@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：frontend/src/types/logistics/serial
 // 文件名称：outbound.d.ts
-// 创建时间：2026-06-30
+// 创建时间：2026-07-02
 // 创建人：Takt365(Auto Generated)
 // 功能描述：logistics/serial 模块类型定义（自动生成；类型名去 Takt 前缀与末尾 Dto，如 TaktCompanyDto → Company）
 // 
@@ -44,7 +44,7 @@ export interface SerialOutbound extends CompanyDtoBase {
   shippingInvoiceNo: string;
 
   /**
-   * 出库日期
+   * 装车日期
    */
   outboundDate: string;
 
@@ -52,11 +52,6 @@ export interface SerialOutbound extends CompanyDtoBase {
    * 仕向地（选项 TaktModelDestinations/options，DictValue=DestinationCode）
    */
   destination: string;
-
-  /**
-   * 运输方式（字典 logistics_shipping_method_type；0=海运 1=空运 2=陆运 3=铁路 4=快递 5=其他）
-   */
-  shippingMethod: number;
 
   /**
    * 目的地港（字典 logistics_destination_port_code；DictValue 为港口/运输编码，如 ACE_AIR、VIE）
@@ -124,12 +119,12 @@ export interface SerialOutboundQuery extends TaktPagedQuery {
   shippingInvoiceNo?: string;
 
   /**
-   * 出库日期（范围查询-开始）
+   * 装车日期（范围查询-开始）
    */
   outboundDateStart?: string;
 
   /**
-   * 出库日期（范围查询-结束）
+   * 装车日期（范围查询-结束）
    */
   outboundDateEnd?: string;
 
@@ -137,11 +132,6 @@ export interface SerialOutboundQuery extends TaktPagedQuery {
    * 仕向地（选项 TaktModelDestinations/options，DictValue=DestinationCode）
    */
   destination?: string;
-
-  /**
-   * 运输方式（字典 logistics_shipping_method_type；0=海运 1=空运 2=陆运 3=铁路 4=快递 5=其他）
-   */
-  shippingMethod?: number;
 
   /**
    * 目的地港（字典 logistics_destination_port_code；DictValue 为港口/运输编码，如 ACE_AIR、VIE）
@@ -228,7 +218,7 @@ export interface SerialOutboundCreate {
   shippingInvoiceNo: string;
 
   /**
-   * 出库日期
+   * 装车日期
    */
   outboundDate: string;
 
@@ -236,11 +226,6 @@ export interface SerialOutboundCreate {
    * 仕向地（选项 TaktModelDestinations/options，DictValue=DestinationCode）
    */
   destination: string;
-
-  /**
-   * 运输方式（字典 logistics_shipping_method_type；0=海运 1=空运 2=陆运 3=铁路 4=快递 5=其他）
-   */
-  shippingMethod: number;
 
   /**
    * 目的地港（字典 logistics_destination_port_code；DictValue 为港口/运输编码，如 ACE_AIR、VIE）
@@ -332,7 +317,7 @@ export interface SerialOutboundTemplate {
   shippingInvoiceNo?: string;
 
   /**
-   * 出库日期
+   * 装车日期
    */
   outboundDate?: string;
 
@@ -340,11 +325,6 @@ export interface SerialOutboundTemplate {
    * 仕向地（选项 TaktModelDestinations/options，DictValue=DestinationCode）
    */
   destination?: string;
-
-  /**
-   * 运输方式（字典 logistics_shipping_method_type；0=海运 1=空运 2=陆运 3=铁路 4=快递 5=其他）
-   */
-  shippingMethod?: number;
 
   /**
    * 目的地港（字典 logistics_destination_port_code；DictValue 为港口/运输编码，如 ACE_AIR、VIE）
@@ -426,7 +406,7 @@ export interface SerialOutboundImport {
   shippingInvoiceNo?: string;
 
   /**
-   * 出库日期
+   * 装车日期
    */
   outboundDate?: string;
 
@@ -434,11 +414,6 @@ export interface SerialOutboundImport {
    * 仕向地（选项 TaktModelDestinations/options，DictValue=DestinationCode）
    */
   destination?: string;
-
-  /**
-   * 运输方式（字典 logistics_shipping_method_type；0=海运 1=空运 2=陆运 3=铁路 4=快递 5=其他）
-   */
-  shippingMethod?: number;
 
   /**
    * 目的地港（字典 logistics_destination_port_code；DictValue 为港口/运输编码，如 ACE_AIR、VIE）
@@ -515,7 +490,7 @@ export interface SerialOutboundExport {
   shippingInvoiceNo: string;
 
   /**
-   * 出库日期
+   * 装车日期
    */
   outboundDate: string;
 
@@ -523,11 +498,6 @@ export interface SerialOutboundExport {
    * 仕向地（选项 TaktModelDestinations/options，DictValue=DestinationCode）
    */
   destination: string;
-
-  /**
-   * 运输方式（字典 logistics_shipping_method_type；0=海运 1=空运 2=陆运 3=铁路 4=快递 5=其他）
-   */
-  shippingMethod: number;
 
   /**
    * 目的地港（字典 logistics_destination_port_code；DictValue 为港口/运输编码，如 ACE_AIR、VIE）

@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：frontend/src/types/logistics/manufacturing/output
 // 文件名称：production-changeover.d.ts
-// 创建时间：2026-06-23
+// 创建时间：2026-07-06
 // 创建人：Takt365(Auto Generated)
 // 功能描述：logistics/manufacturing/output 模块类型定义（自动生成；类型名去 Takt 前缀与末尾 Dto，如 TaktCompanyDto → Company）
 // 
@@ -29,14 +29,19 @@ export interface ProductionChangeover extends CompanyDtoBase {
   productionChangeoverId: string;
 
   /**
-   * 生产工厂
+   * 生产工厂（回填：随工单）
    */
   plantCode: string;
 
   /**
-   * 生产类别
+   * 生产类别（字典 logistics_prod_category，存 DictValue：EPP/FPP/RWP/MDP/CPP）
    */
   prodCategory?: string;
+
+  /**
+   * 切换类别（字典 logistics_changeover_category，存 DictValue：ASSY/PCBA）
+   */
+  changeoverCategory: string;
 
   /**
    * 生产日期
@@ -44,24 +49,29 @@ export interface ProductionChangeover extends CompanyDtoBase {
   prodDate: string;
 
   /**
-   * 生产班组（选项 TaktProductionTeams/options，存 TeamCode；最大 20 字符）
+   * 生产班组（选项 TaktProductionTeams/options，存 TeamCode，ExtValue=PlantCode 按工厂过滤）
    */
   prodTeam?: string;
 
   /**
-   * 读取SOP时间
+   * 当前工单（切换前工单号，选项 TaktProductionOrders/options，按 PlantCode 过滤）
    */
-  readSopTime: number;
+  currentProdOrderCode: string;
 
   /**
-   * 人数
+   * 当前机种（回填：随工单）
    */
-  personCount: number;
+  currentModelCode: string;
 
   /**
-   * SOP总时间
+   * 切换后工单（切换目标工单号，选项 TaktProductionOrders/options，按 PlantCode 过滤）
    */
-  totalSopTime: number;
+  changeoverProdOrderCode: string;
+
+  /**
+   * 切换后机种（回填：随工单）
+   */
+  changeoverModelCode: string;
 
   /**
    * 切换次数
@@ -69,14 +79,44 @@ export interface ProductionChangeover extends CompanyDtoBase {
   changeoverCount: number;
 
   /**
-   * 切换时间（单次）
+   * 切换时间（单次，单位：分钟）
    */
   changeoverTime: number;
 
   /**
-   * 切换总时间
+   * 仪设时间（仪器/设备设置耗时，单位：分钟）
+   */
+  instrumentSetupTime: number;
+
+  /**
+   * 切换总时间（单位：分钟）
    */
   totalChangeoverTime: number;
+
+  /**
+   * 读取SOP时间（单位：分钟）
+   */
+  readSopTime: number;
+
+  /**
+   * 学习时间（切换学习/培训耗时，单位：分钟）
+   */
+  learningTime: number;
+
+  /**
+   * 人数（参与切换人数）
+   */
+  personCount: number;
+
+  /**
+   * 学习总时间（单位：分钟）
+   */
+  totalLearningTime: number;
+
+  /**
+   * SOP总时间（单位：分钟）
+   */
+  totalSopTime: number;
 
 }
 
@@ -99,14 +139,19 @@ export interface ProductionChangeoverQuery extends TaktPagedQuery {
   companyCode?: string;
 
   /**
-   * 生产工厂
+   * 生产工厂（回填：随工单）
    */
   plantCode?: string;
 
   /**
-   * 生产类别
+   * 生产类别（字典 logistics_prod_category，存 DictValue：EPP/FPP/RWP/MDP/CPP）
    */
   prodCategory?: string;
+
+  /**
+   * 切换类别（字典 logistics_changeover_category，存 DictValue：ASSY/PCBA）
+   */
+  changeoverCategory?: string;
 
   /**
    * 生产日期（范围查询-开始）
@@ -119,24 +164,29 @@ export interface ProductionChangeoverQuery extends TaktPagedQuery {
   prodDateEnd?: string;
 
   /**
-   * 生产班组（选项 TaktProductionTeams/options，存 TeamCode；最大 20 字符）
+   * 生产班组（选项 TaktProductionTeams/options，存 TeamCode，ExtValue=PlantCode 按工厂过滤）
    */
   prodTeam?: string;
 
   /**
-   * 读取SOP时间
+   * 当前工单（切换前工单号，选项 TaktProductionOrders/options，按 PlantCode 过滤）
    */
-  readSopTime?: number;
+  currentProdOrderCode?: string;
 
   /**
-   * 人数
+   * 当前机种（回填：随工单）
    */
-  personCount?: number;
+  currentModelCode?: string;
 
   /**
-   * SOP总时间
+   * 切换后工单（切换目标工单号，选项 TaktProductionOrders/options，按 PlantCode 过滤）
    */
-  totalSopTime?: number;
+  changeoverProdOrderCode?: string;
+
+  /**
+   * 切换后机种（回填：随工单）
+   */
+  changeoverModelCode?: string;
 
   /**
    * 切换次数
@@ -144,14 +194,44 @@ export interface ProductionChangeoverQuery extends TaktPagedQuery {
   changeoverCount?: number;
 
   /**
-   * 切换时间（单次）
+   * 切换时间（单次，单位：分钟）
    */
   changeoverTime?: number;
 
   /**
-   * 切换总时间
+   * 仪设时间（仪器/设备设置耗时，单位：分钟）
+   */
+  instrumentSetupTime?: number;
+
+  /**
+   * 切换总时间（单位：分钟）
    */
   totalChangeoverTime?: number;
+
+  /**
+   * 读取SOP时间（单位：分钟）
+   */
+  readSopTime?: number;
+
+  /**
+   * 学习时间（切换学习/培训耗时，单位：分钟）
+   */
+  learningTime?: number;
+
+  /**
+   * 人数（参与切换人数）
+   */
+  personCount?: number;
+
+  /**
+   * 学习总时间（单位：分钟）
+   */
+  totalLearningTime?: number;
+
+  /**
+   * SOP总时间（单位：分钟）
+   */
+  totalSopTime?: number;
 
   /**
    * 创建时间（范围查询-开始）
@@ -198,14 +278,19 @@ export interface ProductionChangeoverCreate {
   companyDefaultCulture: string;
 
   /**
-   * 生产工厂
+   * 生产工厂（回填：随工单）
    */
   plantCode: string;
 
   /**
-   * 生产类别
+   * 生产类别（字典 logistics_prod_category，存 DictValue：EPP/FPP/RWP/MDP/CPP）
    */
   prodCategory?: string;
+
+  /**
+   * 切换类别（字典 logistics_changeover_category，存 DictValue：ASSY/PCBA）
+   */
+  changeoverCategory: string;
 
   /**
    * 生产日期
@@ -213,24 +298,29 @@ export interface ProductionChangeoverCreate {
   prodDate: string;
 
   /**
-   * 生产班组（选项 TaktProductionTeams/options，存 TeamCode；最大 20 字符）
+   * 生产班组（选项 TaktProductionTeams/options，存 TeamCode，ExtValue=PlantCode 按工厂过滤）
    */
   prodTeam?: string;
 
   /**
-   * 读取SOP时间
+   * 当前工单（切换前工单号，选项 TaktProductionOrders/options，按 PlantCode 过滤）
    */
-  readSopTime: number;
+  currentProdOrderCode: string;
 
   /**
-   * 人数
+   * 当前机种（回填：随工单）
    */
-  personCount: number;
+  currentModelCode: string;
 
   /**
-   * SOP总时间
+   * 切换后工单（切换目标工单号，选项 TaktProductionOrders/options，按 PlantCode 过滤）
    */
-  totalSopTime: number;
+  changeoverProdOrderCode: string;
+
+  /**
+   * 切换后机种（回填：随工单）
+   */
+  changeoverModelCode: string;
 
   /**
    * 切换次数
@@ -238,14 +328,44 @@ export interface ProductionChangeoverCreate {
   changeoverCount: number;
 
   /**
-   * 切换时间（单次）
+   * 切换时间（单次，单位：分钟）
    */
   changeoverTime: number;
 
   /**
-   * 切换总时间
+   * 仪设时间（仪器/设备设置耗时，单位：分钟）
+   */
+  instrumentSetupTime: number;
+
+  /**
+   * 切换总时间（单位：分钟）
    */
   totalChangeoverTime: number;
+
+  /**
+   * 读取SOP时间（单位：分钟）
+   */
+  readSopTime: number;
+
+  /**
+   * 学习时间（切换学习/培训耗时，单位：分钟）
+   */
+  learningTime: number;
+
+  /**
+   * 人数（参与切换人数）
+   */
+  personCount: number;
+
+  /**
+   * 学习总时间（单位：分钟）
+   */
+  totalLearningTime: number;
+
+  /**
+   * SOP总时间（单位：分钟）
+   */
+  totalSopTime: number;
 
   /**
    * 扩展字段JSON
@@ -292,14 +412,19 @@ export interface ProductionChangeoverTemplate {
   companyCode?: string;
 
   /**
-   * 生产工厂
+   * 生产工厂（回填：随工单）
    */
   plantCode?: string;
 
   /**
-   * 生产类别
+   * 生产类别（字典 logistics_prod_category，存 DictValue：EPP/FPP/RWP/MDP/CPP）
    */
   prodCategory?: string;
+
+  /**
+   * 切换类别（字典 logistics_changeover_category，存 DictValue：ASSY/PCBA）
+   */
+  changeoverCategory?: string;
 
   /**
    * 生产日期
@@ -307,24 +432,29 @@ export interface ProductionChangeoverTemplate {
   prodDate?: string;
 
   /**
-   * 生产班组（选项 TaktProductionTeams/options，存 TeamCode；最大 20 字符）
+   * 生产班组（选项 TaktProductionTeams/options，存 TeamCode，ExtValue=PlantCode 按工厂过滤）
    */
   prodTeam?: string;
 
   /**
-   * 读取SOP时间
+   * 当前工单（切换前工单号，选项 TaktProductionOrders/options，按 PlantCode 过滤）
    */
-  readSopTime?: number;
+  currentProdOrderCode?: string;
 
   /**
-   * 人数
+   * 当前机种（回填：随工单）
    */
-  personCount?: number;
+  currentModelCode?: string;
 
   /**
-   * SOP总时间
+   * 切换后工单（切换目标工单号，选项 TaktProductionOrders/options，按 PlantCode 过滤）
    */
-  totalSopTime?: number;
+  changeoverProdOrderCode?: string;
+
+  /**
+   * 切换后机种（回填：随工单）
+   */
+  changeoverModelCode?: string;
 
   /**
    * 切换次数
@@ -332,14 +462,44 @@ export interface ProductionChangeoverTemplate {
   changeoverCount?: number;
 
   /**
-   * 切换时间（单次）
+   * 切换时间（单次，单位：分钟）
    */
   changeoverTime?: number;
 
   /**
-   * 切换总时间
+   * 仪设时间（仪器/设备设置耗时，单位：分钟）
+   */
+  instrumentSetupTime?: number;
+
+  /**
+   * 切换总时间（单位：分钟）
    */
   totalChangeoverTime?: number;
+
+  /**
+   * 读取SOP时间（单位：分钟）
+   */
+  readSopTime?: number;
+
+  /**
+   * 学习时间（切换学习/培训耗时，单位：分钟）
+   */
+  learningTime?: number;
+
+  /**
+   * 人数（参与切换人数）
+   */
+  personCount?: number;
+
+  /**
+   * 学习总时间（单位：分钟）
+   */
+  totalLearningTime?: number;
+
+  /**
+   * SOP总时间（单位：分钟）
+   */
+  totalSopTime?: number;
 
   /**
    * 扩展字段JSON
@@ -376,14 +536,19 @@ export interface ProductionChangeoverImport {
   companyDefaultCulture?: string;
 
   /**
-   * 生产工厂
+   * 生产工厂（回填：随工单）
    */
   plantCode?: string;
 
   /**
-   * 生产类别
+   * 生产类别（字典 logistics_prod_category，存 DictValue：EPP/FPP/RWP/MDP/CPP）
    */
   prodCategory?: string;
+
+  /**
+   * 切换类别（字典 logistics_changeover_category，存 DictValue：ASSY/PCBA）
+   */
+  changeoverCategory?: string;
 
   /**
    * 生产日期
@@ -391,24 +556,29 @@ export interface ProductionChangeoverImport {
   prodDate?: string;
 
   /**
-   * 生产班组（选项 TaktProductionTeams/options，存 TeamCode；最大 20 字符）
+   * 生产班组（选项 TaktProductionTeams/options，存 TeamCode，ExtValue=PlantCode 按工厂过滤）
    */
   prodTeam?: string;
 
   /**
-   * 读取SOP时间
+   * 当前工单（切换前工单号，选项 TaktProductionOrders/options，按 PlantCode 过滤）
    */
-  readSopTime?: number;
+  currentProdOrderCode?: string;
 
   /**
-   * 人数
+   * 当前机种（回填：随工单）
    */
-  personCount?: number;
+  currentModelCode?: string;
 
   /**
-   * SOP总时间
+   * 切换后工单（切换目标工单号，选项 TaktProductionOrders/options，按 PlantCode 过滤）
    */
-  totalSopTime?: number;
+  changeoverProdOrderCode?: string;
+
+  /**
+   * 切换后机种（回填：随工单）
+   */
+  changeoverModelCode?: string;
 
   /**
    * 切换次数
@@ -416,14 +586,44 @@ export interface ProductionChangeoverImport {
   changeoverCount?: number;
 
   /**
-   * 切换时间（单次）
+   * 切换时间（单次，单位：分钟）
    */
   changeoverTime?: number;
 
   /**
-   * 切换总时间
+   * 仪设时间（仪器/设备设置耗时，单位：分钟）
+   */
+  instrumentSetupTime?: number;
+
+  /**
+   * 切换总时间（单位：分钟）
    */
   totalChangeoverTime?: number;
+
+  /**
+   * 读取SOP时间（单位：分钟）
+   */
+  readSopTime?: number;
+
+  /**
+   * 学习时间（切换学习/培训耗时，单位：分钟）
+   */
+  learningTime?: number;
+
+  /**
+   * 人数（参与切换人数）
+   */
+  personCount?: number;
+
+  /**
+   * 学习总时间（单位：分钟）
+   */
+  totalLearningTime?: number;
+
+  /**
+   * SOP总时间（单位：分钟）
+   */
+  totalSopTime?: number;
 
   /**
    * 扩展字段JSON
@@ -455,14 +655,19 @@ export interface ProductionChangeoverExport {
   companyCode: string;
 
   /**
-   * 生产工厂
+   * 生产工厂（回填：随工单）
    */
   plantCode: string;
 
   /**
-   * 生产类别
+   * 生产类别（字典 logistics_prod_category，存 DictValue：EPP/FPP/RWP/MDP/CPP）
    */
   prodCategory?: string;
+
+  /**
+   * 切换类别（字典 logistics_changeover_category，存 DictValue：ASSY/PCBA）
+   */
+  changeoverCategory: string;
 
   /**
    * 生产日期
@@ -470,24 +675,29 @@ export interface ProductionChangeoverExport {
   prodDate: string;
 
   /**
-   * 生产班组（选项 TaktProductionTeams/options，存 TeamCode；最大 20 字符）
+   * 生产班组（选项 TaktProductionTeams/options，存 TeamCode，ExtValue=PlantCode 按工厂过滤）
    */
   prodTeam?: string;
 
   /**
-   * 读取SOP时间
+   * 当前工单（切换前工单号，选项 TaktProductionOrders/options，按 PlantCode 过滤）
    */
-  readSopTime: number;
+  currentProdOrderCode: string;
 
   /**
-   * 人数
+   * 当前机种（回填：随工单）
    */
-  personCount: number;
+  currentModelCode: string;
 
   /**
-   * SOP总时间
+   * 切换后工单（切换目标工单号，选项 TaktProductionOrders/options，按 PlantCode 过滤）
    */
-  totalSopTime: number;
+  changeoverProdOrderCode: string;
+
+  /**
+   * 切换后机种（回填：随工单）
+   */
+  changeoverModelCode: string;
 
   /**
    * 切换次数
@@ -495,14 +705,44 @@ export interface ProductionChangeoverExport {
   changeoverCount: number;
 
   /**
-   * 切换时间（单次）
+   * 切换时间（单次，单位：分钟）
    */
   changeoverTime: number;
 
   /**
-   * 切换总时间
+   * 仪设时间（仪器/设备设置耗时，单位：分钟）
+   */
+  instrumentSetupTime: number;
+
+  /**
+   * 切换总时间（单位：分钟）
    */
   totalChangeoverTime: number;
+
+  /**
+   * 读取SOP时间（单位：分钟）
+   */
+  readSopTime: number;
+
+  /**
+   * 学习时间（切换学习/培训耗时，单位：分钟）
+   */
+  learningTime: number;
+
+  /**
+   * 人数（参与切换人数）
+   */
+  personCount: number;
+
+  /**
+   * 学习总时间（单位：分钟）
+   */
+  totalLearningTime: number;
+
+  /**
+   * SOP总时间（单位：分钟）
+   */
+  totalSopTime: number;
 
   /**
    * 扩展字段JSON

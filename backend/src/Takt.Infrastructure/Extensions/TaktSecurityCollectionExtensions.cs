@@ -19,6 +19,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Options;
 using Takt.Infrastructure.Middleware;
+using Takt.Shared.Constants;
 using Takt.Shared.Enums;
 using Takt.Shared.Models;
 using Takt.Shared.Options;
@@ -87,6 +88,33 @@ public static class TaktSecurityCollectionExtensions
                     {
                         PermitLimit = Math.Max(1, rateLimit.MaxRequests),
                         Window = TimeSpan.FromSeconds(Math.Max(1, rateLimit.TimeWindowSeconds)),
+                        QueueProcessingOrder = QueueProcessingOrder.OldestFirst,
+                        QueueLimit = 0,
+                    });
+            });
+
+            rateLimiterOptions.AddPolicy(TaktRateLimitPolicyNames.Login, httpContext =>
+            {
+                var securityOptions = httpContext.RequestServices
+                    .GetRequiredService<IOptions<TaktSecurityOptions>>()
+                    .Value;
+                var loginRateLimit = securityOptions.LoginRateLimit;
+
+                if (!loginRateLimit.Enabled)
+                {
+                    return RateLimitPartition.GetNoLimiter("login-disabled");
+                }
+
+                var partitionKey = httpContext.Connection.RemoteIpAddress?.ToString()
+                    ?? httpContext.Request.Headers["X-Forwarded-For"].FirstOrDefault()
+                    ?? "unknown";
+
+                return RateLimitPartition.GetFixedWindowLimiter(
+                    $"login:{partitionKey}",
+                    _ => new FixedWindowRateLimiterOptions
+                    {
+                        PermitLimit = Math.Max(1, loginRateLimit.MaxRequests),
+                        Window = TimeSpan.FromSeconds(Math.Max(1, loginRateLimit.TimeWindowSeconds)),
                         QueueProcessingOrder = QueueProcessingOrder.OldestFirst,
                         QueueLimit = 0,
                     });

@@ -21,19 +21,19 @@
     >
       <a-tab-pane
         key="tab-0"
-        :tab="t('common.page.form.tabs.basicinfo')"
+        :tab="t('common.page.form.tabs.basicinfo') + ' (1/2)'"
         force-render
       >
         <div :class="formContentClass">
           <a-row :gutter="24">
             <a-col :span="12">
               <a-form-item
-                :label="t('entity.maintenanceworkordermaterial.workordercode')"
+                :label="pi.label('workOrderCode')"
                 name="workOrderCode"
               >
                 <a-input
                   v-model:value="formState.workOrderCode"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.maintenanceworkordermaterial.workordercode') })"
+                  :placeholder="pi.ph('workOrderCode')"
                   show-count
                   :maxlength="50"
                   allow-clear
@@ -43,24 +43,24 @@
             </a-col>
             <a-col :span="12">
               <a-form-item
-                :label="t('entity.maintenanceworkordermaterial.linenumber')"
+                :label="pi.label('lineNumber')"
                 name="lineNumber"
               >
                 <a-input-number
                   v-model:value="formState.lineNumber"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.maintenanceworkordermaterial.linenumber') })"
+                  :placeholder="pi.ph('lineNumber')"
                   style="width: 100%"
                 />
               </a-form-item>
             </a-col>
             <a-col :span="12">
               <a-form-item
-                :label="t('entity.maintenanceworkordermaterial.materialid')"
+                :label="pi.label('materialId')"
                 name="materialId"
               >
                 <a-input
                   v-model:value="formState.materialId"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.maintenanceworkordermaterial.materialid') })"
+                  :placeholder="pi.ph('materialId')"
                   show-count
                   :maxlength="20"
                   allow-clear
@@ -69,12 +69,12 @@
             </a-col>
             <a-col :span="12">
               <a-form-item
-                :label="t('entity.maintenanceworkordermaterial.materialcode')"
+                :label="pi.label('materialCode')"
                 name="materialCode"
               >
                 <a-input
                   v-model:value="formState.materialCode"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.maintenanceworkordermaterial.materialcode') })"
+                  :placeholder="pi.ph('materialCode')"
                   show-count
                   :maxlength="20"
                   allow-clear
@@ -84,12 +84,12 @@
             </a-col>
             <a-col :span="12">
               <a-form-item
-                :label="t('entity.maintenanceworkordermaterial.materialname')"
+                :label="pi.label('materialName')"
                 name="materialName"
               >
                 <a-input
                   v-model:value="formState.materialName"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.maintenanceworkordermaterial.materialname') })"
+                  :placeholder="pi.ph('materialName')"
                   show-count
                   :maxlength="20"
                   allow-clear
@@ -98,39 +98,139 @@
             </a-col>
             <a-col :span="12">
               <a-form-item
-                :label="t('entity.maintenanceworkordermaterial.requiredquantity')"
+                :label="pi.label('requiredQuantity')"
                 name="requiredQuantity"
               >
                 <a-input-number
                   v-model:value="formState.requiredQuantity"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.maintenanceworkordermaterial.requiredquantity') })"
+                  :placeholder="pi.ph('requiredQuantity')"
                   style="width: 100%"
                 />
               </a-form-item>
             </a-col>
             <a-col :span="12">
               <a-form-item
-                :label="t('entity.maintenanceworkordermaterial.issuedquantity')"
+                :label="pi.label('issuedQuantity')"
                 name="issuedQuantity"
               >
                 <a-input-number
                   v-model:value="formState.issuedQuantity"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.maintenanceworkordermaterial.issuedquantity') })"
+                  :placeholder="pi.ph('issuedQuantity')"
                   style="width: 100%"
                 />
               </a-form-item>
             </a-col>
             <a-col :span="12">
               <a-form-item
-                :label="t('entity.maintenanceworkordermaterial.materialunit')"
+                :label="pi.label('materialUnit')"
                 name="materialUnit"
               >
                 <a-input
                   v-model:value="formState.materialUnit"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.maintenanceworkordermaterial.materialunit') })"
+                  :placeholder="pi.ph('materialUnit')"
                   show-count
                   :maxlength="20"
                   allow-clear
+                />
+              </a-form-item>
+            </a-col>
+            <a-col :span="12">
+              <a-form-item
+                :label="pi.label('unitPrice')"
+                name="unitPrice"
+              >
+                <a-input-number
+                  v-model:value="formState.unitPrice"
+                  :placeholder="pi.ph('unitPrice')"
+                  style="width: 100%"
+                />
+              </a-form-item>
+            </a-col>
+            <a-col :span="12">
+              <a-form-item
+                :label="pi.label('amount')"
+                name="amount"
+              >
+                <a-input-number
+                  v-model:value="formState.amount"
+                  :placeholder="pi.ph('amount')"
+                  style="width: 100%"
+                />
+              </a-form-item>
+            </a-col>
+          </a-row>
+        </div>
+      </a-tab-pane>
+      <a-tab-pane
+        key="tab-1"
+        :tab="t('common.page.form.tabs.basicinfo') + ' (2/2)'"
+        force-render
+      >
+        <div :class="formContentClass">
+          <a-row :gutter="24">
+            <a-col :span="12">
+              <a-form-item
+                :label="pi.label('warehouseCode')"
+                name="warehouseCode"
+              >
+                <a-input
+                  v-model:value="formState.warehouseCode"
+                  :placeholder="pi.ph('warehouseCode')"
+                  show-count
+                  :maxlength="20"
+                  allow-clear
+                  :disabled="!!formData?.maintenanceWorkOrderMaterialId"
+                />
+              </a-form-item>
+            </a-col>
+            <a-col :span="12">
+              <a-form-item
+                :label="pi.label('storageLocation')"
+                name="storageLocation"
+              >
+                <a-input
+                  v-model:value="formState.storageLocation"
+                  :placeholder="pi.ph('storageLocation')"
+                  show-count
+                  :maxlength="20"
+                  allow-clear
+                />
+              </a-form-item>
+            </a-col>
+            <a-col :span="12">
+              <a-form-item
+                :label="pi.label('issueStatus')"
+                name="issueStatus"
+              >
+                <a-input-number
+                  v-model:value="formState.issueStatus"
+                  :placeholder="pi.ph('issueStatus')"
+                  style="width: 100%"
+                />
+              </a-form-item>
+            </a-col>
+            <a-col :span="12">
+              <a-form-item
+                :label="pi.label('issueTime')"
+                name="issueTime"
+              >
+                <a-date-picker
+                  v-model:value="formState.issueTime"
+                  :placeholder="pi.ph('issueTime')"
+                  value-format="YYYY-MM-DD"
+                  style="width: 100%"
+                />
+              </a-form-item>
+            </a-col>
+            <a-col :span="12">
+              <a-form-item
+                :label="pi.label('isObsolete')"
+                name="isObsolete"
+              >
+                <TaktSelect
+                  v-model:value="formState.isObsolete"
+                  dict-type="sys_yes_no_type"
+                  :placeholder="pi.ph('isObsolete')"
                 />
               </a-form-item>
             </a-col>
@@ -146,10 +246,17 @@
  * 维护工单实体子表 maintenanceWorkOrderMaterial 维护表单 · 由 generate-vue-master-detail-from-api.cjs 生成
  * @module views/logistics/maintenance/work-order/components
  */
-import { reactive, watch, computed, ref } from 'vue'
+import { reactive, watch, computed, ref, onMounted } from 'vue'
 import { useI18n } from 'vue-i18n'
 import type { Rule } from 'ant-design-vue/es/form'
+import { useMaintenanceWorkOrderMaterialI18n } from '../composables/use-work-order-material-i18n'
+
+/** 实体字段 i18n */
+const pi = useMaintenanceWorkOrderMaterialI18n()
+
 import type { MaintenanceWorkOrderMaterialCreate } from '@/types/logistics/maintenance/work-order-material'
+import TaktSelect from '@/components/business/takt-select/index.vue'
+import { useDictDataStore } from '@/stores/foundation/dict-data'
 
 /** i18n 翻译函数 */
 const { t } = useI18n()
@@ -158,7 +265,8 @@ const formContentClass = computed(() => (formFields.length > 10 ? 'takt-form-con
 /** 当前激活的 Tab key */
 const activeTab = ref('tab-0')
 /** CreateDto 字段名列表（与 formState 键对齐） */
-const formFields = ["workOrderCode","lineNumber","materialId","materialCode","materialName","requiredQuantity","issuedQuantity","materialUnit"]
+const formFields = ["workOrderCode","lineNumber","materialId","materialCode","materialName","requiredQuantity","issuedQuantity","materialUnit","unitPrice","amount","warehouseCode","storageLocation","issueStatus","issueTime","isObsolete"]
+
 
 
 /** 父级传入的编辑 DTO；新增时为 undefined 或空对象 */
@@ -185,6 +293,13 @@ function applyFormDefaults(target: Record<string, unknown>) {
   void target
 }
 
+/** Pinia：字典缓存（TaktSelect dict-type 渲染前预热，避免选项空白） */
+const dictDataStore = useDictDataStore()
+
+/** 表单挂载时预加载全量字典 */
+onMounted(() => {
+  void dictDataStore.loadAllDictDataAsync()
+})
 
 /** 编辑态灌入 formData；新增态恢复默认值（须含 maintenanceWorkOrderMaterialId 才视为编辑） */
 watch(
@@ -213,18 +328,18 @@ const rules = computed<Record<string, Rule[]>>(() => ({
   workOrderCode: [
     {
       required: true,
-      message: t('common.page.form.placeholder.required', { field: t('entity.maintenanceworkordermaterial.workordercode') }),
+      message: pi.ph('workOrderCode'),
       trigger: 'blur'
     }
   ],
   lineNumber: [{
     validator: async (_rule, value) => {
       if (value === undefined || value === null || value === '') {
-        return Promise.reject(t('common.page.form.placeholder.select', { field: t('entity.maintenanceworkordermaterial.linenumber') }))
+        return Promise.reject(pi.ph('lineNumber'))
       }
       const num = typeof value === 'number' ? value : Number(value)
       if (!Number.isFinite(num)) {
-        return Promise.reject(t('common.page.form.placeholder.select', { field: t('entity.maintenanceworkordermaterial.linenumber') }))
+        return Promise.reject(pi.ph('lineNumber'))
       }
       return Promise.resolve()
     },
@@ -233,32 +348,32 @@ const rules = computed<Record<string, Rule[]>>(() => ({
   materialId: [
     {
       required: true,
-      message: t('common.page.form.placeholder.required', { field: t('entity.maintenanceworkordermaterial.materialid') }),
+      message: pi.ph('materialId'),
       trigger: 'blur'
     }
   ],
   materialCode: [
     {
       required: true,
-      message: t('common.page.form.placeholder.required', { field: t('entity.maintenanceworkordermaterial.materialcode') }),
+      message: pi.ph('materialCode'),
       trigger: 'blur'
     }
   ],
   materialName: [
     {
       required: true,
-      message: t('common.page.form.placeholder.required', { field: t('entity.maintenanceworkordermaterial.materialname') }),
+      message: pi.ph('materialName'),
       trigger: 'blur'
     }
   ],
   requiredQuantity: [{
     validator: async (_rule, value) => {
       if (value === undefined || value === null || value === '') {
-        return Promise.reject(t('common.page.form.placeholder.select', { field: t('entity.maintenanceworkordermaterial.requiredquantity') }))
+        return Promise.reject(pi.ph('requiredQuantity'))
       }
       const num = typeof value === 'number' ? value : Number(value)
       if (!Number.isFinite(num)) {
-        return Promise.reject(t('common.page.form.placeholder.select', { field: t('entity.maintenanceworkordermaterial.requiredquantity') }))
+        return Promise.reject(pi.ph('requiredQuantity'))
       }
       return Promise.resolve()
     },
@@ -267,11 +382,11 @@ const rules = computed<Record<string, Rule[]>>(() => ({
   issuedQuantity: [{
     validator: async (_rule, value) => {
       if (value === undefined || value === null || value === '') {
-        return Promise.reject(t('common.page.form.placeholder.select', { field: t('entity.maintenanceworkordermaterial.issuedquantity') }))
+        return Promise.reject(pi.ph('issuedQuantity'))
       }
       const num = typeof value === 'number' ? value : Number(value)
       if (!Number.isFinite(num)) {
-        return Promise.reject(t('common.page.form.placeholder.select', { field: t('entity.maintenanceworkordermaterial.issuedquantity') }))
+        return Promise.reject(pi.ph('issuedQuantity'))
       }
       return Promise.resolve()
     },
@@ -280,10 +395,62 @@ const rules = computed<Record<string, Rule[]>>(() => ({
   materialUnit: [
     {
       required: true,
-      message: t('common.page.form.placeholder.required', { field: t('entity.maintenanceworkordermaterial.materialunit') }),
+      message: pi.ph('materialUnit'),
       trigger: 'blur'
     }
   ],
+  unitPrice: [{
+    validator: async (_rule, value) => {
+      if (value === undefined || value === null || value === '') {
+        return Promise.reject(pi.ph('unitPrice'))
+      }
+      const num = typeof value === 'number' ? value : Number(value)
+      if (!Number.isFinite(num)) {
+        return Promise.reject(pi.ph('unitPrice'))
+      }
+      return Promise.resolve()
+    },
+    trigger: 'change'
+  }],
+  amount: [{
+    validator: async (_rule, value) => {
+      if (value === undefined || value === null || value === '') {
+        return Promise.reject(pi.ph('amount'))
+      }
+      const num = typeof value === 'number' ? value : Number(value)
+      if (!Number.isFinite(num)) {
+        return Promise.reject(pi.ph('amount'))
+      }
+      return Promise.resolve()
+    },
+    trigger: 'change'
+  }],
+  issueStatus: [{
+    validator: async (_rule, value) => {
+      if (value === undefined || value === null || value === '') {
+        return Promise.reject(pi.ph('issueStatus'))
+      }
+      const num = typeof value === 'number' ? value : Number(value)
+      if (!Number.isFinite(num)) {
+        return Promise.reject(pi.ph('issueStatus'))
+      }
+      return Promise.resolve()
+    },
+    trigger: 'change'
+  }],
+  isObsolete: [{
+    validator: async (_rule, value) => {
+      if (value === undefined || value === null || value === '') {
+        return Promise.reject(pi.ph('isObsolete'))
+      }
+      const num = typeof value === 'number' ? value : Number(value)
+      if (!Number.isFinite(num)) {
+        return Promise.reject(pi.ph('isObsolete'))
+      }
+      return Promise.resolve()
+    },
+    trigger: 'change'
+  }],
 }))
 
 /** 校验表单（失败 throw，供父级 handleFormSubmit 捕获） */
@@ -306,6 +473,22 @@ function getValues(): Record<string, any> {
   if ('issuedQuantity' in payload) {
     const rawissuedQuantity = payload.issuedQuantity
     payload.issuedQuantity = typeof rawissuedQuantity === 'number' ? rawissuedQuantity : Number(rawissuedQuantity)
+  }
+  if ('unitPrice' in payload) {
+    const rawunitPrice = payload.unitPrice
+    payload.unitPrice = typeof rawunitPrice === 'number' ? rawunitPrice : Number(rawunitPrice)
+  }
+  if ('amount' in payload) {
+    const rawamount = payload.amount
+    payload.amount = typeof rawamount === 'number' ? rawamount : Number(rawamount)
+  }
+  if ('issueStatus' in payload) {
+    const rawissueStatus = payload.issueStatus
+    payload.issueStatus = typeof rawissueStatus === 'number' ? rawissueStatus : Number(rawissueStatus)
+  }
+  if ('isObsolete' in payload) {
+    const rawisObsolete = payload.isObsolete
+    payload.isObsolete = typeof rawisObsolete === 'number' ? rawisObsolete : Number(rawisObsolete)
   }
   if ('sortOrder' in payload) delete payload.sortOrder
   payload.maintenanceWorkOrderId = props.masterId

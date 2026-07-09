@@ -99,10 +99,4 @@ public class TaktIqcOrder : TaktCompanyEntityBase
     /// </summary>
     [Navigate(NavigateType.OneToMany, nameof(TaktIqcOrderItem.IqcOrderId))]
     public List<TaktIqcOrderItem>? Items { get; set; }
-
-    /// <summary>
-    /// 变更日志列表（主子表关系）
-    /// </summary>
-    [Navigate(NavigateType.OneToMany, nameof(TaktIqcOrderChangeLog.IqcOrderId))]
-    public List<TaktIqcOrderChangeLog>? ChangeLogs { get; set; }
 }

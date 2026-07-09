@@ -152,13 +152,6 @@ public class TaktAssetDto : TaktCompanyDtoBase
     /// 资产状态（字典 accounting_asset_status）
     /// </summary>
     public int AssetStatus { get; set; } = 1;
-
-    /// <summary>
-    /// 固定资产变更记录列表（外键在子表 TaktAssetChangeLog.AssetId）
-    /// （子表：TaktAssetChangeLog）
-    /// </summary>
-    public List<TaktAssetChangeLogDto>? ChangeLogs { get; set; }
-
 }
 
 // ========================================
@@ -483,14 +476,7 @@ public class TaktAssetCreateDto
     /// <summary>
     /// 资产状态（字典 accounting_asset_status）
     /// </summary>
-    public int AssetStatus { get; set; } = 1;
-
-    /// <summary>
-    /// 固定资产变更记录列表（外键在子表 TaktAssetChangeLog.AssetId）（子表，级联保存）
-    /// </summary>
-    public List<TaktAssetChangeLogCreateDto>? ChangeLogs { get; set; }
-
-    /// <summary>
+    public int AssetStatus { get; set; } = 1;    /// <summary>
     /// 扩展字段JSON
     /// </summary>
     public string? ExtField { get; set; }
@@ -681,14 +667,7 @@ public class TaktAssetTemplateDto
     /// <summary>
     /// 资产状态（字典 accounting_asset_status）
     /// </summary>
-    public int? AssetStatus { get; set; }
-
-    /// <summary>
-    /// 固定资产变更记录列表（外键在子表 TaktAssetChangeLog.AssetId）（子表，级联保存）
-    /// </summary>
-    public List<TaktAssetChangeLogCreateDto>? ChangeLogs { get; set; }
-
-    /// <summary>
+    public int? AssetStatus { get; set; }    /// <summary>
     /// 扩展字段JSON
     /// </summary>
     public string? ExtField { get; set; }
@@ -836,14 +815,7 @@ public class TaktAssetImportDto
     /// <summary>
     /// 资产状态（字典 accounting_asset_status）
     /// </summary>
-    public int? AssetStatus { get; set; }
-
-    /// <summary>
-    /// 固定资产变更记录列表（外键在子表 TaktAssetChangeLog.AssetId）（子表，级联保存）
-    /// </summary>
-    public List<TaktAssetChangeLogCreateDto>? ChangeLogs { get; set; }
-
-    /// <summary>
+    public int? AssetStatus { get; set; }    /// <summary>
     /// 扩展字段JSON
     /// </summary>
     public string? ExtField { get; set; }

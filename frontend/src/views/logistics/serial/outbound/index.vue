@@ -65,6 +65,8 @@
       :master-row-selection="rowSelection"
       master-id-column-key="serialOutboundId"
       :master-visible-column-keys="visibleColumnKeys"
+      master-table-mode="masterDetailMaster"
+      master-scroll-layout="masterDetailLr"
       :master-total="total"
       master-entity-scope="company"
       @master-change="handleTableChange"
@@ -74,22 +76,16 @@
     >
       <!-- 字典/开关列渲染 -->
       <template #bodyCell="{ column, record }">
-        <template v-if="column.key === 'shippingMethod'">
+        <template v-if="column.key === 'destinationPort'">
           <TaktDictTag
-            :value="getSerialOutboundField(record, 'shippingMethod')"
-            dict-type="logistics_shipping_method_type"
+            :value="getSerialOutboundDictValue(record, 'destinationPort')"
+            dict-type="logistics_destination_port_code"
           />
         </template>
         <template v-else-if="column.key === 'outboundType'">
           <TaktDictTag
-            :value="getSerialOutboundField(record, 'outboundType')"
+            :value="getSerialOutboundDictValue(record, 'outboundType')"
             dict-type="logistics_outbound_type"
-          />
-        </template>
-        <template v-else-if="column.key === 'destinationPort'">
-          <TaktDictTag
-            :value="getSerialOutboundField(record, 'destinationPort')"
-            dict-type="logistics_destination_port_code"
           />
         </template>
       </template>
@@ -130,21 +126,20 @@
     >
       <template #default="{ isFieldVisible }">
       <div v-show="isFieldVisible('plantCode')">
-      <a-form-item :label="t('entity.serialoutbound.plantcode')">
-        <a-input
+      <a-form-item :label="pi.queryLabel('plantCode')">
+        <TaktSelect
           v-model:value="advancedQueryForm.plantCode"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.serialoutbound.plantcode') })"
-          show-count
-          :maxlength="4"
+          api-url="TaktPlants/options"
+          :placeholder="pi.queryPh('plantCode', 'select')"
           allow-clear
         />
       </a-form-item>
       </div>
       <div v-show="isFieldVisible('outboundNo')">
-      <a-form-item :label="t('entity.serialoutbound.outboundno')">
+      <a-form-item :label="pi.queryLabel('outboundNo')">
         <a-input
           v-model:value="advancedQueryForm.outboundNo"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.serialoutbound.outboundno') })"
+          :placeholder="pi.queryPh('outboundNo', 'required')"
           show-count
           :maxlength="50"
           allow-clear
@@ -152,10 +147,10 @@
       </a-form-item>
       </div>
       <div v-show="isFieldVisible('shippingInvoiceNo')">
-      <a-form-item :label="t('entity.serialoutbound.shippinginvoiceno')">
+      <a-form-item :label="pi.queryLabel('shippingInvoiceNo')">
         <a-input
           v-model:value="advancedQueryForm.shippingInvoiceNo"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.serialoutbound.shippinginvoiceno') })"
+          :placeholder="pi.queryPh('shippingInvoiceNo', 'required')"
           show-count
           :maxlength="50"
           allow-clear
@@ -163,101 +158,89 @@
       </a-form-item>
       </div>
       <div v-show="isFieldVisible('outboundDateStart')">
-      <a-form-item :label="t('entity.serialoutbound.outbounddatestart')">
+      <a-form-item :label="pi.queryLabel('outboundDateStart')">
         <a-date-picker
           v-model:value="advancedQueryForm.outboundDateStart"
-          :placeholder="t('common.page.form.placeholder.select', { field: t('entity.serialoutbound.outbounddatestart') })"
+          :placeholder="pi.queryPh('outboundDateStart', 'select')"
           value-format="YYYY-MM-DD"
           style="width: 100%"
         />
       </a-form-item>
       </div>
       <div v-show="isFieldVisible('outboundDateEnd')">
-      <a-form-item :label="t('entity.serialoutbound.outbounddateend')">
+      <a-form-item :label="pi.queryLabel('outboundDateEnd')">
         <a-date-picker
           v-model:value="advancedQueryForm.outboundDateEnd"
-          :placeholder="t('common.page.form.placeholder.select', { field: t('entity.serialoutbound.outbounddateend') })"
+          :placeholder="pi.queryPh('outboundDateEnd', 'select')"
           value-format="YYYY-MM-DD"
           style="width: 100%"
         />
       </a-form-item>
       </div>
       <div v-show="isFieldVisible('destination')">
-      <a-form-item :label="t('entity.serialoutbound.destination')">
+      <a-form-item :label="pi.queryLabel('destination')">
         <TaktSelect
           v-model:value="advancedQueryForm.destination"
-          api-url="/api/TaktModelDestinations/options"
-          :placeholder="t('common.page.form.placeholder.select', { field: t('entity.serialoutbound.destination') })"
-          allow-clear
-        />
-      </a-form-item>
-      </div>
-      <div v-show="isFieldVisible('shippingMethod')">
-      <a-form-item :label="t('entity.serialoutbound.shippingmethod')">
-        <TaktSelect
-          v-model:value="advancedQueryForm.shippingMethod"
-          dict-type="logistics_shipping_method_type"
-          :placeholder="t('common.page.form.placeholder.select', { field: t('entity.serialoutbound.shippingmethod') })"
+          api-url="TaktModelDestinations/options"
+          :placeholder="pi.queryPh('destination', 'select')"
           allow-clear
         />
       </a-form-item>
       </div>
       <div v-show="isFieldVisible('destinationPort')">
-      <a-form-item :label="t('entity.serialoutbound.destinationport')">
+      <a-form-item :label="pi.queryLabel('destinationPort')">
         <TaktSelect
           v-model:value="advancedQueryForm.destinationPort"
           dict-type="logistics_destination_port_code"
-          :placeholder="t('common.page.form.placeholder.select', { field: t('entity.serialoutbound.destinationport') })"
+          :placeholder="pi.queryPh('destinationPort', 'select')"
           allow-clear
         />
       </a-form-item>
       </div>
       <div v-show="isFieldVisible('outboundType')">
-      <a-form-item :label="t('entity.serialoutbound.outboundtype')">
+      <a-form-item :label="pi.queryLabel('outboundType')">
         <TaktSelect
           v-model:value="advancedQueryForm.outboundType"
           dict-type="logistics_outbound_type"
-          :placeholder="t('common.page.form.placeholder.select', { field: t('entity.serialoutbound.outboundtype') })"
+          :placeholder="pi.queryPh('outboundType', 'select')"
           allow-clear
         />
       </a-form-item>
       </div>
       <div v-show="isFieldVisible('warehouseCode')">
-      <a-form-item :label="t('entity.serialoutbound.warehousecode')">
-        <a-input
+      <a-form-item :label="pi.queryLabel('warehouseCode')">
+        <TaktSelect
           v-model:value="advancedQueryForm.warehouseCode"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.serialoutbound.warehousecode') })"
-          show-count
-          :maxlength="50"
+          api-url="TaktWarehouses/options"
+          :placeholder="pi.queryPh('warehouseCode', 'select')"
           allow-clear
         />
       </a-form-item>
       </div>
       <div v-show="isFieldVisible('locationCode')">
-      <a-form-item :label="t('entity.serialoutbound.locationcode')">
-        <a-input
+      <a-form-item :label="pi.queryLabel('locationCode')">
+        <TaktSelect
           v-model:value="advancedQueryForm.locationCode"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.serialoutbound.locationcode') })"
-          show-count
-          :maxlength="50"
+          api-url="TaktStorageLocations/options"
+          :placeholder="pi.queryPh('locationCode', 'select')"
           allow-clear
         />
       </a-form-item>
       </div>
       <div v-show="isFieldVisible('totalQuantity')">
-      <a-form-item :label="t('entity.serialoutbound.totalquantity')">
+      <a-form-item :label="pi.queryLabel('totalQuantity')">
         <a-input-number
           v-model:value="advancedQueryForm.totalQuantity"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.serialoutbound.totalquantity') })"
+          :placeholder="pi.queryPh('totalQuantity', 'required')"
           style="width: 100%"
         />
       </a-form-item>
       </div>
       <div v-show="isFieldVisible('createdAtStart')">
-      <a-form-item :label="t('common.page.entity.createdatstart')">
+      <a-form-item :label="pi.queryLabel('createdAtStart')">
         <a-date-picker
           v-model:value="advancedQueryForm.createdAtStart"
-          :placeholder="t('common.page.form.placeholder.select', { field: t('common.page.entity.createdatstart') })"
+          :placeholder="pi.queryPh('createdAtStart', 'select')"
           value-format="YYYY-MM-DD HH:mm:ss"
             show-time
           style="width: 100%"
@@ -265,10 +248,10 @@
       </a-form-item>
       </div>
       <div v-show="isFieldVisible('createdAtEnd')">
-      <a-form-item :label="t('common.page.entity.createdatend')">
+      <a-form-item :label="pi.queryLabel('createdAtEnd')">
         <a-date-picker
           v-model:value="advancedQueryForm.createdAtEnd"
-          :placeholder="t('common.page.form.placeholder.select', { field: t('common.page.entity.createdatend') })"
+          :placeholder="pi.queryPh('createdAtEnd', 'select')"
           value-format="YYYY-MM-DD HH:mm:ss"
             show-time
           style="width: 100%"
@@ -290,7 +273,7 @@
             >
               <span class="takt-form-label-hint-icon"><RiQuestionLine class="takt-remix-icon" /></span>
             </a-tooltip>
-            <span>{{ t('common.page.entity.extfield') }}</span>
+            <span>{{ pi.queryLabel('extField') }}</span>
           </span>
         </template>
         <a-textarea
@@ -304,10 +287,10 @@
       </a-form-item>
       </div>
       <div v-show="isFieldVisible('remark')">
-      <a-form-item :label="t('common.page.entity.remark')">
+      <a-form-item :label="pi.queryLabel('remark')">
         <a-textarea
           v-model:value="advancedQueryForm.remark"
-          :placeholder="t('common.page.form.placeholder.optional', { field: t('common.page.entity.remark') })"
+          :placeholder="pi.queryPh('remark', 'optional')"
             :rows="4"
             show-count
             :maxlength="400"
@@ -321,14 +304,15 @@
     <!-- 导入对话框 -->
     <TaktModal
       v-model:open="importVisible"
-      :title="t('common.dialog.title.import', { entity: t('entity.serialoutbound._self') })"
+      :title="t('common.dialog.title.import', { entity: pi.self() })"
       :width="600"
       :footer="null"
       :cancel-text="t('common.page.button.close')"
       @cancel="handleImportCancel"
     >
       <TaktImportFile
-        entity-i18n-key="entity.serialoutbound._self"
+        v-if="importVisible"
+        :entity-i18n-key="SERIALOUTBOUND_SELF_I18N_KEY"
         file-type="xlsx"
         :sheet-name="excelNames.sheet"
         :template-file-name="excelNames.fileBase"
@@ -347,7 +331,7 @@
       :id-column-key="'serialOutboundId'"
       :action-column-key="'action'"
       entity-scope="company"
-      table-mode="single"
+      table-mode="masterDetailMaster"
       @update:checked-keys="handleColumnKeysChange"
       @reset="handleColumnSettingReset"
     />
@@ -367,13 +351,25 @@ import { useI18n } from 'vue-i18n'
 import { ensureTaktPaginationConfigAsync, getTaktDefaultPageIndex, getTaktDefaultPageSize } from '@/utils/takt-paged'
 import SerialOutboundForm from './components/outbound-form.vue'
 import SerialOutboundItemPanel from './components/outbound-item-panel.vue'
-import { provideSerialOutboundMasterContext } from './composables/use-outbound-master-context'
+import { provideSerialOutboundMasterContext, type SerialOutboundRowRecord } from './composables/use-outbound-master-context'
 import { getSerialOutboundList, getSerialOutboundById, createSerialOutbound, updateSerialOutbound, deleteSerialOutboundById, deleteSerialOutboundBatch, getSerialOutboundTemplate, importSerialOutbound, exportSerialOutbound } from '@/api/logistics/serial/outbound'
 import type { SerialOutbound, SerialOutboundQuery } from '@/types/logistics/serial/outbound'
 import { useDictDataStore } from '@/stores/foundation/dict-data'
 import { taktExcelEntityNames } from '@/utils/naming'
 import { resolveExportDownloadFileName } from '@/utils/export-download-name'
+import { normalizeImportResult, type TaktImportResult } from '@/utils/takt-import-result'
 import { RiEditLine, RiDeleteBinLine, RiQuestionLine } from '@remixicon/vue'
+
+import {
+  useSerialOutboundI18n,
+  SERIALOUTBOUND_LIST_FIELDS,
+  SERIALOUTBOUND_QUERY_STRING_FIELDS,
+  SERIALOUTBOUND_QUERY_FIELDS,
+  SERIALOUTBOUND_SELF_I18N_KEY,
+} from './composables/use-outbound-i18n'
+
+/** 实体字段 i18n（标签/占位符统一入口） */
+const pi = useSerialOutboundI18n()
 
 /** i18n 翻译函数 */
 const { t } = useI18n()
@@ -381,7 +377,7 @@ const { t } = useI18n()
 const excelNames = taktExcelEntityNames('TaktSerialOutbound')
 /** 列表快捷查询占位文案 */
 const searchPlaceholder = computed(
-  () => t('common.page.form.placeholder.search', { keyword: t('entity.serialoutbound._self') })
+  () => t('common.page.form.placeholder.search', { keyword: pi.self() })
 )
 
 /** 快捷查询关键字 */
@@ -397,9 +393,9 @@ const pageSize = ref(getTaktDefaultPageSize())
 /** 分页 total */
 const total = ref(0)
 /** 工具栏单选时当前行 */
-const selectedRow = ref<SerialOutbound | null>(null)
+const selectedRow = ref<SerialOutboundRowRecord | null>(null)
 /** 表格多选行 */
-const selectedRows = ref<SerialOutbound[]>([])
+const selectedRows = ref<SerialOutboundRowRecord[]>([])
 /** 表格多选 row-key 集合 */
 const selectedRowKeys = ref<(string | number)[]>([])
 
@@ -416,44 +412,27 @@ const formRef = ref()
 
 /** 高级查询抽屉是否打开 */
 const advancedQueryVisible = ref(false)
+/**
+ * 创建空的高级查询表单
+ * @returns {Record<string, unknown>} 高级查询初始模型
+ */
+function createEmptyAdvancedQueryForm() {
+  const form = Object.fromEntries(SERIALOUTBOUND_QUERY_STRING_FIELDS.map((key) => [key, ''])) as Record<
+    (typeof SERIALOUTBOUND_QUERY_STRING_FIELDS)[number],
+    string
+  >
+  return {
+    ...form,
+    outboundType: undefined as number | undefined,
+    totalQuantity: undefined as number | undefined,
+  }
+}
 /** 高级查询表单模型 */
-const advancedQueryForm = ref({
-  plantCode: '',
-  outboundNo: '',
-  shippingInvoiceNo: '',
-  outboundDateStart: '',
-  outboundDateEnd: '',
-  destination: '',
-  shippingMethod: undefined as number | undefined,
-  destinationPort: '',
-  outboundType: undefined as number | undefined,
-  warehouseCode: '',
-  locationCode: '',
-  totalQuantity: undefined as number | undefined,
-  createdAtStart: '',
-  createdAtEnd: '',
-  extField: '',
-  remark: '',
-})
+const advancedQueryForm = ref(createEmptyAdvancedQueryForm())
 /** 高级查询字段元数据（列显隐配置） */
-const queryFieldsMeta = computed(() => [
-  { key: 'plantCode', label: t('entity.serialoutbound.plantcode') },
-  { key: 'outboundNo', label: t('entity.serialoutbound.outboundno') },
-  { key: 'shippingInvoiceNo', label: t('entity.serialoutbound.shippinginvoiceno') },
-  { key: 'outboundDateStart', label: t('common.page.entity.createdatstart').replace(t('common.page.entity.createdat'), t('entity.serialoutbound.outbounddate')) },
-  { key: 'outboundDateEnd', label: t('common.page.entity.createdatend').replace(t('common.page.entity.createdat'), t('entity.serialoutbound.outbounddate')) },
-  { key: 'destination', label: t('entity.serialoutbound.destination') },
-  { key: 'shippingMethod', label: t('entity.serialoutbound.shippingmethod') },
-  { key: 'destinationPort', label: t('entity.serialoutbound.destinationport') },
-  { key: 'outboundType', label: t('entity.serialoutbound.outboundtype') },
-  { key: 'warehouseCode', label: t('entity.serialoutbound.warehousecode') },
-  { key: 'locationCode', label: t('entity.serialoutbound.locationcode') },
-  { key: 'totalQuantity', label: t('entity.serialoutbound.totalquantity') },
-  { key: 'createdAtStart', label: t('common.page.entity.createdatstart') },
-  { key: 'createdAtEnd', label: t('common.page.entity.createdatend') },
-  { key: 'extField', label: t('common.page.entity.extfield') },
-  { key: 'remark', label: t('common.page.entity.remark') },
-])
+const queryFieldsMeta = computed(() =>
+  SERIALOUTBOUND_QUERY_FIELDS.map((key) => ({ key, label: pi.queryLabel(key) })),
+)
 /** 高级查询当前可见字段 key */
 const visibleQueryFieldKeys = ref<string[]>([])
 /** 列设置抽屉是否打开 */
@@ -497,28 +476,15 @@ function buildListQuery(overrides?: Partial<SerialOutboundQuery>): SerialOutboun
       query[key] = v as never
     }
   }
-  assignTrimmed('plantCode', form.plantCode)
-  assignTrimmed('outboundNo', form.outboundNo)
-  assignTrimmed('shippingInvoiceNo', form.shippingInvoiceNo)
-  assignTrimmed('outboundDateStart', form.outboundDateStart)
-  assignTrimmed('outboundDateEnd', form.outboundDateEnd)
-  assignTrimmed('destination', form.destination)
-  if (form.shippingMethod !== undefined && form.shippingMethod !== null) {
-    query.shippingMethod = form.shippingMethod
+  for (const key of SERIALOUTBOUND_QUERY_STRING_FIELDS) {
+    assignTrimmed(key, form[key])
   }
-  assignTrimmed('destinationPort', form.destinationPort)
   if (form.outboundType !== undefined && form.outboundType !== null) {
     query.outboundType = form.outboundType
   }
-  assignTrimmed('warehouseCode', form.warehouseCode)
-  assignTrimmed('locationCode', form.locationCode)
   if (form.totalQuantity !== undefined && form.totalQuantity !== null) {
     query.totalQuantity = form.totalQuantity
   }
-  assignTrimmed('createdAtStart', form.createdAtStart)
-  assignTrimmed('createdAtEnd', form.createdAtEnd)
-  assignTrimmed('extField', form.extField)
-  assignTrimmed('remark', form.remark)
   return query
 }
 /** 页面挂载：租户上下文就绪后加载分页配置，再拉列表 */
@@ -533,7 +499,7 @@ onMounted(async () => {
 const selectedMasterKey = ref('')
 
 /** 同步主表选中行到右侧明细（子表由 *-panel watch 自动 reload） */
-function syncMasterSelection(record: SerialOutbound | null) {
+function syncMasterSelection(record: SerialOutboundRowRecord | null) {
   selectedMasterRow.value = record
   selectedMasterKey.value = record ? getSerialOutboundId(record) : ''
 }
@@ -543,7 +509,7 @@ function syncMasterSelection(record: SerialOutbound | null) {
  * @param record 主表行
  */
 function handleMasterSelect(record: Record<string, unknown>) {
-  const row = record as unknown as SerialOutbound
+  const row = record as unknown as SerialOutboundRowRecord
   const key = getSerialOutboundId(row)
   selectedRowKeys.value = [key]
   selectedRows.value = [row]
@@ -561,7 +527,7 @@ function handleMasterPaginationChange(_page: number, _pageSize: number) {
 }
 
 /** 加载主表详情并回填当前页 dataSource */
-async function loadSerialOutboundDetail(record: SerialOutbound): Promise<SerialOutbound | null> {
+async function loadSerialOutboundDetail(record: SerialOutboundRowRecord): Promise<SerialOutbound | null> {
   const id = getSerialOutboundId(record)
   if (!id) {
     return null
@@ -592,7 +558,7 @@ const columns = computed<TableColumnsType>(() => [
     customRender: ({ record }: { record: any }) => getSerialOutboundField(record, 'serialOutboundId') ?? ''
   },
   {
-    title: t('entity.serialoutbound.plantcode'),
+    title: pi.label('plantCode'),
     dataIndex: 'plantCode',
     key: 'plantCode',
     width: 120,
@@ -601,7 +567,7 @@ const columns = computed<TableColumnsType>(() => [
     customRender: ({ record }: { record: any }) => getSerialOutboundField(record, 'plantCode') ?? ''
   },
   {
-    title: t('entity.serialoutbound.outboundno'),
+    title: pi.label('outboundNo'),
     dataIndex: 'outboundNo',
     key: 'outboundNo',
     width: 120,
@@ -610,7 +576,7 @@ const columns = computed<TableColumnsType>(() => [
     customRender: ({ record }: { record: any }) => getSerialOutboundField(record, 'outboundNo') ?? ''
   },
   {
-    title: t('entity.serialoutbound.shippinginvoiceno'),
+    title: pi.label('shippingInvoiceNo'),
     dataIndex: 'shippingInvoiceNo',
     key: 'shippingInvoiceNo',
     width: 120,
@@ -619,7 +585,7 @@ const columns = computed<TableColumnsType>(() => [
     customRender: ({ record }: { record: any }) => getSerialOutboundField(record, 'shippingInvoiceNo') ?? ''
   },
   {
-    title: t('entity.serialoutbound.outbounddate'),
+    title: pi.label('outboundDate'),
     dataIndex: 'outboundDate',
     key: 'outboundDate',
     width: 120,
@@ -628,7 +594,7 @@ const columns = computed<TableColumnsType>(() => [
     customRender: ({ record }: { record: any }) => getSerialOutboundField(record, 'outboundDate') ?? ''
   },
   {
-    title: t('entity.serialoutbound.destination'),
+    title: pi.label('destination'),
     dataIndex: 'destination',
     key: 'destination',
     width: 120,
@@ -637,15 +603,7 @@ const columns = computed<TableColumnsType>(() => [
     customRender: ({ record }: { record: any }) => getSerialOutboundField(record, 'destination') ?? ''
   },
   {
-    title: t('entity.serialoutbound.shippingmethod'),
-    dataIndex: 'shippingMethod',
-    key: 'shippingMethod',
-    width: 120,
-    resizable: true,
-    ellipsis: true,
-  },
-  {
-    title: t('entity.serialoutbound.destinationport'),
+    title: pi.label('destinationPort'),
     dataIndex: 'destinationPort',
     key: 'destinationPort',
     width: 120,
@@ -653,7 +611,7 @@ const columns = computed<TableColumnsType>(() => [
     ellipsis: true,
   },
   {
-    title: t('entity.serialoutbound.outboundtype'),
+    title: pi.label('outboundType'),
     dataIndex: 'outboundType',
     key: 'outboundType',
     width: 120,
@@ -661,7 +619,7 @@ const columns = computed<TableColumnsType>(() => [
     ellipsis: true,
   },
   {
-    title: t('entity.serialoutbound.warehousecode'),
+    title: pi.label('warehouseCode'),
     dataIndex: 'warehouseCode',
     key: 'warehouseCode',
     width: 120,
@@ -670,7 +628,7 @@ const columns = computed<TableColumnsType>(() => [
     customRender: ({ record }: { record: any }) => getSerialOutboundField(record, 'warehouseCode') ?? ''
   },
   {
-    title: t('entity.serialoutbound.locationcode'),
+    title: pi.label('locationCode'),
     dataIndex: 'locationCode',
     key: 'locationCode',
     width: 120,
@@ -679,7 +637,7 @@ const columns = computed<TableColumnsType>(() => [
     customRender: ({ record }: { record: any }) => getSerialOutboundField(record, 'locationCode') ?? ''
   },
   {
-    title: t('entity.serialoutbound.totalquantity'),
+    title: pi.label('totalQuantity'),
     dataIndex: 'totalQuantity',
     key: 'totalQuantity',
     width: 120,
@@ -695,7 +653,7 @@ const columns = computed<TableColumnsType>(() => [
         shape: 'plain',
         icon: RiEditLine,
         permission: 'logistics:serial:outbound:update',
-        onClick: (record: SerialOutbound) => handleEdit(record)
+        onClick: (record: SerialOutboundRowRecord) => handleEdit(record)
       },
       {
         key: 'delete',
@@ -703,26 +661,44 @@ const columns = computed<TableColumnsType>(() => [
         shape: 'plain',
         icon: RiDeleteBinLine,
         permission: 'logistics:serial:outbound:delete',
-        onClick: (record: SerialOutbound) => handleDeleteOne(record)
+        onClick: (record: SerialOutboundRowRecord) => handleDeleteOne(record)
       }
     ]
   })
 ])
 
 /** 表格 row-key（优先实体主键字段） */
-const getSerialOutboundId = (record: any): string => record?.[entityIdName] ?? ''
+const getSerialOutboundId = (record: SerialOutboundRowRecord): string => {
+  const id = (record as Record<string, unknown>)?.[entityIdName]
+  return id != null ? String(id) : ''
+}
 /**
  * 读取行字段值
  * @param record 行数据
  * @param field 字段名
  */
 const getSerialOutboundField = (record: any, field: string): any => record?.[field]
+/**
+ * 供 TaktDictTag 等组件使用的标量字典值
+ * @param record 行数据
+ * @param field 字段名
+ */
+const getSerialOutboundDictValue = (
+  record: SerialOutboundRowRecord,
+  field: string,
+): string | number | undefined => {
+  const value = (record as Record<string, unknown>)?.[field]
+  if (value === null || value === undefined) return undefined
+  if (typeof value === 'string' || typeof value === 'number') return value
+  return String(value)
+}
+
 
 
 /** 行选择配置 */
 const rowSelection = computed(() => ({
   selectedRowKeys: selectedRowKeys.value,
-  onChange: (keys: (string | number)[], rows: SerialOutbound[]) => {
+  onChange: (keys: (string | number)[], rows: SerialOutboundRowRecord[]) => {
     selectedRowKeys.value = keys
     selectedRows.value = rows
     selectedRow.value = rows.length === 1 ? (rows[0] ?? null) : null
@@ -732,7 +708,7 @@ const rowSelection = computed(() => ({
       syncMasterSelection(null)
     }
   },
-  onSelect: (record: SerialOutbound, selected: boolean) => {
+  onSelect: (record: SerialOutboundRowRecord, selected: boolean) => {
     if (selected) {
       selectedRow.value = record
       syncMasterSelection(record)
@@ -741,7 +717,7 @@ const rowSelection = computed(() => ({
       syncMasterSelection(null)
     }
   },
-  onSelectAll: (selected: boolean, selectedRowsData: SerialOutbound[]) => {
+  onSelectAll: (selected: boolean, selectedRowsData: SerialOutboundRowRecord[]) => {
     selectedRow.value = selected && selectedRowsData.length === 1 ? (selectedRowsData[0] ?? null) : null
     syncMasterSelection(selectedRow.value)
   }
@@ -783,7 +759,6 @@ function handleReset() {
   outboundDateStart: '',
   outboundDateEnd: '',
   destination: '',
-  shippingMethod: undefined as number | undefined,
   destinationPort: '',
   outboundType: undefined as number | undefined,
   warehouseCode: '',
@@ -800,14 +775,14 @@ function handleReset() {
 
 /** 打开新增弹窗 */
 function handleCreate() {
-  formTitle.value = t('common.dialog.title.create', { entity: t('entity.serialoutbound._self') })
+  formTitle.value = t('common.dialog.title.create', { entity: pi.self() })
   formData.value = null
   formVisible.value = true
   nextTick(() => formRef.value?.resetFields())
 }
 /** 打开编辑弹窗（主子表：先拉详情含子表） */
-async function handleEdit(record: SerialOutbound) {
-  formTitle.value = t('common.dialog.title.edit', { entity: t('entity.serialoutbound._self') })
+async function handleEdit(record: SerialOutboundRowRecord) {
+  formTitle.value = t('common.dialog.title.edit', { entity: pi.self() })
   formLoading.value = true
   try {
     const detail = await loadSerialOutboundDetail(record)
@@ -823,7 +798,7 @@ function handleUpdate() {
   if (selectedRow.value) {
     void handleEdit(selectedRow.value)
   } else {
-    message.warning(t('common.tip.select.to.action', { action: t('common.page.button.edit'), entity: t('entity.serialoutbound._self') }))
+    message.warning(t('common.tip.select.to.action', { action: t('common.page.button.edit'), entity: pi.self() }))
   }
 }
 /** 提交新增/编辑表单 */
@@ -841,10 +816,10 @@ async function handleFormSubmit() {
     const id = (formData.value as any)?.[entityIdName]
     if (id) {
       await updateSerialOutbound(id, payload as any)
-      message.success(t('common.feedback.updated', { target: t('entity.serialoutbound._self') }))
+      message.success(t('common.feedback.updated', { target: pi.self() }))
     } else {
       await createSerialOutbound(payload as any)
-      message.success(t('common.feedback.created', { target: t('entity.serialoutbound._self') }))
+      message.success(t('common.feedback.created', { target: pi.self() }))
     }
     formVisible.value = false
     formData.value = null
@@ -875,15 +850,22 @@ async function handleDownloadTemplate(sheetName?: string, fileName?: string): Pr
   return (res as any)?.data ?? res
 }
 
-/** 上传并导入 Excel 文件 */
-async function handleImportFile(file: File, sheetName?: string): Promise<{ success: number; fail: number; errors: string[] }> {
-  return await importSerialOutbound(file, sheetName)
+/** 上传并导入 Excel 文件（归一化后端 SuccessCount/successCount） */
+async function handleImportFile(file: File, sheetName?: string): Promise<TaktImportResult> {
+  const raw = await importSerialOutbound(file, sheetName)
+  return normalizeImportResult(raw)
 }
 
-/** 导入完成回调：刷新列表并可选关闭对话框 */
-function handleImportSuccess(result: { success: number; fail: number; errors: string[] }) {
+/** 导入完成回调：刷新列表；全部成功时延迟关闭对话框 */
+function handleImportSuccess(result: TaktImportResult) {
   loadData()
-  if (result.fail === 0) setTimeout(() => { importVisible.value = false }, 2000)
+
+      if (selectedMasterKey.value) {
+    serialOutboundItemPanelRef.value?.reload?.()
+      }
+  if (result.fail === 0 && result.success > 0) {
+    setTimeout(() => { importVisible.value = false }, 2000)
+  }
 }
 
 /** 关闭导入对话框 */
@@ -917,24 +899,24 @@ async function handleExport() {
     link.click()
     document.body.removeChild(link)
     setTimeout(() => window.URL.revokeObjectURL(url), 100)
-    message.success(t('common.feedback.export.success', { target: t('entity.serialoutbound._self') }))
+    message.success(t('common.feedback.export.success', { target: pi.self() }))
   } catch (error: any) {
     logger.error('[SerialOutbound] 导出失败', { error })
-    message.error(error?.message || t('common.feedback.export.failed', { target: t('entity.serialoutbound._self') }))
+    message.error(error?.message || t('common.feedback.export.failed', { target: pi.self() }))
   } finally {
     loading.value = false
   }
 }
 /** 删除单行 */
-async function handleDeleteOne(record: SerialOutbound) {
+async function handleDeleteOne(record: SerialOutboundRowRecord) {
   Modal.confirm({
     title: t('common.tip.confirm.delete.title'),
-    content: t('common.tip.confirm.delete.entity', { entity: t('entity.serialoutbound._self'), name: t('common.tip.this.target', { target: t('entity.serialoutbound._self') }) }),
+    content: t('common.tip.confirm.delete.entity', { entity: pi.self(), name: t('common.tip.this.target', { target: pi.self() }) }),
     okText: t('common.page.button.delete'),
     cancelText: t('common.page.button.cancel'),
     onOk: async () => {
       await deleteSerialOutboundById((record as any)[entityIdName])
-      message.success(t('common.feedback.deleted', { target: t('entity.serialoutbound._self') }))
+      message.success(t('common.feedback.deleted', { target: pi.self() }))
       selectedRowKeys.value = []
       selectedRows.value = []
       selectedRow.value = null
@@ -946,18 +928,18 @@ async function handleDeleteOne(record: SerialOutbound) {
 /** 批量删除选中行 */
 async function handleDelete() {
   if (selectedRows.value.length === 0) {
-    message.warning(t('common.tip.select.to.action', { action: t('common.page.button.delete'), entity: t('entity.serialoutbound._self') }))
+    message.warning(t('common.tip.select.to.action', { action: t('common.page.button.delete'), entity: pi.self() }))
     return
   }
   Modal.confirm({
     title: t('common.tip.confirm.delete.title'),
-    content: t('common.tip.confirm.delete.count', { entity: t('entity.serialoutbound._self'), count: selectedRows.value.length }),
+    content: t('common.tip.confirm.delete.count', { entity: pi.self(), count: selectedRows.value.length }),
     okText: t('common.page.button.delete'),
     cancelText: t('common.page.button.cancel'),
     onOk: async () => {
       const ids = selectedRows.value.map((r: any) => r[entityIdName]).filter(Boolean)
       await deleteSerialOutboundBatch(ids)
-      message.success(t('common.feedback.deleted', { target: t('entity.serialoutbound._self') }))
+      message.success(t('common.feedback.deleted', { target: pi.self() }))
       selectedRowKeys.value = []
       selectedRows.value = []
       selectedRow.value = null
@@ -986,7 +968,6 @@ function handleAdvancedQueryReset() {
   outboundDateStart: '',
   outboundDateEnd: '',
   destination: '',
-  shippingMethod: undefined as number | undefined,
   destinationPort: '',
   outboundType: undefined as number | undefined,
   warehouseCode: '',

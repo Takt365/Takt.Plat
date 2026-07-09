@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Application.Dtos.Logistics.Quality.Cost
 // 文件名称：TaktQualityAssuranceReliabilityDtos.cs
-// 创建时间：2026-06-30
+// 创建时间：2026-07-09
 // 创建人：Takt365(Auto Generated)
 // 功能描述：QualityAssuranceReliability 模块 DTO（由 generate-dtos-from-entity.cjs 根据 TaktQualityAssuranceReliability 生成，请按需审阅）
 // 
@@ -77,6 +77,11 @@ public class TaktQualityAssuranceReliabilityDto : TaktCompanyDtoBase
     public string? ReliabilityNote { get; set; } = string.Empty;
 
     /// <summary>
+    /// 是否作废（字典 sys_yes_no_type，0=否 1=是；编辑移除子行时标记作废）
+    /// </summary>
+    public int IsObsolete { get; set; } = 0;
+
+    /// <summary>
     /// 品质业务主表(导航属性)
     /// （主表：TaktQualityAssurance）
     /// </summary>
@@ -139,6 +144,11 @@ public class TaktQualityAssuranceReliabilityQueryDto : TaktPagedQuery
     /// 信赖性评价备注
     /// </summary>
     public string? ReliabilityNote { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 是否作废（字典 sys_yes_no_type，0=否 1=是；编辑移除子行时标记作废）
+    /// </summary>
+    public int? IsObsolete { get; set; }
 
     /// <summary>
     /// 创建时间（范围查询-开始）
@@ -223,6 +233,11 @@ public class TaktQualityAssuranceReliabilityCreateDto
     public string? ReliabilityNote { get; set; } = string.Empty;
 
     /// <summary>
+    /// 是否作废（字典 sys_yes_no_type，0=否 1=是；编辑移除子行时标记作废）
+    /// </summary>
+    public int IsObsolete { get; set; } = 0;
+
+    /// <summary>
     /// 扩展字段JSON
     /// </summary>
     public string? ExtField { get; set; }
@@ -252,6 +267,29 @@ public class TaktQualityAssuranceReliabilityUpdateDto : TaktQualityAssuranceReli
     [JsonConverter(typeof(ValueToStringConverter))]
     public long QualityAssuranceReliabilityId { get; set; }
 
+}
+
+// ========================================
+// QualityAssuranceReliability 作废 DTO
+// ========================================
+
+/// <summary>
+/// QualityAssuranceReliability 作废/撤销作废 DTO
+/// </summary>
+public class TaktQualityAssuranceReliabilityObsoleteDto
+{
+    /// <summary>
+    /// QualityAssuranceReliabilityID
+    /// </summary>
+    [Required(ErrorMessage = "ID不能为空")]
+    [AdaptMember("Id")]
+    [JsonConverter(typeof(ValueToStringConverter))]
+    public long QualityAssuranceReliabilityId { get; set; }
+
+    /// <summary>
+    /// 是否作废（字典 sys_yes_no_type，0=否 1=是；编辑移除子行时标记作废）
+    /// </summary>
+    public int IsObsolete { get; set; }
 }
 
 // ========================================
@@ -308,6 +346,11 @@ public class TaktQualityAssuranceReliabilityTemplateDto
     /// 信赖性评价备注
     /// </summary>
     public string? ReliabilityNote { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 是否作废（字典 sys_yes_no_type，0=否 1=是；编辑移除子行时标记作废）
+    /// </summary>
+    public int? IsObsolete { get; set; }
 
     /// <summary>
     /// 扩展字段JSON
@@ -378,6 +421,11 @@ public class TaktQualityAssuranceReliabilityImportDto
     public string? ReliabilityNote { get; set; } = string.Empty;
 
     /// <summary>
+    /// 是否作废（字典 sys_yes_no_type，0=否 1=是；编辑移除子行时标记作废）
+    /// </summary>
+    public int? IsObsolete { get; set; }
+
+    /// <summary>
     /// 扩展字段JSON
     /// </summary>
     public string? ExtField { get; set; }
@@ -445,6 +493,11 @@ public class TaktQualityAssuranceReliabilityExportDto
     /// 信赖性评价备注
     /// </summary>
     public string? ReliabilityNote { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 是否作废（字典 sys_yes_no_type，0=否 1=是；编辑移除子行时标记作废）
+    /// </summary>
+    public int IsObsolete { get; set; } = 0;
 
     /// <summary>
     /// 扩展字段JSON

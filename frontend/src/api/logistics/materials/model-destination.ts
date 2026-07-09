@@ -152,6 +152,36 @@ export function getModelDestinationByMaterial(materialCode: string): Promise<Mod
   });
 }
 
+/**
+ * 根据物料编码获取机种仕向列表
+ * @param {string} materialCode 物料编码
+ * @returns {Promise<ModelDestination[]>} 型号目的地 DTO 列表
+ */
+export function getModelDestinationListByMaterial(materialCode: string): Promise<ModelDestination[]> {
+  return request<ModelDestination[]>({
+    url: `${MODEL_DESTINATION_API_BASE}/list-by-material`,
+    method: 'get',
+    params: {
+      materialCode,
+    },
+  });
+}
+
+/**
+ * 根据物料编码获取机种仕向选项列表
+ * @param {string} materialCode 物料编码
+ * @returns {Promise<TaktSelectOption[]>} 下拉选项
+ */
+export function getModelDestinationOptionsByMaterial(materialCode: string): Promise<TaktSelectOption[]> {
+  return request<TaktSelectOption[]>({
+    url: `${MODEL_DESTINATION_API_BASE}/options-by-material`,
+    method: 'get',
+    params: {
+      materialCode,
+    },
+  });
+}
+
 // ========================================
 // 导入导出
 // ========================================

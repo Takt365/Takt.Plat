@@ -190,7 +190,6 @@ import type { FormInstance } from 'ant-design-vue';
 import type { Rule } from 'ant-design-vue/es/form';
 import { useLoginFieldSync } from '@/composables/use-login-field-sync';
 import {
-  isTaktCaptchaDisabledError,
   probeSessionCaptchaRequiredAsync,
   useTaktLoginCaptcha,
   type TaktCaptchaPanelExpose,
@@ -324,6 +323,13 @@ const loginTicket = ref<string | null>(null);
 
 /** 验密成功时绑定的租户+用户名（signin 须与签发时一致） */
 const loginSessionContext = ref<{ tenantCode: string; username: string } | null>(null);
+
+/** 启用验证码时，待验密的租户/用户名/密文密码 */
+const pendingVerifyPayload = ref<{
+  tenantCode: string;
+  username: string;
+  password: string;
+} | null>(null);
 
 /** 防止验证码通过后重复触发 signin */
 const signInSubmitting = ref(false);
@@ -609,7 +615,52 @@ function resolveLoginErrorMessage(error: unknown, fallback: string): string {
     return t('login.page.message.credentials.incorrect');
   }
 
+  const accountLockedHints = [
+    'common.status.account.locked',
+    'login.page.message.account.locked',
+    '账户已锁定',
+    'account is locked',
+    'アカウントがロック',
+  ] as const;
+
+  if (accountLockedHints.some((hint) => msg.toLowerCase().includes(hint.toLowerCase()))) {
+    return t('login.page.message.account.locked');
+  }
+
   return msg;
+}
+
+/**
+ * 验密并建立会话（verify-password → signin；有票据时 signin 跳过验证码）
+ * @param payload 验密请求载荷
+ */
+async function runVerifyAndSignInAsync(payload: {
+  tenantCode: string;
+  username: string;
+  password: string;
+  captchaId?: string;
+  captchaCode?: string;
+}): Promise<void> {
+  const verifyResult = normalizeSessionVerifyPasswordResponse(
+    await verifySessionPassword({
+      username: payload.username,
+      password: payload.password,
+      tenantCode: payload.tenantCode,
+      captchaId: payload.captchaId,
+      captchaCode: payload.captchaCode,
+    }),
+  );
+
+  const ticket = verifyResult.loginTicket?.trim();
+  if (!ticket) {
+    throw new Error(t('login.page.message.fail'));
+  }
+
+  loginTicket.value = ticket;
+  loginSessionContext.value = { tenantCode: payload.tenantCode, username: payload.username };
+  pendingVerifyPayload.value = null;
+
+  await completeSignInAsync();
 }
 
 /**
@@ -630,52 +681,18 @@ async function handleLogin(): Promise<void> {
     const { tenantCode, username } = resolveLoginCredentials();
     const cipherPassword = await buildCipherPasswordAsync();
 
-    const verifyResult = normalizeSessionVerifyPasswordResponse(
-      await verifySessionPassword({
-        username,
-        password: cipherPassword,
-        tenantCode,
-      }),
-    );
-
-    const ticket = verifyResult.loginTicket?.trim();
-    if (!ticket) {
-      throw new Error(t('login.page.message.fail'));
-    }
-
-    loginTicket.value = ticket;
-    loginSessionContext.value = { tenantCode, username };
-
-    let needCaptcha = verifyResult.captchaRequired;
-    if (!needCaptcha) {
-      needCaptcha = await probeSessionCaptchaRequiredAsync();
-    }
-
-    if (needCaptcha) {
+    const needCaptchaUpfront = await probeSessionCaptchaRequiredAsync();
+    if (needCaptchaUpfront) {
+      pendingVerifyPayload.value = { tenantCode, username, password: cipherPassword };
       captchaModalOpen.value = true;
       return;
     }
 
-    await completeSignInAsync();
+    await runVerifyAndSignInAsync({ tenantCode, username, password: cipherPassword });
   } catch (error) {
-    if (isTaktCaptchaDisabledError(error)) {
-      try {
-        loading.value = true;
-        signInSubmitting.value = true;
-        await completeSignInAsync();
-        return;
-      } catch (signInError) {
-        loginTicket.value = null;
-        loginSessionContext.value = null;
-        message.error(resolveLoginErrorMessage(signInError, t('login.page.message.fail')));
-        return;
-      } finally {
-        loading.value = false;
-        signInSubmitting.value = false;
-      }
-    }
     loginTicket.value = null;
     loginSessionContext.value = null;
+    pendingVerifyPayload.value = null;
     message.error(resolveLoginErrorMessage(error, t('login.page.message.fail')));
   } finally {
     loading.value = false;
@@ -690,28 +707,54 @@ async function handleCaptchaConfirm(): Promise<void> {
     return;
   }
 
-  const payload = confirmCaptcha();
-  if (!payload) {
+  const captchaPayload = confirmCaptcha();
+  if (!captchaPayload) {
     return;
   }
 
-  const ctx = loginSessionContext.value;
-  if (!ctx?.tenantCode || !loginTicket.value?.trim()) {
-    message.error(t('login.page.message.fail'));
-    captchaModalOpen.value = true;
+  const pending = pendingVerifyPayload.value;
+  if (!pending) {
+    const ctx = loginSessionContext.value;
+    if (!ctx?.tenantCode || !loginTicket.value?.trim()) {
+      message.error(t('login.page.message.fail'));
+      captchaModalOpen.value = true;
+      return;
+    }
+
+    loading.value = true;
+    signInSubmitting.value = true;
+    try {
+      if (tenantStore.tenantCode !== ctx.tenantCode) {
+        tenantStore.setTenant(ctx.tenantCode);
+      }
+      await completeSignInAsync(captchaPayload);
+    } catch (error) {
+      loginTicket.value = null;
+      loginSessionContext.value = null;
+      message.error(resolveLoginErrorMessage(error, t('login.page.message.fail')));
+      captchaModalOpen.value = true;
+    } finally {
+      loading.value = false;
+      signInSubmitting.value = false;
+    }
     return;
   }
 
   loading.value = true;
   signInSubmitting.value = true;
   try {
-    if (tenantStore.tenantCode !== ctx.tenantCode) {
-      tenantStore.setTenant(ctx.tenantCode);
+    if (tenantStore.tenantCode !== pending.tenantCode) {
+      tenantStore.setTenant(pending.tenantCode);
     }
-    await completeSignInAsync(payload);
+    await runVerifyAndSignInAsync({
+      ...pending,
+      captchaId: captchaPayload.captchaId,
+      captchaCode: captchaPayload.captchaCode,
+    });
   } catch (error) {
     loginTicket.value = null;
     loginSessionContext.value = null;
+    pendingVerifyPayload.value = null;
     message.error(resolveLoginErrorMessage(error, t('login.page.message.fail')));
     captchaModalOpen.value = true;
   } finally {
@@ -726,19 +769,38 @@ async function handleCaptchaConfirm(): Promise<void> {
 function handleCaptchaCancel(): void {
   loginTicket.value = null;
   loginSessionContext.value = null;
+  pendingVerifyPayload.value = null;
   cancelCaptcha();
 }
 
 registerCaptchaOnVerified(handleCaptchaConfirm);
 
 registerCaptchaOnCaptchaSkipped(async () => {
+  const pending = pendingVerifyPayload.value;
+  if (!pending) {
+    loading.value = true;
+    signInSubmitting.value = true;
+    try {
+      await completeSignInAsync();
+    } catch (error) {
+      loginTicket.value = null;
+      loginSessionContext.value = null;
+      message.error(resolveLoginErrorMessage(error, t('login.page.message.fail')));
+    } finally {
+      loading.value = false;
+      signInSubmitting.value = false;
+    }
+    return;
+  }
+
   loading.value = true;
   signInSubmitting.value = true;
   try {
-    await completeSignInAsync();
+    await runVerifyAndSignInAsync(pending);
   } catch (error) {
     loginTicket.value = null;
     loginSessionContext.value = null;
+    pendingVerifyPayload.value = null;
     message.error(resolveLoginErrorMessage(error, t('login.page.message.fail')));
   } finally {
     loading.value = false;

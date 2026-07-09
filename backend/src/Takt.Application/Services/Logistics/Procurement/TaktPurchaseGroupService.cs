@@ -96,7 +96,7 @@ public class TaktPurchaseGroupService : TaktServiceBase, ITaktPurchaseGroupServi
     {
         EnsureThreeLayerContext();
         var list = await _purchaseGroupRepository.GetListAsync(
-            x => x.TenantCode == CurrentTenantCode && x.CompanyCode == CurrentCompanyCode && x.PurchaseGroupStatus == 1,
+            x => x.TenantCode == CurrentTenantCode && x.CompanyCode == CurrentCompanyCode && x.GroupStatus == 1,
             x => x.SortOrder,
             false);
         return list.Select(e => new TaktSelectOption
@@ -213,18 +213,18 @@ public class TaktPurchaseGroupService : TaktServiceBase, ITaktPurchaseGroupServi
     /// </summary>
     /// <param name="dto">状态DTO</param>
     /// <returns>DTO</returns>
-    public async Task<TaktPurchaseGroupDto> UpdatePurchaseGroupStatusAsync(TaktPurchaseGroupStatusDto dto)
+    public async Task<TaktPurchaseGroupDto> UpdateGroupStatusAsync(TaktGroupStatusDto dto)
     {
         var entity = await _purchaseGroupRepository.GetByIdAsync(dto.PurchaseGroupId);
         if (entity == null)
         {
             throw new TaktBusinessException("采购组主数据不存在");
         }
-        if (entity.IsBuiltIn == 1 && dto.PurchaseGroupStatus != 1)
+        if (entity.IsBuiltIn == 1 && dto.GroupStatus != 1)
         {
             throw new TaktBusinessException("不允许禁用内置采购组主数据");
         }
-        entity.PurchaseGroupStatus = dto.PurchaseGroupStatus;
+        entity.GroupStatus = dto.GroupStatus;
         await _purchaseGroupRepository.UpdateAsync(entity);
         return await GetPurchaseGroupByIdAsync(dto.PurchaseGroupId) ?? throw new TaktBusinessException("采购组主数据不存在");
     }
@@ -363,7 +363,7 @@ public class TaktPurchaseGroupService : TaktServiceBase, ITaktPurchaseGroupServi
                 || SqlFunc.ToString(x.ResponsibleUserId).Contains(keywords)
                 || (x.ContactPhone != null && x.ContactPhone.Contains(keywords))
                 || (x.ContactEmail != null && x.ContactEmail.Contains(keywords))
-                || SqlFunc.ToString(x.PurchaseGroupStatus).Contains(keywords)
+                || SqlFunc.ToString(x.GroupStatus).Contains(keywords)
                 || SqlFunc.ToString(x.IsBuiltIn).Contains(keywords)
                 || SqlFunc.ToString(x.SortOrder).Contains(keywords)
                 || (x.ExtField != null && x.ExtField.Contains(keywords))
@@ -407,9 +407,9 @@ public class TaktPurchaseGroupService : TaktServiceBase, ITaktPurchaseGroupServi
             exp = exp.And(x => x.ContactEmail != null && x.ContactEmail.Contains(queryDto.ContactEmail));
         }
 
-        if (queryDto?.PurchaseGroupStatus.HasValue == true)
+        if (queryDto?.GroupStatus.HasValue == true)
         {
-            exp = exp.And(x => x.PurchaseGroupStatus == queryDto.PurchaseGroupStatus);
+            exp = exp.And(x => x.GroupStatus == queryDto.GroupStatus);
         }
 
         if (queryDto?.IsBuiltIn.HasValue == true)

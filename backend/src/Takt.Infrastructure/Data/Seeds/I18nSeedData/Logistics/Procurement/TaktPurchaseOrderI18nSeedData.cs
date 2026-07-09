@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Infrastructure.Data.Seeds.I18nSeedData.Logistics.Procurement
 // 文件名称：TaktPurchaseOrderI18nSeedData.cs
-// 创建时间：2026-07-02
+// 创建时间：2026-07-09
 // 创建人：Takt365(Auto Generated)
 // 功能描述：TaktPurchaseOrder 实体字段国际化种子（无对应 frontend locales；TranslationText 取自 ColumnDescription，ContextNote 取自属性 XML summary）
 // 
@@ -305,15 +305,6 @@ public class TaktPurchaseOrderI18nSeedData : ITaktSeedDataCoordinator
             new TranslationSeedItem("entity.purchaseorder.items", "zh-CN", "订单明细列表", "订单明细列表（主子表关系，一个订单可以有多个明细）"),
             // entity.purchaseorder.items
             new TranslationSeedItem("entity.purchaseorder.items", "zh-HK", "订单明细列表_hk", "订单明细列表（主子表关系，一个订单可以有多个明细）"),
-
-            // entity.purchaseorder.changelogs
-            new TranslationSeedItem("entity.purchaseorder.changelogs", "en-US", "采购订单变更记录列表_us", "采购订单变更记录列表（外键在子表 TaktPurchaseOrderChangeLog.PurchaseOrderId）"),
-            // entity.purchaseorder.changelogs
-            new TranslationSeedItem("entity.purchaseorder.changelogs", "ja-JP", "采购订单变更记录列表_jp", "采购订单变更记录列表（外键在子表 TaktPurchaseOrderChangeLog.PurchaseOrderId）"),
-            // entity.purchaseorder.changelogs
-            new TranslationSeedItem("entity.purchaseorder.changelogs", "zh-CN", "采购订单变更记录列表", "采购订单变更记录列表（外键在子表 TaktPurchaseOrderChangeLog.PurchaseOrderId）"),
-            // entity.purchaseorder.changelogs
-            new TranslationSeedItem("entity.purchaseorder.changelogs", "zh-HK", "采购订单变更记录列表_hk", "采购订单变更记录列表（外键在子表 TaktPurchaseOrderChangeLog.PurchaseOrderId）"),
         };
     }
 

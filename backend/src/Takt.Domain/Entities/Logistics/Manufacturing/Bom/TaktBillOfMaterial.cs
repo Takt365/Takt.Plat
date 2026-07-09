@@ -129,10 +129,4 @@ public class TaktBillOfMaterial : TaktCompanyEntityBase
     /// </summary>
     [Navigate(NavigateType.OneToMany, nameof(TaktBillOfMaterialItem.BillOfMaterialId))]
     public List<TaktBillOfMaterialItem>? Items { get; set; }
-
-    /// <summary>
-    /// BOM变更记录列表（外键在子表 TaktBillOfMaterialChangeLog.BillOfMaterialId）
-    /// </summary>
-    [Navigate(NavigateType.OneToMany, nameof(TaktBillOfMaterialChangeLog.BillOfMaterialId))]
-    public List<TaktBillOfMaterialChangeLog>? ChangeLogs { get; set; }
 }

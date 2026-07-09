@@ -638,6 +638,8 @@ const columns = computed<TableColumnsType>(() => [
     width: 120,
     resizable: true,
     ellipsis: true,
+    sorter: (a: EcGijutsu, b: EcGijutsu) =>
+      String(getEcField(a, 'ecNo') ?? '').localeCompare(String(getEcField(b, 'ecNo') ?? '')),
     customRender: ({ record }: { record: any }) => getEcField(record, 'ecNo') ?? ''
   },
   {
@@ -647,6 +649,9 @@ const columns = computed<TableColumnsType>(() => [
     width: 120,
     resizable: true,
     ellipsis: true,
+    sorter: (a: EcGijutsu, b: EcGijutsu) =>
+      new Date(String(getEcField(a, 'ecIssueDate') ?? 0)).getTime()
+      - new Date(String(getEcField(b, 'ecIssueDate') ?? 0)).getTime(),
     customRender: ({ record }: { record: any }) => getEcField(record, 'ecIssueDate') ?? ''
   },
   {

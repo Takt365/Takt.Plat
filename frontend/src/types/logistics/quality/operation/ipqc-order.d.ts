@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：frontend/src/types/logistics/quality/operation
 // 文件名称：ipqc-order.d.ts
-// 创建时间：2026-06-30
+// 创建时间：2026-07-09
 // 创建人：Takt365(Auto Generated)
 // 功能描述：logistics/quality/operation 模块类型定义（自动生成；类型名去 Takt 前缀与末尾 Dto，如 TaktCompanyDto → Company）
 // 
@@ -107,11 +107,6 @@ export interface IpqcOrder extends CompanyDtoBase {
    * IPQC检验单明细列表（主子表关系） （子表：TaktIpqcOrderItem）
    */
   items?: IpqcOrderItem[];
-
-  /**
-   * 变更日志列表（主子表关系） （子表：TaktIpqcOrderChangeLog）
-   */
-  changeLogs?: IpqcOrderChangeLog[];
 
 }
 
@@ -340,12 +335,7 @@ export interface IpqcOrderCreate {
   /**
    * IPQC检验单明细列表（主子表关系）（子表，级联保存）
    */
-  items?: IpqcOrderItemCreate[];
-
-  /**
-   * 变更日志列表（主子表关系）（子表，级联保存）
-   */
-  changeLogs?: IpqcOrderChangeLogCreate[];
+  items?: IpqcOrderItemUpdate[];
 
   /**
    * 扩展字段JSON
@@ -491,11 +481,6 @@ export interface IpqcOrderTemplate {
   items?: IpqcOrderItemCreate[];
 
   /**
-   * 变更日志列表（主子表关系）（子表，级联保存）
-   */
-  changeLogs?: IpqcOrderChangeLogCreate[];
-
-  /**
    * 扩展字段JSON
    */
   extField?: string;
@@ -608,11 +593,6 @@ export interface IpqcOrderImport {
    * IPQC检验单明细列表（主子表关系）（子表，级联保存）
    */
   items?: IpqcOrderItemCreate[];
-
-  /**
-   * 变更日志列表（主子表关系）（子表，级联保存）
-   */
-  changeLogs?: IpqcOrderChangeLogCreate[];
 
   /**
    * 扩展字段JSON

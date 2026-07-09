@@ -9,22 +9,42 @@
 
 <template>
   <div class="p-4 flex flex-col min-h-0 h-full">
-    <!-- 查询栏 -->
-    <TaktQueryBar
-      v-model="queryKeyword"
-      :placeholder="searchPlaceholder"
-      :loading="loading"
-      @search="handleSearch"
-      @reset="handleReset"
-    />
-
-    <!-- 工具栏 -->
-    <TaktToolsBar
-      create-permission="logistics:maintenance:work:order:create"
-      update-permission="logistics:maintenance:work:order:update"
-      delete-permission="logistics:maintenance:work:order:delete"
-      import-permission="logistics:maintenance:work:order:import"
-      export-permission="logistics:maintenance:work:order:export"
+    <!-- 左主右从 -->
+    <TaktMasterDetailTableLr
+      v-model:master-current="currentPage"
+      v-model:master-page-size="pageSize"
+      v-model:selected-master-key="selectedMasterKey"
+      class="min-h-0 flex-1"
+      :master-columns="columns"
+      :master-data-source="dataSource"
+      :master-loading="loading"
+      :master-row-key="getMaintenanceWorkOrderId"
+      :master-row-selection="rowSelection"
+      master-id-column-key="maintenanceWorkOrderId"
+      :master-visible-column-keys="visibleColumnKeys"
+      master-table-mode="masterDetailMaster"
+      master-scroll-layout="masterDetailLr"
+      :master-total="total"
+      master-entity-scope="approval"
+      @master-change="handleTableChange"
+      @master-resize-column="handleResizeColumn"
+      @master-pagination-change="handleMasterPaginationChange"
+      @master-select="handleMasterSelect"
+    >
+      <template #master-toolbar>
+        <TaktQueryBar
+          v-model="queryKeyword"
+          :placeholder="searchPlaceholder"
+          :loading="loading"
+          @search="handleSearch"
+          @reset="handleReset"
+        />
+        <TaktToolsBar
+      create-permission="logistics:maintenance:equipment:create"
+      update-permission="logistics:maintenance:equipment:update"
+      delete-permission="logistics:maintenance:equipment:delete"
+      import-permission="logistics:maintenance:equipment:import"
+      export-permission="logistics:maintenance:equipment:export"
       :show-create="true"
       :show-update="true"
       :show-delete="true"
@@ -50,51 +70,31 @@
       @advanced-query="handleAdvancedQuery"
       @column-setting="handleColumnSetting"
       @refresh="handleRefresh"
-    />
-
-    <!-- 左主右从 -->
-    <TaktMasterDetailTableLr
-      v-model:master-current="currentPage"
-      v-model:master-page-size="pageSize"
-      v-model:selected-master-key="selectedMasterKey"
-      class="min-h-0 flex-1"
-      :master-columns="columns"
-      :master-data-source="dataSource"
-      :master-loading="loading"
-      :master-row-key="getMaintenanceWorkOrderId"
-      :master-row-selection="rowSelection"
-      master-id-column-key="maintenanceWorkOrderId"
-      :master-visible-column-keys="visibleColumnKeys"
-      :master-total="total"
-      master-entity-scope="approval"
-      @master-change="handleTableChange"
-      @master-resize-column="handleResizeColumn"
-      @master-pagination-change="handleMasterPaginationChange"
-      @master-select="handleMasterSelect"
-    >
+        />
+      </template>
       <!-- 字典/开关列渲染 -->
       <template #bodyCell="{ column, record }">
         <template v-if="column.key === 'maintenanceCategory'">
           <TaktDictTag
-            :value="getMaintenanceWorkOrderField(record, 'maintenanceCategory')"
+            :value="getMaintenanceWorkOrderDictValue(record, 'maintenanceCategory')"
             dict-type="logistics_maintenance_category"
           />
         </template>
         <template v-else-if="column.key === 'maintenanceType'">
           <TaktDictTag
-            :value="getMaintenanceWorkOrderField(record, 'maintenanceType')"
+            :value="getMaintenanceWorkOrderDictValue(record, 'maintenanceType')"
             dict-type="logistics_maintenance_type"
           />
         </template>
         <template v-else-if="column.key === 'workOrderStatus'">
           <TaktDictTag
-            :value="getMaintenanceWorkOrderField(record, 'workOrderStatus')"
+            :value="getMaintenanceWorkOrderDictValue(record, 'workOrderStatus')"
             dict-type="sys_ticket_status"
           />
         </template>
         <template v-else-if="column.key === 'isHistoryArchived'">
           <TaktDictTag
-            :value="getMaintenanceWorkOrderField(record, 'isHistoryArchived')"
+            :value="getMaintenanceWorkOrderDictValue(record, 'isHistoryArchived')"
             dict-type="sys_yes_no_type"
           />
         </template>
@@ -136,10 +136,10 @@
     >
       <template #default="{ isFieldVisible }">
       <div v-show="isFieldVisible('plantCode')">
-      <a-form-item :label="t('entity.maintenanceworkorder.plantcode')">
+      <a-form-item :label="pi.queryLabel('plantCode')">
         <a-input
           v-model:value="advancedQueryForm.plantCode"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.maintenanceworkorder.plantcode') })"
+          :placeholder="pi.queryPh('plantCode', 'required')"
           show-count
           :maxlength="4"
           allow-clear
@@ -147,10 +147,10 @@
       </a-form-item>
       </div>
       <div v-show="isFieldVisible('workOrderCode')">
-      <a-form-item :label="t('entity.maintenanceworkorder.workordercode')">
+      <a-form-item :label="pi.queryLabel('workOrderCode')">
         <a-input
           v-model:value="advancedQueryForm.workOrderCode"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.maintenanceworkorder.workordercode') })"
+          :placeholder="pi.queryPh('workOrderCode', 'required')"
           show-count
           :maxlength="50"
           allow-clear
@@ -158,10 +158,10 @@
       </a-form-item>
       </div>
       <div v-show="isFieldVisible('maintenanceNotificationId')">
-      <a-form-item :label="t('entity.maintenanceworkorder.maintenancenotificationid')">
+      <a-form-item :label="pi.queryLabel('maintenanceNotificationId')">
         <a-input
           v-model:value="advancedQueryForm.maintenanceNotificationId"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.maintenanceworkorder.maintenancenotificationid') })"
+          :placeholder="pi.queryPh('maintenanceNotificationId', 'required')"
           show-count
           :maxlength="20"
           allow-clear
@@ -169,10 +169,10 @@
       </a-form-item>
       </div>
       <div v-show="isFieldVisible('notificationCode')">
-      <a-form-item :label="t('entity.maintenanceworkorder.notificationcode')">
+      <a-form-item :label="pi.queryLabel('notificationCode')">
         <a-input
           v-model:value="advancedQueryForm.notificationCode"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.maintenanceworkorder.notificationcode') })"
+          :placeholder="pi.queryPh('notificationCode', 'required')"
           show-count
           :maxlength="50"
           allow-clear
@@ -180,10 +180,10 @@
       </a-form-item>
       </div>
       <div v-show="isFieldVisible('equipmentId')">
-      <a-form-item :label="t('entity.maintenanceworkorder.equipmentid')">
+      <a-form-item :label="pi.queryLabel('equipmentId')">
         <a-input
           v-model:value="advancedQueryForm.equipmentId"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.maintenanceworkorder.equipmentid') })"
+          :placeholder="pi.queryPh('equipmentId', 'required')"
           show-count
           :maxlength="20"
           allow-clear
@@ -191,10 +191,10 @@
       </a-form-item>
       </div>
       <div v-show="isFieldVisible('equipmentCode')">
-      <a-form-item :label="t('entity.maintenanceworkorder.equipmentcode')">
+      <a-form-item :label="pi.queryLabel('equipmentCode')">
         <a-input
           v-model:value="advancedQueryForm.equipmentCode"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.maintenanceworkorder.equipmentcode') })"
+          :placeholder="pi.queryPh('equipmentCode', 'required')"
           show-count
           :maxlength="50"
           allow-clear
@@ -202,10 +202,10 @@
       </a-form-item>
       </div>
       <div v-show="isFieldVisible('equipmentName')">
-      <a-form-item :label="t('entity.maintenanceworkorder.equipmentname')">
+      <a-form-item :label="pi.queryLabel('equipmentName')">
         <a-input
           v-model:value="advancedQueryForm.equipmentName"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.maintenanceworkorder.equipmentname') })"
+          :placeholder="pi.queryPh('equipmentName', 'required')"
           show-count
           :maxlength="200"
           allow-clear
@@ -213,49 +213,49 @@
       </a-form-item>
       </div>
       <div v-show="isFieldVisible('maintenanceCategory')">
-      <a-form-item :label="t('entity.maintenanceworkorder.maintenancecategory')">
+      <a-form-item :label="pi.queryLabel('maintenanceCategory')">
         <TaktSelect
           v-model:value="advancedQueryForm.maintenanceCategory"
           dict-type="logistics_maintenance_category"
-          :placeholder="t('common.page.form.placeholder.select', { field: t('entity.maintenanceworkorder.maintenancecategory') })"
+          :placeholder="pi.queryPh('maintenanceCategory', 'select')"
           allow-clear
         />
       </a-form-item>
       </div>
       <div v-show="isFieldVisible('maintenanceType')">
-      <a-form-item :label="t('entity.maintenanceworkorder.maintenancetype')">
+      <a-form-item :label="pi.queryLabel('maintenanceType')">
         <TaktSelect
           v-model:value="advancedQueryForm.maintenanceType"
           dict-type="logistics_maintenance_type"
-          :placeholder="t('common.page.form.placeholder.select', { field: t('entity.maintenanceworkorder.maintenancetype') })"
+          :placeholder="pi.queryPh('maintenanceType', 'select')"
           allow-clear
         />
       </a-form-item>
       </div>
       <div v-show="isFieldVisible('workOrderStatus')">
-      <a-form-item :label="t('entity.maintenanceworkorder.workorderstatus')">
+      <a-form-item :label="pi.queryLabel('workOrderStatus')">
         <TaktSelect
           v-model:value="advancedQueryForm.workOrderStatus"
           dict-type="sys_ticket_status"
-          :placeholder="t('common.page.form.placeholder.select', { field: t('entity.maintenanceworkorder.workorderstatus') })"
+          :placeholder="pi.queryPh('workOrderStatus', 'select')"
           allow-clear
         />
       </a-form-item>
       </div>
       <div v-show="isFieldVisible('priority')">
-      <a-form-item :label="t('entity.maintenanceworkorder.priority')">
+      <a-form-item :label="pi.queryLabel('priority')">
         <a-input-number
           v-model:value="advancedQueryForm.priority"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.maintenanceworkorder.priority') })"
+          :placeholder="pi.queryPh('priority', 'required')"
           style="width: 100%"
         />
       </a-form-item>
       </div>
       <div v-show="isFieldVisible('workCenter')">
-      <a-form-item :label="t('entity.maintenanceworkorder.workcenter')">
+      <a-form-item :label="pi.queryLabel('workCenter')">
         <a-input
           v-model:value="advancedQueryForm.workCenter"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.maintenanceworkorder.workcenter') })"
+          :placeholder="pi.queryPh('workCenter', 'required')"
           show-count
           :maxlength="50"
           allow-clear
@@ -263,10 +263,10 @@
       </a-form-item>
       </div>
       <div v-show="isFieldVisible('assignedTechnician')">
-      <a-form-item :label="t('entity.maintenanceworkorder.assignedtechnician')">
+      <a-form-item :label="pi.queryLabel('assignedTechnician')">
         <a-input
           v-model:value="advancedQueryForm.assignedTechnician"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.maintenanceworkorder.assignedtechnician') })"
+          :placeholder="pi.queryPh('assignedTechnician', 'required')"
           show-count
           :maxlength="50"
           allow-clear
@@ -274,10 +274,10 @@
       </a-form-item>
       </div>
       <div v-show="isFieldVisible('maintenanceCompany')">
-      <a-form-item :label="t('entity.maintenanceworkorder.maintenancecompany')">
+      <a-form-item :label="pi.queryLabel('maintenanceCompany')">
         <a-input
           v-model:value="advancedQueryForm.maintenanceCompany"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.maintenanceworkorder.maintenancecompany') })"
+          :placeholder="pi.queryPh('maintenanceCompany', 'required')"
           show-count
           :maxlength="200"
           allow-clear
@@ -285,110 +285,110 @@
       </a-form-item>
       </div>
       <div v-show="isFieldVisible('plannedStartTimeStart')">
-      <a-form-item :label="t('entity.maintenanceworkorder.plannedstarttimestart')">
+      <a-form-item :label="pi.queryLabel('plannedStartTimeStart')">
         <a-date-picker
           v-model:value="advancedQueryForm.plannedStartTimeStart"
-          :placeholder="t('common.page.form.placeholder.select', { field: t('entity.maintenanceworkorder.plannedstarttimestart') })"
+          :placeholder="pi.queryPh('plannedStartTimeStart', 'select')"
           value-format="YYYY-MM-DD"
           style="width: 100%"
         />
       </a-form-item>
       </div>
       <div v-show="isFieldVisible('plannedStartTimeEnd')">
-      <a-form-item :label="t('entity.maintenanceworkorder.plannedstarttimeend')">
+      <a-form-item :label="pi.queryLabel('plannedStartTimeEnd')">
         <a-date-picker
           v-model:value="advancedQueryForm.plannedStartTimeEnd"
-          :placeholder="t('common.page.form.placeholder.select', { field: t('entity.maintenanceworkorder.plannedstarttimeend') })"
+          :placeholder="pi.queryPh('plannedStartTimeEnd', 'select')"
           value-format="YYYY-MM-DD"
           style="width: 100%"
         />
       </a-form-item>
       </div>
       <div v-show="isFieldVisible('plannedEndTimeStart')">
-      <a-form-item :label="t('entity.maintenanceworkorder.plannedendtimestart')">
+      <a-form-item :label="pi.queryLabel('plannedEndTimeStart')">
         <a-date-picker
           v-model:value="advancedQueryForm.plannedEndTimeStart"
-          :placeholder="t('common.page.form.placeholder.select', { field: t('entity.maintenanceworkorder.plannedendtimestart') })"
+          :placeholder="pi.queryPh('plannedEndTimeStart', 'select')"
           value-format="YYYY-MM-DD"
           style="width: 100%"
         />
       </a-form-item>
       </div>
       <div v-show="isFieldVisible('plannedEndTimeEnd')">
-      <a-form-item :label="t('entity.maintenanceworkorder.plannedendtimeend')">
+      <a-form-item :label="pi.queryLabel('plannedEndTimeEnd')">
         <a-date-picker
           v-model:value="advancedQueryForm.plannedEndTimeEnd"
-          :placeholder="t('common.page.form.placeholder.select', { field: t('entity.maintenanceworkorder.plannedendtimeend') })"
+          :placeholder="pi.queryPh('plannedEndTimeEnd', 'select')"
           value-format="YYYY-MM-DD"
           style="width: 100%"
         />
       </a-form-item>
       </div>
       <div v-show="isFieldVisible('actualStartTimeStart')">
-      <a-form-item :label="t('entity.maintenanceworkorder.actualstarttimestart')">
+      <a-form-item :label="pi.queryLabel('actualStartTimeStart')">
         <a-date-picker
           v-model:value="advancedQueryForm.actualStartTimeStart"
-          :placeholder="t('common.page.form.placeholder.select', { field: t('entity.maintenanceworkorder.actualstarttimestart') })"
+          :placeholder="pi.queryPh('actualStartTimeStart', 'select')"
           value-format="YYYY-MM-DD"
           style="width: 100%"
         />
       </a-form-item>
       </div>
       <div v-show="isFieldVisible('actualStartTimeEnd')">
-      <a-form-item :label="t('entity.maintenanceworkorder.actualstarttimeend')">
+      <a-form-item :label="pi.queryLabel('actualStartTimeEnd')">
         <a-date-picker
           v-model:value="advancedQueryForm.actualStartTimeEnd"
-          :placeholder="t('common.page.form.placeholder.select', { field: t('entity.maintenanceworkorder.actualstarttimeend') })"
+          :placeholder="pi.queryPh('actualStartTimeEnd', 'select')"
           value-format="YYYY-MM-DD"
           style="width: 100%"
         />
       </a-form-item>
       </div>
       <div v-show="isFieldVisible('actualEndTimeStart')">
-      <a-form-item :label="t('entity.maintenanceworkorder.actualendtimestart')">
+      <a-form-item :label="pi.queryLabel('actualEndTimeStart')">
         <a-date-picker
           v-model:value="advancedQueryForm.actualEndTimeStart"
-          :placeholder="t('common.page.form.placeholder.select', { field: t('entity.maintenanceworkorder.actualendtimestart') })"
+          :placeholder="pi.queryPh('actualEndTimeStart', 'select')"
           value-format="YYYY-MM-DD"
           style="width: 100%"
         />
       </a-form-item>
       </div>
       <div v-show="isFieldVisible('actualEndTimeEnd')">
-      <a-form-item :label="t('entity.maintenanceworkorder.actualendtimeend')">
+      <a-form-item :label="pi.queryLabel('actualEndTimeEnd')">
         <a-date-picker
           v-model:value="advancedQueryForm.actualEndTimeEnd"
-          :placeholder="t('common.page.form.placeholder.select', { field: t('entity.maintenanceworkorder.actualendtimeend') })"
+          :placeholder="pi.queryPh('actualEndTimeEnd', 'select')"
           value-format="YYYY-MM-DD"
           style="width: 100%"
         />
       </a-form-item>
       </div>
       <div v-show="isFieldVisible('faultDescription')">
-      <a-form-item :label="t('entity.maintenanceworkorder.faultdescription')">
+      <a-form-item :label="pi.queryLabel('faultDescription')">
         <a-textarea
           v-model:value="advancedQueryForm.faultDescription"
-          :placeholder="t('common.page.form.placeholder.optional', { field: t('entity.maintenanceworkorder.faultdescription') })"
+          :placeholder="pi.queryPh('faultDescription', 'optional')"
           :rows="2"
           allow-clear
         />
       </a-form-item>
       </div>
       <div v-show="isFieldVisible('maintenanceContent')">
-      <a-form-item :label="t('entity.maintenanceworkorder.maintenancecontent')">
+      <a-form-item :label="pi.queryLabel('maintenanceContent')">
         <a-textarea
           v-model:value="advancedQueryForm.maintenanceContent"
-          :placeholder="t('common.page.form.placeholder.optional', { field: t('entity.maintenanceworkorder.maintenancecontent') })"
+          :placeholder="pi.queryPh('maintenanceContent', 'optional')"
           :rows="2"
           allow-clear
         />
       </a-form-item>
       </div>
       <div v-show="isFieldVisible('solution')">
-      <a-form-item :label="t('entity.maintenanceworkorder.solution')">
+      <a-form-item :label="pi.queryLabel('solution')">
         <a-input
           v-model:value="advancedQueryForm.solution"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.maintenanceworkorder.solution') })"
+          :placeholder="pi.queryPh('solution', 'required')"
           show-count
           :maxlength="2000"
           allow-clear
@@ -396,10 +396,10 @@
       </a-form-item>
       </div>
       <div v-show="isFieldVisible('costCenterId')">
-      <a-form-item :label="t('entity.maintenanceworkorder.costcenterid')">
+      <a-form-item :label="pi.queryLabel('costCenterId')">
         <a-input
           v-model:value="advancedQueryForm.costCenterId"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.maintenanceworkorder.costcenterid') })"
+          :placeholder="pi.queryPh('costCenterId', 'required')"
           show-count
           :maxlength="20"
           allow-clear
@@ -407,21 +407,21 @@
       </a-form-item>
       </div>
       <div v-show="isFieldVisible('costCenterCode')">
-      <a-form-item :label="t('entity.maintenanceworkorder.costcentercode')">
+      <a-form-item :label="pi.queryLabel('costCenterCode')">
         <a-input
           v-model:value="advancedQueryForm.costCenterCode"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.maintenanceworkorder.costcentercode') })"
+          :placeholder="pi.queryPh('costCenterCode', 'required')"
           show-count
-          :maxlength="4"
+          :maxlength="50"
           allow-clear
         />
       </a-form-item>
       </div>
       <div v-show="isFieldVisible('costElementId')">
-      <a-form-item :label="t('entity.maintenanceworkorder.costelementid')">
+      <a-form-item :label="pi.queryLabel('costElementId')">
         <a-input
           v-model:value="advancedQueryForm.costElementId"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.maintenanceworkorder.costelementid') })"
+          :placeholder="pi.queryPh('costElementId', 'required')"
           show-count
           :maxlength="20"
           allow-clear
@@ -429,86 +429,86 @@
       </a-form-item>
       </div>
       <div v-show="isFieldVisible('costElementCode')">
-      <a-form-item :label="t('entity.maintenanceworkorder.costelementcode')">
+      <a-form-item :label="pi.queryLabel('costElementCode')">
         <a-input
           v-model:value="advancedQueryForm.costElementCode"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.maintenanceworkorder.costelementcode') })"
+          :placeholder="pi.queryPh('costElementCode', 'required')"
           show-count
-          :maxlength="4"
+          :maxlength="50"
           allow-clear
         />
       </a-form-item>
       </div>
       <div v-show="isFieldVisible('totalMaterialCost')">
-      <a-form-item :label="t('entity.maintenanceworkorder.totalmaterialcost')">
+      <a-form-item :label="pi.queryLabel('totalMaterialCost')">
         <a-input-number
           v-model:value="advancedQueryForm.totalMaterialCost"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.maintenanceworkorder.totalmaterialcost') })"
+          :placeholder="pi.queryPh('totalMaterialCost', 'required')"
           style="width: 100%"
         />
       </a-form-item>
       </div>
       <div v-show="isFieldVisible('totalLaborCost')">
-      <a-form-item :label="t('entity.maintenanceworkorder.totallaborcost')">
+      <a-form-item :label="pi.queryLabel('totalLaborCost')">
         <a-input-number
           v-model:value="advancedQueryForm.totalLaborCost"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.maintenanceworkorder.totallaborcost') })"
+          :placeholder="pi.queryPh('totalLaborCost', 'required')"
           style="width: 100%"
         />
       </a-form-item>
       </div>
       <div v-show="isFieldVisible('totalOtherCost')">
-      <a-form-item :label="t('entity.maintenanceworkorder.totalothercost')">
+      <a-form-item :label="pi.queryLabel('totalOtherCost')">
         <a-input-number
           v-model:value="advancedQueryForm.totalOtherCost"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.maintenanceworkorder.totalothercost') })"
+          :placeholder="pi.queryPh('totalOtherCost', 'required')"
           style="width: 100%"
         />
       </a-form-item>
       </div>
       <div v-show="isFieldVisible('totalCost')">
-      <a-form-item :label="t('entity.maintenanceworkorder.totalcost')">
+      <a-form-item :label="pi.queryLabel('totalCost')">
         <a-input-number
           v-model:value="advancedQueryForm.totalCost"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.maintenanceworkorder.totalcost') })"
+          :placeholder="pi.queryPh('totalCost', 'required')"
           style="width: 100%"
         />
       </a-form-item>
       </div>
       <div v-show="isFieldVisible('settlementStatus')">
-      <a-form-item :label="t('entity.maintenanceworkorder.settlementstatus')">
+      <a-form-item :label="pi.queryLabel('settlementStatus')">
         <a-input-number
           v-model:value="advancedQueryForm.settlementStatus"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.maintenanceworkorder.settlementstatus') })"
+          :placeholder="pi.queryPh('settlementStatus', 'required')"
           style="width: 100%"
         />
       </a-form-item>
       </div>
       <div v-show="isFieldVisible('settlementTimeStart')">
-      <a-form-item :label="t('entity.maintenanceworkorder.settlementtimestart')">
+      <a-form-item :label="pi.queryLabel('settlementTimeStart')">
         <a-date-picker
           v-model:value="advancedQueryForm.settlementTimeStart"
-          :placeholder="t('common.page.form.placeholder.select', { field: t('entity.maintenanceworkorder.settlementtimestart') })"
+          :placeholder="pi.queryPh('settlementTimeStart', 'select')"
           value-format="YYYY-MM-DD"
           style="width: 100%"
         />
       </a-form-item>
       </div>
       <div v-show="isFieldVisible('settlementTimeEnd')">
-      <a-form-item :label="t('entity.maintenanceworkorder.settlementtimeend')">
+      <a-form-item :label="pi.queryLabel('settlementTimeEnd')">
         <a-date-picker
           v-model:value="advancedQueryForm.settlementTimeEnd"
-          :placeholder="t('common.page.form.placeholder.select', { field: t('entity.maintenanceworkorder.settlementtimeend') })"
+          :placeholder="pi.queryPh('settlementTimeEnd', 'select')"
           value-format="YYYY-MM-DD"
           style="width: 100%"
         />
       </a-form-item>
       </div>
       <div v-show="isFieldVisible('completedAtStart')">
-      <a-form-item :label="t('entity.maintenanceworkorder.completedatstart')">
+      <a-form-item :label="pi.queryLabel('completedAtStart')">
         <a-input
           v-model:value="advancedQueryForm.completedAtStart"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.maintenanceworkorder.completedatstart') })"
+          :placeholder="pi.queryPh('completedAtStart', 'required')"
           show-count
           :maxlength="20"
           allow-clear
@@ -516,20 +516,20 @@
       </a-form-item>
       </div>
       <div v-show="isFieldVisible('completedAtEnd')">
-      <a-form-item :label="t('entity.maintenanceworkorder.completedatend')">
+      <a-form-item :label="pi.queryLabel('completedAtEnd')">
         <a-date-picker
           v-model:value="advancedQueryForm.completedAtEnd"
-          :placeholder="t('common.page.form.placeholder.select', { field: t('entity.maintenanceworkorder.completedatend') })"
+          :placeholder="pi.queryPh('completedAtEnd', 'select')"
           value-format="YYYY-MM-DD"
           style="width: 100%"
         />
       </a-form-item>
       </div>
       <div v-show="isFieldVisible('acceptedBy')">
-      <a-form-item :label="t('entity.maintenanceworkorder.acceptedby')">
+      <a-form-item :label="pi.queryLabel('acceptedBy')">
         <a-input
           v-model:value="advancedQueryForm.acceptedBy"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.maintenanceworkorder.acceptedby') })"
+          :placeholder="pi.queryPh('acceptedBy', 'required')"
           show-count
           :maxlength="50"
           allow-clear
@@ -537,10 +537,10 @@
       </a-form-item>
       </div>
       <div v-show="isFieldVisible('acceptedAtStart')">
-      <a-form-item :label="t('entity.maintenanceworkorder.acceptedatstart')">
+      <a-form-item :label="pi.queryLabel('acceptedAtStart')">
         <a-input
           v-model:value="advancedQueryForm.acceptedAtStart"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.maintenanceworkorder.acceptedatstart') })"
+          :placeholder="pi.queryPh('acceptedAtStart', 'required')"
           show-count
           :maxlength="20"
           allow-clear
@@ -548,58 +548,58 @@
       </a-form-item>
       </div>
       <div v-show="isFieldVisible('acceptedAtEnd')">
-      <a-form-item :label="t('entity.maintenanceworkorder.acceptedatend')">
+      <a-form-item :label="pi.queryLabel('acceptedAtEnd')">
         <a-date-picker
           v-model:value="advancedQueryForm.acceptedAtEnd"
-          :placeholder="t('common.page.form.placeholder.select', { field: t('entity.maintenanceworkorder.acceptedatend') })"
+          :placeholder="pi.queryPh('acceptedAtEnd', 'select')"
           value-format="YYYY-MM-DD"
           style="width: 100%"
         />
       </a-form-item>
       </div>
       <div v-show="isFieldVisible('maintenanceResult')">
-      <a-form-item :label="t('entity.maintenanceworkorder.maintenanceresult')">
+      <a-form-item :label="pi.queryLabel('maintenanceResult')">
         <a-input-number
           v-model:value="advancedQueryForm.maintenanceResult"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.maintenanceworkorder.maintenanceresult') })"
+          :placeholder="pi.queryPh('maintenanceResult', 'required')"
           style="width: 100%"
         />
       </a-form-item>
       </div>
       <div v-show="isFieldVisible('nextMaintenanceDateStart')">
-      <a-form-item :label="t('entity.maintenanceworkorder.nextmaintenancedatestart')">
+      <a-form-item :label="pi.queryLabel('nextMaintenanceDateStart')">
         <a-date-picker
           v-model:value="advancedQueryForm.nextMaintenanceDateStart"
-          :placeholder="t('common.page.form.placeholder.select', { field: t('entity.maintenanceworkorder.nextmaintenancedatestart') })"
+          :placeholder="pi.queryPh('nextMaintenanceDateStart', 'select')"
           value-format="YYYY-MM-DD"
           style="width: 100%"
         />
       </a-form-item>
       </div>
       <div v-show="isFieldVisible('nextMaintenanceDateEnd')">
-      <a-form-item :label="t('entity.maintenanceworkorder.nextmaintenancedateend')">
+      <a-form-item :label="pi.queryLabel('nextMaintenanceDateEnd')">
         <a-date-picker
           v-model:value="advancedQueryForm.nextMaintenanceDateEnd"
-          :placeholder="t('common.page.form.placeholder.select', { field: t('entity.maintenanceworkorder.nextmaintenancedateend') })"
+          :placeholder="pi.queryPh('nextMaintenanceDateEnd', 'select')"
           value-format="YYYY-MM-DD"
           style="width: 100%"
         />
       </a-form-item>
       </div>
       <div v-show="isFieldVisible('maintenanceCycleDays')">
-      <a-form-item :label="t('entity.maintenanceworkorder.maintenancecycledays')">
+      <a-form-item :label="pi.queryLabel('maintenanceCycleDays')">
         <a-input-number
           v-model:value="advancedQueryForm.maintenanceCycleDays"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.maintenanceworkorder.maintenancecycledays') })"
+          :placeholder="pi.queryPh('maintenanceCycleDays', 'required')"
           style="width: 100%"
         />
       </a-form-item>
       </div>
       <div v-show="isFieldVisible('maintenanceImages')">
-      <a-form-item :label="t('entity.maintenanceworkorder.maintenanceimages')">
+      <a-form-item :label="pi.queryLabel('maintenanceImages')">
         <a-input
           v-model:value="advancedQueryForm.maintenanceImages"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.maintenanceworkorder.maintenanceimages') })"
+          :placeholder="pi.queryPh('maintenanceImages', 'required')"
           show-count
           :maxlength="2000"
           allow-clear
@@ -607,10 +607,10 @@
       </a-form-item>
       </div>
       <div v-show="isFieldVisible('maintenanceDocuments')">
-      <a-form-item :label="t('entity.maintenanceworkorder.maintenancedocuments')">
+      <a-form-item :label="pi.queryLabel('maintenanceDocuments')">
         <a-input
           v-model:value="advancedQueryForm.maintenanceDocuments"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.maintenanceworkorder.maintenancedocuments') })"
+          :placeholder="pi.queryPh('maintenanceDocuments', 'required')"
           show-count
           :maxlength="2000"
           allow-clear
@@ -618,10 +618,10 @@
       </a-form-item>
       </div>
       <div v-show="isFieldVisible('acceptedSummary')">
-      <a-form-item :label="t('entity.maintenanceworkorder.acceptedsummary')">
+      <a-form-item :label="pi.queryLabel('acceptedSummary')">
         <a-input
           v-model:value="advancedQueryForm.acceptedSummary"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.maintenanceworkorder.acceptedsummary') })"
+          :placeholder="pi.queryPh('acceptedSummary', 'required')"
           show-count
           :maxlength="500"
           allow-clear
@@ -629,30 +629,30 @@
       </a-form-item>
       </div>
       <div v-show="isFieldVisible('isHistoryArchived')">
-      <a-form-item :label="t('entity.maintenanceworkorder.ishistoryarchived')">
+      <a-form-item :label="pi.queryLabel('isHistoryArchived')">
         <TaktSelect
           v-model:value="advancedQueryForm.isHistoryArchived"
           dict-type="sys_yes_no_type"
-          :placeholder="t('common.page.form.placeholder.select', { field: t('entity.maintenanceworkorder.ishistoryarchived') })"
+          :placeholder="pi.queryPh('isHistoryArchived', 'select')"
           allow-clear
         />
       </a-form-item>
       </div>
       <div v-show="isFieldVisible('approvalStatus')">
-      <a-form-item :label="t('entity.maintenanceworkorder.approvalstatus')">
+      <a-form-item :label="pi.queryLabel('approvalStatus')">
         <TaktSelect
           v-model:value="advancedQueryForm.approvalStatus"
           dict-type="sys_approval_status"
-          :placeholder="t('common.page.form.placeholder.select', { field: t('entity.maintenanceworkorder.approvalstatus') })"
+          :placeholder="pi.queryPh('approvalStatus', 'select')"
           allow-clear
         />
       </a-form-item>
       </div>
       <div v-show="isFieldVisible('initiatorId')">
-      <a-form-item :label="t('entity.maintenanceworkorder.initiatorid')">
+      <a-form-item :label="pi.queryLabel('initiatorId')">
         <a-input
           v-model:value="advancedQueryForm.initiatorId"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.maintenanceworkorder.initiatorid') })"
+          :placeholder="pi.queryPh('initiatorId', 'required')"
           show-count
           :maxlength="20"
           allow-clear
@@ -660,10 +660,10 @@
       </a-form-item>
       </div>
       <div v-show="isFieldVisible('initiatedAtStart')">
-      <a-form-item :label="t('entity.maintenanceworkorder.initiatedatstart')">
+      <a-form-item :label="pi.queryLabel('initiatedAtStart')">
         <a-input
           v-model:value="advancedQueryForm.initiatedAtStart"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.maintenanceworkorder.initiatedatstart') })"
+          :placeholder="pi.queryPh('initiatedAtStart', 'required')"
           show-count
           :maxlength="20"
           allow-clear
@@ -671,20 +671,20 @@
       </a-form-item>
       </div>
       <div v-show="isFieldVisible('initiatedAtEnd')">
-      <a-form-item :label="t('entity.maintenanceworkorder.initiatedatend')">
+      <a-form-item :label="pi.queryLabel('initiatedAtEnd')">
         <a-date-picker
           v-model:value="advancedQueryForm.initiatedAtEnd"
-          :placeholder="t('common.page.form.placeholder.select', { field: t('entity.maintenanceworkorder.initiatedatend') })"
+          :placeholder="pi.queryPh('initiatedAtEnd', 'select')"
           value-format="YYYY-MM-DD"
           style="width: 100%"
         />
       </a-form-item>
       </div>
       <div v-show="isFieldVisible('approvedBy')">
-      <a-form-item :label="t('entity.maintenanceworkorder.approvedby')">
+      <a-form-item :label="pi.queryLabel('approvedBy')">
         <a-input
           v-model:value="advancedQueryForm.approvedBy"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.maintenanceworkorder.approvedby') })"
+          :placeholder="pi.queryPh('approvedBy', 'required')"
           show-count
           :maxlength="20"
           allow-clear
@@ -692,10 +692,10 @@
       </a-form-item>
       </div>
       <div v-show="isFieldVisible('approvedAtStart')">
-      <a-form-item :label="t('entity.maintenanceworkorder.approvedatstart')">
+      <a-form-item :label="pi.queryLabel('approvedAtStart')">
         <a-input
           v-model:value="advancedQueryForm.approvedAtStart"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.maintenanceworkorder.approvedatstart') })"
+          :placeholder="pi.queryPh('approvedAtStart', 'required')"
           show-count
           :maxlength="20"
           allow-clear
@@ -703,20 +703,20 @@
       </a-form-item>
       </div>
       <div v-show="isFieldVisible('approvedAtEnd')">
-      <a-form-item :label="t('entity.maintenanceworkorder.approvedatend')">
+      <a-form-item :label="pi.queryLabel('approvedAtEnd')">
         <a-date-picker
           v-model:value="advancedQueryForm.approvedAtEnd"
-          :placeholder="t('common.page.form.placeholder.select', { field: t('entity.maintenanceworkorder.approvedatend') })"
+          :placeholder="pi.queryPh('approvedAtEnd', 'select')"
           value-format="YYYY-MM-DD"
           style="width: 100%"
         />
       </a-form-item>
       </div>
       <div v-show="isFieldVisible('flowInstanceId')">
-      <a-form-item :label="t('entity.maintenanceworkorder.flowinstanceid')">
+      <a-form-item :label="pi.queryLabel('flowInstanceId')">
         <a-input
           v-model:value="advancedQueryForm.flowInstanceId"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.maintenanceworkorder.flowinstanceid') })"
+          :placeholder="pi.queryPh('flowInstanceId', 'required')"
           show-count
           :maxlength="20"
           allow-clear
@@ -724,10 +724,10 @@
       </a-form-item>
       </div>
       <div v-show="isFieldVisible('createdAtStart')">
-      <a-form-item :label="t('common.page.entity.createdatstart')">
+      <a-form-item :label="pi.queryLabel('createdAtStart')">
         <a-date-picker
           v-model:value="advancedQueryForm.createdAtStart"
-          :placeholder="t('common.page.form.placeholder.select', { field: t('common.page.entity.createdatstart') })"
+          :placeholder="pi.queryPh('createdAtStart', 'select')"
           value-format="YYYY-MM-DD HH:mm:ss"
             show-time
           style="width: 100%"
@@ -735,10 +735,10 @@
       </a-form-item>
       </div>
       <div v-show="isFieldVisible('createdAtEnd')">
-      <a-form-item :label="t('common.page.entity.createdatend')">
+      <a-form-item :label="pi.queryLabel('createdAtEnd')">
         <a-date-picker
           v-model:value="advancedQueryForm.createdAtEnd"
-          :placeholder="t('common.page.form.placeholder.select', { field: t('common.page.entity.createdatend') })"
+          :placeholder="pi.queryPh('createdAtEnd', 'select')"
           value-format="YYYY-MM-DD HH:mm:ss"
             show-time
           style="width: 100%"
@@ -760,7 +760,7 @@
             >
               <span class="takt-form-label-hint-icon"><RiQuestionLine class="takt-remix-icon" /></span>
             </a-tooltip>
-            <span>{{ t('common.page.entity.extfield') }}</span>
+            <span>{{ pi.queryLabel('extField') }}</span>
           </span>
         </template>
         <a-textarea
@@ -774,10 +774,10 @@
       </a-form-item>
       </div>
       <div v-show="isFieldVisible('remark')">
-      <a-form-item :label="t('common.page.entity.remark')">
+      <a-form-item :label="pi.queryLabel('remark')">
         <a-textarea
           v-model:value="advancedQueryForm.remark"
-          :placeholder="t('common.page.form.placeholder.optional', { field: t('common.page.entity.remark') })"
+          :placeholder="pi.queryPh('remark', 'optional')"
             :rows="4"
             show-count
             :maxlength="400"
@@ -791,14 +791,15 @@
     <!-- 导入对话框 -->
     <TaktModal
       v-model:open="importVisible"
-      :title="t('common.dialog.title.import', { entity: t('entity.maintenanceworkorder._self') })"
+      :title="t('common.dialog.title.import', { entity: pi.self() })"
       :width="600"
       :footer="null"
       :cancel-text="t('common.page.button.close')"
       @cancel="handleImportCancel"
     >
       <TaktImportFile
-        entity-i18n-key="entity.maintenanceworkorder._self"
+        v-if="importVisible"
+        :entity-i18n-key="MAINTENANCEWORKORDER_SELF_I18N_KEY"
         file-type="xlsx"
         :sheet-name="excelNames.sheet"
         :template-file-name="excelNames.fileBase"
@@ -817,7 +818,7 @@
       :id-column-key="'maintenanceWorkOrderId'"
       :action-column-key="'action'"
       entity-scope="approval"
-      table-mode="single"
+      table-mode="masterDetailMaster"
       @update:checked-keys="handleColumnKeysChange"
       @reset="handleColumnSettingReset"
     />
@@ -837,13 +838,25 @@ import { useI18n } from 'vue-i18n'
 import { ensureTaktPaginationConfigAsync, getTaktDefaultPageIndex, getTaktDefaultPageSize } from '@/utils/takt-paged'
 import MaintenanceWorkOrderForm from './components/work-order-form.vue'
 import MaintenanceWorkOrderMaterialPanel from './components/work-order-material-panel.vue'
-import { provideMaintenanceWorkOrderMasterContext } from './composables/use-work-order-master-context'
+import { provideMaintenanceWorkOrderMasterContext, type MaintenanceWorkOrderRowRecord } from './composables/use-work-order-master-context'
 import { getMaintenanceWorkOrderList, getMaintenanceWorkOrderById, createMaintenanceWorkOrder, updateMaintenanceWorkOrder, deleteMaintenanceWorkOrderById, deleteMaintenanceWorkOrderBatch, getMaintenanceWorkOrderTemplate, importMaintenanceWorkOrder, exportMaintenanceWorkOrder, updateMaintenanceWorkOrderStatus } from '@/api/logistics/maintenance/work-order'
 import type { MaintenanceWorkOrder, MaintenanceWorkOrderQuery } from '@/types/logistics/maintenance/work-order'
 import { useDictDataStore } from '@/stores/foundation/dict-data'
 import { taktExcelEntityNames } from '@/utils/naming'
 import { resolveExportDownloadFileName } from '@/utils/export-download-name'
+import { normalizeImportResult, type TaktImportResult } from '@/utils/takt-import-result'
 import { RiEditLine, RiDeleteBinLine, RiQuestionLine } from '@remixicon/vue'
+
+import {
+  useMaintenanceWorkOrderI18n,
+  MAINTENANCEWORKORDER_LIST_FIELDS,
+  MAINTENANCEWORKORDER_QUERY_STRING_FIELDS,
+  MAINTENANCEWORKORDER_QUERY_FIELDS,
+  MAINTENANCEWORKORDER_SELF_I18N_KEY,
+} from './composables/use-work-order-i18n'
+
+/** 实体字段 i18n（标签/占位符统一入口） */
+const pi = useMaintenanceWorkOrderI18n()
 
 /** i18n 翻译函数 */
 const { t } = useI18n()
@@ -851,7 +864,7 @@ const { t } = useI18n()
 const excelNames = taktExcelEntityNames('TaktMaintenanceWorkOrder')
 /** 列表快捷查询占位文案 */
 const searchPlaceholder = computed(
-  () => t('common.page.form.placeholder.search', { keyword: t('entity.maintenanceworkorder._self') })
+  () => t('common.page.form.placeholder.search', { keyword: pi.self() })
 )
 
 /** 快捷查询关键字 */
@@ -867,9 +880,9 @@ const pageSize = ref(getTaktDefaultPageSize())
 /** 分页 total */
 const total = ref(0)
 /** 工具栏单选时当前行 */
-const selectedRow = ref<MaintenanceWorkOrder | null>(null)
+const selectedRow = ref<MaintenanceWorkOrderRowRecord | null>(null)
 /** 表格多选行 */
-const selectedRows = ref<MaintenanceWorkOrder[]>([])
+const selectedRows = ref<MaintenanceWorkOrderRowRecord[]>([])
 /** 表格多选 row-key 集合 */
 const selectedRowKeys = ref<(string | number)[]>([])
 
@@ -886,134 +899,38 @@ const formRef = ref()
 
 /** 高级查询抽屉是否打开 */
 const advancedQueryVisible = ref(false)
+/**
+ * 创建空的高级查询表单
+ * @returns {Record<string, unknown>} 高级查询初始模型
+ */
+function createEmptyAdvancedQueryForm() {
+  const form = Object.fromEntries(MAINTENANCEWORKORDER_QUERY_STRING_FIELDS.map((key) => [key, ''])) as Record<
+    (typeof MAINTENANCEWORKORDER_QUERY_STRING_FIELDS)[number],
+    string
+  >
+  return {
+    ...form,
+    maintenanceCategory: undefined as number | undefined,
+    maintenanceType: undefined as number | undefined,
+    workOrderStatus: undefined as number | undefined,
+    priority: undefined as number | undefined,
+    totalMaterialCost: undefined as number | undefined,
+    totalLaborCost: undefined as number | undefined,
+    totalOtherCost: undefined as number | undefined,
+    totalCost: undefined as number | undefined,
+    settlementStatus: undefined as number | undefined,
+    maintenanceResult: undefined as number | undefined,
+    maintenanceCycleDays: undefined as number | undefined,
+    isHistoryArchived: undefined as number | undefined,
+    approvalStatus: undefined as number | undefined,
+  }
+}
 /** 高级查询表单模型 */
-const advancedQueryForm = ref({
-  plantCode: '',
-  workOrderCode: '',
-  maintenanceNotificationId: '',
-  notificationCode: '',
-  equipmentId: '',
-  equipmentCode: '',
-  equipmentName: '',
-  maintenanceCategory: undefined as number | undefined,
-  maintenanceType: undefined as number | undefined,
-  workOrderStatus: undefined as number | undefined,
-  priority: undefined as number | undefined,
-  workCenter: '',
-  assignedTechnician: '',
-  maintenanceCompany: '',
-  plannedStartTimeStart: '',
-  plannedStartTimeEnd: '',
-  plannedEndTimeStart: '',
-  plannedEndTimeEnd: '',
-  actualStartTimeStart: '',
-  actualStartTimeEnd: '',
-  actualEndTimeStart: '',
-  actualEndTimeEnd: '',
-  faultDescription: '',
-  maintenanceContent: '',
-  solution: '',
-  costCenterId: '',
-  costCenterCode: '',
-  costElementId: '',
-  costElementCode: '',
-  totalMaterialCost: undefined as number | undefined,
-  totalLaborCost: undefined as number | undefined,
-  totalOtherCost: undefined as number | undefined,
-  totalCost: undefined as number | undefined,
-  settlementStatus: undefined as number | undefined,
-  settlementTimeStart: '',
-  settlementTimeEnd: '',
-  completedAtStart: '',
-  completedAtEnd: '',
-  acceptedBy: '',
-  acceptedAtStart: '',
-  acceptedAtEnd: '',
-  maintenanceResult: undefined as number | undefined,
-  nextMaintenanceDateStart: '',
-  nextMaintenanceDateEnd: '',
-  maintenanceCycleDays: undefined as number | undefined,
-  maintenanceImages: '',
-  maintenanceDocuments: '',
-  acceptedSummary: '',
-  isHistoryArchived: undefined as number | undefined,
-  approvalStatus: undefined as number | undefined,
-  initiatorId: '',
-  initiatedAtStart: '',
-  initiatedAtEnd: '',
-  approvedBy: '',
-  approvedAtStart: '',
-  approvedAtEnd: '',
-  flowInstanceId: '',
-  createdAtStart: '',
-  createdAtEnd: '',
-  extField: '',
-  remark: '',
-})
+const advancedQueryForm = ref(createEmptyAdvancedQueryForm())
 /** 高级查询字段元数据（列显隐配置） */
-const queryFieldsMeta = computed(() => [
-  { key: 'plantCode', label: t('entity.maintenanceworkorder.plantcode') },
-  { key: 'workOrderCode', label: t('entity.maintenanceworkorder.workordercode') },
-  { key: 'maintenanceNotificationId', label: t('entity.maintenanceworkorder.maintenancenotificationid') },
-  { key: 'notificationCode', label: t('entity.maintenanceworkorder.notificationcode') },
-  { key: 'equipmentId', label: t('entity.maintenanceworkorder.equipmentid') },
-  { key: 'equipmentCode', label: t('entity.maintenanceworkorder.equipmentcode') },
-  { key: 'equipmentName', label: t('entity.maintenanceworkorder.equipmentname') },
-  { key: 'maintenanceCategory', label: t('entity.maintenanceworkorder.maintenancecategory') },
-  { key: 'maintenanceType', label: t('entity.maintenanceworkorder.maintenancetype') },
-  { key: 'workOrderStatus', label: t('entity.maintenanceworkorder.workorderstatus') },
-  { key: 'priority', label: t('entity.maintenanceworkorder.priority') },
-  { key: 'workCenter', label: t('entity.maintenanceworkorder.workcenter') },
-  { key: 'assignedTechnician', label: t('entity.maintenanceworkorder.assignedtechnician') },
-  { key: 'maintenanceCompany', label: t('entity.maintenanceworkorder.maintenancecompany') },
-  { key: 'plannedStartTimeStart', label: t('common.page.entity.createdatstart').replace(t('common.page.entity.createdat'), t('entity.maintenanceworkorder.plannedstarttime')) },
-  { key: 'plannedStartTimeEnd', label: t('common.page.entity.createdatend').replace(t('common.page.entity.createdat'), t('entity.maintenanceworkorder.plannedstarttime')) },
-  { key: 'plannedEndTimeStart', label: t('common.page.entity.createdatstart').replace(t('common.page.entity.createdat'), t('entity.maintenanceworkorder.plannedendtime')) },
-  { key: 'plannedEndTimeEnd', label: t('common.page.entity.createdatend').replace(t('common.page.entity.createdat'), t('entity.maintenanceworkorder.plannedendtime')) },
-  { key: 'actualStartTimeStart', label: t('common.page.entity.createdatstart').replace(t('common.page.entity.createdat'), t('entity.maintenanceworkorder.actualstarttime')) },
-  { key: 'actualStartTimeEnd', label: t('common.page.entity.createdatend').replace(t('common.page.entity.createdat'), t('entity.maintenanceworkorder.actualstarttime')) },
-  { key: 'actualEndTimeStart', label: t('common.page.entity.createdatstart').replace(t('common.page.entity.createdat'), t('entity.maintenanceworkorder.actualendtime')) },
-  { key: 'actualEndTimeEnd', label: t('common.page.entity.createdatend').replace(t('common.page.entity.createdat'), t('entity.maintenanceworkorder.actualendtime')) },
-  { key: 'faultDescription', label: t('entity.maintenanceworkorder.faultdescription') },
-  { key: 'maintenanceContent', label: t('entity.maintenanceworkorder.maintenancecontent') },
-  { key: 'solution', label: t('entity.maintenanceworkorder.solution') },
-  { key: 'costCenterId', label: t('entity.maintenanceworkorder.costcenterid') },
-  { key: 'costCenterCode', label: t('entity.maintenanceworkorder.costcentercode') },
-  { key: 'costElementId', label: t('entity.maintenanceworkorder.costelementid') },
-  { key: 'costElementCode', label: t('entity.maintenanceworkorder.costelementcode') },
-  { key: 'totalMaterialCost', label: t('entity.maintenanceworkorder.totalmaterialcost') },
-  { key: 'totalLaborCost', label: t('entity.maintenanceworkorder.totallaborcost') },
-  { key: 'totalOtherCost', label: t('entity.maintenanceworkorder.totalothercost') },
-  { key: 'totalCost', label: t('entity.maintenanceworkorder.totalcost') },
-  { key: 'settlementStatus', label: t('entity.maintenanceworkorder.settlementstatus') },
-  { key: 'settlementTimeStart', label: t('common.page.entity.createdatstart').replace(t('common.page.entity.createdat'), t('entity.maintenanceworkorder.settlementtime')) },
-  { key: 'settlementTimeEnd', label: t('common.page.entity.createdatend').replace(t('common.page.entity.createdat'), t('entity.maintenanceworkorder.settlementtime')) },
-  { key: 'completedAtStart', label: t('entity.maintenanceworkorder.completedatstart') },
-  { key: 'completedAtEnd', label: t('entity.maintenanceworkorder.completedatend') },
-  { key: 'acceptedBy', label: t('entity.maintenanceworkorder.acceptedby') },
-  { key: 'acceptedAtStart', label: t('entity.maintenanceworkorder.acceptedatstart') },
-  { key: 'acceptedAtEnd', label: t('entity.maintenanceworkorder.acceptedatend') },
-  { key: 'maintenanceResult', label: t('entity.maintenanceworkorder.maintenanceresult') },
-  { key: 'nextMaintenanceDateStart', label: t('common.page.entity.createdatstart').replace(t('common.page.entity.createdat'), t('entity.maintenanceworkorder.nextmaintenancedate')) },
-  { key: 'nextMaintenanceDateEnd', label: t('common.page.entity.createdatend').replace(t('common.page.entity.createdat'), t('entity.maintenanceworkorder.nextmaintenancedate')) },
-  { key: 'maintenanceCycleDays', label: t('entity.maintenanceworkorder.maintenancecycledays') },
-  { key: 'maintenanceImages', label: t('entity.maintenanceworkorder.maintenanceimages') },
-  { key: 'maintenanceDocuments', label: t('entity.maintenanceworkorder.maintenancedocuments') },
-  { key: 'acceptedSummary', label: t('entity.maintenanceworkorder.acceptedsummary') },
-  { key: 'isHistoryArchived', label: t('entity.maintenanceworkorder.ishistoryarchived') },
-  { key: 'approvalStatus', label: t('entity.maintenanceworkorder.approvalstatus') },
-  { key: 'initiatorId', label: t('entity.maintenanceworkorder.initiatorid') },
-  { key: 'initiatedAtStart', label: t('entity.maintenanceworkorder.initiatedatstart') },
-  { key: 'initiatedAtEnd', label: t('entity.maintenanceworkorder.initiatedatend') },
-  { key: 'approvedBy', label: t('entity.maintenanceworkorder.approvedby') },
-  { key: 'approvedAtStart', label: t('entity.maintenanceworkorder.approvedatstart') },
-  { key: 'approvedAtEnd', label: t('entity.maintenanceworkorder.approvedatend') },
-  { key: 'flowInstanceId', label: t('entity.maintenanceworkorder.flowinstanceid') },
-  { key: 'createdAtStart', label: t('common.page.entity.createdatstart') },
-  { key: 'createdAtEnd', label: t('common.page.entity.createdatend') },
-  { key: 'extField', label: t('common.page.entity.extfield') },
-  { key: 'remark', label: t('common.page.entity.remark') },
-])
+const queryFieldsMeta = computed(() =>
+  MAINTENANCEWORKORDER_QUERY_FIELDS.map((key) => ({ key, label: pi.queryLabel(key) })),
+)
 /** 高级查询当前可见字段 key */
 const visibleQueryFieldKeys = ref<string[]>([])
 /** 列设置抽屉是否打开 */
@@ -1057,13 +974,9 @@ function buildListQuery(overrides?: Partial<MaintenanceWorkOrderQuery>): Mainten
       query[key] = v as never
     }
   }
-  assignTrimmed('plantCode', form.plantCode)
-  assignTrimmed('workOrderCode', form.workOrderCode)
-  assignTrimmed('maintenanceNotificationId', form.maintenanceNotificationId)
-  assignTrimmed('notificationCode', form.notificationCode)
-  assignTrimmed('equipmentId', form.equipmentId)
-  assignTrimmed('equipmentCode', form.equipmentCode)
-  assignTrimmed('equipmentName', form.equipmentName)
+  for (const key of MAINTENANCEWORKORDER_QUERY_STRING_FIELDS) {
+    assignTrimmed(key, form[key])
+  }
   if (form.maintenanceCategory !== undefined && form.maintenanceCategory !== null) {
     query.maintenanceCategory = form.maintenanceCategory
   }
@@ -1076,24 +989,6 @@ function buildListQuery(overrides?: Partial<MaintenanceWorkOrderQuery>): Mainten
   if (form.priority !== undefined && form.priority !== null) {
     query.priority = form.priority
   }
-  assignTrimmed('workCenter', form.workCenter)
-  assignTrimmed('assignedTechnician', form.assignedTechnician)
-  assignTrimmed('maintenanceCompany', form.maintenanceCompany)
-  assignTrimmed('plannedStartTimeStart', form.plannedStartTimeStart)
-  assignTrimmed('plannedStartTimeEnd', form.plannedStartTimeEnd)
-  assignTrimmed('plannedEndTimeStart', form.plannedEndTimeStart)
-  assignTrimmed('plannedEndTimeEnd', form.plannedEndTimeEnd)
-  assignTrimmed('actualStartTimeStart', form.actualStartTimeStart)
-  assignTrimmed('actualStartTimeEnd', form.actualStartTimeEnd)
-  assignTrimmed('actualEndTimeStart', form.actualEndTimeStart)
-  assignTrimmed('actualEndTimeEnd', form.actualEndTimeEnd)
-  assignTrimmed('faultDescription', form.faultDescription)
-  assignTrimmed('maintenanceContent', form.maintenanceContent)
-  assignTrimmed('solution', form.solution)
-  assignTrimmed('costCenterId', form.costCenterId)
-  assignTrimmed('costCenterCode', form.costCenterCode)
-  assignTrimmed('costElementId', form.costElementId)
-  assignTrimmed('costElementCode', form.costElementCode)
   if (form.totalMaterialCost !== undefined && form.totalMaterialCost !== null) {
     query.totalMaterialCost = form.totalMaterialCost
   }
@@ -1109,41 +1004,18 @@ function buildListQuery(overrides?: Partial<MaintenanceWorkOrderQuery>): Mainten
   if (form.settlementStatus !== undefined && form.settlementStatus !== null) {
     query.settlementStatus = form.settlementStatus
   }
-  assignTrimmed('settlementTimeStart', form.settlementTimeStart)
-  assignTrimmed('settlementTimeEnd', form.settlementTimeEnd)
-  assignTrimmed('completedAtStart', form.completedAtStart)
-  assignTrimmed('completedAtEnd', form.completedAtEnd)
-  assignTrimmed('acceptedBy', form.acceptedBy)
-  assignTrimmed('acceptedAtStart', form.acceptedAtStart)
-  assignTrimmed('acceptedAtEnd', form.acceptedAtEnd)
   if (form.maintenanceResult !== undefined && form.maintenanceResult !== null) {
     query.maintenanceResult = form.maintenanceResult
   }
-  assignTrimmed('nextMaintenanceDateStart', form.nextMaintenanceDateStart)
-  assignTrimmed('nextMaintenanceDateEnd', form.nextMaintenanceDateEnd)
   if (form.maintenanceCycleDays !== undefined && form.maintenanceCycleDays !== null) {
     query.maintenanceCycleDays = form.maintenanceCycleDays
   }
-  assignTrimmed('maintenanceImages', form.maintenanceImages)
-  assignTrimmed('maintenanceDocuments', form.maintenanceDocuments)
-  assignTrimmed('acceptedSummary', form.acceptedSummary)
   if (form.isHistoryArchived !== undefined && form.isHistoryArchived !== null) {
     query.isHistoryArchived = form.isHistoryArchived
   }
   if (form.approvalStatus !== undefined && form.approvalStatus !== null) {
     query.approvalStatus = form.approvalStatus
   }
-  assignTrimmed('initiatorId', form.initiatorId)
-  assignTrimmed('initiatedAtStart', form.initiatedAtStart)
-  assignTrimmed('initiatedAtEnd', form.initiatedAtEnd)
-  assignTrimmed('approvedBy', form.approvedBy)
-  assignTrimmed('approvedAtStart', form.approvedAtStart)
-  assignTrimmed('approvedAtEnd', form.approvedAtEnd)
-  assignTrimmed('flowInstanceId', form.flowInstanceId)
-  assignTrimmed('createdAtStart', form.createdAtStart)
-  assignTrimmed('createdAtEnd', form.createdAtEnd)
-  assignTrimmed('extField', form.extField)
-  assignTrimmed('remark', form.remark)
   return query
 }
 /** 页面挂载：租户上下文就绪后加载分页配置，再拉列表 */
@@ -1158,7 +1030,7 @@ onMounted(async () => {
 const selectedMasterKey = ref('')
 
 /** 同步主表选中行到右侧明细（子表由 *-panel watch 自动 reload） */
-function syncMasterSelection(record: MaintenanceWorkOrder | null) {
+function syncMasterSelection(record: MaintenanceWorkOrderRowRecord | null) {
   selectedMasterRow.value = record
   selectedMasterKey.value = record ? getMaintenanceWorkOrderId(record) : ''
 }
@@ -1168,7 +1040,7 @@ function syncMasterSelection(record: MaintenanceWorkOrder | null) {
  * @param record 主表行
  */
 function handleMasterSelect(record: Record<string, unknown>) {
-  const row = record as unknown as MaintenanceWorkOrder
+  const row = record as unknown as MaintenanceWorkOrderRowRecord
   const key = getMaintenanceWorkOrderId(row)
   selectedRowKeys.value = [key]
   selectedRows.value = [row]
@@ -1186,7 +1058,7 @@ function handleMasterPaginationChange(_page: number, _pageSize: number) {
 }
 
 /** 加载主表详情并回填当前页 dataSource */
-async function loadMaintenanceWorkOrderDetail(record: MaintenanceWorkOrder): Promise<MaintenanceWorkOrder | null> {
+async function loadMaintenanceWorkOrderDetail(record: MaintenanceWorkOrderRowRecord): Promise<MaintenanceWorkOrder | null> {
   const id = getMaintenanceWorkOrderId(record)
   if (!id) {
     return null
@@ -1217,7 +1089,7 @@ const columns = computed<TableColumnsType>(() => [
     customRender: ({ record }: { record: any }) => getMaintenanceWorkOrderField(record, 'maintenanceWorkOrderId') ?? ''
   },
   {
-    title: t('entity.maintenanceworkorder.plantcode'),
+    title: pi.label('plantCode'),
     dataIndex: 'plantCode',
     key: 'plantCode',
     width: 120,
@@ -1226,7 +1098,7 @@ const columns = computed<TableColumnsType>(() => [
     customRender: ({ record }: { record: any }) => getMaintenanceWorkOrderField(record, 'plantCode') ?? ''
   },
   {
-    title: t('entity.maintenanceworkorder.workordercode'),
+    title: pi.label('workOrderCode'),
     dataIndex: 'workOrderCode',
     key: 'workOrderCode',
     width: 120,
@@ -1235,7 +1107,7 @@ const columns = computed<TableColumnsType>(() => [
     customRender: ({ record }: { record: any }) => getMaintenanceWorkOrderField(record, 'workOrderCode') ?? ''
   },
   {
-    title: t('entity.maintenanceworkorder.maintenancenotificationid'),
+    title: pi.label('maintenanceNotificationId'),
     dataIndex: 'maintenanceNotificationId',
     key: 'maintenanceNotificationId',
     width: 120,
@@ -1244,7 +1116,7 @@ const columns = computed<TableColumnsType>(() => [
     customRender: ({ record }: { record: any }) => getMaintenanceWorkOrderField(record, 'maintenanceNotificationId') ?? ''
   },
   {
-    title: t('entity.maintenanceworkorder.notificationcode'),
+    title: pi.label('notificationCode'),
     dataIndex: 'notificationCode',
     key: 'notificationCode',
     width: 120,
@@ -1253,7 +1125,7 @@ const columns = computed<TableColumnsType>(() => [
     customRender: ({ record }: { record: any }) => getMaintenanceWorkOrderField(record, 'notificationCode') ?? ''
   },
   {
-    title: t('entity.maintenanceworkorder.equipmentid'),
+    title: pi.label('equipmentId'),
     dataIndex: 'equipmentId',
     key: 'equipmentId',
     width: 120,
@@ -1262,7 +1134,7 @@ const columns = computed<TableColumnsType>(() => [
     customRender: ({ record }: { record: any }) => getMaintenanceWorkOrderField(record, 'equipmentId') ?? ''
   },
   {
-    title: t('entity.maintenanceworkorder.equipmentcode'),
+    title: pi.label('equipmentCode'),
     dataIndex: 'equipmentCode',
     key: 'equipmentCode',
     width: 120,
@@ -1271,7 +1143,7 @@ const columns = computed<TableColumnsType>(() => [
     customRender: ({ record }: { record: any }) => getMaintenanceWorkOrderField(record, 'equipmentCode') ?? ''
   },
   {
-    title: t('entity.maintenanceworkorder.equipmentname'),
+    title: pi.label('equipmentName'),
     dataIndex: 'equipmentName',
     key: 'equipmentName',
     width: 120,
@@ -1280,7 +1152,7 @@ const columns = computed<TableColumnsType>(() => [
     customRender: ({ record }: { record: any }) => getMaintenanceWorkOrderField(record, 'equipmentName') ?? ''
   },
   {
-    title: t('entity.maintenanceworkorder.maintenancecategory'),
+    title: pi.label('maintenanceCategory'),
     dataIndex: 'maintenanceCategory',
     key: 'maintenanceCategory',
     width: 120,
@@ -1288,7 +1160,7 @@ const columns = computed<TableColumnsType>(() => [
     ellipsis: true,
   },
   {
-    title: t('entity.maintenanceworkorder.maintenancetype'),
+    title: pi.label('maintenanceType'),
     dataIndex: 'maintenanceType',
     key: 'maintenanceType',
     width: 120,
@@ -1296,7 +1168,7 @@ const columns = computed<TableColumnsType>(() => [
     ellipsis: true,
   },
   {
-    title: t('entity.maintenanceworkorder.workorderstatus'),
+    title: pi.label('workOrderStatus'),
     dataIndex: 'workOrderStatus',
     key: 'workOrderStatus',
     width: 120,
@@ -1304,7 +1176,7 @@ const columns = computed<TableColumnsType>(() => [
     ellipsis: true,
   },
   {
-    title: t('entity.maintenanceworkorder.priority'),
+    title: pi.label('priority'),
     dataIndex: 'priority',
     key: 'priority',
     width: 120,
@@ -1313,7 +1185,7 @@ const columns = computed<TableColumnsType>(() => [
     customRender: ({ record }: { record: any }) => getMaintenanceWorkOrderField(record, 'priority') ?? ''
   },
   {
-    title: t('entity.maintenanceworkorder.workcenter'),
+    title: pi.label('workCenter'),
     dataIndex: 'workCenter',
     key: 'workCenter',
     width: 120,
@@ -1322,7 +1194,7 @@ const columns = computed<TableColumnsType>(() => [
     customRender: ({ record }: { record: any }) => getMaintenanceWorkOrderField(record, 'workCenter') ?? ''
   },
   {
-    title: t('entity.maintenanceworkorder.assignedtechnician'),
+    title: pi.label('assignedTechnician'),
     dataIndex: 'assignedTechnician',
     key: 'assignedTechnician',
     width: 120,
@@ -1331,7 +1203,7 @@ const columns = computed<TableColumnsType>(() => [
     customRender: ({ record }: { record: any }) => getMaintenanceWorkOrderField(record, 'assignedTechnician') ?? ''
   },
   {
-    title: t('entity.maintenanceworkorder.maintenancecompany'),
+    title: pi.label('maintenanceCompany'),
     dataIndex: 'maintenanceCompany',
     key: 'maintenanceCompany',
     width: 120,
@@ -1340,7 +1212,7 @@ const columns = computed<TableColumnsType>(() => [
     customRender: ({ record }: { record: any }) => getMaintenanceWorkOrderField(record, 'maintenanceCompany') ?? ''
   },
   {
-    title: t('entity.maintenanceworkorder.plannedstarttime'),
+    title: pi.label('plannedStartTime'),
     dataIndex: 'plannedStartTime',
     key: 'plannedStartTime',
     width: 120,
@@ -1349,7 +1221,7 @@ const columns = computed<TableColumnsType>(() => [
     customRender: ({ record }: { record: any }) => getMaintenanceWorkOrderField(record, 'plannedStartTime') ?? ''
   },
   {
-    title: t('entity.maintenanceworkorder.plannedendtime'),
+    title: pi.label('plannedEndTime'),
     dataIndex: 'plannedEndTime',
     key: 'plannedEndTime',
     width: 120,
@@ -1358,7 +1230,7 @@ const columns = computed<TableColumnsType>(() => [
     customRender: ({ record }: { record: any }) => getMaintenanceWorkOrderField(record, 'plannedEndTime') ?? ''
   },
   {
-    title: t('entity.maintenanceworkorder.actualstarttime'),
+    title: pi.label('actualStartTime'),
     dataIndex: 'actualStartTime',
     key: 'actualStartTime',
     width: 120,
@@ -1367,7 +1239,7 @@ const columns = computed<TableColumnsType>(() => [
     customRender: ({ record }: { record: any }) => getMaintenanceWorkOrderField(record, 'actualStartTime') ?? ''
   },
   {
-    title: t('entity.maintenanceworkorder.actualendtime'),
+    title: pi.label('actualEndTime'),
     dataIndex: 'actualEndTime',
     key: 'actualEndTime',
     width: 120,
@@ -1376,7 +1248,7 @@ const columns = computed<TableColumnsType>(() => [
     customRender: ({ record }: { record: any }) => getMaintenanceWorkOrderField(record, 'actualEndTime') ?? ''
   },
   {
-    title: t('entity.maintenanceworkorder.faultdescription'),
+    title: pi.label('faultDescription'),
     dataIndex: 'faultDescription',
     key: 'faultDescription',
     width: 120,
@@ -1385,7 +1257,7 @@ const columns = computed<TableColumnsType>(() => [
     customRender: ({ record }: { record: any }) => getMaintenanceWorkOrderField(record, 'faultDescription') ?? ''
   },
   {
-    title: t('entity.maintenanceworkorder.maintenancecontent'),
+    title: pi.label('maintenanceContent'),
     dataIndex: 'maintenanceContent',
     key: 'maintenanceContent',
     width: 120,
@@ -1394,7 +1266,7 @@ const columns = computed<TableColumnsType>(() => [
     customRender: ({ record }: { record: any }) => getMaintenanceWorkOrderField(record, 'maintenanceContent') ?? ''
   },
   {
-    title: t('entity.maintenanceworkorder.solution'),
+    title: pi.label('solution'),
     dataIndex: 'solution',
     key: 'solution',
     width: 120,
@@ -1403,7 +1275,7 @@ const columns = computed<TableColumnsType>(() => [
     customRender: ({ record }: { record: any }) => getMaintenanceWorkOrderField(record, 'solution') ?? ''
   },
   {
-    title: t('entity.maintenanceworkorder.costcenterid'),
+    title: pi.label('costCenterId'),
     dataIndex: 'costCenterId',
     key: 'costCenterId',
     width: 120,
@@ -1412,7 +1284,7 @@ const columns = computed<TableColumnsType>(() => [
     customRender: ({ record }: { record: any }) => getMaintenanceWorkOrderField(record, 'costCenterId') ?? ''
   },
   {
-    title: t('entity.maintenanceworkorder.costcentercode'),
+    title: pi.label('costCenterCode'),
     dataIndex: 'costCenterCode',
     key: 'costCenterCode',
     width: 120,
@@ -1421,7 +1293,7 @@ const columns = computed<TableColumnsType>(() => [
     customRender: ({ record }: { record: any }) => getMaintenanceWorkOrderField(record, 'costCenterCode') ?? ''
   },
   {
-    title: t('entity.maintenanceworkorder.costelementid'),
+    title: pi.label('costElementId'),
     dataIndex: 'costElementId',
     key: 'costElementId',
     width: 120,
@@ -1430,7 +1302,7 @@ const columns = computed<TableColumnsType>(() => [
     customRender: ({ record }: { record: any }) => getMaintenanceWorkOrderField(record, 'costElementId') ?? ''
   },
   {
-    title: t('entity.maintenanceworkorder.costelementcode'),
+    title: pi.label('costElementCode'),
     dataIndex: 'costElementCode',
     key: 'costElementCode',
     width: 120,
@@ -1439,7 +1311,7 @@ const columns = computed<TableColumnsType>(() => [
     customRender: ({ record }: { record: any }) => getMaintenanceWorkOrderField(record, 'costElementCode') ?? ''
   },
   {
-    title: t('entity.maintenanceworkorder.totalmaterialcost'),
+    title: pi.label('totalMaterialCost'),
     dataIndex: 'totalMaterialCost',
     key: 'totalMaterialCost',
     width: 120,
@@ -1448,7 +1320,7 @@ const columns = computed<TableColumnsType>(() => [
     customRender: ({ record }: { record: any }) => getMaintenanceWorkOrderField(record, 'totalMaterialCost') ?? ''
   },
   {
-    title: t('entity.maintenanceworkorder.totallaborcost'),
+    title: pi.label('totalLaborCost'),
     dataIndex: 'totalLaborCost',
     key: 'totalLaborCost',
     width: 120,
@@ -1457,7 +1329,7 @@ const columns = computed<TableColumnsType>(() => [
     customRender: ({ record }: { record: any }) => getMaintenanceWorkOrderField(record, 'totalLaborCost') ?? ''
   },
   {
-    title: t('entity.maintenanceworkorder.totalothercost'),
+    title: pi.label('totalOtherCost'),
     dataIndex: 'totalOtherCost',
     key: 'totalOtherCost',
     width: 120,
@@ -1466,7 +1338,7 @@ const columns = computed<TableColumnsType>(() => [
     customRender: ({ record }: { record: any }) => getMaintenanceWorkOrderField(record, 'totalOtherCost') ?? ''
   },
   {
-    title: t('entity.maintenanceworkorder.totalcost'),
+    title: pi.label('totalCost'),
     dataIndex: 'totalCost',
     key: 'totalCost',
     width: 120,
@@ -1475,7 +1347,7 @@ const columns = computed<TableColumnsType>(() => [
     customRender: ({ record }: { record: any }) => getMaintenanceWorkOrderField(record, 'totalCost') ?? ''
   },
   {
-    title: t('entity.maintenanceworkorder.settlementstatus'),
+    title: pi.label('settlementStatus'),
     dataIndex: 'settlementStatus',
     key: 'settlementStatus',
     width: 120,
@@ -1484,7 +1356,7 @@ const columns = computed<TableColumnsType>(() => [
     customRender: ({ record }: { record: any }) => getMaintenanceWorkOrderField(record, 'settlementStatus') ?? ''
   },
   {
-    title: t('entity.maintenanceworkorder.settlementtime'),
+    title: pi.label('settlementTime'),
     dataIndex: 'settlementTime',
     key: 'settlementTime',
     width: 120,
@@ -1493,7 +1365,7 @@ const columns = computed<TableColumnsType>(() => [
     customRender: ({ record }: { record: any }) => getMaintenanceWorkOrderField(record, 'settlementTime') ?? ''
   },
   {
-    title: t('entity.maintenanceworkorder.completedat'),
+    title: pi.label('completedAt'),
     dataIndex: 'completedAt',
     key: 'completedAt',
     width: 120,
@@ -1502,7 +1374,7 @@ const columns = computed<TableColumnsType>(() => [
     customRender: ({ record }: { record: any }) => getMaintenanceWorkOrderField(record, 'completedAt') ?? ''
   },
   {
-    title: t('entity.maintenanceworkorder.acceptedby'),
+    title: pi.label('acceptedBy'),
     dataIndex: 'acceptedBy',
     key: 'acceptedBy',
     width: 120,
@@ -1511,7 +1383,7 @@ const columns = computed<TableColumnsType>(() => [
     customRender: ({ record }: { record: any }) => getMaintenanceWorkOrderField(record, 'acceptedBy') ?? ''
   },
   {
-    title: t('entity.maintenanceworkorder.acceptedat'),
+    title: pi.label('acceptedAt'),
     dataIndex: 'acceptedAt',
     key: 'acceptedAt',
     width: 120,
@@ -1520,7 +1392,7 @@ const columns = computed<TableColumnsType>(() => [
     customRender: ({ record }: { record: any }) => getMaintenanceWorkOrderField(record, 'acceptedAt') ?? ''
   },
   {
-    title: t('entity.maintenanceworkorder.maintenanceresult'),
+    title: pi.label('maintenanceResult'),
     dataIndex: 'maintenanceResult',
     key: 'maintenanceResult',
     width: 120,
@@ -1529,7 +1401,7 @@ const columns = computed<TableColumnsType>(() => [
     customRender: ({ record }: { record: any }) => getMaintenanceWorkOrderField(record, 'maintenanceResult') ?? ''
   },
   {
-    title: t('entity.maintenanceworkorder.nextmaintenancedate'),
+    title: pi.label('nextMaintenanceDate'),
     dataIndex: 'nextMaintenanceDate',
     key: 'nextMaintenanceDate',
     width: 120,
@@ -1538,7 +1410,7 @@ const columns = computed<TableColumnsType>(() => [
     customRender: ({ record }: { record: any }) => getMaintenanceWorkOrderField(record, 'nextMaintenanceDate') ?? ''
   },
   {
-    title: t('entity.maintenanceworkorder.maintenancecycledays'),
+    title: pi.label('maintenanceCycleDays'),
     dataIndex: 'maintenanceCycleDays',
     key: 'maintenanceCycleDays',
     width: 120,
@@ -1547,7 +1419,7 @@ const columns = computed<TableColumnsType>(() => [
     customRender: ({ record }: { record: any }) => getMaintenanceWorkOrderField(record, 'maintenanceCycleDays') ?? ''
   },
   {
-    title: t('entity.maintenanceworkorder.maintenanceimages'),
+    title: pi.label('maintenanceImages'),
     dataIndex: 'maintenanceImages',
     key: 'maintenanceImages',
     width: 120,
@@ -1556,7 +1428,7 @@ const columns = computed<TableColumnsType>(() => [
     customRender: ({ record }: { record: any }) => getMaintenanceWorkOrderField(record, 'maintenanceImages') ?? ''
   },
   {
-    title: t('entity.maintenanceworkorder.maintenancedocuments'),
+    title: pi.label('maintenanceDocuments'),
     dataIndex: 'maintenanceDocuments',
     key: 'maintenanceDocuments',
     width: 120,
@@ -1565,7 +1437,7 @@ const columns = computed<TableColumnsType>(() => [
     customRender: ({ record }: { record: any }) => getMaintenanceWorkOrderField(record, 'maintenanceDocuments') ?? ''
   },
   {
-    title: t('entity.maintenanceworkorder.acceptedsummary'),
+    title: pi.label('acceptedSummary'),
     dataIndex: 'acceptedSummary',
     key: 'acceptedSummary',
     width: 120,
@@ -1574,30 +1446,12 @@ const columns = computed<TableColumnsType>(() => [
     customRender: ({ record }: { record: any }) => getMaintenanceWorkOrderField(record, 'acceptedSummary') ?? ''
   },
   {
-    title: t('entity.maintenanceworkorder.ishistoryarchived'),
+    title: pi.label('isHistoryArchived'),
     dataIndex: 'isHistoryArchived',
     key: 'isHistoryArchived',
     width: 120,
     resizable: true,
     ellipsis: true,
-  },
-  {
-    title: t('entity.maintenanceworkorder.maintenancenotification'),
-    dataIndex: 'maintenanceNotification',
-    key: 'maintenanceNotification',
-    width: 120,
-    resizable: true,
-    ellipsis: true,
-    customRender: ({ record }: { record: any }) => getMaintenanceWorkOrderField(record, 'maintenanceNotification') ?? ''
-  },
-  {
-    title: t('entity.maintenanceworkorder.equipment'),
-    dataIndex: 'equipment',
-    key: 'equipment',
-    width: 120,
-    resizable: true,
-    ellipsis: true,
-    customRender: ({ record }: { record: any }) => getMaintenanceWorkOrderField(record, 'equipment') ?? ''
   },
   CreateActionColumn({
     actions: [
@@ -1606,35 +1460,53 @@ const columns = computed<TableColumnsType>(() => [
         label: t('common.page.button.edit'),
         shape: 'plain',
         icon: RiEditLine,
-        permission: 'logistics:maintenance:work:order:update',
-        onClick: (record: MaintenanceWorkOrder) => handleEdit(record)
+        permission: 'logistics:maintenance:equipment:update',
+        onClick: (record: MaintenanceWorkOrderRowRecord) => handleEdit(record)
       },
       {
         key: 'delete',
         label: t('common.page.button.delete'),
         shape: 'plain',
         icon: RiDeleteBinLine,
-        permission: 'logistics:maintenance:work:order:delete',
-        onClick: (record: MaintenanceWorkOrder) => handleDeleteOne(record)
+        permission: 'logistics:maintenance:equipment:delete',
+        onClick: (record: MaintenanceWorkOrderRowRecord) => handleDeleteOne(record)
       }
     ]
   })
 ])
 
 /** 表格 row-key（优先实体主键字段） */
-const getMaintenanceWorkOrderId = (record: any): string => record?.[entityIdName] ?? ''
+const getMaintenanceWorkOrderId = (record: MaintenanceWorkOrderRowRecord): string => {
+  const id = (record as Record<string, unknown>)?.[entityIdName]
+  return id != null ? String(id) : ''
+}
 /**
  * 读取行字段值
  * @param record 行数据
  * @param field 字段名
  */
 const getMaintenanceWorkOrderField = (record: any, field: string): any => record?.[field]
+/**
+ * 供 TaktDictTag 等组件使用的标量字典值
+ * @param record 行数据
+ * @param field 字段名
+ */
+const getMaintenanceWorkOrderDictValue = (
+  record: MaintenanceWorkOrderRowRecord,
+  field: string,
+): string | number | undefined => {
+  const value = (record as Record<string, unknown>)?.[field]
+  if (value === null || value === undefined) return undefined
+  if (typeof value === 'string' || typeof value === 'number') return value
+  return String(value)
+}
+
 
 
 /** 行选择配置 */
 const rowSelection = computed(() => ({
   selectedRowKeys: selectedRowKeys.value,
-  onChange: (keys: (string | number)[], rows: MaintenanceWorkOrder[]) => {
+  onChange: (keys: (string | number)[], rows: MaintenanceWorkOrderRowRecord[]) => {
     selectedRowKeys.value = keys
     selectedRows.value = rows
     selectedRow.value = rows.length === 1 ? (rows[0] ?? null) : null
@@ -1644,7 +1516,7 @@ const rowSelection = computed(() => ({
       syncMasterSelection(null)
     }
   },
-  onSelect: (record: MaintenanceWorkOrder, selected: boolean) => {
+  onSelect: (record: MaintenanceWorkOrderRowRecord, selected: boolean) => {
     if (selected) {
       selectedRow.value = record
       syncMasterSelection(record)
@@ -1653,7 +1525,7 @@ const rowSelection = computed(() => ({
       syncMasterSelection(null)
     }
   },
-  onSelectAll: (selected: boolean, selectedRowsData: MaintenanceWorkOrder[]) => {
+  onSelectAll: (selected: boolean, selectedRowsData: MaintenanceWorkOrderRowRecord[]) => {
     selectedRow.value = selected && selectedRowsData.length === 1 ? (selectedRowsData[0] ?? null) : null
     syncMasterSelection(selectedRow.value)
   }
@@ -1757,14 +1629,14 @@ function handleReset() {
 
 /** 打开新增弹窗 */
 function handleCreate() {
-  formTitle.value = t('common.dialog.title.create', { entity: t('entity.maintenanceworkorder._self') })
+  formTitle.value = t('common.dialog.title.create', { entity: pi.self() })
   formData.value = null
   formVisible.value = true
   nextTick(() => formRef.value?.resetFields())
 }
 /** 打开编辑弹窗（主子表：先拉详情含子表） */
-async function handleEdit(record: MaintenanceWorkOrder) {
-  formTitle.value = t('common.dialog.title.edit', { entity: t('entity.maintenanceworkorder._self') })
+async function handleEdit(record: MaintenanceWorkOrderRowRecord) {
+  formTitle.value = t('common.dialog.title.edit', { entity: pi.self() })
   formLoading.value = true
   try {
     const detail = await loadMaintenanceWorkOrderDetail(record)
@@ -1780,7 +1652,7 @@ function handleUpdate() {
   if (selectedRow.value) {
     void handleEdit(selectedRow.value)
   } else {
-    message.warning(t('common.tip.select.to.action', { action: t('common.page.button.edit'), entity: t('entity.maintenanceworkorder._self') }))
+    message.warning(t('common.tip.select.to.action', { action: t('common.page.button.edit'), entity: pi.self() }))
   }
 }
 /** 提交新增/编辑表单 */
@@ -1798,10 +1670,10 @@ async function handleFormSubmit() {
     const id = (formData.value as any)?.[entityIdName]
     if (id) {
       await updateMaintenanceWorkOrder(id, payload as any)
-      message.success(t('common.feedback.updated', { target: t('entity.maintenanceworkorder._self') }))
+      message.success(t('common.feedback.updated', { target: pi.self() }))
     } else {
       await createMaintenanceWorkOrder(payload as any)
-      message.success(t('common.feedback.created', { target: t('entity.maintenanceworkorder._self') }))
+      message.success(t('common.feedback.created', { target: pi.self() }))
     }
     formVisible.value = false
     formData.value = null
@@ -1832,15 +1704,22 @@ async function handleDownloadTemplate(sheetName?: string, fileName?: string): Pr
   return (res as any)?.data ?? res
 }
 
-/** 上传并导入 Excel 文件 */
-async function handleImportFile(file: File, sheetName?: string): Promise<{ success: number; fail: number; errors: string[] }> {
-  return await importMaintenanceWorkOrder(file, sheetName)
+/** 上传并导入 Excel 文件（归一化后端 SuccessCount/successCount） */
+async function handleImportFile(file: File, sheetName?: string): Promise<TaktImportResult> {
+  const raw = await importMaintenanceWorkOrder(file, sheetName)
+  return normalizeImportResult(raw)
 }
 
-/** 导入完成回调：刷新列表并可选关闭对话框 */
-function handleImportSuccess(result: { success: number; fail: number; errors: string[] }) {
+/** 导入完成回调：刷新列表；全部成功时延迟关闭对话框 */
+function handleImportSuccess(result: TaktImportResult) {
   loadData()
-  if (result.fail === 0) setTimeout(() => { importVisible.value = false }, 2000)
+
+      if (selectedMasterKey.value) {
+    maintenanceWorkOrderMaterialPanelRef.value?.reload?.()
+      }
+  if (result.fail === 0 && result.success > 0) {
+    setTimeout(() => { importVisible.value = false }, 2000)
+  }
 }
 
 /** 关闭导入对话框 */
@@ -1874,24 +1753,24 @@ async function handleExport() {
     link.click()
     document.body.removeChild(link)
     setTimeout(() => window.URL.revokeObjectURL(url), 100)
-    message.success(t('common.feedback.export.success', { target: t('entity.maintenanceworkorder._self') }))
+    message.success(t('common.feedback.export.success', { target: pi.self() }))
   } catch (error: any) {
     logger.error('[MaintenanceWorkOrder] 导出失败', { error })
-    message.error(error?.message || t('common.feedback.export.failed', { target: t('entity.maintenanceworkorder._self') }))
+    message.error(error?.message || t('common.feedback.export.failed', { target: pi.self() }))
   } finally {
     loading.value = false
   }
 }
 /** 删除单行 */
-async function handleDeleteOne(record: MaintenanceWorkOrder) {
+async function handleDeleteOne(record: MaintenanceWorkOrderRowRecord) {
   Modal.confirm({
     title: t('common.tip.confirm.delete.title'),
-    content: t('common.tip.confirm.delete.entity', { entity: t('entity.maintenanceworkorder._self'), name: t('common.tip.this.target', { target: t('entity.maintenanceworkorder._self') }) }),
+    content: t('common.tip.confirm.delete.entity', { entity: pi.self(), name: t('common.tip.this.target', { target: pi.self() }) }),
     okText: t('common.page.button.delete'),
     cancelText: t('common.page.button.cancel'),
     onOk: async () => {
       await deleteMaintenanceWorkOrderById((record as any)[entityIdName])
-      message.success(t('common.feedback.deleted', { target: t('entity.maintenanceworkorder._self') }))
+      message.success(t('common.feedback.deleted', { target: pi.self() }))
       selectedRowKeys.value = []
       selectedRows.value = []
       selectedRow.value = null
@@ -1903,18 +1782,18 @@ async function handleDeleteOne(record: MaintenanceWorkOrder) {
 /** 批量删除选中行 */
 async function handleDelete() {
   if (selectedRows.value.length === 0) {
-    message.warning(t('common.tip.select.to.action', { action: t('common.page.button.delete'), entity: t('entity.maintenanceworkorder._self') }))
+    message.warning(t('common.tip.select.to.action', { action: t('common.page.button.delete'), entity: pi.self() }))
     return
   }
   Modal.confirm({
     title: t('common.tip.confirm.delete.title'),
-    content: t('common.tip.confirm.delete.count', { entity: t('entity.maintenanceworkorder._self'), count: selectedRows.value.length }),
+    content: t('common.tip.confirm.delete.count', { entity: pi.self(), count: selectedRows.value.length }),
     okText: t('common.page.button.delete'),
     cancelText: t('common.page.button.cancel'),
     onOk: async () => {
       const ids = selectedRows.value.map((r: any) => r[entityIdName]).filter(Boolean)
       await deleteMaintenanceWorkOrderBatch(ids)
-      message.success(t('common.feedback.deleted', { target: t('entity.maintenanceworkorder._self') }))
+      message.success(t('common.feedback.deleted', { target: pi.self() }))
       selectedRowKeys.value = []
       selectedRows.value = []
       selectedRow.value = null

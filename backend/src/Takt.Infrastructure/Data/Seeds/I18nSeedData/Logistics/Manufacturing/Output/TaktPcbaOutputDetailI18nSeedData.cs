@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Infrastructure.Data.Seeds.I18nSeedData.Logistics.Manufacturing.Output
 // 文件名称：TaktPcbaOutputDetailI18nSeedData.cs
-// 创建时间：2026-07-02
+// 创建时间：2026-07-09
 // 创建人：Takt365(Auto Generated)
 // 功能描述：TaktPcbaOutputDetail 实体字段国际化种子（无对应 frontend locales；TranslationText 取自 ColumnDescription，ContextNote 取自属性 XML summary）
 // 
@@ -100,13 +100,13 @@ public class TaktPcbaOutputDetailI18nSeedData : ITaktSeedDataCoordinator
             new TranslationSeedItem("entity.pcbaoutputdetail.pcbaoutputid", "zh-HK", "PCBA日报ID_hk", "PCBA日报ID（主表主键,序列化为string以避免Javascript精度问题）"),
 
             // entity.pcbaoutputdetail.prodordercode
-            new TranslationSeedItem("entity.pcbaoutputdetail.prodordercode", "en-US", "生产工单号_us", "生产工单号（冗余字段,便于查询）"),
+            new TranslationSeedItem("entity.pcbaoutputdetail.prodordercode", "en-US", "工单号_us", "工单号（冗余字段,便于查询）"),
             // entity.pcbaoutputdetail.prodordercode
-            new TranslationSeedItem("entity.pcbaoutputdetail.prodordercode", "ja-JP", "生产工单号_jp", "生产工单号（冗余字段,便于查询）"),
+            new TranslationSeedItem("entity.pcbaoutputdetail.prodordercode", "ja-JP", "工单号_jp", "工单号（冗余字段,便于查询）"),
             // entity.pcbaoutputdetail.prodordercode
-            new TranslationSeedItem("entity.pcbaoutputdetail.prodordercode", "zh-CN", "生产工单号", "生产工单号（冗余字段,便于查询）"),
+            new TranslationSeedItem("entity.pcbaoutputdetail.prodordercode", "zh-CN", "工单号", "工单号（冗余字段,便于查询）"),
             // entity.pcbaoutputdetail.prodordercode
-            new TranslationSeedItem("entity.pcbaoutputdetail.prodordercode", "zh-HK", "生产工单号_hk", "生产工单号（冗余字段,便于查询）"),
+            new TranslationSeedItem("entity.pcbaoutputdetail.prodordercode", "zh-HK", "工单号_hk", "工单号（冗余字段,便于查询）"),
 
             // entity.pcbaoutputdetail.linenumber
             new TranslationSeedItem("entity.pcbaoutputdetail.linenumber", "en-US", "行号_us", "行号（项号/序号，固定步长=10）"),
@@ -118,13 +118,13 @@ public class TaktPcbaOutputDetailI18nSeedData : ITaktSeedDataCoordinator
             new TranslationSeedItem("entity.pcbaoutputdetail.linenumber", "zh-HK", "行号_hk", "行号（项号/序号，固定步长=10）"),
 
             // entity.pcbaoutputdetail.timeperiod
-            new TranslationSeedItem("entity.pcbaoutputdetail.timeperiod", "en-US", "生产时段_us", "生产时段"),
+            new TranslationSeedItem("entity.pcbaoutputdetail.timeperiod", "en-US", "生产时段_us", "生产时段（PCBA 存工作中心 WorkCenter，新增时按物料查 TaktStandardOperationTime 自动生成）"),
             // entity.pcbaoutputdetail.timeperiod
-            new TranslationSeedItem("entity.pcbaoutputdetail.timeperiod", "ja-JP", "生产时段_jp", "生产时段"),
+            new TranslationSeedItem("entity.pcbaoutputdetail.timeperiod", "ja-JP", "生产时段_jp", "生产时段（PCBA 存工作中心 WorkCenter，新增时按物料查 TaktStandardOperationTime 自动生成）"),
             // entity.pcbaoutputdetail.timeperiod
-            new TranslationSeedItem("entity.pcbaoutputdetail.timeperiod", "zh-CN", "生产时段", "生产时段"),
+            new TranslationSeedItem("entity.pcbaoutputdetail.timeperiod", "zh-CN", "生产时段", "生产时段（PCBA 存工作中心 WorkCenter，新增时按物料查 TaktStandardOperationTime 自动生成）"),
             // entity.pcbaoutputdetail.timeperiod
-            new TranslationSeedItem("entity.pcbaoutputdetail.timeperiod", "zh-HK", "生产时段_hk", "生产时段"),
+            new TranslationSeedItem("entity.pcbaoutputdetail.timeperiod", "zh-HK", "生产时段_hk", "生产时段（PCBA 存工作中心 WorkCenter，新增时按物料查 TaktStandardOperationTime 自动生成）"),
 
             // entity.pcbaoutputdetail.shiftno
             new TranslationSeedItem("entity.pcbaoutputdetail.shiftno", "en-US", "班次_us", "班次（字典 logistics_shift_category；1=早 2=中 3=晚 4=白班 5=夜班）"),
@@ -172,31 +172,31 @@ public class TaktPcbaOutputDetailI18nSeedData : ITaktSeedDataCoordinator
             new TranslationSeedItem("entity.pcbaoutputdetail.dailycompletedqty", "zh-HK", "当日完成数_hk", "当日完成数"),
 
             // entity.pcbaoutputdetail.totalcompletedqty
-            new TranslationSeedItem("entity.pcbaoutputdetail.totalcompletedqty", "en-US", "累计完成数_us", "累计完成数"),
+            new TranslationSeedItem("entity.pcbaoutputdetail.totalcompletedqty", "en-US", "累计完成数_us", "累计完成数（计算结果：同工单号+班次+PCB板别+面板别桶内全部明细当日完成数合计）"),
             // entity.pcbaoutputdetail.totalcompletedqty
-            new TranslationSeedItem("entity.pcbaoutputdetail.totalcompletedqty", "ja-JP", "累计完成数_jp", "累计完成数"),
+            new TranslationSeedItem("entity.pcbaoutputdetail.totalcompletedqty", "ja-JP", "累计完成数_jp", "累计完成数（计算结果：同工单号+班次+PCB板别+面板别桶内全部明细当日完成数合计）"),
             // entity.pcbaoutputdetail.totalcompletedqty
-            new TranslationSeedItem("entity.pcbaoutputdetail.totalcompletedqty", "zh-CN", "累计完成数", "累计完成数"),
+            new TranslationSeedItem("entity.pcbaoutputdetail.totalcompletedqty", "zh-CN", "累计完成数", "累计完成数（计算结果：同工单号+班次+PCB板别+面板别桶内全部明细当日完成数合计）"),
             // entity.pcbaoutputdetail.totalcompletedqty
-            new TranslationSeedItem("entity.pcbaoutputdetail.totalcompletedqty", "zh-HK", "累计完成数_hk", "累计完成数"),
+            new TranslationSeedItem("entity.pcbaoutputdetail.totalcompletedqty", "zh-HK", "累计完成数_hk", "累计完成数（计算结果：同工单号+班次+PCB板别+面板别桶内全部明细当日完成数合计）"),
 
             // entity.pcbaoutputdetail.completedstatus
-            new TranslationSeedItem("entity.pcbaoutputdetail.completedstatus", "en-US", "完成状态_us", "完成状态（字典 logistics_pcba_completed_status；0=未完成 1=部分完成 2=已完成）"),
+            new TranslationSeedItem("entity.pcbaoutputdetail.completedstatus", "en-US", "完成状态_us", "完成状态（计算结果：字典 logistics_pcba_completed_status；0=未完成 1=部分完成 2=已完成；按累计完成数与批次数量比较）"),
             // entity.pcbaoutputdetail.completedstatus
-            new TranslationSeedItem("entity.pcbaoutputdetail.completedstatus", "ja-JP", "完成状态_jp", "完成状态（字典 logistics_pcba_completed_status；0=未完成 1=部分完成 2=已完成）"),
+            new TranslationSeedItem("entity.pcbaoutputdetail.completedstatus", "ja-JP", "完成状态_jp", "完成状态（计算结果：字典 logistics_pcba_completed_status；0=未完成 1=部分完成 2=已完成；按累计完成数与批次数量比较）"),
             // entity.pcbaoutputdetail.completedstatus
-            new TranslationSeedItem("entity.pcbaoutputdetail.completedstatus", "zh-CN", "完成状态", "完成状态（字典 logistics_pcba_completed_status；0=未完成 1=部分完成 2=已完成）"),
+            new TranslationSeedItem("entity.pcbaoutputdetail.completedstatus", "zh-CN", "完成状态", "完成状态（计算结果：字典 logistics_pcba_completed_status；0=未完成 1=部分完成 2=已完成；按累计完成数与批次数量比较）"),
             // entity.pcbaoutputdetail.completedstatus
-            new TranslationSeedItem("entity.pcbaoutputdetail.completedstatus", "zh-HK", "完成状态_hk", "完成状态（字典 logistics_pcba_completed_status；0=未完成 1=部分完成 2=已完成）"),
+            new TranslationSeedItem("entity.pcbaoutputdetail.completedstatus", "zh-HK", "完成状态_hk", "完成状态（计算结果：字典 logistics_pcba_completed_status；0=未完成 1=部分完成 2=已完成；按累计完成数与批次数量比较）"),
 
             // entity.pcbaoutputdetail.serialno
-            new TranslationSeedItem("entity.pcbaoutputdetail.serialno", "en-US", "序列号_us", "序列号"),
+            new TranslationSeedItem("entity.pcbaoutputdetail.serialno", "en-US", "序列号_us", "序列号（明细级）"),
             // entity.pcbaoutputdetail.serialno
-            new TranslationSeedItem("entity.pcbaoutputdetail.serialno", "ja-JP", "序列号_jp", "序列号"),
+            new TranslationSeedItem("entity.pcbaoutputdetail.serialno", "ja-JP", "序列号_jp", "序列号（明细级）"),
             // entity.pcbaoutputdetail.serialno
-            new TranslationSeedItem("entity.pcbaoutputdetail.serialno", "zh-CN", "序列号", "序列号"),
+            new TranslationSeedItem("entity.pcbaoutputdetail.serialno", "zh-CN", "序列号", "序列号（明细级）"),
             // entity.pcbaoutputdetail.serialno
-            new TranslationSeedItem("entity.pcbaoutputdetail.serialno", "zh-HK", "序列号_hk", "序列号"),
+            new TranslationSeedItem("entity.pcbaoutputdetail.serialno", "zh-HK", "序列号_hk", "序列号（明细级）"),
 
             // entity.pcbaoutputdetail.defectcount
             new TranslationSeedItem("entity.pcbaoutputdetail.defectcount", "en-US", "不良台数_us", "不良台数"),
@@ -207,14 +207,50 @@ public class TaktPcbaOutputDetailI18nSeedData : ITaktSeedDataCoordinator
             // entity.pcbaoutputdetail.defectcount
             new TranslationSeedItem("entity.pcbaoutputdetail.defectcount", "zh-HK", "不良台数_hk", "不良台数"),
 
+            // entity.pcbaoutputdetail.downtimeminutes
+            new TranslationSeedItem("entity.pcbaoutputdetail.downtimeminutes", "en-US", "停线时间_us", "停线时间(分钟)"),
+            // entity.pcbaoutputdetail.downtimeminutes
+            new TranslationSeedItem("entity.pcbaoutputdetail.downtimeminutes", "ja-JP", "停线时间_jp", "停线时间(分钟)"),
+            // entity.pcbaoutputdetail.downtimeminutes
+            new TranslationSeedItem("entity.pcbaoutputdetail.downtimeminutes", "zh-CN", "停线时间", "停线时间(分钟)"),
+            // entity.pcbaoutputdetail.downtimeminutes
+            new TranslationSeedItem("entity.pcbaoutputdetail.downtimeminutes", "zh-HK", "停线时间_hk", "停线时间(分钟)"),
+
+            // entity.pcbaoutputdetail.downtimereason
+            new TranslationSeedItem("entity.pcbaoutputdetail.downtimereason", "en-US", "停线原因_us", "停线原因（字典 logistics_stop_reason_category，多选 DictLabel 逗号分隔）"),
+            // entity.pcbaoutputdetail.downtimereason
+            new TranslationSeedItem("entity.pcbaoutputdetail.downtimereason", "ja-JP", "停线原因_jp", "停线原因（字典 logistics_stop_reason_category，多选 DictLabel 逗号分隔）"),
+            // entity.pcbaoutputdetail.downtimereason
+            new TranslationSeedItem("entity.pcbaoutputdetail.downtimereason", "zh-CN", "停线原因", "停线原因（字典 logistics_stop_reason_category，多选 DictLabel 逗号分隔）"),
+            // entity.pcbaoutputdetail.downtimereason
+            new TranslationSeedItem("entity.pcbaoutputdetail.downtimereason", "zh-HK", "停线原因_hk", "停线原因（字典 logistics_stop_reason_category，多选 DictLabel 逗号分隔）"),
+
+            // entity.pcbaoutputdetail.downtimedescription
+            new TranslationSeedItem("entity.pcbaoutputdetail.downtimedescription", "en-US", "停线说明_us", "停线说明"),
+            // entity.pcbaoutputdetail.downtimedescription
+            new TranslationSeedItem("entity.pcbaoutputdetail.downtimedescription", "ja-JP", "停线说明_jp", "停线说明"),
+            // entity.pcbaoutputdetail.downtimedescription
+            new TranslationSeedItem("entity.pcbaoutputdetail.downtimedescription", "zh-CN", "停线说明", "停线说明"),
+            // entity.pcbaoutputdetail.downtimedescription
+            new TranslationSeedItem("entity.pcbaoutputdetail.downtimedescription", "zh-HK", "停线说明_hk", "停线说明"),
+
             // entity.pcbaoutputdetail.inputminutes
-            new TranslationSeedItem("entity.pcbaoutputdetail.inputminutes", "en-US", "投入工数_us", "投入工数(分钟)"),
+            new TranslationSeedItem("entity.pcbaoutputdetail.inputminutes", "en-US", "投入工数_us", "投入工数(分钟)（计算结果：主表 DirectLabor×60）"),
             // entity.pcbaoutputdetail.inputminutes
-            new TranslationSeedItem("entity.pcbaoutputdetail.inputminutes", "ja-JP", "投入工数_jp", "投入工数(分钟)"),
+            new TranslationSeedItem("entity.pcbaoutputdetail.inputminutes", "ja-JP", "投入工数_jp", "投入工数(分钟)（计算结果：主表 DirectLabor×60）"),
             // entity.pcbaoutputdetail.inputminutes
-            new TranslationSeedItem("entity.pcbaoutputdetail.inputminutes", "zh-CN", "投入工数", "投入工数(分钟)"),
+            new TranslationSeedItem("entity.pcbaoutputdetail.inputminutes", "zh-CN", "投入工数", "投入工数(分钟)（计算结果：主表 DirectLabor×60）"),
             // entity.pcbaoutputdetail.inputminutes
-            new TranslationSeedItem("entity.pcbaoutputdetail.inputminutes", "zh-HK", "投入工数_hk", "投入工数(分钟)"),
+            new TranslationSeedItem("entity.pcbaoutputdetail.inputminutes", "zh-HK", "投入工数_hk", "投入工数(分钟)（计算结果：主表 DirectLabor×60）"),
+
+            // entity.pcbaoutputdetail.actualminutes
+            new TranslationSeedItem("entity.pcbaoutputdetail.actualminutes", "en-US", "实际工时_us", "实际工时(分钟)（计算结果：MixedProd=0 时投入工时-停线时间；MixedProd≠0 时报工工时-停线时间）"),
+            // entity.pcbaoutputdetail.actualminutes
+            new TranslationSeedItem("entity.pcbaoutputdetail.actualminutes", "ja-JP", "实际工时_jp", "实际工时(分钟)（计算结果：MixedProd=0 时投入工时-停线时间；MixedProd≠0 时报工工时-停线时间）"),
+            // entity.pcbaoutputdetail.actualminutes
+            new TranslationSeedItem("entity.pcbaoutputdetail.actualminutes", "zh-CN", "实际工时", "实际工时(分钟)（计算结果：MixedProd=0 时投入工时-停线时间；MixedProd≠0 时报工工时-停线时间）"),
+            // entity.pcbaoutputdetail.actualminutes
+            new TranslationSeedItem("entity.pcbaoutputdetail.actualminutes", "zh-HK", "实际工时_hk", "实际工时(分钟)（计算结果：MixedProd=0 时投入工时-停线时间；MixedProd≠0 时报工工时-停线时间）"),
 
             // entity.pcbaoutputdetail.repairminutes
             new TranslationSeedItem("entity.pcbaoutputdetail.repairminutes", "en-US", "修工数_us", "修工数(分钟)"),
@@ -262,13 +298,13 @@ public class TaktPcbaOutputDetailI18nSeedData : ITaktSeedDataCoordinator
             new TranslationSeedItem("entity.pcbaoutputdetail.totalminutes", "zh-HK", "总工数_hk", "总工数(分钟)"),
 
             // entity.pcbaoutputdetail.unachievedreason
-            new TranslationSeedItem("entity.pcbaoutputdetail.unachievedreason", "en-US", "未达成原因_us", "未达成原因（字典 logistics_nonachievement_reason_category，存 DictValue）"),
+            new TranslationSeedItem("entity.pcbaoutputdetail.unachievedreason", "en-US", "未达成原因_us", "未达成原因（字典 logistics_nonachievement_reason_category，多选 DictLabel 逗号分隔）"),
             // entity.pcbaoutputdetail.unachievedreason
-            new TranslationSeedItem("entity.pcbaoutputdetail.unachievedreason", "ja-JP", "未达成原因_jp", "未达成原因（字典 logistics_nonachievement_reason_category，存 DictValue）"),
+            new TranslationSeedItem("entity.pcbaoutputdetail.unachievedreason", "ja-JP", "未达成原因_jp", "未达成原因（字典 logistics_nonachievement_reason_category，多选 DictLabel 逗号分隔）"),
             // entity.pcbaoutputdetail.unachievedreason
-            new TranslationSeedItem("entity.pcbaoutputdetail.unachievedreason", "zh-CN", "未达成原因", "未达成原因（字典 logistics_nonachievement_reason_category，存 DictValue）"),
+            new TranslationSeedItem("entity.pcbaoutputdetail.unachievedreason", "zh-CN", "未达成原因", "未达成原因（字典 logistics_nonachievement_reason_category，多选 DictLabel 逗号分隔）"),
             // entity.pcbaoutputdetail.unachievedreason
-            new TranslationSeedItem("entity.pcbaoutputdetail.unachievedreason", "zh-HK", "未达成原因_hk", "未达成原因（字典 logistics_nonachievement_reason_category，存 DictValue）"),
+            new TranslationSeedItem("entity.pcbaoutputdetail.unachievedreason", "zh-HK", "未达成原因_hk", "未达成原因（字典 logistics_nonachievement_reason_category，多选 DictLabel 逗号分隔）"),
 
             // entity.pcbaoutputdetail.unachieveddescription
             new TranslationSeedItem("entity.pcbaoutputdetail.unachieveddescription", "en-US", "未达成说明_us", "未达成说明"),
@@ -278,6 +314,42 @@ public class TaktPcbaOutputDetailI18nSeedData : ITaktSeedDataCoordinator
             new TranslationSeedItem("entity.pcbaoutputdetail.unachieveddescription", "zh-CN", "未达成说明", "未达成说明"),
             // entity.pcbaoutputdetail.unachieveddescription
             new TranslationSeedItem("entity.pcbaoutputdetail.unachieveddescription", "zh-HK", "未达成说明_hk", "未达成说明"),
+
+            // entity.pcbaoutputdetail.confirmminutes
+            new TranslationSeedItem("entity.pcbaoutputdetail.confirmminutes", "en-US", "报工工时_us", "报工工时(分钟)"),
+            // entity.pcbaoutputdetail.confirmminutes
+            new TranslationSeedItem("entity.pcbaoutputdetail.confirmminutes", "ja-JP", "报工工时_jp", "报工工时(分钟)"),
+            // entity.pcbaoutputdetail.confirmminutes
+            new TranslationSeedItem("entity.pcbaoutputdetail.confirmminutes", "zh-CN", "报工工时", "报工工时(分钟)"),
+            // entity.pcbaoutputdetail.confirmminutes
+            new TranslationSeedItem("entity.pcbaoutputdetail.confirmminutes", "zh-HK", "报工工时_hk", "报工工时(分钟)"),
+
+            // entity.pcbaoutputdetail.mixedprod
+            new TranslationSeedItem("entity.pcbaoutputdetail.mixedprod", "en-US", "混合生产_us", "混合生产（0=非混合；N=此生产时段内另有N笔报工）"),
+            // entity.pcbaoutputdetail.mixedprod
+            new TranslationSeedItem("entity.pcbaoutputdetail.mixedprod", "ja-JP", "混合生产_jp", "混合生产（0=非混合；N=此生产时段内另有N笔报工）"),
+            // entity.pcbaoutputdetail.mixedprod
+            new TranslationSeedItem("entity.pcbaoutputdetail.mixedprod", "zh-CN", "混合生产", "混合生产（0=非混合；N=此生产时段内另有N笔报工）"),
+            // entity.pcbaoutputdetail.mixedprod
+            new TranslationSeedItem("entity.pcbaoutputdetail.mixedprod", "zh-HK", "混合生产_hk", "混合生产（0=非混合；N=此生产时段内另有N笔报工）"),
+
+            // entity.pcbaoutputdetail.achievementrate
+            new TranslationSeedItem("entity.pcbaoutputdetail.achievementrate", "en-US", "达成率_us", "达成率(%)（计算结果：当日完成数÷主表标准产能×100%；标准产能为0时取0）"),
+            // entity.pcbaoutputdetail.achievementrate
+            new TranslationSeedItem("entity.pcbaoutputdetail.achievementrate", "ja-JP", "达成率_jp", "达成率(%)（计算结果：当日完成数÷主表标准产能×100%；标准产能为0时取0）"),
+            // entity.pcbaoutputdetail.achievementrate
+            new TranslationSeedItem("entity.pcbaoutputdetail.achievementrate", "zh-CN", "达成率", "达成率(%)（计算结果：当日完成数÷主表标准产能×100%；标准产能为0时取0）"),
+            // entity.pcbaoutputdetail.achievementrate
+            new TranslationSeedItem("entity.pcbaoutputdetail.achievementrate", "zh-HK", "达成率_hk", "达成率(%)（计算结果：当日完成数÷主表标准产能×100%；标准产能为0时取0）"),
+
+            // entity.pcbaoutputdetail.isobsolete
+            new TranslationSeedItem("entity.pcbaoutputdetail.isobsolete", "en-US", "是否作废_us", "是否作废（字典 sys_yes_no_type，0=否 1=是；编辑移除子行时标记作废）"),
+            // entity.pcbaoutputdetail.isobsolete
+            new TranslationSeedItem("entity.pcbaoutputdetail.isobsolete", "ja-JP", "是否作废_jp", "是否作废（字典 sys_yes_no_type，0=否 1=是；编辑移除子行时标记作废）"),
+            // entity.pcbaoutputdetail.isobsolete
+            new TranslationSeedItem("entity.pcbaoutputdetail.isobsolete", "zh-CN", "是否作废", "是否作废（字典 sys_yes_no_type，0=否 1=是；编辑移除子行时标记作废）"),
+            // entity.pcbaoutputdetail.isobsolete
+            new TranslationSeedItem("entity.pcbaoutputdetail.isobsolete", "zh-HK", "是否作废_hk", "是否作废（字典 sys_yes_no_type，0=否 1=是；编辑移除子行时标记作废）"),
 
             // entity.pcbaoutputdetail.pcbaoutput
             new TranslationSeedItem("entity.pcbaoutputdetail.pcbaoutput", "en-US", "PCBA日报_us", "PCBA日报（主表）"),

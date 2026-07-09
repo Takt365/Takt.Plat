@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：frontend/src/api/logistics/manufacturing/bom
 // 文件名称：standard-operation-time.ts
-// 创建时间：2026-06-30
+// 创建时间：2026-07-09
 // 创建人：Takt365(Auto Generated)
 // 功能描述：logistics/manufacturing/bom 模块 API（自动生成，请勿手改路由常量）
 // 
@@ -60,15 +60,21 @@ export function getStandardOperationTimeById(id: string): Promise<StandardOperat
  * 根据物料编码获取当前有效的标准工序时间列表
  * @param {string} materialCode 物料编码
  * @param {string} plantCode 工厂代码（可选）
+ * @param {string} prodDate 生产日期（可选；未传时按当天解析有效期）
  * @returns {Promise<StandardOperationTime[]>} 标准工序时间 DTO 列表
  */
-export function getStandardOperationTimeByMaterial(materialCode: string, plantCode?: string): Promise<StandardOperationTime[]> {
+export function getStandardOperationTimeByMaterial(
+  materialCode: string,
+  plantCode?: string,
+  prodDate?: string
+): Promise<StandardOperationTime[]> {
   return request<StandardOperationTime[]>({
     url: `${STANDARD_OPERATION_TIME_API_BASE}/by-material`,
     method: 'get',
     params: {
       materialCode,
-      plantCode
+      plantCode,
+      prodDate
     },
   });
 }
@@ -137,6 +143,29 @@ export function getStandardOperationTimeOptions(): Promise<TaktSelectOption[]> {
   return request<TaktSelectOption[]>({
     url: `${STANDARD_OPERATION_TIME_API_BASE}/options`,
     method: 'get',
+  });
+}
+
+/**
+ * 根据物料编码获取当前有效的标准工时选项列表
+ * @param {string} materialCode 物料编码
+ * @param {string} plantCode 工厂代码（可选）
+ * @param {string} prodDate 生产日期（可选；未传时按当天解析有效期）
+ * @returns {Promise<TaktSelectOption[]>} 下拉选项
+ */
+export function getStandardOperationTimeOptionsByMaterial(
+  materialCode: string,
+  plantCode?: string,
+  prodDate?: string
+): Promise<TaktSelectOption[]> {
+  return request<TaktSelectOption[]>({
+    url: `${STANDARD_OPERATION_TIME_API_BASE}/options-by-material`,
+    method: 'get',
+    params: {
+      materialCode,
+      plantCode,
+      prodDate
+    },
   });
 }
 

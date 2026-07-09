@@ -32,7 +32,6 @@ namespace Takt.Application.Services.Routine.HelpDesk;
 public class TaktTicketService : TaktServiceBase, ITaktTicketService
 {
     private readonly ITaktCompanyRepository<TaktTicket> _ticketRepository;
-    private readonly ITaktCompanyRepository<TaktTicketChangeLog> _ticketChangeLogRepository;
     private readonly ITaktCompanyRepository<TaktTicketReply> _ticketReplyRepository;
     private readonly ITaktCompanyRepository<TaktTicketCategoryAssign> _categoryAssignRepository;
     private readonly ITaktCompanyRepository<TaktAsset> _assetRepository;
@@ -44,7 +43,6 @@ public class TaktTicketService : TaktServiceBase, ITaktTicketService
     /// 构造函数
     /// </summary>
     /// <param name="ticketRepository">工单仓储</param>
-    /// <param name="ticketChangeLogRepository">工单变更日志仓储</param>
     /// <param name="ticketReplyRepository">工单回复仓储</param>
     /// <param name="categoryAssignRepository">工单分类默认处理人仓储</param>
     /// <param name="assetRepository">财务资产仓储</param>
@@ -55,7 +53,6 @@ public class TaktTicketService : TaktServiceBase, ITaktTicketService
     /// <param name="localizationService">本地化服务</param>
     public TaktTicketService(
         ITaktCompanyRepository<TaktTicket> ticketRepository,
-        ITaktCompanyRepository<TaktTicketChangeLog> ticketChangeLogRepository,
         ITaktCompanyRepository<TaktTicketReply> ticketReplyRepository,
         ITaktCompanyRepository<TaktTicketCategoryAssign> categoryAssignRepository,
         ITaktCompanyRepository<TaktAsset> assetRepository,
@@ -67,7 +64,6 @@ public class TaktTicketService : TaktServiceBase, ITaktTicketService
         : base(userContext, localizationService)
     {
         _ticketRepository = ticketRepository;
-        _ticketChangeLogRepository = ticketChangeLogRepository;
         _ticketReplyRepository = ticketReplyRepository;
         _categoryAssignRepository = categoryAssignRepository;
         _assetRepository = assetRepository;
@@ -252,15 +248,6 @@ public class TaktTicketService : TaktServiceBase, ITaktTicketService
         ApplyTicketPriorityFromMatrix(entity, dto.Urgency, dto.Impact);
         entity = await _ticketRepository.CreateAsync(entity);
         await TryAutoAssignAsync(entity);
-        await AppendChangeLogAsync(
-            entity,
-            0,
-            "工单创建",
-            dto.Remark);
-        if (dto.ChangeLogs is { Count: > 0 })
-        {
-            await SaveTicketChildrenAsync(entity, dto);
-        }
         return await GetTicketByIdAsync(entity.Id) ?? entity.Adapt<TaktTicketDto>();
     }
 
@@ -347,7 +334,6 @@ public class TaktTicketService : TaktServiceBase, ITaktTicketService
         ApplyTicketPriorityFromMatrix(entity, dto.Urgency, dto.Impact);
         await EnsureTicketNoUniqueAsync(entity.TicketNo, id);
         await _ticketRepository.UpdateAsync(entity);
-        await SaveTicketChildrenAsync(entity, dto);
         return await GetTicketByIdAsync(id) ?? throw new TaktBusinessException("工单不存在");
     }
 
@@ -359,9 +345,7 @@ public class TaktTicketService : TaktServiceBase, ITaktTicketService
     public async Task DeleteTicketByIdAsync(long id)
     {
         var entity = await GetTicketEntityOrThrowAsync(id);
-        await _ticketReplyRepository.DeleteAsync(x => x.TicketId == entity.Id);
-        await _ticketChangeLogRepository.DeleteAsync(x => x.TicketId == entity.Id);
-        var deleted = await _ticketRepository.DeleteAsync(id);
+        await _ticketReplyRepository.DeleteAsync(x => x.TicketId == entity.Id);        var deleted = await _ticketRepository.DeleteAsync(id);
         if (!deleted)
         {
             throw new TaktBusinessException("工单不存在或已删除");
@@ -586,7 +570,6 @@ public class TaktTicketService : TaktServiceBase, ITaktTicketService
                 "用户回复，继续处理",
                 null);
         }
-        await AppendChangeLogAsync(entity, 4, "工单回复", dto.TicketContent);
         return reply.Adapt<TaktTicketReplyDto>();
     }
 
@@ -781,40 +764,6 @@ public class TaktTicketService : TaktServiceBase, ITaktTicketService
         }
         entity.TicketStatus = target;
         await _ticketRepository.UpdateAsync(entity);
-        await AppendChangeLogAsync(
-            entity,
-            changeType,
-            $"{summary}：{current} → {target}",
-            reason,
-            $"{{\"from\":{current},\"to\":{target}}}");
-    }
-
-    /// <summary>
-    /// 追加变更日志
-    /// </summary>
-    /// <param name="entity">工单实体</param>
-    /// <param name="changeType">变更类型</param>
-    /// <param name="summary">变更摘要</param>
-    /// <param name="reason">变更原因</param>
-    /// <param name="changeFields">变更字段 JSON</param>
-    /// <returns>任务</returns>
-    private async Task AppendChangeLogAsync(
-        TaktTicket entity,
-        int changeType,
-        string summary,
-        string? reason,
-        string? changeFields = null)
-    {
-        var log = new TaktTicketChangeLog
-        {
-            TicketId = entity.Id,
-            TicketNo = entity.TicketNo,
-            ChangeType = changeType,
-            ChangeSummary = summary,
-            ChangeReason = reason,
-            ChangeFields = changeFields,
-        };
-        await _ticketChangeLogRepository.CreateAsync(log);
     }
 
     /// <summary>
@@ -841,11 +790,6 @@ public class TaktTicketService : TaktServiceBase, ITaktTicketService
         entity.AssigneeName = assign.AssigneeName;
         entity.TicketStatus = TaktTicketConstants.Assigned;
         await _ticketRepository.UpdateAsync(entity);
-        await AppendChangeLogAsync(
-            entity,
-            5,
-            $"系统自动指派：{assign.AssigneeName}",
-            entity.CategoryCode);
     }
 
     /// <summary>
@@ -969,8 +913,6 @@ public class TaktTicketService : TaktServiceBase, ITaktTicketService
         {
             return;
         }
-        var changelogs = await _ticketChangeLogRepository.GetListAsync(x => x.TicketId == entity.Id);
-        dto.ChangeLogs = changelogs.Adapt<List<TaktTicketChangeLogDto>>();
         var replies = await _ticketReplyRepository.GetListAsync(
             x => x.TicketId == entity.Id,
             x => x.CreatedAt,
@@ -1059,27 +1001,6 @@ public class TaktTicketService : TaktServiceBase, ITaktTicketService
                 && x.CompanyCode == CurrentCompanyCode
                 && x.AssetCode == code);
         dto.AssetName = assets.FirstOrDefault()?.AssetName;
-    }
-
-    /// <summary>
-    /// 保存工单子表级联
-    /// </summary>
-    /// <param name="entity">工单实体</param>
-    /// <param name="dto">创建 DTO</param>
-    /// <returns>任务</returns>
-    private async Task SaveTicketChildrenAsync(TaktTicket entity, TaktTicketCreateDto dto)
-    {
-        if (dto.ChangeLogs is not { Count: > 0 })
-        {
-            return;
-        }
-        var changelogs = dto.ChangeLogs.Adapt<List<TaktTicketChangeLog>>();
-        foreach (var child in changelogs)
-        {
-            child.TicketId = entity.Id;
-        }
-        await _ticketChangeLogRepository.DeleteAsync(x => x.TicketId == entity.Id);
-        await _ticketChangeLogRepository.CreateRangeAsync(changelogs);
     }
 
     /// <summary>

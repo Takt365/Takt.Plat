@@ -139,10 +139,4 @@ public class TaktAsset : TaktCompanyEntityBase
     /// </summary>
     [SugarColumn(ColumnName = "asset_status", ColumnDescription = "资产状态", ColumnDataType = "int", IsNullable = false, DefaultValue = "1")]
     public int AssetStatus { get; set; } = 1;
-
-    /// <summary>
-    /// 固定资产变更记录列表（外键在子表 TaktAssetChangeLog.AssetId）
-    /// </summary>
-    [Navigate(NavigateType.OneToMany, nameof(TaktAssetChangeLog.AssetId))]
-    public List<TaktAssetChangeLog>? ChangeLogs { get; set; }
 }

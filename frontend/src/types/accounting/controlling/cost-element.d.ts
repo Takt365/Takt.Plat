@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：frontend/src/types/accounting/controlling
 // 文件名称：cost-element.d.ts
-// 创建时间：2026-06-23
+// 创建时间：2026-07-09
 // 创建人：Takt365(Auto Generated)
 // 功能描述：accounting/controlling 模块类型定义（自动生成；类型名去 Takt 前缀与末尾 Dto，如 TaktCompanyDto → Company）
 // 
@@ -39,12 +39,12 @@ export interface CostElement extends CompanyDtoBase {
   costElementName: string;
 
   /**
-   * 成本要素类型（0=初级，1=次级）
+   * 成本要素类型（字典 accounting_cost_element_type；0=初级，1=次级；由 KATYP 推导）
    */
   costElementType: number;
 
   /**
-   * 成本要素类别（0=人工，1=材料，2=制造费用，3=其他）
+   * 成本要素类别（字典 accounting_cost_element_category；SAP KATYP 整型值）
    */
   costElementCategory: number;
 
@@ -59,11 +59,6 @@ export interface CostElement extends CompanyDtoBase {
   costElementLevel: number;
 
   /**
-   * 成本要素状态（字典 sys_normal_disable_status；1=启用，0=禁用）
-   */
-  costElementStatus: number;
-
-  /**
    * 生效日期
    */
   validFrom: string;
@@ -74,14 +69,19 @@ export interface CostElement extends CompanyDtoBase {
   validTo: string;
 
   /**
+   * 关联工厂
+   */
+  relatedPlant: string;
+
+  /**
    * 排序号
    */
   sortOrder: number;
 
   /**
-   * 成本要素变更记录列表（外键在子表 TaktCostElementChangeLog.CostElementId） （子表：TaktCostElementChangeLog）
+   * 成本要素状态（字典 sys_normal_disable_status；1=启用，0=禁用）
    */
-  changeLogs?: CostElementChangeLog[];
+  costElementStatus: number;
 
 }
 
@@ -149,11 +149,6 @@ export interface CostElementQuery extends TaktPagedQuery {
   costElementLevel?: number;
 
   /**
-   * 成本要素状态（字典 sys_normal_disable_status；1=启用，0=禁用）
-   */
-  costElementStatus?: number;
-
-  /**
    * 生效日期（范围查询-开始）
    */
   validFromStart?: string;
@@ -174,9 +169,19 @@ export interface CostElementQuery extends TaktPagedQuery {
   validToEnd?: string;
 
   /**
+   * 关联工厂
+   */
+  relatedPlant?: string;
+
+  /**
    * 排序号
    */
   sortOrder?: number;
+
+  /**
+   * 成本要素状态（字典 sys_normal_disable_status；1=启用，0=禁用）
+   */
+  costElementStatus?: number;
 
   /**
    * 创建时间（范围查询-开始）
@@ -233,12 +238,12 @@ export interface CostElementCreate {
   costElementName: string;
 
   /**
-   * 成本要素类型（0=初级，1=次级）
+   * 成本要素类型（字典 accounting_cost_element_type；0=初级，1=次级；由 KATYP 推导）
    */
   costElementType: number;
 
   /**
-   * 成本要素类别（0=人工，1=材料，2=制造费用，3=其他）
+   * 成本要素类别（字典 accounting_cost_element_category；SAP KATYP 整型值）
    */
   costElementCategory: number;
 
@@ -253,11 +258,6 @@ export interface CostElementCreate {
   costElementLevel: number;
 
   /**
-   * 成本要素状态（字典 sys_normal_disable_status；1=启用，0=禁用）
-   */
-  costElementStatus: number;
-
-  /**
    * 生效日期
    */
   validFrom: string;
@@ -268,9 +268,14 @@ export interface CostElementCreate {
   validTo: string;
 
   /**
-   * 成本要素变更记录列表（外键在子表 TaktCostElementChangeLog.CostElementId）（子表，级联保存）
+   * 关联工厂
    */
-  changeLogs?: CostElementChangeLogCreate[];
+  relatedPlant: string;
+
+  /**
+   * 成本要素状态（字典 sys_normal_disable_status；1=启用，0=禁用）
+   */
+  costElementStatus: number;
 
   /**
    * 扩展字段JSON
@@ -385,11 +390,6 @@ export interface CostElementTemplate {
   costElementLevel?: number;
 
   /**
-   * 成本要素状态（字典 sys_normal_disable_status；1=启用，0=禁用）
-   */
-  costElementStatus?: number;
-
-  /**
    * 生效日期
    */
   validFrom?: string;
@@ -400,9 +400,14 @@ export interface CostElementTemplate {
   validTo?: string;
 
   /**
-   * 成本要素变更记录列表（外键在子表 TaktCostElementChangeLog.CostElementId）（子表，级联保存）
+   * 关联工厂
    */
-  changeLogs?: CostElementChangeLogCreate[];
+  relatedPlant?: string;
+
+  /**
+   * 成本要素状态（字典 sys_normal_disable_status；1=启用，0=禁用）
+   */
+  costElementStatus?: number;
 
   /**
    * 扩展字段JSON
@@ -469,11 +474,6 @@ export interface CostElementImport {
   costElementLevel?: number;
 
   /**
-   * 成本要素状态（字典 sys_normal_disable_status；1=启用，0=禁用）
-   */
-  costElementStatus?: number;
-
-  /**
    * 生效日期
    */
   validFrom?: string;
@@ -484,9 +484,14 @@ export interface CostElementImport {
   validTo?: string;
 
   /**
-   * 成本要素变更记录列表（外键在子表 TaktCostElementChangeLog.CostElementId）（子表，级联保存）
+   * 关联工厂
    */
-  changeLogs?: CostElementChangeLogCreate[];
+  relatedPlant?: string;
+
+  /**
+   * 成本要素状态（字典 sys_normal_disable_status；1=启用，0=禁用）
+   */
+  costElementStatus?: number;
 
   /**
    * 扩展字段JSON
@@ -528,12 +533,12 @@ export interface CostElementExport {
   costElementName: string;
 
   /**
-   * 成本要素类型（0=初级，1=次级）
+   * 成本要素类型（字典 accounting_cost_element_type；0=初级，1=次级；由 KATYP 推导）
    */
   costElementType: number;
 
   /**
-   * 成本要素类别（0=人工，1=材料，2=制造费用，3=其他）
+   * 成本要素类别（字典 accounting_cost_element_category；SAP KATYP 整型值）
    */
   costElementCategory: number;
 
@@ -548,11 +553,6 @@ export interface CostElementExport {
   costElementLevel: number;
 
   /**
-   * 成本要素状态（字典 sys_normal_disable_status；1=启用，0=禁用）
-   */
-  costElementStatus: number;
-
-  /**
    * 生效日期
    */
   validFrom: string;
@@ -563,9 +563,19 @@ export interface CostElementExport {
   validTo: string;
 
   /**
+   * 关联工厂
+   */
+  relatedPlant: string;
+
+  /**
    * 排序号
    */
   sortOrder: number;
+
+  /**
+   * 成本要素状态（字典 sys_normal_disable_status；1=启用，0=禁用）
+   */
+  costElementStatus: number;
 
   /**
    * 扩展字段JSON

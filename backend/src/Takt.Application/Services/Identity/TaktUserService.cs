@@ -13,6 +13,7 @@
 using System.Linq.Expressions;
 using Mapster;
 using Microsoft.Extensions.Localization;
+using Microsoft.Extensions.Options;
 using SqlSugar;
 using Takt.Application.Dtos.Identity;
 using Takt.Application.Services.Foundation;
@@ -25,6 +26,7 @@ using Takt.Shared.Enums;
 using Takt.Shared.Exceptions;
 using Takt.Shared.Helpers;
 using Takt.Shared.Models;
+using Takt.Shared.Options;
 
 namespace Takt.Application.Services.Identity;
 
@@ -38,6 +40,7 @@ public class TaktUserService : TaktServiceBase, ITaktUserService
     private readonly ITaktRbacService _rbacService;
     private readonly ITaktPermissionService _permissionService;
     private readonly ITaktDictDataService _dictDataService;
+    private readonly TaktPasswordPolicyOptions _passwordPolicyOptions;
 
     /// <summary>
     /// 构造函数
@@ -47,6 +50,7 @@ public class TaktUserService : TaktServiceBase, ITaktUserService
     /// <param name="rbacService">RBAC 关联分配服务</param>
     /// <param name="permissionService">权限服务</param>
     /// <param name="dictDataService">字典数据服务</param>
+    /// <param name="passwordPolicyOptions">密码策略配置</param>
     /// <param name="userContext">用户上下文</param>
     /// <param name="localizationService">本地化服务</param>
     public TaktUserService(
@@ -55,6 +59,7 @@ public class TaktUserService : TaktServiceBase, ITaktUserService
         ITaktRbacService rbacService,
         ITaktPermissionService permissionService,
         ITaktDictDataService dictDataService,
+        IOptions<TaktPasswordPolicyOptions> passwordPolicyOptions,
         ITaktUserContext userContext,
         ITaktLocalizationService localizationService)
         : base(userContext, localizationService)
@@ -64,6 +69,7 @@ public class TaktUserService : TaktServiceBase, ITaktUserService
         _rbacService = rbacService;
         _permissionService = permissionService;
         _dictDataService = dictDataService;
+        _passwordPolicyOptions = passwordPolicyOptions.Value;
     }
 
     // ========================================
@@ -179,6 +185,8 @@ public class TaktUserService : TaktServiceBase, ITaktUserService
         {
             ThrowValidationLocalized(TaktValidationI18nKeys.NotFound, TaktValidationI18nKeys.EntityUserEmployeeId, dto.EmployeeId);
         }
+
+        ValidateNewPassword(dto.PasswordHash);
 
         // 3. 创建实体
         var entity = dto.Adapt<TaktUser>();
@@ -486,6 +494,8 @@ public class TaktUserService : TaktServiceBase, ITaktUserService
         }
 
         entity.PasswordHash = TaktEncryptHelper.HashPassword(dto.NewPassword);
+        entity.LoginFailCount = 0;
+        entity.LockedUntil = null;
         entity.UpdatedBy = CurrentUserId;
         entity.UpdatedAt = DateTime.Now;
 
@@ -807,27 +817,19 @@ public class TaktUserService : TaktServiceBase, ITaktUserService
     }
 
     /// <summary>
-    /// 校验新密码基本规则
+    /// 校验新密码是否满足 PasswordPolicy 配置
     /// </summary>
     /// <param name="password">明文密码</param>
-    private static void ValidateNewPassword(string password)
+    private void ValidateNewPassword(string password)
     {
-        const int minLength = 8;
-
-        if (string.IsNullOrWhiteSpace(password))
+        if (!TaktPasswordPolicyHelper.TryValidate(password, _passwordPolicyOptions, out var i18nKey))
         {
-            throw new TaktBusinessException("新密码不能为空");
-        }
+            if (i18nKey == TaktValidationI18nKeys.Required)
+            {
+                ThrowValidationLocalized(TaktValidationI18nKeys.Required, TaktValidationI18nKeys.EntityUserPassword);
+            }
 
-        if (password.Length < minLength)
-        {
-            throw new TaktBusinessException($"密码长度不能少于{minLength}位");
-        }
-
-        const int maxLength = 20;
-        if (password.Length > maxLength)
-        {
-            throw new TaktBusinessException($"密码长度不能超过{maxLength}位");
+            ThrowBusinessExceptionLocalized(i18nKey);
         }
     }
 

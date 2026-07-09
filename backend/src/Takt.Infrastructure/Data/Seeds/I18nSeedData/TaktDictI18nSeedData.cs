@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Infrastructure.Data.Seeds.I18nSeedData
 // 文件名称：TaktDictI18nSeedData.cs
-// 创建时间：2026-07-02
+// 创建时间：2026-07-09
 // 创建人：Takt365(Cursor AI)
 // 功能描述：字典项国际化翻译种子（dict.* 键，与 TaktDictDataSeedData I18nKey 对齐）
 // 
@@ -769,6 +769,114 @@ public class TaktDictI18nSeedData : ITaktSeedDataCoordinator
             ("dict.accounting.currency.code.chf", "zh-CN", "瑞士法郎", "币种.瑞士法郎"),
             // dict.accounting.currency.code.chf
             ("dict.accounting.currency.code.chf", "zh-HK", "瑞士法郎_hk", "币种.瑞士法郎"),
+
+            // dict.accounting.exchange.rate.type.m
+            ("dict.accounting.exchange.rate.type.m", "en-US", "平均汇率_us", "汇率类型.平均汇率"),
+            // dict.accounting.exchange.rate.type.m
+            ("dict.accounting.exchange.rate.type.m", "ja-JP", "平均汇率_jp", "汇率类型.平均汇率"),
+            // dict.accounting.exchange.rate.type.m
+            ("dict.accounting.exchange.rate.type.m", "zh-CN", "平均汇率", "汇率类型.平均汇率"),
+            // dict.accounting.exchange.rate.type.m
+            ("dict.accounting.exchange.rate.type.m", "zh-HK", "平均汇率_hk", "汇率类型.平均汇率"),
+
+            // dict.accounting.exchange.rate.type.b
+            ("dict.accounting.exchange.rate.type.b", "en-US", "银行买入价_us", "汇率类型.银行买入价"),
+            // dict.accounting.exchange.rate.type.b
+            ("dict.accounting.exchange.rate.type.b", "ja-JP", "银行买入价_jp", "汇率类型.银行买入价"),
+            // dict.accounting.exchange.rate.type.b
+            ("dict.accounting.exchange.rate.type.b", "zh-CN", "银行买入价", "汇率类型.银行买入价"),
+            // dict.accounting.exchange.rate.type.b
+            ("dict.accounting.exchange.rate.type.b", "zh-HK", "银行买入价_hk", "汇率类型.银行买入价"),
+
+            // dict.accounting.exchange.rate.type.g
+            ("dict.accounting.exchange.rate.type.g", "en-US", "历史汇率_us", "汇率类型.历史汇率"),
+            // dict.accounting.exchange.rate.type.g
+            ("dict.accounting.exchange.rate.type.g", "ja-JP", "历史汇率_jp", "汇率类型.历史汇率"),
+            // dict.accounting.exchange.rate.type.g
+            ("dict.accounting.exchange.rate.type.g", "zh-CN", "历史汇率", "汇率类型.历史汇率"),
+            // dict.accounting.exchange.rate.type.g
+            ("dict.accounting.exchange.rate.type.g", "zh-HK", "历史汇率_hk", "汇率类型.历史汇率"),
+
+            // dict.accounting.exchange.rate.type.p
+            ("dict.accounting.exchange.rate.type.p", "en-US", "计划汇率_us", "汇率类型.计划汇率"),
+            // dict.accounting.exchange.rate.type.p
+            ("dict.accounting.exchange.rate.type.p", "ja-JP", "计划汇率_jp", "汇率类型.计划汇率"),
+            // dict.accounting.exchange.rate.type.p
+            ("dict.accounting.exchange.rate.type.p", "zh-CN", "计划汇率", "汇率类型.计划汇率"),
+            // dict.accounting.exchange.rate.type.p
+            ("dict.accounting.exchange.rate.type.p", "zh-HK", "计划汇率_hk", "汇率类型.计划汇率"),
+
+            // dict.accounting.exchange.rate.type.z
+            ("dict.accounting.exchange.rate.type.z", "en-US", "自定义汇率_us", "汇率类型.自定义汇率"),
+            // dict.accounting.exchange.rate.type.z
+            ("dict.accounting.exchange.rate.type.z", "ja-JP", "自定义汇率_jp", "汇率类型.自定义汇率"),
+            // dict.accounting.exchange.rate.type.z
+            ("dict.accounting.exchange.rate.type.z", "zh-CN", "自定义汇率", "汇率类型.自定义汇率"),
+            // dict.accounting.exchange.rate.type.z
+            ("dict.accounting.exchange.rate.type.z", "zh-HK", "自定义汇率_hk", "汇率类型.自定义汇率"),
+
+            // dict.accounting.exchange.rate.type.e
+            ("dict.accounting.exchange.rate.type.e", "en-US", "期末汇率_us", "汇率类型.期末汇率"),
+            // dict.accounting.exchange.rate.type.e
+            ("dict.accounting.exchange.rate.type.e", "ja-JP", "期末汇率_jp", "汇率类型.期末汇率"),
+            // dict.accounting.exchange.rate.type.e
+            ("dict.accounting.exchange.rate.type.e", "zh-CN", "期末汇率", "汇率类型.期末汇率"),
+            // dict.accounting.exchange.rate.type.e
+            ("dict.accounting.exchange.rate.type.e", "zh-HK", "期末汇率_hk", "汇率类型.期末汇率"),
+
+            // dict.accounting.exchange.rate.type.k
+            ("dict.accounting.exchange.rate.type.k", "en-US", "现金余额汇率_us", "汇率类型.现金余额汇率"),
+            // dict.accounting.exchange.rate.type.k
+            ("dict.accounting.exchange.rate.type.k", "ja-JP", "现金余额汇率_jp", "汇率类型.现金余额汇率"),
+            // dict.accounting.exchange.rate.type.k
+            ("dict.accounting.exchange.rate.type.k", "zh-CN", "现金余额汇率", "汇率类型.现金余额汇率"),
+            // dict.accounting.exchange.rate.type.k
+            ("dict.accounting.exchange.rate.type.k", "zh-HK", "现金余额汇率_hk", "汇率类型.现金余额汇率"),
+
+            // dict.accounting.exchange.rate.type.x
+            ("dict.accounting.exchange.rate.type.x", "en-US", "平均买入价_us", "汇率类型.平均买入价"),
+            // dict.accounting.exchange.rate.type.x
+            ("dict.accounting.exchange.rate.type.x", "ja-JP", "平均买入价_jp", "汇率类型.平均买入价"),
+            // dict.accounting.exchange.rate.type.x
+            ("dict.accounting.exchange.rate.type.x", "zh-CN", "平均买入价", "汇率类型.平均买入价"),
+            // dict.accounting.exchange.rate.type.x
+            ("dict.accounting.exchange.rate.type.x", "zh-HK", "平均买入价_hk", "汇率类型.平均买入价"),
+
+            // dict.accounting.financial.year.category.cn
+            ("dict.accounting.financial.year.category.cn", "en-US", "中国财年_us", "财务年度类别.中国财年"),
+            // dict.accounting.financial.year.category.cn
+            ("dict.accounting.financial.year.category.cn", "ja-JP", "中国财年_jp", "财务年度类别.中国财年"),
+            // dict.accounting.financial.year.category.cn
+            ("dict.accounting.financial.year.category.cn", "zh-CN", "中国财年", "财务年度类别.中国财年"),
+            // dict.accounting.financial.year.category.cn
+            ("dict.accounting.financial.year.category.cn", "zh-HK", "中国财年_hk", "财务年度类别.中国财年"),
+
+            // dict.accounting.financial.year.category.jp
+            ("dict.accounting.financial.year.category.jp", "en-US", "日本财年_us", "财务年度类别.日本财年"),
+            // dict.accounting.financial.year.category.jp
+            ("dict.accounting.financial.year.category.jp", "ja-JP", "日本财年_jp", "财务年度类别.日本财年"),
+            // dict.accounting.financial.year.category.jp
+            ("dict.accounting.financial.year.category.jp", "zh-CN", "日本财年", "财务年度类别.日本财年"),
+            // dict.accounting.financial.year.category.jp
+            ("dict.accounting.financial.year.category.jp", "zh-HK", "日本财年_hk", "财务年度类别.日本财年"),
+
+            // dict.accounting.financial.year.category.hk
+            ("dict.accounting.financial.year.category.hk", "en-US", "香港财年_us", "财务年度类别.香港财年"),
+            // dict.accounting.financial.year.category.hk
+            ("dict.accounting.financial.year.category.hk", "ja-JP", "香港财年_jp", "财务年度类别.香港财年"),
+            // dict.accounting.financial.year.category.hk
+            ("dict.accounting.financial.year.category.hk", "zh-CN", "香港财年", "财务年度类别.香港财年"),
+            // dict.accounting.financial.year.category.hk
+            ("dict.accounting.financial.year.category.hk", "zh-HK", "香港财年_hk", "财务年度类别.香港财年"),
+
+            // dict.accounting.financial.year.category.us
+            ("dict.accounting.financial.year.category.us", "en-US", "美国财年_us", "财务年度类别.美国财年"),
+            // dict.accounting.financial.year.category.us
+            ("dict.accounting.financial.year.category.us", "ja-JP", "美国财年_jp", "财务年度类别.美国财年"),
+            // dict.accounting.financial.year.category.us
+            ("dict.accounting.financial.year.category.us", "zh-CN", "美国财年", "财务年度类别.美国财年"),
+            // dict.accounting.financial.year.category.us
+            ("dict.accounting.financial.year.category.us", "zh-HK", "美国财年_hk", "财务年度类别.美国财年"),
 
             // dict.accounting.payment.terms.param.adv100
             ("dict.accounting.payment.terms.param.adv100", "en-US", "预付全款_us", "付款条件.预付全款"),
@@ -4235,6 +4343,87 @@ public class TaktDictI18nSeedData : ITaktSeedDataCoordinator
             // dict.logistics.defect.level.category.suggestion
             ("dict.logistics.defect.level.category.suggestion", "zh-HK", "建议改进_hk", "缺点等级.建议改进"),
 
+            // dict.logistics.defect.nature.category.bupinbuliang
+            ("dict.logistics.defect.nature.category.bupinbuliang", "en-US", "部品不良_us", "不良性质.部品不良"),
+            // dict.logistics.defect.nature.category.bupinbuliang
+            ("dict.logistics.defect.nature.category.bupinbuliang", "ja-JP", "部品不良_jp", "不良性质.部品不良"),
+            // dict.logistics.defect.nature.category.bupinbuliang
+            ("dict.logistics.defect.nature.category.bupinbuliang", "zh-CN", "部品不良", "不良性质.部品不良"),
+            // dict.logistics.defect.nature.category.bupinbuliang
+            ("dict.logistics.defect.nature.category.bupinbuliang", "zh-HK", "部品不良_hk", "不良性质.部品不良"),
+
+            // dict.logistics.defect.nature.category.xiulibuliang
+            ("dict.logistics.defect.nature.category.xiulibuliang", "en-US", "修理不良_us", "不良性质.修理不良"),
+            // dict.logistics.defect.nature.category.xiulibuliang
+            ("dict.logistics.defect.nature.category.xiulibuliang", "ja-JP", "修理不良_jp", "不良性质.修理不良"),
+            // dict.logistics.defect.nature.category.xiulibuliang
+            ("dict.logistics.defect.nature.category.xiulibuliang", "zh-CN", "修理不良", "不良性质.修理不良"),
+            // dict.logistics.defect.nature.category.xiulibuliang
+            ("dict.logistics.defect.nature.category.xiulibuliang", "zh-HK", "修理不良_hk", "不良性质.修理不良"),
+
+            // dict.logistics.defect.responsibility.category.shoucha
+            ("dict.logistics.defect.responsibility.category.shoucha", "en-US", "手插_us", "责任归属.手插"),
+            // dict.logistics.defect.responsibility.category.shoucha
+            ("dict.logistics.defect.responsibility.category.shoucha", "ja-JP", "手插_jp", "责任归属.手插"),
+            // dict.logistics.defect.responsibility.category.shoucha
+            ("dict.logistics.defect.responsibility.category.shoucha", "zh-CN", "手插", "责任归属.手插"),
+            // dict.logistics.defect.responsibility.category.shoucha
+            ("dict.logistics.defect.responsibility.category.shoucha", "zh-HK", "手插_hk", "责任归属.手插"),
+
+            // dict.logistics.defect.responsibility.category.xiuzhengbupin
+            ("dict.logistics.defect.responsibility.category.xiuzhengbupin", "en-US", "修正部品_us", "责任归属.修正部品"),
+            // dict.logistics.defect.responsibility.category.xiuzhengbupin
+            ("dict.logistics.defect.responsibility.category.xiuzhengbupin", "ja-JP", "修正部品_jp", "责任归属.修正部品"),
+            // dict.logistics.defect.responsibility.category.xiuzhengbupin
+            ("dict.logistics.defect.responsibility.category.xiuzhengbupin", "zh-CN", "修正部品", "责任归属.修正部品"),
+            // dict.logistics.defect.responsibility.category.xiuzhengbupin
+            ("dict.logistics.defect.responsibility.category.xiuzhengbupin", "zh-HK", "修正部品_hk", "责任归属.修正部品"),
+
+            // dict.logistics.defect.responsibility.category.zichabupin
+            ("dict.logistics.defect.responsibility.category.zichabupin", "en-US", "自插部品_us", "责任归属.自插部品"),
+            // dict.logistics.defect.responsibility.category.zichabupin
+            ("dict.logistics.defect.responsibility.category.zichabupin", "ja-JP", "自插部品_jp", "责任归属.自插部品"),
+            // dict.logistics.defect.responsibility.category.zichabupin
+            ("dict.logistics.defect.responsibility.category.zichabupin", "zh-CN", "自插部品", "责任归属.自插部品"),
+            // dict.logistics.defect.responsibility.category.zichabupin
+            ("dict.logistics.defect.responsibility.category.zichabupin", "zh-HK", "自插部品_hk", "责任归属.自插部品"),
+
+            // dict.logistics.defect.responsibility.category.smtbupin
+            ("dict.logistics.defect.responsibility.category.smtbupin", "en-US", "SMT部品_us", "责任归属.SMT部品"),
+            // dict.logistics.defect.responsibility.category.smtbupin
+            ("dict.logistics.defect.responsibility.category.smtbupin", "ja-JP", "SMT部品_jp", "责任归属.SMT部品"),
+            // dict.logistics.defect.responsibility.category.smtbupin
+            ("dict.logistics.defect.responsibility.category.smtbupin", "zh-CN", "SMT部品", "责任归属.SMT部品"),
+            // dict.logistics.defect.responsibility.category.smtbupin
+            ("dict.logistics.defect.responsibility.category.smtbupin", "zh-HK", "SMT部品_hk", "责任归属.SMT部品"),
+
+            // dict.logistics.defect.responsibility.category.iqcbupin
+            ("dict.logistics.defect.responsibility.category.iqcbupin", "en-US", "IQC部品_us", "责任归属.IQC部品"),
+            // dict.logistics.defect.responsibility.category.iqcbupin
+            ("dict.logistics.defect.responsibility.category.iqcbupin", "ja-JP", "IQC部品_jp", "责任归属.IQC部品"),
+            // dict.logistics.defect.responsibility.category.iqcbupin
+            ("dict.logistics.defect.responsibility.category.iqcbupin", "zh-CN", "IQC部品", "责任归属.IQC部品"),
+            // dict.logistics.defect.responsibility.category.iqcbupin
+            ("dict.logistics.defect.responsibility.category.iqcbupin", "zh-HK", "IQC部品_hk", "责任归属.IQC部品"),
+
+            // dict.logistics.defect.responsibility.category.shouchabupin
+            ("dict.logistics.defect.responsibility.category.shouchabupin", "en-US", "手插部品_us", "责任归属.手插部品"),
+            // dict.logistics.defect.responsibility.category.shouchabupin
+            ("dict.logistics.defect.responsibility.category.shouchabupin", "ja-JP", "手插部品_jp", "责任归属.手插部品"),
+            // dict.logistics.defect.responsibility.category.shouchabupin
+            ("dict.logistics.defect.responsibility.category.shouchabupin", "zh-CN", "手插部品", "责任归属.手插部品"),
+            // dict.logistics.defect.responsibility.category.shouchabupin
+            ("dict.logistics.defect.responsibility.category.shouchabupin", "zh-HK", "手插部品_hk", "责任归属.手插部品"),
+
+            // dict.logistics.defect.responsibility.category.smt
+            ("dict.logistics.defect.responsibility.category.smt", "en-US", "SMT_us", "责任归属.SMT"),
+            // dict.logistics.defect.responsibility.category.smt
+            ("dict.logistics.defect.responsibility.category.smt", "ja-JP", "SMT_jp", "责任归属.SMT"),
+            // dict.logistics.defect.responsibility.category.smt
+            ("dict.logistics.defect.responsibility.category.smt", "zh-CN", "SMT", "责任归属.SMT"),
+            // dict.logistics.defect.responsibility.category.smt
+            ("dict.logistics.defect.responsibility.category.smt", "zh-HK", "SMT_hk", "责任归属.SMT"),
+
             // dict.logistics.equipment.category.production
             ("dict.logistics.equipment.category.production", "en-US", "生产设备_us", "设备类别.生产设备"),
             // dict.logistics.equipment.category.production
@@ -5208,13 +5397,13 @@ public class TaktDictI18nSeedData : ITaktSeedDataCoordinator
             ("dict.logistics.quality.certification.10", "zh-HK", "ISO/IEC 17025_hk", "质量认证.ISOIEC17025"),
 
             // dict.logistics.quality.certification.11
-            ("dict.logistics.quality.certification.11", "en-US", "GB/T 50430_us", "质量认证.GBT50430"),
+            ("dict.logistics.quality.certification.11", "en-US", "Gt/b 50430_us", "质量认证.GBT50430"),
             // dict.logistics.quality.certification.11
-            ("dict.logistics.quality.certification.11", "ja-JP", "GB/T 50430_jp", "质量认证.GBT50430"),
+            ("dict.logistics.quality.certification.11", "ja-JP", "Gt/b 50430_jp", "质量认证.GBT50430"),
             // dict.logistics.quality.certification.11
-            ("dict.logistics.quality.certification.11", "zh-CN", "GB/T 50430", "质量认证.GBT50430"),
+            ("dict.logistics.quality.certification.11", "zh-CN", "Gt/b 50430", "质量认证.GBT50430"),
             // dict.logistics.quality.certification.11
-            ("dict.logistics.quality.certification.11", "zh-HK", "GB/T 50430_hk", "质量认证.GBT50430"),
+            ("dict.logistics.quality.certification.11", "zh-HK", "Gt/b 50430_hk", "质量认证.GBT50430"),
 
             // dict.logistics.material.type.roh
             ("dict.logistics.material.type.roh", "en-US", "原材料_us", "物料类型.原材料"),
@@ -5766,13 +5955,13 @@ public class TaktDictI18nSeedData : ITaktSeedDataCoordinator
             ("dict.logistics.countersign.business.type.standalone", "zh-HK", "独立会签_hk", "会签业务类型.独立会签"),
 
             // dict.logistics.sampling.scheme.type.gb2828
-            ("dict.logistics.sampling.scheme.type.gb2828", "en-US", "gb/t 2828.1_us", "抽样方案类型.gb/t 2828.1"),
+            ("dict.logistics.sampling.scheme.type.gb2828", "en-US", "gt/b 2828.1_us", "抽样方案类型.gt/b 2828.1"),
             // dict.logistics.sampling.scheme.type.gb2828
-            ("dict.logistics.sampling.scheme.type.gb2828", "ja-JP", "gb/t 2828.1_jp", "抽样方案类型.gb/t 2828.1"),
+            ("dict.logistics.sampling.scheme.type.gb2828", "ja-JP", "gt/b 2828.1_jp", "抽样方案类型.gt/b 2828.1"),
             // dict.logistics.sampling.scheme.type.gb2828
-            ("dict.logistics.sampling.scheme.type.gb2828", "zh-CN", "gb/t 2828.1", "抽样方案类型.gb/t 2828.1"),
+            ("dict.logistics.sampling.scheme.type.gb2828", "zh-CN", "gt/b 2828.1", "抽样方案类型.gt/b 2828.1"),
             // dict.logistics.sampling.scheme.type.gb2828
-            ("dict.logistics.sampling.scheme.type.gb2828", "zh-HK", "gb/t 2828.1_hk", "抽样方案类型.gb/t 2828.1"),
+            ("dict.logistics.sampling.scheme.type.gb2828", "zh-HK", "gt/b 2828.1_hk", "抽样方案类型.gt/b 2828.1"),
 
             // dict.logistics.sampling.scheme.type.mil105e
             ("dict.logistics.sampling.scheme.type.mil105e", "en-US", "mil-std-105e_us", "抽样方案类型.mil-std-105e"),
@@ -5793,13 +5982,13 @@ public class TaktDictI18nSeedData : ITaktSeedDataCoordinator
             ("dict.logistics.sampling.scheme.type.iso2859", "zh-HK", "iso 2859-1_hk", "抽样方案类型.iso 2859-1"),
 
             // dict.logistics.sampling.scheme.type.gb2829
-            ("dict.logistics.sampling.scheme.type.gb2829", "en-US", "gb/t 2829_us", "抽样方案类型.gb/t 2829"),
+            ("dict.logistics.sampling.scheme.type.gb2829", "en-US", "gt/b 2829_us", "抽样方案类型.gt/b 2829"),
             // dict.logistics.sampling.scheme.type.gb2829
-            ("dict.logistics.sampling.scheme.type.gb2829", "ja-JP", "gb/t 2829_jp", "抽样方案类型.gb/t 2829"),
+            ("dict.logistics.sampling.scheme.type.gb2829", "ja-JP", "gt/b 2829_jp", "抽样方案类型.gt/b 2829"),
             // dict.logistics.sampling.scheme.type.gb2829
-            ("dict.logistics.sampling.scheme.type.gb2829", "zh-CN", "gb/t 2829", "抽样方案类型.gb/t 2829"),
+            ("dict.logistics.sampling.scheme.type.gb2829", "zh-CN", "gt/b 2829", "抽样方案类型.gt/b 2829"),
             // dict.logistics.sampling.scheme.type.gb2829
-            ("dict.logistics.sampling.scheme.type.gb2829", "zh-HK", "gb/t 2829_hk", "抽样方案类型.gb/t 2829"),
+            ("dict.logistics.sampling.scheme.type.gb2829", "zh-HK", "gt/b 2829_hk", "抽样方案类型.gt/b 2829"),
 
             // dict.logistics.sampling.scheme.type.c_zero
             ("dict.logistics.sampling.scheme.type.c_zero", "en-US", "c=0抽样_us", "抽样方案类型.c=0抽样"),
@@ -9914,6 +10103,87 @@ public class TaktDictI18nSeedData : ITaktSeedDataCoordinator
             // dict.logistics.defect.category.9
             ("dict.logistics.defect.category.9", "zh-HK", "其他_hk", "不良区分.其他"),
 
+            // dict.logistics.assy.location.category.zicha
+            ("dict.logistics.assy.location.category.zicha", "en-US", "自插_us", "组立个所.自插"),
+            // dict.logistics.assy.location.category.zicha
+            ("dict.logistics.assy.location.category.zicha", "ja-JP", "自插_jp", "组立个所.自插"),
+            // dict.logistics.assy.location.category.zicha
+            ("dict.logistics.assy.location.category.zicha", "zh-CN", "自插", "组立个所.自插"),
+            // dict.logistics.assy.location.category.zicha
+            ("dict.logistics.assy.location.category.zicha", "zh-HK", "自插_hk", "组立个所.自插"),
+
+            // dict.logistics.assy.location.category.bupin
+            ("dict.logistics.assy.location.category.bupin", "en-US", "部品_us", "组立个所.部品"),
+            // dict.logistics.assy.location.category.bupin
+            ("dict.logistics.assy.location.category.bupin", "ja-JP", "部品_jp", "组立个所.部品"),
+            // dict.logistics.assy.location.category.bupin
+            ("dict.logistics.assy.location.category.bupin", "zh-CN", "部品", "组立个所.部品"),
+            // dict.logistics.assy.location.category.bupin
+            ("dict.logistics.assy.location.category.bupin", "zh-HK", "部品_hk", "组立个所.部品"),
+
+            // dict.logistics.assy.location.category.sheji
+            ("dict.logistics.assy.location.category.sheji", "en-US", "设计_us", "组立个所.设计"),
+            // dict.logistics.assy.location.category.sheji
+            ("dict.logistics.assy.location.category.sheji", "ja-JP", "设计_jp", "组立个所.设计"),
+            // dict.logistics.assy.location.category.sheji
+            ("dict.logistics.assy.location.category.sheji", "zh-CN", "设计", "组立个所.设计"),
+            // dict.logistics.assy.location.category.sheji
+            ("dict.logistics.assy.location.category.sheji", "zh-HK", "设计_hk", "组立个所.设计"),
+
+            // dict.logistics.assy.location.category.xiuzheng
+            ("dict.logistics.assy.location.category.xiuzheng", "en-US", "修正_us", "组立个所.修正"),
+            // dict.logistics.assy.location.category.xiuzheng
+            ("dict.logistics.assy.location.category.xiuzheng", "ja-JP", "修正_jp", "组立个所.修正"),
+            // dict.logistics.assy.location.category.xiuzheng
+            ("dict.logistics.assy.location.category.xiuzheng", "zh-CN", "修正", "组立个所.修正"),
+            // dict.logistics.assy.location.category.xiuzheng
+            ("dict.logistics.assy.location.category.xiuzheng", "zh-HK", "修正_hk", "组立个所.修正"),
+
+            // dict.logistics.assy.location.category.jiagong
+            ("dict.logistics.assy.location.category.jiagong", "en-US", "加工_us", "组立个所.加工"),
+            // dict.logistics.assy.location.category.jiagong
+            ("dict.logistics.assy.location.category.jiagong", "ja-JP", "加工_jp", "组立个所.加工"),
+            // dict.logistics.assy.location.category.jiagong
+            ("dict.logistics.assy.location.category.jiagong", "zh-CN", "加工", "组立个所.加工"),
+            // dict.logistics.assy.location.category.jiagong
+            ("dict.logistics.assy.location.category.jiagong", "zh-HK", "加工_hk", "组立个所.加工"),
+
+            // dict.logistics.assy.location.category.shoucha
+            ("dict.logistics.assy.location.category.shoucha", "en-US", "手插_us", "组立个所.手插"),
+            // dict.logistics.assy.location.category.shoucha
+            ("dict.logistics.assy.location.category.shoucha", "ja-JP", "手插_jp", "组立个所.手插"),
+            // dict.logistics.assy.location.category.shoucha
+            ("dict.logistics.assy.location.category.shoucha", "zh-CN", "手插", "组立个所.手插"),
+            // dict.logistics.assy.location.category.shoucha
+            ("dict.logistics.assy.location.category.shoucha", "zh-HK", "手插_hk", "组立个所.手插"),
+
+            // dict.logistics.assy.location.category.zuli
+            ("dict.logistics.assy.location.category.zuli", "en-US", "组立_us", "组立个所.组立"),
+            // dict.logistics.assy.location.category.zuli
+            ("dict.logistics.assy.location.category.zuli", "ja-JP", "组立_jp", "组立个所.组立"),
+            // dict.logistics.assy.location.category.zuli
+            ("dict.logistics.assy.location.category.zuli", "zh-CN", "组立", "组立个所.组立"),
+            // dict.logistics.assy.location.category.zuli
+            ("dict.logistics.assy.location.category.zuli", "zh-HK", "组立_hk", "组立个所.组立"),
+
+            // dict.logistics.assy.location.category.smt
+            ("dict.logistics.assy.location.category.smt", "en-US", "SMT_us", "组立个所.SMT"),
+            // dict.logistics.assy.location.category.smt
+            ("dict.logistics.assy.location.category.smt", "ja-JP", "SMT_jp", "组立个所.SMT"),
+            // dict.logistics.assy.location.category.smt
+            ("dict.logistics.assy.location.category.smt", "zh-CN", "SMT", "组立个所.SMT"),
+            // dict.logistics.assy.location.category.smt
+            ("dict.logistics.assy.location.category.smt", "zh-HK", "SMT_hk", "组立个所.SMT"),
+
+            // dict.logistics.assy.location.category.qita
+            ("dict.logistics.assy.location.category.qita", "en-US", "其他_us", "组立个所.其他"),
+            // dict.logistics.assy.location.category.qita
+            ("dict.logistics.assy.location.category.qita", "ja-JP", "其他_jp", "组立个所.其他"),
+            // dict.logistics.assy.location.category.qita
+            ("dict.logistics.assy.location.category.qita", "zh-CN", "其他", "组立个所.其他"),
+            // dict.logistics.assy.location.category.qita
+            ("dict.logistics.assy.location.category.qita", "zh-HK", "其他_hk", "组立个所.其他"),
+
             // dict.logistics.ec.distinction.category.1
             ("dict.logistics.ec.distinction.category.1", "en-US", "全仕向_us", "设变管理区分.全仕向"),
             // dict.logistics.ec.distinction.category.1
@@ -10066,6 +10336,231 @@ public class TaktDictI18nSeedData : ITaktSeedDataCoordinator
             ("dict.logistics.ec.gijutsu.status.3", "zh-CN", "完成", "设变技术课状态.完成"),
             // dict.logistics.ec.gijutsu.status.3
             ("dict.logistics.ec.gijutsu.status.3", "zh-HK", "完成_hk", "设变技术课状态.完成"),
+
+            // dict.logistics.ec.attachment.type.tl
+            ("dict.logistics.ec.attachment.type.tl", "en-US", "联络_us", "设变附件文件类别.联络"),
+            // dict.logistics.ec.attachment.type.tl
+            ("dict.logistics.ec.attachment.type.tl", "ja-JP", "联络_jp", "设变附件文件类别.联络"),
+            // dict.logistics.ec.attachment.type.tl
+            ("dict.logistics.ec.attachment.type.tl", "zh-CN", "联络", "设变附件文件类别.联络"),
+            // dict.logistics.ec.attachment.type.tl
+            ("dict.logistics.ec.attachment.type.tl", "zh-HK", "联络_hk", "设变附件文件类别.联络"),
+
+            // dict.logistics.ec.attachment.type.epp
+            ("dict.logistics.ec.attachment.type.epp", "en-US", "EPP_us", "设变附件文件类别.EPP"),
+            // dict.logistics.ec.attachment.type.epp
+            ("dict.logistics.ec.attachment.type.epp", "ja-JP", "EPP_jp", "设变附件文件类别.EPP"),
+            // dict.logistics.ec.attachment.type.epp
+            ("dict.logistics.ec.attachment.type.epp", "zh-CN", "EPP", "设变附件文件类别.EPP"),
+            // dict.logistics.ec.attachment.type.epp
+            ("dict.logistics.ec.attachment.type.epp", "zh-HK", "EPP_hk", "设变附件文件类别.EPP"),
+
+            // dict.logistics.ec.attachment.type.fpp
+            ("dict.logistics.ec.attachment.type.fpp", "en-US", "FPP_us", "设变附件文件类别.FPP"),
+            // dict.logistics.ec.attachment.type.fpp
+            ("dict.logistics.ec.attachment.type.fpp", "ja-JP", "FPP_jp", "设变附件文件类别.FPP"),
+            // dict.logistics.ec.attachment.type.fpp
+            ("dict.logistics.ec.attachment.type.fpp", "zh-CN", "FPP", "设变附件文件类别.FPP"),
+            // dict.logistics.ec.attachment.type.fpp
+            ("dict.logistics.ec.attachment.type.fpp", "zh-HK", "FPP_hk", "设变附件文件类别.FPP"),
+
+            // dict.logistics.ec.attachment.type.el
+            ("dict.logistics.ec.attachment.type.el", "en-US", "外部联络_us", "设变附件文件类别.外部联络"),
+            // dict.logistics.ec.attachment.type.el
+            ("dict.logistics.ec.attachment.type.el", "ja-JP", "外部联络_jp", "设变附件文件类别.外部联络"),
+            // dict.logistics.ec.attachment.type.el
+            ("dict.logistics.ec.attachment.type.el", "zh-CN", "外部联络", "设变附件文件类别.外部联络"),
+            // dict.logistics.ec.attachment.type.el
+            ("dict.logistics.ec.attachment.type.el", "zh-HK", "外部联络_hk", "设变附件文件类别.外部联络"),
+
+            // dict.logistics.ec.attachment.type.tcj
+            ("dict.logistics.ec.attachment.type.tcj", "en-US", "TCJ_us", "设变附件文件类别.TCJ"),
+            // dict.logistics.ec.attachment.type.tcj
+            ("dict.logistics.ec.attachment.type.tcj", "ja-JP", "TCJ_jp", "设变附件文件类别.TCJ"),
+            // dict.logistics.ec.attachment.type.tcj
+            ("dict.logistics.ec.attachment.type.tcj", "zh-CN", "TCJ", "设变附件文件类别.TCJ"),
+            // dict.logistics.ec.attachment.type.tcj
+            ("dict.logistics.ec.attachment.type.tcj", "zh-HK", "TCJ_hk", "设变附件文件类别.TCJ"),
+
+            // dict.logistics.ec.attachment.type.ec
+            ("dict.logistics.ec.attachment.type.ec", "en-US", "设变_us", "设变附件文件类别.设变文件"),
+            // dict.logistics.ec.attachment.type.ec
+            ("dict.logistics.ec.attachment.type.ec", "ja-JP", "设变_jp", "设变附件文件类别.设变文件"),
+            // dict.logistics.ec.attachment.type.ec
+            ("dict.logistics.ec.attachment.type.ec", "zh-CN", "设变", "设变附件文件类别.设变文件"),
+            // dict.logistics.ec.attachment.type.ec
+            ("dict.logistics.ec.attachment.type.ec", "zh-HK", "设变_hk", "设变附件文件类别.设变文件"),
+
+            // dict.logistics.ec.legacy.part.disposition.1
+            ("dict.logistics.ec.legacy.part.disposition.1", "en-US", "转用_us", "旧物料处理.转用"),
+            // dict.logistics.ec.legacy.part.disposition.1
+            ("dict.logistics.ec.legacy.part.disposition.1", "ja-JP", "转用_jp", "旧物料处理.转用"),
+            // dict.logistics.ec.legacy.part.disposition.1
+            ("dict.logistics.ec.legacy.part.disposition.1", "zh-CN", "转用", "旧物料处理.转用"),
+            // dict.logistics.ec.legacy.part.disposition.1
+            ("dict.logistics.ec.legacy.part.disposition.1", "zh-HK", "转用_hk", "旧物料处理.转用"),
+
+            // dict.logistics.ec.legacy.part.disposition.2
+            ("dict.logistics.ec.legacy.part.disposition.2", "en-US", "废弃_us", "旧物料处理.废弃"),
+            // dict.logistics.ec.legacy.part.disposition.2
+            ("dict.logistics.ec.legacy.part.disposition.2", "ja-JP", "废弃_jp", "旧物料处理.废弃"),
+            // dict.logistics.ec.legacy.part.disposition.2
+            ("dict.logistics.ec.legacy.part.disposition.2", "zh-CN", "废弃", "旧物料处理.废弃"),
+            // dict.logistics.ec.legacy.part.disposition.2
+            ("dict.logistics.ec.legacy.part.disposition.2", "zh-HK", "废弃_hk", "旧物料处理.废弃"),
+
+            // dict.logistics.ec.legacy.part.disposition.3
+            ("dict.logistics.ec.legacy.part.disposition.3", "en-US", "返工_us", "旧物料处理.返工"),
+            // dict.logistics.ec.legacy.part.disposition.3
+            ("dict.logistics.ec.legacy.part.disposition.3", "ja-JP", "返工_jp", "旧物料处理.返工"),
+            // dict.logistics.ec.legacy.part.disposition.3
+            ("dict.logistics.ec.legacy.part.disposition.3", "zh-CN", "返工", "旧物料处理.返工"),
+            // dict.logistics.ec.legacy.part.disposition.3
+            ("dict.logistics.ec.legacy.part.disposition.3", "zh-HK", "返工_hk", "旧物料处理.返工"),
+
+            // dict.logistics.ec.legacy.part.disposition.4
+            ("dict.logistics.ec.legacy.part.disposition.4", "en-US", "消耗_us", "旧物料处理.消耗"),
+            // dict.logistics.ec.legacy.part.disposition.4
+            ("dict.logistics.ec.legacy.part.disposition.4", "ja-JP", "消耗_jp", "旧物料处理.消耗"),
+            // dict.logistics.ec.legacy.part.disposition.4
+            ("dict.logistics.ec.legacy.part.disposition.4", "zh-CN", "消耗", "旧物料处理.消耗"),
+            // dict.logistics.ec.legacy.part.disposition.4
+            ("dict.logistics.ec.legacy.part.disposition.4", "zh-HK", "消耗_hk", "旧物料处理.消耗"),
+
+            // dict.logistics.ec.legacy.part.disposition.5
+            ("dict.logistics.ec.legacy.part.disposition.5", "en-US", "无处理_us", "旧物料处理.无处理"),
+            // dict.logistics.ec.legacy.part.disposition.5
+            ("dict.logistics.ec.legacy.part.disposition.5", "ja-JP", "无处理_jp", "旧物料处理.无处理"),
+            // dict.logistics.ec.legacy.part.disposition.5
+            ("dict.logistics.ec.legacy.part.disposition.5", "zh-CN", "无处理", "旧物料处理.无处理"),
+            // dict.logistics.ec.legacy.part.disposition.5
+            ("dict.logistics.ec.legacy.part.disposition.5", "zh-HK", "无处理_hk", "旧物料处理.无处理"),
+
+            // dict.logistics.ec.legacy.part.disposition.9
+            ("dict.logistics.ec.legacy.part.disposition.9", "en-US", "未定_us", "旧物料处理.未定"),
+            // dict.logistics.ec.legacy.part.disposition.9
+            ("dict.logistics.ec.legacy.part.disposition.9", "ja-JP", "未定_jp", "旧物料处理.未定"),
+            // dict.logistics.ec.legacy.part.disposition.9
+            ("dict.logistics.ec.legacy.part.disposition.9", "zh-CN", "未定", "旧物料处理.未定"),
+            // dict.logistics.ec.legacy.part.disposition.9
+            ("dict.logistics.ec.legacy.part.disposition.9", "zh-HK", "未定_hk", "旧物料处理.未定"),
+
+            // dict.logistics.ec.source.instruction.1
+            ("dict.logistics.ec.source.instruction.1", "en-US", "已出货成品_us", "安排指示.已出货成品"),
+            // dict.logistics.ec.source.instruction.1
+            ("dict.logistics.ec.source.instruction.1", "ja-JP", "已出货成品_jp", "安排指示.已出货成品"),
+            // dict.logistics.ec.source.instruction.1
+            ("dict.logistics.ec.source.instruction.1", "zh-CN", "已出货成品", "安排指示.已出货成品"),
+            // dict.logistics.ec.source.instruction.1
+            ("dict.logistics.ec.source.instruction.1", "zh-HK", "已出货成品_hk", "安排指示.已出货成品"),
+
+            // dict.logistics.ec.source.instruction.2
+            ("dict.logistics.ec.source.instruction.2", "en-US", "在线半成品_us", "安排指示.在线半成品"),
+            // dict.logistics.ec.source.instruction.2
+            ("dict.logistics.ec.source.instruction.2", "ja-JP", "在线半成品_jp", "安排指示.在线半成品"),
+            // dict.logistics.ec.source.instruction.2
+            ("dict.logistics.ec.source.instruction.2", "zh-CN", "在线半成品", "安排指示.在线半成品"),
+            // dict.logistics.ec.source.instruction.2
+            ("dict.logistics.ec.source.instruction.2", "zh-HK", "在线半成品_hk", "安排指示.在线半成品"),
+
+            // dict.logistics.ec.source.instruction.3
+            ("dict.logistics.ec.source.instruction.3", "en-US", "库存零件_us", "安排指示.库存零件"),
+            // dict.logistics.ec.source.instruction.3
+            ("dict.logistics.ec.source.instruction.3", "ja-JP", "库存零件_jp", "安排指示.库存零件"),
+            // dict.logistics.ec.source.instruction.3
+            ("dict.logistics.ec.source.instruction.3", "zh-CN", "库存零件", "安排指示.库存零件"),
+            // dict.logistics.ec.source.instruction.3
+            ("dict.logistics.ec.source.instruction.3", "zh-HK", "库存零件_hk", "安排指示.库存零件"),
+
+            // dict.logistics.ec.source.instruction.4
+            ("dict.logistics.ec.source.instruction.4", "en-US", "外协在制品_us", "安排指示.外协在制品"),
+            // dict.logistics.ec.source.instruction.4
+            ("dict.logistics.ec.source.instruction.4", "ja-JP", "外协在制品_jp", "安排指示.外协在制品"),
+            // dict.logistics.ec.source.instruction.4
+            ("dict.logistics.ec.source.instruction.4", "zh-CN", "外协在制品", "安排指示.外协在制品"),
+            // dict.logistics.ec.source.instruction.4
+            ("dict.logistics.ec.source.instruction.4", "zh-HK", "外协在制品_hk", "安排指示.外协在制品"),
+
+            // dict.logistics.ec.source.instruction.5
+            ("dict.logistics.ec.source.instruction.5", "en-US", "新下达订单_us", "安排指示.新下达订单"),
+            // dict.logistics.ec.source.instruction.5
+            ("dict.logistics.ec.source.instruction.5", "ja-JP", "新下达订单_jp", "安排指示.新下达订单"),
+            // dict.logistics.ec.source.instruction.5
+            ("dict.logistics.ec.source.instruction.5", "zh-CN", "新下达订单", "安排指示.新下达订单"),
+            // dict.logistics.ec.source.instruction.5
+            ("dict.logistics.ec.source.instruction.5", "zh-HK", "新下达订单_hk", "安排指示.新下达订单"),
+
+            // dict.logistics.ec.source.instruction.9
+            ("dict.logistics.ec.source.instruction.9", "en-US", "未定_us", "安排指示.未定"),
+            // dict.logistics.ec.source.instruction.9
+            ("dict.logistics.ec.source.instruction.9", "ja-JP", "未定_jp", "安排指示.未定"),
+            // dict.logistics.ec.source.instruction.9
+            ("dict.logistics.ec.source.instruction.9", "zh-CN", "未定", "安排指示.未定"),
+            // dict.logistics.ec.source.instruction.9
+            ("dict.logistics.ec.source.instruction.9", "zh-HK", "未定_hk", "安排指示.未定"),
+
+            // dict.logistics.ec.source.distinction.1
+            ("dict.logistics.ec.source.distinction.1", "en-US", "有_us", "第二供应商区分.有"),
+            // dict.logistics.ec.source.distinction.1
+            ("dict.logistics.ec.source.distinction.1", "ja-JP", "有_jp", "第二供应商区分.有"),
+            // dict.logistics.ec.source.distinction.1
+            ("dict.logistics.ec.source.distinction.1", "zh-CN", "有", "第二供应商区分.有"),
+            // dict.logistics.ec.source.distinction.1
+            ("dict.logistics.ec.source.distinction.1", "zh-HK", "有_hk", "第二供应商区分.有"),
+
+            // dict.logistics.ec.source.distinction.2
+            ("dict.logistics.ec.source.distinction.2", "en-US", "优先_us", "第二供应商区分.优先"),
+            // dict.logistics.ec.source.distinction.2
+            ("dict.logistics.ec.source.distinction.2", "ja-JP", "优先_jp", "第二供应商区分.优先"),
+            // dict.logistics.ec.source.distinction.2
+            ("dict.logistics.ec.source.distinction.2", "zh-CN", "优先", "第二供应商区分.优先"),
+            // dict.logistics.ec.source.distinction.2
+            ("dict.logistics.ec.source.distinction.2", "zh-HK", "优先_hk", "第二供应商区分.优先"),
+
+            // dict.logistics.ec.source.distinction.3
+            ("dict.logistics.ec.source.distinction.3", "en-US", "无_us", "第二供应商区分.无"),
+            // dict.logistics.ec.source.distinction.3
+            ("dict.logistics.ec.source.distinction.3", "ja-JP", "无_jp", "第二供应商区分.无"),
+            // dict.logistics.ec.source.distinction.3
+            ("dict.logistics.ec.source.distinction.3", "zh-CN", "无", "第二供应商区分.无"),
+            // dict.logistics.ec.source.distinction.3
+            ("dict.logistics.ec.source.distinction.3", "zh-HK", "无_hk", "第二供应商区分.无"),
+
+            // dict.logistics.ec.source.compatibility.a
+            ("dict.logistics.ec.source.compatibility.a", "en-US", "兼容_us", "兼容性.兼容"),
+            // dict.logistics.ec.source.compatibility.a
+            ("dict.logistics.ec.source.compatibility.a", "ja-JP", "兼容_jp", "兼容性.兼容"),
+            // dict.logistics.ec.source.compatibility.a
+            ("dict.logistics.ec.source.compatibility.a", "zh-CN", "兼容", "兼容性.兼容"),
+            // dict.logistics.ec.source.compatibility.a
+            ("dict.logistics.ec.source.compatibility.a", "zh-HK", "兼容_hk", "兼容性.兼容"),
+
+            // dict.logistics.ec.source.compatibility.b
+            ("dict.logistics.ec.source.compatibility.b", "en-US", "单向兼容（新替旧）_us", "兼容性.单向兼容（新替旧）"),
+            // dict.logistics.ec.source.compatibility.b
+            ("dict.logistics.ec.source.compatibility.b", "ja-JP", "单向兼容（新替旧）_jp", "兼容性.单向兼容（新替旧）"),
+            // dict.logistics.ec.source.compatibility.b
+            ("dict.logistics.ec.source.compatibility.b", "zh-CN", "单向兼容（新替旧）", "兼容性.单向兼容（新替旧）"),
+            // dict.logistics.ec.source.compatibility.b
+            ("dict.logistics.ec.source.compatibility.b", "zh-HK", "单向兼容（新替旧）_hk", "兼容性.单向兼容（新替旧）"),
+
+            // dict.logistics.ec.source.compatibility.c
+            ("dict.logistics.ec.source.compatibility.c", "en-US", "单向兼容（旧替新）_us", "兼容性.单向兼容（旧替新）"),
+            // dict.logistics.ec.source.compatibility.c
+            ("dict.logistics.ec.source.compatibility.c", "ja-JP", "单向兼容（旧替新）_jp", "兼容性.单向兼容（旧替新）"),
+            // dict.logistics.ec.source.compatibility.c
+            ("dict.logistics.ec.source.compatibility.c", "zh-CN", "单向兼容（旧替新）", "兼容性.单向兼容（旧替新）"),
+            // dict.logistics.ec.source.compatibility.c
+            ("dict.logistics.ec.source.compatibility.c", "zh-HK", "单向兼容（旧替新）_hk", "兼容性.单向兼容（旧替新）"),
+
+            // dict.logistics.ec.source.compatibility.d
+            ("dict.logistics.ec.source.compatibility.d", "en-US", "不兼容_us", "兼容性.不兼容"),
+            // dict.logistics.ec.source.compatibility.d
+            ("dict.logistics.ec.source.compatibility.d", "ja-JP", "不兼容_jp", "兼容性.不兼容"),
+            // dict.logistics.ec.source.compatibility.d
+            ("dict.logistics.ec.source.compatibility.d", "zh-CN", "不兼容", "兼容性.不兼容"),
+            // dict.logistics.ec.source.compatibility.d
+            ("dict.logistics.ec.source.compatibility.d", "zh-HK", "不兼容_hk", "兼容性.不兼容"),
 
             // dict.sys.equipment.status.0
             ("dict.sys.equipment.status.0", "en-US", "运行中_us", "设备状态.运行中"),
@@ -10356,13 +10851,13 @@ public class TaktDictI18nSeedData : ITaktSeedDataCoordinator
             ("dict.logistics.nonachievement.reason.category.16", "zh-HK", "返工_hk", "未达成原因.返工"),
 
             // dict.logistics.nonachievement.reason.category.17
-            ("dict.logistics.nonachievement.reason.category.17", "en-US", "下机慢_us", "未达成原因.下机慢"),
+            ("dict.logistics.nonachievement.reason.category.17", "en-US", "机台工程复杂，下机慢_us", "未达成原因.下机慢"),
             // dict.logistics.nonachievement.reason.category.17
-            ("dict.logistics.nonachievement.reason.category.17", "ja-JP", "下机慢_jp", "未达成原因.下机慢"),
+            ("dict.logistics.nonachievement.reason.category.17", "ja-JP", "机台工程复杂，下机慢_jp", "未达成原因.下机慢"),
             // dict.logistics.nonachievement.reason.category.17
-            ("dict.logistics.nonachievement.reason.category.17", "zh-CN", "下机慢", "未达成原因.下机慢"),
+            ("dict.logistics.nonachievement.reason.category.17", "zh-CN", "机台工程复杂，下机慢", "未达成原因.下机慢"),
             // dict.logistics.nonachievement.reason.category.17
-            ("dict.logistics.nonachievement.reason.category.17", "zh-HK", "下机慢_hk", "未达成原因.下机慢"),
+            ("dict.logistics.nonachievement.reason.category.17", "zh-HK", "机台工程复杂，下机慢_hk", "未达成原因.下机慢"),
 
             // dict.logistics.nonachievement.reason.category.18
             ("dict.logistics.nonachievement.reason.category.18", "en-US", "学习中,新人员学习,开会_us", "未达成原因.学习中,新人员学习,开会"),
@@ -10950,13 +11445,13 @@ public class TaktDictI18nSeedData : ITaktSeedDataCoordinator
             ("dict.logistics.pcba.panel.category.9", "zh-HK", "adda b_hk", "pcba板位类别.adda b"),
 
             // dict.logistics.pcba.panel.category.10
-            ("dict.logistics.pcba.panel.category.10", "en-US", "adda b/t_us", "pcba板位类别.adda b/t"),
+            ("dict.logistics.pcba.panel.category.10", "en-US", "adda t/b_us", "pcba板位类别.adda t/b"),
             // dict.logistics.pcba.panel.category.10
-            ("dict.logistics.pcba.panel.category.10", "ja-JP", "adda b/t_jp", "pcba板位类别.adda b/t"),
+            ("dict.logistics.pcba.panel.category.10", "ja-JP", "adda t/b_jp", "pcba板位类别.adda t/b"),
             // dict.logistics.pcba.panel.category.10
-            ("dict.logistics.pcba.panel.category.10", "zh-CN", "adda b/t", "pcba板位类别.adda b/t"),
+            ("dict.logistics.pcba.panel.category.10", "zh-CN", "adda t/b", "pcba板位类别.adda t/b"),
             // dict.logistics.pcba.panel.category.10
-            ("dict.logistics.pcba.panel.category.10", "zh-HK", "adda b/t_hk", "pcba板位类别.adda b/t"),
+            ("dict.logistics.pcba.panel.category.10", "zh-HK", "adda t/b_hk", "pcba板位类别.adda t/b"),
 
             // dict.logistics.pcba.panel.category.11
             ("dict.logistics.pcba.panel.category.11", "en-US", "adda t_us", "pcba板位类别.adda t"),
@@ -10986,13 +11481,13 @@ public class TaktDictI18nSeedData : ITaktSeedDataCoordinator
             ("dict.logistics.pcba.panel.category.13", "zh-HK", "adoc b_hk", "pcba板位类别.adoc b"),
 
             // dict.logistics.pcba.panel.category.14
-            ("dict.logistics.pcba.panel.category.14", "en-US", "adoc b/t_us", "pcba板位类别.adoc b/t"),
+            ("dict.logistics.pcba.panel.category.14", "en-US", "adoc t/b_us", "pcba板位类别.adoc t/b"),
             // dict.logistics.pcba.panel.category.14
-            ("dict.logistics.pcba.panel.category.14", "ja-JP", "adoc b/t_jp", "pcba板位类别.adoc b/t"),
+            ("dict.logistics.pcba.panel.category.14", "ja-JP", "adoc t/b_jp", "pcba板位类别.adoc t/b"),
             // dict.logistics.pcba.panel.category.14
-            ("dict.logistics.pcba.panel.category.14", "zh-CN", "adoc b/t", "pcba板位类别.adoc b/t"),
+            ("dict.logistics.pcba.panel.category.14", "zh-CN", "adoc t/b", "pcba板位类别.adoc t/b"),
             // dict.logistics.pcba.panel.category.14
-            ("dict.logistics.pcba.panel.category.14", "zh-HK", "adoc b/t_hk", "pcba板位类别.adoc b/t"),
+            ("dict.logistics.pcba.panel.category.14", "zh-HK", "adoc t/b_hk", "pcba板位类别.adoc t/b"),
 
             // dict.logistics.pcba.panel.category.15
             ("dict.logistics.pcba.panel.category.15", "en-US", "adoc t_us", "pcba板位类别.adoc t"),
@@ -11013,13 +11508,13 @@ public class TaktDictI18nSeedData : ITaktSeedDataCoordinator
             ("dict.logistics.pcba.panel.category.16", "zh-HK", "aes4 b_hk", "pcba板位类别.aes4 b"),
 
             // dict.logistics.pcba.panel.category.17
-            ("dict.logistics.pcba.panel.category.17", "en-US", "aes4 b/t_us", "pcba板位类别.aes4 b/t"),
+            ("dict.logistics.pcba.panel.category.17", "en-US", "aes4 t/b_us", "pcba板位类别.aes4 t/b"),
             // dict.logistics.pcba.panel.category.17
-            ("dict.logistics.pcba.panel.category.17", "ja-JP", "aes4 b/t_jp", "pcba板位类别.aes4 b/t"),
+            ("dict.logistics.pcba.panel.category.17", "ja-JP", "aes4 t/b_jp", "pcba板位类别.aes4 t/b"),
             // dict.logistics.pcba.panel.category.17
-            ("dict.logistics.pcba.panel.category.17", "zh-CN", "aes4 b/t", "pcba板位类别.aes4 b/t"),
+            ("dict.logistics.pcba.panel.category.17", "zh-CN", "aes4 t/b", "pcba板位类别.aes4 t/b"),
             // dict.logistics.pcba.panel.category.17
-            ("dict.logistics.pcba.panel.category.17", "zh-HK", "aes4 b/t_hk", "pcba板位类别.aes4 b/t"),
+            ("dict.logistics.pcba.panel.category.17", "zh-HK", "aes4 t/b_hk", "pcba板位类别.aes4 t/b"),
 
             // dict.logistics.pcba.panel.category.18
             ("dict.logistics.pcba.panel.category.18", "en-US", "aes4 t_us", "pcba板位类别.aes4 t"),
@@ -11058,13 +11553,13 @@ public class TaktDictI18nSeedData : ITaktSeedDataCoordinator
             ("dict.logistics.pcba.panel.category.25", "zh-HK", "ana b_hk", "pcba板位类别.ana b"),
 
             // dict.logistics.pcba.panel.category.26
-            ("dict.logistics.pcba.panel.category.26", "en-US", "ana b/t_us", "pcba板位类别.ana b/t"),
+            ("dict.logistics.pcba.panel.category.26", "en-US", "ana t/b_us", "pcba板位类别.ana t/b"),
             // dict.logistics.pcba.panel.category.26
-            ("dict.logistics.pcba.panel.category.26", "ja-JP", "ana b/t_jp", "pcba板位类别.ana b/t"),
+            ("dict.logistics.pcba.panel.category.26", "ja-JP", "ana t/b_jp", "pcba板位类别.ana t/b"),
             // dict.logistics.pcba.panel.category.26
-            ("dict.logistics.pcba.panel.category.26", "zh-CN", "ana b/t", "pcba板位类别.ana b/t"),
+            ("dict.logistics.pcba.panel.category.26", "zh-CN", "ana t/b", "pcba板位类别.ana t/b"),
             // dict.logistics.pcba.panel.category.26
-            ("dict.logistics.pcba.panel.category.26", "zh-HK", "ana b/t_hk", "pcba板位类别.ana b/t"),
+            ("dict.logistics.pcba.panel.category.26", "zh-HK", "ana t/b_hk", "pcba板位类别.ana t/b"),
 
             // dict.logistics.pcba.panel.category.27
             ("dict.logistics.pcba.panel.category.27", "en-US", "ana t_us", "pcba板位类别.ana t"),
@@ -11076,13 +11571,13 @@ public class TaktDictI18nSeedData : ITaktSeedDataCoordinator
             ("dict.logistics.pcba.panel.category.27", "zh-HK", "ana t_hk", "pcba板位类别.ana t"),
 
             // dict.logistics.pcba.panel.category.28
-            ("dict.logistics.pcba.panel.category.28", "en-US", "apnel t_us", "pcba板位类别.apnel t"),
+            ("dict.logistics.pcba.panel.category.28", "en-US", "panel t_us", "pcba板位类别.panel t"),
             // dict.logistics.pcba.panel.category.28
-            ("dict.logistics.pcba.panel.category.28", "ja-JP", "apnel t_jp", "pcba板位类别.apnel t"),
+            ("dict.logistics.pcba.panel.category.28", "ja-JP", "panel t_jp", "pcba板位类别.panel t"),
             // dict.logistics.pcba.panel.category.28
-            ("dict.logistics.pcba.panel.category.28", "zh-CN", "apnel t", "pcba板位类别.apnel t"),
+            ("dict.logistics.pcba.panel.category.28", "zh-CN", "panel t", "pcba板位类别.panel t"),
             // dict.logistics.pcba.panel.category.28
-            ("dict.logistics.pcba.panel.category.28", "zh-HK", "apnel t_hk", "pcba板位类别.apnel t"),
+            ("dict.logistics.pcba.panel.category.28", "zh-HK", "panel t_hk", "pcba板位类别.panel t"),
 
             // dict.logistics.pcba.panel.category.29
             ("dict.logistics.pcba.panel.category.29", "en-US", "audio_us", "pcba板位类别.audio"),
@@ -11130,13 +11625,13 @@ public class TaktDictI18nSeedData : ITaktSeedDataCoordinator
             ("dict.logistics.pcba.panel.category.33", "zh-HK", "audio b_hk", "pcba板位类别.audio b"),
 
             // dict.logistics.pcba.panel.category.34
-            ("dict.logistics.pcba.panel.category.34", "en-US", "audio b/t_us", "pcba板位类别.audio b/t"),
+            ("dict.logistics.pcba.panel.category.34", "en-US", "audio t/b_us", "pcba板位类别.audio t/b"),
             // dict.logistics.pcba.panel.category.34
-            ("dict.logistics.pcba.panel.category.34", "ja-JP", "audio b/t_jp", "pcba板位类别.audio b/t"),
+            ("dict.logistics.pcba.panel.category.34", "ja-JP", "audio t/b_jp", "pcba板位类别.audio t/b"),
             // dict.logistics.pcba.panel.category.34
-            ("dict.logistics.pcba.panel.category.34", "zh-CN", "audio b/t", "pcba板位类别.audio b/t"),
+            ("dict.logistics.pcba.panel.category.34", "zh-CN", "audio t/b", "pcba板位类别.audio t/b"),
             // dict.logistics.pcba.panel.category.34
-            ("dict.logistics.pcba.panel.category.34", "zh-HK", "audio b/t_hk", "pcba板位类别.audio b/t"),
+            ("dict.logistics.pcba.panel.category.34", "zh-HK", "audio t/b_hk", "pcba板位类别.audio t/b"),
 
             // dict.logistics.pcba.panel.category.35
             ("dict.logistics.pcba.panel.category.35", "en-US", "audio t_us", "pcba板位类别.audio t"),
@@ -11220,13 +11715,13 @@ public class TaktDictI18nSeedData : ITaktSeedDataCoordinator
             ("dict.logistics.pcba.panel.category.43", "zh-HK", "ccl b_hk", "pcba板位类别.ccl b"),
 
             // dict.logistics.pcba.panel.category.44
-            ("dict.logistics.pcba.panel.category.44", "en-US", "ccl b/t_us", "pcba板位类别.ccl b/t"),
+            ("dict.logistics.pcba.panel.category.44", "en-US", "ccl t/b_us", "pcba板位类别.ccl t/b"),
             // dict.logistics.pcba.panel.category.44
-            ("dict.logistics.pcba.panel.category.44", "ja-JP", "ccl b/t_jp", "pcba板位类别.ccl b/t"),
+            ("dict.logistics.pcba.panel.category.44", "ja-JP", "ccl t/b_jp", "pcba板位类别.ccl t/b"),
             // dict.logistics.pcba.panel.category.44
-            ("dict.logistics.pcba.panel.category.44", "zh-CN", "ccl b/t", "pcba板位类别.ccl b/t"),
+            ("dict.logistics.pcba.panel.category.44", "zh-CN", "ccl t/b", "pcba板位类别.ccl t/b"),
             // dict.logistics.pcba.panel.category.44
-            ("dict.logistics.pcba.panel.category.44", "zh-HK", "ccl b/t_hk", "pcba板位类别.ccl b/t"),
+            ("dict.logistics.pcba.panel.category.44", "zh-HK", "ccl t/b_hk", "pcba板位类别.ccl t/b"),
 
             // dict.logistics.pcba.panel.category.45
             ("dict.logistics.pcba.panel.category.45", "en-US", "ccl t_us", "pcba板位类别.ccl t"),
@@ -11292,13 +11787,13 @@ public class TaktDictI18nSeedData : ITaktSeedDataCoordinator
             ("dict.logistics.pcba.panel.category.51", "zh-HK", "cdmcu b_hk", "pcba板位类别.cdmcu b"),
 
             // dict.logistics.pcba.panel.category.52
-            ("dict.logistics.pcba.panel.category.52", "en-US", "cdmcu b/t_us", "pcba板位类别.cdmcu b/t"),
+            ("dict.logistics.pcba.panel.category.52", "en-US", "cdmcu t/b_us", "pcba板位类别.cdmcu t/b"),
             // dict.logistics.pcba.panel.category.52
-            ("dict.logistics.pcba.panel.category.52", "ja-JP", "cdmcu b/t_jp", "pcba板位类别.cdmcu b/t"),
+            ("dict.logistics.pcba.panel.category.52", "ja-JP", "cdmcu t/b_jp", "pcba板位类别.cdmcu t/b"),
             // dict.logistics.pcba.panel.category.52
-            ("dict.logistics.pcba.panel.category.52", "zh-CN", "cdmcu b/t", "pcba板位类别.cdmcu b/t"),
+            ("dict.logistics.pcba.panel.category.52", "zh-CN", "cdmcu t/b", "pcba板位类别.cdmcu t/b"),
             // dict.logistics.pcba.panel.category.52
-            ("dict.logistics.pcba.panel.category.52", "zh-HK", "cdmcu b/t_hk", "pcba板位类别.cdmcu b/t"),
+            ("dict.logistics.pcba.panel.category.52", "zh-HK", "cdmcu t/b_hk", "pcba板位类别.cdmcu t/b"),
 
             // dict.logistics.pcba.panel.category.53
             ("dict.logistics.pcba.panel.category.53", "en-US", "cdmcu t_us", "pcba板位类别.cdmcu t"),
@@ -11373,13 +11868,13 @@ public class TaktDictI18nSeedData : ITaktSeedDataCoordinator
             ("dict.logistics.pcba.panel.category.60", "zh-HK", "conn b_hk", "pcba板位类别.conn b"),
 
             // dict.logistics.pcba.panel.category.61
-            ("dict.logistics.pcba.panel.category.61", "en-US", "conn b/t_us", "pcba板位类别.conn b/t"),
+            ("dict.logistics.pcba.panel.category.61", "en-US", "conn t/b_us", "pcba板位类别.conn t/b"),
             // dict.logistics.pcba.panel.category.61
-            ("dict.logistics.pcba.panel.category.61", "ja-JP", "conn b/t_jp", "pcba板位类别.conn b/t"),
+            ("dict.logistics.pcba.panel.category.61", "ja-JP", "conn t/b_jp", "pcba板位类别.conn t/b"),
             // dict.logistics.pcba.panel.category.61
-            ("dict.logistics.pcba.panel.category.61", "zh-CN", "conn b/t", "pcba板位类别.conn b/t"),
+            ("dict.logistics.pcba.panel.category.61", "zh-CN", "conn t/b", "pcba板位类别.conn t/b"),
             // dict.logistics.pcba.panel.category.61
-            ("dict.logistics.pcba.panel.category.61", "zh-HK", "conn b/t_hk", "pcba板位类别.conn b/t"),
+            ("dict.logistics.pcba.panel.category.61", "zh-HK", "conn t/b_hk", "pcba板位类别.conn t/b"),
 
             // dict.logistics.pcba.panel.category.62
             ("dict.logistics.pcba.panel.category.62", "en-US", "conn t_us", "pcba板位类别.conn t"),
@@ -11462,15 +11957,6 @@ public class TaktDictI18nSeedData : ITaktSeedDataCoordinator
             // dict.logistics.pcba.panel.category.71
             ("dict.logistics.pcba.panel.category.71", "zh-HK", "dsp t_hk", "pcba板位类别.dsp t"),
 
-            // dict.logistics.pcba.panel.category.72
-            ("dict.logistics.pcba.panel.category.72", "en-US", "dspl  t_us", "pcba板位类别.dspl  t"),
-            // dict.logistics.pcba.panel.category.72
-            ("dict.logistics.pcba.panel.category.72", "ja-JP", "dspl  t_jp", "pcba板位类别.dspl  t"),
-            // dict.logistics.pcba.panel.category.72
-            ("dict.logistics.pcba.panel.category.72", "zh-CN", "dspl  t", "pcba板位类别.dspl  t"),
-            // dict.logistics.pcba.panel.category.72
-            ("dict.logistics.pcba.panel.category.72", "zh-HK", "dspl  t_hk", "pcba板位类别.dspl  t"),
-
             // dict.logistics.pcba.panel.category.73
             ("dict.logistics.pcba.panel.category.73", "en-US", "dspl a_us", "pcba板位类别.dspl a"),
             // dict.logistics.pcba.panel.category.73
@@ -11490,13 +11976,13 @@ public class TaktDictI18nSeedData : ITaktSeedDataCoordinator
             ("dict.logistics.pcba.panel.category.74", "zh-HK", "dspl b_hk", "pcba板位类别.dspl b"),
 
             // dict.logistics.pcba.panel.category.75
-            ("dict.logistics.pcba.panel.category.75", "en-US", "dspl b/t_us", "pcba板位类别.dspl b/t"),
+            ("dict.logistics.pcba.panel.category.75", "en-US", "dspl t/b_us", "pcba板位类别.dspl t/b"),
             // dict.logistics.pcba.panel.category.75
-            ("dict.logistics.pcba.panel.category.75", "ja-JP", "dspl b/t_jp", "pcba板位类别.dspl b/t"),
+            ("dict.logistics.pcba.panel.category.75", "ja-JP", "dspl t/b_jp", "pcba板位类别.dspl t/b"),
             // dict.logistics.pcba.panel.category.75
-            ("dict.logistics.pcba.panel.category.75", "zh-CN", "dspl b/t", "pcba板位类别.dspl b/t"),
+            ("dict.logistics.pcba.panel.category.75", "zh-CN", "dspl t/b", "pcba板位类别.dspl t/b"),
             // dict.logistics.pcba.panel.category.75
-            ("dict.logistics.pcba.panel.category.75", "zh-HK", "dspl b/t_hk", "pcba板位类别.dspl b/t"),
+            ("dict.logistics.pcba.panel.category.75", "zh-HK", "dspl t/b_hk", "pcba板位类别.dspl t/b"),
 
             // dict.logistics.pcba.panel.category.76
             ("dict.logistics.pcba.panel.category.76", "en-US", "dspl t_us", "pcba板位类别.dspl t"),
@@ -11561,15 +12047,6 @@ public class TaktDictI18nSeedData : ITaktSeedDataCoordinator
             // dict.logistics.pcba.panel.category.82
             ("dict.logistics.pcba.panel.category.82", "zh-HK", "encoder_hk", "pcba板位类别.encoder"),
 
-            // dict.logistics.pcba.panel.category.83
-            ("dict.logistics.pcba.panel.category.83", "en-US", "encoger_us", "pcba板位类别.encoger"),
-            // dict.logistics.pcba.panel.category.83
-            ("dict.logistics.pcba.panel.category.83", "ja-JP", "encoger_jp", "pcba板位类别.encoger"),
-            // dict.logistics.pcba.panel.category.83
-            ("dict.logistics.pcba.panel.category.83", "zh-CN", "encoger", "pcba板位类别.encoger"),
-            // dict.logistics.pcba.panel.category.83
-            ("dict.logistics.pcba.panel.category.83", "zh-HK", "encoger_hk", "pcba板位类别.encoger"),
-
             // dict.logistics.pcba.panel.category.84
             ("dict.logistics.pcba.panel.category.84", "en-US", "ether_us", "pcba板位类别.ether"),
             // dict.logistics.pcba.panel.category.84
@@ -11616,13 +12093,13 @@ public class TaktDictI18nSeedData : ITaktSeedDataCoordinator
             ("dict.logistics.pcba.panel.category.88", "zh-HK", "euro b_hk", "pcba板位类别.euro b"),
 
             // dict.logistics.pcba.panel.category.89
-            ("dict.logistics.pcba.panel.category.89", "en-US", "euro b/t_us", "pcba板位类别.euro b/t"),
+            ("dict.logistics.pcba.panel.category.89", "en-US", "euro t/b_us", "pcba板位类别.euro t/b"),
             // dict.logistics.pcba.panel.category.89
-            ("dict.logistics.pcba.panel.category.89", "ja-JP", "euro b/t_jp", "pcba板位类别.euro b/t"),
+            ("dict.logistics.pcba.panel.category.89", "ja-JP", "euro t/b_jp", "pcba板位类别.euro t/b"),
             // dict.logistics.pcba.panel.category.89
-            ("dict.logistics.pcba.panel.category.89", "zh-CN", "euro b/t", "pcba板位类别.euro b/t"),
+            ("dict.logistics.pcba.panel.category.89", "zh-CN", "euro t/b", "pcba板位类别.euro t/b"),
             // dict.logistics.pcba.panel.category.89
-            ("dict.logistics.pcba.panel.category.89", "zh-HK", "euro b/t_hk", "pcba板位类别.euro b/t"),
+            ("dict.logistics.pcba.panel.category.89", "zh-HK", "euro t/b_hk", "pcba板位类别.euro t/b"),
 
             // dict.logistics.pcba.panel.category.90
             ("dict.logistics.pcba.panel.category.90", "en-US", "euro t_us", "pcba板位类别.euro t"),
@@ -11643,13 +12120,13 @@ public class TaktDictI18nSeedData : ITaktSeedDataCoordinator
             ("dict.logistics.pcba.panel.category.91", "zh-HK", "fader b_hk", "pcba板位类别.fader b"),
 
             // dict.logistics.pcba.panel.category.92
-            ("dict.logistics.pcba.panel.category.92", "en-US", "fader b/t_us", "pcba板位类别.fader b/t"),
+            ("dict.logistics.pcba.panel.category.92", "en-US", "fader t/b_us", "pcba板位类别.fader t/b"),
             // dict.logistics.pcba.panel.category.92
-            ("dict.logistics.pcba.panel.category.92", "ja-JP", "fader b/t_jp", "pcba板位类别.fader b/t"),
+            ("dict.logistics.pcba.panel.category.92", "ja-JP", "fader t/b_jp", "pcba板位类别.fader t/b"),
             // dict.logistics.pcba.panel.category.92
-            ("dict.logistics.pcba.panel.category.92", "zh-CN", "fader b/t", "pcba板位类别.fader b/t"),
+            ("dict.logistics.pcba.panel.category.92", "zh-CN", "fader t/b", "pcba板位类别.fader t/b"),
             // dict.logistics.pcba.panel.category.92
-            ("dict.logistics.pcba.panel.category.92", "zh-HK", "fader b/t_hk", "pcba板位类别.fader b/t"),
+            ("dict.logistics.pcba.panel.category.92", "zh-HK", "fader t/b_hk", "pcba板位类别.fader t/b"),
 
             // dict.logistics.pcba.panel.category.93
             ("dict.logistics.pcba.panel.category.93", "en-US", "fader t_us", "pcba板位类别.fader t"),
@@ -11659,24 +12136,6 @@ public class TaktDictI18nSeedData : ITaktSeedDataCoordinator
             ("dict.logistics.pcba.panel.category.93", "zh-CN", "fader t", "pcba板位类别.fader t"),
             // dict.logistics.pcba.panel.category.93
             ("dict.logistics.pcba.panel.category.93", "zh-HK", "fader t_hk", "pcba板位类别.fader t"),
-
-            // dict.logistics.pcba.panel.category.94
-            ("dict.logistics.pcba.panel.category.94", "en-US", "faether b_us", "pcba板位类别.faether b"),
-            // dict.logistics.pcba.panel.category.94
-            ("dict.logistics.pcba.panel.category.94", "ja-JP", "faether b_jp", "pcba板位类别.faether b"),
-            // dict.logistics.pcba.panel.category.94
-            ("dict.logistics.pcba.panel.category.94", "zh-CN", "faether b", "pcba板位类别.faether b"),
-            // dict.logistics.pcba.panel.category.94
-            ("dict.logistics.pcba.panel.category.94", "zh-HK", "faether b_hk", "pcba板位类别.faether b"),
-
-            // dict.logistics.pcba.panel.category.95
-            ("dict.logistics.pcba.panel.category.95", "en-US", "faether t_us", "pcba板位类别.faether t"),
-            // dict.logistics.pcba.panel.category.95
-            ("dict.logistics.pcba.panel.category.95", "ja-JP", "faether t_jp", "pcba板位类别.faether t"),
-            // dict.logistics.pcba.panel.category.95
-            ("dict.logistics.pcba.panel.category.95", "zh-CN", "faether t", "pcba板位类别.faether t"),
-            // dict.logistics.pcba.panel.category.95
-            ("dict.logistics.pcba.panel.category.95", "zh-HK", "faether t_hk", "pcba板位类别.faether t"),
 
             // dict.logistics.pcba.panel.category.96
             ("dict.logistics.pcba.panel.category.96", "en-US", "front_us", "pcba板位类别.front"),
@@ -11706,13 +12165,13 @@ public class TaktDictI18nSeedData : ITaktSeedDataCoordinator
             ("dict.logistics.pcba.panel.category.98", "zh-HK", "front b_hk", "pcba板位类别.front b"),
 
             // dict.logistics.pcba.panel.category.99
-            ("dict.logistics.pcba.panel.category.99", "en-US", "front b/t_us", "pcba板位类别.front b/t"),
+            ("dict.logistics.pcba.panel.category.99", "en-US", "front t/b_us", "pcba板位类别.front t/b"),
             // dict.logistics.pcba.panel.category.99
-            ("dict.logistics.pcba.panel.category.99", "ja-JP", "front b/t_jp", "pcba板位类别.front b/t"),
+            ("dict.logistics.pcba.panel.category.99", "ja-JP", "front t/b_jp", "pcba板位类别.front t/b"),
             // dict.logistics.pcba.panel.category.99
-            ("dict.logistics.pcba.panel.category.99", "zh-CN", "front b/t", "pcba板位类别.front b/t"),
+            ("dict.logistics.pcba.panel.category.99", "zh-CN", "front t/b", "pcba板位类别.front t/b"),
             // dict.logistics.pcba.panel.category.99
-            ("dict.logistics.pcba.panel.category.99", "zh-HK", "front b/t_hk", "pcba板位类别.front b/t"),
+            ("dict.logistics.pcba.panel.category.99", "zh-HK", "front t/b_hk", "pcba板位类别.front t/b"),
 
             // dict.logistics.pcba.panel.category.100
             ("dict.logistics.pcba.panel.category.100", "en-US", "front sys t_us", "pcba板位类别.front sys t"),
@@ -11731,24 +12190,6 @@ public class TaktDictI18nSeedData : ITaktSeedDataCoordinator
             ("dict.logistics.pcba.panel.category.101", "zh-CN", "front t", "pcba板位类别.front t"),
             // dict.logistics.pcba.panel.category.101
             ("dict.logistics.pcba.panel.category.101", "zh-HK", "front t_hk", "pcba板位类别.front t"),
-
-            // dict.logistics.pcba.panel.category.102
-            ("dict.logistics.pcba.panel.category.102", "en-US", "front-a_us", "pcba板位类别.front-a"),
-            // dict.logistics.pcba.panel.category.102
-            ("dict.logistics.pcba.panel.category.102", "ja-JP", "front-a_jp", "pcba板位类别.front-a"),
-            // dict.logistics.pcba.panel.category.102
-            ("dict.logistics.pcba.panel.category.102", "zh-CN", "front-a", "pcba板位类别.front-a"),
-            // dict.logistics.pcba.panel.category.102
-            ("dict.logistics.pcba.panel.category.102", "zh-HK", "front-a_hk", "pcba板位类别.front-a"),
-
-            // dict.logistics.pcba.panel.category.103
-            ("dict.logistics.pcba.panel.category.103", "en-US", "frotn b_us", "pcba板位类别.frotn b"),
-            // dict.logistics.pcba.panel.category.103
-            ("dict.logistics.pcba.panel.category.103", "ja-JP", "frotn b_jp", "pcba板位类别.frotn b"),
-            // dict.logistics.pcba.panel.category.103
-            ("dict.logistics.pcba.panel.category.103", "zh-CN", "frotn b", "pcba板位类别.frotn b"),
-            // dict.logistics.pcba.panel.category.103
-            ("dict.logistics.pcba.panel.category.103", "zh-HK", "frotn b_hk", "pcba板位类别.frotn b"),
 
             // dict.logistics.pcba.panel.category.104
             ("dict.logistics.pcba.panel.category.104", "en-US", "gather_us", "pcba板位类别.gather"),
@@ -11796,13 +12237,13 @@ public class TaktDictI18nSeedData : ITaktSeedDataCoordinator
             ("dict.logistics.pcba.panel.category.108", "zh-HK", "gather b_hk", "pcba板位类别.gather b"),
 
             // dict.logistics.pcba.panel.category.109
-            ("dict.logistics.pcba.panel.category.109", "en-US", "gather b/t_us", "pcba板位类别.gather b/t"),
+            ("dict.logistics.pcba.panel.category.109", "en-US", "gather t/b_us", "pcba板位类别.gather t/b"),
             // dict.logistics.pcba.panel.category.109
-            ("dict.logistics.pcba.panel.category.109", "ja-JP", "gather b/t_jp", "pcba板位类别.gather b/t"),
+            ("dict.logistics.pcba.panel.category.109", "ja-JP", "gather t/b_jp", "pcba板位类别.gather t/b"),
             // dict.logistics.pcba.panel.category.109
-            ("dict.logistics.pcba.panel.category.109", "zh-CN", "gather b/t", "pcba板位类别.gather b/t"),
+            ("dict.logistics.pcba.panel.category.109", "zh-CN", "gather t/b", "pcba板位类别.gather t/b"),
             // dict.logistics.pcba.panel.category.109
-            ("dict.logistics.pcba.panel.category.109", "zh-HK", "gather b/t_hk", "pcba板位类别.gather b/t"),
+            ("dict.logistics.pcba.panel.category.109", "zh-HK", "gather t/b_hk", "pcba板位类别.gather t/b"),
 
             // dict.logistics.pcba.panel.category.110
             ("dict.logistics.pcba.panel.category.110", "en-US", "gather c_us", "pcba板位类别.gather c"),
@@ -11822,23 +12263,14 @@ public class TaktDictI18nSeedData : ITaktSeedDataCoordinator
             // dict.logistics.pcba.panel.category.111
             ("dict.logistics.pcba.panel.category.111", "zh-HK", "gather t_hk", "pcba板位类别.gather t"),
 
-            // dict.logistics.pcba.panel.category.112
-            ("dict.logistics.pcba.panel.category.112", "en-US", "gather-c_us", "pcba板位类别.gather-c"),
-            // dict.logistics.pcba.panel.category.112
-            ("dict.logistics.pcba.panel.category.112", "ja-JP", "gather-c_jp", "pcba板位类别.gather-c"),
-            // dict.logistics.pcba.panel.category.112
-            ("dict.logistics.pcba.panel.category.112", "zh-CN", "gather-c", "pcba板位类别.gather-c"),
-            // dict.logistics.pcba.panel.category.112
-            ("dict.logistics.pcba.panel.category.112", "zh-HK", "gather-c_hk", "pcba板位类别.gather-c"),
-
             // dict.logistics.pcba.panel.category.113
-            ("dict.logistics.pcba.panel.category.113", "en-US", "gather-j_us", "pcba板位类别.gather-j"),
+            ("dict.logistics.pcba.panel.category.113", "en-US", "gather j_us", "pcba板位类别.gather j"),
             // dict.logistics.pcba.panel.category.113
-            ("dict.logistics.pcba.panel.category.113", "ja-JP", "gather-j_jp", "pcba板位类别.gather-j"),
+            ("dict.logistics.pcba.panel.category.113", "ja-JP", "gather j_jp", "pcba板位类别.gather j"),
             // dict.logistics.pcba.panel.category.113
-            ("dict.logistics.pcba.panel.category.113", "zh-CN", "gather-j", "pcba板位类别.gather-j"),
+            ("dict.logistics.pcba.panel.category.113", "zh-CN", "gather j", "pcba板位类别.gather j"),
             // dict.logistics.pcba.panel.category.113
-            ("dict.logistics.pcba.panel.category.113", "zh-HK", "gather-j_hk", "pcba板位类别.gather-j"),
+            ("dict.logistics.pcba.panel.category.113", "zh-HK", "gather j_hk", "pcba板位类别.gather j"),
 
             // dict.logistics.pcba.panel.category.114
             ("dict.logistics.pcba.panel.category.114", "en-US", "if_us", "pcba板位类别.if"),
@@ -11885,14 +12317,23 @@ public class TaktDictI18nSeedData : ITaktSeedDataCoordinator
             // dict.logistics.pcba.panel.category.120
             ("dict.logistics.pcba.panel.category.120", "zh-HK", "io_hk", "pcba板位类别.io"),
 
+            // dict.logistics.pcba.panel.category.115
+            ("dict.logistics.pcba.panel.category.115", "en-US", "io b_us", "pcba板位类别.io b"),
+            // dict.logistics.pcba.panel.category.115
+            ("dict.logistics.pcba.panel.category.115", "ja-JP", "io b_jp", "pcba板位类别.io b"),
+            // dict.logistics.pcba.panel.category.115
+            ("dict.logistics.pcba.panel.category.115", "zh-CN", "io b", "pcba板位类别.io b"),
+            // dict.logistics.pcba.panel.category.115
+            ("dict.logistics.pcba.panel.category.115", "zh-HK", "io b_hk", "pcba板位类别.io b"),
+
             // dict.logistics.pcba.panel.category.121
-            ("dict.logistics.pcba.panel.category.121", "en-US", "io b/t_us", "pcba板位类别.io b/t"),
+            ("dict.logistics.pcba.panel.category.121", "en-US", "io t/b_us", "pcba板位类别.io t/b"),
             // dict.logistics.pcba.panel.category.121
-            ("dict.logistics.pcba.panel.category.121", "ja-JP", "io b/t_jp", "pcba板位类别.io b/t"),
+            ("dict.logistics.pcba.panel.category.121", "ja-JP", "io t/b_jp", "pcba板位类别.io t/b"),
             // dict.logistics.pcba.panel.category.121
-            ("dict.logistics.pcba.panel.category.121", "zh-CN", "io b/t", "pcba板位类别.io b/t"),
+            ("dict.logistics.pcba.panel.category.121", "zh-CN", "io t/b", "pcba板位类别.io t/b"),
             // dict.logistics.pcba.panel.category.121
-            ("dict.logistics.pcba.panel.category.121", "zh-HK", "io b/t_hk", "pcba板位类别.io b/t"),
+            ("dict.logistics.pcba.panel.category.121", "zh-HK", "io t/b_hk", "pcba板位类别.io t/b"),
 
             // dict.logistics.pcba.panel.category.122
             ("dict.logistics.pcba.panel.category.122", "en-US", "io t_us", "pcba板位类别.io t"),
@@ -11931,13 +12372,13 @@ public class TaktDictI18nSeedData : ITaktSeedDataCoordinator
             ("dict.logistics.pcba.panel.category.125", "zh-HK", "jack b_hk", "pcba板位类别.jack b"),
 
             // dict.logistics.pcba.panel.category.126
-            ("dict.logistics.pcba.panel.category.126", "en-US", "jack b/t_us", "pcba板位类别.jack b/t"),
+            ("dict.logistics.pcba.panel.category.126", "en-US", "jack t/b_us", "pcba板位类别.jack t/b"),
             // dict.logistics.pcba.panel.category.126
-            ("dict.logistics.pcba.panel.category.126", "ja-JP", "jack b/t_jp", "pcba板位类别.jack b/t"),
+            ("dict.logistics.pcba.panel.category.126", "ja-JP", "jack t/b_jp", "pcba板位类别.jack t/b"),
             // dict.logistics.pcba.panel.category.126
-            ("dict.logistics.pcba.panel.category.126", "zh-CN", "jack b/t", "pcba板位类别.jack b/t"),
+            ("dict.logistics.pcba.panel.category.126", "zh-CN", "jack t/b", "pcba板位类别.jack t/b"),
             // dict.logistics.pcba.panel.category.126
-            ("dict.logistics.pcba.panel.category.126", "zh-HK", "jack b/t_hk", "pcba板位类别.jack b/t"),
+            ("dict.logistics.pcba.panel.category.126", "zh-HK", "jack t/b_hk", "pcba板位类别.jack t/b"),
 
             // dict.logistics.pcba.panel.category.127
             ("dict.logistics.pcba.panel.category.127", "en-US", "jack t_us", "pcba板位类别.jack t"),
@@ -12111,13 +12552,13 @@ public class TaktDictI18nSeedData : ITaktSeedDataCoordinator
             ("dict.logistics.pcba.panel.category.148", "zh-HK", "key b_hk", "pcba板位类别.key b"),
 
             // dict.logistics.pcba.panel.category.149
-            ("dict.logistics.pcba.panel.category.149", "en-US", "key b/t_us", "pcba板位类别.key b/t"),
+            ("dict.logistics.pcba.panel.category.149", "en-US", "key t/b_us", "pcba板位类别.key t/b"),
             // dict.logistics.pcba.panel.category.149
-            ("dict.logistics.pcba.panel.category.149", "ja-JP", "key b/t_jp", "pcba板位类别.key b/t"),
+            ("dict.logistics.pcba.panel.category.149", "ja-JP", "key t/b_jp", "pcba板位类别.key t/b"),
             // dict.logistics.pcba.panel.category.149
-            ("dict.logistics.pcba.panel.category.149", "zh-CN", "key b/t", "pcba板位类别.key b/t"),
+            ("dict.logistics.pcba.panel.category.149", "zh-CN", "key t/b", "pcba板位类别.key t/b"),
             // dict.logistics.pcba.panel.category.149
-            ("dict.logistics.pcba.panel.category.149", "zh-HK", "key b/t_hk", "pcba板位类别.key b/t"),
+            ("dict.logistics.pcba.panel.category.149", "zh-HK", "key t/b_hk", "pcba板位类别.key t/b"),
 
             // dict.logistics.pcba.panel.category.150
             ("dict.logistics.pcba.panel.category.150", "en-US", "key t_us", "pcba板位类别.key t"),
@@ -12147,13 +12588,13 @@ public class TaktDictI18nSeedData : ITaktSeedDataCoordinator
             ("dict.logistics.pcba.panel.category.152", "zh-HK", "lcd b_hk", "pcba板位类别.lcd b"),
 
             // dict.logistics.pcba.panel.category.153
-            ("dict.logistics.pcba.panel.category.153", "en-US", "lcd b/t_us", "pcba板位类别.lcd b/t"),
+            ("dict.logistics.pcba.panel.category.153", "en-US", "lcd t/b_us", "pcba板位类别.lcd t/b"),
             // dict.logistics.pcba.panel.category.153
-            ("dict.logistics.pcba.panel.category.153", "ja-JP", "lcd b/t_jp", "pcba板位类别.lcd b/t"),
+            ("dict.logistics.pcba.panel.category.153", "ja-JP", "lcd t/b_jp", "pcba板位类别.lcd t/b"),
             // dict.logistics.pcba.panel.category.153
-            ("dict.logistics.pcba.panel.category.153", "zh-CN", "lcd b/t", "pcba板位类别.lcd b/t"),
+            ("dict.logistics.pcba.panel.category.153", "zh-CN", "lcd t/b", "pcba板位类别.lcd t/b"),
             // dict.logistics.pcba.panel.category.153
-            ("dict.logistics.pcba.panel.category.153", "zh-HK", "lcd b/t_hk", "pcba板位类别.lcd b/t"),
+            ("dict.logistics.pcba.panel.category.153", "zh-HK", "lcd t/b_hk", "pcba板位类别.lcd t/b"),
 
             // dict.logistics.pcba.panel.category.154
             ("dict.logistics.pcba.panel.category.154", "en-US", "lcd ex_us", "pcba板位类别.lcd ex"),
@@ -12174,13 +12615,13 @@ public class TaktDictI18nSeedData : ITaktSeedDataCoordinator
             ("dict.logistics.pcba.panel.category.155", "zh-HK", "lcd ex b_hk", "pcba板位类别.lcd ex b"),
 
             // dict.logistics.pcba.panel.category.156
-            ("dict.logistics.pcba.panel.category.156", "en-US", "lcd ex b/t_us", "pcba板位类别.lcd ex b/t"),
+            ("dict.logistics.pcba.panel.category.156", "en-US", "lcd ex t/b_us", "pcba板位类别.lcd ex t/b"),
             // dict.logistics.pcba.panel.category.156
-            ("dict.logistics.pcba.panel.category.156", "ja-JP", "lcd ex b/t_jp", "pcba板位类别.lcd ex b/t"),
+            ("dict.logistics.pcba.panel.category.156", "ja-JP", "lcd ex t/b_jp", "pcba板位类别.lcd ex t/b"),
             // dict.logistics.pcba.panel.category.156
-            ("dict.logistics.pcba.panel.category.156", "zh-CN", "lcd ex b/t", "pcba板位类别.lcd ex b/t"),
+            ("dict.logistics.pcba.panel.category.156", "zh-CN", "lcd ex t/b", "pcba板位类别.lcd ex t/b"),
             // dict.logistics.pcba.panel.category.156
-            ("dict.logistics.pcba.panel.category.156", "zh-HK", "lcd ex b/t_hk", "pcba板位类别.lcd ex b/t"),
+            ("dict.logistics.pcba.panel.category.156", "zh-HK", "lcd ex t/b_hk", "pcba板位类别.lcd ex t/b"),
 
             // dict.logistics.pcba.panel.category.157
             ("dict.logistics.pcba.panel.category.157", "en-US", "lcd ex t_us", "pcba板位类别.lcd ex t"),
@@ -12190,6 +12631,15 @@ public class TaktDictI18nSeedData : ITaktSeedDataCoordinator
             ("dict.logistics.pcba.panel.category.157", "zh-CN", "lcd ex t", "pcba板位类别.lcd ex t"),
             // dict.logistics.pcba.panel.category.157
             ("dict.logistics.pcba.panel.category.157", "zh-HK", "lcd ex t_hk", "pcba板位类别.lcd ex t"),
+
+            // dict.logistics.pcba.panel.category.159
+            ("dict.logistics.pcba.panel.category.159", "en-US", "lcd t_us", "pcba板位类别.lcd t"),
+            // dict.logistics.pcba.panel.category.159
+            ("dict.logistics.pcba.panel.category.159", "ja-JP", "lcd t_jp", "pcba板位类别.lcd t"),
+            // dict.logistics.pcba.panel.category.159
+            ("dict.logistics.pcba.panel.category.159", "zh-CN", "lcd t", "pcba板位类别.lcd t"),
+            // dict.logistics.pcba.panel.category.159
+            ("dict.logistics.pcba.panel.category.159", "zh-HK", "lcd t_hk", "pcba板位类别.lcd t"),
 
             // dict.logistics.pcba.panel.category.158
             ("dict.logistics.pcba.panel.category.158", "en-US", "madi b_us", "pcba板位类别.madi b"),
@@ -12201,13 +12651,13 @@ public class TaktDictI18nSeedData : ITaktSeedDataCoordinator
             ("dict.logistics.pcba.panel.category.158", "zh-HK", "madi b_hk", "pcba板位类别.madi b"),
 
             // dict.logistics.pcba.panel.category.161
-            ("dict.logistics.pcba.panel.category.161", "en-US", "madi b/t_us", "pcba板位类别.madi b/t"),
+            ("dict.logistics.pcba.panel.category.161", "en-US", "madi t/b_us", "pcba板位类别.madi t/b"),
             // dict.logistics.pcba.panel.category.161
-            ("dict.logistics.pcba.panel.category.161", "ja-JP", "madi b/t_jp", "pcba板位类别.madi b/t"),
+            ("dict.logistics.pcba.panel.category.161", "ja-JP", "madi t/b_jp", "pcba板位类别.madi t/b"),
             // dict.logistics.pcba.panel.category.161
-            ("dict.logistics.pcba.panel.category.161", "zh-CN", "madi b/t", "pcba板位类别.madi b/t"),
+            ("dict.logistics.pcba.panel.category.161", "zh-CN", "madi t/b", "pcba板位类别.madi t/b"),
             // dict.logistics.pcba.panel.category.161
-            ("dict.logistics.pcba.panel.category.161", "zh-HK", "madi b/t_hk", "pcba板位类别.madi b/t"),
+            ("dict.logistics.pcba.panel.category.161", "zh-HK", "madi t/b_hk", "pcba板位类别.madi t/b"),
 
             // dict.logistics.pcba.panel.category.162
             ("dict.logistics.pcba.panel.category.162", "en-US", "madi t_us", "pcba板位类别.madi t"),
@@ -12236,32 +12686,23 @@ public class TaktDictI18nSeedData : ITaktSeedDataCoordinator
             // dict.logistics.pcba.panel.category.164
             ("dict.logistics.pcba.panel.category.164", "zh-HK", "mafad b_hk", "pcba板位类别.mafad b"),
 
-            // dict.logistics.pcba.panel.category.165
-            ("dict.logistics.pcba.panel.category.165", "en-US", "ma-fad b_us", "pcba板位类别.ma-fad b"),
-            // dict.logistics.pcba.panel.category.165
-            ("dict.logistics.pcba.panel.category.165", "ja-JP", "ma-fad b_jp", "pcba板位类别.ma-fad b"),
-            // dict.logistics.pcba.panel.category.165
-            ("dict.logistics.pcba.panel.category.165", "zh-CN", "ma-fad b", "pcba板位类别.ma-fad b"),
-            // dict.logistics.pcba.panel.category.165
-            ("dict.logistics.pcba.panel.category.165", "zh-HK", "ma-fad b_hk", "pcba板位类别.ma-fad b"),
+            // dict.logistics.pcba.panel.category.166
+            ("dict.logistics.pcba.panel.category.166", "en-US", "mafad t/b_us", "pcba板位类别.mafad t/b"),
+            // dict.logistics.pcba.panel.category.166
+            ("dict.logistics.pcba.panel.category.166", "ja-JP", "mafad t/b_jp", "pcba板位类别.mafad t/b"),
+            // dict.logistics.pcba.panel.category.166
+            ("dict.logistics.pcba.panel.category.166", "zh-CN", "mafad t/b", "pcba板位类别.mafad t/b"),
+            // dict.logistics.pcba.panel.category.166
+            ("dict.logistics.pcba.panel.category.166", "zh-HK", "mafad t/b_hk", "pcba板位类别.mafad t/b"),
 
-            // dict.logistics.pcba.panel.category.166
-            ("dict.logistics.pcba.panel.category.166", "en-US", "mafad b/t_us", "pcba板位类别.mafad b/t"),
-            // dict.logistics.pcba.panel.category.166
-            ("dict.logistics.pcba.panel.category.166", "ja-JP", "mafad b/t_jp", "pcba板位类别.mafad b/t"),
-            // dict.logistics.pcba.panel.category.166
-            ("dict.logistics.pcba.panel.category.166", "zh-CN", "mafad b/t", "pcba板位类别.mafad b/t"),
-            // dict.logistics.pcba.panel.category.166
-            ("dict.logistics.pcba.panel.category.166", "zh-HK", "mafad b/t_hk", "pcba板位类别.mafad b/t"),
-
-            // dict.logistics.pcba.panel.category.167
-            ("dict.logistics.pcba.panel.category.167", "en-US", "ma-fad t_us", "pcba板位类别.ma-fad t"),
-            // dict.logistics.pcba.panel.category.167
-            ("dict.logistics.pcba.panel.category.167", "ja-JP", "ma-fad t_jp", "pcba板位类别.ma-fad t"),
-            // dict.logistics.pcba.panel.category.167
-            ("dict.logistics.pcba.panel.category.167", "zh-CN", "ma-fad t", "pcba板位类别.ma-fad t"),
-            // dict.logistics.pcba.panel.category.167
-            ("dict.logistics.pcba.panel.category.167", "zh-HK", "ma-fad t_hk", "pcba板位类别.ma-fad t"),
+            // dict.logistics.pcba.panel.category.169
+            ("dict.logistics.pcba.panel.category.169", "en-US", "mafad t_us", "pcba板位类别.mafad t"),
+            // dict.logistics.pcba.panel.category.169
+            ("dict.logistics.pcba.panel.category.169", "ja-JP", "mafad t_jp", "pcba板位类别.mafad t"),
+            // dict.logistics.pcba.panel.category.169
+            ("dict.logistics.pcba.panel.category.169", "zh-CN", "mafad t", "pcba板位类别.mafad t"),
+            // dict.logistics.pcba.panel.category.169
+            ("dict.logistics.pcba.panel.category.169", "zh-HK", "mafad t_hk", "pcba板位类别.mafad t"),
 
             // dict.logistics.pcba.panel.category.168
             ("dict.logistics.pcba.panel.category.168", "en-US", "main_us", "pcba板位类别.main"),
@@ -12309,22 +12750,31 @@ public class TaktDictI18nSeedData : ITaktSeedDataCoordinator
             ("dict.logistics.pcba.panel.category.174", "zh-HK", "main b_hk", "pcba板位类别.main b"),
 
             // dict.logistics.pcba.panel.category.175
-            ("dict.logistics.pcba.panel.category.175", "en-US", "main b/t_us", "pcba板位类别.main b/t"),
+            ("dict.logistics.pcba.panel.category.175", "en-US", "main t/b_us", "pcba板位类别.main t/b"),
             // dict.logistics.pcba.panel.category.175
-            ("dict.logistics.pcba.panel.category.175", "ja-JP", "main b/t_jp", "pcba板位类别.main b/t"),
+            ("dict.logistics.pcba.panel.category.175", "ja-JP", "main t/b_jp", "pcba板位类别.main t/b"),
             // dict.logistics.pcba.panel.category.175
-            ("dict.logistics.pcba.panel.category.175", "zh-CN", "main b/t", "pcba板位类别.main b/t"),
+            ("dict.logistics.pcba.panel.category.175", "zh-CN", "main t/b", "pcba板位类别.main t/b"),
             // dict.logistics.pcba.panel.category.175
-            ("dict.logistics.pcba.panel.category.175", "zh-HK", "main b/t_hk", "pcba板位类别.main b/t"),
+            ("dict.logistics.pcba.panel.category.175", "zh-HK", "main t/b_hk", "pcba板位类别.main t/b"),
+
+            // dict.logistics.pcba.panel.category.177
+            ("dict.logistics.pcba.panel.category.177", "en-US", "main t_us", "pcba板位类别.main t"),
+            // dict.logistics.pcba.panel.category.177
+            ("dict.logistics.pcba.panel.category.177", "ja-JP", "main t_jp", "pcba板位类别.main t"),
+            // dict.logistics.pcba.panel.category.177
+            ("dict.logistics.pcba.panel.category.177", "zh-CN", "main t", "pcba板位类别.main t"),
+            // dict.logistics.pcba.panel.category.177
+            ("dict.logistics.pcba.panel.category.177", "zh-HK", "main t_hk", "pcba板位类别.main t"),
 
             // dict.logistics.pcba.panel.category.176
-            ("dict.logistics.pcba.panel.category.176", "en-US", "mather b/t_us", "pcba板位类别.mather b/t"),
+            ("dict.logistics.pcba.panel.category.176", "en-US", "mother t/b_us", "pcba板位类别.mother t/b"),
             // dict.logistics.pcba.panel.category.176
-            ("dict.logistics.pcba.panel.category.176", "ja-JP", "mather b/t_jp", "pcba板位类别.mather b/t"),
+            ("dict.logistics.pcba.panel.category.176", "ja-JP", "mother t/b_jp", "pcba板位类别.mother t/b"),
             // dict.logistics.pcba.panel.category.176
-            ("dict.logistics.pcba.panel.category.176", "zh-CN", "mather b/t", "pcba板位类别.mather b/t"),
+            ("dict.logistics.pcba.panel.category.176", "zh-CN", "mother t/b", "pcba板位类别.mother t/b"),
             // dict.logistics.pcba.panel.category.176
-            ("dict.logistics.pcba.panel.category.176", "zh-HK", "mather b/t_hk", "pcba板位类别.mather b/t"),
+            ("dict.logistics.pcba.panel.category.176", "zh-HK", "mother t/b_hk", "pcba板位类别.mother t/b"),
 
             // dict.logistics.pcba.panel.category.179
             ("dict.logistics.pcba.panel.category.179", "en-US", "meter_us", "pcba板位类别.meter"),
@@ -12381,13 +12831,13 @@ public class TaktDictI18nSeedData : ITaktSeedDataCoordinator
             ("dict.logistics.pcba.panel.category.184", "zh-HK", "panel b_hk", "pcba板位类别.panel b"),
 
             // dict.logistics.pcba.panel.category.185
-            ("dict.logistics.pcba.panel.category.185", "en-US", "panel b/t_us", "pcba板位类别.panel b/t"),
+            ("dict.logistics.pcba.panel.category.185", "en-US", "panel t/b_us", "pcba板位类别.panel t/b"),
             // dict.logistics.pcba.panel.category.185
-            ("dict.logistics.pcba.panel.category.185", "ja-JP", "panel b/t_jp", "pcba板位类别.panel b/t"),
+            ("dict.logistics.pcba.panel.category.185", "ja-JP", "panel t/b_jp", "pcba板位类别.panel t/b"),
             // dict.logistics.pcba.panel.category.185
-            ("dict.logistics.pcba.panel.category.185", "zh-CN", "panel b/t", "pcba板位类别.panel b/t"),
+            ("dict.logistics.pcba.panel.category.185", "zh-CN", "panel t/b", "pcba板位类别.panel t/b"),
             // dict.logistics.pcba.panel.category.185
-            ("dict.logistics.pcba.panel.category.185", "zh-HK", "panel b/t_hk", "pcba板位类别.panel b/t"),
+            ("dict.logistics.pcba.panel.category.185", "zh-HK", "panel t/b_hk", "pcba板位类别.panel t/b"),
 
             // dict.logistics.pcba.panel.category.186
             ("dict.logistics.pcba.panel.category.186", "en-US", "panel l_us", "pcba板位类别.panel l"),
@@ -12453,13 +12903,13 @@ public class TaktDictI18nSeedData : ITaktSeedDataCoordinator
             ("dict.logistics.pcba.panel.category.192", "zh-HK", "power b_hk", "pcba板位类别.power b"),
 
             // dict.logistics.pcba.panel.category.193
-            ("dict.logistics.pcba.panel.category.193", "en-US", "power b/t_us", "pcba板位类别.power b/t"),
+            ("dict.logistics.pcba.panel.category.193", "en-US", "power t/b_us", "pcba板位类别.power t/b"),
             // dict.logistics.pcba.panel.category.193
-            ("dict.logistics.pcba.panel.category.193", "ja-JP", "power b/t_jp", "pcba板位类别.power b/t"),
+            ("dict.logistics.pcba.panel.category.193", "ja-JP", "power t/b_jp", "pcba板位类别.power t/b"),
             // dict.logistics.pcba.panel.category.193
-            ("dict.logistics.pcba.panel.category.193", "zh-CN", "power b/t", "pcba板位类别.power b/t"),
+            ("dict.logistics.pcba.panel.category.193", "zh-CN", "power t/b", "pcba板位类别.power t/b"),
             // dict.logistics.pcba.panel.category.193
-            ("dict.logistics.pcba.panel.category.193", "zh-HK", "power b/t_hk", "pcba板位类别.power b/t"),
+            ("dict.logistics.pcba.panel.category.193", "zh-HK", "power t/b_hk", "pcba板位类别.power t/b"),
 
             // dict.logistics.pcba.panel.category.194
             ("dict.logistics.pcba.panel.category.194", "en-US", "power t_us", "pcba板位类别.power t"),
@@ -12480,13 +12930,13 @@ public class TaktDictI18nSeedData : ITaktSeedDataCoordinator
             ("dict.logistics.pcba.panel.category.195", "zh-HK", "prm b_hk", "pcba板位类别.prm b"),
 
             // dict.logistics.pcba.panel.category.196
-            ("dict.logistics.pcba.panel.category.196", "en-US", "prm b/t_us", "pcba板位类别.prm b/t"),
+            ("dict.logistics.pcba.panel.category.196", "en-US", "prm t/b_us", "pcba板位类别.prm t/b"),
             // dict.logistics.pcba.panel.category.196
-            ("dict.logistics.pcba.panel.category.196", "ja-JP", "prm b/t_jp", "pcba板位类别.prm b/t"),
+            ("dict.logistics.pcba.panel.category.196", "ja-JP", "prm t/b_jp", "pcba板位类别.prm t/b"),
             // dict.logistics.pcba.panel.category.196
-            ("dict.logistics.pcba.panel.category.196", "zh-CN", "prm b/t", "pcba板位类别.prm b/t"),
+            ("dict.logistics.pcba.panel.category.196", "zh-CN", "prm t/b", "pcba板位类别.prm t/b"),
             // dict.logistics.pcba.panel.category.196
-            ("dict.logistics.pcba.panel.category.196", "zh-HK", "prm b/t_hk", "pcba板位类别.prm b/t"),
+            ("dict.logistics.pcba.panel.category.196", "zh-HK", "prm t/b_hk", "pcba板位类别.prm t/b"),
 
             // dict.logistics.pcba.panel.category.197
             ("dict.logistics.pcba.panel.category.197", "en-US", "prm t_us", "pcba板位类别.prm t"),
@@ -12516,13 +12966,13 @@ public class TaktDictI18nSeedData : ITaktSeedDataCoordinator
             ("dict.logistics.pcba.panel.category.199", "zh-HK", "psl b_hk", "pcba板位类别.psl b"),
 
             // dict.logistics.pcba.panel.category.200
-            ("dict.logistics.pcba.panel.category.200", "en-US", "psl b/t_us", "pcba板位类别.psl b/t"),
+            ("dict.logistics.pcba.panel.category.200", "en-US", "psl t/b_us", "pcba板位类别.psl t/b"),
             // dict.logistics.pcba.panel.category.200
-            ("dict.logistics.pcba.panel.category.200", "ja-JP", "psl b/t_jp", "pcba板位类别.psl b/t"),
+            ("dict.logistics.pcba.panel.category.200", "ja-JP", "psl t/b_jp", "pcba板位类别.psl t/b"),
             // dict.logistics.pcba.panel.category.200
-            ("dict.logistics.pcba.panel.category.200", "zh-CN", "psl b/t", "pcba板位类别.psl b/t"),
+            ("dict.logistics.pcba.panel.category.200", "zh-CN", "psl t/b", "pcba板位类别.psl t/b"),
             // dict.logistics.pcba.panel.category.200
-            ("dict.logistics.pcba.panel.category.200", "zh-HK", "psl b/t_hk", "pcba板位类别.psl b/t"),
+            ("dict.logistics.pcba.panel.category.200", "zh-HK", "psl t/b_hk", "pcba板位类别.psl t/b"),
 
             // dict.logistics.pcba.panel.category.201
             ("dict.logistics.pcba.panel.category.201", "en-US", "psl t_us", "pcba板位类别.psl t"),
@@ -12552,13 +13002,13 @@ public class TaktDictI18nSeedData : ITaktSeedDataCoordinator
             ("dict.logistics.pcba.panel.category.203", "zh-HK", "ptst b_hk", "pcba板位类别.ptst b"),
 
             // dict.logistics.pcba.panel.category.204
-            ("dict.logistics.pcba.panel.category.204", "en-US", "ptst b/t_us", "pcba板位类别.ptst b/t"),
+            ("dict.logistics.pcba.panel.category.204", "en-US", "ptst t/b_us", "pcba板位类别.ptst t/b"),
             // dict.logistics.pcba.panel.category.204
-            ("dict.logistics.pcba.panel.category.204", "ja-JP", "ptst b/t_jp", "pcba板位类别.ptst b/t"),
+            ("dict.logistics.pcba.panel.category.204", "ja-JP", "ptst t/b_jp", "pcba板位类别.ptst t/b"),
             // dict.logistics.pcba.panel.category.204
-            ("dict.logistics.pcba.panel.category.204", "zh-CN", "ptst b/t", "pcba板位类别.ptst b/t"),
+            ("dict.logistics.pcba.panel.category.204", "zh-CN", "ptst t/b", "pcba板位类别.ptst t/b"),
             // dict.logistics.pcba.panel.category.204
-            ("dict.logistics.pcba.panel.category.204", "zh-HK", "ptst b/t_hk", "pcba板位类别.ptst b/t"),
+            ("dict.logistics.pcba.panel.category.204", "zh-HK", "ptst t/b_hk", "pcba板位类别.ptst t/b"),
 
             // dict.logistics.pcba.panel.category.205
             ("dict.logistics.pcba.panel.category.205", "en-US", "ptst t_us", "pcba板位类别.ptst t"),
@@ -12642,13 +13092,13 @@ public class TaktDictI18nSeedData : ITaktSeedDataCoordinator
             ("dict.logistics.pcba.panel.category.213", "zh-HK", "rfp b_hk", "pcba板位类别.rfp b"),
 
             // dict.logistics.pcba.panel.category.214
-            ("dict.logistics.pcba.panel.category.214", "en-US", "rfp b/t_us", "pcba板位类别.rfp b/t"),
+            ("dict.logistics.pcba.panel.category.214", "en-US", "rfp t/b_us", "pcba板位类别.rfp t/b"),
             // dict.logistics.pcba.panel.category.214
-            ("dict.logistics.pcba.panel.category.214", "ja-JP", "rfp b/t_jp", "pcba板位类别.rfp b/t"),
+            ("dict.logistics.pcba.panel.category.214", "ja-JP", "rfp t/b_jp", "pcba板位类别.rfp t/b"),
             // dict.logistics.pcba.panel.category.214
-            ("dict.logistics.pcba.panel.category.214", "zh-CN", "rfp b/t", "pcba板位类别.rfp b/t"),
+            ("dict.logistics.pcba.panel.category.214", "zh-CN", "rfp t/b", "pcba板位类别.rfp t/b"),
             // dict.logistics.pcba.panel.category.214
-            ("dict.logistics.pcba.panel.category.214", "zh-HK", "rfp b/t_hk", "pcba板位类别.rfp b/t"),
+            ("dict.logistics.pcba.panel.category.214", "zh-HK", "rfp t/b_hk", "pcba板位类别.rfp t/b"),
 
             // dict.logistics.pcba.panel.category.215
             ("dict.logistics.pcba.panel.category.215", "en-US", "rfp t_us", "pcba板位类别.rfp t"),
@@ -12669,13 +13119,13 @@ public class TaktDictI18nSeedData : ITaktSeedDataCoordinator
             ("dict.logistics.pcba.panel.category.216", "zh-HK", "rmn b_hk", "pcba板位类别.rmn b"),
 
             // dict.logistics.pcba.panel.category.217
-            ("dict.logistics.pcba.panel.category.217", "en-US", "rmn b/t_us", "pcba板位类别.rmn b/t"),
+            ("dict.logistics.pcba.panel.category.217", "en-US", "rmn t/b_us", "pcba板位类别.rmn t/b"),
             // dict.logistics.pcba.panel.category.217
-            ("dict.logistics.pcba.panel.category.217", "ja-JP", "rmn b/t_jp", "pcba板位类别.rmn b/t"),
+            ("dict.logistics.pcba.panel.category.217", "ja-JP", "rmn t/b_jp", "pcba板位类别.rmn t/b"),
             // dict.logistics.pcba.panel.category.217
-            ("dict.logistics.pcba.panel.category.217", "zh-CN", "rmn b/t", "pcba板位类别.rmn b/t"),
+            ("dict.logistics.pcba.panel.category.217", "zh-CN", "rmn t/b", "pcba板位类别.rmn t/b"),
             // dict.logistics.pcba.panel.category.217
-            ("dict.logistics.pcba.panel.category.217", "zh-HK", "rmn b/t_hk", "pcba板位类别.rmn b/t"),
+            ("dict.logistics.pcba.panel.category.217", "zh-HK", "rmn t/b_hk", "pcba板位类别.rmn t/b"),
 
             // dict.logistics.pcba.panel.category.218
             ("dict.logistics.pcba.panel.category.218", "en-US", "rmn t_us", "pcba板位类别.rmn t"),
@@ -12705,13 +13155,13 @@ public class TaktDictI18nSeedData : ITaktSeedDataCoordinator
             ("dict.logistics.pcba.panel.category.220", "zh-HK", "rsb b_hk", "pcba板位类别.rsb b"),
 
             // dict.logistics.pcba.panel.category.221
-            ("dict.logistics.pcba.panel.category.221", "en-US", "rsb b/t_us", "pcba板位类别.rsb b/t"),
+            ("dict.logistics.pcba.panel.category.221", "en-US", "rsb t/b_us", "pcba板位类别.rsb t/b"),
             // dict.logistics.pcba.panel.category.221
-            ("dict.logistics.pcba.panel.category.221", "ja-JP", "rsb b/t_jp", "pcba板位类别.rsb b/t"),
+            ("dict.logistics.pcba.panel.category.221", "ja-JP", "rsb t/b_jp", "pcba板位类别.rsb t/b"),
             // dict.logistics.pcba.panel.category.221
-            ("dict.logistics.pcba.panel.category.221", "zh-CN", "rsb b/t", "pcba板位类别.rsb b/t"),
+            ("dict.logistics.pcba.panel.category.221", "zh-CN", "rsb t/b", "pcba板位类别.rsb t/b"),
             // dict.logistics.pcba.panel.category.221
-            ("dict.logistics.pcba.panel.category.221", "zh-HK", "rsb b/t_hk", "pcba板位类别.rsb b/t"),
+            ("dict.logistics.pcba.panel.category.221", "zh-HK", "rsb t/b_hk", "pcba板位类别.rsb t/b"),
 
             // dict.logistics.pcba.panel.category.222
             ("dict.logistics.pcba.panel.category.222", "en-US", "rsb t_us", "pcba板位类别.rsb t"),
@@ -12777,13 +13227,13 @@ public class TaktDictI18nSeedData : ITaktSeedDataCoordinator
             ("dict.logistics.pcba.panel.category.228", "zh-HK", "slot b_hk", "pcba板位类别.slot b"),
 
             // dict.logistics.pcba.panel.category.229
-            ("dict.logistics.pcba.panel.category.229", "en-US", "slot b/t_us", "pcba板位类别.slot b/t"),
+            ("dict.logistics.pcba.panel.category.229", "en-US", "slot t/b_us", "pcba板位类别.slot t/b"),
             // dict.logistics.pcba.panel.category.229
-            ("dict.logistics.pcba.panel.category.229", "ja-JP", "slot b/t_jp", "pcba板位类别.slot b/t"),
+            ("dict.logistics.pcba.panel.category.229", "ja-JP", "slot t/b_jp", "pcba板位类别.slot t/b"),
             // dict.logistics.pcba.panel.category.229
-            ("dict.logistics.pcba.panel.category.229", "zh-CN", "slot b/t", "pcba板位类别.slot b/t"),
+            ("dict.logistics.pcba.panel.category.229", "zh-CN", "slot t/b", "pcba板位类别.slot t/b"),
             // dict.logistics.pcba.panel.category.229
-            ("dict.logistics.pcba.panel.category.229", "zh-HK", "slot b/t_hk", "pcba板位类别.slot b/t"),
+            ("dict.logistics.pcba.panel.category.229", "zh-HK", "slot t/b_hk", "pcba板位类别.slot t/b"),
 
             // dict.logistics.pcba.panel.category.230
             ("dict.logistics.pcba.panel.category.230", "en-US", "slot t_us", "pcba板位类别.slot t"),
@@ -12840,13 +13290,13 @@ public class TaktDictI18nSeedData : ITaktSeedDataCoordinator
             ("dict.logistics.pcba.panel.category.235", "zh-HK", "swusb akm b_hk", "pcba板位类别.swusb akm b"),
 
             // dict.logistics.pcba.panel.category.236
-            ("dict.logistics.pcba.panel.category.236", "en-US", "swusb akm b/t_us", "pcba板位类别.swusb akm b/t"),
+            ("dict.logistics.pcba.panel.category.236", "en-US", "swusb akm t/b_us", "pcba板位类别.swusb akm t/b"),
             // dict.logistics.pcba.panel.category.236
-            ("dict.logistics.pcba.panel.category.236", "ja-JP", "swusb akm b/t_jp", "pcba板位类别.swusb akm b/t"),
+            ("dict.logistics.pcba.panel.category.236", "ja-JP", "swusb akm t/b_jp", "pcba板位类别.swusb akm t/b"),
             // dict.logistics.pcba.panel.category.236
-            ("dict.logistics.pcba.panel.category.236", "zh-CN", "swusb akm b/t", "pcba板位类别.swusb akm b/t"),
+            ("dict.logistics.pcba.panel.category.236", "zh-CN", "swusb akm t/b", "pcba板位类别.swusb akm t/b"),
             // dict.logistics.pcba.panel.category.236
-            ("dict.logistics.pcba.panel.category.236", "zh-HK", "swusb akm b/t_hk", "pcba板位类别.swusb akm b/t"),
+            ("dict.logistics.pcba.panel.category.236", "zh-HK", "swusb akm t/b_hk", "pcba板位类别.swusb akm t/b"),
 
             // dict.logistics.pcba.panel.category.237
             ("dict.logistics.pcba.panel.category.237", "en-US", "swusb akm t_us", "pcba板位类别.swusb akm t"),
@@ -12867,13 +13317,13 @@ public class TaktDictI18nSeedData : ITaktSeedDataCoordinator
             ("dict.logistics.pcba.panel.category.238", "zh-HK", "swusb b_hk", "pcba板位类别.swusb b"),
 
             // dict.logistics.pcba.panel.category.239
-            ("dict.logistics.pcba.panel.category.239", "en-US", "swusb b/t_us", "pcba板位类别.swusb b/t"),
+            ("dict.logistics.pcba.panel.category.239", "en-US", "swusb t/b_us", "pcba板位类别.swusb t/b"),
             // dict.logistics.pcba.panel.category.239
-            ("dict.logistics.pcba.panel.category.239", "ja-JP", "swusb b/t_jp", "pcba板位类别.swusb b/t"),
+            ("dict.logistics.pcba.panel.category.239", "ja-JP", "swusb t/b_jp", "pcba板位类别.swusb t/b"),
             // dict.logistics.pcba.panel.category.239
-            ("dict.logistics.pcba.panel.category.239", "zh-CN", "swusb b/t", "pcba板位类别.swusb b/t"),
+            ("dict.logistics.pcba.panel.category.239", "zh-CN", "swusb t/b", "pcba板位类别.swusb t/b"),
             // dict.logistics.pcba.panel.category.239
-            ("dict.logistics.pcba.panel.category.239", "zh-HK", "swusb b/t_hk", "pcba板位类别.swusb b/t"),
+            ("dict.logistics.pcba.panel.category.239", "zh-HK", "swusb t/b_hk", "pcba板位类别.swusb t/b"),
 
             // dict.logistics.pcba.panel.category.240
             ("dict.logistics.pcba.panel.category.240", "en-US", "swusb t_us", "pcba板位类别.swusb t"),
@@ -12921,13 +13371,22 @@ public class TaktDictI18nSeedData : ITaktSeedDataCoordinator
             ("dict.logistics.pcba.panel.category.244", "zh-HK", "usb b_hk", "pcba板位类别.usb b"),
 
             // dict.logistics.pcba.panel.category.245
-            ("dict.logistics.pcba.panel.category.245", "en-US", "usb b/t_us", "pcba板位类别.usb b/t"),
+            ("dict.logistics.pcba.panel.category.245", "en-US", "usb t/b_us", "pcba板位类别.usb t/b"),
             // dict.logistics.pcba.panel.category.245
-            ("dict.logistics.pcba.panel.category.245", "ja-JP", "usb b/t_jp", "pcba板位类别.usb b/t"),
+            ("dict.logistics.pcba.panel.category.245", "ja-JP", "usb t/b_jp", "pcba板位类别.usb t/b"),
             // dict.logistics.pcba.panel.category.245
-            ("dict.logistics.pcba.panel.category.245", "zh-CN", "usb b/t", "pcba板位类别.usb b/t"),
+            ("dict.logistics.pcba.panel.category.245", "zh-CN", "usb t/b", "pcba板位类别.usb t/b"),
             // dict.logistics.pcba.panel.category.245
-            ("dict.logistics.pcba.panel.category.245", "zh-HK", "usb b/t_hk", "pcba板位类别.usb b/t"),
+            ("dict.logistics.pcba.panel.category.245", "zh-HK", "usb t/b_hk", "pcba板位类别.usb t/b"),
+
+            // dict.logistics.pcba.panel.category.247
+            ("dict.logistics.pcba.panel.category.247", "en-US", "usb t_us", "pcba板位类别.usb t"),
+            // dict.logistics.pcba.panel.category.247
+            ("dict.logistics.pcba.panel.category.247", "ja-JP", "usb t_jp", "pcba板位类别.usb t"),
+            // dict.logistics.pcba.panel.category.247
+            ("dict.logistics.pcba.panel.category.247", "zh-CN", "usb t", "pcba板位类别.usb t"),
+            // dict.logistics.pcba.panel.category.247
+            ("dict.logistics.pcba.panel.category.247", "zh-HK", "usb t_hk", "pcba板位类别.usb t"),
 
             // dict.logistics.pcba.panel.category.246
             ("dict.logistics.pcba.panel.category.246", "en-US", "xlr_us", "pcba板位类别.xlr"),
@@ -12975,13 +13434,13 @@ public class TaktDictI18nSeedData : ITaktSeedDataCoordinator
             ("dict.logistics.pcba.panel.category.252", "zh-HK", "xlrin b_hk", "pcba板位类别.xlrin b"),
 
             // dict.logistics.pcba.panel.category.253
-            ("dict.logistics.pcba.panel.category.253", "en-US", "xlrin b/t_us", "pcba板位类别.xlrin b/t"),
+            ("dict.logistics.pcba.panel.category.253", "en-US", "xlrin t/b_us", "pcba板位类别.xlrin t/b"),
             // dict.logistics.pcba.panel.category.253
-            ("dict.logistics.pcba.panel.category.253", "ja-JP", "xlrin b/t_jp", "pcba板位类别.xlrin b/t"),
+            ("dict.logistics.pcba.panel.category.253", "ja-JP", "xlrin t/b_jp", "pcba板位类别.xlrin t/b"),
             // dict.logistics.pcba.panel.category.253
-            ("dict.logistics.pcba.panel.category.253", "zh-CN", "xlrin b/t", "pcba板位类别.xlrin b/t"),
+            ("dict.logistics.pcba.panel.category.253", "zh-CN", "xlrin t/b", "pcba板位类别.xlrin t/b"),
             // dict.logistics.pcba.panel.category.253
-            ("dict.logistics.pcba.panel.category.253", "zh-HK", "xlrin b/t_hk", "pcba板位类别.xlrin b/t"),
+            ("dict.logistics.pcba.panel.category.253", "zh-HK", "xlrin t/b_hk", "pcba板位类别.xlrin t/b"),
 
             // dict.logistics.pcba.panel.category.254
             ("dict.logistics.pcba.panel.category.254", "en-US", "xlrin t_us", "pcba板位类别.xlrin t"),
@@ -13002,13 +13461,13 @@ public class TaktDictI18nSeedData : ITaktSeedDataCoordinator
             ("dict.logistics.pcba.panel.category.255", "zh-HK", "xlrio b_hk", "pcba板位类别.xlrio b"),
 
             // dict.logistics.pcba.panel.category.256
-            ("dict.logistics.pcba.panel.category.256", "en-US", "xlrio b/t_us", "pcba板位类别.xlrio b/t"),
+            ("dict.logistics.pcba.panel.category.256", "en-US", "xlrio t/b_us", "pcba板位类别.xlrio t/b"),
             // dict.logistics.pcba.panel.category.256
-            ("dict.logistics.pcba.panel.category.256", "ja-JP", "xlrio b/t_jp", "pcba板位类别.xlrio b/t"),
+            ("dict.logistics.pcba.panel.category.256", "ja-JP", "xlrio t/b_jp", "pcba板位类别.xlrio t/b"),
             // dict.logistics.pcba.panel.category.256
-            ("dict.logistics.pcba.panel.category.256", "zh-CN", "xlrio b/t", "pcba板位类别.xlrio b/t"),
+            ("dict.logistics.pcba.panel.category.256", "zh-CN", "xlrio t/b", "pcba板位类别.xlrio t/b"),
             // dict.logistics.pcba.panel.category.256
-            ("dict.logistics.pcba.panel.category.256", "zh-HK", "xlrio b/t_hk", "pcba板位类别.xlrio b/t"),
+            ("dict.logistics.pcba.panel.category.256", "zh-HK", "xlrio t/b_hk", "pcba板位类别.xlrio t/b"),
 
             // dict.logistics.pcba.panel.category.257
             ("dict.logistics.pcba.panel.category.257", "en-US", "xlrio t_us", "pcba板位类别.xlrio t"),
@@ -13046,86 +13505,68 @@ public class TaktDictI18nSeedData : ITaktSeedDataCoordinator
             // dict.logistics.pcba.side.category.t
             ("dict.logistics.pcba.side.category.t", "zh-HK", "t面_hk", "pcba面别.t面"),
 
-            // dict.logistics.prod.category.rd
-            ("dict.logistics.prod.category.rd", "en-US", "研发_us", "生产类别.研发"),
-            // dict.logistics.prod.category.rd
-            ("dict.logistics.prod.category.rd", "ja-JP", "研发_jp", "生产类别.研发"),
-            // dict.logistics.prod.category.rd
-            ("dict.logistics.prod.category.rd", "zh-CN", "研发", "生产类别.研发"),
-            // dict.logistics.prod.category.rd
-            ("dict.logistics.prod.category.rd", "zh-HK", "研发_hk", "生产类别.研发"),
-
-            // dict.logistics.prod.category.evt
-            ("dict.logistics.prod.category.evt", "en-US", "工程验证测试_us", "生产类别.工程验证测试"),
-            // dict.logistics.prod.category.evt
-            ("dict.logistics.prod.category.evt", "ja-JP", "工程验证测试_jp", "生产类别.工程验证测试"),
-            // dict.logistics.prod.category.evt
-            ("dict.logistics.prod.category.evt", "zh-CN", "工程验证测试", "生产类别.工程验证测试"),
-            // dict.logistics.prod.category.evt
-            ("dict.logistics.prod.category.evt", "zh-HK", "工程验证测试_hk", "生产类别.工程验证测试"),
-
-            // dict.logistics.prod.category.dvt
-            ("dict.logistics.prod.category.dvt", "en-US", "设计验证测试_us", "生产类别.设计验证测试"),
-            // dict.logistics.prod.category.dvt
-            ("dict.logistics.prod.category.dvt", "ja-JP", "设计验证测试_jp", "生产类别.设计验证测试"),
-            // dict.logistics.prod.category.dvt
-            ("dict.logistics.prod.category.dvt", "zh-CN", "设计验证测试", "生产类别.设计验证测试"),
-            // dict.logistics.prod.category.dvt
-            ("dict.logistics.prod.category.dvt", "zh-HK", "设计验证测试_hk", "生产类别.设计验证测试"),
-
             // dict.logistics.prod.category.epp
-            ("dict.logistics.prod.category.epp", "en-US", "工程试产_us", "生产类别.工程试产"),
+            ("dict.logistics.prod.category.epp", "en-US", "试产_us", "生产类别.试产"),
             // dict.logistics.prod.category.epp
-            ("dict.logistics.prod.category.epp", "ja-JP", "工程试产_jp", "生产类别.工程试产"),
+            ("dict.logistics.prod.category.epp", "ja-JP", "试产_jp", "生产类别.试产"),
             // dict.logistics.prod.category.epp
-            ("dict.logistics.prod.category.epp", "zh-CN", "工程试产", "生产类别.工程试产"),
+            ("dict.logistics.prod.category.epp", "zh-CN", "试产", "生产类别.试产"),
             // dict.logistics.prod.category.epp
-            ("dict.logistics.prod.category.epp", "zh-HK", "工程试产_hk", "生产类别.工程试产"),
-
-            // dict.logistics.prod.category.pp
-            ("dict.logistics.prod.category.pp", "en-US", "试产_us", "生产类别.试产"),
-            // dict.logistics.prod.category.pp
-            ("dict.logistics.prod.category.pp", "ja-JP", "试产_jp", "生产类别.试产"),
-            // dict.logistics.prod.category.pp
-            ("dict.logistics.prod.category.pp", "zh-CN", "试产", "生产类别.试产"),
-            // dict.logistics.prod.category.pp
-            ("dict.logistics.prod.category.pp", "zh-HK", "试产_hk", "生产类别.试产"),
+            ("dict.logistics.prod.category.epp", "zh-HK", "试产_hk", "生产类别.试产"),
 
             // dict.logistics.prod.category.fpp
-            ("dict.logistics.prod.category.fpp", "en-US", "正式生产_us", "生产类别.正式生产"),
+            ("dict.logistics.prod.category.fpp", "en-US", "常规生产_us", "生产类别.常规生产"),
             // dict.logistics.prod.category.fpp
-            ("dict.logistics.prod.category.fpp", "ja-JP", "正式生产_jp", "生产类别.正式生产"),
+            ("dict.logistics.prod.category.fpp", "ja-JP", "常规生产_jp", "生产类别.常规生产"),
             // dict.logistics.prod.category.fpp
-            ("dict.logistics.prod.category.fpp", "zh-CN", "正式生产", "生产类别.正式生产"),
+            ("dict.logistics.prod.category.fpp", "zh-CN", "常规生产", "生产类别.常规生产"),
             // dict.logistics.prod.category.fpp
-            ("dict.logistics.prod.category.fpp", "zh-HK", "正式生产_hk", "生产类别.正式生产"),
+            ("dict.logistics.prod.category.fpp", "zh-HK", "常规生产_hk", "生产类别.常规生产"),
 
-            // dict.logistics.prod.category.mp
-            ("dict.logistics.prod.category.mp", "en-US", "大规模生产_us", "生产类别.大规模生产"),
-            // dict.logistics.prod.category.mp
-            ("dict.logistics.prod.category.mp", "ja-JP", "大规模生产_jp", "生产类别.大规模生产"),
-            // dict.logistics.prod.category.mp
-            ("dict.logistics.prod.category.mp", "zh-CN", "大规模生产", "生产类别.大规模生产"),
-            // dict.logistics.prod.category.mp
-            ("dict.logistics.prod.category.mp", "zh-HK", "大规模生产_hk", "生产类别.大规模生产"),
+            // dict.logistics.prod.category.rwp
+            ("dict.logistics.prod.category.rwp", "en-US", "返工生产_us", "生产类别.返工生产"),
+            // dict.logistics.prod.category.rwp
+            ("dict.logistics.prod.category.rwp", "ja-JP", "返工生产_jp", "生产类别.返工生产"),
+            // dict.logistics.prod.category.rwp
+            ("dict.logistics.prod.category.rwp", "zh-CN", "返工生产", "生产类别.返工生产"),
+            // dict.logistics.prod.category.rwp
+            ("dict.logistics.prod.category.rwp", "zh-HK", "返工生产_hk", "生产类别.返工生产"),
 
-            // dict.logistics.prod.category.rpr
-            ("dict.logistics.prod.category.rpr", "en-US", "维修生产_us", "生产类别.维修生产"),
-            // dict.logistics.prod.category.rpr
-            ("dict.logistics.prod.category.rpr", "ja-JP", "维修生产_jp", "生产类别.维修生产"),
-            // dict.logistics.prod.category.rpr
-            ("dict.logistics.prod.category.rpr", "zh-CN", "维修生产", "生产类别.维修生产"),
-            // dict.logistics.prod.category.rpr
-            ("dict.logistics.prod.category.rpr", "zh-HK", "维修生产_hk", "生产类别.维修生产"),
+            // dict.logistics.prod.category.mdp
+            ("dict.logistics.prod.category.mdp", "en-US", "改修生产_us", "生产类别.改修生产"),
+            // dict.logistics.prod.category.mdp
+            ("dict.logistics.prod.category.mdp", "ja-JP", "改修生产_jp", "生产类别.改修生产"),
+            // dict.logistics.prod.category.mdp
+            ("dict.logistics.prod.category.mdp", "zh-CN", "改修生产", "生产类别.改修生产"),
+            // dict.logistics.prod.category.mdp
+            ("dict.logistics.prod.category.mdp", "zh-HK", "改修生产_hk", "生产类别.改修生产"),
 
-            // dict.logistics.prod.category.rwr
-            ("dict.logistics.prod.category.rwr", "en-US", "返工生产_us", "生产类别.返工生产"),
-            // dict.logistics.prod.category.rwr
-            ("dict.logistics.prod.category.rwr", "ja-JP", "返工生产_jp", "生产类别.返工生产"),
-            // dict.logistics.prod.category.rwr
-            ("dict.logistics.prod.category.rwr", "zh-CN", "返工生产", "生产类别.返工生产"),
-            // dict.logistics.prod.category.rwr
-            ("dict.logistics.prod.category.rwr", "zh-HK", "返工生产_hk", "生产类别.返工生产"),
+            // dict.logistics.prod.category.cpp
+            ("dict.logistics.prod.category.cpp", "en-US", "清机生产_us", "生产类别.清机生产"),
+            // dict.logistics.prod.category.cpp
+            ("dict.logistics.prod.category.cpp", "ja-JP", "清机生产_jp", "生产类别.清机生产"),
+            // dict.logistics.prod.category.cpp
+            ("dict.logistics.prod.category.cpp", "zh-CN", "清机生产", "生产类别.清机生产"),
+            // dict.logistics.prod.category.cpp
+            ("dict.logistics.prod.category.cpp", "zh-HK", "清机生产_hk", "生产类别.清机生产"),
+
+            // dict.logistics.changeover.category.assy
+            ("dict.logistics.changeover.category.assy", "en-US", "组立_us", "切换类别.组立"),
+            // dict.logistics.changeover.category.assy
+            ("dict.logistics.changeover.category.assy", "ja-JP", "组立_jp", "切换类别.组立"),
+            // dict.logistics.changeover.category.assy
+            ("dict.logistics.changeover.category.assy", "zh-CN", "组立", "切换类别.组立"),
+            // dict.logistics.changeover.category.assy
+            ("dict.logistics.changeover.category.assy", "zh-HK", "组立_hk", "切换类别.组立"),
+
+            // dict.logistics.changeover.category.pcba
+            ("dict.logistics.changeover.category.pcba", "en-US", "PCBA_us", "切换类别.PCBA"),
+            // dict.logistics.changeover.category.pcba
+            ("dict.logistics.changeover.category.pcba", "ja-JP", "PCBA_jp", "切换类别.PCBA"),
+            // dict.logistics.changeover.category.pcba
+            ("dict.logistics.changeover.category.pcba", "zh-CN", "PCBA", "切换类别.PCBA"),
+            // dict.logistics.changeover.category.pcba
+            ("dict.logistics.changeover.category.pcba", "zh-HK", "PCBA_hk", "切换类别.PCBA"),
 
             // dict.logistics.prod.status.1
             ("dict.logistics.prod.status.1", "en-US", "进行中_us", "生产状态.进行中"),
@@ -13236,13 +13677,13 @@ public class TaktDictI18nSeedData : ITaktSeedDataCoordinator
             ("dict.logistics.team.category.o", "zh-HK", "其他_hk", "班组分类.其他"),
 
             // dict.logistics.prod.order.type.zdta
-            ("dict.logistics.prod.order.type.zdta", "en-US", "通常生産_us", "工单类型.通常生産"),
+            ("dict.logistics.prod.order.type.zdta", "en-US", "常规生产_us", "工单类型.常规生产"),
             // dict.logistics.prod.order.type.zdta
-            ("dict.logistics.prod.order.type.zdta", "ja-JP", "通常生産_jp", "工单类型.通常生産"),
+            ("dict.logistics.prod.order.type.zdta", "ja-JP", "常规生产_jp", "工单类型.常规生产"),
             // dict.logistics.prod.order.type.zdta
-            ("dict.logistics.prod.order.type.zdta", "zh-CN", "通常生産", "工单类型.通常生産"),
+            ("dict.logistics.prod.order.type.zdta", "zh-CN", "常规生产", "工单类型.常规生产"),
             // dict.logistics.prod.order.type.zdta
-            ("dict.logistics.prod.order.type.zdta", "zh-HK", "通常生産_hk", "工单类型.通常生産"),
+            ("dict.logistics.prod.order.type.zdta", "zh-HK", "常规生产_hk", "工单类型.常规生产"),
 
             // dict.logistics.prod.order.type.zdtb
             ("dict.logistics.prod.order.type.zdtb", "en-US", "改造改修_us", "工单类型.改造改修"),
@@ -13254,22 +13695,22 @@ public class TaktDictI18nSeedData : ITaktSeedDataCoordinator
             ("dict.logistics.prod.order.type.zdtb", "zh-HK", "改造改修_hk", "工单类型.改造改修"),
 
             // dict.logistics.prod.order.type.zdtc
-            ("dict.logistics.prod.order.type.zdtc", "en-US", "開発試作_us", "工单类型.開発試作"),
+            ("dict.logistics.prod.order.type.zdtc", "en-US", "试产_us", "工单类型.试产"),
             // dict.logistics.prod.order.type.zdtc
-            ("dict.logistics.prod.order.type.zdtc", "ja-JP", "開発試作_jp", "工单类型.開発試作"),
+            ("dict.logistics.prod.order.type.zdtc", "ja-JP", "试产_jp", "工单类型.试产"),
             // dict.logistics.prod.order.type.zdtc
-            ("dict.logistics.prod.order.type.zdtc", "zh-CN", "開発試作", "工单类型.開発試作"),
+            ("dict.logistics.prod.order.type.zdtc", "zh-CN", "试产", "工单类型.试产"),
             // dict.logistics.prod.order.type.zdtc
-            ("dict.logistics.prod.order.type.zdtc", "zh-HK", "開発試作_hk", "工单类型.開発試作"),
+            ("dict.logistics.prod.order.type.zdtc", "zh-HK", "试产_hk", "工单类型.试产"),
 
             // dict.logistics.prod.order.type.zdtd
-            ("dict.logistics.prod.order.type.zdtd", "en-US", "通常生産PCBA_us", "工单类型.通常生産PCBA"),
+            ("dict.logistics.prod.order.type.zdtd", "en-US", "常规生产PCBA_us", "工单类型.常规生产PCBA"),
             // dict.logistics.prod.order.type.zdtd
-            ("dict.logistics.prod.order.type.zdtd", "ja-JP", "通常生産PCBA_jp", "工单类型.通常生産PCBA"),
+            ("dict.logistics.prod.order.type.zdtd", "ja-JP", "常规生产PCBA_jp", "工单类型.常规生产PCBA"),
             // dict.logistics.prod.order.type.zdtd
-            ("dict.logistics.prod.order.type.zdtd", "zh-CN", "通常生産PCBA", "工单类型.通常生産PCBA"),
+            ("dict.logistics.prod.order.type.zdtd", "zh-CN", "常规生产PCBA", "工单类型.常规生产PCBA"),
             // dict.logistics.prod.order.type.zdtd
-            ("dict.logistics.prod.order.type.zdtd", "zh-HK", "通常生産PCBA_hk", "工单类型.通常生産PCBA"),
+            ("dict.logistics.prod.order.type.zdtd", "zh-HK", "常规生产PCBA_hk", "工单类型.常规生产PCBA"),
 
             // dict.logistics.prod.order.type.zdte
             ("dict.logistics.prod.order.type.zdte", "en-US", "改造改修PCBA_us", "工单类型.改造改修PCBA"),
@@ -13281,13 +13722,13 @@ public class TaktDictI18nSeedData : ITaktSeedDataCoordinator
             ("dict.logistics.prod.order.type.zdte", "zh-HK", "改造改修PCBA_hk", "工单类型.改造改修PCBA"),
 
             // dict.logistics.prod.order.type.zdtf
-            ("dict.logistics.prod.order.type.zdtf", "en-US", "開発試作PCBA_us", "工单类型.開発試作PCBA"),
+            ("dict.logistics.prod.order.type.zdtf", "en-US", "试产PCBA_us", "工单类型.试产PCBA"),
             // dict.logistics.prod.order.type.zdtf
-            ("dict.logistics.prod.order.type.zdtf", "ja-JP", "開発試作PCBA_jp", "工单类型.開発試作PCBA"),
+            ("dict.logistics.prod.order.type.zdtf", "ja-JP", "试产PCBA_jp", "工单类型.试产PCBA"),
             // dict.logistics.prod.order.type.zdtf
-            ("dict.logistics.prod.order.type.zdtf", "zh-CN", "開発試作PCBA", "工单类型.開発試作PCBA"),
+            ("dict.logistics.prod.order.type.zdtf", "zh-CN", "试产PCBA", "工单类型.试产PCBA"),
             // dict.logistics.prod.order.type.zdtf
-            ("dict.logistics.prod.order.type.zdtf", "zh-HK", "開発試作PCBA_hk", "工单类型.開発試作PCBA"),
+            ("dict.logistics.prod.order.type.zdtf", "zh-HK", "试产PCBA_hk", "工单类型.试产PCBA"),
 
             // dict.logistics.stop.reason.category.1
             ("dict.logistics.stop.reason.category.1", "en-US", "切换停止时间_us", "停线原因.切换停止时间"),
@@ -13721,6 +14162,186 @@ public class TaktDictI18nSeedData : ITaktSeedDataCoordinator
             // dict.logistics.warranty.status.3
             ("dict.logistics.warranty.status.3", "zh-HK", "延保中_hk", "保修状态.延保中"),
 
+            // dict.logistics.work.center.category.0001
+            ("dict.logistics.work.center.category.0001", "en-US", "生产_us", "工作中心类别.生产（成品/半成品加工）"),
+            // dict.logistics.work.center.category.0001
+            ("dict.logistics.work.center.category.0001", "ja-JP", "生产_jp", "工作中心类别.生产（成品/半成品加工）"),
+            // dict.logistics.work.center.category.0001
+            ("dict.logistics.work.center.category.0001", "zh-CN", "生产", "工作中心类别.生产（成品/半成品加工）"),
+            // dict.logistics.work.center.category.0001
+            ("dict.logistics.work.center.category.0001", "zh-HK", "生产_hk", "工作中心类别.生产（成品/半成品加工）"),
+
+            // dict.logistics.work.center.category.0002
+            ("dict.logistics.work.center.category.0002", "en-US", "装配_us", "工作中心类别.装配（最终装配、总装线）"),
+            // dict.logistics.work.center.category.0002
+            ("dict.logistics.work.center.category.0002", "ja-JP", "装配_jp", "工作中心类别.装配（最终装配、总装线）"),
+            // dict.logistics.work.center.category.0002
+            ("dict.logistics.work.center.category.0002", "zh-CN", "装配", "工作中心类别.装配（最终装配、总装线）"),
+            // dict.logistics.work.center.category.0002
+            ("dict.logistics.work.center.category.0002", "zh-HK", "装配_hk", "工作中心类别.装配（最终装配、总装线）"),
+
+            // dict.logistics.work.center.category.0003
+            ("dict.logistics.work.center.category.0003", "en-US", "机加工_us", "工作中心类别.机加工（CNC、铣床、车床、磨床）"),
+            // dict.logistics.work.center.category.0003
+            ("dict.logistics.work.center.category.0003", "ja-JP", "机加工_jp", "工作中心类别.机加工（CNC、铣床、车床、磨床）"),
+            // dict.logistics.work.center.category.0003
+            ("dict.logistics.work.center.category.0003", "zh-CN", "机加工", "工作中心类别.机加工（CNC、铣床、车床、磨床）"),
+            // dict.logistics.work.center.category.0003
+            ("dict.logistics.work.center.category.0003", "zh-HK", "机加工_hk", "工作中心类别.机加工（CNC、铣床、车床、磨床）"),
+
+            // dict.logistics.work.center.category.0004
+            ("dict.logistics.work.center.category.0004", "en-US", "冲压_us", "工作中心类别.冲压（冲床、钣金成型）"),
+            // dict.logistics.work.center.category.0004
+            ("dict.logistics.work.center.category.0004", "ja-JP", "冲压_jp", "工作中心类别.冲压（冲床、钣金成型）"),
+            // dict.logistics.work.center.category.0004
+            ("dict.logistics.work.center.category.0004", "zh-CN", "冲压", "工作中心类别.冲压（冲床、钣金成型）"),
+            // dict.logistics.work.center.category.0004
+            ("dict.logistics.work.center.category.0004", "zh-HK", "冲压_hk", "工作中心类别.冲压（冲床、钣金成型）"),
+
+            // dict.logistics.work.center.category.0005
+            ("dict.logistics.work.center.category.0005", "en-US", "焊接_us", "工作中心类别.焊接（点焊、弧焊、激光焊）"),
+            // dict.logistics.work.center.category.0005
+            ("dict.logistics.work.center.category.0005", "ja-JP", "焊接_jp", "工作中心类别.焊接（点焊、弧焊、激光焊）"),
+            // dict.logistics.work.center.category.0005
+            ("dict.logistics.work.center.category.0005", "zh-CN", "焊接", "工作中心类别.焊接（点焊、弧焊、激光焊）"),
+            // dict.logistics.work.center.category.0005
+            ("dict.logistics.work.center.category.0005", "zh-HK", "焊接_hk", "工作中心类别.焊接（点焊、弧焊、激光焊）"),
+
+            // dict.logistics.work.center.category.0006
+            ("dict.logistics.work.center.category.0006", "en-US", "喷涂_us", "工作中心类别.喷涂（喷漆、电泳、粉末喷涂）"),
+            // dict.logistics.work.center.category.0006
+            ("dict.logistics.work.center.category.0006", "ja-JP", "喷涂_jp", "工作中心类别.喷涂（喷漆、电泳、粉末喷涂）"),
+            // dict.logistics.work.center.category.0006
+            ("dict.logistics.work.center.category.0006", "zh-CN", "喷涂", "工作中心类别.喷涂（喷漆、电泳、粉末喷涂）"),
+            // dict.logistics.work.center.category.0006
+            ("dict.logistics.work.center.category.0006", "zh-HK", "喷涂_hk", "工作中心类别.喷涂（喷漆、电泳、粉末喷涂）"),
+
+            // dict.logistics.work.center.category.0007
+            ("dict.logistics.work.center.category.0007", "en-US", "热处理_us", "工作中心类别.热处理（淬火、回火、渗碳）"),
+            // dict.logistics.work.center.category.0007
+            ("dict.logistics.work.center.category.0007", "ja-JP", "热处理_jp", "工作中心类别.热处理（淬火、回火、渗碳）"),
+            // dict.logistics.work.center.category.0007
+            ("dict.logistics.work.center.category.0007", "zh-CN", "热处理", "工作中心类别.热处理（淬火、回火、渗碳）"),
+            // dict.logistics.work.center.category.0007
+            ("dict.logistics.work.center.category.0007", "zh-HK", "热处理_hk", "工作中心类别.热处理（淬火、回火、渗碳）"),
+
+            // dict.logistics.work.center.category.0008
+            ("dict.logistics.work.center.category.0008", "en-US", "表面处理_us", "工作中心类别.表面处理（电镀、阳极氧化、化成）"),
+            // dict.logistics.work.center.category.0008
+            ("dict.logistics.work.center.category.0008", "ja-JP", "表面处理_jp", "工作中心类别.表面处理（电镀、阳极氧化、化成）"),
+            // dict.logistics.work.center.category.0008
+            ("dict.logistics.work.center.category.0008", "zh-CN", "表面处理", "工作中心类别.表面处理（电镀、阳极氧化、化成）"),
+            // dict.logistics.work.center.category.0008
+            ("dict.logistics.work.center.category.0008", "zh-HK", "表面处理_hk", "工作中心类别.表面处理（电镀、阳极氧化、化成）"),
+
+            // dict.logistics.work.center.category.0009
+            ("dict.logistics.work.center.category.0009", "en-US", "检测 / QC_us", "工作中心类别.检测/QC（IQC/IPQC/FQC、测量室）"),
+            // dict.logistics.work.center.category.0009
+            ("dict.logistics.work.center.category.0009", "ja-JP", "检测 / QC_jp", "工作中心类别.检测/QC（IQC/IPQC/FQC、测量室）"),
+            // dict.logistics.work.center.category.0009
+            ("dict.logistics.work.center.category.0009", "zh-CN", "检测 / QC", "工作中心类别.检测/QC（IQC/IPQC/FQC、测量室）"),
+            // dict.logistics.work.center.category.0009
+            ("dict.logistics.work.center.category.0009", "zh-HK", "检测 / QC_hk", "工作中心类别.检测/QC（IQC/IPQC/FQC、测量室）"),
+
+            // dict.logistics.work.center.category.0010
+            ("dict.logistics.work.center.category.0010", "en-US", "测试_us", "工作中心类别.测试（电气测试、功能测试、老化）"),
+            // dict.logistics.work.center.category.0010
+            ("dict.logistics.work.center.category.0010", "ja-JP", "测试_jp", "工作中心类别.测试（电气测试、功能测试、老化）"),
+            // dict.logistics.work.center.category.0010
+            ("dict.logistics.work.center.category.0010", "zh-CN", "测试", "工作中心类别.测试（电气测试、功能测试、老化）"),
+            // dict.logistics.work.center.category.0010
+            ("dict.logistics.work.center.category.0010", "zh-HK", "测试_hk", "工作中心类别.测试（电气测试、功能测试、老化）"),
+
+            // dict.logistics.work.center.category.0011
+            ("dict.logistics.work.center.category.0011", "en-US", "包装_us", "工作中心类别.包装（成品包装、贴标）"),
+            // dict.logistics.work.center.category.0011
+            ("dict.logistics.work.center.category.0011", "ja-JP", "包装_jp", "工作中心类别.包装（成品包装、贴标）"),
+            // dict.logistics.work.center.category.0011
+            ("dict.logistics.work.center.category.0011", "zh-CN", "包装", "工作中心类别.包装（成品包装、贴标）"),
+            // dict.logistics.work.center.category.0011
+            ("dict.logistics.work.center.category.0011", "zh-HK", "包装_hk", "工作中心类别.包装（成品包装、贴标）"),
+
+            // dict.logistics.work.center.category.0012
+            ("dict.logistics.work.center.category.0012", "en-US", "返工_us", "工作中心类别.返工（返工中心、维修站）"),
+            // dict.logistics.work.center.category.0012
+            ("dict.logistics.work.center.category.0012", "ja-JP", "返工_jp", "工作中心类别.返工（返工中心、维修站）"),
+            // dict.logistics.work.center.category.0012
+            ("dict.logistics.work.center.category.0012", "zh-CN", "返工", "工作中心类别.返工（返工中心、维修站）"),
+            // dict.logistics.work.center.category.0012
+            ("dict.logistics.work.center.category.0012", "zh-HK", "返工_hk", "工作中心类别.返工（返工中心、维修站）"),
+
+            // dict.logistics.work.center.category.0013
+            ("dict.logistics.work.center.category.0013", "en-US", "仓储 / 搬运_us", "工作中心类别.仓储/搬运（仓库、AGV、叉车作业）"),
+            // dict.logistics.work.center.category.0013
+            ("dict.logistics.work.center.category.0013", "ja-JP", "仓储 / 搬运_jp", "工作中心类别.仓储/搬运（仓库、AGV、叉车作业）"),
+            // dict.logistics.work.center.category.0013
+            ("dict.logistics.work.center.category.0013", "zh-CN", "仓储 / 搬运", "工作中心类别.仓储/搬运（仓库、AGV、叉车作业）"),
+            // dict.logistics.work.center.category.0013
+            ("dict.logistics.work.center.category.0013", "zh-HK", "仓储 / 搬运_hk", "工作中心类别.仓储/搬运（仓库、AGV、叉车作业）"),
+
+            // dict.logistics.work.center.category.0014
+            ("dict.logistics.work.center.category.0014", "en-US", "模具 / 工装_us", "工作中心类别.模具/工装（模具车间、工装维护）"),
+            // dict.logistics.work.center.category.0014
+            ("dict.logistics.work.center.category.0014", "ja-JP", "模具 / 工装_jp", "工作中心类别.模具/工装（模具车间、工装维护）"),
+            // dict.logistics.work.center.category.0014
+            ("dict.logistics.work.center.category.0014", "zh-CN", "模具 / 工装", "工作中心类别.模具/工装（模具车间、工装维护）"),
+            // dict.logistics.work.center.category.0014
+            ("dict.logistics.work.center.category.0014", "zh-HK", "模具 / 工装_hk", "工作中心类别.模具/工装（模具车间、工装维护）"),
+
+            // dict.logistics.work.center.category.0015
+            ("dict.logistics.work.center.category.0015", "en-US", "外协 / 委外_us", "工作中心类别.外协/委外（发外加工、委外工序）"),
+            // dict.logistics.work.center.category.0015
+            ("dict.logistics.work.center.category.0015", "ja-JP", "外协 / 委外_jp", "工作中心类别.外协/委外（发外加工、委外工序）"),
+            // dict.logistics.work.center.category.0015
+            ("dict.logistics.work.center.category.0015", "zh-CN", "外协 / 委外", "工作中心类别.外协/委外（发外加工、委外工序）"),
+            // dict.logistics.work.center.category.0015
+            ("dict.logistics.work.center.category.0015", "zh-HK", "外协 / 委外_hk", "工作中心类别.外协/委外（发外加工、委外工序）"),
+
+            // dict.logistics.work.center.category.0016
+            ("dict.logistics.work.center.category.0016", "en-US", "维护 / 保养_us", "工作中心类别.维护/保养（设备维修、TPM）"),
+            // dict.logistics.work.center.category.0016
+            ("dict.logistics.work.center.category.0016", "ja-JP", "维护 / 保养_jp", "工作中心类别.维护/保养（设备维修、TPM）"),
+            // dict.logistics.work.center.category.0016
+            ("dict.logistics.work.center.category.0016", "zh-CN", "维护 / 保养", "工作中心类别.维护/保养（设备维修、TPM）"),
+            // dict.logistics.work.center.category.0016
+            ("dict.logistics.work.center.category.0016", "zh-HK", "维护 / 保养_hk", "工作中心类别.维护/保养（设备维修、TPM）"),
+
+            // dict.logistics.work.center.category.0017
+            ("dict.logistics.work.center.category.0017", "en-US", "报废 / 处置_us", "工作中心类别.报废/处置（报废处理、回收）"),
+            // dict.logistics.work.center.category.0017
+            ("dict.logistics.work.center.category.0017", "ja-JP", "报废 / 处置_jp", "工作中心类别.报废/处置（报废处理、回收）"),
+            // dict.logistics.work.center.category.0017
+            ("dict.logistics.work.center.category.0017", "zh-CN", "报废 / 处置", "工作中心类别.报废/处置（报废处理、回收）"),
+            // dict.logistics.work.center.category.0017
+            ("dict.logistics.work.center.category.0017", "zh-HK", "报废 / 处置_hk", "工作中心类别.报废/处置（报废处理、回收）"),
+
+            // dict.logistics.work.center.category.0018
+            ("dict.logistics.work.center.category.0018", "en-US", "人工_us", "工作中心类别.人工（纯人工工位）"),
+            // dict.logistics.work.center.category.0018
+            ("dict.logistics.work.center.category.0018", "ja-JP", "人工_jp", "工作中心类别.人工（纯人工工位）"),
+            // dict.logistics.work.center.category.0018
+            ("dict.logistics.work.center.category.0018", "zh-CN", "人工", "工作中心类别.人工（纯人工工位）"),
+            // dict.logistics.work.center.category.0018
+            ("dict.logistics.work.center.category.0018", "zh-HK", "人工_hk", "工作中心类别.人工（纯人工工位）"),
+
+            // dict.logistics.work.center.category.0019
+            ("dict.logistics.work.center.category.0019", "en-US", "机器_us", "工作中心类别.机器（纯设备工位）"),
+            // dict.logistics.work.center.category.0019
+            ("dict.logistics.work.center.category.0019", "ja-JP", "机器_jp", "工作中心类别.机器（纯设备工位）"),
+            // dict.logistics.work.center.category.0019
+            ("dict.logistics.work.center.category.0019", "zh-CN", "机器", "工作中心类别.机器（纯设备工位）"),
+            // dict.logistics.work.center.category.0019
+            ("dict.logistics.work.center.category.0019", "zh-HK", "机器_hk", "工作中心类别.机器（纯设备工位）"),
+
+            // dict.logistics.work.center.category.0020
+            ("dict.logistics.work.center.category.0020", "en-US", "混合（人机）_us", "工作中心类别.混合（人机联合作业）"),
+            // dict.logistics.work.center.category.0020
+            ("dict.logistics.work.center.category.0020", "ja-JP", "混合（人机）_jp", "工作中心类别.混合（人机联合作业）"),
+            // dict.logistics.work.center.category.0020
+            ("dict.logistics.work.center.category.0020", "zh-CN", "混合（人机）", "工作中心类别.混合（人机联合作业）"),
+            // dict.logistics.work.center.category.0020
+            ("dict.logistics.work.center.category.0020", "zh-HK", "混合（人机）_hk", "工作中心类别.混合（人机联合作业）"),
+
             // dict.sys.culture.code.af-za
             ("dict.sys.culture.code.af-za", "en-US", "Afrikaans", "区域文化编码.Afrikaans"),
             // dict.sys.culture.code.af-za
@@ -13884,13 +14505,13 @@ public class TaktDictI18nSeedData : ITaktSeedDataCoordinator
             ("dict.sys.culture.code.it-it", "zh-HK", "italiano", "区域文化编码.italiano"),
 
             // dict.sys.culture.code.ja-jp
-            ("dict.sys.culture.code.ja-jp", "en-US", "日本語", "区域文化编码.日本語"),
+            ("dict.sys.culture.code.ja-jp", "en-US", "日本語(JP)", "区域文化编码.日本語"),
             // dict.sys.culture.code.ja-jp
-            ("dict.sys.culture.code.ja-jp", "ja-JP", "日本語", "区域文化编码.日本語"),
+            ("dict.sys.culture.code.ja-jp", "ja-JP", "日本語(JP)", "区域文化编码.日本語"),
             // dict.sys.culture.code.ja-jp
-            ("dict.sys.culture.code.ja-jp", "zh-CN", "日本語", "区域文化编码.日本語"),
+            ("dict.sys.culture.code.ja-jp", "zh-CN", "日本語(JP)", "区域文化编码.日本語"),
             // dict.sys.culture.code.ja-jp
-            ("dict.sys.culture.code.ja-jp", "zh-HK", "日本語", "区域文化编码.日本語"),
+            ("dict.sys.culture.code.ja-jp", "zh-HK", "日本語(JP)", "区域文化编码.日本語"),
 
             // dict.sys.culture.code.ka-ge
             ("dict.sys.culture.code.ka-ge", "en-US", "ქართული", "区域文化编码.ქართული"),
@@ -14485,6 +15106,636 @@ public class TaktDictI18nSeedData : ITaktSeedDataCoordinator
             ("dict.sys.leave.type.other", "zh-CN", "其他", "请假类型.其他"),
             // dict.sys.leave.type.other
             ("dict.sys.leave.type.other", "zh-HK", "其他_hk", "请假类型.其他"),
+
+            // dict.sys.list.class.category.0
+            ("dict.sys.list.class.category.0", "en-US", "默认_us", "字典样式类别.默认"),
+            // dict.sys.list.class.category.0
+            ("dict.sys.list.class.category.0", "ja-JP", "默认_jp", "字典样式类别.默认"),
+            // dict.sys.list.class.category.0
+            ("dict.sys.list.class.category.0", "zh-CN", "默认", "字典样式类别.默认"),
+            // dict.sys.list.class.category.0
+            ("dict.sys.list.class.category.0", "zh-HK", "默认_hk", "字典样式类别.默认"),
+
+            // dict.sys.list.class.category.1
+            ("dict.sys.list.class.category.1", "en-US", "成功_us", "字典样式类别.成功"),
+            // dict.sys.list.class.category.1
+            ("dict.sys.list.class.category.1", "ja-JP", "成功_jp", "字典样式类别.成功"),
+            // dict.sys.list.class.category.1
+            ("dict.sys.list.class.category.1", "zh-CN", "成功", "字典样式类别.成功"),
+            // dict.sys.list.class.category.1
+            ("dict.sys.list.class.category.1", "zh-HK", "成功_hk", "字典样式类别.成功"),
+
+            // dict.sys.list.class.category.2
+            ("dict.sys.list.class.category.2", "en-US", "危险_us", "字典样式类别.危险"),
+            // dict.sys.list.class.category.2
+            ("dict.sys.list.class.category.2", "ja-JP", "危险_jp", "字典样式类别.危险"),
+            // dict.sys.list.class.category.2
+            ("dict.sys.list.class.category.2", "zh-CN", "危险", "字典样式类别.危险"),
+            // dict.sys.list.class.category.2
+            ("dict.sys.list.class.category.2", "zh-HK", "危险_hk", "字典样式类别.危险"),
+
+            // dict.sys.list.class.category.3
+            ("dict.sys.list.class.category.3", "en-US", "警告_us", "字典样式类别.警告"),
+            // dict.sys.list.class.category.3
+            ("dict.sys.list.class.category.3", "ja-JP", "警告_jp", "字典样式类别.警告"),
+            // dict.sys.list.class.category.3
+            ("dict.sys.list.class.category.3", "zh-CN", "警告", "字典样式类别.警告"),
+            // dict.sys.list.class.category.3
+            ("dict.sys.list.class.category.3", "zh-HK", "警告_hk", "字典样式类别.警告"),
+
+            // dict.sys.list.class.category.4
+            ("dict.sys.list.class.category.4", "en-US", "进行中_us", "字典样式类别.进行中"),
+            // dict.sys.list.class.category.4
+            ("dict.sys.list.class.category.4", "ja-JP", "进行中_jp", "字典样式类别.进行中"),
+            // dict.sys.list.class.category.4
+            ("dict.sys.list.class.category.4", "zh-CN", "进行中", "字典样式类别.进行中"),
+            // dict.sys.list.class.category.4
+            ("dict.sys.list.class.category.4", "zh-HK", "进行中_hk", "字典样式类别.进行中"),
+
+            // dict.sys.list.class.category.5
+            ("dict.sys.list.class.category.5", "en-US", "信息_us", "字典样式类别.信息"),
+            // dict.sys.list.class.category.5
+            ("dict.sys.list.class.category.5", "ja-JP", "信息_jp", "字典样式类别.信息"),
+            // dict.sys.list.class.category.5
+            ("dict.sys.list.class.category.5", "zh-CN", "信息", "字典样式类别.信息"),
+            // dict.sys.list.class.category.5
+            ("dict.sys.list.class.category.5", "zh-HK", "信息_hk", "字典样式类别.信息"),
+
+            // dict.sys.list.class.category.6
+            ("dict.sys.list.class.category.6", "en-US", "大红_us", "字典样式类别.大红"),
+            // dict.sys.list.class.category.6
+            ("dict.sys.list.class.category.6", "ja-JP", "大红_jp", "字典样式类别.大红"),
+            // dict.sys.list.class.category.6
+            ("dict.sys.list.class.category.6", "zh-CN", "大红", "字典样式类别.大红"),
+            // dict.sys.list.class.category.6
+            ("dict.sys.list.class.category.6", "zh-HK", "大红_hk", "字典样式类别.大红"),
+
+            // dict.sys.list.class.category.7
+            ("dict.sys.list.class.category.7", "en-US", "朱红_us", "字典样式类别.朱红"),
+            // dict.sys.list.class.category.7
+            ("dict.sys.list.class.category.7", "ja-JP", "朱红_jp", "字典样式类别.朱红"),
+            // dict.sys.list.class.category.7
+            ("dict.sys.list.class.category.7", "zh-CN", "朱红", "字典样式类别.朱红"),
+            // dict.sys.list.class.category.7
+            ("dict.sys.list.class.category.7", "zh-HK", "朱红_hk", "字典样式类别.朱红"),
+
+            // dict.sys.list.class.category.8
+            ("dict.sys.list.class.category.8", "en-US", "朱砂_us", "字典样式类别.朱砂"),
+            // dict.sys.list.class.category.8
+            ("dict.sys.list.class.category.8", "ja-JP", "朱砂_jp", "字典样式类别.朱砂"),
+            // dict.sys.list.class.category.8
+            ("dict.sys.list.class.category.8", "zh-CN", "朱砂", "字典样式类别.朱砂"),
+            // dict.sys.list.class.category.8
+            ("dict.sys.list.class.category.8", "zh-HK", "朱砂_hk", "字典样式类别.朱砂"),
+
+            // dict.sys.list.class.category.9
+            ("dict.sys.list.class.category.9", "en-US", "火红_us", "字典样式类别.火红"),
+            // dict.sys.list.class.category.9
+            ("dict.sys.list.class.category.9", "ja-JP", "火红_jp", "字典样式类别.火红"),
+            // dict.sys.list.class.category.9
+            ("dict.sys.list.class.category.9", "zh-CN", "火红", "字典样式类别.火红"),
+            // dict.sys.list.class.category.9
+            ("dict.sys.list.class.category.9", "zh-HK", "火红_hk", "字典样式类别.火红"),
+
+            // dict.sys.list.class.category.10
+            ("dict.sys.list.class.category.10", "en-US", "妃色_us", "字典样式类别.妃色"),
+            // dict.sys.list.class.category.10
+            ("dict.sys.list.class.category.10", "ja-JP", "妃色_jp", "字典样式类别.妃色"),
+            // dict.sys.list.class.category.10
+            ("dict.sys.list.class.category.10", "zh-CN", "妃色", "字典样式类别.妃色"),
+            // dict.sys.list.class.category.10
+            ("dict.sys.list.class.category.10", "zh-HK", "妃色_hk", "字典样式类别.妃色"),
+
+            // dict.sys.list.class.category.11
+            ("dict.sys.list.class.category.11", "en-US", "桃红_us", "字典样式类别.桃红"),
+            // dict.sys.list.class.category.11
+            ("dict.sys.list.class.category.11", "ja-JP", "桃红_jp", "字典样式类别.桃红"),
+            // dict.sys.list.class.category.11
+            ("dict.sys.list.class.category.11", "zh-CN", "桃红", "字典样式类别.桃红"),
+            // dict.sys.list.class.category.11
+            ("dict.sys.list.class.category.11", "zh-HK", "桃红_hk", "字典样式类别.桃红"),
+
+            // dict.sys.list.class.category.12
+            ("dict.sys.list.class.category.12", "en-US", "粉红_us", "字典样式类别.粉红"),
+            // dict.sys.list.class.category.12
+            ("dict.sys.list.class.category.12", "ja-JP", "粉红_jp", "字典样式类别.粉红"),
+            // dict.sys.list.class.category.12
+            ("dict.sys.list.class.category.12", "zh-CN", "粉红", "字典样式类别.粉红"),
+            // dict.sys.list.class.category.12
+            ("dict.sys.list.class.category.12", "zh-HK", "粉红_hk", "字典样式类别.粉红"),
+
+            // dict.sys.list.class.category.13
+            ("dict.sys.list.class.category.13", "en-US", "橙色_us", "字典样式类别.橙色"),
+            // dict.sys.list.class.category.13
+            ("dict.sys.list.class.category.13", "ja-JP", "橙色_jp", "字典样式类别.橙色"),
+            // dict.sys.list.class.category.13
+            ("dict.sys.list.class.category.13", "zh-CN", "橙色", "字典样式类别.橙色"),
+            // dict.sys.list.class.category.13
+            ("dict.sys.list.class.category.13", "zh-HK", "橙色_hk", "字典样式类别.橙色"),
+
+            // dict.sys.list.class.category.14
+            ("dict.sys.list.class.category.14", "en-US", "橘红_us", "字典样式类别.橘红"),
+            // dict.sys.list.class.category.14
+            ("dict.sys.list.class.category.14", "ja-JP", "橘红_jp", "字典样式类别.橘红"),
+            // dict.sys.list.class.category.14
+            ("dict.sys.list.class.category.14", "zh-CN", "橘红", "字典样式类别.橘红"),
+            // dict.sys.list.class.category.14
+            ("dict.sys.list.class.category.14", "zh-HK", "橘红_hk", "字典样式类别.橘红"),
+
+            // dict.sys.list.class.category.15
+            ("dict.sys.list.class.category.15", "en-US", "橘黄_us", "字典样式类别.橘黄"),
+            // dict.sys.list.class.category.15
+            ("dict.sys.list.class.category.15", "ja-JP", "橘黄_jp", "字典样式类别.橘黄"),
+            // dict.sys.list.class.category.15
+            ("dict.sys.list.class.category.15", "zh-CN", "橘黄", "字典样式类别.橘黄"),
+            // dict.sys.list.class.category.15
+            ("dict.sys.list.class.category.15", "zh-HK", "橘黄_hk", "字典样式类别.橘黄"),
+
+            // dict.sys.list.class.category.16
+            ("dict.sys.list.class.category.16", "en-US", "橙黄_us", "字典样式类别.橙黄"),
+            // dict.sys.list.class.category.16
+            ("dict.sys.list.class.category.16", "ja-JP", "橙黄_jp", "字典样式类别.橙黄"),
+            // dict.sys.list.class.category.16
+            ("dict.sys.list.class.category.16", "zh-CN", "橙黄", "字典样式类别.橙黄"),
+            // dict.sys.list.class.category.16
+            ("dict.sys.list.class.category.16", "zh-HK", "橙黄_hk", "字典样式类别.橙黄"),
+
+            // dict.sys.list.class.category.17
+            ("dict.sys.list.class.category.17", "en-US", "杏黄_us", "字典样式类别.杏黄"),
+            // dict.sys.list.class.category.17
+            ("dict.sys.list.class.category.17", "ja-JP", "杏黄_jp", "字典样式类别.杏黄"),
+            // dict.sys.list.class.category.17
+            ("dict.sys.list.class.category.17", "zh-CN", "杏黄", "字典样式类别.杏黄"),
+            // dict.sys.list.class.category.17
+            ("dict.sys.list.class.category.17", "zh-HK", "杏黄_hk", "字典样式类别.杏黄"),
+
+            // dict.sys.list.class.category.18
+            ("dict.sys.list.class.category.18", "en-US", "枣红_us", "字典样式类别.枣红"),
+            // dict.sys.list.class.category.18
+            ("dict.sys.list.class.category.18", "ja-JP", "枣红_jp", "字典样式类别.枣红"),
+            // dict.sys.list.class.category.18
+            ("dict.sys.list.class.category.18", "zh-CN", "枣红", "字典样式类别.枣红"),
+            // dict.sys.list.class.category.18
+            ("dict.sys.list.class.category.18", "zh-HK", "枣红_hk", "字典样式类别.枣红"),
+
+            // dict.sys.list.class.category.19
+            ("dict.sys.list.class.category.19", "en-US", "栗色_us", "字典样式类别.栗色"),
+            // dict.sys.list.class.category.19
+            ("dict.sys.list.class.category.19", "ja-JP", "栗色_jp", "字典样式类别.栗色"),
+            // dict.sys.list.class.category.19
+            ("dict.sys.list.class.category.19", "zh-CN", "栗色", "字典样式类别.栗色"),
+            // dict.sys.list.class.category.19
+            ("dict.sys.list.class.category.19", "zh-HK", "栗色_hk", "字典样式类别.栗色"),
+
+            // dict.sys.list.class.category.20
+            ("dict.sys.list.class.category.20", "en-US", "鹅黄_us", "字典样式类别.鹅黄"),
+            // dict.sys.list.class.category.20
+            ("dict.sys.list.class.category.20", "ja-JP", "鹅黄_jp", "字典样式类别.鹅黄"),
+            // dict.sys.list.class.category.20
+            ("dict.sys.list.class.category.20", "zh-CN", "鹅黄", "字典样式类别.鹅黄"),
+            // dict.sys.list.class.category.20
+            ("dict.sys.list.class.category.20", "zh-HK", "鹅黄_hk", "字典样式类别.鹅黄"),
+
+            // dict.sys.list.class.category.21
+            ("dict.sys.list.class.category.21", "en-US", "鸭黄_us", "字典样式类别.鸭黄"),
+            // dict.sys.list.class.category.21
+            ("dict.sys.list.class.category.21", "ja-JP", "鸭黄_jp", "字典样式类别.鸭黄"),
+            // dict.sys.list.class.category.21
+            ("dict.sys.list.class.category.21", "zh-CN", "鸭黄", "字典样式类别.鸭黄"),
+            // dict.sys.list.class.category.21
+            ("dict.sys.list.class.category.21", "zh-HK", "鸭黄_hk", "字典样式类别.鸭黄"),
+
+            // dict.sys.list.class.category.22
+            ("dict.sys.list.class.category.22", "en-US", "樱草色_us", "字典样式类别.樱草色"),
+            // dict.sys.list.class.category.22
+            ("dict.sys.list.class.category.22", "ja-JP", "樱草色_jp", "字典样式类别.樱草色"),
+            // dict.sys.list.class.category.22
+            ("dict.sys.list.class.category.22", "zh-CN", "樱草色", "字典样式类别.樱草色"),
+            // dict.sys.list.class.category.22
+            ("dict.sys.list.class.category.22", "zh-HK", "樱草色_hk", "字典样式类别.樱草色"),
+
+            // dict.sys.list.class.category.23
+            ("dict.sys.list.class.category.23", "en-US", "姜黄_us", "字典样式类别.姜黄"),
+            // dict.sys.list.class.category.23
+            ("dict.sys.list.class.category.23", "ja-JP", "姜黄_jp", "字典样式类别.姜黄"),
+            // dict.sys.list.class.category.23
+            ("dict.sys.list.class.category.23", "zh-CN", "姜黄", "字典样式类别.姜黄"),
+            // dict.sys.list.class.category.23
+            ("dict.sys.list.class.category.23", "zh-HK", "姜黄_hk", "字典样式类别.姜黄"),
+
+            // dict.sys.list.class.category.24
+            ("dict.sys.list.class.category.24", "en-US", "缃色_us", "字典样式类别.缃色"),
+            // dict.sys.list.class.category.24
+            ("dict.sys.list.class.category.24", "ja-JP", "缃色_jp", "字典样式类别.缃色"),
+            // dict.sys.list.class.category.24
+            ("dict.sys.list.class.category.24", "zh-CN", "缃色", "字典样式类别.缃色"),
+            // dict.sys.list.class.category.24
+            ("dict.sys.list.class.category.24", "zh-HK", "缃色_hk", "字典样式类别.缃色"),
+
+            // dict.sys.list.class.category.25
+            ("dict.sys.list.class.category.25", "en-US", "秋香色_us", "字典样式类别.秋香色"),
+            // dict.sys.list.class.category.25
+            ("dict.sys.list.class.category.25", "ja-JP", "秋香色_jp", "字典样式类别.秋香色"),
+            // dict.sys.list.class.category.25
+            ("dict.sys.list.class.category.25", "zh-CN", "秋香色", "字典样式类别.秋香色"),
+            // dict.sys.list.class.category.25
+            ("dict.sys.list.class.category.25", "zh-HK", "秋香色_hk", "字典样式类别.秋香色"),
+
+            // dict.sys.list.class.category.26
+            ("dict.sys.list.class.category.26", "en-US", "绿色_us", "字典样式类别.绿色"),
+            // dict.sys.list.class.category.26
+            ("dict.sys.list.class.category.26", "ja-JP", "绿色_jp", "字典样式类别.绿色"),
+            // dict.sys.list.class.category.26
+            ("dict.sys.list.class.category.26", "zh-CN", "绿色", "字典样式类别.绿色"),
+            // dict.sys.list.class.category.26
+            ("dict.sys.list.class.category.26", "zh-HK", "绿色_hk", "字典样式类别.绿色"),
+
+            // dict.sys.list.class.category.27
+            ("dict.sys.list.class.category.27", "en-US", "草绿_us", "字典样式类别.草绿"),
+            // dict.sys.list.class.category.27
+            ("dict.sys.list.class.category.27", "ja-JP", "草绿_jp", "字典样式类别.草绿"),
+            // dict.sys.list.class.category.27
+            ("dict.sys.list.class.category.27", "zh-CN", "草绿", "字典样式类别.草绿"),
+            // dict.sys.list.class.category.27
+            ("dict.sys.list.class.category.27", "zh-HK", "草绿_hk", "字典样式类别.草绿"),
+
+            // dict.sys.list.class.category.28
+            ("dict.sys.list.class.category.28", "en-US", "嫩绿_us", "字典样式类别.嫩绿"),
+            // dict.sys.list.class.category.28
+            ("dict.sys.list.class.category.28", "ja-JP", "嫩绿_jp", "字典样式类别.嫩绿"),
+            // dict.sys.list.class.category.28
+            ("dict.sys.list.class.category.28", "zh-CN", "嫩绿", "字典样式类别.嫩绿"),
+            // dict.sys.list.class.category.28
+            ("dict.sys.list.class.category.28", "zh-HK", "嫩绿_hk", "字典样式类别.嫩绿"),
+
+            // dict.sys.list.class.category.29
+            ("dict.sys.list.class.category.29", "en-US", "柳绿_us", "字典样式类别.柳绿"),
+            // dict.sys.list.class.category.29
+            ("dict.sys.list.class.category.29", "ja-JP", "柳绿_jp", "字典样式类别.柳绿"),
+            // dict.sys.list.class.category.29
+            ("dict.sys.list.class.category.29", "zh-CN", "柳绿", "字典样式类别.柳绿"),
+            // dict.sys.list.class.category.29
+            ("dict.sys.list.class.category.29", "zh-HK", "柳绿_hk", "字典样式类别.柳绿"),
+
+            // dict.sys.list.class.category.30
+            ("dict.sys.list.class.category.30", "en-US", "葱绿_us", "字典样式类别.葱绿"),
+            // dict.sys.list.class.category.30
+            ("dict.sys.list.class.category.30", "ja-JP", "葱绿_jp", "字典样式类别.葱绿"),
+            // dict.sys.list.class.category.30
+            ("dict.sys.list.class.category.30", "zh-CN", "葱绿", "字典样式类别.葱绿"),
+            // dict.sys.list.class.category.30
+            ("dict.sys.list.class.category.30", "zh-HK", "葱绿_hk", "字典样式类别.葱绿"),
+
+            // dict.sys.list.class.category.31
+            ("dict.sys.list.class.category.31", "en-US", "油绿_us", "字典样式类别.油绿"),
+            // dict.sys.list.class.category.31
+            ("dict.sys.list.class.category.31", "ja-JP", "油绿_jp", "字典样式类别.油绿"),
+            // dict.sys.list.class.category.31
+            ("dict.sys.list.class.category.31", "zh-CN", "油绿", "字典样式类别.油绿"),
+            // dict.sys.list.class.category.31
+            ("dict.sys.list.class.category.31", "zh-HK", "油绿_hk", "字典样式类别.油绿"),
+
+            // dict.sys.list.class.category.32
+            ("dict.sys.list.class.category.32", "en-US", "松柏绿_us", "字典样式类别.松柏绿"),
+            // dict.sys.list.class.category.32
+            ("dict.sys.list.class.category.32", "ja-JP", "松柏绿_jp", "字典样式类别.松柏绿"),
+            // dict.sys.list.class.category.32
+            ("dict.sys.list.class.category.32", "zh-CN", "松柏绿", "字典样式类别.松柏绿"),
+            // dict.sys.list.class.category.32
+            ("dict.sys.list.class.category.32", "zh-HK", "松柏绿_hk", "字典样式类别.松柏绿"),
+
+            // dict.sys.list.class.category.33
+            ("dict.sys.list.class.category.33", "en-US", "青色_us", "字典样式类别.青色"),
+            // dict.sys.list.class.category.33
+            ("dict.sys.list.class.category.33", "ja-JP", "青色_jp", "字典样式类别.青色"),
+            // dict.sys.list.class.category.33
+            ("dict.sys.list.class.category.33", "zh-CN", "青色", "字典样式类别.青色"),
+            // dict.sys.list.class.category.33
+            ("dict.sys.list.class.category.33", "zh-HK", "青色_hk", "字典样式类别.青色"),
+
+            // dict.sys.list.class.category.34
+            ("dict.sys.list.class.category.34", "en-US", "青翠_us", "字典样式类别.青翠"),
+            // dict.sys.list.class.category.34
+            ("dict.sys.list.class.category.34", "ja-JP", "青翠_jp", "字典样式类别.青翠"),
+            // dict.sys.list.class.category.34
+            ("dict.sys.list.class.category.34", "zh-CN", "青翠", "字典样式类别.青翠"),
+            // dict.sys.list.class.category.34
+            ("dict.sys.list.class.category.34", "zh-HK", "青翠_hk", "字典样式类别.青翠"),
+
+            // dict.sys.list.class.category.35
+            ("dict.sys.list.class.category.35", "en-US", "碧色_us", "字典样式类别.碧色"),
+            // dict.sys.list.class.category.35
+            ("dict.sys.list.class.category.35", "ja-JP", "碧色_jp", "字典样式类别.碧色"),
+            // dict.sys.list.class.category.35
+            ("dict.sys.list.class.category.35", "zh-CN", "碧色", "字典样式类别.碧色"),
+            // dict.sys.list.class.category.35
+            ("dict.sys.list.class.category.35", "zh-HK", "碧色_hk", "字典样式类别.碧色"),
+
+            // dict.sys.list.class.category.36
+            ("dict.sys.list.class.category.36", "en-US", "青碧_us", "字典样式类别.青碧"),
+            // dict.sys.list.class.category.36
+            ("dict.sys.list.class.category.36", "ja-JP", "青碧_jp", "字典样式类别.青碧"),
+            // dict.sys.list.class.category.36
+            ("dict.sys.list.class.category.36", "zh-CN", "青碧", "字典样式类别.青碧"),
+            // dict.sys.list.class.category.36
+            ("dict.sys.list.class.category.36", "zh-HK", "青碧_hk", "字典样式类别.青碧"),
+
+            // dict.sys.list.class.category.37
+            ("dict.sys.list.class.category.37", "en-US", "翡翠色_us", "字典样式类别.翡翠色"),
+            // dict.sys.list.class.category.37
+            ("dict.sys.list.class.category.37", "ja-JP", "翡翠色_jp", "字典样式类别.翡翠色"),
+            // dict.sys.list.class.category.37
+            ("dict.sys.list.class.category.37", "zh-CN", "翡翠色", "字典样式类别.翡翠色"),
+            // dict.sys.list.class.category.37
+            ("dict.sys.list.class.category.37", "zh-HK", "翡翠色_hk", "字典样式类别.翡翠色"),
+
+            // dict.sys.list.class.category.38
+            ("dict.sys.list.class.category.38", "en-US", "鸭卵青_us", "字典样式类别.鸭卵青"),
+            // dict.sys.list.class.category.38
+            ("dict.sys.list.class.category.38", "ja-JP", "鸭卵青_jp", "字典样式类别.鸭卵青"),
+            // dict.sys.list.class.category.38
+            ("dict.sys.list.class.category.38", "zh-CN", "鸭卵青", "字典样式类别.鸭卵青"),
+            // dict.sys.list.class.category.38
+            ("dict.sys.list.class.category.38", "zh-HK", "鸭卵青_hk", "字典样式类别.鸭卵青"),
+
+            // dict.sys.list.class.category.39
+            ("dict.sys.list.class.category.39", "en-US", "水色_us", "字典样式类别.水色"),
+            // dict.sys.list.class.category.39
+            ("dict.sys.list.class.category.39", "ja-JP", "水色_jp", "字典样式类别.水色"),
+            // dict.sys.list.class.category.39
+            ("dict.sys.list.class.category.39", "zh-CN", "水色", "字典样式类别.水色"),
+            // dict.sys.list.class.category.39
+            ("dict.sys.list.class.category.39", "zh-HK", "水色_hk", "字典样式类别.水色"),
+
+            // dict.sys.list.class.category.40
+            ("dict.sys.list.class.category.40", "en-US", "蓝_us", "字典样式类别.蓝"),
+            // dict.sys.list.class.category.40
+            ("dict.sys.list.class.category.40", "ja-JP", "蓝_jp", "字典样式类别.蓝"),
+            // dict.sys.list.class.category.40
+            ("dict.sys.list.class.category.40", "zh-CN", "蓝", "字典样式类别.蓝"),
+            // dict.sys.list.class.category.40
+            ("dict.sys.list.class.category.40", "zh-HK", "蓝_hk", "字典样式类别.蓝"),
+
+            // dict.sys.list.class.category.41
+            ("dict.sys.list.class.category.41", "en-US", "碧蓝_us", "字典样式类别.碧蓝"),
+            // dict.sys.list.class.category.41
+            ("dict.sys.list.class.category.41", "ja-JP", "碧蓝_jp", "字典样式类别.碧蓝"),
+            // dict.sys.list.class.category.41
+            ("dict.sys.list.class.category.41", "zh-CN", "碧蓝", "字典样式类别.碧蓝"),
+            // dict.sys.list.class.category.41
+            ("dict.sys.list.class.category.41", "zh-HK", "碧蓝_hk", "字典样式类别.碧蓝"),
+
+            // dict.sys.list.class.category.42
+            ("dict.sys.list.class.category.42", "en-US", "蔚蓝_us", "字典样式类别.蔚蓝"),
+            // dict.sys.list.class.category.42
+            ("dict.sys.list.class.category.42", "ja-JP", "蔚蓝_jp", "字典样式类别.蔚蓝"),
+            // dict.sys.list.class.category.42
+            ("dict.sys.list.class.category.42", "zh-CN", "蔚蓝", "字典样式类别.蔚蓝"),
+            // dict.sys.list.class.category.42
+            ("dict.sys.list.class.category.42", "zh-HK", "蔚蓝_hk", "字典样式类别.蔚蓝"),
+
+            // dict.sys.list.class.category.43
+            ("dict.sys.list.class.category.43", "en-US", "宝蓝_us", "字典样式类别.宝蓝"),
+            // dict.sys.list.class.category.43
+            ("dict.sys.list.class.category.43", "ja-JP", "宝蓝_jp", "字典样式类别.宝蓝"),
+            // dict.sys.list.class.category.43
+            ("dict.sys.list.class.category.43", "zh-CN", "宝蓝", "字典样式类别.宝蓝"),
+            // dict.sys.list.class.category.43
+            ("dict.sys.list.class.category.43", "zh-HK", "宝蓝_hk", "字典样式类别.宝蓝"),
+
+            // dict.sys.list.class.category.44
+            ("dict.sys.list.class.category.44", "en-US", "靛青_us", "字典样式类别.靛青"),
+            // dict.sys.list.class.category.44
+            ("dict.sys.list.class.category.44", "ja-JP", "靛青_jp", "字典样式类别.靛青"),
+            // dict.sys.list.class.category.44
+            ("dict.sys.list.class.category.44", "zh-CN", "靛青", "字典样式类别.靛青"),
+            // dict.sys.list.class.category.44
+            ("dict.sys.list.class.category.44", "zh-HK", "靛青_hk", "字典样式类别.靛青"),
+
+            // dict.sys.list.class.category.45
+            ("dict.sys.list.class.category.45", "en-US", "藏青_us", "字典样式类别.藏青"),
+            // dict.sys.list.class.category.45
+            ("dict.sys.list.class.category.45", "ja-JP", "藏青_jp", "字典样式类别.藏青"),
+            // dict.sys.list.class.category.45
+            ("dict.sys.list.class.category.45", "zh-CN", "藏青", "字典样式类别.藏青"),
+            // dict.sys.list.class.category.45
+            ("dict.sys.list.class.category.45", "zh-HK", "藏青_hk", "字典样式类别.藏青"),
+
+            // dict.sys.list.class.category.46
+            ("dict.sys.list.class.category.46", "en-US", "月白_us", "字典样式类别.月白"),
+            // dict.sys.list.class.category.46
+            ("dict.sys.list.class.category.46", "ja-JP", "月白_jp", "字典样式类别.月白"),
+            // dict.sys.list.class.category.46
+            ("dict.sys.list.class.category.46", "zh-CN", "月白", "字典样式类别.月白"),
+            // dict.sys.list.class.category.46
+            ("dict.sys.list.class.category.46", "zh-HK", "月白_hk", "字典样式类别.月白"),
+
+            // dict.sys.list.class.category.47
+            ("dict.sys.list.class.category.47", "en-US", "紫色_us", "字典样式类别.紫色"),
+            // dict.sys.list.class.category.47
+            ("dict.sys.list.class.category.47", "ja-JP", "紫色_jp", "字典样式类别.紫色"),
+            // dict.sys.list.class.category.47
+            ("dict.sys.list.class.category.47", "zh-CN", "紫色", "字典样式类别.紫色"),
+            // dict.sys.list.class.category.47
+            ("dict.sys.list.class.category.47", "zh-HK", "紫色_hk", "字典样式类别.紫色"),
+
+            // dict.sys.list.class.category.48
+            ("dict.sys.list.class.category.48", "en-US", "桜色_us", "字典样式类别.桜色"),
+            // dict.sys.list.class.category.48
+            ("dict.sys.list.class.category.48", "ja-JP", "桜色_jp", "字典样式类别.桜色"),
+            // dict.sys.list.class.category.48
+            ("dict.sys.list.class.category.48", "zh-CN", "桜色", "字典样式类别.桜色"),
+            // dict.sys.list.class.category.48
+            ("dict.sys.list.class.category.48", "zh-HK", "桜色_hk", "字典样式类别.桜色"),
+
+            // dict.sys.list.class.category.49
+            ("dict.sys.list.class.category.49", "en-US", "桃色_us", "字典样式类别.桃色"),
+            // dict.sys.list.class.category.49
+            ("dict.sys.list.class.category.49", "ja-JP", "桃色_jp", "字典样式类别.桃色"),
+            // dict.sys.list.class.category.49
+            ("dict.sys.list.class.category.49", "zh-CN", "桃色", "字典样式类别.桃色"),
+            // dict.sys.list.class.category.49
+            ("dict.sys.list.class.category.49", "zh-HK", "桃色_hk", "字典样式类别.桃色"),
+
+            // dict.sys.list.class.category.50
+            ("dict.sys.list.class.category.50", "en-US", "赤紫_us", "字典样式类别.赤紫"),
+            // dict.sys.list.class.category.50
+            ("dict.sys.list.class.category.50", "ja-JP", "赤紫_jp", "字典样式类别.赤紫"),
+            // dict.sys.list.class.category.50
+            ("dict.sys.list.class.category.50", "zh-CN", "赤紫", "字典样式类别.赤紫"),
+            // dict.sys.list.class.category.50
+            ("dict.sys.list.class.category.50", "zh-HK", "赤紫_hk", "字典样式类别.赤紫"),
+
+            // dict.sys.list.class.category.51
+            ("dict.sys.list.class.category.51", "en-US", "紅梅色_us", "字典样式类别.紅梅色"),
+            // dict.sys.list.class.category.51
+            ("dict.sys.list.class.category.51", "ja-JP", "紅梅色_jp", "字典样式类别.紅梅色"),
+            // dict.sys.list.class.category.51
+            ("dict.sys.list.class.category.51", "zh-CN", "紅梅色", "字典样式类别.紅梅色"),
+            // dict.sys.list.class.category.51
+            ("dict.sys.list.class.category.51", "zh-HK", "紅梅色_hk", "字典样式类别.紅梅色"),
+
+            // dict.sys.list.class.category.52
+            ("dict.sys.list.class.category.52", "en-US", "甚三紅_us", "字典样式类别.甚三紅"),
+            // dict.sys.list.class.category.52
+            ("dict.sys.list.class.category.52", "ja-JP", "甚三紅_jp", "字典样式类别.甚三紅"),
+            // dict.sys.list.class.category.52
+            ("dict.sys.list.class.category.52", "zh-CN", "甚三紅", "字典样式类别.甚三紅"),
+            // dict.sys.list.class.category.52
+            ("dict.sys.list.class.category.52", "zh-HK", "甚三紅_hk", "字典样式类别.甚三紅"),
+
+            // dict.sys.list.class.category.53
+            ("dict.sys.list.class.category.53", "en-US", "紅藤色_us", "字典样式类别.紅藤色"),
+            // dict.sys.list.class.category.53
+            ("dict.sys.list.class.category.53", "ja-JP", "紅藤色_jp", "字典样式类别.紅藤色"),
+            // dict.sys.list.class.category.53
+            ("dict.sys.list.class.category.53", "zh-CN", "紅藤色", "字典样式类别.紅藤色"),
+            // dict.sys.list.class.category.53
+            ("dict.sys.list.class.category.53", "zh-HK", "紅藤色_hk", "字典样式类别.紅藤色"),
+
+            // dict.sys.list.class.category.54
+            ("dict.sys.list.class.category.54", "en-US", "真朱_us", "字典样式类别.真朱"),
+            // dict.sys.list.class.category.54
+            ("dict.sys.list.class.category.54", "ja-JP", "真朱_jp", "字典样式类别.真朱"),
+            // dict.sys.list.class.category.54
+            ("dict.sys.list.class.category.54", "zh-CN", "真朱", "字典样式类别.真朱"),
+            // dict.sys.list.class.category.54
+            ("dict.sys.list.class.category.54", "zh-HK", "真朱_hk", "字典样式类别.真朱"),
+
+            // dict.sys.list.class.category.55
+            ("dict.sys.list.class.category.55", "en-US", "櫨染_us", "字典样式类别.櫨染"),
+            // dict.sys.list.class.category.55
+            ("dict.sys.list.class.category.55", "ja-JP", "櫨染_jp", "字典样式类别.櫨染"),
+            // dict.sys.list.class.category.55
+            ("dict.sys.list.class.category.55", "zh-CN", "櫨染", "字典样式类别.櫨染"),
+            // dict.sys.list.class.category.55
+            ("dict.sys.list.class.category.55", "zh-HK", "櫨染_hk", "字典样式类别.櫨染"),
+
+            // dict.sys.list.class.category.56
+            ("dict.sys.list.class.category.56", "en-US", "黄金_us", "字典样式类别.黄金"),
+            // dict.sys.list.class.category.56
+            ("dict.sys.list.class.category.56", "ja-JP", "黄金_jp", "字典样式类别.黄金"),
+            // dict.sys.list.class.category.56
+            ("dict.sys.list.class.category.56", "zh-CN", "黄金", "字典样式类别.黄金"),
+            // dict.sys.list.class.category.56
+            ("dict.sys.list.class.category.56", "zh-HK", "黄金_hk", "字典样式类别.黄金"),
+
+            // dict.sys.list.class.category.57
+            ("dict.sys.list.class.category.57", "en-US", "紅鬱金_us", "字典样式类别.紅鬱金"),
+            // dict.sys.list.class.category.57
+            ("dict.sys.list.class.category.57", "ja-JP", "紅鬱金_jp", "字典样式类别.紅鬱金"),
+            // dict.sys.list.class.category.57
+            ("dict.sys.list.class.category.57", "zh-CN", "紅鬱金", "字典样式类别.紅鬱金"),
+            // dict.sys.list.class.category.57
+            ("dict.sys.list.class.category.57", "zh-HK", "紅鬱金_hk", "字典样式类别.紅鬱金"),
+
+            // dict.sys.list.class.category.58
+            ("dict.sys.list.class.category.58", "en-US", "柿渋色_us", "字典样式类别.柿渋色"),
+            // dict.sys.list.class.category.58
+            ("dict.sys.list.class.category.58", "ja-JP", "柿渋色_jp", "字典样式类别.柿渋色"),
+            // dict.sys.list.class.category.58
+            ("dict.sys.list.class.category.58", "zh-CN", "柿渋色", "字典样式类别.柿渋色"),
+            // dict.sys.list.class.category.58
+            ("dict.sys.list.class.category.58", "zh-HK", "柿渋色_hk", "字典样式类别.柿渋色"),
+
+            // dict.sys.list.class.category.59
+            ("dict.sys.list.class.category.59", "en-US", "鶸色_us", "字典样式类别.鶸色"),
+            // dict.sys.list.class.category.59
+            ("dict.sys.list.class.category.59", "ja-JP", "鶸色_jp", "字典样式类别.鶸色"),
+            // dict.sys.list.class.category.59
+            ("dict.sys.list.class.category.59", "zh-CN", "鶸色", "字典样式类别.鶸色"),
+            // dict.sys.list.class.category.59
+            ("dict.sys.list.class.category.59", "zh-HK", "鶸色_hk", "字典样式类别.鶸色"),
+
+            // dict.sys.list.class.category.60
+            ("dict.sys.list.class.category.60", "en-US", "躑躅色_us", "字典样式类别.躑躅色"),
+            // dict.sys.list.class.category.60
+            ("dict.sys.list.class.category.60", "ja-JP", "躑躅色_jp", "字典样式类别.躑躅色"),
+            // dict.sys.list.class.category.60
+            ("dict.sys.list.class.category.60", "zh-CN", "躑躅色", "字典样式类别.躑躅色"),
+            // dict.sys.list.class.category.60
+            ("dict.sys.list.class.category.60", "zh-HK", "躑躅色_hk", "字典样式类别.躑躅色"),
+
+            // dict.sys.list.class.category.61
+            ("dict.sys.list.class.category.61", "en-US", "黄朽葉色_us", "字典样式类别.黄朽葉色"),
+            // dict.sys.list.class.category.61
+            ("dict.sys.list.class.category.61", "ja-JP", "黄朽葉色_jp", "字典样式类别.黄朽葉色"),
+            // dict.sys.list.class.category.61
+            ("dict.sys.list.class.category.61", "zh-CN", "黄朽葉色", "字典样式类别.黄朽葉色"),
+            // dict.sys.list.class.category.61
+            ("dict.sys.list.class.category.61", "zh-HK", "黄朽葉色_hk", "字典样式类别.黄朽葉色"),
+
+            // dict.sys.list.class.category.62
+            ("dict.sys.list.class.category.62", "en-US", "菜種油色_us", "字典样式类别.菜種油色"),
+            // dict.sys.list.class.category.62
+            ("dict.sys.list.class.category.62", "ja-JP", "菜種油色_jp", "字典样式类别.菜種油色"),
+            // dict.sys.list.class.category.62
+            ("dict.sys.list.class.category.62", "zh-CN", "菜種油色", "字典样式类别.菜種油色"),
+            // dict.sys.list.class.category.62
+            ("dict.sys.list.class.category.62", "zh-HK", "菜種油色_hk", "字典样式类别.菜種油色"),
+
+            // dict.sys.list.class.category.63
+            ("dict.sys.list.class.category.63", "en-US", "鴇色_us", "字典样式类别.鴇色"),
+            // dict.sys.list.class.category.63
+            ("dict.sys.list.class.category.63", "ja-JP", "鴇色_jp", "字典样式类别.鴇色"),
+            // dict.sys.list.class.category.63
+            ("dict.sys.list.class.category.63", "zh-CN", "鴇色", "字典样式类别.鴇色"),
+            // dict.sys.list.class.category.63
+            ("dict.sys.list.class.category.63", "zh-HK", "鴇色_hk", "字典样式类别.鴇色"),
+
+            // dict.sys.list.class.category.64
+            ("dict.sys.list.class.category.64", "en-US", "萌葱色_us", "字典样式类别.萌葱色"),
+            // dict.sys.list.class.category.64
+            ("dict.sys.list.class.category.64", "ja-JP", "萌葱色_jp", "字典样式类别.萌葱色"),
+            // dict.sys.list.class.category.64
+            ("dict.sys.list.class.category.64", "zh-CN", "萌葱色", "字典样式类别.萌葱色"),
+            // dict.sys.list.class.category.64
+            ("dict.sys.list.class.category.64", "zh-HK", "萌葱色_hk", "字典样式类别.萌葱色"),
+
+            // dict.sys.list.class.category.65
+            ("dict.sys.list.class.category.65", "en-US", "花浅葱_us", "字典样式类别.花浅葱"),
+            // dict.sys.list.class.category.65
+            ("dict.sys.list.class.category.65", "ja-JP", "花浅葱_jp", "字典样式类别.花浅葱"),
+            // dict.sys.list.class.category.65
+            ("dict.sys.list.class.category.65", "zh-CN", "花浅葱", "字典样式类别.花浅葱"),
+            // dict.sys.list.class.category.65
+            ("dict.sys.list.class.category.65", "zh-HK", "花浅葱_hk", "字典样式类别.花浅葱"),
+
+            // dict.sys.list.class.category.66
+            ("dict.sys.list.class.category.66", "en-US", "浅葱色_us", "字典样式类别.浅葱色"),
+            // dict.sys.list.class.category.66
+            ("dict.sys.list.class.category.66", "ja-JP", "浅葱色_jp", "字典样式类别.浅葱色"),
+            // dict.sys.list.class.category.66
+            ("dict.sys.list.class.category.66", "zh-CN", "浅葱色", "字典样式类别.浅葱色"),
+            // dict.sys.list.class.category.66
+            ("dict.sys.list.class.category.66", "zh-HK", "浅葱色_hk", "字典样式类别.浅葱色"),
+
+            // dict.sys.list.class.category.67
+            ("dict.sys.list.class.category.67", "en-US", "青緑_us", "字典样式类别.青緑"),
+            // dict.sys.list.class.category.67
+            ("dict.sys.list.class.category.67", "ja-JP", "青緑_jp", "字典样式类别.青緑"),
+            // dict.sys.list.class.category.67
+            ("dict.sys.list.class.category.67", "zh-CN", "青緑", "字典样式类别.青緑"),
+            // dict.sys.list.class.category.67
+            ("dict.sys.list.class.category.67", "zh-HK", "青緑_hk", "字典样式类别.青緑"),
+
+            // dict.sys.list.class.category.68
+            ("dict.sys.list.class.category.68", "en-US", "青碧_us", "字典样式类别.青碧"),
+            // dict.sys.list.class.category.68
+            ("dict.sys.list.class.category.68", "ja-JP", "青碧_jp", "字典样式类别.青碧"),
+            // dict.sys.list.class.category.68
+            ("dict.sys.list.class.category.68", "zh-CN", "青碧", "字典样式类别.青碧"),
+            // dict.sys.list.class.category.68
+            ("dict.sys.list.class.category.68", "zh-HK", "青碧_hk", "字典样式类别.青碧"),
+
+            // dict.sys.list.class.category.69
+            ("dict.sys.list.class.category.69", "en-US", "山吹茶_us", "字典样式类别.山吹茶"),
+            // dict.sys.list.class.category.69
+            ("dict.sys.list.class.category.69", "ja-JP", "山吹茶_jp", "字典样式类别.山吹茶"),
+            // dict.sys.list.class.category.69
+            ("dict.sys.list.class.category.69", "zh-CN", "山吹茶", "字典样式类别.山吹茶"),
+            // dict.sys.list.class.category.69
+            ("dict.sys.list.class.category.69", "zh-HK", "山吹茶_hk", "字典样式类别.山吹茶"),
 
             // dict.sys.mail.status.0
             ("dict.sys.mail.status.0", "en-US", "草稿_us", "邮件状态.草稿"),
@@ -17726,51 +18977,6 @@ public class TaktDictI18nSeedData : ITaktSeedDataCoordinator
             // dict.routine.document.confidential.level.3
             ("dict.routine.document.confidential.level.3", "zh-HK", "绝密_hk", "文档密级.绝密"),
 
-            // dict.routine.document.change.type.0
-            ("dict.routine.document.change.type.0", "en-US", "创建_us", "文档变更类型.创建"),
-            // dict.routine.document.change.type.0
-            ("dict.routine.document.change.type.0", "ja-JP", "创建_jp", "文档变更类型.创建"),
-            // dict.routine.document.change.type.0
-            ("dict.routine.document.change.type.0", "zh-CN", "创建", "文档变更类型.创建"),
-            // dict.routine.document.change.type.0
-            ("dict.routine.document.change.type.0", "zh-HK", "创建_hk", "文档变更类型.创建"),
-
-            // dict.routine.document.change.type.1
-            ("dict.routine.document.change.type.1", "en-US", "修订_us", "文档变更类型.修订"),
-            // dict.routine.document.change.type.1
-            ("dict.routine.document.change.type.1", "ja-JP", "修订_jp", "文档变更类型.修订"),
-            // dict.routine.document.change.type.1
-            ("dict.routine.document.change.type.1", "zh-CN", "修订", "文档变更类型.修订"),
-            // dict.routine.document.change.type.1
-            ("dict.routine.document.change.type.1", "zh-HK", "修订_hk", "文档变更类型.修订"),
-
-            // dict.routine.document.change.type.2
-            ("dict.routine.document.change.type.2", "en-US", "发布_us", "文档变更类型.发布"),
-            // dict.routine.document.change.type.2
-            ("dict.routine.document.change.type.2", "ja-JP", "发布_jp", "文档变更类型.发布"),
-            // dict.routine.document.change.type.2
-            ("dict.routine.document.change.type.2", "zh-CN", "发布", "文档变更类型.发布"),
-            // dict.routine.document.change.type.2
-            ("dict.routine.document.change.type.2", "zh-HK", "发布_hk", "文档变更类型.发布"),
-
-            // dict.routine.document.change.type.3
-            ("dict.routine.document.change.type.3", "en-US", "归档_us", "文档变更类型.归档"),
-            // dict.routine.document.change.type.3
-            ("dict.routine.document.change.type.3", "ja-JP", "归档_jp", "文档变更类型.归档"),
-            // dict.routine.document.change.type.3
-            ("dict.routine.document.change.type.3", "zh-CN", "归档", "文档变更类型.归档"),
-            // dict.routine.document.change.type.3
-            ("dict.routine.document.change.type.3", "zh-HK", "归档_hk", "文档变更类型.归档"),
-
-            // dict.routine.document.change.type.4
-            ("dict.routine.document.change.type.4", "en-US", "删除_us", "文档变更类型.删除"),
-            // dict.routine.document.change.type.4
-            ("dict.routine.document.change.type.4", "ja-JP", "删除_jp", "文档变更类型.删除"),
-            // dict.routine.document.change.type.4
-            ("dict.routine.document.change.type.4", "zh-CN", "删除", "文档变更类型.删除"),
-            // dict.routine.document.change.type.4
-            ("dict.routine.document.change.type.4", "zh-HK", "删除_hk", "文档变更类型.删除"),
-
             // dict.routine.knowledge.status.0
             ("dict.routine.knowledge.status.0", "en-US", "草稿_us", "知识库状态.草稿"),
             // dict.routine.knowledge.status.0
@@ -17851,42 +19057,6 @@ public class TaktDictI18nSeedData : ITaktSeedDataCoordinator
             ("dict.routine.ticket.reply.author.type.2", "zh-CN", "系统", "工单回复作者类型.系统"),
             // dict.routine.ticket.reply.author.type.2
             ("dict.routine.ticket.reply.author.type.2", "zh-HK", "系统_hk", "工单回复作者类型.系统"),
-
-            // dict.sys.entity.change.type.0
-            ("dict.sys.entity.change.type.0", "en-US", "创建_us", "实体变更类型.创建"),
-            // dict.sys.entity.change.type.0
-            ("dict.sys.entity.change.type.0", "ja-JP", "创建_jp", "实体变更类型.创建"),
-            // dict.sys.entity.change.type.0
-            ("dict.sys.entity.change.type.0", "zh-CN", "创建", "实体变更类型.创建"),
-            // dict.sys.entity.change.type.0
-            ("dict.sys.entity.change.type.0", "zh-HK", "创建_hk", "实体变更类型.创建"),
-
-            // dict.sys.entity.change.type.1
-            ("dict.sys.entity.change.type.1", "en-US", "更新_us", "实体变更类型.更新"),
-            // dict.sys.entity.change.type.1
-            ("dict.sys.entity.change.type.1", "ja-JP", "更新_jp", "实体变更类型.更新"),
-            // dict.sys.entity.change.type.1
-            ("dict.sys.entity.change.type.1", "zh-CN", "更新", "实体变更类型.更新"),
-            // dict.sys.entity.change.type.1
-            ("dict.sys.entity.change.type.1", "zh-HK", "更新_hk", "实体变更类型.更新"),
-
-            // dict.sys.entity.change.type.2
-            ("dict.sys.entity.change.type.2", "en-US", "删除_us", "实体变更类型.删除"),
-            // dict.sys.entity.change.type.2
-            ("dict.sys.entity.change.type.2", "ja-JP", "删除_jp", "实体变更类型.删除"),
-            // dict.sys.entity.change.type.2
-            ("dict.sys.entity.change.type.2", "zh-CN", "删除", "实体变更类型.删除"),
-            // dict.sys.entity.change.type.2
-            ("dict.sys.entity.change.type.2", "zh-HK", "删除_hk", "实体变更类型.删除"),
-
-            // dict.sys.entity.change.type.3
-            ("dict.sys.entity.change.type.3", "en-US", "状态变更_us", "实体变更类型.状态变更"),
-            // dict.sys.entity.change.type.3
-            ("dict.sys.entity.change.type.3", "ja-JP", "状态变更_jp", "实体变更类型.状态变更"),
-            // dict.sys.entity.change.type.3
-            ("dict.sys.entity.change.type.3", "zh-CN", "状态变更", "实体变更类型.状态变更"),
-            // dict.sys.entity.change.type.3
-            ("dict.sys.entity.change.type.3", "zh-HK", "状态变更_hk", "实体变更类型.状态变更"),
 
             // dict.routine.news.comment.status.0
             ("dict.routine.news.comment.status.0", "en-US", "待展示_us", "新闻评论展示状态.待展示"),
@@ -19292,6 +20462,240 @@ public class TaktDictI18nSeedData : ITaktSeedDataCoordinator
             // dict.logistics.quality.inspection.type.2
             ("dict.logistics.quality.inspection.type.2", "zh-HK", "FQC最终检验_hk", "检验类型.FQC最终检验"),
 
+            // dict.logistics.quality.group.inspection.category.0
+            ("dict.logistics.quality.group.inspection.category.0", "en-US", "IQC_us", "质量组检查类别.IQC"),
+            // dict.logistics.quality.group.inspection.category.0
+            ("dict.logistics.quality.group.inspection.category.0", "ja-JP", "IQC_jp", "质量组检查类别.IQC"),
+            // dict.logistics.quality.group.inspection.category.0
+            ("dict.logistics.quality.group.inspection.category.0", "zh-CN", "IQC", "质量组检查类别.IQC"),
+            // dict.logistics.quality.group.inspection.category.0
+            ("dict.logistics.quality.group.inspection.category.0", "zh-HK", "IQC_hk", "质量组检查类别.IQC"),
+
+            // dict.logistics.quality.group.inspection.category.1
+            ("dict.logistics.quality.group.inspection.category.1", "en-US", "QA_us", "质量组检查类别.QA"),
+            // dict.logistics.quality.group.inspection.category.1
+            ("dict.logistics.quality.group.inspection.category.1", "ja-JP", "QA_jp", "质量组检查类别.QA"),
+            // dict.logistics.quality.group.inspection.category.1
+            ("dict.logistics.quality.group.inspection.category.1", "zh-CN", "QA", "质量组检查类别.QA"),
+            // dict.logistics.quality.group.inspection.category.1
+            ("dict.logistics.quality.group.inspection.category.1", "zh-HK", "QA_hk", "质量组检查类别.QA"),
+
+            // dict.logistics.quality.group.inspection.category.2
+            ("dict.logistics.quality.group.inspection.category.2", "en-US", "IPQC_us", "质量组检查类别.IPQC"),
+            // dict.logistics.quality.group.inspection.category.2
+            ("dict.logistics.quality.group.inspection.category.2", "ja-JP", "IPQC_jp", "质量组检查类别.IPQC"),
+            // dict.logistics.quality.group.inspection.category.2
+            ("dict.logistics.quality.group.inspection.category.2", "zh-CN", "IPQC", "质量组检查类别.IPQC"),
+            // dict.logistics.quality.group.inspection.category.2
+            ("dict.logistics.quality.group.inspection.category.2", "zh-HK", "IPQC_hk", "质量组检查类别.IPQC"),
+
+            // dict.logistics.manufacturing.defect.group.category.0
+            ("dict.logistics.manufacturing.defect.group.category.0", "en-US", "Assy_us", "不良组类别.Assy"),
+            // dict.logistics.manufacturing.defect.group.category.0
+            ("dict.logistics.manufacturing.defect.group.category.0", "ja-JP", "Assy_jp", "不良组类别.Assy"),
+            // dict.logistics.manufacturing.defect.group.category.0
+            ("dict.logistics.manufacturing.defect.group.category.0", "zh-CN", "Assy", "不良组类别.Assy"),
+            // dict.logistics.manufacturing.defect.group.category.0
+            ("dict.logistics.manufacturing.defect.group.category.0", "zh-HK", "Assy_hk", "不良组类别.Assy"),
+
+            // dict.logistics.manufacturing.defect.group.category.1
+            ("dict.logistics.manufacturing.defect.group.category.1", "en-US", "Inspection_us", "不良组类别.Inspection"),
+            // dict.logistics.manufacturing.defect.group.category.1
+            ("dict.logistics.manufacturing.defect.group.category.1", "ja-JP", "Inspection_jp", "不良组类别.Inspection"),
+            // dict.logistics.manufacturing.defect.group.category.1
+            ("dict.logistics.manufacturing.defect.group.category.1", "zh-CN", "Inspection", "不良组类别.Inspection"),
+            // dict.logistics.manufacturing.defect.group.category.1
+            ("dict.logistics.manufacturing.defect.group.category.1", "zh-HK", "Inspection_hk", "不良组类别.Inspection"),
+
+            // dict.logistics.manufacturing.defect.group.category.2
+            ("dict.logistics.manufacturing.defect.group.category.2", "en-US", "Repair_us", "不良组类别.Repair"),
+            // dict.logistics.manufacturing.defect.group.category.2
+            ("dict.logistics.manufacturing.defect.group.category.2", "ja-JP", "Repair_jp", "不良组类别.Repair"),
+            // dict.logistics.manufacturing.defect.group.category.2
+            ("dict.logistics.manufacturing.defect.group.category.2", "zh-CN", "Repair", "不良组类别.Repair"),
+            // dict.logistics.manufacturing.defect.group.category.2
+            ("dict.logistics.manufacturing.defect.group.category.2", "zh-HK", "Repair_hk", "不良组类别.Repair"),
+
+            // dict.logistics.procurement.purchase.group.c01
+            ("dict.logistics.procurement.purchase.group.c01", "en-US", "张三_us", "采购组.C01"),
+            // dict.logistics.procurement.purchase.group.c01
+            ("dict.logistics.procurement.purchase.group.c01", "ja-JP", "张三_jp", "采购组.C01"),
+            // dict.logistics.procurement.purchase.group.c01
+            ("dict.logistics.procurement.purchase.group.c01", "zh-CN", "张三", "采购组.C01"),
+            // dict.logistics.procurement.purchase.group.c01
+            ("dict.logistics.procurement.purchase.group.c01", "zh-HK", "张三_hk", "采购组.C01"),
+
+            // dict.logistics.procurement.purchase.group.c02
+            ("dict.logistics.procurement.purchase.group.c02", "en-US", "李四_us", "采购组.C02"),
+            // dict.logistics.procurement.purchase.group.c02
+            ("dict.logistics.procurement.purchase.group.c02", "ja-JP", "李四_jp", "采购组.C02"),
+            // dict.logistics.procurement.purchase.group.c02
+            ("dict.logistics.procurement.purchase.group.c02", "zh-CN", "李四", "采购组.C02"),
+            // dict.logistics.procurement.purchase.group.c02
+            ("dict.logistics.procurement.purchase.group.c02", "zh-HK", "李四_hk", "采购组.C02"),
+
+            // dict.logistics.procurement.purchase.group.h01
+            ("dict.logistics.procurement.purchase.group.h01", "en-US", "张三_us", "采购组.H01"),
+            // dict.logistics.procurement.purchase.group.h01
+            ("dict.logistics.procurement.purchase.group.h01", "ja-JP", "张三_jp", "采购组.H01"),
+            // dict.logistics.procurement.purchase.group.h01
+            ("dict.logistics.procurement.purchase.group.h01", "zh-CN", "张三", "采购组.H01"),
+            // dict.logistics.procurement.purchase.group.h01
+            ("dict.logistics.procurement.purchase.group.h01", "zh-HK", "张三_hk", "采购组.H01"),
+
+            // dict.logistics.procurement.purchase.group.h02
+            ("dict.logistics.procurement.purchase.group.h02", "en-US", "李四_us", "采购组.H02"),
+            // dict.logistics.procurement.purchase.group.h02
+            ("dict.logistics.procurement.purchase.group.h02", "ja-JP", "李四_jp", "采购组.H02"),
+            // dict.logistics.procurement.purchase.group.h02
+            ("dict.logistics.procurement.purchase.group.h02", "zh-CN", "李四", "采购组.H02"),
+            // dict.logistics.procurement.purchase.group.h02
+            ("dict.logistics.procurement.purchase.group.h02", "zh-HK", "李四_hk", "采购组.H02"),
+
+            // dict.logistics.sales.sales.group.c01
+            ("dict.logistics.sales.sales.group.c01", "en-US", "张三_us", "销售组.C01"),
+            // dict.logistics.sales.sales.group.c01
+            ("dict.logistics.sales.sales.group.c01", "ja-JP", "张三_jp", "销售组.C01"),
+            // dict.logistics.sales.sales.group.c01
+            ("dict.logistics.sales.sales.group.c01", "zh-CN", "张三", "销售组.C01"),
+            // dict.logistics.sales.sales.group.c01
+            ("dict.logistics.sales.sales.group.c01", "zh-HK", "张三_hk", "销售组.C01"),
+
+            // dict.logistics.sales.sales.group.c02
+            ("dict.logistics.sales.sales.group.c02", "en-US", "李四_us", "销售组.C02"),
+            // dict.logistics.sales.sales.group.c02
+            ("dict.logistics.sales.sales.group.c02", "ja-JP", "李四_jp", "销售组.C02"),
+            // dict.logistics.sales.sales.group.c02
+            ("dict.logistics.sales.sales.group.c02", "zh-CN", "李四", "销售组.C02"),
+            // dict.logistics.sales.sales.group.c02
+            ("dict.logistics.sales.sales.group.c02", "zh-HK", "李四_hk", "销售组.C02"),
+
+            // dict.logistics.sales.sales.group.h01
+            ("dict.logistics.sales.sales.group.h01", "en-US", "张三_us", "销售组.H01"),
+            // dict.logistics.sales.sales.group.h01
+            ("dict.logistics.sales.sales.group.h01", "ja-JP", "张三_jp", "销售组.H01"),
+            // dict.logistics.sales.sales.group.h01
+            ("dict.logistics.sales.sales.group.h01", "zh-CN", "张三", "销售组.H01"),
+            // dict.logistics.sales.sales.group.h01
+            ("dict.logistics.sales.sales.group.h01", "zh-HK", "张三_hk", "销售组.H01"),
+
+            // dict.logistics.sales.sales.group.h02
+            ("dict.logistics.sales.sales.group.h02", "en-US", "李四_us", "销售组.H02"),
+            // dict.logistics.sales.sales.group.h02
+            ("dict.logistics.sales.sales.group.h02", "ja-JP", "李四_jp", "销售组.H02"),
+            // dict.logistics.sales.sales.group.h02
+            ("dict.logistics.sales.sales.group.h02", "zh-CN", "李四", "销售组.H02"),
+            // dict.logistics.sales.sales.group.h02
+            ("dict.logistics.sales.sales.group.h02", "zh-HK", "李四_hk", "销售组.H02"),
+
+            // dict.logistics.manufacturing.ec.group.c01
+            ("dict.logistics.manufacturing.ec.group.c01", "en-US", "张三_us", "设变组.C01"),
+            // dict.logistics.manufacturing.ec.group.c01
+            ("dict.logistics.manufacturing.ec.group.c01", "ja-JP", "张三_jp", "设变组.C01"),
+            // dict.logistics.manufacturing.ec.group.c01
+            ("dict.logistics.manufacturing.ec.group.c01", "zh-CN", "张三", "设变组.C01"),
+            // dict.logistics.manufacturing.ec.group.c01
+            ("dict.logistics.manufacturing.ec.group.c01", "zh-HK", "张三_hk", "设变组.C01"),
+
+            // dict.logistics.manufacturing.ec.group.c02
+            ("dict.logistics.manufacturing.ec.group.c02", "en-US", "李四_us", "设变组.C02"),
+            // dict.logistics.manufacturing.ec.group.c02
+            ("dict.logistics.manufacturing.ec.group.c02", "ja-JP", "李四_jp", "设变组.C02"),
+            // dict.logistics.manufacturing.ec.group.c02
+            ("dict.logistics.manufacturing.ec.group.c02", "zh-CN", "李四", "设变组.C02"),
+            // dict.logistics.manufacturing.ec.group.c02
+            ("dict.logistics.manufacturing.ec.group.c02", "zh-HK", "李四_hk", "设变组.C02"),
+
+            // dict.logistics.manufacturing.ec.group.h01
+            ("dict.logistics.manufacturing.ec.group.h01", "en-US", "张三_us", "设变组.H01"),
+            // dict.logistics.manufacturing.ec.group.h01
+            ("dict.logistics.manufacturing.ec.group.h01", "ja-JP", "张三_jp", "设变组.H01"),
+            // dict.logistics.manufacturing.ec.group.h01
+            ("dict.logistics.manufacturing.ec.group.h01", "zh-CN", "张三", "设变组.H01"),
+            // dict.logistics.manufacturing.ec.group.h01
+            ("dict.logistics.manufacturing.ec.group.h01", "zh-HK", "张三_hk", "设变组.H01"),
+
+            // dict.logistics.manufacturing.ec.group.h02
+            ("dict.logistics.manufacturing.ec.group.h02", "en-US", "李四_us", "设变组.H02"),
+            // dict.logistics.manufacturing.ec.group.h02
+            ("dict.logistics.manufacturing.ec.group.h02", "ja-JP", "李四_jp", "设变组.H02"),
+            // dict.logistics.manufacturing.ec.group.h02
+            ("dict.logistics.manufacturing.ec.group.h02", "zh-CN", "李四", "设变组.H02"),
+            // dict.logistics.manufacturing.ec.group.h02
+            ("dict.logistics.manufacturing.ec.group.h02", "zh-HK", "李四_hk", "设变组.H02"),
+
+            // dict.logistics.quality.operation.quality.group.c01
+            ("dict.logistics.quality.operation.quality.group.c01", "en-US", "张三_us", "质量组.C01"),
+            // dict.logistics.quality.operation.quality.group.c01
+            ("dict.logistics.quality.operation.quality.group.c01", "ja-JP", "张三_jp", "质量组.C01"),
+            // dict.logistics.quality.operation.quality.group.c01
+            ("dict.logistics.quality.operation.quality.group.c01", "zh-CN", "张三", "质量组.C01"),
+            // dict.logistics.quality.operation.quality.group.c01
+            ("dict.logistics.quality.operation.quality.group.c01", "zh-HK", "张三_hk", "质量组.C01"),
+
+            // dict.logistics.quality.operation.quality.group.c02
+            ("dict.logistics.quality.operation.quality.group.c02", "en-US", "李四_us", "质量组.C02"),
+            // dict.logistics.quality.operation.quality.group.c02
+            ("dict.logistics.quality.operation.quality.group.c02", "ja-JP", "李四_jp", "质量组.C02"),
+            // dict.logistics.quality.operation.quality.group.c02
+            ("dict.logistics.quality.operation.quality.group.c02", "zh-CN", "李四", "质量组.C02"),
+            // dict.logistics.quality.operation.quality.group.c02
+            ("dict.logistics.quality.operation.quality.group.c02", "zh-HK", "李四_hk", "质量组.C02"),
+
+            // dict.logistics.quality.operation.quality.group.h01
+            ("dict.logistics.quality.operation.quality.group.h01", "en-US", "张三_us", "质量组.H01"),
+            // dict.logistics.quality.operation.quality.group.h01
+            ("dict.logistics.quality.operation.quality.group.h01", "ja-JP", "张三_jp", "质量组.H01"),
+            // dict.logistics.quality.operation.quality.group.h01
+            ("dict.logistics.quality.operation.quality.group.h01", "zh-CN", "张三", "质量组.H01"),
+            // dict.logistics.quality.operation.quality.group.h01
+            ("dict.logistics.quality.operation.quality.group.h01", "zh-HK", "张三_hk", "质量组.H01"),
+
+            // dict.logistics.quality.operation.quality.group.h02
+            ("dict.logistics.quality.operation.quality.group.h02", "en-US", "李四_us", "质量组.H02"),
+            // dict.logistics.quality.operation.quality.group.h02
+            ("dict.logistics.quality.operation.quality.group.h02", "ja-JP", "李四_jp", "质量组.H02"),
+            // dict.logistics.quality.operation.quality.group.h02
+            ("dict.logistics.quality.operation.quality.group.h02", "zh-CN", "李四", "质量组.H02"),
+            // dict.logistics.quality.operation.quality.group.h02
+            ("dict.logistics.quality.operation.quality.group.h02", "zh-HK", "李四_hk", "质量组.H02"),
+
+            // dict.logistics.manufacturing.defect.group.c01
+            ("dict.logistics.manufacturing.defect.group.c01", "en-US", "张三_us", "不良组.C01"),
+            // dict.logistics.manufacturing.defect.group.c01
+            ("dict.logistics.manufacturing.defect.group.c01", "ja-JP", "张三_jp", "不良组.C01"),
+            // dict.logistics.manufacturing.defect.group.c01
+            ("dict.logistics.manufacturing.defect.group.c01", "zh-CN", "张三", "不良组.C01"),
+            // dict.logistics.manufacturing.defect.group.c01
+            ("dict.logistics.manufacturing.defect.group.c01", "zh-HK", "张三_hk", "不良组.C01"),
+
+            // dict.logistics.manufacturing.defect.group.c02
+            ("dict.logistics.manufacturing.defect.group.c02", "en-US", "李四_us", "不良组.C02"),
+            // dict.logistics.manufacturing.defect.group.c02
+            ("dict.logistics.manufacturing.defect.group.c02", "ja-JP", "李四_jp", "不良组.C02"),
+            // dict.logistics.manufacturing.defect.group.c02
+            ("dict.logistics.manufacturing.defect.group.c02", "zh-CN", "李四", "不良组.C02"),
+            // dict.logistics.manufacturing.defect.group.c02
+            ("dict.logistics.manufacturing.defect.group.c02", "zh-HK", "李四_hk", "不良组.C02"),
+
+            // dict.logistics.manufacturing.defect.group.h01
+            ("dict.logistics.manufacturing.defect.group.h01", "en-US", "张三_us", "不良组.H01"),
+            // dict.logistics.manufacturing.defect.group.h01
+            ("dict.logistics.manufacturing.defect.group.h01", "ja-JP", "张三_jp", "不良组.H01"),
+            // dict.logistics.manufacturing.defect.group.h01
+            ("dict.logistics.manufacturing.defect.group.h01", "zh-CN", "张三", "不良组.H01"),
+            // dict.logistics.manufacturing.defect.group.h01
+            ("dict.logistics.manufacturing.defect.group.h01", "zh-HK", "张三_hk", "不良组.H01"),
+
+            // dict.logistics.manufacturing.defect.group.h02
+            ("dict.logistics.manufacturing.defect.group.h02", "en-US", "李四_us", "不良组.H02"),
+            // dict.logistics.manufacturing.defect.group.h02
+            ("dict.logistics.manufacturing.defect.group.h02", "ja-JP", "李四_jp", "不良组.H02"),
+            // dict.logistics.manufacturing.defect.group.h02
+            ("dict.logistics.manufacturing.defect.group.h02", "zh-CN", "李四", "不良组.H02"),
+            // dict.logistics.manufacturing.defect.group.h02
+            ("dict.logistics.manufacturing.defect.group.h02", "zh-HK", "李四_hk", "不良组.H02"),
+
             // dict.logistics.quality.standard.status.0
             ("dict.logistics.quality.standard.status.0", "en-US", "草稿_us", "检验标准状态.草稿"),
             // dict.logistics.quality.standard.status.0
@@ -19437,22 +20841,22 @@ public class TaktDictI18nSeedData : ITaktSeedDataCoordinator
             ("dict.logistics.quality.sampling.scheme.type.3", "zh-HK", "计量调整型_hk", "抽样方案类型.计量调整型"),
 
             // dict.logistics.quality.sampling.standard.0
-            ("dict.logistics.quality.sampling.standard.0", "en-US", "GB/T 2828.1_us", "抽样标准.GB/T 2828.1"),
+            ("dict.logistics.quality.sampling.standard.0", "en-US", "Gt/b 2828.1_us", "抽样标准.Gt/b 2828.1"),
             // dict.logistics.quality.sampling.standard.0
-            ("dict.logistics.quality.sampling.standard.0", "ja-JP", "GB/T 2828.1_jp", "抽样标准.GB/T 2828.1"),
+            ("dict.logistics.quality.sampling.standard.0", "ja-JP", "Gt/b 2828.1_jp", "抽样标准.Gt/b 2828.1"),
             // dict.logistics.quality.sampling.standard.0
-            ("dict.logistics.quality.sampling.standard.0", "zh-CN", "GB/T 2828.1", "抽样标准.GB/T 2828.1"),
+            ("dict.logistics.quality.sampling.standard.0", "zh-CN", "Gt/b 2828.1", "抽样标准.Gt/b 2828.1"),
             // dict.logistics.quality.sampling.standard.0
-            ("dict.logistics.quality.sampling.standard.0", "zh-HK", "GB/T 2828.1_hk", "抽样标准.GB/T 2828.1"),
+            ("dict.logistics.quality.sampling.standard.0", "zh-HK", "Gt/b 2828.1_hk", "抽样标准.Gt/b 2828.1"),
 
             // dict.logistics.quality.sampling.standard.1
-            ("dict.logistics.quality.sampling.standard.1", "en-US", "GB/T 6378_us", "抽样标准.GB/T 6378"),
+            ("dict.logistics.quality.sampling.standard.1", "en-US", "Gt/b 6378_us", "抽样标准.Gt/b 6378"),
             // dict.logistics.quality.sampling.standard.1
-            ("dict.logistics.quality.sampling.standard.1", "ja-JP", "GB/T 6378_jp", "抽样标准.GB/T 6378"),
+            ("dict.logistics.quality.sampling.standard.1", "ja-JP", "Gt/b 6378_jp", "抽样标准.Gt/b 6378"),
             // dict.logistics.quality.sampling.standard.1
-            ("dict.logistics.quality.sampling.standard.1", "zh-CN", "GB/T 6378", "抽样标准.GB/T 6378"),
+            ("dict.logistics.quality.sampling.standard.1", "zh-CN", "Gt/b 6378", "抽样标准.Gt/b 6378"),
             // dict.logistics.quality.sampling.standard.1
-            ("dict.logistics.quality.sampling.standard.1", "zh-HK", "GB/T 6378_hk", "抽样标准.GB/T 6378"),
+            ("dict.logistics.quality.sampling.standard.1", "zh-HK", "Gt/b 6378_hk", "抽样标准.Gt/b 6378"),
 
             // dict.logistics.quality.sampling.standard.2
             ("dict.logistics.quality.sampling.standard.2", "en-US", "MIL-STD-105E_us", "抽样标准.MIL-STD-105E"),

@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Application.Services.Logistics.Sales
 // 文件名称：TaktSalesOrderService.cs
-// 创建时间：2026-07-01
+// 创建时间：2026-07-09
 // 创建人：Takt365(Cursor AI)
 // 功能描述：销售订单应用服务实现
 // 
@@ -31,7 +31,6 @@ public class TaktSalesOrderService : TaktServiceBase, ITaktSalesOrderService
 {
     private readonly ITaktCompanyRepository<TaktSalesOrder> _salesOrderRepository;
     private readonly ITaktCompanyRepository<TaktSalesOrderItem> _salesOrderItemRepository;
-    private readonly ITaktCompanyRepository<TaktSalesOrderChangeLog> _salesOrderChangeLogRepository;
     private readonly ITaktLineNumberGenerator _lineNumberGenerator;
     private readonly ITaktUniqueValidator _uniqueValidator;
 
@@ -40,7 +39,6 @@ public class TaktSalesOrderService : TaktServiceBase, ITaktSalesOrderService
     /// </summary>
     /// <param name="salesOrderRepository">销售订单仓储</param>
     /// <param name="salesOrderItemRepository">SalesOrderItem仓储</param>
-    /// <param name="salesOrderChangeLogRepository">SalesOrderChangeLog仓储</param>
     /// <param name="lineNumberGenerator">明细行号生成器</param>
     /// <param name="uniqueValidator">唯一性验证器</param>
     /// <param name="userContext">用户上下文</param>
@@ -48,7 +46,6 @@ public class TaktSalesOrderService : TaktServiceBase, ITaktSalesOrderService
     public TaktSalesOrderService(
         ITaktCompanyRepository<TaktSalesOrder> salesOrderRepository,
         ITaktCompanyRepository<TaktSalesOrderItem> salesOrderItemRepository,
-        ITaktCompanyRepository<TaktSalesOrderChangeLog> salesOrderChangeLogRepository,
         ITaktLineNumberGenerator lineNumberGenerator,
         ITaktUniqueValidator uniqueValidator,
         ITaktUserContext? userContext = null,
@@ -57,7 +54,6 @@ public class TaktSalesOrderService : TaktServiceBase, ITaktSalesOrderService
     {
         _salesOrderRepository = salesOrderRepository;
         _salesOrderItemRepository = salesOrderItemRepository;
-        _salesOrderChangeLogRepository = salesOrderChangeLogRepository;
         _lineNumberGenerator = lineNumberGenerator;
         _uniqueValidator = uniqueValidator;
     }
@@ -179,7 +175,6 @@ public class TaktSalesOrderService : TaktServiceBase, ITaktSalesOrderService
             throw new TaktBusinessException("销售订单不存在或已删除");
         }
         await _salesOrderItemRepository.DeleteAsync(x => x.SalesOrderId == entity.Id);
-        await _salesOrderChangeLogRepository.DeleteAsync(x => x.SalesOrderId == entity.Id);
         var deleted = await _salesOrderRepository.DeleteAsync(id);
         if (!deleted)
         {
@@ -313,7 +308,31 @@ public class TaktSalesOrderService : TaktServiceBase, ITaktSalesOrderService
     // ========================================
 
     /// <summary>
-    /// 填充销售订单详情（加载 OneToMany 子表：销售订单明细、销售订单变更记录）
+    /// 将指定主表下全部未作废销售订单明细标记为作废（编辑清空子表）
+    /// </summary>
+    /// <param name="salesOrderId">主表主键</param>
+    /// <returns>任务</returns>
+    private async Task MarkSalesOrderItemsObsoleteAsync(long salesOrderId)
+    {
+        if (salesOrderId <= 0)
+        {
+            return;
+        }
+        var rows = await _salesOrderItemRepository.GetListAsync(
+            x => x.SalesOrderId == salesOrderId && x.IsObsolete == 0);
+        if (rows.Count == 0)
+        {
+            return;
+        }
+        foreach (var row in rows)
+        {
+            row.IsObsolete = 1;
+        }
+        await _salesOrderItemRepository.UpdateRangeAsync(rows);
+    }
+
+    /// <summary>
+    /// 填充销售订单详情（加载 OneToMany 子表：销售订单明细）
     /// </summary>
     /// <param name="dto">响应 DTO</param>
     /// <param name="entity">主表实体</param>
@@ -324,16 +343,13 @@ public class TaktSalesOrderService : TaktServiceBase, ITaktSalesOrderService
         {
             return;
         }
-        // 销售订单明细 → dto.Items
+        // 销售订单明细 → dto.Items（含作废行）
         var items = await _salesOrderItemRepository.GetListAsync(x => x.SalesOrderId == entity.Id);
         dto.Items = items.Adapt<List<TaktSalesOrderItemDto>>();
-        // 销售订单变更记录 → dto.ChangeLogs
-        var changelogs = await _salesOrderChangeLogRepository.GetListAsync(x => x.SalesOrderId == entity.Id);
-        dto.ChangeLogs = changelogs.Adapt<List<TaktSalesOrderChangeLogDto>>();
     }
 
     /// <summary>
-    /// 保存销售订单子表级联（销售订单明细、销售订单变更记录；Create/Update 后按主表 Id 先删后插）
+    /// 保存销售订单子表级联（销售订单明细；按子表 Id 增量新增/更新；未提交行标记作废，禁止先删后插）
     /// </summary>
     /// <param name="entity">主表实体</param>
     /// <param name="dto">创建/更新 DTO（含子表集合；UpdateDto 须继承 CreateDto）</param>
@@ -343,73 +359,95 @@ public class TaktSalesOrderService : TaktServiceBase, ITaktSalesOrderService
         // 销售订单明细（Items）
         if (dto.Items is not { Count: > 0 })
         {
-            await _salesOrderItemRepository.DeleteAsync(x => x.SalesOrderId == entity.Id);
+            await MarkSalesOrderItemsObsoleteAsync(entity.Id);
+            return;
         }
         else
         {
-            var items = dto.Items.Adapt<List<TaktSalesOrderItem>>();
-            foreach (var child in items)
+            var existingList = await _salesOrderItemRepository.GetListAsync(x => x.SalesOrderId == entity.Id);
+            var existingById = existingList.ToDictionary(x => x.Id);
+            var submittedIds = new HashSet<long>();
+            var toCreate = new List<TaktSalesOrderItem>();
+            var seenLineKeys = new HashSet<string>(StringComparer.Ordinal);
+            for (var i = 0; i < dto.Items.Count; i++)
             {
-                child.SalesOrderId = entity.Id;
-            }
-            var itemsNeedLine = items.Where(c => c.LineNumber <= 0).ToList();
-            if (itemsNeedLine.Count > 0)
-            {
-                var businessCode = !string.IsNullOrWhiteSpace(entity.SalesOrderCode) ? entity.SalesOrderCode : entity.Id.ToString();
-                var maxLine = await _salesOrderItemRepository.GetMaxIntAsync(
-                    x => x.TenantCode == CurrentTenantCode && x.CompanyCode == CurrentCompanyCode && x.SalesOrderId == entity.Id,
-                    x => x.LineNumber);
-                var lineSeq = _lineNumberGenerator.GenerateSequence(businessCode, itemsNeedLine.Count, maxLine).ToList();
-                var lineIdx = 0;
-                foreach (var child in items)
+                var childDto = dto.Items[i];
+                childDto.SalesOrderId = entity.Id;
+                var lineKey = $"{entity.CompanyCode}|{entity.Id}|{childDto.LineNumber}";
+                if (!seenLineKeys.Add(lineKey))
                 {
-                    if (child.LineNumber <= 0)
+                    throw new TaktBusinessException("销售订单明细第{i + 1}项与本次提交的其他项重复（CompanyCode、SalesOrderId、LineNumber）");
+                }
+                if (childDto.SalesOrderItemId > 0)
+                {
+                    if (!existingById.TryGetValue(childDto.SalesOrderItemId, out var target))
                     {
-                        child.LineNumber = lineSeq[lineIdx++];
+                        throw new TaktBusinessException("销售订单明细不存在（SalesOrderItemId={childDto.SalesOrderItemId}）");
                     }
+                    if (target.SalesOrderId != entity.Id)
+                    {
+                        throw new TaktBusinessException("销售订单明细不属于当前主表（SalesOrderItemId={childDto.SalesOrderItemId}）");
+                    }
+                    submittedIds.Add(childDto.SalesOrderItemId);
+                    var isUniqueUpdate_ix_takt_logistics_sales_order_item_order_line_unique = await _uniqueValidator.IsUniqueAsync(
+                        _salesOrderItemRepository,
+                        x => x.CompanyCode == x.CompanyCode
+                && x.SalesOrderId == x.SalesOrderId
+                && x.LineNumber == x.LineNumber,
+                        childDto.SalesOrderItemId);
+                    if (!isUniqueUpdate_ix_takt_logistics_sales_order_item_order_line_unique)
+                    {
+                        throw new TaktBusinessException("销售订单明细的CompanyCode、SalesOrderId、LineNumber已存在");
+                    }
+                    childDto.Adapt(target);
+                    target.Id = childDto.SalesOrderItemId;
+                    target.SalesOrderId = entity.Id;
+                    target.IsObsolete = 0;
+                    await _salesOrderItemRepository.UpdateAsync(target);
+                }
+                else
+                {
+                    var isUniqueCreate_ix_takt_logistics_sales_order_item_order_line_unique = await _uniqueValidator.IsUniqueAsync(
+                        _salesOrderItemRepository,
+                        x => x.CompanyCode == x.CompanyCode
+                && x.SalesOrderId == x.SalesOrderId
+                && x.LineNumber == x.LineNumber);
+                    if (!isUniqueCreate_ix_takt_logistics_sales_order_item_order_line_unique)
+                    {
+                        throw new TaktBusinessException("销售订单明细的CompanyCode、SalesOrderId、LineNumber已存在");
+                    }
+                    var child = childDto.Adapt<TaktSalesOrderItem>();
+                    child.Id = 0;
+                    child.SalesOrderId = entity.Id;
+                    child.IsObsolete = 0;
+                    toCreate.Add(child);
                 }
             }
-                        var seenKeys = new HashSet<string>(StringComparer.Ordinal);
-                        for (var i = 0; i < items.Count; i++)
+            var toObsolete = existingList.Where(x => !submittedIds.Contains(x.Id) && x.IsObsolete == 0).ToList();
+            foreach (var removed in toObsolete)
+            {
+                removed.IsObsolete = 1;
+                await _salesOrderItemRepository.UpdateAsync(removed);
+            }
+            if (toCreate.Count > 0)
+            {
+                var needLine = toCreate.Where(c => c.LineNumber <= 0).ToList();
+                if (needLine.Count > 0)
+                {
+                    var businessCode = !string.IsNullOrWhiteSpace(entity.SalesOrderCode) ? entity.SalesOrderCode : entity.Id.ToString();
+                    var maxLine = existingList.Count > 0 ? existingList.Max(x => x.LineNumber) : 0;
+                    var lineSeq = _lineNumberGenerator.GenerateSequence(businessCode, needLine.Count, maxLine).ToList();
+                    var lineIdx = 0;
+                    foreach (var child in toCreate)
+                    {
+                        if (child.LineNumber <= 0)
                         {
-                            var key = $"{items[i].CompanyCode}|{items[i].SalesOrderId}|{items[i].LineNumber}";
-                            if (!seenKeys.Add(key))
-                            {
-                                throw new TaktBusinessException($"销售订单明细第{i + 1}项与本次提交的其他项重复（CompanyCode、SalesOrderId、LineNumber）");
-                            }
+                            child.LineNumber = lineSeq[lineIdx++];
                         }
-            await _salesOrderItemRepository.DeleteAsync(x => x.SalesOrderId == entity.Id);
-            foreach (var child in items)
-            {
-            var isUnique_ix_takt_logistics_sales_order_item_order_line_unique = await _uniqueValidator.IsUniqueAsync(
-                _salesOrderItemRepository,
-                x => x.CompanyCode == child.CompanyCode
-                    && x.SalesOrderId == child.SalesOrderId
-                    && x.LineNumber == child.LineNumber);
-            if (!isUnique_ix_takt_logistics_sales_order_item_order_line_unique)
-            {
-                throw new TaktBusinessException("销售订单明细的CompanyCode、SalesOrderId、LineNumber已存在");
+                    }
+                }
+                await _salesOrderItemRepository.CreateRangeAsync(toCreate);
             }
-            }
-            await _salesOrderItemRepository.CreateRangeAsync(items);
-        }
-        // 销售订单变更记录（ChangeLogs）
-        if (dto.ChangeLogs is not { Count: > 0 })
-        {
-            await _salesOrderChangeLogRepository.DeleteAsync(x => x.SalesOrderId == entity.Id);
-        }
-        else
-        {
-            var changelogs = dto.ChangeLogs.Adapt<List<TaktSalesOrderChangeLog>>();
-            foreach (var child in changelogs)
-            {
-                child.SalesOrderId = entity.Id;
-            }
-            await _salesOrderChangeLogRepository.DeleteAsync(x => x.SalesOrderId == entity.Id);
-            foreach (var child in changelogs)
-            {
-            }
-            await _salesOrderChangeLogRepository.CreateRangeAsync(changelogs);
         }
     }
     // ========================================

@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Application.Validators.Logistics.Manufacturing.Defect
 // 文件名称：TaktPcbaInspectionValidators.cs
-// 创建时间：2026-07-02
+// 创建时间：2026-07-09
 // 创建人：Takt365(Auto Generated)
 // 功能描述：PcbaInspection 模块 FluentValidation 验证器（由 generate-validators-from-entity.cjs 根据 TaktPcbaInspection 生成，请按需审阅）
 // 
@@ -42,8 +42,8 @@ public class TaktPcbaInspectionCreateValidator : AbstractValidator<TaktPcbaInspe
             .NotEmpty().WithMessage("生产类别不能为空")
             .MaximumLength(20).WithMessage("生产类别长度不能超过20个字符");
         RuleFor(x => x.ProdOrderCode)
-            .NotEmpty().WithMessage("生产工单号不能为空")
-            .MaximumLength(20).WithMessage("生产工单号长度不能超过20个字符");
+            .NotEmpty().WithMessage("工单号不能为空")
+            .MaximumLength(20).WithMessage("工单号长度不能超过20个字符");
         RuleFor(x => x.ModelCode)
             .NotEmpty().WithMessage("机种不能为空")
             .MaximumLength(20).WithMessage("机种长度不能超过20个字符");
@@ -86,8 +86,8 @@ public class TaktPcbaInspectionUpdateValidator : AbstractValidator<TaktPcbaInspe
             .NotEmpty().WithMessage("生产类别不能为空")
             .MaximumLength(20).WithMessage("生产类别长度不能超过20个字符");
         RuleFor(x => x.ProdOrderCode)
-            .NotEmpty().WithMessage("生产工单号不能为空")
-            .MaximumLength(20).WithMessage("生产工单号长度不能超过20个字符");
+            .NotEmpty().WithMessage("工单号不能为空")
+            .MaximumLength(20).WithMessage("工单号长度不能超过20个字符");
         RuleFor(x => x.ModelCode)
             .NotEmpty().WithMessage("机种不能为空")
             .MaximumLength(20).WithMessage("机种长度不能超过20个字符");
@@ -126,8 +126,8 @@ public class TaktPcbaInspectionImportValidator : AbstractValidator<TaktPcbaInspe
             .NotEmpty().WithMessage("生产类别不能为空")
             .MaximumLength(20).WithMessage("生产类别长度不能超过20个字符");
         RuleFor(x => x.ProdOrderCode)
-            .NotEmpty().WithMessage("生产工单号不能为空")
-            .MaximumLength(20).WithMessage("生产工单号长度不能超过20个字符");
+            .NotEmpty().WithMessage("工单号不能为空")
+            .MaximumLength(20).WithMessage("工单号长度不能超过20个字符");
         RuleFor(x => x.ModelCode)
             .NotEmpty().WithMessage("机种不能为空")
             .MaximumLength(20).WithMessage("机种长度不能超过20个字符");

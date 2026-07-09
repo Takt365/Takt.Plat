@@ -173,8 +173,8 @@
       ref="materialDocumentItemTableRef"
       v-model="childMaterialDocumentItemRows"
       :columns="materialDocumentItemFormColumns"
-      :title="t('entity.materialdocumentitem._self')"
-      :add-button-entity="t('entity.materialdocumentitem._self')"
+      :title="materialDocumentItemPi.self()"
+      :add-button-entity="materialDocumentItemPi.self()"
       id-field="materialDocumentItemId"
       :default-row="createDefaultMaterialDocumentItemRow"
       :disabled="loading"
@@ -191,6 +191,11 @@
 import { reactive, watch, computed, ref } from 'vue'
 import { useI18n } from 'vue-i18n'
 import type { Rule } from 'ant-design-vue/es/form'
+import { useMaterialDocumentI18n } from '../composables/use-material-document-i18n'
+
+/** 实体字段 i18n */
+const pi = useMaterialDocumentI18n()
+
 import type { MaterialDocumentCreate } from '@/types/logistics/materials/material-document'
 import { RiQuestionLine } from '@remixicon/vue'
 import { useTenantStore } from '@/stores/identity/tenant'
@@ -225,6 +230,9 @@ const formFields = ["tenantCode","companyCode","companyDefaultCulture","plantCod
 
 
 import type { TaktEditableTableColumn } from '@/components/business/takt-editable-table/types'
+import { useMaterialDocumentItemI18n } from '../composables/use-material-document-item-i18n'
+
+const materialDocumentItemPi = useMaterialDocumentItemI18n()
 
 const childMaterialDocumentItemRows = ref<Record<string, unknown>[]>([])
 const materialDocumentItemTableRef = ref<{
@@ -237,52 +245,52 @@ const materialDocumentItemTableRef = ref<{
 const materialDocumentItemFormColumns = computed<TaktEditableTableColumn[]>(() => [
   {
     key: 'lineNumber',
-    title: pi.label('lineNumber'),
+    title: materialDocumentItemPi.label('lineNumber'),
     editor: 'inputNumber',
     width: 140, summary: 'sum',
   },
   {
     key: 'warehouseCode',
-    title: pi.label('warehouseCode'),
+    title: materialDocumentItemPi.label('warehouseCode'),
     editor: 'input',
     width: 140,
   },
   {
     key: 'movementType',
-    title: pi.label('movementType'),
+    title: materialDocumentItemPi.label('movementType'),
     editor: 'input',
     width: 140,
   },
   {
     key: 'postingDate',
-    title: pi.label('postingDate'),
+    title: materialDocumentItemPi.label('postingDate'),
     editor: 'datePicker',
     valueFormat: 'YYYY-MM-DD',
     width: 140,
   },
   {
     key: 'quantity',
-    title: pi.label('quantity'),
+    title: materialDocumentItemPi.label('quantity'),
     editor: 'inputNumber',
     width: 140,
   },
   {
     key: 'specialStock',
-    title: pi.label('specialStock'),
+    title: materialDocumentItemPi.label('specialStock'),
     editor: 'input',
-    width: 140, allowClear: true, placeholder: pi.ph('specialStock'),
+    width: 140, allowClear: true, placeholder: materialDocumentItemPi.ph('specialStock'),
   },
   {
     key: 'purchaseOrderCode',
-    title: pi.label('purchaseOrderCode'),
+    title: materialDocumentItemPi.label('purchaseOrderCode'),
     editor: 'input',
-    width: 140, allowClear: true, placeholder: pi.ph('purchaseOrderCode'),
+    width: 140, allowClear: true, placeholder: materialDocumentItemPi.ph('purchaseOrderCode'),
   },
   {
     key: 'productionOrderCode',
-    title: pi.label('productionOrderCode'),
+    title: materialDocumentItemPi.label('productionOrderCode'),
     editor: 'input',
-    width: 140, allowClear: true, placeholder: pi.ph('productionOrderCode'),
+    width: 140, allowClear: true, placeholder: materialDocumentItemPi.ph('productionOrderCode'),
   },
 ])
 

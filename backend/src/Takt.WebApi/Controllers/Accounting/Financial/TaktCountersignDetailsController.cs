@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.WebApi.Controllers.Accounting.Financial
 // 文件名称：TaktCountersignDetailsController.cs
-// 创建时间：2026-06-30
+// 创建时间：2026-07-09
 // 创建人：Takt365(Cursor AI)
 // 功能描述：会签单明细控制器
 // 
@@ -173,6 +173,26 @@ public class TaktCountersignDetailsController : TaktControllerBase
         {
             await _countersignDetailService.DeleteCountersignDetailBatchAsync(ids);
             return Success("删除成功");
+        }
+        catch (Exception ex)
+        {
+            return HandleException(ex);
+        }
+    }
+
+    /// <summary>
+    /// 更新会签单明细作废状态
+    /// </summary>
+    /// <param name="dto">作废 DTO</param>
+    /// <returns>会签单明细DTO</returns>
+    [TaktPermission("accounting:financial:countersign:update", "更新会签单明细作废状态")]
+    [HttpPut("obsolete")]
+    public async Task<IActionResult> UpdateCountersignDetailObsoleteAsync([FromBody] TaktCountersignDetailObsoleteDto dto)
+    {
+        try
+        {
+            var result = await _countersignDetailService.UpdateCountersignDetailObsoleteAsync(dto);
+            return Success(result, "更新成功");
         }
         catch (Exception ex)
         {

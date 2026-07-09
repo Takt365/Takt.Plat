@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：frontend/src/types/routine/help-desk
 // 文件名称：ticket.d.ts
-// 创建时间：2026-06-24
+// 创建时间：2026-07-09
 // 创建人：Takt365(Auto Generated)
 // 功能描述：routine/help-desk 模块类型定义（自动生成；类型名去 Takt 前缀与末尾 Dto，如 TaktCompanyDto → Company）
 // 
@@ -44,14 +44,9 @@ export interface Ticket extends CompanyDtoBase {
   ticketContent?: string;
 
   /**
-   * 附件列表 JSON。格式：[{ "FileId": 0, "FileName": "", "FilePath": "", "FileSize": 0, "FileType": "", "FileExtension": "", "SortOrder": 0 }]
+   * 附件 （JSON列表形式，由TaktFile 统一上传到服务器）。格式：[{ "FileId": 0, "FileName": "", "FilePath": "", "FileSize": 0, "FileType": "", "FileExtension": "", "SortOrder": 0 }]
    */
   attachments?: string;
-
-  /**
-   * 工单状态（字典 sys_ticket_status；0=新建，1=已分配，2=处理中，3=待确认，4=已完成，5=已关闭，6=已取消，7=重新打开）
-   */
-  ticketStatus: number;
 
   /**
    * 优先级（字典 sys_priority_level_category）
@@ -159,6 +154,16 @@ export interface Ticket extends CompanyDtoBase {
   assetCode?: string;
 
   /**
+   * 资产名称（填充字段，来自 TaktAsset）
+   */
+  assetName?: string;
+
+  /**
+   * 工单回复列表（详情填充）
+   */
+  replies?: TicketReply[];
+
+  /**
    * 申请部门ID
    */
   applicantDeptId?: string;
@@ -174,14 +179,14 @@ export interface Ticket extends CompanyDtoBase {
   applicantBy: string;
 
   /**
+   * 工单状态（字典 sys_ticket_status；0=新建，1=已分配，2=处理中，3=待确认，4=已完成，5=已关闭，6=已取消，7=重新打开）
+   */
+  ticketStatus: number;
+
+  /**
    * 子工单列表（父工单时有效；外键：本表 Id = 子工单 ParentTicketId） （子表：TaktTicket）
    */
   childTickets?: Ticket[];
-
-  /**
-   * 工单变更日志列表（主子表关系） （子表：TaktTicketChangeLog）
-   */
-  changeLogs?: TicketChangeLog[];
 
 }
 
@@ -219,14 +224,9 @@ export interface TicketQuery extends TaktPagedQuery {
   ticketContent?: string;
 
   /**
-   * 附件列表 JSON。格式：[{ "FileId": 0, "FileName": "", "FilePath": "", "FileSize": 0, "FileType": "", "FileExtension": "", "SortOrder": 0 }]
+   * 附件 （JSON列表形式，由TaktFile 统一上传到服务器）。格式：[{ "FileId": 0, "FileName": "", "FilePath": "", "FileSize": 0, "FileType": "", "FileExtension": "", "SortOrder": 0 }]
    */
   attachments?: string;
-
-  /**
-   * 工单状态（字典 sys_ticket_status；0=新建，1=已分配，2=处理中，3=待确认，4=已完成，5=已关闭，6=已取消，7=重新打开）
-   */
-  ticketStatus?: number;
 
   /**
    * 优先级（字典 sys_priority_level_category）
@@ -359,6 +359,11 @@ export interface TicketQuery extends TaktPagedQuery {
   applicantBy?: string;
 
   /**
+   * 工单状态（字典 sys_ticket_status；0=新建，1=已分配，2=处理中，3=待确认，4=已完成，5=已关闭，6=已取消，7=重新打开）
+   */
+  ticketStatus?: number;
+
+  /**
    * 创建时间（范围查询-开始）
    */
   createdAtStart?: string;
@@ -418,14 +423,9 @@ export interface TicketCreate {
   ticketContent?: string;
 
   /**
-   * 附件列表 JSON。格式：[{ "FileId": 0, "FileName": "", "FilePath": "", "FileSize": 0, "FileType": "", "FileExtension": "", "SortOrder": 0 }]
+   * 附件 （JSON列表形式，由TaktFile 统一上传到服务器）。格式：[{ "FileId": 0, "FileName": "", "FilePath": "", "FileSize": 0, "FileType": "", "FileExtension": "", "SortOrder": 0 }]
    */
   attachments?: string;
-
-  /**
-   * 工单状态（字典 sys_ticket_status；0=新建，1=已分配，2=处理中，3=待确认，4=已完成，5=已关闭，6=已取消，7=重新打开）
-   */
-  ticketStatus: number;
 
   /**
    * 优先级（字典 sys_priority_level_category）
@@ -533,14 +533,14 @@ export interface TicketCreate {
   applicantBy: string;
 
   /**
+   * 工单状态（字典 sys_ticket_status；0=新建，1=已分配，2=处理中，3=待确认，4=已完成，5=已关闭，6=已取消，7=重新打开）
+   */
+  ticketStatus: number;
+
+  /**
    * 子工单列表（父工单时有效；外键：本表 Id = 子工单 ParentTicketId）（子表，级联保存）
    */
   childTickets?: TicketCreate[];
-
-  /**
-   * 工单变更日志列表（主子表关系）（子表，级联保存）
-   */
-  changeLogs?: TicketChangeLogCreate[];
 
   /**
    * 扩展字段JSON
@@ -621,14 +621,9 @@ export interface TicketTemplate {
   ticketContent?: string;
 
   /**
-   * 附件列表 JSON。格式：[{ "FileId": 0, "FileName": "", "FilePath": "", "FileSize": 0, "FileType": "", "FileExtension": "", "SortOrder": 0 }]
+   * 附件 （JSON列表形式，由TaktFile 统一上传到服务器）。格式：[{ "FileId": 0, "FileName": "", "FilePath": "", "FileSize": 0, "FileType": "", "FileExtension": "", "SortOrder": 0 }]
    */
   attachments?: string;
-
-  /**
-   * 工单状态（字典 sys_ticket_status；0=新建，1=已分配，2=处理中，3=待确认，4=已完成，5=已关闭，6=已取消，7=重新打开）
-   */
-  ticketStatus?: number;
 
   /**
    * 优先级（字典 sys_priority_level_category）
@@ -736,14 +731,14 @@ export interface TicketTemplate {
   applicantBy?: string;
 
   /**
+   * 工单状态（字典 sys_ticket_status；0=新建，1=已分配，2=处理中，3=待确认，4=已完成，5=已关闭，6=已取消，7=重新打开）
+   */
+  ticketStatus?: number;
+
+  /**
    * 子工单列表（父工单时有效；外键：本表 Id = 子工单 ParentTicketId）（子表，级联保存）
    */
   childTickets?: TicketCreate[];
-
-  /**
-   * 工单变更日志列表（主子表关系）（子表，级联保存）
-   */
-  changeLogs?: TicketChangeLogCreate[];
 
   /**
    * 扩展字段JSON
@@ -795,14 +790,9 @@ export interface TicketImport {
   ticketContent?: string;
 
   /**
-   * 附件列表 JSON。格式：[{ "FileId": 0, "FileName": "", "FilePath": "", "FileSize": 0, "FileType": "", "FileExtension": "", "SortOrder": 0 }]
+   * 附件 （JSON列表形式，由TaktFile 统一上传到服务器）。格式：[{ "FileId": 0, "FileName": "", "FilePath": "", "FileSize": 0, "FileType": "", "FileExtension": "", "SortOrder": 0 }]
    */
   attachments?: string;
-
-  /**
-   * 工单状态（字典 sys_ticket_status；0=新建，1=已分配，2=处理中，3=待确认，4=已完成，5=已关闭，6=已取消，7=重新打开）
-   */
-  ticketStatus?: number;
 
   /**
    * 优先级（字典 sys_priority_level_category）
@@ -910,14 +900,14 @@ export interface TicketImport {
   applicantBy?: string;
 
   /**
+   * 工单状态（字典 sys_ticket_status；0=新建，1=已分配，2=处理中，3=待确认，4=已完成，5=已关闭，6=已取消，7=重新打开）
+   */
+  ticketStatus?: number;
+
+  /**
    * 子工单列表（父工单时有效；外键：本表 Id = 子工单 ParentTicketId）（子表，级联保存）
    */
   childTickets?: TicketCreate[];
-
-  /**
-   * 工单变更日志列表（主子表关系）（子表，级联保存）
-   */
-  changeLogs?: TicketChangeLogCreate[];
 
   /**
    * 扩展字段JSON
@@ -964,14 +954,9 @@ export interface TicketExport {
   ticketContent?: string;
 
   /**
-   * 附件列表 JSON。格式：[{ "FileId": 0, "FileName": "", "FilePath": "", "FileSize": 0, "FileType": "", "FileExtension": "", "SortOrder": 0 }]
+   * 附件 （JSON列表形式，由TaktFile 统一上传到服务器）。格式：[{ "FileId": 0, "FileName": "", "FilePath": "", "FileSize": 0, "FileType": "", "FileExtension": "", "SortOrder": 0 }]
    */
   attachments?: string;
-
-  /**
-   * 工单状态（字典 sys_ticket_status；0=新建，1=已分配，2=处理中，3=待确认，4=已完成，5=已关闭，6=已取消，7=重新打开）
-   */
-  ticketStatus: number;
 
   /**
    * 优先级（字典 sys_priority_level_category）
@@ -1077,6 +1062,11 @@ export interface TicketExport {
    * 申请人（实际申请人；代理人代提时填被代理人）
    */
   applicantBy: string;
+
+  /**
+   * 工单状态（字典 sys_ticket_status；0=新建，1=已分配，2=处理中，3=待确认，4=已完成，5=已关闭，6=已取消，7=重新打开）
+   */
+  ticketStatus: number;
 
   /**
    * 扩展字段JSON

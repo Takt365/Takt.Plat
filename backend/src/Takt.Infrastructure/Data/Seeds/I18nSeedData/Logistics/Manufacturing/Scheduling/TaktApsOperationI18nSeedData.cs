@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Infrastructure.Data.Seeds.I18nSeedData.Logistics.Manufacturing.Scheduling
 // 文件名称：TaktApsOperationI18nSeedData.cs
-// 创建时间：2026-07-02
+// 创建时间：2026-07-09
 // 创建人：Takt365(Auto Generated)
 // 功能描述：TaktApsOperation 实体字段国际化种子（无对应 frontend locales；TranslationText 取自 ColumnDescription，ContextNote 取自属性 XML summary）
 // 
@@ -206,6 +206,15 @@ public class TaktApsOperationI18nSeedData : ITaktSeedDataCoordinator
             new TranslationSeedItem("entity.apsoperation.operationstatus", "zh-CN", "工序状态", "工序状态（字典 aps_operation_status；0=待排程，1=已排程，2=执行中，3=已完成）"),
             // entity.apsoperation.operationstatus
             new TranslationSeedItem("entity.apsoperation.operationstatus", "zh-HK", "工序状态_hk", "工序状态（字典 aps_operation_status；0=待排程，1=已排程，2=执行中，3=已完成）"),
+
+            // entity.apsoperation.isobsolete
+            new TranslationSeedItem("entity.apsoperation.isobsolete", "en-US", "是否作废_us", "是否作废（字典 sys_yes_no_type，0=否 1=是；编辑移除子行时标记作废）"),
+            // entity.apsoperation.isobsolete
+            new TranslationSeedItem("entity.apsoperation.isobsolete", "ja-JP", "是否作废_jp", "是否作废（字典 sys_yes_no_type，0=否 1=是；编辑移除子行时标记作废）"),
+            // entity.apsoperation.isobsolete
+            new TranslationSeedItem("entity.apsoperation.isobsolete", "zh-CN", "是否作废", "是否作废（字典 sys_yes_no_type，0=否 1=是；编辑移除子行时标记作废）"),
+            // entity.apsoperation.isobsolete
+            new TranslationSeedItem("entity.apsoperation.isobsolete", "zh-HK", "是否作废_hk", "是否作废（字典 sys_yes_no_type，0=否 1=是；编辑移除子行时标记作废）"),
         };
     }
 

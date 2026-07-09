@@ -135,6 +135,9 @@ export default {
       credentials: {
         incorrect: "ユーザー名またはパスワードが正しくありません",
       },
+      account: {
+        locked: "アカウントがロックされています。しばらくしてから再試行してください",
+      },
       tenant: {
         no: {
           access: "選択したテナントにログインする権限がありません",

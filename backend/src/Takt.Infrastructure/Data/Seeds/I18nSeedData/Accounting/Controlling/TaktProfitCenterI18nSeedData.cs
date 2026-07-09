@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Infrastructure.Data.Seeds.I18nSeedData.Accounting.Controlling
 // 文件名称：TaktProfitCenterI18nSeedData.cs
-// 创建时间：2026-07-02
+// 创建时间：2026-07-09
 // 创建人：Takt365(Auto Generated)
 // 功能描述：TaktProfitCenter 实体字段国际化种子（无对应 frontend locales；TranslationText 取自 ColumnDescription，ContextNote 取自属性 XML summary）
 // 
@@ -206,15 +206,6 @@ public class TaktProfitCenterI18nSeedData : ITaktSeedDataCoordinator
             new TranslationSeedItem("entity.profitcenter.status", "zh-CN", "利润中心状态", "利润中心状态（字典 sys_normal_disable_status；1=启用，0=禁用）"),
             // entity.profitcenter.status
             new TranslationSeedItem("entity.profitcenter.status", "zh-HK", "利润中心状态_hk", "利润中心状态（字典 sys_normal_disable_status；1=启用，0=禁用）"),
-
-            // entity.profitcenter.changelogs
-            new TranslationSeedItem("entity.profitcenter.changelogs", "en-US", "利润中心变更记录列表_us", "利润中心变更记录列表（外键在子表 TaktProfitCenterChangeLog.ProfitCenterId）"),
-            // entity.profitcenter.changelogs
-            new TranslationSeedItem("entity.profitcenter.changelogs", "ja-JP", "利润中心变更记录列表_jp", "利润中心变更记录列表（外键在子表 TaktProfitCenterChangeLog.ProfitCenterId）"),
-            // entity.profitcenter.changelogs
-            new TranslationSeedItem("entity.profitcenter.changelogs", "zh-CN", "利润中心变更记录列表", "利润中心变更记录列表（外键在子表 TaktProfitCenterChangeLog.ProfitCenterId）"),
-            // entity.profitcenter.changelogs
-            new TranslationSeedItem("entity.profitcenter.changelogs", "zh-HK", "利润中心变更记录列表_hk", "利润中心变更记录列表（外键在子表 TaktProfitCenterChangeLog.ProfitCenterId）"),
         };
     }
 

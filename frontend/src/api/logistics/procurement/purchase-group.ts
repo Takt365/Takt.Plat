@@ -19,7 +19,7 @@ import type {
   PurchaseGroup,
   PurchaseGroupCreate,
   PurchaseGroupSort,
-  PurchaseGroupStatus,
+  GroupStatus,
   PurchaseGroupUpdate
 } from '@/types/logistics/procurement/purchase-group';
 
@@ -112,10 +112,10 @@ export function deletePurchaseGroupBatch(ids: string[]): Promise<void> {
 
 /**
  * 更新采购组主数据状态
- * @param {PurchaseGroupStatus} dto 状态 DTO
+ * @param {GroupStatus} dto 状态 DTO
  * @returns {Promise<PurchaseGroup>} 采购组主数据DTO
  */
-export function updatePurchaseGroupStatus(dto: PurchaseGroupStatus): Promise<PurchaseGroup> {
+export function updateGroupStatus(dto: GroupStatus): Promise<PurchaseGroup> {
   return request<PurchaseGroup>({
     url: `${PURCHASE_GROUP_API_BASE}/status`,
     method: 'put',

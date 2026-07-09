@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：frontend/src/types/logistics/sales
 // 文件名称：price-scale.d.ts
-// 创建时间：2026-07-01
+// 创建时间：2026-07-09
 // 创建人：Takt365(Auto Generated)
 // 功能描述：logistics/sales 模块类型定义（自动生成；类型名去 Takt 前缀与末尾 Dto，如 TaktCompanyDto → Company）
 // 
@@ -64,6 +64,11 @@ export interface SalesPriceScale extends CompanyDtoBase {
   scalePrice: number;
 
   /**
+   * 是否作废（字典 sys_yes_no_type，0=否 1=是；编辑移除子行时标记作废）
+   */
+  isObsolete: number;
+
+  /**
    * 销售价格明细（主表） （主表：TaktSalesPriceItem）
    */
   priceItem?: SalesPriceItem;
@@ -117,6 +122,11 @@ export interface SalesPriceScaleQuery extends TaktPagedQuery {
    * 阶梯价格（精确到分，存储为整数，单位为分）
    */
   scalePrice?: number;
+
+  /**
+   * 是否作废（字典 sys_yes_no_type，0=否 1=是；编辑移除子行时标记作废）
+   */
+  isObsolete?: number;
 
   /**
    * 创建时间（范围查询-开始）
@@ -193,6 +203,11 @@ export interface SalesPriceScaleCreate {
   scalePrice: number;
 
   /**
+   * 是否作废（字典 sys_yes_no_type，0=否 1=是；编辑移除子行时标记作废）
+   */
+  isObsolete: number;
+
+  /**
    * 扩展字段JSON
    */
   extField?: string;
@@ -216,6 +231,25 @@ export interface SalesPriceScaleUpdate extends SalesPriceScaleCreate {
    * SalesPriceScaleID（标识要更新的实体）
    */
   salesPriceScaleId: string;
+
+}
+
+
+/**
+ * SalesPriceScale 作废/撤销作废 DTO
+ * 对应前端 SalesPriceScaleObsolete
+ * @description 对应后端 TaktSalesPriceScaleObsoleteDto
+ */
+export interface SalesPriceScaleObsolete {
+  /**
+   * SalesPriceScaleID
+   */
+  salesPriceScaleId: string;
+
+  /**
+   * 是否作废（字典 sys_yes_no_type，0=否 1=是；编辑移除子行时标记作废）
+   */
+  isObsolete: number;
 
 }
 
@@ -265,6 +299,11 @@ export interface SalesPriceScaleTemplate {
    * 阶梯价格（精确到分，存储为整数，单位为分）
    */
   scalePrice?: number;
+
+  /**
+   * 是否作废（字典 sys_yes_no_type，0=否 1=是；编辑移除子行时标记作废）
+   */
+  isObsolete?: number;
 
   /**
    * 扩展字段JSON
@@ -331,6 +370,11 @@ export interface SalesPriceScaleImport {
   scalePrice?: number;
 
   /**
+   * 是否作废（字典 sys_yes_no_type，0=否 1=是；编辑移除子行时标记作废）
+   */
+  isObsolete?: number;
+
+  /**
    * 扩展字段JSON
    */
   extField?: string;
@@ -388,6 +432,11 @@ export interface SalesPriceScaleExport {
    * 阶梯价格（精确到分，存储为整数，单位为分）
    */
   scalePrice: number;
+
+  /**
+   * 是否作废（字典 sys_yes_no_type，0=否 1=是；编辑移除子行时标记作废）
+   */
+  isObsolete: number;
 
   /**
    * 扩展字段JSON

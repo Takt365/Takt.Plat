@@ -94,10 +94,4 @@ public class TaktCostCenter : TaktCompanyEntityBase
     /// </summary>
     [SugarColumn(ColumnName = "cost_center_status", ColumnDescription = "成本中心状态", ColumnDataType = "int", IsNullable = false, DefaultValue = "1")]
     public int CostCenterStatus { get; set; } = 1;
-
-    /// <summary>
-    /// 成本中心变更记录列表（外键在子表 TaktCostCenterChangeLog.CostCenterId）
-    /// </summary>
-    [Navigate(NavigateType.OneToMany, nameof(TaktCostCenterChangeLog.CostCenterId))]
-    public List<TaktCostCenterChangeLog>? ChangeLogs { get; set; }
 }

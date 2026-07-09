@@ -94,13 +94,6 @@ public class TaktItAssetDto : TaktCompanyDtoBase
     /// 保修/维保说明
     /// </summary>
     public string? WarrantyRemark { get; set; } = string.Empty;
-
-    /// <summary>
-    /// IT 设备保修变更日志列表
-    /// （子表：TaktItAssetChangeLog）
-    /// </summary>
-    public List<TaktItAssetChangeLogDto>? ChangeLogs { get; set; }
-
 }
 
 // ========================================
@@ -315,11 +308,6 @@ public class TaktItAssetCreateDto
     public string? WarrantyRemark { get; set; } = string.Empty;
 
     /// <summary>
-    /// IT 设备保修变更日志列表（子表，级联保存）
-    /// </summary>
-    public List<TaktItAssetChangeLogCreateDto>? ChangeLogs { get; set; }
-
-    /// <summary>
     /// 扩展字段JSON
     /// </summary>
     public string? ExtField { get; set; }
@@ -431,11 +419,6 @@ public class TaktItAssetTemplateDto
     public string? WarrantyRemark { get; set; } = string.Empty;
 
     /// <summary>
-    /// IT 设备保修变更日志列表（子表，级联保存）
-    /// </summary>
-    public List<TaktItAssetChangeLogCreateDto>? ChangeLogs { get; set; }
-
-    /// <summary>
     /// 扩展字段JSON
     /// </summary>
     public string? ExtField { get; set; }
@@ -526,11 +509,6 @@ public class TaktItAssetImportDto
     /// 保修/维保说明
     /// </summary>
     public string? WarrantyRemark { get; set; } = string.Empty;
-
-    /// <summary>
-    /// IT 设备保修变更日志列表（子表，级联保存）
-    /// </summary>
-    public List<TaktItAssetChangeLogCreateDto>? ChangeLogs { get; set; }
 
     /// <summary>
     /// 扩展字段JSON

@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Infrastructure.Data.Seeds.I18nSeedData.Logistics.Manufacturing.Scheduling
 // 文件名称：TaktWorkCenterI18nSeedData.cs
-// 创建时间：2026-07-02
+// 创建时间：2026-07-09
 // 创建人：Takt365(Auto Generated)
 // 功能描述：TaktWorkCenter 实体字段国际化种子（无对应 frontend locales；TranslationText 取自 ColumnDescription，ContextNote 取自属性 XML summary）
 // 
@@ -116,24 +116,6 @@ public class TaktWorkCenterI18nSeedData : ITaktSeedDataCoordinator
             new TranslationSeedItem("entity.workcenter.name", "zh-CN", "工作中心名称", "工作中心名称"),
             // entity.workcenter.name
             new TranslationSeedItem("entity.workcenter.name", "zh-HK", "工作中心名称_hk", "工作中心名称"),
-
-            // entity.workcenter.workshopcode
-            new TranslationSeedItem("entity.workcenter.workshopcode", "en-US", "车间编码_us", "车间编码"),
-            // entity.workcenter.workshopcode
-            new TranslationSeedItem("entity.workcenter.workshopcode", "ja-JP", "车间编码_jp", "车间编码"),
-            // entity.workcenter.workshopcode
-            new TranslationSeedItem("entity.workcenter.workshopcode", "zh-CN", "车间编码", "车间编码"),
-            // entity.workcenter.workshopcode
-            new TranslationSeedItem("entity.workcenter.workshopcode", "zh-HK", "车间编码_hk", "车间编码"),
-
-            // entity.workcenter.defaultshiftid
-            new TranslationSeedItem("entity.workcenter.defaultshiftid", "en-US", "默认班次ID_us", "默认班次 ID（关联 TaktWorkShift.Id，选项 TaktWorkShifts/options）"),
-            // entity.workcenter.defaultshiftid
-            new TranslationSeedItem("entity.workcenter.defaultshiftid", "ja-JP", "默认班次ID_jp", "默认班次 ID（关联 TaktWorkShift.Id，选项 TaktWorkShifts/options）"),
-            // entity.workcenter.defaultshiftid
-            new TranslationSeedItem("entity.workcenter.defaultshiftid", "zh-CN", "默认班次ID", "默认班次 ID（关联 TaktWorkShift.Id，选项 TaktWorkShifts/options）"),
-            // entity.workcenter.defaultshiftid
-            new TranslationSeedItem("entity.workcenter.defaultshiftid", "zh-HK", "默认班次ID_hk", "默认班次 ID（关联 TaktWorkShift.Id，选项 TaktWorkShifts/options）"),
 
             // entity.workcenter.status
             new TranslationSeedItem("entity.workcenter.status", "en-US", "工作中心状态_us", "状态（字典 sys_normal_disable；1=启用，0=禁用）"),

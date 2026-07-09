@@ -9,10 +9,13 @@
 import { inject, provide, type InjectionKey, type Ref, ref } from 'vue'
 import type { AssyOutput } from '@/types/logistics/manufacturing/output/assy-output'
 
+/** 表格行类型（与 index 列表行、TaktSingleTable slot record 一致） */
+export type AssyOutputRowRecord = AssyOutput | Record<string, unknown>
+
 /** 主表选中行上下文 */
 export interface AssyOutputMasterContext {
   /** 当前选中的主表行（右侧明细依赖） */
-  selectedMasterRow: Ref<AssyOutput | null>
+  selectedMasterRow: Ref<AssyOutputRowRecord | null>
 }
 
 const assyOutputMasterContextKey: InjectionKey<AssyOutputMasterContext> = Symbol('assy-outputMasterContext')
@@ -22,7 +25,7 @@ const assyOutputMasterContextKey: InjectionKey<AssyOutputMasterContext> = Symbol
  * @returns {AssyOutputMasterContext} 主表上下文
  */
 export function provideAssyOutputMasterContext(): AssyOutputMasterContext {
-  const selectedMasterRow = ref<AssyOutput | null>(null)
+  const selectedMasterRow = ref<AssyOutputRowRecord | null>(null)
   const ctx: AssyOutputMasterContext = { selectedMasterRow }
   provide(assyOutputMasterContextKey, ctx)
   return ctx

@@ -9,17 +9,37 @@
 
 <template>
   <div class="p-4 flex flex-col min-h-0 h-full">
-    <!-- 查询栏 -->
-    <TaktQueryBar
-      v-model="queryKeyword"
-      :placeholder="searchPlaceholder"
-      :loading="loading"
-      @search="handleSearch"
-      @reset="handleReset"
-    />
-
-    <!-- 工具栏 -->
-    <TaktToolsBar
+    <!-- 左主右从 -->
+    <TaktMasterDetailTableLr
+      v-model:master-current="currentPage"
+      v-model:master-page-size="pageSize"
+      v-model:selected-master-key="selectedMasterKey"
+      class="min-h-0 flex-1"
+      :master-columns="columns"
+      :master-data-source="dataSource"
+      :master-loading="loading"
+      :master-row-key="getProductionPlanId"
+      :master-row-selection="rowSelection"
+      master-id-column-key="productionPlanId"
+      :master-visible-column-keys="visibleColumnKeys"
+      master-table-mode="masterDetailMaster"
+      master-scroll-layout="masterDetailLr"
+      :master-total="total"
+      master-entity-scope="approval"
+      @master-change="handleTableChange"
+      @master-resize-column="handleResizeColumn"
+      @master-pagination-change="handleMasterPaginationChange"
+      @master-select="handleMasterSelect"
+    >
+      <template #master-toolbar>
+        <TaktQueryBar
+          v-model="queryKeyword"
+          :placeholder="searchPlaceholder"
+          :loading="loading"
+          @search="handleSearch"
+          @reset="handleReset"
+        />
+        <TaktToolsBar
       create-permission="logistics:manufacturing:planning:production:plan:create"
       update-permission="logistics:manufacturing:planning:production:plan:update"
       delete-permission="logistics:manufacturing:planning:production:plan:delete"
@@ -50,40 +70,20 @@
       @advanced-query="handleAdvancedQuery"
       @column-setting="handleColumnSetting"
       @refresh="handleRefresh"
-    />
-
-    <!-- 左主右从 -->
-    <TaktMasterDetailTableLr
-      v-model:master-current="currentPage"
-      v-model:master-page-size="pageSize"
-      v-model:selected-master-key="selectedMasterKey"
-      class="min-h-0 flex-1"
-      :master-columns="columns"
-      :master-data-source="dataSource"
-      :master-loading="loading"
-      :master-row-key="getProductionPlanId"
-      :master-row-selection="rowSelection"
-      master-id-column-key="productionPlanId"
-      :master-visible-column-keys="visibleColumnKeys"
-      :master-total="total"
-      master-entity-scope="approval"
-      @master-change="handleTableChange"
-      @master-resize-column="handleResizeColumn"
-      @master-pagination-change="handleMasterPaginationChange"
-      @master-select="handleMasterSelect"
-    >
+        />
+      </template>
       <!-- 字典/开关列渲染 -->
       <template #bodyCell="{ column, record }">
         <template v-if="column.key === 'planStatus'">
           <a-switch
-            :checked="getProductionPlanField(record, 'planStatus') === 1"
+            :checked="getProductionPlanDictValue(record, 'planStatus') === 1"
             :checked-children="t('common.page.button.enable')" :un-checked-children="t('common.page.button.disable')"
             @change="(checked: unknown) => handlePlanStatusChange(record, Boolean(checked))"
           />
         </template>
         <template v-else-if="column.key === 'convertedStatus'">
           <TaktDictTag
-            :value="getProductionPlanField(record, 'convertedStatus')"
+            :value="getProductionPlanDictValue(record, 'convertedStatus')"
             dict-type="sys_convert_status"
           />
         </template>
@@ -125,21 +125,20 @@
     >
       <template #default="{ isFieldVisible }">
       <div v-show="isFieldVisible('plantCode')">
-      <a-form-item :label="t('entity.productionplan.plantcode')">
-        <a-input
+      <a-form-item :label="pi.queryLabel('plantCode')">
+        <TaktSelect
           v-model:value="advancedQueryForm.plantCode"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.productionplan.plantcode') })"
-          show-count
-          :maxlength="50"
+          api-url="TaktPlants/options"
+          :placeholder="pi.queryPh('plantCode', 'select')"
           allow-clear
         />
       </a-form-item>
       </div>
       <div v-show="isFieldVisible('productionPlanCode')">
-      <a-form-item :label="t('entity.productionplan.code')">
+      <a-form-item :label="pi.queryLabel('productionPlanCode')">
         <a-input
           v-model:value="advancedQueryForm.productionPlanCode"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.productionplan.code') })"
+          :placeholder="pi.queryPh('productionPlanCode', 'required')"
           show-count
           :maxlength="10"
           allow-clear
@@ -147,10 +146,10 @@
       </a-form-item>
       </div>
       <div v-show="isFieldVisible('salesPlanId')">
-      <a-form-item :label="t('entity.productionplan.salesplanid')">
+      <a-form-item :label="pi.queryLabel('salesPlanId')">
         <a-input
           v-model:value="advancedQueryForm.salesPlanId"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.productionplan.salesplanid') })"
+          :placeholder="pi.queryPh('salesPlanId', 'required')"
           show-count
           :maxlength="20"
           allow-clear
@@ -158,10 +157,10 @@
       </a-form-item>
       </div>
       <div v-show="isFieldVisible('salesPlanCode')">
-      <a-form-item :label="t('entity.productionplan.salesplancode')">
+      <a-form-item :label="pi.queryLabel('salesPlanCode')">
         <a-input
           v-model:value="advancedQueryForm.salesPlanCode"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.productionplan.salesplancode') })"
+          :placeholder="pi.queryPh('salesPlanCode', 'required')"
           show-count
           :maxlength="10"
           allow-clear
@@ -169,10 +168,10 @@
       </a-form-item>
       </div>
       <div v-show="isFieldVisible('masterProductionScheduleId')">
-      <a-form-item :label="t('entity.productionplan.masterproductionscheduleid')">
+      <a-form-item :label="pi.queryLabel('masterProductionScheduleId')">
         <a-input
           v-model:value="advancedQueryForm.masterProductionScheduleId"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.productionplan.masterproductionscheduleid') })"
+          :placeholder="pi.queryPh('masterProductionScheduleId', 'required')"
           show-count
           :maxlength="20"
           allow-clear
@@ -180,10 +179,10 @@
       </a-form-item>
       </div>
       <div v-show="isFieldVisible('mpsCode')">
-      <a-form-item :label="t('entity.productionplan.mpscode')">
+      <a-form-item :label="pi.queryLabel('mpsCode')">
         <a-input
           v-model:value="advancedQueryForm.mpsCode"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.productionplan.mpscode') })"
+          :placeholder="pi.queryPh('mpsCode', 'required')"
           show-count
           :maxlength="40"
           allow-clear
@@ -191,168 +190,166 @@
       </a-form-item>
       </div>
       <div v-show="isFieldVisible('planDateStart')">
-      <a-form-item :label="t('entity.productionplan.plandatestart')">
+      <a-form-item :label="pi.queryLabel('planDateStart')">
         <a-date-picker
           v-model:value="advancedQueryForm.planDateStart"
-          :placeholder="t('common.page.form.placeholder.select', { field: t('entity.productionplan.plandatestart') })"
+          :placeholder="pi.queryPh('planDateStart', 'select')"
           value-format="YYYY-MM-DD"
           style="width: 100%"
         />
       </a-form-item>
       </div>
       <div v-show="isFieldVisible('planDateEnd')">
-      <a-form-item :label="t('entity.productionplan.plandateend')">
+      <a-form-item :label="pi.queryLabel('planDateEnd')">
         <a-date-picker
           v-model:value="advancedQueryForm.planDateEnd"
-          :placeholder="t('common.page.form.placeholder.select', { field: t('entity.productionplan.plandateend') })"
+          :placeholder="pi.queryPh('planDateEnd', 'select')"
           value-format="YYYY-MM-DD"
           style="width: 100%"
         />
       </a-form-item>
       </div>
       <div v-show="isFieldVisible('planPeriodStartStart')">
-      <a-form-item :label="t('entity.productionplan.planperiodstartstart')">
+      <a-form-item :label="pi.queryLabel('planPeriodStartStart')">
         <a-date-picker
           v-model:value="advancedQueryForm.planPeriodStartStart"
-          :placeholder="t('common.page.form.placeholder.select', { field: t('entity.productionplan.planperiodstartstart') })"
+          :placeholder="pi.queryPh('planPeriodStartStart', 'select')"
           value-format="YYYY-MM-DD"
           style="width: 100%"
         />
       </a-form-item>
       </div>
       <div v-show="isFieldVisible('planPeriodStartEnd')">
-      <a-form-item :label="t('entity.productionplan.planperiodstartend')">
+      <a-form-item :label="pi.queryLabel('planPeriodStartEnd')">
         <a-date-picker
           v-model:value="advancedQueryForm.planPeriodStartEnd"
-          :placeholder="t('common.page.form.placeholder.select', { field: t('entity.productionplan.planperiodstartend') })"
+          :placeholder="pi.queryPh('planPeriodStartEnd', 'select')"
           value-format="YYYY-MM-DD"
           style="width: 100%"
         />
       </a-form-item>
       </div>
       <div v-show="isFieldVisible('planPeriodEndStart')">
-      <a-form-item :label="t('entity.productionplan.planperiodendstart')">
+      <a-form-item :label="pi.queryLabel('planPeriodEndStart')">
         <a-date-picker
           v-model:value="advancedQueryForm.planPeriodEndStart"
-          :placeholder="t('common.page.form.placeholder.select', { field: t('entity.productionplan.planperiodendstart') })"
+          :placeholder="pi.queryPh('planPeriodEndStart', 'select')"
           value-format="YYYY-MM-DD"
           style="width: 100%"
         />
       </a-form-item>
       </div>
       <div v-show="isFieldVisible('planPeriodEndEnd')">
-      <a-form-item :label="t('entity.productionplan.planperiodendend')">
+      <a-form-item :label="pi.queryLabel('planPeriodEndEnd')">
         <a-date-picker
           v-model:value="advancedQueryForm.planPeriodEndEnd"
-          :placeholder="t('common.page.form.placeholder.select', { field: t('entity.productionplan.planperiodendend') })"
+          :placeholder="pi.queryPh('planPeriodEndEnd', 'select')"
           value-format="YYYY-MM-DD"
           style="width: 100%"
         />
       </a-form-item>
       </div>
       <div v-show="isFieldVisible('plannerId')">
-      <a-form-item :label="t('entity.productionplan.plannerid')">
-        <a-input
+      <a-form-item :label="pi.queryLabel('plannerId')">
+        <TaktSelect
           v-model:value="advancedQueryForm.plannerId"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.productionplan.plannerid') })"
-          show-count
-          :maxlength="20"
+          api-url="TaktEmployees/options"
+          :placeholder="pi.queryPh('plannerId', 'select')"
           allow-clear
         />
       </a-form-item>
       </div>
       <div v-show="isFieldVisible('planBy')">
-      <a-form-item :label="t('entity.productionplan.planby')">
-        <a-input
+      <a-form-item :label="pi.queryLabel('planBy')">
+        <TaktSelect
           v-model:value="advancedQueryForm.planBy"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.productionplan.planby') })"
-          show-count
-          :maxlength="50"
+          api-url="TaktEmployees/options"
+          :placeholder="pi.queryPh('planBy', 'select')"
           allow-clear
         />
       </a-form-item>
       </div>
       <div v-show="isFieldVisible('totalQuantity')">
-      <a-form-item :label="t('entity.productionplan.totalquantity')">
+      <a-form-item :label="pi.queryLabel('totalQuantity')">
         <a-input-number
           v-model:value="advancedQueryForm.totalQuantity"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.productionplan.totalquantity') })"
+          :placeholder="pi.queryPh('totalQuantity', 'required')"
           style="width: 100%"
         />
       </a-form-item>
       </div>
       <div v-show="isFieldVisible('totalAmount')">
-      <a-form-item :label="t('entity.productionplan.totalamount')">
+      <a-form-item :label="pi.queryLabel('totalAmount')">
         <a-input-number
           v-model:value="advancedQueryForm.totalAmount"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.productionplan.totalamount') })"
+          :placeholder="pi.queryPh('totalAmount', 'required')"
           style="width: 100%"
         />
       </a-form-item>
       </div>
       <div v-show="isFieldVisible('convertedQuantity')">
-      <a-form-item :label="t('entity.productionplan.convertedquantity')">
+      <a-form-item :label="pi.queryLabel('convertedQuantity')">
         <a-input-number
           v-model:value="advancedQueryForm.convertedQuantity"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.productionplan.convertedquantity') })"
+          :placeholder="pi.queryPh('convertedQuantity', 'required')"
           style="width: 100%"
         />
       </a-form-item>
       </div>
       <div v-show="isFieldVisible('convertedAmount')">
-      <a-form-item :label="t('entity.productionplan.convertedamount')">
+      <a-form-item :label="pi.queryLabel('convertedAmount')">
         <a-input-number
           v-model:value="advancedQueryForm.convertedAmount"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.productionplan.convertedamount') })"
+          :placeholder="pi.queryPh('convertedAmount', 'required')"
           style="width: 100%"
         />
       </a-form-item>
       </div>
       <div v-show="isFieldVisible('planStatus')">
-      <a-form-item :label="t('entity.productionplan.planstatus')">
+      <a-form-item :label="pi.queryLabel('planStatus')">
         <TaktSelect
           v-model:value="advancedQueryForm.planStatus"
           dict-type="sys_normal_disable_status"
-          :placeholder="t('common.page.form.placeholder.select', { field: t('entity.productionplan.planstatus') })"
+          :placeholder="pi.queryPh('planStatus', 'select')"
           allow-clear
         />
       </a-form-item>
       </div>
       <div v-show="isFieldVisible('convertedStatus')">
-      <a-form-item :label="t('entity.productionplan.convertedstatus')">
+      <a-form-item :label="pi.queryLabel('convertedStatus')">
         <TaktSelect
           v-model:value="advancedQueryForm.convertedStatus"
           dict-type="sys_convert_status"
-          :placeholder="t('common.page.form.placeholder.select', { field: t('entity.productionplan.convertedstatus') })"
+          :placeholder="pi.queryPh('convertedStatus', 'select')"
           allow-clear
         />
       </a-form-item>
       </div>
       <div v-show="isFieldVisible('planDescription')">
-      <a-form-item :label="t('entity.productionplan.plandescription')">
+      <a-form-item :label="pi.queryLabel('planDescription')">
         <a-textarea
           v-model:value="advancedQueryForm.planDescription"
-          :placeholder="t('common.page.form.placeholder.optional', { field: t('entity.productionplan.plandescription') })"
+          :placeholder="pi.queryPh('planDescription', 'optional')"
           :rows="2"
           allow-clear
         />
       </a-form-item>
       </div>
       <div v-show="isFieldVisible('approvalStatus')">
-      <a-form-item :label="t('entity.productionplan.approvalstatus')">
+      <a-form-item :label="pi.queryLabel('approvalStatus')">
         <TaktSelect
           v-model:value="advancedQueryForm.approvalStatus"
           dict-type="sys_approval_status"
-          :placeholder="t('common.page.form.placeholder.select', { field: t('entity.productionplan.approvalstatus') })"
+          :placeholder="pi.queryPh('approvalStatus', 'select')"
           allow-clear
         />
       </a-form-item>
       </div>
       <div v-show="isFieldVisible('initiatorId')">
-      <a-form-item :label="t('entity.productionplan.initiatorid')">
+      <a-form-item :label="pi.queryLabel('initiatorId')">
         <a-input
           v-model:value="advancedQueryForm.initiatorId"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.productionplan.initiatorid') })"
+          :placeholder="pi.queryPh('initiatorId', 'required')"
           show-count
           :maxlength="20"
           allow-clear
@@ -360,10 +357,10 @@
       </a-form-item>
       </div>
       <div v-show="isFieldVisible('initiatedAtStart')">
-      <a-form-item :label="t('entity.productionplan.initiatedatstart')">
+      <a-form-item :label="pi.queryLabel('initiatedAtStart')">
         <a-input
           v-model:value="advancedQueryForm.initiatedAtStart"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.productionplan.initiatedatstart') })"
+          :placeholder="pi.queryPh('initiatedAtStart', 'required')"
           show-count
           :maxlength="20"
           allow-clear
@@ -371,20 +368,20 @@
       </a-form-item>
       </div>
       <div v-show="isFieldVisible('initiatedAtEnd')">
-      <a-form-item :label="t('entity.productionplan.initiatedatend')">
+      <a-form-item :label="pi.queryLabel('initiatedAtEnd')">
         <a-date-picker
           v-model:value="advancedQueryForm.initiatedAtEnd"
-          :placeholder="t('common.page.form.placeholder.select', { field: t('entity.productionplan.initiatedatend') })"
+          :placeholder="pi.queryPh('initiatedAtEnd', 'select')"
           value-format="YYYY-MM-DD"
           style="width: 100%"
         />
       </a-form-item>
       </div>
       <div v-show="isFieldVisible('approvedBy')">
-      <a-form-item :label="t('entity.productionplan.approvedby')">
+      <a-form-item :label="pi.queryLabel('approvedBy')">
         <a-input
           v-model:value="advancedQueryForm.approvedBy"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.productionplan.approvedby') })"
+          :placeholder="pi.queryPh('approvedBy', 'required')"
           show-count
           :maxlength="20"
           allow-clear
@@ -392,10 +389,10 @@
       </a-form-item>
       </div>
       <div v-show="isFieldVisible('approvedAtStart')">
-      <a-form-item :label="t('entity.productionplan.approvedatstart')">
+      <a-form-item :label="pi.queryLabel('approvedAtStart')">
         <a-input
           v-model:value="advancedQueryForm.approvedAtStart"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.productionplan.approvedatstart') })"
+          :placeholder="pi.queryPh('approvedAtStart', 'required')"
           show-count
           :maxlength="20"
           allow-clear
@@ -403,20 +400,20 @@
       </a-form-item>
       </div>
       <div v-show="isFieldVisible('approvedAtEnd')">
-      <a-form-item :label="t('entity.productionplan.approvedatend')">
+      <a-form-item :label="pi.queryLabel('approvedAtEnd')">
         <a-date-picker
           v-model:value="advancedQueryForm.approvedAtEnd"
-          :placeholder="t('common.page.form.placeholder.select', { field: t('entity.productionplan.approvedatend') })"
+          :placeholder="pi.queryPh('approvedAtEnd', 'select')"
           value-format="YYYY-MM-DD"
           style="width: 100%"
         />
       </a-form-item>
       </div>
       <div v-show="isFieldVisible('flowInstanceId')">
-      <a-form-item :label="t('entity.productionplan.flowinstanceid')">
+      <a-form-item :label="pi.queryLabel('flowInstanceId')">
         <a-input
           v-model:value="advancedQueryForm.flowInstanceId"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.productionplan.flowinstanceid') })"
+          :placeholder="pi.queryPh('flowInstanceId', 'required')"
           show-count
           :maxlength="20"
           allow-clear
@@ -424,10 +421,10 @@
       </a-form-item>
       </div>
       <div v-show="isFieldVisible('createdAtStart')">
-      <a-form-item :label="t('common.page.entity.createdatstart')">
+      <a-form-item :label="pi.queryLabel('createdAtStart')">
         <a-date-picker
           v-model:value="advancedQueryForm.createdAtStart"
-          :placeholder="t('common.page.form.placeholder.select', { field: t('common.page.entity.createdatstart') })"
+          :placeholder="pi.queryPh('createdAtStart', 'select')"
           value-format="YYYY-MM-DD HH:mm:ss"
             show-time
           style="width: 100%"
@@ -435,10 +432,10 @@
       </a-form-item>
       </div>
       <div v-show="isFieldVisible('createdAtEnd')">
-      <a-form-item :label="t('common.page.entity.createdatend')">
+      <a-form-item :label="pi.queryLabel('createdAtEnd')">
         <a-date-picker
           v-model:value="advancedQueryForm.createdAtEnd"
-          :placeholder="t('common.page.form.placeholder.select', { field: t('common.page.entity.createdatend') })"
+          :placeholder="pi.queryPh('createdAtEnd', 'select')"
           value-format="YYYY-MM-DD HH:mm:ss"
             show-time
           style="width: 100%"
@@ -460,7 +457,7 @@
             >
               <span class="takt-form-label-hint-icon"><RiQuestionLine class="takt-remix-icon" /></span>
             </a-tooltip>
-            <span>{{ t('common.page.entity.extfield') }}</span>
+            <span>{{ pi.queryLabel('extField') }}</span>
           </span>
         </template>
         <a-textarea
@@ -474,10 +471,10 @@
       </a-form-item>
       </div>
       <div v-show="isFieldVisible('remark')">
-      <a-form-item :label="t('common.page.entity.remark')">
+      <a-form-item :label="pi.queryLabel('remark')">
         <a-textarea
           v-model:value="advancedQueryForm.remark"
-          :placeholder="t('common.page.form.placeholder.optional', { field: t('common.page.entity.remark') })"
+          :placeholder="pi.queryPh('remark', 'optional')"
             :rows="4"
             show-count
             :maxlength="400"
@@ -491,14 +488,15 @@
     <!-- 导入对话框 -->
     <TaktModal
       v-model:open="importVisible"
-      :title="t('common.dialog.title.import', { entity: t('entity.productionplan._self') })"
+      :title="t('common.dialog.title.import', { entity: pi.self() })"
       :width="600"
       :footer="null"
       :cancel-text="t('common.page.button.close')"
       @cancel="handleImportCancel"
     >
       <TaktImportFile
-        entity-i18n-key="entity.productionplan._self"
+        v-if="importVisible"
+        :entity-i18n-key="PRODUCTIONPLAN_SELF_I18N_KEY"
         file-type="xlsx"
         :sheet-name="excelNames.sheet"
         :template-file-name="excelNames.fileBase"
@@ -517,7 +515,7 @@
       :id-column-key="'productionPlanId'"
       :action-column-key="'action'"
       entity-scope="approval"
-      table-mode="single"
+      table-mode="masterDetailMaster"
       @update:checked-keys="handleColumnKeysChange"
       @reset="handleColumnSettingReset"
     />
@@ -537,13 +535,25 @@ import { useI18n } from 'vue-i18n'
 import { ensureTaktPaginationConfigAsync, getTaktDefaultPageIndex, getTaktDefaultPageSize } from '@/utils/takt-paged'
 import ProductionPlanForm from './components/production-plan-form.vue'
 import ProductionPlanItemPanel from './components/production-plan-item-panel.vue'
-import { provideProductionPlanMasterContext } from './composables/use-production-plan-master-context'
+import { provideProductionPlanMasterContext, type ProductionPlanRowRecord } from './composables/use-production-plan-master-context'
 import { getProductionPlanList, getProductionPlanById, createProductionPlan, updateProductionPlan, deleteProductionPlanById, deleteProductionPlanBatch, getProductionPlanTemplate, importProductionPlan, exportProductionPlan, updateProductionPlanStatus } from '@/api/logistics/manufacturing/planning/production-plan'
 import type { ProductionPlan, ProductionPlanQuery } from '@/types/logistics/manufacturing/planning/production-plan'
 import { useDictDataStore } from '@/stores/foundation/dict-data'
 import { taktExcelEntityNames } from '@/utils/naming'
 import { resolveExportDownloadFileName } from '@/utils/export-download-name'
+import { normalizeImportResult, type TaktImportResult } from '@/utils/takt-import-result'
 import { RiEditLine, RiDeleteBinLine, RiQuestionLine } from '@remixicon/vue'
+
+import {
+  useProductionPlanI18n,
+  PRODUCTIONPLAN_LIST_FIELDS,
+  PRODUCTIONPLAN_QUERY_STRING_FIELDS,
+  PRODUCTIONPLAN_QUERY_FIELDS,
+  PRODUCTIONPLAN_SELF_I18N_KEY,
+} from './composables/use-production-plan-i18n'
+
+/** 实体字段 i18n（标签/占位符统一入口） */
+const pi = useProductionPlanI18n()
 
 /** i18n 翻译函数 */
 const { t } = useI18n()
@@ -551,7 +561,7 @@ const { t } = useI18n()
 const excelNames = taktExcelEntityNames('TaktProductionPlan')
 /** 列表快捷查询占位文案 */
 const searchPlaceholder = computed(
-  () => t('common.page.form.placeholder.search', { keyword: t('entity.productionplan._self') })
+  () => t('common.page.form.placeholder.search', { keyword: pi.self() })
 )
 
 /** 快捷查询关键字 */
@@ -567,9 +577,9 @@ const pageSize = ref(getTaktDefaultPageSize())
 /** 分页 total */
 const total = ref(0)
 /** 工具栏单选时当前行 */
-const selectedRow = ref<ProductionPlan | null>(null)
+const selectedRow = ref<ProductionPlanRowRecord | null>(null)
 /** 表格多选行 */
-const selectedRows = ref<ProductionPlan[]>([])
+const selectedRows = ref<ProductionPlanRowRecord[]>([])
 /** 表格多选 row-key 集合 */
 const selectedRowKeys = ref<(string | number)[]>([])
 
@@ -586,78 +596,32 @@ const formRef = ref()
 
 /** 高级查询抽屉是否打开 */
 const advancedQueryVisible = ref(false)
+/**
+ * 创建空的高级查询表单
+ * @returns {Record<string, unknown>} 高级查询初始模型
+ */
+function createEmptyAdvancedQueryForm() {
+  const form = Object.fromEntries(PRODUCTIONPLAN_QUERY_STRING_FIELDS.map((key) => [key, ''])) as Record<
+    (typeof PRODUCTIONPLAN_QUERY_STRING_FIELDS)[number],
+    string
+  >
+  return {
+    ...form,
+    totalQuantity: undefined as number | undefined,
+    totalAmount: undefined as number | undefined,
+    convertedQuantity: undefined as number | undefined,
+    convertedAmount: undefined as number | undefined,
+    planStatus: undefined as number | undefined,
+    convertedStatus: undefined as number | undefined,
+    approvalStatus: undefined as number | undefined,
+  }
+}
 /** 高级查询表单模型 */
-const advancedQueryForm = ref({
-  plantCode: '',
-  productionPlanCode: '',
-  salesPlanId: '',
-  salesPlanCode: '',
-  masterProductionScheduleId: '',
-  mpsCode: '',
-  planDateStart: '',
-  planDateEnd: '',
-  planPeriodStartStart: '',
-  planPeriodStartEnd: '',
-  planPeriodEndStart: '',
-  planPeriodEndEnd: '',
-  plannerId: '',
-  planBy: '',
-  totalQuantity: undefined as number | undefined,
-  totalAmount: undefined as number | undefined,
-  convertedQuantity: undefined as number | undefined,
-  convertedAmount: undefined as number | undefined,
-  planStatus: undefined as number | undefined,
-  convertedStatus: undefined as number | undefined,
-  planDescription: '',
-  approvalStatus: undefined as number | undefined,
-  initiatorId: '',
-  initiatedAtStart: '',
-  initiatedAtEnd: '',
-  approvedBy: '',
-  approvedAtStart: '',
-  approvedAtEnd: '',
-  flowInstanceId: '',
-  createdAtStart: '',
-  createdAtEnd: '',
-  extField: '',
-  remark: '',
-})
+const advancedQueryForm = ref(createEmptyAdvancedQueryForm())
 /** 高级查询字段元数据（列显隐配置） */
-const queryFieldsMeta = computed(() => [
-  { key: 'plantCode', label: t('entity.productionplan.plantcode') },
-  { key: 'productionPlanCode', label: t('entity.productionplan.code') },
-  { key: 'salesPlanId', label: t('entity.productionplan.salesplanid') },
-  { key: 'salesPlanCode', label: t('entity.productionplan.salesplancode') },
-  { key: 'masterProductionScheduleId', label: t('entity.productionplan.masterproductionscheduleid') },
-  { key: 'mpsCode', label: t('entity.productionplan.mpscode') },
-  { key: 'planDateStart', label: t('common.page.entity.createdatstart').replace(t('common.page.entity.createdat'), t('entity.productionplan.plandate')) },
-  { key: 'planDateEnd', label: t('common.page.entity.createdatend').replace(t('common.page.entity.createdat'), t('entity.productionplan.plandate')) },
-  { key: 'planPeriodStartStart', label: t('entity.productionplan.planperiodstartstart') },
-  { key: 'planPeriodStartEnd', label: t('entity.productionplan.planperiodstartend') },
-  { key: 'planPeriodEndStart', label: t('entity.productionplan.planperiodendstart') },
-  { key: 'planPeriodEndEnd', label: t('entity.productionplan.planperiodendend') },
-  { key: 'plannerId', label: t('entity.productionplan.plannerid') },
-  { key: 'planBy', label: t('entity.productionplan.planby') },
-  { key: 'totalQuantity', label: t('entity.productionplan.totalquantity') },
-  { key: 'totalAmount', label: t('entity.productionplan.totalamount') },
-  { key: 'convertedQuantity', label: t('entity.productionplan.convertedquantity') },
-  { key: 'convertedAmount', label: t('entity.productionplan.convertedamount') },
-  { key: 'planStatus', label: t('entity.productionplan.planstatus') },
-  { key: 'convertedStatus', label: t('entity.productionplan.convertedstatus') },
-  { key: 'planDescription', label: t('entity.productionplan.plandescription') },
-  { key: 'approvalStatus', label: t('entity.productionplan.approvalstatus') },
-  { key: 'initiatorId', label: t('entity.productionplan.initiatorid') },
-  { key: 'initiatedAtStart', label: t('entity.productionplan.initiatedatstart') },
-  { key: 'initiatedAtEnd', label: t('entity.productionplan.initiatedatend') },
-  { key: 'approvedBy', label: t('entity.productionplan.approvedby') },
-  { key: 'approvedAtStart', label: t('entity.productionplan.approvedatstart') },
-  { key: 'approvedAtEnd', label: t('entity.productionplan.approvedatend') },
-  { key: 'flowInstanceId', label: t('entity.productionplan.flowinstanceid') },
-  { key: 'createdAtStart', label: t('common.page.entity.createdatstart') },
-  { key: 'createdAtEnd', label: t('common.page.entity.createdatend') },
-  { key: 'extField', label: t('common.page.entity.extfield') },
-  { key: 'remark', label: t('common.page.entity.remark') },
-])
+const queryFieldsMeta = computed(() =>
+  PRODUCTIONPLAN_QUERY_FIELDS.map((key) => ({ key, label: pi.queryLabel(key) })),
+)
 /** 高级查询当前可见字段 key */
 const visibleQueryFieldKeys = ref<string[]>([])
 /** 列设置抽屉是否打开 */
@@ -701,20 +665,9 @@ function buildListQuery(overrides?: Partial<ProductionPlanQuery>): ProductionPla
       query[key] = v as never
     }
   }
-  assignTrimmed('plantCode', form.plantCode)
-  assignTrimmed('productionPlanCode', form.productionPlanCode)
-  assignTrimmed('salesPlanId', form.salesPlanId)
-  assignTrimmed('salesPlanCode', form.salesPlanCode)
-  assignTrimmed('masterProductionScheduleId', form.masterProductionScheduleId)
-  assignTrimmed('mpsCode', form.mpsCode)
-  assignTrimmed('planDateStart', form.planDateStart)
-  assignTrimmed('planDateEnd', form.planDateEnd)
-  assignTrimmed('planPeriodStartStart', form.planPeriodStartStart)
-  assignTrimmed('planPeriodStartEnd', form.planPeriodStartEnd)
-  assignTrimmed('planPeriodEndStart', form.planPeriodEndStart)
-  assignTrimmed('planPeriodEndEnd', form.planPeriodEndEnd)
-  assignTrimmed('plannerId', form.plannerId)
-  assignTrimmed('planBy', form.planBy)
+  for (const key of PRODUCTIONPLAN_QUERY_STRING_FIELDS) {
+    assignTrimmed(key, form[key])
+  }
   if (form.totalQuantity !== undefined && form.totalQuantity !== null) {
     query.totalQuantity = form.totalQuantity
   }
@@ -733,21 +686,9 @@ function buildListQuery(overrides?: Partial<ProductionPlanQuery>): ProductionPla
   if (form.convertedStatus !== undefined && form.convertedStatus !== null) {
     query.convertedStatus = form.convertedStatus
   }
-  assignTrimmed('planDescription', form.planDescription)
   if (form.approvalStatus !== undefined && form.approvalStatus !== null) {
     query.approvalStatus = form.approvalStatus
   }
-  assignTrimmed('initiatorId', form.initiatorId)
-  assignTrimmed('initiatedAtStart', form.initiatedAtStart)
-  assignTrimmed('initiatedAtEnd', form.initiatedAtEnd)
-  assignTrimmed('approvedBy', form.approvedBy)
-  assignTrimmed('approvedAtStart', form.approvedAtStart)
-  assignTrimmed('approvedAtEnd', form.approvedAtEnd)
-  assignTrimmed('flowInstanceId', form.flowInstanceId)
-  assignTrimmed('createdAtStart', form.createdAtStart)
-  assignTrimmed('createdAtEnd', form.createdAtEnd)
-  assignTrimmed('extField', form.extField)
-  assignTrimmed('remark', form.remark)
   return query
 }
 /** 页面挂载：租户上下文就绪后加载分页配置，再拉列表 */
@@ -762,7 +703,7 @@ onMounted(async () => {
 const selectedMasterKey = ref('')
 
 /** 同步主表选中行到右侧明细（子表由 *-panel watch 自动 reload） */
-function syncMasterSelection(record: ProductionPlan | null) {
+function syncMasterSelection(record: ProductionPlanRowRecord | null) {
   selectedMasterRow.value = record
   selectedMasterKey.value = record ? getProductionPlanId(record) : ''
 }
@@ -772,7 +713,7 @@ function syncMasterSelection(record: ProductionPlan | null) {
  * @param record 主表行
  */
 function handleMasterSelect(record: Record<string, unknown>) {
-  const row = record as unknown as ProductionPlan
+  const row = record as unknown as ProductionPlanRowRecord
   const key = getProductionPlanId(row)
   selectedRowKeys.value = [key]
   selectedRows.value = [row]
@@ -790,7 +731,7 @@ function handleMasterPaginationChange(_page: number, _pageSize: number) {
 }
 
 /** 加载主表详情并回填当前页 dataSource */
-async function loadProductionPlanDetail(record: ProductionPlan): Promise<ProductionPlan | null> {
+async function loadProductionPlanDetail(record: ProductionPlanRowRecord): Promise<ProductionPlan | null> {
   const id = getProductionPlanId(record)
   if (!id) {
     return null
@@ -821,7 +762,7 @@ const columns = computed<TableColumnsType>(() => [
     customRender: ({ record }: { record: any }) => getProductionPlanField(record, 'productionPlanId') ?? ''
   },
   {
-    title: t('entity.productionplan.plantcode'),
+    title: pi.label('plantCode'),
     dataIndex: 'plantCode',
     key: 'plantCode',
     width: 120,
@@ -830,7 +771,7 @@ const columns = computed<TableColumnsType>(() => [
     customRender: ({ record }: { record: any }) => getProductionPlanField(record, 'plantCode') ?? ''
   },
   {
-    title: t('entity.productionplan.code'),
+    title: pi.label('productionPlanCode'),
     dataIndex: 'productionPlanCode',
     key: 'productionPlanCode',
     width: 120,
@@ -839,7 +780,7 @@ const columns = computed<TableColumnsType>(() => [
     customRender: ({ record }: { record: any }) => getProductionPlanField(record, 'productionPlanCode') ?? ''
   },
   {
-    title: t('entity.productionplan.salesplanid'),
+    title: pi.label('salesPlanId'),
     dataIndex: 'salesPlanId',
     key: 'salesPlanId',
     width: 120,
@@ -848,7 +789,7 @@ const columns = computed<TableColumnsType>(() => [
     customRender: ({ record }: { record: any }) => getProductionPlanField(record, 'salesPlanId') ?? ''
   },
   {
-    title: t('entity.productionplan.salesplancode'),
+    title: pi.label('salesPlanCode'),
     dataIndex: 'salesPlanCode',
     key: 'salesPlanCode',
     width: 120,
@@ -857,7 +798,7 @@ const columns = computed<TableColumnsType>(() => [
     customRender: ({ record }: { record: any }) => getProductionPlanField(record, 'salesPlanCode') ?? ''
   },
   {
-    title: t('entity.productionplan.masterproductionscheduleid'),
+    title: pi.label('masterProductionScheduleId'),
     dataIndex: 'masterProductionScheduleId',
     key: 'masterProductionScheduleId',
     width: 120,
@@ -866,7 +807,7 @@ const columns = computed<TableColumnsType>(() => [
     customRender: ({ record }: { record: any }) => getProductionPlanField(record, 'masterProductionScheduleId') ?? ''
   },
   {
-    title: t('entity.productionplan.mpscode'),
+    title: pi.label('mpsCode'),
     dataIndex: 'mpsCode',
     key: 'mpsCode',
     width: 120,
@@ -875,7 +816,7 @@ const columns = computed<TableColumnsType>(() => [
     customRender: ({ record }: { record: any }) => getProductionPlanField(record, 'mpsCode') ?? ''
   },
   {
-    title: t('entity.productionplan.plandate'),
+    title: pi.label('planDate'),
     dataIndex: 'planDate',
     key: 'planDate',
     width: 120,
@@ -884,7 +825,7 @@ const columns = computed<TableColumnsType>(() => [
     customRender: ({ record }: { record: any }) => getProductionPlanField(record, 'planDate') ?? ''
   },
   {
-    title: t('entity.productionplan.planperiodstart'),
+    title: pi.label('planPeriodStart'),
     dataIndex: 'planPeriodStart',
     key: 'planPeriodStart',
     width: 120,
@@ -893,7 +834,7 @@ const columns = computed<TableColumnsType>(() => [
     customRender: ({ record }: { record: any }) => getProductionPlanField(record, 'planPeriodStart') ?? ''
   },
   {
-    title: t('entity.productionplan.planperiodend'),
+    title: pi.label('planPeriodEnd'),
     dataIndex: 'planPeriodEnd',
     key: 'planPeriodEnd',
     width: 120,
@@ -902,7 +843,7 @@ const columns = computed<TableColumnsType>(() => [
     customRender: ({ record }: { record: any }) => getProductionPlanField(record, 'planPeriodEnd') ?? ''
   },
   {
-    title: t('entity.productionplan.plannerid'),
+    title: pi.label('plannerId'),
     dataIndex: 'plannerId',
     key: 'plannerId',
     width: 120,
@@ -911,7 +852,7 @@ const columns = computed<TableColumnsType>(() => [
     customRender: ({ record }: { record: any }) => getProductionPlanField(record, 'plannerId') ?? ''
   },
   {
-    title: t('entity.productionplan.planby'),
+    title: pi.label('planBy'),
     dataIndex: 'planBy',
     key: 'planBy',
     width: 120,
@@ -920,7 +861,7 @@ const columns = computed<TableColumnsType>(() => [
     customRender: ({ record }: { record: any }) => getProductionPlanField(record, 'planBy') ?? ''
   },
   {
-    title: t('entity.productionplan.totalquantity'),
+    title: pi.label('totalQuantity'),
     dataIndex: 'totalQuantity',
     key: 'totalQuantity',
     width: 120,
@@ -929,7 +870,7 @@ const columns = computed<TableColumnsType>(() => [
     customRender: ({ record }: { record: any }) => getProductionPlanField(record, 'totalQuantity') ?? ''
   },
   {
-    title: t('entity.productionplan.totalamount'),
+    title: pi.label('totalAmount'),
     dataIndex: 'totalAmount',
     key: 'totalAmount',
     width: 120,
@@ -938,7 +879,7 @@ const columns = computed<TableColumnsType>(() => [
     customRender: ({ record }: { record: any }) => getProductionPlanField(record, 'totalAmount') ?? ''
   },
   {
-    title: t('entity.productionplan.convertedquantity'),
+    title: pi.label('convertedQuantity'),
     dataIndex: 'convertedQuantity',
     key: 'convertedQuantity',
     width: 120,
@@ -947,7 +888,7 @@ const columns = computed<TableColumnsType>(() => [
     customRender: ({ record }: { record: any }) => getProductionPlanField(record, 'convertedQuantity') ?? ''
   },
   {
-    title: t('entity.productionplan.convertedamount'),
+    title: pi.label('convertedAmount'),
     dataIndex: 'convertedAmount',
     key: 'convertedAmount',
     width: 120,
@@ -956,7 +897,7 @@ const columns = computed<TableColumnsType>(() => [
     customRender: ({ record }: { record: any }) => getProductionPlanField(record, 'convertedAmount') ?? ''
   },
   {
-    title: t('entity.productionplan.planstatus'),
+    title: pi.label('planStatus'),
     dataIndex: 'planStatus',
     key: 'planStatus',
     width: 120,
@@ -964,7 +905,7 @@ const columns = computed<TableColumnsType>(() => [
     ellipsis: true,
   },
   {
-    title: t('entity.productionplan.convertedstatus'),
+    title: pi.label('convertedStatus'),
     dataIndex: 'convertedStatus',
     key: 'convertedStatus',
     width: 120,
@@ -972,7 +913,7 @@ const columns = computed<TableColumnsType>(() => [
     ellipsis: true,
   },
   {
-    title: t('entity.productionplan.plandescription'),
+    title: pi.label('planDescription'),
     dataIndex: 'planDescription',
     key: 'planDescription',
     width: 120,
@@ -988,7 +929,7 @@ const columns = computed<TableColumnsType>(() => [
         shape: 'plain',
         icon: RiEditLine,
         permission: 'logistics:manufacturing:planning:production:plan:update',
-        onClick: (record: ProductionPlan) => handleEdit(record)
+        onClick: (record: ProductionPlanRowRecord) => handleEdit(record)
       },
       {
         key: 'delete',
@@ -996,26 +937,51 @@ const columns = computed<TableColumnsType>(() => [
         shape: 'plain',
         icon: RiDeleteBinLine,
         permission: 'logistics:manufacturing:planning:production:plan:delete',
-        onClick: (record: ProductionPlan) => handleDeleteOne(record)
+        onClick: (record: ProductionPlanRowRecord) => handleDeleteOne(record)
       }
     ]
   })
 ])
 
 /** 表格 row-key（优先实体主键字段） */
-const getProductionPlanId = (record: any): string => record?.[entityIdName] ?? ''
+const getProductionPlanId = (record: ProductionPlanRowRecord): string => {
+  const id = (record as Record<string, unknown>)?.[entityIdName]
+  return id != null ? String(id) : ''
+}
 /**
  * 读取行字段值
  * @param record 行数据
  * @param field 字段名
  */
 const getProductionPlanField = (record: any, field: string): any => record?.[field]
+/**
+ * 供 TaktDictTag 等组件使用的标量字典值
+ * @param record 行数据
+ * @param field 字段名
+ */
+const getProductionPlanDictValue = (
+  record: ProductionPlanRowRecord,
+  field: string,
+): string | number | undefined => {
+  const value = (record as Record<string, unknown>)?.[field]
+  if (value === null || value === undefined) return undefined
+  if (typeof value === 'string' || typeof value === 'number') return value
+  return String(value)
+}
+
+/** 将行字段/字典值转为有限 number */
+const toProductionPlanNumber = (value: string | number | undefined | null): number => {
+  if (typeof value === 'number' && Number.isFinite(value)) return value
+  const num = Number(value ?? 0)
+  return Number.isFinite(num) ? num : 0
+}
+
 
 
 /** 行选择配置 */
 const rowSelection = computed(() => ({
   selectedRowKeys: selectedRowKeys.value,
-  onChange: (keys: (string | number)[], rows: ProductionPlan[]) => {
+  onChange: (keys: (string | number)[], rows: ProductionPlanRowRecord[]) => {
     selectedRowKeys.value = keys
     selectedRows.value = rows
     selectedRow.value = rows.length === 1 ? (rows[0] ?? null) : null
@@ -1025,7 +991,7 @@ const rowSelection = computed(() => ({
       syncMasterSelection(null)
     }
   },
-  onSelect: (record: ProductionPlan, selected: boolean) => {
+  onSelect: (record: ProductionPlanRowRecord, selected: boolean) => {
     if (selected) {
       selectedRow.value = record
       syncMasterSelection(record)
@@ -1034,7 +1000,7 @@ const rowSelection = computed(() => ({
       syncMasterSelection(null)
     }
   },
-  onSelectAll: (selected: boolean, selectedRowsData: ProductionPlan[]) => {
+  onSelectAll: (selected: boolean, selectedRowsData: ProductionPlanRowRecord[]) => {
     selectedRow.value = selected && selectedRowsData.length === 1 ? (selectedRowsData[0] ?? null) : null
     syncMasterSelection(selectedRow.value)
   }
@@ -1110,14 +1076,14 @@ function handleReset() {
 
 /** 打开新增弹窗 */
 function handleCreate() {
-  formTitle.value = t('common.dialog.title.create', { entity: t('entity.productionplan._self') })
+  formTitle.value = t('common.dialog.title.create', { entity: pi.self() })
   formData.value = null
   formVisible.value = true
   nextTick(() => formRef.value?.resetFields())
 }
 /** 打开编辑弹窗（主子表：先拉详情含子表） */
-async function handleEdit(record: ProductionPlan) {
-  formTitle.value = t('common.dialog.title.edit', { entity: t('entity.productionplan._self') })
+async function handleEdit(record: ProductionPlanRowRecord) {
+  formTitle.value = t('common.dialog.title.edit', { entity: pi.self() })
   formLoading.value = true
   try {
     const detail = await loadProductionPlanDetail(record)
@@ -1133,7 +1099,7 @@ function handleUpdate() {
   if (selectedRow.value) {
     void handleEdit(selectedRow.value)
   } else {
-    message.warning(t('common.tip.select.to.action', { action: t('common.page.button.edit'), entity: t('entity.productionplan._self') }))
+    message.warning(t('common.tip.select.to.action', { action: t('common.page.button.edit'), entity: pi.self() }))
   }
 }
 /** 提交新增/编辑表单 */
@@ -1151,10 +1117,10 @@ async function handleFormSubmit() {
     const id = (formData.value as any)?.[entityIdName]
     if (id) {
       await updateProductionPlan(id, payload as any)
-      message.success(t('common.feedback.updated', { target: t('entity.productionplan._self') }))
+      message.success(t('common.feedback.updated', { target: pi.self() }))
     } else {
       await createProductionPlan(payload as any)
-      message.success(t('common.feedback.created', { target: t('entity.productionplan._self') }))
+      message.success(t('common.feedback.created', { target: pi.self() }))
     }
     formVisible.value = false
     formData.value = null
@@ -1185,15 +1151,22 @@ async function handleDownloadTemplate(sheetName?: string, fileName?: string): Pr
   return (res as any)?.data ?? res
 }
 
-/** 上传并导入 Excel 文件 */
-async function handleImportFile(file: File, sheetName?: string): Promise<{ success: number; fail: number; errors: string[] }> {
-  return await importProductionPlan(file, sheetName)
+/** 上传并导入 Excel 文件（归一化后端 SuccessCount/successCount） */
+async function handleImportFile(file: File, sheetName?: string): Promise<TaktImportResult> {
+  const raw = await importProductionPlan(file, sheetName)
+  return normalizeImportResult(raw)
 }
 
-/** 导入完成回调：刷新列表并可选关闭对话框 */
-function handleImportSuccess(result: { success: number; fail: number; errors: string[] }) {
+/** 导入完成回调：刷新列表；全部成功时延迟关闭对话框 */
+function handleImportSuccess(result: TaktImportResult) {
   loadData()
-  if (result.fail === 0) setTimeout(() => { importVisible.value = false }, 2000)
+
+      if (selectedMasterKey.value) {
+    productionPlanItemPanelRef.value?.reload?.()
+      }
+  if (result.fail === 0 && result.success > 0) {
+    setTimeout(() => { importVisible.value = false }, 2000)
+  }
 }
 
 /** 关闭导入对话框 */
@@ -1227,24 +1200,24 @@ async function handleExport() {
     link.click()
     document.body.removeChild(link)
     setTimeout(() => window.URL.revokeObjectURL(url), 100)
-    message.success(t('common.feedback.export.success', { target: t('entity.productionplan._self') }))
+    message.success(t('common.feedback.export.success', { target: pi.self() }))
   } catch (error: any) {
     logger.error('[ProductionPlan] 导出失败', { error })
-    message.error(error?.message || t('common.feedback.export.failed', { target: t('entity.productionplan._self') }))
+    message.error(error?.message || t('common.feedback.export.failed', { target: pi.self() }))
   } finally {
     loading.value = false
   }
 }
 /** 删除单行 */
-async function handleDeleteOne(record: ProductionPlan) {
+async function handleDeleteOne(record: ProductionPlanRowRecord) {
   Modal.confirm({
     title: t('common.tip.confirm.delete.title'),
-    content: t('common.tip.confirm.delete.entity', { entity: t('entity.productionplan._self'), name: t('common.tip.this.target', { target: t('entity.productionplan._self') }) }),
+    content: t('common.tip.confirm.delete.entity', { entity: pi.self(), name: t('common.tip.this.target', { target: pi.self() }) }),
     okText: t('common.page.button.delete'),
     cancelText: t('common.page.button.cancel'),
     onOk: async () => {
       await deleteProductionPlanById((record as any)[entityIdName])
-      message.success(t('common.feedback.deleted', { target: t('entity.productionplan._self') }))
+      message.success(t('common.feedback.deleted', { target: pi.self() }))
       selectedRowKeys.value = []
       selectedRows.value = []
       selectedRow.value = null
@@ -1256,18 +1229,18 @@ async function handleDeleteOne(record: ProductionPlan) {
 /** 批量删除选中行 */
 async function handleDelete() {
   if (selectedRows.value.length === 0) {
-    message.warning(t('common.tip.select.to.action', { action: t('common.page.button.delete'), entity: t('entity.productionplan._self') }))
+    message.warning(t('common.tip.select.to.action', { action: t('common.page.button.delete'), entity: pi.self() }))
     return
   }
   Modal.confirm({
     title: t('common.tip.confirm.delete.title'),
-    content: t('common.tip.confirm.delete.count', { entity: t('entity.productionplan._self'), count: selectedRows.value.length }),
+    content: t('common.tip.confirm.delete.count', { entity: pi.self(), count: selectedRows.value.length }),
     okText: t('common.page.button.delete'),
     cancelText: t('common.page.button.cancel'),
     onOk: async () => {
       const ids = selectedRows.value.map((r: any) => r[entityIdName]).filter(Boolean)
       await deleteProductionPlanBatch(ids)
-      message.success(t('common.feedback.deleted', { target: t('entity.productionplan._self') }))
+      message.success(t('common.feedback.deleted', { target: pi.self() }))
       selectedRowKeys.value = []
       selectedRows.value = []
       selectedRow.value = null
@@ -1281,9 +1254,9 @@ async function handleDelete() {
  * @param record 当前行
  * @param checked 是否启用
  */
-async function handlePlanStatusChange(record: ProductionPlan, checked: boolean) {
+async function handlePlanStatusChange(record: ProductionPlanRowRecord, checked: boolean) {
   const newVal = checked ? 1 : 0
-  const oldVal = getProductionPlanField(record, 'planStatus')
+  const oldVal = toProductionPlanNumber(getProductionPlanDictValue(record, 'planStatus'))
   const id = getProductionPlanId(record)
   const row = dataSource.value.find((item) => getProductionPlanId(item) === id)
   if (row) {

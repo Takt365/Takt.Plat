@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Application.Dtos.Logistics.Procurement
 // 文件名称：TaktPurchasePriceScaleDtos.cs
-// 创建时间：2026-06-27
+// 创建时间：2026-07-09
 // 创建人：Takt365(Auto Generated)
 // 功能描述：PurchasePriceScale 模块 DTO（由 generate-dtos-from-entity.cjs 根据 TaktPurchasePriceScale 生成，请按需审阅）
 // 
@@ -36,13 +36,13 @@ public class TaktPurchasePriceScaleDto : TaktCompanyDtoBase
     public long PurchasePriceScaleId { get; set; }
 
     /// <summary>
-    /// 采购价格明细ID（主子表关系，序列化为string以避免Javascript精度问题）
+    /// 采购价格明细 ID（关联 TaktPurchasePriceItem.Id，选项 TaktPurchasePriceItems/options）
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
     public long PurchasePriceItemId { get; set; }
 
     /// <summary>
-    /// 采购价格明细名称（填充字段）
+    /// 采购价格明细 名称（填充字段）
     /// </summary>
     public string? PurchasePriceItemName { get; set; }
 
@@ -76,6 +76,11 @@ public class TaktPurchasePriceScaleDto : TaktCompanyDtoBase
     /// </summary>
     public int SortOrder { get; set; } = 0;
 
+    /// <summary>
+    /// 是否作废（字典 sys_yes_no_type，0=否 1=是；编辑移除子行时标记作废）
+    /// </summary>
+    public int IsObsolete { get; set; } = 0;
+
 }
 
 // ========================================
@@ -99,7 +104,7 @@ public class TaktPurchasePriceScaleQueryDto : TaktPagedQuery
     public string? CompanyCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 采购价格明细ID（主子表关系，序列化为string以避免Javascript精度问题）
+    /// 采购价格明细 ID（关联 TaktPurchasePriceItem.Id，选项 TaktPurchasePriceItems/options）
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
     public long? PurchasePriceItemId { get; set; }
@@ -133,6 +138,11 @@ public class TaktPurchasePriceScaleQueryDto : TaktPagedQuery
     /// 排序号（越小越靠前）
     /// </summary>
     public int? SortOrder { get; set; }
+
+    /// <summary>
+    /// 是否作废（字典 sys_yes_no_type，0=否 1=是；编辑移除子行时标记作废）
+    /// </summary>
+    public int? IsObsolete { get; set; }
 
     /// <summary>
     /// 创建时间（范围查询-开始）
@@ -180,7 +190,7 @@ public class TaktPurchasePriceScaleCreateDto
     public string CompanyDefaultCulture { get; set; } = string.Empty;
 
     /// <summary>
-    /// 采购价格明细ID（主子表关系，序列化为string以避免Javascript精度问题）
+    /// 采购价格明细 ID（关联 TaktPurchasePriceItem.Id，选项 TaktPurchasePriceItems/options）
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
     public long PurchasePriceItemId { get; set; }
@@ -210,6 +220,11 @@ public class TaktPurchasePriceScaleCreateDto
     /// 阶梯价格（精确到分，存储为整数，单位为分）
     /// </summary>
     public decimal ScalePrice { get; set; }
+
+    /// <summary>
+    /// 是否作废（字典 sys_yes_no_type，0=否 1=是；编辑移除子行时标记作废）
+    /// </summary>
+    public int IsObsolete { get; set; } = 0;
 
     /// <summary>
     /// 扩展字段JSON
@@ -268,6 +283,29 @@ public class TaktPurchasePriceScaleSortDto
 }
 
 // ========================================
+// PurchasePriceScale 作废 DTO
+// ========================================
+
+/// <summary>
+/// PurchasePriceScale 作废/撤销作废 DTO
+/// </summary>
+public class TaktPurchasePriceScaleObsoleteDto
+{
+    /// <summary>
+    /// PurchasePriceScaleID
+    /// </summary>
+    [Required(ErrorMessage = "ID不能为空")]
+    [AdaptMember("Id")]
+    [JsonConverter(typeof(ValueToStringConverter))]
+    public long PurchasePriceScaleId { get; set; }
+
+    /// <summary>
+    /// 是否作废（字典 sys_yes_no_type，0=否 1=是；编辑移除子行时标记作废）
+    /// </summary>
+    public int IsObsolete { get; set; }
+}
+
+// ========================================
 // 导入 DTO
 // ========================================
 
@@ -287,7 +325,7 @@ public class TaktPurchasePriceScaleTemplateDto
     public string? CompanyCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 采购价格明细ID（主子表关系，序列化为string以避免Javascript精度问题）
+    /// 采购价格明细 ID（关联 TaktPurchasePriceItem.Id，选项 TaktPurchasePriceItems/options）
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
     public long? PurchasePriceItemId { get; set; }
@@ -316,6 +354,11 @@ public class TaktPurchasePriceScaleTemplateDto
     /// 阶梯价格（精确到分，存储为整数，单位为分）
     /// </summary>
     public decimal? ScalePrice { get; set; }
+
+    /// <summary>
+    /// 是否作废（字典 sys_yes_no_type，0=否 1=是；编辑移除子行时标记作废）
+    /// </summary>
+    public int? IsObsolete { get; set; }
 
     /// <summary>
     /// 扩展字段JSON
@@ -350,7 +393,7 @@ public class TaktPurchasePriceScaleImportDto
     public string? CompanyDefaultCulture { get; set; } = string.Empty;
 
     /// <summary>
-    /// 采购价格明细ID（主子表关系，序列化为string以避免Javascript精度问题）
+    /// 采购价格明细 ID（关联 TaktPurchasePriceItem.Id，选项 TaktPurchasePriceItems/options）
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
     public long? PurchasePriceItemId { get; set; }
@@ -379,6 +422,11 @@ public class TaktPurchasePriceScaleImportDto
     /// 阶梯价格（精确到分，存储为整数，单位为分）
     /// </summary>
     public decimal? ScalePrice { get; set; }
+
+    /// <summary>
+    /// 是否作废（字典 sys_yes_no_type，0=否 1=是；编辑移除子行时标记作废）
+    /// </summary>
+    public int? IsObsolete { get; set; }
 
     /// <summary>
     /// 扩展字段JSON
@@ -414,7 +462,7 @@ public class TaktPurchasePriceScaleExportDto
     public string CompanyCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 采购价格明细ID（主子表关系，序列化为string以避免Javascript精度问题）
+    /// 采购价格明细 ID（关联 TaktPurchasePriceItem.Id，选项 TaktPurchasePriceItems/options）
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
     public long PurchasePriceItemId { get; set; }
@@ -448,6 +496,11 @@ public class TaktPurchasePriceScaleExportDto
     /// 排序号（越小越靠前）
     /// </summary>
     public int SortOrder { get; set; } = 0;
+
+    /// <summary>
+    /// 是否作废（字典 sys_yes_no_type，0=否 1=是；编辑移除子行时标记作废）
+    /// </summary>
+    public int IsObsolete { get; set; } = 0;
 
     /// <summary>
     /// 扩展字段JSON

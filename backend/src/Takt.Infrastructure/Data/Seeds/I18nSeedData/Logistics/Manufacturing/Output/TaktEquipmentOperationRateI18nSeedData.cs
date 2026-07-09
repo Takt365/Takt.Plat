@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Infrastructure.Data.Seeds.I18nSeedData.Logistics.Manufacturing.Output
 // 文件名称：TaktEquipmentOperationRateI18nSeedData.cs
-// 创建时间：2026-07-02
+// 创建时间：2026-07-06
 // 创建人：Takt365(Auto Generated)
 // 功能描述：TaktEquipmentOperationRate 实体字段国际化种子（无对应 frontend locales；TranslationText 取自 ColumnDescription，ContextNote 取自属性 XML summary）
 // 
@@ -315,23 +315,14 @@ public class TaktEquipmentOperationRateI18nSeedData : ITaktSeedDataCoordinator
             // entity.equipmentoperationrate.teamleader
             new TranslationSeedItem("entity.equipmentoperationrate.teamleader", "zh-HK", "班组长_hk", "班组长（选项 TaktEmployees/options，存员工姓名或工号）"),
 
-            // entity.equipmentoperationrate.status
-            new TranslationSeedItem("entity.equipmentoperationrate.status", "en-US", "状态_us", "状态（0=正常，1=停用）"),
-            // entity.equipmentoperationrate.status
-            new TranslationSeedItem("entity.equipmentoperationrate.status", "ja-JP", "状态_jp", "状态（0=正常，1=停用）"),
-            // entity.equipmentoperationrate.status
-            new TranslationSeedItem("entity.equipmentoperationrate.status", "zh-CN", "状态", "状态（0=正常，1=停用）"),
-            // entity.equipmentoperationrate.status
-            new TranslationSeedItem("entity.equipmentoperationrate.status", "zh-HK", "状态_hk", "状态（0=正常，1=停用）"),
-
-            // entity.equipmentoperationrate.changelogs
-            new TranslationSeedItem("entity.equipmentoperationrate.changelogs", "en-US", "机器稼动率变更记录列表_us", "机器稼动率变更记录列表（外键在子表 TaktEquipmentOperationRateChangeLog.EquipmentOperationRateId）"),
-            // entity.equipmentoperationrate.changelogs
-            new TranslationSeedItem("entity.equipmentoperationrate.changelogs", "ja-JP", "机器稼动率变更记录列表_jp", "机器稼动率变更记录列表（外键在子表 TaktEquipmentOperationRateChangeLog.EquipmentOperationRateId）"),
-            // entity.equipmentoperationrate.changelogs
-            new TranslationSeedItem("entity.equipmentoperationrate.changelogs", "zh-CN", "机器稼动率变更记录列表", "机器稼动率变更记录列表（外键在子表 TaktEquipmentOperationRateChangeLog.EquipmentOperationRateId）"),
-            // entity.equipmentoperationrate.changelogs
-            new TranslationSeedItem("entity.equipmentoperationrate.changelogs", "zh-HK", "机器稼动率变更记录列表_hk", "机器稼动率变更记录列表（外键在子表 TaktEquipmentOperationRateChangeLog.EquipmentOperationRateId）"),
+            // entity.equipmentoperationrate.ratestatus
+            new TranslationSeedItem("entity.equipmentoperationrate.ratestatus", "en-US", "状态_us", "状态（0=正常，1=停用）"),
+            // entity.equipmentoperationrate.ratestatus
+            new TranslationSeedItem("entity.equipmentoperationrate.ratestatus", "ja-JP", "状态_jp", "状态（0=正常，1=停用）"),
+            // entity.equipmentoperationrate.ratestatus
+            new TranslationSeedItem("entity.equipmentoperationrate.ratestatus", "zh-CN", "状态", "状态（0=正常，1=停用）"),
+            // entity.equipmentoperationrate.ratestatus
+            new TranslationSeedItem("entity.equipmentoperationrate.ratestatus", "zh-HK", "状态_hk", "状态（0=正常，1=停用）"),
         };
     }
 

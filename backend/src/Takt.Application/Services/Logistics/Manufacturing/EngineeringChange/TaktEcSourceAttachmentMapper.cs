@@ -24,7 +24,7 @@ public static class TaktEcSourceAttachmentMapper
     private const string PlaceholderAccessUrl = "-";
 
     /// <summary>
-    /// 将来源设变主表上的文档编号映射为设变附件行（技联书→Liaison，PP番号→FPP）
+    /// 将来源设变主表上的文档编号映射为设变附件行（技联书→TL，PP番号→FPP）
     /// </summary>
     /// <param name="sourceEc">来源设变主</param>
     /// <param name="ecNo">设变单号</param>

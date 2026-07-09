@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Infrastructure.Data.Seeds.I18nSeedData.Logistics.Manufacturing.EngineeringChange
 // 文件名称：TaktEcDetailI18nSeedData.cs
-// 创建时间：2026-07-02
+// 创建时间：2026-07-09
 // 创建人：Takt365(Auto Generated)
 // 功能描述：TaktEcDetail 实体字段国际化种子（无对应 frontend locales；TranslationText 取自 ColumnDescription，ContextNote 取自属性 XML summary）
 // 
@@ -334,40 +334,49 @@ public class TaktEcDetailI18nSeedData : ITaktSeedDataCoordinator
             new TranslationSeedItem("entity.ecdetail.ecbomdate", "zh-HK", "BOM生效日期_hk", "BOM生效日期（Ec_bomdate）"),
 
             // entity.ecdetail.eciscompatible
-            new TranslationSeedItem("entity.ecdetail.eciscompatible", "en-US", "互换性_us", "互换性（Ec_is_compatible）"),
+            new TranslationSeedItem("entity.ecdetail.eciscompatible", "en-US", "兼容性_us", "兼容性（字典 logistics_ec_source_compatibility；A=兼容，B=单向兼容（新替旧），C=单向兼容（旧替新），D=不兼容）"),
             // entity.ecdetail.eciscompatible
-            new TranslationSeedItem("entity.ecdetail.eciscompatible", "ja-JP", "互换性_jp", "互换性（Ec_is_compatible）"),
+            new TranslationSeedItem("entity.ecdetail.eciscompatible", "ja-JP", "兼容性_jp", "兼容性（字典 logistics_ec_source_compatibility；A=兼容，B=单向兼容（新替旧），C=单向兼容（旧替新），D=不兼容）"),
             // entity.ecdetail.eciscompatible
-            new TranslationSeedItem("entity.ecdetail.eciscompatible", "zh-CN", "互换性", "互换性（Ec_is_compatible）"),
+            new TranslationSeedItem("entity.ecdetail.eciscompatible", "zh-CN", "兼容性", "兼容性（字典 logistics_ec_source_compatibility；A=兼容，B=单向兼容（新替旧），C=单向兼容（旧替新），D=不兼容）"),
             // entity.ecdetail.eciscompatible
-            new TranslationSeedItem("entity.ecdetail.eciscompatible", "zh-HK", "互换性_hk", "互换性（Ec_is_compatible）"),
+            new TranslationSeedItem("entity.ecdetail.eciscompatible", "zh-HK", "兼容性_hk", "兼容性（字典 logistics_ec_source_compatibility；A=兼容，B=单向兼容（新替旧），C=单向兼容（旧替新），D=不兼容）"),
 
             // entity.ecdetail.ecseconddistinction
-            new TranslationSeedItem("entity.ecdetail.ecseconddistinction", "en-US", "二级区分_us", "二级区分（Ec_second_distinction）"),
+            new TranslationSeedItem("entity.ecdetail.ecseconddistinction", "en-US", "二级区分_us", "二级区分（字典 logistics_ec_source_distinction；1=有，2=优先，3=无）"),
             // entity.ecdetail.ecseconddistinction
-            new TranslationSeedItem("entity.ecdetail.ecseconddistinction", "ja-JP", "二级区分_jp", "二级区分（Ec_second_distinction）"),
+            new TranslationSeedItem("entity.ecdetail.ecseconddistinction", "ja-JP", "二级区分_jp", "二级区分（字典 logistics_ec_source_distinction；1=有，2=优先，3=无）"),
             // entity.ecdetail.ecseconddistinction
-            new TranslationSeedItem("entity.ecdetail.ecseconddistinction", "zh-CN", "二级区分", "二级区分（Ec_second_distinction）"),
+            new TranslationSeedItem("entity.ecdetail.ecseconddistinction", "zh-CN", "二级区分", "二级区分（字典 logistics_ec_source_distinction；1=有，2=优先，3=无）"),
             // entity.ecdetail.ecseconddistinction
-            new TranslationSeedItem("entity.ecdetail.ecseconddistinction", "zh-HK", "二级区分_hk", "二级区分（Ec_second_distinction）"),
+            new TranslationSeedItem("entity.ecdetail.ecseconddistinction", "zh-HK", "二级区分_hk", "二级区分（字典 logistics_ec_source_distinction；1=有，2=优先，3=无）"),
 
-            // entity.ecdetail.ecinstructionno
-            new TranslationSeedItem("entity.ecdetail.ecinstructionno", "en-US", "生产指令_us", "生产指令（Ec_instruction_no）"),
-            // entity.ecdetail.ecinstructionno
-            new TranslationSeedItem("entity.ecdetail.ecinstructionno", "ja-JP", "生产指令_jp", "生产指令（Ec_instruction_no）"),
-            // entity.ecdetail.ecinstructionno
-            new TranslationSeedItem("entity.ecdetail.ecinstructionno", "zh-CN", "生产指令", "生产指令（Ec_instruction_no）"),
-            // entity.ecdetail.ecinstructionno
-            new TranslationSeedItem("entity.ecdetail.ecinstructionno", "zh-HK", "生产指令_hk", "生产指令（Ec_instruction_no）"),
+            // entity.ecdetail.ecinstruction
+            new TranslationSeedItem("entity.ecdetail.ecinstruction", "en-US", "生产指令_us", "生产指令（字典 logistics_ec_source_instruction；1=已出货成品，2=在线半成品，3=库存零件，4=外协在制品，5=新下达订单，9=未定）"),
+            // entity.ecdetail.ecinstruction
+            new TranslationSeedItem("entity.ecdetail.ecinstruction", "ja-JP", "生产指令_jp", "生产指令（字典 logistics_ec_source_instruction；1=已出货成品，2=在线半成品，3=库存零件，4=外协在制品，5=新下达订单，9=未定）"),
+            // entity.ecdetail.ecinstruction
+            new TranslationSeedItem("entity.ecdetail.ecinstruction", "zh-CN", "生产指令", "生产指令（字典 logistics_ec_source_instruction；1=已出货成品，2=在线半成品，3=库存零件，4=外协在制品，5=新下达订单，9=未定）"),
+            // entity.ecdetail.ecinstruction
+            new TranslationSeedItem("entity.ecdetail.ecinstruction", "zh-HK", "生产指令_hk", "生产指令（字典 logistics_ec_source_instruction；1=已出货成品，2=在线半成品，3=库存零件，4=外协在制品，5=新下达订单，9=未定）"),
 
             // entity.ecdetail.eclegacypartdisposition
-            new TranslationSeedItem("entity.ecdetail.eclegacypartdisposition", "en-US", "旧品处理_us", "旧品处理（Ec_legacy_part_disposition）"),
+            new TranslationSeedItem("entity.ecdetail.eclegacypartdisposition", "en-US", "旧品处理_us", "旧品处理（字典 logistics_ec_legacy_part_disposition；1=转用，2=废弃，3=返工，4=消耗，5=无处理，9=未定）"),
             // entity.ecdetail.eclegacypartdisposition
-            new TranslationSeedItem("entity.ecdetail.eclegacypartdisposition", "ja-JP", "旧品处理_jp", "旧品处理（Ec_legacy_part_disposition）"),
+            new TranslationSeedItem("entity.ecdetail.eclegacypartdisposition", "ja-JP", "旧品处理_jp", "旧品处理（字典 logistics_ec_legacy_part_disposition；1=转用，2=废弃，3=返工，4=消耗，5=无处理，9=未定）"),
             // entity.ecdetail.eclegacypartdisposition
-            new TranslationSeedItem("entity.ecdetail.eclegacypartdisposition", "zh-CN", "旧品处理", "旧品处理（Ec_legacy_part_disposition）"),
+            new TranslationSeedItem("entity.ecdetail.eclegacypartdisposition", "zh-CN", "旧品处理", "旧品处理（字典 logistics_ec_legacy_part_disposition；1=转用，2=废弃，3=返工，4=消耗，5=无处理，9=未定）"),
             // entity.ecdetail.eclegacypartdisposition
-            new TranslationSeedItem("entity.ecdetail.eclegacypartdisposition", "zh-HK", "旧品处理_hk", "旧品处理（Ec_legacy_part_disposition）"),
+            new TranslationSeedItem("entity.ecdetail.eclegacypartdisposition", "zh-HK", "旧品处理_hk", "旧品处理（字典 logistics_ec_legacy_part_disposition；1=转用，2=废弃，3=返工，4=消耗，5=无处理，9=未定）"),
+
+            // entity.ecdetail.isobsolete
+            new TranslationSeedItem("entity.ecdetail.isobsolete", "en-US", "是否作废_us", "是否作废（字典 sys_yes_no_type，0=否 1=是；编辑移除子行时标记作废）"),
+            // entity.ecdetail.isobsolete
+            new TranslationSeedItem("entity.ecdetail.isobsolete", "ja-JP", "是否作废_jp", "是否作废（字典 sys_yes_no_type，0=否 1=是；编辑移除子行时标记作废）"),
+            // entity.ecdetail.isobsolete
+            new TranslationSeedItem("entity.ecdetail.isobsolete", "zh-CN", "是否作废", "是否作废（字典 sys_yes_no_type，0=否 1=是；编辑移除子行时标记作废）"),
+            // entity.ecdetail.isobsolete
+            new TranslationSeedItem("entity.ecdetail.isobsolete", "zh-HK", "是否作废_hk", "是否作废（字典 sys_yes_no_type，0=否 1=是；编辑移除子行时标记作废）"),
 
             // entity.ecdetail.ecgijutsu
             new TranslationSeedItem("entity.ecdetail.ecgijutsu", "en-US", "设变技术课主表_us", "设变技术课主表（多对一）"),

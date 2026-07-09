@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Application.Dtos.Logistics.Manufacturing.Defect
 // 文件名称：TaktAssyDefectDetailDtos.cs
-// 创建时间：2026-06-30
+// 创建时间：2026-07-09
 // 创建人：Takt365(Auto Generated)
 // 功能描述：AssyDefectDetail 模块 DTO（由 generate-dtos-from-entity.cjs 根据 TaktAssyDefectDetail 生成，请按需审阅）
 // 
@@ -47,9 +47,19 @@ public class TaktAssyDefectDetailDto : TaktCompanyDtoBase
     public string? AssyDefectName { get; set; }
 
     /// <summary>
-    /// 生产工单号（冗余字段,便于查询）
+    /// 工单号（冗余字段,便于查询）
     /// </summary>
     public string ProdOrderCode { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 生实实绩（冗余字段,便于统计/查询）
+    /// </summary>
+    public decimal ProdActualQty { get; set; }
+
+    /// <summary>
+    /// 无不良数量（冗余字段,便于统计/查询）
+    /// </summary>
+    public decimal GoodQuantity { get; set; }
 
     /// <summary>
     /// 行号（项号/序号，固定步长=10）
@@ -92,7 +102,7 @@ public class TaktAssyDefectDetailDto : TaktCompanyDtoBase
     public string? DefectSymptom { get; set; } = string.Empty;
 
     /// <summary>
-    /// 不良个所（字典 logistics_pcb_location_category，存 DictValue）
+    /// 不良个所（字典 logistics_assy_location_category，存 DictValue）
     /// </summary>
     public string? DefectLocation { get; set; } = string.Empty;
 
@@ -105,6 +115,11 @@ public class TaktAssyDefectDetailDto : TaktCompanyDtoBase
     /// 修理员（关联 TaktEmployee.Id，选项 TaktEmployees/options）
     /// </summary>
     public string? RepairOperator { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 是否作废（字典 sys_yes_no_type，0=否 1=是；编辑移除子行时标记作废）
+    /// </summary>
+    public int IsObsolete { get; set; } = 0;
 
     /// <summary>
     /// 组立不良日报（主表）
@@ -141,9 +156,19 @@ public class TaktAssyDefectDetailQueryDto : TaktPagedQuery
     public long? AssyDefectId { get; set; }
 
     /// <summary>
-    /// 生产工单号（冗余字段,便于查询）
+    /// 工单号（冗余字段,便于查询）
     /// </summary>
     public string? ProdOrderCode { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 生实实绩（冗余字段,便于统计/查询）
+    /// </summary>
+    public decimal? ProdActualQty { get; set; }
+
+    /// <summary>
+    /// 无不良数量（冗余字段,便于统计/查询）
+    /// </summary>
+    public decimal? GoodQuantity { get; set; }
 
     /// <summary>
     /// 行号（项号/序号，固定步长=10）
@@ -186,7 +211,7 @@ public class TaktAssyDefectDetailQueryDto : TaktPagedQuery
     public string? DefectSymptom { get; set; } = string.Empty;
 
     /// <summary>
-    /// 不良个所（字典 logistics_pcb_location_category，存 DictValue）
+    /// 不良个所（字典 logistics_assy_location_category，存 DictValue）
     /// </summary>
     public string? DefectLocation { get; set; } = string.Empty;
 
@@ -199,6 +224,11 @@ public class TaktAssyDefectDetailQueryDto : TaktPagedQuery
     /// 修理员（关联 TaktEmployee.Id，选项 TaktEmployees/options）
     /// </summary>
     public string? RepairOperator { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 是否作废（字典 sys_yes_no_type，0=否 1=是；编辑移除子行时标记作废）
+    /// </summary>
+    public int? IsObsolete { get; set; }
 
     /// <summary>
     /// 创建时间（范围查询-开始）
@@ -252,10 +282,20 @@ public class TaktAssyDefectDetailCreateDto
     public long AssyDefectId { get; set; }
 
     /// <summary>
-    /// 生产工单号（冗余字段,便于查询）
+    /// 工单号（冗余字段,便于查询）
     /// </summary>
-    [Required(ErrorMessage = "生产工单号（冗余字段,便于查询）不能为空")]
+    [Required(ErrorMessage = "工单号（冗余字段,便于查询）不能为空")]
     public string ProdOrderCode { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 生实实绩（冗余字段,便于统计/查询）
+    /// </summary>
+    public decimal ProdActualQty { get; set; }
+
+    /// <summary>
+    /// 无不良数量（冗余字段,便于统计/查询）
+    /// </summary>
+    public decimal GoodQuantity { get; set; }
 
     /// <summary>
     /// 行号（项号/序号，固定步长=10）
@@ -298,7 +338,7 @@ public class TaktAssyDefectDetailCreateDto
     public string? DefectSymptom { get; set; } = string.Empty;
 
     /// <summary>
-    /// 不良个所（字典 logistics_pcb_location_category，存 DictValue）
+    /// 不良个所（字典 logistics_assy_location_category，存 DictValue）
     /// </summary>
     public string? DefectLocation { get; set; } = string.Empty;
 
@@ -311,6 +351,11 @@ public class TaktAssyDefectDetailCreateDto
     /// 修理员（关联 TaktEmployee.Id，选项 TaktEmployees/options）
     /// </summary>
     public string? RepairOperator { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 是否作废（字典 sys_yes_no_type，0=否 1=是；编辑移除子行时标记作废）
+    /// </summary>
+    public int IsObsolete { get; set; } = 0;
 
     /// <summary>
     /// 扩展字段JSON
@@ -345,6 +390,29 @@ public class TaktAssyDefectDetailUpdateDto : TaktAssyDefectDetailCreateDto
 }
 
 // ========================================
+// AssyDefectDetail 作废 DTO
+// ========================================
+
+/// <summary>
+/// AssyDefectDetail 作废/撤销作废 DTO
+/// </summary>
+public class TaktAssyDefectDetailObsoleteDto
+{
+    /// <summary>
+    /// AssyDefectDetailID
+    /// </summary>
+    [Required(ErrorMessage = "ID不能为空")]
+    [AdaptMember("Id")]
+    [JsonConverter(typeof(ValueToStringConverter))]
+    public long AssyDefectDetailId { get; set; }
+
+    /// <summary>
+    /// 是否作废（字典 sys_yes_no_type，0=否 1=是；编辑移除子行时标记作废）
+    /// </summary>
+    public int IsObsolete { get; set; }
+}
+
+// ========================================
 // 导入 DTO
 // ========================================
 
@@ -370,9 +438,19 @@ public class TaktAssyDefectDetailTemplateDto
     public long? AssyDefectId { get; set; }
 
     /// <summary>
-    /// 生产工单号（冗余字段,便于查询）
+    /// 工单号（冗余字段,便于查询）
     /// </summary>
     public string? ProdOrderCode { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 生实实绩（冗余字段,便于统计/查询）
+    /// </summary>
+    public decimal? ProdActualQty { get; set; }
+
+    /// <summary>
+    /// 无不良数量（冗余字段,便于统计/查询）
+    /// </summary>
+    public decimal? GoodQuantity { get; set; }
 
     /// <summary>
     /// 行号（项号/序号，固定步长=10）
@@ -415,7 +493,7 @@ public class TaktAssyDefectDetailTemplateDto
     public string? DefectSymptom { get; set; } = string.Empty;
 
     /// <summary>
-    /// 不良个所（字典 logistics_pcb_location_category，存 DictValue）
+    /// 不良个所（字典 logistics_assy_location_category，存 DictValue）
     /// </summary>
     public string? DefectLocation { get; set; } = string.Empty;
 
@@ -428,6 +506,11 @@ public class TaktAssyDefectDetailTemplateDto
     /// 修理员（关联 TaktEmployee.Id，选项 TaktEmployees/options）
     /// </summary>
     public string? RepairOperator { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 是否作废（字典 sys_yes_no_type，0=否 1=是；编辑移除子行时标记作废）
+    /// </summary>
+    public int? IsObsolete { get; set; }
 
     /// <summary>
     /// 扩展字段JSON
@@ -468,9 +551,19 @@ public class TaktAssyDefectDetailImportDto
     public long? AssyDefectId { get; set; }
 
     /// <summary>
-    /// 生产工单号（冗余字段,便于查询）
+    /// 工单号（冗余字段,便于查询）
     /// </summary>
     public string? ProdOrderCode { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 生实实绩（冗余字段,便于统计/查询）
+    /// </summary>
+    public decimal? ProdActualQty { get; set; }
+
+    /// <summary>
+    /// 无不良数量（冗余字段,便于统计/查询）
+    /// </summary>
+    public decimal? GoodQuantity { get; set; }
 
     /// <summary>
     /// 行号（项号/序号，固定步长=10）
@@ -513,7 +606,7 @@ public class TaktAssyDefectDetailImportDto
     public string? DefectSymptom { get; set; } = string.Empty;
 
     /// <summary>
-    /// 不良个所（字典 logistics_pcb_location_category，存 DictValue）
+    /// 不良个所（字典 logistics_assy_location_category，存 DictValue）
     /// </summary>
     public string? DefectLocation { get; set; } = string.Empty;
 
@@ -526,6 +619,11 @@ public class TaktAssyDefectDetailImportDto
     /// 修理员（关联 TaktEmployee.Id，选项 TaktEmployees/options）
     /// </summary>
     public string? RepairOperator { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 是否作废（字典 sys_yes_no_type，0=否 1=是；编辑移除子行时标记作废）
+    /// </summary>
+    public int? IsObsolete { get; set; }
 
     /// <summary>
     /// 扩展字段JSON
@@ -567,9 +665,19 @@ public class TaktAssyDefectDetailExportDto
     public long AssyDefectId { get; set; }
 
     /// <summary>
-    /// 生产工单号（冗余字段,便于查询）
+    /// 工单号（冗余字段,便于查询）
     /// </summary>
     public string ProdOrderCode { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 生实实绩（冗余字段,便于统计/查询）
+    /// </summary>
+    public decimal ProdActualQty { get; set; }
+
+    /// <summary>
+    /// 无不良数量（冗余字段,便于统计/查询）
+    /// </summary>
+    public decimal GoodQuantity { get; set; }
 
     /// <summary>
     /// 行号（项号/序号，固定步长=10）
@@ -612,7 +720,7 @@ public class TaktAssyDefectDetailExportDto
     public string? DefectSymptom { get; set; } = string.Empty;
 
     /// <summary>
-    /// 不良个所（字典 logistics_pcb_location_category，存 DictValue）
+    /// 不良个所（字典 logistics_assy_location_category，存 DictValue）
     /// </summary>
     public string? DefectLocation { get; set; } = string.Empty;
 
@@ -625,6 +733,11 @@ public class TaktAssyDefectDetailExportDto
     /// 修理员（关联 TaktEmployee.Id，选项 TaktEmployees/options）
     /// </summary>
     public string? RepairOperator { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 是否作废（字典 sys_yes_no_type，0=否 1=是；编辑移除子行时标记作废）
+    /// </summary>
+    public int IsObsolete { get; set; } = 0;
 
     /// <summary>
     /// 扩展字段JSON

@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：frontend/src/api/logistics/manufacturing/engineering-change
 // 文件名称：ec-attachment.ts
-// 创建时间：2026-06-30
+// 创建时间：2026-07-09
 // 创建人：Takt365(Auto Generated)
 // 功能描述：logistics/manufacturing/engineering-change 模块 API（自动生成，请勿手改路由常量）
 // 
@@ -18,6 +18,7 @@ import type {
 import type {
   EcAttachment,
   EcAttachmentCreate,
+  EcAttachmentObsolete,
   EcAttachmentUpdate
 } from '@/types/logistics/manufacturing/engineering-change/ec-attachment';
 
@@ -105,6 +106,19 @@ export function deleteEcAttachmentBatch(ids: string[]): Promise<void> {
     url: `${EC_ATTACHMENT_API_BASE}/batch`,
     method: 'delete',
     data: ids,
+  });
+}
+
+/**
+ * 更新设变附件作废状态
+ * @param {EcAttachmentObsolete} dto 作废 DTO
+ * @returns {Promise<EcAttachment>} 设变附件DTO
+ */
+export function updateEcAttachmentObsolete(dto: EcAttachmentObsolete): Promise<EcAttachment> {
+  return request<EcAttachment>({
+    url: `${EC_ATTACHMENT_API_BASE}/obsolete`,
+    method: 'put',
+    data: dto,
   });
 }
 

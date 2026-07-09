@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Application.Services.Logistics.Quality.Complaint
 // 文件名称：ITaktCustomerSatisfactionSurveyItemService.cs
-// 创建时间：2026-06-23
+// 创建时间：2026-07-09
 // 创建人：Takt365(Cursor AI)
 // 功能描述：客户满意度调查项目明细应用服务接口
 // 
@@ -76,6 +76,13 @@ public interface ITaktCustomerSatisfactionSurveyItemService
     /// <param name="dto">状态DTO</param>
     /// <returns>DTO</returns>
     Task<TaktCustomerSatisfactionSurveyItemDto> UpdateCustomerSatisfactionSurveyItemStatusAsync(TaktCustomerSatisfactionSurveyItemStatusDto dto);
+
+    /// <summary>
+    /// 更新客户满意度调查项目明细作废状态
+    /// </summary>
+    /// <param name="dto">作废DTO</param>
+    /// <returns>DTO</returns>
+    Task<TaktCustomerSatisfactionSurveyItemDto> UpdateCustomerSatisfactionSurveyItemObsoleteAsync(TaktCustomerSatisfactionSurveyItemObsoleteDto dto);
 
     /// <summary>
     /// 获取导入模板

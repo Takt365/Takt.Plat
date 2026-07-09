@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：frontend/src/api/logistics/maintenance
 // 文件名称：work-order-labor.ts
-// 创建时间：2026-06-23
+// 创建时间：2026-07-09
 // 创建人：Takt365(Auto Generated)
 // 功能描述：logistics/maintenance 模块 API（自动生成，请勿手改路由常量）
 // 
@@ -18,6 +18,7 @@ import type {
 import type {
   MaintenanceWorkOrderLabor,
   MaintenanceWorkOrderLaborCreate,
+  MaintenanceWorkOrderLaborObsolete,
   MaintenanceWorkOrderLaborStatus,
   MaintenanceWorkOrderLaborUpdate
 } from '@/types/logistics/maintenance/work-order-labor';
@@ -117,6 +118,19 @@ export function deleteMaintenanceWorkOrderLaborBatch(ids: string[]): Promise<voi
 export function updateMaintenanceWorkOrderLaborStatus(dto: MaintenanceWorkOrderLaborStatus): Promise<MaintenanceWorkOrderLabor> {
   return request<MaintenanceWorkOrderLabor>({
     url: `${MAINTENANCE_WORK_ORDER_LABOR_API_BASE}/status`,
+    method: 'put',
+    data: dto,
+  });
+}
+
+/**
+ * 更新维护工单报工作废状态
+ * @param {MaintenanceWorkOrderLaborObsolete} dto 作废 DTO
+ * @returns {Promise<MaintenanceWorkOrderLabor>} 维护工单报工DTO
+ */
+export function updateMaintenanceWorkOrderLaborObsolete(dto: MaintenanceWorkOrderLaborObsolete): Promise<MaintenanceWorkOrderLabor> {
+  return request<MaintenanceWorkOrderLabor>({
+    url: `${MAINTENANCE_WORK_ORDER_LABOR_API_BASE}/obsolete`,
     method: 'put',
     data: dto,
   });

@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：frontend/src/api/logistics/manufacturing/scheduling
 // 文件名称：aps-schedule-item.ts
-// 创建时间：2026-06-30
+// 创建时间：2026-07-09
 // 创建人：Takt365(Auto Generated)
 // 功能描述：logistics/manufacturing/scheduling 模块 API（自动生成，请勿手改路由常量）
 // 
@@ -18,6 +18,7 @@ import type {
 import type {
   ApsScheduleItem,
   ApsScheduleItemCreate,
+  ApsScheduleItemObsolete,
   ApsScheduleItemStatus,
   ApsScheduleItemUpdate
 } from '@/types/logistics/manufacturing/scheduling/aps-schedule-item';
@@ -117,6 +118,19 @@ export function deleteApsScheduleItemBatch(ids: string[]): Promise<void> {
 export function updateApsScheduleItemStatus(dto: ApsScheduleItemStatus): Promise<ApsScheduleItem> {
   return request<ApsScheduleItem>({
     url: `${APS_SCHEDULE_ITEM_API_BASE}/status`,
+    method: 'put',
+    data: dto,
+  });
+}
+
+/**
+ * 更新APS排程明细作废状态
+ * @param {ApsScheduleItemObsolete} dto 作废 DTO
+ * @returns {Promise<ApsScheduleItem>} APS排程明细DTO
+ */
+export function updateApsScheduleItemObsolete(dto: ApsScheduleItemObsolete): Promise<ApsScheduleItem> {
+  return request<ApsScheduleItem>({
+    url: `${APS_SCHEDULE_ITEM_API_BASE}/obsolete`,
     method: 'put',
     data: dto,
   });

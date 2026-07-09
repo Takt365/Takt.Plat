@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Infrastructure.Data.Seeds.I18nSeedData.Routine.HelpDesk
 // 文件名称：TaktItAssetI18nSeedData.cs
-// 创建时间：2026-07-02
+// 创建时间：2026-07-09
 // 创建人：Takt365(Auto Generated)
 // 功能描述：TaktItAsset 实体字段国际化种子（无对应 frontend locales；TranslationText 取自 ColumnDescription，ContextNote 取自属性 XML summary）
 // 
@@ -197,15 +197,6 @@ public class TaktItAssetI18nSeedData : ITaktSeedDataCoordinator
             new TranslationSeedItem("entity.itasset.warrantyremark", "zh-CN", "保修说明", "保修/维保说明"),
             // entity.itasset.warrantyremark
             new TranslationSeedItem("entity.itasset.warrantyremark", "zh-HK", "保修说明_hk", "保修/维保说明"),
-
-            // entity.itasset.changelogs
-            new TranslationSeedItem("entity.itasset.changelogs", "en-US", "IT 设备保修变更日志列表_us", "IT 设备保修变更日志列表"),
-            // entity.itasset.changelogs
-            new TranslationSeedItem("entity.itasset.changelogs", "ja-JP", "IT 设备保修变更日志列表_jp", "IT 设备保修变更日志列表"),
-            // entity.itasset.changelogs
-            new TranslationSeedItem("entity.itasset.changelogs", "zh-CN", "IT 设备保修变更日志列表", "IT 设备保修变更日志列表"),
-            // entity.itasset.changelogs
-            new TranslationSeedItem("entity.itasset.changelogs", "zh-HK", "IT 设备保修变更日志列表_hk", "IT 设备保修变更日志列表"),
         };
     }
 

@@ -80,10 +80,4 @@ public class TaktSalesPrice : TaktCompanyEntityBase
     /// </summary>
     [Navigate(NavigateType.OneToMany, nameof(TaktSalesPriceItem.SalesPriceId))]
     public List<TaktSalesPriceItem>? Items { get; set; }
-
-    /// <summary>
-    /// 销售价格变更记录列表（外键在子表 TaktSalesPriceChangeLog.SalesPriceId）
-    /// </summary>
-    [Navigate(NavigateType.OneToMany, nameof(TaktSalesPriceChangeLog.SalesPriceId))]
-    public List<TaktSalesPriceChangeLog>? ChangeLogs { get; set; }
 }

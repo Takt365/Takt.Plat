@@ -107,13 +107,6 @@ public class TaktCostCenterDto : TaktCompanyDtoBase
     /// 成本中心状态（字典 sys_normal_disable_status；1=启用，0=禁用）
     /// </summary>
     public int CostCenterStatus { get; set; } = 0;
-
-    /// <summary>
-    /// 成本中心变更记录列表（外键在子表 TaktCostCenterChangeLog.CostCenterId）
-    /// （子表：TaktCostCenterChangeLog）
-    /// </summary>
-    public List<TaktCostCenterChangeLogDto>? ChangeLogs { get; set; }
-
 }
 
 // ========================================
@@ -349,14 +342,7 @@ public class TaktCostCenterCreateDto
     /// <summary>
     /// 成本中心状态（字典 sys_normal_disable_status；1=启用，0=禁用）
     /// </summary>
-    public int CostCenterStatus { get; set; } = 0;
-
-    /// <summary>
-    /// 成本中心变更记录列表（外键在子表 TaktCostCenterChangeLog.CostCenterId）（子表，级联保存）
-    /// </summary>
-    public List<TaktCostCenterChangeLogCreateDto>? ChangeLogs { get; set; }
-
-    /// <summary>
+    public int CostCenterStatus { get; set; } = 0;    /// <summary>
     /// 扩展字段JSON
     /// </summary>
     public string? ExtField { get; set; }
@@ -521,14 +507,7 @@ public class TaktCostCenterTemplateDto
     /// <summary>
     /// 成本中心状态（字典 sys_normal_disable_status；1=启用，0=禁用）
     /// </summary>
-    public int? CostCenterStatus { get; set; }
-
-    /// <summary>
-    /// 成本中心变更记录列表（外键在子表 TaktCostCenterChangeLog.CostCenterId）（子表，级联保存）
-    /// </summary>
-    public List<TaktCostCenterChangeLogCreateDto>? ChangeLogs { get; set; }
-
-    /// <summary>
+    public int? CostCenterStatus { get; set; }    /// <summary>
     /// 扩展字段JSON
     /// </summary>
     public string? ExtField { get; set; }
@@ -626,14 +605,7 @@ public class TaktCostCenterImportDto
     /// <summary>
     /// 成本中心状态（字典 sys_normal_disable_status；1=启用，0=禁用）
     /// </summary>
-    public int? CostCenterStatus { get; set; }
-
-    /// <summary>
-    /// 成本中心变更记录列表（外键在子表 TaktCostCenterChangeLog.CostCenterId）（子表，级联保存）
-    /// </summary>
-    public List<TaktCostCenterChangeLogCreateDto>? ChangeLogs { get; set; }
-
-    /// <summary>
+    public int? CostCenterStatus { get; set; }    /// <summary>
     /// 扩展字段JSON
     /// </summary>
     public string? ExtField { get; set; }

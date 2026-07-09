@@ -86,10 +86,4 @@ public class TaktPurchasePrice : TaktCompanyEntityBase
     /// </summary>
     [Navigate(NavigateType.OneToMany, nameof(TaktPurchasePriceItem.PurchasePriceId))]
     public List<TaktPurchasePriceItem>? Items { get; set; }
-
-    /// <summary>
-    /// 采购价格变更记录列表（外键在子表 TaktPurchasePriceChangeLog.PurchasePriceId）
-    /// </summary>
-    [Navigate(NavigateType.OneToMany, nameof(TaktPurchasePriceChangeLog.PurchasePriceId))]
-    public List<TaktPurchasePriceChangeLog>? ChangeLogs { get; set; }
 }

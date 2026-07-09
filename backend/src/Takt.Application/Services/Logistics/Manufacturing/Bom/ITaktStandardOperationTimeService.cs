@@ -46,8 +46,18 @@ public interface ITaktStandardOperationTimeService
     /// </summary>
     /// <param name="materialCode">物料编码</param>
     /// <param name="plantCode">工厂代码（可选）</param>
+    /// <param name="prodDate">生产日期（可选；未传时按当天解析有效期）</param>
     /// <returns>标准工序时间 DTO 列表</returns>
-    Task<List<TaktStandardOperationTimeDto>> GetStandardOperationTimeByMaterialAsync(string materialCode, string? plantCode = null);
+    Task<List<TaktStandardOperationTimeDto>> GetStandardOperationTimeByMaterialAsync(string materialCode, string? plantCode = null, DateTime? prodDate = null);
+
+    /// <summary>
+    /// 根据物料编码获取当前有效的标准工时选项列表
+    /// </summary>
+    /// <param name="materialCode">物料编码</param>
+    /// <param name="plantCode">工厂代码（可选）</param>
+    /// <param name="prodDate">生产日期（可选；未传时按当天解析有效期）</param>
+    /// <returns>下拉选项（ExtValue=标准工时分钟数）</returns>
+    Task<List<TaktSelectOption>> GetStandardOperationTimeOptionsByMaterialAsync(string materialCode, string? plantCode = null, DateTime? prodDate = null);
 
     /// <summary>
     /// 创建标准工序时间

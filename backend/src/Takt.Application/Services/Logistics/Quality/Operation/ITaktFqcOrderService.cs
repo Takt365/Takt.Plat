@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Application.Services.Logistics.Quality.Operation
 // 文件名称：ITaktFqcOrderService.cs
-// 创建时间：2026-06-30
+// 创建时间：2026-07-09
 // 创建人：Takt365(Cursor AI)
 // 功能描述：出货检验单应用服务接口
 // 
@@ -101,12 +101,5 @@ public interface ITaktFqcOrderService
     /// <param name="fileName">文件名</param>
     /// <returns>Excel 文件</returns>
     Task<(string fileName, byte[] fileContent)> ExportFqcOrderAsync(TaktFqcOrderQueryDto? query = null, string? sheetName = null, string? fileName = null);
-
-    /// <summary>
-    /// 获取 FQC 检验统计（数据看板）
-    /// </summary>
-    /// <param name="queryDto">查询 DTO</param>
-    /// <returns>FQC 检验统计</returns>
-    Task<TaktFqcOrderStatDto> GetFqcOrderStatAsync(TaktQualityStatQueryDto queryDto);
 
 }

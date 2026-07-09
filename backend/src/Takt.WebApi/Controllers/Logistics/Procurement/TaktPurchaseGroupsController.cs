@@ -187,11 +187,11 @@ public class TaktPurchaseGroupsController : TaktControllerBase
     /// <returns>采购组主数据DTO</returns>
     [TaktPermission("logistics:procurement:purchase:group:update", "更新采购组主数据状态")]
     [HttpPut("status")]
-    public async Task<IActionResult> UpdatePurchaseGroupStatusAsync([FromBody] TaktPurchaseGroupStatusDto dto)
+    public async Task<IActionResult> UpdateGroupStatusAsync([FromBody] TaktGroupStatusDto dto)
     {
         try
         {
-            var result = await _purchaseGroupService.UpdatePurchaseGroupStatusAsync(dto);
+            var result = await _purchaseGroupService.UpdateGroupStatusAsync(dto);
             return Success(result, "更新成功");
         }
         catch (Exception ex)

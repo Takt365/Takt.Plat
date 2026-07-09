@@ -2,7 +2,7 @@
 <!-- 项目名称：节拍数字工厂 · Takt Plat (TDF) -->
 <!-- 命名空间：@/views/logistics/materials/material-document-item/components -->
 <!-- 文件名称：material-document-form.vue -->
-<!-- 功能描述：Takt物料交易主表实体维护弹窗内嵌表单（上主下从级联保存）。由 generate-vue-master-detail-from-api.cjs 根据 types/api 自动生成；defineExpose 提供 validate、getValues、resetFields -->
+<!-- 功能描述：Takt物料凭证主表实体维护弹窗内嵌表单（上主下从级联保存）。由 generate-vue-master-detail-from-api.cjs 根据 types/api 自动生成；defineExpose 提供 validate、getValues、resetFields -->
 <!-- 版权信息：Copyright (c) 2025 Takt  All rights reserved. -->
 <!-- 免责声明：此软件使用 MIT License，作者不承担任何使用风险。 -->
 <!-- ======================================== -->
@@ -375,7 +375,7 @@
 
 <script setup lang="ts">
 /**
- * Takt物料交易主表实体维护表单 · 由 generate-vue-master-detail-from-api.cjs 根据 types/api 生成
+ * Takt物料凭证主表实体维护表单 · 由 generate-vue-master-detail-from-api.cjs 根据 types/api 生成
  * @module views/logistics/materials/material-document-item/components
  */
 import { reactive, watch, computed, ref, onMounted } from 'vue'

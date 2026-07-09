@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：frontend/src/types/logistics/manufacturing/defect
 // 文件名称：pcba-inspection-detail.d.ts
-// 创建时间：2026-06-30
+// 创建时间：2026-07-09
 // 创建人：Takt365(Auto Generated)
 // 功能描述：logistics/manufacturing/defect 模块类型定义（自动生成；类型名去 Takt 前缀与末尾 Dto，如 TaktCompanyDto → Company）
 // 
@@ -39,7 +39,7 @@ export interface PcbaInspectionDetail extends CompanyDtoBase {
   pcbaInspectionName?: string;
 
   /**
-   * 生产工单号（冗余字段,便于查询）
+   * 工单号（冗余字段,便于查询）
    */
   prodOrderCode: string;
 
@@ -139,6 +139,11 @@ export interface PcbaInspectionDetail extends CompanyDtoBase {
   defectLocation?: string;
 
   /**
+   * 是否作废（字典 sys_yes_no_type，0=否 1=是；编辑移除子行时标记作废）
+   */
+  isObsolete: number;
+
+  /**
    * PCBA检查日报（主表） （主表：TaktPcbaInspection）
    */
   pcbaInspection?: PcbaInspection;
@@ -169,7 +174,7 @@ export interface PcbaInspectionDetailQuery extends TaktPagedQuery {
   pcbaInspectionId?: string;
 
   /**
-   * 生产工单号（冗余字段,便于查询）
+   * 工单号（冗余字段,便于查询）
    */
   prodOrderCode?: string;
 
@@ -279,6 +284,11 @@ export interface PcbaInspectionDetailQuery extends TaktPagedQuery {
   defectLocation?: string;
 
   /**
+   * 是否作废（字典 sys_yes_no_type，0=否 1=是；编辑移除子行时标记作废）
+   */
+  isObsolete?: number;
+
+  /**
    * 创建时间（范围查询-开始）
    */
   createdAtStart?: string;
@@ -328,7 +338,7 @@ export interface PcbaInspectionDetailCreate {
   pcbaInspectionId: string;
 
   /**
-   * 生产工单号（冗余字段,便于查询）
+   * 工单号（冗余字段,便于查询）
    */
   prodOrderCode: string;
 
@@ -426,6 +436,11 @@ export interface PcbaInspectionDetailCreate {
    * 不良个所（字典 logistics_pcb_location_category，存 DictValue）
    */
   defectLocation?: string;
+
+  /**
+   * 是否作废（字典 sys_yes_no_type，0=否 1=是；编辑移除子行时标记作废）
+   */
+  isObsolete: number;
 
   /**
    * 扩展字段JSON
@@ -475,6 +490,25 @@ export interface PcbaInspectionDetailStatus {
 
 
 /**
+ * PcbaInspectionDetail 作废/撤销作废 DTO
+ * 对应前端 PcbaInspectionDetailObsolete
+ * @description 对应后端 TaktPcbaInspectionDetailObsoleteDto
+ */
+export interface PcbaInspectionDetailObsolete {
+  /**
+   * PcbaInspectionDetailID
+   */
+  pcbaInspectionDetailId: string;
+
+  /**
+   * 是否作废（字典 sys_yes_no_type，0=否 1=是；编辑移除子行时标记作废）
+   */
+  isObsolete: number;
+
+}
+
+
+/**
  * PcbaInspectionDetail 导入模板行 DTO
  * 对应前端 PcbaInspectionDetailTemplate
  * @description 对应后端 TaktPcbaInspectionDetailTemplateDto
@@ -496,7 +530,7 @@ export interface PcbaInspectionDetailTemplate {
   pcbaInspectionId?: string;
 
   /**
-   * 生产工单号（冗余字段,便于查询）
+   * 工单号（冗余字段,便于查询）
    */
   prodOrderCode?: string;
 
@@ -594,6 +628,11 @@ export interface PcbaInspectionDetailTemplate {
    * 不良个所（字典 logistics_pcb_location_category，存 DictValue）
    */
   defectLocation?: string;
+
+  /**
+   * 是否作废（字典 sys_yes_no_type，0=否 1=是；编辑移除子行时标记作废）
+   */
+  isObsolete?: number;
 
   /**
    * 扩展字段JSON
@@ -635,7 +674,7 @@ export interface PcbaInspectionDetailImport {
   pcbaInspectionId?: string;
 
   /**
-   * 生产工单号（冗余字段,便于查询）
+   * 工单号（冗余字段,便于查询）
    */
   prodOrderCode?: string;
 
@@ -735,6 +774,11 @@ export interface PcbaInspectionDetailImport {
   defectLocation?: string;
 
   /**
+   * 是否作废（字典 sys_yes_no_type，0=否 1=是；编辑移除子行时标记作废）
+   */
+  isObsolete?: number;
+
+  /**
    * 扩展字段JSON
    */
   extField?: string;
@@ -769,7 +813,7 @@ export interface PcbaInspectionDetailExport {
   pcbaInspectionId: string;
 
   /**
-   * 生产工单号（冗余字段,便于查询）
+   * 工单号（冗余字段,便于查询）
    */
   prodOrderCode: string;
 
@@ -867,6 +911,11 @@ export interface PcbaInspectionDetailExport {
    * 不良个所（字典 logistics_pcb_location_category，存 DictValue）
    */
   defectLocation?: string;
+
+  /**
+   * 是否作废（字典 sys_yes_no_type，0=否 1=是；编辑移除子行时标记作废）
+   */
+  isObsolete: number;
 
   /**
    * 扩展字段JSON

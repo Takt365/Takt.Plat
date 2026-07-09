@@ -16,7 +16,7 @@ using Takt.Domain.Entities;
 namespace Takt.Domain.Entities.Logistics.Manufacturing.Scheduling;
 
 /// <summary>
-/// 工作中心（WC；PlantCode 对齐 TaktCalendar.RelatedPlant，班次对齐 TaktWorkShift）
+/// 工作中心（WC；PlantCode 对齐 TaktCalendar.RelatedPlant）
 /// </summary>
 [SugarTable("takt_logistics_manufacturing_scheduling_work_center", "工作中心表")]
 [SugarIndex("ix_work_center_tenant", nameof(TenantCode), OrderByType.Asc, nameof(CompanyCode), OrderByType.Asc, false)]
@@ -41,19 +41,6 @@ public class TaktWorkCenter : TaktCompanyEntityBase
     /// </summary>
     [SugarColumn(ColumnName = "work_center_name", ColumnDescription = "工作中心名称", ColumnDataType = "nvarchar", Length = 200, IsNullable = false)]
     public string WorkCenterName { get; set; } = string.Empty;
-
-    /// <summary>
-    /// 车间编码
-    /// </summary>
-    [SugarColumn(ColumnName = "workshop_code", ColumnDescription = "车间编码", ColumnDataType = "nvarchar", Length = 40, IsNullable = true)]
-    public string? WorkshopCode { get; set; }
-
-    /// <summary>
-    /// 默认班次 ID（关联 TaktWorkShift.Id，选项 TaktWorkShifts/options）
-    /// </summary>
-    [SugarColumn(ColumnName = "default_shift_id", ColumnDescription = "默认班次ID", ColumnDataType = "bigint", IsNullable = true)]
-    [JsonConverter(typeof(ValueToStringConverter))]
-    public long? DefaultShiftId { get; set; }
 
     /// <summary>
     /// 状态（字典 sys_normal_disable；1=启用，0=禁用）

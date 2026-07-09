@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：frontend/src/api/logistics/quality/complaint
 // 文件名称：customer-complaint-item.ts
-// 创建时间：2026-06-23
+// 创建时间：2026-07-09
 // 创建人：Takt365(Auto Generated)
 // 功能描述：logistics/quality/complaint 模块 API（自动生成，请勿手改路由常量）
 // 
@@ -18,6 +18,7 @@ import type {
 import type {
   CustomerComplaintItem,
   CustomerComplaintItemCreate,
+  CustomerComplaintItemObsolete,
   CustomerComplaintItemStatus,
   CustomerComplaintItemUpdate
 } from '@/types/logistics/quality/complaint/customer-complaint-item';
@@ -117,6 +118,19 @@ export function deleteCustomerComplaintItemBatch(ids: string[]): Promise<void> {
 export function updateCustomerComplaintItemStatus(dto: CustomerComplaintItemStatus): Promise<CustomerComplaintItem> {
   return request<CustomerComplaintItem>({
     url: `${CUSTOMER_COMPLAINT_ITEM_API_BASE}/status`,
+    method: 'put',
+    data: dto,
+  });
+}
+
+/**
+ * 更新客诉明细作废状态
+ * @param {CustomerComplaintItemObsolete} dto 作废 DTO
+ * @returns {Promise<CustomerComplaintItem>} 客诉明细DTO
+ */
+export function updateCustomerComplaintItemObsolete(dto: CustomerComplaintItemObsolete): Promise<CustomerComplaintItem> {
+  return request<CustomerComplaintItem>({
+    url: `${CUSTOMER_COMPLAINT_ITEM_API_BASE}/obsolete`,
     method: 'put',
     data: dto,
   });

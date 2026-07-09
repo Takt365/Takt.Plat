@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Infrastructure.Data.Seeds.I18nSeedData.Logistics.Manufacturing.Scheduling
 // 文件名称：TaktProductionDispatchI18nSeedData.cs
-// 创建时间：2026-07-02
+// 创建时间：2026-07-09
 // 创建人：Takt365(Auto Generated)
 // 功能描述：TaktProductionDispatch 实体字段国际化种子（无对应 frontend locales；TranslationText 取自 ColumnDescription，ContextNote 取自属性 XML summary）
 // 
@@ -118,13 +118,13 @@ public class TaktProductionDispatchI18nSeedData : ITaktSeedDataCoordinator
             new TranslationSeedItem("entity.productiondispatch.productionorderid", "zh-HK", "生产工单ID_hk", "生产工单 ID（关联 TaktProductionOrder.Id，选项 TaktProductionOrders/options）"),
 
             // entity.productiondispatch.prodordercode
-            new TranslationSeedItem("entity.productiondispatch.prodordercode", "en-US", "生产工单号_us", "生产工单号（关联 TaktProductionOrder.ProdOrderCode，冗余）"),
+            new TranslationSeedItem("entity.productiondispatch.prodordercode", "en-US", "工单号_us", "工单号（关联 TaktProductionOrder.ProdOrderCode，冗余）"),
             // entity.productiondispatch.prodordercode
-            new TranslationSeedItem("entity.productiondispatch.prodordercode", "ja-JP", "生产工单号_jp", "生产工单号（关联 TaktProductionOrder.ProdOrderCode，冗余）"),
+            new TranslationSeedItem("entity.productiondispatch.prodordercode", "ja-JP", "工单号_jp", "工单号（关联 TaktProductionOrder.ProdOrderCode，冗余）"),
             // entity.productiondispatch.prodordercode
-            new TranslationSeedItem("entity.productiondispatch.prodordercode", "zh-CN", "生产工单号", "生产工单号（关联 TaktProductionOrder.ProdOrderCode，冗余）"),
+            new TranslationSeedItem("entity.productiondispatch.prodordercode", "zh-CN", "工单号", "工单号（关联 TaktProductionOrder.ProdOrderCode，冗余）"),
             // entity.productiondispatch.prodordercode
-            new TranslationSeedItem("entity.productiondispatch.prodordercode", "zh-HK", "生产工单号_hk", "生产工单号（关联 TaktProductionOrder.ProdOrderCode，冗余）"),
+            new TranslationSeedItem("entity.productiondispatch.prodordercode", "zh-HK", "工单号_hk", "工单号（关联 TaktProductionOrder.ProdOrderCode，冗余）"),
 
             // entity.productiondispatch.apsoperationid
             new TranslationSeedItem("entity.productiondispatch.apsoperationid", "en-US", "APS工序排程ID_us", "APS 工序排程 ID（关联 TaktApsOperation.Id，选项 TaktApsOperations/options）"),

@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：frontend/src/api/routine/conference-center
 // 文件名称：conference-agenda.ts
-// 创建时间：2026-06-24
+// 创建时间：2026-07-09
 // 创建人：Takt365(Auto Generated)
 // 功能描述：routine/conference-center 模块 API（自动生成，请勿手改路由常量）
 // 
@@ -18,6 +18,7 @@ import type {
 import type {
   ConferenceAgenda,
   ConferenceAgendaCreate,
+  ConferenceAgendaObsolete,
   ConferenceAgendaUpdate
 } from '@/types/routine/conference-center/conference-agenda';
 
@@ -105,6 +106,19 @@ export function deleteConferenceAgendaBatch(ids: string[]): Promise<void> {
     url: `${CONFERENCE_AGENDA_API_BASE}/batch`,
     method: 'delete',
     data: ids,
+  });
+}
+
+/**
+ * 更新会议议程纪要作废状态
+ * @param {ConferenceAgendaObsolete} dto 作废 DTO
+ * @returns {Promise<ConferenceAgenda>} 会议议程纪要DTO
+ */
+export function updateConferenceAgendaObsolete(dto: ConferenceAgendaObsolete): Promise<ConferenceAgenda> {
+  return request<ConferenceAgenda>({
+    url: `${CONFERENCE_AGENDA_API_BASE}/obsolete`,
+    method: 'put',
+    data: dto,
   });
 }
 

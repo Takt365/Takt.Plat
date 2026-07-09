@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Application.Services.Logistics.Quality.Complaint
 // 文件名称：TaktSupplierEvaluationItemService.cs
-// 创建时间：2026-06-23
+// 创建时间：2026-07-09
 // 创建人：Takt365(Cursor AI)
 // 功能描述：供应商评价考核项目明细应用服务实现
 // 
@@ -118,6 +118,7 @@ public class TaktSupplierEvaluationItemService : TaktServiceBase, ITaktSupplierE
     public async Task<TaktSupplierEvaluationItemDto> CreateSupplierEvaluationItemAsync(TaktSupplierEvaluationItemCreateDto dto)
     {
         var entity = dto.Adapt<TaktSupplierEvaluationItem>();
+        entity.IsObsolete = 0;
         await StampSupplierEvaluationItemSupplierEvaluationAsync(entity, dto);
         var isUnique_ix_takt_logistics_quality_supplier_evaluation_item_line_unique = await _uniqueValidator.IsUniqueAsync(
             _supplierEvaluationItemRepository,
@@ -174,11 +175,21 @@ public class TaktSupplierEvaluationItemService : TaktServiceBase, ITaktSupplierE
     /// <returns>任务</returns>
     public async Task DeleteSupplierEvaluationItemByIdAsync(long id)
     {
-        var deleted = await _supplierEvaluationItemRepository.DeleteAsync(id);
-        if (!deleted)
+        var entity = await _supplierEvaluationItemRepository.GetByIdAsync(id);
+        if (entity == null)
         {
             throw new TaktBusinessException("供应商评价考核项目明细不存在或已删除");
         }
+        if (entity.TenantCode != CurrentTenantCode || entity.CompanyCode != CurrentCompanyCode)
+        {
+            throw new TaktBusinessException("供应商评价考核项目明细不存在或已删除");
+        }
+        if (entity.IsObsolete == 1)
+        {
+            throw new TaktBusinessException("供应商评价考核项目明细已作废");
+        }
+        entity.IsObsolete = 1;
+        await _supplierEvaluationItemRepository.UpdateAsync(entity);
     }
 
     /// <summary>
@@ -212,6 +223,27 @@ public class TaktSupplierEvaluationItemService : TaktServiceBase, ITaktSupplierE
             throw new TaktBusinessException("供应商评价考核项目明细不存在");
         }
         entity.RectificationStatus = dto.RectificationStatus;
+        await _supplierEvaluationItemRepository.UpdateAsync(entity);
+        return await GetSupplierEvaluationItemByIdAsync(dto.SupplierEvaluationItemId) ?? throw new TaktBusinessException("供应商评价考核项目明细不存在");
+    }
+
+    /// <summary>
+    /// 更新供应商评价考核项目明细作废状态
+    /// </summary>
+    /// <param name="dto">作废DTO</param>
+    /// <returns>DTO</returns>
+    public async Task<TaktSupplierEvaluationItemDto> UpdateSupplierEvaluationItemObsoleteAsync(TaktSupplierEvaluationItemObsoleteDto dto)
+    {
+        var entity = await _supplierEvaluationItemRepository.GetByIdAsync(dto.SupplierEvaluationItemId);
+        if (entity == null)
+        {
+            throw new TaktBusinessException("供应商评价考核项目明细不存在");
+        }
+        if (entity.TenantCode != CurrentTenantCode || entity.CompanyCode != CurrentCompanyCode)
+        {
+            throw new TaktBusinessException("供应商评价考核项目明细不存在");
+        }
+        entity.IsObsolete = dto.IsObsolete;
         await _supplierEvaluationItemRepository.UpdateAsync(entity);
         return await GetSupplierEvaluationItemByIdAsync(dto.SupplierEvaluationItemId) ?? throw new TaktBusinessException("供应商评价考核项目明细不存在");
     }
@@ -347,6 +379,15 @@ public class TaktSupplierEvaluationItemService : TaktServiceBase, ITaktSupplierE
     private static Expression<Func<TaktSupplierEvaluationItem, bool>> QueryExpression(TaktSupplierEvaluationItemQueryDto? queryDto)
     {
         var exp = Expressionable.Create<TaktSupplierEvaluationItem>();
+
+        if (queryDto?.IsObsolete.HasValue == true)
+        {
+            exp = exp.And(x => x.IsObsolete == queryDto.IsObsolete);
+        }
+        else
+        {
+            exp = exp.And(x => x.IsObsolete == 0);
+        }
 
         if (!string.IsNullOrEmpty(queryDto?.KeyWords))
         {

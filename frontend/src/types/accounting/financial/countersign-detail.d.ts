@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：frontend/src/types/accounting/financial
 // 文件名称：countersign-detail.d.ts
-// 创建时间：2026-06-30
+// 创建时间：2026-07-09
 // 创建人：Takt365(Auto Generated)
 // 功能描述：accounting/financial 模块类型定义（自动生成；类型名去 Takt 前缀与末尾 Dto，如 TaktCompanyDto → Company）
 // 
@@ -78,6 +78,11 @@ export interface CountersignDetail extends CompanyDtoBase {
    */
   itemAmount: number;
 
+  /**
+   * 是否作废（字典 sys_yes_no_type，0=否 1=是；编辑移除子行时标记作废）
+   */
+  isObsolete: number;
+
 }
 
 
@@ -142,6 +147,11 @@ export interface CountersignDetailQuery extends TaktPagedQuery {
    * 金额
    */
   itemAmount?: number;
+
+  /**
+   * 是否作废（字典 sys_yes_no_type，0=否 1=是；编辑移除子行时标记作废）
+   */
+  isObsolete?: number;
 
   /**
    * 创建时间（范围查询-开始）
@@ -233,6 +243,11 @@ export interface CountersignDetailCreate {
   itemAmount: number;
 
   /**
+   * 是否作废（字典 sys_yes_no_type，0=否 1=是；编辑移除子行时标记作废）
+   */
+  isObsolete: number;
+
+  /**
    * 扩展字段JSON
    */
   extField?: string;
@@ -256,6 +271,25 @@ export interface CountersignDetailUpdate extends CountersignDetailCreate {
    * CountersignDetailID（标识要更新的实体）
    */
   countersignDetailId: string;
+
+}
+
+
+/**
+ * CountersignDetail 作废/撤销作废 DTO
+ * 对应前端 CountersignDetailObsolete
+ * @description 对应后端 TaktCountersignDetailObsoleteDto
+ */
+export interface CountersignDetailObsolete {
+  /**
+   * CountersignDetailID
+   */
+  countersignDetailId: string;
+
+  /**
+   * 是否作废（字典 sys_yes_no_type，0=否 1=是；编辑移除子行时标记作废）
+   */
+  isObsolete: number;
 
 }
 
@@ -320,6 +354,11 @@ export interface CountersignDetailTemplate {
    * 金额
    */
   itemAmount?: number;
+
+  /**
+   * 是否作废（字典 sys_yes_no_type，0=否 1=是；编辑移除子行时标记作废）
+   */
+  isObsolete?: number;
 
   /**
    * 扩展字段JSON
@@ -401,6 +440,11 @@ export interface CountersignDetailImport {
   itemAmount?: number;
 
   /**
+   * 是否作废（字典 sys_yes_no_type，0=否 1=是；编辑移除子行时标记作废）
+   */
+  isObsolete?: number;
+
+  /**
    * 扩展字段JSON
    */
   extField?: string;
@@ -473,6 +517,11 @@ export interface CountersignDetailExport {
    * 金额
    */
   itemAmount: number;
+
+  /**
+   * 是否作废（字典 sys_yes_no_type，0=否 1=是；编辑移除子行时标记作废）
+   */
+  isObsolete: number;
 
   /**
    * 扩展字段JSON

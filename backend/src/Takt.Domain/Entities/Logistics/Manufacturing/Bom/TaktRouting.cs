@@ -100,10 +100,4 @@ public class TaktRouting : TaktApprovalEntityBase
     /// </summary>
     [Navigate(NavigateType.OneToMany, nameof(TaktRoutingItem.RoutingId))]
     public List<TaktRoutingItem>? Items { get; set; }
-
-    /// <summary>
-    /// 变更日志列表（主子表关系）
-    /// </summary>
-    [Navigate(NavigateType.OneToMany, nameof(TaktRoutingChangeLog.RoutingId))]
-    public List<TaktRoutingChangeLog>? ChangeLogs { get; set; }
 }

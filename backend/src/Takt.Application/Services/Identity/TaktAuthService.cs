@@ -48,6 +48,7 @@ public class TaktAuthService : TaktServiceBase, ITaktAuthService
     private readonly ITaktCacheService _cacheService;
     private readonly ITaktLoginSessionService _loginSessionService;
     private readonly TaktCacheOptions _cacheOptions;
+    private readonly TaktAccountLockOptions _accountLockOptions;
 
     /// <summary>
     /// 构造函数
@@ -64,6 +65,7 @@ public class TaktAuthService : TaktServiceBase, ITaktAuthService
     /// <param name="cacheService">缓存服务</param>
     /// <param name="loginSessionService">登录会话服务</param>
     /// <param name="cacheOptions">缓存配置</param>
+    /// <param name="accountLockOptions">账户锁定配置</param>
     /// <param name="userContext">用户上下文</param>
     /// <param name="localizationService">本地化服务</param>
     public TaktAuthService(
@@ -79,6 +81,7 @@ public class TaktAuthService : TaktServiceBase, ITaktAuthService
         ITaktCacheService cacheService,
         ITaktLoginSessionService loginSessionService,
         IOptions<TaktCacheOptions> cacheOptions,
+        IOptions<TaktAccountLockOptions> accountLockOptions,
         ITaktUserContext? userContext = null,
         ITaktLocalizationService? localizationService = null)
         : base(userContext, localizationService)
@@ -95,6 +98,7 @@ public class TaktAuthService : TaktServiceBase, ITaktAuthService
         _cacheService = cacheService;
         _loginSessionService = loginSessionService;
         _cacheOptions = cacheOptions.Value;
+        _accountLockOptions = accountLockOptions.Value;
     }
 
     /// <summary>
@@ -313,74 +317,152 @@ public class TaktAuthService : TaktServiceBase, ITaktAuthService
         return await ValidateUserPasswordCoreAsync(tenantCode, username, password);
     }
 
-    /// <summary>
-    /// 仅校验密码（调用方须已单独通过租户内用户存在性校验）
-    /// </summary>
-    /// <param name="tenantCode">租户编码</param>
-    /// <param name="username">用户名</param>
-    /// <param name="password">密码</param>
-    /// <returns>用户 ID；密码错误返回 null</returns>
+    /// <inheritdoc />
     public Task<long?> ValidateUserPasswordOnlyAsync(string tenantCode, string username, string password)
     {
         return ValidateUserPasswordCoreAsync(tenantCode, username, password);
     }
 
-    /// <summary>
-    /// 校验租户权限与密码（租户权限优先，再验密）
-    /// </summary>
-    /// <param name="tenantCode">租户编码</param>
-    /// <param name="username">用户名</param>
-    /// <param name="password">明文密码</param>
-    /// <returns>用户 ID；失败返回 null</returns>
+    /// <inheritdoc />
     public async Task<long?> ValidateUserAsync(string tenantCode, string username, string password)
     {
-        if (!await ValidateUserTenantAccessAsync(tenantCode, username))
-        {
-            LogWarning($"租户登录权限不足: TenantCode={tenantCode}, Username={username}");
-            return null;
-        }
-
-        return await ValidateUserPasswordCoreAsync(tenantCode, username, password);
+        var authResult = await AuthenticateLoginCredentialsAsync(tenantCode, username, password);
+        return authResult.Status == TaktLoginCredentialStatus.Success ? authResult.UserId : null;
     }
 
-    /// <summary>
-    /// 校验密码（假定租户权限已通过）
-    /// </summary>
-    /// <param name="tenantCode">租户编码</param>
-    /// <param name="username">用户名</param>
-    /// <param name="password">明文密码</param>
-    /// <returns>用户 ID；用户不存在、密码错误或账号禁用时返回 null</returns>
-    private async Task<long?> ValidateUserPasswordCoreAsync(string tenantCode, string username, string password)
+    /// <inheritdoc />
+    public async Task<TaktLoginCredentialResult> AuthenticateLoginCredentialsAsync(
+        string tenantCode,
+        string username,
+        string plainPassword)
     {
         var trimmedTenant = tenantCode.Trim();
         var normalizedUsername = username.Trim().ToLowerInvariant();
-        LogInformation(
-            "尝试验证用户密码: TenantCode={TenantCode}, Username={Username}",
-            trimmedTenant,
-            normalizedUsername);
+
+        if (!await ValidateUserTenantAccessAsync(trimmedTenant, normalizedUsername))
+        {
+            LogWarning($"登录凭据校验失败（无租户权限）: TenantCode={trimmedTenant}, Username={normalizedUsername}");
+            return new TaktLoginCredentialResult { Status = TaktLoginCredentialStatus.InvalidCredentials };
+        }
 
         var user = await _userRepository.FirstAsync(u =>
             u.TenantCode == trimmedTenant && u.Username == normalizedUsername);
 
         if (user == null)
         {
-            LogWarning($"用户不存在: TenantCode={tenantCode}, Username={username}");
-            return null;
+            LogWarning($"登录凭据校验失败（用户不存在）: TenantCode={trimmedTenant}, Username={normalizedUsername}");
+            return new TaktLoginCredentialResult { Status = TaktLoginCredentialStatus.InvalidCredentials };
         }
 
-        if (!TaktEncryptHelper.VerifyPassword(password, user.PasswordHash))
+        if (await TryGetActiveAccountLockAsync(user) is { } lockedUntil)
         {
-            LogWarning($"密码错误: UserId={user.Id}, Username={username}");
-            return null;
+            LogWarning($"登录凭据校验失败（账户锁定）: UserId={user.Id}, LockedUntil={lockedUntil:O}");
+            return new TaktLoginCredentialResult
+            {
+                Status = TaktLoginCredentialStatus.AccountLocked,
+                LockedUntil = lockedUntil,
+            };
+        }
+
+        if (!TaktEncryptHelper.VerifyPassword(plainPassword, user.PasswordHash))
+        {
+            LogWarning($"登录凭据校验失败（密码错误）: UserId={user.Id}, Username={normalizedUsername}");
+            await RecordLoginFailureAsync(user);
+            return new TaktLoginCredentialResult { Status = TaktLoginCredentialStatus.InvalidCredentials };
         }
 
         if (user.UserStatus != 1)
         {
-            ThrowBusinessExceptionLocalized(TaktValidationI18nKeys.StatusAccountDisabled);
+            LogWarning($"登录凭据校验失败（账号停用）: UserId={user.Id}, Username={normalizedUsername}");
+            return new TaktLoginCredentialResult { Status = TaktLoginCredentialStatus.InvalidCredentials };
         }
 
-        LogInformation("用户密码验证成功: UserId={UserId}, Username={Username}", user.Id, username);
-        return user.Id;
+        await ClearLoginFailureStateAsync(user);
+        LogInformation("登录凭据校验成功: UserId={UserId}, Username={Username}", user.Id, normalizedUsername);
+        return new TaktLoginCredentialResult
+        {
+            Status = TaktLoginCredentialStatus.Success,
+            UserId = user.Id,
+        };
+    }
+
+    /// <summary>
+    /// 校验密码（内部统一走 AuthenticateLoginCredentialsAsync）
+    /// </summary>
+    /// <param name="tenantCode">租户编码</param>
+    /// <param name="username">用户名</param>
+    /// <param name="password">明文密码</param>
+    /// <returns>用户 ID；失败返回 null</returns>
+    private async Task<long?> ValidateUserPasswordCoreAsync(string tenantCode, string username, string password)
+    {
+        var result = await AuthenticateLoginCredentialsAsync(tenantCode, username, password);
+        return result.Status == TaktLoginCredentialStatus.Success ? result.UserId : null;
+    }
+
+    /// <summary>
+    /// 若账户处于锁定期则返回 LockedUntil；过期则自动清零
+    /// </summary>
+    /// <param name="user">用户实体</param>
+    /// <returns>仍锁定时返回截止时间；否则 null</returns>
+    private async Task<DateTime?> TryGetActiveAccountLockAsync(TaktUser user)
+    {
+        if (!_accountLockOptions.Enabled || !user.LockedUntil.HasValue)
+        {
+            return null;
+        }
+
+        var now = DateTime.Now;
+        if (user.LockedUntil.Value > now)
+        {
+            return user.LockedUntil.Value;
+        }
+
+        if (user.LoginFailCount > 0 || user.LockedUntil.HasValue)
+        {
+            user.LoginFailCount = 0;
+            user.LockedUntil = null;
+            await _userRepository.UpdateAsync(user);
+        }
+
+        return null;
+    }
+
+    /// <summary>
+    /// 记录一次登录失败并在达上限时锁定账户
+    /// </summary>
+    /// <param name="user">用户实体</param>
+    private async Task RecordLoginFailureAsync(TaktUser user)
+    {
+        if (!_accountLockOptions.Enabled)
+        {
+            return;
+        }
+
+        user.LoginFailCount++;
+        if (user.LoginFailCount >= _accountLockOptions.ErrorLimit)
+        {
+            user.LockedUntil = DateTime.Now.AddMinutes(_accountLockOptions.LockDurationMinutes);
+            LogWarning(
+                $"账户已锁定: UserId={user.Id}, FailCount={user.LoginFailCount}, LockedUntil={user.LockedUntil:O}");
+        }
+
+        await _userRepository.UpdateAsync(user);
+    }
+
+    /// <summary>
+    /// 登录成功后清零失败计数与锁定截止时间
+    /// </summary>
+    /// <param name="user">用户实体</param>
+    private async Task ClearLoginFailureStateAsync(TaktUser user)
+    {
+        if (user.LoginFailCount == 0 && !user.LockedUntil.HasValue)
+        {
+            return;
+        }
+
+        user.LoginFailCount = 0;
+        user.LockedUntil = null;
+        await _userRepository.UpdateAsync(user);
     }
 
     /// <summary>

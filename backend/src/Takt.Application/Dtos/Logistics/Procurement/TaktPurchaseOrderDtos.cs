@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Application.Dtos.Logistics.Procurement
 // 文件名称：TaktPurchaseOrderDtos.cs
-// 创建时间：2026-06-24
+// 创建时间：2026-07-09
 // 创建人：Takt365(Auto Generated)
 // 功能描述：PurchaseOrder 模块 DTO（由 generate-dtos-from-entity.cjs 根据 TaktPurchaseOrder 生成，请按需审阅）
 // 
@@ -36,7 +36,7 @@ public class TaktPurchaseOrderDto : TaktCompanyDtoBase
     public long PurchaseOrderId { get; set; }
 
     /// <summary>
-    /// 工厂代码（不可空）
+    /// 工厂代码（选项 TaktPlants/options，DictValue=PlantCode）
     /// </summary>
     public string PlantCode { get; set; } = string.Empty;
 
@@ -46,7 +46,7 @@ public class TaktPurchaseOrderDto : TaktCompanyDtoBase
     public string PurchaseOrderCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 来源采购申请 ID（采购链路自动生成时写入）
+    /// 来源采购申请 ID（关联 TaktPurchaseRequest.Id，选项 TaktPurchaseRequests/options）
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
     public long? PurchaseRequestId { get; set; }
@@ -62,7 +62,7 @@ public class TaktPurchaseOrderDto : TaktCompanyDtoBase
     public string? PurchaseRequestCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 供应商编码
+    /// 供应商编码（选项 TaktSuppliers/options，DictValue=SupplierCode）
     /// </summary>
     public string SupplierCode { get; set; } = string.Empty;
 
@@ -87,7 +87,7 @@ public class TaktPurchaseOrderDto : TaktCompanyDtoBase
     public DateTime? ActualArrivalDate { get; set; }
 
     /// <summary>
-    /// 采购组编码（关联 TaktPurchaseGroup.PurchaseGroupCode）
+    /// 采购组编码（选项 TaktPurchaseGroups/options，DictValue=PurchaseGroupCode）
     /// </summary>
     public string? PurchaseGroup { get; set; } = string.Empty;
 
@@ -147,7 +147,7 @@ public class TaktPurchaseOrderDto : TaktCompanyDtoBase
     public string? DeliveryAddress { get; set; } = string.Empty;
 
     /// <summary>
-    /// 订单状态（1=启用，0=禁用）
+    /// 订单状态（字典 sys_normal_disable_status；1=启用，0=禁用）
     /// </summary>
     public int OrderStatus { get; set; } = 0;
 
@@ -161,12 +161,6 @@ public class TaktPurchaseOrderDto : TaktCompanyDtoBase
     /// （子表：TaktPurchaseOrderItem）
     /// </summary>
     public List<TaktPurchaseOrderItemDto>? Items { get; set; }
-
-    /// <summary>
-    /// 采购订单变更记录列表（外键在子表 TaktPurchaseOrderChangeLog.OrderId）
-    /// （子表：TaktPurchaseOrderChangeLog）
-    /// </summary>
-    public List<TaktPurchaseOrderChangeLogDto>? ChangeLogs { get; set; }
 
 }
 
@@ -191,7 +185,7 @@ public class TaktPurchaseOrderQueryDto : TaktPagedQuery
     public string? CompanyCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 工厂代码（不可空）
+    /// 工厂代码（选项 TaktPlants/options，DictValue=PlantCode）
     /// </summary>
     public string? PlantCode { get; set; } = string.Empty;
 
@@ -201,7 +195,7 @@ public class TaktPurchaseOrderQueryDto : TaktPagedQuery
     public string? PurchaseOrderCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 来源采购申请 ID（采购链路自动生成时写入）
+    /// 来源采购申请 ID（关联 TaktPurchaseRequest.Id，选项 TaktPurchaseRequests/options）
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
     public long? PurchaseRequestId { get; set; }
@@ -212,7 +206,7 @@ public class TaktPurchaseOrderQueryDto : TaktPagedQuery
     public string? PurchaseRequestCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 供应商编码
+    /// 供应商编码（选项 TaktSuppliers/options，DictValue=SupplierCode）
     /// </summary>
     public string? SupplierCode { get; set; } = string.Empty;
 
@@ -252,7 +246,7 @@ public class TaktPurchaseOrderQueryDto : TaktPagedQuery
     public DateTime? ActualArrivalDateEnd { get; set; }
 
     /// <summary>
-    /// 采购组编码（关联 TaktPurchaseGroup.PurchaseGroupCode）
+    /// 采购组编码（选项 TaktPurchaseGroups/options，DictValue=PurchaseGroupCode）
     /// </summary>
     public string? PurchaseGroup { get; set; } = string.Empty;
 
@@ -312,7 +306,7 @@ public class TaktPurchaseOrderQueryDto : TaktPagedQuery
     public string? DeliveryAddress { get; set; } = string.Empty;
 
     /// <summary>
-    /// 订单状态（1=启用，0=禁用）
+    /// 订单状态（字典 sys_normal_disable_status；1=启用，0=禁用）
     /// </summary>
     public int? OrderStatus { get; set; }
 
@@ -367,9 +361,9 @@ public class TaktPurchaseOrderCreateDto
     public string CompanyDefaultCulture { get; set; } = string.Empty;
 
     /// <summary>
-    /// 工厂代码（不可空）
+    /// 工厂代码（选项 TaktPlants/options，DictValue=PlantCode）
     /// </summary>
-    [Required(ErrorMessage = "工厂代码（不可空）不能为空")]
+    [Required(ErrorMessage = "工厂代码（选项 TaktPlants/options，DictValue=PlantCode）不能为空")]
     public string PlantCode { get; set; } = string.Empty;
 
     /// <summary>
@@ -379,7 +373,7 @@ public class TaktPurchaseOrderCreateDto
     public string PurchaseOrderCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 来源采购申请 ID（采购链路自动生成时写入）
+    /// 来源采购申请 ID（关联 TaktPurchaseRequest.Id，选项 TaktPurchaseRequests/options）
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
     public long? PurchaseRequestId { get; set; }
@@ -390,9 +384,9 @@ public class TaktPurchaseOrderCreateDto
     public string? PurchaseRequestCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 供应商编码
+    /// 供应商编码（选项 TaktSuppliers/options，DictValue=SupplierCode）
     /// </summary>
-    [Required(ErrorMessage = "供应商编码不能为空")]
+    [Required(ErrorMessage = "供应商编码（选项 TaktSuppliers/options，DictValue=SupplierCode）不能为空")]
     public string SupplierCode { get; set; } = string.Empty;
 
     /// <summary>
@@ -417,7 +411,7 @@ public class TaktPurchaseOrderCreateDto
     public DateTime? ActualArrivalDate { get; set; }
 
     /// <summary>
-    /// 采购组编码（关联 TaktPurchaseGroup.PurchaseGroupCode）
+    /// 采购组编码（选项 TaktPurchaseGroups/options，DictValue=PurchaseGroupCode）
     /// </summary>
     public string? PurchaseGroup { get; set; } = string.Empty;
 
@@ -477,7 +471,7 @@ public class TaktPurchaseOrderCreateDto
     public string? DeliveryAddress { get; set; } = string.Empty;
 
     /// <summary>
-    /// 订单状态（1=启用，0=禁用）
+    /// 订单状态（字典 sys_normal_disable_status；1=启用，0=禁用）
     /// </summary>
     public int OrderStatus { get; set; } = 0;
 
@@ -489,12 +483,7 @@ public class TaktPurchaseOrderCreateDto
     /// <summary>
     /// 订单明细列表（主子表关系，一个订单可以有多个明细）（子表，级联保存）
     /// </summary>
-    public List<TaktPurchaseOrderItemCreateDto>? Items { get; set; }
-
-    /// <summary>
-    /// 采购订单变更记录列表（外键在子表 TaktPurchaseOrderChangeLog.OrderId）（子表，级联保存）
-    /// </summary>
-    public List<TaktPurchaseOrderChangeLogCreateDto>? ChangeLogs { get; set; }
+    public List<TaktPurchaseOrderItemUpdateDto>? Items { get; set; }
 
     /// <summary>
     /// 扩展字段JSON
@@ -546,9 +535,9 @@ public class TaktPurchaseOrderStatusDto
     public long PurchaseOrderId { get; set; }
 
     /// <summary>
-    /// 订单状态（1=启用，0=禁用）
+    /// 订单状态（字典 sys_normal_disable_status；1=启用，0=禁用）
     /// </summary>
-    [Required(ErrorMessage = "订单状态（1=启用，0=禁用）不能为空")]
+    [Required(ErrorMessage = "订单状态（字典 sys_normal_disable_status；1=启用，0=禁用）不能为空")]
     public int OrderStatus { get; set; } = 0;
 }
 
@@ -572,7 +561,7 @@ public class TaktPurchaseOrderTemplateDto
     public string? CompanyCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 工厂代码（不可空）
+    /// 工厂代码（选项 TaktPlants/options，DictValue=PlantCode）
     /// </summary>
     public string? PlantCode { get; set; } = string.Empty;
 
@@ -582,7 +571,7 @@ public class TaktPurchaseOrderTemplateDto
     public string? PurchaseOrderCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 来源采购申请 ID（采购链路自动生成时写入）
+    /// 来源采购申请 ID（关联 TaktPurchaseRequest.Id，选项 TaktPurchaseRequests/options）
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
     public long? PurchaseRequestId { get; set; }
@@ -593,7 +582,7 @@ public class TaktPurchaseOrderTemplateDto
     public string? PurchaseRequestCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 供应商编码
+    /// 供应商编码（选项 TaktSuppliers/options，DictValue=SupplierCode）
     /// </summary>
     public string? SupplierCode { get; set; } = string.Empty;
 
@@ -618,7 +607,7 @@ public class TaktPurchaseOrderTemplateDto
     public DateTime? ActualArrivalDate { get; set; }
 
     /// <summary>
-    /// 采购组编码（关联 TaktPurchaseGroup.PurchaseGroupCode）
+    /// 采购组编码（选项 TaktPurchaseGroups/options，DictValue=PurchaseGroupCode）
     /// </summary>
     public string? PurchaseGroup { get; set; } = string.Empty;
 
@@ -678,7 +667,7 @@ public class TaktPurchaseOrderTemplateDto
     public string? DeliveryAddress { get; set; } = string.Empty;
 
     /// <summary>
-    /// 订单状态（1=启用，0=禁用）
+    /// 订单状态（字典 sys_normal_disable_status；1=启用，0=禁用）
     /// </summary>
     public int? OrderStatus { get; set; }
 
@@ -691,11 +680,6 @@ public class TaktPurchaseOrderTemplateDto
     /// 订单明细列表（主子表关系，一个订单可以有多个明细）（子表，级联保存）
     /// </summary>
     public List<TaktPurchaseOrderItemCreateDto>? Items { get; set; }
-
-    /// <summary>
-    /// 采购订单变更记录列表（外键在子表 TaktPurchaseOrderChangeLog.OrderId）（子表，级联保存）
-    /// </summary>
-    public List<TaktPurchaseOrderChangeLogCreateDto>? ChangeLogs { get; set; }
 
     /// <summary>
     /// 扩展字段JSON
@@ -730,7 +714,7 @@ public class TaktPurchaseOrderImportDto
     public string? CompanyDefaultCulture { get; set; } = string.Empty;
 
     /// <summary>
-    /// 工厂代码（不可空）
+    /// 工厂代码（选项 TaktPlants/options，DictValue=PlantCode）
     /// </summary>
     public string? PlantCode { get; set; } = string.Empty;
 
@@ -740,7 +724,7 @@ public class TaktPurchaseOrderImportDto
     public string? PurchaseOrderCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 来源采购申请 ID（采购链路自动生成时写入）
+    /// 来源采购申请 ID（关联 TaktPurchaseRequest.Id，选项 TaktPurchaseRequests/options）
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
     public long? PurchaseRequestId { get; set; }
@@ -751,7 +735,7 @@ public class TaktPurchaseOrderImportDto
     public string? PurchaseRequestCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 供应商编码
+    /// 供应商编码（选项 TaktSuppliers/options，DictValue=SupplierCode）
     /// </summary>
     public string? SupplierCode { get; set; } = string.Empty;
 
@@ -776,7 +760,7 @@ public class TaktPurchaseOrderImportDto
     public DateTime? ActualArrivalDate { get; set; }
 
     /// <summary>
-    /// 采购组编码（关联 TaktPurchaseGroup.PurchaseGroupCode）
+    /// 采购组编码（选项 TaktPurchaseGroups/options，DictValue=PurchaseGroupCode）
     /// </summary>
     public string? PurchaseGroup { get; set; } = string.Empty;
 
@@ -836,7 +820,7 @@ public class TaktPurchaseOrderImportDto
     public string? DeliveryAddress { get; set; } = string.Empty;
 
     /// <summary>
-    /// 订单状态（1=启用，0=禁用）
+    /// 订单状态（字典 sys_normal_disable_status；1=启用，0=禁用）
     /// </summary>
     public int? OrderStatus { get; set; }
 
@@ -849,11 +833,6 @@ public class TaktPurchaseOrderImportDto
     /// 订单明细列表（主子表关系，一个订单可以有多个明细）（子表，级联保存）
     /// </summary>
     public List<TaktPurchaseOrderItemCreateDto>? Items { get; set; }
-
-    /// <summary>
-    /// 采购订单变更记录列表（外键在子表 TaktPurchaseOrderChangeLog.OrderId）（子表，级联保存）
-    /// </summary>
-    public List<TaktPurchaseOrderChangeLogCreateDto>? ChangeLogs { get; set; }
 
     /// <summary>
     /// 扩展字段JSON
@@ -889,7 +868,7 @@ public class TaktPurchaseOrderExportDto
     public string CompanyCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 工厂代码（不可空）
+    /// 工厂代码（选项 TaktPlants/options，DictValue=PlantCode）
     /// </summary>
     public string PlantCode { get; set; } = string.Empty;
 
@@ -899,7 +878,7 @@ public class TaktPurchaseOrderExportDto
     public string PurchaseOrderCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 来源采购申请 ID（采购链路自动生成时写入）
+    /// 来源采购申请 ID（关联 TaktPurchaseRequest.Id，选项 TaktPurchaseRequests/options）
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
     public long? PurchaseRequestId { get; set; }
@@ -910,7 +889,7 @@ public class TaktPurchaseOrderExportDto
     public string? PurchaseRequestCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 供应商编码
+    /// 供应商编码（选项 TaktSuppliers/options，DictValue=SupplierCode）
     /// </summary>
     public string SupplierCode { get; set; } = string.Empty;
 
@@ -935,7 +914,7 @@ public class TaktPurchaseOrderExportDto
     public DateTime? ActualArrivalDate { get; set; }
 
     /// <summary>
-    /// 采购组编码（关联 TaktPurchaseGroup.PurchaseGroupCode）
+    /// 采购组编码（选项 TaktPurchaseGroups/options，DictValue=PurchaseGroupCode）
     /// </summary>
     public string? PurchaseGroup { get; set; } = string.Empty;
 
@@ -995,7 +974,7 @@ public class TaktPurchaseOrderExportDto
     public string? DeliveryAddress { get; set; } = string.Empty;
 
     /// <summary>
-    /// 订单状态（1=启用，0=禁用）
+    /// 订单状态（字典 sys_normal_disable_status；1=启用，0=禁用）
     /// </summary>
     public int OrderStatus { get; set; } = 0;
 

@@ -42,11 +42,25 @@ public interface ITaktModelDestinationService
     Task<List<TaktSelectOption>> GetModelDestinationOptionsAsync();
 
     /// <summary>
-    /// 根据物料编码获取机种名称与仕向地信息
+    /// 根据物料编码获取机种名称与仕向地信息（首条）
     /// </summary>
     /// <param name="materialCode">物料编码</param>
     /// <returns>型号目的地 DTO；未匹配时返回 null</returns>
     Task<TaktModelDestinationDto?> GetModelDestinationByMaterialAsync(string materialCode);
+
+    /// <summary>
+    /// 根据物料编码获取机种仕向列表
+    /// </summary>
+    /// <param name="materialCode">物料编码</param>
+    /// <returns>型号目的地 DTO 列表</returns>
+    Task<List<TaktModelDestinationDto>> GetModelDestinationListByMaterialAsync(string materialCode);
+
+    /// <summary>
+    /// 根据物料编码获取机种仕向选项列表
+    /// </summary>
+    /// <param name="materialCode">物料编码</param>
+    /// <returns>下拉选项</returns>
+    Task<List<TaktSelectOption>> GetModelDestinationOptionsByMaterialAsync(string materialCode);
 
     /// <summary>
     /// 创建型号目的地

@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：frontend/src/types/logistics/materials
 // 文件名称：material-plant.d.ts
-// 创建时间：2026-06-30
+// 创建时间：2026-07-09
 // 创建人：Takt365(Auto Generated)
 // 功能描述：logistics/materials 模块类型定义（自动生成；类型名去 Takt 前缀与末尾 Dto，如 TaktCompanyDto → Company）
 // 
@@ -104,7 +104,7 @@ export interface MaterialPlant extends CompanyDtoBase {
   minOrderQuantity: number;
 
   /**
-   * 舍入值（基本单位数量，整数）
+   * 舍入值（基本单位数量，用于数量舍入，整数）
    */
   roundingValue: number;
 
@@ -114,7 +114,7 @@ export interface MaterialPlant extends CompanyDtoBase {
   plannedDeliveryTimeDays: number;
 
   /**
-   * 自制生产天数（支持 1 位小数，如 0.5、2.5）
+   * 自制生产天数（内部生产所需天数，支持 1 位小数如 0.5、2.5）
    */
   inHouseProductionDays: number;
 
@@ -202,11 +202,6 @@ export interface MaterialPlant extends CompanyDtoBase {
    * 物料状态（字典 sys_normal_disable_status；0=禁用，1=启用，2=锁定）
    */
   materialStatus: number;
-
-  /**
-   * 工厂物料变更记录列表（外键在子表 TaktMaterialPlantChangeLog.MaterialPlantId） （子表：TaktMaterialPlantChangeLog）
-   */
-  changeLogs?: MaterialPlantChangeLog[];
 
 }
 
@@ -304,7 +299,7 @@ export interface MaterialPlantQuery extends TaktPagedQuery {
   minOrderQuantity?: number;
 
   /**
-   * 舍入值（基本单位数量，整数）
+   * 舍入值（基本单位数量，用于数量舍入，整数）
    */
   roundingValue?: number;
 
@@ -314,7 +309,7 @@ export interface MaterialPlantQuery extends TaktPagedQuery {
   plannedDeliveryTimeDays?: number;
 
   /**
-   * 自制生产天数（支持 1 位小数，如 0.5、2.5）
+   * 自制生产天数（内部生产所需天数，支持 1 位小数如 0.5、2.5）
    */
   inHouseProductionDays?: number;
 
@@ -523,7 +518,7 @@ export interface MaterialPlantCreate {
   minOrderQuantity: number;
 
   /**
-   * 舍入值（基本单位数量，整数）
+   * 舍入值（基本单位数量，用于数量舍入，整数）
    */
   roundingValue: number;
 
@@ -533,7 +528,7 @@ export interface MaterialPlantCreate {
   plannedDeliveryTimeDays: number;
 
   /**
-   * 自制生产天数（支持 1 位小数，如 0.5、2.5）
+   * 自制生产天数（内部生产所需天数，支持 1 位小数如 0.5、2.5）
    */
   inHouseProductionDays: number;
 
@@ -621,11 +616,6 @@ export interface MaterialPlantCreate {
    * 物料状态（字典 sys_normal_disable_status；0=禁用，1=启用，2=锁定）
    */
   materialStatus: number;
-
-  /**
-   * 工厂物料变更记录列表（外键在子表 TaktMaterialPlantChangeLog.MaterialPlantId）（子表，级联保存）
-   */
-  changeLogs?: MaterialPlantChangeLogCreate[];
 
   /**
    * 扩展字段JSON
@@ -766,7 +756,7 @@ export interface MaterialPlantTemplate {
   minOrderQuantity?: number;
 
   /**
-   * 舍入值（基本单位数量，整数）
+   * 舍入值（基本单位数量，用于数量舍入，整数）
    */
   roundingValue?: number;
 
@@ -776,7 +766,7 @@ export interface MaterialPlantTemplate {
   plannedDeliveryTimeDays?: number;
 
   /**
-   * 自制生产天数（支持 1 位小数，如 0.5、2.5）
+   * 自制生产天数（内部生产所需天数，支持 1 位小数如 0.5、2.5）
    */
   inHouseProductionDays?: number;
 
@@ -864,11 +854,6 @@ export interface MaterialPlantTemplate {
    * 物料状态（字典 sys_normal_disable_status；0=禁用，1=启用，2=锁定）
    */
   materialStatus?: number;
-
-  /**
-   * 工厂物料变更记录列表（外键在子表 TaktMaterialPlantChangeLog.MaterialPlantId）（子表，级联保存）
-   */
-  changeLogs?: MaterialPlantChangeLogCreate[];
 
   /**
    * 扩展字段JSON
@@ -980,7 +965,7 @@ export interface MaterialPlantImport {
   minOrderQuantity?: number;
 
   /**
-   * 舍入值（基本单位数量，整数）
+   * 舍入值（基本单位数量，用于数量舍入，整数）
    */
   roundingValue?: number;
 
@@ -990,7 +975,7 @@ export interface MaterialPlantImport {
   plannedDeliveryTimeDays?: number;
 
   /**
-   * 自制生产天数（支持 1 位小数，如 0.5、2.5）
+   * 自制生产天数（内部生产所需天数，支持 1 位小数如 0.5、2.5）
    */
   inHouseProductionDays?: number;
 
@@ -1078,11 +1063,6 @@ export interface MaterialPlantImport {
    * 物料状态（字典 sys_normal_disable_status；0=禁用，1=启用，2=锁定）
    */
   materialStatus?: number;
-
-  /**
-   * 工厂物料变更记录列表（外键在子表 TaktMaterialPlantChangeLog.MaterialPlantId）（子表，级联保存）
-   */
-  changeLogs?: MaterialPlantChangeLogCreate[];
 
   /**
    * 扩展字段JSON
@@ -1189,7 +1169,7 @@ export interface MaterialPlantExport {
   minOrderQuantity: number;
 
   /**
-   * 舍入值（基本单位数量，整数）
+   * 舍入值（基本单位数量，用于数量舍入，整数）
    */
   roundingValue: number;
 
@@ -1199,7 +1179,7 @@ export interface MaterialPlantExport {
   plannedDeliveryTimeDays: number;
 
   /**
-   * 自制生产天数（支持 1 位小数，如 0.5、2.5）
+   * 自制生产天数（内部生产所需天数，支持 1 位小数如 0.5、2.5）
    */
   inHouseProductionDays: number;
 

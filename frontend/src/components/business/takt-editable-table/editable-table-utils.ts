@@ -7,7 +7,7 @@
 // 免责声明：此软件使用 MIT License，作者不承担任何使用风险。
 // ========================================
 
-import { TAKT_EDITABLE_ROW_KEY, type TaktEditableRow, type TaktEditableTableColumn } from './types'
+import { TAKT_EDITABLE_ROW_KEY, type TaktEditableRow, type TaktEditableTableColumn, filterActiveEditableRows } from './types'
 
 /** 可编辑子表校验错误项 */
 export interface TaktEditableValidateError {
@@ -35,6 +35,10 @@ export interface TaktEditableValidateOptions {
   rowFieldLabel?: (rowIndex: number, column: TaktEditableTableColumn) => string
   /** 唯一性冲突文案工厂 */
   uniqueMessage?: (rowIndex: number, column: TaktEditableTableColumn) => string
+  /** 作废字段名；设置后校验/最少行数仅统计未作废行 */
+  obsoleteField?: string
+  /** 作废字段取值，默认 1 */
+  obsoleteValue?: number | string
 }
 
 /**
@@ -187,8 +191,10 @@ export async function validateEditableRows(
 ): Promise<TaktEditableValidateError[]> {
   const minRows = options.minRows ?? 0
   const skipColumnValidateWhenEmpty = options.skipColumnValidateWhenEmpty !== false
+  const obsoleteValue = options.obsoleteValue ?? 1
+  const activeRows = filterActiveEditableRows(rows, options.obsoleteField, obsoleteValue)
   const errors: TaktEditableValidateError[] = []
-  if (rows.length < minRows) {
+  if (activeRows.length < minRows) {
     errors.push({
       rowIndex: -1,
       rowKey: '',
@@ -198,12 +204,15 @@ export async function validateEditableRows(
     })
     return errors
   }
-  if (!rows.length && skipColumnValidateWhenEmpty) {
+  if (!activeRows.length && skipColumnValidateWhenEmpty) {
     return errors
   }
   for (let rowIndex = 0; rowIndex < rows.length; rowIndex++) {
     const row = rows[rowIndex]
     if (!row) {
+      continue
+    }
+    if (options.obsoleteField && filterActiveEditableRows([row], options.obsoleteField, obsoleteValue).length === 0) {
       continue
     }
     const rowKey = resolveEditableRowKey(row)
@@ -238,6 +247,9 @@ export async function validateEditableRows(
         if (normalized) {
           const duplicated = rows.some((other, otherIndex) => {
             if (otherIndex === rowIndex || !other) {
+              return false
+            }
+            if (options.obsoleteField && filterActiveEditableRows([other], options.obsoleteField, obsoleteValue).length === 0) {
               return false
             }
             const otherValue = other[dataIndex]

@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：frontend/src/api/accounting/controlling
 // 文件名称：cost-element.ts
-// 创建时间：2026-06-23
+// 创建时间：2026-07-09
 // 创建人：Takt365(Auto Generated)
 // 功能描述：accounting/controlling 模块 API（自动生成，请勿手改路由常量）
 // 
@@ -165,6 +165,17 @@ export function updateCostElementSort(dto: CostElementSort): Promise<CostElement
 export function getCostElementTreeOptions(): Promise<TaktTreeSelectOption[]> {
   return request<TaktTreeSelectOption[]>({
     url: `${COST_ELEMENT_API_BASE}/tree-options`,
+    method: 'get',
+  });
+}
+
+/**
+ * 获取成本要素父级树形选项列表
+ * @returns {Promise<TaktTreeSelectOption[]>} 树形选项
+ */
+export function getCostElementParentTreeOptions(): Promise<TaktTreeSelectOption[]> {
+  return request<TaktTreeSelectOption[]>({
+    url: `${COST_ELEMENT_API_BASE}/parent-tree-options`,
     method: 'get',
   });
 }

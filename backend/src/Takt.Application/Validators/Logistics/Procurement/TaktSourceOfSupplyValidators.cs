@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Application.Validators.Logistics.Procurement
 // 文件名称：TaktSourceOfSupplyValidators.cs
-// 创建时间：2026-07-02
+// 创建时间：2026-07-09
 // 创建人：Takt365(Auto Generated)
 // 功能描述：SourceOfSupply 模块 FluentValidation 验证器（由 generate-validators-from-entity.cjs 根据 TaktSourceOfSupply 生成，请按需审阅）
 // 
@@ -39,8 +39,8 @@ public class TaktSourceOfSupplyCreateValidator : AbstractValidator<TaktSourceOfS
             .NotEmpty().WithMessage("工厂代码不能为空")
             .MaximumLength(4).WithMessage("工厂代码长度不能超过4个字符");
         RuleFor(x => x.SourceOfSupplyCode)
-            .NotEmpty().WithMessage("货源编码不能为空")
-            .MaximumLength(20).WithMessage("货源编码长度不能超过20个字符");
+            .NotEmpty().WithMessage("货源清单编码不能为空")
+            .MaximumLength(20).WithMessage("货源清单编码长度不能超过20个字符");
         RuleFor(x => x.MaterialCode)
             .NotEmpty().WithMessage("物料编码不能为空")
             .MaximumLength(20).WithMessage("物料编码长度不能超过20个字符");
@@ -83,8 +83,8 @@ public class TaktSourceOfSupplyUpdateValidator : AbstractValidator<TaktSourceOfS
             .NotEmpty().WithMessage("工厂代码不能为空")
             .MaximumLength(4).WithMessage("工厂代码长度不能超过4个字符");
         RuleFor(x => x.SourceOfSupplyCode)
-            .NotEmpty().WithMessage("货源编码不能为空")
-            .MaximumLength(20).WithMessage("货源编码长度不能超过20个字符");
+            .NotEmpty().WithMessage("货源清单编码不能为空")
+            .MaximumLength(20).WithMessage("货源清单编码长度不能超过20个字符");
         RuleFor(x => x.MaterialCode)
             .NotEmpty().WithMessage("物料编码不能为空")
             .MaximumLength(20).WithMessage("物料编码长度不能超过20个字符");
@@ -123,8 +123,8 @@ public class TaktSourceOfSupplyImportValidator : AbstractValidator<TaktSourceOfS
             .NotEmpty().WithMessage("工厂代码不能为空")
             .MaximumLength(4).WithMessage("工厂代码长度不能超过4个字符");
         RuleFor(x => x.SourceOfSupplyCode)
-            .NotEmpty().WithMessage("货源编码不能为空")
-            .MaximumLength(20).WithMessage("货源编码长度不能超过20个字符");
+            .NotEmpty().WithMessage("货源清单编码不能为空")
+            .MaximumLength(20).WithMessage("货源清单编码长度不能超过20个字符");
         RuleFor(x => x.MaterialCode)
             .NotEmpty().WithMessage("物料编码不能为空")
             .MaximumLength(20).WithMessage("物料编码长度不能超过20个字符");

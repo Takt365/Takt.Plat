@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.WebApi.Controllers.Logistics.Materials
 // 文件名称：TaktMaterialDocumentsController.cs
-// 创建时间：2026-07-01
+// 创建时间：2026-07-05
 // 创建人：Takt365(Cursor AI)
 // 功能描述：物料凭证控制器
 // 
@@ -81,7 +81,7 @@ public class TaktMaterialDocumentsController : TaktControllerBase
     }
 
     /// <summary>
-    /// 获取物料交易选项列表
+    /// 获取物料凭证选项列表
     /// </summary>
     /// <returns>下拉选项</returns>
     [TaktPermission("logistics:materials:material:document:query", "物料凭证选项")]

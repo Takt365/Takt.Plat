@@ -9,10 +9,13 @@
 import { inject, provide, type InjectionKey, type Ref, ref } from 'vue'
 import type { Manufacturer } from '@/types/logistics/materials/manufacturer'
 
+/** 表格行类型（与 index 列表行、TaktSingleTable slot record 一致） */
+export type ManufacturerRowRecord = Manufacturer | Record<string, unknown>
+
 /** 主表选中行上下文 */
 export interface ManufacturerMasterContext {
   /** 当前选中的主表行（右侧明细依赖） */
-  selectedMasterRow: Ref<Manufacturer | null>
+  selectedMasterRow: Ref<ManufacturerRowRecord | null>
 }
 
 const manufacturerMasterContextKey: InjectionKey<ManufacturerMasterContext> = Symbol('manufacturerMasterContext')
@@ -22,7 +25,7 @@ const manufacturerMasterContextKey: InjectionKey<ManufacturerMasterContext> = Sy
  * @returns {ManufacturerMasterContext} 主表上下文
  */
 export function provideManufacturerMasterContext(): ManufacturerMasterContext {
-  const selectedMasterRow = ref<Manufacturer | null>(null)
+  const selectedMasterRow = ref<ManufacturerRowRecord | null>(null)
   const ctx: ManufacturerMasterContext = { selectedMasterRow }
   provide(manufacturerMasterContextKey, ctx)
   return ctx

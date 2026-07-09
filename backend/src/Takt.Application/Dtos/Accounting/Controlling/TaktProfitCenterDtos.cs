@@ -102,13 +102,6 @@ public class TaktProfitCenterDto : TaktCompanyDtoBase
     /// 利润中心状态（字典 sys_normal_disable_status；1=启用，0=禁用）
     /// </summary>
     public int ProfitCenterStatus { get; set; } = 0;
-
-    /// <summary>
-    /// 利润中心变更记录列表（外键在子表 TaktProfitCenterChangeLog.ProfitCenterId）
-    /// （子表：TaktProfitCenterChangeLog）
-    /// </summary>
-    public List<TaktProfitCenterChangeLogDto>? ChangeLogs { get; set; }
-
 }
 
 // ========================================
@@ -334,14 +327,7 @@ public class TaktProfitCenterCreateDto
     /// <summary>
     /// 利润中心状态（字典 sys_normal_disable_status；1=启用，0=禁用）
     /// </summary>
-    public int ProfitCenterStatus { get; set; } = 0;
-
-    /// <summary>
-    /// 利润中心变更记录列表（外键在子表 TaktProfitCenterChangeLog.ProfitCenterId）（子表，级联保存）
-    /// </summary>
-    public List<TaktProfitCenterChangeLogCreateDto>? ChangeLogs { get; set; }
-
-    /// <summary>
+    public int ProfitCenterStatus { get; set; } = 0;    /// <summary>
     /// 扩展字段JSON
     /// </summary>
     public string? ExtField { get; set; }
@@ -501,14 +487,7 @@ public class TaktProfitCenterTemplateDto
     /// <summary>
     /// 利润中心状态（字典 sys_normal_disable_status；1=启用，0=禁用）
     /// </summary>
-    public int? ProfitCenterStatus { get; set; }
-
-    /// <summary>
-    /// 利润中心变更记录列表（外键在子表 TaktProfitCenterChangeLog.ProfitCenterId）（子表，级联保存）
-    /// </summary>
-    public List<TaktProfitCenterChangeLogCreateDto>? ChangeLogs { get; set; }
-
-    /// <summary>
+    public int? ProfitCenterStatus { get; set; }    /// <summary>
     /// 扩展字段JSON
     /// </summary>
     public string? ExtField { get; set; }
@@ -601,14 +580,7 @@ public class TaktProfitCenterImportDto
     /// <summary>
     /// 利润中心状态（字典 sys_normal_disable_status；1=启用，0=禁用）
     /// </summary>
-    public int? ProfitCenterStatus { get; set; }
-
-    /// <summary>
-    /// 利润中心变更记录列表（外键在子表 TaktProfitCenterChangeLog.ProfitCenterId）（子表，级联保存）
-    /// </summary>
-    public List<TaktProfitCenterChangeLogCreateDto>? ChangeLogs { get; set; }
-
-    /// <summary>
+    public int? ProfitCenterStatus { get; set; }    /// <summary>
     /// 扩展字段JSON
     /// </summary>
     public string? ExtField { get; set; }

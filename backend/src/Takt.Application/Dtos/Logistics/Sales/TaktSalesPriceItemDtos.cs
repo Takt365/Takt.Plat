@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Application.Dtos.Logistics.Sales
 // 文件名称：TaktSalesPriceItemDtos.cs
-// 创建时间：2026-07-01
+// 创建时间：2026-07-09
 // 创建人：Takt365(Auto Generated)
 // 功能描述：SalesPriceItem 模块 DTO（由 generate-dtos-from-entity.cjs 根据 TaktSalesPriceItem 生成，请按需审阅）
 // 
@@ -87,6 +87,11 @@ public class TaktSalesPriceItemDto : TaktCompanyDtoBase
     public int MaxOrderQuantity { get; set; } = 0;
 
     /// <summary>
+    /// 是否作废（字典 sys_yes_no_type，0=否 1=是；编辑移除子行时标记作废）
+    /// </summary>
+    public int IsObsolete { get; set; } = 0;
+
+    /// <summary>
     /// 价格阶梯列表（主子表关系，一个物料价格可以有多个阶梯）
     /// （子表：TaktSalesPriceScale）
     /// </summary>
@@ -165,6 +170,11 @@ public class TaktSalesPriceItemQueryDto : TaktPagedQuery
     /// 最大订购量（基本单位数量，0表示无限制，整数）
     /// </summary>
     public int? MaxOrderQuantity { get; set; }
+
+    /// <summary>
+    /// 是否作废（字典 sys_yes_no_type，0=否 1=是；编辑移除子行时标记作废）
+    /// </summary>
+    public int? IsObsolete { get; set; }
 
     /// <summary>
     /// 创建时间（范围查询-开始）
@@ -261,9 +271,14 @@ public class TaktSalesPriceItemCreateDto
     public int MaxOrderQuantity { get; set; } = 0;
 
     /// <summary>
+    /// 是否作废（字典 sys_yes_no_type，0=否 1=是；编辑移除子行时标记作废）
+    /// </summary>
+    public int IsObsolete { get; set; } = 0;
+
+    /// <summary>
     /// 价格阶梯列表（主子表关系，一个物料价格可以有多个阶梯）（子表，级联保存）
     /// </summary>
-    public List<TaktSalesPriceScaleCreateDto>? Scales { get; set; }
+    public List<TaktSalesPriceScaleUpdateDto>? Scales { get; set; }
 
     /// <summary>
     /// 扩展字段JSON
@@ -295,6 +310,29 @@ public class TaktSalesPriceItemUpdateDto : TaktSalesPriceItemCreateDto
     [JsonConverter(typeof(ValueToStringConverter))]
     public long SalesPriceItemId { get; set; }
 
+}
+
+// ========================================
+// SalesPriceItem 作废 DTO
+// ========================================
+
+/// <summary>
+/// SalesPriceItem 作废/撤销作废 DTO
+/// </summary>
+public class TaktSalesPriceItemObsoleteDto
+{
+    /// <summary>
+    /// SalesPriceItemID
+    /// </summary>
+    [Required(ErrorMessage = "ID不能为空")]
+    [AdaptMember("Id")]
+    [JsonConverter(typeof(ValueToStringConverter))]
+    public long SalesPriceItemId { get; set; }
+
+    /// <summary>
+    /// 是否作废（字典 sys_yes_no_type，0=否 1=是；编辑移除子行时标记作废）
+    /// </summary>
+    public int IsObsolete { get; set; }
 }
 
 // ========================================
@@ -361,6 +399,11 @@ public class TaktSalesPriceItemTemplateDto
     /// 最大订购量（基本单位数量，0表示无限制，整数）
     /// </summary>
     public int? MaxOrderQuantity { get; set; }
+
+    /// <summary>
+    /// 是否作废（字典 sys_yes_no_type，0=否 1=是；编辑移除子行时标记作废）
+    /// </summary>
+    public int? IsObsolete { get; set; }
 
     /// <summary>
     /// 价格阶梯列表（主子表关系，一个物料价格可以有多个阶梯）（子表，级联保存）
@@ -446,6 +489,11 @@ public class TaktSalesPriceItemImportDto
     public int? MaxOrderQuantity { get; set; }
 
     /// <summary>
+    /// 是否作废（字典 sys_yes_no_type，0=否 1=是；编辑移除子行时标记作废）
+    /// </summary>
+    public int? IsObsolete { get; set; }
+
+    /// <summary>
     /// 价格阶梯列表（主子表关系，一个物料价格可以有多个阶梯）（子表，级联保存）
     /// </summary>
     public List<TaktSalesPriceScaleCreateDto>? Scales { get; set; }
@@ -528,6 +576,11 @@ public class TaktSalesPriceItemExportDto
     /// 最大订购量（基本单位数量，0表示无限制，整数）
     /// </summary>
     public int MaxOrderQuantity { get; set; } = 0;
+
+    /// <summary>
+    /// 是否作废（字典 sys_yes_no_type，0=否 1=是；编辑移除子行时标记作废）
+    /// </summary>
+    public int IsObsolete { get; set; } = 0;
 
     /// <summary>
     /// 扩展字段JSON

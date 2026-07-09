@@ -373,7 +373,7 @@ fix(dept): 修复部门唯一索引冲突
 | 执行方式 | `node scripts/<name>.cjs [args]`（入口见 `15-codegen`） |
 | ❌ 禁止 | `.ps1`、`.psm1`、`.bat`、`.cmd` 及 **PowerShell 脚本/内联命令** 作为仓库自动化 |
 | ❌ 禁止 | 在 `scripts/` 新增 `.mjs`/`.ts` 作流水线或可执行入口（无用户明确例外） |
-| 允许非入口 | `scripts/jsconfig.json`、`scripts/api-fragments/**/*.cjs`（被 `require` 的片段） |
+| 允许非入口 | `scripts/gen/api-fragments/**/*.cjs`（被 `require` 的片段） |
 
 批量改写、代码生成、校验：**写 `.cjs` 或 Cursor 编辑工具（StrReplace/Write）**，不得新建 PowerShell 脚本替代。
 

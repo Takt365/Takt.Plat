@@ -13,6 +13,7 @@
     "InjectionKey": true,
     "MaybeRef": true,
     "MaybeRefOrGetter": true,
+    "MeasureMasterDetailLrTableScrollYOptions": true,
     "Modal": true,
     "PropType": true,
     "QUARTZ_TABLE_NAME": true,

@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Application.Dtos.Logistics.Sales
 // 文件名称：TaktSalesOrderItemDtos.cs
-// 创建时间：2026-07-01
+// 创建时间：2026-07-09
 // 创建人：Takt365(Auto Generated)
 // 功能描述：SalesOrderItem 模块 DTO（由 generate-dtos-from-entity.cjs 根据 TaktSalesOrderItem 生成，请按需审阅）
 // 
@@ -127,6 +127,11 @@ public class TaktSalesOrderItemDto : TaktCompanyDtoBase
     public int DeliveryStatus { get; set; } = 0;
 
     /// <summary>
+    /// 是否作废（字典 sys_yes_no_type，0=否 1=是；编辑移除子行时标记作废）
+    /// </summary>
+    public int IsObsolete { get; set; } = 0;
+
+    /// <summary>
     /// 销售订单主表
     /// （主表：TaktSalesOrder）
     /// </summary>
@@ -239,6 +244,11 @@ public class TaktSalesOrderItemQueryDto : TaktPagedQuery
     /// 行交货状态（字典 logistics_delivery_status；0=未交货 1=部分交货 2=全部交货）
     /// </summary>
     public int? DeliveryStatus { get; set; }
+
+    /// <summary>
+    /// 是否作废（字典 sys_yes_no_type，0=否 1=是；编辑移除子行时标记作废）
+    /// </summary>
+    public int? IsObsolete { get; set; }
 
     /// <summary>
     /// 创建时间（范围查询-开始）
@@ -376,6 +386,11 @@ public class TaktSalesOrderItemCreateDto
     public int DeliveryStatus { get; set; } = 0;
 
     /// <summary>
+    /// 是否作废（字典 sys_yes_no_type，0=否 1=是；编辑移除子行时标记作废）
+    /// </summary>
+    public int IsObsolete { get; set; } = 0;
+
+    /// <summary>
     /// 扩展字段JSON
     /// </summary>
     public string? ExtField { get; set; }
@@ -429,6 +444,29 @@ public class TaktSalesOrderItemStatusDto
     /// </summary>
     [Required(ErrorMessage = "行交货状态（字典 logistics_delivery_status；0=未交货 1=部分交货 2=全部交货）不能为空")]
     public int DeliveryStatus { get; set; } = 0;
+}
+
+// ========================================
+// SalesOrderItem 作废 DTO
+// ========================================
+
+/// <summary>
+/// SalesOrderItem 作废/撤销作废 DTO
+/// </summary>
+public class TaktSalesOrderItemObsoleteDto
+{
+    /// <summary>
+    /// SalesOrderItemID
+    /// </summary>
+    [Required(ErrorMessage = "ID不能为空")]
+    [AdaptMember("Id")]
+    [JsonConverter(typeof(ValueToStringConverter))]
+    public long SalesOrderItemId { get; set; }
+
+    /// <summary>
+    /// 是否作废（字典 sys_yes_no_type，0=否 1=是；编辑移除子行时标记作废）
+    /// </summary>
+    public int IsObsolete { get; set; }
 }
 
 // ========================================
@@ -535,6 +573,11 @@ public class TaktSalesOrderItemTemplateDto
     /// 行交货状态（字典 logistics_delivery_status；0=未交货 1=部分交货 2=全部交货）
     /// </summary>
     public int? DeliveryStatus { get; set; }
+
+    /// <summary>
+    /// 是否作废（字典 sys_yes_no_type，0=否 1=是；编辑移除子行时标记作废）
+    /// </summary>
+    public int? IsObsolete { get; set; }
 
     /// <summary>
     /// 扩展字段JSON
@@ -655,6 +698,11 @@ public class TaktSalesOrderItemImportDto
     public int? DeliveryStatus { get; set; }
 
     /// <summary>
+    /// 是否作废（字典 sys_yes_no_type，0=否 1=是；编辑移除子行时标记作废）
+    /// </summary>
+    public int? IsObsolete { get; set; }
+
+    /// <summary>
     /// 扩展字段JSON
     /// </summary>
     public string? ExtField { get; set; }
@@ -772,6 +820,11 @@ public class TaktSalesOrderItemExportDto
     /// 行交货状态（字典 logistics_delivery_status；0=未交货 1=部分交货 2=全部交货）
     /// </summary>
     public int DeliveryStatus { get; set; } = 0;
+
+    /// <summary>
+    /// 是否作废（字典 sys_yes_no_type，0=否 1=是；编辑移除子行时标记作废）
+    /// </summary>
+    public int IsObsolete { get; set; } = 0;
 
     /// <summary>
     /// 扩展字段JSON

@@ -15,7 +15,7 @@ namespace Takt.Shared.Constants;
 /// <summary>
 /// API 权限特性
 /// 用于标记控制器或操作所需的权限标识
-/// 格式：领域:目录:实体:操作（如：accounting:controlling:costcenterchangelog:list）
+/// 格式：领域:目录:实体:操作（如：accounting:controlling:costcenter:list）
 /// </summary>
 [AttributeUsage(AttributeTargets.Class | AttributeTargets.Method, AllowMultiple = false, Inherited = true)]
 public class TaktPermissionAttribute : Attribute
@@ -34,7 +34,7 @@ public class TaktPermissionAttribute : Attribute
     /// <summary>
     /// 初始化权限特性
     /// </summary>
-    /// <param name="permissionCode">权限标识（如：accounting:controlling:costcenterchangelog:list）</param>
+    /// <param name="permissionCode">权限标识（如：accounting:controlling:costcenter:list）</param>
     /// <param name="displayName">权限显示名称</param>
     public TaktPermissionAttribute(string permissionCode, string displayName)
     {

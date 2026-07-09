@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：frontend/src/types/logistics/maintenance
 // 文件名称：work-order-material.d.ts
-// 创建时间：2026-06-23
+// 创建时间：2026-07-09
 // 创建人：Takt365(Auto Generated)
 // 功能描述：logistics/maintenance 模块类型定义（自动生成；类型名去 Takt 前缀与末尾 Dto，如 TaktCompanyDto → Company）
 // 
@@ -107,6 +107,11 @@ export interface MaintenanceWorkOrderMaterial extends CompanyDtoBase {
    * 领料时间
    */
   issueTime?: string;
+
+  /**
+   * 是否作废（字典 sys_yes_no_type，0=否 1=是；编辑移除子行时标记作废）
+   */
+  isObsolete: number;
 
   /**
    * 维护工单（主表） （主表：TaktMaintenanceWorkOrder）
@@ -217,6 +222,11 @@ export interface MaintenanceWorkOrderMaterialQuery extends TaktPagedQuery {
    * 领料时间（范围查询-结束）
    */
   issueTimeEnd?: string;
+
+  /**
+   * 是否作废（字典 sys_yes_no_type，0=否 1=是；编辑移除子行时标记作废）
+   */
+  isObsolete?: number;
 
   /**
    * 创建时间（范围查询-开始）
@@ -338,6 +348,11 @@ export interface MaintenanceWorkOrderMaterialCreate {
   issueTime?: string;
 
   /**
+   * 是否作废（字典 sys_yes_no_type，0=否 1=是；编辑移除子行时标记作废）
+   */
+  isObsolete: number;
+
+  /**
    * 扩展字段JSON
    */
   extField?: string;
@@ -380,6 +395,25 @@ export interface MaintenanceWorkOrderMaterialStatus {
    * 领料状态（0=待领料，1=部分领料，2=已领料）
    */
   issueStatus: number;
+
+}
+
+
+/**
+ * MaintenanceWorkOrderMaterial 作废/撤销作废 DTO
+ * 对应前端 MaintenanceWorkOrderMaterialObsolete
+ * @description 对应后端 TaktMaintenanceWorkOrderMaterialObsoleteDto
+ */
+export interface MaintenanceWorkOrderMaterialObsolete {
+  /**
+   * MaintenanceWorkOrderMaterialID
+   */
+  maintenanceWorkOrderMaterialId: string;
+
+  /**
+   * 是否作废（字典 sys_yes_no_type，0=否 1=是；编辑移除子行时标记作废）
+   */
+  isObsolete: number;
 
 }
 
@@ -474,6 +508,11 @@ export interface MaintenanceWorkOrderMaterialTemplate {
    * 领料时间
    */
   issueTime?: string;
+
+  /**
+   * 是否作废（字典 sys_yes_no_type，0=否 1=是；编辑移除子行时标记作废）
+   */
+  isObsolete?: number;
 
   /**
    * 扩展字段JSON
@@ -585,6 +624,11 @@ export interface MaintenanceWorkOrderMaterialImport {
   issueTime?: string;
 
   /**
+   * 是否作废（字典 sys_yes_no_type，0=否 1=是；编辑移除子行时标记作废）
+   */
+  isObsolete?: number;
+
+  /**
    * 扩展字段JSON
    */
   extField?: string;
@@ -687,6 +731,11 @@ export interface MaintenanceWorkOrderMaterialExport {
    * 领料时间
    */
   issueTime?: string;
+
+  /**
+   * 是否作废（字典 sys_yes_no_type，0=否 1=是；编辑移除子行时标记作废）
+   */
+  isObsolete: number;
 
   /**
    * 扩展字段JSON

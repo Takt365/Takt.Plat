@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.WebApi.Controllers.Logistics.Manufacturing.Defect
 // 文件名称：TaktPcbaInspectionDetailsController.cs
-// 创建时间：2026-06-30
+// 创建时间：2026-07-09
 // 创建人：Takt365(Cursor AI)
 // 功能描述：PCBA检查明细控制器
 // 
@@ -192,6 +192,26 @@ public class TaktPcbaInspectionDetailsController : TaktControllerBase
         try
         {
             var result = await _pcbaInspectionDetailService.UpdatePcbaInspectionDetailStatusAsync(dto);
+            return Success(result, "更新成功");
+        }
+        catch (Exception ex)
+        {
+            return HandleException(ex);
+        }
+    }
+
+    /// <summary>
+    /// 更新PCBA检查明细作废状态
+    /// </summary>
+    /// <param name="dto">作废 DTO</param>
+    /// <returns>PCBA检查明细DTO</returns>
+    [TaktPermission("logistics:manufacturing:defect:pcba:inspection:update", "更新PCBA检查明细作废状态")]
+    [HttpPut("obsolete")]
+    public async Task<IActionResult> UpdatePcbaInspectionDetailObsoleteAsync([FromBody] TaktPcbaInspectionDetailObsoleteDto dto)
+    {
+        try
+        {
+            var result = await _pcbaInspectionDetailService.UpdatePcbaInspectionDetailObsoleteAsync(dto);
             return Success(result, "更新成功");
         }
         catch (Exception ex)

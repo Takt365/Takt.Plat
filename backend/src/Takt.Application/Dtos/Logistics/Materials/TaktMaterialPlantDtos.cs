@@ -209,13 +209,6 @@ public class TaktMaterialPlantDto : TaktCompanyDtoBase
     /// 物料状态（字典 sys_normal_disable_status；0=禁用，1=启用，2=锁定）
     /// </summary>
     public int MaterialStatus { get; set; } = 0;
-
-    /// <summary>
-    /// 工厂物料变更记录列表（外键在子表 TaktMaterialPlantChangeLog.MaterialPlantId）
-    /// （子表：TaktMaterialPlantChangeLog）
-    /// </summary>
-    public List<TaktMaterialPlantChangeLogDto>? ChangeLogs { get; set; }
-
 }
 
 // ========================================
@@ -648,14 +641,7 @@ public class TaktMaterialPlantCreateDto
     /// <summary>
     /// 物料状态（字典 sys_normal_disable_status；0=禁用，1=启用，2=锁定）
     /// </summary>
-    public int MaterialStatus { get; set; } = 0;
-
-    /// <summary>
-    /// 工厂物料变更记录列表（外键在子表 TaktMaterialPlantChangeLog.MaterialPlantId）（子表，级联保存）
-    /// </summary>
-    public List<TaktMaterialPlantChangeLogCreateDto>? ChangeLogs { get; set; }
-
-    /// <summary>
+    public int MaterialStatus { get; set; } = 0;    /// <summary>
     /// 扩展字段JSON
     /// </summary>
     public string? ExtField { get; set; }
@@ -903,14 +889,7 @@ public class TaktMaterialPlantTemplateDto
     /// <summary>
     /// 物料状态（字典 sys_normal_disable_status；0=禁用，1=启用，2=锁定）
     /// </summary>
-    public int? MaterialStatus { get; set; }
-
-    /// <summary>
-    /// 工厂物料变更记录列表（外键在子表 TaktMaterialPlantChangeLog.MaterialPlantId）（子表，级联保存）
-    /// </summary>
-    public List<TaktMaterialPlantChangeLogCreateDto>? ChangeLogs { get; set; }
-
-    /// <summary>
+    public int? MaterialStatus { get; set; }    /// <summary>
     /// 扩展字段JSON
     /// </summary>
     public string? ExtField { get; set; }
@@ -1115,14 +1094,7 @@ public class TaktMaterialPlantImportDto
     /// <summary>
     /// 物料状态（字典 sys_normal_disable_status；0=禁用，1=启用，2=锁定）
     /// </summary>
-    public int? MaterialStatus { get; set; }
-
-    /// <summary>
-    /// 工厂物料变更记录列表（外键在子表 TaktMaterialPlantChangeLog.MaterialPlantId）（子表，级联保存）
-    /// </summary>
-    public List<TaktMaterialPlantChangeLogCreateDto>? ChangeLogs { get; set; }
-
-    /// <summary>
+    public int? MaterialStatus { get; set; }    /// <summary>
     /// 扩展字段JSON
     /// </summary>
     public string? ExtField { get; set; }

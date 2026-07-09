@@ -45,9 +45,9 @@ public class TaktProductionDispatch : TaktCompanyEntityBase
     public long ProductionOrderId { get; set; }
 
     /// <summary>
-    /// 生产工单号（关联 TaktProductionOrder.ProdOrderCode，冗余）
+    /// 工单号（关联 TaktProductionOrder.ProdOrderCode，冗余）
     /// </summary>
-    [SugarColumn(ColumnName = "prod_order_code", ColumnDescription = "生产工单号", ColumnDataType = "nvarchar", Length = 40, IsNullable = false)]
+    [SugarColumn(ColumnName = "prod_order_code", ColumnDescription = "工单号", ColumnDataType = "nvarchar", Length = 40, IsNullable = false)]
     public string ProdOrderCode { get; set; } = string.Empty;
 
     /// <summary>

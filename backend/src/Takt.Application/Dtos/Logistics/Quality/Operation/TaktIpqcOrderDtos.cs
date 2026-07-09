@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Application.Dtos.Logistics.Quality.Operation
 // 文件名称：TaktIpqcOrderDtos.cs
-// 创建时间：2026-06-30
+// 创建时间：2026-07-09
 // 创建人：Takt365(Auto Generated)
 // 功能描述：IpqcOrder 模块 DTO（由 generate-dtos-from-entity.cjs 根据 TaktIpqcOrder 生成，请按需审阅）
 // 
@@ -115,12 +115,6 @@ public class TaktIpqcOrderDto : TaktCompanyDtoBase
     /// （子表：TaktIpqcOrderItem）
     /// </summary>
     public List<TaktIpqcOrderItemDto>? Items { get; set; }
-
-    /// <summary>
-    /// 变更日志列表（主子表关系）
-    /// （子表：TaktIpqcOrderChangeLog）
-    /// </summary>
-    public List<TaktIpqcOrderChangeLogDto>? ChangeLogs { get; set; }
 
 }
 
@@ -357,12 +351,7 @@ public class TaktIpqcOrderCreateDto
     /// <summary>
     /// IPQC检验单明细列表（主子表关系）（子表，级联保存）
     /// </summary>
-    public List<TaktIpqcOrderItemCreateDto>? Items { get; set; }
-
-    /// <summary>
-    /// 变更日志列表（主子表关系）（子表，级联保存）
-    /// </summary>
-    public List<TaktIpqcOrderChangeLogCreateDto>? ChangeLogs { get; set; }
+    public List<TaktIpqcOrderItemUpdateDto>? Items { get; set; }
 
     /// <summary>
     /// 扩展字段JSON
@@ -520,11 +509,6 @@ public class TaktIpqcOrderTemplateDto
     public List<TaktIpqcOrderItemCreateDto>? Items { get; set; }
 
     /// <summary>
-    /// 变更日志列表（主子表关系）（子表，级联保存）
-    /// </summary>
-    public List<TaktIpqcOrderChangeLogCreateDto>? ChangeLogs { get; set; }
-
-    /// <summary>
     /// 扩展字段JSON
     /// </summary>
     public string? ExtField { get; set; }
@@ -635,11 +619,6 @@ public class TaktIpqcOrderImportDto
     /// IPQC检验单明细列表（主子表关系）（子表，级联保存）
     /// </summary>
     public List<TaktIpqcOrderItemCreateDto>? Items { get; set; }
-
-    /// <summary>
-    /// 变更日志列表（主子表关系）（子表，级联保存）
-    /// </summary>
-    public List<TaktIpqcOrderChangeLogCreateDto>? ChangeLogs { get; set; }
 
     /// <summary>
     /// 扩展字段JSON

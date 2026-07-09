@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：frontend/src/types/routine/document-center
 // 文件名称：document.d.ts
-// 创建时间：2026-06-24
+// 创建时间：2026-07-09
 // 创建人：Takt365(Auto Generated)
 // 功能描述：routine/document-center 模块类型定义（自动生成；类型名去 Takt 前缀与末尾 Dto，如 TaktCompanyDto → Company）
 // 
@@ -42,11 +42,6 @@ export interface Document extends ApprovalDtoBase {
    * 文档分类
    */
   documentCategory: number;
-
-  /**
-   * 文档状态
-   */
-  documentStatus: number;
 
   /**
    * 密级
@@ -144,11 +139,6 @@ export interface Document extends ApprovalDtoBase {
   documentIsTop: number;
 
   /**
-   * 排序号
-   */
-  sortOrder: number;
-
-  /**
    * 浏览次数
    */
   documentViewCount: number;
@@ -174,14 +164,19 @@ export interface Document extends ApprovalDtoBase {
   targetUsers?: string;
 
   /**
+   * 排序号
+   */
+  sortOrder: number;
+
+  /**
+   * 文档状态
+   */
+  documentStatus: number;
+
+  /**
    * 版本历史列表（主子表关系） （子表：TaktDocumentVersion）
    */
   versions?: DocumentVersion[];
-
-  /**
-   * 变更日志列表（主子表关系） （子表：TaktDocumentChangeLog）
-   */
-  changeLogs?: DocumentChangeLog[];
 
 }
 
@@ -217,11 +212,6 @@ export interface DocumentQuery extends TaktPagedQuery {
    * 文档分类
    */
   documentCategory?: number;
-
-  /**
-   * 文档状态
-   */
-  documentStatus?: number;
 
   /**
    * 密级
@@ -334,11 +324,6 @@ export interface DocumentQuery extends TaktPagedQuery {
   documentIsTop?: number;
 
   /**
-   * 排序号
-   */
-  sortOrder?: number;
-
-  /**
    * 浏览次数
    */
   documentViewCount?: number;
@@ -362,6 +347,16 @@ export interface DocumentQuery extends TaktPagedQuery {
    * 目标用户 ID（多个用逗号分隔）
    */
   targetUsers?: string;
+
+  /**
+   * 排序号
+   */
+  sortOrder?: number;
+
+  /**
+   * 文档状态
+   */
+  documentStatus?: number;
 
   /**
    * 审批状态（字典 sys_approval_status；与 TaktApprovalEntityBase.ApprovalStatus 一致）
@@ -463,11 +458,6 @@ export interface DocumentCreate {
   documentCategory: number;
 
   /**
-   * 文档状态
-   */
-  documentStatus: number;
-
-  /**
    * 密级
    */
   confidentialLevel: number;
@@ -588,14 +578,14 @@ export interface DocumentCreate {
   targetUsers?: string;
 
   /**
+   * 文档状态
+   */
+  documentStatus: number;
+
+  /**
    * 版本历史列表（主子表关系）（子表，级联保存）
    */
   versions?: DocumentVersionCreate[];
-
-  /**
-   * 变更日志列表（主子表关系）（子表，级联保存）
-   */
-  changeLogs?: DocumentChangeLogCreate[];
 
   /**
    * 扩展字段JSON
@@ -695,11 +685,6 @@ export interface DocumentTemplate {
   documentCategory?: number;
 
   /**
-   * 文档状态
-   */
-  documentStatus?: number;
-
-  /**
    * 密级
    */
   confidentialLevel?: number;
@@ -820,14 +805,14 @@ export interface DocumentTemplate {
   targetUsers?: string;
 
   /**
+   * 文档状态
+   */
+  documentStatus?: number;
+
+  /**
    * 版本历史列表（主子表关系）（子表，级联保存）
    */
   versions?: DocumentVersionCreate[];
-
-  /**
-   * 变更日志列表（主子表关系）（子表，级联保存）
-   */
-  changeLogs?: DocumentChangeLogCreate[];
 
   /**
    * 扩展字段JSON
@@ -879,11 +864,6 @@ export interface DocumentImport {
   documentCategory?: number;
 
   /**
-   * 文档状态
-   */
-  documentStatus?: number;
-
-  /**
    * 密级
    */
   confidentialLevel?: number;
@@ -1004,14 +984,14 @@ export interface DocumentImport {
   targetUsers?: string;
 
   /**
+   * 文档状态
+   */
+  documentStatus?: number;
+
+  /**
    * 版本历史列表（主子表关系）（子表，级联保存）
    */
   versions?: DocumentVersionCreate[];
-
-  /**
-   * 变更日志列表（主子表关系）（子表，级联保存）
-   */
-  changeLogs?: DocumentChangeLogCreate[];
 
   /**
    * 扩展字段JSON
@@ -1051,11 +1031,6 @@ export interface DocumentExport {
    * 文档分类
    */
   documentCategory: number;
-
-  /**
-   * 文档状态
-   */
-  documentStatus: number;
 
   /**
    * 密级
@@ -1153,11 +1128,6 @@ export interface DocumentExport {
   documentIsTop: number;
 
   /**
-   * 排序号
-   */
-  sortOrder: number;
-
-  /**
    * 浏览次数
    */
   documentViewCount: number;
@@ -1181,6 +1151,16 @@ export interface DocumentExport {
    * 目标用户 ID（多个用逗号分隔）
    */
   targetUsers?: string;
+
+  /**
+   * 排序号
+   */
+  sortOrder: number;
+
+  /**
+   * 文档状态
+   */
+  documentStatus: number;
 
   /**
    * 扩展字段JSON

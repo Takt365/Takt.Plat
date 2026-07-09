@@ -17,8 +17,7 @@ namespace Takt.Domain.Entities.Identity;
 
 /// <summary>
 /// 用户公司关联实体
-/// 支持用户跨公司访问（多对多关系）
-/// 例如：用户D1010在租户100下可以访问公司2300和2400
+/// 支持用户跨公司访问（多对多关系）；演示种子为所有启用用户关联全部公司
 /// </summary>
 [SugarTable("takt_identity_user_company", "用户公司关联表")]
 [SugarIndex("ix_user_company_tenant", nameof(TenantCode), OrderByType.Asc, nameof(CompanyCode), OrderByType.Asc, false)]
@@ -34,9 +33,11 @@ public class TaktUserCompany : TaktCompanyEntityBase
     public long UserId { get; set; }
 
     /// <summary>
-    /// 是否默认登录公司（字典 sys_yes_no_type；同一用户在同一租户下仅应有一条为是）
+    /// 是否默认登录公司（字典 sys_is_default_type；1=是 0=否）
+    /// 同一用户在同一租户下仅应有一条为 1；登录时由 TaktAuthService 按 IsDefault=1 解析默认公司
+    /// 演示种子 TaktUserCompanySeedData 为所有用户关联全部公司，默认登录公司为 <c>2300</c>
     /// </summary>
-    [SugarColumn(ColumnName = "is_default", ColumnDescription = "是否默认公司", ColumnDataType = "int", IsNullable = false, DefaultValue = "0")]
+    [SugarColumn(ColumnName = "is_default", ColumnDescription = "默认公司", ColumnDataType = "int", IsNullable = false, DefaultValue = "0")]
     public int IsDefault { get; set; } = 0;
 
     // ========================================

@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：frontend/src/types/logistics/manufacturing/planning
 // 文件名称：production-plan.d.ts
-// 创建时间：2026-06-23
+// 创建时间：2026-07-07
 // 创建人：Takt365(Auto Generated)
 // 功能描述：logistics/manufacturing/planning 模块类型定义（自动生成；类型名去 Takt 前缀与末尾 Dto，如 TaktCompanyDto → Company）
 // 
@@ -29,7 +29,7 @@ export interface ProductionPlan extends ApprovalDtoBase {
   productionPlanId: string;
 
   /**
-   * 工厂代码（关联 TaktPlant.PlantCode）
+   * 工厂代码（选项 TaktPlants/options，DictValue=PlantCode）
    */
   plantCode: string;
 
@@ -84,7 +84,7 @@ export interface ProductionPlan extends ApprovalDtoBase {
   planPeriodEnd: string;
 
   /**
-   * 计划人员工ID（关联 TaktEmployee，序列化为 string 以避免 Javascript 精度问题）
+   * 计划人员工ID（关联 TaktEmployee.Id，选项 TaktEmployees/options）
    */
   plannerId?: string;
 
@@ -94,7 +94,7 @@ export interface ProductionPlan extends ApprovalDtoBase {
   plannerName?: string;
 
   /**
-   * 计划人（人员代码）
+   * 计划人（关联 TaktEmployee.EmployeeNo，选项 TaktEmployees/options，DictValue=EmployeeNo）
    */
   planBy: string;
 
@@ -119,7 +119,7 @@ export interface ProductionPlan extends ApprovalDtoBase {
   convertedAmount: number;
 
   /**
-   * 计划状态（字典 sys_normal_disable_status；1=启用，0=禁用）
+   * 计划状态（字典 sys_normal_disable_status；1=启用，0=禁用，2=锁定）
    */
   planStatus: number;
 
@@ -159,7 +159,7 @@ export interface ProductionPlanQuery extends TaktPagedQuery {
   companyCode?: string;
 
   /**
-   * 工厂代码（关联 TaktPlant.PlantCode）
+   * 工厂代码（选项 TaktPlants/options，DictValue=PlantCode）
    */
   plantCode?: string;
 
@@ -219,12 +219,12 @@ export interface ProductionPlanQuery extends TaktPagedQuery {
   planPeriodEndEnd?: string;
 
   /**
-   * 计划人员工ID（关联 TaktEmployee，序列化为 string 以避免 Javascript 精度问题）
+   * 计划人员工ID（关联 TaktEmployee.Id，选项 TaktEmployees/options）
    */
   plannerId?: string;
 
   /**
-   * 计划人（人员代码）
+   * 计划人（关联 TaktEmployee.EmployeeNo，选项 TaktEmployees/options，DictValue=EmployeeNo）
    */
   planBy?: string;
 
@@ -249,7 +249,7 @@ export interface ProductionPlanQuery extends TaktPagedQuery {
   convertedAmount?: number;
 
   /**
-   * 计划状态（字典 sys_normal_disable_status；1=启用，0=禁用）
+   * 计划状态（字典 sys_normal_disable_status；1=启用，0=禁用，2=锁定）
    */
   planStatus?: number;
 
@@ -348,7 +348,7 @@ export interface ProductionPlanCreate {
   companyDefaultCulture: string;
 
   /**
-   * 工厂代码（关联 TaktPlant.PlantCode）
+   * 工厂代码（选项 TaktPlants/options，DictValue=PlantCode）
    */
   plantCode: string;
 
@@ -393,12 +393,12 @@ export interface ProductionPlanCreate {
   planPeriodEnd: string;
 
   /**
-   * 计划人员工ID（关联 TaktEmployee，序列化为 string 以避免 Javascript 精度问题）
+   * 计划人员工ID（关联 TaktEmployee.Id，选项 TaktEmployees/options）
    */
   plannerId?: string;
 
   /**
-   * 计划人（人员代码）
+   * 计划人（关联 TaktEmployee.EmployeeNo，选项 TaktEmployees/options，DictValue=EmployeeNo）
    */
   planBy: string;
 
@@ -423,7 +423,7 @@ export interface ProductionPlanCreate {
   convertedAmount: number;
 
   /**
-   * 计划状态（字典 sys_normal_disable_status；1=启用，0=禁用）
+   * 计划状态（字典 sys_normal_disable_status；1=启用，0=禁用，2=锁定）
    */
   planStatus: number;
 
@@ -482,7 +482,7 @@ export interface ProductionPlanStatus {
   productionPlanId: string;
 
   /**
-   * 计划状态（字典 sys_normal_disable_status；1=启用，0=禁用）
+   * 计划状态（字典 sys_normal_disable_status；1=启用，0=禁用，2=锁定）
    */
   planStatus: number;
 
@@ -506,7 +506,7 @@ export interface ProductionPlanTemplate {
   companyCode?: string;
 
   /**
-   * 工厂代码（关联 TaktPlant.PlantCode）
+   * 工厂代码（选项 TaktPlants/options，DictValue=PlantCode）
    */
   plantCode?: string;
 
@@ -551,12 +551,12 @@ export interface ProductionPlanTemplate {
   planPeriodEnd?: string;
 
   /**
-   * 计划人员工ID（关联 TaktEmployee，序列化为 string 以避免 Javascript 精度问题）
+   * 计划人员工ID（关联 TaktEmployee.Id，选项 TaktEmployees/options）
    */
   plannerId?: string;
 
   /**
-   * 计划人（人员代码）
+   * 计划人（关联 TaktEmployee.EmployeeNo，选项 TaktEmployees/options，DictValue=EmployeeNo）
    */
   planBy?: string;
 
@@ -581,7 +581,7 @@ export interface ProductionPlanTemplate {
   convertedAmount?: number;
 
   /**
-   * 计划状态（字典 sys_normal_disable_status；1=启用，0=禁用）
+   * 计划状态（字典 sys_normal_disable_status；1=启用，0=禁用，2=锁定）
    */
   planStatus?: number;
 
@@ -635,7 +635,7 @@ export interface ProductionPlanImport {
   companyDefaultCulture?: string;
 
   /**
-   * 工厂代码（关联 TaktPlant.PlantCode）
+   * 工厂代码（选项 TaktPlants/options，DictValue=PlantCode）
    */
   plantCode?: string;
 
@@ -680,12 +680,12 @@ export interface ProductionPlanImport {
   planPeriodEnd?: string;
 
   /**
-   * 计划人员工ID（关联 TaktEmployee，序列化为 string 以避免 Javascript 精度问题）
+   * 计划人员工ID（关联 TaktEmployee.Id，选项 TaktEmployees/options）
    */
   plannerId?: string;
 
   /**
-   * 计划人（人员代码）
+   * 计划人（关联 TaktEmployee.EmployeeNo，选项 TaktEmployees/options，DictValue=EmployeeNo）
    */
   planBy?: string;
 
@@ -710,7 +710,7 @@ export interface ProductionPlanImport {
   convertedAmount?: number;
 
   /**
-   * 计划状态（字典 sys_normal_disable_status；1=启用，0=禁用）
+   * 计划状态（字典 sys_normal_disable_status；1=启用，0=禁用，2=锁定）
    */
   planStatus?: number;
 
@@ -754,7 +754,7 @@ export interface ProductionPlanExport {
   productionPlanId: string;
 
   /**
-   * 工厂代码（关联 TaktPlant.PlantCode）
+   * 工厂代码（选项 TaktPlants/options，DictValue=PlantCode）
    */
   plantCode: string;
 
@@ -799,12 +799,12 @@ export interface ProductionPlanExport {
   planPeriodEnd: string;
 
   /**
-   * 计划人员工ID（关联 TaktEmployee，序列化为 string 以避免 Javascript 精度问题）
+   * 计划人员工ID（关联 TaktEmployee.Id，选项 TaktEmployees/options）
    */
   plannerId?: string;
 
   /**
-   * 计划人（人员代码）
+   * 计划人（关联 TaktEmployee.EmployeeNo，选项 TaktEmployees/options，DictValue=EmployeeNo）
    */
   planBy: string;
 
@@ -829,7 +829,7 @@ export interface ProductionPlanExport {
   convertedAmount: number;
 
   /**
-   * 计划状态（字典 sys_normal_disable_status；1=启用，0=禁用）
+   * 计划状态（字典 sys_normal_disable_status；1=启用，0=禁用，2=锁定）
    */
   planStatus: number;
 

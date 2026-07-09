@@ -125,13 +125,6 @@ public class TaktAccountTitleDto : TaktCompanyDtoBase
     /// 科目状态（字典 sys_normal_disable_status；1=启用，0=禁用）
     /// </summary>
     public int AccountTitleStatus { get; set; } = 0;
-
-    /// <summary>
-    /// 会计科目变更记录列表（外键在子表 TaktAccountTitleChangeLog.AccountTitleId）
-    /// （子表：TaktAccountTitleChangeLog）
-    /// </summary>
-    public List<TaktAccountTitleChangeLogDto>? ChangeLogs { get; set; }
-
 }
 
 // ========================================
@@ -398,14 +391,7 @@ public class TaktAccountTitleCreateDto
     /// <summary>
     /// 科目状态（字典 sys_normal_disable_status；1=启用，0=禁用）
     /// </summary>
-    public int AccountTitleStatus { get; set; } = 0;
-
-    /// <summary>
-    /// 会计科目变更记录列表（外键在子表 TaktAccountTitleChangeLog.AccountTitleId）（子表，级联保存）
-    /// </summary>
-    public List<TaktAccountTitleChangeLogCreateDto>? ChangeLogs { get; set; }
-
-    /// <summary>
+    public int AccountTitleStatus { get; set; } = 0;    /// <summary>
     /// 扩展字段JSON
     /// </summary>
     public string? ExtField { get; set; }
@@ -583,14 +569,7 @@ public class TaktAccountTitleTemplateDto
     /// <summary>
     /// 科目状态（字典 sys_normal_disable_status；1=启用，0=禁用）
     /// </summary>
-    public int? AccountTitleStatus { get; set; }
-
-    /// <summary>
-    /// 会计科目变更记录列表（外键在子表 TaktAccountTitleChangeLog.AccountTitleId）（子表，级联保存）
-    /// </summary>
-    public List<TaktAccountTitleChangeLogCreateDto>? ChangeLogs { get; set; }
-
-    /// <summary>
+    public int? AccountTitleStatus { get; set; }    /// <summary>
     /// 扩展字段JSON
     /// </summary>
     public string? ExtField { get; set; }
@@ -701,14 +680,7 @@ public class TaktAccountTitleImportDto
     /// <summary>
     /// 科目状态（字典 sys_normal_disable_status；1=启用，0=禁用）
     /// </summary>
-    public int? AccountTitleStatus { get; set; }
-
-    /// <summary>
-    /// 会计科目变更记录列表（外键在子表 TaktAccountTitleChangeLog.AccountTitleId）（子表，级联保存）
-    /// </summary>
-    public List<TaktAccountTitleChangeLogCreateDto>? ChangeLogs { get; set; }
-
-    /// <summary>
+    public int? AccountTitleStatus { get; set; }    /// <summary>
     /// 扩展字段JSON
     /// </summary>
     public string? ExtField { get; set; }

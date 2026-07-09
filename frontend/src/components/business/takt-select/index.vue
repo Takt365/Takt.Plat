@@ -31,7 +31,7 @@
   <!-- 其他情况使用 Select 下拉选择框 -->
   <a-select
     v-else
-    :value="modelValue"
+    :value="effectiveModelValue"
     :options="options"
     :loading="loading"
     :placeholder="placeholder ?? t('common.page.form.placeholder.selectonly')"
@@ -40,7 +40,8 @@
     :mode="multiple ? 'multiple' : undefined"
     :size="size"
     :show-search="showSearch"
-    :filter-option="filterOption"
+    :filter-option="effectiveFilterOption"
+    :option-filter-prop="remoteSearch ? undefined : 'label'"
     :virtual="shouldUseVirtual"
     :list-height="listHeight"
     v-bind="{
@@ -102,6 +103,14 @@ interface Props {
   maxTagCount?: number | 'responsive' | undefined
   /** 是否开启虚拟滚动(大数据量时建议开启,可提升渲染性能)。如果不指定,当选项数量超过 100 条时会自动开启 */
   virtual?: boolean
+  /** API 请求附加查询参数（与 apiUrl 联用，如 plantCode、keyword） */
+  apiParams?: Record<string, string | number | boolean | undefined | null> | undefined
+  /** 是否远程搜索（apiUrl 模式下输入关键字重新请求后端，关闭客户端 filter） */
+  remoteSearch?: boolean
+  /** 远程搜索时写入请求的查询参数字段名，默认 keyword */
+  searchParamKey?: string
+  /** 远程搜索防抖毫秒，默认 300 */
+  searchDebounceMs?: number
   /** 虚拟滚动时列表高度(单位:px),默认 256px */
   listHeight?: number
   /** 字段映射配置(用于自定义 label 和 value 字段名) */
@@ -125,6 +134,10 @@ const props = withDefaults(defineProps<Props>(), {
   filterOption: true,
   maxTagCount: undefined,
   virtual: false,
+  apiParams: undefined,
+  remoteSearch: false,
+  searchParamKey: 'keyword',
+  searchDebounceMs: 300,
   listHeight: 256,
   fieldNames: () => ({
     label: 'label',
@@ -132,12 +145,37 @@ const props = withDefaults(defineProps<Props>(), {
   })
 })
 
-const filterOption = computed(() => {
-  if (typeof props.filterOption !== 'function') {
-    return props.filterOption
+/**
+ * 默认客户端过滤：按 label / value / dictLabel / dictValue 模糊匹配
+ * @param input 搜索输入
+ * @param option 选项
+ * @returns 是否保留
+ */
+function defaultFilterOption(input: string, option?: DefaultOptionType): boolean {
+  const needle = (input || '').trim().toLowerCase()
+  if (!needle) {
+    return true
   }
-  const customFilter = props.filterOption
-  return (input: string, option?: DefaultOptionType) => customFilter(input, option)
+  const opt = option as SelectOptionLike | undefined
+  const nested = (option as { option?: SelectOptionLike } | undefined)?.option
+  const label = String(opt?.label ?? nested?.label ?? opt?.dictLabel ?? nested?.dictLabel ?? '')
+  const value = String(opt?.value ?? nested?.value ?? opt?.dictValue ?? nested?.dictValue ?? '')
+  const extLabel = String(opt?.extLabel ?? nested?.extLabel ?? '')
+  return `${label} ${value} ${extLabel}`.toLowerCase().includes(needle)
+}
+
+const effectiveFilterOption = computed(() => {
+  if (props.remoteSearch && props.apiUrl) {
+    return false
+  }
+  if (typeof props.filterOption === 'function') {
+    const customFilter = props.filterOption
+    return (input: string, option?: DefaultOptionType) => customFilter(input, option)
+  }
+  if (props.filterOption === true) {
+    return defaultFilterOption
+  }
+  return props.filterOption
 })
 
 const emit = defineEmits<{
@@ -148,6 +186,8 @@ const emit = defineEmits<{
 
 const loading = ref(false)
 const rawData = ref<TaktSelectOption[]>([])
+const remoteSearchKeyword = ref('')
+let remoteSearchTimer: ReturnType<typeof setTimeout> | undefined
 const dictDataStore = useDictDataStore()
 
 /**
@@ -252,6 +292,59 @@ function normalizeValue(value: unknown): string | number {
   return ''
 }
 
+/**
+ * 多选模式绑定值规范化：未选/空/无效 DictValue 视为 undefined，并与 options.value 对齐
+ * @param modelValue 绑定值
+ * @param optionList 当前下拉选项
+ * @returns a-select 可识别的多选值；未选时为 undefined
+ */
+function normalizeMultipleSelectValue(
+  modelValue: string | number | (string | number)[] | undefined | null,
+  optionList: ReadonlyArray<{ value?: string | number }>,
+): (string | number)[] | undefined {
+  if (modelValue == null || modelValue === '') {
+    return undefined
+  }
+  let candidates: (string | number)[]
+  if (Array.isArray(modelValue)) {
+    candidates = [...modelValue]
+  } else if (typeof modelValue === 'number' && modelValue === 0) {
+    return undefined
+  } else if (modelValue === '0') {
+    return undefined
+  } else {
+    candidates = [modelValue]
+  }
+  const filtered = candidates.filter((item) => {
+    if (item == null) {
+      return false
+    }
+    const text = String(item).trim()
+    return text !== '' && text !== '0'
+  })
+  if (filtered.length === 0) {
+    return undefined
+  }
+  if (optionList.length === 0) {
+    return undefined
+  }
+  const aligned = filtered
+    .map((item) => optionList.find((opt) => String(opt.value) === String(item))?.value)
+    .filter((item): item is string | number => item != null && item !== '')
+  return aligned.length > 0 ? aligned : undefined
+}
+
+/** a-select 实际绑定值（多选时剔除无效项，避免空白 tag + ×） */
+const effectiveModelValue = computed(() => {
+  if (!props.multiple) {
+    return props.modelValue
+  }
+  return normalizeMultipleSelectValue(
+    props.modelValue,
+    options.value as ReadonlyArray<{ value?: string | number }>,
+  )
+})
+
 // 将后端数据转换为 Select 组件需要的格式
 const options = computed(() => {
   const expectedValueType = props.apiUrl ? 'string' as const : inferValueType(props.modelValue)
@@ -354,7 +447,7 @@ const options = computed(() => {
   })
 })
 
-// 根据数据量自动决定是否开启虚拟滚动（超过 100 条自动开启）
+// 根据数据量自动决定是否开启虚拟滚动（超过 100 条或显式 virtual 时开启）
 const shouldUseVirtual = computed(() => {
   return props.virtual === true || options.value.length > 100
 })
@@ -424,12 +517,27 @@ const loadData = async () => {
   if (props.apiUrl) {
     try {
       loading.value = true
+      const params: Record<string, string | number | boolean> = {}
+      if (props.apiParams) {
+        for (const [key, val] of Object.entries(props.apiParams)) {
+          if (val !== undefined && val !== null && val !== '') {
+            params[key] = val
+          }
+        }
+      }
+      if (props.remoteSearch) {
+        const keyword = remoteSearchKeyword.value.trim()
+        if (keyword) {
+          params[props.searchParamKey] = keyword
+        }
+      }
       const data = await request<TaktSelectOption[]>({
         url: props.apiUrl,
-        method: 'get'
+        method: 'get',
+        params: Object.keys(params).length > 0 ? params : undefined,
       })
       rawData.value = Array.isArray(data) ? data : []
-      if (rawData.value.length > MAX_SELECT_OPTIONS) {
+      if (!props.remoteSearch && rawData.value.length > MAX_SELECT_OPTIONS) {
         selectLogger.warn('选项数超过上限，已截断', {
           action: 'loadData',
           apiUrl: props.apiUrl,
@@ -446,7 +554,7 @@ const loadData = async () => {
     }
     return
   }
-  
+
   // 如果 dictType、apiUrl 和 options 都未提供，才发出警告
   selectLogger.warn('dictType、apiUrl 和 options 都未提供，无法加载数据', { action: 'loadData' })
 }
@@ -500,21 +608,48 @@ const handleChange = (value: SelectValue, option: DefaultOptionType | DefaultOpt
 // 处理搜索
 const handleSearch = (value: string) => {
   emit('search', value)
+  if (!props.remoteSearch || !props.apiUrl) {
+    return
+  }
+  if (remoteSearchTimer) {
+    clearTimeout(remoteSearchTimer)
+  }
+  remoteSearchTimer = setTimeout(() => {
+    remoteSearchKeyword.value = value
+    void loadData()
+  }, props.searchDebounceMs)
 }
 
-// 监听 dictType、API URL 和 options 变化
-watch(() => [props.dictType, props.apiUrl, props.options], () => {
+// 监听 dictType、API URL、options 与 apiParams 变化
+watch(() => [props.dictType, props.apiUrl, props.options, props.apiParams], () => {
   if (props.options?.length) {
     return
   }
   if (props.dictType || props.apiUrl) {
     void loadData()
   }
+}, { deep: true })
+
+watch(() => props.modelValue, (val) => {
+  if (!props.remoteSearch || !props.apiUrl || val == null || val === '') {
+    return
+  }
+  const text = String(Array.isArray(val) ? val[0] : val).trim()
+  if (!text || remoteSearchKeyword.value === text) {
+    return
+  }
+  remoteSearchKeyword.value = text
+  void loadData()
 })
 
 onMounted(() => {
   // 使用 nextTick 确保 props 已经完全初始化（特别是在条件渲染的场景下）
   nextTick(() => {
+    if (props.remoteSearch && props.apiUrl && props.modelValue != null && props.modelValue !== '') {
+      remoteSearchKeyword.value = String(
+        Array.isArray(props.modelValue) ? props.modelValue[0] : props.modelValue,
+      ).trim()
+    }
     if (props.dictType || (props.apiUrl && !props.options?.length)) {
       void loadData()
     }

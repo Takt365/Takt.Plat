@@ -2,61 +2,431 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Application.Services.Logistics.Manufacturing.EngineeringChange
 // 文件名称：TaktEcKoubaiService.cs
-// 创建时间：2026-06-22
+// 创建时间：2026-07-09
 // 创建人：Takt365(Cursor AI)
-// 功能描述：设变采购部门视图应用服务（DeptCode=Mp）
-//
+// 功能描述：设变采购执行应用服务实现
+// 
 // 版权信息：Copyright (c) 2026 Takt  All rights reserved.
 // 免责声明：此软件使用 MIT License，作者不承担任何使用风险。
 // ========================================
 
+using System.Linq.Expressions;
+using Mapster;
+using SqlSugar;
 using Takt.Application.Dtos.Logistics.Manufacturing.EngineeringChange;
 using Takt.Domain.Entities.Logistics.Manufacturing.EngineeringChange;
 using Takt.Domain.Interfaces;
 using Takt.Domain.Repositories;
-using Takt.Shared.Constants;
+using Takt.Shared.Exceptions;
+using Takt.Shared.Helpers;
 using Takt.Shared.Models;
+using Takt.Shared.Options;
 
 namespace Takt.Application.Services.Logistics.Manufacturing.EngineeringChange;
 
 /// <summary>
-/// 设变采购部门视图应用服务
+/// 设变采购执行应用服务
 /// </summary>
-public class TaktEcKoubaiService : TaktEcDeptViewServiceBase, ITaktEcKoubaiService
+public class TaktEcKoubaiService : TaktServiceBase, ITaktEcKoubaiService
 {
+    private readonly ITaktCompanyRepository<TaktEcKoubai> _ecKoubaiRepository;
+    private readonly ITaktLineNumberGenerator _lineNumberGenerator;
+    private readonly ITaktUniqueValidator _uniqueValidator;
+
     /// <summary>
     /// 构造函数
     /// </summary>
+    /// <param name="ecKoubaiRepository">设变采购执行仓储</param>
+    /// <param name="lineNumberGenerator">明细行号生成器</param>
+    /// <param name="uniqueValidator">唯一性验证器</param>
+    /// <param name="userContext">用户上下文</param>
+    /// <param name="localizationService">本地化服务</param>
     public TaktEcKoubaiService(
-        ITaktCompanyRepository<TaktEcDetail> ecDetailRepository,
-        TaktEcExecPersistence ecExecPersistence,
+        ITaktCompanyRepository<TaktEcKoubai> ecKoubaiRepository,
         ITaktLineNumberGenerator lineNumberGenerator,
+        ITaktUniqueValidator uniqueValidator,
         ITaktUserContext? userContext = null,
         ITaktLocalizationService? localizationService = null)
-        : base(TaktEcDeptCodes.Mp, ecDetailRepository, ecExecPersistence, lineNumberGenerator, userContext, localizationService)
+        : base(userContext, localizationService)
     {
+        _ecKoubaiRepository = ecKoubaiRepository;
+        _lineNumberGenerator = lineNumberGenerator;
+        _uniqueValidator = uniqueValidator;
     }
 
-    /// <summary>获取采购部门列表（分页）</summary>
-    /// <param name="queryDto">查询 DTO</param>
+    /// <summary>
+    /// 获取设变采购执行列表（分页）
+    /// </summary>
+    /// <param name="queryDto">查询DTO</param>
     /// <returns>分页结果</returns>
-    public Task<TaktPagedResult<TaktEcDeptViewDto>> GetEcKoubaiListAsync(TaktEcDeptViewQueryDto queryDto) => GetDeptViewListAsync(queryDto);
+    public async Task<TaktPagedResult<TaktEcKoubaiDto>> GetEcKoubaiListAsync(TaktEcKoubaiQueryDto queryDto)
+    {
+        var predicate = QueryExpression(queryDto);
+        var (data, total) = await _ecKoubaiRepository.GetPagedAsync(
+            queryDto.PageIndex,
+            queryDto.PageSize,
+            predicate);
+        return TaktPagedResult<TaktEcKoubaiDto>.Create(
+            data.Adapt<List<TaktEcKoubaiDto>>(),
+            total,
+            queryDto.PageIndex,
+            queryDto.PageSize);
+    }
 
-    /// <summary>根据设变明细 ID 获取采购部门行</summary>
-    /// <param name="ecDetailId">设变明细 ID</param>
-    /// <returns>部门视图 DTO</returns>
-    public Task<TaktEcDeptViewDto?> GetEcKoubaiByEcDetailIdAsync(long ecDetailId) => GetDeptViewByEcDetailIdAsync(ecDetailId);
+    /// <summary>
+    /// 根据ID获取设变采购执行
+    /// </summary>
+    /// <param name="id">设变采购执行ID</param>
+    /// <returns>DTO</returns>
+    public async Task<TaktEcKoubaiDto?> GetEcKoubaiByIdAsync(long id)
+    {
+        var entity = await _ecKoubaiRepository.GetByIdAsync(id);
+        if (entity == null || entity.TenantCode != CurrentTenantCode || entity.CompanyCode != CurrentCompanyCode)
+        {
+            return null;
+        }
+        return entity.Adapt<TaktEcKoubaiDto>();
+    }
 
-    /// <summary>更新采购部门</summary>
-    /// <param name="ecDetailId">设变明细 ID</param>
-    /// <param name="dto">更新 DTO</param>
-    /// <returns>部门视图 DTO</returns>
-    public Task<TaktEcDeptViewDto> UpdateEcKoubaiAsync(long ecDetailId, TaktEcDeptViewUpdateDto dto) => UpdateDeptViewAsync(ecDetailId, dto);
+    /// <summary>
+    /// 获取设变采购执行选项列表
+    /// </summary>
+    /// <returns>下拉选项</returns>
+    public async Task<List<TaktSelectOption>> GetEcKoubaiOptionsAsync()
+    {
+        EnsureThreeLayerContext();
+        var list = await _ecKoubaiRepository.GetListAsync(
+            x => x.TenantCode == CurrentTenantCode && x.CompanyCode == CurrentCompanyCode && x.IsObsolete == 0,
+            x => x.DeptCode ?? string.Empty,
+            false);
+        return list.Select(e => new TaktSelectOption
+        {
+            DictValue = e.Id,
+            DictLabel = e.DeptCode ?? e.Id.ToString(),
+        }).ToList();
+    }
 
-    /// <summary>导出采购部门</summary>
-    /// <param name="query">查询条件</param>
-    /// <param name="sheetName">工作表名</param>
+    /// <summary>
+    /// 创建设变采购执行
+    /// </summary>
+    /// <param name="dto">创建DTO</param>
+    /// <returns>DTO</returns>
+    public async Task<TaktEcKoubaiDto> CreateEcKoubaiAsync(TaktEcKoubaiCreateDto dto)
+    {
+        var entity = dto.Adapt<TaktEcKoubai>();
+        entity.IsObsolete = 0;
+        var isUnique_ix_takt_logistics_manufacturing_ec_koubai_unique = await _uniqueValidator.IsUniqueAsync(
+            _ecKoubaiRepository,
+            x => x.EcnDetailId == entity.EcnDetailId);
+        if (!isUnique_ix_takt_logistics_manufacturing_ec_koubai_unique)
+        {
+            throw new TaktBusinessException("设变采购执行的EcnDetailId已存在");
+        }
+        if (entity.LineNumber <= 0)
+        {
+            var maxLine = await _ecKoubaiRepository.GetMaxIntAsync(
+                x => x.TenantCode == CurrentTenantCode && x.CompanyCode == CurrentCompanyCode && x.EcnDetailId == entity.EcnDetailId,
+                x => x.LineNumber);
+            var businessCode = entity.EcnDetailId.ToString();
+            entity.LineNumber = _lineNumberGenerator.GenerateNext(businessCode, maxLine);
+        }
+        entity = await _ecKoubaiRepository.CreateAsync(entity);
+        return await GetEcKoubaiByIdAsync(entity.Id) ?? entity.Adapt<TaktEcKoubaiDto>();
+    }
+
+    /// <summary>
+    /// 更新设变采购执行
+    /// </summary>
+    /// <param name="id">设变采购执行ID</param>
+    /// <param name="dto">更新DTO</param>
+    /// <returns>DTO</returns>
+    public async Task<TaktEcKoubaiDto> UpdateEcKoubaiAsync(long id, TaktEcKoubaiUpdateDto dto)
+    {
+        var entity = await _ecKoubaiRepository.GetByIdAsync(id);
+        if (entity == null)
+        {
+            throw new TaktBusinessException("设变采购执行不存在");
+        }
+        dto.Adapt(entity);
+        var isUnique_ix_takt_logistics_manufacturing_ec_koubai_unique = await _uniqueValidator.IsUniqueAsync(
+            _ecKoubaiRepository,
+            x => x.EcnDetailId == entity.EcnDetailId,
+            id);
+        if (!isUnique_ix_takt_logistics_manufacturing_ec_koubai_unique)
+        {
+            throw new TaktBusinessException("设变采购执行的EcnDetailId已存在");
+        }
+        await _ecKoubaiRepository.UpdateAsync(entity);
+        return await GetEcKoubaiByIdAsync(id) ?? throw new TaktBusinessException("设变采购执行不存在");
+    }
+
+    /// <summary>
+    /// 删除设变采购执行
+    /// </summary>
+    /// <param name="id">设变采购执行ID</param>
+    /// <returns>任务</returns>
+    public async Task DeleteEcKoubaiByIdAsync(long id)
+    {
+        var entity = await _ecKoubaiRepository.GetByIdAsync(id);
+        if (entity == null)
+        {
+            throw new TaktBusinessException("设变采购执行不存在或已删除");
+        }
+        if (entity.TenantCode != CurrentTenantCode || entity.CompanyCode != CurrentCompanyCode)
+        {
+            throw new TaktBusinessException("设变采购执行不存在或已删除");
+        }
+        if (entity.IsObsolete == 1)
+        {
+            throw new TaktBusinessException("设变采购执行已作废");
+        }
+        entity.IsObsolete = 1;
+        await _ecKoubaiRepository.UpdateAsync(entity);
+    }
+
+    /// <summary>
+    /// 批量删除设变采购执行
+    /// </summary>
+    /// <param name="ids">ID列表</param>
+    /// <returns>任务</returns>
+    public async Task DeleteEcKoubaiBatchAsync(IEnumerable<long> ids)
+    {
+        var idList = ids?.Distinct().ToList() ?? new List<long>();
+        if (idList.Count == 0)
+        {
+            return;
+        }
+        foreach (var id in idList)
+        {
+            await DeleteEcKoubaiByIdAsync(id);
+        }
+    }
+
+    /// <summary>
+    /// 更新设变采购执行作废状态
+    /// </summary>
+    /// <param name="dto">作废DTO</param>
+    /// <returns>DTO</returns>
+    public async Task<TaktEcKoubaiDto> UpdateEcKoubaiObsoleteAsync(TaktEcKoubaiObsoleteDto dto)
+    {
+        var entity = await _ecKoubaiRepository.GetByIdAsync(dto.EcKoubaiId);
+        if (entity == null)
+        {
+            throw new TaktBusinessException("设变采购执行不存在");
+        }
+        if (entity.TenantCode != CurrentTenantCode || entity.CompanyCode != CurrentCompanyCode)
+        {
+            throw new TaktBusinessException("设变采购执行不存在");
+        }
+        entity.IsObsolete = dto.IsObsolete;
+        await _ecKoubaiRepository.UpdateAsync(entity);
+        return await GetEcKoubaiByIdAsync(dto.EcKoubaiId) ?? throw new TaktBusinessException("设变采购执行不存在");
+    }
+
+    /// <summary>
+    /// 获取导入模板
+    /// </summary>
+    /// <param name="sheetName">工作表名称</param>
     /// <param name="fileName">文件名</param>
     /// <returns>Excel 文件</returns>
-    public Task<(string fileName, byte[] fileContent)> ExportEcKoubaiAsync(TaktEcDeptViewQueryDto? query = null, string? sheetName = null, string? fileName = null) => ExportDeptViewAsync(query, sheetName, fileName);
+    public async Task<(string fileName, byte[] content)> GetEcKoubaiTemplateAsync(string? sheetName = null, string? fileName = null)
+    {
+        return await TaktExcelHelper.GenerateTemplateAsync<TaktEcKoubaiTemplateDto>(
+            sheetName ?? "设变采购执行导入模板",
+            fileName ?? "设变采购执行导入模板.xlsx");
+    }
+
+    /// <summary>
+    /// 导入设变采购执行
+    /// </summary>
+    /// <param name="fileStream">Excel 文件流</param>
+    /// <param name="sheetName">工作表名称</param>
+    /// <returns>导入结果</returns>
+    public async Task<(int success, int fail, List<string> errors)> ImportEcKoubaiAsync(Stream fileStream, string? sheetName = null)
+    {
+        var errors = new List<string>();
+        var success = 0;
+        var fail = 0;
+        var rows = await TaktExcelHelper.ImportAsync<TaktEcKoubaiImportDto>(fileStream, sheetName ?? "设变采购执行导入模板");
+        if (rows == null || rows.Count == 0)
+        {
+            errors.Add("Excel文件中没有数据");
+            return (0, 0, errors);
+        }
+        var importSeenKeys = new HashSet<string>(StringComparer.Ordinal);
+        for (var i = 0; i < rows.Count; i++)
+        {
+            try
+            {
+                var entity = rows[i].Adapt<TaktEcKoubai>();
+                var importKey = $"{entity.EcnDetailId}";
+                if (!importSeenKeys.Add(importKey))
+                {
+                    throw new TaktBusinessException("与Excel中其他行重复（EcnDetailId）");
+                }
+                var isUnique_ix_takt_logistics_manufacturing_ec_koubai_unique = await _uniqueValidator.IsUniqueAsync(
+                    _ecKoubaiRepository,
+                    x => x.EcnDetailId == entity.EcnDetailId);
+                if (!isUnique_ix_takt_logistics_manufacturing_ec_koubai_unique)
+                {
+                    throw new TaktBusinessException("设变采购执行的EcnDetailId已存在");
+                }
+                if (entity.LineNumber <= 0)
+                {
+                    var maxLine = await _ecKoubaiRepository.GetMaxIntAsync(
+                        x => x.TenantCode == CurrentTenantCode && x.CompanyCode == CurrentCompanyCode && x.EcnDetailId == entity.EcnDetailId,
+                        x => x.LineNumber);
+                    var businessCode = entity.EcnDetailId.ToString();
+                    entity.LineNumber = _lineNumberGenerator.GenerateNext(businessCode, maxLine);
+                }
+                await _ecKoubaiRepository.CreateAsync(entity);
+                success += 1;
+            }
+            catch (Exception ex)
+            {
+                fail += 1;
+                errors.Add($"第{i + 2}行: {ex.Message}");
+            }
+        }
+        return (success, fail, errors);
+    }
+
+    /// <summary>
+    /// 导出设变采购执行
+    /// </summary>
+    /// <param name="query">查询条件</param>
+    /// <param name="sheetName">工作表名称</param>
+    /// <param name="fileName">文件名</param>
+    /// <returns>Excel 文件</returns>
+    public async Task<(string fileName, byte[] fileContent)> ExportEcKoubaiAsync(TaktEcKoubaiQueryDto? query = null, string? sheetName = null, string? fileName = null)
+    {
+        var predicate = QueryExpression(query ?? new TaktEcKoubaiQueryDto());
+        var list = await _ecKoubaiRepository.GetListAsync(predicate);
+        if (list == null || list.Count == 0)
+        {
+            return await TaktExcelHelper.ExportAsync(
+                new List<TaktEcKoubaiExportDto>(),
+                sheetName ?? "设变采购执行数据",
+                fileName ?? "设变采购执行导出.xlsx");
+        }
+        var exportData = list.Adapt<List<TaktEcKoubaiExportDto>>();
+        return await TaktExcelHelper.ExportAsync(
+            exportData,
+            sheetName ?? "设变采购执行数据",
+            fileName ?? "设变采购执行导出.xlsx");
+    }
+
+    // ========================================
+    // 查询表达式
+    // ========================================
+
+    /// <summary>
+    /// 构建设变采购执行查询表达式
+    /// </summary>
+    /// <param name="queryDto">查询DTO</param>
+    /// <returns>查询表达式</returns>
+    private static Expression<Func<TaktEcKoubai, bool>> QueryExpression(TaktEcKoubaiQueryDto? queryDto)
+    {
+        var exp = Expressionable.Create<TaktEcKoubai>();
+
+        if (queryDto?.IsObsolete.HasValue == true)
+        {
+            exp = exp.And(x => x.IsObsolete == queryDto.IsObsolete);
+        }
+        else
+        {
+            exp = exp.And(x => x.IsObsolete == 0);
+        }
+
+        if (!string.IsNullOrEmpty(queryDto?.KeyWords))
+        {
+            var keywords = queryDto.KeyWords;
+            exp = exp.And(x =>
+                SqlFunc.ToString(x.EcnDetailId).Contains(keywords)
+                || (x.EcNo != null && x.EcNo.Contains(keywords))
+                || SqlFunc.ToString(x.LineNumber).Contains(keywords)
+                || (x.DeptCode != null && x.DeptCode.Contains(keywords))
+                || SqlFunc.ToString(x.IsImplemented).Contains(keywords)
+                || (x.ExecContent != null && x.ExecContent.Contains(keywords))
+                || (x.Supplier != null && x.Supplier.Contains(keywords))
+                || (x.PurchaseOrderNo != null && x.PurchaseOrderNo.Contains(keywords))
+                || (x.ExtField != null && x.ExtField.Contains(keywords))
+                || (x.Remark != null && x.Remark.Contains(keywords))
+                || SqlFunc.ToString(x.PurchaseOrderIssueDate).Contains(keywords)
+                || SqlFunc.ToString(x.CreatedAt).Contains(keywords)
+            );
+        }
+
+        if (queryDto?.EcnDetailId.HasValue == true)
+        {
+            exp = exp.And(x => x.EcnDetailId == queryDto.EcnDetailId);
+        }
+
+        if (!string.IsNullOrEmpty(queryDto?.EcNo))
+        {
+            exp = exp.And(x => x.EcNo != null && x.EcNo.Contains(queryDto.EcNo));
+        }
+
+        if (queryDto?.LineNumber.HasValue == true)
+        {
+            exp = exp.And(x => x.LineNumber == queryDto.LineNumber);
+        }
+
+        if (!string.IsNullOrEmpty(queryDto?.DeptCode))
+        {
+            exp = exp.And(x => x.DeptCode != null && x.DeptCode.Contains(queryDto.DeptCode));
+        }
+
+        if (queryDto?.IsImplemented.HasValue == true)
+        {
+            exp = exp.And(x => x.IsImplemented == queryDto.IsImplemented);
+        }
+
+        if (!string.IsNullOrEmpty(queryDto?.ExecContent))
+        {
+            exp = exp.And(x => x.ExecContent != null && x.ExecContent.Contains(queryDto.ExecContent));
+        }
+
+        if (!string.IsNullOrEmpty(queryDto?.Supplier))
+        {
+            exp = exp.And(x => x.Supplier != null && x.Supplier.Contains(queryDto.Supplier));
+        }
+
+        if (!string.IsNullOrEmpty(queryDto?.PurchaseOrderNo))
+        {
+            exp = exp.And(x => x.PurchaseOrderNo != null && x.PurchaseOrderNo.Contains(queryDto.PurchaseOrderNo));
+        }
+
+        if (!string.IsNullOrEmpty(queryDto?.ExtField))
+        {
+            exp = exp.And(x => x.ExtField != null && x.ExtField.Contains(queryDto.ExtField));
+        }
+
+        if (!string.IsNullOrEmpty(queryDto?.Remark))
+        {
+            exp = exp.And(x => x.Remark != null && x.Remark.Contains(queryDto.Remark));
+        }
+
+        if (queryDto?.PurchaseOrderIssueDateStart.HasValue == true)
+        {
+            exp = exp.And(x => x.PurchaseOrderIssueDate >= queryDto.PurchaseOrderIssueDateStart);
+        }
+
+        if (queryDto?.PurchaseOrderIssueDateEnd.HasValue == true)
+        {
+            exp = exp.And(x => x.PurchaseOrderIssueDate <= queryDto.PurchaseOrderIssueDateEnd);
+        }
+
+        if (queryDto?.CreatedAtStart.HasValue == true)
+        {
+            exp = exp.And(x => x.CreatedAt >= queryDto.CreatedAtStart);
+        }
+
+        if (queryDto?.CreatedAtEnd.HasValue == true)
+        {
+            exp = exp.And(x => x.CreatedAt <= queryDto.CreatedAtEnd);
+        }
+
+        return exp.ToExpression();
+    }
 }

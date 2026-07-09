@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Application.Dtos.Logistics.Sales
 // 文件名称：TaktSalesInvoiceDtos.cs
-// 创建时间：2026-07-01
+// 创建时间：2026-07-09
 // 创建人：Takt365(Auto Generated)
 // 功能描述：SalesInvoice 模块 DTO（由 generate-dtos-from-entity.cjs 根据 TaktSalesInvoice 生成，请按需审阅）
 // 
@@ -191,7 +191,7 @@ public class TaktSalesInvoiceCreateDto
     /// <summary>
     /// 销售发票明细列表（主子表关系，一张发票可有多个明细行）（子表，级联保存）
     /// </summary>
-    public List<TaktSalesInvoiceItemCreateDto>? Items { get; set; }
+    public List<TaktSalesInvoiceItemUpdateDto>? Items { get; set; }
 
     /// <summary>
     /// 扩展字段JSON

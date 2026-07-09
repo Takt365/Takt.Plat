@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：frontend/src/types/logistics/procurement
 // 文件名称：purchase-price-item.d.ts
-// 创建时间：2026-06-24
+// 创建时间：2026-07-09
 // 创建人：Takt365(Auto Generated)
 // 功能描述：logistics/procurement 模块类型定义（自动生成；类型名去 Takt 前缀与末尾 Dto，如 TaktCompanyDto → Company）
 // 
@@ -29,12 +29,12 @@ export interface PurchasePriceItem extends CompanyDtoBase {
   purchasePriceItemId: string;
 
   /**
-   * 采购价格ID（主子表关系，序列化为string以避免Javascript精度问题）
+   * 采购价格 ID（关联 TaktPurchasePrice.Id，选项 TaktPurchasePrices/options）
    */
   purchasePriceId: string;
 
   /**
-   * 采购价格名称（填充字段）
+   * 采购价格 名称（填充字段）
    */
   purchasePriceName?: string;
 
@@ -69,7 +69,12 @@ export interface PurchasePriceItem extends CompanyDtoBase {
   purchaseUnit: string;
 
   /**
-   * 采购价格（精确到分，存储为整数，单位为分）
+   * 价格单位（字典 logistics_price_unit_param：1/100/1000/10000；默认 1000）
+   */
+  purchasePerUnit: number;
+
+  /**
+   * 采购价格（decimal(18,5)）
    */
   purchasePrice: number;
 
@@ -87,6 +92,11 @@ export interface PurchasePriceItem extends CompanyDtoBase {
    * 排序号（越小越靠前）
    */
   sortOrder: number;
+
+  /**
+   * 是否作废（字典 sys_yes_no_type，0=否 1=是；编辑移除子行时标记作废）
+   */
+  isObsolete: number;
 
   /**
    * 价格阶梯列表（主子表关系，一个物料价格可以有多个阶梯） （子表：TaktPurchasePriceScale）
@@ -114,7 +124,7 @@ export interface PurchasePriceItemQuery extends TaktPagedQuery {
   companyCode?: string;
 
   /**
-   * 采购价格ID（主子表关系，序列化为string以避免Javascript精度问题）
+   * 采购价格 ID（关联 TaktPurchasePrice.Id，选项 TaktPurchasePrices/options）
    */
   purchasePriceId?: string;
 
@@ -149,7 +159,12 @@ export interface PurchasePriceItemQuery extends TaktPagedQuery {
   purchaseUnit?: string;
 
   /**
-   * 采购价格（精确到分，存储为整数，单位为分）
+   * 价格单位（字典 logistics_price_unit_param：1/100/1000/10000；默认 1000）
+   */
+  purchasePerUnit?: number;
+
+  /**
+   * 采购价格（decimal(18,5)）
    */
   purchasePrice?: number;
 
@@ -167,6 +182,11 @@ export interface PurchasePriceItemQuery extends TaktPagedQuery {
    * 排序号（越小越靠前）
    */
   sortOrder?: number;
+
+  /**
+   * 是否作废（字典 sys_yes_no_type，0=否 1=是；编辑移除子行时标记作废）
+   */
+  isObsolete?: number;
 
   /**
    * 创建时间（范围查询-开始）
@@ -213,7 +233,7 @@ export interface PurchasePriceItemCreate {
   companyDefaultCulture: string;
 
   /**
-   * 采购价格ID（主子表关系，序列化为string以避免Javascript精度问题）
+   * 采购价格 ID（关联 TaktPurchasePrice.Id，选项 TaktPurchasePrices/options）
    */
   purchasePriceId: string;
 
@@ -248,7 +268,12 @@ export interface PurchasePriceItemCreate {
   purchaseUnit: string;
 
   /**
-   * 采购价格（精确到分，存储为整数，单位为分）
+   * 价格单位（字典 logistics_price_unit_param：1/100/1000/10000；默认 1000）
+   */
+  purchasePerUnit: number;
+
+  /**
+   * 采购价格（decimal(18,5)）
    */
   purchasePrice: number;
 
@@ -263,9 +288,14 @@ export interface PurchasePriceItemCreate {
   maxPurchaseQuantity: number;
 
   /**
+   * 是否作废（字典 sys_yes_no_type，0=否 1=是；编辑移除子行时标记作废）
+   */
+  isObsolete: number;
+
+  /**
    * 价格阶梯列表（主子表关系，一个物料价格可以有多个阶梯）（子表，级联保存）
    */
-  scales?: PurchasePriceScaleCreate[];
+  scales?: PurchasePriceScaleUpdate[];
 
   /**
    * 扩展字段JSON
@@ -315,6 +345,25 @@ export interface PurchasePriceItemSort {
 
 
 /**
+ * PurchasePriceItem 作废/撤销作废 DTO
+ * 对应前端 PurchasePriceItemObsolete
+ * @description 对应后端 TaktPurchasePriceItemObsoleteDto
+ */
+export interface PurchasePriceItemObsolete {
+  /**
+   * PurchasePriceItemID
+   */
+  purchasePriceItemId: string;
+
+  /**
+   * 是否作废（字典 sys_yes_no_type，0=否 1=是；编辑移除子行时标记作废）
+   */
+  isObsolete: number;
+
+}
+
+
+/**
  * PurchasePriceItem 导入模板行 DTO
  * 对应前端 PurchasePriceItemTemplate
  * @description 对应后端 TaktPurchasePriceItemTemplateDto
@@ -331,7 +380,7 @@ export interface PurchasePriceItemTemplate {
   companyCode?: string;
 
   /**
-   * 采购价格ID（主子表关系，序列化为string以避免Javascript精度问题）
+   * 采购价格 ID（关联 TaktPurchasePrice.Id，选项 TaktPurchasePrices/options）
    */
   purchasePriceId?: string;
 
@@ -366,7 +415,12 @@ export interface PurchasePriceItemTemplate {
   purchaseUnit?: string;
 
   /**
-   * 采购价格（精确到分，存储为整数，单位为分）
+   * 价格单位（字典 logistics_price_unit_param：1/100/1000/10000；默认 1000）
+   */
+  purchasePerUnit?: number;
+
+  /**
+   * 采购价格（decimal(18,5)）
    */
   purchasePrice?: number;
 
@@ -379,6 +433,11 @@ export interface PurchasePriceItemTemplate {
    * 最大采购量（基本单位数量，0表示无限制）
    */
   maxPurchaseQuantity?: number;
+
+  /**
+   * 是否作废（字典 sys_yes_no_type，0=否 1=是；编辑移除子行时标记作废）
+   */
+  isObsolete?: number;
 
   /**
    * 价格阶梯列表（主子表关系，一个物料价格可以有多个阶梯）（子表，级联保存）
@@ -420,7 +479,7 @@ export interface PurchasePriceItemImport {
   companyDefaultCulture?: string;
 
   /**
-   * 采购价格ID（主子表关系，序列化为string以避免Javascript精度问题）
+   * 采购价格 ID（关联 TaktPurchasePrice.Id，选项 TaktPurchasePrices/options）
    */
   purchasePriceId?: string;
 
@@ -455,7 +514,12 @@ export interface PurchasePriceItemImport {
   purchaseUnit?: string;
 
   /**
-   * 采购价格（精确到分，存储为整数，单位为分）
+   * 价格单位（字典 logistics_price_unit_param：1/100/1000/10000；默认 1000）
+   */
+  purchasePerUnit?: number;
+
+  /**
+   * 采购价格（decimal(18,5)）
    */
   purchasePrice?: number;
 
@@ -468,6 +532,11 @@ export interface PurchasePriceItemImport {
    * 最大采购量（基本单位数量，0表示无限制）
    */
   maxPurchaseQuantity?: number;
+
+  /**
+   * 是否作废（字典 sys_yes_no_type，0=否 1=是；编辑移除子行时标记作废）
+   */
+  isObsolete?: number;
 
   /**
    * 价格阶梯列表（主子表关系，一个物料价格可以有多个阶梯）（子表，级联保存）
@@ -504,7 +573,7 @@ export interface PurchasePriceItemExport {
   companyCode: string;
 
   /**
-   * 采购价格ID（主子表关系，序列化为string以避免Javascript精度问题）
+   * 采购价格 ID（关联 TaktPurchasePrice.Id，选项 TaktPurchasePrices/options）
    */
   purchasePriceId: string;
 
@@ -539,7 +608,12 @@ export interface PurchasePriceItemExport {
   purchaseUnit: string;
 
   /**
-   * 采购价格（精确到分，存储为整数，单位为分）
+   * 价格单位（字典 logistics_price_unit_param：1/100/1000/10000；默认 1000）
+   */
+  purchasePerUnit: number;
+
+  /**
+   * 采购价格（decimal(18,5)）
    */
   purchasePrice: number;
 
@@ -557,6 +631,11 @@ export interface PurchasePriceItemExport {
    * 排序号（越小越靠前）
    */
   sortOrder: number;
+
+  /**
+   * 是否作废（字典 sys_yes_no_type，0=否 1=是；编辑移除子行时标记作废）
+   */
+  isObsolete: number;
 
   /**
    * 扩展字段JSON

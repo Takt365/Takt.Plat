@@ -9,10 +9,13 @@
 import { inject, provide, type InjectionKey, type Ref, ref } from 'vue'
 import type { FqcOrder } from '@/types/logistics/quality/operation/fqc-order'
 
+/** 表格行类型（与 index 列表行、TaktSingleTable slot record 一致） */
+export type FqcOrderRowRecord = FqcOrder | Record<string, unknown>
+
 /** 主表选中行上下文 */
 export interface FqcOrderMasterContext {
   /** 当前选中的主表行（右侧明细依赖） */
-  selectedMasterRow: Ref<FqcOrder | null>
+  selectedMasterRow: Ref<FqcOrderRowRecord | null>
 }
 
 const fqcOrderMasterContextKey: InjectionKey<FqcOrderMasterContext> = Symbol('fqc-orderMasterContext')
@@ -22,7 +25,7 @@ const fqcOrderMasterContextKey: InjectionKey<FqcOrderMasterContext> = Symbol('fq
  * @returns {FqcOrderMasterContext} 主表上下文
  */
 export function provideFqcOrderMasterContext(): FqcOrderMasterContext {
-  const selectedMasterRow = ref<FqcOrder | null>(null)
+  const selectedMasterRow = ref<FqcOrderRowRecord | null>(null)
   const ctx: FqcOrderMasterContext = { selectedMasterRow }
   provide(fqcOrderMasterContextKey, ctx)
   return ctx

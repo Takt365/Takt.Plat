@@ -9,10 +9,13 @@
 import { inject, provide, type InjectionKey, type Ref, ref } from 'vue'
 import type { SerialInbound } from '@/types/logistics/serial/inbound'
 
+/** 表格行类型（与 index 列表行、TaktSingleTable slot record 一致） */
+export type SerialInboundRowRecord = SerialInbound | Record<string, unknown>
+
 /** 主表选中行上下文 */
 export interface SerialInboundMasterContext {
   /** 当前选中的主表行（右侧明细依赖） */
-  selectedMasterRow: Ref<SerialInbound | null>
+  selectedMasterRow: Ref<SerialInboundRowRecord | null>
 }
 
 const serialInboundMasterContextKey: InjectionKey<SerialInboundMasterContext> = Symbol('inboundMasterContext')
@@ -22,7 +25,7 @@ const serialInboundMasterContextKey: InjectionKey<SerialInboundMasterContext> = 
  * @returns {SerialInboundMasterContext} 主表上下文
  */
 export function provideSerialInboundMasterContext(): SerialInboundMasterContext {
-  const selectedMasterRow = ref<SerialInbound | null>(null)
+  const selectedMasterRow = ref<SerialInboundRowRecord | null>(null)
   const ctx: SerialInboundMasterContext = { selectedMasterRow }
   provide(serialInboundMasterContextKey, ctx)
   return ctx

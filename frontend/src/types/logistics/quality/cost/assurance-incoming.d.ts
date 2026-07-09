@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：frontend/src/types/logistics/quality/cost
 // 文件名称：assurance-incoming.d.ts
-// 创建时间：2026-06-23
+// 创建时间：2026-07-09
 // 创建人：Takt365(Auto Generated)
 // 功能描述：logistics/quality/cost 模块类型定义（自动生成；类型名去 Takt 前缀与末尾 Dto，如 TaktCompanyDto → Company）
 // 
@@ -29,12 +29,12 @@ export interface QualityAssuranceIncoming extends CompanyDtoBase {
   qualityAssuranceIncomingId: string;
 
   /**
-   * 品质业务主表ID(主子表关系,序列化为string以避免Javascript精度问题)
+   * 品质业务主表 ID（关联 TaktQualityAssurance.Id，选项 TaktQualityAssurances/options）
    */
   qualityAssuranceId: string;
 
   /**
-   * 品质业务主表名称（填充字段）
+   * 品质业务主表 名称（填充字段）
    */
   qualityAssuranceName?: string;
 
@@ -79,6 +79,11 @@ export interface QualityAssuranceIncoming extends CompanyDtoBase {
   incomingNote?: string;
 
   /**
+   * 是否作废（字典 sys_yes_no_type，0=否 1=是；编辑移除子行时标记作废）
+   */
+  isObsolete: number;
+
+  /**
    * 品质业务主表(导航属性) （主表：TaktQualityAssurance）
    */
   operation?: QualityAssurance;
@@ -104,7 +109,7 @@ export interface QualityAssuranceIncomingQuery extends TaktPagedQuery {
   companyCode?: string;
 
   /**
-   * 品质业务主表ID(主子表关系,序列化为string以避免Javascript精度问题)
+   * 品质业务主表 ID（关联 TaktQualityAssurance.Id，选项 TaktQualityAssurances/options）
    */
   qualityAssuranceId?: string;
 
@@ -147,6 +152,11 @@ export interface QualityAssuranceIncomingQuery extends TaktPagedQuery {
    * 来料检验备注
    */
   incomingNote?: string;
+
+  /**
+   * 是否作废（字典 sys_yes_no_type，0=否 1=是；编辑移除子行时标记作废）
+   */
+  isObsolete?: number;
 
   /**
    * 创建时间（范围查询-开始）
@@ -193,7 +203,7 @@ export interface QualityAssuranceIncomingCreate {
   companyDefaultCulture: string;
 
   /**
-   * 品质业务主表ID(主子表关系,序列化为string以避免Javascript精度问题)
+   * 品质业务主表 ID（关联 TaktQualityAssurance.Id，选项 TaktQualityAssurances/options）
    */
   qualityAssuranceId: string;
 
@@ -238,6 +248,11 @@ export interface QualityAssuranceIncomingCreate {
   incomingNote?: string;
 
   /**
+   * 是否作废（字典 sys_yes_no_type，0=否 1=是；编辑移除子行时标记作废）
+   */
+  isObsolete: number;
+
+  /**
    * 扩展字段JSON
    */
   extField?: string;
@@ -266,6 +281,25 @@ export interface QualityAssuranceIncomingUpdate extends QualityAssuranceIncoming
 
 
 /**
+ * QualityAssuranceIncoming 作废/撤销作废 DTO
+ * 对应前端 QualityAssuranceIncomingObsolete
+ * @description 对应后端 TaktQualityAssuranceIncomingObsoleteDto
+ */
+export interface QualityAssuranceIncomingObsolete {
+  /**
+   * QualityAssuranceIncomingID
+   */
+  qualityAssuranceIncomingId: string;
+
+  /**
+   * 是否作废（字典 sys_yes_no_type，0=否 1=是；编辑移除子行时标记作废）
+   */
+  isObsolete: number;
+
+}
+
+
+/**
  * QualityAssuranceIncoming 导入模板行 DTO
  * 对应前端 QualityAssuranceIncomingTemplate
  * @description 对应后端 TaktQualityAssuranceIncomingTemplateDto
@@ -282,7 +316,7 @@ export interface QualityAssuranceIncomingTemplate {
   companyCode?: string;
 
   /**
-   * 品质业务主表ID(主子表关系,序列化为string以避免Javascript精度问题)
+   * 品质业务主表 ID（关联 TaktQualityAssurance.Id，选项 TaktQualityAssurances/options）
    */
   qualityAssuranceId?: string;
 
@@ -325,6 +359,11 @@ export interface QualityAssuranceIncomingTemplate {
    * 来料检验备注
    */
   incomingNote?: string;
+
+  /**
+   * 是否作废（字典 sys_yes_no_type，0=否 1=是；编辑移除子行时标记作废）
+   */
+  isObsolete?: number;
 
   /**
    * 扩展字段JSON
@@ -361,7 +400,7 @@ export interface QualityAssuranceIncomingImport {
   companyDefaultCulture?: string;
 
   /**
-   * 品质业务主表ID(主子表关系,序列化为string以避免Javascript精度问题)
+   * 品质业务主表 ID（关联 TaktQualityAssurance.Id，选项 TaktQualityAssurances/options）
    */
   qualityAssuranceId?: string;
 
@@ -406,6 +445,11 @@ export interface QualityAssuranceIncomingImport {
   incomingNote?: string;
 
   /**
+   * 是否作废（字典 sys_yes_no_type，0=否 1=是；编辑移除子行时标记作废）
+   */
+  isObsolete?: number;
+
+  /**
    * 扩展字段JSON
    */
   extField?: string;
@@ -435,7 +479,7 @@ export interface QualityAssuranceIncomingExport {
   companyCode: string;
 
   /**
-   * 品质业务主表ID(主子表关系,序列化为string以避免Javascript精度问题)
+   * 品质业务主表 ID（关联 TaktQualityAssurance.Id，选项 TaktQualityAssurances/options）
    */
   qualityAssuranceId: string;
 
@@ -478,6 +522,11 @@ export interface QualityAssuranceIncomingExport {
    * 来料检验备注
    */
   incomingNote?: string;
+
+  /**
+   * 是否作废（字典 sys_yes_no_type，0=否 1=是；编辑移除子行时标记作废）
+   */
+  isObsolete: number;
 
   /**
    * 扩展字段JSON

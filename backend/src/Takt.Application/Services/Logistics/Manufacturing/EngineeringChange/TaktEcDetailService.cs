@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Application.Services.Logistics.Manufacturing.EngineeringChange
 // 文件名称：TaktEcDetailService.cs
-// 创建时间：2026-06-30
+// 创建时间：2026-07-09
 // 创建人：Takt365(Cursor AI)
 // 功能描述：设变明细应用服务实现
 // 
@@ -30,7 +30,7 @@ namespace Takt.Application.Services.Logistics.Manufacturing.EngineeringChange;
 public class TaktEcDetailService : TaktServiceBase, ITaktEcDetailService
 {
     private readonly ITaktCompanyRepository<TaktEcDetail> _ecDetailRepository;
-    private readonly ITaktCompanyRepository<TaktEcGijutsu> _ecEngRepository;
+    private readonly ITaktCompanyRepository<TaktEcGijutsu> _ecGijutsuRepository;
     private readonly ITaktLineNumberGenerator _lineNumberGenerator;
     private readonly ITaktUniqueValidator _uniqueValidator;
 
@@ -38,14 +38,14 @@ public class TaktEcDetailService : TaktServiceBase, ITaktEcDetailService
     /// 构造函数
     /// </summary>
     /// <param name="ecDetailRepository">设变明细仓储</param>
-    /// <param name="ecEngRepository">设变技术课主仓储</param>
+    /// <param name="ecGijutsuRepository">设变技术课主仓储</param>
     /// <param name="lineNumberGenerator">明细行号生成器</param>
     /// <param name="uniqueValidator">唯一性验证器</param>
     /// <param name="userContext">用户上下文</param>
     /// <param name="localizationService">本地化服务</param>
     public TaktEcDetailService(
         ITaktCompanyRepository<TaktEcDetail> ecDetailRepository,
-        ITaktCompanyRepository<TaktEcGijutsu> ecEngRepository,
+        ITaktCompanyRepository<TaktEcGijutsu> ecGijutsuRepository,
         ITaktLineNumberGenerator lineNumberGenerator,
         ITaktUniqueValidator uniqueValidator,
         ITaktUserContext? userContext = null,
@@ -53,7 +53,7 @@ public class TaktEcDetailService : TaktServiceBase, ITaktEcDetailService
         : base(userContext, localizationService)
     {
         _ecDetailRepository = ecDetailRepository;
-        _ecEngRepository = ecEngRepository;
+        _ecGijutsuRepository = ecGijutsuRepository;
         _lineNumberGenerator = lineNumberGenerator;
         _uniqueValidator = uniqueValidator;
     }
@@ -118,6 +118,7 @@ public class TaktEcDetailService : TaktServiceBase, ITaktEcDetailService
     public async Task<TaktEcDetailDto> CreateEcDetailAsync(TaktEcDetailCreateDto dto)
     {
         var entity = dto.Adapt<TaktEcDetail>();
+        entity.IsObsolete = 0;
         await StampEcDetailEcGijutsuAsync(entity, dto);
         var isUnique_ix_takt_logistics_manufacturing_ec_detail_line_unique = await _uniqueValidator.IsUniqueAsync(
             _ecDetailRepository,
@@ -174,11 +175,21 @@ public class TaktEcDetailService : TaktServiceBase, ITaktEcDetailService
     /// <returns>任务</returns>
     public async Task DeleteEcDetailByIdAsync(long id)
     {
-        var deleted = await _ecDetailRepository.DeleteAsync(id);
-        if (!deleted)
+        var entity = await _ecDetailRepository.GetByIdAsync(id);
+        if (entity == null)
         {
             throw new TaktBusinessException("设变明细不存在或已删除");
         }
+        if (entity.TenantCode != CurrentTenantCode || entity.CompanyCode != CurrentCompanyCode)
+        {
+            throw new TaktBusinessException("设变明细不存在或已删除");
+        }
+        if (entity.IsObsolete == 1)
+        {
+            throw new TaktBusinessException("设变明细已作废");
+        }
+        entity.IsObsolete = 1;
+        await _ecDetailRepository.UpdateAsync(entity);
     }
 
     /// <summary>
@@ -197,6 +208,27 @@ public class TaktEcDetailService : TaktServiceBase, ITaktEcDetailService
         {
             await DeleteEcDetailByIdAsync(id);
         }
+    }
+
+    /// <summary>
+    /// 更新设变明细作废状态
+    /// </summary>
+    /// <param name="dto">作废DTO</param>
+    /// <returns>DTO</returns>
+    public async Task<TaktEcDetailDto> UpdateEcDetailObsoleteAsync(TaktEcDetailObsoleteDto dto)
+    {
+        var entity = await _ecDetailRepository.GetByIdAsync(dto.EcDetailId);
+        if (entity == null)
+        {
+            throw new TaktBusinessException("设变明细不存在");
+        }
+        if (entity.TenantCode != CurrentTenantCode || entity.CompanyCode != CurrentCompanyCode)
+        {
+            throw new TaktBusinessException("设变明细不存在");
+        }
+        entity.IsObsolete = dto.IsObsolete;
+        await _ecDetailRepository.UpdateAsync(entity);
+        return await GetEcDetailByIdAsync(dto.EcDetailId) ?? throw new TaktBusinessException("设变明细不存在");
     }
 
     /// <summary>
@@ -311,7 +343,7 @@ public class TaktEcDetailService : TaktServiceBase, ITaktEcDetailService
         {
             return;
         }
-        var master = await _ecEngRepository.GetByIdAsync(dto.EcId);
+        var master = await _ecGijutsuRepository.GetByIdAsync(dto.EcId);
         if (master == null)
         {
             throw new TaktBusinessException("设变技术课主不存在");
@@ -331,6 +363,15 @@ public class TaktEcDetailService : TaktServiceBase, ITaktEcDetailService
     {
         var exp = Expressionable.Create<TaktEcDetail>();
 
+        if (queryDto?.IsObsolete.HasValue == true)
+        {
+            exp = exp.And(x => x.IsObsolete == queryDto.IsObsolete);
+        }
+        else
+        {
+            exp = exp.And(x => x.IsObsolete == 0);
+        }
+
         if (!string.IsNullOrEmpty(queryDto?.KeyWords))
         {
             var keywords = queryDto.KeyWords;
@@ -338,28 +379,33 @@ public class TaktEcDetailService : TaktServiceBase, ITaktEcDetailService
                 SqlFunc.ToString(x.EcId).Contains(keywords)
                 || (x.EcNo != null && x.EcNo.Contains(keywords))
                 || SqlFunc.ToString(x.LineNumber).Contains(keywords)
+                || (x.EcBomLineNo != null && x.EcBomLineNo.Contains(keywords))
                 || (x.EcModel != null && x.EcModel.Contains(keywords))
                 || (x.EcBomItem != null && x.EcBomItem.Contains(keywords))
-                || (x.EcBomSubItem != null && x.EcBomSubItem.Contains(keywords))
                 || (x.EcBomItemText != null && x.EcBomItemText.Contains(keywords))
+                || (x.EcBomSubItem != null && x.EcBomSubItem.Contains(keywords))
                 || (x.EcBomSubItemText != null && x.EcBomSubItemText.Contains(keywords))
+                || SqlFunc.ToString(x.IsEndOfLine).Contains(keywords)
                 || (x.EcOldItem != null && x.EcOldItem.Contains(keywords))
                 || (x.EcOldText != null && x.EcOldText.Contains(keywords))
                 || SqlFunc.ToString(x.EcOldUsage).Contains(keywords)
                 || (x.EcOldPosition != null && x.EcOldPosition.Contains(keywords))
                 || SqlFunc.ToString(x.EcOldStock).Contains(keywords)
                 || (x.EcOldWarehouse != null && x.EcOldWarehouse.Contains(keywords))
+                || SqlFunc.ToString(x.IsOldProcurement).Contains(keywords)
+                || SqlFunc.ToString(x.IsOldCheck).Contains(keywords)
                 || (x.EcNewItem != null && x.EcNewItem.Contains(keywords))
                 || (x.EcNewText != null && x.EcNewText.Contains(keywords))
                 || SqlFunc.ToString(x.EcNewUsage).Contains(keywords)
                 || (x.EcNewPosition != null && x.EcNewPosition.Contains(keywords))
                 || SqlFunc.ToString(x.EcNewStock).Contains(keywords)
                 || (x.EcNewWarehouse != null && x.EcNewWarehouse.Contains(keywords))
-                || SqlFunc.ToString(x.IsOldProcurement).Contains(keywords)
-                || SqlFunc.ToString(x.IsOldCheck).Contains(keywords)
                 || SqlFunc.ToString(x.IsNewProcurement).Contains(keywords)
                 || SqlFunc.ToString(x.IsNewCheck).Contains(keywords)
-                || SqlFunc.ToString(x.IsEndOfLine).Contains(keywords)
+                || (x.EcIsCompatible != null && x.EcIsCompatible.Contains(keywords))
+                || (x.EcSecondDistinction != null && x.EcSecondDistinction.Contains(keywords))
+                || (x.EcInstruction != null && x.EcInstruction.Contains(keywords))
+                || (x.EcLegacyPartDisposition != null && x.EcLegacyPartDisposition.Contains(keywords))
                 || (x.ExtField != null && x.ExtField.Contains(keywords))
                 || (x.Remark != null && x.Remark.Contains(keywords))
                 || SqlFunc.ToString(x.EcBomDate).Contains(keywords)
@@ -382,6 +428,11 @@ public class TaktEcDetailService : TaktServiceBase, ITaktEcDetailService
             exp = exp.And(x => x.LineNumber == queryDto.LineNumber);
         }
 
+        if (!string.IsNullOrEmpty(queryDto?.EcBomLineNo))
+        {
+            exp = exp.And(x => x.EcBomLineNo != null && x.EcBomLineNo.Contains(queryDto.EcBomLineNo));
+        }
+
         if (!string.IsNullOrEmpty(queryDto?.EcModel))
         {
             exp = exp.And(x => x.EcModel != null && x.EcModel.Contains(queryDto.EcModel));
@@ -392,19 +443,24 @@ public class TaktEcDetailService : TaktServiceBase, ITaktEcDetailService
             exp = exp.And(x => x.EcBomItem != null && x.EcBomItem.Contains(queryDto.EcBomItem));
         }
 
-        if (!string.IsNullOrEmpty(queryDto?.EcBomSubItem))
-        {
-            exp = exp.And(x => x.EcBomSubItem != null && x.EcBomSubItem.Contains(queryDto.EcBomSubItem));
-        }
-
         if (!string.IsNullOrEmpty(queryDto?.EcBomItemText))
         {
             exp = exp.And(x => x.EcBomItemText != null && x.EcBomItemText.Contains(queryDto.EcBomItemText));
         }
 
+        if (!string.IsNullOrEmpty(queryDto?.EcBomSubItem))
+        {
+            exp = exp.And(x => x.EcBomSubItem != null && x.EcBomSubItem.Contains(queryDto.EcBomSubItem));
+        }
+
         if (!string.IsNullOrEmpty(queryDto?.EcBomSubItemText))
         {
             exp = exp.And(x => x.EcBomSubItemText != null && x.EcBomSubItemText.Contains(queryDto.EcBomSubItemText));
+        }
+
+        if (queryDto?.IsEndOfLine.HasValue == true)
+        {
+            exp = exp.And(x => x.IsEndOfLine == queryDto.IsEndOfLine);
         }
 
         if (!string.IsNullOrEmpty(queryDto?.EcOldItem))
@@ -432,6 +488,21 @@ public class TaktEcDetailService : TaktServiceBase, ITaktEcDetailService
             exp = exp.And(x => x.EcOldStock == queryDto.EcOldStock);
         }
 
+        if (!string.IsNullOrEmpty(queryDto?.EcOldWarehouse))
+        {
+            exp = exp.And(x => x.EcOldWarehouse != null && x.EcOldWarehouse.Contains(queryDto.EcOldWarehouse));
+        }
+
+        if (queryDto?.IsOldProcurement.HasValue == true)
+        {
+            exp = exp.And(x => x.IsOldProcurement == queryDto.IsOldProcurement);
+        }
+
+        if (queryDto?.IsOldCheck.HasValue == true)
+        {
+            exp = exp.And(x => x.IsOldCheck == queryDto.IsOldCheck);
+        }
+
         if (!string.IsNullOrEmpty(queryDto?.EcNewItem))
         {
             exp = exp.And(x => x.EcNewItem != null && x.EcNewItem.Contains(queryDto.EcNewItem));
@@ -457,14 +528,9 @@ public class TaktEcDetailService : TaktServiceBase, ITaktEcDetailService
             exp = exp.And(x => x.EcNewStock == queryDto.EcNewStock);
         }
 
-        if (queryDto?.IsOldProcurement.HasValue == true)
+        if (!string.IsNullOrEmpty(queryDto?.EcNewWarehouse))
         {
-            exp = exp.And(x => x.IsOldProcurement == queryDto.IsOldProcurement);
-        }
-
-        if (queryDto?.IsOldCheck.HasValue == true)
-        {
-            exp = exp.And(x => x.IsOldCheck == queryDto.IsOldCheck);
+            exp = exp.And(x => x.EcNewWarehouse != null && x.EcNewWarehouse.Contains(queryDto.EcNewWarehouse));
         }
 
         if (queryDto?.IsNewProcurement.HasValue == true)
@@ -477,19 +543,24 @@ public class TaktEcDetailService : TaktServiceBase, ITaktEcDetailService
             exp = exp.And(x => x.IsNewCheck == queryDto.IsNewCheck);
         }
 
-        if (!string.IsNullOrEmpty(queryDto?.EcOldWarehouse))
+        if (!string.IsNullOrEmpty(queryDto?.EcIsCompatible))
         {
-            exp = exp.And(x => x.EcOldWarehouse != null && x.EcOldWarehouse.Contains(queryDto.EcOldWarehouse));
+            exp = exp.And(x => x.EcIsCompatible != null && x.EcIsCompatible.Contains(queryDto.EcIsCompatible));
         }
 
-        if (!string.IsNullOrEmpty(queryDto?.EcNewWarehouse))
+        if (!string.IsNullOrEmpty(queryDto?.EcSecondDistinction))
         {
-            exp = exp.And(x => x.EcNewWarehouse != null && x.EcNewWarehouse.Contains(queryDto.EcNewWarehouse));
+            exp = exp.And(x => x.EcSecondDistinction != null && x.EcSecondDistinction.Contains(queryDto.EcSecondDistinction));
         }
 
-        if (queryDto?.IsEndOfLine.HasValue == true)
+        if (!string.IsNullOrEmpty(queryDto?.EcInstruction))
         {
-            exp = exp.And(x => x.IsEndOfLine == queryDto.IsEndOfLine);
+            exp = exp.And(x => x.EcInstruction != null && x.EcInstruction.Contains(queryDto.EcInstruction));
+        }
+
+        if (!string.IsNullOrEmpty(queryDto?.EcLegacyPartDisposition))
+        {
+            exp = exp.And(x => x.EcLegacyPartDisposition != null && x.EcLegacyPartDisposition.Contains(queryDto.EcLegacyPartDisposition));
         }
 
         if (!string.IsNullOrEmpty(queryDto?.ExtField))

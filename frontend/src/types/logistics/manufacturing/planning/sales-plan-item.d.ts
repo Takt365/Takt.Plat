@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：frontend/src/types/logistics/manufacturing/planning
 // 文件名称：sales-plan-item.d.ts
-// 创建时间：2026-06-23
+// 创建时间：2026-07-09
 // 创建人：Takt365(Auto Generated)
 // 功能描述：logistics/manufacturing/planning 模块类型定义（自动生成；类型名去 Takt 前缀与末尾 Dto，如 TaktCompanyDto → Company）
 // 
@@ -49,7 +49,7 @@ export interface SalesPlanItem extends CompanyDtoBase {
   lineNumber: number;
 
   /**
-   * 物料编码（成品/销售物料，关联 TaktMaterialPlant.MaterialCode）
+   * 物料编码（关联 TaktMaterial.MaterialCode，选项 TaktMaterials/options）
    */
   materialCode: string;
 
@@ -64,7 +64,7 @@ export interface SalesPlanItem extends CompanyDtoBase {
   materialSpecification?: string;
 
   /**
-   * 客户编码（行级客户，可选）
+   * 客户编码（关联 TaktCustomer.CustomerCode，选项 TaktCustomers/options；行级客户，可选）
    */
   customerCode?: string;
 
@@ -74,7 +74,7 @@ export interface SalesPlanItem extends CompanyDtoBase {
   customerName?: string;
 
   /**
-   * 计划单位
+   * 计划单位（字典 logistics_unit_of_measure_code，DictValue=PC/EA 等；默认 PC）
    */
   planUnit: string;
 
@@ -102,6 +102,11 @@ export interface SalesPlanItem extends CompanyDtoBase {
    * 预计金额
    */
   estimatedAmount: number;
+
+  /**
+   * 是否作废（字典 sys_yes_no_type，0=否 1=是；编辑移除子行时标记作废）
+   */
+  isObsolete: number;
 
 }
 
@@ -139,7 +144,7 @@ export interface SalesPlanItemQuery extends TaktPagedQuery {
   lineNumber?: number;
 
   /**
-   * 物料编码（成品/销售物料，关联 TaktMaterialPlant.MaterialCode）
+   * 物料编码（关联 TaktMaterial.MaterialCode，选项 TaktMaterials/options）
    */
   materialCode?: string;
 
@@ -154,7 +159,7 @@ export interface SalesPlanItemQuery extends TaktPagedQuery {
   materialSpecification?: string;
 
   /**
-   * 客户编码（行级客户，可选）
+   * 客户编码（关联 TaktCustomer.CustomerCode，选项 TaktCustomers/options；行级客户，可选）
    */
   customerCode?: string;
 
@@ -164,7 +169,7 @@ export interface SalesPlanItemQuery extends TaktPagedQuery {
   customerName?: string;
 
   /**
-   * 计划单位
+   * 计划单位（字典 logistics_unit_of_measure_code，DictValue=PC/EA 等；默认 PC）
    */
   planUnit?: string;
 
@@ -197,6 +202,11 @@ export interface SalesPlanItemQuery extends TaktPagedQuery {
    * 预计金额
    */
   estimatedAmount?: number;
+
+  /**
+   * 是否作废（字典 sys_yes_no_type，0=否 1=是；编辑移除子行时标记作废）
+   */
+  isObsolete?: number;
 
   /**
    * 创建时间（范围查询-开始）
@@ -258,7 +268,7 @@ export interface SalesPlanItemCreate {
   lineNumber: number;
 
   /**
-   * 物料编码（成品/销售物料，关联 TaktMaterialPlant.MaterialCode）
+   * 物料编码（关联 TaktMaterial.MaterialCode，选项 TaktMaterials/options）
    */
   materialCode: string;
 
@@ -273,7 +283,7 @@ export interface SalesPlanItemCreate {
   materialSpecification?: string;
 
   /**
-   * 客户编码（行级客户，可选）
+   * 客户编码（关联 TaktCustomer.CustomerCode，选项 TaktCustomers/options；行级客户，可选）
    */
   customerCode?: string;
 
@@ -283,7 +293,7 @@ export interface SalesPlanItemCreate {
   customerName?: string;
 
   /**
-   * 计划单位
+   * 计划单位（字典 logistics_unit_of_measure_code，DictValue=PC/EA 等；默认 PC）
    */
   planUnit: string;
 
@@ -313,6 +323,11 @@ export interface SalesPlanItemCreate {
   estimatedAmount: number;
 
   /**
+   * 是否作废（字典 sys_yes_no_type，0=否 1=是；编辑移除子行时标记作废）
+   */
+  isObsolete: number;
+
+  /**
    * 扩展字段JSON
    */
   extField?: string;
@@ -336,6 +351,25 @@ export interface SalesPlanItemUpdate extends SalesPlanItemCreate {
    * SalesPlanItemID（标识要更新的实体）
    */
   salesPlanItemId: string;
+
+}
+
+
+/**
+ * SalesPlanItem 作废/撤销作废 DTO
+ * 对应前端 SalesPlanItemObsolete
+ * @description 对应后端 TaktSalesPlanItemObsoleteDto
+ */
+export interface SalesPlanItemObsolete {
+  /**
+   * SalesPlanItemID
+   */
+  salesPlanItemId: string;
+
+  /**
+   * 是否作废（字典 sys_yes_no_type，0=否 1=是；编辑移除子行时标记作废）
+   */
+  isObsolete: number;
 
 }
 
@@ -372,7 +406,7 @@ export interface SalesPlanItemTemplate {
   lineNumber?: number;
 
   /**
-   * 物料编码（成品/销售物料，关联 TaktMaterialPlant.MaterialCode）
+   * 物料编码（关联 TaktMaterial.MaterialCode，选项 TaktMaterials/options）
    */
   materialCode?: string;
 
@@ -387,7 +421,7 @@ export interface SalesPlanItemTemplate {
   materialSpecification?: string;
 
   /**
-   * 客户编码（行级客户，可选）
+   * 客户编码（关联 TaktCustomer.CustomerCode，选项 TaktCustomers/options；行级客户，可选）
    */
   customerCode?: string;
 
@@ -397,7 +431,7 @@ export interface SalesPlanItemTemplate {
   customerName?: string;
 
   /**
-   * 计划单位
+   * 计划单位（字典 logistics_unit_of_measure_code，DictValue=PC/EA 等；默认 PC）
    */
   planUnit?: string;
 
@@ -425,6 +459,11 @@ export interface SalesPlanItemTemplate {
    * 预计金额
    */
   estimatedAmount?: number;
+
+  /**
+   * 是否作废（字典 sys_yes_no_type，0=否 1=是；编辑移除子行时标记作废）
+   */
+  isObsolete?: number;
 
   /**
    * 扩展字段JSON
@@ -476,7 +515,7 @@ export interface SalesPlanItemImport {
   lineNumber?: number;
 
   /**
-   * 物料编码（成品/销售物料，关联 TaktMaterialPlant.MaterialCode）
+   * 物料编码（关联 TaktMaterial.MaterialCode，选项 TaktMaterials/options）
    */
   materialCode?: string;
 
@@ -491,7 +530,7 @@ export interface SalesPlanItemImport {
   materialSpecification?: string;
 
   /**
-   * 客户编码（行级客户，可选）
+   * 客户编码（关联 TaktCustomer.CustomerCode，选项 TaktCustomers/options；行级客户，可选）
    */
   customerCode?: string;
 
@@ -501,7 +540,7 @@ export interface SalesPlanItemImport {
   customerName?: string;
 
   /**
-   * 计划单位
+   * 计划单位（字典 logistics_unit_of_measure_code，DictValue=PC/EA 等；默认 PC）
    */
   planUnit?: string;
 
@@ -529,6 +568,11 @@ export interface SalesPlanItemImport {
    * 预计金额
    */
   estimatedAmount?: number;
+
+  /**
+   * 是否作废（字典 sys_yes_no_type，0=否 1=是；编辑移除子行时标记作废）
+   */
+  isObsolete?: number;
 
   /**
    * 扩展字段JSON
@@ -575,7 +619,7 @@ export interface SalesPlanItemExport {
   lineNumber: number;
 
   /**
-   * 物料编码（成品/销售物料，关联 TaktMaterialPlant.MaterialCode）
+   * 物料编码（关联 TaktMaterial.MaterialCode，选项 TaktMaterials/options）
    */
   materialCode: string;
 
@@ -590,7 +634,7 @@ export interface SalesPlanItemExport {
   materialSpecification?: string;
 
   /**
-   * 客户编码（行级客户，可选）
+   * 客户编码（关联 TaktCustomer.CustomerCode，选项 TaktCustomers/options；行级客户，可选）
    */
   customerCode?: string;
 
@@ -600,7 +644,7 @@ export interface SalesPlanItemExport {
   customerName?: string;
 
   /**
-   * 计划单位
+   * 计划单位（字典 logistics_unit_of_measure_code，DictValue=PC/EA 等；默认 PC）
    */
   planUnit: string;
 
@@ -628,6 +672,11 @@ export interface SalesPlanItemExport {
    * 预计金额
    */
   estimatedAmount: number;
+
+  /**
+   * 是否作废（字典 sys_yes_no_type，0=否 1=是；编辑移除子行时标记作废）
+   */
+  isObsolete: number;
 
   /**
    * 扩展字段JSON

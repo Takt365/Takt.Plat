@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Application.Dtos.Accounting.Financial
 // 文件名称：TaktCountersignDtos.cs
-// 创建时间：2026-06-30
+// 创建时间：2026-07-09
 // 创建人：Takt365(Auto Generated)
 // 功能描述：Countersign 模块 DTO（由 generate-dtos-from-entity.cjs 根据 TaktCountersign 生成，请按需审阅）
 // 
@@ -22,7 +22,7 @@ namespace Takt.Application.Dtos.Accounting.Financial;
 // ========================================
 
 /// <summary>
-/// 会签单实体
+/// 会签单实体。继承审批基类，与 TaktFlowEngine 对接；CountersignStatus 与 ApprovalStatus 取值对齐。
 /// 对应前端 TaktCountersignDto
 /// 继承 TaktApprovalDtoBase
 /// </summary>
@@ -512,7 +512,7 @@ public class TaktCountersignCreateDto
     /// <summary>
     /// 会签单明细列表（主子表关系）（子表，级联保存）
     /// </summary>
-    public List<TaktCountersignDetailCreateDto>? CountersignDetails { get; set; }
+    public List<TaktCountersignDetailUpdateDto>? CountersignDetails { get; set; }
 
     /// <summary>
     /// 扩展字段JSON
@@ -566,7 +566,7 @@ public class TaktCountersignStatusDto
     /// <summary>
     /// 会签单状态（字典 sys_approval_status；与 ApprovalStatus 取值一致）
     /// </summary>
-    [Required(ErrorMessage = "会签单状态（字典 sys_approval_status）不能为空")]
+    [Required(ErrorMessage = "会签单状态（字典 sys_approval_status；与 ApprovalStatus 取值一致）不能为空")]
     public int CountersignStatus { get; set; } = 0;
 }
 

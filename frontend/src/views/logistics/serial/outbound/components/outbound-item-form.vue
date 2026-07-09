@@ -28,12 +28,24 @@
           <a-row :gutter="24">
             <a-col :span="12">
               <a-form-item
-                :label="t('entity.serialoutbounditem.outboundno')"
+                :label="pi.label('outboundId')"
+                name="outboundId"
+              >
+                <TaktSelect
+                  v-model:value="formState.outboundId"
+                  api-url="TaktSerialOutbounds/options"
+                  :placeholder="pi.ph('outboundId')"
+                />
+              </a-form-item>
+            </a-col>
+            <a-col :span="12">
+              <a-form-item
+                :label="pi.label('outboundNo')"
                 name="outboundNo"
               >
                 <a-input
                   v-model:value="formState.outboundNo"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.serialoutbounditem.outboundno') })"
+                  :placeholder="pi.ph('outboundNo')"
                   show-count
                   :maxlength="50"
                   allow-clear
@@ -42,24 +54,24 @@
             </a-col>
             <a-col :span="12">
               <a-form-item
-                :label="t('entity.serialoutbounditem.linenumber')"
+                :label="pi.label('lineNumber')"
                 name="lineNumber"
               >
                 <a-input-number
                   v-model:value="formState.lineNumber"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.serialoutbounditem.linenumber') })"
+                  :placeholder="pi.ph('lineNumber')"
                   style="width: 100%"
                 />
               </a-form-item>
             </a-col>
             <a-col :span="12">
               <a-form-item
-                :label="t('entity.serialoutbounditem.outboundserialno')"
+                :label="pi.label('outboundSerialNo')"
                 name="outboundSerialNo"
               >
                 <a-input
                   v-model:value="formState.outboundSerialNo"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.serialoutbounditem.outboundserialno') })"
+                  :placeholder="pi.ph('outboundSerialNo')"
                   show-count
                   :maxlength="20"
                   allow-clear
@@ -68,53 +80,36 @@
             </a-col>
             <a-col :span="12">
               <a-form-item
-                :label="t('entity.serialoutbounditem.referenceinboundid')"
+                :label="pi.label('referenceInboundId')"
                 name="referenceInboundId"
               >
-                <a-input
+                <TaktSelect
                   v-model:value="formState.referenceInboundId"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.serialoutbounditem.referenceinboundid') })"
-                  show-count
-                  :maxlength="20"
-                  allow-clear
+                  api-url="TaktSerialInbounds/options"
+                  :placeholder="pi.ph('referenceInboundId')"
                 />
               </a-form-item>
             </a-col>
             <a-col :span="12">
               <a-form-item
-                :label="t('entity.serialoutbounditem.referenceinboundno')"
+                :label="pi.label('referenceInboundNo')"
                 name="referenceInboundNo"
               >
-                <a-input
+                <TaktSelect
                   v-model:value="formState.referenceInboundNo"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.serialoutbounditem.referenceinboundno') })"
-                  show-count
-                  :maxlength="20"
-                  allow-clear
+                  api-url="TaktSerialInbounds/options"
+                  :placeholder="pi.ph('referenceInboundNo')"
                 />
               </a-form-item>
             </a-col>
             <a-col :span="12">
               <a-form-item
-                :label="t('entity.serialoutbounditem.referenceinboundlinenumber')"
+                :label="pi.label('referenceInboundLineNumber')"
                 name="referenceInboundLineNumber"
               >
                 <a-input-number
                   v-model:value="formState.referenceInboundLineNumber"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.serialoutbounditem.referenceinboundlinenumber') })"
-                  style="width: 100%"
-                />
-              </a-form-item>
-            </a-col>
-            <a-col :span="12">
-              <a-form-item
-                :label="t('entity.serialoutbounditem.outboundtime')"
-                name="outboundTime"
-              >
-                <a-date-picker
-                  v-model:value="formState.outboundTime"
-                  :placeholder="t('common.page.form.placeholder.select', { field: t('entity.serialoutbounditem.outboundtime') })"
-                  value-format="YYYY-MM-DD"
+                  :placeholder="pi.ph('referenceInboundLineNumber')"
                   style="width: 100%"
                 />
               </a-form-item>
@@ -132,7 +127,7 @@
                     >
                       <span class="takt-form-label-hint-icon"><RiQuestionLine class="takt-remix-icon" /></span>
                     </a-tooltip>
-                    <span>{{ t('common.page.entity.extfield') }}</span>
+                    <span>{{ pi.label('extField') }}</span>
                   </span>
                 </template>
                 <a-textarea
@@ -160,6 +155,11 @@
 import { reactive, watch, computed, ref } from 'vue'
 import { useI18n } from 'vue-i18n'
 import type { Rule } from 'ant-design-vue/es/form'
+import { useSerialOutboundItemI18n } from '../composables/use-outbound-item-i18n'
+
+/** 实体字段 i18n */
+const pi = useSerialOutboundItemI18n()
+
 import type { SerialOutboundItemCreate } from '@/types/logistics/serial/outbound-item'
 import { RiQuestionLine } from '@remixicon/vue'
 
@@ -170,7 +170,8 @@ const formContentClass = computed(() => (formFields.length > 10 ? 'takt-form-con
 /** 当前激活的 Tab key */
 const activeTab = ref('tab-0')
 /** CreateDto 字段名列表（与 formState 键对齐） */
-const formFields = ["outboundNo","lineNumber","outboundSerialNo","referenceInboundId","referenceInboundNo","referenceInboundLineNumber","outboundTime","extField"]
+const formFields = ["outboundId","outboundNo","lineNumber","outboundSerialNo","referenceInboundId","referenceInboundNo","referenceInboundLineNumber","extField"]
+
 
 
 /** 父级传入的编辑 DTO；新增时为 undefined 或空对象 */
@@ -222,21 +223,28 @@ watch(
 
 /** 表单校验规则（与 FluentValidation 必填对齐） */
 const rules = computed<Record<string, Rule[]>>(() => ({
+  outboundId: [
+    {
+      required: true,
+      message: pi.ph('outboundId'),
+      trigger: 'change'
+    }
+  ],
   outboundNo: [
     {
       required: true,
-      message: t('common.page.form.placeholder.required', { field: t('entity.serialoutbounditem.outboundno') }),
+      message: pi.ph('outboundNo'),
       trigger: 'blur'
     }
   ],
   lineNumber: [{
     validator: async (_rule, value) => {
       if (value === undefined || value === null || value === '') {
-        return Promise.reject(t('common.page.form.placeholder.select', { field: t('entity.serialoutbounditem.linenumber') }))
+        return Promise.reject(pi.ph('lineNumber'))
       }
       const num = typeof value === 'number' ? value : Number(value)
       if (!Number.isFinite(num)) {
-        return Promise.reject(t('common.page.form.placeholder.select', { field: t('entity.serialoutbounditem.linenumber') }))
+        return Promise.reject(pi.ph('lineNumber'))
       }
       return Promise.resolve()
     },
@@ -245,44 +253,37 @@ const rules = computed<Record<string, Rule[]>>(() => ({
   outboundSerialNo: [
     {
       required: true,
-      message: t('common.page.form.placeholder.required', { field: t('entity.serialoutbounditem.outboundserialno') }),
+      message: pi.ph('outboundSerialNo'),
       trigger: 'blur'
     }
   ],
   referenceInboundId: [
     {
       required: true,
-      message: t('common.page.form.placeholder.required', { field: t('entity.serialoutbounditem.referenceinboundid') }),
-      trigger: 'blur'
+      message: pi.ph('referenceInboundId'),
+      trigger: 'change'
     }
   ],
   referenceInboundNo: [
     {
       required: true,
-      message: t('common.page.form.placeholder.required', { field: t('entity.serialoutbounditem.referenceinboundno') }),
-      trigger: 'blur'
+      message: pi.ph('referenceInboundNo'),
+      trigger: 'change'
     }
   ],
   referenceInboundLineNumber: [{
     validator: async (_rule, value) => {
       if (value === undefined || value === null || value === '') {
-        return Promise.reject(t('common.page.form.placeholder.select', { field: t('entity.serialoutbounditem.referenceinboundlinenumber') }))
+        return Promise.reject(pi.ph('referenceInboundLineNumber'))
       }
       const num = typeof value === 'number' ? value : Number(value)
       if (!Number.isFinite(num)) {
-        return Promise.reject(t('common.page.form.placeholder.select', { field: t('entity.serialoutbounditem.referenceinboundlinenumber') }))
+        return Promise.reject(pi.ph('referenceInboundLineNumber'))
       }
       return Promise.resolve()
     },
     trigger: 'change'
   }],
-  outboundTime: [
-    {
-      required: true,
-      message: t('common.page.form.placeholder.select', { field: t('entity.serialoutbounditem.outboundtime') }),
-      trigger: 'change'
-    }
-  ],
 }))
 
 /** 校验表单（失败 throw，供父级 handleFormSubmit 捕获） */
@@ -291,7 +292,7 @@ async function validate() {
   return formState
 }
 
-/** 映射为 Create/Update DTO（含主表外键 outboundId） */
+/** 映射为 Create/Update DTO（含主表外键 serialOutboundId） */
 function getValues(): Record<string, any> {
   const payload = { ...formState }
   if ('lineNumber' in payload) {
@@ -303,7 +304,7 @@ function getValues(): Record<string, any> {
     payload.referenceInboundLineNumber = typeof rawreferenceInboundLineNumber === 'number' ? rawreferenceInboundLineNumber : Number(rawreferenceInboundLineNumber)
   }
   if ('sortOrder' in payload) delete payload.sortOrder
-  payload.outboundId = props.masterId
+  payload.serialOutboundId = props.masterId
   return payload
 }
 

@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Application.Validators.Logistics.Procurement
 // 文件名称：TaktPurchaseInquiryValidators.cs
-// 创建时间：2026-07-02
+// 创建时间：2026-07-09
 // 创建人：Takt365(Auto Generated)
 // 功能描述：PurchaseInquiry 模块 FluentValidation 验证器（由 generate-validators-from-entity.cjs 根据 TaktPurchaseInquiry 生成，请按需审阅）
 // 
@@ -46,6 +46,9 @@ public class TaktPurchaseInquiryCreateValidator : AbstractValidator<TaktPurchase
         RuleFor(x => x.InquiryBy)
             .NotEmpty().WithMessage("询价人不能为空")
             .MaximumLength(40).WithMessage("询价人长度不能超过40个字符");
+        RuleFor(x => x.PaymentMode)
+            .NotEmpty().WithMessage("付款方式不能为空")
+            .MaximumLength(40).WithMessage("付款方式长度不能超过40个字符");
         RuleFor(x => x.ExtField)
             .MaximumLength(4000).WithMessage("扩展字段JSON长度不能超过4000个字符");
         RuleFor(x => x.Remark)
@@ -86,6 +89,9 @@ public class TaktPurchaseInquiryUpdateValidator : AbstractValidator<TaktPurchase
         RuleFor(x => x.InquiryBy)
             .NotEmpty().WithMessage("询价人不能为空")
             .MaximumLength(40).WithMessage("询价人长度不能超过40个字符");
+        RuleFor(x => x.PaymentMode)
+            .NotEmpty().WithMessage("付款方式不能为空")
+            .MaximumLength(40).WithMessage("付款方式长度不能超过40个字符");
         RuleFor(x => x.ExtField)
             .MaximumLength(4000).WithMessage("扩展字段JSON长度不能超过4000个字符");
         RuleFor(x => x.Remark)
@@ -122,6 +128,9 @@ public class TaktPurchaseInquiryImportValidator : AbstractValidator<TaktPurchase
         RuleFor(x => x.InquiryBy)
             .NotEmpty().WithMessage("询价人不能为空")
             .MaximumLength(40).WithMessage("询价人长度不能超过40个字符");
+        RuleFor(x => x.PaymentMode)
+            .NotEmpty().WithMessage("付款方式不能为空")
+            .MaximumLength(40).WithMessage("付款方式长度不能超过40个字符");
         RuleFor(x => x.ExtField)
             .MaximumLength(4000).WithMessage("扩展字段JSON长度不能超过4000个字符").When(x => !string.IsNullOrWhiteSpace(x.ExtField));
         RuleFor(x => x.Remark)

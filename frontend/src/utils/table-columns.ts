@@ -16,6 +16,24 @@ import type { ColumnGroupType, ColumnType } from 'ant-design-vue/es/table';
 type RowRecord = Record<string, unknown>;
 type ColumnItem = ColumnType<RowRecord> | ColumnGroupType<RowRecord>;
 
+/** 列设置抽屉展示文案（表头 title 为 VNode/函数时由业务列显式提供） */
+export type TaktColumnSettingLabelMeta = {
+  taktColumnSettingLabel?: string;
+};
+
+/**
+ * 读取列设置抽屉展示文案
+ * @param column 表格列配置
+ */
+export function readColumnSettingLabel(column: ColumnItem): string | undefined {
+  const label = (column as TaktColumnSettingLabelMeta).taktColumnSettingLabel;
+  if (label == null) {
+    return undefined;
+  }
+  const trimmed = String(label).trim();
+  return trimmed || undefined;
+}
+
 /** 实体基类作用域 ↔ common.d.ts 三个 EntityBase */
 export type TaktEntityScope = 'tenant' | 'company' | 'approval';
 

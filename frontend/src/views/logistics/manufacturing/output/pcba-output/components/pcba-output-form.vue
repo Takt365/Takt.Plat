@@ -15,7 +15,15 @@
     :rules="rules"
     layout="horizontal"
     label-align="right"
+    :disabled="loading || isMasterProdDateLocked"
   >
+    <a-alert
+      v-if="isMasterProdDateLocked"
+      type="warning"
+      show-icon
+      class="mb-3 shrink-0"
+      :message="prodDateLockedAlertMessage"
+    />
     <a-tabs
       v-model:active-key="activeTab"
       class="pcba-output-form-tabs"
@@ -79,8 +87,7 @@
                   :placeholder="t('common.page.form.placeholder.required', { field: t('entity.pcbaoutput.plantcode') })"
                   show-count
                   :maxlength="4"
-                  allow-clear
-                  :disabled="!!formData?.pcbaOutputId"
+                  disabled
                 />
               </a-form-item>
             </a-col>
@@ -106,6 +113,7 @@
                   :placeholder="t('common.page.form.placeholder.select', { field: t('entity.pcbaoutput.proddate') })"
                   value-format="YYYY-MM-DD"
                   style="width: 100%"
+                  :disabled-date="prodDatePickerDisabledDate"
                 />
               </a-form-item>
             </a-col>
@@ -306,7 +314,7 @@
       :add-button-entity="t('entity.pcbaoutputdetail._self')"
       id-field="pcbaOutputDetailId"
       :default-row="createDefaultPcbaOutputDetailRow"
-      :disabled="loading"
+      :disabled="loading || isMasterProdDateLocked"
       section-border
     />
   </a-form>
@@ -326,9 +334,19 @@ import { RiQuestionLine } from '@remixicon/vue'
 import { useDictDataStore } from '@/stores/foundation/dict-data'
 import { useTenantStore } from '@/stores/identity/tenant'
 import { useUserStore } from '@/stores/identity/user'
+import { getProductionOrderByCode } from '@/api/logistics/manufacturing/planning/production-order'
+import { getModelDestinationByMaterial } from '@/api/logistics/materials/model-destination'
+import {
+  isOutputProdDateLocked,
+  isOutputProdDateSelectable,
+  outputProdDatePickerDisabledDate,
+  resolveDefaultOutputProdDateYmd,
+} from '../../composables/takt-output-prod-date-edit-lock'
+import { useOutputProdDateI18n } from '../../composables/use-output-prod-date-i18n'
 
 /** i18n 翻译函数 */
 const { t } = useI18n()
+const prodDateI18n = useOutputProdDateI18n()
 
 /** Pinia：租户/公司上下文 */
 const tenantStore = useTenantStore()
@@ -468,9 +486,25 @@ const props = withDefaults(defineProps<Props>(), {
 const formRef = ref()
 /** 表单双向绑定模型 */
 const formState = reactive<Record<string, any>>({})
-/** 表单字段默认值（无字典默认项） */
+
+/** 主表生产日期是否已锁定 */
+const isMasterProdDateLocked = computed(() =>
+  isOutputProdDateLocked(String(formState.prodDate ?? '').trim().slice(0, 10)),
+)
+/** 锁定提示文案 */
+const prodDateLockedAlertMessage = computed(() =>
+  prodDateI18n.prodDateLockedMessage(String(formState.prodDate ?? '').trim().slice(0, 10)),
+)
+/** 生产日期不可选已锁定/跨月/未来日期 */
+function prodDatePickerDisabledDate(current: Parameters<typeof outputProdDatePickerDisabledDate>[0]) {
+  return outputProdDatePickerDisabledDate(current)
+}
+
+/** 表单字段默认值 */
 function applyFormDefaults(target: Record<string, unknown>) {
-  void target
+  if (!target.prodDate) {
+    target.prodDate = resolveDefaultOutputProdDateYmd()
+  }
 }
 
 /** Pinia：字典缓存（TaktSelect dict-type 渲染前预热，避免选项空白） */
@@ -506,6 +540,41 @@ watch(
   { immediate: true }
 )
 
+/** 按工单号回填主表字段（仅新增态） */
+async function backfillFromProductionOrder() {
+  if (props.formData?.pcbaOutputId) {
+    return
+  }
+  const prodOrderCode = String(formState.prodOrderCode ?? '').trim()
+  if (!prodOrderCode) {
+    return
+  }
+  try {
+    const order = await getProductionOrderByCode(prodOrderCode)
+    if (order.plantCode) {
+      formState.plantCode = order.plantCode
+    }
+    formState.materialCode = order.materialCode ?? ''
+    formState.prodOrderQty = order.prodOrderQty ?? 0
+    formState.batchNo = order.prodBatch ?? ''
+    if (order.materialCode) {
+      const model = await getModelDestinationByMaterial(order.materialCode)
+      if (model?.modelCode) {
+        formState.modelCode = model.modelCode
+      }
+    }
+  } catch {
+    // 工单不存在时保留用户已填内容
+  }
+}
+
+watch(
+  () => formState.prodOrderCode,
+  () => {
+    void backfillFromProductionOrder()
+  }
+)
+
 /** 公司/租户切换时，新增态表单同步隔离字段 */
 watch(
   () => [tenantStore.tenantCode, tenantStore.companyCode, userStore.userInfo?.companyDefaultCulture] as const,
@@ -538,7 +607,23 @@ const rules = computed<Record<string, Rule[]>>(() => ({
       required: true,
       message: t('common.page.form.placeholder.select', { field: t('entity.pcbaoutput.proddate') }),
       trigger: 'change'
-    }
+    },
+    {
+      validator: async (_rule, value) => {
+        const ymd = String(value ?? '').trim().slice(0, 10)
+        if (!ymd) {
+          return Promise.resolve()
+        }
+        if (isOutputProdDateLocked(ymd)) {
+          return Promise.reject(prodDateI18n.prodDateLockedMessage(ymd))
+        }
+        if (!isOutputProdDateSelectable(ymd)) {
+          return Promise.reject(prodDateI18n.prodDateOutOfRangeMessage())
+        }
+        return Promise.resolve()
+      },
+      trigger: 'change',
+    },
   ],
   prodTeam: [
     {
@@ -637,6 +722,9 @@ const rules = computed<Record<string, Rule[]>>(() => ({
 
 /** 校验表单（失败 throw，供父级 handleFormSubmit 捕获） */
 async function validate() {
+  if (isMasterProdDateLocked.value) {
+    throw new Error(prodDateLockedAlertMessage.value)
+  }
   await formRef.value?.validate()
   await pcbaOutputDetailTableRef.value?.validate?.()
   return formState

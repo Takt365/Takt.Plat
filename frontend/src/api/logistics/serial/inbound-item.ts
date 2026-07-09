@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：frontend/src/api/logistics/serial
 // 文件名称：inbound-item.ts
-// 创建时间：2026-06-23
+// 创建时间：2026-07-09
 // 创建人：Takt365(Auto Generated)
 // 功能描述：logistics/serial 模块 API（自动生成，请勿手改路由常量）
 // 
@@ -18,6 +18,7 @@ import type {
 import type {
   SerialInboundItem,
   SerialInboundItemCreate,
+  SerialInboundItemObsolete,
   SerialInboundItemUpdate
 } from '@/types/logistics/serial/inbound-item';
 
@@ -105,6 +106,19 @@ export function deleteSerialInboundItemBatch(ids: string[]): Promise<void> {
     url: `${SERIAL_INBOUND_ITEM_API_BASE}/batch`,
     method: 'delete',
     data: ids,
+  });
+}
+
+/**
+ * 更新序列号入库明细作废状态
+ * @param {SerialInboundItemObsolete} dto 作废 DTO
+ * @returns {Promise<SerialInboundItem>} 序列号入库明细DTO
+ */
+export function updateSerialInboundItemObsolete(dto: SerialInboundItemObsolete): Promise<SerialInboundItem> {
+  return request<SerialInboundItem>({
+    url: `${SERIAL_INBOUND_ITEM_API_BASE}/obsolete`,
+    method: 'put',
+    data: dto,
   });
 }
 

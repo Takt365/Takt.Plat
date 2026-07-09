@@ -508,7 +508,7 @@ const advancedQueryForm = ref({
   timeUnit: '',
   standardShorts: undefined as number | undefined,
   pointsUnit: '',
-  pointsToMinutesRate: '' as string,
+  pointsToMinutesRate: undefined as number | undefined,
   convertedMinutes: undefined as number | undefined,
   effectiveDateStart: '',
   effectiveDateEnd: '',
@@ -607,7 +607,11 @@ function buildListQuery(overrides?: Partial<StandardOperationTimeQuery>): Standa
     query.standardShorts = form.standardShorts
   }
   assignTrimmed('pointsUnit', form.pointsUnit)
-  assignTrimmed('pointsToMinutesRate', form.pointsToMinutesRate)
+  if (form.pointsToMinutesRate !== undefined && form.pointsToMinutesRate !== null) {
+    query.pointsToMinutesRate = typeof form.pointsToMinutesRate === 'number'
+      ? form.pointsToMinutesRate
+      : Number(form.pointsToMinutesRate)
+  }
   if (form.convertedMinutes !== undefined && form.convertedMinutes !== null) {
     query.convertedMinutes = form.convertedMinutes
   }
@@ -874,7 +878,7 @@ function handleReset() {
   timeUnit: '',
   standardShorts: undefined as number | undefined,
   pointsUnit: '',
-  pointsToMinutesRate: '' as string,
+  pointsToMinutesRate: undefined as number | undefined,
   convertedMinutes: undefined as number | undefined,
   effectiveDateStart: '',
   effectiveDateEnd: '',
@@ -1070,7 +1074,7 @@ function handleAdvancedQueryReset() {
   timeUnit: '',
   standardShorts: undefined as number | undefined,
   pointsUnit: '',
-  pointsToMinutesRate: '' as string,
+  pointsToMinutesRate: undefined as number | undefined,
   convertedMinutes: undefined as number | undefined,
   effectiveDateStart: '',
   effectiveDateEnd: '',

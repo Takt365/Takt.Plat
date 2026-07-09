@@ -36,7 +36,6 @@ public class TaktBillOfMaterialService : TaktServiceBase, ITaktBillOfMaterialSer
 
     private readonly ITaktCompanyRepository<TaktBillOfMaterial> _billOfMaterialRepository;
     private readonly ITaktCompanyRepository<TaktBillOfMaterialItem> _billOfMaterialItemRepository;
-    private readonly ITaktCompanyRepository<TaktBillOfMaterialChangeLog> _billOfMaterialChangeLogRepository;
     private readonly ITaktCompanyRepository<TaktMaterialPlant> _materialPlantRepository;
     private readonly ITaktSortOrderGenerator _sortOrderGenerator;
     private readonly ITaktLineNumberGenerator _lineNumberGenerator;
@@ -47,7 +46,6 @@ public class TaktBillOfMaterialService : TaktServiceBase, ITaktBillOfMaterialSer
     /// </summary>
     /// <param name="billOfMaterialRepository">物料清单仓储</param>
     /// <param name="billOfMaterialItemRepository">BillOfMaterialItem仓储</param>
-    /// <param name="billOfMaterialChangeLogRepository">BillOfMaterialChangeLog仓储</param>
     /// <param name="materialPlantRepository">工厂物料仓储</param>
     /// <param name="sortOrderGenerator">排序号生成器</param>
     /// <param name="lineNumberGenerator">明细行号生成器</param>
@@ -57,7 +55,6 @@ public class TaktBillOfMaterialService : TaktServiceBase, ITaktBillOfMaterialSer
     public TaktBillOfMaterialService(
         ITaktCompanyRepository<TaktBillOfMaterial> billOfMaterialRepository,
         ITaktCompanyRepository<TaktBillOfMaterialItem> billOfMaterialItemRepository,
-        ITaktCompanyRepository<TaktBillOfMaterialChangeLog> billOfMaterialChangeLogRepository,
         ITaktCompanyRepository<TaktMaterialPlant> materialPlantRepository,
         ITaktSortOrderGenerator sortOrderGenerator,
         ITaktLineNumberGenerator lineNumberGenerator,
@@ -68,7 +65,6 @@ public class TaktBillOfMaterialService : TaktServiceBase, ITaktBillOfMaterialSer
     {
         _billOfMaterialRepository = billOfMaterialRepository;
         _billOfMaterialItemRepository = billOfMaterialItemRepository;
-        _billOfMaterialChangeLogRepository = billOfMaterialChangeLogRepository;
         _materialPlantRepository = materialPlantRepository;
         _sortOrderGenerator = sortOrderGenerator;
         _lineNumberGenerator = lineNumberGenerator;
@@ -202,7 +198,6 @@ public class TaktBillOfMaterialService : TaktServiceBase, ITaktBillOfMaterialSer
             throw new TaktBusinessException("物料清单不存在或已删除");
         }
         await _billOfMaterialItemRepository.DeleteAsync(x => x.BillOfMaterialId == entity.Id);
-        await _billOfMaterialChangeLogRepository.DeleteAsync(x => x.BillOfMaterialId == entity.Id);
         var deleted = await _billOfMaterialRepository.DeleteAsync(id);
         if (!deleted)
         {
@@ -455,7 +450,7 @@ public class TaktBillOfMaterialService : TaktServiceBase, ITaktBillOfMaterialSer
     // ========================================
 
     /// <summary>
-    /// 填充物料清单详情（加载 OneToMany 子表：物料清单明细、BOM变更记录）
+    /// 填充物料清单详情（加载 OneToMany 子表：物料清单明细）
     /// </summary>
     /// <param name="dto">响应 DTO</param>
     /// <param name="entity">主表实体</param>
@@ -469,13 +464,10 @@ public class TaktBillOfMaterialService : TaktServiceBase, ITaktBillOfMaterialSer
         // 物料清单明细 → dto.Items
         var items = await _billOfMaterialItemRepository.GetListAsync(x => x.BillOfMaterialId == entity.Id);
         dto.Items = items.Adapt<List<TaktBillOfMaterialItemDto>>();
-        // BOM变更记录 → dto.ChangeLogs
-        var changelogs = await _billOfMaterialChangeLogRepository.GetListAsync(x => x.BillOfMaterialId == entity.Id);
-        dto.ChangeLogs = changelogs.Adapt<List<TaktBillOfMaterialChangeLogDto>>();
     }
 
     /// <summary>
-    /// 保存物料清单子表级联（物料清单明细、BOM变更记录；Create/Update 后按主表 Id 先删后插）
+    /// 保存物料清单子表级联（物料清单明细；Create/Update 后按主表 Id 先删后插）
     /// </summary>
     /// <param name="entity">主表实体</param>
     /// <param name="dto">创建/更新 DTO（含子表集合；UpdateDto 须继承 CreateDto）</param>
@@ -535,24 +527,6 @@ public class TaktBillOfMaterialService : TaktServiceBase, ITaktBillOfMaterialSer
             }
             }
             await _billOfMaterialItemRepository.CreateRangeAsync(items);
-        }
-        // BOM变更记录（ChangeLogs）
-        if (dto.ChangeLogs is not { Count: > 0 })
-        {
-            await _billOfMaterialChangeLogRepository.DeleteAsync(x => x.BillOfMaterialId == entity.Id);
-        }
-        else
-        {
-            var changelogs = dto.ChangeLogs.Adapt<List<TaktBillOfMaterialChangeLog>>();
-            foreach (var child in changelogs)
-            {
-                child.BillOfMaterialId = entity.Id;
-            }
-            await _billOfMaterialChangeLogRepository.DeleteAsync(x => x.BillOfMaterialId == entity.Id);
-            foreach (var child in changelogs)
-            {
-            }
-            await _billOfMaterialChangeLogRepository.CreateRangeAsync(changelogs);
         }
     }
     // ========================================

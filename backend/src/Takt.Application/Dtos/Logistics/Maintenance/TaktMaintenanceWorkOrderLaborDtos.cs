@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Application.Dtos.Logistics.Maintenance
 // 文件名称：TaktMaintenanceWorkOrderLaborDtos.cs
-// 创建时间：2026-06-24
+// 创建时间：2026-07-09
 // 创建人：Takt365(Auto Generated)
 // 功能描述：MaintenanceWorkOrderLabor 模块 DTO（由 generate-dtos-from-entity.cjs 根据 TaktMaintenanceWorkOrderLabor 生成，请按需审阅）
 // 
@@ -108,14 +108,19 @@ public class TaktMaintenanceWorkOrderLaborDto : TaktCompanyDtoBase
     public string? OperationDescription { get; set; } = string.Empty;
 
     /// <summary>
+    /// 报工确认状态（0=待确认，1=已确认）
+    /// </summary>
+    public int ConfirmationStatus { get; set; } = 0;
+
+    /// <summary>
     /// 确认时间
     /// </summary>
     public DateTime? ConfirmedAt { get; set; }
 
     /// <summary>
-    /// 报工确认状态（0=待确认，1=已确认）
+    /// 是否作废（字典 sys_yes_no_type，0=否 1=是；编辑移除子行时标记作废）
     /// </summary>
-    public int ConfirmationStatus { get; set; } = 0;
+    public int IsObsolete { get; set; } = 0;
 
     /// <summary>
     /// 维护工单（主表）
@@ -228,6 +233,11 @@ public class TaktMaintenanceWorkOrderLaborQueryDto : TaktPagedQuery
     public string? OperationDescription { get; set; } = string.Empty;
 
     /// <summary>
+    /// 报工确认状态（0=待确认，1=已确认）
+    /// </summary>
+    public int? ConfirmationStatus { get; set; }
+
+    /// <summary>
     /// 确认时间（范围查询-开始）
     /// </summary>
     public DateTime? ConfirmedAtStart { get; set; }
@@ -238,9 +248,9 @@ public class TaktMaintenanceWorkOrderLaborQueryDto : TaktPagedQuery
     public DateTime? ConfirmedAtEnd { get; set; }
 
     /// <summary>
-    /// 报工确认状态（0=待确认，1=已确认）
+    /// 是否作废（字典 sys_yes_no_type，0=否 1=是；编辑移除子行时标记作废）
     /// </summary>
-    public int? ConfirmationStatus { get; set; }
+    public int? IsObsolete { get; set; }
 
     /// <summary>
     /// 创建时间（范围查询-开始）
@@ -357,14 +367,19 @@ public class TaktMaintenanceWorkOrderLaborCreateDto
     public string? OperationDescription { get; set; } = string.Empty;
 
     /// <summary>
+    /// 报工确认状态（0=待确认，1=已确认）
+    /// </summary>
+    public int ConfirmationStatus { get; set; } = 0;
+
+    /// <summary>
     /// 确认时间
     /// </summary>
     public DateTime? ConfirmedAt { get; set; }
 
     /// <summary>
-    /// 报工确认状态（0=待确认，1=已确认）
+    /// 是否作废（字典 sys_yes_no_type，0=否 1=是；编辑移除子行时标记作废）
     /// </summary>
-    public int ConfirmationStatus { get; set; } = 0;
+    public int IsObsolete { get; set; } = 0;
 
     /// <summary>
     /// 扩展字段JSON
@@ -420,6 +435,29 @@ public class TaktMaintenanceWorkOrderLaborStatusDto
     /// </summary>
     [Required(ErrorMessage = "报工确认状态（0=待确认，1=已确认）不能为空")]
     public int ConfirmationStatus { get; set; } = 0;
+}
+
+// ========================================
+// MaintenanceWorkOrderLabor 作废 DTO
+// ========================================
+
+/// <summary>
+/// MaintenanceWorkOrderLabor 作废/撤销作废 DTO
+/// </summary>
+public class TaktMaintenanceWorkOrderLaborObsoleteDto
+{
+    /// <summary>
+    /// MaintenanceWorkOrderLaborID
+    /// </summary>
+    [Required(ErrorMessage = "ID不能为空")]
+    [AdaptMember("Id")]
+    [JsonConverter(typeof(ValueToStringConverter))]
+    public long MaintenanceWorkOrderLaborId { get; set; }
+
+    /// <summary>
+    /// 是否作废（字典 sys_yes_no_type，0=否 1=是；编辑移除子行时标记作废）
+    /// </summary>
+    public int IsObsolete { get; set; }
 }
 
 // ========================================
@@ -509,14 +547,19 @@ public class TaktMaintenanceWorkOrderLaborTemplateDto
     public string? OperationDescription { get; set; } = string.Empty;
 
     /// <summary>
+    /// 报工确认状态（0=待确认，1=已确认）
+    /// </summary>
+    public int? ConfirmationStatus { get; set; }
+
+    /// <summary>
     /// 确认时间
     /// </summary>
     public DateTime? ConfirmedAt { get; set; }
 
     /// <summary>
-    /// 报工确认状态（0=待确认，1=已确认）
+    /// 是否作废（字典 sys_yes_no_type，0=否 1=是；编辑移除子行时标记作废）
     /// </summary>
-    public int? ConfirmationStatus { get; set; }
+    public int? IsObsolete { get; set; }
 
     /// <summary>
     /// 扩展字段JSON
@@ -618,14 +661,19 @@ public class TaktMaintenanceWorkOrderLaborImportDto
     public string? OperationDescription { get; set; } = string.Empty;
 
     /// <summary>
+    /// 报工确认状态（0=待确认，1=已确认）
+    /// </summary>
+    public int? ConfirmationStatus { get; set; }
+
+    /// <summary>
     /// 确认时间
     /// </summary>
     public DateTime? ConfirmedAt { get; set; }
 
     /// <summary>
-    /// 报工确认状态（0=待确认，1=已确认）
+    /// 是否作废（字典 sys_yes_no_type，0=否 1=是；编辑移除子行时标记作废）
     /// </summary>
-    public int? ConfirmationStatus { get; set; }
+    public int? IsObsolete { get; set; }
 
     /// <summary>
     /// 扩展字段JSON
@@ -728,14 +776,19 @@ public class TaktMaintenanceWorkOrderLaborExportDto
     public string? OperationDescription { get; set; } = string.Empty;
 
     /// <summary>
+    /// 报工确认状态（0=待确认，1=已确认）
+    /// </summary>
+    public int ConfirmationStatus { get; set; } = 0;
+
+    /// <summary>
     /// 确认时间
     /// </summary>
     public DateTime? ConfirmedAt { get; set; }
 
     /// <summary>
-    /// 报工确认状态（0=待确认，1=已确认）
+    /// 是否作废（字典 sys_yes_no_type，0=否 1=是；编辑移除子行时标记作废）
     /// </summary>
-    public int ConfirmationStatus { get; set; } = 0;
+    public int IsObsolete { get; set; } = 0;
 
     /// <summary>
     /// 扩展字段JSON

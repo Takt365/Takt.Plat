@@ -518,34 +518,6 @@
             </a-col>
             <a-col :span="24">
               <a-form-item
-                :label="pi.label('roleIds')"
-                name="roleIds"
-              >
-                <a-input
-                  v-model:value="formState.roleIds"
-                  :placeholder="pi.ph('roleIds')"
-                  show-count
-                  :maxlength="20"
-                  allow-clear
-                />
-              </a-form-item>
-            </a-col>
-            <a-col :span="24">
-              <a-form-item
-                :label="pi.label('userIds')"
-                name="userIds"
-              >
-                <a-input
-                  v-model:value="formState.userIds"
-                  :placeholder="pi.ph('userIds')"
-                  show-count
-                  :maxlength="20"
-                  allow-clear
-                />
-              </a-form-item>
-            </a-col>
-            <a-col :span="24">
-              <a-form-item
                 name="extField"
                 class="takt-form-item-ext-field"
               >

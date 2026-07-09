@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Application.Dtos.Logistics.Manufacturing.Scheduling
 // 文件名称：TaktApsScheduleItemDtos.cs
-// 创建时间：2026-06-30
+// 创建时间：2026-07-09
 // 创建人：Takt365(Auto Generated)
 // 功能描述：ApsScheduleItem 模块 DTO（由 generate-dtos-from-entity.cjs 根据 TaktApsScheduleItem 生成，请按需审阅）
 // 
@@ -180,6 +180,11 @@ public class TaktApsScheduleItemDto : TaktCompanyDtoBase
     public int Priority { get; set; } = 0;
 
     /// <summary>
+    /// 是否作废（字典 sys_yes_no_type，0=否 1=是；编辑移除子行时标记作废）
+    /// </summary>
+    public int IsObsolete { get; set; } = 0;
+
+    /// <summary>
     /// APS排程主表（主表）
     /// （主表：TaktApsSchedule）
     /// </summary>
@@ -350,6 +355,11 @@ public class TaktApsScheduleItemQueryDto : TaktPagedQuery
     /// 优先级（0=普通，1=紧急，2=特急）
     /// </summary>
     public int? Priority { get; set; }
+
+    /// <summary>
+    /// 是否作废（字典 sys_yes_no_type，0=否 1=是；编辑移除子行时标记作废）
+    /// </summary>
+    public int? IsObsolete { get; set; }
 
     /// <summary>
     /// 创建时间（范围查询-开始）
@@ -527,6 +537,11 @@ public class TaktApsScheduleItemCreateDto
     public int Priority { get; set; } = 0;
 
     /// <summary>
+    /// 是否作废（字典 sys_yes_no_type，0=否 1=是；编辑移除子行时标记作废）
+    /// </summary>
+    public int IsObsolete { get; set; } = 0;
+
+    /// <summary>
     /// 扩展字段JSON
     /// </summary>
     public string? ExtField { get; set; }
@@ -580,6 +595,29 @@ public class TaktApsScheduleItemStatusDto
     /// </summary>
     [Required(ErrorMessage = "工序状态（0=未开始，1=准备中，2=加工中，3=已完工，4=已暂停，5=已取消）不能为空")]
     public int ProcessStatus { get; set; } = 0;
+}
+
+// ========================================
+// ApsScheduleItem 作废 DTO
+// ========================================
+
+/// <summary>
+/// ApsScheduleItem 作废/撤销作废 DTO
+/// </summary>
+public class TaktApsScheduleItemObsoleteDto
+{
+    /// <summary>
+    /// ApsScheduleItemID
+    /// </summary>
+    [Required(ErrorMessage = "ID不能为空")]
+    [AdaptMember("Id")]
+    [JsonConverter(typeof(ValueToStringConverter))]
+    public long ApsScheduleItemId { get; set; }
+
+    /// <summary>
+    /// 是否作废（字典 sys_yes_no_type，0=否 1=是；编辑移除子行时标记作废）
+    /// </summary>
+    public int IsObsolete { get; set; }
 }
 
 // ========================================
@@ -724,6 +762,11 @@ public class TaktApsScheduleItemTemplateDto
     /// 优先级（0=普通，1=紧急，2=特急）
     /// </summary>
     public int? Priority { get; set; }
+
+    /// <summary>
+    /// 是否作废（字典 sys_yes_no_type，0=否 1=是；编辑移除子行时标记作废）
+    /// </summary>
+    public int? IsObsolete { get; set; }
 
     /// <summary>
     /// 扩展字段JSON
@@ -882,6 +925,11 @@ public class TaktApsScheduleItemImportDto
     public int? Priority { get; set; }
 
     /// <summary>
+    /// 是否作废（字典 sys_yes_no_type，0=否 1=是；编辑移除子行时标记作废）
+    /// </summary>
+    public int? IsObsolete { get; set; }
+
+    /// <summary>
     /// 扩展字段JSON
     /// </summary>
     public string? ExtField { get; set; }
@@ -1037,6 +1085,11 @@ public class TaktApsScheduleItemExportDto
     /// 优先级（0=普通，1=紧急，2=特急）
     /// </summary>
     public int Priority { get; set; } = 0;
+
+    /// <summary>
+    /// 是否作废（字典 sys_yes_no_type，0=否 1=是；编辑移除子行时标记作废）
+    /// </summary>
+    public int IsObsolete { get; set; } = 0;
 
     /// <summary>
     /// 扩展字段JSON

@@ -275,13 +275,24 @@ import { useI18n } from 'vue-i18n'
 import { ensureTaktPaginationConfigAsync, getTaktDefaultPageIndex, getTaktDefaultPageSize } from '@/utils/takt-paged'
 import MaterialDocumentForm from './components/material-document-form.vue'
 import MaterialDocumentItemPanel from './components/material-document-item-panel.vue'
-import { provideMaterialDocumentMasterContext } from './composables/use-material-document-master-context'
+import { provideMaterialDocumentMasterContext, type MaterialDocumentRowRecord } from './composables/use-material-document-master-context'
 import { getMaterialDocumentList, getMaterialDocumentById, createMaterialDocument, updateMaterialDocument, deleteMaterialDocumentById, deleteMaterialDocumentBatch, getMaterialDocumentTemplate, importMaterialDocument, exportMaterialDocument, updateMaterialDocumentStatus } from '@/api/logistics/materials/material-document'
 import type { MaterialDocument, MaterialDocumentQuery } from '@/types/logistics/materials/material-document'
 import { taktExcelEntityNames } from '@/utils/naming'
 import { resolveExportDownloadFileName } from '@/utils/export-download-name'
 import { normalizeImportResult, type TaktImportResult } from '@/utils/takt-import-result'
 import { RiEditLine, RiDeleteBinLine, RiQuestionLine } from '@remixicon/vue'
+
+import {
+  useMaterialDocumentI18n,
+  MATERIALDOCUMENT_LIST_FIELDS,
+  MATERIALDOCUMENT_QUERY_STRING_FIELDS,
+  MATERIALDOCUMENT_QUERY_FIELDS,
+  MATERIALDOCUMENT_SELF_I18N_KEY,
+} from './composables/use-material-document-i18n'
+
+/** 实体字段 i18n（标签/占位符统一入口） */
+const pi = useMaterialDocumentI18n()
 
 /** i18n 翻译函数 */
 const { t } = useI18n()
@@ -324,18 +335,22 @@ const formRef = ref()
 
 /** 高级查询抽屉是否打开 */
 const advancedQueryVisible = ref(false)
+/**
+ * 创建空的高级查询表单
+ * @returns {Record<string, unknown>} 高级查询初始模型
+ */
+function createEmptyAdvancedQueryForm() {
+  const form = Object.fromEntries(MATERIALDOCUMENT_QUERY_STRING_FIELDS.map((key) => [key, ''])) as Record<
+    (typeof MATERIALDOCUMENT_QUERY_STRING_FIELDS)[number],
+    string
+  >
+  return {
+    ...form,
+    materialDocumentStatus: undefined as number | undefined,
+  }
+}
 /** 高级查询表单模型 */
-const advancedQueryForm = ref({
-  plantCode: '',
-  materialCode: '',
-  materialDocumentCode: '',
-  postedBy: '',
-  materialDocumentStatus: undefined as number | undefined,
-  createdAtStart: '',
-  createdAtEnd: '',
-  extField: '',
-  remark: '',
-})
+const advancedQueryForm = ref(createEmptyAdvancedQueryForm())
 /** 高级查询字段元数据（列显隐配置） */
 const queryFieldsMeta = computed(() =>
   MATERIALDOCUMENT_QUERY_FIELDS.map((key) => ({ key, label: pi.queryLabel(key) })),
@@ -400,7 +415,7 @@ onMounted(async () => {
 const selectedMasterKey = ref('')
 
 /** 同步主表选中行到右侧明细（子表由 *-panel watch 自动 reload） */
-function syncMasterSelection(record: MaterialDocument | null) {
+function syncMasterSelection(record: MaterialDocumentRowRecord | null) {
   selectedMasterRow.value = record
   selectedMasterKey.value = record ? getMaterialDocumentId(record) : ''
 }
@@ -410,7 +425,7 @@ function syncMasterSelection(record: MaterialDocument | null) {
  * @param record 主表行
  */
 function handleMasterSelect(record: Record<string, unknown>) {
-  const row = record as unknown as MaterialDocument
+  const row = record as unknown as MaterialDocumentRowRecord
   const key = getMaterialDocumentId(row)
   selectedRowKeys.value = [key]
   selectedRows.value = [row]
@@ -428,7 +443,7 @@ function handleMasterPaginationChange(_page: number, _pageSize: number) {
 }
 
 /** 加载主表详情并回填当前页 dataSource */
-async function loadMaterialDocumentDetail(record: MaterialDocument): Promise<MaterialDocument | null> {
+async function loadMaterialDocumentDetail(record: MaterialDocumentRowRecord): Promise<MaterialDocument | null> {
   const id = getMaterialDocumentId(record)
   if (!id) {
     return null
@@ -511,7 +526,7 @@ const columns = computed<TableColumnsType>(() => [
         shape: 'plain',
         icon: RiEditLine,
         permission: 'logistics:materials:material:document:update',
-        onClick: (record: MaterialDocument) => handleEdit(record)
+        onClick: (record: MaterialDocumentRowRecord) => handleEdit(record)
       },
       {
         key: 'delete',
@@ -519,14 +534,17 @@ const columns = computed<TableColumnsType>(() => [
         shape: 'plain',
         icon: RiDeleteBinLine,
         permission: 'logistics:materials:material:document:delete',
-        onClick: (record: MaterialDocument) => handleDeleteOne(record)
+        onClick: (record: MaterialDocumentRowRecord) => handleDeleteOne(record)
       }
     ]
   })
 ])
 
 /** 表格 row-key（优先实体主键字段） */
-const getMaterialDocumentId = (record: any): string => record?.[entityIdName] ?? ''
+const getMaterialDocumentId = (record: MaterialDocumentRowRecord): string => {
+  const id = (record as Record<string, unknown>)?.[entityIdName]
+  return id != null ? String(id) : ''
+}
 /**
  * 读取行字段值
  * @param record 行数据
@@ -535,10 +553,11 @@ const getMaterialDocumentId = (record: any): string => record?.[entityIdName] ??
 const getMaterialDocumentField = (record: any, field: string): any => record?.[field]
 
 
+
 /** 行选择配置 */
 const rowSelection = computed(() => ({
   selectedRowKeys: selectedRowKeys.value,
-  onChange: (keys: (string | number)[], rows: MaterialDocument[]) => {
+  onChange: (keys: (string | number)[], rows: MaterialDocumentRowRecord[]) => {
     selectedRowKeys.value = keys
     selectedRows.value = rows
     selectedRow.value = rows.length === 1 ? (rows[0] ?? null) : null
@@ -548,7 +567,7 @@ const rowSelection = computed(() => ({
       syncMasterSelection(null)
     }
   },
-  onSelect: (record: MaterialDocument, selected: boolean) => {
+  onSelect: (record: MaterialDocumentRowRecord, selected: boolean) => {
     if (selected) {
       selectedRow.value = record
       syncMasterSelection(record)
@@ -557,7 +576,7 @@ const rowSelection = computed(() => ({
       syncMasterSelection(null)
     }
   },
-  onSelectAll: (selected: boolean, selectedRowsData: MaterialDocument[]) => {
+  onSelectAll: (selected: boolean, selectedRowsData: MaterialDocumentRowRecord[]) => {
     selectedRow.value = selected && selectedRowsData.length === 1 ? (selectedRowsData[0] ?? null) : null
     syncMasterSelection(selectedRow.value)
   }
@@ -609,14 +628,14 @@ function handleReset() {
 
 /** 打开新增弹窗 */
 function handleCreate() {
-  formTitle.value = t('common.dialog.title.create', { entity: t('entity.materialdocument._self') })
+  formTitle.value = t('common.dialog.title.create', { entity: pi.self() })
   formData.value = null
   formVisible.value = true
   nextTick(() => formRef.value?.resetFields())
 }
 /** 打开编辑弹窗（主子表：先拉详情含子表） */
-async function handleEdit(record: MaterialDocument) {
-  formTitle.value = t('common.dialog.title.edit', { entity: t('entity.materialdocument._self') })
+async function handleEdit(record: MaterialDocumentRowRecord) {
+  formTitle.value = t('common.dialog.title.edit', { entity: pi.self() })
   formLoading.value = true
   try {
     const detail = await loadMaterialDocumentDetail(record)
@@ -632,7 +651,7 @@ function handleUpdate() {
   if (selectedRow.value) {
     void handleEdit(selectedRow.value)
   } else {
-    message.warning(t('common.tip.select.to.action', { action: t('common.page.button.edit'), entity: t('entity.materialdocument._self') }))
+    message.warning(t('common.tip.select.to.action', { action: t('common.page.button.edit'), entity: pi.self() }))
   }
 }
 /** 提交新增/编辑表单 */
@@ -650,10 +669,10 @@ async function handleFormSubmit() {
     const id = (formData.value as any)?.[entityIdName]
     if (id) {
       await updateMaterialDocument(id, payload as any)
-      message.success(t('common.feedback.updated', { target: t('entity.materialdocument._self') }))
+      message.success(t('common.feedback.updated', { target: pi.self() }))
     } else {
       await createMaterialDocument(payload as any)
-      message.success(t('common.feedback.created', { target: t('entity.materialdocument._self') }))
+      message.success(t('common.feedback.created', { target: pi.self() }))
     }
     formVisible.value = false
     formData.value = null
@@ -733,24 +752,24 @@ async function handleExport() {
     link.click()
     document.body.removeChild(link)
     setTimeout(() => window.URL.revokeObjectURL(url), 100)
-    message.success(t('common.feedback.export.success', { target: t('entity.materialdocument._self') }))
+    message.success(t('common.feedback.export.success', { target: pi.self() }))
   } catch (error: any) {
     logger.error('[MaterialDocument] 导出失败', { error })
-    message.error(error?.message || t('common.feedback.export.failed', { target: t('entity.materialdocument._self') }))
+    message.error(error?.message || t('common.feedback.export.failed', { target: pi.self() }))
   } finally {
     loading.value = false
   }
 }
 /** 删除单行 */
-async function handleDeleteOne(record: MaterialDocument) {
+async function handleDeleteOne(record: MaterialDocumentRowRecord) {
   Modal.confirm({
     title: t('common.tip.confirm.delete.title'),
-    content: t('common.tip.confirm.delete.entity', { entity: t('entity.materialdocument._self'), name: t('common.tip.this.target', { target: t('entity.materialdocument._self') }) }),
+    content: t('common.tip.confirm.delete.entity', { entity: pi.self(), name: t('common.tip.this.target', { target: pi.self() }) }),
     okText: t('common.page.button.delete'),
     cancelText: t('common.page.button.cancel'),
     onOk: async () => {
       await deleteMaterialDocumentById((record as any)[entityIdName])
-      message.success(t('common.feedback.deleted', { target: t('entity.materialdocument._self') }))
+      message.success(t('common.feedback.deleted', { target: pi.self() }))
       selectedRowKeys.value = []
       selectedRows.value = []
       selectedRow.value = null
@@ -762,18 +781,18 @@ async function handleDeleteOne(record: MaterialDocument) {
 /** 批量删除选中行 */
 async function handleDelete() {
   if (selectedRows.value.length === 0) {
-    message.warning(t('common.tip.select.to.action', { action: t('common.page.button.delete'), entity: t('entity.materialdocument._self') }))
+    message.warning(t('common.tip.select.to.action', { action: t('common.page.button.delete'), entity: pi.self() }))
     return
   }
   Modal.confirm({
     title: t('common.tip.confirm.delete.title'),
-    content: t('common.tip.confirm.delete.count', { entity: t('entity.materialdocument._self'), count: selectedRows.value.length }),
+    content: t('common.tip.confirm.delete.count', { entity: pi.self(), count: selectedRows.value.length }),
     okText: t('common.page.button.delete'),
     cancelText: t('common.page.button.cancel'),
     onOk: async () => {
       const ids = selectedRows.value.map((r: any) => r[entityIdName]).filter(Boolean)
       await deleteMaterialDocumentBatch(ids)
-      message.success(t('common.feedback.deleted', { target: t('entity.materialdocument._self') }))
+      message.success(t('common.feedback.deleted', { target: pi.self() }))
       selectedRowKeys.value = []
       selectedRows.value = []
       selectedRow.value = null

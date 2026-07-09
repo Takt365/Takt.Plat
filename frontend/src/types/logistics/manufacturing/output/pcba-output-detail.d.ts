@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：frontend/src/types/logistics/manufacturing/output
 // 文件名称：pcba-output-detail.d.ts
-// 创建时间：2026-06-30
+// 创建时间：2026-07-09
 // 创建人：Takt365(Auto Generated)
 // 功能描述：logistics/manufacturing/output 模块类型定义（自动生成；类型名去 Takt 前缀与末尾 Dto，如 TaktCompanyDto → Company）
 // 
@@ -39,7 +39,7 @@ export interface PcbaOutputDetail extends CompanyDtoBase {
   pcbaOutputName?: string;
 
   /**
-   * 生产工单号（冗余字段,便于查询）
+   * 工单号（冗余字段,便于查询）
    */
   prodOrderCode: string;
 
@@ -49,7 +49,7 @@ export interface PcbaOutputDetail extends CompanyDtoBase {
   lineNumber: number;
 
   /**
-   * 生产时段
+   * 生产时段（PCBA 存工作中心 WorkCenter，新增时按物料查 TaktStandardOperationTime 自动生成）
    */
   timePeriod: string;
 
@@ -79,17 +79,17 @@ export interface PcbaOutputDetail extends CompanyDtoBase {
   dailyCompletedQty: number;
 
   /**
-   * 累计完成数
+   * 累计完成数（计算结果：同工单号+班次+PCB板别+面板别桶内全部明细当日完成数合计）
    */
   totalCompletedQty: number;
 
   /**
-   * 完成状态（字典 logistics_pcba_completed_status；0=未完成 1=部分完成 2=已完成）
+   * 完成状态（计算结果：字典 logistics_pcba_completed_status；0=未完成 1=部分完成 2=已完成；按累计完成数与批次数量比较）
    */
   completedStatus: number;
 
   /**
-   * 序列号
+   * 序列号（明细级）
    */
   serialNo: string;
 
@@ -99,9 +99,29 @@ export interface PcbaOutputDetail extends CompanyDtoBase {
   defectCount: number;
 
   /**
-   * 投入工数(分钟)
+   * 停线时间(分钟)
+   */
+  downtimeMinutes: number;
+
+  /**
+   * 停线原因（字典 logistics_stop_reason_category，多选 DictLabel 逗号分隔）
+   */
+  downtimeReason?: string;
+
+  /**
+   * 停线说明
+   */
+  downtimeDescription?: string;
+
+  /**
+   * 投入工数(分钟)（计算结果：主表 DirectLabor×60）
    */
   inputMinutes: number;
+
+  /**
+   * 实际工时(分钟)（计算结果：MixedProd=0 时投入工时-停线时间；MixedProd≠0 时报工工时-停线时间）
+   */
+  actualMinutes: number;
 
   /**
    * 修工数(分钟)
@@ -129,7 +149,7 @@ export interface PcbaOutputDetail extends CompanyDtoBase {
   totalMinutes: number;
 
   /**
-   * 未达成原因（字典 logistics_nonachievement_reason_category，存 DictValue）
+   * 未达成原因（字典 logistics_nonachievement_reason_category，多选 DictLabel 逗号分隔）
    */
   unachievedReason?: string;
 
@@ -137,6 +157,26 @@ export interface PcbaOutputDetail extends CompanyDtoBase {
    * 未达成说明
    */
   unachievedDescription?: string;
+
+  /**
+   * 报工工时(分钟)
+   */
+  confirmMinutes: number;
+
+  /**
+   * 混合生产（0=非混合；N=此生产时段内另有N笔报工）
+   */
+  mixedProd: number;
+
+  /**
+   * 达成率(%)（计算结果：当日完成数÷主表标准产能×100%；标准产能为0时取0）
+   */
+  achievementRate: number;
+
+  /**
+   * 是否作废（字典 sys_yes_no_type，0=否 1=是；编辑移除子行时标记作废）
+   */
+  isObsolete: number;
 
   /**
    * PCBA日报（主表） （主表：TaktPcbaOutput）
@@ -169,7 +209,7 @@ export interface PcbaOutputDetailQuery extends TaktPagedQuery {
   pcbaOutputId?: string;
 
   /**
-   * 生产工单号（冗余字段,便于查询）
+   * 工单号（冗余字段,便于查询）
    */
   prodOrderCode?: string;
 
@@ -179,7 +219,7 @@ export interface PcbaOutputDetailQuery extends TaktPagedQuery {
   lineNumber?: number;
 
   /**
-   * 生产时段
+   * 生产时段（PCBA 存工作中心 WorkCenter，新增时按物料查 TaktStandardOperationTime 自动生成）
    */
   timePeriod?: string;
 
@@ -209,17 +249,17 @@ export interface PcbaOutputDetailQuery extends TaktPagedQuery {
   dailyCompletedQty?: number;
 
   /**
-   * 累计完成数
+   * 累计完成数（计算结果：同工单号+班次+PCB板别+面板别桶内全部明细当日完成数合计）
    */
   totalCompletedQty?: number;
 
   /**
-   * 完成状态（字典 logistics_pcba_completed_status；0=未完成 1=部分完成 2=已完成）
+   * 完成状态（计算结果：字典 logistics_pcba_completed_status；0=未完成 1=部分完成 2=已完成；按累计完成数与批次数量比较）
    */
   completedStatus?: number;
 
   /**
-   * 序列号
+   * 序列号（明细级）
    */
   serialNo?: string;
 
@@ -229,9 +269,29 @@ export interface PcbaOutputDetailQuery extends TaktPagedQuery {
   defectCount?: number;
 
   /**
-   * 投入工数(分钟)
+   * 停线时间(分钟)
+   */
+  downtimeMinutes?: number;
+
+  /**
+   * 停线原因（字典 logistics_stop_reason_category，多选 DictLabel 逗号分隔）
+   */
+  downtimeReason?: string;
+
+  /**
+   * 停线说明
+   */
+  downtimeDescription?: string;
+
+  /**
+   * 投入工数(分钟)（计算结果：主表 DirectLabor×60）
    */
   inputMinutes?: number;
+
+  /**
+   * 实际工时(分钟)（计算结果：MixedProd=0 时投入工时-停线时间；MixedProd≠0 时报工工时-停线时间）
+   */
+  actualMinutes?: number;
 
   /**
    * 修工数(分钟)
@@ -259,7 +319,7 @@ export interface PcbaOutputDetailQuery extends TaktPagedQuery {
   totalMinutes?: number;
 
   /**
-   * 未达成原因（字典 logistics_nonachievement_reason_category，存 DictValue）
+   * 未达成原因（字典 logistics_nonachievement_reason_category，多选 DictLabel 逗号分隔）
    */
   unachievedReason?: string;
 
@@ -267,6 +327,26 @@ export interface PcbaOutputDetailQuery extends TaktPagedQuery {
    * 未达成说明
    */
   unachievedDescription?: string;
+
+  /**
+   * 报工工时(分钟)
+   */
+  confirmMinutes?: number;
+
+  /**
+   * 混合生产（0=非混合；N=此生产时段内另有N笔报工）
+   */
+  mixedProd?: number;
+
+  /**
+   * 达成率(%)（计算结果：当日完成数÷主表标准产能×100%；标准产能为0时取0）
+   */
+  achievementRate?: number;
+
+  /**
+   * 是否作废（字典 sys_yes_no_type，0=否 1=是；编辑移除子行时标记作废）
+   */
+  isObsolete?: number;
 
   /**
    * 创建时间（范围查询-开始）
@@ -318,7 +398,7 @@ export interface PcbaOutputDetailCreate {
   pcbaOutputId: string;
 
   /**
-   * 生产工单号（冗余字段,便于查询）
+   * 工单号（冗余字段,便于查询）
    */
   prodOrderCode: string;
 
@@ -328,7 +408,7 @@ export interface PcbaOutputDetailCreate {
   lineNumber: number;
 
   /**
-   * 生产时段
+   * 生产时段（PCBA 存工作中心 WorkCenter，新增时按物料查 TaktStandardOperationTime 自动生成）
    */
   timePeriod: string;
 
@@ -358,17 +438,17 @@ export interface PcbaOutputDetailCreate {
   dailyCompletedQty: number;
 
   /**
-   * 累计完成数
+   * 累计完成数（计算结果：同工单号+班次+PCB板别+面板别桶内全部明细当日完成数合计）
    */
   totalCompletedQty: number;
 
   /**
-   * 完成状态（字典 logistics_pcba_completed_status；0=未完成 1=部分完成 2=已完成）
+   * 完成状态（计算结果：字典 logistics_pcba_completed_status；0=未完成 1=部分完成 2=已完成；按累计完成数与批次数量比较）
    */
   completedStatus: number;
 
   /**
-   * 序列号
+   * 序列号（明细级）
    */
   serialNo: string;
 
@@ -378,9 +458,29 @@ export interface PcbaOutputDetailCreate {
   defectCount: number;
 
   /**
-   * 投入工数(分钟)
+   * 停线时间(分钟)
+   */
+  downtimeMinutes: number;
+
+  /**
+   * 停线原因（字典 logistics_stop_reason_category，多选 DictLabel 逗号分隔）
+   */
+  downtimeReason?: string;
+
+  /**
+   * 停线说明
+   */
+  downtimeDescription?: string;
+
+  /**
+   * 投入工数(分钟)（计算结果：主表 DirectLabor×60）
    */
   inputMinutes: number;
+
+  /**
+   * 实际工时(分钟)（计算结果：MixedProd=0 时投入工时-停线时间；MixedProd≠0 时报工工时-停线时间）
+   */
+  actualMinutes: number;
 
   /**
    * 修工数(分钟)
@@ -408,7 +508,7 @@ export interface PcbaOutputDetailCreate {
   totalMinutes: number;
 
   /**
-   * 未达成原因（字典 logistics_nonachievement_reason_category，存 DictValue）
+   * 未达成原因（字典 logistics_nonachievement_reason_category，多选 DictLabel 逗号分隔）
    */
   unachievedReason?: string;
 
@@ -416,6 +516,26 @@ export interface PcbaOutputDetailCreate {
    * 未达成说明
    */
   unachievedDescription?: string;
+
+  /**
+   * 报工工时(分钟)
+   */
+  confirmMinutes: number;
+
+  /**
+   * 混合生产（0=非混合；N=此生产时段内另有N笔报工）
+   */
+  mixedProd: number;
+
+  /**
+   * 达成率(%)（计算结果：当日完成数÷主表标准产能×100%；标准产能为0时取0）
+   */
+  achievementRate: number;
+
+  /**
+   * 是否作废（字典 sys_yes_no_type，0=否 1=是；编辑移除子行时标记作废）
+   */
+  isObsolete: number;
 
   /**
    * 扩展字段JSON
@@ -457,9 +577,28 @@ export interface PcbaOutputDetailStatus {
   pcbaOutputDetailId: string;
 
   /**
-   * 完成状态（字典 logistics_pcba_completed_status；0=未完成 1=部分完成 2=已完成）
+   * 完成状态（计算结果：字典 logistics_pcba_completed_status；0=未完成 1=部分完成 2=已完成；按累计完成数与批次数量比较）
    */
   completedStatus: number;
+
+}
+
+
+/**
+ * PcbaOutputDetail 作废/撤销作废 DTO
+ * 对应前端 PcbaOutputDetailObsolete
+ * @description 对应后端 TaktPcbaOutputDetailObsoleteDto
+ */
+export interface PcbaOutputDetailObsolete {
+  /**
+   * PcbaOutputDetailID
+   */
+  pcbaOutputDetailId: string;
+
+  /**
+   * 是否作废（字典 sys_yes_no_type，0=否 1=是；编辑移除子行时标记作废）
+   */
+  isObsolete: number;
 
 }
 
@@ -486,7 +625,7 @@ export interface PcbaOutputDetailTemplate {
   pcbaOutputId?: string;
 
   /**
-   * 生产工单号（冗余字段,便于查询）
+   * 工单号（冗余字段,便于查询）
    */
   prodOrderCode?: string;
 
@@ -496,7 +635,7 @@ export interface PcbaOutputDetailTemplate {
   lineNumber?: number;
 
   /**
-   * 生产时段
+   * 生产时段（PCBA 存工作中心 WorkCenter，新增时按物料查 TaktStandardOperationTime 自动生成）
    */
   timePeriod?: string;
 
@@ -526,17 +665,17 @@ export interface PcbaOutputDetailTemplate {
   dailyCompletedQty?: number;
 
   /**
-   * 累计完成数
+   * 累计完成数（计算结果：同工单号+班次+PCB板别+面板别桶内全部明细当日完成数合计）
    */
   totalCompletedQty?: number;
 
   /**
-   * 完成状态（字典 logistics_pcba_completed_status；0=未完成 1=部分完成 2=已完成）
+   * 完成状态（计算结果：字典 logistics_pcba_completed_status；0=未完成 1=部分完成 2=已完成；按累计完成数与批次数量比较）
    */
   completedStatus?: number;
 
   /**
-   * 序列号
+   * 序列号（明细级）
    */
   serialNo?: string;
 
@@ -546,9 +685,29 @@ export interface PcbaOutputDetailTemplate {
   defectCount?: number;
 
   /**
-   * 投入工数(分钟)
+   * 停线时间(分钟)
+   */
+  downtimeMinutes?: number;
+
+  /**
+   * 停线原因（字典 logistics_stop_reason_category，多选 DictLabel 逗号分隔）
+   */
+  downtimeReason?: string;
+
+  /**
+   * 停线说明
+   */
+  downtimeDescription?: string;
+
+  /**
+   * 投入工数(分钟)（计算结果：主表 DirectLabor×60）
    */
   inputMinutes?: number;
+
+  /**
+   * 实际工时(分钟)（计算结果：MixedProd=0 时投入工时-停线时间；MixedProd≠0 时报工工时-停线时间）
+   */
+  actualMinutes?: number;
 
   /**
    * 修工数(分钟)
@@ -576,7 +735,7 @@ export interface PcbaOutputDetailTemplate {
   totalMinutes?: number;
 
   /**
-   * 未达成原因（字典 logistics_nonachievement_reason_category，存 DictValue）
+   * 未达成原因（字典 logistics_nonachievement_reason_category，多选 DictLabel 逗号分隔）
    */
   unachievedReason?: string;
 
@@ -584,6 +743,26 @@ export interface PcbaOutputDetailTemplate {
    * 未达成说明
    */
   unachievedDescription?: string;
+
+  /**
+   * 报工工时(分钟)
+   */
+  confirmMinutes?: number;
+
+  /**
+   * 混合生产（0=非混合；N=此生产时段内另有N笔报工）
+   */
+  mixedProd?: number;
+
+  /**
+   * 达成率(%)（计算结果：当日完成数÷主表标准产能×100%；标准产能为0时取0）
+   */
+  achievementRate?: number;
+
+  /**
+   * 是否作废（字典 sys_yes_no_type，0=否 1=是；编辑移除子行时标记作废）
+   */
+  isObsolete?: number;
 
   /**
    * 扩展字段JSON
@@ -625,7 +804,7 @@ export interface PcbaOutputDetailImport {
   pcbaOutputId?: string;
 
   /**
-   * 生产工单号（冗余字段,便于查询）
+   * 工单号（冗余字段,便于查询）
    */
   prodOrderCode?: string;
 
@@ -635,7 +814,7 @@ export interface PcbaOutputDetailImport {
   lineNumber?: number;
 
   /**
-   * 生产时段
+   * 生产时段（PCBA 存工作中心 WorkCenter，新增时按物料查 TaktStandardOperationTime 自动生成）
    */
   timePeriod?: string;
 
@@ -665,17 +844,17 @@ export interface PcbaOutputDetailImport {
   dailyCompletedQty?: number;
 
   /**
-   * 累计完成数
+   * 累计完成数（计算结果：同工单号+班次+PCB板别+面板别桶内全部明细当日完成数合计）
    */
   totalCompletedQty?: number;
 
   /**
-   * 完成状态（字典 logistics_pcba_completed_status；0=未完成 1=部分完成 2=已完成）
+   * 完成状态（计算结果：字典 logistics_pcba_completed_status；0=未完成 1=部分完成 2=已完成；按累计完成数与批次数量比较）
    */
   completedStatus?: number;
 
   /**
-   * 序列号
+   * 序列号（明细级）
    */
   serialNo?: string;
 
@@ -685,9 +864,29 @@ export interface PcbaOutputDetailImport {
   defectCount?: number;
 
   /**
-   * 投入工数(分钟)
+   * 停线时间(分钟)
+   */
+  downtimeMinutes?: number;
+
+  /**
+   * 停线原因（字典 logistics_stop_reason_category，多选 DictLabel 逗号分隔）
+   */
+  downtimeReason?: string;
+
+  /**
+   * 停线说明
+   */
+  downtimeDescription?: string;
+
+  /**
+   * 投入工数(分钟)（计算结果：主表 DirectLabor×60）
    */
   inputMinutes?: number;
+
+  /**
+   * 实际工时(分钟)（计算结果：MixedProd=0 时投入工时-停线时间；MixedProd≠0 时报工工时-停线时间）
+   */
+  actualMinutes?: number;
 
   /**
    * 修工数(分钟)
@@ -715,7 +914,7 @@ export interface PcbaOutputDetailImport {
   totalMinutes?: number;
 
   /**
-   * 未达成原因（字典 logistics_nonachievement_reason_category，存 DictValue）
+   * 未达成原因（字典 logistics_nonachievement_reason_category，多选 DictLabel 逗号分隔）
    */
   unachievedReason?: string;
 
@@ -723,6 +922,26 @@ export interface PcbaOutputDetailImport {
    * 未达成说明
    */
   unachievedDescription?: string;
+
+  /**
+   * 报工工时(分钟)
+   */
+  confirmMinutes?: number;
+
+  /**
+   * 混合生产（0=非混合；N=此生产时段内另有N笔报工）
+   */
+  mixedProd?: number;
+
+  /**
+   * 达成率(%)（计算结果：当日完成数÷主表标准产能×100%；标准产能为0时取0）
+   */
+  achievementRate?: number;
+
+  /**
+   * 是否作废（字典 sys_yes_no_type，0=否 1=是；编辑移除子行时标记作废）
+   */
+  isObsolete?: number;
 
   /**
    * 扩展字段JSON
@@ -759,7 +978,7 @@ export interface PcbaOutputDetailExport {
   pcbaOutputId: string;
 
   /**
-   * 生产工单号（冗余字段,便于查询）
+   * 工单号（冗余字段,便于查询）
    */
   prodOrderCode: string;
 
@@ -769,7 +988,7 @@ export interface PcbaOutputDetailExport {
   lineNumber: number;
 
   /**
-   * 生产时段
+   * 生产时段（PCBA 存工作中心 WorkCenter，新增时按物料查 TaktStandardOperationTime 自动生成）
    */
   timePeriod: string;
 
@@ -799,17 +1018,17 @@ export interface PcbaOutputDetailExport {
   dailyCompletedQty: number;
 
   /**
-   * 累计完成数
+   * 累计完成数（计算结果：同工单号+班次+PCB板别+面板别桶内全部明细当日完成数合计）
    */
   totalCompletedQty: number;
 
   /**
-   * 完成状态（字典 logistics_pcba_completed_status；0=未完成 1=部分完成 2=已完成）
+   * 完成状态（计算结果：字典 logistics_pcba_completed_status；0=未完成 1=部分完成 2=已完成；按累计完成数与批次数量比较）
    */
   completedStatus: number;
 
   /**
-   * 序列号
+   * 序列号（明细级）
    */
   serialNo: string;
 
@@ -819,9 +1038,29 @@ export interface PcbaOutputDetailExport {
   defectCount: number;
 
   /**
-   * 投入工数(分钟)
+   * 停线时间(分钟)
+   */
+  downtimeMinutes: number;
+
+  /**
+   * 停线原因（字典 logistics_stop_reason_category，多选 DictLabel 逗号分隔）
+   */
+  downtimeReason?: string;
+
+  /**
+   * 停线说明
+   */
+  downtimeDescription?: string;
+
+  /**
+   * 投入工数(分钟)（计算结果：主表 DirectLabor×60）
    */
   inputMinutes: number;
+
+  /**
+   * 实际工时(分钟)（计算结果：MixedProd=0 时投入工时-停线时间；MixedProd≠0 时报工工时-停线时间）
+   */
+  actualMinutes: number;
 
   /**
    * 修工数(分钟)
@@ -849,7 +1088,7 @@ export interface PcbaOutputDetailExport {
   totalMinutes: number;
 
   /**
-   * 未达成原因（字典 logistics_nonachievement_reason_category，存 DictValue）
+   * 未达成原因（字典 logistics_nonachievement_reason_category，多选 DictLabel 逗号分隔）
    */
   unachievedReason?: string;
 
@@ -857,6 +1096,26 @@ export interface PcbaOutputDetailExport {
    * 未达成说明
    */
   unachievedDescription?: string;
+
+  /**
+   * 报工工时(分钟)
+   */
+  confirmMinutes: number;
+
+  /**
+   * 混合生产（0=非混合；N=此生产时段内另有N笔报工）
+   */
+  mixedProd: number;
+
+  /**
+   * 达成率(%)（计算结果：当日完成数÷主表标准产能×100%；标准产能为0时取0）
+   */
+  achievementRate: number;
+
+  /**
+   * 是否作废（字典 sys_yes_no_type，0=否 1=是；编辑移除子行时标记作废）
+   */
+  isObsolete: number;
 
   /**
    * 扩展字段JSON

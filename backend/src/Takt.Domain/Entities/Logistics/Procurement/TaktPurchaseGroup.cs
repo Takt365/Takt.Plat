@@ -75,6 +75,6 @@ public class TaktPurchaseGroup : TaktCompanyEntityBase
     /// <summary>
     /// 采购组状态（字典 sys_normal_disable_status；1=启用，0=禁用）
     /// </summary>
-    [SugarColumn(ColumnName = "purchase_group_status", ColumnDescription = "采购组状态", ColumnDataType = "int", IsNullable = false, DefaultValue = "1")]
-    public int PurchaseGroupStatus { get; set; } = 1;
+    [SugarColumn(ColumnName = "group_status", ColumnDescription = "采购组状态", ColumnDataType = "int", IsNullable = false, DefaultValue = "1")]
+    public int GroupStatus { get; set; } = 1;
 }

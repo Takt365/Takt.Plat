@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：frontend/src/types/routine/help-desk
 // 文件名称：knowledge.d.ts
-// 创建时间：2026-06-24
+// 创建时间：2026-07-09
 // 创建人：Takt365(Auto Generated)
 // 功能描述：routine/help-desk 模块类型定义（自动生成；类型名去 Takt 前缀与末尾 Dto，如 TaktCompanyDto → Company）
 // 
@@ -54,16 +54,6 @@ export interface Knowledge extends CompanyDtoBase {
   knowledgeTags?: string;
 
   /**
-   * 知识状态（0=草稿，1=已发布，2=已下架）
-   */
-  knowledgeStatus: number;
-
-  /**
-   * 排序号（越小越靠前）
-   */
-  sortOrder: number;
-
-  /**
    * 浏览次数
    */
   knowledgeViewCount: number;
@@ -99,14 +89,19 @@ export interface Knowledge extends CompanyDtoBase {
   revisedAt?: string;
 
   /**
-   * 附件 JSON（列表形式，由TaktFile 统一上传到服务器）
+   * 排序号（越小越靠前）
    */
-  attachments?: string;
+  sortOrder: number;
 
   /**
-   * 知识库变更日志列表 （子表：TaktKnowledgeChangeLog）
+   * 知识状态（0=草稿，1=已发布，2=已下架）
    */
-  changeLogs?: KnowledgeChangeLog[];
+  knowledgeStatus: number;
+
+  /**
+   * 附件 （JSON列表形式，由TaktFile 统一上传到服务器）
+   */
+  attachments?: string;
 
 }
 
@@ -154,16 +149,6 @@ export interface KnowledgeQuery extends TaktPagedQuery {
   knowledgeTags?: string;
 
   /**
-   * 知识状态（0=草稿，1=已发布，2=已下架）
-   */
-  knowledgeStatus?: number;
-
-  /**
-   * 排序号（越小越靠前）
-   */
-  sortOrder?: number;
-
-  /**
    * 浏览次数
    */
   knowledgeViewCount?: number;
@@ -209,7 +194,17 @@ export interface KnowledgeQuery extends TaktPagedQuery {
   revisedAtEnd?: string;
 
   /**
-   * 附件 JSON（列表形式，由TaktFile 统一上传到服务器）
+   * 排序号（越小越靠前）
+   */
+  sortOrder?: number;
+
+  /**
+   * 知识状态（0=草稿，1=已发布，2=已下架）
+   */
+  knowledgeStatus?: number;
+
+  /**
+   * 附件 （JSON列表形式，由TaktFile 统一上传到服务器）
    */
   attachments?: string;
 
@@ -283,11 +278,6 @@ export interface KnowledgeCreate {
   knowledgeTags?: string;
 
   /**
-   * 知识状态（0=草稿，1=已发布，2=已下架）
-   */
-  knowledgeStatus: number;
-
-  /**
    * 浏览次数
    */
   knowledgeViewCount: number;
@@ -323,14 +313,14 @@ export interface KnowledgeCreate {
   revisedAt?: string;
 
   /**
-   * 附件 JSON（列表形式，由TaktFile 统一上传到服务器）
+   * 知识状态（0=草稿，1=已发布，2=已下架）
    */
-  attachments?: string;
+  knowledgeStatus: number;
 
   /**
-   * 知识库变更日志列表（子表，级联保存）
+   * 附件 （JSON列表形式，由TaktFile 统一上传到服务器）
    */
-  changeLogs?: KnowledgeChangeLogCreate[];
+  attachments?: string;
 
   /**
    * 扩展字段JSON
@@ -440,11 +430,6 @@ export interface KnowledgeTemplate {
   knowledgeTags?: string;
 
   /**
-   * 知识状态（0=草稿，1=已发布，2=已下架）
-   */
-  knowledgeStatus?: number;
-
-  /**
    * 浏览次数
    */
   knowledgeViewCount?: number;
@@ -480,14 +465,14 @@ export interface KnowledgeTemplate {
   revisedAt?: string;
 
   /**
-   * 附件 JSON（列表形式，由TaktFile 统一上传到服务器）
+   * 知识状态（0=草稿，1=已发布，2=已下架）
    */
-  attachments?: string;
+  knowledgeStatus?: number;
 
   /**
-   * 知识库变更日志列表（子表，级联保存）
+   * 附件 （JSON列表形式，由TaktFile 统一上传到服务器）
    */
-  changeLogs?: KnowledgeChangeLogCreate[];
+  attachments?: string;
 
   /**
    * 扩展字段JSON
@@ -549,11 +534,6 @@ export interface KnowledgeImport {
   knowledgeTags?: string;
 
   /**
-   * 知识状态（0=草稿，1=已发布，2=已下架）
-   */
-  knowledgeStatus?: number;
-
-  /**
    * 浏览次数
    */
   knowledgeViewCount?: number;
@@ -589,14 +569,14 @@ export interface KnowledgeImport {
   revisedAt?: string;
 
   /**
-   * 附件 JSON（列表形式，由TaktFile 统一上传到服务器）
+   * 知识状态（0=草稿，1=已发布，2=已下架）
    */
-  attachments?: string;
+  knowledgeStatus?: number;
 
   /**
-   * 知识库变更日志列表（子表，级联保存）
+   * 附件 （JSON列表形式，由TaktFile 统一上传到服务器）
    */
-  changeLogs?: KnowledgeChangeLogCreate[];
+  attachments?: string;
 
   /**
    * 扩展字段JSON
@@ -653,16 +633,6 @@ export interface KnowledgeExport {
   knowledgeTags?: string;
 
   /**
-   * 知识状态（0=草稿，1=已发布，2=已下架）
-   */
-  knowledgeStatus: number;
-
-  /**
-   * 排序号（越小越靠前）
-   */
-  sortOrder: number;
-
-  /**
    * 浏览次数
    */
   knowledgeViewCount: number;
@@ -698,7 +668,17 @@ export interface KnowledgeExport {
   revisedAt?: string;
 
   /**
-   * 附件 JSON（列表形式，由TaktFile 统一上传到服务器）
+   * 排序号（越小越靠前）
+   */
+  sortOrder: number;
+
+  /**
+   * 知识状态（0=草稿，1=已发布，2=已下架）
+   */
+  knowledgeStatus: number;
+
+  /**
+   * 附件 （JSON列表形式，由TaktFile 统一上传到服务器）
    */
   attachments?: string;
 

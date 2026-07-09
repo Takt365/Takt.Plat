@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Application.Services.Logistics.Maintenance
 // 文件名称：TaktMaintenanceWorkOrderMaterialService.cs
-// 创建时间：2026-06-23
+// 创建时间：2026-07-09
 // 创建人：Takt365(Cursor AI)
 // 功能描述：维护工单领料应用服务实现
 // 
@@ -123,6 +123,7 @@ public class TaktMaintenanceWorkOrderMaterialService : TaktServiceBase, ITaktMai
     public async Task<TaktMaintenanceWorkOrderMaterialDto> CreateMaintenanceWorkOrderMaterialAsync(TaktMaintenanceWorkOrderMaterialCreateDto dto)
     {
         var entity = dto.Adapt<TaktMaintenanceWorkOrderMaterial>();
+        entity.IsObsolete = 0;
         await StampMaintenanceWorkOrderMaterialMaintenanceWorkOrderAsync(entity, dto);
         await StampMaintenanceWorkOrderMaterialMaterialPlantAsync(entity, dto);
         var isUnique_ix_takt_logistics_maintenance_work_order_material_order_line_unique = await _uniqueValidator.IsUniqueAsync(
@@ -183,11 +184,21 @@ public class TaktMaintenanceWorkOrderMaterialService : TaktServiceBase, ITaktMai
     /// <returns>任务</returns>
     public async Task DeleteMaintenanceWorkOrderMaterialByIdAsync(long id)
     {
-        var deleted = await _maintenanceWorkOrderMaterialRepository.DeleteAsync(id);
-        if (!deleted)
+        var entity = await _maintenanceWorkOrderMaterialRepository.GetByIdAsync(id);
+        if (entity == null)
         {
             throw new TaktBusinessException("维护工单领料不存在或已删除");
         }
+        if (entity.TenantCode != CurrentTenantCode || entity.CompanyCode != CurrentCompanyCode)
+        {
+            throw new TaktBusinessException("维护工单领料不存在或已删除");
+        }
+        if (entity.IsObsolete == 1)
+        {
+            throw new TaktBusinessException("维护工单领料已作废");
+        }
+        entity.IsObsolete = 1;
+        await _maintenanceWorkOrderMaterialRepository.UpdateAsync(entity);
     }
 
     /// <summary>
@@ -221,6 +232,27 @@ public class TaktMaintenanceWorkOrderMaterialService : TaktServiceBase, ITaktMai
             throw new TaktBusinessException("维护工单领料不存在");
         }
         entity.IssueStatus = dto.IssueStatus;
+        await _maintenanceWorkOrderMaterialRepository.UpdateAsync(entity);
+        return await GetMaintenanceWorkOrderMaterialByIdAsync(dto.MaintenanceWorkOrderMaterialId) ?? throw new TaktBusinessException("维护工单领料不存在");
+    }
+
+    /// <summary>
+    /// 更新维护工单领料作废状态
+    /// </summary>
+    /// <param name="dto">作废DTO</param>
+    /// <returns>DTO</returns>
+    public async Task<TaktMaintenanceWorkOrderMaterialDto> UpdateMaintenanceWorkOrderMaterialObsoleteAsync(TaktMaintenanceWorkOrderMaterialObsoleteDto dto)
+    {
+        var entity = await _maintenanceWorkOrderMaterialRepository.GetByIdAsync(dto.MaintenanceWorkOrderMaterialId);
+        if (entity == null)
+        {
+            throw new TaktBusinessException("维护工单领料不存在");
+        }
+        if (entity.TenantCode != CurrentTenantCode || entity.CompanyCode != CurrentCompanyCode)
+        {
+            throw new TaktBusinessException("维护工单领料不存在");
+        }
+        entity.IsObsolete = dto.IsObsolete;
         await _maintenanceWorkOrderMaterialRepository.UpdateAsync(entity);
         return await GetMaintenanceWorkOrderMaterialByIdAsync(dto.MaintenanceWorkOrderMaterialId) ?? throw new TaktBusinessException("维护工单领料不存在");
     }
@@ -378,6 +410,15 @@ public class TaktMaintenanceWorkOrderMaterialService : TaktServiceBase, ITaktMai
     private static Expression<Func<TaktMaintenanceWorkOrderMaterial, bool>> QueryExpression(TaktMaintenanceWorkOrderMaterialQueryDto? queryDto)
     {
         var exp = Expressionable.Create<TaktMaintenanceWorkOrderMaterial>();
+
+        if (queryDto?.IsObsolete.HasValue == true)
+        {
+            exp = exp.And(x => x.IsObsolete == queryDto.IsObsolete);
+        }
+        else
+        {
+            exp = exp.And(x => x.IsObsolete == 0);
+        }
 
         if (!string.IsNullOrEmpty(queryDto?.KeyWords))
         {

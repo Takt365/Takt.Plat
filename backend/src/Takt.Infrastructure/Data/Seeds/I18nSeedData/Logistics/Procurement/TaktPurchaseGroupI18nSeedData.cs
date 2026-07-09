@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Infrastructure.Data.Seeds.I18nSeedData.Logistics.Procurement
 // 文件名称：TaktPurchaseGroupI18nSeedData.cs
-// 创建时间：2026-07-02
+// 创建时间：2026-07-09
 // 创建人：Takt365(Auto Generated)
 // 功能描述：TaktPurchaseGroup 实体字段国际化种子（无对应 frontend locales；TranslationText 取自 ColumnDescription，ContextNote 取自属性 XML summary）
 // 
@@ -171,14 +171,14 @@ public class TaktPurchaseGroupI18nSeedData : ITaktSeedDataCoordinator
             // entity.purchasegroup.sortorder
             new TranslationSeedItem("entity.purchasegroup.sortorder", "zh-HK", "排序号_hk", "排序号（越小越靠前）"),
 
-            // entity.purchasegroup.status
-            new TranslationSeedItem("entity.purchasegroup.status", "en-US", "采购组状态_us", "采购组状态（字典 sys_normal_disable_status；1=启用，0=禁用）"),
-            // entity.purchasegroup.status
-            new TranslationSeedItem("entity.purchasegroup.status", "ja-JP", "采购组状态_jp", "采购组状态（字典 sys_normal_disable_status；1=启用，0=禁用）"),
-            // entity.purchasegroup.status
-            new TranslationSeedItem("entity.purchasegroup.status", "zh-CN", "采购组状态", "采购组状态（字典 sys_normal_disable_status；1=启用，0=禁用）"),
-            // entity.purchasegroup.status
-            new TranslationSeedItem("entity.purchasegroup.status", "zh-HK", "采购组状态_hk", "采购组状态（字典 sys_normal_disable_status；1=启用，0=禁用）"),
+            // entity.purchasegroup.groupstatus
+            new TranslationSeedItem("entity.purchasegroup.groupstatus", "en-US", "采购组状态_us", "采购组状态（字典 sys_normal_disable_status；1=启用，0=禁用）"),
+            // entity.purchasegroup.groupstatus
+            new TranslationSeedItem("entity.purchasegroup.groupstatus", "ja-JP", "采购组状态_jp", "采购组状态（字典 sys_normal_disable_status；1=启用，0=禁用）"),
+            // entity.purchasegroup.groupstatus
+            new TranslationSeedItem("entity.purchasegroup.groupstatus", "zh-CN", "采购组状态", "采购组状态（字典 sys_normal_disable_status；1=启用，0=禁用）"),
+            // entity.purchasegroup.groupstatus
+            new TranslationSeedItem("entity.purchasegroup.groupstatus", "zh-HK", "采购组状态_hk", "采购组状态（字典 sys_normal_disable_status；1=启用，0=禁用）"),
         };
     }
 

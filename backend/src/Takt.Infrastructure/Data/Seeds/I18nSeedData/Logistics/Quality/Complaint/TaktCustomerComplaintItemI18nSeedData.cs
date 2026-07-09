@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Infrastructure.Data.Seeds.I18nSeedData.Logistics.Quality.Complaint
 // 文件名称：TaktCustomerComplaintItemI18nSeedData.cs
-// 创建时间：2026-07-02
+// 创建时间：2026-07-09
 // 创建人：Takt365(Auto Generated)
 // 功能描述：TaktCustomerComplaintItem 实体字段国际化种子（无对应 frontend locales；TranslationText 取自 ColumnDescription，ContextNote 取自属性 XML summary）
 // 
@@ -251,6 +251,15 @@ public class TaktCustomerComplaintItemI18nSeedData : ITaktSeedDataCoordinator
             new TranslationSeedItem("entity.customercomplaintitem.improvementstatus", "zh-CN", "改善状态", "改善状态（字典 logistics_quality_improvement_status）"),
             // entity.customercomplaintitem.improvementstatus
             new TranslationSeedItem("entity.customercomplaintitem.improvementstatus", "zh-HK", "改善状态_hk", "改善状态（字典 logistics_quality_improvement_status）"),
+
+            // entity.customercomplaintitem.isobsolete
+            new TranslationSeedItem("entity.customercomplaintitem.isobsolete", "en-US", "是否作废_us", "是否作废（字典 sys_yes_no_type，0=否 1=是；编辑移除子行时标记作废）"),
+            // entity.customercomplaintitem.isobsolete
+            new TranslationSeedItem("entity.customercomplaintitem.isobsolete", "ja-JP", "是否作废_jp", "是否作废（字典 sys_yes_no_type，0=否 1=是；编辑移除子行时标记作废）"),
+            // entity.customercomplaintitem.isobsolete
+            new TranslationSeedItem("entity.customercomplaintitem.isobsolete", "zh-CN", "是否作废", "是否作废（字典 sys_yes_no_type，0=否 1=是；编辑移除子行时标记作废）"),
+            // entity.customercomplaintitem.isobsolete
+            new TranslationSeedItem("entity.customercomplaintitem.isobsolete", "zh-HK", "是否作废_hk", "是否作废（字典 sys_yes_no_type，0=否 1=是；编辑移除子行时标记作废）"),
 
             // entity.customercomplaintitem.complaint
             new TranslationSeedItem("entity.customercomplaintitem.complaint", "en-US", "客诉主表_us", "客诉主表"),

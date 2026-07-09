@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Application.Services.Logistics.Manufacturing.Defect
 // 文件名称：TaktPcbaRepairService.cs
-// 创建时间：2026-06-30
+// 创建时间：2026-07-09
 // 创建人：Takt365(Cursor AI)
 // 功能描述：PCBA改修日报应用服务实现
 // 
@@ -121,15 +121,11 @@ public class TaktPcbaRepairService : TaktServiceBase, ITaktPcbaRepairService
         var entity = dto.Adapt<TaktPcbaRepair>();
         var isUnique_ix_takt_logistics_manufacturing_defect_pcba_repair_unique = await _uniqueValidator.IsUniqueAsync(
             _pcbaRepairRepository,
-            x => x.PlantCode == entity.PlantCode
-                && x.ProdCategory == entity.ProdCategory
-                && x.ProdDate == entity.ProdDate
-                && x.ProdTeam == entity.ProdTeam
-                && x.ShiftNo == entity.ShiftNo
+            x => x.ProdDate == entity.ProdDate
                 && x.ProdOrderCode == entity.ProdOrderCode);
         if (!isUnique_ix_takt_logistics_manufacturing_defect_pcba_repair_unique)
         {
-            throw new TaktBusinessException("PCBA改修日报的PlantCode、ProdCategory、ProdDate、ProdTeam、ShiftNo、ProdOrderCode已存在");
+            throw new TaktBusinessException("PCBA改修日报的ProdDate、ProdOrderCode已存在");
         }
         entity = await _pcbaRepairRepository.CreateAsync(entity);
                 await SavePcbaRepairChildrenAsync(entity, dto);
@@ -152,16 +148,12 @@ public class TaktPcbaRepairService : TaktServiceBase, ITaktPcbaRepairService
         dto.Adapt(entity);
         var isUnique_ix_takt_logistics_manufacturing_defect_pcba_repair_unique = await _uniqueValidator.IsUniqueAsync(
             _pcbaRepairRepository,
-            x => x.PlantCode == entity.PlantCode
-                && x.ProdCategory == entity.ProdCategory
-                && x.ProdDate == entity.ProdDate
-                && x.ProdTeam == entity.ProdTeam
-                && x.ShiftNo == entity.ShiftNo
+            x => x.ProdDate == entity.ProdDate
                 && x.ProdOrderCode == entity.ProdOrderCode,
             id);
         if (!isUnique_ix_takt_logistics_manufacturing_defect_pcba_repair_unique)
         {
-            throw new TaktBusinessException("PCBA改修日报的PlantCode、ProdCategory、ProdDate、ProdTeam、ShiftNo、ProdOrderCode已存在");
+            throw new TaktBusinessException("PCBA改修日报的ProdDate、ProdOrderCode已存在");
         }
         await _pcbaRepairRepository.UpdateAsync(entity);
                 await SavePcbaRepairChildrenAsync(entity, dto);
@@ -242,22 +234,18 @@ public class TaktPcbaRepairService : TaktServiceBase, ITaktPcbaRepairService
             try
             {
                 var entity = rows[i].Adapt<TaktPcbaRepair>();
-                var importKey = $"{entity.PlantCode}|{entity.ProdCategory}|{entity.ProdDate}|{entity.ProdTeam}|{entity.ShiftNo}|{entity.ProdOrderCode}";
+                var importKey = $"{entity.ProdDate}|{entity.ProdOrderCode}";
                 if (!importSeenKeys.Add(importKey))
                 {
-                    throw new TaktBusinessException("与Excel中其他行重复（PlantCode、ProdCategory、ProdDate、ProdTeam、ShiftNo、ProdOrderCode）");
+                    throw new TaktBusinessException("与Excel中其他行重复（ProdDate、ProdOrderCode）");
                 }
                 var isUnique_ix_takt_logistics_manufacturing_defect_pcba_repair_unique = await _uniqueValidator.IsUniqueAsync(
                     _pcbaRepairRepository,
-                    x => x.PlantCode == entity.PlantCode
-                        && x.ProdCategory == entity.ProdCategory
-                        && x.ProdDate == entity.ProdDate
-                        && x.ProdTeam == entity.ProdTeam
-                        && x.ShiftNo == entity.ShiftNo
+                    x => x.ProdDate == entity.ProdDate
                         && x.ProdOrderCode == entity.ProdOrderCode);
                 if (!isUnique_ix_takt_logistics_manufacturing_defect_pcba_repair_unique)
                 {
-                    throw new TaktBusinessException("PCBA改修日报的PlantCode、ProdCategory、ProdDate、ProdTeam、ShiftNo、ProdOrderCode已存在");
+                    throw new TaktBusinessException("PCBA改修日报的ProdDate、ProdOrderCode已存在");
                 }
                 await _pcbaRepairRepository.CreateAsync(entity);
                 success += 1;
@@ -301,6 +289,30 @@ public class TaktPcbaRepairService : TaktServiceBase, ITaktPcbaRepairService
     // ========================================
 
     /// <summary>
+    /// 将指定主表下全部未作废PCBA改修明细标记为作废（编辑清空子表）
+    /// </summary>
+    /// <param name="pcbaRepairId">主表主键</param>
+    /// <returns>任务</returns>
+    private async Task MarkPcbaRepairDetailsObsoleteAsync(long pcbaRepairId)
+    {
+        if (pcbaRepairId <= 0)
+        {
+            return;
+        }
+        var rows = await _pcbaRepairDetailRepository.GetListAsync(
+            x => x.PcbaRepairId == pcbaRepairId && x.IsObsolete == 0);
+        if (rows.Count == 0)
+        {
+            return;
+        }
+        foreach (var row in rows)
+        {
+            row.IsObsolete = 1;
+        }
+        await _pcbaRepairDetailRepository.UpdateRangeAsync(rows);
+    }
+
+    /// <summary>
     /// 填充PCBA改修日报详情（加载 OneToMany 子表：PCBA改修明细）
     /// </summary>
     /// <param name="dto">响应 DTO</param>
@@ -312,13 +324,13 @@ public class TaktPcbaRepairService : TaktServiceBase, ITaktPcbaRepairService
         {
             return;
         }
-        // PCBA改修明细 → dto.PcbaRepairDetails
+        // PCBA改修明细 → dto.PcbaRepairDetails（含作废行）
         var pcbarepairdetails = await _pcbaRepairDetailRepository.GetListAsync(x => x.PcbaRepairId == entity.Id);
         dto.PcbaRepairDetails = pcbarepairdetails.Adapt<List<TaktPcbaRepairDetailDto>>();
     }
 
     /// <summary>
-    /// 保存PCBA改修日报子表级联（PCBA改修明细；Create/Update 后按主表 Id 先删后插）
+    /// 保存PCBA改修日报子表级联（PCBA改修明细；按子表 Id 增量新增/更新；未提交行标记作废，禁止先删后插）
     /// </summary>
     /// <param name="entity">主表实体</param>
     /// <param name="dto">创建/更新 DTO（含子表集合；UpdateDto 须继承 CreateDto）</param>
@@ -328,104 +340,97 @@ public class TaktPcbaRepairService : TaktServiceBase, ITaktPcbaRepairService
         // PCBA改修明细（PcbaRepairDetails）
         if (dto.PcbaRepairDetails is not { Count: > 0 })
         {
-            await _pcbaRepairDetailRepository.DeleteAsync(x => x.PcbaRepairId == entity.Id);
+            await MarkPcbaRepairDetailsObsoleteAsync(entity.Id);
+            return;
         }
         else
         {
-            var pcbarepairdetails = dto.PcbaRepairDetails.Adapt<List<TaktPcbaRepairDetail>>();
-            foreach (var child in pcbarepairdetails)
+            var existingList = await _pcbaRepairDetailRepository.GetListAsync(x => x.PcbaRepairId == entity.Id);
+            var existingById = existingList.ToDictionary(x => x.Id);
+            var submittedIds = new HashSet<long>();
+            var toCreate = new List<TaktPcbaRepairDetail>();
+            var seenLineKeys = new HashSet<string>(StringComparer.Ordinal);
+            for (var i = 0; i < dto.PcbaRepairDetails.Count; i++)
             {
-                child.PcbaRepairId = entity.Id;
-            }
-            var pcbarepairdetailsNeedLine = pcbarepairdetails.Where(c => c.LineNumber <= 0).ToList();
-            if (pcbarepairdetailsNeedLine.Count > 0)
-            {
-                var businessCode = !string.IsNullOrWhiteSpace(entity.ProdOrderCode) ? entity.ProdOrderCode : entity.Id.ToString();
-                var maxLine = await _pcbaRepairDetailRepository.GetMaxIntAsync(
-                    x => x.TenantCode == CurrentTenantCode && x.CompanyCode == CurrentCompanyCode && x.PcbaRepairId == entity.Id,
-                    x => x.LineNumber);
-                var lineSeq = _lineNumberGenerator.GenerateSequence(businessCode, pcbarepairdetailsNeedLine.Count, maxLine).ToList();
-                var lineIdx = 0;
-                foreach (var child in pcbarepairdetails)
+                var childDto = dto.PcbaRepairDetails[i];
+                childDto.PcbaRepairId = entity.Id;
+                var lineKey = $"{entity.CompanyCode}|{entity.Id}|{childDto.LineNumber}";
+                if (!seenLineKeys.Add(lineKey))
                 {
-                    if (child.LineNumber <= 0)
+                    throw new TaktBusinessException("PCBA改修明细第{i + 1}项与本次提交的其他项重复（CompanyCode、PcbaRepairId、LineNumber）");
+                }
+                if (childDto.PcbaRepairDetailId > 0)
+                {
+                    if (!existingById.TryGetValue(childDto.PcbaRepairDetailId, out var target))
                     {
-                        child.LineNumber = lineSeq[lineIdx++];
+                        throw new TaktBusinessException("PCBA改修明细不存在（PcbaRepairDetailId={childDto.PcbaRepairDetailId}）");
                     }
+                    if (target.PcbaRepairId != entity.Id)
+                    {
+                        throw new TaktBusinessException("PCBA改修明细不属于当前主表（PcbaRepairDetailId={childDto.PcbaRepairDetailId}）");
+                    }
+                    submittedIds.Add(childDto.PcbaRepairDetailId);
+                    var isUniqueUpdate_ix_takt_logistics_manufacturing_defect_pcba_repair_detail_line_unique = await _uniqueValidator.IsUniqueAsync(
+                        _pcbaRepairDetailRepository,
+                        x => x.CompanyCode == x.CompanyCode
+                && x.PcbaRepairId == x.PcbaRepairId
+                && x.LineNumber == x.LineNumber,
+                        childDto.PcbaRepairDetailId);
+                    if (!isUniqueUpdate_ix_takt_logistics_manufacturing_defect_pcba_repair_detail_line_unique)
+                    {
+                        throw new TaktBusinessException("PCBA改修明细的CompanyCode、PcbaRepairId、LineNumber已存在");
+                    }
+                    childDto.Adapt(target);
+                    target.Id = childDto.PcbaRepairDetailId;
+                    target.PcbaRepairId = entity.Id;
+                    target.IsObsolete = 0;
+                    await _pcbaRepairDetailRepository.UpdateAsync(target);
+                }
+                else
+                {
+                    var isUniqueCreate_ix_takt_logistics_manufacturing_defect_pcba_repair_detail_line_unique = await _uniqueValidator.IsUniqueAsync(
+                        _pcbaRepairDetailRepository,
+                        x => x.CompanyCode == x.CompanyCode
+                && x.PcbaRepairId == x.PcbaRepairId
+                && x.LineNumber == x.LineNumber);
+                    if (!isUniqueCreate_ix_takt_logistics_manufacturing_defect_pcba_repair_detail_line_unique)
+                    {
+                        throw new TaktBusinessException("PCBA改修明细的CompanyCode、PcbaRepairId、LineNumber已存在");
+                    }
+                    var child = childDto.Adapt<TaktPcbaRepairDetail>();
+                    child.Id = 0;
+                    child.PcbaRepairId = entity.Id;
+                    child.IsObsolete = 0;
+                    toCreate.Add(child);
                 }
             }
-                        var seenKeys = new HashSet<string>(StringComparer.Ordinal);
-                        for (var i = 0; i < pcbarepairdetails.Count; i++)
+            var toObsolete = existingList.Where(x => !submittedIds.Contains(x.Id) && x.IsObsolete == 0).ToList();
+            foreach (var removed in toObsolete)
+            {
+                removed.IsObsolete = 1;
+                await _pcbaRepairDetailRepository.UpdateAsync(removed);
+            }
+            if (toCreate.Count > 0)
+            {
+                var needLine = toCreate.Where(c => c.LineNumber <= 0).ToList();
+                if (needLine.Count > 0)
+                {
+                    var businessCode = !string.IsNullOrWhiteSpace(entity.ProdOrderCode) ? entity.ProdOrderCode : entity.Id.ToString();
+                    var maxLine = existingList.Count > 0 ? existingList.Max(x => x.LineNumber) : 0;
+                    var lineSeq = _lineNumberGenerator.GenerateSequence(businessCode, needLine.Count, maxLine).ToList();
+                    var lineIdx = 0;
+                    foreach (var child in toCreate)
+                    {
+                        if (child.LineNumber <= 0)
                         {
-                            var key = $"{pcbarepairdetails[i].CompanyCode}|{pcbarepairdetails[i].PcbaRepairId}|{pcbarepairdetails[i].LineNumber}";
-                            if (!seenKeys.Add(key))
-                            {
-                                throw new TaktBusinessException($"PCBA改修明细第{i + 1}项与本次提交的其他项重复（CompanyCode、PcbaRepairId、LineNumber）");
-                            }
+                            child.LineNumber = lineSeq[lineIdx++];
                         }
-            await _pcbaRepairDetailRepository.DeleteAsync(x => x.PcbaRepairId == entity.Id);
-            foreach (var child in pcbarepairdetails)
-            {
-            var isUnique_ix_takt_logistics_manufacturing_defect_pcba_repair_detail_line_unique = await _uniqueValidator.IsUniqueAsync(
-                _pcbaRepairDetailRepository,
-                x => x.CompanyCode == child.CompanyCode
-                    && x.PcbaRepairId == child.PcbaRepairId
-                    && x.LineNumber == child.LineNumber);
-            if (!isUnique_ix_takt_logistics_manufacturing_defect_pcba_repair_detail_line_unique)
-            {
-                throw new TaktBusinessException("PCBA改修明细的CompanyCode、PcbaRepairId、LineNumber已存在");
+                    }
+                }
+                await _pcbaRepairDetailRepository.CreateRangeAsync(toCreate);
             }
-            }
-            await _pcbaRepairDetailRepository.CreateRangeAsync(pcbarepairdetails);
         }
     }
-
-    /// <summary>
-    /// 获取 PCBA 改修统计（数据看板）
-    /// </summary>
-    /// <param name="queryDto">查询 DTO</param>
-    /// <returns>不良统计</returns>
-    public async Task<TaktPcbaRepairStatDto> GetPcbaRepairStatAsync(TaktDefectStatQueryDto queryDto)
-    {
-        EnsureThreeLayerContext();
-        var (start, end, statMonth) = TaktStatMonthRangeHelper.ResolveMonthRange(
-            queryDto.ProdDateStart,
-            queryDto.ProdDateEnd);
-        var tenantCode = CurrentTenantCode;
-        var companyCode = CurrentCompanyCode;
-        Expression<Func<TaktPcbaRepair, bool>> mainPredicate = x =>
-            x.TenantCode == tenantCode
-            && x.CompanyCode == companyCode
-            && x.ProdDate >= start
-            && x.ProdDate <= end;
-        var outputs = await _pcbaRepairRepository.GetListAsync(mainPredicate);
-        if (outputs.Count == 0)
-        {
-            return new TaktPcbaRepairStatDto { StatMonth = statMonth };
-        }
-        var outputIds = outputs.Select(x => x.Id).ToList();
-        Expression<Func<TaktPcbaRepairDetail, bool>> detailPredicate = x =>
-            x.TenantCode == tenantCode
-            && x.CompanyCode == companyCode
-            && outputIds.Contains(x.PcbaRepairId);
-        var monthBaseQty = await _pcbaRepairDetailRepository.SumAsync(x => x.ProdActualQty, detailPredicate);
-        var monthDefectQty = await _pcbaRepairDetailRepository.SumAsync(x => x.DefectQty, detailPredicate);
-        var monthGoodQty = monthBaseQty - monthDefectQty;
-        if (monthGoodQty < 0)
-        {
-            monthGoodQty = 0;
-        }
-        return new TaktPcbaRepairStatDto
-        {
-            StatMonth = statMonth,
-            MonthBaseQty = monthBaseQty,
-            MonthGoodQty = monthGoodQty,
-            MonthDefectQty = monthDefectQty,
-            MonthDefectRatePercent = TaktDefectStatHelper.CalculateDefectRatePercent(monthDefectQty, monthBaseQty),
-            MonthYieldRatePercent = TaktDefectStatHelper.CalculateYieldRatePercent(monthGoodQty, monthBaseQty),
-        };
-    }
-
     // ========================================
     // 查询表达式
     // ========================================
@@ -447,6 +452,7 @@ public class TaktPcbaRepairService : TaktServiceBase, ITaktPcbaRepairService
                 || (x.ProdCategory != null && x.ProdCategory.Contains(keywords))
                 || (x.ProdTeam != null && x.ProdTeam.Contains(keywords))
                 || SqlFunc.ToString(x.ShiftNo).Contains(keywords)
+                || (x.ProdOrderType != null && x.ProdOrderType.Contains(keywords))
                 || (x.ProdOrderCode != null && x.ProdOrderCode.Contains(keywords))
                 || SqlFunc.ToString(x.ProdOrderQty).Contains(keywords)
                 || (x.ModelCode != null && x.ModelCode.Contains(keywords))
@@ -477,6 +483,11 @@ public class TaktPcbaRepairService : TaktServiceBase, ITaktPcbaRepairService
         if (queryDto?.ShiftNo.HasValue == true)
         {
             exp = exp.And(x => x.ShiftNo == queryDto.ShiftNo);
+        }
+
+        if (!string.IsNullOrEmpty(queryDto?.ProdOrderType))
+        {
+            exp = exp.And(x => x.ProdOrderType != null && x.ProdOrderType.Contains(queryDto.ProdOrderType));
         }
 
         if (!string.IsNullOrEmpty(queryDto?.ProdOrderCode))

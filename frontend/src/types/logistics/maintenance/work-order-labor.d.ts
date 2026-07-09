@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：frontend/src/types/logistics/maintenance
 // 文件名称：work-order-labor.d.ts
-// 创建时间：2026-06-23
+// 创建时间：2026-07-09
 // 创建人：Takt365(Auto Generated)
 // 功能描述：logistics/maintenance 模块类型定义（自动生成；类型名去 Takt 前缀与末尾 Dto，如 TaktCompanyDto → Company）
 // 
@@ -107,6 +107,11 @@ export interface MaintenanceWorkOrderLabor extends CompanyDtoBase {
    * 确认时间
    */
   confirmedAt?: string;
+
+  /**
+   * 是否作废（字典 sys_yes_no_type，0=否 1=是；编辑移除子行时标记作废）
+   */
+  isObsolete: number;
 
   /**
    * 维护工单（主表） （主表：TaktMaintenanceWorkOrder）
@@ -229,6 +234,11 @@ export interface MaintenanceWorkOrderLaborQuery extends TaktPagedQuery {
   confirmedAtEnd?: string;
 
   /**
+   * 是否作废（字典 sys_yes_no_type，0=否 1=是；编辑移除子行时标记作废）
+   */
+  isObsolete?: number;
+
+  /**
    * 创建时间（范围查询-开始）
    */
   createdAtStart?: string;
@@ -348,6 +358,11 @@ export interface MaintenanceWorkOrderLaborCreate {
   confirmedAt?: string;
 
   /**
+   * 是否作废（字典 sys_yes_no_type，0=否 1=是；编辑移除子行时标记作废）
+   */
+  isObsolete: number;
+
+  /**
    * 扩展字段JSON
    */
   extField?: string;
@@ -390,6 +405,25 @@ export interface MaintenanceWorkOrderLaborStatus {
    * 报工确认状态（0=待确认，1=已确认）
    */
   confirmationStatus: number;
+
+}
+
+
+/**
+ * MaintenanceWorkOrderLabor 作废/撤销作废 DTO
+ * 对应前端 MaintenanceWorkOrderLaborObsolete
+ * @description 对应后端 TaktMaintenanceWorkOrderLaborObsoleteDto
+ */
+export interface MaintenanceWorkOrderLaborObsolete {
+  /**
+   * MaintenanceWorkOrderLaborID
+   */
+  maintenanceWorkOrderLaborId: string;
+
+  /**
+   * 是否作废（字典 sys_yes_no_type，0=否 1=是；编辑移除子行时标记作废）
+   */
+  isObsolete: number;
 
 }
 
@@ -484,6 +518,11 @@ export interface MaintenanceWorkOrderLaborTemplate {
    * 确认时间
    */
   confirmedAt?: string;
+
+  /**
+   * 是否作废（字典 sys_yes_no_type，0=否 1=是；编辑移除子行时标记作废）
+   */
+  isObsolete?: number;
 
   /**
    * 扩展字段JSON
@@ -595,6 +634,11 @@ export interface MaintenanceWorkOrderLaborImport {
   confirmedAt?: string;
 
   /**
+   * 是否作废（字典 sys_yes_no_type，0=否 1=是；编辑移除子行时标记作废）
+   */
+  isObsolete?: number;
+
+  /**
    * 扩展字段JSON
    */
   extField?: string;
@@ -697,6 +741,11 @@ export interface MaintenanceWorkOrderLaborExport {
    * 确认时间
    */
   confirmedAt?: string;
+
+  /**
+   * 是否作废（字典 sys_yes_no_type，0=否 1=是；编辑移除子行时标记作废）
+   */
+  isObsolete: number;
 
   /**
    * 扩展字段JSON

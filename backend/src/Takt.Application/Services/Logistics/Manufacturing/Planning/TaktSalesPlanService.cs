@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Application.Services.Logistics.Manufacturing.Planning
 // 文件名称：TaktSalesPlanService.cs
-// 创建时间：2026-06-23
+// 创建时间：2026-07-09
 // 创建人：Takt365(Cursor AI)
 // 功能描述：销售计划应用服务实现
 // 
@@ -309,6 +309,30 @@ public class TaktSalesPlanService : TaktServiceBase, ITaktSalesPlanService
     // ========================================
 
     /// <summary>
+    /// 将指定主表下全部未作废销售计划明细标记为作废（编辑清空子表）
+    /// </summary>
+    /// <param name="salesPlanId">主表主键</param>
+    /// <returns>任务</returns>
+    private async Task MarkSalesPlanItemsObsoleteAsync(long salesPlanId)
+    {
+        if (salesPlanId <= 0)
+        {
+            return;
+        }
+        var rows = await _salesPlanItemRepository.GetListAsync(
+            x => x.SalesPlanId == salesPlanId && x.IsObsolete == 0);
+        if (rows.Count == 0)
+        {
+            return;
+        }
+        foreach (var row in rows)
+        {
+            row.IsObsolete = 1;
+        }
+        await _salesPlanItemRepository.UpdateRangeAsync(rows);
+    }
+
+    /// <summary>
     /// 填充销售计划详情（加载 OneToMany 子表：销售计划明细）
     /// </summary>
     /// <param name="dto">响应 DTO</param>
@@ -320,13 +344,13 @@ public class TaktSalesPlanService : TaktServiceBase, ITaktSalesPlanService
         {
             return;
         }
-        // 销售计划明细 → dto.Items
+        // 销售计划明细 → dto.Items（含作废行）
         var items = await _salesPlanItemRepository.GetListAsync(x => x.SalesPlanId == entity.Id);
         dto.Items = items.Adapt<List<TaktSalesPlanItemDto>>();
     }
 
     /// <summary>
-    /// 保存销售计划子表级联（销售计划明细；Create/Update 后按主表 Id 先删后插）
+    /// 保存销售计划子表级联（销售计划明细；按子表 Id 增量新增/更新；未提交行标记作废，禁止先删后插）
     /// </summary>
     /// <param name="entity">主表实体</param>
     /// <param name="dto">创建/更新 DTO（含子表集合；UpdateDto 须继承 CreateDto）</param>
@@ -336,56 +360,97 @@ public class TaktSalesPlanService : TaktServiceBase, ITaktSalesPlanService
         // 销售计划明细（Items）
         if (dto.Items is not { Count: > 0 })
         {
-            await _salesPlanItemRepository.DeleteAsync(x => x.SalesPlanId == entity.Id);
+            await MarkSalesPlanItemsObsoleteAsync(entity.Id);
+            return;
         }
         else
         {
-            var items = dto.Items.Adapt<List<TaktSalesPlanItem>>();
-            foreach (var child in items)
+            var existingList = await _salesPlanItemRepository.GetListAsync(x => x.SalesPlanId == entity.Id);
+            var existingById = existingList.ToDictionary(x => x.Id);
+            var submittedIds = new HashSet<long>();
+            var toCreate = new List<TaktSalesPlanItem>();
+            var seenLineKeys = new HashSet<string>(StringComparer.Ordinal);
+            for (var i = 0; i < dto.Items.Count; i++)
             {
-                child.SalesPlanId = entity.Id;
-            }
-            var itemsNeedLine = items.Where(c => c.LineNumber <= 0).ToList();
-            if (itemsNeedLine.Count > 0)
-            {
-                var businessCode = !string.IsNullOrWhiteSpace(entity.SalesPlanCode) ? entity.SalesPlanCode : entity.Id.ToString();
-                var maxLine = await _salesPlanItemRepository.GetMaxIntAsync(
-                    x => x.TenantCode == CurrentTenantCode && x.CompanyCode == CurrentCompanyCode && x.SalesPlanId == entity.Id,
-                    x => x.LineNumber);
-                var lineSeq = _lineNumberGenerator.GenerateSequence(businessCode, itemsNeedLine.Count, maxLine).ToList();
-                var lineIdx = 0;
-                foreach (var child in items)
+                var childDto = dto.Items[i];
+                childDto.SalesPlanId = entity.Id;
+                var lineKey = $"{entity.CompanyCode}|{entity.Id}|{childDto.LineNumber}";
+                if (!seenLineKeys.Add(lineKey))
                 {
-                    if (child.LineNumber <= 0)
+                    throw new TaktBusinessException("销售计划明细第{i + 1}项与本次提交的其他项重复（CompanyCode、SalesPlanId、LineNumber）");
+                }
+                if (childDto.SalesPlanItemId > 0)
+                {
+                    if (!existingById.TryGetValue(childDto.SalesPlanItemId, out var target))
                     {
-                        child.LineNumber = lineSeq[lineIdx++];
+                        throw new TaktBusinessException("销售计划明细不存在（SalesPlanItemId={childDto.SalesPlanItemId}）");
                     }
+                    if (target.SalesPlanId != entity.Id)
+                    {
+                        throw new TaktBusinessException("销售计划明细不属于当前主表（SalesPlanItemId={childDto.SalesPlanItemId}）");
+                    }
+                    submittedIds.Add(childDto.SalesPlanItemId);
+                    var isUniqueUpdate_ix_takt_logistics_manufacturing_planning_sales_plan_item_line_unique = await _uniqueValidator.IsUniqueAsync(
+                        _salesPlanItemRepository,
+                        x => x.CompanyCode == x.CompanyCode
+                && x.SalesPlanId == x.SalesPlanId
+                && x.LineNumber == x.LineNumber
+                && x.MaterialCode == x.MaterialCode,
+                        childDto.SalesPlanItemId);
+                    if (!isUniqueUpdate_ix_takt_logistics_manufacturing_planning_sales_plan_item_line_unique)
+                    {
+                        throw new TaktBusinessException("销售计划明细的CompanyCode、SalesPlanId、LineNumber、MaterialCode已存在");
+                    }
+                    childDto.Adapt(target);
+                    target.Id = childDto.SalesPlanItemId;
+                    target.SalesPlanId = entity.Id;
+                    target.IsObsolete = 0;
+                    await _salesPlanItemRepository.UpdateAsync(target);
+                }
+                else
+                {
+                    var isUniqueCreate_ix_takt_logistics_manufacturing_planning_sales_plan_item_line_unique = await _uniqueValidator.IsUniqueAsync(
+                        _salesPlanItemRepository,
+                        x => x.CompanyCode == x.CompanyCode
+                && x.SalesPlanId == x.SalesPlanId
+                && x.LineNumber == x.LineNumber
+                && x.MaterialCode == x.MaterialCode);
+                    if (!isUniqueCreate_ix_takt_logistics_manufacturing_planning_sales_plan_item_line_unique)
+                    {
+                        throw new TaktBusinessException("销售计划明细的CompanyCode、SalesPlanId、LineNumber、MaterialCode已存在");
+                    }
+                    var child = childDto.Adapt<TaktSalesPlanItem>();
+                    child.Id = 0;
+                    child.SalesPlanId = entity.Id;
+                    child.IsObsolete = 0;
+                    toCreate.Add(child);
                 }
             }
-                        var seenKeys = new HashSet<string>(StringComparer.Ordinal);
-                        for (var i = 0; i < items.Count; i++)
+            var toObsolete = existingList.Where(x => !submittedIds.Contains(x.Id) && x.IsObsolete == 0).ToList();
+            foreach (var removed in toObsolete)
+            {
+                removed.IsObsolete = 1;
+                await _salesPlanItemRepository.UpdateAsync(removed);
+            }
+            if (toCreate.Count > 0)
+            {
+                var needLine = toCreate.Where(c => c.LineNumber <= 0).ToList();
+                if (needLine.Count > 0)
+                {
+                    var businessCode = !string.IsNullOrWhiteSpace(entity.SalesPlanCode) ? entity.SalesPlanCode : entity.Id.ToString();
+                    var maxLine = existingList.Count > 0 ? existingList.Max(x => x.LineNumber) : 0;
+                    var lineSeq = _lineNumberGenerator.GenerateSequence(businessCode, needLine.Count, maxLine).ToList();
+                    var lineIdx = 0;
+                    foreach (var child in toCreate)
+                    {
+                        if (child.LineNumber <= 0)
                         {
-                            var key = $"{items[i].CompanyCode}|{items[i].SalesPlanId}|{items[i].LineNumber}|{items[i].MaterialCode}";
-                            if (!seenKeys.Add(key))
-                            {
-                                throw new TaktBusinessException($"销售计划明细第{i + 1}项与本次提交的其他项重复（CompanyCode、SalesPlanId、LineNumber、MaterialCode）");
-                            }
+                            child.LineNumber = lineSeq[lineIdx++];
                         }
-            await _salesPlanItemRepository.DeleteAsync(x => x.SalesPlanId == entity.Id);
-            foreach (var child in items)
-            {
-            var isUnique_ix_takt_logistics_manufacturing_planning_sales_plan_item_line_unique = await _uniqueValidator.IsUniqueAsync(
-                _salesPlanItemRepository,
-                x => x.CompanyCode == child.CompanyCode
-                    && x.SalesPlanId == child.SalesPlanId
-                    && x.LineNumber == child.LineNumber
-                    && x.MaterialCode == child.MaterialCode);
-            if (!isUnique_ix_takt_logistics_manufacturing_planning_sales_plan_item_line_unique)
-            {
-                throw new TaktBusinessException("销售计划明细的CompanyCode、SalesPlanId、LineNumber、MaterialCode已存在");
+                    }
+                }
+                await _salesPlanItemRepository.CreateRangeAsync(toCreate);
             }
-            }
-            await _salesPlanItemRepository.CreateRangeAsync(items);
         }
     }
     // ========================================

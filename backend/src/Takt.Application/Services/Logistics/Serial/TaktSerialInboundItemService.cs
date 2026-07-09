@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Application.Services.Logistics.Serial
 // 文件名称：TaktSerialInboundItemService.cs
-// 创建时间：2026-06-23
+// 创建时间：2026-07-09
 // 创建人：Takt365(Cursor AI)
 // 功能描述：序列号入库明细应用服务实现
 // 
@@ -118,6 +118,7 @@ public class TaktSerialInboundItemService : TaktServiceBase, ITaktSerialInboundI
     public async Task<TaktSerialInboundItemDto> CreateSerialInboundItemAsync(TaktSerialInboundItemCreateDto dto)
     {
         var entity = dto.Adapt<TaktSerialInboundItem>();
+        entity.IsObsolete = 0;
         await StampSerialInboundItemSerialInboundAsync(entity, dto);
         var isUnique_ix_takt_logistics_serial_inbound_item_inbound_serial_no_unique = await _uniqueValidator.IsUniqueAsync(
             _serialInboundItemRepository,
@@ -172,11 +173,21 @@ public class TaktSerialInboundItemService : TaktServiceBase, ITaktSerialInboundI
     /// <returns>任务</returns>
     public async Task DeleteSerialInboundItemByIdAsync(long id)
     {
-        var deleted = await _serialInboundItemRepository.DeleteAsync(id);
-        if (!deleted)
+        var entity = await _serialInboundItemRepository.GetByIdAsync(id);
+        if (entity == null)
         {
             throw new TaktBusinessException("序列号入库明细不存在或已删除");
         }
+        if (entity.TenantCode != CurrentTenantCode || entity.CompanyCode != CurrentCompanyCode)
+        {
+            throw new TaktBusinessException("序列号入库明细不存在或已删除");
+        }
+        if (entity.IsObsolete == 1)
+        {
+            throw new TaktBusinessException("序列号入库明细已作废");
+        }
+        entity.IsObsolete = 1;
+        await _serialInboundItemRepository.UpdateAsync(entity);
     }
 
     /// <summary>
@@ -195,6 +206,27 @@ public class TaktSerialInboundItemService : TaktServiceBase, ITaktSerialInboundI
         {
             await DeleteSerialInboundItemByIdAsync(id);
         }
+    }
+
+    /// <summary>
+    /// 更新序列号入库明细作废状态
+    /// </summary>
+    /// <param name="dto">作废DTO</param>
+    /// <returns>DTO</returns>
+    public async Task<TaktSerialInboundItemDto> UpdateSerialInboundItemObsoleteAsync(TaktSerialInboundItemObsoleteDto dto)
+    {
+        var entity = await _serialInboundItemRepository.GetByIdAsync(dto.SerialInboundItemId);
+        if (entity == null)
+        {
+            throw new TaktBusinessException("序列号入库明细不存在");
+        }
+        if (entity.TenantCode != CurrentTenantCode || entity.CompanyCode != CurrentCompanyCode)
+        {
+            throw new TaktBusinessException("序列号入库明细不存在");
+        }
+        entity.IsObsolete = dto.IsObsolete;
+        await _serialInboundItemRepository.UpdateAsync(entity);
+        return await GetSerialInboundItemByIdAsync(dto.SerialInboundItemId) ?? throw new TaktBusinessException("序列号入库明细不存在");
     }
 
     /// <summary>
@@ -328,6 +360,15 @@ public class TaktSerialInboundItemService : TaktServiceBase, ITaktSerialInboundI
     {
         var exp = Expressionable.Create<TaktSerialInboundItem>();
 
+        if (queryDto?.IsObsolete.HasValue == true)
+        {
+            exp = exp.And(x => x.IsObsolete == queryDto.IsObsolete);
+        }
+        else
+        {
+            exp = exp.And(x => x.IsObsolete == 0);
+        }
+
         if (!string.IsNullOrEmpty(queryDto?.KeyWords))
         {
             var keywords = queryDto.KeyWords;
@@ -338,7 +379,6 @@ public class TaktSerialInboundItemService : TaktServiceBase, ITaktSerialInboundI
                 || (x.InboundSerialNo != null && x.InboundSerialNo.Contains(keywords))
                 || (x.ExtField != null && x.ExtField.Contains(keywords))
                 || (x.Remark != null && x.Remark.Contains(keywords))
-                || SqlFunc.ToString(x.InboundTime).Contains(keywords)
                 || SqlFunc.ToString(x.CreatedAt).Contains(keywords)
             );
         }
@@ -371,16 +411,6 @@ public class TaktSerialInboundItemService : TaktServiceBase, ITaktSerialInboundI
         if (!string.IsNullOrEmpty(queryDto?.Remark))
         {
             exp = exp.And(x => x.Remark != null && x.Remark.Contains(queryDto.Remark));
-        }
-
-        if (queryDto?.InboundTimeStart.HasValue == true)
-        {
-            exp = exp.And(x => x.InboundTime >= queryDto.InboundTimeStart);
-        }
-
-        if (queryDto?.InboundTimeEnd.HasValue == true)
-        {
-            exp = exp.And(x => x.InboundTime <= queryDto.InboundTimeEnd);
         }
 
         if (queryDto?.CreatedAtStart.HasValue == true)

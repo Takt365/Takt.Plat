@@ -76,9 +76,9 @@ public class TaktStandardOperationTimeDto : TaktApprovalDtoBase
     public string PointsUnit { get; set; } = string.Empty;
 
     /// <summary>
-    /// 点数转分钟汇率（字典 logistics_points_to_minutes_rate；DictValue=1/0.028/0.045；普通=1，AI=0.028，SMT=0.045）
+    /// 点数转分钟汇率（decimal，精度 3 位小数；可选值参见字典 logistics_points_to_minutes_rate：普通=1，AI=0.028，SMT=0.045）
     /// </summary>
-    public string PointsToMinutesRate { get; set; } = string.Empty;
+    public decimal PointsToMinutesRate { get; set; } = 1;
 
     /// <summary>
     /// 转换后标准工时（分钟）
@@ -94,13 +94,6 @@ public class TaktStandardOperationTimeDto : TaktApprovalDtoBase
     /// 失效日期
     /// </summary>
     public DateTime? ExpiryDate { get; set; }
-
-    /// <summary>
-    /// 标准工序时间变更记录列表（外键在子表 TaktStandardOperationTimeChangeLog.StandardOperationTimeId）
-    /// （子表：TaktStandardOperationTimeChangeLog）
-    /// </summary>
-    public List<TaktStandardOperationTimeChangeLogDto>? ChangeLogs { get; set; }
-
 }
 
 // ========================================
@@ -164,9 +157,9 @@ public class TaktStandardOperationTimeQueryDto : TaktPagedQuery
     public string? PointsUnit { get; set; } = string.Empty;
 
     /// <summary>
-    /// 点数转分钟汇率（字典 logistics_points_to_minutes_rate；DictValue=1/0.028/0.045；普通=1，AI=0.028，SMT=0.045）
+    /// 点数转分钟汇率（decimal，精度 3 位小数；可选值参见字典 logistics_points_to_minutes_rate：普通=1，AI=0.028，SMT=0.045）
     /// </summary>
-    public string? PointsToMinutesRate { get; set; } = string.Empty;
+    public decimal? PointsToMinutesRate { get; set; }
 
     /// <summary>
     /// 转换后标准工时（分钟）
@@ -327,10 +320,9 @@ public class TaktStandardOperationTimeCreateDto
     public string PointsUnit { get; set; } = string.Empty;
 
     /// <summary>
-    /// 点数转分钟汇率（字典 logistics_points_to_minutes_rate；DictValue=1/0.028/0.045；普通=1，AI=0.028，SMT=0.045）
+    /// 点数转分钟汇率（decimal，精度 3 位小数；可选值参见字典 logistics_points_to_minutes_rate：普通=1，AI=0.028，SMT=0.045）
     /// </summary>
-    [Required(ErrorMessage = "点数转分钟汇率（字典 logistics_points_to_minutes_rate；DictValue=1/0.028/0.045；普通=1，AI=0.028，SMT=0.045）不能为空")]
-    public string PointsToMinutesRate { get; set; } = string.Empty;
+    public decimal PointsToMinutesRate { get; set; } = 1;
 
     /// <summary>
     /// 转换后标准工时（分钟）
@@ -345,14 +337,7 @@ public class TaktStandardOperationTimeCreateDto
     /// <summary>
     /// 失效日期
     /// </summary>
-    public DateTime? ExpiryDate { get; set; }
-
-    /// <summary>
-    /// 标准工序时间变更记录列表（外键在子表 TaktStandardOperationTimeChangeLog.StandardOperationTimeId）（子表，级联保存）
-    /// </summary>
-    public List<TaktStandardOperationTimeChangeLogCreateDto>? ChangeLogs { get; set; }
-
-    /// <summary>
+    public DateTime? ExpiryDate { get; set; }    /// <summary>
     /// 扩展字段JSON
     /// </summary>
     public string? ExtField { get; set; }
@@ -444,9 +429,9 @@ public class TaktStandardOperationTimeTemplateDto
     public string? PointsUnit { get; set; } = string.Empty;
 
     /// <summary>
-    /// 点数转分钟汇率（字典 logistics_points_to_minutes_rate；DictValue=1/0.028/0.045；普通=1，AI=0.028，SMT=0.045）
+    /// 点数转分钟汇率（decimal，精度 3 位小数；可选值参见字典 logistics_points_to_minutes_rate：普通=1，AI=0.028，SMT=0.045）
     /// </summary>
-    public string? PointsToMinutesRate { get; set; } = string.Empty;
+    public decimal? PointsToMinutesRate { get; set; }
 
     /// <summary>
     /// 转换后标准工时（分钟）
@@ -461,14 +446,7 @@ public class TaktStandardOperationTimeTemplateDto
     /// <summary>
     /// 失效日期
     /// </summary>
-    public DateTime? ExpiryDate { get; set; }
-
-    /// <summary>
-    /// 标准工序时间变更记录列表（外键在子表 TaktStandardOperationTimeChangeLog.StandardOperationTimeId）（子表，级联保存）
-    /// </summary>
-    public List<TaktStandardOperationTimeChangeLogCreateDto>? ChangeLogs { get; set; }
-
-    /// <summary>
+    public DateTime? ExpiryDate { get; set; }    /// <summary>
     /// 扩展字段JSON
     /// </summary>
     public string? ExtField { get; set; }
@@ -541,9 +519,9 @@ public class TaktStandardOperationTimeImportDto
     public string? PointsUnit { get; set; } = string.Empty;
 
     /// <summary>
-    /// 点数转分钟汇率（字典 logistics_points_to_minutes_rate；DictValue=1/0.028/0.045；普通=1，AI=0.028，SMT=0.045）
+    /// 点数转分钟汇率（decimal，精度 3 位小数；可选值参见字典 logistics_points_to_minutes_rate：普通=1，AI=0.028，SMT=0.045）
     /// </summary>
-    public string? PointsToMinutesRate { get; set; } = string.Empty;
+    public decimal? PointsToMinutesRate { get; set; }
 
     /// <summary>
     /// 转换后标准工时（分钟）
@@ -558,14 +536,7 @@ public class TaktStandardOperationTimeImportDto
     /// <summary>
     /// 失效日期
     /// </summary>
-    public DateTime? ExpiryDate { get; set; }
-
-    /// <summary>
-    /// 标准工序时间变更记录列表（外键在子表 TaktStandardOperationTimeChangeLog.StandardOperationTimeId）（子表，级联保存）
-    /// </summary>
-    public List<TaktStandardOperationTimeChangeLogCreateDto>? ChangeLogs { get; set; }
-
-    /// <summary>
+    public DateTime? ExpiryDate { get; set; }    /// <summary>
     /// 扩展字段JSON
     /// </summary>
     public string? ExtField { get; set; }
@@ -634,9 +605,9 @@ public class TaktStandardOperationTimeExportDto
     public string PointsUnit { get; set; } = string.Empty;
 
     /// <summary>
-    /// 点数转分钟汇率（字典 logistics_points_to_minutes_rate；DictValue=1/0.028/0.045；普通=1，AI=0.028，SMT=0.045）
+    /// 点数转分钟汇率（decimal，精度 3 位小数；可选值参见字典 logistics_points_to_minutes_rate：普通=1，AI=0.028，SMT=0.045）
     /// </summary>
-    public string PointsToMinutesRate { get; set; } = string.Empty;
+    public decimal PointsToMinutesRate { get; set; } = 1;
 
     /// <summary>
     /// 转换后标准工时（分钟）

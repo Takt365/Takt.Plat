@@ -8,9 +8,6 @@
 
 <template>
   <div class="pcba-inspection-detail-panel flex h-full min-h-0 flex-col overflow-hidden">
-    <div class="mb-2 text-sm font-medium text-text">
-      {{ t('entity.pcbainspectiondetail._self') }}
-    </div>
     <TaktQueryBar
       v-model="queryKeyword"
       :placeholder="searchPlaceholder"
@@ -55,7 +52,10 @@
       @delete="handleDelete"
       @refresh="handleRefresh"
     />
-    <div class="pcba-inspection-detail-panel__table-wrap min-h-0 flex-1 overflow-hidden">
+    <div
+      ref="detailTableWrapRef"
+      class="pcba-inspection-detail-panel__table-wrap min-h-0 flex-1 overflow-hidden"
+    >
       <TaktSingleTable
         class="h-full min-h-0"
         :columns="columns"
@@ -74,11 +74,27 @@
         :total="total"
         scroll-layout="masterDetailLr"
         table-mode="masterDetailDetail"
+        :scroll="{ y: detailTableScrollY }"
         :show-row-selection="true"
         @change="handleTableChange"
         @pagination-change="handleMasterDetailPaginationChange"
         @resize-column="handleResizeColumn"
-      />
+      >
+        <template #summary>
+          <a-table-summary fixed>
+            <a-table-summary-row>
+              <a-table-summary-cell :index="0" />
+              <a-table-summary-cell
+                v-for="cell in summaryCells"
+                :key="cell.key"
+                :index="cell.index"
+              >
+                <span class="text-sm font-medium">{{ cell.text }}</span>
+              </a-table-summary-cell>
+            </a-table-summary-row>
+          </a-table-summary>
+        </template>
+      </TaktSingleTable>
     </div>
     <TaktModal
       v-model:open="formVisible"
@@ -107,10 +123,10 @@
     >
       <template #default="{ isFieldVisible }">
       <div v-show="isFieldVisible('prodOrderCode')">
-      <a-form-item :label="t('entity.pcbainspectiondetail.prodordercode')">
+      <a-form-item :label="pi.queryLabel('prodOrderCode')">
         <a-input
           v-model:value="advancedQueryForm.prodOrderCode"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.pcbainspectiondetail.prodordercode') })"
+          :placeholder="pi.queryPh('prodOrderCode', 'required')"
           show-count
           :maxlength="20"
           allow-clear
@@ -118,176 +134,174 @@
       </a-form-item>
       </div>
       <div v-show="isFieldVisible('lineNumber')">
-      <a-form-item :label="t('entity.pcbainspectiondetail.linenumber')">
+      <a-form-item :label="pi.queryLabel('lineNumber')">
         <a-input-number
           v-model:value="advancedQueryForm.lineNumber"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.pcbainspectiondetail.linenumber') })"
+          :placeholder="pi.queryPh('lineNumber', 'required')"
           style="width: 100%"
         />
       </a-form-item>
       </div>
       <div v-show="isFieldVisible('pcbaBoardType')">
-      <a-form-item :label="t('entity.pcbainspectiondetail.pcbaboardtype')">
+      <a-form-item :label="pi.queryLabel('pcbaBoardType')">
         <TaktSelect
           v-model:value="advancedQueryForm.pcbaBoardType"
           dict-type="logistics_pcba_panel_category"
-          :placeholder="t('common.page.form.placeholder.select', { field: t('entity.pcbainspectiondetail.pcbaboardtype') })"
+          :placeholder="pi.queryPh('pcbaBoardType', 'select')"
           allow-clear
         />
       </a-form-item>
       </div>
       <div v-show="isFieldVisible('visualInspectionLine')">
-      <a-form-item :label="t('entity.pcbainspectiondetail.visualinspectionline')">
+      <a-form-item :label="pi.queryLabel('visualInspectionLine')">
         <TaktSelect
           v-model:value="advancedQueryForm.visualInspectionLine"
           dict-type="logistics_visual_inspection_line_category"
-          :placeholder="t('common.page.form.placeholder.select', { field: t('entity.pcbainspectiondetail.visualinspectionline') })"
+          :placeholder="pi.queryPh('visualInspectionLine', 'select')"
           allow-clear
         />
       </a-form-item>
       </div>
       <div v-show="isFieldVisible('aoiLine')">
-      <a-form-item :label="t('entity.pcbainspectiondetail.aoiline')">
+      <a-form-item :label="pi.queryLabel('aoiLine')">
         <TaktSelect
           v-model:value="advancedQueryForm.aoiLine"
           dict-type="logistics_aoi_inspection_line_category"
-          :placeholder="t('common.page.form.placeholder.select', { field: t('entity.pcbainspectiondetail.aoiline') })"
+          :placeholder="pi.queryPh('aoiLine', 'select')"
           allow-clear
         />
       </a-form-item>
       </div>
       <div v-show="isFieldVisible('bSideAssemblyDateStart')">
-      <a-form-item :label="t('entity.pcbainspectiondetail.bsideassemblydatestart')">
+      <a-form-item :label="pi.queryLabel('bSideAssemblyDateStart')">
         <a-date-picker
           v-model:value="advancedQueryForm.bSideAssemblyDateStart"
-          :placeholder="t('common.page.form.placeholder.select', { field: t('entity.pcbainspectiondetail.bsideassemblydatestart') })"
+          :placeholder="pi.queryPh('bSideAssemblyDateStart', 'select')"
           value-format="YYYY-MM-DD"
           style="width: 100%"
         />
       </a-form-item>
       </div>
       <div v-show="isFieldVisible('bSideAssemblyDateEnd')">
-      <a-form-item :label="t('entity.pcbainspectiondetail.bsideassemblydateend')">
+      <a-form-item :label="pi.queryLabel('bSideAssemblyDateEnd')">
         <a-date-picker
           v-model:value="advancedQueryForm.bSideAssemblyDateEnd"
-          :placeholder="t('common.page.form.placeholder.select', { field: t('entity.pcbainspectiondetail.bsideassemblydateend') })"
+          :placeholder="pi.queryPh('bSideAssemblyDateEnd', 'select')"
           value-format="YYYY-MM-DD"
           style="width: 100%"
         />
       </a-form-item>
       </div>
       <div v-show="isFieldVisible('tSideAssemblyDateStart')">
-      <a-form-item :label="t('entity.pcbainspectiondetail.tsideassemblydatestart')">
+      <a-form-item :label="pi.queryLabel('tSideAssemblyDateStart')">
         <a-date-picker
           v-model:value="advancedQueryForm.tSideAssemblyDateStart"
-          :placeholder="t('common.page.form.placeholder.select', { field: t('entity.pcbainspectiondetail.tsideassemblydatestart') })"
+          :placeholder="pi.queryPh('tSideAssemblyDateStart', 'select')"
           value-format="YYYY-MM-DD"
           style="width: 100%"
         />
       </a-form-item>
       </div>
       <div v-show="isFieldVisible('tSideAssemblyDateEnd')">
-      <a-form-item :label="t('entity.pcbainspectiondetail.tsideassemblydateend')">
+      <a-form-item :label="pi.queryLabel('tSideAssemblyDateEnd')">
         <a-date-picker
           v-model:value="advancedQueryForm.tSideAssemblyDateEnd"
-          :placeholder="t('common.page.form.placeholder.select', { field: t('entity.pcbainspectiondetail.tsideassemblydateend') })"
+          :placeholder="pi.queryPh('tSideAssemblyDateEnd', 'select')"
           value-format="YYYY-MM-DD"
           style="width: 100%"
         />
       </a-form-item>
       </div>
       <div v-show="isFieldVisible('shiftNo')">
-      <a-form-item :label="t('entity.pcbainspectiondetail.shiftno')">
+      <a-form-item :label="pi.queryLabel('shiftNo')">
         <TaktSelect
           v-model:value="advancedQueryForm.shiftNo"
           dict-type="logistics_shift_category"
-          :placeholder="t('common.page.form.placeholder.select', { field: t('entity.pcbainspectiondetail.shiftno') })"
+          :placeholder="pi.queryPh('shiftNo', 'select')"
           allow-clear
         />
       </a-form-item>
       </div>
       <div v-show="isFieldVisible('inspectorName')">
-      <a-form-item :label="t('entity.pcbainspectiondetail.inspectorname')">
-        <a-input
+      <a-form-item :label="pi.queryLabel('inspectorName')">
+        <TaktSelect
           v-model:value="advancedQueryForm.inspectorName"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.pcbainspectiondetail.inspectorname') })"
-          show-count
-          :maxlength="20"
+          api-url="TaktEmployees/options"
+          :placeholder="pi.queryPh('inspectorName', 'select')"
           allow-clear
         />
       </a-form-item>
       </div>
       <div v-show="isFieldVisible('dailyCompletedQty')">
-      <a-form-item :label="t('entity.pcbainspectiondetail.dailycompletedqty')">
+      <a-form-item :label="pi.queryLabel('dailyCompletedQty')">
         <a-input-number
           v-model:value="advancedQueryForm.dailyCompletedQty"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.pcbainspectiondetail.dailycompletedqty') })"
+          :placeholder="pi.queryPh('dailyCompletedQty', 'required')"
           style="width: 100%"
         />
       </a-form-item>
       </div>
       <div v-show="isFieldVisible('inspectionQty')">
-      <a-form-item :label="t('entity.pcbainspectiondetail.inspectionqty')">
+      <a-form-item :label="pi.queryLabel('inspectionQty')">
         <a-input-number
           v-model:value="advancedQueryForm.inspectionQty"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.pcbainspectiondetail.inspectionqty') })"
+          :placeholder="pi.queryPh('inspectionQty', 'required')"
           style="width: 100%"
         />
       </a-form-item>
       </div>
       <div v-show="isFieldVisible('inspectionStatus')">
-      <a-form-item :label="t('entity.pcbainspectiondetail.inspectionstatus')">
+      <a-form-item :label="pi.queryLabel('inspectionStatus')">
         <TaktSelect
           v-model:value="advancedQueryForm.inspectionStatus"
           dict-type="logistics_pcba_inspection_status"
-          :placeholder="t('common.page.form.placeholder.select', { field: t('entity.pcbainspectiondetail.inspectionstatus') })"
+          :placeholder="pi.queryPh('inspectionStatus', 'select')"
           allow-clear
         />
       </a-form-item>
       </div>
       <div v-show="isFieldVisible('prodTeam')">
-      <a-form-item :label="t('entity.pcbainspectiondetail.prodteam')">
-        <a-input
+      <a-form-item :label="pi.queryLabel('prodTeam')">
+        <TaktSelect
           v-model:value="advancedQueryForm.prodTeam"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.pcbainspectiondetail.prodteam') })"
-          show-count
-          :maxlength="20"
+          api-url="TaktProductionTeams/options"
+          :placeholder="pi.queryPh('prodTeam', 'select')"
           allow-clear
         />
       </a-form-item>
       </div>
       <div v-show="isFieldVisible('inspectionWorkHours')">
-      <a-form-item :label="t('entity.pcbainspectiondetail.inspectionworkhours')">
+      <a-form-item :label="pi.queryLabel('inspectionWorkHours')">
         <a-input-number
           v-model:value="advancedQueryForm.inspectionWorkHours"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.pcbainspectiondetail.inspectionworkhours') })"
+          :placeholder="pi.queryPh('inspectionWorkHours', 'required')"
           style="width: 100%"
         />
       </a-form-item>
       </div>
       <div v-show="isFieldVisible('aoiWorkHours')">
-      <a-form-item :label="t('entity.pcbainspectiondetail.aoiworkhours')">
+      <a-form-item :label="pi.queryLabel('aoiWorkHours')">
         <a-input-number
           v-model:value="advancedQueryForm.aoiWorkHours"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.pcbainspectiondetail.aoiworkhours') })"
+          :placeholder="pi.queryPh('aoiWorkHours', 'required')"
           style="width: 100%"
         />
       </a-form-item>
       </div>
       <div v-show="isFieldVisible('defectQty')">
-      <a-form-item :label="t('entity.pcbainspectiondetail.defectqty')">
+      <a-form-item :label="pi.queryLabel('defectQty')">
         <a-input-number
           v-model:value="advancedQueryForm.defectQty"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.pcbainspectiondetail.defectqty') })"
+          :placeholder="pi.queryPh('defectQty', 'required')"
           style="width: 100%"
         />
       </a-form-item>
       </div>
       <div v-show="isFieldVisible('handPlacement')">
-      <a-form-item :label="t('entity.pcbainspectiondetail.handplacement')">
+      <a-form-item :label="pi.queryLabel('handPlacement')">
         <a-input
           v-model:value="advancedQueryForm.handPlacement"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.pcbainspectiondetail.handplacement') })"
+          :placeholder="pi.queryPh('handPlacement', 'required')"
           show-count
           :maxlength="20"
           allow-clear
@@ -295,10 +309,10 @@
       </a-form-item>
       </div>
       <div v-show="isFieldVisible('serialNumber')">
-      <a-form-item :label="t('entity.pcbainspectiondetail.serialnumber')">
+      <a-form-item :label="pi.queryLabel('serialNumber')">
         <a-input
           v-model:value="advancedQueryForm.serialNumber"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.pcbainspectiondetail.serialnumber') })"
+          :placeholder="pi.queryPh('serialNumber', 'required')"
           show-count
           :maxlength="20"
           allow-clear
@@ -306,30 +320,40 @@
       </a-form-item>
       </div>
       <div v-show="isFieldVisible('content')">
-      <a-form-item :label="t('entity.pcbainspectiondetail.content')">
+      <a-form-item :label="pi.queryLabel('content')">
         <a-textarea
           v-model:value="advancedQueryForm.content"
-          :placeholder="t('common.page.form.placeholder.optional', { field: t('entity.pcbainspectiondetail.content') })"
+          :placeholder="pi.queryPh('content', 'optional')"
           :rows="2"
           allow-clear
         />
       </a-form-item>
       </div>
       <div v-show="isFieldVisible('defectLocation')">
-      <a-form-item :label="t('entity.pcbainspectiondetail.defectlocation')">
+      <a-form-item :label="pi.queryLabel('defectLocation')">
         <TaktSelect
           v-model:value="advancedQueryForm.defectLocation"
           dict-type="logistics_pcb_location_category"
-          :placeholder="t('common.page.form.placeholder.select', { field: t('entity.pcbainspectiondetail.defectlocation') })"
+          :placeholder="pi.queryPh('defectLocation', 'select')"
+          allow-clear
+        />
+      </a-form-item>
+      </div>
+      <div v-show="isFieldVisible('isObsolete')">
+      <a-form-item :label="pi.queryLabel('isObsolete')">
+        <TaktSelect
+          v-model:value="advancedQueryForm.isObsolete"
+          dict-type="sys_yes_no_type"
+          :placeholder="pi.queryPh('isObsolete', 'select')"
           allow-clear
         />
       </a-form-item>
       </div>
       <div v-show="isFieldVisible('createdAtStart')">
-      <a-form-item :label="t('common.page.entity.createdatstart')">
+      <a-form-item :label="pi.queryLabel('createdAtStart')">
         <a-date-picker
           v-model:value="advancedQueryForm.createdAtStart"
-          :placeholder="t('common.page.form.placeholder.select', { field: t('common.page.entity.createdatstart') })"
+          :placeholder="pi.queryPh('createdAtStart', 'select')"
           value-format="YYYY-MM-DD HH:mm:ss"
             show-time
           style="width: 100%"
@@ -337,10 +361,10 @@
       </a-form-item>
       </div>
       <div v-show="isFieldVisible('createdAtEnd')">
-      <a-form-item :label="t('common.page.entity.createdatend')">
+      <a-form-item :label="pi.queryLabel('createdAtEnd')">
         <a-date-picker
           v-model:value="advancedQueryForm.createdAtEnd"
-          :placeholder="t('common.page.form.placeholder.select', { field: t('common.page.entity.createdatend') })"
+          :placeholder="pi.queryPh('createdAtEnd', 'select')"
           value-format="YYYY-MM-DD HH:mm:ss"
             show-time
           style="width: 100%"
@@ -362,7 +386,7 @@
             >
               <span class="takt-form-label-hint-icon"><RiQuestionLine class="takt-remix-icon" /></span>
             </a-tooltip>
-            <span>{{ t('common.page.entity.extfield') }}</span>
+            <span>{{ pi.queryLabel('extField') }}</span>
           </span>
         </template>
         <a-textarea
@@ -376,10 +400,10 @@
       </a-form-item>
       </div>
       <div v-show="isFieldVisible('remark')">
-      <a-form-item :label="t('common.page.entity.remark')">
+      <a-form-item :label="pi.queryLabel('remark')">
         <a-textarea
           v-model:value="advancedQueryForm.remark"
-          :placeholder="t('common.page.form.placeholder.optional', { field: t('common.page.entity.remark') })"
+          :placeholder="pi.queryPh('remark', 'optional')"
             :rows="4"
             show-count
             :maxlength="400"
@@ -392,7 +416,7 @@
     <!-- 导入对话框 -->
     <TaktModal
       v-model:open="importVisible"
-      :title="t('common.dialog.title.import', { entity: t('entity.pcbainspectiondetail._self') })"
+      :title="t('common.dialog.title.import', { entity: pi.self() })"
       :width="600"
       :footer="null"
       :cancel-text="t('common.page.button.close')"
@@ -400,7 +424,7 @@
     >
       <TaktImportFile
         v-if="importVisible"
-        entity-i18n-key="entity.pcbainspectiondetail._self"
+        :entity-i18n-key="PCBAINSPECTIONDETAIL_SELF_I18N_KEY"
         file-type="xlsx"
         :sheet-name="excelNames.sheet"
         :template-file-name="excelNames.fileBase"
@@ -430,14 +454,23 @@
  * PCBA检查日报实体 不良率子表 pcbaInspectionDetail 右栏面板
  * @module views/logistics/manufacturing/defect/pcba-inspection/components
  */
-import { ref, computed, watch } from 'vue'
+import { ref, computed, watch, onMounted, onBeforeUnmount, nextTick } from 'vue'
 import { message, Modal } from 'ant-design-vue'
 import type { TableColumnsType } from 'ant-design-vue'
 import { useI18n } from 'vue-i18n'
+import { measureMasterDetailLrTableScrollY } from '@/composables/use-takt-master-detail-lr-scroll-y'
+import { TAKT_TABLE_SCROLL_Y_MIN } from '@/utils/table-scroll'
 import { getTaktDefaultPageIndex, getTaktDefaultPageSize } from '@/utils/takt-paged'
 import { taktExcelEntityNames } from '@/utils/naming'
 import { resolveExportDownloadFileName } from '@/utils/export-download-name'
 import { normalizeImportResult, type TaktImportResult } from '@/utils/takt-import-result'
+import {
+  filterMergedColumnsByDefaultVisible,
+  filterTableColumnsByVisibleKeys,
+  mergeDefaultColumns,
+  normalizeUserTableColumns,
+} from '@/utils/table-columns'
+import { formatSummaryValue } from '@/components/business/takt-editable-table/editable-table-utils'
 import { CreateActionColumn } from '@/components/business/takt-action-column/index'
 import { RiEditLine, RiDeleteBinLine, RiQuestionLine } from '@remixicon/vue'
 import PcbaInspectionDetailForm from './pcba-inspection-detail-form.vue'
@@ -455,6 +488,18 @@ import {
 } from '@/api/logistics/manufacturing/defect/pcba-inspection-detail'
 import type { PcbaInspectionDetail, PcbaInspectionDetailQuery } from '@/types/logistics/manufacturing/defect/pcba-inspection-detail'
 
+import {
+  usePcbaInspectionDetailI18n,
+  PCBAINSPECTIONDETAIL_DEFAULT_VISIBLE_COLUMN_KEYS,
+  PCBAINSPECTIONDETAIL_SUMMARY_SUM_FIELDS,
+  PCBAINSPECTIONDETAIL_QUERY_STRING_FIELDS,
+  PCBAINSPECTIONDETAIL_QUERY_FIELDS,
+  PCBAINSPECTIONDETAIL_SELF_I18N_KEY,
+} from '../composables/use-pcba-inspection-detail-i18n'
+
+/** 实体字段 i18n（标签/占位符统一入口） */
+const pi = usePcbaInspectionDetailI18n()
+
 const { t } = useI18n()
 const { selectedMasterRow } = usePcbaInspectionMasterContext()
 
@@ -462,10 +507,45 @@ const { selectedMasterRow } = usePcbaInspectionMasterContext()
 const excelNames = taktExcelEntityNames('TaktPcbaInspectionDetail')
 /** 快捷查询占位文案 */
 const searchPlaceholder = computed(
-  () => t('common.page.form.placeholder.search', { keyword: t('entity.pcbainspectiondetail._self') }),
+  () => t('common.page.form.placeholder.search', { keyword: pi.self() }),
 )
 
 const loading = ref(false)
+
+/** 子表滚动区容器（扣除查询/工具栏后剩余高度） */
+const detailTableWrapRef = ref<HTMLElement | null>(null)
+/** 子表 scroll.y（按 __table-wrap 实测，避免沿用主表共享高度导致双滚动条） */
+const detailTableScrollY = ref(TAKT_TABLE_SCROLL_Y_MIN)
+let detailTableScrollResizeObserver: ResizeObserver | null = null
+
+/** 按子表容器重算 scroll.y（扣除表头 + 汇总行，避免合计被裁切或双滚动条） */
+function recalcDetailTableScrollY(): void {
+  const wrap = detailTableWrapRef.value
+  if (!wrap) {
+    return
+  }
+  detailTableScrollY.value = measureMasterDetailLrTableScrollY(wrap, { reserveSummaryRow: true })
+}
+
+/** 监听子表容器尺寸变化 */
+function startDetailTableScrollObserve(): void {
+  stopDetailTableScrollObserve()
+  recalcDetailTableScrollY()
+  const wrap = detailTableWrapRef.value
+  if (!wrap) {
+    return
+  }
+  detailTableScrollResizeObserver = new ResizeObserver(() => {
+    recalcDetailTableScrollY()
+  })
+  detailTableScrollResizeObserver.observe(wrap)
+}
+
+/** 停止监听子表容器尺寸 */
+function stopDetailTableScrollObserve(): void {
+  detailTableScrollResizeObserver?.disconnect()
+  detailTableScrollResizeObserver = null
+}
 const dataSource = ref<PcbaInspectionDetail[]>([])
 const currentPage = ref(getTaktDefaultPageIndex())
 const pageSize = ref(getTaktDefaultPageSize())
@@ -481,73 +561,35 @@ const formLoading = ref(false)
 const formRef = ref()
 
 const advancedQueryVisible = ref(false)
-const advancedQueryForm = ref({
-  prodOrderCode: '',
-  lineNumber: undefined as number | undefined,
-  pcbaBoardType: '',
-  visualInspectionLine: '',
-  aoiLine: '',
-  bSideAssemblyDateStart: '',
-  bSideAssemblyDateEnd: '',
-  tSideAssemblyDateStart: '',
-  tSideAssemblyDateEnd: '',
-  shiftNo: undefined as number | undefined,
-  inspectorName: '',
-  dailyCompletedQty: undefined as number | undefined,
-  inspectionQty: undefined as number | undefined,
-  inspectionStatus: undefined as number | undefined,
-  prodTeam: '',
-  inspectionWorkHours: undefined as number | undefined,
-  aoiWorkHours: undefined as number | undefined,
-  defectQty: undefined as number | undefined,
-  handPlacement: '',
-  serialNumber: '',
-  content: '',
-  defectLocation: '',
-  createdAtStart: '',
-  createdAtEnd: '',
-  extField: '',
-  remark: '',
-})
+/**
+ * 创建空的高级查询表单
+ * @returns {Record<string, unknown>} 高级查询初始模型
+ */
+function createEmptyAdvancedQueryForm() {
+  const form = Object.fromEntries(PCBAINSPECTIONDETAIL_QUERY_STRING_FIELDS.map((key) => [key, ''])) as Record<
+    (typeof PCBAINSPECTIONDETAIL_QUERY_STRING_FIELDS)[number],
+    string
+  >
+  return {
+    ...form,
+    lineNumber: undefined as number | undefined,
+    shiftNo: undefined as number | undefined,
+    dailyCompletedQty: undefined as number | undefined,
+    inspectionQty: undefined as number | undefined,
+    inspectionStatus: undefined as number | undefined,
+    inspectionWorkHours: undefined as number | undefined,
+    aoiWorkHours: undefined as number | undefined,
+    defectQty: undefined as number | undefined,
+    isObsolete: undefined as number | undefined,
+  }
+}
+const advancedQueryForm = ref(createEmptyAdvancedQueryForm())
 const visibleQueryFieldKeys = ref<string[]>([])
 
 /** 高级查询字段元数据 */
-const queryFieldsMeta = computed(() => [
-  { key: 'prodOrderCode', label: t('entity.pcbainspectiondetail.prodordercode') },
-  { key: 'lineNumber', label: t('entity.pcbainspectiondetail.linenumber') },
-  { key: 'pcbaBoardType', label: t('entity.pcbainspectiondetail.pcbaboardtype') },
-  { key: 'visualInspectionLine', label: t('entity.pcbainspectiondetail.visualinspectionline') },
-  { key: 'aoiLine', label: t('entity.pcbainspectiondetail.aoiline') },
-  { key: 'bSideAssemblyDateStart', label: t('common.page.entity.createdatstart').replace(t('common.page.entity.createdat'), t('entity.pcbainspectiondetail.bsideassemblydate')) },
-  { key: 'bSideAssemblyDateEnd', label: t('common.page.entity.createdatend').replace(t('common.page.entity.createdat'), t('entity.pcbainspectiondetail.bsideassemblydate')) },
-  { key: 'tSideAssemblyDateStart', label: t('common.page.entity.createdatstart').replace(t('common.page.entity.createdat'), t('entity.pcbainspectiondetail.tsideassemblydate')) },
-  { key: 'tSideAssemblyDateEnd', label: t('common.page.entity.createdatend').replace(t('common.page.entity.createdat'), t('entity.pcbainspectiondetail.tsideassemblydate')) },
-  { key: 'shiftNo', label: t('entity.pcbainspectiondetail.shiftno') },
-  { key: 'inspectorName', label: t('entity.pcbainspectiondetail.inspectorname') },
-  { key: 'dailyCompletedQty', label: t('entity.pcbainspectiondetail.dailycompletedqty') },
-  { key: 'inspectionQty', label: t('entity.pcbainspectiondetail.inspectionqty') },
-  { key: 'inspectionStatus', label: t('entity.pcbainspectiondetail.inspectionstatus') },
-  { key: 'prodTeam', label: t('entity.pcbainspectiondetail.prodteam') },
-  { key: 'inspectionWorkHours', label: t('entity.pcbainspectiondetail.inspectionworkhours') },
-  { key: 'aoiWorkHours', label: t('entity.pcbainspectiondetail.aoiworkhours') },
-  { key: 'defectQty', label: t('entity.pcbainspectiondetail.defectqty') },
-  { key: 'handPlacement', label: t('entity.pcbainspectiondetail.handplacement') },
-  { key: 'serialNumber', label: t('entity.pcbainspectiondetail.serialnumber') },
-  { key: 'content', label: t('entity.pcbainspectiondetail.content') },
-  { key: 'defectLocation', label: t('entity.pcbainspectiondetail.defectlocation') },
-  { key: 'createdAtStart', label: t('common.page.entity.createdatstart') },
-  { key: 'createdAtEnd', label: t('common.page.entity.createdatend') },
-  { key: 'extField', label: t('common.page.entity.extfield') },
-  { key: 'remark', label: t('common.page.entity.remark') },
-])
-
-/**
- * 高级查询字段标签
- * @param key 字段 key
- */
-function fieldLabel(key: string): string {
-  return queryFieldsMeta.value.find((f) => f.key === key)?.label ?? key
-}
+const queryFieldsMeta = computed(() =>
+  PCBAINSPECTIONDETAIL_QUERY_FIELDS.map((key) => ({ key, label: pi.queryLabel(key) })),
+)
 
 function handleAdvancedQuery() {
   advancedQueryVisible.value = true
@@ -560,38 +602,11 @@ function handleAdvancedQuerySubmit() {
 }
 
 function handleAdvancedQueryReset() {
-  advancedQueryForm.value = {
-  prodOrderCode: '',
-  lineNumber: undefined as number | undefined,
-  pcbaBoardType: '',
-  visualInspectionLine: '',
-  aoiLine: '',
-  bSideAssemblyDateStart: '',
-  bSideAssemblyDateEnd: '',
-  tSideAssemblyDateStart: '',
-  tSideAssemblyDateEnd: '',
-  shiftNo: undefined as number | undefined,
-  inspectorName: '',
-  dailyCompletedQty: undefined as number | undefined,
-  inspectionQty: undefined as number | undefined,
-  inspectionStatus: undefined as number | undefined,
-  prodTeam: '',
-  inspectionWorkHours: undefined as number | undefined,
-  aoiWorkHours: undefined as number | undefined,
-  defectQty: undefined as number | undefined,
-  handPlacement: '',
-  serialNumber: '',
-  content: '',
-  defectLocation: '',
-  createdAtStart: '',
-  createdAtEnd: '',
-  extField: '',
-  remark: '',
-  }
+  advancedQueryForm.value = createEmptyAdvancedQueryForm()
 }
 const columnSettingVisible = ref(false)
-/** 表格当前可见列 key（空数组时按 tableMode=masterDetailDetail 默认 id+4 业务列） */
-const visibleColumnKeys = ref<string[]>([])
+/** 表格当前可见列 key */
+const visibleColumnKeys = ref<string[]>([...PCBAINSPECTIONDETAIL_DEFAULT_VISIBLE_COLUMN_KEYS])
 
 function handleColumnSetting() {
   columnSettingVisible.value = true
@@ -602,13 +617,16 @@ function handleColumnKeysChange(keys: string[]) {
 }
 
 function handleColumnSettingReset() {
-  visibleColumnKeys.value = []
+  visibleColumnKeys.value = [...PCBAINSPECTIONDETAIL_DEFAULT_VISIBLE_COLUMN_KEYS]
 }
 const importVisible = ref(false)
 
 const entityIdName = 'pcbaInspectionDetailId'
-const hasMasterSelection = computed(() => !!selectedMasterRow.value?.pcbaInspectionId)
-const masterPcbaInspectionId = computed(() => selectedMasterRow.value?.pcbaInspectionId ?? '')
+const masterPcbaInspectionId = computed((): string => {
+  const id = (selectedMasterRow.value as Record<string, unknown> | null)?.['pcbaInspectionId']
+  return id != null ? String(id) : ''
+})
+const hasMasterSelection = computed(() => masterPcbaInspectionId.value !== '')
 const updateDisabled = computed(() => !hasMasterSelection.value || selectedRows.value.length !== 1)
 const deleteDisabled = computed(() => !hasMasterSelection.value || selectedRows.value.length === 0)
 
@@ -633,7 +651,17 @@ const columns = computed<TableColumnsType>(() => [
       String(getPcbaInspectionDetailField(record, 'pcbaInspectionDetailId') ?? ''),
   },
   {
-    title: t('entity.pcbainspectiondetail.prodordercode'),
+    title: pi.label('pcbaInspectionId'),
+    dataIndex: 'pcbaInspectionId',
+    key: 'pcbaInspectionId',
+    width: 120,
+    resizable: true,
+    ellipsis: true,
+    customRender: ({ record }: { record: PcbaInspectionDetail }) =>
+      String(getPcbaInspectionDetailField(record, 'pcbaInspectionId') ?? ''),
+  },
+  {
+    title: pi.label('prodOrderCode'),
     dataIndex: 'prodOrderCode',
     key: 'prodOrderCode',
     width: 120,
@@ -643,7 +671,7 @@ const columns = computed<TableColumnsType>(() => [
       String(getPcbaInspectionDetailField(record, 'prodOrderCode') ?? ''),
   },
   {
-    title: t('entity.pcbainspectiondetail.linenumber'),
+    title: pi.label('lineNumber'),
     dataIndex: 'lineNumber',
     key: 'lineNumber',
     width: 120,
@@ -653,7 +681,7 @@ const columns = computed<TableColumnsType>(() => [
       String(getPcbaInspectionDetailField(record, 'lineNumber') ?? ''),
   },
   {
-    title: t('entity.pcbainspectiondetail.pcbaboardtype'),
+    title: pi.label('pcbaBoardType'),
     dataIndex: 'pcbaBoardType',
     key: 'pcbaBoardType',
     width: 120,
@@ -663,7 +691,7 @@ const columns = computed<TableColumnsType>(() => [
       String(getPcbaInspectionDetailField(record, 'pcbaBoardType') ?? ''),
   },
   {
-    title: t('entity.pcbainspectiondetail.visualinspectionline'),
+    title: pi.label('visualInspectionLine'),
     dataIndex: 'visualInspectionLine',
     key: 'visualInspectionLine',
     width: 120,
@@ -673,7 +701,7 @@ const columns = computed<TableColumnsType>(() => [
       String(getPcbaInspectionDetailField(record, 'visualInspectionLine') ?? ''),
   },
   {
-    title: t('entity.pcbainspectiondetail.aoiline'),
+    title: pi.label('aoiLine'),
     dataIndex: 'aoiLine',
     key: 'aoiLine',
     width: 120,
@@ -683,7 +711,7 @@ const columns = computed<TableColumnsType>(() => [
       String(getPcbaInspectionDetailField(record, 'aoiLine') ?? ''),
   },
   {
-    title: t('entity.pcbainspectiondetail.bsideassemblydate'),
+    title: pi.label('bSideAssemblyDate'),
     dataIndex: 'bSideAssemblyDate',
     key: 'bSideAssemblyDate',
     width: 120,
@@ -693,7 +721,7 @@ const columns = computed<TableColumnsType>(() => [
       String(getPcbaInspectionDetailField(record, 'bSideAssemblyDate') ?? ''),
   },
   {
-    title: t('entity.pcbainspectiondetail.tsideassemblydate'),
+    title: pi.label('tSideAssemblyDate'),
     dataIndex: 'tSideAssemblyDate',
     key: 'tSideAssemblyDate',
     width: 120,
@@ -703,7 +731,7 @@ const columns = computed<TableColumnsType>(() => [
       String(getPcbaInspectionDetailField(record, 'tSideAssemblyDate') ?? ''),
   },
   {
-    title: t('entity.pcbainspectiondetail.shiftno'),
+    title: pi.label('shiftNo'),
     dataIndex: 'shiftNo',
     key: 'shiftNo',
     width: 120,
@@ -713,7 +741,7 @@ const columns = computed<TableColumnsType>(() => [
       String(getPcbaInspectionDetailField(record, 'shiftNo') ?? ''),
   },
   {
-    title: t('entity.pcbainspectiondetail.inspectorname'),
+    title: pi.label('inspectorName'),
     dataIndex: 'inspectorName',
     key: 'inspectorName',
     width: 120,
@@ -723,7 +751,7 @@ const columns = computed<TableColumnsType>(() => [
       String(getPcbaInspectionDetailField(record, 'inspectorName') ?? ''),
   },
   {
-    title: t('entity.pcbainspectiondetail.dailycompletedqty'),
+    title: pi.label('dailyCompletedQty'),
     dataIndex: 'dailyCompletedQty',
     key: 'dailyCompletedQty',
     width: 120,
@@ -733,7 +761,7 @@ const columns = computed<TableColumnsType>(() => [
       String(getPcbaInspectionDetailField(record, 'dailyCompletedQty') ?? ''),
   },
   {
-    title: t('entity.pcbainspectiondetail.inspectionqty'),
+    title: pi.label('inspectionQty'),
     dataIndex: 'inspectionQty',
     key: 'inspectionQty',
     width: 120,
@@ -743,7 +771,7 @@ const columns = computed<TableColumnsType>(() => [
       String(getPcbaInspectionDetailField(record, 'inspectionQty') ?? ''),
   },
   {
-    title: t('entity.pcbainspectiondetail.inspectionstatus'),
+    title: pi.label('inspectionStatus'),
     dataIndex: 'inspectionStatus',
     key: 'inspectionStatus',
     width: 120,
@@ -753,7 +781,7 @@ const columns = computed<TableColumnsType>(() => [
       String(getPcbaInspectionDetailField(record, 'inspectionStatus') ?? ''),
   },
   {
-    title: t('entity.pcbainspectiondetail.prodteam'),
+    title: pi.label('prodTeam'),
     dataIndex: 'prodTeam',
     key: 'prodTeam',
     width: 120,
@@ -763,7 +791,7 @@ const columns = computed<TableColumnsType>(() => [
       String(getPcbaInspectionDetailField(record, 'prodTeam') ?? ''),
   },
   {
-    title: t('entity.pcbainspectiondetail.inspectionworkhours'),
+    title: pi.label('inspectionWorkHours'),
     dataIndex: 'inspectionWorkHours',
     key: 'inspectionWorkHours',
     width: 120,
@@ -773,7 +801,7 @@ const columns = computed<TableColumnsType>(() => [
       String(getPcbaInspectionDetailField(record, 'inspectionWorkHours') ?? ''),
   },
   {
-    title: t('entity.pcbainspectiondetail.aoiworkhours'),
+    title: pi.label('aoiWorkHours'),
     dataIndex: 'aoiWorkHours',
     key: 'aoiWorkHours',
     width: 120,
@@ -783,7 +811,7 @@ const columns = computed<TableColumnsType>(() => [
       String(getPcbaInspectionDetailField(record, 'aoiWorkHours') ?? ''),
   },
   {
-    title: t('entity.pcbainspectiondetail.defectqty'),
+    title: pi.label('defectQty'),
     dataIndex: 'defectQty',
     key: 'defectQty',
     width: 120,
@@ -793,7 +821,7 @@ const columns = computed<TableColumnsType>(() => [
       String(getPcbaInspectionDetailField(record, 'defectQty') ?? ''),
   },
   {
-    title: t('entity.pcbainspectiondetail.handplacement'),
+    title: pi.label('handPlacement'),
     dataIndex: 'handPlacement',
     key: 'handPlacement',
     width: 120,
@@ -803,7 +831,7 @@ const columns = computed<TableColumnsType>(() => [
       String(getPcbaInspectionDetailField(record, 'handPlacement') ?? ''),
   },
   {
-    title: t('entity.pcbainspectiondetail.serialnumber'),
+    title: pi.label('serialNumber'),
     dataIndex: 'serialNumber',
     key: 'serialNumber',
     width: 120,
@@ -813,7 +841,7 @@ const columns = computed<TableColumnsType>(() => [
       String(getPcbaInspectionDetailField(record, 'serialNumber') ?? ''),
   },
   {
-    title: t('entity.pcbainspectiondetail.content'),
+    title: pi.label('content'),
     dataIndex: 'content',
     key: 'content',
     width: 120,
@@ -823,7 +851,7 @@ const columns = computed<TableColumnsType>(() => [
       String(getPcbaInspectionDetailField(record, 'content') ?? ''),
   },
   {
-    title: t('entity.pcbainspectiondetail.defectlocation'),
+    title: pi.label('defectLocation'),
     dataIndex: 'defectLocation',
     key: 'defectLocation',
     width: 120,
@@ -833,14 +861,14 @@ const columns = computed<TableColumnsType>(() => [
       String(getPcbaInspectionDetailField(record, 'defectLocation') ?? ''),
   },
   {
-    title: t('entity.pcbainspectiondetail.pcbainspection'),
-    dataIndex: 'pcbaInspection',
-    key: 'pcbaInspection',
+    title: pi.label('isObsolete'),
+    dataIndex: 'isObsolete',
+    key: 'isObsolete',
     width: 120,
     resizable: true,
     ellipsis: true,
     customRender: ({ record }: { record: PcbaInspectionDetail }) =>
-      String(getPcbaInspectionDetailField(record, 'pcbaInspection') ?? ''),
+      String(getPcbaInspectionDetailField(record, 'isObsolete') ?? ''),
   },
   CreateActionColumn({
     actions: [
@@ -864,6 +892,75 @@ const columns = computed<TableColumnsType>(() => [
   }),
 ])
 
+/** 与 TaktSingleTable 展示列对齐（用于汇总行单元格） */
+const resolvedSummaryColumns = computed(() => {
+  const userCols = normalizeUserTableColumns(columns.value)
+  const merged = mergeDefaultColumns(userCols, t, true, 'company')
+  const keys = visibleColumnKeys.value
+  if (keys.length > 0) {
+    return filterTableColumnsByVisibleKeys(merged, keys, merged)
+  }
+  return filterMergedColumnsByDefaultVisible(merged, userCols, {
+    idColumnKey: 'pcbaInspectionDetailId',
+    actionColumnKey: 'action',
+    tableMode: 'masterDetailDetail',
+    entityScope: 'company',
+  })
+})
+
+const summarySumFieldSet = new Set<string>(PCBAINSPECTIONDETAIL_SUMMARY_SUM_FIELDS)
+
+/** 汇总行首列文案 */
+const summaryLabel = computed(() => t('components.business.page.editabletable.summarylabel'))
+
+/** 汇总行单元格（index 与 a-table 列序一致：0=行选择，1..n=展示列） */
+const summaryCells = computed(() => {
+  const cells: Array<{ key: string; text: string; index: number }> = []
+  resolvedSummaryColumns.value.forEach((col, columnIndex) => {
+    const key = String(col.key ?? columnIndex)
+    let text = ''
+    if (columnIndex === 0) {
+      text = summaryLabel.value
+    } else if (isSummarySumField(key)) {
+      text = formatSummaryFieldTotal(key)
+    }
+    cells.push({
+      key,
+      text,
+      index: columnIndex + 1,
+    })
+  })
+  return cells
+})
+
+/** 是否参与当前页合计 */
+function isSummarySumField(field: string): boolean {
+  return summarySumFieldSet.has(field)
+}
+
+/** 当前页 dataSource 各合计列求和 */
+const summaryFieldTotals = computed(() => {
+  const totals = Object.fromEntries(
+    PCBAINSPECTIONDETAIL_SUMMARY_SUM_FIELDS.map((field) => [field, 0]),
+  ) as Record<(typeof PCBAINSPECTIONDETAIL_SUMMARY_SUM_FIELDS)[number], number>
+  for (const row of dataSource.value) {
+    for (const field of PCBAINSPECTIONDETAIL_SUMMARY_SUM_FIELDS) {
+      const num = Number(getPcbaInspectionDetailField(row, field))
+      if (Number.isFinite(num)) {
+        totals[field] += num
+      }
+    }
+  }
+  return totals
+})
+
+/** 格式化合计单元格展示值 */
+function formatSummaryFieldTotal(field: string): string {
+  if (!isSummarySumField(field)) {
+    return ''
+  }
+  return formatSummaryValue(summaryFieldTotals.value[field as keyof typeof summaryFieldTotals.value])
+}
 const rowSelection = computed(() => ({
   selectedRowKeys: selectedRowKeys.value,
   onChange: (keys: (string | number)[], rows: PcbaInspectionDetail[]) => {
@@ -924,21 +1021,15 @@ function buildListQuery(overrides?: Partial<PcbaInspectionDetailQuery>): PcbaIns
       query[key] = v as never
     }
   }
-  assignTrimmed('prodOrderCode', form.prodOrderCode)
+  for (const key of PCBAINSPECTIONDETAIL_QUERY_STRING_FIELDS) {
+    assignTrimmed(key, form[key])
+  }
   if (form.lineNumber !== undefined && form.lineNumber !== null) {
     query.lineNumber = form.lineNumber
   }
-  assignTrimmed('pcbaBoardType', form.pcbaBoardType)
-  assignTrimmed('visualInspectionLine', form.visualInspectionLine)
-  assignTrimmed('aoiLine', form.aoiLine)
-  assignTrimmed('bSideAssemblyDateStart', form.bSideAssemblyDateStart)
-  assignTrimmed('bSideAssemblyDateEnd', form.bSideAssemblyDateEnd)
-  assignTrimmed('tSideAssemblyDateStart', form.tSideAssemblyDateStart)
-  assignTrimmed('tSideAssemblyDateEnd', form.tSideAssemblyDateEnd)
   if (form.shiftNo !== undefined && form.shiftNo !== null) {
     query.shiftNo = form.shiftNo
   }
-  assignTrimmed('inspectorName', form.inspectorName)
   if (form.dailyCompletedQty !== undefined && form.dailyCompletedQty !== null) {
     query.dailyCompletedQty = form.dailyCompletedQty
   }
@@ -948,7 +1039,6 @@ function buildListQuery(overrides?: Partial<PcbaInspectionDetailQuery>): PcbaIns
   if (form.inspectionStatus !== undefined && form.inspectionStatus !== null) {
     query.inspectionStatus = form.inspectionStatus
   }
-  assignTrimmed('prodTeam', form.prodTeam)
   if (form.inspectionWorkHours !== undefined && form.inspectionWorkHours !== null) {
     query.inspectionWorkHours = form.inspectionWorkHours
   }
@@ -958,14 +1048,9 @@ function buildListQuery(overrides?: Partial<PcbaInspectionDetailQuery>): PcbaIns
   if (form.defectQty !== undefined && form.defectQty !== null) {
     query.defectQty = form.defectQty
   }
-  assignTrimmed('handPlacement', form.handPlacement)
-  assignTrimmed('serialNumber', form.serialNumber)
-  assignTrimmed('content', form.content)
-  assignTrimmed('defectLocation', form.defectLocation)
-  assignTrimmed('createdAtStart', form.createdAtStart)
-  assignTrimmed('createdAtEnd', form.createdAtEnd)
-  assignTrimmed('extField', form.extField)
-  assignTrimmed('remark', form.remark)
+  if (form.isObsolete !== undefined && form.isObsolete !== null) {
+    query.isObsolete = form.isObsolete
+  }
   return query
 }
 
@@ -1006,6 +1091,36 @@ watch(masterPcbaInspectionId, () => {
 /** 租户/公司切换时刷新子表 */
 useTableRefresh(loadData)
 
+onMounted(() => {
+  startDetailTableScrollObserve()
+})
+
+onBeforeUnmount(() => {
+  stopDetailTableScrollObserve()
+})
+
+watch(
+  () => loading.value,
+  (isLoading) => {
+    if (!isLoading) {
+      void nextTick(() => recalcDetailTableScrollY())
+    }
+  },
+)
+
+watch(
+  () => [dataSource.value.length, visibleColumnKeys.value.join(',')],
+  () => {
+    void nextTick(() => recalcDetailTableScrollY())
+  },
+)
+
+watch(hasMasterSelection, (selected) => {
+  if (selected) {
+    void nextTick(() => startDetailTableScrollObserve())
+  }
+})
+
 function handleSearch() {
   currentPage.value = getTaktDefaultPageIndex()
   void loadData()
@@ -1022,13 +1137,13 @@ function handleCreate() {
     message.warning(t('common.status.empty'))
     return
   }
-  formTitle.value = t('common.dialog.title.create', { entity: t('entity.pcbainspectiondetail._self') })
+  formTitle.value = t('common.dialog.title.create', { entity: pi.self() })
   formData.value = {}
   formVisible.value = true
 }
 
 async function handleEdit(record: PcbaInspectionDetail) {
-  formTitle.value = t('common.dialog.title.edit', { entity: t('entity.pcbainspectiondetail._self') })
+  formTitle.value = t('common.dialog.title.edit', { entity: pi.self() })
   formLoading.value = true
   try {
     const detail = await getPcbaInspectionDetailById(getPcbaInspectionDetailId(record))
@@ -1045,7 +1160,7 @@ function handleUpdate() {
   } else {
     message.warning(t('common.tip.select.to.action', {
       action: t('common.page.button.edit'),
-      entity: t('entity.pcbainspectiondetail._self'),
+      entity: pi.self(),
     }))
   }
 }
@@ -1064,10 +1179,10 @@ async function handleFormSubmit() {
     const id = formData.value?.pcbaInspectionDetailId
     if (id) {
       await updatePcbaInspectionDetail(id, payload)
-      message.success(t('common.feedback.updated', { target: t('entity.pcbainspectiondetail._self') }))
+      message.success(t('common.feedback.updated', { target: pi.self() }))
     } else {
       await createPcbaInspectionDetail(payload)
-      message.success(t('common.feedback.created', { target: t('entity.pcbainspectiondetail._self') }))
+      message.success(t('common.feedback.created', { target: pi.self() }))
     }
     formVisible.value = false
     await loadData()
@@ -1084,14 +1199,14 @@ async function handleDeleteOne(record: PcbaInspectionDetail) {
   Modal.confirm({
     title: t('common.tip.confirm.delete.title'),
     content: t('common.tip.confirm.delete.entity', {
-      entity: t('entity.pcbainspectiondetail._self'),
-      name: t('common.tip.this.target', { target: t('entity.pcbainspectiondetail._self') }),
+      entity: pi.self(),
+      name: t('common.tip.this.target', { target: pi.self() }),
     }),
     okText: t('common.page.button.delete'),
     cancelText: t('common.page.button.cancel'),
     onOk: async () => {
       await deletePcbaInspectionDetailById(getPcbaInspectionDetailId(record))
-      message.success(t('common.feedback.deleted', { target: t('entity.pcbainspectiondetail._self') }))
+      message.success(t('common.feedback.deleted', { target: pi.self() }))
       await loadData()
     },
   })
@@ -1101,14 +1216,14 @@ async function handleDelete() {
   if (!hasMasterSelection.value || selectedRows.value.length === 0) {
     message.warning(t('common.tip.select.to.action', {
       action: t('common.page.button.delete'),
-      entity: t('entity.pcbainspectiondetail._self'),
+      entity: pi.self(),
     }))
     return
   }
   Modal.confirm({
     title: t('common.tip.confirm.delete.title'),
     content: t('common.tip.confirm.delete.count', {
-      entity: t('entity.pcbainspectiondetail._self'),
+      entity: pi.self(),
       count: selectedRows.value.length,
     }),
     okText: t('common.page.button.delete'),
@@ -1116,7 +1231,7 @@ async function handleDelete() {
     onOk: async () => {
       const ids = selectedRows.value.map((r) => getPcbaInspectionDetailId(r)).filter(Boolean)
       await deletePcbaInspectionDetailBatch(ids)
-      message.success(t('common.feedback.deleted', { target: t('entity.pcbainspectiondetail._self') }))
+      message.success(t('common.feedback.deleted', { target: pi.self() }))
       await loadData()
     },
   })
@@ -1189,10 +1304,10 @@ async function handleExport() {
     link.click()
     document.body.removeChild(link)
     setTimeout(() => window.URL.revokeObjectURL(url), 100)
-    message.success(t('common.feedback.export.success', { target: t('entity.pcbainspectiondetail._self') }))
+    message.success(t('common.feedback.export.success', { target: pi.self() }))
   } catch (error: unknown) {
     const err = error as { message?: string }
-    message.error(err?.message || t('common.feedback.export.failed', { target: t('entity.pcbainspectiondetail._self') }))
+    message.error(err?.message || t('common.feedback.export.failed', { target: pi.self() }))
   } finally {
     loading.value = false
   }

@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：frontend/src/types/logistics/sales
 // 文件名称：order.d.ts
-// 创建时间：2026-07-01
+// 创建时间：2026-07-09
 // 创建人：Takt365(Auto Generated)
 // 功能描述：logistics/sales 模块类型定义（自动生成；类型名去 Takt 前缀与末尾 Dto，如 TaktCompanyDto → Company）
 // 
@@ -137,11 +137,6 @@ export interface SalesOrder extends CompanyDtoBase {
    * 销售订单明细列表（主子表关系，一个订单可以有多个明细） （子表：TaktSalesOrderItem）
    */
   items?: SalesOrderItem[];
-
-  /**
-   * 销售订单变更记录列表（外键在子表 TaktSalesOrderChangeLog.SalesOrderId） （子表：TaktSalesOrderChangeLog）
-   */
-  changeLogs?: SalesOrderChangeLog[];
 
 }
 
@@ -435,12 +430,7 @@ export interface SalesOrderCreate {
   /**
    * 销售订单明细列表（主子表关系，一个订单可以有多个明细）（子表，级联保存）
    */
-  items?: SalesOrderItemCreate[];
-
-  /**
-   * 销售订单变更记录列表（外键在子表 TaktSalesOrderChangeLog.SalesOrderId）（子表，级联保存）
-   */
-  changeLogs?: SalesOrderChangeLogCreate[];
+  items?: SalesOrderItemUpdate[];
 
   /**
    * 扩展字段JSON
@@ -616,11 +606,6 @@ export interface SalesOrderTemplate {
   items?: SalesOrderItemCreate[];
 
   /**
-   * 销售订单变更记录列表（外键在子表 TaktSalesOrderChangeLog.SalesOrderId）（子表，级联保存）
-   */
-  changeLogs?: SalesOrderChangeLogCreate[];
-
-  /**
    * 扩展字段JSON
    */
   extField?: string;
@@ -763,11 +748,6 @@ export interface SalesOrderImport {
    * 销售订单明细列表（主子表关系，一个订单可以有多个明细）（子表，级联保存）
    */
   items?: SalesOrderItemCreate[];
-
-  /**
-   * 销售订单变更记录列表（外键在子表 TaktSalesOrderChangeLog.SalesOrderId）（子表，级联保存）
-   */
-  changeLogs?: SalesOrderChangeLogCreate[];
 
   /**
    * 扩展字段JSON

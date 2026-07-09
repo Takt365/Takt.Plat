@@ -22,7 +22,7 @@ namespace Takt.Application.Dtos.Logistics.Procurement;
 // ========================================
 
 /// <summary>
-/// Takt货源实体（公司级；工厂+物料+供货商维度的有效货源记录）
+/// Takt货源清单实体（公司级；工厂+物料+供货商维度的有效货源清单记录）
 /// 对应前端 TaktSourceOfSupplyDto
 /// 继承 TaktCompanyDtoBase
 /// </summary>
@@ -41,7 +41,7 @@ public class TaktSourceOfSupplyDto : TaktCompanyDtoBase
     public string PlantCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 货源编码（租户+公司内唯一；业务单据号）
+    /// 货源清单编码（租户+公司内唯一；业务单据号）
     /// </summary>
     public string SourceOfSupplyCode { get; set; } = string.Empty;
 
@@ -61,7 +61,7 @@ public class TaktSourceOfSupplyDto : TaktCompanyDtoBase
     public string? PurchaseGroup { get; set; } = string.Empty;
 
     /// <summary>
-    /// 固定（字典 sys_yes_no_type；1=是，0=否；固定货源，MRP/寻源优先选用）
+    /// 固定（字典 sys_yes_no_type；1=是，0=否；固定货源清单，MRP/寻源优先选用）
     /// </summary>
     public int IsFixed { get; set; } = 0;
 
@@ -106,12 +106,12 @@ public class TaktSourceOfSupplyDto : TaktCompanyDtoBase
     public DateTime ValidTo { get; set; }
 
     /// <summary>
-    /// 排序号（越小越靠前；同物料多货源时的优先级）
+    /// 排序号（越小越靠前；同物料多货源清单时的优先级）
     /// </summary>
     public int SortOrder { get; set; } = 0;
 
     /// <summary>
-    /// 货源状态（字典 sys_normal_disable_status；1=启用，0=禁用）
+    /// 货源清单状态（字典 sys_normal_disable_status；1=启用，0=禁用）
     /// </summary>
     public int SourceStatus { get; set; } = 0;
 
@@ -143,7 +143,7 @@ public class TaktSourceOfSupplyQueryDto : TaktPagedQuery
     public string? PlantCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 货源编码（租户+公司内唯一；业务单据号）
+    /// 货源清单编码（租户+公司内唯一；业务单据号）
     /// </summary>
     public string? SourceOfSupplyCode { get; set; } = string.Empty;
 
@@ -163,7 +163,7 @@ public class TaktSourceOfSupplyQueryDto : TaktPagedQuery
     public string? PurchaseGroup { get; set; } = string.Empty;
 
     /// <summary>
-    /// 固定（字典 sys_yes_no_type；1=是，0=否；固定货源，MRP/寻源优先选用）
+    /// 固定（字典 sys_yes_no_type；1=是，0=否；固定货源清单，MRP/寻源优先选用）
     /// </summary>
     public int? IsFixed { get; set; }
 
@@ -218,12 +218,12 @@ public class TaktSourceOfSupplyQueryDto : TaktPagedQuery
     public DateTime? ValidToEnd { get; set; }
 
     /// <summary>
-    /// 排序号（越小越靠前；同物料多货源时的优先级）
+    /// 排序号（越小越靠前；同物料多货源清单时的优先级）
     /// </summary>
     public int? SortOrder { get; set; }
 
     /// <summary>
-    /// 货源状态（字典 sys_normal_disable_status；1=启用，0=禁用）
+    /// 货源清单状态（字典 sys_normal_disable_status；1=启用，0=禁用）
     /// </summary>
     public int? SourceStatus { get; set; }
 
@@ -279,9 +279,9 @@ public class TaktSourceOfSupplyCreateDto
     public string PlantCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 货源编码（租户+公司内唯一；业务单据号）
+    /// 货源清单编码（租户+公司内唯一；业务单据号）
     /// </summary>
-    [Required(ErrorMessage = "货源编码（租户+公司内唯一；业务单据号）不能为空")]
+    [Required(ErrorMessage = "货源清单编码（租户+公司内唯一；业务单据号）不能为空")]
     public string SourceOfSupplyCode { get; set; } = string.Empty;
 
     /// <summary>
@@ -302,7 +302,7 @@ public class TaktSourceOfSupplyCreateDto
     public string? PurchaseGroup { get; set; } = string.Empty;
 
     /// <summary>
-    /// 固定（字典 sys_yes_no_type；1=是，0=否；固定货源，MRP/寻源优先选用）
+    /// 固定（字典 sys_yes_no_type；1=是，0=否；固定货源清单，MRP/寻源优先选用）
     /// </summary>
     public int IsFixed { get; set; } = 0;
 
@@ -348,7 +348,7 @@ public class TaktSourceOfSupplyCreateDto
     public DateTime ValidTo { get; set; }
 
     /// <summary>
-    /// 货源状态（字典 sys_normal_disable_status；1=启用，0=禁用）
+    /// 货源清单状态（字典 sys_normal_disable_status；1=启用，0=禁用）
     /// </summary>
     public int SourceStatus { get; set; } = 0;
 
@@ -402,9 +402,9 @@ public class TaktSourceOfSupplyStatusDto
     public long SourceOfSupplyId { get; set; }
 
     /// <summary>
-    /// 货源状态（字典 sys_normal_disable_status；1=启用，0=禁用）
+    /// 货源清单状态（字典 sys_normal_disable_status；1=启用，0=禁用）
     /// </summary>
-    [Required(ErrorMessage = "货源状态（字典 sys_normal_disable_status；1=启用，0=禁用）不能为空")]
+    [Required(ErrorMessage = "货源清单状态（字典 sys_normal_disable_status；1=启用，0=禁用）不能为空")]
     public int SourceStatus { get; set; } = 0;
 }
 
@@ -426,9 +426,9 @@ public class TaktSourceOfSupplySortDto
     public long SourceOfSupplyId { get; set; }
 
     /// <summary>
-    /// 排序号（越小越靠前；同物料多货源时的优先级）
+    /// 排序号（越小越靠前；同物料多货源清单时的优先级）
     /// </summary>
-    [Required(ErrorMessage = "排序号（越小越靠前；同物料多货源时的优先级）不能为空")]
+    [Required(ErrorMessage = "排序号（越小越靠前；同物料多货源清单时的优先级）不能为空")]
     public int SortOrder { get; set; } = 0;
 }
 
@@ -457,7 +457,7 @@ public class TaktSourceOfSupplyTemplateDto
     public string? PlantCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 货源编码（租户+公司内唯一；业务单据号）
+    /// 货源清单编码（租户+公司内唯一；业务单据号）
     /// </summary>
     public string? SourceOfSupplyCode { get; set; } = string.Empty;
 
@@ -477,7 +477,7 @@ public class TaktSourceOfSupplyTemplateDto
     public string? PurchaseGroup { get; set; } = string.Empty;
 
     /// <summary>
-    /// 固定（字典 sys_yes_no_type；1=是，0=否；固定货源，MRP/寻源优先选用）
+    /// 固定（字典 sys_yes_no_type；1=是，0=否；固定货源清单，MRP/寻源优先选用）
     /// </summary>
     public int? IsFixed { get; set; }
 
@@ -522,7 +522,7 @@ public class TaktSourceOfSupplyTemplateDto
     public DateTime? ValidTo { get; set; }
 
     /// <summary>
-    /// 货源状态（字典 sys_normal_disable_status；1=启用，0=禁用）
+    /// 货源清单状态（字典 sys_normal_disable_status；1=启用，0=禁用）
     /// </summary>
     public int? SourceStatus { get; set; }
 
@@ -564,7 +564,7 @@ public class TaktSourceOfSupplyImportDto
     public string? PlantCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 货源编码（租户+公司内唯一；业务单据号）
+    /// 货源清单编码（租户+公司内唯一；业务单据号）
     /// </summary>
     public string? SourceOfSupplyCode { get; set; } = string.Empty;
 
@@ -584,7 +584,7 @@ public class TaktSourceOfSupplyImportDto
     public string? PurchaseGroup { get; set; } = string.Empty;
 
     /// <summary>
-    /// 固定（字典 sys_yes_no_type；1=是，0=否；固定货源，MRP/寻源优先选用）
+    /// 固定（字典 sys_yes_no_type；1=是，0=否；固定货源清单，MRP/寻源优先选用）
     /// </summary>
     public int? IsFixed { get; set; }
 
@@ -629,7 +629,7 @@ public class TaktSourceOfSupplyImportDto
     public DateTime? ValidTo { get; set; }
 
     /// <summary>
-    /// 货源状态（字典 sys_normal_disable_status；1=启用，0=禁用）
+    /// 货源清单状态（字典 sys_normal_disable_status；1=启用，0=禁用）
     /// </summary>
     public int? SourceStatus { get; set; }
 
@@ -672,7 +672,7 @@ public class TaktSourceOfSupplyExportDto
     public string PlantCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 货源编码（租户+公司内唯一；业务单据号）
+    /// 货源清单编码（租户+公司内唯一；业务单据号）
     /// </summary>
     public string SourceOfSupplyCode { get; set; } = string.Empty;
 
@@ -692,7 +692,7 @@ public class TaktSourceOfSupplyExportDto
     public string? PurchaseGroup { get; set; } = string.Empty;
 
     /// <summary>
-    /// 固定（字典 sys_yes_no_type；1=是，0=否；固定货源，MRP/寻源优先选用）
+    /// 固定（字典 sys_yes_no_type；1=是，0=否；固定货源清单，MRP/寻源优先选用）
     /// </summary>
     public int IsFixed { get; set; } = 0;
 
@@ -737,12 +737,12 @@ public class TaktSourceOfSupplyExportDto
     public DateTime ValidTo { get; set; }
 
     /// <summary>
-    /// 排序号（越小越靠前；同物料多货源时的优先级）
+    /// 排序号（越小越靠前；同物料多货源清单时的优先级）
     /// </summary>
     public int SortOrder { get; set; } = 0;
 
     /// <summary>
-    /// 货源状态（字典 sys_normal_disable_status；1=启用，0=禁用）
+    /// 货源清单状态（字典 sys_normal_disable_status；1=启用，0=禁用）
     /// </summary>
     public int SourceStatus { get; set; } = 0;
 

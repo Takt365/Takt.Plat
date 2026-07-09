@@ -60,4 +60,11 @@ public class TaktEcSeizougijutsu : TaktCompanyEntityBase
     /// <summary>是否更新 SOP（0=否 1=是，字典 sys_yes_no）</summary>
     [SugarColumn(ColumnName = "is_sop_updated", ColumnDescription = "是否更新SOP", ColumnDataType = "int", IsNullable = false, DefaultValue = "0")]
     public int IsSopUpdated { get; set; } = 0;
+
+    /// <summary>
+    /// 是否作废（字典 sys_yes_no_type，0=否 1=是；编辑移除子行时标记作废）
+    /// </summary>
+    [SugarColumn(ColumnName = "is_obsolete", ColumnDescription = "是否作废", ColumnDataType = "int", IsNullable = false, DefaultValue = "0")]
+    public int IsObsolete { get; set; } = 0;
+
 }

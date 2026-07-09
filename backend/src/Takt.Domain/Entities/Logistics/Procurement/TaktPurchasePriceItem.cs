@@ -100,6 +100,12 @@ public class TaktPurchasePriceItem : TaktCompanyEntityBase
     public int SortOrder { get; set; } = 0;
 
     /// <summary>
+    /// 是否作废（字典 sys_yes_no_type，0=否 1=是；编辑移除子行时标记作废）
+    /// </summary>
+    [SugarColumn(ColumnName = "is_obsolete", ColumnDescription = "是否作废", ColumnDataType = "int", IsNullable = false, DefaultValue = "0")]
+    public int IsObsolete { get; set; } = 0;
+
+    /// <summary>
     /// 价格阶梯列表（主子表关系，一个物料价格可以有多个阶梯）
     /// </summary>
     [Navigate(NavigateType.OneToMany, nameof(TaktPurchasePriceScale.PurchasePriceItemId))]

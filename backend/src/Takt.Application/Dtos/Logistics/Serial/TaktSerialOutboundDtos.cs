@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Application.Dtos.Logistics.Serial
 // 文件名称：TaktSerialOutboundDtos.cs
-// 创建时间：2026-06-30
+// 创建时间：2026-07-09
 // 创建人：Takt365(Auto Generated)
 // 功能描述：SerialOutbound 模块 DTO（由 generate-dtos-from-entity.cjs 根据 TaktSerialOutbound 生成，请按需审阅）
 // 
@@ -51,7 +51,7 @@ public class TaktSerialOutboundDto : TaktCompanyDtoBase
     public string ShippingInvoiceNo { get; set; } = string.Empty;
 
     /// <summary>
-    /// 出库日期
+    /// 装车日期
     /// </summary>
     public DateTime OutboundDate { get; set; }
 
@@ -59,11 +59,6 @@ public class TaktSerialOutboundDto : TaktCompanyDtoBase
     /// 仕向地（选项 TaktModelDestinations/options，DictValue=DestinationCode）
     /// </summary>
     public string Destination { get; set; } = string.Empty;
-
-    /// <summary>
-    /// 运输方式（字典 logistics_shipping_method_type；0=海运 1=空运 2=陆运 3=铁路 4=快递 5=其他）
-    /// </summary>
-    public int ShippingMethod { get; set; } = 0;
 
     /// <summary>
     /// 目的地港（字典 logistics_destination_port_code；DictValue 为港口/运输编码，如 ACE_AIR、VIE）
@@ -134,12 +129,12 @@ public class TaktSerialOutboundQueryDto : TaktPagedQuery
     public string? ShippingInvoiceNo { get; set; } = string.Empty;
 
     /// <summary>
-    /// 出库日期（范围查询-开始）
+    /// 装车日期（范围查询-开始）
     /// </summary>
     public DateTime? OutboundDateStart { get; set; }
 
     /// <summary>
-    /// 出库日期（范围查询-结束）
+    /// 装车日期（范围查询-结束）
     /// </summary>
     public DateTime? OutboundDateEnd { get; set; }
 
@@ -147,11 +142,6 @@ public class TaktSerialOutboundQueryDto : TaktPagedQuery
     /// 仕向地（选项 TaktModelDestinations/options，DictValue=DestinationCode）
     /// </summary>
     public string? Destination { get; set; } = string.Empty;
-
-    /// <summary>
-    /// 运输方式（字典 logistics_shipping_method_type；0=海运 1=空运 2=陆运 3=铁路 4=快递 5=其他）
-    /// </summary>
-    public int? ShippingMethod { get; set; }
 
     /// <summary>
     /// 目的地港（字典 logistics_destination_port_code；DictValue 为港口/运输编码，如 ACE_AIR、VIE）
@@ -242,7 +232,7 @@ public class TaktSerialOutboundCreateDto
     public string ShippingInvoiceNo { get; set; } = string.Empty;
 
     /// <summary>
-    /// 出库日期
+    /// 装车日期
     /// </summary>
     public DateTime OutboundDate { get; set; }
 
@@ -251,11 +241,6 @@ public class TaktSerialOutboundCreateDto
     /// </summary>
     [Required(ErrorMessage = "仕向地（选项 TaktModelDestinations/options，DictValue=DestinationCode）不能为空")]
     public string Destination { get; set; } = string.Empty;
-
-    /// <summary>
-    /// 运输方式（字典 logistics_shipping_method_type；0=海运 1=空运 2=陆运 3=铁路 4=快递 5=其他）
-    /// </summary>
-    public int ShippingMethod { get; set; } = 0;
 
     /// <summary>
     /// 目的地港（字典 logistics_destination_port_code；DictValue 为港口/运输编码，如 ACE_AIR、VIE）
@@ -288,7 +273,7 @@ public class TaktSerialOutboundCreateDto
     /// <summary>
     /// 序列号出库明细列表（主子表关系）（子表，级联保存）
     /// </summary>
-    public List<TaktSerialOutboundItemCreateDto>? Items { get; set; }
+    public List<TaktSerialOutboundItemUpdateDto>? Items { get; set; }
 
     /// <summary>
     /// 扩展字段JSON
@@ -357,7 +342,7 @@ public class TaktSerialOutboundTemplateDto
     public string? ShippingInvoiceNo { get; set; } = string.Empty;
 
     /// <summary>
-    /// 出库日期
+    /// 装车日期
     /// </summary>
     public DateTime? OutboundDate { get; set; }
 
@@ -365,11 +350,6 @@ public class TaktSerialOutboundTemplateDto
     /// 仕向地（选项 TaktModelDestinations/options，DictValue=DestinationCode）
     /// </summary>
     public string? Destination { get; set; } = string.Empty;
-
-    /// <summary>
-    /// 运输方式（字典 logistics_shipping_method_type；0=海运 1=空运 2=陆运 3=铁路 4=快递 5=其他）
-    /// </summary>
-    public int? ShippingMethod { get; set; }
 
     /// <summary>
     /// 目的地港（字典 logistics_destination_port_code；DictValue 为港口/运输编码，如 ACE_AIR、VIE）
@@ -449,7 +429,7 @@ public class TaktSerialOutboundImportDto
     public string? ShippingInvoiceNo { get; set; } = string.Empty;
 
     /// <summary>
-    /// 出库日期
+    /// 装车日期
     /// </summary>
     public DateTime? OutboundDate { get; set; }
 
@@ -457,11 +437,6 @@ public class TaktSerialOutboundImportDto
     /// 仕向地（选项 TaktModelDestinations/options，DictValue=DestinationCode）
     /// </summary>
     public string? Destination { get; set; } = string.Empty;
-
-    /// <summary>
-    /// 运输方式（字典 logistics_shipping_method_type；0=海运 1=空运 2=陆运 3=铁路 4=快递 5=其他）
-    /// </summary>
-    public int? ShippingMethod { get; set; }
 
     /// <summary>
     /// 目的地港（字典 logistics_destination_port_code；DictValue 为港口/运输编码，如 ACE_AIR、VIE）
@@ -542,7 +517,7 @@ public class TaktSerialOutboundExportDto
     public string ShippingInvoiceNo { get; set; } = string.Empty;
 
     /// <summary>
-    /// 出库日期
+    /// 装车日期
     /// </summary>
     public DateTime OutboundDate { get; set; }
 
@@ -550,11 +525,6 @@ public class TaktSerialOutboundExportDto
     /// 仕向地（选项 TaktModelDestinations/options，DictValue=DestinationCode）
     /// </summary>
     public string Destination { get; set; } = string.Empty;
-
-    /// <summary>
-    /// 运输方式（字典 logistics_shipping_method_type；0=海运 1=空运 2=陆运 3=铁路 4=快递 5=其他）
-    /// </summary>
-    public int ShippingMethod { get; set; } = 0;
 
     /// <summary>
     /// 目的地港（字典 logistics_destination_port_code；DictValue 为港口/运输编码，如 ACE_AIR、VIE）

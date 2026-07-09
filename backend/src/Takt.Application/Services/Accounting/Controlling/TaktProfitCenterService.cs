@@ -30,7 +30,6 @@ namespace Takt.Application.Services.Accounting.Controlling;
 public class TaktProfitCenterService : TaktServiceBase, ITaktProfitCenterService
 {
     private readonly ITaktCompanyRepository<TaktProfitCenter> _profitCenterRepository;
-    private readonly ITaktCompanyRepository<TaktProfitCenterChangeLog> _profitCenterChangeLogRepository;
     private readonly ITaktSortOrderGenerator _sortOrderGenerator;
     private readonly ITaktUniqueValidator _uniqueValidator;
 
@@ -38,14 +37,12 @@ public class TaktProfitCenterService : TaktServiceBase, ITaktProfitCenterService
     /// 构造函数
     /// </summary>
     /// <param name="profitCenterRepository">利润中心仓储</param>
-    /// <param name="profitCenterChangeLogRepository">ProfitCenterChangeLog仓储</param>
     /// <param name="sortOrderGenerator">排序号生成器</param>
     /// <param name="uniqueValidator">唯一性验证器</param>
     /// <param name="userContext">用户上下文</param>
     /// <param name="localizationService">本地化服务</param>
     public TaktProfitCenterService(
         ITaktCompanyRepository<TaktProfitCenter> profitCenterRepository,
-        ITaktCompanyRepository<TaktProfitCenterChangeLog> profitCenterChangeLogRepository,
         ITaktSortOrderGenerator sortOrderGenerator,
         ITaktUniqueValidator uniqueValidator,
         ITaktUserContext? userContext = null,
@@ -53,7 +50,6 @@ public class TaktProfitCenterService : TaktServiceBase, ITaktProfitCenterService
         : base(userContext, localizationService)
     {
         _profitCenterRepository = profitCenterRepository;
-        _profitCenterChangeLogRepository = profitCenterChangeLogRepository;
         _sortOrderGenerator = sortOrderGenerator;
         _uniqueValidator = uniqueValidator;
     }
@@ -232,9 +228,7 @@ public class TaktProfitCenterService : TaktServiceBase, ITaktProfitCenterService
         if (entity == null)
         {
             throw new TaktBusinessException("利润中心不存在或已删除");
-        }
-        await _profitCenterChangeLogRepository.DeleteAsync(x => x.ProfitCenterId == entity.Id);
-        var deleted = await _profitCenterRepository.DeleteAsync(id);
+        }        var deleted = await _profitCenterRepository.DeleteAsync(id);
         if (!deleted)
         {
             throw new TaktBusinessException("利润中心不存在或已删除");
@@ -401,9 +395,6 @@ public class TaktProfitCenterService : TaktServiceBase, ITaktProfitCenterService
         {
             return;
         }
-        // 利润中心变更记录 → dto.ChangeLogs
-        var changelogs = await _profitCenterChangeLogRepository.GetListAsync(x => x.ProfitCenterId == entity.Id);
-        dto.ChangeLogs = changelogs.Adapt<List<TaktProfitCenterChangeLogDto>>();
     }
 
     /// <summary>
@@ -414,24 +405,6 @@ public class TaktProfitCenterService : TaktServiceBase, ITaktProfitCenterService
     /// <returns>任务</returns>
     private async Task SaveProfitCenterChildrenAsync(TaktProfitCenter entity, TaktProfitCenterCreateDto dto)
     {
-        // 利润中心变更记录（ChangeLogs）
-        if (dto.ChangeLogs is not { Count: > 0 })
-        {
-            await _profitCenterChangeLogRepository.DeleteAsync(x => x.ProfitCenterId == entity.Id);
-        }
-        else
-        {
-            var changelogs = dto.ChangeLogs.Adapt<List<TaktProfitCenterChangeLog>>();
-            foreach (var child in changelogs)
-            {
-                child.ProfitCenterId = entity.Id;
-            }
-            await _profitCenterChangeLogRepository.DeleteAsync(x => x.ProfitCenterId == entity.Id);
-            foreach (var child in changelogs)
-            {
-            }
-            await _profitCenterChangeLogRepository.CreateRangeAsync(changelogs);
-        }
     }
     // ========================================
     // 查询表达式

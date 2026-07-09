@@ -185,9 +185,4 @@ public class TaktTicket : TaktCompanyEntityBase
     /// </summary>
     [Navigate(NavigateType.OneToOne, nameof(TaktTicketEvaluation.TicketId))]
     public TaktTicketEvaluation? Evaluation { get; set; }
-    /// <summary>
-    /// 工单变更日志列表（主子表关系）
-    /// </summary>
-    [Navigate(NavigateType.OneToMany, nameof(TaktTicketChangeLog.TicketId))]
-    public List<TaktTicketChangeLog>? ChangeLogs { get; set; }
 }

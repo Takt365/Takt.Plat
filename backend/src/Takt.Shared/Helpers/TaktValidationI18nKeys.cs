@@ -101,6 +101,12 @@ public static class TaktValidationI18nKeys
     /// <summary>账号已停用</summary>
     public const string StatusAccountDisabled = "common.status.account.disabled";
 
+    /// <summary>账号已锁定</summary>
+    public const string StatusAccountLocked = "common.status.account.locked";
+
+    /// <summary>密码不满足复杂度策略</summary>
+    public const string ValidationPasswordWeak = "common.validation.password.weak";
+
     /// <summary>无权登录所选租户</summary>
     public const string PermissionTenantNoAccess = "common.permission.tenant.no.access";
 
@@ -286,4 +292,8 @@ public static class TaktValidationI18nKeys
 
     /// <summary>工单已关闭不可编辑</summary>
     public const string TicketClosedReadonly = "validation.ticket.closed.readonly";
+
+    /// <summary>组立日报生产日期已过编辑截止日</summary>
+    public const string AssyOutputProdDateLocked = "validation.logistics.assyoutput.proddate.locked";
+    public const string AssyOutputProdDateOutOfRange = "validation.logistics.assyoutput.proddate.outofrange";
 }

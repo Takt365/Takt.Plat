@@ -105,9 +105,4 @@ public class TaktKnowledge : TaktCompanyEntityBase
     // ========================================
     // 导航属性区域
     // ========================================
-    /// <summary>
-    /// 知识库变更日志列表
-    /// </summary>
-    [Navigate(NavigateType.OneToMany, nameof(TaktKnowledgeChangeLog.KnowledgeId))]
-    public List<TaktKnowledgeChangeLog>? ChangeLogs { get; set; }
 }

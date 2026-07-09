@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Infrastructure.Data.Seeds.I18nSeedData.Logistics.Sales
 // 文件名称：TaktSalesPriceItemI18nSeedData.cs
-// 创建时间：2026-07-02
+// 创建时间：2026-07-09
 // 创建人：Takt365(Auto Generated)
 // 功能描述：TaktSalesPriceItem 实体字段国际化种子（无对应 frontend locales；TranslationText 取自 ColumnDescription，ContextNote 取自属性 XML summary）
 // 
@@ -170,6 +170,15 @@ public class TaktSalesPriceItemI18nSeedData : ITaktSeedDataCoordinator
             new TranslationSeedItem("entity.salespriceitem.maxorderquantity", "zh-CN", "最大订购量", "最大订购量（基本单位数量，0表示无限制，整数）"),
             // entity.salespriceitem.maxorderquantity
             new TranslationSeedItem("entity.salespriceitem.maxorderquantity", "zh-HK", "最大订购量_hk", "最大订购量（基本单位数量，0表示无限制，整数）"),
+
+            // entity.salespriceitem.isobsolete
+            new TranslationSeedItem("entity.salespriceitem.isobsolete", "en-US", "是否作废_us", "是否作废（字典 sys_yes_no_type，0=否 1=是；编辑移除子行时标记作废）"),
+            // entity.salespriceitem.isobsolete
+            new TranslationSeedItem("entity.salespriceitem.isobsolete", "ja-JP", "是否作废_jp", "是否作废（字典 sys_yes_no_type，0=否 1=是；编辑移除子行时标记作废）"),
+            // entity.salespriceitem.isobsolete
+            new TranslationSeedItem("entity.salespriceitem.isobsolete", "zh-CN", "是否作废", "是否作废（字典 sys_yes_no_type，0=否 1=是；编辑移除子行时标记作废）"),
+            // entity.salespriceitem.isobsolete
+            new TranslationSeedItem("entity.salespriceitem.isobsolete", "zh-HK", "是否作废_hk", "是否作废（字典 sys_yes_no_type，0=否 1=是；编辑移除子行时标记作废）"),
 
             // entity.salespriceitem.scales
             new TranslationSeedItem("entity.salespriceitem.scales", "en-US", "价格阶梯列表_us", "价格阶梯列表（主子表关系，一个物料价格可以有多个阶梯）"),

@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Application.Services.HumanResource.Attendance
 // 文件名称：TaktOvertimeItemService.cs
-// 创建时间：2026-06-23
+// 创建时间：2026-07-09
 // 创建人：Takt365(Cursor AI)
 // 功能描述：加班明细应用服务实现
 // 
@@ -118,6 +118,7 @@ public class TaktOvertimeItemService : TaktServiceBase, ITaktOvertimeItemService
     public async Task<TaktOvertimeItemDto> CreateOvertimeItemAsync(TaktOvertimeItemCreateDto dto)
     {
         var entity = dto.Adapt<TaktOvertimeItem>();
+        entity.IsObsolete = 0;
         await StampOvertimeItemOvertimeAsync(entity, dto);
         var isUnique_ix_overtime_item_request_line_unique = await _uniqueValidator.IsUniqueAsync(
             _overtimeItemRepository,
@@ -174,11 +175,21 @@ public class TaktOvertimeItemService : TaktServiceBase, ITaktOvertimeItemService
     /// <returns>任务</returns>
     public async Task DeleteOvertimeItemByIdAsync(long id)
     {
-        var deleted = await _overtimeItemRepository.DeleteAsync(id);
-        if (!deleted)
+        var entity = await _overtimeItemRepository.GetByIdAsync(id);
+        if (entity == null)
         {
             throw new TaktBusinessException("加班明细不存在或已删除");
         }
+        if (entity.TenantCode != CurrentTenantCode || entity.CompanyCode != CurrentCompanyCode)
+        {
+            throw new TaktBusinessException("加班明细不存在或已删除");
+        }
+        if (entity.IsObsolete == 1)
+        {
+            throw new TaktBusinessException("加班明细已作废");
+        }
+        entity.IsObsolete = 1;
+        await _overtimeItemRepository.UpdateAsync(entity);
     }
 
     /// <summary>
@@ -197,6 +208,27 @@ public class TaktOvertimeItemService : TaktServiceBase, ITaktOvertimeItemService
         {
             await DeleteOvertimeItemByIdAsync(id);
         }
+    }
+
+    /// <summary>
+    /// 更新加班明细作废状态
+    /// </summary>
+    /// <param name="dto">作废DTO</param>
+    /// <returns>DTO</returns>
+    public async Task<TaktOvertimeItemDto> UpdateOvertimeItemObsoleteAsync(TaktOvertimeItemObsoleteDto dto)
+    {
+        var entity = await _overtimeItemRepository.GetByIdAsync(dto.OvertimeItemId);
+        if (entity == null)
+        {
+            throw new TaktBusinessException("加班明细不存在");
+        }
+        if (entity.TenantCode != CurrentTenantCode || entity.CompanyCode != CurrentCompanyCode)
+        {
+            throw new TaktBusinessException("加班明细不存在");
+        }
+        entity.IsObsolete = dto.IsObsolete;
+        await _overtimeItemRepository.UpdateAsync(entity);
+        return await GetOvertimeItemByIdAsync(dto.OvertimeItemId) ?? throw new TaktBusinessException("加班明细不存在");
     }
 
     /// <summary>
@@ -330,6 +362,15 @@ public class TaktOvertimeItemService : TaktServiceBase, ITaktOvertimeItemService
     private static Expression<Func<TaktOvertimeItem, bool>> QueryExpression(TaktOvertimeItemQueryDto? queryDto)
     {
         var exp = Expressionable.Create<TaktOvertimeItem>();
+
+        if (queryDto?.IsObsolete.HasValue == true)
+        {
+            exp = exp.And(x => x.IsObsolete == queryDto.IsObsolete);
+        }
+        else
+        {
+            exp = exp.And(x => x.IsObsolete == 0);
+        }
 
         if (!string.IsNullOrEmpty(queryDto?.KeyWords))
         {

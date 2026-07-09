@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Application.Services.Logistics.Quality.Complaint
 // 文件名称：TaktCustomerComplaintItemService.cs
-// 创建时间：2026-06-23
+// 创建时间：2026-07-09
 // 创建人：Takt365(Cursor AI)
 // 功能描述：客诉明细应用服务实现
 // 
@@ -118,6 +118,7 @@ public class TaktCustomerComplaintItemService : TaktServiceBase, ITaktCustomerCo
     public async Task<TaktCustomerComplaintItemDto> CreateCustomerComplaintItemAsync(TaktCustomerComplaintItemCreateDto dto)
     {
         var entity = dto.Adapt<TaktCustomerComplaintItem>();
+        entity.IsObsolete = 0;
         await StampCustomerComplaintItemCustomerComplaintAsync(entity, dto);
         var isUnique_ix_takt_logistics_quality_customer_complaint_item_line_unique = await _uniqueValidator.IsUniqueAsync(
             _customerComplaintItemRepository,
@@ -174,11 +175,21 @@ public class TaktCustomerComplaintItemService : TaktServiceBase, ITaktCustomerCo
     /// <returns>任务</returns>
     public async Task DeleteCustomerComplaintItemByIdAsync(long id)
     {
-        var deleted = await _customerComplaintItemRepository.DeleteAsync(id);
-        if (!deleted)
+        var entity = await _customerComplaintItemRepository.GetByIdAsync(id);
+        if (entity == null)
         {
             throw new TaktBusinessException("客诉明细不存在或已删除");
         }
+        if (entity.TenantCode != CurrentTenantCode || entity.CompanyCode != CurrentCompanyCode)
+        {
+            throw new TaktBusinessException("客诉明细不存在或已删除");
+        }
+        if (entity.IsObsolete == 1)
+        {
+            throw new TaktBusinessException("客诉明细已作废");
+        }
+        entity.IsObsolete = 1;
+        await _customerComplaintItemRepository.UpdateAsync(entity);
     }
 
     /// <summary>
@@ -212,6 +223,27 @@ public class TaktCustomerComplaintItemService : TaktServiceBase, ITaktCustomerCo
             throw new TaktBusinessException("客诉明细不存在");
         }
         entity.ImprovementStatus = dto.ImprovementStatus;
+        await _customerComplaintItemRepository.UpdateAsync(entity);
+        return await GetCustomerComplaintItemByIdAsync(dto.CustomerComplaintItemId) ?? throw new TaktBusinessException("客诉明细不存在");
+    }
+
+    /// <summary>
+    /// 更新客诉明细作废状态
+    /// </summary>
+    /// <param name="dto">作废DTO</param>
+    /// <returns>DTO</returns>
+    public async Task<TaktCustomerComplaintItemDto> UpdateCustomerComplaintItemObsoleteAsync(TaktCustomerComplaintItemObsoleteDto dto)
+    {
+        var entity = await _customerComplaintItemRepository.GetByIdAsync(dto.CustomerComplaintItemId);
+        if (entity == null)
+        {
+            throw new TaktBusinessException("客诉明细不存在");
+        }
+        if (entity.TenantCode != CurrentTenantCode || entity.CompanyCode != CurrentCompanyCode)
+        {
+            throw new TaktBusinessException("客诉明细不存在");
+        }
+        entity.IsObsolete = dto.IsObsolete;
         await _customerComplaintItemRepository.UpdateAsync(entity);
         return await GetCustomerComplaintItemByIdAsync(dto.CustomerComplaintItemId) ?? throw new TaktBusinessException("客诉明细不存在");
     }
@@ -348,6 +380,15 @@ public class TaktCustomerComplaintItemService : TaktServiceBase, ITaktCustomerCo
     {
         var exp = Expressionable.Create<TaktCustomerComplaintItem>();
 
+        if (queryDto?.IsObsolete.HasValue == true)
+        {
+            exp = exp.And(x => x.IsObsolete == queryDto.IsObsolete);
+        }
+        else
+        {
+            exp = exp.And(x => x.IsObsolete == 0);
+        }
+
         if (!string.IsNullOrEmpty(queryDto?.KeyWords))
         {
             var keywords = queryDto.KeyWords;
@@ -366,8 +407,8 @@ public class TaktCustomerComplaintItemService : TaktServiceBase, ITaktCustomerCo
                 || (x.CauseAnalysis != null && x.CauseAnalysis.Contains(keywords))
                 || (x.ImprovementAction != null && x.ImprovementAction.Contains(keywords))
                 || (x.ImprovementResponsible != null && x.ImprovementResponsible.Contains(keywords))
-                || SqlFunc.ToString(x.ImprovementStatus).Contains(keywords)
                 || (x.AttachmentPaths != null && x.AttachmentPaths.Contains(keywords))
+                || SqlFunc.ToString(x.ImprovementStatus).Contains(keywords)
                 || (x.ExtField != null && x.ExtField.Contains(keywords))
                 || (x.Remark != null && x.Remark.Contains(keywords))
                 || SqlFunc.ToString(x.PlannedCompletionDate).Contains(keywords)
@@ -446,14 +487,14 @@ public class TaktCustomerComplaintItemService : TaktServiceBase, ITaktCustomerCo
             exp = exp.And(x => x.ImprovementResponsible != null && x.ImprovementResponsible.Contains(queryDto.ImprovementResponsible));
         }
 
-        if (queryDto?.ImprovementStatus.HasValue == true)
-        {
-            exp = exp.And(x => x.ImprovementStatus == queryDto.ImprovementStatus);
-        }
-
         if (!string.IsNullOrEmpty(queryDto?.AttachmentPaths))
         {
             exp = exp.And(x => x.AttachmentPaths != null && x.AttachmentPaths.Contains(queryDto.AttachmentPaths));
+        }
+
+        if (queryDto?.ImprovementStatus.HasValue == true)
+        {
+            exp = exp.And(x => x.ImprovementStatus == queryDto.ImprovementStatus);
         }
 
         if (!string.IsNullOrEmpty(queryDto?.ExtField))

@@ -16,7 +16,7 @@ import type {
 } from '@/types/common';
 
 /**
- * Takt货源实体（公司级；工厂+物料+供货商维度的有效货源记录）
+ * Takt货源清单实体（公司级；工厂+物料+供货商维度的有效货源清单记录）
  * 对应前端 TaktSourceOfSupplyDto
  * 继承 TaktCompanyDtoBase
  * 对应前端 SourceOfSupply
@@ -34,7 +34,7 @@ export interface SourceOfSupply extends CompanyDtoBase {
   plantCode: string;
 
   /**
-   * 货源编码（租户+公司内唯一；业务单据号）
+   * 货源清单编码（租户+公司内唯一；业务单据号）
    */
   sourceOfSupplyCode: string;
 
@@ -54,7 +54,7 @@ export interface SourceOfSupply extends CompanyDtoBase {
   purchaseGroup?: string;
 
   /**
-   * 固定（字典 sys_yes_no_type；1=是，0=否；固定货源，MRP/寻源优先选用）
+   * 固定（字典 sys_yes_no_type；1=是，0=否；固定货源清单，MRP/寻源优先选用）
    */
   isFixed: number;
 
@@ -99,12 +99,12 @@ export interface SourceOfSupply extends CompanyDtoBase {
   validTo: string;
 
   /**
-   * 排序号（越小越靠前；同物料多货源时的优先级）
+   * 排序号（越小越靠前；同物料多货源清单时的优先级）
    */
   sortOrder: number;
 
   /**
-   * 货源状态（字典 sys_normal_disable_status；1=启用，0=禁用）
+   * 货源清单状态（字典 sys_normal_disable_status；1=启用，0=禁用）
    */
   sourceStatus: number;
 
@@ -134,7 +134,7 @@ export interface SourceOfSupplyQuery extends TaktPagedQuery {
   plantCode?: string;
 
   /**
-   * 货源编码（租户+公司内唯一；业务单据号）
+   * 货源清单编码（租户+公司内唯一；业务单据号）
    */
   sourceOfSupplyCode?: string;
 
@@ -154,7 +154,7 @@ export interface SourceOfSupplyQuery extends TaktPagedQuery {
   purchaseGroup?: string;
 
   /**
-   * 固定（字典 sys_yes_no_type；1=是，0=否；固定货源，MRP/寻源优先选用）
+   * 固定（字典 sys_yes_no_type；1=是，0=否；固定货源清单，MRP/寻源优先选用）
    */
   isFixed?: number;
 
@@ -209,12 +209,12 @@ export interface SourceOfSupplyQuery extends TaktPagedQuery {
   validToEnd?: string;
 
   /**
-   * 排序号（越小越靠前；同物料多货源时的优先级）
+   * 排序号（越小越靠前；同物料多货源清单时的优先级）
    */
   sortOrder?: number;
 
   /**
-   * 货源状态（字典 sys_normal_disable_status；1=启用，0=禁用）
+   * 货源清单状态（字典 sys_normal_disable_status；1=启用，0=禁用）
    */
   sourceStatus?: number;
 
@@ -268,7 +268,7 @@ export interface SourceOfSupplyCreate {
   plantCode: string;
 
   /**
-   * 货源编码（租户+公司内唯一；业务单据号）
+   * 货源清单编码（租户+公司内唯一；业务单据号）
    */
   sourceOfSupplyCode: string;
 
@@ -288,7 +288,7 @@ export interface SourceOfSupplyCreate {
   purchaseGroup?: string;
 
   /**
-   * 固定（字典 sys_yes_no_type；1=是，0=否；固定货源，MRP/寻源优先选用）
+   * 固定（字典 sys_yes_no_type；1=是，0=否；固定货源清单，MRP/寻源优先选用）
    */
   isFixed: number;
 
@@ -333,7 +333,7 @@ export interface SourceOfSupplyCreate {
   validTo: string;
 
   /**
-   * 货源状态（字典 sys_normal_disable_status；1=启用，0=禁用）
+   * 货源清单状态（字典 sys_normal_disable_status；1=启用，0=禁用）
    */
   sourceStatus: number;
 
@@ -377,7 +377,7 @@ export interface SourceOfSupplyStatus {
   sourceOfSupplyId: string;
 
   /**
-   * 货源状态（字典 sys_normal_disable_status；1=启用，0=禁用）
+   * 货源清单状态（字典 sys_normal_disable_status；1=启用，0=禁用）
    */
   sourceStatus: number;
 
@@ -396,7 +396,7 @@ export interface SourceOfSupplySort {
   sourceOfSupplyId: string;
 
   /**
-   * 排序号（越小越靠前；同物料多货源时的优先级）
+   * 排序号（越小越靠前；同物料多货源清单时的优先级）
    */
   sortOrder: number;
 
@@ -425,7 +425,7 @@ export interface SourceOfSupplyTemplate {
   plantCode?: string;
 
   /**
-   * 货源编码（租户+公司内唯一；业务单据号）
+   * 货源清单编码（租户+公司内唯一；业务单据号）
    */
   sourceOfSupplyCode?: string;
 
@@ -445,7 +445,7 @@ export interface SourceOfSupplyTemplate {
   purchaseGroup?: string;
 
   /**
-   * 固定（字典 sys_yes_no_type；1=是，0=否；固定货源，MRP/寻源优先选用）
+   * 固定（字典 sys_yes_no_type；1=是，0=否；固定货源清单，MRP/寻源优先选用）
    */
   isFixed?: number;
 
@@ -490,7 +490,7 @@ export interface SourceOfSupplyTemplate {
   validTo?: string;
 
   /**
-   * 货源状态（字典 sys_normal_disable_status；1=启用，0=禁用）
+   * 货源清单状态（字典 sys_normal_disable_status；1=启用，0=禁用）
    */
   sourceStatus?: number;
 
@@ -534,7 +534,7 @@ export interface SourceOfSupplyImport {
   plantCode?: string;
 
   /**
-   * 货源编码（租户+公司内唯一；业务单据号）
+   * 货源清单编码（租户+公司内唯一；业务单据号）
    */
   sourceOfSupplyCode?: string;
 
@@ -554,7 +554,7 @@ export interface SourceOfSupplyImport {
   purchaseGroup?: string;
 
   /**
-   * 固定（字典 sys_yes_no_type；1=是，0=否；固定货源，MRP/寻源优先选用）
+   * 固定（字典 sys_yes_no_type；1=是，0=否；固定货源清单，MRP/寻源优先选用）
    */
   isFixed?: number;
 
@@ -599,7 +599,7 @@ export interface SourceOfSupplyImport {
   validTo?: string;
 
   /**
-   * 货源状态（字典 sys_normal_disable_status；1=启用，0=禁用）
+   * 货源清单状态（字典 sys_normal_disable_status；1=启用，0=禁用）
    */
   sourceStatus?: number;
 
@@ -638,7 +638,7 @@ export interface SourceOfSupplyExport {
   plantCode: string;
 
   /**
-   * 货源编码（租户+公司内唯一；业务单据号）
+   * 货源清单编码（租户+公司内唯一；业务单据号）
    */
   sourceOfSupplyCode: string;
 
@@ -658,7 +658,7 @@ export interface SourceOfSupplyExport {
   purchaseGroup?: string;
 
   /**
-   * 固定（字典 sys_yes_no_type；1=是，0=否；固定货源，MRP/寻源优先选用）
+   * 固定（字典 sys_yes_no_type；1=是，0=否；固定货源清单，MRP/寻源优先选用）
    */
   isFixed: number;
 
@@ -703,12 +703,12 @@ export interface SourceOfSupplyExport {
   validTo: string;
 
   /**
-   * 排序号（越小越靠前；同物料多货源时的优先级）
+   * 排序号（越小越靠前；同物料多货源清单时的优先级）
    */
   sortOrder: number;
 
   /**
-   * 货源状态（字典 sys_normal_disable_status；1=启用，0=禁用）
+   * 货源清单状态（字典 sys_normal_disable_status；1=启用，0=禁用）
    */
   sourceStatus: number;
 

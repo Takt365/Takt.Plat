@@ -29,6 +29,8 @@ namespace Takt.Application.Services.Logistics.Materials;
 /// </summary>
 public class TaktModelDestinationService : TaktServiceBase, ITaktModelDestinationService
 {
+    private const int MaxModelDestinationRowsByMaterial = 50;
+
     private readonly ITaktTenantRepository<TaktModelDestination> _modelDestinationRepository;
     private readonly ITaktSortOrderGenerator _sortOrderGenerator;
     private readonly ITaktUniqueValidator _uniqueValidator;
@@ -106,19 +108,64 @@ public class TaktModelDestinationService : TaktServiceBase, ITaktModelDestinatio
     }
 
     /// <summary>
-    /// 根据物料编码获取机种名称与仕向地信息
+    /// 根据物料编码获取机种名称与仕向地信息（首条）
     /// </summary>
     /// <param name="materialCode">物料编码</param>
     /// <returns>型号目的地 DTO；未匹配时返回 null</returns>
     public async Task<TaktModelDestinationDto?> GetModelDestinationByMaterialAsync(string materialCode)
     {
+        var list = await GetModelDestinationListByMaterialAsync(materialCode);
+        return list.FirstOrDefault();
+    }
+
+    /// <summary>
+    /// 根据物料编码获取机种仕向列表
+    /// </summary>
+    /// <param name="materialCode">物料编码</param>
+    /// <returns>型号目的地 DTO 列表</returns>
+    public async Task<List<TaktModelDestinationDto>> GetModelDestinationListByMaterialAsync(string materialCode)
+    {
         ArgumentException.ThrowIfNullOrWhiteSpace(materialCode);
+        var list = await QueryModelDestinationsByMaterialAsync(materialCode);
+        return list.Adapt<List<TaktModelDestinationDto>>();
+    }
+
+    /// <summary>
+    /// 根据物料编码获取机种仕向选项列表
+    /// </summary>
+    /// <param name="materialCode">物料编码</param>
+    /// <returns>下拉选项</returns>
+    public async Task<List<TaktSelectOption>> GetModelDestinationOptionsByMaterialAsync(string materialCode)
+    {
+        ArgumentException.ThrowIfNullOrWhiteSpace(materialCode);
+        var list = await QueryModelDestinationsByMaterialAsync(materialCode);
+        return list.Select(e =>
+        {
+            var modelLabel = string.IsNullOrWhiteSpace(e.ModelName) ? e.ModelCode : e.ModelName;
+            var destinationLabel = string.IsNullOrWhiteSpace(e.DestinationName) ? e.DestinationCode : e.DestinationName;
+            return new TaktSelectOption
+            {
+                DictValue = e.Id,
+                DictLabel = $"{modelLabel} / {destinationLabel}",
+                ExtValue = e.ModelCode,
+                ExtLabel = e.DestinationCode,
+                SortOrder = e.SortOrder,
+            };
+        }).ToList();
+    }
+
+    /// <summary>
+    /// 按物料编码查询型号目的地实体列表
+    /// </summary>
+    /// <param name="materialCode">物料编码</param>
+    /// <returns>型号目的地实体列表</returns>
+    private async Task<List<TaktModelDestination>> QueryModelDestinationsByMaterialAsync(string materialCode)
+    {
         var list = await _modelDestinationRepository.GetListAsync(
             x => x.TenantCode == CurrentTenantCode && x.MaterialCode == materialCode,
             x => x.SortOrder,
             false);
-        var entity = list.FirstOrDefault();
-        return entity?.Adapt<TaktModelDestinationDto>();
+        return list.Take(MaxModelDestinationRowsByMaterial).ToList();
     }
 
     /// <summary>

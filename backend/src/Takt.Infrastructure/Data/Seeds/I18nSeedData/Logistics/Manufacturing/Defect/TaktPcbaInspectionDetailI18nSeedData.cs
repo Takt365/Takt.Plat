@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Infrastructure.Data.Seeds.I18nSeedData.Logistics.Manufacturing.Defect
 // 文件名称：TaktPcbaInspectionDetailI18nSeedData.cs
-// 创建时间：2026-07-02
+// 创建时间：2026-07-09
 // 创建人：Takt365(Auto Generated)
 // 功能描述：TaktPcbaInspectionDetail 实体字段国际化种子（无对应 frontend locales；TranslationText 取自 ColumnDescription，ContextNote 取自属性 XML summary）
 // 
@@ -100,13 +100,13 @@ public class TaktPcbaInspectionDetailI18nSeedData : ITaktSeedDataCoordinator
             new TranslationSeedItem("entity.pcbainspectiondetail.pcbainspectionid", "zh-HK", "PCBA检查ID_hk", "PCBA检查日报ID（主表主键,序列化为string以避免Javascript精度问题）"),
 
             // entity.pcbainspectiondetail.prodordercode
-            new TranslationSeedItem("entity.pcbainspectiondetail.prodordercode", "en-US", "生产工单号_us", "生产工单号（冗余字段,便于查询）"),
+            new TranslationSeedItem("entity.pcbainspectiondetail.prodordercode", "en-US", "工单号_us", "工单号（冗余字段,便于查询）"),
             // entity.pcbainspectiondetail.prodordercode
-            new TranslationSeedItem("entity.pcbainspectiondetail.prodordercode", "ja-JP", "生产工单号_jp", "生产工单号（冗余字段,便于查询）"),
+            new TranslationSeedItem("entity.pcbainspectiondetail.prodordercode", "ja-JP", "工单号_jp", "工单号（冗余字段,便于查询）"),
             // entity.pcbainspectiondetail.prodordercode
-            new TranslationSeedItem("entity.pcbainspectiondetail.prodordercode", "zh-CN", "生产工单号", "生产工单号（冗余字段,便于查询）"),
+            new TranslationSeedItem("entity.pcbainspectiondetail.prodordercode", "zh-CN", "工单号", "工单号（冗余字段,便于查询）"),
             // entity.pcbainspectiondetail.prodordercode
-            new TranslationSeedItem("entity.pcbainspectiondetail.prodordercode", "zh-HK", "生产工单号_hk", "生产工单号（冗余字段,便于查询）"),
+            new TranslationSeedItem("entity.pcbainspectiondetail.prodordercode", "zh-HK", "工单号_hk", "工单号（冗余字段,便于查询）"),
 
             // entity.pcbainspectiondetail.linenumber
             new TranslationSeedItem("entity.pcbainspectiondetail.linenumber", "en-US", "行号_us", "行号（项号/序号，固定步长=10）"),
@@ -278,6 +278,15 @@ public class TaktPcbaInspectionDetailI18nSeedData : ITaktSeedDataCoordinator
             new TranslationSeedItem("entity.pcbainspectiondetail.defectlocation", "zh-CN", "不良个所", "不良个所（字典 logistics_pcb_location_category，存 DictValue）"),
             // entity.pcbainspectiondetail.defectlocation
             new TranslationSeedItem("entity.pcbainspectiondetail.defectlocation", "zh-HK", "不良个所_hk", "不良个所（字典 logistics_pcb_location_category，存 DictValue）"),
+
+            // entity.pcbainspectiondetail.isobsolete
+            new TranslationSeedItem("entity.pcbainspectiondetail.isobsolete", "en-US", "是否作废_us", "是否作废（字典 sys_yes_no_type，0=否 1=是；编辑移除子行时标记作废）"),
+            // entity.pcbainspectiondetail.isobsolete
+            new TranslationSeedItem("entity.pcbainspectiondetail.isobsolete", "ja-JP", "是否作废_jp", "是否作废（字典 sys_yes_no_type，0=否 1=是；编辑移除子行时标记作废）"),
+            // entity.pcbainspectiondetail.isobsolete
+            new TranslationSeedItem("entity.pcbainspectiondetail.isobsolete", "zh-CN", "是否作废", "是否作废（字典 sys_yes_no_type，0=否 1=是；编辑移除子行时标记作废）"),
+            // entity.pcbainspectiondetail.isobsolete
+            new TranslationSeedItem("entity.pcbainspectiondetail.isobsolete", "zh-HK", "是否作废_hk", "是否作废（字典 sys_yes_no_type，0=否 1=是；编辑移除子行时标记作废）"),
 
             // entity.pcbainspectiondetail.pcbainspection
             new TranslationSeedItem("entity.pcbainspectiondetail.pcbainspection", "en-US", "PCBA检查日报_us", "PCBA检查日报（主表）"),

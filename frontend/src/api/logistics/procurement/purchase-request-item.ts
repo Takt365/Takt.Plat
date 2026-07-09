@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：frontend/src/api/logistics/procurement
 // 文件名称：purchase-request-item.ts
-// 创建时间：2026-06-30
+// 创建时间：2026-07-09
 // 创建人：Takt365(Auto Generated)
 // 功能描述：logistics/procurement 模块 API（自动生成，请勿手改路由常量）
 // 
@@ -18,6 +18,7 @@ import type {
 import type {
   PurchaseRequestItem,
   PurchaseRequestItemCreate,
+  PurchaseRequestItemObsolete,
   PurchaseRequestItemUpdate
 } from '@/types/logistics/procurement/purchase-request-item';
 
@@ -105,6 +106,19 @@ export function deletePurchaseRequestItemBatch(ids: string[]): Promise<void> {
     url: `${PURCHASE_REQUEST_ITEM_API_BASE}/batch`,
     method: 'delete',
     data: ids,
+  });
+}
+
+/**
+ * 更新采购申请明细作废状态
+ * @param {PurchaseRequestItemObsolete} dto 作废 DTO
+ * @returns {Promise<PurchaseRequestItem>} 采购申请明细DTO
+ */
+export function updatePurchaseRequestItemObsolete(dto: PurchaseRequestItemObsolete): Promise<PurchaseRequestItem> {
+  return request<PurchaseRequestItem>({
+    url: `${PURCHASE_REQUEST_ITEM_API_BASE}/obsolete`,
+    method: 'put',
+    data: dto,
   });
 }
 

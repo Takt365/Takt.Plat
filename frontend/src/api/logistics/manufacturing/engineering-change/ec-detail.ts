@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：frontend/src/api/logistics/manufacturing/engineering-change
 // 文件名称：ec-detail.ts
-// 创建时间：2026-07-01
+// 创建时间：2026-07-09
 // 创建人：Takt365(Auto Generated)
 // 功能描述：logistics/manufacturing/engineering-change 模块 API（自动生成，请勿手改路由常量）
 // 
@@ -18,6 +18,7 @@ import type {
 import type {
   EcDetail,
   EcDetailCreate,
+  EcDetailObsolete,
   EcDetailUpdate
 } from '@/types/logistics/manufacturing/engineering-change/ec-detail';
 
@@ -105,6 +106,19 @@ export function deleteEcDetailBatch(ids: string[]): Promise<void> {
     url: `${EC_DETAIL_API_BASE}/batch`,
     method: 'delete',
     data: ids,
+  });
+}
+
+/**
+ * 更新设变明细作废状态
+ * @param {EcDetailObsolete} dto 作废 DTO
+ * @returns {Promise<EcDetail>} 设变明细DTO
+ */
+export function updateEcDetailObsolete(dto: EcDetailObsolete): Promise<EcDetail> {
+  return request<EcDetail>({
+    url: `${EC_DETAIL_API_BASE}/obsolete`,
+    method: 'put',
+    data: dto,
   });
 }
 

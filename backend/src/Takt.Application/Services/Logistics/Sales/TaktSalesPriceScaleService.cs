@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Application.Services.Logistics.Sales
 // 文件名称：TaktSalesPriceScaleService.cs
-// 创建时间：2026-07-01
+// 创建时间：2026-07-09
 // 创建人：Takt365(Cursor AI)
 // 功能描述：销售价格阶梯应用服务实现
 // 
@@ -118,6 +118,7 @@ public class TaktSalesPriceScaleService : TaktServiceBase, ITaktSalesPriceScaleS
     public async Task<TaktSalesPriceScaleDto> CreateSalesPriceScaleAsync(TaktSalesPriceScaleCreateDto dto)
     {
         var entity = dto.Adapt<TaktSalesPriceScale>();
+        entity.IsObsolete = 0;
         await StampSalesPriceScaleSalesPriceItemAsync(entity, dto);
         var isUnique_ix_takt_logistics_sales_price_scale_item_line_unique = await _uniqueValidator.IsUniqueAsync(
             _salesPriceScaleRepository,
@@ -174,11 +175,21 @@ public class TaktSalesPriceScaleService : TaktServiceBase, ITaktSalesPriceScaleS
     /// <returns>任务</returns>
     public async Task DeleteSalesPriceScaleByIdAsync(long id)
     {
-        var deleted = await _salesPriceScaleRepository.DeleteAsync(id);
-        if (!deleted)
+        var entity = await _salesPriceScaleRepository.GetByIdAsync(id);
+        if (entity == null)
         {
             throw new TaktBusinessException("销售价格阶梯不存在或已删除");
         }
+        if (entity.TenantCode != CurrentTenantCode || entity.CompanyCode != CurrentCompanyCode)
+        {
+            throw new TaktBusinessException("销售价格阶梯不存在或已删除");
+        }
+        if (entity.IsObsolete == 1)
+        {
+            throw new TaktBusinessException("销售价格阶梯已作废");
+        }
+        entity.IsObsolete = 1;
+        await _salesPriceScaleRepository.UpdateAsync(entity);
     }
 
     /// <summary>
@@ -197,6 +208,27 @@ public class TaktSalesPriceScaleService : TaktServiceBase, ITaktSalesPriceScaleS
         {
             await DeleteSalesPriceScaleByIdAsync(id);
         }
+    }
+
+    /// <summary>
+    /// 更新销售价格阶梯作废状态
+    /// </summary>
+    /// <param name="dto">作废DTO</param>
+    /// <returns>DTO</returns>
+    public async Task<TaktSalesPriceScaleDto> UpdateSalesPriceScaleObsoleteAsync(TaktSalesPriceScaleObsoleteDto dto)
+    {
+        var entity = await _salesPriceScaleRepository.GetByIdAsync(dto.SalesPriceScaleId);
+        if (entity == null)
+        {
+            throw new TaktBusinessException("销售价格阶梯不存在");
+        }
+        if (entity.TenantCode != CurrentTenantCode || entity.CompanyCode != CurrentCompanyCode)
+        {
+            throw new TaktBusinessException("销售价格阶梯不存在");
+        }
+        entity.IsObsolete = dto.IsObsolete;
+        await _salesPriceScaleRepository.UpdateAsync(entity);
+        return await GetSalesPriceScaleByIdAsync(dto.SalesPriceScaleId) ?? throw new TaktBusinessException("销售价格阶梯不存在");
     }
 
     /// <summary>
@@ -330,6 +362,15 @@ public class TaktSalesPriceScaleService : TaktServiceBase, ITaktSalesPriceScaleS
     private static Expression<Func<TaktSalesPriceScale, bool>> QueryExpression(TaktSalesPriceScaleQueryDto? queryDto)
     {
         var exp = Expressionable.Create<TaktSalesPriceScale>();
+
+        if (queryDto?.IsObsolete.HasValue == true)
+        {
+            exp = exp.And(x => x.IsObsolete == queryDto.IsObsolete);
+        }
+        else
+        {
+            exp = exp.And(x => x.IsObsolete == 0);
+        }
 
         if (!string.IsNullOrEmpty(queryDto?.KeyWords))
         {

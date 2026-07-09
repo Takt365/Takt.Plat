@@ -384,8 +384,6 @@ public class TaktWorkCenterService : TaktServiceBase, ITaktWorkCenterService
                 (x.PlantCode != null && x.PlantCode.Contains(keywords))
                 || (x.WorkCenterCode != null && x.WorkCenterCode.Contains(keywords))
                 || (x.WorkCenterName != null && x.WorkCenterName.Contains(keywords))
-                || (x.WorkshopCode != null && x.WorkshopCode.Contains(keywords))
-                || SqlFunc.ToString(x.DefaultShiftId).Contains(keywords)
                 || SqlFunc.ToString(x.WorkCenterStatus).Contains(keywords)
                 || (x.ExtField != null && x.ExtField.Contains(keywords))
                 || (x.Remark != null && x.Remark.Contains(keywords))
@@ -406,16 +404,6 @@ public class TaktWorkCenterService : TaktServiceBase, ITaktWorkCenterService
         if (!string.IsNullOrEmpty(queryDto?.WorkCenterName))
         {
             exp = exp.And(x => x.WorkCenterName != null && x.WorkCenterName.Contains(queryDto.WorkCenterName));
-        }
-
-        if (!string.IsNullOrEmpty(queryDto?.WorkshopCode))
-        {
-            exp = exp.And(x => x.WorkshopCode != null && x.WorkshopCode.Contains(queryDto.WorkshopCode));
-        }
-
-        if (queryDto?.DefaultShiftId.HasValue == true)
-        {
-            exp = exp.And(x => x.DefaultShiftId == queryDto.DefaultShiftId);
         }
 
         if (queryDto?.WorkCenterStatus.HasValue == true)

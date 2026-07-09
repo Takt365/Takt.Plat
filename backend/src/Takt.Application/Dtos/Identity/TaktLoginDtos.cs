@@ -104,6 +104,16 @@ public class TaktSessionVerifyPasswordRequestDto
     /// 租户编码
     /// </summary>
     public string TenantCode { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 验证码 ID（启用验证码时必填）
+    /// </summary>
+    public string? CaptchaId { get; set; }
+
+    /// <summary>
+    /// 验证码载荷（启用验证码时必填）
+    /// </summary>
+    public string? CaptchaCode { get; set; }
 }
 
 /// <summary>
@@ -443,6 +453,69 @@ public class TaktLoginPreviewLocaleDto
 
     /// <summary>
     /// 公司区域文化 BCP47（takt_company.default_culture，用于业务数据 CRUD 语言校验）
+    /// </summary>
+    public string CompanyDefaultCulture { get; set; } = string.Empty;
+}
+
+/// <summary>
+/// 登录凭据校验结果状态
+/// </summary>
+public enum TaktLoginCredentialStatus
+{
+    /// <summary>
+    /// 校验通过
+    /// </summary>
+    Success = 0,
+
+    /// <summary>
+    /// 用户名或密码错误（含无租户权限、账号停用、用户不存在）
+    /// </summary>
+    InvalidCredentials = 1,
+
+    /// <summary>
+    /// 账号因连续失败已锁定
+    /// </summary>
+    AccountLocked = 2,
+}
+
+/// <summary>
+/// 登录凭据校验结果
+/// </summary>
+public class TaktLoginCredentialResult
+{
+    /// <summary>
+    /// 校验状态
+    /// </summary>
+    public TaktLoginCredentialStatus Status { get; set; }
+
+    /// <summary>
+    /// 用户 ID（仅 Success 时有值）
+    /// </summary>
+    public long? UserId { get; set; }
+
+    /// <summary>
+    /// 锁定截止时间（仅 AccountLocked 时有值）
+    /// </summary>
+    public DateTime? LockedUntil { get; set; }
+}
+
+/// <summary>
+/// 登录前预览对外响应（不含 userFound/tenantFound，防用户名枚举）
+/// </summary>
+public class TaktLoginPreviewLocaleResponseDto
+{
+    /// <summary>
+    /// 用户默认登录公司代码
+    /// </summary>
+    public string CompanyCode { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 用户区域文化 BCP47
+    /// </summary>
+    public string DefaultCulture { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 公司区域文化 BCP47
     /// </summary>
     public string CompanyDefaultCulture { get; set; } = string.Empty;
 }

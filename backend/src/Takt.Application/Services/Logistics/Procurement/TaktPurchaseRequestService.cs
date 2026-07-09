@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Application.Services.Logistics.Procurement
 // 文件名称：TaktPurchaseRequestService.cs
-// 创建时间：2026-06-24
+// 创建时间：2026-07-09
 // 创建人：Takt365(Cursor AI)
 // 功能描述：采购申请应用服务实现
 // 
@@ -31,7 +31,6 @@ public class TaktPurchaseRequestService : TaktServiceBase, ITaktPurchaseRequestS
 {
     private readonly ITaktApprovalRepository<TaktPurchaseRequest> _purchaseRequestRepository;
     private readonly ITaktCompanyRepository<TaktPurchaseRequestItem> _purchaseRequestItemRepository;
-    private readonly ITaktCompanyRepository<TaktPurchaseRequestChangeLog> _purchaseRequestChangeLogRepository;
     private readonly ITaktLineNumberGenerator _lineNumberGenerator;
     private readonly ITaktUniqueValidator _uniqueValidator;
 
@@ -40,7 +39,6 @@ public class TaktPurchaseRequestService : TaktServiceBase, ITaktPurchaseRequestS
     /// </summary>
     /// <param name="purchaseRequestRepository">采购申请仓储</param>
     /// <param name="purchaseRequestItemRepository">PurchaseRequestItem仓储</param>
-    /// <param name="purchaseRequestChangeLogRepository">PurchaseRequestChangeLog仓储</param>
     /// <param name="lineNumberGenerator">明细行号生成器</param>
     /// <param name="uniqueValidator">唯一性验证器</param>
     /// <param name="userContext">用户上下文</param>
@@ -48,7 +46,6 @@ public class TaktPurchaseRequestService : TaktServiceBase, ITaktPurchaseRequestS
     public TaktPurchaseRequestService(
         ITaktApprovalRepository<TaktPurchaseRequest> purchaseRequestRepository,
         ITaktCompanyRepository<TaktPurchaseRequestItem> purchaseRequestItemRepository,
-        ITaktCompanyRepository<TaktPurchaseRequestChangeLog> purchaseRequestChangeLogRepository,
         ITaktLineNumberGenerator lineNumberGenerator,
         ITaktUniqueValidator uniqueValidator,
         ITaktUserContext? userContext = null,
@@ -57,7 +54,6 @@ public class TaktPurchaseRequestService : TaktServiceBase, ITaktPurchaseRequestS
     {
         _purchaseRequestRepository = purchaseRequestRepository;
         _purchaseRequestItemRepository = purchaseRequestItemRepository;
-        _purchaseRequestChangeLogRepository = purchaseRequestChangeLogRepository;
         _lineNumberGenerator = lineNumberGenerator;
         _uniqueValidator = uniqueValidator;
     }
@@ -180,7 +176,6 @@ public class TaktPurchaseRequestService : TaktServiceBase, ITaktPurchaseRequestS
             throw new TaktBusinessException("采购申请不存在或已删除");
         }
         await _purchaseRequestItemRepository.DeleteAsync(x => x.PurchaseRequestId == entity.Id);
-        await _purchaseRequestChangeLogRepository.DeleteAsync(x => x.PurchaseRequestId == entity.Id);
         var deleted = await _purchaseRequestRepository.DeleteAsync(id);
         if (!deleted)
         {
@@ -315,7 +310,31 @@ public class TaktPurchaseRequestService : TaktServiceBase, ITaktPurchaseRequestS
     // ========================================
 
     /// <summary>
-    /// 填充采购申请详情（加载 OneToMany 子表：采购申请明细、采购申请变更记录）
+    /// 将指定主表下全部未作废采购申请明细标记为作废（编辑清空子表）
+    /// </summary>
+    /// <param name="purchaseRequestId">主表主键</param>
+    /// <returns>任务</returns>
+    private async Task MarkPurchaseRequestItemsObsoleteAsync(long purchaseRequestId)
+    {
+        if (purchaseRequestId <= 0)
+        {
+            return;
+        }
+        var rows = await _purchaseRequestItemRepository.GetListAsync(
+            x => x.PurchaseRequestId == purchaseRequestId && x.IsObsolete == 0);
+        if (rows.Count == 0)
+        {
+            return;
+        }
+        foreach (var row in rows)
+        {
+            row.IsObsolete = 1;
+        }
+        await _purchaseRequestItemRepository.UpdateRangeAsync(rows);
+    }
+
+    /// <summary>
+    /// 填充采购申请详情（加载 OneToMany 子表：采购申请明细）
     /// </summary>
     /// <param name="dto">响应 DTO</param>
     /// <param name="entity">主表实体</param>
@@ -326,16 +345,13 @@ public class TaktPurchaseRequestService : TaktServiceBase, ITaktPurchaseRequestS
         {
             return;
         }
-        // 采购申请明细 → dto.Items
+        // 采购申请明细 → dto.Items（含作废行）
         var items = await _purchaseRequestItemRepository.GetListAsync(x => x.PurchaseRequestId == entity.Id);
         dto.Items = items.Adapt<List<TaktPurchaseRequestItemDto>>();
-        // 采购申请变更记录 → dto.ChangeLogs
-        var changelogs = await _purchaseRequestChangeLogRepository.GetListAsync(x => x.PurchaseRequestId == entity.Id);
-        dto.ChangeLogs = changelogs.Adapt<List<TaktPurchaseRequestChangeLogDto>>();
     }
 
     /// <summary>
-    /// 保存采购申请子表级联（采购申请明细、采购申请变更记录；Create/Update 后按主表 Id 先删后插）
+    /// 保存采购申请子表级联（采购申请明细；按子表 Id 增量新增/更新；未提交行标记作废，禁止先删后插）
     /// </summary>
     /// <param name="entity">主表实体</param>
     /// <param name="dto">创建/更新 DTO（含子表集合；UpdateDto 须继承 CreateDto）</param>
@@ -345,74 +361,97 @@ public class TaktPurchaseRequestService : TaktServiceBase, ITaktPurchaseRequestS
         // 采购申请明细（Items）
         if (dto.Items is not { Count: > 0 })
         {
-            await _purchaseRequestItemRepository.DeleteAsync(x => x.PurchaseRequestId == entity.Id);
+            await MarkPurchaseRequestItemsObsoleteAsync(entity.Id);
+            return;
         }
         else
         {
-            var items = dto.Items.Adapt<List<TaktPurchaseRequestItem>>();
-            foreach (var child in items)
+            var existingList = await _purchaseRequestItemRepository.GetListAsync(x => x.PurchaseRequestId == entity.Id);
+            var existingById = existingList.ToDictionary(x => x.Id);
+            var submittedIds = new HashSet<long>();
+            var toCreate = new List<TaktPurchaseRequestItem>();
+            var seenLineKeys = new HashSet<string>(StringComparer.Ordinal);
+            for (var i = 0; i < dto.Items.Count; i++)
             {
-                child.PurchaseRequestId = entity.Id;
-            }
-            var itemsNeedLine = items.Where(c => c.LineNumber <= 0).ToList();
-            if (itemsNeedLine.Count > 0)
-            {
-                var businessCode = !string.IsNullOrWhiteSpace(entity.PurchaseRequestCode) ? entity.PurchaseRequestCode : entity.Id.ToString();
-                var maxLine = await _purchaseRequestItemRepository.GetMaxIntAsync(
-                    x => x.TenantCode == CurrentTenantCode && x.CompanyCode == CurrentCompanyCode && x.PurchaseRequestId == entity.Id,
-                    x => x.LineNumber);
-                var lineSeq = _lineNumberGenerator.GenerateSequence(businessCode, itemsNeedLine.Count, maxLine).ToList();
-                var lineIdx = 0;
-                foreach (var child in items)
+                var childDto = dto.Items[i];
+                childDto.PurchaseRequestId = entity.Id;
+                var lineKey = $"{entity.CompanyCode}|{entity.Id}|{childDto.LineNumber}";
+                if (!seenLineKeys.Add(lineKey))
                 {
-                    if (child.LineNumber <= 0)
+                    throw new TaktBusinessException("采购申请明细第{i + 1}项与本次提交的其他项重复（CompanyCode、PurchaseRequestId、LineNumber）");
+                }
+                if (childDto.PurchaseRequestItemId > 0)
+                {
+                    if (!existingById.TryGetValue(childDto.PurchaseRequestItemId, out var target))
                     {
-                        child.LineNumber = lineSeq[lineIdx++];
+                        throw new TaktBusinessException("采购申请明细不存在（PurchaseRequestItemId={childDto.PurchaseRequestItemId}）");
                     }
+                    if (target.PurchaseRequestId != entity.Id)
+                    {
+                        throw new TaktBusinessException("采购申请明细不属于当前主表（PurchaseRequestItemId={childDto.PurchaseRequestItemId}）");
+                    }
+                    submittedIds.Add(childDto.PurchaseRequestItemId);
+                    var isUniqueUpdate_ix_takt_logistics_materials_purchase_request_item_request_line_unique = await _uniqueValidator.IsUniqueAsync(
+                        _purchaseRequestItemRepository,
+                        x => x.CompanyCode == x.CompanyCode
+                && x.PurchaseRequestId == x.PurchaseRequestId
+                && x.LineNumber == x.LineNumber
+                && x.MaterialCode == x.MaterialCode,
+                        childDto.PurchaseRequestItemId);
+                    if (!isUniqueUpdate_ix_takt_logistics_materials_purchase_request_item_request_line_unique)
+                    {
+                        throw new TaktBusinessException("采购申请明细的CompanyCode、PurchaseRequestId、LineNumber、MaterialCode已存在");
+                    }
+                    childDto.Adapt(target);
+                    target.Id = childDto.PurchaseRequestItemId;
+                    target.PurchaseRequestId = entity.Id;
+                    target.IsObsolete = 0;
+                    await _purchaseRequestItemRepository.UpdateAsync(target);
+                }
+                else
+                {
+                    var isUniqueCreate_ix_takt_logistics_materials_purchase_request_item_request_line_unique = await _uniqueValidator.IsUniqueAsync(
+                        _purchaseRequestItemRepository,
+                        x => x.CompanyCode == x.CompanyCode
+                && x.PurchaseRequestId == x.PurchaseRequestId
+                && x.LineNumber == x.LineNumber
+                && x.MaterialCode == x.MaterialCode);
+                    if (!isUniqueCreate_ix_takt_logistics_materials_purchase_request_item_request_line_unique)
+                    {
+                        throw new TaktBusinessException("采购申请明细的CompanyCode、PurchaseRequestId、LineNumber、MaterialCode已存在");
+                    }
+                    var child = childDto.Adapt<TaktPurchaseRequestItem>();
+                    child.Id = 0;
+                    child.PurchaseRequestId = entity.Id;
+                    child.IsObsolete = 0;
+                    toCreate.Add(child);
                 }
             }
-                        var seenKeys = new HashSet<string>(StringComparer.Ordinal);
-                        for (var i = 0; i < items.Count; i++)
+            var toObsolete = existingList.Where(x => !submittedIds.Contains(x.Id) && x.IsObsolete == 0).ToList();
+            foreach (var removed in toObsolete)
+            {
+                removed.IsObsolete = 1;
+                await _purchaseRequestItemRepository.UpdateAsync(removed);
+            }
+            if (toCreate.Count > 0)
+            {
+                var needLine = toCreate.Where(c => c.LineNumber <= 0).ToList();
+                if (needLine.Count > 0)
+                {
+                    var businessCode = !string.IsNullOrWhiteSpace(entity.PurchaseRequestCode) ? entity.PurchaseRequestCode : entity.Id.ToString();
+                    var maxLine = existingList.Count > 0 ? existingList.Max(x => x.LineNumber) : 0;
+                    var lineSeq = _lineNumberGenerator.GenerateSequence(businessCode, needLine.Count, maxLine).ToList();
+                    var lineIdx = 0;
+                    foreach (var child in toCreate)
+                    {
+                        if (child.LineNumber <= 0)
                         {
-                            var key = $"{items[i].CompanyCode}|{items[i].PurchaseRequestId}|{items[i].LineNumber}|{items[i].MaterialCode}";
-                            if (!seenKeys.Add(key))
-                            {
-                                throw new TaktBusinessException($"采购申请明细第{i + 1}项与本次提交的其他项重复（CompanyCode、PurchaseRequestId、LineNumber、MaterialCode）");
-                            }
+                            child.LineNumber = lineSeq[lineIdx++];
                         }
-            await _purchaseRequestItemRepository.DeleteAsync(x => x.PurchaseRequestId == entity.Id);
-            foreach (var child in items)
-            {
-            var isUnique_ix_takt_logistics_materials_purchase_request_item_request_line_unique = await _uniqueValidator.IsUniqueAsync(
-                _purchaseRequestItemRepository,
-                x => x.CompanyCode == child.CompanyCode
-                    && x.PurchaseRequestId == child.PurchaseRequestId
-                    && x.LineNumber == child.LineNumber
-                    && x.MaterialCode == child.MaterialCode);
-            if (!isUnique_ix_takt_logistics_materials_purchase_request_item_request_line_unique)
-            {
-                throw new TaktBusinessException("采购申请明细的CompanyCode、PurchaseRequestId、LineNumber、MaterialCode已存在");
+                    }
+                }
+                await _purchaseRequestItemRepository.CreateRangeAsync(toCreate);
             }
-            }
-            await _purchaseRequestItemRepository.CreateRangeAsync(items);
-        }
-        // 采购申请变更记录（ChangeLogs）
-        if (dto.ChangeLogs is not { Count: > 0 })
-        {
-            await _purchaseRequestChangeLogRepository.DeleteAsync(x => x.PurchaseRequestId == entity.Id);
-        }
-        else
-        {
-            var changelogs = dto.ChangeLogs.Adapt<List<TaktPurchaseRequestChangeLog>>();
-            foreach (var child in changelogs)
-            {
-                child.PurchaseRequestId = entity.Id;
-            }
-            await _purchaseRequestChangeLogRepository.DeleteAsync(x => x.PurchaseRequestId == entity.Id);
-            foreach (var child in changelogs)
-            {
-            }
-            await _purchaseRequestChangeLogRepository.CreateRangeAsync(changelogs);
         }
     }
     // ========================================
@@ -434,6 +473,10 @@ public class TaktPurchaseRequestService : TaktServiceBase, ITaktPurchaseRequestS
             exp = exp.And(x =>
                 (x.PlantCode != null && x.PlantCode.Contains(keywords))
                 || (x.PurchaseRequestCode != null && x.PurchaseRequestCode.Contains(keywords))
+                || SqlFunc.ToString(x.PurchaseInquiryId).Contains(keywords)
+                || (x.PurchaseInquiryCode != null && x.PurchaseInquiryCode.Contains(keywords))
+                || SqlFunc.ToString(x.ChainScheme).Contains(keywords)
+                || SqlFunc.ToString(x.PoDecision).Contains(keywords)
                 || SqlFunc.ToString(x.CountersignId).Contains(keywords)
                 || (x.CountersignCode != null && x.CountersignCode.Contains(keywords))
                 || SqlFunc.ToString(x.RequestId).Contains(keywords)
@@ -461,6 +504,26 @@ public class TaktPurchaseRequestService : TaktServiceBase, ITaktPurchaseRequestS
         if (!string.IsNullOrEmpty(queryDto?.PurchaseRequestCode))
         {
             exp = exp.And(x => x.PurchaseRequestCode != null && x.PurchaseRequestCode.Contains(queryDto.PurchaseRequestCode));
+        }
+
+        if (queryDto?.PurchaseInquiryId.HasValue == true)
+        {
+            exp = exp.And(x => x.PurchaseInquiryId == queryDto.PurchaseInquiryId);
+        }
+
+        if (!string.IsNullOrEmpty(queryDto?.PurchaseInquiryCode))
+        {
+            exp = exp.And(x => x.PurchaseInquiryCode != null && x.PurchaseInquiryCode.Contains(queryDto.PurchaseInquiryCode));
+        }
+
+        if (queryDto?.ChainScheme.HasValue == true)
+        {
+            exp = exp.And(x => x.ChainScheme == queryDto.ChainScheme);
+        }
+
+        if (queryDto?.PoDecision.HasValue == true)
+        {
+            exp = exp.And(x => x.PoDecision == queryDto.PoDecision);
         }
 
         if (queryDto?.CountersignId.HasValue == true)

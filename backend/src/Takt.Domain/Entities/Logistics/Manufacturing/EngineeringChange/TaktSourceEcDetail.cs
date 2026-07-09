@@ -22,7 +22,7 @@ namespace Takt.Domain.Entities.Logistics.Manufacturing.EngineeringChange;
 [SugarIndex("ix_source_ec_detail_tenant", nameof(TenantCode), OrderByType.Asc, nameof(CompanyCode), OrderByType.Asc, false)]
 [SugarIndex("ix_source_ec_detail_is_deleted", nameof(TenantCode), OrderByType.Asc, nameof(CompanyCode), OrderByType.Asc, nameof(IsDeleted), OrderByType.Asc, false)]
 [SugarIndex("ix_source_ec_detail_ecid", nameof(TenantCode), OrderByType.Asc, nameof(CompanyCode), OrderByType.Asc, nameof(SourceEcId), OrderByType.Asc, false)]
-public class TaktSourceEcDetail : TaktCompanyEntityIncrementBase
+public class TaktSourceEcDetail : TaktCompanyEntityBase
 {
     /// <summary>
     /// 主ID
@@ -98,25 +98,25 @@ public class TaktSourceEcDetail : TaktCompanyEntityIncrementBase
     public string? SourceBomNo { get; set; }
 
     /// <summary>
-    /// 互换性
+    /// 兼容性（字典 logistics_ec_source_compatibility；A=兼容，B=单向兼容（新替旧），C=单向兼容（旧替新），D=不兼容）
     /// </summary>
-    [SugarColumn(ColumnName = "source_interchangeability", ColumnDescription = "互换性", Length = 4, ColumnDataType = "nvarchar", IsNullable = true)]
-    public string? SourceInterchangeability { get; set; }
+    [SugarColumn(ColumnName = "source_compatibility", ColumnDescription = "兼容性", Length = 4, ColumnDataType = "nvarchar", IsNullable = true)]
+    public string? SourceCompatibility { get; set; }
 
     /// <summary>
-    /// 区分
+    /// 区分（字典 logistics_ec_source_distinction；1=有，2=优先，3=无）
     /// </summary>
     [SugarColumn(ColumnName = "source_distinction", ColumnDescription = "区分", Length = 4, ColumnDataType = "nvarchar", IsNullable = true)]
     public string? SourceDistinction { get; set; }
 
     /// <summary>
-    /// 安排指示
+    /// 安排指示（字典 logistics_ec_source_instruction；1=已出货成品，2=在线半成品，3=库存零件，4=外协在制品，5=新下达订单，9=未定）
     /// </summary>
-    [SugarColumn(ColumnName = "source_arrangement_instruction", ColumnDescription = "安排指示", Length = 4, ColumnDataType = "nvarchar", IsNullable = true)]
-    public string? SourceArrangementInstruction { get; set; }
+    [SugarColumn(ColumnName = "source_instruction", ColumnDescription = "安排指示", Length = 4, ColumnDataType = "nvarchar", IsNullable = true)]
+    public string? SourceInstruction { get; set; }
 
     /// <summary>
-    /// 旧物料处理
+    /// 旧物料处理（字典 logistics_ec_legacy_part_disposition；1=转用，2=废弃，3=返工，4=消耗，5=无处理，9=未定）
     /// </summary>
     [SugarColumn(ColumnName = "source_legacy_part_disposition", ColumnDescription = "旧物料处理", Length = 4, ColumnDataType = "nvarchar", IsNullable = true)]
     public string? SourceLegacyPartDisposition { get; set; }

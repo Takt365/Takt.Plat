@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Infrastructure.Data.Seeds.I18nSeedData.Logistics.Quality.Operation
 // 文件名称：TaktInspectionStandardItemI18nSeedData.cs
-// 创建时间：2026-07-02
+// 创建时间：2026-07-09
 // 创建人：Takt365(Auto Generated)
 // 功能描述：TaktInspectionStandardItem 实体字段国际化种子（无对应 frontend locales；TranslationText 取自 ColumnDescription，ContextNote 取自属性 XML summary）
 // 
@@ -224,6 +224,15 @@ public class TaktInspectionStandardItemI18nSeedData : ITaktSeedDataCoordinator
             new TranslationSeedItem("entity.inspectionstandarditem.isqualifiedbasis", "zh-CN", "是否合格判定项目", "是否合格判定项目（字典 sys_yes_no_type）"),
             // entity.inspectionstandarditem.isqualifiedbasis
             new TranslationSeedItem("entity.inspectionstandarditem.isqualifiedbasis", "zh-HK", "是否合格判定项目_hk", "是否合格判定项目（字典 sys_yes_no_type）"),
+
+            // entity.inspectionstandarditem.isobsolete
+            new TranslationSeedItem("entity.inspectionstandarditem.isobsolete", "en-US", "是否作废_us", "是否作废（字典 sys_yes_no_type，0=否 1=是；编辑移除子行时标记作废）"),
+            // entity.inspectionstandarditem.isobsolete
+            new TranslationSeedItem("entity.inspectionstandarditem.isobsolete", "ja-JP", "是否作废_jp", "是否作废（字典 sys_yes_no_type，0=否 1=是；编辑移除子行时标记作废）"),
+            // entity.inspectionstandarditem.isobsolete
+            new TranslationSeedItem("entity.inspectionstandarditem.isobsolete", "zh-CN", "是否作废", "是否作废（字典 sys_yes_no_type，0=否 1=是；编辑移除子行时标记作废）"),
+            // entity.inspectionstandarditem.isobsolete
+            new TranslationSeedItem("entity.inspectionstandarditem.isobsolete", "zh-HK", "是否作废_hk", "是否作废（字典 sys_yes_no_type，0=否 1=是；编辑移除子行时标记作废）"),
 
             // entity.inspectionstandarditem.standard
             new TranslationSeedItem("entity.inspectionstandarditem.standard", "en-US", "检验标准_us", "检验标准（主表）"),

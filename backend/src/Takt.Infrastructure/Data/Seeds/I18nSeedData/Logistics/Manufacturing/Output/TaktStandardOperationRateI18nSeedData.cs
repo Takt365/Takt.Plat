@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Infrastructure.Data.Seeds.I18nSeedData.Logistics.Manufacturing.Output
 // 文件名称：TaktStandardOperationRateI18nSeedData.cs
-// 创建时间：2026-07-02
+// 创建时间：2026-07-06
 // 创建人：Takt365(Auto Generated)
 // 功能描述：TaktStandardOperationRate 实体字段国际化种子（无对应 frontend locales；TranslationText 取自 ColumnDescription，ContextNote 取自属性 XML summary）
 // 
@@ -100,13 +100,13 @@ public class TaktStandardOperationRateI18nSeedData : ITaktSeedDataCoordinator
             new TranslationSeedItem("entity.standardoperationrate.plantcode", "zh-HK", "工厂代码_hk", "工厂代码（关联 TaktPlant.PlantCode，选项 TaktPlants/options）"),
 
             // entity.standardoperationrate.financialyear
-            new TranslationSeedItem("entity.standardoperationrate.financialyear", "en-US", "财务年度_us", "财务年度"),
+            new TranslationSeedItem("entity.standardoperationrate.financialyear", "en-US", "财务年度_us", "财务年度编码（如 FY2000、FY2027；日本/香港 FY2027=2026/4/1～2027/3/31）"),
             // entity.standardoperationrate.financialyear
-            new TranslationSeedItem("entity.standardoperationrate.financialyear", "ja-JP", "财务年度_jp", "财务年度"),
+            new TranslationSeedItem("entity.standardoperationrate.financialyear", "ja-JP", "财务年度_jp", "财务年度编码（如 FY2000、FY2027；日本/香港 FY2027=2026/4/1～2027/3/31）"),
             // entity.standardoperationrate.financialyear
-            new TranslationSeedItem("entity.standardoperationrate.financialyear", "zh-CN", "财务年度", "财务年度"),
+            new TranslationSeedItem("entity.standardoperationrate.financialyear", "zh-CN", "财务年度", "财务年度编码（如 FY2000、FY2027；日本/香港 FY2027=2026/4/1～2027/3/31）"),
             // entity.standardoperationrate.financialyear
-            new TranslationSeedItem("entity.standardoperationrate.financialyear", "zh-HK", "财务年度_hk", "财务年度"),
+            new TranslationSeedItem("entity.standardoperationrate.financialyear", "zh-HK", "财务年度_hk", "财务年度编码（如 FY2000、FY2027；日本/香港 FY2027=2026/4/1～2027/3/31）"),
 
             // entity.standardoperationrate.operationtype
             new TranslationSeedItem("entity.standardoperationrate.operationtype", "en-US", "稼动率类型_us", "稼动率类型（1=人员，2=SMT设备，3=测试设备，4=包装设备，5=其他）"),
@@ -118,13 +118,13 @@ public class TaktStandardOperationRateI18nSeedData : ITaktSeedDataCoordinator
             new TranslationSeedItem("entity.standardoperationrate.operationtype", "zh-HK", "稼动率类型_hk", "稼动率类型（1=人员，2=SMT设备，3=测试设备，4=包装设备，5=其他）"),
 
             // entity.standardoperationrate.operationrate
-            new TranslationSeedItem("entity.standardoperationrate.operationrate", "en-US", "稼动率(%)_us", "稼动率（%）"),
+            new TranslationSeedItem("entity.standardoperationrate.operationrate", "en-US", "稼动率_us", "稼动率（比例，如 0.85 表示 85%）"),
             // entity.standardoperationrate.operationrate
-            new TranslationSeedItem("entity.standardoperationrate.operationrate", "ja-JP", "稼动率(%)_jp", "稼动率（%）"),
+            new TranslationSeedItem("entity.standardoperationrate.operationrate", "ja-JP", "稼动率_jp", "稼动率（比例，如 0.85 表示 85%）"),
             // entity.standardoperationrate.operationrate
-            new TranslationSeedItem("entity.standardoperationrate.operationrate", "zh-CN", "稼动率(%)", "稼动率（%）"),
+            new TranslationSeedItem("entity.standardoperationrate.operationrate", "zh-CN", "稼动率", "稼动率（比例，如 0.85 表示 85%）"),
             // entity.standardoperationrate.operationrate
-            new TranslationSeedItem("entity.standardoperationrate.operationrate", "zh-HK", "稼动率(%)_hk", "稼动率（%）"),
+            new TranslationSeedItem("entity.standardoperationrate.operationrate", "zh-HK", "稼动率_hk", "稼动率（比例，如 0.85 表示 85%）"),
 
             // entity.standardoperationrate.effectivedate
             new TranslationSeedItem("entity.standardoperationrate.effectivedate", "en-US", "生效日期_us", "生效日期"),
@@ -144,23 +144,14 @@ public class TaktStandardOperationRateI18nSeedData : ITaktSeedDataCoordinator
             // entity.standardoperationrate.expirydate
             new TranslationSeedItem("entity.standardoperationrate.expirydate", "zh-HK", "失效日期_hk", "失效日期"),
 
-            // entity.standardoperationrate.status
-            new TranslationSeedItem("entity.standardoperationrate.status", "en-US", "状态_us", "状态（字典 sys_normal_disable_status；0=禁用，1=启用）"),
-            // entity.standardoperationrate.status
-            new TranslationSeedItem("entity.standardoperationrate.status", "ja-JP", "状态_jp", "状态（字典 sys_normal_disable_status；0=禁用，1=启用）"),
-            // entity.standardoperationrate.status
-            new TranslationSeedItem("entity.standardoperationrate.status", "zh-CN", "状态", "状态（字典 sys_normal_disable_status；0=禁用，1=启用）"),
-            // entity.standardoperationrate.status
-            new TranslationSeedItem("entity.standardoperationrate.status", "zh-HK", "状态_hk", "状态（字典 sys_normal_disable_status；0=禁用，1=启用）"),
-
-            // entity.standardoperationrate.changelogs
-            new TranslationSeedItem("entity.standardoperationrate.changelogs", "en-US", "标准生产稼动率变更记录列表_us", "标准生产稼动率变更记录列表（外键在子表 TaktStandardOperationRateChangeLog.StandardOperationRateId）"),
-            // entity.standardoperationrate.changelogs
-            new TranslationSeedItem("entity.standardoperationrate.changelogs", "ja-JP", "标准生产稼动率变更记录列表_jp", "标准生产稼动率变更记录列表（外键在子表 TaktStandardOperationRateChangeLog.StandardOperationRateId）"),
-            // entity.standardoperationrate.changelogs
-            new TranslationSeedItem("entity.standardoperationrate.changelogs", "zh-CN", "标准生产稼动率变更记录列表", "标准生产稼动率变更记录列表（外键在子表 TaktStandardOperationRateChangeLog.StandardOperationRateId）"),
-            // entity.standardoperationrate.changelogs
-            new TranslationSeedItem("entity.standardoperationrate.changelogs", "zh-HK", "标准生产稼动率变更记录列表_hk", "标准生产稼动率变更记录列表（外键在子表 TaktStandardOperationRateChangeLog.StandardOperationRateId）"),
+            // entity.standardoperationrate.ratestatus
+            new TranslationSeedItem("entity.standardoperationrate.ratestatus", "en-US", "状态_us", "状态（字典 sys_normal_disable_status；0=禁用，1=启用）"),
+            // entity.standardoperationrate.ratestatus
+            new TranslationSeedItem("entity.standardoperationrate.ratestatus", "ja-JP", "状态_jp", "状态（字典 sys_normal_disable_status；0=禁用，1=启用）"),
+            // entity.standardoperationrate.ratestatus
+            new TranslationSeedItem("entity.standardoperationrate.ratestatus", "zh-CN", "状态", "状态（字典 sys_normal_disable_status；0=禁用，1=启用）"),
+            // entity.standardoperationrate.ratestatus
+            new TranslationSeedItem("entity.standardoperationrate.ratestatus", "zh-HK", "状态_hk", "状态（字典 sys_normal_disable_status；0=禁用，1=启用）"),
         };
     }
 

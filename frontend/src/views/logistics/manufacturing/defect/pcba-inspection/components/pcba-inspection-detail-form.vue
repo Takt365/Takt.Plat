@@ -21,19 +21,19 @@
     >
       <a-tab-pane
         key="tab-0"
-        :tab="t('common.page.form.tabs.basicinfo')"
+        :tab="t('common.page.form.tabs.basicinfo') + ' (1/3)'"
         force-render
       >
         <div :class="formContentClass">
           <a-row :gutter="24">
             <a-col :span="12">
               <a-form-item
-                :label="t('entity.pcbainspectiondetail.prodordercode')"
+                :label="pi.label('prodOrderCode')"
                 name="prodOrderCode"
               >
                 <a-input
                   v-model:value="formState.prodOrderCode"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.pcbainspectiondetail.prodordercode') })"
+                  :placeholder="pi.ph('prodOrderCode')"
                   show-count
                   :maxlength="20"
                   allow-clear
@@ -43,60 +43,60 @@
             </a-col>
             <a-col :span="12">
               <a-form-item
-                :label="t('entity.pcbainspectiondetail.linenumber')"
+                :label="pi.label('lineNumber')"
                 name="lineNumber"
               >
                 <a-input-number
                   v-model:value="formState.lineNumber"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.pcbainspectiondetail.linenumber') })"
+                  :placeholder="pi.ph('lineNumber')"
                   style="width: 100%"
                 />
               </a-form-item>
             </a-col>
             <a-col :span="12">
               <a-form-item
-                :label="t('entity.pcbainspectiondetail.pcbaboardtype')"
+                :label="pi.label('pcbaBoardType')"
                 name="pcbaBoardType"
               >
                 <TaktSelect
                   v-model:value="formState.pcbaBoardType"
                   dict-type="logistics_pcba_panel_category"
-                  :placeholder="t('common.page.form.placeholder.select', { field: t('entity.pcbainspectiondetail.pcbaboardtype') })"
+                  :placeholder="pi.ph('pcbaBoardType')"
                 />
               </a-form-item>
             </a-col>
             <a-col :span="12">
               <a-form-item
-                :label="t('entity.pcbainspectiondetail.visualinspectionline')"
+                :label="pi.label('visualInspectionLine')"
                 name="visualInspectionLine"
               >
                 <TaktSelect
                   v-model:value="formState.visualInspectionLine"
                   dict-type="logistics_visual_inspection_line_category"
-                  :placeholder="t('common.page.form.placeholder.select', { field: t('entity.pcbainspectiondetail.visualinspectionline') })"
+                  :placeholder="pi.ph('visualInspectionLine')"
                 />
               </a-form-item>
             </a-col>
             <a-col :span="12">
               <a-form-item
-                :label="t('entity.pcbainspectiondetail.aoiline')"
+                :label="pi.label('aoiLine')"
                 name="aoiLine"
               >
                 <TaktSelect
                   v-model:value="formState.aoiLine"
                   dict-type="logistics_aoi_inspection_line_category"
-                  :placeholder="t('common.page.form.placeholder.select', { field: t('entity.pcbainspectiondetail.aoiline') })"
+                  :placeholder="pi.ph('aoiLine')"
                 />
               </a-form-item>
             </a-col>
             <a-col :span="12">
               <a-form-item
-                :label="t('entity.pcbainspectiondetail.bsideassemblydate')"
+                :label="pi.label('bSideAssemblyDate')"
                 name="bSideAssemblyDate"
               >
                 <a-date-picker
                   v-model:value="formState.bSideAssemblyDate"
-                  :placeholder="t('common.page.form.placeholder.select', { field: t('entity.pcbainspectiondetail.bsideassemblydate') })"
+                  :placeholder="pi.ph('bSideAssemblyDate')"
                   value-format="YYYY-MM-DD"
                   style="width: 100%"
                 />
@@ -104,12 +104,12 @@
             </a-col>
             <a-col :span="12">
               <a-form-item
-                :label="t('entity.pcbainspectiondetail.tsideassemblydate')"
+                :label="pi.label('tSideAssemblyDate')"
                 name="tSideAssemblyDate"
               >
                 <a-date-picker
                   v-model:value="formState.tSideAssemblyDate"
-                  :placeholder="t('common.page.form.placeholder.select', { field: t('entity.pcbainspectiondetail.tsideassemblydate') })"
+                  :placeholder="pi.ph('tSideAssemblyDate')"
                   value-format="YYYY-MM-DD"
                   style="width: 100%"
                 />
@@ -117,13 +117,193 @@
             </a-col>
             <a-col :span="12">
               <a-form-item
-                :label="t('entity.pcbainspectiondetail.shiftno')"
+                :label="pi.label('shiftNo')"
                 name="shiftNo"
               >
                 <TaktSelect
                   v-model:value="formState.shiftNo"
                   dict-type="logistics_shift_category"
-                  :placeholder="t('common.page.form.placeholder.select', { field: t('entity.pcbainspectiondetail.shiftno') })"
+                  :placeholder="pi.ph('shiftNo')"
+                />
+              </a-form-item>
+            </a-col>
+            <a-col :span="12">
+              <a-form-item
+                :label="pi.label('inspectorName')"
+                name="inspectorName"
+              >
+                <TaktSelect
+                  v-model:value="formState.inspectorName"
+                  api-url="TaktEmployees/options"
+                  :placeholder="pi.ph('inspectorName')"
+                />
+              </a-form-item>
+            </a-col>
+            <a-col :span="12">
+              <a-form-item
+                :label="pi.label('dailyCompletedQty')"
+                name="dailyCompletedQty"
+              >
+                <a-input-number
+                  v-model:value="formState.dailyCompletedQty"
+                  :placeholder="pi.ph('dailyCompletedQty')"
+                  style="width: 100%"
+                />
+              </a-form-item>
+            </a-col>
+          </a-row>
+        </div>
+      </a-tab-pane>
+      <a-tab-pane
+        key="tab-1"
+        :tab="t('common.page.form.tabs.basicinfo') + ' (2/3)'"
+        force-render
+      >
+        <div :class="formContentClass">
+          <a-row :gutter="24">
+            <a-col :span="12">
+              <a-form-item
+                :label="pi.label('inspectionQty')"
+                name="inspectionQty"
+              >
+                <a-input-number
+                  v-model:value="formState.inspectionQty"
+                  :placeholder="pi.ph('inspectionQty')"
+                  style="width: 100%"
+                />
+              </a-form-item>
+            </a-col>
+            <a-col :span="12">
+              <a-form-item
+                :label="pi.label('inspectionStatus')"
+                name="inspectionStatus"
+              >
+                <TaktSelect
+                  v-model:value="formState.inspectionStatus"
+                  dict-type="logistics_pcba_inspection_status"
+                  :placeholder="pi.ph('inspectionStatus')"
+                />
+              </a-form-item>
+            </a-col>
+            <a-col :span="12">
+              <a-form-item
+                :label="pi.label('prodTeam')"
+                name="prodTeam"
+              >
+                <TaktSelect
+                  v-model:value="formState.prodTeam"
+                  api-url="TaktProductionTeams/options"
+                  :placeholder="pi.ph('prodTeam')"
+                />
+              </a-form-item>
+            </a-col>
+            <a-col :span="12">
+              <a-form-item
+                :label="pi.label('inspectionWorkHours')"
+                name="inspectionWorkHours"
+              >
+                <a-input-number
+                  v-model:value="formState.inspectionWorkHours"
+                  :placeholder="pi.ph('inspectionWorkHours')"
+                  style="width: 100%"
+                />
+              </a-form-item>
+            </a-col>
+            <a-col :span="12">
+              <a-form-item
+                :label="pi.label('aoiWorkHours')"
+                name="aoiWorkHours"
+              >
+                <a-input-number
+                  v-model:value="formState.aoiWorkHours"
+                  :placeholder="pi.ph('aoiWorkHours')"
+                  style="width: 100%"
+                />
+              </a-form-item>
+            </a-col>
+            <a-col :span="12">
+              <a-form-item
+                :label="pi.label('defectQty')"
+                name="defectQty"
+              >
+                <a-input-number
+                  v-model:value="formState.defectQty"
+                  :placeholder="pi.ph('defectQty')"
+                  style="width: 100%"
+                />
+              </a-form-item>
+            </a-col>
+            <a-col :span="12">
+              <a-form-item
+                :label="pi.label('handPlacement')"
+                name="handPlacement"
+              >
+                <a-input
+                  v-model:value="formState.handPlacement"
+                  :placeholder="pi.ph('handPlacement')"
+                  show-count
+                  :maxlength="20"
+                  allow-clear
+                />
+              </a-form-item>
+            </a-col>
+            <a-col :span="12">
+              <a-form-item
+                :label="pi.label('serialNumber')"
+                name="serialNumber"
+              >
+                <a-input
+                  v-model:value="formState.serialNumber"
+                  :placeholder="pi.ph('serialNumber')"
+                  show-count
+                  :maxlength="20"
+                  allow-clear
+                />
+              </a-form-item>
+            </a-col>
+            <a-col :span="24">
+              <a-form-item
+                :label="pi.label('content')"
+                name="content"
+              >
+                <a-textarea
+                  v-model:value="formState.content"
+                  :placeholder="pi.ph('content')"
+                  :rows="2"
+                />
+              </a-form-item>
+            </a-col>
+            <a-col :span="12">
+              <a-form-item
+                :label="pi.label('defectLocation')"
+                name="defectLocation"
+              >
+                <TaktSelect
+                  v-model:value="formState.defectLocation"
+                  dict-type="logistics_pcb_location_category"
+                  :placeholder="pi.ph('defectLocation')"
+                />
+              </a-form-item>
+            </a-col>
+          </a-row>
+        </div>
+      </a-tab-pane>
+      <a-tab-pane
+        key="tab-2"
+        :tab="t('common.page.form.tabs.basicinfo') + ' (3/3)'"
+        force-render
+      >
+        <div :class="formContentClass">
+          <a-row :gutter="24">
+            <a-col :span="12">
+              <a-form-item
+                :label="pi.label('isObsolete')"
+                name="isObsolete"
+              >
+                <TaktSelect
+                  v-model:value="formState.isObsolete"
+                  dict-type="sys_yes_no_type"
+                  :placeholder="pi.ph('isObsolete')"
                 />
               </a-form-item>
             </a-col>
@@ -142,6 +322,11 @@
 import { reactive, watch, computed, ref, onMounted } from 'vue'
 import { useI18n } from 'vue-i18n'
 import type { Rule } from 'ant-design-vue/es/form'
+import { usePcbaInspectionDetailI18n } from '../composables/use-pcba-inspection-detail-i18n'
+
+/** 实体字段 i18n */
+const pi = usePcbaInspectionDetailI18n()
+
 import type { PcbaInspectionDetailCreate } from '@/types/logistics/manufacturing/defect/pcba-inspection-detail'
 import TaktSelect from '@/components/business/takt-select/index.vue'
 import { useDictDataStore } from '@/stores/foundation/dict-data'
@@ -153,7 +338,8 @@ const formContentClass = computed(() => (formFields.length > 10 ? 'takt-form-con
 /** 当前激活的 Tab key */
 const activeTab = ref('tab-0')
 /** CreateDto 字段名列表（与 formState 键对齐） */
-const formFields = ["prodOrderCode","lineNumber","pcbaBoardType","visualInspectionLine","aoiLine","bSideAssemblyDate","tSideAssemblyDate","shiftNo"]
+const formFields = ["prodOrderCode","lineNumber","pcbaBoardType","visualInspectionLine","aoiLine","bSideAssemblyDate","tSideAssemblyDate","shiftNo","inspectorName","dailyCompletedQty","inspectionQty","inspectionStatus","prodTeam","inspectionWorkHours","aoiWorkHours","defectQty","handPlacement","serialNumber","content","defectLocation","isObsolete"]
+
 
 
 /** 父级传入的编辑 DTO；新增时为 undefined 或空对象 */
@@ -175,9 +361,14 @@ const props = withDefaults(defineProps<Props>(), {
 const formRef = ref()
 /** 表单双向绑定模型 */
 const formState = reactive<Record<string, any>>({})
-/** 表单字段默认值（无字典默认项） */
+/** 表单字段默认值（字典 IsDefault=1，来自 TaktDictDataSeedData） */
+const FORM_FIELD_DEFAULTS: Record<string, string | number> = {
+  inspectionStatus: 1
+}
+
+/** 写入表单默认值（新增 / resetFields / 弹窗再次打开时） */
 function applyFormDefaults(target: Record<string, unknown>) {
-  void target
+  Object.assign(target, FORM_FIELD_DEFAULTS)
 }
 
 /** Pinia：字典缓存（TaktSelect dict-type 渲染前预热，避免选项空白） */
@@ -215,18 +406,18 @@ const rules = computed<Record<string, Rule[]>>(() => ({
   prodOrderCode: [
     {
       required: true,
-      message: t('common.page.form.placeholder.required', { field: t('entity.pcbainspectiondetail.prodordercode') }),
+      message: pi.ph('prodOrderCode'),
       trigger: 'blur'
     }
   ],
   lineNumber: [{
     validator: async (_rule, value) => {
       if (value === undefined || value === null || value === '') {
-        return Promise.reject(t('common.page.form.placeholder.select', { field: t('entity.pcbainspectiondetail.linenumber') }))
+        return Promise.reject(pi.ph('lineNumber'))
       }
       const num = typeof value === 'number' ? value : Number(value)
       if (!Number.isFinite(num)) {
-        return Promise.reject(t('common.page.form.placeholder.select', { field: t('entity.pcbainspectiondetail.linenumber') }))
+        return Promise.reject(pi.ph('lineNumber'))
       }
       return Promise.resolve()
     },
@@ -235,11 +426,102 @@ const rules = computed<Record<string, Rule[]>>(() => ({
   shiftNo: [{
     validator: async (_rule, value) => {
       if (value === undefined || value === null || value === '') {
-        return Promise.reject(t('common.page.form.placeholder.select', { field: t('entity.pcbainspectiondetail.shiftno') }))
+        return Promise.reject(pi.ph('shiftNo'))
       }
       const num = typeof value === 'number' ? value : Number(value)
       if (!Number.isFinite(num)) {
-        return Promise.reject(t('common.page.form.placeholder.select', { field: t('entity.pcbainspectiondetail.shiftno') }))
+        return Promise.reject(pi.ph('shiftNo'))
+      }
+      return Promise.resolve()
+    },
+    trigger: 'change'
+  }],
+  dailyCompletedQty: [{
+    validator: async (_rule, value) => {
+      if (value === undefined || value === null || value === '') {
+        return Promise.reject(pi.ph('dailyCompletedQty'))
+      }
+      const num = typeof value === 'number' ? value : Number(value)
+      if (!Number.isFinite(num)) {
+        return Promise.reject(pi.ph('dailyCompletedQty'))
+      }
+      return Promise.resolve()
+    },
+    trigger: 'change'
+  }],
+  inspectionQty: [{
+    validator: async (_rule, value) => {
+      if (value === undefined || value === null || value === '') {
+        return Promise.reject(pi.ph('inspectionQty'))
+      }
+      const num = typeof value === 'number' ? value : Number(value)
+      if (!Number.isFinite(num)) {
+        return Promise.reject(pi.ph('inspectionQty'))
+      }
+      return Promise.resolve()
+    },
+    trigger: 'change'
+  }],
+  inspectionStatus: [{
+    validator: async (_rule, value) => {
+      if (value === undefined || value === null || value === '') {
+        return Promise.reject(pi.ph('inspectionStatus'))
+      }
+      const num = typeof value === 'number' ? value : Number(value)
+      if (!Number.isFinite(num)) {
+        return Promise.reject(pi.ph('inspectionStatus'))
+      }
+      return Promise.resolve()
+    },
+    trigger: 'change'
+  }],
+  inspectionWorkHours: [{
+    validator: async (_rule, value) => {
+      if (value === undefined || value === null || value === '') {
+        return Promise.reject(pi.ph('inspectionWorkHours'))
+      }
+      const num = typeof value === 'number' ? value : Number(value)
+      if (!Number.isFinite(num)) {
+        return Promise.reject(pi.ph('inspectionWorkHours'))
+      }
+      return Promise.resolve()
+    },
+    trigger: 'change'
+  }],
+  aoiWorkHours: [{
+    validator: async (_rule, value) => {
+      if (value === undefined || value === null || value === '') {
+        return Promise.reject(pi.ph('aoiWorkHours'))
+      }
+      const num = typeof value === 'number' ? value : Number(value)
+      if (!Number.isFinite(num)) {
+        return Promise.reject(pi.ph('aoiWorkHours'))
+      }
+      return Promise.resolve()
+    },
+    trigger: 'change'
+  }],
+  defectQty: [{
+    validator: async (_rule, value) => {
+      if (value === undefined || value === null || value === '') {
+        return Promise.reject(pi.ph('defectQty'))
+      }
+      const num = typeof value === 'number' ? value : Number(value)
+      if (!Number.isFinite(num)) {
+        return Promise.reject(pi.ph('defectQty'))
+      }
+      return Promise.resolve()
+    },
+    trigger: 'change'
+  }],
+  isObsolete: [{
+    validator: async (_rule, value) => {
+      if (value === undefined || value === null || value === '') {
+        return Promise.reject(pi.ph('isObsolete'))
+      }
+      const num = typeof value === 'number' ? value : Number(value)
+      if (!Number.isFinite(num)) {
+        return Promise.reject(pi.ph('isObsolete'))
       }
       return Promise.resolve()
     },
@@ -263,6 +545,34 @@ function getValues(): Record<string, any> {
   if ('shiftNo' in payload) {
     const rawshiftNo = payload.shiftNo
     payload.shiftNo = typeof rawshiftNo === 'number' ? rawshiftNo : Number(rawshiftNo)
+  }
+  if ('dailyCompletedQty' in payload) {
+    const rawdailyCompletedQty = payload.dailyCompletedQty
+    payload.dailyCompletedQty = typeof rawdailyCompletedQty === 'number' ? rawdailyCompletedQty : Number(rawdailyCompletedQty)
+  }
+  if ('inspectionQty' in payload) {
+    const rawinspectionQty = payload.inspectionQty
+    payload.inspectionQty = typeof rawinspectionQty === 'number' ? rawinspectionQty : Number(rawinspectionQty)
+  }
+  if ('inspectionStatus' in payload) {
+    const rawinspectionStatus = payload.inspectionStatus
+    payload.inspectionStatus = typeof rawinspectionStatus === 'number' ? rawinspectionStatus : Number(rawinspectionStatus)
+  }
+  if ('inspectionWorkHours' in payload) {
+    const rawinspectionWorkHours = payload.inspectionWorkHours
+    payload.inspectionWorkHours = typeof rawinspectionWorkHours === 'number' ? rawinspectionWorkHours : Number(rawinspectionWorkHours)
+  }
+  if ('aoiWorkHours' in payload) {
+    const rawaoiWorkHours = payload.aoiWorkHours
+    payload.aoiWorkHours = typeof rawaoiWorkHours === 'number' ? rawaoiWorkHours : Number(rawaoiWorkHours)
+  }
+  if ('defectQty' in payload) {
+    const rawdefectQty = payload.defectQty
+    payload.defectQty = typeof rawdefectQty === 'number' ? rawdefectQty : Number(rawdefectQty)
+  }
+  if ('isObsolete' in payload) {
+    const rawisObsolete = payload.isObsolete
+    payload.isObsolete = typeof rawisObsolete === 'number' ? rawisObsolete : Number(rawisObsolete)
   }
   if ('sortOrder' in payload) delete payload.sortOrder
   payload.pcbaInspectionId = props.masterId

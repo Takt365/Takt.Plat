@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Application.Dtos.Logistics.Manufacturing.Output
 // 文件名称：TaktPcbaOutputDetailDtos.cs
-// 创建时间：2026-06-30
+// 创建时间：2026-07-09
 // 创建人：Takt365(Auto Generated)
 // 功能描述：PcbaOutputDetail 模块 DTO（由 generate-dtos-from-entity.cjs 根据 TaktPcbaOutputDetail 生成，请按需审阅）
 // 
@@ -47,7 +47,7 @@ public class TaktPcbaOutputDetailDto : TaktCompanyDtoBase
     public string? PcbaOutputName { get; set; }
 
     /// <summary>
-    /// 生产工单号（冗余字段,便于查询）
+    /// 工单号（冗余字段,便于查询）
     /// </summary>
     public string ProdOrderCode { get; set; } = string.Empty;
 
@@ -57,7 +57,7 @@ public class TaktPcbaOutputDetailDto : TaktCompanyDtoBase
     public int LineNumber { get; set; } = 0;
 
     /// <summary>
-    /// 生产时段
+    /// 生产时段（PCBA 存工作中心 WorkCenter，新增时按物料查 TaktStandardOperationTime 自动生成）
     /// </summary>
     public string TimePeriod { get; set; } = string.Empty;
 
@@ -87,17 +87,17 @@ public class TaktPcbaOutputDetailDto : TaktCompanyDtoBase
     public decimal DailyCompletedQty { get; set; }
 
     /// <summary>
-    /// 累计完成数
+    /// 累计完成数（计算结果：同工单号+班次+PCB板别+面板别桶内全部明细当日完成数合计）
     /// </summary>
     public decimal TotalCompletedQty { get; set; }
 
     /// <summary>
-    /// 完成状态（字典 logistics_pcba_completed_status；0=未完成 1=部分完成 2=已完成）
+    /// 完成状态（计算结果：字典 logistics_pcba_completed_status；0=未完成 1=部分完成 2=已完成；按累计完成数与批次数量比较）
     /// </summary>
     public int CompletedStatus { get; set; } = 0;
 
     /// <summary>
-    /// 序列号
+    /// 序列号（明细级）
     /// </summary>
     public string SerialNo { get; set; } = string.Empty;
 
@@ -107,9 +107,29 @@ public class TaktPcbaOutputDetailDto : TaktCompanyDtoBase
     public int DefectCount { get; set; } = 0;
 
     /// <summary>
-    /// 投入工数(分钟)
+    /// 停线时间(分钟)
+    /// </summary>
+    public int DowntimeMinutes { get; set; } = 0;
+
+    /// <summary>
+    /// 停线原因（字典 logistics_stop_reason_category，多选 DictLabel 逗号分隔）
+    /// </summary>
+    public string? DowntimeReason { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 停线说明
+    /// </summary>
+    public string? DowntimeDescription { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 投入工数(分钟)（计算结果：主表 DirectLabor×60）
     /// </summary>
     public decimal InputMinutes { get; set; }
+
+    /// <summary>
+    /// 实际工时(分钟)（计算结果：MixedProd=0 时投入工时-停线时间；MixedProd≠0 时报工工时-停线时间）
+    /// </summary>
+    public decimal ActualMinutes { get; set; }
 
     /// <summary>
     /// 修工数(分钟)
@@ -137,7 +157,7 @@ public class TaktPcbaOutputDetailDto : TaktCompanyDtoBase
     public decimal TotalMinutes { get; set; }
 
     /// <summary>
-    /// 未达成原因（字典 logistics_nonachievement_reason_category，存 DictValue）
+    /// 未达成原因（字典 logistics_nonachievement_reason_category，多选 DictLabel 逗号分隔）
     /// </summary>
     public string? UnachievedReason { get; set; } = string.Empty;
 
@@ -145,6 +165,26 @@ public class TaktPcbaOutputDetailDto : TaktCompanyDtoBase
     /// 未达成说明
     /// </summary>
     public string? UnachievedDescription { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 报工工时(分钟)
+    /// </summary>
+    public decimal ConfirmMinutes { get; set; }
+
+    /// <summary>
+    /// 混合生产（0=非混合；N=此生产时段内另有N笔报工）
+    /// </summary>
+    public int MixedProd { get; set; } = 0;
+
+    /// <summary>
+    /// 达成率(%)（计算结果：当日完成数÷主表标准产能×100%；标准产能为0时取0）
+    /// </summary>
+    public decimal AchievementRate { get; set; }
+
+    /// <summary>
+    /// 是否作废（字典 sys_yes_no_type，0=否 1=是；编辑移除子行时标记作废）
+    /// </summary>
+    public int IsObsolete { get; set; } = 0;
 
     /// <summary>
     /// PCBA日报（主表）
@@ -181,7 +221,7 @@ public class TaktPcbaOutputDetailQueryDto : TaktPagedQuery
     public long? PcbaOutputId { get; set; }
 
     /// <summary>
-    /// 生产工单号（冗余字段,便于查询）
+    /// 工单号（冗余字段,便于查询）
     /// </summary>
     public string? ProdOrderCode { get; set; } = string.Empty;
 
@@ -191,7 +231,7 @@ public class TaktPcbaOutputDetailQueryDto : TaktPagedQuery
     public int? LineNumber { get; set; }
 
     /// <summary>
-    /// 生产时段
+    /// 生产时段（PCBA 存工作中心 WorkCenter，新增时按物料查 TaktStandardOperationTime 自动生成）
     /// </summary>
     public string? TimePeriod { get; set; } = string.Empty;
 
@@ -221,17 +261,17 @@ public class TaktPcbaOutputDetailQueryDto : TaktPagedQuery
     public decimal? DailyCompletedQty { get; set; }
 
     /// <summary>
-    /// 累计完成数
+    /// 累计完成数（计算结果：同工单号+班次+PCB板别+面板别桶内全部明细当日完成数合计）
     /// </summary>
     public decimal? TotalCompletedQty { get; set; }
 
     /// <summary>
-    /// 完成状态（字典 logistics_pcba_completed_status；0=未完成 1=部分完成 2=已完成）
+    /// 完成状态（计算结果：字典 logistics_pcba_completed_status；0=未完成 1=部分完成 2=已完成；按累计完成数与批次数量比较）
     /// </summary>
     public int? CompletedStatus { get; set; }
 
     /// <summary>
-    /// 序列号
+    /// 序列号（明细级）
     /// </summary>
     public string? SerialNo { get; set; } = string.Empty;
 
@@ -241,9 +281,29 @@ public class TaktPcbaOutputDetailQueryDto : TaktPagedQuery
     public int? DefectCount { get; set; }
 
     /// <summary>
-    /// 投入工数(分钟)
+    /// 停线时间(分钟)
+    /// </summary>
+    public int? DowntimeMinutes { get; set; }
+
+    /// <summary>
+    /// 停线原因（字典 logistics_stop_reason_category，多选 DictLabel 逗号分隔）
+    /// </summary>
+    public string? DowntimeReason { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 停线说明
+    /// </summary>
+    public string? DowntimeDescription { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 投入工数(分钟)（计算结果：主表 DirectLabor×60）
     /// </summary>
     public decimal? InputMinutes { get; set; }
+
+    /// <summary>
+    /// 实际工时(分钟)（计算结果：MixedProd=0 时投入工时-停线时间；MixedProd≠0 时报工工时-停线时间）
+    /// </summary>
+    public decimal? ActualMinutes { get; set; }
 
     /// <summary>
     /// 修工数(分钟)
@@ -271,7 +331,7 @@ public class TaktPcbaOutputDetailQueryDto : TaktPagedQuery
     public decimal? TotalMinutes { get; set; }
 
     /// <summary>
-    /// 未达成原因（字典 logistics_nonachievement_reason_category，存 DictValue）
+    /// 未达成原因（字典 logistics_nonachievement_reason_category，多选 DictLabel 逗号分隔）
     /// </summary>
     public string? UnachievedReason { get; set; } = string.Empty;
 
@@ -279,6 +339,26 @@ public class TaktPcbaOutputDetailQueryDto : TaktPagedQuery
     /// 未达成说明
     /// </summary>
     public string? UnachievedDescription { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 报工工时(分钟)
+    /// </summary>
+    public decimal? ConfirmMinutes { get; set; }
+
+    /// <summary>
+    /// 混合生产（0=非混合；N=此生产时段内另有N笔报工）
+    /// </summary>
+    public int? MixedProd { get; set; }
+
+    /// <summary>
+    /// 达成率(%)（计算结果：当日完成数÷主表标准产能×100%；标准产能为0时取0）
+    /// </summary>
+    public decimal? AchievementRate { get; set; }
+
+    /// <summary>
+    /// 是否作废（字典 sys_yes_no_type，0=否 1=是；编辑移除子行时标记作废）
+    /// </summary>
+    public int? IsObsolete { get; set; }
 
     /// <summary>
     /// 创建时间（范围查询-开始）
@@ -332,9 +412,9 @@ public class TaktPcbaOutputDetailCreateDto
     public long PcbaOutputId { get; set; }
 
     /// <summary>
-    /// 生产工单号（冗余字段,便于查询）
+    /// 工单号（冗余字段,便于查询）
     /// </summary>
-    [Required(ErrorMessage = "生产工单号（冗余字段,便于查询）不能为空")]
+    [Required(ErrorMessage = "工单号（冗余字段,便于查询）不能为空")]
     public string ProdOrderCode { get; set; } = string.Empty;
 
     /// <summary>
@@ -343,9 +423,9 @@ public class TaktPcbaOutputDetailCreateDto
     public int LineNumber { get; set; } = 0;
 
     /// <summary>
-    /// 生产时段
+    /// 生产时段（PCBA 存工作中心 WorkCenter，新增时按物料查 TaktStandardOperationTime 自动生成）
     /// </summary>
-    [Required(ErrorMessage = "生产时段不能为空")]
+    [Required(ErrorMessage = "生产时段（PCBA 存工作中心 WorkCenter，新增时按物料查 TaktStandardOperationTime 自动生成）不能为空")]
     public string TimePeriod { get; set; } = string.Empty;
 
     /// <summary>
@@ -376,19 +456,19 @@ public class TaktPcbaOutputDetailCreateDto
     public decimal DailyCompletedQty { get; set; }
 
     /// <summary>
-    /// 累计完成数
+    /// 累计完成数（计算结果：同工单号+班次+PCB板别+面板别桶内全部明细当日完成数合计）
     /// </summary>
     public decimal TotalCompletedQty { get; set; }
 
     /// <summary>
-    /// 完成状态（字典 logistics_pcba_completed_status；0=未完成 1=部分完成 2=已完成）
+    /// 完成状态（计算结果：字典 logistics_pcba_completed_status；0=未完成 1=部分完成 2=已完成；按累计完成数与批次数量比较）
     /// </summary>
     public int CompletedStatus { get; set; } = 0;
 
     /// <summary>
-    /// 序列号
+    /// 序列号（明细级）
     /// </summary>
-    [Required(ErrorMessage = "序列号不能为空")]
+    [Required(ErrorMessage = "序列号（明细级）不能为空")]
     public string SerialNo { get; set; } = string.Empty;
 
     /// <summary>
@@ -397,9 +477,29 @@ public class TaktPcbaOutputDetailCreateDto
     public int DefectCount { get; set; } = 0;
 
     /// <summary>
-    /// 投入工数(分钟)
+    /// 停线时间(分钟)
+    /// </summary>
+    public int DowntimeMinutes { get; set; } = 0;
+
+    /// <summary>
+    /// 停线原因（字典 logistics_stop_reason_category，多选 DictLabel 逗号分隔）
+    /// </summary>
+    public string? DowntimeReason { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 停线说明
+    /// </summary>
+    public string? DowntimeDescription { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 投入工数(分钟)（计算结果：主表 DirectLabor×60）
     /// </summary>
     public decimal InputMinutes { get; set; }
+
+    /// <summary>
+    /// 实际工时(分钟)（计算结果：MixedProd=0 时投入工时-停线时间；MixedProd≠0 时报工工时-停线时间）
+    /// </summary>
+    public decimal ActualMinutes { get; set; }
 
     /// <summary>
     /// 修工数(分钟)
@@ -427,7 +527,7 @@ public class TaktPcbaOutputDetailCreateDto
     public decimal TotalMinutes { get; set; }
 
     /// <summary>
-    /// 未达成原因（字典 logistics_nonachievement_reason_category，存 DictValue）
+    /// 未达成原因（字典 logistics_nonachievement_reason_category，多选 DictLabel 逗号分隔）
     /// </summary>
     public string? UnachievedReason { get; set; } = string.Empty;
 
@@ -435,6 +535,26 @@ public class TaktPcbaOutputDetailCreateDto
     /// 未达成说明
     /// </summary>
     public string? UnachievedDescription { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 报工工时(分钟)
+    /// </summary>
+    public decimal ConfirmMinutes { get; set; }
+
+    /// <summary>
+    /// 混合生产（0=非混合；N=此生产时段内另有N笔报工）
+    /// </summary>
+    public int MixedProd { get; set; } = 0;
+
+    /// <summary>
+    /// 达成率(%)（计算结果：当日完成数÷主表标准产能×100%；标准产能为0时取0）
+    /// </summary>
+    public decimal AchievementRate { get; set; }
+
+    /// <summary>
+    /// 是否作废（字典 sys_yes_no_type，0=否 1=是；编辑移除子行时标记作废）
+    /// </summary>
+    public int IsObsolete { get; set; } = 0;
 
     /// <summary>
     /// 扩展字段JSON
@@ -486,10 +606,33 @@ public class TaktPcbaOutputDetailStatusDto
     public long PcbaOutputDetailId { get; set; }
 
     /// <summary>
-    /// 完成状态（字典 logistics_pcba_completed_status；0=未完成 1=部分完成 2=已完成）
+    /// 完成状态（计算结果：字典 logistics_pcba_completed_status；0=未完成 1=部分完成 2=已完成；按累计完成数与批次数量比较）
     /// </summary>
-    [Required(ErrorMessage = "完成状态（字典 logistics_pcba_completed_status；0=未完成 1=部分完成 2=已完成）不能为空")]
+    [Required(ErrorMessage = "完成状态（计算结果：字典 logistics_pcba_completed_status；0=未完成 1=部分完成 2=已完成；按累计完成数与批次数量比较）不能为空")]
     public int CompletedStatus { get; set; } = 0;
+}
+
+// ========================================
+// PcbaOutputDetail 作废 DTO
+// ========================================
+
+/// <summary>
+/// PcbaOutputDetail 作废/撤销作废 DTO
+/// </summary>
+public class TaktPcbaOutputDetailObsoleteDto
+{
+    /// <summary>
+    /// PcbaOutputDetailID
+    /// </summary>
+    [Required(ErrorMessage = "ID不能为空")]
+    [AdaptMember("Id")]
+    [JsonConverter(typeof(ValueToStringConverter))]
+    public long PcbaOutputDetailId { get; set; }
+
+    /// <summary>
+    /// 是否作废（字典 sys_yes_no_type，0=否 1=是；编辑移除子行时标记作废）
+    /// </summary>
+    public int IsObsolete { get; set; }
 }
 
 // ========================================
@@ -518,7 +661,7 @@ public class TaktPcbaOutputDetailTemplateDto
     public long? PcbaOutputId { get; set; }
 
     /// <summary>
-    /// 生产工单号（冗余字段,便于查询）
+    /// 工单号（冗余字段,便于查询）
     /// </summary>
     public string? ProdOrderCode { get; set; } = string.Empty;
 
@@ -528,7 +671,7 @@ public class TaktPcbaOutputDetailTemplateDto
     public int? LineNumber { get; set; }
 
     /// <summary>
-    /// 生产时段
+    /// 生产时段（PCBA 存工作中心 WorkCenter，新增时按物料查 TaktStandardOperationTime 自动生成）
     /// </summary>
     public string? TimePeriod { get; set; } = string.Empty;
 
@@ -558,17 +701,17 @@ public class TaktPcbaOutputDetailTemplateDto
     public decimal? DailyCompletedQty { get; set; }
 
     /// <summary>
-    /// 累计完成数
+    /// 累计完成数（计算结果：同工单号+班次+PCB板别+面板别桶内全部明细当日完成数合计）
     /// </summary>
     public decimal? TotalCompletedQty { get; set; }
 
     /// <summary>
-    /// 完成状态（字典 logistics_pcba_completed_status；0=未完成 1=部分完成 2=已完成）
+    /// 完成状态（计算结果：字典 logistics_pcba_completed_status；0=未完成 1=部分完成 2=已完成；按累计完成数与批次数量比较）
     /// </summary>
     public int? CompletedStatus { get; set; }
 
     /// <summary>
-    /// 序列号
+    /// 序列号（明细级）
     /// </summary>
     public string? SerialNo { get; set; } = string.Empty;
 
@@ -578,9 +721,29 @@ public class TaktPcbaOutputDetailTemplateDto
     public int? DefectCount { get; set; }
 
     /// <summary>
-    /// 投入工数(分钟)
+    /// 停线时间(分钟)
+    /// </summary>
+    public int? DowntimeMinutes { get; set; }
+
+    /// <summary>
+    /// 停线原因（字典 logistics_stop_reason_category，多选 DictLabel 逗号分隔）
+    /// </summary>
+    public string? DowntimeReason { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 停线说明
+    /// </summary>
+    public string? DowntimeDescription { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 投入工数(分钟)（计算结果：主表 DirectLabor×60）
     /// </summary>
     public decimal? InputMinutes { get; set; }
+
+    /// <summary>
+    /// 实际工时(分钟)（计算结果：MixedProd=0 时投入工时-停线时间；MixedProd≠0 时报工工时-停线时间）
+    /// </summary>
+    public decimal? ActualMinutes { get; set; }
 
     /// <summary>
     /// 修工数(分钟)
@@ -608,7 +771,7 @@ public class TaktPcbaOutputDetailTemplateDto
     public decimal? TotalMinutes { get; set; }
 
     /// <summary>
-    /// 未达成原因（字典 logistics_nonachievement_reason_category，存 DictValue）
+    /// 未达成原因（字典 logistics_nonachievement_reason_category，多选 DictLabel 逗号分隔）
     /// </summary>
     public string? UnachievedReason { get; set; } = string.Empty;
 
@@ -616,6 +779,26 @@ public class TaktPcbaOutputDetailTemplateDto
     /// 未达成说明
     /// </summary>
     public string? UnachievedDescription { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 报工工时(分钟)
+    /// </summary>
+    public decimal? ConfirmMinutes { get; set; }
+
+    /// <summary>
+    /// 混合生产（0=非混合；N=此生产时段内另有N笔报工）
+    /// </summary>
+    public int? MixedProd { get; set; }
+
+    /// <summary>
+    /// 达成率(%)（计算结果：当日完成数÷主表标准产能×100%；标准产能为0时取0）
+    /// </summary>
+    public decimal? AchievementRate { get; set; }
+
+    /// <summary>
+    /// 是否作废（字典 sys_yes_no_type，0=否 1=是；编辑移除子行时标记作废）
+    /// </summary>
+    public int? IsObsolete { get; set; }
 
     /// <summary>
     /// 扩展字段JSON
@@ -656,7 +839,7 @@ public class TaktPcbaOutputDetailImportDto
     public long? PcbaOutputId { get; set; }
 
     /// <summary>
-    /// 生产工单号（冗余字段,便于查询）
+    /// 工单号（冗余字段,便于查询）
     /// </summary>
     public string? ProdOrderCode { get; set; } = string.Empty;
 
@@ -666,7 +849,7 @@ public class TaktPcbaOutputDetailImportDto
     public int? LineNumber { get; set; }
 
     /// <summary>
-    /// 生产时段
+    /// 生产时段（PCBA 存工作中心 WorkCenter，新增时按物料查 TaktStandardOperationTime 自动生成）
     /// </summary>
     public string? TimePeriod { get; set; } = string.Empty;
 
@@ -696,17 +879,17 @@ public class TaktPcbaOutputDetailImportDto
     public decimal? DailyCompletedQty { get; set; }
 
     /// <summary>
-    /// 累计完成数
+    /// 累计完成数（计算结果：同工单号+班次+PCB板别+面板别桶内全部明细当日完成数合计）
     /// </summary>
     public decimal? TotalCompletedQty { get; set; }
 
     /// <summary>
-    /// 完成状态（字典 logistics_pcba_completed_status；0=未完成 1=部分完成 2=已完成）
+    /// 完成状态（计算结果：字典 logistics_pcba_completed_status；0=未完成 1=部分完成 2=已完成；按累计完成数与批次数量比较）
     /// </summary>
     public int? CompletedStatus { get; set; }
 
     /// <summary>
-    /// 序列号
+    /// 序列号（明细级）
     /// </summary>
     public string? SerialNo { get; set; } = string.Empty;
 
@@ -716,9 +899,29 @@ public class TaktPcbaOutputDetailImportDto
     public int? DefectCount { get; set; }
 
     /// <summary>
-    /// 投入工数(分钟)
+    /// 停线时间(分钟)
+    /// </summary>
+    public int? DowntimeMinutes { get; set; }
+
+    /// <summary>
+    /// 停线原因（字典 logistics_stop_reason_category，多选 DictLabel 逗号分隔）
+    /// </summary>
+    public string? DowntimeReason { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 停线说明
+    /// </summary>
+    public string? DowntimeDescription { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 投入工数(分钟)（计算结果：主表 DirectLabor×60）
     /// </summary>
     public decimal? InputMinutes { get; set; }
+
+    /// <summary>
+    /// 实际工时(分钟)（计算结果：MixedProd=0 时投入工时-停线时间；MixedProd≠0 时报工工时-停线时间）
+    /// </summary>
+    public decimal? ActualMinutes { get; set; }
 
     /// <summary>
     /// 修工数(分钟)
@@ -746,7 +949,7 @@ public class TaktPcbaOutputDetailImportDto
     public decimal? TotalMinutes { get; set; }
 
     /// <summary>
-    /// 未达成原因（字典 logistics_nonachievement_reason_category，存 DictValue）
+    /// 未达成原因（字典 logistics_nonachievement_reason_category，多选 DictLabel 逗号分隔）
     /// </summary>
     public string? UnachievedReason { get; set; } = string.Empty;
 
@@ -754,6 +957,26 @@ public class TaktPcbaOutputDetailImportDto
     /// 未达成说明
     /// </summary>
     public string? UnachievedDescription { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 报工工时(分钟)
+    /// </summary>
+    public decimal? ConfirmMinutes { get; set; }
+
+    /// <summary>
+    /// 混合生产（0=非混合；N=此生产时段内另有N笔报工）
+    /// </summary>
+    public int? MixedProd { get; set; }
+
+    /// <summary>
+    /// 达成率(%)（计算结果：当日完成数÷主表标准产能×100%；标准产能为0时取0）
+    /// </summary>
+    public decimal? AchievementRate { get; set; }
+
+    /// <summary>
+    /// 是否作废（字典 sys_yes_no_type，0=否 1=是；编辑移除子行时标记作废）
+    /// </summary>
+    public int? IsObsolete { get; set; }
 
     /// <summary>
     /// 扩展字段JSON
@@ -795,7 +1018,7 @@ public class TaktPcbaOutputDetailExportDto
     public long PcbaOutputId { get; set; }
 
     /// <summary>
-    /// 生产工单号（冗余字段,便于查询）
+    /// 工单号（冗余字段,便于查询）
     /// </summary>
     public string ProdOrderCode { get; set; } = string.Empty;
 
@@ -805,7 +1028,7 @@ public class TaktPcbaOutputDetailExportDto
     public int LineNumber { get; set; } = 0;
 
     /// <summary>
-    /// 生产时段
+    /// 生产时段（PCBA 存工作中心 WorkCenter，新增时按物料查 TaktStandardOperationTime 自动生成）
     /// </summary>
     public string TimePeriod { get; set; } = string.Empty;
 
@@ -835,17 +1058,17 @@ public class TaktPcbaOutputDetailExportDto
     public decimal DailyCompletedQty { get; set; }
 
     /// <summary>
-    /// 累计完成数
+    /// 累计完成数（计算结果：同工单号+班次+PCB板别+面板别桶内全部明细当日完成数合计）
     /// </summary>
     public decimal TotalCompletedQty { get; set; }
 
     /// <summary>
-    /// 完成状态（字典 logistics_pcba_completed_status；0=未完成 1=部分完成 2=已完成）
+    /// 完成状态（计算结果：字典 logistics_pcba_completed_status；0=未完成 1=部分完成 2=已完成；按累计完成数与批次数量比较）
     /// </summary>
     public int CompletedStatus { get; set; } = 0;
 
     /// <summary>
-    /// 序列号
+    /// 序列号（明细级）
     /// </summary>
     public string SerialNo { get; set; } = string.Empty;
 
@@ -855,9 +1078,29 @@ public class TaktPcbaOutputDetailExportDto
     public int DefectCount { get; set; } = 0;
 
     /// <summary>
-    /// 投入工数(分钟)
+    /// 停线时间(分钟)
+    /// </summary>
+    public int DowntimeMinutes { get; set; } = 0;
+
+    /// <summary>
+    /// 停线原因（字典 logistics_stop_reason_category，多选 DictLabel 逗号分隔）
+    /// </summary>
+    public string? DowntimeReason { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 停线说明
+    /// </summary>
+    public string? DowntimeDescription { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 投入工数(分钟)（计算结果：主表 DirectLabor×60）
     /// </summary>
     public decimal InputMinutes { get; set; }
+
+    /// <summary>
+    /// 实际工时(分钟)（计算结果：MixedProd=0 时投入工时-停线时间；MixedProd≠0 时报工工时-停线时间）
+    /// </summary>
+    public decimal ActualMinutes { get; set; }
 
     /// <summary>
     /// 修工数(分钟)
@@ -885,7 +1128,7 @@ public class TaktPcbaOutputDetailExportDto
     public decimal TotalMinutes { get; set; }
 
     /// <summary>
-    /// 未达成原因（字典 logistics_nonachievement_reason_category，存 DictValue）
+    /// 未达成原因（字典 logistics_nonachievement_reason_category，多选 DictLabel 逗号分隔）
     /// </summary>
     public string? UnachievedReason { get; set; } = string.Empty;
 
@@ -893,6 +1136,26 @@ public class TaktPcbaOutputDetailExportDto
     /// 未达成说明
     /// </summary>
     public string? UnachievedDescription { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 报工工时(分钟)
+    /// </summary>
+    public decimal ConfirmMinutes { get; set; }
+
+    /// <summary>
+    /// 混合生产（0=非混合；N=此生产时段内另有N笔报工）
+    /// </summary>
+    public int MixedProd { get; set; } = 0;
+
+    /// <summary>
+    /// 达成率(%)（计算结果：当日完成数÷主表标准产能×100%；标准产能为0时取0）
+    /// </summary>
+    public decimal AchievementRate { get; set; }
+
+    /// <summary>
+    /// 是否作废（字典 sys_yes_no_type，0=否 1=是；编辑移除子行时标记作废）
+    /// </summary>
+    public int IsObsolete { get; set; } = 0;
 
     /// <summary>
     /// 扩展字段JSON

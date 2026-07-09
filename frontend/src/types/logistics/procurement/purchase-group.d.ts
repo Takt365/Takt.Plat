@@ -81,7 +81,7 @@ export interface PurchaseGroup extends CompanyDtoBase {
   /**
    * 采购组状态（字典 sys_normal_disable_status；1=启用，0=禁用）
    */
-  purchaseGroupStatus: number;
+  GroupStatus: number;
 
 }
 
@@ -151,7 +151,7 @@ export interface PurchaseGroupQuery extends TaktPagedQuery {
   /**
    * 采购组状态（字典 sys_normal_disable_status；1=启用，0=禁用）
    */
-  purchaseGroupStatus?: number;
+  GroupStatus?: number;
 
   /**
    * 创建时间（范围查询-开始）
@@ -240,7 +240,7 @@ export interface PurchaseGroupCreate {
   /**
    * 采购组状态（字典 sys_normal_disable_status；1=启用，0=禁用）
    */
-  purchaseGroupStatus: number;
+  GroupStatus: number;
 
   /**
    * 扩展字段JSON
@@ -272,10 +272,10 @@ export interface PurchaseGroupUpdate extends PurchaseGroupCreate {
 
 /**
  * PurchaseGroup 状态更新 DTO
- * 对应前端 PurchaseGroupStatus
- * @description 对应后端 TaktPurchaseGroupStatusDto
+ * 对应前端 GroupStatus
+ * @description 对应后端 TaktGroupStatusDto
  */
-export interface PurchaseGroupStatus {
+export interface GroupStatus {
   /**
    * PurchaseGroupID
    */
@@ -284,7 +284,7 @@ export interface PurchaseGroupStatus {
   /**
    * 采购组状态（字典 sys_normal_disable_status；1=启用，0=禁用）
    */
-  purchaseGroupStatus: number;
+  GroupStatus: number;
 
 }
 
@@ -367,7 +367,7 @@ export interface PurchaseGroupTemplate {
   /**
    * 采购组状态（字典 sys_normal_disable_status；1=启用，0=禁用）
    */
-  purchaseGroupStatus?: number;
+  GroupStatus?: number;
 
   /**
    * 扩展字段JSON
@@ -446,7 +446,7 @@ export interface PurchaseGroupImport {
   /**
    * 采购组状态（字典 sys_normal_disable_status；1=启用，0=禁用）
    */
-  purchaseGroupStatus?: number;
+  GroupStatus?: number;
 
   /**
    * 扩展字段JSON
@@ -525,7 +525,7 @@ export interface PurchaseGroupExport {
   /**
    * 采购组状态（字典 sys_normal_disable_status；1=启用，0=禁用）
    */
-  purchaseGroupStatus: number;
+  GroupStatus: number;
 
   /**
    * 扩展字段JSON

@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Infrastructure.Data.Seeds.I18nSeedData.Logistics.Manufacturing.Bom
 // 文件名称：TaktStandardOperationTimeI18nSeedData.cs
-// 创建时间：2026-07-02
+// 创建时间：2026-07-09
 // 创建人：Takt365(Auto Generated)
 // 功能描述：TaktStandardOperationTime 实体字段国际化种子（无对应 frontend locales；TranslationText 取自 ColumnDescription，ContextNote 取自属性 XML summary）
 // 
@@ -163,13 +163,13 @@ public class TaktStandardOperationTimeI18nSeedData : ITaktSeedDataCoordinator
             new TranslationSeedItem("entity.standardoperationtime.pointsunit", "zh-HK", "点数单位_hk", "点数单位（字典 logistics_points_unit，默认 SHORT）"),
 
             // entity.standardoperationtime.pointstominutesrate
-            new TranslationSeedItem("entity.standardoperationtime.pointstominutesrate", "en-US", "转换汇率_us", "点数转分钟汇率（字典 logistics_points_to_minutes_rate；DictValue=1/0.028/0.045；普通=1，AI=0.028，SMT=0.045）"),
+            new TranslationSeedItem("entity.standardoperationtime.pointstominutesrate", "en-US", "转换汇率_us", "点数转分钟汇率（decimal，精度 3 位小数；可选值参见字典 logistics_points_to_minutes_rate：普通=1，AI=0.028，SMT=0.045）"),
             // entity.standardoperationtime.pointstominutesrate
-            new TranslationSeedItem("entity.standardoperationtime.pointstominutesrate", "ja-JP", "转换汇率_jp", "点数转分钟汇率（字典 logistics_points_to_minutes_rate；DictValue=1/0.028/0.045；普通=1，AI=0.028，SMT=0.045）"),
+            new TranslationSeedItem("entity.standardoperationtime.pointstominutesrate", "ja-JP", "转换汇率_jp", "点数转分钟汇率（decimal，精度 3 位小数；可选值参见字典 logistics_points_to_minutes_rate：普通=1，AI=0.028，SMT=0.045）"),
             // entity.standardoperationtime.pointstominutesrate
-            new TranslationSeedItem("entity.standardoperationtime.pointstominutesrate", "zh-CN", "转换汇率", "点数转分钟汇率（字典 logistics_points_to_minutes_rate；DictValue=1/0.028/0.045；普通=1，AI=0.028，SMT=0.045）"),
+            new TranslationSeedItem("entity.standardoperationtime.pointstominutesrate", "zh-CN", "转换汇率", "点数转分钟汇率（decimal，精度 3 位小数；可选值参见字典 logistics_points_to_minutes_rate：普通=1，AI=0.028，SMT=0.045）"),
             // entity.standardoperationtime.pointstominutesrate
-            new TranslationSeedItem("entity.standardoperationtime.pointstominutesrate", "zh-HK", "转换汇率_hk", "点数转分钟汇率（字典 logistics_points_to_minutes_rate；DictValue=1/0.028/0.045；普通=1，AI=0.028，SMT=0.045）"),
+            new TranslationSeedItem("entity.standardoperationtime.pointstominutesrate", "zh-HK", "转换汇率_hk", "点数转分钟汇率（decimal，精度 3 位小数；可选值参见字典 logistics_points_to_minutes_rate：普通=1，AI=0.028，SMT=0.045）"),
 
             // entity.standardoperationtime.convertedminutes
             new TranslationSeedItem("entity.standardoperationtime.convertedminutes", "en-US", "转换工时_us", "转换后标准工时（分钟）"),
@@ -197,15 +197,6 @@ public class TaktStandardOperationTimeI18nSeedData : ITaktSeedDataCoordinator
             new TranslationSeedItem("entity.standardoperationtime.expirydate", "zh-CN", "失效日期", "失效日期"),
             // entity.standardoperationtime.expirydate
             new TranslationSeedItem("entity.standardoperationtime.expirydate", "zh-HK", "失效日期_hk", "失效日期"),
-
-            // entity.standardoperationtime.changelogs
-            new TranslationSeedItem("entity.standardoperationtime.changelogs", "en-US", "标准工序时间变更记录列表_us", "标准工序时间变更记录列表（外键在子表 TaktStandardOperationTimeChangeLog.StandardOperationTimeId）"),
-            // entity.standardoperationtime.changelogs
-            new TranslationSeedItem("entity.standardoperationtime.changelogs", "ja-JP", "标准工序时间变更记录列表_jp", "标准工序时间变更记录列表（外键在子表 TaktStandardOperationTimeChangeLog.StandardOperationTimeId）"),
-            // entity.standardoperationtime.changelogs
-            new TranslationSeedItem("entity.standardoperationtime.changelogs", "zh-CN", "标准工序时间变更记录列表", "标准工序时间变更记录列表（外键在子表 TaktStandardOperationTimeChangeLog.StandardOperationTimeId）"),
-            // entity.standardoperationtime.changelogs
-            new TranslationSeedItem("entity.standardoperationtime.changelogs", "zh-HK", "标准工序时间变更记录列表_hk", "标准工序时间变更记录列表（外键在子表 TaktStandardOperationTimeChangeLog.StandardOperationTimeId）"),
         };
     }
 

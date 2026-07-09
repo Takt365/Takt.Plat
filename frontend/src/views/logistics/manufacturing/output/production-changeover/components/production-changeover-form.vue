@@ -15,26 +15,34 @@
     :rules="rules"
     layout="horizontal"
     label-align="right"
+    :disabled="loading || isMasterProdDateLocked"
   >
+    <a-alert
+      v-if="isMasterProdDateLocked"
+      type="warning"
+      show-icon
+      class="mb-3 shrink-0"
+      :message="prodDateLockedAlertMessage"
+    />
     <a-tabs
       v-model:active-key="activeTab"
       class="production-changeover-form-tabs"
     >
       <a-tab-pane
         key="tab-0"
-        :tab="t('common.page.form.tabs.basicinfo') + ' (1/2)'"
+        :tab="t('common.page.form.tabs.basicinfo') + ' (1/3)'"
         force-render
       >
         <div :class="formContentClass">
           <a-row :gutter="24">
             <a-col :span="12">
               <a-form-item
-                :label="t('common.page.entity.tenantcode')"
+                :label="pi.label('tenantCode')"
                 name="tenantCode"
               >
                 <a-input
                   v-model:value="formState.tenantCode"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('common.page.entity.tenantcode') })"
+                  :placeholder="pi.ph('tenantCode')"
                   show-count
                   :maxlength="20"
                   disabled
@@ -43,12 +51,12 @@
             </a-col>
             <a-col :span="12">
               <a-form-item
-                :label="t('common.page.entity.companycode')"
+                :label="pi.label('companyCode')"
                 name="companyCode"
               >
                 <a-input
                   v-model:value="formState.companyCode"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('common.page.entity.companycode') })"
+                  :placeholder="pi.ph('companyCode')"
                   show-count
                   :maxlength="20"
                   disabled
@@ -57,12 +65,12 @@
             </a-col>
             <a-col :span="12">
               <a-form-item
-                :label="t('common.page.entity.companydefaultculture')"
+                :label="pi.label('companyDefaultCulture')"
                 name="companyDefaultCulture"
               >
                 <a-input
                   v-model:value="formState.companyDefaultCulture"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('common.page.entity.companydefaultculture') })"
+                  :placeholder="pi.ph('companyDefaultCulture')"
                   show-count
                   :maxlength="20"
                   disabled
@@ -71,92 +79,105 @@
             </a-col>
             <a-col :span="12">
               <a-form-item
-                :label="t('entity.productionchangeover.plantcode')"
+                :label="pi.label('plantCode')"
                 name="plantCode"
               >
-                <TaktSelect
+                <a-input
                   v-model:value="formState.plantCode"
-                  api-url="TaktPlants/options"
-                  :placeholder="t('common.page.form.placeholder.select', { field: t('entity.productionchangeover.plantcode') })"
-                  :disabled="!!formData?.productionChangeoverId || loading"
+                  :placeholder="pi.ph('plantCode')"
+                  show-count
+                  :maxlength="4"
+                  disabled
                 />
               </a-form-item>
             </a-col>
             <a-col :span="12">
               <a-form-item
-                :label="t('entity.productionchangeover.prodcategory')"
+                :label="pi.label('prodCategory')"
                 name="prodCategory"
               >
                 <TaktSelect
                   v-model:value="formState.prodCategory"
                   dict-type="logistics_prod_category"
-                  :field-names="{ label: 'dictLabel', value: 'dictValue' }"
-                  :placeholder="t('common.page.form.placeholder.select', { field: t('entity.productionchangeover.prodcategory') })"
-                  :disabled="loading"
+                  :placeholder="pi.ph('prodCategory')"
                 />
               </a-form-item>
             </a-col>
             <a-col :span="12">
               <a-form-item
-                :label="t('entity.productionchangeover.proddate')"
+                :label="pi.label('changeoverCategory')"
+                name="changeoverCategory"
+              >
+                <TaktSelect
+                  v-model:value="formState.changeoverCategory"
+                  dict-type="logistics_changeover_category"
+                  :placeholder="pi.ph('changeoverCategory')"
+                />
+              </a-form-item>
+            </a-col>
+            <a-col :span="12">
+              <a-form-item
+                :label="pi.label('prodDate')"
                 name="prodDate"
               >
                 <a-date-picker
                   v-model:value="formState.prodDate"
-                  :placeholder="t('common.page.form.placeholder.select', { field: t('entity.productionchangeover.proddate') })"
+                  :placeholder="pi.ph('prodDate')"
                   value-format="YYYY-MM-DD"
                   style="width: 100%"
+                  :disabled-date="prodDatePickerDisabledDate"
                 />
               </a-form-item>
             </a-col>
             <a-col :span="12">
               <a-form-item
-                :label="t('entity.productionchangeover.prodteam')"
+                :label="pi.label('prodTeam')"
                 name="prodTeam"
               >
                 <TaktSelect
                   v-model:value="formState.prodTeam"
-                  :options="filteredProductionTeamOptions"
-                  :field-names="{ label: 'dictLabel', value: 'dictValue' }"
-                  :placeholder="t('common.page.form.placeholder.select', { field: t('entity.productionchangeover.prodteam') })"
-                  :disabled="loading || !formState.plantCode"
-                  allow-clear
+                  api-url="TaktProductionTeams/options"
+                  :placeholder="pi.ph('prodTeam')"
                 />
               </a-form-item>
             </a-col>
             <a-col :span="12">
               <a-form-item
-                :label="t('entity.productionchangeover.readsoptime')"
-                name="readSopTime"
+                :label="pi.label('currentProdOrderCode')"
+                name="currentProdOrderCode"
               >
-                <a-input-number
-                  v-model:value="formState.readSopTime"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.productionchangeover.readsoptime') })"
-                  style="width: 100%"
+                <TaktSelect
+                  v-model:value="formState.currentProdOrderCode"
+                  api-url="TaktProductionOrders/options"
+                  :placeholder="pi.ph('currentProdOrderCode')"
+                  :disabled="!!formData?.productionChangeoverId"
                 />
               </a-form-item>
             </a-col>
             <a-col :span="12">
               <a-form-item
-                :label="t('entity.productionchangeover.personcount')"
-                name="personCount"
+                :label="pi.label('currentModelCode')"
+                name="currentModelCode"
               >
-                <a-input-number
-                  v-model:value="formState.personCount"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.productionchangeover.personcount') })"
-                  style="width: 100%"
+                <a-input
+                  v-model:value="formState.currentModelCode"
+                  :placeholder="pi.ph('currentModelCode')"
+                  show-count
+                  :maxlength="20"
+                  disabled
                 />
               </a-form-item>
             </a-col>
             <a-col :span="12">
               <a-form-item
-                :label="t('entity.productionchangeover.totalsoptime')"
-                name="totalSopTime"
+                :label="pi.label('changeoverProdOrderCode')"
+                name="changeoverProdOrderCode"
               >
-                <a-input-number
-                  v-model:value="formState.totalSopTime"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.productionchangeover.totalsoptime') })"
-                  style="width: 100%"
+                <TaktSelect
+                  v-model:value="formState.changeoverProdOrderCode"
+                  api-url="TaktProductionOrders/options"
+                  :placeholder="pi.ph('changeoverProdOrderCode')"
+                  :disabled="!!formData?.productionChangeoverId"
                 />
               </a-form-item>
             </a-col>
@@ -165,47 +186,143 @@
       </a-tab-pane>
       <a-tab-pane
         key="tab-1"
-        :tab="t('common.page.form.tabs.basicinfo') + ' (2/2)'"
+        :tab="t('common.page.form.tabs.basicinfo') + ' (2/3)'"
         force-render
       >
         <div :class="formContentClass">
           <a-row :gutter="24">
-            <a-col :span="24">
+            <a-col :span="12">
               <a-form-item
-                :label="t('entity.productionchangeover.changeovercount')"
+                :label="pi.label('changeoverModelCode')"
+                name="changeoverModelCode"
+              >
+                <a-input
+                  v-model:value="formState.changeoverModelCode"
+                  :placeholder="pi.ph('changeoverModelCode')"
+                  show-count
+                  :maxlength="20"
+                  disabled
+                />
+              </a-form-item>
+            </a-col>
+            <a-col :span="12">
+              <a-form-item
+                :label="pi.label('changeoverCount')"
                 name="changeoverCount"
               >
                 <a-input-number
                   v-model:value="formState.changeoverCount"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.productionchangeover.changeovercount') })"
+                  :placeholder="pi.ph('changeoverCount')"
                   style="width: 100%"
                 />
               </a-form-item>
             </a-col>
-            <a-col :span="24">
+            <a-col :span="12">
               <a-form-item
-                :label="t('entity.productionchangeover.changeovertime')"
+                :label="pi.label('changeoverTime')"
                 name="changeoverTime"
               >
                 <a-input-number
                   v-model:value="formState.changeoverTime"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.productionchangeover.changeovertime') })"
+                  :placeholder="pi.ph('changeoverTime')"
                   style="width: 100%"
                 />
               </a-form-item>
             </a-col>
-            <a-col :span="24">
+            <a-col :span="12">
               <a-form-item
-                :label="t('entity.productionchangeover.totalchangeovertime')"
+                :label="pi.label('instrumentSetupTime')"
+                name="instrumentSetupTime"
+              >
+                <a-input-number
+                  v-model:value="formState.instrumentSetupTime"
+                  :placeholder="pi.ph('instrumentSetupTime')"
+                  style="width: 100%"
+                />
+              </a-form-item>
+            </a-col>
+            <a-col :span="12">
+              <a-form-item
+                :label="pi.label('totalChangeoverTime')"
                 name="totalChangeoverTime"
               >
                 <a-input-number
                   v-model:value="formState.totalChangeoverTime"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.productionchangeover.totalchangeovertime') })"
+                  :placeholder="pi.ph('totalChangeoverTime')"
                   style="width: 100%"
                 />
               </a-form-item>
             </a-col>
+            <a-col :span="12">
+              <a-form-item
+                :label="pi.label('readSopTime')"
+                name="readSopTime"
+              >
+                <a-input-number
+                  v-model:value="formState.readSopTime"
+                  :placeholder="pi.ph('readSopTime')"
+                  style="width: 100%"
+                />
+              </a-form-item>
+            </a-col>
+            <a-col :span="12">
+              <a-form-item
+                :label="pi.label('learningTime')"
+                name="learningTime"
+              >
+                <a-input-number
+                  v-model:value="formState.learningTime"
+                  :placeholder="pi.ph('learningTime')"
+                  style="width: 100%"
+                />
+              </a-form-item>
+            </a-col>
+            <a-col :span="12">
+              <a-form-item
+                :label="pi.label('personCount')"
+                name="personCount"
+              >
+                <a-input-number
+                  v-model:value="formState.personCount"
+                  :placeholder="pi.ph('personCount')"
+                  style="width: 100%"
+                />
+              </a-form-item>
+            </a-col>
+            <a-col :span="12">
+              <a-form-item
+                :label="pi.label('totalLearningTime')"
+                name="totalLearningTime"
+              >
+                <a-input-number
+                  v-model:value="formState.totalLearningTime"
+                  :placeholder="pi.ph('totalLearningTime')"
+                  style="width: 100%"
+                />
+              </a-form-item>
+            </a-col>
+            <a-col :span="12">
+              <a-form-item
+                :label="pi.label('totalSopTime')"
+                name="totalSopTime"
+              >
+                <a-input-number
+                  v-model:value="formState.totalSopTime"
+                  :placeholder="pi.ph('totalSopTime')"
+                  style="width: 100%"
+                />
+              </a-form-item>
+            </a-col>
+          </a-row>
+        </div>
+      </a-tab-pane>
+      <a-tab-pane
+        key="tab-2"
+        :tab="t('common.page.form.tabs.basicinfo') + ' (3/3)'"
+        force-render
+      >
+        <div :class="formContentClass">
+          <a-row :gutter="24">
             <a-col :span="24">
               <a-form-item
                 name="extField"
@@ -219,7 +336,7 @@
                     >
                       <span class="takt-form-label-hint-icon"><RiQuestionLine class="takt-remix-icon" /></span>
                     </a-tooltip>
-                    <span>{{ t('common.page.entity.extfield') }}</span>
+                    <span>{{ pi.label('extField') }}</span>
                   </span>
                 </template>
                 <a-textarea
@@ -234,12 +351,12 @@
             </a-col>
             <a-col :span="24">
               <a-form-item
-                :label="t('common.page.entity.remark')"
+                :label="pi.label('remark')"
                 name="remark"
               >
                 <a-textarea
                   v-model:value="formState.remark"
-                  :placeholder="t('common.page.form.placeholder.optional', { field: t('common.page.entity.remark') })"
+                  :placeholder="pi.ph('remark')"
                   :rows="4"
                   show-count
                   :maxlength="400"
@@ -262,69 +379,55 @@
 import { reactive, watch, computed, ref, onMounted } from 'vue'
 import { useI18n } from 'vue-i18n'
 import type { Rule } from 'ant-design-vue/es/form'
+import { useProductionChangeoverI18n } from '../composables/use-production-changeover-i18n'
 import type { ProductionChangeoverCreate } from '@/types/logistics/manufacturing/output/production-changeover'
-import type { TaktSelectOption } from '@/types/common'
 import TaktSelect from '@/components/business/takt-select/index.vue'
 import { RiQuestionLine } from '@remixicon/vue'
+import { useDictDataStore } from '@/stores/foundation/dict-data'
 import { useTenantStore } from '@/stores/identity/tenant'
 import { useUserStore } from '@/stores/identity/user'
-import { useDictDataStore } from '@/stores/foundation/dict-data'
-import { getProductionTeamOptions } from '@/api/logistics/manufacturing/output/production-team'
+import { getProductionOrderByCode } from '@/api/logistics/manufacturing/planning/production-order'
+import { getModelDestinationByMaterial } from '@/api/logistics/materials/model-destination'
+import {
+  isOutputProdDateLocked,
+  isOutputProdDateSelectable,
+  outputProdDatePickerDisabledDate,
+  resolveDefaultOutputProdDateYmd,
+} from '../../composables/takt-output-prod-date-edit-lock'
+import { useOutputProdDateI18n } from '../../composables/use-output-prod-date-i18n'
+
+/** 实体字段 i18n */
+const pi = useProductionChangeoverI18n()
+const prodDateI18n = useOutputProdDateI18n()
 
 /** i18n 翻译函数 */
 const { t } = useI18n()
 
-/** Pinia：字典缓存 */
-const dictDataStore = useDictDataStore()
-/** 生产班组下拉全量选项 */
-const productionTeamOptions = ref<TaktSelectOption[]>([])
-/** 按当前工厂过滤的生产班组选项 */
-const filteredProductionTeamOptions = computed(() => {
-  const plantCode = formState.plantCode
-  if (!plantCode) {
-    return []
-  }
-  return productionTeamOptions.value.filter((item) => String(item.extValue ?? '') === String(plantCode))
-})
-
-/** 加载生产班组选项 */
-async function loadProductionTeamOptions() {
-  productionTeamOptions.value = await getProductionTeamOptions()
-}
-
-/** Pinia：租户/公司上下文 */
+/** Pinia：租户上下文 */
 const tenantStore = useTenantStore()
 /** Pinia：用户上下文 */
 const userStore = useUserStore()
 
-/** 表单挂载时预加载字典与班组选项 */
-onMounted(async () => {
-  void dictDataStore.loadAllDictDataAsync()
-  await loadProductionTeamOptions()
-})
-
 /**
  * 上下文隔离字段：租户 / 公司 / 公司默认语言（登录或公司切换注入，表单只读）
  * @param target 表单数据
- * @param force 为 true 时强制覆盖（新增态或公司切换）
+ * @param force 为 true 时强制覆盖（新增态或上下文切换）
  */
 function applyScopeDefaults(target: Record<string, unknown>, force = false) {
-  if (formFields.includes('tenantCode') && (force || !target.tenantCode)) {
+  if (force || !target.tenantCode) {
     target.tenantCode = tenantStore.tenantCode
   }
-  if (formFields.includes('companyCode') && (force || !target.companyCode)) {
+  if (force || !target.companyCode) {
     target.companyCode = tenantStore.companyCode
   }
-  if (formFields.includes('companyDefaultCulture') && (force || !target.companyDefaultCulture)) {
+  if (force || !target.companyDefaultCulture) {
     target.companyDefaultCulture = userStore.userInfo?.companyDefaultCulture ?? ''
   }
 }
-/** 表单内容区高度 class（字段多时 tab-10 行） */
-const formContentClass = computed(() => (formFields.length > 10 ? 'takt-form-content-rows-10' : 'takt-form-content-rows-5'))
+/** 表单内容区高度 class（多 Tab 大表单固定 10 行高度） */
+const formContentClass = 'takt-form-content-rows-10'
 /** 当前激活的 Tab key */
 const activeTab = ref('tab-0')
-/** CreateDto 字段名列表（与 formState 键对齐） */
-const formFields = ["tenantCode","companyCode","companyDefaultCulture","plantCode","prodCategory","prodDate","prodTeam","readSopTime","personCount","totalSopTime","changeoverCount","changeoverTime","totalChangeoverTime","extField","remark"]
 
 
 /** 父级传入的编辑 DTO；新增时为 undefined 或空对象 */
@@ -343,11 +446,34 @@ const props = withDefaults(defineProps<Props>(), {
 const formRef = ref()
 /** 表单双向绑定模型 */
 const formState = reactive<Record<string, any>>({})
-/** 表单字段默认值（无字典默认项） */
-function applyFormDefaults(target: Record<string, unknown>) {
-  void target
+
+/** 主表生产日期是否已锁定 */
+const isMasterProdDateLocked = computed(() =>
+  isOutputProdDateLocked(String(formState.prodDate ?? '').trim().slice(0, 10)),
+)
+/** 锁定提示文案 */
+const prodDateLockedAlertMessage = computed(() =>
+  prodDateI18n.prodDateLockedMessage(String(formState.prodDate ?? '').trim().slice(0, 10)),
+)
+/** 生产日期不可选已锁定/跨月/未来日期 */
+function prodDatePickerDisabledDate(current: Parameters<typeof outputProdDatePickerDisabledDate>[0]) {
+  return outputProdDatePickerDisabledDate(current)
 }
 
+/** 表单字段默认值 */
+function applyFormDefaults(target: Record<string, unknown>) {
+  if (!target.prodDate) {
+    target.prodDate = resolveDefaultOutputProdDateYmd()
+  }
+}
+
+/** Pinia：字典缓存（TaktSelect dict-type 渲染前预热，避免选项空白） */
+const dictDataStore = useDictDataStore()
+
+/** 表单挂载时预加载全量字典 */
+onMounted(() => {
+  void dictDataStore.loadAllDictDataAsync()
+})
 
 /** 编辑态灌入 formData；新增态恢复默认值（须含 productionChangeoverId 才视为编辑） */
 watch(
@@ -373,35 +499,57 @@ watch(
   { immediate: true }
 )
 
+/** 按当前/切换后工单回填工厂与机种（仅新增态） */
+async function backfillFromProductionOrders() {
+  if (props.formData?.productionChangeoverId) {
+    return
+  }
+  const currentCode = String(formState.currentProdOrderCode ?? '').trim()
+  if (currentCode) {
+    try {
+      const currentOrder = await getProductionOrderByCode(currentCode)
+      if (currentOrder.plantCode) {
+        formState.plantCode = currentOrder.plantCode
+      }
+      if (currentOrder.materialCode) {
+        const model = await getModelDestinationByMaterial(currentOrder.materialCode)
+        if (model?.modelCode) {
+          formState.currentModelCode = model.modelCode
+        }
+      }
+    } catch {
+      // 工单不存在时保留用户已填内容
+    }
+  }
+  const changeoverCode = String(formState.changeoverProdOrderCode ?? '').trim()
+  if (changeoverCode) {
+    try {
+      const changeoverOrder = await getProductionOrderByCode(changeoverCode)
+      if (changeoverOrder.materialCode) {
+        const model = await getModelDestinationByMaterial(changeoverOrder.materialCode)
+        if (model?.modelCode) {
+          formState.changeoverModelCode = model.modelCode
+        }
+      }
+    } catch {
+      // 工单不存在时保留用户已填内容
+    }
+  }
+}
+
+watch(
+  () => [formState.currentProdOrderCode, formState.changeoverProdOrderCode] as const,
+  () => {
+    void backfillFromProductionOrders()
+  }
+)
+
 /** 公司/租户切换时，新增态表单同步隔离字段 */
 watch(
   () => [tenantStore.tenantCode, tenantStore.companyCode, userStore.userInfo?.companyDefaultCulture] as const,
   () => {
-    const isCreate = !props.formData?.productionChangeoverId
-    if (isCreate) {
+    if (!props.formData?.productionChangeoverId) {
       applyScopeDefaults(formState, true)
-    }
-  },
-)
-
-/** 工厂变更时清理无效生产班组 */
-watch(
-  () => formState.plantCode,
-  (plantCode, prevPlantCode) => {
-    if (props.formData?.productionChangeoverId) {
-      return
-    }
-    if (!plantCode) {
-      formState.prodTeam = undefined
-      return
-    }
-    if (prevPlantCode && prevPlantCode !== plantCode && formState.prodTeam) {
-      const teamStillValid = filteredProductionTeamOptions.value.some(
-        (item) => String(item.dictValue ?? '') === String(formState.prodTeam)
-      )
-      if (!teamStillValid) {
-        formState.prodTeam = undefined
-      }
     }
   },
 )
@@ -411,64 +559,62 @@ const rules = computed<Record<string, Rule[]>>(() => ({
   plantCode: [
     {
       required: true,
-      message: t('common.page.form.placeholder.required', { field: t('entity.productionchangeover.plantcode') }),
-      trigger: 'blur'
+      message: pi.ph('plantCode'),
+      trigger: 'change'
+    }
+  ],
+  changeoverCategory: [
+    {
+      required: true,
+      message: pi.ph('changeoverCategory'),
+      trigger: 'change'
     }
   ],
   prodDate: [
     {
       required: true,
-      message: t('common.page.form.placeholder.select', { field: t('entity.productionchangeover.proddate') }),
+      message: pi.ph('prodDate'),
+      trigger: 'change'
+    },
+    {
+      validator: async (_rule, value) => {
+        const ymd = String(value ?? '').trim().slice(0, 10)
+        if (!ymd) {
+          return Promise.resolve()
+        }
+        if (isOutputProdDateLocked(ymd)) {
+          return Promise.reject(prodDateI18n.prodDateLockedMessage(ymd))
+        }
+        if (!isOutputProdDateSelectable(ymd)) {
+          return Promise.reject(prodDateI18n.prodDateOutOfRangeMessage())
+        }
+        return Promise.resolve()
+      },
+      trigger: 'change',
+    },
+  ],
+  currentProdOrderCode: [
+    {
+      required: true,
+      message: pi.ph('currentProdOrderCode'),
       trigger: 'change'
     }
   ],
-  readSopTime: [{
-    validator: async (_rule, value) => {
-      if (value === undefined || value === null || value === '') {
-        return Promise.reject(t('common.page.form.placeholder.select', { field: t('entity.productionchangeover.readsoptime') }))
-      }
-      const num = typeof value === 'number' ? value : Number(value)
-      if (!Number.isFinite(num)) {
-        return Promise.reject(t('common.page.form.placeholder.select', { field: t('entity.productionchangeover.readsoptime') }))
-      }
-      return Promise.resolve()
-    },
-    trigger: 'change'
-  }],
-  personCount: [{
-    validator: async (_rule, value) => {
-      if (value === undefined || value === null || value === '') {
-        return Promise.reject(t('common.page.form.placeholder.select', { field: t('entity.productionchangeover.personcount') }))
-      }
-      const num = typeof value === 'number' ? value : Number(value)
-      if (!Number.isFinite(num)) {
-        return Promise.reject(t('common.page.form.placeholder.select', { field: t('entity.productionchangeover.personcount') }))
-      }
-      return Promise.resolve()
-    },
-    trigger: 'change'
-  }],
-  totalSopTime: [{
-    validator: async (_rule, value) => {
-      if (value === undefined || value === null || value === '') {
-        return Promise.reject(t('common.page.form.placeholder.select', { field: t('entity.productionchangeover.totalsoptime') }))
-      }
-      const num = typeof value === 'number' ? value : Number(value)
-      if (!Number.isFinite(num)) {
-        return Promise.reject(t('common.page.form.placeholder.select', { field: t('entity.productionchangeover.totalsoptime') }))
-      }
-      return Promise.resolve()
-    },
-    trigger: 'change'
-  }],
+  changeoverProdOrderCode: [
+    {
+      required: true,
+      message: pi.ph('changeoverProdOrderCode'),
+      trigger: 'change'
+    }
+  ],
   changeoverCount: [{
     validator: async (_rule, value) => {
       if (value === undefined || value === null || value === '') {
-        return Promise.reject(t('common.page.form.placeholder.select', { field: t('entity.productionchangeover.changeovercount') }))
+        return Promise.reject(pi.ph('changeoverCount'))
       }
       const num = typeof value === 'number' ? value : Number(value)
       if (!Number.isFinite(num)) {
-        return Promise.reject(t('common.page.form.placeholder.select', { field: t('entity.productionchangeover.changeovercount') }))
+        return Promise.reject(pi.ph('changeoverCount'))
       }
       return Promise.resolve()
     },
@@ -477,11 +623,24 @@ const rules = computed<Record<string, Rule[]>>(() => ({
   changeoverTime: [{
     validator: async (_rule, value) => {
       if (value === undefined || value === null || value === '') {
-        return Promise.reject(t('common.page.form.placeholder.select', { field: t('entity.productionchangeover.changeovertime') }))
+        return Promise.reject(pi.ph('changeoverTime'))
       }
       const num = typeof value === 'number' ? value : Number(value)
       if (!Number.isFinite(num)) {
-        return Promise.reject(t('common.page.form.placeholder.select', { field: t('entity.productionchangeover.changeovertime') }))
+        return Promise.reject(pi.ph('changeoverTime'))
+      }
+      return Promise.resolve()
+    },
+    trigger: 'change'
+  }],
+  instrumentSetupTime: [{
+    validator: async (_rule, value) => {
+      if (value === undefined || value === null || value === '') {
+        return Promise.reject(pi.ph('instrumentSetupTime'))
+      }
+      const num = typeof value === 'number' ? value : Number(value)
+      if (!Number.isFinite(num)) {
+        return Promise.reject(pi.ph('instrumentSetupTime'))
       }
       return Promise.resolve()
     },
@@ -490,11 +649,76 @@ const rules = computed<Record<string, Rule[]>>(() => ({
   totalChangeoverTime: [{
     validator: async (_rule, value) => {
       if (value === undefined || value === null || value === '') {
-        return Promise.reject(t('common.page.form.placeholder.select', { field: t('entity.productionchangeover.totalchangeovertime') }))
+        return Promise.reject(pi.ph('totalChangeoverTime'))
       }
       const num = typeof value === 'number' ? value : Number(value)
       if (!Number.isFinite(num)) {
-        return Promise.reject(t('common.page.form.placeholder.select', { field: t('entity.productionchangeover.totalchangeovertime') }))
+        return Promise.reject(pi.ph('totalChangeoverTime'))
+      }
+      return Promise.resolve()
+    },
+    trigger: 'change'
+  }],
+  readSopTime: [{
+    validator: async (_rule, value) => {
+      if (value === undefined || value === null || value === '') {
+        return Promise.reject(pi.ph('readSopTime'))
+      }
+      const num = typeof value === 'number' ? value : Number(value)
+      if (!Number.isFinite(num)) {
+        return Promise.reject(pi.ph('readSopTime'))
+      }
+      return Promise.resolve()
+    },
+    trigger: 'change'
+  }],
+  learningTime: [{
+    validator: async (_rule, value) => {
+      if (value === undefined || value === null || value === '') {
+        return Promise.reject(pi.ph('learningTime'))
+      }
+      const num = typeof value === 'number' ? value : Number(value)
+      if (!Number.isFinite(num)) {
+        return Promise.reject(pi.ph('learningTime'))
+      }
+      return Promise.resolve()
+    },
+    trigger: 'change'
+  }],
+  personCount: [{
+    validator: async (_rule, value) => {
+      if (value === undefined || value === null || value === '') {
+        return Promise.reject(pi.ph('personCount'))
+      }
+      const num = typeof value === 'number' ? value : Number(value)
+      if (!Number.isFinite(num)) {
+        return Promise.reject(pi.ph('personCount'))
+      }
+      return Promise.resolve()
+    },
+    trigger: 'change'
+  }],
+  totalLearningTime: [{
+    validator: async (_rule, value) => {
+      if (value === undefined || value === null || value === '') {
+        return Promise.reject(pi.ph('totalLearningTime'))
+      }
+      const num = typeof value === 'number' ? value : Number(value)
+      if (!Number.isFinite(num)) {
+        return Promise.reject(pi.ph('totalLearningTime'))
+      }
+      return Promise.resolve()
+    },
+    trigger: 'change'
+  }],
+  totalSopTime: [{
+    validator: async (_rule, value) => {
+      if (value === undefined || value === null || value === '') {
+        return Promise.reject(pi.ph('totalSopTime'))
+      }
+      const num = typeof value === 'number' ? value : Number(value)
+      if (!Number.isFinite(num)) {
+        return Promise.reject(pi.ph('totalSopTime'))
       }
       return Promise.resolve()
     },
@@ -504,6 +728,9 @@ const rules = computed<Record<string, Rule[]>>(() => ({
 
 /** 校验表单（失败 throw，供父级 handleFormSubmit 捕获） */
 async function validate() {
+  if (isMasterProdDateLocked.value) {
+    throw new Error(prodDateLockedAlertMessage.value)
+  }
   await formRef.value?.validate()
   return formState
 }
@@ -511,18 +738,6 @@ async function validate() {
 /** 映射为 Create/Update DTO */
 function getValues(): Record<string, any> {
   const payload = { ...formState }
-  if ('readSopTime' in payload) {
-    const rawreadSopTime = payload.readSopTime
-    payload.readSopTime = typeof rawreadSopTime === 'number' ? rawreadSopTime : Number(rawreadSopTime)
-  }
-  if ('personCount' in payload) {
-    const rawpersonCount = payload.personCount
-    payload.personCount = typeof rawpersonCount === 'number' ? rawpersonCount : Number(rawpersonCount)
-  }
-  if ('totalSopTime' in payload) {
-    const rawtotalSopTime = payload.totalSopTime
-    payload.totalSopTime = typeof rawtotalSopTime === 'number' ? rawtotalSopTime : Number(rawtotalSopTime)
-  }
   if ('changeoverCount' in payload) {
     const rawchangeoverCount = payload.changeoverCount
     payload.changeoverCount = typeof rawchangeoverCount === 'number' ? rawchangeoverCount : Number(rawchangeoverCount)
@@ -531,9 +746,33 @@ function getValues(): Record<string, any> {
     const rawchangeoverTime = payload.changeoverTime
     payload.changeoverTime = typeof rawchangeoverTime === 'number' ? rawchangeoverTime : Number(rawchangeoverTime)
   }
+  if ('instrumentSetupTime' in payload) {
+    const rawinstrumentSetupTime = payload.instrumentSetupTime
+    payload.instrumentSetupTime = typeof rawinstrumentSetupTime === 'number' ? rawinstrumentSetupTime : Number(rawinstrumentSetupTime)
+  }
   if ('totalChangeoverTime' in payload) {
     const rawtotalChangeoverTime = payload.totalChangeoverTime
     payload.totalChangeoverTime = typeof rawtotalChangeoverTime === 'number' ? rawtotalChangeoverTime : Number(rawtotalChangeoverTime)
+  }
+  if ('readSopTime' in payload) {
+    const rawreadSopTime = payload.readSopTime
+    payload.readSopTime = typeof rawreadSopTime === 'number' ? rawreadSopTime : Number(rawreadSopTime)
+  }
+  if ('learningTime' in payload) {
+    const rawlearningTime = payload.learningTime
+    payload.learningTime = typeof rawlearningTime === 'number' ? rawlearningTime : Number(rawlearningTime)
+  }
+  if ('personCount' in payload) {
+    const rawpersonCount = payload.personCount
+    payload.personCount = typeof rawpersonCount === 'number' ? rawpersonCount : Number(rawpersonCount)
+  }
+  if ('totalLearningTime' in payload) {
+    const rawtotalLearningTime = payload.totalLearningTime
+    payload.totalLearningTime = typeof rawtotalLearningTime === 'number' ? rawtotalLearningTime : Number(rawtotalLearningTime)
+  }
+  if ('totalSopTime' in payload) {
+    const rawtotalSopTime = payload.totalSopTime
+    payload.totalSopTime = typeof rawtotalSopTime === 'number' ? rawtotalSopTime : Number(rawtotalSopTime)
   }
   if ('sortOrder' in payload) delete payload.sortOrder
   return payload

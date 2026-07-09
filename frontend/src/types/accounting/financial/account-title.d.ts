@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：frontend/src/types/accounting/financial
 // 文件名称：account-title.d.ts
-// 创建时间：2026-06-24
+// 创建时间：2026-07-09
 // 创建人：Takt365(Auto Generated)
 // 功能描述：accounting/financial 模块类型定义（自动生成；类型名去 Takt 前缀与末尾 Dto，如 TaktCompanyDto → Company）
 // 
@@ -94,16 +94,6 @@ export interface AccountTitle extends CompanyDtoBase {
   isBank: number;
 
   /**
-   * 关联工厂（关联 TaktPlant.PlantCode）
-   */
-  relatedPlant?: string;
-
-  /**
-   * 科目状态（字典 sys_normal_disable_status；1=启用，0=禁用）
-   */
-  accountTitleStatus: number;
-
-  /**
    * 生效日期
    */
   validFrom: string;
@@ -114,14 +104,19 @@ export interface AccountTitle extends CompanyDtoBase {
   validTo: string;
 
   /**
+   * 关联工厂（关联 TaktPlant.PlantCode）
+   */
+  relatedPlant: string;
+
+  /**
    * 排序号
    */
   sortOrder: number;
 
   /**
-   * 会计科目变更记录列表（外键在子表 TaktAccountTitleChangeLog.AccountTitleId） （子表：TaktAccountTitleChangeLog）
+   * 科目状态（字典 sys_normal_disable_status；1=启用，0=禁用）
    */
-  changeLogs?: AccountTitleChangeLog[];
+  accountTitleStatus: number;
 
 }
 
@@ -224,16 +219,6 @@ export interface AccountTitleQuery extends TaktPagedQuery {
   isBank?: number;
 
   /**
-   * 关联工厂（关联 TaktPlant.PlantCode）
-   */
-  relatedPlant?: string;
-
-  /**
-   * 科目状态（字典 sys_normal_disable_status；1=启用，0=禁用）
-   */
-  accountTitleStatus?: number;
-
-  /**
    * 生效日期（范围查询-开始）
    */
   validFromStart?: string;
@@ -254,9 +239,19 @@ export interface AccountTitleQuery extends TaktPagedQuery {
   validToEnd?: string;
 
   /**
+   * 关联工厂（关联 TaktPlant.PlantCode）
+   */
+  relatedPlant?: string;
+
+  /**
    * 排序号
    */
   sortOrder?: number;
+
+  /**
+   * 科目状态（字典 sys_normal_disable_status；1=启用，0=禁用）
+   */
+  accountTitleStatus?: number;
 
   /**
    * 创建时间（范围查询-开始）
@@ -363,16 +358,6 @@ export interface AccountTitleCreate {
   isBank: number;
 
   /**
-   * 关联工厂（关联 TaktPlant.PlantCode）
-   */
-  relatedPlant?: string;
-
-  /**
-   * 科目状态（字典 sys_normal_disable_status；1=启用，0=禁用）
-   */
-  accountTitleStatus: number;
-
-  /**
    * 生效日期
    */
   validFrom: string;
@@ -383,9 +368,14 @@ export interface AccountTitleCreate {
   validTo: string;
 
   /**
-   * 会计科目变更记录列表（外键在子表 TaktAccountTitleChangeLog.AccountTitleId）（子表，级联保存）
+   * 关联工厂（关联 TaktPlant.PlantCode）
    */
-  changeLogs?: AccountTitleChangeLogCreate[];
+  relatedPlant: string;
+
+  /**
+   * 科目状态（字典 sys_normal_disable_status；1=启用，0=禁用）
+   */
+  accountTitleStatus: number;
 
   /**
    * 扩展字段JSON
@@ -530,16 +520,6 @@ export interface AccountTitleTemplate {
   isBank?: number;
 
   /**
-   * 关联工厂（关联 TaktPlant.PlantCode）
-   */
-  relatedPlant?: string;
-
-  /**
-   * 科目状态（字典 sys_normal_disable_status；1=启用，0=禁用）
-   */
-  accountTitleStatus?: number;
-
-  /**
    * 生效日期
    */
   validFrom?: string;
@@ -550,9 +530,14 @@ export interface AccountTitleTemplate {
   validTo?: string;
 
   /**
-   * 会计科目变更记录列表（外键在子表 TaktAccountTitleChangeLog.AccountTitleId）（子表，级联保存）
+   * 关联工厂（关联 TaktPlant.PlantCode）
    */
-  changeLogs?: AccountTitleChangeLogCreate[];
+  relatedPlant?: string;
+
+  /**
+   * 科目状态（字典 sys_normal_disable_status；1=启用，0=禁用）
+   */
+  accountTitleStatus?: number;
 
   /**
    * 扩展字段JSON
@@ -649,16 +634,6 @@ export interface AccountTitleImport {
   isBank?: number;
 
   /**
-   * 关联工厂（关联 TaktPlant.PlantCode）
-   */
-  relatedPlant?: string;
-
-  /**
-   * 科目状态（字典 sys_normal_disable_status；1=启用，0=禁用）
-   */
-  accountTitleStatus?: number;
-
-  /**
    * 生效日期
    */
   validFrom?: string;
@@ -669,9 +644,14 @@ export interface AccountTitleImport {
   validTo?: string;
 
   /**
-   * 会计科目变更记录列表（外键在子表 TaktAccountTitleChangeLog.AccountTitleId）（子表，级联保存）
+   * 关联工厂（关联 TaktPlant.PlantCode）
    */
-  changeLogs?: AccountTitleChangeLogCreate[];
+  relatedPlant?: string;
+
+  /**
+   * 科目状态（字典 sys_normal_disable_status；1=启用，0=禁用）
+   */
+  accountTitleStatus?: number;
 
   /**
    * 扩展字段JSON
@@ -768,16 +748,6 @@ export interface AccountTitleExport {
   isBank: number;
 
   /**
-   * 关联工厂（关联 TaktPlant.PlantCode）
-   */
-  relatedPlant?: string;
-
-  /**
-   * 科目状态（字典 sys_normal_disable_status；1=启用，0=禁用）
-   */
-  accountTitleStatus: number;
-
-  /**
    * 生效日期
    */
   validFrom: string;
@@ -788,9 +758,19 @@ export interface AccountTitleExport {
   validTo: string;
 
   /**
+   * 关联工厂（关联 TaktPlant.PlantCode）
+   */
+  relatedPlant: string;
+
+  /**
    * 排序号
    */
   sortOrder: number;
+
+  /**
+   * 科目状态（字典 sys_normal_disable_status；1=启用，0=禁用）
+   */
+  accountTitleStatus: number;
 
   /**
    * 扩展字段JSON

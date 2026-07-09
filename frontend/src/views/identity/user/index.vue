@@ -75,10 +75,10 @@
         <template v-if="column.key === 'userStatus'">
           <a-switch
             :checked="record.userStatus === 1"
-            :disabled="isAdminUser(record)"
+            :disabled="isAdminUser(toUserRecord(record))"
             :checked-children="t('common.page.button.enable')"
             :un-checked-children="t('common.page.button.disable')"
-            @change="(checked: unknown) => handleUserStatusChange(record, Boolean(checked))"
+            @change="(checked: unknown) => handleUserStatusChange(toUserRecord(record), Boolean(checked))"
           />
         </template>
         <template v-else-if="column.key === 'userType'">
@@ -523,6 +523,15 @@ const isAdminUser = (user: User | null): boolean => {
   if (!user) return false
   const lowerUserName = getUsername(user).toLowerCase()
   return lowerUserName === 'admin' || lowerUserName === 'guest'
+}
+
+/**
+ * bodyCell 插槽行转为 User（TaktSingleTable 透传 record 为 Record）
+ * @param record 表格行
+ * @returns {User} 用户行
+ */
+function toUserRecord(record: Record<string, unknown>): User {
+  return record as unknown as User
 }
 
 // 更新/删除按钮禁用状态（表格无选中时自动灰色；基于 selectedRows 保证与表格勾选一致）

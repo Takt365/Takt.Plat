@@ -32,9 +32,9 @@ public class TaktAssyOutputDetail : TaktCompanyEntityBase
     public long AssyOutputId { get; set; }
     
     /// <summary>
-    /// 生产工单号（冗余字段,便于查询）
+    /// 工单号（冗余字段,便于查询）
     /// </summary>
-    [SugarColumn(ColumnName = "prod_order_code", ColumnDescription = "生产工单号", ColumnDataType = "nvarchar", Length = 20, IsNullable = false)]
+    [SugarColumn(ColumnName = "prod_order_code", ColumnDescription = "工单号", ColumnDataType = "nvarchar", Length = 20, IsNullable = false)]
     public string ProdOrderCode { get; set; } = string.Empty;
     
     /// <summary>
@@ -44,10 +44,16 @@ public class TaktAssyOutputDetail : TaktCompanyEntityBase
     public int LineNumber { get; set; } = 0;
 
     /// <summary>
-    /// 生产时段
+    /// 生产时段（固定值）
     /// </summary>
     [SugarColumn(ColumnName = "time_period", ColumnDescription = "生产时段", Length = 20, ColumnDataType = "nvarchar", IsNullable = false)]
     public string TimePeriod { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 标准产能（冗余字段：默认快照主表 StdCapacity；有报工工时时按报工工时÷标准工时×稼动率重算该行）
+    /// </summary>
+    [SugarColumn(ColumnName = "std_capacity", ColumnDescription = "标准产能", ColumnDataType = "decimal", Length = 18, DecimalDigits = 2, IsNullable = false, DefaultValue = "0")]
+    public decimal StdCapacity { get; set; } = 0;
 
     /// <summary>
     /// 实际生产数量
@@ -62,9 +68,9 @@ public class TaktAssyOutputDetail : TaktCompanyEntityBase
     public int DowntimeMinutes { get; set; } = 0;
 
     /// <summary>
-    /// 停线原因（字典 logistics_stop_reason_category，存 DictValue）
+    /// 停线原因（字典 logistics_stop_reason_category，多选 DictLabel 逗号分隔）
     /// </summary>
-    [SugarColumn(ColumnName = "downtime_reason", ColumnDescription = "停线原因", Length = 40, ColumnDataType = "nvarchar", IsNullable = true)]
+    [SugarColumn(ColumnName = "downtime_reason", ColumnDescription = "停线原因", Length = 500, ColumnDataType = "nvarchar", IsNullable = true)]
     public string? DowntimeReason { get; set; }
 
     /// <summary>
@@ -74,9 +80,9 @@ public class TaktAssyOutputDetail : TaktCompanyEntityBase
     public string? DowntimeDescription { get; set; }
 
     /// <summary>
-    /// 未达成原因（字典 logistics_nonachievement_reason_category，存 DictValue）
+    /// 未达成原因（字典 logistics_nonachievement_reason_category，多选 DictLabel 逗号分隔）
     /// </summary>
-    [SugarColumn(ColumnName = "unachieved_reason", ColumnDescription = "未达成原因", Length = 40, ColumnDataType = "nvarchar", IsNullable = true)]
+    [SugarColumn(ColumnName = "unachieved_reason", ColumnDescription = "未达成原因", Length = 500, ColumnDataType = "nvarchar", IsNullable = true)]
     public string? UnachievedReason { get; set; }
 
     /// <summary>
@@ -86,28 +92,46 @@ public class TaktAssyOutputDetail : TaktCompanyEntityBase
     public string? UnachievedDescription { get; set; }
 
     /// <summary>
-    /// 投入工时(分钟)
+    /// 投入工时(分钟)（计算结果：无产量且无报工时为 0；报工工时大于 0 时等于报工工时，否则为人数×60）
     /// </summary>
     [SugarColumn(ColumnName = "input_minutes", ColumnDescription = "投入工时", ColumnDataType = "decimal", Length = 10, DecimalDigits = 2, IsNullable = false, DefaultValue = "0")]
     public decimal InputMinutes { get; set; } = 0;
 
     /// <summary>
-    /// 生产工时(分钟)
-    /// </summary>
-    [SugarColumn(ColumnName = "prod_minutes", ColumnDescription = "生产工时", ColumnDataType = "decimal", Length = 10, DecimalDigits = 2, IsNullable = false, DefaultValue = "0")]
-    public decimal ProdMinutes { get; set; } = 0;
-
-    /// <summary>
-    /// 实际工时(分钟)
+    /// 实际工时(分钟)（计算结果：无产量且无报工时为 0；报工工时大于 0 时为报工工时减停线时间，否则为投入工时减停线时间；有产量时不小于 0）
     /// </summary>
     [SugarColumn(ColumnName = "actual_minutes", ColumnDescription = "实际工时", ColumnDataType = "decimal", Length = 10, DecimalDigits = 2, IsNullable = false, DefaultValue = "0")]
     public decimal ActualMinutes { get; set; } = 0;
 
     /// <summary>
-    /// 达成率(%)
+    /// 间接工时(分钟)（计算结果：无产量且无报工时为 0；否则为间接人数×向下取整(实际工时÷直接人数)）
     /// </summary>
-    [SugarColumn(ColumnName = "achievement_rate", ColumnDescription = "达成率", ColumnDataType = "decimal", Length = 5, DecimalDigits = 2, IsNullable = false, DefaultValue = "0")]
+    [SugarColumn(ColumnName = "indirect_minutes", ColumnDescription = "间接工时", ColumnDataType = "decimal", Length = 10, DecimalDigits = 2, IsNullable = false, DefaultValue = "0")]
+    public decimal IndirectMinutes { get; set; } = 0;
+
+    /// <summary>
+    /// 报工工时(分钟)（填写场景：1 同一时段混合生产；2 清机；3 无产出、欠料、仪设、切换机种等需记录损失时间）
+    /// </summary>
+    [SugarColumn(ColumnName = "confirm_minutes", ColumnDescription = "报工工时", ColumnDataType = "decimal", Length = 10, DecimalDigits = 2, IsNullable = false, DefaultValue = "0")]
+    public decimal ConfirmMinutes { get; set; } = 0;
+
+    /// <summary>
+    /// 混合生产（0=非混合；N≥2 表示同班组同日期同生产时段内共有 N 笔有产量/报工）
+    /// </summary>
+    [SugarColumn(ColumnName = "mixed_prod", ColumnDescription = "混合生产", ColumnDataType = "int", IsNullable = false, DefaultValue = "0")]
+    public int MixedProd { get; set; } = 0;
+
+    /// <summary>
+    /// 达成率(%)（计算结果：实际生产数量÷StdCapacity×100%；标准产能为0时取0）
+    /// </summary>
+    [SugarColumn(ColumnName = "achievement_rate", ColumnDescription = "达成率", ColumnDataType = "decimal", Length = 7, DecimalDigits = 2, IsNullable = false, DefaultValue = "0")]
     public decimal AchievementRate { get; set; } = 0;
+
+    /// <summary>
+    /// 是否作废（字典 sys_yes_no_type，0=否 1=是；编辑移除子行时标记作废）
+    /// </summary>
+    [SugarColumn(ColumnName = "is_obsolete", ColumnDescription = "是否作废", ColumnDataType = "int", IsNullable = false, DefaultValue = "0")]
+    public int IsObsolete { get; set; } = 0;
 
     /// <summary>
     /// 组立日报（主表）

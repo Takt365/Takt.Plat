@@ -28,24 +28,24 @@
           <a-row :gutter="24">
             <a-col :span="12">
               <a-form-item
-                :label="t('entity.manufacturermaterial.linenumber')"
+                :label="pi.label('lineNumber')"
                 name="lineNumber"
               >
                 <a-input-number
                   v-model:value="formState.lineNumber"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.manufacturermaterial.linenumber') })"
+                  :placeholder="pi.ph('lineNumber')"
                   style="width: 100%"
                 />
               </a-form-item>
             </a-col>
             <a-col :span="12">
               <a-form-item
-                :label="t('entity.manufacturermaterial.code')"
+                :label="pi.label('manufacturerMaterialCode')"
                 name="manufacturerMaterialCode"
               >
                 <a-input
                   v-model:value="formState.manufacturerMaterialCode"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.manufacturermaterial.code') })"
+                  :placeholder="pi.ph('manufacturerMaterialCode')"
                   show-count
                   :maxlength="20"
                   allow-clear
@@ -55,12 +55,12 @@
             </a-col>
             <a-col :span="12">
               <a-form-item
-                :label="t('entity.manufacturermaterial.name')"
+                :label="pi.label('manufacturerMaterialName')"
                 name="manufacturerMaterialName"
               >
                 <a-input
                   v-model:value="formState.manufacturerMaterialName"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.manufacturermaterial.name') })"
+                  :placeholder="pi.ph('manufacturerMaterialName')"
                   show-count
                   :maxlength="20"
                   allow-clear
@@ -69,12 +69,12 @@
             </a-col>
             <a-col :span="12">
               <a-form-item
-                :label="t('entity.manufacturermaterial.specification')"
+                :label="pi.label('manufacturerMaterialSpecification')"
                 name="manufacturerMaterialSpecification"
               >
                 <a-input
                   v-model:value="formState.manufacturerMaterialSpecification"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.manufacturermaterial.specification') })"
+                  :placeholder="pi.ph('manufacturerMaterialSpecification')"
                   show-count
                   :maxlength="20"
                   allow-clear
@@ -83,15 +83,13 @@
             </a-col>
             <a-col :span="12">
               <a-form-item
-                :label="t('entity.manufacturermaterial.materialcode')"
+                :label="pi.label('materialCode')"
                 name="materialCode"
               >
-                <a-input
+                <TaktSelect
                   v-model:value="formState.materialCode"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.manufacturermaterial.materialcode') })"
-                  show-count
-                  :maxlength="20"
-                  allow-clear
+                  api-url="TaktMaterials/options"
+                  :placeholder="pi.ph('materialCode')"
                   :disabled="!!formData?.manufacturerMaterialId"
                 />
               </a-form-item>
@@ -109,7 +107,7 @@
                     >
                       <span class="takt-form-label-hint-icon"><RiQuestionLine class="takt-remix-icon" /></span>
                     </a-tooltip>
-                    <span>{{ t('common.page.entity.extfield') }}</span>
+                    <span>{{ pi.label('extField') }}</span>
                   </span>
                 </template>
                 <a-textarea
@@ -124,12 +122,12 @@
             </a-col>
             <a-col :span="24">
               <a-form-item
-                :label="t('common.page.entity.remark')"
+                :label="pi.label('remark')"
                 name="remark"
               >
                 <a-textarea
                   v-model:value="formState.remark"
-                  :placeholder="t('common.page.form.placeholder.optional', { field: t('common.page.entity.remark') })"
+                  :placeholder="pi.ph('remark')"
                   :rows="4"
                   show-count
                   :maxlength="400"
@@ -152,6 +150,11 @@
 import { reactive, watch, computed, ref } from 'vue'
 import { useI18n } from 'vue-i18n'
 import type { Rule } from 'ant-design-vue/es/form'
+import { useManufacturerMaterialI18n } from '../composables/use-manufacturer-material-i18n'
+
+/** 实体字段 i18n */
+const pi = useManufacturerMaterialI18n()
+
 import type { ManufacturerMaterialCreate } from '@/types/logistics/materials/manufacturer-material'
 import { RiQuestionLine } from '@remixicon/vue'
 
@@ -163,6 +166,7 @@ const formContentClass = computed(() => (formFields.length > 10 ? 'takt-form-con
 const activeTab = ref('tab-0')
 /** CreateDto 字段名列表（与 formState 键对齐） */
 const formFields = ["lineNumber","manufacturerMaterialCode","manufacturerMaterialName","manufacturerMaterialSpecification","materialCode","extField","remark"]
+
 
 
 /** 父级传入的编辑 DTO；新增时为 undefined 或空对象 */
@@ -217,11 +221,11 @@ const rules = computed<Record<string, Rule[]>>(() => ({
   lineNumber: [{
     validator: async (_rule, value) => {
       if (value === undefined || value === null || value === '') {
-        return Promise.reject(t('common.page.form.placeholder.select', { field: t('entity.manufacturermaterial.linenumber') }))
+        return Promise.reject(pi.ph('lineNumber'))
       }
       const num = typeof value === 'number' ? value : Number(value)
       if (!Number.isFinite(num)) {
-        return Promise.reject(t('common.page.form.placeholder.select', { field: t('entity.manufacturermaterial.linenumber') }))
+        return Promise.reject(pi.ph('lineNumber'))
       }
       return Promise.resolve()
     },
@@ -230,22 +234,22 @@ const rules = computed<Record<string, Rule[]>>(() => ({
   manufacturerMaterialCode: [
     {
       required: true,
-      message: t('common.page.form.placeholder.required', { field: t('entity.manufacturermaterial.code') }),
+      message: pi.ph('manufacturerMaterialCode'),
       trigger: 'blur'
     }
   ],
   manufacturerMaterialName: [
     {
       required: true,
-      message: t('common.page.form.placeholder.required', { field: t('entity.manufacturermaterial.name') }),
+      message: pi.ph('manufacturerMaterialName'),
       trigger: 'blur'
     }
   ],
   materialCode: [
     {
       required: true,
-      message: t('common.page.form.placeholder.required', { field: t('entity.manufacturermaterial.materialcode') }),
-      trigger: 'blur'
+      message: pi.ph('materialCode'),
+      trigger: 'change'
     }
   ],
 }))

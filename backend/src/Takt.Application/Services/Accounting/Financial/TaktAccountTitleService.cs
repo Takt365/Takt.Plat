@@ -30,7 +30,6 @@ namespace Takt.Application.Services.Accounting.Financial;
 public class TaktAccountTitleService : TaktServiceBase, ITaktAccountTitleService
 {
     private readonly ITaktCompanyRepository<TaktAccountTitle> _accountTitleRepository;
-    private readonly ITaktCompanyRepository<TaktAccountTitleChangeLog> _accountTitleChangeLogRepository;
     private readonly ITaktSortOrderGenerator _sortOrderGenerator;
     private readonly ITaktUniqueValidator _uniqueValidator;
 
@@ -38,14 +37,12 @@ public class TaktAccountTitleService : TaktServiceBase, ITaktAccountTitleService
     /// 构造函数
     /// </summary>
     /// <param name="accountTitleRepository">会计科目仓储</param>
-    /// <param name="accountTitleChangeLogRepository">AccountTitleChangeLog仓储</param>
     /// <param name="sortOrderGenerator">排序号生成器</param>
     /// <param name="uniqueValidator">唯一性验证器</param>
     /// <param name="userContext">用户上下文</param>
     /// <param name="localizationService">本地化服务</param>
     public TaktAccountTitleService(
         ITaktCompanyRepository<TaktAccountTitle> accountTitleRepository,
-        ITaktCompanyRepository<TaktAccountTitleChangeLog> accountTitleChangeLogRepository,
         ITaktSortOrderGenerator sortOrderGenerator,
         ITaktUniqueValidator uniqueValidator,
         ITaktUserContext? userContext = null,
@@ -53,7 +50,6 @@ public class TaktAccountTitleService : TaktServiceBase, ITaktAccountTitleService
         : base(userContext, localizationService)
     {
         _accountTitleRepository = accountTitleRepository;
-        _accountTitleChangeLogRepository = accountTitleChangeLogRepository;
         _sortOrderGenerator = sortOrderGenerator;
         _uniqueValidator = uniqueValidator;
     }
@@ -289,9 +285,7 @@ public class TaktAccountTitleService : TaktServiceBase, ITaktAccountTitleService
         if (entity == null)
         {
             throw new TaktBusinessException("会计科目不存在或已删除");
-        }
-        await _accountTitleChangeLogRepository.DeleteAsync(x => x.AccountTitleId == entity.Id);
-        var deleted = await _accountTitleRepository.DeleteAsync(id);
+        }        var deleted = await _accountTitleRepository.DeleteAsync(id);
         if (!deleted)
         {
             throw new TaktBusinessException("会计科目不存在或已删除");
@@ -458,9 +452,6 @@ public class TaktAccountTitleService : TaktServiceBase, ITaktAccountTitleService
         {
             return;
         }
-        // 会计科目变更记录 → dto.ChangeLogs
-        var changelogs = await _accountTitleChangeLogRepository.GetListAsync(x => x.AccountTitleId == entity.Id);
-        dto.ChangeLogs = changelogs.Adapt<List<TaktAccountTitleChangeLogDto>>();
     }
 
     /// <summary>
@@ -471,24 +462,6 @@ public class TaktAccountTitleService : TaktServiceBase, ITaktAccountTitleService
     /// <returns>任务</returns>
     private async Task SaveAccountTitleChildrenAsync(TaktAccountTitle entity, TaktAccountTitleCreateDto dto)
     {
-        // 会计科目变更记录（ChangeLogs）
-        if (dto.ChangeLogs is not { Count: > 0 })
-        {
-            await _accountTitleChangeLogRepository.DeleteAsync(x => x.AccountTitleId == entity.Id);
-        }
-        else
-        {
-            var changelogs = dto.ChangeLogs.Adapt<List<TaktAccountTitleChangeLog>>();
-            foreach (var child in changelogs)
-            {
-                child.AccountTitleId = entity.Id;
-            }
-            await _accountTitleChangeLogRepository.DeleteAsync(x => x.AccountTitleId == entity.Id);
-            foreach (var child in changelogs)
-            {
-            }
-            await _accountTitleChangeLogRepository.CreateRangeAsync(changelogs);
-        }
     }
     // ========================================
     // 查询表达式

@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Infrastructure.Data.Seeds.I18nSeedData.Accounting.Financial
 // 文件名称：TaktAccountTitleI18nSeedData.cs
-// 创建时间：2026-07-02
+// 创建时间：2026-07-09
 // 创建人：Takt365(Auto Generated)
 // 功能描述：TaktAccountTitle 实体字段国际化种子（无对应 frontend locales；TranslationText 取自 ColumnDescription，ContextNote 取自属性 XML summary）
 // 
@@ -251,15 +251,6 @@ public class TaktAccountTitleI18nSeedData : ITaktSeedDataCoordinator
             new TranslationSeedItem("entity.accounttitle.status", "zh-CN", "科目状态", "科目状态（字典 sys_normal_disable_status；1=启用，0=禁用）"),
             // entity.accounttitle.status
             new TranslationSeedItem("entity.accounttitle.status", "zh-HK", "科目状态_hk", "科目状态（字典 sys_normal_disable_status；1=启用，0=禁用）"),
-
-            // entity.accounttitle.changelogs
-            new TranslationSeedItem("entity.accounttitle.changelogs", "en-US", "会计科目变更记录列表_us", "会计科目变更记录列表（外键在子表 TaktAccountTitleChangeLog.AccountTitleId）"),
-            // entity.accounttitle.changelogs
-            new TranslationSeedItem("entity.accounttitle.changelogs", "ja-JP", "会计科目变更记录列表_jp", "会计科目变更记录列表（外键在子表 TaktAccountTitleChangeLog.AccountTitleId）"),
-            // entity.accounttitle.changelogs
-            new TranslationSeedItem("entity.accounttitle.changelogs", "zh-CN", "会计科目变更记录列表", "会计科目变更记录列表（外键在子表 TaktAccountTitleChangeLog.AccountTitleId）"),
-            // entity.accounttitle.changelogs
-            new TranslationSeedItem("entity.accounttitle.changelogs", "zh-HK", "会计科目变更记录列表_hk", "会计科目变更记录列表（外键在子表 TaktAccountTitleChangeLog.AccountTitleId）"),
         };
     }
 

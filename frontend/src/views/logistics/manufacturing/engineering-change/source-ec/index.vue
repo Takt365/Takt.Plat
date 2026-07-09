@@ -780,6 +780,8 @@ const columns = computed<TableColumnsType>(() => [
     width: 120,
     resizable: true,
     ellipsis: true,
+    sorter: (a: SourceEc, b: SourceEc) =>
+      String(getSourceEcField(a, 'sourceEcNo') ?? '').localeCompare(String(getSourceEcField(b, 'sourceEcNo') ?? '')),
     customRender: ({ record }: { record: any }) => getSourceEcField(record, 'sourceEcNo') ?? ''
   },
   {
@@ -816,6 +818,9 @@ const columns = computed<TableColumnsType>(() => [
     width: 120,
     resizable: true,
     ellipsis: true,
+    sorter: (a: SourceEc, b: SourceEc) =>
+      new Date(String(getSourceEcField(a, 'sourceIssueDate') ?? 0)).getTime()
+      - new Date(String(getSourceEcField(b, 'sourceIssueDate') ?? 0)).getTime(),
     customRender: ({ record }: { record: any }) => getSourceEcField(record, 'sourceIssueDate') ?? ''
   },
   {
@@ -1298,7 +1303,7 @@ function handleRefresh() {
   loadData()
 }
 
-/** 表格 change 占位 */
+/** 表格 change（仅处理排序，分页由 TaktPagination 处理） */
 function handleTableChange() {}
 /** 列宽拖拽回调占位 */
 function handleResizeColumn() {}

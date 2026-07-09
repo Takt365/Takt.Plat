@@ -30,6 +30,11 @@ public class TaktAccountLockOptions
     public int ErrorLimit { get; set; } = 5;
 
     /// <summary>
+    /// 锁定时长（分钟）
+    /// </summary>
+    public int LockDurationMinutes { get; set; } = 30;
+
+    /// <summary>
     /// 锁定原因模板
     /// </summary>
     public string LockReason { get; set; } = "连续登录失败{ErrorCount}次，达到错误次数限制（{ErrorLimit}次）";
@@ -42,6 +47,11 @@ public class TaktAccountLockOptions
         if (ErrorLimit <= 0)
         {
             throw new InvalidOperationException($"{SectionName}:ErrorLimit 必须大于 0");
+        }
+
+        if (LockDurationMinutes <= 0)
+        {
+            throw new InvalidOperationException($"{SectionName}:LockDurationMinutes 必须大于 0");
         }
 
         if (string.IsNullOrWhiteSpace(LockReason))

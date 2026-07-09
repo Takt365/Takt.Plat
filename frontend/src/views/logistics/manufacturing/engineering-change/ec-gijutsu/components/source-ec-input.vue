@@ -35,28 +35,23 @@
       </a-form-item>
     </a-form>
     <!-- 未导入来源设变列表 -->
-    <a-table
+    <TaktSingleTable
+      class="min-h-0"
+      entity-scope="company"
       :columns="columns"
+      :visible-column-keys="visibleColumnKeys"
+      :id-column-key="'sourceEcId'"
+      table-mode="single"
       :data-source="dataSource"
       :loading="listLoading"
+      :stripe="true"
       :row-key="getSourceEcId"
-      :pagination="false"
       :row-selection="rowSelection"
-      size="middle"
-      :scroll="{ y: 360 }"
-      class="min-h-0"
-    >
-      <template #bodyCell="{ column, record }">
-        <template v-if="column.key === 'changeStatus'">
-          <TaktDictTag
-            v-if="record.changeStatus != null"
-            dict-type="logistics_ec_status"
-            :value="record.changeStatus"
-          />
-          <span v-else class="text-text-secondary">—</span>
-        </template>
-      </template>
-    </a-table>
+      :include-audit-fields="false"
+      scroll-layout="editable"
+      :show-pagination="false"
+      @change="handleTableChange"
+    />
     <TaktPagination
       v-model:current="currentPage"
       v-model:page-size="pageSize"
@@ -124,64 +119,95 @@ const pageSize = ref(getTaktDefaultPageSize())
 const total = ref(0)
 /** 选中来源设变 ID（单选） */
 const selectedSourceEcId = ref('')
+/** 默认可见列（弹窗内嵌列表，不含主键列） */
+const visibleColumnKeys = ref<string[]>([
+  'sourceEcNo',
+  'sourceModel',
+  'sourceTitle',
+  'sourceStatus',
+  'sourceIssueDate',
+  'sourceTcjOwner',
+  'detailCount',
+])
 
-/** 表格列 */
+/**
+ * 读取行字段值
+ * @param record 行数据
+ * @param field 字段名
+ */
+function getSourceEcField(record: EcGijutsuSourceEcInputItem, field: keyof EcGijutsuSourceEcInputItem): unknown {
+  return record?.[field]
+}
+
+/** 表格列（与设变来源列表页字段读取方式一致） */
 const columns = computed<TableColumnsType>(() => [
   {
     title: t('entity.sourceec.no'),
     dataIndex: 'sourceEcNo',
     key: 'sourceEcNo',
-    width: 100,
+    width: 120,
+    resizable: true,
     ellipsis: true,
+    sorter: (a: EcGijutsuSourceEcInputItem, b: EcGijutsuSourceEcInputItem) =>
+      String(getSourceEcField(a, 'sourceEcNo') ?? '').localeCompare(String(getSourceEcField(b, 'sourceEcNo') ?? '')),
+    customRender: ({ record }: { record: EcGijutsuSourceEcInputItem }) => getSourceEcField(record, 'sourceEcNo') ?? '',
   },
   {
     title: t('entity.sourceec.sourcemodel'),
     dataIndex: 'sourceModel',
     key: 'sourceModel',
-    width: 100,
+    width: 120,
+    resizable: true,
     ellipsis: true,
+    customRender: ({ record }: { record: EcGijutsuSourceEcInputItem }) => getSourceEcField(record, 'sourceModel') ?? '',
   },
   {
     title: t('entity.sourceec.sourcetitle'),
     dataIndex: 'sourceTitle',
     key: 'sourceTitle',
     width: 180,
+    resizable: true,
     ellipsis: true,
-  },
-  {
-    title: t('entity.sourceec.sourceissuedate'),
-    dataIndex: 'sourceIssueDate',
-    key: 'sourceIssueDate',
-    width: 110,
-    ellipsis: true,
-  },
-  {
-    title: t('entity.ec.changestatus'),
-    dataIndex: 'changeStatus',
-    key: 'changeStatus',
-    width: 110,
-    ellipsis: true,
+    customRender: ({ record }: { record: EcGijutsuSourceEcInputItem }) => getSourceEcField(record, 'sourceTitle') ?? '',
   },
   {
     title: t('entity.sourceec.sourcestatus'),
     dataIndex: 'sourceStatus',
     key: 'sourceStatus',
-    width: 100,
+    width: 120,
+    resizable: true,
     ellipsis: true,
+    customRender: ({ record }: { record: EcGijutsuSourceEcInputItem }) => getSourceEcField(record, 'sourceStatus') ?? '',
+  },
+  {
+    title: t('entity.sourceec.sourceissuedate'),
+    dataIndex: 'sourceIssueDate',
+    key: 'sourceIssueDate',
+    width: 120,
+    resizable: true,
+    ellipsis: true,
+    sorter: (a: EcGijutsuSourceEcInputItem, b: EcGijutsuSourceEcInputItem) =>
+      new Date(String(getSourceEcField(a, 'sourceIssueDate') ?? 0)).getTime()
+      - new Date(String(getSourceEcField(b, 'sourceIssueDate') ?? 0)).getTime(),
+    customRender: ({ record }: { record: EcGijutsuSourceEcInputItem }) => getSourceEcField(record, 'sourceIssueDate') ?? '',
   },
   {
     title: t('entity.sourceec.sourcetcjowner'),
     dataIndex: 'sourceTcjOwner',
     key: 'sourceTcjOwner',
-    width: 100,
+    width: 120,
+    resizable: true,
     ellipsis: true,
+    customRender: ({ record }: { record: EcGijutsuSourceEcInputItem }) => getSourceEcField(record, 'sourceTcjOwner') ?? '',
   },
   {
     title: t('logistics.manufacturing.engineering-change.ec-gijutsu.page.sourceEcInput.detailCount'),
     dataIndex: 'detailCount',
     key: 'detailCount',
     width: 90,
+    resizable: true,
     align: 'right',
+    customRender: ({ record }: { record: EcGijutsuSourceEcInputItem }) => getSourceEcField(record, 'detailCount') ?? '',
   },
 ])
 
@@ -196,11 +222,11 @@ const rowSelection = computed(() => ({
 
 /**
  * 获取来源设变行主键
- * @param {EcGijutsuSourceEcInputItem} record 行数据
- * @returns {string} 主键
+ * @param record 行数据
+ * @returns 主键
  */
-function getSourceEcId(record: EcGijutsuSourceEcInputItem): string {
-  return String(record.sourceEcId ?? '')
+function getSourceEcId(record: any): string {
+  return String(record?.sourceEcId ?? '')
 }
 
 /**
@@ -272,6 +298,9 @@ function handlePaginationChange(page: number, size: number): void {
   void loadData()
 }
 
+/** 表格 change（仅处理排序，分页由 TaktPagination 处理） */
+function handleTableChange(): void {}
+
 /** 重置表单与选择 */
 function resetFields(): void {
   queryKeyword.value = ''
@@ -311,7 +340,7 @@ async function handleLoadToForm(): Promise<void> {
       ecLeader: draft.ecLeader ?? '',
       ecDistinction: draft.ecDistinction === 0 ? undefined : draft.ecDistinction,
       ecDetails: draft.ecDetails ?? [],
-      attachments: draft.attachments ?? [],
+      attachments: [],
     }
     emit('draft-ready', formDraft)
   } catch (error: unknown) {

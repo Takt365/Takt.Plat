@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：frontend/src/api/logistics/quality/operation
 // 文件名称：iqc-order.ts
-// 创建时间：2026-06-30
+// 创建时间：2026-07-09
 // 创建人：Takt365(Auto Generated)
 // 功能描述：logistics/quality/operation 模块 API（自动生成，请勿手改路由常量）
 // 
@@ -21,6 +21,12 @@ import type {
   IqcOrderStatus,
   IqcOrderUpdate
 } from '@/types/logistics/quality/operation/iqc-order';
+import type {
+  IqcOrderStat
+} from '@/types/logistics/quality/operation/iqc-order-stat';
+import type {
+  QualityStatQuery
+} from '@/types/logistics/quality/operation/quality-stat-query';
 
 /**
  * API 路径前缀（相对 request baseURL，对应后端 [controller]）
@@ -40,6 +46,19 @@ const IQC_ORDER_API_BASE = 'TaktIqcOrders';
 export function getIqcOrderList(queryDto: any): Promise<TaktPagedResult<IqcOrder>> {
   return request<TaktPagedResult<IqcOrder>>({
     url: `${IQC_ORDER_API_BASE}/list`,
+    method: 'get',
+    params: queryDto,
+  });
+}
+
+/**
+ * 获取 IQC 检验统计（数据看板）
+ * @param {QualityStatQuery} queryDto 查询 DTO
+ * @returns {Promise<IqcOrderStat>} IQC 检验统计
+ */
+export function getIqcOrderStat(queryDto: QualityStatQuery): Promise<IqcOrderStat> {
+  return request<IqcOrderStat>({
+    url: `${IQC_ORDER_API_BASE}/inspection-stat`,
     method: 'get',
     params: queryDto,
   });

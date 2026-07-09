@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：frontend/src/types/logistics/manufacturing/engineering-change
 // 文件名称：ec-detail.d.ts
-// 创建时间：2026-07-01
+// 创建时间：2026-07-09
 // 创建人：Takt365(Auto Generated)
 // 功能描述：logistics/manufacturing/engineering-change 模块类型定义（自动生成；类型名去 Takt 前缀与末尾 Dto，如 TaktCompanyDto → Company）
 // 
@@ -47,6 +47,11 @@ export interface EcDetail extends CompanyDtoBase {
    * 行号（项号/序号，固定步长=10）
    */
   lineNumber: number;
+
+  /**
+   * BOM行号（Ec_bom_line_no）
+   */
+  ecBomLineNo?: string;
 
   /**
    * 机种（Ec_model）
@@ -164,6 +169,31 @@ export interface EcDetail extends CompanyDtoBase {
   ecBomDate: string;
 
   /**
+   * 兼容性（字典 logistics_ec_source_compatibility；A=兼容，B=单向兼容（新替旧），C=单向兼容（旧替新），D=不兼容）
+   */
+  ecIsCompatible?: string;
+
+  /**
+   * 二级区分（字典 logistics_ec_source_distinction；1=有，2=优先，3=无）
+   */
+  ecSecondDistinction?: string;
+
+  /**
+   * 生产指令（字典 logistics_ec_source_instruction；1=已出货成品，2=在线半成品，3=库存零件，4=外协在制品，5=新下达订单，9=未定）
+   */
+  ecInstruction?: string;
+
+  /**
+   * 旧品处理（字典 logistics_ec_legacy_part_disposition；1=转用，2=废弃，3=返工，4=消耗，5=无处理，9=未定）
+   */
+  ecLegacyPartDisposition?: string;
+
+  /**
+   * 是否作废（字典 sys_yes_no_type，0=否 1=是；编辑移除子行时标记作废）
+   */
+  isObsolete: number;
+
+  /**
    * 设变技术课主表（多对一） （主表：TaktEcGijutsu）
    */
   ecGijutsu?: EcGijutsu;
@@ -202,6 +232,11 @@ export interface EcDetailQuery extends TaktPagedQuery {
    * 行号（项号/序号，固定步长=10）
    */
   lineNumber?: number;
+
+  /**
+   * BOM行号（Ec_bom_line_no）
+   */
+  ecBomLineNo?: string;
 
   /**
    * 机种（Ec_model）
@@ -324,6 +359,31 @@ export interface EcDetailQuery extends TaktPagedQuery {
   ecBomDateEnd?: string;
 
   /**
+   * 兼容性（字典 logistics_ec_source_compatibility；A=兼容，B=单向兼容（新替旧），C=单向兼容（旧替新），D=不兼容）
+   */
+  ecIsCompatible?: string;
+
+  /**
+   * 二级区分（字典 logistics_ec_source_distinction；1=有，2=优先，3=无）
+   */
+  ecSecondDistinction?: string;
+
+  /**
+   * 生产指令（字典 logistics_ec_source_instruction；1=已出货成品，2=在线半成品，3=库存零件，4=外协在制品，5=新下达订单，9=未定）
+   */
+  ecInstruction?: string;
+
+  /**
+   * 旧品处理（字典 logistics_ec_legacy_part_disposition；1=转用，2=废弃，3=返工，4=消耗，5=无处理，9=未定）
+   */
+  ecLegacyPartDisposition?: string;
+
+  /**
+   * 是否作废（字典 sys_yes_no_type，0=否 1=是；编辑移除子行时标记作废）
+   */
+  isObsolete?: number;
+
+  /**
    * 创建时间（范围查询-开始）
    */
   createdAtStart?: string;
@@ -383,6 +443,11 @@ export interface EcDetailCreate {
   lineNumber: number;
 
   /**
+   * BOM行号（Ec_bom_line_no）
+   */
+  ecBomLineNo?: string;
+
+  /**
    * 机种（Ec_model）
    */
   ecModel: string;
@@ -498,6 +563,31 @@ export interface EcDetailCreate {
   ecBomDate: string;
 
   /**
+   * 兼容性（字典 logistics_ec_source_compatibility；A=兼容，B=单向兼容（新替旧），C=单向兼容（旧替新），D=不兼容）
+   */
+  ecIsCompatible?: string;
+
+  /**
+   * 二级区分（字典 logistics_ec_source_distinction；1=有，2=优先，3=无）
+   */
+  ecSecondDistinction?: string;
+
+  /**
+   * 生产指令（字典 logistics_ec_source_instruction；1=已出货成品，2=在线半成品，3=库存零件，4=外协在制品，5=新下达订单，9=未定）
+   */
+  ecInstruction?: string;
+
+  /**
+   * 旧品处理（字典 logistics_ec_legacy_part_disposition；1=转用，2=废弃，3=返工，4=消耗，5=无处理，9=未定）
+   */
+  ecLegacyPartDisposition?: string;
+
+  /**
+   * 是否作废（字典 sys_yes_no_type，0=否 1=是；编辑移除子行时标记作废）
+   */
+  isObsolete: number;
+
+  /**
    * 扩展字段JSON
    */
   extField?: string;
@@ -521,6 +611,25 @@ export interface EcDetailUpdate extends EcDetailCreate {
    * EcDetailID（标识要更新的实体）
    */
   ecDetailId: string;
+
+}
+
+
+/**
+ * EcDetail 作废/撤销作废 DTO
+ * 对应前端 EcDetailObsolete
+ * @description 对应后端 TaktEcDetailObsoleteDto
+ */
+export interface EcDetailObsolete {
+  /**
+   * EcDetailID
+   */
+  ecDetailId: string;
+
+  /**
+   * 是否作废（字典 sys_yes_no_type，0=否 1=是；编辑移除子行时标记作废）
+   */
+  isObsolete: number;
 
 }
 
@@ -557,6 +666,11 @@ export interface EcDetailTemplate {
   lineNumber?: number;
 
   /**
+   * BOM行号（Ec_bom_line_no）
+   */
+  ecBomLineNo?: string;
+
+  /**
    * 机种（Ec_model）
    */
   ecModel?: string;
@@ -584,7 +698,7 @@ export interface EcDetailTemplate {
   /**
    * 完成品EOL（End of Line，0=否 1=是）
    */
-  isEndOfLine: number;
+  isEndOfLine?: number;
 
   /**
    * 旧料号（Ec_olditem）
@@ -619,12 +733,12 @@ export interface EcDetailTemplate {
   /**
    * 旧品是否采购（0=否 1=是）
    */
-  isOldProcurement: number;
+  isOldProcurement?: number;
 
   /**
    * 旧品是否检查（0=否 1=是）
    */
-  isOldCheck: number;
+  isOldCheck?: number;
 
   /**
    * 新料号（Ec_newitem）
@@ -670,6 +784,31 @@ export interface EcDetailTemplate {
    * BOM生效日期（Ec_bomdate）
    */
   ecBomDate?: string;
+
+  /**
+   * 兼容性（字典 logistics_ec_source_compatibility；A=兼容，B=单向兼容（新替旧），C=单向兼容（旧替新），D=不兼容）
+   */
+  ecIsCompatible?: string;
+
+  /**
+   * 二级区分（字典 logistics_ec_source_distinction；1=有，2=优先，3=无）
+   */
+  ecSecondDistinction?: string;
+
+  /**
+   * 生产指令（字典 logistics_ec_source_instruction；1=已出货成品，2=在线半成品，3=库存零件，4=外协在制品，5=新下达订单，9=未定）
+   */
+  ecInstruction?: string;
+
+  /**
+   * 旧品处理（字典 logistics_ec_legacy_part_disposition；1=转用，2=废弃，3=返工，4=消耗，5=无处理，9=未定）
+   */
+  ecLegacyPartDisposition?: string;
+
+  /**
+   * 是否作废（字典 sys_yes_no_type，0=否 1=是；编辑移除子行时标记作废）
+   */
+  isObsolete?: number;
 
   /**
    * 扩展字段JSON
@@ -721,6 +860,11 @@ export interface EcDetailImport {
   lineNumber?: number;
 
   /**
+   * BOM行号（Ec_bom_line_no）
+   */
+  ecBomLineNo?: string;
+
+  /**
    * 机种（Ec_model）
    */
   ecModel?: string;
@@ -748,7 +892,7 @@ export interface EcDetailImport {
   /**
    * 完成品EOL（End of Line，0=否 1=是）
    */
-  isEndOfLine: number;
+  isEndOfLine?: number;
 
   /**
    * 旧料号（Ec_olditem）
@@ -783,12 +927,12 @@ export interface EcDetailImport {
   /**
    * 旧品是否采购（0=否 1=是）
    */
-  isOldProcurement: number;
+  isOldProcurement?: number;
 
   /**
    * 旧品是否检查（0=否 1=是）
    */
-  isOldCheck: number;
+  isOldCheck?: number;
 
   /**
    * 新料号（Ec_newitem）
@@ -836,6 +980,31 @@ export interface EcDetailImport {
   ecBomDate?: string;
 
   /**
+   * 兼容性（字典 logistics_ec_source_compatibility；A=兼容，B=单向兼容（新替旧），C=单向兼容（旧替新），D=不兼容）
+   */
+  ecIsCompatible?: string;
+
+  /**
+   * 二级区分（字典 logistics_ec_source_distinction；1=有，2=优先，3=无）
+   */
+  ecSecondDistinction?: string;
+
+  /**
+   * 生产指令（字典 logistics_ec_source_instruction；1=已出货成品，2=在线半成品，3=库存零件，4=外协在制品，5=新下达订单，9=未定）
+   */
+  ecInstruction?: string;
+
+  /**
+   * 旧品处理（字典 logistics_ec_legacy_part_disposition；1=转用，2=废弃，3=返工，4=消耗，5=无处理，9=未定）
+   */
+  ecLegacyPartDisposition?: string;
+
+  /**
+   * 是否作废（字典 sys_yes_no_type，0=否 1=是；编辑移除子行时标记作废）
+   */
+  isObsolete?: number;
+
+  /**
    * 扩展字段JSON
    */
   extField?: string;
@@ -878,6 +1047,11 @@ export interface EcDetailExport {
    * 行号（项号/序号，固定步长=10）
    */
   lineNumber: number;
+
+  /**
+   * BOM行号（Ec_bom_line_no）
+   */
+  ecBomLineNo?: string;
 
   /**
    * 机种（Ec_model）
@@ -993,6 +1167,31 @@ export interface EcDetailExport {
    * BOM生效日期（Ec_bomdate）
    */
   ecBomDate: string;
+
+  /**
+   * 兼容性（字典 logistics_ec_source_compatibility；A=兼容，B=单向兼容（新替旧），C=单向兼容（旧替新），D=不兼容）
+   */
+  ecIsCompatible?: string;
+
+  /**
+   * 二级区分（字典 logistics_ec_source_distinction；1=有，2=优先，3=无）
+   */
+  ecSecondDistinction?: string;
+
+  /**
+   * 生产指令（字典 logistics_ec_source_instruction；1=已出货成品，2=在线半成品，3=库存零件，4=外协在制品，5=新下达订单，9=未定）
+   */
+  ecInstruction?: string;
+
+  /**
+   * 旧品处理（字典 logistics_ec_legacy_part_disposition；1=转用，2=废弃，3=返工，4=消耗，5=无处理，9=未定）
+   */
+  ecLegacyPartDisposition?: string;
+
+  /**
+   * 是否作废（字典 sys_yes_no_type，0=否 1=是；编辑移除子行时标记作废）
+   */
+  isObsolete: number;
 
   /**
    * 扩展字段JSON

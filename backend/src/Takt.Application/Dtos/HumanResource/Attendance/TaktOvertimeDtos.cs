@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Application.Dtos.HumanResource.Attendance
 // 文件名称：TaktOvertimeDtos.cs
-// 创建时间：2026-06-24
+// 创建时间：2026-07-09
 // 创建人：Takt365(Auto Generated)
 // 功能描述：Overtime 模块 DTO（由 generate-dtos-from-entity.cjs 根据 TaktOvertime 生成，请按需审阅）
 // 
@@ -395,7 +395,7 @@ public class TaktOvertimeCreateDto
     /// <summary>
     /// 关联工厂（关联 TaktPlant.PlantCode，选项 TaktPlants/options）
     /// </summary>
-    [Required(ErrorMessage = "关联工厂不能为空")]
+    [Required(ErrorMessage = "关联工厂（关联 TaktPlant.PlantCode，选项 TaktPlants/options）不能为空")]
     public string RelatedPlant { get; set; } = string.Empty;
 
     /// <summary>
@@ -406,7 +406,7 @@ public class TaktOvertimeCreateDto
     /// <summary>
     /// 加班明细列表（子表，级联保存）
     /// </summary>
-    public List<TaktOvertimeItemCreateDto>? Items { get; set; }
+    public List<TaktOvertimeItemUpdateDto>? Items { get; set; }
 
     /// <summary>
     /// 扩展字段JSON
@@ -460,7 +460,7 @@ public class TaktOvertimeStatusDto
     /// <summary>
     /// 加班状态（字典 sys_approval_status；0=待审批 1=审批中 2=已通过 3=已驳回 4=已撤回 5=已终止）
     /// </summary>
-    [Required(ErrorMessage = "加班状态不能为空")]
+    [Required(ErrorMessage = "加班状态（字典 sys_approval_status；0=待审批 1=审批中 2=已通过 3=已驳回 4=已撤回 5=已终止）不能为空")]
     public int OvertimeStatus { get; set; } = 0;
 }
 

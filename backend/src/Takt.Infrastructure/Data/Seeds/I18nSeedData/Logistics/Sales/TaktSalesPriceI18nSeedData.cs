@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Infrastructure.Data.Seeds.I18nSeedData.Logistics.Sales
 // 文件名称：TaktSalesPriceI18nSeedData.cs
-// 创建时间：2026-07-02
+// 创建时间：2026-07-09
 // 创建人：Takt365(Auto Generated)
 // 功能描述：TaktSalesPrice 实体字段国际化种子（无对应 frontend locales；TranslationText 取自 ColumnDescription，ContextNote 取自属性 XML summary）
 // 
@@ -161,15 +161,6 @@ public class TaktSalesPriceI18nSeedData : ITaktSeedDataCoordinator
             new TranslationSeedItem("entity.salesprice.items", "zh-CN", "物料价格明细列表", "物料价格明细列表（主子表关系，一个客户价格可以有多个物料价格）"),
             // entity.salesprice.items
             new TranslationSeedItem("entity.salesprice.items", "zh-HK", "物料价格明细列表_hk", "物料价格明细列表（主子表关系，一个客户价格可以有多个物料价格）"),
-
-            // entity.salesprice.changelogs
-            new TranslationSeedItem("entity.salesprice.changelogs", "en-US", "销售价格变更记录列表_us", "销售价格变更记录列表（外键在子表 TaktSalesPriceChangeLog.SalesPriceId）"),
-            // entity.salesprice.changelogs
-            new TranslationSeedItem("entity.salesprice.changelogs", "ja-JP", "销售价格变更记录列表_jp", "销售价格变更记录列表（外键在子表 TaktSalesPriceChangeLog.SalesPriceId）"),
-            // entity.salesprice.changelogs
-            new TranslationSeedItem("entity.salesprice.changelogs", "zh-CN", "销售价格变更记录列表", "销售价格变更记录列表（外键在子表 TaktSalesPriceChangeLog.SalesPriceId）"),
-            // entity.salesprice.changelogs
-            new TranslationSeedItem("entity.salesprice.changelogs", "zh-HK", "销售价格变更记录列表_hk", "销售价格变更记录列表（外键在子表 TaktSalesPriceChangeLog.SalesPriceId）"),
         };
     }
 

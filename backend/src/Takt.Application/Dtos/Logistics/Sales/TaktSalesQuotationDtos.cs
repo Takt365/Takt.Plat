@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Application.Dtos.Logistics.Sales
 // 文件名称：TaktSalesQuotationDtos.cs
-// 创建时间：2026-07-01
+// 创建时间：2026-07-09
 // 创建人：Takt365(Auto Generated)
 // 功能描述：SalesQuotation 模块 DTO（由 generate-dtos-from-entity.cjs 根据 TaktSalesQuotation 生成，请按需审阅）
 // 
@@ -110,12 +110,6 @@ public class TaktSalesQuotationDto : TaktCompanyDtoBase
     /// （子表：TaktSalesQuotationItem）
     /// </summary>
     public List<TaktSalesQuotationItemDto>? Items { get; set; }
-
-    /// <summary>
-    /// 销售报价变更记录列表（外键在子表 TaktSalesQuotationChangeLog.SalesQuotationId）
-    /// （子表：TaktSalesQuotationChangeLog）
-    /// </summary>
-    public List<TaktSalesQuotationChangeLogDto>? ChangeLogs { get; set; }
 
 }
 
@@ -341,12 +335,7 @@ public class TaktSalesQuotationCreateDto
     /// <summary>
     /// 销售报价明细列表（主子表关系）（子表，级联保存）
     /// </summary>
-    public List<TaktSalesQuotationItemCreateDto>? Items { get; set; }
-
-    /// <summary>
-    /// 销售报价变更记录列表（外键在子表 TaktSalesQuotationChangeLog.SalesQuotationId）（子表，级联保存）
-    /// </summary>
-    public List<TaktSalesQuotationChangeLogCreateDto>? ChangeLogs { get; set; }
+    public List<TaktSalesQuotationItemUpdateDto>? Items { get; set; }
 
     /// <summary>
     /// 扩展字段JSON
@@ -499,11 +488,6 @@ public class TaktSalesQuotationTemplateDto
     public List<TaktSalesQuotationItemCreateDto>? Items { get; set; }
 
     /// <summary>
-    /// 销售报价变更记录列表（外键在子表 TaktSalesQuotationChangeLog.SalesQuotationId）（子表，级联保存）
-    /// </summary>
-    public List<TaktSalesQuotationChangeLogCreateDto>? ChangeLogs { get; set; }
-
-    /// <summary>
     /// 扩展字段JSON
     /// </summary>
     public string? ExtField { get; set; }
@@ -609,11 +593,6 @@ public class TaktSalesQuotationImportDto
     /// 销售报价明细列表（主子表关系）（子表，级联保存）
     /// </summary>
     public List<TaktSalesQuotationItemCreateDto>? Items { get; set; }
-
-    /// <summary>
-    /// 销售报价变更记录列表（外键在子表 TaktSalesQuotationChangeLog.SalesQuotationId）（子表，级联保存）
-    /// </summary>
-    public List<TaktSalesQuotationChangeLogCreateDto>? ChangeLogs { get; set; }
 
     /// <summary>
     /// 扩展字段JSON

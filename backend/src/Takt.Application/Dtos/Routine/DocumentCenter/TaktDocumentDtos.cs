@@ -189,13 +189,6 @@ public class TaktDocumentDto : TaktApprovalDtoBase
     /// （子表：TaktDocumentVersion）
     /// </summary>
     public List<TaktDocumentVersionDto>? Versions { get; set; }
-
-    /// <summary>
-    /// 变更日志列表（主子表关系）
-    /// （子表：TaktDocumentChangeLog）
-    /// </summary>
-    public List<TaktDocumentChangeLogDto>? ChangeLogs { get; set; }
-
 }
 
 // ========================================
@@ -678,11 +671,6 @@ public class TaktDocumentCreateDto
     public List<TaktDocumentVersionCreateDto>? Versions { get; set; }
 
     /// <summary>
-    /// 变更日志列表（主子表关系）（子表，级联保存）
-    /// </summary>
-    public List<TaktDocumentChangeLogCreateDto>? ChangeLogs { get; set; }
-
-    /// <summary>
     /// 扩展字段JSON
     /// </summary>
     public string? ExtField { get; set; }
@@ -931,11 +919,6 @@ public class TaktDocumentTemplateDto
     public List<TaktDocumentVersionCreateDto>? Versions { get; set; }
 
     /// <summary>
-    /// 变更日志列表（主子表关系）（子表，级联保存）
-    /// </summary>
-    public List<TaktDocumentChangeLogCreateDto>? ChangeLogs { get; set; }
-
-    /// <summary>
     /// 扩展字段JSON
     /// </summary>
     public string? ExtField { get; set; }
@@ -1115,11 +1098,6 @@ public class TaktDocumentImportDto
     /// 版本历史列表（主子表关系）（子表，级联保存）
     /// </summary>
     public List<TaktDocumentVersionCreateDto>? Versions { get; set; }
-
-    /// <summary>
-    /// 变更日志列表（主子表关系）（子表，级联保存）
-    /// </summary>
-    public List<TaktDocumentChangeLogCreateDto>? ChangeLogs { get; set; }
 
     /// <summary>
     /// 扩展字段JSON

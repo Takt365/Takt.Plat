@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Application.Services.Logistics.Quality.Operation
 // 文件名称：TaktIpqcOrderItemService.cs
-// 创建时间：2026-06-30
+// 创建时间：2026-07-09
 // 创建人：Takt365(Cursor AI)
 // 功能描述：制程检验单明细应用服务实现
 // 
@@ -119,6 +119,7 @@ public class TaktIpqcOrderItemService : TaktServiceBase, ITaktIpqcOrderItemServi
     public async Task<TaktIpqcOrderItemDto> CreateIpqcOrderItemAsync(TaktIpqcOrderItemCreateDto dto)
     {
         var entity = dto.Adapt<TaktIpqcOrderItem>();
+        entity.IsObsolete = 0;
         var isUnique_ix_takt_logistics_quality_ipqc_order_item_order_line_unique = await _uniqueValidator.IsUniqueAsync(
             _ipqcOrderItemRepository,
             x => x.IpqcOrderId == entity.IpqcOrderId
@@ -224,6 +225,27 @@ public class TaktIpqcOrderItemService : TaktServiceBase, ITaktIpqcOrderItemServi
     }
 
     /// <summary>
+    /// 更新制程检验单明细作废状态
+    /// </summary>
+    /// <param name="dto">作废DTO</param>
+    /// <returns>DTO</returns>
+    public async Task<TaktIpqcOrderItemDto> UpdateIpqcOrderItemObsoleteAsync(TaktIpqcOrderItemObsoleteDto dto)
+    {
+        var entity = await _ipqcOrderItemRepository.GetByIdAsync(dto.IpqcOrderItemId);
+        if (entity == null)
+        {
+            throw new TaktBusinessException("制程检验单明细不存在");
+        }
+        if (entity.TenantCode != CurrentTenantCode || entity.CompanyCode != CurrentCompanyCode)
+        {
+            throw new TaktBusinessException("制程检验单明细不存在");
+        }
+        entity.IsObsolete = dto.IsObsolete;
+        await _ipqcOrderItemRepository.UpdateAsync(entity);
+        return await GetIpqcOrderItemByIdAsync(dto.IpqcOrderItemId) ?? throw new TaktBusinessException("制程检验单明细不存在");
+    }
+
+    /// <summary>
     /// 获取导入模板
     /// </summary>
     /// <param name="sheetName">工作表名称</param>
@@ -322,6 +344,30 @@ public class TaktIpqcOrderItemService : TaktServiceBase, ITaktIpqcOrderItemServi
     // ========================================
 
     /// <summary>
+    /// 将指定主表下全部未作废制程检验不良处理记录标记为作废（编辑清空子表）
+    /// </summary>
+    /// <param name="ipqcOrderItemId">主表主键</param>
+    /// <returns>任务</returns>
+    private async Task MarkIpqcDefectHandlingsObsoleteAsync(long ipqcOrderItemId)
+    {
+        if (ipqcOrderItemId <= 0)
+        {
+            return;
+        }
+        var rows = await _ipqcDefectHandlingRepository.GetListAsync(
+            x => x.IpqcOrderItemId == ipqcOrderItemId && x.IsObsolete == 0);
+        if (rows.Count == 0)
+        {
+            return;
+        }
+        foreach (var row in rows)
+        {
+            row.IsObsolete = 1;
+        }
+        await _ipqcDefectHandlingRepository.UpdateRangeAsync(rows);
+    }
+
+    /// <summary>
     /// 填充制程检验单明细详情（加载 OneToMany 子表：制程检验不良处理记录）
     /// </summary>
     /// <param name="dto">响应 DTO</param>
@@ -333,13 +379,13 @@ public class TaktIpqcOrderItemService : TaktServiceBase, ITaktIpqcOrderItemServi
         {
             return;
         }
-        // 制程检验不良处理记录 → dto.DefectHandlings
+        // 制程检验不良处理记录 → dto.DefectHandlings（含作废行）
         var defecthandlings = await _ipqcDefectHandlingRepository.GetListAsync(x => x.IpqcOrderItemId == entity.Id);
         dto.DefectHandlings = defecthandlings.Adapt<List<TaktIpqcDefectHandlingDto>>();
     }
 
     /// <summary>
-    /// 保存制程检验单明细子表级联（制程检验不良处理记录；Create/Update 后按主表 Id 先删后插）
+    /// 保存制程检验单明细子表级联（制程检验不良处理记录；按子表 Id 增量新增/更新；未提交行标记作废，禁止先删后插）
     /// </summary>
     /// <param name="entity">主表实体</param>
     /// <param name="dto">创建/更新 DTO（含子表集合；UpdateDto 须继承 CreateDto）</param>
@@ -349,56 +395,76 @@ public class TaktIpqcOrderItemService : TaktServiceBase, ITaktIpqcOrderItemServi
         // 制程检验不良处理记录（DefectHandlings）
         if (dto.DefectHandlings is not { Count: > 0 })
         {
-            await _ipqcDefectHandlingRepository.DeleteAsync(x => x.IpqcOrderItemId == entity.Id);
+            await MarkIpqcDefectHandlingsObsoleteAsync(entity.Id);
+            return;
         }
         else
         {
-            var defecthandlings = dto.DefectHandlings.Adapt<List<TaktIpqcDefectHandling>>();
-            foreach (var child in defecthandlings)
+            var existingList = await _ipqcDefectHandlingRepository.GetListAsync(x => x.IpqcOrderItemId == entity.Id);
+            var existingById = existingList.ToDictionary(x => x.Id);
+            var submittedIds = new HashSet<long>();
+            var toCreate = new List<TaktIpqcDefectHandling>();
+            var seenLineKeys = new HashSet<string>(StringComparer.Ordinal);
+            for (var i = 0; i < dto.DefectHandlings.Count; i++)
             {
-                child.IpqcOrderItemId = entity.Id;
-            }
-            var defecthandlingsNeedLine = defecthandlings.Where(c => c.LineNumber <= 0).ToList();
-            if (defecthandlingsNeedLine.Count > 0)
-            {
-                var businessCode = !string.IsNullOrWhiteSpace(entity.IpqcOrderCode) ? entity.IpqcOrderCode : entity.Id.ToString();
-                var maxLine = await _ipqcDefectHandlingRepository.GetMaxIntAsync(
-                    x => x.TenantCode == CurrentTenantCode && x.CompanyCode == CurrentCompanyCode && x.IpqcOrderItemId == entity.Id,
-                    x => x.LineNumber);
-                var lineSeq = _lineNumberGenerator.GenerateSequence(businessCode, defecthandlingsNeedLine.Count, maxLine).ToList();
-                var lineIdx = 0;
-                foreach (var child in defecthandlings)
+                var childDto = dto.DefectHandlings[i];
+                childDto.IpqcOrderItemId = entity.Id;
+                var lineKey = $"{entity.CompanyCode}|{entity.Id}|{childDto.LineNumber}";
+                if (!seenLineKeys.Add(lineKey))
                 {
-                    if (child.LineNumber <= 0)
+                    throw new TaktBusinessException("制程检验不良处理记录第{i + 1}项与本次提交的其他项重复（CompanyCode、IpqcOrderItemId、LineNumber）");
+                }
+                if (childDto.IpqcDefectHandlingId > 0)
+                {
+                    if (!existingById.TryGetValue(childDto.IpqcDefectHandlingId, out var target))
                     {
-                        child.LineNumber = lineSeq[lineIdx++];
+                        throw new TaktBusinessException("制程检验不良处理记录不存在（IpqcDefectHandlingId={childDto.IpqcDefectHandlingId}）");
                     }
+                    if (target.IpqcOrderItemId != entity.Id)
+                    {
+                        throw new TaktBusinessException("制程检验不良处理记录不属于当前主表（IpqcDefectHandlingId={childDto.IpqcDefectHandlingId}）");
+                    }
+                    submittedIds.Add(childDto.IpqcDefectHandlingId);
+                    childDto.Adapt(target);
+                    target.Id = childDto.IpqcDefectHandlingId;
+                    target.IpqcOrderItemId = entity.Id;
+                    target.IsObsolete = 0;
+                    await _ipqcDefectHandlingRepository.UpdateAsync(target);
+                }
+                else
+                {
+                    var child = childDto.Adapt<TaktIpqcDefectHandling>();
+                    child.Id = 0;
+                    child.IpqcOrderItemId = entity.Id;
+                    child.IsObsolete = 0;
+                    toCreate.Add(child);
                 }
             }
-                        var seenKeys = new HashSet<string>(StringComparer.Ordinal);
-                        for (var i = 0; i < defecthandlings.Count; i++)
+            var toObsolete = existingList.Where(x => !submittedIds.Contains(x.Id) && x.IsObsolete == 0).ToList();
+            foreach (var removed in toObsolete)
+            {
+                removed.IsObsolete = 1;
+                await _ipqcDefectHandlingRepository.UpdateAsync(removed);
+            }
+            if (toCreate.Count > 0)
+            {
+                var needLine = toCreate.Where(c => c.LineNumber <= 0).ToList();
+                if (needLine.Count > 0)
+                {
+                    var businessCode = !string.IsNullOrWhiteSpace(entity.IpqcOrderCode) ? entity.IpqcOrderCode : entity.Id.ToString();
+                    var maxLine = existingList.Count > 0 ? existingList.Max(x => x.LineNumber) : 0;
+                    var lineSeq = _lineNumberGenerator.GenerateSequence(businessCode, needLine.Count, maxLine).ToList();
+                    var lineIdx = 0;
+                    foreach (var child in toCreate)
+                    {
+                        if (child.LineNumber <= 0)
                         {
-                            var key = $"{defecthandlings[i].CompanyCode}|{defecthandlings[i].IpqcOrderItemId}|{defecthandlings[i].DefectCode}|{defecthandlings[i].HandlingMethod}";
-                            if (!seenKeys.Add(key))
-                            {
-                                throw new TaktBusinessException($"制程检验不良处理记录第{i + 1}项与本次提交的其他项重复（CompanyCode、IpqcOrderItemId、DefectCode、HandlingMethod）");
-                            }
+                            child.LineNumber = lineSeq[lineIdx++];
                         }
-            await _ipqcDefectHandlingRepository.DeleteAsync(x => x.IpqcOrderItemId == entity.Id);
-            foreach (var child in defecthandlings)
-            {
-            var isUnique_ix_takt_logistics_quality_ipqc_defect_handling_unique = await _uniqueValidator.IsUniqueAsync(
-                _ipqcDefectHandlingRepository,
-                x => x.CompanyCode == child.CompanyCode
-                    && x.IpqcOrderItemId == child.IpqcOrderItemId
-                    && x.DefectCode == child.DefectCode
-                    && x.HandlingMethod == child.HandlingMethod);
-            if (!isUnique_ix_takt_logistics_quality_ipqc_defect_handling_unique)
-            {
-                throw new TaktBusinessException("制程检验不良处理记录的CompanyCode、IpqcOrderItemId、DefectCode、HandlingMethod已存在");
+                    }
+                }
+                await _ipqcDefectHandlingRepository.CreateRangeAsync(toCreate);
             }
-            }
-            await _ipqcDefectHandlingRepository.CreateRangeAsync(defecthandlings);
         }
     }
     // ========================================
@@ -413,6 +479,15 @@ public class TaktIpqcOrderItemService : TaktServiceBase, ITaktIpqcOrderItemServi
     private static Expression<Func<TaktIpqcOrderItem, bool>> QueryExpression(TaktIpqcOrderItemQueryDto? queryDto)
     {
         var exp = Expressionable.Create<TaktIpqcOrderItem>();
+
+        if (queryDto?.IsObsolete.HasValue == true)
+        {
+            exp = exp.And(x => x.IsObsolete == queryDto.IsObsolete);
+        }
+        else
+        {
+            exp = exp.And(x => x.IsObsolete == 0);
+        }
 
         if (!string.IsNullOrEmpty(queryDto?.KeyWords))
         {

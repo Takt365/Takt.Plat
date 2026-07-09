@@ -90,13 +90,6 @@ public class TaktCostElementDto : TaktCompanyDtoBase
     /// 成本要素状态（字典 sys_normal_disable_status；1=启用，0=禁用）
     /// </summary>
     public int CostElementStatus { get; set; } = 0;
-
-    /// <summary>
-    /// 成本要素变更记录列表（外键在子表 TaktCostElementChangeLog.CostElementId）
-    /// （子表：TaktCostElementChangeLog）
-    /// </summary>
-    public List<TaktCostElementChangeLogDto>? ChangeLogs { get; set; }
-
 }
 
 // ========================================
@@ -298,14 +291,7 @@ public class TaktCostElementCreateDto
     /// <summary>
     /// 成本要素状态（字典 sys_normal_disable_status；1=启用，0=禁用）
     /// </summary>
-    public int CostElementStatus { get; set; } = 0;
-
-    /// <summary>
-    /// 成本要素变更记录列表（外键在子表 TaktCostElementChangeLog.CostElementId）（子表，级联保存）
-    /// </summary>
-    public List<TaktCostElementChangeLogCreateDto>? ChangeLogs { get; set; }
-
-    /// <summary>
+    public int CostElementStatus { get; set; } = 0;    /// <summary>
     /// 扩展字段JSON
     /// </summary>
     public string? ExtField { get; set; }
@@ -453,14 +439,7 @@ public class TaktCostElementTemplateDto
     /// <summary>
     /// 成本要素状态（字典 sys_normal_disable_status；1=启用，0=禁用）
     /// </summary>
-    public int? CostElementStatus { get; set; }
-
-    /// <summary>
-    /// 成本要素变更记录列表（外键在子表 TaktCostElementChangeLog.CostElementId）（子表，级联保存）
-    /// </summary>
-    public List<TaktCostElementChangeLogCreateDto>? ChangeLogs { get; set; }
-
-    /// <summary>
+    public int? CostElementStatus { get; set; }    /// <summary>
     /// 扩展字段JSON
     /// </summary>
     public string? ExtField { get; set; }
@@ -541,14 +520,7 @@ public class TaktCostElementImportDto
     /// <summary>
     /// 成本要素状态（字典 sys_normal_disable_status；1=启用，0=禁用）
     /// </summary>
-    public int? CostElementStatus { get; set; }
-
-    /// <summary>
-    /// 成本要素变更记录列表（外键在子表 TaktCostElementChangeLog.CostElementId）（子表，级联保存）
-    /// </summary>
-    public List<TaktCostElementChangeLogCreateDto>? ChangeLogs { get; set; }
-
-    /// <summary>
+    public int? CostElementStatus { get; set; }    /// <summary>
     /// 扩展字段JSON
     /// </summary>
     public string? ExtField { get; set; }

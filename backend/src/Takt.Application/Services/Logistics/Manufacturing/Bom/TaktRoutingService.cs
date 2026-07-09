@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Application.Services.Logistics.Manufacturing.Bom
 // 文件名称：TaktRoutingService.cs
-// 创建时间：2026-06-23
+// 创建时间：2026-07-09
 // 创建人：Takt365(Cursor AI)
 // 功能描述：工艺路线主应用服务实现
 // 
@@ -31,7 +31,6 @@ public class TaktRoutingService : TaktServiceBase, ITaktRoutingService
 {
     private readonly ITaktApprovalRepository<TaktRouting> _routingRepository;
     private readonly ITaktCompanyRepository<TaktRoutingItem> _routingItemRepository;
-    private readonly ITaktCompanyRepository<TaktRoutingChangeLog> _routingChangeLogRepository;
     private readonly ITaktSortOrderGenerator _sortOrderGenerator;
     private readonly ITaktLineNumberGenerator _lineNumberGenerator;
     private readonly ITaktUniqueValidator _uniqueValidator;
@@ -41,7 +40,6 @@ public class TaktRoutingService : TaktServiceBase, ITaktRoutingService
     /// </summary>
     /// <param name="routingRepository">工艺路线主仓储</param>
     /// <param name="routingItemRepository">RoutingItem仓储</param>
-    /// <param name="routingChangeLogRepository">RoutingChangeLog仓储</param>
     /// <param name="sortOrderGenerator">排序号生成器</param>
     /// <param name="lineNumberGenerator">明细行号生成器</param>
     /// <param name="uniqueValidator">唯一性验证器</param>
@@ -50,7 +48,6 @@ public class TaktRoutingService : TaktServiceBase, ITaktRoutingService
     public TaktRoutingService(
         ITaktApprovalRepository<TaktRouting> routingRepository,
         ITaktCompanyRepository<TaktRoutingItem> routingItemRepository,
-        ITaktCompanyRepository<TaktRoutingChangeLog> routingChangeLogRepository,
         ITaktSortOrderGenerator sortOrderGenerator,
         ITaktLineNumberGenerator lineNumberGenerator,
         ITaktUniqueValidator uniqueValidator,
@@ -60,7 +57,6 @@ public class TaktRoutingService : TaktServiceBase, ITaktRoutingService
     {
         _routingRepository = routingRepository;
         _routingItemRepository = routingItemRepository;
-        _routingChangeLogRepository = routingChangeLogRepository;
         _sortOrderGenerator = sortOrderGenerator;
         _lineNumberGenerator = lineNumberGenerator;
         _uniqueValidator = uniqueValidator;
@@ -181,7 +177,6 @@ public class TaktRoutingService : TaktServiceBase, ITaktRoutingService
             throw new TaktBusinessException("工艺路线主不存在或已删除");
         }
         await _routingItemRepository.DeleteAsync(x => x.RoutingId == entity.Id);
-        await _routingChangeLogRepository.DeleteAsync(x => x.RoutingId == entity.Id);
         var deleted = await _routingRepository.DeleteAsync(id);
         if (!deleted)
         {
@@ -315,7 +310,31 @@ public class TaktRoutingService : TaktServiceBase, ITaktRoutingService
     // ========================================
 
     /// <summary>
-    /// 填充工艺路线主详情（加载 OneToMany 子表：工艺路线明细、工艺路线变更日志）
+    /// 将指定主表下全部未作废工艺路线明细标记为作废（编辑清空子表）
+    /// </summary>
+    /// <param name="routingId">主表主键</param>
+    /// <returns>任务</returns>
+    private async Task MarkRoutingItemsObsoleteAsync(long routingId)
+    {
+        if (routingId <= 0)
+        {
+            return;
+        }
+        var rows = await _routingItemRepository.GetListAsync(
+            x => x.RoutingId == routingId && x.IsObsolete == 0);
+        if (rows.Count == 0)
+        {
+            return;
+        }
+        foreach (var row in rows)
+        {
+            row.IsObsolete = 1;
+        }
+        await _routingItemRepository.UpdateRangeAsync(rows);
+    }
+
+    /// <summary>
+    /// 填充工艺路线主详情（加载 OneToMany 子表：工艺路线明细）
     /// </summary>
     /// <param name="dto">响应 DTO</param>
     /// <param name="entity">主表实体</param>
@@ -326,16 +345,13 @@ public class TaktRoutingService : TaktServiceBase, ITaktRoutingService
         {
             return;
         }
-        // 工艺路线明细 → dto.Items
+        // 工艺路线明细 → dto.Items（含作废行）
         var items = await _routingItemRepository.GetListAsync(x => x.RoutingId == entity.Id);
         dto.Items = items.Adapt<List<TaktRoutingItemDto>>();
-        // 工艺路线变更日志 → dto.ChangeLogs
-        var changelogs = await _routingChangeLogRepository.GetListAsync(x => x.RoutingId == entity.Id);
-        dto.ChangeLogs = changelogs.Adapt<List<TaktRoutingChangeLogDto>>();
     }
 
     /// <summary>
-    /// 保存工艺路线主子表级联（工艺路线明细、工艺路线变更日志；Create/Update 后按主表 Id 先删后插）
+    /// 保存工艺路线主子表级联（工艺路线明细；按子表 Id 增量新增/更新；未提交行标记作废，禁止先删后插）
     /// </summary>
     /// <param name="entity">主表实体</param>
     /// <param name="dto">创建/更新 DTO（含子表集合；UpdateDto 须继承 CreateDto）</param>
@@ -345,89 +361,95 @@ public class TaktRoutingService : TaktServiceBase, ITaktRoutingService
         // 工艺路线明细（Items）
         if (dto.Items is not { Count: > 0 })
         {
-            await _routingItemRepository.DeleteAsync(x => x.RoutingId == entity.Id);
+            await MarkRoutingItemsObsoleteAsync(entity.Id);
+            return;
         }
         else
         {
-            var items = dto.Items.Adapt<List<TaktRoutingItem>>();
-            foreach (var child in items)
+            var existingList = await _routingItemRepository.GetListAsync(x => x.RoutingId == entity.Id);
+            var existingById = existingList.ToDictionary(x => x.Id);
+            var submittedIds = new HashSet<long>();
+            var toCreate = new List<TaktRoutingItem>();
+            var seenLineKeys = new HashSet<string>(StringComparer.Ordinal);
+            for (var i = 0; i < dto.Items.Count; i++)
             {
-                child.RoutingId = entity.Id;
-            }
-            var itemsNeedSort = items.Where(c => c.SortOrder <= 0).ToList();
-            if (itemsNeedSort.Count > 0)
-            {
-                var maxSort = await _routingItemRepository.GetMaxIntAsync(
-                    x => x.TenantCode == CurrentTenantCode && x.CompanyCode == CurrentCompanyCode && x.RoutingId == entity.Id,
-                    x => x.SortOrder);
-                var sortSeq = _sortOrderGenerator.GenerateSequenceForMaster(entity.Id, itemsNeedSort.Count, maxSort).ToList();
-                var sortIdx = 0;
-                foreach (var child in items)
+                var childDto = dto.Items[i];
+                childDto.RoutingId = entity.Id;
+                var lineKey = $"{entity.CompanyCode}|{entity.Id}|{childDto.LineNumber}";
+                if (!seenLineKeys.Add(lineKey))
                 {
-                    if (child.SortOrder <= 0)
+                    throw new TaktBusinessException("工艺路线明细第{i + 1}项与本次提交的其他项重复（CompanyCode、RoutingId、LineNumber）");
+                }
+                if (childDto.RoutingItemId > 0)
+                {
+                    if (!existingById.TryGetValue(childDto.RoutingItemId, out var target))
                     {
-                        child.SortOrder = sortSeq[sortIdx++];
+                        throw new TaktBusinessException("工艺路线明细不存在（RoutingItemId={childDto.RoutingItemId}）");
                     }
+                    if (target.RoutingId != entity.Id)
+                    {
+                        throw new TaktBusinessException("工艺路线明细不属于当前主表（RoutingItemId={childDto.RoutingItemId}）");
+                    }
+                    submittedIds.Add(childDto.RoutingItemId);
+                    var isUniqueUpdate_ix_takt_logistics_manufacturing_bom_routing_item_routing_line_unique = await _uniqueValidator.IsUniqueAsync(
+                        _routingItemRepository,
+                        x => x.CompanyCode == x.CompanyCode
+                && x.RoutingId == x.RoutingId
+                && x.LineNumber == x.LineNumber,
+                        childDto.RoutingItemId);
+                    if (!isUniqueUpdate_ix_takt_logistics_manufacturing_bom_routing_item_routing_line_unique)
+                    {
+                        throw new TaktBusinessException("工艺路线明细的CompanyCode、RoutingId、LineNumber已存在");
+                    }
+                    childDto.Adapt(target);
+                    target.Id = childDto.RoutingItemId;
+                    target.RoutingId = entity.Id;
+                    target.IsObsolete = 0;
+                    await _routingItemRepository.UpdateAsync(target);
+                }
+                else
+                {
+                    var isUniqueCreate_ix_takt_logistics_manufacturing_bom_routing_item_routing_line_unique = await _uniqueValidator.IsUniqueAsync(
+                        _routingItemRepository,
+                        x => x.CompanyCode == x.CompanyCode
+                && x.RoutingId == x.RoutingId
+                && x.LineNumber == x.LineNumber);
+                    if (!isUniqueCreate_ix_takt_logistics_manufacturing_bom_routing_item_routing_line_unique)
+                    {
+                        throw new TaktBusinessException("工艺路线明细的CompanyCode、RoutingId、LineNumber已存在");
+                    }
+                    var child = childDto.Adapt<TaktRoutingItem>();
+                    child.Id = 0;
+                    child.RoutingId = entity.Id;
+                    child.IsObsolete = 0;
+                    toCreate.Add(child);
                 }
             }
-            var itemsNeedLine = items.Where(c => c.LineNumber <= 0).ToList();
-            if (itemsNeedLine.Count > 0)
+            var toObsolete = existingList.Where(x => !submittedIds.Contains(x.Id) && x.IsObsolete == 0).ToList();
+            foreach (var removed in toObsolete)
             {
-                var businessCode = !string.IsNullOrWhiteSpace(entity.RoutingCode) ? entity.RoutingCode : entity.Id.ToString();
-                var maxLine = await _routingItemRepository.GetMaxIntAsync(
-                    x => x.TenantCode == CurrentTenantCode && x.CompanyCode == CurrentCompanyCode && x.RoutingId == entity.Id,
-                    x => x.LineNumber);
-                var lineSeq = _lineNumberGenerator.GenerateSequence(businessCode, itemsNeedLine.Count, maxLine).ToList();
-                var lineIdx = 0;
-                foreach (var child in items)
-                {
-                    if (child.LineNumber <= 0)
-                    {
-                        child.LineNumber = lineSeq[lineIdx++];
-                    }
-                }
+                removed.IsObsolete = 1;
+                await _routingItemRepository.UpdateAsync(removed);
             }
-                        var seenKeys = new HashSet<string>(StringComparer.Ordinal);
-                        for (var i = 0; i < items.Count; i++)
+            if (toCreate.Count > 0)
+            {
+                var needLine = toCreate.Where(c => c.LineNumber <= 0).ToList();
+                if (needLine.Count > 0)
+                {
+                    var businessCode = !string.IsNullOrWhiteSpace(entity.RoutingCode) ? entity.RoutingCode : entity.Id.ToString();
+                    var maxLine = existingList.Count > 0 ? existingList.Max(x => x.LineNumber) : 0;
+                    var lineSeq = _lineNumberGenerator.GenerateSequence(businessCode, needLine.Count, maxLine).ToList();
+                    var lineIdx = 0;
+                    foreach (var child in toCreate)
+                    {
+                        if (child.LineNumber <= 0)
                         {
-                            var key = $"{items[i].CompanyCode}|{items[i].RoutingId}|{items[i].LineNumber}";
-                            if (!seenKeys.Add(key))
-                            {
-                                throw new TaktBusinessException($"工艺路线明细第{i + 1}项与本次提交的其他项重复（CompanyCode、RoutingId、LineNumber）");
-                            }
+                            child.LineNumber = lineSeq[lineIdx++];
                         }
-            await _routingItemRepository.DeleteAsync(x => x.RoutingId == entity.Id);
-            foreach (var child in items)
-            {
-            var isUnique_ix_takt_logistics_manufacturing_bom_routing_item_routing_line_unique = await _uniqueValidator.IsUniqueAsync(
-                _routingItemRepository,
-                x => x.CompanyCode == child.CompanyCode
-                    && x.RoutingId == child.RoutingId
-                    && x.LineNumber == child.LineNumber);
-            if (!isUnique_ix_takt_logistics_manufacturing_bom_routing_item_routing_line_unique)
-            {
-                throw new TaktBusinessException("工艺路线明细的CompanyCode、RoutingId、LineNumber已存在");
+                    }
+                }
+                await _routingItemRepository.CreateRangeAsync(toCreate);
             }
-            }
-            await _routingItemRepository.CreateRangeAsync(items);
-        }
-        // 工艺路线变更日志（ChangeLogs）
-        if (dto.ChangeLogs is not { Count: > 0 })
-        {
-            await _routingChangeLogRepository.DeleteAsync(x => x.RoutingId == entity.Id);
-        }
-        else
-        {
-            var changelogs = dto.ChangeLogs.Adapt<List<TaktRoutingChangeLog>>();
-            foreach (var child in changelogs)
-            {
-                child.RoutingId = entity.Id;
-            }
-            await _routingChangeLogRepository.DeleteAsync(x => x.RoutingId == entity.Id);
-            foreach (var child in changelogs)
-            {
-            }
-            await _routingChangeLogRepository.CreateRangeAsync(changelogs);
         }
     }
     // ========================================

@@ -186,9 +186,4 @@ public class TaktDocument : TaktApprovalEntityBase
     /// </summary>
     [Navigate(NavigateType.OneToMany, nameof(TaktDocumentVersion.DocumentId))]
     public List<TaktDocumentVersion>? Versions { get; set; }
-    /// <summary>
-    /// 变更日志列表（主子表关系）
-    /// </summary>
-    [Navigate(NavigateType.OneToMany, nameof(TaktDocumentChangeLog.DocumentId))]
-    public List<TaktDocumentChangeLog>? ChangeLogs { get; set; }
 }

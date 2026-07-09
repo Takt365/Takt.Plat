@@ -152,26 +152,6 @@ public class TaktMenuLevel3SeedData
             insertCount += insertAF1;
             updateCount += updateAF1;
 
-            var (insertAF1Cl, updateAF1Cl) = await CreateOrUpdateMenuAsync(menuRepository, seedContext, tenantCode, "ACCOUNTING_FINANCIAL_ACCOUNT_TITLE_CHANGE_LOG", menu =>
-            {
-                menu.MenuName = "会计科目变更";
-                menu.MenuCode = "ACCOUNTING_FINANCIAL_ACCOUNT_TITLE_CHANGE_LOG";
-                menu.I18nKey = "menu.accounting.financial.account.title.change.log";
-                menu.Icon = "RiFileHistoryLine";
-                menu.ParentId = accountingFinancialMenu.Id;
-                menu.MenuType = 1;
-                menu.Permission = "accounting:financial:account:title:change:log:list";
-                menu.RoutePath = "/accounting/financial/account-title-change-log";
-                menu.ComponentPath = "accounting/financial/account-title-change-log/index";
-                menu.SortOrder = 2;
-                menu.MenuStatus = 1;
-                menu.IsVisible = 1;
-                menu.IsCached = 0;
-                menu.IsExternal = 0;
-            });
-            insertCount += insertAF1Cl;
-            updateCount += updateAF1Cl;
-
             var (insertAF2, updateAF2) = await CreateOrUpdateMenuAsync(menuRepository, seedContext, tenantCode, "ACCOUNTING_FINANCIAL_ASSET", menu =>
             {
                 menu.MenuName = "固定资产";
@@ -183,7 +163,7 @@ public class TaktMenuLevel3SeedData
                 menu.Permission = "accounting:financial:asset:list";
                 menu.RoutePath = "/accounting/financial/asset";
                 menu.ComponentPath = "accounting/financial/asset/index";
-                menu.SortOrder = 3;
+                menu.SortOrder = 2;
                 menu.MenuStatus = 1;
                 menu.IsVisible = 1;
                 menu.IsCached = 0;
@@ -191,26 +171,6 @@ public class TaktMenuLevel3SeedData
             });
             insertCount += insertAF2;
             updateCount += updateAF2;
-
-            var (insertAF2Cl, updateAF2Cl) = await CreateOrUpdateMenuAsync(menuRepository, seedContext, tenantCode, "ACCOUNTING_FINANCIAL_ASSET_CHANGE_LOG", menu =>
-            {
-                menu.MenuName = "固定资产变更";
-                menu.MenuCode = "ACCOUNTING_FINANCIAL_ASSET_CHANGE_LOG";
-                menu.I18nKey = "menu.accounting.financial.asset.change.log";
-                menu.Icon = "RiFileHistoryLine";
-                menu.ParentId = accountingFinancialMenu.Id;
-                menu.MenuType = 1;
-                menu.Permission = "accounting:financial:asset:change:log:list";
-                menu.RoutePath = "/accounting/financial/asset-change-log";
-                menu.ComponentPath = "accounting/financial/asset-change-log/index";
-                menu.SortOrder = 4;
-                menu.MenuStatus = 1;
-                menu.IsVisible = 1;
-                menu.IsCached = 0;
-                menu.IsExternal = 0;
-            });
-            insertCount += insertAF2Cl;
-            updateCount += updateAF2Cl;
 
             var (insertAF3, updateAF3) = await CreateOrUpdateMenuAsync(menuRepository, seedContext, tenantCode, "ACCOUNTING_FINANCIAL_COUNTERSIGN", menu =>
             {
@@ -223,7 +183,7 @@ public class TaktMenuLevel3SeedData
                 menu.Permission = "accounting:financial:countersign:list";
                 menu.RoutePath = "/accounting/financial/countersign";
                 menu.ComponentPath = "accounting/financial/countersign/index";
-                menu.SortOrder = 5;
+                menu.SortOrder = 3;
                 menu.MenuStatus = 1;
                 menu.IsVisible = 1;
                 menu.IsCached = 0;
@@ -243,7 +203,7 @@ public class TaktMenuLevel3SeedData
                 menu.Permission = "accounting:financial:expense:list";
                 menu.RoutePath = "/accounting/financial/expense";
                 menu.ComponentPath = "accounting/financial/expense/index";
-                menu.SortOrder = 6;
+                menu.SortOrder = 4;
                 menu.MenuStatus = 1;
                 menu.IsVisible = 1;
                 menu.IsCached = 0;
@@ -263,7 +223,7 @@ public class TaktMenuLevel3SeedData
                 menu.Permission = "accounting:financial:company:list";
                 menu.RoutePath = "/accounting/financial/company";
                 menu.ComponentPath = "accounting/financial/company/index";
-                menu.SortOrder = 7;
+                menu.SortOrder = 5;
                 menu.MenuStatus = 1;
                 menu.IsVisible = 1;
                 menu.IsCached = 0;
@@ -271,6 +231,26 @@ public class TaktMenuLevel3SeedData
             });
             insertCount += insertAF4;
             updateCount += updateAF4;
+
+            var (insertAF5, updateAF5) = await CreateOrUpdateMenuAsync(menuRepository, seedContext, tenantCode, "ACCOUNTING_FINANCIAL_EXCHANGE_RATE", menu =>
+            {
+                menu.MenuName = "汇率维护";
+                menu.MenuCode = "ACCOUNTING_FINANCIAL_EXCHANGE_RATE";
+                menu.I18nKey = "menu.accounting.financial.exchange.rate";
+                menu.Icon = "RiExchangeLine";
+                menu.ParentId = accountingFinancialMenu.Id;
+                menu.MenuType = 1;
+                menu.Permission = "accounting:financial:exchange:rate:list";
+                menu.RoutePath = "/accounting/financial/exchange-rate";
+                menu.ComponentPath = "accounting/financial/exchange-rate/index";
+                menu.SortOrder = 6;
+                menu.MenuStatus = 1;
+                menu.IsVisible = 1;
+                menu.IsCached = 0;
+                menu.IsExternal = 0;
+            });
+            insertCount += insertAF5;
+            updateCount += updateAF5;
         }
 
         // ========== 控制会计下的三级菜单 (ACCOUNTING_CONTROLLING) ==========
@@ -296,26 +276,6 @@ public class TaktMenuLevel3SeedData
             insertCount += insertAC1;
             updateCount += updateAC1;
 
-            var (insertAC1Cl, updateAC1Cl) = await CreateOrUpdateMenuAsync(menuRepository, seedContext, tenantCode, "ACCOUNTING_CONTROLLING_PROFIT_CENTER_CHANGE_LOG", menu =>
-            {
-                menu.MenuName = "利润中心变更";
-                menu.MenuCode = "ACCOUNTING_CONTROLLING_PROFIT_CENTER_CHANGE_LOG";
-                menu.I18nKey = "menu.accounting.controlling.profit.center.change.log";
-                menu.Icon = "RiFileHistoryLine";
-                menu.ParentId = accountingControllingMenu.Id;
-                menu.MenuType = 1;
-                menu.Permission = "accounting:controlling:profit:center:change:log:list";
-                menu.RoutePath = "/accounting/controlling/profit-center-change-log";
-                menu.ComponentPath = "accounting/controlling/profit-center-change-log/index";
-                menu.SortOrder = 2;
-                menu.MenuStatus = 1;
-                menu.IsVisible = 1;
-                menu.IsCached = 0;
-                menu.IsExternal = 0;
-            });
-            insertCount += insertAC1Cl;
-            updateCount += updateAC1Cl;
-
             var (insertAC2, updateAC2) = await CreateOrUpdateMenuAsync(menuRepository, seedContext, tenantCode, "ACCOUNTING_CONTROLLING_COST_CENTER", menu =>
             {
                 menu.MenuName = "成本中心";
@@ -327,7 +287,7 @@ public class TaktMenuLevel3SeedData
                 menu.Permission = "accounting:controlling:cost:center:list";
                 menu.RoutePath = "/accounting/controlling/cost-center";
                 menu.ComponentPath = "accounting/controlling/cost-center/index";
-                menu.SortOrder = 3;
+                menu.SortOrder = 2;
                 menu.MenuStatus = 1;
                 menu.IsVisible = 1;
                 menu.IsCached = 0;
@@ -335,26 +295,6 @@ public class TaktMenuLevel3SeedData
             });
             insertCount += insertAC2;
             updateCount += updateAC2;
-
-            var (insertAC2Cl, updateAC2Cl) = await CreateOrUpdateMenuAsync(menuRepository, seedContext, tenantCode, "ACCOUNTING_CONTROLLING_COST_CENTER_CHANGE_LOG", menu =>
-            {
-                menu.MenuName = "成本中心变更";
-                menu.MenuCode = "ACCOUNTING_CONTROLLING_COST_CENTER_CHANGE_LOG";
-                menu.I18nKey = "menu.accounting.controlling.cost.center.change.log";
-                menu.Icon = "RiFileHistoryLine";
-                menu.ParentId = accountingControllingMenu.Id;
-                menu.MenuType = 1;
-                menu.Permission = "accounting:controlling:cost:center:change:log:list";
-                menu.RoutePath = "/accounting/controlling/cost-center-change-log";
-                menu.ComponentPath = "accounting/controlling/cost-center-change-log/index";
-                menu.SortOrder = 4;
-                menu.MenuStatus = 1;
-                menu.IsVisible = 1;
-                menu.IsCached = 0;
-                menu.IsExternal = 0;
-            });
-            insertCount += insertAC2Cl;
-            updateCount += updateAC2Cl;
 
             var (insertAC3, updateAC3) = await CreateOrUpdateMenuAsync(menuRepository, seedContext, tenantCode, "ACCOUNTING_CONTROLLING_COST_ELEMENT", menu =>
             {
@@ -367,7 +307,7 @@ public class TaktMenuLevel3SeedData
                 menu.Permission = "accounting:controlling:cost:element:list";
                 menu.RoutePath = "/accounting/controlling/cost-element";
                 menu.ComponentPath = "accounting/controlling/cost-element/index";
-                menu.SortOrder = 5;
+                menu.SortOrder = 3;
                 menu.MenuStatus = 1;
                 menu.IsVisible = 1;
                 menu.IsCached = 0;
@@ -375,26 +315,6 @@ public class TaktMenuLevel3SeedData
             });
             insertCount += insertAC3;
             updateCount += updateAC3;
-
-            var (insertAC3Cl, updateAC3Cl) = await CreateOrUpdateMenuAsync(menuRepository, seedContext, tenantCode, "ACCOUNTING_CONTROLLING_COST_ELEMENT_CHANGE_LOG", menu =>
-            {
-                menu.MenuName = "成本要素变更";
-                menu.MenuCode = "ACCOUNTING_CONTROLLING_COST_ELEMENT_CHANGE_LOG";
-                menu.I18nKey = "menu.accounting.controlling.cost.element.change.log";
-                menu.Icon = "RiFileHistoryLine";
-                menu.ParentId = accountingControllingMenu.Id;
-                menu.MenuType = 1;
-                menu.Permission = "accounting:controlling:cost:element:change:log:list";
-                menu.RoutePath = "/accounting/controlling/cost-element-change-log";
-                menu.ComponentPath = "accounting/controlling/cost-element-change-log/index";
-                menu.SortOrder = 6;
-                menu.MenuStatus = 1;
-                menu.IsVisible = 1;
-                menu.IsCached = 0;
-                menu.IsExternal = 0;
-            });
-            insertCount += insertAC3Cl;
-            updateCount += updateAC3Cl;
 
             var (insertAC4, updateAC4) = await CreateOrUpdateMenuAsync(menuRepository, seedContext, tenantCode, "ACCOUNTING_CONTROLLING_STANDARD_WAGE_RATE", menu =>
             {
@@ -407,7 +327,7 @@ public class TaktMenuLevel3SeedData
                 menu.Permission = "accounting:controlling:standard:wage:rate:list";
                 menu.RoutePath = "/accounting/controlling/standard-wage-rate";
                 menu.ComponentPath = "accounting/controlling/standard-wage-rate/index";
-                menu.SortOrder = 7;
+                menu.SortOrder = 4;
                 menu.MenuStatus = 1;
                 menu.IsVisible = 1;
                 menu.IsCached = 0;
@@ -461,26 +381,6 @@ public class TaktMenuLevel3SeedData
             insertCount += insertLM2;
             updateCount += updateLM2;
 
-            var (insertLM2Cl, updateLM2Cl) = await CreateOrUpdateMenuAsync(menuRepository, seedContext, tenantCode, "LOGISTICS_MATERIALS_MATERIAL_CHANGE_LOG", menu =>
-            {
-                menu.MenuName = "全局物料变更";
-                menu.MenuCode = "LOGISTICS_MATERIALS_MATERIAL_CHANGE_LOG";
-                menu.I18nKey = "menu.logistics.materials.material.change.log";
-                menu.Icon = "RiFileHistoryLine";
-                menu.ParentId = logisticsMaterialMenu.Id;
-                menu.MenuType = 1;
-                menu.Permission = "logistics:materials:material:change:log:list";
-                menu.RoutePath = "/logistics/materials/material-change-log";
-                menu.ComponentPath = "logistics/materials/material-change-log/index";
-                menu.SortOrder = 3;
-                menu.MenuStatus = 1;
-                menu.IsVisible = 1;
-                menu.IsCached = 0;
-                menu.IsExternal = 0;
-            });
-            insertCount += insertLM2Cl;
-            updateCount += updateLM2Cl;
-
             // TaktMaterialPlant：实体全名含 MATERIAL，MenuCode/I18nKey/Permission 均须 MATERIAL_PLANT 分段
             var (insertLM3, updateLM3) = await CreateOrUpdateMenuAsync(menuRepository, seedContext, tenantCode, "LOGISTICS_MATERIALS_MATERIAL_PLANT", menu =>
             {
@@ -493,7 +393,7 @@ public class TaktMenuLevel3SeedData
                 menu.Permission = "logistics:materials:material:plant:list";
                 menu.RoutePath = "/logistics/materials/material-plant";
                 menu.ComponentPath = "logistics/materials/material-plant/index";
-                menu.SortOrder = 4;
+                menu.SortOrder = 3;
                 menu.MenuStatus = 1;
                 menu.IsVisible = 1;
                 menu.IsCached = 0;
@@ -501,26 +401,6 @@ public class TaktMenuLevel3SeedData
             });
             insertCount += insertLM3;
             updateCount += updateLM3;
-
-            var (insertLM3Cl, updateLM3Cl) = await CreateOrUpdateMenuAsync(menuRepository, seedContext, tenantCode, "LOGISTICS_MATERIALS_MATERIAL_PLANT_CHANGE_LOG", menu =>
-            {
-                menu.MenuName = "工厂物料变更";
-                menu.MenuCode = "LOGISTICS_MATERIALS_MATERIAL_PLANT_CHANGE_LOG";
-                menu.I18nKey = "menu.logistics.materials.material.plant.change.log";
-                menu.Icon = "RiFileHistoryLine";
-                menu.ParentId = logisticsMaterialMenu.Id;
-                menu.MenuType = 1;
-                menu.Permission = "logistics:materials:material:plant:change:log:list";
-                menu.RoutePath = "/logistics/materials/material-plant-change-log";
-                menu.ComponentPath = "logistics/materials/material-plant-change-log/index";
-                menu.SortOrder = 5;
-                menu.MenuStatus = 1;
-                menu.IsVisible = 1;
-                menu.IsCached = 0;
-                menu.IsExternal = 0;
-            });
-            insertCount += insertLM3Cl;
-            updateCount += updateLM3Cl;
 
             // TaktWarehouse 主表；TaktStorageLocation 为子表，在仓库页右栏维护，无独立菜单
             var (insertLM3Wh, updateLM3Wh) = await CreateOrUpdateMenuAsync(menuRepository, seedContext, tenantCode, "LOGISTICS_MATERIALS_WAREHOUSE", menu =>
@@ -534,7 +414,7 @@ public class TaktMenuLevel3SeedData
                 menu.Permission = "logistics:materials:warehouse:list";
                 menu.RoutePath = "/logistics/materials/warehouse";
                 menu.ComponentPath = "logistics/materials/warehouse/index";
-                menu.SortOrder = 6;
+                menu.SortOrder = 4;
                 menu.MenuStatus = 1;
                 menu.IsVisible = 1;
                 menu.IsCached = 0;
@@ -554,7 +434,7 @@ public class TaktMenuLevel3SeedData
                 menu.Permission = "logistics:materials:material:group:list";
                 menu.RoutePath = "/logistics/materials/material-group";
                 menu.ComponentPath = "logistics/materials/material-group/index";
-                menu.SortOrder = 7;
+                menu.SortOrder = 5;
                 menu.MenuStatus = 1;
                 menu.IsVisible = 1;
                 menu.IsCached = 0;
@@ -574,7 +454,7 @@ public class TaktMenuLevel3SeedData
                 menu.Permission = "logistics:materials:packaging:list";
                 menu.RoutePath = "/logistics/materials/packaging";
                 menu.ComponentPath = "logistics/materials/packaging/index";
-                menu.SortOrder = 8;
+                menu.SortOrder = 6;
                 menu.MenuStatus = 1;
                 menu.IsVisible = 1;
                 menu.IsCached = 0;
@@ -594,7 +474,7 @@ public class TaktMenuLevel3SeedData
                 menu.Permission = "logistics:materials:model:destination:list";
                 menu.RoutePath = "/logistics/materials/model-destination";
                 menu.ComponentPath = "logistics/materials/model-destination/index";
-                menu.SortOrder = 9;
+                menu.SortOrder = 7;
                 menu.MenuStatus = 1;
                 menu.IsVisible = 1;
                 menu.IsCached = 0;
@@ -611,10 +491,10 @@ public class TaktMenuLevel3SeedData
                 menu.Icon = "RiBuilding4Line";
                 menu.ParentId = logisticsMaterialMenu.Id;
                 menu.MenuType = 1;
-                menu.Permission = "logistics:materials:manufacturer:material:list";
+                menu.Permission = "logistics:materials:manufacturer:material:material:list";
                 menu.RoutePath = "/logistics/materials/manufacturer";
                 menu.ComponentPath = "logistics/materials/manufacturer/index";
-                menu.SortOrder = 10;
+                menu.SortOrder = 8;
                 menu.MenuStatus = 1;
                 menu.IsVisible = 1;
                 menu.IsCached = 0;
@@ -625,7 +505,7 @@ public class TaktMenuLevel3SeedData
 
             var (insertLM7, updateLM7) = await CreateOrUpdateMenuAsync(menuRepository, seedContext, tenantCode, "LOGISTICS_MATERIALS_MATERIAL_TRANSACTION", menu =>
             {
-                menu.MenuName = "物料交易";
+                menu.MenuName = "物料凭证";
                 menu.MenuCode = "LOGISTICS_MATERIALS_MATERIAL_TRANSACTION";
                 menu.I18nKey = "menu.logistics.materials.material.document";
                 menu.Icon = "RiExchangeLine";
@@ -634,7 +514,7 @@ public class TaktMenuLevel3SeedData
                 menu.Permission = "logistics:materials:material:document:list";
                 menu.RoutePath = "/logistics/materials/material-document";
                 menu.ComponentPath = "logistics/materials/material-document/index";
-                menu.SortOrder = 11;
+                menu.SortOrder = 9;
                 menu.MenuStatus = 1;
                 menu.IsVisible = 1;
                 menu.IsCached = 0;
@@ -689,7 +569,7 @@ public class TaktMenuLevel3SeedData
 
             var (insert06, update06) = await CreateOrUpdateMenuAsync(menuRepository, seedContext, tenantCode, "LOGISTICS_PROCUREMENT_SOURCE_OF_SUPPLY", menu =>
             {
-                menu.MenuName = "货源";
+                menu.MenuName = "货源清单";
                 menu.MenuCode = "LOGISTICS_PROCUREMENT_SOURCE_OF_SUPPLY";
                 menu.I18nKey = "menu.logistics.procurement.source.of.supply";
                 menu.Icon = "RiLinksLine";
@@ -727,26 +607,6 @@ public class TaktMenuLevel3SeedData
             insertCount += insert07;
             updateCount += update07;
 
-            var (insert07Cl, update07Cl) = await CreateOrUpdateMenuAsync(menuRepository, seedContext, tenantCode, "LOGISTICS_PROCUREMENT_PURCHASE_REQUEST_CHANGE_LOG", menu =>
-            {
-                menu.MenuName = "采购申请变更";
-                menu.MenuCode = "LOGISTICS_PROCUREMENT_PURCHASE_REQUEST_CHANGE_LOG";
-                menu.I18nKey = "menu.logistics.procurement.purchase.request.change.log";
-                menu.Icon = "RiFileHistoryLine";
-                menu.ParentId = logisticsProcurementMenu.Id;
-                menu.MenuType = 1;
-                menu.Permission = "logistics:procurement:purchase:request:change:log:list";
-                menu.RoutePath = "/logistics/procurement/purchase-request-change-log";
-                menu.ComponentPath = "logistics/procurement/purchase-request-change-log/index";
-                menu.SortOrder = 5;
-                menu.MenuStatus = 1;
-                menu.IsVisible = 1;
-                menu.IsCached = 0;
-                menu.IsExternal = 0;
-            });
-            insertCount += insert07Cl;
-            updateCount += update07Cl;
-
             var (insert07Inq, update07Inq) = await CreateOrUpdateMenuAsync(menuRepository, seedContext, tenantCode, "LOGISTICS_PROCUREMENT_PURCHASE_INQUIRY", menu =>
             {
                 menu.MenuName = "采购询价";
@@ -758,7 +618,7 @@ public class TaktMenuLevel3SeedData
                 menu.Permission = "logistics:procurement:purchase:inquiry:list";
                 menu.RoutePath = "/logistics/procurement/purchase-inquiry";
                 menu.ComponentPath = "logistics/procurement/purchase-inquiry/index";
-                menu.SortOrder = 6;
+                menu.SortOrder = 5;
                 menu.MenuStatus = 1;
                 menu.IsVisible = 1;
                 menu.IsCached = 0;
@@ -778,7 +638,7 @@ public class TaktMenuLevel3SeedData
                 menu.Permission = "logistics:procurement:purchase:order:list";
                 menu.RoutePath = "/logistics/procurement/purchase-order";
                 menu.ComponentPath = "logistics/procurement/purchase-order/index";
-                menu.SortOrder = 7;
+                menu.SortOrder = 6;
                 menu.MenuStatus = 1;
                 menu.IsVisible = 1;
                 menu.IsCached = 0;
@@ -786,26 +646,6 @@ public class TaktMenuLevel3SeedData
             });
             insertCount += insert08;
             updateCount += update08;
-
-            var (insert08Cl, update08Cl) = await CreateOrUpdateMenuAsync(menuRepository, seedContext, tenantCode, "LOGISTICS_PROCUREMENT_PURCHASE_ORDER_CHANGE_LOG", menu =>
-            {
-                menu.MenuName = "采购订单变更";
-                menu.MenuCode = "LOGISTICS_PROCUREMENT_PURCHASE_ORDER_CHANGE_LOG";
-                menu.I18nKey = "menu.logistics.procurement.purchase.order.change.log";
-                menu.Icon = "RiFileHistoryLine";
-                menu.ParentId = logisticsProcurementMenu.Id;
-                menu.MenuType = 1;
-                menu.Permission = "logistics:procurement:purchase:order:change:log:list";
-                menu.RoutePath = "/logistics/procurement/purchase-order-change-log";
-                menu.ComponentPath = "logistics/procurement/purchase-order-change-log/index";
-                menu.SortOrder = 8;
-                menu.MenuStatus = 1;
-                menu.IsVisible = 1;
-                menu.IsCached = 0;
-                menu.IsExternal = 0;
-            });
-            insertCount += insert08Cl;
-            updateCount += update08Cl;
 
             var (insert08Price, update08Price) = await CreateOrUpdateMenuAsync(menuRepository, seedContext, tenantCode, "LOGISTICS_PROCUREMENT_PURCHASE_PRICE", menu =>
             {
@@ -818,7 +658,7 @@ public class TaktMenuLevel3SeedData
                 menu.Permission = "logistics:procurement:purchase:price:list";
                 menu.RoutePath = "/logistics/procurement/purchase-price";
                 menu.ComponentPath = "logistics/procurement/purchase-price/index";
-                menu.SortOrder = 9;
+                menu.SortOrder = 7;
                 menu.MenuStatus = 1;
                 menu.IsVisible = 1;
                 menu.IsCached = 0;
@@ -826,26 +666,6 @@ public class TaktMenuLevel3SeedData
             });
             insertCount += insert08Price;
             updateCount += update08Price;
-
-            var (insert08PriceCl, update08PriceCl) = await CreateOrUpdateMenuAsync(menuRepository, seedContext, tenantCode, "LOGISTICS_PROCUREMENT_PURCHASE_PRICE_CHANGE_LOG", menu =>
-            {
-                menu.MenuName = "采购价格变更";
-                menu.MenuCode = "LOGISTICS_PROCUREMENT_PURCHASE_PRICE_CHANGE_LOG";
-                menu.I18nKey = "menu.logistics.procurement.purchase.price.change.log";
-                menu.Icon = "RiFileHistoryLine";
-                menu.ParentId = logisticsProcurementMenu.Id;
-                menu.MenuType = 1;
-                menu.Permission = "logistics:procurement:purchase:price:change:log:list";
-                menu.RoutePath = "/logistics/procurement/purchase-price-change-log";
-                menu.ComponentPath = "logistics/procurement/purchase-price-change-log/index";
-                menu.SortOrder = 10;
-                menu.MenuStatus = 1;
-                menu.IsVisible = 1;
-                menu.IsCached = 0;
-                menu.IsExternal = 0;
-            });
-            insertCount += insert08PriceCl;
-            updateCount += update08PriceCl;
 
             var (insert09, update09) = await CreateOrUpdateMenuAsync(menuRepository, seedContext, tenantCode, "LOGISTICS_PROCUREMENT_PURCHASE_INVOICE", menu =>
             {
@@ -858,7 +678,7 @@ public class TaktMenuLevel3SeedData
                 menu.Permission = "logistics:procurement:purchase:invoice:list";
                 menu.RoutePath = "/logistics/procurement/purchase-invoice";
                 menu.ComponentPath = "logistics/procurement/purchase-invoice/index";
-                menu.SortOrder = 11;
+                menu.SortOrder = 8;
                 menu.MenuStatus = 1;
                 menu.IsVisible = 1;
                 menu.IsCached = 0;
@@ -878,7 +698,7 @@ public class TaktMenuLevel3SeedData
                 menu.Permission = "logistics:procurement:purchase:group:list";
                 menu.RoutePath = "/logistics/procurement/purchase-group";
                 menu.ComponentPath = "logistics/procurement/purchase-group/index";
-                menu.SortOrder = 12;
+                menu.SortOrder = 9;
                 menu.MenuStatus = 1;
                 menu.IsVisible = 1;
                 menu.IsCached = 0;
@@ -1317,26 +1137,6 @@ public class TaktMenuLevel3SeedData
             insertCount += insertLS3;
             updateCount += updateLS3;
 
-            var (insertLS3Cl, updateLS3Cl) = await CreateOrUpdateMenuAsync(menuRepository, seedContext, tenantCode, "LOGISTICS_SALES_QUOTATION_CHANGE_LOG", menu =>
-            {
-                menu.MenuName = "销售报价变更";
-                menu.MenuCode = "LOGISTICS_SALES_QUOTATION_CHANGE_LOG";
-                menu.I18nKey = "menu.logistics.sales.quotation.change.log";
-                menu.Icon = "RiFileHistoryLine";
-                menu.ParentId = logisticsSalesMenu.Id;
-                menu.MenuType = 1;
-                menu.Permission = "logistics:sales:quotation:change:log:list";
-                menu.RoutePath = "/logistics/sales/quotation-change-log";
-                menu.ComponentPath = "logistics/sales/quotation-change-log/index";
-                menu.SortOrder = 4;
-                menu.MenuStatus = 1;
-                menu.IsVisible = 1;
-                menu.IsCached = 0;
-                menu.IsExternal = 0;
-            });
-            insertCount += insertLS3Cl;
-            updateCount += updateLS3Cl;
-
             var (insertLS4, updateLS4) = await CreateOrUpdateMenuAsync(menuRepository, seedContext, tenantCode, "LOGISTICS_SALES_PRICE", menu =>
             {
                 menu.MenuName = "销售价格";
@@ -1348,7 +1148,7 @@ public class TaktMenuLevel3SeedData
                 menu.Permission = "logistics:sales:price:list";
                 menu.RoutePath = "/logistics/sales/price";
                 menu.ComponentPath = "logistics/sales/price/index";
-                menu.SortOrder = 5;
+                menu.SortOrder = 4;
                 menu.MenuStatus = 1;
                 menu.IsVisible = 1;
                 menu.IsCached = 0;
@@ -1356,26 +1156,6 @@ public class TaktMenuLevel3SeedData
             });
             insertCount += insertLS4;
             updateCount += updateLS4;
-
-            var (insertLS4Cl, updateLS4Cl) = await CreateOrUpdateMenuAsync(menuRepository, seedContext, tenantCode, "LOGISTICS_SALES_PRICE_CHANGE_LOG", menu =>
-            {
-                menu.MenuName = "销售价格变更";
-                menu.MenuCode = "LOGISTICS_SALES_PRICE_CHANGE_LOG";
-                menu.I18nKey = "menu.logistics.sales.price.change.log";
-                menu.Icon = "RiFileHistoryLine";
-                menu.ParentId = logisticsSalesMenu.Id;
-                menu.MenuType = 1;
-                menu.Permission = "logistics:sales:price:change:log:list";
-                menu.RoutePath = "/logistics/sales/price-change-log";
-                menu.ComponentPath = "logistics/sales/price-change-log/index";
-                menu.SortOrder = 6;
-                menu.MenuStatus = 1;
-                menu.IsVisible = 1;
-                menu.IsCached = 0;
-                menu.IsExternal = 0;
-            });
-            insertCount += insertLS4Cl;
-            updateCount += updateLS4Cl;
 
             var (insertLS5, updateLS5) = await CreateOrUpdateMenuAsync(menuRepository, seedContext, tenantCode, "LOGISTICS_SALES_ORDER", menu =>
             {
@@ -1388,7 +1168,7 @@ public class TaktMenuLevel3SeedData
                 menu.Permission = "logistics:sales:order:list";
                 menu.RoutePath = "/logistics/sales/order";
                 menu.ComponentPath = "logistics/sales/order/index";
-                menu.SortOrder = 7;
+                menu.SortOrder = 5;
                 menu.MenuStatus = 1;
                 menu.IsVisible = 1;
                 menu.IsCached = 0;
@@ -1396,26 +1176,6 @@ public class TaktMenuLevel3SeedData
             });
             insertCount += insertLS5;
             updateCount += updateLS5;
-
-            var (insertLS5Cl, updateLS5Cl) = await CreateOrUpdateMenuAsync(menuRepository, seedContext, tenantCode, "LOGISTICS_SALES_ORDER_CHANGE_LOG", menu =>
-            {
-                menu.MenuName = "销售订单变更";
-                menu.MenuCode = "LOGISTICS_SALES_ORDER_CHANGE_LOG";
-                menu.I18nKey = "menu.logistics.sales.order.change.log";
-                menu.Icon = "RiFileHistoryLine";
-                menu.ParentId = logisticsSalesMenu.Id;
-                menu.MenuType = 1;
-                menu.Permission = "logistics:sales:order:change:log:list";
-                menu.RoutePath = "/logistics/sales/order-change-log";
-                menu.ComponentPath = "logistics/sales/order-change-log/index";
-                menu.SortOrder = 8;
-                menu.MenuStatus = 1;
-                menu.IsVisible = 1;
-                menu.IsCached = 0;
-                menu.IsExternal = 0;
-            });
-            insertCount += insertLS5Cl;
-            updateCount += updateLS5Cl;
 
             var (insertLS6, updateLS6) = await CreateOrUpdateMenuAsync(menuRepository, seedContext, tenantCode, "LOGISTICS_SALES_INVOICE", menu =>
             {
@@ -1428,7 +1188,7 @@ public class TaktMenuLevel3SeedData
                 menu.Permission = "logistics:sales:invoice:list";
                 menu.RoutePath = "/logistics/sales/sales-invoice";
                 menu.ComponentPath = "logistics/sales/sales-invoice/index";
-                menu.SortOrder = 9;
+                menu.SortOrder = 6;
                 menu.MenuStatus = 1;
                 menu.IsVisible = 1;
                 menu.IsCached = 0;
@@ -1436,6 +1196,26 @@ public class TaktMenuLevel3SeedData
             });
             insertCount += insertLS6;
             updateCount += updateLS6;
+
+            var (insertLS7, updateLS7) = await CreateOrUpdateMenuAsync(menuRepository, seedContext, tenantCode, "LOGISTICS_SALES_GROUP", menu =>
+            {
+                menu.MenuName = "销售组";
+                menu.MenuCode = "LOGISTICS_SALES_GROUP";
+                menu.I18nKey = "menu.logistics.sales.group";
+                menu.Icon = "RiGroupLine";
+                menu.ParentId = logisticsSalesMenu.Id;
+                menu.MenuType = 1;
+                menu.Permission = "logistics:sales:group:list";
+                menu.RoutePath = "/logistics/sales/group";
+                menu.ComponentPath = "logistics/sales/group/index";
+                menu.SortOrder = 7;
+                menu.MenuStatus = 1;
+                menu.IsVisible = 1;
+                menu.IsCached = 0;
+                menu.IsExternal = 0;
+            });
+            insertCount += insertLS7;
+            updateCount += updateLS7;
         }
 
         // ========== 序列号管理下的三级菜单 (LOGISTICS_SERIAL) ==========
@@ -2384,26 +2164,6 @@ public class TaktMenuLevel3SeedData
             insertCount += insertHd2;
             updateCount += updateHd2;
 
-            var (insertHd2Cl, updateHd2Cl) = await CreateOrUpdateMenuAsync(menuRepository, seedContext, tenantCode, "ROUTINE_HELP_DESK_TICKET_CHANGE_LOG", menu =>
-            {
-                menu.MenuName = "工单变更";
-                menu.MenuCode = "ROUTINE_HELP_DESK_TICKET_CHANGE_LOG";
-                menu.I18nKey = "menu.routine.help.desk.ticket.change.log";
-                menu.Icon = "RiFileHistoryLine";
-                menu.ParentId = routineHelpDeskMenu.Id;
-                menu.MenuType = 1;
-                menu.Permission = "routine:help:desk:ticket:change:log:list";
-                menu.RoutePath = "/routine/help-desk/ticket-change-log";
-                menu.ComponentPath = "routine/help-desk/ticket-change-log/index";
-                menu.SortOrder = 3;
-                menu.MenuStatus = 1;
-                menu.IsVisible = 1;
-                menu.IsCached = 0;
-                menu.IsExternal = 0;
-            });
-            insertCount += insertHd2Cl;
-            updateCount += updateHd2Cl;
-
             var (insertHd3, updateHd3) = await CreateOrUpdateMenuAsync(menuRepository, seedContext, tenantCode, "ROUTINE_HELP_DESK_KNOWLEDGE", menu =>
             {
                 menu.MenuName = "知识库（FAQ）";
@@ -2415,7 +2175,7 @@ public class TaktMenuLevel3SeedData
                 menu.Permission = "routine:help:desk:knowledge:list";
                 menu.RoutePath = "/routine/help-desk/knowledge";
                 menu.ComponentPath = "routine/help-desk/knowledge/index";
-                menu.SortOrder = 4;
+                menu.SortOrder = 3;
                 menu.MenuStatus = 1;
                 menu.IsVisible = 1;
                 menu.IsCached = 0;
@@ -2423,26 +2183,6 @@ public class TaktMenuLevel3SeedData
             });
             insertCount += insertHd3;
             updateCount += updateHd3;
-
-            var (insertHd3Cl, updateHd3Cl) = await CreateOrUpdateMenuAsync(menuRepository, seedContext, tenantCode, "ROUTINE_HELP_DESK_KNOWLEDGE_CHANGE_LOG", menu =>
-            {
-                menu.MenuName = "知识库变更";
-                menu.MenuCode = "ROUTINE_HELP_DESK_KNOWLEDGE_CHANGE_LOG";
-                menu.I18nKey = "menu.routine.help.desk.knowledge.change.log";
-                menu.Icon = "RiFileHistoryLine";
-                menu.ParentId = routineHelpDeskMenu.Id;
-                menu.MenuType = 1;
-                menu.Permission = "routine:help:desk:knowledge:change:log:list";
-                menu.RoutePath = "/routine/help-desk/knowledge-change-log";
-                menu.ComponentPath = "routine/help-desk/knowledge-change-log/index";
-                menu.SortOrder = 5;
-                menu.MenuStatus = 1;
-                menu.IsVisible = 1;
-                menu.IsCached = 0;
-                menu.IsExternal = 0;
-            });
-            insertCount += insertHd3Cl;
-            updateCount += updateHd3Cl;
 
             var (insertHd4, updateHd4) = await CreateOrUpdateMenuAsync(menuRepository, seedContext, tenantCode, "ROUTINE_HELP_DESK_MY_ASSET", menu =>
             {
@@ -2455,7 +2195,7 @@ public class TaktMenuLevel3SeedData
                 menu.Permission = "routine:help:desk:my:asset:list";
                 menu.RoutePath = "/routine/help-desk/my-asset";
                 menu.ComponentPath = "routine/help-desk/my-asset/index";
-                menu.SortOrder = 6;
+                menu.SortOrder = 4;
                 menu.MenuStatus = 1;
                 menu.IsVisible = 1;
                 menu.IsCached = 0;
@@ -2475,7 +2215,7 @@ public class TaktMenuLevel3SeedData
                 menu.Permission = "routine:help:desk:it:asset:list";
                 menu.RoutePath = "/routine/help-desk/it-asset";
                 menu.ComponentPath = "routine/help-desk/it-asset/index";
-                menu.SortOrder = 7;
+                menu.SortOrder = 5;
                 menu.MenuStatus = 1;
                 menu.IsVisible = 1;
                 menu.IsCached = 0;
@@ -2483,26 +2223,6 @@ public class TaktMenuLevel3SeedData
             });
             insertCount += insertHd5;
             updateCount += updateHd5;
-
-            var (insertHd5Cl, updateHd5Cl) = await CreateOrUpdateMenuAsync(menuRepository, seedContext, tenantCode, "ROUTINE_HELP_DESK_IT_ASSET_CHANGE_LOG", menu =>
-            {
-                menu.MenuName = "IT设备保修变更";
-                menu.MenuCode = "ROUTINE_HELP_DESK_IT_ASSET_CHANGE_LOG";
-                menu.I18nKey = "menu.routine.help.desk.it.asset.change.log";
-                menu.Icon = "RiFileHistoryLine";
-                menu.ParentId = routineHelpDeskMenu.Id;
-                menu.MenuType = 1;
-                menu.Permission = "routine:help:desk:it:asset:change:log:list";
-                menu.RoutePath = "/routine/help-desk/it-asset-change-log";
-                menu.ComponentPath = "routine/help-desk/it-asset-change-log/index";
-                menu.SortOrder = 8;
-                menu.MenuStatus = 1;
-                menu.IsVisible = 1;
-                menu.IsCached = 0;
-                menu.IsExternal = 0;
-            });
-            insertCount += insertHd5Cl;
-            updateCount += updateHd5Cl;
         }
 
         // ========== 文管中心下的三级菜单 (ROUTINE_DOCUMENT_CENTER) ==========
@@ -2516,7 +2236,7 @@ public class TaktMenuLevel3SeedData
                 menu.Icon = "RiFileTextLine";
                 menu.ParentId = routineDocumentCenterMenu.Id;
                 menu.MenuType = 1;
-                menu.Permission = "routine:document:center:document:list";
+                menu.Permission = "routine:document:center:list";
                 menu.RoutePath = "/routine/document-center/document";
                 menu.ComponentPath = "routine/document-center/document/index";
                 menu.SortOrder = 1;
@@ -2527,26 +2247,6 @@ public class TaktMenuLevel3SeedData
             });
             insertCount += insertDc1;
             updateCount += updateDc1;
-
-            var (insertDc1Cl, updateDc1Cl) = await CreateOrUpdateMenuAsync(menuRepository, seedContext, tenantCode, "ROUTINE_DOCUMENT_CENTER_DOCUMENT_CHANGE_LOG", menu =>
-            {
-                menu.MenuName = "文档变更";
-                menu.MenuCode = "ROUTINE_DOCUMENT_CENTER_DOCUMENT_CHANGE_LOG";
-                menu.I18nKey = "menu.routine.document.center.document.change.log";
-                menu.Icon = "RiFileHistoryLine";
-                menu.ParentId = routineDocumentCenterMenu.Id;
-                menu.MenuType = 1;
-                menu.Permission = "routine:document:center:document:change:log:list";
-                menu.RoutePath = "/routine/document-center/document-change-log";
-                menu.ComponentPath = "routine/document-center/document-change-log/index";
-                menu.SortOrder = 2;
-                menu.MenuStatus = 1;
-                menu.IsVisible = 1;
-                menu.IsCached = 0;
-                menu.IsExternal = 0;
-            });
-            insertCount += insertDc1Cl;
-            updateCount += updateDc1Cl;
         }
 
         return (insertCount, updateCount);

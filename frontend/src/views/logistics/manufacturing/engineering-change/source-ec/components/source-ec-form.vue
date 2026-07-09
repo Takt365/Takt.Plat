@@ -448,7 +448,40 @@
       :default-row="createEmptySourceEcDetailRow"
       :disabled="loading || readOnly"
       section-border
-    />
+    >
+      <template #cell-SourceCompatibility="{ record }">
+        <TaktSelect
+          v-model:value="record.SourceCompatibility"
+          dict-type="logistics_ec_source_compatibility"
+          allow-clear
+          :disabled="loading || readOnly"
+        />
+      </template>
+      <template #cell-sourceDistinction="{ record }">
+        <TaktSelect
+          v-model:value="record.sourceDistinction"
+          dict-type="logistics_ec_source_distinction"
+          allow-clear
+          :disabled="loading || readOnly"
+        />
+      </template>
+      <template #cell-sourceLegacyPartDisposition="{ record }">
+        <TaktSelect
+          v-model:value="record.sourceLegacyPartDisposition"
+          dict-type="logistics_ec_legacy_part_disposition"
+          allow-clear
+          :disabled="loading || readOnly"
+        />
+      </template>
+      <template #cell-SourceInstruction="{ record }">
+        <TaktSelect
+          v-model:value="record.SourceInstruction"
+          dict-type="logistics_ec_source_instruction"
+          allow-clear
+          :disabled="loading || readOnly"
+        />
+      </template>
+    </TaktEditableTable>
   </a-form>
 </template>
 

@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Infrastructure.Data.Seeds.I18nSeedData.Routine.HelpDesk
 // 文件名称：TaktKnowledgeI18nSeedData.cs
-// 创建时间：2026-07-02
+// 创建时间：2026-07-09
 // 创建人：Takt365(Auto Generated)
 // 功能描述：TaktKnowledge 实体字段国际化种子（无对应 frontend locales；TranslationText 取自 ColumnDescription，ContextNote 取自属性 XML summary）
 // 
@@ -224,15 +224,6 @@ public class TaktKnowledgeI18nSeedData : ITaktSeedDataCoordinator
             new TranslationSeedItem("entity.knowledge.attachments", "zh-CN", "附件JSON", "附件（JSON 列表形式，由 TaktFile 统一上传到服务器）"),
             // entity.knowledge.attachments
             new TranslationSeedItem("entity.knowledge.attachments", "zh-HK", "附件JSON_hk", "附件（JSON 列表形式，由 TaktFile 统一上传到服务器）"),
-
-            // entity.knowledge.changelogs
-            new TranslationSeedItem("entity.knowledge.changelogs", "en-US", "知识库变更日志列表_us", "知识库变更日志列表"),
-            // entity.knowledge.changelogs
-            new TranslationSeedItem("entity.knowledge.changelogs", "ja-JP", "知识库变更日志列表_jp", "知识库变更日志列表"),
-            // entity.knowledge.changelogs
-            new TranslationSeedItem("entity.knowledge.changelogs", "zh-CN", "知识库变更日志列表", "知识库变更日志列表"),
-            // entity.knowledge.changelogs
-            new TranslationSeedItem("entity.knowledge.changelogs", "zh-HK", "知识库变更日志列表_hk", "知识库变更日志列表"),
         };
     }
 

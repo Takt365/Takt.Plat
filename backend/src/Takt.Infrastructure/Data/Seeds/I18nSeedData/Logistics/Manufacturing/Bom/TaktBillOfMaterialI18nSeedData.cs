@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Infrastructure.Data.Seeds.I18nSeedData.Logistics.Manufacturing.Bom
 // 文件名称：TaktBillOfMaterialI18nSeedData.cs
-// 创建时间：2026-07-02
+// 创建时间：2026-07-09
 // 创建人：Takt365(Auto Generated)
 // 功能描述：TaktBillOfMaterial 实体字段国际化种子（已对齐前端 locales：src/locales/logistics/manufacturing/bom/bill-of-material）
 // 
@@ -242,15 +242,6 @@ public class TaktBillOfMaterialI18nSeedData : ITaktSeedDataCoordinator
             new TranslationSeedItem("entity.billofmaterial.items", "zh-CN", "BOM组成件明细", "BOM组成件明细（扁平单层；多层通过子件物料关联其BOM头递归展开）"),
             // entity.billofmaterial.items
             new TranslationSeedItem("entity.billofmaterial.items", "zh-HK", "BOM组成件明细_hk", "BOM组成件明细（扁平单层；多层通过子件物料关联其BOM头递归展开）"),
-
-            // entity.billofmaterial.changelogs
-            new TranslationSeedItem("entity.billofmaterial.changelogs", "en-US", "BOM变更记录列表_us", "BOM变更记录列表（外键在子表 TaktBillOfMaterialChangeLog.BillOfMaterialId）"),
-            // entity.billofmaterial.changelogs
-            new TranslationSeedItem("entity.billofmaterial.changelogs", "ja-JP", "BOM变更记录列表_jp", "BOM变更记录列表（外键在子表 TaktBillOfMaterialChangeLog.BillOfMaterialId）"),
-            // entity.billofmaterial.changelogs
-            new TranslationSeedItem("entity.billofmaterial.changelogs", "zh-CN", "BOM变更记录列表", "BOM变更记录列表（外键在子表 TaktBillOfMaterialChangeLog.BillOfMaterialId）"),
-            // entity.billofmaterial.changelogs
-            new TranslationSeedItem("entity.billofmaterial.changelogs", "zh-HK", "BOM变更记录列表_hk", "BOM变更记录列表（外键在子表 TaktBillOfMaterialChangeLog.BillOfMaterialId）"),
         };
     }
 

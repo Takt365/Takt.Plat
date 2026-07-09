@@ -16,7 +16,7 @@ import type {
 } from '@/types/common';
 
 /**
- * 工作中心（WC；PlantCode 对齐 TaktCalendar.RelatedPlant，班次对齐 TaktWorkShift）
+ * 工作中心（WC；PlantCode 对齐 TaktCalendar.RelatedPlant）
  * 对应前端 TaktWorkCenterDto
  * 继承 TaktCompanyDtoBase
  * 对应前端 WorkCenter
@@ -42,21 +42,6 @@ export interface WorkCenter extends CompanyDtoBase {
    * 工作中心名称
    */
   workCenterName: string;
-
-  /**
-   * 车间编码
-   */
-  workshopCode?: string;
-
-  /**
-   * 默认班次 ID（关联 HR TaktWorkShift；APS 产能结合 TaktCalendar.RelatedPlant 与当日班次计算）
-   */
-  defaultShiftId?: string;
-
-  /**
-   * 默认班次 名称（填充字段）
-   */
-  defaultShiftName?: string;
 
   /**
    * 状态（字典 sys_normal_disable；1=启用，0=禁用）
@@ -102,16 +87,6 @@ export interface WorkCenterQuery extends TaktPagedQuery {
    * 工作中心名称
    */
   workCenterName?: string;
-
-  /**
-   * 车间编码
-   */
-  workshopCode?: string;
-
-  /**
-   * 默认班次 ID（关联 HR TaktWorkShift；APS 产能结合 TaktCalendar.RelatedPlant 与当日班次计算）
-   */
-  defaultShiftId?: string;
 
   /**
    * 状态（字典 sys_normal_disable；1=启用，0=禁用）
@@ -176,16 +151,6 @@ export interface WorkCenterCreate {
    * 工作中心名称
    */
   workCenterName: string;
-
-  /**
-   * 车间编码
-   */
-  workshopCode?: string;
-
-  /**
-   * 默认班次 ID（关联 HR TaktWorkShift；APS 产能结合 TaktCalendar.RelatedPlant 与当日班次计算）
-   */
-  defaultShiftId?: string;
 
   /**
    * 状态（字典 sys_normal_disable；1=启用，0=禁用）
@@ -276,16 +241,6 @@ export interface WorkCenterTemplate {
   workCenterName?: string;
 
   /**
-   * 车间编码
-   */
-  workshopCode?: string;
-
-  /**
-   * 默认班次 ID（关联 HR TaktWorkShift；APS 产能结合 TaktCalendar.RelatedPlant 与当日班次计算）
-   */
-  defaultShiftId?: string;
-
-  /**
    * 状态（字典 sys_normal_disable；1=启用，0=禁用）
    */
   workCenterStatus?: number;
@@ -345,16 +300,6 @@ export interface WorkCenterImport {
   workCenterName?: string;
 
   /**
-   * 车间编码
-   */
-  workshopCode?: string;
-
-  /**
-   * 默认班次 ID（关联 HR TaktWorkShift；APS 产能结合 TaktCalendar.RelatedPlant 与当日班次计算）
-   */
-  defaultShiftId?: string;
-
-  /**
    * 状态（字典 sys_normal_disable；1=启用，0=禁用）
    */
   workCenterStatus?: number;
@@ -407,16 +352,6 @@ export interface WorkCenterExport {
    * 工作中心名称
    */
   workCenterName: string;
-
-  /**
-   * 车间编码
-   */
-  workshopCode?: string;
-
-  /**
-   * 默认班次 ID（关联 HR TaktWorkShift；APS 产能结合 TaktCalendar.RelatedPlant 与当日班次计算）
-   */
-  defaultShiftId?: string;
 
   /**
    * 状态（字典 sys_normal_disable；1=启用，0=禁用）

@@ -79,10 +79,4 @@ public class TaktCostElement : TaktCompanyEntityBase
     /// </summary>
     [SugarColumn(ColumnName = "cost_element_status", ColumnDescription = "成本要素状态", ColumnDataType = "int", IsNullable = false, DefaultValue = "1")]
     public int CostElementStatus { get; set; } = 1;
-
-    /// <summary>
-    /// 成本要素变更记录列表（外键在子表 TaktCostElementChangeLog.CostElementId）
-    /// </summary>
-    [Navigate(NavigateType.OneToMany, nameof(TaktCostElementChangeLog.CostElementId))]
-    public List<TaktCostElementChangeLog>? ChangeLogs { get; set; }
 }

@@ -9,10 +9,13 @@
 import { inject, provide, type InjectionKey, type Ref, ref } from 'vue'
 import type { AssyDefect } from '@/types/logistics/manufacturing/defect/assy-defect'
 
+/** 表格行类型（与 index 列表行、TaktSingleTable slot record 一致） */
+export type AssyDefectRowRecord = AssyDefect | Record<string, unknown>
+
 /** 主表选中行上下文 */
 export interface AssyDefectMasterContext {
   /** 当前选中的主表行（右侧明细依赖） */
-  selectedMasterRow: Ref<AssyDefect | null>
+  selectedMasterRow: Ref<AssyDefectRowRecord | null>
 }
 
 const assyDefectMasterContextKey: InjectionKey<AssyDefectMasterContext> = Symbol('assy-defectMasterContext')
@@ -22,7 +25,7 @@ const assyDefectMasterContextKey: InjectionKey<AssyDefectMasterContext> = Symbol
  * @returns {AssyDefectMasterContext} 主表上下文
  */
 export function provideAssyDefectMasterContext(): AssyDefectMasterContext {
-  const selectedMasterRow = ref<AssyDefect | null>(null)
+  const selectedMasterRow = ref<AssyDefectRowRecord | null>(null)
   const ctx: AssyDefectMasterContext = { selectedMasterRow }
   provide(assyDefectMasterContextKey, ctx)
   return ctx

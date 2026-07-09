@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Application.Services.Routine.ConferenceCenter
 // 文件名称：TaktConferenceAgendaService.cs
-// 创建时间：2026-06-23
+// 创建时间：2026-07-09
 // 创建人：Takt365(Cursor AI)
 // 功能描述：会议议程纪要应用服务实现
 // 
@@ -118,6 +118,7 @@ public class TaktConferenceAgendaService : TaktServiceBase, ITaktConferenceAgend
     public async Task<TaktConferenceAgendaDto> CreateConferenceAgendaAsync(TaktConferenceAgendaCreateDto dto)
     {
         var entity = dto.Adapt<TaktConferenceAgenda>();
+        entity.IsObsolete = 0;
         await StampConferenceAgendaConferenceAsync(entity, dto);
         if (entity.LineNumber <= 0)
         {
@@ -157,11 +158,21 @@ public class TaktConferenceAgendaService : TaktServiceBase, ITaktConferenceAgend
     /// <returns>任务</returns>
     public async Task DeleteConferenceAgendaByIdAsync(long id)
     {
-        var deleted = await _conferenceAgendaRepository.DeleteAsync(id);
-        if (!deleted)
+        var entity = await _conferenceAgendaRepository.GetByIdAsync(id);
+        if (entity == null)
         {
             throw new TaktBusinessException("会议议程纪要不存在或已删除");
         }
+        if (entity.TenantCode != CurrentTenantCode || entity.CompanyCode != CurrentCompanyCode)
+        {
+            throw new TaktBusinessException("会议议程纪要不存在或已删除");
+        }
+        if (entity.IsObsolete == 1)
+        {
+            throw new TaktBusinessException("会议议程纪要已作废");
+        }
+        entity.IsObsolete = 1;
+        await _conferenceAgendaRepository.UpdateAsync(entity);
     }
 
     /// <summary>
@@ -180,6 +191,27 @@ public class TaktConferenceAgendaService : TaktServiceBase, ITaktConferenceAgend
         {
             await DeleteConferenceAgendaByIdAsync(id);
         }
+    }
+
+    /// <summary>
+    /// 更新会议议程纪要作废状态
+    /// </summary>
+    /// <param name="dto">作废DTO</param>
+    /// <returns>DTO</returns>
+    public async Task<TaktConferenceAgendaDto> UpdateConferenceAgendaObsoleteAsync(TaktConferenceAgendaObsoleteDto dto)
+    {
+        var entity = await _conferenceAgendaRepository.GetByIdAsync(dto.ConferenceAgendaId);
+        if (entity == null)
+        {
+            throw new TaktBusinessException("会议议程纪要不存在");
+        }
+        if (entity.TenantCode != CurrentTenantCode || entity.CompanyCode != CurrentCompanyCode)
+        {
+            throw new TaktBusinessException("会议议程纪要不存在");
+        }
+        entity.IsObsolete = dto.IsObsolete;
+        await _conferenceAgendaRepository.UpdateAsync(entity);
+        return await GetConferenceAgendaByIdAsync(dto.ConferenceAgendaId) ?? throw new TaktBusinessException("会议议程纪要不存在");
     }
 
     /// <summary>
@@ -299,6 +331,15 @@ public class TaktConferenceAgendaService : TaktServiceBase, ITaktConferenceAgend
     private static Expression<Func<TaktConferenceAgenda, bool>> QueryExpression(TaktConferenceAgendaQueryDto? queryDto)
     {
         var exp = Expressionable.Create<TaktConferenceAgenda>();
+
+        if (queryDto?.IsObsolete.HasValue == true)
+        {
+            exp = exp.And(x => x.IsObsolete == queryDto.IsObsolete);
+        }
+        else
+        {
+            exp = exp.And(x => x.IsObsolete == 0);
+        }
 
         if (!string.IsNullOrEmpty(queryDto?.KeyWords))
         {

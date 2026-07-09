@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.WebApi.Controllers.Routine.ConferenceCenter
 // 文件名称：TaktConferenceAgendasController.cs
-// 创建时间：2026-06-23
+// 创建时间：2026-07-09
 // 创建人：Takt365(Cursor AI)
 // 功能描述：会议议程纪要控制器
 // 
@@ -173,6 +173,26 @@ public class TaktConferenceAgendasController : TaktControllerBase
         {
             await _conferenceAgendaService.DeleteConferenceAgendaBatchAsync(ids);
             return Success("删除成功");
+        }
+        catch (Exception ex)
+        {
+            return HandleException(ex);
+        }
+    }
+
+    /// <summary>
+    /// 更新会议议程纪要作废状态
+    /// </summary>
+    /// <param name="dto">作废 DTO</param>
+    /// <returns>会议议程纪要DTO</returns>
+    [TaktPermission("routine:conference:center:agenda:update", "更新会议议程纪要作废状态")]
+    [HttpPut("obsolete")]
+    public async Task<IActionResult> UpdateConferenceAgendaObsoleteAsync([FromBody] TaktConferenceAgendaObsoleteDto dto)
+    {
+        try
+        {
+            var result = await _conferenceAgendaService.UpdateConferenceAgendaObsoleteAsync(dto);
+            return Success(result, "更新成功");
         }
         catch (Exception ex)
         {

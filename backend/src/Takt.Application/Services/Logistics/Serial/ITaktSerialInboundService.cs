@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Application.Services.Logistics.Serial
 // 文件名称：ITaktSerialInboundService.cs
-// 创建时间：2026-06-23
+// 创建时间：2026-07-09
 // 创建人：Takt365(Cursor AI)
 // 功能描述：序列号入库应用服务接口
 // 
@@ -94,12 +94,5 @@ public interface ITaktSerialInboundService
     /// <param name="fileName">文件名</param>
     /// <returns>Excel 文件</returns>
     Task<(string fileName, byte[] fileContent)> ExportSerialInboundAsync(TaktSerialInboundQueryDto? query = null, string? sheetName = null, string? fileName = null);
-
-    /// <summary>
-    /// 获取序列号入库统计（数据看板）
-    /// </summary>
-    /// <param name="queryDto">查询 DTO</param>
-    /// <returns>序列号入库统计</returns>
-    Task<TaktSerialInboundStatDto> GetSerialInboundStatAsync(TaktSerialInboundStatQueryDto queryDto);
 
 }

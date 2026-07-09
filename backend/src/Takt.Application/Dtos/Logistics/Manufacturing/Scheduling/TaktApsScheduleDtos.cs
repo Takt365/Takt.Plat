@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Application.Dtos.Logistics.Manufacturing.Scheduling
 // 文件名称：TaktApsScheduleDtos.cs
-// 创建时间：2026-06-30
+// 创建时间：2026-07-09
 // 创建人：Takt365(Auto Generated)
 // 功能描述：ApsSchedule 模块 DTO（由 generate-dtos-from-entity.cjs 根据 TaktApsSchedule 生成，请按需审阅）
 // 
@@ -158,12 +158,6 @@ public class TaktApsScheduleDto : TaktCompanyDtoBase
     /// （子表：TaktApsScheduleItem）
     /// </summary>
     public List<TaktApsScheduleItemDto>? Items { get; set; }
-
-    /// <summary>
-    /// 变更日志列表（主子表关系）
-    /// （子表：TaktApsScheduleChangeLog）
-    /// </summary>
-    public List<TaktApsScheduleChangeLogDto>? ChangeLogs { get; set; }
 
 }
 
@@ -482,17 +476,12 @@ public class TaktApsScheduleCreateDto
     /// <summary>
     /// APS 排程订单列表（排程批次关联的订单）（子表，级联保存）
     /// </summary>
-    public List<TaktApsOrderCreateDto>? Orders { get; set; }
+    public List<TaktApsOrderUpdateDto>? Orders { get; set; }
 
     /// <summary>
     /// 排程明细列表（主子表关系）（子表，级联保存）
     /// </summary>
-    public List<TaktApsScheduleItemCreateDto>? Items { get; set; }
-
-    /// <summary>
-    /// 变更日志列表（主子表关系）（子表，级联保存）
-    /// </summary>
-    public List<TaktApsScheduleChangeLogCreateDto>? ChangeLogs { get; set; }
+    public List<TaktApsScheduleItemUpdateDto>? Items { get; set; }
 
     /// <summary>
     /// 扩展字段JSON
@@ -692,11 +681,6 @@ public class TaktApsScheduleTemplateDto
     public List<TaktApsScheduleItemCreateDto>? Items { get; set; }
 
     /// <summary>
-    /// 变更日志列表（主子表关系）（子表，级联保存）
-    /// </summary>
-    public List<TaktApsScheduleChangeLogCreateDto>? ChangeLogs { get; set; }
-
-    /// <summary>
     /// 扩展字段JSON
     /// </summary>
     public string? ExtField { get; set; }
@@ -849,11 +833,6 @@ public class TaktApsScheduleImportDto
     /// 排程明细列表（主子表关系）（子表，级联保存）
     /// </summary>
     public List<TaktApsScheduleItemCreateDto>? Items { get; set; }
-
-    /// <summary>
-    /// 变更日志列表（主子表关系）（子表，级联保存）
-    /// </summary>
-    public List<TaktApsScheduleChangeLogCreateDto>? ChangeLogs { get; set; }
 
     /// <summary>
     /// 扩展字段JSON

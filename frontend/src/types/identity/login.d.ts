@@ -105,6 +105,16 @@ export interface SessionVerifyPasswordRequest {
    */
   tenantCode: string;
 
+  /**
+   * 验证码 ID（启用验证码时必填）
+   */
+  captchaId?: string;
+
+  /**
+   * 验证码载荷（启用验证码时必填）
+   */
+  captchaCode?: string;
+
 }
 
 
@@ -391,21 +401,6 @@ export interface UserInfoResponse {
  * @description 对应后端 TaktLoginPreviewLocaleDto
  */
 export interface LoginPreviewLocale {
-  /**
-   * 租户在 TaktTenant 中存在且启用
-   */
-  tenantFound: boolean;
-
-  /**
-   * 用户在 TaktUser 中存在且启用
-   */
-  userFound: boolean;
-
-  /**
-   * 已解析到 is_default=Yes 的 TaktUserCompany 且对应 TaktCompany 启用
-   */
-  defaultCompanyFound: boolean;
-
   /**
    * 用户默认登录公司代码（takt_identity_user_company.is_default=Yes）
    */

@@ -20,6 +20,7 @@ using Microsoft.AspNetCore;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.RateLimiting;
 using Microsoft.Extensions.Options;
 using OpenIddict.Abstractions;
 using Takt.Application.Dtos.Identity;
@@ -127,6 +128,7 @@ public class TaktAuthsController : TaktControllerBase
     /// <param name="dto">登录请求</param>
     /// <returns>是否成功</returns>
     [AllowAnonymous]
+    [EnableRateLimiting(TaktRateLimitPolicyNames.Login)]
     [HttpPost("session/signin")]
     [TaktPermission("identity:auth:signin", "登录会话")]
     public async Task<IActionResult> SignInSessionAsync([FromBody] TaktLoginRequestDto dto)
@@ -144,26 +146,51 @@ public class TaktAuthsController : TaktControllerBase
 
         ApplyLoginContextHeaders(tenantCode, null);
 
-        if (!await _authService.ValidateUserTenantAccessAsync(tenantCode, username))
+        var hasLoginTicket = !string.IsNullOrWhiteSpace(dto.LoginTicket);
+        TaktLoginCredentialStatus? credentialFailureStatus = null;
+        long? userId;
+
+        if (hasLoginTicket)
         {
-            var tenantAccessMessage = GetLocalizedString(TaktValidationI18nKeys.PermissionTenantNoAccess);
-            await _openIddictLogHandler.CreateLoginLogAsync(
-                HttpContext, TaktAuthLoginPhases.SignInSession, tenantCode, dto.CompanyCode, username,
-                TaktConstants.LoginType.Password, TaktConstants.LoginResult.PasswordError, tenantAccessMessage);
-            return Unauthorized(new { message = tenantAccessMessage });
+            userId = await _loginTicketService.ConsumeLoginTicketAsync(
+                dto.LoginTicket!,
+                tenantCode,
+                username);
+        }
+        else
+        {
+            if (!TryDecryptTransportPassword(dto.Password, out var plainPassword, out var cipherError))
+            {
+                await _openIddictLogHandler.CreateLoginLogAsync(
+                    HttpContext, TaktAuthLoginPhases.SignInSession, tenantCode, dto.CompanyCode, username,
+                    TaktConstants.LoginType.Password, TaktConstants.LoginResult.PasswordError, cipherError);
+                return BadRequest(new { message = cipherError });
+            }
+
+            var authResult = await _authService.AuthenticateLoginCredentialsAsync(tenantCode, username, plainPassword);
+            if (authResult.Status != TaktLoginCredentialStatus.Success)
+            {
+                credentialFailureStatus = authResult.Status;
+                userId = null;
+            }
+            else
+            {
+                userId = authResult.UserId;
+            }
         }
 
-        var userId = await ResolveSignInUserIdAsync(tenantCode, username, dto);
         if (userId == null)
         {
-            var invalidCredentialsMessage = GetValidationMessage(TaktValidationI18nKeys.Incorrect, TaktValidationI18nKeys.FieldLoginCredentials);
+            var failureMessage = credentialFailureStatus == TaktLoginCredentialStatus.AccountLocked
+                ? GetLocalizedString(TaktValidationI18nKeys.StatusAccountLocked)
+                : GetValidationMessage(TaktValidationI18nKeys.Incorrect, TaktValidationI18nKeys.FieldLoginCredentials);
             await _openIddictLogHandler.CreateLoginLogAsync(
                 HttpContext, TaktAuthLoginPhases.SignInSession, tenantCode, dto.CompanyCode, username,
-                TaktConstants.LoginType.Password, TaktConstants.LoginResult.PasswordError, invalidCredentialsMessage);
-            return Unauthorized(new { message = invalidCredentialsMessage });
+                TaktConstants.LoginType.Password, TaktConstants.LoginResult.PasswordError, failureMessage);
+            return Unauthorized(new { message = failureMessage });
         }
 
-        if (_captchaOptions.Enabled)
+        if (_captchaOptions.Enabled && !hasLoginTicket)
         {
             if (string.IsNullOrWhiteSpace(dto.CaptchaId) || string.IsNullOrWhiteSpace(dto.CaptchaCode))
             {
@@ -257,6 +284,7 @@ public class TaktAuthsController : TaktControllerBase
     /// <param name="dto">校验请求</param>
     /// <returns>校验结果</returns>
     [AllowAnonymous]
+    [EnableRateLimiting(TaktRateLimitPolicyNames.Login)]
     [HttpPost("session/verify-password")]
     public async Task<IActionResult> VerifySessionPasswordAsync([FromBody] TaktSessionVerifyPasswordRequestDto dto)
     {
@@ -275,18 +303,15 @@ public class TaktAuthsController : TaktControllerBase
 
         ApplyLoginContextHeaders(tenantCode, null);
 
-        // ① 租户下用户登录权限（不验证密码）
-        if (!await _authService.ValidateUserTenantAccessAsync(tenantCode, username))
+        if (_captchaOptions.Enabled)
         {
-            var tenantAccessMessage = GetLocalizedString(TaktValidationI18nKeys.PermissionTenantNoAccess);
-            await _openIddictLogHandler.CreateLoginLogAsync(
-                HttpContext, TaktAuthLoginPhases.VerifyPassword, tenantCode, null, username,
-                TaktConstants.LoginType.VerifyPassword, TaktConstants.LoginResult.PasswordError, tenantAccessMessage,
-                elapsedMs: stopwatch.ElapsedMilliseconds);
-            return Unauthorized(new { message = tenantAccessMessage });
+            var captchaError = await TryVerifyLoginCaptchaAsync(dto.CaptchaId, dto.CaptchaCode, tenantCode, username, stopwatch);
+            if (captchaError != null)
+            {
+                return captchaError;
+            }
         }
 
-        // ② 解密并验证密码
         if (!TryDecryptTransportPassword(dto.Password, out var plainPassword, out var cipherError))
         {
             await _openIddictLogHandler.CreateLoginLogAsync(
@@ -296,33 +321,79 @@ public class TaktAuthsController : TaktControllerBase
             return BadRequest(new { message = cipherError });
         }
 
-        var userId = await _authService.ValidateUserPasswordOnlyAsync(tenantCode, username, plainPassword);
-        if (userId == null)
+        var authResult = await _authService.AuthenticateLoginCredentialsAsync(tenantCode, username, plainPassword);
+        if (authResult.Status != TaktLoginCredentialStatus.Success || !authResult.UserId.HasValue)
         {
-            var invalidCredentialsMessage = GetValidationMessage(TaktValidationI18nKeys.Incorrect, TaktValidationI18nKeys.FieldLoginCredentials);
+            var failureMessage = authResult.Status == TaktLoginCredentialStatus.AccountLocked
+                ? GetLocalizedString(TaktValidationI18nKeys.StatusAccountLocked)
+                : GetValidationMessage(TaktValidationI18nKeys.Incorrect, TaktValidationI18nKeys.FieldLoginCredentials);
             await _openIddictLogHandler.CreateLoginLogAsync(
                 HttpContext, TaktAuthLoginPhases.VerifyPassword, tenantCode, null, username,
-                TaktConstants.LoginType.VerifyPassword, TaktConstants.LoginResult.PasswordError, invalidCredentialsMessage,
+                TaktConstants.LoginType.VerifyPassword, TaktConstants.LoginResult.PasswordError, failureMessage,
                 elapsedMs: stopwatch.ElapsedMilliseconds);
-            return Unauthorized(new { message = invalidCredentialsMessage });
+            return Unauthorized(new { message = failureMessage });
         }
 
         var loginTicket = await _loginTicketService.CreateLoginTicketAsync(
-            userId.Value,
+            authResult.UserId.Value,
             tenantCode,
             username);
 
         await _openIddictLogHandler.CreateLoginLogAsync(
             HttpContext, TaktAuthLoginPhases.VerifyPassword, tenantCode, null, username,
             TaktConstants.LoginType.VerifyPassword, TaktConstants.LoginResult.Success, "密码校验通过，已签发登录票据",
-            userId.Value, stopwatch.ElapsedMilliseconds);
+            authResult.UserId.Value, stopwatch.ElapsedMilliseconds);
 
         return Ok(new TaktSessionVerifyPasswordResponseDto
         {
             PasswordValid = true,
-            CaptchaRequired = _captchaOptions.Enabled,
+            CaptchaRequired = false,
             LoginTicket = loginTicket,
         });
+    }
+
+    /// <summary>
+    /// 校验登录验证码（启用时必填）
+    /// </summary>
+    /// <param name="captchaId">验证码 ID</param>
+    /// <param name="captchaCode">验证码载荷</param>
+    /// <param name="tenantCode">租户编码</param>
+    /// <param name="username">用户名</param>
+    /// <param name="stopwatch">耗时计时</param>
+    /// <returns>失败时返回 IActionResult；成功返回 null</returns>
+    private async Task<IActionResult?> TryVerifyLoginCaptchaAsync(
+        string? captchaId,
+        string? captchaCode,
+        string tenantCode,
+        string username,
+        Stopwatch stopwatch)
+    {
+        if (string.IsNullOrWhiteSpace(captchaId) || string.IsNullOrWhiteSpace(captchaCode))
+        {
+            var captchaRequiredMessage = GetValidationMessage(TaktValidationI18nKeys.Required, TaktValidationI18nKeys.FieldCaptcha);
+            await _openIddictLogHandler.CreateLoginLogAsync(
+                HttpContext, TaktAuthLoginPhases.VerifyPassword, tenantCode, null, username,
+                TaktConstants.LoginType.VerifyPassword, TaktConstants.LoginResult.CaptchaError, captchaRequiredMessage,
+                elapsedMs: stopwatch.ElapsedMilliseconds);
+            return BadRequest(new { message = captchaRequiredMessage, captchaRequired = true });
+        }
+
+        var captchaVerify = await _captchaService.VerifyAsync(new TaktCaptchaVerifyRequest
+        {
+            CaptchaId = captchaId,
+            UserInput = captchaCode,
+        });
+        if (captchaVerify.Success)
+        {
+            return null;
+        }
+
+        var captchaInvalidMessage = GetValidationMessage(TaktValidationI18nKeys.NotFoundOrExpired, TaktValidationI18nKeys.FieldCaptcha);
+        await _openIddictLogHandler.CreateLoginLogAsync(
+            HttpContext, TaktAuthLoginPhases.VerifyPassword, tenantCode, null, username,
+            TaktConstants.LoginType.VerifyPassword, TaktConstants.LoginResult.CaptchaError, captchaInvalidMessage,
+            elapsedMs: stopwatch.ElapsedMilliseconds);
+        return BadRequest(new { message = captchaInvalidMessage });
     }
 
     /// <summary>
@@ -347,7 +418,8 @@ public class TaktAuthsController : TaktControllerBase
             return null;
         }
 
-        return await _authService.ValidateUserPasswordOnlyAsync(tenantCode, username, plainPassword);
+        var authResult = await _authService.AuthenticateLoginCredentialsAsync(tenantCode, username, plainPassword);
+        return authResult.Status == TaktLoginCredentialStatus.Success ? authResult.UserId : null;
     }
 
     /// <summary>
@@ -507,7 +579,18 @@ public class TaktAuthsController : TaktControllerBase
             }
 
             var result = await _authService.GetLoginPreviewLocaleAsync(tenantCode, username);
-            return Success(result, GetLocalizedString("common.feedback.query.success"));
+            var response = new TaktLoginPreviewLocaleResponseDto();
+            if (result.UserFound)
+            {
+                response.DefaultCulture = result.DefaultCulture;
+                if (result.DefaultCompanyFound)
+                {
+                    response.CompanyCode = result.CompanyCode;
+                    response.CompanyDefaultCulture = result.CompanyDefaultCulture;
+                }
+            }
+
+            return Success(response, GetLocalizedString("common.feedback.query.success"));
         }
         catch (Exception ex)
         {

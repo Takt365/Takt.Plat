@@ -502,6 +502,12 @@ function getValues(): Record<string, any> {
     const rawconvertedMinutes = payload.convertedMinutes
     payload.convertedMinutes = typeof rawconvertedMinutes === 'number' ? rawconvertedMinutes : Number(rawconvertedMinutes)
   }
+  if ('pointsToMinutesRate' in payload) {
+    const rawPointsToMinutesRate = payload.pointsToMinutesRate
+    payload.pointsToMinutesRate = typeof rawPointsToMinutesRate === 'number'
+      ? rawPointsToMinutesRate
+      : Number(rawPointsToMinutesRate)
+  }
   if ('sortOrder' in payload) delete payload.sortOrder
   return payload
 }

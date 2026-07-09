@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Application.Dtos.Logistics.Manufacturing.Bom
 // 文件名称：TaktRoutingItemDtos.cs
-// 创建时间：2026-06-30
+// 创建时间：2026-07-09
 // 创建人：Takt365(Auto Generated)
 // 功能描述：RoutingItem 模块 DTO（由 generate-dtos-from-entity.cjs 根据 TaktRoutingItem 生成，请按需审阅）
 // 
@@ -132,6 +132,11 @@ public class TaktRoutingItemDto : TaktCompanyDtoBase
     public string? ExtJson { get; set; } = string.Empty;
 
     /// <summary>
+    /// 是否作废（字典 sys_yes_no_type，0=否 1=是；编辑移除子行时标记作废）
+    /// </summary>
+    public int IsObsolete { get; set; } = 0;
+
+    /// <summary>
     /// 工艺路线主表（主表）
     /// （主表：TaktRouting）
     /// </summary>
@@ -255,6 +260,11 @@ public class TaktRoutingItemQueryDto : TaktPagedQuery
     /// 工序扩展 JSON（五段工艺差异化参数，如钢网/Feeder/扭矩/烙铁温度）
     /// </summary>
     public string? ExtJson { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 是否作废（字典 sys_yes_no_type，0=否 1=是；编辑移除子行时标记作废）
+    /// </summary>
+    public int? IsObsolete { get; set; }
 
     /// <summary>
     /// 创建时间（范围查询-开始）
@@ -393,9 +403,14 @@ public class TaktRoutingItemCreateDto
     public string? ExtJson { get; set; } = string.Empty;
 
     /// <summary>
+    /// 是否作废（字典 sys_yes_no_type，0=否 1=是；编辑移除子行时标记作废）
+    /// </summary>
+    public int IsObsolete { get; set; } = 0;
+
+    /// <summary>
     /// 工序参数定义（子表，级联保存）
     /// </summary>
-    public List<TaktRoutingItemArgumentCreateDto>? Arguments { get; set; }
+    public List<TaktRoutingItemArgumentUpdateDto>? Arguments { get; set; }
 
     /// <summary>
     /// 扩展字段JSON
@@ -451,6 +466,29 @@ public class TaktRoutingItemSortDto
     /// </summary>
     [Required(ErrorMessage = "排序号不能为空")]
     public int SortOrder { get; set; } = 0;
+}
+
+// ========================================
+// RoutingItem 作废 DTO
+// ========================================
+
+/// <summary>
+/// RoutingItem 作废/撤销作废 DTO
+/// </summary>
+public class TaktRoutingItemObsoleteDto
+{
+    /// <summary>
+    /// RoutingItemID
+    /// </summary>
+    [Required(ErrorMessage = "ID不能为空")]
+    [AdaptMember("Id")]
+    [JsonConverter(typeof(ValueToStringConverter))]
+    public long RoutingItemId { get; set; }
+
+    /// <summary>
+    /// 是否作废（字典 sys_yes_no_type，0=否 1=是；编辑移除子行时标记作废）
+    /// </summary>
+    public int IsObsolete { get; set; }
 }
 
 // ========================================
@@ -557,6 +595,11 @@ public class TaktRoutingItemTemplateDto
     /// 工序扩展 JSON（五段工艺差异化参数，如钢网/Feeder/扭矩/烙铁温度）
     /// </summary>
     public string? ExtJson { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 是否作废（字典 sys_yes_no_type，0=否 1=是；编辑移除子行时标记作废）
+    /// </summary>
+    public int? IsObsolete { get; set; }
 
     /// <summary>
     /// 工序参数定义（子表，级联保存）
@@ -680,6 +723,11 @@ public class TaktRoutingItemImportDto
     /// 工序扩展 JSON（五段工艺差异化参数，如钢网/Feeder/扭矩/烙铁温度）
     /// </summary>
     public string? ExtJson { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 是否作废（字典 sys_yes_no_type，0=否 1=是；编辑移除子行时标记作废）
+    /// </summary>
+    public int? IsObsolete { get; set; }
 
     /// <summary>
     /// 工序参数定义（子表，级联保存）
@@ -809,6 +857,11 @@ public class TaktRoutingItemExportDto
     /// 工序扩展 JSON（五段工艺差异化参数，如钢网/Feeder/扭矩/烙铁温度）
     /// </summary>
     public string? ExtJson { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 是否作废（字典 sys_yes_no_type，0=否 1=是；编辑移除子行时标记作废）
+    /// </summary>
+    public int IsObsolete { get; set; } = 0;
 
     /// <summary>
     /// 扩展字段JSON

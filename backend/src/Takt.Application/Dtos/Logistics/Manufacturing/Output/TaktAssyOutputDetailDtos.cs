@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Application.Dtos.Logistics.Manufacturing.Output
 // 文件名称：TaktAssyOutputDetailDtos.cs
-// 创建时间：2026-06-30
+// 创建时间：2026-07-09
 // 创建人：Takt365(Auto Generated)
 // 功能描述：AssyOutputDetail 模块 DTO（由 generate-dtos-from-entity.cjs 根据 TaktAssyOutputDetail 生成，请按需审阅）
 // 
@@ -47,7 +47,7 @@ public class TaktAssyOutputDetailDto : TaktCompanyDtoBase
     public string? AssyOutputName { get; set; }
 
     /// <summary>
-    /// 生产工单号（冗余字段,便于查询）
+    /// 工单号（冗余字段,便于查询）
     /// </summary>
     public string ProdOrderCode { get; set; } = string.Empty;
 
@@ -57,9 +57,14 @@ public class TaktAssyOutputDetailDto : TaktCompanyDtoBase
     public int LineNumber { get; set; } = 0;
 
     /// <summary>
-    /// 生产时段
+    /// 生产时段（固定值）
     /// </summary>
     public string TimePeriod { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 标准产能（冗余字段：默认快照主表 StdCapacity；有报工工时时按报工工时÷标准工时×稼动率重算该行）
+    /// </summary>
+    public decimal StdCapacity { get; set; }
 
     /// <summary>
     /// 实际生产数量
@@ -72,7 +77,7 @@ public class TaktAssyOutputDetailDto : TaktCompanyDtoBase
     public int DowntimeMinutes { get; set; } = 0;
 
     /// <summary>
-    /// 停线原因（字典 logistics_stop_reason_category，存 DictValue）
+    /// 停线原因（字典 logistics_stop_reason_category，多选 DictLabel 逗号分隔）
     /// </summary>
     public string? DowntimeReason { get; set; } = string.Empty;
 
@@ -82,7 +87,7 @@ public class TaktAssyOutputDetailDto : TaktCompanyDtoBase
     public string? DowntimeDescription { get; set; } = string.Empty;
 
     /// <summary>
-    /// 未达成原因（字典 logistics_nonachievement_reason_category，存 DictValue）
+    /// 未达成原因（字典 logistics_nonachievement_reason_category，多选 DictLabel 逗号分隔）
     /// </summary>
     public string? UnachievedReason { get; set; } = string.Empty;
 
@@ -92,24 +97,39 @@ public class TaktAssyOutputDetailDto : TaktCompanyDtoBase
     public string? UnachievedDescription { get; set; } = string.Empty;
 
     /// <summary>
-    /// 投入工时(分钟)
+    /// 投入工时(分钟)（计算结果：无产量且无报工时为 0；报工工时大于 0 时等于报工工时，否则为人数×60）
     /// </summary>
     public decimal InputMinutes { get; set; }
 
     /// <summary>
-    /// 生产工时(分钟)
-    /// </summary>
-    public decimal ProdMinutes { get; set; }
-
-    /// <summary>
-    /// 实际工时(分钟)
+    /// 实际工时(分钟)（计算结果：无产量且无报工时为 0；报工工时大于 0 时为报工工时减停线时间，否则为投入工时减停线时间；有产量时不小于 0）
     /// </summary>
     public decimal ActualMinutes { get; set; }
 
     /// <summary>
-    /// 达成率(%)
+    /// 间接工时(分钟)（计算结果：无产量且无报工时为 0；否则为间接人数×向下取整(实际工时÷直接人数)）
+    /// </summary>
+    public decimal IndirectMinutes { get; set; }
+
+    /// <summary>
+    /// 报工工时(分钟)（填写场景：1 同一时段混合生产；2 清机；3 无产出、欠料、仪设、切换机种等需记录损失时间）
+    /// </summary>
+    public decimal ConfirmMinutes { get; set; }
+
+    /// <summary>
+    /// 混合生产（0=非混合；N≥2 表示同班组同日期同生产时段内共有 N 笔有产量/报工）
+    /// </summary>
+    public int MixedProd { get; set; } = 0;
+
+    /// <summary>
+    /// 达成率(%)（计算结果：实际生产数量÷StdCapacity×100%；标准产能为0时取0）
     /// </summary>
     public decimal AchievementRate { get; set; }
+
+    /// <summary>
+    /// 是否作废（字典 sys_yes_no_type，0=否 1=是；编辑移除子行时标记作废）
+    /// </summary>
+    public int IsObsolete { get; set; } = 0;
 
     /// <summary>
     /// 组立日报（主表）
@@ -146,7 +166,7 @@ public class TaktAssyOutputDetailQueryDto : TaktPagedQuery
     public long? AssyOutputId { get; set; }
 
     /// <summary>
-    /// 生产工单号（冗余字段,便于查询）
+    /// 工单号（冗余字段,便于查询）
     /// </summary>
     public string? ProdOrderCode { get; set; } = string.Empty;
 
@@ -156,9 +176,14 @@ public class TaktAssyOutputDetailQueryDto : TaktPagedQuery
     public int? LineNumber { get; set; }
 
     /// <summary>
-    /// 生产时段
+    /// 生产时段（固定值）
     /// </summary>
     public string? TimePeriod { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 标准产能（冗余字段：默认快照主表 StdCapacity；有报工工时时按报工工时÷标准工时×稼动率重算该行）
+    /// </summary>
+    public decimal? StdCapacity { get; set; }
 
     /// <summary>
     /// 实际生产数量
@@ -171,7 +196,7 @@ public class TaktAssyOutputDetailQueryDto : TaktPagedQuery
     public int? DowntimeMinutes { get; set; }
 
     /// <summary>
-    /// 停线原因（字典 logistics_stop_reason_category，存 DictValue）
+    /// 停线原因（字典 logistics_stop_reason_category，多选 DictLabel 逗号分隔）
     /// </summary>
     public string? DowntimeReason { get; set; } = string.Empty;
 
@@ -181,7 +206,7 @@ public class TaktAssyOutputDetailQueryDto : TaktPagedQuery
     public string? DowntimeDescription { get; set; } = string.Empty;
 
     /// <summary>
-    /// 未达成原因（字典 logistics_nonachievement_reason_category，存 DictValue）
+    /// 未达成原因（字典 logistics_nonachievement_reason_category，多选 DictLabel 逗号分隔）
     /// </summary>
     public string? UnachievedReason { get; set; } = string.Empty;
 
@@ -191,24 +216,39 @@ public class TaktAssyOutputDetailQueryDto : TaktPagedQuery
     public string? UnachievedDescription { get; set; } = string.Empty;
 
     /// <summary>
-    /// 投入工时(分钟)
+    /// 投入工时(分钟)（计算结果：无产量且无报工时为 0；报工工时大于 0 时等于报工工时，否则为人数×60）
     /// </summary>
     public decimal? InputMinutes { get; set; }
 
     /// <summary>
-    /// 生产工时(分钟)
-    /// </summary>
-    public decimal? ProdMinutes { get; set; }
-
-    /// <summary>
-    /// 实际工时(分钟)
+    /// 实际工时(分钟)（计算结果：无产量且无报工时为 0；报工工时大于 0 时为报工工时减停线时间，否则为投入工时减停线时间；有产量时不小于 0）
     /// </summary>
     public decimal? ActualMinutes { get; set; }
 
     /// <summary>
-    /// 达成率(%)
+    /// 间接工时(分钟)（计算结果：无产量且无报工时为 0；否则为间接人数×向下取整(实际工时÷直接人数)）
+    /// </summary>
+    public decimal? IndirectMinutes { get; set; }
+
+    /// <summary>
+    /// 报工工时(分钟)（填写场景：1 同一时段混合生产；2 清机；3 无产出、欠料、仪设、切换机种等需记录损失时间）
+    /// </summary>
+    public decimal? ConfirmMinutes { get; set; }
+
+    /// <summary>
+    /// 混合生产（0=非混合；N≥2 表示同班组同日期同生产时段内共有 N 笔有产量/报工）
+    /// </summary>
+    public int? MixedProd { get; set; }
+
+    /// <summary>
+    /// 达成率(%)（计算结果：实际生产数量÷StdCapacity×100%；标准产能为0时取0）
     /// </summary>
     public decimal? AchievementRate { get; set; }
+
+    /// <summary>
+    /// 是否作废（字典 sys_yes_no_type，0=否 1=是；编辑移除子行时标记作废）
+    /// </summary>
+    public int? IsObsolete { get; set; }
 
     /// <summary>
     /// 创建时间（范围查询-开始）
@@ -262,9 +302,9 @@ public class TaktAssyOutputDetailCreateDto
     public long AssyOutputId { get; set; }
 
     /// <summary>
-    /// 生产工单号（冗余字段,便于查询）
+    /// 工单号（冗余字段,便于查询）
     /// </summary>
-    [Required(ErrorMessage = "生产工单号（冗余字段,便于查询）不能为空")]
+    [Required(ErrorMessage = "工单号（冗余字段,便于查询）不能为空")]
     public string ProdOrderCode { get; set; } = string.Empty;
 
     /// <summary>
@@ -273,10 +313,15 @@ public class TaktAssyOutputDetailCreateDto
     public int LineNumber { get; set; } = 0;
 
     /// <summary>
-    /// 生产时段
+    /// 生产时段（固定值）
     /// </summary>
-    [Required(ErrorMessage = "生产时段不能为空")]
+    [Required(ErrorMessage = "生产时段（固定值）不能为空")]
     public string TimePeriod { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 标准产能（冗余字段：默认快照主表 StdCapacity；有报工工时时按报工工时÷标准工时×稼动率重算该行）
+    /// </summary>
+    public decimal StdCapacity { get; set; }
 
     /// <summary>
     /// 实际生产数量
@@ -289,7 +334,7 @@ public class TaktAssyOutputDetailCreateDto
     public int DowntimeMinutes { get; set; } = 0;
 
     /// <summary>
-    /// 停线原因（字典 logistics_stop_reason_category，存 DictValue）
+    /// 停线原因（字典 logistics_stop_reason_category，多选 DictLabel 逗号分隔）
     /// </summary>
     public string? DowntimeReason { get; set; } = string.Empty;
 
@@ -299,7 +344,7 @@ public class TaktAssyOutputDetailCreateDto
     public string? DowntimeDescription { get; set; } = string.Empty;
 
     /// <summary>
-    /// 未达成原因（字典 logistics_nonachievement_reason_category，存 DictValue）
+    /// 未达成原因（字典 logistics_nonachievement_reason_category，多选 DictLabel 逗号分隔）
     /// </summary>
     public string? UnachievedReason { get; set; } = string.Empty;
 
@@ -309,24 +354,39 @@ public class TaktAssyOutputDetailCreateDto
     public string? UnachievedDescription { get; set; } = string.Empty;
 
     /// <summary>
-    /// 投入工时(分钟)
+    /// 投入工时(分钟)（计算结果：无产量且无报工时为 0；报工工时大于 0 时等于报工工时，否则为人数×60）
     /// </summary>
     public decimal InputMinutes { get; set; }
 
     /// <summary>
-    /// 生产工时(分钟)
-    /// </summary>
-    public decimal ProdMinutes { get; set; }
-
-    /// <summary>
-    /// 实际工时(分钟)
+    /// 实际工时(分钟)（计算结果：无产量且无报工时为 0；报工工时大于 0 时为报工工时减停线时间，否则为投入工时减停线时间；有产量时不小于 0）
     /// </summary>
     public decimal ActualMinutes { get; set; }
 
     /// <summary>
-    /// 达成率(%)
+    /// 间接工时(分钟)（计算结果：无产量且无报工时为 0；否则为间接人数×向下取整(实际工时÷直接人数)）
+    /// </summary>
+    public decimal IndirectMinutes { get; set; }
+
+    /// <summary>
+    /// 报工工时(分钟)（填写场景：1 同一时段混合生产；2 清机；3 无产出、欠料、仪设、切换机种等需记录损失时间）
+    /// </summary>
+    public decimal ConfirmMinutes { get; set; }
+
+    /// <summary>
+    /// 混合生产（0=非混合；N≥2 表示同班组同日期同生产时段内共有 N 笔有产量/报工）
+    /// </summary>
+    public int MixedProd { get; set; } = 0;
+
+    /// <summary>
+    /// 达成率(%)（计算结果：实际生产数量÷StdCapacity×100%；标准产能为0时取0）
     /// </summary>
     public decimal AchievementRate { get; set; }
+
+    /// <summary>
+    /// 是否作废（字典 sys_yes_no_type，0=否 1=是；编辑移除子行时标记作废）
+    /// </summary>
+    public int IsObsolete { get; set; } = 0;
 
     /// <summary>
     /// 扩展字段JSON
@@ -361,6 +421,29 @@ public class TaktAssyOutputDetailUpdateDto : TaktAssyOutputDetailCreateDto
 }
 
 // ========================================
+// AssyOutputDetail 作废 DTO
+// ========================================
+
+/// <summary>
+/// AssyOutputDetail 作废/撤销作废 DTO
+/// </summary>
+public class TaktAssyOutputDetailObsoleteDto
+{
+    /// <summary>
+    /// AssyOutputDetailID
+    /// </summary>
+    [Required(ErrorMessage = "ID不能为空")]
+    [AdaptMember("Id")]
+    [JsonConverter(typeof(ValueToStringConverter))]
+    public long AssyOutputDetailId { get; set; }
+
+    /// <summary>
+    /// 是否作废（字典 sys_yes_no_type，0=否 1=是；编辑移除子行时标记作废）
+    /// </summary>
+    public int IsObsolete { get; set; }
+}
+
+// ========================================
 // 导入 DTO
 // ========================================
 
@@ -386,7 +469,7 @@ public class TaktAssyOutputDetailTemplateDto
     public long? AssyOutputId { get; set; }
 
     /// <summary>
-    /// 生产工单号（冗余字段,便于查询）
+    /// 工单号（冗余字段,便于查询）
     /// </summary>
     public string? ProdOrderCode { get; set; } = string.Empty;
 
@@ -396,9 +479,14 @@ public class TaktAssyOutputDetailTemplateDto
     public int? LineNumber { get; set; }
 
     /// <summary>
-    /// 生产时段
+    /// 生产时段（固定值）
     /// </summary>
     public string? TimePeriod { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 标准产能（冗余字段：默认快照主表 StdCapacity；有报工工时时按报工工时÷标准工时×稼动率重算该行）
+    /// </summary>
+    public decimal? StdCapacity { get; set; }
 
     /// <summary>
     /// 实际生产数量
@@ -411,7 +499,7 @@ public class TaktAssyOutputDetailTemplateDto
     public int? DowntimeMinutes { get; set; }
 
     /// <summary>
-    /// 停线原因（字典 logistics_stop_reason_category，存 DictValue）
+    /// 停线原因（字典 logistics_stop_reason_category，多选 DictLabel 逗号分隔）
     /// </summary>
     public string? DowntimeReason { get; set; } = string.Empty;
 
@@ -421,7 +509,7 @@ public class TaktAssyOutputDetailTemplateDto
     public string? DowntimeDescription { get; set; } = string.Empty;
 
     /// <summary>
-    /// 未达成原因（字典 logistics_nonachievement_reason_category，存 DictValue）
+    /// 未达成原因（字典 logistics_nonachievement_reason_category，多选 DictLabel 逗号分隔）
     /// </summary>
     public string? UnachievedReason { get; set; } = string.Empty;
 
@@ -431,24 +519,39 @@ public class TaktAssyOutputDetailTemplateDto
     public string? UnachievedDescription { get; set; } = string.Empty;
 
     /// <summary>
-    /// 投入工时(分钟)
+    /// 投入工时(分钟)（计算结果：无产量且无报工时为 0；报工工时大于 0 时等于报工工时，否则为人数×60）
     /// </summary>
     public decimal? InputMinutes { get; set; }
 
     /// <summary>
-    /// 生产工时(分钟)
-    /// </summary>
-    public decimal? ProdMinutes { get; set; }
-
-    /// <summary>
-    /// 实际工时(分钟)
+    /// 实际工时(分钟)（计算结果：无产量且无报工时为 0；报工工时大于 0 时为报工工时减停线时间，否则为投入工时减停线时间；有产量时不小于 0）
     /// </summary>
     public decimal? ActualMinutes { get; set; }
 
     /// <summary>
-    /// 达成率(%)
+    /// 间接工时(分钟)（计算结果：无产量且无报工时为 0；否则为间接人数×向下取整(实际工时÷直接人数)）
+    /// </summary>
+    public decimal? IndirectMinutes { get; set; }
+
+    /// <summary>
+    /// 报工工时(分钟)（填写场景：1 同一时段混合生产；2 清机；3 无产出、欠料、仪设、切换机种等需记录损失时间）
+    /// </summary>
+    public decimal? ConfirmMinutes { get; set; }
+
+    /// <summary>
+    /// 混合生产（0=非混合；N≥2 表示同班组同日期同生产时段内共有 N 笔有产量/报工）
+    /// </summary>
+    public int? MixedProd { get; set; }
+
+    /// <summary>
+    /// 达成率(%)（计算结果：实际生产数量÷StdCapacity×100%；标准产能为0时取0）
     /// </summary>
     public decimal? AchievementRate { get; set; }
+
+    /// <summary>
+    /// 是否作废（字典 sys_yes_no_type，0=否 1=是；编辑移除子行时标记作废）
+    /// </summary>
+    public int? IsObsolete { get; set; }
 
     /// <summary>
     /// 扩展字段JSON
@@ -489,7 +592,7 @@ public class TaktAssyOutputDetailImportDto
     public long? AssyOutputId { get; set; }
 
     /// <summary>
-    /// 生产工单号（冗余字段,便于查询）
+    /// 工单号（冗余字段,便于查询）
     /// </summary>
     public string? ProdOrderCode { get; set; } = string.Empty;
 
@@ -499,9 +602,14 @@ public class TaktAssyOutputDetailImportDto
     public int? LineNumber { get; set; }
 
     /// <summary>
-    /// 生产时段
+    /// 生产时段（固定值）
     /// </summary>
     public string? TimePeriod { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 标准产能（冗余字段：默认快照主表 StdCapacity；有报工工时时按报工工时÷标准工时×稼动率重算该行）
+    /// </summary>
+    public decimal? StdCapacity { get; set; }
 
     /// <summary>
     /// 实际生产数量
@@ -514,7 +622,7 @@ public class TaktAssyOutputDetailImportDto
     public int? DowntimeMinutes { get; set; }
 
     /// <summary>
-    /// 停线原因（字典 logistics_stop_reason_category，存 DictValue）
+    /// 停线原因（字典 logistics_stop_reason_category，多选 DictLabel 逗号分隔）
     /// </summary>
     public string? DowntimeReason { get; set; } = string.Empty;
 
@@ -524,7 +632,7 @@ public class TaktAssyOutputDetailImportDto
     public string? DowntimeDescription { get; set; } = string.Empty;
 
     /// <summary>
-    /// 未达成原因（字典 logistics_nonachievement_reason_category，存 DictValue）
+    /// 未达成原因（字典 logistics_nonachievement_reason_category，多选 DictLabel 逗号分隔）
     /// </summary>
     public string? UnachievedReason { get; set; } = string.Empty;
 
@@ -534,24 +642,39 @@ public class TaktAssyOutputDetailImportDto
     public string? UnachievedDescription { get; set; } = string.Empty;
 
     /// <summary>
-    /// 投入工时(分钟)
+    /// 投入工时(分钟)（计算结果：无产量且无报工时为 0；报工工时大于 0 时等于报工工时，否则为人数×60）
     /// </summary>
     public decimal? InputMinutes { get; set; }
 
     /// <summary>
-    /// 生产工时(分钟)
-    /// </summary>
-    public decimal? ProdMinutes { get; set; }
-
-    /// <summary>
-    /// 实际工时(分钟)
+    /// 实际工时(分钟)（计算结果：无产量且无报工时为 0；报工工时大于 0 时为报工工时减停线时间，否则为投入工时减停线时间；有产量时不小于 0）
     /// </summary>
     public decimal? ActualMinutes { get; set; }
 
     /// <summary>
-    /// 达成率(%)
+    /// 间接工时(分钟)（计算结果：无产量且无报工时为 0；否则为间接人数×向下取整(实际工时÷直接人数)）
+    /// </summary>
+    public decimal? IndirectMinutes { get; set; }
+
+    /// <summary>
+    /// 报工工时(分钟)（填写场景：1 同一时段混合生产；2 清机；3 无产出、欠料、仪设、切换机种等需记录损失时间）
+    /// </summary>
+    public decimal? ConfirmMinutes { get; set; }
+
+    /// <summary>
+    /// 混合生产（0=非混合；N≥2 表示同班组同日期同生产时段内共有 N 笔有产量/报工）
+    /// </summary>
+    public int? MixedProd { get; set; }
+
+    /// <summary>
+    /// 达成率(%)（计算结果：实际生产数量÷StdCapacity×100%；标准产能为0时取0）
     /// </summary>
     public decimal? AchievementRate { get; set; }
+
+    /// <summary>
+    /// 是否作废（字典 sys_yes_no_type，0=否 1=是；编辑移除子行时标记作废）
+    /// </summary>
+    public int? IsObsolete { get; set; }
 
     /// <summary>
     /// 扩展字段JSON
@@ -593,7 +716,7 @@ public class TaktAssyOutputDetailExportDto
     public long AssyOutputId { get; set; }
 
     /// <summary>
-    /// 生产工单号（冗余字段,便于查询）
+    /// 工单号（冗余字段,便于查询）
     /// </summary>
     public string ProdOrderCode { get; set; } = string.Empty;
 
@@ -603,9 +726,14 @@ public class TaktAssyOutputDetailExportDto
     public int LineNumber { get; set; } = 0;
 
     /// <summary>
-    /// 生产时段
+    /// 生产时段（固定值）
     /// </summary>
     public string TimePeriod { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 标准产能（冗余字段：默认快照主表 StdCapacity；有报工工时时按报工工时÷标准工时×稼动率重算该行）
+    /// </summary>
+    public decimal StdCapacity { get; set; }
 
     /// <summary>
     /// 实际生产数量
@@ -618,7 +746,7 @@ public class TaktAssyOutputDetailExportDto
     public int DowntimeMinutes { get; set; } = 0;
 
     /// <summary>
-    /// 停线原因（字典 logistics_stop_reason_category，存 DictValue）
+    /// 停线原因（字典 logistics_stop_reason_category，多选 DictLabel 逗号分隔）
     /// </summary>
     public string? DowntimeReason { get; set; } = string.Empty;
 
@@ -628,7 +756,7 @@ public class TaktAssyOutputDetailExportDto
     public string? DowntimeDescription { get; set; } = string.Empty;
 
     /// <summary>
-    /// 未达成原因（字典 logistics_nonachievement_reason_category，存 DictValue）
+    /// 未达成原因（字典 logistics_nonachievement_reason_category，多选 DictLabel 逗号分隔）
     /// </summary>
     public string? UnachievedReason { get; set; } = string.Empty;
 
@@ -638,24 +766,39 @@ public class TaktAssyOutputDetailExportDto
     public string? UnachievedDescription { get; set; } = string.Empty;
 
     /// <summary>
-    /// 投入工时(分钟)
+    /// 投入工时(分钟)（计算结果：无产量且无报工时为 0；报工工时大于 0 时等于报工工时，否则为人数×60）
     /// </summary>
     public decimal InputMinutes { get; set; }
 
     /// <summary>
-    /// 生产工时(分钟)
-    /// </summary>
-    public decimal ProdMinutes { get; set; }
-
-    /// <summary>
-    /// 实际工时(分钟)
+    /// 实际工时(分钟)（计算结果：无产量且无报工时为 0；报工工时大于 0 时为报工工时减停线时间，否则为投入工时减停线时间；有产量时不小于 0）
     /// </summary>
     public decimal ActualMinutes { get; set; }
 
     /// <summary>
-    /// 达成率(%)
+    /// 间接工时(分钟)（计算结果：无产量且无报工时为 0；否则为间接人数×向下取整(实际工时÷直接人数)）
+    /// </summary>
+    public decimal IndirectMinutes { get; set; }
+
+    /// <summary>
+    /// 报工工时(分钟)（填写场景：1 同一时段混合生产；2 清机；3 无产出、欠料、仪设、切换机种等需记录损失时间）
+    /// </summary>
+    public decimal ConfirmMinutes { get; set; }
+
+    /// <summary>
+    /// 混合生产（0=非混合；N≥2 表示同班组同日期同生产时段内共有 N 笔有产量/报工）
+    /// </summary>
+    public int MixedProd { get; set; } = 0;
+
+    /// <summary>
+    /// 达成率(%)（计算结果：实际生产数量÷StdCapacity×100%；标准产能为0时取0）
     /// </summary>
     public decimal AchievementRate { get; set; }
+
+    /// <summary>
+    /// 是否作废（字典 sys_yes_no_type，0=否 1=是；编辑移除子行时标记作废）
+    /// </summary>
+    public int IsObsolete { get; set; } = 0;
 
     /// <summary>
     /// 扩展字段JSON

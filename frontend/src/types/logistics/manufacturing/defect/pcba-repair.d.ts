@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：frontend/src/types/logistics/manufacturing/defect
 // 文件名称：pcba-repair.d.ts
-// 创建时间：2026-06-30
+// 创建时间：2026-07-09
 // 创建人：Takt365(Auto Generated)
 // 功能描述：logistics/manufacturing/defect 模块类型定义（自动生成；类型名去 Takt 前缀与末尾 Dto，如 TaktCompanyDto → Company）
 // 
@@ -16,7 +16,7 @@ import type {
 } from '@/types/common';
 
 /**
- * PCBA改修日报实体
+ * PCBA改修日报实体 不良率(%) = 明细不良数量合计 ÷ 明细生产实绩合计 × 100%；直行率(%) = (生产实绩 - 不良数量) ÷ 生产实绩 × 100%。
  * 对应前端 TaktPcbaRepairDto
  * 继承 TaktCompanyDtoBase
  * 对应前端 PcbaRepair
@@ -29,12 +29,12 @@ export interface PcbaRepair extends CompanyDtoBase {
   pcbaRepairId: string;
 
   /**
-   * 工厂代码（关联 TaktPlant.PlantCode，选项 TaktPlants/options）
+   * 工厂代码（回填：随工单）
    */
   plantCode: string;
 
   /**
-   * 生产类别（字典 logistics_prod_category，存 DictValue：RD/EVT/DVT/EPP/PP/FPP/MP/RPR/RWR）
+   * 生产类别（字典 logistics_prod_category，存 DictValue：EPP/FPP/RWP/MDP/CPP）
    */
   prodCategory: string;
 
@@ -54,12 +54,17 @@ export interface PcbaRepair extends CompanyDtoBase {
   shiftNo: number;
 
   /**
-   * 生产工单号（选项 TaktProductionOrders/options，按 PlantCode 过滤）
+   * 工单类别（回填：随工单）
+   */
+  prodOrderType?: string;
+
+  /**
+   * 工单号（选项 TaktProductionOrders/options，按 PlantCode 过滤）
    */
   prodOrderCode: string;
 
   /**
-   * 订单数量
+   * 工单数量
    */
   prodOrderQty: number;
 
@@ -104,12 +109,12 @@ export interface PcbaRepairQuery extends TaktPagedQuery {
   companyCode?: string;
 
   /**
-   * 工厂代码（关联 TaktPlant.PlantCode，选项 TaktPlants/options）
+   * 工厂代码（回填：随工单）
    */
   plantCode?: string;
 
   /**
-   * 生产类别（字典 logistics_prod_category，存 DictValue：RD/EVT/DVT/EPP/PP/FPP/MP/RPR/RWR）
+   * 生产类别（字典 logistics_prod_category，存 DictValue：EPP/FPP/RWP/MDP/CPP）
    */
   prodCategory?: string;
 
@@ -134,12 +139,17 @@ export interface PcbaRepairQuery extends TaktPagedQuery {
   shiftNo?: number;
 
   /**
-   * 生产工单号（选项 TaktProductionOrders/options，按 PlantCode 过滤）
+   * 工单类别（回填：随工单）
+   */
+  prodOrderType?: string;
+
+  /**
+   * 工单号（选项 TaktProductionOrders/options，按 PlantCode 过滤）
    */
   prodOrderCode?: string;
 
   /**
-   * 订单数量
+   * 工单数量
    */
   prodOrderQty?: number;
 
@@ -203,12 +213,12 @@ export interface PcbaRepairCreate {
   companyDefaultCulture: string;
 
   /**
-   * 工厂代码（关联 TaktPlant.PlantCode，选项 TaktPlants/options）
+   * 工厂代码（回填：随工单）
    */
   plantCode: string;
 
   /**
-   * 生产类别（字典 logistics_prod_category，存 DictValue：RD/EVT/DVT/EPP/PP/FPP/MP/RPR/RWR）
+   * 生产类别（字典 logistics_prod_category，存 DictValue：EPP/FPP/RWP/MDP/CPP）
    */
   prodCategory: string;
 
@@ -228,12 +238,17 @@ export interface PcbaRepairCreate {
   shiftNo: number;
 
   /**
-   * 生产工单号（选项 TaktProductionOrders/options，按 PlantCode 过滤）
+   * 工单类别（回填：随工单）
+   */
+  prodOrderType?: string;
+
+  /**
+   * 工单号（选项 TaktProductionOrders/options，按 PlantCode 过滤）
    */
   prodOrderCode: string;
 
   /**
-   * 订单数量
+   * 工单数量
    */
   prodOrderQty: number;
 
@@ -255,7 +270,7 @@ export interface PcbaRepairCreate {
   /**
    * PCBA改修明细列表（子表，级联保存）
    */
-  pcbaRepairDetails?: PcbaRepairDetailCreate[];
+  pcbaRepairDetails?: PcbaRepairDetailUpdate[];
 
   /**
    * 扩展字段JSON
@@ -302,12 +317,12 @@ export interface PcbaRepairTemplate {
   companyCode?: string;
 
   /**
-   * 工厂代码（关联 TaktPlant.PlantCode，选项 TaktPlants/options）
+   * 工厂代码（回填：随工单）
    */
   plantCode?: string;
 
   /**
-   * 生产类别（字典 logistics_prod_category，存 DictValue：RD/EVT/DVT/EPP/PP/FPP/MP/RPR/RWR）
+   * 生产类别（字典 logistics_prod_category，存 DictValue：EPP/FPP/RWP/MDP/CPP）
    */
   prodCategory?: string;
 
@@ -327,12 +342,17 @@ export interface PcbaRepairTemplate {
   shiftNo?: number;
 
   /**
-   * 生产工单号（选项 TaktProductionOrders/options，按 PlantCode 过滤）
+   * 工单类别（回填：随工单）
+   */
+  prodOrderType?: string;
+
+  /**
+   * 工单号（选项 TaktProductionOrders/options，按 PlantCode 过滤）
    */
   prodOrderCode?: string;
 
   /**
-   * 订单数量
+   * 工单数量
    */
   prodOrderQty?: number;
 
@@ -391,12 +411,12 @@ export interface PcbaRepairImport {
   companyDefaultCulture?: string;
 
   /**
-   * 工厂代码（关联 TaktPlant.PlantCode，选项 TaktPlants/options）
+   * 工厂代码（回填：随工单）
    */
   plantCode?: string;
 
   /**
-   * 生产类别（字典 logistics_prod_category，存 DictValue：RD/EVT/DVT/EPP/PP/FPP/MP/RPR/RWR）
+   * 生产类别（字典 logistics_prod_category，存 DictValue：EPP/FPP/RWP/MDP/CPP）
    */
   prodCategory?: string;
 
@@ -416,12 +436,17 @@ export interface PcbaRepairImport {
   shiftNo?: number;
 
   /**
-   * 生产工单号（选项 TaktProductionOrders/options，按 PlantCode 过滤）
+   * 工单类别（回填：随工单）
+   */
+  prodOrderType?: string;
+
+  /**
+   * 工单号（选项 TaktProductionOrders/options，按 PlantCode 过滤）
    */
   prodOrderCode?: string;
 
   /**
-   * 订单数量
+   * 工单数量
    */
   prodOrderQty?: number;
 
@@ -475,12 +500,12 @@ export interface PcbaRepairExport {
   companyCode: string;
 
   /**
-   * 工厂代码（关联 TaktPlant.PlantCode，选项 TaktPlants/options）
+   * 工厂代码（回填：随工单）
    */
   plantCode: string;
 
   /**
-   * 生产类别（字典 logistics_prod_category，存 DictValue：RD/EVT/DVT/EPP/PP/FPP/MP/RPR/RWR）
+   * 生产类别（字典 logistics_prod_category，存 DictValue：EPP/FPP/RWP/MDP/CPP）
    */
   prodCategory: string;
 
@@ -500,12 +525,17 @@ export interface PcbaRepairExport {
   shiftNo: number;
 
   /**
-   * 生产工单号（选项 TaktProductionOrders/options，按 PlantCode 过滤）
+   * 工单类别（回填：随工单）
+   */
+  prodOrderType?: string;
+
+  /**
+   * 工单号（选项 TaktProductionOrders/options，按 PlantCode 过滤）
    */
   prodOrderCode: string;
 
   /**
-   * 订单数量
+   * 工单数量
    */
   prodOrderQty: number;
 

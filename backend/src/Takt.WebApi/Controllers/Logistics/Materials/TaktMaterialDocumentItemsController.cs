@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.WebApi.Controllers.Logistics.Materials
 // 文件名称：TaktMaterialDocumentItemsController.cs
-// 创建时间：2026-07-01
+// 创建时间：2026-07-09
 // 创建人：Takt365(Cursor AI)
 // 功能描述：物料凭证行项目控制器
 // 
@@ -81,7 +81,7 @@ public class TaktMaterialDocumentItemsController : TaktControllerBase
     }
 
     /// <summary>
-    /// 获取物料交易明细选项列表
+    /// 获取物料凭证明细选项列表
     /// </summary>
     /// <returns>下拉选项</returns>
     [TaktPermission("logistics:materials:material:document:query", "物料凭证行项目选项")]
@@ -173,6 +173,26 @@ public class TaktMaterialDocumentItemsController : TaktControllerBase
         {
             await _materialDocumentItemService.DeleteMaterialDocumentItemBatchAsync(ids);
             return Success("删除成功");
+        }
+        catch (Exception ex)
+        {
+            return HandleException(ex);
+        }
+    }
+
+    /// <summary>
+    /// 更新物料凭证行项目作废状态
+    /// </summary>
+    /// <param name="dto">作废 DTO</param>
+    /// <returns>物料凭证行项目DTO</returns>
+    [TaktPermission("logistics:materials:material:document:update", "更新物料凭证行项目作废状态")]
+    [HttpPut("obsolete")]
+    public async Task<IActionResult> UpdateMaterialDocumentItemObsoleteAsync([FromBody] TaktMaterialDocumentItemObsoleteDto dto)
+    {
+        try
+        {
+            var result = await _materialDocumentItemService.UpdateMaterialDocumentItemObsoleteAsync(dto);
+            return Success(result, "更新成功");
         }
         catch (Exception ex)
         {

@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Application.Services.Logistics.Quality.Operation
 // 文件名称：TaktFqcOrderItemService.cs
-// 创建时间：2026-06-30
+// 创建时间：2026-07-09
 // 创建人：Takt365(Cursor AI)
 // 功能描述：出货检验单明细应用服务实现
 // 
@@ -119,6 +119,7 @@ public class TaktFqcOrderItemService : TaktServiceBase, ITaktFqcOrderItemService
     public async Task<TaktFqcOrderItemDto> CreateFqcOrderItemAsync(TaktFqcOrderItemCreateDto dto)
     {
         var entity = dto.Adapt<TaktFqcOrderItem>();
+        entity.IsObsolete = 0;
         var isUnique_ix_takt_logistics_quality_fqc_order_item_order_line_unique = await _uniqueValidator.IsUniqueAsync(
             _fqcOrderItemRepository,
             x => x.FqcOrderId == entity.FqcOrderId
@@ -224,6 +225,27 @@ public class TaktFqcOrderItemService : TaktServiceBase, ITaktFqcOrderItemService
     }
 
     /// <summary>
+    /// 更新出货检验单明细作废状态
+    /// </summary>
+    /// <param name="dto">作废DTO</param>
+    /// <returns>DTO</returns>
+    public async Task<TaktFqcOrderItemDto> UpdateFqcOrderItemObsoleteAsync(TaktFqcOrderItemObsoleteDto dto)
+    {
+        var entity = await _fqcOrderItemRepository.GetByIdAsync(dto.FqcOrderItemId);
+        if (entity == null)
+        {
+            throw new TaktBusinessException("出货检验单明细不存在");
+        }
+        if (entity.TenantCode != CurrentTenantCode || entity.CompanyCode != CurrentCompanyCode)
+        {
+            throw new TaktBusinessException("出货检验单明细不存在");
+        }
+        entity.IsObsolete = dto.IsObsolete;
+        await _fqcOrderItemRepository.UpdateAsync(entity);
+        return await GetFqcOrderItemByIdAsync(dto.FqcOrderItemId) ?? throw new TaktBusinessException("出货检验单明细不存在");
+    }
+
+    /// <summary>
     /// 获取导入模板
     /// </summary>
     /// <param name="sheetName">工作表名称</param>
@@ -322,6 +344,30 @@ public class TaktFqcOrderItemService : TaktServiceBase, ITaktFqcOrderItemService
     // ========================================
 
     /// <summary>
+    /// 将指定主表下全部未作废出货检验不良处理记录标记为作废（编辑清空子表）
+    /// </summary>
+    /// <param name="fqcOrderItemId">主表主键</param>
+    /// <returns>任务</returns>
+    private async Task MarkFqcDefectHandlingsObsoleteAsync(long fqcOrderItemId)
+    {
+        if (fqcOrderItemId <= 0)
+        {
+            return;
+        }
+        var rows = await _fqcDefectHandlingRepository.GetListAsync(
+            x => x.FqcOrderItemId == fqcOrderItemId && x.IsObsolete == 0);
+        if (rows.Count == 0)
+        {
+            return;
+        }
+        foreach (var row in rows)
+        {
+            row.IsObsolete = 1;
+        }
+        await _fqcDefectHandlingRepository.UpdateRangeAsync(rows);
+    }
+
+    /// <summary>
     /// 填充出货检验单明细详情（加载 OneToMany 子表：出货检验不良处理记录）
     /// </summary>
     /// <param name="dto">响应 DTO</param>
@@ -333,13 +379,13 @@ public class TaktFqcOrderItemService : TaktServiceBase, ITaktFqcOrderItemService
         {
             return;
         }
-        // 出货检验不良处理记录 → dto.DefectHandlings
+        // 出货检验不良处理记录 → dto.DefectHandlings（含作废行）
         var defecthandlings = await _fqcDefectHandlingRepository.GetListAsync(x => x.FqcOrderItemId == entity.Id);
         dto.DefectHandlings = defecthandlings.Adapt<List<TaktFqcDefectHandlingDto>>();
     }
 
     /// <summary>
-    /// 保存出货检验单明细子表级联（出货检验不良处理记录；Create/Update 后按主表 Id 先删后插）
+    /// 保存出货检验单明细子表级联（出货检验不良处理记录；按子表 Id 增量新增/更新；未提交行标记作废，禁止先删后插）
     /// </summary>
     /// <param name="entity">主表实体</param>
     /// <param name="dto">创建/更新 DTO（含子表集合；UpdateDto 须继承 CreateDto）</param>
@@ -347,58 +393,91 @@ public class TaktFqcOrderItemService : TaktServiceBase, ITaktFqcOrderItemService
     private async Task SaveFqcOrderItemChildrenAsync(TaktFqcOrderItem entity, TaktFqcOrderItemCreateDto dto)
     {
         // 出货检验不良处理记录（DefectHandlings）
-        if (dto.DefectHandlings is not { Count: > 0 })
+        List<TaktFqcDefectHandlingUpdateDto>? defectHandlingsForSave;
+        if (dto is TaktFqcOrderItemUpdateDto updateDto && updateDto.DefectHandlings != null)
         {
-            await _fqcDefectHandlingRepository.DeleteAsync(x => x.FqcOrderItemId == entity.Id);
+            defectHandlingsForSave = updateDto.DefectHandlings;
+        }
+        else if (dto.DefectHandlings != null)
+        {
+            defectHandlingsForSave = dto.DefectHandlings.Adapt<List<TaktFqcDefectHandlingUpdateDto>>();
         }
         else
         {
-            var defecthandlings = dto.DefectHandlings.Adapt<List<TaktFqcDefectHandling>>();
-            foreach (var child in defecthandlings)
+            defectHandlingsForSave = null;
+        }
+        if (defectHandlingsForSave is not { Count: > 0 })
+        {
+            await MarkFqcDefectHandlingsObsoleteAsync(entity.Id);
+            return;
+        }
+        else
+        {
+            var existingList = await _fqcDefectHandlingRepository.GetListAsync(x => x.FqcOrderItemId == entity.Id);
+            var existingById = existingList.ToDictionary(x => x.Id);
+            var submittedIds = new HashSet<long>();
+            var toCreate = new List<TaktFqcDefectHandling>();
+            var seenLineKeys = new HashSet<string>(StringComparer.Ordinal);
+            for (var i = 0; i < defectHandlingsForSave.Count; i++)
             {
-                child.FqcOrderItemId = entity.Id;
-            }
-            var defecthandlingsNeedLine = defecthandlings.Where(c => c.LineNumber <= 0).ToList();
-            if (defecthandlingsNeedLine.Count > 0)
-            {
-                var businessCode = !string.IsNullOrWhiteSpace(entity.FqcOrderCode) ? entity.FqcOrderCode : entity.Id.ToString();
-                var maxLine = await _fqcDefectHandlingRepository.GetMaxIntAsync(
-                    x => x.TenantCode == CurrentTenantCode && x.CompanyCode == CurrentCompanyCode && x.FqcOrderItemId == entity.Id,
-                    x => x.LineNumber);
-                var lineSeq = _lineNumberGenerator.GenerateSequence(businessCode, defecthandlingsNeedLine.Count, maxLine).ToList();
-                var lineIdx = 0;
-                foreach (var child in defecthandlings)
+                var childDto = defectHandlingsForSave[i];
+                childDto.FqcOrderItemId = entity.Id;
+                var lineKey = $"{entity.CompanyCode}|{entity.Id}|{childDto.LineNumber}";
+                if (!seenLineKeys.Add(lineKey))
                 {
-                    if (child.LineNumber <= 0)
+                    throw new TaktBusinessException("出货检验不良处理记录第{i + 1}项与本次提交的其他项重复（CompanyCode、FqcOrderItemId、LineNumber）");
+                }
+                if (childDto.FqcDefectHandlingId > 0)
+                {
+                    if (!existingById.TryGetValue(childDto.FqcDefectHandlingId, out var target))
                     {
-                        child.LineNumber = lineSeq[lineIdx++];
+                        throw new TaktBusinessException("出货检验不良处理记录不存在（FqcDefectHandlingId={childDto.FqcDefectHandlingId}）");
                     }
+                    if (target.FqcOrderItemId != entity.Id)
+                    {
+                        throw new TaktBusinessException("出货检验不良处理记录不属于当前主表（FqcDefectHandlingId={childDto.FqcDefectHandlingId}）");
+                    }
+                    submittedIds.Add(childDto.FqcDefectHandlingId);
+                    childDto.Adapt(target);
+                    target.Id = childDto.FqcDefectHandlingId;
+                    target.FqcOrderItemId = entity.Id;
+                    target.IsObsolete = 0;
+                    await _fqcDefectHandlingRepository.UpdateAsync(target);
+                }
+                else
+                {
+                    var child = childDto.Adapt<TaktFqcDefectHandling>();
+                    child.Id = 0;
+                    child.FqcOrderItemId = entity.Id;
+                    child.IsObsolete = 0;
+                    toCreate.Add(child);
                 }
             }
-                        var seenKeys = new HashSet<string>(StringComparer.Ordinal);
-                        for (var i = 0; i < defecthandlings.Count; i++)
+            var toObsolete = existingList.Where(x => !submittedIds.Contains(x.Id) && x.IsObsolete == 0).ToList();
+            foreach (var removed in toObsolete)
+            {
+                removed.IsObsolete = 1;
+                await _fqcDefectHandlingRepository.UpdateAsync(removed);
+            }
+            if (toCreate.Count > 0)
+            {
+                var needLine = toCreate.Where(c => c.LineNumber <= 0).ToList();
+                if (needLine.Count > 0)
+                {
+                    var businessCode = !string.IsNullOrWhiteSpace(entity.FqcOrderCode) ? entity.FqcOrderCode : entity.Id.ToString();
+                    var maxLine = existingList.Count > 0 ? existingList.Max(x => x.LineNumber) : 0;
+                    var lineSeq = _lineNumberGenerator.GenerateSequence(businessCode, needLine.Count, maxLine).ToList();
+                    var lineIdx = 0;
+                    foreach (var child in toCreate)
+                    {
+                        if (child.LineNumber <= 0)
                         {
-                            var key = $"{defecthandlings[i].CompanyCode}|{defecthandlings[i].FqcOrderItemId}|{defecthandlings[i].DefectCode}|{defecthandlings[i].HandlingMethod}";
-                            if (!seenKeys.Add(key))
-                            {
-                                throw new TaktBusinessException($"出货检验不良处理记录第{i + 1}项与本次提交的其他项重复（CompanyCode、FqcOrderItemId、DefectCode、HandlingMethod）");
-                            }
+                            child.LineNumber = lineSeq[lineIdx++];
                         }
-            await _fqcDefectHandlingRepository.DeleteAsync(x => x.FqcOrderItemId == entity.Id);
-            foreach (var child in defecthandlings)
-            {
-            var isUnique_ix_takt_logistics_quality_fqc_defect_handling_unique = await _uniqueValidator.IsUniqueAsync(
-                _fqcDefectHandlingRepository,
-                x => x.CompanyCode == child.CompanyCode
-                    && x.FqcOrderItemId == child.FqcOrderItemId
-                    && x.DefectCode == child.DefectCode
-                    && x.HandlingMethod == child.HandlingMethod);
-            if (!isUnique_ix_takt_logistics_quality_fqc_defect_handling_unique)
-            {
-                throw new TaktBusinessException("出货检验不良处理记录的CompanyCode、FqcOrderItemId、DefectCode、HandlingMethod已存在");
+                    }
+                }
+                await _fqcDefectHandlingRepository.CreateRangeAsync(toCreate);
             }
-            }
-            await _fqcDefectHandlingRepository.CreateRangeAsync(defecthandlings);
         }
     }
     // ========================================
@@ -413,6 +492,15 @@ public class TaktFqcOrderItemService : TaktServiceBase, ITaktFqcOrderItemService
     private static Expression<Func<TaktFqcOrderItem, bool>> QueryExpression(TaktFqcOrderItemQueryDto? queryDto)
     {
         var exp = Expressionable.Create<TaktFqcOrderItem>();
+
+        if (queryDto?.IsObsolete.HasValue == true)
+        {
+            exp = exp.And(x => x.IsObsolete == queryDto.IsObsolete);
+        }
+        else
+        {
+            exp = exp.And(x => x.IsObsolete == 0);
+        }
 
         if (!string.IsNullOrEmpty(queryDto?.KeyWords))
         {

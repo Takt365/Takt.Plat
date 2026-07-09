@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：frontend/src/types/logistics/materials
 // 文件名称：material.d.ts
-// 创建时间：2026-06-30
+// 创建时间：2026-07-09
 // 创建人：Takt365(Auto Generated)
 // 功能描述：logistics/materials 模块类型定义（自动生成；类型名去 Takt 前缀与末尾 Dto，如 TaktCompanyDto → Company）
 // 
@@ -107,11 +107,6 @@ export interface Material extends TenantDtoBase {
    * 物料状态（字典 sys_normal_disable_status；0=禁用，1=启用，2=锁定）
    */
   materialStatus: number;
-
-  /**
-   * 全局物料变更记录列表（外键在子表 TaktMaterialChangeLog.MaterialId） （子表：TaktMaterialChangeLog）
-   */
-  changeLogs?: MaterialChangeLog[];
 
 }
 
@@ -323,11 +318,6 @@ export interface MaterialCreate {
   materialStatus: number;
 
   /**
-   * 全局物料变更记录列表（外键在子表 TaktMaterialChangeLog.MaterialId）（子表，级联保存）
-   */
-  changeLogs?: MaterialChangeLogCreate[];
-
-  /**
    * 扩展字段JSON
    */
   extField?: string;
@@ -466,11 +456,6 @@ export interface MaterialTemplate {
   materialStatus?: number;
 
   /**
-   * 全局物料变更记录列表（外键在子表 TaktMaterialChangeLog.MaterialId）（子表，级联保存）
-   */
-  changeLogs?: MaterialChangeLogCreate[];
-
-  /**
    * 扩展字段JSON
    */
   extField?: string;
@@ -573,11 +558,6 @@ export interface MaterialImport {
    * 物料状态（字典 sys_normal_disable_status；0=禁用，1=启用，2=锁定）
    */
   materialStatus?: number;
-
-  /**
-   * 全局物料变更记录列表（外键在子表 TaktMaterialChangeLog.MaterialId）（子表，级联保存）
-   */
-  changeLogs?: MaterialChangeLogCreate[];
 
   /**
    * 扩展字段JSON

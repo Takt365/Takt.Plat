@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：frontend/src/types/logistics/manufacturing/defect
 // 文件名称：assy-defect-detail.d.ts
-// 创建时间：2026-06-30
+// 创建时间：2026-07-09
 // 创建人：Takt365(Auto Generated)
 // 功能描述：logistics/manufacturing/defect 模块类型定义（自动生成；类型名去 Takt 前缀与末尾 Dto，如 TaktCompanyDto → Company）
 // 
@@ -39,9 +39,19 @@ export interface AssyDefectDetail extends CompanyDtoBase {
   assyDefectName?: string;
 
   /**
-   * 生产工单号（冗余字段,便于查询）
+   * 工单号（冗余字段,便于查询）
    */
   prodOrderCode: string;
+
+  /**
+   * 生实实绩（冗余字段,便于统计/查询）
+   */
+  prodActualQty: number;
+
+  /**
+   * 无不良数量（冗余字段,便于统计/查询）
+   */
+  goodQuantity: number;
 
   /**
    * 行号（项号/序号，固定步长=10）
@@ -84,7 +94,7 @@ export interface AssyDefectDetail extends CompanyDtoBase {
   defectSymptom?: string;
 
   /**
-   * 不良个所（字典 logistics_pcb_location_category，存 DictValue）
+   * 不良个所（字典 logistics_assy_location_category，存 DictValue）
    */
   defectLocation?: string;
 
@@ -97,6 +107,11 @@ export interface AssyDefectDetail extends CompanyDtoBase {
    * 修理员（关联 TaktEmployee.Id，选项 TaktEmployees/options）
    */
   repairOperator?: string;
+
+  /**
+   * 是否作废（字典 sys_yes_no_type，0=否 1=是；编辑移除子行时标记作废）
+   */
+  isObsolete: number;
 
   /**
    * 组立不良日报（主表） （主表：TaktAssyDefect）
@@ -129,9 +144,19 @@ export interface AssyDefectDetailQuery extends TaktPagedQuery {
   assyDefectId?: string;
 
   /**
-   * 生产工单号（冗余字段,便于查询）
+   * 工单号（冗余字段,便于查询）
    */
   prodOrderCode?: string;
+
+  /**
+   * 生实实绩（冗余字段,便于统计/查询）
+   */
+  prodActualQty?: number;
+
+  /**
+   * 无不良数量（冗余字段,便于统计/查询）
+   */
+  goodQuantity?: number;
 
   /**
    * 行号（项号/序号，固定步长=10）
@@ -174,7 +199,7 @@ export interface AssyDefectDetailQuery extends TaktPagedQuery {
   defectSymptom?: string;
 
   /**
-   * 不良个所（字典 logistics_pcb_location_category，存 DictValue）
+   * 不良个所（字典 logistics_assy_location_category，存 DictValue）
    */
   defectLocation?: string;
 
@@ -187,6 +212,11 @@ export interface AssyDefectDetailQuery extends TaktPagedQuery {
    * 修理员（关联 TaktEmployee.Id，选项 TaktEmployees/options）
    */
   repairOperator?: string;
+
+  /**
+   * 是否作废（字典 sys_yes_no_type，0=否 1=是；编辑移除子行时标记作废）
+   */
+  isObsolete?: number;
 
   /**
    * 创建时间（范围查询-开始）
@@ -238,9 +268,19 @@ export interface AssyDefectDetailCreate {
   assyDefectId: string;
 
   /**
-   * 生产工单号（冗余字段,便于查询）
+   * 工单号（冗余字段,便于查询）
    */
   prodOrderCode: string;
+
+  /**
+   * 生实实绩（冗余字段,便于统计/查询）
+   */
+  prodActualQty: number;
+
+  /**
+   * 无不良数量（冗余字段,便于统计/查询）
+   */
+  goodQuantity: number;
 
   /**
    * 行号（项号/序号，固定步长=10）
@@ -283,7 +323,7 @@ export interface AssyDefectDetailCreate {
   defectSymptom?: string;
 
   /**
-   * 不良个所（字典 logistics_pcb_location_category，存 DictValue）
+   * 不良个所（字典 logistics_assy_location_category，存 DictValue）
    */
   defectLocation?: string;
 
@@ -296,6 +336,11 @@ export interface AssyDefectDetailCreate {
    * 修理员（关联 TaktEmployee.Id，选项 TaktEmployees/options）
    */
   repairOperator?: string;
+
+  /**
+   * 是否作废（字典 sys_yes_no_type，0=否 1=是；编辑移除子行时标记作废）
+   */
+  isObsolete: number;
 
   /**
    * 扩展字段JSON
@@ -326,6 +371,25 @@ export interface AssyDefectDetailUpdate extends AssyDefectDetailCreate {
 
 
 /**
+ * AssyDefectDetail 作废/撤销作废 DTO
+ * 对应前端 AssyDefectDetailObsolete
+ * @description 对应后端 TaktAssyDefectDetailObsoleteDto
+ */
+export interface AssyDefectDetailObsolete {
+  /**
+   * AssyDefectDetailID
+   */
+  assyDefectDetailId: string;
+
+  /**
+   * 是否作废（字典 sys_yes_no_type，0=否 1=是；编辑移除子行时标记作废）
+   */
+  isObsolete: number;
+
+}
+
+
+/**
  * AssyDefectDetail 导入模板行 DTO
  * 对应前端 AssyDefectDetailTemplate
  * @description 对应后端 TaktAssyDefectDetailTemplateDto
@@ -347,9 +411,19 @@ export interface AssyDefectDetailTemplate {
   assyDefectId?: string;
 
   /**
-   * 生产工单号（冗余字段,便于查询）
+   * 工单号（冗余字段,便于查询）
    */
   prodOrderCode?: string;
+
+  /**
+   * 生实实绩（冗余字段,便于统计/查询）
+   */
+  prodActualQty?: number;
+
+  /**
+   * 无不良数量（冗余字段,便于统计/查询）
+   */
+  goodQuantity?: number;
 
   /**
    * 行号（项号/序号，固定步长=10）
@@ -392,7 +466,7 @@ export interface AssyDefectDetailTemplate {
   defectSymptom?: string;
 
   /**
-   * 不良个所（字典 logistics_pcb_location_category，存 DictValue）
+   * 不良个所（字典 logistics_assy_location_category，存 DictValue）
    */
   defectLocation?: string;
 
@@ -405,6 +479,11 @@ export interface AssyDefectDetailTemplate {
    * 修理员（关联 TaktEmployee.Id，选项 TaktEmployees/options）
    */
   repairOperator?: string;
+
+  /**
+   * 是否作废（字典 sys_yes_no_type，0=否 1=是；编辑移除子行时标记作废）
+   */
+  isObsolete?: number;
 
   /**
    * 扩展字段JSON
@@ -446,9 +525,19 @@ export interface AssyDefectDetailImport {
   assyDefectId?: string;
 
   /**
-   * 生产工单号（冗余字段,便于查询）
+   * 工单号（冗余字段,便于查询）
    */
   prodOrderCode?: string;
+
+  /**
+   * 生实实绩（冗余字段,便于统计/查询）
+   */
+  prodActualQty?: number;
+
+  /**
+   * 无不良数量（冗余字段,便于统计/查询）
+   */
+  goodQuantity?: number;
 
   /**
    * 行号（项号/序号，固定步长=10）
@@ -491,7 +580,7 @@ export interface AssyDefectDetailImport {
   defectSymptom?: string;
 
   /**
-   * 不良个所（字典 logistics_pcb_location_category，存 DictValue）
+   * 不良个所（字典 logistics_assy_location_category，存 DictValue）
    */
   defectLocation?: string;
 
@@ -504,6 +593,11 @@ export interface AssyDefectDetailImport {
    * 修理员（关联 TaktEmployee.Id，选项 TaktEmployees/options）
    */
   repairOperator?: string;
+
+  /**
+   * 是否作废（字典 sys_yes_no_type，0=否 1=是；编辑移除子行时标记作废）
+   */
+  isObsolete?: number;
 
   /**
    * 扩展字段JSON
@@ -540,9 +634,19 @@ export interface AssyDefectDetailExport {
   assyDefectId: string;
 
   /**
-   * 生产工单号（冗余字段,便于查询）
+   * 工单号（冗余字段,便于查询）
    */
   prodOrderCode: string;
+
+  /**
+   * 生实实绩（冗余字段,便于统计/查询）
+   */
+  prodActualQty: number;
+
+  /**
+   * 无不良数量（冗余字段,便于统计/查询）
+   */
+  goodQuantity: number;
 
   /**
    * 行号（项号/序号，固定步长=10）
@@ -585,7 +689,7 @@ export interface AssyDefectDetailExport {
   defectSymptom?: string;
 
   /**
-   * 不良个所（字典 logistics_pcb_location_category，存 DictValue）
+   * 不良个所（字典 logistics_assy_location_category，存 DictValue）
    */
   defectLocation?: string;
 
@@ -598,6 +702,11 @@ export interface AssyDefectDetailExport {
    * 修理员（关联 TaktEmployee.Id，选项 TaktEmployees/options）
    */
   repairOperator?: string;
+
+  /**
+   * 是否作废（字典 sys_yes_no_type，0=否 1=是；编辑移除子行时标记作废）
+   */
+  isObsolete: number;
 
   /**
    * 扩展字段JSON

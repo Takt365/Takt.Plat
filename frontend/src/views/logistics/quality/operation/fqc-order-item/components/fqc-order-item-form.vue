@@ -10,7 +10,7 @@
 <template>
   <a-form
     ref="formRef"
-    class="takt-generated-form fqc-order-item-form flex flex-col min-h-0"
+    class="takt-generated-form fqc-order-item-form flex flex-col min-h-0 overflow-visible"
     :model="formState"
     :rules="rules"
     layout="horizontal"
@@ -29,68 +29,24 @@
           <a-row :gutter="24">
             <a-col :span="12">
               <a-form-item
-                :label="t('common.page.entity.tenantcode')"
-                name="tenantCode"
-              >
-                <a-input
-                  v-model:value="formState.tenantCode"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('common.page.entity.tenantcode') })"
-                  show-count
-                  :maxlength="20"
-                  disabled
-                />
-              </a-form-item>
-            </a-col>
-            <a-col :span="12">
-              <a-form-item
-                :label="t('common.page.entity.companycode')"
-                name="companyCode"
-              >
-                <a-input
-                  v-model:value="formState.companyCode"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('common.page.entity.companycode') })"
-                  show-count
-                  :maxlength="20"
-                  disabled
-                />
-              </a-form-item>
-            </a-col>
-            <a-col :span="12">
-              <a-form-item
-                :label="t('common.page.entity.companydefaultculture')"
-                name="companyDefaultCulture"
-              >
-                <a-input
-                  v-model:value="formState.companyDefaultCulture"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('common.page.entity.companydefaultculture') })"
-                  show-count
-                  :maxlength="20"
-                  disabled
-                />
-              </a-form-item>
-            </a-col>
-            <a-col :span="12">
-              <a-form-item
-                :label="t('entity.fqcorderitem.fqcorderid')"
+                :label="pi.label('fqcOrderId')"
                 name="fqcOrderId"
               >
-                <a-input
+                <TaktSelect
                   v-model:value="formState.fqcOrderId"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.fqcorderitem.fqcorderid') })"
-                  show-count
-                  :maxlength="20"
-                  allow-clear
+                  api-url="TaktFqcOrders/options"
+                  :placeholder="pi.ph('fqcOrderId')"
                 />
               </a-form-item>
             </a-col>
             <a-col :span="12">
               <a-form-item
-                :label="t('entity.fqcorderitem.fqcordercode')"
+                :label="pi.label('fqcOrderCode')"
                 name="fqcOrderCode"
               >
                 <a-input
                   v-model:value="formState.fqcOrderCode"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.fqcorderitem.fqcordercode') })"
+                  :placeholder="pi.ph('fqcOrderCode')"
                   show-count
                   :maxlength="50"
                   allow-clear
@@ -100,39 +56,37 @@
             </a-col>
             <a-col :span="12">
               <a-form-item
-                :label="t('entity.fqcorderitem.linenumber')"
+                :label="pi.label('lineNumber')"
                 name="lineNumber"
               >
                 <a-input-number
                   v-model:value="formState.lineNumber"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.fqcorderitem.linenumber') })"
+                  :placeholder="pi.ph('lineNumber')"
                   style="width: 100%"
                 />
               </a-form-item>
             </a-col>
             <a-col :span="12">
               <a-form-item
-                :label="t('entity.fqcorderitem.materialcode')"
+                :label="pi.label('materialCode')"
                 name="materialCode"
               >
-                <a-input
+                <TaktSelect
                   v-model:value="formState.materialCode"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.fqcorderitem.materialcode') })"
-                  show-count
-                  :maxlength="20"
-                  allow-clear
+                  api-url="TaktMaterials/options"
+                  :placeholder="pi.ph('materialCode')"
                   :disabled="!!formData?.fqcOrderItemId"
                 />
               </a-form-item>
             </a-col>
             <a-col :span="12">
               <a-form-item
-                :label="t('entity.fqcorderitem.materialname')"
+                :label="pi.label('materialName')"
                 name="materialName"
               >
                 <a-input
                   v-model:value="formState.materialName"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.fqcorderitem.materialname') })"
+                  :placeholder="pi.ph('materialName')"
                   show-count
                   :maxlength="40"
                   allow-clear
@@ -141,12 +95,12 @@
             </a-col>
             <a-col :span="12">
               <a-form-item
-                :label="t('entity.fqcorderitem.batchno')"
+                :label="pi.label('batchNo')"
                 name="batchNo"
               >
                 <a-input
                   v-model:value="formState.batchNo"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.fqcorderitem.batchno') })"
+                  :placeholder="pi.ph('batchNo')"
                   show-count
                   :maxlength="50"
                   allow-clear
@@ -155,13 +109,51 @@
             </a-col>
             <a-col :span="12">
               <a-form-item
-                :label="t('entity.fqcorderitem.warehousequantity')"
+                :label="pi.label('warehouseQuantity')"
                 name="warehouseQuantity"
               >
                 <a-input-number
                   v-model:value="formState.warehouseQuantity"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.fqcorderitem.warehousequantity') })"
+                  :placeholder="pi.ph('warehouseQuantity')"
                   style="width: 100%"
+                />
+              </a-form-item>
+            </a-col>
+            <a-col :span="12">
+              <a-form-item
+                :label="pi.label('standardCode')"
+                name="standardCode"
+              >
+                <TaktSelect
+                  v-model:value="formState.standardCode"
+                  api-url="TaktInspectionStandards/options"
+                  :placeholder="pi.ph('standardCode')"
+                  :disabled="!!formData?.fqcOrderItemId"
+                />
+              </a-form-item>
+            </a-col>
+            <a-col :span="12">
+              <a-form-item
+                :label="pi.label('samplingSchemeCode')"
+                name="samplingSchemeCode"
+              >
+                <TaktSelect
+                  v-model:value="formState.samplingSchemeCode"
+                  api-url="TaktSamplingSchemes/options"
+                  :placeholder="pi.ph('samplingSchemeCode')"
+                  :disabled="!!formData?.fqcOrderItemId"
+                />
+              </a-form-item>
+            </a-col>
+            <a-col :span="12">
+              <a-form-item
+                :label="pi.label('inspectionMethod')"
+                name="inspectionMethod"
+              >
+                <TaktSelect
+                  v-model:value="formState.inspectionMethod"
+                  dict-type="logistics_quality_inspection_method"
+                  :placeholder="pi.ph('inspectionMethod')"
                 />
               </a-form-item>
             </a-col>
@@ -177,102 +169,60 @@
           <a-row :gutter="24">
             <a-col :span="12">
               <a-form-item
-                :label="t('entity.fqcorderitem.standardcode')"
-                name="standardCode"
-              >
-                <a-input
-                  v-model:value="formState.standardCode"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.fqcorderitem.standardcode') })"
-                  show-count
-                  :maxlength="50"
-                  allow-clear
-                  :disabled="!!formData?.fqcOrderItemId"
-                />
-              </a-form-item>
-            </a-col>
-            <a-col :span="12">
-              <a-form-item
-                :label="t('entity.fqcorderitem.samplingschemecode')"
-                name="samplingSchemeCode"
-              >
-                <a-input
-                  v-model:value="formState.samplingSchemeCode"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.fqcorderitem.samplingschemecode') })"
-                  show-count
-                  :maxlength="50"
-                  allow-clear
-                  :disabled="!!formData?.fqcOrderItemId"
-                />
-              </a-form-item>
-            </a-col>
-            <a-col :span="12">
-              <a-form-item
-                :label="t('entity.fqcorderitem.inspectionmethod')"
-                name="inspectionMethod"
-              >
-                <TaktSelect
-                  v-model:value="formState.inspectionMethod"
-                  dict-type="logistics_quality_inspection_method"
-                  :placeholder="t('common.page.form.placeholder.select', { field: t('entity.fqcorderitem.inspectionmethod') })"
-                />
-              </a-form-item>
-            </a-col>
-            <a-col :span="12">
-              <a-form-item
-                :label="t('entity.fqcorderitem.samplequantity')"
+                :label="pi.label('sampleQuantity')"
                 name="sampleQuantity"
               >
                 <a-input-number
                   v-model:value="formState.sampleQuantity"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.fqcorderitem.samplequantity') })"
+                  :placeholder="pi.ph('sampleQuantity')"
                   style="width: 100%"
                 />
               </a-form-item>
             </a-col>
             <a-col :span="12">
               <a-form-item
-                :label="t('entity.fqcorderitem.qualifiedquantity')"
+                :label="pi.label('qualifiedQuantity')"
                 name="qualifiedQuantity"
               >
                 <a-input-number
                   v-model:value="formState.qualifiedQuantity"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.fqcorderitem.qualifiedquantity') })"
+                  :placeholder="pi.ph('qualifiedQuantity')"
                   style="width: 100%"
                 />
               </a-form-item>
             </a-col>
             <a-col :span="12">
               <a-form-item
-                :label="t('entity.fqcorderitem.unqualifiedquantity')"
+                :label="pi.label('unqualifiedQuantity')"
                 name="unqualifiedQuantity"
               >
                 <a-input-number
                   v-model:value="formState.unqualifiedQuantity"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.fqcorderitem.unqualifiedquantity') })"
+                  :placeholder="pi.ph('unqualifiedQuantity')"
                   style="width: 100%"
                 />
               </a-form-item>
             </a-col>
             <a-col :span="12">
               <a-form-item
-                :label="t('entity.fqcorderitem.inspectionreturnquantity')"
+                :label="pi.label('inspectionReturnQuantity')"
                 name="inspectionReturnQuantity"
               >
                 <a-input-number
                   v-model:value="formState.inspectionReturnQuantity"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.fqcorderitem.inspectionreturnquantity') })"
+                  :placeholder="pi.ph('inspectionReturnQuantity')"
                   style="width: 100%"
                 />
               </a-form-item>
             </a-col>
             <a-col :span="12">
               <a-form-item
-                :label="t('entity.fqcorderitem.sampleserialno')"
+                :label="pi.label('sampleSerialNo')"
                 name="sampleSerialNo"
               >
                 <a-input
                   v-model:value="formState.sampleSerialNo"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.fqcorderitem.sampleserialno') })"
+                  :placeholder="pi.ph('sampleSerialNo')"
                   show-count
                   :maxlength="100"
                   allow-clear
@@ -281,27 +231,62 @@
             </a-col>
             <a-col :span="24">
               <a-form-item
-                :label="t('entity.fqcorderitem.inspectiondescription')"
+                :label="pi.label('inspectionDescription')"
                 name="inspectionDescription"
               >
                 <a-textarea
                   v-model:value="formState.inspectionDescription"
-                  :placeholder="t('common.page.form.placeholder.optional', { field: t('entity.fqcorderitem.inspectiondescription') })"
+                  :placeholder="pi.ph('inspectionDescription')"
                   :rows="2"
                 />
               </a-form-item>
             </a-col>
             <a-col :span="12">
               <a-form-item
-                :label="t('entity.fqcorderitem.inspectorby')"
+                :label="pi.label('inspectorBy')"
                 name="inspectorBy"
               >
-                <a-input
+                <TaktSelect
                   v-model:value="formState.inspectorBy"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.fqcorderitem.inspectorby') })"
-                  show-count
-                  :maxlength="50"
-                  allow-clear
+                  api-url="TaktEmployees/options"
+                  :placeholder="pi.ph('inspectorBy')"
+                />
+              </a-form-item>
+            </a-col>
+            <a-col :span="12">
+              <a-form-item
+                :label="pi.label('inspectionDate')"
+                name="inspectionDate"
+              >
+                <a-date-picker
+                  v-model:value="formState.inspectionDate"
+                  :placeholder="pi.ph('inspectionDate')"
+                  value-format="YYYY-MM-DD"
+                  style="width: 100%"
+                />
+              </a-form-item>
+            </a-col>
+            <a-col :span="12">
+              <a-form-item
+                :label="pi.label('judgeStatus')"
+                name="judgeStatus"
+              >
+                <TaktSelect
+                  v-model:value="formState.judgeStatus"
+                  dict-type="logistics_quality_judge_status"
+                  :placeholder="pi.ph('judgeStatus')"
+                />
+              </a-form-item>
+            </a-col>
+            <a-col :span="12">
+              <a-form-item
+                :label="pi.label('isObsolete')"
+                name="isObsolete"
+              >
+                <TaktSelect
+                  v-model:value="formState.isObsolete"
+                  dict-type="sys_yes_no_type"
+                  :placeholder="pi.ph('isObsolete')"
                 />
               </a-form-item>
             </a-col>
@@ -317,26 +302,43 @@
           <a-row :gutter="24">
             <a-col :span="24">
               <a-form-item
-                :label="t('entity.fqcorderitem.inspectiondate')"
-                name="inspectionDate"
+                :label="pi.label('tenantCode')"
+                name="tenantCode"
               >
-                <a-date-picker
-                  v-model:value="formState.inspectionDate"
-                  :placeholder="t('common.page.form.placeholder.select', { field: t('entity.fqcorderitem.inspectiondate') })"
-                  value-format="YYYY-MM-DD"
-                  style="width: 100%"
+                <a-input
+                  v-model:value="formState.tenantCode"
+                  :placeholder="pi.ph('tenantCode')"
+                  show-count
+                  :maxlength="20"
+                  disabled
                 />
               </a-form-item>
             </a-col>
             <a-col :span="24">
               <a-form-item
-                :label="t('entity.fqcorderitem.judgestatus')"
-                name="judgeStatus"
+                :label="pi.label('companyCode')"
+                name="companyCode"
               >
-                <TaktSelect
-                  v-model:value="formState.judgeStatus"
-                  dict-type="logistics_quality_judge_status"
-                  :placeholder="t('common.page.form.placeholder.select', { field: t('entity.fqcorderitem.judgestatus') })"
+                <a-input
+                  v-model:value="formState.companyCode"
+                  :placeholder="pi.ph('companyCode')"
+                  show-count
+                  :maxlength="20"
+                  disabled
+                />
+              </a-form-item>
+            </a-col>
+            <a-col :span="24">
+              <a-form-item
+                :label="pi.label('companyDefaultCulture')"
+                name="companyDefaultCulture"
+              >
+                <a-input
+                  v-model:value="formState.companyDefaultCulture"
+                  :placeholder="pi.ph('companyDefaultCulture')"
+                  show-count
+                  :maxlength="20"
+                  disabled
                 />
               </a-form-item>
             </a-col>
@@ -353,7 +355,7 @@
                     >
                       <span class="takt-form-label-hint-icon"><RiQuestionLine class="takt-remix-icon" /></span>
                     </a-tooltip>
-                    <span>{{ t('common.page.entity.extfield') }}</span>
+                    <span>{{ pi.label('extField') }}</span>
                   </span>
                 </template>
                 <a-textarea
@@ -368,12 +370,12 @@
             </a-col>
             <a-col :span="24">
               <a-form-item
-                :label="t('common.page.entity.remark')"
+                :label="pi.label('remark')"
                 name="remark"
               >
                 <a-textarea
                   v-model:value="formState.remark"
-                  :placeholder="t('common.page.form.placeholder.optional', { field: t('common.page.entity.remark') })"
+                  :placeholder="pi.ph('remark')"
                   :rows="4"
                   show-count
                   :maxlength="400"
@@ -390,13 +392,93 @@
       ref="fqcDefectHandlingTableRef"
       v-model="childFqcDefectHandlingRows"
       :columns="fqcDefectHandlingFormColumns"
-      :title="t('entity.fqcdefecthandling._self')"
-      :add-button-entity="t('entity.fqcdefecthandling._self')"
+      :title="fqcDefectHandlingPi.self()"
+      :add-button-entity="fqcDefectHandlingPi.self()"
       id-field="fqcDefectHandlingId"
       :default-row="createDefaultFqcDefectHandlingRow"
       :disabled="loading"
+      :enable-vertical-scroll="false"
       section-border
-    />
+      class="w-full min-w-0"
+    >
+      <template #cell-defectType="{ record }">
+        <TaktSelect
+          v-model:value="record.defectType"
+          dict-type="logistics_quality_defect_type"
+          class="w-full"
+          :get-popup-container="getSelectPopupContainer"
+          :placeholder="fqcDefectHandlingPi.ph('defectType')"
+          :disabled="loading"
+          allow-clear
+        />
+      </template>
+      <template #cell-handlingMethod="{ record }">
+        <TaktSelect
+          v-model:value="record.handlingMethod"
+          dict-type="logistics_quality_defect_handling_method"
+          class="w-full"
+          :get-popup-container="getSelectPopupContainer"
+          :placeholder="fqcDefectHandlingPi.ph('handlingMethod')"
+          :disabled="loading"
+          allow-clear
+        />
+      </template>
+      <template #cell-responsibleDept="{ record }">
+        <TaktSelect
+          v-model:value="record.responsibleDept"
+          api-url="TaktDepts/tree-options"
+          class="w-full"
+          :get-popup-container="getSelectPopupContainer"
+          :placeholder="fqcDefectHandlingPi.queryPh('responsibleDept', 'select')"
+          :disabled="loading"
+          allow-clear
+        />
+      </template>
+      <template #cell-responsibleBy="{ record }">
+        <TaktSelect
+          v-model:value="record.responsibleBy"
+          api-url="TaktEmployees/options"
+          class="w-full"
+          :get-popup-container="getSelectPopupContainer"
+          :placeholder="fqcDefectHandlingPi.queryPh('responsibleBy', 'select')"
+          :disabled="loading"
+          allow-clear
+        />
+      </template>
+      <template #cell-handlerBy="{ record }">
+        <TaktSelect
+          v-model:value="record.handlerBy"
+          api-url="TaktEmployees/options"
+          class="w-full"
+          :get-popup-container="getSelectPopupContainer"
+          :placeholder="fqcDefectHandlingPi.queryPh('handlerBy', 'select')"
+          :disabled="loading"
+          allow-clear
+        />
+      </template>
+      <template #cell-handlingStatus="{ record }">
+        <TaktSelect
+          v-model:value="record.handlingStatus"
+          dict-type="logistics_quality_defect_handling_status"
+          class="w-full"
+          :get-popup-container="getSelectPopupContainer"
+          :placeholder="fqcDefectHandlingPi.ph('handlingStatus')"
+          :disabled="loading"
+          allow-clear
+        />
+      </template>
+      <template #cell-isObsolete="{ record }">
+        <TaktSelect
+          v-model:value="record.isObsolete"
+          dict-type="sys_yes_no_type"
+          class="w-full"
+          :get-popup-container="getSelectPopupContainer"
+          :placeholder="fqcDefectHandlingPi.ph('isObsolete')"
+          :disabled="loading"
+          allow-clear
+        />
+      </template>
+    </TaktEditableTable>
   </a-form>
 </template>
 
@@ -408,6 +490,11 @@
 import { reactive, watch, computed, ref, onMounted } from 'vue'
 import { useI18n } from 'vue-i18n'
 import type { Rule } from 'ant-design-vue/es/form'
+import { useFqcOrderItemI18n } from '../composables/use-fqc-order-item-i18n'
+
+/** 实体字段 i18n */
+const pi = useFqcOrderItemI18n()
+
 import type { FqcOrderItemCreate } from '@/types/logistics/quality/operation/fqc-order-item'
 import TaktSelect from '@/components/business/takt-select/index.vue'
 import { RiQuestionLine } from '@remixicon/vue'
@@ -444,9 +531,19 @@ const formContentClass = computed(() => (formFields.length > 10 ? 'takt-form-con
 /** 当前激活的 Tab key */
 const activeTab = ref('tab-0')
 /** CreateDto 字段名列表（与 formState 键对齐） */
-const formFields = ["tenantCode","companyCode","companyDefaultCulture","fqcOrderId","fqcOrderCode","lineNumber","materialCode","materialName","batchNo","warehouseQuantity","standardCode","samplingSchemeCode","inspectionMethod","sampleQuantity","qualifiedQuantity","unqualifiedQuantity","inspectionReturnQuantity","sampleSerialNo","inspectionDescription","inspectorBy","inspectionDate","judgeStatus","extField","remark"]
+const formFields = ["tenantCode","companyCode","companyDefaultCulture","fqcOrderId","fqcOrderCode","lineNumber","materialCode","materialName","batchNo","warehouseQuantity","standardCode","samplingSchemeCode","inspectionMethod","sampleQuantity","qualifiedQuantity","unqualifiedQuantity","inspectionReturnQuantity","sampleSerialNo","inspectionDescription","inspectorBy","inspectionDate","judgeStatus","isObsolete","extField","remark"]
+
 
 import type { TaktEditableTableColumn } from '@/components/business/takt-editable-table/types'
+import { resolveNextDetailLineNumber } from '@/utils/takt-sequence'
+import { useFqcDefectHandlingI18n } from '../composables/use-fqc-defect-handling-i18n'
+
+const fqcDefectHandlingPi = useFqcDefectHandlingI18n()
+
+/** 弹窗/表格内 TaktSelect 下拉挂载容器（避免 overflow 裁剪与表头列错位） */
+function getSelectPopupContainer(triggerNode?: HTMLElement): HTMLElement {
+  return triggerNode?.ownerDocument?.body ?? document.body
+}
 
 const childFqcDefectHandlingRows = ref<Record<string, unknown>[]>([])
 const fqcDefectHandlingTableRef = ref<{
@@ -455,90 +552,179 @@ const fqcDefectHandlingTableRef = ref<{
   resetRows: () => void
 } | null>(null)
 
+/** 是否已持久化的子表行 */
+function isPersistedFqcDefectHandlingRow(row: Record<string, unknown>): boolean {
+  const id = row.fqcDefectHandlingId
+  if (id == null || id === '') {
+    return false
+  }
+  return String(id) !== '0'
+}
+
+/** 分配下一可用子表行号（含作废行，仅据当前表格行递增） */
+function allocateNextFqcDefectHandlingLineNumber(): number {
+  const rows = fqcDefectHandlingTableRef.value?.getRows?.() ?? childFqcDefectHandlingRows.value
+  return resolveNextDetailLineNumber(0, rows)
+}
+
 /** 子表 fqcDefectHandling 可编辑列 */
 const fqcDefectHandlingFormColumns = computed<TaktEditableTableColumn[]>(() => [
   {
     key: 'fqcDefectHandlingCode',
-    title: t('entity.fqcdefecthandling.code'),
+    title: fqcDefectHandlingPi.label('fqcDefectHandlingCode'),
     editor: 'input',
     width: 140,
   },
   {
     key: 'fqcOrderCode',
-    title: t('entity.fqcdefecthandling.fqcordercode'),
+    title: fqcDefectHandlingPi.label('fqcOrderCode'),
     editor: 'input',
     width: 140,
   },
   {
     key: 'lineNumber',
-    title: t('entity.fqcdefecthandling.linenumber'),
-    editor: 'inputNumber',
-    width: 140, summary: 'sum',
+    title: fqcDefectHandlingPi.label('lineNumber'),
+    width: 140,
   },
   {
     key: 'defectType',
-    title: t('entity.fqcdefecthandling.defecttype'),
-    editor: 'inputNumber',
+    title: fqcDefectHandlingPi.label('defectType'),
     width: 140,
   },
   {
     key: 'defectCode',
-    title: t('entity.fqcdefecthandling.defectcode'),
+    title: fqcDefectHandlingPi.label('defectCode'),
     editor: 'input',
     width: 140,
   },
   {
     key: 'defectDescription',
-    title: t('entity.fqcdefecthandling.defectdescription'),
+    title: fqcDefectHandlingPi.label('defectDescription'),
     editor: 'textarea',
     rows: 1,
-    placeholder: t('common.page.form.placeholder.required', { field: t('entity.fqcdefecthandling.defectdescription') }),
-    width: 140,
+    placeholder: fqcDefectHandlingPi.ph('defectDescription'),
+    width: 180,
   },
   {
     key: 'defectQuantity',
-    title: t('entity.fqcdefecthandling.defectquantity'),
-    editor: 'inputNumber',
+    title: fqcDefectHandlingPi.label('defectQuantity'),
     width: 140,
   },
   {
     key: 'handlingMethod',
-    title: t('entity.fqcdefecthandling.handlingmethod'),
-    editor: 'inputNumber',
+    title: fqcDefectHandlingPi.label('handlingMethod'),
+    width: 140,
+  },
+  {
+    key: 'handlingDescription',
+    title: fqcDefectHandlingPi.label('handlingDescription'),
+    editor: 'textarea',
+    rows: 1,
+    placeholder: fqcDefectHandlingPi.ph('handlingDescription'),
+    width: 180,
+  },
+  {
+    key: 'responsibleDept',
+    title: fqcDefectHandlingPi.label('responsibleDept'),
+    width: 140,
+  },
+  {
+    key: 'responsibleBy',
+    title: fqcDefectHandlingPi.label('responsibleBy'),
+    width: 140,
+  },
+  {
+    key: 'handlerBy',
+    title: fqcDefectHandlingPi.label('handlerBy'),
+    width: 140,
+  },
+  {
+    key: 'handlingAt',
+    title: fqcDefectHandlingPi.label('handlingAt'),
+    editor: 'datePicker',
+    valueFormat: 'YYYY-MM-DD',
+    width: 140,
+  },
+  {
+    key: 'correctiveAction',
+    title: fqcDefectHandlingPi.label('correctiveAction'),
+    editor: 'input',
+    width: 140, allowClear: true, placeholder: fqcDefectHandlingPi.ph('correctiveAction'),
+  },
+  {
+    key: 'defectImages',
+    title: fqcDefectHandlingPi.label('defectImages'),
+    editor: 'input',
+    width: 140, allowClear: true, placeholder: fqcDefectHandlingPi.ph('defectImages'),
+  },
+  {
+    key: 'attachments',
+    title: fqcDefectHandlingPi.label('attachments'),
+    editor: 'input',
+    width: 140, allowClear: true, placeholder: fqcDefectHandlingPi.ph('attachments'),
+  },
+  {
+    key: 'handlingStatus',
+    title: fqcDefectHandlingPi.label('handlingStatus'),
+    width: 140,
+  },
+  {
+    key: 'isObsolete',
+    title: fqcDefectHandlingPi.label('isObsolete'),
     width: 140,
   },
 ])
 
 /** 编辑态从 formData 同步各子表行 */
 function syncChildRowsFromFormData(val: Partial<FqcOrderItemCreate & { fqcOrderItemId?: string }> | null | undefined) {
-  childFqcDefectHandlingRows.value = ((val as any)?.defectHandlings ?? []) as Record<string, unknown>[]
+  const rows_fqcDefectHandling = ((val as any)?.defectHandlings ?? []) as Record<string, unknown>[]
+  childFqcDefectHandlingRows.value = rows_fqcDefectHandling
 }
 
 function createDefaultFqcDefectHandlingRow(): Record<string, unknown> {
   return {
     fqcDefectHandlingCode: '',
     fqcOrderCode: '',
-    lineNumber: (childFqcDefectHandlingRows.value.length + 1) * 10,
+    lineNumber: allocateNextFqcDefectHandlingLineNumber(),
     defectType: 0,
     defectCode: '',
     defectDescription: '',
     defectQuantity: 0,
     handlingMethod: 0,
+    handlingDescription: '',
+    responsibleDept: '',
+    responsibleBy: '',
+    handlerBy: '',
+    handlingAt: '',
+    correctiveAction: '',
+    defectImages: '',
+    attachments: '',
+    handlingStatus: 0,
+    isObsolete: 0,
   }
 }
 
 /** 组装 Create/Update 载荷（主表 + 子表数组） */
 function buildSubmitPayload() {
   const masterId = props.formData?.fqcOrderItemId ?? ''
+  const isUpdate = Boolean(masterId)
   return {
     ...formState,
-    defectHandlings: fqcDefectHandlingTableRef.value?.getRows?.() ?? childFqcDefectHandlingRows.value.map((rest) => ({
-      ...rest,
-      tenantCode: tenantStore.tenantCode,
-      companyCode: tenantStore.companyCode,
-      companyDefaultCulture: userStore.userInfo?.companyDefaultCulture ?? '',
-      fqcOrderItemId: masterId,
-    })),
+    defectHandlings: fqcDefectHandlingTableRef.value?.getRows?.() ?? childFqcDefectHandlingRows.value.map((row) => {
+      const normalized = {
+        ...row,
+        tenantCode: tenantStore.tenantCode,
+        companyCode: tenantStore.companyCode,
+        companyDefaultCulture: userStore.userInfo?.companyDefaultCulture ?? '',
+        fqcOrderItemId: masterId,
+      }
+      if (isUpdate && isPersistedFqcDefectHandlingRow(row)) {
+        normalized.fqcDefectHandlingId = row.fqcDefectHandlingId
+      } else {
+        delete normalized.fqcDefectHandlingId
+      }
+      return normalized
+    }),
   }
 }
 
@@ -618,25 +804,25 @@ const rules = computed<Record<string, Rule[]>>(() => ({
   fqcOrderId: [
     {
       required: true,
-      message: t('common.page.form.placeholder.required', { field: t('entity.fqcorderitem.fqcorderid') }),
-      trigger: 'blur'
+      message: pi.ph('fqcOrderId'),
+      trigger: 'change'
     }
   ],
   fqcOrderCode: [
     {
       required: true,
-      message: t('common.page.form.placeholder.required', { field: t('entity.fqcorderitem.fqcordercode') }),
+      message: pi.ph('fqcOrderCode'),
       trigger: 'blur'
     }
   ],
   lineNumber: [{
     validator: async (_rule, value) => {
       if (value === undefined || value === null || value === '') {
-        return Promise.reject(t('common.page.form.placeholder.select', { field: t('entity.fqcorderitem.linenumber') }))
+        return Promise.reject(pi.ph('lineNumber'))
       }
       const num = typeof value === 'number' ? value : Number(value)
       if (!Number.isFinite(num)) {
-        return Promise.reject(t('common.page.form.placeholder.select', { field: t('entity.fqcorderitem.linenumber') }))
+        return Promise.reject(pi.ph('lineNumber'))
       }
       return Promise.resolve()
     },
@@ -645,25 +831,25 @@ const rules = computed<Record<string, Rule[]>>(() => ({
   materialCode: [
     {
       required: true,
-      message: t('common.page.form.placeholder.required', { field: t('entity.fqcorderitem.materialcode') }),
-      trigger: 'blur'
+      message: pi.ph('materialCode'),
+      trigger: 'change'
     }
   ],
   materialName: [
     {
       required: true,
-      message: t('common.page.form.placeholder.required', { field: t('entity.fqcorderitem.materialname') }),
+      message: pi.ph('materialName'),
       trigger: 'blur'
     }
   ],
   warehouseQuantity: [{
     validator: async (_rule, value) => {
       if (value === undefined || value === null || value === '') {
-        return Promise.reject(t('common.page.form.placeholder.select', { field: t('entity.fqcorderitem.warehousequantity') }))
+        return Promise.reject(pi.ph('warehouseQuantity'))
       }
       const num = typeof value === 'number' ? value : Number(value)
       if (!Number.isFinite(num)) {
-        return Promise.reject(t('common.page.form.placeholder.select', { field: t('entity.fqcorderitem.warehousequantity') }))
+        return Promise.reject(pi.ph('warehouseQuantity'))
       }
       return Promise.resolve()
     },
@@ -672,25 +858,25 @@ const rules = computed<Record<string, Rule[]>>(() => ({
   standardCode: [
     {
       required: true,
-      message: t('common.page.form.placeholder.required', { field: t('entity.fqcorderitem.standardcode') }),
-      trigger: 'blur'
+      message: pi.ph('standardCode'),
+      trigger: 'change'
     }
   ],
   samplingSchemeCode: [
     {
       required: true,
-      message: t('common.page.form.placeholder.required', { field: t('entity.fqcorderitem.samplingschemecode') }),
-      trigger: 'blur'
+      message: pi.ph('samplingSchemeCode'),
+      trigger: 'change'
     }
   ],
   inspectionMethod: [{
     validator: async (_rule, value) => {
       if (value === undefined || value === null || value === '') {
-        return Promise.reject(t('common.page.form.placeholder.select', { field: t('entity.fqcorderitem.inspectionmethod') }))
+        return Promise.reject(pi.ph('inspectionMethod'))
       }
       const num = typeof value === 'number' ? value : Number(value)
       if (!Number.isFinite(num)) {
-        return Promise.reject(t('common.page.form.placeholder.select', { field: t('entity.fqcorderitem.inspectionmethod') }))
+        return Promise.reject(pi.ph('inspectionMethod'))
       }
       return Promise.resolve()
     },
@@ -699,11 +885,11 @@ const rules = computed<Record<string, Rule[]>>(() => ({
   sampleQuantity: [{
     validator: async (_rule, value) => {
       if (value === undefined || value === null || value === '') {
-        return Promise.reject(t('common.page.form.placeholder.select', { field: t('entity.fqcorderitem.samplequantity') }))
+        return Promise.reject(pi.ph('sampleQuantity'))
       }
       const num = typeof value === 'number' ? value : Number(value)
       if (!Number.isFinite(num)) {
-        return Promise.reject(t('common.page.form.placeholder.select', { field: t('entity.fqcorderitem.samplequantity') }))
+        return Promise.reject(pi.ph('sampleQuantity'))
       }
       return Promise.resolve()
     },
@@ -712,11 +898,11 @@ const rules = computed<Record<string, Rule[]>>(() => ({
   qualifiedQuantity: [{
     validator: async (_rule, value) => {
       if (value === undefined || value === null || value === '') {
-        return Promise.reject(t('common.page.form.placeholder.select', { field: t('entity.fqcorderitem.qualifiedquantity') }))
+        return Promise.reject(pi.ph('qualifiedQuantity'))
       }
       const num = typeof value === 'number' ? value : Number(value)
       if (!Number.isFinite(num)) {
-        return Promise.reject(t('common.page.form.placeholder.select', { field: t('entity.fqcorderitem.qualifiedquantity') }))
+        return Promise.reject(pi.ph('qualifiedQuantity'))
       }
       return Promise.resolve()
     },
@@ -725,11 +911,11 @@ const rules = computed<Record<string, Rule[]>>(() => ({
   unqualifiedQuantity: [{
     validator: async (_rule, value) => {
       if (value === undefined || value === null || value === '') {
-        return Promise.reject(t('common.page.form.placeholder.select', { field: t('entity.fqcorderitem.unqualifiedquantity') }))
+        return Promise.reject(pi.ph('unqualifiedQuantity'))
       }
       const num = typeof value === 'number' ? value : Number(value)
       if (!Number.isFinite(num)) {
-        return Promise.reject(t('common.page.form.placeholder.select', { field: t('entity.fqcorderitem.unqualifiedquantity') }))
+        return Promise.reject(pi.ph('unqualifiedQuantity'))
       }
       return Promise.resolve()
     },
@@ -738,11 +924,11 @@ const rules = computed<Record<string, Rule[]>>(() => ({
   inspectionReturnQuantity: [{
     validator: async (_rule, value) => {
       if (value === undefined || value === null || value === '') {
-        return Promise.reject(t('common.page.form.placeholder.select', { field: t('entity.fqcorderitem.inspectionreturnquantity') }))
+        return Promise.reject(pi.ph('inspectionReturnQuantity'))
       }
       const num = typeof value === 'number' ? value : Number(value)
       if (!Number.isFinite(num)) {
-        return Promise.reject(t('common.page.form.placeholder.select', { field: t('entity.fqcorderitem.inspectionreturnquantity') }))
+        return Promise.reject(pi.ph('inspectionReturnQuantity'))
       }
       return Promise.resolve()
     },
@@ -751,25 +937,38 @@ const rules = computed<Record<string, Rule[]>>(() => ({
   inspectorBy: [
     {
       required: true,
-      message: t('common.page.form.placeholder.required', { field: t('entity.fqcorderitem.inspectorby') }),
-      trigger: 'blur'
+      message: pi.ph('inspectorBy'),
+      trigger: 'change'
     }
   ],
   inspectionDate: [
     {
       required: true,
-      message: t('common.page.form.placeholder.select', { field: t('entity.fqcorderitem.inspectiondate') }),
+      message: pi.ph('inspectionDate'),
       trigger: 'change'
     }
   ],
   judgeStatus: [{
     validator: async (_rule, value) => {
       if (value === undefined || value === null || value === '') {
-        return Promise.reject(t('common.page.form.placeholder.select', { field: t('entity.fqcorderitem.judgestatus') }))
+        return Promise.reject(pi.ph('judgeStatus'))
       }
       const num = typeof value === 'number' ? value : Number(value)
       if (!Number.isFinite(num)) {
-        return Promise.reject(t('common.page.form.placeholder.select', { field: t('entity.fqcorderitem.judgestatus') }))
+        return Promise.reject(pi.ph('judgeStatus'))
+      }
+      return Promise.resolve()
+    },
+    trigger: 'change'
+  }],
+  isObsolete: [{
+    validator: async (_rule, value) => {
+      if (value === undefined || value === null || value === '') {
+        return Promise.reject(pi.ph('isObsolete'))
+      }
+      const num = typeof value === 'number' ? value : Number(value)
+      if (!Number.isFinite(num)) {
+        return Promise.reject(pi.ph('isObsolete'))
       }
       return Promise.resolve()
     },
@@ -818,6 +1017,10 @@ function getValues(): Record<string, any> {
   if ('judgeStatus' in payload) {
     const rawjudgeStatus = payload.judgeStatus
     payload.judgeStatus = typeof rawjudgeStatus === 'number' ? rawjudgeStatus : Number(rawjudgeStatus)
+  }
+  if ('isObsolete' in payload) {
+    const rawisObsolete = payload.isObsolete
+    payload.isObsolete = typeof rawisObsolete === 'number' ? rawisObsolete : Number(rawisObsolete)
   }
   if ('sortOrder' in payload) delete payload.sortOrder
   return payload

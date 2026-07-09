@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Application.Dtos.Logistics.Manufacturing.Planning
 // 文件名称：TaktPurchasePlanItemDtos.cs
-// 创建时间：2026-06-23
+// 创建时间：2026-07-09
 // 创建人：Takt365(Auto Generated)
 // 功能描述：PurchasePlanItem 模块 DTO（由 generate-dtos-from-entity.cjs 根据 TaktPurchasePlanItem 生成，请按需审阅）
 // 
@@ -78,7 +78,7 @@ public class TaktPurchasePlanItemDto : TaktCompanyDtoBase
     public int? ProductionPlanLineNumber { get; set; }
 
     /// <summary>
-    /// 物料编码（关联 TaktMaterialPlant.MaterialCode）
+    /// 物料编码（关联 TaktMaterial.MaterialCode，选项 TaktMaterials/options）
     /// </summary>
     public string MaterialCode { get; set; } = string.Empty;
 
@@ -93,7 +93,7 @@ public class TaktPurchasePlanItemDto : TaktCompanyDtoBase
     public string? MaterialSpecification { get; set; } = string.Empty;
 
     /// <summary>
-    /// 计划单位
+    /// 计划单位（字典 logistics_unit_of_measure_code，DictValue=PC/EA 等；默认 PC）
     /// </summary>
     public string PlanUnit { get; set; } = string.Empty;
 
@@ -123,7 +123,7 @@ public class TaktPurchasePlanItemDto : TaktCompanyDtoBase
     public decimal EstimatedAmount { get; set; }
 
     /// <summary>
-    /// 参考供货商编码（关联 TaktSupplier.SupplierCode）
+    /// 参考供货商编码（关联 TaktSupplier.SupplierCode，选项 TaktSuppliers/options，DictValue=SupplierCode）
     /// </summary>
     public string? ReferenceSupplierCode { get; set; } = string.Empty;
 
@@ -131,6 +131,11 @@ public class TaktPurchasePlanItemDto : TaktCompanyDtoBase
     /// 参考供货商名称
     /// </summary>
     public string? ReferenceSupplierName { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 是否作废（字典 sys_yes_no_type，0=否 1=是；编辑移除子行时标记作废）
+    /// </summary>
+    public int IsObsolete { get; set; } = 0;
 
 }
 
@@ -187,7 +192,7 @@ public class TaktPurchasePlanItemQueryDto : TaktPagedQuery
     public int? ProductionPlanLineNumber { get; set; }
 
     /// <summary>
-    /// 物料编码（关联 TaktMaterialPlant.MaterialCode）
+    /// 物料编码（关联 TaktMaterial.MaterialCode，选项 TaktMaterials/options）
     /// </summary>
     public string? MaterialCode { get; set; } = string.Empty;
 
@@ -202,7 +207,7 @@ public class TaktPurchasePlanItemQueryDto : TaktPagedQuery
     public string? MaterialSpecification { get; set; } = string.Empty;
 
     /// <summary>
-    /// 计划单位
+    /// 计划单位（字典 logistics_unit_of_measure_code，DictValue=PC/EA 等；默认 PC）
     /// </summary>
     public string? PlanUnit { get; set; } = string.Empty;
 
@@ -237,7 +242,7 @@ public class TaktPurchasePlanItemQueryDto : TaktPagedQuery
     public decimal? EstimatedAmount { get; set; }
 
     /// <summary>
-    /// 参考供货商编码（关联 TaktSupplier.SupplierCode）
+    /// 参考供货商编码（关联 TaktSupplier.SupplierCode，选项 TaktSuppliers/options，DictValue=SupplierCode）
     /// </summary>
     public string? ReferenceSupplierCode { get; set; } = string.Empty;
 
@@ -245,6 +250,11 @@ public class TaktPurchasePlanItemQueryDto : TaktPagedQuery
     /// 参考供货商名称
     /// </summary>
     public string? ReferenceSupplierName { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 是否作废（字典 sys_yes_no_type，0=否 1=是；编辑移除子行时标记作废）
+    /// </summary>
+    public int? IsObsolete { get; set; }
 
     /// <summary>
     /// 创建时间（范围查询-开始）
@@ -325,9 +335,9 @@ public class TaktPurchasePlanItemCreateDto
     public int? ProductionPlanLineNumber { get; set; }
 
     /// <summary>
-    /// 物料编码（关联 TaktMaterialPlant.MaterialCode）
+    /// 物料编码（关联 TaktMaterial.MaterialCode，选项 TaktMaterials/options）
     /// </summary>
-    [Required(ErrorMessage = "物料编码（关联 TaktMaterialPlant.MaterialCode）不能为空")]
+    [Required(ErrorMessage = "物料编码（关联 TaktMaterial.MaterialCode，选项 TaktMaterials/options）不能为空")]
     public string MaterialCode { get; set; } = string.Empty;
 
     /// <summary>
@@ -342,9 +352,9 @@ public class TaktPurchasePlanItemCreateDto
     public string? MaterialSpecification { get; set; } = string.Empty;
 
     /// <summary>
-    /// 计划单位
+    /// 计划单位（字典 logistics_unit_of_measure_code，DictValue=PC/EA 等；默认 PC）
     /// </summary>
-    [Required(ErrorMessage = "计划单位不能为空")]
+    [Required(ErrorMessage = "计划单位（字典 logistics_unit_of_measure_code，DictValue=PC/EA 等；默认 PC）不能为空")]
     public string PlanUnit { get; set; } = string.Empty;
 
     /// <summary>
@@ -373,7 +383,7 @@ public class TaktPurchasePlanItemCreateDto
     public decimal EstimatedAmount { get; set; }
 
     /// <summary>
-    /// 参考供货商编码（关联 TaktSupplier.SupplierCode）
+    /// 参考供货商编码（关联 TaktSupplier.SupplierCode，选项 TaktSuppliers/options，DictValue=SupplierCode）
     /// </summary>
     public string? ReferenceSupplierCode { get; set; } = string.Empty;
 
@@ -381,6 +391,11 @@ public class TaktPurchasePlanItemCreateDto
     /// 参考供货商名称
     /// </summary>
     public string? ReferenceSupplierName { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 是否作废（字典 sys_yes_no_type，0=否 1=是；编辑移除子行时标记作废）
+    /// </summary>
+    public int IsObsolete { get; set; } = 0;
 
     /// <summary>
     /// 扩展字段JSON
@@ -412,6 +427,29 @@ public class TaktPurchasePlanItemUpdateDto : TaktPurchasePlanItemCreateDto
     [JsonConverter(typeof(ValueToStringConverter))]
     public long PurchasePlanItemId { get; set; }
 
+}
+
+// ========================================
+// PurchasePlanItem 作废 DTO
+// ========================================
+
+/// <summary>
+/// PurchasePlanItem 作废/撤销作废 DTO
+/// </summary>
+public class TaktPurchasePlanItemObsoleteDto
+{
+    /// <summary>
+    /// PurchasePlanItemID
+    /// </summary>
+    [Required(ErrorMessage = "ID不能为空")]
+    [AdaptMember("Id")]
+    [JsonConverter(typeof(ValueToStringConverter))]
+    public long PurchasePlanItemId { get; set; }
+
+    /// <summary>
+    /// 是否作废（字典 sys_yes_no_type，0=否 1=是；编辑移除子行时标记作废）
+    /// </summary>
+    public int IsObsolete { get; set; }
 }
 
 // ========================================
@@ -466,7 +504,7 @@ public class TaktPurchasePlanItemTemplateDto
     public int? ProductionPlanLineNumber { get; set; }
 
     /// <summary>
-    /// 物料编码（关联 TaktMaterialPlant.MaterialCode）
+    /// 物料编码（关联 TaktMaterial.MaterialCode，选项 TaktMaterials/options）
     /// </summary>
     public string? MaterialCode { get; set; } = string.Empty;
 
@@ -481,7 +519,7 @@ public class TaktPurchasePlanItemTemplateDto
     public string? MaterialSpecification { get; set; } = string.Empty;
 
     /// <summary>
-    /// 计划单位
+    /// 计划单位（字典 logistics_unit_of_measure_code，DictValue=PC/EA 等；默认 PC）
     /// </summary>
     public string? PlanUnit { get; set; } = string.Empty;
 
@@ -511,7 +549,7 @@ public class TaktPurchasePlanItemTemplateDto
     public decimal? EstimatedAmount { get; set; }
 
     /// <summary>
-    /// 参考供货商编码（关联 TaktSupplier.SupplierCode）
+    /// 参考供货商编码（关联 TaktSupplier.SupplierCode，选项 TaktSuppliers/options，DictValue=SupplierCode）
     /// </summary>
     public string? ReferenceSupplierCode { get; set; } = string.Empty;
 
@@ -519,6 +557,11 @@ public class TaktPurchasePlanItemTemplateDto
     /// 参考供货商名称
     /// </summary>
     public string? ReferenceSupplierName { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 是否作废（字典 sys_yes_no_type，0=否 1=是；编辑移除子行时标记作废）
+    /// </summary>
+    public int? IsObsolete { get; set; }
 
     /// <summary>
     /// 扩展字段JSON
@@ -585,7 +628,7 @@ public class TaktPurchasePlanItemImportDto
     public int? ProductionPlanLineNumber { get; set; }
 
     /// <summary>
-    /// 物料编码（关联 TaktMaterialPlant.MaterialCode）
+    /// 物料编码（关联 TaktMaterial.MaterialCode，选项 TaktMaterials/options）
     /// </summary>
     public string? MaterialCode { get; set; } = string.Empty;
 
@@ -600,7 +643,7 @@ public class TaktPurchasePlanItemImportDto
     public string? MaterialSpecification { get; set; } = string.Empty;
 
     /// <summary>
-    /// 计划单位
+    /// 计划单位（字典 logistics_unit_of_measure_code，DictValue=PC/EA 等；默认 PC）
     /// </summary>
     public string? PlanUnit { get; set; } = string.Empty;
 
@@ -630,7 +673,7 @@ public class TaktPurchasePlanItemImportDto
     public decimal? EstimatedAmount { get; set; }
 
     /// <summary>
-    /// 参考供货商编码（关联 TaktSupplier.SupplierCode）
+    /// 参考供货商编码（关联 TaktSupplier.SupplierCode，选项 TaktSuppliers/options，DictValue=SupplierCode）
     /// </summary>
     public string? ReferenceSupplierCode { get; set; } = string.Empty;
 
@@ -638,6 +681,11 @@ public class TaktPurchasePlanItemImportDto
     /// 参考供货商名称
     /// </summary>
     public string? ReferenceSupplierName { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 是否作废（字典 sys_yes_no_type，0=否 1=是；编辑移除子行时标记作废）
+    /// </summary>
+    public int? IsObsolete { get; set; }
 
     /// <summary>
     /// 扩展字段JSON
@@ -705,7 +753,7 @@ public class TaktPurchasePlanItemExportDto
     public int? ProductionPlanLineNumber { get; set; }
 
     /// <summary>
-    /// 物料编码（关联 TaktMaterialPlant.MaterialCode）
+    /// 物料编码（关联 TaktMaterial.MaterialCode，选项 TaktMaterials/options）
     /// </summary>
     public string MaterialCode { get; set; } = string.Empty;
 
@@ -720,7 +768,7 @@ public class TaktPurchasePlanItemExportDto
     public string? MaterialSpecification { get; set; } = string.Empty;
 
     /// <summary>
-    /// 计划单位
+    /// 计划单位（字典 logistics_unit_of_measure_code，DictValue=PC/EA 等；默认 PC）
     /// </summary>
     public string PlanUnit { get; set; } = string.Empty;
 
@@ -750,7 +798,7 @@ public class TaktPurchasePlanItemExportDto
     public decimal EstimatedAmount { get; set; }
 
     /// <summary>
-    /// 参考供货商编码（关联 TaktSupplier.SupplierCode）
+    /// 参考供货商编码（关联 TaktSupplier.SupplierCode，选项 TaktSuppliers/options，DictValue=SupplierCode）
     /// </summary>
     public string? ReferenceSupplierCode { get; set; } = string.Empty;
 
@@ -758,6 +806,11 @@ public class TaktPurchasePlanItemExportDto
     /// 参考供货商名称
     /// </summary>
     public string? ReferenceSupplierName { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 是否作废（字典 sys_yes_no_type，0=否 1=是；编辑移除子行时标记作废）
+    /// </summary>
+    public int IsObsolete { get; set; } = 0;
 
     /// <summary>
     /// 扩展字段JSON

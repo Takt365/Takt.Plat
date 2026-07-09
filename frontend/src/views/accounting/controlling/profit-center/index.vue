@@ -750,7 +750,6 @@ function buildProfitCenterUpdateDto(
     validTo: profitCenter.validTo,
     relatedPlant: profitCenter.relatedPlant,
     profitCenterStatus: profitCenter.profitCenterStatus,
-    changeLogs: profitCenter.changeLogs,
     extField: profitCenter.extField,
     remark: profitCenter.remark,
   }

@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：frontend/src/api/logistics/manufacturing/bom
 // 文件名称：bill-of-material-item.ts
-// 创建时间：2026-06-23
+// 创建时间：2026-07-09
 // 创建人：Takt365(Auto Generated)
 // 功能描述：logistics/manufacturing/bom 模块 API（自动生成，请勿手改路由常量）
 // 
@@ -18,6 +18,7 @@ import type {
 import type {
   BillOfMaterialItem,
   BillOfMaterialItemCreate,
+  BillOfMaterialItemObsolete,
   BillOfMaterialItemUpdate
 } from '@/types/logistics/manufacturing/bom/bill-of-material-item';
 
@@ -105,6 +106,19 @@ export function deleteBillOfMaterialItemBatch(ids: string[]): Promise<void> {
     url: `${BILL_OF_MATERIAL_ITEM_API_BASE}/batch`,
     method: 'delete',
     data: ids,
+  });
+}
+
+/**
+ * 更新物料清单明细作废状态
+ * @param {BillOfMaterialItemObsolete} dto 作废 DTO
+ * @returns {Promise<BillOfMaterialItem>} 物料清单明细DTO
+ */
+export function updateBillOfMaterialItemObsolete(dto: BillOfMaterialItemObsolete): Promise<BillOfMaterialItem> {
+  return request<BillOfMaterialItem>({
+    url: `${BILL_OF_MATERIAL_ITEM_API_BASE}/obsolete`,
+    method: 'put',
+    data: dto,
   });
 }
 

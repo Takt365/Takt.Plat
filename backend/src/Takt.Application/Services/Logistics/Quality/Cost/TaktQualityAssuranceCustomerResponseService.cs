@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Application.Services.Logistics.Quality.Cost
 // 文件名称：TaktQualityAssuranceCustomerResponseService.cs
-// 创建时间：2026-06-23
+// 创建时间：2026-07-09
 // 创建人：Takt365(Cursor AI)
 // 功能描述：品质业务顾客品质要求对应费用明细应用服务实现
 // 
@@ -118,6 +118,7 @@ public class TaktQualityAssuranceCustomerResponseService : TaktServiceBase, ITak
     public async Task<TaktQualityAssuranceCustomerResponseDto> CreateQualityAssuranceCustomerResponseAsync(TaktQualityAssuranceCustomerResponseCreateDto dto)
     {
         var entity = dto.Adapt<TaktQualityAssuranceCustomerResponse>();
+        entity.IsObsolete = 0;
         await StampQualityAssuranceCustomerResponseQualityAssuranceAsync(entity, dto);
         var isUnique_ix_takt_logistics_quality_assurance_customer_response_line_unique = await _uniqueValidator.IsUniqueAsync(
             _qualityAssuranceCustomerResponseRepository,
@@ -174,11 +175,21 @@ public class TaktQualityAssuranceCustomerResponseService : TaktServiceBase, ITak
     /// <returns>任务</returns>
     public async Task DeleteQualityAssuranceCustomerResponseByIdAsync(long id)
     {
-        var deleted = await _qualityAssuranceCustomerResponseRepository.DeleteAsync(id);
-        if (!deleted)
+        var entity = await _qualityAssuranceCustomerResponseRepository.GetByIdAsync(id);
+        if (entity == null)
         {
             throw new TaktBusinessException("品质业务顾客品质要求对应费用明细不存在或已删除");
         }
+        if (entity.TenantCode != CurrentTenantCode || entity.CompanyCode != CurrentCompanyCode)
+        {
+            throw new TaktBusinessException("品质业务顾客品质要求对应费用明细不存在或已删除");
+        }
+        if (entity.IsObsolete == 1)
+        {
+            throw new TaktBusinessException("品质业务顾客品质要求对应费用明细已作废");
+        }
+        entity.IsObsolete = 1;
+        await _qualityAssuranceCustomerResponseRepository.UpdateAsync(entity);
     }
 
     /// <summary>
@@ -197,6 +208,27 @@ public class TaktQualityAssuranceCustomerResponseService : TaktServiceBase, ITak
         {
             await DeleteQualityAssuranceCustomerResponseByIdAsync(id);
         }
+    }
+
+    /// <summary>
+    /// 更新品质业务顾客品质要求对应费用明细作废状态
+    /// </summary>
+    /// <param name="dto">作废DTO</param>
+    /// <returns>DTO</returns>
+    public async Task<TaktQualityAssuranceCustomerResponseDto> UpdateQualityAssuranceCustomerResponseObsoleteAsync(TaktQualityAssuranceCustomerResponseObsoleteDto dto)
+    {
+        var entity = await _qualityAssuranceCustomerResponseRepository.GetByIdAsync(dto.QualityAssuranceCustomerResponseId);
+        if (entity == null)
+        {
+            throw new TaktBusinessException("品质业务顾客品质要求对应费用明细不存在");
+        }
+        if (entity.TenantCode != CurrentTenantCode || entity.CompanyCode != CurrentCompanyCode)
+        {
+            throw new TaktBusinessException("品质业务顾客品质要求对应费用明细不存在");
+        }
+        entity.IsObsolete = dto.IsObsolete;
+        await _qualityAssuranceCustomerResponseRepository.UpdateAsync(entity);
+        return await GetQualityAssuranceCustomerResponseByIdAsync(dto.QualityAssuranceCustomerResponseId) ?? throw new TaktBusinessException("品质业务顾客品质要求对应费用明细不存在");
     }
 
     /// <summary>
@@ -330,6 +362,15 @@ public class TaktQualityAssuranceCustomerResponseService : TaktServiceBase, ITak
     private static Expression<Func<TaktQualityAssuranceCustomerResponse, bool>> QueryExpression(TaktQualityAssuranceCustomerResponseQueryDto? queryDto)
     {
         var exp = Expressionable.Create<TaktQualityAssuranceCustomerResponse>();
+
+        if (queryDto?.IsObsolete.HasValue == true)
+        {
+            exp = exp.And(x => x.IsObsolete == queryDto.IsObsolete);
+        }
+        else
+        {
+            exp = exp.And(x => x.IsObsolete == 0);
+        }
 
         if (!string.IsNullOrEmpty(queryDto?.KeyWords))
         {

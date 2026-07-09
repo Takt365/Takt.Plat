@@ -36,10 +36,8 @@ export interface EcGijutsuSourceEcInputItem {
   sourceTitle: string;
   /** 发行日期 */
   sourceIssueDate: string;
-  /** 来源状态（原始文本） */
+  /** 来源状态（来源 PLM 英文；导入时映射为设变变更状态） */
   sourceStatus: string;
-  /** 导入后将写入的变更状态（字典 logistics_ec_status；1～7；无法映射时为 null） */
-  changeStatus: number | null;
   /** TCJ担当 */
   sourceTcjOwner?: string;
   /** 来源明细行数 */

@@ -69,3 +69,21 @@ export function resolveMaxLineNumber(values: readonly number[]): number {
   }
   return values.reduce((max, value) => (Number.isFinite(value) ? Math.max(max, value) : max), 0)
 }
+
+/**
+ * 解析子表下一行号（已提交最大行号 + 当前未保存行号）
+ * @param committedMaxLineNumber 后端返回的已占用最大行号（IsObsolete 子表传 0）
+ * @param currentRows 当前子表行
+ * @param lineNumberField 行号字段名
+ * @returns 下一可用行号
+ */
+export function resolveNextDetailLineNumber(
+  committedMaxLineNumber: number,
+  currentRows: readonly Record<string, unknown>[],
+  lineNumberField = 'lineNumber',
+): number {
+  const rowMax = resolveMaxLineNumber(
+    currentRows.map((row) => Number(row[lineNumberField]) || 0),
+  )
+  return generateNextLineNumber(Math.max(committedMaxLineNumber, rowMax))
+}

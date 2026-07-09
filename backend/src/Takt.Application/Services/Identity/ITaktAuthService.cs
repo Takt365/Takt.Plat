@@ -58,6 +58,18 @@ public interface ITaktAuthService
     Task<long?> ValidateUserPasswordOnlyAsync(string tenantCode, string username, string password);
 
     /// <summary>
+    /// 登录凭据统一校验（租户权限、锁定、密码；成功时清零失败计数）
+    /// </summary>
+    /// <param name="tenantCode">租户编码</param>
+    /// <param name="username">用户名</param>
+    /// <param name="plainPassword">明文密码</param>
+    /// <returns>校验结果（含锁定态）</returns>
+    Task<TaktLoginCredentialResult> AuthenticateLoginCredentialsAsync(
+        string tenantCode,
+        string username,
+        string plainPassword);
+
+    /// <summary>
     /// 解析登录会话租户与公司（用户公司关联 IsDefault + 权限校验）
     /// </summary>
     /// <param name="userId">用户 ID</param>

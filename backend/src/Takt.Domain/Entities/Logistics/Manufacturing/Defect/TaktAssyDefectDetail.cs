@@ -32,11 +32,23 @@ public class TaktAssyDefectDetail : TaktCompanyEntityBase
     public long AssyDefectId { get; set; }
     
     /// <summary>
-    /// 生产工单号（冗余字段,便于查询）
+    /// 工单号（冗余字段,便于查询）
     /// </summary>
-    [SugarColumn(ColumnName = "prod_order_code", ColumnDescription = "生产工单号", ColumnDataType = "nvarchar", Length = 20, IsNullable = false)]
+    [SugarColumn(ColumnName = "prod_order_code", ColumnDescription = "工单号", ColumnDataType = "nvarchar", Length = 20, IsNullable = false)]
     public string ProdOrderCode { get; set; } = string.Empty;
-    
+
+    /// <summary>
+    /// 生实实绩（冗余字段,便于统计/查询）
+    /// </summary>
+    [SugarColumn(ColumnName = "prod_actual_qty", ColumnDescription = "生实实绩", ColumnDataType = "decimal", Length = 18, DecimalDigits = 3, IsNullable = false, DefaultValue = "0")]
+    public decimal ProdActualQty { get; set; } = 0;
+
+    /// <summary>
+    /// 无不良数量（冗余字段,便于统计/查询）
+    /// </summary>
+    [SugarColumn(ColumnName = "good_quantity", ColumnDescription = "无不良数量", ColumnDataType = "decimal", Length = 18, DecimalDigits = 3, IsNullable = false, DefaultValue = "0")]
+    public decimal GoodQuantity { get; set; } = 0;
+
     /// <summary>
     /// 行号（项号/序号，固定步长=10）
     /// </summary>
@@ -86,7 +98,7 @@ public class TaktAssyDefectDetail : TaktCompanyEntityBase
     public string? DefectSymptom { get; set; }
 
     /// <summary>
-    /// 不良个所（字典 logistics_pcb_location_category，存 DictValue）
+    /// 不良个所（字典 logistics_assy_location_category，存 DictValue）
     /// </summary>
     [SugarColumn(ColumnName = "defect_location", ColumnDescription = "不良个所", Length = 40, ColumnDataType = "nvarchar", IsNullable = true)]
     public string? DefectLocation { get; set; }
@@ -102,6 +114,12 @@ public class TaktAssyDefectDetail : TaktCompanyEntityBase
     /// </summary>
     [SugarColumn(ColumnName = "repair_operator", ColumnDescription = "修理员", Length = 40, ColumnDataType = "nvarchar", IsNullable = true)]
     public string? RepairOperator { get; set; }
+
+    /// <summary>
+    /// 是否作废（字典 sys_yes_no_type，0=否 1=是；编辑移除子行时标记作废）
+    /// </summary>
+    [SugarColumn(ColumnName = "is_obsolete", ColumnDescription = "是否作废", ColumnDataType = "int", IsNullable = false, DefaultValue = "0")]
+    public int IsObsolete { get; set; } = 0;
 
     /// <summary>
     /// 组立不良日报（主表）

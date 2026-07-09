@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Application.Services.Logistics.Manufacturing.Bom
 // 文件名称：TaktBillOfMaterialSubstituteService.cs
-// 创建时间：2026-06-23
+// 创建时间：2026-07-09
 // 创建人：Takt365(Cursor AI)
 // 功能描述：BOM替代料应用服务实现
 // 
@@ -123,6 +123,7 @@ public class TaktBillOfMaterialSubstituteService : TaktServiceBase, ITaktBillOfM
     public async Task<TaktBillOfMaterialSubstituteDto> CreateBillOfMaterialSubstituteAsync(TaktBillOfMaterialSubstituteCreateDto dto)
     {
         var entity = dto.Adapt<TaktBillOfMaterialSubstitute>();
+        entity.IsObsolete = 0;
         await StampBillOfMaterialSubstituteBillOfMaterialItemAsync(entity, dto);
         await StampBillOfMaterialSubstituteMaterialPlantAsync(entity, dto);
         var isUnique_ix_takt_logistics_manufacturing_bom_substitute_item_material_unique = await _uniqueValidator.IsUniqueAsync(
@@ -181,11 +182,21 @@ public class TaktBillOfMaterialSubstituteService : TaktServiceBase, ITaktBillOfM
     /// <returns>任务</returns>
     public async Task DeleteBillOfMaterialSubstituteByIdAsync(long id)
     {
-        var deleted = await _billOfMaterialSubstituteRepository.DeleteAsync(id);
-        if (!deleted)
+        var entity = await _billOfMaterialSubstituteRepository.GetByIdAsync(id);
+        if (entity == null)
         {
             throw new TaktBusinessException("BOM替代料不存在或已删除");
         }
+        if (entity.TenantCode != CurrentTenantCode || entity.CompanyCode != CurrentCompanyCode)
+        {
+            throw new TaktBusinessException("BOM替代料不存在或已删除");
+        }
+        if (entity.IsObsolete == 1)
+        {
+            throw new TaktBusinessException("BOM替代料已作废");
+        }
+        entity.IsObsolete = 1;
+        await _billOfMaterialSubstituteRepository.UpdateAsync(entity);
     }
 
     /// <summary>
@@ -204,6 +215,27 @@ public class TaktBillOfMaterialSubstituteService : TaktServiceBase, ITaktBillOfM
         {
             await DeleteBillOfMaterialSubstituteByIdAsync(id);
         }
+    }
+
+    /// <summary>
+    /// 更新BOM替代料作废状态
+    /// </summary>
+    /// <param name="dto">作废DTO</param>
+    /// <returns>DTO</returns>
+    public async Task<TaktBillOfMaterialSubstituteDto> UpdateBillOfMaterialSubstituteObsoleteAsync(TaktBillOfMaterialSubstituteObsoleteDto dto)
+    {
+        var entity = await _billOfMaterialSubstituteRepository.GetByIdAsync(dto.BillOfMaterialSubstituteId);
+        if (entity == null)
+        {
+            throw new TaktBusinessException("BOM替代料不存在");
+        }
+        if (entity.TenantCode != CurrentTenantCode || entity.CompanyCode != CurrentCompanyCode)
+        {
+            throw new TaktBusinessException("BOM替代料不存在");
+        }
+        entity.IsObsolete = dto.IsObsolete;
+        await _billOfMaterialSubstituteRepository.UpdateAsync(entity);
+        return await GetBillOfMaterialSubstituteByIdAsync(dto.BillOfMaterialSubstituteId) ?? throw new TaktBusinessException("BOM替代料不存在");
     }
 
     /// <summary>
@@ -358,6 +390,15 @@ public class TaktBillOfMaterialSubstituteService : TaktServiceBase, ITaktBillOfM
     private static Expression<Func<TaktBillOfMaterialSubstitute, bool>> QueryExpression(TaktBillOfMaterialSubstituteQueryDto? queryDto)
     {
         var exp = Expressionable.Create<TaktBillOfMaterialSubstitute>();
+
+        if (queryDto?.IsObsolete.HasValue == true)
+        {
+            exp = exp.And(x => x.IsObsolete == queryDto.IsObsolete);
+        }
+        else
+        {
+            exp = exp.And(x => x.IsObsolete == 0);
+        }
 
         if (!string.IsNullOrEmpty(queryDto?.KeyWords))
         {

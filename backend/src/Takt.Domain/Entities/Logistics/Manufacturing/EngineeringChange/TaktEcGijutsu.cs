@@ -30,7 +30,7 @@ namespace Takt.Domain.Entities.Logistics.Manufacturing.EngineeringChange;
 public class TaktEcGijutsu : TaktCompanyEntityBase
 {
     /// <summary>
-    /// 工厂代码
+    /// 工厂代码（关联 TaktPlant.PlantCode，选项 TaktPlants/options）
     /// </summary>
     [SugarColumn(ColumnName = "plant_code", ColumnDescription = "工厂代码", Length = 4, ColumnDataType = "nvarchar", IsNullable = false)]
     public string PlantCode { get; set; } = string.Empty;

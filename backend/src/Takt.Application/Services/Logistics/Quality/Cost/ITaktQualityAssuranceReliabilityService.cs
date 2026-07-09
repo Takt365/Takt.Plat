@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Application.Services.Logistics.Quality.Cost
 // 文件名称：ITaktQualityAssuranceReliabilityService.cs
-// 创建时间：2026-06-23
+// 创建时间：2026-07-09
 // 创建人：Takt365(Cursor AI)
 // 功能描述：品质业务信赖性评价ORT费用明细应用服务接口
 // 
@@ -69,6 +69,13 @@ public interface ITaktQualityAssuranceReliabilityService
     /// <param name="ids">ID列表</param>
     /// <returns>任务</returns>
     Task DeleteQualityAssuranceReliabilityBatchAsync(IEnumerable<long> ids);
+
+    /// <summary>
+    /// 更新品质业务信赖性评价ORT费用明细作废状态
+    /// </summary>
+    /// <param name="dto">作废DTO</param>
+    /// <returns>DTO</returns>
+    Task<TaktQualityAssuranceReliabilityDto> UpdateQualityAssuranceReliabilityObsoleteAsync(TaktQualityAssuranceReliabilityObsoleteDto dto);
 
     /// <summary>
     /// 获取导入模板

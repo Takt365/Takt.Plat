@@ -68,7 +68,14 @@ public class TaktOvertimeItem : TaktCompanyEntityBase
     [SugarColumn(ColumnName = "actual_hours", ColumnDescription = "实际小时数", ColumnDataType = "decimal", Length = 8, DecimalDigits = 2, IsNullable = true)]
     public decimal? ActualHours { get; set; }
 
-    // ========================================
+    /// <summary>
+    /// 是否作废（字典 sys_yes_no_type，0=否 1=是；编辑移除子行时标记作废）
+    /// </summary>
+    [SugarColumn(ColumnName = "is_obsolete", ColumnDescription = "是否作废", ColumnDataType = "int", IsNullable = false, DefaultValue = "0")]
+    public int IsObsolete { get; set; } = 0;
+
+
+// ========================================
     // 导航属性区域
     // ========================================
     /// <summary>

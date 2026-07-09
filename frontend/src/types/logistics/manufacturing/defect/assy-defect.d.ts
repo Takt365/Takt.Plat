@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：frontend/src/types/logistics/manufacturing/defect
 // 文件名称：assy-defect.d.ts
-// 创建时间：2026-06-30
+// 创建时间：2026-07-09
 // 创建人：Takt365(Auto Generated)
 // 功能描述：logistics/manufacturing/defect 模块类型定义（自动生成；类型名去 Takt 前缀与末尾 Dto，如 TaktCompanyDto → Company）
 // 
@@ -29,12 +29,12 @@ export interface AssyDefect extends CompanyDtoBase {
   assyDefectId: string;
 
   /**
-   * 工厂代码（关联 TaktPlant.PlantCode，选项 TaktPlants/options）
+   * 工厂代码（回填：随工单）
    */
   plantCode: string;
 
   /**
-   * 生产类别（字典 logistics_prod_category，存 DictValue：RD/EVT/DVT/EPP/PP/FPP/MP/RPR/RWR）
+   * 生产类别（字典 logistics_prod_category，存 DictValue：EPP/FPP/RWP/MDP/CPP）
    */
   prodCategory: string;
 
@@ -54,12 +54,17 @@ export interface AssyDefect extends CompanyDtoBase {
   shiftNo: number;
 
   /**
-   * 生产工单号（选项 TaktProductionOrders/options，按 PlantCode 过滤）
+   * 工单类别（回填：随工单）
+   */
+  prodOrderType?: string;
+
+  /**
+   * 工单号（选项 TaktAssyOutputs/prod-order-options，来源组立日报；同日同工单已存在不良日报则不再展示）
    */
   prodOrderCode: string;
 
   /**
-   * 生产订单数量
+   * 工单数量
    */
   prodOrderQty: number;
 
@@ -114,12 +119,12 @@ export interface AssyDefectQuery extends TaktPagedQuery {
   companyCode?: string;
 
   /**
-   * 工厂代码（关联 TaktPlant.PlantCode，选项 TaktPlants/options）
+   * 工厂代码（回填：随工单）
    */
   plantCode?: string;
 
   /**
-   * 生产类别（字典 logistics_prod_category，存 DictValue：RD/EVT/DVT/EPP/PP/FPP/MP/RPR/RWR）
+   * 生产类别（字典 logistics_prod_category，存 DictValue：EPP/FPP/RWP/MDP/CPP）
    */
   prodCategory?: string;
 
@@ -144,12 +149,17 @@ export interface AssyDefectQuery extends TaktPagedQuery {
   shiftNo?: number;
 
   /**
-   * 生产工单号（选项 TaktProductionOrders/options，按 PlantCode 过滤）
+   * 工单类别（回填：随工单）
+   */
+  prodOrderType?: string;
+
+  /**
+   * 工单号（选项 TaktAssyOutputs/prod-order-options，来源组立日报；同日同工单已存在不良日报则不再展示）
    */
   prodOrderCode?: string;
 
   /**
-   * 生产订单数量
+   * 工单数量
    */
   prodOrderQty?: number;
 
@@ -223,12 +233,12 @@ export interface AssyDefectCreate {
   companyDefaultCulture: string;
 
   /**
-   * 工厂代码（关联 TaktPlant.PlantCode，选项 TaktPlants/options）
+   * 工厂代码（回填：随工单）
    */
   plantCode: string;
 
   /**
-   * 生产类别（字典 logistics_prod_category，存 DictValue：RD/EVT/DVT/EPP/PP/FPP/MP/RPR/RWR）
+   * 生产类别（字典 logistics_prod_category，存 DictValue：EPP/FPP/RWP/MDP/CPP）
    */
   prodCategory: string;
 
@@ -248,12 +258,17 @@ export interface AssyDefectCreate {
   shiftNo: number;
 
   /**
-   * 生产工单号（选项 TaktProductionOrders/options，按 PlantCode 过滤）
+   * 工单类别（回填：随工单）
+   */
+  prodOrderType?: string;
+
+  /**
+   * 工单号（选项 TaktAssyOutputs/prod-order-options，来源组立日报；同日同工单已存在不良日报则不再展示）
    */
   prodOrderCode: string;
 
   /**
-   * 生产订单数量
+   * 工单数量
    */
   prodOrderQty: number;
 
@@ -285,7 +300,7 @@ export interface AssyDefectCreate {
   /**
    * 组立不良明细列表（子表，级联保存）
    */
-  assyDefectDetails?: AssyDefectDetailCreate[];
+  assyDefectDetails?: AssyDefectDetailUpdate[];
 
   /**
    * 扩展字段JSON
@@ -332,12 +347,12 @@ export interface AssyDefectTemplate {
   companyCode?: string;
 
   /**
-   * 工厂代码（关联 TaktPlant.PlantCode，选项 TaktPlants/options）
+   * 工厂代码（回填：随工单）
    */
   plantCode?: string;
 
   /**
-   * 生产类别（字典 logistics_prod_category，存 DictValue：RD/EVT/DVT/EPP/PP/FPP/MP/RPR/RWR）
+   * 生产类别（字典 logistics_prod_category，存 DictValue：EPP/FPP/RWP/MDP/CPP）
    */
   prodCategory?: string;
 
@@ -357,12 +372,17 @@ export interface AssyDefectTemplate {
   shiftNo?: number;
 
   /**
-   * 生产工单号（选项 TaktProductionOrders/options，按 PlantCode 过滤）
+   * 工单类别（回填：随工单）
+   */
+  prodOrderType?: string;
+
+  /**
+   * 工单号（选项 TaktAssyOutputs/prod-order-options，来源组立日报；同日同工单已存在不良日报则不再展示）
    */
   prodOrderCode?: string;
 
   /**
-   * 生产订单数量
+   * 工单数量
    */
   prodOrderQty?: number;
 
@@ -431,12 +451,12 @@ export interface AssyDefectImport {
   companyDefaultCulture?: string;
 
   /**
-   * 工厂代码（关联 TaktPlant.PlantCode，选项 TaktPlants/options）
+   * 工厂代码（回填：随工单）
    */
   plantCode?: string;
 
   /**
-   * 生产类别（字典 logistics_prod_category，存 DictValue：RD/EVT/DVT/EPP/PP/FPP/MP/RPR/RWR）
+   * 生产类别（字典 logistics_prod_category，存 DictValue：EPP/FPP/RWP/MDP/CPP）
    */
   prodCategory?: string;
 
@@ -456,12 +476,17 @@ export interface AssyDefectImport {
   shiftNo?: number;
 
   /**
-   * 生产工单号（选项 TaktProductionOrders/options，按 PlantCode 过滤）
+   * 工单类别（回填：随工单）
+   */
+  prodOrderType?: string;
+
+  /**
+   * 工单号（选项 TaktAssyOutputs/prod-order-options，来源组立日报；同日同工单已存在不良日报则不再展示）
    */
   prodOrderCode?: string;
 
   /**
-   * 生产订单数量
+   * 工单数量
    */
   prodOrderQty?: number;
 
@@ -525,12 +550,12 @@ export interface AssyDefectExport {
   companyCode: string;
 
   /**
-   * 工厂代码（关联 TaktPlant.PlantCode，选项 TaktPlants/options）
+   * 工厂代码（回填：随工单）
    */
   plantCode: string;
 
   /**
-   * 生产类别（字典 logistics_prod_category，存 DictValue：RD/EVT/DVT/EPP/PP/FPP/MP/RPR/RWR）
+   * 生产类别（字典 logistics_prod_category，存 DictValue：EPP/FPP/RWP/MDP/CPP）
    */
   prodCategory: string;
 
@@ -550,12 +575,17 @@ export interface AssyDefectExport {
   shiftNo: number;
 
   /**
-   * 生产工单号（选项 TaktProductionOrders/options，按 PlantCode 过滤）
+   * 工单类别（回填：随工单）
+   */
+  prodOrderType?: string;
+
+  /**
+   * 工单号（选项 TaktAssyOutputs/prod-order-options，来源组立日报；同日同工单已存在不良日报则不再展示）
    */
   prodOrderCode: string;
 
   /**
-   * 生产订单数量
+   * 工单数量
    */
   prodOrderQty: number;
 

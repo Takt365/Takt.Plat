@@ -155,10 +155,10 @@
             <a-col :span="12">
               <a-form-item
                 :label="t('entity.purchasegroup.status')"
-                name="purchaseGroupStatus"
+                name="GroupStatus"
               >
                 <TaktSelect
-                  v-model:value="formState.purchaseGroupStatus"
+                  v-model:value="formState.GroupStatus"
                   dict-type="sys_normal_disable_status"
                   :placeholder="t('common.page.form.placeholder.select', { field: t('entity.purchasegroup.status') })"
                 />
@@ -278,7 +278,7 @@ const formContentClass = computed(() => (formFields.length > 10 ? 'takt-form-con
 /** 当前激活的 Tab key */
 const activeTab = ref('tab-0')
 /** CreateDto 字段名列表（与 formState 键对齐） */
-const formFields = ["tenantCode","companyCode","companyDefaultCulture","purchaseGroupCode","purchaseGroupName","purchaseGroupDescription","responsibleUserId","contactPhone","contactEmail","purchaseGroupStatus","isBuiltIn","extField","remark"]
+const formFields = ["tenantCode","companyCode","companyDefaultCulture","purchaseGroupCode","purchaseGroupName","purchaseGroupDescription","responsibleUserId","contactPhone","contactEmail","GroupStatus","isBuiltIn","extField","remark"]
 
 
 /** 父级传入的编辑 DTO；新增时为 undefined 或空对象 */
@@ -299,7 +299,7 @@ const formRef = ref()
 const formState = reactive<Record<string, any>>({})
 /** 表单字段默认值（字典 IsDefault=1，来自 TaktDictDataSeedData） */
 const FORM_FIELD_DEFAULTS: Record<string, string | number> = {
-  purchaseGroupStatus: 1,
+  GroupStatus: 1,
   isBuiltIn: 0
 }
 
@@ -367,7 +367,7 @@ const rules = computed<Record<string, Rule[]>>(() => ({
       trigger: 'blur'
     }
   ],
-  purchaseGroupStatus: [{
+  GroupStatus: [{
     validator: async (_rule, value) => {
       if (value === undefined || value === null || value === '') {
         return Promise.reject(t('common.page.form.placeholder.select', { field: t('entity.purchasegroup.status') }))
@@ -404,9 +404,9 @@ async function validate() {
 /** 映射为 Create/Update DTO */
 function getValues(): Record<string, any> {
   const payload = { ...formState }
-  if ('purchaseGroupStatus' in payload) {
-    const rawpurchaseGroupStatus = payload.purchaseGroupStatus
-    payload.purchaseGroupStatus = typeof rawpurchaseGroupStatus === 'number' ? rawpurchaseGroupStatus : Number(rawpurchaseGroupStatus)
+  if ('GroupStatus' in payload) {
+    const rawGroupStatus = payload.GroupStatus
+    payload.GroupStatus = typeof rawGroupStatus === 'number' ? rawGroupStatus : Number(rawGroupStatus)
   }
   if ('isBuiltIn' in payload) {
     const rawisBuiltIn = payload.isBuiltIn

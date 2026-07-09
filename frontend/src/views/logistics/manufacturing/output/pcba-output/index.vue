@@ -390,9 +390,15 @@ import { taktExcelEntityNames } from '@/utils/naming'
 import { resolveExportDownloadFileName } from '@/utils/export-download-name'
 import { normalizeImportResult, type TaktImportResult } from '@/utils/takt-import-result'
 import { RiEditLine, RiDeleteBinLine, RiQuestionLine } from '@remixicon/vue'
+import {
+  getOutputProdDateYmdFromRecord,
+  isOutputProdDateLocked,
+} from '../composables/takt-output-prod-date-edit-lock'
+import { useOutputProdDateI18n } from '../composables/use-output-prod-date-i18n'
 
 /** i18n 翻译函数 */
 const { t } = useI18n()
+const prodDateI18n = useOutputProdDateI18n()
 /** Excel 导入/导出默认 sheet 名与文件名前缀 */
 const excelNames = taktExcelEntityNames('TaktPcbaOutput')
 /** 列表快捷查询占位文案 */
@@ -484,10 +490,20 @@ const importVisible = ref(false)
 const visibleColumnKeys = ref<string[]>([])
 /** 实体主键字段名（row-key、API 路径参数） */
 const entityIdName = 'pcbaOutputId'
-/** 工具栏「编辑」是否禁用（须恰好选中一行） */
-const updateDisabled = computed(() => selectedRows.value.length !== 1)
-/** 工具栏「删除」是否禁用（未选中任何行） */
-const deleteDisabled = computed(() => selectedRows.value.length === 0)
+/** 工具栏「编辑」是否禁用（须恰好选中一行且生产日期未锁定） */
+const updateDisabled = computed(() => {
+  if (selectedRows.value.length !== 1) {
+    return true
+  }
+  return isPcbaOutputRowProdDateLocked(selectedRows.value[0])
+})
+/** 工具栏「删除」是否禁用（未选中或含已锁定生产日期行） */
+const deleteDisabled = computed(() => {
+  if (selectedRows.value.length === 0) {
+    return true
+  }
+  return selectedRows.value.some((row) => isPcbaOutputRowProdDateLocked(row))
+})
 
 /** Pinia：字典缓存（列表/查询 dict-type 渲染前预热） */
 const dictDataStore = useDictDataStore()
@@ -740,6 +756,7 @@ const columns = computed<TableColumnsType>(() => [
         shape: 'plain',
         icon: RiEditLine,
         permission: 'logistics:manufacturing:output:pcba:update',
+        disabled: (record: PcbaOutput) => isPcbaOutputRowProdDateLocked(record),
         onClick: (record: PcbaOutput) => handleEdit(record)
       },
       {
@@ -748,6 +765,7 @@ const columns = computed<TableColumnsType>(() => [
         shape: 'plain',
         icon: RiDeleteBinLine,
         permission: 'logistics:manufacturing:output:pcba:delete',
+        disabled: (record: PcbaOutput) => isPcbaOutputRowProdDateLocked(record),
         onClick: (record: PcbaOutput) => handleDeleteOne(record)
       }
     ]
@@ -762,6 +780,29 @@ const getPcbaOutputId = (record: any): string => record?.[entityIdName] ?? ''
  * @param field 字段名
  */
 const getPcbaOutputField = (record: any, field: string): any => record?.[field]
+/**
+ * 主表行生产日期是否已锁定
+ * @param record 主表行
+ */
+function isPcbaOutputRowProdDateLocked(record: PcbaOutput | null | undefined): boolean {
+  if (!record) {
+    return false
+  }
+  const ymd = getOutputProdDateYmdFromRecord(record as Record<string, unknown>)
+  return ymd !== '' && isOutputProdDateLocked(ymd)
+}
+/**
+ * 锁定行操作时提示
+ * @param record 主表行
+ */
+function warnPcbaOutputProdDateLocked(record: PcbaOutput): boolean {
+  if (!isPcbaOutputRowProdDateLocked(record)) {
+    return false
+  }
+  const ymd = getOutputProdDateYmdFromRecord(record as Record<string, unknown>)
+  message.warning(prodDateI18n.prodDateLockedMessage(ymd))
+  return true
+}
 
 
 /** 行选择配置 */
@@ -854,6 +895,9 @@ function handleCreate() {
 }
 /** 打开编辑弹窗（主子表：先拉详情含子表） */
 async function handleEdit(record: PcbaOutput) {
+  if (warnPcbaOutputProdDateLocked(record)) {
+    return
+  }
   formTitle.value = t('common.dialog.title.edit', { entity: t('entity.pcbaoutput._self') })
   formLoading.value = true
   try {
@@ -981,6 +1025,9 @@ async function handleExport() {
 }
 /** 删除单行 */
 async function handleDeleteOne(record: PcbaOutput) {
+  if (warnPcbaOutputProdDateLocked(record)) {
+    return
+  }
   Modal.confirm({
     title: t('common.tip.confirm.delete.title'),
     content: t('common.tip.confirm.delete.entity', { entity: t('entity.pcbaoutput._self'), name: t('common.tip.this.target', { target: t('entity.pcbaoutput._self') }) }),
@@ -1001,6 +1048,11 @@ async function handleDeleteOne(record: PcbaOutput) {
 async function handleDelete() {
   if (selectedRows.value.length === 0) {
     message.warning(t('common.tip.select.to.action', { action: t('common.page.button.delete'), entity: t('entity.pcbaoutput._self') }))
+    return
+  }
+  const lockedRow = selectedRows.value.find((row) => isPcbaOutputRowProdDateLocked(row))
+  if (lockedRow) {
+    warnPcbaOutputProdDateLocked(lockedRow)
     return
   }
   Modal.confirm({

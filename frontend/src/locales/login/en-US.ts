@@ -135,6 +135,9 @@ export default {
       credentials: {
         incorrect: "Incorrect username or password",
       },
+      account: {
+        locked: "This account is locked. Please try again later",
+      },
       tenant: {
         no: {
           access: "You do not have permission to sign in to the selected tenant",

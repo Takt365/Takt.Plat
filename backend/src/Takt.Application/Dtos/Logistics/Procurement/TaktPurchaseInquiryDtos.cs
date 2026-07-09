@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Application.Dtos.Logistics.Procurement
 // 文件名称：TaktPurchaseInquiryDtos.cs
-// 创建时间：2026-06-24
+// 创建时间：2026-07-09
 // 创建人：Takt365(Auto Generated)
 // 功能描述：PurchaseInquiry 模块 DTO（由 generate-dtos-from-entity.cjs 根据 TaktPurchaseInquiry 生成，请按需审阅）
 // 
@@ -24,9 +24,9 @@ namespace Takt.Application.Dtos.Logistics.Procurement;
 /// <summary>
 /// 采购询价实体
 /// 对应前端 TaktPurchaseInquiryDto
-/// 继承 TaktApprovalDtoBase
+/// 继承 TaktCompanyDtoBase
 /// </summary>
-public class TaktPurchaseInquiryDto : TaktApprovalDtoBase
+public class TaktPurchaseInquiryDto : TaktCompanyDtoBase
 {
     /// <summary>
     /// PurchaseInquiryID（适配实体 Id，序列化为 string 以避免 Javascript 精度问题）
@@ -36,7 +36,7 @@ public class TaktPurchaseInquiryDto : TaktApprovalDtoBase
     public long PurchaseInquiryId { get; set; }
 
     /// <summary>
-    /// 工厂代码
+    /// 工厂代码（选项 TaktPlants/options，DictValue=PlantCode）
     /// </summary>
     public string PlantCode { get; set; } = string.Empty;
 
@@ -56,7 +56,7 @@ public class TaktPurchaseInquiryDto : TaktApprovalDtoBase
     public DateTime? QuoteDeadlineDate { get; set; }
 
     /// <summary>
-    /// 询价人员工 ID（关联 TaktEmployee）
+    /// 询价人员工 ID（关联 TaktEmployee.Id，选项 TaktEmployees/options）
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
     public long? InquiryId { get; set; }
@@ -72,7 +72,7 @@ public class TaktPurchaseInquiryDto : TaktApprovalDtoBase
     public string InquiryBy { get; set; } = string.Empty;
 
     /// <summary>
-    /// 询价供应商编码
+    /// 询价供应商编码（选项 TaktSuppliers/options，DictValue=SupplierCode）
     /// </summary>
     public string? SupplierCode { get; set; } = string.Empty;
 
@@ -80,6 +80,16 @@ public class TaktPurchaseInquiryDto : TaktApprovalDtoBase
     /// 询价供应商名称
     /// </summary>
     public string? SupplierName { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 付款方式（字典 logistics_payment_mode：vendorpay=供应商付款，employeereimburse=员工报销）
+    /// </summary>
+    public string PaymentMode { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 采购链路方案（字典 logistics_procurement_chain_scheme；1=方案一含报销，2=方案二仅 PO）
+    /// </summary>
+    public int ChainScheme { get; set; } = 0;
 
     /// <summary>
     /// 询价总数量（基本单位数量）
@@ -107,7 +117,7 @@ public class TaktPurchaseInquiryDto : TaktApprovalDtoBase
     public string? InquiryReason { get; set; } = string.Empty;
 
     /// <summary>
-    /// 询价状态（字典 sys_normal_disable：1=启用，0=禁用）
+    /// 询价状态（字典 sys_normal_disable_status；1=启用，0=禁用）
     /// </summary>
     public int InquiryStatus { get; set; } = 0;
 
@@ -145,7 +155,7 @@ public class TaktPurchaseInquiryQueryDto : TaktPagedQuery
     public string? CompanyCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 工厂代码
+    /// 工厂代码（选项 TaktPlants/options，DictValue=PlantCode）
     /// </summary>
     public string? PlantCode { get; set; } = string.Empty;
 
@@ -175,7 +185,7 @@ public class TaktPurchaseInquiryQueryDto : TaktPagedQuery
     public DateTime? QuoteDeadlineDateEnd { get; set; }
 
     /// <summary>
-    /// 询价人员工 ID（关联 TaktEmployee）
+    /// 询价人员工 ID（关联 TaktEmployee.Id，选项 TaktEmployees/options）
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
     public long? InquiryId { get; set; }
@@ -186,7 +196,7 @@ public class TaktPurchaseInquiryQueryDto : TaktPagedQuery
     public string? InquiryBy { get; set; } = string.Empty;
 
     /// <summary>
-    /// 询价供应商编码
+    /// 询价供应商编码（选项 TaktSuppliers/options，DictValue=SupplierCode）
     /// </summary>
     public string? SupplierCode { get; set; } = string.Empty;
 
@@ -194,6 +204,16 @@ public class TaktPurchaseInquiryQueryDto : TaktPagedQuery
     /// 询价供应商名称
     /// </summary>
     public string? SupplierName { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 付款方式（字典 logistics_payment_mode：vendorpay=供应商付款，employeereimburse=员工报销）
+    /// </summary>
+    public string? PaymentMode { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 采购链路方案（字典 logistics_procurement_chain_scheme；1=方案一含报销，2=方案二仅 PO）
+    /// </summary>
+    public int? ChainScheme { get; set; }
 
     /// <summary>
     /// 询价总数量（基本单位数量）
@@ -221,7 +241,7 @@ public class TaktPurchaseInquiryQueryDto : TaktPagedQuery
     public string? InquiryReason { get; set; } = string.Empty;
 
     /// <summary>
-    /// 询价状态（字典 sys_normal_disable：1=启用，0=禁用）
+    /// 询价状态（字典 sys_normal_disable_status；1=启用，0=禁用）
     /// </summary>
     public int? InquiryStatus { get; set; }
 
@@ -229,49 +249,6 @@ public class TaktPurchaseInquiryQueryDto : TaktPagedQuery
     /// 转价格状态（字典 sys_convert_status；0=未转换，1=部分转换，2=全部转换）
     /// </summary>
     public int? ConvertedStatus { get; set; }
-
-    /// <summary>
-    /// 审批状态（字典 sys_approval_status；与 TaktApprovalEntityBase.ApprovalStatus 一致）
-    /// </summary>
-    public TaktApprovalStatus? ApprovalStatus { get; set; }
-
-    /// <summary>
-    /// 发起人ID
-    /// </summary>
-    [JsonConverter(typeof(ValueToStringConverter))]
-    public long? InitiatorId { get; set; }
-
-    /// <summary>
-    /// 发起时间（范围查询-开始）
-    /// </summary>
-    public DateTime? InitiatedAtStart { get; set; }
-
-    /// <summary>
-    /// 发起时间（范围查询-结束）
-    /// </summary>
-    public DateTime? InitiatedAtEnd { get; set; }
-
-    /// <summary>
-    /// 最终审批人ID
-    /// </summary>
-    [JsonConverter(typeof(ValueToStringConverter))]
-    public long? ApprovedBy { get; set; }
-
-    /// <summary>
-    /// 最终审批时间（范围查询-开始）
-    /// </summary>
-    public DateTime? ApprovedAtStart { get; set; }
-
-    /// <summary>
-    /// 最终审批时间（范围查询-结束）
-    /// </summary>
-    public DateTime? ApprovedAtEnd { get; set; }
-
-    /// <summary>
-    /// 流程实例 ID
-    /// </summary>
-    [JsonConverter(typeof(ValueToStringConverter))]
-    public long? FlowInstanceId { get; set; }
 
     /// <summary>
     /// 创建时间（范围查询-开始）
@@ -319,9 +296,9 @@ public class TaktPurchaseInquiryCreateDto
     public string CompanyDefaultCulture { get; set; } = string.Empty;
 
     /// <summary>
-    /// 工厂代码
+    /// 工厂代码（选项 TaktPlants/options，DictValue=PlantCode）
     /// </summary>
-    [Required(ErrorMessage = "工厂代码不能为空")]
+    [Required(ErrorMessage = "工厂代码（选项 TaktPlants/options，DictValue=PlantCode）不能为空")]
     public string PlantCode { get; set; } = string.Empty;
 
     /// <summary>
@@ -341,7 +318,7 @@ public class TaktPurchaseInquiryCreateDto
     public DateTime? QuoteDeadlineDate { get; set; }
 
     /// <summary>
-    /// 询价人员工 ID（关联 TaktEmployee）
+    /// 询价人员工 ID（关联 TaktEmployee.Id，选项 TaktEmployees/options）
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
     public long? InquiryId { get; set; }
@@ -353,7 +330,7 @@ public class TaktPurchaseInquiryCreateDto
     public string InquiryBy { get; set; } = string.Empty;
 
     /// <summary>
-    /// 询价供应商编码
+    /// 询价供应商编码（选项 TaktSuppliers/options，DictValue=SupplierCode）
     /// </summary>
     public string? SupplierCode { get; set; } = string.Empty;
 
@@ -361,6 +338,17 @@ public class TaktPurchaseInquiryCreateDto
     /// 询价供应商名称
     /// </summary>
     public string? SupplierName { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 付款方式（字典 logistics_payment_mode：vendorpay=供应商付款，employeereimburse=员工报销）
+    /// </summary>
+    [Required(ErrorMessage = "付款方式（字典 logistics_payment_mode：vendorpay=供应商付款，employeereimburse=员工报销）不能为空")]
+    public string PaymentMode { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 采购链路方案（字典 logistics_procurement_chain_scheme；1=方案一含报销，2=方案二仅 PO）
+    /// </summary>
+    public int ChainScheme { get; set; } = 0;
 
     /// <summary>
     /// 询价总数量（基本单位数量）
@@ -388,7 +376,7 @@ public class TaktPurchaseInquiryCreateDto
     public string? InquiryReason { get; set; } = string.Empty;
 
     /// <summary>
-    /// 询价状态（字典 sys_normal_disable：1=启用，0=禁用）
+    /// 询价状态（字典 sys_normal_disable_status；1=启用，0=禁用）
     /// </summary>
     public int InquiryStatus { get; set; } = 0;
 
@@ -400,7 +388,7 @@ public class TaktPurchaseInquiryCreateDto
     /// <summary>
     /// 采购询价明细列表（主子表关系）（子表，级联保存）
     /// </summary>
-    public List<TaktPurchaseInquiryItemCreateDto>? Items { get; set; }
+    public List<TaktPurchaseInquiryItemUpdateDto>? Items { get; set; }
 
     /// <summary>
     /// 扩展字段JSON
@@ -452,9 +440,9 @@ public class TaktPurchaseInquiryStatusDto
     public long PurchaseInquiryId { get; set; }
 
     /// <summary>
-    /// 询价状态（字典 sys_normal_disable：1=启用，0=禁用）
+    /// 询价状态（字典 sys_normal_disable_status；1=启用，0=禁用）
     /// </summary>
-    [Required(ErrorMessage = "询价状态（字典 sys_normal_disable：1=启用，0=禁用）不能为空")]
+    [Required(ErrorMessage = "询价状态（字典 sys_normal_disable_status；1=启用，0=禁用）不能为空")]
     public int InquiryStatus { get; set; } = 0;
 }
 
@@ -478,7 +466,7 @@ public class TaktPurchaseInquiryTemplateDto
     public string? CompanyCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 工厂代码
+    /// 工厂代码（选项 TaktPlants/options，DictValue=PlantCode）
     /// </summary>
     public string? PlantCode { get; set; } = string.Empty;
 
@@ -498,7 +486,7 @@ public class TaktPurchaseInquiryTemplateDto
     public DateTime? QuoteDeadlineDate { get; set; }
 
     /// <summary>
-    /// 询价人员工 ID（关联 TaktEmployee）
+    /// 询价人员工 ID（关联 TaktEmployee.Id，选项 TaktEmployees/options）
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
     public long? InquiryId { get; set; }
@@ -509,7 +497,7 @@ public class TaktPurchaseInquiryTemplateDto
     public string? InquiryBy { get; set; } = string.Empty;
 
     /// <summary>
-    /// 询价供应商编码
+    /// 询价供应商编码（选项 TaktSuppliers/options，DictValue=SupplierCode）
     /// </summary>
     public string? SupplierCode { get; set; } = string.Empty;
 
@@ -517,6 +505,16 @@ public class TaktPurchaseInquiryTemplateDto
     /// 询价供应商名称
     /// </summary>
     public string? SupplierName { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 付款方式（字典 logistics_payment_mode：vendorpay=供应商付款，employeereimburse=员工报销）
+    /// </summary>
+    public string? PaymentMode { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 采购链路方案（字典 logistics_procurement_chain_scheme；1=方案一含报销，2=方案二仅 PO）
+    /// </summary>
+    public int? ChainScheme { get; set; }
 
     /// <summary>
     /// 询价总数量（基本单位数量）
@@ -544,7 +542,7 @@ public class TaktPurchaseInquiryTemplateDto
     public string? InquiryReason { get; set; } = string.Empty;
 
     /// <summary>
-    /// 询价状态（字典 sys_normal_disable：1=启用，0=禁用）
+    /// 询价状态（字典 sys_normal_disable_status；1=启用，0=禁用）
     /// </summary>
     public int? InquiryStatus { get; set; }
 
@@ -591,7 +589,7 @@ public class TaktPurchaseInquiryImportDto
     public string? CompanyDefaultCulture { get; set; } = string.Empty;
 
     /// <summary>
-    /// 工厂代码
+    /// 工厂代码（选项 TaktPlants/options，DictValue=PlantCode）
     /// </summary>
     public string? PlantCode { get; set; } = string.Empty;
 
@@ -611,7 +609,7 @@ public class TaktPurchaseInquiryImportDto
     public DateTime? QuoteDeadlineDate { get; set; }
 
     /// <summary>
-    /// 询价人员工 ID（关联 TaktEmployee）
+    /// 询价人员工 ID（关联 TaktEmployee.Id，选项 TaktEmployees/options）
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
     public long? InquiryId { get; set; }
@@ -622,7 +620,7 @@ public class TaktPurchaseInquiryImportDto
     public string? InquiryBy { get; set; } = string.Empty;
 
     /// <summary>
-    /// 询价供应商编码
+    /// 询价供应商编码（选项 TaktSuppliers/options，DictValue=SupplierCode）
     /// </summary>
     public string? SupplierCode { get; set; } = string.Empty;
 
@@ -630,6 +628,16 @@ public class TaktPurchaseInquiryImportDto
     /// 询价供应商名称
     /// </summary>
     public string? SupplierName { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 付款方式（字典 logistics_payment_mode：vendorpay=供应商付款，employeereimburse=员工报销）
+    /// </summary>
+    public string? PaymentMode { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 采购链路方案（字典 logistics_procurement_chain_scheme；1=方案一含报销，2=方案二仅 PO）
+    /// </summary>
+    public int? ChainScheme { get; set; }
 
     /// <summary>
     /// 询价总数量（基本单位数量）
@@ -657,7 +665,7 @@ public class TaktPurchaseInquiryImportDto
     public string? InquiryReason { get; set; } = string.Empty;
 
     /// <summary>
-    /// 询价状态（字典 sys_normal_disable：1=启用，0=禁用）
+    /// 询价状态（字典 sys_normal_disable_status；1=启用，0=禁用）
     /// </summary>
     public int? InquiryStatus { get; set; }
 
@@ -700,7 +708,12 @@ public class TaktPurchaseInquiryExportDto
     public long PurchaseInquiryId { get; set; }
 
     /// <summary>
-    /// 工厂代码
+    /// 公司代码
+    /// </summary>
+    public string CompanyCode { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 工厂代码（选项 TaktPlants/options，DictValue=PlantCode）
     /// </summary>
     public string PlantCode { get; set; } = string.Empty;
 
@@ -720,7 +733,7 @@ public class TaktPurchaseInquiryExportDto
     public DateTime? QuoteDeadlineDate { get; set; }
 
     /// <summary>
-    /// 询价人员工 ID（关联 TaktEmployee）
+    /// 询价人员工 ID（关联 TaktEmployee.Id，选项 TaktEmployees/options）
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
     public long? InquiryId { get; set; }
@@ -731,7 +744,7 @@ public class TaktPurchaseInquiryExportDto
     public string InquiryBy { get; set; } = string.Empty;
 
     /// <summary>
-    /// 询价供应商编码
+    /// 询价供应商编码（选项 TaktSuppliers/options，DictValue=SupplierCode）
     /// </summary>
     public string? SupplierCode { get; set; } = string.Empty;
 
@@ -739,6 +752,16 @@ public class TaktPurchaseInquiryExportDto
     /// 询价供应商名称
     /// </summary>
     public string? SupplierName { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 付款方式（字典 logistics_payment_mode：vendorpay=供应商付款，employeereimburse=员工报销）
+    /// </summary>
+    public string PaymentMode { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 采购链路方案（字典 logistics_procurement_chain_scheme；1=方案一含报销，2=方案二仅 PO）
+    /// </summary>
+    public int ChainScheme { get; set; } = 0;
 
     /// <summary>
     /// 询价总数量（基本单位数量）
@@ -766,7 +789,7 @@ public class TaktPurchaseInquiryExportDto
     public string? InquiryReason { get; set; } = string.Empty;
 
     /// <summary>
-    /// 询价状态（字典 sys_normal_disable：1=启用，0=禁用）
+    /// 询价状态（字典 sys_normal_disable_status；1=启用，0=禁用）
     /// </summary>
     public int InquiryStatus { get; set; } = 0;
 

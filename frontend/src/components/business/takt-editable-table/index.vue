@@ -2,13 +2,14 @@
 <!-- 项目名称：节拍数字工厂 · Takt Plat (TDF) -->
 <!-- 命名空间：@/components/business/takt-editable-table -->
 <!-- 文件名称：index.vue -->
-<!-- 功能描述：主子表表单内嵌可编辑子表；增删行、行校验、汇总、空数据提示；defineExpose validate/getRows -->
+<!-- 功能描述：主子表表单内嵌可编辑子表；增删行、行校验、汇总、Excel 风格键盘单元格导航；defineExpose validate/getRows -->
 <!-- 版权信息：Copyright (c) 2025 Takt  All rights reserved. -->
 <!-- 免责声明：此软件使用 MIT License，作者不承担任何使用风险。 -->
 <!-- ======================================== -->
 
 <template>
   <div
+    ref="tableRootRef"
     class="takt-editable-table flex flex-col min-h-0"
     :class="sectionBorder ? 'pt-3 mt-3 border-t border-border' : undefined"
   >
@@ -38,11 +39,13 @@
       :data-source="innerRows"
       :pagination="false"
       :scroll="scrollConfig"
+      table-layout="fixed"
       :row-key="rowKeyResolver"
       :size="size"
       :bordered="bordered"
       :loading="loading"
       :locale="tableLocale"
+      :custom-row="resolveCustomRow"
     >
       <template #emptyText>
         <div class="py-8 text-center text-sm text-text-secondary">
@@ -63,10 +66,9 @@
           <a-table-summary fixed>
             <a-table-summary-row>
               <a-table-summary-cell
-                v-for="(cell, cellIndex) in summaryCells"
+                v-for="cell in summaryCells"
                 :key="cell.key"
-                :index="cellIndex"
-                :col-span="cell.colSpan"
+                :index="cell.index"
               >
                 <span class="text-sm font-medium">{{ cell.text }}</span>
               </a-table-summary-cell>
@@ -76,7 +78,32 @@
       </template>
       <template #bodyCell="{ column, record, index }">
         <template v-if="column.key === ACTION_COLUMN_KEY">
-          <a-tooltip :title="t('common.page.button.deleterow')">
+          <template v-if="obsoleteField">
+            <a-button
+              v-if="!isRowObsolete(record)"
+              type="link"
+              size="small"
+              class="takt-button-void-row px-0"
+              :disabled="disabled || loading"
+              @click="handleMarkRowObsolete(index)"
+            >
+              {{ t('common.page.button.void') }}
+            </a-button>
+            <a-button
+              v-else
+              type="link"
+              size="small"
+              class="takt-button-revoke-row px-0"
+              :disabled="disabled || loading"
+              @click="handleRevokeRowObsolete(index)"
+            >
+              {{ t('common.page.button.revoke') }}
+            </a-button>
+          </template>
+          <a-tooltip
+            v-else
+            :title="t('common.page.button.deleterow')"
+          >
             <a-button
               class="takt-button-delete-row takt-button-plain-borderless takt-button-plain-icon-only"
               :disabled="disabled || loading"
@@ -88,50 +115,63 @@
             </a-button>
           </a-tooltip>
         </template>
-        <template v-else-if="$slots[`cell-${String(column.key)}`]">
-          <slot
-            :name="`cell-${String(column.key)}`"
-            :record="record"
-            :index="index"
-            :column="resolveColumn(String(column.key))"
-            :error="getCellError(record, String(column.key))"
-          />
+        <template v-else-if="hasCellSlot(String(column.key))">
+          <div
+            class="takt-editable-table-cell"
+            v-bind="resolveCellNavAttrs(index, String(column.key))"
+          >
+            <slot
+              :name="`cell-${String(column.key)}`"
+              :record="record"
+              :index="index"
+              :column="resolveColumn(String(column.key))"
+              :error="getCellError(record, String(column.key))"
+              :cell-nav="resolveCellNavAttrs(index, String(column.key))"
+            />
+            <span
+              v-if="getCellError(record, String(column.key))"
+              class="text-xs text-red-500"
+            >{{ getCellError(record, String(column.key)) }}</span>
+          </div>
         </template>
         <template v-else>
-          <div class="flex min-w-0 flex-col gap-0.5">
-            <template v-if="isReadonlyColumn(String(column.key))">
+          <div
+            class="takt-editable-table-cell gap-0.5"
+            v-bind="resolveCellNavAttrs(index, String(column.key))"
+          >
+            <template v-if="isReadonlyColumn(String(column.key)) || isRowObsolete(record)">
               <span class="text-sm">{{ record[resolveDataIndex(String(column.key))] }}</span>
             </template>
             <template v-else-if="resolveEditor(String(column.key)) === 'inputNumber'">
               <a-input-number
                 v-model:value="record[resolveDataIndex(String(column.key))]"
-                v-bind="resolveInputNumberProps(String(column.key))"
+                v-bind="resolveInputNumberProps(String(column.key), record)"
                 :status="resolveCellStatus(record, String(column.key))"
-                @change="handleCellChange(record, String(column.key))"
+                @update:value="(val) => handleEditorValueChange(record, String(column.key), val)"
               />
             </template>
             <template v-else-if="resolveEditor(String(column.key)) === 'textarea'">
               <a-textarea
                 v-model:value="record[resolveDataIndex(String(column.key))]"
-                v-bind="resolveTextareaProps(String(column.key))"
+                v-bind="resolveTextareaProps(String(column.key), record)"
                 :status="resolveCellStatus(record, String(column.key))"
-                @change="handleCellChange(record, String(column.key))"
+                @change="(val) => handleEditorValueChange(record, String(column.key), val)"
               />
             </template>
             <template v-else-if="resolveEditor(String(column.key)) === 'datePicker'">
               <a-date-picker
                 v-model:value="record[resolveDataIndex(String(column.key))]"
-                v-bind="resolveDatePickerProps(String(column.key))"
+                v-bind="resolveDatePickerProps(String(column.key), record)"
                 :status="resolveCellStatus(record, String(column.key))"
-                @change="handleCellChange(record, String(column.key))"
+                @change="(val) => handleEditorValueChange(record, String(column.key), val)"
               />
             </template>
             <template v-else>
               <a-input
                 v-model:value="record[resolveDataIndex(String(column.key))]"
-                v-bind="resolveInputProps(String(column.key))"
+                v-bind="resolveInputProps(String(column.key), record)"
                 :status="resolveCellStatus(record, String(column.key))"
-                @change="handleCellChange(record, String(column.key))"
+                @change="(val) => handleEditorValueChange(record, String(column.key), val)"
               />
             </template>
             <span
@@ -150,9 +190,10 @@
  * 主子表表单内嵌可编辑子表
  * @module components/business/takt-editable-table
  */
-import { computed, ref, watch } from 'vue'
+import { computed, h, nextTick, ref, useSlots, watch } from 'vue'
 import { useI18n } from 'vue-i18n'
-import { RiDeleteRow, RiInsertRowBottom } from '@remixicon/vue'
+import { Tooltip } from 'ant-design-vue'
+import { RiDeleteRow, RiInsertRowBottom, RiQuestionLine } from '@remixicon/vue'
 import type { TableColumnsType } from 'ant-design-vue'
 import {
   computeEditableSummaryMap,
@@ -175,13 +216,60 @@ import {
   type TaktEditableEditorType,
   type TaktEditableRow,
   type TaktEditableTableColumn,
+  filterActiveEditableRows,
+  isEditableRowObsolete,
 } from './types'
+import {
+  buildEditableCellNavAttrs,
+  buildEditableNavColumnKeys,
+  focusEditableTableCell,
+  resolveNextEditableCell,
+  shouldNavigateHorizontalOnArrowKey,
+  shouldNavigateOnEnterKey,
+  shouldNavigateVerticalOnArrowKey,
+  type TaktEditableNavDirection,
+} from './editable-table-nav'
 
 /** 操作列 key（内置） */
 const ACTION_COLUMN_KEY = '__action'
 
 /** i18n 翻译函数 */
 const { t } = useI18n()
+
+/**
+ * 构建表头标题（可选问号提示、必填红 *）
+ * @param title 列标题
+ * @param titleHint 提示文案
+ * @param required 是否必填
+ */
+function buildColumnTitle(title: string, titleHint?: string, required?: boolean) {
+  const labelBody = titleHint
+    ? () =>
+        h('span', { class: 'inline-flex items-center gap-1 align-middle' }, [
+          h(
+            Tooltip,
+            { title: titleHint, placement: 'top' },
+            {
+              default: () =>
+                h('span', { class: 'takt-form-label-hint-icon inline-flex cursor-help' }, [
+                  h(RiQuestionLine, { class: 'takt-remix-icon' }),
+                ]),
+            },
+          ),
+          h('span', null, title),
+        ])
+    : title
+  if (!required) {
+    return labelBody
+  }
+  if (typeof labelBody === 'function') {
+    return () =>
+      h('span', { class: 'ant-form-item-required inline-flex items-center gap-1 align-middle' }, [
+        labelBody(),
+      ])
+  }
+  return h('span', { class: 'ant-form-item-required' }, title)
+}
 
 /** 组件 Props */
 interface Props {
@@ -205,6 +293,8 @@ interface Props {
   scroll?: { x?: number | string | true; y?: number | string }
   /** 表格布局场景（默认 editable） */
   scrollLayout?: TaktTableScrollLayout
+  /** 是否启用表体纵向 scroll.y（弹窗内嵌子表可关，与外层表单共用滚动条） */
+  enableVerticalScroll?: boolean
   /** @deprecated 请用 scroll.y；显式覆盖纵向滚动高度（px） */
   scrollY?: number
   /** 表格 bordered */
@@ -229,6 +319,14 @@ interface Props {
   summaryLabel?: string
   /** validate 最少行数 */
   minRows?: number
+  /** 是否启用方向键 / 回车键在可编辑单元格间导航（Excel 风格） */
+  enableArrowNavigation?: boolean
+  /** 作废字段名（如 isObsolete）；设置后操作列为作废/撤销，作废行灰色只读 */
+  obsoleteField?: string
+  /** 未作废取值，默认 0 */
+  obsoleteActiveValue?: number | string
+  /** 作废取值，默认 1 */
+  obsoleteValue?: number | string
 }
 
 const props = withDefaults(defineProps<Props>(), {
@@ -241,6 +339,7 @@ const props = withDefaults(defineProps<Props>(), {
   showToolbar: true,
   scroll: undefined,
   scrollLayout: 'editable',
+  enableVerticalScroll: true,
   bordered: true,
   size: 'middle',
   loading: false,
@@ -252,27 +351,54 @@ const props = withDefaults(defineProps<Props>(), {
   showSummary: undefined,
   summaryLabel: '',
   minRows: 0,
+  enableArrowNavigation: true,
+  obsoleteField: '',
+  obsoleteActiveValue: 0,
+  obsoleteValue: 1,
 })
 
 const emit = defineEmits<{
   'update:modelValue': [rows: TaktEditableRow[]]
   add: [row: TaktEditableRow]
   remove: [payload: { index: number; row: TaktEditableRow }]
+  /** 行标记作废 */
+  obsolete: [payload: { index: number; row: TaktEditableRow }]
+  /** 行撤销作废 */
+  revoke: [payload: { index: number; row: TaktEditableRow }]
+  /** 单元格值变更（v-model 已同步后发出，供派生计算等） */
+  cellValueChange: [payload: { record: TaktEditableRow; columnKey: string; value: unknown }]
 }>()
+
+/** 父级透传的单元格具名插槽（动态名 cell-{columnKey}） */
+const cellSlots = useSlots()
+
+/**
+ * 是否存在列级自定义插槽
+ * @param columnKey 列 key
+ * @returns 是否已定义 cell-{columnKey} 插槽
+ */
+function hasCellSlot(columnKey: string): boolean {
+  return typeof cellSlots[`cell-${columnKey}`] === 'function'
+}
 
 /** 内部行（始终带 __rowKey） */
 const innerRows = ref<TaktEditableRow[]>([])
+/** 表格根元素（方向键聚焦） */
+const tableRootRef = ref<HTMLElement | null>(null)
 /** 单元格校验错误 `${rowKey}:${field}` → message */
 const cellErrors = ref<Record<string, string>>({})
 
-/** 同步外部 modelValue → innerRows */
+/** 可方向键导航的列 key（有序） */
+const navigableColumnKeys = computed(() => buildEditableNavColumnKeys(props.columns))
+
+/** 同步外部 modelValue → innerRows（浅监听引用，编辑态不重建内部行） */
 watch(
   () => props.modelValue,
   (val) => {
     innerRows.value = attachEditableRowKeys(val ?? [], props.idField || undefined)
     cellErrors.value = {}
   },
-  { immediate: true, deep: true },
+  { immediate: true },
 )
 
 /** 空数据提示 */
@@ -311,8 +437,13 @@ const hasSummaryRow = computed(() => {
   return props.columns.some((col) => !!col.summary)
 })
 
+/** 汇总用行（排除作废行） */
+const summarySourceRows = computed(() =>
+  filterActiveEditableRows(innerRows.value, props.obsoleteField || undefined, props.obsoleteValue),
+)
+
 /** 汇总值映射 */
-const summaryValueMap = computed(() => computeEditableSummaryMap(innerRows.value, props.columns))
+const summaryValueMap = computed(() => computeEditableSummaryMap(summarySourceRows.value, props.columns))
 
 /** 汇总行首列文案 */
 const resolvedSummaryLabel = computed(() => {
@@ -322,31 +453,27 @@ const resolvedSummaryLabel = computed(() => {
   return t('components.business.page.editabletable.summarylabel')
 })
 
-/** 汇总行单元格 */
+/** 汇总行单元格（index 与 a-table columns 列序一致，禁止额外插入标签列） */
 const summaryCells = computed(() => {
-  const cells: Array<{ key: string; text: string; colSpan?: number }> = [
-    {
-      key: '__summary_label',
-      text: resolvedSummaryLabel.value,
-    },
-  ]
-  for (const column of props.columns) {
-    if (!column.summary) {
-      cells.push({
-        key: column.key,
-        text: '',
-      })
-      continue
+  const cells: Array<{ key: string; text: string; index: number }> = []
+  props.columns.forEach((column, columnIndex) => {
+    let text = ''
+    if (columnIndex === 0) {
+      text = resolvedSummaryLabel.value
+    } else if (column.summary) {
+      const raw = summaryValueMap.value[column.key]
+      text = formatSummaryValue(raw, column.summaryPrecision ?? 2)
     }
-    const raw = summaryValueMap.value[column.key]
     cells.push({
-      key: column.key,
-      text: formatSummaryValue(raw, column.summaryPrecision ?? 2),
+      key: String(column.key),
+      index: columnIndex,
+      text,
     })
-  }
+  })
   if (props.showDelete) {
     cells.push({
       key: ACTION_COLUMN_KEY,
+      index: props.columns.length,
       text: '',
     })
   }
@@ -370,7 +497,7 @@ const scrollConfig = computed(() =>
   resolveTableScrollConfig({
     columns: tableColumns.value,
     scroll: mergedScroll.value,
-    enableVerticalScroll: true,
+    enableVerticalScroll: props.enableVerticalScroll,
     scrollLayout: props.scrollLayout,
     verticalScrollHeight: resolveVerticalScrollY(mergedScroll.value?.y, viewportScrollYPx.value),
   }),
@@ -379,7 +506,7 @@ const scrollConfig = computed(() =>
 /** a-table columns */
 const tableColumns = computed<TableColumnsType>(() => {
   const cols: TableColumnsType = props.columns.map((col) => ({
-    title: col.title,
+    title: buildColumnTitle(col.title, col.titleHint, col.required),
     dataIndex: col.dataIndex ?? col.key,
     key: col.key,
     width: col.width,
@@ -390,7 +517,7 @@ const tableColumns = computed<TableColumnsType>(() => {
     cols.push({
       title: t('common.table.actions'),
       key: ACTION_COLUMN_KEY,
-      width: 56,
+      width: props.obsoleteField ? 72 : 56,
       align: 'center',
       fixed: 'right',
     })
@@ -405,6 +532,39 @@ const tableColumns = computed<TableColumnsType>(() => {
  */
 function rowKeyResolver(row: TaktEditableRow): string {
   return String(row[TAKT_EDITABLE_ROW_KEY] ?? '')
+}
+
+/**
+ * 行是否已作废
+ * @param row 行数据
+ * @returns {boolean} 是否作废
+ */
+function isRowObsolete(row: TaktEditableRow): boolean {
+  if (!props.obsoleteField) {
+    return false
+  }
+  return isEditableRowObsolete(row, props.obsoleteField, props.obsoleteValue)
+}
+
+/**
+ * 行是否禁用编辑
+ * @param row 行数据
+ * @returns {boolean} 是否禁用
+ */
+function isRowEditingDisabled(row: TaktEditableRow): boolean {
+  return props.disabled || props.loading || isRowObsolete(row)
+}
+
+/**
+ * a-table 行 class（作废行灰色）
+ * @param record 行数据
+ * @returns {object} customRow 配置
+ */
+function resolveCustomRow(record: TaktEditableRow) {
+  if (isRowObsolete(record)) {
+    return { class: 'takt-editable-table-row-obsolete' }
+  }
+  return {}
 }
 
 /**
@@ -451,6 +611,97 @@ function handleCellChange(row: TaktEditableRow, columnKey: string) {
   const next = { ...cellErrors.value }
   delete next[key]
   cellErrors.value = next
+}
+
+/**
+ * 内置编辑器值变更：清校验并通知父级
+ * @param row 行
+ * @param columnKey 列 key
+ * @param value 新值
+ */
+function handleEditorValueChange(row: TaktEditableRow, columnKey: string, value: unknown) {
+  handleCellChange(row, columnKey)
+  emit('cellValueChange', { record: row, columnKey, value })
+}
+
+/**
+ * 键盘在可编辑单元格间移动焦点（方向键；Enter 下一行；Shift+Enter 上一行）
+ * @param event 键盘事件
+ * @param rowIndex 行索引
+ * @param columnKey 列 key
+ */
+function handleCellNavKeydown(event: KeyboardEvent, rowIndex: number, columnKey: string) {
+  if (!props.enableArrowNavigation || props.disabled || props.loading) {
+    return
+  }
+  const row = innerRows.value[rowIndex]
+  if (!row || isRowObsolete(row)) {
+    return
+  }
+  if (isReadonlyColumn(columnKey)) {
+    return
+  }
+  const column = resolveColumn(columnKey)
+  let direction: TaktEditableNavDirection | null = null
+  if (event.key === 'Enter') {
+    if (!shouldNavigateOnEnterKey(event, column)) {
+      return
+    }
+    direction = event.shiftKey ? 'up' : 'down'
+  } else {
+    const keyMap: Record<string, TaktEditableNavDirection | undefined> = {
+      ArrowUp: 'up',
+      ArrowDown: 'down',
+      ArrowLeft: 'left',
+      ArrowRight: 'right',
+    }
+    direction = keyMap[event.key] ?? null
+  }
+  if (!direction) {
+    return
+  }
+  if (
+    (direction === 'left' || direction === 'right')
+    && !shouldNavigateHorizontalOnArrowKey(event, direction)
+  ) {
+    return
+  }
+  if (
+    (direction === 'up' || direction === 'down')
+    && !shouldNavigateVerticalOnArrowKey(event)
+  ) {
+    return
+  }
+  const next = resolveNextEditableCell(
+    rowIndex,
+    columnKey,
+    direction,
+    navigableColumnKeys.value,
+    innerRows.value.length,
+  )
+  if (!next) {
+    return
+  }
+  event.preventDefault()
+  event.stopPropagation()
+  void nextTick(() => {
+    focusEditableTableCell(tableRootRef.value, next.rowIndex, next.columnKey)
+  })
+}
+
+/**
+ * 可编辑单元格导航属性（data 坐标 + keydown）
+ * @param rowIndex 行索引
+ * @param columnKey 列 key
+ * @returns Vue v-bind 对象；只读列返回空对象
+ */
+function resolveCellNavAttrs(rowIndex: number, columnKey: string): Record<string, unknown> {
+  if (!props.enableArrowNavigation || isReadonlyColumn(columnKey)) {
+    return {}
+  }
+  return buildEditableCellNavAttrs(rowIndex, columnKey, (event) => {
+    handleCellNavKeydown(event, rowIndex, columnKey)
+  })
 }
 
 /**
@@ -534,28 +785,30 @@ function buildRowFieldLabel(rowIndex: number, column: TaktEditableTableColumn): 
  * @param key 列 key
  * @returns {Record<string, unknown>} props
  */
-function resolveInputProps(key: string): Record<string, unknown> {
+function resolveInputProps(key: string, row: TaktEditableRow): Record<string, unknown> {
   const col = resolveColumn(key)
   return {
     placeholder: col ? resolvePlaceholder(col) : '',
     size: props.size,
-    disabled: props.disabled || props.loading,
+    disabled: isRowEditingDisabled(row),
     allowClear: col?.allowClear !== false,
+    style: { width: '100%' },
   }
 }
 
 /**
  * 解析 a-input-number props
  * @param key 列 key
+ * @param row 行数据
  * @returns {Record<string, unknown>} props
  */
-function resolveInputNumberProps(key: string): Record<string, unknown> {
+function resolveInputNumberProps(key: string, row: TaktEditableRow): Record<string, unknown> {
   const col = resolveColumn(key)
   return {
     min: col?.min ?? 0,
     placeholder: col ? resolvePlaceholder(col) : '',
     size: props.size,
-    disabled: props.disabled || props.loading,
+    disabled: isRowEditingDisabled(row),
     style: { width: '100%' },
   }
 }
@@ -563,31 +816,40 @@ function resolveInputNumberProps(key: string): Record<string, unknown> {
 /**
  * 解析 a-textarea props
  * @param key 列 key
+ * @param row 行数据
  * @returns {Record<string, unknown>} props
  */
-function resolveTextareaProps(key: string): Record<string, unknown> {
+function resolveTextareaProps(key: string, row: TaktEditableRow): Record<string, unknown> {
   const col = resolveColumn(key)
-  return {
+  const rows = col?.rows ?? 1
+  const result: Record<string, unknown> = {
     placeholder: col ? resolvePlaceholder(col) : '',
-    rows: col?.rows ?? 1,
     size: props.size,
-    disabled: props.disabled || props.loading,
+    disabled: isRowEditingDisabled(row),
+    style: { width: '100%' },
   }
+  if (rows <= 1) {
+    result.autoSize = { minRows: 1, maxRows: 1 }
+  } else {
+    result.rows = rows
+  }
+  return result
 }
 
 /**
  * 解析 a-date-picker props
  * @param key 列 key
+ * @param row 行数据
  * @returns {Record<string, unknown>} props
  */
-function resolveDatePickerProps(key: string): Record<string, unknown> {
+function resolveDatePickerProps(key: string, row: TaktEditableRow): Record<string, unknown> {
   const col = resolveColumn(key)
   return {
     placeholder: col ? resolvePlaceholder(col) : '',
     valueFormat: col?.valueFormat ?? 'YYYY-MM-DD HH:mm:ss',
     showTime: col?.showTime ?? true,
     size: props.size,
-    disabled: props.disabled || props.loading,
+    disabled: isRowEditingDisabled(row),
     style: { width: '100%' },
   }
 }
@@ -608,6 +870,9 @@ function handleAddRow() {
     ...base,
     [TAKT_EDITABLE_ROW_KEY]: createEditableRowKey(),
   }
+  if (props.obsoleteField) {
+    row[props.obsoleteField] = props.obsoleteActiveValue
+  }
   const next = [...innerRows.value, row]
   emitRows(next)
   emit('add', row)
@@ -625,6 +890,42 @@ function handleRemoveRow(index: number) {
   const next = innerRows.value.filter((_, i) => i !== index)
   emitRows(next)
   emit('remove', { index, row })
+}
+
+/**
+ * 标记行作废（保留行号，灰色只读）
+ * @param index 行索引
+ */
+function handleMarkRowObsolete(index: number) {
+  if (!props.obsoleteField) {
+    return
+  }
+  const row = innerRows.value[index]
+  if (!row || isRowObsolete(row)) {
+    return
+  }
+  row[props.obsoleteField] = props.obsoleteValue
+  const next = [...innerRows.value]
+  emitRows(next)
+  emit('obsolete', { index, row })
+}
+
+/**
+ * 撤销行作废
+ * @param index 行索引
+ */
+function handleRevokeRowObsolete(index: number) {
+  if (!props.obsoleteField) {
+    return
+  }
+  const row = innerRows.value[index]
+  if (!row || !isRowObsolete(row)) {
+    return
+  }
+  row[props.obsoleteField] = props.obsoleteActiveValue
+  const next = [...innerRows.value]
+  emitRows(next)
+  emit('revoke', { index, row })
 }
 
 /**
@@ -670,6 +971,8 @@ async function validate(): Promise<TaktEditableValidateError[]> {
   const rawErrors = await validateEditableRows(innerRows.value, props.columns, {
     minRows: props.minRows,
     minRowsMessage,
+    obsoleteField: props.obsoleteField || undefined,
+    obsoleteValue: props.obsoleteValue,
     rowFieldLabel: (rowIndex, column) =>
       t('common.validation.required', { field: buildRowFieldLabel(rowIndex, column) }),
     uniqueMessage: (rowIndex, column) =>
@@ -695,13 +998,70 @@ async function validate(): Promise<TaktEditableValidateError[]> {
   return []
 }
 
+/**
+ * 遍历内部可编辑行（原地修改，供父级派生字段刷新）
+ * @param callback 行回调
+ */
+function forEachRow(callback: (row: TaktEditableRow, index: number) => void) {
+  innerRows.value.forEach(callback)
+}
+
+/**
+ * 将内部行同步至 v-model（剥离 __rowKey）
+ */
+function syncModelValue() {
+  emit('update:modelValue', detachEditableRowKeys(innerRows.value))
+}
+
 defineExpose({
   addRow: handleAddRow,
   removeRow: handleRemoveRow,
+  markRowObsolete: handleMarkRowObsolete,
+  revokeRowObsolete: handleRevokeRowObsolete,
   getRows,
   getSummaryValues,
   resetRows,
   validate,
   clearValidate,
+  forEachRow,
+  syncModelValue,
 })
 </script>
+
+<style scoped lang="css">
+/* 行内编辑：单元格垂直居中，控件宽度撑满，单行 textarea 不撑高行 */
+.takt-editable-table :deep(.ant-table-tbody > tr > td) {
+  vertical-align: middle;
+  padding-top: 4px;
+  padding-bottom: 4px;
+}
+
+.takt-editable-table-cell {
+  display: flex;
+  min-width: 0;
+  min-height: 32px;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.takt-editable-table-cell :deep(.ant-input),
+.takt-editable-table-cell :deep(.ant-input-affix-wrapper),
+.takt-editable-table-cell :deep(.ant-input-number),
+.takt-editable-table-cell :deep(.ant-select),
+.takt-editable-table-cell :deep(.ant-picker) {
+  width: 100%;
+}
+
+.takt-editable-table-cell :deep(textarea.ant-input) {
+  resize: none;
+}
+
+.takt-editable-table-cell :deep(.ant-select-selector) {
+  align-items: center;
+}
+
+.takt-editable-table :deep(.takt-editable-table-row-obsolete > td) {
+  color: var(--ant-color-text-disabled);
+  background-color: var(--ant-color-fill-alter);
+}
+</style>

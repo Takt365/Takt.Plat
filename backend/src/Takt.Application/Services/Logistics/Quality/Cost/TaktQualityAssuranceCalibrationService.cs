@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Application.Services.Logistics.Quality.Cost
 // 文件名称：TaktQualityAssuranceCalibrationService.cs
-// 创建时间：2026-06-23
+// 创建时间：2026-07-09
 // 创建人：Takt365(Cursor AI)
 // 功能描述：品质业务设备校正费用明细应用服务实现
 // 
@@ -118,6 +118,7 @@ public class TaktQualityAssuranceCalibrationService : TaktServiceBase, ITaktQual
     public async Task<TaktQualityAssuranceCalibrationDto> CreateQualityAssuranceCalibrationAsync(TaktQualityAssuranceCalibrationCreateDto dto)
     {
         var entity = dto.Adapt<TaktQualityAssuranceCalibration>();
+        entity.IsObsolete = 0;
         await StampQualityAssuranceCalibrationQualityAssuranceAsync(entity, dto);
         var isUnique_ix_takt_logistics_quality_assurance_calibration_line_unique = await _uniqueValidator.IsUniqueAsync(
             _qualityAssuranceCalibrationRepository,
@@ -174,11 +175,21 @@ public class TaktQualityAssuranceCalibrationService : TaktServiceBase, ITaktQual
     /// <returns>任务</returns>
     public async Task DeleteQualityAssuranceCalibrationByIdAsync(long id)
     {
-        var deleted = await _qualityAssuranceCalibrationRepository.DeleteAsync(id);
-        if (!deleted)
+        var entity = await _qualityAssuranceCalibrationRepository.GetByIdAsync(id);
+        if (entity == null)
         {
             throw new TaktBusinessException("品质业务设备校正费用明细不存在或已删除");
         }
+        if (entity.TenantCode != CurrentTenantCode || entity.CompanyCode != CurrentCompanyCode)
+        {
+            throw new TaktBusinessException("品质业务设备校正费用明细不存在或已删除");
+        }
+        if (entity.IsObsolete == 1)
+        {
+            throw new TaktBusinessException("品质业务设备校正费用明细已作废");
+        }
+        entity.IsObsolete = 1;
+        await _qualityAssuranceCalibrationRepository.UpdateAsync(entity);
     }
 
     /// <summary>
@@ -197,6 +208,27 @@ public class TaktQualityAssuranceCalibrationService : TaktServiceBase, ITaktQual
         {
             await DeleteQualityAssuranceCalibrationByIdAsync(id);
         }
+    }
+
+    /// <summary>
+    /// 更新品质业务设备校正费用明细作废状态
+    /// </summary>
+    /// <param name="dto">作废DTO</param>
+    /// <returns>DTO</returns>
+    public async Task<TaktQualityAssuranceCalibrationDto> UpdateQualityAssuranceCalibrationObsoleteAsync(TaktQualityAssuranceCalibrationObsoleteDto dto)
+    {
+        var entity = await _qualityAssuranceCalibrationRepository.GetByIdAsync(dto.QualityAssuranceCalibrationId);
+        if (entity == null)
+        {
+            throw new TaktBusinessException("品质业务设备校正费用明细不存在");
+        }
+        if (entity.TenantCode != CurrentTenantCode || entity.CompanyCode != CurrentCompanyCode)
+        {
+            throw new TaktBusinessException("品质业务设备校正费用明细不存在");
+        }
+        entity.IsObsolete = dto.IsObsolete;
+        await _qualityAssuranceCalibrationRepository.UpdateAsync(entity);
+        return await GetQualityAssuranceCalibrationByIdAsync(dto.QualityAssuranceCalibrationId) ?? throw new TaktBusinessException("品质业务设备校正费用明细不存在");
     }
 
     /// <summary>
@@ -330,6 +362,15 @@ public class TaktQualityAssuranceCalibrationService : TaktServiceBase, ITaktQual
     private static Expression<Func<TaktQualityAssuranceCalibration, bool>> QueryExpression(TaktQualityAssuranceCalibrationQueryDto? queryDto)
     {
         var exp = Expressionable.Create<TaktQualityAssuranceCalibration>();
+
+        if (queryDto?.IsObsolete.HasValue == true)
+        {
+            exp = exp.And(x => x.IsObsolete == queryDto.IsObsolete);
+        }
+        else
+        {
+            exp = exp.And(x => x.IsObsolete == 0);
+        }
 
         if (!string.IsNullOrEmpty(queryDto?.KeyWords))
         {

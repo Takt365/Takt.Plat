@@ -143,10 +143,4 @@ public class TaktSalesOrder : TaktCompanyEntityBase
     /// </summary>
     [Navigate(NavigateType.OneToMany, nameof(TaktSalesOrderItem.SalesOrderId))]
     public List<TaktSalesOrderItem>? Items { get; set; }
-
-    /// <summary>
-    /// 销售订单变更记录列表（外键在子表 TaktSalesOrderChangeLog.SalesOrderId）
-    /// </summary>
-    [Navigate(NavigateType.OneToMany, nameof(TaktSalesOrderChangeLog.SalesOrderId))]
-    public List<TaktSalesOrderChangeLog>? ChangeLogs { get; set; }
 }

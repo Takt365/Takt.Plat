@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：frontend/src/api/logistics/sales
 // 文件名称：quotation-item.ts
-// 创建时间：2026-07-01
+// 创建时间：2026-07-09
 // 创建人：Takt365(Auto Generated)
 // 功能描述：logistics/sales 模块 API（自动生成，请勿手改路由常量）
 // 
@@ -18,6 +18,7 @@ import type {
 import type {
   SalesQuotationItem,
   SalesQuotationItemCreate,
+  SalesQuotationItemObsolete,
   SalesQuotationItemUpdate
 } from '@/types/logistics/sales/quotation-item';
 
@@ -105,6 +106,19 @@ export function deleteSalesQuotationItemBatch(ids: string[]): Promise<void> {
     url: `${SALES_QUOTATION_ITEM_API_BASE}/batch`,
     method: 'delete',
     data: ids,
+  });
+}
+
+/**
+ * 更新销售报价明细作废状态
+ * @param {SalesQuotationItemObsolete} dto 作废 DTO
+ * @returns {Promise<SalesQuotationItem>} 销售报价明细DTO
+ */
+export function updateSalesQuotationItemObsolete(dto: SalesQuotationItemObsolete): Promise<SalesQuotationItem> {
+  return request<SalesQuotationItem>({
+    url: `${SALES_QUOTATION_ITEM_API_BASE}/obsolete`,
+    method: 'put',
+    data: dto,
   });
 }
 

@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：frontend/src/types/logistics/quality/operation
 // 文件名称：fqc-order.d.ts
-// 创建时间：2026-06-30
+// 创建时间：2026-07-09
 // 创建人：Takt365(Auto Generated)
 // 功能描述：logistics/quality/operation 模块类型定义（自动生成；类型名去 Takt 前缀与末尾 Dto，如 TaktCompanyDto → Company）
 // 
@@ -102,11 +102,6 @@ export interface FqcOrder extends CompanyDtoBase {
    * FQC检验单明细列表（主子表关系） （子表：TaktFqcOrderItem）
    */
   items?: FqcOrderItem[];
-
-  /**
-   * 变更日志列表（主子表关系） （子表：TaktFqcOrderChangeLog）
-   */
-  changeLogs?: FqcOrderChangeLog[];
 
 }
 
@@ -328,11 +323,6 @@ export interface FqcOrderCreate {
   items?: FqcOrderItemCreate[];
 
   /**
-   * 变更日志列表（主子表关系）（子表，级联保存）
-   */
-  changeLogs?: FqcOrderChangeLogCreate[];
-
-  /**
    * 扩展字段JSON
    */
   extField?: string;
@@ -356,6 +346,11 @@ export interface FqcOrderUpdate extends FqcOrderCreate {
    * FqcOrderID（标识要更新的实体）
    */
   fqcOrderId: string;
+
+  /**
+   * FQC检验单明细列表（主子表关系）（子表，级联保存）
+   */
+  items?: any;
 
 }
 
@@ -471,11 +466,6 @@ export interface FqcOrderTemplate {
   items?: FqcOrderItemCreate[];
 
   /**
-   * 变更日志列表（主子表关系）（子表，级联保存）
-   */
-  changeLogs?: FqcOrderChangeLogCreate[];
-
-  /**
    * 扩展字段JSON
    */
   extField?: string;
@@ -583,11 +573,6 @@ export interface FqcOrderImport {
    * FQC检验单明细列表（主子表关系）（子表，级联保存）
    */
   items?: FqcOrderItemCreate[];
-
-  /**
-   * 变更日志列表（主子表关系）（子表，级联保存）
-   */
-  changeLogs?: FqcOrderChangeLogCreate[];
 
   /**
    * 扩展字段JSON

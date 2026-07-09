@@ -120,12 +120,12 @@
       </div>
       <div v-show="isFieldVisible('attachmentType')">
       <a-form-item :label="t('entity.ecattachment.attachmenttype')">
-        <a-input
+        <TaktSelect
           v-model:value="advancedQueryForm.attachmentType"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.ecattachment.attachmenttype') })"
-          show-count
-          :maxlength="20"
+          dict-type="logistics_ec_attachment_type"
+          :placeholder="t('common.page.form.placeholder.select', { field: t('entity.ecattachment.attachmenttype') })"
           allow-clear
+          class="w-full"
         />
       </a-form-item>
       </div>
@@ -247,7 +247,7 @@
  * 设变子表 ecAttachment 右栏面板
  * @module views/logistics/manufacturing/engineering-change/ec-gijutsu/components
  */
-import { ref, computed, watch, nextTick } from 'vue'
+import { ref, computed, watch, nextTick, h } from 'vue'
 import { message, Modal } from 'ant-design-vue'
 import type { TableColumnsType } from 'ant-design-vue'
 import { useI18n } from 'vue-i18n'
@@ -257,6 +257,7 @@ import { resolveExportDownloadFileName } from '@/utils/export-download-name'
 import { CreateActionColumn } from '@/components/business/takt-action-column/index'
 import { RiEditLine, RiDeleteBinLine } from '@remixicon/vue'
 import EcAttachmentForm from './ec-attachment-form.vue'
+import TaktDictTag from '@/components/common/takt-dict-tag/index.vue'
 import { useEcMasterContext } from '../composables/use-ec-master-context'
 import {
   getEcAttachmentList,
@@ -418,8 +419,10 @@ const columns = computed<TableColumnsType>(() => [
     width: 120,
     resizable: true,
     ellipsis: true,
-    customRender: ({ record }: { record: EcAttachment }) =>
-      String(getEcAttachmentField(record, 'attachmentType') ?? ''),
+    customRender: ({ record }: { record: EcAttachment }) => h(TaktDictTag, {
+      dictType: 'logistics_ec_attachment_type',
+      value: String(getEcAttachmentField(record, 'attachmentType') ?? ''),
+    }),
   },
   {
     title: t('entity.ecattachment.docno'),

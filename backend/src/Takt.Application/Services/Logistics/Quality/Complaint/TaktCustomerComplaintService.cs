@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Application.Services.Logistics.Quality.Complaint
 // 文件名称：TaktCustomerComplaintService.cs
-// 创建时间：2026-06-23
+// 创建时间：2026-07-09
 // 创建人：Takt365(Cursor AI)
 // 功能描述：客诉主应用服务实现
 // 
@@ -125,10 +125,11 @@ public class TaktCustomerComplaintService : TaktServiceBase, ITaktCustomerCompla
         var entity = dto.Adapt<TaktCustomerComplaint>();
         var isUnique_ix_takt_logistics_quality_customer_complaint_complaint_unique = await _uniqueValidator.IsUniqueAsync(
             _customerComplaintRepository,
-            x => x.CustomerComplaintCode == entity.CustomerComplaintCode);
+            x => x.RelatedPlant == entity.RelatedPlant
+                && x.CustomerComplaintCode == entity.CustomerComplaintCode);
         if (!isUnique_ix_takt_logistics_quality_customer_complaint_complaint_unique)
         {
-            throw new TaktBusinessException("客诉主的CustomerComplaintCode已存在");
+            throw new TaktBusinessException("客诉主的RelatedPlant、CustomerComplaintCode已存在");
         }
         if (entity.SortOrder <= 0)
         {
@@ -158,11 +159,12 @@ public class TaktCustomerComplaintService : TaktServiceBase, ITaktCustomerCompla
         dto.Adapt(entity);
         var isUnique_ix_takt_logistics_quality_customer_complaint_complaint_unique = await _uniqueValidator.IsUniqueAsync(
             _customerComplaintRepository,
-            x => x.CustomerComplaintCode == entity.CustomerComplaintCode,
+            x => x.RelatedPlant == entity.RelatedPlant
+                && x.CustomerComplaintCode == entity.CustomerComplaintCode,
             id);
         if (!isUnique_ix_takt_logistics_quality_customer_complaint_complaint_unique)
         {
-            throw new TaktBusinessException("客诉主的CustomerComplaintCode已存在");
+            throw new TaktBusinessException("客诉主的RelatedPlant、CustomerComplaintCode已存在");
         }
         await _customerComplaintRepository.UpdateAsync(entity);
                 await SaveCustomerComplaintChildrenAsync(entity, dto);
@@ -277,17 +279,18 @@ public class TaktCustomerComplaintService : TaktServiceBase, ITaktCustomerCompla
             try
             {
                 var entity = rows[i].Adapt<TaktCustomerComplaint>();
-                var importKey = $"{entity.CustomerComplaintCode}";
+                var importKey = $"{entity.RelatedPlant}|{entity.CustomerComplaintCode}";
                 if (!importSeenKeys.Add(importKey))
                 {
-                    throw new TaktBusinessException("与Excel中其他行重复（CustomerComplaintCode）");
+                    throw new TaktBusinessException("与Excel中其他行重复（RelatedPlant、CustomerComplaintCode）");
                 }
                 var isUnique_ix_takt_logistics_quality_customer_complaint_complaint_unique = await _uniqueValidator.IsUniqueAsync(
                     _customerComplaintRepository,
-                    x => x.CustomerComplaintCode == entity.CustomerComplaintCode);
+                    x => x.RelatedPlant == entity.RelatedPlant
+                        && x.CustomerComplaintCode == entity.CustomerComplaintCode);
                 if (!isUnique_ix_takt_logistics_quality_customer_complaint_complaint_unique)
                 {
-                    throw new TaktBusinessException("客诉主的CustomerComplaintCode已存在");
+                    throw new TaktBusinessException("客诉主的RelatedPlant、CustomerComplaintCode已存在");
                 }
                 if (entity.SortOrder <= 0)
                 {
@@ -338,6 +341,30 @@ public class TaktCustomerComplaintService : TaktServiceBase, ITaktCustomerCompla
     // ========================================
 
     /// <summary>
+    /// 将指定主表下全部未作废客诉明细标记为作废（编辑清空子表）
+    /// </summary>
+    /// <param name="complaintId">主表主键</param>
+    /// <returns>任务</returns>
+    private async Task MarkCustomerComplaintItemsObsoleteAsync(long complaintId)
+    {
+        if (complaintId <= 0)
+        {
+            return;
+        }
+        var rows = await _customerComplaintItemRepository.GetListAsync(
+            x => x.ComplaintId == complaintId && x.IsObsolete == 0);
+        if (rows.Count == 0)
+        {
+            return;
+        }
+        foreach (var row in rows)
+        {
+            row.IsObsolete = 1;
+        }
+        await _customerComplaintItemRepository.UpdateRangeAsync(rows);
+    }
+
+    /// <summary>
     /// 填充客诉主详情（加载 OneToMany 子表：客诉明细）
     /// </summary>
     /// <param name="dto">响应 DTO</param>
@@ -349,13 +376,13 @@ public class TaktCustomerComplaintService : TaktServiceBase, ITaktCustomerCompla
         {
             return;
         }
-        // 客诉明细 → dto.Items
+        // 客诉明细 → dto.Items（含作废行）
         var items = await _customerComplaintItemRepository.GetListAsync(x => x.ComplaintId == entity.Id);
         dto.Items = items.Adapt<List<TaktCustomerComplaintItemDto>>();
     }
 
     /// <summary>
-    /// 保存客诉主子表级联（客诉明细；Create/Update 后按主表 Id 先删后插）
+    /// 保存客诉主子表级联（客诉明细；按子表 Id 增量新增/更新；未提交行标记作废，禁止先删后插）
     /// </summary>
     /// <param name="entity">主表实体</param>
     /// <param name="dto">创建/更新 DTO（含子表集合；UpdateDto 须继承 CreateDto）</param>
@@ -365,55 +392,95 @@ public class TaktCustomerComplaintService : TaktServiceBase, ITaktCustomerCompla
         // 客诉明细（Items）
         if (dto.Items is not { Count: > 0 })
         {
-            await _customerComplaintItemRepository.DeleteAsync(x => x.ComplaintId == entity.Id);
+            await MarkCustomerComplaintItemsObsoleteAsync(entity.Id);
+            return;
         }
         else
         {
-            var items = dto.Items.Adapt<List<TaktCustomerComplaintItem>>();
-            foreach (var child in items)
+            var existingList = await _customerComplaintItemRepository.GetListAsync(x => x.ComplaintId == entity.Id);
+            var existingById = existingList.ToDictionary(x => x.Id);
+            var submittedIds = new HashSet<long>();
+            var toCreate = new List<TaktCustomerComplaintItem>();
+            var seenLineKeys = new HashSet<string>(StringComparer.Ordinal);
+            for (var i = 0; i < dto.Items.Count; i++)
             {
-                child.ComplaintId = entity.Id;
-            }
-            var itemsNeedLine = items.Where(c => c.LineNumber <= 0).ToList();
-            if (itemsNeedLine.Count > 0)
-            {
-                var businessCode = !string.IsNullOrWhiteSpace(entity.CustomerComplaintCode) ? entity.CustomerComplaintCode : entity.Id.ToString();
-                var maxLine = await _customerComplaintItemRepository.GetMaxIntAsync(
-                    x => x.TenantCode == CurrentTenantCode && x.CompanyCode == CurrentCompanyCode && x.ComplaintId == entity.Id,
-                    x => x.LineNumber);
-                var lineSeq = _lineNumberGenerator.GenerateSequence(businessCode, itemsNeedLine.Count, maxLine).ToList();
-                var lineIdx = 0;
-                foreach (var child in items)
+                var childDto = dto.Items[i];
+                childDto.ComplaintId = entity.Id;
+                var lineKey = $"{entity.CompanyCode}|{entity.Id}|{childDto.LineNumber}";
+                if (!seenLineKeys.Add(lineKey))
                 {
-                    if (child.LineNumber <= 0)
+                    throw new TaktBusinessException("客诉明细第{i + 1}项与本次提交的其他项重复（CompanyCode、ComplaintId、LineNumber）");
+                }
+                if (childDto.CustomerComplaintItemId > 0)
+                {
+                    if (!existingById.TryGetValue(childDto.CustomerComplaintItemId, out var target))
                     {
-                        child.LineNumber = lineSeq[lineIdx++];
+                        throw new TaktBusinessException("客诉明细不存在（CustomerComplaintItemId={childDto.CustomerComplaintItemId}）");
                     }
+                    if (target.ComplaintId != entity.Id)
+                    {
+                        throw new TaktBusinessException("客诉明细不属于当前主表（CustomerComplaintItemId={childDto.CustomerComplaintItemId}）");
+                    }
+                    submittedIds.Add(childDto.CustomerComplaintItemId);
+                    var isUniqueUpdate_ix_takt_logistics_quality_customer_complaint_item_line_unique = await _uniqueValidator.IsUniqueAsync(
+                        _customerComplaintItemRepository,
+                        x => x.CompanyCode == x.CompanyCode
+                && x.ComplaintId == x.ComplaintId
+                && x.LineNumber == x.LineNumber,
+                        childDto.CustomerComplaintItemId);
+                    if (!isUniqueUpdate_ix_takt_logistics_quality_customer_complaint_item_line_unique)
+                    {
+                        throw new TaktBusinessException("客诉明细的CompanyCode、ComplaintId、LineNumber已存在");
+                    }
+                    childDto.Adapt(target);
+                    target.Id = childDto.CustomerComplaintItemId;
+                    target.ComplaintId = entity.Id;
+                    target.IsObsolete = 0;
+                    await _customerComplaintItemRepository.UpdateAsync(target);
+                }
+                else
+                {
+                    var isUniqueCreate_ix_takt_logistics_quality_customer_complaint_item_line_unique = await _uniqueValidator.IsUniqueAsync(
+                        _customerComplaintItemRepository,
+                        x => x.CompanyCode == x.CompanyCode
+                && x.ComplaintId == x.ComplaintId
+                && x.LineNumber == x.LineNumber);
+                    if (!isUniqueCreate_ix_takt_logistics_quality_customer_complaint_item_line_unique)
+                    {
+                        throw new TaktBusinessException("客诉明细的CompanyCode、ComplaintId、LineNumber已存在");
+                    }
+                    var child = childDto.Adapt<TaktCustomerComplaintItem>();
+                    child.Id = 0;
+                    child.ComplaintId = entity.Id;
+                    child.IsObsolete = 0;
+                    toCreate.Add(child);
                 }
             }
-                        var seenKeys = new HashSet<string>(StringComparer.Ordinal);
-                        for (var i = 0; i < items.Count; i++)
+            var toObsolete = existingList.Where(x => !submittedIds.Contains(x.Id) && x.IsObsolete == 0).ToList();
+            foreach (var removed in toObsolete)
+            {
+                removed.IsObsolete = 1;
+                await _customerComplaintItemRepository.UpdateAsync(removed);
+            }
+            if (toCreate.Count > 0)
+            {
+                var needLine = toCreate.Where(c => c.LineNumber <= 0).ToList();
+                if (needLine.Count > 0)
+                {
+                    var businessCode = !string.IsNullOrWhiteSpace(entity.CustomerComplaintCode) ? entity.CustomerComplaintCode : entity.Id.ToString();
+                    var maxLine = existingList.Count > 0 ? existingList.Max(x => x.LineNumber) : 0;
+                    var lineSeq = _lineNumberGenerator.GenerateSequence(businessCode, needLine.Count, maxLine).ToList();
+                    var lineIdx = 0;
+                    foreach (var child in toCreate)
+                    {
+                        if (child.LineNumber <= 0)
                         {
-                            var key = $"{items[i].CompanyCode}|{items[i].ComplaintId}|{items[i].LineNumber}";
-                            if (!seenKeys.Add(key))
-                            {
-                                throw new TaktBusinessException($"客诉明细第{i + 1}项与本次提交的其他项重复（CompanyCode、ComplaintId、LineNumber）");
-                            }
+                            child.LineNumber = lineSeq[lineIdx++];
                         }
-            await _customerComplaintItemRepository.DeleteAsync(x => x.ComplaintId == entity.Id);
-            foreach (var child in items)
-            {
-            var isUnique_ix_takt_logistics_quality_customer_complaint_item_line_unique = await _uniqueValidator.IsUniqueAsync(
-                _customerComplaintItemRepository,
-                x => x.CompanyCode == child.CompanyCode
-                    && x.ComplaintId == child.ComplaintId
-                    && x.LineNumber == child.LineNumber);
-            if (!isUnique_ix_takt_logistics_quality_customer_complaint_item_line_unique)
-            {
-                throw new TaktBusinessException("客诉明细的CompanyCode、ComplaintId、LineNumber已存在");
+                    }
+                }
+                await _customerComplaintItemRepository.CreateRangeAsync(toCreate);
             }
-            }
-            await _customerComplaintItemRepository.CreateRangeAsync(items);
         }
     }
     // ========================================
@@ -444,12 +511,13 @@ public class TaktCustomerComplaintService : TaktServiceBase, ITaktCustomerCompla
                 || (x.ResponsibleDeptName != null && x.ResponsibleDeptName.Contains(keywords))
                 || SqlFunc.ToString(x.ResponsiblePersonId).Contains(keywords)
                 || (x.ResponsiblePersonName != null && x.ResponsiblePersonName.Contains(keywords))
-                || SqlFunc.ToString(x.ComplaintStatus).Contains(keywords)
                 || (x.ComplaintDescription != null && x.ComplaintDescription.Contains(keywords))
                 || (x.HandlingResult != null && x.HandlingResult.Contains(keywords))
                 || SqlFunc.ToString(x.CustomerSatisfaction).Contains(keywords)
+                || (x.Attachments != null && x.Attachments.Contains(keywords))
                 || (x.RelatedPlant != null && x.RelatedPlant.Contains(keywords))
                 || SqlFunc.ToString(x.SortOrder).Contains(keywords)
+                || SqlFunc.ToString(x.ComplaintStatus).Contains(keywords)
                 || (x.ExtField != null && x.ExtField.Contains(keywords))
                 || (x.Remark != null && x.Remark.Contains(keywords))
                 || SqlFunc.ToString(x.ComplaintDate).Contains(keywords)
@@ -514,11 +582,6 @@ public class TaktCustomerComplaintService : TaktServiceBase, ITaktCustomerCompla
             exp = exp.And(x => x.ResponsiblePersonName != null && x.ResponsiblePersonName.Contains(queryDto.ResponsiblePersonName));
         }
 
-        if (queryDto?.ComplaintStatus.HasValue == true)
-        {
-            exp = exp.And(x => x.ComplaintStatus == queryDto.ComplaintStatus);
-        }
-
         if (!string.IsNullOrEmpty(queryDto?.ComplaintDescription))
         {
             exp = exp.And(x => x.ComplaintDescription != null && x.ComplaintDescription.Contains(queryDto.ComplaintDescription));
@@ -534,6 +597,11 @@ public class TaktCustomerComplaintService : TaktServiceBase, ITaktCustomerCompla
             exp = exp.And(x => x.CustomerSatisfaction == queryDto.CustomerSatisfaction);
         }
 
+        if (!string.IsNullOrEmpty(queryDto?.Attachments))
+        {
+            exp = exp.And(x => x.Attachments != null && x.Attachments.Contains(queryDto.Attachments));
+        }
+
         if (!string.IsNullOrEmpty(queryDto?.RelatedPlant))
         {
             exp = exp.And(x => x.RelatedPlant != null && x.RelatedPlant.Contains(queryDto.RelatedPlant));
@@ -542,6 +610,11 @@ public class TaktCustomerComplaintService : TaktServiceBase, ITaktCustomerCompla
         if (queryDto?.SortOrder.HasValue == true)
         {
             exp = exp.And(x => x.SortOrder == queryDto.SortOrder);
+        }
+
+        if (queryDto?.ComplaintStatus.HasValue == true)
+        {
+            exp = exp.And(x => x.ComplaintStatus == queryDto.ComplaintStatus);
         }
 
         if (!string.IsNullOrEmpty(queryDto?.ExtField))

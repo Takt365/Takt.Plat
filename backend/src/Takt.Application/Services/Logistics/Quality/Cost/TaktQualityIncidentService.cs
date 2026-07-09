@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Application.Services.Logistics.Quality.Cost
 // 文件名称：TaktQualityIncidentService.cs
-// 创建时间：2026-06-23
+// 创建时间：2026-07-09
 // 创建人：Takt365(Cursor AI)
 // 功能描述：品质事故主应用服务实现
 // 
@@ -292,6 +292,30 @@ public class TaktQualityIncidentService : TaktServiceBase, ITaktQualityIncidentS
     // ========================================
 
     /// <summary>
+    /// 将指定主表下全部未作废品质事故明细标记为作废（编辑清空子表）
+    /// </summary>
+    /// <param name="qualityIncidentId">主表主键</param>
+    /// <returns>任务</returns>
+    private async Task MarkQualityIncidentItemsObsoleteAsync(long qualityIncidentId)
+    {
+        if (qualityIncidentId <= 0)
+        {
+            return;
+        }
+        var rows = await _qualityIncidentItemRepository.GetListAsync(
+            x => x.QualityIncidentId == qualityIncidentId && x.IsObsolete == 0);
+        if (rows.Count == 0)
+        {
+            return;
+        }
+        foreach (var row in rows)
+        {
+            row.IsObsolete = 1;
+        }
+        await _qualityIncidentItemRepository.UpdateRangeAsync(rows);
+    }
+
+    /// <summary>
     /// 填充品质事故主详情（加载 OneToMany 子表：品质事故明细）
     /// </summary>
     /// <param name="dto">响应 DTO</param>
@@ -303,13 +327,13 @@ public class TaktQualityIncidentService : TaktServiceBase, ITaktQualityIncidentS
         {
             return;
         }
-        // 品质事故明细 → dto.IncidentItems
+        // 品质事故明细 → dto.IncidentItems（含作废行）
         var incidentitems = await _qualityIncidentItemRepository.GetListAsync(x => x.QualityIncidentId == entity.Id);
         dto.IncidentItems = incidentitems.Adapt<List<TaktQualityIncidentItemDto>>();
     }
 
     /// <summary>
-    /// 保存品质事故主子表级联（品质事故明细；Create/Update 后按主表 Id 先删后插）
+    /// 保存品质事故主子表级联（品质事故明细；按子表 Id 增量新增/更新；未提交行标记作废，禁止先删后插）
     /// </summary>
     /// <param name="entity">主表实体</param>
     /// <param name="dto">创建/更新 DTO（含子表集合；UpdateDto 须继承 CreateDto）</param>
@@ -319,56 +343,97 @@ public class TaktQualityIncidentService : TaktServiceBase, ITaktQualityIncidentS
         // 品质事故明细（IncidentItems）
         if (dto.IncidentItems is not { Count: > 0 })
         {
-            await _qualityIncidentItemRepository.DeleteAsync(x => x.QualityIncidentId == entity.Id);
+            await MarkQualityIncidentItemsObsoleteAsync(entity.Id);
+            return;
         }
         else
         {
-            var incidentitems = dto.IncidentItems.Adapt<List<TaktQualityIncidentItem>>();
-            foreach (var child in incidentitems)
+            var existingList = await _qualityIncidentItemRepository.GetListAsync(x => x.QualityIncidentId == entity.Id);
+            var existingById = existingList.ToDictionary(x => x.Id);
+            var submittedIds = new HashSet<long>();
+            var toCreate = new List<TaktQualityIncidentItem>();
+            var seenLineKeys = new HashSet<string>(StringComparer.Ordinal);
+            for (var i = 0; i < dto.IncidentItems.Count; i++)
             {
-                child.QualityIncidentId = entity.Id;
-            }
-            var incidentitemsNeedLine = incidentitems.Where(c => c.LineNumber <= 0).ToList();
-            if (incidentitemsNeedLine.Count > 0)
-            {
-                var businessCode = !string.IsNullOrWhiteSpace(entity.QualityIncidentCode) ? entity.QualityIncidentCode : entity.Id.ToString();
-                var maxLine = await _qualityIncidentItemRepository.GetMaxIntAsync(
-                    x => x.TenantCode == CurrentTenantCode && x.CompanyCode == CurrentCompanyCode && x.QualityIncidentId == entity.Id,
-                    x => x.LineNumber);
-                var lineSeq = _lineNumberGenerator.GenerateSequence(businessCode, incidentitemsNeedLine.Count, maxLine).ToList();
-                var lineIdx = 0;
-                foreach (var child in incidentitems)
+                var childDto = dto.IncidentItems[i];
+                childDto.QualityIncidentId = entity.Id;
+                var lineKey = $"{entity.CompanyCode}|{entity.Id}|{childDto.LineNumber}";
+                if (!seenLineKeys.Add(lineKey))
                 {
-                    if (child.LineNumber <= 0)
+                    throw new TaktBusinessException("品质事故明细第{i + 1}项与本次提交的其他项重复（CompanyCode、QualityIncidentId、LineNumber）");
+                }
+                if (childDto.QualityIncidentItemId > 0)
+                {
+                    if (!existingById.TryGetValue(childDto.QualityIncidentItemId, out var target))
                     {
-                        child.LineNumber = lineSeq[lineIdx++];
+                        throw new TaktBusinessException("品质事故明细不存在（QualityIncidentItemId={childDto.QualityIncidentItemId}）");
                     }
+                    if (target.QualityIncidentId != entity.Id)
+                    {
+                        throw new TaktBusinessException("品质事故明细不属于当前主表（QualityIncidentItemId={childDto.QualityIncidentItemId}）");
+                    }
+                    submittedIds.Add(childDto.QualityIncidentItemId);
+                    var isUniqueUpdate_ix_takt_logistics_quality_incident_item_line_number_unique = await _uniqueValidator.IsUniqueAsync(
+                        _qualityIncidentItemRepository,
+                        x => x.CompanyCode == x.CompanyCode
+                && x.QualityIncidentId == x.QualityIncidentId
+                && x.LineNumber == x.LineNumber
+                && x.MaterialCode == x.MaterialCode,
+                        childDto.QualityIncidentItemId);
+                    if (!isUniqueUpdate_ix_takt_logistics_quality_incident_item_line_number_unique)
+                    {
+                        throw new TaktBusinessException("品质事故明细的CompanyCode、QualityIncidentId、LineNumber、MaterialCode已存在");
+                    }
+                    childDto.Adapt(target);
+                    target.Id = childDto.QualityIncidentItemId;
+                    target.QualityIncidentId = entity.Id;
+                    target.IsObsolete = 0;
+                    await _qualityIncidentItemRepository.UpdateAsync(target);
+                }
+                else
+                {
+                    var isUniqueCreate_ix_takt_logistics_quality_incident_item_line_number_unique = await _uniqueValidator.IsUniqueAsync(
+                        _qualityIncidentItemRepository,
+                        x => x.CompanyCode == x.CompanyCode
+                && x.QualityIncidentId == x.QualityIncidentId
+                && x.LineNumber == x.LineNumber
+                && x.MaterialCode == x.MaterialCode);
+                    if (!isUniqueCreate_ix_takt_logistics_quality_incident_item_line_number_unique)
+                    {
+                        throw new TaktBusinessException("品质事故明细的CompanyCode、QualityIncidentId、LineNumber、MaterialCode已存在");
+                    }
+                    var child = childDto.Adapt<TaktQualityIncidentItem>();
+                    child.Id = 0;
+                    child.QualityIncidentId = entity.Id;
+                    child.IsObsolete = 0;
+                    toCreate.Add(child);
                 }
             }
-                        var seenKeys = new HashSet<string>(StringComparer.Ordinal);
-                        for (var i = 0; i < incidentitems.Count; i++)
+            var toObsolete = existingList.Where(x => !submittedIds.Contains(x.Id) && x.IsObsolete == 0).ToList();
+            foreach (var removed in toObsolete)
+            {
+                removed.IsObsolete = 1;
+                await _qualityIncidentItemRepository.UpdateAsync(removed);
+            }
+            if (toCreate.Count > 0)
+            {
+                var needLine = toCreate.Where(c => c.LineNumber <= 0).ToList();
+                if (needLine.Count > 0)
+                {
+                    var businessCode = !string.IsNullOrWhiteSpace(entity.QualityIncidentCode) ? entity.QualityIncidentCode : entity.Id.ToString();
+                    var maxLine = existingList.Count > 0 ? existingList.Max(x => x.LineNumber) : 0;
+                    var lineSeq = _lineNumberGenerator.GenerateSequence(businessCode, needLine.Count, maxLine).ToList();
+                    var lineIdx = 0;
+                    foreach (var child in toCreate)
+                    {
+                        if (child.LineNumber <= 0)
                         {
-                            var key = $"{incidentitems[i].CompanyCode}|{incidentitems[i].QualityIncidentId}|{incidentitems[i].LineNumber}|{incidentitems[i].MaterialCode}";
-                            if (!seenKeys.Add(key))
-                            {
-                                throw new TaktBusinessException($"品质事故明细第{i + 1}项与本次提交的其他项重复（CompanyCode、QualityIncidentId、LineNumber、MaterialCode）");
-                            }
+                            child.LineNumber = lineSeq[lineIdx++];
                         }
-            await _qualityIncidentItemRepository.DeleteAsync(x => x.QualityIncidentId == entity.Id);
-            foreach (var child in incidentitems)
-            {
-            var isUnique_ix_takt_logistics_quality_incident_item_line_number_unique = await _uniqueValidator.IsUniqueAsync(
-                _qualityIncidentItemRepository,
-                x => x.CompanyCode == child.CompanyCode
-                    && x.QualityIncidentId == child.QualityIncidentId
-                    && x.LineNumber == child.LineNumber
-                    && x.MaterialCode == child.MaterialCode);
-            if (!isUnique_ix_takt_logistics_quality_incident_item_line_number_unique)
-            {
-                throw new TaktBusinessException("品质事故明细的CompanyCode、QualityIncidentId、LineNumber、MaterialCode已存在");
+                    }
+                }
+                await _qualityIncidentItemRepository.CreateRangeAsync(toCreate);
             }
-            }
-            await _qualityIncidentItemRepository.CreateRangeAsync(incidentitems);
         }
     }
     // ========================================

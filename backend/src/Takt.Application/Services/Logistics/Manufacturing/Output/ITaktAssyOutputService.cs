@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Application.Services.Logistics.Manufacturing.Output
 // 文件名称：ITaktAssyOutputService.cs
-// 创建时间：2026-06-30
+// 创建时间：2026-07-06
 // 创建人：Takt365(Cursor AI)
 // 功能描述：组立日报应用服务接口
 // 
@@ -42,7 +42,20 @@ public interface ITaktAssyOutputService
     Task<List<TaktSelectOption>> GetAssyOutputOptionsAsync();
 
     /// <summary>
-    /// 创建组立日报
+    /// 获取组立日报新增时固定的生产时段列表（13 条）
+    /// </summary>
+    /// <returns>生产时段字符串列表</returns>
+    Task<IReadOnlyList<string>> GetAssyOutputDefaultTimePeriodsAsync();
+
+    /// <summary>
+    /// 获取组立不良日报新增用工单选项（来源已生产的组立日报，排除同日同工单已存在不良日报）
+    /// </summary>
+    /// <param name="excludeAssyDefectId">编辑态当前不良日报 ID（保留其对应组立日报在选项中）</param>
+    /// <returns>下拉选项，DictValue 为组立日报 Id</returns>
+    Task<List<TaktSelectOption>> GetAssyOutputProdOrderOptionsAsync(long? excludeAssyDefectId = null);
+
+    /// <summary>
+    /// 创建组立日报（自动级联创建 13 条固定生产时段明细）
     /// </summary>
     /// <param name="dto">创建DTO</param>
     /// <returns>DTO</returns>
@@ -94,12 +107,5 @@ public interface ITaktAssyOutputService
     /// <param name="fileName">文件名</param>
     /// <returns>Excel 文件</returns>
     Task<(string fileName, byte[] fileContent)> ExportAssyOutputAsync(TaktAssyOutputQueryDto? query = null, string? sheetName = null, string? fileName = null);
-
-    /// <summary>
-    /// 获取组立生产统计（数据看板）
-    /// </summary>
-    /// <param name="queryDto">查询 DTO</param>
-    /// <returns>生产统计</returns>
-    Task<TaktAssyOutputProductionStatDto> GetAssyOutputProductionStatAsync(TaktOutputProductionStatQueryDto queryDto);
 
 }

@@ -29,12 +29,12 @@
           <a-row :gutter="24">
             <a-col :span="12">
               <a-form-item
-                :label="t('common.page.entity.tenantcode')"
+                :label="pi.label('tenantCode')"
                 name="tenantCode"
               >
                 <a-input
                   v-model:value="formState.tenantCode"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('common.page.entity.tenantcode') })"
+                  :placeholder="pi.ph('tenantCode')"
                   show-count
                   :maxlength="20"
                   disabled
@@ -43,12 +43,12 @@
             </a-col>
             <a-col :span="12">
               <a-form-item
-                :label="t('common.page.entity.companycode')"
+                :label="pi.label('companyCode')"
                 name="companyCode"
               >
                 <a-input
                   v-model:value="formState.companyCode"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('common.page.entity.companycode') })"
+                  :placeholder="pi.ph('companyCode')"
                   show-count
                   :maxlength="20"
                   disabled
@@ -57,12 +57,12 @@
             </a-col>
             <a-col :span="12">
               <a-form-item
-                :label="t('common.page.entity.companydefaultculture')"
+                :label="pi.label('companyDefaultCulture')"
                 name="companyDefaultCulture"
               >
                 <a-input
                   v-model:value="formState.companyDefaultCulture"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('common.page.entity.companydefaultculture') })"
+                  :placeholder="pi.ph('companyDefaultCulture')"
                   show-count
                   :maxlength="20"
                   disabled
@@ -71,27 +71,25 @@
             </a-col>
             <a-col :span="12">
               <a-form-item
-                :label="t('entity.serialinbound.plantcode')"
+                :label="pi.label('plantCode')"
                 name="plantCode"
               >
-                <a-input
+                <TaktSelect
                   v-model:value="formState.plantCode"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.serialinbound.plantcode') })"
-                  show-count
-                  :maxlength="4"
-                  allow-clear
+                  api-url="TaktPlants/options"
+                  :placeholder="pi.ph('plantCode')"
                   :disabled="!!formData?.serialInboundId"
                 />
               </a-form-item>
             </a-col>
             <a-col :span="12">
               <a-form-item
-                :label="t('entity.serialinbound.inboundno')"
+                :label="pi.label('inboundNo')"
                 name="inboundNo"
               >
                 <a-input
                   v-model:value="formState.inboundNo"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.serialinbound.inboundno') })"
+                  :placeholder="pi.ph('inboundNo')"
                   show-count
                   :maxlength="50"
                   allow-clear
@@ -100,12 +98,12 @@
             </a-col>
             <a-col :span="12">
               <a-form-item
-                :label="t('entity.serialinbound.inbounddate')"
+                :label="pi.label('inboundDate')"
                 name="inboundDate"
               >
                 <a-date-picker
                   v-model:value="formState.inboundDate"
-                  :placeholder="t('common.page.form.placeholder.select', { field: t('entity.serialinbound.inbounddate') })"
+                  :placeholder="pi.ph('inboundDate')"
                   value-format="YYYY-MM-DD"
                   style="width: 100%"
                 />
@@ -113,54 +111,50 @@
             </a-col>
             <a-col :span="12">
               <a-form-item
-                :label="t('entity.serialinbound.inboundtype')"
+                :label="pi.label('inboundType')"
                 name="inboundType"
               >
                 <TaktSelect
                   v-model:value="formState.inboundType"
                   dict-type="logistics_inbound_type"
-                  :placeholder="t('common.page.form.placeholder.select', { field: t('entity.serialinbound.inboundtype') })"
+                  :placeholder="pi.ph('inboundType')"
                 />
               </a-form-item>
             </a-col>
             <a-col :span="12">
               <a-form-item
-                :label="t('entity.serialinbound.warehousecode')"
+                :label="pi.label('warehouseCode')"
                 name="warehouseCode"
               >
-                <a-input
+                <TaktSelect
                   v-model:value="formState.warehouseCode"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.serialinbound.warehousecode') })"
-                  show-count
-                  :maxlength="50"
-                  allow-clear
+                  api-url="TaktWarehouses/options"
+                  :placeholder="pi.ph('warehouseCode')"
                   :disabled="!!formData?.serialInboundId"
                 />
               </a-form-item>
             </a-col>
             <a-col :span="12">
               <a-form-item
-                :label="t('entity.serialinbound.locationcode')"
+                :label="pi.label('locationCode')"
                 name="locationCode"
               >
-                <a-input
+                <TaktSelect
                   v-model:value="formState.locationCode"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.serialinbound.locationcode') })"
-                  show-count
-                  :maxlength="50"
-                  allow-clear
+                  api-url="TaktStorageLocations/options"
+                  :placeholder="pi.ph('locationCode')"
                   :disabled="!!formData?.serialInboundId"
                 />
               </a-form-item>
             </a-col>
             <a-col :span="12">
               <a-form-item
-                :label="t('entity.serialinbound.totalquantity')"
+                :label="pi.label('totalQuantity')"
                 name="totalQuantity"
               >
                 <a-input-number
                   v-model:value="formState.totalQuantity"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.serialinbound.totalquantity') })"
+                  :placeholder="pi.ph('totalQuantity')"
                   style="width: 100%"
                 />
               </a-form-item>
@@ -188,7 +182,7 @@
                     >
                       <span class="takt-form-label-hint-icon"><RiQuestionLine class="takt-remix-icon" /></span>
                     </a-tooltip>
-                    <span>{{ t('common.page.entity.extfield') }}</span>
+                    <span>{{ pi.label('extField') }}</span>
                   </span>
                 </template>
                 <a-textarea
@@ -203,12 +197,12 @@
             </a-col>
             <a-col :span="24">
               <a-form-item
-                :label="t('common.page.entity.remark')"
+                :label="pi.label('remark')"
                 name="remark"
               >
                 <a-textarea
                   v-model:value="formState.remark"
-                  :placeholder="t('common.page.form.placeholder.optional', { field: t('common.page.entity.remark') })"
+                  :placeholder="pi.ph('remark')"
                   :rows="4"
                   show-count
                   :maxlength="400"
@@ -225,8 +219,8 @@
       ref="serialInboundItemTableRef"
       v-model="childSerialInboundItemRows"
       :columns="serialInboundItemFormColumns"
-      :title="t('entity.serialinbounditem._self')"
-      :add-button-entity="t('entity.serialinbounditem._self')"
+      :title="serialInboundItemPi.self()"
+      :add-button-entity="serialInboundItemPi.self()"
       id-field="serialInboundItemId"
       :default-row="createDefaultSerialInboundItemRow"
       :disabled="loading"
@@ -243,6 +237,11 @@
 import { reactive, watch, computed, ref, onMounted } from 'vue'
 import { useI18n } from 'vue-i18n'
 import type { Rule } from 'ant-design-vue/es/form'
+import { useSerialInboundI18n } from '../composables/use-inbound-i18n'
+
+/** 实体字段 i18n */
+const pi = useSerialInboundI18n()
+
 import type { SerialInboundCreate } from '@/types/logistics/serial/inbound'
 import TaktSelect from '@/components/business/takt-select/index.vue'
 import { RiQuestionLine } from '@remixicon/vue'
@@ -281,7 +280,11 @@ const activeTab = ref('tab-0')
 /** CreateDto 字段名列表（与 formState 键对齐） */
 const formFields = ["tenantCode","companyCode","companyDefaultCulture","plantCode","inboundNo","inboundDate","inboundType","warehouseCode","locationCode","totalQuantity","extField","remark"]
 
+
 import type { TaktEditableTableColumn } from '@/components/business/takt-editable-table/types'
+import { useSerialInboundItemI18n } from '../composables/use-inbound-item-i18n'
+
+const serialInboundItemPi = useSerialInboundItemI18n()
 
 const childSerialInboundItemRows = ref<Record<string, unknown>[]>([])
 const serialInboundItemTableRef = ref<{
@@ -293,44 +296,43 @@ const serialInboundItemTableRef = ref<{
 /** 子表 serialInboundItem 可编辑列 */
 const serialInboundItemFormColumns = computed<TaktEditableTableColumn[]>(() => [
   {
+    key: 'inboundId',
+    title: serialInboundItemPi.label('inboundId'),
+    editor: 'input',
+    width: 140,
+  },
+  {
     key: 'inboundNo',
-    title: t('entity.serialinbounditem.inboundno'),
+    title: serialInboundItemPi.label('inboundNo'),
     editor: 'input',
     width: 140,
   },
   {
     key: 'lineNumber',
-    title: t('entity.serialinbounditem.linenumber'),
+    title: serialInboundItemPi.label('lineNumber'),
     editor: 'inputNumber',
     width: 140, summary: 'sum',
   },
   {
     key: 'inboundSerialNo',
-    title: t('entity.serialinbounditem.inboundserialno'),
+    title: serialInboundItemPi.label('inboundSerialNo'),
     editor: 'input',
     width: 140, required: true, unique: true,
   },
   {
-    key: 'inboundTime',
-    title: t('entity.serialinbounditem.inboundtime'),
-    editor: 'datePicker',
-    valueFormat: 'YYYY-MM-DD HH:mm:ss', showTime: true,
-    width: 140,
-  },
-  {
     key: 'extField',
-    title: t('common.page.entity.extfield'),
+    title: serialInboundItemPi.label('extField'),
     editor: 'textarea',
     rows: 2,
-    placeholder: t('common.page.form.placeholder.optional', { field: t('common.page.entity.extfield') }),
+    placeholder: t('common.page.form.placeholder.extfield'),
     width: 140,
   },
   {
     key: 'remark',
-    title: t('common.page.entity.remark'),
+    title: serialInboundItemPi.label('remark'),
     editor: 'textarea',
     rows: 2,
-    placeholder: t('common.page.form.placeholder.optional', { field: t('common.page.entity.remark') }),
+    placeholder: serialInboundItemPi.ph('remark'),
     width: 140,
   },
 ])
@@ -342,10 +344,10 @@ function syncChildRowsFromFormData(val: Partial<SerialInboundCreate & { serialIn
 
 function createDefaultSerialInboundItemRow(): Record<string, unknown> {
   return {
+    inboundId: '',
     inboundNo: '',
     lineNumber: (childSerialInboundItemRows.value.length + 1) * 10,
     inboundSerialNo: '',
-    inboundTime: '',
     extField: '',
     remark: '',
   }
@@ -361,7 +363,7 @@ function buildSubmitPayload() {
       tenantCode: tenantStore.tenantCode,
       companyCode: tenantStore.companyCode,
       companyDefaultCulture: userStore.userInfo?.companyDefaultCulture ?? '',
-      inboundId: masterId,
+      serialInboundId: masterId,
     })),
   }
 }
@@ -441,32 +443,32 @@ const rules = computed<Record<string, Rule[]>>(() => ({
   plantCode: [
     {
       required: true,
-      message: t('common.page.form.placeholder.required', { field: t('entity.serialinbound.plantcode') }),
-      trigger: 'blur'
+      message: pi.ph('plantCode'),
+      trigger: 'change'
     }
   ],
   inboundNo: [
     {
       required: true,
-      message: t('common.page.form.placeholder.required', { field: t('entity.serialinbound.inboundno') }),
+      message: pi.ph('inboundNo'),
       trigger: 'blur'
     }
   ],
   inboundDate: [
     {
       required: true,
-      message: t('common.page.form.placeholder.select', { field: t('entity.serialinbound.inbounddate') }),
+      message: pi.ph('inboundDate'),
       trigger: 'change'
     }
   ],
   inboundType: [{
     validator: async (_rule, value) => {
       if (value === undefined || value === null || value === '') {
-        return Promise.reject(t('common.page.form.placeholder.select', { field: t('entity.serialinbound.inboundtype') }))
+        return Promise.reject(pi.ph('inboundType'))
       }
       const num = typeof value === 'number' ? value : Number(value)
       if (!Number.isFinite(num)) {
-        return Promise.reject(t('common.page.form.placeholder.select', { field: t('entity.serialinbound.inboundtype') }))
+        return Promise.reject(pi.ph('inboundType'))
       }
       return Promise.resolve()
     },
@@ -475,30 +477,30 @@ const rules = computed<Record<string, Rule[]>>(() => ({
   warehouseCode: [
     {
       required: true,
-      message: t('common.page.form.placeholder.required', { field: t('entity.serialinbound.warehousecode') }),
-      trigger: 'blur'
+      message: pi.ph('warehouseCode'),
+      trigger: 'change'
     }
   ],
   locationCode: [
     {
       required: true,
-      message: t('common.page.form.placeholder.required', { field: t('entity.serialinbound.locationcode') }),
-      trigger: 'blur'
+      message: pi.ph('locationCode'),
+      trigger: 'change'
     }
   ],
   totalQuantity: [{
     validator: async (_rule, value) => {
       if (value === undefined || value === null || value === '') {
-        return Promise.reject(t('common.page.form.placeholder.select', { field: t('entity.serialinbound.totalquantity') }))
+        return Promise.reject(pi.ph('totalQuantity'))
       }
       const num = typeof value === 'number' ? value : Number(value)
       if (!Number.isFinite(num)) {
-        return Promise.reject(t('common.page.form.placeholder.select', { field: t('entity.serialinbound.totalquantity') }))
+        return Promise.reject(pi.ph('totalQuantity'))
       }
       return Promise.resolve()
     },
     trigger: 'change'
-  }  ],
+  }],
 }))
 
 /** 校验表单（失败 throw，供父级 handleFormSubmit 捕获） */

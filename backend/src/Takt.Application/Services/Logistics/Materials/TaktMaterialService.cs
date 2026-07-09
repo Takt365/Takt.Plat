@@ -30,27 +30,23 @@ namespace Takt.Application.Services.Logistics.Materials;
 public class TaktMaterialService : TaktServiceBase, ITaktMaterialService
 {
     private readonly ITaktTenantRepository<TaktMaterial> _materialRepository;
-    private readonly ITaktTenantRepository<TaktMaterialChangeLog> _materialChangeLogRepository;
     private readonly ITaktUniqueValidator _uniqueValidator;
 
     /// <summary>
     /// 构造函数
     /// </summary>
     /// <param name="materialRepository">全局物料仓储</param>
-    /// <param name="materialChangeLogRepository">MaterialChangeLog仓储</param>
     /// <param name="uniqueValidator">唯一性验证器</param>
     /// <param name="userContext">用户上下文</param>
     /// <param name="localizationService">本地化服务</param>
     public TaktMaterialService(
         ITaktTenantRepository<TaktMaterial> materialRepository,
-        ITaktTenantRepository<TaktMaterialChangeLog> materialChangeLogRepository,
         ITaktUniqueValidator uniqueValidator,
         ITaktUserContext? userContext = null,
         ITaktLocalizationService? localizationService = null)
         : base(userContext, localizationService)
     {
         _materialRepository = materialRepository;
-        _materialChangeLogRepository = materialChangeLogRepository;
         _uniqueValidator = uniqueValidator;
     }
 
@@ -164,9 +160,7 @@ public class TaktMaterialService : TaktServiceBase, ITaktMaterialService
         if (entity == null)
         {
             throw new TaktBusinessException("全局物料不存在或已删除");
-        }
-        await _materialChangeLogRepository.DeleteAsync(x => x.MaterialId == entity.Id);
-        var deleted = await _materialRepository.DeleteAsync(id);
+        }        var deleted = await _materialRepository.DeleteAsync(id);
         if (!deleted)
         {
             throw new TaktBusinessException("全局物料不存在或已删除");
@@ -309,9 +303,6 @@ public class TaktMaterialService : TaktServiceBase, ITaktMaterialService
         {
             return;
         }
-        // 全局物料变更记录 → dto.ChangeLogs
-        var changelogs = await _materialChangeLogRepository.GetListAsync(x => x.MaterialId == entity.Id);
-        dto.ChangeLogs = changelogs.Adapt<List<TaktMaterialChangeLogDto>>();
     }
 
     /// <summary>
@@ -322,24 +313,6 @@ public class TaktMaterialService : TaktServiceBase, ITaktMaterialService
     /// <returns>任务</returns>
     private async Task SaveMaterialChildrenAsync(TaktMaterial entity, TaktMaterialCreateDto dto)
     {
-        // 全局物料变更记录（ChangeLogs）
-        if (dto.ChangeLogs is not { Count: > 0 })
-        {
-            await _materialChangeLogRepository.DeleteAsync(x => x.MaterialId == entity.Id);
-        }
-        else
-        {
-            var changelogs = dto.ChangeLogs.Adapt<List<TaktMaterialChangeLog>>();
-            foreach (var child in changelogs)
-            {
-                child.MaterialId = entity.Id;
-            }
-            await _materialChangeLogRepository.DeleteAsync(x => x.MaterialId == entity.Id);
-            foreach (var child in changelogs)
-            {
-            }
-            await _materialChangeLogRepository.CreateRangeAsync(changelogs);
-        }
     }
     // ========================================
     // 查询表达式

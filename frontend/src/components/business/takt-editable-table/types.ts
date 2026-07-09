@@ -32,6 +32,8 @@ export interface TaktEditableTableColumn {
   key: string
   /** 列标题（已翻译文案） */
   title: string
+  /** 列标题旁问号提示（可选） */
+  titleHint?: string
   /** 绑定字段名，默认同 key */
   dataIndex?: string
   /** 列宽 */
@@ -68,6 +70,42 @@ export interface TaktEditableTableColumn {
   summary?: TaktEditableSummaryType | ((rows: readonly TaktEditableRow[]) => unknown)
   /** sum/avg 小数位，默认 2 */
   summaryPrecision?: number
+}
+
+/**
+ * 判断子表行是否已作废
+ * @param row 行数据
+ * @param obsoleteField 作废字段名（如 isObsolete）
+ * @param obsoleteValue 作废取值，默认 1
+ * @returns {boolean} 是否作废
+ */
+export function isEditableRowObsolete(
+  row: Record<string, unknown>,
+  obsoleteField: string,
+  obsoleteValue: number | string = 1,
+): boolean {
+  if (!obsoleteField) {
+    return false
+  }
+  return Number(row[obsoleteField]) === Number(obsoleteValue)
+}
+
+/**
+ * 过滤未作废子表行（汇总/校验用）
+ * @param rows 行数组
+ * @param obsoleteField 作废字段名
+ * @param obsoleteValue 作废取值
+ * @returns {TaktEditableRow[]} 未作废行
+ */
+export function filterActiveEditableRows(
+  rows: readonly TaktEditableRow[],
+  obsoleteField?: string,
+  obsoleteValue: number | string = 1,
+): TaktEditableRow[] {
+  if (!obsoleteField) {
+    return [...rows]
+  }
+  return rows.filter((row) => !isEditableRowObsolete(row, obsoleteField, obsoleteValue))
 }
 
 /**

@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Application.Dtos.Logistics.Sales
 // 文件名称：TaktSalesOrderDtos.cs
-// 创建时间：2026-07-01
+// 创建时间：2026-07-09
 // 创建人：Takt365(Auto Generated)
 // 功能描述：SalesOrder 模块 DTO（由 generate-dtos-from-entity.cjs 根据 TaktSalesOrder 生成，请按需审阅）
 // 
@@ -145,12 +145,6 @@ public class TaktSalesOrderDto : TaktCompanyDtoBase
     /// （子表：TaktSalesOrderItem）
     /// </summary>
     public List<TaktSalesOrderItemDto>? Items { get; set; }
-
-    /// <summary>
-    /// 销售订单变更记录列表（外键在子表 TaktSalesOrderChangeLog.SalesOrderId）
-    /// （子表：TaktSalesOrderChangeLog）
-    /// </summary>
-    public List<TaktSalesOrderChangeLogDto>? ChangeLogs { get; set; }
 
 }
 
@@ -451,12 +445,7 @@ public class TaktSalesOrderCreateDto
     /// <summary>
     /// 销售订单明细列表（主子表关系，一个订单可以有多个明细）（子表，级联保存）
     /// </summary>
-    public List<TaktSalesOrderItemCreateDto>? Items { get; set; }
-
-    /// <summary>
-    /// 销售订单变更记录列表（外键在子表 TaktSalesOrderChangeLog.SalesOrderId）（子表，级联保存）
-    /// </summary>
-    public List<TaktSalesOrderChangeLogCreateDto>? ChangeLogs { get; set; }
+    public List<TaktSalesOrderItemUpdateDto>? Items { get; set; }
 
     /// <summary>
     /// 扩展字段JSON
@@ -644,11 +633,6 @@ public class TaktSalesOrderTemplateDto
     public List<TaktSalesOrderItemCreateDto>? Items { get; set; }
 
     /// <summary>
-    /// 销售订单变更记录列表（外键在子表 TaktSalesOrderChangeLog.SalesOrderId）（子表，级联保存）
-    /// </summary>
-    public List<TaktSalesOrderChangeLogCreateDto>? ChangeLogs { get; set; }
-
-    /// <summary>
     /// 扩展字段JSON
     /// </summary>
     public string? ExtField { get; set; }
@@ -789,11 +773,6 @@ public class TaktSalesOrderImportDto
     /// 销售订单明细列表（主子表关系，一个订单可以有多个明细）（子表，级联保存）
     /// </summary>
     public List<TaktSalesOrderItemCreateDto>? Items { get; set; }
-
-    /// <summary>
-    /// 销售订单变更记录列表（外键在子表 TaktSalesOrderChangeLog.SalesOrderId）（子表，级联保存）
-    /// </summary>
-    public List<TaktSalesOrderChangeLogCreateDto>? ChangeLogs { get; set; }
 
     /// <summary>
     /// 扩展字段JSON

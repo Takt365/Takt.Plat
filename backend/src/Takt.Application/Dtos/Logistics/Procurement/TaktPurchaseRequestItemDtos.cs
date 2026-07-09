@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Application.Dtos.Logistics.Procurement
 // 文件名称：TaktPurchaseRequestItemDtos.cs
-// 创建时间：2026-06-30
+// 创建时间：2026-07-09
 // 创建人：Takt365(Auto Generated)
 // 功能描述：PurchaseRequestItem 模块 DTO（由 generate-dtos-from-entity.cjs 根据 TaktPurchaseRequestItem 生成，请按需审阅）
 // 
@@ -116,6 +116,11 @@ public class TaktPurchaseRequestItemDto : TaktCompanyDtoBase
     /// </summary>
     public string? ReferenceSupplierName { get; set; } = string.Empty;
 
+    /// <summary>
+    /// 是否作废（字典 sys_yes_no_type，0=否 1=是；编辑移除子行时标记作废）
+    /// </summary>
+    public int IsObsolete { get; set; } = 0;
+
 }
 
 // ========================================
@@ -213,6 +218,11 @@ public class TaktPurchaseRequestItemQueryDto : TaktPagedQuery
     /// 参考供应商名称
     /// </summary>
     public string? ReferenceSupplierName { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 是否作废（字典 sys_yes_no_type，0=否 1=是；编辑移除子行时标记作废）
+    /// </summary>
+    public int? IsObsolete { get; set; }
 
     /// <summary>
     /// 创建时间（范围查询-开始）
@@ -340,6 +350,11 @@ public class TaktPurchaseRequestItemCreateDto
     public string? ReferenceSupplierName { get; set; } = string.Empty;
 
     /// <summary>
+    /// 是否作废（字典 sys_yes_no_type，0=否 1=是；编辑移除子行时标记作废）
+    /// </summary>
+    public int IsObsolete { get; set; } = 0;
+
+    /// <summary>
     /// 扩展字段JSON
     /// </summary>
     public string? ExtField { get; set; }
@@ -369,6 +384,29 @@ public class TaktPurchaseRequestItemUpdateDto : TaktPurchaseRequestItemCreateDto
     [JsonConverter(typeof(ValueToStringConverter))]
     public long PurchaseRequestItemId { get; set; }
 
+}
+
+// ========================================
+// PurchaseRequestItem 作废 DTO
+// ========================================
+
+/// <summary>
+/// PurchaseRequestItem 作废/撤销作废 DTO
+/// </summary>
+public class TaktPurchaseRequestItemObsoleteDto
+{
+    /// <summary>
+    /// PurchaseRequestItemID
+    /// </summary>
+    [Required(ErrorMessage = "ID不能为空")]
+    [AdaptMember("Id")]
+    [JsonConverter(typeof(ValueToStringConverter))]
+    public long PurchaseRequestItemId { get; set; }
+
+    /// <summary>
+    /// 是否作废（字典 sys_yes_no_type，0=否 1=是；编辑移除子行时标记作废）
+    /// </summary>
+    public int IsObsolete { get; set; }
 }
 
 // ========================================
@@ -465,6 +503,11 @@ public class TaktPurchaseRequestItemTemplateDto
     /// 参考供应商名称
     /// </summary>
     public string? ReferenceSupplierName { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 是否作废（字典 sys_yes_no_type，0=否 1=是；编辑移除子行时标记作废）
+    /// </summary>
+    public int? IsObsolete { get; set; }
 
     /// <summary>
     /// 扩展字段JSON
@@ -575,6 +618,11 @@ public class TaktPurchaseRequestItemImportDto
     public string? ReferenceSupplierName { get; set; } = string.Empty;
 
     /// <summary>
+    /// 是否作废（字典 sys_yes_no_type，0=否 1=是；编辑移除子行时标记作废）
+    /// </summary>
+    public int? IsObsolete { get; set; }
+
+    /// <summary>
     /// 扩展字段JSON
     /// </summary>
     public string? ExtField { get; set; }
@@ -682,6 +730,11 @@ public class TaktPurchaseRequestItemExportDto
     /// 参考供应商名称
     /// </summary>
     public string? ReferenceSupplierName { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 是否作废（字典 sys_yes_no_type，0=否 1=是；编辑移除子行时标记作废）
+    /// </summary>
+    public int IsObsolete { get; set; } = 0;
 
     /// <summary>
     /// 扩展字段JSON

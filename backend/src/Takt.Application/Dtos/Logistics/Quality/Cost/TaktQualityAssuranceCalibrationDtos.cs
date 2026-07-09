@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Application.Dtos.Logistics.Quality.Cost
 // 文件名称：TaktQualityAssuranceCalibrationDtos.cs
-// 创建时间：2026-06-30
+// 创建时间：2026-07-09
 // 创建人：Takt365(Auto Generated)
 // 功能描述：QualityAssuranceCalibration 模块 DTO（由 generate-dtos-from-entity.cjs 根据 TaktQualityAssuranceCalibration 生成，请按需审阅）
 // 
@@ -82,6 +82,11 @@ public class TaktQualityAssuranceCalibrationDto : TaktCompanyDtoBase
     public string? CalibrationNote { get; set; } = string.Empty;
 
     /// <summary>
+    /// 是否作废（字典 sys_yes_no_type，0=否 1=是；编辑移除子行时标记作废）
+    /// </summary>
+    public int IsObsolete { get; set; } = 0;
+
+    /// <summary>
     /// 品质业务主表(导航属性)
     /// （主表：TaktQualityAssurance）
     /// </summary>
@@ -149,6 +154,11 @@ public class TaktQualityAssuranceCalibrationQueryDto : TaktPagedQuery
     /// 校正备注
     /// </summary>
     public string? CalibrationNote { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 是否作废（字典 sys_yes_no_type，0=否 1=是；编辑移除子行时标记作废）
+    /// </summary>
+    public int? IsObsolete { get; set; }
 
     /// <summary>
     /// 创建时间（范围查询-开始）
@@ -238,6 +248,11 @@ public class TaktQualityAssuranceCalibrationCreateDto
     public string? CalibrationNote { get; set; } = string.Empty;
 
     /// <summary>
+    /// 是否作废（字典 sys_yes_no_type，0=否 1=是；编辑移除子行时标记作废）
+    /// </summary>
+    public int IsObsolete { get; set; } = 0;
+
+    /// <summary>
     /// 扩展字段JSON
     /// </summary>
     public string? ExtField { get; set; }
@@ -267,6 +282,29 @@ public class TaktQualityAssuranceCalibrationUpdateDto : TaktQualityAssuranceCali
     [JsonConverter(typeof(ValueToStringConverter))]
     public long QualityAssuranceCalibrationId { get; set; }
 
+}
+
+// ========================================
+// QualityAssuranceCalibration 作废 DTO
+// ========================================
+
+/// <summary>
+/// QualityAssuranceCalibration 作废/撤销作废 DTO
+/// </summary>
+public class TaktQualityAssuranceCalibrationObsoleteDto
+{
+    /// <summary>
+    /// QualityAssuranceCalibrationID
+    /// </summary>
+    [Required(ErrorMessage = "ID不能为空")]
+    [AdaptMember("Id")]
+    [JsonConverter(typeof(ValueToStringConverter))]
+    public long QualityAssuranceCalibrationId { get; set; }
+
+    /// <summary>
+    /// 是否作废（字典 sys_yes_no_type，0=否 1=是；编辑移除子行时标记作废）
+    /// </summary>
+    public int IsObsolete { get; set; }
 }
 
 // ========================================
@@ -328,6 +366,11 @@ public class TaktQualityAssuranceCalibrationTemplateDto
     /// 校正备注
     /// </summary>
     public string? CalibrationNote { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 是否作废（字典 sys_yes_no_type，0=否 1=是；编辑移除子行时标记作废）
+    /// </summary>
+    public int? IsObsolete { get; set; }
 
     /// <summary>
     /// 扩展字段JSON
@@ -403,6 +446,11 @@ public class TaktQualityAssuranceCalibrationImportDto
     public string? CalibrationNote { get; set; } = string.Empty;
 
     /// <summary>
+    /// 是否作废（字典 sys_yes_no_type，0=否 1=是；编辑移除子行时标记作废）
+    /// </summary>
+    public int? IsObsolete { get; set; }
+
+    /// <summary>
     /// 扩展字段JSON
     /// </summary>
     public string? ExtField { get; set; }
@@ -475,6 +523,11 @@ public class TaktQualityAssuranceCalibrationExportDto
     /// 校正备注
     /// </summary>
     public string? CalibrationNote { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 是否作废（字典 sys_yes_no_type，0=否 1=是；编辑移除子行时标记作废）
+    /// </summary>
+    public int IsObsolete { get; set; } = 0;
 
     /// <summary>
     /// 扩展字段JSON

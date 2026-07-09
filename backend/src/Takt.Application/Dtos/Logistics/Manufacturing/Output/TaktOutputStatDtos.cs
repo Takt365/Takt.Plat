@@ -64,7 +64,7 @@ public class TaktOutputProductionStatDto
     public decimal MonthInputMinutes { get; set; }
 
     /// <summary>
-    /// 月生产工时（分钟；组立：ProdMinutes；PCBA：TotalMinutes）
+    /// 月生产工时（分钟；组立：ConfirmMinutes；PCBA：TotalMinutes）
     /// </summary>
     public decimal MonthProdMinutes { get; set; }
 

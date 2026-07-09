@@ -169,7 +169,6 @@ alwaysApply: false
 
 ### 5.2 跳过 Vue 生成
 
-- `*ChangeLog` 从属实体：无独立 `index.vue` / `*-form.vue`（由主实体页承载）
 - 主子表从实体：默认由主表展开区承载（`QuartzLog` 等见 `STANDALONE_CHILD_VUE_ENTITY_SHORT_NAMES` 例外）
 
 **树表**（如 `Dept`）可执行 `--Dept` 生成后端与基础 Vue；复杂左树右表 UI 仍须对照 `13-vue-view` / `14-vue-form` 手工增强。

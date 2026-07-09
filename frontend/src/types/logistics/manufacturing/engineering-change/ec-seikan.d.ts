@@ -2,15 +2,606 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：frontend/src/types/logistics/manufacturing/engineering-change
 // 文件名称：ec-seikan.d.ts
-// 创建时间：2026-06-30
-// 功能描述：设变生管部门类型（复用 EcDeptView 共用结构）
-//
-// 版权信息：Copyright (c) 2026 Takt  All rights reserved.
+// 创建时间：2026-07-09
+// 创建人：Takt365(Auto Generated)
+// 功能描述：logistics/manufacturing/engineering-change 模块类型定义（自动生成；类型名去 Takt 前缀与末尾 Dto，如 TaktCompanyDto → Company）
+// 
+// 版权信息：Copyright (c) 2025 Takt  All rights reserved.
 // 免责声明：此软件使用 MIT License，作者不承担任何使用风险。
 // ========================================
 
-export type {
-  EcDeptView as EcSeikan,
-  EcDeptViewQuery as EcSeikanQuery,
-  EcDeptViewUpdate as EcSeikanUpdate,
-} from './ec-dept-view';
+import type {
+  CompanyDtoBase,
+  TaktPagedQuery
+} from '@/types/common';
+
+/**
+ * 设变生管课（D0420）部门执行表
+ * 对应前端 TaktEcSeikanDto
+ * 继承 TaktCompanyDtoBase
+ * 对应前端 EcSeikan
+ * @description 对应后端 TaktEcSeikanDto
+ */
+export interface EcSeikan extends CompanyDtoBase {
+  /**
+   * EcSeikanID（适配实体 Id，序列化为 string 以避免 Javascript 精度问题）
+   */
+  ecSeikanId: string;
+
+  /**
+   * 设变明细 ID（TaktEcDetail 主键；关联由 TaktEcDetail.EcSeikan 导航）
+   */
+  ecnDetailId: string;
+
+  /**
+   * 设变明细 名称（填充字段）
+   */
+  ecnDetailName?: string;
+
+  /**
+   * 设变单号（冗余，便于查询）
+   */
+  ecNo: string;
+
+  /**
+   * 行号（项号/序号，固定步长=10）
+   */
+  lineNumber: number;
+
+  /**
+   * 部门编码（TaktDept.DeptCode，5 位，如 D0420）
+   */
+  deptCode: string;
+
+  /**
+   * 是否实施（0=否 1=是，字典 sys_yes_no）
+   */
+  isImplemented: number;
+
+  /**
+   * 执行内容（各部门通用）
+   */
+  execContent?: string;
+
+  /**
+   * 预计生产日期
+   */
+  scheduledProductionDate?: string;
+
+  /**
+   * 预定批次
+   */
+  scheduledBatch?: string;
+
+  /**
+   * Po残
+   */
+  poRemainder?: string;
+
+  /**
+   * 结余
+   */
+  balance?: string;
+
+  /**
+   * 旧品处理
+   */
+  oldProductHandling?: string;
+
+  /**
+   * 是否作废（字典 sys_yes_no_type，0=否 1=是；编辑移除子行时标记作废）
+   */
+  isObsolete: number;
+
+}
+
+
+/**
+ * EcSeikan 分页查询 DTO
+ * 继承 TaktPagedQuery
+ * 对应前端 EcSeikanQuery
+ * @description 对应后端 TaktEcSeikanQueryDto
+ */
+export interface EcSeikanQuery extends TaktPagedQuery {
+  /**
+   * 租户编码
+   */
+  tenantCode?: string;
+
+  /**
+   * 公司代码
+   */
+  companyCode?: string;
+
+  /**
+   * 设变明细 ID（TaktEcDetail 主键；关联由 TaktEcDetail.EcSeikan 导航）
+   */
+  ecnDetailId?: string;
+
+  /**
+   * 设变单号（冗余，便于查询）
+   */
+  ecNo?: string;
+
+  /**
+   * 行号（项号/序号，固定步长=10）
+   */
+  lineNumber?: number;
+
+  /**
+   * 部门编码（TaktDept.DeptCode，5 位，如 D0420）
+   */
+  deptCode?: string;
+
+  /**
+   * 是否实施（0=否 1=是，字典 sys_yes_no）
+   */
+  isImplemented?: number;
+
+  /**
+   * 执行内容（各部门通用）
+   */
+  execContent?: string;
+
+  /**
+   * 预计生产日期（范围查询-开始）
+   */
+  scheduledProductionDateStart?: string;
+
+  /**
+   * 预计生产日期（范围查询-结束）
+   */
+  scheduledProductionDateEnd?: string;
+
+  /**
+   * 预定批次
+   */
+  scheduledBatch?: string;
+
+  /**
+   * Po残
+   */
+  poRemainder?: string;
+
+  /**
+   * 结余
+   */
+  balance?: string;
+
+  /**
+   * 旧品处理
+   */
+  oldProductHandling?: string;
+
+  /**
+   * 是否作废（字典 sys_yes_no_type，0=否 1=是；编辑移除子行时标记作废）
+   */
+  isObsolete?: number;
+
+  /**
+   * 创建时间（范围查询-开始）
+   */
+  createdAtStart?: string;
+
+  /**
+   * 创建时间（范围查询-结束）
+   */
+  createdAtEnd?: string;
+
+  /**
+   * 扩展字段JSON
+   */
+  extField?: string;
+
+  /**
+   * 备注（模糊查询）
+   */
+  remark?: string;
+
+}
+
+
+/**
+ * 创建EcSeikan DTO
+ * 对应前端 EcSeikanCreate
+ * @description 对应后端 TaktEcSeikanCreateDto
+ */
+export interface EcSeikanCreate {
+  /**
+   * 租户编码（登录上下文注入，对应请求头 X-Tenant-Code）
+   */
+  tenantCode: string;
+
+  /**
+   * 公司代码（登录或公司切换注入，对应请求头 X-Company-Code）
+   */
+  companyCode: string;
+
+  /**
+   * 当前公司区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
+   */
+  companyDefaultCulture: string;
+
+  /**
+   * 设变明细 ID（TaktEcDetail 主键；关联由 TaktEcDetail.EcSeikan 导航）
+   */
+  ecnDetailId: string;
+
+  /**
+   * 设变单号（冗余，便于查询）
+   */
+  ecNo: string;
+
+  /**
+   * 行号（项号/序号，固定步长=10）
+   */
+  lineNumber: number;
+
+  /**
+   * 部门编码（TaktDept.DeptCode，5 位，如 D0420）
+   */
+  deptCode: string;
+
+  /**
+   * 是否实施（0=否 1=是，字典 sys_yes_no）
+   */
+  isImplemented: number;
+
+  /**
+   * 执行内容（各部门通用）
+   */
+  execContent?: string;
+
+  /**
+   * 预计生产日期
+   */
+  scheduledProductionDate?: string;
+
+  /**
+   * 预定批次
+   */
+  scheduledBatch?: string;
+
+  /**
+   * Po残
+   */
+  poRemainder?: string;
+
+  /**
+   * 结余
+   */
+  balance?: string;
+
+  /**
+   * 旧品处理
+   */
+  oldProductHandling?: string;
+
+  /**
+   * 是否作废（字典 sys_yes_no_type，0=否 1=是；编辑移除子行时标记作废）
+   */
+  isObsolete: number;
+
+  /**
+   * 扩展字段JSON
+   */
+  extField?: string;
+
+  /**
+   * 备注
+   */
+  remark?: string;
+
+}
+
+
+/**
+ * 更新EcSeikan DTO
+ * 继承 TaktEcSeikanCreateDto，添加 EcSeikanId 字段
+ * 对应前端 EcSeikanUpdate
+ * @description 对应后端 TaktEcSeikanUpdateDto
+ */
+export interface EcSeikanUpdate extends EcSeikanCreate {
+  /**
+   * EcSeikanID（标识要更新的实体）
+   */
+  ecSeikanId: string;
+
+}
+
+
+/**
+ * EcSeikan 作废/撤销作废 DTO
+ * 对应前端 EcSeikanObsolete
+ * @description 对应后端 TaktEcSeikanObsoleteDto
+ */
+export interface EcSeikanObsolete {
+  /**
+   * EcSeikanID
+   */
+  ecSeikanId: string;
+
+  /**
+   * 是否作废（字典 sys_yes_no_type，0=否 1=是；编辑移除子行时标记作废）
+   */
+  isObsolete: number;
+
+}
+
+
+/**
+ * EcSeikan 导入模板行 DTO
+ * 对应前端 EcSeikanTemplate
+ * @description 对应后端 TaktEcSeikanTemplateDto
+ */
+export interface EcSeikanTemplate {
+  /**
+   * 租户编码（登录上下文注入，对应请求头 X-Tenant-Code）
+   */
+  tenantCode?: string;
+
+  /**
+   * 公司代码（登录或公司切换注入，对应请求头 X-Company-Code）
+   */
+  companyCode?: string;
+
+  /**
+   * 设变明细 ID（TaktEcDetail 主键；关联由 TaktEcDetail.EcSeikan 导航）
+   */
+  ecnDetailId?: string;
+
+  /**
+   * 设变单号（冗余，便于查询）
+   */
+  ecNo?: string;
+
+  /**
+   * 行号（项号/序号，固定步长=10）
+   */
+  lineNumber?: number;
+
+  /**
+   * 部门编码（TaktDept.DeptCode，5 位，如 D0420）
+   */
+  deptCode?: string;
+
+  /**
+   * 是否实施（0=否 1=是，字典 sys_yes_no）
+   */
+  isImplemented?: number;
+
+  /**
+   * 执行内容（各部门通用）
+   */
+  execContent?: string;
+
+  /**
+   * 预计生产日期
+   */
+  scheduledProductionDate?: string;
+
+  /**
+   * 预定批次
+   */
+  scheduledBatch?: string;
+
+  /**
+   * Po残
+   */
+  poRemainder?: string;
+
+  /**
+   * 结余
+   */
+  balance?: string;
+
+  /**
+   * 旧品处理
+   */
+  oldProductHandling?: string;
+
+  /**
+   * 是否作废（字典 sys_yes_no_type，0=否 1=是；编辑移除子行时标记作废）
+   */
+  isObsolete?: number;
+
+  /**
+   * 扩展字段JSON
+   */
+  extField?: string;
+
+  /**
+   * 备注
+   */
+  remark?: string;
+
+}
+
+
+/**
+ * EcSeikan 导入 DTO（独立实现，不继承 TemplateDto）
+ * 对应前端 EcSeikanImport
+ * @description 对应后端 TaktEcSeikanImportDto
+ */
+export interface EcSeikanImport {
+  /**
+   * 租户编码（登录上下文注入，对应请求头 X-Tenant-Code）
+   */
+  tenantCode?: string;
+
+  /**
+   * 公司代码（登录或公司切换注入，对应请求头 X-Company-Code）
+   */
+  companyCode?: string;
+
+  /**
+   * 当前公司区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
+   */
+  companyDefaultCulture?: string;
+
+  /**
+   * 设变明细 ID（TaktEcDetail 主键；关联由 TaktEcDetail.EcSeikan 导航）
+   */
+  ecnDetailId?: string;
+
+  /**
+   * 设变单号（冗余，便于查询）
+   */
+  ecNo?: string;
+
+  /**
+   * 行号（项号/序号，固定步长=10）
+   */
+  lineNumber?: number;
+
+  /**
+   * 部门编码（TaktDept.DeptCode，5 位，如 D0420）
+   */
+  deptCode?: string;
+
+  /**
+   * 是否实施（0=否 1=是，字典 sys_yes_no）
+   */
+  isImplemented?: number;
+
+  /**
+   * 执行内容（各部门通用）
+   */
+  execContent?: string;
+
+  /**
+   * 预计生产日期
+   */
+  scheduledProductionDate?: string;
+
+  /**
+   * 预定批次
+   */
+  scheduledBatch?: string;
+
+  /**
+   * Po残
+   */
+  poRemainder?: string;
+
+  /**
+   * 结余
+   */
+  balance?: string;
+
+  /**
+   * 旧品处理
+   */
+  oldProductHandling?: string;
+
+  /**
+   * 是否作废（字典 sys_yes_no_type，0=否 1=是；编辑移除子行时标记作废）
+   */
+  isObsolete?: number;
+
+  /**
+   * 扩展字段JSON
+   */
+  extField?: string;
+
+  /**
+   * 备注
+   */
+  remark?: string;
+
+}
+
+
+/**
+ * EcSeikan 导出 DTO（独立实现，不继承响应 Dto）
+ * 对应前端 EcSeikanExport
+ * @description 对应后端 TaktEcSeikanExportDto
+ */
+export interface EcSeikanExport {
+  /**
+   * EcSeikanID
+   */
+  ecSeikanId: string;
+
+  /**
+   * 公司代码
+   */
+  companyCode: string;
+
+  /**
+   * 设变明细 ID（TaktEcDetail 主键；关联由 TaktEcDetail.EcSeikan 导航）
+   */
+  ecnDetailId: string;
+
+  /**
+   * 设变单号（冗余，便于查询）
+   */
+  ecNo: string;
+
+  /**
+   * 行号（项号/序号，固定步长=10）
+   */
+  lineNumber: number;
+
+  /**
+   * 部门编码（TaktDept.DeptCode，5 位，如 D0420）
+   */
+  deptCode: string;
+
+  /**
+   * 是否实施（0=否 1=是，字典 sys_yes_no）
+   */
+  isImplemented: number;
+
+  /**
+   * 执行内容（各部门通用）
+   */
+  execContent?: string;
+
+  /**
+   * 预计生产日期
+   */
+  scheduledProductionDate?: string;
+
+  /**
+   * 预定批次
+   */
+  scheduledBatch?: string;
+
+  /**
+   * Po残
+   */
+  poRemainder?: string;
+
+  /**
+   * 结余
+   */
+  balance?: string;
+
+  /**
+   * 旧品处理
+   */
+  oldProductHandling?: string;
+
+  /**
+   * 是否作废（字典 sys_yes_no_type，0=否 1=是；编辑移除子行时标记作废）
+   */
+  isObsolete: number;
+
+  /**
+   * 扩展字段JSON
+   */
+  extField?: string;
+
+  /**
+   * 备注
+   */
+  remark?: string;
+
+  /**
+   * 创建时间
+   */
+  createdAt: string;
+
+}
+

@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Application.Services.Logistics.Quality.Cost
 // 文件名称：ITaktQualityIssueMeetingService.cs
-// 创建时间：2026-06-23
+// 创建时间：2026-07-09
 // 创建人：Takt365(Cursor AI)
 // 功能描述：质量问题会议调查试验费用明细应用服务接口
 // 
@@ -69,6 +69,13 @@ public interface ITaktQualityIssueMeetingService
     /// <param name="ids">ID列表</param>
     /// <returns>任务</returns>
     Task DeleteQualityIssueMeetingBatchAsync(IEnumerable<long> ids);
+
+    /// <summary>
+    /// 更新质量问题会议调查试验费用明细作废状态
+    /// </summary>
+    /// <param name="dto">作废DTO</param>
+    /// <returns>DTO</returns>
+    Task<TaktQualityIssueMeetingDto> UpdateQualityIssueMeetingObsoleteAsync(TaktQualityIssueMeetingObsoleteDto dto);
 
     /// <summary>
     /// 获取导入模板

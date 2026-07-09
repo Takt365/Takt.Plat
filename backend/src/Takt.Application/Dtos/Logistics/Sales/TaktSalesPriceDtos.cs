@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Application.Dtos.Logistics.Sales
 // 文件名称：TaktSalesPriceDtos.cs
-// 创建时间：2026-07-01
+// 创建时间：2026-07-09
 // 创建人：Takt365(Auto Generated)
 // 功能描述：SalesPrice 模块 DTO（由 generate-dtos-from-entity.cjs 根据 TaktSalesPrice 生成，请按需审阅）
 // 
@@ -75,12 +75,6 @@ public class TaktSalesPriceDto : TaktCompanyDtoBase
     /// （子表：TaktSalesPriceItem）
     /// </summary>
     public List<TaktSalesPriceItemDto>? Items { get; set; }
-
-    /// <summary>
-    /// 销售价格变更记录列表（外键在子表 TaktSalesPriceChangeLog.SalesPriceId）
-    /// （子表：TaktSalesPriceChangeLog）
-    /// </summary>
-    public List<TaktSalesPriceChangeLogDto>? ChangeLogs { get; set; }
 
 }
 
@@ -235,12 +229,7 @@ public class TaktSalesPriceCreateDto
     /// <summary>
     /// 物料价格明细列表（主子表关系，一个客户价格可以有多个物料价格）（子表，级联保存）
     /// </summary>
-    public List<TaktSalesPriceItemCreateDto>? Items { get; set; }
-
-    /// <summary>
-    /// 销售价格变更记录列表（外键在子表 TaktSalesPriceChangeLog.SalesPriceId）（子表，级联保存）
-    /// </summary>
-    public List<TaktSalesPriceChangeLogCreateDto>? ChangeLogs { get; set; }
+    public List<TaktSalesPriceItemUpdateDto>? Items { get; set; }
 
     /// <summary>
     /// 扩展字段JSON
@@ -358,11 +347,6 @@ public class TaktSalesPriceTemplateDto
     public List<TaktSalesPriceItemCreateDto>? Items { get; set; }
 
     /// <summary>
-    /// 销售价格变更记录列表（外键在子表 TaktSalesPriceChangeLog.SalesPriceId）（子表，级联保存）
-    /// </summary>
-    public List<TaktSalesPriceChangeLogCreateDto>? ChangeLogs { get; set; }
-
-    /// <summary>
     /// 扩展字段JSON
     /// </summary>
     public string? ExtField { get; set; }
@@ -433,11 +417,6 @@ public class TaktSalesPriceImportDto
     /// 物料价格明细列表（主子表关系，一个客户价格可以有多个物料价格）（子表，级联保存）
     /// </summary>
     public List<TaktSalesPriceItemCreateDto>? Items { get; set; }
-
-    /// <summary>
-    /// 销售价格变更记录列表（外键在子表 TaktSalesPriceChangeLog.SalesPriceId）（子表，级联保存）
-    /// </summary>
-    public List<TaktSalesPriceChangeLogCreateDto>? ChangeLogs { get; set; }
 
     /// <summary>
     /// 扩展字段JSON

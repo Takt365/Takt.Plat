@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Application.Dtos.Routine.ConferenceCenter
 // 文件名称：TaktConferenceAgendaDtos.cs
-// 创建时间：2026-06-24
+// 创建时间：2026-07-09
 // 创建人：Takt365(Auto Generated)
 // 功能描述：ConferenceAgenda 模块 DTO（由 generate-dtos-from-entity.cjs 根据 TaktConferenceAgenda 生成，请按需审阅）
 // 
@@ -36,7 +36,7 @@ public class TaktConferenceAgendaDto : TaktCompanyDtoBase
     public long ConferenceAgendaId { get; set; }
 
     /// <summary>
-    /// 会议 ID（主子表关系）
+    /// 会议 ID（关联 TaktConference.Id，选项 TaktConferences/options）
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
     public long ConferenceId { get; set; }
@@ -47,7 +47,7 @@ public class TaktConferenceAgendaDto : TaktCompanyDtoBase
     public string? ConferenceName { get; set; }
 
     /// <summary>
-    /// 记录类型（议程项 / 会议纪要）
+    /// 记录类型（字典 routine_conference_record_type；0=议程项 1=会议纪要）
     /// </summary>
     public int RecordType { get; set; } = 0;
 
@@ -72,7 +72,7 @@ public class TaktConferenceAgendaDto : TaktCompanyDtoBase
     public string? ConferenceAgendaSummary { get; set; } = string.Empty;
 
     /// <summary>
-    /// 主讲人/汇报人 ID（议程项）
+    /// 主讲人/汇报人 ID（关联 TaktUser.Id，选项 TaktUsers/options）
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
     public long? PresenterId { get; set; }
@@ -93,7 +93,7 @@ public class TaktConferenceAgendaDto : TaktCompanyDtoBase
     public int DurationMinutes { get; set; } = 0;
 
     /// <summary>
-    /// 记录人 ID（会议纪要）
+    /// 记录人 ID（关联 TaktUser.Id，选项 TaktUsers/options）
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
     public long? RecorderId { get; set; }
@@ -104,9 +104,14 @@ public class TaktConferenceAgendaDto : TaktCompanyDtoBase
     public string? RecorderName { get; set; } = string.Empty;
 
     /// <summary>
-    /// 附件 （JSON列表形式，由TaktFile 统一上传到服务器）
+    /// 附件（JSON 列表形式，由 TaktFile 统一上传到服务器）
     /// </summary>
     public string? Attachments { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 是否作废（字典 sys_yes_no_type，0=否 1=是；编辑移除子行时标记作废）
+    /// </summary>
+    public int IsObsolete { get; set; } = 0;
 
     /// <summary>
     /// 会议（主表）
@@ -137,13 +142,13 @@ public class TaktConferenceAgendaQueryDto : TaktPagedQuery
     public string? CompanyCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 会议 ID（主子表关系）
+    /// 会议 ID（关联 TaktConference.Id，选项 TaktConferences/options）
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
     public long? ConferenceId { get; set; }
 
     /// <summary>
-    /// 记录类型（议程项 / 会议纪要）
+    /// 记录类型（字典 routine_conference_record_type；0=议程项 1=会议纪要）
     /// </summary>
     public int? RecordType { get; set; }
 
@@ -168,7 +173,7 @@ public class TaktConferenceAgendaQueryDto : TaktPagedQuery
     public string? ConferenceAgendaSummary { get; set; } = string.Empty;
 
     /// <summary>
-    /// 主讲人/汇报人 ID（议程项）
+    /// 主讲人/汇报人 ID（关联 TaktUser.Id，选项 TaktUsers/options）
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
     public long? PresenterId { get; set; }
@@ -194,7 +199,7 @@ public class TaktConferenceAgendaQueryDto : TaktPagedQuery
     public int? DurationMinutes { get; set; }
 
     /// <summary>
-    /// 记录人 ID（会议纪要）
+    /// 记录人 ID（关联 TaktUser.Id，选项 TaktUsers/options）
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
     public long? RecorderId { get; set; }
@@ -205,9 +210,14 @@ public class TaktConferenceAgendaQueryDto : TaktPagedQuery
     public string? RecorderName { get; set; } = string.Empty;
 
     /// <summary>
-    /// 附件 （JSON列表形式，由TaktFile 统一上传到服务器）
+    /// 附件（JSON 列表形式，由 TaktFile 统一上传到服务器）
     /// </summary>
     public string? Attachments { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 是否作废（字典 sys_yes_no_type，0=否 1=是；编辑移除子行时标记作废）
+    /// </summary>
+    public int? IsObsolete { get; set; }
 
     /// <summary>
     /// 创建时间（范围查询-开始）
@@ -255,13 +265,13 @@ public class TaktConferenceAgendaCreateDto
     public string CompanyDefaultCulture { get; set; } = string.Empty;
 
     /// <summary>
-    /// 会议 ID（主子表关系）
+    /// 会议 ID（关联 TaktConference.Id，选项 TaktConferences/options）
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
     public long ConferenceId { get; set; }
 
     /// <summary>
-    /// 记录类型（议程项 / 会议纪要）
+    /// 记录类型（字典 routine_conference_record_type；0=议程项 1=会议纪要）
     /// </summary>
     public int RecordType { get; set; } = 0;
 
@@ -287,7 +297,7 @@ public class TaktConferenceAgendaCreateDto
     public string? ConferenceAgendaSummary { get; set; } = string.Empty;
 
     /// <summary>
-    /// 主讲人/汇报人 ID（议程项）
+    /// 主讲人/汇报人 ID（关联 TaktUser.Id，选项 TaktUsers/options）
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
     public long? PresenterId { get; set; }
@@ -308,7 +318,7 @@ public class TaktConferenceAgendaCreateDto
     public int DurationMinutes { get; set; } = 0;
 
     /// <summary>
-    /// 记录人 ID（会议纪要）
+    /// 记录人 ID（关联 TaktUser.Id，选项 TaktUsers/options）
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
     public long? RecorderId { get; set; }
@@ -319,9 +329,14 @@ public class TaktConferenceAgendaCreateDto
     public string? RecorderName { get; set; } = string.Empty;
 
     /// <summary>
-    /// 附件 （JSON列表形式，由TaktFile 统一上传到服务器）
+    /// 附件（JSON 列表形式，由 TaktFile 统一上传到服务器）
     /// </summary>
     public string? Attachments { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 是否作废（字典 sys_yes_no_type，0=否 1=是；编辑移除子行时标记作废）
+    /// </summary>
+    public int IsObsolete { get; set; } = 0;
 
     /// <summary>
     /// 扩展字段JSON
@@ -356,6 +371,29 @@ public class TaktConferenceAgendaUpdateDto : TaktConferenceAgendaCreateDto
 }
 
 // ========================================
+// ConferenceAgenda 作废 DTO
+// ========================================
+
+/// <summary>
+/// ConferenceAgenda 作废/撤销作废 DTO
+/// </summary>
+public class TaktConferenceAgendaObsoleteDto
+{
+    /// <summary>
+    /// ConferenceAgendaID
+    /// </summary>
+    [Required(ErrorMessage = "ID不能为空")]
+    [AdaptMember("Id")]
+    [JsonConverter(typeof(ValueToStringConverter))]
+    public long ConferenceAgendaId { get; set; }
+
+    /// <summary>
+    /// 是否作废（字典 sys_yes_no_type，0=否 1=是；编辑移除子行时标记作废）
+    /// </summary>
+    public int IsObsolete { get; set; }
+}
+
+// ========================================
 // 导入 DTO
 // ========================================
 
@@ -375,13 +413,13 @@ public class TaktConferenceAgendaTemplateDto
     public string? CompanyCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 会议 ID（主子表关系）
+    /// 会议 ID（关联 TaktConference.Id，选项 TaktConferences/options）
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
     public long? ConferenceId { get; set; }
 
     /// <summary>
-    /// 记录类型（议程项 / 会议纪要）
+    /// 记录类型（字典 routine_conference_record_type；0=议程项 1=会议纪要）
     /// </summary>
     public int? RecordType { get; set; }
 
@@ -406,7 +444,7 @@ public class TaktConferenceAgendaTemplateDto
     public string? ConferenceAgendaSummary { get; set; } = string.Empty;
 
     /// <summary>
-    /// 主讲人/汇报人 ID（议程项）
+    /// 主讲人/汇报人 ID（关联 TaktUser.Id，选项 TaktUsers/options）
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
     public long? PresenterId { get; set; }
@@ -427,7 +465,7 @@ public class TaktConferenceAgendaTemplateDto
     public int? DurationMinutes { get; set; }
 
     /// <summary>
-    /// 记录人 ID（会议纪要）
+    /// 记录人 ID（关联 TaktUser.Id，选项 TaktUsers/options）
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
     public long? RecorderId { get; set; }
@@ -438,9 +476,14 @@ public class TaktConferenceAgendaTemplateDto
     public string? RecorderName { get; set; } = string.Empty;
 
     /// <summary>
-    /// 附件 （JSON列表形式，由TaktFile 统一上传到服务器）
+    /// 附件（JSON 列表形式，由 TaktFile 统一上传到服务器）
     /// </summary>
     public string? Attachments { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 是否作废（字典 sys_yes_no_type，0=否 1=是；编辑移除子行时标记作废）
+    /// </summary>
+    public int? IsObsolete { get; set; }
 
     /// <summary>
     /// 扩展字段JSON
@@ -475,13 +518,13 @@ public class TaktConferenceAgendaImportDto
     public string? CompanyDefaultCulture { get; set; } = string.Empty;
 
     /// <summary>
-    /// 会议 ID（主子表关系）
+    /// 会议 ID（关联 TaktConference.Id，选项 TaktConferences/options）
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
     public long? ConferenceId { get; set; }
 
     /// <summary>
-    /// 记录类型（议程项 / 会议纪要）
+    /// 记录类型（字典 routine_conference_record_type；0=议程项 1=会议纪要）
     /// </summary>
     public int? RecordType { get; set; }
 
@@ -506,7 +549,7 @@ public class TaktConferenceAgendaImportDto
     public string? ConferenceAgendaSummary { get; set; } = string.Empty;
 
     /// <summary>
-    /// 主讲人/汇报人 ID（议程项）
+    /// 主讲人/汇报人 ID（关联 TaktUser.Id，选项 TaktUsers/options）
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
     public long? PresenterId { get; set; }
@@ -527,7 +570,7 @@ public class TaktConferenceAgendaImportDto
     public int? DurationMinutes { get; set; }
 
     /// <summary>
-    /// 记录人 ID（会议纪要）
+    /// 记录人 ID（关联 TaktUser.Id，选项 TaktUsers/options）
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
     public long? RecorderId { get; set; }
@@ -538,9 +581,14 @@ public class TaktConferenceAgendaImportDto
     public string? RecorderName { get; set; } = string.Empty;
 
     /// <summary>
-    /// 附件 （JSON列表形式，由TaktFile 统一上传到服务器）
+    /// 附件（JSON 列表形式，由 TaktFile 统一上传到服务器）
     /// </summary>
     public string? Attachments { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 是否作废（字典 sys_yes_no_type，0=否 1=是；编辑移除子行时标记作废）
+    /// </summary>
+    public int? IsObsolete { get; set; }
 
     /// <summary>
     /// 扩展字段JSON
@@ -576,13 +624,13 @@ public class TaktConferenceAgendaExportDto
     public string CompanyCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 会议 ID（主子表关系）
+    /// 会议 ID（关联 TaktConference.Id，选项 TaktConferences/options）
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
     public long ConferenceId { get; set; }
 
     /// <summary>
-    /// 记录类型（议程项 / 会议纪要）
+    /// 记录类型（字典 routine_conference_record_type；0=议程项 1=会议纪要）
     /// </summary>
     public int RecordType { get; set; } = 0;
 
@@ -607,7 +655,7 @@ public class TaktConferenceAgendaExportDto
     public string? ConferenceAgendaSummary { get; set; } = string.Empty;
 
     /// <summary>
-    /// 主讲人/汇报人 ID（议程项）
+    /// 主讲人/汇报人 ID（关联 TaktUser.Id，选项 TaktUsers/options）
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
     public long? PresenterId { get; set; }
@@ -628,7 +676,7 @@ public class TaktConferenceAgendaExportDto
     public int DurationMinutes { get; set; } = 0;
 
     /// <summary>
-    /// 记录人 ID（会议纪要）
+    /// 记录人 ID（关联 TaktUser.Id，选项 TaktUsers/options）
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
     public long? RecorderId { get; set; }
@@ -639,9 +687,14 @@ public class TaktConferenceAgendaExportDto
     public string? RecorderName { get; set; } = string.Empty;
 
     /// <summary>
-    /// 附件 （JSON列表形式，由TaktFile 统一上传到服务器）
+    /// 附件（JSON 列表形式，由 TaktFile 统一上传到服务器）
     /// </summary>
     public string? Attachments { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 是否作废（字典 sys_yes_no_type，0=否 1=是；编辑移除子行时标记作废）
+    /// </summary>
+    public int IsObsolete { get; set; } = 0;
 
     /// <summary>
     /// 扩展字段JSON

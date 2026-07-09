@@ -168,4 +168,93 @@ public sealed class TaktDictSnapshot
         error = null;
         return true;
     }
+
+    /// <summary>
+    /// 导出：DictValue 字符串 → DictLabel
+    /// </summary>
+    /// <param name="dictTypeCode">字典类型编码</param>
+    /// <param name="dictValue">DictValue</param>
+    /// <param name="fallback">未命中回退；为空时回退为 dictValue 本身</param>
+    /// <returns>DictLabel 或回退</returns>
+    public string GetLabel(string dictTypeCode, string dictValue, string? fallback = null)
+    {
+        ArgumentException.ThrowIfNullOrWhiteSpace(dictTypeCode);
+        if (string.IsNullOrWhiteSpace(dictValue))
+        {
+            return fallback ?? string.Empty;
+        }
+        var typeKey = dictTypeCode.Trim();
+        var valueKey = dictValue.Trim();
+        if (!_valueToLabel.TryGetValue(typeKey, out var map))
+        {
+            return fallback ?? valueKey;
+        }
+        return map.TryGetValue(valueKey, out var label) ? label : (fallback ?? valueKey);
+    }
+
+    /// <summary>
+    /// 导入：DictLabel → DictValue 字符串
+    /// </summary>
+    /// <param name="dictTypeCode">字典类型编码</param>
+    /// <param name="dictLabel">DictLabel</param>
+    /// <returns>DictValue；未命中 null</returns>
+    public string? GetValueByLabel(string dictTypeCode, string dictLabel)
+    {
+        ArgumentException.ThrowIfNullOrWhiteSpace(dictTypeCode);
+        if (string.IsNullOrWhiteSpace(dictLabel))
+        {
+            return null;
+        }
+        var typeKey = dictTypeCode.Trim();
+        if (!_labelToValue.TryGetValue(typeKey, out var map))
+        {
+            return null;
+        }
+        return map.TryGetValue(dictLabel.Trim(), out var value) ? value : null;
+    }
+
+    /// <summary>
+    /// 解析逗号分隔片段为 canonical DictValue（片段可为 DictValue 或 DictLabel）
+    /// </summary>
+    /// <param name="dictTypeCode">字典类型编码</param>
+    /// <param name="part">单个片段</param>
+    /// <returns>DictValue；无法解析时返回 trim 后的原片段</returns>
+    public string ResolvePartToDictValue(string dictTypeCode, string part)
+    {
+        ArgumentException.ThrowIfNullOrWhiteSpace(dictTypeCode);
+        if (string.IsNullOrWhiteSpace(part))
+        {
+            return string.Empty;
+        }
+        var typeKey = dictTypeCode.Trim();
+        var trimmed = part.Trim();
+        if (_valueToLabel.TryGetValue(typeKey, out var forward) && forward.ContainsKey(trimmed))
+        {
+            return trimmed;
+        }
+        var fromLabel = GetValueByLabel(typeKey, trimmed);
+        return fromLabel ?? trimmed;
+    }
+
+    /// <summary>
+    /// 解析逗号分隔片段为 canonical DictLabel（片段可为 DictValue 或 DictLabel）
+    /// </summary>
+    /// <param name="dictTypeCode">字典类型编码</param>
+    /// <param name="part">单个片段</param>
+    /// <returns>DictLabel；无法解析时返回 trim 后的原片段</returns>
+    public string ResolvePartToDictLabel(string dictTypeCode, string part)
+    {
+        ArgumentException.ThrowIfNullOrWhiteSpace(dictTypeCode);
+        if (string.IsNullOrWhiteSpace(part))
+        {
+            return string.Empty;
+        }
+        var typeKey = dictTypeCode.Trim();
+        var trimmed = part.Trim();
+        if (_labelToValue.TryGetValue(typeKey, out var reverse) && reverse.ContainsKey(trimmed))
+        {
+            return trimmed;
+        }
+        return GetLabel(typeKey, trimmed, trimmed);
+    }
 }

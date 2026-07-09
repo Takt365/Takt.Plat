@@ -50,17 +50,17 @@ public class TaktSerialInboundStatDto
 }
 
 /// <summary>
-/// 序列号出库统计查询 DTO（按出库日期区间；可选仕向地、目的地港筛选）
+/// 序列号出库统计查询 DTO（按装车日期区间；可选仕向地、目的地港筛选）
 /// </summary>
 public class TaktSerialOutboundStatQueryDto
 {
     /// <summary>
-    /// 出库日期（范围-开始；默认当月 1 日）
+    /// 装车日期（范围-开始；默认当月 1 日）
     /// </summary>
     public DateTime? OutboundDateStart { get; set; }
 
     /// <summary>
-    /// 出库日期（范围-结束；默认当月最后一日）
+    /// 装车日期（范围-结束；默认当月最后一日）
     /// </summary>
     public DateTime? OutboundDateEnd { get; set; }
 
@@ -76,12 +76,12 @@ public class TaktSerialOutboundStatQueryDto
 }
 
 /// <summary>
-/// 序列号出库统计分组行 DTO（按出库日期 + 仕向地 + 目的地港）
+/// 序列号出库统计分组行 DTO（按装车日期 + 仕向地 + 目的地港）
 /// </summary>
 public class TaktSerialOutboundStatItemDto
 {
     /// <summary>
-    /// 出库日期（日粒度）
+    /// 装车日期（日粒度）
     /// </summary>
     public DateTime OutboundDate { get; set; }
 
@@ -127,7 +127,7 @@ public class TaktSerialOutboundStatDto
     public int MonthTotalQuantity { get; set; }
 
     /// <summary>
-    /// 按出库日期、仕向地、目的地港分组明细
+    /// 按装车日期、仕向地、目的地港分组明细
     /// </summary>
     public List<TaktSerialOutboundStatItemDto> GroupItems { get; set; } = new();
 }

@@ -29,12 +29,12 @@
           <a-row :gutter="24">
             <a-col :span="12">
               <a-form-item
-                :label="t('common.page.entity.tenantcode')"
+                :label="pi.label('tenantCode')"
                 name="tenantCode"
               >
                 <a-input
                   v-model:value="formState.tenantCode"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('common.page.entity.tenantcode') })"
+                  :placeholder="pi.ph('tenantCode')"
                   show-count
                   :maxlength="20"
                   disabled
@@ -43,12 +43,12 @@
             </a-col>
             <a-col :span="12">
               <a-form-item
-                :label="t('common.page.entity.companycode')"
+                :label="pi.label('companyCode')"
                 name="companyCode"
               >
                 <a-input
                   v-model:value="formState.companyCode"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('common.page.entity.companycode') })"
+                  :placeholder="pi.ph('companyCode')"
                   show-count
                   :maxlength="20"
                   disabled
@@ -57,12 +57,12 @@
             </a-col>
             <a-col :span="12">
               <a-form-item
-                :label="t('common.page.entity.companydefaultculture')"
+                :label="pi.label('companyDefaultCulture')"
                 name="companyDefaultCulture"
               >
                 <a-input
                   v-model:value="formState.companyDefaultCulture"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('common.page.entity.companydefaultculture') })"
+                  :placeholder="pi.ph('companyDefaultCulture')"
                   show-count
                   :maxlength="20"
                   disabled
@@ -71,27 +71,25 @@
             </a-col>
             <a-col :span="12">
               <a-form-item
-                :label="t('entity.serialoutbound.plantcode')"
+                :label="pi.label('plantCode')"
                 name="plantCode"
               >
-                <a-input
+                <TaktSelect
                   v-model:value="formState.plantCode"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.serialoutbound.plantcode') })"
-                  show-count
-                  :maxlength="4"
-                  allow-clear
+                  api-url="TaktPlants/options"
+                  :placeholder="pi.ph('plantCode')"
                   :disabled="!!formData?.serialOutboundId"
                 />
               </a-form-item>
             </a-col>
             <a-col :span="12">
               <a-form-item
-                :label="t('entity.serialoutbound.outboundno')"
+                :label="pi.label('outboundNo')"
                 name="outboundNo"
               >
                 <a-input
                   v-model:value="formState.outboundNo"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.serialoutbound.outboundno') })"
+                  :placeholder="pi.ph('outboundNo')"
                   show-count
                   :maxlength="50"
                   allow-clear
@@ -100,12 +98,12 @@
             </a-col>
             <a-col :span="12">
               <a-form-item
-                :label="t('entity.serialoutbound.shippinginvoiceno')"
+                :label="pi.label('shippingInvoiceNo')"
                 name="shippingInvoiceNo"
               >
                 <a-input
                   v-model:value="formState.shippingInvoiceNo"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.serialoutbound.shippinginvoiceno') })"
+                  :placeholder="pi.ph('shippingInvoiceNo')"
                   show-count
                   :maxlength="50"
                   allow-clear
@@ -114,12 +112,12 @@
             </a-col>
             <a-col :span="12">
               <a-form-item
-                :label="t('entity.serialoutbound.outbounddate')"
+                :label="pi.label('outboundDate')"
                 name="outboundDate"
               >
                 <a-date-picker
                   v-model:value="formState.outboundDate"
-                  :placeholder="t('common.page.form.placeholder.select', { field: t('entity.serialoutbound.outbounddate') })"
+                  :placeholder="pi.ph('outboundDate')"
                   value-format="YYYY-MM-DD"
                   style="width: 100%"
                 />
@@ -127,37 +125,37 @@
             </a-col>
             <a-col :span="12">
               <a-form-item
-                :label="t('entity.serialoutbound.destination')"
+                :label="pi.label('destination')"
                 name="destination"
               >
                 <TaktSelect
                   v-model:value="formState.destination"
-                  api-url="/api/TaktModelDestinations/options"
-                  :placeholder="t('common.page.form.placeholder.select', { field: t('entity.serialoutbound.destination') })"
+                  api-url="TaktModelDestinations/options"
+                  :placeholder="pi.ph('destination')"
                 />
               </a-form-item>
             </a-col>
             <a-col :span="12">
               <a-form-item
-                :label="t('entity.serialoutbound.shippingmethod')"
-                name="shippingMethod"
-              >
-                <TaktSelect
-                  v-model:value="formState.shippingMethod"
-                  dict-type="logistics_shipping_method_type"
-                  :placeholder="t('common.page.form.placeholder.select', { field: t('entity.serialoutbound.shippingmethod') })"
-                />
-              </a-form-item>
-            </a-col>
-            <a-col :span="12">
-              <a-form-item
-                :label="t('entity.serialoutbound.destinationport')"
+                :label="pi.label('destinationPort')"
                 name="destinationPort"
               >
                 <TaktSelect
                   v-model:value="formState.destinationPort"
                   dict-type="logistics_destination_port_code"
-                  :placeholder="t('common.page.form.placeholder.select', { field: t('entity.serialoutbound.destinationport') })"
+                  :placeholder="pi.ph('destinationPort')"
+                />
+              </a-form-item>
+            </a-col>
+            <a-col :span="12">
+              <a-form-item
+                :label="pi.label('outboundType')"
+                name="outboundType"
+              >
+                <TaktSelect
+                  v-model:value="formState.outboundType"
+                  dict-type="logistics_outbound_type"
+                  :placeholder="pi.ph('outboundType')"
                 />
               </a-form-item>
             </a-col>
@@ -173,54 +171,38 @@
           <a-row :gutter="24">
             <a-col :span="24">
               <a-form-item
-                :label="t('entity.serialoutbound.outboundtype')"
-                name="outboundType"
-              >
-                <TaktSelect
-                  v-model:value="formState.outboundType"
-                  dict-type="logistics_outbound_type"
-                  :placeholder="t('common.page.form.placeholder.select', { field: t('entity.serialoutbound.outboundtype') })"
-                />
-              </a-form-item>
-            </a-col>
-            <a-col :span="24">
-              <a-form-item
-                :label="t('entity.serialoutbound.warehousecode')"
+                :label="pi.label('warehouseCode')"
                 name="warehouseCode"
               >
-                <a-input
+                <TaktSelect
                   v-model:value="formState.warehouseCode"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.serialoutbound.warehousecode') })"
-                  show-count
-                  :maxlength="50"
-                  allow-clear
+                  api-url="TaktWarehouses/options"
+                  :placeholder="pi.ph('warehouseCode')"
                   :disabled="!!formData?.serialOutboundId"
                 />
               </a-form-item>
             </a-col>
             <a-col :span="24">
               <a-form-item
-                :label="t('entity.serialoutbound.locationcode')"
+                :label="pi.label('locationCode')"
                 name="locationCode"
               >
-                <a-input
+                <TaktSelect
                   v-model:value="formState.locationCode"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.serialoutbound.locationcode') })"
-                  show-count
-                  :maxlength="50"
-                  allow-clear
+                  api-url="TaktStorageLocations/options"
+                  :placeholder="pi.ph('locationCode')"
                   :disabled="!!formData?.serialOutboundId"
                 />
               </a-form-item>
             </a-col>
             <a-col :span="24">
               <a-form-item
-                :label="t('entity.serialoutbound.totalquantity')"
+                :label="pi.label('totalQuantity')"
                 name="totalQuantity"
               >
                 <a-input-number
                   v-model:value="formState.totalQuantity"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.serialoutbound.totalquantity') })"
+                  :placeholder="pi.ph('totalQuantity')"
                   style="width: 100%"
                 />
               </a-form-item>
@@ -238,7 +220,7 @@
                     >
                       <span class="takt-form-label-hint-icon"><RiQuestionLine class="takt-remix-icon" /></span>
                     </a-tooltip>
-                    <span>{{ t('common.page.entity.extfield') }}</span>
+                    <span>{{ pi.label('extField') }}</span>
                   </span>
                 </template>
                 <a-textarea
@@ -253,12 +235,12 @@
             </a-col>
             <a-col :span="24">
               <a-form-item
-                :label="t('common.page.entity.remark')"
+                :label="pi.label('remark')"
                 name="remark"
               >
                 <a-textarea
                   v-model:value="formState.remark"
-                  :placeholder="t('common.page.form.placeholder.optional', { field: t('common.page.entity.remark') })"
+                  :placeholder="pi.ph('remark')"
                   :rows="4"
                   show-count
                   :maxlength="400"
@@ -275,8 +257,8 @@
       ref="serialOutboundItemTableRef"
       v-model="childSerialOutboundItemRows"
       :columns="serialOutboundItemFormColumns"
-      :title="t('entity.serialoutbounditem._self')"
-      :add-button-entity="t('entity.serialoutbounditem._self')"
+      :title="serialOutboundItemPi.self()"
+      :add-button-entity="serialOutboundItemPi.self()"
       id-field="serialOutboundItemId"
       :default-row="createDefaultSerialOutboundItemRow"
       :disabled="loading"
@@ -293,6 +275,11 @@
 import { reactive, watch, computed, ref, onMounted } from 'vue'
 import { useI18n } from 'vue-i18n'
 import type { Rule } from 'ant-design-vue/es/form'
+import { useSerialOutboundI18n } from '../composables/use-outbound-i18n'
+
+/** 实体字段 i18n */
+const pi = useSerialOutboundI18n()
+
 import type { SerialOutboundCreate } from '@/types/logistics/serial/outbound'
 import TaktSelect from '@/components/business/takt-select/index.vue'
 import { RiQuestionLine } from '@remixicon/vue'
@@ -329,9 +316,13 @@ const formContentClass = computed(() => (formFields.length > 10 ? 'takt-form-con
 /** 当前激活的 Tab key */
 const activeTab = ref('tab-0')
 /** CreateDto 字段名列表（与 formState 键对齐） */
-const formFields = ["tenantCode","companyCode","companyDefaultCulture","plantCode","outboundNo","shippingInvoiceNo","outboundDate","destination","shippingMethod","destinationPort","outboundType","warehouseCode","locationCode","totalQuantity","extField","remark"]
+const formFields = ["tenantCode","companyCode","companyDefaultCulture","plantCode","outboundNo","shippingInvoiceNo","outboundDate","destination","destinationPort","outboundType","warehouseCode","locationCode","totalQuantity","extField","remark"]
+
 
 import type { TaktEditableTableColumn } from '@/components/business/takt-editable-table/types'
+import { useSerialOutboundItemI18n } from '../composables/use-outbound-item-i18n'
+
+const serialOutboundItemPi = useSerialOutboundItemI18n()
 
 const childSerialOutboundItemRows = ref<Record<string, unknown>[]>([])
 const serialOutboundItemTableRef = ref<{
@@ -343,54 +334,53 @@ const serialOutboundItemTableRef = ref<{
 /** 子表 serialOutboundItem 可编辑列 */
 const serialOutboundItemFormColumns = computed<TaktEditableTableColumn[]>(() => [
   {
+    key: 'outboundId',
+    title: serialOutboundItemPi.label('outboundId'),
+    editor: 'input',
+    width: 140,
+  },
+  {
     key: 'outboundNo',
-    title: t('entity.serialoutbounditem.outboundno'),
+    title: serialOutboundItemPi.label('outboundNo'),
     editor: 'input',
     width: 140,
   },
   {
     key: 'lineNumber',
-    title: t('entity.serialoutbounditem.linenumber'),
+    title: serialOutboundItemPi.label('lineNumber'),
     editor: 'inputNumber',
     width: 140, summary: 'sum',
   },
   {
     key: 'outboundSerialNo',
-    title: t('entity.serialoutbounditem.outboundserialno'),
+    title: serialOutboundItemPi.label('outboundSerialNo'),
     editor: 'input',
     width: 140, required: true, unique: true,
   },
   {
     key: 'referenceInboundId',
-    title: t('entity.serialoutbounditem.referenceinboundid'),
+    title: serialOutboundItemPi.label('referenceInboundId'),
     editor: 'input',
     width: 140,
   },
   {
     key: 'referenceInboundNo',
-    title: t('entity.serialoutbounditem.referenceinboundno'),
+    title: serialOutboundItemPi.label('referenceInboundNo'),
     editor: 'input',
     width: 140,
   },
   {
     key: 'referenceInboundLineNumber',
-    title: t('entity.serialoutbounditem.referenceinboundlinenumber'),
+    title: serialOutboundItemPi.label('referenceInboundLineNumber'),
     editor: 'inputNumber',
     width: 140,
   },
   {
-    key: 'outboundTime',
-    title: t('entity.serialoutbounditem.outboundtime'),
-    editor: 'datePicker',
-    valueFormat: 'YYYY-MM-DD HH:mm:ss', showTime: true,
-    width: 140,
-  },
-  {
     key: 'extField',
-    title: t('common.page.entity.extfield'),
+    title: serialOutboundItemPi.label('extField'),
     editor: 'textarea',
     rows: 2,
-    placeholder: t('common.page.form.placeholder.optional', { field: t('common.page.entity.extfield') }),
+    placeholder: t('common.page.form.placeholder.extfield'),
     width: 140,
   },
 ])
@@ -402,13 +392,13 @@ function syncChildRowsFromFormData(val: Partial<SerialOutboundCreate & { serialO
 
 function createDefaultSerialOutboundItemRow(): Record<string, unknown> {
   return {
+    outboundId: '',
     outboundNo: '',
     lineNumber: (childSerialOutboundItemRows.value.length + 1) * 10,
     outboundSerialNo: '',
     referenceInboundId: '',
     referenceInboundNo: '',
     referenceInboundLineNumber: 0,
-    outboundTime: '',
     extField: '',
   }
 }
@@ -423,7 +413,7 @@ function buildSubmitPayload() {
       tenantCode: tenantStore.tenantCode,
       companyCode: tenantStore.companyCode,
       companyDefaultCulture: userStore.userInfo?.companyDefaultCulture ?? '',
-      outboundId: masterId,
+      serialOutboundId: masterId,
     })),
   }
 }
@@ -446,7 +436,7 @@ const formRef = ref()
 const formState = reactive<Record<string, any>>({})
 /** 表单字段默认值（字典 IsDefault=1，来自 TaktDictDataSeedData） */
 const FORM_FIELD_DEFAULTS: Record<string, string | number> = {
-  shippingMethod: 0,
+  destinationPort: "ACE_AIR",
   outboundType: 5
 }
 
@@ -504,66 +494,53 @@ const rules = computed<Record<string, Rule[]>>(() => ({
   plantCode: [
     {
       required: true,
-      message: t('common.page.form.placeholder.required', { field: t('entity.serialoutbound.plantcode') }),
-      trigger: 'blur'
+      message: pi.ph('plantCode'),
+      trigger: 'change'
     }
   ],
   outboundNo: [
     {
       required: true,
-      message: t('common.page.form.placeholder.required', { field: t('entity.serialoutbound.outboundno') }),
+      message: pi.ph('outboundNo'),
       trigger: 'blur'
     }
   ],
   shippingInvoiceNo: [
     {
       required: true,
-      message: t('common.page.form.placeholder.required', { field: t('entity.serialoutbound.shippinginvoiceno') }),
+      message: pi.ph('shippingInvoiceNo'),
       trigger: 'blur'
     }
   ],
   outboundDate: [
     {
       required: true,
-      message: t('common.page.form.placeholder.select', { field: t('entity.serialoutbound.outbounddate') }),
+      message: pi.ph('outboundDate'),
       trigger: 'change'
     }
   ],
   destination: [
     {
       required: true,
-      message: t('common.page.form.placeholder.required', { field: t('entity.serialoutbound.destination') }),
-      trigger: 'blur'
+      message: pi.ph('destination'),
+      trigger: 'change'
     }
   ],
-  shippingMethod: [{
-    validator: async (_rule, value) => {
-      if (value === undefined || value === null || value === '') {
-        return Promise.reject(t('common.page.form.placeholder.select', { field: t('entity.serialoutbound.shippingmethod') }))
-      }
-      const num = typeof value === 'number' ? value : Number(value)
-      if (!Number.isFinite(num)) {
-        return Promise.reject(t('common.page.form.placeholder.select', { field: t('entity.serialoutbound.shippingmethod') }))
-      }
-      return Promise.resolve()
-    },
-    trigger: 'change'
-  }],
   destinationPort: [
     {
       required: true,
-      message: t('common.page.form.placeholder.select', { field: t('entity.serialoutbound.destinationport') }),
+      message: pi.ph('destinationPort'),
       trigger: 'change'
     }
   ],
   outboundType: [{
     validator: async (_rule, value) => {
       if (value === undefined || value === null || value === '') {
-        return Promise.reject(t('common.page.form.placeholder.select', { field: t('entity.serialoutbound.outboundtype') }))
+        return Promise.reject(pi.ph('outboundType'))
       }
       const num = typeof value === 'number' ? value : Number(value)
       if (!Number.isFinite(num)) {
-        return Promise.reject(t('common.page.form.placeholder.select', { field: t('entity.serialoutbound.outboundtype') }))
+        return Promise.reject(pi.ph('outboundType'))
       }
       return Promise.resolve()
     },
@@ -572,25 +549,25 @@ const rules = computed<Record<string, Rule[]>>(() => ({
   warehouseCode: [
     {
       required: true,
-      message: t('common.page.form.placeholder.required', { field: t('entity.serialoutbound.warehousecode') }),
-      trigger: 'blur'
+      message: pi.ph('warehouseCode'),
+      trigger: 'change'
     }
   ],
   locationCode: [
     {
       required: true,
-      message: t('common.page.form.placeholder.required', { field: t('entity.serialoutbound.locationcode') }),
-      trigger: 'blur'
+      message: pi.ph('locationCode'),
+      trigger: 'change'
     }
   ],
   totalQuantity: [{
     validator: async (_rule, value) => {
       if (value === undefined || value === null || value === '') {
-        return Promise.reject(t('common.page.form.placeholder.select', { field: t('entity.serialoutbound.totalquantity') }))
+        return Promise.reject(pi.ph('totalQuantity'))
       }
       const num = typeof value === 'number' ? value : Number(value)
       if (!Number.isFinite(num)) {
-        return Promise.reject(t('common.page.form.placeholder.select', { field: t('entity.serialoutbound.totalquantity') }))
+        return Promise.reject(pi.ph('totalQuantity'))
       }
       return Promise.resolve()
     },
@@ -608,10 +585,6 @@ async function validate() {
 /** 映射为 Create/Update DTO */
 function getValues(): Record<string, any> {
   const payload = buildSubmitPayload() as Record<string, unknown>
-  if ('shippingMethod' in payload) {
-    const rawshippingMethod = payload.shippingMethod
-    payload.shippingMethod = typeof rawshippingMethod === 'number' ? rawshippingMethod : Number(rawshippingMethod)
-  }
   if ('outboundType' in payload) {
     const rawoutboundType = payload.outboundType
     payload.outboundType = typeof rawoutboundType === 'number' ? rawoutboundType : Number(rawoutboundType)

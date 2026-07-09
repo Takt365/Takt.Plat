@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：frontend/src/types/logistics/quality/complaint
 // 文件名称：supplier-evaluation-item.d.ts
-// 创建时间：2026-06-23
+// 创建时间：2026-07-09
 // 创建人：Takt365(Auto Generated)
 // 功能描述：logistics/quality/complaint 模块类型定义（自动生成；类型名去 Takt 前缀与末尾 Dto，如 TaktCompanyDto → Company）
 // 
@@ -29,12 +29,12 @@ export interface SupplierEvaluationItem extends CompanyDtoBase {
   supplierEvaluationItemId: string;
 
   /**
-   * 评价表ID（主子表关系，序列化为string以避免Javascript精度问题）
+   * 评价表 ID（关联 TaktSupplierEvaluation.Id，选项 TaktSupplierEvaluations/options）
    */
   evaluationId: string;
 
   /**
-   * 评价表名称（填充字段）
+   * 评价表 名称（填充字段）
    */
   evaluationName?: string;
 
@@ -49,7 +49,7 @@ export interface SupplierEvaluationItem extends CompanyDtoBase {
   lineNumber: number;
 
   /**
-   * 评价类别类型（0=质量管理，1=交付能力，2=价格水平，3=服务水平，4=技术能力，5=管理体系，6=其他）
+   * 评价类别类型（字典 logistics_quality_evaluation_category）
    */
   categoryType: number;
 
@@ -79,7 +79,7 @@ export interface SupplierEvaluationItem extends CompanyDtoBase {
   score?: number;
 
   /**
-   * 评级（0=D级-不合格，1=C级-合格，2=B级-良好，3=A级-优秀）
+   * 评级（字典 logistics_quality_supplier_rating）
    */
   ratingLevel?: number;
 
@@ -109,9 +109,14 @@ export interface SupplierEvaluationItem extends CompanyDtoBase {
   rectificationDeadline?: string;
 
   /**
-   * 整改状态（0=无需整改，1=待整改，2=整改中，3=已完成，4=未通过）
+   * 整改状态（字典 logistics_quality_rectification_status）
    */
   rectificationStatus: number;
+
+  /**
+   * 是否作废（字典 sys_yes_no_type，0=否 1=是；编辑移除子行时标记作废）
+   */
+  isObsolete: number;
 
   /**
    * 评价表主表 （主表：TaktSupplierEvaluation）
@@ -139,7 +144,7 @@ export interface SupplierEvaluationItemQuery extends TaktPagedQuery {
   companyCode?: string;
 
   /**
-   * 评价表ID（主子表关系，序列化为string以避免Javascript精度问题）
+   * 评价表 ID（关联 TaktSupplierEvaluation.Id，选项 TaktSupplierEvaluations/options）
    */
   evaluationId?: string;
 
@@ -154,7 +159,7 @@ export interface SupplierEvaluationItemQuery extends TaktPagedQuery {
   lineNumber?: number;
 
   /**
-   * 评价类别类型（0=质量管理，1=交付能力，2=价格水平，3=服务水平，4=技术能力，5=管理体系，6=其他）
+   * 评价类别类型（字典 logistics_quality_evaluation_category）
    */
   categoryType?: number;
 
@@ -184,7 +189,7 @@ export interface SupplierEvaluationItemQuery extends TaktPagedQuery {
   score?: number;
 
   /**
-   * 评级（0=D级-不合格，1=C级-合格，2=B级-良好，3=A级-优秀）
+   * 评级（字典 logistics_quality_supplier_rating）
    */
   ratingLevel?: number;
 
@@ -219,9 +224,14 @@ export interface SupplierEvaluationItemQuery extends TaktPagedQuery {
   rectificationDeadlineEnd?: string;
 
   /**
-   * 整改状态（0=无需整改，1=待整改，2=整改中，3=已完成，4=未通过）
+   * 整改状态（字典 logistics_quality_rectification_status）
    */
   rectificationStatus?: number;
+
+  /**
+   * 是否作废（字典 sys_yes_no_type，0=否 1=是；编辑移除子行时标记作废）
+   */
+  isObsolete?: number;
 
   /**
    * 创建时间（范围查询-开始）
@@ -268,7 +278,7 @@ export interface SupplierEvaluationItemCreate {
   companyDefaultCulture: string;
 
   /**
-   * 评价表ID（主子表关系，序列化为string以避免Javascript精度问题）
+   * 评价表 ID（关联 TaktSupplierEvaluation.Id，选项 TaktSupplierEvaluations/options）
    */
   evaluationId: string;
 
@@ -283,7 +293,7 @@ export interface SupplierEvaluationItemCreate {
   lineNumber: number;
 
   /**
-   * 评价类别类型（0=质量管理，1=交付能力，2=价格水平，3=服务水平，4=技术能力，5=管理体系，6=其他）
+   * 评价类别类型（字典 logistics_quality_evaluation_category）
    */
   categoryType: number;
 
@@ -313,7 +323,7 @@ export interface SupplierEvaluationItemCreate {
   score?: number;
 
   /**
-   * 评级（0=D级-不合格，1=C级-合格，2=B级-良好，3=A级-优秀）
+   * 评级（字典 logistics_quality_supplier_rating）
    */
   ratingLevel?: number;
 
@@ -343,9 +353,14 @@ export interface SupplierEvaluationItemCreate {
   rectificationDeadline?: string;
 
   /**
-   * 整改状态（0=无需整改，1=待整改，2=整改中，3=已完成，4=未通过）
+   * 整改状态（字典 logistics_quality_rectification_status）
    */
   rectificationStatus: number;
+
+  /**
+   * 是否作废（字典 sys_yes_no_type，0=否 1=是；编辑移除子行时标记作废）
+   */
+  isObsolete: number;
 
   /**
    * 扩展字段JSON
@@ -387,9 +402,28 @@ export interface SupplierEvaluationItemStatus {
   supplierEvaluationItemId: string;
 
   /**
-   * 整改状态（0=无需整改，1=待整改，2=整改中，3=已完成，4=未通过）
+   * 整改状态（字典 logistics_quality_rectification_status）
    */
   rectificationStatus: number;
+
+}
+
+
+/**
+ * SupplierEvaluationItem 作废/撤销作废 DTO
+ * 对应前端 SupplierEvaluationItemObsolete
+ * @description 对应后端 TaktSupplierEvaluationItemObsoleteDto
+ */
+export interface SupplierEvaluationItemObsolete {
+  /**
+   * SupplierEvaluationItemID
+   */
+  supplierEvaluationItemId: string;
+
+  /**
+   * 是否作废（字典 sys_yes_no_type，0=否 1=是；编辑移除子行时标记作废）
+   */
+  isObsolete: number;
 
 }
 
@@ -411,7 +445,7 @@ export interface SupplierEvaluationItemTemplate {
   companyCode?: string;
 
   /**
-   * 评价表ID（主子表关系，序列化为string以避免Javascript精度问题）
+   * 评价表 ID（关联 TaktSupplierEvaluation.Id，选项 TaktSupplierEvaluations/options）
    */
   evaluationId?: string;
 
@@ -426,7 +460,7 @@ export interface SupplierEvaluationItemTemplate {
   lineNumber?: number;
 
   /**
-   * 评价类别类型（0=质量管理，1=交付能力，2=价格水平，3=服务水平，4=技术能力，5=管理体系，6=其他）
+   * 评价类别类型（字典 logistics_quality_evaluation_category）
    */
   categoryType?: number;
 
@@ -456,7 +490,7 @@ export interface SupplierEvaluationItemTemplate {
   score?: number;
 
   /**
-   * 评级（0=D级-不合格，1=C级-合格，2=B级-良好，3=A级-优秀）
+   * 评级（字典 logistics_quality_supplier_rating）
    */
   ratingLevel?: number;
 
@@ -486,9 +520,14 @@ export interface SupplierEvaluationItemTemplate {
   rectificationDeadline?: string;
 
   /**
-   * 整改状态（0=无需整改，1=待整改，2=整改中，3=已完成，4=未通过）
+   * 整改状态（字典 logistics_quality_rectification_status）
    */
   rectificationStatus?: number;
+
+  /**
+   * 是否作废（字典 sys_yes_no_type，0=否 1=是；编辑移除子行时标记作废）
+   */
+  isObsolete?: number;
 
   /**
    * 扩展字段JSON
@@ -525,7 +564,7 @@ export interface SupplierEvaluationItemImport {
   companyDefaultCulture?: string;
 
   /**
-   * 评价表ID（主子表关系，序列化为string以避免Javascript精度问题）
+   * 评价表 ID（关联 TaktSupplierEvaluation.Id，选项 TaktSupplierEvaluations/options）
    */
   evaluationId?: string;
 
@@ -540,7 +579,7 @@ export interface SupplierEvaluationItemImport {
   lineNumber?: number;
 
   /**
-   * 评价类别类型（0=质量管理，1=交付能力，2=价格水平，3=服务水平，4=技术能力，5=管理体系，6=其他）
+   * 评价类别类型（字典 logistics_quality_evaluation_category）
    */
   categoryType?: number;
 
@@ -570,7 +609,7 @@ export interface SupplierEvaluationItemImport {
   score?: number;
 
   /**
-   * 评级（0=D级-不合格，1=C级-合格，2=B级-良好，3=A级-优秀）
+   * 评级（字典 logistics_quality_supplier_rating）
    */
   ratingLevel?: number;
 
@@ -600,9 +639,14 @@ export interface SupplierEvaluationItemImport {
   rectificationDeadline?: string;
 
   /**
-   * 整改状态（0=无需整改，1=待整改，2=整改中，3=已完成，4=未通过）
+   * 整改状态（字典 logistics_quality_rectification_status）
    */
   rectificationStatus?: number;
+
+  /**
+   * 是否作废（字典 sys_yes_no_type，0=否 1=是；编辑移除子行时标记作废）
+   */
+  isObsolete?: number;
 
   /**
    * 扩展字段JSON
@@ -634,7 +678,7 @@ export interface SupplierEvaluationItemExport {
   companyCode: string;
 
   /**
-   * 评价表ID（主子表关系，序列化为string以避免Javascript精度问题）
+   * 评价表 ID（关联 TaktSupplierEvaluation.Id，选项 TaktSupplierEvaluations/options）
    */
   evaluationId: string;
 
@@ -649,7 +693,7 @@ export interface SupplierEvaluationItemExport {
   lineNumber: number;
 
   /**
-   * 评价类别类型（0=质量管理，1=交付能力，2=价格水平，3=服务水平，4=技术能力，5=管理体系，6=其他）
+   * 评价类别类型（字典 logistics_quality_evaluation_category）
    */
   categoryType: number;
 
@@ -679,7 +723,7 @@ export interface SupplierEvaluationItemExport {
   score?: number;
 
   /**
-   * 评级（0=D级-不合格，1=C级-合格，2=B级-良好，3=A级-优秀）
+   * 评级（字典 logistics_quality_supplier_rating）
    */
   ratingLevel?: number;
 
@@ -709,9 +753,14 @@ export interface SupplierEvaluationItemExport {
   rectificationDeadline?: string;
 
   /**
-   * 整改状态（0=无需整改，1=待整改，2=整改中，3=已完成，4=未通过）
+   * 整改状态（字典 logistics_quality_rectification_status）
    */
   rectificationStatus: number;
+
+  /**
+   * 是否作废（字典 sys_yes_no_type，0=否 1=是；编辑移除子行时标记作废）
+   */
+  isObsolete: number;
 
   /**
    * 扩展字段JSON

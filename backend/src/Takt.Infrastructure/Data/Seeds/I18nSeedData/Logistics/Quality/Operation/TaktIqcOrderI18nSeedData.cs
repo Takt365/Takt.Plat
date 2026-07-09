@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Infrastructure.Data.Seeds.I18nSeedData.Logistics.Quality.Operation
 // 文件名称：TaktIqcOrderI18nSeedData.cs
-// 创建时间：2026-07-02
+// 创建时间：2026-07-09
 // 创建人：Takt365(Auto Generated)
 // 功能描述：TaktIqcOrder 实体字段国际化种子（无对应 frontend locales；TranslationText 取自 ColumnDescription，ContextNote 取自属性 XML summary）
 // 
@@ -224,15 +224,6 @@ public class TaktIqcOrderI18nSeedData : ITaktSeedDataCoordinator
             new TranslationSeedItem("entity.iqcorder.items", "zh-CN", "IQC检验单明细列表", "IQC检验单明细列表（主子表关系）"),
             // entity.iqcorder.items
             new TranslationSeedItem("entity.iqcorder.items", "zh-HK", "IQC检验单明细列表_hk", "IQC检验单明细列表（主子表关系）"),
-
-            // entity.iqcorder.changelogs
-            new TranslationSeedItem("entity.iqcorder.changelogs", "en-US", "变更日志列表_us", "变更日志列表（主子表关系）"),
-            // entity.iqcorder.changelogs
-            new TranslationSeedItem("entity.iqcorder.changelogs", "ja-JP", "变更日志列表_jp", "变更日志列表（主子表关系）"),
-            // entity.iqcorder.changelogs
-            new TranslationSeedItem("entity.iqcorder.changelogs", "zh-CN", "变更日志列表", "变更日志列表（主子表关系）"),
-            // entity.iqcorder.changelogs
-            new TranslationSeedItem("entity.iqcorder.changelogs", "zh-HK", "变更日志列表_hk", "变更日志列表（主子表关系）"),
         };
     }
 

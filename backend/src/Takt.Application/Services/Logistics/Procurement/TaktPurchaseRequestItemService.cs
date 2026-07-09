@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Application.Services.Logistics.Procurement
 // 文件名称：TaktPurchaseRequestItemService.cs
-// 创建时间：2026-06-30
+// 创建时间：2026-07-09
 // 创建人：Takt365(Cursor AI)
 // 功能描述：采购申请明细应用服务实现
 // 
@@ -114,6 +114,7 @@ public class TaktPurchaseRequestItemService : TaktServiceBase, ITaktPurchaseRequ
     public async Task<TaktPurchaseRequestItemDto> CreatePurchaseRequestItemAsync(TaktPurchaseRequestItemCreateDto dto)
     {
         var entity = dto.Adapt<TaktPurchaseRequestItem>();
+        entity.IsObsolete = 0;
         var isUnique_ix_takt_logistics_materials_purchase_request_item_request_line_unique = await _uniqueValidator.IsUniqueAsync(
             _purchaseRequestItemRepository,
             x => x.PurchaseRequestId == entity.PurchaseRequestId
@@ -170,11 +171,21 @@ public class TaktPurchaseRequestItemService : TaktServiceBase, ITaktPurchaseRequ
     /// <returns>任务</returns>
     public async Task DeletePurchaseRequestItemByIdAsync(long id)
     {
-        var deleted = await _purchaseRequestItemRepository.DeleteAsync(id);
-        if (!deleted)
+        var entity = await _purchaseRequestItemRepository.GetByIdAsync(id);
+        if (entity == null)
         {
             throw new TaktBusinessException("采购申请明细不存在或已删除");
         }
+        if (entity.TenantCode != CurrentTenantCode || entity.CompanyCode != CurrentCompanyCode)
+        {
+            throw new TaktBusinessException("采购申请明细不存在或已删除");
+        }
+        if (entity.IsObsolete == 1)
+        {
+            throw new TaktBusinessException("采购申请明细已作废");
+        }
+        entity.IsObsolete = 1;
+        await _purchaseRequestItemRepository.UpdateAsync(entity);
     }
 
     /// <summary>
@@ -193,6 +204,27 @@ public class TaktPurchaseRequestItemService : TaktServiceBase, ITaktPurchaseRequ
         {
             await DeletePurchaseRequestItemByIdAsync(id);
         }
+    }
+
+    /// <summary>
+    /// 更新采购申请明细作废状态
+    /// </summary>
+    /// <param name="dto">作废DTO</param>
+    /// <returns>DTO</returns>
+    public async Task<TaktPurchaseRequestItemDto> UpdatePurchaseRequestItemObsoleteAsync(TaktPurchaseRequestItemObsoleteDto dto)
+    {
+        var entity = await _purchaseRequestItemRepository.GetByIdAsync(dto.PurchaseRequestItemId);
+        if (entity == null)
+        {
+            throw new TaktBusinessException("采购申请明细不存在");
+        }
+        if (entity.TenantCode != CurrentTenantCode || entity.CompanyCode != CurrentCompanyCode)
+        {
+            throw new TaktBusinessException("采购申请明细不存在");
+        }
+        entity.IsObsolete = dto.IsObsolete;
+        await _purchaseRequestItemRepository.UpdateAsync(entity);
+        return await GetPurchaseRequestItemByIdAsync(dto.PurchaseRequestItemId) ?? throw new TaktBusinessException("采购申请明细不存在");
     }
 
     /// <summary>
@@ -302,6 +334,15 @@ public class TaktPurchaseRequestItemService : TaktServiceBase, ITaktPurchaseRequ
     private static Expression<Func<TaktPurchaseRequestItem, bool>> QueryExpression(TaktPurchaseRequestItemQueryDto? queryDto)
     {
         var exp = Expressionable.Create<TaktPurchaseRequestItem>();
+
+        if (queryDto?.IsObsolete.HasValue == true)
+        {
+            exp = exp.And(x => x.IsObsolete == queryDto.IsObsolete);
+        }
+        else
+        {
+            exp = exp.And(x => x.IsObsolete == 0);
+        }
 
         if (!string.IsNullOrEmpty(queryDto?.KeyWords))
         {

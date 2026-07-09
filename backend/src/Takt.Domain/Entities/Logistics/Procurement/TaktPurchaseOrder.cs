@@ -150,10 +150,4 @@ public class TaktPurchaseOrder : TaktCompanyEntityBase
     /// </summary>
     [Navigate(NavigateType.OneToMany, nameof(TaktPurchaseOrderItem.PurchaseOrderId))]
     public List<TaktPurchaseOrderItem>? Items { get; set; }
-
-    /// <summary>
-    /// 采购订单变更记录列表（外键在子表 TaktPurchaseOrderChangeLog.PurchaseOrderId）
-    /// </summary>
-    [Navigate(NavigateType.OneToMany, nameof(TaktPurchaseOrderChangeLog.PurchaseOrderId))]
-    public List<TaktPurchaseOrderChangeLog>? ChangeLogs { get; set; }
 }

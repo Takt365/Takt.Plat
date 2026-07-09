@@ -10,7 +10,7 @@
 <template>
   <a-form
     ref="formRef"
-    class="takt-generated-form work-order-form flex flex-col min-h-0"
+    class="takt-generated-form work-order-form flex flex-col min-h-0 overflow-visible"
     :model="formState"
     :rules="rules"
     layout="horizontal"
@@ -22,61 +22,19 @@
     >
       <a-tab-pane
         key="tab-0"
-        :tab="t('common.page.form.tabs.basicinfo') + ' (1/5)'"
+        :tab="t('common.page.form.tabs.basicinfo') + ' (1/6)'"
         force-render
       >
         <div :class="formContentClass">
           <a-row :gutter="24">
             <a-col :span="12">
               <a-form-item
-                :label="t('common.page.entity.tenantcode')"
-                name="tenantCode"
-              >
-                <a-input
-                  v-model:value="formState.tenantCode"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('common.page.entity.tenantcode') })"
-                  show-count
-                  :maxlength="20"
-                  disabled
-                />
-              </a-form-item>
-            </a-col>
-            <a-col :span="12">
-              <a-form-item
-                :label="t('common.page.entity.companycode')"
-                name="companyCode"
-              >
-                <a-input
-                  v-model:value="formState.companyCode"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('common.page.entity.companycode') })"
-                  show-count
-                  :maxlength="20"
-                  disabled
-                />
-              </a-form-item>
-            </a-col>
-            <a-col :span="12">
-              <a-form-item
-                :label="t('common.page.entity.companydefaultculture')"
-                name="companyDefaultCulture"
-              >
-                <a-input
-                  v-model:value="formState.companyDefaultCulture"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('common.page.entity.companydefaultculture') })"
-                  show-count
-                  :maxlength="20"
-                  disabled
-                />
-              </a-form-item>
-            </a-col>
-            <a-col :span="12">
-              <a-form-item
-                :label="t('entity.maintenanceworkorder.plantcode')"
+                :label="pi.label('plantCode')"
                 name="plantCode"
               >
                 <a-input
                   v-model:value="formState.plantCode"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.maintenanceworkorder.plantcode') })"
+                  :placeholder="pi.ph('plantCode')"
                   show-count
                   :maxlength="4"
                   allow-clear
@@ -86,12 +44,12 @@
             </a-col>
             <a-col :span="12">
               <a-form-item
-                :label="t('entity.maintenanceworkorder.workordercode')"
+                :label="pi.label('workOrderCode')"
                 name="workOrderCode"
               >
                 <a-input
                   v-model:value="formState.workOrderCode"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.maintenanceworkorder.workordercode') })"
+                  :placeholder="pi.ph('workOrderCode')"
                   show-count
                   :maxlength="50"
                   allow-clear
@@ -101,12 +59,12 @@
             </a-col>
             <a-col :span="12">
               <a-form-item
-                :label="t('entity.maintenanceworkorder.maintenancenotificationid')"
+                :label="pi.label('maintenanceNotificationId')"
                 name="maintenanceNotificationId"
               >
                 <a-input
                   v-model:value="formState.maintenanceNotificationId"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.maintenanceworkorder.maintenancenotificationid') })"
+                  :placeholder="pi.ph('maintenanceNotificationId')"
                   show-count
                   :maxlength="20"
                   allow-clear
@@ -115,12 +73,12 @@
             </a-col>
             <a-col :span="12">
               <a-form-item
-                :label="t('entity.maintenanceworkorder.notificationcode')"
+                :label="pi.label('notificationCode')"
                 name="notificationCode"
               >
                 <a-input
                   v-model:value="formState.notificationCode"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.maintenanceworkorder.notificationcode') })"
+                  :placeholder="pi.ph('notificationCode')"
                   show-count
                   :maxlength="50"
                   allow-clear
@@ -130,12 +88,12 @@
             </a-col>
             <a-col :span="12">
               <a-form-item
-                :label="t('entity.maintenanceworkorder.equipmentid')"
+                :label="pi.label('equipmentId')"
                 name="equipmentId"
               >
                 <a-input
                   v-model:value="formState.equipmentId"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.maintenanceworkorder.equipmentid') })"
+                  :placeholder="pi.ph('equipmentId')"
                   show-count
                   :maxlength="20"
                   allow-clear
@@ -144,12 +102,12 @@
             </a-col>
             <a-col :span="12">
               <a-form-item
-                :label="t('entity.maintenanceworkorder.equipmentcode')"
+                :label="pi.label('equipmentCode')"
                 name="equipmentCode"
               >
                 <a-input
                   v-model:value="formState.equipmentCode"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.maintenanceworkorder.equipmentcode') })"
+                  :placeholder="pi.ph('equipmentCode')"
                   show-count
                   :maxlength="50"
                   allow-clear
@@ -159,15 +117,51 @@
             </a-col>
             <a-col :span="12">
               <a-form-item
-                :label="t('entity.maintenanceworkorder.equipmentname')"
+                :label="pi.label('equipmentName')"
                 name="equipmentName"
               >
                 <a-input
                   v-model:value="formState.equipmentName"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.maintenanceworkorder.equipmentname') })"
+                  :placeholder="pi.ph('equipmentName')"
                   show-count
                   :maxlength="200"
                   allow-clear
+                />
+              </a-form-item>
+            </a-col>
+            <a-col :span="12">
+              <a-form-item
+                :label="pi.label('maintenanceCategory')"
+                name="maintenanceCategory"
+              >
+                <TaktSelect
+                  v-model:value="formState.maintenanceCategory"
+                  dict-type="logistics_maintenance_category"
+                  :placeholder="pi.ph('maintenanceCategory')"
+                />
+              </a-form-item>
+            </a-col>
+            <a-col :span="12">
+              <a-form-item
+                :label="pi.label('maintenanceType')"
+                name="maintenanceType"
+              >
+                <TaktSelect
+                  v-model:value="formState.maintenanceType"
+                  dict-type="logistics_maintenance_type"
+                  :placeholder="pi.ph('maintenanceType')"
+                />
+              </a-form-item>
+            </a-col>
+            <a-col :span="12">
+              <a-form-item
+                :label="pi.label('workOrderStatus')"
+                name="workOrderStatus"
+              >
+                <TaktSelect
+                  v-model:value="formState.workOrderStatus"
+                  dict-type="sys_ticket_status"
+                  :placeholder="pi.ph('workOrderStatus')"
                 />
               </a-form-item>
             </a-col>
@@ -176,81 +170,31 @@
       </a-tab-pane>
       <a-tab-pane
         key="tab-1"
-        :tab="t('common.page.form.tabs.basicinfo') + ' (2/5)'"
+        :tab="t('common.page.form.tabs.basicinfo') + ' (2/6)'"
         force-render
       >
         <div :class="formContentClass">
           <a-row :gutter="24">
             <a-col :span="12">
               <a-form-item
-                :label="t('entity.maintenanceworkorder.maintenancecategory')"
-                name="maintenanceCategory"
-              >
-                <TaktSelect
-                  v-model:value="formState.maintenanceCategory"
-                  dict-type="logistics_maintenance_category"
-                  :placeholder="t('common.page.form.placeholder.select', { field: t('entity.maintenanceworkorder.maintenancecategory') })"
-                />
-              </a-form-item>
-            </a-col>
-            <a-col :span="12">
-              <a-form-item
-                :label="t('entity.maintenanceworkorder.maintenancetype')"
-                name="maintenanceType"
-              >
-                <TaktSelect
-                  v-model:value="formState.maintenanceType"
-                  dict-type="logistics_maintenance_type"
-                  :placeholder="t('common.page.form.placeholder.select', { field: t('entity.maintenanceworkorder.maintenancetype') })"
-                />
-              </a-form-item>
-            </a-col>
-            <a-col :span="12">
-              <a-form-item
-                :label="t('entity.maintenanceworkorder.workorderstatus')"
-                name="workOrderStatus"
-              >
-                <TaktSelect
-                  v-model:value="formState.workOrderStatus"
-                  dict-type="sys_ticket_status"
-                  :placeholder="t('common.page.form.placeholder.select', { field: t('entity.maintenanceworkorder.workorderstatus') })"
-                />
-              </a-form-item>
-            </a-col>
-            <a-col :span="12">
-              <a-form-item
-                :label="t('entity.maintenanceworkorder.priority')"
+                :label="pi.label('priority')"
                 name="priority"
               >
                 <a-input-number
                   v-model:value="formState.priority"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.maintenanceworkorder.priority') })"
+                  :placeholder="pi.ph('priority')"
                   style="width: 100%"
                 />
               </a-form-item>
             </a-col>
             <a-col :span="12">
               <a-form-item
-                :label="t('entity.maintenanceworkorder.workcenter')"
+                :label="pi.label('workCenter')"
                 name="workCenter"
               >
                 <a-input
                   v-model:value="formState.workCenter"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.maintenanceworkorder.workcenter') })"
-                  show-count
-                  :maxlength="8"
-                  allow-clear
-                />
-              </a-form-item>
-            </a-col>
-            <a-col :span="12">
-              <a-form-item
-                :label="t('entity.maintenanceworkorder.assignedtechnician')"
-                name="assignedTechnician"
-              >
-                <a-input
-                  v-model:value="formState.assignedTechnician"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.maintenanceworkorder.assignedtechnician') })"
+                  :placeholder="pi.ph('workCenter')"
                   show-count
                   :maxlength="50"
                   allow-clear
@@ -259,12 +203,26 @@
             </a-col>
             <a-col :span="12">
               <a-form-item
-                :label="t('entity.maintenanceworkorder.maintenancecompany')"
+                :label="pi.label('assignedTechnician')"
+                name="assignedTechnician"
+              >
+                <a-input
+                  v-model:value="formState.assignedTechnician"
+                  :placeholder="pi.ph('assignedTechnician')"
+                  show-count
+                  :maxlength="50"
+                  allow-clear
+                />
+              </a-form-item>
+            </a-col>
+            <a-col :span="12">
+              <a-form-item
+                :label="pi.label('maintenanceCompany')"
                 name="maintenanceCompany"
               >
                 <a-input
                   v-model:value="formState.maintenanceCompany"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.maintenanceworkorder.maintenancecompany') })"
+                  :placeholder="pi.ph('maintenanceCompany')"
                   show-count
                   :maxlength="200"
                   allow-clear
@@ -273,12 +231,12 @@
             </a-col>
             <a-col :span="12">
               <a-form-item
-                :label="t('entity.maintenanceworkorder.plannedstarttime')"
+                :label="pi.label('plannedStartTime')"
                 name="plannedStartTime"
               >
                 <a-date-picker
                   v-model:value="formState.plannedStartTime"
-                  :placeholder="t('common.page.form.placeholder.select', { field: t('entity.maintenanceworkorder.plannedstarttime') })"
+                  :placeholder="pi.ph('plannedStartTime')"
                   value-format="YYYY-MM-DD"
                   style="width: 100%"
                 />
@@ -286,12 +244,12 @@
             </a-col>
             <a-col :span="12">
               <a-form-item
-                :label="t('entity.maintenanceworkorder.plannedendtime')"
+                :label="pi.label('plannedEndTime')"
                 name="plannedEndTime"
               >
                 <a-date-picker
                   v-model:value="formState.plannedEndTime"
-                  :placeholder="t('common.page.form.placeholder.select', { field: t('entity.maintenanceworkorder.plannedendtime') })"
+                  :placeholder="pi.ph('plannedEndTime')"
                   value-format="YYYY-MM-DD"
                   style="width: 100%"
                 />
@@ -299,14 +257,51 @@
             </a-col>
             <a-col :span="12">
               <a-form-item
-                :label="t('entity.maintenanceworkorder.actualstarttime')"
+                :label="pi.label('actualStartTime')"
                 name="actualStartTime"
               >
                 <a-date-picker
                   v-model:value="formState.actualStartTime"
-                  :placeholder="t('common.page.form.placeholder.select', { field: t('entity.maintenanceworkorder.actualstarttime') })"
+                  :placeholder="pi.ph('actualStartTime')"
                   value-format="YYYY-MM-DD"
                   style="width: 100%"
+                />
+              </a-form-item>
+            </a-col>
+            <a-col :span="12">
+              <a-form-item
+                :label="pi.label('actualEndTime')"
+                name="actualEndTime"
+              >
+                <a-date-picker
+                  v-model:value="formState.actualEndTime"
+                  :placeholder="pi.ph('actualEndTime')"
+                  value-format="YYYY-MM-DD"
+                  style="width: 100%"
+                />
+              </a-form-item>
+            </a-col>
+            <a-col :span="24">
+              <a-form-item
+                :label="pi.label('faultDescription')"
+                name="faultDescription"
+              >
+                <a-textarea
+                  v-model:value="formState.faultDescription"
+                  :placeholder="pi.ph('faultDescription')"
+                  :rows="2"
+                />
+              </a-form-item>
+            </a-col>
+            <a-col :span="24">
+              <a-form-item
+                :label="pi.label('maintenanceContent')"
+                name="maintenanceContent"
+              >
+                <a-textarea
+                  v-model:value="formState.maintenanceContent"
+                  :placeholder="pi.ph('maintenanceContent')"
+                  :rows="2"
                 />
               </a-form-item>
             </a-col>
@@ -315,56 +310,19 @@
       </a-tab-pane>
       <a-tab-pane
         key="tab-2"
-        :tab="t('common.page.form.tabs.basicinfo') + ' (3/5)'"
+        :tab="t('common.page.form.tabs.basicinfo') + ' (3/6)'"
         force-render
       >
         <div :class="formContentClass">
           <a-row :gutter="24">
             <a-col :span="12">
               <a-form-item
-                :label="t('entity.maintenanceworkorder.actualendtime')"
-                name="actualEndTime"
-              >
-                <a-date-picker
-                  v-model:value="formState.actualEndTime"
-                  :placeholder="t('common.page.form.placeholder.select', { field: t('entity.maintenanceworkorder.actualendtime') })"
-                  value-format="YYYY-MM-DD"
-                  style="width: 100%"
-                />
-              </a-form-item>
-            </a-col>
-            <a-col :span="24">
-              <a-form-item
-                :label="t('entity.maintenanceworkorder.faultdescription')"
-                name="faultDescription"
-              >
-                <a-textarea
-                  v-model:value="formState.faultDescription"
-                  :placeholder="t('common.page.form.placeholder.optional', { field: t('entity.maintenanceworkorder.faultdescription') })"
-                  :rows="2"
-                />
-              </a-form-item>
-            </a-col>
-            <a-col :span="24">
-              <a-form-item
-                :label="t('entity.maintenanceworkorder.maintenancecontent')"
-                name="maintenanceContent"
-              >
-                <a-textarea
-                  v-model:value="formState.maintenanceContent"
-                  :placeholder="t('common.page.form.placeholder.optional', { field: t('entity.maintenanceworkorder.maintenancecontent') })"
-                  :rows="2"
-                />
-              </a-form-item>
-            </a-col>
-            <a-col :span="12">
-              <a-form-item
-                :label="t('entity.maintenanceworkorder.solution')"
+                :label="pi.label('solution')"
                 name="solution"
               >
                 <a-input
                   v-model:value="formState.solution"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.maintenanceworkorder.solution') })"
+                  :placeholder="pi.ph('solution')"
                   show-count
                   :maxlength="2000"
                   allow-clear
@@ -373,12 +331,12 @@
             </a-col>
             <a-col :span="12">
               <a-form-item
-                :label="t('entity.maintenanceworkorder.costcenterid')"
+                :label="pi.label('costCenterId')"
                 name="costCenterId"
               >
                 <a-input
                   v-model:value="formState.costCenterId"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.maintenanceworkorder.costcenterid') })"
+                  :placeholder="pi.ph('costCenterId')"
                   show-count
                   :maxlength="20"
                   allow-clear
@@ -387,14 +345,14 @@
             </a-col>
             <a-col :span="12">
               <a-form-item
-                :label="t('entity.maintenanceworkorder.costcentercode')"
+                :label="pi.label('costCenterCode')"
                 name="costCenterCode"
               >
                 <a-input
                   v-model:value="formState.costCenterCode"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.maintenanceworkorder.costcentercode') })"
+                  :placeholder="pi.ph('costCenterCode')"
                   show-count
-                  :maxlength="4"
+                  :maxlength="50"
                   allow-clear
                   :disabled="!!formData?.maintenanceWorkOrderId"
                 />
@@ -402,12 +360,12 @@
             </a-col>
             <a-col :span="12">
               <a-form-item
-                :label="t('entity.maintenanceworkorder.costelementid')"
+                :label="pi.label('costElementId')"
                 name="costElementId"
               >
                 <a-input
                   v-model:value="formState.costElementId"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.maintenanceworkorder.costelementid') })"
+                  :placeholder="pi.ph('costElementId')"
                   show-count
                   :maxlength="20"
                   allow-clear
@@ -416,14 +374,14 @@
             </a-col>
             <a-col :span="12">
               <a-form-item
-                :label="t('entity.maintenanceworkorder.costelementcode')"
+                :label="pi.label('costElementCode')"
                 name="costElementCode"
               >
                 <a-input
                   v-model:value="formState.costElementCode"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.maintenanceworkorder.costelementcode') })"
+                  :placeholder="pi.ph('costElementCode')"
                   show-count
-                  :maxlength="4"
+                  :maxlength="50"
                   allow-clear
                   :disabled="!!formData?.maintenanceWorkOrderId"
                 />
@@ -431,24 +389,60 @@
             </a-col>
             <a-col :span="12">
               <a-form-item
-                :label="t('entity.maintenanceworkorder.totalmaterialcost')"
+                :label="pi.label('totalMaterialCost')"
                 name="totalMaterialCost"
               >
                 <a-input-number
                   v-model:value="formState.totalMaterialCost"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.maintenanceworkorder.totalmaterialcost') })"
+                  :placeholder="pi.ph('totalMaterialCost')"
                   style="width: 100%"
                 />
               </a-form-item>
             </a-col>
             <a-col :span="12">
               <a-form-item
-                :label="t('entity.maintenanceworkorder.totallaborcost')"
+                :label="pi.label('totalLaborCost')"
                 name="totalLaborCost"
               >
                 <a-input-number
                   v-model:value="formState.totalLaborCost"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.maintenanceworkorder.totallaborcost') })"
+                  :placeholder="pi.ph('totalLaborCost')"
+                  style="width: 100%"
+                />
+              </a-form-item>
+            </a-col>
+            <a-col :span="12">
+              <a-form-item
+                :label="pi.label('totalOtherCost')"
+                name="totalOtherCost"
+              >
+                <a-input-number
+                  v-model:value="formState.totalOtherCost"
+                  :placeholder="pi.ph('totalOtherCost')"
+                  style="width: 100%"
+                />
+              </a-form-item>
+            </a-col>
+            <a-col :span="12">
+              <a-form-item
+                :label="pi.label('totalCost')"
+                name="totalCost"
+              >
+                <a-input-number
+                  v-model:value="formState.totalCost"
+                  :placeholder="pi.ph('totalCost')"
+                  style="width: 100%"
+                />
+              </a-form-item>
+            </a-col>
+            <a-col :span="12">
+              <a-form-item
+                :label="pi.label('settlementStatus')"
+                name="settlementStatus"
+              >
+                <a-input-number
+                  v-model:value="formState.settlementStatus"
+                  :placeholder="pi.ph('settlementStatus')"
                   style="width: 100%"
                 />
               </a-form-item>
@@ -458,55 +452,19 @@
       </a-tab-pane>
       <a-tab-pane
         key="tab-3"
-        :tab="t('common.page.form.tabs.basicinfo') + ' (4/5)'"
+        :tab="t('common.page.form.tabs.basicinfo') + ' (4/6)'"
         force-render
       >
         <div :class="formContentClass">
           <a-row :gutter="24">
             <a-col :span="12">
               <a-form-item
-                :label="t('entity.maintenanceworkorder.totalothercost')"
-                name="totalOtherCost"
-              >
-                <a-input-number
-                  v-model:value="formState.totalOtherCost"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.maintenanceworkorder.totalothercost') })"
-                  style="width: 100%"
-                />
-              </a-form-item>
-            </a-col>
-            <a-col :span="12">
-              <a-form-item
-                :label="t('entity.maintenanceworkorder.totalcost')"
-                name="totalCost"
-              >
-                <a-input-number
-                  v-model:value="formState.totalCost"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.maintenanceworkorder.totalcost') })"
-                  style="width: 100%"
-                />
-              </a-form-item>
-            </a-col>
-            <a-col :span="12">
-              <a-form-item
-                :label="t('entity.maintenanceworkorder.settlementstatus')"
-                name="settlementStatus"
-              >
-                <a-input-number
-                  v-model:value="formState.settlementStatus"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.maintenanceworkorder.settlementstatus') })"
-                  style="width: 100%"
-                />
-              </a-form-item>
-            </a-col>
-            <a-col :span="12">
-              <a-form-item
-                :label="t('entity.maintenanceworkorder.settlementtime')"
+                :label="pi.label('settlementTime')"
                 name="settlementTime"
               >
                 <a-date-picker
                   v-model:value="formState.settlementTime"
-                  :placeholder="t('common.page.form.placeholder.select', { field: t('entity.maintenanceworkorder.settlementtime') })"
+                  :placeholder="pi.ph('settlementTime')"
                   value-format="YYYY-MM-DD"
                   style="width: 100%"
                 />
@@ -514,12 +472,12 @@
             </a-col>
             <a-col :span="12">
               <a-form-item
-                :label="t('entity.maintenanceworkorder.completedat')"
+                :label="pi.label('completedAt')"
                 name="completedAt"
               >
                 <a-date-picker
                   v-model:value="formState.completedAt"
-                  :placeholder="t('common.page.form.placeholder.select', { field: t('entity.maintenanceworkorder.completedat') })"
+                  :placeholder="pi.ph('completedAt')"
                   value-format="YYYY-MM-DD"
                   style="width: 100%"
                 />
@@ -527,12 +485,12 @@
             </a-col>
             <a-col :span="12">
               <a-form-item
-                :label="t('entity.maintenanceworkorder.acceptedby')"
+                :label="pi.label('acceptedBy')"
                 name="acceptedBy"
               >
                 <a-input
                   v-model:value="formState.acceptedBy"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.maintenanceworkorder.acceptedby') })"
+                  :placeholder="pi.ph('acceptedBy')"
                   show-count
                   :maxlength="50"
                   allow-clear
@@ -541,12 +499,12 @@
             </a-col>
             <a-col :span="12">
               <a-form-item
-                :label="t('entity.maintenanceworkorder.acceptedat')"
+                :label="pi.label('acceptedAt')"
                 name="acceptedAt"
               >
                 <a-date-picker
                   v-model:value="formState.acceptedAt"
-                  :placeholder="t('common.page.form.placeholder.select', { field: t('entity.maintenanceworkorder.acceptedat') })"
+                  :placeholder="pi.ph('acceptedAt')"
                   value-format="YYYY-MM-DD"
                   style="width: 100%"
                 />
@@ -554,24 +512,24 @@
             </a-col>
             <a-col :span="12">
               <a-form-item
-                :label="t('entity.maintenanceworkorder.maintenanceresult')"
+                :label="pi.label('maintenanceResult')"
                 name="maintenanceResult"
               >
                 <a-input-number
                   v-model:value="formState.maintenanceResult"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.maintenanceworkorder.maintenanceresult') })"
+                  :placeholder="pi.ph('maintenanceResult')"
                   style="width: 100%"
                 />
               </a-form-item>
             </a-col>
             <a-col :span="12">
               <a-form-item
-                :label="t('entity.maintenanceworkorder.nextmaintenancedate')"
+                :label="pi.label('nextMaintenanceDate')"
                 name="nextMaintenanceDate"
               >
                 <a-date-picker
                   v-model:value="formState.nextMaintenanceDate"
-                  :placeholder="t('common.page.form.placeholder.select', { field: t('entity.maintenanceworkorder.nextmaintenancedate') })"
+                  :placeholder="pi.ph('nextMaintenanceDate')"
                   value-format="YYYY-MM-DD"
                   style="width: 100%"
                 />
@@ -579,13 +537,55 @@
             </a-col>
             <a-col :span="12">
               <a-form-item
-                :label="t('entity.maintenanceworkorder.maintenancecycledays')"
+                :label="pi.label('maintenanceCycleDays')"
                 name="maintenanceCycleDays"
               >
                 <a-input-number
                   v-model:value="formState.maintenanceCycleDays"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.maintenanceworkorder.maintenancecycledays') })"
+                  :placeholder="pi.ph('maintenanceCycleDays')"
                   style="width: 100%"
+                />
+              </a-form-item>
+            </a-col>
+            <a-col :span="12">
+              <a-form-item
+                :label="pi.label('maintenanceImages')"
+                name="maintenanceImages"
+              >
+                <a-input
+                  v-model:value="formState.maintenanceImages"
+                  :placeholder="pi.ph('maintenanceImages')"
+                  show-count
+                  :maxlength="2000"
+                  allow-clear
+                />
+              </a-form-item>
+            </a-col>
+            <a-col :span="12">
+              <a-form-item
+                :label="pi.label('maintenanceDocuments')"
+                name="maintenanceDocuments"
+              >
+                <a-input
+                  v-model:value="formState.maintenanceDocuments"
+                  :placeholder="pi.ph('maintenanceDocuments')"
+                  show-count
+                  :maxlength="2000"
+                  allow-clear
+                />
+              </a-form-item>
+            </a-col>
+            <a-col :span="12">
+              <a-form-item
+                :label="pi.label('acceptedSummary')"
+                name="acceptedSummary"
+              >
+                <a-input
+                  v-model:value="formState.acceptedSummary"
+                  :placeholder="pi.ph('acceptedSummary')"
+                  show-count
+                  :maxlength="500"
+                  allow-clear
                 />
               </a-form-item>
             </a-col>
@@ -594,62 +594,72 @@
       </a-tab-pane>
       <a-tab-pane
         key="tab-4"
-        :tab="t('common.page.form.tabs.basicinfo') + ' (5/5)'"
+        :tab="t('common.page.form.tabs.basicinfo') + ' (5/6)'"
         force-render
       >
         <div :class="formContentClass">
           <a-row :gutter="24">
             <a-col :span="24">
               <a-form-item
-                :label="t('entity.maintenanceworkorder.maintenanceimages')"
-                name="maintenanceImages"
-              >
-                <a-input
-                  v-model:value="formState.maintenanceImages"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.maintenanceworkorder.maintenanceimages') })"
-                  show-count
-                  :maxlength="2000"
-                  allow-clear
-                />
-              </a-form-item>
-            </a-col>
-            <a-col :span="24">
-              <a-form-item
-                :label="t('entity.maintenanceworkorder.maintenancedocuments')"
-                name="maintenanceDocuments"
-              >
-                <a-input
-                  v-model:value="formState.maintenanceDocuments"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.maintenanceworkorder.maintenancedocuments') })"
-                  show-count
-                  :maxlength="2000"
-                  allow-clear
-                />
-              </a-form-item>
-            </a-col>
-            <a-col :span="24">
-              <a-form-item
-                :label="t('entity.maintenanceworkorder.acceptedsummary')"
-                name="acceptedSummary"
-              >
-                <a-input
-                  v-model:value="formState.acceptedSummary"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.maintenanceworkorder.acceptedsummary') })"
-                  show-count
-                  :maxlength="500"
-                  allow-clear
-                />
-              </a-form-item>
-            </a-col>
-            <a-col :span="24">
-              <a-form-item
-                :label="t('entity.maintenanceworkorder.ishistoryarchived')"
+                :label="pi.label('isHistoryArchived')"
                 name="isHistoryArchived"
               >
                 <TaktSelect
                   v-model:value="formState.isHistoryArchived"
                   dict-type="sys_yes_no_type"
-                  :placeholder="t('common.page.form.placeholder.select', { field: t('entity.maintenanceworkorder.ishistoryarchived') })"
+                  :placeholder="pi.ph('isHistoryArchived')"
+                />
+              </a-form-item>
+            </a-col>
+          </a-row>
+        </div>
+      </a-tab-pane>
+      <a-tab-pane
+        key="tab-5"
+        :tab="t('common.page.form.tabs.basicinfo') + ' (6/6)'"
+        force-render
+      >
+        <div :class="formContentClass">
+          <a-row :gutter="24">
+            <a-col :span="24">
+              <a-form-item
+                :label="pi.label('tenantCode')"
+                name="tenantCode"
+              >
+                <a-input
+                  v-model:value="formState.tenantCode"
+                  :placeholder="pi.ph('tenantCode')"
+                  show-count
+                  :maxlength="20"
+                  disabled
+                />
+              </a-form-item>
+            </a-col>
+            <a-col :span="24">
+              <a-form-item
+                :label="pi.label('companyCode')"
+                name="companyCode"
+              >
+                <a-input
+                  v-model:value="formState.companyCode"
+                  :placeholder="pi.ph('companyCode')"
+                  show-count
+                  :maxlength="20"
+                  disabled
+                />
+              </a-form-item>
+            </a-col>
+            <a-col :span="24">
+              <a-form-item
+                :label="pi.label('companyDefaultCulture')"
+                name="companyDefaultCulture"
+              >
+                <a-input
+                  v-model:value="formState.companyDefaultCulture"
+                  :placeholder="pi.ph('companyDefaultCulture')"
+                  show-count
+                  :maxlength="20"
+                  disabled
                 />
               </a-form-item>
             </a-col>
@@ -666,7 +676,7 @@
                     >
                       <span class="takt-form-label-hint-icon"><RiQuestionLine class="takt-remix-icon" /></span>
                     </a-tooltip>
-                    <span>{{ t('common.page.entity.extfield') }}</span>
+                    <span>{{ pi.label('extField') }}</span>
                   </span>
                 </template>
                 <a-textarea
@@ -681,12 +691,12 @@
             </a-col>
             <a-col :span="24">
               <a-form-item
-                :label="t('common.page.entity.remark')"
+                :label="pi.label('remark')"
                 name="remark"
               >
                 <a-textarea
                   v-model:value="formState.remark"
-                  :placeholder="t('common.page.form.placeholder.optional', { field: t('common.page.entity.remark') })"
+                  :placeholder="pi.ph('remark')"
                   :rows="4"
                   show-count
                   :maxlength="400"
@@ -703,13 +713,27 @@
       ref="maintenanceWorkOrderMaterialTableRef"
       v-model="childMaintenanceWorkOrderMaterialRows"
       :columns="maintenanceWorkOrderMaterialFormColumns"
-      :title="t('entity.maintenanceworkordermaterial._self')"
-      :add-button-entity="t('entity.maintenanceworkordermaterial._self')"
+      :title="maintenanceWorkOrderMaterialPi.self()"
+      :add-button-entity="maintenanceWorkOrderMaterialPi.self()"
       id-field="maintenanceWorkOrderMaterialId"
       :default-row="createDefaultMaintenanceWorkOrderMaterialRow"
       :disabled="loading"
+      :enable-vertical-scroll="false"
       section-border
-    />
+      class="w-full min-w-0"
+    >
+      <template #cell-isObsolete="{ record }">
+        <TaktSelect
+          v-model:value="record.isObsolete"
+          dict-type="sys_yes_no_type"
+          class="w-full"
+          :get-popup-container="getSelectPopupContainer"
+          :placeholder="maintenanceWorkOrderMaterialPi.ph('isObsolete')"
+          :disabled="loading"
+          allow-clear
+        />
+      </template>
+    </TaktEditableTable>
   </a-form>
 </template>
 
@@ -721,6 +745,11 @@
 import { reactive, watch, computed, ref, onMounted } from 'vue'
 import { useI18n } from 'vue-i18n'
 import type { Rule } from 'ant-design-vue/es/form'
+import { useMaintenanceWorkOrderI18n } from '../composables/use-work-order-i18n'
+
+/** 实体字段 i18n */
+const pi = useMaintenanceWorkOrderI18n()
+
 import type { MaintenanceWorkOrderCreate } from '@/types/logistics/maintenance/work-order'
 import TaktSelect from '@/components/business/takt-select/index.vue'
 import { RiQuestionLine } from '@remixicon/vue'
@@ -759,7 +788,17 @@ const activeTab = ref('tab-0')
 /** CreateDto 字段名列表（与 formState 键对齐） */
 const formFields = ["tenantCode","companyCode","companyDefaultCulture","plantCode","workOrderCode","maintenanceNotificationId","notificationCode","equipmentId","equipmentCode","equipmentName","maintenanceCategory","maintenanceType","workOrderStatus","priority","workCenter","assignedTechnician","maintenanceCompany","plannedStartTime","plannedEndTime","actualStartTime","actualEndTime","faultDescription","maintenanceContent","solution","costCenterId","costCenterCode","costElementId","costElementCode","totalMaterialCost","totalLaborCost","totalOtherCost","totalCost","settlementStatus","settlementTime","completedAt","acceptedBy","acceptedAt","maintenanceResult","nextMaintenanceDate","maintenanceCycleDays","maintenanceImages","maintenanceDocuments","acceptedSummary","isHistoryArchived","extField","remark"]
 
+
 import type { TaktEditableTableColumn } from '@/components/business/takt-editable-table/types'
+import { resolveNextDetailLineNumber } from '@/utils/takt-sequence'
+import { useMaintenanceWorkOrderMaterialI18n } from '../composables/use-work-order-material-i18n'
+
+const maintenanceWorkOrderMaterialPi = useMaintenanceWorkOrderMaterialI18n()
+
+/** 弹窗/表格内 TaktSelect 下拉挂载容器（避免 overflow 裁剪与表头列错位） */
+function getSelectPopupContainer(triggerNode?: HTMLElement): HTMLElement {
+  return triggerNode?.ownerDocument?.body ?? document.body
+}
 
 const childMaintenanceWorkOrderMaterialRows = ref<Record<string, unknown>[]>([])
 const maintenanceWorkOrderMaterialTableRef = ref<{
@@ -768,88 +807,156 @@ const maintenanceWorkOrderMaterialTableRef = ref<{
   resetRows: () => void
 } | null>(null)
 
+/** 是否已持久化的子表行 */
+function isPersistedMaintenanceWorkOrderMaterialRow(row: Record<string, unknown>): boolean {
+  const id = row.maintenanceWorkOrderMaterialId
+  if (id == null || id === '') {
+    return false
+  }
+  return String(id) !== '0'
+}
+
+/** 分配下一可用子表行号（含作废行，仅据当前表格行递增） */
+function allocateNextMaintenanceWorkOrderMaterialLineNumber(): number {
+  const rows = maintenanceWorkOrderMaterialTableRef.value?.getRows?.() ?? childMaintenanceWorkOrderMaterialRows.value
+  return resolveNextDetailLineNumber(0, rows)
+}
+
 /** 子表 maintenanceWorkOrderMaterial 可编辑列 */
 const maintenanceWorkOrderMaterialFormColumns = computed<TaktEditableTableColumn[]>(() => [
   {
     key: 'workOrderCode',
-    title: t('entity.maintenanceworkordermaterial.workordercode'),
+    title: maintenanceWorkOrderMaterialPi.label('workOrderCode'),
     editor: 'input',
     width: 140,
   },
   {
     key: 'lineNumber',
-    title: t('entity.maintenanceworkordermaterial.linenumber'),
-    editor: 'inputNumber',
-    width: 140, summary: 'sum',
+    title: maintenanceWorkOrderMaterialPi.label('lineNumber'),
+    width: 140,
   },
   {
     key: 'materialId',
-    title: t('entity.maintenanceworkordermaterial.materialid'),
+    title: maintenanceWorkOrderMaterialPi.label('materialId'),
     editor: 'input',
     width: 140,
   },
   {
     key: 'materialCode',
-    title: t('entity.maintenanceworkordermaterial.materialcode'),
+    title: maintenanceWorkOrderMaterialPi.label('materialCode'),
     editor: 'input',
     width: 140,
   },
   {
     key: 'materialName',
-    title: t('entity.maintenanceworkordermaterial.materialname'),
+    title: maintenanceWorkOrderMaterialPi.label('materialName'),
     editor: 'input',
     width: 140,
   },
   {
     key: 'requiredQuantity',
-    title: t('entity.maintenanceworkordermaterial.requiredquantity'),
-    editor: 'inputNumber',
+    title: maintenanceWorkOrderMaterialPi.label('requiredQuantity'),
     width: 140,
   },
   {
     key: 'issuedQuantity',
-    title: t('entity.maintenanceworkordermaterial.issuedquantity'),
-    editor: 'inputNumber',
+    title: maintenanceWorkOrderMaterialPi.label('issuedQuantity'),
     width: 140,
   },
   {
     key: 'materialUnit',
-    title: t('entity.maintenanceworkordermaterial.materialunit'),
+    title: maintenanceWorkOrderMaterialPi.label('materialUnit'),
     editor: 'input',
+    width: 140,
+  },
+  {
+    key: 'unitPrice',
+    title: maintenanceWorkOrderMaterialPi.label('unitPrice'),
+    width: 140,
+  },
+  {
+    key: 'amount',
+    title: maintenanceWorkOrderMaterialPi.label('amount'),
+    width: 140,
+  },
+  {
+    key: 'warehouseCode',
+    title: maintenanceWorkOrderMaterialPi.label('warehouseCode'),
+    editor: 'input',
+    width: 140, allowClear: true, placeholder: maintenanceWorkOrderMaterialPi.ph('warehouseCode'),
+  },
+  {
+    key: 'storageLocation',
+    title: maintenanceWorkOrderMaterialPi.label('storageLocation'),
+    editor: 'input',
+    width: 140, allowClear: true, placeholder: maintenanceWorkOrderMaterialPi.ph('storageLocation'),
+  },
+  {
+    key: 'issueStatus',
+    title: maintenanceWorkOrderMaterialPi.label('issueStatus'),
+    width: 140,
+  },
+  {
+    key: 'issueTime',
+    title: maintenanceWorkOrderMaterialPi.label('issueTime'),
+    editor: 'datePicker',
+    valueFormat: 'YYYY-MM-DD HH:mm:ss', showTime: true,
+    width: 140,
+  },
+  {
+    key: 'isObsolete',
+    title: maintenanceWorkOrderMaterialPi.label('isObsolete'),
     width: 140,
   },
 ])
 
 /** 编辑态从 formData 同步各子表行 */
 function syncChildRowsFromFormData(val: Partial<MaintenanceWorkOrderCreate & { maintenanceWorkOrderId?: string }> | null | undefined) {
-  childMaintenanceWorkOrderMaterialRows.value = ((val as any)?.materials ?? []) as Record<string, unknown>[]
+  const rows_maintenanceWorkOrderMaterial = ((val as any)?.materials ?? []) as Record<string, unknown>[]
+  childMaintenanceWorkOrderMaterialRows.value = rows_maintenanceWorkOrderMaterial
 }
 
 function createDefaultMaintenanceWorkOrderMaterialRow(): Record<string, unknown> {
   return {
     workOrderCode: '',
-    lineNumber: (childMaintenanceWorkOrderMaterialRows.value.length + 1) * 10,
+    lineNumber: allocateNextMaintenanceWorkOrderMaterialLineNumber(),
     materialId: '',
     materialCode: '',
     materialName: '',
     requiredQuantity: 0,
     issuedQuantity: 0,
     materialUnit: '',
+    unitPrice: 0,
+    amount: 0,
+    warehouseCode: '',
+    storageLocation: '',
+    issueStatus: 0,
+    issueTime: '',
+    isObsolete: 0,
   }
 }
 
 /** 组装 Create/Update 载荷（主表 + 子表数组） */
 function buildSubmitPayload() {
   const masterId = props.formData?.maintenanceWorkOrderId ?? ''
+  const isUpdate = Boolean(masterId)
   return {
     ...formState,
-    materials: maintenanceWorkOrderMaterialTableRef.value?.getRows?.() ?? childMaintenanceWorkOrderMaterialRows.value.map((rest) => ({
-      ...rest,
-      tenantCode: tenantStore.tenantCode,
-      companyCode: tenantStore.companyCode,
-      companyDefaultCulture: userStore.userInfo?.companyDefaultCulture ?? '',
-      maintenanceWorkOrderId: masterId,
-    })),
+    materials: maintenanceWorkOrderMaterialTableRef.value?.getRows?.() ?? childMaintenanceWorkOrderMaterialRows.value.map((row) => {
+      const normalized = {
+        ...row,
+        tenantCode: tenantStore.tenantCode,
+        companyCode: tenantStore.companyCode,
+        companyDefaultCulture: userStore.userInfo?.companyDefaultCulture ?? '',
+        maintenanceWorkOrderId: masterId,
+      }
+      if (isUpdate && isPersistedMaintenanceWorkOrderMaterialRow(row)) {
+        normalized.maintenanceWorkOrderMaterialId = row.maintenanceWorkOrderMaterialId
+      } else {
+        delete normalized.maintenanceWorkOrderMaterialId
+      }
+      return normalized
+    }),
   }
 }
 
@@ -928,46 +1035,46 @@ const rules = computed<Record<string, Rule[]>>(() => ({
   plantCode: [
     {
       required: true,
-      message: t('common.page.form.placeholder.required', { field: t('entity.maintenanceworkorder.plantcode') }),
+      message: pi.ph('plantCode'),
       trigger: 'blur'
     }
   ],
   workOrderCode: [
     {
       required: true,
-      message: t('common.page.form.placeholder.required', { field: t('entity.maintenanceworkorder.workordercode') }),
+      message: pi.ph('workOrderCode'),
       trigger: 'blur'
     }
   ],
   equipmentId: [
     {
       required: true,
-      message: t('common.page.form.placeholder.required', { field: t('entity.maintenanceworkorder.equipmentid') }),
+      message: pi.ph('equipmentId'),
       trigger: 'blur'
     }
   ],
   equipmentCode: [
     {
       required: true,
-      message: t('common.page.form.placeholder.required', { field: t('entity.maintenanceworkorder.equipmentcode') }),
+      message: pi.ph('equipmentCode'),
       trigger: 'blur'
     }
   ],
   equipmentName: [
     {
       required: true,
-      message: t('common.page.form.placeholder.required', { field: t('entity.maintenanceworkorder.equipmentname') }),
+      message: pi.ph('equipmentName'),
       trigger: 'blur'
     }
   ],
   maintenanceCategory: [{
     validator: async (_rule, value) => {
       if (value === undefined || value === null || value === '') {
-        return Promise.reject(t('common.page.form.placeholder.select', { field: t('entity.maintenanceworkorder.maintenancecategory') }))
+        return Promise.reject(pi.ph('maintenanceCategory'))
       }
       const num = typeof value === 'number' ? value : Number(value)
       if (!Number.isFinite(num)) {
-        return Promise.reject(t('common.page.form.placeholder.select', { field: t('entity.maintenanceworkorder.maintenancecategory') }))
+        return Promise.reject(pi.ph('maintenanceCategory'))
       }
       return Promise.resolve()
     },
@@ -976,11 +1083,11 @@ const rules = computed<Record<string, Rule[]>>(() => ({
   maintenanceType: [{
     validator: async (_rule, value) => {
       if (value === undefined || value === null || value === '') {
-        return Promise.reject(t('common.page.form.placeholder.select', { field: t('entity.maintenanceworkorder.maintenancetype') }))
+        return Promise.reject(pi.ph('maintenanceType'))
       }
       const num = typeof value === 'number' ? value : Number(value)
       if (!Number.isFinite(num)) {
-        return Promise.reject(t('common.page.form.placeholder.select', { field: t('entity.maintenanceworkorder.maintenancetype') }))
+        return Promise.reject(pi.ph('maintenanceType'))
       }
       return Promise.resolve()
     },
@@ -989,11 +1096,11 @@ const rules = computed<Record<string, Rule[]>>(() => ({
   workOrderStatus: [{
     validator: async (_rule, value) => {
       if (value === undefined || value === null || value === '') {
-        return Promise.reject(t('common.page.form.placeholder.select', { field: t('entity.maintenanceworkorder.workorderstatus') }))
+        return Promise.reject(pi.ph('workOrderStatus'))
       }
       const num = typeof value === 'number' ? value : Number(value)
       if (!Number.isFinite(num)) {
-        return Promise.reject(t('common.page.form.placeholder.select', { field: t('entity.maintenanceworkorder.workorderstatus') }))
+        return Promise.reject(pi.ph('workOrderStatus'))
       }
       return Promise.resolve()
     },
@@ -1002,11 +1109,11 @@ const rules = computed<Record<string, Rule[]>>(() => ({
   priority: [{
     validator: async (_rule, value) => {
       if (value === undefined || value === null || value === '') {
-        return Promise.reject(t('common.page.form.placeholder.select', { field: t('entity.maintenanceworkorder.priority') }))
+        return Promise.reject(pi.ph('priority'))
       }
       const num = typeof value === 'number' ? value : Number(value)
       if (!Number.isFinite(num)) {
-        return Promise.reject(t('common.page.form.placeholder.select', { field: t('entity.maintenanceworkorder.priority') }))
+        return Promise.reject(pi.ph('priority'))
       }
       return Promise.resolve()
     },
@@ -1015,11 +1122,11 @@ const rules = computed<Record<string, Rule[]>>(() => ({
   totalMaterialCost: [{
     validator: async (_rule, value) => {
       if (value === undefined || value === null || value === '') {
-        return Promise.reject(t('common.page.form.placeholder.select', { field: t('entity.maintenanceworkorder.totalmaterialcost') }))
+        return Promise.reject(pi.ph('totalMaterialCost'))
       }
       const num = typeof value === 'number' ? value : Number(value)
       if (!Number.isFinite(num)) {
-        return Promise.reject(t('common.page.form.placeholder.select', { field: t('entity.maintenanceworkorder.totalmaterialcost') }))
+        return Promise.reject(pi.ph('totalMaterialCost'))
       }
       return Promise.resolve()
     },
@@ -1028,11 +1135,11 @@ const rules = computed<Record<string, Rule[]>>(() => ({
   totalLaborCost: [{
     validator: async (_rule, value) => {
       if (value === undefined || value === null || value === '') {
-        return Promise.reject(t('common.page.form.placeholder.select', { field: t('entity.maintenanceworkorder.totallaborcost') }))
+        return Promise.reject(pi.ph('totalLaborCost'))
       }
       const num = typeof value === 'number' ? value : Number(value)
       if (!Number.isFinite(num)) {
-        return Promise.reject(t('common.page.form.placeholder.select', { field: t('entity.maintenanceworkorder.totallaborcost') }))
+        return Promise.reject(pi.ph('totalLaborCost'))
       }
       return Promise.resolve()
     },
@@ -1041,11 +1148,11 @@ const rules = computed<Record<string, Rule[]>>(() => ({
   totalOtherCost: [{
     validator: async (_rule, value) => {
       if (value === undefined || value === null || value === '') {
-        return Promise.reject(t('common.page.form.placeholder.select', { field: t('entity.maintenanceworkorder.totalothercost') }))
+        return Promise.reject(pi.ph('totalOtherCost'))
       }
       const num = typeof value === 'number' ? value : Number(value)
       if (!Number.isFinite(num)) {
-        return Promise.reject(t('common.page.form.placeholder.select', { field: t('entity.maintenanceworkorder.totalothercost') }))
+        return Promise.reject(pi.ph('totalOtherCost'))
       }
       return Promise.resolve()
     },
@@ -1054,11 +1161,11 @@ const rules = computed<Record<string, Rule[]>>(() => ({
   totalCost: [{
     validator: async (_rule, value) => {
       if (value === undefined || value === null || value === '') {
-        return Promise.reject(t('common.page.form.placeholder.select', { field: t('entity.maintenanceworkorder.totalcost') }))
+        return Promise.reject(pi.ph('totalCost'))
       }
       const num = typeof value === 'number' ? value : Number(value)
       if (!Number.isFinite(num)) {
-        return Promise.reject(t('common.page.form.placeholder.select', { field: t('entity.maintenanceworkorder.totalcost') }))
+        return Promise.reject(pi.ph('totalCost'))
       }
       return Promise.resolve()
     },
@@ -1067,11 +1174,11 @@ const rules = computed<Record<string, Rule[]>>(() => ({
   settlementStatus: [{
     validator: async (_rule, value) => {
       if (value === undefined || value === null || value === '') {
-        return Promise.reject(t('common.page.form.placeholder.select', { field: t('entity.maintenanceworkorder.settlementstatus') }))
+        return Promise.reject(pi.ph('settlementStatus'))
       }
       const num = typeof value === 'number' ? value : Number(value)
       if (!Number.isFinite(num)) {
-        return Promise.reject(t('common.page.form.placeholder.select', { field: t('entity.maintenanceworkorder.settlementstatus') }))
+        return Promise.reject(pi.ph('settlementStatus'))
       }
       return Promise.resolve()
     },
@@ -1080,11 +1187,11 @@ const rules = computed<Record<string, Rule[]>>(() => ({
   maintenanceResult: [{
     validator: async (_rule, value) => {
       if (value === undefined || value === null || value === '') {
-        return Promise.reject(t('common.page.form.placeholder.select', { field: t('entity.maintenanceworkorder.maintenanceresult') }))
+        return Promise.reject(pi.ph('maintenanceResult'))
       }
       const num = typeof value === 'number' ? value : Number(value)
       if (!Number.isFinite(num)) {
-        return Promise.reject(t('common.page.form.placeholder.select', { field: t('entity.maintenanceworkorder.maintenanceresult') }))
+        return Promise.reject(pi.ph('maintenanceResult'))
       }
       return Promise.resolve()
     },
@@ -1093,11 +1200,11 @@ const rules = computed<Record<string, Rule[]>>(() => ({
   maintenanceCycleDays: [{
     validator: async (_rule, value) => {
       if (value === undefined || value === null || value === '') {
-        return Promise.reject(t('common.page.form.placeholder.select', { field: t('entity.maintenanceworkorder.maintenancecycledays') }))
+        return Promise.reject(pi.ph('maintenanceCycleDays'))
       }
       const num = typeof value === 'number' ? value : Number(value)
       if (!Number.isFinite(num)) {
-        return Promise.reject(t('common.page.form.placeholder.select', { field: t('entity.maintenanceworkorder.maintenancecycledays') }))
+        return Promise.reject(pi.ph('maintenanceCycleDays'))
       }
       return Promise.resolve()
     },
@@ -1106,11 +1213,11 @@ const rules = computed<Record<string, Rule[]>>(() => ({
   isHistoryArchived: [{
     validator: async (_rule, value) => {
       if (value === undefined || value === null || value === '') {
-        return Promise.reject(t('common.page.form.placeholder.select', { field: t('entity.maintenanceworkorder.ishistoryarchived') }))
+        return Promise.reject(pi.ph('isHistoryArchived'))
       }
       const num = typeof value === 'number' ? value : Number(value)
       if (!Number.isFinite(num)) {
-        return Promise.reject(t('common.page.form.placeholder.select', { field: t('entity.maintenanceworkorder.ishistoryarchived') }))
+        return Promise.reject(pi.ph('isHistoryArchived'))
       }
       return Promise.resolve()
     },

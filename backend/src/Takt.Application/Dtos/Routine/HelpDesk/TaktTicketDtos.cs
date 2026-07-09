@@ -202,13 +202,6 @@ public class TaktTicketDto : TaktCompanyDtoBase
     /// （子表：TaktTicket）
     /// </summary>
     public List<TaktTicketDto>? ChildTickets { get; set; }
-
-    /// <summary>
-    /// 工单变更日志列表（主子表关系）
-    /// （子表：TaktTicketChangeLog）
-    /// </summary>
-    public List<TaktTicketChangeLogDto>? ChangeLogs { get; set; }
-
 }
 
 // ========================================
@@ -583,11 +576,6 @@ public class TaktTicketCreateDto
     public List<TaktTicketCreateDto>? ChildTickets { get; set; }
 
     /// <summary>
-    /// 工单变更日志列表（主子表关系）（子表，级联保存）
-    /// </summary>
-    public List<TaktTicketChangeLogCreateDto>? ChangeLogs { get; set; }
-
-    /// <summary>
     /// 扩展字段JSON
     /// </summary>
     public string? ExtField { get; set; }
@@ -805,11 +793,6 @@ public class TaktTicketTemplateDto
     public List<TaktTicketCreateDto>? ChildTickets { get; set; }
 
     /// <summary>
-    /// 工单变更日志列表（主子表关系）（子表，级联保存）
-    /// </summary>
-    public List<TaktTicketChangeLogCreateDto>? ChangeLogs { get; set; }
-
-    /// <summary>
     /// 扩展字段JSON
     /// </summary>
     public string? ExtField { get; set; }
@@ -982,11 +965,6 @@ public class TaktTicketImportDto
     /// 子工单列表（父工单时有效；外键：本表 Id = 子工单 ParentTicketId）（子表，级联保存）
     /// </summary>
     public List<TaktTicketCreateDto>? ChildTickets { get; set; }
-
-    /// <summary>
-    /// 工单变更日志列表（主子表关系）（子表，级联保存）
-    /// </summary>
-    public List<TaktTicketChangeLogCreateDto>? ChangeLogs { get; set; }
 
     /// <summary>
     /// 扩展字段JSON

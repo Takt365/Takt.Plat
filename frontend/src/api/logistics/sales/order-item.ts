@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：frontend/src/api/logistics/sales
 // 文件名称：order-item.ts
-// 创建时间：2026-07-01
+// 创建时间：2026-07-09
 // 创建人：Takt365(Auto Generated)
 // 功能描述：logistics/sales 模块 API（自动生成，请勿手改路由常量）
 // 
@@ -18,6 +18,7 @@ import type {
 import type {
   SalesOrderItem,
   SalesOrderItemCreate,
+  SalesOrderItemObsolete,
   SalesOrderItemStatus,
   SalesOrderItemUpdate
 } from '@/types/logistics/sales/order-item';
@@ -117,6 +118,19 @@ export function deleteSalesOrderItemBatch(ids: string[]): Promise<void> {
 export function updateSalesOrderItemStatus(dto: SalesOrderItemStatus): Promise<SalesOrderItem> {
   return request<SalesOrderItem>({
     url: `${SALES_ORDER_ITEM_API_BASE}/status`,
+    method: 'put',
+    data: dto,
+  });
+}
+
+/**
+ * 更新销售订单明细作废状态
+ * @param {SalesOrderItemObsolete} dto 作废 DTO
+ * @returns {Promise<SalesOrderItem>} 销售订单明细DTO
+ */
+export function updateSalesOrderItemObsolete(dto: SalesOrderItemObsolete): Promise<SalesOrderItem> {
+  return request<SalesOrderItem>({
+    url: `${SALES_ORDER_ITEM_API_BASE}/obsolete`,
     method: 'put',
     data: dto,
   });

@@ -135,6 +135,9 @@ export default {
       credentials: {
         incorrect: "用户名或密码错误",
       },
+      account: {
+        locked: "账户已锁定，请稍后再试",
+      },
       tenant: {
         no: {
           access: "当前用户无权登录所选租户",

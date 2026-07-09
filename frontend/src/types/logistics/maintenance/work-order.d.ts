@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：frontend/src/types/logistics/maintenance
 // 文件名称：work-order.d.ts
-// 创建时间：2026-06-23
+// 创建时间：2026-07-09
 // 创建人：Takt365(Auto Generated)
 // 功能描述：logistics/maintenance 模块类型定义（自动生成；类型名去 Takt 前缀与末尾 Dto，如 TaktCompanyDto → Company）
 // 
@@ -856,6 +856,16 @@ export interface MaintenanceWorkOrderUpdate extends MaintenanceWorkOrderCreate {
    * MaintenanceWorkOrderID（标识要更新的实体）
    */
   maintenanceWorkOrderId: string;
+
+  /**
+   * 领料明细（子表，级联保存）
+   */
+  materials?: any;
+
+  /**
+   * 报工明细（子表，级联保存）
+   */
+  labors?: any;
 
 }
 

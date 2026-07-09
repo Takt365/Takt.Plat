@@ -151,28 +151,6 @@
         />
       </a-form-item>
       </div>
-      <div v-show="isFieldVisible('workshopCode')">
-      <a-form-item :label="t('entity.workcenter.workshopcode')">
-        <a-input
-          v-model:value="advancedQueryForm.workshopCode"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.workcenter.workshopcode') })"
-          show-count
-          :maxlength="8"
-          allow-clear
-        />
-      </a-form-item>
-      </div>
-      <div v-show="isFieldVisible('defaultShiftId')">
-      <a-form-item :label="t('entity.workcenter.defaultshiftid')">
-        <a-input
-          v-model:value="advancedQueryForm.defaultShiftId"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.workcenter.defaultshiftid') })"
-          show-count
-          :maxlength="20"
-          allow-clear
-        />
-      </a-form-item>
-      </div>
       <div v-show="isFieldVisible('workCenterStatus')">
       <a-form-item :label="t('entity.workcenter.status')">
         <TaktSelect
@@ -351,8 +329,6 @@ const advancedQueryForm = ref({
   plantCode: '',
   workCenterCode: '',
   workCenterName: '',
-  workshopCode: '',
-  defaultShiftId: '',
   workCenterStatus: undefined as number | undefined,
   createdAtStart: '',
   createdAtEnd: '',
@@ -364,8 +340,6 @@ const queryFieldsMeta = computed(() => [
   { key: 'plantCode', label: t('entity.workcenter.plantcode') },
   { key: 'workCenterCode', label: t('entity.workcenter.code') },
   { key: 'workCenterName', label: t('entity.workcenter.name') },
-  { key: 'workshopCode', label: t('entity.workcenter.workshopcode') },
-  { key: 'defaultShiftId', label: t('entity.workcenter.defaultshiftid') },
   { key: 'workCenterStatus', label: t('entity.workcenter.status') },
   { key: 'createdAtStart', label: t('common.page.entity.createdatstart') },
   { key: 'createdAtEnd', label: t('common.page.entity.createdatend') },
@@ -418,8 +392,6 @@ function buildListQuery(overrides?: Partial<WorkCenterQuery>): WorkCenterQuery {
   assignTrimmed('plantCode', form.plantCode)
   assignTrimmed('workCenterCode', form.workCenterCode)
   assignTrimmed('workCenterName', form.workCenterName)
-  assignTrimmed('workshopCode', form.workshopCode)
-  assignTrimmed('defaultShiftId', form.defaultShiftId)
   if (form.workCenterStatus !== undefined && form.workCenterStatus !== null) {
     query.workCenterStatus = form.workCenterStatus
   }
@@ -527,24 +499,6 @@ const columns = computed<TableColumnsType>(() => [
     customRender: ({ record }: { record: any }) => getWorkCenterField(record, 'workCenterName') ?? ''
   },
   {
-    title: t('entity.workcenter.workshopcode'),
-    dataIndex: 'workshopCode',
-    key: 'workshopCode',
-    width: 120,
-    resizable: true,
-    ellipsis: true,
-    customRender: ({ record }: { record: any }) => getWorkCenterField(record, 'workshopCode') ?? ''
-  },
-  {
-    title: t('entity.workcenter.defaultshiftid'),
-    dataIndex: 'defaultShiftId',
-    key: 'defaultShiftId',
-    width: 120,
-    resizable: true,
-    ellipsis: true,
-    customRender: ({ record }: { record: any }) => getWorkCenterField(record, 'defaultShiftId') ?? ''
-  },
-  {
     title: t('entity.workcenter.status'),
     dataIndex: 'workCenterStatus',
     key: 'workCenterStatus',
@@ -645,8 +599,6 @@ function handleReset() {
   plantCode: '',
   workCenterCode: '',
   workCenterName: '',
-  workshopCode: '',
-  defaultShiftId: '',
   workCenterStatus: undefined as number | undefined,
   createdAtStart: '',
   createdAtEnd: '',
@@ -866,8 +818,6 @@ function handleAdvancedQueryReset() {
   plantCode: '',
   workCenterCode: '',
   workCenterName: '',
-  workshopCode: '',
-  defaultShiftId: '',
   workCenterStatus: undefined as number | undefined,
   createdAtStart: '',
   createdAtEnd: '',

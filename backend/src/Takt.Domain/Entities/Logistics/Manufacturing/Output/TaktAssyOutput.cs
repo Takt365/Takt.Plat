@@ -6,7 +6,8 @@
 // 创建人：Takt365(Cursor AI)
 // 功能描述：组立日报（产出）主表实体，按工厂、生产日期、生产线等记录生产订单与标准产能
 // 计算公式：达成率(%) = 明细实际生产数量合计 ÷ 主表标准产能合计 × 100%（见 TaktProductionStatHelper.CalculateAchievementRatePercent）
-// 明细参考：明细达成率(%) = 明细实际生产数量 ÷ 主表标准产能 × 100%（AchievementRate 存于 TaktAssyOutputDetail；标准产能为 0 时取 0）
+// 标准产能：小时产能 = DirectLabor×60÷StdMinutes×标准生产稼动率(%)；StdMinutes 取自标准工序时间；稼动率取自 TaktStandardOperationRate
+// 明细参考：明细标准产能无产量无报工为 0；有产量无报工为表头小时产能；有报工为报工工时÷标准工时×稼动率；明细达成率(%) = 实际生产数量 ÷ 明细标准产能 × 100%
 //
 // 版权信息：Copyright (c) 2025 Takt  All rights reserved.
 // 免责声明：此软件使用 MIT License，作者不承担任何使用风险。
@@ -24,20 +25,20 @@ namespace Takt.Domain.Entities.Logistics.Manufacturing.Output;
 [SugarTable("takt_logistics_manufacturing_output_assy", "组立日报表")]
 [SugarIndex("ix_assy_output_tenant", nameof(TenantCode), OrderByType.Asc, nameof(CompanyCode), OrderByType.Asc, false)]
 [SugarIndex("ix_assy_output_is_deleted", nameof(TenantCode), OrderByType.Asc, nameof(CompanyCode), OrderByType.Asc, nameof(IsDeleted), OrderByType.Asc, false)]
-[SugarIndex("ix_takt_logistics_manufacturing_output_assy_unique", nameof(TenantCode), OrderByType.Asc, nameof(CompanyCode), OrderByType.Asc, nameof(PlantCode), OrderByType.Asc, nameof(ProdCategory), OrderByType.Asc, nameof(ProdDate), OrderByType.Asc, nameof(ProdTeam), OrderByType.Asc, nameof(ShiftNo), OrderByType.Asc, nameof(ProdOrderCode), OrderByType.Asc, true)]
+[SugarIndex("ix_takt_logistics_manufacturing_output_assy_unique", nameof(TenantCode), OrderByType.Asc, nameof(CompanyCode), OrderByType.Asc, nameof(ProdDate), OrderByType.Asc, nameof(ProdOrderCode), OrderByType.Asc, true)]
 [SugarIndex("ix_takt_logistics_manufacturing_output_assy_prod_date", nameof(TenantCode), OrderByType.Asc, nameof(CompanyCode), OrderByType.Asc, nameof(ProdDate), OrderByType.Asc, false)]
 [SugarIndex("ix_takt_logistics_manufacturing_output_assy_prod_team", nameof(TenantCode), OrderByType.Asc, nameof(CompanyCode), OrderByType.Asc, nameof(ProdTeam), OrderByType.Asc, false)]
 [SugarIndex("ix_takt_logistics_manufacturing_output_assy_prod_order_code", nameof(TenantCode), OrderByType.Asc, nameof(CompanyCode), OrderByType.Asc, nameof(ProdOrderCode), OrderByType.Asc, false)]
 public class TaktAssyOutput : TaktCompanyEntityBase
 {
     /// <summary>
-    /// 工厂代码（关联 TaktPlant.PlantCode，选项 TaktPlants/options）
+    /// 工厂代码（回填：随工单）
     /// </summary>
     [SugarColumn(ColumnName = "plant_code", ColumnDescription = "工厂代码", Length = 4, ColumnDataType = "nvarchar", IsNullable = false)]
     public string PlantCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 生产类别（字典 logistics_prod_category，存 DictValue：RD/EVT/DVT/EPP/PP/FPP/MP/RPR/RWR）
+    /// 生产类别（字典 logistics_prod_category，存 DictValue：EPP/FPP/RWP/MDP/CPP）
     /// </summary>
     [SugarColumn(ColumnName = "prod_category", ColumnDescription = "生产类别", Length = 20, ColumnDataType = "nvarchar", IsNullable = false)]
     public string ProdCategory { get; set; } = string.Empty;
@@ -73,51 +74,57 @@ public class TaktAssyOutput : TaktCompanyEntityBase
     public int ShiftNo { get; set; } = 1;
 
     /// <summary>
-    /// 生产订单类型（选项 TaktProductionOrders/options 的 ExtLabel，随工单回填）
+    /// 工单类别（回填：随工单）
     /// </summary>
-    [SugarColumn(ColumnName = "prod_order_type", ColumnDescription = "生产订单类型", Length = 20, ColumnDataType = "nvarchar", IsNullable = true)]
+    [SugarColumn(ColumnName = "prod_order_type", ColumnDescription = "工单类别", Length = 20, ColumnDataType = "nvarchar", IsNullable = true)]
     public string? ProdOrderType { get; set; }
 
     /// <summary>
-    /// 生产工单号（选项 TaktProductionOrders/options，按 PlantCode 过滤）
+    /// 工单号（选项 TaktProductionOrders/options，按 PlantCode 过滤）
     /// </summary>
-    [SugarColumn(ColumnName = "prod_order_code", ColumnDescription = "生产工单号", Length = 20, ColumnDataType = "nvarchar", IsNullable = false)]
+    [SugarColumn(ColumnName = "prod_order_code", ColumnDescription = "工单号", Length = 20, ColumnDataType = "nvarchar", IsNullable = false)]
     public string ProdOrderCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 机种
+    /// 机种（回填：随工单）
     /// </summary>
     [SugarColumn(ColumnName = "model_code", ColumnDescription = "机种", Length = 20, ColumnDataType = "nvarchar", IsNullable = false)]
     public string ModelCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 物料编码
+    /// 物料编码（回填：随工单）
     /// </summary>
     [SugarColumn(ColumnName = "material_code", ColumnDescription = "物料编码", Length = 20, ColumnDataType = "nvarchar", IsNullable = false)]
     public string MaterialCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 批次
+    /// 批次（回填：随工单）
     /// </summary>
     [SugarColumn(ColumnName = "batch_no", ColumnDescription = "批次", Length = 20, ColumnDataType = "nvarchar", IsNullable = true)]
     public string? BatchNo { get; set; }
 
     /// <summary>
-    /// 订单数量
+    /// 工单数量（回填：随工单）
     /// </summary>
-    [SugarColumn(ColumnName = "prod_order_qty", ColumnDescription = "订单数量", ColumnDataType = "decimal", Length = 18, DecimalDigits = 3, IsNullable = false, DefaultValue = "0")]
+    [SugarColumn(ColumnName = "prod_order_qty", ColumnDescription = "工单数量", ColumnDataType = "decimal", Length = 18, DecimalDigits = 3, IsNullable = false, DefaultValue = "0")]
     public decimal ProdOrderQty { get; set; } = 0;
 
     /// <summary>
-    /// 标准工时(分钟)
+    /// 序列号（回填：随工单）
     /// </summary>
-    [SugarColumn(ColumnName = "std_minutes", ColumnDescription = "标准工时(分钟)", ColumnDataType = "decimal", Length = 10, DecimalDigits = 2, IsNullable = false, DefaultValue = "0")]
+    [SugarColumn(ColumnName = "serial_no", ColumnDescription = "序列号", ColumnDataType = "nvarchar", Length = 80, IsNullable = true)]
+    public string? SerialNo { get; set; }
+
+    /// <summary>
+    /// 标准工时(分钟)（回填：按 MaterialCode 查询 TaktStandardOperationTime 汇总转换工时）
+    /// </summary>
+    [SugarColumn(ColumnName = "std_minutes", ColumnDescription = "标准工时", ColumnDataType = "decimal", Length = 10, DecimalDigits = 2, IsNullable = false, DefaultValue = "0")]
     public decimal StdMinutes { get; set; } = 0;
 
     /// <summary>
-    /// 标准产能
+    /// 标准产能（计算结果：利用标准生产稼动率计算出小时产能，DirectLabor人数*60分钟/StdMinutes标准工时*标准生产稼动率）
     /// </summary>
-    [SugarColumn(ColumnName = "std_capacity", ColumnDescription = "标准产能", ColumnDataType = "decimal", Length = 18, DecimalDigits = 3, IsNullable = false, DefaultValue = "0")]
+    [SugarColumn(ColumnName = "std_capacity", ColumnDescription = "标准产能", ColumnDataType = "decimal", Length = 18, DecimalDigits = 2, IsNullable = false, DefaultValue = "0")]
     public decimal StdCapacity { get; set; } = 0;
 
     /// <summary>

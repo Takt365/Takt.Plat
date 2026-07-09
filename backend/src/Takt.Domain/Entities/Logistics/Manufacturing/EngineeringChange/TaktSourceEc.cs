@@ -22,7 +22,7 @@ namespace Takt.Domain.Entities.Logistics.Manufacturing.EngineeringChange;
 [SugarIndex("ix_source_ec_tenant", nameof(TenantCode), OrderByType.Asc, nameof(CompanyCode), OrderByType.Asc, false)]
 [SugarIndex("ix_source_ec_is_deleted", nameof(TenantCode), OrderByType.Asc, nameof(CompanyCode), OrderByType.Asc, nameof(IsDeleted), OrderByType.Asc, false)]
 [SugarIndex("ix_source_ec_no_unique", nameof(TenantCode), OrderByType.Asc, nameof(CompanyCode), OrderByType.Asc, nameof(SourceEcNo), OrderByType.Asc, true)]
-public class TaktSourceEc : TaktCompanyEntityIncrementBase
+public class TaktSourceEc : TaktCompanyEntityBase
 {
     /// <summary>
     /// 设变号码

@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：frontend/src/api/logistics/manufacturing/planning
 // 文件名称：purchase-plan-item.ts
-// 创建时间：2026-06-23
+// 创建时间：2026-07-09
 // 创建人：Takt365(Auto Generated)
 // 功能描述：logistics/manufacturing/planning 模块 API（自动生成，请勿手改路由常量）
 // 
@@ -18,6 +18,7 @@ import type {
 import type {
   PurchasePlanItem,
   PurchasePlanItemCreate,
+  PurchasePlanItemObsolete,
   PurchasePlanItemUpdate
 } from '@/types/logistics/manufacturing/planning/purchase-plan-item';
 
@@ -105,6 +106,19 @@ export function deletePurchasePlanItemBatch(ids: string[]): Promise<void> {
     url: `${PURCHASE_PLAN_ITEM_API_BASE}/batch`,
     method: 'delete',
     data: ids,
+  });
+}
+
+/**
+ * 更新采购计划明细作废状态
+ * @param {PurchasePlanItemObsolete} dto 作废 DTO
+ * @returns {Promise<PurchasePlanItem>} 采购计划明细DTO
+ */
+export function updatePurchasePlanItemObsolete(dto: PurchasePlanItemObsolete): Promise<PurchasePlanItem> {
+  return request<PurchasePlanItem>({
+    url: `${PURCHASE_PLAN_ITEM_API_BASE}/obsolete`,
+    method: 'put',
+    data: dto,
   });
 }
 

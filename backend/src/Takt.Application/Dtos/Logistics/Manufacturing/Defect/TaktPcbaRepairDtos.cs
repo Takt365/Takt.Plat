@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Application.Dtos.Logistics.Manufacturing.Defect
 // 文件名称：TaktPcbaRepairDtos.cs
-// 创建时间：2026-06-30
+// 创建时间：2026-07-09
 // 创建人：Takt365(Auto Generated)
 // 功能描述：PcbaRepair 模块 DTO（由 generate-dtos-from-entity.cjs 根据 TaktPcbaRepair 生成，请按需审阅）
 // 
@@ -22,7 +22,7 @@ namespace Takt.Application.Dtos.Logistics.Manufacturing.Defect;
 // ========================================
 
 /// <summary>
-/// PCBA改修日报实体
+/// PCBA改修日报实体 不良率(%) = 明细不良数量合计 ÷ 明细生产实绩合计 × 100%；直行率(%) = (生产实绩 - 不良数量) ÷ 生产实绩 × 100%。
 /// 对应前端 TaktPcbaRepairDto
 /// 继承 TaktCompanyDtoBase
 /// </summary>
@@ -36,12 +36,12 @@ public class TaktPcbaRepairDto : TaktCompanyDtoBase
     public long PcbaRepairId { get; set; }
 
     /// <summary>
-    /// 工厂代码（关联 TaktPlant.PlantCode，选项 TaktPlants/options）
+    /// 工厂代码（回填：随工单）
     /// </summary>
     public string PlantCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 生产类别（字典 logistics_prod_category，存 DictValue：RD/EVT/DVT/EPP/PP/FPP/MP/RPR/RWR）
+    /// 生产类别（字典 logistics_prod_category，存 DictValue：EPP/FPP/RWP/MDP/CPP）
     /// </summary>
     public string ProdCategory { get; set; } = string.Empty;
 
@@ -61,12 +61,17 @@ public class TaktPcbaRepairDto : TaktCompanyDtoBase
     public int ShiftNo { get; set; } = 0;
 
     /// <summary>
-    /// 生产工单号（选项 TaktProductionOrders/options，按 PlantCode 过滤）
+    /// 工单类别（回填：随工单）
+    /// </summary>
+    public string? ProdOrderType { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 工单号（选项 TaktProductionOrders/options，按 PlantCode 过滤）
     /// </summary>
     public string ProdOrderCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 订单数量
+    /// 工单数量
     /// </summary>
     public decimal ProdOrderQty { get; set; }
 
@@ -114,12 +119,12 @@ public class TaktPcbaRepairQueryDto : TaktPagedQuery
     public string? CompanyCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 工厂代码（关联 TaktPlant.PlantCode，选项 TaktPlants/options）
+    /// 工厂代码（回填：随工单）
     /// </summary>
     public string? PlantCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 生产类别（字典 logistics_prod_category，存 DictValue：RD/EVT/DVT/EPP/PP/FPP/MP/RPR/RWR）
+    /// 生产类别（字典 logistics_prod_category，存 DictValue：EPP/FPP/RWP/MDP/CPP）
     /// </summary>
     public string? ProdCategory { get; set; } = string.Empty;
 
@@ -144,12 +149,17 @@ public class TaktPcbaRepairQueryDto : TaktPagedQuery
     public int? ShiftNo { get; set; }
 
     /// <summary>
-    /// 生产工单号（选项 TaktProductionOrders/options，按 PlantCode 过滤）
+    /// 工单类别（回填：随工单）
+    /// </summary>
+    public string? ProdOrderType { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 工单号（选项 TaktProductionOrders/options，按 PlantCode 过滤）
     /// </summary>
     public string? ProdOrderCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 订单数量
+    /// 工单数量
     /// </summary>
     public decimal? ProdOrderQty { get; set; }
 
@@ -214,15 +224,15 @@ public class TaktPcbaRepairCreateDto
     public string CompanyDefaultCulture { get; set; } = string.Empty;
 
     /// <summary>
-    /// 工厂代码（关联 TaktPlant.PlantCode，选项 TaktPlants/options）
+    /// 工厂代码（回填：随工单）
     /// </summary>
-    [Required(ErrorMessage = "工厂代码（关联 TaktPlant.PlantCode，选项 TaktPlants/options）不能为空")]
+    [Required(ErrorMessage = "工厂代码（回填：随工单）不能为空")]
     public string PlantCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 生产类别（字典 logistics_prod_category，存 DictValue：RD/EVT/DVT/EPP/PP/FPP/MP/RPR/RWR）
+    /// 生产类别（字典 logistics_prod_category，存 DictValue：EPP/FPP/RWP/MDP/CPP）
     /// </summary>
-    [Required(ErrorMessage = "生产类别（字典 logistics_prod_category，存 DictValue：RD/EVT/DVT/EPP/PP/FPP/MP/RPR/RWR）不能为空")]
+    [Required(ErrorMessage = "生产类别（字典 logistics_prod_category，存 DictValue：EPP/FPP/RWP/MDP/CPP）不能为空")]
     public string ProdCategory { get; set; } = string.Empty;
 
     /// <summary>
@@ -242,13 +252,18 @@ public class TaktPcbaRepairCreateDto
     public int ShiftNo { get; set; } = 0;
 
     /// <summary>
-    /// 生产工单号（选项 TaktProductionOrders/options，按 PlantCode 过滤）
+    /// 工单类别（回填：随工单）
     /// </summary>
-    [Required(ErrorMessage = "生产工单号（选项 TaktProductionOrders/options，按 PlantCode 过滤）不能为空")]
+    public string? ProdOrderType { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 工单号（选项 TaktProductionOrders/options，按 PlantCode 过滤）
+    /// </summary>
+    [Required(ErrorMessage = "工单号（选项 TaktProductionOrders/options，按 PlantCode 过滤）不能为空")]
     public string ProdOrderCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 订单数量
+    /// 工单数量
     /// </summary>
     public decimal ProdOrderQty { get; set; }
 
@@ -272,7 +287,7 @@ public class TaktPcbaRepairCreateDto
     /// <summary>
     /// PCBA改修明细列表（子表，级联保存）
     /// </summary>
-    public List<TaktPcbaRepairDetailCreateDto>? PcbaRepairDetails { get; set; }
+    public List<TaktPcbaRepairDetailUpdateDto>? PcbaRepairDetails { get; set; }
 
     /// <summary>
     /// 扩展字段JSON
@@ -326,12 +341,12 @@ public class TaktPcbaRepairTemplateDto
     public string? CompanyCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 工厂代码（关联 TaktPlant.PlantCode，选项 TaktPlants/options）
+    /// 工厂代码（回填：随工单）
     /// </summary>
     public string? PlantCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 生产类别（字典 logistics_prod_category，存 DictValue：RD/EVT/DVT/EPP/PP/FPP/MP/RPR/RWR）
+    /// 生产类别（字典 logistics_prod_category，存 DictValue：EPP/FPP/RWP/MDP/CPP）
     /// </summary>
     public string? ProdCategory { get; set; } = string.Empty;
 
@@ -351,12 +366,17 @@ public class TaktPcbaRepairTemplateDto
     public int? ShiftNo { get; set; }
 
     /// <summary>
-    /// 生产工单号（选项 TaktProductionOrders/options，按 PlantCode 过滤）
+    /// 工单类别（回填：随工单）
+    /// </summary>
+    public string? ProdOrderType { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 工单号（选项 TaktProductionOrders/options，按 PlantCode 过滤）
     /// </summary>
     public string? ProdOrderCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 订单数量
+    /// 工单数量
     /// </summary>
     public decimal? ProdOrderQty { get; set; }
 
@@ -413,12 +433,12 @@ public class TaktPcbaRepairImportDto
     public string? CompanyDefaultCulture { get; set; } = string.Empty;
 
     /// <summary>
-    /// 工厂代码（关联 TaktPlant.PlantCode，选项 TaktPlants/options）
+    /// 工厂代码（回填：随工单）
     /// </summary>
     public string? PlantCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 生产类别（字典 logistics_prod_category，存 DictValue：RD/EVT/DVT/EPP/PP/FPP/MP/RPR/RWR）
+    /// 生产类别（字典 logistics_prod_category，存 DictValue：EPP/FPP/RWP/MDP/CPP）
     /// </summary>
     public string? ProdCategory { get; set; } = string.Empty;
 
@@ -438,12 +458,17 @@ public class TaktPcbaRepairImportDto
     public int? ShiftNo { get; set; }
 
     /// <summary>
-    /// 生产工单号（选项 TaktProductionOrders/options，按 PlantCode 过滤）
+    /// 工单类别（回填：随工单）
+    /// </summary>
+    public string? ProdOrderType { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 工单号（选项 TaktProductionOrders/options，按 PlantCode 过滤）
     /// </summary>
     public string? ProdOrderCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 订单数量
+    /// 工单数量
     /// </summary>
     public decimal? ProdOrderQty { get; set; }
 
@@ -501,12 +526,12 @@ public class TaktPcbaRepairExportDto
     public string CompanyCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 工厂代码（关联 TaktPlant.PlantCode，选项 TaktPlants/options）
+    /// 工厂代码（回填：随工单）
     /// </summary>
     public string PlantCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 生产类别（字典 logistics_prod_category，存 DictValue：RD/EVT/DVT/EPP/PP/FPP/MP/RPR/RWR）
+    /// 生产类别（字典 logistics_prod_category，存 DictValue：EPP/FPP/RWP/MDP/CPP）
     /// </summary>
     public string ProdCategory { get; set; } = string.Empty;
 
@@ -526,12 +551,17 @@ public class TaktPcbaRepairExportDto
     public int ShiftNo { get; set; } = 0;
 
     /// <summary>
-    /// 生产工单号（选项 TaktProductionOrders/options，按 PlantCode 过滤）
+    /// 工单类别（回填：随工单）
+    /// </summary>
+    public string? ProdOrderType { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 工单号（选项 TaktProductionOrders/options，按 PlantCode 过滤）
     /// </summary>
     public string ProdOrderCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 订单数量
+    /// 工单数量
     /// </summary>
     public decimal ProdOrderQty { get; set; }
 

@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Application.Services.Logistics.Quality.Cost
 // 文件名称：TaktQualityAssuranceReliabilityService.cs
-// 创建时间：2026-06-23
+// 创建时间：2026-07-09
 // 创建人：Takt365(Cursor AI)
 // 功能描述：品质业务信赖性评价ORT费用明细应用服务实现
 // 
@@ -118,6 +118,7 @@ public class TaktQualityAssuranceReliabilityService : TaktServiceBase, ITaktQual
     public async Task<TaktQualityAssuranceReliabilityDto> CreateQualityAssuranceReliabilityAsync(TaktQualityAssuranceReliabilityCreateDto dto)
     {
         var entity = dto.Adapt<TaktQualityAssuranceReliability>();
+        entity.IsObsolete = 0;
         await StampQualityAssuranceReliabilityQualityAssuranceAsync(entity, dto);
         var isUnique_ix_takt_logistics_quality_assurance_reliability_line_unique = await _uniqueValidator.IsUniqueAsync(
             _qualityAssuranceReliabilityRepository,
@@ -174,11 +175,21 @@ public class TaktQualityAssuranceReliabilityService : TaktServiceBase, ITaktQual
     /// <returns>任务</returns>
     public async Task DeleteQualityAssuranceReliabilityByIdAsync(long id)
     {
-        var deleted = await _qualityAssuranceReliabilityRepository.DeleteAsync(id);
-        if (!deleted)
+        var entity = await _qualityAssuranceReliabilityRepository.GetByIdAsync(id);
+        if (entity == null)
         {
             throw new TaktBusinessException("品质业务信赖性评价ORT费用明细不存在或已删除");
         }
+        if (entity.TenantCode != CurrentTenantCode || entity.CompanyCode != CurrentCompanyCode)
+        {
+            throw new TaktBusinessException("品质业务信赖性评价ORT费用明细不存在或已删除");
+        }
+        if (entity.IsObsolete == 1)
+        {
+            throw new TaktBusinessException("品质业务信赖性评价ORT费用明细已作废");
+        }
+        entity.IsObsolete = 1;
+        await _qualityAssuranceReliabilityRepository.UpdateAsync(entity);
     }
 
     /// <summary>
@@ -197,6 +208,27 @@ public class TaktQualityAssuranceReliabilityService : TaktServiceBase, ITaktQual
         {
             await DeleteQualityAssuranceReliabilityByIdAsync(id);
         }
+    }
+
+    /// <summary>
+    /// 更新品质业务信赖性评价ORT费用明细作废状态
+    /// </summary>
+    /// <param name="dto">作废DTO</param>
+    /// <returns>DTO</returns>
+    public async Task<TaktQualityAssuranceReliabilityDto> UpdateQualityAssuranceReliabilityObsoleteAsync(TaktQualityAssuranceReliabilityObsoleteDto dto)
+    {
+        var entity = await _qualityAssuranceReliabilityRepository.GetByIdAsync(dto.QualityAssuranceReliabilityId);
+        if (entity == null)
+        {
+            throw new TaktBusinessException("品质业务信赖性评价ORT费用明细不存在");
+        }
+        if (entity.TenantCode != CurrentTenantCode || entity.CompanyCode != CurrentCompanyCode)
+        {
+            throw new TaktBusinessException("品质业务信赖性评价ORT费用明细不存在");
+        }
+        entity.IsObsolete = dto.IsObsolete;
+        await _qualityAssuranceReliabilityRepository.UpdateAsync(entity);
+        return await GetQualityAssuranceReliabilityByIdAsync(dto.QualityAssuranceReliabilityId) ?? throw new TaktBusinessException("品质业务信赖性评价ORT费用明细不存在");
     }
 
     /// <summary>
@@ -330,6 +362,15 @@ public class TaktQualityAssuranceReliabilityService : TaktServiceBase, ITaktQual
     private static Expression<Func<TaktQualityAssuranceReliability, bool>> QueryExpression(TaktQualityAssuranceReliabilityQueryDto? queryDto)
     {
         var exp = Expressionable.Create<TaktQualityAssuranceReliability>();
+
+        if (queryDto?.IsObsolete.HasValue == true)
+        {
+            exp = exp.And(x => x.IsObsolete == queryDto.IsObsolete);
+        }
+        else
+        {
+            exp = exp.And(x => x.IsObsolete == 0);
+        }
 
         if (!string.IsNullOrEmpty(queryDto?.KeyWords))
         {

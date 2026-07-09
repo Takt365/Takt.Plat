@@ -102,9 +102,9 @@ public class TaktSourceEcDetailDto : TaktCompanyDtoBase
     public string? SourceBomNo { get; set; } = string.Empty;
 
     /// <summary>
-    /// 互换性
+    /// 兼容性
     /// </summary>
-    public string? SourceInterchangeability { get; set; } = string.Empty;
+    public string? SourceCompatibility { get; set; } = string.Empty;
 
     /// <summary>
     /// 区分
@@ -114,7 +114,7 @@ public class TaktSourceEcDetailDto : TaktCompanyDtoBase
     /// <summary>
     /// 安排指示
     /// </summary>
-    public string? SourceArrangementInstruction { get; set; } = string.Empty;
+    public string? SourceInstruction { get; set; } = string.Empty;
 
     /// <summary>
     /// 旧物料处理
@@ -211,9 +211,9 @@ public class TaktSourceEcDetailQueryDto : TaktPagedQuery
     public string? SourceBomNo { get; set; } = string.Empty;
 
     /// <summary>
-    /// 互换性
+    /// 兼容性
     /// </summary>
-    public string? SourceInterchangeability { get; set; } = string.Empty;
+    public string? SourceCompatibility { get; set; } = string.Empty;
 
     /// <summary>
     /// 区分
@@ -223,7 +223,7 @@ public class TaktSourceEcDetailQueryDto : TaktPagedQuery
     /// <summary>
     /// 安排指示
     /// </summary>
-    public string? SourceArrangementInstruction { get; set; } = string.Empty;
+    public string? SourceInstruction { get; set; } = string.Empty;
 
     /// <summary>
     /// 旧物料处理
@@ -339,9 +339,9 @@ public class TaktSourceEcDetailCreateDto
     public string? SourceBomNo { get; set; } = string.Empty;
 
     /// <summary>
-    /// 互换性
+    /// 兼容性
     /// </summary>
-    public string? SourceInterchangeability { get; set; } = string.Empty;
+    public string? SourceCompatibility { get; set; } = string.Empty;
 
     /// <summary>
     /// 区分
@@ -351,7 +351,7 @@ public class TaktSourceEcDetailCreateDto
     /// <summary>
     /// 安排指示
     /// </summary>
-    public string? SourceArrangementInstruction { get; set; } = string.Empty;
+    public string? SourceInstruction { get; set; } = string.Empty;
 
     /// <summary>
     /// 旧物料处理
@@ -471,9 +471,9 @@ public class TaktSourceEcDetailTemplateDto
     public string? SourceBomNo { get; set; } = string.Empty;
 
     /// <summary>
-    /// 互换性
+    /// 兼容性
     /// </summary>
-    public string? SourceInterchangeability { get; set; } = string.Empty;
+    public string? SourceCompatibility { get; set; } = string.Empty;
 
     /// <summary>
     /// 区分
@@ -483,7 +483,7 @@ public class TaktSourceEcDetailTemplateDto
     /// <summary>
     /// 安排指示
     /// </summary>
-    public string? SourceArrangementInstruction { get; set; } = string.Empty;
+    public string? SourceInstruction { get; set; } = string.Empty;
 
     /// <summary>
     /// 旧物料处理
@@ -579,9 +579,9 @@ public class TaktSourceEcDetailImportDto
     public string? SourceBomNo { get; set; } = string.Empty;
 
     /// <summary>
-    /// 互换性
+    /// 兼容性
     /// </summary>
-    public string? SourceInterchangeability { get; set; } = string.Empty;
+    public string? SourceCompatibility { get; set; } = string.Empty;
 
     /// <summary>
     /// 区分
@@ -591,7 +591,7 @@ public class TaktSourceEcDetailImportDto
     /// <summary>
     /// 安排指示
     /// </summary>
-    public string? SourceArrangementInstruction { get; set; } = string.Empty;
+    public string? SourceInstruction { get; set; } = string.Empty;
 
     /// <summary>
     /// 旧物料处理
@@ -693,9 +693,9 @@ public class TaktSourceEcDetailExportDto
     public string? SourceBomNo { get; set; } = string.Empty;
 
     /// <summary>
-    /// 互换性
+    /// 兼容性
     /// </summary>
-    public string? SourceInterchangeability { get; set; } = string.Empty;
+    public string? SourceCompatibility { get; set; } = string.Empty;
 
     /// <summary>
     /// 区分
@@ -705,7 +705,7 @@ public class TaktSourceEcDetailExportDto
     /// <summary>
     /// 安排指示
     /// </summary>
-    public string? SourceArrangementInstruction { get; set; } = string.Empty;
+    public string? SourceInstruction { get; set; } = string.Empty;
 
     /// <summary>
     /// 旧物料处理

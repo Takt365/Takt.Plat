@@ -30,7 +30,6 @@ namespace Takt.Application.Services.Accounting.Controlling;
 public class TaktCostCenterService : TaktServiceBase, ITaktCostCenterService
 {
     private readonly ITaktCompanyRepository<TaktCostCenter> _costCenterRepository;
-    private readonly ITaktCompanyRepository<TaktCostCenterChangeLog> _costCenterChangeLogRepository;
     private readonly ITaktSortOrderGenerator _sortOrderGenerator;
     private readonly ITaktUniqueValidator _uniqueValidator;
 
@@ -38,14 +37,12 @@ public class TaktCostCenterService : TaktServiceBase, ITaktCostCenterService
     /// 构造函数
     /// </summary>
     /// <param name="costCenterRepository">成本中心仓储</param>
-    /// <param name="costCenterChangeLogRepository">CostCenterChangeLog仓储</param>
     /// <param name="sortOrderGenerator">排序号生成器</param>
     /// <param name="uniqueValidator">唯一性验证器</param>
     /// <param name="userContext">用户上下文</param>
     /// <param name="localizationService">本地化服务</param>
     public TaktCostCenterService(
         ITaktCompanyRepository<TaktCostCenter> costCenterRepository,
-        ITaktCompanyRepository<TaktCostCenterChangeLog> costCenterChangeLogRepository,
         ITaktSortOrderGenerator sortOrderGenerator,
         ITaktUniqueValidator uniqueValidator,
         ITaktUserContext? userContext = null,
@@ -53,7 +50,6 @@ public class TaktCostCenterService : TaktServiceBase, ITaktCostCenterService
         : base(userContext, localizationService)
     {
         _costCenterRepository = costCenterRepository;
-        _costCenterChangeLogRepository = costCenterChangeLogRepository;
         _sortOrderGenerator = sortOrderGenerator;
         _uniqueValidator = uniqueValidator;
     }
@@ -232,9 +228,7 @@ public class TaktCostCenterService : TaktServiceBase, ITaktCostCenterService
         if (entity == null)
         {
             throw new TaktBusinessException("成本中心不存在或已删除");
-        }
-        await _costCenterChangeLogRepository.DeleteAsync(x => x.CostCenterId == entity.Id);
-        var deleted = await _costCenterRepository.DeleteAsync(id);
+        }        var deleted = await _costCenterRepository.DeleteAsync(id);
         if (!deleted)
         {
             throw new TaktBusinessException("成本中心不存在或已删除");
@@ -401,9 +395,6 @@ public class TaktCostCenterService : TaktServiceBase, ITaktCostCenterService
         {
             return;
         }
-        // 成本中心变更记录 → dto.ChangeLogs
-        var changelogs = await _costCenterChangeLogRepository.GetListAsync(x => x.CostCenterId == entity.Id);
-        dto.ChangeLogs = changelogs.Adapt<List<TaktCostCenterChangeLogDto>>();
     }
 
     /// <summary>
@@ -414,24 +405,6 @@ public class TaktCostCenterService : TaktServiceBase, ITaktCostCenterService
     /// <returns>任务</returns>
     private async Task SaveCostCenterChildrenAsync(TaktCostCenter entity, TaktCostCenterCreateDto dto)
     {
-        // 成本中心变更记录（ChangeLogs）
-        if (dto.ChangeLogs is not { Count: > 0 })
-        {
-            await _costCenterChangeLogRepository.DeleteAsync(x => x.CostCenterId == entity.Id);
-        }
-        else
-        {
-            var changelogs = dto.ChangeLogs.Adapt<List<TaktCostCenterChangeLog>>();
-            foreach (var child in changelogs)
-            {
-                child.CostCenterId = entity.Id;
-            }
-            await _costCenterChangeLogRepository.DeleteAsync(x => x.CostCenterId == entity.Id);
-            foreach (var child in changelogs)
-            {
-            }
-            await _costCenterChangeLogRepository.CreateRangeAsync(changelogs);
-        }
     }
     // ========================================
     // 查询表达式

@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：frontend/src/types/logistics/procurement
 // 文件名称：purchase-order-item.d.ts
-// 创建时间：2026-06-30
+// 创建时间：2026-07-09
 // 创建人：Takt365(Auto Generated)
 // 功能描述：logistics/procurement 模块类型定义（自动生成；类型名去 Takt 前缀与末尾 Dto，如 TaktCompanyDto → Company）
 // 
@@ -128,6 +128,11 @@ export interface PurchaseOrderItem extends CompanyDtoBase {
    */
   deliveryStatus: number;
 
+  /**
+   * 是否作废（字典 sys_yes_no_type，0=否 1=是；编辑移除子行时标记作废）
+   */
+  isObsolete: number;
+
 }
 
 
@@ -242,6 +247,11 @@ export interface PurchaseOrderItemQuery extends TaktPagedQuery {
    * 行交货状态（字典 logistics_delivery_status；0=未交货，1=部分交货，2=全部交货）
    */
   deliveryStatus?: number;
+
+  /**
+   * 是否作废（字典 sys_yes_no_type，0=否 1=是；编辑移除子行时标记作废）
+   */
+  isObsolete?: number;
 
   /**
    * 创建时间（范围查询-开始）
@@ -383,6 +393,11 @@ export interface PurchaseOrderItemCreate {
   deliveryStatus: number;
 
   /**
+   * 是否作废（字典 sys_yes_no_type，0=否 1=是；编辑移除子行时标记作废）
+   */
+  isObsolete: number;
+
+  /**
    * 扩展字段JSON
    */
   extField?: string;
@@ -425,6 +440,25 @@ export interface PurchaseOrderItemStatus {
    * 行交货状态（字典 logistics_delivery_status；0=未交货，1=部分交货，2=全部交货）
    */
   deliveryStatus: number;
+
+}
+
+
+/**
+ * PurchaseOrderItem 作废/撤销作废 DTO
+ * 对应前端 PurchaseOrderItemObsolete
+ * @description 对应后端 TaktPurchaseOrderItemObsoleteDto
+ */
+export interface PurchaseOrderItemObsolete {
+  /**
+   * PurchaseOrderItemID
+   */
+  purchaseOrderItemId: string;
+
+  /**
+   * 是否作废（字典 sys_yes_no_type，0=否 1=是；编辑移除子行时标记作废）
+   */
+  isObsolete: number;
 
 }
 
@@ -539,6 +573,11 @@ export interface PurchaseOrderItemTemplate {
    * 行交货状态（字典 logistics_delivery_status；0=未交货，1=部分交货，2=全部交货）
    */
   deliveryStatus?: number;
+
+  /**
+   * 是否作废（字典 sys_yes_no_type，0=否 1=是；编辑移除子行时标记作废）
+   */
+  isObsolete?: number;
 
   /**
    * 扩展字段JSON
@@ -670,6 +709,11 @@ export interface PurchaseOrderItemImport {
   deliveryStatus?: number;
 
   /**
+   * 是否作废（字典 sys_yes_no_type，0=否 1=是；编辑移除子行时标记作废）
+   */
+  isObsolete?: number;
+
+  /**
    * 扩展字段JSON
    */
   extField?: string;
@@ -792,6 +836,11 @@ export interface PurchaseOrderItemExport {
    * 行交货状态（字典 logistics_delivery_status；0=未交货，1=部分交货，2=全部交货）
    */
   deliveryStatus: number;
+
+  /**
+   * 是否作废（字典 sys_yes_no_type，0=否 1=是；编辑移除子行时标记作废）
+   */
+  isObsolete: number;
 
   /**
    * 扩展字段JSON

@@ -89,10 +89,4 @@ public class TaktProfitCenter : TaktCompanyEntityBase
     /// </summary>
     [SugarColumn(ColumnName = "profit_center_status", ColumnDescription = "利润中心状态", ColumnDataType = "int", IsNullable = false, DefaultValue = "1")]
     public int ProfitCenterStatus { get; set; } = 1;
-
-    /// <summary>
-    /// 利润中心变更记录列表（外键在子表 TaktProfitCenterChangeLog.ProfitCenterId）
-    /// </summary>
-    [Navigate(NavigateType.OneToMany, nameof(TaktProfitCenterChangeLog.ProfitCenterId))]
-    public List<TaktProfitCenterChangeLog>? ChangeLogs { get; set; }
 }

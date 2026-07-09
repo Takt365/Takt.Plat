@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Application.Dtos.Logistics.Procurement
 // 文件名称：TaktPurchaseInvoiceItemDtos.cs
-// 创建时间：2026-06-30
+// 创建时间：2026-07-09
 // 创建人：Takt365(Auto Generated)
 // 功能描述：PurchaseInvoiceItem 模块 DTO（由 generate-dtos-from-entity.cjs 根据 TaktPurchaseInvoiceItem 生成，请按需审阅）
 // 
@@ -121,6 +121,11 @@ public class TaktPurchaseInvoiceItemDto : TaktCompanyDtoBase
     /// </summary>
     public decimal SubtotalAmount { get; set; }
 
+    /// <summary>
+    /// 是否作废（字典 sys_yes_no_type，0=否 1=是；编辑移除子行时标记作废）
+    /// </summary>
+    public int IsObsolete { get; set; } = 0;
+
 }
 
 // ========================================
@@ -223,6 +228,11 @@ public class TaktPurchaseInvoiceItemQueryDto : TaktPagedQuery
     /// 小计金额
     /// </summary>
     public decimal? SubtotalAmount { get; set; }
+
+    /// <summary>
+    /// 是否作废（字典 sys_yes_no_type，0=否 1=是；编辑移除子行时标记作废）
+    /// </summary>
+    public int? IsObsolete { get; set; }
 
     /// <summary>
     /// 创建时间（范围查询-开始）
@@ -354,6 +364,11 @@ public class TaktPurchaseInvoiceItemCreateDto
     public decimal SubtotalAmount { get; set; }
 
     /// <summary>
+    /// 是否作废（字典 sys_yes_no_type，0=否 1=是；编辑移除子行时标记作废）
+    /// </summary>
+    public int IsObsolete { get; set; } = 0;
+
+    /// <summary>
     /// 扩展字段JSON
     /// </summary>
     public string? ExtField { get; set; }
@@ -383,6 +398,29 @@ public class TaktPurchaseInvoiceItemUpdateDto : TaktPurchaseInvoiceItemCreateDto
     [JsonConverter(typeof(ValueToStringConverter))]
     public long PurchaseInvoiceItemId { get; set; }
 
+}
+
+// ========================================
+// PurchaseInvoiceItem 作废 DTO
+// ========================================
+
+/// <summary>
+/// PurchaseInvoiceItem 作废/撤销作废 DTO
+/// </summary>
+public class TaktPurchaseInvoiceItemObsoleteDto
+{
+    /// <summary>
+    /// PurchaseInvoiceItemID
+    /// </summary>
+    [Required(ErrorMessage = "ID不能为空")]
+    [AdaptMember("Id")]
+    [JsonConverter(typeof(ValueToStringConverter))]
+    public long PurchaseInvoiceItemId { get; set; }
+
+    /// <summary>
+    /// 是否作废（字典 sys_yes_no_type，0=否 1=是；编辑移除子行时标记作废）
+    /// </summary>
+    public int IsObsolete { get; set; }
 }
 
 // ========================================
@@ -484,6 +522,11 @@ public class TaktPurchaseInvoiceItemTemplateDto
     /// 小计金额
     /// </summary>
     public decimal? SubtotalAmount { get; set; }
+
+    /// <summary>
+    /// 是否作废（字典 sys_yes_no_type，0=否 1=是；编辑移除子行时标记作废）
+    /// </summary>
+    public int? IsObsolete { get; set; }
 
     /// <summary>
     /// 扩展字段JSON
@@ -599,6 +642,11 @@ public class TaktPurchaseInvoiceItemImportDto
     public decimal? SubtotalAmount { get; set; }
 
     /// <summary>
+    /// 是否作废（字典 sys_yes_no_type，0=否 1=是；编辑移除子行时标记作废）
+    /// </summary>
+    public int? IsObsolete { get; set; }
+
+    /// <summary>
     /// 扩展字段JSON
     /// </summary>
     public string? ExtField { get; set; }
@@ -711,6 +759,11 @@ public class TaktPurchaseInvoiceItemExportDto
     /// 小计金额
     /// </summary>
     public decimal SubtotalAmount { get; set; }
+
+    /// <summary>
+    /// 是否作废（字典 sys_yes_no_type，0=否 1=是；编辑移除子行时标记作废）
+    /// </summary>
+    public int IsObsolete { get; set; } = 0;
 
     /// <summary>
     /// 扩展字段JSON

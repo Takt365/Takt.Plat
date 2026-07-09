@@ -69,4 +69,11 @@ public class TaktEcSeikan : TaktCompanyEntityBase
     /// <summary>旧品处理</summary>
     [SugarColumn(ColumnName = "old_product_handling", ColumnDescription = "旧品处理", ColumnDataType = "nvarchar", Length = 500, IsNullable = true)]
     public string? OldProductHandling { get; set; }
+
+    /// <summary>
+    /// 是否作废（字典 sys_yes_no_type，0=否 1=是；编辑移除子行时标记作废）
+    /// </summary>
+    [SugarColumn(ColumnName = "is_obsolete", ColumnDescription = "是否作废", ColumnDataType = "int", IsNullable = false, DefaultValue = "0")]
+    public int IsObsolete { get; set; } = 0;
+
 }

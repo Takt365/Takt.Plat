@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Application.Dtos.Logistics.Manufacturing.EngineeringChange
 // 文件名称：TaktEcDetailDtos.cs
-// 创建时间：2026-07-01
+// 创建时间：2026-07-09
 // 创建人：Takt365(Auto Generated)
 // 功能描述：EcDetail 模块 DTO（由 generate-dtos-from-entity.cjs 根据 TaktEcDetail 生成，请按需审阅）
 // 
@@ -177,24 +177,29 @@ public class TaktEcDetailDto : TaktCompanyDtoBase
     public DateTime EcBomDate { get; set; }
 
     /// <summary>
-    /// 互换性（Ec_is_compatible）
+    /// 兼容性（字典 logistics_ec_source_compatibility；A=兼容，B=单向兼容（新替旧），C=单向兼容（旧替新），D=不兼容）
     /// </summary>
     public string? EcIsCompatible { get; set; } = string.Empty;
 
     /// <summary>
-    /// 二级区分（Ec_second_distinction）
+    /// 二级区分（字典 logistics_ec_source_distinction；1=有，2=优先，3=无）
     /// </summary>
     public string? EcSecondDistinction { get; set; } = string.Empty;
 
     /// <summary>
-    /// 生产指令（Ec_instruction_no）
+    /// 生产指令（字典 logistics_ec_source_instruction；1=已出货成品，2=在线半成品，3=库存零件，4=外协在制品，5=新下达订单，9=未定）
     /// </summary>
-    public string? EcInstructionNo { get; set; } = string.Empty;
+    public string? EcInstruction { get; set; } = string.Empty;
 
     /// <summary>
-    /// 旧品处理（Ec_legacy_part_disposition）
+    /// 旧品处理（字典 logistics_ec_legacy_part_disposition；1=转用，2=废弃，3=返工，4=消耗，5=无处理，9=未定）
     /// </summary>
     public string? EcLegacyPartDisposition { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 是否作废（字典 sys_yes_no_type，0=否 1=是；编辑移除子行时标记作废）
+    /// </summary>
+    public int IsObsolete { get; set; } = 0;
 
     /// <summary>
     /// 设变技术课主表（多对一）
@@ -366,24 +371,29 @@ public class TaktEcDetailQueryDto : TaktPagedQuery
     public DateTime? EcBomDateEnd { get; set; }
 
     /// <summary>
-    /// 互换性（Ec_is_compatible）
+    /// 兼容性（字典 logistics_ec_source_compatibility；A=兼容，B=单向兼容（新替旧），C=单向兼容（旧替新），D=不兼容）
     /// </summary>
     public string? EcIsCompatible { get; set; } = string.Empty;
 
     /// <summary>
-    /// 二级区分（Ec_second_distinction）
+    /// 二级区分（字典 logistics_ec_source_distinction；1=有，2=优先，3=无）
     /// </summary>
     public string? EcSecondDistinction { get; set; } = string.Empty;
 
     /// <summary>
-    /// 生产指令（Ec_instruction_no）
+    /// 生产指令（字典 logistics_ec_source_instruction；1=已出货成品，2=在线半成品，3=库存零件，4=外协在制品，5=新下达订单，9=未定）
     /// </summary>
-    public string? EcInstructionNo { get; set; } = string.Empty;
+    public string? EcInstruction { get; set; } = string.Empty;
 
     /// <summary>
-    /// 旧品处理（Ec_legacy_part_disposition）
+    /// 旧品处理（字典 logistics_ec_legacy_part_disposition；1=转用，2=废弃，3=返工，4=消耗，5=无处理，9=未定）
     /// </summary>
     public string? EcLegacyPartDisposition { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 是否作废（字典 sys_yes_no_type，0=否 1=是；编辑移除子行时标记作废）
+    /// </summary>
+    public int? IsObsolete { get; set; }
 
     /// <summary>
     /// 创建时间（范围查询-开始）
@@ -569,24 +579,29 @@ public class TaktEcDetailCreateDto
     public DateTime EcBomDate { get; set; }
 
     /// <summary>
-    /// 互换性（Ec_is_compatible）
+    /// 兼容性（字典 logistics_ec_source_compatibility；A=兼容，B=单向兼容（新替旧），C=单向兼容（旧替新），D=不兼容）
     /// </summary>
     public string? EcIsCompatible { get; set; } = string.Empty;
 
     /// <summary>
-    /// 二级区分（Ec_second_distinction）
+    /// 二级区分（字典 logistics_ec_source_distinction；1=有，2=优先，3=无）
     /// </summary>
     public string? EcSecondDistinction { get; set; } = string.Empty;
 
     /// <summary>
-    /// 生产指令（Ec_instruction_no）
+    /// 生产指令（字典 logistics_ec_source_instruction；1=已出货成品，2=在线半成品，3=库存零件，4=外协在制品，5=新下达订单，9=未定）
     /// </summary>
-    public string? EcInstructionNo { get; set; } = string.Empty;
+    public string? EcInstruction { get; set; } = string.Empty;
 
     /// <summary>
-    /// 旧品处理（Ec_legacy_part_disposition）
+    /// 旧品处理（字典 logistics_ec_legacy_part_disposition；1=转用，2=废弃，3=返工，4=消耗，5=无处理，9=未定）
     /// </summary>
     public string? EcLegacyPartDisposition { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 是否作废（字典 sys_yes_no_type，0=否 1=是；编辑移除子行时标记作废）
+    /// </summary>
+    public int IsObsolete { get; set; } = 0;
 
     /// <summary>
     /// 扩展字段JSON
@@ -618,6 +633,29 @@ public class TaktEcDetailUpdateDto : TaktEcDetailCreateDto
     [JsonConverter(typeof(ValueToStringConverter))]
     public long EcDetailId { get; set; }
 
+}
+
+// ========================================
+// EcDetail 作废 DTO
+// ========================================
+
+/// <summary>
+/// EcDetail 作废/撤销作废 DTO
+/// </summary>
+public class TaktEcDetailObsoleteDto
+{
+    /// <summary>
+    /// EcDetailID
+    /// </summary>
+    [Required(ErrorMessage = "ID不能为空")]
+    [AdaptMember("Id")]
+    [JsonConverter(typeof(ValueToStringConverter))]
+    public long EcDetailId { get; set; }
+
+    /// <summary>
+    /// 是否作废（字典 sys_yes_no_type，0=否 1=是；编辑移除子行时标记作废）
+    /// </summary>
+    public int IsObsolete { get; set; }
 }
 
 // ========================================
@@ -776,24 +814,29 @@ public class TaktEcDetailTemplateDto
     public DateTime? EcBomDate { get; set; }
 
     /// <summary>
-    /// 互换性（Ec_is_compatible）
+    /// 兼容性（字典 logistics_ec_source_compatibility；A=兼容，B=单向兼容（新替旧），C=单向兼容（旧替新），D=不兼容）
     /// </summary>
     public string? EcIsCompatible { get; set; } = string.Empty;
 
     /// <summary>
-    /// 二级区分（Ec_second_distinction）
+    /// 二级区分（字典 logistics_ec_source_distinction；1=有，2=优先，3=无）
     /// </summary>
     public string? EcSecondDistinction { get; set; } = string.Empty;
 
     /// <summary>
-    /// 生产指令（Ec_instruction_no）
+    /// 生产指令（字典 logistics_ec_source_instruction；1=已出货成品，2=在线半成品，3=库存零件，4=外协在制品，5=新下达订单，9=未定）
     /// </summary>
-    public string? EcInstructionNo { get; set; } = string.Empty;
+    public string? EcInstruction { get; set; } = string.Empty;
 
     /// <summary>
-    /// 旧品处理（Ec_legacy_part_disposition）
+    /// 旧品处理（字典 logistics_ec_legacy_part_disposition；1=转用，2=废弃，3=返工，4=消耗，5=无处理，9=未定）
     /// </summary>
     public string? EcLegacyPartDisposition { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 是否作废（字典 sys_yes_no_type，0=否 1=是；编辑移除子行时标记作废）
+    /// </summary>
+    public int? IsObsolete { get; set; }
 
     /// <summary>
     /// 扩展字段JSON
@@ -964,24 +1007,29 @@ public class TaktEcDetailImportDto
     public DateTime? EcBomDate { get; set; }
 
     /// <summary>
-    /// 互换性（Ec_is_compatible）
+    /// 兼容性（字典 logistics_ec_source_compatibility；A=兼容，B=单向兼容（新替旧），C=单向兼容（旧替新），D=不兼容）
     /// </summary>
     public string? EcIsCompatible { get; set; } = string.Empty;
 
     /// <summary>
-    /// 二级区分（Ec_second_distinction）
+    /// 二级区分（字典 logistics_ec_source_distinction；1=有，2=优先，3=无）
     /// </summary>
     public string? EcSecondDistinction { get; set; } = string.Empty;
 
     /// <summary>
-    /// 生产指令（Ec_instruction_no）
+    /// 生产指令（字典 logistics_ec_source_instruction；1=已出货成品，2=在线半成品，3=库存零件，4=外协在制品，5=新下达订单，9=未定）
     /// </summary>
-    public string? EcInstructionNo { get; set; } = string.Empty;
+    public string? EcInstruction { get; set; } = string.Empty;
 
     /// <summary>
-    /// 旧品处理（Ec_legacy_part_disposition）
+    /// 旧品处理（字典 logistics_ec_legacy_part_disposition；1=转用，2=废弃，3=返工，4=消耗，5=无处理，9=未定）
     /// </summary>
     public string? EcLegacyPartDisposition { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 是否作废（字典 sys_yes_no_type，0=否 1=是；编辑移除子行时标记作废）
+    /// </summary>
+    public int? IsObsolete { get; set; }
 
     /// <summary>
     /// 扩展字段JSON
@@ -1153,24 +1201,29 @@ public class TaktEcDetailExportDto
     public DateTime EcBomDate { get; set; }
 
     /// <summary>
-    /// 互换性（Ec_is_compatible）
+    /// 兼容性（字典 logistics_ec_source_compatibility；A=兼容，B=单向兼容（新替旧），C=单向兼容（旧替新），D=不兼容）
     /// </summary>
     public string? EcIsCompatible { get; set; } = string.Empty;
 
     /// <summary>
-    /// 二级区分（Ec_second_distinction）
+    /// 二级区分（字典 logistics_ec_source_distinction；1=有，2=优先，3=无）
     /// </summary>
     public string? EcSecondDistinction { get; set; } = string.Empty;
 
     /// <summary>
-    /// 生产指令（Ec_instruction_no）
+    /// 生产指令（字典 logistics_ec_source_instruction；1=已出货成品，2=在线半成品，3=库存零件，4=外协在制品，5=新下达订单，9=未定）
     /// </summary>
-    public string? EcInstructionNo { get; set; } = string.Empty;
+    public string? EcInstruction { get; set; } = string.Empty;
 
     /// <summary>
-    /// 旧品处理（Ec_legacy_part_disposition）
+    /// 旧品处理（字典 logistics_ec_legacy_part_disposition；1=转用，2=废弃，3=返工，4=消耗，5=无处理，9=未定）
     /// </summary>
     public string? EcLegacyPartDisposition { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 是否作废（字典 sys_yes_no_type，0=否 1=是；编辑移除子行时标记作废）
+    /// </summary>
+    public int IsObsolete { get; set; } = 0;
 
     /// <summary>
     /// 扩展字段JSON

@@ -124,6 +124,54 @@ public class TaktModelDestinationsController : TaktControllerBase
     }
 
     /// <summary>
+    /// 根据物料编码获取机种仕向列表
+    /// </summary>
+    /// <param name="materialCode">物料编码</param>
+    /// <returns>型号目的地 DTO 列表</returns>
+    [TaktPermission("logistics:materials:model:destination:query", "按物料查询机种仕向列表")]
+    [HttpGet("list-by-material")]
+    public async Task<IActionResult> GetModelDestinationListByMaterialAsync([FromQuery] string materialCode)
+    {
+        try
+        {
+            if (string.IsNullOrWhiteSpace(materialCode))
+            {
+                return BadRequest("物料编码不能为空");
+            }
+            var result = await _modelDestinationService.GetModelDestinationListByMaterialAsync(materialCode);
+            return Success(result, "查询成功");
+        }
+        catch (Exception ex)
+        {
+            return HandleException(ex);
+        }
+    }
+
+    /// <summary>
+    /// 根据物料编码获取机种仕向选项列表
+    /// </summary>
+    /// <param name="materialCode">物料编码</param>
+    /// <returns>下拉选项</returns>
+    [TaktPermission("logistics:materials:model:destination:query", "按物料查询机种仕向选项")]
+    [HttpGet("options-by-material")]
+    public async Task<IActionResult> GetModelDestinationOptionsByMaterialAsync([FromQuery] string materialCode)
+    {
+        try
+        {
+            if (string.IsNullOrWhiteSpace(materialCode))
+            {
+                return BadRequest("物料编码不能为空");
+            }
+            var result = await _modelDestinationService.GetModelDestinationOptionsByMaterialAsync(materialCode);
+            return Success(result, "查询成功");
+        }
+        catch (Exception ex)
+        {
+            return HandleException(ex);
+        }
+    }
+
+    /// <summary>
     /// 创建型号目的地
     /// </summary>
     /// <param name="dto">创建DTO</param>

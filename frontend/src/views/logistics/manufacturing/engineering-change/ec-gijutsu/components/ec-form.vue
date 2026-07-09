@@ -2,7 +2,7 @@
 <!-- 项目名称：节拍数字工厂 · Takt Plat (TDF) -->
 <!-- 命名空间：@/views/logistics/manufacturing/engineering-change/ec-gijutsu/components -->
 <!-- 文件名称：ec-form.vue -->
-<!-- 功能描述：设变维护弹窗内嵌表单；主表仅 ecLeader/ecDistinction/ecEntryDate/ecContent/ecStatus/remark 可编辑；附件 Tab 工具栏 CRUD + 弹窗表单 -->
+<!-- 功能描述：设变维护弹窗内嵌表单；主表仅 ecLeader/ecDistinction/ecEntryDate/ecContent/ecStatus/remark 可编辑；附件 Tab 工具栏增删改（来源导入无预置行，须手工维护） -->
 <!-- 版权信息：Copyright (c) 2025 Takt  All rights reserved. -->
 <!-- 免责声明：此软件使用 MIT License，作者不承担任何使用风险。 -->
 <!-- ======================================== -->
@@ -311,9 +311,9 @@
           create-permission="logistics:manufacturing:engineering:change:gijutsu:create"
           update-permission="logistics:manufacturing:engineering:change:gijutsu:update"
           delete-permission="logistics:manufacturing:engineering:change:gijutsu:delete"
-          :show-create="!sourceImportMode"
+          :show-create="true"
           :show-update="true"
-          :show-delete="!sourceImportMode"
+          :show-delete="true"
           :show-import="false"
           :show-export="false"
           :show-expand="false"
@@ -375,7 +375,7 @@
  * 设变维护表单 · 由 generate-vue-master-detail-from-api.cjs 根据 types/api 生成
  * @module views/logistics/manufacturing/engineering-change/ec-gijutsu/components
  */
-import { reactive, watch, computed, ref, nextTick } from 'vue'
+import { reactive, watch, computed, ref, nextTick, h } from 'vue'
 import { useI18n } from 'vue-i18n'
 import { message, Modal } from 'ant-design-vue'
 import type { TableColumnsType } from 'ant-design-vue'
@@ -384,6 +384,7 @@ import type { EcGijutsuFormData } from '@/types/logistics/manufacturing/engineer
 import { RiQuestionLine, RiEditLine, RiDeleteBinLine } from '@remixicon/vue'
 import { CreateActionColumn } from '@/components/business/takt-action-column/index'
 import EcAttachmentForm from './ec-attachment-form.vue'
+import TaktDictTag from '@/components/common/takt-dict-tag/index.vue'
 import { useTenantStore } from '@/stores/identity/tenant'
 import { useUserStore } from '@/stores/identity/user'
 
@@ -512,7 +513,10 @@ const ecAttachmentTableColumns = computed<TableColumnsType>(() => {
       key: 'attachmentType',
       width: 120,
       ellipsis: true,
-      customRender: ({ record }) => formatSubTableCell(record as Record<string, unknown>, 'attachmentType'),
+      customRender: ({ record }) => h(TaktDictTag, {
+        dictType: 'logistics_ec_attachment_type',
+        value: String((record as Record<string, unknown>).attachmentType ?? ''),
+      }),
     },
     {
       title: t('entity.ecattachment.docno'),
@@ -548,17 +552,15 @@ const ecAttachmentTableColumns = computed<TableColumnsType>(() => {
       permission: 'logistics:manufacturing:engineering:change:gijutsu:update',
       onClick: (record: Record<string, unknown>) => void handleAttachmentEdit(record),
     },
-  ]
-  if (!props.sourceImportMode) {
-    actions.push({
+    {
       key: 'delete',
       label: t('common.page.button.delete'),
       shape: 'plain' as const,
       icon: RiDeleteBinLine,
       permission: 'logistics:manufacturing:engineering:change:gijutsu:delete',
       onClick: (record: Record<string, unknown>) => void handleAttachmentDeleteOne(record),
-    })
-  }
+    },
+  ]
   cols.push(CreateActionColumn({ actions }))
   return cols
 })

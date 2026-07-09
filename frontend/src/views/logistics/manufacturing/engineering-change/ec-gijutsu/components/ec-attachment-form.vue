@@ -59,12 +59,12 @@
                 :label="t('entity.ecattachment.attachmenttype')"
                 name="attachmentType"
               >
-                <a-input
+                <TaktSelect
                   v-model:value="formState.attachmentType"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.ecattachment.attachmenttype') })"
-                  show-count
-                  :maxlength="30"
+                  dict-type="logistics_ec_attachment_type"
+                  :placeholder="t('common.page.form.placeholder.select', { field: t('entity.ecattachment.attachmenttype') })"
                   allow-clear
+                  class="w-full"
                   :disabled="loading || fileUploading"
                 />
               </a-form-item>
@@ -251,6 +251,9 @@ function applyFormDefaults(target: Record<string, unknown>) {
   if (target.lineNumber === undefined || target.lineNumber === null || target.lineNumber === '') {
     target.lineNumber = 10
   }
+  if (!String(target.attachmentType ?? '').trim()) {
+    target.attachmentType = 'EC'
+  }
 }
 
 /** 根据 accessUrl 同步 takt-upload-file 列表展示 */
@@ -397,13 +400,15 @@ const rules = computed<Record<string, Rule[]>>(() => ({
     },
     trigger: 'change',
   }],
-  attachmentType: [
-    {
-      required: true,
-      message: t('common.page.form.placeholder.required', { field: t('entity.ecattachment.attachmenttype') }),
-      trigger: 'blur',
+  attachmentType: [{
+    validator: async (_rule, value) => {
+      if (value === undefined || value === null || value === '') {
+        return Promise.reject(t('common.page.form.placeholder.select', { field: t('entity.ecattachment.attachmenttype') }))
+      }
+      return Promise.resolve()
     },
-  ],
+    trigger: 'change',
+  }],
   docNo: [
     {
       required: true,

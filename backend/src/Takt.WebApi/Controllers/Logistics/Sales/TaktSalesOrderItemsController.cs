@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.WebApi.Controllers.Logistics.Sales
 // 文件名称：TaktSalesOrderItemsController.cs
-// 创建时间：2026-07-01
+// 创建时间：2026-07-09
 // 创建人：Takt365(Cursor AI)
 // 功能描述：销售订单明细控制器
 // 
@@ -192,6 +192,26 @@ public class TaktSalesOrderItemsController : TaktControllerBase
         try
         {
             var result = await _salesOrderItemService.UpdateSalesOrderItemStatusAsync(dto);
+            return Success(result, "更新成功");
+        }
+        catch (Exception ex)
+        {
+            return HandleException(ex);
+        }
+    }
+
+    /// <summary>
+    /// 更新销售订单明细作废状态
+    /// </summary>
+    /// <param name="dto">作废 DTO</param>
+    /// <returns>销售订单明细DTO</returns>
+    [TaktPermission("logistics:sales:order:update", "更新销售订单明细作废状态")]
+    [HttpPut("obsolete")]
+    public async Task<IActionResult> UpdateSalesOrderItemObsoleteAsync([FromBody] TaktSalesOrderItemObsoleteDto dto)
+    {
+        try
+        {
+            var result = await _salesOrderItemService.UpdateSalesOrderItemObsoleteAsync(dto);
             return Success(result, "更新成功");
         }
         catch (Exception ex)

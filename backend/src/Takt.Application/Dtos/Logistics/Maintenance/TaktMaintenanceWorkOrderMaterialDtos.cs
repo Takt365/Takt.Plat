@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Application.Dtos.Logistics.Maintenance
 // 文件名称：TaktMaintenanceWorkOrderMaterialDtos.cs
-// 创建时间：2026-06-24
+// 创建时间：2026-07-09
 // 创建人：Takt365(Auto Generated)
 // 功能描述：MaintenanceWorkOrderMaterial 模块 DTO（由 generate-dtos-from-entity.cjs 根据 TaktMaintenanceWorkOrderMaterial 生成，请按需审阅）
 // 
@@ -108,14 +108,19 @@ public class TaktMaintenanceWorkOrderMaterialDto : TaktCompanyDtoBase
     public string? StorageLocation { get; set; } = string.Empty;
 
     /// <summary>
+    /// 领料状态（0=待领料，1=部分领料，2=已领料）
+    /// </summary>
+    public int IssueStatus { get; set; } = 0;
+
+    /// <summary>
     /// 领料时间
     /// </summary>
     public DateTime? IssueTime { get; set; }
 
     /// <summary>
-    /// 领料状态（0=待领料，1=部分领料，2=已领料）
+    /// 是否作废（字典 sys_yes_no_type，0=否 1=是；编辑移除子行时标记作废）
     /// </summary>
-    public int IssueStatus { get; set; } = 0;
+    public int IsObsolete { get; set; } = 0;
 
     /// <summary>
     /// 维护工单（主表）
@@ -219,6 +224,11 @@ public class TaktMaintenanceWorkOrderMaterialQueryDto : TaktPagedQuery
     public string? StorageLocation { get; set; } = string.Empty;
 
     /// <summary>
+    /// 领料状态（0=待领料，1=部分领料，2=已领料）
+    /// </summary>
+    public int? IssueStatus { get; set; }
+
+    /// <summary>
     /// 领料时间（范围查询-开始）
     /// </summary>
     public DateTime? IssueTimeStart { get; set; }
@@ -229,9 +239,9 @@ public class TaktMaintenanceWorkOrderMaterialQueryDto : TaktPagedQuery
     public DateTime? IssueTimeEnd { get; set; }
 
     /// <summary>
-    /// 领料状态（0=待领料，1=部分领料，2=已领料）
+    /// 是否作废（字典 sys_yes_no_type，0=否 1=是；编辑移除子行时标记作废）
     /// </summary>
-    public int? IssueStatus { get; set; }
+    public int? IsObsolete { get; set; }
 
     /// <summary>
     /// 创建时间（范围查询-开始）
@@ -350,14 +360,19 @@ public class TaktMaintenanceWorkOrderMaterialCreateDto
     public string? StorageLocation { get; set; } = string.Empty;
 
     /// <summary>
+    /// 领料状态（0=待领料，1=部分领料，2=已领料）
+    /// </summary>
+    public int IssueStatus { get; set; } = 0;
+
+    /// <summary>
     /// 领料时间
     /// </summary>
     public DateTime? IssueTime { get; set; }
 
     /// <summary>
-    /// 领料状态（0=待领料，1=部分领料，2=已领料）
+    /// 是否作废（字典 sys_yes_no_type，0=否 1=是；编辑移除子行时标记作废）
     /// </summary>
-    public int IssueStatus { get; set; } = 0;
+    public int IsObsolete { get; set; } = 0;
 
     /// <summary>
     /// 扩展字段JSON
@@ -413,6 +428,29 @@ public class TaktMaintenanceWorkOrderMaterialStatusDto
     /// </summary>
     [Required(ErrorMessage = "领料状态（0=待领料，1=部分领料，2=已领料）不能为空")]
     public int IssueStatus { get; set; } = 0;
+}
+
+// ========================================
+// MaintenanceWorkOrderMaterial 作废 DTO
+// ========================================
+
+/// <summary>
+/// MaintenanceWorkOrderMaterial 作废/撤销作废 DTO
+/// </summary>
+public class TaktMaintenanceWorkOrderMaterialObsoleteDto
+{
+    /// <summary>
+    /// MaintenanceWorkOrderMaterialID
+    /// </summary>
+    [Required(ErrorMessage = "ID不能为空")]
+    [AdaptMember("Id")]
+    [JsonConverter(typeof(ValueToStringConverter))]
+    public long MaintenanceWorkOrderMaterialId { get; set; }
+
+    /// <summary>
+    /// 是否作废（字典 sys_yes_no_type，0=否 1=是；编辑移除子行时标记作废）
+    /// </summary>
+    public int IsObsolete { get; set; }
 }
 
 // ========================================
@@ -502,14 +540,19 @@ public class TaktMaintenanceWorkOrderMaterialTemplateDto
     public string? StorageLocation { get; set; } = string.Empty;
 
     /// <summary>
+    /// 领料状态（0=待领料，1=部分领料，2=已领料）
+    /// </summary>
+    public int? IssueStatus { get; set; }
+
+    /// <summary>
     /// 领料时间
     /// </summary>
     public DateTime? IssueTime { get; set; }
 
     /// <summary>
-    /// 领料状态（0=待领料，1=部分领料，2=已领料）
+    /// 是否作废（字典 sys_yes_no_type，0=否 1=是；编辑移除子行时标记作废）
     /// </summary>
-    public int? IssueStatus { get; set; }
+    public int? IsObsolete { get; set; }
 
     /// <summary>
     /// 扩展字段JSON
@@ -611,14 +654,19 @@ public class TaktMaintenanceWorkOrderMaterialImportDto
     public string? StorageLocation { get; set; } = string.Empty;
 
     /// <summary>
+    /// 领料状态（0=待领料，1=部分领料，2=已领料）
+    /// </summary>
+    public int? IssueStatus { get; set; }
+
+    /// <summary>
     /// 领料时间
     /// </summary>
     public DateTime? IssueTime { get; set; }
 
     /// <summary>
-    /// 领料状态（0=待领料，1=部分领料，2=已领料）
+    /// 是否作废（字典 sys_yes_no_type，0=否 1=是；编辑移除子行时标记作废）
     /// </summary>
-    public int? IssueStatus { get; set; }
+    public int? IsObsolete { get; set; }
 
     /// <summary>
     /// 扩展字段JSON
@@ -721,14 +769,19 @@ public class TaktMaintenanceWorkOrderMaterialExportDto
     public string? StorageLocation { get; set; } = string.Empty;
 
     /// <summary>
+    /// 领料状态（0=待领料，1=部分领料，2=已领料）
+    /// </summary>
+    public int IssueStatus { get; set; } = 0;
+
+    /// <summary>
     /// 领料时间
     /// </summary>
     public DateTime? IssueTime { get; set; }
 
     /// <summary>
-    /// 领料状态（0=待领料，1=部分领料，2=已领料）
+    /// 是否作废（字典 sys_yes_no_type，0=否 1=是；编辑移除子行时标记作废）
     /// </summary>
-    public int IssueStatus { get; set; } = 0;
+    public int IsObsolete { get; set; } = 0;
 
     /// <summary>
     /// 扩展字段JSON

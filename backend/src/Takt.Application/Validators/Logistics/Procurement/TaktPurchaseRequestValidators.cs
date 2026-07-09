@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Application.Validators.Logistics.Procurement
 // 文件名称：TaktPurchaseRequestValidators.cs
-// 创建时间：2026-07-02
+// 创建时间：2026-07-09
 // 创建人：Takt365(Auto Generated)
 // 功能描述：PurchaseRequest 模块 FluentValidation 验证器（由 generate-validators-from-entity.cjs 根据 TaktPurchaseRequest 生成，请按需审阅）
 // 
@@ -41,6 +41,8 @@ public class TaktPurchaseRequestCreateValidator : AbstractValidator<TaktPurchase
         RuleFor(x => x.PurchaseRequestCode)
             .NotEmpty().WithMessage("采购申请编码不能为空")
             .MaximumLength(10).WithMessage("采购申请编码长度不能超过10个字符");
+        RuleFor(x => x.PurchaseInquiryId)
+            .GreaterThanOrEqualTo(0).WithMessage("来源采购询价 ID不能为负数");
         RuleFor(x => x.CountersignId)
             .GreaterThanOrEqualTo(0).WithMessage("PR 会签单 ID不能为负数");
         RuleFor(x => x.RequestId)
@@ -83,6 +85,8 @@ public class TaktPurchaseRequestUpdateValidator : AbstractValidator<TaktPurchase
         RuleFor(x => x.PurchaseRequestCode)
             .NotEmpty().WithMessage("采购申请编码不能为空")
             .MaximumLength(10).WithMessage("采购申请编码长度不能超过10个字符");
+        RuleFor(x => x.PurchaseInquiryId)
+            .GreaterThanOrEqualTo(0).WithMessage("来源采购询价 ID不能为负数");
         RuleFor(x => x.CountersignId)
             .GreaterThanOrEqualTo(0).WithMessage("PR 会签单 ID不能为负数");
         RuleFor(x => x.RequestId)
@@ -121,6 +125,8 @@ public class TaktPurchaseRequestImportValidator : AbstractValidator<TaktPurchase
         RuleFor(x => x.PurchaseRequestCode)
             .NotEmpty().WithMessage("采购申请编码不能为空")
             .MaximumLength(10).WithMessage("采购申请编码长度不能超过10个字符");
+        RuleFor(x => x.PurchaseInquiryId)
+            .GreaterThanOrEqualTo(0).WithMessage("来源采购询价 ID不能为负数");
         RuleFor(x => x.CountersignId)
             .GreaterThanOrEqualTo(0).WithMessage("PR 会签单 ID不能为负数");
         RuleFor(x => x.RequestId)

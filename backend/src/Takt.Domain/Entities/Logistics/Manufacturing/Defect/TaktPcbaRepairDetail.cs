@@ -32,9 +32,9 @@ public class TaktPcbaRepairDetail : TaktCompanyEntityBase
     public long PcbaRepairId { get; set; }
     
     /// <summary>
-    /// 生产工单号（冗余字段,便于查询）
+    /// 工单号（冗余字段,便于查询）
     /// </summary>
-    [SugarColumn(ColumnName = "prod_order_code", ColumnDescription = "生产工单号", ColumnDataType = "nvarchar", Length = 20, IsNullable = false)]
+    [SugarColumn(ColumnName = "prod_order_code", ColumnDescription = "工单号", ColumnDataType = "nvarchar", Length = 20, IsNullable = false)]
     public string ProdOrderCode { get; set; } = string.Empty;
     
     /// <summary>
@@ -108,6 +108,12 @@ public class TaktPcbaRepairDetail : TaktCompanyEntityBase
     /// </summary>
     [SugarColumn(ColumnName = "repair_operator", ColumnDescription = "修理员", Length = 40, ColumnDataType = "nvarchar", IsNullable = true)]
     public string? RepairOperator { get; set; }
+
+    /// <summary>
+    /// 是否作废（字典 sys_yes_no_type，0=否 1=是；编辑移除子行时标记作废）
+    /// </summary>
+    [SugarColumn(ColumnName = "is_obsolete", ColumnDescription = "是否作废", ColumnDataType = "int", IsNullable = false, DefaultValue = "0")]
+    public int IsObsolete { get; set; } = 0;
 
     /// <summary>
     /// PCBA改修日报（主表）

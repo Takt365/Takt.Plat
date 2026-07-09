@@ -9,10 +9,13 @@
 import { inject, provide, type InjectionKey, type Ref, ref } from 'vue'
 import type { ProductionPlan } from '@/types/logistics/manufacturing/planning/production-plan'
 
+/** 表格行类型（与 index 列表行、TaktSingleTable slot record 一致） */
+export type ProductionPlanRowRecord = ProductionPlan | Record<string, unknown>
+
 /** 主表选中行上下文 */
 export interface ProductionPlanMasterContext {
   /** 当前选中的主表行（右侧明细依赖） */
-  selectedMasterRow: Ref<ProductionPlan | null>
+  selectedMasterRow: Ref<ProductionPlanRowRecord | null>
 }
 
 const productionPlanMasterContextKey: InjectionKey<ProductionPlanMasterContext> = Symbol('production-planMasterContext')
@@ -22,7 +25,7 @@ const productionPlanMasterContextKey: InjectionKey<ProductionPlanMasterContext> 
  * @returns {ProductionPlanMasterContext} 主表上下文
  */
 export function provideProductionPlanMasterContext(): ProductionPlanMasterContext {
-  const selectedMasterRow = ref<ProductionPlan | null>(null)
+  const selectedMasterRow = ref<ProductionPlanRowRecord | null>(null)
   const ctx: ProductionPlanMasterContext = { selectedMasterRow }
   provide(productionPlanMasterContextKey, ctx)
   return ctx

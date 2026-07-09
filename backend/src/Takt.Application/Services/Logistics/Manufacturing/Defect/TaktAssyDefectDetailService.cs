@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Application.Services.Logistics.Manufacturing.Defect
 // 文件名称：TaktAssyDefectDetailService.cs
-// 创建时间：2026-06-30
+// 创建时间：2026-07-09
 // 创建人：Takt365(Cursor AI)
 // 功能描述：组立不良明细应用服务实现
 // 
@@ -15,6 +15,7 @@ using Mapster;
 using SqlSugar;
 using Takt.Application.Dtos.Logistics.Manufacturing.Defect;
 using Takt.Domain.Entities.Logistics.Manufacturing.Defect;
+using Takt.Domain.Entities.Logistics.Manufacturing.Output;
 using Takt.Domain.Interfaces;
 using Takt.Domain.Repositories;
 using Takt.Shared.Exceptions;
@@ -31,6 +32,10 @@ public class TaktAssyDefectDetailService : TaktServiceBase, ITaktAssyDefectDetai
 {
     private readonly ITaktCompanyRepository<TaktAssyDefectDetail> _assyDefectDetailRepository;
     private readonly ITaktCompanyRepository<TaktAssyDefect> _assyDefectRepository;
+    private readonly ITaktCompanyRepository<TaktAssyOutput> _assyOutputRepository;
+    private readonly ITaktCompanyRepository<TaktAssyOutputDetail> _assyOutputDetailRepository;
+    private readonly ITaktCompanyRepository<TaktAssyOrderDefect> _assyOrderDefectRepository;
+    private readonly ITaktCompanyRepository<TaktAssyBatchDefect> _assyBatchDefectRepository;
     private readonly ITaktLineNumberGenerator _lineNumberGenerator;
     private readonly ITaktUniqueValidator _uniqueValidator;
 
@@ -39,6 +44,10 @@ public class TaktAssyDefectDetailService : TaktServiceBase, ITaktAssyDefectDetai
     /// </summary>
     /// <param name="assyDefectDetailRepository">组立不良明细仓储</param>
     /// <param name="assyDefectRepository">组立不良日报仓储</param>
+    /// <param name="assyOutputRepository">组立日报仓储</param>
+    /// <param name="assyOutputDetailRepository">组立日报明细仓储</param>
+    /// <param name="assyOrderDefectRepository">工单不良统计仓储</param>
+    /// <param name="assyBatchDefectRepository">批量不良统计仓储</param>
     /// <param name="lineNumberGenerator">明细行号生成器</param>
     /// <param name="uniqueValidator">唯一性验证器</param>
     /// <param name="userContext">用户上下文</param>
@@ -46,6 +55,10 @@ public class TaktAssyDefectDetailService : TaktServiceBase, ITaktAssyDefectDetai
     public TaktAssyDefectDetailService(
         ITaktCompanyRepository<TaktAssyDefectDetail> assyDefectDetailRepository,
         ITaktCompanyRepository<TaktAssyDefect> assyDefectRepository,
+        ITaktCompanyRepository<TaktAssyOutput> assyOutputRepository,
+        ITaktCompanyRepository<TaktAssyOutputDetail> assyOutputDetailRepository,
+        ITaktCompanyRepository<TaktAssyOrderDefect> assyOrderDefectRepository,
+        ITaktCompanyRepository<TaktAssyBatchDefect> assyBatchDefectRepository,
         ITaktLineNumberGenerator lineNumberGenerator,
         ITaktUniqueValidator uniqueValidator,
         ITaktUserContext? userContext = null,
@@ -54,6 +67,10 @@ public class TaktAssyDefectDetailService : TaktServiceBase, ITaktAssyDefectDetai
     {
         _assyDefectDetailRepository = assyDefectDetailRepository;
         _assyDefectRepository = assyDefectRepository;
+        _assyOutputRepository = assyOutputRepository;
+        _assyOutputDetailRepository = assyOutputDetailRepository;
+        _assyOrderDefectRepository = assyOrderDefectRepository;
+        _assyBatchDefectRepository = assyBatchDefectRepository;
         _lineNumberGenerator = lineNumberGenerator;
         _uniqueValidator = uniqueValidator;
     }
@@ -100,7 +117,7 @@ public class TaktAssyDefectDetailService : TaktServiceBase, ITaktAssyDefectDetai
     {
         EnsureThreeLayerContext();
         var list = await _assyDefectDetailRepository.GetListAsync(
-            x => x.TenantCode == CurrentTenantCode && x.CompanyCode == CurrentCompanyCode,
+            x => x.TenantCode == CurrentTenantCode && x.CompanyCode == CurrentCompanyCode && x.IsObsolete == 0,
             x => x.ProdOrderCode ?? string.Empty,
             false);
         return list.Select(e => new TaktSelectOption
@@ -135,7 +152,9 @@ public class TaktAssyDefectDetailService : TaktServiceBase, ITaktAssyDefectDetai
             var businessCode = entity.AssyDefectId.ToString();
             entity.LineNumber = _lineNumberGenerator.GenerateNext(businessCode, maxLine);
         }
+        entity.IsObsolete = 0;
         entity = await _assyDefectDetailRepository.CreateAsync(entity);
+        await SyncFromAssyDefectDetailChangeAsync(entity.AssyDefectId);
         return await GetAssyDefectDetailByIdAsync(entity.Id) ?? entity.Adapt<TaktAssyDefectDetailDto>();
     }
 
@@ -164,7 +183,31 @@ public class TaktAssyDefectDetailService : TaktServiceBase, ITaktAssyDefectDetai
             throw new TaktBusinessException("组立不良明细的AssyDefectId、LineNumber已存在");
         }
         await _assyDefectDetailRepository.UpdateAsync(entity);
+        await SyncFromAssyDefectDetailChangeAsync(entity.AssyDefectId);
         return await GetAssyDefectDetailByIdAsync(id) ?? throw new TaktBusinessException("组立不良明细不存在");
+    }
+
+    /// <summary>
+    /// 更新组立不良明细作废状态
+    /// </summary>
+    /// <param name="dto">作废DTO</param>
+    /// <returns>DTO</returns>
+    public async Task<TaktAssyDefectDetailDto> UpdateAssyDefectDetailObsoleteAsync(TaktAssyDefectDetailObsoleteDto dto)
+    {
+        var entity = await _assyDefectDetailRepository.GetByIdAsync(dto.AssyDefectDetailId);
+        if (entity == null)
+        {
+            throw new TaktBusinessException("组立不良明细不存在");
+        }
+        if (entity.TenantCode != CurrentTenantCode || entity.CompanyCode != CurrentCompanyCode)
+        {
+            throw new TaktBusinessException("组立不良明细不存在");
+        }
+        entity.IsObsolete = dto.IsObsolete;
+        await _assyDefectDetailRepository.UpdateAsync(entity);
+        await SyncFromAssyDefectDetailChangeAsync(entity.AssyDefectId);
+        return await GetAssyDefectDetailByIdAsync(dto.AssyDefectDetailId)
+            ?? throw new TaktBusinessException("组立不良明细不存在");
     }
 
     /// <summary>
@@ -174,11 +217,23 @@ public class TaktAssyDefectDetailService : TaktServiceBase, ITaktAssyDefectDetai
     /// <returns>任务</returns>
     public async Task DeleteAssyDefectDetailByIdAsync(long id)
     {
-        var deleted = await _assyDefectDetailRepository.DeleteAsync(id);
-        if (!deleted)
+        var entity = await _assyDefectDetailRepository.GetByIdAsync(id);
+        if (entity == null)
         {
             throw new TaktBusinessException("组立不良明细不存在或已删除");
         }
+        if (entity.TenantCode != CurrentTenantCode || entity.CompanyCode != CurrentCompanyCode)
+        {
+            throw new TaktBusinessException("组立不良明细不存在或已删除");
+        }
+        if (entity.IsObsolete == 1)
+        {
+            throw new TaktBusinessException("组立不良明细已作废");
+        }
+        var assyDefectId = entity.AssyDefectId;
+        entity.IsObsolete = 1;
+        await _assyDefectDetailRepository.UpdateAsync(entity);
+        await SyncFromAssyDefectDetailChangeAsync(assyDefectId);
     }
 
     /// <summary>
@@ -258,6 +313,7 @@ public class TaktAssyDefectDetailService : TaktServiceBase, ITaktAssyDefectDetai
                     var businessCode = entity.AssyDefectId.ToString();
                     entity.LineNumber = _lineNumberGenerator.GenerateNext(businessCode, maxLine);
                 }
+                entity.IsObsolete = 0;
                 await _assyDefectDetailRepository.CreateAsync(entity);
                 success += 1;
             }
@@ -295,6 +351,26 @@ public class TaktAssyDefectDetailService : TaktServiceBase, ITaktAssyDefectDetai
             fileName ?? "组立不良明细导出.xlsx");
     }
 
+    /// <summary>
+    /// 组立不良明细变更后重算主表数量并刷新工单/批量不良统计
+    /// </summary>
+    /// <param name="assyDefectId">组立不良日报 ID</param>
+    /// <returns>任务</returns>
+    private async Task SyncFromAssyDefectDetailChangeAsync(long assyDefectId)
+    {
+        EnsureThreeLayerContext();
+        await TaktAssyOutputDefectSyncHelper.SyncFromAssyDefectDetailChangeAsync(
+            _assyOutputRepository,
+            _assyOutputDetailRepository,
+            _assyDefectRepository,
+            _assyDefectDetailRepository,
+            _assyOrderDefectRepository,
+            _assyBatchDefectRepository,
+            assyDefectId,
+            CurrentTenantCode,
+            CurrentCompanyCode);
+    }
+
     // ========================================
     // 主表外键同步（ManyToOne）
     // ========================================
@@ -330,6 +406,14 @@ public class TaktAssyDefectDetailService : TaktServiceBase, ITaktAssyDefectDetai
     private static Expression<Func<TaktAssyDefectDetail, bool>> QueryExpression(TaktAssyDefectDetailQueryDto? queryDto)
     {
         var exp = Expressionable.Create<TaktAssyDefectDetail>();
+        if (queryDto?.IsObsolete.HasValue == true)
+        {
+            exp = exp.And(x => x.IsObsolete == queryDto.IsObsolete);
+        }
+        else
+        {
+            exp = exp.And(x => x.IsObsolete == 0);
+        }
 
         if (!string.IsNullOrEmpty(queryDto?.KeyWords))
         {
@@ -337,6 +421,8 @@ public class TaktAssyDefectDetailService : TaktServiceBase, ITaktAssyDefectDetai
             exp = exp.And(x =>
                 SqlFunc.ToString(x.AssyDefectId).Contains(keywords)
                 || (x.ProdOrderCode != null && x.ProdOrderCode.Contains(keywords))
+                || SqlFunc.ToString(x.ProdActualQty).Contains(keywords)
+                || SqlFunc.ToString(x.GoodQuantity).Contains(keywords)
                 || SqlFunc.ToString(x.LineNumber).Contains(keywords)
                 || (x.DefectCategory != null && x.DefectCategory.Contains(keywords))
                 || SqlFunc.ToString(x.DefectQty).Contains(keywords)
@@ -362,6 +448,16 @@ public class TaktAssyDefectDetailService : TaktServiceBase, ITaktAssyDefectDetai
         if (!string.IsNullOrEmpty(queryDto?.ProdOrderCode))
         {
             exp = exp.And(x => x.ProdOrderCode != null && x.ProdOrderCode.Contains(queryDto.ProdOrderCode));
+        }
+
+        if (queryDto?.ProdActualQty.HasValue == true)
+        {
+            exp = exp.And(x => x.ProdActualQty == queryDto.ProdActualQty);
+        }
+
+        if (queryDto?.GoodQuantity.HasValue == true)
+        {
+            exp = exp.And(x => x.GoodQuantity == queryDto.GoodQuantity);
         }
 
         if (queryDto?.LineNumber.HasValue == true)

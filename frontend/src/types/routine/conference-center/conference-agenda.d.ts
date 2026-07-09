@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：frontend/src/types/routine/conference-center
 // 文件名称：conference-agenda.d.ts
-// 创建时间：2026-06-24
+// 创建时间：2026-07-09
 // 创建人：Takt365(Auto Generated)
 // 功能描述：routine/conference-center 模块类型定义（自动生成；类型名去 Takt 前缀与末尾 Dto，如 TaktCompanyDto → Company）
 // 
@@ -29,7 +29,7 @@ export interface ConferenceAgenda extends CompanyDtoBase {
   conferenceAgendaId: string;
 
   /**
-   * 会议 ID（主子表关系）
+   * 会议 ID（关联 TaktConference.Id，选项 TaktConferences/options）
    */
   conferenceId: string;
 
@@ -39,7 +39,7 @@ export interface ConferenceAgenda extends CompanyDtoBase {
   conferenceName?: string;
 
   /**
-   * 记录类型（议程项 / 会议纪要）
+   * 记录类型（字典 routine_conference_record_type；0=议程项 1=会议纪要）
    */
   recordType: number;
 
@@ -64,7 +64,7 @@ export interface ConferenceAgenda extends CompanyDtoBase {
   conferenceAgendaSummary?: string;
 
   /**
-   * 主讲人/汇报人 ID（议程项）
+   * 主讲人/汇报人 ID（关联 TaktUser.Id，选项 TaktUsers/options）
    */
   presenterId?: string;
 
@@ -84,7 +84,7 @@ export interface ConferenceAgenda extends CompanyDtoBase {
   durationMinutes: number;
 
   /**
-   * 记录人 ID（会议纪要）
+   * 记录人 ID（关联 TaktUser.Id，选项 TaktUsers/options）
    */
   recorderId?: string;
 
@@ -94,9 +94,14 @@ export interface ConferenceAgenda extends CompanyDtoBase {
   recorderName?: string;
 
   /**
-   * 附件 JSON（列表形式，由TaktFile 统一上传到服务器）
+   * 附件（JSON 列表形式，由 TaktFile 统一上传到服务器）
    */
   attachments?: string;
+
+  /**
+   * 是否作废（字典 sys_yes_no_type，0=否 1=是；编辑移除子行时标记作废）
+   */
+  isObsolete: number;
 
   /**
    * 会议（主表） （主表：TaktConference）
@@ -124,12 +129,12 @@ export interface ConferenceAgendaQuery extends TaktPagedQuery {
   companyCode?: string;
 
   /**
-   * 会议 ID（主子表关系）
+   * 会议 ID（关联 TaktConference.Id，选项 TaktConferences/options）
    */
   conferenceId?: string;
 
   /**
-   * 记录类型（议程项 / 会议纪要）
+   * 记录类型（字典 routine_conference_record_type；0=议程项 1=会议纪要）
    */
   recordType?: number;
 
@@ -154,7 +159,7 @@ export interface ConferenceAgendaQuery extends TaktPagedQuery {
   conferenceAgendaSummary?: string;
 
   /**
-   * 主讲人/汇报人 ID（议程项）
+   * 主讲人/汇报人 ID（关联 TaktUser.Id，选项 TaktUsers/options）
    */
   presenterId?: string;
 
@@ -179,7 +184,7 @@ export interface ConferenceAgendaQuery extends TaktPagedQuery {
   durationMinutes?: number;
 
   /**
-   * 记录人 ID（会议纪要）
+   * 记录人 ID（关联 TaktUser.Id，选项 TaktUsers/options）
    */
   recorderId?: string;
 
@@ -189,9 +194,14 @@ export interface ConferenceAgendaQuery extends TaktPagedQuery {
   recorderName?: string;
 
   /**
-   * 附件 JSON（列表形式，由TaktFile 统一上传到服务器）
+   * 附件（JSON 列表形式，由 TaktFile 统一上传到服务器）
    */
   attachments?: string;
+
+  /**
+   * 是否作废（字典 sys_yes_no_type，0=否 1=是；编辑移除子行时标记作废）
+   */
+  isObsolete?: number;
 
   /**
    * 创建时间（范围查询-开始）
@@ -238,12 +248,12 @@ export interface ConferenceAgendaCreate {
   companyDefaultCulture: string;
 
   /**
-   * 会议 ID（主子表关系）
+   * 会议 ID（关联 TaktConference.Id，选项 TaktConferences/options）
    */
   conferenceId: string;
 
   /**
-   * 记录类型（议程项 / 会议纪要）
+   * 记录类型（字典 routine_conference_record_type；0=议程项 1=会议纪要）
    */
   recordType: number;
 
@@ -268,7 +278,7 @@ export interface ConferenceAgendaCreate {
   conferenceAgendaSummary?: string;
 
   /**
-   * 主讲人/汇报人 ID（议程项）
+   * 主讲人/汇报人 ID（关联 TaktUser.Id，选项 TaktUsers/options）
    */
   presenterId?: string;
 
@@ -288,7 +298,7 @@ export interface ConferenceAgendaCreate {
   durationMinutes: number;
 
   /**
-   * 记录人 ID（会议纪要）
+   * 记录人 ID（关联 TaktUser.Id，选项 TaktUsers/options）
    */
   recorderId?: string;
 
@@ -298,9 +308,14 @@ export interface ConferenceAgendaCreate {
   recorderName?: string;
 
   /**
-   * 附件 JSON（列表形式，由TaktFile 统一上传到服务器）
+   * 附件（JSON 列表形式，由 TaktFile 统一上传到服务器）
    */
   attachments?: string;
+
+  /**
+   * 是否作废（字典 sys_yes_no_type，0=否 1=是；编辑移除子行时标记作废）
+   */
+  isObsolete: number;
 
   /**
    * 扩展字段JSON
@@ -331,6 +346,25 @@ export interface ConferenceAgendaUpdate extends ConferenceAgendaCreate {
 
 
 /**
+ * ConferenceAgenda 作废/撤销作废 DTO
+ * 对应前端 ConferenceAgendaObsolete
+ * @description 对应后端 TaktConferenceAgendaObsoleteDto
+ */
+export interface ConferenceAgendaObsolete {
+  /**
+   * ConferenceAgendaID
+   */
+  conferenceAgendaId: string;
+
+  /**
+   * 是否作废（字典 sys_yes_no_type，0=否 1=是；编辑移除子行时标记作废）
+   */
+  isObsolete: number;
+
+}
+
+
+/**
  * ConferenceAgenda 导入模板行 DTO
  * 对应前端 ConferenceAgendaTemplate
  * @description 对应后端 TaktConferenceAgendaTemplateDto
@@ -347,12 +381,12 @@ export interface ConferenceAgendaTemplate {
   companyCode?: string;
 
   /**
-   * 会议 ID（主子表关系）
+   * 会议 ID（关联 TaktConference.Id，选项 TaktConferences/options）
    */
   conferenceId?: string;
 
   /**
-   * 记录类型（议程项 / 会议纪要）
+   * 记录类型（字典 routine_conference_record_type；0=议程项 1=会议纪要）
    */
   recordType?: number;
 
@@ -377,7 +411,7 @@ export interface ConferenceAgendaTemplate {
   conferenceAgendaSummary?: string;
 
   /**
-   * 主讲人/汇报人 ID（议程项）
+   * 主讲人/汇报人 ID（关联 TaktUser.Id，选项 TaktUsers/options）
    */
   presenterId?: string;
 
@@ -397,7 +431,7 @@ export interface ConferenceAgendaTemplate {
   durationMinutes?: number;
 
   /**
-   * 记录人 ID（会议纪要）
+   * 记录人 ID（关联 TaktUser.Id，选项 TaktUsers/options）
    */
   recorderId?: string;
 
@@ -407,9 +441,14 @@ export interface ConferenceAgendaTemplate {
   recorderName?: string;
 
   /**
-   * 附件 JSON（列表形式，由TaktFile 统一上传到服务器）
+   * 附件（JSON 列表形式，由 TaktFile 统一上传到服务器）
    */
   attachments?: string;
+
+  /**
+   * 是否作废（字典 sys_yes_no_type，0=否 1=是；编辑移除子行时标记作废）
+   */
+  isObsolete?: number;
 
   /**
    * 扩展字段JSON
@@ -446,12 +485,12 @@ export interface ConferenceAgendaImport {
   companyDefaultCulture?: string;
 
   /**
-   * 会议 ID（主子表关系）
+   * 会议 ID（关联 TaktConference.Id，选项 TaktConferences/options）
    */
   conferenceId?: string;
 
   /**
-   * 记录类型（议程项 / 会议纪要）
+   * 记录类型（字典 routine_conference_record_type；0=议程项 1=会议纪要）
    */
   recordType?: number;
 
@@ -476,7 +515,7 @@ export interface ConferenceAgendaImport {
   conferenceAgendaSummary?: string;
 
   /**
-   * 主讲人/汇报人 ID（议程项）
+   * 主讲人/汇报人 ID（关联 TaktUser.Id，选项 TaktUsers/options）
    */
   presenterId?: string;
 
@@ -496,7 +535,7 @@ export interface ConferenceAgendaImport {
   durationMinutes?: number;
 
   /**
-   * 记录人 ID（会议纪要）
+   * 记录人 ID（关联 TaktUser.Id，选项 TaktUsers/options）
    */
   recorderId?: string;
 
@@ -506,9 +545,14 @@ export interface ConferenceAgendaImport {
   recorderName?: string;
 
   /**
-   * 附件 JSON（列表形式，由TaktFile 统一上传到服务器）
+   * 附件（JSON 列表形式，由 TaktFile 统一上传到服务器）
    */
   attachments?: string;
+
+  /**
+   * 是否作废（字典 sys_yes_no_type，0=否 1=是；编辑移除子行时标记作废）
+   */
+  isObsolete?: number;
 
   /**
    * 扩展字段JSON
@@ -540,12 +584,12 @@ export interface ConferenceAgendaExport {
   companyCode: string;
 
   /**
-   * 会议 ID（主子表关系）
+   * 会议 ID（关联 TaktConference.Id，选项 TaktConferences/options）
    */
   conferenceId: string;
 
   /**
-   * 记录类型（议程项 / 会议纪要）
+   * 记录类型（字典 routine_conference_record_type；0=议程项 1=会议纪要）
    */
   recordType: number;
 
@@ -570,7 +614,7 @@ export interface ConferenceAgendaExport {
   conferenceAgendaSummary?: string;
 
   /**
-   * 主讲人/汇报人 ID（议程项）
+   * 主讲人/汇报人 ID（关联 TaktUser.Id，选项 TaktUsers/options）
    */
   presenterId?: string;
 
@@ -590,7 +634,7 @@ export interface ConferenceAgendaExport {
   durationMinutes: number;
 
   /**
-   * 记录人 ID（会议纪要）
+   * 记录人 ID（关联 TaktUser.Id，选项 TaktUsers/options）
    */
   recorderId?: string;
 
@@ -600,9 +644,14 @@ export interface ConferenceAgendaExport {
   recorderName?: string;
 
   /**
-   * 附件 JSON（列表形式，由TaktFile 统一上传到服务器）
+   * 附件（JSON 列表形式，由 TaktFile 统一上传到服务器）
    */
   attachments?: string;
+
+  /**
+   * 是否作废（字典 sys_yes_no_type，0=否 1=是；编辑移除子行时标记作废）
+   */
+  isObsolete: number;
 
   /**
    * 扩展字段JSON

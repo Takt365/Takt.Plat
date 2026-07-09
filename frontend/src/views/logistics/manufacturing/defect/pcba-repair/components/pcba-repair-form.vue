@@ -2,7 +2,7 @@
 <!-- 项目名称：节拍数字工厂 · Takt Plat (TDF) -->
 <!-- 命名空间：@/views/logistics/manufacturing/defect/pcba-repair/components -->
 <!-- 文件名称：pcba-repair-form.vue -->
-<!-- 功能描述：PCBA改修日报实体维护弹窗内嵌表单（上主下从级联保存）。由 generate-vue-master-detail-from-api.cjs 根据 types/api 自动生成；defineExpose 提供 validate、getValues、resetFields -->
+<!-- 功能描述：PCBA改修日报实体 不良率维护弹窗内嵌表单（上主下从级联保存）。由 generate-vue-master-detail-from-api.cjs 根据 types/api 自动生成；defineExpose 提供 validate、getValues、resetFields -->
 <!-- 版权信息：Copyright (c) 2025 Takt  All rights reserved. -->
 <!-- 免责声明：此软件使用 MIT License，作者不承担任何使用风险。 -->
 <!-- ======================================== -->
@@ -10,7 +10,7 @@
 <template>
   <a-form
     ref="formRef"
-    class="takt-generated-form pcba-repair-form flex flex-col min-h-0"
+    class="takt-generated-form pcba-repair-form flex flex-col min-h-0 overflow-visible"
     :model="formState"
     :rules="rules"
     layout="horizontal"
@@ -22,88 +22,45 @@
     >
       <a-tab-pane
         key="tab-0"
-        :tab="t('common.page.form.tabs.basicinfo') + ' (1/2)'"
+        :tab="t('common.page.form.tabs.basicinfo') + ' (1/3)'"
         force-render
       >
         <div :class="formContentClass">
           <a-row :gutter="24">
             <a-col :span="12">
               <a-form-item
-                :label="t('common.page.entity.tenantcode')"
-                name="tenantCode"
-              >
-                <a-input
-                  v-model:value="formState.tenantCode"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('common.page.entity.tenantcode') })"
-                  show-count
-                  :maxlength="20"
-                  disabled
-                />
-              </a-form-item>
-            </a-col>
-            <a-col :span="12">
-              <a-form-item
-                :label="t('common.page.entity.companycode')"
-                name="companyCode"
-              >
-                <a-input
-                  v-model:value="formState.companyCode"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('common.page.entity.companycode') })"
-                  show-count
-                  :maxlength="20"
-                  disabled
-                />
-              </a-form-item>
-            </a-col>
-            <a-col :span="12">
-              <a-form-item
-                :label="t('common.page.entity.companydefaultculture')"
-                name="companyDefaultCulture"
-              >
-                <a-input
-                  v-model:value="formState.companyDefaultCulture"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('common.page.entity.companydefaultculture') })"
-                  show-count
-                  :maxlength="20"
-                  disabled
-                />
-              </a-form-item>
-            </a-col>
-            <a-col :span="12">
-              <a-form-item
-                :label="t('entity.pcbarepair.plantcode')"
+                :label="pi.label('plantCode')"
                 name="plantCode"
               >
                 <a-input
                   v-model:value="formState.plantCode"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.pcbarepair.plantcode') })"
+                  :placeholder="pi.ph('plantCode')"
                   show-count
                   :maxlength="4"
-                  allow-clear
-                  :disabled="!!formData?.pcbaRepairId"
+                  disabled
                 />
               </a-form-item>
             </a-col>
             <a-col :span="12">
               <a-form-item
-                :label="t('entity.pcbarepair.prodcategory')"
+                :label="pi.label('prodCategory')"
                 name="prodCategory"
               >
                 <TaktSelect
                   v-model:value="formState.prodCategory"
                   dict-type="logistics_prod_category"
-                  :placeholder="t('common.page.form.placeholder.select', { field: t('entity.pcbarepair.prodcategory') })"
+                  :placeholder="pi.ph('prodCategory')"
                 />
               </a-form-item>
             </a-col>
             <a-col :span="12">
               <a-form-item
-                :label="t('entity.pcbarepair.proddate')"
+                :label="pi.label('prodDate')"
                 name="prodDate"
               >
                 <a-date-picker
                   v-model:value="formState.prodDate"
-                  :placeholder="t('common.page.form.placeholder.select', { field: t('entity.pcbarepair.proddate') })"
+                  :placeholder="pi.ph('prodDate')"
                   value-format="YYYY-MM-DD"
                   style="width: 100%"
                 />
@@ -111,38 +68,75 @@
             </a-col>
             <a-col :span="12">
               <a-form-item
-                :label="t('entity.pcbarepair.prodteam')"
+                :label="pi.label('prodTeam')"
                 name="prodTeam"
               >
-                <a-input
+                <TaktSelect
                   v-model:value="formState.prodTeam"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.pcbarepair.prodteam') })"
-                  show-count
-                  :maxlength="20"
-                  allow-clear
+                  api-url="TaktProductionTeams/options"
+                  :placeholder="pi.ph('prodTeam')"
                 />
               </a-form-item>
             </a-col>
             <a-col :span="12">
               <a-form-item
-                :label="t('entity.pcbarepair.shiftno')"
+                :label="pi.label('shiftNo')"
                 name="shiftNo"
               >
                 <TaktSelect
                   v-model:value="formState.shiftNo"
                   dict-type="logistics_shift_category"
-                  :placeholder="t('common.page.form.placeholder.select', { field: t('entity.pcbarepair.shiftno') })"
+                  :placeholder="pi.ph('shiftNo')"
                 />
               </a-form-item>
             </a-col>
             <a-col :span="12">
               <a-form-item
-                :label="t('entity.pcbarepair.prodordercode')"
-                name="prodOrderCode"
+                :label="pi.label('prodOrderType')"
+                name="prodOrderType"
               >
                 <a-input
+                  v-model:value="formState.prodOrderType"
+                  :placeholder="pi.ph('prodOrderType')"
+                  show-count
+                  :maxlength="20"
+                  disabled
+                />
+              </a-form-item>
+            </a-col>
+            <a-col :span="12">
+              <a-form-item
+                :label="pi.label('prodOrderCode')"
+                name="prodOrderCode"
+              >
+                <TaktSelect
                   v-model:value="formState.prodOrderCode"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.pcbarepair.prodordercode') })"
+                  api-url="TaktProductionOrders/options"
+                  :placeholder="pi.ph('prodOrderCode')"
+                  :disabled="!!formData?.pcbaRepairId"
+                />
+              </a-form-item>
+            </a-col>
+            <a-col :span="12">
+              <a-form-item
+                :label="pi.label('prodOrderQty')"
+                name="prodOrderQty"
+              >
+                <a-input-number
+                  v-model:value="formState.prodOrderQty"
+                  :placeholder="pi.ph('prodOrderQty')"
+                  style="width: 100%"
+                />
+              </a-form-item>
+            </a-col>
+            <a-col :span="12">
+              <a-form-item
+                :label="pi.label('modelCode')"
+                name="modelCode"
+              >
+                <a-input
+                  v-model:value="formState.modelCode"
+                  :placeholder="pi.ph('modelCode')"
                   show-count
                   :maxlength="20"
                   allow-clear
@@ -152,13 +146,15 @@
             </a-col>
             <a-col :span="12">
               <a-form-item
-                :label="t('entity.pcbarepair.prodorderqty')"
-                name="prodOrderQty"
+                :label="pi.label('batchNo')"
+                name="batchNo"
               >
-                <a-input-number
-                  v-model:value="formState.prodOrderQty"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.pcbarepair.prodorderqty') })"
-                  style="width: 100%"
+                <a-input
+                  v-model:value="formState.batchNo"
+                  :placeholder="pi.ph('batchNo')"
+                  show-count
+                  :maxlength="20"
+                  allow-clear
                 />
               </a-form-item>
             </a-col>
@@ -167,52 +163,75 @@
       </a-tab-pane>
       <a-tab-pane
         key="tab-1"
-        :tab="t('common.page.form.tabs.basicinfo') + ' (2/2)'"
+        :tab="t('common.page.form.tabs.basicinfo') + ' (2/3)'"
         force-render
       >
         <div :class="formContentClass">
           <a-row :gutter="24">
             <a-col :span="24">
               <a-form-item
-                :label="t('entity.pcbarepair.modelcode')"
-                name="modelCode"
-              >
-                <a-input
-                  v-model:value="formState.modelCode"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.pcbarepair.modelcode') })"
-                  show-count
-                  :maxlength="20"
-                  allow-clear
-                  :disabled="!!formData?.pcbaRepairId"
-                />
-              </a-form-item>
-            </a-col>
-            <a-col :span="24">
-              <a-form-item
-                :label="t('entity.pcbarepair.batchno')"
-                name="batchNo"
-              >
-                <a-input
-                  v-model:value="formState.batchNo"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.pcbarepair.batchno') })"
-                  show-count
-                  :maxlength="20"
-                  allow-clear
-                />
-              </a-form-item>
-            </a-col>
-            <a-col :span="24">
-              <a-form-item
-                :label="t('entity.pcbarepair.materialcode')"
+                :label="pi.label('materialCode')"
                 name="materialCode"
               >
                 <a-input
                   v-model:value="formState.materialCode"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.pcbarepair.materialcode') })"
+                  :placeholder="pi.ph('materialCode')"
                   show-count
                   :maxlength="20"
                   allow-clear
                   :disabled="!!formData?.pcbaRepairId"
+                />
+              </a-form-item>
+            </a-col>
+          </a-row>
+        </div>
+      </a-tab-pane>
+      <a-tab-pane
+        key="tab-2"
+        :tab="t('common.page.form.tabs.basicinfo') + ' (3/3)'"
+        force-render
+      >
+        <div :class="formContentClass">
+          <a-row :gutter="24">
+            <a-col :span="24">
+              <a-form-item
+                :label="pi.label('tenantCode')"
+                name="tenantCode"
+              >
+                <a-input
+                  v-model:value="formState.tenantCode"
+                  :placeholder="pi.ph('tenantCode')"
+                  show-count
+                  :maxlength="20"
+                  disabled
+                />
+              </a-form-item>
+            </a-col>
+            <a-col :span="24">
+              <a-form-item
+                :label="pi.label('companyCode')"
+                name="companyCode"
+              >
+                <a-input
+                  v-model:value="formState.companyCode"
+                  :placeholder="pi.ph('companyCode')"
+                  show-count
+                  :maxlength="20"
+                  disabled
+                />
+              </a-form-item>
+            </a-col>
+            <a-col :span="24">
+              <a-form-item
+                :label="pi.label('companyDefaultCulture')"
+                name="companyDefaultCulture"
+              >
+                <a-input
+                  v-model:value="formState.companyDefaultCulture"
+                  :placeholder="pi.ph('companyDefaultCulture')"
+                  show-count
+                  :maxlength="20"
+                  disabled
                 />
               </a-form-item>
             </a-col>
@@ -229,7 +248,7 @@
                     >
                       <span class="takt-form-label-hint-icon"><RiQuestionLine class="takt-remix-icon" /></span>
                     </a-tooltip>
-                    <span>{{ t('common.page.entity.extfield') }}</span>
+                    <span>{{ pi.label('extField') }}</span>
                   </span>
                 </template>
                 <a-textarea
@@ -244,12 +263,12 @@
             </a-col>
             <a-col :span="24">
               <a-form-item
-                :label="t('common.page.entity.remark')"
+                :label="pi.label('remark')"
                 name="remark"
               >
                 <a-textarea
                   v-model:value="formState.remark"
-                  :placeholder="t('common.page.form.placeholder.optional', { field: t('common.page.entity.remark') })"
+                  :placeholder="pi.ph('remark')"
                   :rows="4"
                   show-count
                   :maxlength="400"
@@ -266,24 +285,109 @@
       ref="pcbaRepairDetailTableRef"
       v-model="childPcbaRepairDetailRows"
       :columns="pcbaRepairDetailFormColumns"
-      :title="t('entity.pcbarepairdetail._self')"
-      :add-button-entity="t('entity.pcbarepairdetail._self')"
+      :title="pcbaRepairDetailPi.self()"
+      :add-button-entity="pcbaRepairDetailPi.self()"
       id-field="pcbaRepairDetailId"
       :default-row="createDefaultPcbaRepairDetailRow"
       :disabled="loading"
+      :enable-vertical-scroll="false"
       section-border
-    />
+      class="w-full min-w-0"
+    >
+      <template #cell-pcbaBoardType="{ record }">
+        <TaktSelect
+          v-model:value="record.pcbaBoardType"
+          dict-type="logistics_pcba_panel_category"
+          class="w-full"
+          :get-popup-container="getSelectPopupContainer"
+          :placeholder="pcbaRepairDetailPi.ph('pcbaBoardType')"
+          :disabled="loading"
+          allow-clear
+        />
+      </template>
+      <template #cell-prodTeam="{ record }">
+        <TaktSelect
+          v-model:value="record.prodTeam"
+          api-url="TaktProductionTeams/options"
+          class="w-full"
+          :get-popup-container="getSelectPopupContainer"
+          :placeholder="pcbaRepairDetailPi.queryPh('prodTeam', 'select')"
+          :disabled="loading"
+          allow-clear
+        />
+      </template>
+      <template #cell-defectEngineering="{ record }">
+        <TaktSelect
+          v-model:value="record.defectEngineering"
+          dict-type="logistics_defect_category"
+          class="w-full"
+          :get-popup-container="getSelectPopupContainer"
+          :placeholder="pcbaRepairDetailPi.ph('defectEngineering')"
+          :disabled="loading"
+          allow-clear
+        />
+      </template>
+      <template #cell-defectResponsibility="{ record }">
+        <TaktSelect
+          v-model:value="record.defectResponsibility"
+          dict-type="logistics_defect_responsibility_category"
+          class="w-full"
+          :get-popup-container="getSelectPopupContainer"
+          :placeholder="pcbaRepairDetailPi.ph('defectResponsibility')"
+          :disabled="loading"
+          allow-clear
+        />
+      </template>
+      <template #cell-defectNature="{ record }">
+        <TaktSelect
+          v-model:value="record.defectNature"
+          dict-type="logistics_defect_nature_category"
+          class="w-full"
+          :get-popup-container="getSelectPopupContainer"
+          :placeholder="pcbaRepairDetailPi.ph('defectNature')"
+          :disabled="loading"
+          allow-clear
+        />
+      </template>
+      <template #cell-repairOperator="{ record }">
+        <TaktSelect
+          v-model:value="record.repairOperator"
+          api-url="TaktEmployees/options"
+          class="w-full"
+          :get-popup-container="getSelectPopupContainer"
+          :placeholder="pcbaRepairDetailPi.queryPh('repairOperator', 'select')"
+          :disabled="loading"
+          allow-clear
+        />
+      </template>
+      <template #cell-isObsolete="{ record }">
+        <TaktSelect
+          v-model:value="record.isObsolete"
+          dict-type="sys_yes_no_type"
+          class="w-full"
+          :get-popup-container="getSelectPopupContainer"
+          :placeholder="pcbaRepairDetailPi.ph('isObsolete')"
+          :disabled="loading"
+          allow-clear
+        />
+      </template>
+    </TaktEditableTable>
   </a-form>
 </template>
 
 <script setup lang="ts">
 /**
- * PCBA改修日报实体维护表单 · 由 generate-vue-master-detail-from-api.cjs 根据 types/api 生成
+ * PCBA改修日报实体 不良率维护表单 · 由 generate-vue-master-detail-from-api.cjs 根据 types/api 生成
  * @module views/logistics/manufacturing/defect/pcba-repair/components
  */
 import { reactive, watch, computed, ref, onMounted } from 'vue'
 import { useI18n } from 'vue-i18n'
 import type { Rule } from 'ant-design-vue/es/form'
+import { usePcbaRepairI18n } from '../composables/use-pcba-repair-i18n'
+
+/** 实体字段 i18n */
+const pi = usePcbaRepairI18n()
+
 import type { PcbaRepairCreate } from '@/types/logistics/manufacturing/defect/pcba-repair'
 import TaktSelect from '@/components/business/takt-select/index.vue'
 import { RiQuestionLine } from '@remixicon/vue'
@@ -320,9 +424,19 @@ const formContentClass = computed(() => (formFields.length > 10 ? 'takt-form-con
 /** 当前激活的 Tab key */
 const activeTab = ref('tab-0')
 /** CreateDto 字段名列表（与 formState 键对齐） */
-const formFields = ["tenantCode","companyCode","companyDefaultCulture","plantCode","prodCategory","prodDate","prodTeam","shiftNo","prodOrderCode","prodOrderQty","modelCode","batchNo","materialCode","extField","remark"]
+const formFields = ["tenantCode","companyCode","companyDefaultCulture","plantCode","prodCategory","prodDate","prodTeam","shiftNo","prodOrderType","prodOrderCode","prodOrderQty","modelCode","batchNo","materialCode","extField","remark"]
+
 
 import type { TaktEditableTableColumn } from '@/components/business/takt-editable-table/types'
+import { resolveNextDetailLineNumber } from '@/utils/takt-sequence'
+import { usePcbaRepairDetailI18n } from '../composables/use-pcba-repair-detail-i18n'
+
+const pcbaRepairDetailPi = usePcbaRepairDetailI18n()
+
+/** 弹窗/表格内 TaktSelect 下拉挂载容器（避免 overflow 裁剪与表头列错位） */
+function getSelectPopupContainer(triggerNode?: HTMLElement): HTMLElement {
+  return triggerNode?.ownerDocument?.body ?? document.body
+}
 
 const childPcbaRepairDetailRows = ref<Record<string, unknown>[]>([])
 const pcbaRepairDetailTableRef = ref<{
@@ -331,88 +445,145 @@ const pcbaRepairDetailTableRef = ref<{
   resetRows: () => void
 } | null>(null)
 
+/** 是否已持久化的子表行 */
+function isPersistedPcbaRepairDetailRow(row: Record<string, unknown>): boolean {
+  const id = row.pcbaRepairDetailId
+  if (id == null || id === '') {
+    return false
+  }
+  return String(id) !== '0'
+}
+
+/** 分配下一可用子表行号（含作废行，仅据当前表格行递增） */
+function allocateNextPcbaRepairDetailLineNumber(): number {
+  const rows = pcbaRepairDetailTableRef.value?.getRows?.() ?? childPcbaRepairDetailRows.value
+  return resolveNextDetailLineNumber(0, rows)
+}
+
 /** 子表 pcbaRepairDetail 可编辑列 */
 const pcbaRepairDetailFormColumns = computed<TaktEditableTableColumn[]>(() => [
   {
     key: 'prodOrderCode',
-    title: t('entity.pcbarepairdetail.prodordercode'),
+    title: pcbaRepairDetailPi.label('prodOrderCode'),
     editor: 'input',
     width: 140,
   },
   {
     key: 'lineNumber',
-    title: t('entity.pcbarepairdetail.linenumber'),
-    editor: 'inputNumber',
-    width: 140, summary: 'sum',
+    title: pcbaRepairDetailPi.label('lineNumber'),
+    width: 140,
   },
   {
     key: 'pcbaBoardType',
-    title: t('entity.pcbarepairdetail.pcbaboardtype'),
-    editor: 'input',
-    width: 140, allowClear: true, placeholder: t('common.page.form.placeholder.optional', { field: t('entity.pcbarepairdetail.pcbaboardtype') }),
+    title: pcbaRepairDetailPi.label('pcbaBoardType'),
+    width: 140,
   },
   {
     key: 'prodActualQty',
-    title: t('entity.pcbarepairdetail.prodactualqty'),
-    editor: 'inputNumber',
+    title: pcbaRepairDetailPi.label('prodActualQty'),
     width: 140,
   },
   {
     key: 'prodTeam',
-    title: t('entity.pcbarepairdetail.prodteam'),
-    editor: 'input',
-    width: 140, allowClear: true, placeholder: t('common.page.form.placeholder.optional', { field: t('entity.pcbarepairdetail.prodteam') }),
+    title: pcbaRepairDetailPi.label('prodTeam'),
+    width: 140,
   },
   {
     key: 'cardNo',
-    title: t('entity.pcbarepairdetail.cardno'),
+    title: pcbaRepairDetailPi.label('cardNo'),
     editor: 'input',
-    width: 140, allowClear: true, placeholder: t('common.page.form.placeholder.optional', { field: t('entity.pcbarepairdetail.cardno') }),
+    width: 140, allowClear: true, placeholder: pcbaRepairDetailPi.ph('cardNo'),
   },
   {
     key: 'defectSymptom',
-    title: t('entity.pcbarepairdetail.defectsymptom'),
+    title: pcbaRepairDetailPi.label('defectSymptom'),
     editor: 'input',
-    width: 140, allowClear: true, placeholder: t('common.page.form.placeholder.optional', { field: t('entity.pcbarepairdetail.defectsymptom') }),
+    width: 140, allowClear: true, placeholder: pcbaRepairDetailPi.ph('defectSymptom'),
   },
   {
     key: 'defectEngineering',
-    title: t('entity.pcbarepairdetail.defectengineering'),
+    title: pcbaRepairDetailPi.label('defectEngineering'),
+    width: 140,
+  },
+  {
+    key: 'defectReason',
+    title: pcbaRepairDetailPi.label('defectReason'),
     editor: 'input',
-    width: 140, allowClear: true, placeholder: t('common.page.form.placeholder.optional', { field: t('entity.pcbarepairdetail.defectengineering') }),
+    width: 140, allowClear: true, placeholder: pcbaRepairDetailPi.ph('defectReason'),
+  },
+  {
+    key: 'defectQty',
+    title: pcbaRepairDetailPi.label('defectQty'),
+    width: 140,
+  },
+  {
+    key: 'defectResponsibility',
+    title: pcbaRepairDetailPi.label('defectResponsibility'),
+    width: 140,
+  },
+  {
+    key: 'defectNature',
+    title: pcbaRepairDetailPi.label('defectNature'),
+    width: 140,
+  },
+  {
+    key: 'repairOperator',
+    title: pcbaRepairDetailPi.label('repairOperator'),
+    width: 140,
+  },
+  {
+    key: 'isObsolete',
+    title: pcbaRepairDetailPi.label('isObsolete'),
+    width: 140,
   },
 ])
 
 /** 编辑态从 formData 同步各子表行 */
 function syncChildRowsFromFormData(val: Partial<PcbaRepairCreate & { pcbaRepairId?: string }> | null | undefined) {
-  childPcbaRepairDetailRows.value = ((val as any)?.pcbaRepairDetails ?? []) as Record<string, unknown>[]
+  const rows_pcbaRepairDetail = ((val as any)?.pcbaRepairDetails ?? []) as Record<string, unknown>[]
+  childPcbaRepairDetailRows.value = rows_pcbaRepairDetail
 }
 
 function createDefaultPcbaRepairDetailRow(): Record<string, unknown> {
   return {
     prodOrderCode: '',
-    lineNumber: (childPcbaRepairDetailRows.value.length + 1) * 10,
+    lineNumber: allocateNextPcbaRepairDetailLineNumber(),
     pcbaBoardType: '',
     prodActualQty: 0,
     prodTeam: '',
     cardNo: '',
     defectSymptom: '',
     defectEngineering: '',
+    defectReason: '',
+    defectQty: 0,
+    defectResponsibility: '',
+    defectNature: '',
+    repairOperator: '',
+    isObsolete: 0,
   }
 }
 
 /** 组装 Create/Update 载荷（主表 + 子表数组） */
 function buildSubmitPayload() {
   const masterId = props.formData?.pcbaRepairId ?? ''
+  const isUpdate = Boolean(masterId)
   return {
     ...formState,
-    pcbaRepairDetails: pcbaRepairDetailTableRef.value?.getRows?.() ?? childPcbaRepairDetailRows.value.map((rest) => ({
-      ...rest,
-      tenantCode: tenantStore.tenantCode,
-      companyCode: tenantStore.companyCode,
-      companyDefaultCulture: userStore.userInfo?.companyDefaultCulture ?? '',
-      pcbaRepairId: masterId,
-    })),
+    pcbaRepairDetails: pcbaRepairDetailTableRef.value?.getRows?.() ?? childPcbaRepairDetailRows.value.map((row) => {
+      const normalized = {
+        ...row,
+        tenantCode: tenantStore.tenantCode,
+        companyCode: tenantStore.companyCode,
+        companyDefaultCulture: userStore.userInfo?.companyDefaultCulture ?? '',
+        pcbaRepairId: masterId,
+      }
+      if (isUpdate && isPersistedPcbaRepairDetailRow(row)) {
+        normalized.pcbaRepairDetailId = row.pcbaRepairDetailId
+      } else {
+        delete normalized.pcbaRepairDetailId
+      }
+      return normalized
+    }),
   }
 }
 
@@ -433,7 +604,9 @@ const formRef = ref()
 /** 表单双向绑定模型 */
 const formState = reactive<Record<string, any>>({})
 /** 表单字段默认值（字典 IsDefault=1，来自 TaktDictDataSeedData） */
-const FORM_FIELD_DEFAULTS: Record<string, string | number> = {}
+const FORM_FIELD_DEFAULTS: Record<string, string | number> = {
+  prodCategory: "FPP"
+}
 
 /** 写入表单默认值（新增 / resetFields / 弹窗再次打开时） */
 function applyFormDefaults(target: Record<string, unknown>) {
@@ -486,42 +659,35 @@ watch(
 
 /** 表单校验规则（与 FluentValidation 必填对齐） */
 const rules = computed<Record<string, Rule[]>>(() => ({
-  plantCode: [
-    {
-      required: true,
-      message: t('common.page.form.placeholder.required', { field: t('entity.pcbarepair.plantcode') }),
-      trigger: 'blur'
-    }
-  ],
   prodCategory: [
     {
       required: true,
-      message: t('common.page.form.placeholder.select', { field: t('entity.pcbarepair.prodcategory') }),
+      message: pi.ph('prodCategory'),
       trigger: 'change'
     }
   ],
   prodDate: [
     {
       required: true,
-      message: t('common.page.form.placeholder.select', { field: t('entity.pcbarepair.proddate') }),
+      message: pi.ph('prodDate'),
       trigger: 'change'
     }
   ],
   prodTeam: [
     {
       required: true,
-      message: t('common.page.form.placeholder.required', { field: t('entity.pcbarepair.prodteam') }),
-      trigger: 'blur'
+      message: pi.ph('prodTeam'),
+      trigger: 'change'
     }
   ],
   shiftNo: [{
     validator: async (_rule, value) => {
       if (value === undefined || value === null || value === '') {
-        return Promise.reject(t('common.page.form.placeholder.select', { field: t('entity.pcbarepair.shiftno') }))
+        return Promise.reject(pi.ph('shiftNo'))
       }
       const num = typeof value === 'number' ? value : Number(value)
       if (!Number.isFinite(num)) {
-        return Promise.reject(t('common.page.form.placeholder.select', { field: t('entity.pcbarepair.shiftno') }))
+        return Promise.reject(pi.ph('shiftNo'))
       }
       return Promise.resolve()
     },
@@ -530,18 +696,18 @@ const rules = computed<Record<string, Rule[]>>(() => ({
   prodOrderCode: [
     {
       required: true,
-      message: t('common.page.form.placeholder.required', { field: t('entity.pcbarepair.prodordercode') }),
-      trigger: 'blur'
+      message: pi.ph('prodOrderCode'),
+      trigger: 'change'
     }
   ],
   prodOrderQty: [{
     validator: async (_rule, value) => {
       if (value === undefined || value === null || value === '') {
-        return Promise.reject(t('common.page.form.placeholder.select', { field: t('entity.pcbarepair.prodorderqty') }))
+        return Promise.reject(pi.ph('prodOrderQty'))
       }
       const num = typeof value === 'number' ? value : Number(value)
       if (!Number.isFinite(num)) {
-        return Promise.reject(t('common.page.form.placeholder.select', { field: t('entity.pcbarepair.prodorderqty') }))
+        return Promise.reject(pi.ph('prodOrderQty'))
       }
       return Promise.resolve()
     },
@@ -550,14 +716,14 @@ const rules = computed<Record<string, Rule[]>>(() => ({
   modelCode: [
     {
       required: true,
-      message: t('common.page.form.placeholder.required', { field: t('entity.pcbarepair.modelcode') }),
+      message: pi.ph('modelCode'),
       trigger: 'blur'
     }
   ],
   materialCode: [
     {
       required: true,
-      message: t('common.page.form.placeholder.required', { field: t('entity.pcbarepair.materialcode') }),
+      message: pi.ph('materialCode'),
       trigger: 'blur'
     }
   ],

@@ -94,9 +94,9 @@ export interface SourceEcDetail extends CompanyDtoBase {
   sourceBomNo?: string;
 
   /**
-   * 互换性
+   * 兼容性
    */
-  sourceInterchangeability?: string;
+  SourceCompatibility?: string;
 
   /**
    * 区分
@@ -106,7 +106,7 @@ export interface SourceEcDetail extends CompanyDtoBase {
   /**
    * 安排指示
    */
-  sourceArrangementInstruction?: string;
+  SourceInstruction?: string;
 
   /**
    * 旧物料处理
@@ -199,9 +199,9 @@ export interface SourceEcDetailQuery extends TaktPagedQuery {
   sourceBomNo?: string;
 
   /**
-   * 互换性
+   * 兼容性
    */
-  sourceInterchangeability?: string;
+  SourceCompatibility?: string;
 
   /**
    * 区分
@@ -211,7 +211,7 @@ export interface SourceEcDetailQuery extends TaktPagedQuery {
   /**
    * 安排指示
    */
-  sourceArrangementInstruction?: string;
+  SourceInstruction?: string;
 
   /**
    * 旧物料处理
@@ -323,9 +323,9 @@ export interface SourceEcDetailCreate {
   sourceBomNo?: string;
 
   /**
-   * 互换性
+   * 兼容性
    */
-  sourceInterchangeability?: string;
+  SourceCompatibility?: string;
 
   /**
    * 区分
@@ -335,7 +335,7 @@ export interface SourceEcDetailCreate {
   /**
    * 安排指示
    */
-  sourceArrangementInstruction?: string;
+  SourceInstruction?: string;
 
   /**
    * 旧物料处理
@@ -447,9 +447,9 @@ export interface SourceEcDetailTemplate {
   sourceBomNo?: string;
 
   /**
-   * 互换性
+   * 兼容性
    */
-  sourceInterchangeability?: string;
+  SourceCompatibility?: string;
 
   /**
    * 区分
@@ -459,7 +459,7 @@ export interface SourceEcDetailTemplate {
   /**
    * 安排指示
    */
-  sourceArrangementInstruction?: string;
+  SourceInstruction?: string;
 
   /**
    * 旧物料处理
@@ -556,9 +556,9 @@ export interface SourceEcDetailImport {
   sourceBomNo?: string;
 
   /**
-   * 互换性
+   * 兼容性
    */
-  sourceInterchangeability?: string;
+  SourceCompatibility?: string;
 
   /**
    * 区分
@@ -568,7 +568,7 @@ export interface SourceEcDetailImport {
   /**
    * 安排指示
    */
-  sourceArrangementInstruction?: string;
+  SourceInstruction?: string;
 
   /**
    * 旧物料处理
@@ -665,9 +665,9 @@ export interface SourceEcDetailExport {
   sourceBomNo?: string;
 
   /**
-   * 互换性
+   * 兼容性
    */
-  sourceInterchangeability?: string;
+  SourceCompatibility?: string;
 
   /**
    * 区分
@@ -677,7 +677,7 @@ export interface SourceEcDetailExport {
   /**
    * 安排指示
    */
-  sourceArrangementInstruction?: string;
+  SourceInstruction?: string;
 
   /**
    * 旧物料处理

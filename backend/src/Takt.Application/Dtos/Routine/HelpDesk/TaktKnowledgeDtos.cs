@@ -109,13 +109,6 @@ public class TaktKnowledgeDto : TaktCompanyDtoBase
     /// 附件 （JSON列表形式，由TaktFile 统一上传到服务器）
     /// </summary>
     public string? Attachments { get; set; } = string.Empty;
-
-    /// <summary>
-    /// 知识库变更日志列表
-    /// （子表：TaktKnowledgeChangeLog）
-    /// </summary>
-    public List<TaktKnowledgeChangeLogDto>? ChangeLogs { get; set; }
-
 }
 
 // ========================================
@@ -340,11 +333,6 @@ public class TaktKnowledgeCreateDto
     public string? Attachments { get; set; } = string.Empty;
 
     /// <summary>
-    /// 知识库变更日志列表（子表，级联保存）
-    /// </summary>
-    public List<TaktKnowledgeChangeLogCreateDto>? ChangeLogs { get; set; }
-
-    /// <summary>
     /// 扩展字段JSON
     /// </summary>
     public string? ExtField { get; set; }
@@ -514,11 +502,6 @@ public class TaktKnowledgeTemplateDto
     public string? Attachments { get; set; } = string.Empty;
 
     /// <summary>
-    /// 知识库变更日志列表（子表，级联保存）
-    /// </summary>
-    public List<TaktKnowledgeChangeLogCreateDto>? ChangeLogs { get; set; }
-
-    /// <summary>
     /// 扩展字段JSON
     /// </summary>
     public string? ExtField { get; set; }
@@ -619,11 +602,6 @@ public class TaktKnowledgeImportDto
     /// 附件 （JSON列表形式，由TaktFile 统一上传到服务器）
     /// </summary>
     public string? Attachments { get; set; } = string.Empty;
-
-    /// <summary>
-    /// 知识库变更日志列表（子表，级联保存）
-    /// </summary>
-    public List<TaktKnowledgeChangeLogCreateDto>? ChangeLogs { get; set; }
 
     /// <summary>
     /// 扩展字段JSON

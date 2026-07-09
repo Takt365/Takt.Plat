@@ -31,7 +31,6 @@ namespace Takt.Application.Services.Accounting.Controlling;
 public class TaktCostElementService : TaktServiceBase, ITaktCostElementService
 {
     private readonly ITaktCompanyRepository<TaktCostElement> _costElementRepository;
-    private readonly ITaktCompanyRepository<TaktCostElementChangeLog> _costElementChangeLogRepository;
     private readonly ITaktSortOrderGenerator _sortOrderGenerator;
     private readonly ITaktUniqueValidator _uniqueValidator;
 
@@ -39,14 +38,12 @@ public class TaktCostElementService : TaktServiceBase, ITaktCostElementService
     /// 构造函数
     /// </summary>
     /// <param name="costElementRepository">成本要素仓储</param>
-    /// <param name="costElementChangeLogRepository">CostElementChangeLog仓储</param>
     /// <param name="sortOrderGenerator">排序号生成器</param>
     /// <param name="uniqueValidator">唯一性验证器</param>
     /// <param name="userContext">用户上下文</param>
     /// <param name="localizationService">本地化服务</param>
     public TaktCostElementService(
         ITaktCompanyRepository<TaktCostElement> costElementRepository,
-        ITaktCompanyRepository<TaktCostElementChangeLog> costElementChangeLogRepository,
         ITaktSortOrderGenerator sortOrderGenerator,
         ITaktUniqueValidator uniqueValidator,
         ITaktUserContext? userContext = null,
@@ -54,7 +51,6 @@ public class TaktCostElementService : TaktServiceBase, ITaktCostElementService
         : base(userContext, localizationService)
     {
         _costElementRepository = costElementRepository;
-        _costElementChangeLogRepository = costElementChangeLogRepository;
         _sortOrderGenerator = sortOrderGenerator;
         _uniqueValidator = uniqueValidator;
     }
@@ -272,9 +268,7 @@ public class TaktCostElementService : TaktServiceBase, ITaktCostElementService
         if (entity == null)
         {
             throw new TaktBusinessException("成本要素不存在或已删除");
-        }
-        await _costElementChangeLogRepository.DeleteAsync(x => x.CostElementId == entity.Id);
-        var deleted = await _costElementRepository.DeleteAsync(id);
+        }        var deleted = await _costElementRepository.DeleteAsync(id);
         if (!deleted)
         {
             throw new TaktBusinessException("成本要素不存在或已删除");
@@ -442,9 +436,6 @@ public class TaktCostElementService : TaktServiceBase, ITaktCostElementService
         {
             return;
         }
-        // 成本要素变更记录 → dto.ChangeLogs
-        var changelogs = await _costElementChangeLogRepository.GetListAsync(x => x.CostElementId == entity.Id);
-        dto.ChangeLogs = changelogs.Adapt<List<TaktCostElementChangeLogDto>>();
     }
 
     /// <summary>
@@ -455,24 +446,6 @@ public class TaktCostElementService : TaktServiceBase, ITaktCostElementService
     /// <returns>任务</returns>
     private async Task SaveCostElementChildrenAsync(TaktCostElement entity, TaktCostElementCreateDto dto)
     {
-        // 成本要素变更记录（ChangeLogs）
-        if (dto.ChangeLogs is not { Count: > 0 })
-        {
-            await _costElementChangeLogRepository.DeleteAsync(x => x.CostElementId == entity.Id);
-        }
-        else
-        {
-            var changelogs = dto.ChangeLogs.Adapt<List<TaktCostElementChangeLog>>();
-            foreach (var child in changelogs)
-            {
-                child.CostElementId = entity.Id;
-            }
-            await _costElementChangeLogRepository.DeleteAsync(x => x.CostElementId == entity.Id);
-            foreach (var child in changelogs)
-            {
-            }
-            await _costElementChangeLogRepository.CreateRangeAsync(changelogs);
-        }
     }
     // ========================================
     // 查询表达式

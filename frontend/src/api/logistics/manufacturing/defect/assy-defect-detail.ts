@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：frontend/src/api/logistics/manufacturing/defect
 // 文件名称：assy-defect-detail.ts
-// 创建时间：2026-06-30
+// 创建时间：2026-07-09
 // 创建人：Takt365(Auto Generated)
 // 功能描述：logistics/manufacturing/defect 模块 API（自动生成，请勿手改路由常量）
 // 
@@ -18,6 +18,7 @@ import type {
 import type {
   AssyDefectDetail,
   AssyDefectDetailCreate,
+  AssyDefectDetailObsolete,
   AssyDefectDetailUpdate
 } from '@/types/logistics/manufacturing/defect/assy-defect-detail';
 
@@ -78,6 +79,19 @@ export function createAssyDefectDetail(dto: AssyDefectDetailCreate): Promise<Ass
 export function updateAssyDefectDetail(id: string, dto: AssyDefectDetailUpdate): Promise<AssyDefectDetail> {
   return request<AssyDefectDetail>({
     url: `${ASSY_DEFECT_DETAIL_API_BASE}/${id}`,
+    method: 'put',
+    data: dto,
+  });
+}
+
+/**
+ * 更新组立不良明细作废状态
+ * @param {AssyDefectDetailObsolete} dto 作废 DTO
+ * @returns {Promise<AssyDefectDetail>} 组立不良明细DTO
+ */
+export function updateAssyDefectDetailObsolete(dto: AssyDefectDetailObsolete): Promise<AssyDefectDetail> {
+  return request<AssyDefectDetail>({
+    url: `${ASSY_DEFECT_DETAIL_API_BASE}/obsolete`,
     method: 'put',
     data: dto,
   });

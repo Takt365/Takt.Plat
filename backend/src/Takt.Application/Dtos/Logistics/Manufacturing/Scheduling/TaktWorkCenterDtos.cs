@@ -22,7 +22,7 @@ namespace Takt.Application.Dtos.Logistics.Manufacturing.Scheduling;
 // ========================================
 
 /// <summary>
-/// 工作中心（WC；PlantCode 对齐 TaktCalendar.RelatedPlant，班次对齐 TaktWorkShift）
+/// 工作中心（WC；PlantCode 对齐 TaktCalendar.RelatedPlant）
 /// 对应前端 TaktWorkCenterDto
 /// 继承 TaktCompanyDtoBase
 /// </summary>
@@ -49,22 +49,6 @@ public class TaktWorkCenterDto : TaktCompanyDtoBase
     /// 工作中心名称
     /// </summary>
     public string WorkCenterName { get; set; } = string.Empty;
-
-    /// <summary>
-    /// 车间编码
-    /// </summary>
-    public string? WorkshopCode { get; set; } = string.Empty;
-
-    /// <summary>
-    /// 默认班次 ID（关联 HR TaktWorkShift；APS 产能结合 TaktCalendar.RelatedPlant 与当日班次计算）
-    /// </summary>
-    [JsonConverter(typeof(ValueToStringConverter))]
-    public long? DefaultShiftId { get; set; }
-
-    /// <summary>
-    /// 默认班次 名称（填充字段）
-    /// </summary>
-    public string? DefaultShiftName { get; set; }
 
     /// <summary>
     /// 状态（字典 sys_normal_disable；1=启用，0=禁用）
@@ -113,17 +97,6 @@ public class TaktWorkCenterQueryDto : TaktPagedQuery
     /// 工作中心名称
     /// </summary>
     public string? WorkCenterName { get; set; } = string.Empty;
-
-    /// <summary>
-    /// 车间编码
-    /// </summary>
-    public string? WorkshopCode { get; set; } = string.Empty;
-
-    /// <summary>
-    /// 默认班次 ID（关联 HR TaktWorkShift；APS 产能结合 TaktCalendar.RelatedPlant 与当日班次计算）
-    /// </summary>
-    [JsonConverter(typeof(ValueToStringConverter))]
-    public long? DefaultShiftId { get; set; }
 
     /// <summary>
     /// 状态（字典 sys_normal_disable；1=启用，0=禁用）
@@ -192,17 +165,6 @@ public class TaktWorkCenterCreateDto
     /// </summary>
     [Required(ErrorMessage = "工作中心名称不能为空")]
     public string WorkCenterName { get; set; } = string.Empty;
-
-    /// <summary>
-    /// 车间编码
-    /// </summary>
-    public string? WorkshopCode { get; set; } = string.Empty;
-
-    /// <summary>
-    /// 默认班次 ID（关联 HR TaktWorkShift；APS 产能结合 TaktCalendar.RelatedPlant 与当日班次计算）
-    /// </summary>
-    [JsonConverter(typeof(ValueToStringConverter))]
-    public long? DefaultShiftId { get; set; }
 
     /// <summary>
     /// 状态（字典 sys_normal_disable；1=启用，0=禁用）
@@ -305,17 +267,6 @@ public class TaktWorkCenterTemplateDto
     public string? WorkCenterName { get; set; } = string.Empty;
 
     /// <summary>
-    /// 车间编码
-    /// </summary>
-    public string? WorkshopCode { get; set; } = string.Empty;
-
-    /// <summary>
-    /// 默认班次 ID（关联 HR TaktWorkShift；APS 产能结合 TaktCalendar.RelatedPlant 与当日班次计算）
-    /// </summary>
-    [JsonConverter(typeof(ValueToStringConverter))]
-    public long? DefaultShiftId { get; set; }
-
-    /// <summary>
     /// 状态（字典 sys_normal_disable；1=启用，0=禁用）
     /// </summary>
     public int? WorkCenterStatus { get; set; }
@@ -371,17 +322,6 @@ public class TaktWorkCenterImportDto
     /// 工作中心名称
     /// </summary>
     public string? WorkCenterName { get; set; } = string.Empty;
-
-    /// <summary>
-    /// 车间编码
-    /// </summary>
-    public string? WorkshopCode { get; set; } = string.Empty;
-
-    /// <summary>
-    /// 默认班次 ID（关联 HR TaktWorkShift；APS 产能结合 TaktCalendar.RelatedPlant 与当日班次计算）
-    /// </summary>
-    [JsonConverter(typeof(ValueToStringConverter))]
-    public long? DefaultShiftId { get; set; }
 
     /// <summary>
     /// 状态（字典 sys_normal_disable；1=启用，0=禁用）
@@ -440,17 +380,6 @@ public class TaktWorkCenterExportDto
     /// 工作中心名称
     /// </summary>
     public string WorkCenterName { get; set; } = string.Empty;
-
-    /// <summary>
-    /// 车间编码
-    /// </summary>
-    public string? WorkshopCode { get; set; } = string.Empty;
-
-    /// <summary>
-    /// 默认班次 ID（关联 HR TaktWorkShift；APS 产能结合 TaktCalendar.RelatedPlant 与当日班次计算）
-    /// </summary>
-    [JsonConverter(typeof(ValueToStringConverter))]
-    public long? DefaultShiftId { get; set; }
 
     /// <summary>
     /// 状态（字典 sys_normal_disable；1=启用，0=禁用）

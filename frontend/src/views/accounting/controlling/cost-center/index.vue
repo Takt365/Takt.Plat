@@ -762,7 +762,6 @@ function buildCostCenterUpdateDto(
     validTo: costCenter.validTo,
     relatedPlant: costCenter.relatedPlant,
     costCenterStatus: costCenter.costCenterStatus,
-    changeLogs: costCenter.changeLogs,
     extField: costCenter.extField,
     remark: costCenter.remark,
   }

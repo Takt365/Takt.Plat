@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：frontend/src/types/logistics/manufacturing/output
 // 文件名称：assy-output-detail.d.ts
-// 创建时间：2026-06-30
+// 创建时间：2026-07-09
 // 创建人：Takt365(Auto Generated)
 // 功能描述：logistics/manufacturing/output 模块类型定义（自动生成；类型名去 Takt 前缀与末尾 Dto，如 TaktCompanyDto → Company）
 // 
@@ -39,7 +39,7 @@ export interface AssyOutputDetail extends CompanyDtoBase {
   assyOutputName?: string;
 
   /**
-   * 生产工单号（冗余字段,便于查询）
+   * 工单号（冗余字段,便于查询）
    */
   prodOrderCode: string;
 
@@ -49,9 +49,14 @@ export interface AssyOutputDetail extends CompanyDtoBase {
   lineNumber: number;
 
   /**
-   * 生产时段
+   * 生产时段（固定值）
    */
   timePeriod: string;
+
+  /**
+   * 标准产能（冗余字段：默认快照主表 StdCapacity；有报工工时时按报工工时÷标准工时×稼动率重算该行）
+   */
+  stdCapacity: number;
 
   /**
    * 实际生产数量
@@ -64,7 +69,7 @@ export interface AssyOutputDetail extends CompanyDtoBase {
   downtimeMinutes: number;
 
   /**
-   * 停线原因（字典 logistics_stop_reason_category，存 DictValue）
+   * 停线原因（字典 logistics_stop_reason_category，多选 DictLabel 逗号分隔）
    */
   downtimeReason?: string;
 
@@ -74,7 +79,7 @@ export interface AssyOutputDetail extends CompanyDtoBase {
   downtimeDescription?: string;
 
   /**
-   * 未达成原因（字典 logistics_nonachievement_reason_category，存 DictValue）
+   * 未达成原因（字典 logistics_nonachievement_reason_category，多选 DictLabel 逗号分隔）
    */
   unachievedReason?: string;
 
@@ -84,24 +89,39 @@ export interface AssyOutputDetail extends CompanyDtoBase {
   unachievedDescription?: string;
 
   /**
-   * 投入工时(分钟)
+   * 投入工时(分钟)（计算结果：无产量且无报工时为 0；报工工时大于 0 时等于报工工时，否则为人数×60）
    */
   inputMinutes: number;
 
   /**
-   * 生产工时(分钟)
-   */
-  prodMinutes: number;
-
-  /**
-   * 实际工时(分钟)
+   * 实际工时(分钟)（计算结果：无产量且无报工时为 0；报工工时大于 0 时为报工工时减停线时间，否则为投入工时减停线时间；有产量时不小于 0）
    */
   actualMinutes: number;
 
   /**
-   * 达成率(%)
+   * 间接工时(分钟)（计算结果：无产量且无报工时为 0；否则为间接人数×向下取整(实际工时÷直接人数)）
+   */
+  indirectMinutes: number;
+
+  /**
+   * 报工工时(分钟)（填写场景：1 同一时段混合生产；2 清机；3 无产出、欠料、仪设、切换机种等需记录损失时间）
+   */
+  confirmMinutes: number;
+
+  /**
+   * 混合生产（0=非混合；N≥2 表示同班组同日期同生产时段内共有 N 笔有产量/报工）
+   */
+  mixedProd: number;
+
+  /**
+   * 达成率(%)（计算结果：实际生产数量÷StdCapacity×100%；标准产能为0时取0）
    */
   achievementRate: number;
+
+  /**
+   * 是否作废（字典 sys_yes_no_type，0=否 1=是；编辑移除子行时标记作废）
+   */
+  isObsolete: number;
 
   /**
    * 组立日报（主表） （主表：TaktAssyOutput）
@@ -134,7 +154,7 @@ export interface AssyOutputDetailQuery extends TaktPagedQuery {
   assyOutputId?: string;
 
   /**
-   * 生产工单号（冗余字段,便于查询）
+   * 工单号（冗余字段,便于查询）
    */
   prodOrderCode?: string;
 
@@ -144,9 +164,14 @@ export interface AssyOutputDetailQuery extends TaktPagedQuery {
   lineNumber?: number;
 
   /**
-   * 生产时段
+   * 生产时段（固定值）
    */
   timePeriod?: string;
+
+  /**
+   * 标准产能（冗余字段：默认快照主表 StdCapacity；有报工工时时按报工工时÷标准工时×稼动率重算该行）
+   */
+  stdCapacity?: number;
 
   /**
    * 实际生产数量
@@ -159,7 +184,7 @@ export interface AssyOutputDetailQuery extends TaktPagedQuery {
   downtimeMinutes?: number;
 
   /**
-   * 停线原因（字典 logistics_stop_reason_category，存 DictValue）
+   * 停线原因（字典 logistics_stop_reason_category，多选 DictLabel 逗号分隔）
    */
   downtimeReason?: string;
 
@@ -169,7 +194,7 @@ export interface AssyOutputDetailQuery extends TaktPagedQuery {
   downtimeDescription?: string;
 
   /**
-   * 未达成原因（字典 logistics_nonachievement_reason_category，存 DictValue）
+   * 未达成原因（字典 logistics_nonachievement_reason_category，多选 DictLabel 逗号分隔）
    */
   unachievedReason?: string;
 
@@ -179,24 +204,39 @@ export interface AssyOutputDetailQuery extends TaktPagedQuery {
   unachievedDescription?: string;
 
   /**
-   * 投入工时(分钟)
+   * 投入工时(分钟)（计算结果：无产量且无报工时为 0；报工工时大于 0 时等于报工工时，否则为人数×60）
    */
   inputMinutes?: number;
 
   /**
-   * 生产工时(分钟)
-   */
-  prodMinutes?: number;
-
-  /**
-   * 实际工时(分钟)
+   * 实际工时(分钟)（计算结果：无产量且无报工时为 0；报工工时大于 0 时为报工工时减停线时间，否则为投入工时减停线时间；有产量时不小于 0）
    */
   actualMinutes?: number;
 
   /**
-   * 达成率(%)
+   * 间接工时(分钟)（计算结果：无产量且无报工时为 0；否则为间接人数×向下取整(实际工时÷直接人数)）
+   */
+  indirectMinutes?: number;
+
+  /**
+   * 报工工时(分钟)（填写场景：1 同一时段混合生产；2 清机；3 无产出、欠料、仪设、切换机种等需记录损失时间）
+   */
+  confirmMinutes?: number;
+
+  /**
+   * 混合生产（0=非混合；N≥2 表示同班组同日期同生产时段内共有 N 笔有产量/报工）
+   */
+  mixedProd?: number;
+
+  /**
+   * 达成率(%)（计算结果：实际生产数量÷StdCapacity×100%；标准产能为0时取0）
    */
   achievementRate?: number;
+
+  /**
+   * 是否作废（字典 sys_yes_no_type，0=否 1=是；编辑移除子行时标记作废）
+   */
+  isObsolete?: number;
 
   /**
    * 创建时间（范围查询-开始）
@@ -248,7 +288,7 @@ export interface AssyOutputDetailCreate {
   assyOutputId: string;
 
   /**
-   * 生产工单号（冗余字段,便于查询）
+   * 工单号（冗余字段,便于查询）
    */
   prodOrderCode: string;
 
@@ -258,9 +298,14 @@ export interface AssyOutputDetailCreate {
   lineNumber: number;
 
   /**
-   * 生产时段
+   * 生产时段（固定值）
    */
   timePeriod: string;
+
+  /**
+   * 标准产能（冗余字段：默认快照主表 StdCapacity；有报工工时时按报工工时÷标准工时×稼动率重算该行）
+   */
+  stdCapacity: number;
 
   /**
    * 实际生产数量
@@ -273,7 +318,7 @@ export interface AssyOutputDetailCreate {
   downtimeMinutes: number;
 
   /**
-   * 停线原因（字典 logistics_stop_reason_category，存 DictValue）
+   * 停线原因（字典 logistics_stop_reason_category，多选 DictLabel 逗号分隔）
    */
   downtimeReason?: string;
 
@@ -283,7 +328,7 @@ export interface AssyOutputDetailCreate {
   downtimeDescription?: string;
 
   /**
-   * 未达成原因（字典 logistics_nonachievement_reason_category，存 DictValue）
+   * 未达成原因（字典 logistics_nonachievement_reason_category，多选 DictLabel 逗号分隔）
    */
   unachievedReason?: string;
 
@@ -293,24 +338,39 @@ export interface AssyOutputDetailCreate {
   unachievedDescription?: string;
 
   /**
-   * 投入工时(分钟)
+   * 投入工时(分钟)（计算结果：无产量且无报工时为 0；报工工时大于 0 时等于报工工时，否则为人数×60）
    */
   inputMinutes: number;
 
   /**
-   * 生产工时(分钟)
-   */
-  prodMinutes: number;
-
-  /**
-   * 实际工时(分钟)
+   * 实际工时(分钟)（计算结果：无产量且无报工时为 0；报工工时大于 0 时为报工工时减停线时间，否则为投入工时减停线时间；有产量时不小于 0）
    */
   actualMinutes: number;
 
   /**
-   * 达成率(%)
+   * 间接工时(分钟)（计算结果：无产量且无报工时为 0；否则为间接人数×向下取整(实际工时÷直接人数)）
+   */
+  indirectMinutes: number;
+
+  /**
+   * 报工工时(分钟)（填写场景：1 同一时段混合生产；2 清机；3 无产出、欠料、仪设、切换机种等需记录损失时间）
+   */
+  confirmMinutes: number;
+
+  /**
+   * 混合生产（0=非混合；N≥2 表示同班组同日期同生产时段内共有 N 笔有产量/报工）
+   */
+  mixedProd: number;
+
+  /**
+   * 达成率(%)（计算结果：实际生产数量÷StdCapacity×100%；标准产能为0时取0）
    */
   achievementRate: number;
+
+  /**
+   * 是否作废（字典 sys_yes_no_type，0=否 1=是；编辑移除子行时标记作废）
+   */
+  isObsolete: number;
 
   /**
    * 扩展字段JSON
@@ -341,6 +401,25 @@ export interface AssyOutputDetailUpdate extends AssyOutputDetailCreate {
 
 
 /**
+ * AssyOutputDetail 作废/撤销作废 DTO
+ * 对应前端 AssyOutputDetailObsolete
+ * @description 对应后端 TaktAssyOutputDetailObsoleteDto
+ */
+export interface AssyOutputDetailObsolete {
+  /**
+   * AssyOutputDetailID
+   */
+  assyOutputDetailId: string;
+
+  /**
+   * 是否作废（字典 sys_yes_no_type，0=否 1=是；编辑移除子行时标记作废）
+   */
+  isObsolete: number;
+
+}
+
+
+/**
  * AssyOutputDetail 导入模板行 DTO
  * 对应前端 AssyOutputDetailTemplate
  * @description 对应后端 TaktAssyOutputDetailTemplateDto
@@ -362,7 +441,7 @@ export interface AssyOutputDetailTemplate {
   assyOutputId?: string;
 
   /**
-   * 生产工单号（冗余字段,便于查询）
+   * 工单号（冗余字段,便于查询）
    */
   prodOrderCode?: string;
 
@@ -372,9 +451,14 @@ export interface AssyOutputDetailTemplate {
   lineNumber?: number;
 
   /**
-   * 生产时段
+   * 生产时段（固定值）
    */
   timePeriod?: string;
+
+  /**
+   * 标准产能（冗余字段：默认快照主表 StdCapacity；有报工工时时按报工工时÷标准工时×稼动率重算该行）
+   */
+  stdCapacity?: number;
 
   /**
    * 实际生产数量
@@ -387,7 +471,7 @@ export interface AssyOutputDetailTemplate {
   downtimeMinutes?: number;
 
   /**
-   * 停线原因（字典 logistics_stop_reason_category，存 DictValue）
+   * 停线原因（字典 logistics_stop_reason_category，多选 DictLabel 逗号分隔）
    */
   downtimeReason?: string;
 
@@ -397,7 +481,7 @@ export interface AssyOutputDetailTemplate {
   downtimeDescription?: string;
 
   /**
-   * 未达成原因（字典 logistics_nonachievement_reason_category，存 DictValue）
+   * 未达成原因（字典 logistics_nonachievement_reason_category，多选 DictLabel 逗号分隔）
    */
   unachievedReason?: string;
 
@@ -407,24 +491,39 @@ export interface AssyOutputDetailTemplate {
   unachievedDescription?: string;
 
   /**
-   * 投入工时(分钟)
+   * 投入工时(分钟)（计算结果：无产量且无报工时为 0；报工工时大于 0 时等于报工工时，否则为人数×60）
    */
   inputMinutes?: number;
 
   /**
-   * 生产工时(分钟)
-   */
-  prodMinutes?: number;
-
-  /**
-   * 实际工时(分钟)
+   * 实际工时(分钟)（计算结果：无产量且无报工时为 0；报工工时大于 0 时为报工工时减停线时间，否则为投入工时减停线时间；有产量时不小于 0）
    */
   actualMinutes?: number;
 
   /**
-   * 达成率(%)
+   * 间接工时(分钟)（计算结果：无产量且无报工时为 0；否则为间接人数×向下取整(实际工时÷直接人数)）
+   */
+  indirectMinutes?: number;
+
+  /**
+   * 报工工时(分钟)（填写场景：1 同一时段混合生产；2 清机；3 无产出、欠料、仪设、切换机种等需记录损失时间）
+   */
+  confirmMinutes?: number;
+
+  /**
+   * 混合生产（0=非混合；N≥2 表示同班组同日期同生产时段内共有 N 笔有产量/报工）
+   */
+  mixedProd?: number;
+
+  /**
+   * 达成率(%)（计算结果：实际生产数量÷StdCapacity×100%；标准产能为0时取0）
    */
   achievementRate?: number;
+
+  /**
+   * 是否作废（字典 sys_yes_no_type，0=否 1=是；编辑移除子行时标记作废）
+   */
+  isObsolete?: number;
 
   /**
    * 扩展字段JSON
@@ -466,7 +565,7 @@ export interface AssyOutputDetailImport {
   assyOutputId?: string;
 
   /**
-   * 生产工单号（冗余字段,便于查询）
+   * 工单号（冗余字段,便于查询）
    */
   prodOrderCode?: string;
 
@@ -476,9 +575,14 @@ export interface AssyOutputDetailImport {
   lineNumber?: number;
 
   /**
-   * 生产时段
+   * 生产时段（固定值）
    */
   timePeriod?: string;
+
+  /**
+   * 标准产能（冗余字段：默认快照主表 StdCapacity；有报工工时时按报工工时÷标准工时×稼动率重算该行）
+   */
+  stdCapacity?: number;
 
   /**
    * 实际生产数量
@@ -491,7 +595,7 @@ export interface AssyOutputDetailImport {
   downtimeMinutes?: number;
 
   /**
-   * 停线原因（字典 logistics_stop_reason_category，存 DictValue）
+   * 停线原因（字典 logistics_stop_reason_category，多选 DictLabel 逗号分隔）
    */
   downtimeReason?: string;
 
@@ -501,7 +605,7 @@ export interface AssyOutputDetailImport {
   downtimeDescription?: string;
 
   /**
-   * 未达成原因（字典 logistics_nonachievement_reason_category，存 DictValue）
+   * 未达成原因（字典 logistics_nonachievement_reason_category，多选 DictLabel 逗号分隔）
    */
   unachievedReason?: string;
 
@@ -511,24 +615,39 @@ export interface AssyOutputDetailImport {
   unachievedDescription?: string;
 
   /**
-   * 投入工时(分钟)
+   * 投入工时(分钟)（计算结果：无产量且无报工时为 0；报工工时大于 0 时等于报工工时，否则为人数×60）
    */
   inputMinutes?: number;
 
   /**
-   * 生产工时(分钟)
-   */
-  prodMinutes?: number;
-
-  /**
-   * 实际工时(分钟)
+   * 实际工时(分钟)（计算结果：无产量且无报工时为 0；报工工时大于 0 时为报工工时减停线时间，否则为投入工时减停线时间；有产量时不小于 0）
    */
   actualMinutes?: number;
 
   /**
-   * 达成率(%)
+   * 间接工时(分钟)（计算结果：无产量且无报工时为 0；否则为间接人数×向下取整(实际工时÷直接人数)）
+   */
+  indirectMinutes?: number;
+
+  /**
+   * 报工工时(分钟)（填写场景：1 同一时段混合生产；2 清机；3 无产出、欠料、仪设、切换机种等需记录损失时间）
+   */
+  confirmMinutes?: number;
+
+  /**
+   * 混合生产（0=非混合；N≥2 表示同班组同日期同生产时段内共有 N 笔有产量/报工）
+   */
+  mixedProd?: number;
+
+  /**
+   * 达成率(%)（计算结果：实际生产数量÷StdCapacity×100%；标准产能为0时取0）
    */
   achievementRate?: number;
+
+  /**
+   * 是否作废（字典 sys_yes_no_type，0=否 1=是；编辑移除子行时标记作废）
+   */
+  isObsolete?: number;
 
   /**
    * 扩展字段JSON
@@ -565,7 +684,7 @@ export interface AssyOutputDetailExport {
   assyOutputId: string;
 
   /**
-   * 生产工单号（冗余字段,便于查询）
+   * 工单号（冗余字段,便于查询）
    */
   prodOrderCode: string;
 
@@ -575,9 +694,14 @@ export interface AssyOutputDetailExport {
   lineNumber: number;
 
   /**
-   * 生产时段
+   * 生产时段（固定值）
    */
   timePeriod: string;
+
+  /**
+   * 标准产能（冗余字段：默认快照主表 StdCapacity；有报工工时时按报工工时÷标准工时×稼动率重算该行）
+   */
+  stdCapacity: number;
 
   /**
    * 实际生产数量
@@ -590,7 +714,7 @@ export interface AssyOutputDetailExport {
   downtimeMinutes: number;
 
   /**
-   * 停线原因（字典 logistics_stop_reason_category，存 DictValue）
+   * 停线原因（字典 logistics_stop_reason_category，多选 DictLabel 逗号分隔）
    */
   downtimeReason?: string;
 
@@ -600,7 +724,7 @@ export interface AssyOutputDetailExport {
   downtimeDescription?: string;
 
   /**
-   * 未达成原因（字典 logistics_nonachievement_reason_category，存 DictValue）
+   * 未达成原因（字典 logistics_nonachievement_reason_category，多选 DictLabel 逗号分隔）
    */
   unachievedReason?: string;
 
@@ -610,24 +734,39 @@ export interface AssyOutputDetailExport {
   unachievedDescription?: string;
 
   /**
-   * 投入工时(分钟)
+   * 投入工时(分钟)（计算结果：无产量且无报工时为 0；报工工时大于 0 时等于报工工时，否则为人数×60）
    */
   inputMinutes: number;
 
   /**
-   * 生产工时(分钟)
-   */
-  prodMinutes: number;
-
-  /**
-   * 实际工时(分钟)
+   * 实际工时(分钟)（计算结果：无产量且无报工时为 0；报工工时大于 0 时为报工工时减停线时间，否则为投入工时减停线时间；有产量时不小于 0）
    */
   actualMinutes: number;
 
   /**
-   * 达成率(%)
+   * 间接工时(分钟)（计算结果：无产量且无报工时为 0；否则为间接人数×向下取整(实际工时÷直接人数)）
+   */
+  indirectMinutes: number;
+
+  /**
+   * 报工工时(分钟)（填写场景：1 同一时段混合生产；2 清机；3 无产出、欠料、仪设、切换机种等需记录损失时间）
+   */
+  confirmMinutes: number;
+
+  /**
+   * 混合生产（0=非混合；N≥2 表示同班组同日期同生产时段内共有 N 笔有产量/报工）
+   */
+  mixedProd: number;
+
+  /**
+   * 达成率(%)（计算结果：实际生产数量÷StdCapacity×100%；标准产能为0时取0）
    */
   achievementRate: number;
+
+  /**
+   * 是否作废（字典 sys_yes_no_type，0=否 1=是；编辑移除子行时标记作废）
+   */
+  isObsolete: number;
 
   /**
    * 扩展字段JSON

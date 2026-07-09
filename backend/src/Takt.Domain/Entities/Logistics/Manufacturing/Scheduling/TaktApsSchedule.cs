@@ -169,10 +169,4 @@ public class TaktApsSchedule : TaktCompanyEntityBase
     /// </summary>
     [Navigate(NavigateType.OneToMany, nameof(TaktApsScheduleItem.ApsScheduleId))]
     public List<TaktApsScheduleItem>? Items { get; set; }
-
-    /// <summary>
-    /// 变更日志列表（主子表关系）
-    /// </summary>
-    [Navigate(NavigateType.OneToMany, nameof(TaktApsScheduleChangeLog.ApsScheduleId))]
-    public List<TaktApsScheduleChangeLog>? ChangeLogs { get; set; }
 }

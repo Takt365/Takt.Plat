@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：frontend/src/types/logistics/manufacturing/bom
 // 文件名称：bill-of-material-substitute.d.ts
-// 创建时间：2026-06-23
+// 创建时间：2026-07-09
 // 创建人：Takt365(Auto Generated)
 // 功能描述：logistics/manufacturing/bom 模块类型定义（自动生成；类型名去 Takt 前缀与末尾 Dto，如 TaktCompanyDto → Company）
 // 
@@ -64,7 +64,7 @@ export interface BillOfMaterialSubstitute extends CompanyDtoBase {
   lineNumber: number;
 
   /**
-   * 替代物料ID（关联工厂物料主数据，序列化为string以避免Javascript精度问题）
+   * 替代物料ID（关联工厂物料 TaktMaterialPlant.Id，选项 TaktMaterialPlants/options）
    */
   substituteMaterialId: string;
 
@@ -94,7 +94,7 @@ export interface BillOfMaterialSubstitute extends CompanyDtoBase {
   usageQuantity: number;
 
   /**
-   * 单位
+   * 单位（字典 logistics_unit_of_measure_code）
    */
   materialUnit: string;
 
@@ -117,6 +117,11 @@ export interface BillOfMaterialSubstitute extends CompanyDtoBase {
    * 失效日期（为空表示永久有效）
    */
   expiryDate?: string;
+
+  /**
+   * 是否作废（字典 sys_yes_no_type，0=否 1=是；编辑移除子行时标记作废）
+   */
+  isObsolete: number;
 
   /**
    * 物料清单明细（主表） （主表：TaktBillOfMaterialItem）
@@ -174,7 +179,7 @@ export interface BillOfMaterialSubstituteQuery extends TaktPagedQuery {
   lineNumber?: number;
 
   /**
-   * 替代物料ID（关联工厂物料主数据，序列化为string以避免Javascript精度问题）
+   * 替代物料ID（关联工厂物料 TaktMaterialPlant.Id，选项 TaktMaterialPlants/options）
    */
   substituteMaterialId?: string;
 
@@ -199,7 +204,7 @@ export interface BillOfMaterialSubstituteQuery extends TaktPagedQuery {
   usageQuantity?: number;
 
   /**
-   * 单位
+   * 单位（字典 logistics_unit_of_measure_code）
    */
   materialUnit?: string;
 
@@ -232,6 +237,11 @@ export interface BillOfMaterialSubstituteQuery extends TaktPagedQuery {
    * 失效日期（为空表示永久有效）（范围查询-结束）
    */
   expiryDateEnd?: string;
+
+  /**
+   * 是否作废（字典 sys_yes_no_type，0=否 1=是；编辑移除子行时标记作废）
+   */
+  isObsolete?: number;
 
   /**
    * 创建时间（范围查询-开始）
@@ -303,7 +313,7 @@ export interface BillOfMaterialSubstituteCreate {
   lineNumber: number;
 
   /**
-   * 替代物料ID（关联工厂物料主数据，序列化为string以避免Javascript精度问题）
+   * 替代物料ID（关联工厂物料 TaktMaterialPlant.Id，选项 TaktMaterialPlants/options）
    */
   substituteMaterialId: string;
 
@@ -328,7 +338,7 @@ export interface BillOfMaterialSubstituteCreate {
   usageQuantity: number;
 
   /**
-   * 单位
+   * 单位（字典 logistics_unit_of_measure_code）
    */
   materialUnit: string;
 
@@ -351,6 +361,11 @@ export interface BillOfMaterialSubstituteCreate {
    * 失效日期（为空表示永久有效）
    */
   expiryDate?: string;
+
+  /**
+   * 是否作废（字典 sys_yes_no_type，0=否 1=是；编辑移除子行时标记作废）
+   */
+  isObsolete: number;
 
   /**
    * 扩展字段JSON
@@ -376,6 +391,25 @@ export interface BillOfMaterialSubstituteUpdate extends BillOfMaterialSubstitute
    * BillOfMaterialSubstituteID（标识要更新的实体）
    */
   billOfMaterialSubstituteId: string;
+
+}
+
+
+/**
+ * BillOfMaterialSubstitute 作废/撤销作废 DTO
+ * 对应前端 BillOfMaterialSubstituteObsolete
+ * @description 对应后端 TaktBillOfMaterialSubstituteObsoleteDto
+ */
+export interface BillOfMaterialSubstituteObsolete {
+  /**
+   * BillOfMaterialSubstituteID
+   */
+  billOfMaterialSubstituteId: string;
+
+  /**
+   * 是否作废（字典 sys_yes_no_type，0=否 1=是；编辑移除子行时标记作废）
+   */
+  isObsolete: number;
 
 }
 
@@ -422,7 +456,7 @@ export interface BillOfMaterialSubstituteTemplate {
   lineNumber?: number;
 
   /**
-   * 替代物料ID（关联工厂物料主数据，序列化为string以避免Javascript精度问题）
+   * 替代物料ID（关联工厂物料 TaktMaterialPlant.Id，选项 TaktMaterialPlants/options）
    */
   substituteMaterialId?: string;
 
@@ -447,7 +481,7 @@ export interface BillOfMaterialSubstituteTemplate {
   usageQuantity?: number;
 
   /**
-   * 单位
+   * 单位（字典 logistics_unit_of_measure_code）
    */
   materialUnit?: string;
 
@@ -470,6 +504,11 @@ export interface BillOfMaterialSubstituteTemplate {
    * 失效日期（为空表示永久有效）
    */
   expiryDate?: string;
+
+  /**
+   * 是否作废（字典 sys_yes_no_type，0=否 1=是；编辑移除子行时标记作废）
+   */
+  isObsolete?: number;
 
   /**
    * 扩展字段JSON
@@ -531,7 +570,7 @@ export interface BillOfMaterialSubstituteImport {
   lineNumber?: number;
 
   /**
-   * 替代物料ID（关联工厂物料主数据，序列化为string以避免Javascript精度问题）
+   * 替代物料ID（关联工厂物料 TaktMaterialPlant.Id，选项 TaktMaterialPlants/options）
    */
   substituteMaterialId?: string;
 
@@ -556,7 +595,7 @@ export interface BillOfMaterialSubstituteImport {
   usageQuantity?: number;
 
   /**
-   * 单位
+   * 单位（字典 logistics_unit_of_measure_code）
    */
   materialUnit?: string;
 
@@ -579,6 +618,11 @@ export interface BillOfMaterialSubstituteImport {
    * 失效日期（为空表示永久有效）
    */
   expiryDate?: string;
+
+  /**
+   * 是否作废（字典 sys_yes_no_type，0=否 1=是；编辑移除子行时标记作废）
+   */
+  isObsolete?: number;
 
   /**
    * 扩展字段JSON
@@ -635,7 +679,7 @@ export interface BillOfMaterialSubstituteExport {
   lineNumber: number;
 
   /**
-   * 替代物料ID（关联工厂物料主数据，序列化为string以避免Javascript精度问题）
+   * 替代物料ID（关联工厂物料 TaktMaterialPlant.Id，选项 TaktMaterialPlants/options）
    */
   substituteMaterialId: string;
 
@@ -660,7 +704,7 @@ export interface BillOfMaterialSubstituteExport {
   usageQuantity: number;
 
   /**
-   * 单位
+   * 单位（字典 logistics_unit_of_measure_code）
    */
   materialUnit: string;
 
@@ -683,6 +727,11 @@ export interface BillOfMaterialSubstituteExport {
    * 失效日期（为空表示永久有效）
    */
   expiryDate?: string;
+
+  /**
+   * 是否作废（字典 sys_yes_no_type，0=否 1=是；编辑移除子行时标记作废）
+   */
+  isObsolete: number;
 
   /**
    * 扩展字段JSON

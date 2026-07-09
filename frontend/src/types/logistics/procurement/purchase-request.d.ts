@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：frontend/src/types/logistics/procurement
 // 文件名称：purchase-request.d.ts
-// 创建时间：2026-06-24
+// 创建时间：2026-07-09
 // 创建人：Takt365(Auto Generated)
 // 功能描述：logistics/procurement 模块类型定义（自动生成；类型名去 Takt 前缀与末尾 Dto，如 TaktCompanyDto → Company）
 // 
@@ -29,7 +29,7 @@ export interface PurchaseRequest extends ApprovalDtoBase {
   purchaseRequestId: string;
 
   /**
-   * 工厂代码（不可空）
+   * 工厂代码（选项 TaktPlants/options，DictValue=PlantCode）
    */
   plantCode: string;
 
@@ -39,17 +39,42 @@ export interface PurchaseRequest extends ApprovalDtoBase {
   purchaseRequestCode: string;
 
   /**
-   * 来源会签单 ID（采购链路自动生成时写入）
+   * 来源采购询价 ID（关联 TaktPurchaseInquiry.Id，选项 TaktPurchaseInquirys/options）
+   */
+  purchaseInquiryId?: string;
+
+  /**
+   * 来源采购询价 名称（填充字段）
+   */
+  purchaseInquiryName?: string;
+
+  /**
+   * 来源采购询价编码（冗余）
+   */
+  purchaseInquiryCode?: string;
+
+  /**
+   * 采购链路方案（字典 logistics_procurement_chain_scheme；1=方案一，2=方案二）
+   */
+  chainScheme: number;
+
+  /**
+   * PO 生成决策（方案一：null=待决策，1=生成 PO，0=暂不生成 PO）
+   */
+  poDecision?: number;
+
+  /**
+   * PR 会签单 ID（关联 TaktCountersign.Id，选项 TaktCountersigns/options）
    */
   countersignId?: string;
 
   /**
-   * 来源会签单 名称（填充字段）
+   * PR 会签单 名称（填充字段）
    */
   countersignName?: string;
 
   /**
-   * 来源会签编号（冗余）
+   * PR 会签编号（冗余）
    */
   countersignCode?: string;
 
@@ -64,12 +89,12 @@ export interface PurchaseRequest extends ApprovalDtoBase {
   requiredArrivalDate?: string;
 
   /**
-   * 申请人员工ID（关联 TaktEmployee，序列化为 string 以避免 Javascript 精度问题）
+   * 申请人员工 ID（关联 TaktEmployee.Id，选项 TaktEmployees/options）
    */
   requestId?: string;
 
   /**
-   * 申请人员工名称（填充字段）
+   * 申请人员工 名称（填充字段）
    */
   requestName?: string;
 
@@ -104,7 +129,7 @@ export interface PurchaseRequest extends ApprovalDtoBase {
   requestReason?: string;
 
   /**
-   * 申请状态（1=启用，0=禁用）
+   * 申请状态（字典 sys_approval_status；与 ApprovalStatus 取值一致）
    */
   requestStatus: number;
 
@@ -117,11 +142,6 @@ export interface PurchaseRequest extends ApprovalDtoBase {
    * 采购申请明细列表（主子表关系，一个申请可以有多个明细） （子表：TaktPurchaseRequestItem）
    */
   items?: PurchaseRequestItem[];
-
-  /**
-   * 采购申请变更记录列表（外键在子表 TaktPurchaseRequestChangeLog.RequestId） （子表：TaktPurchaseRequestChangeLog）
-   */
-  changeLogs?: PurchaseRequestChangeLog[];
 
 }
 
@@ -144,7 +164,7 @@ export interface PurchaseRequestQuery extends TaktPagedQuery {
   companyCode?: string;
 
   /**
-   * 工厂代码（不可空）
+   * 工厂代码（选项 TaktPlants/options，DictValue=PlantCode）
    */
   plantCode?: string;
 
@@ -154,12 +174,32 @@ export interface PurchaseRequestQuery extends TaktPagedQuery {
   purchaseRequestCode?: string;
 
   /**
-   * 来源会签单 ID（采购链路自动生成时写入）
+   * 来源采购询价 ID（关联 TaktPurchaseInquiry.Id，选项 TaktPurchaseInquirys/options）
+   */
+  purchaseInquiryId?: string;
+
+  /**
+   * 来源采购询价编码（冗余）
+   */
+  purchaseInquiryCode?: string;
+
+  /**
+   * 采购链路方案（字典 logistics_procurement_chain_scheme；1=方案一，2=方案二）
+   */
+  chainScheme?: number;
+
+  /**
+   * PO 生成决策（方案一：null=待决策，1=生成 PO，0=暂不生成 PO）
+   */
+  poDecision?: number;
+
+  /**
+   * PR 会签单 ID（关联 TaktCountersign.Id，选项 TaktCountersigns/options）
    */
   countersignId?: string;
 
   /**
-   * 来源会签编号（冗余）
+   * PR 会签编号（冗余）
    */
   countersignCode?: string;
 
@@ -184,7 +224,7 @@ export interface PurchaseRequestQuery extends TaktPagedQuery {
   requiredArrivalDateEnd?: string;
 
   /**
-   * 申请人员工ID（关联 TaktEmployee，序列化为 string 以避免 Javascript 精度问题）
+   * 申请人员工 ID（关联 TaktEmployee.Id，选项 TaktEmployees/options）
    */
   requestId?: string;
 
@@ -219,7 +259,7 @@ export interface PurchaseRequestQuery extends TaktPagedQuery {
   requestReason?: string;
 
   /**
-   * 申请状态（1=启用，0=禁用）
+   * 申请状态（字典 sys_approval_status；与 ApprovalStatus 取值一致）
    */
   requestStatus?: number;
 
@@ -313,7 +353,7 @@ export interface PurchaseRequestCreate {
   companyDefaultCulture: string;
 
   /**
-   * 工厂代码（不可空）
+   * 工厂代码（选项 TaktPlants/options，DictValue=PlantCode）
    */
   plantCode: string;
 
@@ -323,12 +363,32 @@ export interface PurchaseRequestCreate {
   purchaseRequestCode: string;
 
   /**
-   * 来源会签单 ID（采购链路自动生成时写入）
+   * 来源采购询价 ID（关联 TaktPurchaseInquiry.Id，选项 TaktPurchaseInquirys/options）
+   */
+  purchaseInquiryId?: string;
+
+  /**
+   * 来源采购询价编码（冗余）
+   */
+  purchaseInquiryCode?: string;
+
+  /**
+   * 采购链路方案（字典 logistics_procurement_chain_scheme；1=方案一，2=方案二）
+   */
+  chainScheme: number;
+
+  /**
+   * PO 生成决策（方案一：null=待决策，1=生成 PO，0=暂不生成 PO）
+   */
+  poDecision?: number;
+
+  /**
+   * PR 会签单 ID（关联 TaktCountersign.Id，选项 TaktCountersigns/options）
    */
   countersignId?: string;
 
   /**
-   * 来源会签编号（冗余）
+   * PR 会签编号（冗余）
    */
   countersignCode?: string;
 
@@ -343,7 +403,7 @@ export interface PurchaseRequestCreate {
   requiredArrivalDate?: string;
 
   /**
-   * 申请人员工ID（关联 TaktEmployee，序列化为 string 以避免 Javascript 精度问题）
+   * 申请人员工 ID（关联 TaktEmployee.Id，选项 TaktEmployees/options）
    */
   requestId?: string;
 
@@ -378,7 +438,7 @@ export interface PurchaseRequestCreate {
   requestReason?: string;
 
   /**
-   * 申请状态（1=启用，0=禁用）
+   * 申请状态（字典 sys_approval_status；与 ApprovalStatus 取值一致）
    */
   requestStatus: number;
 
@@ -390,12 +450,7 @@ export interface PurchaseRequestCreate {
   /**
    * 采购申请明细列表（主子表关系，一个申请可以有多个明细）（子表，级联保存）
    */
-  items?: PurchaseRequestItemCreate[];
-
-  /**
-   * 采购申请变更记录列表（外键在子表 TaktPurchaseRequestChangeLog.RequestId）（子表，级联保存）
-   */
-  changeLogs?: PurchaseRequestChangeLogCreate[];
+  items?: PurchaseRequestItemUpdate[];
 
   /**
    * 扩展字段JSON
@@ -437,7 +492,7 @@ export interface PurchaseRequestStatus {
   purchaseRequestId: string;
 
   /**
-   * 申请状态（1=启用，0=禁用）
+   * 申请状态（字典 sys_approval_status；与 ApprovalStatus 取值一致）
    */
   requestStatus: number;
 
@@ -461,7 +516,7 @@ export interface PurchaseRequestTemplate {
   companyCode?: string;
 
   /**
-   * 工厂代码（不可空）
+   * 工厂代码（选项 TaktPlants/options，DictValue=PlantCode）
    */
   plantCode?: string;
 
@@ -471,12 +526,32 @@ export interface PurchaseRequestTemplate {
   purchaseRequestCode?: string;
 
   /**
-   * 来源会签单 ID（采购链路自动生成时写入）
+   * 来源采购询价 ID（关联 TaktPurchaseInquiry.Id，选项 TaktPurchaseInquirys/options）
+   */
+  purchaseInquiryId?: string;
+
+  /**
+   * 来源采购询价编码（冗余）
+   */
+  purchaseInquiryCode?: string;
+
+  /**
+   * 采购链路方案（字典 logistics_procurement_chain_scheme；1=方案一，2=方案二）
+   */
+  chainScheme?: number;
+
+  /**
+   * PO 生成决策（方案一：null=待决策，1=生成 PO，0=暂不生成 PO）
+   */
+  poDecision?: number;
+
+  /**
+   * PR 会签单 ID（关联 TaktCountersign.Id，选项 TaktCountersigns/options）
    */
   countersignId?: string;
 
   /**
-   * 来源会签编号（冗余）
+   * PR 会签编号（冗余）
    */
   countersignCode?: string;
 
@@ -491,7 +566,7 @@ export interface PurchaseRequestTemplate {
   requiredArrivalDate?: string;
 
   /**
-   * 申请人员工ID（关联 TaktEmployee，序列化为 string 以避免 Javascript 精度问题）
+   * 申请人员工 ID（关联 TaktEmployee.Id，选项 TaktEmployees/options）
    */
   requestId?: string;
 
@@ -526,7 +601,7 @@ export interface PurchaseRequestTemplate {
   requestReason?: string;
 
   /**
-   * 申请状态（1=启用，0=禁用）
+   * 申请状态（字典 sys_approval_status；与 ApprovalStatus 取值一致）
    */
   requestStatus?: number;
 
@@ -539,11 +614,6 @@ export interface PurchaseRequestTemplate {
    * 采购申请明细列表（主子表关系，一个申请可以有多个明细）（子表，级联保存）
    */
   items?: PurchaseRequestItemCreate[];
-
-  /**
-   * 采购申请变更记录列表（外键在子表 TaktPurchaseRequestChangeLog.RequestId）（子表，级联保存）
-   */
-  changeLogs?: PurchaseRequestChangeLogCreate[];
 
   /**
    * 扩展字段JSON
@@ -580,7 +650,7 @@ export interface PurchaseRequestImport {
   companyDefaultCulture?: string;
 
   /**
-   * 工厂代码（不可空）
+   * 工厂代码（选项 TaktPlants/options，DictValue=PlantCode）
    */
   plantCode?: string;
 
@@ -590,12 +660,32 @@ export interface PurchaseRequestImport {
   purchaseRequestCode?: string;
 
   /**
-   * 来源会签单 ID（采购链路自动生成时写入）
+   * 来源采购询价 ID（关联 TaktPurchaseInquiry.Id，选项 TaktPurchaseInquirys/options）
+   */
+  purchaseInquiryId?: string;
+
+  /**
+   * 来源采购询价编码（冗余）
+   */
+  purchaseInquiryCode?: string;
+
+  /**
+   * 采购链路方案（字典 logistics_procurement_chain_scheme；1=方案一，2=方案二）
+   */
+  chainScheme?: number;
+
+  /**
+   * PO 生成决策（方案一：null=待决策，1=生成 PO，0=暂不生成 PO）
+   */
+  poDecision?: number;
+
+  /**
+   * PR 会签单 ID（关联 TaktCountersign.Id，选项 TaktCountersigns/options）
    */
   countersignId?: string;
 
   /**
-   * 来源会签编号（冗余）
+   * PR 会签编号（冗余）
    */
   countersignCode?: string;
 
@@ -610,7 +700,7 @@ export interface PurchaseRequestImport {
   requiredArrivalDate?: string;
 
   /**
-   * 申请人员工ID（关联 TaktEmployee，序列化为 string 以避免 Javascript 精度问题）
+   * 申请人员工 ID（关联 TaktEmployee.Id，选项 TaktEmployees/options）
    */
   requestId?: string;
 
@@ -645,7 +735,7 @@ export interface PurchaseRequestImport {
   requestReason?: string;
 
   /**
-   * 申请状态（1=启用，0=禁用）
+   * 申请状态（字典 sys_approval_status；与 ApprovalStatus 取值一致）
    */
   requestStatus?: number;
 
@@ -658,11 +748,6 @@ export interface PurchaseRequestImport {
    * 采购申请明细列表（主子表关系，一个申请可以有多个明细）（子表，级联保存）
    */
   items?: PurchaseRequestItemCreate[];
-
-  /**
-   * 采购申请变更记录列表（外键在子表 TaktPurchaseRequestChangeLog.RequestId）（子表，级联保存）
-   */
-  changeLogs?: PurchaseRequestChangeLogCreate[];
 
   /**
    * 扩展字段JSON
@@ -689,7 +774,7 @@ export interface PurchaseRequestExport {
   purchaseRequestId: string;
 
   /**
-   * 工厂代码（不可空）
+   * 工厂代码（选项 TaktPlants/options，DictValue=PlantCode）
    */
   plantCode: string;
 
@@ -699,12 +784,32 @@ export interface PurchaseRequestExport {
   purchaseRequestCode: string;
 
   /**
-   * 来源会签单 ID（采购链路自动生成时写入）
+   * 来源采购询价 ID（关联 TaktPurchaseInquiry.Id，选项 TaktPurchaseInquirys/options）
+   */
+  purchaseInquiryId?: string;
+
+  /**
+   * 来源采购询价编码（冗余）
+   */
+  purchaseInquiryCode?: string;
+
+  /**
+   * 采购链路方案（字典 logistics_procurement_chain_scheme；1=方案一，2=方案二）
+   */
+  chainScheme: number;
+
+  /**
+   * PO 生成决策（方案一：null=待决策，1=生成 PO，0=暂不生成 PO）
+   */
+  poDecision?: number;
+
+  /**
+   * PR 会签单 ID（关联 TaktCountersign.Id，选项 TaktCountersigns/options）
    */
   countersignId?: string;
 
   /**
-   * 来源会签编号（冗余）
+   * PR 会签编号（冗余）
    */
   countersignCode?: string;
 
@@ -719,7 +824,7 @@ export interface PurchaseRequestExport {
   requiredArrivalDate?: string;
 
   /**
-   * 申请人员工ID（关联 TaktEmployee，序列化为 string 以避免 Javascript 精度问题）
+   * 申请人员工 ID（关联 TaktEmployee.Id，选项 TaktEmployees/options）
    */
   requestId?: string;
 
@@ -754,7 +859,7 @@ export interface PurchaseRequestExport {
   requestReason?: string;
 
   /**
-   * 申请状态（1=启用，0=禁用）
+   * 申请状态（字典 sys_approval_status；与 ApprovalStatus 取值一致）
    */
   requestStatus: number;
 

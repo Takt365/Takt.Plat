@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：frontend/src/types/logistics/manufacturing/bom
 // 文件名称：bill-of-material.d.ts
-// 创建时间：2026-06-23
+// 创建时间：2026-07-09
 // 创建人：Takt365(Auto Generated)
 // 功能描述：logistics/manufacturing/bom 模块类型定义（自动生成；类型名去 Takt 前缀与末尾 Dto，如 TaktCompanyDto → Company）
 // 
@@ -29,7 +29,7 @@ export interface BillOfMaterial extends CompanyDtoBase {
   billOfMaterialId: string;
 
   /**
-   * 工厂代码
+   * 工厂代码（选项 TaktPlants/options，DictValue=PlantCode）
    */
   plantCode: string;
 
@@ -44,7 +44,7 @@ export interface BillOfMaterial extends CompanyDtoBase {
   bomName: string;
 
   /**
-   * 父物料ID（成品/半成品，关联工厂物料主数据，序列化为string以避免Javascript精度问题）
+   * 父物料ID（关联工厂物料 TaktMaterialPlant.Id，选项 TaktMaterialPlants/options）
    */
   parentMaterialId: string;
 
@@ -64,7 +64,7 @@ export interface BillOfMaterial extends CompanyDtoBase {
   bomVersion: string;
 
   /**
-   * BOM类型/用途（0=标准BOM，1=工程BOM，2=制造BOM，3=成本BOM，4=销售BOM，对应SAP BOM Usage）
+   * BOM类型/用途（字典 logistics_bom_type；0=标准，1=工程，2=制造，3=成本，4=销售）
    */
   bomType: number;
 
@@ -84,7 +84,7 @@ export interface BillOfMaterial extends CompanyDtoBase {
   expiryDate?: string;
 
   /**
-   * 父物料单位
+   * 父物料单位（字典 logistics_unit_of_measure_code）
    */
   parentMaterialUnit: string;
 
@@ -92,11 +92,6 @@ export interface BillOfMaterial extends CompanyDtoBase {
    * 基本数量（BOM基数，对应SAP Base quantity）
    */
   parentMaterialQuantity: number;
-
-  /**
-   * BOM状态（0=草稿，1=已发布，2=已停用）
-   */
-  bomStatus: number;
 
   /**
    * BOM描述
@@ -109,14 +104,14 @@ export interface BillOfMaterial extends CompanyDtoBase {
   sortOrder: number;
 
   /**
+   * BOM状态（字典 logistics_bom_status；0=草稿，1=已发布，2=已停用）
+   */
+  bomStatus: number;
+
+  /**
    * BOM组成件明细（扁平单层；多层通过子件物料关联其BOM头递归展开） （子表：TaktBillOfMaterialItem）
    */
   items?: BillOfMaterialItem[];
-
-  /**
-   * BOM变更记录列表（外键在子表 TaktBillOfMaterialChangeLog.BillOfMaterialId） （子表：TaktBillOfMaterialChangeLog）
-   */
-  changeLogs?: BillOfMaterialChangeLog[];
 
 }
 
@@ -139,7 +134,7 @@ export interface BillOfMaterialQuery extends TaktPagedQuery {
   companyCode?: string;
 
   /**
-   * 工厂代码
+   * 工厂代码（选项 TaktPlants/options，DictValue=PlantCode）
    */
   plantCode?: string;
 
@@ -154,7 +149,7 @@ export interface BillOfMaterialQuery extends TaktPagedQuery {
   bomName?: string;
 
   /**
-   * 父物料ID（成品/半成品，关联工厂物料主数据，序列化为string以避免Javascript精度问题）
+   * 父物料ID（关联工厂物料 TaktMaterialPlant.Id，选项 TaktMaterialPlants/options）
    */
   parentMaterialId?: string;
 
@@ -174,7 +169,7 @@ export interface BillOfMaterialQuery extends TaktPagedQuery {
   bomVersion?: string;
 
   /**
-   * BOM类型/用途（0=标准BOM，1=工程BOM，2=制造BOM，3=成本BOM，4=销售BOM，对应SAP BOM Usage）
+   * BOM类型/用途（字典 logistics_bom_type；0=标准，1=工程，2=制造，3=成本，4=销售）
    */
   bomType?: number;
 
@@ -204,7 +199,7 @@ export interface BillOfMaterialQuery extends TaktPagedQuery {
   expiryDateEnd?: string;
 
   /**
-   * 父物料单位
+   * 父物料单位（字典 logistics_unit_of_measure_code）
    */
   parentMaterialUnit?: string;
 
@@ -212,11 +207,6 @@ export interface BillOfMaterialQuery extends TaktPagedQuery {
    * 基本数量（BOM基数，对应SAP Base quantity）
    */
   parentMaterialQuantity?: number;
-
-  /**
-   * BOM状态（0=草稿，1=已发布，2=已停用）
-   */
-  bomStatus?: number;
 
   /**
    * BOM描述
@@ -227,6 +217,11 @@ export interface BillOfMaterialQuery extends TaktPagedQuery {
    * 排序号（越小越靠前）
    */
   sortOrder?: number;
+
+  /**
+   * BOM状态（字典 logistics_bom_status；0=草稿，1=已发布，2=已停用）
+   */
+  bomStatus?: number;
 
   /**
    * 创建时间（范围查询-开始）
@@ -273,7 +268,7 @@ export interface BillOfMaterialCreate {
   companyDefaultCulture: string;
 
   /**
-   * 工厂代码
+   * 工厂代码（选项 TaktPlants/options，DictValue=PlantCode）
    */
   plantCode: string;
 
@@ -288,7 +283,7 @@ export interface BillOfMaterialCreate {
   bomName: string;
 
   /**
-   * 父物料ID（成品/半成品，关联工厂物料主数据，序列化为string以避免Javascript精度问题）
+   * 父物料ID（关联工厂物料 TaktMaterialPlant.Id，选项 TaktMaterialPlants/options）
    */
   parentMaterialId: string;
 
@@ -308,7 +303,7 @@ export interface BillOfMaterialCreate {
   bomVersion: string;
 
   /**
-   * BOM类型/用途（0=标准BOM，1=工程BOM，2=制造BOM，3=成本BOM，4=销售BOM，对应SAP BOM Usage）
+   * BOM类型/用途（字典 logistics_bom_type；0=标准，1=工程，2=制造，3=成本，4=销售）
    */
   bomType: number;
 
@@ -328,7 +323,7 @@ export interface BillOfMaterialCreate {
   expiryDate?: string;
 
   /**
-   * 父物料单位
+   * 父物料单位（字典 logistics_unit_of_measure_code）
    */
   parentMaterialUnit: string;
 
@@ -338,24 +333,19 @@ export interface BillOfMaterialCreate {
   parentMaterialQuantity: number;
 
   /**
-   * BOM状态（0=草稿，1=已发布，2=已停用）
-   */
-  bomStatus: number;
-
-  /**
    * BOM描述
    */
   bomDescription?: string;
 
   /**
-   * BOM组成件明细（扁平单层；多层通过子件物料关联其BOM头递归展开）（子表，级联保存）
+   * BOM状态（字典 logistics_bom_status；0=草稿，1=已发布，2=已停用）
    */
-  items?: BillOfMaterialItemCreate[];
+  bomStatus: number;
 
   /**
-   * BOM变更记录列表（外键在子表 TaktBillOfMaterialChangeLog.BillOfMaterialId）（子表，级联保存）
+   * BOM组成件明细（扁平单层；多层通过子件物料关联其BOM头递归展开）（子表，级联保存）
    */
-  changeLogs?: BillOfMaterialChangeLogCreate[];
+  items?: BillOfMaterialItemUpdate[];
 
   /**
    * 扩展字段JSON
@@ -397,7 +387,7 @@ export interface BillOfMaterialStatus {
   billOfMaterialId: string;
 
   /**
-   * BOM状态（0=草稿，1=已发布，2=已停用）
+   * BOM状态（字典 logistics_bom_status；0=草稿，1=已发布，2=已停用）
    */
   bomStatus: number;
 
@@ -440,7 +430,7 @@ export interface BillOfMaterialTemplate {
   companyCode?: string;
 
   /**
-   * 工厂代码
+   * 工厂代码（选项 TaktPlants/options，DictValue=PlantCode）
    */
   plantCode?: string;
 
@@ -455,7 +445,7 @@ export interface BillOfMaterialTemplate {
   bomName?: string;
 
   /**
-   * 父物料ID（成品/半成品，关联工厂物料主数据，序列化为string以避免Javascript精度问题）
+   * 父物料ID（关联工厂物料 TaktMaterialPlant.Id，选项 TaktMaterialPlants/options）
    */
   parentMaterialId?: string;
 
@@ -475,7 +465,7 @@ export interface BillOfMaterialTemplate {
   bomVersion?: string;
 
   /**
-   * BOM类型/用途（0=标准BOM，1=工程BOM，2=制造BOM，3=成本BOM，4=销售BOM，对应SAP BOM Usage）
+   * BOM类型/用途（字典 logistics_bom_type；0=标准，1=工程，2=制造，3=成本，4=销售）
    */
   bomType?: number;
 
@@ -495,7 +485,7 @@ export interface BillOfMaterialTemplate {
   expiryDate?: string;
 
   /**
-   * 父物料单位
+   * 父物料单位（字典 logistics_unit_of_measure_code）
    */
   parentMaterialUnit?: string;
 
@@ -505,24 +495,19 @@ export interface BillOfMaterialTemplate {
   parentMaterialQuantity?: number;
 
   /**
-   * BOM状态（0=草稿，1=已发布，2=已停用）
-   */
-  bomStatus?: number;
-
-  /**
    * BOM描述
    */
   bomDescription?: string;
 
   /**
+   * BOM状态（字典 logistics_bom_status；0=草稿，1=已发布，2=已停用）
+   */
+  bomStatus?: number;
+
+  /**
    * BOM组成件明细（扁平单层；多层通过子件物料关联其BOM头递归展开）（子表，级联保存）
    */
   items?: BillOfMaterialItemCreate[];
-
-  /**
-   * BOM变更记录列表（外键在子表 TaktBillOfMaterialChangeLog.BillOfMaterialId）（子表，级联保存）
-   */
-  changeLogs?: BillOfMaterialChangeLogCreate[];
 
   /**
    * 扩展字段JSON
@@ -559,7 +544,7 @@ export interface BillOfMaterialImport {
   companyDefaultCulture?: string;
 
   /**
-   * 工厂代码
+   * 工厂代码（选项 TaktPlants/options，DictValue=PlantCode）
    */
   plantCode?: string;
 
@@ -574,7 +559,7 @@ export interface BillOfMaterialImport {
   bomName?: string;
 
   /**
-   * 父物料ID（成品/半成品，关联工厂物料主数据，序列化为string以避免Javascript精度问题）
+   * 父物料ID（关联工厂物料 TaktMaterialPlant.Id，选项 TaktMaterialPlants/options）
    */
   parentMaterialId?: string;
 
@@ -594,7 +579,7 @@ export interface BillOfMaterialImport {
   bomVersion?: string;
 
   /**
-   * BOM类型/用途（0=标准BOM，1=工程BOM，2=制造BOM，3=成本BOM，4=销售BOM，对应SAP BOM Usage）
+   * BOM类型/用途（字典 logistics_bom_type；0=标准，1=工程，2=制造，3=成本，4=销售）
    */
   bomType?: number;
 
@@ -614,7 +599,7 @@ export interface BillOfMaterialImport {
   expiryDate?: string;
 
   /**
-   * 父物料单位
+   * 父物料单位（字典 logistics_unit_of_measure_code）
    */
   parentMaterialUnit?: string;
 
@@ -624,24 +609,19 @@ export interface BillOfMaterialImport {
   parentMaterialQuantity?: number;
 
   /**
-   * BOM状态（0=草稿，1=已发布，2=已停用）
-   */
-  bomStatus?: number;
-
-  /**
    * BOM描述
    */
   bomDescription?: string;
 
   /**
+   * BOM状态（字典 logistics_bom_status；0=草稿，1=已发布，2=已停用）
+   */
+  bomStatus?: number;
+
+  /**
    * BOM组成件明细（扁平单层；多层通过子件物料关联其BOM头递归展开）（子表，级联保存）
    */
   items?: BillOfMaterialItemCreate[];
-
-  /**
-   * BOM变更记录列表（外键在子表 TaktBillOfMaterialChangeLog.BillOfMaterialId）（子表，级联保存）
-   */
-  changeLogs?: BillOfMaterialChangeLogCreate[];
 
   /**
    * 扩展字段JSON
@@ -673,7 +653,7 @@ export interface BillOfMaterialExport {
   companyCode: string;
 
   /**
-   * 工厂代码
+   * 工厂代码（选项 TaktPlants/options，DictValue=PlantCode）
    */
   plantCode: string;
 
@@ -688,7 +668,7 @@ export interface BillOfMaterialExport {
   bomName: string;
 
   /**
-   * 父物料ID（成品/半成品，关联工厂物料主数据，序列化为string以避免Javascript精度问题）
+   * 父物料ID（关联工厂物料 TaktMaterialPlant.Id，选项 TaktMaterialPlants/options）
    */
   parentMaterialId: string;
 
@@ -708,7 +688,7 @@ export interface BillOfMaterialExport {
   bomVersion: string;
 
   /**
-   * BOM类型/用途（0=标准BOM，1=工程BOM，2=制造BOM，3=成本BOM，4=销售BOM，对应SAP BOM Usage）
+   * BOM类型/用途（字典 logistics_bom_type；0=标准，1=工程，2=制造，3=成本，4=销售）
    */
   bomType: number;
 
@@ -728,7 +708,7 @@ export interface BillOfMaterialExport {
   expiryDate?: string;
 
   /**
-   * 父物料单位
+   * 父物料单位（字典 logistics_unit_of_measure_code）
    */
   parentMaterialUnit: string;
 
@@ -736,11 +716,6 @@ export interface BillOfMaterialExport {
    * 基本数量（BOM基数，对应SAP Base quantity）
    */
   parentMaterialQuantity: number;
-
-  /**
-   * BOM状态（0=草稿，1=已发布，2=已停用）
-   */
-  bomStatus: number;
 
   /**
    * BOM描述
@@ -751,6 +726,11 @@ export interface BillOfMaterialExport {
    * 排序号（越小越靠前）
    */
   sortOrder: number;
+
+  /**
+   * BOM状态（字典 logistics_bom_status；0=草稿，1=已发布，2=已停用）
+   */
+  bomStatus: number;
 
   /**
    * 扩展字段JSON

@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Application.Dtos.Logistics.Procurement
 // 文件名称：TaktPurchaseRequestDtos.cs
-// 创建时间：2026-06-24
+// 创建时间：2026-07-09
 // 创建人：Takt365(Auto Generated)
 // 功能描述：PurchaseRequest 模块 DTO（由 generate-dtos-from-entity.cjs 根据 TaktPurchaseRequest 生成，请按需审阅）
 // 
@@ -36,7 +36,7 @@ public class TaktPurchaseRequestDto : TaktApprovalDtoBase
     public long PurchaseRequestId { get; set; }
 
     /// <summary>
-    /// 工厂代码（不可空）
+    /// 工厂代码（选项 TaktPlants/options，DictValue=PlantCode）
     /// </summary>
     public string PlantCode { get; set; } = string.Empty;
 
@@ -46,18 +46,44 @@ public class TaktPurchaseRequestDto : TaktApprovalDtoBase
     public string PurchaseRequestCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 来源会签单 ID（采购链路自动生成时写入）
+    /// 来源采购询价 ID（关联 TaktPurchaseInquiry.Id，选项 TaktPurchaseInquirys/options）
+    /// </summary>
+    [JsonConverter(typeof(ValueToStringConverter))]
+    public long? PurchaseInquiryId { get; set; }
+
+    /// <summary>
+    /// 来源采购询价 名称（填充字段）
+    /// </summary>
+    public string? PurchaseInquiryName { get; set; }
+
+    /// <summary>
+    /// 来源采购询价编码（冗余）
+    /// </summary>
+    public string? PurchaseInquiryCode { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 采购链路方案（字典 logistics_procurement_chain_scheme；1=方案一，2=方案二）
+    /// </summary>
+    public int ChainScheme { get; set; } = 0;
+
+    /// <summary>
+    /// PO 生成决策（方案一：null=待决策，1=生成 PO，0=暂不生成 PO）
+    /// </summary>
+    public int? PoDecision { get; set; }
+
+    /// <summary>
+    /// PR 会签单 ID（关联 TaktCountersign.Id，选项 TaktCountersigns/options）
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
     public long? CountersignId { get; set; }
 
     /// <summary>
-    /// 来源会签单 名称（填充字段）
+    /// PR 会签单 名称（填充字段）
     /// </summary>
     public string? CountersignName { get; set; }
 
     /// <summary>
-    /// 来源会签编号（冗余）
+    /// PR 会签编号（冗余）
     /// </summary>
     public string? CountersignCode { get; set; } = string.Empty;
 
@@ -72,13 +98,13 @@ public class TaktPurchaseRequestDto : TaktApprovalDtoBase
     public DateTime? RequiredArrivalDate { get; set; }
 
     /// <summary>
-    /// 申请人员工ID（关联 TaktEmployee，序列化为 string 以避免 Javascript 精度问题）
+    /// 申请人员工 ID（关联 TaktEmployee.Id，选项 TaktEmployees/options）
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
     public long? RequestId { get; set; }
 
     /// <summary>
-    /// 申请人员工名称（填充字段）
+    /// 申请人员工 名称（填充字段）
     /// </summary>
     public string? RequestName { get; set; }
 
@@ -113,7 +139,7 @@ public class TaktPurchaseRequestDto : TaktApprovalDtoBase
     public string? RequestReason { get; set; } = string.Empty;
 
     /// <summary>
-    /// 申请状态（1=启用，0=禁用）
+    /// 申请状态（字典 sys_approval_status；与 ApprovalStatus 取值一致）
     /// </summary>
     public int RequestStatus { get; set; } = 0;
 
@@ -127,12 +153,6 @@ public class TaktPurchaseRequestDto : TaktApprovalDtoBase
     /// （子表：TaktPurchaseRequestItem）
     /// </summary>
     public List<TaktPurchaseRequestItemDto>? Items { get; set; }
-
-    /// <summary>
-    /// 采购申请变更记录列表（外键在子表 TaktPurchaseRequestChangeLog.RequestId）
-    /// （子表：TaktPurchaseRequestChangeLog）
-    /// </summary>
-    public List<TaktPurchaseRequestChangeLogDto>? ChangeLogs { get; set; }
 
 }
 
@@ -157,7 +177,7 @@ public class TaktPurchaseRequestQueryDto : TaktPagedQuery
     public string? CompanyCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 工厂代码（不可空）
+    /// 工厂代码（选项 TaktPlants/options，DictValue=PlantCode）
     /// </summary>
     public string? PlantCode { get; set; } = string.Empty;
 
@@ -167,13 +187,34 @@ public class TaktPurchaseRequestQueryDto : TaktPagedQuery
     public string? PurchaseRequestCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 来源会签单 ID（采购链路自动生成时写入）
+    /// 来源采购询价 ID（关联 TaktPurchaseInquiry.Id，选项 TaktPurchaseInquirys/options）
+    /// </summary>
+    [JsonConverter(typeof(ValueToStringConverter))]
+    public long? PurchaseInquiryId { get; set; }
+
+    /// <summary>
+    /// 来源采购询价编码（冗余）
+    /// </summary>
+    public string? PurchaseInquiryCode { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 采购链路方案（字典 logistics_procurement_chain_scheme；1=方案一，2=方案二）
+    /// </summary>
+    public int? ChainScheme { get; set; }
+
+    /// <summary>
+    /// PO 生成决策（方案一：null=待决策，1=生成 PO，0=暂不生成 PO）
+    /// </summary>
+    public int? PoDecision { get; set; }
+
+    /// <summary>
+    /// PR 会签单 ID（关联 TaktCountersign.Id，选项 TaktCountersigns/options）
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
     public long? CountersignId { get; set; }
 
     /// <summary>
-    /// 来源会签编号（冗余）
+    /// PR 会签编号（冗余）
     /// </summary>
     public string? CountersignCode { get; set; } = string.Empty;
 
@@ -198,7 +239,7 @@ public class TaktPurchaseRequestQueryDto : TaktPagedQuery
     public DateTime? RequiredArrivalDateEnd { get; set; }
 
     /// <summary>
-    /// 申请人员工ID（关联 TaktEmployee，序列化为 string 以避免 Javascript 精度问题）
+    /// 申请人员工 ID（关联 TaktEmployee.Id，选项 TaktEmployees/options）
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
     public long? RequestId { get; set; }
@@ -234,7 +275,7 @@ public class TaktPurchaseRequestQueryDto : TaktPagedQuery
     public string? RequestReason { get; set; } = string.Empty;
 
     /// <summary>
-    /// 申请状态（1=启用，0=禁用）
+    /// 申请状态（字典 sys_approval_status；与 ApprovalStatus 取值一致）
     /// </summary>
     public int? RequestStatus { get; set; }
 
@@ -332,9 +373,9 @@ public class TaktPurchaseRequestCreateDto
     public string CompanyDefaultCulture { get; set; } = string.Empty;
 
     /// <summary>
-    /// 工厂代码（不可空）
+    /// 工厂代码（选项 TaktPlants/options，DictValue=PlantCode）
     /// </summary>
-    [Required(ErrorMessage = "工厂代码（不可空）不能为空")]
+    [Required(ErrorMessage = "工厂代码（选项 TaktPlants/options，DictValue=PlantCode）不能为空")]
     public string PlantCode { get; set; } = string.Empty;
 
     /// <summary>
@@ -344,13 +385,34 @@ public class TaktPurchaseRequestCreateDto
     public string PurchaseRequestCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 来源会签单 ID（采购链路自动生成时写入）
+    /// 来源采购询价 ID（关联 TaktPurchaseInquiry.Id，选项 TaktPurchaseInquirys/options）
+    /// </summary>
+    [JsonConverter(typeof(ValueToStringConverter))]
+    public long? PurchaseInquiryId { get; set; }
+
+    /// <summary>
+    /// 来源采购询价编码（冗余）
+    /// </summary>
+    public string? PurchaseInquiryCode { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 采购链路方案（字典 logistics_procurement_chain_scheme；1=方案一，2=方案二）
+    /// </summary>
+    public int ChainScheme { get; set; } = 0;
+
+    /// <summary>
+    /// PO 生成决策（方案一：null=待决策，1=生成 PO，0=暂不生成 PO）
+    /// </summary>
+    public int? PoDecision { get; set; }
+
+    /// <summary>
+    /// PR 会签单 ID（关联 TaktCountersign.Id，选项 TaktCountersigns/options）
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
     public long? CountersignId { get; set; }
 
     /// <summary>
-    /// 来源会签编号（冗余）
+    /// PR 会签编号（冗余）
     /// </summary>
     public string? CountersignCode { get; set; } = string.Empty;
 
@@ -365,7 +427,7 @@ public class TaktPurchaseRequestCreateDto
     public DateTime? RequiredArrivalDate { get; set; }
 
     /// <summary>
-    /// 申请人员工ID（关联 TaktEmployee，序列化为 string 以避免 Javascript 精度问题）
+    /// 申请人员工 ID（关联 TaktEmployee.Id，选项 TaktEmployees/options）
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
     public long? RequestId { get; set; }
@@ -402,7 +464,7 @@ public class TaktPurchaseRequestCreateDto
     public string? RequestReason { get; set; } = string.Empty;
 
     /// <summary>
-    /// 申请状态（1=启用，0=禁用）
+    /// 申请状态（字典 sys_approval_status；与 ApprovalStatus 取值一致）
     /// </summary>
     public int RequestStatus { get; set; } = 0;
 
@@ -414,12 +476,7 @@ public class TaktPurchaseRequestCreateDto
     /// <summary>
     /// 采购申请明细列表（主子表关系，一个申请可以有多个明细）（子表，级联保存）
     /// </summary>
-    public List<TaktPurchaseRequestItemCreateDto>? Items { get; set; }
-
-    /// <summary>
-    /// 采购申请变更记录列表（外键在子表 TaktPurchaseRequestChangeLog.RequestId）（子表，级联保存）
-    /// </summary>
-    public List<TaktPurchaseRequestChangeLogCreateDto>? ChangeLogs { get; set; }
+    public List<TaktPurchaseRequestItemUpdateDto>? Items { get; set; }
 
     /// <summary>
     /// 扩展字段JSON
@@ -471,9 +528,9 @@ public class TaktPurchaseRequestStatusDto
     public long PurchaseRequestId { get; set; }
 
     /// <summary>
-    /// 申请状态（1=启用，0=禁用）
+    /// 申请状态（字典 sys_approval_status；与 ApprovalStatus 取值一致）
     /// </summary>
-    [Required(ErrorMessage = "申请状态（1=启用，0=禁用）不能为空")]
+    [Required(ErrorMessage = "申请状态（字典 sys_approval_status；与 ApprovalStatus 取值一致）不能为空")]
     public int RequestStatus { get; set; } = 0;
 }
 
@@ -497,7 +554,7 @@ public class TaktPurchaseRequestTemplateDto
     public string? CompanyCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 工厂代码（不可空）
+    /// 工厂代码（选项 TaktPlants/options，DictValue=PlantCode）
     /// </summary>
     public string? PlantCode { get; set; } = string.Empty;
 
@@ -507,13 +564,34 @@ public class TaktPurchaseRequestTemplateDto
     public string? PurchaseRequestCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 来源会签单 ID（采购链路自动生成时写入）
+    /// 来源采购询价 ID（关联 TaktPurchaseInquiry.Id，选项 TaktPurchaseInquirys/options）
+    /// </summary>
+    [JsonConverter(typeof(ValueToStringConverter))]
+    public long? PurchaseInquiryId { get; set; }
+
+    /// <summary>
+    /// 来源采购询价编码（冗余）
+    /// </summary>
+    public string? PurchaseInquiryCode { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 采购链路方案（字典 logistics_procurement_chain_scheme；1=方案一，2=方案二）
+    /// </summary>
+    public int? ChainScheme { get; set; }
+
+    /// <summary>
+    /// PO 生成决策（方案一：null=待决策，1=生成 PO，0=暂不生成 PO）
+    /// </summary>
+    public int? PoDecision { get; set; }
+
+    /// <summary>
+    /// PR 会签单 ID（关联 TaktCountersign.Id，选项 TaktCountersigns/options）
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
     public long? CountersignId { get; set; }
 
     /// <summary>
-    /// 来源会签编号（冗余）
+    /// PR 会签编号（冗余）
     /// </summary>
     public string? CountersignCode { get; set; } = string.Empty;
 
@@ -528,7 +606,7 @@ public class TaktPurchaseRequestTemplateDto
     public DateTime? RequiredArrivalDate { get; set; }
 
     /// <summary>
-    /// 申请人员工ID（关联 TaktEmployee，序列化为 string 以避免 Javascript 精度问题）
+    /// 申请人员工 ID（关联 TaktEmployee.Id，选项 TaktEmployees/options）
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
     public long? RequestId { get; set; }
@@ -564,7 +642,7 @@ public class TaktPurchaseRequestTemplateDto
     public string? RequestReason { get; set; } = string.Empty;
 
     /// <summary>
-    /// 申请状态（1=启用，0=禁用）
+    /// 申请状态（字典 sys_approval_status；与 ApprovalStatus 取值一致）
     /// </summary>
     public int? RequestStatus { get; set; }
 
@@ -577,11 +655,6 @@ public class TaktPurchaseRequestTemplateDto
     /// 采购申请明细列表（主子表关系，一个申请可以有多个明细）（子表，级联保存）
     /// </summary>
     public List<TaktPurchaseRequestItemCreateDto>? Items { get; set; }
-
-    /// <summary>
-    /// 采购申请变更记录列表（外键在子表 TaktPurchaseRequestChangeLog.RequestId）（子表，级联保存）
-    /// </summary>
-    public List<TaktPurchaseRequestChangeLogCreateDto>? ChangeLogs { get; set; }
 
     /// <summary>
     /// 扩展字段JSON
@@ -616,7 +689,7 @@ public class TaktPurchaseRequestImportDto
     public string? CompanyDefaultCulture { get; set; } = string.Empty;
 
     /// <summary>
-    /// 工厂代码（不可空）
+    /// 工厂代码（选项 TaktPlants/options，DictValue=PlantCode）
     /// </summary>
     public string? PlantCode { get; set; } = string.Empty;
 
@@ -626,13 +699,34 @@ public class TaktPurchaseRequestImportDto
     public string? PurchaseRequestCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 来源会签单 ID（采购链路自动生成时写入）
+    /// 来源采购询价 ID（关联 TaktPurchaseInquiry.Id，选项 TaktPurchaseInquirys/options）
+    /// </summary>
+    [JsonConverter(typeof(ValueToStringConverter))]
+    public long? PurchaseInquiryId { get; set; }
+
+    /// <summary>
+    /// 来源采购询价编码（冗余）
+    /// </summary>
+    public string? PurchaseInquiryCode { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 采购链路方案（字典 logistics_procurement_chain_scheme；1=方案一，2=方案二）
+    /// </summary>
+    public int? ChainScheme { get; set; }
+
+    /// <summary>
+    /// PO 生成决策（方案一：null=待决策，1=生成 PO，0=暂不生成 PO）
+    /// </summary>
+    public int? PoDecision { get; set; }
+
+    /// <summary>
+    /// PR 会签单 ID（关联 TaktCountersign.Id，选项 TaktCountersigns/options）
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
     public long? CountersignId { get; set; }
 
     /// <summary>
-    /// 来源会签编号（冗余）
+    /// PR 会签编号（冗余）
     /// </summary>
     public string? CountersignCode { get; set; } = string.Empty;
 
@@ -647,7 +741,7 @@ public class TaktPurchaseRequestImportDto
     public DateTime? RequiredArrivalDate { get; set; }
 
     /// <summary>
-    /// 申请人员工ID（关联 TaktEmployee，序列化为 string 以避免 Javascript 精度问题）
+    /// 申请人员工 ID（关联 TaktEmployee.Id，选项 TaktEmployees/options）
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
     public long? RequestId { get; set; }
@@ -683,7 +777,7 @@ public class TaktPurchaseRequestImportDto
     public string? RequestReason { get; set; } = string.Empty;
 
     /// <summary>
-    /// 申请状态（1=启用，0=禁用）
+    /// 申请状态（字典 sys_approval_status；与 ApprovalStatus 取值一致）
     /// </summary>
     public int? RequestStatus { get; set; }
 
@@ -696,11 +790,6 @@ public class TaktPurchaseRequestImportDto
     /// 采购申请明细列表（主子表关系，一个申请可以有多个明细）（子表，级联保存）
     /// </summary>
     public List<TaktPurchaseRequestItemCreateDto>? Items { get; set; }
-
-    /// <summary>
-    /// 采购申请变更记录列表（外键在子表 TaktPurchaseRequestChangeLog.RequestId）（子表，级联保存）
-    /// </summary>
-    public List<TaktPurchaseRequestChangeLogCreateDto>? ChangeLogs { get; set; }
 
     /// <summary>
     /// 扩展字段JSON
@@ -731,7 +820,7 @@ public class TaktPurchaseRequestExportDto
     public long PurchaseRequestId { get; set; }
 
     /// <summary>
-    /// 工厂代码（不可空）
+    /// 工厂代码（选项 TaktPlants/options，DictValue=PlantCode）
     /// </summary>
     public string PlantCode { get; set; } = string.Empty;
 
@@ -741,13 +830,34 @@ public class TaktPurchaseRequestExportDto
     public string PurchaseRequestCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 来源会签单 ID（采购链路自动生成时写入）
+    /// 来源采购询价 ID（关联 TaktPurchaseInquiry.Id，选项 TaktPurchaseInquirys/options）
+    /// </summary>
+    [JsonConverter(typeof(ValueToStringConverter))]
+    public long? PurchaseInquiryId { get; set; }
+
+    /// <summary>
+    /// 来源采购询价编码（冗余）
+    /// </summary>
+    public string? PurchaseInquiryCode { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 采购链路方案（字典 logistics_procurement_chain_scheme；1=方案一，2=方案二）
+    /// </summary>
+    public int ChainScheme { get; set; } = 0;
+
+    /// <summary>
+    /// PO 生成决策（方案一：null=待决策，1=生成 PO，0=暂不生成 PO）
+    /// </summary>
+    public int? PoDecision { get; set; }
+
+    /// <summary>
+    /// PR 会签单 ID（关联 TaktCountersign.Id，选项 TaktCountersigns/options）
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
     public long? CountersignId { get; set; }
 
     /// <summary>
-    /// 来源会签编号（冗余）
+    /// PR 会签编号（冗余）
     /// </summary>
     public string? CountersignCode { get; set; } = string.Empty;
 
@@ -762,7 +872,7 @@ public class TaktPurchaseRequestExportDto
     public DateTime? RequiredArrivalDate { get; set; }
 
     /// <summary>
-    /// 申请人员工ID（关联 TaktEmployee，序列化为 string 以避免 Javascript 精度问题）
+    /// 申请人员工 ID（关联 TaktEmployee.Id，选项 TaktEmployees/options）
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
     public long? RequestId { get; set; }
@@ -798,7 +908,7 @@ public class TaktPurchaseRequestExportDto
     public string? RequestReason { get; set; } = string.Empty;
 
     /// <summary>
-    /// 申请状态（1=启用，0=禁用）
+    /// 申请状态（字典 sys_approval_status；与 ApprovalStatus 取值一致）
     /// </summary>
     public int RequestStatus { get; set; } = 0;
 

@@ -63,6 +63,7 @@ import type { TableColumnsType } from 'ant-design-vue'
 import {
   mergeDefaultColumns,
   normalizeUserTableColumns,
+  readColumnSettingLabel,
   resolveDefaultVisibleColumnKeys,
   type TaktEntityScope,
   type TaktTableLayoutMode,
@@ -77,7 +78,7 @@ const { t } = useI18n()
 /** 与 Table `columns` 单项类型一致（title 可为 ColumnTitle，不可收窄为 string） */
 type ColumnItem = TableColumnsType[number]
 
-/** 列设置里仅展示 string/number 标题；VNode/函数标题退回 key/dataIndex */
+/** 列设置里仅展示 string/number 标题；VNode/函数标题须由 taktColumnSettingLabel 提供文案 */
 function columnTitlePrimitive(column: ColumnItem): string | number | undefined {
   const v = column.title
   if (v == null) return undefined
@@ -193,8 +194,12 @@ const getColumnKey = (column: ColumnItem): string => {
   return String(key)
 }
 
-// 获取列标题
+// 获取列标题（列设置抽屉用；函数/VNode 表头依赖 taktColumnSettingLabel）
 const getColumnTitle = (column: ColumnItem): string => {
+  const settingLabel = readColumnSettingLabel(column)
+  if (settingLabel) {
+    return settingLabel
+  }
   const fromTitle = columnTitlePrimitive(column)
   if (fromTitle != null && fromTitle !== '') return String(fromTitle)
   return String(column.key ?? columnDataIndex(column) ?? '')

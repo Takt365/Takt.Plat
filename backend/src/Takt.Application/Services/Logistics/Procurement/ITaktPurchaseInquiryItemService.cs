@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Application.Services.Logistics.Procurement
 // 文件名称：ITaktPurchaseInquiryItemService.cs
-// 创建时间：2026-06-30
+// 创建时间：2026-07-09
 // 创建人：Takt365(Cursor AI)
 // 功能描述：采购询价明细应用服务接口
 // 
@@ -69,6 +69,13 @@ public interface ITaktPurchaseInquiryItemService
     /// <param name="ids">ID列表</param>
     /// <returns>任务</returns>
     Task DeletePurchaseInquiryItemBatchAsync(IEnumerable<long> ids);
+
+    /// <summary>
+    /// 更新采购询价明细作废状态
+    /// </summary>
+    /// <param name="dto">作废DTO</param>
+    /// <returns>DTO</returns>
+    Task<TaktPurchaseInquiryItemDto> UpdatePurchaseInquiryItemObsoleteAsync(TaktPurchaseInquiryItemObsoleteDto dto);
 
     /// <summary>
     /// 获取导入模板

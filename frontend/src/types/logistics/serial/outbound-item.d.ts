@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：frontend/src/types/logistics/serial
 // 文件名称：outbound-item.d.ts
-// 创建时间：2026-06-23
+// 创建时间：2026-07-09
 // 创建人：Takt365(Auto Generated)
 // 功能描述：logistics/serial 模块类型定义（自动生成；类型名去 Takt 前缀与末尾 Dto，如 TaktCompanyDto → Company）
 // 
@@ -29,12 +29,12 @@ export interface SerialOutboundItem extends CompanyDtoBase {
   serialOutboundItemId: string;
 
   /**
-   * 出库ID（主子表关系，序列化为string以避免Javascript精度问题）
+   * 出库主表 ID（关联 TaktSerialOutbound.Id，选项 TaktSerialOutbounds/options）
    */
   outboundId: string;
 
   /**
-   * 出库名称（填充字段）
+   * 出库主表 名称（填充字段）
    */
   outboundName?: string;
 
@@ -49,34 +49,34 @@ export interface SerialOutboundItem extends CompanyDtoBase {
   lineNumber: number;
 
   /**
-   * 出库序列号（唯一索引）
+   * 出库序列号（租户+公司内唯一）
    */
   outboundSerialNo: string;
 
   /**
-   * 关联入库ID(序列化为string以避免Javascript精度问题)
+   * 关联入库主表 ID（关联 TaktSerialInbound.Id，选项 TaktSerialInbounds/options）
    */
   referenceInboundId: string;
 
   /**
-   * 关联入库名称（填充字段）
+   * 关联入库主表 名称（填充字段）
    */
   referenceInboundName?: string;
 
   /**
-   * 关联入库单号
+   * 关联入库单号（选项 TaktSerialInbounds/options，DictValue=InboundNo）
    */
   referenceInboundNo: string;
 
   /**
-   * 关联入库行号
+   * 关联入库行号（对应 TaktSerialInboundItem.LineNumber）
    */
   referenceInboundLineNumber: number;
 
   /**
-   * 出库时间
+   * 是否作废（字典 sys_yes_no_type，0=否 1=是；编辑移除子行时标记作废）
    */
-  outboundTime: string;
+  isObsolete: number;
 
   /**
    * 出库主表 （主表：TaktSerialOutbound）
@@ -104,7 +104,7 @@ export interface SerialOutboundItemQuery extends TaktPagedQuery {
   companyCode?: string;
 
   /**
-   * 出库ID（主子表关系，序列化为string以避免Javascript精度问题）
+   * 出库主表 ID（关联 TaktSerialOutbound.Id，选项 TaktSerialOutbounds/options）
    */
   outboundId?: string;
 
@@ -119,34 +119,29 @@ export interface SerialOutboundItemQuery extends TaktPagedQuery {
   lineNumber?: number;
 
   /**
-   * 出库序列号（唯一索引）
+   * 出库序列号（租户+公司内唯一）
    */
   outboundSerialNo?: string;
 
   /**
-   * 关联入库ID(序列化为string以避免Javascript精度问题)
+   * 关联入库主表 ID（关联 TaktSerialInbound.Id，选项 TaktSerialInbounds/options）
    */
   referenceInboundId?: string;
 
   /**
-   * 关联入库单号
+   * 关联入库单号（选项 TaktSerialInbounds/options，DictValue=InboundNo）
    */
   referenceInboundNo?: string;
 
   /**
-   * 关联入库行号
+   * 关联入库行号（对应 TaktSerialInboundItem.LineNumber）
    */
   referenceInboundLineNumber?: number;
 
   /**
-   * 出库时间（范围查询-开始）
+   * 是否作废（字典 sys_yes_no_type，0=否 1=是；编辑移除子行时标记作废）
    */
-  outboundTimeStart?: string;
-
-  /**
-   * 出库时间（范围查询-结束）
-   */
-  outboundTimeEnd?: string;
+  isObsolete?: number;
 
   /**
    * 创建时间（范围查询-开始）
@@ -193,7 +188,7 @@ export interface SerialOutboundItemCreate {
   companyDefaultCulture: string;
 
   /**
-   * 出库ID（主子表关系，序列化为string以避免Javascript精度问题）
+   * 出库主表 ID（关联 TaktSerialOutbound.Id，选项 TaktSerialOutbounds/options）
    */
   outboundId: string;
 
@@ -208,29 +203,29 @@ export interface SerialOutboundItemCreate {
   lineNumber: number;
 
   /**
-   * 出库序列号（唯一索引）
+   * 出库序列号（租户+公司内唯一）
    */
   outboundSerialNo: string;
 
   /**
-   * 关联入库ID(序列化为string以避免Javascript精度问题)
+   * 关联入库主表 ID（关联 TaktSerialInbound.Id，选项 TaktSerialInbounds/options）
    */
   referenceInboundId: string;
 
   /**
-   * 关联入库单号
+   * 关联入库单号（选项 TaktSerialInbounds/options，DictValue=InboundNo）
    */
   referenceInboundNo: string;
 
   /**
-   * 关联入库行号
+   * 关联入库行号（对应 TaktSerialInboundItem.LineNumber）
    */
   referenceInboundLineNumber: number;
 
   /**
-   * 出库时间
+   * 是否作废（字典 sys_yes_no_type，0=否 1=是；编辑移除子行时标记作废）
    */
-  outboundTime: string;
+  isObsolete: number;
 
   /**
    * 扩展字段JSON
@@ -261,6 +256,25 @@ export interface SerialOutboundItemUpdate extends SerialOutboundItemCreate {
 
 
 /**
+ * SerialOutboundItem 作废/撤销作废 DTO
+ * 对应前端 SerialOutboundItemObsolete
+ * @description 对应后端 TaktSerialOutboundItemObsoleteDto
+ */
+export interface SerialOutboundItemObsolete {
+  /**
+   * SerialOutboundItemID
+   */
+  serialOutboundItemId: string;
+
+  /**
+   * 是否作废（字典 sys_yes_no_type，0=否 1=是；编辑移除子行时标记作废）
+   */
+  isObsolete: number;
+
+}
+
+
+/**
  * SerialOutboundItem 导入模板行 DTO
  * 对应前端 SerialOutboundItemTemplate
  * @description 对应后端 TaktSerialOutboundItemTemplateDto
@@ -277,7 +291,7 @@ export interface SerialOutboundItemTemplate {
   companyCode?: string;
 
   /**
-   * 出库ID（主子表关系，序列化为string以避免Javascript精度问题）
+   * 出库主表 ID（关联 TaktSerialOutbound.Id，选项 TaktSerialOutbounds/options）
    */
   outboundId?: string;
 
@@ -292,29 +306,29 @@ export interface SerialOutboundItemTemplate {
   lineNumber?: number;
 
   /**
-   * 出库序列号（唯一索引）
+   * 出库序列号（租户+公司内唯一）
    */
   outboundSerialNo?: string;
 
   /**
-   * 关联入库ID(序列化为string以避免Javascript精度问题)
+   * 关联入库主表 ID（关联 TaktSerialInbound.Id，选项 TaktSerialInbounds/options）
    */
   referenceInboundId?: string;
 
   /**
-   * 关联入库单号
+   * 关联入库单号（选项 TaktSerialInbounds/options，DictValue=InboundNo）
    */
   referenceInboundNo?: string;
 
   /**
-   * 关联入库行号
+   * 关联入库行号（对应 TaktSerialInboundItem.LineNumber）
    */
   referenceInboundLineNumber?: number;
 
   /**
-   * 出库时间
+   * 是否作废（字典 sys_yes_no_type，0=否 1=是；编辑移除子行时标记作废）
    */
-  outboundTime?: string;
+  isObsolete?: number;
 
   /**
    * 扩展字段JSON
@@ -351,7 +365,7 @@ export interface SerialOutboundItemImport {
   companyDefaultCulture?: string;
 
   /**
-   * 出库ID（主子表关系，序列化为string以避免Javascript精度问题）
+   * 出库主表 ID（关联 TaktSerialOutbound.Id，选项 TaktSerialOutbounds/options）
    */
   outboundId?: string;
 
@@ -366,29 +380,29 @@ export interface SerialOutboundItemImport {
   lineNumber?: number;
 
   /**
-   * 出库序列号（唯一索引）
+   * 出库序列号（租户+公司内唯一）
    */
   outboundSerialNo?: string;
 
   /**
-   * 关联入库ID(序列化为string以避免Javascript精度问题)
+   * 关联入库主表 ID（关联 TaktSerialInbound.Id，选项 TaktSerialInbounds/options）
    */
   referenceInboundId?: string;
 
   /**
-   * 关联入库单号
+   * 关联入库单号（选项 TaktSerialInbounds/options，DictValue=InboundNo）
    */
   referenceInboundNo?: string;
 
   /**
-   * 关联入库行号
+   * 关联入库行号（对应 TaktSerialInboundItem.LineNumber）
    */
   referenceInboundLineNumber?: number;
 
   /**
-   * 出库时间
+   * 是否作废（字典 sys_yes_no_type，0=否 1=是；编辑移除子行时标记作废）
    */
-  outboundTime?: string;
+  isObsolete?: number;
 
   /**
    * 扩展字段JSON
@@ -420,7 +434,7 @@ export interface SerialOutboundItemExport {
   companyCode: string;
 
   /**
-   * 出库ID（主子表关系，序列化为string以避免Javascript精度问题）
+   * 出库主表 ID（关联 TaktSerialOutbound.Id，选项 TaktSerialOutbounds/options）
    */
   outboundId: string;
 
@@ -435,29 +449,29 @@ export interface SerialOutboundItemExport {
   lineNumber: number;
 
   /**
-   * 出库序列号（唯一索引）
+   * 出库序列号（租户+公司内唯一）
    */
   outboundSerialNo: string;
 
   /**
-   * 关联入库ID(序列化为string以避免Javascript精度问题)
+   * 关联入库主表 ID（关联 TaktSerialInbound.Id，选项 TaktSerialInbounds/options）
    */
   referenceInboundId: string;
 
   /**
-   * 关联入库单号
+   * 关联入库单号（选项 TaktSerialInbounds/options，DictValue=InboundNo）
    */
   referenceInboundNo: string;
 
   /**
-   * 关联入库行号
+   * 关联入库行号（对应 TaktSerialInboundItem.LineNumber）
    */
   referenceInboundLineNumber: number;
 
   /**
-   * 出库时间
+   * 是否作废（字典 sys_yes_no_type，0=否 1=是；编辑移除子行时标记作废）
    */
-  outboundTime: string;
+  isObsolete: number;
 
   /**
    * 扩展字段JSON

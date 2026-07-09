@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Application.Services.Logistics.Quality.Cost
 // 文件名称：TaktQualityIssueAssyReworkService.cs
-// 创建时间：2026-06-23
+// 创建时间：2026-07-09
 // 创建人：Takt365(Cursor AI)
 // 功能描述：质量问题组装不良改修费用明细应用服务实现
 // 
@@ -118,6 +118,7 @@ public class TaktQualityIssueAssyReworkService : TaktServiceBase, ITaktQualityIs
     public async Task<TaktQualityIssueAssyReworkDto> CreateQualityIssueAssyReworkAsync(TaktQualityIssueAssyReworkCreateDto dto)
     {
         var entity = dto.Adapt<TaktQualityIssueAssyRework>();
+        entity.IsObsolete = 0;
         await StampQualityIssueAssyReworkQualityIssueAsync(entity, dto);
         var isUnique_ix_takt_logistics_quality_issue_assy_rework_line_unique = await _uniqueValidator.IsUniqueAsync(
             _qualityIssueAssyReworkRepository,
@@ -174,11 +175,21 @@ public class TaktQualityIssueAssyReworkService : TaktServiceBase, ITaktQualityIs
     /// <returns>任务</returns>
     public async Task DeleteQualityIssueAssyReworkByIdAsync(long id)
     {
-        var deleted = await _qualityIssueAssyReworkRepository.DeleteAsync(id);
-        if (!deleted)
+        var entity = await _qualityIssueAssyReworkRepository.GetByIdAsync(id);
+        if (entity == null)
         {
             throw new TaktBusinessException("质量问题组装不良改修费用明细不存在或已删除");
         }
+        if (entity.TenantCode != CurrentTenantCode || entity.CompanyCode != CurrentCompanyCode)
+        {
+            throw new TaktBusinessException("质量问题组装不良改修费用明细不存在或已删除");
+        }
+        if (entity.IsObsolete == 1)
+        {
+            throw new TaktBusinessException("质量问题组装不良改修费用明细已作废");
+        }
+        entity.IsObsolete = 1;
+        await _qualityIssueAssyReworkRepository.UpdateAsync(entity);
     }
 
     /// <summary>
@@ -197,6 +208,27 @@ public class TaktQualityIssueAssyReworkService : TaktServiceBase, ITaktQualityIs
         {
             await DeleteQualityIssueAssyReworkByIdAsync(id);
         }
+    }
+
+    /// <summary>
+    /// 更新质量问题组装不良改修费用明细作废状态
+    /// </summary>
+    /// <param name="dto">作废DTO</param>
+    /// <returns>DTO</returns>
+    public async Task<TaktQualityIssueAssyReworkDto> UpdateQualityIssueAssyReworkObsoleteAsync(TaktQualityIssueAssyReworkObsoleteDto dto)
+    {
+        var entity = await _qualityIssueAssyReworkRepository.GetByIdAsync(dto.QualityIssueAssyReworkId);
+        if (entity == null)
+        {
+            throw new TaktBusinessException("质量问题组装不良改修费用明细不存在");
+        }
+        if (entity.TenantCode != CurrentTenantCode || entity.CompanyCode != CurrentCompanyCode)
+        {
+            throw new TaktBusinessException("质量问题组装不良改修费用明细不存在");
+        }
+        entity.IsObsolete = dto.IsObsolete;
+        await _qualityIssueAssyReworkRepository.UpdateAsync(entity);
+        return await GetQualityIssueAssyReworkByIdAsync(dto.QualityIssueAssyReworkId) ?? throw new TaktBusinessException("质量问题组装不良改修费用明细不存在");
     }
 
     /// <summary>
@@ -330,6 +362,15 @@ public class TaktQualityIssueAssyReworkService : TaktServiceBase, ITaktQualityIs
     private static Expression<Func<TaktQualityIssueAssyRework, bool>> QueryExpression(TaktQualityIssueAssyReworkQueryDto? queryDto)
     {
         var exp = Expressionable.Create<TaktQualityIssueAssyRework>();
+
+        if (queryDto?.IsObsolete.HasValue == true)
+        {
+            exp = exp.And(x => x.IsObsolete == queryDto.IsObsolete);
+        }
+        else
+        {
+            exp = exp.And(x => x.IsObsolete == 0);
+        }
 
         if (!string.IsNullOrEmpty(queryDto?.KeyWords))
         {

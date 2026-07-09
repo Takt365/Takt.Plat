@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Application.Services.Logistics.Quality.Cost
 // 文件名称：TaktQualityIncidentItemService.cs
-// 创建时间：2026-06-23
+// 创建时间：2026-07-09
 // 创建人：Takt365(Cursor AI)
 // 功能描述：品质事故明细应用服务实现
 // 
@@ -118,6 +118,7 @@ public class TaktQualityIncidentItemService : TaktServiceBase, ITaktQualityIncid
     public async Task<TaktQualityIncidentItemDto> CreateQualityIncidentItemAsync(TaktQualityIncidentItemCreateDto dto)
     {
         var entity = dto.Adapt<TaktQualityIncidentItem>();
+        entity.IsObsolete = 0;
         await StampQualityIncidentItemQualityIncidentAsync(entity, dto);
         var isUnique_ix_takt_logistics_quality_incident_item_line_number_unique = await _uniqueValidator.IsUniqueAsync(
             _qualityIncidentItemRepository,
@@ -176,11 +177,21 @@ public class TaktQualityIncidentItemService : TaktServiceBase, ITaktQualityIncid
     /// <returns>任务</returns>
     public async Task DeleteQualityIncidentItemByIdAsync(long id)
     {
-        var deleted = await _qualityIncidentItemRepository.DeleteAsync(id);
-        if (!deleted)
+        var entity = await _qualityIncidentItemRepository.GetByIdAsync(id);
+        if (entity == null)
         {
             throw new TaktBusinessException("品质事故明细不存在或已删除");
         }
+        if (entity.TenantCode != CurrentTenantCode || entity.CompanyCode != CurrentCompanyCode)
+        {
+            throw new TaktBusinessException("品质事故明细不存在或已删除");
+        }
+        if (entity.IsObsolete == 1)
+        {
+            throw new TaktBusinessException("品质事故明细已作废");
+        }
+        entity.IsObsolete = 1;
+        await _qualityIncidentItemRepository.UpdateAsync(entity);
     }
 
     /// <summary>
@@ -199,6 +210,27 @@ public class TaktQualityIncidentItemService : TaktServiceBase, ITaktQualityIncid
         {
             await DeleteQualityIncidentItemByIdAsync(id);
         }
+    }
+
+    /// <summary>
+    /// 更新品质事故明细作废状态
+    /// </summary>
+    /// <param name="dto">作废DTO</param>
+    /// <returns>DTO</returns>
+    public async Task<TaktQualityIncidentItemDto> UpdateQualityIncidentItemObsoleteAsync(TaktQualityIncidentItemObsoleteDto dto)
+    {
+        var entity = await _qualityIncidentItemRepository.GetByIdAsync(dto.QualityIncidentItemId);
+        if (entity == null)
+        {
+            throw new TaktBusinessException("品质事故明细不存在");
+        }
+        if (entity.TenantCode != CurrentTenantCode || entity.CompanyCode != CurrentCompanyCode)
+        {
+            throw new TaktBusinessException("品质事故明细不存在");
+        }
+        entity.IsObsolete = dto.IsObsolete;
+        await _qualityIncidentItemRepository.UpdateAsync(entity);
+        return await GetQualityIncidentItemByIdAsync(dto.QualityIncidentItemId) ?? throw new TaktBusinessException("品质事故明细不存在");
     }
 
     /// <summary>
@@ -333,6 +365,15 @@ public class TaktQualityIncidentItemService : TaktServiceBase, ITaktQualityIncid
     private static Expression<Func<TaktQualityIncidentItem, bool>> QueryExpression(TaktQualityIncidentItemQueryDto? queryDto)
     {
         var exp = Expressionable.Create<TaktQualityIncidentItem>();
+
+        if (queryDto?.IsObsolete.HasValue == true)
+        {
+            exp = exp.And(x => x.IsObsolete == queryDto.IsObsolete);
+        }
+        else
+        {
+            exp = exp.And(x => x.IsObsolete == 0);
+        }
 
         if (!string.IsNullOrEmpty(queryDto?.KeyWords))
         {

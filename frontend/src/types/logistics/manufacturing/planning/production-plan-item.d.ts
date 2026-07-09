@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：frontend/src/types/logistics/manufacturing/planning
 // 文件名称：production-plan-item.d.ts
-// 创建时间：2026-06-23
+// 创建时间：2026-07-09
 // 创建人：Takt365(Auto Generated)
 // 功能描述：logistics/manufacturing/planning 模块类型定义（自动生成；类型名去 Takt 前缀与末尾 Dto，如 TaktCompanyDto → Company）
 // 
@@ -69,7 +69,7 @@ export interface ProductionPlanItem extends CompanyDtoBase {
   salesPlanLineNumber?: number;
 
   /**
-   * 物料编码（计划生产物料，关联 TaktMaterialPlant.MaterialCode）
+   * 物料编码（关联 TaktMaterial.MaterialCode，选项 TaktMaterials/options）
    */
   materialCode: string;
 
@@ -84,7 +84,7 @@ export interface ProductionPlanItem extends CompanyDtoBase {
   materialSpecification?: string;
 
   /**
-   * 计划单位
+   * 计划单位（字典 logistics_unit_of_measure_code，DictValue=PC/EA 等；默认 PC）
    */
   planUnit: string;
 
@@ -117,6 +117,11 @@ export interface ProductionPlanItem extends CompanyDtoBase {
    * 预计金额
    */
   estimatedAmount: number;
+
+  /**
+   * 是否作废（字典 sys_yes_no_type，0=否 1=是；编辑移除子行时标记作废）
+   */
+  isObsolete: number;
 
 }
 
@@ -169,7 +174,7 @@ export interface ProductionPlanItemQuery extends TaktPagedQuery {
   salesPlanLineNumber?: number;
 
   /**
-   * 物料编码（计划生产物料，关联 TaktMaterialPlant.MaterialCode）
+   * 物料编码（关联 TaktMaterial.MaterialCode，选项 TaktMaterials/options）
    */
   materialCode?: string;
 
@@ -184,7 +189,7 @@ export interface ProductionPlanItemQuery extends TaktPagedQuery {
   materialSpecification?: string;
 
   /**
-   * 计划单位
+   * 计划单位（字典 logistics_unit_of_measure_code，DictValue=PC/EA 等；默认 PC）
    */
   planUnit?: string;
 
@@ -227,6 +232,11 @@ export interface ProductionPlanItemQuery extends TaktPagedQuery {
    * 预计金额
    */
   estimatedAmount?: number;
+
+  /**
+   * 是否作废（字典 sys_yes_no_type，0=否 1=是；编辑移除子行时标记作废）
+   */
+  isObsolete?: number;
 
   /**
    * 创建时间（范围查询-开始）
@@ -303,7 +313,7 @@ export interface ProductionPlanItemCreate {
   salesPlanLineNumber?: number;
 
   /**
-   * 物料编码（计划生产物料，关联 TaktMaterialPlant.MaterialCode）
+   * 物料编码（关联 TaktMaterial.MaterialCode，选项 TaktMaterials/options）
    */
   materialCode: string;
 
@@ -318,7 +328,7 @@ export interface ProductionPlanItemCreate {
   materialSpecification?: string;
 
   /**
-   * 计划单位
+   * 计划单位（字典 logistics_unit_of_measure_code，DictValue=PC/EA 等；默认 PC）
    */
   planUnit: string;
 
@@ -353,6 +363,11 @@ export interface ProductionPlanItemCreate {
   estimatedAmount: number;
 
   /**
+   * 是否作废（字典 sys_yes_no_type，0=否 1=是；编辑移除子行时标记作废）
+   */
+  isObsolete: number;
+
+  /**
    * 扩展字段JSON
    */
   extField?: string;
@@ -376,6 +391,25 @@ export interface ProductionPlanItemUpdate extends ProductionPlanItemCreate {
    * ProductionPlanItemID（标识要更新的实体）
    */
   productionPlanItemId: string;
+
+}
+
+
+/**
+ * ProductionPlanItem 作废/撤销作废 DTO
+ * 对应前端 ProductionPlanItemObsolete
+ * @description 对应后端 TaktProductionPlanItemObsoleteDto
+ */
+export interface ProductionPlanItemObsolete {
+  /**
+   * ProductionPlanItemID
+   */
+  productionPlanItemId: string;
+
+  /**
+   * 是否作废（字典 sys_yes_no_type，0=否 1=是；编辑移除子行时标记作废）
+   */
+  isObsolete: number;
 
 }
 
@@ -427,7 +461,7 @@ export interface ProductionPlanItemTemplate {
   salesPlanLineNumber?: number;
 
   /**
-   * 物料编码（计划生产物料，关联 TaktMaterialPlant.MaterialCode）
+   * 物料编码（关联 TaktMaterial.MaterialCode，选项 TaktMaterials/options）
    */
   materialCode?: string;
 
@@ -442,7 +476,7 @@ export interface ProductionPlanItemTemplate {
   materialSpecification?: string;
 
   /**
-   * 计划单位
+   * 计划单位（字典 logistics_unit_of_measure_code，DictValue=PC/EA 等；默认 PC）
    */
   planUnit?: string;
 
@@ -475,6 +509,11 @@ export interface ProductionPlanItemTemplate {
    * 预计金额
    */
   estimatedAmount?: number;
+
+  /**
+   * 是否作废（字典 sys_yes_no_type，0=否 1=是；编辑移除子行时标记作废）
+   */
+  isObsolete?: number;
 
   /**
    * 扩展字段JSON
@@ -541,7 +580,7 @@ export interface ProductionPlanItemImport {
   salesPlanLineNumber?: number;
 
   /**
-   * 物料编码（计划生产物料，关联 TaktMaterialPlant.MaterialCode）
+   * 物料编码（关联 TaktMaterial.MaterialCode，选项 TaktMaterials/options）
    */
   materialCode?: string;
 
@@ -556,7 +595,7 @@ export interface ProductionPlanItemImport {
   materialSpecification?: string;
 
   /**
-   * 计划单位
+   * 计划单位（字典 logistics_unit_of_measure_code，DictValue=PC/EA 等；默认 PC）
    */
   planUnit?: string;
 
@@ -589,6 +628,11 @@ export interface ProductionPlanItemImport {
    * 预计金额
    */
   estimatedAmount?: number;
+
+  /**
+   * 是否作废（字典 sys_yes_no_type，0=否 1=是；编辑移除子行时标记作废）
+   */
+  isObsolete?: number;
 
   /**
    * 扩展字段JSON
@@ -650,7 +694,7 @@ export interface ProductionPlanItemExport {
   salesPlanLineNumber?: number;
 
   /**
-   * 物料编码（计划生产物料，关联 TaktMaterialPlant.MaterialCode）
+   * 物料编码（关联 TaktMaterial.MaterialCode，选项 TaktMaterials/options）
    */
   materialCode: string;
 
@@ -665,7 +709,7 @@ export interface ProductionPlanItemExport {
   materialSpecification?: string;
 
   /**
-   * 计划单位
+   * 计划单位（字典 logistics_unit_of_measure_code，DictValue=PC/EA 等；默认 PC）
    */
   planUnit: string;
 
@@ -698,6 +742,11 @@ export interface ProductionPlanItemExport {
    * 预计金额
    */
   estimatedAmount: number;
+
+  /**
+   * 是否作废（字典 sys_yes_no_type，0=否 1=是；编辑移除子行时标记作废）
+   */
+  isObsolete: number;
 
   /**
    * 扩展字段JSON

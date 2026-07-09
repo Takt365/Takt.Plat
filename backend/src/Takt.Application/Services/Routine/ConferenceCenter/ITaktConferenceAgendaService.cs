@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Application.Services.Routine.ConferenceCenter
 // 文件名称：ITaktConferenceAgendaService.cs
-// 创建时间：2026-06-23
+// 创建时间：2026-07-09
 // 创建人：Takt365(Cursor AI)
 // 功能描述：会议议程纪要应用服务接口
 // 
@@ -69,6 +69,13 @@ public interface ITaktConferenceAgendaService
     /// <param name="ids">ID列表</param>
     /// <returns>任务</returns>
     Task DeleteConferenceAgendaBatchAsync(IEnumerable<long> ids);
+
+    /// <summary>
+    /// 更新会议议程纪要作废状态
+    /// </summary>
+    /// <param name="dto">作废DTO</param>
+    /// <returns>DTO</returns>
+    Task<TaktConferenceAgendaDto> UpdateConferenceAgendaObsoleteAsync(TaktConferenceAgendaObsoleteDto dto);
 
     /// <summary>
     /// 获取导入模板

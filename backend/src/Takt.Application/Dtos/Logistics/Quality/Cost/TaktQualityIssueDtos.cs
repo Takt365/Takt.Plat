@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Application.Dtos.Logistics.Quality.Cost
 // 文件名称：TaktQualityIssueDtos.cs
-// 创建时间：2026-06-30
+// 创建时间：2026-07-09
 // 创建人：Takt365(Auto Generated)
 // 功能描述：QualityIssue 模块 DTO（由 generate-dtos-from-entity.cjs 根据 TaktQualityIssue 生成，请按需审阅）
 // 
@@ -298,17 +298,17 @@ public class TaktQualityIssueCreateDto
     /// <summary>
     /// 会议/调查/试验费用明细列表（子表，级联保存）
     /// </summary>
-    public List<TaktQualityIssueMeetingCreateDto>? MeetingItems { get; set; }
+    public List<TaktQualityIssueMeetingUpdateDto>? MeetingItems { get; set; }
 
     /// <summary>
     /// 组装不良改修应对明细列表（子表，级联保存）
     /// </summary>
-    public List<TaktQualityIssueAssyReworkCreateDto>? AssyReworkItems { get; set; }
+    public List<TaktQualityIssueAssyReworkUpdateDto>? AssyReworkItems { get; set; }
 
     /// <summary>
     /// PCBA不良改修应对明细列表（子表，级联保存）
     /// </summary>
-    public List<TaktQualityIssuePcbaReworkCreateDto>? PcbaReworkItems { get; set; }
+    public List<TaktQualityIssuePcbaReworkUpdateDto>? PcbaReworkItems { get; set; }
 
     /// <summary>
     /// 扩展字段JSON

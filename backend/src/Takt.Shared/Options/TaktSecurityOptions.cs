@@ -25,6 +25,16 @@ public class TaktSecurityOptions
     public TaktRateLimitOptions RateLimit { get; set; } = new();
 
     /// <summary>
+    /// 登录端点专用限流（verify-password、signin）
+    /// </summary>
+    public TaktRateLimitOptions LoginRateLimit { get; set; } = new()
+    {
+        Enabled = true,
+        MaxRequests = 10,
+        TimeWindowSeconds = 60,
+    };
+
+    /// <summary>
     /// CSRF 防护配置
     /// </summary>
     public TaktCsrfProtectionOptions CsrfProtection { get; set; } = new();
@@ -40,6 +50,7 @@ public class TaktSecurityOptions
     public void Validate()
     {
         RateLimit.Validate();
+        LoginRateLimit.Validate();
         XssProtection.Validate();
     }
 }

@@ -57,7 +57,7 @@ public class TaktProductionDispatchDto : TaktCompanyDtoBase
     public string? ProductionOrderName { get; set; }
 
     /// <summary>
-    /// 生产工单号（冗余）
+    /// 工单号（冗余）
     /// </summary>
     public string ProdOrderCode { get; set; } = string.Empty;
 
@@ -141,7 +141,7 @@ public class TaktProductionDispatchQueryDto : TaktPagedQuery
     public long? ProductionOrderId { get; set; }
 
     /// <summary>
-    /// 生产工单号（冗余）
+    /// 工单号（冗余）
     /// </summary>
     public string? ProdOrderCode { get; set; } = string.Empty;
 
@@ -255,9 +255,9 @@ public class TaktProductionDispatchCreateDto
     public long ProductionOrderId { get; set; }
 
     /// <summary>
-    /// 生产工单号（冗余）
+    /// 工单号（冗余）
     /// </summary>
-    [Required(ErrorMessage = "生产工单号（冗余）不能为空")]
+    [Required(ErrorMessage = "工单号（冗余）不能为空")]
     public string ProdOrderCode { get; set; } = string.Empty;
 
     /// <summary>
@@ -388,7 +388,7 @@ public class TaktProductionDispatchTemplateDto
     public long? ProductionOrderId { get; set; }
 
     /// <summary>
-    /// 生产工单号（冗余）
+    /// 工单号（冗余）
     /// </summary>
     public string? ProdOrderCode { get; set; } = string.Empty;
 
@@ -477,7 +477,7 @@ public class TaktProductionDispatchImportDto
     public long? ProductionOrderId { get; set; }
 
     /// <summary>
-    /// 生产工单号（冗余）
+    /// 工单号（冗余）
     /// </summary>
     public string? ProdOrderCode { get; set; } = string.Empty;
 
@@ -567,7 +567,7 @@ public class TaktProductionDispatchExportDto
     public long ProductionOrderId { get; set; }
 
     /// <summary>
-    /// 生产工单号（冗余）
+    /// 工单号（冗余）
     /// </summary>
     public string ProdOrderCode { get; set; } = string.Empty;
 

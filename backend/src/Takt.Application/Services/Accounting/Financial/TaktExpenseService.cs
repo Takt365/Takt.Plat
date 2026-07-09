@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Application.Services.Accounting.Financial
 // 文件名称：TaktExpenseService.cs
-// 创建时间：2026-06-24
+// 创建时间：2026-07-09
 // 创建人：Takt365(Cursor AI)
 // 功能描述：费用单应用服务实现
 // 
@@ -303,6 +303,30 @@ public class TaktExpenseService : TaktServiceBase, ITaktExpenseService
     // ========================================
 
     /// <summary>
+    /// 将指定主表下全部未作废费用单明细标记为作废（编辑清空子表）
+    /// </summary>
+    /// <param name="expenseId">主表主键</param>
+    /// <returns>任务</returns>
+    private async Task MarkExpenseDetailsObsoleteAsync(long expenseId)
+    {
+        if (expenseId <= 0)
+        {
+            return;
+        }
+        var rows = await _expenseDetailRepository.GetListAsync(
+            x => x.ExpenseId == expenseId && x.IsObsolete == 0);
+        if (rows.Count == 0)
+        {
+            return;
+        }
+        foreach (var row in rows)
+        {
+            row.IsObsolete = 1;
+        }
+        await _expenseDetailRepository.UpdateRangeAsync(rows);
+    }
+
+    /// <summary>
     /// 填充费用单详情（加载 OneToMany 子表：费用单明细）
     /// </summary>
     /// <param name="dto">响应 DTO</param>
@@ -314,13 +338,13 @@ public class TaktExpenseService : TaktServiceBase, ITaktExpenseService
         {
             return;
         }
-        // 费用单明细 → dto.ExpenseDetails
+        // 费用单明细 → dto.ExpenseDetails（含作废行）
         var expensedetails = await _expenseDetailRepository.GetListAsync(x => x.ExpenseId == entity.Id);
         dto.ExpenseDetails = expensedetails.Adapt<List<TaktExpenseDetailDto>>();
     }
 
     /// <summary>
-    /// 保存费用单子表级联（费用单明细；Create/Update 后按主表 Id 先删后插）
+    /// 保存费用单子表级联（费用单明细；按子表 Id 增量新增/更新；未提交行标记作废，禁止先删后插）
     /// </summary>
     /// <param name="entity">主表实体</param>
     /// <param name="dto">创建/更新 DTO（含子表集合；UpdateDto 须继承 CreateDto）</param>
@@ -330,55 +354,95 @@ public class TaktExpenseService : TaktServiceBase, ITaktExpenseService
         // 费用单明细（ExpenseDetails）
         if (dto.ExpenseDetails is not { Count: > 0 })
         {
-            await _expenseDetailRepository.DeleteAsync(x => x.ExpenseId == entity.Id);
+            await MarkExpenseDetailsObsoleteAsync(entity.Id);
+            return;
         }
         else
         {
-            var expensedetails = dto.ExpenseDetails.Adapt<List<TaktExpenseDetail>>();
-            foreach (var child in expensedetails)
+            var existingList = await _expenseDetailRepository.GetListAsync(x => x.ExpenseId == entity.Id);
+            var existingById = existingList.ToDictionary(x => x.Id);
+            var submittedIds = new HashSet<long>();
+            var toCreate = new List<TaktExpenseDetail>();
+            var seenLineKeys = new HashSet<string>(StringComparer.Ordinal);
+            for (var i = 0; i < dto.ExpenseDetails.Count; i++)
             {
-                child.ExpenseId = entity.Id;
-            }
-            var expensedetailsNeedLine = expensedetails.Where(c => c.LineNumber <= 0).ToList();
-            if (expensedetailsNeedLine.Count > 0)
-            {
-                var businessCode = !string.IsNullOrWhiteSpace(entity.ExpenseCode) ? entity.ExpenseCode : entity.Id.ToString();
-                var maxLine = await _expenseDetailRepository.GetMaxIntAsync(
-                    x => x.TenantCode == CurrentTenantCode && x.CompanyCode == CurrentCompanyCode && x.ExpenseId == entity.Id,
-                    x => x.LineNumber);
-                var lineSeq = _lineNumberGenerator.GenerateSequence(businessCode, expensedetailsNeedLine.Count, maxLine).ToList();
-                var lineIdx = 0;
-                foreach (var child in expensedetails)
+                var childDto = dto.ExpenseDetails[i];
+                childDto.ExpenseId = entity.Id;
+                var lineKey = $"{entity.CompanyCode}|{entity.Id}|{childDto.LineNumber}";
+                if (!seenLineKeys.Add(lineKey))
                 {
-                    if (child.LineNumber <= 0)
+                    throw new TaktBusinessException("费用单明细第{i + 1}项与本次提交的其他项重复（CompanyCode、ExpenseId、LineNumber）");
+                }
+                if (childDto.ExpenseDetailId > 0)
+                {
+                    if (!existingById.TryGetValue(childDto.ExpenseDetailId, out var target))
                     {
-                        child.LineNumber = lineSeq[lineIdx++];
+                        throw new TaktBusinessException("费用单明细不存在（ExpenseDetailId={childDto.ExpenseDetailId}）");
                     }
+                    if (target.ExpenseId != entity.Id)
+                    {
+                        throw new TaktBusinessException("费用单明细不属于当前主表（ExpenseDetailId={childDto.ExpenseDetailId}）");
+                    }
+                    submittedIds.Add(childDto.ExpenseDetailId);
+                    var isUniqueUpdate_ix_expense_detail_line_unique = await _uniqueValidator.IsUniqueAsync(
+                        _expenseDetailRepository,
+                        x => x.CompanyCode == x.CompanyCode
+                && x.ExpenseId == x.ExpenseId
+                && x.LineNumber == x.LineNumber,
+                        childDto.ExpenseDetailId);
+                    if (!isUniqueUpdate_ix_expense_detail_line_unique)
+                    {
+                        throw new TaktBusinessException("费用单明细的CompanyCode、ExpenseId、LineNumber已存在");
+                    }
+                    childDto.Adapt(target);
+                    target.Id = childDto.ExpenseDetailId;
+                    target.ExpenseId = entity.Id;
+                    target.IsObsolete = 0;
+                    await _expenseDetailRepository.UpdateAsync(target);
+                }
+                else
+                {
+                    var isUniqueCreate_ix_expense_detail_line_unique = await _uniqueValidator.IsUniqueAsync(
+                        _expenseDetailRepository,
+                        x => x.CompanyCode == x.CompanyCode
+                && x.ExpenseId == x.ExpenseId
+                && x.LineNumber == x.LineNumber);
+                    if (!isUniqueCreate_ix_expense_detail_line_unique)
+                    {
+                        throw new TaktBusinessException("费用单明细的CompanyCode、ExpenseId、LineNumber已存在");
+                    }
+                    var child = childDto.Adapt<TaktExpenseDetail>();
+                    child.Id = 0;
+                    child.ExpenseId = entity.Id;
+                    child.IsObsolete = 0;
+                    toCreate.Add(child);
                 }
             }
-                        var seenKeys = new HashSet<string>(StringComparer.Ordinal);
-                        for (var i = 0; i < expensedetails.Count; i++)
+            var toObsolete = existingList.Where(x => !submittedIds.Contains(x.Id) && x.IsObsolete == 0).ToList();
+            foreach (var removed in toObsolete)
+            {
+                removed.IsObsolete = 1;
+                await _expenseDetailRepository.UpdateAsync(removed);
+            }
+            if (toCreate.Count > 0)
+            {
+                var needLine = toCreate.Where(c => c.LineNumber <= 0).ToList();
+                if (needLine.Count > 0)
+                {
+                    var businessCode = !string.IsNullOrWhiteSpace(entity.ExpenseCode) ? entity.ExpenseCode : entity.Id.ToString();
+                    var maxLine = existingList.Count > 0 ? existingList.Max(x => x.LineNumber) : 0;
+                    var lineSeq = _lineNumberGenerator.GenerateSequence(businessCode, needLine.Count, maxLine).ToList();
+                    var lineIdx = 0;
+                    foreach (var child in toCreate)
+                    {
+                        if (child.LineNumber <= 0)
                         {
-                            var key = $"{expensedetails[i].CompanyCode}|{expensedetails[i].ExpenseId}|{expensedetails[i].LineNumber}";
-                            if (!seenKeys.Add(key))
-                            {
-                                throw new TaktBusinessException($"费用单明细第{i + 1}项与本次提交的其他项重复（CompanyCode、ExpenseId、LineNumber）");
-                            }
+                            child.LineNumber = lineSeq[lineIdx++];
                         }
-            await _expenseDetailRepository.DeleteAsync(x => x.ExpenseId == entity.Id);
-            foreach (var child in expensedetails)
-            {
-            var isUnique_ix_expense_detail_line_unique = await _uniqueValidator.IsUniqueAsync(
-                _expenseDetailRepository,
-                x => x.CompanyCode == child.CompanyCode
-                    && x.ExpenseId == child.ExpenseId
-                    && x.LineNumber == child.LineNumber);
-            if (!isUnique_ix_expense_detail_line_unique)
-            {
-                throw new TaktBusinessException("费用单明细的CompanyCode、ExpenseId、LineNumber已存在");
+                    }
+                }
+                await _expenseDetailRepository.CreateRangeAsync(toCreate);
             }
-            }
-            await _expenseDetailRepository.CreateRangeAsync(expensedetails);
         }
     }
     // ========================================

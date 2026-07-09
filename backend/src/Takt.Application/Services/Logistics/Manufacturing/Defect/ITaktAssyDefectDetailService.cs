@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Application.Services.Logistics.Manufacturing.Defect
 // 文件名称：ITaktAssyDefectDetailService.cs
-// 创建时间：2026-06-30
+// 创建时间：2026-07-09
 // 创建人：Takt365(Cursor AI)
 // 功能描述：组立不良明细应用服务接口
 // 
@@ -55,6 +55,13 @@ public interface ITaktAssyDefectDetailService
     /// <param name="dto">更新DTO</param>
     /// <returns>DTO</returns>
     Task<TaktAssyDefectDetailDto> UpdateAssyDefectDetailAsync(long id, TaktAssyDefectDetailUpdateDto dto);
+
+    /// <summary>
+    /// 更新组立不良明细作废状态
+    /// </summary>
+    /// <param name="dto">作废DTO</param>
+    /// <returns>DTO</returns>
+    Task<TaktAssyDefectDetailDto> UpdateAssyDefectDetailObsoleteAsync(TaktAssyDefectDetailObsoleteDto dto);
 
     /// <summary>
     /// 删除组立不良明细

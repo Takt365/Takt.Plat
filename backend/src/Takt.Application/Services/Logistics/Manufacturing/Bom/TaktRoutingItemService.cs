@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Application.Services.Logistics.Manufacturing.Bom
 // 文件名称：TaktRoutingItemService.cs
-// 创建时间：2026-06-23
+// 创建时间：2026-07-09
 // 创建人：Takt365(Cursor AI)
 // 功能描述：工艺路线明细应用服务实现
 // 
@@ -123,6 +123,7 @@ public class TaktRoutingItemService : TaktServiceBase, ITaktRoutingItemService
     public async Task<TaktRoutingItemDto> CreateRoutingItemAsync(TaktRoutingItemCreateDto dto)
     {
         var entity = dto.Adapt<TaktRoutingItem>();
+        entity.IsObsolete = 0;
         var isUnique_ix_takt_logistics_manufacturing_bom_routing_item_routing_line_unique = await _uniqueValidator.IsUniqueAsync(
             _routingItemRepository,
             x => x.RoutingId == entity.RoutingId
@@ -230,6 +231,27 @@ public class TaktRoutingItemService : TaktServiceBase, ITaktRoutingItemService
             throw new TaktBusinessException("工艺路线明细不存在");
         }
         entity.SortOrder = dto.SortOrder;
+        await _routingItemRepository.UpdateAsync(entity);
+        return await GetRoutingItemByIdAsync(dto.RoutingItemId) ?? throw new TaktBusinessException("工艺路线明细不存在");
+    }
+
+    /// <summary>
+    /// 更新工艺路线明细作废状态
+    /// </summary>
+    /// <param name="dto">作废DTO</param>
+    /// <returns>DTO</returns>
+    public async Task<TaktRoutingItemDto> UpdateRoutingItemObsoleteAsync(TaktRoutingItemObsoleteDto dto)
+    {
+        var entity = await _routingItemRepository.GetByIdAsync(dto.RoutingItemId);
+        if (entity == null)
+        {
+            throw new TaktBusinessException("工艺路线明细不存在");
+        }
+        if (entity.TenantCode != CurrentTenantCode || entity.CompanyCode != CurrentCompanyCode)
+        {
+            throw new TaktBusinessException("工艺路线明细不存在");
+        }
+        entity.IsObsolete = dto.IsObsolete;
         await _routingItemRepository.UpdateAsync(entity);
         return await GetRoutingItemByIdAsync(dto.RoutingItemId) ?? throw new TaktBusinessException("工艺路线明细不存在");
     }
@@ -357,7 +379,7 @@ public class TaktRoutingItemService : TaktServiceBase, ITaktRoutingItemService
     }
 
     /// <summary>
-    /// 保存工艺路线明细子表级联（工艺路线工序参数；Create/Update 后按主表 Id 先删后插）
+    /// 保存工艺路线明细子表级联（工艺路线工序参数；按子表 Id 增量新增/更新；未提交行标记作废，禁止先删后插）
     /// </summary>
     /// <param name="entity">主表实体</param>
     /// <param name="dto">创建/更新 DTO（含子表集合；UpdateDto 须继承 CreateDto）</param>
@@ -371,32 +393,46 @@ public class TaktRoutingItemService : TaktServiceBase, ITaktRoutingItemService
         }
         else
         {
-            var arguments = dto.Arguments.Adapt<List<TaktRoutingItemArgument>>();
-            foreach (var child in arguments)
+            var existingList = await _routingItemArgumentRepository.GetListAsync(x => x.RoutingItemId == entity.Id);
+            var existingById = existingList.ToDictionary(x => x.Id);
+            var submittedIds = new HashSet<long>();
+            var toCreate = new List<TaktRoutingItemArgument>();
+            for (var i = 0; i < dto.Arguments.Count; i++)
             {
-                child.RoutingItemId = entity.Id;
-            }
-            var argumentsNeedSort = arguments.Where(c => c.SortOrder <= 0).ToList();
-            if (argumentsNeedSort.Count > 0)
-            {
-                var maxSort = await _routingItemArgumentRepository.GetMaxIntAsync(
-                    x => x.TenantCode == CurrentTenantCode && x.CompanyCode == CurrentCompanyCode && x.RoutingItemId == entity.Id,
-                    x => x.SortOrder);
-                var sortSeq = _sortOrderGenerator.GenerateSequenceForMaster(entity.Id, argumentsNeedSort.Count, maxSort).ToList();
-                var sortIdx = 0;
-                foreach (var child in arguments)
+                var childDto = dto.Arguments[i];
+                childDto.RoutingItemId = entity.Id;
+                if (childDto.RoutingItemArgumentId > 0)
                 {
-                    if (child.SortOrder <= 0)
+                    if (!existingById.TryGetValue(childDto.RoutingItemArgumentId, out var target))
                     {
-                        child.SortOrder = sortSeq[sortIdx++];
+                        throw new TaktBusinessException("工艺路线工序参数不存在（RoutingItemArgumentId={childDto.RoutingItemArgumentId}）");
                     }
+                    if (target.RoutingItemId != entity.Id)
+                    {
+                        throw new TaktBusinessException("工艺路线工序参数不属于当前主表（RoutingItemArgumentId={childDto.RoutingItemArgumentId}）");
+                    }
+                    submittedIds.Add(childDto.RoutingItemArgumentId);
+                    childDto.Adapt(target);
+                    target.Id = childDto.RoutingItemArgumentId;
+                    target.RoutingItemId = entity.Id;
+                    await _routingItemArgumentRepository.UpdateAsync(target);
+                }
+                else
+                {
+                    var child = childDto.Adapt<TaktRoutingItemArgument>();
+                    child.Id = 0;
+                    child.RoutingItemId = entity.Id;
+                    toCreate.Add(child);
                 }
             }
-            await _routingItemArgumentRepository.DeleteAsync(x => x.RoutingItemId == entity.Id);
-            foreach (var child in arguments)
+            foreach (var removed in existingList.Where(x => !submittedIds.Contains(x.Id)))
             {
+                await _routingItemArgumentRepository.DeleteAsync(removed.Id);
             }
-            await _routingItemArgumentRepository.CreateRangeAsync(arguments);
+            if (toCreate.Count > 0)
+            {
+                await _routingItemArgumentRepository.CreateRangeAsync(toCreate);
+            }
         }
     }
     // ========================================
@@ -411,6 +447,15 @@ public class TaktRoutingItemService : TaktServiceBase, ITaktRoutingItemService
     private static Expression<Func<TaktRoutingItem, bool>> QueryExpression(TaktRoutingItemQueryDto? queryDto)
     {
         var exp = Expressionable.Create<TaktRoutingItem>();
+
+        if (queryDto?.IsObsolete.HasValue == true)
+        {
+            exp = exp.And(x => x.IsObsolete == queryDto.IsObsolete);
+        }
+        else
+        {
+            exp = exp.And(x => x.IsObsolete == 0);
+        }
 
         if (!string.IsNullOrEmpty(queryDto?.KeyWords))
         {
@@ -487,7 +532,7 @@ public class TaktRoutingItemService : TaktServiceBase, ITaktRoutingItemService
 
         if (!string.IsNullOrEmpty(queryDto?.PointsToMinutesRate))
         {
-            exp = exp.And(x => x.PointsToMinutesRate == queryDto.PointsToMinutesRate);
+            exp = exp.And(x => x.PointsToMinutesRate != null && x.PointsToMinutesRate.Contains(queryDto.PointsToMinutesRate));
         }
 
         if (queryDto?.ConvertedMinutes.HasValue == true)

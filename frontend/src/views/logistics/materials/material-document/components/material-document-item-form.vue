@@ -145,6 +145,11 @@
 import { reactive, watch, computed, ref, onMounted } from 'vue'
 import { useI18n } from 'vue-i18n'
 import type { Rule } from 'ant-design-vue/es/form'
+import { useMaterialDocumentItemI18n } from '../composables/use-material-document-item-i18n'
+
+/** 实体字段 i18n */
+const pi = useMaterialDocumentItemI18n()
+
 import type { MaterialDocumentItemCreate } from '@/types/logistics/materials/material-document-item'
 import TaktSelect from '@/components/business/takt-select/index.vue'
 import { useDictDataStore } from '@/stores/foundation/dict-data'

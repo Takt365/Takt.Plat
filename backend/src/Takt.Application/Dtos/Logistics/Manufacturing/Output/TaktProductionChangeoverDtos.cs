@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Application.Dtos.Logistics.Manufacturing.Output
 // 文件名称：TaktProductionChangeoverDtos.cs
-// 创建时间：2026-06-23
+// 创建时间：2026-07-06
 // 创建人：Takt365(Auto Generated)
 // 功能描述：ProductionChangeover 模块 DTO（由 generate-dtos-from-entity.cjs 根据 TaktProductionChangeover 生成，请按需审阅）
 // 
@@ -36,14 +36,19 @@ public class TaktProductionChangeoverDto : TaktCompanyDtoBase
     public long ProductionChangeoverId { get; set; }
 
     /// <summary>
-    /// 生产工厂
+    /// 生产工厂（回填：随工单）
     /// </summary>
     public string PlantCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 生产类别
+    /// 生产类别（字典 logistics_prod_category，存 DictValue：EPP/FPP/RWP/MDP/CPP）
     /// </summary>
     public string? ProdCategory { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 切换类别（字典 logistics_changeover_category，存 DictValue：ASSY/PCBA）
+    /// </summary>
+    public string ChangeoverCategory { get; set; } = string.Empty;
 
     /// <summary>
     /// 生产日期
@@ -51,24 +56,29 @@ public class TaktProductionChangeoverDto : TaktCompanyDtoBase
     public DateTime ProdDate { get; set; }
 
     /// <summary>
-    /// 生产班组（选项 TaktProductionTeams/options，存 TeamCode）
+    /// 生产班组（选项 TaktProductionTeams/options，存 TeamCode，ExtValue=PlantCode 按工厂过滤）
     /// </summary>
     public string? ProdTeam { get; set; } = string.Empty;
 
     /// <summary>
-    /// 读取SOP时间
+    /// 当前工单（切换前工单号，选项 TaktProductionOrders/options，按 PlantCode 过滤）
     /// </summary>
-    public decimal ReadSopTime { get; set; }
+    public string CurrentProdOrderCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 人数
+    /// 当前机种（回填：随工单）
     /// </summary>
-    public int PersonCount { get; set; } = 0;
+    public string CurrentModelCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// SOP总时间
+    /// 切换后工单（切换目标工单号，选项 TaktProductionOrders/options，按 PlantCode 过滤）
     /// </summary>
-    public decimal TotalSopTime { get; set; }
+    public string ChangeoverProdOrderCode { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 切换后机种（回填：随工单）
+    /// </summary>
+    public string ChangeoverModelCode { get; set; } = string.Empty;
 
     /// <summary>
     /// 切换次数
@@ -76,14 +86,44 @@ public class TaktProductionChangeoverDto : TaktCompanyDtoBase
     public int ChangeoverCount { get; set; } = 0;
 
     /// <summary>
-    /// 切换时间（单次）
+    /// 切换时间（单次，单位：分钟）
     /// </summary>
-    public decimal ChangeoverTime { get; set; }
+    public int ChangeoverTime { get; set; } = 0;
 
     /// <summary>
-    /// 切换总时间
+    /// 仪设时间（仪器/设备设置耗时，单位：分钟）
     /// </summary>
-    public decimal TotalChangeoverTime { get; set; }
+    public int InstrumentSetupTime { get; set; } = 0;
+
+    /// <summary>
+    /// 切换总时间（单位：分钟）
+    /// </summary>
+    public int TotalChangeoverTime { get; set; } = 0;
+
+    /// <summary>
+    /// 读取SOP时间（单位：分钟）
+    /// </summary>
+    public int ReadSopTime { get; set; } = 0;
+
+    /// <summary>
+    /// 学习时间（切换学习/培训耗时，单位：分钟）
+    /// </summary>
+    public int LearningTime { get; set; } = 0;
+
+    /// <summary>
+    /// 人数（参与切换人数）
+    /// </summary>
+    public int PersonCount { get; set; } = 0;
+
+    /// <summary>
+    /// 学习总时间（单位：分钟）
+    /// </summary>
+    public int TotalLearningTime { get; set; } = 0;
+
+    /// <summary>
+    /// SOP总时间（单位：分钟）
+    /// </summary>
+    public int TotalSopTime { get; set; } = 0;
 
 }
 
@@ -108,14 +148,19 @@ public class TaktProductionChangeoverQueryDto : TaktPagedQuery
     public string? CompanyCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 生产工厂
+    /// 生产工厂（回填：随工单）
     /// </summary>
     public string? PlantCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 生产类别
+    /// 生产类别（字典 logistics_prod_category，存 DictValue：EPP/FPP/RWP/MDP/CPP）
     /// </summary>
     public string? ProdCategory { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 切换类别（字典 logistics_changeover_category，存 DictValue：ASSY/PCBA）
+    /// </summary>
+    public string? ChangeoverCategory { get; set; } = string.Empty;
 
     /// <summary>
     /// 生产日期（范围查询-开始）
@@ -128,24 +173,29 @@ public class TaktProductionChangeoverQueryDto : TaktPagedQuery
     public DateTime? ProdDateEnd { get; set; }
 
     /// <summary>
-    /// 生产班组（选项 TaktProductionTeams/options，存 TeamCode）
+    /// 生产班组（选项 TaktProductionTeams/options，存 TeamCode，ExtValue=PlantCode 按工厂过滤）
     /// </summary>
     public string? ProdTeam { get; set; } = string.Empty;
 
     /// <summary>
-    /// 读取SOP时间
+    /// 当前工单（切换前工单号，选项 TaktProductionOrders/options，按 PlantCode 过滤）
     /// </summary>
-    public decimal? ReadSopTime { get; set; }
+    public string? CurrentProdOrderCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 人数
+    /// 当前机种（回填：随工单）
     /// </summary>
-    public int? PersonCount { get; set; }
+    public string? CurrentModelCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// SOP总时间
+    /// 切换后工单（切换目标工单号，选项 TaktProductionOrders/options，按 PlantCode 过滤）
     /// </summary>
-    public decimal? TotalSopTime { get; set; }
+    public string? ChangeoverProdOrderCode { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 切换后机种（回填：随工单）
+    /// </summary>
+    public string? ChangeoverModelCode { get; set; } = string.Empty;
 
     /// <summary>
     /// 切换次数
@@ -153,14 +203,44 @@ public class TaktProductionChangeoverQueryDto : TaktPagedQuery
     public int? ChangeoverCount { get; set; }
 
     /// <summary>
-    /// 切换时间（单次）
+    /// 切换时间（单次，单位：分钟）
     /// </summary>
-    public decimal? ChangeoverTime { get; set; }
+    public int? ChangeoverTime { get; set; }
 
     /// <summary>
-    /// 切换总时间
+    /// 仪设时间（仪器/设备设置耗时，单位：分钟）
     /// </summary>
-    public decimal? TotalChangeoverTime { get; set; }
+    public int? InstrumentSetupTime { get; set; }
+
+    /// <summary>
+    /// 切换总时间（单位：分钟）
+    /// </summary>
+    public int? TotalChangeoverTime { get; set; }
+
+    /// <summary>
+    /// 读取SOP时间（单位：分钟）
+    /// </summary>
+    public int? ReadSopTime { get; set; }
+
+    /// <summary>
+    /// 学习时间（切换学习/培训耗时，单位：分钟）
+    /// </summary>
+    public int? LearningTime { get; set; }
+
+    /// <summary>
+    /// 人数（参与切换人数）
+    /// </summary>
+    public int? PersonCount { get; set; }
+
+    /// <summary>
+    /// 学习总时间（单位：分钟）
+    /// </summary>
+    public int? TotalLearningTime { get; set; }
+
+    /// <summary>
+    /// SOP总时间（单位：分钟）
+    /// </summary>
+    public int? TotalSopTime { get; set; }
 
     /// <summary>
     /// 创建时间（范围查询-开始）
@@ -208,15 +288,21 @@ public class TaktProductionChangeoverCreateDto
     public string CompanyDefaultCulture { get; set; } = string.Empty;
 
     /// <summary>
-    /// 生产工厂
+    /// 生产工厂（回填：随工单）
     /// </summary>
-    [Required(ErrorMessage = "生产工厂不能为空")]
+    [Required(ErrorMessage = "生产工厂（回填：随工单）不能为空")]
     public string PlantCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 生产类别
+    /// 生产类别（字典 logistics_prod_category，存 DictValue：EPP/FPP/RWP/MDP/CPP）
     /// </summary>
     public string? ProdCategory { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 切换类别（字典 logistics_changeover_category，存 DictValue：ASSY/PCBA）
+    /// </summary>
+    [Required(ErrorMessage = "切换类别（字典 logistics_changeover_category，存 DictValue：ASSY/PCBA）不能为空")]
+    public string ChangeoverCategory { get; set; } = string.Empty;
 
     /// <summary>
     /// 生产日期
@@ -224,24 +310,33 @@ public class TaktProductionChangeoverCreateDto
     public DateTime ProdDate { get; set; }
 
     /// <summary>
-    /// 生产班组（选项 TaktProductionTeams/options，存 TeamCode）
+    /// 生产班组（选项 TaktProductionTeams/options，存 TeamCode，ExtValue=PlantCode 按工厂过滤）
     /// </summary>
     public string? ProdTeam { get; set; } = string.Empty;
 
     /// <summary>
-    /// 读取SOP时间
+    /// 当前工单（切换前工单号，选项 TaktProductionOrders/options，按 PlantCode 过滤）
     /// </summary>
-    public decimal ReadSopTime { get; set; }
+    [Required(ErrorMessage = "当前工单（切换前工单号，选项 TaktProductionOrders/options，按 PlantCode 过滤）不能为空")]
+    public string CurrentProdOrderCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 人数
+    /// 当前机种（回填：随工单）
     /// </summary>
-    public int PersonCount { get; set; } = 0;
+    [Required(ErrorMessage = "当前机种（回填：随工单）不能为空")]
+    public string CurrentModelCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// SOP总时间
+    /// 切换后工单（切换目标工单号，选项 TaktProductionOrders/options，按 PlantCode 过滤）
     /// </summary>
-    public decimal TotalSopTime { get; set; }
+    [Required(ErrorMessage = "切换后工单（切换目标工单号，选项 TaktProductionOrders/options，按 PlantCode 过滤）不能为空")]
+    public string ChangeoverProdOrderCode { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 切换后机种（回填：随工单）
+    /// </summary>
+    [Required(ErrorMessage = "切换后机种（回填：随工单）不能为空")]
+    public string ChangeoverModelCode { get; set; } = string.Empty;
 
     /// <summary>
     /// 切换次数
@@ -249,14 +344,44 @@ public class TaktProductionChangeoverCreateDto
     public int ChangeoverCount { get; set; } = 0;
 
     /// <summary>
-    /// 切换时间（单次）
+    /// 切换时间（单次，单位：分钟）
     /// </summary>
-    public decimal ChangeoverTime { get; set; }
+    public int ChangeoverTime { get; set; } = 0;
 
     /// <summary>
-    /// 切换总时间
+    /// 仪设时间（仪器/设备设置耗时，单位：分钟）
     /// </summary>
-    public decimal TotalChangeoverTime { get; set; }
+    public int InstrumentSetupTime { get; set; } = 0;
+
+    /// <summary>
+    /// 切换总时间（单位：分钟）
+    /// </summary>
+    public int TotalChangeoverTime { get; set; } = 0;
+
+    /// <summary>
+    /// 读取SOP时间（单位：分钟）
+    /// </summary>
+    public int ReadSopTime { get; set; } = 0;
+
+    /// <summary>
+    /// 学习时间（切换学习/培训耗时，单位：分钟）
+    /// </summary>
+    public int LearningTime { get; set; } = 0;
+
+    /// <summary>
+    /// 人数（参与切换人数）
+    /// </summary>
+    public int PersonCount { get; set; } = 0;
+
+    /// <summary>
+    /// 学习总时间（单位：分钟）
+    /// </summary>
+    public int TotalLearningTime { get; set; } = 0;
+
+    /// <summary>
+    /// SOP总时间（单位：分钟）
+    /// </summary>
+    public int TotalSopTime { get; set; } = 0;
 
     /// <summary>
     /// 扩展字段JSON
@@ -310,14 +435,19 @@ public class TaktProductionChangeoverTemplateDto
     public string? CompanyCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 生产工厂
+    /// 生产工厂（回填：随工单）
     /// </summary>
     public string? PlantCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 生产类别
+    /// 生产类别（字典 logistics_prod_category，存 DictValue：EPP/FPP/RWP/MDP/CPP）
     /// </summary>
     public string? ProdCategory { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 切换类别（字典 logistics_changeover_category，存 DictValue：ASSY/PCBA）
+    /// </summary>
+    public string ChangeoverCategory { get; set; } = string.Empty;
 
     /// <summary>
     /// 生产日期
@@ -325,24 +455,29 @@ public class TaktProductionChangeoverTemplateDto
     public DateTime? ProdDate { get; set; }
 
     /// <summary>
-    /// 生产班组（选项 TaktProductionTeams/options，存 TeamCode）
+    /// 生产班组（选项 TaktProductionTeams/options，存 TeamCode，ExtValue=PlantCode 按工厂过滤）
     /// </summary>
     public string? ProdTeam { get; set; } = string.Empty;
 
     /// <summary>
-    /// 读取SOP时间
+    /// 当前工单（切换前工单号，选项 TaktProductionOrders/options，按 PlantCode 过滤）
     /// </summary>
-    public decimal? ReadSopTime { get; set; }
+    public string? CurrentProdOrderCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 人数
+    /// 当前机种（回填：随工单）
     /// </summary>
-    public int? PersonCount { get; set; }
+    public string? CurrentModelCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// SOP总时间
+    /// 切换后工单（切换目标工单号，选项 TaktProductionOrders/options，按 PlantCode 过滤）
     /// </summary>
-    public decimal? TotalSopTime { get; set; }
+    public string? ChangeoverProdOrderCode { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 切换后机种（回填：随工单）
+    /// </summary>
+    public string? ChangeoverModelCode { get; set; } = string.Empty;
 
     /// <summary>
     /// 切换次数
@@ -350,14 +485,44 @@ public class TaktProductionChangeoverTemplateDto
     public int? ChangeoverCount { get; set; }
 
     /// <summary>
-    /// 切换时间（单次）
+    /// 切换时间（单次，单位：分钟）
     /// </summary>
-    public decimal? ChangeoverTime { get; set; }
+    public int? ChangeoverTime { get; set; }
 
     /// <summary>
-    /// 切换总时间
+    /// 仪设时间（仪器/设备设置耗时，单位：分钟）
     /// </summary>
-    public decimal? TotalChangeoverTime { get; set; }
+    public int? InstrumentSetupTime { get; set; }
+
+    /// <summary>
+    /// 切换总时间（单位：分钟）
+    /// </summary>
+    public int? TotalChangeoverTime { get; set; }
+
+    /// <summary>
+    /// 读取SOP时间（单位：分钟）
+    /// </summary>
+    public int? ReadSopTime { get; set; }
+
+    /// <summary>
+    /// 学习时间（切换学习/培训耗时，单位：分钟）
+    /// </summary>
+    public int? LearningTime { get; set; }
+
+    /// <summary>
+    /// 人数（参与切换人数）
+    /// </summary>
+    public int? PersonCount { get; set; }
+
+    /// <summary>
+    /// 学习总时间（单位：分钟）
+    /// </summary>
+    public int? TotalLearningTime { get; set; }
+
+    /// <summary>
+    /// SOP总时间（单位：分钟）
+    /// </summary>
+    public int? TotalSopTime { get; set; }
 
     /// <summary>
     /// 扩展字段JSON
@@ -392,14 +557,19 @@ public class TaktProductionChangeoverImportDto
     public string? CompanyDefaultCulture { get; set; } = string.Empty;
 
     /// <summary>
-    /// 生产工厂
+    /// 生产工厂（回填：随工单）
     /// </summary>
     public string? PlantCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 生产类别
+    /// 生产类别（字典 logistics_prod_category，存 DictValue：EPP/FPP/RWP/MDP/CPP）
     /// </summary>
     public string? ProdCategory { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 切换类别（字典 logistics_changeover_category，存 DictValue：ASSY/PCBA）
+    /// </summary>
+    public string ChangeoverCategory { get; set; } = string.Empty;
 
     /// <summary>
     /// 生产日期
@@ -407,24 +577,29 @@ public class TaktProductionChangeoverImportDto
     public DateTime? ProdDate { get; set; }
 
     /// <summary>
-    /// 生产班组（选项 TaktProductionTeams/options，存 TeamCode）
+    /// 生产班组（选项 TaktProductionTeams/options，存 TeamCode，ExtValue=PlantCode 按工厂过滤）
     /// </summary>
     public string? ProdTeam { get; set; } = string.Empty;
 
     /// <summary>
-    /// 读取SOP时间
+    /// 当前工单（切换前工单号，选项 TaktProductionOrders/options，按 PlantCode 过滤）
     /// </summary>
-    public decimal? ReadSopTime { get; set; }
+    public string? CurrentProdOrderCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 人数
+    /// 当前机种（回填：随工单）
     /// </summary>
-    public int? PersonCount { get; set; }
+    public string? CurrentModelCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// SOP总时间
+    /// 切换后工单（切换目标工单号，选项 TaktProductionOrders/options，按 PlantCode 过滤）
     /// </summary>
-    public decimal? TotalSopTime { get; set; }
+    public string? ChangeoverProdOrderCode { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 切换后机种（回填：随工单）
+    /// </summary>
+    public string? ChangeoverModelCode { get; set; } = string.Empty;
 
     /// <summary>
     /// 切换次数
@@ -432,14 +607,44 @@ public class TaktProductionChangeoverImportDto
     public int? ChangeoverCount { get; set; }
 
     /// <summary>
-    /// 切换时间（单次）
+    /// 切换时间（单次，单位：分钟）
     /// </summary>
-    public decimal? ChangeoverTime { get; set; }
+    public int? ChangeoverTime { get; set; }
 
     /// <summary>
-    /// 切换总时间
+    /// 仪设时间（仪器/设备设置耗时，单位：分钟）
     /// </summary>
-    public decimal? TotalChangeoverTime { get; set; }
+    public int? InstrumentSetupTime { get; set; }
+
+    /// <summary>
+    /// 切换总时间（单位：分钟）
+    /// </summary>
+    public int? TotalChangeoverTime { get; set; }
+
+    /// <summary>
+    /// 读取SOP时间（单位：分钟）
+    /// </summary>
+    public int? ReadSopTime { get; set; }
+
+    /// <summary>
+    /// 学习时间（切换学习/培训耗时，单位：分钟）
+    /// </summary>
+    public int? LearningTime { get; set; }
+
+    /// <summary>
+    /// 人数（参与切换人数）
+    /// </summary>
+    public int? PersonCount { get; set; }
+
+    /// <summary>
+    /// 学习总时间（单位：分钟）
+    /// </summary>
+    public int? TotalLearningTime { get; set; }
+
+    /// <summary>
+    /// SOP总时间（单位：分钟）
+    /// </summary>
+    public int? TotalSopTime { get; set; }
 
     /// <summary>
     /// 扩展字段JSON
@@ -475,14 +680,19 @@ public class TaktProductionChangeoverExportDto
     public string CompanyCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 生产工厂
+    /// 生产工厂（回填：随工单）
     /// </summary>
     public string PlantCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 生产类别
+    /// 生产类别（字典 logistics_prod_category，存 DictValue：EPP/FPP/RWP/MDP/CPP）
     /// </summary>
     public string? ProdCategory { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 切换类别（字典 logistics_changeover_category，存 DictValue：ASSY/PCBA）
+    /// </summary>
+    public string ChangeoverCategory { get; set; } = string.Empty;
 
     /// <summary>
     /// 生产日期
@@ -490,24 +700,29 @@ public class TaktProductionChangeoverExportDto
     public DateTime ProdDate { get; set; }
 
     /// <summary>
-    /// 生产班组（选项 TaktProductionTeams/options，存 TeamCode）
+    /// 生产班组（选项 TaktProductionTeams/options，存 TeamCode，ExtValue=PlantCode 按工厂过滤）
     /// </summary>
     public string? ProdTeam { get; set; } = string.Empty;
 
     /// <summary>
-    /// 读取SOP时间
+    /// 当前工单（切换前工单号，选项 TaktProductionOrders/options，按 PlantCode 过滤）
     /// </summary>
-    public decimal ReadSopTime { get; set; }
+    public string CurrentProdOrderCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 人数
+    /// 当前机种（回填：随工单）
     /// </summary>
-    public int PersonCount { get; set; } = 0;
+    public string CurrentModelCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// SOP总时间
+    /// 切换后工单（切换目标工单号，选项 TaktProductionOrders/options，按 PlantCode 过滤）
     /// </summary>
-    public decimal TotalSopTime { get; set; }
+    public string ChangeoverProdOrderCode { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 切换后机种（回填：随工单）
+    /// </summary>
+    public string ChangeoverModelCode { get; set; } = string.Empty;
 
     /// <summary>
     /// 切换次数
@@ -515,14 +730,44 @@ public class TaktProductionChangeoverExportDto
     public int ChangeoverCount { get; set; } = 0;
 
     /// <summary>
-    /// 切换时间（单次）
+    /// 切换时间（单次，单位：分钟）
     /// </summary>
-    public decimal ChangeoverTime { get; set; }
+    public int ChangeoverTime { get; set; } = 0;
 
     /// <summary>
-    /// 切换总时间
+    /// 仪设时间（仪器/设备设置耗时，单位：分钟）
     /// </summary>
-    public decimal TotalChangeoverTime { get; set; }
+    public int InstrumentSetupTime { get; set; } = 0;
+
+    /// <summary>
+    /// 切换总时间（单位：分钟）
+    /// </summary>
+    public int TotalChangeoverTime { get; set; } = 0;
+
+    /// <summary>
+    /// 读取SOP时间（单位：分钟）
+    /// </summary>
+    public int ReadSopTime { get; set; } = 0;
+
+    /// <summary>
+    /// 学习时间（切换学习/培训耗时，单位：分钟）
+    /// </summary>
+    public int LearningTime { get; set; } = 0;
+
+    /// <summary>
+    /// 人数（参与切换人数）
+    /// </summary>
+    public int PersonCount { get; set; } = 0;
+
+    /// <summary>
+    /// 学习总时间（单位：分钟）
+    /// </summary>
+    public int TotalLearningTime { get; set; } = 0;
+
+    /// <summary>
+    /// SOP总时间（单位：分钟）
+    /// </summary>
+    public int TotalSopTime { get; set; } = 0;
 
     /// <summary>
     /// 扩展字段JSON

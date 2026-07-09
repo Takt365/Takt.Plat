@@ -247,12 +247,16 @@ public interface ITaktTenantRepository<TEntity> : ITaktUniqueExistenceRepository
     // ========================================
 
     /// <summary>
-    /// 按条件取整型字段最大值（当前租户范围内、未删除）
+    /// 按条件取整型字段最大值（当前租户范围内；默认未删除）
     /// </summary>
     /// <param name="predicate">查询条件</param>
     /// <param name="fieldSelector">整型字段（如 SortOrder、行号字段）</param>
+    /// <param name="includeSoftDeleted">为 true 时含已软删行（行号分配等唯一索引不区分删除态）</param>
     /// <returns>最大值；无记录时为 0</returns>
-    Task<int> GetMaxIntAsync(Expression<Func<TEntity, bool>> predicate, Expression<Func<TEntity, int>> fieldSelector);
+    Task<int> GetMaxIntAsync(
+        Expression<Func<TEntity, bool>> predicate,
+        Expression<Func<TEntity, int>> fieldSelector,
+        bool includeSoftDeleted = false);
 
     /// <summary>
     /// 执行只读 SQL 并返回动态行（调用方须先经 TaktSqlExecutorValidator 校验）

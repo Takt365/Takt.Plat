@@ -135,6 +135,9 @@ export default {
       credentials: {
         incorrect: "用戶名或密碼錯誤",
       },
+      account: {
+        locked: "賬戶已鎖定，請稍後再試",
+      },
       tenant: {
         no: {
           access: "當前用戶無權登錄所選租戶",

@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：frontend/src/types/logistics/manufacturing/scheduling
 // 文件名称：aps-schedule.d.ts
-// 创建时间：2026-06-30
+// 创建时间：2026-07-09
 // 创建人：Takt365(Auto Generated)
 // 功能描述：logistics/manufacturing/scheduling 模块类型定义（自动生成；类型名去 Takt 前缀与末尾 Dto，如 TaktCompanyDto → Company）
 // 
@@ -147,11 +147,6 @@ export interface ApsSchedule extends CompanyDtoBase {
    * 排程明细列表（主子表关系） （子表：TaktApsScheduleItem）
    */
   items?: ApsScheduleItem[];
-
-  /**
-   * 变更日志列表（主子表关系） （子表：TaktApsScheduleChangeLog）
-   */
-  changeLogs?: ApsScheduleChangeLog[];
 
 }
 
@@ -460,17 +455,12 @@ export interface ApsScheduleCreate {
   /**
    * APS 排程订单列表（排程批次关联的订单）（子表，级联保存）
    */
-  orders?: ApsOrderCreate[];
+  orders?: ApsOrderUpdate[];
 
   /**
    * 排程明细列表（主子表关系）（子表，级联保存）
    */
-  items?: ApsScheduleItemCreate[];
-
-  /**
-   * 变更日志列表（主子表关系）（子表，级联保存）
-   */
-  changeLogs?: ApsScheduleChangeLogCreate[];
+  items?: ApsScheduleItemUpdate[];
 
   /**
    * 扩展字段JSON
@@ -656,11 +646,6 @@ export interface ApsScheduleTemplate {
   items?: ApsScheduleItemCreate[];
 
   /**
-   * 变更日志列表（主子表关系）（子表，级联保存）
-   */
-  changeLogs?: ApsScheduleChangeLogCreate[];
-
-  /**
    * 扩展字段JSON
    */
   extField?: string;
@@ -813,11 +798,6 @@ export interface ApsScheduleImport {
    * 排程明细列表（主子表关系）（子表，级联保存）
    */
   items?: ApsScheduleItemCreate[];
-
-  /**
-   * 变更日志列表（主子表关系）（子表，级联保存）
-   */
-  changeLogs?: ApsScheduleChangeLogCreate[];
 
   /**
    * 扩展字段JSON

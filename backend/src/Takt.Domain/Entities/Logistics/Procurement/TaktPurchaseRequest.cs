@@ -133,10 +133,4 @@ public class TaktPurchaseRequest : TaktApprovalEntityBase
     /// </summary>
     [Navigate(NavigateType.OneToMany, nameof(TaktPurchaseRequestItem.PurchaseRequestId))]
     public List<TaktPurchaseRequestItem>? Items { get; set; }
-
-    /// <summary>
-    /// 采购申请变更记录列表（外键在子表 TaktPurchaseRequestChangeLog.PurchaseRequestId）
-    /// </summary>
-    [Navigate(NavigateType.OneToMany, nameof(TaktPurchaseRequestChangeLog.PurchaseRequestId))]
-    public List<TaktPurchaseRequestChangeLog>? ChangeLogs { get; set; }
 }

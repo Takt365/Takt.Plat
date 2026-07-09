@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.WebApi.Controllers.Logistics.Quality.Cost
 // 文件名称：TaktQualityIssueAssyReworksController.cs
-// 创建时间：2026-06-27
+// 创建时间：2026-07-09
 // 创建人：Takt365(Cursor AI)
 // 功能描述：质量问题组装不良改修费用明细控制器
 // 
@@ -173,6 +173,26 @@ public class TaktQualityIssueAssyReworksController : TaktControllerBase
         {
             await _qualityIssueAssyReworkService.DeleteQualityIssueAssyReworkBatchAsync(ids);
             return Success("删除成功");
+        }
+        catch (Exception ex)
+        {
+            return HandleException(ex);
+        }
+    }
+
+    /// <summary>
+    /// 更新质量问题组装不良改修费用明细作废状态
+    /// </summary>
+    /// <param name="dto">作废 DTO</param>
+    /// <returns>质量问题组装不良改修费用明细DTO</returns>
+    [TaktPermission("logistics:quality:cost:issue:update", "更新质量问题组装不良改修费用明细作废状态")]
+    [HttpPut("obsolete")]
+    public async Task<IActionResult> UpdateQualityIssueAssyReworkObsoleteAsync([FromBody] TaktQualityIssueAssyReworkObsoleteDto dto)
+    {
+        try
+        {
+            var result = await _qualityIssueAssyReworkService.UpdateQualityIssueAssyReworkObsoleteAsync(dto);
+            return Success(result, "更新成功");
         }
         catch (Exception ex)
         {

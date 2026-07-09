@@ -101,6 +101,10 @@ public class TaktSessionVerifyPasswordRequestValidator : AbstractValidator<TaktS
         RuleFor(x => x.TenantCode)
             .NotEmpty().WithMessage(TaktValidationMessageHelper.Build(T, TaktValidationI18nKeys.Required, TaktValidationI18nKeys.FieldTenantCode))
             .MaximumLength(4).WithMessage(TaktValidationMessageHelper.Build(T, TaktValidationI18nKeys.TooLong, TaktValidationI18nKeys.FieldTenantCode, max: 4));
+
+        RuleFor(x => x.CaptchaCode)
+            .MaximumLength(8192).WithMessage(TaktValidationMessageHelper.Build(T, TaktValidationI18nKeys.TooLong, TaktValidationI18nKeys.FieldCaptchaPayload, max: 8192))
+            .When(x => !string.IsNullOrEmpty(x.CaptchaCode));
     }
 }
 

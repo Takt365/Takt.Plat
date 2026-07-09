@@ -64,14 +64,9 @@ public class TaktEcGijutsuSourceEcInputItemDto
     public DateTime SourceIssueDate { get; set; }
 
     /// <summary>
-    /// 来源状态（原始文本，导入时映射为 ChangeStatus）
+    /// 来源状态（来源 PLM 英文；导入时由 TaktEcSourceStatusMapper 映射为设变 ChangeStatus）
     /// </summary>
     public string SourceStatus { get; set; } = string.Empty;
-
-    /// <summary>
-    /// 导入后将写入的变更状态（字典 logistics_ec_status；1～7；无法映射时为 null）
-    /// </summary>
-    public int? ChangeStatus { get; set; }
 
     /// <summary>
     /// TCJ担当

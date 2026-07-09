@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：frontend/src/api/logistics/quality/cost
 // 文件名称：assurance-first-article.ts
-// 创建时间：2026-06-23
+// 创建时间：2026-07-09
 // 创建人：Takt365(Auto Generated)
 // 功能描述：logistics/quality/cost 模块 API（自动生成，请勿手改路由常量）
 // 
@@ -18,6 +18,7 @@ import type {
 import type {
   QualityAssuranceFirstArticle,
   QualityAssuranceFirstArticleCreate,
+  QualityAssuranceFirstArticleObsolete,
   QualityAssuranceFirstArticleUpdate
 } from '@/types/logistics/quality/cost/assurance-first-article';
 
@@ -105,6 +106,19 @@ export function deleteQualityAssuranceFirstArticleBatch(ids: string[]): Promise<
     url: `${QUALITY_ASSURANCE_FIRST_ARTICLE_API_BASE}/batch`,
     method: 'delete',
     data: ids,
+  });
+}
+
+/**
+ * 更新品质业务初期定期检定费用明细作废状态
+ * @param {QualityAssuranceFirstArticleObsolete} dto 作废 DTO
+ * @returns {Promise<QualityAssuranceFirstArticle>} 品质业务初期定期检定费用明细DTO
+ */
+export function updateQualityAssuranceFirstArticleObsolete(dto: QualityAssuranceFirstArticleObsolete): Promise<QualityAssuranceFirstArticle> {
+  return request<QualityAssuranceFirstArticle>({
+    url: `${QUALITY_ASSURANCE_FIRST_ARTICLE_API_BASE}/obsolete`,
+    method: 'put',
+    data: dto,
   });
 }
 

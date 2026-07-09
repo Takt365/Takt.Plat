@@ -93,26 +93,6 @@ public class TaktMenuLevel4SeedData
             insertCount += insertBOM2;
             updateCount += updateBOM2;
 
-            var (insertBOM2Cl, updateBOM2Cl) = await CreateOrUpdateMenuAsync(menuRepository, sqlSugarContext, tenantCode, "LOGISTICS_MANUFACTURING_BOM_BILL_OF_MATERIAL_CHANGE_LOG", menu =>
-            {
-                menu.MenuName = "物料清单变更";
-                menu.MenuCode = "LOGISTICS_MANUFACTURING_BOM_BILL_OF_MATERIAL_CHANGE_LOG";
-                menu.I18nKey = "menu.logistics.manufacturing.bom.bill.of.material.change.log";
-                menu.Icon = "RiFileHistoryLine";
-                menu.ParentId = manufacturingBomMenu.Id;
-                menu.MenuType = 1;
-                menu.Permission = "logistics:manufacturing:bom:bill:of:material:change:log:list";
-                menu.RoutePath = "/logistics/manufacturing/bom/bill-of-material-change-log";
-                menu.ComponentPath = "logistics/manufacturing/bom/bill-of-material-change-log/index";
-                menu.SortOrder = 2;
-                menu.MenuStatus = 1;
-                menu.IsVisible = 1;
-                menu.IsCached = 0;
-                menu.IsExternal = 0;
-            });
-            insertCount += insertBOM2Cl;
-            updateCount += updateBOM2Cl;
-
             var (insertBOM5, updateBOM5) = await CreateOrUpdateMenuAsync(menuRepository, sqlSugarContext, tenantCode, "LOGISTICS_MANUFACTURING_BOM_ROUTING", menu =>
             {
                 menu.MenuName = "工艺路线";
@@ -124,7 +104,7 @@ public class TaktMenuLevel4SeedData
                 menu.Permission = "logistics:manufacturing:bom:routing:list";
                 menu.RoutePath = "/logistics/manufacturing/bom/routing";
                 menu.ComponentPath = "logistics/manufacturing/bom/routing/index";
-                menu.SortOrder = 3;
+                menu.SortOrder = 2;
                 menu.MenuStatus = 1;
                 menu.IsVisible = 1;
                 menu.IsCached = 0;
@@ -132,26 +112,6 @@ public class TaktMenuLevel4SeedData
             });
             insertCount += insertBOM5;
             updateCount += updateBOM5;
-
-            var (insertBOM5Cl, updateBOM5Cl) = await CreateOrUpdateMenuAsync(menuRepository, sqlSugarContext, tenantCode, "LOGISTICS_MANUFACTURING_BOM_ROUTING_CHANGE_LOG", menu =>
-            {
-                menu.MenuName = "工艺路线变更";
-                menu.MenuCode = "LOGISTICS_MANUFACTURING_BOM_ROUTING_CHANGE_LOG";
-                menu.I18nKey = "menu.logistics.manufacturing.bom.routing.change.log";
-                menu.Icon = "RiFileHistoryLine";
-                menu.ParentId = manufacturingBomMenu.Id;
-                menu.MenuType = 1;
-                menu.Permission = "logistics:manufacturing:bom:routing:change:log:list";
-                menu.RoutePath = "/logistics/manufacturing/bom/routing-change-log";
-                menu.ComponentPath = "logistics/manufacturing/bom/routing-change-log/index";
-                menu.SortOrder = 4;
-                menu.MenuStatus = 1;
-                menu.IsVisible = 1;
-                menu.IsCached = 0;
-                menu.IsExternal = 0;
-            });
-            insertCount += insertBOM5Cl;
-            updateCount += updateBOM5Cl;
 
             var (insertBOM9, updateBOM9) = await CreateOrUpdateMenuAsync(menuRepository, sqlSugarContext, tenantCode, "LOGISTICS_MANUFACTURING_BOM_STANDARD_OPERATION_TIME", menu =>
             {
@@ -164,7 +124,7 @@ public class TaktMenuLevel4SeedData
                 menu.Permission = "logistics:manufacturing:bom:standard:operation:time:list";
                 menu.RoutePath = "/logistics/manufacturing/bom/standard-operation-time";
                 menu.ComponentPath = "logistics/manufacturing/bom/standard-operation-time/index";
-                menu.SortOrder = 6;
+                menu.SortOrder = 3;
                 menu.MenuStatus = 1;
                 menu.IsVisible = 1;
                 menu.IsCached = 0;
@@ -172,26 +132,6 @@ public class TaktMenuLevel4SeedData
             });
             insertCount += insertBOM9;
             updateCount += updateBOM9;
-
-            var (insertBOM9Cl, updateBOM9Cl) = await CreateOrUpdateMenuAsync(menuRepository, sqlSugarContext, tenantCode, "LOGISTICS_MANUFACTURING_BOM_STANDARD_OPERATION_TIME_CHANGE_LOG", menu =>
-            {
-                menu.MenuName = "标准工序时间变更";
-                menu.MenuCode = "LOGISTICS_MANUFACTURING_BOM_STANDARD_OPERATION_TIME_CHANGE_LOG";
-                menu.I18nKey = "menu.logistics.manufacturing.bom.standard.operation.time.change.log";
-                menu.Icon = "RiFileHistoryLine";
-                menu.ParentId = manufacturingBomMenu.Id;
-                menu.MenuType = 1;
-                menu.Permission = "logistics:manufacturing:bom:standard:operation:time:change:log:list";
-                menu.RoutePath = "/logistics/manufacturing/bom/standard-operation-time-change-log";
-                menu.ComponentPath = "logistics/manufacturing/bom/standard-operation-time-change-log/index";
-                menu.SortOrder = 7;
-                menu.MenuStatus = 1;
-                menu.IsVisible = 1;
-                menu.IsCached = 0;
-                menu.IsExternal = 0;
-            });
-            insertCount += insertBOM9Cl;
-            updateCount += updateBOM9Cl;
         }
 
         // ========== MRP计划下的四级菜单 ==========
@@ -316,6 +256,106 @@ public class TaktMenuLevel4SeedData
             });
             insertCount += insertPLN3;
             updateCount += updatePLN3;
+
+            var (insertPLN4, updatePLN4) = await CreateOrUpdateMenuAsync(menuRepository, sqlSugarContext, tenantCode, "LOGISTICS_MANUFACTURING_PLANNING_PRODUCTION_ORDER", menu =>
+            {
+                menu.MenuName = "生产工单";
+                menu.MenuCode = "LOGISTICS_MANUFACTURING_PLANNING_PRODUCTION_ORDER";
+                menu.I18nKey = "menu.logistics.manufacturing.planning.production.order";
+                menu.Icon = "RiFileList3Line";
+                menu.ParentId = manufacturingPlanningMenu.Id;
+                menu.MenuType = 1;
+                menu.Permission = "logistics:manufacturing:planning:production:order:list";
+                menu.RoutePath = "/logistics/manufacturing/planning/production-order";
+                menu.ComponentPath = "logistics/manufacturing/planning/production-order/index";
+                menu.SortOrder = 7;
+                menu.MenuStatus = 1;
+                menu.IsVisible = 1;
+                menu.IsCached = 0;
+                menu.IsExternal = 0;
+            });
+            insertCount += insertPLN4;
+            updateCount += updatePLN4;
+
+            var (insertPLN5, updatePLN5) = await CreateOrUpdateMenuAsync(menuRepository, sqlSugarContext, tenantCode, "LOGISTICS_MANUFACTURING_PLANNING_PRODUCTION_TEAM", menu =>
+            {
+                menu.MenuName = "生产班组";
+                menu.MenuCode = "LOGISTICS_MANUFACTURING_PLANNING_PRODUCTION_TEAM";
+                menu.I18nKey = "menu.logistics.manufacturing.planning.production.team";
+                menu.Icon = "RiTeamLine";
+                menu.ParentId = manufacturingPlanningMenu.Id;
+                menu.MenuType = 1;
+                menu.Permission = "logistics:manufacturing:planning:production:team:list";
+                menu.RoutePath = "/logistics/manufacturing/planning/production-team";
+                menu.ComponentPath = "logistics/manufacturing/planning/production-team/index";
+                menu.SortOrder = 8;
+                menu.MenuStatus = 1;
+                menu.IsVisible = 1;
+                menu.IsCached = 0;
+                menu.IsExternal = 0;
+            });
+            insertCount += insertPLN5;
+            updateCount += updatePLN5;
+
+            var (insertPLN6, updatePLN6) = await CreateOrUpdateMenuAsync(menuRepository, sqlSugarContext, tenantCode, "LOGISTICS_MANUFACTURING_PLANNING_STANDARD_OPERATION_RATE", menu =>
+            {
+                menu.MenuName = "标准生产稼动率";
+                menu.MenuCode = "LOGISTICS_MANUFACTURING_PLANNING_STANDARD_OPERATION_RATE";
+                menu.I18nKey = "menu.logistics.manufacturing.planning.standard.operation.rate";
+                menu.Icon = "RiBarChartLine";
+                menu.ParentId = manufacturingPlanningMenu.Id;
+                menu.MenuType = 1;
+                menu.Permission = "logistics:manufacturing:planning:standard:operation:rate:list";
+                menu.RoutePath = "/logistics/manufacturing/planning/standard-operation-rate";
+                menu.ComponentPath = "logistics/manufacturing/planning/standard-operation-rate/index";
+                menu.SortOrder = 9;
+                menu.MenuStatus = 1;
+                menu.IsVisible = 1;
+                menu.IsCached = 0;
+                menu.IsExternal = 0;
+            });
+            insertCount += insertPLN6;
+            updateCount += updatePLN6;
+
+            var (insertPLN7, updatePLN7) = await CreateOrUpdateMenuAsync(menuRepository, sqlSugarContext, tenantCode, "LOGISTICS_MANUFACTURING_PLANNING_EQUIPMENT_OPERATION_RATE", menu =>
+            {
+                menu.MenuName = "机器稼动率";
+                menu.MenuCode = "LOGISTICS_MANUFACTURING_PLANNING_EQUIPMENT_OPERATION_RATE";
+                menu.I18nKey = "menu.logistics.manufacturing.planning.equipment.operation.rate";
+                menu.Icon = "RiPulseLine";
+                menu.ParentId = manufacturingPlanningMenu.Id;
+                menu.MenuType = 1;
+                menu.Permission = "logistics:manufacturing:planning:equipment:operation:rate:list";
+                menu.RoutePath = "/logistics/manufacturing/planning/equipment-operation-rate";
+                menu.ComponentPath = "logistics/manufacturing/planning/equipment-operation-rate/index";
+                menu.SortOrder = 10;
+                menu.MenuStatus = 1;
+                menu.IsVisible = 1;
+                menu.IsCached = 0;
+                menu.IsExternal = 0;
+            });
+            insertCount += insertPLN7;
+            updateCount += updatePLN7;
+
+            var (insertPLN8, updatePLN8) = await CreateOrUpdateMenuAsync(menuRepository, sqlSugarContext, tenantCode, "LOGISTICS_MANUFACTURING_PLANNING_PERSONNEL_OPERATION_RATE", menu =>
+            {
+                menu.MenuName = "人员稼动率";
+                menu.MenuCode = "LOGISTICS_MANUFACTURING_PLANNING_PERSONNEL_OPERATION_RATE";
+                menu.I18nKey = "menu.logistics.manufacturing.planning.personnel.operation.rate";
+                menu.Icon = "RiUserLine";
+                menu.ParentId = manufacturingPlanningMenu.Id;
+                menu.MenuType = 1;
+                menu.Permission = "logistics:manufacturing:planning:personnel:operation:rate:list";
+                menu.RoutePath = "/logistics/manufacturing/planning/personnel-operation-rate";
+                menu.ComponentPath = "logistics/manufacturing/planning/personnel-operation-rate/index";
+                menu.SortOrder = 11;
+                menu.MenuStatus = 1;
+                menu.IsVisible = 1;
+                menu.IsCached = 0;
+                menu.IsExternal = 0;
+            });
+            insertCount += insertPLN8;
+            updateCount += updatePLN8;
         }
 
         // ========== 生产排程下的四级菜单 ==========
@@ -341,26 +381,6 @@ public class TaktMenuLevel4SeedData
             insertCount += insertSCH1;
             updateCount += updateSCH1;
 
-            var (insertSCH1Cl, updateSCH1Cl) = await CreateOrUpdateMenuAsync(menuRepository, sqlSugarContext, tenantCode, "LOGISTICS_MANUFACTURING_SCHEDULING_APS_SCHEDULE_CHANGE_LOG", menu =>
-            {
-                menu.MenuName = "APS排程变更";
-                menu.MenuCode = "LOGISTICS_MANUFACTURING_SCHEDULING_APS_SCHEDULE_CHANGE_LOG";
-                menu.I18nKey = "menu.logistics.manufacturing.scheduling.aps.schedule.change.log";
-                menu.Icon = "RiFileHistoryLine";
-                menu.ParentId = manufacturingSchedulingMenu.Id;
-                menu.MenuType = 1;
-                menu.Permission = "logistics:manufacturing:scheduling:aps:schedule:change:log:list";
-                menu.RoutePath = "/logistics/manufacturing/scheduling/aps-schedule-change-log";
-                menu.ComponentPath = "logistics/manufacturing/scheduling/aps-schedule-change-log/index";
-                menu.SortOrder = 2;
-                menu.MenuStatus = 1;
-                menu.IsVisible = 1;
-                menu.IsCached = 0;
-                menu.IsExternal = 0;
-            });
-            insertCount += insertSCH1Cl;
-            updateCount += updateSCH1Cl;
-
             var (insertSCH2, updateSCH2) = await CreateOrUpdateMenuAsync(menuRepository, sqlSugarContext, tenantCode, "LOGISTICS_MANUFACTURING_SCHEDULING_WORK_CENTER", menu =>
             {
                 menu.MenuName = "工作中心";
@@ -372,7 +392,7 @@ public class TaktMenuLevel4SeedData
                 menu.Permission = "logistics:manufacturing:scheduling:work:center:list";
                 menu.RoutePath = "/logistics/manufacturing/scheduling/work-center";
                 menu.ComponentPath = "logistics/manufacturing/scheduling/work-center/index";
-                menu.SortOrder = 3;
+                menu.SortOrder = 2;
                 menu.MenuStatus = 1;
                 menu.IsVisible = 1;
                 menu.IsCached = 0;
@@ -392,7 +412,7 @@ public class TaktMenuLevel4SeedData
                 menu.Permission = "logistics:manufacturing:scheduling:changeover:matrix:list";
                 menu.RoutePath = "/logistics/manufacturing/scheduling/changeover-matrix";
                 menu.ComponentPath = "logistics/manufacturing/scheduling/changeover-matrix/index";
-                menu.SortOrder = 4;
+                menu.SortOrder = 3;
                 menu.MenuStatus = 1;
                 menu.IsVisible = 1;
                 menu.IsCached = 0;
@@ -412,7 +432,7 @@ public class TaktMenuLevel4SeedData
                 menu.Permission = "logistics:manufacturing:scheduling:aps:order:list";
                 menu.RoutePath = "/logistics/manufacturing/scheduling/aps-order";
                 menu.ComponentPath = "logistics/manufacturing/scheduling/aps-order/index";
-                menu.SortOrder = 5;
+                menu.SortOrder = 4;
                 menu.MenuStatus = 1;
                 menu.IsVisible = 1;
                 menu.IsCached = 0;
@@ -432,7 +452,7 @@ public class TaktMenuLevel4SeedData
                 menu.Permission = "logistics:manufacturing:scheduling:production:dispatch:list";
                 menu.RoutePath = "/logistics/manufacturing/scheduling/production-dispatch";
                 menu.ComponentPath = "logistics/manufacturing/scheduling/production-dispatch/index";
-                menu.SortOrder = 6;
+                menu.SortOrder = 5;
                 menu.MenuStatus = 1;
                 menu.IsVisible = 1;
                 menu.IsCached = 0;
@@ -445,6 +465,26 @@ public class TaktMenuLevel4SeedData
         // ========== 设变下的四级菜单 ==========
         if (manufacturingEngineeringChangeMenu != null)
         {
+            var (insertECNGroup, updateECNGroup) = await CreateOrUpdateMenuAsync(menuRepository, sqlSugarContext, tenantCode, "LOGISTICS_MANUFACTURING_ENGINEERING_CHANGE_EC_GROUP", menu =>
+            {
+                menu.MenuName = "设变组";
+                menu.MenuCode = "LOGISTICS_MANUFACTURING_ENGINEERING_CHANGE_EC_GROUP";
+                menu.I18nKey = "menu.logistics.manufacturing.engineering.change.ec.group";
+                menu.Icon = "RiGroupLine";
+                menu.ParentId = manufacturingEngineeringChangeMenu.Id;
+                menu.MenuType = 1;
+                menu.Permission = "logistics:manufacturing:engineering:change:ec:group:list";
+                menu.RoutePath = "/logistics/manufacturing/engineering-change/ec-group";
+                menu.ComponentPath = "logistics/manufacturing/engineering-change/ec-group/index";
+                menu.SortOrder = 1;
+                menu.MenuStatus = 1;
+                menu.IsVisible = 1;
+                menu.IsCached = 0;
+                menu.IsExternal = 0;
+            });
+            insertCount += insertECNGroup;
+            updateCount += updateECNGroup;
+
             var (insertECN1, updateECN1) = await CreateOrUpdateMenuAsync(menuRepository, sqlSugarContext, tenantCode, "LOGISTICS_MANUFACTURING_ENGINEERING_CHANGE_KANBAN", menu =>
             {
                 menu.MenuName = "设变看板";
@@ -456,7 +496,7 @@ public class TaktMenuLevel4SeedData
                 menu.Permission = "logistics:manufacturing:engineering:change:kanban:list";
                 menu.RoutePath = "/logistics/manufacturing/engineering-change/ec-kanban";
                 menu.ComponentPath = "logistics/manufacturing/engineering-change/ec-kanban/index";
-                menu.SortOrder = 1;
+                menu.SortOrder = 2;
                 menu.MenuStatus = 1;
                 menu.IsVisible = 1;
                 menu.IsCached = 0;
@@ -476,7 +516,7 @@ public class TaktMenuLevel4SeedData
                 menu.Permission = "logistics:manufacturing:engineering:change:batch:list";
                 menu.RoutePath = "/logistics/manufacturing/engineering-change/ec-batch";
                 menu.ComponentPath = "logistics/manufacturing/engineering-change/ec-batch/index";
-                menu.SortOrder = 2;
+                menu.SortOrder = 3;
                 menu.MenuStatus = 1;
                 menu.IsVisible = 1;
                 menu.IsCached = 0;
@@ -496,7 +536,7 @@ public class TaktMenuLevel4SeedData
                 menu.Permission = "logistics:manufacturing:engineering:change:kakunin:list";
                 menu.RoutePath = "/logistics/manufacturing/engineering-change/ec-kakunin";
                 menu.ComponentPath = "logistics/manufacturing/engineering-change/ec-kakunin/index";
-                menu.SortOrder = 3;
+                menu.SortOrder = 4;
                 menu.MenuStatus = 1;
                 menu.IsVisible = 1;
                 menu.IsCached = 0;
@@ -516,7 +556,7 @@ public class TaktMenuLevel4SeedData
                 menu.Permission = "logistics:manufacturing:engineering:change:gijutsu:list";
                 menu.RoutePath = "/logistics/manufacturing/engineering-change/ec-gijutsu";
                 menu.ComponentPath = "logistics/manufacturing/engineering-change/ec-gijutsu/index";
-                menu.SortOrder = 4;
+                menu.SortOrder = 5;
                 menu.MenuStatus = 1;
                 menu.IsVisible = 1;
                 menu.IsCached = 0;
@@ -536,7 +576,7 @@ public class TaktMenuLevel4SeedData
                 menu.Permission = "logistics:manufacturing:engineering:change:notification:list";
                 menu.RoutePath = "/logistics/manufacturing/engineering-change/ec-notification";
                 menu.ComponentPath = "logistics/manufacturing/engineering-change/ec-notification/index";
-                menu.SortOrder = 5;
+                menu.SortOrder = 6;
                 menu.MenuStatus = 1;
                 menu.IsVisible = 1;
                 menu.IsCached = 0;
@@ -556,7 +596,7 @@ public class TaktMenuLevel4SeedData
                 menu.Permission = "logistics:manufacturing:engineering:change:koubai:list";
                 menu.RoutePath = "/logistics/manufacturing/engineering-change/ec-koubai";
                 menu.ComponentPath = "logistics/manufacturing/engineering-change/ec-koubai/index";
-                menu.SortOrder = 6;
+                menu.SortOrder = 7;
                 menu.MenuStatus = 1;
                 menu.IsVisible = 1;
                 menu.IsCached = 0;
@@ -576,7 +616,7 @@ public class TaktMenuLevel4SeedData
                 menu.Permission = "logistics:manufacturing:engineering:change:seikan:list";
                 menu.RoutePath = "/logistics/manufacturing/engineering-change/ec-seikan";
                 menu.ComponentPath = "logistics/manufacturing/engineering-change/ec-seikan/index";
-                menu.SortOrder = 7;
+                menu.SortOrder = 8;
                 menu.MenuStatus = 1;
                 menu.IsVisible = 1;
                 menu.IsCached = 0;
@@ -596,7 +636,7 @@ public class TaktMenuLevel4SeedData
                 menu.Permission = "logistics:manufacturing:engineering:change:ukeken:list";
                 menu.RoutePath = "/logistics/manufacturing/engineering-change/ec-ukeken";
                 menu.ComponentPath = "logistics/manufacturing/engineering-change/ec-ukeken/index";
-                menu.SortOrder = 8;
+                menu.SortOrder = 9;
                 menu.MenuStatus = 1;
                 menu.IsVisible = 1;
                 menu.IsCached = 0;
@@ -616,7 +656,7 @@ public class TaktMenuLevel4SeedData
                 menu.Permission = "logistics:manufacturing:engineering:change:bukan:list";
                 menu.RoutePath = "/logistics/manufacturing/engineering-change/ec-bukan";
                 menu.ComponentPath = "logistics/manufacturing/engineering-change/ec-bukan/index";
-                menu.SortOrder = 9;
+                menu.SortOrder = 10;
                 menu.MenuStatus = 1;
                 menu.IsVisible = 1;
                 menu.IsCached = 0;
@@ -636,7 +676,7 @@ public class TaktMenuLevel4SeedData
                 menu.Permission = "logistics:manufacturing:engineering:change:seizounika:list";
                 menu.RoutePath = "/logistics/manufacturing/engineering-change/ec-seizounika";
                 menu.ComponentPath = "logistics/manufacturing/engineering-change/ec-seizounika/index";
-                menu.SortOrder = 10;
+                menu.SortOrder = 11;
                 menu.MenuStatus = 1;
                 menu.IsVisible = 1;
                 menu.IsCached = 0;
@@ -656,7 +696,7 @@ public class TaktMenuLevel4SeedData
                 menu.Permission = "logistics:manufacturing:engineering:change:seizouikka:list";
                 menu.RoutePath = "/logistics/manufacturing/engineering-change/ec-seizouikka";
                 menu.ComponentPath = "logistics/manufacturing/engineering-change/ec-seizouikka/index";
-                menu.SortOrder = 11;
+                menu.SortOrder = 12;
                 menu.MenuStatus = 1;
                 menu.IsVisible = 1;
                 menu.IsCached = 0;
@@ -676,7 +716,7 @@ public class TaktMenuLevel4SeedData
                 menu.Permission = "logistics:manufacturing:engineering:change:hinkan:list";
                 menu.RoutePath = "/logistics/manufacturing/engineering-change/ec-hinkan";
                 menu.ComponentPath = "logistics/manufacturing/engineering-change/ec-hinkan/index";
-                menu.SortOrder = 12;
+                menu.SortOrder = 13;
                 menu.MenuStatus = 1;
                 menu.IsVisible = 1;
                 menu.IsCached = 0;
@@ -696,7 +736,7 @@ public class TaktMenuLevel4SeedData
                 menu.Permission = "logistics:manufacturing:engineering:change:seizougijutsu:list";
                 menu.RoutePath = "/logistics/manufacturing/engineering-change/ec-seizougijutsu";
                 menu.ComponentPath = "logistics/manufacturing/engineering-change/ec-seizougijutsu/index";
-                menu.SortOrder = 13;
+                menu.SortOrder = 14;
                 menu.MenuStatus = 1;
                 menu.IsVisible = 1;
                 menu.IsCached = 0;
@@ -716,7 +756,7 @@ public class TaktMenuLevel4SeedData
                 menu.Permission = "logistics:manufacturing:engineering:change:legacy:product:list";
                 menu.RoutePath = "/logistics/manufacturing/engineering-change/legacy-product";
                 menu.ComponentPath = "logistics/manufacturing/engineering-change/legacy-product/index";
-                menu.SortOrder = 14;
+                menu.SortOrder = 15;
                 menu.MenuStatus = 1;
                 menu.IsVisible = 1;
                 menu.IsCached = 0;
@@ -736,7 +776,7 @@ public class TaktMenuLevel4SeedData
                 menu.Permission = "logistics:manufacturing:engineering:change:source:ec:list";
                 menu.RoutePath = "/logistics/manufacturing/engineering-change/source-ec";
                 menu.ComponentPath = "logistics/manufacturing/engineering-change/source-ec/index";
-                menu.SortOrder = 15;
+                menu.SortOrder = 16;
                 menu.MenuStatus = 1;
                 menu.IsVisible = 1;
                 menu.IsCached = 0;
@@ -749,46 +789,6 @@ public class TaktMenuLevel4SeedData
         // ========== 产出管理下的四级菜单 ==========
         if (manufacturingOutputMenu != null)
         {
-            var (insertOUT1, updateOUT1) = await CreateOrUpdateMenuAsync(menuRepository, sqlSugarContext, tenantCode, "LOGISTICS_MANUFACTURING_OUTPUT_PRODUCTION_ORDER", menu =>
-            {
-                menu.MenuName = "生产工单";
-                menu.MenuCode = "LOGISTICS_MANUFACTURING_OUTPUT_PRODUCTION_ORDER";
-                menu.I18nKey = "menu.logistics.manufacturing.output.production.order";
-                menu.Icon = "RiFileList3Line";
-                menu.ParentId = manufacturingOutputMenu.Id;
-                menu.MenuType = 1;
-                menu.Permission = "logistics:manufacturing:output:production:order:list";
-                menu.RoutePath = "/logistics/manufacturing/output/production-order";
-                menu.ComponentPath = "logistics/manufacturing/output/production-order/index";
-                menu.SortOrder = 1;
-                menu.MenuStatus = 1;
-                menu.IsVisible = 1;
-                menu.IsCached = 0;
-                menu.IsExternal = 0;
-            });
-            insertCount += insertOUT1;
-            updateCount += updateOUT1;
-
-            var (insertOUT1Cl, updateOUT1Cl) = await CreateOrUpdateMenuAsync(menuRepository, sqlSugarContext, tenantCode, "LOGISTICS_MANUFACTURING_OUTPUT_PRODUCTION_ORDER_CHANGE_LOG", menu =>
-            {
-                menu.MenuName = "生产工单变更";
-                menu.MenuCode = "LOGISTICS_MANUFACTURING_OUTPUT_PRODUCTION_ORDER_CHANGE_LOG";
-                menu.I18nKey = "menu.logistics.manufacturing.output.production.order.change.log";
-                menu.Icon = "RiFileHistoryLine";
-                menu.ParentId = manufacturingOutputMenu.Id;
-                menu.MenuType = 1;
-                menu.Permission = "logistics:manufacturing:output:production:order:change:log:list";
-                menu.RoutePath = "/logistics/manufacturing/output/production-order-change-log";
-                menu.ComponentPath = "logistics/manufacturing/output/production-order-change-log/index";
-                menu.SortOrder = 2;
-                menu.MenuStatus = 1;
-                menu.IsVisible = 1;
-                menu.IsCached = 0;
-                menu.IsExternal = 0;
-            });
-            insertCount += insertOUT1Cl;
-            updateCount += updateOUT1Cl;
-
             var (insertOUT2, updateOUT2) = await CreateOrUpdateMenuAsync(menuRepository, sqlSugarContext, tenantCode, "LOGISTICS_MANUFACTURING_OUTPUT_PCBA", menu =>
             {
                 menu.MenuName = "PCBA日报";
@@ -800,7 +800,7 @@ public class TaktMenuLevel4SeedData
                 menu.Permission = "logistics:manufacturing:output:pcba:list";
                 menu.RoutePath = "/logistics/manufacturing/output/pcba-output";
                 menu.ComponentPath = "logistics/manufacturing/output/pcba-output/index";
-                menu.SortOrder = 3;
+                menu.SortOrder = 1;
                 menu.MenuStatus = 1;
                 menu.IsVisible = 1;
                 menu.IsCached = 0;
@@ -820,7 +820,7 @@ public class TaktMenuLevel4SeedData
                 menu.Permission = "logistics:manufacturing:output:assy:list";
                 menu.RoutePath = "/logistics/manufacturing/output/assy-output";
                 menu.ComponentPath = "logistics/manufacturing/output/assy-output/index";
-                menu.SortOrder = 4;
+                menu.SortOrder = 2;
                 menu.MenuStatus = 1;
                 menu.IsVisible = 1;
                 menu.IsCached = 0;
@@ -840,7 +840,7 @@ public class TaktMenuLevel4SeedData
                 menu.Permission = "logistics:manufacturing:output:production:changeover:list";
                 menu.RoutePath = "/logistics/manufacturing/output/production-changeover";
                 menu.ComponentPath = "logistics/manufacturing/output/production-changeover/index";
-                menu.SortOrder = 5;
+                menu.SortOrder = 3;
                 menu.MenuStatus = 1;
                 menu.IsVisible = 1;
                 menu.IsCached = 0;
@@ -848,154 +848,34 @@ public class TaktMenuLevel4SeedData
             });
             insertCount += insertOUT6;
             updateCount += updateOUT6;
-
-            var (insertOUT7, updateOUT7) = await CreateOrUpdateMenuAsync(menuRepository, sqlSugarContext, tenantCode, "LOGISTICS_MANUFACTURING_OUTPUT_EQUIPMENT_OPERATION_RATE", menu =>
-            {
-                menu.MenuName = "机器稼动率";
-                menu.MenuCode = "LOGISTICS_MANUFACTURING_OUTPUT_EQUIPMENT_OPERATION_RATE";
-                menu.I18nKey = "menu.logistics.manufacturing.output.equipment.operation.rate";
-                menu.Icon = "RiPulseLine";
-                menu.ParentId = manufacturingOutputMenu.Id;
-                menu.MenuType = 1;
-                menu.Permission = "logistics:manufacturing:output:equipment:operation:rate:list";
-                menu.RoutePath = "/logistics/manufacturing/output/equipment-operation-rate";
-                menu.ComponentPath = "logistics/manufacturing/output/equipment-operation-rate/index";
-                menu.SortOrder = 6;
-                menu.MenuStatus = 1;
-                menu.IsVisible = 1;
-                menu.IsCached = 0;
-                menu.IsExternal = 0;
-            });
-            insertCount += insertOUT7;
-            updateCount += updateOUT7;
-
-            var (insertOUT7Cl, updateOUT7Cl) = await CreateOrUpdateMenuAsync(menuRepository, sqlSugarContext, tenantCode, "LOGISTICS_MANUFACTURING_OUTPUT_EQUIPMENT_OPERATION_RATE_CHANGE_LOG", menu =>
-            {
-                menu.MenuName = "机器稼动率变更";
-                menu.MenuCode = "LOGISTICS_MANUFACTURING_OUTPUT_EQUIPMENT_OPERATION_RATE_CHANGE_LOG";
-                menu.I18nKey = "menu.logistics.manufacturing.output.equipment.operation.rate.change.log";
-                menu.Icon = "RiFileHistoryLine";
-                menu.ParentId = manufacturingOutputMenu.Id;
-                menu.MenuType = 1;
-                menu.Permission = "logistics:manufacturing:output:equipment:operation:rate:change:log:list";
-                menu.RoutePath = "/logistics/manufacturing/output/equipment-operation-rate-change-log";
-                menu.ComponentPath = "logistics/manufacturing/output/equipment-operation-rate-change-log/index";
-                menu.SortOrder = 7;
-                menu.MenuStatus = 1;
-                menu.IsVisible = 1;
-                menu.IsCached = 0;
-                menu.IsExternal = 0;
-            });
-            insertCount += insertOUT7Cl;
-            updateCount += updateOUT7Cl;
-
-            var (insertOUT8, updateOUT8) = await CreateOrUpdateMenuAsync(menuRepository, sqlSugarContext, tenantCode, "LOGISTICS_MANUFACTURING_OUTPUT_PERSONNEL_OPERATION_RATE", menu =>
-            {
-                menu.MenuName = "人员稼动率";
-                menu.MenuCode = "LOGISTICS_MANUFACTURING_OUTPUT_PERSONNEL_OPERATION_RATE";
-                menu.I18nKey = "menu.logistics.manufacturing.output.personnel.operation.rate";
-                menu.Icon = "RiUserLine";
-                menu.ParentId = manufacturingOutputMenu.Id;
-                menu.MenuType = 1;
-                menu.Permission = "logistics:manufacturing:output:personnel:operation:rate:list";
-                menu.RoutePath = "/logistics/manufacturing/output/personnel-operation-rate";
-                menu.ComponentPath = "logistics/manufacturing/output/personnel-operation-rate/index";
-                menu.SortOrder = 8;
-                menu.MenuStatus = 1;
-                menu.IsVisible = 1;
-                menu.IsCached = 0;
-                menu.IsExternal = 0;
-            });
-            insertCount += insertOUT8;
-            updateCount += updateOUT8;
-
-            var (insertOUT8Cl, updateOUT8Cl) = await CreateOrUpdateMenuAsync(menuRepository, sqlSugarContext, tenantCode, "LOGISTICS_MANUFACTURING_OUTPUT_PERSONNEL_OPERATION_RATE_CHANGE_LOG", menu =>
-            {
-                menu.MenuName = "人员稼动率变更";
-                menu.MenuCode = "LOGISTICS_MANUFACTURING_OUTPUT_PERSONNEL_OPERATION_RATE_CHANGE_LOG";
-                menu.I18nKey = "menu.logistics.manufacturing.output.personnel.operation.rate.change.log";
-                menu.Icon = "RiFileHistoryLine";
-                menu.ParentId = manufacturingOutputMenu.Id;
-                menu.MenuType = 1;
-                menu.Permission = "logistics:manufacturing:output:personnel:operation:rate:change:log:list";
-                menu.RoutePath = "/logistics/manufacturing/output/personnel-operation-rate-change-log";
-                menu.ComponentPath = "logistics/manufacturing/output/personnel-operation-rate-change-log/index";
-                menu.SortOrder = 9;
-                menu.MenuStatus = 1;
-                menu.IsVisible = 1;
-                menu.IsCached = 0;
-                menu.IsExternal = 0;
-            });
-            insertCount += insertOUT8Cl;
-            updateCount += updateOUT8Cl;
-
-            var (insertOUT9, updateOUT9) = await CreateOrUpdateMenuAsync(menuRepository, sqlSugarContext, tenantCode, "LOGISTICS_MANUFACTURING_OUTPUT_PRODUCTION_TEAM", menu =>
-            {
-                menu.MenuName = "生产班组";
-                menu.MenuCode = "LOGISTICS_MANUFACTURING_OUTPUT_PRODUCTION_TEAM";
-                menu.I18nKey = "menu.logistics.manufacturing.output.production.team";
-                menu.Icon = "RiTeamLine";
-                menu.ParentId = manufacturingOutputMenu.Id;
-                menu.MenuType = 1;
-                menu.Permission = "logistics:manufacturing:output:production:team:list";
-                menu.RoutePath = "/logistics/manufacturing/output/production-team";
-                menu.ComponentPath = "logistics/manufacturing/output/production-team/index";
-                menu.SortOrder = 10;
-                menu.MenuStatus = 1;
-                menu.IsVisible = 1;
-                menu.IsCached = 0;
-                menu.IsExternal = 0;
-            });
-            insertCount += insertOUT9;
-            updateCount += updateOUT9;
-
-            var (insertOUT10, updateOUT10) = await CreateOrUpdateMenuAsync(menuRepository, sqlSugarContext, tenantCode, "LOGISTICS_MANUFACTURING_OUTPUT_STANDARD_OPERATION_RATE", menu =>
-            {
-                menu.MenuName = "标准生产稼动率";
-                menu.MenuCode = "LOGISTICS_MANUFACTURING_OUTPUT_STANDARD_OPERATION_RATE";
-                menu.I18nKey = "menu.logistics.manufacturing.output.standard.operation.rate";
-                menu.Icon = "RiBarChartLine";
-                menu.ParentId = manufacturingOutputMenu.Id;
-                menu.MenuType = 1;
-                menu.Permission = "logistics:manufacturing:output:standard:operation:rate:list";
-                menu.RoutePath = "/logistics/manufacturing/output/standard-operation-rate";
-                menu.ComponentPath = "logistics/manufacturing/output/standard-operation-rate/index";
-                menu.SortOrder = 11;
-                menu.MenuStatus = 1;
-                menu.IsVisible = 1;
-                menu.IsCached = 0;
-                menu.IsExternal = 0;
-            });
-            insertCount += insertOUT10;
-            updateCount += updateOUT10;
-
-            var (insertOUT10Cl, updateOUT10Cl) = await CreateOrUpdateMenuAsync(menuRepository, sqlSugarContext, tenantCode, "LOGISTICS_MANUFACTURING_OUTPUT_STANDARD_OPERATION_RATE_CHANGE_LOG", menu =>
-            {
-                menu.MenuName = "标准生产稼动率变更";
-                menu.MenuCode = "LOGISTICS_MANUFACTURING_OUTPUT_STANDARD_OPERATION_RATE_CHANGE_LOG";
-                menu.I18nKey = "menu.logistics.manufacturing.output.standard.operation.rate.change.log";
-                menu.Icon = "RiFileHistoryLine";
-                menu.ParentId = manufacturingOutputMenu.Id;
-                menu.MenuType = 1;
-                menu.Permission = "logistics:manufacturing:output:standard:operation:rate:change:log:list";
-                menu.RoutePath = "/logistics/manufacturing/output/standard-operation-rate-change-log";
-                menu.ComponentPath = "logistics/manufacturing/output/standard-operation-rate-change-log/index";
-                menu.SortOrder = 12;
-                menu.MenuStatus = 1;
-                menu.IsVisible = 1;
-                menu.IsCached = 0;
-                menu.IsExternal = 0;
-            });
-            insertCount += insertOUT10Cl;
-            updateCount += updateOUT10Cl;
         }
 
         // ========== 不良管理下的四级菜单 ==========
         if (manufacturingDefectMenu != null)
         {
+            var (insertDEF0, updateDEF0) = await CreateOrUpdateMenuAsync(menuRepository, sqlSugarContext, tenantCode, "LOGISTICS_MANUFACTURING_DEFECT_GROUP", menu =>
+            {
+                menu.MenuName = "不良组";
+                menu.MenuCode = "LOGISTICS_MANUFACTURING_DEFECT_GROUP";
+                menu.I18nKey = "menu.logistics.manufacturing.defect.group";
+                menu.Icon = "RiGroupLine";
+                menu.ParentId = manufacturingDefectMenu.Id;
+                menu.MenuType = 1;
+                menu.Permission = "logistics:manufacturing:defect:group:list";
+                menu.RoutePath = "/logistics/manufacturing/defect/group";
+                menu.ComponentPath = "logistics/manufacturing/defect/group/index";
+                menu.SortOrder = 1;
+                menu.MenuStatus = 1;
+                menu.IsVisible = 1;
+                menu.IsCached = 0;
+                menu.IsExternal = 0;
+            });
+            insertCount += insertDEF0;
+            updateCount += updateDEF0;
+
             var (insertDEF1, updateDEF1) = await CreateOrUpdateMenuAsync(menuRepository, sqlSugarContext, tenantCode, "LOGISTICS_MANUFACTURING_DEFECT_PCBA_INSPECTION", menu =>
             {
-                menu.MenuName = "PCBA检查";
+                menu.MenuName = "SMT检查";
                 menu.MenuCode = "LOGISTICS_MANUFACTURING_DEFECT_PCBA_INSPECTION";
                 menu.I18nKey = "menu.logistics.manufacturing.defect.pcba.inspection";
                 menu.Icon = "RiSearchLine";
@@ -1004,7 +884,7 @@ public class TaktMenuLevel4SeedData
                 menu.Permission = "logistics:manufacturing:defect:pcba:inspection:list";
                 menu.RoutePath = "/logistics/manufacturing/defect/pcba-inspection";
                 menu.ComponentPath = "logistics/manufacturing/defect/pcba-inspection/index";
-                menu.SortOrder = 1;
+                menu.SortOrder = 2;
                 menu.MenuStatus = 1;
                 menu.IsVisible = 1;
                 menu.IsCached = 0;
@@ -1015,7 +895,7 @@ public class TaktMenuLevel4SeedData
 
             var (insertDEF3, updateDEF3) = await CreateOrUpdateMenuAsync(menuRepository, sqlSugarContext, tenantCode, "LOGISTICS_MANUFACTURING_DEFECT_PCBA_REPAIR", menu =>
             {
-                menu.MenuName = "PCBA改修";
+                menu.MenuName = "PCBA修理";
                 menu.MenuCode = "LOGISTICS_MANUFACTURING_DEFECT_PCBA_REPAIR";
                 menu.I18nKey = "menu.logistics.manufacturing.defect.pcba.repair";
                 menu.Icon = "RiToolsLine";
@@ -1024,7 +904,7 @@ public class TaktMenuLevel4SeedData
                 menu.Permission = "logistics:manufacturing:defect:pcba:repair:list";
                 menu.RoutePath = "/logistics/manufacturing/defect/pcba-repair";
                 menu.ComponentPath = "logistics/manufacturing/defect/pcba-repair/index";
-                menu.SortOrder = 2;
+                menu.SortOrder = 3;
                 menu.MenuStatus = 1;
                 menu.IsVisible = 1;
                 menu.IsCached = 0;
@@ -1044,7 +924,7 @@ public class TaktMenuLevel4SeedData
                 menu.Permission = "logistics:manufacturing:defect:assy:list";
                 menu.RoutePath = "/logistics/manufacturing/defect/assy-defect";
                 menu.ComponentPath = "logistics/manufacturing/defect/assy-defect/index";
-                menu.SortOrder = 3;
+                menu.SortOrder = 4;
                 menu.MenuStatus = 1;
                 menu.IsVisible = 1;
                 menu.IsCached = 0;
@@ -1285,6 +1165,26 @@ public class TaktMenuLevel4SeedData
         // ========== 质量业务下的四级菜单 ==========
         if (qualityAssuranceMenu != null)
         {
+            var (insertQO0, updateQO0) = await CreateOrUpdateMenuAsync(menuRepository, sqlSugarContext, tenantCode, "LOGISTICS_QUALITY_OPERATION_QUALITY_GROUP", menu =>
+            {
+                menu.MenuName = "质量组";
+                menu.MenuCode = "LOGISTICS_QUALITY_OPERATION_QUALITY_GROUP";
+                menu.I18nKey = "menu.logistics.quality.operation.group";
+                menu.Icon = "RiGroupLine";
+                menu.ParentId = qualityAssuranceMenu.Id;
+                menu.MenuType = 1;
+                menu.Permission = "logistics:quality:operation:group:list";
+                menu.RoutePath = "/logistics/quality/operation/group";
+                menu.ComponentPath = "logistics/quality/operation/group/index";
+                menu.SortOrder = 1;
+                menu.MenuStatus = 1;
+                menu.IsVisible = 1;
+                menu.IsCached = 0;
+                menu.IsExternal = 0;
+            });
+            insertCount += insertQO0;
+            updateCount += updateQO0;
+
             var (insertQO1, updateQO1) = await CreateOrUpdateMenuAsync(menuRepository, sqlSugarContext, tenantCode, "LOGISTICS_QUALITY_OPERATION_SAMPLING_SCHEME", menu =>
             {
                 menu.MenuName = "抽样方案";
@@ -1296,7 +1196,7 @@ public class TaktMenuLevel4SeedData
                 menu.Permission = "logistics:quality:operation:sampling:scheme:list";
                 menu.RoutePath = "/logistics/quality/operation/sampling-scheme";
                 menu.ComponentPath = "logistics/quality/operation/sampling-scheme/index";
-                menu.SortOrder = 1;
+                menu.SortOrder = 2;
                 menu.MenuStatus = 1;
                 menu.IsVisible = 1;
                 menu.IsCached = 0;
@@ -1316,7 +1216,7 @@ public class TaktMenuLevel4SeedData
                 menu.Permission = "logistics:quality:operation:inspection:standard:list";
                 menu.RoutePath = "/logistics/quality/operation/inspection-standard";
                 menu.ComponentPath = "logistics/quality/operation/inspection-standard/index";
-                menu.SortOrder = 2;
+                menu.SortOrder = 3;
                 menu.MenuStatus = 1;
                 menu.IsVisible = 1;
                 menu.IsCached = 0;
@@ -1336,7 +1236,7 @@ public class TaktMenuLevel4SeedData
                 menu.Permission = "logistics:quality:operation:iqc:order:list";
                 menu.RoutePath = "/logistics/quality/operation/iqc-order";
                 menu.ComponentPath = "logistics/quality/operation/iqc-order/index";
-                menu.SortOrder = 3;
+                menu.SortOrder = 4;
                 menu.MenuStatus = 1;
                 menu.IsVisible = 1;
                 menu.IsCached = 0;
@@ -1344,26 +1244,6 @@ public class TaktMenuLevel4SeedData
             });
             insertCount += insertQO3;
             updateCount += updateQO3;
-
-            var (insertQO3Cl, updateQO3Cl) = await CreateOrUpdateMenuAsync(menuRepository, sqlSugarContext, tenantCode, "LOGISTICS_QUALITY_OPERATION_IQC_ORDER_CHANGE_LOG", menu =>
-            {
-                menu.MenuName = "进货检验变更";
-                menu.MenuCode = "LOGISTICS_QUALITY_OPERATION_IQC_ORDER_CHANGE_LOG";
-                menu.I18nKey = "menu.logistics.quality.operation.iqc.order.change.log";
-                menu.Icon = "RiFileHistoryLine";
-                menu.ParentId = qualityAssuranceMenu.Id;
-                menu.MenuType = 1;
-                menu.Permission = "logistics:quality:operation:iqc:order:change:log:list";
-                menu.RoutePath = "/logistics/quality/operation/iqc-order-change-log";
-                menu.ComponentPath = "logistics/quality/operation/iqc-order-change-log/index";
-                menu.SortOrder = 4;
-                menu.MenuStatus = 1;
-                menu.IsVisible = 1;
-                menu.IsCached = 0;
-                menu.IsExternal = 0;
-            });
-            insertCount += insertQO3Cl;
-            updateCount += updateQO3Cl;
 
             var (insertQO4, updateQO4) = await CreateOrUpdateMenuAsync(menuRepository, sqlSugarContext, tenantCode, "LOGISTICS_QUALITY_OPERATION_IPQC_ORDER", menu =>
             {
@@ -1385,26 +1265,6 @@ public class TaktMenuLevel4SeedData
             insertCount += insertQO4;
             updateCount += updateQO4;
 
-            var (insertQO4Cl, updateQO4Cl) = await CreateOrUpdateMenuAsync(menuRepository, sqlSugarContext, tenantCode, "LOGISTICS_QUALITY_OPERATION_IPQC_ORDER_CHANGE_LOG", menu =>
-            {
-                menu.MenuName = "制程检验变更";
-                menu.MenuCode = "LOGISTICS_QUALITY_OPERATION_IPQC_ORDER_CHANGE_LOG";
-                menu.I18nKey = "menu.logistics.quality.operation.ipqc.order.change.log";
-                menu.Icon = "RiFileHistoryLine";
-                menu.ParentId = qualityAssuranceMenu.Id;
-                menu.MenuType = 1;
-                menu.Permission = "logistics:quality:operation:ipqc:order:change:log:list";
-                menu.RoutePath = "/logistics/quality/operation/ipqc-order-change-log";
-                menu.ComponentPath = "logistics/quality/operation/ipqc-order-change-log/index";
-                menu.SortOrder = 6;
-                menu.MenuStatus = 1;
-                menu.IsVisible = 1;
-                menu.IsCached = 0;
-                menu.IsExternal = 0;
-            });
-            insertCount += insertQO4Cl;
-            updateCount += updateQO4Cl;
-
             var (insertQO5, updateQO5) = await CreateOrUpdateMenuAsync(menuRepository, sqlSugarContext, tenantCode, "LOGISTICS_QUALITY_OPERATION_FQC_ORDER", menu =>
             {
                 menu.MenuName = "入库检验";
@@ -1416,7 +1276,7 @@ public class TaktMenuLevel4SeedData
                 menu.Permission = "logistics:quality:operation:fqc:order:list";
                 menu.RoutePath = "/logistics/quality/operation/fqc-order";
                 menu.ComponentPath = "logistics/quality/operation/fqc-order/index";
-                menu.SortOrder = 7;
+                menu.SortOrder = 6;
                 menu.MenuStatus = 1;
                 menu.IsVisible = 1;
                 menu.IsCached = 0;
@@ -1424,26 +1284,6 @@ public class TaktMenuLevel4SeedData
             });
             insertCount += insertQO5;
             updateCount += updateQO5;
-
-            var (insertQO5Cl, updateQO5Cl) = await CreateOrUpdateMenuAsync(menuRepository, sqlSugarContext, tenantCode, "LOGISTICS_QUALITY_OPERATION_FQC_ORDER_CHANGE_LOG", menu =>
-            {
-                menu.MenuName = "入库检验变更";
-                menu.MenuCode = "LOGISTICS_QUALITY_OPERATION_FQC_ORDER_CHANGE_LOG";
-                menu.I18nKey = "menu.logistics.quality.operation.fqc.order.change.log";
-                menu.Icon = "RiFileHistoryLine";
-                menu.ParentId = qualityAssuranceMenu.Id;
-                menu.MenuType = 1;
-                menu.Permission = "logistics:quality:operation:fqc:order:change:log:list";
-                menu.RoutePath = "/logistics/quality/operation/fqc-order-change-log";
-                menu.ComponentPath = "logistics/quality/operation/fqc-order-change-log/index";
-                menu.SortOrder = 8;
-                menu.MenuStatus = 1;
-                menu.IsVisible = 1;
-                menu.IsCached = 0;
-                menu.IsExternal = 0;
-            });
-            insertCount += insertQO5Cl;
-            updateCount += updateQO5Cl;
         }
 
         // ========== 客诉管理下的四级菜单 (LOGISTICS_QUALITY_COMPLAINT) ==========

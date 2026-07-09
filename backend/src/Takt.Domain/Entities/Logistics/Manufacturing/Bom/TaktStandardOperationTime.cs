@@ -76,10 +76,10 @@ public class TaktStandardOperationTime : TaktApprovalEntityBase
     public string PointsUnit { get; set; } = "SHORT";
 
     /// <summary>
-    /// 点数转分钟汇率（字典 logistics_points_to_minutes_rate；DictValue=1/0.028/0.045；普通=1，AI=0.028，SMT=0.045）
+    /// 点数转分钟汇率（decimal，精度 3 位小数；可选值参见字典 logistics_points_to_minutes_rate：普通=1，AI=0.028，SMT=0.045）
     /// </summary>
-    [SugarColumn(ColumnName = "points_to_minutes_rate", ColumnDescription = "转换汇率", ColumnDataType = "nvarchar", Length = 10, IsNullable = false, DefaultValue = "1")]
-    public string PointsToMinutesRate { get; set; } = "1";
+    [SugarColumn(ColumnName = "points_to_minutes_rate", ColumnDescription = "转换汇率", ColumnDataType = "decimal", Length = 10, DecimalDigits = 3, IsNullable = false, DefaultValue = "1")]
+    public decimal PointsToMinutesRate { get; set; } = 1;
 
     /// <summary>
     /// 转换后标准工时（分钟）
@@ -98,10 +98,4 @@ public class TaktStandardOperationTime : TaktApprovalEntityBase
     /// </summary>
     [SugarColumn(ColumnName = "expiry_date", ColumnDescription = "失效日期", ColumnDataType = "datetime", IsNullable = true)]
     public DateTime? ExpiryDate { get; set; }
-
-    /// <summary>
-    /// 标准工序时间变更记录列表（外键在子表 TaktStandardOperationTimeChangeLog.StandardOperationTimeId）
-    /// </summary>
-    [Navigate(NavigateType.OneToMany, nameof(TaktStandardOperationTimeChangeLog.StandardOperationTimeId))]
-    public List<TaktStandardOperationTimeChangeLog>? ChangeLogs { get; set; }
 }

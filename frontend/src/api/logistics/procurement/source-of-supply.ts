@@ -34,7 +34,7 @@ const SOURCE_OF_SUPPLY_API_BASE = 'TaktSourceOfSupplies';
 // ========================================
 
 /**
- * 获取货源清单列表（分页）
+ * 获取货源清单清单列表（分页）
  * @param {any} queryDto 查询DTO
  * @returns {Promise<TaktPagedResult<SourceOfSupply>>} 分页结果
  */
@@ -47,9 +47,9 @@ export function getSourceOfSupplyList(queryDto: any): Promise<TaktPagedResult<So
 }
 
 /**
- * 根据ID获取货源清单
- * @param {string} id 货源清单ID
- * @returns {Promise<SourceOfSupply>} 货源清单DTO
+ * 根据ID获取货源清单清单
+ * @param {string} id 货源清单清单ID
+ * @returns {Promise<SourceOfSupply>} 货源清单清单DTO
  */
 export function getSourceOfSupplyById(id: string): Promise<SourceOfSupply> {
   return request<SourceOfSupply>({
@@ -59,9 +59,9 @@ export function getSourceOfSupplyById(id: string): Promise<SourceOfSupply> {
 }
 
 /**
- * 创建货源清单
+ * 创建货源清单清单
  * @param {SourceOfSupplyCreate} dto 创建DTO
- * @returns {Promise<SourceOfSupply>} 货源清单DTO
+ * @returns {Promise<SourceOfSupply>} 货源清单清单DTO
  */
 export function createSourceOfSupply(dto: SourceOfSupplyCreate): Promise<SourceOfSupply> {
   return request<SourceOfSupply>({
@@ -72,10 +72,10 @@ export function createSourceOfSupply(dto: SourceOfSupplyCreate): Promise<SourceO
 }
 
 /**
- * 更新货源清单
- * @param {string} id 货源清单ID
+ * 更新货源清单清单
+ * @param {string} id 货源清单清单ID
  * @param {SourceOfSupplyUpdate} dto 更新DTO
- * @returns {Promise<SourceOfSupply>} 货源清单DTO
+ * @returns {Promise<SourceOfSupply>} 货源清单清单DTO
  */
 export function updateSourceOfSupply(id: string, dto: SourceOfSupplyUpdate): Promise<SourceOfSupply> {
   return request<SourceOfSupply>({
@@ -86,8 +86,8 @@ export function updateSourceOfSupply(id: string, dto: SourceOfSupplyUpdate): Pro
 }
 
 /**
- * 删除货源清单
- * @param {string} id 货源清单ID
+ * 删除货源清单清单
+ * @param {string} id 货源清单清单ID
  * @returns {Promise<void>} 操作结果
  */
 export function deleteSourceOfSupplyById(id: string): Promise<void> {
@@ -98,7 +98,7 @@ export function deleteSourceOfSupplyById(id: string): Promise<void> {
 }
 
 /**
- * 批量删除货源清单
+ * 批量删除货源清单清单
  * @param {string[]} ids ID列表
  * @returns {Promise<void>} 操作结果
  */
@@ -111,9 +111,9 @@ export function deleteSourceOfSupplyBatch(ids: string[]): Promise<void> {
 }
 
 /**
- * 更新货源清单状态
+ * 更新货源清单清单状态
  * @param {SourceOfSupplyStatus} dto 状态 DTO
- * @returns {Promise<SourceOfSupply>} 货源清单DTO
+ * @returns {Promise<SourceOfSupply>} 货源清单清单DTO
  */
 export function updateSourceOfSupplyStatus(dto: SourceOfSupplyStatus): Promise<SourceOfSupply> {
   return request<SourceOfSupply>({
@@ -124,9 +124,9 @@ export function updateSourceOfSupplyStatus(dto: SourceOfSupplyStatus): Promise<S
 }
 
 /**
- * 更新货源清单排序
+ * 更新货源清单清单排序
  * @param {SourceOfSupplySort} dto 排序DTO
- * @returns {Promise<SourceOfSupply>} 货源清单DTO
+ * @returns {Promise<SourceOfSupply>} 货源清单清单DTO
  */
 export function updateSourceOfSupplySort(dto: SourceOfSupplySort): Promise<SourceOfSupply> {
   return request<SourceOfSupply>({
@@ -141,7 +141,7 @@ export function updateSourceOfSupplySort(dto: SourceOfSupplySort): Promise<Sourc
 // ========================================
 
 /**
- * 获取货源清单选项列表
+ * 获取货源清单清单选项列表
  * @returns {Promise<TaktSelectOption[]>} 下拉选项
  */
 export function getSourceOfSupplyOptions(): Promise<TaktSelectOption[]> {
@@ -174,7 +174,7 @@ export function getSourceOfSupplyTemplate(sheetName?: string, templateName?: str
 }
 
 /**
- * 导入货源清单
+ * 导入货源清单清单
  * @param {globalThis.File} file Excel文件
  * @param {string} sheetName sheetName
  * @returns {Promise<{ success: number; fail: number; errors: string[] }>} 导入结果
@@ -197,7 +197,7 @@ export function importSourceOfSupply(file: globalThis.File, sheetName?: string):
 }
 
 /**
- * 导出货源清单
+ * 导出货源清单清单
  * @param {any} query query
  * @param {string} sheetName sheetName
  * @param {string} exportName exportName

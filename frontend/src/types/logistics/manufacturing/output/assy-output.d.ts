@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：frontend/src/types/logistics/manufacturing/output
 // 文件名称：assy-output.d.ts
-// 创建时间：2026-06-30
+// 创建时间：2026-07-06
 // 创建人：Takt365(Auto Generated)
 // 功能描述：logistics/manufacturing/output 模块类型定义（自动生成；类型名去 Takt 前缀与末尾 Dto，如 TaktCompanyDto → Company）
 // 
@@ -29,12 +29,12 @@ export interface AssyOutput extends CompanyDtoBase {
   assyOutputId: string;
 
   /**
-   * 工厂代码（关联 TaktPlant.PlantCode，选项 TaktPlants/options）
+   * 工厂代码（回填：随工单）
    */
   plantCode: string;
 
   /**
-   * 生产类别（字典 logistics_prod_category，存 DictValue：RD/EVT/DVT/EPP/PP/FPP/MP/RPR/RWR）
+   * 生产类别（字典 logistics_prod_category，存 DictValue：EPP/FPP/RWP/MDP/CPP）
    */
   prodCategory: string;
 
@@ -64,12 +64,12 @@ export interface AssyOutput extends CompanyDtoBase {
   shiftNo: number;
 
   /**
-   * 生产订单类型（选项 TaktProductionOrders/options 的 ExtLabel，随工单回填）
+   * 订单类别（选项 TaktProductionOrders/options 的 ExtLabel，随工单回填）
    */
   prodOrderType?: string;
 
   /**
-   * 生产工单号（选项 TaktProductionOrders/options，按 PlantCode 过滤）
+   * 工单号（选项 TaktProductionOrders/options，按 PlantCode 过滤）
    */
   prodOrderCode: string;
 
@@ -92,6 +92,11 @@ export interface AssyOutput extends CompanyDtoBase {
    * 订单数量
    */
   prodOrderQty: number;
+
+  /**
+   * 序列号（回填：随工单）
+   */
+  serialNo?: string;
 
   /**
    * 标准工时(分钟)
@@ -129,12 +134,12 @@ export interface AssyOutputQuery extends TaktPagedQuery {
   companyCode?: string;
 
   /**
-   * 工厂代码（关联 TaktPlant.PlantCode，选项 TaktPlants/options）
+   * 工厂代码（回填：随工单）
    */
   plantCode?: string;
 
   /**
-   * 生产类别（字典 logistics_prod_category，存 DictValue：RD/EVT/DVT/EPP/PP/FPP/MP/RPR/RWR）
+   * 生产类别（字典 logistics_prod_category，存 DictValue：EPP/FPP/RWP/MDP/CPP）
    */
   prodCategory?: string;
 
@@ -169,12 +174,12 @@ export interface AssyOutputQuery extends TaktPagedQuery {
   shiftNo?: number;
 
   /**
-   * 生产订单类型（选项 TaktProductionOrders/options 的 ExtLabel，随工单回填）
+   * 订单类别（选项 TaktProductionOrders/options 的 ExtLabel，随工单回填）
    */
   prodOrderType?: string;
 
   /**
-   * 生产工单号（选项 TaktProductionOrders/options，按 PlantCode 过滤）
+   * 工单号（选项 TaktProductionOrders/options，按 PlantCode 过滤）
    */
   prodOrderCode?: string;
 
@@ -197,6 +202,11 @@ export interface AssyOutputQuery extends TaktPagedQuery {
    * 订单数量
    */
   prodOrderQty?: number;
+
+  /**
+   * 序列号（回填：随工单）
+   */
+  serialNo?: string;
 
   /**
    * 标准工时(分钟)
@@ -253,12 +263,12 @@ export interface AssyOutputCreate {
   companyDefaultCulture: string;
 
   /**
-   * 工厂代码（关联 TaktPlant.PlantCode，选项 TaktPlants/options）
+   * 工厂代码（回填：随工单）
    */
   plantCode: string;
 
   /**
-   * 生产类别（字典 logistics_prod_category，存 DictValue：RD/EVT/DVT/EPP/PP/FPP/MP/RPR/RWR）
+   * 生产类别（字典 logistics_prod_category，存 DictValue：EPP/FPP/RWP/MDP/CPP）
    */
   prodCategory: string;
 
@@ -288,12 +298,12 @@ export interface AssyOutputCreate {
   shiftNo: number;
 
   /**
-   * 生产订单类型（选项 TaktProductionOrders/options 的 ExtLabel，随工单回填）
+   * 订单类别（选项 TaktProductionOrders/options 的 ExtLabel，随工单回填）
    */
   prodOrderType?: string;
 
   /**
-   * 生产工单号（选项 TaktProductionOrders/options，按 PlantCode 过滤）
+   * 工单号（选项 TaktProductionOrders/options，按 PlantCode 过滤）
    */
   prodOrderCode: string;
 
@@ -316,6 +326,11 @@ export interface AssyOutputCreate {
    * 订单数量
    */
   prodOrderQty: number;
+
+  /**
+   * 序列号（回填：随工单）
+   */
+  serialNo?: string;
 
   /**
    * 标准工时(分钟)
@@ -377,12 +392,12 @@ export interface AssyOutputTemplate {
   companyCode?: string;
 
   /**
-   * 工厂代码（关联 TaktPlant.PlantCode，选项 TaktPlants/options）
+   * 工厂代码（回填：随工单）
    */
   plantCode?: string;
 
   /**
-   * 生产类别（字典 logistics_prod_category，存 DictValue：RD/EVT/DVT/EPP/PP/FPP/MP/RPR/RWR）
+   * 生产类别（字典 logistics_prod_category，存 DictValue：EPP/FPP/RWP/MDP/CPP）
    */
   prodCategory?: string;
 
@@ -412,12 +427,12 @@ export interface AssyOutputTemplate {
   shiftNo?: number;
 
   /**
-   * 生产订单类型（选项 TaktProductionOrders/options 的 ExtLabel，随工单回填）
+   * 订单类别（选项 TaktProductionOrders/options 的 ExtLabel，随工单回填）
    */
   prodOrderType?: string;
 
   /**
-   * 生产工单号（选项 TaktProductionOrders/options，按 PlantCode 过滤）
+   * 工单号（选项 TaktProductionOrders/options，按 PlantCode 过滤）
    */
   prodOrderCode?: string;
 
@@ -440,6 +455,11 @@ export interface AssyOutputTemplate {
    * 订单数量
    */
   prodOrderQty?: number;
+
+  /**
+   * 序列号（回填：随工单）
+   */
+  serialNo?: string;
 
   /**
    * 标准工时(分钟)
@@ -491,12 +511,12 @@ export interface AssyOutputImport {
   companyDefaultCulture?: string;
 
   /**
-   * 工厂代码（关联 TaktPlant.PlantCode，选项 TaktPlants/options）
+   * 工厂代码（回填：随工单）
    */
   plantCode?: string;
 
   /**
-   * 生产类别（字典 logistics_prod_category，存 DictValue：RD/EVT/DVT/EPP/PP/FPP/MP/RPR/RWR）
+   * 生产类别（字典 logistics_prod_category，存 DictValue：EPP/FPP/RWP/MDP/CPP）
    */
   prodCategory?: string;
 
@@ -526,12 +546,12 @@ export interface AssyOutputImport {
   shiftNo?: number;
 
   /**
-   * 生产订单类型（选项 TaktProductionOrders/options 的 ExtLabel，随工单回填）
+   * 订单类别（选项 TaktProductionOrders/options 的 ExtLabel，随工单回填）
    */
   prodOrderType?: string;
 
   /**
-   * 生产工单号（选项 TaktProductionOrders/options，按 PlantCode 过滤）
+   * 工单号（选项 TaktProductionOrders/options，按 PlantCode 过滤）
    */
   prodOrderCode?: string;
 
@@ -554,6 +574,11 @@ export interface AssyOutputImport {
    * 订单数量
    */
   prodOrderQty?: number;
+
+  /**
+   * 序列号（回填：随工单）
+   */
+  serialNo?: string;
 
   /**
    * 标准工时(分钟)
@@ -600,12 +625,12 @@ export interface AssyOutputExport {
   companyCode: string;
 
   /**
-   * 工厂代码（关联 TaktPlant.PlantCode，选项 TaktPlants/options）
+   * 工厂代码（回填：随工单）
    */
   plantCode: string;
 
   /**
-   * 生产类别（字典 logistics_prod_category，存 DictValue：RD/EVT/DVT/EPP/PP/FPP/MP/RPR/RWR）
+   * 生产类别（字典 logistics_prod_category，存 DictValue：EPP/FPP/RWP/MDP/CPP）
    */
   prodCategory: string;
 
@@ -635,12 +660,12 @@ export interface AssyOutputExport {
   shiftNo: number;
 
   /**
-   * 生产订单类型（选项 TaktProductionOrders/options 的 ExtLabel，随工单回填）
+   * 订单类别（选项 TaktProductionOrders/options 的 ExtLabel，随工单回填）
    */
   prodOrderType?: string;
 
   /**
-   * 生产工单号（选项 TaktProductionOrders/options，按 PlantCode 过滤）
+   * 工单号（选项 TaktProductionOrders/options，按 PlantCode 过滤）
    */
   prodOrderCode: string;
 
@@ -663,6 +688,11 @@ export interface AssyOutputExport {
    * 订单数量
    */
   prodOrderQty: number;
+
+  /**
+   * 序列号（回填：随工单）
+   */
+  serialNo?: string;
 
   /**
    * 标准工时(分钟)
@@ -689,28 +719,5 @@ export interface AssyOutputExport {
    */
   createdAt: string;
 
-}
-
-/**
- * 组立生产统计（数据看板 production-stat）
- * @description 对应后端 TaktAssyOutputProductionStatDto
- */
-export interface AssyOutputProductionStat {
-  /** 统计月份 yyyy-MM */
-  statMonth: string;
-  /** 月标准产能合计 */
-  monthStdCapacity: number;
-  /** 月实际产量合计 */
-  monthProdActualQty: number;
-  /** 月达成率（%） */
-  monthAchievementRate: number;
-  /** 月停线损失（分钟） */
-  monthDowntimeMinutes: number;
-  /** 月投入工时（分钟） */
-  monthInputMinutes: number;
-  /** 月生产工时（分钟） */
-  monthProdMinutes: number;
-  /** 月实际工时（分钟） */
-  monthActualMinutes: number;
 }
 

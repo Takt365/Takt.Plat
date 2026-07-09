@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Application.Services.Logistics.Manufacturing.Output
 // 文件名称：TaktAssyOutputDetailService.cs
-// 创建时间：2026-06-30
+// 创建时间：2026-07-06
 // 创建人：Takt365(Cursor AI)
 // 功能描述：组立日报明细应用服务实现
 // 
@@ -10,11 +10,16 @@
 // 免责声明：此软件使用 MIT License，作者不承担任何使用风险。
 // ========================================
 
+using System.Globalization;
 using System.Linq.Expressions;
 using Mapster;
 using SqlSugar;
 using Takt.Application.Dtos.Logistics.Manufacturing.Output;
+using Takt.Application.Services.Logistics.Manufacturing.Defect;
+using Takt.Domain.Entities.Foundation;
+using Takt.Domain.Entities.Logistics.Manufacturing.Defect;
 using Takt.Domain.Entities.Logistics.Manufacturing.Output;
+using Takt.Domain.Entities.Logistics.Manufacturing.Planning;
 using Takt.Domain.Interfaces;
 using Takt.Domain.Repositories;
 using Takt.Shared.Exceptions;
@@ -31,31 +36,63 @@ public class TaktAssyOutputDetailService : TaktServiceBase, ITaktAssyOutputDetai
 {
     private readonly ITaktCompanyRepository<TaktAssyOutputDetail> _assyOutputDetailRepository;
     private readonly ITaktCompanyRepository<TaktAssyOutput> _assyOutputRepository;
+    private readonly ITaktCompanyRepository<TaktAssyDefect> _assyDefectRepository;
+    private readonly ITaktCompanyRepository<TaktAssyDefectDetail> _assyDefectDetailRepository;
+    private readonly ITaktCompanyRepository<TaktAssyOrderDefect> _assyOrderDefectRepository;
+    private readonly ITaktCompanyRepository<TaktAssyBatchDefect> _assyBatchDefectRepository;
+    private readonly ITaktCompanyRepository<TaktProductionChangeover> _productionChangeoverRepository;
+    private readonly ITaktCompanyRepository<TaktProductionOrder> _productionOrderRepository;
+    private readonly ITaktCompanyRepository<TaktStandardOperationRate> _standardOperationRateRepository;
     private readonly ITaktLineNumberGenerator _lineNumberGenerator;
     private readonly ITaktUniqueValidator _uniqueValidator;
+    private readonly ITaktTenantRepository<TaktDictData> _dictDataRepository;
 
     /// <summary>
     /// 构造函数
     /// </summary>
     /// <param name="assyOutputDetailRepository">组立日报明细仓储</param>
     /// <param name="assyOutputRepository">组立日报仓储</param>
+    /// <param name="assyDefectRepository">组立不良日报仓储</param>
+    /// <param name="assyDefectDetailRepository">组立不良明细仓储</param>
+    /// <param name="assyOrderDefectRepository">工单不良统计仓储</param>
+    /// <param name="assyBatchDefectRepository">批量不良统计仓储</param>
+    /// <param name="productionChangeoverRepository">生产切换记录仓储</param>
+    /// <param name="productionOrderRepository">生产工单仓储</param>
+    /// <param name="standardOperationRateRepository">标准生产稼动率仓储</param>
     /// <param name="lineNumberGenerator">明细行号生成器</param>
     /// <param name="uniqueValidator">唯一性验证器</param>
+    /// <param name="dictDataRepository">字典数据仓储（多选原因 sortOrder 排序）</param>
     /// <param name="userContext">用户上下文</param>
     /// <param name="localizationService">本地化服务</param>
     public TaktAssyOutputDetailService(
         ITaktCompanyRepository<TaktAssyOutputDetail> assyOutputDetailRepository,
         ITaktCompanyRepository<TaktAssyOutput> assyOutputRepository,
+        ITaktCompanyRepository<TaktAssyDefect> assyDefectRepository,
+        ITaktCompanyRepository<TaktAssyDefectDetail> assyDefectDetailRepository,
+        ITaktCompanyRepository<TaktAssyOrderDefect> assyOrderDefectRepository,
+        ITaktCompanyRepository<TaktAssyBatchDefect> assyBatchDefectRepository,
+        ITaktCompanyRepository<TaktProductionChangeover> productionChangeoverRepository,
+        ITaktCompanyRepository<TaktProductionOrder> productionOrderRepository,
+        ITaktCompanyRepository<TaktStandardOperationRate> standardOperationRateRepository,
         ITaktLineNumberGenerator lineNumberGenerator,
         ITaktUniqueValidator uniqueValidator,
+        ITaktTenantRepository<TaktDictData> dictDataRepository,
         ITaktUserContext? userContext = null,
         ITaktLocalizationService? localizationService = null)
         : base(userContext, localizationService)
     {
         _assyOutputDetailRepository = assyOutputDetailRepository;
         _assyOutputRepository = assyOutputRepository;
+        _assyDefectRepository = assyDefectRepository;
+        _assyDefectDetailRepository = assyDefectDetailRepository;
+        _assyOrderDefectRepository = assyOrderDefectRepository;
+        _assyBatchDefectRepository = assyBatchDefectRepository;
+        _productionChangeoverRepository = productionChangeoverRepository;
+        _productionOrderRepository = productionOrderRepository;
+        _standardOperationRateRepository = standardOperationRateRepository;
         _lineNumberGenerator = lineNumberGenerator;
         _uniqueValidator = uniqueValidator;
+        _dictDataRepository = dictDataRepository;
     }
 
     /// <summary>
@@ -117,8 +154,12 @@ public class TaktAssyOutputDetailService : TaktServiceBase, ITaktAssyOutputDetai
     /// <returns>DTO</returns>
     public async Task<TaktAssyOutputDetailDto> CreateAssyOutputDetailAsync(TaktAssyOutputDetailCreateDto dto)
     {
+        var (dictSnapshot, dictSortMaps) = await TaktOutputDictMultiFieldsHelper.LoadAsync(_dictDataRepository, CurrentTenantCode);
+        (dto.DowntimeReason, dto.UnachievedReason) = TaktOutputDictMultiFieldsHelper.NormalizeFields(
+            dto.DowntimeReason, dto.UnachievedReason, dictSnapshot, dictSortMaps);
         var entity = dto.Adapt<TaktAssyOutputDetail>();
-        await StampAssyOutputDetailAssyOutputAsync(entity, dto);
+        var master = await RequireAssyOutputMasterAsync(entity, dto);
+        EnsureAssyOutputProdDateEditable(master.ProdDate);
         var isUnique_ix_takt_logistics_manufacturing_output_assy_detail_line_unique = await _uniqueValidator.IsUniqueAsync(
             _assyOutputDetailRepository,
             x => x.AssyOutputId == entity.AssyOutputId
@@ -135,7 +176,18 @@ public class TaktAssyOutputDetailService : TaktServiceBase, ITaktAssyOutputDetai
             var businessCode = entity.AssyOutputId.ToString();
             entity.LineNumber = _lineNumberGenerator.GenerateNext(businessCode, maxLine);
         }
+        await ApplyDetailDerivedFieldsAsync(entity, master);
+        await TaktAssyOutputProdActualQtyLimitHelper.EnsureProdActualQtyNotExceedForDetailAsync(
+            _assyOutputDetailRepository,
+            _productionOrderRepository,
+            CurrentTenantCode,
+            CurrentCompanyCode,
+            master,
+            entity.ProdActualQty);
         entity = await _assyOutputDetailRepository.CreateAsync(entity);
+        await RefreshMixedProdBucketForMasterAsync(master, entity.TimePeriod);
+        await RefreshChangeoverBucketForMasterAsync(master, entity.TimePeriod);
+        await SyncDefectFromOutputAsync(master);
         return await GetAssyOutputDetailByIdAsync(entity.Id) ?? entity.Adapt<TaktAssyOutputDetailDto>();
     }
 
@@ -152,8 +204,16 @@ public class TaktAssyOutputDetailService : TaktServiceBase, ITaktAssyOutputDetai
         {
             throw new TaktBusinessException("组立日报明细不存在");
         }
+        var oldMaster = await _assyOutputRepository.GetByIdAsync(entity.AssyOutputId);
+        var oldTimePeriod = entity.TimePeriod;
+        var oldProdTeam = oldMaster?.ProdTeam;
+        var oldProdDate = oldMaster?.ProdDate ?? default;
+        var (dictSnapshot, dictSortMaps) = await TaktOutputDictMultiFieldsHelper.LoadAsync(_dictDataRepository, CurrentTenantCode);
+        (dto.DowntimeReason, dto.UnachievedReason) = TaktOutputDictMultiFieldsHelper.NormalizeFields(
+            dto.DowntimeReason, dto.UnachievedReason, dictSnapshot, dictSortMaps);
         dto.Adapt(entity);
-        await StampAssyOutputDetailAssyOutputAsync(entity, dto);
+        var master = await RequireAssyOutputMasterAsync(entity, dto);
+        EnsureAssyOutputProdDateEditable(master.ProdDate);
         var isUnique_ix_takt_logistics_manufacturing_output_assy_detail_line_unique = await _uniqueValidator.IsUniqueAsync(
             _assyOutputDetailRepository,
             x => x.AssyOutputId == entity.AssyOutputId
@@ -163,7 +223,29 @@ public class TaktAssyOutputDetailService : TaktServiceBase, ITaktAssyOutputDetai
         {
             throw new TaktBusinessException("组立日报明细的AssyOutputId、LineNumber已存在");
         }
+        await ApplyDetailDerivedFieldsAsync(entity, master);
+        await TaktAssyOutputProdActualQtyLimitHelper.EnsureProdActualQtyNotExceedForDetailAsync(
+            _assyOutputDetailRepository,
+            _productionOrderRepository,
+            CurrentTenantCode,
+            CurrentCompanyCode,
+            master,
+            entity.ProdActualQty,
+            id);
         await _assyOutputDetailRepository.UpdateAsync(entity);
+        await RefreshMixedProdBucketForMasterAsync(master, entity.TimePeriod);
+        if (oldMaster != null
+            && !string.IsNullOrWhiteSpace(oldTimePeriod)
+            && !string.IsNullOrWhiteSpace(oldProdTeam)
+            && (!string.Equals(oldTimePeriod, entity.TimePeriod, StringComparison.Ordinal)
+                || !string.Equals(oldProdTeam, master.ProdTeam, StringComparison.Ordinal)
+                || oldProdDate.Date != master.ProdDate.Date))
+        {
+            await RefreshMixedProdBucketAsync(oldProdTeam, oldProdDate, oldTimePeriod);
+            await RefreshChangeoverBucketAsync(oldProdTeam, oldProdDate, oldTimePeriod);
+        }
+        await RefreshChangeoverBucketForMasterAsync(master, entity.TimePeriod);
+        await SyncDefectFromOutputAsync(master);
         return await GetAssyOutputDetailByIdAsync(id) ?? throw new TaktBusinessException("组立日报明细不存在");
     }
 
@@ -174,10 +256,29 @@ public class TaktAssyOutputDetailService : TaktServiceBase, ITaktAssyOutputDetai
     /// <returns>任务</returns>
     public async Task DeleteAssyOutputDetailByIdAsync(long id)
     {
+        var entity = await _assyOutputDetailRepository.GetByIdAsync(id);
+        if (entity == null)
+        {
+            throw new TaktBusinessException("组立日报明细不存在或已删除");
+        }
+        var master = await _assyOutputRepository.GetByIdAsync(entity.AssyOutputId);
+        var timePeriod = entity.TimePeriod;
+        var prodTeam = master?.ProdTeam;
+        var prodDate = master?.ProdDate ?? default;
+        if (master != null)
+        {
+            EnsureAssyOutputProdDateEditable(master.ProdDate);
+        }
         var deleted = await _assyOutputDetailRepository.DeleteAsync(id);
         if (!deleted)
         {
             throw new TaktBusinessException("组立日报明细不存在或已删除");
+        }
+        if (master != null && !string.IsNullOrWhiteSpace(timePeriod) && !string.IsNullOrWhiteSpace(prodTeam))
+        {
+            await RefreshMixedProdBucketAsync(prodTeam, prodDate, timePeriod);
+            await RefreshChangeoverBucketAsync(prodTeam, prodDate, timePeriod);
+            await SyncDefectFromOutputAsync(master);
         }
     }
 
@@ -230,13 +331,19 @@ public class TaktAssyOutputDetailService : TaktServiceBase, ITaktAssyOutputDetai
             return (0, 0, errors);
         }
         var importSeenKeys = new HashSet<string>(StringComparer.Ordinal);
+        var importOutputIds = new HashSet<long>();
+        var importBucketsToRefresh = new HashSet<(string ProdTeam, DateTime ProdDate, string TimePeriod)>();
+        var (dictSnapshot, dictSortMaps) = await TaktOutputDictMultiFieldsHelper.LoadAsync(_dictDataRepository, CurrentTenantCode);
         for (var i = 0; i < rows.Count; i++)
         {
             try
             {
-                var entity = rows[i].Adapt<TaktAssyOutputDetail>();
                 var importDto = rows[i].Adapt<TaktAssyOutputDetailCreateDto>();
-                await StampAssyOutputDetailAssyOutputAsync(entity, importDto);
+                (importDto.DowntimeReason, importDto.UnachievedReason) = TaktOutputDictMultiFieldsHelper.NormalizeFields(
+                    importDto.DowntimeReason, importDto.UnachievedReason, dictSnapshot, dictSortMaps);
+                var entity = importDto.Adapt<TaktAssyOutputDetail>();
+                var master = await RequireAssyOutputMasterAsync(entity, importDto);
+                EnsureAssyOutputProdDateEditable(master.ProdDate);
                 var importKey = $"{entity.AssyOutputId}|{entity.LineNumber}";
                 if (!importSeenKeys.Add(importKey))
                 {
@@ -258,13 +365,39 @@ public class TaktAssyOutputDetailService : TaktServiceBase, ITaktAssyOutputDetai
                     var businessCode = entity.AssyOutputId.ToString();
                     entity.LineNumber = _lineNumberGenerator.GenerateNext(businessCode, maxLine);
                 }
+                await ApplyDetailDerivedFieldsAsync(entity, master);
+                await TaktAssyOutputProdActualQtyLimitHelper.EnsureProdActualQtyNotExceedForDetailAsync(
+                    _assyOutputDetailRepository,
+                    _productionOrderRepository,
+                    CurrentTenantCode,
+                    CurrentCompanyCode,
+                    master,
+                    entity.ProdActualQty);
                 await _assyOutputDetailRepository.CreateAsync(entity);
+                importOutputIds.Add(master.Id);
+                if (!string.IsNullOrWhiteSpace(entity.TimePeriod))
+                {
+                    importBucketsToRefresh.Add((master.ProdTeam, master.ProdDate, entity.TimePeriod));
+                }
                 success += 1;
             }
             catch (Exception ex)
             {
                 fail += 1;
                 errors.Add($"第{i + 2}行: {ex.Message}");
+            }
+        }
+        foreach (var bucket in importBucketsToRefresh)
+        {
+            await RefreshMixedProdBucketAsync(bucket.ProdTeam, bucket.ProdDate, bucket.TimePeriod);
+            await RefreshChangeoverBucketAsync(bucket.ProdTeam, bucket.ProdDate, bucket.TimePeriod);
+        }
+        foreach (var outputId in importOutputIds)
+        {
+            var output = await _assyOutputRepository.GetByIdAsync(outputId);
+            if (output != null)
+            {
+                await SyncDefectFromOutputAsync(output);
             }
         }
         return (success, fail, errors);
@@ -296,28 +429,161 @@ public class TaktAssyOutputDetailService : TaktServiceBase, ITaktAssyOutputDetai
     }
 
     // ========================================
-    // 主表外键同步（ManyToOne）
+    // 派生字段计算（MixedProd / 工时 / 达成率）
     // ========================================
 
     /// <summary>
-    /// 同步组立日报明细主表外键（ManyToOne → 组立日报）
+    /// 校验主表生产日期未过编辑截止日（次月 cutoff 日之后不可新增/修改/删除明细）
     /// </summary>
-    /// <param name="entity">当前实体</param>
+    /// <param name="prodDate">生产日期</param>
+    private void EnsureAssyOutputProdDateEditable(DateTime prodDate)
+    {
+        if (TaktAssyOutputProdDateEditLockHelper.IsProdDateLocked(prodDate, DateTime.Today))
+        {
+            ThrowBusinessExceptionLocalized(
+                TaktValidationI18nKeys.AssyOutputProdDateLocked,
+                prodDate.ToString("yyyy-MM-dd", CultureInfo.InvariantCulture),
+                TaktAssyOutputProdDateEditLockHelper.DefaultCutoffDayOfNextMonth);
+        }
+        if (!TaktAssyOutputProdDateEditLockHelper.IsProdDateSelectable(prodDate, DateTime.Today))
+        {
+            ThrowBusinessExceptionLocalized(
+                TaktValidationI18nKeys.AssyOutputProdDateOutOfRange,
+                TaktAssyOutputProdDateEditLockHelper.DefaultCutoffDayOfNextMonth);
+        }
+    }
+
+    /// <summary>
+    /// 校验并同步组立日报主表外键，返回主表实体
+    /// </summary>
+    /// <param name="entity">组立日报明细实体</param>
     /// <param name="dto">创建 DTO</param>
-    /// <returns>任务</returns>
-    private async Task StampAssyOutputDetailAssyOutputAsync(TaktAssyOutputDetail entity, TaktAssyOutputDetailCreateDto dto)
+    /// <returns>组立日报主表</returns>
+    private async Task<TaktAssyOutput> RequireAssyOutputMasterAsync(TaktAssyOutputDetail entity, TaktAssyOutputDetailCreateDto dto)
     {
         if (dto.AssyOutputId <= 0)
         {
-            return;
+            throw new TaktBusinessException("组立日报不存在");
         }
         var master = await _assyOutputRepository.GetByIdAsync(dto.AssyOutputId);
-        if (master == null)
+        if (master == null || master.TenantCode != CurrentTenantCode || master.CompanyCode != CurrentCompanyCode)
         {
             throw new TaktBusinessException("组立日报不存在");
         }
         entity.AssyOutputId = master.Id;
+        return master;
     }
+
+    /// <summary>
+    /// 保存前按主表重算明细派生字段（含无产量无报工时标准产能为 0）
+    /// </summary>
+    /// <param name="detail">组立日报明细</param>
+    /// <param name="master">组立日报主表</param>
+    /// <returns>任务</returns>
+    private async Task ApplyDetailDerivedFieldsAsync(TaktAssyOutputDetail detail, TaktAssyOutput master)
+    {
+        ArgumentNullException.ThrowIfNull(detail);
+        ArgumentNullException.ThrowIfNull(master);
+        var operationRatePercent = await TaktAssyOutputDerivedFieldsHelper.ResolvePersonnelOperationRatePercentAsync(
+            _standardOperationRateRepository,
+            CurrentTenantCode,
+            CurrentCompanyCode,
+            master.PlantCode,
+            master.ProdDate);
+        TaktAssyOutputDetailDerivedFieldsHelper.ApplyCalculatedFields(
+            detail,
+            master,
+            TaktProductionStatHelper.CalculateAssyMixedProdCount(1),
+            operationRatePercent);
+    }
+
+    /// <summary>
+    /// 刷新指定主表上下文下生产时段混合生产桶
+    /// </summary>
+    /// <param name="master">组立日报主表</param>
+    /// <param name="timePeriod">生产时段</param>
+    /// <returns>任务</returns>
+    private async Task RefreshMixedProdBucketForMasterAsync(TaktAssyOutput master, string timePeriod)
+    {
+        await RefreshMixedProdBucketAsync(master.ProdTeam, master.ProdDate, timePeriod);
+    }
+
+    /// <summary>
+    /// 刷新指定主表上下文下生产时段生产切换桶
+    /// </summary>
+    /// <param name="master">组立日报主表</param>
+    /// <param name="timePeriod">生产时段</param>
+    /// <returns>任务</returns>
+    private async Task RefreshChangeoverBucketForMasterAsync(TaktAssyOutput master, string timePeriod)
+    {
+        await RefreshChangeoverBucketAsync(master.ProdTeam, master.ProdDate, timePeriod);
+    }
+
+    /// <summary>
+    /// 刷新同一生产日期、生产班组、生产时段桶内生产切换记录
+    /// </summary>
+    /// <param name="prodTeam">生产班组</param>
+    /// <param name="prodDate">生产日期</param>
+    /// <param name="timePeriod">生产时段</param>
+    /// <returns>任务</returns>
+    private async Task RefreshChangeoverBucketAsync(string prodTeam, DateTime prodDate, string timePeriod)
+    {
+        EnsureThreeLayerContext();
+        await TaktAssyOutputProductionChangeoverSyncHelper.RefreshBucketAsync(
+            _assyOutputRepository,
+            _assyOutputDetailRepository,
+            _productionChangeoverRepository,
+            _productionOrderRepository,
+            CurrentTenantCode,
+            CurrentCompanyCode,
+            prodTeam,
+            prodDate,
+            timePeriod);
+    }
+
+    /// <summary>
+    /// 刷新同一生产日期、生产班组、生产时段桶内全部明细派生字段
+    /// </summary>
+    /// <param name="prodTeam">生产班组</param>
+    /// <param name="prodDate">生产日期</param>
+    /// <param name="timePeriod">生产时段</param>
+    /// <returns>任务</returns>
+    private async Task RefreshMixedProdBucketAsync(string prodTeam, DateTime prodDate, string timePeriod)
+    {
+        EnsureThreeLayerContext();
+        await TaktAssyOutputDetailDerivedFieldsHelper.RefreshMixedProdBucketAsync(
+            _assyOutputRepository,
+            _assyOutputDetailRepository,
+            CurrentTenantCode,
+            CurrentCompanyCode,
+            prodTeam,
+            prodDate,
+            timePeriod);
+    }
+
+    /// <summary>
+    /// 产出主表变更后刷新工单/批量不良统计（不自动生成组立不良日报）
+    /// </summary>
+    /// <param name="output">组立日报主表</param>
+    /// <returns>任务</returns>
+    private async Task SyncDefectFromOutputAsync(TaktAssyOutput output)
+    {
+        EnsureThreeLayerContext();
+        await TaktAssyOutputDefectSyncHelper.SyncFromAssyOutputAsync(
+            _assyOutputRepository,
+            _assyOutputDetailRepository,
+            _assyDefectRepository,
+            _assyDefectDetailRepository,
+            _assyOrderDefectRepository,
+            _assyBatchDefectRepository,
+            output,
+            CurrentTenantCode,
+            CurrentCompanyCode);
+    }
+
+    // ========================================
+    // 主表外键同步（ManyToOne）
+    // ========================================
     // ========================================
     // 查询表达式
     // ========================================
@@ -339,6 +605,7 @@ public class TaktAssyOutputDetailService : TaktServiceBase, ITaktAssyOutputDetai
                 || (x.ProdOrderCode != null && x.ProdOrderCode.Contains(keywords))
                 || SqlFunc.ToString(x.LineNumber).Contains(keywords)
                 || (x.TimePeriod != null && x.TimePeriod.Contains(keywords))
+                || SqlFunc.ToString(x.MixedProd).Contains(keywords)
                 || SqlFunc.ToString(x.ProdActualQty).Contains(keywords)
                 || SqlFunc.ToString(x.DowntimeMinutes).Contains(keywords)
                 || (x.DowntimeReason != null && x.DowntimeReason.Contains(keywords))
@@ -346,8 +613,10 @@ public class TaktAssyOutputDetailService : TaktServiceBase, ITaktAssyOutputDetai
                 || (x.UnachievedReason != null && x.UnachievedReason.Contains(keywords))
                 || (x.UnachievedDescription != null && x.UnachievedDescription.Contains(keywords))
                 || SqlFunc.ToString(x.InputMinutes).Contains(keywords)
-                || SqlFunc.ToString(x.ProdMinutes).Contains(keywords)
                 || SqlFunc.ToString(x.ActualMinutes).Contains(keywords)
+                || SqlFunc.ToString(x.IndirectMinutes).Contains(keywords)
+                || SqlFunc.ToString(x.ConfirmMinutes).Contains(keywords)
+                || SqlFunc.ToString(x.StdCapacity).Contains(keywords)
                 || SqlFunc.ToString(x.AchievementRate).Contains(keywords)
                 || (x.ExtField != null && x.ExtField.Contains(keywords))
                 || (x.Remark != null && x.Remark.Contains(keywords))
@@ -373,6 +642,11 @@ public class TaktAssyOutputDetailService : TaktServiceBase, ITaktAssyOutputDetai
         if (!string.IsNullOrEmpty(queryDto?.TimePeriod))
         {
             exp = exp.And(x => x.TimePeriod != null && x.TimePeriod.Contains(queryDto.TimePeriod));
+        }
+
+        if (queryDto?.MixedProd.HasValue == true)
+        {
+            exp = exp.And(x => x.MixedProd == queryDto.MixedProd);
         }
 
         if (queryDto?.ProdActualQty.HasValue == true)
@@ -410,14 +684,24 @@ public class TaktAssyOutputDetailService : TaktServiceBase, ITaktAssyOutputDetai
             exp = exp.And(x => x.InputMinutes == queryDto.InputMinutes);
         }
 
-        if (queryDto?.ProdMinutes.HasValue == true)
-        {
-            exp = exp.And(x => x.ProdMinutes == queryDto.ProdMinutes);
-        }
-
         if (queryDto?.ActualMinutes.HasValue == true)
         {
             exp = exp.And(x => x.ActualMinutes == queryDto.ActualMinutes);
+        }
+
+        if (queryDto?.IndirectMinutes.HasValue == true)
+        {
+            exp = exp.And(x => x.IndirectMinutes == queryDto.IndirectMinutes);
+        }
+
+        if (queryDto?.ConfirmMinutes.HasValue == true)
+        {
+            exp = exp.And(x => x.ConfirmMinutes == queryDto.ConfirmMinutes);
+        }
+
+        if (queryDto?.StdCapacity.HasValue == true)
+        {
+            exp = exp.And(x => x.StdCapacity == queryDto.StdCapacity);
         }
 
         if (queryDto?.AchievementRate.HasValue == true)

@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Application.Dtos.Logistics.Quality.Cost
 // 文件名称：TaktQualityAssuranceDtos.cs
-// 创建时间：2026-06-30
+// 创建时间：2026-07-09
 // 创建人：Takt365(Auto Generated)
 // 功能描述：QualityAssurance 模块 DTO（由 generate-dtos-from-entity.cjs 根据 TaktQualityAssurance 生成，请按需审阅）
 // 
@@ -271,37 +271,37 @@ public class TaktQualityAssuranceCreateDto
     /// <summary>
     /// 来料检验费用明细列表（子表，级联保存）
     /// </summary>
-    public List<TaktQualityAssuranceIncomingCreateDto>? IncomingItems { get; set; }
+    public List<TaktQualityAssuranceIncomingUpdateDto>? IncomingItems { get; set; }
 
     /// <summary>
     /// 初期/定期检定费用明细列表（子表，级联保存）
     /// </summary>
-    public List<TaktQualityAssuranceFirstArticleCreateDto>? FirstArticleItems { get; set; }
+    public List<TaktQualityAssuranceFirstArticleUpdateDto>? FirstArticleItems { get; set; }
 
     /// <summary>
     /// 设备校正费用明细列表（子表，级联保存）
     /// </summary>
-    public List<TaktQualityAssuranceCalibrationCreateDto>? CalibrationItems { get; set; }
+    public List<TaktQualityAssuranceCalibrationUpdateDto>? CalibrationItems { get; set; }
 
     /// <summary>
     /// 其他通常业务费用明细列表（子表，级联保存）
     /// </summary>
-    public List<TaktQualityAssuranceOtherCreateDto>? OtherItems { get; set; }
+    public List<TaktQualityAssuranceOtherUpdateDto>? OtherItems { get; set; }
 
     /// <summary>
     /// 出货检验费用明细列表（子表，级联保存）
     /// </summary>
-    public List<TaktQualityAssuranceOutgoingCreateDto>? OutgoingItems { get; set; }
+    public List<TaktQualityAssuranceOutgoingUpdateDto>? OutgoingItems { get; set; }
 
     /// <summary>
     /// 信赖性评价/ORT费用明细列表（子表，级联保存）
     /// </summary>
-    public List<TaktQualityAssuranceReliabilityCreateDto>? ReliabilityItems { get; set; }
+    public List<TaktQualityAssuranceReliabilityUpdateDto>? ReliabilityItems { get; set; }
 
     /// <summary>
     /// 顾客品质要求对应费用明细列表（子表，级联保存）
     /// </summary>
-    public List<TaktQualityAssuranceCustomerResponseCreateDto>? CustomerResponseItems { get; set; }
+    public List<TaktQualityAssuranceCustomerResponseUpdateDto>? CustomerResponseItems { get; set; }
 
     /// <summary>
     /// 扩展字段JSON

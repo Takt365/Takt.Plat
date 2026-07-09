@@ -1,4 +1,4 @@
-﻿// ========================================
+// ========================================
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Infrastructure.Data.Seeds
 // 文件名称：TaktUserCompanySeedData.cs
@@ -24,7 +24,7 @@ using Takt.Shared.Options;
 namespace Takt.Infrastructure.Data.Seeds.EntitySeedData;
 
 /// <summary>
-/// 用户-公司关联种子数据初始化
+/// 用户-公司关联种子数据初始化；所有启用用户关联全部公司，默认登录公司为 <c>2300</c>
 /// 幂等性操作：存在则更新 IsDefault，不存在则创建
 /// </summary>
 public class TaktUserCompanySeedData : ITaktSeedDataCoordinator
@@ -81,10 +81,18 @@ public class TaktUserCompanySeedData : ITaktSeedDataCoordinator
             return (0, 0);
         }
 
-        var primaryCompanyCode = database.GetSeedCompanyCode();
-        if (!companyMap.TryGetValue(primaryCompanyCode, out var primaryCompany))
+        const string DefaultCompanyCode = "2300";
+        if (!companyMap.TryGetValue(DefaultCompanyCode, out var defaultCompany))
         {
-            primaryCompany = orderedCompanies[0];
+            TaktLogger.Warning(
+                "租户 {TenantCode} 未找到默认公司 {DefaultCompanyCode}，回退为 Database:CompanyCodes 首项",
+                tenantCode,
+                DefaultCompanyCode);
+            var fallbackCode = database.GetSeedCompanyCode();
+            if (!companyMap.TryGetValue(fallbackCode, out defaultCompany))
+            {
+                defaultCompany = orderedCompanies[0];
+            }
         }
 
         var users = await userRepository.GetListAsync(
@@ -92,34 +100,25 @@ public class TaktUserCompanySeedData : ITaktSeedDataCoordinator
 
         foreach (var user in users)
         {
-            if (user.Username == "admin")
+            foreach (var company in orderedCompanies)
             {
-                foreach (var company in orderedCompanies)
-                {
-                    var isDefault = string.Equals(company.CompanyCode, primaryCompany.CompanyCode, StringComparison.Ordinal);
-                    var (inserted, updated) = await CreateOrUpdateUserCompanyAsync(
-                        userRepository,
-                        userCompanyRepository,
-                        tenantCode,
-                        user.Username,
-                        company.CompanyCode,
-                        isDefault);
-                    insertCount += inserted;
-                    updateCount += updated;
-                }
-            }
-            else
-            {
+                var isDefault = string.Equals(company.CompanyCode, defaultCompany.CompanyCode, StringComparison.Ordinal);
                 var (inserted, updated) = await CreateOrUpdateUserCompanyAsync(
                     userRepository,
                     userCompanyRepository,
                     tenantCode,
                     user.Username,
-                    primaryCompany.CompanyCode,
-                    true);
+                    company.CompanyCode,
+                    isDefault);
                 insertCount += inserted;
                 updateCount += updated;
             }
+
+            updateCount += await ClearStaleDefaultFlagsAsync(
+                userCompanyRepository,
+                tenantCode,
+                user.Id,
+                defaultCompany.CompanyCode);
         }
 
         TaktLogger.Information(
@@ -174,5 +173,40 @@ public class TaktUserCompanySeedData : ITaktSeedDataCoordinator
         link.IsDefault = isDefaultValue;
         await userCompanyRepository.UpdateAsync(link);
         return (0, 1);
+    }
+
+    /// <summary>
+    /// 清除用户其它公司关联上残留的 IsDefault=1，保证仅默认公司（2300）为默认登录公司
+    /// </summary>
+    /// <param name="userCompanyRepository">用户-公司关联仓储</param>
+    /// <param name="tenantCode">租户编码</param>
+    /// <param name="userId">用户 ID</param>
+    /// <param name="defaultCompanyCode">默认公司编码</param>
+    /// <returns>更新的记录数</returns>
+    private static async Task<int> ClearStaleDefaultFlagsAsync(
+        ITaktCompanySeedRepository<TaktUserCompany> userCompanyRepository,
+        string tenantCode,
+        long userId,
+        string defaultCompanyCode)
+    {
+        var staleLinks = await userCompanyRepository.GetListAsync(uc =>
+            uc.TenantCode == tenantCode
+            && uc.UserId == userId
+            && uc.IsDefault == 1
+            && uc.CompanyCode != defaultCompanyCode);
+        if (staleLinks == null || staleLinks.Count == 0)
+        {
+            return 0;
+        }
+
+        var updated = 0;
+        foreach (var link in staleLinks)
+        {
+            link.IsDefault = 0;
+            await userCompanyRepository.UpdateAsync(link);
+            updated++;
+        }
+
+        return updated;
     }
 }

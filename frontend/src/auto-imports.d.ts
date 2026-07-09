@@ -130,7 +130,7 @@ declare global {
   export type { TaktCaptchaPanelExpose, UseTaktLoginCaptchaOptions } from './composables/use-takt-login-captcha'
   import('./composables/use-takt-login-captcha')
   // @ts-ignore
-  export type { TaktMasterDetailLrScrollMeasureRefs } from './composables/use-takt-master-detail-lr-scroll-y'
+  export type { TaktMasterDetailLrScrollMeasureRefs, MeasureMasterDetailLrTableScrollYOptions } from './composables/use-takt-master-detail-lr-scroll-y'
   import('./composables/use-takt-master-detail-lr-scroll-y')
 }
 

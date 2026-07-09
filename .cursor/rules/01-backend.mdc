@@ -158,7 +158,7 @@ HTTP 路由、权限末段与前端 API 完整映射见 `@.cursor/rules/12-crud.
     - `RelatedPlant` + `*Status` → `RelatedPlant` → `*Status`
     - 仅 `*Status` → `*Status` 最后
     - `ValidFrom`/`ValidTo` 等业务字段保持在末段三字段之前，不参与上述四种重排
-    - 批量校正：`node scripts/reorder-entity-tail-fields.cjs`；DTO 顺序随 `generate-dtos-from-entity.cjs` 与实体对齐
+    - DTO 顺序随 `generate-dtos-from-entity.cjs` 与实体属性声明顺序对齐
   - **`RelatedPlant`（强制）**：`public string RelatedPlant { get; set; } = string.Empty;`（非 `string?`）；与同实体其它必填 `string` 一致；❌ 禁止业务默认值（如 `= "0001"`）；`[SugarColumn]` 须 `IsNullable = false` 且无 `DefaultValue`
   - **参照**：`TaktAnnouncement`（`AnnouncementCode`/`AnnouncementTitle`/`AnnouncementType`/`AnnouncementStatus` + 无前缀 `Content`/`Summary`/`PublishTime`）；`TaktUser`（`Username`、`UserType`）；`TaktCostCenter`（`ValidFrom`/`ValidTo` 在 `RelatedPlant` 之前）
   - ❌ 禁止同实体混用 `Title` 与 `AnnouncementType` 这类「核心字段部分有前缀、部分无前缀」

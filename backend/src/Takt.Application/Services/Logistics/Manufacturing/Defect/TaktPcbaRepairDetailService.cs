@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Application.Services.Logistics.Manufacturing.Defect
 // 文件名称：TaktPcbaRepairDetailService.cs
-// 创建时间：2026-06-30
+// 创建时间：2026-07-09
 // 创建人：Takt365(Cursor AI)
 // 功能描述：PCBA改修明细应用服务实现
 // 
@@ -118,6 +118,7 @@ public class TaktPcbaRepairDetailService : TaktServiceBase, ITaktPcbaRepairDetai
     public async Task<TaktPcbaRepairDetailDto> CreatePcbaRepairDetailAsync(TaktPcbaRepairDetailCreateDto dto)
     {
         var entity = dto.Adapt<TaktPcbaRepairDetail>();
+        entity.IsObsolete = 0;
         await StampPcbaRepairDetailPcbaRepairAsync(entity, dto);
         var isUnique_ix_takt_logistics_manufacturing_defect_pcba_repair_detail_line_unique = await _uniqueValidator.IsUniqueAsync(
             _pcbaRepairDetailRepository,
@@ -174,11 +175,21 @@ public class TaktPcbaRepairDetailService : TaktServiceBase, ITaktPcbaRepairDetai
     /// <returns>任务</returns>
     public async Task DeletePcbaRepairDetailByIdAsync(long id)
     {
-        var deleted = await _pcbaRepairDetailRepository.DeleteAsync(id);
-        if (!deleted)
+        var entity = await _pcbaRepairDetailRepository.GetByIdAsync(id);
+        if (entity == null)
         {
             throw new TaktBusinessException("PCBA改修明细不存在或已删除");
         }
+        if (entity.TenantCode != CurrentTenantCode || entity.CompanyCode != CurrentCompanyCode)
+        {
+            throw new TaktBusinessException("PCBA改修明细不存在或已删除");
+        }
+        if (entity.IsObsolete == 1)
+        {
+            throw new TaktBusinessException("PCBA改修明细已作废");
+        }
+        entity.IsObsolete = 1;
+        await _pcbaRepairDetailRepository.UpdateAsync(entity);
     }
 
     /// <summary>
@@ -197,6 +208,27 @@ public class TaktPcbaRepairDetailService : TaktServiceBase, ITaktPcbaRepairDetai
         {
             await DeletePcbaRepairDetailByIdAsync(id);
         }
+    }
+
+    /// <summary>
+    /// 更新PCBA改修明细作废状态
+    /// </summary>
+    /// <param name="dto">作废DTO</param>
+    /// <returns>DTO</returns>
+    public async Task<TaktPcbaRepairDetailDto> UpdatePcbaRepairDetailObsoleteAsync(TaktPcbaRepairDetailObsoleteDto dto)
+    {
+        var entity = await _pcbaRepairDetailRepository.GetByIdAsync(dto.PcbaRepairDetailId);
+        if (entity == null)
+        {
+            throw new TaktBusinessException("PCBA改修明细不存在");
+        }
+        if (entity.TenantCode != CurrentTenantCode || entity.CompanyCode != CurrentCompanyCode)
+        {
+            throw new TaktBusinessException("PCBA改修明细不存在");
+        }
+        entity.IsObsolete = dto.IsObsolete;
+        await _pcbaRepairDetailRepository.UpdateAsync(entity);
+        return await GetPcbaRepairDetailByIdAsync(dto.PcbaRepairDetailId) ?? throw new TaktBusinessException("PCBA改修明细不存在");
     }
 
     /// <summary>
@@ -330,6 +362,15 @@ public class TaktPcbaRepairDetailService : TaktServiceBase, ITaktPcbaRepairDetai
     private static Expression<Func<TaktPcbaRepairDetail, bool>> QueryExpression(TaktPcbaRepairDetailQueryDto? queryDto)
     {
         var exp = Expressionable.Create<TaktPcbaRepairDetail>();
+
+        if (queryDto?.IsObsolete.HasValue == true)
+        {
+            exp = exp.And(x => x.IsObsolete == queryDto.IsObsolete);
+        }
+        else
+        {
+            exp = exp.And(x => x.IsObsolete == 0);
+        }
 
         if (!string.IsNullOrEmpty(queryDto?.KeyWords))
         {

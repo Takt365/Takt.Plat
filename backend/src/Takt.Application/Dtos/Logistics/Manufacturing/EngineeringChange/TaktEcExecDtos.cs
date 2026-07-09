@@ -1317,7 +1317,7 @@ public class TaktEcExecBatchTransposedDto
     public int LineNumber { get; set; }
     /// <summary>设变单号</summary>
     public string EcNo { get; set; } = string.Empty;
-    /// <summary>技联 No.（附件 Liaison DocNo）</summary>
+    /// <summary>技联 No.（附件 TL DocNo）</summary>
     public string? TechnicalLiaisonNo { get; set; }
     /// <summary>P番 No.（附件 FPP DocNo）</summary>
     public string? PNo { get; set; }

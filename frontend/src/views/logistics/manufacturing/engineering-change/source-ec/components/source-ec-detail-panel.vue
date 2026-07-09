@@ -212,47 +212,43 @@
         />
       </a-form-item>
       </div>
-      <div v-show="isFieldVisible('sourceInterchangeability')">
-      <a-form-item :label="t('entity.sourceecdetail.sourceinterchangeability')">
-        <a-input
-          v-model:value="advancedQueryForm.sourceInterchangeability"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.sourceecdetail.sourceinterchangeability') })"
-          show-count
-          :maxlength="20"
+      <div v-show="isFieldVisible('SourceCompatibility')">
+      <a-form-item :label="t('entity.sourceecdetail.SourceCompatibility')">
+        <TaktSelect
+          v-model:value="advancedQueryForm.SourceCompatibility"
+          dict-type="logistics_ec_source_compatibility"
           allow-clear
+          :placeholder="t('common.page.form.placeholder.select', { field: t('entity.sourceecdetail.SourceCompatibility') })"
         />
       </a-form-item>
       </div>
       <div v-show="isFieldVisible('sourceDistinction')">
       <a-form-item :label="t('entity.sourceecdetail.sourcedistinction')">
-        <a-input
+        <TaktSelect
           v-model:value="advancedQueryForm.sourceDistinction"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.sourceecdetail.sourcedistinction') })"
-          show-count
-          :maxlength="20"
+          dict-type="logistics_ec_source_distinction"
           allow-clear
+          :placeholder="t('common.page.form.placeholder.select', { field: t('entity.sourceecdetail.sourcedistinction') })"
         />
       </a-form-item>
       </div>
-      <div v-show="isFieldVisible('sourceArrangementInstruction')">
-      <a-form-item :label="t('entity.sourceecdetail.sourcearrangementinstruction')">
-        <a-input
-          v-model:value="advancedQueryForm.sourceArrangementInstruction"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.sourceecdetail.sourcearrangementinstruction') })"
-          show-count
-          :maxlength="20"
+      <div v-show="isFieldVisible('SourceInstruction')">
+      <a-form-item :label="t('entity.sourceecdetail.SourceInstruction')">
+        <TaktSelect
+          v-model:value="advancedQueryForm.SourceInstruction"
+          dict-type="logistics_ec_source_instruction"
           allow-clear
+          :placeholder="t('common.page.form.placeholder.select', { field: t('entity.sourceecdetail.SourceInstruction') })"
         />
       </a-form-item>
       </div>
       <div v-show="isFieldVisible('sourceLegacyPartDisposition')">
       <a-form-item :label="t('entity.sourceecdetail.sourcelegacypartdisposition')">
-        <a-input
+        <TaktSelect
           v-model:value="advancedQueryForm.sourceLegacyPartDisposition"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.sourceecdetail.sourcelegacypartdisposition') })"
-          show-count
-          :maxlength="20"
+          dict-type="logistics_ec_legacy_part_disposition"
           allow-clear
+          :placeholder="t('common.page.form.placeholder.select', { field: t('entity.sourceecdetail.sourcelegacypartdisposition') })"
         />
       </a-form-item>
       </div>
@@ -443,9 +439,9 @@ const advancedQueryForm = ref({
   sourceReplacementUsage: undefined as number | undefined,
   sourceReplacementMountingPosition: '',
   sourceBomNo: '',
-  sourceInterchangeability: '',
+  SourceCompatibility: '',
   sourceDistinction: '',
-  sourceArrangementInstruction: '',
+  SourceInstruction: '',
   sourceLegacyPartDisposition: '',
   sourceBomEffectiveDateStart: '',
   sourceBomEffectiveDateEnd: '',
@@ -469,9 +465,9 @@ const queryFieldsMeta = computed(() => [
   { key: 'sourceReplacementUsage', label: t('entity.sourceecdetail.sourcereplacementusage') },
   { key: 'sourceReplacementMountingPosition', label: t('entity.sourceecdetail.sourcereplacementmountingposition') },
   { key: 'sourceBomNo', label: t('entity.sourceecdetail.sourcebomno') },
-  { key: 'sourceInterchangeability', label: t('entity.sourceecdetail.sourceinterchangeability') },
+  { key: 'SourceCompatibility', label: t('entity.sourceecdetail.SourceCompatibility') },
   { key: 'sourceDistinction', label: t('entity.sourceecdetail.sourcedistinction') },
-  { key: 'sourceArrangementInstruction', label: t('entity.sourceecdetail.sourcearrangementinstruction') },
+  { key: 'SourceInstruction', label: t('entity.sourceecdetail.SourceInstruction') },
   { key: 'sourceLegacyPartDisposition', label: t('entity.sourceecdetail.sourcelegacypartdisposition') },
   { key: 'sourceBomEffectiveDateStart', label: t('common.page.entity.createdatstart').replace(t('common.page.entity.createdat'), t('entity.sourceecdetail.sourcebomeffectivedate')) },
   { key: 'sourceBomEffectiveDateEnd', label: t('common.page.entity.createdatend').replace(t('common.page.entity.createdat'), t('entity.sourceecdetail.sourcebomeffectivedate')) },
@@ -512,9 +508,9 @@ function handleAdvancedQueryReset() {
   sourceReplacementUsage: undefined as number | undefined,
   sourceReplacementMountingPosition: '',
   sourceBomNo: '',
-  sourceInterchangeability: '',
+  SourceCompatibility: '',
   sourceDistinction: '',
-  sourceArrangementInstruction: '',
+  SourceInstruction: '',
   sourceLegacyPartDisposition: '',
   sourceBomEffectiveDateStart: '',
   sourceBomEffectiveDateEnd: '',
@@ -655,9 +651,9 @@ function buildListQuery(overrides?: Partial<SourceEcDetailQuery>): SourceEcDetai
   }
   assignTrimmed('sourceReplacementMountingPosition', form.sourceReplacementMountingPosition)
   assignTrimmed('sourceBomNo', form.sourceBomNo)
-  assignTrimmed('sourceInterchangeability', form.sourceInterchangeability)
+  assignTrimmed('SourceCompatibility', form.SourceCompatibility)
   assignTrimmed('sourceDistinction', form.sourceDistinction)
-  assignTrimmed('sourceArrangementInstruction', form.sourceArrangementInstruction)
+  assignTrimmed('SourceInstruction', form.SourceInstruction)
   assignTrimmed('sourceLegacyPartDisposition', form.sourceLegacyPartDisposition)
   assignTrimmed('sourceBomEffectiveDateStart', form.sourceBomEffectiveDateStart)
   assignTrimmed('sourceBomEffectiveDateEnd', form.sourceBomEffectiveDateEnd)

@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Application.Services.Logistics.Sales
 // 文件名称：TaktSalesPriceItemService.cs
-// 创建时间：2026-07-01
+// 创建时间：2026-07-09
 // 创建人：Takt365(Cursor AI)
 // 功能描述：销售价格明细应用服务实现
 // 
@@ -119,6 +119,7 @@ public class TaktSalesPriceItemService : TaktServiceBase, ITaktSalesPriceItemSer
     public async Task<TaktSalesPriceItemDto> CreateSalesPriceItemAsync(TaktSalesPriceItemCreateDto dto)
     {
         var entity = dto.Adapt<TaktSalesPriceItem>();
+        entity.IsObsolete = 0;
         var isUnique_ix_takt_logistics_sales_price_item_price_line_unique = await _uniqueValidator.IsUniqueAsync(
             _salesPriceItemRepository,
             x => x.SalesPriceId == entity.SalesPriceId
@@ -204,6 +205,27 @@ public class TaktSalesPriceItemService : TaktServiceBase, ITaktSalesPriceItemSer
         {
             await DeleteSalesPriceItemByIdAsync(id);
         }
+    }
+
+    /// <summary>
+    /// 更新销售价格明细作废状态
+    /// </summary>
+    /// <param name="dto">作废DTO</param>
+    /// <returns>DTO</returns>
+    public async Task<TaktSalesPriceItemDto> UpdateSalesPriceItemObsoleteAsync(TaktSalesPriceItemObsoleteDto dto)
+    {
+        var entity = await _salesPriceItemRepository.GetByIdAsync(dto.SalesPriceItemId);
+        if (entity == null)
+        {
+            throw new TaktBusinessException("销售价格明细不存在");
+        }
+        if (entity.TenantCode != CurrentTenantCode || entity.CompanyCode != CurrentCompanyCode)
+        {
+            throw new TaktBusinessException("销售价格明细不存在");
+        }
+        entity.IsObsolete = dto.IsObsolete;
+        await _salesPriceItemRepository.UpdateAsync(entity);
+        return await GetSalesPriceItemByIdAsync(dto.SalesPriceItemId) ?? throw new TaktBusinessException("销售价格明细不存在");
     }
 
     /// <summary>
@@ -305,6 +327,30 @@ public class TaktSalesPriceItemService : TaktServiceBase, ITaktSalesPriceItemSer
     // ========================================
 
     /// <summary>
+    /// 将指定主表下全部未作废销售价格阶梯标记为作废（编辑清空子表）
+    /// </summary>
+    /// <param name="itemId">主表主键</param>
+    /// <returns>任务</returns>
+    private async Task MarkSalesPriceScalesObsoleteAsync(long itemId)
+    {
+        if (itemId <= 0)
+        {
+            return;
+        }
+        var rows = await _salesPriceScaleRepository.GetListAsync(
+            x => x.ItemId == itemId && x.IsObsolete == 0);
+        if (rows.Count == 0)
+        {
+            return;
+        }
+        foreach (var row in rows)
+        {
+            row.IsObsolete = 1;
+        }
+        await _salesPriceScaleRepository.UpdateRangeAsync(rows);
+    }
+
+    /// <summary>
     /// 填充销售价格明细详情（加载 OneToMany 子表：销售价格阶梯）
     /// </summary>
     /// <param name="dto">响应 DTO</param>
@@ -316,13 +362,13 @@ public class TaktSalesPriceItemService : TaktServiceBase, ITaktSalesPriceItemSer
         {
             return;
         }
-        // 销售价格阶梯 → dto.Scales
+        // 销售价格阶梯 → dto.Scales（含作废行）
         var scales = await _salesPriceScaleRepository.GetListAsync(x => x.ItemId == entity.Id);
         dto.Scales = scales.Adapt<List<TaktSalesPriceScaleDto>>();
     }
 
     /// <summary>
-    /// 保存销售价格明细子表级联（销售价格阶梯；Create/Update 后按主表 Id 先删后插）
+    /// 保存销售价格明细子表级联（销售价格阶梯；按子表 Id 增量新增/更新；未提交行标记作废，禁止先删后插）
     /// </summary>
     /// <param name="entity">主表实体</param>
     /// <param name="dto">创建/更新 DTO（含子表集合；UpdateDto 须继承 CreateDto）</param>
@@ -332,55 +378,95 @@ public class TaktSalesPriceItemService : TaktServiceBase, ITaktSalesPriceItemSer
         // 销售价格阶梯（Scales）
         if (dto.Scales is not { Count: > 0 })
         {
-            await _salesPriceScaleRepository.DeleteAsync(x => x.ItemId == entity.Id);
+            await MarkSalesPriceScalesObsoleteAsync(entity.Id);
+            return;
         }
         else
         {
-            var scales = dto.Scales.Adapt<List<TaktSalesPriceScale>>();
-            foreach (var child in scales)
+            var existingList = await _salesPriceScaleRepository.GetListAsync(x => x.ItemId == entity.Id);
+            var existingById = existingList.ToDictionary(x => x.Id);
+            var submittedIds = new HashSet<long>();
+            var toCreate = new List<TaktSalesPriceScale>();
+            var seenLineKeys = new HashSet<string>(StringComparer.Ordinal);
+            for (var i = 0; i < dto.Scales.Count; i++)
             {
-                child.ItemId = entity.Id;
-            }
-            var scalesNeedLine = scales.Where(c => c.LineNumber <= 0).ToList();
-            if (scalesNeedLine.Count > 0)
-            {
-                var businessCode = !string.IsNullOrWhiteSpace(entity.SalesPriceCode) ? entity.SalesPriceCode : entity.Id.ToString();
-                var maxLine = await _salesPriceScaleRepository.GetMaxIntAsync(
-                    x => x.TenantCode == CurrentTenantCode && x.CompanyCode == CurrentCompanyCode && x.ItemId == entity.Id,
-                    x => x.LineNumber);
-                var lineSeq = _lineNumberGenerator.GenerateSequence(businessCode, scalesNeedLine.Count, maxLine).ToList();
-                var lineIdx = 0;
-                foreach (var child in scales)
+                var childDto = dto.Scales[i];
+                childDto.ItemId = entity.Id;
+                var lineKey = $"{entity.CompanyCode}|{entity.Id}|{childDto.LineNumber}";
+                if (!seenLineKeys.Add(lineKey))
                 {
-                    if (child.LineNumber <= 0)
+                    throw new TaktBusinessException("销售价格阶梯第{i + 1}项与本次提交的其他项重复（CompanyCode、ItemId、LineNumber）");
+                }
+                if (childDto.SalesPriceScaleId > 0)
+                {
+                    if (!existingById.TryGetValue(childDto.SalesPriceScaleId, out var target))
                     {
-                        child.LineNumber = lineSeq[lineIdx++];
+                        throw new TaktBusinessException("销售价格阶梯不存在（SalesPriceScaleId={childDto.SalesPriceScaleId}）");
                     }
+                    if (target.ItemId != entity.Id)
+                    {
+                        throw new TaktBusinessException("销售价格阶梯不属于当前主表（SalesPriceScaleId={childDto.SalesPriceScaleId}）");
+                    }
+                    submittedIds.Add(childDto.SalesPriceScaleId);
+                    var isUniqueUpdate_ix_takt_logistics_sales_price_scale_item_line_unique = await _uniqueValidator.IsUniqueAsync(
+                        _salesPriceScaleRepository,
+                        x => x.CompanyCode == x.CompanyCode
+                && x.ItemId == x.ItemId
+                && x.LineNumber == x.LineNumber,
+                        childDto.SalesPriceScaleId);
+                    if (!isUniqueUpdate_ix_takt_logistics_sales_price_scale_item_line_unique)
+                    {
+                        throw new TaktBusinessException("销售价格阶梯的CompanyCode、ItemId、LineNumber已存在");
+                    }
+                    childDto.Adapt(target);
+                    target.Id = childDto.SalesPriceScaleId;
+                    target.ItemId = entity.Id;
+                    target.IsObsolete = 0;
+                    await _salesPriceScaleRepository.UpdateAsync(target);
+                }
+                else
+                {
+                    var isUniqueCreate_ix_takt_logistics_sales_price_scale_item_line_unique = await _uniqueValidator.IsUniqueAsync(
+                        _salesPriceScaleRepository,
+                        x => x.CompanyCode == x.CompanyCode
+                && x.ItemId == x.ItemId
+                && x.LineNumber == x.LineNumber);
+                    if (!isUniqueCreate_ix_takt_logistics_sales_price_scale_item_line_unique)
+                    {
+                        throw new TaktBusinessException("销售价格阶梯的CompanyCode、ItemId、LineNumber已存在");
+                    }
+                    var child = childDto.Adapt<TaktSalesPriceScale>();
+                    child.Id = 0;
+                    child.ItemId = entity.Id;
+                    child.IsObsolete = 0;
+                    toCreate.Add(child);
                 }
             }
-                        var seenKeys = new HashSet<string>(StringComparer.Ordinal);
-                        for (var i = 0; i < scales.Count; i++)
+            var toObsolete = existingList.Where(x => !submittedIds.Contains(x.Id) && x.IsObsolete == 0).ToList();
+            foreach (var removed in toObsolete)
+            {
+                removed.IsObsolete = 1;
+                await _salesPriceScaleRepository.UpdateAsync(removed);
+            }
+            if (toCreate.Count > 0)
+            {
+                var needLine = toCreate.Where(c => c.LineNumber <= 0).ToList();
+                if (needLine.Count > 0)
+                {
+                    var businessCode = !string.IsNullOrWhiteSpace(entity.SalesPriceCode) ? entity.SalesPriceCode : entity.Id.ToString();
+                    var maxLine = existingList.Count > 0 ? existingList.Max(x => x.LineNumber) : 0;
+                    var lineSeq = _lineNumberGenerator.GenerateSequence(businessCode, needLine.Count, maxLine).ToList();
+                    var lineIdx = 0;
+                    foreach (var child in toCreate)
+                    {
+                        if (child.LineNumber <= 0)
                         {
-                            var key = $"{scales[i].CompanyCode}|{scales[i].ItemId}|{scales[i].LineNumber}";
-                            if (!seenKeys.Add(key))
-                            {
-                                throw new TaktBusinessException($"销售价格阶梯第{i + 1}项与本次提交的其他项重复（CompanyCode、ItemId、LineNumber）");
-                            }
+                            child.LineNumber = lineSeq[lineIdx++];
                         }
-            await _salesPriceScaleRepository.DeleteAsync(x => x.ItemId == entity.Id);
-            foreach (var child in scales)
-            {
-            var isUnique_ix_takt_logistics_sales_price_scale_item_line_unique = await _uniqueValidator.IsUniqueAsync(
-                _salesPriceScaleRepository,
-                x => x.CompanyCode == child.CompanyCode
-                    && x.ItemId == child.ItemId
-                    && x.LineNumber == child.LineNumber);
-            if (!isUnique_ix_takt_logistics_sales_price_scale_item_line_unique)
-            {
-                throw new TaktBusinessException("销售价格阶梯的CompanyCode、ItemId、LineNumber已存在");
+                    }
+                }
+                await _salesPriceScaleRepository.CreateRangeAsync(toCreate);
             }
-            }
-            await _salesPriceScaleRepository.CreateRangeAsync(scales);
         }
     }
     // ========================================
@@ -395,6 +481,15 @@ public class TaktSalesPriceItemService : TaktServiceBase, ITaktSalesPriceItemSer
     private static Expression<Func<TaktSalesPriceItem, bool>> QueryExpression(TaktSalesPriceItemQueryDto? queryDto)
     {
         var exp = Expressionable.Create<TaktSalesPriceItem>();
+
+        if (queryDto?.IsObsolete.HasValue == true)
+        {
+            exp = exp.And(x => x.IsObsolete == queryDto.IsObsolete);
+        }
+        else
+        {
+            exp = exp.And(x => x.IsObsolete == 0);
+        }
 
         if (!string.IsNullOrEmpty(queryDto?.KeyWords))
         {

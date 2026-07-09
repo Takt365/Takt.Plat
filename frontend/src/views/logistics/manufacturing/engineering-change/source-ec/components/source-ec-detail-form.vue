@@ -189,15 +189,14 @@
             </a-col>
             <a-col :span="12">
               <a-form-item
-                :label="t('entity.sourceecdetail.sourceinterchangeability')"
-                name="sourceInterchangeability"
+                :label="t('entity.sourceecdetail.SourceCompatibility')"
+                name="SourceCompatibility"
               >
-                <a-input
-                  v-model:value="formState.sourceInterchangeability"
-                  :placeholder="t('common.page.form.placeholder.optional', { field: t('entity.sourceecdetail.sourceinterchangeability') })"
-                  show-count
-                  :maxlength="4"
+                <TaktSelect
+                  v-model:value="formState.SourceCompatibility"
+                  dict-type="logistics_ec_source_compatibility"
                   allow-clear
+                  :placeholder="t('common.page.form.placeholder.optional', { field: t('entity.sourceecdetail.SourceCompatibility') })"
                 />
               </a-form-item>
             </a-col>
@@ -206,26 +205,24 @@
                 :label="t('entity.sourceecdetail.sourcedistinction')"
                 name="sourceDistinction"
               >
-                <a-input
+                <TaktSelect
                   v-model:value="formState.sourceDistinction"
-                  :placeholder="t('common.page.form.placeholder.optional', { field: t('entity.sourceecdetail.sourcedistinction') })"
-                  show-count
-                  :maxlength="4"
+                  dict-type="logistics_ec_source_distinction"
                   allow-clear
+                  :placeholder="t('common.page.form.placeholder.optional', { field: t('entity.sourceecdetail.sourcedistinction') })"
                 />
               </a-form-item>
             </a-col>
             <a-col :span="12">
               <a-form-item
-                :label="t('entity.sourceecdetail.sourcearrangementinstruction')"
-                name="sourceArrangementInstruction"
+                :label="t('entity.sourceecdetail.SourceInstruction')"
+                name="SourceInstruction"
               >
-                <a-input
-                  v-model:value="formState.sourceArrangementInstruction"
-                  :placeholder="t('common.page.form.placeholder.optional', { field: t('entity.sourceecdetail.sourcearrangementinstruction') })"
-                  show-count
-                  :maxlength="4"
+                <TaktSelect
+                  v-model:value="formState.SourceInstruction"
+                  dict-type="logistics_ec_source_instruction"
                   allow-clear
+                  :placeholder="t('common.page.form.placeholder.optional', { field: t('entity.sourceecdetail.SourceInstruction') })"
                 />
               </a-form-item>
             </a-col>
@@ -234,12 +231,11 @@
                 :label="t('entity.sourceecdetail.sourcelegacypartdisposition')"
                 name="sourceLegacyPartDisposition"
               >
-                <a-input
+                <TaktSelect
                   v-model:value="formState.sourceLegacyPartDisposition"
-                  :placeholder="t('common.page.form.placeholder.optional', { field: t('entity.sourceecdetail.sourcelegacypartdisposition') })"
-                  show-count
-                  :maxlength="4"
+                  dict-type="logistics_ec_legacy_part_disposition"
                   allow-clear
+                  :placeholder="t('common.page.form.placeholder.optional', { field: t('entity.sourceecdetail.sourcelegacypartdisposition') })"
                 />
               </a-form-item>
             </a-col>

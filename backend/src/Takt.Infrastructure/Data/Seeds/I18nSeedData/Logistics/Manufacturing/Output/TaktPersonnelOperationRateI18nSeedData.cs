@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Infrastructure.Data.Seeds.I18nSeedData.Logistics.Manufacturing.Output
 // 文件名称：TaktPersonnelOperationRateI18nSeedData.cs
-// 创建时间：2026-07-02
+// 创建时间：2026-07-06
 // 创建人：Takt365(Auto Generated)
 // 功能描述：TaktPersonnelOperationRate 实体字段国际化种子（无对应 frontend locales；TranslationText 取自 ColumnDescription，ContextNote 取自属性 XML summary）
 // 
@@ -351,23 +351,14 @@ public class TaktPersonnelOperationRateI18nSeedData : ITaktSeedDataCoordinator
             // entity.personneloperationrate.supervisor
             new TranslationSeedItem("entity.personneloperationrate.supervisor", "zh-HK", "主管_hk", "主管（选项 TaktEmployees/options，存员工姓名或工号）"),
 
-            // entity.personneloperationrate.status
-            new TranslationSeedItem("entity.personneloperationrate.status", "en-US", "状态_us", "状态（0=正常，1=停用）"),
-            // entity.personneloperationrate.status
-            new TranslationSeedItem("entity.personneloperationrate.status", "ja-JP", "状态_jp", "状态（0=正常，1=停用）"),
-            // entity.personneloperationrate.status
-            new TranslationSeedItem("entity.personneloperationrate.status", "zh-CN", "状态", "状态（0=正常，1=停用）"),
-            // entity.personneloperationrate.status
-            new TranslationSeedItem("entity.personneloperationrate.status", "zh-HK", "状态_hk", "状态（0=正常，1=停用）"),
-
-            // entity.personneloperationrate.changelogs
-            new TranslationSeedItem("entity.personneloperationrate.changelogs", "en-US", "人员稼动率变更记录列表_us", "人员稼动率变更记录列表（外键在子表 TaktPersonnelOperationRateChangeLog.PersonnelOperationRateId）"),
-            // entity.personneloperationrate.changelogs
-            new TranslationSeedItem("entity.personneloperationrate.changelogs", "ja-JP", "人员稼动率变更记录列表_jp", "人员稼动率变更记录列表（外键在子表 TaktPersonnelOperationRateChangeLog.PersonnelOperationRateId）"),
-            // entity.personneloperationrate.changelogs
-            new TranslationSeedItem("entity.personneloperationrate.changelogs", "zh-CN", "人员稼动率变更记录列表", "人员稼动率变更记录列表（外键在子表 TaktPersonnelOperationRateChangeLog.PersonnelOperationRateId）"),
-            // entity.personneloperationrate.changelogs
-            new TranslationSeedItem("entity.personneloperationrate.changelogs", "zh-HK", "人员稼动率变更记录列表_hk", "人员稼动率变更记录列表（外键在子表 TaktPersonnelOperationRateChangeLog.PersonnelOperationRateId）"),
+            // entity.personneloperationrate.ratestatus
+            new TranslationSeedItem("entity.personneloperationrate.ratestatus", "en-US", "状态_us", "状态（0=正常，1=停用）"),
+            // entity.personneloperationrate.ratestatus
+            new TranslationSeedItem("entity.personneloperationrate.ratestatus", "ja-JP", "状态_jp", "状态（0=正常，1=停用）"),
+            // entity.personneloperationrate.ratestatus
+            new TranslationSeedItem("entity.personneloperationrate.ratestatus", "zh-CN", "状态", "状态（0=正常，1=停用）"),
+            // entity.personneloperationrate.ratestatus
+            new TranslationSeedItem("entity.personneloperationrate.ratestatus", "zh-HK", "状态_hk", "状态（0=正常，1=停用）"),
         };
     }
 

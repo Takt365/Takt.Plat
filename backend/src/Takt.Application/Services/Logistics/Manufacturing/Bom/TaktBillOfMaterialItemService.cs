@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Application.Services.Logistics.Manufacturing.Bom
 // 文件名称：TaktBillOfMaterialItemService.cs
-// 创建时间：2026-06-23
+// 创建时间：2026-07-09
 // 创建人：Takt365(Cursor AI)
 // 功能描述：物料清单明细应用服务实现
 // 
@@ -119,6 +119,7 @@ public class TaktBillOfMaterialItemService : TaktServiceBase, ITaktBillOfMateria
     public async Task<TaktBillOfMaterialItemDto> CreateBillOfMaterialItemAsync(TaktBillOfMaterialItemCreateDto dto)
     {
         var entity = dto.Adapt<TaktBillOfMaterialItem>();
+        entity.IsObsolete = 0;
         var isUnique_ix_takt_logistics_manufacturing_bom_item_bom_line_unique = await _uniqueValidator.IsUniqueAsync(
             _billOfMaterialItemRepository,
             x => x.BillOfMaterialId == entity.BillOfMaterialId
@@ -206,6 +207,27 @@ public class TaktBillOfMaterialItemService : TaktServiceBase, ITaktBillOfMateria
         {
             await DeleteBillOfMaterialItemByIdAsync(id);
         }
+    }
+
+    /// <summary>
+    /// 更新物料清单明细作废状态
+    /// </summary>
+    /// <param name="dto">作废DTO</param>
+    /// <returns>DTO</returns>
+    public async Task<TaktBillOfMaterialItemDto> UpdateBillOfMaterialItemObsoleteAsync(TaktBillOfMaterialItemObsoleteDto dto)
+    {
+        var entity = await _billOfMaterialItemRepository.GetByIdAsync(dto.BillOfMaterialItemId);
+        if (entity == null)
+        {
+            throw new TaktBusinessException("物料清单明细不存在");
+        }
+        if (entity.TenantCode != CurrentTenantCode || entity.CompanyCode != CurrentCompanyCode)
+        {
+            throw new TaktBusinessException("物料清单明细不存在");
+        }
+        entity.IsObsolete = dto.IsObsolete;
+        await _billOfMaterialItemRepository.UpdateAsync(entity);
+        return await GetBillOfMaterialItemByIdAsync(dto.BillOfMaterialItemId) ?? throw new TaktBusinessException("物料清单明细不存在");
     }
 
     /// <summary>
@@ -308,6 +330,30 @@ public class TaktBillOfMaterialItemService : TaktServiceBase, ITaktBillOfMateria
     // ========================================
 
     /// <summary>
+    /// 将指定主表下全部未作废BOM替代料标记为作废（编辑清空子表）
+    /// </summary>
+    /// <param name="billOfMaterialItemId">主表主键</param>
+    /// <returns>任务</returns>
+    private async Task MarkBillOfMaterialSubstitutesObsoleteAsync(long billOfMaterialItemId)
+    {
+        if (billOfMaterialItemId <= 0)
+        {
+            return;
+        }
+        var rows = await _billOfMaterialSubstituteRepository.GetListAsync(
+            x => x.BillOfMaterialItemId == billOfMaterialItemId && x.IsObsolete == 0);
+        if (rows.Count == 0)
+        {
+            return;
+        }
+        foreach (var row in rows)
+        {
+            row.IsObsolete = 1;
+        }
+        await _billOfMaterialSubstituteRepository.UpdateRangeAsync(rows);
+    }
+
+    /// <summary>
     /// 填充物料清单明细详情（加载 OneToMany 子表：BOM替代料）
     /// </summary>
     /// <param name="dto">响应 DTO</param>
@@ -319,13 +365,13 @@ public class TaktBillOfMaterialItemService : TaktServiceBase, ITaktBillOfMateria
         {
             return;
         }
-        // BOM替代料 → dto.Substitutes
+        // BOM替代料 → dto.Substitutes（含作废行）
         var substitutes = await _billOfMaterialSubstituteRepository.GetListAsync(x => x.BillOfMaterialItemId == entity.Id);
         dto.Substitutes = substitutes.Adapt<List<TaktBillOfMaterialSubstituteDto>>();
     }
 
     /// <summary>
-    /// 保存物料清单明细子表级联（BOM替代料；Create/Update 后按主表 Id 先删后插）
+    /// 保存物料清单明细子表级联（BOM替代料；按子表 Id 增量新增/更新；未提交行标记作废，禁止先删后插）
     /// </summary>
     /// <param name="entity">主表实体</param>
     /// <param name="dto">创建/更新 DTO（含子表集合；UpdateDto 须继承 CreateDto）</param>
@@ -335,55 +381,76 @@ public class TaktBillOfMaterialItemService : TaktServiceBase, ITaktBillOfMateria
         // BOM替代料（Substitutes）
         if (dto.Substitutes is not { Count: > 0 })
         {
-            await _billOfMaterialSubstituteRepository.DeleteAsync(x => x.BillOfMaterialItemId == entity.Id);
+            await MarkBillOfMaterialSubstitutesObsoleteAsync(entity.Id);
+            return;
         }
         else
         {
-            var substitutes = dto.Substitutes.Adapt<List<TaktBillOfMaterialSubstitute>>();
-            foreach (var child in substitutes)
+            var existingList = await _billOfMaterialSubstituteRepository.GetListAsync(x => x.BillOfMaterialItemId == entity.Id);
+            var existingById = existingList.ToDictionary(x => x.Id);
+            var submittedIds = new HashSet<long>();
+            var toCreate = new List<TaktBillOfMaterialSubstitute>();
+            var seenLineKeys = new HashSet<string>(StringComparer.Ordinal);
+            for (var i = 0; i < dto.Substitutes.Count; i++)
             {
-                child.BillOfMaterialItemId = entity.Id;
-            }
-            var substitutesNeedLine = substitutes.Where(c => c.LineNumber <= 0).ToList();
-            if (substitutesNeedLine.Count > 0)
-            {
-                var businessCode = !string.IsNullOrWhiteSpace(entity.BomCode) ? entity.BomCode : entity.Id.ToString();
-                var maxLine = await _billOfMaterialSubstituteRepository.GetMaxIntAsync(
-                    x => x.TenantCode == CurrentTenantCode && x.CompanyCode == CurrentCompanyCode && x.BillOfMaterialItemId == entity.Id,
-                    x => x.LineNumber);
-                var lineSeq = _lineNumberGenerator.GenerateSequence(businessCode, substitutesNeedLine.Count, maxLine).ToList();
-                var lineIdx = 0;
-                foreach (var child in substitutes)
+                var childDto = dto.Substitutes[i];
+                childDto.BillOfMaterialItemId = entity.Id;
+                var lineKey = $"{entity.CompanyCode}|{entity.Id}|{childDto.LineNumber}";
+                if (!seenLineKeys.Add(lineKey))
                 {
-                    if (child.LineNumber <= 0)
+                    throw new TaktBusinessException("BOM替代料第{i + 1}项与本次提交的其他项重复（CompanyCode、BillOfMaterialItemId、LineNumber）");
+                }
+                if (childDto.BillOfMaterialSubstituteId > 0)
+                {
+                    if (!existingById.TryGetValue(childDto.BillOfMaterialSubstituteId, out var target))
                     {
-                        child.LineNumber = lineSeq[lineIdx++];
+                        throw new TaktBusinessException("BOM替代料不存在（BillOfMaterialSubstituteId={childDto.BillOfMaterialSubstituteId}）");
                     }
+                    if (target.BillOfMaterialItemId != entity.Id)
+                    {
+                        throw new TaktBusinessException("BOM替代料不属于当前主表（BillOfMaterialSubstituteId={childDto.BillOfMaterialSubstituteId}）");
+                    }
+                    submittedIds.Add(childDto.BillOfMaterialSubstituteId);
+                    childDto.Adapt(target);
+                    target.Id = childDto.BillOfMaterialSubstituteId;
+                    target.BillOfMaterialItemId = entity.Id;
+                    target.IsObsolete = 0;
+                    await _billOfMaterialSubstituteRepository.UpdateAsync(target);
+                }
+                else
+                {
+                    var child = childDto.Adapt<TaktBillOfMaterialSubstitute>();
+                    child.Id = 0;
+                    child.BillOfMaterialItemId = entity.Id;
+                    child.IsObsolete = 0;
+                    toCreate.Add(child);
                 }
             }
-                        var seenKeys = new HashSet<string>(StringComparer.Ordinal);
-                        for (var i = 0; i < substitutes.Count; i++)
+            var toObsolete = existingList.Where(x => !submittedIds.Contains(x.Id) && x.IsObsolete == 0).ToList();
+            foreach (var removed in toObsolete)
+            {
+                removed.IsObsolete = 1;
+                await _billOfMaterialSubstituteRepository.UpdateAsync(removed);
+            }
+            if (toCreate.Count > 0)
+            {
+                var needLine = toCreate.Where(c => c.LineNumber <= 0).ToList();
+                if (needLine.Count > 0)
+                {
+                    var businessCode = !string.IsNullOrWhiteSpace(entity.BomCode) ? entity.BomCode : entity.Id.ToString();
+                    var maxLine = existingList.Count > 0 ? existingList.Max(x => x.LineNumber) : 0;
+                    var lineSeq = _lineNumberGenerator.GenerateSequence(businessCode, needLine.Count, maxLine).ToList();
+                    var lineIdx = 0;
+                    foreach (var child in toCreate)
+                    {
+                        if (child.LineNumber <= 0)
                         {
-                            var key = $"{substitutes[i].CompanyCode}|{substitutes[i].BillOfMaterialItemId}|{substitutes[i].SubstituteMaterialId}";
-                            if (!seenKeys.Add(key))
-                            {
-                                throw new TaktBusinessException($"BOM替代料第{i + 1}项与本次提交的其他项重复（CompanyCode、BillOfMaterialItemId、SubstituteMaterialId）");
-                            }
+                            child.LineNumber = lineSeq[lineIdx++];
                         }
-            await _billOfMaterialSubstituteRepository.DeleteAsync(x => x.BillOfMaterialItemId == entity.Id);
-            foreach (var child in substitutes)
-            {
-            var isUnique_ix_takt_logistics_manufacturing_bom_substitute_item_material_unique = await _uniqueValidator.IsUniqueAsync(
-                _billOfMaterialSubstituteRepository,
-                x => x.CompanyCode == child.CompanyCode
-                    && x.BillOfMaterialItemId == child.BillOfMaterialItemId
-                    && x.SubstituteMaterialId == child.SubstituteMaterialId);
-            if (!isUnique_ix_takt_logistics_manufacturing_bom_substitute_item_material_unique)
-            {
-                throw new TaktBusinessException("BOM替代料的CompanyCode、BillOfMaterialItemId、SubstituteMaterialId已存在");
+                    }
+                }
+                await _billOfMaterialSubstituteRepository.CreateRangeAsync(toCreate);
             }
-            }
-            await _billOfMaterialSubstituteRepository.CreateRangeAsync(substitutes);
         }
     }
     // ========================================
@@ -398,6 +465,15 @@ public class TaktBillOfMaterialItemService : TaktServiceBase, ITaktBillOfMateria
     private static Expression<Func<TaktBillOfMaterialItem, bool>> QueryExpression(TaktBillOfMaterialItemQueryDto? queryDto)
     {
         var exp = Expressionable.Create<TaktBillOfMaterialItem>();
+
+        if (queryDto?.IsObsolete.HasValue == true)
+        {
+            exp = exp.And(x => x.IsObsolete == queryDto.IsObsolete);
+        }
+        else
+        {
+            exp = exp.And(x => x.IsObsolete == 0);
+        }
 
         if (!string.IsNullOrEmpty(queryDto?.KeyWords))
         {

@@ -46,13 +46,15 @@ public class TaktSerialInboundItem : TaktCompanyEntityBase
     /// </summary>
     [SugarColumn(ColumnName = "inbound_serial_no", ColumnDescription = "入库序列号", ColumnDataType = "nvarchar", Length = 100, IsNullable = false)]
     public string InboundSerialNo { get; set; } = string.Empty;
-    /// <summary>
-    /// 入库时间
-    /// </summary>
-    [SugarColumn(ColumnName = "inbound_time", ColumnDescription = "入库时间", ColumnDataType = "datetime", IsNullable = false, DefaultValue = "GETDATE()")]
-    public DateTime InboundTime { get; set; } = DateTime.Now;
 
-    // ========================================
+    /// <summary>
+    /// 是否作废（字典 sys_yes_no_type，0=否 1=是；编辑移除子行时标记作废）
+    /// </summary>
+    [SugarColumn(ColumnName = "is_obsolete", ColumnDescription = "是否作废", ColumnDataType = "int", IsNullable = false, DefaultValue = "0")]
+    public int IsObsolete { get; set; } = 0;
+
+
+// ========================================
     // 导航属性区域
     // ========================================
 

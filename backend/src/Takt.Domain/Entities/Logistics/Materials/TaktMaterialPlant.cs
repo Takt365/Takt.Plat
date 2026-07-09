@@ -202,10 +202,4 @@ public class TaktMaterialPlant : TaktCompanyEntityBase
     /// </summary>
     [SugarColumn(ColumnName = "material_status", ColumnDescription = "物料状态", ColumnDataType = "int", IsNullable = false, DefaultValue = "1")]
     public int MaterialStatus { get; set; } = 1;
-
-    /// <summary>
-    /// 工厂物料变更记录列表（外键在子表 TaktMaterialPlantChangeLog.MaterialPlantId）
-    /// </summary>
-    [Navigate(NavigateType.OneToMany, nameof(TaktMaterialPlantChangeLog.MaterialPlantId))]
-    public List<TaktMaterialPlantChangeLog>? ChangeLogs { get; set; }
 }

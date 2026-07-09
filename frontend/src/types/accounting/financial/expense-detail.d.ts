@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：frontend/src/types/accounting/financial
 // 文件名称：expense-detail.d.ts
-// 创建时间：2026-06-29
+// 创建时间：2026-07-09
 // 创建人：Takt365(Auto Generated)
 // 功能描述：accounting/financial 模块类型定义（自动生成；类型名去 Takt 前缀与末尾 Dto，如 TaktCompanyDto → Company）
 // 
@@ -88,6 +88,11 @@ export interface ExpenseDetail extends CompanyDtoBase {
    */
   expenseDetailDate?: string;
 
+  /**
+   * 是否作废（字典 sys_yes_no_type，0=否 1=是；编辑移除子行时标记作废）
+   */
+  isObsolete: number;
+
 }
 
 
@@ -167,6 +172,11 @@ export interface ExpenseDetailQuery extends TaktPagedQuery {
    * 费用发生日期（范围查询-结束）
    */
   expenseDetailDateEnd?: string;
+
+  /**
+   * 是否作废（字典 sys_yes_no_type，0=否 1=是；编辑移除子行时标记作废）
+   */
+  isObsolete?: number;
 
   /**
    * 创建时间（范围查询-开始）
@@ -268,6 +278,11 @@ export interface ExpenseDetailCreate {
   expenseDetailDate?: string;
 
   /**
+   * 是否作废（字典 sys_yes_no_type，0=否 1=是；编辑移除子行时标记作废）
+   */
+  isObsolete: number;
+
+  /**
    * 扩展字段JSON
    */
   extField?: string;
@@ -291,6 +306,25 @@ export interface ExpenseDetailUpdate extends ExpenseDetailCreate {
    * ExpenseDetailID（标识要更新的实体）
    */
   expenseDetailId: string;
+
+}
+
+
+/**
+ * ExpenseDetail 作废/撤销作废 DTO
+ * 对应前端 ExpenseDetailObsolete
+ * @description 对应后端 TaktExpenseDetailObsoleteDto
+ */
+export interface ExpenseDetailObsolete {
+  /**
+   * ExpenseDetailID
+   */
+  expenseDetailId: string;
+
+  /**
+   * 是否作废（字典 sys_yes_no_type，0=否 1=是；编辑移除子行时标记作废）
+   */
+  isObsolete: number;
 
 }
 
@@ -365,6 +399,11 @@ export interface ExpenseDetailTemplate {
    * 费用发生日期
    */
   expenseDetailDate?: string;
+
+  /**
+   * 是否作废（字典 sys_yes_no_type，0=否 1=是；编辑移除子行时标记作废）
+   */
+  isObsolete?: number;
 
   /**
    * 扩展字段JSON
@@ -456,6 +495,11 @@ export interface ExpenseDetailImport {
   expenseDetailDate?: string;
 
   /**
+   * 是否作废（字典 sys_yes_no_type，0=否 1=是；编辑移除子行时标记作废）
+   */
+  isObsolete?: number;
+
+  /**
    * 扩展字段JSON
    */
   extField?: string;
@@ -538,6 +582,11 @@ export interface ExpenseDetailExport {
    * 费用发生日期
    */
   expenseDetailDate?: string;
+
+  /**
+   * 是否作废（字典 sys_yes_no_type，0=否 1=是；编辑移除子行时标记作废）
+   */
+  isObsolete: number;
 
   /**
    * 扩展字段JSON

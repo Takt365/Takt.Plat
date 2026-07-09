@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Application.Services.Logistics.Maintenance
 // 文件名称：ITaktMaintenanceWorkOrderLaborService.cs
-// 创建时间：2026-06-23
+// 创建时间：2026-07-09
 // 创建人：Takt365(Cursor AI)
 // 功能描述：维护工单报工应用服务接口
 // 
@@ -76,6 +76,13 @@ public interface ITaktMaintenanceWorkOrderLaborService
     /// <param name="dto">状态DTO</param>
     /// <returns>DTO</returns>
     Task<TaktMaintenanceWorkOrderLaborDto> UpdateMaintenanceWorkOrderLaborStatusAsync(TaktMaintenanceWorkOrderLaborStatusDto dto);
+
+    /// <summary>
+    /// 更新维护工单报工作废状态
+    /// </summary>
+    /// <param name="dto">作废DTO</param>
+    /// <returns>DTO</returns>
+    Task<TaktMaintenanceWorkOrderLaborDto> UpdateMaintenanceWorkOrderLaborObsoleteAsync(TaktMaintenanceWorkOrderLaborObsoleteDto dto);
 
     /// <summary>
     /// 获取导入模板

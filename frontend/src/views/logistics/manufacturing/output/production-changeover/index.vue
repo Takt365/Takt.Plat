@@ -69,6 +69,21 @@
       @change="handleTableChange"
       @resize-column="handleResizeColumn"
     >
+      <!-- 字典/开关列渲染 -->
+      <template #bodyCell="{ column, record }">
+        <template v-if="column.key === 'prodCategory'">
+          <TaktDictTag
+            :value="getProductionChangeoverDictValue(record, 'prodCategory')"
+            dict-type="logistics_prod_category"
+          />
+        </template>
+        <template v-else-if="column.key === 'changeoverCategory'">
+          <TaktDictTag
+            :value="getProductionChangeoverDictValue(record, 'changeoverCategory')"
+            dict-type="logistics_changeover_category"
+          />
+        </template>
+      </template>
 
     </TaktSingleTable>
 
@@ -110,117 +125,193 @@
     >
       <template #default="{ isFieldVisible }">
       <div v-show="isFieldVisible('plantCode')">
-      <a-form-item :label="t('entity.productionchangeover.plantcode')">
-        <a-input
+      <a-form-item :label="pi.queryLabel('plantCode')">
+        <TaktSelect
           v-model:value="advancedQueryForm.plantCode"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.productionchangeover.plantcode') })"
-          show-count
-          :maxlength="50"
+          api-url="TaktPlants/options"
+          :placeholder="pi.queryPh('plantCode', 'select')"
           allow-clear
         />
       </a-form-item>
       </div>
       <div v-show="isFieldVisible('prodCategory')">
-      <a-form-item :label="t('entity.productionchangeover.prodcategory')">
-        <a-input
+      <a-form-item :label="pi.queryLabel('prodCategory')">
+        <TaktSelect
           v-model:value="advancedQueryForm.prodCategory"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.productionchangeover.prodcategory') })"
-          show-count
-          :maxlength="50"
+          dict-type="logistics_prod_category"
+          :placeholder="pi.queryPh('prodCategory', 'select')"
+          allow-clear
+        />
+      </a-form-item>
+      </div>
+      <div v-show="isFieldVisible('changeoverCategory')">
+      <a-form-item :label="pi.queryLabel('changeoverCategory')">
+        <TaktSelect
+          v-model:value="advancedQueryForm.changeoverCategory"
+          dict-type="logistics_changeover_category"
+          :placeholder="pi.queryPh('changeoverCategory', 'select')"
           allow-clear
         />
       </a-form-item>
       </div>
       <div v-show="isFieldVisible('prodDateStart')">
-      <a-form-item :label="t('entity.productionchangeover.proddatestart')">
+      <a-form-item :label="pi.queryLabel('prodDateStart')">
         <a-date-picker
           v-model:value="advancedQueryForm.prodDateStart"
-          :placeholder="t('common.page.form.placeholder.select', { field: t('entity.productionchangeover.proddatestart') })"
+          :placeholder="pi.queryPh('prodDateStart', 'select')"
           value-format="YYYY-MM-DD"
           style="width: 100%"
         />
       </a-form-item>
       </div>
       <div v-show="isFieldVisible('prodDateEnd')">
-      <a-form-item :label="t('entity.productionchangeover.proddateend')">
+      <a-form-item :label="pi.queryLabel('prodDateEnd')">
         <a-date-picker
           v-model:value="advancedQueryForm.prodDateEnd"
-          :placeholder="t('common.page.form.placeholder.select', { field: t('entity.productionchangeover.proddateend') })"
+          :placeholder="pi.queryPh('prodDateEnd', 'select')"
           value-format="YYYY-MM-DD"
           style="width: 100%"
         />
       </a-form-item>
       </div>
       <div v-show="isFieldVisible('prodTeam')">
-      <a-form-item :label="t('entity.productionchangeover.prodteam')">
-        <a-input
+      <a-form-item :label="pi.queryLabel('prodTeam')">
+        <TaktSelect
           v-model:value="advancedQueryForm.prodTeam"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.productionchangeover.prodteam') })"
+          api-url="TaktProductionTeams/options"
+          :placeholder="pi.queryPh('prodTeam', 'select')"
+          allow-clear
+        />
+      </a-form-item>
+      </div>
+      <div v-show="isFieldVisible('currentProdOrderCode')">
+      <a-form-item :label="pi.queryLabel('currentProdOrderCode')">
+        <TaktSelect
+          v-model:value="advancedQueryForm.currentProdOrderCode"
+          api-url="TaktProductionOrders/options"
+          :placeholder="pi.queryPh('currentProdOrderCode', 'select')"
+          allow-clear
+        />
+      </a-form-item>
+      </div>
+      <div v-show="isFieldVisible('currentModelCode')">
+      <a-form-item :label="pi.queryLabel('currentModelCode')">
+        <a-input
+          v-model:value="advancedQueryForm.currentModelCode"
+          :placeholder="pi.queryPh('currentModelCode', 'required')"
           show-count
           :maxlength="20"
           allow-clear
         />
       </a-form-item>
       </div>
-      <div v-show="isFieldVisible('readSopTime')">
-      <a-form-item :label="t('entity.productionchangeover.readsoptime')">
-        <a-input-number
-          v-model:value="advancedQueryForm.readSopTime"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.productionchangeover.readsoptime') })"
-          style="width: 100%"
+      <div v-show="isFieldVisible('changeoverProdOrderCode')">
+      <a-form-item :label="pi.queryLabel('changeoverProdOrderCode')">
+        <TaktSelect
+          v-model:value="advancedQueryForm.changeoverProdOrderCode"
+          api-url="TaktProductionOrders/options"
+          :placeholder="pi.queryPh('changeoverProdOrderCode', 'select')"
+          allow-clear
         />
       </a-form-item>
       </div>
-      <div v-show="isFieldVisible('personCount')">
-      <a-form-item :label="t('entity.productionchangeover.personcount')">
-        <a-input-number
-          v-model:value="advancedQueryForm.personCount"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.productionchangeover.personcount') })"
-          style="width: 100%"
-        />
-      </a-form-item>
-      </div>
-      <div v-show="isFieldVisible('totalSopTime')">
-      <a-form-item :label="t('entity.productionchangeover.totalsoptime')">
-        <a-input-number
-          v-model:value="advancedQueryForm.totalSopTime"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.productionchangeover.totalsoptime') })"
-          style="width: 100%"
+      <div v-show="isFieldVisible('changeoverModelCode')">
+      <a-form-item :label="pi.queryLabel('changeoverModelCode')">
+        <a-input
+          v-model:value="advancedQueryForm.changeoverModelCode"
+          :placeholder="pi.queryPh('changeoverModelCode', 'required')"
+          show-count
+          :maxlength="20"
+          allow-clear
         />
       </a-form-item>
       </div>
       <div v-show="isFieldVisible('changeoverCount')">
-      <a-form-item :label="t('entity.productionchangeover.changeovercount')">
+      <a-form-item :label="pi.queryLabel('changeoverCount')">
         <a-input-number
           v-model:value="advancedQueryForm.changeoverCount"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.productionchangeover.changeovercount') })"
+          :placeholder="pi.queryPh('changeoverCount', 'required')"
           style="width: 100%"
         />
       </a-form-item>
       </div>
       <div v-show="isFieldVisible('changeoverTime')">
-      <a-form-item :label="t('entity.productionchangeover.changeovertime')">
+      <a-form-item :label="pi.queryLabel('changeoverTime')">
         <a-input-number
           v-model:value="advancedQueryForm.changeoverTime"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.productionchangeover.changeovertime') })"
+          :placeholder="pi.queryPh('changeoverTime', 'required')"
+          style="width: 100%"
+        />
+      </a-form-item>
+      </div>
+      <div v-show="isFieldVisible('instrumentSetupTime')">
+      <a-form-item :label="pi.queryLabel('instrumentSetupTime')">
+        <a-input-number
+          v-model:value="advancedQueryForm.instrumentSetupTime"
+          :placeholder="pi.queryPh('instrumentSetupTime', 'required')"
           style="width: 100%"
         />
       </a-form-item>
       </div>
       <div v-show="isFieldVisible('totalChangeoverTime')">
-      <a-form-item :label="t('entity.productionchangeover.totalchangeovertime')">
+      <a-form-item :label="pi.queryLabel('totalChangeoverTime')">
         <a-input-number
           v-model:value="advancedQueryForm.totalChangeoverTime"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.productionchangeover.totalchangeovertime') })"
+          :placeholder="pi.queryPh('totalChangeoverTime', 'required')"
+          style="width: 100%"
+        />
+      </a-form-item>
+      </div>
+      <div v-show="isFieldVisible('readSopTime')">
+      <a-form-item :label="pi.queryLabel('readSopTime')">
+        <a-input-number
+          v-model:value="advancedQueryForm.readSopTime"
+          :placeholder="pi.queryPh('readSopTime', 'required')"
+          style="width: 100%"
+        />
+      </a-form-item>
+      </div>
+      <div v-show="isFieldVisible('learningTime')">
+      <a-form-item :label="pi.queryLabel('learningTime')">
+        <a-input-number
+          v-model:value="advancedQueryForm.learningTime"
+          :placeholder="pi.queryPh('learningTime', 'required')"
+          style="width: 100%"
+        />
+      </a-form-item>
+      </div>
+      <div v-show="isFieldVisible('personCount')">
+      <a-form-item :label="pi.queryLabel('personCount')">
+        <a-input-number
+          v-model:value="advancedQueryForm.personCount"
+          :placeholder="pi.queryPh('personCount', 'required')"
+          style="width: 100%"
+        />
+      </a-form-item>
+      </div>
+      <div v-show="isFieldVisible('totalLearningTime')">
+      <a-form-item :label="pi.queryLabel('totalLearningTime')">
+        <a-input-number
+          v-model:value="advancedQueryForm.totalLearningTime"
+          :placeholder="pi.queryPh('totalLearningTime', 'required')"
+          style="width: 100%"
+        />
+      </a-form-item>
+      </div>
+      <div v-show="isFieldVisible('totalSopTime')">
+      <a-form-item :label="pi.queryLabel('totalSopTime')">
+        <a-input-number
+          v-model:value="advancedQueryForm.totalSopTime"
+          :placeholder="pi.queryPh('totalSopTime', 'required')"
           style="width: 100%"
         />
       </a-form-item>
       </div>
       <div v-show="isFieldVisible('createdAtStart')">
-      <a-form-item :label="t('common.page.entity.createdatstart')">
+      <a-form-item :label="pi.queryLabel('createdAtStart')">
         <a-date-picker
           v-model:value="advancedQueryForm.createdAtStart"
-          :placeholder="t('common.page.form.placeholder.select', { field: t('common.page.entity.createdatstart') })"
+          :placeholder="pi.queryPh('createdAtStart', 'select')"
           value-format="YYYY-MM-DD HH:mm:ss"
             show-time
           style="width: 100%"
@@ -228,10 +319,10 @@
       </a-form-item>
       </div>
       <div v-show="isFieldVisible('createdAtEnd')">
-      <a-form-item :label="t('common.page.entity.createdatend')">
+      <a-form-item :label="pi.queryLabel('createdAtEnd')">
         <a-date-picker
           v-model:value="advancedQueryForm.createdAtEnd"
-          :placeholder="t('common.page.form.placeholder.select', { field: t('common.page.entity.createdatend') })"
+          :placeholder="pi.queryPh('createdAtEnd', 'select')"
           value-format="YYYY-MM-DD HH:mm:ss"
             show-time
           style="width: 100%"
@@ -253,7 +344,7 @@
             >
               <span class="takt-form-label-hint-icon"><RiQuestionLine class="takt-remix-icon" /></span>
             </a-tooltip>
-            <span>{{ t('common.page.entity.extfield') }}</span>
+            <span>{{ pi.queryLabel('extField') }}</span>
           </span>
         </template>
         <a-textarea
@@ -267,10 +358,10 @@
       </a-form-item>
       </div>
       <div v-show="isFieldVisible('remark')">
-      <a-form-item :label="t('common.page.entity.remark')">
+      <a-form-item :label="pi.queryLabel('remark')">
         <a-textarea
           v-model:value="advancedQueryForm.remark"
-          :placeholder="t('common.page.form.placeholder.optional', { field: t('common.page.entity.remark') })"
+          :placeholder="pi.queryPh('remark', 'optional')"
             :rows="4"
             show-count
             :maxlength="400"
@@ -284,14 +375,15 @@
     <!-- 导入对话框 -->
     <TaktModal
       v-model:open="importVisible"
-      :title="t('common.dialog.title.import', { entity: t('entity.productionchangeover._self') })"
+      :title="t('common.dialog.title.import', { entity: pi.self() })"
       :width="600"
       :footer="null"
       :cancel-text="t('common.page.button.close')"
       @cancel="handleImportCancel"
     >
       <TaktImportFile
-        entity-i18n-key="entity.productionchangeover._self"
+        v-if="importVisible"
+        :entity-i18n-key="PRODUCTIONCHANGEOVER_SELF_I18N_KEY"
         file-type="xlsx"
         :sheet-name="excelNames.sheet"
         :template-file-name="excelNames.fileBase"
@@ -331,17 +423,37 @@ import { ensureTaktPaginationConfigAsync, getTaktDefaultPageIndex, getTaktDefaul
 import ProductionChangeoverForm from './components/production-changeover-form.vue'
 import { getProductionChangeoverList, getProductionChangeoverById, createProductionChangeover, updateProductionChangeover, deleteProductionChangeoverById, deleteProductionChangeoverBatch, getProductionChangeoverTemplate, importProductionChangeover, exportProductionChangeover } from '@/api/logistics/manufacturing/output/production-changeover'
 import type { ProductionChangeover, ProductionChangeoverQuery } from '@/types/logistics/manufacturing/output/production-changeover'
+import { useDictDataStore } from '@/stores/foundation/dict-data'
 import { taktExcelEntityNames } from '@/utils/naming'
 import { resolveExportDownloadFileName } from '@/utils/export-download-name'
+import { normalizeImportResult, type TaktImportResult } from '@/utils/takt-import-result'
 import { RiEditLine, RiDeleteBinLine, RiQuestionLine } from '@remixicon/vue'
+import {
+  getOutputProdDateYmdFromRecord,
+  isOutputProdDateLocked,
+} from '../composables/takt-output-prod-date-edit-lock'
+import { useOutputProdDateI18n } from '../composables/use-output-prod-date-i18n'
 
+import {
+  useProductionChangeoverI18n,
+  PRODUCTIONCHANGEOVER_LIST_FIELDS,
+  PRODUCTIONCHANGEOVER_QUERY_STRING_FIELDS,
+  PRODUCTIONCHANGEOVER_QUERY_FIELDS,
+  PRODUCTIONCHANGEOVER_SELF_I18N_KEY,
+} from './composables/use-production-changeover-i18n'
+
+/** 实体字段 i18n（标签/占位符统一入口） */
+const pi = useProductionChangeoverI18n()
+const prodDateI18n = useOutputProdDateI18n()
+/** 表格行类型（TaktSingleTable slot record 与 dataSource 行兼容） */
+type ProductionChangeoverRowRecord = ProductionChangeover | Record<string, unknown>
 /** i18n 翻译函数 */
 const { t } = useI18n()
 /** Excel 导入/导出默认 sheet 名与文件名前缀 */
 const excelNames = taktExcelEntityNames('TaktProductionChangeover')
 /** 列表快捷查询占位文案 */
 const searchPlaceholder = computed(
-  () => t('common.page.form.placeholder.search', { keyword: t('entity.productionchangeover._self') })
+  () => t('common.page.form.placeholder.search', { keyword: pi.self() })
 )
 
 /** 快捷查询关键字 */
@@ -357,9 +469,9 @@ const pageSize = ref(getTaktDefaultPageSize())
 /** 分页 total */
 const total = ref(0)
 /** 工具栏单选时当前行 */
-const selectedRow = ref<ProductionChangeover | null>(null)
+const selectedRow = ref<ProductionChangeoverRowRecord | null>(null)
 /** 表格多选行 */
-const selectedRows = ref<ProductionChangeover[]>([])
+const selectedRows = ref<ProductionChangeoverRowRecord[]>([])
 /** 表格多选 row-key 集合 */
 const selectedRowKeys = ref<(string | number)[]>([])
 
@@ -376,42 +488,34 @@ const formRef = ref()
 
 /** 高级查询抽屉是否打开 */
 const advancedQueryVisible = ref(false)
+/**
+ * 创建空的高级查询表单
+ * @returns {Record<string, unknown>} 高级查询初始模型
+ */
+function createEmptyAdvancedQueryForm() {
+  const form = Object.fromEntries(PRODUCTIONCHANGEOVER_QUERY_STRING_FIELDS.map((key) => [key, ''])) as Record<
+    (typeof PRODUCTIONCHANGEOVER_QUERY_STRING_FIELDS)[number],
+    string
+  >
+  return {
+    ...form,
+    changeoverCount: undefined as number | undefined,
+    changeoverTime: undefined as number | undefined,
+    instrumentSetupTime: undefined as number | undefined,
+    totalChangeoverTime: undefined as number | undefined,
+    readSopTime: undefined as number | undefined,
+    learningTime: undefined as number | undefined,
+    personCount: undefined as number | undefined,
+    totalLearningTime: undefined as number | undefined,
+    totalSopTime: undefined as number | undefined,
+  }
+}
 /** 高级查询表单模型 */
-const advancedQueryForm = ref({
-  plantCode: '',
-  prodCategory: '',
-  prodDateStart: '',
-  prodDateEnd: '',
-  prodTeam: '',
-  readSopTime: undefined as number | undefined,
-  personCount: undefined as number | undefined,
-  totalSopTime: undefined as number | undefined,
-  changeoverCount: undefined as number | undefined,
-  changeoverTime: undefined as number | undefined,
-  totalChangeoverTime: undefined as number | undefined,
-  createdAtStart: '',
-  createdAtEnd: '',
-  extField: '',
-  remark: '',
-})
+const advancedQueryForm = ref(createEmptyAdvancedQueryForm())
 /** 高级查询字段元数据（列显隐配置） */
-const queryFieldsMeta = computed(() => [
-  { key: 'plantCode', label: t('entity.productionchangeover.plantcode') },
-  { key: 'prodCategory', label: t('entity.productionchangeover.prodcategory') },
-  { key: 'prodDateStart', label: t('common.page.entity.createdatstart').replace(t('common.page.entity.createdat'), t('entity.productionchangeover.proddate')) },
-  { key: 'prodDateEnd', label: t('common.page.entity.createdatend').replace(t('common.page.entity.createdat'), t('entity.productionchangeover.proddate')) },
-  { key: 'prodTeam', label: t('entity.productionchangeover.prodteam') },
-  { key: 'readSopTime', label: t('entity.productionchangeover.readsoptime') },
-  { key: 'personCount', label: t('entity.productionchangeover.personcount') },
-  { key: 'totalSopTime', label: t('entity.productionchangeover.totalsoptime') },
-  { key: 'changeoverCount', label: t('entity.productionchangeover.changeovercount') },
-  { key: 'changeoverTime', label: t('entity.productionchangeover.changeovertime') },
-  { key: 'totalChangeoverTime', label: t('entity.productionchangeover.totalchangeovertime') },
-  { key: 'createdAtStart', label: t('common.page.entity.createdatstart') },
-  { key: 'createdAtEnd', label: t('common.page.entity.createdatend') },
-  { key: 'extField', label: t('common.page.entity.extfield') },
-  { key: 'remark', label: t('common.page.entity.remark') },
-])
+const queryFieldsMeta = computed(() =>
+  PRODUCTIONCHANGEOVER_QUERY_FIELDS.map((key) => ({ key, label: pi.queryLabel(key) })),
+)
 /** 高级查询当前可见字段 key */
 const visibleQueryFieldKeys = ref<string[]>([])
 /** 列设置抽屉是否打开 */
@@ -422,11 +526,23 @@ const importVisible = ref(false)
 const visibleColumnKeys = ref<string[]>([])
 /** 实体主键字段名（row-key、API 路径参数） */
 const entityIdName = 'productionChangeoverId'
-/** 工具栏「编辑」是否禁用（须恰好选中一行） */
-const updateDisabled = computed(() => selectedRows.value.length !== 1)
-/** 工具栏「删除」是否禁用（未选中任何行） */
-const deleteDisabled = computed(() => selectedRows.value.length === 0)
+/** 工具栏「编辑」是否禁用（须恰好选中一行且生产日期未锁定） */
+const updateDisabled = computed(() => {
+  if (selectedRows.value.length !== 1) {
+    return true
+  }
+  return isProductionChangeoverRowProdDateLocked(selectedRows.value[0])
+})
+/** 工具栏「删除」是否禁用（未选中或含已锁定生产日期行） */
+const deleteDisabled = computed(() => {
+  if (selectedRows.value.length === 0) {
+    return true
+  }
+  return selectedRows.value.some((row) => isProductionChangeoverRowProdDateLocked(row))
+})
 
+/** Pinia：字典缓存（列表/查询 dict-type 渲染前预热） */
+const dictDataStore = useDictDataStore()
 
 
 /**
@@ -451,19 +567,8 @@ function buildListQuery(overrides?: Partial<ProductionChangeoverQuery>): Product
       query[key] = v as never
     }
   }
-  assignTrimmed('plantCode', form.plantCode)
-  assignTrimmed('prodCategory', form.prodCategory)
-  assignTrimmed('prodDateStart', form.prodDateStart)
-  assignTrimmed('prodDateEnd', form.prodDateEnd)
-  assignTrimmed('prodTeam', form.prodTeam)
-  if (form.readSopTime !== undefined && form.readSopTime !== null) {
-    query.readSopTime = form.readSopTime
-  }
-  if (form.personCount !== undefined && form.personCount !== null) {
-    query.personCount = form.personCount
-  }
-  if (form.totalSopTime !== undefined && form.totalSopTime !== null) {
-    query.totalSopTime = form.totalSopTime
+  for (const key of PRODUCTIONCHANGEOVER_QUERY_STRING_FIELDS) {
+    assignTrimmed(key, form[key])
   }
   if (form.changeoverCount !== undefined && form.changeoverCount !== null) {
     query.changeoverCount = form.changeoverCount
@@ -471,129 +576,63 @@ function buildListQuery(overrides?: Partial<ProductionChangeoverQuery>): Product
   if (form.changeoverTime !== undefined && form.changeoverTime !== null) {
     query.changeoverTime = form.changeoverTime
   }
+  if (form.instrumentSetupTime !== undefined && form.instrumentSetupTime !== null) {
+    query.instrumentSetupTime = form.instrumentSetupTime
+  }
   if (form.totalChangeoverTime !== undefined && form.totalChangeoverTime !== null) {
     query.totalChangeoverTime = form.totalChangeoverTime
   }
-  assignTrimmed('createdAtStart', form.createdAtStart)
-  assignTrimmed('createdAtEnd', form.createdAtEnd)
-  assignTrimmed('extField', form.extField)
-  assignTrimmed('remark', form.remark)
+  if (form.readSopTime !== undefined && form.readSopTime !== null) {
+    query.readSopTime = form.readSopTime
+  }
+  if (form.learningTime !== undefined && form.learningTime !== null) {
+    query.learningTime = form.learningTime
+  }
+  if (form.personCount !== undefined && form.personCount !== null) {
+    query.personCount = form.personCount
+  }
+  if (form.totalLearningTime !== undefined && form.totalLearningTime !== null) {
+    query.totalLearningTime = form.totalLearningTime
+  }
+  if (form.totalSopTime !== undefined && form.totalSopTime !== null) {
+    query.totalSopTime = form.totalSopTime
+  }
   return query
 }
 /** 页面挂载：租户上下文就绪后加载分页配置，再拉列表 */
 onMounted(async () => {
   await ensureTaktPaginationConfigAsync()
+  void dictDataStore.loadAllDictDataAsync()
   loadData()
 })
 
 
-
-
-
-
+/**
+ * 构建列表标准文本列
+ * @param key 列 key / dataIndex
+ * @param title 列标题
+ * @param options 宽度与固定列
+ */
+function buildProductionChangeoverListColumn(
+  key: string,
+  title: string,
+  options?: { width?: number; fixed?: 'left' },
+) {
+  return {
+    title,
+    dataIndex: key,
+    key,
+    width: options?.width ?? 120,
+    resizable: true,
+    ellipsis: true,
+    ...(options?.fixed ? { fixed: options.fixed } : {}),
+  }
+}
 
 /** 表格列定义（i18n 随 locale 变化） */
 const columns = computed<TableColumnsType>(() => [
-  {
-    title: t('common.page.entity.id'),
-    dataIndex: 'productionChangeoverId',
-    key: 'productionChangeoverId',
-    width: 80,
-    resizable: true,
-    ellipsis: true,
-    fixed: 'left',
-    customRender: ({ record }: { record: any }) => getProductionChangeoverField(record, 'productionChangeoverId') ?? ''
-  },
-  {
-    title: t('entity.productionchangeover.plantcode'),
-    dataIndex: 'plantCode',
-    key: 'plantCode',
-    width: 120,
-    resizable: true,
-    ellipsis: true,
-    customRender: ({ record }: { record: any }) => getProductionChangeoverField(record, 'plantCode') ?? ''
-  },
-  {
-    title: t('entity.productionchangeover.prodcategory'),
-    dataIndex: 'prodCategory',
-    key: 'prodCategory',
-    width: 120,
-    resizable: true,
-    ellipsis: true,
-    customRender: ({ record }: { record: any }) => getProductionChangeoverField(record, 'prodCategory') ?? ''
-  },
-  {
-    title: t('entity.productionchangeover.proddate'),
-    dataIndex: 'prodDate',
-    key: 'prodDate',
-    width: 120,
-    resizable: true,
-    ellipsis: true,
-    customRender: ({ record }: { record: any }) => getProductionChangeoverField(record, 'prodDate') ?? ''
-  },
-  {
-    title: t('entity.productionchangeover.prodteam'),
-    dataIndex: 'prodTeam',
-    key: 'prodTeam',
-    width: 120,
-    resizable: true,
-    ellipsis: true,
-    customRender: ({ record }: { record: any }) => getProductionChangeoverField(record, 'prodTeam') ?? ''
-  },
-  {
-    title: t('entity.productionchangeover.readsoptime'),
-    dataIndex: 'readSopTime',
-    key: 'readSopTime',
-    width: 120,
-    resizable: true,
-    ellipsis: true,
-    customRender: ({ record }: { record: any }) => getProductionChangeoverField(record, 'readSopTime') ?? ''
-  },
-  {
-    title: t('entity.productionchangeover.personcount'),
-    dataIndex: 'personCount',
-    key: 'personCount',
-    width: 120,
-    resizable: true,
-    ellipsis: true,
-    customRender: ({ record }: { record: any }) => getProductionChangeoverField(record, 'personCount') ?? ''
-  },
-  {
-    title: t('entity.productionchangeover.totalsoptime'),
-    dataIndex: 'totalSopTime',
-    key: 'totalSopTime',
-    width: 120,
-    resizable: true,
-    ellipsis: true,
-    customRender: ({ record }: { record: any }) => getProductionChangeoverField(record, 'totalSopTime') ?? ''
-  },
-  {
-    title: t('entity.productionchangeover.changeovercount'),
-    dataIndex: 'changeoverCount',
-    key: 'changeoverCount',
-    width: 120,
-    resizable: true,
-    ellipsis: true,
-    customRender: ({ record }: { record: any }) => getProductionChangeoverField(record, 'changeoverCount') ?? ''
-  },
-  {
-    title: t('entity.productionchangeover.changeovertime'),
-    dataIndex: 'changeoverTime',
-    key: 'changeoverTime',
-    width: 120,
-    resizable: true,
-    ellipsis: true,
-    customRender: ({ record }: { record: any }) => getProductionChangeoverField(record, 'changeoverTime') ?? ''
-  },
-  {
-    title: t('entity.productionchangeover.totalchangeovertime'),
-    dataIndex: 'totalChangeoverTime',
-    key: 'totalChangeoverTime',
-    width: 120,
-    resizable: true,
-    ellipsis: true,
-    customRender: ({ record }: { record: any }) => getProductionChangeoverField(record, 'totalChangeoverTime') ?? ''
-  },
+  buildProductionChangeoverListColumn('productionChangeoverId', t('common.page.entity.id'), { width: 80, fixed: 'left' }),
+  ...PRODUCTIONCHANGEOVER_LIST_FIELDS.map((key) => buildProductionChangeoverListColumn(key, pi.label(key))),
   CreateActionColumn({
     actions: [
       {
@@ -602,7 +641,8 @@ const columns = computed<TableColumnsType>(() => [
         shape: 'plain',
         icon: RiEditLine,
         permission: 'logistics:manufacturing:output:production:changeover:update',
-        onClick: (record: ProductionChangeover) => handleEdit(record)
+        disabled: (record: ProductionChangeoverRowRecord) => isProductionChangeoverRowProdDateLocked(record),
+        onClick: (record: ProductionChangeoverRowRecord) => handleEdit(record)
       },
       {
         key: 'delete',
@@ -610,44 +650,79 @@ const columns = computed<TableColumnsType>(() => [
         shape: 'plain',
         icon: RiDeleteBinLine,
         permission: 'logistics:manufacturing:output:production:changeover:delete',
-        onClick: (record: ProductionChangeover) => handleDeleteOne(record)
+        disabled: (record: ProductionChangeoverRowRecord) => isProductionChangeoverRowProdDateLocked(record),
+        onClick: (record: ProductionChangeoverRowRecord) => handleDeleteOne(record)
       }
     ]
   })
 ])
 
 /** 表格 row-key（优先实体主键字段） */
-const getProductionChangeoverId = (record: any): string => record?.[entityIdName] ?? ''
+const getProductionChangeoverId = (record: ProductionChangeoverRowRecord): string => {
+  const id = (record as Record<string, unknown>)?.[entityIdName]
+  return id != null ? String(id) : ''
+}
 /**
- * 读取行字段值
+ * 供 TaktDictTag 等组件使用的标量字典值
  * @param record 行数据
  * @param field 字段名
  */
-const getProductionChangeoverField = (record: any, field: string): any => record?.[field]
+const getProductionChangeoverDictValue = (
+  record: ProductionChangeoverRowRecord,
+  field: string,
+): string | number | undefined => {
+  const value = (record as Record<string, unknown>)?.[field]
+  if (value === null || value === undefined) return undefined
+  if (typeof value === 'string' || typeof value === 'number') return value
+  return String(value)
+}
 
+/**
+ * 主表行生产日期是否已锁定
+ * @param record 主表行
+ */
+function isProductionChangeoverRowProdDateLocked(record: ProductionChangeoverRowRecord | null | undefined): boolean {
+  if (!record) {
+    return false
+  }
+  const ymd = getOutputProdDateYmdFromRecord(record as Record<string, unknown>)
+  return ymd !== '' && isOutputProdDateLocked(ymd)
+}
+/**
+ * 锁定行操作时提示
+ * @param record 主表行
+ */
+function warnProductionChangeoverProdDateLocked(record: ProductionChangeoverRowRecord): boolean {
+  if (!isProductionChangeoverRowProdDateLocked(record)) {
+    return false
+  }
+  const ymd = getOutputProdDateYmdFromRecord(record as Record<string, unknown>)
+  message.warning(prodDateI18n.prodDateLockedMessage(ymd))
+  return true
+}
 
 /** 行选择配置 */
 const rowSelection = computed(() => ({
   selectedRowKeys: selectedRowKeys.value,
-  onChange: (keys: (string | number)[], rows: ProductionChangeover[]) => {
+  onChange: (keys: (string | number)[], rows: ProductionChangeoverRowRecord[]) => {
     selectedRowKeys.value = keys
     selectedRows.value = rows
     selectedRow.value = rows.length === 1 ? (rows[0] ?? null) : null
   },
-  onSelect: (record: ProductionChangeover, selected: boolean) => {
+  onSelect: (record: ProductionChangeoverRowRecord, selected: boolean) => {
     if (selected) {
       selectedRow.value = record
     } else if (selectedRow.value && getProductionChangeoverId(selectedRow.value) === getProductionChangeoverId(record)) {
       selectedRow.value = null
     }
   },
-  onSelectAll: (selected: boolean, selectedRowsData: ProductionChangeover[]) => {
+  onSelectAll: (selected: boolean, selectedRowsData: ProductionChangeoverRowRecord[]) => {
     selectedRow.value = selected && selectedRowsData.length === 1 ? (selectedRowsData[0] ?? null) : null
   }
 }))
 
 /** 行点击切换选中（与 rowSelection 联动） */
-const onClickRow = (record: ProductionChangeover) => ({
+const onClickRow = (record: ProductionChangeoverRowRecord) => ({
   onClick: () => {
     const key = getProductionChangeoverId(record)
     const index = selectedRowKeys.value.indexOf(key)
@@ -693,47 +768,46 @@ function handleSearch() {
 /** 重置查询条件并刷新列表 */
 function handleReset() {
   queryKeyword.value = ''
-  advancedQueryForm.value = {
-  plantCode: '',
-  prodCategory: '',
-  prodDateStart: '',
-  prodDateEnd: '',
-  prodTeam: '',
-  readSopTime: undefined as number | undefined,
-  personCount: undefined as number | undefined,
-  totalSopTime: undefined as number | undefined,
-  changeoverCount: undefined as number | undefined,
-  changeoverTime: undefined as number | undefined,
-  totalChangeoverTime: undefined as number | undefined,
-  createdAtStart: '',
-  createdAtEnd: '',
-  extField: '',
-  remark: '',
-  }
+  advancedQueryForm.value = createEmptyAdvancedQueryForm()
   currentPage.value = getTaktDefaultPageIndex()
   loadData()
 }
 
 /** 打开新增弹窗 */
 function handleCreate() {
-  formTitle.value = t('common.dialog.title.create', { entity: t('entity.productionchangeover._self') })
+  formTitle.value = t('common.dialog.title.create', { entity: pi.self() })
   formData.value = null
   formVisible.value = true
   nextTick(() => formRef.value?.resetFields())
 }
-/** 打开编辑弹窗 */
-function handleEdit(record: ProductionChangeover) {
-  formTitle.value = t('common.dialog.title.edit', { entity: t('entity.productionchangeover._self') })
-  formData.value = { ...record }
-  formVisible.value = true
+/** 打开编辑弹窗（拉取详情，避免列表列裁剪字段） */
+async function handleEdit(record: ProductionChangeoverRowRecord) {
+  if (warnProductionChangeoverProdDateLocked(record)) {
+    return
+  }
+  const id = getProductionChangeoverId(record)
+  if (!id) {
+    return
+  }
+  formTitle.value = t('common.dialog.title.edit', { entity: pi.self() })
+  formLoading.value = true
+  try {
+    const detail = await getProductionChangeoverById(id)
+    formData.value = detail ?? ({ ...record } as Partial<ProductionChangeover>)
+    formVisible.value = true
+  } catch (error: unknown) {
+    message.error(t('common.feedback.load.data.failed'))
+  } finally {
+    formLoading.value = false
+  }
 }
 
 /** 工具栏编辑：打开当前单选行 */
 function handleUpdate() {
   if (selectedRow.value) {
-    handleEdit(selectedRow.value)
+    void handleEdit(selectedRow.value)
   } else {
-    message.warning(t('common.tip.select.to.action', { action: t('common.page.button.edit'), entity: t('entity.productionchangeover._self') }))
+    message.warning(t('common.tip.select.to.action', { action: t('common.page.button.edit'), entity: pi.self() }))
   }
 }
 /** 提交新增/编辑表单 */
@@ -751,10 +825,10 @@ async function handleFormSubmit() {
     const id = (formData.value as any)?.[entityIdName]
     if (id) {
       await updateProductionChangeover(id, payload as any)
-      message.success(t('common.feedback.updated', { target: t('entity.productionchangeover._self') }))
+      message.success(t('common.feedback.updated', { target: pi.self() }))
     } else {
       await createProductionChangeover(payload as any)
-      message.success(t('common.feedback.created', { target: t('entity.productionchangeover._self') }))
+      message.success(t('common.feedback.created', { target: pi.self() }))
     }
     formVisible.value = false
     formData.value = null
@@ -782,15 +856,18 @@ async function handleDownloadTemplate(sheetName?: string, fileName?: string): Pr
   return (res as any)?.data ?? res
 }
 
-/** 上传并导入 Excel 文件 */
-async function handleImportFile(file: File, sheetName?: string): Promise<{ success: number; fail: number; errors: string[] }> {
-  return await importProductionChangeover(file, sheetName)
+/** 上传并导入 Excel 文件（归一化后端 SuccessCount/successCount） */
+async function handleImportFile(file: File, sheetName?: string): Promise<TaktImportResult> {
+  const raw = await importProductionChangeover(file, sheetName)
+  return normalizeImportResult(raw)
 }
 
-/** 导入完成回调：刷新列表并可选关闭对话框 */
-function handleImportSuccess(result: { success: number; fail: number; errors: string[] }) {
+/** 导入完成回调：刷新列表；全部成功时延迟关闭对话框 */
+function handleImportSuccess(result: TaktImportResult) {
   loadData()
-  if (result.fail === 0) setTimeout(() => { importVisible.value = false }, 2000)
+  if (result.fail === 0 && result.success > 0) {
+    setTimeout(() => { importVisible.value = false }, 2000)
+  }
 }
 
 /** 关闭导入对话框 */
@@ -824,24 +901,27 @@ async function handleExport() {
     link.click()
     document.body.removeChild(link)
     setTimeout(() => window.URL.revokeObjectURL(url), 100)
-    message.success(t('common.feedback.export.success', { target: t('entity.productionchangeover._self') }))
+    message.success(t('common.feedback.export.success', { target: pi.self() }))
   } catch (error: any) {
     logger.error('[ProductionChangeover] 导出失败', { error })
-    message.error(error?.message || t('common.feedback.export.failed', { target: t('entity.productionchangeover._self') }))
+    message.error(error?.message || t('common.feedback.export.failed', { target: pi.self() }))
   } finally {
     loading.value = false
   }
 }
 /** 删除单行 */
-async function handleDeleteOne(record: ProductionChangeover) {
+async function handleDeleteOne(record: ProductionChangeoverRowRecord) {
+  if (warnProductionChangeoverProdDateLocked(record)) {
+    return
+  }
   Modal.confirm({
     title: t('common.tip.confirm.delete.title'),
-    content: t('common.tip.confirm.delete.entity', { entity: t('entity.productionchangeover._self'), name: t('common.tip.this.target', { target: t('entity.productionchangeover._self') }) }),
+    content: t('common.tip.confirm.delete.entity', { entity: pi.self(), name: t('common.tip.this.target', { target: pi.self() }) }),
     okText: t('common.page.button.delete'),
     cancelText: t('common.page.button.cancel'),
     onOk: async () => {
       await deleteProductionChangeoverById((record as any)[entityIdName])
-      message.success(t('common.feedback.deleted', { target: t('entity.productionchangeover._self') }))
+      message.success(t('common.feedback.deleted', { target: pi.self() }))
       loadData()
     }
   })
@@ -849,18 +929,23 @@ async function handleDeleteOne(record: ProductionChangeover) {
 /** 批量删除选中行 */
 async function handleDelete() {
   if (selectedRows.value.length === 0) {
-    message.warning(t('common.tip.select.to.action', { action: t('common.page.button.delete'), entity: t('entity.productionchangeover._self') }))
+    message.warning(t('common.tip.select.to.action', { action: t('common.page.button.delete'), entity: pi.self() }))
+    return
+  }
+  const lockedRow = selectedRows.value.find((row) => isProductionChangeoverRowProdDateLocked(row))
+  if (lockedRow) {
+    warnProductionChangeoverProdDateLocked(lockedRow)
     return
   }
   Modal.confirm({
     title: t('common.tip.confirm.delete.title'),
-    content: t('common.tip.confirm.delete.count', { entity: t('entity.productionchangeover._self'), count: selectedRows.value.length }),
+    content: t('common.tip.confirm.delete.count', { entity: pi.self(), count: selectedRows.value.length }),
     okText: t('common.page.button.delete'),
     cancelText: t('common.page.button.cancel'),
     onOk: async () => {
       const ids = selectedRows.value.map((r: any) => r[entityIdName]).filter(Boolean)
       await deleteProductionChangeoverBatch(ids)
-      message.success(t('common.feedback.deleted', { target: t('entity.productionchangeover._self') }))
+      message.success(t('common.feedback.deleted', { target: pi.self() }))
       loadData()
     }
   })
@@ -878,23 +963,7 @@ function handleAdvancedQuerySubmit() {
 }
 
 function handleAdvancedQueryReset() {
-  advancedQueryForm.value = {
-  plantCode: '',
-  prodCategory: '',
-  prodDateStart: '',
-  prodDateEnd: '',
-  prodTeam: '',
-  readSopTime: undefined as number | undefined,
-  personCount: undefined as number | undefined,
-  totalSopTime: undefined as number | undefined,
-  changeoverCount: undefined as number | undefined,
-  changeoverTime: undefined as number | undefined,
-  totalChangeoverTime: undefined as number | undefined,
-  createdAtStart: '',
-  createdAtEnd: '',
-  extField: '',
-  remark: '',
-  }
+  advancedQueryForm.value = createEmptyAdvancedQueryForm()
 }
 
 /** 打开列设置抽屉 */

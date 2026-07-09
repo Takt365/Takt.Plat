@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Application.Services.Logistics.Manufacturing.Output
 // 文件名称：TaktPcbaOutputDetailService.cs
-// 创建时间：2026-06-30
+// 创建时间：2026-07-09
 // 创建人：Takt365(Cursor AI)
 // 功能描述：PCBA日报明细应用服务实现
 // 
@@ -118,6 +118,7 @@ public class TaktPcbaOutputDetailService : TaktServiceBase, ITaktPcbaOutputDetai
     public async Task<TaktPcbaOutputDetailDto> CreatePcbaOutputDetailAsync(TaktPcbaOutputDetailCreateDto dto)
     {
         var entity = dto.Adapt<TaktPcbaOutputDetail>();
+        entity.IsObsolete = 0;
         await StampPcbaOutputDetailPcbaOutputAsync(entity, dto);
         var isUnique_ix_takt_logistics_manufacturing_output_pcba_detail_line_unique = await _uniqueValidator.IsUniqueAsync(
             _pcbaOutputDetailRepository,
@@ -174,11 +175,21 @@ public class TaktPcbaOutputDetailService : TaktServiceBase, ITaktPcbaOutputDetai
     /// <returns>任务</returns>
     public async Task DeletePcbaOutputDetailByIdAsync(long id)
     {
-        var deleted = await _pcbaOutputDetailRepository.DeleteAsync(id);
-        if (!deleted)
+        var entity = await _pcbaOutputDetailRepository.GetByIdAsync(id);
+        if (entity == null)
         {
             throw new TaktBusinessException("PCBA日报明细不存在或已删除");
         }
+        if (entity.TenantCode != CurrentTenantCode || entity.CompanyCode != CurrentCompanyCode)
+        {
+            throw new TaktBusinessException("PCBA日报明细不存在或已删除");
+        }
+        if (entity.IsObsolete == 1)
+        {
+            throw new TaktBusinessException("PCBA日报明细已作废");
+        }
+        entity.IsObsolete = 1;
+        await _pcbaOutputDetailRepository.UpdateAsync(entity);
     }
 
     /// <summary>
@@ -212,6 +223,27 @@ public class TaktPcbaOutputDetailService : TaktServiceBase, ITaktPcbaOutputDetai
             throw new TaktBusinessException("PCBA日报明细不存在");
         }
         entity.CompletedStatus = dto.CompletedStatus;
+        await _pcbaOutputDetailRepository.UpdateAsync(entity);
+        return await GetPcbaOutputDetailByIdAsync(dto.PcbaOutputDetailId) ?? throw new TaktBusinessException("PCBA日报明细不存在");
+    }
+
+    /// <summary>
+    /// 更新PCBA日报明细作废状态
+    /// </summary>
+    /// <param name="dto">作废DTO</param>
+    /// <returns>DTO</returns>
+    public async Task<TaktPcbaOutputDetailDto> UpdatePcbaOutputDetailObsoleteAsync(TaktPcbaOutputDetailObsoleteDto dto)
+    {
+        var entity = await _pcbaOutputDetailRepository.GetByIdAsync(dto.PcbaOutputDetailId);
+        if (entity == null)
+        {
+            throw new TaktBusinessException("PCBA日报明细不存在");
+        }
+        if (entity.TenantCode != CurrentTenantCode || entity.CompanyCode != CurrentCompanyCode)
+        {
+            throw new TaktBusinessException("PCBA日报明细不存在");
+        }
+        entity.IsObsolete = dto.IsObsolete;
         await _pcbaOutputDetailRepository.UpdateAsync(entity);
         return await GetPcbaOutputDetailByIdAsync(dto.PcbaOutputDetailId) ?? throw new TaktBusinessException("PCBA日报明细不存在");
     }
@@ -348,6 +380,15 @@ public class TaktPcbaOutputDetailService : TaktServiceBase, ITaktPcbaOutputDetai
     {
         var exp = Expressionable.Create<TaktPcbaOutputDetail>();
 
+        if (queryDto?.IsObsolete.HasValue == true)
+        {
+            exp = exp.And(x => x.IsObsolete == queryDto.IsObsolete);
+        }
+        else
+        {
+            exp = exp.And(x => x.IsObsolete == 0);
+        }
+
         if (!string.IsNullOrEmpty(queryDto?.KeyWords))
         {
             var keywords = queryDto.KeyWords;
@@ -365,7 +406,11 @@ public class TaktPcbaOutputDetailService : TaktServiceBase, ITaktPcbaOutputDetai
                 || SqlFunc.ToString(x.CompletedStatus).Contains(keywords)
                 || (x.SerialNo != null && x.SerialNo.Contains(keywords))
                 || SqlFunc.ToString(x.DefectCount).Contains(keywords)
+                || SqlFunc.ToString(x.DowntimeMinutes).Contains(keywords)
+                || (x.DowntimeReason != null && x.DowntimeReason.Contains(keywords))
+                || (x.DowntimeDescription != null && x.DowntimeDescription.Contains(keywords))
                 || SqlFunc.ToString(x.InputMinutes).Contains(keywords)
+                || SqlFunc.ToString(x.ActualMinutes).Contains(keywords)
                 || SqlFunc.ToString(x.RepairMinutes).Contains(keywords)
                 || SqlFunc.ToString(x.SwitchCount).Contains(keywords)
                 || SqlFunc.ToString(x.SwitchTime).Contains(keywords)
@@ -373,6 +418,9 @@ public class TaktPcbaOutputDetailService : TaktServiceBase, ITaktPcbaOutputDetai
                 || SqlFunc.ToString(x.TotalMinutes).Contains(keywords)
                 || (x.UnachievedReason != null && x.UnachievedReason.Contains(keywords))
                 || (x.UnachievedDescription != null && x.UnachievedDescription.Contains(keywords))
+                || SqlFunc.ToString(x.ConfirmMinutes).Contains(keywords)
+                || SqlFunc.ToString(x.MixedProd).Contains(keywords)
+                || SqlFunc.ToString(x.AchievementRate).Contains(keywords)
                 || (x.ExtField != null && x.ExtField.Contains(keywords))
                 || (x.Remark != null && x.Remark.Contains(keywords))
                 || SqlFunc.ToString(x.CreatedAt).Contains(keywords)
@@ -444,9 +492,29 @@ public class TaktPcbaOutputDetailService : TaktServiceBase, ITaktPcbaOutputDetai
             exp = exp.And(x => x.DefectCount == queryDto.DefectCount);
         }
 
+        if (queryDto?.DowntimeMinutes.HasValue == true)
+        {
+            exp = exp.And(x => x.DowntimeMinutes == queryDto.DowntimeMinutes);
+        }
+
+        if (!string.IsNullOrEmpty(queryDto?.DowntimeReason))
+        {
+            exp = exp.And(x => x.DowntimeReason != null && x.DowntimeReason.Contains(queryDto.DowntimeReason));
+        }
+
+        if (!string.IsNullOrEmpty(queryDto?.DowntimeDescription))
+        {
+            exp = exp.And(x => x.DowntimeDescription != null && x.DowntimeDescription.Contains(queryDto.DowntimeDescription));
+        }
+
         if (queryDto?.InputMinutes.HasValue == true)
         {
             exp = exp.And(x => x.InputMinutes == queryDto.InputMinutes);
+        }
+
+        if (queryDto?.ActualMinutes.HasValue == true)
+        {
+            exp = exp.And(x => x.ActualMinutes == queryDto.ActualMinutes);
         }
 
         if (queryDto?.RepairMinutes.HasValue == true)
@@ -482,6 +550,21 @@ public class TaktPcbaOutputDetailService : TaktServiceBase, ITaktPcbaOutputDetai
         if (!string.IsNullOrEmpty(queryDto?.UnachievedDescription))
         {
             exp = exp.And(x => x.UnachievedDescription != null && x.UnachievedDescription.Contains(queryDto.UnachievedDescription));
+        }
+
+        if (queryDto?.ConfirmMinutes.HasValue == true)
+        {
+            exp = exp.And(x => x.ConfirmMinutes == queryDto.ConfirmMinutes);
+        }
+
+        if (queryDto?.MixedProd.HasValue == true)
+        {
+            exp = exp.And(x => x.MixedProd == queryDto.MixedProd);
+        }
+
+        if (queryDto?.AchievementRate.HasValue == true)
+        {
+            exp = exp.And(x => x.AchievementRate == queryDto.AchievementRate);
         }
 
         if (!string.IsNullOrEmpty(queryDto?.ExtField))

@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：frontend/src/types/accounting/controlling
 // 文件名称：profit-center.d.ts
-// 创建时间：2026-07-02
+// 创建时间：2026-07-09
 // 创建人：Takt365(Auto Generated)
 // 功能描述：accounting/controlling 模块类型定义（自动生成；类型名去 Takt 前缀与末尾 Dto，如 TaktCompanyDto → Company）
 // 
@@ -92,11 +92,6 @@ export interface ProfitCenter extends CompanyDtoBase {
    * 利润中心状态（字典 sys_normal_disable_status；1=启用，0=禁用）
    */
   profitCenterStatus: number;
-
-  /**
-   * 利润中心变更记录列表（外键在子表 TaktProfitCenterChangeLog.ProfitCenterId） （子表：TaktProfitCenterChangeLog）
-   */
-  changeLogs?: ProfitCenterChangeLog[];
 
 }
 
@@ -313,11 +308,6 @@ export interface ProfitCenterCreate {
   profitCenterStatus: number;
 
   /**
-   * 利润中心变更记录列表（外键在子表 TaktProfitCenterChangeLog.ProfitCenterId）（子表，级联保存）
-   */
-  changeLogs?: ProfitCenterChangeLogCreate[];
-
-  /**
    * 扩展字段JSON
    */
   extField?: string;
@@ -460,11 +450,6 @@ export interface ProfitCenterTemplate {
   profitCenterStatus?: number;
 
   /**
-   * 利润中心变更记录列表（外键在子表 TaktProfitCenterChangeLog.ProfitCenterId）（子表，级联保存）
-   */
-  changeLogs?: ProfitCenterChangeLogCreate[];
-
-  /**
    * 扩展字段JSON
    */
   extField?: string;
@@ -557,11 +542,6 @@ export interface ProfitCenterImport {
    * 利润中心状态（字典 sys_normal_disable_status；1=启用，0=禁用）
    */
   profitCenterStatus?: number;
-
-  /**
-   * 利润中心变更记录列表（外键在子表 TaktProfitCenterChangeLog.ProfitCenterId）（子表，级联保存）
-   */
-  changeLogs?: ProfitCenterChangeLogCreate[];
 
   /**
    * 扩展字段JSON

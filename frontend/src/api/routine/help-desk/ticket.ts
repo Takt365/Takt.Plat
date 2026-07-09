@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：frontend/src/api/routine/help-desk
 // 文件名称：ticket.ts
-// 创建时间：2026-06-24
+// 创建时间：2026-07-09
 // 创建人：Takt365(Auto Generated)
 // 功能描述：routine/help-desk 模块 API（自动生成，请勿手改路由常量）
 // 
@@ -15,6 +15,12 @@ import type {
   TaktPagedResult,
   TaktSelectOption
 } from '@/types/common';
+import type {
+  HelpDeskTicketStat
+} from '@/types/routine/help-desk/help-desk-ticket-stat';
+import type {
+  HelpDeskTicketStatQuery
+} from '@/types/routine/help-desk/help-desk-ticket-stat-query';
 import type {
   MyTicketReply
 } from '@/types/routine/help-desk/my-ticket-reply';
@@ -64,6 +70,19 @@ const TICKET_API_BASE = 'TaktTickets';
 export function getTicketList(queryDto: any): Promise<TaktPagedResult<Ticket>> {
   return request<TaktPagedResult<Ticket>>({
     url: `${TICKET_API_BASE}/list`,
+    method: 'get',
+    params: queryDto,
+  });
+}
+
+/**
+ * 获取服务台工单统计（数据看板）
+ * @param {HelpDeskTicketStatQuery} queryDto 查询 DTO
+ * @returns {Promise<HelpDeskTicketStat>} 服务台工单统计
+ */
+export function getHelpDeskTicketStat(queryDto: HelpDeskTicketStatQuery): Promise<HelpDeskTicketStat> {
+  return request<HelpDeskTicketStat>({
+    url: `${TICKET_API_BASE}/ticket-stat`,
     method: 'get',
     params: queryDto,
   });

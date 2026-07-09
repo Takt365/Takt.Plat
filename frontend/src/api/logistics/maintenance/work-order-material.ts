@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：frontend/src/api/logistics/maintenance
 // 文件名称：work-order-material.ts
-// 创建时间：2026-06-23
+// 创建时间：2026-07-09
 // 创建人：Takt365(Auto Generated)
 // 功能描述：logistics/maintenance 模块 API（自动生成，请勿手改路由常量）
 // 
@@ -18,6 +18,7 @@ import type {
 import type {
   MaintenanceWorkOrderMaterial,
   MaintenanceWorkOrderMaterialCreate,
+  MaintenanceWorkOrderMaterialObsolete,
   MaintenanceWorkOrderMaterialStatus,
   MaintenanceWorkOrderMaterialUpdate
 } from '@/types/logistics/maintenance/work-order-material';
@@ -117,6 +118,19 @@ export function deleteMaintenanceWorkOrderMaterialBatch(ids: string[]): Promise<
 export function updateMaintenanceWorkOrderMaterialStatus(dto: MaintenanceWorkOrderMaterialStatus): Promise<MaintenanceWorkOrderMaterial> {
   return request<MaintenanceWorkOrderMaterial>({
     url: `${MAINTENANCE_WORK_ORDER_MATERIAL_API_BASE}/status`,
+    method: 'put',
+    data: dto,
+  });
+}
+
+/**
+ * 更新维护工单领料作废状态
+ * @param {MaintenanceWorkOrderMaterialObsolete} dto 作废 DTO
+ * @returns {Promise<MaintenanceWorkOrderMaterial>} 维护工单领料DTO
+ */
+export function updateMaintenanceWorkOrderMaterialObsolete(dto: MaintenanceWorkOrderMaterialObsolete): Promise<MaintenanceWorkOrderMaterial> {
+  return request<MaintenanceWorkOrderMaterial>({
+    url: `${MAINTENANCE_WORK_ORDER_MATERIAL_API_BASE}/obsolete`,
     method: 'put',
     data: dto,
   });

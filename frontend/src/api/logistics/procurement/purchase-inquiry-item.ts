@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：frontend/src/api/logistics/procurement
 // 文件名称：purchase-inquiry-item.ts
-// 创建时间：2026-06-30
+// 创建时间：2026-07-09
 // 创建人：Takt365(Auto Generated)
 // 功能描述：logistics/procurement 模块 API（自动生成，请勿手改路由常量）
 // 
@@ -18,6 +18,7 @@ import type {
 import type {
   PurchaseInquiryItem,
   PurchaseInquiryItemCreate,
+  PurchaseInquiryItemObsolete,
   PurchaseInquiryItemUpdate
 } from '@/types/logistics/procurement/purchase-inquiry-item';
 
@@ -105,6 +106,19 @@ export function deletePurchaseInquiryItemBatch(ids: string[]): Promise<void> {
     url: `${PURCHASE_INQUIRY_ITEM_API_BASE}/batch`,
     method: 'delete',
     data: ids,
+  });
+}
+
+/**
+ * 更新采购询价明细作废状态
+ * @param {PurchaseInquiryItemObsolete} dto 作废 DTO
+ * @returns {Promise<PurchaseInquiryItem>} 采购询价明细DTO
+ */
+export function updatePurchaseInquiryItemObsolete(dto: PurchaseInquiryItemObsolete): Promise<PurchaseInquiryItem> {
+  return request<PurchaseInquiryItem>({
+    url: `${PURCHASE_INQUIRY_ITEM_API_BASE}/obsolete`,
+    method: 'put',
+    data: dto,
   });
 }
 

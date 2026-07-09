@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.WebApi.Controllers.Logistics.Serial
 // 文件名称：TaktSerialInboundsController.cs
-// 创建时间：2026-06-23
+// 创建时间：2026-07-02
 // 创建人：Takt365(Cursor AI)
 // 功能描述：序列号入库控制器
 // 
@@ -49,26 +49,6 @@ public class TaktSerialInboundsController : TaktControllerBase
         {
             var result = await _serialInboundService.GetSerialInboundListAsync(queryDto);
             return Success(result.Data, result.Total, result.PageIndex, result.PageSize, "查询成功");
-        }
-        catch (Exception ex)
-        {
-            return HandleException(ex);
-        }
-    }
-
-    /// <summary>
-    /// 获取序列号入库统计（数据看板）
-    /// </summary>
-    /// <param name="queryDto">查询 DTO</param>
-    /// <returns>序列号入库统计</returns>
-    [TaktPermission("logistics:serial:inbound:list", "序列号入库统计")]
-    [HttpGet("inbound-stat")]
-    public async Task<IActionResult> GetSerialInboundStatAsync([FromQuery] TaktSerialInboundStatQueryDto queryDto)
-    {
-        try
-        {
-            var result = await _serialInboundService.GetSerialInboundStatAsync(queryDto);
-            return Success(result, "查询成功");
         }
         catch (Exception ex)
         {

@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：frontend/src/types/routine/help-desk
 // 文件名称：it-asset.d.ts
-// 创建时间：2026-06-23
+// 创建时间：2026-07-09
 // 创建人：Takt365(Auto Generated)
 // 功能描述：routine/help-desk 模块类型定义（自动生成；类型名去 Takt 前缀与末尾 Dto，如 TaktCompanyDto → Company）
 // 
@@ -87,11 +87,6 @@ export interface ItAsset extends CompanyDtoBase {
    * 保修/维保说明
    */
   warrantyRemark?: string;
-
-  /**
-   * IT 设备保修变更日志列表 （子表：TaktItAssetChangeLog）
-   */
-  changeLogs?: ItAssetChangeLog[];
 
 }
 
@@ -303,11 +298,6 @@ export interface ItAssetCreate {
   warrantyRemark?: string;
 
   /**
-   * IT 设备保修变更日志列表（子表，级联保存）
-   */
-  changeLogs?: ItAssetChangeLogCreate[];
-
-  /**
    * 扩展字段JSON
    */
   extField?: string;
@@ -412,11 +402,6 @@ export interface ItAssetTemplate {
   warrantyRemark?: string;
 
   /**
-   * IT 设备保修变更日志列表（子表，级联保存）
-   */
-  changeLogs?: ItAssetChangeLogCreate[];
-
-  /**
    * 扩展字段JSON
    */
   extField?: string;
@@ -509,11 +494,6 @@ export interface ItAssetImport {
    * 保修/维保说明
    */
   warrantyRemark?: string;
-
-  /**
-   * IT 设备保修变更日志列表（子表，级联保存）
-   */
-  changeLogs?: ItAssetChangeLogCreate[];
 
   /**
    * 扩展字段JSON

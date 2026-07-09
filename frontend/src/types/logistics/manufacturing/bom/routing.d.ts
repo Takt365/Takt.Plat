@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：frontend/src/types/logistics/manufacturing/bom
 // 文件名称：routing.d.ts
-// 创建时间：2026-06-23
+// 创建时间：2026-07-09
 // 创建人：Takt365(Auto Generated)
 // 功能描述：logistics/manufacturing/bom 模块类型定义（自动生成；类型名去 Takt 前缀与末尾 Dto，如 TaktCompanyDto → Company）
 // 
@@ -29,12 +29,12 @@ export interface Routing extends ApprovalDtoBase {
   routingId: string;
 
   /**
-   * 工厂代码
+   * 工厂代码（选项 TaktPlants/options，DictValue=PlantCode）
    */
   plantCode: string;
 
   /**
-   * 工作中心
+   * 工作中心（选项 TaktWorkCenters/options，按工厂 ExtValue 过滤）
    */
   workCenter: string;
 
@@ -49,12 +49,12 @@ export interface Routing extends ApprovalDtoBase {
   routingName: string;
 
   /**
-   * 用途（1=生产，2=工程/设计，3=万能，4=工厂维护）
+   * 用途（字典 logistics_routing_purpose：1=生产，2=工程/设计，3=万能，4=工厂维护）
    */
   purpose: number;
 
   /**
-   * 适用物料编码
+   * 适用物料编码（选项 TaktMaterials/options）
    */
   materialCode: string;
 
@@ -64,7 +64,7 @@ export interface Routing extends ApprovalDtoBase {
   version: string;
 
   /**
-   * 状态（1=生成的，2=对订单下达，3=对成本核算下达，4=下达的（通用））
+   * 状态（字典 logistics_routing_status：1=生成的，2=对订单下达，3=对成本核算下达，4=下达的）
    */
   routingStatus: number;
 
@@ -88,11 +88,6 @@ export interface Routing extends ApprovalDtoBase {
    */
   items?: RoutingItem[];
 
-  /**
-   * 变更日志列表（主子表关系） （子表：TaktRoutingChangeLog）
-   */
-  changeLogs?: RoutingChangeLog[];
-
 }
 
 
@@ -114,12 +109,12 @@ export interface RoutingQuery extends TaktPagedQuery {
   companyCode?: string;
 
   /**
-   * 工厂代码
+   * 工厂代码（选项 TaktPlants/options，DictValue=PlantCode）
    */
   plantCode?: string;
 
   /**
-   * 工作中心
+   * 工作中心（选项 TaktWorkCenters/options，按工厂 ExtValue 过滤）
    */
   workCenter?: string;
 
@@ -134,12 +129,12 @@ export interface RoutingQuery extends TaktPagedQuery {
   routingName?: string;
 
   /**
-   * 用途（1=生产，2=工程/设计，3=万能，4=工厂维护）
+   * 用途（字典 logistics_routing_purpose：1=生产，2=工程/设计，3=万能，4=工厂维护）
    */
   purpose?: number;
 
   /**
-   * 适用物料编码
+   * 适用物料编码（选项 TaktMaterials/options）
    */
   materialCode?: string;
 
@@ -149,7 +144,7 @@ export interface RoutingQuery extends TaktPagedQuery {
   version?: string;
 
   /**
-   * 状态（1=生成的，2=对订单下达，3=对成本核算下达，4=下达的（通用））
+   * 状态（字典 logistics_routing_status：1=生成的，2=对订单下达，3=对成本核算下达，4=下达的）
    */
   routingStatus?: number;
 
@@ -263,12 +258,12 @@ export interface RoutingCreate {
   companyDefaultCulture: string;
 
   /**
-   * 工厂代码
+   * 工厂代码（选项 TaktPlants/options，DictValue=PlantCode）
    */
   plantCode: string;
 
   /**
-   * 工作中心
+   * 工作中心（选项 TaktWorkCenters/options，按工厂 ExtValue 过滤）
    */
   workCenter: string;
 
@@ -283,12 +278,12 @@ export interface RoutingCreate {
   routingName: string;
 
   /**
-   * 用途（1=生产，2=工程/设计，3=万能，4=工厂维护）
+   * 用途（字典 logistics_routing_purpose：1=生产，2=工程/设计，3=万能，4=工厂维护）
    */
   purpose: number;
 
   /**
-   * 适用物料编码
+   * 适用物料编码（选项 TaktMaterials/options）
    */
   materialCode: string;
 
@@ -298,7 +293,7 @@ export interface RoutingCreate {
   version: string;
 
   /**
-   * 状态（1=生成的，2=对订单下达，3=对成本核算下达，4=下达的（通用））
+   * 状态（字典 logistics_routing_status：1=生成的，2=对订单下达，3=对成本核算下达，4=下达的）
    */
   routingStatus: number;
 
@@ -320,12 +315,7 @@ export interface RoutingCreate {
   /**
    * 工艺路线明细列表（主子表关系）（子表，级联保存）
    */
-  items?: RoutingItemCreate[];
-
-  /**
-   * 变更日志列表（主子表关系）（子表，级联保存）
-   */
-  changeLogs?: RoutingChangeLogCreate[];
+  items?: RoutingItemUpdate[];
 
   /**
    * 扩展字段JSON
@@ -367,7 +357,7 @@ export interface RoutingStatus {
   routingId: string;
 
   /**
-   * 状态（1=生成的，2=对订单下达，3=对成本核算下达，4=下达的（通用））
+   * 状态（字典 logistics_routing_status：1=生成的，2=对订单下达，3=对成本核算下达，4=下达的）
    */
   routingStatus: number;
 
@@ -391,12 +381,12 @@ export interface RoutingTemplate {
   companyCode?: string;
 
   /**
-   * 工厂代码
+   * 工厂代码（选项 TaktPlants/options，DictValue=PlantCode）
    */
   plantCode?: string;
 
   /**
-   * 工作中心
+   * 工作中心（选项 TaktWorkCenters/options，按工厂 ExtValue 过滤）
    */
   workCenter?: string;
 
@@ -411,12 +401,12 @@ export interface RoutingTemplate {
   routingName?: string;
 
   /**
-   * 用途（1=生产，2=工程/设计，3=万能，4=工厂维护）
+   * 用途（字典 logistics_routing_purpose：1=生产，2=工程/设计，3=万能，4=工厂维护）
    */
   purpose?: number;
 
   /**
-   * 适用物料编码
+   * 适用物料编码（选项 TaktMaterials/options）
    */
   materialCode?: string;
 
@@ -426,7 +416,7 @@ export interface RoutingTemplate {
   version?: string;
 
   /**
-   * 状态（1=生成的，2=对订单下达，3=对成本核算下达，4=下达的（通用））
+   * 状态（字典 logistics_routing_status：1=生成的，2=对订单下达，3=对成本核算下达，4=下达的）
    */
   routingStatus?: number;
 
@@ -449,11 +439,6 @@ export interface RoutingTemplate {
    * 工艺路线明细列表（主子表关系）（子表，级联保存）
    */
   items?: RoutingItemCreate[];
-
-  /**
-   * 变更日志列表（主子表关系）（子表，级联保存）
-   */
-  changeLogs?: RoutingChangeLogCreate[];
 
   /**
    * 扩展字段JSON
@@ -490,12 +475,12 @@ export interface RoutingImport {
   companyDefaultCulture?: string;
 
   /**
-   * 工厂代码
+   * 工厂代码（选项 TaktPlants/options，DictValue=PlantCode）
    */
   plantCode?: string;
 
   /**
-   * 工作中心
+   * 工作中心（选项 TaktWorkCenters/options，按工厂 ExtValue 过滤）
    */
   workCenter?: string;
 
@@ -510,12 +495,12 @@ export interface RoutingImport {
   routingName?: string;
 
   /**
-   * 用途（1=生产，2=工程/设计，3=万能，4=工厂维护）
+   * 用途（字典 logistics_routing_purpose：1=生产，2=工程/设计，3=万能，4=工厂维护）
    */
   purpose?: number;
 
   /**
-   * 适用物料编码
+   * 适用物料编码（选项 TaktMaterials/options）
    */
   materialCode?: string;
 
@@ -525,7 +510,7 @@ export interface RoutingImport {
   version?: string;
 
   /**
-   * 状态（1=生成的，2=对订单下达，3=对成本核算下达，4=下达的（通用））
+   * 状态（字典 logistics_routing_status：1=生成的，2=对订单下达，3=对成本核算下达，4=下达的）
    */
   routingStatus?: number;
 
@@ -548,11 +533,6 @@ export interface RoutingImport {
    * 工艺路线明细列表（主子表关系）（子表，级联保存）
    */
   items?: RoutingItemCreate[];
-
-  /**
-   * 变更日志列表（主子表关系）（子表，级联保存）
-   */
-  changeLogs?: RoutingChangeLogCreate[];
 
   /**
    * 扩展字段JSON
@@ -579,12 +559,12 @@ export interface RoutingExport {
   routingId: string;
 
   /**
-   * 工厂代码
+   * 工厂代码（选项 TaktPlants/options，DictValue=PlantCode）
    */
   plantCode: string;
 
   /**
-   * 工作中心
+   * 工作中心（选项 TaktWorkCenters/options，按工厂 ExtValue 过滤）
    */
   workCenter: string;
 
@@ -599,12 +579,12 @@ export interface RoutingExport {
   routingName: string;
 
   /**
-   * 用途（1=生产，2=工程/设计，3=万能，4=工厂维护）
+   * 用途（字典 logistics_routing_purpose：1=生产，2=工程/设计，3=万能，4=工厂维护）
    */
   purpose: number;
 
   /**
-   * 适用物料编码
+   * 适用物料编码（选项 TaktMaterials/options）
    */
   materialCode: string;
 
@@ -614,7 +594,7 @@ export interface RoutingExport {
   version: string;
 
   /**
-   * 状态（1=生成的，2=对订单下达，3=对成本核算下达，4=下达的（通用））
+   * 状态（字典 logistics_routing_status：1=生成的，2=对订单下达，3=对成本核算下达，4=下达的）
    */
   routingStatus: number;
 

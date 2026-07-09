@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Application.Dtos.Logistics.Manufacturing.Planning
 // 文件名称：TaktPurchasePlanDtos.cs
-// 创建时间：2026-06-24
+// 创建时间：2026-07-09
 // 创建人：Takt365(Auto Generated)
 // 功能描述：PurchasePlan 模块 DTO（由 generate-dtos-from-entity.cjs 根据 TaktPurchasePlan 生成，请按需审阅）
 // 
@@ -36,7 +36,7 @@ public class TaktPurchasePlanDto : TaktApprovalDtoBase
     public long PurchasePlanId { get; set; }
 
     /// <summary>
-    /// 工厂代码（关联 TaktPlant.PlantCode）
+    /// 工厂代码（选项 TaktPlants/options，DictValue=PlantCode）
     /// </summary>
     public string PlantCode { get; set; } = string.Empty;
 
@@ -77,12 +77,12 @@ public class TaktPurchasePlanDto : TaktApprovalDtoBase
     public DateTime PlanPeriodEnd { get; set; }
 
     /// <summary>
-    /// 采购组编码（关联 TaktPurchaseGroup.PurchaseGroupCode）
+    /// 采购组编码（关联 TaktPurchaseGroup.PurchaseGroupCode，选项 TaktPurchaseGroups/options，DictValue=PurchaseGroupCode）
     /// </summary>
     public string? PurchaseGroupCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 计划人员工ID（关联 TaktEmployee，序列化为 string 以避免 Javascript 精度问题）
+    /// 计划人员工ID（关联 TaktEmployee.Id，选项 TaktEmployees/options）
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
     public long? PlannerId { get; set; }
@@ -93,7 +93,7 @@ public class TaktPurchasePlanDto : TaktApprovalDtoBase
     public string? PlannerName { get; set; }
 
     /// <summary>
-    /// 计划人（人员代码）
+    /// 计划人（关联 TaktEmployee.EmployeeNo，选项 TaktEmployees/options，DictValue=EmployeeNo）
     /// </summary>
     public string PlanBy { get; set; } = string.Empty;
 
@@ -118,12 +118,7 @@ public class TaktPurchasePlanDto : TaktApprovalDtoBase
     public decimal ConvertedAmount { get; set; }
 
     /// <summary>
-    /// 计划说明
-    /// </summary>
-    public string? PlanDescription { get; set; } = string.Empty;
-
-    /// <summary>
-    /// 计划状态（字典 sys_normal_disable_status；1=启用，0=禁用）
+    /// 计划状态（字典 sys_normal_disable_status；1=启用，0=禁用，2=锁定）
     /// </summary>
     public int PlanStatus { get; set; } = 0;
 
@@ -131,6 +126,11 @@ public class TaktPurchasePlanDto : TaktApprovalDtoBase
     /// 转单状态（字典 sys_convert_status；0=未转换，1=部分转换，2=全部转换）
     /// </summary>
     public int ConvertedStatus { get; set; } = 0;
+
+    /// <summary>
+    /// 计划说明
+    /// </summary>
+    public string? PlanDescription { get; set; } = string.Empty;
 
     /// <summary>
     /// 采购计划明细列表（主子表关系，一个计划可有多个明细行）
@@ -161,7 +161,7 @@ public class TaktPurchasePlanQueryDto : TaktPagedQuery
     public string? CompanyCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 工厂代码（关联 TaktPlant.PlantCode）
+    /// 工厂代码（选项 TaktPlants/options，DictValue=PlantCode）
     /// </summary>
     public string? PlantCode { get; set; } = string.Empty;
 
@@ -212,18 +212,18 @@ public class TaktPurchasePlanQueryDto : TaktPagedQuery
     public DateTime? PlanPeriodEndEnd { get; set; }
 
     /// <summary>
-    /// 采购组编码（关联 TaktPurchaseGroup.PurchaseGroupCode）
+    /// 采购组编码（关联 TaktPurchaseGroup.PurchaseGroupCode，选项 TaktPurchaseGroups/options，DictValue=PurchaseGroupCode）
     /// </summary>
     public string? PurchaseGroupCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 计划人员工ID（关联 TaktEmployee，序列化为 string 以避免 Javascript 精度问题）
+    /// 计划人员工ID（关联 TaktEmployee.Id，选项 TaktEmployees/options）
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
     public long? PlannerId { get; set; }
 
     /// <summary>
-    /// 计划人（人员代码）
+    /// 计划人（关联 TaktEmployee.EmployeeNo，选项 TaktEmployees/options，DictValue=EmployeeNo）
     /// </summary>
     public string? PlanBy { get; set; } = string.Empty;
 
@@ -248,12 +248,7 @@ public class TaktPurchasePlanQueryDto : TaktPagedQuery
     public decimal? ConvertedAmount { get; set; }
 
     /// <summary>
-    /// 计划说明
-    /// </summary>
-    public string? PlanDescription { get; set; } = string.Empty;
-
-    /// <summary>
-    /// 计划状态（字典 sys_normal_disable_status；1=启用，0=禁用）
+    /// 计划状态（字典 sys_normal_disable_status；1=启用，0=禁用，2=锁定）
     /// </summary>
     public int? PlanStatus { get; set; }
 
@@ -261,6 +256,11 @@ public class TaktPurchasePlanQueryDto : TaktPagedQuery
     /// 转单状态（字典 sys_convert_status；0=未转换，1=部分转换，2=全部转换）
     /// </summary>
     public int? ConvertedStatus { get; set; }
+
+    /// <summary>
+    /// 计划说明
+    /// </summary>
+    public string? PlanDescription { get; set; } = string.Empty;
 
     /// <summary>
     /// 审批状态（字典 sys_approval_status；与 TaktApprovalEntityBase.ApprovalStatus 一致）
@@ -351,9 +351,9 @@ public class TaktPurchasePlanCreateDto
     public string CompanyDefaultCulture { get; set; } = string.Empty;
 
     /// <summary>
-    /// 工厂代码（关联 TaktPlant.PlantCode）
+    /// 工厂代码（选项 TaktPlants/options，DictValue=PlantCode）
     /// </summary>
-    [Required(ErrorMessage = "工厂代码（关联 TaktPlant.PlantCode）不能为空")]
+    [Required(ErrorMessage = "工厂代码（选项 TaktPlants/options，DictValue=PlantCode）不能为空")]
     public string PlantCode { get; set; } = string.Empty;
 
     /// <summary>
@@ -389,20 +389,20 @@ public class TaktPurchasePlanCreateDto
     public DateTime PlanPeriodEnd { get; set; }
 
     /// <summary>
-    /// 采购组编码（关联 TaktPurchaseGroup.PurchaseGroupCode）
+    /// 采购组编码（关联 TaktPurchaseGroup.PurchaseGroupCode，选项 TaktPurchaseGroups/options，DictValue=PurchaseGroupCode）
     /// </summary>
     public string? PurchaseGroupCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 计划人员工ID（关联 TaktEmployee，序列化为 string 以避免 Javascript 精度问题）
+    /// 计划人员工ID（关联 TaktEmployee.Id，选项 TaktEmployees/options）
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
     public long? PlannerId { get; set; }
 
     /// <summary>
-    /// 计划人（人员代码）
+    /// 计划人（关联 TaktEmployee.EmployeeNo，选项 TaktEmployees/options，DictValue=EmployeeNo）
     /// </summary>
-    [Required(ErrorMessage = "计划人（人员代码）不能为空")]
+    [Required(ErrorMessage = "计划人（关联 TaktEmployee.EmployeeNo，选项 TaktEmployees/options，DictValue=EmployeeNo）不能为空")]
     public string PlanBy { get; set; } = string.Empty;
 
     /// <summary>
@@ -426,12 +426,7 @@ public class TaktPurchasePlanCreateDto
     public decimal ConvertedAmount { get; set; }
 
     /// <summary>
-    /// 计划说明
-    /// </summary>
-    public string? PlanDescription { get; set; } = string.Empty;
-
-    /// <summary>
-    /// 计划状态（字典 sys_normal_disable_status；1=启用，0=禁用）
+    /// 计划状态（字典 sys_normal_disable_status；1=启用，0=禁用，2=锁定）
     /// </summary>
     public int PlanStatus { get; set; } = 0;
 
@@ -441,9 +436,14 @@ public class TaktPurchasePlanCreateDto
     public int ConvertedStatus { get; set; } = 0;
 
     /// <summary>
+    /// 计划说明
+    /// </summary>
+    public string? PlanDescription { get; set; } = string.Empty;
+
+    /// <summary>
     /// 采购计划明细列表（主子表关系，一个计划可有多个明细行）（子表，级联保存）
     /// </summary>
-    public List<TaktPurchasePlanItemCreateDto>? Items { get; set; }
+    public List<TaktPurchasePlanItemUpdateDto>? Items { get; set; }
 
     /// <summary>
     /// 扩展字段JSON
@@ -495,9 +495,9 @@ public class TaktPurchasePlanStatusDto
     public long PurchasePlanId { get; set; }
 
     /// <summary>
-    /// 计划状态（字典 sys_normal_disable_status；1=启用，0=禁用）
+    /// 计划状态（字典 sys_normal_disable_status；1=启用，0=禁用，2=锁定）
     /// </summary>
-    [Required(ErrorMessage = "计划状态（字典 sys_normal_disable_status；1=启用，0=禁用）不能为空")]
+    [Required(ErrorMessage = "计划状态（字典 sys_normal_disable_status；1=启用，0=禁用，2=锁定）不能为空")]
     public int PlanStatus { get; set; } = 0;
 }
 
@@ -521,7 +521,7 @@ public class TaktPurchasePlanTemplateDto
     public string? CompanyCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 工厂代码（关联 TaktPlant.PlantCode）
+    /// 工厂代码（选项 TaktPlants/options，DictValue=PlantCode）
     /// </summary>
     public string? PlantCode { get; set; } = string.Empty;
 
@@ -557,18 +557,18 @@ public class TaktPurchasePlanTemplateDto
     public DateTime? PlanPeriodEnd { get; set; }
 
     /// <summary>
-    /// 采购组编码（关联 TaktPurchaseGroup.PurchaseGroupCode）
+    /// 采购组编码（关联 TaktPurchaseGroup.PurchaseGroupCode，选项 TaktPurchaseGroups/options，DictValue=PurchaseGroupCode）
     /// </summary>
     public string? PurchaseGroupCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 计划人员工ID（关联 TaktEmployee，序列化为 string 以避免 Javascript 精度问题）
+    /// 计划人员工ID（关联 TaktEmployee.Id，选项 TaktEmployees/options）
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
     public long? PlannerId { get; set; }
 
     /// <summary>
-    /// 计划人（人员代码）
+    /// 计划人（关联 TaktEmployee.EmployeeNo，选项 TaktEmployees/options，DictValue=EmployeeNo）
     /// </summary>
     public string? PlanBy { get; set; } = string.Empty;
 
@@ -593,12 +593,7 @@ public class TaktPurchasePlanTemplateDto
     public decimal? ConvertedAmount { get; set; }
 
     /// <summary>
-    /// 计划说明
-    /// </summary>
-    public string? PlanDescription { get; set; } = string.Empty;
-
-    /// <summary>
-    /// 计划状态（字典 sys_normal_disable_status；1=启用，0=禁用）
+    /// 计划状态（字典 sys_normal_disable_status；1=启用，0=禁用，2=锁定）
     /// </summary>
     public int? PlanStatus { get; set; }
 
@@ -606,6 +601,11 @@ public class TaktPurchasePlanTemplateDto
     /// 转单状态（字典 sys_convert_status；0=未转换，1=部分转换，2=全部转换）
     /// </summary>
     public int? ConvertedStatus { get; set; }
+
+    /// <summary>
+    /// 计划说明
+    /// </summary>
+    public string? PlanDescription { get; set; } = string.Empty;
 
     /// <summary>
     /// 采购计划明细列表（主子表关系，一个计划可有多个明细行）（子表，级联保存）
@@ -645,7 +645,7 @@ public class TaktPurchasePlanImportDto
     public string? CompanyDefaultCulture { get; set; } = string.Empty;
 
     /// <summary>
-    /// 工厂代码（关联 TaktPlant.PlantCode）
+    /// 工厂代码（选项 TaktPlants/options，DictValue=PlantCode）
     /// </summary>
     public string? PlantCode { get; set; } = string.Empty;
 
@@ -681,18 +681,18 @@ public class TaktPurchasePlanImportDto
     public DateTime? PlanPeriodEnd { get; set; }
 
     /// <summary>
-    /// 采购组编码（关联 TaktPurchaseGroup.PurchaseGroupCode）
+    /// 采购组编码（关联 TaktPurchaseGroup.PurchaseGroupCode，选项 TaktPurchaseGroups/options，DictValue=PurchaseGroupCode）
     /// </summary>
     public string? PurchaseGroupCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 计划人员工ID（关联 TaktEmployee，序列化为 string 以避免 Javascript 精度问题）
+    /// 计划人员工ID（关联 TaktEmployee.Id，选项 TaktEmployees/options）
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
     public long? PlannerId { get; set; }
 
     /// <summary>
-    /// 计划人（人员代码）
+    /// 计划人（关联 TaktEmployee.EmployeeNo，选项 TaktEmployees/options，DictValue=EmployeeNo）
     /// </summary>
     public string? PlanBy { get; set; } = string.Empty;
 
@@ -717,12 +717,7 @@ public class TaktPurchasePlanImportDto
     public decimal? ConvertedAmount { get; set; }
 
     /// <summary>
-    /// 计划说明
-    /// </summary>
-    public string? PlanDescription { get; set; } = string.Empty;
-
-    /// <summary>
-    /// 计划状态（字典 sys_normal_disable_status；1=启用，0=禁用）
+    /// 计划状态（字典 sys_normal_disable_status；1=启用，0=禁用，2=锁定）
     /// </summary>
     public int? PlanStatus { get; set; }
 
@@ -730,6 +725,11 @@ public class TaktPurchasePlanImportDto
     /// 转单状态（字典 sys_convert_status；0=未转换，1=部分转换，2=全部转换）
     /// </summary>
     public int? ConvertedStatus { get; set; }
+
+    /// <summary>
+    /// 计划说明
+    /// </summary>
+    public string? PlanDescription { get; set; } = string.Empty;
 
     /// <summary>
     /// 采购计划明细列表（主子表关系，一个计划可有多个明细行）（子表，级联保存）
@@ -765,7 +765,7 @@ public class TaktPurchasePlanExportDto
     public long PurchasePlanId { get; set; }
 
     /// <summary>
-    /// 工厂代码（关联 TaktPlant.PlantCode）
+    /// 工厂代码（选项 TaktPlants/options，DictValue=PlantCode）
     /// </summary>
     public string PlantCode { get; set; } = string.Empty;
 
@@ -801,18 +801,18 @@ public class TaktPurchasePlanExportDto
     public DateTime PlanPeriodEnd { get; set; }
 
     /// <summary>
-    /// 采购组编码（关联 TaktPurchaseGroup.PurchaseGroupCode）
+    /// 采购组编码（关联 TaktPurchaseGroup.PurchaseGroupCode，选项 TaktPurchaseGroups/options，DictValue=PurchaseGroupCode）
     /// </summary>
     public string? PurchaseGroupCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 计划人员工ID（关联 TaktEmployee，序列化为 string 以避免 Javascript 精度问题）
+    /// 计划人员工ID（关联 TaktEmployee.Id，选项 TaktEmployees/options）
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
     public long? PlannerId { get; set; }
 
     /// <summary>
-    /// 计划人（人员代码）
+    /// 计划人（关联 TaktEmployee.EmployeeNo，选项 TaktEmployees/options，DictValue=EmployeeNo）
     /// </summary>
     public string PlanBy { get; set; } = string.Empty;
 
@@ -837,12 +837,7 @@ public class TaktPurchasePlanExportDto
     public decimal ConvertedAmount { get; set; }
 
     /// <summary>
-    /// 计划说明
-    /// </summary>
-    public string? PlanDescription { get; set; } = string.Empty;
-
-    /// <summary>
-    /// 计划状态（字典 sys_normal_disable_status；1=启用，0=禁用）
+    /// 计划状态（字典 sys_normal_disable_status；1=启用，0=禁用，2=锁定）
     /// </summary>
     public int PlanStatus { get; set; } = 0;
 
@@ -850,6 +845,11 @@ public class TaktPurchasePlanExportDto
     /// 转单状态（字典 sys_convert_status；0=未转换，1=部分转换，2=全部转换）
     /// </summary>
     public int ConvertedStatus { get; set; } = 0;
+
+    /// <summary>
+    /// 计划说明
+    /// </summary>
+    public string? PlanDescription { get; set; } = string.Empty;
 
     /// <summary>
     /// 扩展字段JSON

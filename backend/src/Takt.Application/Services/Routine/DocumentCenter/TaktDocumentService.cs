@@ -31,7 +31,6 @@ public class TaktDocumentService : TaktServiceBase, ITaktDocumentService
 {
     private readonly ITaktApprovalRepository<TaktDocument> _documentRepository;
     private readonly ITaktCompanyRepository<TaktDocumentVersion> _documentVersionRepository;
-    private readonly ITaktCompanyRepository<TaktDocumentChangeLog> _documentChangeLogRepository;
     private readonly ITaktSortOrderGenerator _sortOrderGenerator;
     private readonly ITaktUniqueValidator _uniqueValidator;
 
@@ -40,7 +39,6 @@ public class TaktDocumentService : TaktServiceBase, ITaktDocumentService
     /// </summary>
     /// <param name="documentRepository">文管中心仓储</param>
     /// <param name="documentVersionRepository">DocumentVersion仓储</param>
-    /// <param name="documentChangeLogRepository">DocumentChangeLog仓储</param>
     /// <param name="sortOrderGenerator">排序号生成器</param>
     /// <param name="uniqueValidator">唯一性验证器</param>
     /// <param name="userContext">用户上下文</param>
@@ -48,7 +46,6 @@ public class TaktDocumentService : TaktServiceBase, ITaktDocumentService
     public TaktDocumentService(
         ITaktApprovalRepository<TaktDocument> documentRepository,
         ITaktCompanyRepository<TaktDocumentVersion> documentVersionRepository,
-        ITaktCompanyRepository<TaktDocumentChangeLog> documentChangeLogRepository,
         ITaktSortOrderGenerator sortOrderGenerator,
         ITaktUniqueValidator uniqueValidator,
         ITaktUserContext? userContext = null,
@@ -57,7 +54,6 @@ public class TaktDocumentService : TaktServiceBase, ITaktDocumentService
     {
         _documentRepository = documentRepository;
         _documentVersionRepository = documentVersionRepository;
-        _documentChangeLogRepository = documentChangeLogRepository;
         _sortOrderGenerator = sortOrderGenerator;
         _uniqueValidator = uniqueValidator;
     }
@@ -181,9 +177,7 @@ public class TaktDocumentService : TaktServiceBase, ITaktDocumentService
         {
             throw new TaktBusinessException("文管中心不存在或已删除");
         }
-        await _documentVersionRepository.DeleteAsync(x => x.DocumentId == entity.Id);
-        await _documentChangeLogRepository.DeleteAsync(x => x.DocumentId == entity.Id);
-        var deleted = await _documentRepository.DeleteAsync(id);
+        await _documentVersionRepository.DeleteAsync(x => x.DocumentId == entity.Id);        var deleted = await _documentRepository.DeleteAsync(id);
         if (!deleted)
         {
             throw new TaktBusinessException("文管中心不存在或已删除");
@@ -353,9 +347,6 @@ public class TaktDocumentService : TaktServiceBase, ITaktDocumentService
         // 文管文档版本 → dto.Versions
         var versions = await _documentVersionRepository.GetListAsync(x => x.DocumentId == entity.Id);
         dto.Versions = versions.Adapt<List<TaktDocumentVersionDto>>();
-        // 文管文档变更日志 → dto.ChangeLogs
-        var changelogs = await _documentChangeLogRepository.GetListAsync(x => x.DocumentId == entity.Id);
-        dto.ChangeLogs = changelogs.Adapt<List<TaktDocumentChangeLogDto>>();
     }
 
     /// <summary>
@@ -401,24 +392,6 @@ public class TaktDocumentService : TaktServiceBase, ITaktDocumentService
             }
             }
             await _documentVersionRepository.CreateRangeAsync(versions);
-        }
-        // 文管文档变更日志（ChangeLogs）
-        if (dto.ChangeLogs is not { Count: > 0 })
-        {
-            await _documentChangeLogRepository.DeleteAsync(x => x.DocumentId == entity.Id);
-        }
-        else
-        {
-            var changelogs = dto.ChangeLogs.Adapt<List<TaktDocumentChangeLog>>();
-            foreach (var child in changelogs)
-            {
-                child.DocumentId = entity.Id;
-            }
-            await _documentChangeLogRepository.DeleteAsync(x => x.DocumentId == entity.Id);
-            foreach (var child in changelogs)
-            {
-            }
-            await _documentChangeLogRepository.CreateRangeAsync(changelogs);
         }
     }
     // ========================================

@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：frontend/src/api/logistics/quality/operation
 // 文件名称：ipqc-order-item.ts
-// 创建时间：2026-06-30
+// 创建时间：2026-07-09
 // 创建人：Takt365(Auto Generated)
 // 功能描述：logistics/quality/operation 模块 API（自动生成，请勿手改路由常量）
 // 
@@ -18,6 +18,7 @@ import type {
 import type {
   IpqcOrderItem,
   IpqcOrderItemCreate,
+  IpqcOrderItemObsolete,
   IpqcOrderItemStatus,
   IpqcOrderItemUpdate
 } from '@/types/logistics/quality/operation/ipqc-order-item';
@@ -117,6 +118,19 @@ export function deleteIpqcOrderItemBatch(ids: string[]): Promise<void> {
 export function updateIpqcOrderItemStatus(dto: IpqcOrderItemStatus): Promise<IpqcOrderItem> {
   return request<IpqcOrderItem>({
     url: `${IPQC_ORDER_ITEM_API_BASE}/status`,
+    method: 'put',
+    data: dto,
+  });
+}
+
+/**
+ * 更新制程检验单明细作废状态
+ * @param {IpqcOrderItemObsolete} dto 作废 DTO
+ * @returns {Promise<IpqcOrderItem>} 制程检验单明细DTO
+ */
+export function updateIpqcOrderItemObsolete(dto: IpqcOrderItemObsolete): Promise<IpqcOrderItem> {
+  return request<IpqcOrderItem>({
+    url: `${IPQC_ORDER_ITEM_API_BASE}/obsolete`,
     method: 'put',
     data: dto,
   });

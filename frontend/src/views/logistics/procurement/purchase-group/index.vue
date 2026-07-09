@@ -71,11 +71,11 @@
     >
       <!-- 字典/开关列渲染 -->
       <template #bodyCell="{ column, record }">
-        <template v-if="column.key === 'purchaseGroupStatus'">
+        <template v-if="column.key === 'GroupStatus'">
           <a-switch
-            :checked="getPurchaseGroupField(record, 'purchaseGroupStatus') === 1"
+            :checked="getPurchaseGroupField(record, 'GroupStatus') === 1"
             :checked-children="t('common.page.button.enable')" :un-checked-children="t('common.page.button.disable')"
-            @change="(checked: unknown) => handlePurchaseGroupStatusChange(record, Boolean(checked))"
+            @change="(checked: unknown) => handleGroupStatusChange(record, Boolean(checked))"
           />
         </template>
         <template v-else-if="column.key === 'isBuiltIn'">
@@ -190,10 +190,10 @@
         />
       </a-form-item>
       </div>
-      <div v-show="isFieldVisible('purchaseGroupStatus')">
+      <div v-show="isFieldVisible('GroupStatus')">
       <a-form-item :label="t('entity.purchasegroup.status')">
         <TaktSelect
-          v-model:value="advancedQueryForm.purchaseGroupStatus"
+          v-model:value="advancedQueryForm.GroupStatus"
           dict-type="sys_normal_disable_status"
           :placeholder="t('common.page.form.placeholder.select', { field: t('entity.purchasegroup.status') })"
           allow-clear
@@ -323,7 +323,7 @@ import { CreateActionColumn } from '@/components/business/takt-action-column/ind
 import { useI18n } from 'vue-i18n'
 import { ensureTaktPaginationConfigAsync, getTaktDefaultPageIndex, getTaktDefaultPageSize } from '@/utils/takt-paged'
 import PurchaseGroupForm from './components/purchase-group-form.vue'
-import { getPurchaseGroupList, getPurchaseGroupById, createPurchaseGroup, updatePurchaseGroup, deletePurchaseGroupById, deletePurchaseGroupBatch, getPurchaseGroupTemplate, importPurchaseGroup, exportPurchaseGroup, updatePurchaseGroupStatus } from '@/api/logistics/procurement/purchase-group'
+import { getPurchaseGroupList, getPurchaseGroupById, createPurchaseGroup, updatePurchaseGroup, deletePurchaseGroupById, deletePurchaseGroupBatch, getPurchaseGroupTemplate, importPurchaseGroup, exportPurchaseGroup, updateGroupStatus } from '@/api/logistics/procurement/purchase-group'
 import type { PurchaseGroup, PurchaseGroupQuery } from '@/types/logistics/procurement/purchase-group'
 import { useDictDataStore } from '@/stores/foundation/dict-data'
 import { taktExcelEntityNames } from '@/utils/naming'
@@ -379,7 +379,7 @@ const advancedQueryForm = ref({
   responsibleUserId: '',
   contactPhone: '',
   contactEmail: '',
-  purchaseGroupStatus: undefined as number | undefined,
+  GroupStatus: undefined as number | undefined,
   isBuiltIn: undefined as number | undefined,
   createdAtStart: '',
   createdAtEnd: '',
@@ -394,7 +394,7 @@ const queryFieldsMeta = computed(() => [
   { key: 'responsibleUserId', label: t('entity.purchasegroup.responsibleuserid') },
   { key: 'contactPhone', label: t('entity.purchasegroup.contactphone') },
   { key: 'contactEmail', label: t('entity.purchasegroup.contactemail') },
-  { key: 'purchaseGroupStatus', label: t('entity.purchasegroup.status') },
+  { key: 'GroupStatus', label: t('entity.purchasegroup.status') },
   { key: 'isBuiltIn', label: t('entity.purchasegroup.isbuiltin') },
   { key: 'createdAtStart', label: t('common.page.entity.createdatstart') },
   { key: 'createdAtEnd', label: t('common.page.entity.createdatend') },
@@ -448,8 +448,8 @@ function buildListQuery(overrides?: Partial<PurchaseGroupQuery>): PurchaseGroupQ
   assignTrimmed('responsibleUserId', form.responsibleUserId)
   assignTrimmed('contactPhone', form.contactPhone)
   assignTrimmed('contactEmail', form.contactEmail)
-  if (form.purchaseGroupStatus !== undefined && form.purchaseGroupStatus !== null) {
-    query.purchaseGroupStatus = form.purchaseGroupStatus
+  if (form.GroupStatus !== undefined && form.GroupStatus !== null) {
+    query.GroupStatus = form.GroupStatus
   }
   if (form.isBuiltIn !== undefined && form.isBuiltIn !== null) {
     query.isBuiltIn = form.isBuiltIn
@@ -541,8 +541,8 @@ const columns = computed<TableColumnsType>(() => [
   },
   {
     title: t('entity.purchasegroup.status'),
-    dataIndex: 'purchaseGroupStatus',
-    key: 'purchaseGroupStatus',
+    dataIndex: 'GroupStatus',
+    key: 'GroupStatus',
     width: 120,
     resizable: true,
     ellipsis: true,
@@ -661,7 +661,7 @@ function handleReset() {
   responsibleUserId: '',
   contactPhone: '',
   contactEmail: '',
-  purchaseGroupStatus: undefined as number | undefined,
+  GroupStatus: undefined as number | undefined,
   isBuiltIn: undefined as number | undefined,
   createdAtStart: '',
   createdAtEnd: '',
@@ -828,21 +828,21 @@ async function handleDelete() {
  * @param record 当前行
  * @param checked 是否启用
  */
-async function handlePurchaseGroupStatusChange(record: PurchaseGroup, checked: boolean) {
+async function handleGroupStatusChange(record: PurchaseGroup, checked: boolean) {
   const newVal = checked ? 1 : 0
-  const oldVal = getPurchaseGroupField(record, 'purchaseGroupStatus')
+  const oldVal = getPurchaseGroupField(record, 'GroupStatus')
   const id = getPurchaseGroupId(record)
   const row = dataSource.value.find((item) => getPurchaseGroupId(item) === id)
   if (row) {
-    row.purchaseGroupStatus = newVal
+    row.GroupStatus = newVal
   }
   try {
-    await updatePurchaseGroupStatus({ purchaseGroupId: id, purchaseGroupStatus: newVal })
+    await updateGroupStatus({ purchaseGroupId: id, GroupStatus: newVal })
     message.success(t('common.feedback.updated'))
     
   } catch (error: unknown) {
     if (row) {
-      row.purchaseGroupStatus = oldVal
+      row.GroupStatus = oldVal
     }
     message.error(t('common.feedback.failed'))
   }
@@ -867,7 +867,7 @@ function handleAdvancedQueryReset() {
   responsibleUserId: '',
   contactPhone: '',
   contactEmail: '',
-  purchaseGroupStatus: undefined as number | undefined,
+  GroupStatus: undefined as number | undefined,
   isBuiltIn: undefined as number | undefined,
   createdAtStart: '',
   createdAtEnd: '',

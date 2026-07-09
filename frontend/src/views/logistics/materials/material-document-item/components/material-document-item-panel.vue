@@ -2,7 +2,7 @@
 <!-- 项目名称：节拍数字工厂 · Takt Plat (TDF) -->
 <!-- 命名空间：@/views/logistics/materials/material-document-item/components -->
 <!-- 文件名称：material-document-item-panel.vue -->
-<!-- 功能描述：Takt物料交易主表实体主表实体右侧明细 materialDocumentItem 独立 CRUD（按主表选中 materialDocumentId 分页） -->
+<!-- 功能描述：Takt物料凭证主表实体主表实体右侧明细 materialDocumentItem 独立 CRUD（按主表选中 materialDocumentId 分页） -->
 <!-- 版权信息：Copyright (c) 2025 Takt  All rights reserved. -->
 <!-- ======================================== -->
 
@@ -372,7 +372,7 @@
 
 <script setup lang="ts">
 /**
- * Takt物料交易主表实体子表 materialDocumentItem 右栏面板
+ * Takt物料凭证主表实体子表 materialDocumentItem 右栏面板
  * @module views/logistics/materials/material-document-item/components
  */
 import { ref, computed, watch } from 'vue'

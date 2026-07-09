@@ -30,27 +30,23 @@ namespace Takt.Application.Services.Routine.HelpDesk;
 public class TaktItAssetService : TaktServiceBase, ITaktItAssetService
 {
     private readonly ITaktCompanyRepository<TaktItAsset> _itAssetRepository;
-    private readonly ITaktCompanyRepository<TaktItAssetChangeLog> _itAssetChangeLogRepository;
     private readonly ITaktUniqueValidator _uniqueValidator;
 
     /// <summary>
     /// 构造函数
     /// </summary>
     /// <param name="itAssetRepository">IT设备保修扩展仓储</param>
-    /// <param name="itAssetChangeLogRepository">ItAssetChangeLog仓储</param>
     /// <param name="uniqueValidator">唯一性验证器</param>
     /// <param name="userContext">用户上下文</param>
     /// <param name="localizationService">本地化服务</param>
     public TaktItAssetService(
         ITaktCompanyRepository<TaktItAsset> itAssetRepository,
-        ITaktCompanyRepository<TaktItAssetChangeLog> itAssetChangeLogRepository,
         ITaktUniqueValidator uniqueValidator,
         ITaktUserContext? userContext = null,
         ITaktLocalizationService? localizationService = null)
         : base(userContext, localizationService)
     {
         _itAssetRepository = itAssetRepository;
-        _itAssetChangeLogRepository = itAssetChangeLogRepository;
         _uniqueValidator = uniqueValidator;
     }
 
@@ -165,9 +161,7 @@ public class TaktItAssetService : TaktServiceBase, ITaktItAssetService
         if (entity == null)
         {
             throw new TaktBusinessException("IT设备保修扩展不存在或已删除");
-        }
-        await _itAssetChangeLogRepository.DeleteAsync(x => x.ItAssetId == entity.Id);
-        var deleted = await _itAssetRepository.DeleteAsync(id);
+        }        var deleted = await _itAssetRepository.DeleteAsync(id);
         if (!deleted)
         {
             throw new TaktBusinessException("IT设备保修扩展不存在或已删除");
@@ -293,9 +287,6 @@ public class TaktItAssetService : TaktServiceBase, ITaktItAssetService
         {
             return;
         }
-        // IT设备保修变更日志 → dto.ChangeLogs
-        var changelogs = await _itAssetChangeLogRepository.GetListAsync(x => x.ItAssetId == entity.Id);
-        dto.ChangeLogs = changelogs.Adapt<List<TaktItAssetChangeLogDto>>();
     }
 
     /// <summary>
@@ -306,24 +297,6 @@ public class TaktItAssetService : TaktServiceBase, ITaktItAssetService
     /// <returns>任务</returns>
     private async Task SaveItAssetChildrenAsync(TaktItAsset entity, TaktItAssetCreateDto dto)
     {
-        // IT设备保修变更日志（ChangeLogs）
-        if (dto.ChangeLogs is not { Count: > 0 })
-        {
-            await _itAssetChangeLogRepository.DeleteAsync(x => x.ItAssetId == entity.Id);
-        }
-        else
-        {
-            var changelogs = dto.ChangeLogs.Adapt<List<TaktItAssetChangeLog>>();
-            foreach (var child in changelogs)
-            {
-                child.ItAssetId = entity.Id;
-            }
-            await _itAssetChangeLogRepository.DeleteAsync(x => x.ItAssetId == entity.Id);
-            foreach (var child in changelogs)
-            {
-            }
-            await _itAssetChangeLogRepository.CreateRangeAsync(changelogs);
-        }
     }
     // ========================================
     // 查询表达式

@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：frontend/src/api/logistics/procurement
 // 文件名称：purchase-request.ts
-// 创建时间：2026-06-24
+// 创建时间：2026-07-09
 // 创建人：Takt365(Auto Generated)
 // 功能描述：logistics/procurement 模块 API（自动生成，请勿手改路由常量）
 // 
@@ -119,6 +119,34 @@ export function updatePurchaseRequestStatus(dto: PurchaseRequestStatus): Promise
     url: `${PURCHASE_REQUEST_API_BASE}/status`,
     method: 'put',
     data: dto,
+  });
+}
+
+/**
+ * 提交采购申请会签审批
+ * @param {string} id 采购申请主键
+ * @returns {Promise<unknown>} 操作结果
+ */
+export function submitPurchaseRequestCountersign(id: string): Promise<unknown> {
+  return request({
+    url: `${PURCHASE_REQUEST_API_BASE}/${id}/submit-countersign`,
+    method: 'post',
+  });
+}
+
+/**
+ * 方案一：PR 会签通过后 PO 生成决策
+ * @param {string} id 采购申请主键
+ * @param {boolean} generatePo true=生成 PO；false=暂不生成 PO 直接报销
+ * @returns {Promise<unknown>} 操作结果
+ */
+export function applyPurchaseRequestPoDecision(id: string, generatePo: boolean): Promise<unknown> {
+  return request({
+    url: `${PURCHASE_REQUEST_API_BASE}/${id}/po-decision`,
+    method: 'post',
+    params: {
+      generatePo
+    },
   });
 }
 

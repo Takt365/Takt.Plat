@@ -8,9 +8,6 @@
 
 <template>
   <div class="fqc-order-item-panel flex h-full min-h-0 flex-col overflow-hidden">
-    <div class="mb-2 text-sm font-medium text-text">
-      {{ t('entity.fqcorderitem._self') }}
-    </div>
     <TaktQueryBar
       v-model="queryKeyword"
       :placeholder="searchPlaceholder"
@@ -55,7 +52,10 @@
       @delete="handleDelete"
       @refresh="handleRefresh"
     />
-    <div class="fqc-order-item-panel__table-wrap min-h-0 flex-1 overflow-hidden">
+    <div
+      ref="detailTableWrapRef"
+      class="fqc-order-item-panel__table-wrap min-h-0 flex-1 overflow-hidden"
+    >
       <TaktSingleTable
         class="h-full min-h-0"
         :columns="columns"
@@ -74,11 +74,27 @@
         :total="total"
         scroll-layout="masterDetailLr"
         table-mode="masterDetailDetail"
+        :scroll="{ y: detailTableScrollY }"
         :show-row-selection="true"
         @change="handleTableChange"
         @pagination-change="handleMasterDetailPaginationChange"
         @resize-column="handleResizeColumn"
-      />
+      >
+        <template #summary>
+          <a-table-summary fixed>
+            <a-table-summary-row>
+              <a-table-summary-cell :index="0" />
+              <a-table-summary-cell
+                v-for="cell in summaryCells"
+                :key="cell.key"
+                :index="cell.index"
+              >
+                <span class="text-sm font-medium">{{ cell.text }}</span>
+              </a-table-summary-cell>
+            </a-table-summary-row>
+          </a-table-summary>
+        </template>
+      </TaktSingleTable>
     </div>
     <TaktModal
       v-model:open="formVisible"
@@ -107,10 +123,10 @@
     >
       <template #default="{ isFieldVisible }">
       <div v-show="isFieldVisible('fqcOrderCode')">
-      <a-form-item :label="t('entity.fqcorderitem.fqcordercode')">
+      <a-form-item :label="pi.queryLabel('fqcOrderCode')">
         <a-input
           v-model:value="advancedQueryForm.fqcOrderCode"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.fqcorderitem.fqcordercode') })"
+          :placeholder="pi.queryPh('fqcOrderCode', 'required')"
           show-count
           :maxlength="50"
           allow-clear
@@ -118,30 +134,29 @@
       </a-form-item>
       </div>
       <div v-show="isFieldVisible('lineNumber')">
-      <a-form-item :label="t('entity.fqcorderitem.linenumber')">
+      <a-form-item :label="pi.queryLabel('lineNumber')">
         <a-input-number
           v-model:value="advancedQueryForm.lineNumber"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.fqcorderitem.linenumber') })"
+          :placeholder="pi.queryPh('lineNumber', 'required')"
           style="width: 100%"
         />
       </a-form-item>
       </div>
       <div v-show="isFieldVisible('materialCode')">
-      <a-form-item :label="t('entity.fqcorderitem.materialcode')">
-        <a-input
+      <a-form-item :label="pi.queryLabel('materialCode')">
+        <TaktSelect
           v-model:value="advancedQueryForm.materialCode"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.fqcorderitem.materialcode') })"
-          show-count
-          :maxlength="20"
+          api-url="TaktMaterials/options"
+          :placeholder="pi.queryPh('materialCode', 'select')"
           allow-clear
         />
       </a-form-item>
       </div>
       <div v-show="isFieldVisible('materialName')">
-      <a-form-item :label="t('entity.fqcorderitem.materialname')">
+      <a-form-item :label="pi.queryLabel('materialName')">
         <a-input
           v-model:value="advancedQueryForm.materialName"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.fqcorderitem.materialname') })"
+          :placeholder="pi.queryPh('materialName', 'required')"
           show-count
           :maxlength="20"
           allow-clear
@@ -149,10 +164,10 @@
       </a-form-item>
       </div>
       <div v-show="isFieldVisible('batchNo')">
-      <a-form-item :label="t('entity.fqcorderitem.batchno')">
+      <a-form-item :label="pi.queryLabel('batchNo')">
         <a-input
           v-model:value="advancedQueryForm.batchNo"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.fqcorderitem.batchno') })"
+          :placeholder="pi.queryPh('batchNo', 'required')"
           show-count
           :maxlength="20"
           allow-clear
@@ -160,87 +175,85 @@
       </a-form-item>
       </div>
       <div v-show="isFieldVisible('warehouseQuantity')">
-      <a-form-item :label="t('entity.fqcorderitem.warehousequantity')">
+      <a-form-item :label="pi.queryLabel('warehouseQuantity')">
         <a-input-number
           v-model:value="advancedQueryForm.warehouseQuantity"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.fqcorderitem.warehousequantity') })"
+          :placeholder="pi.queryPh('warehouseQuantity', 'required')"
           style="width: 100%"
         />
       </a-form-item>
       </div>
       <div v-show="isFieldVisible('standardCode')">
-      <a-form-item :label="t('entity.fqcorderitem.standardcode')">
-        <a-input
+      <a-form-item :label="pi.queryLabel('standardCode')">
+        <TaktSelect
           v-model:value="advancedQueryForm.standardCode"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.fqcorderitem.standardcode') })"
-          show-count
-          :maxlength="20"
+          api-url="TaktInspectionStandards/options"
+          :placeholder="pi.queryPh('standardCode', 'select')"
           allow-clear
         />
       </a-form-item>
       </div>
       <div v-show="isFieldVisible('samplingSchemeCode')">
-      <a-form-item :label="t('entity.fqcorderitem.samplingschemecode')">
-        <a-input
+      <a-form-item :label="pi.queryLabel('samplingSchemeCode')">
+        <TaktSelect
           v-model:value="advancedQueryForm.samplingSchemeCode"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.fqcorderitem.samplingschemecode') })"
-          show-count
-          :maxlength="20"
+          api-url="TaktSamplingSchemes/options"
+          :placeholder="pi.queryPh('samplingSchemeCode', 'select')"
           allow-clear
         />
       </a-form-item>
       </div>
       <div v-show="isFieldVisible('inspectionMethod')">
-      <a-form-item :label="t('entity.fqcorderitem.inspectionmethod')">
+      <a-form-item :label="pi.queryLabel('inspectionMethod')">
         <TaktSelect
           v-model:value="advancedQueryForm.inspectionMethod"
           dict-type="logistics_quality_inspection_method"
-          :placeholder="t('common.page.form.placeholder.select', { field: t('entity.fqcorderitem.inspectionmethod') })"
+          :placeholder="pi.queryPh('inspectionMethod', 'select')"
           allow-clear
         />
       </a-form-item>
       </div>
       <div v-show="isFieldVisible('sampleQuantity')">
-      <a-form-item :label="t('entity.fqcorderitem.samplequantity')">
+      <a-form-item :label="pi.queryLabel('sampleQuantity')">
         <a-input-number
           v-model:value="advancedQueryForm.sampleQuantity"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.fqcorderitem.samplequantity') })"
+          :placeholder="pi.queryPh('sampleQuantity', 'required')"
           style="width: 100%"
         />
       </a-form-item>
       </div>
       <div v-show="isFieldVisible('qualifiedQuantity')">
-      <a-form-item :label="t('entity.fqcorderitem.qualifiedquantity')">
+      <a-form-item :label="pi.queryLabel('qualifiedQuantity')">
         <a-input-number
           v-model:value="advancedQueryForm.qualifiedQuantity"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.fqcorderitem.qualifiedquantity') })"
+          :placeholder="pi.queryPh('qualifiedQuantity', 'required')"
           style="width: 100%"
         />
       </a-form-item>
       </div>
       <div v-show="isFieldVisible('unqualifiedQuantity')">
-      <a-form-item :label="t('entity.fqcorderitem.unqualifiedquantity')">
+      <a-form-item :label="pi.queryLabel('unqualifiedQuantity')">
         <a-input-number
           v-model:value="advancedQueryForm.unqualifiedQuantity"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.fqcorderitem.unqualifiedquantity') })"
+          :placeholder="pi.queryPh('unqualifiedQuantity', 'required')"
           style="width: 100%"
         />
       </a-form-item>
       </div>
       <div v-show="isFieldVisible('inspectionReturnQuantity')">
-      <a-form-item :label="t('entity.fqcorderitem.inspectionreturnquantity')">
+      <a-form-item :label="pi.queryLabel('inspectionReturnQuantity')">
         <a-input-number
           v-model:value="advancedQueryForm.inspectionReturnQuantity"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.fqcorderitem.inspectionreturnquantity') })"
+          :placeholder="pi.queryPh('inspectionReturnQuantity', 'required')"
           style="width: 100%"
         />
       </a-form-item>
       </div>
       <div v-show="isFieldVisible('sampleSerialNo')">
-      <a-form-item :label="t('entity.fqcorderitem.sampleserialno')">
+      <a-form-item :label="pi.queryLabel('sampleSerialNo')">
         <a-input
           v-model:value="advancedQueryForm.sampleSerialNo"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.fqcorderitem.sampleserialno') })"
+          :placeholder="pi.queryPh('sampleSerialNo', 'required')"
           show-count
           :maxlength="20"
           allow-clear
@@ -248,61 +261,70 @@
       </a-form-item>
       </div>
       <div v-show="isFieldVisible('inspectionDescription')">
-      <a-form-item :label="t('entity.fqcorderitem.inspectiondescription')">
+      <a-form-item :label="pi.queryLabel('inspectionDescription')">
         <a-textarea
           v-model:value="advancedQueryForm.inspectionDescription"
-          :placeholder="t('common.page.form.placeholder.optional', { field: t('entity.fqcorderitem.inspectiondescription') })"
+          :placeholder="pi.queryPh('inspectionDescription', 'optional')"
           :rows="2"
           allow-clear
         />
       </a-form-item>
       </div>
       <div v-show="isFieldVisible('inspectorBy')">
-      <a-form-item :label="t('entity.fqcorderitem.inspectorby')">
-        <a-input
+      <a-form-item :label="pi.queryLabel('inspectorBy')">
+        <TaktSelect
           v-model:value="advancedQueryForm.inspectorBy"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.fqcorderitem.inspectorby') })"
-          show-count
-          :maxlength="20"
+          api-url="TaktEmployees/options"
+          :placeholder="pi.queryPh('inspectorBy', 'select')"
           allow-clear
         />
       </a-form-item>
       </div>
       <div v-show="isFieldVisible('inspectionDateStart')">
-      <a-form-item :label="t('entity.fqcorderitem.inspectiondatestart')">
+      <a-form-item :label="pi.queryLabel('inspectionDateStart')">
         <a-date-picker
           v-model:value="advancedQueryForm.inspectionDateStart"
-          :placeholder="t('common.page.form.placeholder.select', { field: t('entity.fqcorderitem.inspectiondatestart') })"
+          :placeholder="pi.queryPh('inspectionDateStart', 'select')"
           value-format="YYYY-MM-DD"
           style="width: 100%"
         />
       </a-form-item>
       </div>
       <div v-show="isFieldVisible('inspectionDateEnd')">
-      <a-form-item :label="t('entity.fqcorderitem.inspectiondateend')">
+      <a-form-item :label="pi.queryLabel('inspectionDateEnd')">
         <a-date-picker
           v-model:value="advancedQueryForm.inspectionDateEnd"
-          :placeholder="t('common.page.form.placeholder.select', { field: t('entity.fqcorderitem.inspectiondateend') })"
+          :placeholder="pi.queryPh('inspectionDateEnd', 'select')"
           value-format="YYYY-MM-DD"
           style="width: 100%"
         />
       </a-form-item>
       </div>
       <div v-show="isFieldVisible('judgeStatus')">
-      <a-form-item :label="t('entity.fqcorderitem.judgestatus')">
+      <a-form-item :label="pi.queryLabel('judgeStatus')">
         <TaktSelect
           v-model:value="advancedQueryForm.judgeStatus"
           dict-type="logistics_quality_judge_status"
-          :placeholder="t('common.page.form.placeholder.select', { field: t('entity.fqcorderitem.judgestatus') })"
+          :placeholder="pi.queryPh('judgeStatus', 'select')"
+          allow-clear
+        />
+      </a-form-item>
+      </div>
+      <div v-show="isFieldVisible('isObsolete')">
+      <a-form-item :label="pi.queryLabel('isObsolete')">
+        <TaktSelect
+          v-model:value="advancedQueryForm.isObsolete"
+          dict-type="sys_yes_no_type"
+          :placeholder="pi.queryPh('isObsolete', 'select')"
           allow-clear
         />
       </a-form-item>
       </div>
       <div v-show="isFieldVisible('createdAtStart')">
-      <a-form-item :label="t('common.page.entity.createdatstart')">
+      <a-form-item :label="pi.queryLabel('createdAtStart')">
         <a-date-picker
           v-model:value="advancedQueryForm.createdAtStart"
-          :placeholder="t('common.page.form.placeholder.select', { field: t('common.page.entity.createdatstart') })"
+          :placeholder="pi.queryPh('createdAtStart', 'select')"
           value-format="YYYY-MM-DD HH:mm:ss"
             show-time
           style="width: 100%"
@@ -310,10 +332,10 @@
       </a-form-item>
       </div>
       <div v-show="isFieldVisible('createdAtEnd')">
-      <a-form-item :label="t('common.page.entity.createdatend')">
+      <a-form-item :label="pi.queryLabel('createdAtEnd')">
         <a-date-picker
           v-model:value="advancedQueryForm.createdAtEnd"
-          :placeholder="t('common.page.form.placeholder.select', { field: t('common.page.entity.createdatend') })"
+          :placeholder="pi.queryPh('createdAtEnd', 'select')"
           value-format="YYYY-MM-DD HH:mm:ss"
             show-time
           style="width: 100%"
@@ -335,7 +357,7 @@
             >
               <span class="takt-form-label-hint-icon"><RiQuestionLine class="takt-remix-icon" /></span>
             </a-tooltip>
-            <span>{{ t('common.page.entity.extfield') }}</span>
+            <span>{{ pi.queryLabel('extField') }}</span>
           </span>
         </template>
         <a-textarea
@@ -349,10 +371,10 @@
       </a-form-item>
       </div>
       <div v-show="isFieldVisible('remark')">
-      <a-form-item :label="t('common.page.entity.remark')">
+      <a-form-item :label="pi.queryLabel('remark')">
         <a-textarea
           v-model:value="advancedQueryForm.remark"
-          :placeholder="t('common.page.form.placeholder.optional', { field: t('common.page.entity.remark') })"
+          :placeholder="pi.queryPh('remark', 'optional')"
             :rows="4"
             show-count
             :maxlength="400"
@@ -365,7 +387,7 @@
     <!-- 导入对话框 -->
     <TaktModal
       v-model:open="importVisible"
-      :title="t('common.dialog.title.import', { entity: t('entity.fqcorderitem._self') })"
+      :title="t('common.dialog.title.import', { entity: pi.self() })"
       :width="600"
       :footer="null"
       :cancel-text="t('common.page.button.close')"
@@ -373,7 +395,7 @@
     >
       <TaktImportFile
         v-if="importVisible"
-        entity-i18n-key="entity.fqcorderitem._self"
+        :entity-i18n-key="FQCORDERITEM_SELF_I18N_KEY"
         file-type="xlsx"
         :sheet-name="excelNames.sheet"
         :template-file-name="excelNames.fileBase"
@@ -403,14 +425,23 @@
  * FQC出货检验单实体子表 fqcOrderItem 右栏面板
  * @module views/logistics/quality/operation/fqc-order/components
  */
-import { ref, computed, watch } from 'vue'
+import { ref, computed, watch, onMounted, onBeforeUnmount, nextTick } from 'vue'
 import { message, Modal } from 'ant-design-vue'
 import type { TableColumnsType } from 'ant-design-vue'
 import { useI18n } from 'vue-i18n'
+import { measureMasterDetailLrTableScrollY } from '@/composables/use-takt-master-detail-lr-scroll-y'
+import { TAKT_TABLE_SCROLL_Y_MIN } from '@/utils/table-scroll'
 import { getTaktDefaultPageIndex, getTaktDefaultPageSize } from '@/utils/takt-paged'
 import { taktExcelEntityNames } from '@/utils/naming'
 import { resolveExportDownloadFileName } from '@/utils/export-download-name'
 import { normalizeImportResult, type TaktImportResult } from '@/utils/takt-import-result'
+import {
+  filterMergedColumnsByDefaultVisible,
+  filterTableColumnsByVisibleKeys,
+  mergeDefaultColumns,
+  normalizeUserTableColumns,
+} from '@/utils/table-columns'
+import { formatSummaryValue } from '@/components/business/takt-editable-table/editable-table-utils'
 import { CreateActionColumn } from '@/components/business/takt-action-column/index'
 import { RiEditLine, RiDeleteBinLine, RiQuestionLine } from '@remixicon/vue'
 import FqcOrderItemForm from './fqc-order-item-form.vue'
@@ -428,6 +459,18 @@ import {
 } from '@/api/logistics/quality/operation/fqc-order-item'
 import type { FqcOrderItem, FqcOrderItemQuery } from '@/types/logistics/quality/operation/fqc-order-item'
 
+import {
+  useFqcOrderItemI18n,
+  FQCORDERITEM_DEFAULT_VISIBLE_COLUMN_KEYS,
+  FQCORDERITEM_SUMMARY_SUM_FIELDS,
+  FQCORDERITEM_QUERY_STRING_FIELDS,
+  FQCORDERITEM_QUERY_FIELDS,
+  FQCORDERITEM_SELF_I18N_KEY,
+} from '../composables/use-fqc-order-item-i18n'
+
+/** 实体字段 i18n（标签/占位符统一入口） */
+const pi = useFqcOrderItemI18n()
+
 const { t } = useI18n()
 const { selectedMasterRow } = useFqcOrderMasterContext()
 
@@ -435,10 +478,45 @@ const { selectedMasterRow } = useFqcOrderMasterContext()
 const excelNames = taktExcelEntityNames('TaktFqcOrderItem')
 /** 快捷查询占位文案 */
 const searchPlaceholder = computed(
-  () => t('common.page.form.placeholder.search', { keyword: t('entity.fqcorderitem._self') }),
+  () => t('common.page.form.placeholder.search', { keyword: pi.self() }),
 )
 
 const loading = ref(false)
+
+/** 子表滚动区容器（扣除查询/工具栏后剩余高度） */
+const detailTableWrapRef = ref<HTMLElement | null>(null)
+/** 子表 scroll.y（按 __table-wrap 实测，避免沿用主表共享高度导致双滚动条） */
+const detailTableScrollY = ref(TAKT_TABLE_SCROLL_Y_MIN)
+let detailTableScrollResizeObserver: ResizeObserver | null = null
+
+/** 按子表容器重算 scroll.y（扣除表头 + 汇总行，避免合计被裁切或双滚动条） */
+function recalcDetailTableScrollY(): void {
+  const wrap = detailTableWrapRef.value
+  if (!wrap) {
+    return
+  }
+  detailTableScrollY.value = measureMasterDetailLrTableScrollY(wrap, { reserveSummaryRow: true })
+}
+
+/** 监听子表容器尺寸变化 */
+function startDetailTableScrollObserve(): void {
+  stopDetailTableScrollObserve()
+  recalcDetailTableScrollY()
+  const wrap = detailTableWrapRef.value
+  if (!wrap) {
+    return
+  }
+  detailTableScrollResizeObserver = new ResizeObserver(() => {
+    recalcDetailTableScrollY()
+  })
+  detailTableScrollResizeObserver.observe(wrap)
+}
+
+/** 停止监听子表容器尺寸 */
+function stopDetailTableScrollObserve(): void {
+  detailTableScrollResizeObserver?.disconnect()
+  detailTableScrollResizeObserver = null
+}
 const dataSource = ref<FqcOrderItem[]>([])
 const currentPage = ref(getTaktDefaultPageIndex())
 const pageSize = ref(getTaktDefaultPageSize())
@@ -454,67 +532,35 @@ const formLoading = ref(false)
 const formRef = ref()
 
 const advancedQueryVisible = ref(false)
-const advancedQueryForm = ref({
-  fqcOrderCode: '',
-  lineNumber: undefined as number | undefined,
-  materialCode: '',
-  materialName: '',
-  batchNo: '',
-  warehouseQuantity: undefined as number | undefined,
-  standardCode: '',
-  samplingSchemeCode: '',
-  inspectionMethod: undefined as number | undefined,
-  sampleQuantity: undefined as number | undefined,
-  qualifiedQuantity: undefined as number | undefined,
-  unqualifiedQuantity: undefined as number | undefined,
-  inspectionReturnQuantity: undefined as number | undefined,
-  sampleSerialNo: '',
-  inspectionDescription: '',
-  inspectorBy: '',
-  inspectionDateStart: '',
-  inspectionDateEnd: '',
-  judgeStatus: undefined as number | undefined,
-  createdAtStart: '',
-  createdAtEnd: '',
-  extField: '',
-  remark: '',
-})
+/**
+ * 创建空的高级查询表单
+ * @returns {Record<string, unknown>} 高级查询初始模型
+ */
+function createEmptyAdvancedQueryForm() {
+  const form = Object.fromEntries(FQCORDERITEM_QUERY_STRING_FIELDS.map((key) => [key, ''])) as Record<
+    (typeof FQCORDERITEM_QUERY_STRING_FIELDS)[number],
+    string
+  >
+  return {
+    ...form,
+    lineNumber: undefined as number | undefined,
+    warehouseQuantity: undefined as number | undefined,
+    inspectionMethod: undefined as number | undefined,
+    sampleQuantity: undefined as number | undefined,
+    qualifiedQuantity: undefined as number | undefined,
+    unqualifiedQuantity: undefined as number | undefined,
+    inspectionReturnQuantity: undefined as number | undefined,
+    judgeStatus: undefined as number | undefined,
+    isObsolete: undefined as number | undefined,
+  }
+}
+const advancedQueryForm = ref(createEmptyAdvancedQueryForm())
 const visibleQueryFieldKeys = ref<string[]>([])
 
 /** 高级查询字段元数据 */
-const queryFieldsMeta = computed(() => [
-  { key: 'fqcOrderCode', label: t('entity.fqcorderitem.fqcordercode') },
-  { key: 'lineNumber', label: t('entity.fqcorderitem.linenumber') },
-  { key: 'materialCode', label: t('entity.fqcorderitem.materialcode') },
-  { key: 'materialName', label: t('entity.fqcorderitem.materialname') },
-  { key: 'batchNo', label: t('entity.fqcorderitem.batchno') },
-  { key: 'warehouseQuantity', label: t('entity.fqcorderitem.warehousequantity') },
-  { key: 'standardCode', label: t('entity.fqcorderitem.standardcode') },
-  { key: 'samplingSchemeCode', label: t('entity.fqcorderitem.samplingschemecode') },
-  { key: 'inspectionMethod', label: t('entity.fqcorderitem.inspectionmethod') },
-  { key: 'sampleQuantity', label: t('entity.fqcorderitem.samplequantity') },
-  { key: 'qualifiedQuantity', label: t('entity.fqcorderitem.qualifiedquantity') },
-  { key: 'unqualifiedQuantity', label: t('entity.fqcorderitem.unqualifiedquantity') },
-  { key: 'inspectionReturnQuantity', label: t('entity.fqcorderitem.inspectionreturnquantity') },
-  { key: 'sampleSerialNo', label: t('entity.fqcorderitem.sampleserialno') },
-  { key: 'inspectionDescription', label: t('entity.fqcorderitem.inspectiondescription') },
-  { key: 'inspectorBy', label: t('entity.fqcorderitem.inspectorby') },
-  { key: 'inspectionDateStart', label: t('common.page.entity.createdatstart').replace(t('common.page.entity.createdat'), t('entity.fqcorderitem.inspectiondate')) },
-  { key: 'inspectionDateEnd', label: t('common.page.entity.createdatend').replace(t('common.page.entity.createdat'), t('entity.fqcorderitem.inspectiondate')) },
-  { key: 'judgeStatus', label: t('entity.fqcorderitem.judgestatus') },
-  { key: 'createdAtStart', label: t('common.page.entity.createdatstart') },
-  { key: 'createdAtEnd', label: t('common.page.entity.createdatend') },
-  { key: 'extField', label: t('common.page.entity.extfield') },
-  { key: 'remark', label: t('common.page.entity.remark') },
-])
-
-/**
- * 高级查询字段标签
- * @param key 字段 key
- */
-function fieldLabel(key: string): string {
-  return queryFieldsMeta.value.find((f) => f.key === key)?.label ?? key
-}
+const queryFieldsMeta = computed(() =>
+  FQCORDERITEM_QUERY_FIELDS.map((key) => ({ key, label: pi.queryLabel(key) })),
+)
 
 function handleAdvancedQuery() {
   advancedQueryVisible.value = true
@@ -527,35 +573,11 @@ function handleAdvancedQuerySubmit() {
 }
 
 function handleAdvancedQueryReset() {
-  advancedQueryForm.value = {
-  fqcOrderCode: '',
-  lineNumber: undefined as number | undefined,
-  materialCode: '',
-  materialName: '',
-  batchNo: '',
-  warehouseQuantity: undefined as number | undefined,
-  standardCode: '',
-  samplingSchemeCode: '',
-  inspectionMethod: undefined as number | undefined,
-  sampleQuantity: undefined as number | undefined,
-  qualifiedQuantity: undefined as number | undefined,
-  unqualifiedQuantity: undefined as number | undefined,
-  inspectionReturnQuantity: undefined as number | undefined,
-  sampleSerialNo: '',
-  inspectionDescription: '',
-  inspectorBy: '',
-  inspectionDateStart: '',
-  inspectionDateEnd: '',
-  judgeStatus: undefined as number | undefined,
-  createdAtStart: '',
-  createdAtEnd: '',
-  extField: '',
-  remark: '',
-  }
+  advancedQueryForm.value = createEmptyAdvancedQueryForm()
 }
 const columnSettingVisible = ref(false)
-/** 表格当前可见列 key（空数组时按 tableMode=masterDetailDetail 默认 id+4 业务列） */
-const visibleColumnKeys = ref<string[]>([])
+/** 表格当前可见列 key */
+const visibleColumnKeys = ref<string[]>([...FQCORDERITEM_DEFAULT_VISIBLE_COLUMN_KEYS])
 
 function handleColumnSetting() {
   columnSettingVisible.value = true
@@ -566,13 +588,16 @@ function handleColumnKeysChange(keys: string[]) {
 }
 
 function handleColumnSettingReset() {
-  visibleColumnKeys.value = []
+  visibleColumnKeys.value = [...FQCORDERITEM_DEFAULT_VISIBLE_COLUMN_KEYS]
 }
 const importVisible = ref(false)
 
 const entityIdName = 'fqcOrderItemId'
-const hasMasterSelection = computed(() => !!selectedMasterRow.value?.fqcOrderId)
-const masterFqcOrderId = computed(() => selectedMasterRow.value?.fqcOrderId ?? '')
+const masterFqcOrderId = computed((): string => {
+  const id = (selectedMasterRow.value as Record<string, unknown> | null)?.['fqcOrderId']
+  return id != null ? String(id) : ''
+})
+const hasMasterSelection = computed(() => masterFqcOrderId.value !== '')
 const updateDisabled = computed(() => !hasMasterSelection.value || selectedRows.value.length !== 1)
 const deleteDisabled = computed(() => !hasMasterSelection.value || selectedRows.value.length === 0)
 
@@ -597,7 +622,17 @@ const columns = computed<TableColumnsType>(() => [
       String(getFqcOrderItemField(record, 'fqcOrderItemId') ?? ''),
   },
   {
-    title: t('entity.fqcorderitem.fqcordercode'),
+    title: pi.label('fqcOrderId'),
+    dataIndex: 'fqcOrderId',
+    key: 'fqcOrderId',
+    width: 120,
+    resizable: true,
+    ellipsis: true,
+    customRender: ({ record }: { record: FqcOrderItem }) =>
+      String(getFqcOrderItemField(record, 'fqcOrderId') ?? ''),
+  },
+  {
+    title: pi.label('fqcOrderCode'),
     dataIndex: 'fqcOrderCode',
     key: 'fqcOrderCode',
     width: 120,
@@ -607,7 +642,7 @@ const columns = computed<TableColumnsType>(() => [
       String(getFqcOrderItemField(record, 'fqcOrderCode') ?? ''),
   },
   {
-    title: t('entity.fqcorderitem.linenumber'),
+    title: pi.label('lineNumber'),
     dataIndex: 'lineNumber',
     key: 'lineNumber',
     width: 120,
@@ -617,7 +652,7 @@ const columns = computed<TableColumnsType>(() => [
       String(getFqcOrderItemField(record, 'lineNumber') ?? ''),
   },
   {
-    title: t('entity.fqcorderitem.materialcode'),
+    title: pi.label('materialCode'),
     dataIndex: 'materialCode',
     key: 'materialCode',
     width: 120,
@@ -627,7 +662,7 @@ const columns = computed<TableColumnsType>(() => [
       String(getFqcOrderItemField(record, 'materialCode') ?? ''),
   },
   {
-    title: t('entity.fqcorderitem.materialname'),
+    title: pi.label('materialName'),
     dataIndex: 'materialName',
     key: 'materialName',
     width: 120,
@@ -637,7 +672,7 @@ const columns = computed<TableColumnsType>(() => [
       String(getFqcOrderItemField(record, 'materialName') ?? ''),
   },
   {
-    title: t('entity.fqcorderitem.batchno'),
+    title: pi.label('batchNo'),
     dataIndex: 'batchNo',
     key: 'batchNo',
     width: 120,
@@ -647,7 +682,7 @@ const columns = computed<TableColumnsType>(() => [
       String(getFqcOrderItemField(record, 'batchNo') ?? ''),
   },
   {
-    title: t('entity.fqcorderitem.warehousequantity'),
+    title: pi.label('warehouseQuantity'),
     dataIndex: 'warehouseQuantity',
     key: 'warehouseQuantity',
     width: 120,
@@ -657,7 +692,7 @@ const columns = computed<TableColumnsType>(() => [
       String(getFqcOrderItemField(record, 'warehouseQuantity') ?? ''),
   },
   {
-    title: t('entity.fqcorderitem.standardcode'),
+    title: pi.label('standardCode'),
     dataIndex: 'standardCode',
     key: 'standardCode',
     width: 120,
@@ -667,7 +702,7 @@ const columns = computed<TableColumnsType>(() => [
       String(getFqcOrderItemField(record, 'standardCode') ?? ''),
   },
   {
-    title: t('entity.fqcorderitem.samplingschemecode'),
+    title: pi.label('samplingSchemeCode'),
     dataIndex: 'samplingSchemeCode',
     key: 'samplingSchemeCode',
     width: 120,
@@ -677,7 +712,7 @@ const columns = computed<TableColumnsType>(() => [
       String(getFqcOrderItemField(record, 'samplingSchemeCode') ?? ''),
   },
   {
-    title: t('entity.fqcorderitem.inspectionmethod'),
+    title: pi.label('inspectionMethod'),
     dataIndex: 'inspectionMethod',
     key: 'inspectionMethod',
     width: 120,
@@ -687,7 +722,7 @@ const columns = computed<TableColumnsType>(() => [
       String(getFqcOrderItemField(record, 'inspectionMethod') ?? ''),
   },
   {
-    title: t('entity.fqcorderitem.samplequantity'),
+    title: pi.label('sampleQuantity'),
     dataIndex: 'sampleQuantity',
     key: 'sampleQuantity',
     width: 120,
@@ -697,7 +732,7 @@ const columns = computed<TableColumnsType>(() => [
       String(getFqcOrderItemField(record, 'sampleQuantity') ?? ''),
   },
   {
-    title: t('entity.fqcorderitem.qualifiedquantity'),
+    title: pi.label('qualifiedQuantity'),
     dataIndex: 'qualifiedQuantity',
     key: 'qualifiedQuantity',
     width: 120,
@@ -707,7 +742,7 @@ const columns = computed<TableColumnsType>(() => [
       String(getFqcOrderItemField(record, 'qualifiedQuantity') ?? ''),
   },
   {
-    title: t('entity.fqcorderitem.unqualifiedquantity'),
+    title: pi.label('unqualifiedQuantity'),
     dataIndex: 'unqualifiedQuantity',
     key: 'unqualifiedQuantity',
     width: 120,
@@ -717,7 +752,7 @@ const columns = computed<TableColumnsType>(() => [
       String(getFqcOrderItemField(record, 'unqualifiedQuantity') ?? ''),
   },
   {
-    title: t('entity.fqcorderitem.inspectionreturnquantity'),
+    title: pi.label('inspectionReturnQuantity'),
     dataIndex: 'inspectionReturnQuantity',
     key: 'inspectionReturnQuantity',
     width: 120,
@@ -727,7 +762,7 @@ const columns = computed<TableColumnsType>(() => [
       String(getFqcOrderItemField(record, 'inspectionReturnQuantity') ?? ''),
   },
   {
-    title: t('entity.fqcorderitem.sampleserialno'),
+    title: pi.label('sampleSerialNo'),
     dataIndex: 'sampleSerialNo',
     key: 'sampleSerialNo',
     width: 120,
@@ -737,7 +772,7 @@ const columns = computed<TableColumnsType>(() => [
       String(getFqcOrderItemField(record, 'sampleSerialNo') ?? ''),
   },
   {
-    title: t('entity.fqcorderitem.inspectiondescription'),
+    title: pi.label('inspectionDescription'),
     dataIndex: 'inspectionDescription',
     key: 'inspectionDescription',
     width: 120,
@@ -747,7 +782,7 @@ const columns = computed<TableColumnsType>(() => [
       String(getFqcOrderItemField(record, 'inspectionDescription') ?? ''),
   },
   {
-    title: t('entity.fqcorderitem.inspectorby'),
+    title: pi.label('inspectorBy'),
     dataIndex: 'inspectorBy',
     key: 'inspectorBy',
     width: 120,
@@ -757,7 +792,7 @@ const columns = computed<TableColumnsType>(() => [
       String(getFqcOrderItemField(record, 'inspectorBy') ?? ''),
   },
   {
-    title: t('entity.fqcorderitem.inspectiondate'),
+    title: pi.label('inspectionDate'),
     dataIndex: 'inspectionDate',
     key: 'inspectionDate',
     width: 120,
@@ -767,7 +802,7 @@ const columns = computed<TableColumnsType>(() => [
       String(getFqcOrderItemField(record, 'inspectionDate') ?? ''),
   },
   {
-    title: t('entity.fqcorderitem.judgestatus'),
+    title: pi.label('judgeStatus'),
     dataIndex: 'judgeStatus',
     key: 'judgeStatus',
     width: 120,
@@ -777,24 +812,14 @@ const columns = computed<TableColumnsType>(() => [
       String(getFqcOrderItemField(record, 'judgeStatus') ?? ''),
   },
   {
-    title: t('entity.fqcorderitem.order'),
-    dataIndex: 'order',
-    key: 'order',
+    title: pi.label('isObsolete'),
+    dataIndex: 'isObsolete',
+    key: 'isObsolete',
     width: 120,
     resizable: true,
     ellipsis: true,
     customRender: ({ record }: { record: FqcOrderItem }) =>
-      String(getFqcOrderItemField(record, 'order') ?? ''),
-  },
-  {
-    title: t('entity.fqcorderitem.defecthandlings'),
-    dataIndex: 'defectHandlings',
-    key: 'defectHandlings',
-    width: 120,
-    resizable: true,
-    ellipsis: true,
-    customRender: ({ record }: { record: FqcOrderItem }) =>
-      String(getFqcOrderItemField(record, 'defectHandlings') ?? ''),
+      String(getFqcOrderItemField(record, 'isObsolete') ?? ''),
   },
   CreateActionColumn({
     actions: [
@@ -818,6 +843,75 @@ const columns = computed<TableColumnsType>(() => [
   }),
 ])
 
+/** 与 TaktSingleTable 展示列对齐（用于汇总行单元格） */
+const resolvedSummaryColumns = computed(() => {
+  const userCols = normalizeUserTableColumns(columns.value)
+  const merged = mergeDefaultColumns(userCols, t, true, 'company')
+  const keys = visibleColumnKeys.value
+  if (keys.length > 0) {
+    return filterTableColumnsByVisibleKeys(merged, keys, merged)
+  }
+  return filterMergedColumnsByDefaultVisible(merged, userCols, {
+    idColumnKey: 'fqcOrderItemId',
+    actionColumnKey: 'action',
+    tableMode: 'masterDetailDetail',
+    entityScope: 'company',
+  })
+})
+
+const summarySumFieldSet = new Set<string>(FQCORDERITEM_SUMMARY_SUM_FIELDS)
+
+/** 汇总行首列文案 */
+const summaryLabel = computed(() => t('components.business.page.editabletable.summarylabel'))
+
+/** 汇总行单元格（index 与 a-table 列序一致：0=行选择，1..n=展示列） */
+const summaryCells = computed(() => {
+  const cells: Array<{ key: string; text: string; index: number }> = []
+  resolvedSummaryColumns.value.forEach((col, columnIndex) => {
+    const key = String(col.key ?? columnIndex)
+    let text = ''
+    if (columnIndex === 0) {
+      text = summaryLabel.value
+    } else if (isSummarySumField(key)) {
+      text = formatSummaryFieldTotal(key)
+    }
+    cells.push({
+      key,
+      text,
+      index: columnIndex + 1,
+    })
+  })
+  return cells
+})
+
+/** 是否参与当前页合计 */
+function isSummarySumField(field: string): boolean {
+  return summarySumFieldSet.has(field)
+}
+
+/** 当前页 dataSource 各合计列求和 */
+const summaryFieldTotals = computed(() => {
+  const totals = Object.fromEntries(
+    FQCORDERITEM_SUMMARY_SUM_FIELDS.map((field) => [field, 0]),
+  ) as Record<(typeof FQCORDERITEM_SUMMARY_SUM_FIELDS)[number], number>
+  for (const row of dataSource.value) {
+    for (const field of FQCORDERITEM_SUMMARY_SUM_FIELDS) {
+      const num = Number(getFqcOrderItemField(row, field))
+      if (Number.isFinite(num)) {
+        totals[field] += num
+      }
+    }
+  }
+  return totals
+})
+
+/** 格式化合计单元格展示值 */
+function formatSummaryFieldTotal(field: string): string {
+  if (!isSummarySumField(field)) {
+    return ''
+  }
+  return formatSummaryValue(summaryFieldTotals.value[field as keyof typeof summaryFieldTotals.value])
+}
 const rowSelection = computed(() => ({
   selectedRowKeys: selectedRowKeys.value,
   onChange: (keys: (string | number)[], rows: FqcOrderItem[]) => {
@@ -878,18 +972,15 @@ function buildListQuery(overrides?: Partial<FqcOrderItemQuery>): FqcOrderItemQue
       query[key] = v as never
     }
   }
-  assignTrimmed('fqcOrderCode', form.fqcOrderCode)
+  for (const key of FQCORDERITEM_QUERY_STRING_FIELDS) {
+    assignTrimmed(key, form[key])
+  }
   if (form.lineNumber !== undefined && form.lineNumber !== null) {
     query.lineNumber = form.lineNumber
   }
-  assignTrimmed('materialCode', form.materialCode)
-  assignTrimmed('materialName', form.materialName)
-  assignTrimmed('batchNo', form.batchNo)
   if (form.warehouseQuantity !== undefined && form.warehouseQuantity !== null) {
     query.warehouseQuantity = form.warehouseQuantity
   }
-  assignTrimmed('standardCode', form.standardCode)
-  assignTrimmed('samplingSchemeCode', form.samplingSchemeCode)
   if (form.inspectionMethod !== undefined && form.inspectionMethod !== null) {
     query.inspectionMethod = form.inspectionMethod
   }
@@ -905,18 +996,12 @@ function buildListQuery(overrides?: Partial<FqcOrderItemQuery>): FqcOrderItemQue
   if (form.inspectionReturnQuantity !== undefined && form.inspectionReturnQuantity !== null) {
     query.inspectionReturnQuantity = form.inspectionReturnQuantity
   }
-  assignTrimmed('sampleSerialNo', form.sampleSerialNo)
-  assignTrimmed('inspectionDescription', form.inspectionDescription)
-  assignTrimmed('inspectorBy', form.inspectorBy)
-  assignTrimmed('inspectionDateStart', form.inspectionDateStart)
-  assignTrimmed('inspectionDateEnd', form.inspectionDateEnd)
   if (form.judgeStatus !== undefined && form.judgeStatus !== null) {
     query.judgeStatus = form.judgeStatus
   }
-  assignTrimmed('createdAtStart', form.createdAtStart)
-  assignTrimmed('createdAtEnd', form.createdAtEnd)
-  assignTrimmed('extField', form.extField)
-  assignTrimmed('remark', form.remark)
+  if (form.isObsolete !== undefined && form.isObsolete !== null) {
+    query.isObsolete = form.isObsolete
+  }
   return query
 }
 
@@ -957,6 +1042,36 @@ watch(masterFqcOrderId, () => {
 /** 租户/公司切换时刷新子表 */
 useTableRefresh(loadData)
 
+onMounted(() => {
+  startDetailTableScrollObserve()
+})
+
+onBeforeUnmount(() => {
+  stopDetailTableScrollObserve()
+})
+
+watch(
+  () => loading.value,
+  (isLoading) => {
+    if (!isLoading) {
+      void nextTick(() => recalcDetailTableScrollY())
+    }
+  },
+)
+
+watch(
+  () => [dataSource.value.length, visibleColumnKeys.value.join(',')],
+  () => {
+    void nextTick(() => recalcDetailTableScrollY())
+  },
+)
+
+watch(hasMasterSelection, (selected) => {
+  if (selected) {
+    void nextTick(() => startDetailTableScrollObserve())
+  }
+})
+
 function handleSearch() {
   currentPage.value = getTaktDefaultPageIndex()
   void loadData()
@@ -973,13 +1088,13 @@ function handleCreate() {
     message.warning(t('common.status.empty'))
     return
   }
-  formTitle.value = t('common.dialog.title.create', { entity: t('entity.fqcorderitem._self') })
+  formTitle.value = t('common.dialog.title.create', { entity: pi.self() })
   formData.value = {}
   formVisible.value = true
 }
 
 async function handleEdit(record: FqcOrderItem) {
-  formTitle.value = t('common.dialog.title.edit', { entity: t('entity.fqcorderitem._self') })
+  formTitle.value = t('common.dialog.title.edit', { entity: pi.self() })
   formLoading.value = true
   try {
     const detail = await getFqcOrderItemById(getFqcOrderItemId(record))
@@ -996,7 +1111,7 @@ function handleUpdate() {
   } else {
     message.warning(t('common.tip.select.to.action', {
       action: t('common.page.button.edit'),
-      entity: t('entity.fqcorderitem._self'),
+      entity: pi.self(),
     }))
   }
 }
@@ -1015,10 +1130,10 @@ async function handleFormSubmit() {
     const id = formData.value?.fqcOrderItemId
     if (id) {
       await updateFqcOrderItem(id, payload)
-      message.success(t('common.feedback.updated', { target: t('entity.fqcorderitem._self') }))
+      message.success(t('common.feedback.updated', { target: pi.self() }))
     } else {
       await createFqcOrderItem(payload)
-      message.success(t('common.feedback.created', { target: t('entity.fqcorderitem._self') }))
+      message.success(t('common.feedback.created', { target: pi.self() }))
     }
     formVisible.value = false
     await loadData()
@@ -1035,14 +1150,14 @@ async function handleDeleteOne(record: FqcOrderItem) {
   Modal.confirm({
     title: t('common.tip.confirm.delete.title'),
     content: t('common.tip.confirm.delete.entity', {
-      entity: t('entity.fqcorderitem._self'),
-      name: t('common.tip.this.target', { target: t('entity.fqcorderitem._self') }),
+      entity: pi.self(),
+      name: t('common.tip.this.target', { target: pi.self() }),
     }),
     okText: t('common.page.button.delete'),
     cancelText: t('common.page.button.cancel'),
     onOk: async () => {
       await deleteFqcOrderItemById(getFqcOrderItemId(record))
-      message.success(t('common.feedback.deleted', { target: t('entity.fqcorderitem._self') }))
+      message.success(t('common.feedback.deleted', { target: pi.self() }))
       await loadData()
     },
   })
@@ -1052,14 +1167,14 @@ async function handleDelete() {
   if (!hasMasterSelection.value || selectedRows.value.length === 0) {
     message.warning(t('common.tip.select.to.action', {
       action: t('common.page.button.delete'),
-      entity: t('entity.fqcorderitem._self'),
+      entity: pi.self(),
     }))
     return
   }
   Modal.confirm({
     title: t('common.tip.confirm.delete.title'),
     content: t('common.tip.confirm.delete.count', {
-      entity: t('entity.fqcorderitem._self'),
+      entity: pi.self(),
       count: selectedRows.value.length,
     }),
     okText: t('common.page.button.delete'),
@@ -1067,7 +1182,7 @@ async function handleDelete() {
     onOk: async () => {
       const ids = selectedRows.value.map((r) => getFqcOrderItemId(r)).filter(Boolean)
       await deleteFqcOrderItemBatch(ids)
-      message.success(t('common.feedback.deleted', { target: t('entity.fqcorderitem._self') }))
+      message.success(t('common.feedback.deleted', { target: pi.self() }))
       await loadData()
     },
   })
@@ -1140,10 +1255,10 @@ async function handleExport() {
     link.click()
     document.body.removeChild(link)
     setTimeout(() => window.URL.revokeObjectURL(url), 100)
-    message.success(t('common.feedback.export.success', { target: t('entity.fqcorderitem._self') }))
+    message.success(t('common.feedback.export.success', { target: pi.self() }))
   } catch (error: unknown) {
     const err = error as { message?: string }
-    message.error(err?.message || t('common.feedback.export.failed', { target: t('entity.fqcorderitem._self') }))
+    message.error(err?.message || t('common.feedback.export.failed', { target: pi.self() }))
   } finally {
     loading.value = false
   }

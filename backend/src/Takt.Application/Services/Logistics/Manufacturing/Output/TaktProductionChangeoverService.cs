@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Application.Services.Logistics.Manufacturing.Output
 // 文件名称：TaktProductionChangeoverService.cs
-// 创建时间：2026-06-23
+// 创建时间：2026-07-06
 // 创建人：Takt365(Cursor AI)
 // 功能描述：生产切换记录应用服务实现
 // 
@@ -10,11 +10,13 @@
 // 免责声明：此软件使用 MIT License，作者不承担任何使用风险。
 // ========================================
 
+using System.Globalization;
 using System.Linq.Expressions;
 using Mapster;
 using SqlSugar;
 using Takt.Application.Dtos.Logistics.Manufacturing.Output;
 using Takt.Domain.Entities.Logistics.Manufacturing.Output;
+using Takt.Domain.Entities.Logistics.Manufacturing.Planning;
 using Takt.Domain.Interfaces;
 using Takt.Domain.Repositories;
 using Takt.Shared.Exceptions;
@@ -30,23 +32,27 @@ namespace Takt.Application.Services.Logistics.Manufacturing.Output;
 public class TaktProductionChangeoverService : TaktServiceBase, ITaktProductionChangeoverService
 {
     private readonly ITaktCompanyRepository<TaktProductionChangeover> _productionChangeoverRepository;
+    private readonly ITaktCompanyRepository<TaktProductionOrder> _productionOrderRepository;
     private readonly ITaktUniqueValidator _uniqueValidator;
 
     /// <summary>
     /// 构造函数
     /// </summary>
     /// <param name="productionChangeoverRepository">生产切换记录仓储</param>
+    /// <param name="productionOrderRepository">生产工单仓储</param>
     /// <param name="uniqueValidator">唯一性验证器</param>
     /// <param name="userContext">用户上下文</param>
     /// <param name="localizationService">本地化服务</param>
     public TaktProductionChangeoverService(
         ITaktCompanyRepository<TaktProductionChangeover> productionChangeoverRepository,
+        ITaktCompanyRepository<TaktProductionOrder> productionOrderRepository,
         ITaktUniqueValidator uniqueValidator,
         ITaktUserContext? userContext = null,
         ITaktLocalizationService? localizationService = null)
         : base(userContext, localizationService)
     {
         _productionChangeoverRepository = productionChangeoverRepository;
+        _productionOrderRepository = productionOrderRepository;
         _uniqueValidator = uniqueValidator;
     }
 
@@ -110,15 +116,22 @@ public class TaktProductionChangeoverService : TaktServiceBase, ITaktProductionC
     public async Task<TaktProductionChangeoverDto> CreateProductionChangeoverAsync(TaktProductionChangeoverCreateDto dto)
     {
         var entity = dto.Adapt<TaktProductionChangeover>();
+        EnsureManufacturingOutputProdDateEditable(entity.ProdDate);
+        EnsureThreeLayerContext();
+        await ApplyPlantCodeFromCurrentProdOrderAsync(entity);
         var isUnique_ix_takt_logistics_manufacturing_output_production_changeover_unique = await _uniqueValidator.IsUniqueAsync(
             _productionChangeoverRepository,
             x => x.PlantCode == entity.PlantCode
                 && x.ProdCategory == entity.ProdCategory
                 && x.ProdDate == entity.ProdDate
-                && x.ProdTeam == entity.ProdTeam);
+                && x.ProdTeam == entity.ProdTeam
+                && x.CurrentProdOrderCode == entity.CurrentProdOrderCode
+                && x.CurrentModelCode == entity.CurrentModelCode
+                && x.ChangeoverProdOrderCode == entity.ChangeoverProdOrderCode
+                && x.ChangeoverModelCode == entity.ChangeoverModelCode);
         if (!isUnique_ix_takt_logistics_manufacturing_output_production_changeover_unique)
         {
-            throw new TaktBusinessException("生产切换记录的PlantCode、ProdCategory、ProdDate、生产班组已存在");
+            throw new TaktBusinessException("生产切换记录的PlantCode、ProdCategory、ProdDate、ProdTeam、CurrentProdOrderCode、CurrentModelCode、ChangeoverProdOrderCode、ChangeoverModelCode已存在");
         }
         entity = await _productionChangeoverRepository.CreateAsync(entity);
         return await GetProductionChangeoverByIdAsync(entity.Id) ?? entity.Adapt<TaktProductionChangeoverDto>();
@@ -137,17 +150,25 @@ public class TaktProductionChangeoverService : TaktServiceBase, ITaktProductionC
         {
             throw new TaktBusinessException("生产切换记录不存在");
         }
+        EnsureManufacturingOutputProdDateEditable(entity.ProdDate);
         dto.Adapt(entity);
+        EnsureManufacturingOutputProdDateEditable(entity.ProdDate);
+        EnsureThreeLayerContext();
+        await ApplyPlantCodeFromCurrentProdOrderAsync(entity);
         var isUnique_ix_takt_logistics_manufacturing_output_production_changeover_unique = await _uniqueValidator.IsUniqueAsync(
             _productionChangeoverRepository,
             x => x.PlantCode == entity.PlantCode
                 && x.ProdCategory == entity.ProdCategory
                 && x.ProdDate == entity.ProdDate
-                && x.ProdTeam == entity.ProdTeam,
+                && x.ProdTeam == entity.ProdTeam
+                && x.CurrentProdOrderCode == entity.CurrentProdOrderCode
+                && x.CurrentModelCode == entity.CurrentModelCode
+                && x.ChangeoverProdOrderCode == entity.ChangeoverProdOrderCode
+                && x.ChangeoverModelCode == entity.ChangeoverModelCode,
             id);
         if (!isUnique_ix_takt_logistics_manufacturing_output_production_changeover_unique)
         {
-            throw new TaktBusinessException("生产切换记录的PlantCode、ProdCategory、ProdDate、生产班组已存在");
+            throw new TaktBusinessException("生产切换记录的PlantCode、ProdCategory、ProdDate、ProdTeam、CurrentProdOrderCode、CurrentModelCode、ChangeoverProdOrderCode、ChangeoverModelCode已存在");
         }
         await _productionChangeoverRepository.UpdateAsync(entity);
         return await GetProductionChangeoverByIdAsync(id) ?? throw new TaktBusinessException("生产切换记录不存在");
@@ -160,6 +181,12 @@ public class TaktProductionChangeoverService : TaktServiceBase, ITaktProductionC
     /// <returns>任务</returns>
     public async Task DeleteProductionChangeoverByIdAsync(long id)
     {
+        var entity = await _productionChangeoverRepository.GetByIdAsync(id);
+        if (entity == null)
+        {
+            throw new TaktBusinessException("生产切换记录不存在或已删除");
+        }
+        EnsureManufacturingOutputProdDateEditable(entity.ProdDate);
         var deleted = await _productionChangeoverRepository.DeleteAsync(id);
         if (!deleted)
         {
@@ -221,20 +248,27 @@ public class TaktProductionChangeoverService : TaktServiceBase, ITaktProductionC
             try
             {
                 var entity = rows[i].Adapt<TaktProductionChangeover>();
-                var importKey = $"{entity.PlantCode}|{entity.ProdCategory}|{entity.ProdDate}|{entity.ProdTeam}";
+                EnsureManufacturingOutputProdDateEditable(entity.ProdDate);
+                EnsureThreeLayerContext();
+                await ApplyPlantCodeFromCurrentProdOrderAsync(entity);
+                var importKey = $"{entity.PlantCode}|{entity.ProdCategory}|{entity.ProdDate}|{entity.ProdTeam}|{entity.CurrentProdOrderCode}|{entity.CurrentModelCode}|{entity.ChangeoverProdOrderCode}|{entity.ChangeoverModelCode}";
                 if (!importSeenKeys.Add(importKey))
                 {
-                    throw new TaktBusinessException("与Excel中其他行重复（PlantCode、ProdCategory、ProdDate、生产班组）");
+                    throw new TaktBusinessException("与Excel中其他行重复（PlantCode、ProdCategory、ProdDate、ProdTeam、CurrentProdOrderCode、CurrentModelCode、ChangeoverProdOrderCode、ChangeoverModelCode）");
                 }
                 var isUnique_ix_takt_logistics_manufacturing_output_production_changeover_unique = await _uniqueValidator.IsUniqueAsync(
                     _productionChangeoverRepository,
                     x => x.PlantCode == entity.PlantCode
                         && x.ProdCategory == entity.ProdCategory
                         && x.ProdDate == entity.ProdDate
-                        && x.ProdTeam == entity.ProdTeam);
+                        && x.ProdTeam == entity.ProdTeam
+                        && x.CurrentProdOrderCode == entity.CurrentProdOrderCode
+                        && x.CurrentModelCode == entity.CurrentModelCode
+                        && x.ChangeoverProdOrderCode == entity.ChangeoverProdOrderCode
+                        && x.ChangeoverModelCode == entity.ChangeoverModelCode);
                 if (!isUnique_ix_takt_logistics_manufacturing_output_production_changeover_unique)
                 {
-                    throw new TaktBusinessException("生产切换记录的PlantCode、ProdCategory、ProdDate、生产班组已存在");
+                    throw new TaktBusinessException("生产切换记录的PlantCode、ProdCategory、ProdDate、ProdTeam、CurrentProdOrderCode、CurrentModelCode、ChangeoverProdOrderCode、ChangeoverModelCode已存在");
                 }
                 await _productionChangeoverRepository.CreateAsync(entity);
                 success += 1;
@@ -278,6 +312,42 @@ public class TaktProductionChangeoverService : TaktServiceBase, ITaktProductionC
     // ========================================
 
     /// <summary>
+    /// 按当前工单号回填生产工厂
+    /// </summary>
+    /// <param name="entity">生产切换记录</param>
+    /// <returns>任务</returns>
+    private async Task ApplyPlantCodeFromCurrentProdOrderAsync(TaktProductionChangeover entity)
+    {
+        await TaktProductionOrderBackfillHelper.ApplyPlantCodeAsync(
+            _productionOrderRepository,
+            CurrentTenantCode,
+            CurrentCompanyCode,
+            entity.CurrentProdOrderCode,
+            v => entity.PlantCode = v);
+    }
+
+    /// <summary>
+    /// 校验生产日期是否可编辑（锁定与可选范围）
+    /// </summary>
+    /// <param name="prodDate">生产日期</param>
+    private void EnsureManufacturingOutputProdDateEditable(DateTime prodDate)
+    {
+        if (TaktAssyOutputProdDateEditLockHelper.IsProdDateLocked(prodDate, DateTime.Today))
+        {
+            ThrowBusinessExceptionLocalized(
+                TaktValidationI18nKeys.AssyOutputProdDateLocked,
+                prodDate.ToString("yyyy-MM-dd", CultureInfo.InvariantCulture),
+                TaktAssyOutputProdDateEditLockHelper.DefaultCutoffDayOfNextMonth);
+        }
+        if (!TaktAssyOutputProdDateEditLockHelper.IsProdDateSelectable(prodDate, DateTime.Today))
+        {
+            ThrowBusinessExceptionLocalized(
+                TaktValidationI18nKeys.AssyOutputProdDateOutOfRange,
+                TaktAssyOutputProdDateEditLockHelper.DefaultCutoffDayOfNextMonth);
+        }
+    }
+
+    /// <summary>
     /// 构建生产切换记录查询表达式
     /// </summary>
     /// <param name="queryDto">查询DTO</param>
@@ -292,13 +362,21 @@ public class TaktProductionChangeoverService : TaktServiceBase, ITaktProductionC
             exp = exp.And(x =>
                 (x.PlantCode != null && x.PlantCode.Contains(keywords))
                 || (x.ProdCategory != null && x.ProdCategory.Contains(keywords))
+                || (x.ChangeoverCategory != null && x.ChangeoverCategory.Contains(keywords))
                 || (x.ProdTeam != null && x.ProdTeam.Contains(keywords))
-                || SqlFunc.ToString(x.ReadSopTime).Contains(keywords)
-                || SqlFunc.ToString(x.PersonCount).Contains(keywords)
-                || SqlFunc.ToString(x.TotalSopTime).Contains(keywords)
+                || (x.CurrentProdOrderCode != null && x.CurrentProdOrderCode.Contains(keywords))
+                || (x.CurrentModelCode != null && x.CurrentModelCode.Contains(keywords))
+                || (x.ChangeoverProdOrderCode != null && x.ChangeoverProdOrderCode.Contains(keywords))
+                || (x.ChangeoverModelCode != null && x.ChangeoverModelCode.Contains(keywords))
                 || SqlFunc.ToString(x.ChangeoverCount).Contains(keywords)
                 || SqlFunc.ToString(x.ChangeoverTime).Contains(keywords)
+                || SqlFunc.ToString(x.InstrumentSetupTime).Contains(keywords)
                 || SqlFunc.ToString(x.TotalChangeoverTime).Contains(keywords)
+                || SqlFunc.ToString(x.ReadSopTime).Contains(keywords)
+                || SqlFunc.ToString(x.LearningTime).Contains(keywords)
+                || SqlFunc.ToString(x.PersonCount).Contains(keywords)
+                || SqlFunc.ToString(x.TotalLearningTime).Contains(keywords)
+                || SqlFunc.ToString(x.TotalSopTime).Contains(keywords)
                 || (x.ExtField != null && x.ExtField.Contains(keywords))
                 || (x.Remark != null && x.Remark.Contains(keywords))
                 || SqlFunc.ToString(x.ProdDate).Contains(keywords)
@@ -316,24 +394,34 @@ public class TaktProductionChangeoverService : TaktServiceBase, ITaktProductionC
             exp = exp.And(x => x.ProdCategory != null && x.ProdCategory.Contains(queryDto.ProdCategory));
         }
 
+        if (!string.IsNullOrEmpty(queryDto?.ChangeoverCategory))
+        {
+            exp = exp.And(x => x.ChangeoverCategory != null && x.ChangeoverCategory.Contains(queryDto.ChangeoverCategory));
+        }
+
         if (!string.IsNullOrEmpty(queryDto?.ProdTeam))
         {
             exp = exp.And(x => x.ProdTeam != null && x.ProdTeam.Contains(queryDto.ProdTeam));
         }
 
-        if (queryDto?.ReadSopTime.HasValue == true)
+        if (!string.IsNullOrEmpty(queryDto?.CurrentProdOrderCode))
         {
-            exp = exp.And(x => x.ReadSopTime == queryDto.ReadSopTime);
+            exp = exp.And(x => x.CurrentProdOrderCode != null && x.CurrentProdOrderCode.Contains(queryDto.CurrentProdOrderCode));
         }
 
-        if (queryDto?.PersonCount.HasValue == true)
+        if (!string.IsNullOrEmpty(queryDto?.CurrentModelCode))
         {
-            exp = exp.And(x => x.PersonCount == queryDto.PersonCount);
+            exp = exp.And(x => x.CurrentModelCode != null && x.CurrentModelCode.Contains(queryDto.CurrentModelCode));
         }
 
-        if (queryDto?.TotalSopTime.HasValue == true)
+        if (!string.IsNullOrEmpty(queryDto?.ChangeoverProdOrderCode))
         {
-            exp = exp.And(x => x.TotalSopTime == queryDto.TotalSopTime);
+            exp = exp.And(x => x.ChangeoverProdOrderCode != null && x.ChangeoverProdOrderCode.Contains(queryDto.ChangeoverProdOrderCode));
+        }
+
+        if (!string.IsNullOrEmpty(queryDto?.ChangeoverModelCode))
+        {
+            exp = exp.And(x => x.ChangeoverModelCode != null && x.ChangeoverModelCode.Contains(queryDto.ChangeoverModelCode));
         }
 
         if (queryDto?.ChangeoverCount.HasValue == true)
@@ -346,9 +434,39 @@ public class TaktProductionChangeoverService : TaktServiceBase, ITaktProductionC
             exp = exp.And(x => x.ChangeoverTime == queryDto.ChangeoverTime);
         }
 
+        if (queryDto?.InstrumentSetupTime.HasValue == true)
+        {
+            exp = exp.And(x => x.InstrumentSetupTime == queryDto.InstrumentSetupTime);
+        }
+
         if (queryDto?.TotalChangeoverTime.HasValue == true)
         {
             exp = exp.And(x => x.TotalChangeoverTime == queryDto.TotalChangeoverTime);
+        }
+
+        if (queryDto?.ReadSopTime.HasValue == true)
+        {
+            exp = exp.And(x => x.ReadSopTime == queryDto.ReadSopTime);
+        }
+
+        if (queryDto?.LearningTime.HasValue == true)
+        {
+            exp = exp.And(x => x.LearningTime == queryDto.LearningTime);
+        }
+
+        if (queryDto?.PersonCount.HasValue == true)
+        {
+            exp = exp.And(x => x.PersonCount == queryDto.PersonCount);
+        }
+
+        if (queryDto?.TotalLearningTime.HasValue == true)
+        {
+            exp = exp.And(x => x.TotalLearningTime == queryDto.TotalLearningTime);
+        }
+
+        if (queryDto?.TotalSopTime.HasValue == true)
+        {
+            exp = exp.And(x => x.TotalSopTime == queryDto.TotalSopTime);
         }
 
         if (!string.IsNullOrEmpty(queryDto?.ExtField))

@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Application.Services.Logistics.Sales
 // 文件名称：ITaktSalesOrderItemService.cs
-// 创建时间：2026-07-01
+// 创建时间：2026-07-09
 // 创建人：Takt365(Cursor AI)
 // 功能描述：销售订单明细应用服务接口
 // 
@@ -76,6 +76,13 @@ public interface ITaktSalesOrderItemService
     /// <param name="dto">状态DTO</param>
     /// <returns>DTO</returns>
     Task<TaktSalesOrderItemDto> UpdateSalesOrderItemStatusAsync(TaktSalesOrderItemStatusDto dto);
+
+    /// <summary>
+    /// 更新销售订单明细作废状态
+    /// </summary>
+    /// <param name="dto">作废DTO</param>
+    /// <returns>DTO</returns>
+    Task<TaktSalesOrderItemDto> UpdateSalesOrderItemObsoleteAsync(TaktSalesOrderItemObsoleteDto dto);
 
     /// <summary>
     /// 获取导入模板

@@ -431,11 +431,24 @@ defineExpose({
 }
 
 /** scroll.y 兜底：空数据/少行时亦保持固定表体高度（不随数据撑开） */
+.takt-single-table__body--fixed-y :deep(.ant-table-container) {
+  display: flex;
+  flex-direction: column;
+  min-height: 0;
+  height: 100%;
+}
+
 .takt-single-table__body--fixed-y :deep(.ant-table-body) {
   min-height: var(--takt-table-scroll-y);
   max-height: var(--takt-table-scroll-y);
   overflow-y: scroll !important;
   scrollbar-gutter: stable;
+  flex: 1 1 auto;
+  min-width: 0;
+}
+
+.takt-single-table__body--fixed-y :deep(.ant-table-summary) {
+  flex-shrink: 0;
 }
 
 .takt-single-table__body--fixed-y :deep(.ant-table-placeholder) {

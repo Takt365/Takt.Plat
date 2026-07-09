@@ -114,10 +114,4 @@ public class TaktAccountTitle : TaktCompanyEntityBase
     /// </summary>
     [SugarColumn(ColumnName = "account_title_status", ColumnDescription = "科目状态", ColumnDataType = "int", IsNullable = false, DefaultValue = "1")]
     public int AccountTitleStatus { get; set; } = 1;
-
-    /// <summary>
-    /// 会计科目变更记录列表（外键在子表 TaktAccountTitleChangeLog.AccountTitleId）
-    /// </summary>
-    [Navigate(NavigateType.OneToMany, nameof(TaktAccountTitleChangeLog.AccountTitleId))]
-    public List<TaktAccountTitleChangeLog>? ChangeLogs { get; set; }
 }

@@ -828,7 +828,6 @@ function buildAccountTitleUpdateDto(
     accountTitleStatus: accountTitle.accountTitleStatus,
     validFrom: accountTitle.validFrom,
     validTo: accountTitle.validTo,
-    changeLogs: accountTitle.changeLogs,
     extField: accountTitle.extField,
     remark: accountTitle.remark,
   }

@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：frontend/src/api/logistics/quality/cost
 // 文件名称：incident-item.ts
-// 创建时间：2026-06-23
+// 创建时间：2026-07-09
 // 创建人：Takt365(Auto Generated)
 // 功能描述：logistics/quality/cost 模块 API（自动生成，请勿手改路由常量）
 // 
@@ -18,6 +18,7 @@ import type {
 import type {
   QualityIncidentItem,
   QualityIncidentItemCreate,
+  QualityIncidentItemObsolete,
   QualityIncidentItemUpdate
 } from '@/types/logistics/quality/cost/incident-item';
 
@@ -105,6 +106,19 @@ export function deleteQualityIncidentItemBatch(ids: string[]): Promise<void> {
     url: `${QUALITY_INCIDENT_ITEM_API_BASE}/batch`,
     method: 'delete',
     data: ids,
+  });
+}
+
+/**
+ * 更新品质事故明细作废状态
+ * @param {QualityIncidentItemObsolete} dto 作废 DTO
+ * @returns {Promise<QualityIncidentItem>} 品质事故明细DTO
+ */
+export function updateQualityIncidentItemObsolete(dto: QualityIncidentItemObsolete): Promise<QualityIncidentItem> {
+  return request<QualityIncidentItem>({
+    url: `${QUALITY_INCIDENT_ITEM_API_BASE}/obsolete`,
+    method: 'put',
+    data: dto,
   });
 }
 

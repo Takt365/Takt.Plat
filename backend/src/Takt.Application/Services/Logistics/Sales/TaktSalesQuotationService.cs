@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Application.Services.Logistics.Sales
 // 文件名称：TaktSalesQuotationService.cs
-// 创建时间：2026-07-01
+// 创建时间：2026-07-09
 // 创建人：Takt365(Cursor AI)
 // 功能描述：销售报价应用服务实现
 // 
@@ -31,7 +31,6 @@ public class TaktSalesQuotationService : TaktServiceBase, ITaktSalesQuotationSer
 {
     private readonly ITaktCompanyRepository<TaktSalesQuotation> _salesQuotationRepository;
     private readonly ITaktCompanyRepository<TaktSalesQuotationItem> _salesQuotationItemRepository;
-    private readonly ITaktCompanyRepository<TaktSalesQuotationChangeLog> _salesQuotationChangeLogRepository;
     private readonly ITaktLineNumberGenerator _lineNumberGenerator;
     private readonly ITaktUniqueValidator _uniqueValidator;
 
@@ -40,7 +39,6 @@ public class TaktSalesQuotationService : TaktServiceBase, ITaktSalesQuotationSer
     /// </summary>
     /// <param name="salesQuotationRepository">销售报价仓储</param>
     /// <param name="salesQuotationItemRepository">SalesQuotationItem仓储</param>
-    /// <param name="salesQuotationChangeLogRepository">SalesQuotationChangeLog仓储</param>
     /// <param name="lineNumberGenerator">明细行号生成器</param>
     /// <param name="uniqueValidator">唯一性验证器</param>
     /// <param name="userContext">用户上下文</param>
@@ -48,7 +46,6 @@ public class TaktSalesQuotationService : TaktServiceBase, ITaktSalesQuotationSer
     public TaktSalesQuotationService(
         ITaktCompanyRepository<TaktSalesQuotation> salesQuotationRepository,
         ITaktCompanyRepository<TaktSalesQuotationItem> salesQuotationItemRepository,
-        ITaktCompanyRepository<TaktSalesQuotationChangeLog> salesQuotationChangeLogRepository,
         ITaktLineNumberGenerator lineNumberGenerator,
         ITaktUniqueValidator uniqueValidator,
         ITaktUserContext? userContext = null,
@@ -57,7 +54,6 @@ public class TaktSalesQuotationService : TaktServiceBase, ITaktSalesQuotationSer
     {
         _salesQuotationRepository = salesQuotationRepository;
         _salesQuotationItemRepository = salesQuotationItemRepository;
-        _salesQuotationChangeLogRepository = salesQuotationChangeLogRepository;
         _lineNumberGenerator = lineNumberGenerator;
         _uniqueValidator = uniqueValidator;
     }
@@ -177,7 +173,6 @@ public class TaktSalesQuotationService : TaktServiceBase, ITaktSalesQuotationSer
             throw new TaktBusinessException("销售报价不存在或已删除");
         }
         await _salesQuotationItemRepository.DeleteAsync(x => x.SalesQuotationId == entity.Id);
-        await _salesQuotationChangeLogRepository.DeleteAsync(x => x.SalesQuotationId == entity.Id);
         var deleted = await _salesQuotationRepository.DeleteAsync(id);
         if (!deleted)
         {
@@ -311,7 +306,31 @@ public class TaktSalesQuotationService : TaktServiceBase, ITaktSalesQuotationSer
     // ========================================
 
     /// <summary>
-    /// 填充销售报价详情（加载 OneToMany 子表：销售报价明细、销售报价变更记录）
+    /// 将指定主表下全部未作废销售报价明细标记为作废（编辑清空子表）
+    /// </summary>
+    /// <param name="salesQuotationId">主表主键</param>
+    /// <returns>任务</returns>
+    private async Task MarkSalesQuotationItemsObsoleteAsync(long salesQuotationId)
+    {
+        if (salesQuotationId <= 0)
+        {
+            return;
+        }
+        var rows = await _salesQuotationItemRepository.GetListAsync(
+            x => x.SalesQuotationId == salesQuotationId && x.IsObsolete == 0);
+        if (rows.Count == 0)
+        {
+            return;
+        }
+        foreach (var row in rows)
+        {
+            row.IsObsolete = 1;
+        }
+        await _salesQuotationItemRepository.UpdateRangeAsync(rows);
+    }
+
+    /// <summary>
+    /// 填充销售报价详情（加载 OneToMany 子表：销售报价明细）
     /// </summary>
     /// <param name="dto">响应 DTO</param>
     /// <param name="entity">主表实体</param>
@@ -322,16 +341,13 @@ public class TaktSalesQuotationService : TaktServiceBase, ITaktSalesQuotationSer
         {
             return;
         }
-        // 销售报价明细 → dto.Items
+        // 销售报价明细 → dto.Items（含作废行）
         var items = await _salesQuotationItemRepository.GetListAsync(x => x.SalesQuotationId == entity.Id);
         dto.Items = items.Adapt<List<TaktSalesQuotationItemDto>>();
-        // 销售报价变更记录 → dto.ChangeLogs
-        var changelogs = await _salesQuotationChangeLogRepository.GetListAsync(x => x.SalesQuotationId == entity.Id);
-        dto.ChangeLogs = changelogs.Adapt<List<TaktSalesQuotationChangeLogDto>>();
     }
 
     /// <summary>
-    /// 保存销售报价子表级联（销售报价明细、销售报价变更记录；Create/Update 后按主表 Id 先删后插）
+    /// 保存销售报价子表级联（销售报价明细；按子表 Id 增量新增/更新；未提交行标记作废，禁止先删后插）
     /// </summary>
     /// <param name="entity">主表实体</param>
     /// <param name="dto">创建/更新 DTO（含子表集合；UpdateDto 须继承 CreateDto）</param>
@@ -341,73 +357,95 @@ public class TaktSalesQuotationService : TaktServiceBase, ITaktSalesQuotationSer
         // 销售报价明细（Items）
         if (dto.Items is not { Count: > 0 })
         {
-            await _salesQuotationItemRepository.DeleteAsync(x => x.SalesQuotationId == entity.Id);
+            await MarkSalesQuotationItemsObsoleteAsync(entity.Id);
+            return;
         }
         else
         {
-            var items = dto.Items.Adapt<List<TaktSalesQuotationItem>>();
-            foreach (var child in items)
+            var existingList = await _salesQuotationItemRepository.GetListAsync(x => x.SalesQuotationId == entity.Id);
+            var existingById = existingList.ToDictionary(x => x.Id);
+            var submittedIds = new HashSet<long>();
+            var toCreate = new List<TaktSalesQuotationItem>();
+            var seenLineKeys = new HashSet<string>(StringComparer.Ordinal);
+            for (var i = 0; i < dto.Items.Count; i++)
             {
-                child.SalesQuotationId = entity.Id;
-            }
-            var itemsNeedLine = items.Where(c => c.LineNumber <= 0).ToList();
-            if (itemsNeedLine.Count > 0)
-            {
-                var businessCode = !string.IsNullOrWhiteSpace(entity.SalesQuotationCode) ? entity.SalesQuotationCode : entity.Id.ToString();
-                var maxLine = await _salesQuotationItemRepository.GetMaxIntAsync(
-                    x => x.TenantCode == CurrentTenantCode && x.CompanyCode == CurrentCompanyCode && x.SalesQuotationId == entity.Id,
-                    x => x.LineNumber);
-                var lineSeq = _lineNumberGenerator.GenerateSequence(businessCode, itemsNeedLine.Count, maxLine).ToList();
-                var lineIdx = 0;
-                foreach (var child in items)
+                var childDto = dto.Items[i];
+                childDto.SalesQuotationId = entity.Id;
+                var lineKey = $"{entity.CompanyCode}|{entity.Id}|{childDto.LineNumber}";
+                if (!seenLineKeys.Add(lineKey))
                 {
-                    if (child.LineNumber <= 0)
+                    throw new TaktBusinessException("销售报价明细第{i + 1}项与本次提交的其他项重复（CompanyCode、SalesQuotationId、LineNumber）");
+                }
+                if (childDto.SalesQuotationItemId > 0)
+                {
+                    if (!existingById.TryGetValue(childDto.SalesQuotationItemId, out var target))
                     {
-                        child.LineNumber = lineSeq[lineIdx++];
+                        throw new TaktBusinessException("销售报价明细不存在（SalesQuotationItemId={childDto.SalesQuotationItemId}）");
                     }
+                    if (target.SalesQuotationId != entity.Id)
+                    {
+                        throw new TaktBusinessException("销售报价明细不属于当前主表（SalesQuotationItemId={childDto.SalesQuotationItemId}）");
+                    }
+                    submittedIds.Add(childDto.SalesQuotationItemId);
+                    var isUniqueUpdate_ix_takt_logistics_sales_quotation_item_line_unique = await _uniqueValidator.IsUniqueAsync(
+                        _salesQuotationItemRepository,
+                        x => x.CompanyCode == x.CompanyCode
+                && x.SalesQuotationId == x.SalesQuotationId
+                && x.LineNumber == x.LineNumber,
+                        childDto.SalesQuotationItemId);
+                    if (!isUniqueUpdate_ix_takt_logistics_sales_quotation_item_line_unique)
+                    {
+                        throw new TaktBusinessException("销售报价明细的CompanyCode、SalesQuotationId、LineNumber已存在");
+                    }
+                    childDto.Adapt(target);
+                    target.Id = childDto.SalesQuotationItemId;
+                    target.SalesQuotationId = entity.Id;
+                    target.IsObsolete = 0;
+                    await _salesQuotationItemRepository.UpdateAsync(target);
+                }
+                else
+                {
+                    var isUniqueCreate_ix_takt_logistics_sales_quotation_item_line_unique = await _uniqueValidator.IsUniqueAsync(
+                        _salesQuotationItemRepository,
+                        x => x.CompanyCode == x.CompanyCode
+                && x.SalesQuotationId == x.SalesQuotationId
+                && x.LineNumber == x.LineNumber);
+                    if (!isUniqueCreate_ix_takt_logistics_sales_quotation_item_line_unique)
+                    {
+                        throw new TaktBusinessException("销售报价明细的CompanyCode、SalesQuotationId、LineNumber已存在");
+                    }
+                    var child = childDto.Adapt<TaktSalesQuotationItem>();
+                    child.Id = 0;
+                    child.SalesQuotationId = entity.Id;
+                    child.IsObsolete = 0;
+                    toCreate.Add(child);
                 }
             }
-                        var seenKeys = new HashSet<string>(StringComparer.Ordinal);
-                        for (var i = 0; i < items.Count; i++)
+            var toObsolete = existingList.Where(x => !submittedIds.Contains(x.Id) && x.IsObsolete == 0).ToList();
+            foreach (var removed in toObsolete)
+            {
+                removed.IsObsolete = 1;
+                await _salesQuotationItemRepository.UpdateAsync(removed);
+            }
+            if (toCreate.Count > 0)
+            {
+                var needLine = toCreate.Where(c => c.LineNumber <= 0).ToList();
+                if (needLine.Count > 0)
+                {
+                    var businessCode = !string.IsNullOrWhiteSpace(entity.SalesQuotationCode) ? entity.SalesQuotationCode : entity.Id.ToString();
+                    var maxLine = existingList.Count > 0 ? existingList.Max(x => x.LineNumber) : 0;
+                    var lineSeq = _lineNumberGenerator.GenerateSequence(businessCode, needLine.Count, maxLine).ToList();
+                    var lineIdx = 0;
+                    foreach (var child in toCreate)
+                    {
+                        if (child.LineNumber <= 0)
                         {
-                            var key = $"{items[i].CompanyCode}|{items[i].SalesQuotationId}|{items[i].LineNumber}";
-                            if (!seenKeys.Add(key))
-                            {
-                                throw new TaktBusinessException($"销售报价明细第{i + 1}项与本次提交的其他项重复（CompanyCode、SalesQuotationId、LineNumber）");
-                            }
+                            child.LineNumber = lineSeq[lineIdx++];
                         }
-            await _salesQuotationItemRepository.DeleteAsync(x => x.SalesQuotationId == entity.Id);
-            foreach (var child in items)
-            {
-            var isUnique_ix_takt_logistics_sales_quotation_item_line_unique = await _uniqueValidator.IsUniqueAsync(
-                _salesQuotationItemRepository,
-                x => x.CompanyCode == child.CompanyCode
-                    && x.SalesQuotationId == child.SalesQuotationId
-                    && x.LineNumber == child.LineNumber);
-            if (!isUnique_ix_takt_logistics_sales_quotation_item_line_unique)
-            {
-                throw new TaktBusinessException("销售报价明细的CompanyCode、SalesQuotationId、LineNumber已存在");
+                    }
+                }
+                await _salesQuotationItemRepository.CreateRangeAsync(toCreate);
             }
-            }
-            await _salesQuotationItemRepository.CreateRangeAsync(items);
-        }
-        // 销售报价变更记录（ChangeLogs）
-        if (dto.ChangeLogs is not { Count: > 0 })
-        {
-            await _salesQuotationChangeLogRepository.DeleteAsync(x => x.SalesQuotationId == entity.Id);
-        }
-        else
-        {
-            var changelogs = dto.ChangeLogs.Adapt<List<TaktSalesQuotationChangeLog>>();
-            foreach (var child in changelogs)
-            {
-                child.SalesQuotationId = entity.Id;
-            }
-            await _salesQuotationChangeLogRepository.DeleteAsync(x => x.SalesQuotationId == entity.Id);
-            foreach (var child in changelogs)
-            {
-            }
-            await _salesQuotationChangeLogRepository.CreateRangeAsync(changelogs);
         }
     }
     // ========================================

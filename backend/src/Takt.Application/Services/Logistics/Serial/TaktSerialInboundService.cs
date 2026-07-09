@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Application.Services.Logistics.Serial
 // 文件名称：TaktSerialInboundService.cs
-// 创建时间：2026-06-23
+// 创建时间：2026-07-09
 // 创建人：Takt365(Cursor AI)
 // 功能描述：序列号入库应用服务实现
 // 
@@ -289,6 +289,30 @@ public class TaktSerialInboundService : TaktServiceBase, ITaktSerialInboundServi
     // ========================================
 
     /// <summary>
+    /// 将指定主表下全部未作废序列号入库明细标记为作废（编辑清空子表）
+    /// </summary>
+    /// <param name="inboundId">主表主键</param>
+    /// <returns>任务</returns>
+    private async Task MarkSerialInboundItemsObsoleteAsync(long inboundId)
+    {
+        if (inboundId <= 0)
+        {
+            return;
+        }
+        var rows = await _serialInboundItemRepository.GetListAsync(
+            x => x.InboundId == inboundId && x.IsObsolete == 0);
+        if (rows.Count == 0)
+        {
+            return;
+        }
+        foreach (var row in rows)
+        {
+            row.IsObsolete = 1;
+        }
+        await _serialInboundItemRepository.UpdateRangeAsync(rows);
+    }
+
+    /// <summary>
     /// 填充序列号入库详情（加载 OneToMany 子表：序列号入库明细）
     /// </summary>
     /// <param name="dto">响应 DTO</param>
@@ -300,13 +324,13 @@ public class TaktSerialInboundService : TaktServiceBase, ITaktSerialInboundServi
         {
             return;
         }
-        // 序列号入库明细 → dto.Items
+        // 序列号入库明细 → dto.Items（含作废行）
         var items = await _serialInboundItemRepository.GetListAsync(x => x.InboundId == entity.Id);
         dto.Items = items.Adapt<List<TaktSerialInboundItemDto>>();
     }
 
     /// <summary>
-    /// 保存序列号入库子表级联（序列号入库明细；Create/Update 后按主表 Id 先删后插）
+    /// 保存序列号入库子表级联（序列号入库明细；按子表 Id 增量新增/更新；未提交行标记作废，禁止先删后插）
     /// </summary>
     /// <param name="entity">主表实体</param>
     /// <param name="dto">创建/更新 DTO（含子表集合；UpdateDto 须继承 CreateDto）</param>
@@ -316,85 +340,78 @@ public class TaktSerialInboundService : TaktServiceBase, ITaktSerialInboundServi
         // 序列号入库明细（Items）
         if (dto.Items is not { Count: > 0 })
         {
-            await _serialInboundItemRepository.DeleteAsync(x => x.InboundId == entity.Id);
+            await MarkSerialInboundItemsObsoleteAsync(entity.Id);
+            return;
         }
         else
         {
-            var items = dto.Items.Adapt<List<TaktSerialInboundItem>>();
-            foreach (var child in items)
+            var existingList = await _serialInboundItemRepository.GetListAsync(x => x.InboundId == entity.Id);
+            var existingById = existingList.ToDictionary(x => x.Id);
+            var submittedIds = new HashSet<long>();
+            var toCreate = new List<TaktSerialInboundItem>();
+            var seenLineKeys = new HashSet<string>(StringComparer.Ordinal);
+            for (var i = 0; i < dto.Items.Count; i++)
             {
-                child.InboundId = entity.Id;
-            }
-            var itemsNeedLine = items.Where(c => c.LineNumber <= 0).ToList();
-            if (itemsNeedLine.Count > 0)
-            {
-                var businessCode = entity.Id.ToString();
-                var maxLine = await _serialInboundItemRepository.GetMaxIntAsync(
-                    x => x.TenantCode == CurrentTenantCode && x.CompanyCode == CurrentCompanyCode && x.InboundId == entity.Id,
-                    x => x.LineNumber);
-                var lineSeq = _lineNumberGenerator.GenerateSequence(businessCode, itemsNeedLine.Count, maxLine).ToList();
-                var lineIdx = 0;
-                foreach (var child in items)
+                var childDto = dto.Items[i];
+                childDto.InboundId = entity.Id;
+                var lineKey = $"{entity.CompanyCode}|{entity.Id}|{childDto.LineNumber}";
+                if (!seenLineKeys.Add(lineKey))
                 {
-                    if (child.LineNumber <= 0)
+                    throw new TaktBusinessException("序列号入库明细第{i + 1}项与本次提交的其他项重复（CompanyCode、InboundId、LineNumber）");
+                }
+                if (childDto.SerialInboundItemId > 0)
+                {
+                    if (!existingById.TryGetValue(childDto.SerialInboundItemId, out var target))
                     {
-                        child.LineNumber = lineSeq[lineIdx++];
+                        throw new TaktBusinessException("序列号入库明细不存在（SerialInboundItemId={childDto.SerialInboundItemId}）");
                     }
+                    if (target.InboundId != entity.Id)
+                    {
+                        throw new TaktBusinessException("序列号入库明细不属于当前主表（SerialInboundItemId={childDto.SerialInboundItemId}）");
+                    }
+                    submittedIds.Add(childDto.SerialInboundItemId);
+                    childDto.Adapt(target);
+                    target.Id = childDto.SerialInboundItemId;
+                    target.InboundId = entity.Id;
+                    target.IsObsolete = 0;
+                    await _serialInboundItemRepository.UpdateAsync(target);
+                }
+                else
+                {
+                    var child = childDto.Adapt<TaktSerialInboundItem>();
+                    child.Id = 0;
+                    child.InboundId = entity.Id;
+                    child.IsObsolete = 0;
+                    toCreate.Add(child);
                 }
             }
-                        var seenKeys = new HashSet<string>(StringComparer.Ordinal);
-                        for (var i = 0; i < items.Count; i++)
+            var toObsolete = existingList.Where(x => !submittedIds.Contains(x.Id) && x.IsObsolete == 0).ToList();
+            foreach (var removed in toObsolete)
+            {
+                removed.IsObsolete = 1;
+                await _serialInboundItemRepository.UpdateAsync(removed);
+            }
+            if (toCreate.Count > 0)
+            {
+                var needLine = toCreate.Where(c => c.LineNumber <= 0).ToList();
+                if (needLine.Count > 0)
+                {
+                    var businessCode = entity.Id.ToString();
+                    var maxLine = existingList.Count > 0 ? existingList.Max(x => x.LineNumber) : 0;
+                    var lineSeq = _lineNumberGenerator.GenerateSequence(businessCode, needLine.Count, maxLine).ToList();
+                    var lineIdx = 0;
+                    foreach (var child in toCreate)
+                    {
+                        if (child.LineNumber <= 0)
                         {
-                            var key = $"{items[i].CompanyCode}|{items[i].InboundSerialNo}";
-                            if (!seenKeys.Add(key))
-                            {
-                                throw new TaktBusinessException($"序列号入库明细第{i + 1}项与本次提交的其他项重复（CompanyCode、InboundSerialNo）");
-                            }
+                            child.LineNumber = lineSeq[lineIdx++];
                         }
-            await _serialInboundItemRepository.DeleteAsync(x => x.InboundId == entity.Id);
-            foreach (var child in items)
-            {
-            var isUnique_ix_takt_logistics_serial_inbound_item_inbound_serial_no_unique = await _uniqueValidator.IsUniqueAsync(
-                _serialInboundItemRepository,
-                x => x.CompanyCode == child.CompanyCode
-                    && x.InboundSerialNo == child.InboundSerialNo);
-            if (!isUnique_ix_takt_logistics_serial_inbound_item_inbound_serial_no_unique)
-            {
-                throw new TaktBusinessException("序列号入库明细的CompanyCode、InboundSerialNo已存在");
+                    }
+                }
+                await _serialInboundItemRepository.CreateRangeAsync(toCreate);
             }
-            }
-            await _serialInboundItemRepository.CreateRangeAsync(items);
         }
     }
-
-    /// <summary>
-    /// 获取序列号入库统计（数据看板）
-    /// </summary>
-    /// <param name="queryDto">查询 DTO</param>
-    /// <returns>序列号入库统计</returns>
-    public async Task<TaktSerialInboundStatDto> GetSerialInboundStatAsync(TaktSerialInboundStatQueryDto queryDto)
-    {
-        EnsureThreeLayerContext();
-        var (start, end, statMonth) = TaktStatMonthRangeHelper.ResolveMonthRange(
-            queryDto.InboundDateStart,
-            queryDto.InboundDateEnd);
-        var tenantCode = CurrentTenantCode;
-        var companyCode = CurrentCompanyCode;
-        Expression<Func<TaktSerialInbound, bool>> predicate = x =>
-            x.TenantCode == tenantCode
-            && x.CompanyCode == companyCode
-            && x.InboundDate >= start
-            && x.InboundDate <= end;
-        var monthInboundCount = await _serialInboundRepository.CountAsync(predicate);
-        var monthTotalQuantity = await _serialInboundRepository.SumAsync(x => x.TotalQuantity, predicate);
-        return new TaktSerialInboundStatDto
-        {
-            StatMonth = statMonth,
-            MonthInboundCount = monthInboundCount,
-            MonthTotalQuantity = monthTotalQuantity,
-        };
-    }
-
     // ========================================
     // 查询表达式
     // ========================================

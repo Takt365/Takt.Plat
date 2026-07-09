@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：frontend/src/api/logistics/quality/operation
 // 文件名称：inspection-standard-item.ts
-// 创建时间：2026-06-30
+// 创建时间：2026-07-09
 // 创建人：Takt365(Auto Generated)
 // 功能描述：logistics/quality/operation 模块 API（自动生成，请勿手改路由常量）
 // 
@@ -18,6 +18,7 @@ import type {
 import type {
   InspectionStandardItem,
   InspectionStandardItemCreate,
+  InspectionStandardItemObsolete,
   InspectionStandardItemUpdate
 } from '@/types/logistics/quality/operation/inspection-standard-item';
 
@@ -105,6 +106,19 @@ export function deleteInspectionStandardItemBatch(ids: string[]): Promise<void> 
     url: `${INSPECTION_STANDARD_ITEM_API_BASE}/batch`,
     method: 'delete',
     data: ids,
+  });
+}
+
+/**
+ * 更新检验标准明细作废状态
+ * @param {InspectionStandardItemObsolete} dto 作废 DTO
+ * @returns {Promise<InspectionStandardItem>} 检验标准明细DTO
+ */
+export function updateInspectionStandardItemObsolete(dto: InspectionStandardItemObsolete): Promise<InspectionStandardItem> {
+  return request<InspectionStandardItem>({
+    url: `${INSPECTION_STANDARD_ITEM_API_BASE}/obsolete`,
+    method: 'put',
+    data: dto,
   });
 }
 

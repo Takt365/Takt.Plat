@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：frontend/src/api/logistics/manufacturing/defect
 // 文件名称：pcba-repair-detail.ts
-// 创建时间：2026-06-30
+// 创建时间：2026-07-09
 // 创建人：Takt365(Auto Generated)
 // 功能描述：logistics/manufacturing/defect 模块 API（自动生成，请勿手改路由常量）
 // 
@@ -18,6 +18,7 @@ import type {
 import type {
   PcbaRepairDetail,
   PcbaRepairDetailCreate,
+  PcbaRepairDetailObsolete,
   PcbaRepairDetailUpdate
 } from '@/types/logistics/manufacturing/defect/pcba-repair-detail';
 
@@ -105,6 +106,19 @@ export function deletePcbaRepairDetailBatch(ids: string[]): Promise<void> {
     url: `${PCBA_REPAIR_DETAIL_API_BASE}/batch`,
     method: 'delete',
     data: ids,
+  });
+}
+
+/**
+ * 更新PCBA改修明细作废状态
+ * @param {PcbaRepairDetailObsolete} dto 作废 DTO
+ * @returns {Promise<PcbaRepairDetail>} PCBA改修明细DTO
+ */
+export function updatePcbaRepairDetailObsolete(dto: PcbaRepairDetailObsolete): Promise<PcbaRepairDetail> {
+  return request<PcbaRepairDetail>({
+    url: `${PCBA_REPAIR_DETAIL_API_BASE}/obsolete`,
+    method: 'put',
+    data: dto,
   });
 }
 

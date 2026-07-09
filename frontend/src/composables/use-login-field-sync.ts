@@ -249,9 +249,6 @@ export function useLoginFieldSync(options: UseLoginFieldSyncOptions) {
     if (!result || generation !== tenantGeneration) {
       return;
     }
-    if (!result.userFound) {
-      notifyPreviewToast(t('login.page.message.user.not.found'));
-    }
     lastPreviewKey = previewKey;
   }
 

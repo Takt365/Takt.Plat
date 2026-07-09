@@ -42,20 +42,15 @@ public class TaktSerialOutbound : TaktCompanyEntityBase
     [SugarColumn(ColumnName = "shipping_invoice_no", ColumnDescription = "出货发票号", ColumnDataType = "nvarchar", Length = 50, IsNullable = false, DefaultValue = "")]
     public string ShippingInvoiceNo { get; set; } = string.Empty;
     /// <summary>
-    /// 出库日期
+    /// 装车日期
     /// </summary>
-    [SugarColumn(ColumnName = "outbound_date", ColumnDescription = "出库日期", ColumnDataType = "datetime", IsNullable = false)]
+    [SugarColumn(ColumnName = "outbound_date", ColumnDescription = "装车日期", ColumnDataType = "datetime", IsNullable = false)]
     public DateTime OutboundDate { get; set; } = DateTime.Today;
     /// <summary>
     /// 仕向地（选项 TaktModelDestinations/options，DictValue=DestinationCode）
     /// </summary>
     [SugarColumn(ColumnName = "destination", ColumnDescription = "仕向地", ColumnDataType = "nvarchar", Length = 40, IsNullable = false, DefaultValue = "")]
     public string Destination { get; set; } = string.Empty;
-    /// <summary>
-    /// 运输方式（字典 logistics_shipping_method_type；0=海运 1=空运 2=陆运 3=铁路 4=快递 5=其他）
-    /// </summary>
-    [SugarColumn(ColumnName = "shipping_method", ColumnDescription = "运输方式", ColumnDataType = "int", IsNullable = false, DefaultValue = "0")]
-    public int ShippingMethod { get; set; } = 0;
     /// <summary>
     /// 目的地港（字典 logistics_destination_port_code；DictValue 为港口/运输编码，如 ACE_AIR、VIE）
     /// </summary>
@@ -69,7 +64,7 @@ public class TaktSerialOutbound : TaktCompanyEntityBase
     /// <summary>
     /// 仓库编码（关联 TaktWarehouse.WarehouseCode，选项 TaktWarehouses/options）
     /// </summary>
-    [SugarColumn(ColumnName = "warehouse_code", ColumnDescription = "仓库编码", ColumnDataType = "nvarchar", Length = 50, IsNullable = false, DefaultValue = "C008")]
+    [SugarColumn(ColumnName = "warehouse_code", ColumnDescription = "仓库编码", ColumnDataType = "nvarchar", Length = 4, IsNullable = false, DefaultValue = "C008")]
     public string WarehouseCode { get; set; } = "C008";
     /// <summary>
     /// 库位编码（关联 TaktStorageLocation.LocationCode，选项 TaktStorageLocations/options）

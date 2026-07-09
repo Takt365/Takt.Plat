@@ -9,10 +9,13 @@
 import { inject, provide, type InjectionKey, type Ref, ref } from 'vue'
 import type { PcbaInspection } from '@/types/logistics/manufacturing/defect/pcba-inspection'
 
+/** 表格行类型（与 index 列表行、TaktSingleTable slot record 一致） */
+export type PcbaInspectionRowRecord = PcbaInspection | Record<string, unknown>
+
 /** 主表选中行上下文 */
 export interface PcbaInspectionMasterContext {
   /** 当前选中的主表行（右侧明细依赖） */
-  selectedMasterRow: Ref<PcbaInspection | null>
+  selectedMasterRow: Ref<PcbaInspectionRowRecord | null>
 }
 
 const pcbaInspectionMasterContextKey: InjectionKey<PcbaInspectionMasterContext> = Symbol('pcba-inspectionMasterContext')
@@ -22,7 +25,7 @@ const pcbaInspectionMasterContextKey: InjectionKey<PcbaInspectionMasterContext> 
  * @returns {PcbaInspectionMasterContext} 主表上下文
  */
 export function providePcbaInspectionMasterContext(): PcbaInspectionMasterContext {
-  const selectedMasterRow = ref<PcbaInspection | null>(null)
+  const selectedMasterRow = ref<PcbaInspectionRowRecord | null>(null)
   const ctx: PcbaInspectionMasterContext = { selectedMasterRow }
   provide(pcbaInspectionMasterContextKey, ctx)
   return ctx

@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：frontend/src/types/logistics/quality/operation
 // 文件名称：iqc-order.d.ts
-// 创建时间：2026-06-30
+// 创建时间：2026-07-09
 // 创建人：Takt365(Auto Generated)
 // 功能描述：logistics/quality/operation 模块类型定义（自动生成；类型名去 Takt 前缀与末尾 Dto，如 TaktCompanyDto → Company）
 // 
@@ -102,11 +102,6 @@ export interface IqcOrder extends CompanyDtoBase {
    * IQC检验单明细列表（主子表关系） （子表：TaktIqcOrderItem）
    */
   items?: IqcOrderItem[];
-
-  /**
-   * 变更日志列表（主子表关系） （子表：TaktIqcOrderChangeLog）
-   */
-  changeLogs?: IqcOrderChangeLog[];
 
 }
 
@@ -325,12 +320,7 @@ export interface IqcOrderCreate {
   /**
    * IQC检验单明细列表（主子表关系）（子表，级联保存）
    */
-  items?: IqcOrderItemCreate[];
-
-  /**
-   * 变更日志列表（主子表关系）（子表，级联保存）
-   */
-  changeLogs?: IqcOrderChangeLogCreate[];
+  items?: IqcOrderItemUpdate[];
 
   /**
    * 扩展字段JSON
@@ -471,11 +461,6 @@ export interface IqcOrderTemplate {
   items?: IqcOrderItemCreate[];
 
   /**
-   * 变更日志列表（主子表关系）（子表，级联保存）
-   */
-  changeLogs?: IqcOrderChangeLogCreate[];
-
-  /**
    * 扩展字段JSON
    */
   extField?: string;
@@ -583,11 +568,6 @@ export interface IqcOrderImport {
    * IQC检验单明细列表（主子表关系）（子表，级联保存）
    */
   items?: IqcOrderItemCreate[];
-
-  /**
-   * 变更日志列表（主子表关系）（子表，级联保存）
-   */
-  changeLogs?: IqcOrderChangeLogCreate[];
 
   /**
    * 扩展字段JSON

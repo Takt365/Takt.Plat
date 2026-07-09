@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Infrastructure.Data.Seeds.I18nSeedData.Logistics.Quality.Cost
 // 文件名称：TaktQualityAssuranceCustomerResponseI18nSeedData.cs
-// 创建时间：2026-07-02
+// 创建时间：2026-07-09
 // 创建人：Takt365(Auto Generated)
 // 功能描述：TaktQualityAssuranceCustomerResponse 实体字段国际化种子（无对应 frontend locales；TranslationText 取自 ColumnDescription，ContextNote 取自属性 XML summary）
 // 
@@ -152,6 +152,15 @@ public class TaktQualityAssuranceCustomerResponseI18nSeedData : ITaktSeedDataCoo
             new TranslationSeedItem("entity.qualityassurancecustomerresponse.customerresponsenote", "zh-CN", "顾客应对备注", "顾客应对备注"),
             // entity.qualityassurancecustomerresponse.customerresponsenote
             new TranslationSeedItem("entity.qualityassurancecustomerresponse.customerresponsenote", "zh-HK", "顾客应对备注_hk", "顾客应对备注"),
+
+            // entity.qualityassurancecustomerresponse.isobsolete
+            new TranslationSeedItem("entity.qualityassurancecustomerresponse.isobsolete", "en-US", "是否作废_us", "是否作废（字典 sys_yes_no_type，0=否 1=是；编辑移除子行时标记作废）"),
+            // entity.qualityassurancecustomerresponse.isobsolete
+            new TranslationSeedItem("entity.qualityassurancecustomerresponse.isobsolete", "ja-JP", "是否作废_jp", "是否作废（字典 sys_yes_no_type，0=否 1=是；编辑移除子行时标记作废）"),
+            // entity.qualityassurancecustomerresponse.isobsolete
+            new TranslationSeedItem("entity.qualityassurancecustomerresponse.isobsolete", "zh-CN", "是否作废", "是否作废（字典 sys_yes_no_type，0=否 1=是；编辑移除子行时标记作废）"),
+            // entity.qualityassurancecustomerresponse.isobsolete
+            new TranslationSeedItem("entity.qualityassurancecustomerresponse.isobsolete", "zh-HK", "是否作废_hk", "是否作废（字典 sys_yes_no_type，0=否 1=是；编辑移除子行时标记作废）"),
 
             // entity.qualityassurancecustomerresponse.operation
             new TranslationSeedItem("entity.qualityassurancecustomerresponse.operation", "en-US", "品质业务主表_us", "品质业务主表(导航属性)"),

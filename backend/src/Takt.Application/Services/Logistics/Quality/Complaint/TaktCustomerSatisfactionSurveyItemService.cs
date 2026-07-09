@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Application.Services.Logistics.Quality.Complaint
 // 文件名称：TaktCustomerSatisfactionSurveyItemService.cs
-// 创建时间：2026-06-23
+// 创建时间：2026-07-09
 // 创建人：Takt365(Cursor AI)
 // 功能描述：客户满意度调查项目明细应用服务实现
 // 
@@ -118,6 +118,7 @@ public class TaktCustomerSatisfactionSurveyItemService : TaktServiceBase, ITaktC
     public async Task<TaktCustomerSatisfactionSurveyItemDto> CreateCustomerSatisfactionSurveyItemAsync(TaktCustomerSatisfactionSurveyItemCreateDto dto)
     {
         var entity = dto.Adapt<TaktCustomerSatisfactionSurveyItem>();
+        entity.IsObsolete = 0;
         await StampCustomerSatisfactionSurveyItemCustomerSatisfactionSurveyAsync(entity, dto);
         var isUnique_ix_takt_logistics_quality_customer_satisfaction_survey_item_line_unique = await _uniqueValidator.IsUniqueAsync(
             _customerSatisfactionSurveyItemRepository,
@@ -174,11 +175,21 @@ public class TaktCustomerSatisfactionSurveyItemService : TaktServiceBase, ITaktC
     /// <returns>任务</returns>
     public async Task DeleteCustomerSatisfactionSurveyItemByIdAsync(long id)
     {
-        var deleted = await _customerSatisfactionSurveyItemRepository.DeleteAsync(id);
-        if (!deleted)
+        var entity = await _customerSatisfactionSurveyItemRepository.GetByIdAsync(id);
+        if (entity == null)
         {
             throw new TaktBusinessException("客户满意度调查项目明细不存在或已删除");
         }
+        if (entity.TenantCode != CurrentTenantCode || entity.CompanyCode != CurrentCompanyCode)
+        {
+            throw new TaktBusinessException("客户满意度调查项目明细不存在或已删除");
+        }
+        if (entity.IsObsolete == 1)
+        {
+            throw new TaktBusinessException("客户满意度调查项目明细已作废");
+        }
+        entity.IsObsolete = 1;
+        await _customerSatisfactionSurveyItemRepository.UpdateAsync(entity);
     }
 
     /// <summary>
@@ -212,6 +223,27 @@ public class TaktCustomerSatisfactionSurveyItemService : TaktServiceBase, ITaktC
             throw new TaktBusinessException("客户满意度调查项目明细不存在");
         }
         entity.FollowUpStatus = dto.FollowUpStatus;
+        await _customerSatisfactionSurveyItemRepository.UpdateAsync(entity);
+        return await GetCustomerSatisfactionSurveyItemByIdAsync(dto.CustomerSatisfactionSurveyItemId) ?? throw new TaktBusinessException("客户满意度调查项目明细不存在");
+    }
+
+    /// <summary>
+    /// 更新客户满意度调查项目明细作废状态
+    /// </summary>
+    /// <param name="dto">作废DTO</param>
+    /// <returns>DTO</returns>
+    public async Task<TaktCustomerSatisfactionSurveyItemDto> UpdateCustomerSatisfactionSurveyItemObsoleteAsync(TaktCustomerSatisfactionSurveyItemObsoleteDto dto)
+    {
+        var entity = await _customerSatisfactionSurveyItemRepository.GetByIdAsync(dto.CustomerSatisfactionSurveyItemId);
+        if (entity == null)
+        {
+            throw new TaktBusinessException("客户满意度调查项目明细不存在");
+        }
+        if (entity.TenantCode != CurrentTenantCode || entity.CompanyCode != CurrentCompanyCode)
+        {
+            throw new TaktBusinessException("客户满意度调查项目明细不存在");
+        }
+        entity.IsObsolete = dto.IsObsolete;
         await _customerSatisfactionSurveyItemRepository.UpdateAsync(entity);
         return await GetCustomerSatisfactionSurveyItemByIdAsync(dto.CustomerSatisfactionSurveyItemId) ?? throw new TaktBusinessException("客户满意度调查项目明细不存在");
     }
@@ -347,6 +379,15 @@ public class TaktCustomerSatisfactionSurveyItemService : TaktServiceBase, ITaktC
     private static Expression<Func<TaktCustomerSatisfactionSurveyItem, bool>> QueryExpression(TaktCustomerSatisfactionSurveyItemQueryDto? queryDto)
     {
         var exp = Expressionable.Create<TaktCustomerSatisfactionSurveyItem>();
+
+        if (queryDto?.IsObsolete.HasValue == true)
+        {
+            exp = exp.And(x => x.IsObsolete == queryDto.IsObsolete);
+        }
+        else
+        {
+            exp = exp.And(x => x.IsObsolete == 0);
+        }
 
         if (!string.IsNullOrEmpty(queryDto?.KeyWords))
         {

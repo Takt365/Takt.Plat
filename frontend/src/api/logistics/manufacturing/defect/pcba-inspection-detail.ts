@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：frontend/src/api/logistics/manufacturing/defect
 // 文件名称：pcba-inspection-detail.ts
-// 创建时间：2026-06-30
+// 创建时间：2026-07-09
 // 创建人：Takt365(Auto Generated)
 // 功能描述：logistics/manufacturing/defect 模块 API（自动生成，请勿手改路由常量）
 // 
@@ -18,6 +18,7 @@ import type {
 import type {
   PcbaInspectionDetail,
   PcbaInspectionDetailCreate,
+  PcbaInspectionDetailObsolete,
   PcbaInspectionDetailStatus,
   PcbaInspectionDetailUpdate
 } from '@/types/logistics/manufacturing/defect/pcba-inspection-detail';
@@ -117,6 +118,19 @@ export function deletePcbaInspectionDetailBatch(ids: string[]): Promise<void> {
 export function updatePcbaInspectionDetailStatus(dto: PcbaInspectionDetailStatus): Promise<PcbaInspectionDetail> {
   return request<PcbaInspectionDetail>({
     url: `${PCBA_INSPECTION_DETAIL_API_BASE}/status`,
+    method: 'put',
+    data: dto,
+  });
+}
+
+/**
+ * 更新PCBA检查明细作废状态
+ * @param {PcbaInspectionDetailObsolete} dto 作废 DTO
+ * @returns {Promise<PcbaInspectionDetail>} PCBA检查明细DTO
+ */
+export function updatePcbaInspectionDetailObsolete(dto: PcbaInspectionDetailObsolete): Promise<PcbaInspectionDetail> {
+  return request<PcbaInspectionDetail>({
+    url: `${PCBA_INSPECTION_DETAIL_API_BASE}/obsolete`,
     method: 'put',
     data: dto,
   });

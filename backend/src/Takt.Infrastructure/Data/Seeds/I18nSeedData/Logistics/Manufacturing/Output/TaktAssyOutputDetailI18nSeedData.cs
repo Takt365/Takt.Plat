@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Infrastructure.Data.Seeds.I18nSeedData.Logistics.Manufacturing.Output
 // 文件名称：TaktAssyOutputDetailI18nSeedData.cs
-// 创建时间：2026-07-02
+// 创建时间：2026-07-09
 // 创建人：Takt365(Auto Generated)
 // 功能描述：TaktAssyOutputDetail 实体字段国际化种子（无对应 frontend locales；TranslationText 取自 ColumnDescription，ContextNote 取自属性 XML summary）
 // 
@@ -100,13 +100,13 @@ public class TaktAssyOutputDetailI18nSeedData : ITaktSeedDataCoordinator
             new TranslationSeedItem("entity.assyoutputdetail.assyoutputid", "zh-HK", "组立日报ID_hk", "组立日报ID（主表主键,序列化为string以避免Javascript精度问题）"),
 
             // entity.assyoutputdetail.prodordercode
-            new TranslationSeedItem("entity.assyoutputdetail.prodordercode", "en-US", "生产工单号_us", "生产工单号（冗余字段,便于查询）"),
+            new TranslationSeedItem("entity.assyoutputdetail.prodordercode", "en-US", "工单号_us", "工单号（冗余字段,便于查询）"),
             // entity.assyoutputdetail.prodordercode
-            new TranslationSeedItem("entity.assyoutputdetail.prodordercode", "ja-JP", "生产工单号_jp", "生产工单号（冗余字段,便于查询）"),
+            new TranslationSeedItem("entity.assyoutputdetail.prodordercode", "ja-JP", "工单号_jp", "工单号（冗余字段,便于查询）"),
             // entity.assyoutputdetail.prodordercode
-            new TranslationSeedItem("entity.assyoutputdetail.prodordercode", "zh-CN", "生产工单号", "生产工单号（冗余字段,便于查询）"),
+            new TranslationSeedItem("entity.assyoutputdetail.prodordercode", "zh-CN", "工单号", "工单号（冗余字段,便于查询）"),
             // entity.assyoutputdetail.prodordercode
-            new TranslationSeedItem("entity.assyoutputdetail.prodordercode", "zh-HK", "生产工单号_hk", "生产工单号（冗余字段,便于查询）"),
+            new TranslationSeedItem("entity.assyoutputdetail.prodordercode", "zh-HK", "工单号_hk", "工单号（冗余字段,便于查询）"),
 
             // entity.assyoutputdetail.linenumber
             new TranslationSeedItem("entity.assyoutputdetail.linenumber", "en-US", "行号_us", "行号（项号/序号，固定步长=10）"),
@@ -118,13 +118,22 @@ public class TaktAssyOutputDetailI18nSeedData : ITaktSeedDataCoordinator
             new TranslationSeedItem("entity.assyoutputdetail.linenumber", "zh-HK", "行号_hk", "行号（项号/序号，固定步长=10）"),
 
             // entity.assyoutputdetail.timeperiod
-            new TranslationSeedItem("entity.assyoutputdetail.timeperiod", "en-US", "生产时段_us", "生产时段"),
+            new TranslationSeedItem("entity.assyoutputdetail.timeperiod", "en-US", "生产时段_us", "生产时段（固定值）"),
             // entity.assyoutputdetail.timeperiod
-            new TranslationSeedItem("entity.assyoutputdetail.timeperiod", "ja-JP", "生产时段_jp", "生产时段"),
+            new TranslationSeedItem("entity.assyoutputdetail.timeperiod", "ja-JP", "生产时段_jp", "生产时段（固定值）"),
             // entity.assyoutputdetail.timeperiod
-            new TranslationSeedItem("entity.assyoutputdetail.timeperiod", "zh-CN", "生产时段", "生产时段"),
+            new TranslationSeedItem("entity.assyoutputdetail.timeperiod", "zh-CN", "生产时段", "生产时段（固定值）"),
             // entity.assyoutputdetail.timeperiod
-            new TranslationSeedItem("entity.assyoutputdetail.timeperiod", "zh-HK", "生产时段_hk", "生产时段"),
+            new TranslationSeedItem("entity.assyoutputdetail.timeperiod", "zh-HK", "生产时段_hk", "生产时段（固定值）"),
+
+            // entity.assyoutputdetail.stdcapacity
+            new TranslationSeedItem("entity.assyoutputdetail.stdcapacity", "en-US", "标准产能_us", "标准产能（冗余字段：默认快照主表 StdCapacity；有报工工时时按报工工时÷标准工时×稼动率重算该行）"),
+            // entity.assyoutputdetail.stdcapacity
+            new TranslationSeedItem("entity.assyoutputdetail.stdcapacity", "ja-JP", "标准产能_jp", "标准产能（冗余字段：默认快照主表 StdCapacity；有报工工时时按报工工时÷标准工时×稼动率重算该行）"),
+            // entity.assyoutputdetail.stdcapacity
+            new TranslationSeedItem("entity.assyoutputdetail.stdcapacity", "zh-CN", "标准产能", "标准产能（冗余字段：默认快照主表 StdCapacity；有报工工时时按报工工时÷标准工时×稼动率重算该行）"),
+            // entity.assyoutputdetail.stdcapacity
+            new TranslationSeedItem("entity.assyoutputdetail.stdcapacity", "zh-HK", "标准产能_hk", "标准产能（冗余字段：默认快照主表 StdCapacity；有报工工时时按报工工时÷标准工时×稼动率重算该行）"),
 
             // entity.assyoutputdetail.prodactualqty
             new TranslationSeedItem("entity.assyoutputdetail.prodactualqty", "en-US", "实际生产数量_us", "实际生产数量"),
@@ -145,13 +154,13 @@ public class TaktAssyOutputDetailI18nSeedData : ITaktSeedDataCoordinator
             new TranslationSeedItem("entity.assyoutputdetail.downtimeminutes", "zh-HK", "停线时间_hk", "停线时间(分钟)"),
 
             // entity.assyoutputdetail.downtimereason
-            new TranslationSeedItem("entity.assyoutputdetail.downtimereason", "en-US", "停线原因_us", "停线原因（字典 logistics_stop_reason_category，存 DictValue）"),
+            new TranslationSeedItem("entity.assyoutputdetail.downtimereason", "en-US", "停线原因_us", "停线原因（字典 logistics_stop_reason_category，多选 DictLabel 逗号分隔）"),
             // entity.assyoutputdetail.downtimereason
-            new TranslationSeedItem("entity.assyoutputdetail.downtimereason", "ja-JP", "停线原因_jp", "停线原因（字典 logistics_stop_reason_category，存 DictValue）"),
+            new TranslationSeedItem("entity.assyoutputdetail.downtimereason", "ja-JP", "停线原因_jp", "停线原因（字典 logistics_stop_reason_category，多选 DictLabel 逗号分隔）"),
             // entity.assyoutputdetail.downtimereason
-            new TranslationSeedItem("entity.assyoutputdetail.downtimereason", "zh-CN", "停线原因", "停线原因（字典 logistics_stop_reason_category，存 DictValue）"),
+            new TranslationSeedItem("entity.assyoutputdetail.downtimereason", "zh-CN", "停线原因", "停线原因（字典 logistics_stop_reason_category，多选 DictLabel 逗号分隔）"),
             // entity.assyoutputdetail.downtimereason
-            new TranslationSeedItem("entity.assyoutputdetail.downtimereason", "zh-HK", "停线原因_hk", "停线原因（字典 logistics_stop_reason_category，存 DictValue）"),
+            new TranslationSeedItem("entity.assyoutputdetail.downtimereason", "zh-HK", "停线原因_hk", "停线原因（字典 logistics_stop_reason_category，多选 DictLabel 逗号分隔）"),
 
             // entity.assyoutputdetail.downtimedescription
             new TranslationSeedItem("entity.assyoutputdetail.downtimedescription", "en-US", "停线说明_us", "停线说明"),
@@ -163,13 +172,13 @@ public class TaktAssyOutputDetailI18nSeedData : ITaktSeedDataCoordinator
             new TranslationSeedItem("entity.assyoutputdetail.downtimedescription", "zh-HK", "停线说明_hk", "停线说明"),
 
             // entity.assyoutputdetail.unachievedreason
-            new TranslationSeedItem("entity.assyoutputdetail.unachievedreason", "en-US", "未达成原因_us", "未达成原因（字典 logistics_nonachievement_reason_category，存 DictValue）"),
+            new TranslationSeedItem("entity.assyoutputdetail.unachievedreason", "en-US", "未达成原因_us", "未达成原因（字典 logistics_nonachievement_reason_category，多选 DictLabel 逗号分隔）"),
             // entity.assyoutputdetail.unachievedreason
-            new TranslationSeedItem("entity.assyoutputdetail.unachievedreason", "ja-JP", "未达成原因_jp", "未达成原因（字典 logistics_nonachievement_reason_category，存 DictValue）"),
+            new TranslationSeedItem("entity.assyoutputdetail.unachievedreason", "ja-JP", "未达成原因_jp", "未达成原因（字典 logistics_nonachievement_reason_category，多选 DictLabel 逗号分隔）"),
             // entity.assyoutputdetail.unachievedreason
-            new TranslationSeedItem("entity.assyoutputdetail.unachievedreason", "zh-CN", "未达成原因", "未达成原因（字典 logistics_nonachievement_reason_category，存 DictValue）"),
+            new TranslationSeedItem("entity.assyoutputdetail.unachievedreason", "zh-CN", "未达成原因", "未达成原因（字典 logistics_nonachievement_reason_category，多选 DictLabel 逗号分隔）"),
             // entity.assyoutputdetail.unachievedreason
-            new TranslationSeedItem("entity.assyoutputdetail.unachievedreason", "zh-HK", "未达成原因_hk", "未达成原因（字典 logistics_nonachievement_reason_category，存 DictValue）"),
+            new TranslationSeedItem("entity.assyoutputdetail.unachievedreason", "zh-HK", "未达成原因_hk", "未达成原因（字典 logistics_nonachievement_reason_category，多选 DictLabel 逗号分隔）"),
 
             // entity.assyoutputdetail.unachieveddescription
             new TranslationSeedItem("entity.assyoutputdetail.unachieveddescription", "en-US", "未达成说明_us", "未达成说明"),
@@ -181,40 +190,67 @@ public class TaktAssyOutputDetailI18nSeedData : ITaktSeedDataCoordinator
             new TranslationSeedItem("entity.assyoutputdetail.unachieveddescription", "zh-HK", "未达成说明_hk", "未达成说明"),
 
             // entity.assyoutputdetail.inputminutes
-            new TranslationSeedItem("entity.assyoutputdetail.inputminutes", "en-US", "投入工时_us", "投入工时(分钟)"),
+            new TranslationSeedItem("entity.assyoutputdetail.inputminutes", "en-US", "投入工时_us", "投入工时(分钟)（计算结果：无产量且无报工时为 0；报工工时大于 0 时等于报工工时，否则为人数×60）"),
             // entity.assyoutputdetail.inputminutes
-            new TranslationSeedItem("entity.assyoutputdetail.inputminutes", "ja-JP", "投入工时_jp", "投入工时(分钟)"),
+            new TranslationSeedItem("entity.assyoutputdetail.inputminutes", "ja-JP", "投入工时_jp", "投入工时(分钟)（计算结果：无产量且无报工时为 0；报工工时大于 0 时等于报工工时，否则为人数×60）"),
             // entity.assyoutputdetail.inputminutes
-            new TranslationSeedItem("entity.assyoutputdetail.inputminutes", "zh-CN", "投入工时", "投入工时(分钟)"),
+            new TranslationSeedItem("entity.assyoutputdetail.inputminutes", "zh-CN", "投入工时", "投入工时(分钟)（计算结果：无产量且无报工时为 0；报工工时大于 0 时等于报工工时，否则为人数×60）"),
             // entity.assyoutputdetail.inputminutes
-            new TranslationSeedItem("entity.assyoutputdetail.inputminutes", "zh-HK", "投入工时_hk", "投入工时(分钟)"),
-
-            // entity.assyoutputdetail.prodminutes
-            new TranslationSeedItem("entity.assyoutputdetail.prodminutes", "en-US", "生产工时_us", "生产工时(分钟)"),
-            // entity.assyoutputdetail.prodminutes
-            new TranslationSeedItem("entity.assyoutputdetail.prodminutes", "ja-JP", "生产工时_jp", "生产工时(分钟)"),
-            // entity.assyoutputdetail.prodminutes
-            new TranslationSeedItem("entity.assyoutputdetail.prodminutes", "zh-CN", "生产工时", "生产工时(分钟)"),
-            // entity.assyoutputdetail.prodminutes
-            new TranslationSeedItem("entity.assyoutputdetail.prodminutes", "zh-HK", "生产工时_hk", "生产工时(分钟)"),
+            new TranslationSeedItem("entity.assyoutputdetail.inputminutes", "zh-HK", "投入工时_hk", "投入工时(分钟)（计算结果：无产量且无报工时为 0；报工工时大于 0 时等于报工工时，否则为人数×60）"),
 
             // entity.assyoutputdetail.actualminutes
-            new TranslationSeedItem("entity.assyoutputdetail.actualminutes", "en-US", "实际工时_us", "实际工时(分钟)"),
+            new TranslationSeedItem("entity.assyoutputdetail.actualminutes", "en-US", "实际工时_us", "实际工时(分钟)（计算结果：无产量且无报工时为 0；报工工时大于 0 时为报工工时减停线时间，否则为投入工时减停线时间；有产量时不小于 0）"),
             // entity.assyoutputdetail.actualminutes
-            new TranslationSeedItem("entity.assyoutputdetail.actualminutes", "ja-JP", "实际工时_jp", "实际工时(分钟)"),
+            new TranslationSeedItem("entity.assyoutputdetail.actualminutes", "ja-JP", "实际工时_jp", "实际工时(分钟)（计算结果：无产量且无报工时为 0；报工工时大于 0 时为报工工时减停线时间，否则为投入工时减停线时间；有产量时不小于 0）"),
             // entity.assyoutputdetail.actualminutes
-            new TranslationSeedItem("entity.assyoutputdetail.actualminutes", "zh-CN", "实际工时", "实际工时(分钟)"),
+            new TranslationSeedItem("entity.assyoutputdetail.actualminutes", "zh-CN", "实际工时", "实际工时(分钟)（计算结果：无产量且无报工时为 0；报工工时大于 0 时为报工工时减停线时间，否则为投入工时减停线时间；有产量时不小于 0）"),
             // entity.assyoutputdetail.actualminutes
-            new TranslationSeedItem("entity.assyoutputdetail.actualminutes", "zh-HK", "实际工时_hk", "实际工时(分钟)"),
+            new TranslationSeedItem("entity.assyoutputdetail.actualminutes", "zh-HK", "实际工时_hk", "实际工时(分钟)（计算结果：无产量且无报工时为 0；报工工时大于 0 时为报工工时减停线时间，否则为投入工时减停线时间；有产量时不小于 0）"),
+
+            // entity.assyoutputdetail.indirectminutes
+            new TranslationSeedItem("entity.assyoutputdetail.indirectminutes", "en-US", "间接工时_us", "间接工时(分钟)（计算结果：无产量且无报工时为 0；否则为间接人数×向下取整(实际工时÷直接人数)）"),
+            // entity.assyoutputdetail.indirectminutes
+            new TranslationSeedItem("entity.assyoutputdetail.indirectminutes", "ja-JP", "间接工时_jp", "间接工时(分钟)（计算结果：无产量且无报工时为 0；否则为间接人数×向下取整(实际工时÷直接人数)）"),
+            // entity.assyoutputdetail.indirectminutes
+            new TranslationSeedItem("entity.assyoutputdetail.indirectminutes", "zh-CN", "间接工时", "间接工时(分钟)（计算结果：无产量且无报工时为 0；否则为间接人数×向下取整(实际工时÷直接人数)）"),
+            // entity.assyoutputdetail.indirectminutes
+            new TranslationSeedItem("entity.assyoutputdetail.indirectminutes", "zh-HK", "间接工时_hk", "间接工时(分钟)（计算结果：无产量且无报工时为 0；否则为间接人数×向下取整(实际工时÷直接人数)）"),
+
+            // entity.assyoutputdetail.confirmminutes
+            new TranslationSeedItem("entity.assyoutputdetail.confirmminutes", "en-US", "报工工时_us", "报工工时(分钟)（填写场景：1 同一时段混合生产；2 清机；3 无产出、欠料、仪设、切换机种等需记录损失时间）"),
+            // entity.assyoutputdetail.confirmminutes
+            new TranslationSeedItem("entity.assyoutputdetail.confirmminutes", "ja-JP", "报工工时_jp", "报工工时(分钟)（填写场景：1 同一时段混合生产；2 清机；3 无产出、欠料、仪设、切换机种等需记录损失时间）"),
+            // entity.assyoutputdetail.confirmminutes
+            new TranslationSeedItem("entity.assyoutputdetail.confirmminutes", "zh-CN", "报工工时", "报工工时(分钟)（填写场景：1 同一时段混合生产；2 清机；3 无产出、欠料、仪设、切换机种等需记录损失时间）"),
+            // entity.assyoutputdetail.confirmminutes
+            new TranslationSeedItem("entity.assyoutputdetail.confirmminutes", "zh-HK", "报工工时_hk", "报工工时(分钟)（填写场景：1 同一时段混合生产；2 清机；3 无产出、欠料、仪设、切换机种等需记录损失时间）"),
+
+            // entity.assyoutputdetail.mixedprod
+            new TranslationSeedItem("entity.assyoutputdetail.mixedprod", "en-US", "混合生产_us", "混合生产（0=非混合；N≥2 表示同班组同日期同生产时段内共有 N 笔有产量/报工）"),
+            // entity.assyoutputdetail.mixedprod
+            new TranslationSeedItem("entity.assyoutputdetail.mixedprod", "ja-JP", "混合生产_jp", "混合生产（0=非混合；N≥2 表示同班组同日期同生产时段内共有 N 笔有产量/报工）"),
+            // entity.assyoutputdetail.mixedprod
+            new TranslationSeedItem("entity.assyoutputdetail.mixedprod", "zh-CN", "混合生产", "混合生产（0=非混合；N≥2 表示同班组同日期同生产时段内共有 N 笔有产量/报工）"),
+            // entity.assyoutputdetail.mixedprod
+            new TranslationSeedItem("entity.assyoutputdetail.mixedprod", "zh-HK", "混合生产_hk", "混合生产（0=非混合；N≥2 表示同班组同日期同生产时段内共有 N 笔有产量/报工）"),
 
             // entity.assyoutputdetail.achievementrate
-            new TranslationSeedItem("entity.assyoutputdetail.achievementrate", "en-US", "达成率_us", "达成率(%)"),
+            new TranslationSeedItem("entity.assyoutputdetail.achievementrate", "en-US", "达成率_us", "达成率(%)（计算结果：实际生产数量÷StdCapacity×100%；标准产能为0时取0）"),
             // entity.assyoutputdetail.achievementrate
-            new TranslationSeedItem("entity.assyoutputdetail.achievementrate", "ja-JP", "达成率_jp", "达成率(%)"),
+            new TranslationSeedItem("entity.assyoutputdetail.achievementrate", "ja-JP", "达成率_jp", "达成率(%)（计算结果：实际生产数量÷StdCapacity×100%；标准产能为0时取0）"),
             // entity.assyoutputdetail.achievementrate
-            new TranslationSeedItem("entity.assyoutputdetail.achievementrate", "zh-CN", "达成率", "达成率(%)"),
+            new TranslationSeedItem("entity.assyoutputdetail.achievementrate", "zh-CN", "达成率", "达成率(%)（计算结果：实际生产数量÷StdCapacity×100%；标准产能为0时取0）"),
             // entity.assyoutputdetail.achievementrate
-            new TranslationSeedItem("entity.assyoutputdetail.achievementrate", "zh-HK", "达成率_hk", "达成率(%)"),
+            new TranslationSeedItem("entity.assyoutputdetail.achievementrate", "zh-HK", "达成率_hk", "达成率(%)（计算结果：实际生产数量÷StdCapacity×100%；标准产能为0时取0）"),
+
+            // entity.assyoutputdetail.isobsolete
+            new TranslationSeedItem("entity.assyoutputdetail.isobsolete", "en-US", "是否作废_us", "是否作废（字典 sys_yes_no_type，0=否 1=是；编辑移除子行时标记作废）"),
+            // entity.assyoutputdetail.isobsolete
+            new TranslationSeedItem("entity.assyoutputdetail.isobsolete", "ja-JP", "是否作废_jp", "是否作废（字典 sys_yes_no_type，0=否 1=是；编辑移除子行时标记作废）"),
+            // entity.assyoutputdetail.isobsolete
+            new TranslationSeedItem("entity.assyoutputdetail.isobsolete", "zh-CN", "是否作废", "是否作废（字典 sys_yes_no_type，0=否 1=是；编辑移除子行时标记作废）"),
+            // entity.assyoutputdetail.isobsolete
+            new TranslationSeedItem("entity.assyoutputdetail.isobsolete", "zh-HK", "是否作废_hk", "是否作废（字典 sys_yes_no_type，0=否 1=是；编辑移除子行时标记作废）"),
 
             // entity.assyoutputdetail.assyoutput
             new TranslationSeedItem("entity.assyoutputdetail.assyoutput", "en-US", "组立日报_us", "组立日报（主表）"),

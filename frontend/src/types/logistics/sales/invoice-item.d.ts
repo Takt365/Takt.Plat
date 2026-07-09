@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：frontend/src/types/logistics/sales
 // 文件名称：invoice-item.d.ts
-// 创建时间：2026-07-01
+// 创建时间：2026-07-09
 // 创建人：Takt365(Auto Generated)
 // 功能描述：logistics/sales 模块类型定义（自动生成；类型名去 Takt 前缀与末尾 Dto，如 TaktCompanyDto → Company）
 // 
@@ -124,6 +124,11 @@ export interface SalesInvoiceItem extends CompanyDtoBase {
   referenceDocumentItem?: number;
 
   /**
+   * 是否作废（字典 sys_yes_no_type，0=否 1=是；编辑移除子行时标记作废）
+   */
+  isObsolete: number;
+
+  /**
    * 销售发票主表 （主表：TaktSalesInvoice）
    */
   salesInvoice?: SalesInvoice;
@@ -242,6 +247,11 @@ export interface SalesInvoiceItemQuery extends TaktPagedQuery {
    * 参考凭证项目（行号）
    */
   referenceDocumentItem?: number;
+
+  /**
+   * 是否作废（字典 sys_yes_no_type，0=否 1=是；编辑移除子行时标记作废）
+   */
+  isObsolete?: number;
 
   /**
    * 创建时间（范围查询-开始）
@@ -378,6 +388,11 @@ export interface SalesInvoiceItemCreate {
   referenceDocumentItem?: number;
 
   /**
+   * 是否作废（字典 sys_yes_no_type，0=否 1=是；编辑移除子行时标记作废）
+   */
+  isObsolete: number;
+
+  /**
    * 扩展字段JSON
    */
   extField?: string;
@@ -401,6 +416,25 @@ export interface SalesInvoiceItemUpdate extends SalesInvoiceItemCreate {
    * SalesInvoiceItemID（标识要更新的实体）
    */
   salesInvoiceItemId: string;
+
+}
+
+
+/**
+ * SalesInvoiceItem 作废/撤销作废 DTO
+ * 对应前端 SalesInvoiceItemObsolete
+ * @description 对应后端 TaktSalesInvoiceItemObsoleteDto
+ */
+export interface SalesInvoiceItemObsolete {
+  /**
+   * SalesInvoiceItemID
+   */
+  salesInvoiceItemId: string;
+
+  /**
+   * 是否作废（字典 sys_yes_no_type，0=否 1=是；编辑移除子行时标记作废）
+   */
+  isObsolete: number;
 
 }
 
@@ -510,6 +544,11 @@ export interface SalesInvoiceItemTemplate {
    * 参考凭证项目（行号）
    */
   referenceDocumentItem?: number;
+
+  /**
+   * 是否作废（字典 sys_yes_no_type，0=否 1=是；编辑移除子行时标记作废）
+   */
+  isObsolete?: number;
 
   /**
    * 扩展字段JSON
@@ -636,6 +675,11 @@ export interface SalesInvoiceItemImport {
   referenceDocumentItem?: number;
 
   /**
+   * 是否作废（字典 sys_yes_no_type，0=否 1=是；编辑移除子行时标记作废）
+   */
+  isObsolete?: number;
+
+  /**
    * 扩展字段JSON
    */
   extField?: string;
@@ -753,6 +797,11 @@ export interface SalesInvoiceItemExport {
    * 参考凭证项目（行号）
    */
   referenceDocumentItem?: number;
+
+  /**
+   * 是否作废（字典 sys_yes_no_type，0=否 1=是；编辑移除子行时标记作废）
+   */
+  isObsolete: number;
 
   /**
    * 扩展字段JSON

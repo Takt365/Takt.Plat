@@ -29,12 +29,12 @@
           <a-row :gutter="24">
             <a-col :span="12">
               <a-form-item
-                :label="t('common.page.entity.tenantcode')"
+                :label="pi.label('tenantCode')"
                 name="tenantCode"
               >
                 <a-input
                   v-model:value="formState.tenantCode"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('common.page.entity.tenantcode') })"
+                  :placeholder="pi.ph('tenantCode')"
                   show-count
                   :maxlength="20"
                   disabled
@@ -43,12 +43,12 @@
             </a-col>
             <a-col :span="12">
               <a-form-item
-                :label="t('common.page.entity.companycode')"
+                :label="pi.label('companyCode')"
                 name="companyCode"
               >
                 <a-input
                   v-model:value="formState.companyCode"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('common.page.entity.companycode') })"
+                  :placeholder="pi.ph('companyCode')"
                   show-count
                   :maxlength="20"
                   disabled
@@ -57,12 +57,12 @@
             </a-col>
             <a-col :span="12">
               <a-form-item
-                :label="t('common.page.entity.companydefaultculture')"
+                :label="pi.label('companyDefaultCulture')"
                 name="companyDefaultCulture"
               >
                 <a-input
                   v-model:value="formState.companyDefaultCulture"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('common.page.entity.companydefaultculture') })"
+                  :placeholder="pi.ph('companyDefaultCulture')"
                   show-count
                   :maxlength="20"
                   disabled
@@ -71,12 +71,12 @@
             </a-col>
             <a-col :span="12">
               <a-form-item
-                :label="t('entity.manufacturer.code')"
+                :label="pi.label('manufacturerCode')"
                 name="manufacturerCode"
               >
                 <a-input
                   v-model:value="formState.manufacturerCode"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.manufacturer.code') })"
+                  :placeholder="pi.ph('manufacturerCode')"
                   show-count
                   :maxlength="20"
                   allow-clear
@@ -86,12 +86,12 @@
             </a-col>
             <a-col :span="12">
               <a-form-item
-                :label="t('entity.manufacturer.name')"
+                :label="pi.label('manufacturerName')"
                 name="manufacturerName"
               >
                 <a-input
                   v-model:value="formState.manufacturerName"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.manufacturer.name') })"
+                  :placeholder="pi.ph('manufacturerName')"
                   show-count
                   :maxlength="80"
                   allow-clear
@@ -100,12 +100,12 @@
             </a-col>
             <a-col :span="12">
               <a-form-item
-                :label="t('entity.manufacturer.shortname')"
+                :label="pi.label('manufacturerShortName')"
                 name="manufacturerShortName"
               >
                 <a-input
                   v-model:value="formState.manufacturerShortName"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.manufacturer.shortname') })"
+                  :placeholder="pi.ph('manufacturerShortName')"
                   show-count
                   :maxlength="40"
                   allow-clear
@@ -114,36 +114,36 @@
             </a-col>
             <a-col :span="12">
               <a-form-item
-                :label="t('entity.manufacturer.type')"
+                :label="pi.label('manufacturerType')"
                 name="manufacturerType"
               >
                 <TaktSelect
                   v-model:value="formState.manufacturerType"
                   dict-type="logistics_manufacturer_type"
-                  :placeholder="t('common.page.form.placeholder.select', { field: t('entity.manufacturer.type') })"
+                  :placeholder="pi.ph('manufacturerType')"
                 />
               </a-form-item>
             </a-col>
             <a-col :span="12">
               <a-form-item
-                :label="t('entity.manufacturer.industrysector')"
+                :label="pi.label('industrySector')"
                 name="industrySector"
               >
                 <TaktSelect
                   v-model:value="formState.industrySector"
                   dict-type="logistics_industry_sector"
-                  :placeholder="t('common.page.form.placeholder.select', { field: t('entity.manufacturer.industrysector') })"
+                  :placeholder="pi.ph('industrySector')"
                 />
               </a-form-item>
             </a-col>
             <a-col :span="12">
               <a-form-item
-                :label="t('entity.manufacturer.taxnumber')"
+                :label="pi.label('manufacturerTaxNumber')"
                 name="manufacturerTaxNumber"
               >
                 <a-input
                   v-model:value="formState.manufacturerTaxNumber"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.manufacturer.taxnumber') })"
+                  :placeholder="pi.ph('manufacturerTaxNumber')"
                   show-count
                   :maxlength="50"
                   allow-clear
@@ -152,15 +152,13 @@
             </a-col>
             <a-col :span="12">
               <a-form-item
-                :label="t('entity.manufacturer.registrationcountry')"
+                :label="pi.label('registrationCountry')"
                 name="registrationCountry"
               >
-                <a-input
+                <TaktSelect
                   v-model:value="formState.registrationCountry"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.manufacturer.registrationcountry') })"
-                  show-count
-                  :maxlength="2"
-                  allow-clear
+                  api-url="TaktIsoCodes/options"
+                  :placeholder="pi.ph('registrationCountry')"
                 />
               </a-form-item>
             </a-col>
@@ -176,48 +174,48 @@
           <a-row :gutter="24">
             <a-col :span="24">
               <a-form-item
-                :label="t('entity.manufacturer.registrationaddress1')"
+                :label="pi.label('registrationAddress1')"
                 name="registrationAddress1"
               >
                 <a-textarea
                   v-model:value="formState.registrationAddress1"
-                  :placeholder="t('common.page.form.placeholder.optional', { field: t('entity.manufacturer.registrationaddress1') })"
+                  :placeholder="pi.ph('registrationAddress1')"
                   :rows="2"
                 />
               </a-form-item>
             </a-col>
             <a-col :span="24">
               <a-form-item
-                :label="t('entity.manufacturer.registrationaddress2')"
+                :label="pi.label('registrationAddress2')"
                 name="registrationAddress2"
               >
                 <a-textarea
                   v-model:value="formState.registrationAddress2"
-                  :placeholder="t('common.page.form.placeholder.optional', { field: t('entity.manufacturer.registrationaddress2') })"
+                  :placeholder="pi.ph('registrationAddress2')"
                   :rows="2"
                 />
               </a-form-item>
             </a-col>
             <a-col :span="24">
               <a-form-item
-                :label="t('entity.manufacturer.registrationaddress3')"
+                :label="pi.label('registrationAddress3')"
                 name="registrationAddress3"
               >
                 <a-textarea
                   v-model:value="formState.registrationAddress3"
-                  :placeholder="t('common.page.form.placeholder.optional', { field: t('entity.manufacturer.registrationaddress3') })"
+                  :placeholder="pi.ph('registrationAddress3')"
                   :rows="2"
                 />
               </a-form-item>
             </a-col>
             <a-col :span="12">
               <a-form-item
-                :label="t('entity.manufacturer.phone')"
+                :label="pi.label('manufacturerPhone')"
                 name="manufacturerPhone"
               >
                 <a-input
                   v-model:value="formState.manufacturerPhone"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.manufacturer.phone') })"
+                  :placeholder="pi.ph('manufacturerPhone')"
                   show-count
                   :maxlength="50"
                   allow-clear
@@ -226,12 +224,12 @@
             </a-col>
             <a-col :span="12">
               <a-form-item
-                :label="t('entity.manufacturer.fax')"
+                :label="pi.label('manufacturerFax')"
                 name="manufacturerFax"
               >
                 <a-input
                   v-model:value="formState.manufacturerFax"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.manufacturer.fax') })"
+                  :placeholder="pi.ph('manufacturerFax')"
                   show-count
                   :maxlength="50"
                   allow-clear
@@ -240,12 +238,12 @@
             </a-col>
             <a-col :span="12">
               <a-form-item
-                :label="t('entity.manufacturer.email')"
+                :label="pi.label('manufacturerEmail')"
                 name="manufacturerEmail"
               >
                 <a-input
                   v-model:value="formState.manufacturerEmail"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.manufacturer.email') })"
+                  :placeholder="pi.ph('manufacturerEmail')"
                   show-count
                   :maxlength="100"
                   allow-clear
@@ -254,12 +252,12 @@
             </a-col>
             <a-col :span="12">
               <a-form-item
-                :label="t('entity.manufacturer.website')"
+                :label="pi.label('manufacturerWebsite')"
                 name="manufacturerWebsite"
               >
                 <a-input
                   v-model:value="formState.manufacturerWebsite"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.manufacturer.website') })"
+                  :placeholder="pi.ph('manufacturerWebsite')"
                   show-count
                   :maxlength="200"
                   allow-clear
@@ -268,12 +266,12 @@
             </a-col>
             <a-col :span="12">
               <a-form-item
-                :label="t('entity.manufacturer.contactperson')"
+                :label="pi.label('contactPerson')"
                 name="contactPerson"
               >
                 <a-input
                   v-model:value="formState.contactPerson"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.manufacturer.contactperson') })"
+                  :placeholder="pi.ph('contactPerson')"
                   show-count
                   :maxlength="50"
                   allow-clear
@@ -282,12 +280,12 @@
             </a-col>
             <a-col :span="12">
               <a-form-item
-                :label="t('entity.manufacturer.contactphone')"
+                :label="pi.label('contactPhone')"
                 name="contactPhone"
               >
                 <a-input
                   v-model:value="formState.contactPhone"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.manufacturer.contactphone') })"
+                  :placeholder="pi.ph('contactPhone')"
                   show-count
                   :maxlength="50"
                   allow-clear
@@ -296,12 +294,12 @@
             </a-col>
             <a-col :span="12">
               <a-form-item
-                :label="t('entity.manufacturer.contactemail')"
+                :label="pi.label('contactEmail')"
                 name="contactEmail"
               >
                 <a-input
                   v-model:value="formState.contactEmail"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.manufacturer.contactemail') })"
+                  :placeholder="pi.ph('contactEmail')"
                   show-count
                   :maxlength="100"
                   allow-clear
@@ -320,49 +318,49 @@
           <a-row :gutter="24">
             <a-col :span="24">
               <a-form-item
-                :label="t('entity.manufacturer.level')"
+                :label="pi.label('manufacturerLevel')"
                 name="manufacturerLevel"
               >
-                <a-input-number
+                <TaktSelect
                   v-model:value="formState.manufacturerLevel"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.manufacturer.level') })"
-                  style="width: 100%"
+                  dict-type="logistics_grade_category"
+                  :placeholder="pi.ph('manufacturerLevel')"
                 />
               </a-form-item>
             </a-col>
             <a-col :span="24">
               <a-form-item
-                :label="t('entity.manufacturer.qualitycertification')"
+                :label="pi.label('qualityCertification')"
                 name="qualityCertification"
               >
                 <TaktSelect
                   v-model:value="formState.qualityCertification"
                   dict-type="logistics_quality_certification"
-                  :placeholder="t('common.page.form.placeholder.select', { field: t('entity.manufacturer.qualitycertification') })"
+                  :placeholder="pi.ph('qualityCertification')"
                 />
               </a-form-item>
             </a-col>
             <a-col :span="24">
               <a-form-item
-                :label="t('entity.manufacturer.evaluationscore')"
+                :label="pi.label('evaluationScore')"
                 name="evaluationScore"
               >
                 <a-input-number
                   v-model:value="formState.evaluationScore"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.manufacturer.evaluationscore') })"
+                  :placeholder="pi.ph('evaluationScore')"
                   style="width: 100%"
                 />
               </a-form-item>
             </a-col>
             <a-col :span="24">
               <a-form-item
-                :label="t('entity.manufacturer.status')"
+                :label="pi.label('manufacturerStatus')"
                 name="manufacturerStatus"
               >
                 <TaktSelect
                   v-model:value="formState.manufacturerStatus"
                   dict-type="sys_normal_disable_status"
-                  :placeholder="t('common.page.form.placeholder.select', { field: t('entity.manufacturer.status') })"
+                  :placeholder="pi.ph('manufacturerStatus')"
                 />
               </a-form-item>
             </a-col>
@@ -379,7 +377,7 @@
                     >
                       <span class="takt-form-label-hint-icon"><RiQuestionLine class="takt-remix-icon" /></span>
                     </a-tooltip>
-                    <span>{{ t('common.page.entity.extfield') }}</span>
+                    <span>{{ pi.label('extField') }}</span>
                   </span>
                 </template>
                 <a-textarea
@@ -394,12 +392,12 @@
             </a-col>
             <a-col :span="24">
               <a-form-item
-                :label="t('common.page.entity.remark')"
+                :label="pi.label('remark')"
                 name="remark"
               >
                 <a-textarea
                   v-model:value="formState.remark"
-                  :placeholder="t('common.page.form.placeholder.optional', { field: t('common.page.entity.remark') })"
+                  :placeholder="pi.ph('remark')"
                   :rows="4"
                   show-count
                   :maxlength="400"
@@ -416,8 +414,8 @@
       ref="manufacturerMaterialTableRef"
       v-model="childManufacturerMaterialRows"
       :columns="manufacturerMaterialFormColumns"
-      :title="t('entity.manufacturermaterial._self')"
-      :add-button-entity="t('entity.manufacturermaterial._self')"
+      :title="manufacturerMaterialPi.self()"
+      :add-button-entity="manufacturerMaterialPi.self()"
       id-field="manufacturerMaterialId"
       :default-row="createDefaultManufacturerMaterialRow"
       :disabled="loading"
@@ -434,6 +432,11 @@
 import { reactive, watch, computed, ref, onMounted } from 'vue'
 import { useI18n } from 'vue-i18n'
 import type { Rule } from 'ant-design-vue/es/form'
+import { useManufacturerI18n } from '../composables/use-manufacturer-i18n'
+
+/** 实体字段 i18n */
+const pi = useManufacturerI18n()
+
 import type { ManufacturerCreate } from '@/types/logistics/materials/manufacturer'
 import TaktSelect from '@/components/business/takt-select/index.vue'
 import { RiQuestionLine } from '@remixicon/vue'
@@ -472,7 +475,11 @@ const activeTab = ref('tab-0')
 /** CreateDto 字段名列表（与 formState 键对齐） */
 const formFields = ["tenantCode","companyCode","companyDefaultCulture","manufacturerCode","manufacturerName","manufacturerShortName","manufacturerType","industrySector","manufacturerTaxNumber","registrationCountry","registrationAddress1","registrationAddress2","registrationAddress3","manufacturerPhone","manufacturerFax","manufacturerEmail","manufacturerWebsite","contactPerson","contactPhone","contactEmail","manufacturerLevel","qualityCertification","evaluationScore","manufacturerStatus","extField","remark"]
 
+
 import type { TaktEditableTableColumn } from '@/components/business/takt-editable-table/types'
+import { useManufacturerMaterialI18n } from '../composables/use-manufacturer-material-i18n'
+
+const manufacturerMaterialPi = useManufacturerMaterialI18n()
 
 const childManufacturerMaterialRows = ref<Record<string, unknown>[]>([])
 const manufacturerMaterialTableRef = ref<{
@@ -485,48 +492,48 @@ const manufacturerMaterialTableRef = ref<{
 const manufacturerMaterialFormColumns = computed<TaktEditableTableColumn[]>(() => [
   {
     key: 'lineNumber',
-    title: t('entity.manufacturermaterial.linenumber'),
+    title: manufacturerMaterialPi.label('lineNumber'),
     editor: 'inputNumber',
     width: 140, summary: 'sum',
   },
   {
     key: 'manufacturerMaterialCode',
-    title: t('entity.manufacturermaterial.code'),
+    title: manufacturerMaterialPi.label('manufacturerMaterialCode'),
     editor: 'input',
     width: 140,
   },
   {
     key: 'manufacturerMaterialName',
-    title: t('entity.manufacturermaterial.name'),
+    title: manufacturerMaterialPi.label('manufacturerMaterialName'),
     editor: 'input',
     width: 140,
   },
   {
     key: 'manufacturerMaterialSpecification',
-    title: t('entity.manufacturermaterial.specification'),
+    title: manufacturerMaterialPi.label('manufacturerMaterialSpecification'),
     editor: 'input',
-    width: 140, allowClear: true, placeholder: t('common.page.form.placeholder.optional', { field: t('entity.manufacturermaterial.specification') }),
+    width: 140, allowClear: true, placeholder: manufacturerMaterialPi.ph('manufacturerMaterialSpecification'),
   },
   {
     key: 'materialCode',
-    title: t('entity.manufacturermaterial.materialcode'),
+    title: manufacturerMaterialPi.label('materialCode'),
     editor: 'input',
     width: 140,
   },
   {
     key: 'extField',
-    title: t('common.page.entity.extfield'),
+    title: manufacturerMaterialPi.label('extField'),
     editor: 'textarea',
     rows: 2,
-    placeholder: t('common.page.form.placeholder.optional', { field: t('common.page.entity.extfield') }),
+    placeholder: t('common.page.form.placeholder.extfield'),
     width: 140,
   },
   {
     key: 'remark',
-    title: t('common.page.entity.remark'),
+    title: manufacturerMaterialPi.label('remark'),
     editor: 'textarea',
     rows: 2,
-    placeholder: t('common.page.form.placeholder.optional', { field: t('common.page.entity.remark') }),
+    placeholder: manufacturerMaterialPi.ph('remark'),
     width: 140,
   },
 ])
@@ -581,6 +588,9 @@ const formRef = ref()
 const formState = reactive<Record<string, any>>({})
 /** 表单字段默认值（字典 IsDefault=1，来自 TaktDictDataSeedData） */
 const FORM_FIELD_DEFAULTS: Record<string, string | number> = {
+  manufacturerType: 0,
+  manufacturerLevel: 0,
+  qualityCertification: 0,
   manufacturerStatus: 1
 }
 
@@ -638,25 +648,25 @@ const rules = computed<Record<string, Rule[]>>(() => ({
   manufacturerCode: [
     {
       required: true,
-      message: t('common.page.form.placeholder.required', { field: t('entity.manufacturer.code') }),
+      message: pi.ph('manufacturerCode'),
       trigger: 'blur'
     }
   ],
   manufacturerName: [
     {
       required: true,
-      message: t('common.page.form.placeholder.required', { field: t('entity.manufacturer.name') }),
+      message: pi.ph('manufacturerName'),
       trigger: 'blur'
     }
   ],
   manufacturerType: [{
     validator: async (_rule, value) => {
       if (value === undefined || value === null || value === '') {
-        return Promise.reject(t('common.page.form.placeholder.select', { field: t('entity.manufacturer.type') }))
+        return Promise.reject(pi.ph('manufacturerType'))
       }
       const num = typeof value === 'number' ? value : Number(value)
       if (!Number.isFinite(num)) {
-        return Promise.reject(t('common.page.form.placeholder.select', { field: t('entity.manufacturer.type') }))
+        return Promise.reject(pi.ph('manufacturerType'))
       }
       return Promise.resolve()
     },
@@ -665,11 +675,11 @@ const rules = computed<Record<string, Rule[]>>(() => ({
   manufacturerLevel: [{
     validator: async (_rule, value) => {
       if (value === undefined || value === null || value === '') {
-        return Promise.reject(t('common.page.form.placeholder.select', { field: t('entity.manufacturer.level') }))
+        return Promise.reject(pi.ph('manufacturerLevel'))
       }
       const num = typeof value === 'number' ? value : Number(value)
       if (!Number.isFinite(num)) {
-        return Promise.reject(t('common.page.form.placeholder.select', { field: t('entity.manufacturer.level') }))
+        return Promise.reject(pi.ph('manufacturerLevel'))
       }
       return Promise.resolve()
     },
@@ -678,11 +688,11 @@ const rules = computed<Record<string, Rule[]>>(() => ({
   qualityCertification: [{
     validator: async (_rule, value) => {
       if (value === undefined || value === null || value === '') {
-        return Promise.reject(t('common.page.form.placeholder.select', { field: t('entity.manufacturer.qualitycertification') }))
+        return Promise.reject(pi.ph('qualityCertification'))
       }
       const num = typeof value === 'number' ? value : Number(value)
       if (!Number.isFinite(num)) {
-        return Promise.reject(t('common.page.form.placeholder.select', { field: t('entity.manufacturer.qualitycertification') }))
+        return Promise.reject(pi.ph('qualityCertification'))
       }
       return Promise.resolve()
     },
@@ -691,11 +701,11 @@ const rules = computed<Record<string, Rule[]>>(() => ({
   evaluationScore: [{
     validator: async (_rule, value) => {
       if (value === undefined || value === null || value === '') {
-        return Promise.reject(t('common.page.form.placeholder.select', { field: t('entity.manufacturer.evaluationscore') }))
+        return Promise.reject(pi.ph('evaluationScore'))
       }
       const num = typeof value === 'number' ? value : Number(value)
       if (!Number.isFinite(num)) {
-        return Promise.reject(t('common.page.form.placeholder.select', { field: t('entity.manufacturer.evaluationscore') }))
+        return Promise.reject(pi.ph('evaluationScore'))
       }
       return Promise.resolve()
     },
@@ -704,11 +714,11 @@ const rules = computed<Record<string, Rule[]>>(() => ({
   manufacturerStatus: [{
     validator: async (_rule, value) => {
       if (value === undefined || value === null || value === '') {
-        return Promise.reject(t('common.page.form.placeholder.select', { field: t('entity.manufacturer.status') }))
+        return Promise.reject(pi.ph('manufacturerStatus'))
       }
       const num = typeof value === 'number' ? value : Number(value)
       if (!Number.isFinite(num)) {
-        return Promise.reject(t('common.page.form.placeholder.select', { field: t('entity.manufacturer.status') }))
+        return Promise.reject(pi.ph('manufacturerStatus'))
       }
       return Promise.resolve()
     },

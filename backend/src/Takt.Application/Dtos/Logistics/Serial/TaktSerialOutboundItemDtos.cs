@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Application.Dtos.Logistics.Serial
 // 文件名称：TaktSerialOutboundItemDtos.cs
-// 创建时间：2026-06-30
+// 创建时间：2026-07-09
 // 创建人：Takt365(Auto Generated)
 // 功能描述：SerialOutboundItem 模块 DTO（由 generate-dtos-from-entity.cjs 根据 TaktSerialOutboundItem 生成，请按需审阅）
 // 
@@ -83,9 +83,9 @@ public class TaktSerialOutboundItemDto : TaktCompanyDtoBase
     public int ReferenceInboundLineNumber { get; set; } = 0;
 
     /// <summary>
-    /// 出库时间
+    /// 是否作废（字典 sys_yes_no_type，0=否 1=是；编辑移除子行时标记作废）
     /// </summary>
-    public DateTime OutboundTime { get; set; }
+    public int IsObsolete { get; set; } = 0;
 
     /// <summary>
     /// 出库主表
@@ -153,14 +153,9 @@ public class TaktSerialOutboundItemQueryDto : TaktPagedQuery
     public int? ReferenceInboundLineNumber { get; set; }
 
     /// <summary>
-    /// 出库时间（范围查询-开始）
+    /// 是否作废（字典 sys_yes_no_type，0=否 1=是；编辑移除子行时标记作废）
     /// </summary>
-    public DateTime? OutboundTimeStart { get; set; }
-
-    /// <summary>
-    /// 出库时间（范围查询-结束）
-    /// </summary>
-    public DateTime? OutboundTimeEnd { get; set; }
+    public int? IsObsolete { get; set; }
 
     /// <summary>
     /// 创建时间（范围查询-开始）
@@ -248,9 +243,9 @@ public class TaktSerialOutboundItemCreateDto
     public int ReferenceInboundLineNumber { get; set; } = 0;
 
     /// <summary>
-    /// 出库时间
+    /// 是否作废（字典 sys_yes_no_type，0=否 1=是；编辑移除子行时标记作废）
     /// </summary>
-    public DateTime OutboundTime { get; set; }
+    public int IsObsolete { get; set; } = 0;
 
     /// <summary>
     /// 扩展字段JSON
@@ -282,6 +277,29 @@ public class TaktSerialOutboundItemUpdateDto : TaktSerialOutboundItemCreateDto
     [JsonConverter(typeof(ValueToStringConverter))]
     public long SerialOutboundItemId { get; set; }
 
+}
+
+// ========================================
+// SerialOutboundItem 作废 DTO
+// ========================================
+
+/// <summary>
+/// SerialOutboundItem 作废/撤销作废 DTO
+/// </summary>
+public class TaktSerialOutboundItemObsoleteDto
+{
+    /// <summary>
+    /// SerialOutboundItemID
+    /// </summary>
+    [Required(ErrorMessage = "ID不能为空")]
+    [AdaptMember("Id")]
+    [JsonConverter(typeof(ValueToStringConverter))]
+    public long SerialOutboundItemId { get; set; }
+
+    /// <summary>
+    /// 是否作废（字典 sys_yes_no_type，0=否 1=是；编辑移除子行时标记作废）
+    /// </summary>
+    public int IsObsolete { get; set; }
 }
 
 // ========================================
@@ -341,9 +359,9 @@ public class TaktSerialOutboundItemTemplateDto
     public int? ReferenceInboundLineNumber { get; set; }
 
     /// <summary>
-    /// 出库时间
+    /// 是否作废（字典 sys_yes_no_type，0=否 1=是；编辑移除子行时标记作废）
     /// </summary>
-    public DateTime? OutboundTime { get; set; }
+    public int? IsObsolete { get; set; }
 
     /// <summary>
     /// 扩展字段JSON
@@ -415,9 +433,9 @@ public class TaktSerialOutboundItemImportDto
     public int? ReferenceInboundLineNumber { get; set; }
 
     /// <summary>
-    /// 出库时间
+    /// 是否作废（字典 sys_yes_no_type，0=否 1=是；编辑移除子行时标记作废）
     /// </summary>
-    public DateTime? OutboundTime { get; set; }
+    public int? IsObsolete { get; set; }
 
     /// <summary>
     /// 扩展字段JSON
@@ -490,9 +508,9 @@ public class TaktSerialOutboundItemExportDto
     public int ReferenceInboundLineNumber { get; set; } = 0;
 
     /// <summary>
-    /// 出库时间
+    /// 是否作废（字典 sys_yes_no_type，0=否 1=是；编辑移除子行时标记作废）
     /// </summary>
-    public DateTime OutboundTime { get; set; }
+    public int IsObsolete { get; set; } = 0;
 
     /// <summary>
     /// 扩展字段JSON

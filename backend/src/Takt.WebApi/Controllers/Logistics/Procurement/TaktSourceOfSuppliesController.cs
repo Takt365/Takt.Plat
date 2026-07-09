@@ -4,7 +4,7 @@
 // 文件名称：TaktSourceOfSuppliesController.cs
 // 创建时间：2026-06-23
 // 创建人：Takt365(Cursor AI)
-// 功能描述：货源清单控制器
+// 功能描述：货源清单清单控制器
 // 
 // 版权信息：Copyright (c) 2026 Takt  All rights reserved.
 // 免责声明：此软件使用 MIT License，作者不承担任何使用风险。
@@ -18,11 +18,11 @@ using Takt.Shared.Constants;
 namespace Takt.WebApi.Controllers.Logistics.Procurement;
 
 /// <summary>
-/// 货源清单控制器
-/// 提供货源清单的 REST API
+/// 货源清单清单控制器
+/// 提供货源清单清单的 REST API
 /// </summary>
 [ApiModule(4, "后勤管理")]
-[Route("api/[controller]", Name = "货源清单")]
+[Route("api/[controller]", Name = "货源清单清单")]
 public class TaktSourceOfSuppliesController : TaktControllerBase
 {
     private readonly ITaktSourceOfSupplyService _sourceOfSupplyService;
@@ -30,18 +30,18 @@ public class TaktSourceOfSuppliesController : TaktControllerBase
     /// <summary>
     /// 构造函数
     /// </summary>
-    /// <param name="sourceOfSupplyService">货源清单服务</param>
+    /// <param name="sourceOfSupplyService">货源清单清单服务</param>
     public TaktSourceOfSuppliesController(ITaktSourceOfSupplyService sourceOfSupplyService)
     {
         _sourceOfSupplyService = sourceOfSupplyService;
     }
 
     /// <summary>
-    /// 获取货源清单列表（分页）
+    /// 获取货源清单清单列表（分页）
     /// </summary>
     /// <param name="queryDto">查询DTO</param>
     /// <returns>分页结果</returns>
-    [TaktPermission("logistics:procurement:source:of:supply:list", "货源清单列表")]
+    [TaktPermission("logistics:procurement:source:of:supply:list", "货源清单清单列表")]
     [HttpGet("list")]
     public async Task<IActionResult> GetSourceOfSupplyListAsync([FromQuery] TaktSourceOfSupplyQueryDto queryDto)
     {
@@ -57,11 +57,11 @@ public class TaktSourceOfSuppliesController : TaktControllerBase
     }
 
     /// <summary>
-    /// 根据ID获取货源清单
+    /// 根据ID获取货源清单清单
     /// </summary>
-    /// <param name="id">货源清单ID</param>
-    /// <returns>货源清单DTO</returns>
-    [TaktPermission("logistics:procurement:source:of:supply:query", "货源清单详情")]
+    /// <param name="id">货源清单清单ID</param>
+    /// <returns>货源清单清单DTO</returns>
+    [TaktPermission("logistics:procurement:source:of:supply:query", "货源清单清单详情")]
     [HttpGet("{id}")]
     public async Task<IActionResult> GetSourceOfSupplyByIdAsync(long id)
     {
@@ -70,7 +70,7 @@ public class TaktSourceOfSuppliesController : TaktControllerBase
             var result = await _sourceOfSupplyService.GetSourceOfSupplyByIdAsync(id);
             if (result == null)
             {
-                return NotFound("货源清单不存在");
+                return NotFound("货源清单清单不存在");
             }
             return Success(result, "查询成功");
         }
@@ -81,10 +81,10 @@ public class TaktSourceOfSuppliesController : TaktControllerBase
     }
 
     /// <summary>
-    /// 获取货源清单选项列表
+    /// 获取货源清单清单选项列表
     /// </summary>
     /// <returns>下拉选项</returns>
-    [TaktPermission("logistics:procurement:source:of:supply:query", "货源清单选项")]
+    [TaktPermission("logistics:procurement:source:of:supply:query", "货源清单清单选项")]
     [HttpGet("options")]
     public async Task<IActionResult> GetSourceOfSupplyOptionsAsync()
     {
@@ -100,11 +100,11 @@ public class TaktSourceOfSuppliesController : TaktControllerBase
     }
 
     /// <summary>
-    /// 创建货源清单
+    /// 创建货源清单清单
     /// </summary>
     /// <param name="dto">创建DTO</param>
-    /// <returns>货源清单DTO</returns>
-    [TaktPermission("logistics:procurement:source:of:supply:create", "创建货源清单")]
+    /// <returns>货源清单清单DTO</returns>
+    [TaktPermission("logistics:procurement:source:of:supply:create", "创建货源清单清单")]
     [HttpPost]
     public async Task<IActionResult> CreateSourceOfSupplyAsync([FromBody] TaktSourceOfSupplyCreateDto dto)
     {
@@ -120,12 +120,12 @@ public class TaktSourceOfSuppliesController : TaktControllerBase
     }
 
     /// <summary>
-    /// 更新货源清单
+    /// 更新货源清单清单
     /// </summary>
-    /// <param name="id">货源清单ID</param>
+    /// <param name="id">货源清单清单ID</param>
     /// <param name="dto">更新DTO</param>
-    /// <returns>货源清单DTO</returns>
-    [TaktPermission("logistics:procurement:source:of:supply:update", "更新货源清单")]
+    /// <returns>货源清单清单DTO</returns>
+    [TaktPermission("logistics:procurement:source:of:supply:update", "更新货源清单清单")]
     [HttpPut("{id}")]
     public async Task<IActionResult> UpdateSourceOfSupplyAsync(long id, [FromBody] TaktSourceOfSupplyUpdateDto dto)
     {
@@ -141,11 +141,11 @@ public class TaktSourceOfSuppliesController : TaktControllerBase
     }
 
     /// <summary>
-    /// 删除货源清单
+    /// 删除货源清单清单
     /// </summary>
-    /// <param name="id">货源清单ID</param>
+    /// <param name="id">货源清单清单ID</param>
     /// <returns>操作结果</returns>
-    [TaktPermission("logistics:procurement:source:of:supply:delete", "删除货源清单")]
+    [TaktPermission("logistics:procurement:source:of:supply:delete", "删除货源清单清单")]
     [HttpDelete("{id}")]
     public async Task<IActionResult> DeleteSourceOfSupplyByIdAsync(long id)
     {
@@ -161,11 +161,11 @@ public class TaktSourceOfSuppliesController : TaktControllerBase
     }
 
     /// <summary>
-    /// 批量删除货源清单
+    /// 批量删除货源清单清单
     /// </summary>
     /// <param name="ids">ID列表</param>
     /// <returns>操作结果</returns>
-    [TaktPermission("logistics:procurement:source:of:supply:delete", "批量删除货源清单")]
+    [TaktPermission("logistics:procurement:source:of:supply:delete", "批量删除货源清单清单")]
     [HttpDelete("batch")]
     public async Task<IActionResult> DeleteSourceOfSupplyBatchAsync([FromBody] IEnumerable<long> ids)
     {
@@ -181,11 +181,11 @@ public class TaktSourceOfSuppliesController : TaktControllerBase
     }
 
     /// <summary>
-    /// 更新货源清单状态
+    /// 更新货源清单清单状态
     /// </summary>
     /// <param name="dto">状态 DTO</param>
-    /// <returns>货源清单DTO</returns>
-    [TaktPermission("logistics:procurement:source:of:supply:update", "更新货源清单状态")]
+    /// <returns>货源清单清单DTO</returns>
+    [TaktPermission("logistics:procurement:source:of:supply:update", "更新货源清单清单状态")]
     [HttpPut("status")]
     public async Task<IActionResult> UpdateSourceOfSupplyStatusAsync([FromBody] TaktSourceOfSupplyStatusDto dto)
     {
@@ -201,11 +201,11 @@ public class TaktSourceOfSuppliesController : TaktControllerBase
     }
 
     /// <summary>
-    /// 更新货源清单排序
+    /// 更新货源清单清单排序
     /// </summary>
     /// <param name="dto">排序DTO</param>
-    /// <returns>货源清单DTO</returns>
-    [TaktPermission("logistics:procurement:source:of:supply:update", "更新货源清单排序")]
+    /// <returns>货源清单清单DTO</returns>
+    [TaktPermission("logistics:procurement:source:of:supply:update", "更新货源清单清单排序")]
     [HttpPut("sort")]
     public async Task<IActionResult> UpdateSourceOfSupplySortAsync([FromBody] TaktSourceOfSupplySortDto dto)
     {
@@ -224,7 +224,7 @@ public class TaktSourceOfSuppliesController : TaktControllerBase
     /// 获取导入模板
     /// </summary>
     /// <returns>Excel文件</returns>
-    [TaktPermission("logistics:procurement:source:of:supply:import", "获取货源清单导入模板")]
+    [TaktPermission("logistics:procurement:source:of:supply:import", "获取货源清单清单导入模板")]
     [HttpGet("template")]
     public async Task<IActionResult> GetSourceOfSupplyTemplateAsync([FromQuery] string? sheetName = null, [FromQuery] string? templateName = null)
     {
@@ -240,11 +240,11 @@ public class TaktSourceOfSuppliesController : TaktControllerBase
     }
 
     /// <summary>
-    /// 导入货源清单
+    /// 导入货源清单清单
     /// </summary>
     /// <param name="file">Excel文件</param>
     /// <returns>导入结果</returns>
-    [TaktPermission("logistics:procurement:source:of:supply:import", "导入货源清单")]
+    [TaktPermission("logistics:procurement:source:of:supply:import", "导入货源清单清单")]
     [HttpPost("import")]
     public async Task<IActionResult> ImportSourceOfSupplyAsync(IFormFile file, [FromQuery] string? sheetName = null)
     {
@@ -271,10 +271,10 @@ public class TaktSourceOfSuppliesController : TaktControllerBase
     }
 
     /// <summary>
-    /// 导出货源清单
+    /// 导出货源清单清单
     /// </summary>
     /// <returns>Excel文件</returns>
-    [TaktPermission("logistics:procurement:source:of:supply:export", "导出货源清单")]
+    [TaktPermission("logistics:procurement:source:of:supply:export", "导出货源清单清单")]
     [HttpGet("export")]
     public async Task<IActionResult> ExportSourceOfSupplyAsync([FromQuery] TaktSourceOfSupplyQueryDto? query = null, [FromQuery] string? sheetName = null, [FromQuery] string? exportName = null)
     {

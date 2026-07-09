@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Application.Services.Logistics.Manufacturing.Scheduling
 // 文件名称：TaktApsScheduleService.cs
-// 创建时间：2026-06-30
+// 创建时间：2026-07-09
 // 创建人：Takt365(Cursor AI)
 // 功能描述：APS排程主应用服务实现
 // 
@@ -32,7 +32,6 @@ public class TaktApsScheduleService : TaktServiceBase, ITaktApsScheduleService
     private readonly ITaktCompanyRepository<TaktApsSchedule> _apsScheduleRepository;
     private readonly ITaktCompanyRepository<TaktApsOrder> _apsOrderRepository;
     private readonly ITaktCompanyRepository<TaktApsScheduleItem> _apsScheduleItemRepository;
-    private readonly ITaktCompanyRepository<TaktApsScheduleChangeLog> _apsScheduleChangeLogRepository;
     private readonly ITaktLineNumberGenerator _lineNumberGenerator;
     private readonly ITaktUniqueValidator _uniqueValidator;
 
@@ -42,7 +41,6 @@ public class TaktApsScheduleService : TaktServiceBase, ITaktApsScheduleService
     /// <param name="apsScheduleRepository">APS排程主仓储</param>
     /// <param name="apsOrderRepository">ApsOrder仓储</param>
     /// <param name="apsScheduleItemRepository">ApsScheduleItem仓储</param>
-    /// <param name="apsScheduleChangeLogRepository">ApsScheduleChangeLog仓储</param>
     /// <param name="lineNumberGenerator">明细行号生成器</param>
     /// <param name="uniqueValidator">唯一性验证器</param>
     /// <param name="userContext">用户上下文</param>
@@ -51,7 +49,6 @@ public class TaktApsScheduleService : TaktServiceBase, ITaktApsScheduleService
         ITaktCompanyRepository<TaktApsSchedule> apsScheduleRepository,
         ITaktCompanyRepository<TaktApsOrder> apsOrderRepository,
         ITaktCompanyRepository<TaktApsScheduleItem> apsScheduleItemRepository,
-        ITaktCompanyRepository<TaktApsScheduleChangeLog> apsScheduleChangeLogRepository,
         ITaktLineNumberGenerator lineNumberGenerator,
         ITaktUniqueValidator uniqueValidator,
         ITaktUserContext? userContext = null,
@@ -61,7 +58,6 @@ public class TaktApsScheduleService : TaktServiceBase, ITaktApsScheduleService
         _apsScheduleRepository = apsScheduleRepository;
         _apsOrderRepository = apsOrderRepository;
         _apsScheduleItemRepository = apsScheduleItemRepository;
-        _apsScheduleChangeLogRepository = apsScheduleChangeLogRepository;
         _lineNumberGenerator = lineNumberGenerator;
         _uniqueValidator = uniqueValidator;
     }
@@ -182,7 +178,6 @@ public class TaktApsScheduleService : TaktServiceBase, ITaktApsScheduleService
         }
         await _apsOrderRepository.DeleteAsync(x => x.ApsScheduleId == entity.Id);
         await _apsScheduleItemRepository.DeleteAsync(x => x.ApsScheduleId == entity.Id);
-        await _apsScheduleChangeLogRepository.DeleteAsync(x => x.ApsScheduleId == entity.Id);
         var deleted = await _apsScheduleRepository.DeleteAsync(id);
         if (!deleted)
         {
@@ -316,7 +311,31 @@ public class TaktApsScheduleService : TaktServiceBase, ITaktApsScheduleService
     // ========================================
 
     /// <summary>
-    /// 填充APS排程主详情（加载 OneToMany 子表：APS排程订单、APS排程明细、APS排程变更日志）
+    /// 将指定主表下全部未作废APS排程明细标记为作废（编辑清空子表）
+    /// </summary>
+    /// <param name="apsScheduleId">主表主键</param>
+    /// <returns>任务</returns>
+    private async Task MarkApsScheduleItemsObsoleteAsync(long apsScheduleId)
+    {
+        if (apsScheduleId <= 0)
+        {
+            return;
+        }
+        var rows = await _apsScheduleItemRepository.GetListAsync(
+            x => x.ApsScheduleId == apsScheduleId && x.IsObsolete == 0);
+        if (rows.Count == 0)
+        {
+            return;
+        }
+        foreach (var row in rows)
+        {
+            row.IsObsolete = 1;
+        }
+        await _apsScheduleItemRepository.UpdateRangeAsync(rows);
+    }
+
+    /// <summary>
+    /// 填充APS排程主详情（加载 OneToMany 子表：APS排程订单、APS排程明细）
     /// </summary>
     /// <param name="dto">响应 DTO</param>
     /// <param name="entity">主表实体</param>
@@ -330,16 +349,13 @@ public class TaktApsScheduleService : TaktServiceBase, ITaktApsScheduleService
         // APS排程订单 → dto.Orders
         var orders = await _apsOrderRepository.GetListAsync(x => x.ApsScheduleId == entity.Id);
         dto.Orders = orders.Adapt<List<TaktApsOrderDto>>();
-        // APS排程明细 → dto.Items
+        // APS排程明细 → dto.Items（含作废行）
         var items = await _apsScheduleItemRepository.GetListAsync(x => x.ApsScheduleId == entity.Id);
         dto.Items = items.Adapt<List<TaktApsScheduleItemDto>>();
-        // APS排程变更日志 → dto.ChangeLogs
-        var changelogs = await _apsScheduleChangeLogRepository.GetListAsync(x => x.ApsScheduleId == entity.Id);
-        dto.ChangeLogs = changelogs.Adapt<List<TaktApsScheduleChangeLogDto>>();
     }
 
     /// <summary>
-    /// 保存APS排程主子表级联（APS排程订单、APS排程明细、APS排程变更日志；Create/Update 后按主表 Id 先删后插）
+    /// 保存APS排程主子表级联（APS排程订单、APS排程明细；按子表 Id 增量新增/更新；未提交行标记作废，禁止先删后插）
     /// </summary>
     /// <param name="entity">主表实体</param>
     /// <param name="dto">创建/更新 DTO（含子表集合；UpdateDto 须继承 CreateDto）</param>
@@ -353,109 +369,138 @@ public class TaktApsScheduleService : TaktServiceBase, ITaktApsScheduleService
         }
         else
         {
-            var orders = dto.Orders.Adapt<List<TaktApsOrder>>();
-            foreach (var child in orders)
+            var existingList = await _apsOrderRepository.GetListAsync(x => x.ApsScheduleId == entity.Id);
+            var existingById = existingList.ToDictionary(x => x.Id);
+            var submittedIds = new HashSet<long>();
+            var toCreate = new List<TaktApsOrder>();
+            for (var i = 0; i < dto.Orders.Count; i++)
             {
-                child.ApsScheduleId = entity.Id;
+                var childDto = dto.Orders[i];
+                childDto.ApsScheduleId = entity.Id;
+                if (childDto.ApsOrderId > 0)
+                {
+                    if (!existingById.TryGetValue(childDto.ApsOrderId, out var target))
+                    {
+                        throw new TaktBusinessException("APS排程订单不存在（ApsOrderId={childDto.ApsOrderId}）");
+                    }
+                    if (target.ApsScheduleId != entity.Id)
+                    {
+                        throw new TaktBusinessException("APS排程订单不属于当前主表（ApsOrderId={childDto.ApsOrderId}）");
+                    }
+                    submittedIds.Add(childDto.ApsOrderId);
+                    childDto.Adapt(target);
+                    target.Id = childDto.ApsOrderId;
+                    target.ApsScheduleId = entity.Id;
+                    await _apsOrderRepository.UpdateAsync(target);
+                }
+                else
+                {
+                    var child = childDto.Adapt<TaktApsOrder>();
+                    child.Id = 0;
+                    child.ApsScheduleId = entity.Id;
+                    toCreate.Add(child);
+                }
             }
-                        var seenKeys = new HashSet<string>(StringComparer.Ordinal);
-                        for (var i = 0; i < orders.Count; i++)
-                        {
-                            var key = $"{orders[i].CompanyCode}|{orders[i].PlantCode}|{orders[i].ApsOrderCode}";
-                            if (!seenKeys.Add(key))
-                            {
-                                throw new TaktBusinessException($"APS排程订单第{i + 1}项与本次提交的其他项重复（CompanyCode、PlantCode、ApsOrderCode）");
-                            }
-                        }
-            await _apsOrderRepository.DeleteAsync(x => x.ApsScheduleId == entity.Id);
-            foreach (var child in orders)
+            foreach (var removed in existingList.Where(x => !submittedIds.Contains(x.Id)))
             {
-            var isUnique_ix_takt_logistics_manufacturing_scheduling_aps_order_unique = await _uniqueValidator.IsUniqueAsync(
-                _apsOrderRepository,
-                x => x.CompanyCode == child.CompanyCode
-                    && x.PlantCode == child.PlantCode
-                    && x.ApsOrderCode == child.ApsOrderCode);
-            if (!isUnique_ix_takt_logistics_manufacturing_scheduling_aps_order_unique)
+                await _apsOrderRepository.DeleteAsync(removed.Id);
+            }
+            if (toCreate.Count > 0)
             {
-                throw new TaktBusinessException("APS排程订单的CompanyCode、PlantCode、ApsOrderCode已存在");
+                await _apsOrderRepository.CreateRangeAsync(toCreate);
             }
-            }
-            await _apsOrderRepository.CreateRangeAsync(orders);
         }
         // APS排程明细（Items）
         if (dto.Items is not { Count: > 0 })
         {
-            await _apsScheduleItemRepository.DeleteAsync(x => x.ApsScheduleId == entity.Id);
+            await MarkApsScheduleItemsObsoleteAsync(entity.Id);
         }
         else
         {
-            var items = dto.Items.Adapt<List<TaktApsScheduleItem>>();
-            foreach (var child in items)
+            var existingList = await _apsScheduleItemRepository.GetListAsync(x => x.ApsScheduleId == entity.Id);
+            var existingById = existingList.ToDictionary(x => x.Id);
+            var submittedIds = new HashSet<long>();
+            var toCreate = new List<TaktApsScheduleItem>();
+            var seenLineKeys = new HashSet<string>(StringComparer.Ordinal);
+            for (var i = 0; i < dto.Items.Count; i++)
             {
-                child.ApsScheduleId = entity.Id;
-            }
-            var itemsNeedLine = items.Where(c => c.LineNumber <= 0).ToList();
-            if (itemsNeedLine.Count > 0)
-            {
-                var businessCode = !string.IsNullOrWhiteSpace(entity.ScheduleCode) ? entity.ScheduleCode : entity.Id.ToString();
-                var maxLine = await _apsScheduleItemRepository.GetMaxIntAsync(
-                    x => x.TenantCode == CurrentTenantCode && x.CompanyCode == CurrentCompanyCode && x.ApsScheduleId == entity.Id,
-                    x => x.LineNumber);
-                var lineSeq = _lineNumberGenerator.GenerateSequence(businessCode, itemsNeedLine.Count, maxLine).ToList();
-                var lineIdx = 0;
-                foreach (var child in items)
+                var childDto = dto.Items[i];
+                childDto.ApsScheduleId = entity.Id;
+                var lineKey = $"{entity.CompanyCode}|{entity.Id}|{childDto.LineNumber}";
+                if (!seenLineKeys.Add(lineKey))
                 {
-                    if (string.IsNullOrWhiteSpace(child.ApsScheduleCode))
+                    throw new TaktBusinessException("APS排程明细第{i + 1}项与本次提交的其他项重复（CompanyCode、ApsScheduleId、LineNumber）");
+                }
+                if (childDto.ApsScheduleItemId > 0)
+                {
+                    if (!existingById.TryGetValue(childDto.ApsScheduleItemId, out var target))
                     {
-                        child.ApsScheduleCode = !string.IsNullOrWhiteSpace(entity.ScheduleCode) ? entity.ScheduleCode : entity.Id.ToString();
+                        throw new TaktBusinessException("APS排程明细不存在（ApsScheduleItemId={childDto.ApsScheduleItemId}）");
                     }
-                    if (child.LineNumber <= 0)
+                    if (target.ApsScheduleId != entity.Id)
                     {
-                        child.LineNumber = lineSeq[lineIdx++];
+                        throw new TaktBusinessException("APS排程明细不属于当前主表（ApsScheduleItemId={childDto.ApsScheduleItemId}）");
                     }
+                    submittedIds.Add(childDto.ApsScheduleItemId);
+                    var isUniqueUpdate_ix_takt_logistics_manufacturing_scheduling_aps_item_line_unique = await _uniqueValidator.IsUniqueAsync(
+                        _apsScheduleItemRepository,
+                        x => x.CompanyCode == x.CompanyCode
+                && x.ApsScheduleId == x.ApsScheduleId
+                && x.LineNumber == x.LineNumber,
+                        childDto.ApsScheduleItemId);
+                    if (!isUniqueUpdate_ix_takt_logistics_manufacturing_scheduling_aps_item_line_unique)
+                    {
+                        throw new TaktBusinessException("APS排程明细的CompanyCode、ApsScheduleId、LineNumber已存在");
+                    }
+                    childDto.Adapt(target);
+                    target.Id = childDto.ApsScheduleItemId;
+                    target.ApsScheduleId = entity.Id;
+                    target.IsObsolete = 0;
+                    await _apsScheduleItemRepository.UpdateAsync(target);
+                }
+                else
+                {
+                    var isUniqueCreate_ix_takt_logistics_manufacturing_scheduling_aps_item_line_unique = await _uniqueValidator.IsUniqueAsync(
+                        _apsScheduleItemRepository,
+                        x => x.CompanyCode == x.CompanyCode
+                && x.ApsScheduleId == x.ApsScheduleId
+                && x.LineNumber == x.LineNumber);
+                    if (!isUniqueCreate_ix_takt_logistics_manufacturing_scheduling_aps_item_line_unique)
+                    {
+                        throw new TaktBusinessException("APS排程明细的CompanyCode、ApsScheduleId、LineNumber已存在");
+                    }
+                    var child = childDto.Adapt<TaktApsScheduleItem>();
+                    child.Id = 0;
+                    child.ApsScheduleId = entity.Id;
+                    child.IsObsolete = 0;
+                    toCreate.Add(child);
                 }
             }
-                        var seenKeys = new HashSet<string>(StringComparer.Ordinal);
-                        for (var i = 0; i < items.Count; i++)
+            var toObsolete = existingList.Where(x => !submittedIds.Contains(x.Id) && x.IsObsolete == 0).ToList();
+            foreach (var removed in toObsolete)
+            {
+                removed.IsObsolete = 1;
+                await _apsScheduleItemRepository.UpdateAsync(removed);
+            }
+            if (toCreate.Count > 0)
+            {
+                var needLine = toCreate.Where(c => c.LineNumber <= 0).ToList();
+                if (needLine.Count > 0)
+                {
+                    var businessCode = !string.IsNullOrWhiteSpace(entity.ScheduleCode) ? entity.ScheduleCode : entity.Id.ToString();
+                    var maxLine = existingList.Count > 0 ? existingList.Max(x => x.LineNumber) : 0;
+                    var lineSeq = _lineNumberGenerator.GenerateSequence(businessCode, needLine.Count, maxLine).ToList();
+                    var lineIdx = 0;
+                    foreach (var child in toCreate)
+                    {
+                        if (child.LineNumber <= 0)
                         {
-                            var key = $"{items[i].CompanyCode}|{items[i].ApsScheduleId}|{items[i].LineNumber}";
-                            if (!seenKeys.Add(key))
-                            {
-                                throw new TaktBusinessException($"APS排程明细第{i + 1}项与本次提交的其他项重复（CompanyCode、ApsScheduleId、LineNumber）");
-                            }
+                            child.LineNumber = lineSeq[lineIdx++];
                         }
-            await _apsScheduleItemRepository.DeleteAsync(x => x.ApsScheduleId == entity.Id);
-            foreach (var child in items)
-            {
-            var isUnique_ix_takt_logistics_manufacturing_scheduling_aps_item_line_unique = await _uniqueValidator.IsUniqueAsync(
-                _apsScheduleItemRepository,
-                x => x.CompanyCode == child.CompanyCode
-                    && x.ApsScheduleId == child.ApsScheduleId
-                    && x.LineNumber == child.LineNumber);
-            if (!isUnique_ix_takt_logistics_manufacturing_scheduling_aps_item_line_unique)
-            {
-                throw new TaktBusinessException("APS排程明细的CompanyCode、ApsScheduleId、LineNumber已存在");
+                    }
+                }
+                await _apsScheduleItemRepository.CreateRangeAsync(toCreate);
             }
-            }
-            await _apsScheduleItemRepository.CreateRangeAsync(items);
-        }
-        // APS排程变更日志（ChangeLogs）
-        if (dto.ChangeLogs is not { Count: > 0 })
-        {
-            await _apsScheduleChangeLogRepository.DeleteAsync(x => x.ApsScheduleId == entity.Id);
-        }
-        else
-        {
-            var changelogs = dto.ChangeLogs.Adapt<List<TaktApsScheduleChangeLog>>();
-            foreach (var child in changelogs)
-            {
-                child.ApsScheduleId = entity.Id;
-            }
-            await _apsScheduleChangeLogRepository.DeleteAsync(x => x.ApsScheduleId == entity.Id);
-            foreach (var child in changelogs)
-            {
-            }
-            await _apsScheduleChangeLogRepository.CreateRangeAsync(changelogs);
         }
     }
     // ========================================

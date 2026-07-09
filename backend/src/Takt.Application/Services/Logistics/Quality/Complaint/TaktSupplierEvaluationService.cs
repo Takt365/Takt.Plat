@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Application.Services.Logistics.Quality.Complaint
 // 文件名称：TaktSupplierEvaluationService.cs
-// 创建时间：2026-06-23
+// 创建时间：2026-07-09
 // 创建人：Takt365(Cursor AI)
 // 功能描述：供应商评价考核应用服务实现
 // 
@@ -125,10 +125,11 @@ public class TaktSupplierEvaluationService : TaktServiceBase, ITaktSupplierEvalu
         var entity = dto.Adapt<TaktSupplierEvaluation>();
         var isUnique_ix_takt_logistics_quality_supplier_evaluation_evaluation_unique = await _uniqueValidator.IsUniqueAsync(
             _supplierEvaluationRepository,
-            x => x.SupplierEvaluationCode == entity.SupplierEvaluationCode);
+            x => x.RelatedPlant == entity.RelatedPlant
+                && x.SupplierEvaluationCode == entity.SupplierEvaluationCode);
         if (!isUnique_ix_takt_logistics_quality_supplier_evaluation_evaluation_unique)
         {
-            throw new TaktBusinessException("供应商评价考核的SupplierEvaluationCode已存在");
+            throw new TaktBusinessException("供应商评价考核的RelatedPlant、SupplierEvaluationCode已存在");
         }
         if (entity.SortOrder <= 0)
         {
@@ -158,11 +159,12 @@ public class TaktSupplierEvaluationService : TaktServiceBase, ITaktSupplierEvalu
         dto.Adapt(entity);
         var isUnique_ix_takt_logistics_quality_supplier_evaluation_evaluation_unique = await _uniqueValidator.IsUniqueAsync(
             _supplierEvaluationRepository,
-            x => x.SupplierEvaluationCode == entity.SupplierEvaluationCode,
+            x => x.RelatedPlant == entity.RelatedPlant
+                && x.SupplierEvaluationCode == entity.SupplierEvaluationCode,
             id);
         if (!isUnique_ix_takt_logistics_quality_supplier_evaluation_evaluation_unique)
         {
-            throw new TaktBusinessException("供应商评价考核的SupplierEvaluationCode已存在");
+            throw new TaktBusinessException("供应商评价考核的RelatedPlant、SupplierEvaluationCode已存在");
         }
         await _supplierEvaluationRepository.UpdateAsync(entity);
                 await SaveSupplierEvaluationChildrenAsync(entity, dto);
@@ -277,17 +279,18 @@ public class TaktSupplierEvaluationService : TaktServiceBase, ITaktSupplierEvalu
             try
             {
                 var entity = rows[i].Adapt<TaktSupplierEvaluation>();
-                var importKey = $"{entity.SupplierEvaluationCode}";
+                var importKey = $"{entity.RelatedPlant}|{entity.SupplierEvaluationCode}";
                 if (!importSeenKeys.Add(importKey))
                 {
-                    throw new TaktBusinessException("与Excel中其他行重复（SupplierEvaluationCode）");
+                    throw new TaktBusinessException("与Excel中其他行重复（RelatedPlant、SupplierEvaluationCode）");
                 }
                 var isUnique_ix_takt_logistics_quality_supplier_evaluation_evaluation_unique = await _uniqueValidator.IsUniqueAsync(
                     _supplierEvaluationRepository,
-                    x => x.SupplierEvaluationCode == entity.SupplierEvaluationCode);
+                    x => x.RelatedPlant == entity.RelatedPlant
+                        && x.SupplierEvaluationCode == entity.SupplierEvaluationCode);
                 if (!isUnique_ix_takt_logistics_quality_supplier_evaluation_evaluation_unique)
                 {
-                    throw new TaktBusinessException("供应商评价考核的SupplierEvaluationCode已存在");
+                    throw new TaktBusinessException("供应商评价考核的RelatedPlant、SupplierEvaluationCode已存在");
                 }
                 if (entity.SortOrder <= 0)
                 {
@@ -338,6 +341,30 @@ public class TaktSupplierEvaluationService : TaktServiceBase, ITaktSupplierEvalu
     // ========================================
 
     /// <summary>
+    /// 将指定主表下全部未作废供应商评价考核项目明细标记为作废（编辑清空子表）
+    /// </summary>
+    /// <param name="evaluationId">主表主键</param>
+    /// <returns>任务</returns>
+    private async Task MarkSupplierEvaluationItemsObsoleteAsync(long evaluationId)
+    {
+        if (evaluationId <= 0)
+        {
+            return;
+        }
+        var rows = await _supplierEvaluationItemRepository.GetListAsync(
+            x => x.EvaluationId == evaluationId && x.IsObsolete == 0);
+        if (rows.Count == 0)
+        {
+            return;
+        }
+        foreach (var row in rows)
+        {
+            row.IsObsolete = 1;
+        }
+        await _supplierEvaluationItemRepository.UpdateRangeAsync(rows);
+    }
+
+    /// <summary>
     /// 填充供应商评价考核详情（加载 OneToMany 子表：供应商评价考核项目明细）
     /// </summary>
     /// <param name="dto">响应 DTO</param>
@@ -349,13 +376,13 @@ public class TaktSupplierEvaluationService : TaktServiceBase, ITaktSupplierEvalu
         {
             return;
         }
-        // 供应商评价考核项目明细 → dto.Items
+        // 供应商评价考核项目明细 → dto.Items（含作废行）
         var items = await _supplierEvaluationItemRepository.GetListAsync(x => x.EvaluationId == entity.Id);
         dto.Items = items.Adapt<List<TaktSupplierEvaluationItemDto>>();
     }
 
     /// <summary>
-    /// 保存供应商评价考核子表级联（供应商评价考核项目明细；Create/Update 后按主表 Id 先删后插）
+    /// 保存供应商评价考核子表级联（供应商评价考核项目明细；按子表 Id 增量新增/更新；未提交行标记作废，禁止先删后插）
     /// </summary>
     /// <param name="entity">主表实体</param>
     /// <param name="dto">创建/更新 DTO（含子表集合；UpdateDto 须继承 CreateDto）</param>
@@ -365,55 +392,95 @@ public class TaktSupplierEvaluationService : TaktServiceBase, ITaktSupplierEvalu
         // 供应商评价考核项目明细（Items）
         if (dto.Items is not { Count: > 0 })
         {
-            await _supplierEvaluationItemRepository.DeleteAsync(x => x.EvaluationId == entity.Id);
+            await MarkSupplierEvaluationItemsObsoleteAsync(entity.Id);
+            return;
         }
         else
         {
-            var items = dto.Items.Adapt<List<TaktSupplierEvaluationItem>>();
-            foreach (var child in items)
+            var existingList = await _supplierEvaluationItemRepository.GetListAsync(x => x.EvaluationId == entity.Id);
+            var existingById = existingList.ToDictionary(x => x.Id);
+            var submittedIds = new HashSet<long>();
+            var toCreate = new List<TaktSupplierEvaluationItem>();
+            var seenLineKeys = new HashSet<string>(StringComparer.Ordinal);
+            for (var i = 0; i < dto.Items.Count; i++)
             {
-                child.EvaluationId = entity.Id;
-            }
-            var itemsNeedLine = items.Where(c => c.LineNumber <= 0).ToList();
-            if (itemsNeedLine.Count > 0)
-            {
-                var businessCode = !string.IsNullOrWhiteSpace(entity.SupplierEvaluationCode) ? entity.SupplierEvaluationCode : entity.Id.ToString();
-                var maxLine = await _supplierEvaluationItemRepository.GetMaxIntAsync(
-                    x => x.TenantCode == CurrentTenantCode && x.CompanyCode == CurrentCompanyCode && x.EvaluationId == entity.Id,
-                    x => x.LineNumber);
-                var lineSeq = _lineNumberGenerator.GenerateSequence(businessCode, itemsNeedLine.Count, maxLine).ToList();
-                var lineIdx = 0;
-                foreach (var child in items)
+                var childDto = dto.Items[i];
+                childDto.EvaluationId = entity.Id;
+                var lineKey = $"{entity.CompanyCode}|{entity.Id}|{childDto.LineNumber}";
+                if (!seenLineKeys.Add(lineKey))
                 {
-                    if (child.LineNumber <= 0)
+                    throw new TaktBusinessException("供应商评价考核项目明细第{i + 1}项与本次提交的其他项重复（CompanyCode、EvaluationId、LineNumber）");
+                }
+                if (childDto.SupplierEvaluationItemId > 0)
+                {
+                    if (!existingById.TryGetValue(childDto.SupplierEvaluationItemId, out var target))
                     {
-                        child.LineNumber = lineSeq[lineIdx++];
+                        throw new TaktBusinessException("供应商评价考核项目明细不存在（SupplierEvaluationItemId={childDto.SupplierEvaluationItemId}）");
                     }
+                    if (target.EvaluationId != entity.Id)
+                    {
+                        throw new TaktBusinessException("供应商评价考核项目明细不属于当前主表（SupplierEvaluationItemId={childDto.SupplierEvaluationItemId}）");
+                    }
+                    submittedIds.Add(childDto.SupplierEvaluationItemId);
+                    var isUniqueUpdate_ix_takt_logistics_quality_supplier_evaluation_item_line_unique = await _uniqueValidator.IsUniqueAsync(
+                        _supplierEvaluationItemRepository,
+                        x => x.CompanyCode == x.CompanyCode
+                && x.EvaluationId == x.EvaluationId
+                && x.LineNumber == x.LineNumber,
+                        childDto.SupplierEvaluationItemId);
+                    if (!isUniqueUpdate_ix_takt_logistics_quality_supplier_evaluation_item_line_unique)
+                    {
+                        throw new TaktBusinessException("供应商评价考核项目明细的CompanyCode、EvaluationId、LineNumber已存在");
+                    }
+                    childDto.Adapt(target);
+                    target.Id = childDto.SupplierEvaluationItemId;
+                    target.EvaluationId = entity.Id;
+                    target.IsObsolete = 0;
+                    await _supplierEvaluationItemRepository.UpdateAsync(target);
+                }
+                else
+                {
+                    var isUniqueCreate_ix_takt_logistics_quality_supplier_evaluation_item_line_unique = await _uniqueValidator.IsUniqueAsync(
+                        _supplierEvaluationItemRepository,
+                        x => x.CompanyCode == x.CompanyCode
+                && x.EvaluationId == x.EvaluationId
+                && x.LineNumber == x.LineNumber);
+                    if (!isUniqueCreate_ix_takt_logistics_quality_supplier_evaluation_item_line_unique)
+                    {
+                        throw new TaktBusinessException("供应商评价考核项目明细的CompanyCode、EvaluationId、LineNumber已存在");
+                    }
+                    var child = childDto.Adapt<TaktSupplierEvaluationItem>();
+                    child.Id = 0;
+                    child.EvaluationId = entity.Id;
+                    child.IsObsolete = 0;
+                    toCreate.Add(child);
                 }
             }
-                        var seenKeys = new HashSet<string>(StringComparer.Ordinal);
-                        for (var i = 0; i < items.Count; i++)
+            var toObsolete = existingList.Where(x => !submittedIds.Contains(x.Id) && x.IsObsolete == 0).ToList();
+            foreach (var removed in toObsolete)
+            {
+                removed.IsObsolete = 1;
+                await _supplierEvaluationItemRepository.UpdateAsync(removed);
+            }
+            if (toCreate.Count > 0)
+            {
+                var needLine = toCreate.Where(c => c.LineNumber <= 0).ToList();
+                if (needLine.Count > 0)
+                {
+                    var businessCode = !string.IsNullOrWhiteSpace(entity.SupplierEvaluationCode) ? entity.SupplierEvaluationCode : entity.Id.ToString();
+                    var maxLine = existingList.Count > 0 ? existingList.Max(x => x.LineNumber) : 0;
+                    var lineSeq = _lineNumberGenerator.GenerateSequence(businessCode, needLine.Count, maxLine).ToList();
+                    var lineIdx = 0;
+                    foreach (var child in toCreate)
+                    {
+                        if (child.LineNumber <= 0)
                         {
-                            var key = $"{items[i].CompanyCode}|{items[i].EvaluationId}|{items[i].LineNumber}";
-                            if (!seenKeys.Add(key))
-                            {
-                                throw new TaktBusinessException($"供应商评价考核项目明细第{i + 1}项与本次提交的其他项重复（CompanyCode、EvaluationId、LineNumber）");
-                            }
+                            child.LineNumber = lineSeq[lineIdx++];
                         }
-            await _supplierEvaluationItemRepository.DeleteAsync(x => x.EvaluationId == entity.Id);
-            foreach (var child in items)
-            {
-            var isUnique_ix_takt_logistics_quality_supplier_evaluation_item_line_unique = await _uniqueValidator.IsUniqueAsync(
-                _supplierEvaluationItemRepository,
-                x => x.CompanyCode == child.CompanyCode
-                    && x.EvaluationId == child.EvaluationId
-                    && x.LineNumber == child.LineNumber);
-            if (!isUnique_ix_takt_logistics_quality_supplier_evaluation_item_line_unique)
-            {
-                throw new TaktBusinessException("供应商评价考核项目明细的CompanyCode、EvaluationId、LineNumber已存在");
+                    }
+                }
+                await _supplierEvaluationItemRepository.CreateRangeAsync(toCreate);
             }
-            }
-            await _supplierEvaluationItemRepository.CreateRangeAsync(items);
         }
     }
     // ========================================
@@ -452,10 +519,11 @@ public class TaktSupplierEvaluationService : TaktServiceBase, ITaktSupplierEvalu
                 || (x.MainIssues != null && x.MainIssues.Contains(keywords))
                 || (x.ImprovementRequirements != null && x.ImprovementRequirements.Contains(keywords))
                 || SqlFunc.ToString(x.EvaluationConclusion).Contains(keywords)
+                || (x.Attachments != null && x.Attachments.Contains(keywords))
                 || SqlFunc.ToString(x.EvaluationStatus).Contains(keywords)
-                || SqlFunc.ToString(x.RectificationStatus).Contains(keywords)
                 || (x.RelatedPlant != null && x.RelatedPlant.Contains(keywords))
                 || SqlFunc.ToString(x.SortOrder).Contains(keywords)
+                || SqlFunc.ToString(x.RectificationStatus).Contains(keywords)
                 || (x.ExtField != null && x.ExtField.Contains(keywords))
                 || (x.Remark != null && x.Remark.Contains(keywords))
                 || SqlFunc.ToString(x.EvaluationDate).Contains(keywords)
@@ -559,14 +627,14 @@ public class TaktSupplierEvaluationService : TaktServiceBase, ITaktSupplierEvalu
             exp = exp.And(x => x.EvaluationConclusion == queryDto.EvaluationConclusion);
         }
 
+        if (!string.IsNullOrEmpty(queryDto?.Attachments))
+        {
+            exp = exp.And(x => x.Attachments != null && x.Attachments.Contains(queryDto.Attachments));
+        }
+
         if (queryDto?.EvaluationStatus.HasValue == true)
         {
             exp = exp.And(x => x.EvaluationStatus == queryDto.EvaluationStatus);
-        }
-
-        if (queryDto?.RectificationStatus.HasValue == true)
-        {
-            exp = exp.And(x => x.RectificationStatus == queryDto.RectificationStatus);
         }
 
         if (!string.IsNullOrEmpty(queryDto?.RelatedPlant))
@@ -577,6 +645,11 @@ public class TaktSupplierEvaluationService : TaktServiceBase, ITaktSupplierEvalu
         if (queryDto?.SortOrder.HasValue == true)
         {
             exp = exp.And(x => x.SortOrder == queryDto.SortOrder);
+        }
+
+        if (queryDto?.RectificationStatus.HasValue == true)
+        {
+            exp = exp.And(x => x.RectificationStatus == queryDto.RectificationStatus);
         }
 
         if (!string.IsNullOrEmpty(queryDto?.ExtField))

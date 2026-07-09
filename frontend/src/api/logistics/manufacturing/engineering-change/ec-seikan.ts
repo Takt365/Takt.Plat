@@ -2,43 +2,206 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：frontend/src/api/logistics/manufacturing/engineering-change
 // 文件名称：ec-seikan.ts
-// 创建时间：2026-06-30
-// 功能描述：设变生管部门 API
-//
-// 版权信息：Copyright (c) 2026 Takt  All rights reserved.
+// 创建时间：2026-07-09
+// 创建人：Takt365(Auto Generated)
+// 功能描述：logistics/manufacturing/engineering-change 模块 API（自动生成，请勿手改路由常量）
+// 
+// 版权信息：Copyright (c) 2025 Takt  All rights reserved.
 // 免责声明：此软件使用 MIT License，作者不承担任何使用风险。
 // ========================================
 
 import request from '@/api/request';
-import type { TaktPagedResult } from '@/types/common';
-import type { EcSeikan, EcSeikanQuery, EcSeikanUpdate } from '@/types/logistics/manufacturing/engineering-change/ec-seikan';
-
-const TAKTECSEIKANS_API_BASE = 'TaktEcSeikans';
+import type {
+  TaktPagedResult,
+  TaktSelectOption
+} from '@/types/common';
+import type {
+  EcSeikan,
+  EcSeikanCreate,
+  EcSeikanObsolete,
+  EcSeikanUpdate
+} from '@/types/logistics/manufacturing/engineering-change/ec-seikan';
 
 /**
- * 获取生管部门列表（分页）
+ * API 路径前缀（相对 request baseURL，对应后端 [controller]）
+ * @description TaktEcSeikans
  */
-export function getEcSeikanList(queryDto: EcSeikanQuery) {
-  return request.get<TaktPagedResult<EcSeikan>>(`/${TAKTECSEIKANS_API_BASE}/list`, { params: queryDto });
+const EC_SEIKAN_API_BASE = 'TaktEcSeikans';
+
+// ========================================
+// 基础 CRUD
+// ========================================
+
+/**
+ * 获取设变生管执行列表（分页）
+ * @param {any} queryDto 查询DTO
+ * @returns {Promise<TaktPagedResult<EcSeikan>>} 分页结果
+ */
+export function getEcSeikanList(queryDto: any): Promise<TaktPagedResult<EcSeikan>> {
+  return request<TaktPagedResult<EcSeikan>>({
+    url: `${EC_SEIKAN_API_BASE}/list`,
+    method: 'get',
+    params: queryDto,
+  });
 }
 
 /**
- * 获取生管部门详情
+ * 根据ID获取设变生管执行
+ * @param {string} id 设变生管执行ID
+ * @returns {Promise<EcSeikan>} 设变生管执行DTO
  */
-export function getEcSeikanByEcDetailId(ecDetailId: string) {
-  return request.get<EcSeikan>(`/${TAKTECSEIKANS_API_BASE}/detail/${ecDetailId}`);
+export function getEcSeikanById(id: string): Promise<EcSeikan> {
+  return request<EcSeikan>({
+    url: `${EC_SEIKAN_API_BASE}/${id}`,
+    method: 'get',
+  });
 }
 
 /**
- * 更新生管部门
+ * 创建设变生管执行
+ * @param {EcSeikanCreate} dto 创建DTO
+ * @returns {Promise<EcSeikan>} 设变生管执行DTO
  */
-export function updateEcSeikan(ecDetailId: string, dto: EcSeikanUpdate) {
-  return request.put<EcSeikan>(`/${TAKTECSEIKANS_API_BASE}/detail/${ecDetailId}`, dto);
+export function createEcSeikan(dto: EcSeikanCreate): Promise<EcSeikan> {
+  return request<EcSeikan>({
+    url: `${EC_SEIKAN_API_BASE}`,
+    method: 'post',
+    data: dto,
+  });
 }
 
 /**
- * 导出生管部门
+ * 更新设变生管执行
+ * @param {string} id 设变生管执行ID
+ * @param {EcSeikanUpdate} dto 更新DTO
+ * @returns {Promise<EcSeikan>} 设变生管执行DTO
  */
-export function exportEcSeikanData(queryDto?: EcSeikanQuery) {
-  return request.get(`/${TAKTECSEIKANS_API_BASE}/export`, { params: queryDto, responseType: 'blob' });
+export function updateEcSeikan(id: string, dto: EcSeikanUpdate): Promise<EcSeikan> {
+  return request<EcSeikan>({
+    url: `${EC_SEIKAN_API_BASE}/${id}`,
+    method: 'put',
+    data: dto,
+  });
+}
+
+/**
+ * 删除设变生管执行
+ * @param {string} id 设变生管执行ID
+ * @returns {Promise<void>} 操作结果
+ */
+export function deleteEcSeikanById(id: string): Promise<void> {
+  return request({
+    url: `${EC_SEIKAN_API_BASE}/${id}`,
+    method: 'delete',
+  });
+}
+
+/**
+ * 批量删除设变生管执行
+ * @param {string[]} ids ID列表
+ * @returns {Promise<void>} 操作结果
+ */
+export function deleteEcSeikanBatch(ids: string[]): Promise<void> {
+  return request({
+    url: `${EC_SEIKAN_API_BASE}/batch`,
+    method: 'delete',
+    data: ids,
+  });
+}
+
+/**
+ * 更新设变生管执行作废状态
+ * @param {EcSeikanObsolete} dto 作废 DTO
+ * @returns {Promise<EcSeikan>} 设变生管执行DTO
+ */
+export function updateEcSeikanObsolete(dto: EcSeikanObsolete): Promise<EcSeikan> {
+  return request<EcSeikan>({
+    url: `${EC_SEIKAN_API_BASE}/obsolete`,
+    method: 'put',
+    data: dto,
+  });
+}
+
+// ========================================
+// 选项
+// ========================================
+
+/**
+ * 获取设变生管执行选项列表
+ * @returns {Promise<TaktSelectOption[]>} 下拉选项
+ */
+export function getEcSeikanOptions(): Promise<TaktSelectOption[]> {
+  return request<TaktSelectOption[]>({
+    url: `${EC_SEIKAN_API_BASE}/options`,
+    method: 'get',
+  });
+}
+
+// ========================================
+// 导入导出
+// ========================================
+
+/**
+ * 获取导入模板
+ * @param {string} sheetName sheetName
+ * @param {string} templateName templateName
+ * @returns {Promise<Blob>} Excel文件
+ */
+export function getEcSeikanTemplate(sheetName?: string, templateName?: string): Promise<Blob> {
+  return request<Blob>({
+    url: `${EC_SEIKAN_API_BASE}/template`,
+    method: 'get',
+    params: {
+      sheetName,
+      templateName
+    },
+    responseType: 'blob',
+  });
+}
+
+/**
+ * 导入设变生管执行
+ * @param {globalThis.File} file Excel文件
+ * @param {string} sheetName sheetName
+ * @returns {Promise<{ success: number; fail: number; errors: string[] }>} 导入结果
+ */
+export function importEcSeikan(file: globalThis.File, sheetName?: string): Promise<{ success: number; fail: number; errors: string[] }> {
+  const formData = new FormData();
+  formData.append('file', file);
+  
+  return request({
+    url: `${EC_SEIKAN_API_BASE}/import`,
+    method: 'post',
+    data: formData,
+    headers: {
+      'Content-Type': 'multipart/form-data',
+    },
+    params: {
+      sheetName
+    },
+  });
+}
+
+/**
+ * 导出设变生管执行
+ * @param {any} query query
+ * @param {string} sheetName sheetName
+ * @param {string} exportName exportName
+ * @returns {Promise<Blob>} Excel文件
+ */
+export function exportEcSeikan(
+  query?: any,
+  sheetName?: string,
+  exportName?: string
+): Promise<Blob> {
+  return request<Blob>({
+    url: `${EC_SEIKAN_API_BASE}/export`,
+    method: 'get',
+    params: {
+      ...query,
+      sheetName,
+      exportName
+    },
+    responseType: 'blob',
+  });
 }

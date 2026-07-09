@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Application.Services.Logistics.Sales
 // 文件名称：TaktSalesOrderItemService.cs
-// 创建时间：2026-07-01
+// 创建时间：2026-07-09
 // 创建人：Takt365(Cursor AI)
 // 功能描述：销售订单明细应用服务实现
 // 
@@ -118,6 +118,7 @@ public class TaktSalesOrderItemService : TaktServiceBase, ITaktSalesOrderItemSer
     public async Task<TaktSalesOrderItemDto> CreateSalesOrderItemAsync(TaktSalesOrderItemCreateDto dto)
     {
         var entity = dto.Adapt<TaktSalesOrderItem>();
+        entity.IsObsolete = 0;
         await StampSalesOrderItemSalesOrderAsync(entity, dto);
         var isUnique_ix_takt_logistics_sales_order_item_order_line_unique = await _uniqueValidator.IsUniqueAsync(
             _salesOrderItemRepository,
@@ -174,11 +175,21 @@ public class TaktSalesOrderItemService : TaktServiceBase, ITaktSalesOrderItemSer
     /// <returns>任务</returns>
     public async Task DeleteSalesOrderItemByIdAsync(long id)
     {
-        var deleted = await _salesOrderItemRepository.DeleteAsync(id);
-        if (!deleted)
+        var entity = await _salesOrderItemRepository.GetByIdAsync(id);
+        if (entity == null)
         {
             throw new TaktBusinessException("销售订单明细不存在或已删除");
         }
+        if (entity.TenantCode != CurrentTenantCode || entity.CompanyCode != CurrentCompanyCode)
+        {
+            throw new TaktBusinessException("销售订单明细不存在或已删除");
+        }
+        if (entity.IsObsolete == 1)
+        {
+            throw new TaktBusinessException("销售订单明细已作废");
+        }
+        entity.IsObsolete = 1;
+        await _salesOrderItemRepository.UpdateAsync(entity);
     }
 
     /// <summary>
@@ -212,6 +223,27 @@ public class TaktSalesOrderItemService : TaktServiceBase, ITaktSalesOrderItemSer
             throw new TaktBusinessException("销售订单明细不存在");
         }
         entity.DeliveryStatus = dto.DeliveryStatus;
+        await _salesOrderItemRepository.UpdateAsync(entity);
+        return await GetSalesOrderItemByIdAsync(dto.SalesOrderItemId) ?? throw new TaktBusinessException("销售订单明细不存在");
+    }
+
+    /// <summary>
+    /// 更新销售订单明细作废状态
+    /// </summary>
+    /// <param name="dto">作废DTO</param>
+    /// <returns>DTO</returns>
+    public async Task<TaktSalesOrderItemDto> UpdateSalesOrderItemObsoleteAsync(TaktSalesOrderItemObsoleteDto dto)
+    {
+        var entity = await _salesOrderItemRepository.GetByIdAsync(dto.SalesOrderItemId);
+        if (entity == null)
+        {
+            throw new TaktBusinessException("销售订单明细不存在");
+        }
+        if (entity.TenantCode != CurrentTenantCode || entity.CompanyCode != CurrentCompanyCode)
+        {
+            throw new TaktBusinessException("销售订单明细不存在");
+        }
+        entity.IsObsolete = dto.IsObsolete;
         await _salesOrderItemRepository.UpdateAsync(entity);
         return await GetSalesOrderItemByIdAsync(dto.SalesOrderItemId) ?? throw new TaktBusinessException("销售订单明细不存在");
     }
@@ -347,6 +379,15 @@ public class TaktSalesOrderItemService : TaktServiceBase, ITaktSalesOrderItemSer
     private static Expression<Func<TaktSalesOrderItem, bool>> QueryExpression(TaktSalesOrderItemQueryDto? queryDto)
     {
         var exp = Expressionable.Create<TaktSalesOrderItem>();
+
+        if (queryDto?.IsObsolete.HasValue == true)
+        {
+            exp = exp.And(x => x.IsObsolete == queryDto.IsObsolete);
+        }
+        else
+        {
+            exp = exp.And(x => x.IsObsolete == 0);
+        }
 
         if (!string.IsNullOrEmpty(queryDto?.KeyWords))
         {

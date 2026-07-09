@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.WebApi.Controllers.Logistics.Procurement
 // 文件名称：TaktPurchaseRequestItemsController.cs
-// 创建时间：2026-06-27
+// 创建时间：2026-07-09
 // 创建人：Takt365(Cursor AI)
 // 功能描述：采购申请明细控制器
 // 
@@ -173,6 +173,26 @@ public class TaktPurchaseRequestItemsController : TaktControllerBase
         {
             await _purchaseRequestItemService.DeletePurchaseRequestItemBatchAsync(ids);
             return Success("删除成功");
+        }
+        catch (Exception ex)
+        {
+            return HandleException(ex);
+        }
+    }
+
+    /// <summary>
+    /// 更新采购申请明细作废状态
+    /// </summary>
+    /// <param name="dto">作废 DTO</param>
+    /// <returns>采购申请明细DTO</returns>
+    [TaktPermission("logistics:procurement:purchase:request:update", "更新采购申请明细作废状态")]
+    [HttpPut("obsolete")]
+    public async Task<IActionResult> UpdatePurchaseRequestItemObsoleteAsync([FromBody] TaktPurchaseRequestItemObsoleteDto dto)
+    {
+        try
+        {
+            var result = await _purchaseRequestItemService.UpdatePurchaseRequestItemObsoleteAsync(dto);
+            return Success(result, "更新成功");
         }
         catch (Exception ex)
         {

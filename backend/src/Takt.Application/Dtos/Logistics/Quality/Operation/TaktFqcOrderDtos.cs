@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Application.Dtos.Logistics.Quality.Operation
 // 文件名称：TaktFqcOrderDtos.cs
-// 创建时间：2026-06-30
+// 创建时间：2026-07-09
 // 创建人：Takt365(Auto Generated)
 // 功能描述：FqcOrder 模块 DTO（由 generate-dtos-from-entity.cjs 根据 TaktFqcOrder 生成，请按需审阅）
 // 
@@ -110,12 +110,6 @@ public class TaktFqcOrderDto : TaktCompanyDtoBase
     /// （子表：TaktFqcOrderItem）
     /// </summary>
     public List<TaktFqcOrderItemDto>? Items { get; set; }
-
-    /// <summary>
-    /// 变更日志列表（主子表关系）
-    /// （子表：TaktFqcOrderChangeLog）
-    /// </summary>
-    public List<TaktFqcOrderChangeLogDto>? ChangeLogs { get; set; }
 
 }
 
@@ -343,11 +337,6 @@ public class TaktFqcOrderCreateDto
     public List<TaktFqcOrderItemCreateDto>? Items { get; set; }
 
     /// <summary>
-    /// 变更日志列表（主子表关系）（子表，级联保存）
-    /// </summary>
-    public List<TaktFqcOrderChangeLogCreateDto>? ChangeLogs { get; set; }
-
-    /// <summary>
     /// 扩展字段JSON
     /// </summary>
     public string? ExtField { get; set; }
@@ -376,6 +365,11 @@ public class TaktFqcOrderUpdateDto : TaktFqcOrderCreateDto
     [AdaptMember("Id")]
     [JsonConverter(typeof(ValueToStringConverter))]
     public long FqcOrderId { get; set; }
+
+    /// <summary>
+    /// FQC检验单明细列表（主子表关系）（子表，级联保存）
+    /// </summary>
+    public new List<TaktFqcOrderItemUpdateDto>? Items { get; set; }
 
 }
 
@@ -498,11 +492,6 @@ public class TaktFqcOrderTemplateDto
     public List<TaktFqcOrderItemCreateDto>? Items { get; set; }
 
     /// <summary>
-    /// 变更日志列表（主子表关系）（子表，级联保存）
-    /// </summary>
-    public List<TaktFqcOrderChangeLogCreateDto>? ChangeLogs { get; set; }
-
-    /// <summary>
     /// 扩展字段JSON
     /// </summary>
     public string? ExtField { get; set; }
@@ -608,11 +597,6 @@ public class TaktFqcOrderImportDto
     /// FQC检验单明细列表（主子表关系）（子表，级联保存）
     /// </summary>
     public List<TaktFqcOrderItemCreateDto>? Items { get; set; }
-
-    /// <summary>
-    /// 变更日志列表（主子表关系）（子表，级联保存）
-    /// </summary>
-    public List<TaktFqcOrderChangeLogCreateDto>? ChangeLogs { get; set; }
 
     /// <summary>
     /// 扩展字段JSON

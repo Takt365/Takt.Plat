@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Infrastructure.Data.Seeds.I18nSeedData.Logistics.Procurement
 // 文件名称：TaktPurchasePriceI18nSeedData.cs
-// 创建时间：2026-07-02
+// 创建时间：2026-07-09
 // 创建人：Takt365(Auto Generated)
 // 功能描述：TaktPurchasePrice 实体字段国际化种子（无对应 frontend locales；TranslationText 取自 ColumnDescription，ContextNote 取自属性 XML summary）
 // 
@@ -179,15 +179,6 @@ public class TaktPurchasePriceI18nSeedData : ITaktSeedDataCoordinator
             new TranslationSeedItem("entity.purchaseprice.items", "zh-CN", "物料价格明细列表", "物料价格明细列表（主子表关系，一个供应商价格可以有多个物料价格）"),
             // entity.purchaseprice.items
             new TranslationSeedItem("entity.purchaseprice.items", "zh-HK", "物料价格明细列表_hk", "物料价格明细列表（主子表关系，一个供应商价格可以有多个物料价格）"),
-
-            // entity.purchaseprice.changelogs
-            new TranslationSeedItem("entity.purchaseprice.changelogs", "en-US", "采购价格变更记录列表_us", "采购价格变更记录列表（外键在子表 TaktPurchasePriceChangeLog.PurchasePriceId）"),
-            // entity.purchaseprice.changelogs
-            new TranslationSeedItem("entity.purchaseprice.changelogs", "ja-JP", "采购价格变更记录列表_jp", "采购价格变更记录列表（外键在子表 TaktPurchasePriceChangeLog.PurchasePriceId）"),
-            // entity.purchaseprice.changelogs
-            new TranslationSeedItem("entity.purchaseprice.changelogs", "zh-CN", "采购价格变更记录列表", "采购价格变更记录列表（外键在子表 TaktPurchasePriceChangeLog.PurchasePriceId）"),
-            // entity.purchaseprice.changelogs
-            new TranslationSeedItem("entity.purchaseprice.changelogs", "zh-HK", "采购价格变更记录列表_hk", "采购价格变更记录列表（外键在子表 TaktPurchasePriceChangeLog.PurchasePriceId）"),
         };
     }
 

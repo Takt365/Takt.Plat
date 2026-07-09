@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：frontend/src/api/accounting/financial
 // 文件名称：account-title.ts
-// 创建时间：2026-06-24
+// 创建时间：2026-07-09
 // 创建人：Takt365(Auto Generated)
 // 功能描述：accounting/financial 模块 API（自动生成，请勿手改路由常量）
 // 
@@ -13,6 +13,7 @@
 import request from '@/api/request';
 import type {
   TaktPagedResult,
+  TaktSelectOption,
   TaktTreeSelectOption
 } from '@/types/common';
 import type {
@@ -165,6 +166,28 @@ export function updateAccountTitleSort(dto: AccountTitleSort): Promise<AccountTi
 export function getAccountTitleTreeOptions(): Promise<TaktTreeSelectOption[]> {
   return request<TaktTreeSelectOption[]>({
     url: `${ACCOUNT_TITLE_API_BASE}/tree-options`,
+    method: 'get',
+  });
+}
+
+/**
+ * 获取会计科目父级树形选项列表
+ * @returns {Promise<TaktTreeSelectOption[]>} 树形选项
+ */
+export function getAccountTitleParentTreeOptions(): Promise<TaktTreeSelectOption[]> {
+  return request<TaktTreeSelectOption[]>({
+    url: `${ACCOUNT_TITLE_API_BASE}/parent-tree-options`,
+    method: 'get',
+  });
+}
+
+/**
+ * 获取会计科目选项列表
+ * @returns {Promise<TaktSelectOption[]>} 下拉选项
+ */
+export function getAccountTitleOptions(): Promise<TaktSelectOption[]> {
+  return request<TaktSelectOption[]>({
+    url: `${ACCOUNT_TITLE_API_BASE}/options`,
     method: 'get',
   });
 }

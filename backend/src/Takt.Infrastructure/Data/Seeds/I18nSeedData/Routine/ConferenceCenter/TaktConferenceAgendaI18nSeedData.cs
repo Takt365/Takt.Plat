@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Infrastructure.Data.Seeds.I18nSeedData.Routine.ConferenceCenter
 // 文件名称：TaktConferenceAgendaI18nSeedData.cs
-// 创建时间：2026-07-02
+// 创建时间：2026-07-09
 // 创建人：Takt365(Auto Generated)
 // 功能描述：TaktConferenceAgenda 实体字段国际化种子（无对应 frontend locales；TranslationText 取自 ColumnDescription，ContextNote 取自属性 XML summary）
 // 
@@ -206,6 +206,15 @@ public class TaktConferenceAgendaI18nSeedData : ITaktSeedDataCoordinator
             new TranslationSeedItem("entity.conferenceagenda.attachments", "zh-CN", "附件JSON", "附件（JSON 列表形式，由 TaktFile 统一上传到服务器）"),
             // entity.conferenceagenda.attachments
             new TranslationSeedItem("entity.conferenceagenda.attachments", "zh-HK", "附件JSON_hk", "附件（JSON 列表形式，由 TaktFile 统一上传到服务器）"),
+
+            // entity.conferenceagenda.isobsolete
+            new TranslationSeedItem("entity.conferenceagenda.isobsolete", "en-US", "是否作废_us", "是否作废（字典 sys_yes_no_type，0=否 1=是；编辑移除子行时标记作废）"),
+            // entity.conferenceagenda.isobsolete
+            new TranslationSeedItem("entity.conferenceagenda.isobsolete", "ja-JP", "是否作废_jp", "是否作废（字典 sys_yes_no_type，0=否 1=是；编辑移除子行时标记作废）"),
+            // entity.conferenceagenda.isobsolete
+            new TranslationSeedItem("entity.conferenceagenda.isobsolete", "zh-CN", "是否作废", "是否作废（字典 sys_yes_no_type，0=否 1=是；编辑移除子行时标记作废）"),
+            // entity.conferenceagenda.isobsolete
+            new TranslationSeedItem("entity.conferenceagenda.isobsolete", "zh-HK", "是否作废_hk", "是否作废（字典 sys_yes_no_type，0=否 1=是；编辑移除子行时标记作废）"),
 
             // entity.conferenceagenda.conference
             new TranslationSeedItem("entity.conferenceagenda.conference", "en-US", "会议_us", "会议（主表）"),

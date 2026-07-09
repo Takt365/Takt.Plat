@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Infrastructure.Data.Seeds.I18nSeedData.Logistics.Manufacturing.Defect
 // 文件名称：TaktPcbaRepairI18nSeedData.cs
-// 创建时间：2026-07-02
+// 创建时间：2026-07-09
 // 创建人：Takt365(Auto Generated)
 // 功能描述：TaktPcbaRepair 实体字段国际化种子（无对应 frontend locales；TranslationText 取自 ColumnDescription，ContextNote 取自属性 XML summary）
 // 
@@ -91,22 +91,22 @@ public class TaktPcbaRepairI18nSeedData : ITaktSeedDataCoordinator
             new TranslationSeedItem("entity.pcbarepair._self", "zh-HK", "PCBA改修日报信息_hk", "实体名称"),
 
             // entity.pcbarepair.plantcode
-            new TranslationSeedItem("entity.pcbarepair.plantcode", "en-US", "工厂代码_us", "工厂代码（关联 TaktPlant.PlantCode，选项 TaktPlants/options）"),
+            new TranslationSeedItem("entity.pcbarepair.plantcode", "en-US", "工厂代码_us", "工厂代码（回填：随工单）"),
             // entity.pcbarepair.plantcode
-            new TranslationSeedItem("entity.pcbarepair.plantcode", "ja-JP", "工厂代码_jp", "工厂代码（关联 TaktPlant.PlantCode，选项 TaktPlants/options）"),
+            new TranslationSeedItem("entity.pcbarepair.plantcode", "ja-JP", "工厂代码_jp", "工厂代码（回填：随工单）"),
             // entity.pcbarepair.plantcode
-            new TranslationSeedItem("entity.pcbarepair.plantcode", "zh-CN", "工厂代码", "工厂代码（关联 TaktPlant.PlantCode，选项 TaktPlants/options）"),
+            new TranslationSeedItem("entity.pcbarepair.plantcode", "zh-CN", "工厂代码", "工厂代码（回填：随工单）"),
             // entity.pcbarepair.plantcode
-            new TranslationSeedItem("entity.pcbarepair.plantcode", "zh-HK", "工厂代码_hk", "工厂代码（关联 TaktPlant.PlantCode，选项 TaktPlants/options）"),
+            new TranslationSeedItem("entity.pcbarepair.plantcode", "zh-HK", "工厂代码_hk", "工厂代码（回填：随工单）"),
 
             // entity.pcbarepair.prodcategory
-            new TranslationSeedItem("entity.pcbarepair.prodcategory", "en-US", "生产类别_us", "生产类别（字典 logistics_prod_category，存 DictValue：RD/EVT/DVT/EPP/PP/FPP/MP/RPR/RWR）"),
+            new TranslationSeedItem("entity.pcbarepair.prodcategory", "en-US", "生产类别_us", "生产类别（字典 logistics_prod_category，存 DictValue：EPP/FPP/RWP/MDP/CPP）"),
             // entity.pcbarepair.prodcategory
-            new TranslationSeedItem("entity.pcbarepair.prodcategory", "ja-JP", "生产类别_jp", "生产类别（字典 logistics_prod_category，存 DictValue：RD/EVT/DVT/EPP/PP/FPP/MP/RPR/RWR）"),
+            new TranslationSeedItem("entity.pcbarepair.prodcategory", "ja-JP", "生产类别_jp", "生产类别（字典 logistics_prod_category，存 DictValue：EPP/FPP/RWP/MDP/CPP）"),
             // entity.pcbarepair.prodcategory
-            new TranslationSeedItem("entity.pcbarepair.prodcategory", "zh-CN", "生产类别", "生产类别（字典 logistics_prod_category，存 DictValue：RD/EVT/DVT/EPP/PP/FPP/MP/RPR/RWR）"),
+            new TranslationSeedItem("entity.pcbarepair.prodcategory", "zh-CN", "生产类别", "生产类别（字典 logistics_prod_category，存 DictValue：EPP/FPP/RWP/MDP/CPP）"),
             // entity.pcbarepair.prodcategory
-            new TranslationSeedItem("entity.pcbarepair.prodcategory", "zh-HK", "生产类别_hk", "生产类别（字典 logistics_prod_category，存 DictValue：RD/EVT/DVT/EPP/PP/FPP/MP/RPR/RWR）"),
+            new TranslationSeedItem("entity.pcbarepair.prodcategory", "zh-HK", "生产类别_hk", "生产类别（字典 logistics_prod_category，存 DictValue：EPP/FPP/RWP/MDP/CPP）"),
 
             // entity.pcbarepair.proddate
             new TranslationSeedItem("entity.pcbarepair.proddate", "en-US", "生产日期_us", "生产日期"),
@@ -135,23 +135,32 @@ public class TaktPcbaRepairI18nSeedData : ITaktSeedDataCoordinator
             // entity.pcbarepair.shiftno
             new TranslationSeedItem("entity.pcbarepair.shiftno", "zh-HK", "班次_hk", "班次（字典 logistics_shift_category；1=早 2=中 3=晚 4=白班 5=夜班）"),
 
+            // entity.pcbarepair.prodordertype
+            new TranslationSeedItem("entity.pcbarepair.prodordertype", "en-US", "工单类别_us", "工单类别（回填：随工单）"),
+            // entity.pcbarepair.prodordertype
+            new TranslationSeedItem("entity.pcbarepair.prodordertype", "ja-JP", "工单类别_jp", "工单类别（回填：随工单）"),
+            // entity.pcbarepair.prodordertype
+            new TranslationSeedItem("entity.pcbarepair.prodordertype", "zh-CN", "工单类别", "工单类别（回填：随工单）"),
+            // entity.pcbarepair.prodordertype
+            new TranslationSeedItem("entity.pcbarepair.prodordertype", "zh-HK", "工单类别_hk", "工单类别（回填：随工单）"),
+
             // entity.pcbarepair.prodordercode
-            new TranslationSeedItem("entity.pcbarepair.prodordercode", "en-US", "生产工单号_us", "生产工单号（选项 TaktProductionOrders/options，按 PlantCode 过滤）"),
+            new TranslationSeedItem("entity.pcbarepair.prodordercode", "en-US", "工单号_us", "工单号（选项 TaktProductionOrders/options，按 PlantCode 过滤）"),
             // entity.pcbarepair.prodordercode
-            new TranslationSeedItem("entity.pcbarepair.prodordercode", "ja-JP", "生产工单号_jp", "生产工单号（选项 TaktProductionOrders/options，按 PlantCode 过滤）"),
+            new TranslationSeedItem("entity.pcbarepair.prodordercode", "ja-JP", "工单号_jp", "工单号（选项 TaktProductionOrders/options，按 PlantCode 过滤）"),
             // entity.pcbarepair.prodordercode
-            new TranslationSeedItem("entity.pcbarepair.prodordercode", "zh-CN", "生产工单号", "生产工单号（选项 TaktProductionOrders/options，按 PlantCode 过滤）"),
+            new TranslationSeedItem("entity.pcbarepair.prodordercode", "zh-CN", "工单号", "工单号（选项 TaktProductionOrders/options，按 PlantCode 过滤）"),
             // entity.pcbarepair.prodordercode
-            new TranslationSeedItem("entity.pcbarepair.prodordercode", "zh-HK", "生产工单号_hk", "生产工单号（选项 TaktProductionOrders/options，按 PlantCode 过滤）"),
+            new TranslationSeedItem("entity.pcbarepair.prodordercode", "zh-HK", "工单号_hk", "工单号（选项 TaktProductionOrders/options，按 PlantCode 过滤）"),
 
             // entity.pcbarepair.prodorderqty
-            new TranslationSeedItem("entity.pcbarepair.prodorderqty", "en-US", "订单数量_us", "订单数量"),
+            new TranslationSeedItem("entity.pcbarepair.prodorderqty", "en-US", "工单数量_us", "工单数量"),
             // entity.pcbarepair.prodorderqty
-            new TranslationSeedItem("entity.pcbarepair.prodorderqty", "ja-JP", "订单数量_jp", "订单数量"),
+            new TranslationSeedItem("entity.pcbarepair.prodorderqty", "ja-JP", "工单数量_jp", "工单数量"),
             // entity.pcbarepair.prodorderqty
-            new TranslationSeedItem("entity.pcbarepair.prodorderqty", "zh-CN", "订单数量", "订单数量"),
+            new TranslationSeedItem("entity.pcbarepair.prodorderqty", "zh-CN", "工单数量", "工单数量"),
             // entity.pcbarepair.prodorderqty
-            new TranslationSeedItem("entity.pcbarepair.prodorderqty", "zh-HK", "订单数量_hk", "订单数量"),
+            new TranslationSeedItem("entity.pcbarepair.prodorderqty", "zh-HK", "工单数量_hk", "工单数量"),
 
             // entity.pcbarepair.modelcode
             new TranslationSeedItem("entity.pcbarepair.modelcode", "en-US", "机种_us", "机种"),

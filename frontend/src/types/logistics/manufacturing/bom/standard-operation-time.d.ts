@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：frontend/src/types/logistics/manufacturing/bom
 // 文件名称：standard-operation-time.d.ts
-// 创建时间：2026-06-30
+// 创建时间：2026-07-09
 // 创建人：Takt365(Auto Generated)
 // 功能描述：logistics/manufacturing/bom 模块类型定义（自动生成；类型名去 Takt 前缀与末尾 Dto，如 TaktCompanyDto → Company）
 // 
@@ -69,9 +69,9 @@ export interface StandardOperationTime extends ApprovalDtoBase {
   pointsUnit: string;
 
   /**
-   * 点数转分钟汇率（字典 logistics_points_to_minutes_rate；DictValue=1/0.028/0.045；普通=1，AI=0.028，SMT=0.045）
+   * 点数转分钟汇率（decimal，精度 3 位小数；可选值参见字典 logistics_points_to_minutes_rate：普通=1，AI=0.028，SMT=0.045）
    */
-  pointsToMinutesRate: string;
+  pointsToMinutesRate: number;
 
   /**
    * 转换后标准工时（分钟）
@@ -87,11 +87,6 @@ export interface StandardOperationTime extends ApprovalDtoBase {
    * 失效日期
    */
   expiryDate?: string;
-
-  /**
-   * 标准工序时间变更记录列表（外键在子表 TaktStandardOperationTimeChangeLog.StandardOperationTimeId） （子表：TaktStandardOperationTimeChangeLog）
-   */
-  changeLogs?: StandardOperationTimeChangeLog[];
 
 }
 
@@ -154,9 +149,9 @@ export interface StandardOperationTimeQuery extends TaktPagedQuery {
   pointsUnit?: string;
 
   /**
-   * 点数转分钟汇率（字典 logistics_points_to_minutes_rate；DictValue=1/0.028/0.045；普通=1，AI=0.028，SMT=0.045）
+   * 点数转分钟汇率（decimal，精度 3 位小数；可选值参见字典 logistics_points_to_minutes_rate：普通=1，AI=0.028，SMT=0.045）
    */
-  pointsToMinutesRate?: string;
+  pointsToMinutesRate?: number;
 
   /**
    * 转换后标准工时（分钟）
@@ -308,9 +303,9 @@ export interface StandardOperationTimeCreate {
   pointsUnit: string;
 
   /**
-   * 点数转分钟汇率（字典 logistics_points_to_minutes_rate；DictValue=1/0.028/0.045；普通=1，AI=0.028，SMT=0.045）
+   * 点数转分钟汇率（decimal，精度 3 位小数；可选值参见字典 logistics_points_to_minutes_rate：普通=1，AI=0.028，SMT=0.045）
    */
-  pointsToMinutesRate: string;
+  pointsToMinutesRate: number;
 
   /**
    * 转换后标准工时（分钟）
@@ -326,11 +321,6 @@ export interface StandardOperationTimeCreate {
    * 失效日期
    */
   expiryDate?: string;
-
-  /**
-   * 标准工序时间变更记录列表（外键在子表 TaktStandardOperationTimeChangeLog.StandardOperationTimeId）（子表，级联保存）
-   */
-  changeLogs?: StandardOperationTimeChangeLogCreate[];
 
   /**
    * 扩展字段JSON
@@ -417,9 +407,9 @@ export interface StandardOperationTimeTemplate {
   pointsUnit?: string;
 
   /**
-   * 点数转分钟汇率（字典 logistics_points_to_minutes_rate；DictValue=1/0.028/0.045；普通=1，AI=0.028，SMT=0.045）
+   * 点数转分钟汇率（decimal，精度 3 位小数；可选值参见字典 logistics_points_to_minutes_rate：普通=1，AI=0.028，SMT=0.045）
    */
-  pointsToMinutesRate?: string;
+  pointsToMinutesRate?: number;
 
   /**
    * 转换后标准工时（分钟）
@@ -435,11 +425,6 @@ export interface StandardOperationTimeTemplate {
    * 失效日期
    */
   expiryDate?: string;
-
-  /**
-   * 标准工序时间变更记录列表（外键在子表 TaktStandardOperationTimeChangeLog.StandardOperationTimeId）（子表，级联保存）
-   */
-  changeLogs?: StandardOperationTimeChangeLogCreate[];
 
   /**
    * 扩展字段JSON
@@ -516,9 +501,9 @@ export interface StandardOperationTimeImport {
   pointsUnit?: string;
 
   /**
-   * 点数转分钟汇率（字典 logistics_points_to_minutes_rate；DictValue=1/0.028/0.045；普通=1，AI=0.028，SMT=0.045）
+   * 点数转分钟汇率（decimal，精度 3 位小数；可选值参见字典 logistics_points_to_minutes_rate：普通=1，AI=0.028，SMT=0.045）
    */
-  pointsToMinutesRate?: string;
+  pointsToMinutesRate?: number;
 
   /**
    * 转换后标准工时（分钟）
@@ -534,11 +519,6 @@ export interface StandardOperationTimeImport {
    * 失效日期
    */
   expiryDate?: string;
-
-  /**
-   * 标准工序时间变更记录列表（外键在子表 TaktStandardOperationTimeChangeLog.StandardOperationTimeId）（子表，级联保存）
-   */
-  changeLogs?: StandardOperationTimeChangeLogCreate[];
 
   /**
    * 扩展字段JSON
@@ -605,9 +585,9 @@ export interface StandardOperationTimeExport {
   pointsUnit: string;
 
   /**
-   * 点数转分钟汇率（字典 logistics_points_to_minutes_rate；DictValue=1/0.028/0.045；普通=1，AI=0.028，SMT=0.045）
+   * 点数转分钟汇率（decimal，精度 3 位小数；可选值参见字典 logistics_points_to_minutes_rate：普通=1，AI=0.028，SMT=0.045）
    */
-  pointsToMinutesRate: string;
+  pointsToMinutesRate: number;
 
   /**
    * 转换后标准工时（分钟）

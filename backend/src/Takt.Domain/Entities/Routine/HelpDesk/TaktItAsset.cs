@@ -96,10 +96,4 @@ public class TaktItAsset : TaktCompanyEntityBase
     /// </summary>
     [SugarColumn(ColumnName = "warranty_remark", ColumnDescription = "保修说明", ColumnDataType = "nvarchar", Length = 1000, IsNullable = true)]
     public string? WarrantyRemark { get; set; }
-
-    /// <summary>
-    /// IT 设备保修变更日志列表
-    /// </summary>
-    [Navigate(NavigateType.OneToMany, nameof(TaktItAssetChangeLog.ItAssetId))]
-    public List<TaktItAssetChangeLog>? ChangeLogs { get; set; }
 }

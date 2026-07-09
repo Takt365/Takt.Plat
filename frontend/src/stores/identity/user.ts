@@ -273,14 +273,14 @@ export const useUserStore = defineStore('user', () => {
       return null;
     }
 
-    if (!localeDto.tenantFound || !localeDto.userFound) {
+    if (!localeDto.defaultCulture?.trim() && !localeDto.companyCode?.trim()) {
       holidayFromToken.value = null;
       return localeDto;
     }
 
     let holidayDto: HolidayTheme | null = null;
     const companyCode = localeDto.companyCode?.trim();
-    if (localeDto.defaultCompanyFound && companyCode) {
+    if (companyCode) {
       holidayDto = await fetchHolidayThemeAsync(trimmedTenant, companyCode);
       if (!isPreviewContextValid(seq, trimmedTenant, trimmedUser, expectedKey)) {
         return null;

@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Application.Services.Logistics.Quality.Operation
 // 文件名称：TaktFqcDefectHandlingService.cs
-// 创建时间：2026-06-30
+// 创建时间：2026-07-09
 // 创建人：Takt365(Cursor AI)
 // 功能描述：出货检验不良处理记录应用服务实现
 // 
@@ -118,6 +118,7 @@ public class TaktFqcDefectHandlingService : TaktServiceBase, ITaktFqcDefectHandl
     public async Task<TaktFqcDefectHandlingDto> CreateFqcDefectHandlingAsync(TaktFqcDefectHandlingCreateDto dto)
     {
         var entity = dto.Adapt<TaktFqcDefectHandling>();
+        entity.IsObsolete = 0;
         await StampFqcDefectHandlingFqcOrderItemAsync(entity, dto);
         var isUnique_ix_takt_logistics_quality_fqc_defect_handling_unique = await _uniqueValidator.IsUniqueAsync(
             _fqcDefectHandlingRepository,
@@ -176,11 +177,21 @@ public class TaktFqcDefectHandlingService : TaktServiceBase, ITaktFqcDefectHandl
     /// <returns>任务</returns>
     public async Task DeleteFqcDefectHandlingByIdAsync(long id)
     {
-        var deleted = await _fqcDefectHandlingRepository.DeleteAsync(id);
-        if (!deleted)
+        var entity = await _fqcDefectHandlingRepository.GetByIdAsync(id);
+        if (entity == null)
         {
             throw new TaktBusinessException("出货检验不良处理记录不存在或已删除");
         }
+        if (entity.TenantCode != CurrentTenantCode || entity.CompanyCode != CurrentCompanyCode)
+        {
+            throw new TaktBusinessException("出货检验不良处理记录不存在或已删除");
+        }
+        if (entity.IsObsolete == 1)
+        {
+            throw new TaktBusinessException("出货检验不良处理记录已作废");
+        }
+        entity.IsObsolete = 1;
+        await _fqcDefectHandlingRepository.UpdateAsync(entity);
     }
 
     /// <summary>
@@ -214,6 +225,27 @@ public class TaktFqcDefectHandlingService : TaktServiceBase, ITaktFqcDefectHandl
             throw new TaktBusinessException("出货检验不良处理记录不存在");
         }
         entity.HandlingStatus = dto.HandlingStatus;
+        await _fqcDefectHandlingRepository.UpdateAsync(entity);
+        return await GetFqcDefectHandlingByIdAsync(dto.FqcDefectHandlingId) ?? throw new TaktBusinessException("出货检验不良处理记录不存在");
+    }
+
+    /// <summary>
+    /// 更新出货检验不良处理记录作废状态
+    /// </summary>
+    /// <param name="dto">作废DTO</param>
+    /// <returns>DTO</returns>
+    public async Task<TaktFqcDefectHandlingDto> UpdateFqcDefectHandlingObsoleteAsync(TaktFqcDefectHandlingObsoleteDto dto)
+    {
+        var entity = await _fqcDefectHandlingRepository.GetByIdAsync(dto.FqcDefectHandlingId);
+        if (entity == null)
+        {
+            throw new TaktBusinessException("出货检验不良处理记录不存在");
+        }
+        if (entity.TenantCode != CurrentTenantCode || entity.CompanyCode != CurrentCompanyCode)
+        {
+            throw new TaktBusinessException("出货检验不良处理记录不存在");
+        }
+        entity.IsObsolete = dto.IsObsolete;
         await _fqcDefectHandlingRepository.UpdateAsync(entity);
         return await GetFqcDefectHandlingByIdAsync(dto.FqcDefectHandlingId) ?? throw new TaktBusinessException("出货检验不良处理记录不存在");
     }
@@ -350,6 +382,15 @@ public class TaktFqcDefectHandlingService : TaktServiceBase, ITaktFqcDefectHandl
     private static Expression<Func<TaktFqcDefectHandling, bool>> QueryExpression(TaktFqcDefectHandlingQueryDto? queryDto)
     {
         var exp = Expressionable.Create<TaktFqcDefectHandling>();
+
+        if (queryDto?.IsObsolete.HasValue == true)
+        {
+            exp = exp.And(x => x.IsObsolete == queryDto.IsObsolete);
+        }
+        else
+        {
+            exp = exp.And(x => x.IsObsolete == 0);
+        }
 
         if (!string.IsNullOrEmpty(queryDto?.KeyWords))
         {

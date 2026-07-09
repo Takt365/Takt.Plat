@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：frontend/src/api/logistics/manufacturing/bom
 // 文件名称：routing-item.ts
-// 创建时间：2026-06-30
+// 创建时间：2026-07-09
 // 创建人：Takt365(Auto Generated)
 // 功能描述：logistics/manufacturing/bom 模块 API（自动生成，请勿手改路由常量）
 // 
@@ -18,6 +18,7 @@ import type {
 import type {
   RoutingItem,
   RoutingItemCreate,
+  RoutingItemObsolete,
   RoutingItemSort,
   RoutingItemUpdate
 } from '@/types/logistics/manufacturing/bom/routing-item';
@@ -117,6 +118,19 @@ export function deleteRoutingItemBatch(ids: string[]): Promise<void> {
 export function updateRoutingItemSort(dto: RoutingItemSort): Promise<RoutingItem> {
   return request<RoutingItem>({
     url: `${ROUTING_ITEM_API_BASE}/sort`,
+    method: 'put',
+    data: dto,
+  });
+}
+
+/**
+ * 更新工艺路线明细作废状态
+ * @param {RoutingItemObsolete} dto 作废 DTO
+ * @returns {Promise<RoutingItem>} 工艺路线明细DTO
+ */
+export function updateRoutingItemObsolete(dto: RoutingItemObsolete): Promise<RoutingItem> {
+  return request<RoutingItem>({
+    url: `${ROUTING_ITEM_API_BASE}/obsolete`,
     method: 'put',
     data: dto,
   });

@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Infrastructure.Data.Seeds.I18nSeedData.Logistics.Manufacturing.Defect
 // 文件名称：TaktPcbaInspectionI18nSeedData.cs
-// 创建时间：2026-07-02
+// 创建时间：2026-07-09
 // 创建人：Takt365(Auto Generated)
 // 功能描述：TaktPcbaInspection 实体字段国际化种子（无对应 frontend locales；TranslationText 取自 ColumnDescription，ContextNote 取自属性 XML summary）
 // 
@@ -91,22 +91,22 @@ public class TaktPcbaInspectionI18nSeedData : ITaktSeedDataCoordinator
             new TranslationSeedItem("entity.pcbainspection._self", "zh-HK", "PCBA检查日报信息_hk", "实体名称"),
 
             // entity.pcbainspection.plantcode
-            new TranslationSeedItem("entity.pcbainspection.plantcode", "en-US", "工厂代码_us", "工厂代码（关联 TaktPlant.PlantCode，选项 TaktPlants/options）"),
+            new TranslationSeedItem("entity.pcbainspection.plantcode", "en-US", "工厂代码_us", "工厂代码（回填：随工单）"),
             // entity.pcbainspection.plantcode
-            new TranslationSeedItem("entity.pcbainspection.plantcode", "ja-JP", "工厂代码_jp", "工厂代码（关联 TaktPlant.PlantCode，选项 TaktPlants/options）"),
+            new TranslationSeedItem("entity.pcbainspection.plantcode", "ja-JP", "工厂代码_jp", "工厂代码（回填：随工单）"),
             // entity.pcbainspection.plantcode
-            new TranslationSeedItem("entity.pcbainspection.plantcode", "zh-CN", "工厂代码", "工厂代码（关联 TaktPlant.PlantCode，选项 TaktPlants/options）"),
+            new TranslationSeedItem("entity.pcbainspection.plantcode", "zh-CN", "工厂代码", "工厂代码（回填：随工单）"),
             // entity.pcbainspection.plantcode
-            new TranslationSeedItem("entity.pcbainspection.plantcode", "zh-HK", "工厂代码_hk", "工厂代码（关联 TaktPlant.PlantCode，选项 TaktPlants/options）"),
+            new TranslationSeedItem("entity.pcbainspection.plantcode", "zh-HK", "工厂代码_hk", "工厂代码（回填：随工单）"),
 
             // entity.pcbainspection.prodcategory
-            new TranslationSeedItem("entity.pcbainspection.prodcategory", "en-US", "生产类别_us", "生产类别（字典 logistics_prod_category，存 DictValue：RD/EVT/DVT/EPP/PP/FPP/MP/RPR/RWR）"),
+            new TranslationSeedItem("entity.pcbainspection.prodcategory", "en-US", "生产类别_us", "生产类别（字典 logistics_prod_category，存 DictValue：EPP/FPP/RWP/MDP/CPP）"),
             // entity.pcbainspection.prodcategory
-            new TranslationSeedItem("entity.pcbainspection.prodcategory", "ja-JP", "生产类别_jp", "生产类别（字典 logistics_prod_category，存 DictValue：RD/EVT/DVT/EPP/PP/FPP/MP/RPR/RWR）"),
+            new TranslationSeedItem("entity.pcbainspection.prodcategory", "ja-JP", "生产类别_jp", "生产类别（字典 logistics_prod_category，存 DictValue：EPP/FPP/RWP/MDP/CPP）"),
             // entity.pcbainspection.prodcategory
-            new TranslationSeedItem("entity.pcbainspection.prodcategory", "zh-CN", "生产类别", "生产类别（字典 logistics_prod_category，存 DictValue：RD/EVT/DVT/EPP/PP/FPP/MP/RPR/RWR）"),
+            new TranslationSeedItem("entity.pcbainspection.prodcategory", "zh-CN", "生产类别", "生产类别（字典 logistics_prod_category，存 DictValue：EPP/FPP/RWP/MDP/CPP）"),
             // entity.pcbainspection.prodcategory
-            new TranslationSeedItem("entity.pcbainspection.prodcategory", "zh-HK", "生产类别_hk", "生产类别（字典 logistics_prod_category，存 DictValue：RD/EVT/DVT/EPP/PP/FPP/MP/RPR/RWR）"),
+            new TranslationSeedItem("entity.pcbainspection.prodcategory", "zh-HK", "生产类别_hk", "生产类别（字典 logistics_prod_category，存 DictValue：EPP/FPP/RWP/MDP/CPP）"),
 
             // entity.pcbainspection.proddate
             new TranslationSeedItem("entity.pcbainspection.proddate", "en-US", "生产日期_us", "生产日期"),
@@ -117,23 +117,32 @@ public class TaktPcbaInspectionI18nSeedData : ITaktSeedDataCoordinator
             // entity.pcbainspection.proddate
             new TranslationSeedItem("entity.pcbainspection.proddate", "zh-HK", "生产日期_hk", "生产日期"),
 
+            // entity.pcbainspection.prodordertype
+            new TranslationSeedItem("entity.pcbainspection.prodordertype", "en-US", "工单类别_us", "工单类别（回填：随工单）"),
+            // entity.pcbainspection.prodordertype
+            new TranslationSeedItem("entity.pcbainspection.prodordertype", "ja-JP", "工单类别_jp", "工单类别（回填：随工单）"),
+            // entity.pcbainspection.prodordertype
+            new TranslationSeedItem("entity.pcbainspection.prodordertype", "zh-CN", "工单类别", "工单类别（回填：随工单）"),
+            // entity.pcbainspection.prodordertype
+            new TranslationSeedItem("entity.pcbainspection.prodordertype", "zh-HK", "工单类别_hk", "工单类别（回填：随工单）"),
+
             // entity.pcbainspection.prodordercode
-            new TranslationSeedItem("entity.pcbainspection.prodordercode", "en-US", "生产工单号_us", "生产工单号（选项 TaktProductionOrders/options，按 PlantCode 过滤）"),
+            new TranslationSeedItem("entity.pcbainspection.prodordercode", "en-US", "工单号_us", "工单号（选项 TaktProductionOrders/options，按 PlantCode 过滤）"),
             // entity.pcbainspection.prodordercode
-            new TranslationSeedItem("entity.pcbainspection.prodordercode", "ja-JP", "生产工单号_jp", "生产工单号（选项 TaktProductionOrders/options，按 PlantCode 过滤）"),
+            new TranslationSeedItem("entity.pcbainspection.prodordercode", "ja-JP", "工单号_jp", "工单号（选项 TaktProductionOrders/options，按 PlantCode 过滤）"),
             // entity.pcbainspection.prodordercode
-            new TranslationSeedItem("entity.pcbainspection.prodordercode", "zh-CN", "生产工单号", "生产工单号（选项 TaktProductionOrders/options，按 PlantCode 过滤）"),
+            new TranslationSeedItem("entity.pcbainspection.prodordercode", "zh-CN", "工单号", "工单号（选项 TaktProductionOrders/options，按 PlantCode 过滤）"),
             // entity.pcbainspection.prodordercode
-            new TranslationSeedItem("entity.pcbainspection.prodordercode", "zh-HK", "生产工单号_hk", "生产工单号（选项 TaktProductionOrders/options，按 PlantCode 过滤）"),
+            new TranslationSeedItem("entity.pcbainspection.prodordercode", "zh-HK", "工单号_hk", "工单号（选项 TaktProductionOrders/options，按 PlantCode 过滤）"),
 
             // entity.pcbainspection.prodorderqty
-            new TranslationSeedItem("entity.pcbainspection.prodorderqty", "en-US", "订单数量_us", "订单数量"),
+            new TranslationSeedItem("entity.pcbainspection.prodorderqty", "en-US", "工单数量_us", "工单数量"),
             // entity.pcbainspection.prodorderqty
-            new TranslationSeedItem("entity.pcbainspection.prodorderqty", "ja-JP", "订单数量_jp", "订单数量"),
+            new TranslationSeedItem("entity.pcbainspection.prodorderqty", "ja-JP", "工单数量_jp", "工单数量"),
             // entity.pcbainspection.prodorderqty
-            new TranslationSeedItem("entity.pcbainspection.prodorderqty", "zh-CN", "订单数量", "订单数量"),
+            new TranslationSeedItem("entity.pcbainspection.prodorderqty", "zh-CN", "工单数量", "工单数量"),
             // entity.pcbainspection.prodorderqty
-            new TranslationSeedItem("entity.pcbainspection.prodorderqty", "zh-HK", "订单数量_hk", "订单数量"),
+            new TranslationSeedItem("entity.pcbainspection.prodorderqty", "zh-HK", "工单数量_hk", "工单数量"),
 
             // entity.pcbainspection.modelcode
             new TranslationSeedItem("entity.pcbainspection.modelcode", "en-US", "机种_us", "机种"),

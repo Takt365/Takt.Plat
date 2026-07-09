@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：frontend/src/types/logistics/manufacturing/bom
 // 文件名称：routing-item.d.ts
-// 创建时间：2026-06-30
+// 创建时间：2026-07-09
 // 创建人：Takt365(Auto Generated)
 // 功能描述：logistics/manufacturing/bom 模块类型定义（自动生成；类型名去 Takt 前缀与末尾 Dto，如 TaktCompanyDto → Company）
 // 
@@ -124,6 +124,11 @@ export interface RoutingItem extends CompanyDtoBase {
   extJson?: string;
 
   /**
+   * 是否作废（字典 sys_yes_no_type，0=否 1=是；编辑移除子行时标记作废）
+   */
+  isObsolete: number;
+
+  /**
    * 工艺路线主表（主表） （主表：TaktRouting）
    */
   routing?: Routing;
@@ -242,6 +247,11 @@ export interface RoutingItemQuery extends TaktPagedQuery {
    * 工序扩展 JSON（五段工艺差异化参数，如钢网/Feeder/扭矩/烙铁温度）
    */
   extJson?: string;
+
+  /**
+   * 是否作废（字典 sys_yes_no_type，0=否 1=是；编辑移除子行时标记作废）
+   */
+  isObsolete?: number;
 
   /**
    * 创建时间（范围查询-开始）
@@ -373,9 +383,14 @@ export interface RoutingItemCreate {
   extJson?: string;
 
   /**
+   * 是否作废（字典 sys_yes_no_type，0=否 1=是；编辑移除子行时标记作废）
+   */
+  isObsolete: number;
+
+  /**
    * 工序参数定义（子表，级联保存）
    */
-  arguments?: RoutingItemArgumentCreate[];
+  arguments?: RoutingItemArgumentUpdate[];
 
   /**
    * 扩展字段JSON
@@ -420,6 +435,25 @@ export interface RoutingItemSort {
    * 排序号
    */
   sortOrder: number;
+
+}
+
+
+/**
+ * RoutingItem 作废/撤销作废 DTO
+ * 对应前端 RoutingItemObsolete
+ * @description 对应后端 TaktRoutingItemObsoleteDto
+ */
+export interface RoutingItemObsolete {
+  /**
+   * RoutingItemID
+   */
+  routingItemId: string;
+
+  /**
+   * 是否作废（字典 sys_yes_no_type，0=否 1=是；编辑移除子行时标记作废）
+   */
+  isObsolete: number;
 
 }
 
@@ -524,6 +558,11 @@ export interface RoutingItemTemplate {
    * 工序扩展 JSON（五段工艺差异化参数，如钢网/Feeder/扭矩/烙铁温度）
    */
   extJson?: string;
+
+  /**
+   * 是否作废（字典 sys_yes_no_type，0=否 1=是；编辑移除子行时标记作废）
+   */
+  isObsolete?: number;
 
   /**
    * 工序参数定义（子表，级联保存）
@@ -650,6 +689,11 @@ export interface RoutingItemImport {
   extJson?: string;
 
   /**
+   * 是否作废（字典 sys_yes_no_type，0=否 1=是；编辑移除子行时标记作废）
+   */
+  isObsolete?: number;
+
+  /**
    * 工序参数定义（子表，级联保存）
    */
   arguments?: RoutingItemArgumentCreate[];
@@ -772,6 +816,11 @@ export interface RoutingItemExport {
    * 工序扩展 JSON（五段工艺差异化参数，如钢网/Feeder/扭矩/烙铁温度）
    */
   extJson?: string;
+
+  /**
+   * 是否作废（字典 sys_yes_no_type，0=否 1=是；编辑移除子行时标记作废）
+   */
+  isObsolete: number;
 
   /**
    * 扩展字段JSON

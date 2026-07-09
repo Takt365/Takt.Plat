@@ -2,7 +2,7 @@
 <!-- 项目名称：节拍数字工厂 · Takt Plat (TDF) -->
 <!-- 命名空间：@/views/logistics/manufacturing/defect/pcba-repair/components -->
 <!-- 文件名称：pcba-repair-detail-form.vue -->
-<!-- 功能描述：PCBA改修日报实体子表 pcbaRepairDetail 独立 CRUD 弹窗表单；defineExpose validate/getValues/resetFields。由 generate-vue-master-detail-from-api.cjs 生成，风格与主表 *-form 一致 -->
+<!-- 功能描述：PCBA改修日报实体 不良率子表 pcbaRepairDetail 独立 CRUD 弹窗表单；defineExpose validate/getValues/resetFields。由 generate-vue-master-detail-from-api.cjs 生成，风格与主表 *-form 一致 -->
 <!-- 版权信息：Copyright (c) 2025 Takt  All rights reserved. -->
 <!-- ======================================== -->
 
@@ -21,19 +21,19 @@
     >
       <a-tab-pane
         key="tab-0"
-        :tab="t('common.page.form.tabs.basicinfo')"
+        :tab="t('common.page.form.tabs.basicinfo') + ' (1/2)'"
         force-render
       >
         <div :class="formContentClass">
           <a-row :gutter="24">
             <a-col :span="12">
               <a-form-item
-                :label="t('entity.pcbarepairdetail.prodordercode')"
+                :label="pi.label('prodOrderCode')"
                 name="prodOrderCode"
               >
                 <a-input
                   v-model:value="formState.prodOrderCode"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.pcbarepairdetail.prodordercode') })"
+                  :placeholder="pi.ph('prodOrderCode')"
                   show-count
                   :maxlength="20"
                   allow-clear
@@ -43,62 +43,60 @@
             </a-col>
             <a-col :span="12">
               <a-form-item
-                :label="t('entity.pcbarepairdetail.linenumber')"
+                :label="pi.label('lineNumber')"
                 name="lineNumber"
               >
                 <a-input-number
                   v-model:value="formState.lineNumber"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.pcbarepairdetail.linenumber') })"
+                  :placeholder="pi.ph('lineNumber')"
                   style="width: 100%"
                 />
               </a-form-item>
             </a-col>
             <a-col :span="12">
               <a-form-item
-                :label="t('entity.pcbarepairdetail.pcbaboardtype')"
+                :label="pi.label('pcbaBoardType')"
                 name="pcbaBoardType"
               >
                 <TaktSelect
                   v-model:value="formState.pcbaBoardType"
                   dict-type="logistics_pcba_panel_category"
-                  :placeholder="t('common.page.form.placeholder.select', { field: t('entity.pcbarepairdetail.pcbaboardtype') })"
+                  :placeholder="pi.ph('pcbaBoardType')"
                 />
               </a-form-item>
             </a-col>
             <a-col :span="12">
               <a-form-item
-                :label="t('entity.pcbarepairdetail.prodactualqty')"
+                :label="pi.label('prodActualQty')"
                 name="prodActualQty"
               >
                 <a-input-number
                   v-model:value="formState.prodActualQty"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.pcbarepairdetail.prodactualqty') })"
+                  :placeholder="pi.ph('prodActualQty')"
                   style="width: 100%"
                 />
               </a-form-item>
             </a-col>
             <a-col :span="12">
               <a-form-item
-                :label="t('entity.pcbarepairdetail.prodteam')"
+                :label="pi.label('prodTeam')"
                 name="prodTeam"
               >
-                <a-input
+                <TaktSelect
                   v-model:value="formState.prodTeam"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.pcbarepairdetail.prodteam') })"
-                  show-count
-                  :maxlength="20"
-                  allow-clear
+                  api-url="TaktProductionTeams/options"
+                  :placeholder="pi.ph('prodTeam')"
                 />
               </a-form-item>
             </a-col>
             <a-col :span="12">
               <a-form-item
-                :label="t('entity.pcbarepairdetail.cardno')"
+                :label="pi.label('cardNo')"
                 name="cardNo"
               >
                 <a-input
                   v-model:value="formState.cardNo"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.pcbarepairdetail.cardno') })"
+                  :placeholder="pi.ph('cardNo')"
                   show-count
                   :maxlength="20"
                   allow-clear
@@ -107,12 +105,12 @@
             </a-col>
             <a-col :span="12">
               <a-form-item
-                :label="t('entity.pcbarepairdetail.defectsymptom')"
+                :label="pi.label('defectSymptom')"
                 name="defectSymptom"
               >
                 <a-input
                   v-model:value="formState.defectSymptom"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.pcbarepairdetail.defectsymptom') })"
+                  :placeholder="pi.ph('defectSymptom')"
                   show-count
                   :maxlength="20"
                   allow-clear
@@ -121,13 +119,97 @@
             </a-col>
             <a-col :span="12">
               <a-form-item
-                :label="t('entity.pcbarepairdetail.defectengineering')"
+                :label="pi.label('defectEngineering')"
                 name="defectEngineering"
               >
                 <TaktSelect
                   v-model:value="formState.defectEngineering"
                   dict-type="logistics_defect_category"
-                  :placeholder="t('common.page.form.placeholder.select', { field: t('entity.pcbarepairdetail.defectengineering') })"
+                  :placeholder="pi.ph('defectEngineering')"
+                />
+              </a-form-item>
+            </a-col>
+            <a-col :span="12">
+              <a-form-item
+                :label="pi.label('defectReason')"
+                name="defectReason"
+              >
+                <a-input
+                  v-model:value="formState.defectReason"
+                  :placeholder="pi.ph('defectReason')"
+                  show-count
+                  :maxlength="20"
+                  allow-clear
+                />
+              </a-form-item>
+            </a-col>
+            <a-col :span="12">
+              <a-form-item
+                :label="pi.label('defectQty')"
+                name="defectQty"
+              >
+                <a-input-number
+                  v-model:value="formState.defectQty"
+                  :placeholder="pi.ph('defectQty')"
+                  style="width: 100%"
+                />
+              </a-form-item>
+            </a-col>
+          </a-row>
+        </div>
+      </a-tab-pane>
+      <a-tab-pane
+        key="tab-1"
+        :tab="t('common.page.form.tabs.basicinfo') + ' (2/2)'"
+        force-render
+      >
+        <div :class="formContentClass">
+          <a-row :gutter="24">
+            <a-col :span="12">
+              <a-form-item
+                :label="pi.label('defectResponsibility')"
+                name="defectResponsibility"
+              >
+                <TaktSelect
+                  v-model:value="formState.defectResponsibility"
+                  dict-type="logistics_defect_responsibility_category"
+                  :placeholder="pi.ph('defectResponsibility')"
+                />
+              </a-form-item>
+            </a-col>
+            <a-col :span="12">
+              <a-form-item
+                :label="pi.label('defectNature')"
+                name="defectNature"
+              >
+                <TaktSelect
+                  v-model:value="formState.defectNature"
+                  dict-type="logistics_defect_nature_category"
+                  :placeholder="pi.ph('defectNature')"
+                />
+              </a-form-item>
+            </a-col>
+            <a-col :span="12">
+              <a-form-item
+                :label="pi.label('repairOperator')"
+                name="repairOperator"
+              >
+                <TaktSelect
+                  v-model:value="formState.repairOperator"
+                  api-url="TaktEmployees/options"
+                  :placeholder="pi.ph('repairOperator')"
+                />
+              </a-form-item>
+            </a-col>
+            <a-col :span="12">
+              <a-form-item
+                :label="pi.label('isObsolete')"
+                name="isObsolete"
+              >
+                <TaktSelect
+                  v-model:value="formState.isObsolete"
+                  dict-type="sys_yes_no_type"
+                  :placeholder="pi.ph('isObsolete')"
                 />
               </a-form-item>
             </a-col>
@@ -140,12 +222,17 @@
 
 <script setup lang="ts">
 /**
- * PCBA改修日报实体子表 pcbaRepairDetail 维护表单 · 由 generate-vue-master-detail-from-api.cjs 生成
+ * PCBA改修日报实体 不良率子表 pcbaRepairDetail 维护表单 · 由 generate-vue-master-detail-from-api.cjs 生成
  * @module views/logistics/manufacturing/defect/pcba-repair/components
  */
 import { reactive, watch, computed, ref, onMounted } from 'vue'
 import { useI18n } from 'vue-i18n'
 import type { Rule } from 'ant-design-vue/es/form'
+import { usePcbaRepairDetailI18n } from '../composables/use-pcba-repair-detail-i18n'
+
+/** 实体字段 i18n */
+const pi = usePcbaRepairDetailI18n()
+
 import type { PcbaRepairDetailCreate } from '@/types/logistics/manufacturing/defect/pcba-repair-detail'
 import TaktSelect from '@/components/business/takt-select/index.vue'
 import { useDictDataStore } from '@/stores/foundation/dict-data'
@@ -157,7 +244,8 @@ const formContentClass = computed(() => (formFields.length > 10 ? 'takt-form-con
 /** 当前激活的 Tab key */
 const activeTab = ref('tab-0')
 /** CreateDto 字段名列表（与 formState 键对齐） */
-const formFields = ["prodOrderCode","lineNumber","pcbaBoardType","prodActualQty","prodTeam","cardNo","defectSymptom","defectEngineering"]
+const formFields = ["prodOrderCode","lineNumber","pcbaBoardType","prodActualQty","prodTeam","cardNo","defectSymptom","defectEngineering","defectReason","defectQty","defectResponsibility","defectNature","repairOperator","isObsolete"]
+
 
 
 /** 父级传入的编辑 DTO；新增时为 undefined 或空对象 */
@@ -219,18 +307,18 @@ const rules = computed<Record<string, Rule[]>>(() => ({
   prodOrderCode: [
     {
       required: true,
-      message: t('common.page.form.placeholder.required', { field: t('entity.pcbarepairdetail.prodordercode') }),
+      message: pi.ph('prodOrderCode'),
       trigger: 'blur'
     }
   ],
   lineNumber: [{
     validator: async (_rule, value) => {
       if (value === undefined || value === null || value === '') {
-        return Promise.reject(t('common.page.form.placeholder.select', { field: t('entity.pcbarepairdetail.linenumber') }))
+        return Promise.reject(pi.ph('lineNumber'))
       }
       const num = typeof value === 'number' ? value : Number(value)
       if (!Number.isFinite(num)) {
-        return Promise.reject(t('common.page.form.placeholder.select', { field: t('entity.pcbarepairdetail.linenumber') }))
+        return Promise.reject(pi.ph('lineNumber'))
       }
       return Promise.resolve()
     },
@@ -239,11 +327,37 @@ const rules = computed<Record<string, Rule[]>>(() => ({
   prodActualQty: [{
     validator: async (_rule, value) => {
       if (value === undefined || value === null || value === '') {
-        return Promise.reject(t('common.page.form.placeholder.select', { field: t('entity.pcbarepairdetail.prodactualqty') }))
+        return Promise.reject(pi.ph('prodActualQty'))
       }
       const num = typeof value === 'number' ? value : Number(value)
       if (!Number.isFinite(num)) {
-        return Promise.reject(t('common.page.form.placeholder.select', { field: t('entity.pcbarepairdetail.prodactualqty') }))
+        return Promise.reject(pi.ph('prodActualQty'))
+      }
+      return Promise.resolve()
+    },
+    trigger: 'change'
+  }],
+  defectQty: [{
+    validator: async (_rule, value) => {
+      if (value === undefined || value === null || value === '') {
+        return Promise.reject(pi.ph('defectQty'))
+      }
+      const num = typeof value === 'number' ? value : Number(value)
+      if (!Number.isFinite(num)) {
+        return Promise.reject(pi.ph('defectQty'))
+      }
+      return Promise.resolve()
+    },
+    trigger: 'change'
+  }],
+  isObsolete: [{
+    validator: async (_rule, value) => {
+      if (value === undefined || value === null || value === '') {
+        return Promise.reject(pi.ph('isObsolete'))
+      }
+      const num = typeof value === 'number' ? value : Number(value)
+      if (!Number.isFinite(num)) {
+        return Promise.reject(pi.ph('isObsolete'))
       }
       return Promise.resolve()
     },
@@ -267,6 +381,14 @@ function getValues(): Record<string, any> {
   if ('prodActualQty' in payload) {
     const rawprodActualQty = payload.prodActualQty
     payload.prodActualQty = typeof rawprodActualQty === 'number' ? rawprodActualQty : Number(rawprodActualQty)
+  }
+  if ('defectQty' in payload) {
+    const rawdefectQty = payload.defectQty
+    payload.defectQty = typeof rawdefectQty === 'number' ? rawdefectQty : Number(rawdefectQty)
+  }
+  if ('isObsolete' in payload) {
+    const rawisObsolete = payload.isObsolete
+    payload.isObsolete = typeof rawisObsolete === 'number' ? rawisObsolete : Number(rawisObsolete)
   }
   if ('sortOrder' in payload) delete payload.sortOrder
   payload.pcbaRepairId = props.masterId

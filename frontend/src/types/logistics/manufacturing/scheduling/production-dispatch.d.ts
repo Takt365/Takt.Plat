@@ -49,7 +49,7 @@ export interface ProductionDispatch extends CompanyDtoBase {
   productionOrderName?: string;
 
   /**
-   * 生产工单号（冗余）
+   * 工单号（冗余）
    */
   prodOrderCode: string;
 
@@ -129,7 +129,7 @@ export interface ProductionDispatchQuery extends TaktPagedQuery {
   productionOrderId?: string;
 
   /**
-   * 生产工单号（冗余）
+   * 工单号（冗余）
    */
   prodOrderCode?: string;
 
@@ -238,7 +238,7 @@ export interface ProductionDispatchCreate {
   productionOrderId: string;
 
   /**
-   * 生产工单号（冗余）
+   * 工单号（冗余）
    */
   prodOrderCode: string;
 
@@ -356,7 +356,7 @@ export interface ProductionDispatchTemplate {
   productionOrderId?: string;
 
   /**
-   * 生产工单号（冗余）
+   * 工单号（冗余）
    */
   prodOrderCode?: string;
 
@@ -445,7 +445,7 @@ export interface ProductionDispatchImport {
   productionOrderId?: string;
 
   /**
-   * 生产工单号（冗余）
+   * 工单号（冗余）
    */
   prodOrderCode?: string;
 
@@ -529,7 +529,7 @@ export interface ProductionDispatchExport {
   productionOrderId: string;
 
   /**
-   * 生产工单号（冗余）
+   * 工单号（冗余）
    */
   prodOrderCode: string;
 

@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Application.Services.Logistics.Quality.Cost
 // 文件名称：TaktQualityIssueService.cs
-// 创建时间：2026-06-23
+// 创建时间：2026-07-09
 // 创建人：Takt365(Cursor AI)
 // 功能描述：品质问题应对主应用服务实现
 // 
@@ -302,6 +302,78 @@ public class TaktQualityIssueService : TaktServiceBase, ITaktQualityIssueService
     // ========================================
 
     /// <summary>
+    /// 将指定主表下全部未作废质量问题会议调查试验费用明细标记为作废（编辑清空子表）
+    /// </summary>
+    /// <param name="qualityIssueId">主表主键</param>
+    /// <returns>任务</returns>
+    private async Task MarkQualityIssueMeetingsObsoleteAsync(long qualityIssueId)
+    {
+        if (qualityIssueId <= 0)
+        {
+            return;
+        }
+        var rows = await _qualityIssueMeetingRepository.GetListAsync(
+            x => x.QualityIssueId == qualityIssueId && x.IsObsolete == 0);
+        if (rows.Count == 0)
+        {
+            return;
+        }
+        foreach (var row in rows)
+        {
+            row.IsObsolete = 1;
+        }
+        await _qualityIssueMeetingRepository.UpdateRangeAsync(rows);
+    }
+
+    /// <summary>
+    /// 将指定主表下全部未作废质量问题组装不良改修费用明细标记为作废（编辑清空子表）
+    /// </summary>
+    /// <param name="qualityIssueId">主表主键</param>
+    /// <returns>任务</returns>
+    private async Task MarkQualityIssueAssyReworksObsoleteAsync(long qualityIssueId)
+    {
+        if (qualityIssueId <= 0)
+        {
+            return;
+        }
+        var rows = await _qualityIssueAssyReworkRepository.GetListAsync(
+            x => x.QualityIssueId == qualityIssueId && x.IsObsolete == 0);
+        if (rows.Count == 0)
+        {
+            return;
+        }
+        foreach (var row in rows)
+        {
+            row.IsObsolete = 1;
+        }
+        await _qualityIssueAssyReworkRepository.UpdateRangeAsync(rows);
+    }
+
+    /// <summary>
+    /// 将指定主表下全部未作废质量问题PCBA不良改修费用明细标记为作废（编辑清空子表）
+    /// </summary>
+    /// <param name="qualityIssueId">主表主键</param>
+    /// <returns>任务</returns>
+    private async Task MarkQualityIssuePcbaReworksObsoleteAsync(long qualityIssueId)
+    {
+        if (qualityIssueId <= 0)
+        {
+            return;
+        }
+        var rows = await _qualityIssuePcbaReworkRepository.GetListAsync(
+            x => x.QualityIssueId == qualityIssueId && x.IsObsolete == 0);
+        if (rows.Count == 0)
+        {
+            return;
+        }
+        foreach (var row in rows)
+        {
+            row.IsObsolete = 1;
+        }
+        await _qualityIssuePcbaReworkRepository.UpdateRangeAsync(rows);
+    }
+
+    /// <summary>
     /// 填充品质问题应对主详情（加载 OneToMany 子表：质量问题会议调查试验费用明细、质量问题组装不良改修费用明细、质量问题PCBA不良改修费用明细）
     /// </summary>
     /// <param name="dto">响应 DTO</param>
@@ -313,19 +385,19 @@ public class TaktQualityIssueService : TaktServiceBase, ITaktQualityIssueService
         {
             return;
         }
-        // 质量问题会议调查试验费用明细 → dto.MeetingItems
+        // 质量问题会议调查试验费用明细 → dto.MeetingItems（含作废行）
         var meetingitems = await _qualityIssueMeetingRepository.GetListAsync(x => x.QualityIssueId == entity.Id);
         dto.MeetingItems = meetingitems.Adapt<List<TaktQualityIssueMeetingDto>>();
-        // 质量问题组装不良改修费用明细 → dto.AssyReworkItems
+        // 质量问题组装不良改修费用明细 → dto.AssyReworkItems（含作废行）
         var assyreworkitems = await _qualityIssueAssyReworkRepository.GetListAsync(x => x.QualityIssueId == entity.Id);
         dto.AssyReworkItems = assyreworkitems.Adapt<List<TaktQualityIssueAssyReworkDto>>();
-        // 质量问题PCBA不良改修费用明细 → dto.PcbaReworkItems
+        // 质量问题PCBA不良改修费用明细 → dto.PcbaReworkItems（含作废行）
         var pcbareworkitems = await _qualityIssuePcbaReworkRepository.GetListAsync(x => x.QualityIssueId == entity.Id);
         dto.PcbaReworkItems = pcbareworkitems.Adapt<List<TaktQualityIssuePcbaReworkDto>>();
     }
 
     /// <summary>
-    /// 保存品质问题应对主子表级联（质量问题会议调查试验费用明细、质量问题组装不良改修费用明细、质量问题PCBA不良改修费用明细；Create/Update 后按主表 Id 先删后插）
+    /// 保存品质问题应对主子表级联（质量问题会议调查试验费用明细、质量问题组装不良改修费用明细、质量问题PCBA不良改修费用明细；按子表 Id 增量新增/更新；未提交行标记作废，禁止先删后插）
     /// </summary>
     /// <param name="entity">主表实体</param>
     /// <param name="dto">创建/更新 DTO（含子表集合；UpdateDto 须继承 CreateDto）</param>
@@ -335,161 +407,278 @@ public class TaktQualityIssueService : TaktServiceBase, ITaktQualityIssueService
         // 质量问题会议调查试验费用明细（MeetingItems）
         if (dto.MeetingItems is not { Count: > 0 })
         {
-            await _qualityIssueMeetingRepository.DeleteAsync(x => x.QualityIssueId == entity.Id);
+            await MarkQualityIssueMeetingsObsoleteAsync(entity.Id);
         }
         else
         {
-            var meetingitems = dto.MeetingItems.Adapt<List<TaktQualityIssueMeeting>>();
-            foreach (var child in meetingitems)
+            var existingList = await _qualityIssueMeetingRepository.GetListAsync(x => x.QualityIssueId == entity.Id);
+            var existingById = existingList.ToDictionary(x => x.Id);
+            var submittedIds = new HashSet<long>();
+            var toCreate = new List<TaktQualityIssueMeeting>();
+            var seenLineKeys = new HashSet<string>(StringComparer.Ordinal);
+            for (var i = 0; i < dto.MeetingItems.Count; i++)
             {
-                child.QualityIssueId = entity.Id;
-            }
-            var meetingitemsNeedLine = meetingitems.Where(c => c.LineNumber <= 0).ToList();
-            if (meetingitemsNeedLine.Count > 0)
-            {
-                var businessCode = !string.IsNullOrWhiteSpace(entity.QualityIssueCode) ? entity.QualityIssueCode : entity.Id.ToString();
-                var maxLine = await _qualityIssueMeetingRepository.GetMaxIntAsync(
-                    x => x.TenantCode == CurrentTenantCode && x.CompanyCode == CurrentCompanyCode && x.QualityIssueId == entity.Id,
-                    x => x.LineNumber);
-                var lineSeq = _lineNumberGenerator.GenerateSequence(businessCode, meetingitemsNeedLine.Count, maxLine).ToList();
-                var lineIdx = 0;
-                foreach (var child in meetingitems)
+                var childDto = dto.MeetingItems[i];
+                childDto.QualityIssueId = entity.Id;
+                var lineKey = $"{entity.CompanyCode}|{entity.Id}|{childDto.LineNumber}";
+                if (!seenLineKeys.Add(lineKey))
                 {
-                    if (child.LineNumber <= 0)
+                    throw new TaktBusinessException("质量问题会议调查试验费用明细第{i + 1}项与本次提交的其他项重复（CompanyCode、QualityIssueId、LineNumber）");
+                }
+                if (childDto.QualityIssueMeetingId > 0)
+                {
+                    if (!existingById.TryGetValue(childDto.QualityIssueMeetingId, out var target))
                     {
-                        child.LineNumber = lineSeq[lineIdx++];
+                        throw new TaktBusinessException("质量问题会议调查试验费用明细不存在（QualityIssueMeetingId={childDto.QualityIssueMeetingId}）");
                     }
+                    if (target.QualityIssueId != entity.Id)
+                    {
+                        throw new TaktBusinessException("质量问题会议调查试验费用明细不属于当前主表（QualityIssueMeetingId={childDto.QualityIssueMeetingId}）");
+                    }
+                    submittedIds.Add(childDto.QualityIssueMeetingId);
+                    var isUniqueUpdate_ix_takt_logistics_quality_issue_meeting_line_unique = await _uniqueValidator.IsUniqueAsync(
+                        _qualityIssueMeetingRepository,
+                        x => x.CompanyCode == x.CompanyCode
+                && x.QualityIssueId == x.QualityIssueId
+                && x.LineNumber == x.LineNumber,
+                        childDto.QualityIssueMeetingId);
+                    if (!isUniqueUpdate_ix_takt_logistics_quality_issue_meeting_line_unique)
+                    {
+                        throw new TaktBusinessException("质量问题会议调查试验费用明细的CompanyCode、QualityIssueId、LineNumber已存在");
+                    }
+                    childDto.Adapt(target);
+                    target.Id = childDto.QualityIssueMeetingId;
+                    target.QualityIssueId = entity.Id;
+                    target.IsObsolete = 0;
+                    await _qualityIssueMeetingRepository.UpdateAsync(target);
+                }
+                else
+                {
+                    var isUniqueCreate_ix_takt_logistics_quality_issue_meeting_line_unique = await _uniqueValidator.IsUniqueAsync(
+                        _qualityIssueMeetingRepository,
+                        x => x.CompanyCode == x.CompanyCode
+                && x.QualityIssueId == x.QualityIssueId
+                && x.LineNumber == x.LineNumber);
+                    if (!isUniqueCreate_ix_takt_logistics_quality_issue_meeting_line_unique)
+                    {
+                        throw new TaktBusinessException("质量问题会议调查试验费用明细的CompanyCode、QualityIssueId、LineNumber已存在");
+                    }
+                    var child = childDto.Adapt<TaktQualityIssueMeeting>();
+                    child.Id = 0;
+                    child.QualityIssueId = entity.Id;
+                    child.IsObsolete = 0;
+                    toCreate.Add(child);
                 }
             }
-                        var seenKeys = new HashSet<string>(StringComparer.Ordinal);
-                        for (var i = 0; i < meetingitems.Count; i++)
+            var toObsolete = existingList.Where(x => !submittedIds.Contains(x.Id) && x.IsObsolete == 0).ToList();
+            foreach (var removed in toObsolete)
+            {
+                removed.IsObsolete = 1;
+                await _qualityIssueMeetingRepository.UpdateAsync(removed);
+            }
+            if (toCreate.Count > 0)
+            {
+                var needLine = toCreate.Where(c => c.LineNumber <= 0).ToList();
+                if (needLine.Count > 0)
+                {
+                    var businessCode = !string.IsNullOrWhiteSpace(entity.QualityIssueCode) ? entity.QualityIssueCode : entity.Id.ToString();
+                    var maxLine = existingList.Count > 0 ? existingList.Max(x => x.LineNumber) : 0;
+                    var lineSeq = _lineNumberGenerator.GenerateSequence(businessCode, needLine.Count, maxLine).ToList();
+                    var lineIdx = 0;
+                    foreach (var child in toCreate)
+                    {
+                        if (child.LineNumber <= 0)
                         {
-                            var key = $"{meetingitems[i].CompanyCode}|{meetingitems[i].QualityIssueId}|{meetingitems[i].LineNumber}";
-                            if (!seenKeys.Add(key))
-                            {
-                                throw new TaktBusinessException($"质量问题会议调查试验费用明细第{i + 1}项与本次提交的其他项重复（CompanyCode、QualityIssueId、LineNumber）");
-                            }
+                            child.LineNumber = lineSeq[lineIdx++];
                         }
-            await _qualityIssueMeetingRepository.DeleteAsync(x => x.QualityIssueId == entity.Id);
-            foreach (var child in meetingitems)
-            {
-            var isUnique_ix_takt_logistics_quality_issue_meeting_line_unique = await _uniqueValidator.IsUniqueAsync(
-                _qualityIssueMeetingRepository,
-                x => x.CompanyCode == child.CompanyCode
-                    && x.QualityIssueId == child.QualityIssueId
-                    && x.LineNumber == child.LineNumber);
-            if (!isUnique_ix_takt_logistics_quality_issue_meeting_line_unique)
-            {
-                throw new TaktBusinessException("质量问题会议调查试验费用明细的CompanyCode、QualityIssueId、LineNumber已存在");
+                    }
+                }
+                await _qualityIssueMeetingRepository.CreateRangeAsync(toCreate);
             }
-            }
-            await _qualityIssueMeetingRepository.CreateRangeAsync(meetingitems);
         }
         // 质量问题组装不良改修费用明细（AssyReworkItems）
         if (dto.AssyReworkItems is not { Count: > 0 })
         {
-            await _qualityIssueAssyReworkRepository.DeleteAsync(x => x.QualityIssueId == entity.Id);
+            await MarkQualityIssueAssyReworksObsoleteAsync(entity.Id);
         }
         else
         {
-            var assyreworkitems = dto.AssyReworkItems.Adapt<List<TaktQualityIssueAssyRework>>();
-            foreach (var child in assyreworkitems)
+            var existingList = await _qualityIssueAssyReworkRepository.GetListAsync(x => x.QualityIssueId == entity.Id);
+            var existingById = existingList.ToDictionary(x => x.Id);
+            var submittedIds = new HashSet<long>();
+            var toCreate = new List<TaktQualityIssueAssyRework>();
+            var seenLineKeys = new HashSet<string>(StringComparer.Ordinal);
+            for (var i = 0; i < dto.AssyReworkItems.Count; i++)
             {
-                child.QualityIssueId = entity.Id;
-            }
-            var assyreworkitemsNeedLine = assyreworkitems.Where(c => c.LineNumber <= 0).ToList();
-            if (assyreworkitemsNeedLine.Count > 0)
-            {
-                var businessCode = !string.IsNullOrWhiteSpace(entity.QualityIssueCode) ? entity.QualityIssueCode : entity.Id.ToString();
-                var maxLine = await _qualityIssueAssyReworkRepository.GetMaxIntAsync(
-                    x => x.TenantCode == CurrentTenantCode && x.CompanyCode == CurrentCompanyCode && x.QualityIssueId == entity.Id,
-                    x => x.LineNumber);
-                var lineSeq = _lineNumberGenerator.GenerateSequence(businessCode, assyreworkitemsNeedLine.Count, maxLine).ToList();
-                var lineIdx = 0;
-                foreach (var child in assyreworkitems)
+                var childDto = dto.AssyReworkItems[i];
+                childDto.QualityIssueId = entity.Id;
+                var lineKey = $"{entity.CompanyCode}|{entity.Id}|{childDto.LineNumber}";
+                if (!seenLineKeys.Add(lineKey))
                 {
-                    if (child.LineNumber <= 0)
+                    throw new TaktBusinessException("质量问题组装不良改修费用明细第{i + 1}项与本次提交的其他项重复（CompanyCode、QualityIssueId、LineNumber）");
+                }
+                if (childDto.QualityIssueAssyReworkId > 0)
+                {
+                    if (!existingById.TryGetValue(childDto.QualityIssueAssyReworkId, out var target))
                     {
-                        child.LineNumber = lineSeq[lineIdx++];
+                        throw new TaktBusinessException("质量问题组装不良改修费用明细不存在（QualityIssueAssyReworkId={childDto.QualityIssueAssyReworkId}）");
                     }
+                    if (target.QualityIssueId != entity.Id)
+                    {
+                        throw new TaktBusinessException("质量问题组装不良改修费用明细不属于当前主表（QualityIssueAssyReworkId={childDto.QualityIssueAssyReworkId}）");
+                    }
+                    submittedIds.Add(childDto.QualityIssueAssyReworkId);
+                    var isUniqueUpdate_ix_takt_logistics_quality_issue_assy_rework_line_unique = await _uniqueValidator.IsUniqueAsync(
+                        _qualityIssueAssyReworkRepository,
+                        x => x.CompanyCode == x.CompanyCode
+                && x.QualityIssueId == x.QualityIssueId
+                && x.LineNumber == x.LineNumber,
+                        childDto.QualityIssueAssyReworkId);
+                    if (!isUniqueUpdate_ix_takt_logistics_quality_issue_assy_rework_line_unique)
+                    {
+                        throw new TaktBusinessException("质量问题组装不良改修费用明细的CompanyCode、QualityIssueId、LineNumber已存在");
+                    }
+                    childDto.Adapt(target);
+                    target.Id = childDto.QualityIssueAssyReworkId;
+                    target.QualityIssueId = entity.Id;
+                    target.IsObsolete = 0;
+                    await _qualityIssueAssyReworkRepository.UpdateAsync(target);
+                }
+                else
+                {
+                    var isUniqueCreate_ix_takt_logistics_quality_issue_assy_rework_line_unique = await _uniqueValidator.IsUniqueAsync(
+                        _qualityIssueAssyReworkRepository,
+                        x => x.CompanyCode == x.CompanyCode
+                && x.QualityIssueId == x.QualityIssueId
+                && x.LineNumber == x.LineNumber);
+                    if (!isUniqueCreate_ix_takt_logistics_quality_issue_assy_rework_line_unique)
+                    {
+                        throw new TaktBusinessException("质量问题组装不良改修费用明细的CompanyCode、QualityIssueId、LineNumber已存在");
+                    }
+                    var child = childDto.Adapt<TaktQualityIssueAssyRework>();
+                    child.Id = 0;
+                    child.QualityIssueId = entity.Id;
+                    child.IsObsolete = 0;
+                    toCreate.Add(child);
                 }
             }
-                        var seenKeys = new HashSet<string>(StringComparer.Ordinal);
-                        for (var i = 0; i < assyreworkitems.Count; i++)
+            var toObsolete = existingList.Where(x => !submittedIds.Contains(x.Id) && x.IsObsolete == 0).ToList();
+            foreach (var removed in toObsolete)
+            {
+                removed.IsObsolete = 1;
+                await _qualityIssueAssyReworkRepository.UpdateAsync(removed);
+            }
+            if (toCreate.Count > 0)
+            {
+                var needLine = toCreate.Where(c => c.LineNumber <= 0).ToList();
+                if (needLine.Count > 0)
+                {
+                    var businessCode = !string.IsNullOrWhiteSpace(entity.QualityIssueCode) ? entity.QualityIssueCode : entity.Id.ToString();
+                    var maxLine = existingList.Count > 0 ? existingList.Max(x => x.LineNumber) : 0;
+                    var lineSeq = _lineNumberGenerator.GenerateSequence(businessCode, needLine.Count, maxLine).ToList();
+                    var lineIdx = 0;
+                    foreach (var child in toCreate)
+                    {
+                        if (child.LineNumber <= 0)
                         {
-                            var key = $"{assyreworkitems[i].CompanyCode}|{assyreworkitems[i].QualityIssueId}|{assyreworkitems[i].LineNumber}";
-                            if (!seenKeys.Add(key))
-                            {
-                                throw new TaktBusinessException($"质量问题组装不良改修费用明细第{i + 1}项与本次提交的其他项重复（CompanyCode、QualityIssueId、LineNumber）");
-                            }
+                            child.LineNumber = lineSeq[lineIdx++];
                         }
-            await _qualityIssueAssyReworkRepository.DeleteAsync(x => x.QualityIssueId == entity.Id);
-            foreach (var child in assyreworkitems)
-            {
-            var isUnique_ix_takt_logistics_quality_issue_assy_rework_line_unique = await _uniqueValidator.IsUniqueAsync(
-                _qualityIssueAssyReworkRepository,
-                x => x.CompanyCode == child.CompanyCode
-                    && x.QualityIssueId == child.QualityIssueId
-                    && x.LineNumber == child.LineNumber);
-            if (!isUnique_ix_takt_logistics_quality_issue_assy_rework_line_unique)
-            {
-                throw new TaktBusinessException("质量问题组装不良改修费用明细的CompanyCode、QualityIssueId、LineNumber已存在");
+                    }
+                }
+                await _qualityIssueAssyReworkRepository.CreateRangeAsync(toCreate);
             }
-            }
-            await _qualityIssueAssyReworkRepository.CreateRangeAsync(assyreworkitems);
         }
         // 质量问题PCBA不良改修费用明细（PcbaReworkItems）
         if (dto.PcbaReworkItems is not { Count: > 0 })
         {
-            await _qualityIssuePcbaReworkRepository.DeleteAsync(x => x.QualityIssueId == entity.Id);
+            await MarkQualityIssuePcbaReworksObsoleteAsync(entity.Id);
         }
         else
         {
-            var pcbareworkitems = dto.PcbaReworkItems.Adapt<List<TaktQualityIssuePcbaRework>>();
-            foreach (var child in pcbareworkitems)
+            var existingList = await _qualityIssuePcbaReworkRepository.GetListAsync(x => x.QualityIssueId == entity.Id);
+            var existingById = existingList.ToDictionary(x => x.Id);
+            var submittedIds = new HashSet<long>();
+            var toCreate = new List<TaktQualityIssuePcbaRework>();
+            var seenLineKeys = new HashSet<string>(StringComparer.Ordinal);
+            for (var i = 0; i < dto.PcbaReworkItems.Count; i++)
             {
-                child.QualityIssueId = entity.Id;
-            }
-            var pcbareworkitemsNeedLine = pcbareworkitems.Where(c => c.LineNumber <= 0).ToList();
-            if (pcbareworkitemsNeedLine.Count > 0)
-            {
-                var businessCode = !string.IsNullOrWhiteSpace(entity.QualityIssueCode) ? entity.QualityIssueCode : entity.Id.ToString();
-                var maxLine = await _qualityIssuePcbaReworkRepository.GetMaxIntAsync(
-                    x => x.TenantCode == CurrentTenantCode && x.CompanyCode == CurrentCompanyCode && x.QualityIssueId == entity.Id,
-                    x => x.LineNumber);
-                var lineSeq = _lineNumberGenerator.GenerateSequence(businessCode, pcbareworkitemsNeedLine.Count, maxLine).ToList();
-                var lineIdx = 0;
-                foreach (var child in pcbareworkitems)
+                var childDto = dto.PcbaReworkItems[i];
+                childDto.QualityIssueId = entity.Id;
+                var lineKey = $"{entity.CompanyCode}|{entity.Id}|{childDto.LineNumber}";
+                if (!seenLineKeys.Add(lineKey))
                 {
-                    if (child.LineNumber <= 0)
+                    throw new TaktBusinessException("质量问题PCBA不良改修费用明细第{i + 1}项与本次提交的其他项重复（CompanyCode、QualityIssueId、LineNumber）");
+                }
+                if (childDto.QualityIssuePcbaReworkId > 0)
+                {
+                    if (!existingById.TryGetValue(childDto.QualityIssuePcbaReworkId, out var target))
                     {
-                        child.LineNumber = lineSeq[lineIdx++];
+                        throw new TaktBusinessException("质量问题PCBA不良改修费用明细不存在（QualityIssuePcbaReworkId={childDto.QualityIssuePcbaReworkId}）");
                     }
+                    if (target.QualityIssueId != entity.Id)
+                    {
+                        throw new TaktBusinessException("质量问题PCBA不良改修费用明细不属于当前主表（QualityIssuePcbaReworkId={childDto.QualityIssuePcbaReworkId}）");
+                    }
+                    submittedIds.Add(childDto.QualityIssuePcbaReworkId);
+                    var isUniqueUpdate_ix_takt_logistics_quality_issue_pcba_rework_line_unique = await _uniqueValidator.IsUniqueAsync(
+                        _qualityIssuePcbaReworkRepository,
+                        x => x.CompanyCode == x.CompanyCode
+                && x.QualityIssueId == x.QualityIssueId
+                && x.LineNumber == x.LineNumber,
+                        childDto.QualityIssuePcbaReworkId);
+                    if (!isUniqueUpdate_ix_takt_logistics_quality_issue_pcba_rework_line_unique)
+                    {
+                        throw new TaktBusinessException("质量问题PCBA不良改修费用明细的CompanyCode、QualityIssueId、LineNumber已存在");
+                    }
+                    childDto.Adapt(target);
+                    target.Id = childDto.QualityIssuePcbaReworkId;
+                    target.QualityIssueId = entity.Id;
+                    target.IsObsolete = 0;
+                    await _qualityIssuePcbaReworkRepository.UpdateAsync(target);
+                }
+                else
+                {
+                    var isUniqueCreate_ix_takt_logistics_quality_issue_pcba_rework_line_unique = await _uniqueValidator.IsUniqueAsync(
+                        _qualityIssuePcbaReworkRepository,
+                        x => x.CompanyCode == x.CompanyCode
+                && x.QualityIssueId == x.QualityIssueId
+                && x.LineNumber == x.LineNumber);
+                    if (!isUniqueCreate_ix_takt_logistics_quality_issue_pcba_rework_line_unique)
+                    {
+                        throw new TaktBusinessException("质量问题PCBA不良改修费用明细的CompanyCode、QualityIssueId、LineNumber已存在");
+                    }
+                    var child = childDto.Adapt<TaktQualityIssuePcbaRework>();
+                    child.Id = 0;
+                    child.QualityIssueId = entity.Id;
+                    child.IsObsolete = 0;
+                    toCreate.Add(child);
                 }
             }
-                        var seenKeys = new HashSet<string>(StringComparer.Ordinal);
-                        for (var i = 0; i < pcbareworkitems.Count; i++)
+            var toObsolete = existingList.Where(x => !submittedIds.Contains(x.Id) && x.IsObsolete == 0).ToList();
+            foreach (var removed in toObsolete)
+            {
+                removed.IsObsolete = 1;
+                await _qualityIssuePcbaReworkRepository.UpdateAsync(removed);
+            }
+            if (toCreate.Count > 0)
+            {
+                var needLine = toCreate.Where(c => c.LineNumber <= 0).ToList();
+                if (needLine.Count > 0)
+                {
+                    var businessCode = !string.IsNullOrWhiteSpace(entity.QualityIssueCode) ? entity.QualityIssueCode : entity.Id.ToString();
+                    var maxLine = existingList.Count > 0 ? existingList.Max(x => x.LineNumber) : 0;
+                    var lineSeq = _lineNumberGenerator.GenerateSequence(businessCode, needLine.Count, maxLine).ToList();
+                    var lineIdx = 0;
+                    foreach (var child in toCreate)
+                    {
+                        if (child.LineNumber <= 0)
                         {
-                            var key = $"{pcbareworkitems[i].CompanyCode}|{pcbareworkitems[i].QualityIssueId}|{pcbareworkitems[i].LineNumber}";
-                            if (!seenKeys.Add(key))
-                            {
-                                throw new TaktBusinessException($"质量问题PCBA不良改修费用明细第{i + 1}项与本次提交的其他项重复（CompanyCode、QualityIssueId、LineNumber）");
-                            }
+                            child.LineNumber = lineSeq[lineIdx++];
                         }
-            await _qualityIssuePcbaReworkRepository.DeleteAsync(x => x.QualityIssueId == entity.Id);
-            foreach (var child in pcbareworkitems)
-            {
-            var isUnique_ix_takt_logistics_quality_issue_pcba_rework_line_unique = await _uniqueValidator.IsUniqueAsync(
-                _qualityIssuePcbaReworkRepository,
-                x => x.CompanyCode == child.CompanyCode
-                    && x.QualityIssueId == child.QualityIssueId
-                    && x.LineNumber == child.LineNumber);
-            if (!isUnique_ix_takt_logistics_quality_issue_pcba_rework_line_unique)
-            {
-                throw new TaktBusinessException("质量问题PCBA不良改修费用明细的CompanyCode、QualityIssueId、LineNumber已存在");
+                    }
+                }
+                await _qualityIssuePcbaReworkRepository.CreateRangeAsync(toCreate);
             }
-            }
-            await _qualityIssuePcbaReworkRepository.CreateRangeAsync(pcbareworkitems);
         }
     }
     // ========================================

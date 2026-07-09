@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：frontend/src/types/logistics/sales
 // 文件名称：price.d.ts
-// 创建时间：2026-07-01
+// 创建时间：2026-07-09
 // 创建人：Takt365(Auto Generated)
 // 功能描述：logistics/sales 模块类型定义（自动生成；类型名去 Takt 前缀与末尾 Dto，如 TaktCompanyDto → Company）
 // 
@@ -67,11 +67,6 @@ export interface SalesPrice extends CompanyDtoBase {
    * 物料价格明细列表（主子表关系，一个客户价格可以有多个物料价格） （子表：TaktSalesPriceItem）
    */
   items?: SalesPriceItem[];
-
-  /**
-   * 销售价格变更记录列表（外键在子表 TaktSalesPriceChangeLog.SalesPriceId） （子表：TaktSalesPriceChangeLog）
-   */
-  changeLogs?: SalesPriceChangeLog[];
 
 }
 
@@ -220,12 +215,7 @@ export interface SalesPriceCreate {
   /**
    * 物料价格明细列表（主子表关系，一个客户价格可以有多个物料价格）（子表，级联保存）
    */
-  items?: SalesPriceItemCreate[];
-
-  /**
-   * 销售价格变更记录列表（外键在子表 TaktSalesPriceChangeLog.SalesPriceId）（子表，级联保存）
-   */
-  changeLogs?: SalesPriceChangeLogCreate[];
+  items?: SalesPriceItemUpdate[];
 
   /**
    * 扩展字段JSON
@@ -331,11 +321,6 @@ export interface SalesPriceTemplate {
   items?: SalesPriceItemCreate[];
 
   /**
-   * 销售价格变更记录列表（外键在子表 TaktSalesPriceChangeLog.SalesPriceId）（子表，级联保存）
-   */
-  changeLogs?: SalesPriceChangeLogCreate[];
-
-  /**
    * 扩展字段JSON
    */
   extField?: string;
@@ -408,11 +393,6 @@ export interface SalesPriceImport {
    * 物料价格明细列表（主子表关系，一个客户价格可以有多个物料价格）（子表，级联保存）
    */
   items?: SalesPriceItemCreate[];
-
-  /**
-   * 销售价格变更记录列表（外键在子表 TaktSalesPriceChangeLog.SalesPriceId）（子表，级联保存）
-   */
-  changeLogs?: SalesPriceChangeLogCreate[];
 
   /**
    * 扩展字段JSON

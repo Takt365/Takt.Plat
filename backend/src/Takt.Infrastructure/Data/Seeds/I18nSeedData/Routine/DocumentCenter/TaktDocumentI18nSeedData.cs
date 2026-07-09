@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Infrastructure.Data.Seeds.I18nSeedData.Routine.DocumentCenter
 // 文件名称：TaktDocumentI18nSeedData.cs
-// 创建时间：2026-07-02
+// 创建时间：2026-07-09
 // 创建人：Takt365(Auto Generated)
 // 功能描述：TaktDocument 实体字段国际化种子（无对应 frontend locales；TranslationText 取自 ColumnDescription，ContextNote 取自属性 XML summary）
 // 
@@ -359,15 +359,6 @@ public class TaktDocumentI18nSeedData : ITaktSeedDataCoordinator
             new TranslationSeedItem("entity.document.versions", "zh-CN", "版本历史列表", "版本历史列表（主子表关系）"),
             // entity.document.versions
             new TranslationSeedItem("entity.document.versions", "zh-HK", "版本历史列表_hk", "版本历史列表（主子表关系）"),
-
-            // entity.document.changelogs
-            new TranslationSeedItem("entity.document.changelogs", "en-US", "变更日志列表_us", "变更日志列表（主子表关系）"),
-            // entity.document.changelogs
-            new TranslationSeedItem("entity.document.changelogs", "ja-JP", "变更日志列表_jp", "变更日志列表（主子表关系）"),
-            // entity.document.changelogs
-            new TranslationSeedItem("entity.document.changelogs", "zh-CN", "变更日志列表", "变更日志列表（主子表关系）"),
-            // entity.document.changelogs
-            new TranslationSeedItem("entity.document.changelogs", "zh-HK", "变更日志列表_hk", "变更日志列表（主子表关系）"),
         };
     }
 

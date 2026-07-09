@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：frontend/src/api/logistics/manufacturing/output
 // 文件名称：pcba-output-detail.ts
-// 创建时间：2026-06-30
+// 创建时间：2026-07-09
 // 创建人：Takt365(Auto Generated)
 // 功能描述：logistics/manufacturing/output 模块 API（自动生成，请勿手改路由常量）
 // 
@@ -18,6 +18,7 @@ import type {
 import type {
   PcbaOutputDetail,
   PcbaOutputDetailCreate,
+  PcbaOutputDetailObsolete,
   PcbaOutputDetailStatus,
   PcbaOutputDetailUpdate
 } from '@/types/logistics/manufacturing/output/pcba-output-detail';
@@ -117,6 +118,19 @@ export function deletePcbaOutputDetailBatch(ids: string[]): Promise<void> {
 export function updatePcbaOutputDetailStatus(dto: PcbaOutputDetailStatus): Promise<PcbaOutputDetail> {
   return request<PcbaOutputDetail>({
     url: `${PCBA_OUTPUT_DETAIL_API_BASE}/status`,
+    method: 'put',
+    data: dto,
+  });
+}
+
+/**
+ * 更新PCBA日报明细作废状态
+ * @param {PcbaOutputDetailObsolete} dto 作废 DTO
+ * @returns {Promise<PcbaOutputDetail>} PCBA日报明细DTO
+ */
+export function updatePcbaOutputDetailObsolete(dto: PcbaOutputDetailObsolete): Promise<PcbaOutputDetail> {
+  return request<PcbaOutputDetail>({
+    url: `${PCBA_OUTPUT_DETAIL_API_BASE}/obsolete`,
     method: 'put',
     data: dto,
   });

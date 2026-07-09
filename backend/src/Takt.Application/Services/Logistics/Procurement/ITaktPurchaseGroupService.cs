@@ -75,7 +75,7 @@ public interface ITaktPurchaseGroupService
     /// </summary>
     /// <param name="dto">状态DTO</param>
     /// <returns>DTO</returns>
-    Task<TaktPurchaseGroupDto> UpdatePurchaseGroupStatusAsync(TaktPurchaseGroupStatusDto dto);
+    Task<TaktPurchaseGroupDto> UpdateGroupStatusAsync(TaktGroupStatusDto dto);
 
     /// <summary>
     /// 更新采购组主数据排序

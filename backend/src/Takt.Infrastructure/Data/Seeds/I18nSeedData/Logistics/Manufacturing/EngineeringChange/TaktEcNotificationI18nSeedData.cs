@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Infrastructure.Data.Seeds.I18nSeedData.Logistics.Manufacturing.EngineeringChange
 // 文件名称：TaktEcNotificationI18nSeedData.cs
-// 创建时间：2026-07-02
+// 创建时间：2026-07-09
 // 创建人：Takt365(Auto Generated)
 // 功能描述：TaktEcNotification 实体字段国际化种子（已对齐前端 locales：src/locales/logistics/manufacturing/engineering-change/ec-notification）
 // 
@@ -127,13 +127,13 @@ public class TaktEcNotificationI18nSeedData : ITaktSeedDataCoordinator
             new TranslationSeedItem("entity.ecnotification.ecno", "zh-HK", "设变单号_hk", "设变单号（冗余字段，便于查询）"),
 
             // entity.ecnotification.ectitle
-            new TranslationSeedItem("entity.ecnotification.ectitle", "en-US", "EC Title", "设变标题（冗余字段）"),
+            new TranslationSeedItem("entity.ecnotification.ectitle", "en-US", "设变标题_us", "设变标题（冗余字段）"),
             // entity.ecnotification.ectitle
-            new TranslationSeedItem("entity.ecnotification.ectitle", "ja-JP", "設変タイトル", "设变标题（冗余字段）"),
+            new TranslationSeedItem("entity.ecnotification.ectitle", "ja-JP", "设变标题_jp", "设变标题（冗余字段）"),
             // entity.ecnotification.ectitle
             new TranslationSeedItem("entity.ecnotification.ectitle", "zh-CN", "设变标题", "设变标题（冗余字段）"),
             // entity.ecnotification.ectitle
-            new TranslationSeedItem("entity.ecnotification.ectitle", "zh-HK", "設變標題", "设变标题（冗余字段）"),
+            new TranslationSeedItem("entity.ecnotification.ectitle", "zh-HK", "设变标题_hk", "设变标题（冗余字段）"),
 
             // entity.ecnotification.date
             new TranslationSeedItem("entity.ecnotification.date", "en-US", "通知日期_us", "通知日期"),

@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Application.Dtos.Logistics.Quality.Operation
 // 文件名称：TaktIpqcOrderItemDtos.cs
-// 创建时间：2026-06-30
+// 创建时间：2026-07-09
 // 创建人：Takt365(Auto Generated)
 // 功能描述：IpqcOrderItem 模块 DTO（由 generate-dtos-from-entity.cjs 根据 TaktIpqcOrderItem 生成，请按需审阅）
 // 
@@ -135,6 +135,11 @@ public class TaktIpqcOrderItemDto : TaktCompanyDtoBase
     /// 判定状态（0=待判定，1=合格，2=不合格，3=让步接收，4=返工）
     /// </summary>
     public int JudgeStatus { get; set; } = 0;
+
+    /// <summary>
+    /// 是否作废（字典 sys_yes_no_type，0=否 1=是；编辑移除子行时标记作废）
+    /// </summary>
+    public int IsObsolete { get; set; } = 0;
 
     /// <summary>
     /// IPQC检验单（主表）
@@ -270,6 +275,11 @@ public class TaktIpqcOrderItemQueryDto : TaktPagedQuery
     /// 判定状态（0=待判定，1=合格，2=不合格，3=让步接收，4=返工）
     /// </summary>
     public int? JudgeStatus { get; set; }
+
+    /// <summary>
+    /// 是否作废（字典 sys_yes_no_type，0=否 1=是；编辑移除子行时标记作废）
+    /// </summary>
+    public int? IsObsolete { get; set; }
 
     /// <summary>
     /// 创建时间（范围查询-开始）
@@ -419,9 +429,14 @@ public class TaktIpqcOrderItemCreateDto
     public int JudgeStatus { get; set; } = 0;
 
     /// <summary>
+    /// 是否作废（字典 sys_yes_no_type，0=否 1=是；编辑移除子行时标记作废）
+    /// </summary>
+    public int IsObsolete { get; set; } = 0;
+
+    /// <summary>
     /// 不良处理记录列表（主子表关系）（子表，级联保存）
     /// </summary>
-    public List<TaktIpqcDefectHandlingCreateDto>? DefectHandlings { get; set; }
+    public List<TaktIpqcDefectHandlingUpdateDto>? DefectHandlings { get; set; }
 
     /// <summary>
     /// 扩展字段JSON
@@ -477,6 +492,29 @@ public class TaktIpqcOrderItemStatusDto
     /// </summary>
     [Required(ErrorMessage = "判定状态（0=待判定，1=合格，2=不合格，3=让步接收，4=返工）不能为空")]
     public int JudgeStatus { get; set; } = 0;
+}
+
+// ========================================
+// IpqcOrderItem 作废 DTO
+// ========================================
+
+/// <summary>
+/// IpqcOrderItem 作废/撤销作废 DTO
+/// </summary>
+public class TaktIpqcOrderItemObsoleteDto
+{
+    /// <summary>
+    /// IpqcOrderItemID
+    /// </summary>
+    [Required(ErrorMessage = "ID不能为空")]
+    [AdaptMember("Id")]
+    [JsonConverter(typeof(ValueToStringConverter))]
+    public long IpqcOrderItemId { get; set; }
+
+    /// <summary>
+    /// 是否作废（字典 sys_yes_no_type，0=否 1=是；编辑移除子行时标记作废）
+    /// </summary>
+    public int IsObsolete { get; set; }
 }
 
 // ========================================
@@ -593,6 +631,11 @@ public class TaktIpqcOrderItemTemplateDto
     /// 判定状态（0=待判定，1=合格，2=不合格，3=让步接收，4=返工）
     /// </summary>
     public int? JudgeStatus { get; set; }
+
+    /// <summary>
+    /// 是否作废（字典 sys_yes_no_type，0=否 1=是；编辑移除子行时标记作废）
+    /// </summary>
+    public int? IsObsolete { get; set; }
 
     /// <summary>
     /// 不良处理记录列表（主子表关系）（子表，级联保存）
@@ -728,6 +771,11 @@ public class TaktIpqcOrderItemImportDto
     public int? JudgeStatus { get; set; }
 
     /// <summary>
+    /// 是否作废（字典 sys_yes_no_type，0=否 1=是；编辑移除子行时标记作废）
+    /// </summary>
+    public int? IsObsolete { get; set; }
+
+    /// <summary>
     /// 不良处理记录列表（主子表关系）（子表，级联保存）
     /// </summary>
     public List<TaktIpqcDefectHandlingCreateDto>? DefectHandlings { get; set; }
@@ -860,6 +908,11 @@ public class TaktIpqcOrderItemExportDto
     /// 判定状态（0=待判定，1=合格，2=不合格，3=让步接收，4=返工）
     /// </summary>
     public int JudgeStatus { get; set; } = 0;
+
+    /// <summary>
+    /// 是否作废（字典 sys_yes_no_type，0=否 1=是；编辑移除子行时标记作废）
+    /// </summary>
+    public int IsObsolete { get; set; } = 0;
 
     /// <summary>
     /// 扩展字段JSON

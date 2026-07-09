@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Application.Services.Logistics.Manufacturing.Scheduling
 // 文件名称：TaktApsScheduleItemService.cs
-// 创建时间：2026-06-30
+// 创建时间：2026-07-09
 // 创建人：Takt365(Cursor AI)
 // 功能描述：APS排程明细应用服务实现
 // 
@@ -118,6 +118,7 @@ public class TaktApsScheduleItemService : TaktServiceBase, ITaktApsScheduleItemS
     public async Task<TaktApsScheduleItemDto> CreateApsScheduleItemAsync(TaktApsScheduleItemCreateDto dto)
     {
         var entity = dto.Adapt<TaktApsScheduleItem>();
+        entity.IsObsolete = 0;
         await StampApsScheduleItemApsScheduleAsync(entity, dto);
         var isUnique_ix_takt_logistics_manufacturing_scheduling_aps_item_line_unique = await _uniqueValidator.IsUniqueAsync(
             _apsScheduleItemRepository,
@@ -174,11 +175,21 @@ public class TaktApsScheduleItemService : TaktServiceBase, ITaktApsScheduleItemS
     /// <returns>任务</returns>
     public async Task DeleteApsScheduleItemByIdAsync(long id)
     {
-        var deleted = await _apsScheduleItemRepository.DeleteAsync(id);
-        if (!deleted)
+        var entity = await _apsScheduleItemRepository.GetByIdAsync(id);
+        if (entity == null)
         {
             throw new TaktBusinessException("APS排程明细不存在或已删除");
         }
+        if (entity.TenantCode != CurrentTenantCode || entity.CompanyCode != CurrentCompanyCode)
+        {
+            throw new TaktBusinessException("APS排程明细不存在或已删除");
+        }
+        if (entity.IsObsolete == 1)
+        {
+            throw new TaktBusinessException("APS排程明细已作废");
+        }
+        entity.IsObsolete = 1;
+        await _apsScheduleItemRepository.UpdateAsync(entity);
     }
 
     /// <summary>
@@ -212,6 +223,27 @@ public class TaktApsScheduleItemService : TaktServiceBase, ITaktApsScheduleItemS
             throw new TaktBusinessException("APS排程明细不存在");
         }
         entity.ProcessStatus = dto.ProcessStatus;
+        await _apsScheduleItemRepository.UpdateAsync(entity);
+        return await GetApsScheduleItemByIdAsync(dto.ApsScheduleItemId) ?? throw new TaktBusinessException("APS排程明细不存在");
+    }
+
+    /// <summary>
+    /// 更新APS排程明细作废状态
+    /// </summary>
+    /// <param name="dto">作废DTO</param>
+    /// <returns>DTO</returns>
+    public async Task<TaktApsScheduleItemDto> UpdateApsScheduleItemObsoleteAsync(TaktApsScheduleItemObsoleteDto dto)
+    {
+        var entity = await _apsScheduleItemRepository.GetByIdAsync(dto.ApsScheduleItemId);
+        if (entity == null)
+        {
+            throw new TaktBusinessException("APS排程明细不存在");
+        }
+        if (entity.TenantCode != CurrentTenantCode || entity.CompanyCode != CurrentCompanyCode)
+        {
+            throw new TaktBusinessException("APS排程明细不存在");
+        }
+        entity.IsObsolete = dto.IsObsolete;
         await _apsScheduleItemRepository.UpdateAsync(entity);
         return await GetApsScheduleItemByIdAsync(dto.ApsScheduleItemId) ?? throw new TaktBusinessException("APS排程明细不存在");
     }
@@ -347,6 +379,15 @@ public class TaktApsScheduleItemService : TaktServiceBase, ITaktApsScheduleItemS
     private static Expression<Func<TaktApsScheduleItem, bool>> QueryExpression(TaktApsScheduleItemQueryDto? queryDto)
     {
         var exp = Expressionable.Create<TaktApsScheduleItem>();
+
+        if (queryDto?.IsObsolete.HasValue == true)
+        {
+            exp = exp.And(x => x.IsObsolete == queryDto.IsObsolete);
+        }
+        else
+        {
+            exp = exp.And(x => x.IsObsolete == 0);
+        }
 
         if (!string.IsNullOrEmpty(queryDto?.KeyWords))
         {

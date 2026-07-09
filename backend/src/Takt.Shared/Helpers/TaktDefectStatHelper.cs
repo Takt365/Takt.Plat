@@ -48,4 +48,40 @@ public static class TaktDefectStatHelper
         var rate = goodQty / baseQty * 100m;
         return Math.Round(rate, 2, MidpointRounding.AwayFromZero);
     }
+
+    /// <summary>
+    /// 生产状态：进行中（字典 logistics_prod_status=1）
+    /// </summary>
+    public const int ProdStatusInProgress = 1;
+
+    /// <summary>
+    /// 生产状态：已完成（字典 logistics_prod_status=2）
+    /// </summary>
+    public const int ProdStatusCompleted = 2;
+
+    /// <summary>
+    /// 解析批次生产状态：批次工单总数量与累计生实实绩完全相等且大于 0 时为已完成，否则为进行中
+    /// </summary>
+    /// <param name="batchOrderQty">批次工单总数量</param>
+    /// <param name="prodActualQty">累计生实实绩</param>
+    /// <returns>字典 logistics_prod_status 值</returns>
+    public static int ResolveBatchProdStatus(decimal batchOrderQty, decimal prodActualQty)
+    {
+        return batchOrderQty > 0 && prodActualQty == batchOrderQty
+            ? ProdStatusCompleted
+            : ProdStatusInProgress;
+    }
+
+    /// <summary>
+    /// 解析工单状态：工单数量与累计生实实绩完全相等且大于 0 时为已完成，否则为进行中
+    /// </summary>
+    /// <param name="prodOrderQty">工单数量</param>
+    /// <param name="prodActualQty">累计生实实绩</param>
+    /// <returns>字典 logistics_prod_status 值</returns>
+    public static int ResolveOrderProdStatus(decimal prodOrderQty, decimal prodActualQty)
+    {
+        return prodOrderQty > 0 && prodActualQty == prodOrderQty
+            ? ProdStatusCompleted
+            : ProdStatusInProgress;
+    }
 }

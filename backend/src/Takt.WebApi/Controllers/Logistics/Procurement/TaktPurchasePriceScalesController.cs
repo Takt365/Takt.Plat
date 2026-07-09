@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.WebApi.Controllers.Logistics.Procurement
 // 文件名称：TaktPurchasePriceScalesController.cs
-// 创建时间：2026-06-27
+// 创建时间：2026-07-09
 // 创建人：Takt365(Cursor AI)
 // 功能描述：采购价格阶梯控制器
 // 
@@ -192,6 +192,26 @@ public class TaktPurchasePriceScalesController : TaktControllerBase
         try
         {
             var result = await _purchasePriceScaleService.UpdatePurchasePriceScaleSortAsync(dto);
+            return Success(result, "更新成功");
+        }
+        catch (Exception ex)
+        {
+            return HandleException(ex);
+        }
+    }
+
+    /// <summary>
+    /// 更新采购价格阶梯作废状态
+    /// </summary>
+    /// <param name="dto">作废 DTO</param>
+    /// <returns>采购价格阶梯DTO</returns>
+    [TaktPermission("logistics:procurement:purchase:price:update", "更新采购价格阶梯作废状态")]
+    [HttpPut("obsolete")]
+    public async Task<IActionResult> UpdatePurchasePriceScaleObsoleteAsync([FromBody] TaktPurchasePriceScaleObsoleteDto dto)
+    {
+        try
+        {
+            var result = await _purchasePriceScaleService.UpdatePurchasePriceScaleObsoleteAsync(dto);
             return Success(result, "更新成功");
         }
         catch (Exception ex)

@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Application.Services.Logistics.Manufacturing.Planning
 // 文件名称：TaktProductionPlanItemService.cs
-// 创建时间：2026-06-23
+// 创建时间：2026-07-09
 // 创建人：Takt365(Cursor AI)
 // 功能描述：生产计划明细应用服务实现
 // 
@@ -114,6 +114,7 @@ public class TaktProductionPlanItemService : TaktServiceBase, ITaktProductionPla
     public async Task<TaktProductionPlanItemDto> CreateProductionPlanItemAsync(TaktProductionPlanItemCreateDto dto)
     {
         var entity = dto.Adapt<TaktProductionPlanItem>();
+        entity.IsObsolete = 0;
         var isUnique_ix_takt_logistics_manufacturing_planning_production_plan_item_line_unique = await _uniqueValidator.IsUniqueAsync(
             _productionPlanItemRepository,
             x => x.ProductionPlanId == entity.ProductionPlanId
@@ -170,11 +171,21 @@ public class TaktProductionPlanItemService : TaktServiceBase, ITaktProductionPla
     /// <returns>任务</returns>
     public async Task DeleteProductionPlanItemByIdAsync(long id)
     {
-        var deleted = await _productionPlanItemRepository.DeleteAsync(id);
-        if (!deleted)
+        var entity = await _productionPlanItemRepository.GetByIdAsync(id);
+        if (entity == null)
         {
             throw new TaktBusinessException("生产计划明细不存在或已删除");
         }
+        if (entity.TenantCode != CurrentTenantCode || entity.CompanyCode != CurrentCompanyCode)
+        {
+            throw new TaktBusinessException("生产计划明细不存在或已删除");
+        }
+        if (entity.IsObsolete == 1)
+        {
+            throw new TaktBusinessException("生产计划明细已作废");
+        }
+        entity.IsObsolete = 1;
+        await _productionPlanItemRepository.UpdateAsync(entity);
     }
 
     /// <summary>
@@ -193,6 +204,27 @@ public class TaktProductionPlanItemService : TaktServiceBase, ITaktProductionPla
         {
             await DeleteProductionPlanItemByIdAsync(id);
         }
+    }
+
+    /// <summary>
+    /// 更新生产计划明细作废状态
+    /// </summary>
+    /// <param name="dto">作废DTO</param>
+    /// <returns>DTO</returns>
+    public async Task<TaktProductionPlanItemDto> UpdateProductionPlanItemObsoleteAsync(TaktProductionPlanItemObsoleteDto dto)
+    {
+        var entity = await _productionPlanItemRepository.GetByIdAsync(dto.ProductionPlanItemId);
+        if (entity == null)
+        {
+            throw new TaktBusinessException("生产计划明细不存在");
+        }
+        if (entity.TenantCode != CurrentTenantCode || entity.CompanyCode != CurrentCompanyCode)
+        {
+            throw new TaktBusinessException("生产计划明细不存在");
+        }
+        entity.IsObsolete = dto.IsObsolete;
+        await _productionPlanItemRepository.UpdateAsync(entity);
+        return await GetProductionPlanItemByIdAsync(dto.ProductionPlanItemId) ?? throw new TaktBusinessException("生产计划明细不存在");
     }
 
     /// <summary>
@@ -302,6 +334,15 @@ public class TaktProductionPlanItemService : TaktServiceBase, ITaktProductionPla
     private static Expression<Func<TaktProductionPlanItem, bool>> QueryExpression(TaktProductionPlanItemQueryDto? queryDto)
     {
         var exp = Expressionable.Create<TaktProductionPlanItem>();
+
+        if (queryDto?.IsObsolete.HasValue == true)
+        {
+            exp = exp.And(x => x.IsObsolete == queryDto.IsObsolete);
+        }
+        else
+        {
+            exp = exp.And(x => x.IsObsolete == 0);
+        }
 
         if (!string.IsNullOrEmpty(queryDto?.KeyWords))
         {

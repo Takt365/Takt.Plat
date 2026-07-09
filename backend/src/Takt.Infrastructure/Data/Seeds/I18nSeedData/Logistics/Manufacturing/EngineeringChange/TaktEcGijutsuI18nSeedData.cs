@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Infrastructure.Data.Seeds.I18nSeedData.Logistics.Manufacturing.EngineeringChange
 // 文件名称：TaktEcGijutsuI18nSeedData.cs
-// 创建时间：2026-07-02
+// 创建时间：2026-07-09
 // 创建人：Takt365(Auto Generated)
 // 功能描述：TaktEcGijutsu 实体字段国际化种子（已对齐前端 locales：src/locales/logistics/manufacturing/engineering-change/ec-gijutsu）
 // 
@@ -91,13 +91,13 @@ public class TaktEcGijutsuI18nSeedData : ITaktSeedDataCoordinator
             new TranslationSeedItem("entity.ecgijutsu._self", "zh-HK", "设变技术课主表信息_hk", "实体名称"),
 
             // entity.ecgijutsu.plantcode
-            new TranslationSeedItem("entity.ecgijutsu.plantcode", "en-US", "工厂代码_us", "工厂代码"),
+            new TranslationSeedItem("entity.ecgijutsu.plantcode", "en-US", "工厂代码_us", "工厂代码（关联 TaktPlant.PlantCode，选项 TaktPlants/options）"),
             // entity.ecgijutsu.plantcode
-            new TranslationSeedItem("entity.ecgijutsu.plantcode", "ja-JP", "工厂代码_jp", "工厂代码"),
+            new TranslationSeedItem("entity.ecgijutsu.plantcode", "ja-JP", "工厂代码_jp", "工厂代码（关联 TaktPlant.PlantCode，选项 TaktPlants/options）"),
             // entity.ecgijutsu.plantcode
-            new TranslationSeedItem("entity.ecgijutsu.plantcode", "zh-CN", "工厂代码", "工厂代码"),
+            new TranslationSeedItem("entity.ecgijutsu.plantcode", "zh-CN", "工厂代码", "工厂代码（关联 TaktPlant.PlantCode，选项 TaktPlants/options）"),
             // entity.ecgijutsu.plantcode
-            new TranslationSeedItem("entity.ecgijutsu.plantcode", "zh-HK", "工厂代码_hk", "工厂代码"),
+            new TranslationSeedItem("entity.ecgijutsu.plantcode", "zh-HK", "工厂代码_hk", "工厂代码（关联 TaktPlant.PlantCode，选项 TaktPlants/options）"),
 
             // entity.ecgijutsu.ecno
             new TranslationSeedItem("entity.ecgijutsu.ecno", "en-US", "设变单号_us", "设变单号（唯一）"),
@@ -127,13 +127,13 @@ public class TaktEcGijutsuI18nSeedData : ITaktSeedDataCoordinator
             new TranslationSeedItem("entity.ecgijutsu.changestatus", "zh-HK", "变更状态_hk", "变更状态（字典 logistics_ec_status；1=工作的，2=取消的，3=发行的，4=P.P中变更的，5=固定的，6=挂起的，7=拒绝的）"),
 
             // entity.ecgijutsu.ectitle
-            new TranslationSeedItem("entity.ecgijutsu.ectitle", "en-US", "EC Title", "设变标题"),
+            new TranslationSeedItem("entity.ecgijutsu.ectitle", "en-US", "设变标题_us", "设变标题"),
             // entity.ecgijutsu.ectitle
-            new TranslationSeedItem("entity.ecgijutsu.ectitle", "ja-JP", "設変タイトル", "设变标题"),
+            new TranslationSeedItem("entity.ecgijutsu.ectitle", "ja-JP", "设变标题_jp", "设变标题"),
             // entity.ecgijutsu.ectitle
             new TranslationSeedItem("entity.ecgijutsu.ectitle", "zh-CN", "设变标题", "设变标题"),
             // entity.ecgijutsu.ectitle
-            new TranslationSeedItem("entity.ecgijutsu.ectitle", "zh-HK", "設變標題", "设变标题"),
+            new TranslationSeedItem("entity.ecgijutsu.ectitle", "zh-HK", "设变标题_hk", "设变标题"),
 
             // entity.ecgijutsu.eccontent
             new TranslationSeedItem("entity.ecgijutsu.eccontent", "en-US", "设变内容_us", "设变内容"),

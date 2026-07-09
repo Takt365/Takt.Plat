@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Application.Dtos.Logistics.Manufacturing.EngineeringChange
 // 文件名称：TaktEcGijutsuDtos.cs
-// 创建时间：2026-07-01
+// 创建时间：2026-07-09
 // 创建人：Takt365(Auto Generated)
 // 功能描述：EcGijutsu 模块 DTO（由 generate-dtos-from-entity.cjs 根据 TaktEcGijutsu 生成，请按需审阅）
 // 
@@ -36,7 +36,7 @@ public class TaktEcGijutsuDto : TaktCompanyDtoBase
     public long EcGijutsuId { get; set; }
 
     /// <summary>
-    /// 工厂代码
+    /// 工厂代码（关联 TaktPlant.PlantCode，选项 TaktPlants/options）
     /// </summary>
     public string PlantCode { get; set; } = string.Empty;
 
@@ -51,7 +51,7 @@ public class TaktEcGijutsuDto : TaktCompanyDtoBase
     public DateTime EcIssueDate { get; set; }
 
     /// <summary>
-    /// 变更状态(1=工作的 2=取消的 3=发行的 4=P.P中变更的 5=固定的 6=挂起的 7=拒绝的)
+    /// 变更状态（字典 logistics_ec_status；1=工作的，2=取消的，3=发行的，4=P.P中变更的，5=固定的，6=挂起的，7=拒绝的）
     /// </summary>
     public int ChangeStatus { get; set; } = 0;
 
@@ -78,7 +78,7 @@ public class TaktEcGijutsuDto : TaktCompanyDtoBase
     /// <summary>
     /// 区分/类别（字典 logistics_ec_distinction_category；1=全仕向，2=部管，3=内部，4=技术）
     /// </summary>
-    public int EcDistinction { get; set; } = 4;
+    public int EcDistinction { get; set; } = 0;
 
     /// <summary>
     /// 录入日期
@@ -88,7 +88,7 @@ public class TaktEcGijutsuDto : TaktCompanyDtoBase
     /// <summary>
     /// 设变状态（字典 logistics_ec_gijutsu_status；1=发行，2=执行中，3=完成）
     /// </summary>
-    public int EcStatus { get; set; } = 1;
+    public int EcStatus { get; set; } = 0;
 
     /// <summary>
     /// 设变明细列表（技术阶段一：③，BOM/料号变更行）
@@ -131,7 +131,7 @@ public class TaktEcGijutsuQueryDto : TaktPagedQuery
     public string? CompanyCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 工厂代码
+    /// 工厂代码（关联 TaktPlant.PlantCode，选项 TaktPlants/options）
     /// </summary>
     public string? PlantCode { get; set; } = string.Empty;
 
@@ -151,7 +151,7 @@ public class TaktEcGijutsuQueryDto : TaktPagedQuery
     public DateTime? EcIssueDateEnd { get; set; }
 
     /// <summary>
-    /// 变更状态(1=工作的 2=取消的 3=发行的 4=P.P中变更的 5=固定的 6=挂起的 7=拒绝的)
+    /// 变更状态（字典 logistics_ec_status；1=工作的，2=取消的，3=发行的，4=P.P中变更的，5=固定的，6=挂起的，7=拒绝的）
     /// </summary>
     public int? ChangeStatus { get; set; }
 
@@ -241,9 +241,9 @@ public class TaktEcGijutsuCreateDto
     public string CompanyDefaultCulture { get; set; } = string.Empty;
 
     /// <summary>
-    /// 工厂代码
+    /// 工厂代码（关联 TaktPlant.PlantCode，选项 TaktPlants/options）
     /// </summary>
-    [Required(ErrorMessage = "工厂代码不能为空")]
+    [Required(ErrorMessage = "工厂代码（关联 TaktPlant.PlantCode，选项 TaktPlants/options）不能为空")]
     public string PlantCode { get; set; } = string.Empty;
 
     /// <summary>
@@ -258,7 +258,7 @@ public class TaktEcGijutsuCreateDto
     public DateTime EcIssueDate { get; set; }
 
     /// <summary>
-    /// 变更状态(1=工作的 2=取消的 3=发行的 4=P.P中变更的 5=固定的 6=挂起的 7=拒绝的)
+    /// 变更状态（字典 logistics_ec_status；1=工作的，2=取消的，3=发行的，4=P.P中变更的，5=固定的，6=挂起的，7=拒绝的）
     /// </summary>
     public int ChangeStatus { get; set; } = 0;
 
@@ -277,7 +277,7 @@ public class TaktEcGijutsuCreateDto
     /// <summary>
     /// 负责人（关联 TaktEmployee.Id，选项 TaktEmployees/options）
     /// </summary>
-    [Required(ErrorMessage = "负责人不能为空")]
+    [Required(ErrorMessage = "负责人（关联 TaktEmployee.Id，选项 TaktEmployees/options）不能为空")]
     public string EcLeader { get; set; } = string.Empty;
 
     /// <summary>
@@ -286,10 +286,9 @@ public class TaktEcGijutsuCreateDto
     public decimal EcLossAmount { get; set; }
 
     /// <summary>
-    /// 区分/类别 1:全仕向，2：部管，3：内部，4：技术
+    /// 区分/类别（字典 logistics_ec_distinction_category；1=全仕向，2=部管，3=内部，4=技术）
     /// </summary>
-    [Required(ErrorMessage = "区分/类别不能为空")]
-    public int EcDistinction { get; set; } = 4;
+    public int EcDistinction { get; set; } = 0;
 
     /// <summary>
     /// 录入日期
@@ -299,22 +298,22 @@ public class TaktEcGijutsuCreateDto
     /// <summary>
     /// 设变状态（字典 logistics_ec_gijutsu_status；1=发行，2=执行中，3=完成）
     /// </summary>
-    public int EcStatus { get; set; } = 1;
+    public int EcStatus { get; set; } = 0;
 
     /// <summary>
     /// 设变明细列表（技术阶段一：③，BOM/料号变更行）（子表，级联保存）
     /// </summary>
-    public List<TaktEcDetailCreateDto>? EcDetails { get; set; }
+    public List<TaktEcDetailUpdateDto>? EcDetails { get; set; }
 
     /// <summary>
     /// 设变附件列表（技术阶段一：②，联络/EPP/FPP 等文档）（子表，级联保存）
     /// </summary>
-    public List<TaktEcAttachmentCreateDto>? Attachments { get; set; }
+    public List<TaktEcAttachmentUpdateDto>? Attachments { get; set; }
 
     /// <summary>
     /// 设变通知列表（技术阶段一：④，发行通知至各部门）（子表，级联保存）
     /// </summary>
-    public List<TaktEcNotificationCreateDto>? Notifications { get; set; }
+    public List<TaktEcNotificationUpdateDto>? Notifications { get; set; }
 
     /// <summary>
     /// 扩展字段JSON
@@ -366,9 +365,9 @@ public class TaktEcGijutsuStatusDto
     public long EcGijutsuId { get; set; }
 
     /// <summary>
-    /// 变更状态(1=工作的 2=取消的 3=发行的 4=P.P中变更的 5=固定的 6=挂起的 7=拒绝的)
+    /// 变更状态（字典 logistics_ec_status；1=工作的，2=取消的，3=发行的，4=P.P中变更的，5=固定的，6=挂起的，7=拒绝的）
     /// </summary>
-    [Required(ErrorMessage = "变更状态(1=工作的 2=取消的 3=发行的 4=P.P中变更的 5=固定的 6=挂起的 7=拒绝的)不能为空")]
+    [Required(ErrorMessage = "变更状态（字典 logistics_ec_status；1=工作的，2=取消的，3=发行的，4=P.P中变更的，5=固定的，6=挂起的，7=拒绝的）不能为空")]
     public int ChangeStatus { get; set; } = 0;
 }
 
@@ -392,7 +391,7 @@ public class TaktEcGijutsuTemplateDto
     public string? CompanyCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 工厂代码
+    /// 工厂代码（关联 TaktPlant.PlantCode，选项 TaktPlants/options）
     /// </summary>
     public string? PlantCode { get; set; } = string.Empty;
 
@@ -407,7 +406,7 @@ public class TaktEcGijutsuTemplateDto
     public DateTime? EcIssueDate { get; set; }
 
     /// <summary>
-    /// 变更状态(1=工作的 2=取消的 3=发行的 4=P.P中变更的 5=固定的 6=挂起的 7=拒绝的)
+    /// 变更状态（字典 logistics_ec_status；1=工作的，2=取消的，3=发行的，4=P.P中变更的，5=固定的，6=挂起的，7=拒绝的）
     /// </summary>
     public int? ChangeStatus { get; set; }
 
@@ -494,7 +493,7 @@ public class TaktEcGijutsuImportDto
     public string? CompanyDefaultCulture { get; set; } = string.Empty;
 
     /// <summary>
-    /// 工厂代码
+    /// 工厂代码（关联 TaktPlant.PlantCode，选项 TaktPlants/options）
     /// </summary>
     public string? PlantCode { get; set; } = string.Empty;
 
@@ -509,7 +508,7 @@ public class TaktEcGijutsuImportDto
     public DateTime? EcIssueDate { get; set; }
 
     /// <summary>
-    /// 变更状态(1=工作的 2=取消的 3=发行的 4=P.P中变更的 5=固定的 6=挂起的 7=拒绝的)
+    /// 变更状态（字典 logistics_ec_status；1=工作的，2=取消的，3=发行的，4=P.P中变更的，5=固定的，6=挂起的，7=拒绝的）
     /// </summary>
     public int? ChangeStatus { get; set; }
 
@@ -597,7 +596,7 @@ public class TaktEcGijutsuExportDto
     public string CompanyCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 工厂代码
+    /// 工厂代码（关联 TaktPlant.PlantCode，选项 TaktPlants/options）
     /// </summary>
     public string PlantCode { get; set; } = string.Empty;
 
@@ -612,7 +611,7 @@ public class TaktEcGijutsuExportDto
     public DateTime EcIssueDate { get; set; }
 
     /// <summary>
-    /// 变更状态(1=工作的 2=取消的 3=发行的 4=P.P中变更的 5=固定的 6=挂起的 7=拒绝的)
+    /// 变更状态（字典 logistics_ec_status；1=工作的，2=取消的，3=发行的，4=P.P中变更的，5=固定的，6=挂起的，7=拒绝的）
     /// </summary>
     public int ChangeStatus { get; set; } = 0;
 
@@ -639,7 +638,7 @@ public class TaktEcGijutsuExportDto
     /// <summary>
     /// 区分/类别（字典 logistics_ec_distinction_category；1=全仕向，2=部管，3=内部，4=技术）
     /// </summary>
-    public int EcDistinction { get; set; } = 4;
+    public int EcDistinction { get; set; } = 0;
 
     /// <summary>
     /// 录入日期
@@ -649,7 +648,7 @@ public class TaktEcGijutsuExportDto
     /// <summary>
     /// 设变状态（字典 logistics_ec_gijutsu_status；1=发行，2=执行中，3=完成）
     /// </summary>
-    public int EcStatus { get; set; } = 1;
+    public int EcStatus { get; set; } = 0;
 
     /// <summary>
     /// 扩展字段JSON

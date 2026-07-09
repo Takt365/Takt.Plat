@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：frontend/src/types/logistics/quality/complaint
 // 文件名称：customer-satisfaction-survey-item.d.ts
-// 创建时间：2026-06-23
+// 创建时间：2026-07-09
 // 创建人：Takt365(Auto Generated)
 // 功能描述：logistics/quality/complaint 模块类型定义（自动生成；类型名去 Takt 前缀与末尾 Dto，如 TaktCompanyDto → Company）
 // 
@@ -29,12 +29,12 @@ export interface CustomerSatisfactionSurveyItem extends CompanyDtoBase {
   customerSatisfactionSurveyItemId: string;
 
   /**
-   * 调查表ID（主子表关系，序列化为string以避免Javascript精度问题）
+   * 调查表 ID（关联 TaktCustomerSatisfactionSurvey.Id，选项 TaktCustomerSatisfactionSurveys/options）
    */
   surveyId: string;
 
   /**
-   * 调查表名称（填充字段）
+   * 调查表 名称（填充字段）
    */
   surveyName?: string;
 
@@ -49,7 +49,7 @@ export interface CustomerSatisfactionSurveyItem extends CompanyDtoBase {
   lineNumber: number;
 
   /**
-   * 调查类别类型（0=产品质量，1=交付服务，2=售后服务，3=技术支持，4=价格，5=其他）
+   * 调查类别类型（字典 logistics_quality_satisfaction_category）
    */
   categoryType: number;
 
@@ -74,7 +74,7 @@ export interface CustomerSatisfactionSurveyItem extends CompanyDtoBase {
   score?: number;
 
   /**
-   * 满意度等级（0=非常不满意，1=不满意，2=一般，3=满意，4=非常满意）
+   * 满意度等级（字典 logistics_quality_satisfaction_level）
    */
   satisfactionLevel?: number;
 
@@ -94,9 +94,14 @@ export interface CustomerSatisfactionSurveyItem extends CompanyDtoBase {
   followUpAction?: string;
 
   /**
-   * 跟进状态（0=无需跟进，1=待跟进，2=跟进中，3=已完成）
+   * 跟进状态（字典 logistics_quality_follow_up_status）
    */
   followUpStatus: number;
+
+  /**
+   * 是否作废（字典 sys_yes_no_type，0=否 1=是；编辑移除子行时标记作废）
+   */
+  isObsolete: number;
 
   /**
    * 调查表主表 （主表：TaktCustomerSatisfactionSurvey）
@@ -124,7 +129,7 @@ export interface CustomerSatisfactionSurveyItemQuery extends TaktPagedQuery {
   companyCode?: string;
 
   /**
-   * 调查表ID（主子表关系，序列化为string以避免Javascript精度问题）
+   * 调查表 ID（关联 TaktCustomerSatisfactionSurvey.Id，选项 TaktCustomerSatisfactionSurveys/options）
    */
   surveyId?: string;
 
@@ -139,7 +144,7 @@ export interface CustomerSatisfactionSurveyItemQuery extends TaktPagedQuery {
   lineNumber?: number;
 
   /**
-   * 调查类别类型（0=产品质量，1=交付服务，2=售后服务，3=技术支持，4=价格，5=其他）
+   * 调查类别类型（字典 logistics_quality_satisfaction_category）
    */
   categoryType?: number;
 
@@ -164,7 +169,7 @@ export interface CustomerSatisfactionSurveyItemQuery extends TaktPagedQuery {
   score?: number;
 
   /**
-   * 满意度等级（0=非常不满意，1=不满意，2=一般，3=满意，4=非常满意）
+   * 满意度等级（字典 logistics_quality_satisfaction_level）
    */
   satisfactionLevel?: number;
 
@@ -184,9 +189,14 @@ export interface CustomerSatisfactionSurveyItemQuery extends TaktPagedQuery {
   followUpAction?: string;
 
   /**
-   * 跟进状态（0=无需跟进，1=待跟进，2=跟进中，3=已完成）
+   * 跟进状态（字典 logistics_quality_follow_up_status）
    */
   followUpStatus?: number;
+
+  /**
+   * 是否作废（字典 sys_yes_no_type，0=否 1=是；编辑移除子行时标记作废）
+   */
+  isObsolete?: number;
 
   /**
    * 创建时间（范围查询-开始）
@@ -233,7 +243,7 @@ export interface CustomerSatisfactionSurveyItemCreate {
   companyDefaultCulture: string;
 
   /**
-   * 调查表ID（主子表关系，序列化为string以避免Javascript精度问题）
+   * 调查表 ID（关联 TaktCustomerSatisfactionSurvey.Id，选项 TaktCustomerSatisfactionSurveys/options）
    */
   surveyId: string;
 
@@ -248,7 +258,7 @@ export interface CustomerSatisfactionSurveyItemCreate {
   lineNumber: number;
 
   /**
-   * 调查类别类型（0=产品质量，1=交付服务，2=售后服务，3=技术支持，4=价格，5=其他）
+   * 调查类别类型（字典 logistics_quality_satisfaction_category）
    */
   categoryType: number;
 
@@ -273,7 +283,7 @@ export interface CustomerSatisfactionSurveyItemCreate {
   score?: number;
 
   /**
-   * 满意度等级（0=非常不满意，1=不满意，2=一般，3=满意，4=非常满意）
+   * 满意度等级（字典 logistics_quality_satisfaction_level）
    */
   satisfactionLevel?: number;
 
@@ -293,9 +303,14 @@ export interface CustomerSatisfactionSurveyItemCreate {
   followUpAction?: string;
 
   /**
-   * 跟进状态（0=无需跟进，1=待跟进，2=跟进中，3=已完成）
+   * 跟进状态（字典 logistics_quality_follow_up_status）
    */
   followUpStatus: number;
+
+  /**
+   * 是否作废（字典 sys_yes_no_type，0=否 1=是；编辑移除子行时标记作废）
+   */
+  isObsolete: number;
 
   /**
    * 扩展字段JSON
@@ -337,9 +352,28 @@ export interface CustomerSatisfactionSurveyItemStatus {
   customerSatisfactionSurveyItemId: string;
 
   /**
-   * 跟进状态（0=无需跟进，1=待跟进，2=跟进中，3=已完成）
+   * 跟进状态（字典 logistics_quality_follow_up_status）
    */
   followUpStatus: number;
+
+}
+
+
+/**
+ * CustomerSatisfactionSurveyItem 作废/撤销作废 DTO
+ * 对应前端 CustomerSatisfactionSurveyItemObsolete
+ * @description 对应后端 TaktCustomerSatisfactionSurveyItemObsoleteDto
+ */
+export interface CustomerSatisfactionSurveyItemObsolete {
+  /**
+   * CustomerSatisfactionSurveyItemID
+   */
+  customerSatisfactionSurveyItemId: string;
+
+  /**
+   * 是否作废（字典 sys_yes_no_type，0=否 1=是；编辑移除子行时标记作废）
+   */
+  isObsolete: number;
 
 }
 
@@ -361,7 +395,7 @@ export interface CustomerSatisfactionSurveyItemTemplate {
   companyCode?: string;
 
   /**
-   * 调查表ID（主子表关系，序列化为string以避免Javascript精度问题）
+   * 调查表 ID（关联 TaktCustomerSatisfactionSurvey.Id，选项 TaktCustomerSatisfactionSurveys/options）
    */
   surveyId?: string;
 
@@ -376,7 +410,7 @@ export interface CustomerSatisfactionSurveyItemTemplate {
   lineNumber?: number;
 
   /**
-   * 调查类别类型（0=产品质量，1=交付服务，2=售后服务，3=技术支持，4=价格，5=其他）
+   * 调查类别类型（字典 logistics_quality_satisfaction_category）
    */
   categoryType?: number;
 
@@ -401,7 +435,7 @@ export interface CustomerSatisfactionSurveyItemTemplate {
   score?: number;
 
   /**
-   * 满意度等级（0=非常不满意，1=不满意，2=一般，3=满意，4=非常满意）
+   * 满意度等级（字典 logistics_quality_satisfaction_level）
    */
   satisfactionLevel?: number;
 
@@ -421,9 +455,14 @@ export interface CustomerSatisfactionSurveyItemTemplate {
   followUpAction?: string;
 
   /**
-   * 跟进状态（0=无需跟进，1=待跟进，2=跟进中，3=已完成）
+   * 跟进状态（字典 logistics_quality_follow_up_status）
    */
   followUpStatus?: number;
+
+  /**
+   * 是否作废（字典 sys_yes_no_type，0=否 1=是；编辑移除子行时标记作废）
+   */
+  isObsolete?: number;
 
   /**
    * 扩展字段JSON
@@ -460,7 +499,7 @@ export interface CustomerSatisfactionSurveyItemImport {
   companyDefaultCulture?: string;
 
   /**
-   * 调查表ID（主子表关系，序列化为string以避免Javascript精度问题）
+   * 调查表 ID（关联 TaktCustomerSatisfactionSurvey.Id，选项 TaktCustomerSatisfactionSurveys/options）
    */
   surveyId?: string;
 
@@ -475,7 +514,7 @@ export interface CustomerSatisfactionSurveyItemImport {
   lineNumber?: number;
 
   /**
-   * 调查类别类型（0=产品质量，1=交付服务，2=售后服务，3=技术支持，4=价格，5=其他）
+   * 调查类别类型（字典 logistics_quality_satisfaction_category）
    */
   categoryType?: number;
 
@@ -500,7 +539,7 @@ export interface CustomerSatisfactionSurveyItemImport {
   score?: number;
 
   /**
-   * 满意度等级（0=非常不满意，1=不满意，2=一般，3=满意，4=非常满意）
+   * 满意度等级（字典 logistics_quality_satisfaction_level）
    */
   satisfactionLevel?: number;
 
@@ -520,9 +559,14 @@ export interface CustomerSatisfactionSurveyItemImport {
   followUpAction?: string;
 
   /**
-   * 跟进状态（0=无需跟进，1=待跟进，2=跟进中，3=已完成）
+   * 跟进状态（字典 logistics_quality_follow_up_status）
    */
   followUpStatus?: number;
+
+  /**
+   * 是否作废（字典 sys_yes_no_type，0=否 1=是；编辑移除子行时标记作废）
+   */
+  isObsolete?: number;
 
   /**
    * 扩展字段JSON
@@ -554,7 +598,7 @@ export interface CustomerSatisfactionSurveyItemExport {
   companyCode: string;
 
   /**
-   * 调查表ID（主子表关系，序列化为string以避免Javascript精度问题）
+   * 调查表 ID（关联 TaktCustomerSatisfactionSurvey.Id，选项 TaktCustomerSatisfactionSurveys/options）
    */
   surveyId: string;
 
@@ -569,7 +613,7 @@ export interface CustomerSatisfactionSurveyItemExport {
   lineNumber: number;
 
   /**
-   * 调查类别类型（0=产品质量，1=交付服务，2=售后服务，3=技术支持，4=价格，5=其他）
+   * 调查类别类型（字典 logistics_quality_satisfaction_category）
    */
   categoryType: number;
 
@@ -594,7 +638,7 @@ export interface CustomerSatisfactionSurveyItemExport {
   score?: number;
 
   /**
-   * 满意度等级（0=非常不满意，1=不满意，2=一般，3=满意，4=非常满意）
+   * 满意度等级（字典 logistics_quality_satisfaction_level）
    */
   satisfactionLevel?: number;
 
@@ -614,9 +658,14 @@ export interface CustomerSatisfactionSurveyItemExport {
   followUpAction?: string;
 
   /**
-   * 跟进状态（0=无需跟进，1=待跟进，2=跟进中，3=已完成）
+   * 跟进状态（字典 logistics_quality_follow_up_status）
    */
   followUpStatus: number;
+
+  /**
+   * 是否作废（字典 sys_yes_no_type，0=否 1=是；编辑移除子行时标记作废）
+   */
+  isObsolete: number;
 
   /**
    * 扩展字段JSON

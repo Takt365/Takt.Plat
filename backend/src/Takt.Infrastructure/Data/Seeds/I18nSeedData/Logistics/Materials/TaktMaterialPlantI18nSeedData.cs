@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Infrastructure.Data.Seeds.I18nSeedData.Logistics.Materials
 // 文件名称：TaktMaterialPlantI18nSeedData.cs
-// 创建时间：2026-07-02
+// 创建时间：2026-07-09
 // 创建人：Takt365(Auto Generated)
 // 功能描述：TaktMaterialPlant 实体字段国际化种子（无对应 frontend locales；TranslationText 取自 ColumnDescription，ContextNote 取自属性 XML summary）
 // 
@@ -404,15 +404,6 @@ public class TaktMaterialPlantI18nSeedData : ITaktSeedDataCoordinator
             new TranslationSeedItem("entity.materialplant.materialstatus", "zh-CN", "物料状态", "物料状态（字典 sys_normal_disable_status；0=禁用，1=启用，2=锁定）"),
             // entity.materialplant.materialstatus
             new TranslationSeedItem("entity.materialplant.materialstatus", "zh-HK", "物料状态_hk", "物料状态（字典 sys_normal_disable_status；0=禁用，1=启用，2=锁定）"),
-
-            // entity.materialplant.changelogs
-            new TranslationSeedItem("entity.materialplant.changelogs", "en-US", "工厂物料变更记录列表_us", "工厂物料变更记录列表（外键在子表 TaktMaterialPlantChangeLog.MaterialPlantId）"),
-            // entity.materialplant.changelogs
-            new TranslationSeedItem("entity.materialplant.changelogs", "ja-JP", "工厂物料变更记录列表_jp", "工厂物料变更记录列表（外键在子表 TaktMaterialPlantChangeLog.MaterialPlantId）"),
-            // entity.materialplant.changelogs
-            new TranslationSeedItem("entity.materialplant.changelogs", "zh-CN", "工厂物料变更记录列表", "工厂物料变更记录列表（外键在子表 TaktMaterialPlantChangeLog.MaterialPlantId）"),
-            // entity.materialplant.changelogs
-            new TranslationSeedItem("entity.materialplant.changelogs", "zh-HK", "工厂物料变更记录列表_hk", "工厂物料变更记录列表（外键在子表 TaktMaterialPlantChangeLog.MaterialPlantId）"),
         };
     }
 

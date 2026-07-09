@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：frontend/src/types/logistics/procurement
 // 文件名称：purchase-order.d.ts
-// 创建时间：2026-06-24
+// 创建时间：2026-07-09
 // 创建人：Takt365(Auto Generated)
 // 功能描述：logistics/procurement 模块类型定义（自动生成；类型名去 Takt 前缀与末尾 Dto，如 TaktCompanyDto → Company）
 // 
@@ -29,7 +29,7 @@ export interface PurchaseOrder extends CompanyDtoBase {
   purchaseOrderId: string;
 
   /**
-   * 工厂代码（不可空）
+   * 工厂代码（选项 TaktPlants/options，DictValue=PlantCode）
    */
   plantCode: string;
 
@@ -39,7 +39,7 @@ export interface PurchaseOrder extends CompanyDtoBase {
   purchaseOrderCode: string;
 
   /**
-   * 来源采购申请 ID（采购链路自动生成时写入）
+   * 来源采购申请 ID（关联 TaktPurchaseRequest.Id，选项 TaktPurchaseRequests/options）
    */
   purchaseRequestId?: string;
 
@@ -54,7 +54,7 @@ export interface PurchaseOrder extends CompanyDtoBase {
   purchaseRequestCode?: string;
 
   /**
-   * 供应商编码
+   * 供应商编码（选项 TaktSuppliers/options，DictValue=SupplierCode）
    */
   supplierCode: string;
 
@@ -79,7 +79,7 @@ export interface PurchaseOrder extends CompanyDtoBase {
   actualArrivalDate?: string;
 
   /**
-   * 采购组编码（关联 TaktPurchaseGroup.PurchaseGroupCode）
+   * 采购组编码（选项 TaktPurchaseGroups/options，DictValue=PurchaseGroupCode）
    */
   purchaseGroup?: string;
 
@@ -139,7 +139,7 @@ export interface PurchaseOrder extends CompanyDtoBase {
   deliveryAddress?: string;
 
   /**
-   * 订单状态（1=启用，0=禁用）
+   * 订单状态（字典 sys_normal_disable_status；1=启用，0=禁用）
    */
   orderStatus: number;
 
@@ -152,11 +152,6 @@ export interface PurchaseOrder extends CompanyDtoBase {
    * 订单明细列表（主子表关系，一个订单可以有多个明细） （子表：TaktPurchaseOrderItem）
    */
   items?: PurchaseOrderItem[];
-
-  /**
-   * 采购订单变更记录列表（外键在子表 TaktPurchaseOrderChangeLog.OrderId） （子表：TaktPurchaseOrderChangeLog）
-   */
-  changeLogs?: PurchaseOrderChangeLog[];
 
 }
 
@@ -179,7 +174,7 @@ export interface PurchaseOrderQuery extends TaktPagedQuery {
   companyCode?: string;
 
   /**
-   * 工厂代码（不可空）
+   * 工厂代码（选项 TaktPlants/options，DictValue=PlantCode）
    */
   plantCode?: string;
 
@@ -189,7 +184,7 @@ export interface PurchaseOrderQuery extends TaktPagedQuery {
   purchaseOrderCode?: string;
 
   /**
-   * 来源采购申请 ID（采购链路自动生成时写入）
+   * 来源采购申请 ID（关联 TaktPurchaseRequest.Id，选项 TaktPurchaseRequests/options）
    */
   purchaseRequestId?: string;
 
@@ -199,7 +194,7 @@ export interface PurchaseOrderQuery extends TaktPagedQuery {
   purchaseRequestCode?: string;
 
   /**
-   * 供应商编码
+   * 供应商编码（选项 TaktSuppliers/options，DictValue=SupplierCode）
    */
   supplierCode?: string;
 
@@ -239,7 +234,7 @@ export interface PurchaseOrderQuery extends TaktPagedQuery {
   actualArrivalDateEnd?: string;
 
   /**
-   * 采购组编码（关联 TaktPurchaseGroup.PurchaseGroupCode）
+   * 采购组编码（选项 TaktPurchaseGroups/options，DictValue=PurchaseGroupCode）
    */
   purchaseGroup?: string;
 
@@ -299,7 +294,7 @@ export interface PurchaseOrderQuery extends TaktPagedQuery {
   deliveryAddress?: string;
 
   /**
-   * 订单状态（1=启用，0=禁用）
+   * 订单状态（字典 sys_normal_disable_status；1=启用，0=禁用）
    */
   orderStatus?: number;
 
@@ -353,7 +348,7 @@ export interface PurchaseOrderCreate {
   companyDefaultCulture: string;
 
   /**
-   * 工厂代码（不可空）
+   * 工厂代码（选项 TaktPlants/options，DictValue=PlantCode）
    */
   plantCode: string;
 
@@ -363,7 +358,7 @@ export interface PurchaseOrderCreate {
   purchaseOrderCode: string;
 
   /**
-   * 来源采购申请 ID（采购链路自动生成时写入）
+   * 来源采购申请 ID（关联 TaktPurchaseRequest.Id，选项 TaktPurchaseRequests/options）
    */
   purchaseRequestId?: string;
 
@@ -373,7 +368,7 @@ export interface PurchaseOrderCreate {
   purchaseRequestCode?: string;
 
   /**
-   * 供应商编码
+   * 供应商编码（选项 TaktSuppliers/options，DictValue=SupplierCode）
    */
   supplierCode: string;
 
@@ -398,7 +393,7 @@ export interface PurchaseOrderCreate {
   actualArrivalDate?: string;
 
   /**
-   * 采购组编码（关联 TaktPurchaseGroup.PurchaseGroupCode）
+   * 采购组编码（选项 TaktPurchaseGroups/options，DictValue=PurchaseGroupCode）
    */
   purchaseGroup?: string;
 
@@ -458,7 +453,7 @@ export interface PurchaseOrderCreate {
   deliveryAddress?: string;
 
   /**
-   * 订单状态（1=启用，0=禁用）
+   * 订单状态（字典 sys_normal_disable_status；1=启用，0=禁用）
    */
   orderStatus: number;
 
@@ -470,12 +465,7 @@ export interface PurchaseOrderCreate {
   /**
    * 订单明细列表（主子表关系，一个订单可以有多个明细）（子表，级联保存）
    */
-  items?: PurchaseOrderItemCreate[];
-
-  /**
-   * 采购订单变更记录列表（外键在子表 TaktPurchaseOrderChangeLog.OrderId）（子表，级联保存）
-   */
-  changeLogs?: PurchaseOrderChangeLogCreate[];
+  items?: PurchaseOrderItemUpdate[];
 
   /**
    * 扩展字段JSON
@@ -517,7 +507,7 @@ export interface PurchaseOrderStatus {
   purchaseOrderId: string;
 
   /**
-   * 订单状态（1=启用，0=禁用）
+   * 订单状态（字典 sys_normal_disable_status；1=启用，0=禁用）
    */
   orderStatus: number;
 
@@ -541,7 +531,7 @@ export interface PurchaseOrderTemplate {
   companyCode?: string;
 
   /**
-   * 工厂代码（不可空）
+   * 工厂代码（选项 TaktPlants/options，DictValue=PlantCode）
    */
   plantCode?: string;
 
@@ -551,7 +541,7 @@ export interface PurchaseOrderTemplate {
   purchaseOrderCode?: string;
 
   /**
-   * 来源采购申请 ID（采购链路自动生成时写入）
+   * 来源采购申请 ID（关联 TaktPurchaseRequest.Id，选项 TaktPurchaseRequests/options）
    */
   purchaseRequestId?: string;
 
@@ -561,7 +551,7 @@ export interface PurchaseOrderTemplate {
   purchaseRequestCode?: string;
 
   /**
-   * 供应商编码
+   * 供应商编码（选项 TaktSuppliers/options，DictValue=SupplierCode）
    */
   supplierCode?: string;
 
@@ -586,7 +576,7 @@ export interface PurchaseOrderTemplate {
   actualArrivalDate?: string;
 
   /**
-   * 采购组编码（关联 TaktPurchaseGroup.PurchaseGroupCode）
+   * 采购组编码（选项 TaktPurchaseGroups/options，DictValue=PurchaseGroupCode）
    */
   purchaseGroup?: string;
 
@@ -646,7 +636,7 @@ export interface PurchaseOrderTemplate {
   deliveryAddress?: string;
 
   /**
-   * 订单状态（1=启用，0=禁用）
+   * 订单状态（字典 sys_normal_disable_status；1=启用，0=禁用）
    */
   orderStatus?: number;
 
@@ -659,11 +649,6 @@ export interface PurchaseOrderTemplate {
    * 订单明细列表（主子表关系，一个订单可以有多个明细）（子表，级联保存）
    */
   items?: PurchaseOrderItemCreate[];
-
-  /**
-   * 采购订单变更记录列表（外键在子表 TaktPurchaseOrderChangeLog.OrderId）（子表，级联保存）
-   */
-  changeLogs?: PurchaseOrderChangeLogCreate[];
 
   /**
    * 扩展字段JSON
@@ -700,7 +685,7 @@ export interface PurchaseOrderImport {
   companyDefaultCulture?: string;
 
   /**
-   * 工厂代码（不可空）
+   * 工厂代码（选项 TaktPlants/options，DictValue=PlantCode）
    */
   plantCode?: string;
 
@@ -710,7 +695,7 @@ export interface PurchaseOrderImport {
   purchaseOrderCode?: string;
 
   /**
-   * 来源采购申请 ID（采购链路自动生成时写入）
+   * 来源采购申请 ID（关联 TaktPurchaseRequest.Id，选项 TaktPurchaseRequests/options）
    */
   purchaseRequestId?: string;
 
@@ -720,7 +705,7 @@ export interface PurchaseOrderImport {
   purchaseRequestCode?: string;
 
   /**
-   * 供应商编码
+   * 供应商编码（选项 TaktSuppliers/options，DictValue=SupplierCode）
    */
   supplierCode?: string;
 
@@ -745,7 +730,7 @@ export interface PurchaseOrderImport {
   actualArrivalDate?: string;
 
   /**
-   * 采购组编码（关联 TaktPurchaseGroup.PurchaseGroupCode）
+   * 采购组编码（选项 TaktPurchaseGroups/options，DictValue=PurchaseGroupCode）
    */
   purchaseGroup?: string;
 
@@ -805,7 +790,7 @@ export interface PurchaseOrderImport {
   deliveryAddress?: string;
 
   /**
-   * 订单状态（1=启用，0=禁用）
+   * 订单状态（字典 sys_normal_disable_status；1=启用，0=禁用）
    */
   orderStatus?: number;
 
@@ -818,11 +803,6 @@ export interface PurchaseOrderImport {
    * 订单明细列表（主子表关系，一个订单可以有多个明细）（子表，级联保存）
    */
   items?: PurchaseOrderItemCreate[];
-
-  /**
-   * 采购订单变更记录列表（外键在子表 TaktPurchaseOrderChangeLog.OrderId）（子表，级联保存）
-   */
-  changeLogs?: PurchaseOrderChangeLogCreate[];
 
   /**
    * 扩展字段JSON
@@ -854,7 +834,7 @@ export interface PurchaseOrderExport {
   companyCode: string;
 
   /**
-   * 工厂代码（不可空）
+   * 工厂代码（选项 TaktPlants/options，DictValue=PlantCode）
    */
   plantCode: string;
 
@@ -864,7 +844,7 @@ export interface PurchaseOrderExport {
   purchaseOrderCode: string;
 
   /**
-   * 来源采购申请 ID（采购链路自动生成时写入）
+   * 来源采购申请 ID（关联 TaktPurchaseRequest.Id，选项 TaktPurchaseRequests/options）
    */
   purchaseRequestId?: string;
 
@@ -874,7 +854,7 @@ export interface PurchaseOrderExport {
   purchaseRequestCode?: string;
 
   /**
-   * 供应商编码
+   * 供应商编码（选项 TaktSuppliers/options，DictValue=SupplierCode）
    */
   supplierCode: string;
 
@@ -899,7 +879,7 @@ export interface PurchaseOrderExport {
   actualArrivalDate?: string;
 
   /**
-   * 采购组编码（关联 TaktPurchaseGroup.PurchaseGroupCode）
+   * 采购组编码（选项 TaktPurchaseGroups/options，DictValue=PurchaseGroupCode）
    */
   purchaseGroup?: string;
 
@@ -959,7 +939,7 @@ export interface PurchaseOrderExport {
   deliveryAddress?: string;
 
   /**
-   * 订单状态（1=启用，0=禁用）
+   * 订单状态（字典 sys_normal_disable_status；1=启用，0=禁用）
    */
   orderStatus: number;
 

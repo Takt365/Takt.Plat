@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Application.Services.Accounting.Financial
 // 文件名称：TaktCountersignService.cs
-// 创建时间：2026-06-30
+// 创建时间：2026-07-09
 // 创建人：Takt365(Cursor AI)
 // 功能描述：会签单应用服务实现
 // 
@@ -303,6 +303,30 @@ public class TaktCountersignService : TaktServiceBase, ITaktCountersignService
     // ========================================
 
     /// <summary>
+    /// 将指定主表下全部未作废会签单明细标记为作废（编辑清空子表）
+    /// </summary>
+    /// <param name="countersignId">主表主键</param>
+    /// <returns>任务</returns>
+    private async Task MarkCountersignDetailsObsoleteAsync(long countersignId)
+    {
+        if (countersignId <= 0)
+        {
+            return;
+        }
+        var rows = await _countersignDetailRepository.GetListAsync(
+            x => x.CountersignId == countersignId && x.IsObsolete == 0);
+        if (rows.Count == 0)
+        {
+            return;
+        }
+        foreach (var row in rows)
+        {
+            row.IsObsolete = 1;
+        }
+        await _countersignDetailRepository.UpdateRangeAsync(rows);
+    }
+
+    /// <summary>
     /// 填充会签单详情（加载 OneToMany 子表：会签单明细）
     /// </summary>
     /// <param name="dto">响应 DTO</param>
@@ -314,13 +338,13 @@ public class TaktCountersignService : TaktServiceBase, ITaktCountersignService
         {
             return;
         }
-        // 会签单明细 → dto.CountersignDetails
+        // 会签单明细 → dto.CountersignDetails（含作废行）
         var countersigndetails = await _countersignDetailRepository.GetListAsync(x => x.CountersignId == entity.Id);
         dto.CountersignDetails = countersigndetails.Adapt<List<TaktCountersignDetailDto>>();
     }
 
     /// <summary>
-    /// 保存会签单子表级联（会签单明细；Create/Update 后按主表 Id 先删后插）
+    /// 保存会签单子表级联（会签单明细；按子表 Id 增量新增/更新；未提交行标记作废，禁止先删后插）
     /// </summary>
     /// <param name="entity">主表实体</param>
     /// <param name="dto">创建/更新 DTO（含子表集合；UpdateDto 须继承 CreateDto）</param>
@@ -330,55 +354,95 @@ public class TaktCountersignService : TaktServiceBase, ITaktCountersignService
         // 会签单明细（CountersignDetails）
         if (dto.CountersignDetails is not { Count: > 0 })
         {
-            await _countersignDetailRepository.DeleteAsync(x => x.CountersignId == entity.Id);
+            await MarkCountersignDetailsObsoleteAsync(entity.Id);
+            return;
         }
         else
         {
-            var countersigndetails = dto.CountersignDetails.Adapt<List<TaktCountersignDetail>>();
-            foreach (var child in countersigndetails)
+            var existingList = await _countersignDetailRepository.GetListAsync(x => x.CountersignId == entity.Id);
+            var existingById = existingList.ToDictionary(x => x.Id);
+            var submittedIds = new HashSet<long>();
+            var toCreate = new List<TaktCountersignDetail>();
+            var seenLineKeys = new HashSet<string>(StringComparer.Ordinal);
+            for (var i = 0; i < dto.CountersignDetails.Count; i++)
             {
-                child.CountersignId = entity.Id;
-            }
-            var countersigndetailsNeedLine = countersigndetails.Where(c => c.LineNumber <= 0).ToList();
-            if (countersigndetailsNeedLine.Count > 0)
-            {
-                var businessCode = !string.IsNullOrWhiteSpace(entity.CountersignCode) ? entity.CountersignCode : entity.Id.ToString();
-                var maxLine = await _countersignDetailRepository.GetMaxIntAsync(
-                    x => x.TenantCode == CurrentTenantCode && x.CompanyCode == CurrentCompanyCode && x.CountersignId == entity.Id,
-                    x => x.LineNumber);
-                var lineSeq = _lineNumberGenerator.GenerateSequence(businessCode, countersigndetailsNeedLine.Count, maxLine).ToList();
-                var lineIdx = 0;
-                foreach (var child in countersigndetails)
+                var childDto = dto.CountersignDetails[i];
+                childDto.CountersignId = entity.Id;
+                var lineKey = $"{entity.CompanyCode}|{entity.Id}|{childDto.LineNumber}";
+                if (!seenLineKeys.Add(lineKey))
                 {
-                    if (child.LineNumber <= 0)
+                    throw new TaktBusinessException("会签单明细第{i + 1}项与本次提交的其他项重复（CompanyCode、CountersignId、LineNumber）");
+                }
+                if (childDto.CountersignDetailId > 0)
+                {
+                    if (!existingById.TryGetValue(childDto.CountersignDetailId, out var target))
                     {
-                        child.LineNumber = lineSeq[lineIdx++];
+                        throw new TaktBusinessException("会签单明细不存在（CountersignDetailId={childDto.CountersignDetailId}）");
                     }
+                    if (target.CountersignId != entity.Id)
+                    {
+                        throw new TaktBusinessException("会签单明细不属于当前主表（CountersignDetailId={childDto.CountersignDetailId}）");
+                    }
+                    submittedIds.Add(childDto.CountersignDetailId);
+                    var isUniqueUpdate_ix_countersign_detail_line_unique = await _uniqueValidator.IsUniqueAsync(
+                        _countersignDetailRepository,
+                        x => x.CompanyCode == x.CompanyCode
+                && x.CountersignId == x.CountersignId
+                && x.LineNumber == x.LineNumber,
+                        childDto.CountersignDetailId);
+                    if (!isUniqueUpdate_ix_countersign_detail_line_unique)
+                    {
+                        throw new TaktBusinessException("会签单明细的CompanyCode、CountersignId、LineNumber已存在");
+                    }
+                    childDto.Adapt(target);
+                    target.Id = childDto.CountersignDetailId;
+                    target.CountersignId = entity.Id;
+                    target.IsObsolete = 0;
+                    await _countersignDetailRepository.UpdateAsync(target);
+                }
+                else
+                {
+                    var isUniqueCreate_ix_countersign_detail_line_unique = await _uniqueValidator.IsUniqueAsync(
+                        _countersignDetailRepository,
+                        x => x.CompanyCode == x.CompanyCode
+                && x.CountersignId == x.CountersignId
+                && x.LineNumber == x.LineNumber);
+                    if (!isUniqueCreate_ix_countersign_detail_line_unique)
+                    {
+                        throw new TaktBusinessException("会签单明细的CompanyCode、CountersignId、LineNumber已存在");
+                    }
+                    var child = childDto.Adapt<TaktCountersignDetail>();
+                    child.Id = 0;
+                    child.CountersignId = entity.Id;
+                    child.IsObsolete = 0;
+                    toCreate.Add(child);
                 }
             }
-                        var seenKeys = new HashSet<string>(StringComparer.Ordinal);
-                        for (var i = 0; i < countersigndetails.Count; i++)
+            var toObsolete = existingList.Where(x => !submittedIds.Contains(x.Id) && x.IsObsolete == 0).ToList();
+            foreach (var removed in toObsolete)
+            {
+                removed.IsObsolete = 1;
+                await _countersignDetailRepository.UpdateAsync(removed);
+            }
+            if (toCreate.Count > 0)
+            {
+                var needLine = toCreate.Where(c => c.LineNumber <= 0).ToList();
+                if (needLine.Count > 0)
+                {
+                    var businessCode = !string.IsNullOrWhiteSpace(entity.CountersignCode) ? entity.CountersignCode : entity.Id.ToString();
+                    var maxLine = existingList.Count > 0 ? existingList.Max(x => x.LineNumber) : 0;
+                    var lineSeq = _lineNumberGenerator.GenerateSequence(businessCode, needLine.Count, maxLine).ToList();
+                    var lineIdx = 0;
+                    foreach (var child in toCreate)
+                    {
+                        if (child.LineNumber <= 0)
                         {
-                            var key = $"{countersigndetails[i].CompanyCode}|{countersigndetails[i].CountersignId}|{countersigndetails[i].LineNumber}";
-                            if (!seenKeys.Add(key))
-                            {
-                                throw new TaktBusinessException($"会签单明细第{i + 1}项与本次提交的其他项重复（CompanyCode、CountersignId、LineNumber）");
-                            }
+                            child.LineNumber = lineSeq[lineIdx++];
                         }
-            await _countersignDetailRepository.DeleteAsync(x => x.CountersignId == entity.Id);
-            foreach (var child in countersigndetails)
-            {
-            var isUnique_ix_countersign_detail_line_unique = await _uniqueValidator.IsUniqueAsync(
-                _countersignDetailRepository,
-                x => x.CompanyCode == child.CompanyCode
-                    && x.CountersignId == child.CountersignId
-                    && x.LineNumber == child.LineNumber);
-            if (!isUnique_ix_countersign_detail_line_unique)
-            {
-                throw new TaktBusinessException("会签单明细的CompanyCode、CountersignId、LineNumber已存在");
+                    }
+                }
+                await _countersignDetailRepository.CreateRangeAsync(toCreate);
             }
-            }
-            await _countersignDetailRepository.CreateRangeAsync(countersigndetails);
         }
     }
     // ========================================

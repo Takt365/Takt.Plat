@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Application.Dtos.Logistics.Manufacturing.Bom
 // 文件名称：TaktBillOfMaterialSubstituteDtos.cs
-// 创建时间：2026-06-23
+// 创建时间：2026-07-09
 // 创建人：Takt365(Auto Generated)
 // 功能描述：BillOfMaterialSubstitute 模块 DTO（由 generate-dtos-from-entity.cjs 根据 TaktBillOfMaterialSubstitute 生成，请按需审阅）
 // 
@@ -73,7 +73,7 @@ public class TaktBillOfMaterialSubstituteDto : TaktCompanyDtoBase
     public int LineNumber { get; set; } = 0;
 
     /// <summary>
-    /// 替代物料ID（关联工厂物料主数据，序列化为string以避免Javascript精度问题）
+    /// 替代物料ID（关联工厂物料 TaktMaterialPlant.Id，选项 TaktMaterialPlants/options）
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
     public long SubstituteMaterialId { get; set; }
@@ -104,7 +104,7 @@ public class TaktBillOfMaterialSubstituteDto : TaktCompanyDtoBase
     public decimal UsageQuantity { get; set; }
 
     /// <summary>
-    /// 单位
+    /// 单位（字典 logistics_unit_of_measure_code）
     /// </summary>
     public string MaterialUnit { get; set; } = string.Empty;
 
@@ -127,6 +127,11 @@ public class TaktBillOfMaterialSubstituteDto : TaktCompanyDtoBase
     /// 失效日期（为空表示永久有效）
     /// </summary>
     public DateTime? ExpiryDate { get; set; }
+
+    /// <summary>
+    /// 是否作废（字典 sys_yes_no_type，0=否 1=是；编辑移除子行时标记作废）
+    /// </summary>
+    public int IsObsolete { get; set; } = 0;
 
     /// <summary>
     /// 物料清单明细（主表）
@@ -190,7 +195,7 @@ public class TaktBillOfMaterialSubstituteQueryDto : TaktPagedQuery
     public int? LineNumber { get; set; }
 
     /// <summary>
-    /// 替代物料ID（关联工厂物料主数据，序列化为string以避免Javascript精度问题）
+    /// 替代物料ID（关联工厂物料 TaktMaterialPlant.Id，选项 TaktMaterialPlants/options）
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
     public long? SubstituteMaterialId { get; set; }
@@ -216,7 +221,7 @@ public class TaktBillOfMaterialSubstituteQueryDto : TaktPagedQuery
     public decimal? UsageQuantity { get; set; }
 
     /// <summary>
-    /// 单位
+    /// 单位（字典 logistics_unit_of_measure_code）
     /// </summary>
     public string? MaterialUnit { get; set; } = string.Empty;
 
@@ -249,6 +254,11 @@ public class TaktBillOfMaterialSubstituteQueryDto : TaktPagedQuery
     /// 失效日期（为空表示永久有效）（范围查询-结束）
     /// </summary>
     public DateTime? ExpiryDateEnd { get; set; }
+
+    /// <summary>
+    /// 是否作废（字典 sys_yes_no_type，0=否 1=是；编辑移除子行时标记作废）
+    /// </summary>
+    public int? IsObsolete { get; set; }
 
     /// <summary>
     /// 创建时间（范围查询-开始）
@@ -325,7 +335,7 @@ public class TaktBillOfMaterialSubstituteCreateDto
     public int LineNumber { get; set; } = 0;
 
     /// <summary>
-    /// 替代物料ID（关联工厂物料主数据，序列化为string以避免Javascript精度问题）
+    /// 替代物料ID（关联工厂物料 TaktMaterialPlant.Id，选项 TaktMaterialPlants/options）
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
     public long SubstituteMaterialId { get; set; }
@@ -352,9 +362,9 @@ public class TaktBillOfMaterialSubstituteCreateDto
     public decimal UsageQuantity { get; set; }
 
     /// <summary>
-    /// 单位
+    /// 单位（字典 logistics_unit_of_measure_code）
     /// </summary>
-    [Required(ErrorMessage = "单位不能为空")]
+    [Required(ErrorMessage = "单位（字典 logistics_unit_of_measure_code）不能为空")]
     public string MaterialUnit { get; set; } = string.Empty;
 
     /// <summary>
@@ -376,6 +386,11 @@ public class TaktBillOfMaterialSubstituteCreateDto
     /// 失效日期（为空表示永久有效）
     /// </summary>
     public DateTime? ExpiryDate { get; set; }
+
+    /// <summary>
+    /// 是否作废（字典 sys_yes_no_type，0=否 1=是；编辑移除子行时标记作废）
+    /// </summary>
+    public int IsObsolete { get; set; } = 0;
 
     /// <summary>
     /// 扩展字段JSON
@@ -407,6 +422,29 @@ public class TaktBillOfMaterialSubstituteUpdateDto : TaktBillOfMaterialSubstitut
     [JsonConverter(typeof(ValueToStringConverter))]
     public long BillOfMaterialSubstituteId { get; set; }
 
+}
+
+// ========================================
+// BillOfMaterialSubstitute 作废 DTO
+// ========================================
+
+/// <summary>
+/// BillOfMaterialSubstitute 作废/撤销作废 DTO
+/// </summary>
+public class TaktBillOfMaterialSubstituteObsoleteDto
+{
+    /// <summary>
+    /// BillOfMaterialSubstituteID
+    /// </summary>
+    [Required(ErrorMessage = "ID不能为空")]
+    [AdaptMember("Id")]
+    [JsonConverter(typeof(ValueToStringConverter))]
+    public long BillOfMaterialSubstituteId { get; set; }
+
+    /// <summary>
+    /// 是否作废（字典 sys_yes_no_type，0=否 1=是；编辑移除子行时标记作废）
+    /// </summary>
+    public int IsObsolete { get; set; }
 }
 
 // ========================================
@@ -456,7 +494,7 @@ public class TaktBillOfMaterialSubstituteTemplateDto
     public int? LineNumber { get; set; }
 
     /// <summary>
-    /// 替代物料ID（关联工厂物料主数据，序列化为string以避免Javascript精度问题）
+    /// 替代物料ID（关联工厂物料 TaktMaterialPlant.Id，选项 TaktMaterialPlants/options）
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
     public long? SubstituteMaterialId { get; set; }
@@ -482,7 +520,7 @@ public class TaktBillOfMaterialSubstituteTemplateDto
     public decimal? UsageQuantity { get; set; }
 
     /// <summary>
-    /// 单位
+    /// 单位（字典 logistics_unit_of_measure_code）
     /// </summary>
     public string? MaterialUnit { get; set; } = string.Empty;
 
@@ -505,6 +543,11 @@ public class TaktBillOfMaterialSubstituteTemplateDto
     /// 失效日期（为空表示永久有效）
     /// </summary>
     public DateTime? ExpiryDate { get; set; }
+
+    /// <summary>
+    /// 是否作废（字典 sys_yes_no_type，0=否 1=是；编辑移除子行时标记作废）
+    /// </summary>
+    public int? IsObsolete { get; set; }
 
     /// <summary>
     /// 扩展字段JSON
@@ -566,7 +609,7 @@ public class TaktBillOfMaterialSubstituteImportDto
     public int? LineNumber { get; set; }
 
     /// <summary>
-    /// 替代物料ID（关联工厂物料主数据，序列化为string以避免Javascript精度问题）
+    /// 替代物料ID（关联工厂物料 TaktMaterialPlant.Id，选项 TaktMaterialPlants/options）
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
     public long? SubstituteMaterialId { get; set; }
@@ -592,7 +635,7 @@ public class TaktBillOfMaterialSubstituteImportDto
     public decimal? UsageQuantity { get; set; }
 
     /// <summary>
-    /// 单位
+    /// 单位（字典 logistics_unit_of_measure_code）
     /// </summary>
     public string? MaterialUnit { get; set; } = string.Empty;
 
@@ -615,6 +658,11 @@ public class TaktBillOfMaterialSubstituteImportDto
     /// 失效日期（为空表示永久有效）
     /// </summary>
     public DateTime? ExpiryDate { get; set; }
+
+    /// <summary>
+    /// 是否作废（字典 sys_yes_no_type，0=否 1=是；编辑移除子行时标记作废）
+    /// </summary>
+    public int? IsObsolete { get; set; }
 
     /// <summary>
     /// 扩展字段JSON
@@ -677,7 +725,7 @@ public class TaktBillOfMaterialSubstituteExportDto
     public int LineNumber { get; set; } = 0;
 
     /// <summary>
-    /// 替代物料ID（关联工厂物料主数据，序列化为string以避免Javascript精度问题）
+    /// 替代物料ID（关联工厂物料 TaktMaterialPlant.Id，选项 TaktMaterialPlants/options）
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
     public long SubstituteMaterialId { get; set; }
@@ -703,7 +751,7 @@ public class TaktBillOfMaterialSubstituteExportDto
     public decimal UsageQuantity { get; set; }
 
     /// <summary>
-    /// 单位
+    /// 单位（字典 logistics_unit_of_measure_code）
     /// </summary>
     public string MaterialUnit { get; set; } = string.Empty;
 
@@ -726,6 +774,11 @@ public class TaktBillOfMaterialSubstituteExportDto
     /// 失效日期（为空表示永久有效）
     /// </summary>
     public DateTime? ExpiryDate { get; set; }
+
+    /// <summary>
+    /// 是否作废（字典 sys_yes_no_type，0=否 1=是；编辑移除子行时标记作废）
+    /// </summary>
+    public int IsObsolete { get; set; } = 0;
 
     /// <summary>
     /// 扩展字段JSON

@@ -104,10 +104,11 @@ public class TaktStandardOperationTimesController : TaktControllerBase
     /// </summary>
     /// <param name="materialCode">物料编码</param>
     /// <param name="plantCode">工厂代码（可选）</param>
+    /// <param name="prodDate">生产日期（可选；未传时按当天解析有效期）</param>
     /// <returns>标准工序时间 DTO 列表</returns>
     [TaktPermission("logistics:manufacturing:bom:standard:operation:time:query", "按物料查询标准工序时间")]
     [HttpGet("by-material")]
-    public async Task<IActionResult> GetStandardOperationTimeByMaterialAsync([FromQuery] string materialCode, [FromQuery] string? plantCode = null)
+    public async Task<IActionResult> GetStandardOperationTimeByMaterialAsync([FromQuery] string materialCode, [FromQuery] string? plantCode = null, [FromQuery] DateTime? prodDate = null)
     {
         try
         {
@@ -115,7 +116,33 @@ public class TaktStandardOperationTimesController : TaktControllerBase
             {
                 return BadRequest("物料编码不能为空");
             }
-            var result = await _standardOperationTimeService.GetStandardOperationTimeByMaterialAsync(materialCode, plantCode);
+            var result = await _standardOperationTimeService.GetStandardOperationTimeByMaterialAsync(materialCode, plantCode, prodDate);
+            return Success(result, "查询成功");
+        }
+        catch (Exception ex)
+        {
+            return HandleException(ex);
+        }
+    }
+
+    /// <summary>
+    /// 根据物料编码获取当前有效的标准工时选项列表
+    /// </summary>
+    /// <param name="materialCode">物料编码</param>
+    /// <param name="plantCode">工厂代码（可选）</param>
+    /// <param name="prodDate">生产日期（可选；未传时按当天解析有效期）</param>
+    /// <returns>下拉选项</returns>
+    [TaktPermission("logistics:manufacturing:bom:standard:operation:time:query", "按物料查询标准工时选项")]
+    [HttpGet("options-by-material")]
+    public async Task<IActionResult> GetStandardOperationTimeOptionsByMaterialAsync([FromQuery] string materialCode, [FromQuery] string? plantCode = null, [FromQuery] DateTime? prodDate = null)
+    {
+        try
+        {
+            if (string.IsNullOrWhiteSpace(materialCode))
+            {
+                return BadRequest("物料编码不能为空");
+            }
+            var result = await _standardOperationTimeService.GetStandardOperationTimeOptionsByMaterialAsync(materialCode, plantCode, prodDate);
             return Success(result, "查询成功");
         }
         catch (Exception ex)

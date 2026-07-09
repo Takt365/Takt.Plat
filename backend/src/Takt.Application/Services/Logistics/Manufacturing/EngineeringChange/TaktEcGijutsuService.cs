@@ -637,9 +637,6 @@ public class TaktEcGijutsuService : TaktServiceBase, ITaktEcGijutsuService
             SourceTitle = source.SourceTitle,
             SourceIssueDate = source.SourceIssueDate,
             SourceStatus = source.SourceStatus,
-            ChangeStatus = TaktEcSourceStatusMapper.TryMapToChangeStatus(source.SourceStatus, out var mappedStatus)
-                ? mappedStatus
-                : null,
             SourceTcjOwner = source.SourceTcjOwner,
             DetailCount = detailCountMap.GetValueOrDefault(source.Id),
         }).ToList();
@@ -823,11 +820,11 @@ public class TaktEcGijutsuService : TaktServiceBase, ITaktEcGijutsuService
         }
         var materialsByCode = await LoadMaterialPlantsByCodesAsync(plantCode, materialCodes);
         var lineNumber = 0;
-        var ecDetails = new List<TaktEcDetailCreateDto>(sourceDetails.Count);
+        var ecDetails = new List<TaktEcDetailUpdateDto>(sourceDetails.Count);
         foreach (var detail in sourceDetails.OrderBy(x => x.Id))
         {
             lineNumber += 10;
-            var dto = new TaktEcDetailCreateDto
+            var dto = new TaktEcDetailUpdateDto
             {
                 TenantCode = CurrentTenantCode,
                 CompanyCode = CurrentCompanyCode,
@@ -846,9 +843,9 @@ public class TaktEcGijutsuService : TaktServiceBase, ITaktEcGijutsuService
                 EcNewUsage = detail.SourceReplacementUsage,
                 EcNewPosition = detail.SourceReplacementMountingPosition,
                 EcBomLineNo = detail.SourceBomNo,
-                EcIsCompatible = detail.SourceInterchangeability,
+                EcIsCompatible = detail.SourceCompatibility,
                 EcSecondDistinction = detail.SourceDistinction,
-                EcInstructionNo = detail.SourceArrangementInstruction,
+                EcInstruction = detail.SourceInstruction,
                 EcLegacyPartDisposition = detail.SourceLegacyPartDisposition,
                 EcBomDate = detail.SourceBomEffectiveDate ?? sourceEc.SourceIssueDate,
             };
@@ -877,7 +874,7 @@ public class TaktEcGijutsuService : TaktServiceBase, ITaktEcGijutsuService
                 ecNo,
                 CurrentTenantCode,
                 CurrentCompanyCode,
-                companyDefaultCulture ?? string.Empty),
+                companyDefaultCulture ?? string.Empty).Adapt<List<TaktEcAttachmentUpdateDto>>(),
         };
     }
 

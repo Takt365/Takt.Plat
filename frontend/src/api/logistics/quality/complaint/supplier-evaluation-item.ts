@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：frontend/src/api/logistics/quality/complaint
 // 文件名称：supplier-evaluation-item.ts
-// 创建时间：2026-06-23
+// 创建时间：2026-07-09
 // 创建人：Takt365(Auto Generated)
 // 功能描述：logistics/quality/complaint 模块 API（自动生成，请勿手改路由常量）
 // 
@@ -18,6 +18,7 @@ import type {
 import type {
   SupplierEvaluationItem,
   SupplierEvaluationItemCreate,
+  SupplierEvaluationItemObsolete,
   SupplierEvaluationItemStatus,
   SupplierEvaluationItemUpdate
 } from '@/types/logistics/quality/complaint/supplier-evaluation-item';
@@ -117,6 +118,19 @@ export function deleteSupplierEvaluationItemBatch(ids: string[]): Promise<void> 
 export function updateSupplierEvaluationItemStatus(dto: SupplierEvaluationItemStatus): Promise<SupplierEvaluationItem> {
   return request<SupplierEvaluationItem>({
     url: `${SUPPLIER_EVALUATION_ITEM_API_BASE}/status`,
+    method: 'put',
+    data: dto,
+  });
+}
+
+/**
+ * 更新供应商评价考核项目明细作废状态
+ * @param {SupplierEvaluationItemObsolete} dto 作废 DTO
+ * @returns {Promise<SupplierEvaluationItem>} 供应商评价考核项目明细DTO
+ */
+export function updateSupplierEvaluationItemObsolete(dto: SupplierEvaluationItemObsolete): Promise<SupplierEvaluationItem> {
+  return request<SupplierEvaluationItem>({
+    url: `${SUPPLIER_EVALUATION_ITEM_API_BASE}/obsolete`,
     method: 'put',
     data: dto,
   });

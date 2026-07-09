@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Application.Services.Logistics.Materials
 // 文件名称：TaktManufacturerService.cs
-// 创建时间：2026-06-23
+// 创建时间：2026-07-09
 // 创建人：Takt365(Cursor AI)
 // 功能描述：制造商信息应用服务实现
 // 
@@ -339,6 +339,30 @@ public class TaktManufacturerService : TaktServiceBase, ITaktManufacturerService
     // ========================================
 
     /// <summary>
+    /// 将指定主表下全部未作废制造商物料明细标记为作废（编辑清空子表）
+    /// </summary>
+    /// <param name="manufacturerId">主表主键</param>
+    /// <returns>任务</returns>
+    private async Task MarkManufacturerMaterialsObsoleteAsync(long manufacturerId)
+    {
+        if (manufacturerId <= 0)
+        {
+            return;
+        }
+        var rows = await _manufacturerMaterialRepository.GetListAsync(
+            x => x.ManufacturerId == manufacturerId && x.IsObsolete == 0);
+        if (rows.Count == 0)
+        {
+            return;
+        }
+        foreach (var row in rows)
+        {
+            row.IsObsolete = 1;
+        }
+        await _manufacturerMaterialRepository.UpdateRangeAsync(rows);
+    }
+
+    /// <summary>
     /// 填充制造商信息详情（加载 OneToMany 子表：制造商物料明细）
     /// </summary>
     /// <param name="dto">响应 DTO</param>
@@ -350,13 +374,13 @@ public class TaktManufacturerService : TaktServiceBase, ITaktManufacturerService
         {
             return;
         }
-        // 制造商物料明细 → dto.ManufacturerMaterials
+        // 制造商物料明细 → dto.ManufacturerMaterials（含作废行）
         var manufacturermaterials = await _manufacturerMaterialRepository.GetListAsync(x => x.ManufacturerId == entity.Id);
         dto.ManufacturerMaterials = manufacturermaterials.Adapt<List<TaktManufacturerMaterialDto>>();
     }
 
     /// <summary>
-    /// 保存制造商信息子表级联（制造商物料明细；Create/Update 后按主表 Id 先删后插）
+    /// 保存制造商信息子表级联（制造商物料明细；按子表 Id 增量新增/更新；未提交行标记作废，禁止先删后插）
     /// </summary>
     /// <param name="entity">主表实体</param>
     /// <param name="dto">创建/更新 DTO（含子表集合；UpdateDto 须继承 CreateDto）</param>
@@ -366,64 +390,95 @@ public class TaktManufacturerService : TaktServiceBase, ITaktManufacturerService
         // 制造商物料明细（ManufacturerMaterials）
         if (dto.ManufacturerMaterials is not { Count: > 0 })
         {
-            await _manufacturerMaterialRepository.DeleteAsync(x => x.ManufacturerId == entity.Id);
+            await MarkManufacturerMaterialsObsoleteAsync(entity.Id);
+            return;
         }
         else
         {
-            var manufacturermaterials = dto.ManufacturerMaterials.Adapt<List<TaktManufacturerMaterial>>();
-            foreach (var child in manufacturermaterials)
+            var existingList = await _manufacturerMaterialRepository.GetListAsync(x => x.ManufacturerId == entity.Id);
+            var existingById = existingList.ToDictionary(x => x.Id);
+            var submittedIds = new HashSet<long>();
+            var toCreate = new List<TaktManufacturerMaterial>();
+            var seenLineKeys = new HashSet<string>(StringComparer.Ordinal);
+            for (var i = 0; i < dto.ManufacturerMaterials.Count; i++)
             {
-                child.ManufacturerId = entity.Id;
-            }
-            var manufacturermaterialsNeedLine = manufacturermaterials.Where(c => c.LineNumber <= 0).ToList();
-            if (manufacturermaterialsNeedLine.Count > 0)
-            {
-                var businessCode = !string.IsNullOrWhiteSpace(entity.ManufacturerCode) ? entity.ManufacturerCode : entity.Id.ToString();
-                var maxLine = await _manufacturerMaterialRepository.GetMaxIntAsync(
-                    x => x.TenantCode == CurrentTenantCode && x.CompanyCode == CurrentCompanyCode && x.ManufacturerId == entity.Id,
-                    x => x.LineNumber);
-                var lineSeq = _lineNumberGenerator.GenerateSequence(businessCode, manufacturermaterialsNeedLine.Count, maxLine).ToList();
-                var lineIdx = 0;
-                foreach (var child in manufacturermaterials)
+                var childDto = dto.ManufacturerMaterials[i];
+                childDto.ManufacturerId = entity.Id;
+                var lineKey = $"{entity.CompanyCode}|{entity.Id}|{childDto.LineNumber}";
+                if (!seenLineKeys.Add(lineKey))
                 {
-                    if (child.LineNumber <= 0)
+                    throw new TaktBusinessException("制造商物料明细第{i + 1}项与本次提交的其他项重复（CompanyCode、ManufacturerId、LineNumber）");
+                }
+                if (childDto.ManufacturerMaterialId > 0)
+                {
+                    if (!existingById.TryGetValue(childDto.ManufacturerMaterialId, out var target))
                     {
-                        child.LineNumber = lineSeq[lineIdx++];
+                        throw new TaktBusinessException("制造商物料明细不存在（ManufacturerMaterialId={childDto.ManufacturerMaterialId}）");
                     }
+                    if (target.ManufacturerId != entity.Id)
+                    {
+                        throw new TaktBusinessException("制造商物料明细不属于当前主表（ManufacturerMaterialId={childDto.ManufacturerMaterialId}）");
+                    }
+                    submittedIds.Add(childDto.ManufacturerMaterialId);
+                    var isUniqueUpdate_ix_takt_logistics_materials_manufacturer_material_line_unique = await _uniqueValidator.IsUniqueAsync(
+                        _manufacturerMaterialRepository,
+                        x => x.CompanyCode == x.CompanyCode
+                && x.ManufacturerId == x.ManufacturerId
+                && x.LineNumber == x.LineNumber,
+                        childDto.ManufacturerMaterialId);
+                    if (!isUniqueUpdate_ix_takt_logistics_materials_manufacturer_material_line_unique)
+                    {
+                        throw new TaktBusinessException("制造商物料明细的CompanyCode、ManufacturerId、LineNumber已存在");
+                    }
+                    childDto.Adapt(target);
+                    target.Id = childDto.ManufacturerMaterialId;
+                    target.ManufacturerId = entity.Id;
+                    target.IsObsolete = 0;
+                    await _manufacturerMaterialRepository.UpdateAsync(target);
+                }
+                else
+                {
+                    var isUniqueCreate_ix_takt_logistics_materials_manufacturer_material_line_unique = await _uniqueValidator.IsUniqueAsync(
+                        _manufacturerMaterialRepository,
+                        x => x.CompanyCode == x.CompanyCode
+                && x.ManufacturerId == x.ManufacturerId
+                && x.LineNumber == x.LineNumber);
+                    if (!isUniqueCreate_ix_takt_logistics_materials_manufacturer_material_line_unique)
+                    {
+                        throw new TaktBusinessException("制造商物料明细的CompanyCode、ManufacturerId、LineNumber已存在");
+                    }
+                    var child = childDto.Adapt<TaktManufacturerMaterial>();
+                    child.Id = 0;
+                    child.ManufacturerId = entity.Id;
+                    child.IsObsolete = 0;
+                    toCreate.Add(child);
                 }
             }
-                        var seenKeys = new HashSet<string>(StringComparer.Ordinal);
-                        for (var i = 0; i < manufacturermaterials.Count; i++)
+            var toObsolete = existingList.Where(x => !submittedIds.Contains(x.Id) && x.IsObsolete == 0).ToList();
+            foreach (var removed in toObsolete)
+            {
+                removed.IsObsolete = 1;
+                await _manufacturerMaterialRepository.UpdateAsync(removed);
+            }
+            if (toCreate.Count > 0)
+            {
+                var needLine = toCreate.Where(c => c.LineNumber <= 0).ToList();
+                if (needLine.Count > 0)
+                {
+                    var businessCode = !string.IsNullOrWhiteSpace(entity.ManufacturerCode) ? entity.ManufacturerCode : entity.Id.ToString();
+                    var maxLine = existingList.Count > 0 ? existingList.Max(x => x.LineNumber) : 0;
+                    var lineSeq = _lineNumberGenerator.GenerateSequence(businessCode, needLine.Count, maxLine).ToList();
+                    var lineIdx = 0;
+                    foreach (var child in toCreate)
+                    {
+                        if (child.LineNumber <= 0)
                         {
-                            var key = $"{manufacturermaterials[i].CompanyCode}|{manufacturermaterials[i].ManufacturerId}|{manufacturermaterials[i].LineNumber}";
-                            if (!seenKeys.Add(key))
-                            {
-                                throw new TaktBusinessException($"制造商物料明细第{i + 1}项与本次提交的其他项重复（CompanyCode、ManufacturerId、LineNumber）");
-                            }
+                            child.LineNumber = lineSeq[lineIdx++];
                         }
-            await _manufacturerMaterialRepository.DeleteAsync(x => x.ManufacturerId == entity.Id);
-            foreach (var child in manufacturermaterials)
-            {
-            var isUnique_ix_takt_logistics_materials_manufacturer_material_line_unique = await _uniqueValidator.IsUniqueAsync(
-                _manufacturerMaterialRepository,
-                x => x.CompanyCode == child.CompanyCode
-                    && x.ManufacturerId == child.ManufacturerId
-                    && x.LineNumber == child.LineNumber);
-            if (!isUnique_ix_takt_logistics_materials_manufacturer_material_line_unique)
-            {
-                throw new TaktBusinessException("制造商物料明细的CompanyCode、ManufacturerId、LineNumber已存在");
+                    }
+                }
+                await _manufacturerMaterialRepository.CreateRangeAsync(toCreate);
             }
-            var isUnique_ix_takt_logistics_materials_manufacturer_material_unique = await _uniqueValidator.IsUniqueAsync(
-                _manufacturerMaterialRepository,
-                x => x.CompanyCode == child.CompanyCode
-                    && x.ManufacturerId == child.ManufacturerId
-                    && x.ManufacturerMaterialCode == child.ManufacturerMaterialCode);
-            if (!isUnique_ix_takt_logistics_materials_manufacturer_material_unique)
-            {
-                throw new TaktBusinessException("制造商物料明细的CompanyCode、ManufacturerId、ManufacturerMaterialCode已存在");
-            }
-            }
-            await _manufacturerMaterialRepository.CreateRangeAsync(manufacturermaterials);
         }
     }
     // ========================================
@@ -463,8 +518,8 @@ public class TaktManufacturerService : TaktServiceBase, ITaktManufacturerService
                 || SqlFunc.ToString(x.ManufacturerLevel).Contains(keywords)
                 || SqlFunc.ToString(x.QualityCertification).Contains(keywords)
                 || SqlFunc.ToString(x.EvaluationScore).Contains(keywords)
-                || SqlFunc.ToString(x.ManufacturerStatus).Contains(keywords)
                 || SqlFunc.ToString(x.SortOrder).Contains(keywords)
+                || SqlFunc.ToString(x.ManufacturerStatus).Contains(keywords)
                 || (x.ExtField != null && x.ExtField.Contains(keywords))
                 || (x.Remark != null && x.Remark.Contains(keywords))
                 || SqlFunc.ToString(x.CreatedAt).Contains(keywords)
@@ -571,14 +626,14 @@ public class TaktManufacturerService : TaktServiceBase, ITaktManufacturerService
             exp = exp.And(x => x.EvaluationScore == queryDto.EvaluationScore);
         }
 
-        if (queryDto?.ManufacturerStatus.HasValue == true)
-        {
-            exp = exp.And(x => x.ManufacturerStatus == queryDto.ManufacturerStatus);
-        }
-
         if (queryDto?.SortOrder.HasValue == true)
         {
             exp = exp.And(x => x.SortOrder == queryDto.SortOrder);
+        }
+
+        if (queryDto?.ManufacturerStatus.HasValue == true)
+        {
+            exp = exp.And(x => x.ManufacturerStatus == queryDto.ManufacturerStatus);
         }
 
         if (!string.IsNullOrEmpty(queryDto?.ExtField))

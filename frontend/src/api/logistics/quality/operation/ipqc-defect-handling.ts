@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：frontend/src/api/logistics/quality/operation
 // 文件名称：ipqc-defect-handling.ts
-// 创建时间：2026-06-30
+// 创建时间：2026-07-09
 // 创建人：Takt365(Auto Generated)
 // 功能描述：logistics/quality/operation 模块 API（自动生成，请勿手改路由常量）
 // 
@@ -18,6 +18,7 @@ import type {
 import type {
   IpqcDefectHandling,
   IpqcDefectHandlingCreate,
+  IpqcDefectHandlingObsolete,
   IpqcDefectHandlingStatus,
   IpqcDefectHandlingUpdate
 } from '@/types/logistics/quality/operation/ipqc-defect-handling';
@@ -117,6 +118,19 @@ export function deleteIpqcDefectHandlingBatch(ids: string[]): Promise<void> {
 export function updateIpqcDefectHandlingStatus(dto: IpqcDefectHandlingStatus): Promise<IpqcDefectHandling> {
   return request<IpqcDefectHandling>({
     url: `${IPQC_DEFECT_HANDLING_API_BASE}/status`,
+    method: 'put',
+    data: dto,
+  });
+}
+
+/**
+ * 更新制程检验不良处理记录作废状态
+ * @param {IpqcDefectHandlingObsolete} dto 作废 DTO
+ * @returns {Promise<IpqcDefectHandling>} 制程检验不良处理记录DTO
+ */
+export function updateIpqcDefectHandlingObsolete(dto: IpqcDefectHandlingObsolete): Promise<IpqcDefectHandling> {
+  return request<IpqcDefectHandling>({
+    url: `${IPQC_DEFECT_HANDLING_API_BASE}/obsolete`,
     method: 'put',
     data: dto,
   });

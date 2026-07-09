@@ -296,9 +296,9 @@ public class TaktSourceEcDetailService : TaktServiceBase, ITaktSourceEcDetailSer
                 || SqlFunc.ToString(x.SourceReplacementUsage).Contains(keywords)
                 || (x.SourceReplacementMountingPosition != null && x.SourceReplacementMountingPosition.Contains(keywords))
                 || (x.SourceBomNo != null && x.SourceBomNo.Contains(keywords))
-                || (x.SourceInterchangeability != null && x.SourceInterchangeability.Contains(keywords))
+                || (x.SourceCompatibility != null && x.SourceCompatibility.Contains(keywords))
                 || (x.SourceDistinction != null && x.SourceDistinction.Contains(keywords))
-                || (x.SourceArrangementInstruction != null && x.SourceArrangementInstruction.Contains(keywords))
+                || (x.SourceInstruction != null && x.SourceInstruction.Contains(keywords))
                 || (x.SourceLegacyPartDisposition != null && x.SourceLegacyPartDisposition.Contains(keywords))
                 || (x.ExtField != null && x.ExtField.Contains(keywords))
                 || (x.Remark != null && x.Remark.Contains(keywords))
@@ -367,9 +367,9 @@ public class TaktSourceEcDetailService : TaktServiceBase, ITaktSourceEcDetailSer
             exp = exp.And(x => x.SourceBomNo != null && x.SourceBomNo.Contains(queryDto.SourceBomNo));
         }
 
-        if (!string.IsNullOrEmpty(queryDto?.SourceInterchangeability))
+        if (!string.IsNullOrEmpty(queryDto?.SourceCompatibility))
         {
-            exp = exp.And(x => x.SourceInterchangeability != null && x.SourceInterchangeability.Contains(queryDto.SourceInterchangeability));
+            exp = exp.And(x => x.SourceCompatibility != null && x.SourceCompatibility.Contains(queryDto.SourceCompatibility));
         }
 
         if (!string.IsNullOrEmpty(queryDto?.SourceDistinction))
@@ -377,9 +377,9 @@ public class TaktSourceEcDetailService : TaktServiceBase, ITaktSourceEcDetailSer
             exp = exp.And(x => x.SourceDistinction != null && x.SourceDistinction.Contains(queryDto.SourceDistinction));
         }
 
-        if (!string.IsNullOrEmpty(queryDto?.SourceArrangementInstruction))
+        if (!string.IsNullOrEmpty(queryDto?.SourceInstruction))
         {
-            exp = exp.And(x => x.SourceArrangementInstruction != null && x.SourceArrangementInstruction.Contains(queryDto.SourceArrangementInstruction));
+            exp = exp.And(x => x.SourceInstruction != null && x.SourceInstruction.Contains(queryDto.SourceInstruction));
         }
 
         if (!string.IsNullOrEmpty(queryDto?.SourceLegacyPartDisposition))

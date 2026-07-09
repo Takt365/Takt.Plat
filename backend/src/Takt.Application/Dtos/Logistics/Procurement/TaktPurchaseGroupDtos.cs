@@ -89,7 +89,7 @@ public class TaktPurchaseGroupDto : TaktCompanyDtoBase
     /// <summary>
     /// 采购组状态（字典 sys_normal_disable_status；1=启用，0=禁用）
     /// </summary>
-    public int PurchaseGroupStatus { get; set; } = 0;
+    public int GroupStatus { get; set; } = 0;
 
 }
 
@@ -162,7 +162,7 @@ public class TaktPurchaseGroupQueryDto : TaktPagedQuery
     /// <summary>
     /// 采购组状态（字典 sys_normal_disable_status；1=启用，0=禁用）
     /// </summary>
-    public int? PurchaseGroupStatus { get; set; }
+    public int? GroupStatus { get; set; }
 
     /// <summary>
     /// 创建时间（范围查询-开始）
@@ -256,7 +256,7 @@ public class TaktPurchaseGroupCreateDto
     /// <summary>
     /// 采购组状态（字典 sys_normal_disable_status；1=启用，0=禁用）
     /// </summary>
-    public int PurchaseGroupStatus { get; set; } = 0;
+    public int GroupStatus { get; set; } = 0;
 
     /// <summary>
     /// 扩展字段JSON
@@ -297,7 +297,7 @@ public class TaktPurchaseGroupUpdateDto : TaktPurchaseGroupCreateDto
 /// <summary>
 /// PurchaseGroup 状态更新 DTO
 /// </summary>
-public class TaktPurchaseGroupStatusDto
+public class TaktGroupStatusDto
 {
     /// <summary>
     /// PurchaseGroupID
@@ -311,7 +311,7 @@ public class TaktPurchaseGroupStatusDto
     /// 采购组状态（字典 sys_normal_disable_status；1=启用，0=禁用）
     /// </summary>
     [Required(ErrorMessage = "采购组状态（字典 sys_normal_disable_status；1=启用，0=禁用）不能为空")]
-    public int PurchaseGroupStatus { get; set; } = 0;
+    public int GroupStatus { get; set; } = 0;
 }
 
 // ========================================
@@ -401,7 +401,7 @@ public class TaktPurchaseGroupTemplateDto
     /// <summary>
     /// 采购组状态（字典 sys_normal_disable_status；1=启用，0=禁用）
     /// </summary>
-    public int? PurchaseGroupStatus { get; set; }
+    public int? GroupStatus { get; set; }
 
     /// <summary>
     /// 扩展字段JSON
@@ -479,7 +479,7 @@ public class TaktPurchaseGroupImportDto
     /// <summary>
     /// 采购组状态（字典 sys_normal_disable_status；1=启用，0=禁用）
     /// </summary>
-    public int? PurchaseGroupStatus { get; set; }
+    public int? GroupStatus { get; set; }
 
     /// <summary>
     /// 扩展字段JSON
@@ -563,7 +563,7 @@ public class TaktPurchaseGroupExportDto
     /// <summary>
     /// 采购组状态（字典 sys_normal_disable_status；1=启用，0=禁用）
     /// </summary>
-    public int PurchaseGroupStatus { get; set; } = 0;
+    public int GroupStatus { get; set; } = 0;
 
     /// <summary>
     /// 扩展字段JSON

@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Application.Services.Logistics.Manufacturing.EngineeringChange
 // 文件名称：TaktEcAttachmentService.cs
-// 创建时间：2026-06-30
+// 创建时间：2026-07-09
 // 创建人：Takt365(Cursor AI)
 // 功能描述：设变附件应用服务实现
 // 
@@ -30,7 +30,7 @@ namespace Takt.Application.Services.Logistics.Manufacturing.EngineeringChange;
 public class TaktEcAttachmentService : TaktServiceBase, ITaktEcAttachmentService
 {
     private readonly ITaktCompanyRepository<TaktEcAttachment> _ecAttachmentRepository;
-    private readonly ITaktCompanyRepository<TaktEcGijutsu> _ecEngRepository;
+    private readonly ITaktCompanyRepository<TaktEcGijutsu> _ecGijutsuRepository;
     private readonly ITaktLineNumberGenerator _lineNumberGenerator;
     private readonly ITaktUniqueValidator _uniqueValidator;
 
@@ -38,14 +38,14 @@ public class TaktEcAttachmentService : TaktServiceBase, ITaktEcAttachmentService
     /// 构造函数
     /// </summary>
     /// <param name="ecAttachmentRepository">设变附件仓储</param>
-    /// <param name="ecEngRepository">设变技术课主仓储</param>
+    /// <param name="ecGijutsuRepository">设变技术课主仓储</param>
     /// <param name="lineNumberGenerator">明细行号生成器</param>
     /// <param name="uniqueValidator">唯一性验证器</param>
     /// <param name="userContext">用户上下文</param>
     /// <param name="localizationService">本地化服务</param>
     public TaktEcAttachmentService(
         ITaktCompanyRepository<TaktEcAttachment> ecAttachmentRepository,
-        ITaktCompanyRepository<TaktEcGijutsu> ecEngRepository,
+        ITaktCompanyRepository<TaktEcGijutsu> ecGijutsuRepository,
         ITaktLineNumberGenerator lineNumberGenerator,
         ITaktUniqueValidator uniqueValidator,
         ITaktUserContext? userContext = null,
@@ -53,7 +53,7 @@ public class TaktEcAttachmentService : TaktServiceBase, ITaktEcAttachmentService
         : base(userContext, localizationService)
     {
         _ecAttachmentRepository = ecAttachmentRepository;
-        _ecEngRepository = ecEngRepository;
+        _ecGijutsuRepository = ecGijutsuRepository;
         _lineNumberGenerator = lineNumberGenerator;
         _uniqueValidator = uniqueValidator;
     }
@@ -118,6 +118,7 @@ public class TaktEcAttachmentService : TaktServiceBase, ITaktEcAttachmentService
     public async Task<TaktEcAttachmentDto> CreateEcAttachmentAsync(TaktEcAttachmentCreateDto dto)
     {
         var entity = dto.Adapt<TaktEcAttachment>();
+        entity.IsObsolete = 0;
         await StampEcAttachmentEcGijutsuAsync(entity, dto);
         var isUnique_ix_takt_logistics_manufacturing_ec_attachment_line_unique = await _uniqueValidator.IsUniqueAsync(
             _ecAttachmentRepository,
@@ -174,11 +175,21 @@ public class TaktEcAttachmentService : TaktServiceBase, ITaktEcAttachmentService
     /// <returns>任务</returns>
     public async Task DeleteEcAttachmentByIdAsync(long id)
     {
-        var deleted = await _ecAttachmentRepository.DeleteAsync(id);
-        if (!deleted)
+        var entity = await _ecAttachmentRepository.GetByIdAsync(id);
+        if (entity == null)
         {
             throw new TaktBusinessException("设变附件不存在或已删除");
         }
+        if (entity.TenantCode != CurrentTenantCode || entity.CompanyCode != CurrentCompanyCode)
+        {
+            throw new TaktBusinessException("设变附件不存在或已删除");
+        }
+        if (entity.IsObsolete == 1)
+        {
+            throw new TaktBusinessException("设变附件已作废");
+        }
+        entity.IsObsolete = 1;
+        await _ecAttachmentRepository.UpdateAsync(entity);
     }
 
     /// <summary>
@@ -197,6 +208,27 @@ public class TaktEcAttachmentService : TaktServiceBase, ITaktEcAttachmentService
         {
             await DeleteEcAttachmentByIdAsync(id);
         }
+    }
+
+    /// <summary>
+    /// 更新设变附件作废状态
+    /// </summary>
+    /// <param name="dto">作废DTO</param>
+    /// <returns>DTO</returns>
+    public async Task<TaktEcAttachmentDto> UpdateEcAttachmentObsoleteAsync(TaktEcAttachmentObsoleteDto dto)
+    {
+        var entity = await _ecAttachmentRepository.GetByIdAsync(dto.EcAttachmentId);
+        if (entity == null)
+        {
+            throw new TaktBusinessException("设变附件不存在");
+        }
+        if (entity.TenantCode != CurrentTenantCode || entity.CompanyCode != CurrentCompanyCode)
+        {
+            throw new TaktBusinessException("设变附件不存在");
+        }
+        entity.IsObsolete = dto.IsObsolete;
+        await _ecAttachmentRepository.UpdateAsync(entity);
+        return await GetEcAttachmentByIdAsync(dto.EcAttachmentId) ?? throw new TaktBusinessException("设变附件不存在");
     }
 
     /// <summary>
@@ -311,7 +343,7 @@ public class TaktEcAttachmentService : TaktServiceBase, ITaktEcAttachmentService
         {
             return;
         }
-        var master = await _ecEngRepository.GetByIdAsync(dto.EcId);
+        var master = await _ecGijutsuRepository.GetByIdAsync(dto.EcId);
         if (master == null)
         {
             throw new TaktBusinessException("设变技术课主不存在");
@@ -330,6 +362,15 @@ public class TaktEcAttachmentService : TaktServiceBase, ITaktEcAttachmentService
     private static Expression<Func<TaktEcAttachment, bool>> QueryExpression(TaktEcAttachmentQueryDto? queryDto)
     {
         var exp = Expressionable.Create<TaktEcAttachment>();
+
+        if (queryDto?.IsObsolete.HasValue == true)
+        {
+            exp = exp.And(x => x.IsObsolete == queryDto.IsObsolete);
+        }
+        else
+        {
+            exp = exp.And(x => x.IsObsolete == 0);
+        }
 
         if (!string.IsNullOrEmpty(queryDto?.KeyWords))
         {

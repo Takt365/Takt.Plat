@@ -9,7 +9,7 @@
 <template>
   <div class="material-document-item-panel flex h-full min-h-0 flex-col overflow-hidden">
     <div class="mb-2 text-sm font-medium text-text">
-      {{ t('entity.materialdocumentitem._self') }}
+      {{ pi.self() }}
     </div>
     <TaktQueryBar
       v-model="queryKeyword"
@@ -398,6 +398,17 @@ import {
 } from '@/api/logistics/materials/material-document-item'
 import type { MaterialDocumentItem, MaterialDocumentItemQuery } from '@/types/logistics/materials/material-document-item'
 
+import {
+  useMaterialDocumentItemI18n,
+  MATERIALDOCUMENTITEM_LIST_FIELDS,
+  MATERIALDOCUMENTITEM_QUERY_STRING_FIELDS,
+  MATERIALDOCUMENTITEM_QUERY_FIELDS,
+  MATERIALDOCUMENTITEM_SELF_I18N_KEY,
+} from '../composables/use-material-document-item-i18n'
+
+/** 实体字段 i18n（标签/占位符统一入口） */
+const pi = useMaterialDocumentItemI18n()
+
 const { t } = useI18n()
 const { selectedMasterRow } = useMaterialDocumentMasterContext()
 
@@ -405,7 +416,7 @@ const { selectedMasterRow } = useMaterialDocumentMasterContext()
 const excelNames = taktExcelEntityNames('TaktMaterialDocumentItem')
 /** 快捷查询占位文案 */
 const searchPlaceholder = computed(
-  () => t('common.page.form.placeholder.search', { keyword: t('entity.materialdocumentitem._self') }),
+  () => t('common.page.form.placeholder.search', { keyword: pi.self() }),
 )
 
 const loading = ref(false)
@@ -424,61 +435,29 @@ const formLoading = ref(false)
 const formRef = ref()
 
 const advancedQueryVisible = ref(false)
-const advancedQueryForm = ref({
-  materialDocumentCode: '',
-  lineNumber: undefined as number | undefined,
-  warehouseCode: '',
-  movementType: '',
-  postingDateStart: '',
-  postingDateEnd: '',
-  quantity: undefined as number | undefined,
-  specialStock: '',
-  purchaseOrderCode: '',
-  productionOrderCode: '',
-  projectCode: '',
-  localCurrencyAmount: undefined as number | undefined,
-  documentDateStart: '',
-  documentDateEnd: '',
-  referenceDocumentCode: '',
-  customerCode: '',
-  createdAtStart: '',
-  createdAtEnd: '',
-  extField: '',
-  remark: '',
-})
+/**
+ * 创建空的高级查询表单
+ * @returns {Record<string, unknown>} 高级查询初始模型
+ */
+function createEmptyAdvancedQueryForm() {
+  const form = Object.fromEntries(MATERIALDOCUMENTITEM_QUERY_STRING_FIELDS.map((key) => [key, ''])) as Record<
+    (typeof MATERIALDOCUMENTITEM_QUERY_STRING_FIELDS)[number],
+    string
+  >
+  return {
+    ...form,
+    lineNumber: undefined as number | undefined,
+    quantity: undefined as number | undefined,
+    localCurrencyAmount: undefined as number | undefined,
+  }
+}
+const advancedQueryForm = ref(createEmptyAdvancedQueryForm())
 const visibleQueryFieldKeys = ref<string[]>([])
 
 /** 高级查询字段元数据 */
-const queryFieldsMeta = computed(() => [
-  { key: 'materialDocumentCode', label: pi.queryLabel('materialDocumentCode') },
-  { key: 'lineNumber', label: pi.queryLabel('lineNumber') },
-  { key: 'warehouseCode', label: pi.queryLabel('warehouseCode') },
-  { key: 'movementType', label: pi.queryLabel('movementType') },
-  { key: 'postingDateStart', label: pi.queryLabel('postingDateStart') },
-  { key: 'postingDateEnd', label: pi.queryLabel('postingDateEnd') },
-  { key: 'quantity', label: pi.queryLabel('quantity') },
-  { key: 'specialStock', label: pi.queryLabel('specialStock') },
-  { key: 'purchaseOrderCode', label: pi.queryLabel('purchaseOrderCode') },
-  { key: 'productionOrderCode', label: pi.queryLabel('productionOrderCode') },
-  { key: 'projectCode', label: pi.queryLabel('projectCode') },
-  { key: 'localCurrencyAmount', label: pi.queryLabel('localCurrencyAmount') },
-  { key: 'documentDateStart', label: pi.queryLabel('documentDateStart') },
-  { key: 'documentDateEnd', label: pi.queryLabel('documentDateEnd') },
-  { key: 'referenceDocumentCode', label: pi.queryLabel('referenceDocumentCode') },
-  { key: 'customerCode', label: pi.queryLabel('customerCode') },
-  { key: 'createdAtStart', label: pi.queryLabel('createdAtStart') },
-  { key: 'createdAtEnd', label: pi.queryLabel('createdAtEnd') },
-  { key: 'extField', label: pi.queryLabel('extField') },
-  { key: 'remark', label: pi.queryLabel('remark') },
-])
-
-/**
- * 高级查询字段标签
- * @param key 字段 key
- */
-function fieldLabel(key: string): string {
-  return queryFieldsMeta.value.find((f) => f.key === key)?.label ?? key
-}
+const queryFieldsMeta = computed(() =>
+  MATERIALDOCUMENTITEM_QUERY_FIELDS.map((key) => ({ key, label: pi.queryLabel(key) })),
+)
 
 function handleAdvancedQuery() {
   advancedQueryVisible.value = true
@@ -491,28 +470,7 @@ function handleAdvancedQuerySubmit() {
 }
 
 function handleAdvancedQueryReset() {
-  advancedQueryForm.value = {
-  materialDocumentCode: '',
-  lineNumber: undefined as number | undefined,
-  warehouseCode: '',
-  movementType: '',
-  postingDateStart: '',
-  postingDateEnd: '',
-  quantity: undefined as number | undefined,
-  specialStock: '',
-  purchaseOrderCode: '',
-  productionOrderCode: '',
-  projectCode: '',
-  localCurrencyAmount: undefined as number | undefined,
-  documentDateStart: '',
-  documentDateEnd: '',
-  referenceDocumentCode: '',
-  customerCode: '',
-  createdAtStart: '',
-  createdAtEnd: '',
-  extField: '',
-  remark: '',
-  }
+  advancedQueryForm.value = createEmptyAdvancedQueryForm()
 }
 const columnSettingVisible = ref(false)
 /** 表格当前可见列 key（空数组时按 tableMode=masterDetailDetail 默认 id+4 业务列） */
@@ -532,8 +490,11 @@ function handleColumnSettingReset() {
 const importVisible = ref(false)
 
 const entityIdName = 'materialDocumentItemId'
-const hasMasterSelection = computed(() => !!selectedMasterRow.value?.materialDocumentId)
-const masterMaterialDocumentId = computed(() => selectedMasterRow.value?.materialDocumentId ?? '')
+const masterMaterialDocumentId = computed((): string => {
+  const id = (selectedMasterRow.value as Record<string, unknown> | null)?.['materialDocumentId']
+  return id != null ? String(id) : ''
+})
+const hasMasterSelection = computed(() => masterMaterialDocumentId.value !== '')
 const updateDisabled = computed(() => !hasMasterSelection.value || selectedRows.value.length !== 1)
 const deleteDisabled = computed(() => !hasMasterSelection.value || selectedRows.value.length === 0)
 
@@ -857,13 +818,13 @@ function handleCreate() {
     message.warning(t('common.status.empty'))
     return
   }
-  formTitle.value = t('common.dialog.title.create', { entity: t('entity.materialdocumentitem._self') })
+  formTitle.value = t('common.dialog.title.create', { entity: pi.self() })
   formData.value = {}
   formVisible.value = true
 }
 
 async function handleEdit(record: MaterialDocumentItem) {
-  formTitle.value = t('common.dialog.title.edit', { entity: t('entity.materialdocumentitem._self') })
+  formTitle.value = t('common.dialog.title.edit', { entity: pi.self() })
   formLoading.value = true
   try {
     const detail = await getMaterialDocumentItemById(getMaterialDocumentItemId(record))
@@ -880,7 +841,7 @@ function handleUpdate() {
   } else {
     message.warning(t('common.tip.select.to.action', {
       action: t('common.page.button.edit'),
-      entity: t('entity.materialdocumentitem._self'),
+      entity: pi.self(),
     }))
   }
 }
@@ -899,10 +860,10 @@ async function handleFormSubmit() {
     const id = formData.value?.materialDocumentItemId
     if (id) {
       await updateMaterialDocumentItem(id, payload)
-      message.success(t('common.feedback.updated', { target: t('entity.materialdocumentitem._self') }))
+      message.success(t('common.feedback.updated', { target: pi.self() }))
     } else {
       await createMaterialDocumentItem(payload)
-      message.success(t('common.feedback.created', { target: t('entity.materialdocumentitem._self') }))
+      message.success(t('common.feedback.created', { target: pi.self() }))
     }
     formVisible.value = false
     await loadData()
@@ -919,14 +880,14 @@ async function handleDeleteOne(record: MaterialDocumentItem) {
   Modal.confirm({
     title: t('common.tip.confirm.delete.title'),
     content: t('common.tip.confirm.delete.entity', {
-      entity: t('entity.materialdocumentitem._self'),
-      name: t('common.tip.this.target', { target: t('entity.materialdocumentitem._self') }),
+      entity: pi.self(),
+      name: t('common.tip.this.target', { target: pi.self() }),
     }),
     okText: t('common.page.button.delete'),
     cancelText: t('common.page.button.cancel'),
     onOk: async () => {
       await deleteMaterialDocumentItemById(getMaterialDocumentItemId(record))
-      message.success(t('common.feedback.deleted', { target: t('entity.materialdocumentitem._self') }))
+      message.success(t('common.feedback.deleted', { target: pi.self() }))
       await loadData()
     },
   })
@@ -936,14 +897,14 @@ async function handleDelete() {
   if (!hasMasterSelection.value || selectedRows.value.length === 0) {
     message.warning(t('common.tip.select.to.action', {
       action: t('common.page.button.delete'),
-      entity: t('entity.materialdocumentitem._self'),
+      entity: pi.self(),
     }))
     return
   }
   Modal.confirm({
     title: t('common.tip.confirm.delete.title'),
     content: t('common.tip.confirm.delete.count', {
-      entity: t('entity.materialdocumentitem._self'),
+      entity: pi.self(),
       count: selectedRows.value.length,
     }),
     okText: t('common.page.button.delete'),
@@ -951,7 +912,7 @@ async function handleDelete() {
     onOk: async () => {
       const ids = selectedRows.value.map((r) => getMaterialDocumentItemId(r)).filter(Boolean)
       await deleteMaterialDocumentItemBatch(ids)
-      message.success(t('common.feedback.deleted', { target: t('entity.materialdocumentitem._self') }))
+      message.success(t('common.feedback.deleted', { target: pi.self() }))
       await loadData()
     },
   })
@@ -1024,10 +985,10 @@ async function handleExport() {
     link.click()
     document.body.removeChild(link)
     setTimeout(() => window.URL.revokeObjectURL(url), 100)
-    message.success(t('common.feedback.export.success', { target: t('entity.materialdocumentitem._self') }))
+    message.success(t('common.feedback.export.success', { target: pi.self() }))
   } catch (error: unknown) {
     const err = error as { message?: string }
-    message.error(err?.message || t('common.feedback.export.failed', { target: t('entity.materialdocumentitem._self') }))
+    message.error(err?.message || t('common.feedback.export.failed', { target: pi.self() }))
   } finally {
     loading.value = false
   }

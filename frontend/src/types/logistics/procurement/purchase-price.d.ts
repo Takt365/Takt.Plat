@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：frontend/src/types/logistics/procurement
 // 文件名称：purchase-price.d.ts
-// 创建时间：2026-06-24
+// 创建时间：2026-07-09
 // 创建人：Takt365(Auto Generated)
 // 功能描述：logistics/procurement 模块类型定义（自动生成；类型名去 Takt 前缀与末尾 Dto，如 TaktCompanyDto → Company）
 // 
@@ -29,7 +29,7 @@ export interface PurchasePrice extends CompanyDtoBase {
   purchasePriceId: string;
 
   /**
-   * 工厂代码（不可空）
+   * 工厂代码（选项 TaktPlants/options，DictValue=PlantCode）
    */
   plantCode: string;
 
@@ -39,12 +39,12 @@ export interface PurchasePrice extends CompanyDtoBase {
   purchasePriceCode: string;
 
   /**
-   * 供应商编码
+   * 供应商编码（选项 TaktSuppliers/options，DictValue=SupplierCode）
    */
   supplierCode: string;
 
   /**
-   * 来源采购询价 ID（采购链路自动生成时写入）
+   * 来源采购询价 ID（关联 TaktPurchaseInquiry.Id，选项 TaktPurchaseInquirys/options）
    */
   purchaseInquiryId?: string;
 
@@ -74,7 +74,7 @@ export interface PurchasePrice extends CompanyDtoBase {
   effectiveEndDate?: string;
 
   /**
-   * 价格状态（1=启用，0=禁用）
+   * 价格状态（字典 sys_normal_disable_status；1=启用，0=禁用）
    */
   priceStatus: number;
 
@@ -82,11 +82,6 @@ export interface PurchasePrice extends CompanyDtoBase {
    * 物料价格明细列表（主子表关系，一个供应商价格可以有多个物料价格） （子表：TaktPurchasePriceItem）
    */
   items?: PurchasePriceItem[];
-
-  /**
-   * 采购价格变更记录列表（外键在子表 TaktPurchasePriceChangeLog.PriceId） （子表：TaktPurchasePriceChangeLog）
-   */
-  changeLogs?: PurchasePriceChangeLog[];
 
 }
 
@@ -109,7 +104,7 @@ export interface PurchasePriceQuery extends TaktPagedQuery {
   companyCode?: string;
 
   /**
-   * 工厂代码（不可空）
+   * 工厂代码（选项 TaktPlants/options，DictValue=PlantCode）
    */
   plantCode?: string;
 
@@ -119,12 +114,12 @@ export interface PurchasePriceQuery extends TaktPagedQuery {
   purchasePriceCode?: string;
 
   /**
-   * 供应商编码
+   * 供应商编码（选项 TaktSuppliers/options，DictValue=SupplierCode）
    */
   supplierCode?: string;
 
   /**
-   * 来源采购询价 ID（采购链路自动生成时写入）
+   * 来源采购询价 ID（关联 TaktPurchaseInquiry.Id，选项 TaktPurchaseInquirys/options）
    */
   purchaseInquiryId?: string;
 
@@ -159,7 +154,7 @@ export interface PurchasePriceQuery extends TaktPagedQuery {
   effectiveEndDateEnd?: string;
 
   /**
-   * 价格状态（1=启用，0=禁用）
+   * 价格状态（字典 sys_normal_disable_status；1=启用，0=禁用）
    */
   priceStatus?: number;
 
@@ -208,7 +203,7 @@ export interface PurchasePriceCreate {
   companyDefaultCulture: string;
 
   /**
-   * 工厂代码（不可空）
+   * 工厂代码（选项 TaktPlants/options，DictValue=PlantCode）
    */
   plantCode: string;
 
@@ -218,12 +213,12 @@ export interface PurchasePriceCreate {
   purchasePriceCode: string;
 
   /**
-   * 供应商编码
+   * 供应商编码（选项 TaktSuppliers/options，DictValue=SupplierCode）
    */
   supplierCode: string;
 
   /**
-   * 来源采购询价 ID（采购链路自动生成时写入）
+   * 来源采购询价 ID（关联 TaktPurchaseInquiry.Id，选项 TaktPurchaseInquirys/options）
    */
   purchaseInquiryId?: string;
 
@@ -248,19 +243,14 @@ export interface PurchasePriceCreate {
   effectiveEndDate?: string;
 
   /**
-   * 价格状态（1=启用，0=禁用）
+   * 价格状态（字典 sys_normal_disable_status；1=启用，0=禁用）
    */
   priceStatus: number;
 
   /**
    * 物料价格明细列表（主子表关系，一个供应商价格可以有多个物料价格）（子表，级联保存）
    */
-  items?: PurchasePriceItemCreate[];
-
-  /**
-   * 采购价格变更记录列表（外键在子表 TaktPurchasePriceChangeLog.PriceId）（子表，级联保存）
-   */
-  changeLogs?: PurchasePriceChangeLogCreate[];
+  items?: PurchasePriceItemUpdate[];
 
   /**
    * 扩展字段JSON
@@ -302,7 +292,7 @@ export interface PurchasePriceStatus {
   purchasePriceId: string;
 
   /**
-   * 价格状态（1=启用，0=禁用）
+   * 价格状态（字典 sys_normal_disable_status；1=启用，0=禁用）
    */
   priceStatus: number;
 
@@ -326,7 +316,7 @@ export interface PurchasePriceTemplate {
   companyCode?: string;
 
   /**
-   * 工厂代码（不可空）
+   * 工厂代码（选项 TaktPlants/options，DictValue=PlantCode）
    */
   plantCode?: string;
 
@@ -336,12 +326,12 @@ export interface PurchasePriceTemplate {
   purchasePriceCode?: string;
 
   /**
-   * 供应商编码
+   * 供应商编码（选项 TaktSuppliers/options，DictValue=SupplierCode）
    */
   supplierCode?: string;
 
   /**
-   * 来源采购询价 ID（采购链路自动生成时写入）
+   * 来源采购询价 ID（关联 TaktPurchaseInquiry.Id，选项 TaktPurchaseInquirys/options）
    */
   purchaseInquiryId?: string;
 
@@ -366,7 +356,7 @@ export interface PurchasePriceTemplate {
   effectiveEndDate?: string;
 
   /**
-   * 价格状态（1=启用，0=禁用）
+   * 价格状态（字典 sys_normal_disable_status；1=启用，0=禁用）
    */
   priceStatus?: number;
 
@@ -374,11 +364,6 @@ export interface PurchasePriceTemplate {
    * 物料价格明细列表（主子表关系，一个供应商价格可以有多个物料价格）（子表，级联保存）
    */
   items?: PurchasePriceItemCreate[];
-
-  /**
-   * 采购价格变更记录列表（外键在子表 TaktPurchasePriceChangeLog.PriceId）（子表，级联保存）
-   */
-  changeLogs?: PurchasePriceChangeLogCreate[];
 
   /**
    * 扩展字段JSON
@@ -415,7 +400,7 @@ export interface PurchasePriceImport {
   companyDefaultCulture?: string;
 
   /**
-   * 工厂代码（不可空）
+   * 工厂代码（选项 TaktPlants/options，DictValue=PlantCode）
    */
   plantCode?: string;
 
@@ -425,12 +410,12 @@ export interface PurchasePriceImport {
   purchasePriceCode?: string;
 
   /**
-   * 供应商编码
+   * 供应商编码（选项 TaktSuppliers/options，DictValue=SupplierCode）
    */
   supplierCode?: string;
 
   /**
-   * 来源采购询价 ID（采购链路自动生成时写入）
+   * 来源采购询价 ID（关联 TaktPurchaseInquiry.Id，选项 TaktPurchaseInquirys/options）
    */
   purchaseInquiryId?: string;
 
@@ -455,7 +440,7 @@ export interface PurchasePriceImport {
   effectiveEndDate?: string;
 
   /**
-   * 价格状态（1=启用，0=禁用）
+   * 价格状态（字典 sys_normal_disable_status；1=启用，0=禁用）
    */
   priceStatus?: number;
 
@@ -463,11 +448,6 @@ export interface PurchasePriceImport {
    * 物料价格明细列表（主子表关系，一个供应商价格可以有多个物料价格）（子表，级联保存）
    */
   items?: PurchasePriceItemCreate[];
-
-  /**
-   * 采购价格变更记录列表（外键在子表 TaktPurchasePriceChangeLog.PriceId）（子表，级联保存）
-   */
-  changeLogs?: PurchasePriceChangeLogCreate[];
 
   /**
    * 扩展字段JSON
@@ -499,7 +479,7 @@ export interface PurchasePriceExport {
   companyCode: string;
 
   /**
-   * 工厂代码（不可空）
+   * 工厂代码（选项 TaktPlants/options，DictValue=PlantCode）
    */
   plantCode: string;
 
@@ -509,12 +489,12 @@ export interface PurchasePriceExport {
   purchasePriceCode: string;
 
   /**
-   * 供应商编码
+   * 供应商编码（选项 TaktSuppliers/options，DictValue=SupplierCode）
    */
   supplierCode: string;
 
   /**
-   * 来源采购询价 ID（采购链路自动生成时写入）
+   * 来源采购询价 ID（关联 TaktPurchaseInquiry.Id，选项 TaktPurchaseInquirys/options）
    */
   purchaseInquiryId?: string;
 
@@ -539,7 +519,7 @@ export interface PurchasePriceExport {
   effectiveEndDate?: string;
 
   /**
-   * 价格状态（1=启用，0=禁用）
+   * 价格状态（字典 sys_normal_disable_status；1=启用，0=禁用）
    */
   priceStatus: number;
 

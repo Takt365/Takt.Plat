@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Application.Services.Logistics.Maintenance
 // 文件名称：TaktMaintenanceWorkOrderService.cs
-// 创建时间：2026-06-23
+// 创建时间：2026-07-09
 // 创建人：Takt365(Cursor AI)
 // 功能描述：维护工单应用服务实现
 // 
@@ -311,6 +311,54 @@ public class TaktMaintenanceWorkOrderService : TaktServiceBase, ITaktMaintenance
     // ========================================
 
     /// <summary>
+    /// 将指定主表下全部未作废维护工单领料标记为作废（编辑清空子表）
+    /// </summary>
+    /// <param name="maintenanceWorkOrderId">主表主键</param>
+    /// <returns>任务</returns>
+    private async Task MarkMaintenanceWorkOrderMaterialsObsoleteAsync(long maintenanceWorkOrderId)
+    {
+        if (maintenanceWorkOrderId <= 0)
+        {
+            return;
+        }
+        var rows = await _maintenanceWorkOrderMaterialRepository.GetListAsync(
+            x => x.MaintenanceWorkOrderId == maintenanceWorkOrderId && x.IsObsolete == 0);
+        if (rows.Count == 0)
+        {
+            return;
+        }
+        foreach (var row in rows)
+        {
+            row.IsObsolete = 1;
+        }
+        await _maintenanceWorkOrderMaterialRepository.UpdateRangeAsync(rows);
+    }
+
+    /// <summary>
+    /// 将指定主表下全部未作废维护工单报工标记为作废（编辑清空子表）
+    /// </summary>
+    /// <param name="maintenanceWorkOrderId">主表主键</param>
+    /// <returns>任务</returns>
+    private async Task MarkMaintenanceWorkOrderLaborsObsoleteAsync(long maintenanceWorkOrderId)
+    {
+        if (maintenanceWorkOrderId <= 0)
+        {
+            return;
+        }
+        var rows = await _maintenanceWorkOrderLaborRepository.GetListAsync(
+            x => x.MaintenanceWorkOrderId == maintenanceWorkOrderId && x.IsObsolete == 0);
+        if (rows.Count == 0)
+        {
+            return;
+        }
+        foreach (var row in rows)
+        {
+            row.IsObsolete = 1;
+        }
+        await _maintenanceWorkOrderLaborRepository.UpdateRangeAsync(rows);
+    }
+
+    /// <summary>
     /// 填充维护工单详情（加载 OneToMany 子表：维护工单领料、维护工单报工）
     /// </summary>
     /// <param name="dto">响应 DTO</param>
@@ -322,129 +370,236 @@ public class TaktMaintenanceWorkOrderService : TaktServiceBase, ITaktMaintenance
         {
             return;
         }
-        // 维护工单领料 → dto.Materials
+        // 维护工单领料 → dto.Materials（含作废行）
         var materials = await _maintenanceWorkOrderMaterialRepository.GetListAsync(x => x.MaintenanceWorkOrderId == entity.Id);
         dto.Materials = materials.Adapt<List<TaktMaintenanceWorkOrderMaterialDto>>();
-        // 维护工单报工 → dto.Labors
+        // 维护工单报工 → dto.Labors（含作废行）
         var labors = await _maintenanceWorkOrderLaborRepository.GetListAsync(x => x.MaintenanceWorkOrderId == entity.Id);
         dto.Labors = labors.Adapt<List<TaktMaintenanceWorkOrderLaborDto>>();
     }
 
     /// <summary>
-    /// 保存维护工单子表级联（维护工单领料、维护工单报工；Create/Update 后按主表 Id 先删后插）
+    /// 保存维护工单子表级联（维护工单领料、维护工单报工；按子表 Id 增量新增/更新；未提交行标记作废，禁止先删后插）
     /// </summary>
     /// <param name="entity">主表实体</param>
     /// <param name="dto">创建/更新 DTO（含子表集合；UpdateDto 须继承 CreateDto）</param>
     /// <returns>任务</returns>
     private async Task SaveMaintenanceWorkOrderChildrenAsync(TaktMaintenanceWorkOrder entity, TaktMaintenanceWorkOrderCreateDto dto)
     {
+        var workOrderUpdateDto = dto as TaktMaintenanceWorkOrderUpdateDto;
         // 维护工单领料（Materials）
-        if (dto.Materials is not { Count: > 0 })
+        List<TaktMaintenanceWorkOrderMaterialUpdateDto>? materialsForSave;
+        if (workOrderUpdateDto?.Materials != null)
         {
-            await _maintenanceWorkOrderMaterialRepository.DeleteAsync(x => x.MaintenanceWorkOrderId == entity.Id);
+            materialsForSave = workOrderUpdateDto.Materials;
+        }
+        else if (dto.Materials != null)
+        {
+            materialsForSave = dto.Materials.Adapt<List<TaktMaintenanceWorkOrderMaterialUpdateDto>>();
         }
         else
         {
-            var materials = dto.Materials.Adapt<List<TaktMaintenanceWorkOrderMaterial>>();
-            foreach (var child in materials)
+            materialsForSave = null;
+        }
+        if (materialsForSave is not { Count: > 0 })
+        {
+            await MarkMaintenanceWorkOrderMaterialsObsoleteAsync(entity.Id);
+        }
+        else
+        {
+            var existingList = await _maintenanceWorkOrderMaterialRepository.GetListAsync(x => x.MaintenanceWorkOrderId == entity.Id);
+            var existingById = existingList.ToDictionary(x => x.Id);
+            var submittedIds = new HashSet<long>();
+            var toCreate = new List<TaktMaintenanceWorkOrderMaterial>();
+            var seenLineKeys = new HashSet<string>(StringComparer.Ordinal);
+            for (var i = 0; i < materialsForSave.Count; i++)
             {
-                child.MaintenanceWorkOrderId = entity.Id;
-            }
-            var materialsNeedLine = materials.Where(c => c.LineNumber <= 0).ToList();
-            if (materialsNeedLine.Count > 0)
-            {
-                var businessCode = !string.IsNullOrWhiteSpace(entity.WorkOrderCode) ? entity.WorkOrderCode : entity.Id.ToString();
-                var maxLine = await _maintenanceWorkOrderMaterialRepository.GetMaxIntAsync(
-                    x => x.TenantCode == CurrentTenantCode && x.CompanyCode == CurrentCompanyCode && x.MaintenanceWorkOrderId == entity.Id,
-                    x => x.LineNumber);
-                var lineSeq = _lineNumberGenerator.GenerateSequence(businessCode, materialsNeedLine.Count, maxLine).ToList();
-                var lineIdx = 0;
-                foreach (var child in materials)
+                var childDto = materialsForSave[i];
+                childDto.MaintenanceWorkOrderId = entity.Id;
+                var lineKey = $"{entity.CompanyCode}|{entity.Id}|{childDto.LineNumber}";
+                if (!seenLineKeys.Add(lineKey))
                 {
-                    if (child.LineNumber <= 0)
+                    throw new TaktBusinessException("维护工单领料第{i + 1}项与本次提交的其他项重复（CompanyCode、MaintenanceWorkOrderId、LineNumber）");
+                }
+                if (childDto.MaintenanceWorkOrderMaterialId > 0)
+                {
+                    if (!existingById.TryGetValue(childDto.MaintenanceWorkOrderMaterialId, out var target))
                     {
-                        child.LineNumber = lineSeq[lineIdx++];
+                        throw new TaktBusinessException("维护工单领料不存在（MaintenanceWorkOrderMaterialId={childDto.MaintenanceWorkOrderMaterialId}）");
                     }
+                    if (target.MaintenanceWorkOrderId != entity.Id)
+                    {
+                        throw new TaktBusinessException("维护工单领料不属于当前主表（MaintenanceWorkOrderMaterialId={childDto.MaintenanceWorkOrderMaterialId}）");
+                    }
+                    submittedIds.Add(childDto.MaintenanceWorkOrderMaterialId);
+                    var isUniqueUpdate_ix_takt_logistics_maintenance_work_order_material_order_line_unique = await _uniqueValidator.IsUniqueAsync(
+                        _maintenanceWorkOrderMaterialRepository,
+                        x => x.CompanyCode == x.CompanyCode
+                && x.MaintenanceWorkOrderId == x.MaintenanceWorkOrderId
+                && x.LineNumber == x.LineNumber
+                && x.MaterialCode == x.MaterialCode,
+                        childDto.MaintenanceWorkOrderMaterialId);
+                    if (!isUniqueUpdate_ix_takt_logistics_maintenance_work_order_material_order_line_unique)
+                    {
+                        throw new TaktBusinessException("维护工单领料的CompanyCode、MaintenanceWorkOrderId、LineNumber、MaterialCode已存在");
+                    }
+                    childDto.Adapt(target);
+                    target.Id = childDto.MaintenanceWorkOrderMaterialId;
+                    target.MaintenanceWorkOrderId = entity.Id;
+                    target.IsObsolete = 0;
+                    await _maintenanceWorkOrderMaterialRepository.UpdateAsync(target);
+                }
+                else
+                {
+                    var isUniqueCreate_ix_takt_logistics_maintenance_work_order_material_order_line_unique = await _uniqueValidator.IsUniqueAsync(
+                        _maintenanceWorkOrderMaterialRepository,
+                        x => x.CompanyCode == x.CompanyCode
+                && x.MaintenanceWorkOrderId == x.MaintenanceWorkOrderId
+                && x.LineNumber == x.LineNumber
+                && x.MaterialCode == x.MaterialCode);
+                    if (!isUniqueCreate_ix_takt_logistics_maintenance_work_order_material_order_line_unique)
+                    {
+                        throw new TaktBusinessException("维护工单领料的CompanyCode、MaintenanceWorkOrderId、LineNumber、MaterialCode已存在");
+                    }
+                    var child = childDto.Adapt<TaktMaintenanceWorkOrderMaterial>();
+                    child.Id = 0;
+                    child.MaintenanceWorkOrderId = entity.Id;
+                    child.IsObsolete = 0;
+                    toCreate.Add(child);
                 }
             }
-                        var seenKeys = new HashSet<string>(StringComparer.Ordinal);
-                        for (var i = 0; i < materials.Count; i++)
+            var toObsolete = existingList.Where(x => !submittedIds.Contains(x.Id) && x.IsObsolete == 0).ToList();
+            foreach (var removed in toObsolete)
+            {
+                removed.IsObsolete = 1;
+                await _maintenanceWorkOrderMaterialRepository.UpdateAsync(removed);
+            }
+            if (toCreate.Count > 0)
+            {
+                var needLine = toCreate.Where(c => c.LineNumber <= 0).ToList();
+                if (needLine.Count > 0)
+                {
+                    var businessCode = !string.IsNullOrWhiteSpace(entity.WorkOrderCode) ? entity.WorkOrderCode : entity.Id.ToString();
+                    var maxLine = existingList.Count > 0 ? existingList.Max(x => x.LineNumber) : 0;
+                    var lineSeq = _lineNumberGenerator.GenerateSequence(businessCode, needLine.Count, maxLine).ToList();
+                    var lineIdx = 0;
+                    foreach (var child in toCreate)
+                    {
+                        if (child.LineNumber <= 0)
                         {
-                            var key = $"{materials[i].CompanyCode}|{materials[i].MaintenanceWorkOrderId}|{materials[i].LineNumber}|{materials[i].MaterialCode}";
-                            if (!seenKeys.Add(key))
-                            {
-                                throw new TaktBusinessException($"维护工单领料第{i + 1}项与本次提交的其他项重复（CompanyCode、MaintenanceWorkOrderId、LineNumber、MaterialCode）");
-                            }
+                            child.LineNumber = lineSeq[lineIdx++];
                         }
-            await _maintenanceWorkOrderMaterialRepository.DeleteAsync(x => x.MaintenanceWorkOrderId == entity.Id);
-            foreach (var child in materials)
-            {
-            var isUnique_ix_takt_logistics_maintenance_work_order_material_order_line_unique = await _uniqueValidator.IsUniqueAsync(
-                _maintenanceWorkOrderMaterialRepository,
-                x => x.CompanyCode == child.CompanyCode
-                    && x.MaintenanceWorkOrderId == child.MaintenanceWorkOrderId
-                    && x.LineNumber == child.LineNumber
-                    && x.MaterialCode == child.MaterialCode);
-            if (!isUnique_ix_takt_logistics_maintenance_work_order_material_order_line_unique)
-            {
-                throw new TaktBusinessException("维护工单领料的CompanyCode、MaintenanceWorkOrderId、LineNumber、MaterialCode已存在");
+                    }
+                }
+                await _maintenanceWorkOrderMaterialRepository.CreateRangeAsync(toCreate);
             }
-            }
-            await _maintenanceWorkOrderMaterialRepository.CreateRangeAsync(materials);
         }
         // 维护工单报工（Labors）
-        if (dto.Labors is not { Count: > 0 })
+        List<TaktMaintenanceWorkOrderLaborUpdateDto>? laborsForSave;
+        if (workOrderUpdateDto?.Labors != null)
         {
-            await _maintenanceWorkOrderLaborRepository.DeleteAsync(x => x.MaintenanceWorkOrderId == entity.Id);
+            laborsForSave = workOrderUpdateDto.Labors;
+        }
+        else if (dto.Labors != null)
+        {
+            laborsForSave = dto.Labors.Adapt<List<TaktMaintenanceWorkOrderLaborUpdateDto>>();
         }
         else
         {
-            var labors = dto.Labors.Adapt<List<TaktMaintenanceWorkOrderLabor>>();
-            foreach (var child in labors)
+            laborsForSave = null;
+        }
+        if (laborsForSave is not { Count: > 0 })
+        {
+            await MarkMaintenanceWorkOrderLaborsObsoleteAsync(entity.Id);
+        }
+        else
+        {
+            var existingList = await _maintenanceWorkOrderLaborRepository.GetListAsync(x => x.MaintenanceWorkOrderId == entity.Id);
+            var existingById = existingList.ToDictionary(x => x.Id);
+            var submittedIds = new HashSet<long>();
+            var toCreate = new List<TaktMaintenanceWorkOrderLabor>();
+            var seenLineKeys = new HashSet<string>(StringComparer.Ordinal);
+            for (var i = 0; i < laborsForSave.Count; i++)
             {
-                child.MaintenanceWorkOrderId = entity.Id;
-            }
-            var laborsNeedLine = labors.Where(c => c.LineNumber <= 0).ToList();
-            if (laborsNeedLine.Count > 0)
-            {
-                var businessCode = !string.IsNullOrWhiteSpace(entity.WorkOrderCode) ? entity.WorkOrderCode : entity.Id.ToString();
-                var maxLine = await _maintenanceWorkOrderLaborRepository.GetMaxIntAsync(
-                    x => x.TenantCode == CurrentTenantCode && x.CompanyCode == CurrentCompanyCode && x.MaintenanceWorkOrderId == entity.Id,
-                    x => x.LineNumber);
-                var lineSeq = _lineNumberGenerator.GenerateSequence(businessCode, laborsNeedLine.Count, maxLine).ToList();
-                var lineIdx = 0;
-                foreach (var child in labors)
+                var childDto = laborsForSave[i];
+                childDto.MaintenanceWorkOrderId = entity.Id;
+                var lineKey = $"{entity.CompanyCode}|{entity.Id}|{childDto.LineNumber}";
+                if (!seenLineKeys.Add(lineKey))
                 {
-                    if (child.LineNumber <= 0)
+                    throw new TaktBusinessException("维护工单报工第{i + 1}项与本次提交的其他项重复（CompanyCode、MaintenanceWorkOrderId、LineNumber）");
+                }
+                if (childDto.MaintenanceWorkOrderLaborId > 0)
+                {
+                    if (!existingById.TryGetValue(childDto.MaintenanceWorkOrderLaborId, out var target))
                     {
-                        child.LineNumber = lineSeq[lineIdx++];
+                        throw new TaktBusinessException("维护工单报工不存在（MaintenanceWorkOrderLaborId={childDto.MaintenanceWorkOrderLaborId}）");
                     }
+                    if (target.MaintenanceWorkOrderId != entity.Id)
+                    {
+                        throw new TaktBusinessException("维护工单报工不属于当前主表（MaintenanceWorkOrderLaborId={childDto.MaintenanceWorkOrderLaborId}）");
+                    }
+                    submittedIds.Add(childDto.MaintenanceWorkOrderLaborId);
+                    var isUniqueUpdate_ix_takt_logistics_maintenance_work_order_labor_order_line_unique = await _uniqueValidator.IsUniqueAsync(
+                        _maintenanceWorkOrderLaborRepository,
+                        x => x.CompanyCode == x.CompanyCode
+                && x.MaintenanceWorkOrderId == x.MaintenanceWorkOrderId
+                && x.LineNumber == x.LineNumber
+                && x.EmployeeCode == x.EmployeeCode,
+                        childDto.MaintenanceWorkOrderLaborId);
+                    if (!isUniqueUpdate_ix_takt_logistics_maintenance_work_order_labor_order_line_unique)
+                    {
+                        throw new TaktBusinessException("维护工单报工的CompanyCode、MaintenanceWorkOrderId、LineNumber、EmployeeCode已存在");
+                    }
+                    childDto.Adapt(target);
+                    target.Id = childDto.MaintenanceWorkOrderLaborId;
+                    target.MaintenanceWorkOrderId = entity.Id;
+                    target.IsObsolete = 0;
+                    await _maintenanceWorkOrderLaborRepository.UpdateAsync(target);
+                }
+                else
+                {
+                    var isUniqueCreate_ix_takt_logistics_maintenance_work_order_labor_order_line_unique = await _uniqueValidator.IsUniqueAsync(
+                        _maintenanceWorkOrderLaborRepository,
+                        x => x.CompanyCode == x.CompanyCode
+                && x.MaintenanceWorkOrderId == x.MaintenanceWorkOrderId
+                && x.LineNumber == x.LineNumber
+                && x.EmployeeCode == x.EmployeeCode);
+                    if (!isUniqueCreate_ix_takt_logistics_maintenance_work_order_labor_order_line_unique)
+                    {
+                        throw new TaktBusinessException("维护工单报工的CompanyCode、MaintenanceWorkOrderId、LineNumber、EmployeeCode已存在");
+                    }
+                    var child = childDto.Adapt<TaktMaintenanceWorkOrderLabor>();
+                    child.Id = 0;
+                    child.MaintenanceWorkOrderId = entity.Id;
+                    child.IsObsolete = 0;
+                    toCreate.Add(child);
                 }
             }
-                        var seenKeys = new HashSet<string>(StringComparer.Ordinal);
-                        for (var i = 0; i < labors.Count; i++)
+            var toObsolete = existingList.Where(x => !submittedIds.Contains(x.Id) && x.IsObsolete == 0).ToList();
+            foreach (var removed in toObsolete)
+            {
+                removed.IsObsolete = 1;
+                await _maintenanceWorkOrderLaborRepository.UpdateAsync(removed);
+            }
+            if (toCreate.Count > 0)
+            {
+                var needLine = toCreate.Where(c => c.LineNumber <= 0).ToList();
+                if (needLine.Count > 0)
+                {
+                    var businessCode = !string.IsNullOrWhiteSpace(entity.WorkOrderCode) ? entity.WorkOrderCode : entity.Id.ToString();
+                    var maxLine = existingList.Count > 0 ? existingList.Max(x => x.LineNumber) : 0;
+                    var lineSeq = _lineNumberGenerator.GenerateSequence(businessCode, needLine.Count, maxLine).ToList();
+                    var lineIdx = 0;
+                    foreach (var child in toCreate)
+                    {
+                        if (child.LineNumber <= 0)
                         {
-                            var key = $"{labors[i].CompanyCode}|{labors[i].MaintenanceWorkOrderId}|{labors[i].LineNumber}|{labors[i].EmployeeCode}";
-                            if (!seenKeys.Add(key))
-                            {
-                                throw new TaktBusinessException($"维护工单报工第{i + 1}项与本次提交的其他项重复（CompanyCode、MaintenanceWorkOrderId、LineNumber、EmployeeCode）");
-                            }
+                            child.LineNumber = lineSeq[lineIdx++];
                         }
-            await _maintenanceWorkOrderLaborRepository.DeleteAsync(x => x.MaintenanceWorkOrderId == entity.Id);
-            foreach (var child in labors)
-            {
-            var isUnique_ix_takt_logistics_maintenance_work_order_labor_order_line_unique = await _uniqueValidator.IsUniqueAsync(
-                _maintenanceWorkOrderLaborRepository,
-                x => x.CompanyCode == child.CompanyCode
-                    && x.MaintenanceWorkOrderId == child.MaintenanceWorkOrderId
-                    && x.LineNumber == child.LineNumber
-                    && x.EmployeeCode == child.EmployeeCode);
-            if (!isUnique_ix_takt_logistics_maintenance_work_order_labor_order_line_unique)
-            {
-                throw new TaktBusinessException("维护工单报工的CompanyCode、MaintenanceWorkOrderId、LineNumber、EmployeeCode已存在");
+                    }
+                }
+                await _maintenanceWorkOrderLaborRepository.CreateRangeAsync(toCreate);
             }
-            }
-            await _maintenanceWorkOrderLaborRepository.CreateRangeAsync(labors);
         }
     }
 

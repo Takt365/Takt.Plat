@@ -21,46 +21,44 @@
     >
       <a-tab-pane
         key="tab-0"
-        :tab="t('common.page.form.tabs.basicinfo')"
+        :tab="t('common.page.form.tabs.basicinfo') + ' (1/2)'"
         force-render
       >
         <div :class="formContentClass">
           <a-row :gutter="24">
             <a-col :span="12">
               <a-form-item
-                :label="t('entity.fqcorderitem.linenumber')"
+                :label="pi.label('lineNumber')"
                 name="lineNumber"
               >
                 <a-input-number
                   v-model:value="formState.lineNumber"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.fqcorderitem.linenumber') })"
+                  :placeholder="pi.ph('lineNumber')"
                   style="width: 100%"
                 />
               </a-form-item>
             </a-col>
             <a-col :span="12">
               <a-form-item
-                :label="t('entity.fqcorderitem.materialcode')"
+                :label="pi.label('materialCode')"
                 name="materialCode"
               >
-                <a-input
+                <TaktSelect
                   v-model:value="formState.materialCode"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.fqcorderitem.materialcode') })"
-                  show-count
-                  :maxlength="20"
-                  allow-clear
+                  api-url="TaktMaterials/options"
+                  :placeholder="pi.ph('materialCode')"
                   :disabled="!!formData?.fqcOrderItemId"
                 />
               </a-form-item>
             </a-col>
             <a-col :span="12">
               <a-form-item
-                :label="t('entity.fqcorderitem.materialname')"
+                :label="pi.label('materialName')"
                 name="materialName"
               >
                 <a-input
                   v-model:value="formState.materialName"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.fqcorderitem.materialname') })"
+                  :placeholder="pi.ph('materialName')"
                   show-count
                   :maxlength="20"
                   allow-clear
@@ -69,12 +67,12 @@
             </a-col>
             <a-col :span="12">
               <a-form-item
-                :label="t('entity.fqcorderitem.batchno')"
+                :label="pi.label('batchNo')"
                 name="batchNo"
               >
                 <a-input
                   v-model:value="formState.batchNo"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.fqcorderitem.batchno') })"
+                  :placeholder="pi.ph('batchNo')"
                   show-count
                   :maxlength="20"
                   allow-clear
@@ -83,55 +81,184 @@
             </a-col>
             <a-col :span="12">
               <a-form-item
-                :label="t('entity.fqcorderitem.warehousequantity')"
+                :label="pi.label('warehouseQuantity')"
                 name="warehouseQuantity"
               >
                 <a-input-number
                   v-model:value="formState.warehouseQuantity"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.fqcorderitem.warehousequantity') })"
+                  :placeholder="pi.ph('warehouseQuantity')"
                   style="width: 100%"
                 />
               </a-form-item>
             </a-col>
             <a-col :span="12">
               <a-form-item
-                :label="t('entity.fqcorderitem.standardcode')"
+                :label="pi.label('standardCode')"
                 name="standardCode"
               >
-                <a-input
+                <TaktSelect
                   v-model:value="formState.standardCode"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.fqcorderitem.standardcode') })"
-                  show-count
-                  :maxlength="20"
-                  allow-clear
+                  api-url="TaktInspectionStandards/options"
+                  :placeholder="pi.ph('standardCode')"
                   :disabled="!!formData?.fqcOrderItemId"
                 />
               </a-form-item>
             </a-col>
             <a-col :span="12">
               <a-form-item
-                :label="t('entity.fqcorderitem.samplingschemecode')"
+                :label="pi.label('samplingSchemeCode')"
                 name="samplingSchemeCode"
               >
-                <a-input
+                <TaktSelect
                   v-model:value="formState.samplingSchemeCode"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.fqcorderitem.samplingschemecode') })"
-                  show-count
-                  :maxlength="20"
-                  allow-clear
+                  api-url="TaktSamplingSchemes/options"
+                  :placeholder="pi.ph('samplingSchemeCode')"
                   :disabled="!!formData?.fqcOrderItemId"
                 />
               </a-form-item>
             </a-col>
             <a-col :span="12">
               <a-form-item
-                :label="t('entity.fqcorderitem.inspectionmethod')"
+                :label="pi.label('inspectionMethod')"
                 name="inspectionMethod"
               >
                 <TaktSelect
                   v-model:value="formState.inspectionMethod"
                   dict-type="logistics_quality_inspection_method"
-                  :placeholder="t('common.page.form.placeholder.select', { field: t('entity.fqcorderitem.inspectionmethod') })"
+                  :placeholder="pi.ph('inspectionMethod')"
+                />
+              </a-form-item>
+            </a-col>
+            <a-col :span="12">
+              <a-form-item
+                :label="pi.label('sampleQuantity')"
+                name="sampleQuantity"
+              >
+                <a-input-number
+                  v-model:value="formState.sampleQuantity"
+                  :placeholder="pi.ph('sampleQuantity')"
+                  style="width: 100%"
+                />
+              </a-form-item>
+            </a-col>
+            <a-col :span="12">
+              <a-form-item
+                :label="pi.label('qualifiedQuantity')"
+                name="qualifiedQuantity"
+              >
+                <a-input-number
+                  v-model:value="formState.qualifiedQuantity"
+                  :placeholder="pi.ph('qualifiedQuantity')"
+                  style="width: 100%"
+                />
+              </a-form-item>
+            </a-col>
+          </a-row>
+        </div>
+      </a-tab-pane>
+      <a-tab-pane
+        key="tab-1"
+        :tab="t('common.page.form.tabs.basicinfo') + ' (2/2)'"
+        force-render
+      >
+        <div :class="formContentClass">
+          <a-row :gutter="24">
+            <a-col :span="12">
+              <a-form-item
+                :label="pi.label('unqualifiedQuantity')"
+                name="unqualifiedQuantity"
+              >
+                <a-input-number
+                  v-model:value="formState.unqualifiedQuantity"
+                  :placeholder="pi.ph('unqualifiedQuantity')"
+                  style="width: 100%"
+                />
+              </a-form-item>
+            </a-col>
+            <a-col :span="12">
+              <a-form-item
+                :label="pi.label('inspectionReturnQuantity')"
+                name="inspectionReturnQuantity"
+              >
+                <a-input-number
+                  v-model:value="formState.inspectionReturnQuantity"
+                  :placeholder="pi.ph('inspectionReturnQuantity')"
+                  style="width: 100%"
+                />
+              </a-form-item>
+            </a-col>
+            <a-col :span="12">
+              <a-form-item
+                :label="pi.label('sampleSerialNo')"
+                name="sampleSerialNo"
+              >
+                <a-input
+                  v-model:value="formState.sampleSerialNo"
+                  :placeholder="pi.ph('sampleSerialNo')"
+                  show-count
+                  :maxlength="20"
+                  allow-clear
+                />
+              </a-form-item>
+            </a-col>
+            <a-col :span="24">
+              <a-form-item
+                :label="pi.label('inspectionDescription')"
+                name="inspectionDescription"
+              >
+                <a-textarea
+                  v-model:value="formState.inspectionDescription"
+                  :placeholder="pi.ph('inspectionDescription')"
+                  :rows="2"
+                />
+              </a-form-item>
+            </a-col>
+            <a-col :span="12">
+              <a-form-item
+                :label="pi.label('inspectorBy')"
+                name="inspectorBy"
+              >
+                <TaktSelect
+                  v-model:value="formState.inspectorBy"
+                  api-url="TaktEmployees/options"
+                  :placeholder="pi.ph('inspectorBy')"
+                />
+              </a-form-item>
+            </a-col>
+            <a-col :span="12">
+              <a-form-item
+                :label="pi.label('inspectionDate')"
+                name="inspectionDate"
+              >
+                <a-date-picker
+                  v-model:value="formState.inspectionDate"
+                  :placeholder="pi.ph('inspectionDate')"
+                  value-format="YYYY-MM-DD"
+                  style="width: 100%"
+                />
+              </a-form-item>
+            </a-col>
+            <a-col :span="12">
+              <a-form-item
+                :label="pi.label('judgeStatus')"
+                name="judgeStatus"
+              >
+                <TaktSelect
+                  v-model:value="formState.judgeStatus"
+                  dict-type="logistics_quality_judge_status"
+                  :placeholder="pi.ph('judgeStatus')"
+                />
+              </a-form-item>
+            </a-col>
+            <a-col :span="12">
+              <a-form-item
+                :label="pi.label('isObsolete')"
+                name="isObsolete"
+              >
+                <TaktSelect
+                  v-model:value="formState.isObsolete"
+                  dict-type="sys_yes_no_type"
+                  :placeholder="pi.ph('isObsolete')"
                 />
               </a-form-item>
             </a-col>
@@ -150,6 +277,11 @@
 import { reactive, watch, computed, ref, onMounted } from 'vue'
 import { useI18n } from 'vue-i18n'
 import type { Rule } from 'ant-design-vue/es/form'
+import { useFqcOrderItemI18n } from '../composables/use-fqc-order-item-i18n'
+
+/** 实体字段 i18n */
+const pi = useFqcOrderItemI18n()
+
 import type { FqcOrderItemCreate } from '@/types/logistics/quality/operation/fqc-order-item'
 import TaktSelect from '@/components/business/takt-select/index.vue'
 import { useDictDataStore } from '@/stores/foundation/dict-data'
@@ -161,7 +293,8 @@ const formContentClass = computed(() => (formFields.length > 10 ? 'takt-form-con
 /** 当前激活的 Tab key */
 const activeTab = ref('tab-0')
 /** CreateDto 字段名列表（与 formState 键对齐） */
-const formFields = ["lineNumber","materialCode","materialName","batchNo","warehouseQuantity","standardCode","samplingSchemeCode","inspectionMethod"]
+const formFields = ["lineNumber","materialCode","materialName","batchNo","warehouseQuantity","standardCode","samplingSchemeCode","inspectionMethod","sampleQuantity","qualifiedQuantity","unqualifiedQuantity","inspectionReturnQuantity","sampleSerialNo","inspectionDescription","inspectorBy","inspectionDate","judgeStatus","isObsolete"]
+
 
 
 /** 父级传入的编辑 DTO；新增时为 undefined 或空对象 */
@@ -185,7 +318,8 @@ const formRef = ref()
 const formState = reactive<Record<string, any>>({})
 /** 表单字段默认值（字典 IsDefault=1，来自 TaktDictDataSeedData） */
 const FORM_FIELD_DEFAULTS: Record<string, string | number> = {
-  inspectionMethod: 2
+  inspectionMethod: 2,
+  judgeStatus: 0
 }
 
 /** 写入表单默认值（新增 / resetFields / 弹窗再次打开时） */
@@ -228,11 +362,11 @@ const rules = computed<Record<string, Rule[]>>(() => ({
   lineNumber: [{
     validator: async (_rule, value) => {
       if (value === undefined || value === null || value === '') {
-        return Promise.reject(t('common.page.form.placeholder.select', { field: t('entity.fqcorderitem.linenumber') }))
+        return Promise.reject(pi.ph('lineNumber'))
       }
       const num = typeof value === 'number' ? value : Number(value)
       if (!Number.isFinite(num)) {
-        return Promise.reject(t('common.page.form.placeholder.select', { field: t('entity.fqcorderitem.linenumber') }))
+        return Promise.reject(pi.ph('lineNumber'))
       }
       return Promise.resolve()
     },
@@ -241,25 +375,25 @@ const rules = computed<Record<string, Rule[]>>(() => ({
   materialCode: [
     {
       required: true,
-      message: t('common.page.form.placeholder.required', { field: t('entity.fqcorderitem.materialcode') }),
-      trigger: 'blur'
+      message: pi.ph('materialCode'),
+      trigger: 'change'
     }
   ],
   materialName: [
     {
       required: true,
-      message: t('common.page.form.placeholder.required', { field: t('entity.fqcorderitem.materialname') }),
+      message: pi.ph('materialName'),
       trigger: 'blur'
     }
   ],
   warehouseQuantity: [{
     validator: async (_rule, value) => {
       if (value === undefined || value === null || value === '') {
-        return Promise.reject(t('common.page.form.placeholder.select', { field: t('entity.fqcorderitem.warehousequantity') }))
+        return Promise.reject(pi.ph('warehouseQuantity'))
       }
       const num = typeof value === 'number' ? value : Number(value)
       if (!Number.isFinite(num)) {
-        return Promise.reject(t('common.page.form.placeholder.select', { field: t('entity.fqcorderitem.warehousequantity') }))
+        return Promise.reject(pi.ph('warehouseQuantity'))
       }
       return Promise.resolve()
     },
@@ -268,25 +402,117 @@ const rules = computed<Record<string, Rule[]>>(() => ({
   standardCode: [
     {
       required: true,
-      message: t('common.page.form.placeholder.required', { field: t('entity.fqcorderitem.standardcode') }),
-      trigger: 'blur'
+      message: pi.ph('standardCode'),
+      trigger: 'change'
     }
   ],
   samplingSchemeCode: [
     {
       required: true,
-      message: t('common.page.form.placeholder.required', { field: t('entity.fqcorderitem.samplingschemecode') }),
-      trigger: 'blur'
+      message: pi.ph('samplingSchemeCode'),
+      trigger: 'change'
     }
   ],
   inspectionMethod: [{
     validator: async (_rule, value) => {
       if (value === undefined || value === null || value === '') {
-        return Promise.reject(t('common.page.form.placeholder.select', { field: t('entity.fqcorderitem.inspectionmethod') }))
+        return Promise.reject(pi.ph('inspectionMethod'))
       }
       const num = typeof value === 'number' ? value : Number(value)
       if (!Number.isFinite(num)) {
-        return Promise.reject(t('common.page.form.placeholder.select', { field: t('entity.fqcorderitem.inspectionmethod') }))
+        return Promise.reject(pi.ph('inspectionMethod'))
+      }
+      return Promise.resolve()
+    },
+    trigger: 'change'
+  }],
+  sampleQuantity: [{
+    validator: async (_rule, value) => {
+      if (value === undefined || value === null || value === '') {
+        return Promise.reject(pi.ph('sampleQuantity'))
+      }
+      const num = typeof value === 'number' ? value : Number(value)
+      if (!Number.isFinite(num)) {
+        return Promise.reject(pi.ph('sampleQuantity'))
+      }
+      return Promise.resolve()
+    },
+    trigger: 'change'
+  }],
+  qualifiedQuantity: [{
+    validator: async (_rule, value) => {
+      if (value === undefined || value === null || value === '') {
+        return Promise.reject(pi.ph('qualifiedQuantity'))
+      }
+      const num = typeof value === 'number' ? value : Number(value)
+      if (!Number.isFinite(num)) {
+        return Promise.reject(pi.ph('qualifiedQuantity'))
+      }
+      return Promise.resolve()
+    },
+    trigger: 'change'
+  }],
+  unqualifiedQuantity: [{
+    validator: async (_rule, value) => {
+      if (value === undefined || value === null || value === '') {
+        return Promise.reject(pi.ph('unqualifiedQuantity'))
+      }
+      const num = typeof value === 'number' ? value : Number(value)
+      if (!Number.isFinite(num)) {
+        return Promise.reject(pi.ph('unqualifiedQuantity'))
+      }
+      return Promise.resolve()
+    },
+    trigger: 'change'
+  }],
+  inspectionReturnQuantity: [{
+    validator: async (_rule, value) => {
+      if (value === undefined || value === null || value === '') {
+        return Promise.reject(pi.ph('inspectionReturnQuantity'))
+      }
+      const num = typeof value === 'number' ? value : Number(value)
+      if (!Number.isFinite(num)) {
+        return Promise.reject(pi.ph('inspectionReturnQuantity'))
+      }
+      return Promise.resolve()
+    },
+    trigger: 'change'
+  }],
+  inspectorBy: [
+    {
+      required: true,
+      message: pi.ph('inspectorBy'),
+      trigger: 'change'
+    }
+  ],
+  inspectionDate: [
+    {
+      required: true,
+      message: pi.ph('inspectionDate'),
+      trigger: 'change'
+    }
+  ],
+  judgeStatus: [{
+    validator: async (_rule, value) => {
+      if (value === undefined || value === null || value === '') {
+        return Promise.reject(pi.ph('judgeStatus'))
+      }
+      const num = typeof value === 'number' ? value : Number(value)
+      if (!Number.isFinite(num)) {
+        return Promise.reject(pi.ph('judgeStatus'))
+      }
+      return Promise.resolve()
+    },
+    trigger: 'change'
+  }],
+  isObsolete: [{
+    validator: async (_rule, value) => {
+      if (value === undefined || value === null || value === '') {
+        return Promise.reject(pi.ph('isObsolete'))
+      }
+      const num = typeof value === 'number' ? value : Number(value)
+      if (!Number.isFinite(num)) {
+        return Promise.reject(pi.ph('isObsolete'))
       }
       return Promise.resolve()
     },
@@ -314,6 +540,30 @@ function getValues(): Record<string, any> {
   if ('inspectionMethod' in payload) {
     const rawinspectionMethod = payload.inspectionMethod
     payload.inspectionMethod = typeof rawinspectionMethod === 'number' ? rawinspectionMethod : Number(rawinspectionMethod)
+  }
+  if ('sampleQuantity' in payload) {
+    const rawsampleQuantity = payload.sampleQuantity
+    payload.sampleQuantity = typeof rawsampleQuantity === 'number' ? rawsampleQuantity : Number(rawsampleQuantity)
+  }
+  if ('qualifiedQuantity' in payload) {
+    const rawqualifiedQuantity = payload.qualifiedQuantity
+    payload.qualifiedQuantity = typeof rawqualifiedQuantity === 'number' ? rawqualifiedQuantity : Number(rawqualifiedQuantity)
+  }
+  if ('unqualifiedQuantity' in payload) {
+    const rawunqualifiedQuantity = payload.unqualifiedQuantity
+    payload.unqualifiedQuantity = typeof rawunqualifiedQuantity === 'number' ? rawunqualifiedQuantity : Number(rawunqualifiedQuantity)
+  }
+  if ('inspectionReturnQuantity' in payload) {
+    const rawinspectionReturnQuantity = payload.inspectionReturnQuantity
+    payload.inspectionReturnQuantity = typeof rawinspectionReturnQuantity === 'number' ? rawinspectionReturnQuantity : Number(rawinspectionReturnQuantity)
+  }
+  if ('judgeStatus' in payload) {
+    const rawjudgeStatus = payload.judgeStatus
+    payload.judgeStatus = typeof rawjudgeStatus === 'number' ? rawjudgeStatus : Number(rawjudgeStatus)
+  }
+  if ('isObsolete' in payload) {
+    const rawisObsolete = payload.isObsolete
+    payload.isObsolete = typeof rawisObsolete === 'number' ? rawisObsolete : Number(rawisObsolete)
   }
   if ('sortOrder' in payload) delete payload.sortOrder
   payload.defectHandlings = props.masterId

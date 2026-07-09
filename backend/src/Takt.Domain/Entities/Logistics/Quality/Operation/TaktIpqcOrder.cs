@@ -104,10 +104,4 @@ public class TaktIpqcOrder : TaktCompanyEntityBase
     /// </summary>
     [Navigate(NavigateType.OneToMany, nameof(TaktIpqcOrderItem.IpqcOrderId))]
     public List<TaktIpqcOrderItem>? Items { get; set; }
-
-    /// <summary>
-    /// 变更日志列表（主子表关系）
-    /// </summary>
-    [Navigate(NavigateType.OneToMany, nameof(TaktIpqcOrderChangeLog.IpqcOrderId))]
-    public List<TaktIpqcOrderChangeLog>? ChangeLogs { get; set; }
 }

@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Application.Services.Logistics.Materials
 // 文件名称：TaktMaterialDocumentItemService.cs
-// 创建时间：2026-07-01
+// 创建时间：2026-07-09
 // 创建人：Takt365(Cursor AI)
 // 功能描述：物料凭证行项目应用服务实现
 // 
@@ -93,7 +93,7 @@ public class TaktMaterialDocumentItemService : TaktServiceBase, ITaktMaterialDoc
     }
 
     /// <summary>
-    /// 获取物料交易明细选项列表
+    /// 获取物料凭证明细选项列表
     /// </summary>
     /// <returns>下拉选项</returns>
     public async Task<List<TaktSelectOption>> GetMaterialDocumentItemOptionsAsync()
@@ -120,6 +120,7 @@ public class TaktMaterialDocumentItemService : TaktServiceBase, ITaktMaterialDoc
     public async Task<TaktMaterialDocumentItemDto> CreateMaterialDocumentItemAsync(TaktMaterialDocumentItemCreateDto dto)
     {
         var entity = dto.Adapt<TaktMaterialDocumentItem>();
+        entity.IsObsolete = 0;
         await StampMaterialDocumentItemMaterialDocumentAsync(entity, dto);
         var isUnique_ix_takt_logistics_materials_material_document_item_line_unique = await _uniqueValidator.IsUniqueAsync(
             _materialDocumentItemRepository,
@@ -176,11 +177,21 @@ public class TaktMaterialDocumentItemService : TaktServiceBase, ITaktMaterialDoc
     /// <returns>任务</returns>
     public async Task DeleteMaterialDocumentItemByIdAsync(long id)
     {
-        var deleted = await _materialDocumentItemRepository.DeleteAsync(id);
-        if (!deleted)
+        var entity = await _materialDocumentItemRepository.GetByIdAsync(id);
+        if (entity == null)
         {
             throw new TaktBusinessException("物料凭证行项目不存在或已删除");
         }
+        if (entity.TenantCode != CurrentTenantCode || entity.CompanyCode != CurrentCompanyCode)
+        {
+            throw new TaktBusinessException("物料凭证行项目不存在或已删除");
+        }
+        if (entity.IsObsolete == 1)
+        {
+            throw new TaktBusinessException("物料凭证行项目已作废");
+        }
+        entity.IsObsolete = 1;
+        await _materialDocumentItemRepository.UpdateAsync(entity);
     }
 
     /// <summary>
@@ -199,6 +210,27 @@ public class TaktMaterialDocumentItemService : TaktServiceBase, ITaktMaterialDoc
         {
             await DeleteMaterialDocumentItemByIdAsync(id);
         }
+    }
+
+    /// <summary>
+    /// 更新物料凭证行项目作废状态
+    /// </summary>
+    /// <param name="dto">作废DTO</param>
+    /// <returns>DTO</returns>
+    public async Task<TaktMaterialDocumentItemDto> UpdateMaterialDocumentItemObsoleteAsync(TaktMaterialDocumentItemObsoleteDto dto)
+    {
+        var entity = await _materialDocumentItemRepository.GetByIdAsync(dto.MaterialDocumentItemId);
+        if (entity == null)
+        {
+            throw new TaktBusinessException("物料凭证行项目不存在");
+        }
+        if (entity.TenantCode != CurrentTenantCode || entity.CompanyCode != CurrentCompanyCode)
+        {
+            throw new TaktBusinessException("物料凭证行项目不存在");
+        }
+        entity.IsObsolete = dto.IsObsolete;
+        await _materialDocumentItemRepository.UpdateAsync(entity);
+        return await GetMaterialDocumentItemByIdAsync(dto.MaterialDocumentItemId) ?? throw new TaktBusinessException("物料凭证行项目不存在");
     }
 
     /// <summary>
@@ -332,6 +364,15 @@ public class TaktMaterialDocumentItemService : TaktServiceBase, ITaktMaterialDoc
     private static Expression<Func<TaktMaterialDocumentItem, bool>> QueryExpression(TaktMaterialDocumentItemQueryDto? queryDto)
     {
         var exp = Expressionable.Create<TaktMaterialDocumentItem>();
+
+        if (queryDto?.IsObsolete.HasValue == true)
+        {
+            exp = exp.And(x => x.IsObsolete == queryDto.IsObsolete);
+        }
+        else
+        {
+            exp = exp.And(x => x.IsObsolete == 0);
+        }
 
         if (!string.IsNullOrEmpty(queryDto?.KeyWords))
         {

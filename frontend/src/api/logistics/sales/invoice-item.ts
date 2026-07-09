@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：frontend/src/api/logistics/sales
 // 文件名称：invoice-item.ts
-// 创建时间：2026-07-01
+// 创建时间：2026-07-09
 // 创建人：Takt365(Auto Generated)
 // 功能描述：logistics/sales 模块 API（自动生成，请勿手改路由常量）
 // 
@@ -18,6 +18,7 @@ import type {
 import type {
   SalesInvoiceItem,
   SalesInvoiceItemCreate,
+  SalesInvoiceItemObsolete,
   SalesInvoiceItemUpdate
 } from '@/types/logistics/sales/invoice-item';
 
@@ -105,6 +106,19 @@ export function deleteSalesInvoiceItemBatch(ids: string[]): Promise<void> {
     url: `${SALES_INVOICE_ITEM_API_BASE}/batch`,
     method: 'delete',
     data: ids,
+  });
+}
+
+/**
+ * 更新销售发票明细作废状态
+ * @param {SalesInvoiceItemObsolete} dto 作废 DTO
+ * @returns {Promise<SalesInvoiceItem>} 销售发票明细DTO
+ */
+export function updateSalesInvoiceItemObsolete(dto: SalesInvoiceItemObsolete): Promise<SalesInvoiceItem> {
+  return request<SalesInvoiceItem>({
+    url: `${SALES_INVOICE_ITEM_API_BASE}/obsolete`,
+    method: 'put',
+    data: dto,
   });
 }
 

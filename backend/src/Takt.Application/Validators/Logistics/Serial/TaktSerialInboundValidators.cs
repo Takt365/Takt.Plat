@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Application.Validators.Logistics.Serial
 // 文件名称：TaktSerialInboundValidators.cs
-// 创建时间：2026-07-02
+// 创建时间：2026-07-09
 // 创建人：Takt365(Auto Generated)
 // 功能描述：SerialInbound 模块 FluentValidation 验证器（由 generate-validators-from-entity.cjs 根据 TaktSerialInbound 生成，请按需审阅）
 // 
@@ -43,7 +43,7 @@ public class TaktSerialInboundCreateValidator : AbstractValidator<TaktSerialInbo
             .MaximumLength(50).WithMessage("入库单号长度不能超过50个字符");
         RuleFor(x => x.WarehouseCode)
             .NotEmpty().WithMessage("仓库编码不能为空")
-            .MaximumLength(50).WithMessage("仓库编码长度不能超过50个字符");
+            .MaximumLength(4).WithMessage("仓库编码长度不能超过4个字符");
         RuleFor(x => x.LocationCode)
             .NotEmpty().WithMessage("库位编码不能为空")
             .MaximumLength(40).WithMessage("库位编码长度不能超过40个字符");
@@ -84,7 +84,7 @@ public class TaktSerialInboundUpdateValidator : AbstractValidator<TaktSerialInbo
             .MaximumLength(50).WithMessage("入库单号长度不能超过50个字符");
         RuleFor(x => x.WarehouseCode)
             .NotEmpty().WithMessage("仓库编码不能为空")
-            .MaximumLength(50).WithMessage("仓库编码长度不能超过50个字符");
+            .MaximumLength(4).WithMessage("仓库编码长度不能超过4个字符");
         RuleFor(x => x.LocationCode)
             .NotEmpty().WithMessage("库位编码不能为空")
             .MaximumLength(40).WithMessage("库位编码长度不能超过40个字符");
@@ -121,7 +121,7 @@ public class TaktSerialInboundImportValidator : AbstractValidator<TaktSerialInbo
             .MaximumLength(50).WithMessage("入库单号长度不能超过50个字符");
         RuleFor(x => x.WarehouseCode)
             .NotEmpty().WithMessage("仓库编码不能为空")
-            .MaximumLength(50).WithMessage("仓库编码长度不能超过50个字符");
+            .MaximumLength(4).WithMessage("仓库编码长度不能超过4个字符");
         RuleFor(x => x.LocationCode)
             .NotEmpty().WithMessage("库位编码不能为空")
             .MaximumLength(40).WithMessage("库位编码长度不能超过40个字符");

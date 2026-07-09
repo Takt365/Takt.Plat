@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：frontend/src/api/logistics/materials
 // 文件名称：manufacturer-material.ts
-// 创建时间：2026-06-30
+// 创建时间：2026-07-09
 // 创建人：Takt365(Auto Generated)
 // 功能描述：logistics/materials 模块 API（自动生成，请勿手改路由常量）
 // 
@@ -18,6 +18,7 @@ import type {
 import type {
   ManufacturerMaterial,
   ManufacturerMaterialCreate,
+  ManufacturerMaterialObsolete,
   ManufacturerMaterialUpdate
 } from '@/types/logistics/materials/manufacturer-material';
 
@@ -105,6 +106,19 @@ export function deleteManufacturerMaterialBatch(ids: string[]): Promise<void> {
     url: `${MANUFACTURER_MATERIAL_API_BASE}/batch`,
     method: 'delete',
     data: ids,
+  });
+}
+
+/**
+ * 更新制造商物料明细作废状态
+ * @param {ManufacturerMaterialObsolete} dto 作废 DTO
+ * @returns {Promise<ManufacturerMaterial>} 制造商物料明细DTO
+ */
+export function updateManufacturerMaterialObsolete(dto: ManufacturerMaterialObsolete): Promise<ManufacturerMaterial> {
+  return request<ManufacturerMaterial>({
+    url: `${MANUFACTURER_MATERIAL_API_BASE}/obsolete`,
+    method: 'put',
+    data: dto,
   });
 }
 

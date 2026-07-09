@@ -188,28 +188,34 @@ public class TaktEcDetail : TaktCompanyEntityBase
     public DateTime EcBomDate { get; set; }
 
     /// <summary>
-    /// 互换性（Ec_is_compatible）
+    /// 兼容性（字典 logistics_ec_source_compatibility；A=兼容，B=单向兼容（新替旧），C=单向兼容（旧替新），D=不兼容）
     /// </summary>
-    [SugarColumn(ColumnName = "ec_is_compatible", ColumnDescription = "互换性", Length = 4, ColumnDataType = "nvarchar", IsNullable = true)]
+    [SugarColumn(ColumnName = "ec_is_compatible", ColumnDescription = "兼容性", Length = 4, ColumnDataType = "nvarchar", IsNullable = true)]
     public string? EcIsCompatible { get; set; }
 
     /// <summary>
-    /// 二级区分（Ec_second_distinction）
+    /// 二级区分（字典 logistics_ec_source_distinction；1=有，2=优先，3=无）
     /// </summary>
     [SugarColumn(ColumnName = "ec_second_distinction", ColumnDescription = "二级区分", Length = 4, ColumnDataType = "nvarchar", IsNullable = true)]
     public string? EcSecondDistinction { get; set; }
 
     /// <summary>
-    /// 生产指令（Ec_instruction_no）
+    /// 生产指令（字典 logistics_ec_source_instruction；1=已出货成品，2=在线半成品，3=库存零件，4=外协在制品，5=新下达订单，9=未定）
     /// </summary>
-    [SugarColumn(ColumnName = "ec_instruction_no", ColumnDescription = "生产指令", Length = 4, ColumnDataType = "nvarchar", IsNullable = true)]
-    public string? EcInstructionNo { get; set; }
+    [SugarColumn(ColumnName = "ec_instruction", ColumnDescription = "生产指令", Length = 4, ColumnDataType = "nvarchar", IsNullable = true)]
+    public string? EcInstruction { get; set; }
 
     /// <summary>
-    /// 旧品处理（Ec_legacy_part_disposition）
+    /// 旧品处理（字典 logistics_ec_legacy_part_disposition；1=转用，2=废弃，3=返工，4=消耗，5=无处理，9=未定）
     /// </summary>
     [SugarColumn(ColumnName = "ec_legacy_part_disposition", ColumnDescription = "旧品处理", Length = 4, ColumnDataType = "nvarchar", IsNullable = true)]
     public string? EcLegacyPartDisposition { get; set; }
+
+    /// <summary>
+    /// 是否作废（字典 sys_yes_no_type，0=否 1=是；编辑移除子行时标记作废）
+    /// </summary>
+    [SugarColumn(ColumnName = "is_obsolete", ColumnDescription = "是否作废", ColumnDataType = "int", IsNullable = false, DefaultValue = "0")]
+    public int IsObsolete { get; set; } = 0;
 
     /// <summary>
     /// 设变技术课主表（多对一）

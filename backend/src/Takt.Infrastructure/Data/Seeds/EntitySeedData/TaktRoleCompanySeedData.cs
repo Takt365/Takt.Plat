@@ -1,10 +1,10 @@
-﻿// ========================================
+// ========================================
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Infrastructure.Data.Seeds
 // 文件名称：TaktRoleCompanySeedData.cs
 // 创建时间：2025-01-20
 // 创建人：Takt365(Cursor AI)
-// 功能描述：Takt角色-公司关联种子数据，定义角色可访问的公司范围
+// 功能描述：Takt角色-公司关联种子数据，定义角色可访问的公司范围（数据权限）
 //
 // 版权信息：Copyright (c) 2025 Takt  All rights reserved.
 // 免责声明：此软件使用 MIT License，作者不承担任何使用风险。
@@ -12,11 +12,8 @@
 
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using Takt.Domain.Entities.Accounting.Financial;
 using Takt.Domain.Entities.Identity;
-using Takt.Domain.Interfaces;
 using Takt.Domain.Repositories;
-using Takt.Shared.Enums;
 using Takt.Shared.Helpers;
 using Takt.Shared.Options;
 
@@ -24,12 +21,22 @@ namespace Takt.Infrastructure.Data.Seeds.EntitySeedData;
 
 /// <summary>
 /// 角色-公司关联种子数据初始化
+/// <para>所有启用角色均关联 <c>Database:CompanyCodes</c> 顺序下全部启用公司。</para>
 /// 幂等性操作：存在则跳过，不存在则创建
 /// </summary>
 public class TaktRoleCompanySeedData : ITaktSeedDataCoordinator
 {
+    /// <summary>
+    /// 执行顺序（在公司种子之后、角色-部门关联之前）
+    /// </summary>
     public int Order => 61;
 
+    /// <summary>
+    /// 初始化角色-公司关联种子数据
+    /// </summary>
+    /// <param name="serviceProvider">服务提供者</param>
+    /// <param name="tenantCode">租户编码（由协调器传入）</param>
+    /// <returns>返回插入和更新的记录数（插入数, 更新数；本种子仅插入不更新）</returns>
     public async Task<(int InsertCount, int UpdateCount)> SeedAsync(IServiceProvider serviceProvider, string? tenantCode = null)
     {
         TaktLogger.Information("开始初始化角色-公司关联种子数据...");
@@ -63,36 +70,19 @@ public class TaktRoleCompanySeedData : ITaktSeedDataCoordinator
 
         TaktLogger.Information("正在为租户 {TenantCode} 初始化角色-公司关联数据...", tenantCode);
 
-        foreach (var company in orderedCompanies)
+        var roles = await roleRepository.GetListAsync(r => r.TenantCode == tenantCode && r.RoleStatus == 1);
+        foreach (var role in roles)
         {
-            insertCount += await CreateRoleCompanyAsync(
-                repository,
-                roleRepository,
-                companyRepository,
-                tenantCode,
-                "ROLE_SUPER_ADMIN",
-                company.CompanyCode);
-        }
-
-        var seedCompanyCode = database.GetSeedCompanyCode();
-        var companyMap = orderedCompanies.ToDictionary(c => c.CompanyCode, StringComparer.Ordinal);
-        var demoScopeCompanyCode = companyMap.ContainsKey(seedCompanyCode) ? seedCompanyCode : null;
-        if (demoScopeCompanyCode != null)
-        {
-            insertCount += await CreateRoleCompanyAsync(
-                repository,
-                roleRepository,
-                companyRepository,
-                tenantCode,
-                "ROLE_DEPT_ADMIN",
-                demoScopeCompanyCode);
-            insertCount += await CreateRoleCompanyAsync(
-                repository,
-                roleRepository,
-                companyRepository,
-                tenantCode,
-                "ROLE_EMPLOYEE",
-                demoScopeCompanyCode);
+            foreach (var company in orderedCompanies)
+            {
+                insertCount += await CreateRoleCompanyAsync(
+                    repository,
+                    roleRepository,
+                    companyRepository,
+                    tenantCode,
+                    role.RoleCode,
+                    company.CompanyCode);
+            }
         }
 
         TaktLogger.Information("角色-公司关联种子数据初始化完成: 插入 {InsertCount} 条", insertCount);
@@ -100,6 +90,16 @@ public class TaktRoleCompanySeedData : ITaktSeedDataCoordinator
         return (insertCount, 0);
     }
 
+    /// <summary>
+    /// 创建角色-公司关联（幂等：角色或公司不存在、或关联已存在时返回 0）
+    /// </summary>
+    /// <param name="repository">角色-公司关联仓储</param>
+    /// <param name="roleRepository">角色仓储</param>
+    /// <param name="companyRepository">公司仓储</param>
+    /// <param name="tenantCode">租户编码</param>
+    /// <param name="roleCode">角色编码（如 ROLE_SUPER_ADMIN）</param>
+    /// <param name="companyCode">公司编码</param>
+    /// <returns>新插入记录数为 1，否则为 0</returns>
     private static async Task<int> CreateRoleCompanyAsync(
         ITaktCompanySeedRepository<TaktRoleCompany> repository,
         ITaktTenantSeedRepository<TaktRole> roleRepository,

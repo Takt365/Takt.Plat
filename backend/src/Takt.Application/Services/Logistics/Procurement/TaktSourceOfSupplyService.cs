@@ -4,7 +4,7 @@
 // 文件名称：TaktSourceOfSupplyService.cs
 // 创建时间：2026-06-30
 // 创建人：Takt365(Cursor AI)
-// 功能描述：货源清单应用服务实现
+// 功能描述：货源清单清单应用服务实现
 // 
 // 版权信息：Copyright (c) 2026 Takt  All rights reserved.
 // 免责声明：此软件使用 MIT License，作者不承担任何使用风险。
@@ -25,7 +25,7 @@ using Takt.Shared.Options;
 namespace Takt.Application.Services.Logistics.Procurement;
 
 /// <summary>
-/// 货源清单应用服务
+/// 货源清单清单应用服务
 /// </summary>
 public class TaktSourceOfSupplyService : TaktServiceBase, ITaktSourceOfSupplyService
 {
@@ -36,7 +36,7 @@ public class TaktSourceOfSupplyService : TaktServiceBase, ITaktSourceOfSupplySer
     /// <summary>
     /// 构造函数
     /// </summary>
-    /// <param name="sourceOfSupplyRepository">货源清单仓储</param>
+    /// <param name="sourceOfSupplyRepository">货源清单清单仓储</param>
     /// <param name="sortOrderGenerator">排序号生成器</param>
     /// <param name="uniqueValidator">唯一性验证器</param>
     /// <param name="userContext">用户上下文</param>
@@ -55,7 +55,7 @@ public class TaktSourceOfSupplyService : TaktServiceBase, ITaktSourceOfSupplySer
     }
 
     /// <summary>
-    /// 获取货源清单列表（分页）
+    /// 获取货源清单清单列表（分页）
     /// </summary>
     /// <param name="queryDto">查询DTO</param>
     /// <returns>分页结果</returns>
@@ -74,9 +74,9 @@ public class TaktSourceOfSupplyService : TaktServiceBase, ITaktSourceOfSupplySer
     }
 
     /// <summary>
-    /// 根据ID获取货源清单
+    /// 根据ID获取货源清单清单
     /// </summary>
-    /// <param name="id">货源清单ID</param>
+    /// <param name="id">货源清单清单ID</param>
     /// <returns>DTO</returns>
     public async Task<TaktSourceOfSupplyDto?> GetSourceOfSupplyByIdAsync(long id)
     {
@@ -89,7 +89,7 @@ public class TaktSourceOfSupplyService : TaktServiceBase, ITaktSourceOfSupplySer
     }
 
     /// <summary>
-    /// 获取货源清单选项列表
+    /// 获取货源清单清单选项列表
     /// </summary>
     /// <returns>下拉选项</returns>
     public async Task<List<TaktSelectOption>> GetSourceOfSupplyOptionsAsync()
@@ -107,7 +107,7 @@ public class TaktSourceOfSupplyService : TaktServiceBase, ITaktSourceOfSupplySer
     }
 
     /// <summary>
-    /// 创建货源清单
+    /// 创建货源清单清单
     /// </summary>
     /// <param name="dto">创建DTO</param>
     /// <returns>DTO</returns>
@@ -122,14 +122,14 @@ public class TaktSourceOfSupplyService : TaktServiceBase, ITaktSourceOfSupplySer
                 && x.ValidFrom == entity.ValidFrom);
         if (!isUnique_ix_takt_logistics_procurement_source_of_supply_unique)
         {
-            throw new TaktBusinessException("货源清单的PlantCode、MaterialCode、SupplierCode、ValidFrom已存在");
+            throw new TaktBusinessException("货源清单清单的PlantCode、MaterialCode、SupplierCode、ValidFrom已存在");
         }
         var isUnique_ix_takt_logistics_procurement_source_of_supply_code_unique = await _uniqueValidator.IsUniqueAsync(
             _sourceOfSupplyRepository,
             x => x.SourceOfSupplyCode == entity.SourceOfSupplyCode);
         if (!isUnique_ix_takt_logistics_procurement_source_of_supply_code_unique)
         {
-            throw new TaktBusinessException("货源清单的SourceOfSupplyCode已存在");
+            throw new TaktBusinessException("货源清单清单的SourceOfSupplyCode已存在");
         }
         if (entity.SortOrder <= 0)
         {
@@ -143,9 +143,9 @@ public class TaktSourceOfSupplyService : TaktServiceBase, ITaktSourceOfSupplySer
     }
 
     /// <summary>
-    /// 更新货源清单
+    /// 更新货源清单清单
     /// </summary>
-    /// <param name="id">货源清单ID</param>
+    /// <param name="id">货源清单清单ID</param>
     /// <param name="dto">更新DTO</param>
     /// <returns>DTO</returns>
     public async Task<TaktSourceOfSupplyDto> UpdateSourceOfSupplyAsync(long id, TaktSourceOfSupplyUpdateDto dto)
@@ -153,7 +153,7 @@ public class TaktSourceOfSupplyService : TaktServiceBase, ITaktSourceOfSupplySer
         var entity = await _sourceOfSupplyRepository.GetByIdAsync(id);
         if (entity == null)
         {
-            throw new TaktBusinessException("货源清单不存在");
+            throw new TaktBusinessException("货源清单清单不存在");
         }
         dto.Adapt(entity);
         var isUnique_ix_takt_logistics_procurement_source_of_supply_unique = await _uniqueValidator.IsUniqueAsync(
@@ -165,7 +165,7 @@ public class TaktSourceOfSupplyService : TaktServiceBase, ITaktSourceOfSupplySer
             id);
         if (!isUnique_ix_takt_logistics_procurement_source_of_supply_unique)
         {
-            throw new TaktBusinessException("货源清单的PlantCode、MaterialCode、SupplierCode、ValidFrom已存在");
+            throw new TaktBusinessException("货源清单清单的PlantCode、MaterialCode、SupplierCode、ValidFrom已存在");
         }
         var isUnique_ix_takt_logistics_procurement_source_of_supply_code_unique = await _uniqueValidator.IsUniqueAsync(
             _sourceOfSupplyRepository,
@@ -173,28 +173,28 @@ public class TaktSourceOfSupplyService : TaktServiceBase, ITaktSourceOfSupplySer
             id);
         if (!isUnique_ix_takt_logistics_procurement_source_of_supply_code_unique)
         {
-            throw new TaktBusinessException("货源清单的SourceOfSupplyCode已存在");
+            throw new TaktBusinessException("货源清单清单的SourceOfSupplyCode已存在");
         }
         await _sourceOfSupplyRepository.UpdateAsync(entity);
-        return await GetSourceOfSupplyByIdAsync(id) ?? throw new TaktBusinessException("货源清单不存在");
+        return await GetSourceOfSupplyByIdAsync(id) ?? throw new TaktBusinessException("货源清单清单不存在");
     }
 
     /// <summary>
-    /// 删除货源清单
+    /// 删除货源清单清单
     /// </summary>
-    /// <param name="id">货源清单ID</param>
+    /// <param name="id">货源清单清单ID</param>
     /// <returns>任务</returns>
     public async Task DeleteSourceOfSupplyByIdAsync(long id)
     {
         var deleted = await _sourceOfSupplyRepository.DeleteAsync(id);
         if (!deleted)
         {
-            throw new TaktBusinessException("货源清单不存在或已删除");
+            throw new TaktBusinessException("货源清单清单不存在或已删除");
         }
     }
 
     /// <summary>
-    /// 批量删除货源清单
+    /// 批量删除货源清单清单
     /// </summary>
     /// <param name="ids">ID列表</param>
     /// <returns>任务</returns>
@@ -212,7 +212,7 @@ public class TaktSourceOfSupplyService : TaktServiceBase, ITaktSourceOfSupplySer
     }
 
     /// <summary>
-    /// 更新货源清单状态
+    /// 更新货源清单清单状态
     /// </summary>
     /// <param name="dto">状态DTO</param>
     /// <returns>DTO</returns>
@@ -221,15 +221,15 @@ public class TaktSourceOfSupplyService : TaktServiceBase, ITaktSourceOfSupplySer
         var entity = await _sourceOfSupplyRepository.GetByIdAsync(dto.SourceOfSupplyId);
         if (entity == null)
         {
-            throw new TaktBusinessException("货源清单不存在");
+            throw new TaktBusinessException("货源清单清单不存在");
         }
         entity.SourceStatus = dto.SourceStatus;
         await _sourceOfSupplyRepository.UpdateAsync(entity);
-        return await GetSourceOfSupplyByIdAsync(dto.SourceOfSupplyId) ?? throw new TaktBusinessException("货源清单不存在");
+        return await GetSourceOfSupplyByIdAsync(dto.SourceOfSupplyId) ?? throw new TaktBusinessException("货源清单清单不存在");
     }
 
     /// <summary>
-    /// 更新货源清单排序
+    /// 更新货源清单清单排序
     /// </summary>
     /// <param name="dto">排序DTO</param>
     /// <returns>DTO</returns>
@@ -238,11 +238,11 @@ public class TaktSourceOfSupplyService : TaktServiceBase, ITaktSourceOfSupplySer
         var entity = await _sourceOfSupplyRepository.GetByIdAsync(dto.SourceOfSupplyId);
         if (entity == null)
         {
-            throw new TaktBusinessException("货源清单不存在");
+            throw new TaktBusinessException("货源清单清单不存在");
         }
         entity.SortOrder = dto.SortOrder;
         await _sourceOfSupplyRepository.UpdateAsync(entity);
-        return await GetSourceOfSupplyByIdAsync(dto.SourceOfSupplyId) ?? throw new TaktBusinessException("货源清单不存在");
+        return await GetSourceOfSupplyByIdAsync(dto.SourceOfSupplyId) ?? throw new TaktBusinessException("货源清单清单不存在");
     }
 
     /// <summary>
@@ -254,12 +254,12 @@ public class TaktSourceOfSupplyService : TaktServiceBase, ITaktSourceOfSupplySer
     public async Task<(string fileName, byte[] content)> GetSourceOfSupplyTemplateAsync(string? sheetName = null, string? fileName = null)
     {
         return await TaktExcelHelper.GenerateTemplateAsync<TaktSourceOfSupplyTemplateDto>(
-            sheetName ?? "货源清单导入模板",
-            fileName ?? "货源清单导入模板.xlsx");
+            sheetName ?? "货源清单清单导入模板",
+            fileName ?? "货源清单清单导入模板.xlsx");
     }
 
     /// <summary>
-    /// 导入货源清单
+    /// 导入货源清单清单
     /// </summary>
     /// <param name="fileStream">Excel 文件流</param>
     /// <param name="sheetName">工作表名称</param>
@@ -269,7 +269,7 @@ public class TaktSourceOfSupplyService : TaktServiceBase, ITaktSourceOfSupplySer
         var errors = new List<string>();
         var success = 0;
         var fail = 0;
-        var rows = await TaktExcelHelper.ImportAsync<TaktSourceOfSupplyImportDto>(fileStream, sheetName ?? "货源清单导入模板");
+        var rows = await TaktExcelHelper.ImportAsync<TaktSourceOfSupplyImportDto>(fileStream, sheetName ?? "货源清单清单导入模板");
         if (rows == null || rows.Count == 0)
         {
             errors.Add("Excel文件中没有数据");
@@ -297,14 +297,14 @@ public class TaktSourceOfSupplyService : TaktServiceBase, ITaktSourceOfSupplySer
                         && x.ValidFrom == entity.ValidFrom);
                 if (!isUnique_ix_takt_logistics_procurement_source_of_supply_unique)
                 {
-                    throw new TaktBusinessException("货源清单的PlantCode、MaterialCode、SupplierCode、ValidFrom已存在");
+                    throw new TaktBusinessException("货源清单清单的PlantCode、MaterialCode、SupplierCode、ValidFrom已存在");
                 }
                 var isUnique_ix_takt_logistics_procurement_source_of_supply_code_unique = await _uniqueValidator.IsUniqueAsync(
                     _sourceOfSupplyRepository,
                     x => x.SourceOfSupplyCode == entity.SourceOfSupplyCode);
                 if (!isUnique_ix_takt_logistics_procurement_source_of_supply_code_unique)
                 {
-                    throw new TaktBusinessException("货源清单的SourceOfSupplyCode已存在");
+                    throw new TaktBusinessException("货源清单清单的SourceOfSupplyCode已存在");
                 }
                 if (entity.SortOrder <= 0)
                 {
@@ -324,7 +324,7 @@ public class TaktSourceOfSupplyService : TaktServiceBase, ITaktSourceOfSupplySer
     }
 
     /// <summary>
-    /// 导出货源清单
+    /// 导出货源清单清单
     /// </summary>
     /// <param name="query">查询条件</param>
     /// <param name="sheetName">工作表名称</param>
@@ -338,14 +338,14 @@ public class TaktSourceOfSupplyService : TaktServiceBase, ITaktSourceOfSupplySer
         {
             return await TaktExcelHelper.ExportAsync(
                 new List<TaktSourceOfSupplyExportDto>(),
-                sheetName ?? "货源清单数据",
-                fileName ?? "货源清单导出.xlsx");
+                sheetName ?? "货源清单清单数据",
+                fileName ?? "货源清单清单导出.xlsx");
         }
         var exportData = list.Adapt<List<TaktSourceOfSupplyExportDto>>();
         return await TaktExcelHelper.ExportAsync(
             exportData,
-            sheetName ?? "货源清单数据",
-            fileName ?? "货源清单导出.xlsx");
+            sheetName ?? "货源清单清单数据",
+            fileName ?? "货源清单清单导出.xlsx");
     }
 
     // ========================================
@@ -353,7 +353,7 @@ public class TaktSourceOfSupplyService : TaktServiceBase, ITaktSourceOfSupplySer
     // ========================================
 
     /// <summary>
-    /// 构建货源清单查询表达式
+    /// 构建货源清单清单查询表达式
     /// </summary>
     /// <param name="queryDto">查询DTO</param>
     /// <returns>查询表达式</returns>

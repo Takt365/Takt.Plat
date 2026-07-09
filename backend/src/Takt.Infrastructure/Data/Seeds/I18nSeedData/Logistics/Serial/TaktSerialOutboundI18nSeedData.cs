@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Infrastructure.Data.Seeds.I18nSeedData.Logistics.Serial
 // 文件名称：TaktSerialOutboundI18nSeedData.cs
-// 创建时间：2026-07-02
+// 创建时间：2026-07-09
 // 创建人：Takt365(Auto Generated)
 // 功能描述：TaktSerialOutbound 实体字段国际化种子（无对应 frontend locales；TranslationText 取自 ColumnDescription，ContextNote 取自属性 XML summary）
 // 
@@ -118,13 +118,13 @@ public class TaktSerialOutboundI18nSeedData : ITaktSeedDataCoordinator
             new TranslationSeedItem("entity.serialoutbound.shippinginvoiceno", "zh-HK", "出货发票号_hk", "出货发票号"),
 
             // entity.serialoutbound.outbounddate
-            new TranslationSeedItem("entity.serialoutbound.outbounddate", "en-US", "出库日期_us", "出库日期"),
+            new TranslationSeedItem("entity.serialoutbound.outbounddate", "en-US", "装车日期_us", "装车日期"),
             // entity.serialoutbound.outbounddate
-            new TranslationSeedItem("entity.serialoutbound.outbounddate", "ja-JP", "出库日期_jp", "出库日期"),
+            new TranslationSeedItem("entity.serialoutbound.outbounddate", "ja-JP", "装车日期_jp", "装车日期"),
             // entity.serialoutbound.outbounddate
-            new TranslationSeedItem("entity.serialoutbound.outbounddate", "zh-CN", "出库日期", "出库日期"),
+            new TranslationSeedItem("entity.serialoutbound.outbounddate", "zh-CN", "装车日期", "装车日期"),
             // entity.serialoutbound.outbounddate
-            new TranslationSeedItem("entity.serialoutbound.outbounddate", "zh-HK", "出库日期_hk", "出库日期"),
+            new TranslationSeedItem("entity.serialoutbound.outbounddate", "zh-HK", "装车日期_hk", "装车日期"),
 
             // entity.serialoutbound.destination
             new TranslationSeedItem("entity.serialoutbound.destination", "en-US", "仕向地_us", "仕向地（选项 TaktModelDestinations/options，DictValue=DestinationCode）"),
@@ -134,15 +134,6 @@ public class TaktSerialOutboundI18nSeedData : ITaktSeedDataCoordinator
             new TranslationSeedItem("entity.serialoutbound.destination", "zh-CN", "仕向地", "仕向地（选项 TaktModelDestinations/options，DictValue=DestinationCode）"),
             // entity.serialoutbound.destination
             new TranslationSeedItem("entity.serialoutbound.destination", "zh-HK", "仕向地_hk", "仕向地（选项 TaktModelDestinations/options，DictValue=DestinationCode）"),
-
-            // entity.serialoutbound.shippingmethod
-            new TranslationSeedItem("entity.serialoutbound.shippingmethod", "en-US", "运输方式_us", "运输方式（字典 logistics_shipping_method_type；0=海运 1=空运 2=陆运 3=铁路 4=快递 5=其他）"),
-            // entity.serialoutbound.shippingmethod
-            new TranslationSeedItem("entity.serialoutbound.shippingmethod", "ja-JP", "运输方式_jp", "运输方式（字典 logistics_shipping_method_type；0=海运 1=空运 2=陆运 3=铁路 4=快递 5=其他）"),
-            // entity.serialoutbound.shippingmethod
-            new TranslationSeedItem("entity.serialoutbound.shippingmethod", "zh-CN", "运输方式", "运输方式（字典 logistics_shipping_method_type；0=海运 1=空运 2=陆运 3=铁路 4=快递 5=其他）"),
-            // entity.serialoutbound.shippingmethod
-            new TranslationSeedItem("entity.serialoutbound.shippingmethod", "zh-HK", "运输方式_hk", "运输方式（字典 logistics_shipping_method_type；0=海运 1=空运 2=陆运 3=铁路 4=快递 5=其他）"),
 
             // entity.serialoutbound.destinationport
             new TranslationSeedItem("entity.serialoutbound.destinationport", "en-US", "目的地港_us", "目的地港（字典 logistics_destination_port_code；DictValue 为港口/运输编码，如 ACE_AIR、VIE）"),

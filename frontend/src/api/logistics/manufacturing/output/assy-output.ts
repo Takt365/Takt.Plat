@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：frontend/src/api/logistics/manufacturing/output
 // 文件名称：assy-output.ts
-// 创建时间：2026-06-30
+// 创建时间：2026-07-06
 // 创建人：Takt365(Auto Generated)
 // 功能描述：logistics/manufacturing/output 模块 API（自动生成，请勿手改路由常量）
 // 
@@ -120,6 +120,30 @@ export function getAssyOutputOptions(): Promise<TaktSelectOption[]> {
   return request<TaktSelectOption[]>({
     url: `${ASSY_OUTPUT_API_BASE}/options`,
     method: 'get',
+  });
+}
+
+/**
+ * 获取组立日报新增时固定的生产时段列表（13 条）
+ * @returns {Promise<string[]>} 生产时段列表
+ */
+export function getAssyOutputDefaultTimePeriods(): Promise<string[]> {
+  return request<string[]>({
+    url: `${ASSY_OUTPUT_API_BASE}/default-time-periods`,
+    method: 'get',
+  });
+}
+
+/**
+ * 获取组立不良日报新增用工单选项（来源已生产的组立日报，排除同日同工单已存在不良日报）
+ * @param {string} [excludeAssyDefectId] 编辑态当前不良日报 ID
+ * @returns {Promise<TaktSelectOption[]>} 下拉选项（DictValue 为组立日报 Id）
+ */
+export function getAssyOutputProdOrderOptions(excludeAssyDefectId?: string): Promise<TaktSelectOption[]> {
+  return request<TaktSelectOption[]>({
+    url: `${ASSY_OUTPUT_API_BASE}/prod-order-options`,
+    method: 'get',
+    params: excludeAssyDefectId ? { excludeAssyDefectId } : undefined,
   });
 }
 

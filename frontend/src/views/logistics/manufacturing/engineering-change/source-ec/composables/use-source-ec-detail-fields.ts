@@ -8,6 +8,8 @@
 // ========================================
 
 import type { TableColumnsType } from 'ant-design-vue'
+import { h } from 'vue'
+import TaktDictTag from '@/components/common/takt-dict-tag/index.vue'
 import type { TaktEditableEditorType, TaktEditableTableColumn } from '@/components/business/takt-editable-table/types'
 import type { SourceEcDetail } from '@/types/logistics/manufacturing/engineering-change/source-ec-detail'
 
@@ -30,14 +32,26 @@ export const SOURCE_EC_DETAIL_BUSINESS_FIELD_KEYS = [
   'sourceReplacementUsage',
   'sourceReplacementMountingPosition',
   'sourceBomNo',
-  'sourceInterchangeability',
+  'SourceCompatibility',
   'sourceDistinction',
-  'sourceArrangementInstruction',
+  'SourceInstruction',
   'sourceLegacyPartDisposition',
   'sourceBomEffectiveDate',
 ] as const
 
 export type SourceEcDetailBusinessFieldKey = (typeof SOURCE_EC_DETAIL_BUSINESS_FIELD_KEYS)[number]
+
+/** 旧物料处理字典类型 */
+export const SOURCE_EC_LEGACY_PART_DISPOSITION_DICT_TYPE = 'logistics_ec_legacy_part_disposition'
+
+/** 安排指示字典类型 */
+export const SOURCE_EC_SOURCE_INSTRUCTION_DICT_TYPE = 'logistics_ec_source_instruction'
+
+/** 第二供应商区分字典类型 */
+export const SOURCE_EC_SOURCE_DISTINCTION_DICT_TYPE = 'logistics_ec_source_distinction'
+
+/** 兼容性字典类型 */
+export const SOURCE_EC_SOURCE_COMPATIBILITY_DICT_TYPE = 'logistics_ec_source_compatibility'
 
 type TranslateFn = (key: string, ...args: unknown[]) => string
 
@@ -63,9 +77,9 @@ export const SOURCE_EC_DETAIL_FIELD_META: readonly SourceEcDetailFieldMeta[] = [
   { key: 'sourceReplacementUsage', editor: 'inputNumber', width: 120 },
   { key: 'sourceReplacementMountingPosition', editor: 'input', width: 140, maxLength: 40 },
   { key: 'sourceBomNo', editor: 'input', width: 100, maxLength: 4 },
-  { key: 'sourceInterchangeability', editor: 'input', width: 100, maxLength: 4 },
+  { key: 'SourceCompatibility', editor: 'input', width: 100, maxLength: 4 },
   { key: 'sourceDistinction', editor: 'input', width: 100, maxLength: 4 },
-  { key: 'sourceArrangementInstruction', editor: 'input', width: 120, maxLength: 4 },
+  { key: 'SourceInstruction', editor: 'input', width: 120, maxLength: 4 },
   { key: 'sourceLegacyPartDisposition', editor: 'input', width: 120, maxLength: 4 },
   { key: 'sourceBomEffectiveDate', editor: 'datePicker', width: 120, valueFormat: 'YYYY-MM-DD' },
 ]
@@ -90,6 +104,15 @@ export function buildSourceEcDetailDefaultVisibleColumnKeys(): string[] {
 }
 
 /**
+ * 日期列排序（当前页 dataSource，与 user/index.vue 列 sorter 一致）
+ * @param a 行 A 字段值
+ * @param b 行 B 字段值
+ */
+function compareSourceEcDetailDateField(a: unknown, b: unknown): number {
+  return new Date(String(a ?? 0)).getTime() - new Date(String(b ?? 0)).getTime()
+}
+
+/**
  * 构建子表 TaktSingleTable 业务列（不含 id / action）
  * @param t i18n
  * @param getField 读取行字段
@@ -98,15 +121,49 @@ export function buildSourceEcDetailListBusinessColumns(
   t: TranslateFn,
   getField: (record: SourceEcDetail, field: string) => unknown,
 ): TableColumnsType {
-  return SOURCE_EC_DETAIL_FIELD_META.map((meta) => ({
-    title: t(sourceEcDetailEntityI18nKey(meta.key)),
-    dataIndex: meta.key,
-    key: meta.key,
-    width: meta.width,
-    resizable: true,
-    ellipsis: true,
-    customRender: ({ record }: { record: SourceEcDetail }) => String(getField(record, meta.key) ?? ''),
-  }))
+  return SOURCE_EC_DETAIL_FIELD_META.map((meta) => {
+    const column: TableColumnsType[number] = {
+      title: t(sourceEcDetailEntityI18nKey(meta.key)),
+      dataIndex: meta.key,
+      key: meta.key,
+      width: meta.width,
+      resizable: true,
+      ellipsis: true,
+    }
+    if (meta.key === 'sourceBomEffectiveDate') {
+      column.sorter = (a: SourceEcDetail, b: SourceEcDetail) =>
+        compareSourceEcDetailDateField(getField(a, meta.key), getField(b, meta.key))
+    }
+    if (meta.key === 'sourceLegacyPartDisposition') {
+      column.customRender = ({ record }: { record: SourceEcDetail }) =>
+        h(TaktDictTag, {
+          dictType: SOURCE_EC_LEGACY_PART_DISPOSITION_DICT_TYPE,
+          value: getField(record, meta.key),
+        })
+    } else if (meta.key === 'SourceInstruction') {
+      column.customRender = ({ record }: { record: SourceEcDetail }) =>
+        h(TaktDictTag, {
+          dictType: SOURCE_EC_SOURCE_INSTRUCTION_DICT_TYPE,
+          value: getField(record, meta.key),
+        })
+    } else if (meta.key === 'sourceDistinction') {
+      column.customRender = ({ record }: { record: SourceEcDetail }) =>
+        h(TaktDictTag, {
+          dictType: SOURCE_EC_SOURCE_DISTINCTION_DICT_TYPE,
+          value: getField(record, meta.key),
+        })
+    } else if (meta.key === 'SourceCompatibility') {
+      column.customRender = ({ record }: { record: SourceEcDetail }) =>
+        h(TaktDictTag, {
+          dictType: SOURCE_EC_SOURCE_COMPATIBILITY_DICT_TYPE,
+          value: getField(record, meta.key),
+        })
+    } else {
+      column.customRender = ({ record }: { record: SourceEcDetail }) =>
+        String(getField(record, meta.key) ?? '')
+    }
+    return column
+  })
 }
 
 /**
@@ -156,9 +213,9 @@ export function createEmptySourceEcDetailRow(): Record<string, unknown> {
     sourceReplacementUsage: undefined,
     sourceReplacementMountingPosition: '',
     sourceBomNo: '',
-    sourceInterchangeability: '',
+    SourceCompatibility: '',
     sourceDistinction: '',
-    sourceArrangementInstruction: '',
+    SourceInstruction: '',
     sourceLegacyPartDisposition: '',
     sourceBomEffectiveDate: '',
   }

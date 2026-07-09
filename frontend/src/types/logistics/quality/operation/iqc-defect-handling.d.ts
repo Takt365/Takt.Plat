@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：frontend/src/types/logistics/quality/operation
 // 文件名称：iqc-defect-handling.d.ts
-// 创建时间：2026-06-30
+// 创建时间：2026-07-09
 // 创建人：Takt365(Auto Generated)
 // 功能描述：logistics/quality/operation 模块类型定义（自动生成；类型名去 Takt 前缀与末尾 Dto，如 TaktCompanyDto → Company）
 // 
@@ -124,6 +124,11 @@ export interface IqcDefectHandling extends CompanyDtoBase {
   handlingStatus: number;
 
   /**
+   * 是否作废（字典 sys_yes_no_type，0=否 1=是；编辑移除子行时标记作废）
+   */
+  isObsolete: number;
+
+  /**
    * IQC检验单明细（主表） （主表：TaktIqcOrderItem）
    */
   orderItem?: IqcOrderItem;
@@ -242,6 +247,11 @@ export interface IqcDefectHandlingQuery extends TaktPagedQuery {
    * 处理结果（0=待处理，1=处理中，2=已完成，3=已关闭）
    */
   handlingStatus?: number;
+
+  /**
+   * 是否作废（字典 sys_yes_no_type，0=否 1=是；编辑移除子行时标记作废）
+   */
+  isObsolete?: number;
 
   /**
    * 创建时间（范围查询-开始）
@@ -378,6 +388,11 @@ export interface IqcDefectHandlingCreate {
   handlingStatus: number;
 
   /**
+   * 是否作废（字典 sys_yes_no_type，0=否 1=是；编辑移除子行时标记作废）
+   */
+  isObsolete: number;
+
+  /**
    * 扩展字段JSON
    */
   extField?: string;
@@ -420,6 +435,25 @@ export interface IqcDefectHandlingStatus {
    * 处理结果（0=待处理，1=处理中，2=已完成，3=已关闭）
    */
   handlingStatus: number;
+
+}
+
+
+/**
+ * IqcDefectHandling 作废/撤销作废 DTO
+ * 对应前端 IqcDefectHandlingObsolete
+ * @description 对应后端 TaktIqcDefectHandlingObsoleteDto
+ */
+export interface IqcDefectHandlingObsolete {
+  /**
+   * IqcDefectHandlingID
+   */
+  iqcDefectHandlingId: string;
+
+  /**
+   * 是否作废（字典 sys_yes_no_type，0=否 1=是；编辑移除子行时标记作废）
+   */
+  isObsolete: number;
 
 }
 
@@ -529,6 +563,11 @@ export interface IqcDefectHandlingTemplate {
    * 处理结果（0=待处理，1=处理中，2=已完成，3=已关闭）
    */
   handlingStatus?: number;
+
+  /**
+   * 是否作废（字典 sys_yes_no_type，0=否 1=是；编辑移除子行时标记作废）
+   */
+  isObsolete?: number;
 
   /**
    * 扩展字段JSON
@@ -655,6 +694,11 @@ export interface IqcDefectHandlingImport {
   handlingStatus?: number;
 
   /**
+   * 是否作废（字典 sys_yes_no_type，0=否 1=是；编辑移除子行时标记作废）
+   */
+  isObsolete?: number;
+
+  /**
    * 扩展字段JSON
    */
   extField?: string;
@@ -772,6 +816,11 @@ export interface IqcDefectHandlingExport {
    * 处理结果（0=待处理，1=处理中，2=已完成，3=已关闭）
    */
   handlingStatus: number;
+
+  /**
+   * 是否作废（字典 sys_yes_no_type，0=否 1=是；编辑移除子行时标记作废）
+   */
+  isObsolete: number;
 
   /**
    * 扩展字段JSON

@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：frontend/src/types/logistics/sales
 // 文件名称：order-item.d.ts
-// 创建时间：2026-07-01
+// 创建时间：2026-07-09
 // 创建人：Takt365(Auto Generated)
 // 功能描述：logistics/sales 模块类型定义（自动生成；类型名去 Takt 前缀与末尾 Dto，如 TaktCompanyDto → Company）
 // 
@@ -119,6 +119,11 @@ export interface SalesOrderItem extends CompanyDtoBase {
   deliveryStatus: number;
 
   /**
+   * 是否作废（字典 sys_yes_no_type，0=否 1=是；编辑移除子行时标记作废）
+   */
+  isObsolete: number;
+
+  /**
    * 销售订单主表 （主表：TaktSalesOrder）
    */
   salesOrder?: SalesOrder;
@@ -227,6 +232,11 @@ export interface SalesOrderItemQuery extends TaktPagedQuery {
    * 行交货状态（字典 logistics_delivery_status；0=未交货 1=部分交货 2=全部交货）
    */
   deliveryStatus?: number;
+
+  /**
+   * 是否作废（字典 sys_yes_no_type，0=否 1=是；编辑移除子行时标记作废）
+   */
+  isObsolete?: number;
 
   /**
    * 创建时间（范围查询-开始）
@@ -358,6 +368,11 @@ export interface SalesOrderItemCreate {
   deliveryStatus: number;
 
   /**
+   * 是否作废（字典 sys_yes_no_type，0=否 1=是；编辑移除子行时标记作废）
+   */
+  isObsolete: number;
+
+  /**
    * 扩展字段JSON
    */
   extField?: string;
@@ -400,6 +415,25 @@ export interface SalesOrderItemStatus {
    * 行交货状态（字典 logistics_delivery_status；0=未交货 1=部分交货 2=全部交货）
    */
   deliveryStatus: number;
+
+}
+
+
+/**
+ * SalesOrderItem 作废/撤销作废 DTO
+ * 对应前端 SalesOrderItemObsolete
+ * @description 对应后端 TaktSalesOrderItemObsoleteDto
+ */
+export interface SalesOrderItemObsolete {
+  /**
+   * SalesOrderItemID
+   */
+  salesOrderItemId: string;
+
+  /**
+   * 是否作废（字典 sys_yes_no_type，0=否 1=是；编辑移除子行时标记作废）
+   */
+  isObsolete: number;
 
 }
 
@@ -504,6 +538,11 @@ export interface SalesOrderItemTemplate {
    * 行交货状态（字典 logistics_delivery_status；0=未交货 1=部分交货 2=全部交货）
    */
   deliveryStatus?: number;
+
+  /**
+   * 是否作废（字典 sys_yes_no_type，0=否 1=是；编辑移除子行时标记作废）
+   */
+  isObsolete?: number;
 
   /**
    * 扩展字段JSON
@@ -625,6 +664,11 @@ export interface SalesOrderItemImport {
   deliveryStatus?: number;
 
   /**
+   * 是否作废（字典 sys_yes_no_type，0=否 1=是；编辑移除子行时标记作废）
+   */
+  isObsolete?: number;
+
+  /**
    * 扩展字段JSON
    */
   extField?: string;
@@ -737,6 +781,11 @@ export interface SalesOrderItemExport {
    * 行交货状态（字典 logistics_delivery_status；0=未交货 1=部分交货 2=全部交货）
    */
   deliveryStatus: number;
+
+  /**
+   * 是否作废（字典 sys_yes_no_type，0=否 1=是；编辑移除子行时标记作废）
+   */
+  isObsolete: number;
 
   /**
    * 扩展字段JSON

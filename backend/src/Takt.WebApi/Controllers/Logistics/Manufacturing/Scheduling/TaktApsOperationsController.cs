@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.WebApi.Controllers.Logistics.Manufacturing.Scheduling
 // 文件名称：TaktApsOperationsController.cs
-// 创建时间：2026-06-30
+// 创建时间：2026-07-09
 // 创建人：Takt365(Cursor AI)
 // 功能描述：APS工序排程控制器
 // 
@@ -192,6 +192,26 @@ public class TaktApsOperationsController : TaktControllerBase
         try
         {
             var result = await _apsOperationService.UpdateApsOperationStatusAsync(dto);
+            return Success(result, "更新成功");
+        }
+        catch (Exception ex)
+        {
+            return HandleException(ex);
+        }
+    }
+
+    /// <summary>
+    /// 更新APS工序排程作废状态
+    /// </summary>
+    /// <param name="dto">作废 DTO</param>
+    /// <returns>APS工序排程DTO</returns>
+    [TaktPermission("logistics:manufacturing:scheduling:aps:schedule:update", "更新APS工序排程作废状态")]
+    [HttpPut("obsolete")]
+    public async Task<IActionResult> UpdateApsOperationObsoleteAsync([FromBody] TaktApsOperationObsoleteDto dto)
+    {
+        try
+        {
+            var result = await _apsOperationService.UpdateApsOperationObsoleteAsync(dto);
             return Success(result, "更新成功");
         }
         catch (Exception ex)

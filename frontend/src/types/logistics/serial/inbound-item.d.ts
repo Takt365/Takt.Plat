@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：frontend/src/types/logistics/serial
 // 文件名称：inbound-item.d.ts
-// 创建时间：2026-06-23
+// 创建时间：2026-07-09
 // 创建人：Takt365(Auto Generated)
 // 功能描述：logistics/serial 模块类型定义（自动生成；类型名去 Takt 前缀与末尾 Dto，如 TaktCompanyDto → Company）
 // 
@@ -29,12 +29,12 @@ export interface SerialInboundItem extends CompanyDtoBase {
   serialInboundItemId: string;
 
   /**
-   * 入库ID（主子表关系，序列化为string以避免Javascript精度问题）
+   * 入库主表 ID（关联 TaktSerialInbound.Id，选项 TaktSerialInbounds/options）
    */
   inboundId: string;
 
   /**
-   * 入库名称（填充字段）
+   * 入库主表 名称（填充字段）
    */
   inboundName?: string;
 
@@ -49,14 +49,14 @@ export interface SerialInboundItem extends CompanyDtoBase {
   lineNumber: number;
 
   /**
-   * 入库序列号（唯一索引）
+   * 入库序列号（租户+公司内唯一）
    */
   inboundSerialNo: string;
 
   /**
-   * 入库时间
+   * 是否作废（字典 sys_yes_no_type，0=否 1=是；编辑移除子行时标记作废）
    */
-  inboundTime: string;
+  isObsolete: number;
 
   /**
    * 入库主表 （主表：TaktSerialInbound）
@@ -84,7 +84,7 @@ export interface SerialInboundItemQuery extends TaktPagedQuery {
   companyCode?: string;
 
   /**
-   * 入库ID（主子表关系，序列化为string以避免Javascript精度问题）
+   * 入库主表 ID（关联 TaktSerialInbound.Id，选项 TaktSerialInbounds/options）
    */
   inboundId?: string;
 
@@ -99,19 +99,14 @@ export interface SerialInboundItemQuery extends TaktPagedQuery {
   lineNumber?: number;
 
   /**
-   * 入库序列号（唯一索引）
+   * 入库序列号（租户+公司内唯一）
    */
   inboundSerialNo?: string;
 
   /**
-   * 入库时间（范围查询-开始）
+   * 是否作废（字典 sys_yes_no_type，0=否 1=是；编辑移除子行时标记作废）
    */
-  inboundTimeStart?: string;
-
-  /**
-   * 入库时间（范围查询-结束）
-   */
-  inboundTimeEnd?: string;
+  isObsolete?: number;
 
   /**
    * 创建时间（范围查询-开始）
@@ -158,7 +153,7 @@ export interface SerialInboundItemCreate {
   companyDefaultCulture: string;
 
   /**
-   * 入库ID（主子表关系，序列化为string以避免Javascript精度问题）
+   * 入库主表 ID（关联 TaktSerialInbound.Id，选项 TaktSerialInbounds/options）
    */
   inboundId: string;
 
@@ -173,14 +168,14 @@ export interface SerialInboundItemCreate {
   lineNumber: number;
 
   /**
-   * 入库序列号（唯一索引）
+   * 入库序列号（租户+公司内唯一）
    */
   inboundSerialNo: string;
 
   /**
-   * 入库时间
+   * 是否作废（字典 sys_yes_no_type，0=否 1=是；编辑移除子行时标记作废）
    */
-  inboundTime: string;
+  isObsolete: number;
 
   /**
    * 扩展字段JSON
@@ -211,6 +206,25 @@ export interface SerialInboundItemUpdate extends SerialInboundItemCreate {
 
 
 /**
+ * SerialInboundItem 作废/撤销作废 DTO
+ * 对应前端 SerialInboundItemObsolete
+ * @description 对应后端 TaktSerialInboundItemObsoleteDto
+ */
+export interface SerialInboundItemObsolete {
+  /**
+   * SerialInboundItemID
+   */
+  serialInboundItemId: string;
+
+  /**
+   * 是否作废（字典 sys_yes_no_type，0=否 1=是；编辑移除子行时标记作废）
+   */
+  isObsolete: number;
+
+}
+
+
+/**
  * SerialInboundItem 导入模板行 DTO
  * 对应前端 SerialInboundItemTemplate
  * @description 对应后端 TaktSerialInboundItemTemplateDto
@@ -227,7 +241,7 @@ export interface SerialInboundItemTemplate {
   companyCode?: string;
 
   /**
-   * 入库ID（主子表关系，序列化为string以避免Javascript精度问题）
+   * 入库主表 ID（关联 TaktSerialInbound.Id，选项 TaktSerialInbounds/options）
    */
   inboundId?: string;
 
@@ -242,14 +256,14 @@ export interface SerialInboundItemTemplate {
   lineNumber?: number;
 
   /**
-   * 入库序列号（唯一索引）
+   * 入库序列号（租户+公司内唯一）
    */
   inboundSerialNo?: string;
 
   /**
-   * 入库时间
+   * 是否作废（字典 sys_yes_no_type，0=否 1=是；编辑移除子行时标记作废）
    */
-  inboundTime?: string;
+  isObsolete?: number;
 
   /**
    * 扩展字段JSON
@@ -286,7 +300,7 @@ export interface SerialInboundItemImport {
   companyDefaultCulture?: string;
 
   /**
-   * 入库ID（主子表关系，序列化为string以避免Javascript精度问题）
+   * 入库主表 ID（关联 TaktSerialInbound.Id，选项 TaktSerialInbounds/options）
    */
   inboundId?: string;
 
@@ -301,14 +315,14 @@ export interface SerialInboundItemImport {
   lineNumber?: number;
 
   /**
-   * 入库序列号（唯一索引）
+   * 入库序列号（租户+公司内唯一）
    */
   inboundSerialNo?: string;
 
   /**
-   * 入库时间
+   * 是否作废（字典 sys_yes_no_type，0=否 1=是；编辑移除子行时标记作废）
    */
-  inboundTime?: string;
+  isObsolete?: number;
 
   /**
    * 扩展字段JSON
@@ -340,7 +354,7 @@ export interface SerialInboundItemExport {
   companyCode: string;
 
   /**
-   * 入库ID（主子表关系，序列化为string以避免Javascript精度问题）
+   * 入库主表 ID（关联 TaktSerialInbound.Id，选项 TaktSerialInbounds/options）
    */
   inboundId: string;
 
@@ -355,14 +369,14 @@ export interface SerialInboundItemExport {
   lineNumber: number;
 
   /**
-   * 入库序列号（唯一索引）
+   * 入库序列号（租户+公司内唯一）
    */
   inboundSerialNo: string;
 
   /**
-   * 入库时间
+   * 是否作废（字典 sys_yes_no_type，0=否 1=是；编辑移除子行时标记作废）
    */
-  inboundTime: string;
+  isObsolete: number;
 
   /**
    * 扩展字段JSON

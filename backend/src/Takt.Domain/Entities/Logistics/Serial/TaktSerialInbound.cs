@@ -49,7 +49,7 @@ public class TaktSerialInbound : TaktCompanyEntityBase
     /// <summary>
     /// 仓库编码（关联 TaktWarehouse.WarehouseCode，选项 TaktWarehouses/options）
     /// </summary>
-    [SugarColumn(ColumnName = "warehouse_code", ColumnDescription = "仓库编码", ColumnDataType = "nvarchar", Length = 50, IsNullable = false, DefaultValue = "C008")]
+    [SugarColumn(ColumnName = "warehouse_code", ColumnDescription = "仓库编码", ColumnDataType = "nvarchar", Length = 4, IsNullable = false, DefaultValue = "C008")]
     public string WarehouseCode { get; set; } = "C008";
     /// <summary>
     /// 库位编码（关联 TaktStorageLocation.LocationCode，选项 TaktStorageLocations/options）

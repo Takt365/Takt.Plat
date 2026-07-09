@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Application.Services.Logistics.Quality.Cost
 // 文件名称：TaktQualityIssueMeetingService.cs
-// 创建时间：2026-06-23
+// 创建时间：2026-07-09
 // 创建人：Takt365(Cursor AI)
 // 功能描述：质量问题会议调查试验费用明细应用服务实现
 // 
@@ -118,6 +118,7 @@ public class TaktQualityIssueMeetingService : TaktServiceBase, ITaktQualityIssue
     public async Task<TaktQualityIssueMeetingDto> CreateQualityIssueMeetingAsync(TaktQualityIssueMeetingCreateDto dto)
     {
         var entity = dto.Adapt<TaktQualityIssueMeeting>();
+        entity.IsObsolete = 0;
         await StampQualityIssueMeetingQualityIssueAsync(entity, dto);
         var isUnique_ix_takt_logistics_quality_issue_meeting_line_unique = await _uniqueValidator.IsUniqueAsync(
             _qualityIssueMeetingRepository,
@@ -174,11 +175,21 @@ public class TaktQualityIssueMeetingService : TaktServiceBase, ITaktQualityIssue
     /// <returns>任务</returns>
     public async Task DeleteQualityIssueMeetingByIdAsync(long id)
     {
-        var deleted = await _qualityIssueMeetingRepository.DeleteAsync(id);
-        if (!deleted)
+        var entity = await _qualityIssueMeetingRepository.GetByIdAsync(id);
+        if (entity == null)
         {
             throw new TaktBusinessException("质量问题会议调查试验费用明细不存在或已删除");
         }
+        if (entity.TenantCode != CurrentTenantCode || entity.CompanyCode != CurrentCompanyCode)
+        {
+            throw new TaktBusinessException("质量问题会议调查试验费用明细不存在或已删除");
+        }
+        if (entity.IsObsolete == 1)
+        {
+            throw new TaktBusinessException("质量问题会议调查试验费用明细已作废");
+        }
+        entity.IsObsolete = 1;
+        await _qualityIssueMeetingRepository.UpdateAsync(entity);
     }
 
     /// <summary>
@@ -197,6 +208,27 @@ public class TaktQualityIssueMeetingService : TaktServiceBase, ITaktQualityIssue
         {
             await DeleteQualityIssueMeetingByIdAsync(id);
         }
+    }
+
+    /// <summary>
+    /// 更新质量问题会议调查试验费用明细作废状态
+    /// </summary>
+    /// <param name="dto">作废DTO</param>
+    /// <returns>DTO</returns>
+    public async Task<TaktQualityIssueMeetingDto> UpdateQualityIssueMeetingObsoleteAsync(TaktQualityIssueMeetingObsoleteDto dto)
+    {
+        var entity = await _qualityIssueMeetingRepository.GetByIdAsync(dto.QualityIssueMeetingId);
+        if (entity == null)
+        {
+            throw new TaktBusinessException("质量问题会议调查试验费用明细不存在");
+        }
+        if (entity.TenantCode != CurrentTenantCode || entity.CompanyCode != CurrentCompanyCode)
+        {
+            throw new TaktBusinessException("质量问题会议调查试验费用明细不存在");
+        }
+        entity.IsObsolete = dto.IsObsolete;
+        await _qualityIssueMeetingRepository.UpdateAsync(entity);
+        return await GetQualityIssueMeetingByIdAsync(dto.QualityIssueMeetingId) ?? throw new TaktBusinessException("质量问题会议调查试验费用明细不存在");
     }
 
     /// <summary>
@@ -330,6 +362,15 @@ public class TaktQualityIssueMeetingService : TaktServiceBase, ITaktQualityIssue
     private static Expression<Func<TaktQualityIssueMeeting, bool>> QueryExpression(TaktQualityIssueMeetingQueryDto? queryDto)
     {
         var exp = Expressionable.Create<TaktQualityIssueMeeting>();
+
+        if (queryDto?.IsObsolete.HasValue == true)
+        {
+            exp = exp.And(x => x.IsObsolete == queryDto.IsObsolete);
+        }
+        else
+        {
+            exp = exp.And(x => x.IsObsolete == 0);
+        }
 
         if (!string.IsNullOrEmpty(queryDto?.KeyWords))
         {

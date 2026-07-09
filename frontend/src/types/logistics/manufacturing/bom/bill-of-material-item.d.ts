@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：frontend/src/types/logistics/manufacturing/bom
 // 文件名称：bill-of-material-item.d.ts
-// 创建时间：2026-06-23
+// 创建时间：2026-07-09
 // 创建人：Takt365(Auto Generated)
 // 功能描述：logistics/manufacturing/bom 模块类型定义（自动生成；类型名去 Takt 前缀与末尾 Dto，如 TaktCompanyDto → Company）
 // 
@@ -49,7 +49,7 @@ export interface BillOfMaterialItem extends CompanyDtoBase {
   lineNumber: number;
 
   /**
-   * 子项物料ID（关联工厂物料主数据，序列化为string以避免Javascript精度问题）
+   * 子项物料ID（关联工厂物料 TaktMaterialPlant.Id，选项 TaktMaterialPlants/options）
    */
   materialId: string;
 
@@ -69,7 +69,7 @@ export interface BillOfMaterialItem extends CompanyDtoBase {
   usageQuantity: number;
 
   /**
-   * 单位（unit）
+   * 单位（字典 logistics_unit_of_measure_code）
    */
   materialUnit: string;
 
@@ -89,7 +89,7 @@ export interface BillOfMaterialItem extends CompanyDtoBase {
   operationSeq: number;
 
   /**
-   * 工作中心（work_center）
+   * 工作中心（选项 TaktWorkCenters/options，DictValue=WorkCenterCode）
    */
   workCenter?: string;
 
@@ -109,14 +109,19 @@ export interface BillOfMaterialItem extends CompanyDtoBase {
   substitutePriority: number;
 
   /**
-   * 是否可选件（0=否，1=是，optional_flag）
+   * 是否可选件（字典 sys_yes_no_type；0=否，1=是）
    */
   isOptional: number;
 
   /**
-   * 是否虚拟件（0=否，1=是，phantom_flag）
+   * 是否虚拟件（字典 sys_yes_no_type；0=否，1=是）
    */
   isPhantom: number;
+
+  /**
+   * 是否作废（字典 sys_yes_no_type，0=否 1=是；编辑移除子行时标记作废）
+   */
+  isObsolete: number;
 
   /**
    * 物料清单（BOM头） （主表：TaktBillOfMaterial）
@@ -169,7 +174,7 @@ export interface BillOfMaterialItemQuery extends TaktPagedQuery {
   lineNumber?: number;
 
   /**
-   * 子项物料ID（关联工厂物料主数据，序列化为string以避免Javascript精度问题）
+   * 子项物料ID（关联工厂物料 TaktMaterialPlant.Id，选项 TaktMaterialPlants/options）
    */
   materialId?: string;
 
@@ -184,7 +189,7 @@ export interface BillOfMaterialItemQuery extends TaktPagedQuery {
   usageQuantity?: number;
 
   /**
-   * 单位（unit）
+   * 单位（字典 logistics_unit_of_measure_code）
    */
   materialUnit?: string;
 
@@ -204,7 +209,7 @@ export interface BillOfMaterialItemQuery extends TaktPagedQuery {
   operationSeq?: number;
 
   /**
-   * 工作中心（work_center）
+   * 工作中心（选项 TaktWorkCenters/options，DictValue=WorkCenterCode）
    */
   workCenter?: string;
 
@@ -224,14 +229,19 @@ export interface BillOfMaterialItemQuery extends TaktPagedQuery {
   substitutePriority?: number;
 
   /**
-   * 是否可选件（0=否，1=是，optional_flag）
+   * 是否可选件（字典 sys_yes_no_type；0=否，1=是）
    */
   isOptional?: number;
 
   /**
-   * 是否虚拟件（0=否，1=是，phantom_flag）
+   * 是否虚拟件（字典 sys_yes_no_type；0=否，1=是）
    */
   isPhantom?: number;
+
+  /**
+   * 是否作废（字典 sys_yes_no_type，0=否 1=是；编辑移除子行时标记作废）
+   */
+  isObsolete?: number;
 
   /**
    * 创建时间（范围查询-开始）
@@ -293,7 +303,7 @@ export interface BillOfMaterialItemCreate {
   lineNumber: number;
 
   /**
-   * 子项物料ID（关联工厂物料主数据，序列化为string以避免Javascript精度问题）
+   * 子项物料ID（关联工厂物料 TaktMaterialPlant.Id，选项 TaktMaterialPlants/options）
    */
   materialId: string;
 
@@ -308,7 +318,7 @@ export interface BillOfMaterialItemCreate {
   usageQuantity: number;
 
   /**
-   * 单位（unit）
+   * 单位（字典 logistics_unit_of_measure_code）
    */
   materialUnit: string;
 
@@ -328,7 +338,7 @@ export interface BillOfMaterialItemCreate {
   operationSeq: number;
 
   /**
-   * 工作中心（work_center）
+   * 工作中心（选项 TaktWorkCenters/options，DictValue=WorkCenterCode）
    */
   workCenter?: string;
 
@@ -348,19 +358,24 @@ export interface BillOfMaterialItemCreate {
   substitutePriority: number;
 
   /**
-   * 是否可选件（0=否，1=是，optional_flag）
+   * 是否可选件（字典 sys_yes_no_type；0=否，1=是）
    */
   isOptional: number;
 
   /**
-   * 是否虚拟件（0=否，1=是，phantom_flag）
+   * 是否虚拟件（字典 sys_yes_no_type；0=否，1=是）
    */
   isPhantom: number;
 
   /**
+   * 是否作废（字典 sys_yes_no_type，0=否 1=是；编辑移除子行时标记作废）
+   */
+  isObsolete: number;
+
+  /**
    * 替代料明细（一行主件可维护多条替代物料）（子表，级联保存）
    */
-  substitutes?: BillOfMaterialSubstituteCreate[];
+  substitutes?: BillOfMaterialSubstituteUpdate[];
 
   /**
    * 扩展字段JSON
@@ -386,6 +401,25 @@ export interface BillOfMaterialItemUpdate extends BillOfMaterialItemCreate {
    * BillOfMaterialItemID（标识要更新的实体）
    */
   billOfMaterialItemId: string;
+
+}
+
+
+/**
+ * BillOfMaterialItem 作废/撤销作废 DTO
+ * 对应前端 BillOfMaterialItemObsolete
+ * @description 对应后端 TaktBillOfMaterialItemObsoleteDto
+ */
+export interface BillOfMaterialItemObsolete {
+  /**
+   * BillOfMaterialItemID
+   */
+  billOfMaterialItemId: string;
+
+  /**
+   * 是否作废（字典 sys_yes_no_type，0=否 1=是；编辑移除子行时标记作废）
+   */
+  isObsolete: number;
 
 }
 
@@ -422,7 +456,7 @@ export interface BillOfMaterialItemTemplate {
   lineNumber?: number;
 
   /**
-   * 子项物料ID（关联工厂物料主数据，序列化为string以避免Javascript精度问题）
+   * 子项物料ID（关联工厂物料 TaktMaterialPlant.Id，选项 TaktMaterialPlants/options）
    */
   materialId?: string;
 
@@ -437,7 +471,7 @@ export interface BillOfMaterialItemTemplate {
   usageQuantity?: number;
 
   /**
-   * 单位（unit）
+   * 单位（字典 logistics_unit_of_measure_code）
    */
   materialUnit?: string;
 
@@ -457,7 +491,7 @@ export interface BillOfMaterialItemTemplate {
   operationSeq?: number;
 
   /**
-   * 工作中心（work_center）
+   * 工作中心（选项 TaktWorkCenters/options，DictValue=WorkCenterCode）
    */
   workCenter?: string;
 
@@ -477,14 +511,19 @@ export interface BillOfMaterialItemTemplate {
   substitutePriority?: number;
 
   /**
-   * 是否可选件（0=否，1=是，optional_flag）
+   * 是否可选件（字典 sys_yes_no_type；0=否，1=是）
    */
   isOptional?: number;
 
   /**
-   * 是否虚拟件（0=否，1=是，phantom_flag）
+   * 是否虚拟件（字典 sys_yes_no_type；0=否，1=是）
    */
   isPhantom?: number;
+
+  /**
+   * 是否作废（字典 sys_yes_no_type，0=否 1=是；编辑移除子行时标记作废）
+   */
+  isObsolete?: number;
 
   /**
    * 替代料明细（一行主件可维护多条替代物料）（子表，级联保存）
@@ -541,7 +580,7 @@ export interface BillOfMaterialItemImport {
   lineNumber?: number;
 
   /**
-   * 子项物料ID（关联工厂物料主数据，序列化为string以避免Javascript精度问题）
+   * 子项物料ID（关联工厂物料 TaktMaterialPlant.Id，选项 TaktMaterialPlants/options）
    */
   materialId?: string;
 
@@ -556,7 +595,7 @@ export interface BillOfMaterialItemImport {
   usageQuantity?: number;
 
   /**
-   * 单位（unit）
+   * 单位（字典 logistics_unit_of_measure_code）
    */
   materialUnit?: string;
 
@@ -576,7 +615,7 @@ export interface BillOfMaterialItemImport {
   operationSeq?: number;
 
   /**
-   * 工作中心（work_center）
+   * 工作中心（选项 TaktWorkCenters/options，DictValue=WorkCenterCode）
    */
   workCenter?: string;
 
@@ -596,14 +635,19 @@ export interface BillOfMaterialItemImport {
   substitutePriority?: number;
 
   /**
-   * 是否可选件（0=否，1=是，optional_flag）
+   * 是否可选件（字典 sys_yes_no_type；0=否，1=是）
    */
   isOptional?: number;
 
   /**
-   * 是否虚拟件（0=否，1=是，phantom_flag）
+   * 是否虚拟件（字典 sys_yes_no_type；0=否，1=是）
    */
   isPhantom?: number;
+
+  /**
+   * 是否作废（字典 sys_yes_no_type，0=否 1=是；编辑移除子行时标记作废）
+   */
+  isObsolete?: number;
 
   /**
    * 替代料明细（一行主件可维护多条替代物料）（子表，级联保存）
@@ -655,7 +699,7 @@ export interface BillOfMaterialItemExport {
   lineNumber: number;
 
   /**
-   * 子项物料ID（关联工厂物料主数据，序列化为string以避免Javascript精度问题）
+   * 子项物料ID（关联工厂物料 TaktMaterialPlant.Id，选项 TaktMaterialPlants/options）
    */
   materialId: string;
 
@@ -670,7 +714,7 @@ export interface BillOfMaterialItemExport {
   usageQuantity: number;
 
   /**
-   * 单位（unit）
+   * 单位（字典 logistics_unit_of_measure_code）
    */
   materialUnit: string;
 
@@ -690,7 +734,7 @@ export interface BillOfMaterialItemExport {
   operationSeq: number;
 
   /**
-   * 工作中心（work_center）
+   * 工作中心（选项 TaktWorkCenters/options，DictValue=WorkCenterCode）
    */
   workCenter?: string;
 
@@ -710,14 +754,19 @@ export interface BillOfMaterialItemExport {
   substitutePriority: number;
 
   /**
-   * 是否可选件（0=否，1=是，optional_flag）
+   * 是否可选件（字典 sys_yes_no_type；0=否，1=是）
    */
   isOptional: number;
 
   /**
-   * 是否虚拟件（0=否，1=是，phantom_flag）
+   * 是否虚拟件（字典 sys_yes_no_type；0=否，1=是）
    */
   isPhantom: number;
+
+  /**
+   * 是否作废（字典 sys_yes_no_type，0=否 1=是；编辑移除子行时标记作废）
+   */
+  isObsolete: number;
 
   /**
    * 扩展字段JSON

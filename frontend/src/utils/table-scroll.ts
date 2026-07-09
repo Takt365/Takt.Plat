@@ -93,6 +93,9 @@ export const TAKT_TABLE_PAGINATION_HEIGHT_PX = 40;
 /** Ant Design Table 表头高度回退（size=middle） */
 export const TAKT_TABLE_HEADER_FALLBACK_PX = 56;
 
+/** Ant Design Table 汇总行高度回退（size=middle，含 fixed summary） */
+export const TAKT_TABLE_SUMMARY_ROW_HEIGHT_PX = 48;
+
 /**
  * 左右主子表共享 scroll.y（以组件 pane 高度与两侧 chrome 实测为准，保证左右表体默认等高）
  * @param paneHeight 组件根或 pane 可用高度（px）

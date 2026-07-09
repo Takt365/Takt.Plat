@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：frontend/src/types/logistics/manufacturing/defect
 // 文件名称：pcba-repair-detail.d.ts
-// 创建时间：2026-06-30
+// 创建时间：2026-07-09
 // 创建人：Takt365(Auto Generated)
 // 功能描述：logistics/manufacturing/defect 模块类型定义（自动生成；类型名去 Takt 前缀与末尾 Dto，如 TaktCompanyDto → Company）
 // 
@@ -39,7 +39,7 @@ export interface PcbaRepairDetail extends CompanyDtoBase {
   pcbaRepairName?: string;
 
   /**
-   * 生产工单号（冗余字段,便于查询）
+   * 工单号（冗余字段,便于查询）
    */
   prodOrderCode: string;
 
@@ -104,6 +104,11 @@ export interface PcbaRepairDetail extends CompanyDtoBase {
   repairOperator?: string;
 
   /**
+   * 是否作废（字典 sys_yes_no_type，0=否 1=是；编辑移除子行时标记作废）
+   */
+  isObsolete: number;
+
+  /**
    * PCBA改修日报（主表） （主表：TaktPcbaRepair）
    */
   pcbaRepair?: PcbaRepair;
@@ -134,7 +139,7 @@ export interface PcbaRepairDetailQuery extends TaktPagedQuery {
   pcbaRepairId?: string;
 
   /**
-   * 生产工单号（冗余字段,便于查询）
+   * 工单号（冗余字段,便于查询）
    */
   prodOrderCode?: string;
 
@@ -197,6 +202,11 @@ export interface PcbaRepairDetailQuery extends TaktPagedQuery {
    * 修理员（关联 TaktEmployee.Id，选项 TaktEmployees/options）
    */
   repairOperator?: string;
+
+  /**
+   * 是否作废（字典 sys_yes_no_type，0=否 1=是；编辑移除子行时标记作废）
+   */
+  isObsolete?: number;
 
   /**
    * 创建时间（范围查询-开始）
@@ -248,7 +258,7 @@ export interface PcbaRepairDetailCreate {
   pcbaRepairId: string;
 
   /**
-   * 生产工单号（冗余字段,便于查询）
+   * 工单号（冗余字段,便于查询）
    */
   prodOrderCode: string;
 
@@ -313,6 +323,11 @@ export interface PcbaRepairDetailCreate {
   repairOperator?: string;
 
   /**
+   * 是否作废（字典 sys_yes_no_type，0=否 1=是；编辑移除子行时标记作废）
+   */
+  isObsolete: number;
+
+  /**
    * 扩展字段JSON
    */
   extField?: string;
@@ -341,6 +356,25 @@ export interface PcbaRepairDetailUpdate extends PcbaRepairDetailCreate {
 
 
 /**
+ * PcbaRepairDetail 作废/撤销作废 DTO
+ * 对应前端 PcbaRepairDetailObsolete
+ * @description 对应后端 TaktPcbaRepairDetailObsoleteDto
+ */
+export interface PcbaRepairDetailObsolete {
+  /**
+   * PcbaRepairDetailID
+   */
+  pcbaRepairDetailId: string;
+
+  /**
+   * 是否作废（字典 sys_yes_no_type，0=否 1=是；编辑移除子行时标记作废）
+   */
+  isObsolete: number;
+
+}
+
+
+/**
  * PcbaRepairDetail 导入模板行 DTO
  * 对应前端 PcbaRepairDetailTemplate
  * @description 对应后端 TaktPcbaRepairDetailTemplateDto
@@ -362,7 +396,7 @@ export interface PcbaRepairDetailTemplate {
   pcbaRepairId?: string;
 
   /**
-   * 生产工单号（冗余字段,便于查询）
+   * 工单号（冗余字段,便于查询）
    */
   prodOrderCode?: string;
 
@@ -425,6 +459,11 @@ export interface PcbaRepairDetailTemplate {
    * 修理员（关联 TaktEmployee.Id，选项 TaktEmployees/options）
    */
   repairOperator?: string;
+
+  /**
+   * 是否作废（字典 sys_yes_no_type，0=否 1=是；编辑移除子行时标记作废）
+   */
+  isObsolete?: number;
 
   /**
    * 扩展字段JSON
@@ -466,7 +505,7 @@ export interface PcbaRepairDetailImport {
   pcbaRepairId?: string;
 
   /**
-   * 生产工单号（冗余字段,便于查询）
+   * 工单号（冗余字段,便于查询）
    */
   prodOrderCode?: string;
 
@@ -531,6 +570,11 @@ export interface PcbaRepairDetailImport {
   repairOperator?: string;
 
   /**
+   * 是否作废（字典 sys_yes_no_type，0=否 1=是；编辑移除子行时标记作废）
+   */
+  isObsolete?: number;
+
+  /**
    * 扩展字段JSON
    */
   extField?: string;
@@ -565,7 +609,7 @@ export interface PcbaRepairDetailExport {
   pcbaRepairId: string;
 
   /**
-   * 生产工单号（冗余字段,便于查询）
+   * 工单号（冗余字段,便于查询）
    */
   prodOrderCode: string;
 
@@ -628,6 +672,11 @@ export interface PcbaRepairDetailExport {
    * 修理员（关联 TaktEmployee.Id，选项 TaktEmployees/options）
    */
   repairOperator?: string;
+
+  /**
+   * 是否作废（字典 sys_yes_no_type，0=否 1=是；编辑移除子行时标记作废）
+   */
+  isObsolete: number;
 
   /**
    * 扩展字段JSON

@@ -30,7 +30,6 @@ namespace Takt.Application.Services.Routine.HelpDesk;
 public class TaktKnowledgeService : TaktServiceBase, ITaktKnowledgeService
 {
     private readonly ITaktCompanyRepository<TaktKnowledge> _knowledgeRepository;
-    private readonly ITaktCompanyRepository<TaktKnowledgeChangeLog> _knowledgeChangeLogRepository;
     private readonly ITaktSortOrderGenerator _sortOrderGenerator;
     private readonly ITaktUniqueValidator _uniqueValidator;
 
@@ -38,14 +37,12 @@ public class TaktKnowledgeService : TaktServiceBase, ITaktKnowledgeService
     /// 构造函数
     /// </summary>
     /// <param name="knowledgeRepository">知识库仓储</param>
-    /// <param name="knowledgeChangeLogRepository">KnowledgeChangeLog仓储</param>
     /// <param name="sortOrderGenerator">排序号生成器</param>
     /// <param name="uniqueValidator">唯一性验证器</param>
     /// <param name="userContext">用户上下文</param>
     /// <param name="localizationService">本地化服务</param>
     public TaktKnowledgeService(
         ITaktCompanyRepository<TaktKnowledge> knowledgeRepository,
-        ITaktCompanyRepository<TaktKnowledgeChangeLog> knowledgeChangeLogRepository,
         ITaktSortOrderGenerator sortOrderGenerator,
         ITaktUniqueValidator uniqueValidator,
         ITaktUserContext? userContext = null,
@@ -53,7 +50,6 @@ public class TaktKnowledgeService : TaktServiceBase, ITaktKnowledgeService
         : base(userContext, localizationService)
     {
         _knowledgeRepository = knowledgeRepository;
-        _knowledgeChangeLogRepository = knowledgeChangeLogRepository;
         _sortOrderGenerator = sortOrderGenerator;
         _uniqueValidator = uniqueValidator;
     }
@@ -161,9 +157,7 @@ public class TaktKnowledgeService : TaktServiceBase, ITaktKnowledgeService
         if (entity == null)
         {
             throw new TaktBusinessException("知识库不存在或已删除");
-        }
-        await _knowledgeChangeLogRepository.DeleteAsync(x => x.KnowledgeId == entity.Id);
-        var deleted = await _knowledgeRepository.DeleteAsync(id);
+        }        var deleted = await _knowledgeRepository.DeleteAsync(id);
         if (!deleted)
         {
             throw new TaktBusinessException("知识库不存在或已删除");
@@ -318,9 +312,6 @@ public class TaktKnowledgeService : TaktServiceBase, ITaktKnowledgeService
         {
             return;
         }
-        // 知识库变更日志 → dto.ChangeLogs
-        var changelogs = await _knowledgeChangeLogRepository.GetListAsync(x => x.KnowledgeId == entity.Id);
-        dto.ChangeLogs = changelogs.Adapt<List<TaktKnowledgeChangeLogDto>>();
     }
 
     /// <summary>
@@ -331,24 +322,6 @@ public class TaktKnowledgeService : TaktServiceBase, ITaktKnowledgeService
     /// <returns>任务</returns>
     private async Task SaveKnowledgeChildrenAsync(TaktKnowledge entity, TaktKnowledgeCreateDto dto)
     {
-        // 知识库变更日志（ChangeLogs）
-        if (dto.ChangeLogs is not { Count: > 0 })
-        {
-            await _knowledgeChangeLogRepository.DeleteAsync(x => x.KnowledgeId == entity.Id);
-        }
-        else
-        {
-            var changelogs = dto.ChangeLogs.Adapt<List<TaktKnowledgeChangeLog>>();
-            foreach (var child in changelogs)
-            {
-                child.KnowledgeId = entity.Id;
-            }
-            await _knowledgeChangeLogRepository.DeleteAsync(x => x.KnowledgeId == entity.Id);
-            foreach (var child in changelogs)
-            {
-            }
-            await _knowledgeChangeLogRepository.CreateRangeAsync(changelogs);
-        }
     }
     // ========================================
     // 查询表达式

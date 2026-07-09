@@ -35,7 +35,7 @@
       :show-advanced-query="true"
       :show-column-setting="true"
       :show-fullscreen="true"
-      :import-disabled="!hasMasterSelection"
+      :import-disabled="!hasMasterSelection || masterProdDateLocked"
       :export-disabled="!hasMasterSelection"
       :import-loading="loading"
       :export-loading="loading"
@@ -43,7 +43,7 @@
       @export="handleExport"
       @advanced-query="handleAdvancedQuery"
       @column-setting="handleColumnSetting"
-      :create-disabled="!hasMasterSelection"
+      :create-disabled="!hasMasterSelection || masterProdDateLocked"
       :update-disabled="updateDisabled"
       :delete-disabled="deleteDisabled"
       :create-loading="loading"
@@ -416,6 +416,11 @@ import { RiEditLine, RiDeleteBinLine, RiQuestionLine } from '@remixicon/vue'
 import PcbaOutputDetailForm from './pcba-output-detail-form.vue'
 import { usePcbaOutputMasterContext } from '../composables/use-pcba-output-master-context'
 import {
+  getOutputProdDateYmdFromRecord,
+  isOutputProdDateLocked,
+} from '../../composables/takt-output-prod-date-edit-lock'
+import { useOutputProdDateI18n } from '../../composables/use-output-prod-date-i18n'
+import {
   getPcbaOutputDetailList,
   getPcbaOutputDetailById,
   createPcbaOutputDetail,
@@ -429,6 +434,7 @@ import {
 import type { PcbaOutputDetail, PcbaOutputDetailQuery } from '@/types/logistics/manufacturing/output/pcba-output-detail'
 
 const { t } = useI18n()
+const prodDateI18n = useOutputProdDateI18n()
 const { selectedMasterRow } = usePcbaOutputMasterContext()
 
 /** Excel 导入/导出默认 sheet 名与文件名前缀 */
@@ -576,8 +582,18 @@ const importVisible = ref(false)
 const entityIdName = 'pcbaOutputDetailId'
 const hasMasterSelection = computed(() => !!selectedMasterRow.value?.pcbaOutputId)
 const masterPcbaOutputId = computed(() => selectedMasterRow.value?.pcbaOutputId ?? '')
-const updateDisabled = computed(() => !hasMasterSelection.value || selectedRows.value.length !== 1)
-const deleteDisabled = computed(() => !hasMasterSelection.value || selectedRows.value.length === 0)
+/** 主表生产日期是否已锁定 */
+const masterProdDateLocked = computed(() => {
+  const row = selectedMasterRow.value as Record<string, unknown> | null | undefined
+  const ymd = getOutputProdDateYmdFromRecord(row ?? null)
+  return ymd !== '' && isOutputProdDateLocked(ymd)
+})
+const updateDisabled = computed(() =>
+  !hasMasterSelection.value || selectedRows.value.length !== 1 || masterProdDateLocked.value,
+)
+const deleteDisabled = computed(() =>
+  !hasMasterSelection.value || selectedRows.value.length === 0 || masterProdDateLocked.value,
+)
 
 function getPcbaOutputDetailId(record: PcbaOutputDetail | Record<string, unknown>): string {
   return String((record as PcbaOutputDetail)?.[entityIdName] ?? '')
@@ -800,14 +816,14 @@ const columns = computed<TableColumnsType>(() => [
       String(getPcbaOutputDetailField(record, 'unachievedDescription') ?? ''),
   },
   {
-    title: t('entity.pcbaoutputdetail.pcbaoutput'),
-    dataIndex: 'pcbaOutput',
-    key: 'pcbaOutput',
+    title: t('entity.pcbaoutputdetail.pcbaoutputid'),
+    dataIndex: 'pcbaOutputId',
+    key: 'pcbaOutputId',
     width: 120,
     resizable: true,
     ellipsis: true,
     customRender: ({ record }: { record: PcbaOutputDetail }) =>
-      String(getPcbaOutputDetailField(record, 'pcbaOutput') ?? ''),
+      String(getPcbaOutputDetailField(record, 'pcbaOutputId') ?? ''),
   },
   CreateActionColumn({
     actions: [
@@ -817,6 +833,7 @@ const columns = computed<TableColumnsType>(() => [
         shape: 'plain',
         icon: RiEditLine,
         permission: 'logistics:manufacturing:output:pcba:update',
+        disabled: () => masterProdDateLocked.value,
         onClick: (record: PcbaOutputDetail) => void handleEdit(record),
       },
       {
@@ -825,6 +842,7 @@ const columns = computed<TableColumnsType>(() => [
         shape: 'plain',
         icon: RiDeleteBinLine,
         permission: 'logistics:manufacturing:output:pcba:delete',
+        disabled: () => masterProdDateLocked.value,
         onClick: (record: PcbaOutputDetail) => void handleDeleteOne(record),
       },
     ],
@@ -992,9 +1010,21 @@ function handleQueryReset() {
   void loadData()
 }
 
+function warnMasterProdDateLocked(): boolean {
+  if (!masterProdDateLocked.value) {
+    return false
+  }
+  const ymd = getOutputProdDateYmdFromRecord(selectedMasterRow.value as Record<string, unknown> | null)
+  message.warning(prodDateI18n.prodDateLockedMessage(ymd))
+  return true
+}
+
 function handleCreate() {
   if (!hasMasterSelection.value) {
     message.warning(t('common.status.empty'))
+    return
+  }
+  if (warnMasterProdDateLocked()) {
     return
   }
   formTitle.value = t('common.dialog.title.create', { entity: t('entity.pcbaoutputdetail._self') })
@@ -1003,6 +1033,9 @@ function handleCreate() {
 }
 
 async function handleEdit(record: PcbaOutputDetail) {
+  if (warnMasterProdDateLocked()) {
+    return
+  }
   formTitle.value = t('common.dialog.title.edit', { entity: t('entity.pcbaoutputdetail._self') })
   formLoading.value = true
   try {
@@ -1015,6 +1048,9 @@ async function handleEdit(record: PcbaOutputDetail) {
 }
 
 function handleUpdate() {
+  if (warnMasterProdDateLocked()) {
+    return
+  }
   if (selectedRow.value) {
     void handleEdit(selectedRow.value)
   } else {
@@ -1026,6 +1062,9 @@ function handleUpdate() {
 }
 
 async function handleFormSubmit() {
+  if (warnMasterProdDateLocked()) {
+    return
+  }
   const refInst = formRef.value
   if (!refInst?.validate) return
   try {
@@ -1056,6 +1095,9 @@ function handleFormCancel() {
 }
 
 async function handleDeleteOne(record: PcbaOutputDetail) {
+  if (warnMasterProdDateLocked()) {
+    return
+  }
   Modal.confirm({
     title: t('common.tip.confirm.delete.title'),
     content: t('common.tip.confirm.delete.entity', {
@@ -1078,6 +1120,9 @@ async function handleDelete() {
       action: t('common.page.button.delete'),
       entity: t('entity.pcbaoutputdetail._self'),
     }))
+    return
+  }
+  if (warnMasterProdDateLocked()) {
     return
   }
   Modal.confirm({
@@ -1107,6 +1152,9 @@ function handleImport() {
       message.warning(t('common.status.empty'))
       return
     }
+  if (warnMasterProdDateLocked()) {
+    return
+  }
   importVisible.value = true
 }
 

@@ -9,49 +9,6 @@
 
 <template>
   <div class="p-4 flex flex-col min-h-0 h-full">
-    <!-- 查询栏 -->
-    <TaktQueryBar
-      v-model="queryKeyword"
-      :placeholder="searchPlaceholder"
-      :loading="loading"
-      @search="handleSearch"
-      @reset="handleReset"
-    />
-
-    <!-- 工具栏 -->
-    <TaktToolsBar
-      create-permission="logistics:manufacturing:output:assy:create"
-      update-permission="logistics:manufacturing:output:assy:update"
-      delete-permission="logistics:manufacturing:output:assy:delete"
-      import-permission="logistics:manufacturing:output:assy:import"
-      export-permission="logistics:manufacturing:output:assy:export"
-      :show-create="true"
-      :show-update="true"
-      :show-delete="true"
-      :show-import="true"
-      :show-export="true"
-      :show-expand="false"
-      :show-advanced-query="true"
-      :show-column-setting="true"
-      :show-fullscreen="true"
-      :show-refresh="true"
-      :create-disabled="false"
-      :create-loading="loading"
-      :update-disabled="updateDisabled"
-      :update-loading="loading"
-      :delete-disabled="deleteDisabled"
-      :delete-loading="loading"
-      :refresh-loading="loading"
-      @create="handleCreate"
-      @update="handleUpdate"
-      @delete="handleDelete"
-      @import="handleImport"
-      @export="handleExport"
-      @advanced-query="handleAdvancedQuery"
-      @column-setting="handleColumnSetting"
-      @refresh="handleRefresh"
-    />
-
     <!-- 左主右从 -->
     <TaktMasterDetailTableLr
       v-model:master-current="currentPage"
@@ -74,17 +31,58 @@
       @master-pagination-change="handleMasterPaginationChange"
       @master-select="handleMasterSelect"
     >
+      <template #master-toolbar>
+        <TaktQueryBar
+          v-model="queryKeyword"
+          :placeholder="searchPlaceholder"
+          :loading="loading"
+          @search="handleSearch"
+          @reset="handleReset"
+        />
+        <TaktToolsBar
+          create-permission="logistics:manufacturing:output:assy:create"
+          update-permission="logistics:manufacturing:output:assy:update"
+          delete-permission="logistics:manufacturing:output:assy:delete"
+          import-permission="logistics:manufacturing:output:assy:import"
+          export-permission="logistics:manufacturing:output:assy:export"
+          :show-create="true"
+          :show-update="true"
+          :show-delete="true"
+          :show-import="true"
+          :show-export="true"
+          :show-expand="false"
+          :show-advanced-query="true"
+          :show-column-setting="true"
+          :show-fullscreen="true"
+          :show-refresh="true"
+          :create-disabled="false"
+          :create-loading="loading"
+          :update-disabled="updateDisabled"
+          :update-loading="loading"
+          :delete-disabled="deleteDisabled"
+          :delete-loading="loading"
+          :refresh-loading="loading"
+          @create="handleCreate"
+          @update="handleUpdate"
+          @delete="handleDelete"
+          @import="handleImport"
+          @export="handleExport"
+          @advanced-query="handleAdvancedQuery"
+          @column-setting="handleColumnSetting"
+          @refresh="handleRefresh"
+        />
+      </template>
       <!-- 字典/开关列渲染 -->
       <template #bodyCell="{ column, record }">
         <template v-if="column.key === 'prodCategory'">
           <TaktDictTag
-            :value="getAssyOutputField(record, 'prodCategory')"
+            :value="getAssyOutputDictValue(record, 'prodCategory')"
             dict-type="logistics_prod_category"
           />
         </template>
         <template v-else-if="column.key === 'shiftNo'">
           <TaktDictTag
-            :value="getAssyOutputField(record, 'shiftNo')"
+            :value="getAssyOutputDictValue(record, 'shiftNo')"
             dict-type="logistics_shift_category"
           />
         </template>
@@ -126,112 +124,108 @@
     >
       <template #default="{ isFieldVisible }">
       <div v-show="isFieldVisible('plantCode')">
-      <a-form-item :label="t('entity.assyoutput.plantcode')">
-        <a-input
+      <a-form-item :label="pi.queryLabel('plantCode')">
+        <TaktSelect
           v-model:value="advancedQueryForm.plantCode"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.assyoutput.plantcode') })"
-          show-count
-          :maxlength="4"
+          api-url="TaktPlants/options"
+          :placeholder="pi.queryPh('plantCode', 'select')"
           allow-clear
         />
       </a-form-item>
       </div>
       <div v-show="isFieldVisible('prodCategory')">
-      <a-form-item :label="t('entity.assyoutput.prodcategory')">
+      <a-form-item :label="pi.queryLabel('prodCategory')">
         <TaktSelect
           v-model:value="advancedQueryForm.prodCategory"
           dict-type="logistics_prod_category"
-          :placeholder="t('common.page.form.placeholder.select', { field: t('entity.assyoutput.prodcategory') })"
+          :placeholder="pi.queryPh('prodCategory', 'select')"
           allow-clear
         />
       </a-form-item>
       </div>
       <div v-show="isFieldVisible('prodDateStart')">
-      <a-form-item :label="t('entity.assyoutput.proddatestart')">
+      <a-form-item :label="pi.queryLabel('prodDateStart')">
         <a-date-picker
           v-model:value="advancedQueryForm.prodDateStart"
-          :placeholder="t('common.page.form.placeholder.select', { field: t('entity.assyoutput.proddatestart') })"
+          :placeholder="pi.queryPh('prodDateStart', 'select')"
           value-format="YYYY-MM-DD"
           style="width: 100%"
         />
       </a-form-item>
       </div>
       <div v-show="isFieldVisible('prodDateEnd')">
-      <a-form-item :label="t('entity.assyoutput.proddateend')">
+      <a-form-item :label="pi.queryLabel('prodDateEnd')">
         <a-date-picker
           v-model:value="advancedQueryForm.prodDateEnd"
-          :placeholder="t('common.page.form.placeholder.select', { field: t('entity.assyoutput.proddateend') })"
+          :placeholder="pi.queryPh('prodDateEnd', 'select')"
           value-format="YYYY-MM-DD"
           style="width: 100%"
         />
       </a-form-item>
       </div>
       <div v-show="isFieldVisible('prodTeam')">
-      <a-form-item :label="t('entity.assyoutput.prodteam')">
-        <a-input
+      <a-form-item :label="pi.queryLabel('prodTeam')">
+        <TaktSelect
           v-model:value="advancedQueryForm.prodTeam"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.assyoutput.prodteam') })"
-          show-count
-          :maxlength="20"
+          api-url="TaktProductionTeams/options"
+          :placeholder="pi.queryPh('prodTeam', 'select')"
           allow-clear
         />
       </a-form-item>
       </div>
       <div v-show="isFieldVisible('directLabor')">
-      <a-form-item :label="t('entity.assyoutput.directlabor')">
+      <a-form-item :label="pi.queryLabel('directLabor')">
         <a-input-number
           v-model:value="advancedQueryForm.directLabor"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.assyoutput.directlabor') })"
+          :placeholder="pi.queryPh('directLabor', 'required')"
           style="width: 100%"
         />
       </a-form-item>
       </div>
       <div v-show="isFieldVisible('indirectLabor')">
-      <a-form-item :label="t('entity.assyoutput.indirectlabor')">
+      <a-form-item :label="pi.queryLabel('indirectLabor')">
         <a-input-number
           v-model:value="advancedQueryForm.indirectLabor"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.assyoutput.indirectlabor') })"
+          :placeholder="pi.queryPh('indirectLabor', 'required')"
           style="width: 100%"
         />
       </a-form-item>
       </div>
       <div v-show="isFieldVisible('shiftNo')">
-      <a-form-item :label="t('entity.assyoutput.shiftno')">
+      <a-form-item :label="pi.queryLabel('shiftNo')">
         <TaktSelect
           v-model:value="advancedQueryForm.shiftNo"
           dict-type="logistics_shift_category"
-          :placeholder="t('common.page.form.placeholder.select', { field: t('entity.assyoutput.shiftno') })"
+          :placeholder="pi.queryPh('shiftNo', 'select')"
           allow-clear
         />
       </a-form-item>
       </div>
       <div v-show="isFieldVisible('prodOrderType')">
-      <a-form-item :label="t('entity.assyoutput.prodordertype')">
-        <a-input
+      <a-form-item :label="pi.queryLabel('prodOrderType')">
+        <TaktSelect
           v-model:value="advancedQueryForm.prodOrderType"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.assyoutput.prodordertype') })"
-          show-count
-          :maxlength="20"
+          api-url="TaktProductionOrders/options"
+          :placeholder="pi.queryPh('prodOrderType', 'select')"
           allow-clear
         />
       </a-form-item>
       </div>
       <div v-show="isFieldVisible('prodOrderCode')">
-      <a-form-item :label="t('entity.assyoutput.prodordercode')">
-        <a-input
+      <a-form-item :label="pi.queryLabel('prodOrderCode')">
+        <TaktSelect
           v-model:value="advancedQueryForm.prodOrderCode"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.assyoutput.prodordercode') })"
-          show-count
-          :maxlength="20"
+          api-url="TaktProductionOrders/options"
+          :placeholder="pi.queryPh('prodOrderCode', 'select')"
           allow-clear
         />
       </a-form-item>
       </div>
       <div v-show="isFieldVisible('modelCode')">
-      <a-form-item :label="t('entity.assyoutput.modelcode')">
+      <a-form-item :label="pi.queryLabel('modelCode')">
         <a-input
           v-model:value="advancedQueryForm.modelCode"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.assyoutput.modelcode') })"
+          :placeholder="pi.queryPh('modelCode', 'required')"
           show-count
           :maxlength="20"
           allow-clear
@@ -239,10 +233,10 @@
       </a-form-item>
       </div>
       <div v-show="isFieldVisible('materialCode')">
-      <a-form-item :label="t('entity.assyoutput.materialcode')">
+      <a-form-item :label="pi.queryLabel('materialCode')">
         <a-input
           v-model:value="advancedQueryForm.materialCode"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.assyoutput.materialcode') })"
+          :placeholder="pi.queryPh('materialCode', 'required')"
           show-count
           :maxlength="20"
           allow-clear
@@ -250,10 +244,10 @@
       </a-form-item>
       </div>
       <div v-show="isFieldVisible('batchNo')">
-      <a-form-item :label="t('entity.assyoutput.batchno')">
+      <a-form-item :label="pi.queryLabel('batchNo')">
         <a-input
           v-model:value="advancedQueryForm.batchNo"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.assyoutput.batchno') })"
+          :placeholder="pi.queryPh('batchNo', 'required')"
           show-count
           :maxlength="20"
           allow-clear
@@ -261,37 +255,48 @@
       </a-form-item>
       </div>
       <div v-show="isFieldVisible('prodOrderQty')">
-      <a-form-item :label="t('entity.assyoutput.prodorderqty')">
+      <a-form-item :label="pi.queryLabel('prodOrderQty')">
         <a-input-number
           v-model:value="advancedQueryForm.prodOrderQty"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.assyoutput.prodorderqty') })"
+          :placeholder="pi.queryPh('prodOrderQty', 'required')"
           style="width: 100%"
         />
       </a-form-item>
       </div>
+      <div v-show="isFieldVisible('serialNo')">
+      <a-form-item :label="pi.queryLabel('serialNo')">
+        <a-input
+          v-model:value="advancedQueryForm.serialNo"
+          :placeholder="pi.queryPh('serialNo', 'optional')"
+          show-count
+          :maxlength="80"
+          allow-clear
+        />
+      </a-form-item>
+      </div>
       <div v-show="isFieldVisible('stdMinutes')">
-      <a-form-item :label="t('entity.assyoutput.stdminutes')">
+      <a-form-item :label="pi.queryLabel('stdMinutes')">
         <a-input-number
           v-model:value="advancedQueryForm.stdMinutes"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.assyoutput.stdminutes') })"
+          :placeholder="pi.queryPh('stdMinutes', 'required')"
           style="width: 100%"
         />
       </a-form-item>
       </div>
       <div v-show="isFieldVisible('stdCapacity')">
-      <a-form-item :label="t('entity.assyoutput.stdcapacity')">
+      <a-form-item :label="pi.queryLabel('stdCapacity')">
         <a-input-number
           v-model:value="advancedQueryForm.stdCapacity"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.assyoutput.stdcapacity') })"
+          :placeholder="pi.queryPh('stdCapacity', 'required')"
           style="width: 100%"
         />
       </a-form-item>
       </div>
       <div v-show="isFieldVisible('createdAtStart')">
-      <a-form-item :label="t('common.page.entity.createdatstart')">
+      <a-form-item :label="pi.queryLabel('createdAtStart')">
         <a-date-picker
           v-model:value="advancedQueryForm.createdAtStart"
-          :placeholder="t('common.page.form.placeholder.select', { field: t('common.page.entity.createdatstart') })"
+          :placeholder="pi.queryPh('createdAtStart', 'select')"
           value-format="YYYY-MM-DD HH:mm:ss"
             show-time
           style="width: 100%"
@@ -299,10 +304,10 @@
       </a-form-item>
       </div>
       <div v-show="isFieldVisible('createdAtEnd')">
-      <a-form-item :label="t('common.page.entity.createdatend')">
+      <a-form-item :label="pi.queryLabel('createdAtEnd')">
         <a-date-picker
           v-model:value="advancedQueryForm.createdAtEnd"
-          :placeholder="t('common.page.form.placeholder.select', { field: t('common.page.entity.createdatend') })"
+          :placeholder="pi.queryPh('createdAtEnd', 'select')"
           value-format="YYYY-MM-DD HH:mm:ss"
             show-time
           style="width: 100%"
@@ -324,7 +329,7 @@
             >
               <span class="takt-form-label-hint-icon"><RiQuestionLine class="takt-remix-icon" /></span>
             </a-tooltip>
-            <span>{{ t('common.page.entity.extfield') }}</span>
+            <span>{{ pi.queryLabel('extField') }}</span>
           </span>
         </template>
         <a-textarea
@@ -338,10 +343,10 @@
       </a-form-item>
       </div>
       <div v-show="isFieldVisible('remark')">
-      <a-form-item :label="t('common.page.entity.remark')">
+      <a-form-item :label="pi.queryLabel('remark')">
         <a-textarea
           v-model:value="advancedQueryForm.remark"
-          :placeholder="t('common.page.form.placeholder.optional', { field: t('common.page.entity.remark') })"
+          :placeholder="pi.queryPh('remark', 'optional')"
             :rows="4"
             show-count
             :maxlength="400"
@@ -355,7 +360,7 @@
     <!-- 导入对话框 -->
     <TaktModal
       v-model:open="importVisible"
-      :title="t('common.dialog.title.import', { entity: t('entity.assyoutput._self') })"
+      :title="t('common.dialog.title.import', { entity: pi.self() })"
       :width="600"
       :footer="null"
       :cancel-text="t('common.page.button.close')"
@@ -363,7 +368,7 @@
     >
       <TaktImportFile
         v-if="importVisible"
-        entity-i18n-key="entity.assyoutput._self"
+        :entity-i18n-key="ASSYOUTPUT_SELF_I18N_KEY"
         file-type="xlsx"
         :sheet-name="excelNames.sheet"
         :template-file-name="excelNames.fileBase"
@@ -394,15 +399,15 @@
  * 组立日报管理页 · 由 generate-vue-master-detail-from-api.cjs 根据 types/api 生成
  * @module views/logistics/manufacturing/output/assy-output
  */
-import { ref, computed, onMounted } from 'vue'
-import { message, Modal } from 'ant-design-vue'
+import { ref, computed, onMounted, h } from 'vue'
+import { message, Modal, Tooltip } from 'ant-design-vue'
 import type { TableColumnsType } from 'ant-design-vue'
 import { CreateActionColumn } from '@/components/business/takt-action-column/index'
 import { useI18n } from 'vue-i18n'
 import { ensureTaktPaginationConfigAsync, getTaktDefaultPageIndex, getTaktDefaultPageSize } from '@/utils/takt-paged'
 import AssyOutputForm from './components/assy-output-form.vue'
 import AssyOutputDetailPanel from './components/assy-output-detail-panel.vue'
-import { provideAssyOutputMasterContext } from './composables/use-assy-output-master-context'
+import { provideAssyOutputMasterContext, type AssyOutputRowRecord } from './composables/use-assy-output-master-context'
 import { getAssyOutputList, getAssyOutputById, createAssyOutput, updateAssyOutput, deleteAssyOutputById, deleteAssyOutputBatch, getAssyOutputTemplate, importAssyOutput, exportAssyOutput } from '@/api/logistics/manufacturing/output/assy-output'
 import type { AssyOutput, AssyOutputQuery } from '@/types/logistics/manufacturing/output/assy-output'
 import { useDictDataStore } from '@/stores/foundation/dict-data'
@@ -411,13 +416,28 @@ import { resolveExportDownloadFileName } from '@/utils/export-download-name'
 import { normalizeImportResult, type TaktImportResult } from '@/utils/takt-import-result'
 import { RiEditLine, RiDeleteBinLine, RiQuestionLine } from '@remixicon/vue'
 
+import {
+  useAssyOutputI18n,
+  ASSYOUTPUT_LIST_FIELDS,
+  ASSYOUTPUT_QUERY_STRING_FIELDS,
+  ASSYOUTPUT_QUERY_FIELDS,
+  ASSYOUTPUT_SELF_I18N_KEY,
+} from './composables/use-assy-output-i18n'
+import {
+  getAssyOutputProdDateYmdFromRecord,
+  isAssyOutputProdDateLocked,
+} from './composables/takt-assy-output-prod-date-edit-lock'
+
+/** 实体字段 i18n（标签/占位符统一入口） */
+const pi = useAssyOutputI18n()
+
 /** i18n 翻译函数 */
 const { t } = useI18n()
 /** Excel 导入/导出默认 sheet 名与文件名前缀 */
 const excelNames = taktExcelEntityNames('TaktAssyOutput')
 /** 列表快捷查询占位文案 */
 const searchPlaceholder = computed(
-  () => t('common.page.form.placeholder.search', { keyword: t('entity.assyoutput._self') })
+  () => t('common.page.form.placeholder.search', { keyword: pi.self() })
 )
 
 /** 快捷查询关键字 */
@@ -433,9 +453,9 @@ const pageSize = ref(getTaktDefaultPageSize())
 /** 分页 total */
 const total = ref(0)
 /** 工具栏单选时当前行 */
-const selectedRow = ref<AssyOutput | null>(null)
+const selectedRow = ref<AssyOutputRowRecord | null>(null)
 /** 表格多选行 */
-const selectedRows = ref<AssyOutput[]>([])
+const selectedRows = ref<AssyOutputRowRecord[]>([])
 /** 表格多选 row-key 集合 */
 const selectedRowKeys = ref<(string | number)[]>([])
 
@@ -452,52 +472,31 @@ const formRef = ref()
 
 /** 高级查询抽屉是否打开 */
 const advancedQueryVisible = ref(false)
+/**
+ * 创建空的高级查询表单
+ * @returns {Record<string, unknown>} 高级查询初始模型
+ */
+function createEmptyAdvancedQueryForm() {
+  const form = Object.fromEntries(ASSYOUTPUT_QUERY_STRING_FIELDS.map((key) => [key, ''])) as Record<
+    (typeof ASSYOUTPUT_QUERY_STRING_FIELDS)[number],
+    string
+  >
+  return {
+    ...form,
+    directLabor: undefined as number | undefined,
+    indirectLabor: undefined as number | undefined,
+    shiftNo: undefined as number | undefined,
+    prodOrderQty: undefined as number | undefined,
+    stdMinutes: undefined as number | undefined,
+    stdCapacity: undefined as number | undefined,
+  }
+}
 /** 高级查询表单模型 */
-const advancedQueryForm = ref({
-  plantCode: '',
-  prodCategory: '',
-  prodDateStart: '',
-  prodDateEnd: '',
-  prodTeam: '',
-  directLabor: undefined as number | undefined,
-  indirectLabor: undefined as number | undefined,
-  shiftNo: undefined as number | undefined,
-  prodOrderType: '',
-  prodOrderCode: '',
-  modelCode: '',
-  materialCode: '',
-  batchNo: '',
-  prodOrderQty: undefined as number | undefined,
-  stdMinutes: undefined as number | undefined,
-  stdCapacity: undefined as number | undefined,
-  createdAtStart: '',
-  createdAtEnd: '',
-  extField: '',
-  remark: '',
-})
+const advancedQueryForm = ref(createEmptyAdvancedQueryForm())
 /** 高级查询字段元数据（列显隐配置） */
-const queryFieldsMeta = computed(() => [
-  { key: 'plantCode', label: t('entity.assyoutput.plantcode') },
-  { key: 'prodCategory', label: t('entity.assyoutput.prodcategory') },
-  { key: 'prodDateStart', label: t('common.page.entity.createdatstart').replace(t('common.page.entity.createdat'), t('entity.assyoutput.proddate')) },
-  { key: 'prodDateEnd', label: t('common.page.entity.createdatend').replace(t('common.page.entity.createdat'), t('entity.assyoutput.proddate')) },
-  { key: 'prodTeam', label: t('entity.assyoutput.prodteam') },
-  { key: 'directLabor', label: t('entity.assyoutput.directlabor') },
-  { key: 'indirectLabor', label: t('entity.assyoutput.indirectlabor') },
-  { key: 'shiftNo', label: t('entity.assyoutput.shiftno') },
-  { key: 'prodOrderType', label: t('entity.assyoutput.prodordertype') },
-  { key: 'prodOrderCode', label: t('entity.assyoutput.prodordercode') },
-  { key: 'modelCode', label: t('entity.assyoutput.modelcode') },
-  { key: 'materialCode', label: t('entity.assyoutput.materialcode') },
-  { key: 'batchNo', label: t('entity.assyoutput.batchno') },
-  { key: 'prodOrderQty', label: t('entity.assyoutput.prodorderqty') },
-  { key: 'stdMinutes', label: t('entity.assyoutput.stdminutes') },
-  { key: 'stdCapacity', label: t('entity.assyoutput.stdcapacity') },
-  { key: 'createdAtStart', label: t('common.page.entity.createdatstart') },
-  { key: 'createdAtEnd', label: t('common.page.entity.createdatend') },
-  { key: 'extField', label: t('common.page.entity.extfield') },
-  { key: 'remark', label: t('common.page.entity.remark') },
-])
+const queryFieldsMeta = computed(() =>
+  ASSYOUTPUT_QUERY_FIELDS.map((key) => ({ key, label: pi.queryLabel(key) })),
+)
 /** 高级查询当前可见字段 key */
 const visibleQueryFieldKeys = ref<string[]>([])
 /** 列设置抽屉是否打开 */
@@ -508,10 +507,20 @@ const importVisible = ref(false)
 const visibleColumnKeys = ref<string[]>([])
 /** 实体主键字段名（row-key、API 路径参数） */
 const entityIdName = 'assyOutputId'
-/** 工具栏「编辑」是否禁用（须恰好选中一行） */
-const updateDisabled = computed(() => selectedRows.value.length !== 1)
-/** 工具栏「删除」是否禁用（未选中任何行） */
-const deleteDisabled = computed(() => selectedRows.value.length === 0)
+/** 工具栏「编辑」是否禁用（须恰好选中一行且生产日期未锁定） */
+const updateDisabled = computed(() => {
+  if (selectedRows.value.length !== 1) {
+    return true
+  }
+  return isAssyOutputRowProdDateLocked(selectedRows.value[0])
+})
+/** 工具栏「删除」是否禁用（未选中或含已锁定生产日期行） */
+const deleteDisabled = computed(() => {
+  if (selectedRows.value.length === 0) {
+    return true
+  }
+  return selectedRows.value.some((row) => isAssyOutputRowProdDateLocked(row))
+})
 
 /** Pinia：字典缓存（列表/查询 dict-type 渲染前预热） */
 const dictDataStore = useDictDataStore()
@@ -541,11 +550,9 @@ function buildListQuery(overrides?: Partial<AssyOutputQuery>): AssyOutputQuery {
       query[key] = v as never
     }
   }
-  assignTrimmed('plantCode', form.plantCode)
-  assignTrimmed('prodCategory', form.prodCategory)
-  assignTrimmed('prodDateStart', form.prodDateStart)
-  assignTrimmed('prodDateEnd', form.prodDateEnd)
-  assignTrimmed('prodTeam', form.prodTeam)
+  for (const key of ASSYOUTPUT_QUERY_STRING_FIELDS) {
+    assignTrimmed(key, form[key])
+  }
   if (form.directLabor !== undefined && form.directLabor !== null) {
     query.directLabor = form.directLabor
   }
@@ -555,11 +562,6 @@ function buildListQuery(overrides?: Partial<AssyOutputQuery>): AssyOutputQuery {
   if (form.shiftNo !== undefined && form.shiftNo !== null) {
     query.shiftNo = form.shiftNo
   }
-  assignTrimmed('prodOrderType', form.prodOrderType)
-  assignTrimmed('prodOrderCode', form.prodOrderCode)
-  assignTrimmed('modelCode', form.modelCode)
-  assignTrimmed('materialCode', form.materialCode)
-  assignTrimmed('batchNo', form.batchNo)
   if (form.prodOrderQty !== undefined && form.prodOrderQty !== null) {
     query.prodOrderQty = form.prodOrderQty
   }
@@ -569,10 +571,6 @@ function buildListQuery(overrides?: Partial<AssyOutputQuery>): AssyOutputQuery {
   if (form.stdCapacity !== undefined && form.stdCapacity !== null) {
     query.stdCapacity = form.stdCapacity
   }
-  assignTrimmed('createdAtStart', form.createdAtStart)
-  assignTrimmed('createdAtEnd', form.createdAtEnd)
-  assignTrimmed('extField', form.extField)
-  assignTrimmed('remark', form.remark)
   return query
 }
 /** 页面挂载：租户上下文就绪后加载分页配置，再拉列表 */
@@ -587,7 +585,7 @@ onMounted(async () => {
 const selectedMasterKey = ref('')
 
 /** 同步主表选中行到右侧明细（子表由 *-panel watch 自动 reload） */
-function syncMasterSelection(record: AssyOutput | null) {
+function syncMasterSelection(record: AssyOutputRowRecord | null) {
   selectedMasterRow.value = record
   selectedMasterKey.value = record ? getAssyOutputId(record) : ''
 }
@@ -597,7 +595,7 @@ function syncMasterSelection(record: AssyOutput | null) {
  * @param record 主表行
  */
 function handleMasterSelect(record: Record<string, unknown>) {
-  const row = record as unknown as AssyOutput
+  const row = record as unknown as AssyOutputRowRecord
   const key = getAssyOutputId(row)
   selectedRowKeys.value = [key]
   selectedRows.value = [row]
@@ -615,7 +613,7 @@ function handleMasterPaginationChange(_page: number, _pageSize: number) {
 }
 
 /** 加载主表详情并回填当前页 dataSource */
-async function loadAssyOutputDetail(record: AssyOutput): Promise<AssyOutput | null> {
+async function loadAssyOutputDetail(record: AssyOutputRowRecord): Promise<AssyOutput | null> {
   const id = getAssyOutputId(record)
   if (!id) {
     return null
@@ -646,7 +644,7 @@ const columns = computed<TableColumnsType>(() => [
     customRender: ({ record }: { record: any }) => getAssyOutputField(record, 'assyOutputId') ?? ''
   },
   {
-    title: t('entity.assyoutput.plantcode'),
+    title: pi.label('plantCode'),
     dataIndex: 'plantCode',
     key: 'plantCode',
     width: 120,
@@ -655,7 +653,7 @@ const columns = computed<TableColumnsType>(() => [
     customRender: ({ record }: { record: any }) => getAssyOutputField(record, 'plantCode') ?? ''
   },
   {
-    title: t('entity.assyoutput.prodcategory'),
+    title: pi.label('prodCategory'),
     dataIndex: 'prodCategory',
     key: 'prodCategory',
     width: 120,
@@ -663,7 +661,7 @@ const columns = computed<TableColumnsType>(() => [
     ellipsis: true,
   },
   {
-    title: t('entity.assyoutput.proddate'),
+    title: pi.label('prodDate'),
     dataIndex: 'prodDate',
     key: 'prodDate',
     width: 120,
@@ -672,7 +670,7 @@ const columns = computed<TableColumnsType>(() => [
     customRender: ({ record }: { record: any }) => getAssyOutputField(record, 'prodDate') ?? ''
   },
   {
-    title: t('entity.assyoutput.prodteam'),
+    title: pi.label('prodTeam'),
     dataIndex: 'prodTeam',
     key: 'prodTeam',
     width: 120,
@@ -681,7 +679,7 @@ const columns = computed<TableColumnsType>(() => [
     customRender: ({ record }: { record: any }) => getAssyOutputField(record, 'prodTeam') ?? ''
   },
   {
-    title: t('entity.assyoutput.directlabor'),
+    title: pi.label('directLabor'),
     dataIndex: 'directLabor',
     key: 'directLabor',
     width: 120,
@@ -690,7 +688,7 @@ const columns = computed<TableColumnsType>(() => [
     customRender: ({ record }: { record: any }) => getAssyOutputField(record, 'directLabor') ?? ''
   },
   {
-    title: t('entity.assyoutput.indirectlabor'),
+    title: pi.label('indirectLabor'),
     dataIndex: 'indirectLabor',
     key: 'indirectLabor',
     width: 120,
@@ -699,7 +697,7 @@ const columns = computed<TableColumnsType>(() => [
     customRender: ({ record }: { record: any }) => getAssyOutputField(record, 'indirectLabor') ?? ''
   },
   {
-    title: t('entity.assyoutput.shiftno'),
+    title: pi.label('shiftNo'),
     dataIndex: 'shiftNo',
     key: 'shiftNo',
     width: 120,
@@ -707,7 +705,7 @@ const columns = computed<TableColumnsType>(() => [
     ellipsis: true,
   },
   {
-    title: t('entity.assyoutput.prodordertype'),
+    title: pi.label('prodOrderType'),
     dataIndex: 'prodOrderType',
     key: 'prodOrderType',
     width: 120,
@@ -716,7 +714,7 @@ const columns = computed<TableColumnsType>(() => [
     customRender: ({ record }: { record: any }) => getAssyOutputField(record, 'prodOrderType') ?? ''
   },
   {
-    title: t('entity.assyoutput.prodordercode'),
+    title: pi.label('prodOrderCode'),
     dataIndex: 'prodOrderCode',
     key: 'prodOrderCode',
     width: 120,
@@ -725,7 +723,7 @@ const columns = computed<TableColumnsType>(() => [
     customRender: ({ record }: { record: any }) => getAssyOutputField(record, 'prodOrderCode') ?? ''
   },
   {
-    title: t('entity.assyoutput.modelcode'),
+    title: pi.label('modelCode'),
     dataIndex: 'modelCode',
     key: 'modelCode',
     width: 120,
@@ -734,7 +732,7 @@ const columns = computed<TableColumnsType>(() => [
     customRender: ({ record }: { record: any }) => getAssyOutputField(record, 'modelCode') ?? ''
   },
   {
-    title: t('entity.assyoutput.materialcode'),
+    title: pi.label('materialCode'),
     dataIndex: 'materialCode',
     key: 'materialCode',
     width: 120,
@@ -743,7 +741,7 @@ const columns = computed<TableColumnsType>(() => [
     customRender: ({ record }: { record: any }) => getAssyOutputField(record, 'materialCode') ?? ''
   },
   {
-    title: t('entity.assyoutput.batchno'),
+    title: pi.label('batchNo'),
     dataIndex: 'batchNo',
     key: 'batchNo',
     width: 120,
@@ -752,7 +750,7 @@ const columns = computed<TableColumnsType>(() => [
     customRender: ({ record }: { record: any }) => getAssyOutputField(record, 'batchNo') ?? ''
   },
   {
-    title: t('entity.assyoutput.prodorderqty'),
+    title: pi.label('prodOrderQty'),
     dataIndex: 'prodOrderQty',
     key: 'prodOrderQty',
     width: 120,
@@ -761,7 +759,16 @@ const columns = computed<TableColumnsType>(() => [
     customRender: ({ record }: { record: any }) => getAssyOutputField(record, 'prodOrderQty') ?? ''
   },
   {
-    title: t('entity.assyoutput.stdminutes'),
+    title: pi.label('serialNo'),
+    dataIndex: 'serialNo',
+    key: 'serialNo',
+    width: 120,
+    resizable: true,
+    ellipsis: true,
+    customRender: ({ record }: { record: any }) => getAssyOutputField(record, 'serialNo') ?? ''
+  },
+  {
+    title: pi.label('stdMinutes'),
     dataIndex: 'stdMinutes',
     key: 'stdMinutes',
     width: 120,
@@ -770,7 +777,21 @@ const columns = computed<TableColumnsType>(() => [
     customRender: ({ record }: { record: any }) => getAssyOutputField(record, 'stdMinutes') ?? ''
   },
   {
-    title: t('entity.assyoutput.stdcapacity'),
+    title: () =>
+      h('span', { class: 'inline-flex items-center gap-1 align-middle' }, [
+        h(
+          Tooltip,
+          { title: pi.stdCapacityHint(), placement: 'top' },
+          {
+            default: () =>
+              h('span', { class: 'takt-form-label-hint-icon inline-flex cursor-help' }, [
+                h(RiQuestionLine, { class: 'takt-remix-icon' }),
+              ]),
+          },
+        ),
+        h('span', null, pi.label('stdCapacity')),
+      ]),
+    taktColumnSettingLabel: pi.label('stdCapacity'),
     dataIndex: 'stdCapacity',
     key: 'stdCapacity',
     width: 120,
@@ -786,7 +807,8 @@ const columns = computed<TableColumnsType>(() => [
         shape: 'plain',
         icon: RiEditLine,
         permission: 'logistics:manufacturing:output:assy:update',
-        onClick: (record: AssyOutput) => handleEdit(record)
+        disabled: (record: AssyOutputRowRecord) => isAssyOutputRowProdDateLocked(record),
+        onClick: (record: AssyOutputRowRecord) => handleEdit(record)
       },
       {
         key: 'delete',
@@ -794,26 +816,68 @@ const columns = computed<TableColumnsType>(() => [
         shape: 'plain',
         icon: RiDeleteBinLine,
         permission: 'logistics:manufacturing:output:assy:delete',
-        onClick: (record: AssyOutput) => handleDeleteOne(record)
+        disabled: (record: AssyOutputRowRecord) => isAssyOutputRowProdDateLocked(record),
+        onClick: (record: AssyOutputRowRecord) => handleDeleteOne(record)
       }
     ]
   })
 ])
 
 /** 表格 row-key（优先实体主键字段） */
-const getAssyOutputId = (record: any): string => record?.[entityIdName] ?? ''
+const getAssyOutputId = (record: AssyOutputRowRecord): string => {
+  const id = (record as Record<string, unknown>)?.[entityIdName]
+  return id != null ? String(id) : ''
+}
 /**
  * 读取行字段值
  * @param record 行数据
  * @param field 字段名
  */
 const getAssyOutputField = (record: any, field: string): any => record?.[field]
+/**
+ * 主表行生产日期是否已锁定
+ * @param record 主表行
+ */
+function isAssyOutputRowProdDateLocked(record: AssyOutputRowRecord | null | undefined): boolean {
+  if (!record) {
+    return false
+  }
+  const ymd = getAssyOutputProdDateYmdFromRecord(record as Record<string, unknown>)
+  return ymd !== '' && isAssyOutputProdDateLocked(ymd)
+}
+/**
+ * 锁定行操作时提示
+ * @param record 主表行
+ */
+function warnAssyOutputProdDateLocked(record: AssyOutputRowRecord): boolean {
+  if (!isAssyOutputRowProdDateLocked(record)) {
+    return false
+  }
+  const ymd = getAssyOutputProdDateYmdFromRecord(record as Record<string, unknown>)
+  message.warning(pi.prodDateLockedMessage(ymd))
+  return true
+}
+/**
+ * 供 TaktDictTag 等组件使用的标量字典值
+ * @param record 行数据
+ * @param field 字段名
+ */
+const getAssyOutputDictValue = (
+  record: AssyOutputRowRecord,
+  field: string,
+): string | number | undefined => {
+  const value = (record as Record<string, unknown>)?.[field]
+  if (value === null || value === undefined) return undefined
+  if (typeof value === 'string' || typeof value === 'number') return value
+  return String(value)
+}
+
 
 
 /** 行选择配置 */
 const rowSelection = computed(() => ({
   selectedRowKeys: selectedRowKeys.value,
-  onChange: (keys: (string | number)[], rows: AssyOutput[]) => {
+  onChange: (keys: (string | number)[], rows: AssyOutputRowRecord[]) => {
     selectedRowKeys.value = keys
     selectedRows.value = rows
     selectedRow.value = rows.length === 1 ? (rows[0] ?? null) : null
@@ -823,7 +887,7 @@ const rowSelection = computed(() => ({
       syncMasterSelection(null)
     }
   },
-  onSelect: (record: AssyOutput, selected: boolean) => {
+  onSelect: (record: AssyOutputRowRecord, selected: boolean) => {
     if (selected) {
       selectedRow.value = record
       syncMasterSelection(record)
@@ -832,7 +896,7 @@ const rowSelection = computed(() => ({
       syncMasterSelection(null)
     }
   },
-  onSelectAll: (selected: boolean, selectedRowsData: AssyOutput[]) => {
+  onSelectAll: (selected: boolean, selectedRowsData: AssyOutputRowRecord[]) => {
     selectedRow.value = selected && selectedRowsData.length === 1 ? (selectedRowsData[0] ?? null) : null
     syncMasterSelection(selectedRow.value)
   }
@@ -881,6 +945,7 @@ function handleReset() {
   modelCode: '',
   materialCode: '',
   batchNo: '',
+  serialNo: '',
   prodOrderQty: undefined as number | undefined,
   stdMinutes: undefined as number | undefined,
   stdCapacity: undefined as number | undefined,
@@ -895,14 +960,17 @@ function handleReset() {
 
 /** 打开新增弹窗 */
 function handleCreate() {
-  formTitle.value = t('common.dialog.title.create', { entity: t('entity.assyoutput._self') })
+  formTitle.value = t('common.dialog.title.create', { entity: pi.self() })
   formData.value = null
   formVisible.value = true
   nextTick(() => formRef.value?.resetFields())
 }
 /** 打开编辑弹窗（主子表：先拉详情含子表） */
-async function handleEdit(record: AssyOutput) {
-  formTitle.value = t('common.dialog.title.edit', { entity: t('entity.assyoutput._self') })
+async function handleEdit(record: AssyOutputRowRecord) {
+  if (warnAssyOutputProdDateLocked(record)) {
+    return
+  }
+  formTitle.value = t('common.dialog.title.edit', { entity: pi.self() })
   formLoading.value = true
   try {
     const detail = await loadAssyOutputDetail(record)
@@ -918,7 +986,7 @@ function handleUpdate() {
   if (selectedRow.value) {
     void handleEdit(selectedRow.value)
   } else {
-    message.warning(t('common.tip.select.to.action', { action: t('common.page.button.edit'), entity: t('entity.assyoutput._self') }))
+    message.warning(t('common.tip.select.to.action', { action: t('common.page.button.edit'), entity: pi.self() }))
   }
 }
 /** 提交新增/编辑表单 */
@@ -936,10 +1004,10 @@ async function handleFormSubmit() {
     const id = (formData.value as any)?.[entityIdName]
     if (id) {
       await updateAssyOutput(id, payload as any)
-      message.success(t('common.feedback.updated', { target: t('entity.assyoutput._self') }))
+      message.success(t('common.feedback.updated', { target: pi.self() }))
     } else {
       await createAssyOutput(payload as any)
-      message.success(t('common.feedback.created', { target: t('entity.assyoutput._self') }))
+      message.success(t('common.feedback.created', { target: pi.self() }))
     }
     formVisible.value = false
     formData.value = null
@@ -948,6 +1016,8 @@ async function handleFormSubmit() {
   assyOutputDetailPanelRef.value?.reload?.()
     }
     loadData()
+  } catch {
+    // 错误文案由 request 拦截器 notification 展示
   } finally {
     formLoading.value = false
   }
@@ -1019,24 +1089,27 @@ async function handleExport() {
     link.click()
     document.body.removeChild(link)
     setTimeout(() => window.URL.revokeObjectURL(url), 100)
-    message.success(t('common.feedback.export.success', { target: t('entity.assyoutput._self') }))
+    message.success(t('common.feedback.export.success', { target: pi.self() }))
   } catch (error: any) {
     logger.error('[AssyOutput] 导出失败', { error })
-    message.error(error?.message || t('common.feedback.export.failed', { target: t('entity.assyoutput._self') }))
+    message.error(error?.message || t('common.feedback.export.failed', { target: pi.self() }))
   } finally {
     loading.value = false
   }
 }
 /** 删除单行 */
-async function handleDeleteOne(record: AssyOutput) {
+async function handleDeleteOne(record: AssyOutputRowRecord) {
+  if (warnAssyOutputProdDateLocked(record)) {
+    return
+  }
   Modal.confirm({
     title: t('common.tip.confirm.delete.title'),
-    content: t('common.tip.confirm.delete.entity', { entity: t('entity.assyoutput._self'), name: t('common.tip.this.target', { target: t('entity.assyoutput._self') }) }),
+    content: t('common.tip.confirm.delete.entity', { entity: pi.self(), name: t('common.tip.this.target', { target: pi.self() }) }),
     okText: t('common.page.button.delete'),
     cancelText: t('common.page.button.cancel'),
     onOk: async () => {
       await deleteAssyOutputById((record as any)[entityIdName])
-      message.success(t('common.feedback.deleted', { target: t('entity.assyoutput._self') }))
+      message.success(t('common.feedback.deleted', { target: pi.self() }))
       selectedRowKeys.value = []
       selectedRows.value = []
       selectedRow.value = null
@@ -1048,18 +1121,23 @@ async function handleDeleteOne(record: AssyOutput) {
 /** 批量删除选中行 */
 async function handleDelete() {
   if (selectedRows.value.length === 0) {
-    message.warning(t('common.tip.select.to.action', { action: t('common.page.button.delete'), entity: t('entity.assyoutput._self') }))
+    message.warning(t('common.tip.select.to.action', { action: t('common.page.button.delete'), entity: pi.self() }))
+    return
+  }
+  const lockedRow = selectedRows.value.find((row) => isAssyOutputRowProdDateLocked(row))
+  if (lockedRow) {
+    warnAssyOutputProdDateLocked(lockedRow)
     return
   }
   Modal.confirm({
     title: t('common.tip.confirm.delete.title'),
-    content: t('common.tip.confirm.delete.count', { entity: t('entity.assyoutput._self'), count: selectedRows.value.length }),
+    content: t('common.tip.confirm.delete.count', { entity: pi.self(), count: selectedRows.value.length }),
     okText: t('common.page.button.delete'),
     cancelText: t('common.page.button.cancel'),
     onOk: async () => {
       const ids = selectedRows.value.map((r: any) => r[entityIdName]).filter(Boolean)
       await deleteAssyOutputBatch(ids)
-      message.success(t('common.feedback.deleted', { target: t('entity.assyoutput._self') }))
+      message.success(t('common.feedback.deleted', { target: pi.self() }))
       selectedRowKeys.value = []
       selectedRows.value = []
       selectedRow.value = null
@@ -1095,6 +1173,7 @@ function handleAdvancedQueryReset() {
   modelCode: '',
   materialCode: '',
   batchNo: '',
+  serialNo: '',
   prodOrderQty: undefined as number | undefined,
   stdMinutes: undefined as number | undefined,
   stdCapacity: undefined as number | undefined,

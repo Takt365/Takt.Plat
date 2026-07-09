@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Infrastructure.Data.Seeds.I18nSeedData.Accounting.Financial
 // 文件名称：TaktAssetI18nSeedData.cs
-// 创建时间：2026-07-02
+// 创建时间：2026-07-09
 // 创建人：Takt365(Auto Generated)
 // 功能描述：TaktAsset 实体字段国际化种子（无对应 frontend locales；TranslationText 取自 ColumnDescription，ContextNote 取自属性 XML summary）
 // 
@@ -296,15 +296,6 @@ public class TaktAssetI18nSeedData : ITaktSeedDataCoordinator
             new TranslationSeedItem("entity.asset.status", "zh-CN", "资产状态", "资产状态（字典 accounting_asset_status：0=未使用，1=使用中，2=报废，3=处置，4=实物不存在）"),
             // entity.asset.status
             new TranslationSeedItem("entity.asset.status", "zh-HK", "资产状态_hk", "资产状态（字典 accounting_asset_status：0=未使用，1=使用中，2=报废，3=处置，4=实物不存在）"),
-
-            // entity.asset.changelogs
-            new TranslationSeedItem("entity.asset.changelogs", "en-US", "固定资产变更记录列表_us", "固定资产变更记录列表（外键在子表 TaktAssetChangeLog.AssetId）"),
-            // entity.asset.changelogs
-            new TranslationSeedItem("entity.asset.changelogs", "ja-JP", "固定资产变更记录列表_jp", "固定资产变更记录列表（外键在子表 TaktAssetChangeLog.AssetId）"),
-            // entity.asset.changelogs
-            new TranslationSeedItem("entity.asset.changelogs", "zh-CN", "固定资产变更记录列表", "固定资产变更记录列表（外键在子表 TaktAssetChangeLog.AssetId）"),
-            // entity.asset.changelogs
-            new TranslationSeedItem("entity.asset.changelogs", "zh-HK", "固定资产变更记录列表_hk", "固定资产变更记录列表（外键在子表 TaktAssetChangeLog.AssetId）"),
         };
     }
 

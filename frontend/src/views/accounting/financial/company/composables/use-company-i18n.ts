@@ -95,8 +95,6 @@ export const COMPANY_PLACEHOLDER = {
   codeAlias: 'required',
   relatedPlant: 'select',
   companyStatus: 'select',
-  roleIds: 'optional',
-  userIds: 'optional',
   extField: 'optional',
   remark: 'optional',
 } as const satisfies Record<string, EntityFieldPlaceholderKind>

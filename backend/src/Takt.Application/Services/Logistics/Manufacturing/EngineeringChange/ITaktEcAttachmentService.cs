@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Application.Services.Logistics.Manufacturing.EngineeringChange
 // 文件名称：ITaktEcAttachmentService.cs
-// 创建时间：2026-06-30
+// 创建时间：2026-07-09
 // 创建人：Takt365(Cursor AI)
 // 功能描述：设变附件应用服务接口
 // 
@@ -69,6 +69,13 @@ public interface ITaktEcAttachmentService
     /// <param name="ids">ID列表</param>
     /// <returns>任务</returns>
     Task DeleteEcAttachmentBatchAsync(IEnumerable<long> ids);
+
+    /// <summary>
+    /// 更新设变附件作废状态
+    /// </summary>
+    /// <param name="dto">作废DTO</param>
+    /// <returns>DTO</returns>
+    Task<TaktEcAttachmentDto> UpdateEcAttachmentObsoleteAsync(TaktEcAttachmentObsoleteDto dto);
 
     /// <summary>
     /// 获取导入模板

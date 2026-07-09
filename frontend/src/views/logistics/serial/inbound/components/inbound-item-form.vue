@@ -28,12 +28,24 @@
           <a-row :gutter="24">
             <a-col :span="12">
               <a-form-item
-                :label="t('entity.serialinbounditem.inboundno')"
+                :label="pi.label('inboundId')"
+                name="inboundId"
+              >
+                <TaktSelect
+                  v-model:value="formState.inboundId"
+                  api-url="TaktSerialInbounds/options"
+                  :placeholder="pi.ph('inboundId')"
+                />
+              </a-form-item>
+            </a-col>
+            <a-col :span="12">
+              <a-form-item
+                :label="pi.label('inboundNo')"
                 name="inboundNo"
               >
                 <a-input
                   v-model:value="formState.inboundNo"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.serialinbounditem.inboundno') })"
+                  :placeholder="pi.ph('inboundNo')"
                   show-count
                   :maxlength="50"
                   allow-clear
@@ -42,40 +54,27 @@
             </a-col>
             <a-col :span="12">
               <a-form-item
-                :label="t('entity.serialinbounditem.linenumber')"
+                :label="pi.label('lineNumber')"
                 name="lineNumber"
               >
                 <a-input-number
                   v-model:value="formState.lineNumber"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.serialinbounditem.linenumber') })"
+                  :placeholder="pi.ph('lineNumber')"
                   style="width: 100%"
                 />
               </a-form-item>
             </a-col>
             <a-col :span="12">
               <a-form-item
-                :label="t('entity.serialinbounditem.inboundserialno')"
+                :label="pi.label('inboundSerialNo')"
                 name="inboundSerialNo"
               >
                 <a-input
                   v-model:value="formState.inboundSerialNo"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.serialinbounditem.inboundserialno') })"
+                  :placeholder="pi.ph('inboundSerialNo')"
                   show-count
                   :maxlength="20"
                   allow-clear
-                />
-              </a-form-item>
-            </a-col>
-            <a-col :span="12">
-              <a-form-item
-                :label="t('entity.serialinbounditem.inboundtime')"
-                name="inboundTime"
-              >
-                <a-date-picker
-                  v-model:value="formState.inboundTime"
-                  :placeholder="t('common.page.form.placeholder.select', { field: t('entity.serialinbounditem.inboundtime') })"
-                  value-format="YYYY-MM-DD"
-                  style="width: 100%"
                 />
               </a-form-item>
             </a-col>
@@ -92,7 +91,7 @@
                     >
                       <span class="takt-form-label-hint-icon"><RiQuestionLine class="takt-remix-icon" /></span>
                     </a-tooltip>
-                    <span>{{ t('common.page.entity.extfield') }}</span>
+                    <span>{{ pi.label('extField') }}</span>
                   </span>
                 </template>
                 <a-textarea
@@ -107,12 +106,12 @@
             </a-col>
             <a-col :span="24">
               <a-form-item
-                :label="t('common.page.entity.remark')"
+                :label="pi.label('remark')"
                 name="remark"
               >
                 <a-textarea
                   v-model:value="formState.remark"
-                  :placeholder="t('common.page.form.placeholder.optional', { field: t('common.page.entity.remark') })"
+                  :placeholder="pi.ph('remark')"
                   :rows="4"
                   show-count
                   :maxlength="400"
@@ -135,6 +134,11 @@
 import { reactive, watch, computed, ref } from 'vue'
 import { useI18n } from 'vue-i18n'
 import type { Rule } from 'ant-design-vue/es/form'
+import { useSerialInboundItemI18n } from '../composables/use-inbound-item-i18n'
+
+/** 实体字段 i18n */
+const pi = useSerialInboundItemI18n()
+
 import type { SerialInboundItemCreate } from '@/types/logistics/serial/inbound-item'
 import { RiQuestionLine } from '@remixicon/vue'
 
@@ -145,7 +149,8 @@ const formContentClass = computed(() => (formFields.length > 10 ? 'takt-form-con
 /** 当前激活的 Tab key */
 const activeTab = ref('tab-0')
 /** CreateDto 字段名列表（与 formState 键对齐） */
-const formFields = ["inboundNo","lineNumber","inboundSerialNo","inboundTime","extField","remark"]
+const formFields = ["inboundId","inboundNo","lineNumber","inboundSerialNo","extField","remark"]
+
 
 
 /** 父级传入的编辑 DTO；新增时为 undefined 或空对象 */
@@ -197,21 +202,28 @@ watch(
 
 /** 表单校验规则（与 FluentValidation 必填对齐） */
 const rules = computed<Record<string, Rule[]>>(() => ({
+  inboundId: [
+    {
+      required: true,
+      message: pi.ph('inboundId'),
+      trigger: 'change'
+    }
+  ],
   inboundNo: [
     {
       required: true,
-      message: t('common.page.form.placeholder.required', { field: t('entity.serialinbounditem.inboundno') }),
+      message: pi.ph('inboundNo'),
       trigger: 'blur'
     }
   ],
   lineNumber: [{
     validator: async (_rule, value) => {
       if (value === undefined || value === null || value === '') {
-        return Promise.reject(t('common.page.form.placeholder.select', { field: t('entity.serialinbounditem.linenumber') }))
+        return Promise.reject(pi.ph('lineNumber'))
       }
       const num = typeof value === 'number' ? value : Number(value)
       if (!Number.isFinite(num)) {
-        return Promise.reject(t('common.page.form.placeholder.select', { field: t('entity.serialinbounditem.linenumber') }))
+        return Promise.reject(pi.ph('lineNumber'))
       }
       return Promise.resolve()
     },
@@ -220,15 +232,8 @@ const rules = computed<Record<string, Rule[]>>(() => ({
   inboundSerialNo: [
     {
       required: true,
-      message: t('common.page.form.placeholder.required', { field: t('entity.serialinbounditem.inboundserialno') }),
+      message: pi.ph('inboundSerialNo'),
       trigger: 'blur'
-    }
-  ],
-  inboundTime: [
-    {
-      required: true,
-      message: t('common.page.form.placeholder.select', { field: t('entity.serialinbounditem.inboundtime') }),
-      trigger: 'change'
     }
   ],
 }))
@@ -239,7 +244,7 @@ async function validate() {
   return formState
 }
 
-/** 映射为 Create/Update DTO（含主表外键 inboundId） */
+/** 映射为 Create/Update DTO（含主表外键 serialInboundId） */
 function getValues(): Record<string, any> {
   const payload = { ...formState }
   if ('lineNumber' in payload) {
@@ -247,7 +252,7 @@ function getValues(): Record<string, any> {
     payload.lineNumber = typeof rawlineNumber === 'number' ? rawlineNumber : Number(rawlineNumber)
   }
   if ('sortOrder' in payload) delete payload.sortOrder
-  payload.inboundId = props.masterId
+  payload.serialInboundId = props.masterId
   return payload
 }
 

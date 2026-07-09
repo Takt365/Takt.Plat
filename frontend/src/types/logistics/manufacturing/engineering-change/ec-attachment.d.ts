@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：frontend/src/types/logistics/manufacturing/engineering-change
 // 文件名称：ec-attachment.d.ts
-// 创建时间：2026-06-30
+// 创建时间：2026-07-09
 // 创建人：Takt365(Auto Generated)
 // 功能描述：logistics/manufacturing/engineering-change 模块类型定义（自动生成；类型名去 Takt 前缀与末尾 Dto，如 TaktCompanyDto → Company）
 // 
@@ -16,7 +16,7 @@ import type {
 } from '@/types/common';
 
 /**
- * 设变附件实体（技术阶段一 ②，隶属 TaktEcGijutsu）。文件类别：Liaison/EPP/FPP/ExternalLiaison/TCJ 等；与主表、明细保存后由系统生成 TaktEcNotification。
+ * 设变附件实体（技术阶段一 ②，隶属 TaktEcGijutsu）。文件类别见字典 logistics_ec_attachment_type；与主表、明细保存后由系统生成 TaktEcNotification。
  * 对应前端 TaktEcAttachmentDto
  * 继承 TaktCompanyDtoBase
  * 对应前端 EcAttachment
@@ -49,7 +49,7 @@ export interface EcAttachment extends CompanyDtoBase {
   lineNumber: number;
 
   /**
-   * 文件类别：Liaison=联络, EPP, FPP, ExternalLiaison=外部联络, TCJ 等
+   * 文件类别（字典 logistics_ec_attachment_type；TL=联络，EPP=EPP，FPP=FPP，EL=外部联络，TCJ=TCJ，源PDF=源PDF，EC=EC）
    */
   attachmentType: string;
 
@@ -69,9 +69,14 @@ export interface EcAttachment extends CompanyDtoBase {
   accessUrl: string;
 
   /**
+   * 是否作废（字典 sys_yes_no_type，0=否 1=是；编辑移除子行时标记作废）
+   */
+  isObsolete: number;
+
+  /**
    * 设变主表（多对一） （主表：TaktEcGijutsu）
    */
-  ecEng?: EcGijutsu;
+  ecGijutsu?: EcGijutsu;
 
 }
 
@@ -109,7 +114,7 @@ export interface EcAttachmentQuery extends TaktPagedQuery {
   lineNumber?: number;
 
   /**
-   * 文件类别：Liaison=联络, EPP, FPP, ExternalLiaison=外部联络, TCJ 等
+   * 文件类别（字典 logistics_ec_attachment_type；TL=联络，EPP=EPP，FPP=FPP，EL=外部联络，TCJ=TCJ，源PDF=源PDF，EC=EC）
    */
   attachmentType?: string;
 
@@ -127,6 +132,11 @@ export interface EcAttachmentQuery extends TaktPagedQuery {
    * 访问地址（URL）
    */
   accessUrl?: string;
+
+  /**
+   * 是否作废（字典 sys_yes_no_type，0=否 1=是；编辑移除子行时标记作废）
+   */
+  isObsolete?: number;
 
   /**
    * 创建时间（范围查询-开始）
@@ -188,7 +198,7 @@ export interface EcAttachmentCreate {
   lineNumber: number;
 
   /**
-   * 文件类别：Liaison=联络, EPP, FPP, ExternalLiaison=外部联络, TCJ 等
+   * 文件类别（字典 logistics_ec_attachment_type；TL=联络，EPP=EPP，FPP=FPP，EL=外部联络，TCJ=TCJ，源PDF=源PDF，EC=EC）
    */
   attachmentType: string;
 
@@ -206,6 +216,11 @@ export interface EcAttachmentCreate {
    * 访问地址（URL）
    */
   accessUrl: string;
+
+  /**
+   * 是否作废（字典 sys_yes_no_type，0=否 1=是；编辑移除子行时标记作废）
+   */
+  isObsolete: number;
 
   /**
    * 扩展字段JSON
@@ -231,6 +246,25 @@ export interface EcAttachmentUpdate extends EcAttachmentCreate {
    * EcAttachmentID（标识要更新的实体）
    */
   ecAttachmentId: string;
+
+}
+
+
+/**
+ * EcAttachment 作废/撤销作废 DTO
+ * 对应前端 EcAttachmentObsolete
+ * @description 对应后端 TaktEcAttachmentObsoleteDto
+ */
+export interface EcAttachmentObsolete {
+  /**
+   * EcAttachmentID
+   */
+  ecAttachmentId: string;
+
+  /**
+   * 是否作废（字典 sys_yes_no_type，0=否 1=是；编辑移除子行时标记作废）
+   */
+  isObsolete: number;
 
 }
 
@@ -267,7 +301,7 @@ export interface EcAttachmentTemplate {
   lineNumber?: number;
 
   /**
-   * 文件类别：Liaison=联络, EPP, FPP, ExternalLiaison=外部联络, TCJ 等
+   * 文件类别（字典 logistics_ec_attachment_type；TL=联络，EPP=EPP，FPP=FPP，EL=外部联络，TCJ=TCJ，源PDF=源PDF，EC=EC）
    */
   attachmentType?: string;
 
@@ -285,6 +319,11 @@ export interface EcAttachmentTemplate {
    * 访问地址（URL）
    */
   accessUrl?: string;
+
+  /**
+   * 是否作废（字典 sys_yes_no_type，0=否 1=是；编辑移除子行时标记作废）
+   */
+  isObsolete?: number;
 
   /**
    * 扩展字段JSON
@@ -336,7 +375,7 @@ export interface EcAttachmentImport {
   lineNumber?: number;
 
   /**
-   * 文件类别：Liaison=联络, EPP, FPP, ExternalLiaison=外部联络, TCJ 等
+   * 文件类别（字典 logistics_ec_attachment_type；TL=联络，EPP=EPP，FPP=FPP，EL=外部联络，TCJ=TCJ，源PDF=源PDF，EC=EC）
    */
   attachmentType?: string;
 
@@ -354,6 +393,11 @@ export interface EcAttachmentImport {
    * 访问地址（URL）
    */
   accessUrl?: string;
+
+  /**
+   * 是否作废（字典 sys_yes_no_type，0=否 1=是；编辑移除子行时标记作废）
+   */
+  isObsolete?: number;
 
   /**
    * 扩展字段JSON
@@ -400,7 +444,7 @@ export interface EcAttachmentExport {
   lineNumber: number;
 
   /**
-   * 文件类别：Liaison=联络, EPP, FPP, ExternalLiaison=外部联络, TCJ 等
+   * 文件类别（字典 logistics_ec_attachment_type；TL=联络，EPP=EPP，FPP=FPP，EL=外部联络，TCJ=TCJ，源PDF=源PDF，EC=EC）
    */
   attachmentType: string;
 
@@ -418,6 +462,11 @@ export interface EcAttachmentExport {
    * 访问地址（URL）
    */
   accessUrl: string;
+
+  /**
+   * 是否作废（字典 sys_yes_no_type，0=否 1=是；编辑移除子行时标记作废）
+   */
+  isObsolete: number;
 
   /**
    * 扩展字段JSON

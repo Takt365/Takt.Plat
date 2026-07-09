@@ -24,6 +24,7 @@ import {
   TAKT_TABLE_HEADER_FALLBACK_PX,
   TAKT_TABLE_PAGINATION_HEIGHT_PX,
   TAKT_TABLE_SCROLL_Y_MIN,
+  TAKT_TABLE_SUMMARY_ROW_HEIGHT_PX,
   computeMasterDetailLrSharedScrollYPx,
 } from '@/utils/table-scroll';
 
@@ -42,19 +43,36 @@ export interface TaktMasterDetailLrScrollMeasureRefs {
   includeMasterPagination: Ref<boolean>;
 }
 
+/** 左右主子表 scroll.y 测量选项 */
+export interface MeasureMasterDetailLrTableScrollYOptions {
+  /** 预留汇总行高度（px）；为 true 时用 DOM 实测或 TAKT_TABLE_SUMMARY_ROW_HEIGHT_PX */
+  reserveSummaryRow?: boolean;
+  /** 显式预留底部高度（px），优先于 reserveSummaryRow 的 DOM 实测 */
+  reserveBottomPx?: number;
+}
+
 /**
- * 从 __table-body 内 TaktSingleTable 实测 scroll.y
- * @param hostEl 主表 __table-body
+ * 从 __table-wrap / __table-body 内 TaktSingleTable 实测 scroll.y
+ * @param hostEl 表格外层容器
+ * @param options 汇总行等底部预留
  * @returns scroll.y（px）
  */
-export function measureMasterDetailLrTableScrollY(hostEl: HTMLElement): number {
+export function measureMasterDetailLrTableScrollY(
+  hostEl: HTMLElement,
+  options: MeasureMasterDetailLrTableScrollYOptions = {},
+): number {
   const tableBody = hostEl.querySelector('.takt-single-table__body') as HTMLElement | null;
   if (!tableBody || tableBody.clientHeight <= 0) {
     return TAKT_TABLE_SCROLL_Y_MIN;
   }
   const headerEl = tableBody.querySelector('.ant-table-header') as HTMLElement | null;
   const headerHeight = headerEl?.offsetHeight ?? TAKT_TABLE_HEADER_FALLBACK_PX;
-  return Math.max(TAKT_TABLE_SCROLL_Y_MIN, tableBody.clientHeight - headerHeight);
+  let bottomReserve = options.reserveBottomPx ?? 0;
+  if (bottomReserve <= 0 && options.reserveSummaryRow) {
+    const summaryEl = tableBody.querySelector('.ant-table-summary') as HTMLElement | null;
+    bottomReserve = summaryEl?.offsetHeight ?? TAKT_TABLE_SUMMARY_ROW_HEIGHT_PX;
+  }
+  return Math.max(TAKT_TABLE_SCROLL_Y_MIN, tableBody.clientHeight - headerHeight - bottomReserve);
 }
 
 /**

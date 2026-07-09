@@ -4,7 +4,7 @@
 // 文件名称：TaktSourceOfSupply.cs
 // 创建时间：2026-06-15
 // 创建人：Takt365(Cursor AI)
-// 功能描述：Takt货源实体，定义工厂物料与供货商的采购货源关系（货源清单，与 MRP/采购订单寻源对齐）
+// 功能描述：Takt货源清单实体，定义工厂物料与供货商的采购货源清单关系（货源清单清单，与 MRP/采购订单寻源对齐）
 //
 // 版权信息：Copyright (c) 2025 Takt  All rights reserved.
 // 免责声明：此软件使用 MIT License，作者不承担任何使用风险。
@@ -16,9 +16,9 @@ using Takt.Domain.Entities;
 namespace Takt.Domain.Entities.Logistics.Procurement;
 
 /// <summary>
-/// Takt货源实体（公司级；工厂+物料+供货商维度的有效货源记录）
+/// Takt货源清单实体（公司级；工厂+物料+供货商维度的有效货源清单记录）
 /// </summary>
-[SugarTable("takt_logistics_procurement_source_of_supply", "货源清单表")]
+[SugarTable("takt_logistics_procurement_source_of_supply", "货源清单清单表")]
 [SugarIndex("ix_source_of_supply_tenant", nameof(TenantCode), OrderByType.Asc, nameof(CompanyCode), OrderByType.Asc, false)]
 [SugarIndex("ix_source_of_supply_is_deleted", nameof(TenantCode), OrderByType.Asc, nameof(CompanyCode), OrderByType.Asc, nameof(IsDeleted), OrderByType.Asc, false)]
 [SugarIndex("ix_takt_logistics_procurement_source_of_supply_unique", nameof(TenantCode), OrderByType.Asc, nameof(CompanyCode), OrderByType.Asc, nameof(PlantCode), OrderByType.Asc, nameof(MaterialCode), OrderByType.Asc, nameof(SupplierCode), OrderByType.Asc, nameof(ValidFrom), OrderByType.Asc, true)]
@@ -33,9 +33,9 @@ public class TaktSourceOfSupply : TaktCompanyEntityBase
     [SugarColumn(ColumnName = "plant_code", ColumnDescription = "工厂代码", ColumnDataType = "nvarchar", Length = 4, IsNullable = false)]
     public string PlantCode { get; set; } = string.Empty;
     /// <summary>
-    /// 货源编码（租户+公司内唯一；业务单据号）
+    /// 货源清单编码（租户+公司内唯一；业务单据号）
     /// </summary>
-    [SugarColumn(ColumnName = "source_of_supply_code", ColumnDescription = "货源编码", ColumnDataType = "nvarchar", Length = 20, IsNullable = false)]
+    [SugarColumn(ColumnName = "source_of_supply_code", ColumnDescription = "货源清单编码", ColumnDataType = "nvarchar", Length = 20, IsNullable = false)]
     public string SourceOfSupplyCode { get; set; } = string.Empty;
     /// <summary>
     /// 物料编码（选项 TaktMaterials/options，DictValue=MaterialCode）
@@ -53,7 +53,7 @@ public class TaktSourceOfSupply : TaktCompanyEntityBase
     [SugarColumn(ColumnName = "purchase_group", ColumnDescription = "采购组", ColumnDataType = "nvarchar", Length = 3, IsNullable = true)]
     public string? PurchaseGroup { get; set; }
     /// <summary>
-    /// 固定（字典 sys_yes_no_type；1=是，0=否；固定货源，MRP/寻源优先选用）
+    /// 固定（字典 sys_yes_no_type；1=是，0=否；固定货源清单，MRP/寻源优先选用）
     /// </summary>
     [SugarColumn(ColumnName = "is_fixed", ColumnDescription = "固定", ColumnDataType = "int", IsNullable = false, DefaultValue = "0")]
     public int IsFixed { get; set; } = 0;
@@ -98,13 +98,13 @@ public class TaktSourceOfSupply : TaktCompanyEntityBase
     [SugarColumn(ColumnName = "valid_to", ColumnDescription = "失效日期", ColumnDataType = "datetime", IsNullable = false)]
     public DateTime ValidTo { get; set; } = new DateTime(9999, 12, 31, 23, 59, 59);
     /// <summary>
-    /// 排序号（越小越靠前；同物料多货源时的优先级）
+    /// 排序号（越小越靠前；同物料多货源清单时的优先级）
     /// </summary>
     [SugarColumn(ColumnName = "sort_order", ColumnDescription = "排序号", ColumnDataType = "int", IsNullable = false, DefaultValue = "0")]
     public int SortOrder { get; set; } = 0;
     /// <summary>
-    /// 货源状态（字典 sys_normal_disable_status；1=启用，0=禁用）
+    /// 货源清单状态（字典 sys_normal_disable_status；1=启用，0=禁用）
     /// </summary>
-    [SugarColumn(ColumnName = "source_status", ColumnDescription = "货源状态", ColumnDataType = "int", IsNullable = false, DefaultValue = "1")]
+    [SugarColumn(ColumnName = "source_status", ColumnDescription = "货源清单状态", ColumnDataType = "int", IsNullable = false, DefaultValue = "1")]
     public int SourceStatus { get; set; } = 1;
 }

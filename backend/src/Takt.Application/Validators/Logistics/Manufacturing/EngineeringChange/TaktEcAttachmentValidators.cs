@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Application.Validators.Logistics.Manufacturing.EngineeringChange
 // 文件名称：TaktEcAttachmentValidators.cs
-// 创建时间：2026-07-02
+// 创建时间：2026-07-09
 // 创建人：Takt365(Auto Generated)
 // 功能描述：EcAttachment 模块 FluentValidation 验证器（由 generate-validators-from-entity.cjs 根据 TaktEcAttachment 生成，请按需审阅）
 // 
@@ -41,8 +41,8 @@ public class TaktEcAttachmentCreateValidator : AbstractValidator<TaktEcAttachmen
             .NotEmpty().WithMessage("设变单号不能为空")
             .MaximumLength(10).WithMessage("设变单号长度不能超过10个字符");
         RuleFor(x => x.AttachmentType)
-            .NotEmpty().WithMessage("文件类别：Liaison=联络, EPP, FPP, ExternalLiais不能为空")
-            .MaximumLength(30).WithMessage("文件类别：Liaison=联络, EPP, FPP, ExternalLiais长度不能超过30个字符");
+            .NotEmpty().WithMessage("文件类别不能为空")
+            .MaximumLength(8).WithMessage("文件类别长度不能超过8个字符");
         RuleFor(x => x.DocNo)
             .NotEmpty().WithMessage("文件编号不能为空")
             .MaximumLength(50).WithMessage("文件编号长度不能超过50个字符");
@@ -87,8 +87,8 @@ public class TaktEcAttachmentUpdateValidator : AbstractValidator<TaktEcAttachmen
             .NotEmpty().WithMessage("设变单号不能为空")
             .MaximumLength(10).WithMessage("设变单号长度不能超过10个字符");
         RuleFor(x => x.AttachmentType)
-            .NotEmpty().WithMessage("文件类别：Liaison=联络, EPP, FPP, ExternalLiais不能为空")
-            .MaximumLength(30).WithMessage("文件类别：Liaison=联络, EPP, FPP, ExternalLiais长度不能超过30个字符");
+            .NotEmpty().WithMessage("文件类别不能为空")
+            .MaximumLength(8).WithMessage("文件类别长度不能超过8个字符");
         RuleFor(x => x.DocNo)
             .NotEmpty().WithMessage("文件编号不能为空")
             .MaximumLength(50).WithMessage("文件编号长度不能超过50个字符");
@@ -129,8 +129,8 @@ public class TaktEcAttachmentImportValidator : AbstractValidator<TaktEcAttachmen
             .NotEmpty().WithMessage("设变单号不能为空")
             .MaximumLength(10).WithMessage("设变单号长度不能超过10个字符");
         RuleFor(x => x.AttachmentType)
-            .NotEmpty().WithMessage("文件类别：Liaison=联络, EPP, FPP, ExternalLiais不能为空")
-            .MaximumLength(30).WithMessage("文件类别：Liaison=联络, EPP, FPP, ExternalLiais长度不能超过30个字符");
+            .NotEmpty().WithMessage("文件类别不能为空")
+            .MaximumLength(8).WithMessage("文件类别长度不能超过8个字符");
         RuleFor(x => x.DocNo)
             .NotEmpty().WithMessage("文件编号不能为空")
             .MaximumLength(50).WithMessage("文件编号长度不能超过50个字符");

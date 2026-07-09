@@ -725,7 +725,6 @@ function buildCostElementUpdateDto(
     costElementStatus: costElement.costElementStatus,
     validFrom: costElement.validFrom,
     validTo: costElement.validTo,
-    changeLogs: costElement.changeLogs,
     extField: costElement.extField,
     remark: costElement.remark,
   }

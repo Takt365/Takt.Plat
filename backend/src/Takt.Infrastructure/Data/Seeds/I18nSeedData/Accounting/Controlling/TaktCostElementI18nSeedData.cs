@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Infrastructure.Data.Seeds.I18nSeedData.Accounting.Controlling
 // 文件名称：TaktCostElementI18nSeedData.cs
-// 创建时间：2026-07-02
+// 创建时间：2026-07-09
 // 创建人：Takt365(Auto Generated)
 // 功能描述：TaktCostElement 实体字段国际化种子（无对应 frontend locales；TranslationText 取自 ColumnDescription，ContextNote 取自属性 XML summary）
 // 
@@ -188,15 +188,6 @@ public class TaktCostElementI18nSeedData : ITaktSeedDataCoordinator
             new TranslationSeedItem("entity.costelement.status", "zh-CN", "成本要素状态", "成本要素状态（字典 sys_normal_disable_status；1=启用，0=禁用）"),
             // entity.costelement.status
             new TranslationSeedItem("entity.costelement.status", "zh-HK", "成本要素状态_hk", "成本要素状态（字典 sys_normal_disable_status；1=启用，0=禁用）"),
-
-            // entity.costelement.changelogs
-            new TranslationSeedItem("entity.costelement.changelogs", "en-US", "成本要素变更记录列表_us", "成本要素变更记录列表（外键在子表 TaktCostElementChangeLog.CostElementId）"),
-            // entity.costelement.changelogs
-            new TranslationSeedItem("entity.costelement.changelogs", "ja-JP", "成本要素变更记录列表_jp", "成本要素变更记录列表（外键在子表 TaktCostElementChangeLog.CostElementId）"),
-            // entity.costelement.changelogs
-            new TranslationSeedItem("entity.costelement.changelogs", "zh-CN", "成本要素变更记录列表", "成本要素变更记录列表（外键在子表 TaktCostElementChangeLog.CostElementId）"),
-            // entity.costelement.changelogs
-            new TranslationSeedItem("entity.costelement.changelogs", "zh-HK", "成本要素变更记录列表_hk", "成本要素变更记录列表（外键在子表 TaktCostElementChangeLog.CostElementId）"),
         };
     }
 

@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：frontend/src/api/logistics/quality/complaint
 // 文件名称：customer-satisfaction-survey-item.ts
-// 创建时间：2026-06-23
+// 创建时间：2026-07-09
 // 创建人：Takt365(Auto Generated)
 // 功能描述：logistics/quality/complaint 模块 API（自动生成，请勿手改路由常量）
 // 
@@ -18,6 +18,7 @@ import type {
 import type {
   CustomerSatisfactionSurveyItem,
   CustomerSatisfactionSurveyItemCreate,
+  CustomerSatisfactionSurveyItemObsolete,
   CustomerSatisfactionSurveyItemStatus,
   CustomerSatisfactionSurveyItemUpdate
 } from '@/types/logistics/quality/complaint/customer-satisfaction-survey-item';
@@ -117,6 +118,19 @@ export function deleteCustomerSatisfactionSurveyItemBatch(ids: string[]): Promis
 export function updateCustomerSatisfactionSurveyItemStatus(dto: CustomerSatisfactionSurveyItemStatus): Promise<CustomerSatisfactionSurveyItem> {
   return request<CustomerSatisfactionSurveyItem>({
     url: `${CUSTOMER_SATISFACTION_SURVEY_ITEM_API_BASE}/status`,
+    method: 'put',
+    data: dto,
+  });
+}
+
+/**
+ * 更新客户满意度调查项目明细作废状态
+ * @param {CustomerSatisfactionSurveyItemObsolete} dto 作废 DTO
+ * @returns {Promise<CustomerSatisfactionSurveyItem>} 客户满意度调查项目明细DTO
+ */
+export function updateCustomerSatisfactionSurveyItemObsolete(dto: CustomerSatisfactionSurveyItemObsolete): Promise<CustomerSatisfactionSurveyItem> {
+  return request<CustomerSatisfactionSurveyItem>({
+    url: `${CUSTOMER_SATISFACTION_SURVEY_ITEM_API_BASE}/obsolete`,
     method: 'put',
     data: dto,
   });

@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Application.Services.Logistics.Sales
 // 文件名称：TaktSalesQuotationItemService.cs
-// 创建时间：2026-07-01
+// 创建时间：2026-07-09
 // 创建人：Takt365(Cursor AI)
 // 功能描述：销售报价明细应用服务实现
 // 
@@ -118,6 +118,7 @@ public class TaktSalesQuotationItemService : TaktServiceBase, ITaktSalesQuotatio
     public async Task<TaktSalesQuotationItemDto> CreateSalesQuotationItemAsync(TaktSalesQuotationItemCreateDto dto)
     {
         var entity = dto.Adapt<TaktSalesQuotationItem>();
+        entity.IsObsolete = 0;
         await StampSalesQuotationItemSalesQuotationAsync(entity, dto);
         var isUnique_ix_takt_logistics_sales_quotation_item_line_unique = await _uniqueValidator.IsUniqueAsync(
             _salesQuotationItemRepository,
@@ -174,11 +175,21 @@ public class TaktSalesQuotationItemService : TaktServiceBase, ITaktSalesQuotatio
     /// <returns>任务</returns>
     public async Task DeleteSalesQuotationItemByIdAsync(long id)
     {
-        var deleted = await _salesQuotationItemRepository.DeleteAsync(id);
-        if (!deleted)
+        var entity = await _salesQuotationItemRepository.GetByIdAsync(id);
+        if (entity == null)
         {
             throw new TaktBusinessException("销售报价明细不存在或已删除");
         }
+        if (entity.TenantCode != CurrentTenantCode || entity.CompanyCode != CurrentCompanyCode)
+        {
+            throw new TaktBusinessException("销售报价明细不存在或已删除");
+        }
+        if (entity.IsObsolete == 1)
+        {
+            throw new TaktBusinessException("销售报价明细已作废");
+        }
+        entity.IsObsolete = 1;
+        await _salesQuotationItemRepository.UpdateAsync(entity);
     }
 
     /// <summary>
@@ -197,6 +208,27 @@ public class TaktSalesQuotationItemService : TaktServiceBase, ITaktSalesQuotatio
         {
             await DeleteSalesQuotationItemByIdAsync(id);
         }
+    }
+
+    /// <summary>
+    /// 更新销售报价明细作废状态
+    /// </summary>
+    /// <param name="dto">作废DTO</param>
+    /// <returns>DTO</returns>
+    public async Task<TaktSalesQuotationItemDto> UpdateSalesQuotationItemObsoleteAsync(TaktSalesQuotationItemObsoleteDto dto)
+    {
+        var entity = await _salesQuotationItemRepository.GetByIdAsync(dto.SalesQuotationItemId);
+        if (entity == null)
+        {
+            throw new TaktBusinessException("销售报价明细不存在");
+        }
+        if (entity.TenantCode != CurrentTenantCode || entity.CompanyCode != CurrentCompanyCode)
+        {
+            throw new TaktBusinessException("销售报价明细不存在");
+        }
+        entity.IsObsolete = dto.IsObsolete;
+        await _salesQuotationItemRepository.UpdateAsync(entity);
+        return await GetSalesQuotationItemByIdAsync(dto.SalesQuotationItemId) ?? throw new TaktBusinessException("销售报价明细不存在");
     }
 
     /// <summary>
@@ -330,6 +362,15 @@ public class TaktSalesQuotationItemService : TaktServiceBase, ITaktSalesQuotatio
     private static Expression<Func<TaktSalesQuotationItem, bool>> QueryExpression(TaktSalesQuotationItemQueryDto? queryDto)
     {
         var exp = Expressionable.Create<TaktSalesQuotationItem>();
+
+        if (queryDto?.IsObsolete.HasValue == true)
+        {
+            exp = exp.And(x => x.IsObsolete == queryDto.IsObsolete);
+        }
+        else
+        {
+            exp = exp.And(x => x.IsObsolete == 0);
+        }
 
         if (!string.IsNullOrEmpty(queryDto?.KeyWords))
         {

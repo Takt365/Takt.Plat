@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：frontend/src/api/logistics/manufacturing/scheduling
 // 文件名称：aps-operation.ts
-// 创建时间：2026-06-30
+// 创建时间：2026-07-09
 // 创建人：Takt365(Auto Generated)
 // 功能描述：logistics/manufacturing/scheduling 模块 API（自动生成，请勿手改路由常量）
 // 
@@ -18,6 +18,7 @@ import type {
 import type {
   ApsOperation,
   ApsOperationCreate,
+  ApsOperationObsolete,
   ApsOperationStatus,
   ApsOperationUpdate
 } from '@/types/logistics/manufacturing/scheduling/aps-operation';
@@ -117,6 +118,19 @@ export function deleteApsOperationBatch(ids: string[]): Promise<void> {
 export function updateApsOperationStatus(dto: ApsOperationStatus): Promise<ApsOperation> {
   return request<ApsOperation>({
     url: `${APS_OPERATION_API_BASE}/status`,
+    method: 'put',
+    data: dto,
+  });
+}
+
+/**
+ * 更新APS工序排程作废状态
+ * @param {ApsOperationObsolete} dto 作废 DTO
+ * @returns {Promise<ApsOperation>} APS工序排程DTO
+ */
+export function updateApsOperationObsolete(dto: ApsOperationObsolete): Promise<ApsOperation> {
+  return request<ApsOperation>({
+    url: `${APS_OPERATION_API_BASE}/obsolete`,
     method: 'put',
     data: dto,
   });

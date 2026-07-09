@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：frontend/src/types/logistics/quality/complaint
 // 文件名称：customer-complaint-item.d.ts
-// 创建时间：2026-06-23
+// 创建时间：2026-07-09
 // 创建人：Takt365(Auto Generated)
 // 功能描述：logistics/quality/complaint 模块类型定义（自动生成；类型名去 Takt 前缀与末尾 Dto，如 TaktCompanyDto → Company）
 // 
@@ -29,12 +29,12 @@ export interface CustomerComplaintItem extends CompanyDtoBase {
   customerComplaintItemId: string;
 
   /**
-   * 客诉ID（主子表关系，序列化为string以避免Javascript精度问题）
+   * 客诉 ID（关联 TaktCustomerComplaint.Id，选项 TaktCustomerComplaints/options）
    */
   complaintId: string;
 
   /**
-   * 客诉名称（填充字段）
+   * 客诉 名称（填充字段）
    */
   complaintName?: string;
 
@@ -49,7 +49,7 @@ export interface CustomerComplaintItem extends CompanyDtoBase {
   lineNumber: number;
 
   /**
-   * 产品编码
+   * 产品编码（选项 TaktMaterials/options，DictValue=MaterialCode）
    */
   productCode?: string;
 
@@ -64,7 +64,7 @@ export interface CustomerComplaintItem extends CompanyDtoBase {
   batchNo?: string;
 
   /**
-   * 不良项目类型（0=外观，1=尺寸，2=性能，3=功能，4=包装，5=其他）
+   * 不良项目类型（字典 logistics_quality_complaint_item_type）
    */
   itemType: number;
 
@@ -74,7 +74,7 @@ export interface CustomerComplaintItem extends CompanyDtoBase {
   defectDescription: string;
 
   /**
-   * 缺点等级（CR=严重，MA=主要，MI=次要）
+   * 缺点等级（字典 logistics_quality_defect_severity_code，DictValue=CR/MA/MI）
    */
   defectLevel: string;
 
@@ -99,7 +99,7 @@ export interface CustomerComplaintItem extends CompanyDtoBase {
   improvementAction?: string;
 
   /**
-   * 改善责任人
+   * 改善责任人（选项 TaktEmployees/options，DictValue=EmployeeCode）
    */
   improvementResponsible?: string;
 
@@ -114,14 +114,19 @@ export interface CustomerComplaintItem extends CompanyDtoBase {
   actualCompletionDate?: string;
 
   /**
-   * 改善状态（0=待改善，1=改善中，2=已完成，3=已验证）
+   * 附件路径（多个附件用逗号分隔）
+   */
+  attachmentPaths?: string;
+
+  /**
+   * 改善状态（字典 logistics_quality_improvement_status）
    */
   improvementStatus: number;
 
   /**
-   * 附件路径（多个附件用逗号分隔）
+   * 是否作废（字典 sys_yes_no_type，0=否 1=是；编辑移除子行时标记作废）
    */
-  attachmentPaths?: string;
+  isObsolete: number;
 
   /**
    * 客诉主表 （主表：TaktCustomerComplaint）
@@ -149,7 +154,7 @@ export interface CustomerComplaintItemQuery extends TaktPagedQuery {
   companyCode?: string;
 
   /**
-   * 客诉ID（主子表关系，序列化为string以避免Javascript精度问题）
+   * 客诉 ID（关联 TaktCustomerComplaint.Id，选项 TaktCustomerComplaints/options）
    */
   complaintId?: string;
 
@@ -164,7 +169,7 @@ export interface CustomerComplaintItemQuery extends TaktPagedQuery {
   lineNumber?: number;
 
   /**
-   * 产品编码
+   * 产品编码（选项 TaktMaterials/options，DictValue=MaterialCode）
    */
   productCode?: string;
 
@@ -179,7 +184,7 @@ export interface CustomerComplaintItemQuery extends TaktPagedQuery {
   batchNo?: string;
 
   /**
-   * 不良项目类型（0=外观，1=尺寸，2=性能，3=功能，4=包装，5=其他）
+   * 不良项目类型（字典 logistics_quality_complaint_item_type）
    */
   itemType?: number;
 
@@ -189,7 +194,7 @@ export interface CustomerComplaintItemQuery extends TaktPagedQuery {
   defectDescription?: string;
 
   /**
-   * 缺点等级（CR=严重，MA=主要，MI=次要）
+   * 缺点等级（字典 logistics_quality_defect_severity_code，DictValue=CR/MA/MI）
    */
   defectLevel?: string;
 
@@ -214,7 +219,7 @@ export interface CustomerComplaintItemQuery extends TaktPagedQuery {
   improvementAction?: string;
 
   /**
-   * 改善责任人
+   * 改善责任人（选项 TaktEmployees/options，DictValue=EmployeeCode）
    */
   improvementResponsible?: string;
 
@@ -239,14 +244,19 @@ export interface CustomerComplaintItemQuery extends TaktPagedQuery {
   actualCompletionDateEnd?: string;
 
   /**
-   * 改善状态（0=待改善，1=改善中，2=已完成，3=已验证）
+   * 附件路径（多个附件用逗号分隔）
+   */
+  attachmentPaths?: string;
+
+  /**
+   * 改善状态（字典 logistics_quality_improvement_status）
    */
   improvementStatus?: number;
 
   /**
-   * 附件路径（多个附件用逗号分隔）
+   * 是否作废（字典 sys_yes_no_type，0=否 1=是；编辑移除子行时标记作废）
    */
-  attachmentPaths?: string;
+  isObsolete?: number;
 
   /**
    * 创建时间（范围查询-开始）
@@ -293,7 +303,7 @@ export interface CustomerComplaintItemCreate {
   companyDefaultCulture: string;
 
   /**
-   * 客诉ID（主子表关系，序列化为string以避免Javascript精度问题）
+   * 客诉 ID（关联 TaktCustomerComplaint.Id，选项 TaktCustomerComplaints/options）
    */
   complaintId: string;
 
@@ -308,7 +318,7 @@ export interface CustomerComplaintItemCreate {
   lineNumber: number;
 
   /**
-   * 产品编码
+   * 产品编码（选项 TaktMaterials/options，DictValue=MaterialCode）
    */
   productCode?: string;
 
@@ -323,7 +333,7 @@ export interface CustomerComplaintItemCreate {
   batchNo?: string;
 
   /**
-   * 不良项目类型（0=外观，1=尺寸，2=性能，3=功能，4=包装，5=其他）
+   * 不良项目类型（字典 logistics_quality_complaint_item_type）
    */
   itemType: number;
 
@@ -333,7 +343,7 @@ export interface CustomerComplaintItemCreate {
   defectDescription: string;
 
   /**
-   * 缺点等级（CR=严重，MA=主要，MI=次要）
+   * 缺点等级（字典 logistics_quality_defect_severity_code，DictValue=CR/MA/MI）
    */
   defectLevel: string;
 
@@ -358,7 +368,7 @@ export interface CustomerComplaintItemCreate {
   improvementAction?: string;
 
   /**
-   * 改善责任人
+   * 改善责任人（选项 TaktEmployees/options，DictValue=EmployeeCode）
    */
   improvementResponsible?: string;
 
@@ -373,14 +383,19 @@ export interface CustomerComplaintItemCreate {
   actualCompletionDate?: string;
 
   /**
-   * 改善状态（0=待改善，1=改善中，2=已完成，3=已验证）
+   * 附件路径（多个附件用逗号分隔）
+   */
+  attachmentPaths?: string;
+
+  /**
+   * 改善状态（字典 logistics_quality_improvement_status）
    */
   improvementStatus: number;
 
   /**
-   * 附件路径（多个附件用逗号分隔）
+   * 是否作废（字典 sys_yes_no_type，0=否 1=是；编辑移除子行时标记作废）
    */
-  attachmentPaths?: string;
+  isObsolete: number;
 
   /**
    * 扩展字段JSON
@@ -422,9 +437,28 @@ export interface CustomerComplaintItemStatus {
   customerComplaintItemId: string;
 
   /**
-   * 改善状态（0=待改善，1=改善中，2=已完成，3=已验证）
+   * 改善状态（字典 logistics_quality_improvement_status）
    */
   improvementStatus: number;
+
+}
+
+
+/**
+ * CustomerComplaintItem 作废/撤销作废 DTO
+ * 对应前端 CustomerComplaintItemObsolete
+ * @description 对应后端 TaktCustomerComplaintItemObsoleteDto
+ */
+export interface CustomerComplaintItemObsolete {
+  /**
+   * CustomerComplaintItemID
+   */
+  customerComplaintItemId: string;
+
+  /**
+   * 是否作废（字典 sys_yes_no_type，0=否 1=是；编辑移除子行时标记作废）
+   */
+  isObsolete: number;
 
 }
 
@@ -446,7 +480,7 @@ export interface CustomerComplaintItemTemplate {
   companyCode?: string;
 
   /**
-   * 客诉ID（主子表关系，序列化为string以避免Javascript精度问题）
+   * 客诉 ID（关联 TaktCustomerComplaint.Id，选项 TaktCustomerComplaints/options）
    */
   complaintId?: string;
 
@@ -461,7 +495,7 @@ export interface CustomerComplaintItemTemplate {
   lineNumber?: number;
 
   /**
-   * 产品编码
+   * 产品编码（选项 TaktMaterials/options，DictValue=MaterialCode）
    */
   productCode?: string;
 
@@ -476,7 +510,7 @@ export interface CustomerComplaintItemTemplate {
   batchNo?: string;
 
   /**
-   * 不良项目类型（0=外观，1=尺寸，2=性能，3=功能，4=包装，5=其他）
+   * 不良项目类型（字典 logistics_quality_complaint_item_type）
    */
   itemType?: number;
 
@@ -486,7 +520,7 @@ export interface CustomerComplaintItemTemplate {
   defectDescription?: string;
 
   /**
-   * 缺点等级（CR=严重，MA=主要，MI=次要）
+   * 缺点等级（字典 logistics_quality_defect_severity_code，DictValue=CR/MA/MI）
    */
   defectLevel?: string;
 
@@ -511,7 +545,7 @@ export interface CustomerComplaintItemTemplate {
   improvementAction?: string;
 
   /**
-   * 改善责任人
+   * 改善责任人（选项 TaktEmployees/options，DictValue=EmployeeCode）
    */
   improvementResponsible?: string;
 
@@ -526,14 +560,19 @@ export interface CustomerComplaintItemTemplate {
   actualCompletionDate?: string;
 
   /**
-   * 改善状态（0=待改善，1=改善中，2=已完成，3=已验证）
+   * 附件路径（多个附件用逗号分隔）
+   */
+  attachmentPaths?: string;
+
+  /**
+   * 改善状态（字典 logistics_quality_improvement_status）
    */
   improvementStatus?: number;
 
   /**
-   * 附件路径（多个附件用逗号分隔）
+   * 是否作废（字典 sys_yes_no_type，0=否 1=是；编辑移除子行时标记作废）
    */
-  attachmentPaths?: string;
+  isObsolete?: number;
 
   /**
    * 扩展字段JSON
@@ -570,7 +609,7 @@ export interface CustomerComplaintItemImport {
   companyDefaultCulture?: string;
 
   /**
-   * 客诉ID（主子表关系，序列化为string以避免Javascript精度问题）
+   * 客诉 ID（关联 TaktCustomerComplaint.Id，选项 TaktCustomerComplaints/options）
    */
   complaintId?: string;
 
@@ -585,7 +624,7 @@ export interface CustomerComplaintItemImport {
   lineNumber?: number;
 
   /**
-   * 产品编码
+   * 产品编码（选项 TaktMaterials/options，DictValue=MaterialCode）
    */
   productCode?: string;
 
@@ -600,7 +639,7 @@ export interface CustomerComplaintItemImport {
   batchNo?: string;
 
   /**
-   * 不良项目类型（0=外观，1=尺寸，2=性能，3=功能，4=包装，5=其他）
+   * 不良项目类型（字典 logistics_quality_complaint_item_type）
    */
   itemType?: number;
 
@@ -610,7 +649,7 @@ export interface CustomerComplaintItemImport {
   defectDescription?: string;
 
   /**
-   * 缺点等级（CR=严重，MA=主要，MI=次要）
+   * 缺点等级（字典 logistics_quality_defect_severity_code，DictValue=CR/MA/MI）
    */
   defectLevel?: string;
 
@@ -635,7 +674,7 @@ export interface CustomerComplaintItemImport {
   improvementAction?: string;
 
   /**
-   * 改善责任人
+   * 改善责任人（选项 TaktEmployees/options，DictValue=EmployeeCode）
    */
   improvementResponsible?: string;
 
@@ -650,14 +689,19 @@ export interface CustomerComplaintItemImport {
   actualCompletionDate?: string;
 
   /**
-   * 改善状态（0=待改善，1=改善中，2=已完成，3=已验证）
+   * 附件路径（多个附件用逗号分隔）
+   */
+  attachmentPaths?: string;
+
+  /**
+   * 改善状态（字典 logistics_quality_improvement_status）
    */
   improvementStatus?: number;
 
   /**
-   * 附件路径（多个附件用逗号分隔）
+   * 是否作废（字典 sys_yes_no_type，0=否 1=是；编辑移除子行时标记作废）
    */
-  attachmentPaths?: string;
+  isObsolete?: number;
 
   /**
    * 扩展字段JSON
@@ -689,7 +733,7 @@ export interface CustomerComplaintItemExport {
   companyCode: string;
 
   /**
-   * 客诉ID（主子表关系，序列化为string以避免Javascript精度问题）
+   * 客诉 ID（关联 TaktCustomerComplaint.Id，选项 TaktCustomerComplaints/options）
    */
   complaintId: string;
 
@@ -704,7 +748,7 @@ export interface CustomerComplaintItemExport {
   lineNumber: number;
 
   /**
-   * 产品编码
+   * 产品编码（选项 TaktMaterials/options，DictValue=MaterialCode）
    */
   productCode?: string;
 
@@ -719,7 +763,7 @@ export interface CustomerComplaintItemExport {
   batchNo?: string;
 
   /**
-   * 不良项目类型（0=外观，1=尺寸，2=性能，3=功能，4=包装，5=其他）
+   * 不良项目类型（字典 logistics_quality_complaint_item_type）
    */
   itemType: number;
 
@@ -729,7 +773,7 @@ export interface CustomerComplaintItemExport {
   defectDescription: string;
 
   /**
-   * 缺点等级（CR=严重，MA=主要，MI=次要）
+   * 缺点等级（字典 logistics_quality_defect_severity_code，DictValue=CR/MA/MI）
    */
   defectLevel: string;
 
@@ -754,7 +798,7 @@ export interface CustomerComplaintItemExport {
   improvementAction?: string;
 
   /**
-   * 改善责任人
+   * 改善责任人（选项 TaktEmployees/options，DictValue=EmployeeCode）
    */
   improvementResponsible?: string;
 
@@ -769,14 +813,19 @@ export interface CustomerComplaintItemExport {
   actualCompletionDate?: string;
 
   /**
-   * 改善状态（0=待改善，1=改善中，2=已完成，3=已验证）
+   * 附件路径（多个附件用逗号分隔）
+   */
+  attachmentPaths?: string;
+
+  /**
+   * 改善状态（字典 logistics_quality_improvement_status）
    */
   improvementStatus: number;
 
   /**
-   * 附件路径（多个附件用逗号分隔）
+   * 是否作废（字典 sys_yes_no_type，0=否 1=是；编辑移除子行时标记作废）
    */
-  attachmentPaths?: string;
+  isObsolete: number;
 
   /**
    * 扩展字段JSON

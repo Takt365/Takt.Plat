@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Application.Dtos.Logistics.Manufacturing.Bom
 // 文件名称：TaktRoutingDtos.cs
-// 创建时间：2026-06-24
+// 创建时间：2026-07-09
 // 创建人：Takt365(Auto Generated)
 // 功能描述：Routing 模块 DTO（由 generate-dtos-from-entity.cjs 根据 TaktRouting 生成，请按需审阅）
 // 
@@ -36,12 +36,12 @@ public class TaktRoutingDto : TaktApprovalDtoBase
     public long RoutingId { get; set; }
 
     /// <summary>
-    /// 工厂代码
+    /// 工厂代码（选项 TaktPlants/options，DictValue=PlantCode）
     /// </summary>
     public string PlantCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 工作中心
+    /// 工作中心（选项 TaktWorkCenters/options，按工厂 ExtValue 过滤）
     /// </summary>
     public string WorkCenter { get; set; } = string.Empty;
 
@@ -56,12 +56,12 @@ public class TaktRoutingDto : TaktApprovalDtoBase
     public string RoutingName { get; set; } = string.Empty;
 
     /// <summary>
-    /// 用途（1=生产，2=工程/设计，3=万能，4=工厂维护）
+    /// 用途（字典 logistics_routing_purpose：1=生产，2=工程/设计，3=万能，4=工厂维护）
     /// </summary>
     public int Purpose { get; set; } = 0;
 
     /// <summary>
-    /// 适用物料编码
+    /// 适用物料编码（选项 TaktMaterials/options）
     /// </summary>
     public string MaterialCode { get; set; } = string.Empty;
 
@@ -69,6 +69,11 @@ public class TaktRoutingDto : TaktApprovalDtoBase
     /// 版本号
     /// </summary>
     public string Version { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 状态（字典 logistics_routing_status：1=生成的，2=对订单下达，3=对成本核算下达，4=下达的）
+    /// </summary>
+    public int RoutingStatus { get; set; } = 0;
 
     /// <summary>
     /// 生效日期
@@ -86,21 +91,10 @@ public class TaktRoutingDto : TaktApprovalDtoBase
     public string? RoutingDescription { get; set; } = string.Empty;
 
     /// <summary>
-    /// 状态（1=生成的，2=对订单下达，3=对成本核算下达，4=下达的（通用））
-    /// </summary>
-    public int RoutingStatus { get; set; } = 0;
-
-    /// <summary>
     /// 工艺路线明细列表（主子表关系）
     /// （子表：TaktRoutingItem）
     /// </summary>
     public List<TaktRoutingItemDto>? Items { get; set; }
-
-    /// <summary>
-    /// 变更日志列表（主子表关系）
-    /// （子表：TaktRoutingChangeLog）
-    /// </summary>
-    public List<TaktRoutingChangeLogDto>? ChangeLogs { get; set; }
 
 }
 
@@ -125,12 +119,12 @@ public class TaktRoutingQueryDto : TaktPagedQuery
     public string? CompanyCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 工厂代码
+    /// 工厂代码（选项 TaktPlants/options，DictValue=PlantCode）
     /// </summary>
     public string? PlantCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 工作中心
+    /// 工作中心（选项 TaktWorkCenters/options，按工厂 ExtValue 过滤）
     /// </summary>
     public string? WorkCenter { get; set; } = string.Empty;
 
@@ -145,12 +139,12 @@ public class TaktRoutingQueryDto : TaktPagedQuery
     public string? RoutingName { get; set; } = string.Empty;
 
     /// <summary>
-    /// 用途（1=生产，2=工程/设计，3=万能，4=工厂维护）
+    /// 用途（字典 logistics_routing_purpose：1=生产，2=工程/设计，3=万能，4=工厂维护）
     /// </summary>
     public int? Purpose { get; set; }
 
     /// <summary>
-    /// 适用物料编码
+    /// 适用物料编码（选项 TaktMaterials/options）
     /// </summary>
     public string? MaterialCode { get; set; } = string.Empty;
 
@@ -158,6 +152,11 @@ public class TaktRoutingQueryDto : TaktPagedQuery
     /// 版本号
     /// </summary>
     public string? Version { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 状态（字典 logistics_routing_status：1=生成的，2=对订单下达，3=对成本核算下达，4=下达的）
+    /// </summary>
+    public int? RoutingStatus { get; set; }
 
     /// <summary>
     /// 生效日期（范围查询-开始）
@@ -183,11 +182,6 @@ public class TaktRoutingQueryDto : TaktPagedQuery
     /// 工艺路线说明
     /// </summary>
     public string? RoutingDescription { get; set; } = string.Empty;
-
-    /// <summary>
-    /// 状态（1=生成的，2=对订单下达，3=对成本核算下达，4=下达的（通用））
-    /// </summary>
-    public int? RoutingStatus { get; set; }
 
     /// <summary>
     /// 审批状态（字典 sys_approval_status；与 TaktApprovalEntityBase.ApprovalStatus 一致）
@@ -278,15 +272,15 @@ public class TaktRoutingCreateDto
     public string CompanyDefaultCulture { get; set; } = string.Empty;
 
     /// <summary>
-    /// 工厂代码
+    /// 工厂代码（选项 TaktPlants/options，DictValue=PlantCode）
     /// </summary>
-    [Required(ErrorMessage = "工厂代码不能为空")]
+    [Required(ErrorMessage = "工厂代码（选项 TaktPlants/options，DictValue=PlantCode）不能为空")]
     public string PlantCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 工作中心
+    /// 工作中心（选项 TaktWorkCenters/options，按工厂 ExtValue 过滤）
     /// </summary>
-    [Required(ErrorMessage = "工作中心不能为空")]
+    [Required(ErrorMessage = "工作中心（选项 TaktWorkCenters/options，按工厂 ExtValue 过滤）不能为空")]
     public string WorkCenter { get; set; } = string.Empty;
 
     /// <summary>
@@ -302,14 +296,14 @@ public class TaktRoutingCreateDto
     public string RoutingName { get; set; } = string.Empty;
 
     /// <summary>
-    /// 用途（1=生产，2=工程/设计，3=万能，4=工厂维护）
+    /// 用途（字典 logistics_routing_purpose：1=生产，2=工程/设计，3=万能，4=工厂维护）
     /// </summary>
     public int Purpose { get; set; } = 0;
 
     /// <summary>
-    /// 适用物料编码
+    /// 适用物料编码（选项 TaktMaterials/options）
     /// </summary>
-    [Required(ErrorMessage = "适用物料编码不能为空")]
+    [Required(ErrorMessage = "适用物料编码（选项 TaktMaterials/options）不能为空")]
     public string MaterialCode { get; set; } = string.Empty;
 
     /// <summary>
@@ -317,6 +311,11 @@ public class TaktRoutingCreateDto
     /// </summary>
     [Required(ErrorMessage = "版本号不能为空")]
     public string Version { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 状态（字典 logistics_routing_status：1=生成的，2=对订单下达，3=对成本核算下达，4=下达的）
+    /// </summary>
+    public int RoutingStatus { get; set; } = 0;
 
     /// <summary>
     /// 生效日期
@@ -334,19 +333,9 @@ public class TaktRoutingCreateDto
     public string? RoutingDescription { get; set; } = string.Empty;
 
     /// <summary>
-    /// 状态（1=生成的，2=对订单下达，3=对成本核算下达，4=下达的（通用））
-    /// </summary>
-    public int RoutingStatus { get; set; } = 0;
-
-    /// <summary>
     /// 工艺路线明细列表（主子表关系）（子表，级联保存）
     /// </summary>
-    public List<TaktRoutingItemCreateDto>? Items { get; set; }
-
-    /// <summary>
-    /// 变更日志列表（主子表关系）（子表，级联保存）
-    /// </summary>
-    public List<TaktRoutingChangeLogCreateDto>? ChangeLogs { get; set; }
+    public List<TaktRoutingItemUpdateDto>? Items { get; set; }
 
     /// <summary>
     /// 扩展字段JSON
@@ -398,9 +387,9 @@ public class TaktRoutingStatusDto
     public long RoutingId { get; set; }
 
     /// <summary>
-    /// 状态（1=生成的，2=对订单下达，3=对成本核算下达，4=下达的（通用））
+    /// 状态（字典 logistics_routing_status：1=生成的，2=对订单下达，3=对成本核算下达，4=下达的）
     /// </summary>
-    [Required(ErrorMessage = "状态（1=生成的，2=对订单下达，3=对成本核算下达，4=下达的（通用））不能为空")]
+    [Required(ErrorMessage = "状态（字典 logistics_routing_status：1=生成的，2=对订单下达，3=对成本核算下达，4=下达的）不能为空")]
     public int RoutingStatus { get; set; } = 0;
 }
 
@@ -424,12 +413,12 @@ public class TaktRoutingTemplateDto
     public string? CompanyCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 工厂代码
+    /// 工厂代码（选项 TaktPlants/options，DictValue=PlantCode）
     /// </summary>
     public string? PlantCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 工作中心
+    /// 工作中心（选项 TaktWorkCenters/options，按工厂 ExtValue 过滤）
     /// </summary>
     public string? WorkCenter { get; set; } = string.Empty;
 
@@ -444,12 +433,12 @@ public class TaktRoutingTemplateDto
     public string? RoutingName { get; set; } = string.Empty;
 
     /// <summary>
-    /// 用途（1=生产，2=工程/设计，3=万能，4=工厂维护）
+    /// 用途（字典 logistics_routing_purpose：1=生产，2=工程/设计，3=万能，4=工厂维护）
     /// </summary>
     public int? Purpose { get; set; }
 
     /// <summary>
-    /// 适用物料编码
+    /// 适用物料编码（选项 TaktMaterials/options）
     /// </summary>
     public string? MaterialCode { get; set; } = string.Empty;
 
@@ -457,6 +446,11 @@ public class TaktRoutingTemplateDto
     /// 版本号
     /// </summary>
     public string? Version { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 状态（字典 logistics_routing_status：1=生成的，2=对订单下达，3=对成本核算下达，4=下达的）
+    /// </summary>
+    public int? RoutingStatus { get; set; }
 
     /// <summary>
     /// 生效日期
@@ -474,19 +468,9 @@ public class TaktRoutingTemplateDto
     public string? RoutingDescription { get; set; } = string.Empty;
 
     /// <summary>
-    /// 状态（1=生成的，2=对订单下达，3=对成本核算下达，4=下达的（通用））
-    /// </summary>
-    public int? RoutingStatus { get; set; }
-
-    /// <summary>
     /// 工艺路线明细列表（主子表关系）（子表，级联保存）
     /// </summary>
     public List<TaktRoutingItemCreateDto>? Items { get; set; }
-
-    /// <summary>
-    /// 变更日志列表（主子表关系）（子表，级联保存）
-    /// </summary>
-    public List<TaktRoutingChangeLogCreateDto>? ChangeLogs { get; set; }
 
     /// <summary>
     /// 扩展字段JSON
@@ -521,12 +505,12 @@ public class TaktRoutingImportDto
     public string? CompanyDefaultCulture { get; set; } = string.Empty;
 
     /// <summary>
-    /// 工厂代码
+    /// 工厂代码（选项 TaktPlants/options，DictValue=PlantCode）
     /// </summary>
     public string? PlantCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 工作中心
+    /// 工作中心（选项 TaktWorkCenters/options，按工厂 ExtValue 过滤）
     /// </summary>
     public string? WorkCenter { get; set; } = string.Empty;
 
@@ -541,12 +525,12 @@ public class TaktRoutingImportDto
     public string? RoutingName { get; set; } = string.Empty;
 
     /// <summary>
-    /// 用途（1=生产，2=工程/设计，3=万能，4=工厂维护）
+    /// 用途（字典 logistics_routing_purpose：1=生产，2=工程/设计，3=万能，4=工厂维护）
     /// </summary>
     public int? Purpose { get; set; }
 
     /// <summary>
-    /// 适用物料编码
+    /// 适用物料编码（选项 TaktMaterials/options）
     /// </summary>
     public string? MaterialCode { get; set; } = string.Empty;
 
@@ -554,6 +538,11 @@ public class TaktRoutingImportDto
     /// 版本号
     /// </summary>
     public string? Version { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 状态（字典 logistics_routing_status：1=生成的，2=对订单下达，3=对成本核算下达，4=下达的）
+    /// </summary>
+    public int? RoutingStatus { get; set; }
 
     /// <summary>
     /// 生效日期
@@ -571,19 +560,9 @@ public class TaktRoutingImportDto
     public string? RoutingDescription { get; set; } = string.Empty;
 
     /// <summary>
-    /// 状态（1=生成的，2=对订单下达，3=对成本核算下达，4=下达的（通用））
-    /// </summary>
-    public int? RoutingStatus { get; set; }
-
-    /// <summary>
     /// 工艺路线明细列表（主子表关系）（子表，级联保存）
     /// </summary>
     public List<TaktRoutingItemCreateDto>? Items { get; set; }
-
-    /// <summary>
-    /// 变更日志列表（主子表关系）（子表，级联保存）
-    /// </summary>
-    public List<TaktRoutingChangeLogCreateDto>? ChangeLogs { get; set; }
 
     /// <summary>
     /// 扩展字段JSON
@@ -614,12 +593,12 @@ public class TaktRoutingExportDto
     public long RoutingId { get; set; }
 
     /// <summary>
-    /// 工厂代码
+    /// 工厂代码（选项 TaktPlants/options，DictValue=PlantCode）
     /// </summary>
     public string PlantCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 工作中心
+    /// 工作中心（选项 TaktWorkCenters/options，按工厂 ExtValue 过滤）
     /// </summary>
     public string WorkCenter { get; set; } = string.Empty;
 
@@ -634,12 +613,12 @@ public class TaktRoutingExportDto
     public string RoutingName { get; set; } = string.Empty;
 
     /// <summary>
-    /// 用途（1=生产，2=工程/设计，3=万能，4=工厂维护）
+    /// 用途（字典 logistics_routing_purpose：1=生产，2=工程/设计，3=万能，4=工厂维护）
     /// </summary>
     public int Purpose { get; set; } = 0;
 
     /// <summary>
-    /// 适用物料编码
+    /// 适用物料编码（选项 TaktMaterials/options）
     /// </summary>
     public string MaterialCode { get; set; } = string.Empty;
 
@@ -647,6 +626,11 @@ public class TaktRoutingExportDto
     /// 版本号
     /// </summary>
     public string Version { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 状态（字典 logistics_routing_status：1=生成的，2=对订单下达，3=对成本核算下达，4=下达的）
+    /// </summary>
+    public int RoutingStatus { get; set; } = 0;
 
     /// <summary>
     /// 生效日期
@@ -662,11 +646,6 @@ public class TaktRoutingExportDto
     /// 工艺路线说明
     /// </summary>
     public string? RoutingDescription { get; set; } = string.Empty;
-
-    /// <summary>
-    /// 状态（1=生成的，2=对订单下达，3=对成本核算下达，4=下达的（通用））
-    /// </summary>
-    public int RoutingStatus { get; set; } = 0;
 
     /// <summary>
     /// 扩展字段JSON

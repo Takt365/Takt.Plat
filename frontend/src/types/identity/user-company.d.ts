@@ -22,6 +22,6 @@ export interface UserCompany extends CompanyDtoBase {
   userId: string;
   /** 用户名称（填充） */
   userName?: string;
-  /** 是否默认公司 */
+  /** 默认公司 */
   isDefault: TaktYesNo;
 }

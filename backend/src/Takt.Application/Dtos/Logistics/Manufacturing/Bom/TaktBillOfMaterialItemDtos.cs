@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Application.Dtos.Logistics.Manufacturing.Bom
 // 文件名称：TaktBillOfMaterialItemDtos.cs
-// 创建时间：2026-06-23
+// 创建时间：2026-07-09
 // 创建人：Takt365(Auto Generated)
 // 功能描述：BillOfMaterialItem 模块 DTO（由 generate-dtos-from-entity.cjs 根据 TaktBillOfMaterialItem 生成，请按需审阅）
 // 
@@ -57,7 +57,7 @@ public class TaktBillOfMaterialItemDto : TaktCompanyDtoBase
     public int LineNumber { get; set; } = 0;
 
     /// <summary>
-    /// 子项物料ID（关联工厂物料主数据，序列化为string以避免Javascript精度问题）
+    /// 子项物料ID（关联工厂物料 TaktMaterialPlant.Id，选项 TaktMaterialPlants/options）
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
     public long MaterialId { get; set; }
@@ -78,7 +78,7 @@ public class TaktBillOfMaterialItemDto : TaktCompanyDtoBase
     public decimal UsageQuantity { get; set; }
 
     /// <summary>
-    /// 单位（unit）
+    /// 单位（字典 logistics_unit_of_measure_code）
     /// </summary>
     public string MaterialUnit { get; set; } = string.Empty;
 
@@ -98,7 +98,7 @@ public class TaktBillOfMaterialItemDto : TaktCompanyDtoBase
     public int OperationSeq { get; set; } = 0;
 
     /// <summary>
-    /// 工作中心（work_center）
+    /// 工作中心（选项 TaktWorkCenters/options，DictValue=WorkCenterCode）
     /// </summary>
     public string? WorkCenter { get; set; } = string.Empty;
 
@@ -118,14 +118,19 @@ public class TaktBillOfMaterialItemDto : TaktCompanyDtoBase
     public int SubstitutePriority { get; set; } = 0;
 
     /// <summary>
-    /// 是否可选件（0=否，1=是，optional_flag）
+    /// 是否可选件（字典 sys_yes_no_type；0=否，1=是）
     /// </summary>
     public int IsOptional { get; set; } = 0;
 
     /// <summary>
-    /// 是否虚拟件（0=否，1=是，phantom_flag）
+    /// 是否虚拟件（字典 sys_yes_no_type；0=否，1=是）
     /// </summary>
     public int IsPhantom { get; set; } = 0;
+
+    /// <summary>
+    /// 是否作废（字典 sys_yes_no_type，0=否 1=是；编辑移除子行时标记作废）
+    /// </summary>
+    public int IsObsolete { get; set; } = 0;
 
     /// <summary>
     /// 物料清单（BOM头）
@@ -184,7 +189,7 @@ public class TaktBillOfMaterialItemQueryDto : TaktPagedQuery
     public int? LineNumber { get; set; }
 
     /// <summary>
-    /// 子项物料ID（关联工厂物料主数据，序列化为string以避免Javascript精度问题）
+    /// 子项物料ID（关联工厂物料 TaktMaterialPlant.Id，选项 TaktMaterialPlants/options）
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
     public long? MaterialId { get; set; }
@@ -200,7 +205,7 @@ public class TaktBillOfMaterialItemQueryDto : TaktPagedQuery
     public decimal? UsageQuantity { get; set; }
 
     /// <summary>
-    /// 单位（unit）
+    /// 单位（字典 logistics_unit_of_measure_code）
     /// </summary>
     public string? MaterialUnit { get; set; } = string.Empty;
 
@@ -220,7 +225,7 @@ public class TaktBillOfMaterialItemQueryDto : TaktPagedQuery
     public int? OperationSeq { get; set; }
 
     /// <summary>
-    /// 工作中心（work_center）
+    /// 工作中心（选项 TaktWorkCenters/options，DictValue=WorkCenterCode）
     /// </summary>
     public string? WorkCenter { get; set; } = string.Empty;
 
@@ -240,14 +245,19 @@ public class TaktBillOfMaterialItemQueryDto : TaktPagedQuery
     public int? SubstitutePriority { get; set; }
 
     /// <summary>
-    /// 是否可选件（0=否，1=是，optional_flag）
+    /// 是否可选件（字典 sys_yes_no_type；0=否，1=是）
     /// </summary>
     public int? IsOptional { get; set; }
 
     /// <summary>
-    /// 是否虚拟件（0=否，1=是，phantom_flag）
+    /// 是否虚拟件（字典 sys_yes_no_type；0=否，1=是）
     /// </summary>
     public int? IsPhantom { get; set; }
+
+    /// <summary>
+    /// 是否作废（字典 sys_yes_no_type，0=否 1=是；编辑移除子行时标记作废）
+    /// </summary>
+    public int? IsObsolete { get; set; }
 
     /// <summary>
     /// 创建时间（范围查询-开始）
@@ -312,7 +322,7 @@ public class TaktBillOfMaterialItemCreateDto
     public int LineNumber { get; set; } = 0;
 
     /// <summary>
-    /// 子项物料ID（关联工厂物料主数据，序列化为string以避免Javascript精度问题）
+    /// 子项物料ID（关联工厂物料 TaktMaterialPlant.Id，选项 TaktMaterialPlants/options）
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
     public long MaterialId { get; set; }
@@ -329,9 +339,9 @@ public class TaktBillOfMaterialItemCreateDto
     public decimal UsageQuantity { get; set; }
 
     /// <summary>
-    /// 单位（unit）
+    /// 单位（字典 logistics_unit_of_measure_code）
     /// </summary>
-    [Required(ErrorMessage = "单位（unit）不能为空")]
+    [Required(ErrorMessage = "单位（字典 logistics_unit_of_measure_code）不能为空")]
     public string MaterialUnit { get; set; } = string.Empty;
 
     /// <summary>
@@ -350,7 +360,7 @@ public class TaktBillOfMaterialItemCreateDto
     public int OperationSeq { get; set; } = 0;
 
     /// <summary>
-    /// 工作中心（work_center）
+    /// 工作中心（选项 TaktWorkCenters/options，DictValue=WorkCenterCode）
     /// </summary>
     public string? WorkCenter { get; set; } = string.Empty;
 
@@ -370,19 +380,24 @@ public class TaktBillOfMaterialItemCreateDto
     public int SubstitutePriority { get; set; } = 0;
 
     /// <summary>
-    /// 是否可选件（0=否，1=是，optional_flag）
+    /// 是否可选件（字典 sys_yes_no_type；0=否，1=是）
     /// </summary>
     public int IsOptional { get; set; } = 0;
 
     /// <summary>
-    /// 是否虚拟件（0=否，1=是，phantom_flag）
+    /// 是否虚拟件（字典 sys_yes_no_type；0=否，1=是）
     /// </summary>
     public int IsPhantom { get; set; } = 0;
 
     /// <summary>
+    /// 是否作废（字典 sys_yes_no_type，0=否 1=是；编辑移除子行时标记作废）
+    /// </summary>
+    public int IsObsolete { get; set; } = 0;
+
+    /// <summary>
     /// 替代料明细（一行主件可维护多条替代物料）（子表，级联保存）
     /// </summary>
-    public List<TaktBillOfMaterialSubstituteCreateDto>? Substitutes { get; set; }
+    public List<TaktBillOfMaterialSubstituteUpdateDto>? Substitutes { get; set; }
 
     /// <summary>
     /// 扩展字段JSON
@@ -414,6 +429,29 @@ public class TaktBillOfMaterialItemUpdateDto : TaktBillOfMaterialItemCreateDto
     [JsonConverter(typeof(ValueToStringConverter))]
     public long BillOfMaterialItemId { get; set; }
 
+}
+
+// ========================================
+// BillOfMaterialItem 作废 DTO
+// ========================================
+
+/// <summary>
+/// BillOfMaterialItem 作废/撤销作废 DTO
+/// </summary>
+public class TaktBillOfMaterialItemObsoleteDto
+{
+    /// <summary>
+    /// BillOfMaterialItemID
+    /// </summary>
+    [Required(ErrorMessage = "ID不能为空")]
+    [AdaptMember("Id")]
+    [JsonConverter(typeof(ValueToStringConverter))]
+    public long BillOfMaterialItemId { get; set; }
+
+    /// <summary>
+    /// 是否作废（字典 sys_yes_no_type，0=否 1=是；编辑移除子行时标记作废）
+    /// </summary>
+    public int IsObsolete { get; set; }
 }
 
 // ========================================
@@ -452,7 +490,7 @@ public class TaktBillOfMaterialItemTemplateDto
     public int? LineNumber { get; set; }
 
     /// <summary>
-    /// 子项物料ID（关联工厂物料主数据，序列化为string以避免Javascript精度问题）
+    /// 子项物料ID（关联工厂物料 TaktMaterialPlant.Id，选项 TaktMaterialPlants/options）
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
     public long? MaterialId { get; set; }
@@ -468,7 +506,7 @@ public class TaktBillOfMaterialItemTemplateDto
     public decimal? UsageQuantity { get; set; }
 
     /// <summary>
-    /// 单位（unit）
+    /// 单位（字典 logistics_unit_of_measure_code）
     /// </summary>
     public string? MaterialUnit { get; set; } = string.Empty;
 
@@ -488,7 +526,7 @@ public class TaktBillOfMaterialItemTemplateDto
     public int? OperationSeq { get; set; }
 
     /// <summary>
-    /// 工作中心（work_center）
+    /// 工作中心（选项 TaktWorkCenters/options，DictValue=WorkCenterCode）
     /// </summary>
     public string? WorkCenter { get; set; } = string.Empty;
 
@@ -508,14 +546,19 @@ public class TaktBillOfMaterialItemTemplateDto
     public int? SubstitutePriority { get; set; }
 
     /// <summary>
-    /// 是否可选件（0=否，1=是，optional_flag）
+    /// 是否可选件（字典 sys_yes_no_type；0=否，1=是）
     /// </summary>
     public int? IsOptional { get; set; }
 
     /// <summary>
-    /// 是否虚拟件（0=否，1=是，phantom_flag）
+    /// 是否虚拟件（字典 sys_yes_no_type；0=否，1=是）
     /// </summary>
     public int? IsPhantom { get; set; }
+
+    /// <summary>
+    /// 是否作废（字典 sys_yes_no_type，0=否 1=是；编辑移除子行时标记作废）
+    /// </summary>
+    public int? IsObsolete { get; set; }
 
     /// <summary>
     /// 替代料明细（一行主件可维护多条替代物料）（子表，级联保存）
@@ -571,7 +614,7 @@ public class TaktBillOfMaterialItemImportDto
     public int? LineNumber { get; set; }
 
     /// <summary>
-    /// 子项物料ID（关联工厂物料主数据，序列化为string以避免Javascript精度问题）
+    /// 子项物料ID（关联工厂物料 TaktMaterialPlant.Id，选项 TaktMaterialPlants/options）
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
     public long? MaterialId { get; set; }
@@ -587,7 +630,7 @@ public class TaktBillOfMaterialItemImportDto
     public decimal? UsageQuantity { get; set; }
 
     /// <summary>
-    /// 单位（unit）
+    /// 单位（字典 logistics_unit_of_measure_code）
     /// </summary>
     public string? MaterialUnit { get; set; } = string.Empty;
 
@@ -607,7 +650,7 @@ public class TaktBillOfMaterialItemImportDto
     public int? OperationSeq { get; set; }
 
     /// <summary>
-    /// 工作中心（work_center）
+    /// 工作中心（选项 TaktWorkCenters/options，DictValue=WorkCenterCode）
     /// </summary>
     public string? WorkCenter { get; set; } = string.Empty;
 
@@ -627,14 +670,19 @@ public class TaktBillOfMaterialItemImportDto
     public int? SubstitutePriority { get; set; }
 
     /// <summary>
-    /// 是否可选件（0=否，1=是，optional_flag）
+    /// 是否可选件（字典 sys_yes_no_type；0=否，1=是）
     /// </summary>
     public int? IsOptional { get; set; }
 
     /// <summary>
-    /// 是否虚拟件（0=否，1=是，phantom_flag）
+    /// 是否虚拟件（字典 sys_yes_no_type；0=否，1=是）
     /// </summary>
     public int? IsPhantom { get; set; }
+
+    /// <summary>
+    /// 是否作废（字典 sys_yes_no_type，0=否 1=是；编辑移除子行时标记作废）
+    /// </summary>
+    public int? IsObsolete { get; set; }
 
     /// <summary>
     /// 替代料明细（一行主件可维护多条替代物料）（子表，级联保存）
@@ -691,7 +739,7 @@ public class TaktBillOfMaterialItemExportDto
     public int LineNumber { get; set; } = 0;
 
     /// <summary>
-    /// 子项物料ID（关联工厂物料主数据，序列化为string以避免Javascript精度问题）
+    /// 子项物料ID（关联工厂物料 TaktMaterialPlant.Id，选项 TaktMaterialPlants/options）
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
     public long MaterialId { get; set; }
@@ -707,7 +755,7 @@ public class TaktBillOfMaterialItemExportDto
     public decimal UsageQuantity { get; set; }
 
     /// <summary>
-    /// 单位（unit）
+    /// 单位（字典 logistics_unit_of_measure_code）
     /// </summary>
     public string MaterialUnit { get; set; } = string.Empty;
 
@@ -727,7 +775,7 @@ public class TaktBillOfMaterialItemExportDto
     public int OperationSeq { get; set; } = 0;
 
     /// <summary>
-    /// 工作中心（work_center）
+    /// 工作中心（选项 TaktWorkCenters/options，DictValue=WorkCenterCode）
     /// </summary>
     public string? WorkCenter { get; set; } = string.Empty;
 
@@ -747,14 +795,19 @@ public class TaktBillOfMaterialItemExportDto
     public int SubstitutePriority { get; set; } = 0;
 
     /// <summary>
-    /// 是否可选件（0=否，1=是，optional_flag）
+    /// 是否可选件（字典 sys_yes_no_type；0=否，1=是）
     /// </summary>
     public int IsOptional { get; set; } = 0;
 
     /// <summary>
-    /// 是否虚拟件（0=否，1=是，phantom_flag）
+    /// 是否虚拟件（字典 sys_yes_no_type；0=否，1=是）
     /// </summary>
     public int IsPhantom { get; set; } = 0;
+
+    /// <summary>
+    /// 是否作废（字典 sys_yes_no_type，0=否 1=是；编辑移除子行时标记作废）
+    /// </summary>
+    public int IsObsolete { get; set; } = 0;
 
     /// <summary>
     /// 扩展字段JSON

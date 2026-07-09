@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：frontend/src/api/logistics/manufacturing/planning
 // 文件名称：sales-plan-item.ts
-// 创建时间：2026-06-23
+// 创建时间：2026-07-09
 // 创建人：Takt365(Auto Generated)
 // 功能描述：logistics/manufacturing/planning 模块 API（自动生成，请勿手改路由常量）
 // 
@@ -18,6 +18,7 @@ import type {
 import type {
   SalesPlanItem,
   SalesPlanItemCreate,
+  SalesPlanItemObsolete,
   SalesPlanItemUpdate
 } from '@/types/logistics/manufacturing/planning/sales-plan-item';
 
@@ -105,6 +106,19 @@ export function deleteSalesPlanItemBatch(ids: string[]): Promise<void> {
     url: `${SALES_PLAN_ITEM_API_BASE}/batch`,
     method: 'delete',
     data: ids,
+  });
+}
+
+/**
+ * 更新销售计划明细作废状态
+ * @param {SalesPlanItemObsolete} dto 作废 DTO
+ * @returns {Promise<SalesPlanItem>} 销售计划明细DTO
+ */
+export function updateSalesPlanItemObsolete(dto: SalesPlanItemObsolete): Promise<SalesPlanItem> {
+  return request<SalesPlanItem>({
+    url: `${SALES_PLAN_ITEM_API_BASE}/obsolete`,
+    method: 'put',
+    data: dto,
   });
 }
 

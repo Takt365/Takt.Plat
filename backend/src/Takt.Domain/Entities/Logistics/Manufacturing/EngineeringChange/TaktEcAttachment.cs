@@ -11,7 +11,7 @@ using Takt.Domain.Entities;
 namespace Takt.Domain.Entities.Logistics.Manufacturing.EngineeringChange;
 
 /// <summary>
-/// 设变附件实体（技术阶段一 ②，隶属 TaktEcGijutsu）。文件类别：Liaison/EPP/FPP/ExternalLiaison/TCJ 等；与主表、明细保存后由系统生成 TaktEcNotification。
+/// 设变附件实体（技术阶段一 ②，隶属 TaktEcGijutsu）。文件类别见字典 logistics_ec_attachment_type；与主表、明细保存后由系统生成 TaktEcNotification。
 /// </summary>
 [SugarTable("takt_logistics_manufacturing_ec_attachment", "设变附件表")]
 [SugarIndex("ix_ec_attachment_tenant", nameof(TenantCode), OrderByType.Asc, nameof(CompanyCode), OrderByType.Asc, false)]
@@ -41,9 +41,9 @@ public class TaktEcAttachment : TaktCompanyEntityBase
     public int LineNumber { get; set; } = 0;
 
     /// <summary>
-    /// 文件类别：Liaison=联络, EPP, FPP, ExternalLiaison=外部联络, TCJ 等
+    /// 文件类别（字典 logistics_ec_attachment_type；TL=联络，EPP=EPP，FPP=FPP，EL=外部联络，TCJ=TCJ，源PDF=源PDF，EC=EC）
     /// </summary>
-    [SugarColumn(ColumnName = "attachment_type", ColumnDescription = "文件类别", ColumnDataType = "nvarchar", Length = 30, IsNullable = false)]
+    [SugarColumn(ColumnName = "attachment_type", ColumnDescription = "文件类别", ColumnDataType = "nvarchar", Length = 8, IsNullable = false)]
     public string AttachmentType { get; set; } = string.Empty;
 
     /// <summary>
@@ -63,6 +63,12 @@ public class TaktEcAttachment : TaktCompanyEntityBase
     /// </summary>
     [SugarColumn(ColumnName = "access_url", ColumnDescription = "访问地址", ColumnDataType = "nvarchar", Length = 500, IsNullable = false)]
     public string AccessUrl { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 是否作废（字典 sys_yes_no_type，0=否 1=是；编辑移除子行时标记作废）
+    /// </summary>
+    [SugarColumn(ColumnName = "is_obsolete", ColumnDescription = "是否作废", ColumnDataType = "int", IsNullable = false, DefaultValue = "0")]
+    public int IsObsolete { get; set; } = 0;
 
     /// <summary>
     /// 设变主表（多对一）

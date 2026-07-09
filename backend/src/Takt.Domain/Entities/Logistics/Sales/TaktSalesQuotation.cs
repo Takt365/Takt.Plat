@@ -108,10 +108,4 @@ public class TaktSalesQuotation : TaktCompanyEntityBase
     /// </summary>
     [Navigate(NavigateType.OneToMany, nameof(TaktSalesQuotationItem.SalesQuotationId))]
     public List<TaktSalesQuotationItem>? Items { get; set; }
-
-    /// <summary>
-    /// 销售报价变更记录列表（外键在子表 TaktSalesQuotationChangeLog.SalesQuotationId）
-    /// </summary>
-    [Navigate(NavigateType.OneToMany, nameof(TaktSalesQuotationChangeLog.SalesQuotationId))]
-    public List<TaktSalesQuotationChangeLog>? ChangeLogs { get; set; }
 }

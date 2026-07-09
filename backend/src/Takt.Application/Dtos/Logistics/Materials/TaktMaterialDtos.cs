@@ -114,13 +114,6 @@ public class TaktMaterialDto : TaktTenantDtoBase
     /// 物料状态（字典 sys_normal_disable_status；0=禁用，1=启用，2=锁定）
     /// </summary>
     public int MaterialStatus { get; set; } = 0;
-
-    /// <summary>
-    /// 全局物料变更记录列表（外键在子表 TaktMaterialChangeLog.MaterialId）
-    /// （子表：TaktMaterialChangeLog）
-    /// </summary>
-    public List<TaktMaterialChangeLogDto>? ChangeLogs { get; set; }
-
 }
 
 // ========================================
@@ -338,14 +331,7 @@ public class TaktMaterialCreateDto
     /// <summary>
     /// 物料状态（字典 sys_normal_disable_status；0=禁用，1=启用，2=锁定）
     /// </summary>
-    public int MaterialStatus { get; set; } = 0;
-
-    /// <summary>
-    /// 全局物料变更记录列表（外键在子表 TaktMaterialChangeLog.MaterialId）（子表，级联保存）
-    /// </summary>
-    public List<TaktMaterialChangeLogCreateDto>? ChangeLogs { get; set; }
-
-    /// <summary>
+    public int MaterialStatus { get; set; } = 0;    /// <summary>
     /// 扩展字段JSON
     /// </summary>
     public string? ExtField { get; set; }
@@ -493,14 +479,7 @@ public class TaktMaterialTemplateDto
     /// <summary>
     /// 物料状态（字典 sys_normal_disable_status；0=禁用，1=启用，2=锁定）
     /// </summary>
-    public int? MaterialStatus { get; set; }
-
-    /// <summary>
-    /// 全局物料变更记录列表（外键在子表 TaktMaterialChangeLog.MaterialId）（子表，级联保存）
-    /// </summary>
-    public List<TaktMaterialChangeLogCreateDto>? ChangeLogs { get; set; }
-
-    /// <summary>
+    public int? MaterialStatus { get; set; }    /// <summary>
     /// 扩展字段JSON
     /// </summary>
     public string? ExtField { get; set; }
@@ -600,14 +579,7 @@ public class TaktMaterialImportDto
     /// <summary>
     /// 物料状态（字典 sys_normal_disable_status；0=禁用，1=启用，2=锁定）
     /// </summary>
-    public int? MaterialStatus { get; set; }
-
-    /// <summary>
-    /// 全局物料变更记录列表（外键在子表 TaktMaterialChangeLog.MaterialId）（子表，级联保存）
-    /// </summary>
-    public List<TaktMaterialChangeLogCreateDto>? ChangeLogs { get; set; }
-
-    /// <summary>
+    public int? MaterialStatus { get; set; }    /// <summary>
     /// 扩展字段JSON
     /// </summary>
     public string? ExtField { get; set; }

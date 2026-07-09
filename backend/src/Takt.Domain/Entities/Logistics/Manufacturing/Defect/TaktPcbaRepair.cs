@@ -24,20 +24,20 @@ namespace Takt.Domain.Entities.Logistics.Manufacturing.Defect;
 [SugarTable("takt_logistics_manufacturing_defect_pcba_repair", "PCBA改修日报表")]
 [SugarIndex("ix_pcba_repair_tenant", nameof(TenantCode), OrderByType.Asc, nameof(CompanyCode), OrderByType.Asc, false)]
 [SugarIndex("ix_pcba_repair_is_deleted", nameof(TenantCode), OrderByType.Asc, nameof(CompanyCode), OrderByType.Asc, nameof(IsDeleted), OrderByType.Asc, false)]
-[SugarIndex("ix_takt_logistics_manufacturing_defect_pcba_repair_unique", nameof(TenantCode), OrderByType.Asc, nameof(CompanyCode), OrderByType.Asc, nameof(PlantCode), OrderByType.Asc, nameof(ProdCategory), OrderByType.Asc, nameof(ProdDate), OrderByType.Asc, nameof(ProdTeam), OrderByType.Asc, nameof(ShiftNo), OrderByType.Asc, nameof(ProdOrderCode), OrderByType.Asc, true)]
+[SugarIndex("ix_takt_logistics_manufacturing_defect_pcba_repair_unique", nameof(TenantCode), OrderByType.Asc, nameof(CompanyCode), OrderByType.Asc, nameof(ProdDate), OrderByType.Asc, nameof(ProdOrderCode), OrderByType.Asc, true)]
 [SugarIndex("ix_takt_logistics_manufacturing_defect_pcba_repair_prod_date", nameof(TenantCode), OrderByType.Asc, nameof(CompanyCode), OrderByType.Asc, nameof(ProdDate), OrderByType.Desc, false)]
 [SugarIndex("ix_takt_logistics_manufacturing_defect_pcba_repair_prod_team", nameof(TenantCode), OrderByType.Asc, nameof(CompanyCode), OrderByType.Asc, nameof(ProdTeam), OrderByType.Asc, false)]
 [SugarIndex("ix_takt_logistics_manufacturing_defect_pcba_repair_prod_order_code", nameof(TenantCode), OrderByType.Asc, nameof(CompanyCode), OrderByType.Asc, nameof(ProdOrderCode), OrderByType.Asc, false)]
 public class TaktPcbaRepair : TaktCompanyEntityBase
 {
     /// <summary>
-    /// 工厂代码（关联 TaktPlant.PlantCode，选项 TaktPlants/options）
+    /// 工厂代码（回填：随工单）
     /// </summary>
     [SugarColumn(ColumnName = "plant_code", ColumnDescription = "工厂代码", Length = 4, ColumnDataType = "nvarchar", IsNullable = false)]
     public string PlantCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 生产类别（字典 logistics_prod_category，存 DictValue：RD/EVT/DVT/EPP/PP/FPP/MP/RPR/RWR）
+    /// 生产类别（字典 logistics_prod_category，存 DictValue：EPP/FPP/RWP/MDP/CPP）
     /// </summary>
     [SugarColumn(ColumnName = "prod_category", ColumnDescription = "生产类别", Length = 20, ColumnDataType = "nvarchar", IsNullable = false)]
     public string ProdCategory { get; set; } = string.Empty;
@@ -61,15 +61,21 @@ public class TaktPcbaRepair : TaktCompanyEntityBase
     public int ShiftNo { get; set; } = 1;
 
     /// <summary>
-    /// 生产工单号（选项 TaktProductionOrders/options，按 PlantCode 过滤）
+    /// 工单类别（回填：随工单）
     /// </summary>
-    [SugarColumn(ColumnName = "prod_order_code", ColumnDescription = "生产工单号", Length = 20, ColumnDataType = "nvarchar", IsNullable = false)]
+    [SugarColumn(ColumnName = "prod_order_type", ColumnDescription = "工单类别", Length = 20, ColumnDataType = "nvarchar", IsNullable = true)]
+    public string? ProdOrderType { get; set; }
+
+    /// <summary>
+    /// 工单号（选项 TaktProductionOrders/options，按 PlantCode 过滤）
+    /// </summary>
+    [SugarColumn(ColumnName = "prod_order_code", ColumnDescription = "工单号", Length = 20, ColumnDataType = "nvarchar", IsNullable = false)]
     public string ProdOrderCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 订单数量
+    /// 工单数量
     /// </summary>
-    [SugarColumn(ColumnName = "prod_order_qty", ColumnDescription = "订单数量", ColumnDataType = "decimal", Length = 18, DecimalDigits = 3, IsNullable = false, DefaultValue = "0")]
+    [SugarColumn(ColumnName = "prod_order_qty", ColumnDescription = "工单数量", ColumnDataType = "decimal", Length = 18, DecimalDigits = 3, IsNullable = false, DefaultValue = "0")]
     public decimal ProdOrderQty { get; set; } = 0;
 
     /// <summary>

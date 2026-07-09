@@ -450,8 +450,9 @@ public class TaktProcurementChainOrchestratorService : TaktServiceBase, ITaktPro
             CountersignTitle = $"采购询价审批-{inquiry.PurchaseInquiryCode}",
             ApplicationReason = inquiry.InquiryReason,
             CountersignStatus = 0,
-            CountersignDetails = items.Select(item => new TaktCountersignDetailCreateDto
+            CountersignDetails = items.Select(item => new TaktCountersignDetailUpdateDto
             {
+                CountersignDetailId = 0,
                 LineNumber = item.LineNumber,
                 AllocationCategory = item.AllocationCategory,
                 ItemName = item.MaterialName,
@@ -495,8 +496,9 @@ public class TaktProcurementChainOrchestratorService : TaktServiceBase, ITaktPro
             CountersignTitle = $"采购申请审批-{request.PurchaseRequestCode}",
             ApplicationReason = request.RequestReason,
             CountersignStatus = 0,
-            CountersignDetails = items.Select(item => new TaktCountersignDetailCreateDto
+            CountersignDetails = items.Select(item => new TaktCountersignDetailUpdateDto
             {
+                CountersignDetailId = 0,
                 LineNumber = item.LineNumber,
                 AllocationCategory = item.AllocationCategory,
                 ItemName = item.MaterialName,
@@ -539,8 +541,9 @@ public class TaktProcurementChainOrchestratorService : TaktServiceBase, ITaktPro
             CountersignTitle = $"费用报销审批-{expense.ExpenseCode}",
             ApplicationReason = expense.ApplicationReason,
             CountersignStatus = 0,
-            CountersignDetails = details.Select(detail => new TaktCountersignDetailCreateDto
+            CountersignDetails = details.Select(detail => new TaktCountersignDetailUpdateDto
             {
+                CountersignDetailId = 0,
                 LineNumber = detail.LineNumber,
                 AllocationCategory = detail.AllocationCategory,
                 ItemName = detail.ItemName,
@@ -584,8 +587,9 @@ public class TaktProcurementChainOrchestratorService : TaktServiceBase, ITaktPro
             EffectiveStartDate = inquiry.InquiryDate,
             EffectiveEndDate = inquiry.QuoteDeadlineDate,
             PriceStatus = 1,
-            Items = items.Select(item => new TaktPurchasePriceItemCreateDto
+            Items = items.Select(item => new TaktPurchasePriceItemUpdateDto
             {
+                PurchasePriceItemId = 0,
                 LineNumber = item.LineNumber,
                 MaterialCode = item.MaterialCode ?? string.Empty,
                 MaterialName = item.MaterialName,
@@ -626,8 +630,9 @@ public class TaktProcurementChainOrchestratorService : TaktServiceBase, ITaktPro
             TotalAmount = inquiry.TotalAmount,
             RequestReason = inquiry.InquiryReason ?? countersign.ApplicationReason,
             RequestStatus = 1,
-            Items = items.Select(item => new TaktPurchaseRequestItemCreateDto
+            Items = items.Select(item => new TaktPurchaseRequestItemUpdateDto
             {
+                PurchaseRequestItemId = 0,
                 LineNumber = item.LineNumber,
                 AllocationCategory = item.AllocationCategory,
                 MaterialCode = item.MaterialCode ?? string.Empty,
@@ -680,8 +685,9 @@ public class TaktProcurementChainOrchestratorService : TaktServiceBase, ITaktPro
             ActualAmount = request.TotalAmount,
             TaxAmount = 0,
             OrderStatus = 1,
-            Items = (requestDto.Items ?? []).Select(item => new TaktPurchaseOrderItemCreateDto
+            Items = (requestDto.Items ?? []).Select(item => new TaktPurchaseOrderItemUpdateDto
             {
+                PurchaseOrderItemId = 0,
                 LineNumber = item.LineNumber,
                 RequestCode = request.PurchaseRequestCode,
                 RequestLineNumber = item.LineNumber,
@@ -730,8 +736,9 @@ public class TaktProcurementChainOrchestratorService : TaktServiceBase, ITaktPro
             ExpenseDate = DateTime.Now,
             ApplicationReason = request.RequestReason,
             ExpenseStatus = 0,
-            ExpenseDetails = (orderDto.Items ?? []).Select((item, index) => new TaktExpenseDetailCreateDto
+            ExpenseDetails = (orderDto.Items ?? []).Select((item, index) => new TaktExpenseDetailUpdateDto
             {
+                ExpenseDetailId = 0,
                 LineNumber = item.LineNumber > 0 ? item.LineNumber : (index + 1) * 10,
                 AllocationCategory = "K",
                 ItemName = item.MaterialName,
@@ -781,8 +788,9 @@ public class TaktProcurementChainOrchestratorService : TaktServiceBase, ITaktPro
             ExpenseDate = DateTime.Now,
             ApplicationReason = request.RequestReason,
             ExpenseStatus = 0,
-            ExpenseDetails = (requestDto.Items ?? []).Select((item, index) => new TaktExpenseDetailCreateDto
+            ExpenseDetails = (requestDto.Items ?? []).Select((item, index) => new TaktExpenseDetailUpdateDto
             {
+                ExpenseDetailId = 0,
                 LineNumber = item.LineNumber > 0 ? item.LineNumber : (index + 1) * 10,
                 AllocationCategory = item.AllocationCategory ?? "K",
                 ItemName = item.MaterialName,
@@ -824,8 +832,9 @@ public class TaktProcurementChainOrchestratorService : TaktServiceBase, ITaktPro
             ExpenseDate = DateTime.Now,
             ApplicationReason = countersign.ApplicationReason,
             ExpenseStatus = 0,
-            ExpenseDetails = details.Select(detail => new TaktExpenseDetailCreateDto
+            ExpenseDetails = details.Select(detail => new TaktExpenseDetailUpdateDto
             {
+                ExpenseDetailId = 0,
                 LineNumber = detail.LineNumber,
                 AllocationCategory = detail.AllocationCategory,
                 ItemName = detail.ItemName,

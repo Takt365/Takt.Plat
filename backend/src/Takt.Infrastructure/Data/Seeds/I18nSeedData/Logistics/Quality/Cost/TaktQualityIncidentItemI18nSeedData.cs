@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Infrastructure.Data.Seeds.I18nSeedData.Logistics.Quality.Cost
 // 文件名称：TaktQualityIncidentItemI18nSeedData.cs
-// 创建时间：2026-07-02
+// 创建时间：2026-07-09
 // 创建人：Takt365(Auto Generated)
 // 功能描述：TaktQualityIncidentItem 实体字段国际化种子（无对应 frontend locales；TranslationText 取自 ColumnDescription，ContextNote 取自属性 XML summary）
 // 
@@ -224,6 +224,15 @@ public class TaktQualityIncidentItemI18nSeedData : ITaktSeedDataCoordinator
             new TranslationSeedItem("entity.qualityincidentitem.scrapnote", "zh-CN", "废弃备注", "废弃备注"),
             // entity.qualityincidentitem.scrapnote
             new TranslationSeedItem("entity.qualityincidentitem.scrapnote", "zh-HK", "废弃备注_hk", "废弃备注"),
+
+            // entity.qualityincidentitem.isobsolete
+            new TranslationSeedItem("entity.qualityincidentitem.isobsolete", "en-US", "是否作废_us", "是否作废（字典 sys_yes_no_type，0=否 1=是；编辑移除子行时标记作废）"),
+            // entity.qualityincidentitem.isobsolete
+            new TranslationSeedItem("entity.qualityincidentitem.isobsolete", "ja-JP", "是否作废_jp", "是否作废（字典 sys_yes_no_type，0=否 1=是；编辑移除子行时标记作废）"),
+            // entity.qualityincidentitem.isobsolete
+            new TranslationSeedItem("entity.qualityincidentitem.isobsolete", "zh-CN", "是否作废", "是否作废（字典 sys_yes_no_type，0=否 1=是；编辑移除子行时标记作废）"),
+            // entity.qualityincidentitem.isobsolete
+            new TranslationSeedItem("entity.qualityincidentitem.isobsolete", "zh-HK", "是否作废_hk", "是否作废（字典 sys_yes_no_type，0=否 1=是；编辑移除子行时标记作废）"),
 
             // entity.qualityincidentitem.incident
             new TranslationSeedItem("entity.qualityincidentitem.incident", "en-US", "品质事故主表_us", "品质事故主表(导航属性)"),

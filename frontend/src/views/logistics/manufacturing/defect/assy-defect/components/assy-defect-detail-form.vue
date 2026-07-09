@@ -21,19 +21,19 @@
     >
       <a-tab-pane
         key="tab-0"
-        :tab="t('common.page.form.tabs.basicinfo')"
+        :tab="t('common.page.form.tabs.basicinfo') + ' (1/2)'"
         force-render
       >
         <div :class="formContentClass">
           <a-row :gutter="24">
             <a-col :span="12">
               <a-form-item
-                :label="t('entity.assydefectdetail.prodordercode')"
+                :label="pi.label('prodOrderCode')"
                 name="prodOrderCode"
               >
                 <a-input
                   v-model:value="formState.prodOrderCode"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.assydefectdetail.prodordercode') })"
+                  :placeholder="pi.ph('prodOrderCode')"
                   show-count
                   :maxlength="20"
                   allow-clear
@@ -43,60 +43,84 @@
             </a-col>
             <a-col :span="12">
               <a-form-item
-                :label="t('entity.assydefectdetail.linenumber')"
-                name="lineNumber"
+                :label="pi.label('prodActualQty')"
+                name="prodActualQty"
               >
                 <a-input-number
-                  v-model:value="formState.lineNumber"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.assydefectdetail.linenumber') })"
+                  v-model:value="formState.prodActualQty"
+                  :placeholder="pi.ph('prodActualQty')"
                   style="width: 100%"
                 />
               </a-form-item>
             </a-col>
             <a-col :span="12">
               <a-form-item
-                :label="t('entity.assydefectdetail.defectcategory')"
+                :label="pi.label('goodQuantity')"
+                name="goodQuantity"
+              >
+                <a-input-number
+                  v-model:value="formState.goodQuantity"
+                  :placeholder="pi.ph('goodQuantity')"
+                  style="width: 100%"
+                />
+              </a-form-item>
+            </a-col>
+            <a-col :span="12">
+              <a-form-item
+                :label="pi.label('lineNumber')"
+                name="lineNumber"
+              >
+                <a-input-number
+                  v-model:value="formState.lineNumber"
+                  :placeholder="pi.ph('lineNumber')"
+                  style="width: 100%"
+                />
+              </a-form-item>
+            </a-col>
+            <a-col :span="12">
+              <a-form-item
+                :label="pi.label('defectCategory')"
                 name="defectCategory"
               >
                 <TaktSelect
                   v-model:value="formState.defectCategory"
                   dict-type="logistics_defect_category"
-                  :placeholder="t('common.page.form.placeholder.select', { field: t('entity.assydefectdetail.defectcategory') })"
+                  :placeholder="pi.ph('defectCategory')"
                 />
               </a-form-item>
             </a-col>
             <a-col :span="12">
               <a-form-item
-                :label="t('entity.assydefectdetail.defectqty')"
+                :label="pi.label('defectQty')"
                 name="defectQty"
               >
                 <a-input-number
                   v-model:value="formState.defectQty"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.assydefectdetail.defectqty') })"
+                  :placeholder="pi.ph('defectQty')"
                   style="width: 100%"
                 />
               </a-form-item>
             </a-col>
             <a-col :span="12">
               <a-form-item
-                :label="t('entity.assydefectdetail.cumulativedefectqty')"
+                :label="pi.label('cumulativeDefectQty')"
                 name="cumulativeDefectQty"
               >
                 <a-input-number
                   v-model:value="formState.cumulativeDefectQty"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.assydefectdetail.cumulativedefectqty') })"
+                  :placeholder="pi.ph('cumulativeDefectQty')"
                   style="width: 100%"
                 />
               </a-form-item>
             </a-col>
             <a-col :span="12">
               <a-form-item
-                :label="t('entity.assydefectdetail.randomcardno')"
+                :label="pi.label('randomCardNo')"
                 name="randomCardNo"
               >
                 <a-input
                   v-model:value="formState.randomCardNo"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.assydefectdetail.randomcardno') })"
+                  :placeholder="pi.ph('randomCardNo')"
                   show-count
                   :maxlength="20"
                   allow-clear
@@ -105,12 +129,12 @@
             </a-col>
             <a-col :span="12">
               <a-form-item
-                :label="t('entity.assydefectdetail.occurrenceengineering')"
+                :label="pi.label('occurrenceEngineering')"
                 name="occurrenceEngineering"
               >
                 <a-input
                   v-model:value="formState.occurrenceEngineering"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.assydefectdetail.occurrenceengineering') })"
+                  :placeholder="pi.ph('occurrenceEngineering')"
                   show-count
                   :maxlength="20"
                   allow-clear
@@ -119,15 +143,77 @@
             </a-col>
             <a-col :span="12">
               <a-form-item
-                :label="t('entity.assydefectdetail.teststep')"
+                :label="pi.label('testStep')"
                 name="testStep"
               >
                 <a-input
                   v-model:value="formState.testStep"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.assydefectdetail.teststep') })"
+                  :placeholder="pi.ph('testStep')"
                   show-count
                   :maxlength="20"
                   allow-clear
+                />
+              </a-form-item>
+            </a-col>
+          </a-row>
+        </div>
+      </a-tab-pane>
+      <a-tab-pane
+        key="tab-1"
+        :tab="t('common.page.form.tabs.basicinfo') + ' (2/2)'"
+        force-render
+      >
+        <div :class="formContentClass">
+          <a-row :gutter="24">
+            <a-col :span="12">
+              <a-form-item
+                :label="pi.label('defectSymptom')"
+                name="defectSymptom"
+              >
+                <a-input
+                  v-model:value="formState.defectSymptom"
+                  :placeholder="pi.ph('defectSymptom')"
+                  show-count
+                  :maxlength="20"
+                  allow-clear
+                />
+              </a-form-item>
+            </a-col>
+            <a-col :span="12">
+              <a-form-item
+                :label="pi.label('defectLocation')"
+                name="defectLocation"
+              >
+                <TaktSelect
+                  v-model:value="formState.defectLocation"
+                  dict-type="logistics_assy_location_category"
+                  :placeholder="pi.ph('defectLocation')"
+                />
+              </a-form-item>
+            </a-col>
+            <a-col :span="12">
+              <a-form-item
+                :label="pi.label('defectReason')"
+                name="defectReason"
+              >
+                <a-input
+                  v-model:value="formState.defectReason"
+                  :placeholder="pi.ph('defectReason')"
+                  show-count
+                  :maxlength="20"
+                  allow-clear
+                />
+              </a-form-item>
+            </a-col>
+            <a-col :span="12">
+              <a-form-item
+                :label="pi.label('repairOperator')"
+                name="repairOperator"
+              >
+                <TaktSelect
+                  v-model:value="formState.repairOperator"
+                  api-url="TaktEmployees/options"
+                  :placeholder="pi.ph('repairOperator')"
                 />
               </a-form-item>
             </a-col>
@@ -146,6 +232,11 @@
 import { reactive, watch, computed, ref, onMounted } from 'vue'
 import { useI18n } from 'vue-i18n'
 import type { Rule } from 'ant-design-vue/es/form'
+import { useAssyDefectDetailI18n } from '../composables/use-assy-defect-detail-i18n'
+
+/** 实体字段 i18n */
+const pi = useAssyDefectDetailI18n()
+
 import type { AssyDefectDetailCreate } from '@/types/logistics/manufacturing/defect/assy-defect-detail'
 import TaktSelect from '@/components/business/takt-select/index.vue'
 import { useDictDataStore } from '@/stores/foundation/dict-data'
@@ -157,7 +248,8 @@ const formContentClass = computed(() => (formFields.length > 10 ? 'takt-form-con
 /** 当前激活的 Tab key */
 const activeTab = ref('tab-0')
 /** CreateDto 字段名列表（与 formState 键对齐） */
-const formFields = ["prodOrderCode","lineNumber","defectCategory","defectQty","cumulativeDefectQty","randomCardNo","occurrenceEngineering","testStep"]
+const formFields = ["prodOrderCode","prodActualQty","goodQuantity","lineNumber","defectCategory","defectQty","cumulativeDefectQty","randomCardNo","occurrenceEngineering","testStep","defectSymptom","defectLocation","defectReason","repairOperator"]
+
 
 
 /** 父级传入的编辑 DTO；新增时为 undefined 或空对象 */
@@ -219,18 +311,44 @@ const rules = computed<Record<string, Rule[]>>(() => ({
   prodOrderCode: [
     {
       required: true,
-      message: t('common.page.form.placeholder.required', { field: t('entity.assydefectdetail.prodordercode') }),
+      message: pi.ph('prodOrderCode'),
       trigger: 'blur'
     }
   ],
-  lineNumber: [{
+  prodActualQty: [{
     validator: async (_rule, value) => {
       if (value === undefined || value === null || value === '') {
-        return Promise.reject(t('common.page.form.placeholder.select', { field: t('entity.assydefectdetail.linenumber') }))
+        return Promise.reject(pi.ph('prodActualQty'))
       }
       const num = typeof value === 'number' ? value : Number(value)
       if (!Number.isFinite(num)) {
-        return Promise.reject(t('common.page.form.placeholder.select', { field: t('entity.assydefectdetail.linenumber') }))
+        return Promise.reject(pi.ph('prodActualQty'))
+      }
+      return Promise.resolve()
+    },
+    trigger: 'change'
+  }],
+  goodQuantity: [{
+    validator: async (_rule, value) => {
+      if (value === undefined || value === null || value === '') {
+        return Promise.reject(pi.ph('goodQuantity'))
+      }
+      const num = typeof value === 'number' ? value : Number(value)
+      if (!Number.isFinite(num)) {
+        return Promise.reject(pi.ph('goodQuantity'))
+      }
+      return Promise.resolve()
+    },
+    trigger: 'change'
+  }],
+  lineNumber: [{
+    validator: async (_rule, value) => {
+      if (value === undefined || value === null || value === '') {
+        return Promise.reject(pi.ph('lineNumber'))
+      }
+      const num = typeof value === 'number' ? value : Number(value)
+      if (!Number.isFinite(num)) {
+        return Promise.reject(pi.ph('lineNumber'))
       }
       return Promise.resolve()
     },
@@ -239,11 +357,11 @@ const rules = computed<Record<string, Rule[]>>(() => ({
   defectQty: [{
     validator: async (_rule, value) => {
       if (value === undefined || value === null || value === '') {
-        return Promise.reject(t('common.page.form.placeholder.select', { field: t('entity.assydefectdetail.defectqty') }))
+        return Promise.reject(pi.ph('defectQty'))
       }
       const num = typeof value === 'number' ? value : Number(value)
       if (!Number.isFinite(num)) {
-        return Promise.reject(t('common.page.form.placeholder.select', { field: t('entity.assydefectdetail.defectqty') }))
+        return Promise.reject(pi.ph('defectQty'))
       }
       return Promise.resolve()
     },
@@ -252,11 +370,11 @@ const rules = computed<Record<string, Rule[]>>(() => ({
   cumulativeDefectQty: [{
     validator: async (_rule, value) => {
       if (value === undefined || value === null || value === '') {
-        return Promise.reject(t('common.page.form.placeholder.select', { field: t('entity.assydefectdetail.cumulativedefectqty') }))
+        return Promise.reject(pi.ph('cumulativeDefectQty'))
       }
       const num = typeof value === 'number' ? value : Number(value)
       if (!Number.isFinite(num)) {
-        return Promise.reject(t('common.page.form.placeholder.select', { field: t('entity.assydefectdetail.cumulativedefectqty') }))
+        return Promise.reject(pi.ph('cumulativeDefectQty'))
       }
       return Promise.resolve()
     },
@@ -273,6 +391,14 @@ async function validate() {
 /** 映射为 Create/Update DTO（含主表外键 assyDefectId） */
 function getValues(): Record<string, any> {
   const payload = { ...formState }
+  if ('prodActualQty' in payload) {
+    const rawprodActualQty = payload.prodActualQty
+    payload.prodActualQty = typeof rawprodActualQty === 'number' ? rawprodActualQty : Number(rawprodActualQty)
+  }
+  if ('goodQuantity' in payload) {
+    const rawgoodQuantity = payload.goodQuantity
+    payload.goodQuantity = typeof rawgoodQuantity === 'number' ? rawgoodQuantity : Number(rawgoodQuantity)
+  }
   if ('lineNumber' in payload) {
     const rawlineNumber = payload.lineNumber
     payload.lineNumber = typeof rawlineNumber === 'number' ? rawlineNumber : Number(rawlineNumber)

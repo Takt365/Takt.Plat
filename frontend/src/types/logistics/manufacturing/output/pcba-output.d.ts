@@ -29,12 +29,12 @@ export interface PcbaOutput extends CompanyDtoBase {
   pcbaOutputId: string;
 
   /**
-   * 工厂代码（关联 TaktPlant.PlantCode，选项 TaktPlants/options）
+   * 工厂代码（回填：随工单）
    */
   plantCode: string;
 
   /**
-   * 生产类别（字典 logistics_prod_category，存 DictValue：RD/EVT/DVT/EPP/PP/FPP/MP/RPR/RWR）
+   * 生产类别（字典 logistics_prod_category，存 DictValue：EPP/FPP/RWP/MDP/CPP）
    */
   prodCategory: string;
 
@@ -54,7 +54,7 @@ export interface PcbaOutput extends CompanyDtoBase {
   shiftNo: number;
 
   /**
-   * 生产工单号（选项 TaktProductionOrders/options，按 PlantCode 过滤）
+   * 工单号（选项 TaktProductionOrders/options，按 PlantCode 过滤）
    */
   prodOrderCode: string;
 
@@ -119,12 +119,12 @@ export interface PcbaOutputQuery extends TaktPagedQuery {
   companyCode?: string;
 
   /**
-   * 工厂代码（关联 TaktPlant.PlantCode，选项 TaktPlants/options）
+   * 工厂代码（回填：随工单）
    */
   plantCode?: string;
 
   /**
-   * 生产类别（字典 logistics_prod_category，存 DictValue：RD/EVT/DVT/EPP/PP/FPP/MP/RPR/RWR）
+   * 生产类别（字典 logistics_prod_category，存 DictValue：EPP/FPP/RWP/MDP/CPP）
    */
   prodCategory?: string;
 
@@ -149,7 +149,7 @@ export interface PcbaOutputQuery extends TaktPagedQuery {
   shiftNo?: number;
 
   /**
-   * 生产工单号（选项 TaktProductionOrders/options，按 PlantCode 过滤）
+   * 工单号（选项 TaktProductionOrders/options，按 PlantCode 过滤）
    */
   prodOrderCode?: string;
 
@@ -233,12 +233,12 @@ export interface PcbaOutputCreate {
   companyDefaultCulture: string;
 
   /**
-   * 工厂代码（关联 TaktPlant.PlantCode，选项 TaktPlants/options）
+   * 工厂代码（回填：随工单）
    */
   plantCode: string;
 
   /**
-   * 生产类别（字典 logistics_prod_category，存 DictValue：RD/EVT/DVT/EPP/PP/FPP/MP/RPR/RWR）
+   * 生产类别（字典 logistics_prod_category，存 DictValue：EPP/FPP/RWP/MDP/CPP）
    */
   prodCategory: string;
 
@@ -258,7 +258,7 @@ export interface PcbaOutputCreate {
   shiftNo: number;
 
   /**
-   * 生产工单号（选项 TaktProductionOrders/options，按 PlantCode 过滤）
+   * 工单号（选项 TaktProductionOrders/options，按 PlantCode 过滤）
    */
   prodOrderCode: string;
 
@@ -347,12 +347,12 @@ export interface PcbaOutputTemplate {
   companyCode?: string;
 
   /**
-   * 工厂代码（关联 TaktPlant.PlantCode，选项 TaktPlants/options）
+   * 工厂代码（回填：随工单）
    */
   plantCode?: string;
 
   /**
-   * 生产类别（字典 logistics_prod_category，存 DictValue：RD/EVT/DVT/EPP/PP/FPP/MP/RPR/RWR）
+   * 生产类别（字典 logistics_prod_category，存 DictValue：EPP/FPP/RWP/MDP/CPP）
    */
   prodCategory?: string;
 
@@ -372,7 +372,7 @@ export interface PcbaOutputTemplate {
   shiftNo?: number;
 
   /**
-   * 生产工单号（选项 TaktProductionOrders/options，按 PlantCode 过滤）
+   * 工单号（选项 TaktProductionOrders/options，按 PlantCode 过滤）
    */
   prodOrderCode?: string;
 
@@ -451,12 +451,12 @@ export interface PcbaOutputImport {
   companyDefaultCulture?: string;
 
   /**
-   * 工厂代码（关联 TaktPlant.PlantCode，选项 TaktPlants/options）
+   * 工厂代码（回填：随工单）
    */
   plantCode?: string;
 
   /**
-   * 生产类别（字典 logistics_prod_category，存 DictValue：RD/EVT/DVT/EPP/PP/FPP/MP/RPR/RWR）
+   * 生产类别（字典 logistics_prod_category，存 DictValue：EPP/FPP/RWP/MDP/CPP）
    */
   prodCategory?: string;
 
@@ -476,7 +476,7 @@ export interface PcbaOutputImport {
   shiftNo?: number;
 
   /**
-   * 生产工单号（选项 TaktProductionOrders/options，按 PlantCode 过滤）
+   * 工单号（选项 TaktProductionOrders/options，按 PlantCode 过滤）
    */
   prodOrderCode?: string;
 
@@ -550,12 +550,12 @@ export interface PcbaOutputExport {
   companyCode: string;
 
   /**
-   * 工厂代码（关联 TaktPlant.PlantCode，选项 TaktPlants/options）
+   * 工厂代码（回填：随工单）
    */
   plantCode: string;
 
   /**
-   * 生产类别（字典 logistics_prod_category，存 DictValue：RD/EVT/DVT/EPP/PP/FPP/MP/RPR/RWR）
+   * 生产类别（字典 logistics_prod_category，存 DictValue：EPP/FPP/RWP/MDP/CPP）
    */
   prodCategory: string;
 
@@ -575,7 +575,7 @@ export interface PcbaOutputExport {
   shiftNo: number;
 
   /**
-   * 生产工单号（选项 TaktProductionOrders/options，按 PlantCode 过滤）
+   * 工单号（选项 TaktProductionOrders/options，按 PlantCode 过滤）
    */
   prodOrderCode: string;
 

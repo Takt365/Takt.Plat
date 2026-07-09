@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Application.Dtos.Logistics.Manufacturing.Defect
 // 文件名称：TaktPcbaRepairDetailDtos.cs
-// 创建时间：2026-06-30
+// 创建时间：2026-07-09
 // 创建人：Takt365(Auto Generated)
 // 功能描述：PcbaRepairDetail 模块 DTO（由 generate-dtos-from-entity.cjs 根据 TaktPcbaRepairDetail 生成，请按需审阅）
 // 
@@ -47,7 +47,7 @@ public class TaktPcbaRepairDetailDto : TaktCompanyDtoBase
     public string? PcbaRepairName { get; set; }
 
     /// <summary>
-    /// 生产工单号（冗余字段,便于查询）
+    /// 工单号（冗余字段,便于查询）
     /// </summary>
     public string ProdOrderCode { get; set; } = string.Empty;
 
@@ -112,6 +112,11 @@ public class TaktPcbaRepairDetailDto : TaktCompanyDtoBase
     public string? RepairOperator { get; set; } = string.Empty;
 
     /// <summary>
+    /// 是否作废（字典 sys_yes_no_type，0=否 1=是；编辑移除子行时标记作废）
+    /// </summary>
+    public int IsObsolete { get; set; } = 0;
+
+    /// <summary>
     /// PCBA改修日报（主表）
     /// （主表：TaktPcbaRepair）
     /// </summary>
@@ -146,7 +151,7 @@ public class TaktPcbaRepairDetailQueryDto : TaktPagedQuery
     public long? PcbaRepairId { get; set; }
 
     /// <summary>
-    /// 生产工单号（冗余字段,便于查询）
+    /// 工单号（冗余字段,便于查询）
     /// </summary>
     public string? ProdOrderCode { get; set; } = string.Empty;
 
@@ -209,6 +214,11 @@ public class TaktPcbaRepairDetailQueryDto : TaktPagedQuery
     /// 修理员（关联 TaktEmployee.Id，选项 TaktEmployees/options）
     /// </summary>
     public string? RepairOperator { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 是否作废（字典 sys_yes_no_type，0=否 1=是；编辑移除子行时标记作废）
+    /// </summary>
+    public int? IsObsolete { get; set; }
 
     /// <summary>
     /// 创建时间（范围查询-开始）
@@ -262,9 +272,9 @@ public class TaktPcbaRepairDetailCreateDto
     public long PcbaRepairId { get; set; }
 
     /// <summary>
-    /// 生产工单号（冗余字段,便于查询）
+    /// 工单号（冗余字段,便于查询）
     /// </summary>
-    [Required(ErrorMessage = "生产工单号（冗余字段,便于查询）不能为空")]
+    [Required(ErrorMessage = "工单号（冗余字段,便于查询）不能为空")]
     public string ProdOrderCode { get; set; } = string.Empty;
 
     /// <summary>
@@ -328,6 +338,11 @@ public class TaktPcbaRepairDetailCreateDto
     public string? RepairOperator { get; set; } = string.Empty;
 
     /// <summary>
+    /// 是否作废（字典 sys_yes_no_type，0=否 1=是；编辑移除子行时标记作废）
+    /// </summary>
+    public int IsObsolete { get; set; } = 0;
+
+    /// <summary>
     /// 扩展字段JSON
     /// </summary>
     public string? ExtField { get; set; }
@@ -360,6 +375,29 @@ public class TaktPcbaRepairDetailUpdateDto : TaktPcbaRepairDetailCreateDto
 }
 
 // ========================================
+// PcbaRepairDetail 作废 DTO
+// ========================================
+
+/// <summary>
+/// PcbaRepairDetail 作废/撤销作废 DTO
+/// </summary>
+public class TaktPcbaRepairDetailObsoleteDto
+{
+    /// <summary>
+    /// PcbaRepairDetailID
+    /// </summary>
+    [Required(ErrorMessage = "ID不能为空")]
+    [AdaptMember("Id")]
+    [JsonConverter(typeof(ValueToStringConverter))]
+    public long PcbaRepairDetailId { get; set; }
+
+    /// <summary>
+    /// 是否作废（字典 sys_yes_no_type，0=否 1=是；编辑移除子行时标记作废）
+    /// </summary>
+    public int IsObsolete { get; set; }
+}
+
+// ========================================
 // 导入 DTO
 // ========================================
 
@@ -385,7 +423,7 @@ public class TaktPcbaRepairDetailTemplateDto
     public long? PcbaRepairId { get; set; }
 
     /// <summary>
-    /// 生产工单号（冗余字段,便于查询）
+    /// 工单号（冗余字段,便于查询）
     /// </summary>
     public string? ProdOrderCode { get; set; } = string.Empty;
 
@@ -448,6 +486,11 @@ public class TaktPcbaRepairDetailTemplateDto
     /// 修理员（关联 TaktEmployee.Id，选项 TaktEmployees/options）
     /// </summary>
     public string? RepairOperator { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 是否作废（字典 sys_yes_no_type，0=否 1=是；编辑移除子行时标记作废）
+    /// </summary>
+    public int? IsObsolete { get; set; }
 
     /// <summary>
     /// 扩展字段JSON
@@ -488,7 +531,7 @@ public class TaktPcbaRepairDetailImportDto
     public long? PcbaRepairId { get; set; }
 
     /// <summary>
-    /// 生产工单号（冗余字段,便于查询）
+    /// 工单号（冗余字段,便于查询）
     /// </summary>
     public string? ProdOrderCode { get; set; } = string.Empty;
 
@@ -551,6 +594,11 @@ public class TaktPcbaRepairDetailImportDto
     /// 修理员（关联 TaktEmployee.Id，选项 TaktEmployees/options）
     /// </summary>
     public string? RepairOperator { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 是否作废（字典 sys_yes_no_type，0=否 1=是；编辑移除子行时标记作废）
+    /// </summary>
+    public int? IsObsolete { get; set; }
 
     /// <summary>
     /// 扩展字段JSON
@@ -592,7 +640,7 @@ public class TaktPcbaRepairDetailExportDto
     public long PcbaRepairId { get; set; }
 
     /// <summary>
-    /// 生产工单号（冗余字段,便于查询）
+    /// 工单号（冗余字段,便于查询）
     /// </summary>
     public string ProdOrderCode { get; set; } = string.Empty;
 
@@ -655,6 +703,11 @@ public class TaktPcbaRepairDetailExportDto
     /// 修理员（关联 TaktEmployee.Id，选项 TaktEmployees/options）
     /// </summary>
     public string? RepairOperator { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 是否作废（字典 sys_yes_no_type，0=否 1=是；编辑移除子行时标记作废）
+    /// </summary>
+    public int IsObsolete { get; set; } = 0;
 
     /// <summary>
     /// 扩展字段JSON

@@ -2,7 +2,7 @@
 // 项目名称：节拍数字工厂 · Takt Plat (TDF)
 // 命名空间：@/views/logistics/materials/material-document-item/composables
 // 文件名称：use-material-document-master-context.ts
-// 功能描述：Takt物料交易主表实体主表选中行上下文（供右侧明细面板读取）
+// 功能描述：Takt物料凭证主表实体主表选中行上下文（供右侧明细面板读取）
 // 版权信息：Copyright (c) 2025 Takt  All rights reserved.
 // ========================================
 
