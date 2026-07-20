@@ -4,7 +4,7 @@
 文件名称:index.vue
 创建时间:2025-01-20
 创建人:Takt365(Cursor AI)
-功能描述:单表格组件,支持虚拟滚动、列宽调整、排序、筛选；始终设置 scroll.y（布局高度，与数据有无无关）
+功能描述:单表格组件,支持虚拟滚动、列宽调整、排序、筛选、列溢出省略；始终设置 scroll.y（布局高度，与数据有无无关）
 
 版权信息:Copyright (c) 2025 Takt  All rights reserved.
 免责声明:此软件使用 MIT License,作者不承担任何使用风险。
@@ -50,11 +50,25 @@
               :value="slotData.record?.approvalStatus as string | number | undefined"
             />
           </template>
+          <div
+            v-else-if="isTableColumnEllipsisEnabled(slotData.column)"
+            :class="TAKT_TABLE_CELL_ELLIPSIS_INNER_CLASS"
+            :title="resolveTableCellEllipsisTitle(slotData.text)"
+          >
+            <slot
+              name="bodyCell"
+              v-bind="slotData"
+            >
+              <TaktTableBodyCellFallback :slot-data="slotData" />
+            </slot>
+          </div>
           <slot
             v-else
             name="bodyCell"
             v-bind="slotData"
-          />
+          >
+            <TaktTableBodyCellFallback :slot-data="slotData" />
+          </slot>
         </template>
         <template
           v-for="(_, name) in passthroughSlotNames"
@@ -72,6 +86,15 @@
           <slot name="summary" />
         </template>
       </a-table>
+    </div>
+    <div
+      v-if="showFooterRemark"
+      ref="footerRemarkRef"
+      class="takt-single-table__footer-remark shrink-0 px-1 pt-2 text-sm leading-relaxed text-text-secondary"
+    >
+      <slot name="footerRemark">
+        {{ footerRemark }}
+      </slot>
     </div>
     <TaktPagination
       v-if="showPagination"
@@ -105,14 +128,20 @@ import {
 } from '@/utils/table-columns'
 import {
   applyTableColumnPresentation,
+  isTableColumnEllipsisEnabled,
+  resolveTableCellEllipsisTitle,
   resolveTableScrollConfig,
   resolveVerticalScrollY,
+  shouldUseTableVirtualScroll,
+  TAKT_TABLE_CELL_ELLIPSIS_INNER_CLASS,
+  TAKT_TABLE_SCROLL_Y_MIN,
   type TaktTableScrollLayout,
 } from '@/utils/table-scroll'
+import TaktTableBodyCellFallback from '@/components/business/takt-table-body-cell-fallback/index'
 import { useTaktTableViewportScrollY } from '@/composables/use-takt-table-viewport-scroll-y'
 import { useTaktMasterDetailLrScrollY } from '@/composables/use-takt-master-detail-lr-scroll-y'
 import { useI18n } from 'vue-i18n'
-import { useAttrs, computed, ref, useSlots } from 'vue'
+import { useAttrs, computed, nextTick, onBeforeUnmount, onMounted, ref, useSlots, watch } from 'vue'
 
 type TableRecord = Record<string, unknown>
 type TableSorter = {
@@ -136,7 +165,10 @@ interface Props {
   rowClassName?: string | ((record: TableRecord, index: number) => string) | undefined
   /** 是否启用斑马纹 */
   stripe?: boolean
-  /** 是否启用虚拟滚动 */
+  /**
+   * 虚拟滚动；true 强制开；false 仅在行数未超过 5000 时关闭；超 5000 行一律自动开启
+   * @see TAKT_TABLE_AUTO_VIRTUAL_ROW_THRESHOLD
+   */
   virtual?: boolean
   /** 滚动配置（仅覆盖 x 或显式 y；未传 y 时 innerHeight - 固定 header/footer 与页壳 300px） */
   scroll?: { x?: number | string | true; y?: number | string } | undefined
@@ -186,6 +218,11 @@ interface Props {
   smallScreenColumnCount?: number
   /** @deprecated 请使用 tableMode */
   largeScreenBreakpoint?: number
+  /**
+   * 表尾备注说明（渲染在合计行 / 表体下方、分页上方）
+   * 复杂多行内容请用 #footerRemark 插槽
+   */
+  footerRemark?: string
 }
 
 const props = withDefaults(defineProps<Props>(), {
@@ -214,6 +251,7 @@ const props = withDefaults(defineProps<Props>(), {
   tableMode: 'single',
   smallScreenColumnCount: 5,
   largeScreenBreakpoint: 1200,
+  footerRemark: '',
 })
 
 const emit = defineEmits<{
@@ -229,10 +267,71 @@ const { t } = useI18n()
 const attrs = useAttrs()
 const slots = useSlots()
 
+/** 不向 a-table 透传的插槽（由本组件承接） */
+const OWNED_SLOT_NAMES = new Set(['bodyCell', 'summary', 'footerRemark'])
+
 /** 透传给 a-table 的插槽名（bodyCell 由组件内统一处理 approvalStatus 字典展示） */
 const passthroughSlotNames = computed(() =>
-  Object.keys(slots).filter((name) => name !== 'bodyCell'),
+  Object.keys(slots).filter((name) => !OWNED_SLOT_NAMES.has(name)),
 )
+
+/** 是否展示表尾备注（prop 或插槽） */
+const showFooterRemark = computed(
+  () => !!props.footerRemark?.trim() || !!slots.footerRemark,
+)
+
+/** 表尾备注 DOM（用于从 scroll.y 扣减高度） */
+const footerRemarkRef = ref<HTMLElement | null>(null)
+
+/** 表尾备注占用高度（px） */
+const footerRemarkHeightPx = ref(0)
+
+/** 表尾备注高度观测 */
+let footerRemarkResizeObserver: ResizeObserver | null = null
+
+/**
+ * 测量表尾备注高度，避免与显式 scroll.y 叠高溢出
+ */
+function measureFooterRemarkHeight(): void {
+  const el = footerRemarkRef.value
+  footerRemarkHeightPx.value = el ? Math.ceil(el.getBoundingClientRect().height) : 0
+}
+
+watch(showFooterRemark, async (visible) => {
+  if (!visible) {
+    footerRemarkHeightPx.value = 0
+    return
+  }
+  await nextTick()
+  measureFooterRemarkHeight()
+})
+
+onMounted(() => {
+  if (typeof ResizeObserver === 'undefined') {
+    return
+  }
+  footerRemarkResizeObserver = new ResizeObserver(() => {
+    measureFooterRemarkHeight()
+  })
+  watch(
+    footerRemarkRef,
+    (el, prev) => {
+      if (prev) {
+        footerRemarkResizeObserver?.unobserve(prev)
+      }
+      if (el) {
+        footerRemarkResizeObserver?.observe(el)
+        measureFooterRemarkHeight()
+      }
+    },
+    { immediate: true },
+  )
+})
+
+onBeforeUnmount(() => {
+  footerRemarkResizeObserver?.disconnect()
+  footerRemarkResizeObserver = null
+})
 
 /** 页面传入的 class 挂到根节点（inheritAttrs: false 时不会自动合并） */
 const rootExtraClass = computed(() => attrs.class)
@@ -248,16 +347,10 @@ const tableLocale = computed(() => ({
   emptyText: t('common.status.empty'),
 }))
 
-/** 超过此行数时自动启用虚拟滚动（07-overflow-vue）；仅影响 virtual，不影响 scroll.y */
-const AUTO_VIRTUAL_ROW_THRESHOLD = 50
-
-/** 是否启用虚拟滚动：显式 true 或数据量超阈值 */
-const shouldUseVirtual = computed(() => {
-  if (props.virtual === true) return true
-  const len = props.dataSource?.length ?? 0
-  if (props.virtual === false && len <= AUTO_VIRTUAL_ROW_THRESHOLD) return false
-  return len > AUTO_VIRTUAL_ROW_THRESHOLD
-})
+/** 是否启用虚拟滚动：显式 true，或行数超过 TAKT_TABLE_AUTO_VIRTUAL_ROW_THRESHOLD（5000） */
+const shouldUseVirtual = computed(() =>
+  shouldUseTableVirtualScroll(props.dataSource?.length ?? 0, props.virtual),
+)
 
 const currentPage = computed({
   get: () => props.current ?? 1,
@@ -320,8 +413,8 @@ const masterDetailLrScrollYPx = useTaktMasterDetailLrScrollY()
 /** 视口动态 scroll.y（px）；与 dataSource 行数无关，空表亦保持同一高度 */
 const viewportScrollYPx = useTaktTableViewportScrollY(computed(() => props.scrollLayout))
 
-const scrollConfig = computed(() =>
-  resolveTableScrollConfig({
+const scrollConfig = computed(() => {
+  const resolved = resolveTableScrollConfig({
     columns: resolvedDisplayColumns.value,
     scroll: props.scroll,
     includeRowSelection: effectiveRowSelection.value != null,
@@ -333,8 +426,21 @@ const scrollConfig = computed(() =>
         : props.scrollLayout === 'masterDetailLr' && masterDetailLrScrollYPx != null
           ? masterDetailLrScrollYPx.value
           : resolveVerticalScrollY(undefined, viewportScrollYPx.value),
-  }),
-)
+  })
+  const y = resolved.y
+  const footerH = footerRemarkHeightPx.value
+  if (y == null || y === '' || footerH <= 0) {
+    return resolved
+  }
+  const yNum = typeof y === 'number' ? y : Number.parseFloat(String(y))
+  if (!Number.isFinite(yNum)) {
+    return resolved
+  }
+  return {
+    ...resolved,
+    y: Math.max(TAKT_TABLE_SCROLL_Y_MIN, Math.floor(yNum - footerH)),
+  }
+})
 
 /** 是否已配置固定纵向滚动高度 */
 const hasFixedScrollY = computed(() => {
@@ -426,10 +532,6 @@ defineExpose({
   max-width: 100%;
 }
 
-.takt-single-table__body :deep(.ant-table-content) {
-  overflow-x: auto;
-}
-
 /** scroll.y 兜底：空数据/少行时亦保持固定表体高度（不随数据撑开） */
 .takt-single-table__body--fixed-y :deep(.ant-table-container) {
   display: flex;
@@ -438,9 +540,25 @@ defineExpose({
   height: 100%;
 }
 
+/**
+ * 表头预留与表体相同的纵向滚动条槽位，避免横向滚动时列宽错位
+ * （勿在 .ant-table-content 上另开 overflow-x，否则破坏 Ant Design scroll.x 同步）
+ */
+.takt-single-table__body--fixed-y :deep(.ant-table-header) {
+  overflow-y: scroll !important;
+  scrollbar-gutter: stable;
+  scrollbar-width: none;
+}
+
+.takt-single-table__body--fixed-y :deep(.ant-table-header::-webkit-scrollbar) {
+  width: 0;
+  height: 0;
+}
+
 .takt-single-table__body--fixed-y :deep(.ant-table-body) {
   min-height: var(--takt-table-scroll-y);
   max-height: var(--takt-table-scroll-y);
+  overflow-x: auto !important;
   overflow-y: scroll !important;
   scrollbar-gutter: stable;
   flex: 1 1 auto;

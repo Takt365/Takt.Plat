@@ -45,5 +45,6 @@
     "types": ["vite/client"]
   },
   "include": ["src/**/*.ts", "src/**/*.d.ts", "src/**/*.tsx", "src/**/*.vue"],
+  "exclude": ["src/config/vite-dev-plugin.ts", "src/config/vite-log-file-writer.ts"],
   "references": [{ "path": "./tsconfig.node.json" }]
 }

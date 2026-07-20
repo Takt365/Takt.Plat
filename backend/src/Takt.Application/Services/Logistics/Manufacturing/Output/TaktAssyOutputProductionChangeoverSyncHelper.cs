@@ -11,7 +11,7 @@
 // ========================================
 
 using Takt.Domain.Entities.Logistics.Manufacturing.Output;
-using Takt.Domain.Entities.Logistics.Manufacturing.Planning;
+using Takt.Domain.Entities.Logistics.Manufacturing.Aps;
 using Takt.Domain.Repositories;
 using Takt.Shared.Constants;
 using Takt.Shared.Helpers;
@@ -218,7 +218,7 @@ internal static class TaktAssyOutputProductionChangeoverSyncHelper
     }
 
     /// <summary>
-    /// 解析切换前工单主表：优先同时段其它有产量工单，其次更早时段最近一笔有产量工单，否则取切换目标工单
+    /// 解析切换前工单主表：优先同时段其他有产量工单，其次更早时段最近一笔有产量工单，否则取切换目标工单
     /// </summary>
     private static TaktAssyOutput ResolveCurrentMaster(
         TaktAssyOutput changeoverMaster,

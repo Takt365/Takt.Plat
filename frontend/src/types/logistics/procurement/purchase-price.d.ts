@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：frontend/src/types/logistics/procurement
 // 文件名称：purchase-price.d.ts
-// 创建时间：2026-07-09
+// 创建时间：2026-07-20
 // 创建人：Takt365(Auto Generated)
 // 功能描述：logistics/procurement 模块类型定义（自动生成；类型名去 Takt 前缀与末尾 Dto，如 TaktCompanyDto → Company）
 // 
@@ -16,7 +16,7 @@ import type {
 } from '@/types/common';
 
 /**
- * Takt采购价格实体（供应商价格主表，一个供应商可以有多个物料价格）
+ * Takt采购价格实体（定价记录；条件类型 + 供应商 + 物料 + 有效期；含子表 Items）
  * 对应前端 TaktPurchasePriceDto
  * 继承 TaktCompanyDtoBase
  * 对应前端 PurchasePrice
@@ -29,14 +29,14 @@ export interface PurchasePrice extends CompanyDtoBase {
   purchasePriceId: string;
 
   /**
-   * 工厂代码（选项 TaktPlants/options，DictValue=PlantCode）
-   */
-  plantCode: string;
-
-  /**
-   * 采购价格编码（唯一索引）
+   * 定价记录号（唯一索引；长度 20）
    */
   purchasePriceCode: string;
+
+  /**
+   * 条件类型（字典 logistics_price_type；PB00=采购总价 Gross Price，PR00=基本价格 Base Price，MWST=销项税/增值税，MWRK=不可抵扣进项税，NLXV=购置税）
+   */
+  priceType: string;
 
   /**
    * 供应商编码（选项 TaktSuppliers/options，DictValue=SupplierCode）
@@ -44,7 +44,27 @@ export interface PurchasePrice extends CompanyDtoBase {
   supplierCode: string;
 
   /**
-   * 来源采购询价 ID（关联 TaktPurchaseInquiry.Id，选项 TaktPurchaseInquirys/options）
+   * 物料编码（选项 TaktMaterialPlants/options，DictValue=MaterialCode）
+   */
+  materialCode: string;
+
+  /**
+   * 有效起始日
+   */
+  validFrom: string;
+
+  /**
+   * 有效截至日
+   */
+  validTo: string;
+
+  /**
+   * 可变关键字
+   */
+  variableKey?: string;
+
+  /**
+   * 来源采购询价 ID（选项 TaktPurchaseInquirys/options，DictValue=Id）
    */
   purchaseInquiryId?: string;
 
@@ -59,27 +79,7 @@ export interface PurchasePrice extends CompanyDtoBase {
   purchaseInquiryCode?: string;
 
   /**
-   * 价格类型（字典 logistics_price_type；0=标准价格，1=合同价格，2=临时价格，3=询价价格，4=历史价格）
-   */
-  priceType: number;
-
-  /**
-   * 生效日期
-   */
-  effectiveStartDate: string;
-
-  /**
-   * 失效日期（空表示长期有效）
-   */
-  effectiveEndDate?: string;
-
-  /**
-   * 价格状态（字典 sys_normal_disable_status；1=启用，0=禁用）
-   */
-  priceStatus: number;
-
-  /**
-   * 物料价格明细列表（主子表关系，一个供应商价格可以有多个物料价格） （子表：TaktPurchasePriceItem）
+   * 定价条件行列表（主子表关系） （子表：TaktPurchasePriceItem）
    */
   items?: PurchasePriceItem[];
 
@@ -104,14 +104,14 @@ export interface PurchasePriceQuery extends TaktPagedQuery {
   companyCode?: string;
 
   /**
-   * 工厂代码（选项 TaktPlants/options，DictValue=PlantCode）
-   */
-  plantCode?: string;
-
-  /**
-   * 采购价格编码（唯一索引）
+   * 定价记录号（唯一索引；长度 20）
    */
   purchasePriceCode?: string;
+
+  /**
+   * 条件类型（字典 logistics_price_type；PB00=采购总价 Gross Price，PR00=基本价格 Base Price，MWST=销项税/增值税，MWRK=不可抵扣进项税，NLXV=购置税）
+   */
+  priceType?: string;
 
   /**
    * 供应商编码（选项 TaktSuppliers/options，DictValue=SupplierCode）
@@ -119,7 +119,37 @@ export interface PurchasePriceQuery extends TaktPagedQuery {
   supplierCode?: string;
 
   /**
-   * 来源采购询价 ID（关联 TaktPurchaseInquiry.Id，选项 TaktPurchaseInquirys/options）
+   * 物料编码（选项 TaktMaterialPlants/options，DictValue=MaterialCode）
+   */
+  materialCode?: string;
+
+  /**
+   * 有效起始日（范围查询-开始）
+   */
+  validFromStart?: string;
+
+  /**
+   * 有效起始日（范围查询-结束）
+   */
+  validFromEnd?: string;
+
+  /**
+   * 有效截至日（范围查询-开始）
+   */
+  validToStart?: string;
+
+  /**
+   * 有效截至日（范围查询-结束）
+   */
+  validToEnd?: string;
+
+  /**
+   * 可变关键字
+   */
+  variableKey?: string;
+
+  /**
+   * 来源采购询价 ID（选项 TaktPurchaseInquirys/options，DictValue=Id）
    */
   purchaseInquiryId?: string;
 
@@ -127,36 +157,6 @@ export interface PurchasePriceQuery extends TaktPagedQuery {
    * 来源采购询价编码（冗余）
    */
   purchaseInquiryCode?: string;
-
-  /**
-   * 价格类型（字典 logistics_price_type；0=标准价格，1=合同价格，2=临时价格，3=询价价格，4=历史价格）
-   */
-  priceType?: number;
-
-  /**
-   * 生效日期（范围查询-开始）
-   */
-  effectiveStartDateStart?: string;
-
-  /**
-   * 生效日期（范围查询-结束）
-   */
-  effectiveStartDateEnd?: string;
-
-  /**
-   * 失效日期（空表示长期有效）（范围查询-开始）
-   */
-  effectiveEndDateStart?: string;
-
-  /**
-   * 失效日期（空表示长期有效）（范围查询-结束）
-   */
-  effectiveEndDateEnd?: string;
-
-  /**
-   * 价格状态（字典 sys_normal_disable_status；1=启用，0=禁用）
-   */
-  priceStatus?: number;
 
   /**
    * 创建时间（范围查询-开始）
@@ -203,14 +203,14 @@ export interface PurchasePriceCreate {
   companyDefaultCulture: string;
 
   /**
-   * 工厂代码（选项 TaktPlants/options，DictValue=PlantCode）
-   */
-  plantCode: string;
-
-  /**
-   * 采购价格编码（唯一索引）
+   * 定价记录号（唯一索引；长度 20）
    */
   purchasePriceCode: string;
+
+  /**
+   * 条件类型（字典 logistics_price_type；PB00=采购总价 Gross Price，PR00=基本价格 Base Price，MWST=销项税/增值税，MWRK=不可抵扣进项税，NLXV=购置税）
+   */
+  priceType: string;
 
   /**
    * 供应商编码（选项 TaktSuppliers/options，DictValue=SupplierCode）
@@ -218,7 +218,27 @@ export interface PurchasePriceCreate {
   supplierCode: string;
 
   /**
-   * 来源采购询价 ID（关联 TaktPurchaseInquiry.Id，选项 TaktPurchaseInquirys/options）
+   * 物料编码（选项 TaktMaterialPlants/options，DictValue=MaterialCode）
+   */
+  materialCode: string;
+
+  /**
+   * 有效起始日
+   */
+  validFrom: string;
+
+  /**
+   * 有效截至日
+   */
+  validTo: string;
+
+  /**
+   * 可变关键字
+   */
+  variableKey?: string;
+
+  /**
+   * 来源采购询价 ID（选项 TaktPurchaseInquirys/options，DictValue=Id）
    */
   purchaseInquiryId?: string;
 
@@ -228,29 +248,9 @@ export interface PurchasePriceCreate {
   purchaseInquiryCode?: string;
 
   /**
-   * 价格类型（字典 logistics_price_type；0=标准价格，1=合同价格，2=临时价格，3=询价价格，4=历史价格）
+   * 定价条件行列表（主子表关系）（子表，级联保存）
    */
-  priceType: number;
-
-  /**
-   * 生效日期
-   */
-  effectiveStartDate: string;
-
-  /**
-   * 失效日期（空表示长期有效）
-   */
-  effectiveEndDate?: string;
-
-  /**
-   * 价格状态（字典 sys_normal_disable_status；1=启用，0=禁用）
-   */
-  priceStatus: number;
-
-  /**
-   * 物料价格明细列表（主子表关系，一个供应商价格可以有多个物料价格）（子表，级联保存）
-   */
-  items?: PurchasePriceItemUpdate[];
+  items?: PurchasePriceItemCreate[];
 
   /**
    * 扩展字段JSON
@@ -277,24 +277,10 @@ export interface PurchasePriceUpdate extends PurchasePriceCreate {
    */
   purchasePriceId: string;
 
-}
-
-
-/**
- * PurchasePrice 状态更新 DTO
- * 对应前端 PurchasePriceStatus
- * @description 对应后端 TaktPurchasePriceStatusDto
- */
-export interface PurchasePriceStatus {
   /**
-   * PurchasePriceID
+   * 定价条件行列表（主子表关系）（子表，级联保存）
    */
-  purchasePriceId: string;
-
-  /**
-   * 价格状态（字典 sys_normal_disable_status；1=启用，0=禁用）
-   */
-  priceStatus: number;
+  items?: any;
 
 }
 
@@ -316,14 +302,14 @@ export interface PurchasePriceTemplate {
   companyCode?: string;
 
   /**
-   * 工厂代码（选项 TaktPlants/options，DictValue=PlantCode）
-   */
-  plantCode?: string;
-
-  /**
-   * 采购价格编码（唯一索引）
+   * 定价记录号（唯一索引；长度 20）
    */
   purchasePriceCode?: string;
+
+  /**
+   * 条件类型（字典 logistics_price_type；PB00=采购总价 Gross Price，PR00=基本价格 Base Price，MWST=销项税/增值税，MWRK=不可抵扣进项税，NLXV=购置税）
+   */
+  priceType?: string;
 
   /**
    * 供应商编码（选项 TaktSuppliers/options，DictValue=SupplierCode）
@@ -331,7 +317,27 @@ export interface PurchasePriceTemplate {
   supplierCode?: string;
 
   /**
-   * 来源采购询价 ID（关联 TaktPurchaseInquiry.Id，选项 TaktPurchaseInquirys/options）
+   * 物料编码（选项 TaktMaterialPlants/options，DictValue=MaterialCode）
+   */
+  materialCode?: string;
+
+  /**
+   * 有效起始日
+   */
+  validFrom?: string;
+
+  /**
+   * 有效截至日
+   */
+  validTo?: string;
+
+  /**
+   * 可变关键字
+   */
+  variableKey?: string;
+
+  /**
+   * 来源采购询价 ID（选项 TaktPurchaseInquirys/options，DictValue=Id）
    */
   purchaseInquiryId?: string;
 
@@ -341,27 +347,7 @@ export interface PurchasePriceTemplate {
   purchaseInquiryCode?: string;
 
   /**
-   * 价格类型（字典 logistics_price_type；0=标准价格，1=合同价格，2=临时价格，3=询价价格，4=历史价格）
-   */
-  priceType?: number;
-
-  /**
-   * 生效日期
-   */
-  effectiveStartDate?: string;
-
-  /**
-   * 失效日期（空表示长期有效）
-   */
-  effectiveEndDate?: string;
-
-  /**
-   * 价格状态（字典 sys_normal_disable_status；1=启用，0=禁用）
-   */
-  priceStatus?: number;
-
-  /**
-   * 物料价格明细列表（主子表关系，一个供应商价格可以有多个物料价格）（子表，级联保存）
+   * 定价条件行列表（主子表关系）（子表，级联保存）
    */
   items?: PurchasePriceItemCreate[];
 
@@ -400,14 +386,14 @@ export interface PurchasePriceImport {
   companyDefaultCulture?: string;
 
   /**
-   * 工厂代码（选项 TaktPlants/options，DictValue=PlantCode）
-   */
-  plantCode?: string;
-
-  /**
-   * 采购价格编码（唯一索引）
+   * 定价记录号（唯一索引；长度 20）
    */
   purchasePriceCode?: string;
+
+  /**
+   * 条件类型（字典 logistics_price_type；PB00=采购总价 Gross Price，PR00=基本价格 Base Price，MWST=销项税/增值税，MWRK=不可抵扣进项税，NLXV=购置税）
+   */
+  priceType?: string;
 
   /**
    * 供应商编码（选项 TaktSuppliers/options，DictValue=SupplierCode）
@@ -415,7 +401,27 @@ export interface PurchasePriceImport {
   supplierCode?: string;
 
   /**
-   * 来源采购询价 ID（关联 TaktPurchaseInquiry.Id，选项 TaktPurchaseInquirys/options）
+   * 物料编码（选项 TaktMaterialPlants/options，DictValue=MaterialCode）
+   */
+  materialCode?: string;
+
+  /**
+   * 有效起始日
+   */
+  validFrom?: string;
+
+  /**
+   * 有效截至日
+   */
+  validTo?: string;
+
+  /**
+   * 可变关键字
+   */
+  variableKey?: string;
+
+  /**
+   * 来源采购询价 ID（选项 TaktPurchaseInquirys/options，DictValue=Id）
    */
   purchaseInquiryId?: string;
 
@@ -425,27 +431,7 @@ export interface PurchasePriceImport {
   purchaseInquiryCode?: string;
 
   /**
-   * 价格类型（字典 logistics_price_type；0=标准价格，1=合同价格，2=临时价格，3=询价价格，4=历史价格）
-   */
-  priceType?: number;
-
-  /**
-   * 生效日期
-   */
-  effectiveStartDate?: string;
-
-  /**
-   * 失效日期（空表示长期有效）
-   */
-  effectiveEndDate?: string;
-
-  /**
-   * 价格状态（字典 sys_normal_disable_status；1=启用，0=禁用）
-   */
-  priceStatus?: number;
-
-  /**
-   * 物料价格明细列表（主子表关系，一个供应商价格可以有多个物料价格）（子表，级联保存）
+   * 定价条件行列表（主子表关系）（子表，级联保存）
    */
   items?: PurchasePriceItemCreate[];
 
@@ -479,14 +465,14 @@ export interface PurchasePriceExport {
   companyCode: string;
 
   /**
-   * 工厂代码（选项 TaktPlants/options，DictValue=PlantCode）
-   */
-  plantCode: string;
-
-  /**
-   * 采购价格编码（唯一索引）
+   * 定价记录号（唯一索引；长度 20）
    */
   purchasePriceCode: string;
+
+  /**
+   * 条件类型（字典 logistics_price_type；PB00=采购总价 Gross Price，PR00=基本价格 Base Price，MWST=销项税/增值税，MWRK=不可抵扣进项税，NLXV=购置税）
+   */
+  priceType: string;
 
   /**
    * 供应商编码（选项 TaktSuppliers/options，DictValue=SupplierCode）
@@ -494,7 +480,27 @@ export interface PurchasePriceExport {
   supplierCode: string;
 
   /**
-   * 来源采购询价 ID（关联 TaktPurchaseInquiry.Id，选项 TaktPurchaseInquirys/options）
+   * 物料编码（选项 TaktMaterialPlants/options，DictValue=MaterialCode）
+   */
+  materialCode: string;
+
+  /**
+   * 有效起始日
+   */
+  validFrom: string;
+
+  /**
+   * 有效截至日
+   */
+  validTo: string;
+
+  /**
+   * 可变关键字
+   */
+  variableKey?: string;
+
+  /**
+   * 来源采购询价 ID（选项 TaktPurchaseInquirys/options，DictValue=Id）
    */
   purchaseInquiryId?: string;
 
@@ -502,26 +508,6 @@ export interface PurchasePriceExport {
    * 来源采购询价编码（冗余）
    */
   purchaseInquiryCode?: string;
-
-  /**
-   * 价格类型（字典 logistics_price_type；0=标准价格，1=合同价格，2=临时价格，3=询价价格，4=历史价格）
-   */
-  priceType: number;
-
-  /**
-   * 生效日期
-   */
-  effectiveStartDate: string;
-
-  /**
-   * 失效日期（空表示长期有效）
-   */
-  effectiveEndDate?: string;
-
-  /**
-   * 价格状态（字典 sys_normal_disable_status；1=启用，0=禁用）
-   */
-  priceStatus: number;
 
   /**
    * 扩展字段JSON

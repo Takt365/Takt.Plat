@@ -39,7 +39,7 @@ public class TaktShiftSchedule : TaktCompanyEntityBase
     [JsonConverter(typeof(ValueToStringConverter))]
     public long? DeptId { get; set; }
     /// <summary>
-    /// 员工（关联 TaktEmployee.Id，选项 TaktEmployees/options；ScheduleType=1 时必填）
+    /// 员工（选项 TaktEmployees/options；ScheduleType=1 时必填，DictValue=Id）
     /// </summary>
     [SugarColumn(ColumnName = "employee_id", ColumnDescription = "员工ID", ColumnDataType = "bigint", IsNullable = true)]
     [JsonConverter(typeof(ValueToStringConverter))]
@@ -50,13 +50,13 @@ public class TaktShiftSchedule : TaktCompanyEntityBase
     [SugarColumn(ColumnName = "schedule_date", ColumnDescription = "排班日期", ColumnDataType = "date", IsNullable = false)]
     public DateTime ScheduleDate { get; set; }
     /// <summary>
-    /// 班次（关联 TaktWorkShift.Id，选项 TaktWorkShifts/options）
+    /// 班次（选项 TaktWorkShifts/options，DictValue=Id）
     /// </summary>
     [SugarColumn(ColumnName = "shift_id", ColumnDescription = "班次ID", ColumnDataType = "bigint", IsNullable = false)]
     [JsonConverter(typeof(ValueToStringConverter))]
     public long ShiftId { get; set; }
     /// <summary>
-    /// 关联工厂（关联 TaktPlant.PlantCode，选项 TaktPlants/options）
+    /// 关联工厂（选项 TaktPlants/options，DictValue=Id）
     /// </summary>
     [SugarColumn(ColumnName = "related_plant", ColumnDescription = "关联工厂", ColumnDataType = "nvarchar", Length = 4, IsNullable = false)]
     public string RelatedPlant { get; set; } = string.Empty;

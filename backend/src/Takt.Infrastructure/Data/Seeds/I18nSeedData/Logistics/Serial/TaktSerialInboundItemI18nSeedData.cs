@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Infrastructure.Data.Seeds.I18nSeedData.Logistics.Serial
 // 文件名称：TaktSerialInboundItemI18nSeedData.cs
-// 创建时间：2026-07-09
+// 创建时间：2026-07-20
 // 创建人：Takt365(Auto Generated)
 // 功能描述：TaktSerialInboundItem 实体字段国际化种子（无对应 frontend locales；TranslationText 取自 ColumnDescription，ContextNote 取自属性 XML summary）
 // 
@@ -91,13 +91,13 @@ public class TaktSerialInboundItemI18nSeedData : ITaktSeedDataCoordinator
             new TranslationSeedItem("entity.serialinbounditem._self", "zh-HK", "序列号入库明细信息_hk", "实体名称"),
 
             // entity.serialinbounditem.inboundid
-            new TranslationSeedItem("entity.serialinbounditem.inboundid", "en-US", "入库ID_us", "入库主表 ID（关联 TaktSerialInbound.Id，选项 TaktSerialInbounds/options）"),
+            new TranslationSeedItem("entity.serialinbounditem.inboundid", "en-US", "入库ID_us", "入库主表 ID（选项 TaktSerialInbounds/options，DictValue=Id）"),
             // entity.serialinbounditem.inboundid
-            new TranslationSeedItem("entity.serialinbounditem.inboundid", "ja-JP", "入库ID_jp", "入库主表 ID（关联 TaktSerialInbound.Id，选项 TaktSerialInbounds/options）"),
+            new TranslationSeedItem("entity.serialinbounditem.inboundid", "ja-JP", "入库ID_jp", "入库主表 ID（选项 TaktSerialInbounds/options，DictValue=Id）"),
             // entity.serialinbounditem.inboundid
-            new TranslationSeedItem("entity.serialinbounditem.inboundid", "zh-CN", "入库ID", "入库主表 ID（关联 TaktSerialInbound.Id，选项 TaktSerialInbounds/options）"),
+            new TranslationSeedItem("entity.serialinbounditem.inboundid", "zh-CN", "入库ID", "入库主表 ID（选项 TaktSerialInbounds/options，DictValue=Id）"),
             // entity.serialinbounditem.inboundid
-            new TranslationSeedItem("entity.serialinbounditem.inboundid", "zh-HK", "入库ID_hk", "入库主表 ID（关联 TaktSerialInbound.Id，选项 TaktSerialInbounds/options）"),
+            new TranslationSeedItem("entity.serialinbounditem.inboundid", "zh-HK", "入库ID_hk", "入库主表 ID（选项 TaktSerialInbounds/options，DictValue=Id）"),
 
             // entity.serialinbounditem.inboundno
             new TranslationSeedItem("entity.serialinbounditem.inboundno", "en-US", "入库单号_us", "入库单号（冗余字段，便于查询）"),

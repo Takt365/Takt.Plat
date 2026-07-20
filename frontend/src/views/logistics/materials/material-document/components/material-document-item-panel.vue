@@ -2,15 +2,12 @@
 <!-- 项目名称：节拍数字工厂 · Takt Plat (TDF) -->
 <!-- 命名空间：@/views/logistics/materials/material-document/components -->
 <!-- 文件名称：material-document-item-panel.vue -->
-<!-- 功能描述：Takt物料凭证主表实体主表实体右侧明细 materialDocumentItem 独立 CRUD（按主表选中 materialDocumentId 分页） -->
+<!-- 功能描述：物料凭证明细右栏（仅查询/导入/导出；无新增、更新、删除；按主表选中 materialDocumentId 分页） -->
 <!-- 版权信息：Copyright (c) 2025 Takt  All rights reserved. -->
 <!-- ======================================== -->
 
 <template>
   <div class="material-document-item-panel flex h-full min-h-0 flex-col overflow-hidden">
-    <div class="mb-2 text-sm font-medium text-text">
-      {{ pi.self() }}
-    </div>
     <TaktQueryBar
       v-model="queryKeyword"
       :placeholder="searchPlaceholder"
@@ -18,18 +15,15 @@
       @search="handleSearch"
       @reset="handleQueryReset"
     />
+    <!-- 工具栏：仅导入/导出（无新增、更新、删除） -->
     <TaktToolsBar
-      create-permission="logistics:materials:material:document:create"
-      update-permission="logistics:materials:material:document:update"
-      delete-permission="logistics:materials:material:document:delete"
       import-permission="logistics:materials:material:document:import"
       export-permission="logistics:materials:material:document:export"
-      :show-create="true"
-      :show-update="true"
-      :show-delete="true"
+      :show-create="false"
+      :show-update="false"
+      :show-delete="false"
       :show-expand="false"
       :show-refresh="true"
-
       :show-import="true"
       :show-export="true"
       :show-advanced-query="true"
@@ -39,23 +33,17 @@
       :export-disabled="!hasMasterSelection"
       :import-loading="loading"
       :export-loading="loading"
+      :refresh-loading="loading"
       @import="handleImport"
       @export="handleExport"
       @advanced-query="handleAdvancedQuery"
       @column-setting="handleColumnSetting"
-      :create-disabled="!hasMasterSelection"
-      :update-disabled="updateDisabled"
-      :delete-disabled="deleteDisabled"
-      :create-loading="loading"
-      :update-loading="loading"
-      :delete-loading="loading"
-      :refresh-loading="loading"
-      @create="handleCreate"
-      @update="handleUpdate"
-      @delete="handleDelete"
       @refresh="handleRefresh"
     />
-    <div class="material-document-item-panel__table-wrap min-h-0 flex-1 overflow-hidden">
+    <div
+      ref="detailTableWrapRef"
+      class="material-document-item-panel__table-wrap min-h-0 flex-1 overflow-hidden"
+    >
       <TaktSingleTable
         class="h-full min-h-0"
         :columns="columns"
@@ -64,8 +52,6 @@
         :loading="loading"
         :stripe="true"
         :row-key="getMaterialDocumentItemId"
-        :row-selection="rowSelection"
-        :custom-row="onClickRow"
         :visible-column-keys="visibleColumnKeys"
         id-column-key="materialDocumentItemId"
         :show-pagination="true"
@@ -74,27 +60,27 @@
         :total="total"
         scroll-layout="masterDetailLr"
         table-mode="masterDetailDetail"
-        :show-row-selection="true"
+        :scroll="{ y: detailTableScrollY }"
+        :show-row-selection="false"
         @change="handleTableChange"
         @pagination-change="handleMasterDetailPaginationChange"
         @resize-column="handleResizeColumn"
-      />
+      >
+        <template #summary>
+          <a-table-summary fixed>
+            <a-table-summary-row>
+              <a-table-summary-cell
+                v-for="cell in summaryCells"
+                :key="cell.key"
+                :index="cell.index"
+              >
+                <span class="text-sm font-medium">{{ cell.text }}</span>
+              </a-table-summary-cell>
+            </a-table-summary-row>
+          </a-table-summary>
+        </template>
+      </TaktSingleTable>
     </div>
-    <TaktModal
-      v-model:open="formVisible"
-      :title="formTitle"
-      width="720px"
-      :confirm-loading="formLoading"
-      @ok="handleFormSubmit"
-      @cancel="handleFormCancel"
-    >
-      <MaterialDocumentItemForm
-        ref="formRef"
-        :form-data="formData"
-        :master-id="masterMaterialDocumentId"
-        :loading="formLoading"
-      />
-    </TaktModal>
 
     <TaktQueryDrawer
       v-model:open="advancedQueryVisible"
@@ -268,6 +254,16 @@
         />
       </a-form-item>
       </div>
+      <div v-show="isFieldVisible('isObsolete')">
+      <a-form-item :label="pi.queryLabel('isObsolete')">
+        <TaktSelect
+          v-model:value="advancedQueryForm.isObsolete"
+          dict-type="sys_yes_no_type"
+          :placeholder="pi.queryPh('isObsolete', 'select')"
+          allow-clear
+        />
+      </a-form-item>
+      </div>
       <div v-show="isFieldVisible('createdAtStart')">
       <a-form-item :label="pi.queryLabel('createdAtStart')">
         <a-date-picker
@@ -370,28 +366,30 @@
 
 <script setup lang="ts">
 /**
- * Takt物料凭证主表实体子表 materialDocumentItem 右栏面板
+ * 物料凭证明细右栏面板（仅查询 / 导入 / 导出）
  * @module views/logistics/materials/material-document/components
  */
-import { ref, computed, watch } from 'vue'
-import { message, Modal } from 'ant-design-vue'
+import { ref, computed, watch, onMounted, onBeforeUnmount, nextTick } from 'vue'
+import { message } from 'ant-design-vue'
 import type { TableColumnsType } from 'ant-design-vue'
 import { useI18n } from 'vue-i18n'
+import { measureMasterDetailLrTableScrollY } from '@/composables/use-takt-master-detail-lr-scroll-y'
+import { TAKT_TABLE_SCROLL_Y_MIN } from '@/utils/table-scroll'
 import { getTaktDefaultPageIndex, getTaktDefaultPageSize } from '@/utils/takt-paged'
 import { taktExcelEntityNames } from '@/utils/naming'
 import { resolveExportDownloadFileName } from '@/utils/export-download-name'
 import { normalizeImportResult, type TaktImportResult } from '@/utils/takt-import-result'
-import { CreateActionColumn } from '@/components/business/takt-action-column/index'
-import { RiEditLine, RiDeleteBinLine, RiQuestionLine } from '@remixicon/vue'
-import MaterialDocumentItemForm from './material-document-item-form.vue'
+import {
+  filterMergedColumnsByDefaultVisible,
+  filterTableColumnsByVisibleKeys,
+  mergeDefaultColumns,
+  normalizeUserTableColumns,
+} from '@/utils/table-columns'
+import { formatSummaryValue } from '@/components/business/takt-editable-table/editable-table-utils'
+import { RiQuestionLine } from '@remixicon/vue'
 import { useMaterialDocumentMasterContext } from '../composables/use-material-document-master-context'
 import {
   getMaterialDocumentItemList,
-  getMaterialDocumentItemById,
-  createMaterialDocumentItem,
-  updateMaterialDocumentItem,
-  deleteMaterialDocumentItemById,
-  deleteMaterialDocumentItemBatch,
   getMaterialDocumentItemTemplate,
   importMaterialDocumentItem,
   exportMaterialDocumentItem,
@@ -400,7 +398,8 @@ import type { MaterialDocumentItem, MaterialDocumentItemQuery } from '@/types/lo
 
 import {
   useMaterialDocumentItemI18n,
-  MATERIALDOCUMENTITEM_LIST_FIELDS,
+  MATERIALDOCUMENTITEM_DEFAULT_VISIBLE_COLUMN_KEYS,
+  MATERIALDOCUMENTITEM_SUMMARY_SUM_FIELDS,
   MATERIALDOCUMENTITEM_QUERY_STRING_FIELDS,
   MATERIALDOCUMENTITEM_QUERY_FIELDS,
   MATERIALDOCUMENTITEM_SELF_I18N_KEY,
@@ -420,19 +419,46 @@ const searchPlaceholder = computed(
 )
 
 const loading = ref(false)
+
+/** 子表滚动区容器（扣除查询/工具栏后剩余高度） */
+const detailTableWrapRef = ref<HTMLElement | null>(null)
+/** 子表 scroll.y（按 __table-wrap 实测，避免沿用主表共享高度导致双滚动条） */
+const detailTableScrollY = ref(TAKT_TABLE_SCROLL_Y_MIN)
+let detailTableScrollResizeObserver: ResizeObserver | null = null
+
+/** 按子表容器重算 scroll.y（扣除表头 + 汇总行，避免合计被裁切或双滚动条） */
+function recalcDetailTableScrollY(): void {
+  const wrap = detailTableWrapRef.value
+  if (!wrap) {
+    return
+  }
+  detailTableScrollY.value = measureMasterDetailLrTableScrollY(wrap, { reserveSummaryRow: true })
+}
+
+/** 监听子表容器尺寸变化 */
+function startDetailTableScrollObserve(): void {
+  stopDetailTableScrollObserve()
+  recalcDetailTableScrollY()
+  const wrap = detailTableWrapRef.value
+  if (!wrap) {
+    return
+  }
+  detailTableScrollResizeObserver = new ResizeObserver(() => {
+    recalcDetailTableScrollY()
+  })
+  detailTableScrollResizeObserver.observe(wrap)
+}
+
+/** 停止监听子表容器尺寸 */
+function stopDetailTableScrollObserve(): void {
+  detailTableScrollResizeObserver?.disconnect()
+  detailTableScrollResizeObserver = null
+}
 const dataSource = ref<MaterialDocumentItem[]>([])
 const currentPage = ref(getTaktDefaultPageIndex())
 const pageSize = ref(getTaktDefaultPageSize())
 const total = ref(0)
 const queryKeyword = ref('')
-const selectedRow = ref<MaterialDocumentItem | null>(null)
-const selectedRows = ref<MaterialDocumentItem[]>([])
-const selectedRowKeys = ref<(string | number)[]>([])
-const formVisible = ref(false)
-const formTitle = ref('')
-const formData = ref<Partial<MaterialDocumentItem>>({})
-const formLoading = ref(false)
-const formRef = ref()
 
 const advancedQueryVisible = ref(false)
 /**
@@ -449,6 +475,7 @@ function createEmptyAdvancedQueryForm() {
     lineNumber: undefined as number | undefined,
     quantity: undefined as number | undefined,
     localCurrencyAmount: undefined as number | undefined,
+    isObsolete: undefined as number | undefined,
   }
 }
 const advancedQueryForm = ref(createEmptyAdvancedQueryForm())
@@ -473,8 +500,8 @@ function handleAdvancedQueryReset() {
   advancedQueryForm.value = createEmptyAdvancedQueryForm()
 }
 const columnSettingVisible = ref(false)
-/** 表格当前可见列 key（空数组时按 tableMode=masterDetailDetail 默认 id+4 业务列） */
-const visibleColumnKeys = ref<string[]>([])
+/** 表格当前可见列 key */
+const visibleColumnKeys = ref<string[]>([...MATERIALDOCUMENTITEM_DEFAULT_VISIBLE_COLUMN_KEYS])
 
 function handleColumnSetting() {
   columnSettingVisible.value = true
@@ -485,7 +512,7 @@ function handleColumnKeysChange(keys: string[]) {
 }
 
 function handleColumnSettingReset() {
-  visibleColumnKeys.value = []
+  visibleColumnKeys.value = [...MATERIALDOCUMENTITEM_DEFAULT_VISIBLE_COLUMN_KEYS]
 }
 const importVisible = ref(false)
 
@@ -495,8 +522,6 @@ const masterMaterialDocumentId = computed((): string => {
   return id != null ? String(id) : ''
 })
 const hasMasterSelection = computed(() => masterMaterialDocumentId.value !== '')
-const updateDisabled = computed(() => !hasMasterSelection.value || selectedRows.value.length !== 1)
-const deleteDisabled = computed(() => !hasMasterSelection.value || selectedRows.value.length === 0)
 
 function getMaterialDocumentItemId(record: MaterialDocumentItem | Record<string, unknown>): string {
   return String((record as MaterialDocumentItem)?.[entityIdName] ?? '')
@@ -517,6 +542,16 @@ const columns = computed<TableColumnsType>(() => [
     fixed: 'left',
     customRender: ({ record }: { record: MaterialDocumentItem }) =>
       String(getMaterialDocumentItemField(record, 'materialDocumentItemId') ?? ''),
+  },
+  {
+    title: pi.label('materialDocumentId'),
+    dataIndex: 'materialDocumentId',
+    key: 'materialDocumentId',
+    width: 120,
+    resizable: true,
+    ellipsis: true,
+    customRender: ({ record }: { record: MaterialDocumentItem }) =>
+      String(getMaterialDocumentItemField(record, 'materialDocumentId') ?? ''),
   },
   {
     title: pi.label('materialDocumentCode'),
@@ -659,72 +694,85 @@ const columns = computed<TableColumnsType>(() => [
       String(getMaterialDocumentItemField(record, 'customerCode') ?? ''),
   },
   {
-    title: pi.label('materialTransaction'),
-    dataIndex: 'materialTransaction',
-    key: 'materialTransaction',
+    title: pi.label('isObsolete'),
+    dataIndex: 'isObsolete',
+    key: 'isObsolete',
     width: 120,
     resizable: true,
     ellipsis: true,
     customRender: ({ record }: { record: MaterialDocumentItem }) =>
-      String(getMaterialDocumentItemField(record, 'materialTransaction') ?? ''),
+      String(getMaterialDocumentItemField(record, 'isObsolete') ?? ''),
   },
-  CreateActionColumn({
-    actions: [
-      {
-        key: 'update',
-        label: t('common.page.button.edit'),
-        shape: 'plain',
-        icon: RiEditLine,
-        permission: 'logistics:materials:material:document:update',
-        onClick: (record: MaterialDocumentItem) => void handleEdit(record),
-      },
-      {
-        key: 'delete',
-        label: t('common.page.button.delete'),
-        shape: 'plain',
-        icon: RiDeleteBinLine,
-        permission: 'logistics:materials:material:document:delete',
-        onClick: (record: MaterialDocumentItem) => void handleDeleteOne(record),
-      },
-    ],
-  }),
 ])
 
-const rowSelection = computed(() => ({
-  selectedRowKeys: selectedRowKeys.value,
-  onChange: (keys: (string | number)[], rows: MaterialDocumentItem[]) => {
-    selectedRowKeys.value = keys
-    selectedRows.value = rows
-    selectedRow.value = rows.length === 1 ? (rows[0] ?? null) : null
-  },
-  onSelect: (record: MaterialDocumentItem, selected: boolean) => {
-    if (selected) {
-      selectedRow.value = record
-    } else if (selectedRow.value && getMaterialDocumentItemId(selectedRow.value) === getMaterialDocumentItemId(record)) {
-      selectedRow.value = null
-    }
-  },
-  onSelectAll: (selected: boolean, selectedRowsData: MaterialDocumentItem[]) => {
-    selectedRow.value = selected && selectedRowsData.length === 1 ? (selectedRowsData[0] ?? null) : null
-  },
-}))
-
-/**
- * 行点击选中（与左主表 masterCustomRow 一致，联动 rowSelection）
- * @param record 行数据
- */
-function onClickRow(record: MaterialDocumentItem) {
-  const key = getMaterialDocumentItemId(record)
-  return {
-    onClick: () => {
-      selectedRowKeys.value = [key]
-      selectedRows.value = [record]
-      selectedRow.value = record
-    },
-    class: selectedRowKeys.value.includes(key)
-      ? 'takt-master-detail-table-row-selected cursor-pointer'
-      : 'cursor-pointer',
+/** 与 TaktSingleTable 展示列对齐（用于汇总行单元格） */
+const resolvedSummaryColumns = computed(() => {
+  const userCols = normalizeUserTableColumns(columns.value)
+  const merged = mergeDefaultColumns(userCols, t, true, 'company')
+  const keys = visibleColumnKeys.value
+  if (keys.length > 0) {
+    return filterTableColumnsByVisibleKeys(merged, keys, merged)
   }
+  return filterMergedColumnsByDefaultVisible(merged, userCols, {
+    idColumnKey: 'materialDocumentItemId',
+    actionColumnKey: 'action',
+    tableMode: 'masterDetailDetail',
+    entityScope: 'company',
+  })
+})
+
+const summarySumFieldSet = new Set<string>(MATERIALDOCUMENTITEM_SUMMARY_SUM_FIELDS)
+
+/** 汇总行首列文案 */
+const summaryLabel = computed(() => t('components.business.page.editabletable.summarylabel'))
+
+/** 汇总行单元格（无行选择列：index 与展示列序一致） */
+const summaryCells = computed(() => {
+  const cells: Array<{ key: string; text: string; index: number }> = []
+  resolvedSummaryColumns.value.forEach((col, columnIndex) => {
+    const key = String(col.key ?? columnIndex)
+    let text = ''
+    if (columnIndex === 0) {
+      text = summaryLabel.value
+    } else if (isSummarySumField(key)) {
+      text = formatSummaryFieldTotal(key)
+    }
+    cells.push({
+      key,
+      text,
+      index: columnIndex,
+    })
+  })
+  return cells
+})
+
+/** 是否参与当前页合计 */
+function isSummarySumField(field: string): boolean {
+  return summarySumFieldSet.has(field)
+}
+
+/** 当前页 dataSource 各合计列求和 */
+const summaryFieldTotals = computed(() => {
+  const totals = Object.fromEntries(
+    MATERIALDOCUMENTITEM_SUMMARY_SUM_FIELDS.map((field) => [field, 0]),
+  ) as Record<(typeof MATERIALDOCUMENTITEM_SUMMARY_SUM_FIELDS)[number], number>
+  for (const row of dataSource.value) {
+    for (const field of MATERIALDOCUMENTITEM_SUMMARY_SUM_FIELDS) {
+      const num = Number(getMaterialDocumentItemField(row, field))
+      if (Number.isFinite(num)) {
+        totals[field] += num
+      }
+    }
+  }
+  return totals
+})
+
+/** 格式化合计单元格展示值 */
+function formatSummaryFieldTotal(field: string): string {
+  if (!isSummarySumField(field)) {
+    return ''
+  }
+  return formatSummaryValue(summaryFieldTotals.value[field as keyof typeof summaryFieldTotals.value])
 }
 
 /**
@@ -762,6 +810,9 @@ function buildListQuery(overrides?: Partial<MaterialDocumentItemQuery>): Materia
   if (form.localCurrencyAmount !== undefined && form.localCurrencyAmount !== null) {
     query.localCurrencyAmount = form.localCurrencyAmount
   }
+  if (form.isObsolete !== undefined && form.isObsolete !== null) {
+    query.isObsolete = form.isObsolete
+  }
   return query
 }
 
@@ -769,9 +820,6 @@ async function loadData() {
   if (!hasMasterSelection.value) {
     dataSource.value = []
     total.value = 0
-    selectedRowKeys.value = []
-    selectedRows.value = []
-    selectedRow.value = null
     return
   }
   loading.value = true
@@ -802,6 +850,36 @@ watch(masterMaterialDocumentId, () => {
 /** 租户/公司切换时刷新子表 */
 useTableRefresh(loadData)
 
+onMounted(() => {
+  startDetailTableScrollObserve()
+})
+
+onBeforeUnmount(() => {
+  stopDetailTableScrollObserve()
+})
+
+watch(
+  () => loading.value,
+  (isLoading) => {
+    if (!isLoading) {
+      void nextTick(() => recalcDetailTableScrollY())
+    }
+  },
+)
+
+watch(
+  () => [dataSource.value.length, visibleColumnKeys.value.join(',')],
+  () => {
+    void nextTick(() => recalcDetailTableScrollY())
+  },
+)
+
+watch(hasMasterSelection, (selected) => {
+  if (selected) {
+    void nextTick(() => startDetailTableScrollObserve())
+  }
+})
+
 function handleSearch() {
   currentPage.value = getTaktDefaultPageIndex()
   void loadData()
@@ -811,111 +889,6 @@ function handleQueryReset() {
   queryKeyword.value = ''
   currentPage.value = getTaktDefaultPageIndex()
   void loadData()
-}
-
-function handleCreate() {
-  if (!hasMasterSelection.value) {
-    message.warning(t('common.status.empty'))
-    return
-  }
-  formTitle.value = t('common.dialog.title.create', { entity: pi.self() })
-  formData.value = {}
-  formVisible.value = true
-}
-
-async function handleEdit(record: MaterialDocumentItem) {
-  formTitle.value = t('common.dialog.title.edit', { entity: pi.self() })
-  formLoading.value = true
-  try {
-    const detail = await getMaterialDocumentItemById(getMaterialDocumentItemId(record))
-    formData.value = detail ? { ...detail } : { ...record }
-    formVisible.value = true
-  } finally {
-    formLoading.value = false
-  }
-}
-
-function handleUpdate() {
-  if (selectedRow.value) {
-    void handleEdit(selectedRow.value)
-  } else {
-    message.warning(t('common.tip.select.to.action', {
-      action: t('common.page.button.edit'),
-      entity: pi.self(),
-    }))
-  }
-}
-
-async function handleFormSubmit() {
-  const refInst = formRef.value
-  if (!refInst?.validate) return
-  try {
-    await refInst.validate()
-  } catch {
-    return
-  }
-  formLoading.value = true
-  try {
-    const payload = refInst.getValues?.()
-    const id = formData.value?.materialDocumentItemId
-    if (id) {
-      await updateMaterialDocumentItem(id, payload)
-      message.success(t('common.feedback.updated', { target: pi.self() }))
-    } else {
-      await createMaterialDocumentItem(payload)
-      message.success(t('common.feedback.created', { target: pi.self() }))
-    }
-    formVisible.value = false
-    await loadData()
-  } finally {
-    formLoading.value = false
-  }
-}
-
-function handleFormCancel() {
-  formVisible.value = false
-}
-
-async function handleDeleteOne(record: MaterialDocumentItem) {
-  Modal.confirm({
-    title: t('common.tip.confirm.delete.title'),
-    content: t('common.tip.confirm.delete.entity', {
-      entity: pi.self(),
-      name: t('common.tip.this.target', { target: pi.self() }),
-    }),
-    okText: t('common.page.button.delete'),
-    cancelText: t('common.page.button.cancel'),
-    onOk: async () => {
-      await deleteMaterialDocumentItemById(getMaterialDocumentItemId(record))
-      message.success(t('common.feedback.deleted', { target: pi.self() }))
-      await loadData()
-    },
-  })
-}
-
-async function handleDelete() {
-  if (!hasMasterSelection.value || selectedRows.value.length === 0) {
-    message.warning(t('common.tip.select.to.action', {
-      action: t('common.page.button.delete'),
-      entity: pi.self(),
-    }))
-    return
-  }
-  Modal.confirm({
-    title: t('common.tip.confirm.delete.title'),
-    content: t('common.tip.confirm.delete.count', {
-      entity: pi.self(),
-      count: selectedRows.value.length,
-    }),
-    okText: t('common.page.button.delete'),
-    cancelText: t('common.page.button.cancel'),
-    onOk: async () => {
-      const ids = selectedRows.value.map((r) => getMaterialDocumentItemId(r)).filter(Boolean)
-      await deleteMaterialDocumentItemBatch(ids)
-      message.success(t('common.feedback.deleted', { target: pi.self() }))
-      await loadData()
-    },
-  })
 }
 
 function handleRefresh() {

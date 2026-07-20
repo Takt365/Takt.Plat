@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Infrastructure.Data.Seeds.I18nSeedData.Logistics.Quality.Operation
 // 文件名称：TaktIpqcDefectHandlingI18nSeedData.cs
-// 创建时间：2026-07-09
+// 创建时间：2026-07-20
 // 创建人：Takt365(Auto Generated)
 // 功能描述：TaktIpqcDefectHandling 实体字段国际化种子（无对应 frontend locales；TranslationText 取自 ColumnDescription，ContextNote 取自属性 XML summary）
 // 
@@ -100,13 +100,13 @@ public class TaktIpqcDefectHandlingI18nSeedData : ITaktSeedDataCoordinator
             new TranslationSeedItem("entity.ipqcdefecthandling.code", "zh-HK", "IPQC不良处理编码_hk", "IPQC不良处理编码"),
 
             // entity.ipqcdefecthandling.ipqcorderitemid
-            new TranslationSeedItem("entity.ipqcdefecthandling.ipqcorderitemid", "en-US", "IPQC检验单明细ID_us", "IPQC检验单明细 ID（关联 TaktIpqcOrderItem.Id，选项 TaktIpqcOrderItems/options）"),
+            new TranslationSeedItem("entity.ipqcdefecthandling.ipqcorderitemid", "en-US", "IPQC检验单明细ID_us", "IPQC检验单明细 ID（选项 TaktIpqcOrderItems/options，DictValue=Id）"),
             // entity.ipqcdefecthandling.ipqcorderitemid
-            new TranslationSeedItem("entity.ipqcdefecthandling.ipqcorderitemid", "ja-JP", "IPQC检验单明细ID_jp", "IPQC检验单明细 ID（关联 TaktIpqcOrderItem.Id，选项 TaktIpqcOrderItems/options）"),
+            new TranslationSeedItem("entity.ipqcdefecthandling.ipqcorderitemid", "ja-JP", "IPQC检验单明细ID_jp", "IPQC检验单明细 ID（选项 TaktIpqcOrderItems/options，DictValue=Id）"),
             // entity.ipqcdefecthandling.ipqcorderitemid
-            new TranslationSeedItem("entity.ipqcdefecthandling.ipqcorderitemid", "zh-CN", "IPQC检验单明细ID", "IPQC检验单明细 ID（关联 TaktIpqcOrderItem.Id，选项 TaktIpqcOrderItems/options）"),
+            new TranslationSeedItem("entity.ipqcdefecthandling.ipqcorderitemid", "zh-CN", "IPQC检验单明细ID", "IPQC检验单明细 ID（选项 TaktIpqcOrderItems/options，DictValue=Id）"),
             // entity.ipqcdefecthandling.ipqcorderitemid
-            new TranslationSeedItem("entity.ipqcdefecthandling.ipqcorderitemid", "zh-HK", "IPQC检验单明细ID_hk", "IPQC检验单明细 ID（关联 TaktIpqcOrderItem.Id，选项 TaktIpqcOrderItems/options）"),
+            new TranslationSeedItem("entity.ipqcdefecthandling.ipqcorderitemid", "zh-HK", "IPQC检验单明细ID_hk", "IPQC检验单明细 ID（选项 TaktIpqcOrderItems/options，DictValue=Id）"),
 
             // entity.ipqcdefecthandling.ipqcordercode
             new TranslationSeedItem("entity.ipqcdefecthandling.ipqcordercode", "en-US", "IPQC检验单编码_us", "IPQC检验单编码（冗余字段，便于查询）"),

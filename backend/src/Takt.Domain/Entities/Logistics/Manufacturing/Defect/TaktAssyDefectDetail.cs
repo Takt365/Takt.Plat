@@ -110,7 +110,7 @@ public class TaktAssyDefectDetail : TaktCompanyEntityBase
     public string? DefectReason { get; set; }
 
     /// <summary>
-    /// 修理员（关联 TaktEmployee.Id，选项 TaktEmployees/options）
+    /// 修理员（选项 TaktEmployees/options，DictValue=Id）
     /// </summary>
     [SugarColumn(ColumnName = "repair_operator", ColumnDescription = "修理员", Length = 40, ColumnDataType = "nvarchar", IsNullable = true)]
     public string? RepairOperator { get; set; }

@@ -26,7 +26,7 @@ namespace Takt.Domain.Entities.Routine.DocumentCenter;
 public class TaktDocumentVersion : TaktCompanyEntityBase
 {
     /// <summary>
-    /// 文档 ID（关联 TaktDocument.Id，选项 TaktDocuments/options）
+    /// 文档 ID（选项 TaktDocuments/options，DictValue=Id）
     /// </summary>
     [SugarColumn(ColumnName = "document_id", ColumnDescription = "文档ID", ColumnDataType = "bigint", IsNullable = false)]
     [JsonConverter(typeof(ValueToStringConverter))]
@@ -42,7 +42,7 @@ public class TaktDocumentVersion : TaktCompanyEntityBase
     [SugarColumn(ColumnName = "version_note", ColumnDescription = "版本说明", ColumnDataType = "nvarchar", Length = 500, IsNullable = true)]
     public string? VersionNote { get; set; }
     /// <summary>
-    /// 文件 ID（关联 TaktFile.Id，选项 TaktFiles/options）
+    /// 文件 ID（选项 TaktFiles/options，DictValue=Id）
     /// </summary>
     [SugarColumn(ColumnName = "file_id", ColumnDescription = "文件ID", ColumnDataType = "bigint", IsNullable = false)]
     [JsonConverter(typeof(ValueToStringConverter))]
@@ -73,7 +73,7 @@ public class TaktDocumentVersion : TaktCompanyEntityBase
     [SugarColumn(ColumnName = "file_extension", ColumnDescription = "文件扩展名", ColumnDataType = "nvarchar", Length = 20, IsNullable = true)]
     public string? FileExtension { get; set; }
     /// <summary>
-    /// 修订人 ID（关联 TaktUser.Id，选项 TaktUsers/options）
+    /// 修订人 ID（选项 TaktUsers/options，DictValue=Id）
     /// </summary>
     [SugarColumn(ColumnName = "revised_by", ColumnDescription = "修订人ID", ColumnDataType = "bigint", IsNullable = false)]
     [JsonConverter(typeof(ValueToStringConverter))]

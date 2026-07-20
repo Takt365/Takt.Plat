@@ -118,7 +118,7 @@ function requireEnvNumber(env: Record<string, string>, key: string): number {
  * 解析开发服务器 host
  * - 空字符串：不设置 host（仅本机）
  * - "true"：监听所有网卡
- * - 其它：作为 hostname
+ * - 其他：作为 hostname
  */
 function parseDevServerHost(value: string | undefined): string | boolean | undefined {
   if (value === undefined || value === '') {

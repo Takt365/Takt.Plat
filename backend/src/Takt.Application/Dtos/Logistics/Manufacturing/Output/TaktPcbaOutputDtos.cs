@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Application.Dtos.Logistics.Manufacturing.Output
 // 文件名称：TaktPcbaOutputDtos.cs
-// 创建时间：2026-07-09
+// 创建时间：2026-07-13
 // 创建人：Takt365(Auto Generated)
 // 功能描述：PcbaOutput 模块 DTO（由 generate-dtos-from-entity.cjs 根据 TaktPcbaOutput 生成，请按需审阅）
 // 
@@ -22,7 +22,7 @@ namespace Takt.Application.Dtos.Logistics.Manufacturing.Output;
 // ========================================
 
 /// <summary>
-/// PCBA日报实体 达成率(%) = 明细当日完成数量合计 ÷ 主表标准产能合计 × 100%。
+/// PCBA日报实体 达成率(%) = 明细当日完成数量合计 ÷ 明细人员标准产能合计 × 100%。
 /// 对应前端 TaktPcbaOutputDto
 /// 继承 TaktCompanyDtoBase
 /// </summary>
@@ -49,26 +49,6 @@ public class TaktPcbaOutputDto : TaktCompanyDtoBase
     /// 生产日期
     /// </summary>
     public DateTime ProdDate { get; set; }
-
-    /// <summary>
-    /// 生产班组（选项 TaktProductionTeams/options，存 TeamCode，ExtValue=PlantCode 过滤）
-    /// </summary>
-    public string ProdTeam { get; set; } = string.Empty;
-
-    /// <summary>
-    /// 直接人员
-    /// </summary>
-    public int DirectLabor { get; set; } = 0;
-
-    /// <summary>
-    /// 间接人员
-    /// </summary>
-    public int IndirectLabor { get; set; } = 0;
-
-    /// <summary>
-    /// 班次（字典 logistics_shift_category；1=早 2=中 3=晚 4=白班 5=夜班）
-    /// </summary>
-    public int ShiftNo { get; set; } = 0;
 
     /// <summary>
     /// 工单类别（回填：随工单）
@@ -104,21 +84,6 @@ public class TaktPcbaOutputDto : TaktCompanyDtoBase
     /// 序列号（回填：随工单）
     /// </summary>
     public string? SerialNo { get; set; } = string.Empty;
-
-    /// <summary>
-    /// 标准工时(分钟)（回填：按 MaterialCode 查询 TaktStandardOperationTime 汇总转换工时）
-    /// </summary>
-    public decimal StdMinutes { get; set; }
-
-    /// <summary>
-    /// 标准点数（PCBA 专用）
-    /// </summary>
-    public int StdShorts { get; set; } = 0;
-
-    /// <summary>
-    /// 标准产能（计算结果：利用标准生产稼动率计算出小时产能，DirectLabor人数*60分钟/StdMinutes标准工时*标准生产稼动率）
-    /// </summary>
-    public decimal StdCapacity { get; set; }
 
     /// <summary>
     /// PCBA明细列表
@@ -169,26 +134,6 @@ public class TaktPcbaOutputQueryDto : TaktPagedQuery
     public DateTime? ProdDateEnd { get; set; }
 
     /// <summary>
-    /// 生产班组（选项 TaktProductionTeams/options，存 TeamCode，ExtValue=PlantCode 过滤）
-    /// </summary>
-    public string? ProdTeam { get; set; } = string.Empty;
-
-    /// <summary>
-    /// 直接人员
-    /// </summary>
-    public int? DirectLabor { get; set; }
-
-    /// <summary>
-    /// 间接人员
-    /// </summary>
-    public int? IndirectLabor { get; set; }
-
-    /// <summary>
-    /// 班次（字典 logistics_shift_category；1=早 2=中 3=晚 4=白班 5=夜班）
-    /// </summary>
-    public int? ShiftNo { get; set; }
-
-    /// <summary>
     /// 工单类别（回填：随工单）
     /// </summary>
     public string? ProdOrderType { get; set; } = string.Empty;
@@ -222,21 +167,6 @@ public class TaktPcbaOutputQueryDto : TaktPagedQuery
     /// 序列号（回填：随工单）
     /// </summary>
     public string? SerialNo { get; set; } = string.Empty;
-
-    /// <summary>
-    /// 标准工时(分钟)（回填：按 MaterialCode 查询 TaktStandardOperationTime 汇总转换工时）
-    /// </summary>
-    public decimal? StdMinutes { get; set; }
-
-    /// <summary>
-    /// 标准点数（PCBA 专用）
-    /// </summary>
-    public int? StdShorts { get; set; }
-
-    /// <summary>
-    /// 标准产能（计算结果：利用标准生产稼动率计算出小时产能，DirectLabor人数*60分钟/StdMinutes标准工时*标准生产稼动率）
-    /// </summary>
-    public decimal? StdCapacity { get; set; }
 
     /// <summary>
     /// 创建时间（范围查询-开始）
@@ -301,27 +231,6 @@ public class TaktPcbaOutputCreateDto
     public DateTime ProdDate { get; set; }
 
     /// <summary>
-    /// 生产班组（选项 TaktProductionTeams/options，存 TeamCode，ExtValue=PlantCode 过滤）
-    /// </summary>
-    [Required(ErrorMessage = "生产班组（选项 TaktProductionTeams/options，存 TeamCode，ExtValue=PlantCode 过滤）不能为空")]
-    public string ProdTeam { get; set; } = string.Empty;
-
-    /// <summary>
-    /// 直接人员
-    /// </summary>
-    public int DirectLabor { get; set; } = 0;
-
-    /// <summary>
-    /// 间接人员
-    /// </summary>
-    public int IndirectLabor { get; set; } = 0;
-
-    /// <summary>
-    /// 班次（字典 logistics_shift_category；1=早 2=中 3=晚 4=白班 5=夜班）
-    /// </summary>
-    public int ShiftNo { get; set; } = 0;
-
-    /// <summary>
     /// 工单类别（回填：随工单）
     /// </summary>
     public string? ProdOrderType { get; set; } = string.Empty;
@@ -360,24 +269,9 @@ public class TaktPcbaOutputCreateDto
     public string? SerialNo { get; set; } = string.Empty;
 
     /// <summary>
-    /// 标准工时(分钟)（回填：按 MaterialCode 查询 TaktStandardOperationTime 汇总转换工时）
-    /// </summary>
-    public decimal StdMinutes { get; set; }
-
-    /// <summary>
-    /// 标准点数（PCBA 专用）
-    /// </summary>
-    public int StdShorts { get; set; } = 0;
-
-    /// <summary>
-    /// 标准产能（计算结果：利用标准生产稼动率计算出小时产能，DirectLabor人数*60分钟/StdMinutes标准工时*标准生产稼动率）
-    /// </summary>
-    public decimal StdCapacity { get; set; }
-
-    /// <summary>
     /// PCBA明细列表（子表，级联保存）
     /// </summary>
-    public List<TaktPcbaOutputDetailUpdateDto>? PcbaOutputDetails { get; set; }
+    public List<TaktPcbaOutputDetailCreateDto>? PcbaOutputDetails { get; set; }
 
     /// <summary>
     /// 扩展字段JSON
@@ -408,6 +302,11 @@ public class TaktPcbaOutputUpdateDto : TaktPcbaOutputCreateDto
     [AdaptMember("Id")]
     [JsonConverter(typeof(ValueToStringConverter))]
     public long PcbaOutputId { get; set; }
+
+    /// <summary>
+    /// PCBA明细列表（子表，级联保存）
+    /// </summary>
+    public new List<TaktPcbaOutputDetailUpdateDto>? PcbaOutputDetails { get; set; }
 
 }
 
@@ -446,26 +345,6 @@ public class TaktPcbaOutputTemplateDto
     public DateTime? ProdDate { get; set; }
 
     /// <summary>
-    /// 生产班组（选项 TaktProductionTeams/options，存 TeamCode，ExtValue=PlantCode 过滤）
-    /// </summary>
-    public string? ProdTeam { get; set; } = string.Empty;
-
-    /// <summary>
-    /// 直接人员
-    /// </summary>
-    public int? DirectLabor { get; set; }
-
-    /// <summary>
-    /// 间接人员
-    /// </summary>
-    public int? IndirectLabor { get; set; }
-
-    /// <summary>
-    /// 班次（字典 logistics_shift_category；1=早 2=中 3=晚 4=白班 5=夜班）
-    /// </summary>
-    public int? ShiftNo { get; set; }
-
-    /// <summary>
     /// 工单类别（回填：随工单）
     /// </summary>
     public string? ProdOrderType { get; set; } = string.Empty;
@@ -499,21 +378,6 @@ public class TaktPcbaOutputTemplateDto
     /// 序列号（回填：随工单）
     /// </summary>
     public string? SerialNo { get; set; } = string.Empty;
-
-    /// <summary>
-    /// 标准工时(分钟)（回填：按 MaterialCode 查询 TaktStandardOperationTime 汇总转换工时）
-    /// </summary>
-    public decimal? StdMinutes { get; set; }
-
-    /// <summary>
-    /// 标准点数（PCBA 专用）
-    /// </summary>
-    public int? StdShorts { get; set; }
-
-    /// <summary>
-    /// 标准产能（计算结果：利用标准生产稼动率计算出小时产能，DirectLabor人数*60分钟/StdMinutes标准工时*标准生产稼动率）
-    /// </summary>
-    public decimal? StdCapacity { get; set; }
 
     /// <summary>
     /// PCBA明细列表（子表，级联保存）
@@ -568,26 +432,6 @@ public class TaktPcbaOutputImportDto
     public DateTime? ProdDate { get; set; }
 
     /// <summary>
-    /// 生产班组（选项 TaktProductionTeams/options，存 TeamCode，ExtValue=PlantCode 过滤）
-    /// </summary>
-    public string? ProdTeam { get; set; } = string.Empty;
-
-    /// <summary>
-    /// 直接人员
-    /// </summary>
-    public int? DirectLabor { get; set; }
-
-    /// <summary>
-    /// 间接人员
-    /// </summary>
-    public int? IndirectLabor { get; set; }
-
-    /// <summary>
-    /// 班次（字典 logistics_shift_category；1=早 2=中 3=晚 4=白班 5=夜班）
-    /// </summary>
-    public int? ShiftNo { get; set; }
-
-    /// <summary>
     /// 工单类别（回填：随工单）
     /// </summary>
     public string? ProdOrderType { get; set; } = string.Empty;
@@ -621,21 +465,6 @@ public class TaktPcbaOutputImportDto
     /// 序列号（回填：随工单）
     /// </summary>
     public string? SerialNo { get; set; } = string.Empty;
-
-    /// <summary>
-    /// 标准工时(分钟)（回填：按 MaterialCode 查询 TaktStandardOperationTime 汇总转换工时）
-    /// </summary>
-    public decimal? StdMinutes { get; set; }
-
-    /// <summary>
-    /// 标准点数（PCBA 专用）
-    /// </summary>
-    public int? StdShorts { get; set; }
-
-    /// <summary>
-    /// 标准产能（计算结果：利用标准生产稼动率计算出小时产能，DirectLabor人数*60分钟/StdMinutes标准工时*标准生产稼动率）
-    /// </summary>
-    public decimal? StdCapacity { get; set; }
 
     /// <summary>
     /// PCBA明细列表（子表，级联保存）
@@ -691,26 +520,6 @@ public class TaktPcbaOutputExportDto
     public DateTime ProdDate { get; set; }
 
     /// <summary>
-    /// 生产班组（选项 TaktProductionTeams/options，存 TeamCode，ExtValue=PlantCode 过滤）
-    /// </summary>
-    public string ProdTeam { get; set; } = string.Empty;
-
-    /// <summary>
-    /// 直接人员
-    /// </summary>
-    public int DirectLabor { get; set; } = 0;
-
-    /// <summary>
-    /// 间接人员
-    /// </summary>
-    public int IndirectLabor { get; set; } = 0;
-
-    /// <summary>
-    /// 班次（字典 logistics_shift_category；1=早 2=中 3=晚 4=白班 5=夜班）
-    /// </summary>
-    public int ShiftNo { get; set; } = 0;
-
-    /// <summary>
     /// 工单类别（回填：随工单）
     /// </summary>
     public string? ProdOrderType { get; set; } = string.Empty;
@@ -746,21 +555,6 @@ public class TaktPcbaOutputExportDto
     public string? SerialNo { get; set; } = string.Empty;
 
     /// <summary>
-    /// 标准工时(分钟)（回填：按 MaterialCode 查询 TaktStandardOperationTime 汇总转换工时）
-    /// </summary>
-    public decimal StdMinutes { get; set; }
-
-    /// <summary>
-    /// 标准点数（PCBA 专用）
-    /// </summary>
-    public int StdShorts { get; set; } = 0;
-
-    /// <summary>
-    /// 标准产能（计算结果：利用标准生产稼动率计算出小时产能，DirectLabor人数*60分钟/StdMinutes标准工时*标准生产稼动率）
-    /// </summary>
-    public decimal StdCapacity { get; set; }
-
-    /// <summary>
     /// 扩展字段JSON
     /// </summary>
     public string? ExtField { get; set; }
@@ -777,21 +571,21 @@ public class TaktPcbaOutputExportDto
 }
 
 // ========================================
-// PCBA日报默认子表明细预览 DTO（非实体映射，新增日报前预览）
+// PCBA 日报默认明细预览 DTO
 // ========================================
 
 /// <summary>
-/// PCBA日报默认子表明细预览 DTO
+/// PCBA日报新增时按物料标准工序时间生成的默认明细预览
 /// </summary>
 public class TaktPcbaOutputDefaultDetailDto
 {
     /// <summary>
-    /// 行号（项号/序号，固定步长=10）
+    /// 行号
     /// </summary>
     public int LineNumber { get; set; }
 
     /// <summary>
-    /// 生产时段（工作中心编码）
+    /// 工作中心（对应明细 TimePeriod）
     /// </summary>
     public string WorkCenter { get; set; } = string.Empty;
 

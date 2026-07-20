@@ -99,6 +99,7 @@ export function CreateActionColumn<TRow = ActionRecord>(
     width,
     fixed,
     align,
+    ellipsis: false,
     className: 'takt-action-column',
     customRender: ({ record, index }: { record: ActionRecord; index: number }) => {
       const row = toRow(record);

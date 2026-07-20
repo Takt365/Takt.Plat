@@ -4,8 +4,8 @@
 // 文件名称：TaktSalesPriceItem.cs
 // 创建时间：2025-01-20
 // 创建人：Takt365(Cursor AI)
-// 功能描述：Takt销售价格明细实体，定义客户物料价格领域模型
-// 
+// 功能描述：Takt销售价格明细实体（定价记录条件行：等级/价格/税码）
+//
 // 版权信息：Copyright (c) 2025 Takt  All rights reserved.
 // 免责声明：此软件使用 MIT License，作者不承担任何使用风险。
 // ========================================
@@ -16,68 +16,93 @@ using Takt.Domain.Entities;
 namespace Takt.Domain.Entities.Logistics.Sales;
 
 /// <summary>
-/// Takt销售价格明细实体（客户物料价格明细表）
+/// Takt销售价格明细实体（定价记录条件行；主子表：TaktSalesPrice → Items → ScaleQuantities / ScaleValues）
 /// </summary>
 [SugarTable("takt_logistics_sales_price_item", "销售价格明细表")]
 [SugarIndex("ix_sales_price_item_tenant", nameof(TenantCode), OrderByType.Asc, nameof(CompanyCode), OrderByType.Asc, false)]
 [SugarIndex("ix_sales_price_item_is_deleted", nameof(TenantCode), OrderByType.Asc, nameof(CompanyCode), OrderByType.Asc, nameof(IsDeleted), OrderByType.Asc, false)]
-[SugarIndex("ix_takt_logistics_sales_price_item_price_line_unique", nameof(TenantCode), OrderByType.Asc, nameof(CompanyCode), OrderByType.Asc, nameof(SalesPriceId), OrderByType.Asc, nameof(LineNumber), OrderByType.Asc, true)]
+[SugarIndex("ix_takt_logistics_sales_price_item_seq_unique", nameof(TenantCode), OrderByType.Asc, nameof(CompanyCode), OrderByType.Asc, nameof(SalesPriceId), OrderByType.Asc, nameof(SalesPriceSeq), OrderByType.Asc, true)]
+[SugarIndex("ix_takt_logistics_sales_price_item_code", nameof(TenantCode), OrderByType.Asc, nameof(CompanyCode), OrderByType.Asc, nameof(SalesPriceCode), OrderByType.Asc, false)]
 public class TaktSalesPriceItem : TaktCompanyEntityBase
 {
     /// <summary>
-    /// 销售价格（关联 TaktSalesPrice.Id，选项 TaktSalesPrices/options）
+    /// 销售价格 ID（主子表关系；选项 TaktSalesPrices/options，DictValue=Id）
     /// </summary>
     [SugarColumn(ColumnName = "sales_price_id", ColumnDescription = "销售价格ID", ColumnDataType = "bigint", IsNullable = false)]
     [JsonConverter(typeof(ValueToStringConverter))]
     public long SalesPriceId { get; set; }
 
     /// <summary>
-    /// 销售价格编码（冗余字段，便于查询）
+    /// 定价记录号（冗余；与主表 SalesPriceCode 一致，长度 20）
     /// </summary>
-    [SugarColumn(ColumnName = "sales_price_code", ColumnDescription = "销售价格编码", ColumnDataType = "nvarchar", Length = 50, IsNullable = false)]
+    [SugarColumn(ColumnName = "sales_price_code", ColumnDescription = "定价记录号", ColumnDataType = "nvarchar", Length = 20, IsNullable = false)]
     public string SalesPriceCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 行号（项号/序号，固定步长=10）
+    /// 定价序号（项号/序号，固定步长=10）
     /// </summary>
-    [SugarColumn(ColumnName = "line_number", ColumnDescription = "行号", ColumnDataType = "int", IsNullable = false, DefaultValue = "0")]
-    public int LineNumber { get; set; } = 0;
+    [SugarColumn(ColumnName = "sales_price_seq", ColumnDescription = "定价序号", ColumnDataType = "int", IsNullable = false, DefaultValue = "10")]
+    public int SalesPriceSeq { get; set; } = 10;
 
     /// <summary>
-    /// 物料编码（选项 TaktMaterials/options，DictValue=MaterialCode）
+    /// 条件类型（冗余；字典 logistics_price_type；与主表 PriceType 一致，PB00/PR00/MWST/MWRK/NLXV）
     /// </summary>
-    [SugarColumn(ColumnName = "material_code", ColumnDescription = "物料编码", ColumnDataType = "nvarchar", Length = 20, IsNullable = false)]
-    public string MaterialCode { get; set; } = string.Empty;
+    [SugarColumn(ColumnName = "price_type", ColumnDescription = "条件类型", ColumnDataType = "nvarchar", Length = 4, IsNullable = false, DefaultValue = "PB00")]
+    public string PriceType { get; set; } = "PB00";
 
     /// <summary>
-    /// 销售单位（字典 logistics_unit_of_measure_code，DictValue=PC/EA 等；默认 PC）
+    /// 等级类型（字典 logistics_scale_type；SAP STFKZ；A=基础等级，B=到等级，C=未使用，D=累进间隔等级）
     /// </summary>
-    [SugarColumn(ColumnName = "sales_unit", ColumnDescription = "销售单位", ColumnDataType = "nvarchar", Length = 5, IsNullable = false, DefaultValue = "PC")]
-    public string SalesUnit { get; set; } = "PC";
+    [SugarColumn(ColumnName = "scale_type", ColumnDescription = "等级类型", ColumnDataType = "nvarchar", Length = 1, IsNullable = true)]
+    public string? ScaleType { get; set; }
 
     /// <summary>
-    /// 价格单位（字典 logistics_price_unit_param；1/10/100/1000；默认 1000）
+    /// 等级基础（字典 logistics_scale_basis；SAP KZBZG；B=价值等级，C=数量规模，…）
     /// </summary>
-    [SugarColumn(ColumnName = "sales_per_unit", ColumnDescription = "价格单位", ColumnDataType = "int", IsNullable = false, DefaultValue = "1000")]
-    public int SalesPerUnit { get; set; } = 1000;
+    [SugarColumn(ColumnName = "scale_basis", ColumnDescription = "等级基础", ColumnDataType = "nvarchar", Length = 1, IsNullable = true)]
+    public string? ScaleBasis { get; set; }
 
     /// <summary>
-    /// 销售价格（decimal(18,5)）
+    /// 等级数量
     /// </summary>
-    [SugarColumn(ColumnName = "sales_price", ColumnDescription = "销售价格", ColumnDataType = "decimal", Length = 18, DecimalDigits = 5, IsNullable = false, DefaultValue = "0")]
-    public decimal SalesPrice { get; set; } = 0;
+    [SugarColumn(ColumnName = "scale_quantity", ColumnDescription = "等级数量", ColumnDataType = "decimal", Length = 18, DecimalDigits = 4, IsNullable = false, DefaultValue = "0")]
+    public decimal ScaleQuantity { get; set; } = 0;
 
     /// <summary>
-    /// 最小订购量（基本单位数量，整数）
+    /// 等级单位（字典 logistics_unit_of_measure_code，DictValue=PC/EA 等）
     /// </summary>
-    [SugarColumn(ColumnName = "min_order_quantity", ColumnDescription = "最小订购量", ColumnDataType = "int", IsNullable = false, DefaultValue = "0")]
-    public int MinOrderQuantity { get; set; } = 0;
+    [SugarColumn(ColumnName = "scale_unit", ColumnDescription = "等级单位", ColumnDataType = "nvarchar", Length = 5, IsNullable = true)]
+    public string? ScaleUnit { get; set; }
 
     /// <summary>
-    /// 最大订购量（基本单位数量，0表示无限制，整数）
+    /// 等级值
     /// </summary>
-    [SugarColumn(ColumnName = "max_order_quantity", ColumnDescription = "最大订购量", ColumnDataType = "int", IsNullable = false, DefaultValue = "0")]
-    public int MaxOrderQuantity { get; set; } = 0;
+    [SugarColumn(ColumnName = "scale_value", ColumnDescription = "等级值", ColumnDataType = "decimal", Length = 18, DecimalDigits = 5, IsNullable = false, DefaultValue = "0")]
+    public decimal ScaleValue { get; set; } = 0;
+
+    /// <summary>
+    /// 等级货币（字典 accounting_currency_code，DictValue=CNY/USD 等）
+    /// </summary>
+    [SugarColumn(ColumnName = "scale_currency", ColumnDescription = "等级货币", ColumnDataType = "nvarchar", Length = 3, IsNullable = true)]
+    public string? ScaleCurrency { get; set; }
+
+    /// <summary>
+    /// 计算类型（字典 logistics_calculation_type；SAP KRECH；默认 A=百分数）
+    /// </summary>
+    [SugarColumn(ColumnName = "calculation_type", ColumnDescription = "计算类型", ColumnDataType = "nvarchar", Length = 1, IsNullable = false, DefaultValue = "A")]
+    public string CalculationType { get; set; } = "A";
+
+    /// <summary>
+    /// 价格
+    /// </summary>
+    [SugarColumn(ColumnName = "price", ColumnDescription = "价格", ColumnDataType = "decimal", Length = 18, DecimalDigits = 5, IsNullable = false, DefaultValue = "0")]
+    public decimal Price { get; set; } = 0;
+
+    /// <summary>
+    /// 税码（字典 accounting_tax_code，DictValue=J0/J1/J2…；SAP MWSKZ）
+    /// </summary>
+    [SugarColumn(ColumnName = "tax_code", ColumnDescription = "税码", ColumnDataType = "nvarchar", Length = 4, IsNullable = true)]
+    public string? TaxCode { get; set; }
 
     /// <summary>
     /// 是否作废（字典 sys_yes_no_type，0=否 1=是；编辑移除子行时标记作废）
@@ -85,20 +110,15 @@ public class TaktSalesPriceItem : TaktCompanyEntityBase
     [SugarColumn(ColumnName = "is_obsolete", ColumnDescription = "是否作废", ColumnDataType = "int", IsNullable = false, DefaultValue = "0")]
     public int IsObsolete { get; set; } = 0;
 
-
-// ========================================
-    // 导航属性区域
-    // ========================================
+    /// <summary>
+    /// 数量等级行列表（SAP KONM；主子表关系）
+    /// </summary>
+    [Navigate(NavigateType.OneToMany, nameof(TaktSalesPriceScaleQuantity.SalesPriceItemId))]
+    public List<TaktSalesPriceScaleQuantity>? ScaleQuantities { get; set; }
 
     /// <summary>
-    /// 价格阶梯列表（主子表关系，一个物料价格可以有多个阶梯）
+    /// 价值等级行列表（SAP KONW；主子表关系）
     /// </summary>
-    [Navigate(NavigateType.OneToMany, nameof(TaktSalesPriceScale.ItemId))]
-    public List<TaktSalesPriceScale>? Scales { get; set; }
-
-    /// <summary>
-    /// 销售价格（主表）
-    /// </summary>
-    [Navigate(NavigateType.ManyToOne, nameof(SalesPriceId))]
-    public TaktSalesPrice? Price { get; set; }
+    [Navigate(NavigateType.OneToMany, nameof(TaktSalesPriceScaleValue.SalesPriceItemId))]
+    public List<TaktSalesPriceScaleValue>? ScaleValues { get; set; }
 }

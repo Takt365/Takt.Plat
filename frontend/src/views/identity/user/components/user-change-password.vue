@@ -188,5 +188,5 @@ defineExpose({
 </script>
 
 <style scoped lang="css">
-/* 本组件无局部样式；占位与项目其它表单子组件一致 */
+/* 本组件无局部样式；占位与项目其他表单子组件一致 */
 </style>

@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Application.Dtos.Logistics.Manufacturing.Output
 // 文件名称：TaktPcbaOutputDetailDtos.cs
-// 创建时间：2026-07-09
+// 创建时间：2026-07-13
 // 创建人：Takt365(Auto Generated)
 // 功能描述：PcbaOutputDetail 模块 DTO（由 generate-dtos-from-entity.cjs 根据 TaktPcbaOutputDetail 生成，请按需审阅）
 // 
@@ -62,12 +62,52 @@ public class TaktPcbaOutputDetailDto : TaktCompanyDtoBase
     public string TimePeriod { get; set; } = string.Empty;
 
     /// <summary>
+    /// 生产班组（选项 TaktProductionTeams/options，存 TeamCode，ExtValue=PlantCode 过滤）
+    /// </summary>
+    public string ProdTeam { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 生产设备编码（关联 TaktProductionEquipment.ProductionEquipmentCode，选项 TaktProductionEquipments/options）
+    /// </summary>
+    public string ProductionEquipmentCode { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 直接人员
+    /// </summary>
+    public int DirectLabor { get; set; } = 0;
+
+    /// <summary>
+    /// 间接人员
+    /// </summary>
+    public int IndirectLabor { get; set; } = 0;
+
+    /// <summary>
     /// 班次（字典 logistics_shift_category；1=早 2=中 3=晚 4=白班 5=夜班）
     /// </summary>
     public int ShiftNo { get; set; } = 0;
 
     /// <summary>
-    /// PCB板别（字典 logistics_pcba_panel_category，存 DictValue）
+    /// 标准工时(分钟)（回填：按工作中心查询 TaktStandardOperationTime 转换工时）
+    /// </summary>
+    public decimal StdMinutes { get; set; }
+
+    /// <summary>
+    /// 人员标准产能（计算结果：DirectLabor×60÷StdMinutes×标准生产稼动率）
+    /// </summary>
+    public decimal StdLaborCapacity { get; set; }
+
+    /// <summary>
+    /// 标准点数（PCBA 专用，按工作中心回填）
+    /// </summary>
+    public int StdShorts { get; set; } = 0;
+
+    /// <summary>
+    /// 设备标准产能（计算结果：60÷StdMinutes×设备时间稼动率）
+    /// </summary>
+    public decimal StdEquipmentCapacity { get; set; }
+
+    /// <summary>
+    /// PCB板别（字典 logistics_pcba_function_category，存 DictValue）
     /// </summary>
     public string PcbBoardType { get; set; } = string.Empty;
 
@@ -122,7 +162,7 @@ public class TaktPcbaOutputDetailDto : TaktCompanyDtoBase
     public string? DowntimeDescription { get; set; } = string.Empty;
 
     /// <summary>
-    /// 投入工数(分钟)（计算结果：主表 DirectLabor×60）
+    /// 投入工数(分钟)（计算结果：明细 DirectLabor×60）
     /// </summary>
     public decimal InputMinutes { get; set; }
 
@@ -177,7 +217,7 @@ public class TaktPcbaOutputDetailDto : TaktCompanyDtoBase
     public int MixedProd { get; set; } = 0;
 
     /// <summary>
-    /// 达成率(%)（计算结果：当日完成数÷主表标准产能×100%；标准产能为0时取0）
+    /// 达成率(%)（计算结果：当日完成数÷明细人员标准产能×100%；标准产能为0时取0）
     /// </summary>
     public decimal AchievementRate { get; set; }
 
@@ -236,12 +276,52 @@ public class TaktPcbaOutputDetailQueryDto : TaktPagedQuery
     public string? TimePeriod { get; set; } = string.Empty;
 
     /// <summary>
+    /// 生产班组（选项 TaktProductionTeams/options，存 TeamCode，ExtValue=PlantCode 过滤）
+    /// </summary>
+    public string? ProdTeam { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 生产设备编码（关联 TaktProductionEquipment.ProductionEquipmentCode，选项 TaktProductionEquipments/options）
+    /// </summary>
+    public string? ProductionEquipmentCode { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 直接人员
+    /// </summary>
+    public int? DirectLabor { get; set; }
+
+    /// <summary>
+    /// 间接人员
+    /// </summary>
+    public int? IndirectLabor { get; set; }
+
+    /// <summary>
     /// 班次（字典 logistics_shift_category；1=早 2=中 3=晚 4=白班 5=夜班）
     /// </summary>
     public int? ShiftNo { get; set; }
 
     /// <summary>
-    /// PCB板别（字典 logistics_pcba_panel_category，存 DictValue）
+    /// 标准工时(分钟)（回填：按工作中心查询 TaktStandardOperationTime 转换工时）
+    /// </summary>
+    public decimal? StdMinutes { get; set; }
+
+    /// <summary>
+    /// 人员标准产能（计算结果：DirectLabor×60÷StdMinutes×标准生产稼动率）
+    /// </summary>
+    public decimal? StdLaborCapacity { get; set; }
+
+    /// <summary>
+    /// 标准点数（PCBA 专用，按工作中心回填）
+    /// </summary>
+    public int? StdShorts { get; set; }
+
+    /// <summary>
+    /// 设备标准产能（计算结果：60÷StdMinutes×设备时间稼动率）
+    /// </summary>
+    public decimal? StdEquipmentCapacity { get; set; }
+
+    /// <summary>
+    /// PCB板别（字典 logistics_pcba_function_category，存 DictValue）
     /// </summary>
     public string? PcbBoardType { get; set; } = string.Empty;
 
@@ -296,7 +376,7 @@ public class TaktPcbaOutputDetailQueryDto : TaktPagedQuery
     public string? DowntimeDescription { get; set; } = string.Empty;
 
     /// <summary>
-    /// 投入工数(分钟)（计算结果：主表 DirectLabor×60）
+    /// 投入工数(分钟)（计算结果：明细 DirectLabor×60）
     /// </summary>
     public decimal? InputMinutes { get; set; }
 
@@ -351,7 +431,7 @@ public class TaktPcbaOutputDetailQueryDto : TaktPagedQuery
     public int? MixedProd { get; set; }
 
     /// <summary>
-    /// 达成率(%)（计算结果：当日完成数÷主表标准产能×100%；标准产能为0时取0）
+    /// 达成率(%)（计算结果：当日完成数÷明细人员标准产能×100%；标准产能为0时取0）
     /// </summary>
     public decimal? AchievementRate { get; set; }
 
@@ -429,14 +509,56 @@ public class TaktPcbaOutputDetailCreateDto
     public string TimePeriod { get; set; } = string.Empty;
 
     /// <summary>
+    /// 生产班组（选项 TaktProductionTeams/options，存 TeamCode，ExtValue=PlantCode 过滤）
+    /// </summary>
+    [Required(ErrorMessage = "生产班组（选项 TaktProductionTeams/options，存 TeamCode，ExtValue=PlantCode 过滤）不能为空")]
+    public string ProdTeam { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 生产设备编码（关联 TaktProductionEquipment.ProductionEquipmentCode，选项 TaktProductionEquipments/options）
+    /// </summary>
+    [Required(ErrorMessage = "生产设备编码（关联 TaktProductionEquipment.ProductionEquipmentCode，选项 TaktProductionEquipments/options）不能为空")]
+    public string ProductionEquipmentCode { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 直接人员
+    /// </summary>
+    public int DirectLabor { get; set; } = 0;
+
+    /// <summary>
+    /// 间接人员
+    /// </summary>
+    public int IndirectLabor { get; set; } = 0;
+
+    /// <summary>
     /// 班次（字典 logistics_shift_category；1=早 2=中 3=晚 4=白班 5=夜班）
     /// </summary>
     public int ShiftNo { get; set; } = 0;
 
     /// <summary>
-    /// PCB板别（字典 logistics_pcba_panel_category，存 DictValue）
+    /// 标准工时(分钟)（回填：按工作中心查询 TaktStandardOperationTime 转换工时）
     /// </summary>
-    [Required(ErrorMessage = "PCB板别（字典 logistics_pcba_panel_category，存 DictValue）不能为空")]
+    public decimal StdMinutes { get; set; }
+
+    /// <summary>
+    /// 人员标准产能（计算结果：DirectLabor×60÷StdMinutes×标准生产稼动率）
+    /// </summary>
+    public decimal StdLaborCapacity { get; set; }
+
+    /// <summary>
+    /// 标准点数（PCBA 专用，按工作中心回填）
+    /// </summary>
+    public int StdShorts { get; set; } = 0;
+
+    /// <summary>
+    /// 设备标准产能（计算结果：60÷StdMinutes×设备时间稼动率）
+    /// </summary>
+    public decimal StdEquipmentCapacity { get; set; }
+
+    /// <summary>
+    /// PCB板别（字典 logistics_pcba_function_category，存 DictValue）
+    /// </summary>
+    [Required(ErrorMessage = "PCB板别（字典 logistics_pcba_function_category，存 DictValue）不能为空")]
     public string PcbBoardType { get; set; } = string.Empty;
 
     /// <summary>
@@ -492,7 +614,7 @@ public class TaktPcbaOutputDetailCreateDto
     public string? DowntimeDescription { get; set; } = string.Empty;
 
     /// <summary>
-    /// 投入工数(分钟)（计算结果：主表 DirectLabor×60）
+    /// 投入工数(分钟)（计算结果：明细 DirectLabor×60）
     /// </summary>
     public decimal InputMinutes { get; set; }
 
@@ -547,7 +669,7 @@ public class TaktPcbaOutputDetailCreateDto
     public int MixedProd { get; set; } = 0;
 
     /// <summary>
-    /// 达成率(%)（计算结果：当日完成数÷主表标准产能×100%；标准产能为0时取0）
+    /// 达成率(%)（计算结果：当日完成数÷明细人员标准产能×100%；标准产能为0时取0）
     /// </summary>
     public decimal AchievementRate { get; set; }
 
@@ -676,12 +798,52 @@ public class TaktPcbaOutputDetailTemplateDto
     public string? TimePeriod { get; set; } = string.Empty;
 
     /// <summary>
+    /// 生产班组（选项 TaktProductionTeams/options，存 TeamCode，ExtValue=PlantCode 过滤）
+    /// </summary>
+    public string? ProdTeam { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 生产设备编码（关联 TaktProductionEquipment.ProductionEquipmentCode，选项 TaktProductionEquipments/options）
+    /// </summary>
+    public string? ProductionEquipmentCode { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 直接人员
+    /// </summary>
+    public int? DirectLabor { get; set; }
+
+    /// <summary>
+    /// 间接人员
+    /// </summary>
+    public int? IndirectLabor { get; set; }
+
+    /// <summary>
     /// 班次（字典 logistics_shift_category；1=早 2=中 3=晚 4=白班 5=夜班）
     /// </summary>
     public int? ShiftNo { get; set; }
 
     /// <summary>
-    /// PCB板别（字典 logistics_pcba_panel_category，存 DictValue）
+    /// 标准工时(分钟)（回填：按工作中心查询 TaktStandardOperationTime 转换工时）
+    /// </summary>
+    public decimal? StdMinutes { get; set; }
+
+    /// <summary>
+    /// 人员标准产能（计算结果：DirectLabor×60÷StdMinutes×标准生产稼动率）
+    /// </summary>
+    public decimal? StdLaborCapacity { get; set; }
+
+    /// <summary>
+    /// 标准点数（PCBA 专用，按工作中心回填）
+    /// </summary>
+    public int? StdShorts { get; set; }
+
+    /// <summary>
+    /// 设备标准产能（计算结果：60÷StdMinutes×设备时间稼动率）
+    /// </summary>
+    public decimal? StdEquipmentCapacity { get; set; }
+
+    /// <summary>
+    /// PCB板别（字典 logistics_pcba_function_category，存 DictValue）
     /// </summary>
     public string? PcbBoardType { get; set; } = string.Empty;
 
@@ -736,7 +898,7 @@ public class TaktPcbaOutputDetailTemplateDto
     public string? DowntimeDescription { get; set; } = string.Empty;
 
     /// <summary>
-    /// 投入工数(分钟)（计算结果：主表 DirectLabor×60）
+    /// 投入工数(分钟)（计算结果：明细 DirectLabor×60）
     /// </summary>
     public decimal? InputMinutes { get; set; }
 
@@ -791,7 +953,7 @@ public class TaktPcbaOutputDetailTemplateDto
     public int? MixedProd { get; set; }
 
     /// <summary>
-    /// 达成率(%)（计算结果：当日完成数÷主表标准产能×100%；标准产能为0时取0）
+    /// 达成率(%)（计算结果：当日完成数÷明细人员标准产能×100%；标准产能为0时取0）
     /// </summary>
     public decimal? AchievementRate { get; set; }
 
@@ -854,12 +1016,52 @@ public class TaktPcbaOutputDetailImportDto
     public string? TimePeriod { get; set; } = string.Empty;
 
     /// <summary>
+    /// 生产班组（选项 TaktProductionTeams/options，存 TeamCode，ExtValue=PlantCode 过滤）
+    /// </summary>
+    public string? ProdTeam { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 生产设备编码（关联 TaktProductionEquipment.ProductionEquipmentCode，选项 TaktProductionEquipments/options）
+    /// </summary>
+    public string? ProductionEquipmentCode { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 直接人员
+    /// </summary>
+    public int? DirectLabor { get; set; }
+
+    /// <summary>
+    /// 间接人员
+    /// </summary>
+    public int? IndirectLabor { get; set; }
+
+    /// <summary>
     /// 班次（字典 logistics_shift_category；1=早 2=中 3=晚 4=白班 5=夜班）
     /// </summary>
     public int? ShiftNo { get; set; }
 
     /// <summary>
-    /// PCB板别（字典 logistics_pcba_panel_category，存 DictValue）
+    /// 标准工时(分钟)（回填：按工作中心查询 TaktStandardOperationTime 转换工时）
+    /// </summary>
+    public decimal? StdMinutes { get; set; }
+
+    /// <summary>
+    /// 人员标准产能（计算结果：DirectLabor×60÷StdMinutes×标准生产稼动率）
+    /// </summary>
+    public decimal? StdLaborCapacity { get; set; }
+
+    /// <summary>
+    /// 标准点数（PCBA 专用，按工作中心回填）
+    /// </summary>
+    public int? StdShorts { get; set; }
+
+    /// <summary>
+    /// 设备标准产能（计算结果：60÷StdMinutes×设备时间稼动率）
+    /// </summary>
+    public decimal? StdEquipmentCapacity { get; set; }
+
+    /// <summary>
+    /// PCB板别（字典 logistics_pcba_function_category，存 DictValue）
     /// </summary>
     public string? PcbBoardType { get; set; } = string.Empty;
 
@@ -914,7 +1116,7 @@ public class TaktPcbaOutputDetailImportDto
     public string? DowntimeDescription { get; set; } = string.Empty;
 
     /// <summary>
-    /// 投入工数(分钟)（计算结果：主表 DirectLabor×60）
+    /// 投入工数(分钟)（计算结果：明细 DirectLabor×60）
     /// </summary>
     public decimal? InputMinutes { get; set; }
 
@@ -969,7 +1171,7 @@ public class TaktPcbaOutputDetailImportDto
     public int? MixedProd { get; set; }
 
     /// <summary>
-    /// 达成率(%)（计算结果：当日完成数÷主表标准产能×100%；标准产能为0时取0）
+    /// 达成率(%)（计算结果：当日完成数÷明细人员标准产能×100%；标准产能为0时取0）
     /// </summary>
     public decimal? AchievementRate { get; set; }
 
@@ -1033,12 +1235,52 @@ public class TaktPcbaOutputDetailExportDto
     public string TimePeriod { get; set; } = string.Empty;
 
     /// <summary>
+    /// 生产班组（选项 TaktProductionTeams/options，存 TeamCode，ExtValue=PlantCode 过滤）
+    /// </summary>
+    public string ProdTeam { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 生产设备编码（关联 TaktProductionEquipment.ProductionEquipmentCode，选项 TaktProductionEquipments/options）
+    /// </summary>
+    public string ProductionEquipmentCode { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 直接人员
+    /// </summary>
+    public int DirectLabor { get; set; } = 0;
+
+    /// <summary>
+    /// 间接人员
+    /// </summary>
+    public int IndirectLabor { get; set; } = 0;
+
+    /// <summary>
     /// 班次（字典 logistics_shift_category；1=早 2=中 3=晚 4=白班 5=夜班）
     /// </summary>
     public int ShiftNo { get; set; } = 0;
 
     /// <summary>
-    /// PCB板别（字典 logistics_pcba_panel_category，存 DictValue）
+    /// 标准工时(分钟)（回填：按工作中心查询 TaktStandardOperationTime 转换工时）
+    /// </summary>
+    public decimal StdMinutes { get; set; }
+
+    /// <summary>
+    /// 人员标准产能（计算结果：DirectLabor×60÷StdMinutes×标准生产稼动率）
+    /// </summary>
+    public decimal StdLaborCapacity { get; set; }
+
+    /// <summary>
+    /// 标准点数（PCBA 专用，按工作中心回填）
+    /// </summary>
+    public int StdShorts { get; set; } = 0;
+
+    /// <summary>
+    /// 设备标准产能（计算结果：60÷StdMinutes×设备时间稼动率）
+    /// </summary>
+    public decimal StdEquipmentCapacity { get; set; }
+
+    /// <summary>
+    /// PCB板别（字典 logistics_pcba_function_category，存 DictValue）
     /// </summary>
     public string PcbBoardType { get; set; } = string.Empty;
 
@@ -1093,7 +1335,7 @@ public class TaktPcbaOutputDetailExportDto
     public string? DowntimeDescription { get; set; } = string.Empty;
 
     /// <summary>
-    /// 投入工数(分钟)（计算结果：主表 DirectLabor×60）
+    /// 投入工数(分钟)（计算结果：明细 DirectLabor×60）
     /// </summary>
     public decimal InputMinutes { get; set; }
 
@@ -1148,7 +1390,7 @@ public class TaktPcbaOutputDetailExportDto
     public int MixedProd { get; set; } = 0;
 
     /// <summary>
-    /// 达成率(%)（计算结果：当日完成数÷主表标准产能×100%；标准产能为0时取0）
+    /// 达成率(%)（计算结果：当日完成数÷明细人员标准产能×100%；标准产能为0时取0）
     /// </summary>
     public decimal AchievementRate { get; set; }
 

@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Infrastructure.Data.Seeds.I18nSeedData.HumanResource.Personnel
 // 文件名称：TaktEmployeeI18nSeedData.cs
-// 创建时间：2026-07-09
+// 创建时间：2026-07-20
 // 创建人：Takt365(Auto Generated)
 // 功能描述：TaktEmployee 实体字段国际化种子（无对应 frontend locales；TranslationText 取自 ColumnDescription，ContextNote 取自属性 XML summary）
 // 
@@ -280,13 +280,13 @@ public class TaktEmployeeI18nSeedData : ITaktSeedDataCoordinator
             new TranslationSeedItem("entity.employee.primarydeptid", "zh-HK", "当前主部门ID_hk", "当前主部门（关联 TaktDept.Id，选项 TaktDepts/tree-options；任职投影快照，未上岗可空）"),
 
             // entity.employee.primarypostid
-            new TranslationSeedItem("entity.employee.primarypostid", "en-US", "当前主岗位ID_us", "当前主岗位（关联 TaktPost.Id，选项 TaktPosts/options；任职投影快照，未上岗可空）"),
+            new TranslationSeedItem("entity.employee.primarypostid", "en-US", "当前主岗位ID_us", "当前主岗位（选项 TaktPosts/options；任职投影快照，未上岗可空，DictValue=Id）"),
             // entity.employee.primarypostid
-            new TranslationSeedItem("entity.employee.primarypostid", "ja-JP", "当前主岗位ID_jp", "当前主岗位（关联 TaktPost.Id，选项 TaktPosts/options；任职投影快照，未上岗可空）"),
+            new TranslationSeedItem("entity.employee.primarypostid", "ja-JP", "当前主岗位ID_jp", "当前主岗位（选项 TaktPosts/options；任职投影快照，未上岗可空，DictValue=Id）"),
             // entity.employee.primarypostid
-            new TranslationSeedItem("entity.employee.primarypostid", "zh-CN", "当前主岗位ID", "当前主岗位（关联 TaktPost.Id，选项 TaktPosts/options；任职投影快照，未上岗可空）"),
+            new TranslationSeedItem("entity.employee.primarypostid", "zh-CN", "当前主岗位ID", "当前主岗位（选项 TaktPosts/options；任职投影快照，未上岗可空，DictValue=Id）"),
             // entity.employee.primarypostid
-            new TranslationSeedItem("entity.employee.primarypostid", "zh-HK", "当前主岗位ID_hk", "当前主岗位（关联 TaktPost.Id，选项 TaktPosts/options；任职投影快照，未上岗可空）"),
+            new TranslationSeedItem("entity.employee.primarypostid", "zh-HK", "当前主岗位ID_hk", "当前主岗位（选项 TaktPosts/options；任职投影快照，未上岗可空，DictValue=Id）"),
 
             // entity.employee.isbuiltin
             new TranslationSeedItem("entity.employee.isbuiltin", "en-US", "内置_us", "内置（字典 sys_yes_no_type；0=否 1=是；种子员工不可删）"),

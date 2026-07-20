@@ -1,0 +1,343 @@
+// ========================================
+// 项目名称：节拍工厂·Takt Plat
+// 命名空间：Takt.WebApi.Controllers.Logistics.Materials
+// 文件名称：TaktMaterialMovingPricesController.cs
+// 创建时间：2026-07-16
+// 创建人：Takt365(Cursor AI)
+// 功能描述：移动价格控制器
+// 
+// 版权信息：Copyright (c) 2026 Takt  All rights reserved.
+// 免责声明：此软件使用 MIT License，作者不承担任何使用风险。
+// ========================================
+
+using Microsoft.AspNetCore.Mvc;
+using Takt.Application.Dtos.Logistics.Materials;
+using Takt.Application.Services.Logistics.Materials;
+using Takt.Shared.Constants;
+
+namespace Takt.WebApi.Controllers.Logistics.Materials;
+
+/// <summary>
+/// 移动价格控制器
+/// 提供移动价格的 REST API
+/// </summary>
+[ApiModule(4, "后勤管理")]
+[Route("api/[controller]", Name = "移动价格")]
+public class TaktMaterialMovingPricesController : TaktControllerBase
+{
+    private readonly ITaktMaterialMovingPriceService _materialMovingPriceService;
+
+    /// <summary>
+    /// 构造函数
+    /// </summary>
+    /// <param name="materialMovingPriceService">移动价格服务</param>
+    public TaktMaterialMovingPricesController(ITaktMaterialMovingPriceService materialMovingPriceService)
+    {
+        _materialMovingPriceService = materialMovingPriceService;
+    }
+
+    /// <summary>
+    /// 获取移动价格列表（分页）
+    /// </summary>
+    /// <param name="queryDto">查询DTO</param>
+    /// <returns>分页结果</returns>
+    [TaktPermission("logistics:materials:material:moving:price:list", "移动价格列表")]
+    [HttpGet("list")]
+    public async Task<IActionResult> GetMaterialMovingPriceListAsync([FromQuery] TaktMaterialMovingPriceQueryDto queryDto)
+    {
+        try
+        {
+            var result = await _materialMovingPriceService.GetMaterialMovingPriceListAsync(queryDto);
+            return Success(result.Data, result.Total, result.PageIndex, result.PageSize, "查询成功");
+        }
+        catch (Exception ex)
+        {
+            return HandleException(ex);
+        }
+    }
+
+    /// <summary>
+    /// 根据ID获取移动价格
+    /// </summary>
+    /// <param name="id">移动价格ID</param>
+    /// <returns>移动价格DTO</returns>
+    [TaktPermission("logistics:materials:material:moving:price:query", "移动价格详情")]
+    [HttpGet("{id}")]
+    public async Task<IActionResult> GetMaterialMovingPriceByIdAsync(long id)
+    {
+        try
+        {
+            var result = await _materialMovingPriceService.GetMaterialMovingPriceByIdAsync(id);
+            if (result == null)
+            {
+                return NotFound("移动价格不存在");
+            }
+            return Success(result, "查询成功");
+        }
+        catch (Exception ex)
+        {
+            return HandleException(ex);
+        }
+    }
+
+    /// <summary>
+    /// 获取物料移动价格选项列表
+    /// </summary>
+    /// <returns>下拉选项</returns>
+    [TaktPermission("logistics:materials:material:moving:price:query", "移动价格选项")]
+    [HttpGet("options")]
+    public async Task<IActionResult> GetMaterialMovingPriceOptionsAsync()
+    {
+        try
+        {
+            var result = await _materialMovingPriceService.GetMaterialMovingPriceOptionsAsync();
+            return Success(result, "查询成功");
+        }
+        catch (Exception ex)
+        {
+            return HandleException(ex);
+        }
+    }
+
+    /// <summary>
+    /// 创建移动价格
+    /// </summary>
+    /// <param name="dto">创建DTO</param>
+    /// <returns>移动价格DTO</returns>
+    [TaktPermission("logistics:materials:material:moving:price:create", "创建移动价格")]
+    [HttpPost]
+    public async Task<IActionResult> CreateMaterialMovingPriceAsync([FromBody] TaktMaterialMovingPriceCreateDto dto)
+    {
+        try
+        {
+            var result = await _materialMovingPriceService.CreateMaterialMovingPriceAsync(dto);
+            return Success(result, "创建成功");
+        }
+        catch (Exception ex)
+        {
+            return HandleException(ex);
+        }
+    }
+
+    /// <summary>
+    /// 更新移动价格
+    /// </summary>
+    /// <param name="id">移动价格ID</param>
+    /// <param name="dto">更新DTO</param>
+    /// <returns>移动价格DTO</returns>
+    [TaktPermission("logistics:materials:material:moving:price:update", "更新移动价格")]
+    [HttpPut("{id}")]
+    public async Task<IActionResult> UpdateMaterialMovingPriceAsync(long id, [FromBody] TaktMaterialMovingPriceUpdateDto dto)
+    {
+        try
+        {
+            var result = await _materialMovingPriceService.UpdateMaterialMovingPriceAsync(id, dto);
+            return Success(result, "更新成功");
+        }
+        catch (Exception ex)
+        {
+            return HandleException(ex);
+        }
+    }
+
+    /// <summary>
+    /// 删除移动价格
+    /// </summary>
+    /// <param name="id">移动价格ID</param>
+    /// <returns>操作结果</returns>
+    [TaktPermission("logistics:materials:material:moving:price:delete", "删除移动价格")]
+    [HttpDelete("{id}")]
+    public async Task<IActionResult> DeleteMaterialMovingPriceByIdAsync(long id)
+    {
+        try
+        {
+            await _materialMovingPriceService.DeleteMaterialMovingPriceByIdAsync(id);
+            return Success("删除成功");
+        }
+        catch (Exception ex)
+        {
+            return HandleException(ex);
+        }
+    }
+
+    /// <summary>
+    /// 批量删除移动价格
+    /// </summary>
+    /// <param name="ids">ID列表</param>
+    /// <returns>操作结果</returns>
+    [TaktPermission("logistics:materials:material:moving:price:delete", "批量删除移动价格")]
+    [HttpDelete("batch")]
+    public async Task<IActionResult> DeleteMaterialMovingPriceBatchAsync([FromBody] IEnumerable<long> ids)
+    {
+        try
+        {
+            await _materialMovingPriceService.DeleteMaterialMovingPriceBatchAsync(ids);
+            return Success("删除成功");
+        }
+        catch (Exception ex)
+        {
+            return HandleException(ex);
+        }
+    }
+
+    /// <summary>
+    /// 获取导入模板
+    /// </summary>
+    /// <returns>Excel文件</returns>
+    [TaktPermission("logistics:materials:material:moving:price:import", "获取移动价格导入模板")]
+    [HttpGet("template")]
+    public async Task<IActionResult> GetMaterialMovingPriceTemplateAsync([FromQuery] string? sheetName = null, [FromQuery] string? templateName = null)
+    {
+        try
+        {
+            var (resultFileName, content) = await _materialMovingPriceService.GetMaterialMovingPriceTemplateAsync(sheetName, templateName);
+            return File(content, TaktExcelHelper.ExcelContentType, resultFileName);
+        }
+        catch (Exception ex)
+        {
+            return HandleException(ex);
+        }
+    }
+
+    /// <summary>
+    /// 导入移动价格
+    /// </summary>
+    /// <param name="file">Excel文件</param>
+    /// <returns>导入结果</returns>
+    [TaktPermission("logistics:materials:material:moving:price:import", "导入移动价格")]
+    [HttpPost("import")]
+    public async Task<IActionResult> ImportMaterialMovingPriceAsync(IFormFile file, [FromQuery] string? sheetName = null)
+    {
+        try
+        {
+            if (file == null || file.Length == 0)
+            {
+                return BadRequest("请选择要导入的文件");
+            }
+
+            await using var stream = file.OpenReadStream();
+            var (success, fail, errors) = await _materialMovingPriceService.ImportMaterialMovingPriceAsync(stream, sheetName);
+            return Success(new
+            {
+                SuccessCount = success,
+                FailCount = fail,
+                Errors = errors
+            }, $"导入完成：成功{success}条，失败{fail}条");
+        }
+        catch (Exception ex)
+        {
+            return HandleException(ex);
+        }
+    }
+
+    /// <summary>
+    /// 导出移动价格
+    /// </summary>
+    /// <returns>Excel文件</returns>
+    [TaktPermission("logistics:materials:material:moving:price:export", "导出移动价格")]
+    [HttpGet("export")]
+    public async Task<IActionResult> ExportMaterialMovingPriceAsync([FromQuery] TaktMaterialMovingPriceQueryDto? query = null, [FromQuery] string? sheetName = null, [FromQuery] string? exportName = null)
+    {
+        try
+        {
+            var (resultFileName, fileContent) = await _materialMovingPriceService.ExportMaterialMovingPriceAsync(query, sheetName, exportName);
+            return File(fileContent, TaktExcelHelper.ExcelContentType, resultFileName);
+        }
+        catch (Exception ex)
+        {
+            return HandleException(ex);
+        }
+    }
+
+    /// <summary>
+    /// 物料月移动价格推移分析
+    /// </summary>
+    /// <param name="queryDto">查询 DTO</param>
+    /// <returns>转置分析结果</returns>
+    [TaktPermission("logistics:materials:material:moving:trend:list", "物料移动价格推移")]
+    [HttpGet("monthly-trend-analysis")]
+    public async Task<IActionResult> GetMaterialMovingPriceMonthlyTrendAnalysisAsync(
+        [FromQuery] TaktMaterialMovingPriceMonthlyTrendQueryDto queryDto)
+    {
+        try
+        {
+            var result = await _materialMovingPriceService.GetMaterialMovingPriceMonthlyTrendAnalysisAsync(queryDto);
+            return Success(result, "查询成功");
+        }
+        catch (Exception ex)
+        {
+            return HandleException(ex);
+        }
+    }
+
+    /// <summary>
+    /// 清单导出：物料月移动价格推移（物料×月份转置）
+    /// </summary>
+    /// <param name="query">查询条件</param>
+    /// <param name="sheetName">工作表名称</param>
+    /// <param name="exportName">导出文件名</param>
+    /// <returns>Excel 文件</returns>
+    [TaktPermission("logistics:materials:material:moving:trend:export", "清单导出物料移动价格推移")]
+    [HttpGet("monthly-trend-analysis/export")]
+    public async Task<IActionResult> ExportMaterialMovingPriceMonthlyTrendAnalysisAsync(
+        [FromQuery] TaktMaterialMovingPriceMonthlyTrendQueryDto query,
+        [FromQuery] string? sheetName = null,
+        [FromQuery] string? exportName = null)
+    {
+        try
+        {
+            var (resultFileName, fileContent) = await _materialMovingPriceService.ExportMaterialMovingPriceMonthlyTrendAnalysisAsync(query, sheetName, exportName);
+            return File(fileContent, TaktExcelHelper.ExcelContentType, resultFileName);
+        }
+        catch (Exception ex)
+        {
+            return HandleException(ex);
+        }
+    }
+
+    /// <summary>
+    /// 物料-机种-价格推移分析（BOM 产品/机种组 + 月单价）
+    /// </summary>
+    /// <param name="queryDto">查询 DTO</param>
+    /// <returns>分析结果</returns>
+    [TaktPermission("logistics:materials:material:moving:trend:list", "物料机种价格推移")]
+    [HttpGet("model-trend-analysis")]
+    public async Task<IActionResult> GetMaterialMovingPriceModelTrendAnalysisAsync(
+        [FromQuery] TaktMaterialMovingPriceMonthlyTrendQueryDto queryDto)
+    {
+        try
+        {
+            var result = await _materialMovingPriceService.GetMaterialMovingPriceModelTrendAnalysisAsync(queryDto);
+            return Success(result, "查询成功");
+        }
+        catch (Exception ex)
+        {
+            return HandleException(ex);
+        }
+    }
+
+    /// <summary>
+    /// 清单导出：物料-机种-价格推移
+    /// </summary>
+    /// <param name="query">查询条件</param>
+    /// <param name="sheetName">工作表名称</param>
+    /// <param name="exportName">导出文件名</param>
+    /// <returns>Excel 文件</returns>
+    [TaktPermission("logistics:materials:material:moving:trend:export", "清单导出物料机种价格推移")]
+    [HttpGet("model-trend-analysis/export")]
+    public async Task<IActionResult> ExportMaterialMovingPriceModelTrendAnalysisAsync(
+        [FromQuery] TaktMaterialMovingPriceMonthlyTrendQueryDto query,
+        [FromQuery] string? sheetName = null,
+        [FromQuery] string? exportName = null)
+    {
+        try
+        {
+            var (resultFileName, fileContent) = await _materialMovingPriceService.ExportMaterialMovingPriceModelTrendAnalysisAsync(query, sheetName, exportName);
+            return File(fileContent, TaktExcelHelper.ExcelContentType, resultFileName);
+        }
+        catch (Exception ex)
+        {
+            return HandleException(ex);
+        }
+    }
+}

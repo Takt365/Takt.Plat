@@ -41,6 +41,7 @@ import { translateLocaleMessage } from '@/utils/takt-i18n-message';
 import { useWorkflowTodoCountStore } from '@/stores/workflow/todo-count';
 import { WORKFLOW_TABLE_NAMES } from '@/composables/use-workflow-signalr-refresh';
 import { QUARTZ_TABLE_NAME } from '@/composables/use-quartz-signalr-refresh';
+import { BOM_MATERIAL_COST_ITEM_TABLE_NAME } from '@/composables/use-bom-material-cost-item-recalculate-signalr';
 import type {
   FlowInstanceProgressedEvent,
   FlowSchemeChangedEvent,
@@ -50,6 +51,7 @@ import type {
   QuartzTaskChangedEvent,
   QuartzTaskExecutedEvent,
 } from '@/types/foundation/quartz-signal-r';
+import type { BomMaterialCostItemRecalculateCompletedEvent } from '@/types/logistics/manufacturing/bom/material-cost-item-signal-r';
 import type {
   EcChangeClosedEvent,
   EcChangeNotificationEvent,
@@ -118,6 +120,20 @@ function dispatchQuartzSignalREvents(
   if (executedEvent) {
     EventBus.emit('foundation:quartz-task:executed', executedEvent);
     EventBus.emit('table:refresh', { tableName: QUARTZ_TABLE_NAME });
+  }
+}
+
+/**
+ * 分发 BOM 物料成本重算 SignalR 事件到 EventBus
+ * @param completedEvent 重算完成事件
+ * @returns {void}
+ */
+function dispatchBomMaterialCostItemRecalculateSignalREvents(
+  completedEvent?: BomMaterialCostItemRecalculateCompletedEvent,
+): void {
+  if (completedEvent) {
+    EventBus.emit('logistics:bom-material-cost-item:recalculate-completed', completedEvent);
+    EventBus.emit('table:refresh', { tableName: BOM_MATERIAL_COST_ITEM_TABLE_NAME });
   }
 }
 
@@ -381,6 +397,26 @@ export const useSignalRStore = defineStore('signalr', () => {
         },
         onQuartzTaskExecuted: (event) => {
           dispatchQuartzSignalREvents(undefined, event);
+          const isSuccess = event.executeStatus === 1;
+          notify({
+            type: isSuccess ? 'success' : 'error',
+            message: translateLocaleMessage(
+              isSuccess
+                ? 'foundation.quartz-task.page.signalr.executeSucceeded'
+                : 'foundation.quartz-task.page.signalr.executeFailed',
+              {
+                code: event.taskCode || event.taskName,
+                duration: String(event.executeDuration ?? 0),
+              },
+            ),
+            description: isSuccess
+              ? (event.executeMessage || undefined)
+              : (event.errorInfo || event.executeMessage || undefined),
+            duration: 10,
+          });
+        },
+        onBomMaterialCostItemRecalculateCompleted: (event) => {
+          dispatchBomMaterialCostItemRecalculateSignalREvents(event);
         },
         onEcChangeNotification: (event) => {
           dispatchEcChangeSignalREvents(event);

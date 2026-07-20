@@ -93,7 +93,7 @@ public class TaktCompanySeedData : ITaktSeedDataCoordinator
                 "软件开发；软件销售；信息系统集成服务；智能控制系统集成；信息技术咨询服务；技术服务、技术开发、技术咨询、技术交流、技术转让、技术推广；电子产品销售；电力电子元器件销售；计算机软硬件及辅助设备零售；办公设备销售；办公设备耗材销售；电子专用设备销售；数字视频监控系统制造；机械零件、零部件销售；机械设备销售。（除依法须经批准的项目外，凭营业执照依法自主开展经营活动）",
                 "中国", "北京市", "海淀区", "北京市海淀区中关村", "中关村软件园二期", "100085",
                 "中国", "北京市", "海淀区", "北京市海淀区中关村", "中关村软件园二期", "100085",
-                "+86-10-62600001", "info@takt365.com", "+86-10-62600002", "https://www.takt365.com",
+                "+86-10-62600001", "info@takt365.com", "+86-10-62600002", "https://www.takt365.cn",
                 "91110108MA01234567", "91110108MA01234567", "张三", "李四",
                 1000000m, new DateTime(2010, 1, 1), 1),
             new TaktCompanySeedItem(
@@ -120,7 +120,7 @@ public class TaktCompanySeedData : ITaktSeedDataCoordinator
                 "Wholesale of miscellaneous durable goods / Import and Export Trading",
                 "中国", "香港特别行政区", "沙田", "沙田小瀝源安心街19號匯貿中心8樓9室", "匯貿中心", "000000",
                 "中国", "香港特别行政区", "沙田", "沙田小瀝源安心街19號匯貿中心8樓9室", "匯貿中心", "000000",
-                "+852-26461234", "tac@teac.com.hk", "+852-26461235", "https://www.teac.com.hk",
+                "+852-26461234", "tac@teac.com.hk", "+852-26461235", "https://www.teac.hk",
                 "12345678-000-08-23-A", "12345678-000-08-23-A", "赵六", "钱七",
                 500000m, new DateTime(1995, 12, 1), 4),
             new TaktCompanySeedItem(
@@ -129,7 +129,7 @@ public class TaktCompanySeedData : ITaktSeedDataCoordinator
                 "音响设备及其零配件、电子产品及其零配件、电子元器件的研发、批发、佣金代理（拍卖除外）、进出口及相关配套服务。",
                 "中国", "广东省", "深圳市", "深圳市福田区深南大道南泰然九路西喜年中心A座817房", "喜年中心A座", "518000",
                 "中国", "广东省", "深圳市", "深圳市福田区深南大道南泰然九路西喜年中心A座817房", "喜年中心A座", "518000",
-                "+86-755-82851234", "tsz@teac.com.cn", "+86-755-82851235", "https://www.teac.com.cn",
+                "+86-755-82851234", "tsz@teac.com.cn", "+86-755-82851235", "https://www.teac.cn",
                 "91440300765432109X", "91440300765432109X", "孙八", "周九",
                 500000m, new DateTime(2012, 1, 1), 5),
             new TaktCompanySeedItem(
@@ -138,7 +138,7 @@ public class TaktCompanySeedData : ITaktSeedDataCoordinator
                 "Engaged in the distribution, wholesale, import/export, and after-sales service of high-fidelity audio equipment (Hi-Fi / Esoteric brand), consumer audio-video electronics, professional audio recording equipment (TASCAM brand), and computer data storage and peripheral devices (including CD/DVD drives and disc publishing systems) throughout the United States and North America.",
                 "美国", "California", "Santa Fe Springs", "14525 Valley View Ave., Suite I, Santa Fe Springs, California 90670, U.S.A", "Suite I", "90670",
                 "美国", "California", "Santa Fe Springs", "14525 Valley View Ave., Suite I, Santa Fe Springs, California 90670, U.S.A", "Suite I", "90670",
-                "+1-562-903-9600", "info@teac-audio.com", "+1-562-903-9601", "https://www.teac-audio.com",
+                "+1-562-903-9600", "info@teac-audio.com", "+1-562-903-9601", "https://www.teac.com",
                 "95-1234567", "95-1234567", "John Smith", "Emily Johnson",
                 3000000m, new DateTime(1967, 5, 1), 6),
         ];

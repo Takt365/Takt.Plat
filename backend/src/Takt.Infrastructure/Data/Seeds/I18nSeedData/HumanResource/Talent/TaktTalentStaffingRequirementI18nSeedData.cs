@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Infrastructure.Data.Seeds.I18nSeedData.HumanResource.Talent
 // 文件名称：TaktTalentStaffingRequirementI18nSeedData.cs
-// 创建时间：2026-07-09
+// 创建时间：2026-07-20
 // 创建人：Takt365(Auto Generated)
 // 功能描述：TaktTalentStaffingRequirement 实体字段国际化种子（无对应 frontend locales；TranslationText 取自 ColumnDescription，ContextNote 取自属性 XML summary）
 // 
@@ -109,13 +109,13 @@ public class TaktTalentStaffingRequirementI18nSeedData : ITaktSeedDataCoordinato
             new TranslationSeedItem("entity.talentstaffingrequirement.deptid", "zh-HK", "申请部门ID_hk", "申请部门（关联 TaktDept.Id，选项 TaktDepts/tree-options）"),
 
             // entity.talentstaffingrequirement.postid
-            new TranslationSeedItem("entity.talentstaffingrequirement.postid", "en-US", "申请岗位ID_us", "申请岗位（关联 TaktPost.Id，选项 TaktPosts/options）"),
+            new TranslationSeedItem("entity.talentstaffingrequirement.postid", "en-US", "申请岗位ID_us", "申请岗位（选项 TaktPosts/options，DictValue=Id）"),
             // entity.talentstaffingrequirement.postid
-            new TranslationSeedItem("entity.talentstaffingrequirement.postid", "ja-JP", "申请岗位ID_jp", "申请岗位（关联 TaktPost.Id，选项 TaktPosts/options）"),
+            new TranslationSeedItem("entity.talentstaffingrequirement.postid", "ja-JP", "申请岗位ID_jp", "申请岗位（选项 TaktPosts/options，DictValue=Id）"),
             // entity.talentstaffingrequirement.postid
-            new TranslationSeedItem("entity.talentstaffingrequirement.postid", "zh-CN", "申请岗位ID", "申请岗位（关联 TaktPost.Id，选项 TaktPosts/options）"),
+            new TranslationSeedItem("entity.talentstaffingrequirement.postid", "zh-CN", "申请岗位ID", "申请岗位（选项 TaktPosts/options，DictValue=Id）"),
             // entity.talentstaffingrequirement.postid
-            new TranslationSeedItem("entity.talentstaffingrequirement.postid", "zh-HK", "申请岗位ID_hk", "申请岗位（关联 TaktPost.Id，选项 TaktPosts/options）"),
+            new TranslationSeedItem("entity.talentstaffingrequirement.postid", "zh-HK", "申请岗位ID_hk", "申请岗位（选项 TaktPosts/options，DictValue=Id）"),
 
             // entity.talentstaffingrequirement.jobgrade
             new TranslationSeedItem("entity.talentstaffingrequirement.jobgrade", "en-US", "职级_us", "职级（可参照字典 sys_post_level_category；列存业务码，如 P3/M2）"),
@@ -154,13 +154,13 @@ public class TaktTalentStaffingRequirementI18nSeedData : ITaktSeedDataCoordinato
             new TranslationSeedItem("entity.talentstaffingrequirement.reasoncode", "zh-HK", "需求原因_hk", "需求原因（字典 hr_talent_staffing_reason_code；列存 DictValue：new_headcount/replacement/expansion/substitute）"),
 
             // entity.talentstaffingrequirement.replaceemployeeid
-            new TranslationSeedItem("entity.talentstaffingrequirement.replaceemployeeid", "en-US", "替补员工ID_us", "替补员工（关联 TaktEmployee.Id，选项 TaktEmployees/options；离职补充时填原员工，可空）"),
+            new TranslationSeedItem("entity.talentstaffingrequirement.replaceemployeeid", "en-US", "替补员工ID_us", "替补员工（选项 TaktEmployees/options；离职补充时填原员工，可空，DictValue=Id）"),
             // entity.talentstaffingrequirement.replaceemployeeid
-            new TranslationSeedItem("entity.talentstaffingrequirement.replaceemployeeid", "ja-JP", "替补员工ID_jp", "替补员工（关联 TaktEmployee.Id，选项 TaktEmployees/options；离职补充时填原员工，可空）"),
+            new TranslationSeedItem("entity.talentstaffingrequirement.replaceemployeeid", "ja-JP", "替补员工ID_jp", "替补员工（选项 TaktEmployees/options；离职补充时填原员工，可空，DictValue=Id）"),
             // entity.talentstaffingrequirement.replaceemployeeid
-            new TranslationSeedItem("entity.talentstaffingrequirement.replaceemployeeid", "zh-CN", "替补员工ID", "替补员工（关联 TaktEmployee.Id，选项 TaktEmployees/options；离职补充时填原员工，可空）"),
+            new TranslationSeedItem("entity.talentstaffingrequirement.replaceemployeeid", "zh-CN", "替补员工ID", "替补员工（选项 TaktEmployees/options；离职补充时填原员工，可空，DictValue=Id）"),
             // entity.talentstaffingrequirement.replaceemployeeid
-            new TranslationSeedItem("entity.talentstaffingrequirement.replaceemployeeid", "zh-HK", "替补员工ID_hk", "替补员工（关联 TaktEmployee.Id，选项 TaktEmployees/options；离职补充时填原员工，可空）"),
+            new TranslationSeedItem("entity.talentstaffingrequirement.replaceemployeeid", "zh-HK", "替补员工ID_hk", "替补员工（选项 TaktEmployees/options；离职补充时填原员工，可空，DictValue=Id）"),
 
             // entity.talentstaffingrequirement.expectedonboarddate
             new TranslationSeedItem("entity.talentstaffingrequirement.expectedonboarddate", "en-US", "期望入职日_us", "期望入职日"),

@@ -29,7 +29,7 @@ public class TaktFqcDefectHandling : TaktCompanyEntityBase
     [SugarColumn(ColumnName = "fqc_defect_handling_code", ColumnDescription = "FQC不良处理编码", ColumnDataType = "nvarchar", Length = 50, IsNullable = false)]
     public string FqcDefectHandlingCode { get; set; } = string.Empty;
     /// <summary>
-    /// FQC检验单明细 ID（关联 TaktFqcOrderItem.Id，选项 TaktFqcOrderItems/options）
+    /// FQC检验单明细 ID（选项 TaktFqcOrderItems/options，DictValue=Id）
     /// </summary>
     [SugarColumn(ColumnName = "fqc_order_item_id", ColumnDescription = "FQC检验单明细ID", ColumnDataType = "bigint", IsNullable = false)]
     [JsonConverter(typeof(ValueToStringConverter))]

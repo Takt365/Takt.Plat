@@ -24,7 +24,7 @@
       :show-update="false"
       :show-delete="false"
       :show-start-flow="true"
-      start-flow-permission="workflow:instance:start"
+      start-flow-permission="workflow:instance:initiate"
       :show-send-message="false"
       :show-refresh="true"
       :show-export="false"
@@ -94,7 +94,7 @@
     </TaktModal>
     <TaktModal
       v-model:open="startFlowVisible"
-      :title="t('common.dialog.title.startflow')"
+      :title="t('common.dialog.title.initiate')"
       width="900px"
       @cancel="closeStartFlowModal"
     >
@@ -110,14 +110,14 @@
           {{ t('common.page.button.cancel') }}
         </a-button>
         <a-button
-          v-permission="'workflow:instance:start'"
+          v-permission="'workflow:instance:initiate'"
           :loading="startDraftLoading"
           @click="handleStartFlowDraft"
         >
           {{ t('workflow.my.page.start.flow.form.save.draft.label') }}
         </a-button>
         <a-button
-          v-permission="'workflow:instance:start'"
+          v-permission="'workflow:instance:initiate'"
           type="primary"
           :loading="startFlowLoading"
           @click="handleStartFlowSubmit"
@@ -284,7 +284,7 @@ const columns = computed<TableColumnsType>(() => [
         label: t('workflow.my.page.start.from.draft'),
         shape: 'plain',
         icon: RiPlayLine,
-        permission: 'workflow:instance:start',
+        permission: 'workflow:instance:initiate',
         visible: (record) => record.instanceStatus === 5 && isStarter(record),
         onClick: (record) => handleStartFromDraft(record)
       },

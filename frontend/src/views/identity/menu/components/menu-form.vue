@@ -1,21 +1,31 @@
+<!-- ======================================== -->
+<!-- 项目名称：节拍数字工厂 · Takt Plat (TDF) -->
+<!-- 命名空间：@/views/identity/menu/components -->
+<!-- 文件名称：menu-form.vue -->
+<!-- 功能描述：菜单维护弹窗内嵌表单（树表 ParentId）。Tab：基本信息 / 路由与权限 / 显示与外链；一行一列；defineExpose 提供 validate、getValues、resetFields -->
+<!-- 版权信息：Copyright (c) 2025 Takt  All rights reserved. -->
+<!-- 免责声明：此软件使用 MIT License，作者不承担任何使用风险。 -->
+<!-- ======================================== -->
+
 <template>
-  <a-tabs v-model:active-key="activeTab">
-    <a-tab-pane
-      key="basic"
-      :tab="t('common.page.form.tabs.basicinfo')"
-    >
-      <div :class="formContentClass">
-        <a-form
-          ref="formRef"
-          :model="formState"
-          :rules="rules"
-          :label-col="{ span: 6 }"
-          :wrapper-col="{ span: 18 }"
-          layout="horizontal"
-          label-align="right"
-        >
+  <a-form
+    ref="formRef"
+    class="takt-generated-form"
+    :model="formState"
+    :rules="rules"
+    layout="horizontal"
+    label-align="right"
+  >
+    <a-tabs v-model:active-key="activeTab">
+      <!-- 基本信息 -->
+      <a-tab-pane
+        key="basic"
+        :tab="t('identity.menu.page.tabs.basic')"
+        force-render
+      >
+        <div :class="formContentClass">
           <a-row :gutter="24">
-            <a-col :span="12">
+            <a-col :span="24">
               <a-form-item
                 :label="t('entity.menu.name')"
                 name="menuName"
@@ -28,7 +38,9 @@
                 />
               </a-form-item>
             </a-col>
-            <a-col :span="12">
+          </a-row>
+          <a-row :gutter="24">
+            <a-col :span="24">
               <a-form-item
                 :label="t('entity.menu.code')"
                 name="menuCode"
@@ -48,12 +60,10 @@
               <a-form-item
                 :label="t('entity.menu.parentid')"
                 name="parentId"
-                :label-col="{ span: 4 }"
-                :wrapper-col="{ span: 20 }"
               >
                 <TaktTreeSelect
                   v-model:value="formState.parentId"
-                  api-url="/api/TaktMenus/tree-options"
+                  api-url="TaktMenus/tree-options"
                   :placeholder="t('identity.menu.page.placeholder.parentmenuhint')"
                   allow-clear
                   :field-names="{ label: 'dictLabel', value: 'dictValue' }"
@@ -62,7 +72,105 @@
             </a-col>
           </a-row>
           <a-row :gutter="24">
-            <a-col :span="12">
+            <a-col :span="24">
+              <a-form-item
+                :label="t('entity.menu.type')"
+                name="menuType"
+              >
+                <TaktSelect
+                  v-model:value="formState.menuType"
+                  dict-type="sys_menu_type"
+                  :placeholder="t('common.page.form.placeholder.select', { field: t('entity.menu.type') })"
+                />
+              </a-form-item>
+            </a-col>
+          </a-row>
+          <a-row :gutter="24">
+            <a-col :span="24">
+              <a-form-item
+                :label="t('entity.menu.status')"
+                name="menuStatus"
+              >
+                <TaktSelect
+                  v-model:value="formState.menuStatus"
+                  dict-type="sys_normal_disable_status"
+                  :placeholder="t('common.page.form.placeholder.select', { field: t('entity.menu.status') })"
+                />
+              </a-form-item>
+            </a-col>
+          </a-row>
+          <a-row :gutter="24">
+            <a-col :span="24">
+              <a-form-item
+                :label="t('entity.menu.icon')"
+                name="icon"
+              >
+                <takt-icon-picker
+                  v-model="formState.icon"
+                  :placeholder="t('common.page.form.placeholder.select', { field: t('entity.menu.icon') })"
+                  allow-clear
+                />
+              </a-form-item>
+            </a-col>
+          </a-row>
+          <a-row :gutter="24">
+            <a-col :span="24">
+              <a-form-item
+                :label="t('entity.menu.sortorder')"
+                name="sortOrder"
+              >
+                <a-input-number
+                  v-model:value="formState.sortOrder"
+                  :placeholder="t('common.page.form.placeholder.ordernumhint')"
+                  :min="0"
+                  class="w-full"
+                />
+              </a-form-item>
+            </a-col>
+          </a-row>
+          <a-row :gutter="24">
+            <a-col :span="24">
+              <a-form-item
+                :label="t('entity.menu.l10nkey')"
+                name="i18nKey"
+              >
+                <a-input
+                  v-model:value="formState.i18nKey"
+                  :placeholder="t('identity.menu.page.placeholder.l10nhint')"
+                  show-count
+                  :maxlength="100"
+                />
+              </a-form-item>
+            </a-col>
+          </a-row>
+          <a-row :gutter="24">
+            <a-col :span="24">
+              <a-form-item
+                :label="t('entity.menu.description')"
+                name="description"
+              >
+                <a-textarea
+                  v-model:value="formState.description"
+                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.menu.description') })"
+                  :rows="2"
+                  show-count
+                  :maxlength="500"
+                />
+              </a-form-item>
+            </a-col>
+          </a-row>
+        </div>
+      </a-tab-pane>
+
+      <!-- 路由与权限 -->
+      <a-tab-pane
+        key="route"
+        :tab="t('identity.menu.page.tabs.route')"
+        force-render
+      >
+        <div :class="formContentClass">
+          <a-row :gutter="24">
+            <a-col :span="24">
               <a-form-item
                 :label="t('entity.menu.path')"
                 name="menuPath"
@@ -75,7 +183,9 @@
                 />
               </a-form-item>
             </a-col>
-            <a-col :span="12">
+          </a-row>
+          <a-row :gutter="24">
+            <a-col :span="24">
               <a-form-item
                 :label="t('entity.menu.routepath')"
                 name="routePath"
@@ -94,8 +204,6 @@
               <a-form-item
                 :label="t('entity.menu.component')"
                 name="componentPath"
-                :label-col="{ span: 4 }"
-                :wrapper-col="{ span: 20 }"
               >
                 <a-input
                   v-model:value="formState.componentPath"
@@ -107,72 +215,10 @@
             </a-col>
           </a-row>
           <a-row :gutter="24">
-            <a-col :span="12">
-              <a-form-item
-                :label="t('entity.menu.icon')"
-                name="icon"
-              >
-                <a-input
-                  v-model:value="formState.icon"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.menu.icon') })"
-                  show-count
-                  :maxlength="100"
-                />
-              </a-form-item>
-            </a-col>
-            <a-col :span="12">
-              <a-form-item
-                :label="t('entity.menu.sortorder')"
-                name="sortOrder"
-              >
-                <a-input-number
-                  v-model:value="formState.sortOrder"
-                  :placeholder="t('common.page.form.placeholder.ordernumhint')"
-                  :min="0"
-                  style="width: 100%"
-                />
-              </a-form-item>
-            </a-col>
-          </a-row>
-          <a-row :gutter="24">
-            <a-col :span="24">
-              <a-form-item
-                :label="t('entity.menu.type')"
-                name="menuType"
-                :label-col="{ span: 4 }"
-                :wrapper-col="{ span: 20 }"
-              >
-                <TaktSelect
-                  v-model:value="formState.menuType"
-                  dict-type="sys_menu_type"
-                  :placeholder="t('common.page.form.placeholder.select', { field: t('entity.menu.type') })"
-                />
-              </a-form-item>
-            </a-col>
-          </a-row>
-          <a-row :gutter="24">
-            <a-col :span="24">
-              <a-form-item
-                :label="t('entity.menu.status')"
-                name="menuStatus"
-                :label-col="{ span: 4 }"
-                :wrapper-col="{ span: 20 }"
-              >
-                <TaktSelect
-                  v-model:value="formState.menuStatus"
-                  dict-type="sys_normal_disable_status"
-                  :placeholder="t('common.page.form.placeholder.select', { field: t('entity.menu.status') })"
-                />
-              </a-form-item>
-            </a-col>
-          </a-row>
-          <a-row :gutter="24">
             <a-col :span="24">
               <a-form-item
                 :label="t('entity.menu.permission')"
                 name="permission"
-                :label-col="{ span: 4 }"
-                :wrapper-col="{ span: 20 }"
               >
                 <a-input
                   v-model:value="formState.permission"
@@ -183,8 +229,18 @@
               </a-form-item>
             </a-col>
           </a-row>
+        </div>
+      </a-tab-pane>
+
+      <!-- 显示与外链 -->
+      <a-tab-pane
+        key="display"
+        :tab="t('identity.menu.page.tabs.display')"
+        force-render
+      >
+        <div :class="formContentClass">
           <a-row :gutter="24">
-            <a-col :span="12">
+            <a-col :span="24">
               <a-form-item
                 :label="t('entity.menu.isvisible')"
                 name="isVisible"
@@ -196,7 +252,9 @@
                 />
               </a-form-item>
             </a-col>
-            <a-col :span="12">
+          </a-row>
+          <a-row :gutter="24">
+            <a-col :span="24">
               <a-form-item
                 :label="t('entity.menu.iscached')"
                 name="isCached"
@@ -210,7 +268,7 @@
             </a-col>
           </a-row>
           <a-row :gutter="24">
-            <a-col :span="12">
+            <a-col :span="24">
               <a-form-item
                 :label="t('entity.menu.isexternal')"
                 name="isExternal"
@@ -222,7 +280,9 @@
                 />
               </a-form-item>
             </a-col>
-            <a-col :span="12">
+          </a-row>
+          <a-row :gutter="24">
+            <a-col :span="24">
               <a-form-item
                 :label="t('entity.menu.linkurl')"
                 name="externalUrl"
@@ -236,43 +296,13 @@
               </a-form-item>
             </a-col>
           </a-row>
-          <a-row :gutter="24">
-            <a-col :span="12">
-              <a-form-item
-                :label="t('entity.menu.l10nkey')"
-                name="i18nKey"
-              >
-                <a-input
-                  v-model:value="formState.i18nKey"
-                  :placeholder="t('identity.menu.page.placeholder.l10nhint')"
-                  show-count
-                  :maxlength="100"
-                />
-              </a-form-item>
-            </a-col>
-            <a-col :span="12">
-              <a-form-item
-                :label="t('entity.menu.description')"
-                name="description"
-              >
-                <a-textarea
-                  v-model:value="formState.description"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.menu.description') })"
-                  :rows="2"
-                  show-count
-                  :maxlength="500"
-                />
-              </a-form-item>
-            </a-col>
-          </a-row>
-        </a-form>
-      </div>
-    </a-tab-pane>
-  </a-tabs>
+        </div>
+      </a-tab-pane>
+    </a-tabs>
+  </a-form>
 </template>
 
 <script setup lang="ts">
-import { reactive, watch, ref, computed } from 'vue'
 import { useI18n } from 'vue-i18n'
 import type { Rule } from 'ant-design-vue/es/form'
 import type { Menu, MenuCreate } from '@/types/identity/menu'
@@ -281,7 +311,9 @@ import TaktSelect from '@/components/business/takt-select/index.vue'
 const { t } = useI18n()
 
 interface Props {
+  /** 父级传入的编辑 DTO；新增时为 undefined 或空对象 */
   formData?: Partial<Menu>
+  /** 父级提交 loading，禁用表单项 */
   loading?: boolean
 }
 
@@ -290,11 +322,12 @@ const props = withDefaults(defineProps<Props>(), {
   loading: false
 })
 
+/** 表单实例 */
 const formRef = ref()
+/** 当前 Tab */
 const activeTab = ref('basic')
-/** 表单总字段数（用于内容区高度：>=30 为 10 行，<30 为 5 行） */
-const TOTAL_FIELDS = 17
-const formContentClass = computed(() => (TOTAL_FIELDS >= 30 ? 'takt-form-content-rows-10' : 'takt-form-content-rows-5'))
+/** 表单内容区高度类（单 Tab 字段数未达 30） */
+const formContentClass = computed(() => 'takt-form-content-rows-5')
 
 /** 表单状态（字段名与 Menu / MenuCreate 一致；parentId 兼容树选择组件 string | number） */
 interface FormState extends Omit<MenuCreate, 'parentId' | 'remark'> {
@@ -328,8 +361,10 @@ function createEmptyFormState(): FormState {
   }
 }
 
+/** 表单字段状态 */
 const formState = reactive<FormState>(createEmptyFormState())
 
+/** 校验规则 */
 const rules = computed<Record<string, Rule[]>>(() => ({
   menuName: [{ required: true, message: t('common.page.form.placeholder.required', { field: t('entity.menu.name') }), trigger: 'blur' }],
   menuCode: [{ required: true, message: t('common.page.form.placeholder.required', { field: t('entity.menu.code') }), trigger: 'blur' }],
@@ -364,6 +399,10 @@ watch(() => props.formData, (newData) => {
   activeTab.value = 'basic'
 }, { immediate: true, deep: true })
 
+/**
+ * 校验表单（跨 Tab，依赖 force-render）
+ * @returns {Promise<void>}
+ */
 const validate = async () => {
   await formRef.value?.validate()
 }
@@ -397,6 +436,10 @@ const getValues = (): MenuCreate => {
   }
 }
 
+/**
+ * 重置表单
+ * @returns {void}
+ */
 const resetFields = () => {
   formRef.value?.resetFields()
   Object.assign(formState, createEmptyFormState())

@@ -13,7 +13,7 @@
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Takt.Domain.Entities.Accounting.Financial;
-using Takt.Domain.Entities.Logistics.Manufacturing.Scheduling;
+using Takt.Domain.Entities.Logistics.Manufacturing.Aps;
 using Takt.Domain.Interfaces;
 using Takt.Domain.Repositories;
 using Takt.Shared.Helpers;

@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Infrastructure.Data.Seeds.I18nSeedData.Logistics.Manufacturing.Sop
 // 文件名称：TaktSopRevisionI18nSeedData.cs
-// 创建时间：2026-07-09
+// 创建时间：2026-07-20
 // 创建人：Takt365(Auto Generated)
 // 功能描述：TaktSopRevision 实体字段国际化种子（无对应 frontend locales；TranslationText 取自 ColumnDescription，ContextNote 取自属性 XML summary）
 // 
@@ -91,13 +91,13 @@ public class TaktSopRevisionI18nSeedData : ITaktSeedDataCoordinator
             new TranslationSeedItem("entity.soprevision._self", "zh-HK", "SOP 版本信息_hk", "实体名称"),
 
             // entity.soprevision.sopid
-            new TranslationSeedItem("entity.soprevision.sopid", "en-US", "SOP文档头ID_us", "SOP 文档头 ID（关联 TaktSopDoc.Id，选项 TaktSopDocs/options）"),
+            new TranslationSeedItem("entity.soprevision.sopid", "en-US", "SOP文档头ID_us", "SOP 文档头 ID（选项 TaktSopDocs/options，DictValue=Id）"),
             // entity.soprevision.sopid
-            new TranslationSeedItem("entity.soprevision.sopid", "ja-JP", "SOP文档头ID_jp", "SOP 文档头 ID（关联 TaktSopDoc.Id，选项 TaktSopDocs/options）"),
+            new TranslationSeedItem("entity.soprevision.sopid", "ja-JP", "SOP文档头ID_jp", "SOP 文档头 ID（选项 TaktSopDocs/options，DictValue=Id）"),
             // entity.soprevision.sopid
-            new TranslationSeedItem("entity.soprevision.sopid", "zh-CN", "SOP文档头ID", "SOP 文档头 ID（关联 TaktSopDoc.Id，选项 TaktSopDocs/options）"),
+            new TranslationSeedItem("entity.soprevision.sopid", "zh-CN", "SOP文档头ID", "SOP 文档头 ID（选项 TaktSopDocs/options，DictValue=Id）"),
             // entity.soprevision.sopid
-            new TranslationSeedItem("entity.soprevision.sopid", "zh-HK", "SOP文档头ID_hk", "SOP 文档头 ID（关联 TaktSopDoc.Id，选项 TaktSopDocs/options）"),
+            new TranslationSeedItem("entity.soprevision.sopid", "zh-HK", "SOP文档头ID_hk", "SOP 文档头 ID（选项 TaktSopDocs/options，DictValue=Id）"),
 
             // entity.soprevision.revision
             new TranslationSeedItem("entity.soprevision.revision", "en-US", "版本号_us", "版本号（主版本.次版本，如 1.0、A.01）"),
@@ -127,13 +127,13 @@ public class TaktSopRevisionI18nSeedData : ITaktSeedDataCoordinator
             new TranslationSeedItem("entity.soprevision.changedesc", "zh-HK", "变更说明_hk", "变更说明"),
 
             // entity.soprevision.ecnid
-            new TranslationSeedItem("entity.soprevision.ecnid", "en-US", "ECN主表ID_us", "关联 ECN 主表 ID（关联 TaktEc.Id，选项 TaktEcs/options）"),
+            new TranslationSeedItem("entity.soprevision.ecnid", "en-US", "ECN主表ID_us", "关联 ECN 主表 ID（选项 TaktEcs/options，DictValue=Id）"),
             // entity.soprevision.ecnid
-            new TranslationSeedItem("entity.soprevision.ecnid", "ja-JP", "ECN主表ID_jp", "关联 ECN 主表 ID（关联 TaktEc.Id，选项 TaktEcs/options）"),
+            new TranslationSeedItem("entity.soprevision.ecnid", "ja-JP", "ECN主表ID_jp", "关联 ECN 主表 ID（选项 TaktEcs/options，DictValue=Id）"),
             // entity.soprevision.ecnid
-            new TranslationSeedItem("entity.soprevision.ecnid", "zh-CN", "ECN主表ID", "关联 ECN 主表 ID（关联 TaktEc.Id，选项 TaktEcs/options）"),
+            new TranslationSeedItem("entity.soprevision.ecnid", "zh-CN", "ECN主表ID", "关联 ECN 主表 ID（选项 TaktEcs/options，DictValue=Id）"),
             // entity.soprevision.ecnid
-            new TranslationSeedItem("entity.soprevision.ecnid", "zh-HK", "ECN主表ID_hk", "关联 ECN 主表 ID（关联 TaktEc.Id，选项 TaktEcs/options）"),
+            new TranslationSeedItem("entity.soprevision.ecnid", "zh-HK", "ECN主表ID_hk", "关联 ECN 主表 ID（选项 TaktEcs/options，DictValue=Id）"),
 
             // entity.soprevision.islocked
             new TranslationSeedItem("entity.soprevision.islocked", "en-US", "是否锁定_us", "是否锁定（字典 sys_yes_no_type；0=否，1=是）"),

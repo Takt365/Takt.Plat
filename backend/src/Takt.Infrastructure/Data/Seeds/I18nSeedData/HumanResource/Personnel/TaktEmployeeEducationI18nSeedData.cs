@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Infrastructure.Data.Seeds.I18nSeedData.HumanResource.Personnel
 // 文件名称：TaktEmployeeEducationI18nSeedData.cs
-// 创建时间：2026-07-09
+// 创建时间：2026-07-20
 // 创建人：Takt365(Auto Generated)
 // 功能描述：TaktEmployeeEducation 实体字段国际化种子（无对应 frontend locales；TranslationText 取自 ColumnDescription，ContextNote 取自属性 XML summary）
 // 
@@ -91,13 +91,13 @@ public class TaktEmployeeEducationI18nSeedData : ITaktSeedDataCoordinator
             new TranslationSeedItem("entity.employeeeducation._self", "zh-HK", "员工教育经历信息_hk", "实体名称"),
 
             // entity.employeeeducation.employeeid
-            new TranslationSeedItem("entity.employeeeducation.employeeid", "en-US", "员工ID_us", "员工（关联 TaktEmployee.Id，选项 TaktEmployees/options）"),
+            new TranslationSeedItem("entity.employeeeducation.employeeid", "en-US", "员工ID_us", "员工（选项 TaktEmployees/options，DictValue=Id）"),
             // entity.employeeeducation.employeeid
-            new TranslationSeedItem("entity.employeeeducation.employeeid", "ja-JP", "员工ID_jp", "员工（关联 TaktEmployee.Id，选项 TaktEmployees/options）"),
+            new TranslationSeedItem("entity.employeeeducation.employeeid", "ja-JP", "员工ID_jp", "员工（选项 TaktEmployees/options，DictValue=Id）"),
             // entity.employeeeducation.employeeid
-            new TranslationSeedItem("entity.employeeeducation.employeeid", "zh-CN", "员工ID", "员工（关联 TaktEmployee.Id，选项 TaktEmployees/options）"),
+            new TranslationSeedItem("entity.employeeeducation.employeeid", "zh-CN", "员工ID", "员工（选项 TaktEmployees/options，DictValue=Id）"),
             // entity.employeeeducation.employeeid
-            new TranslationSeedItem("entity.employeeeducation.employeeid", "zh-HK", "员工ID_hk", "员工（关联 TaktEmployee.Id，选项 TaktEmployees/options）"),
+            new TranslationSeedItem("entity.employeeeducation.employeeid", "zh-HK", "员工ID_hk", "员工（选项 TaktEmployees/options，DictValue=Id）"),
 
             // entity.employeeeducation.schoolname
             new TranslationSeedItem("entity.employeeeducation.schoolname", "en-US", "学校名称_us", "学校名称"),

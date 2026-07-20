@@ -542,7 +542,7 @@ const FLOW_NODE_COLORS: Record<string, string> = {
   gateway: '#801dae',
   countersign: '#ed5736',
   copy: '#3296fa',
-  end: '#990033'
+  end: '#800020'
 }
 
 function getNodeStyle(flowType: string | undefined): { fill: string; stroke: string } | undefined {

@@ -21,46 +21,174 @@
     >
       <a-tab-pane
         key="tab-0"
-        :tab="t('common.page.form.tabs.basicinfo')"
+        :tab="t('common.page.form.tabs.basicinfo') + ' (1/2)'"
         force-render
       >
         <div :class="formContentClass">
           <a-row :gutter="24">
             <a-col :span="12">
               <a-form-item
-                :label="t('entity.purchasepriceitem.linenumber')"
-                name="lineNumber"
+                :label="pi.label('purchasePriceSeq')"
+                name="purchasePriceSeq"
               >
                 <a-input-number
-                  v-model:value="formState.lineNumber"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.purchasepriceitem.linenumber') })"
+                  v-model:value="formState.purchasePriceSeq"
+                  :placeholder="pi.ph('purchasePriceSeq')"
                   style="width: 100%"
                 />
               </a-form-item>
             </a-col>
             <a-col :span="12">
               <a-form-item
-                :label="t('entity.purchasepriceitem.materialcode')"
-                name="materialCode"
+                :label="pi.label('priceType')"
+                name="priceType"
               >
-                <a-input
-                  v-model:value="formState.materialCode"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.purchasepriceitem.materialcode') })"
-                  show-count
-                  :maxlength="20"
-                  allow-clear
+                <TaktSelect
+                  v-model:value="formState.priceType"
+                  dict-type="logistics_price_type"
+                  :placeholder="pi.ph('priceType')"
+                />
+              </a-form-item>
+            </a-col>
+            <a-col :span="12">
+              <a-form-item
+                :label="pi.label('scaleType')"
+                name="scaleType"
+              >
+                <TaktSelect
+                  v-model:value="formState.scaleType"
+                  dict-type="logistics_scale_type"
+                  :placeholder="pi.ph('scaleType')"
+                />
+              </a-form-item>
+            </a-col>
+            <a-col :span="12">
+              <a-form-item
+                :label="pi.label('scaleBasis')"
+                name="scaleBasis"
+              >
+                <TaktSelect
+                  v-model:value="formState.scaleBasis"
+                  dict-type="logistics_scale_basis"
+                  :placeholder="pi.ph('scaleBasis')"
+                />
+              </a-form-item>
+            </a-col>
+            <a-col :span="12">
+              <a-form-item
+                :label="pi.label('scaleQuantity')"
+                name="scaleQuantity"
+              >
+                <a-input-number
+                  v-model:value="formState.scaleQuantity"
+                  :placeholder="pi.ph('scaleQuantity')"
+                  style="width: 100%"
+                />
+              </a-form-item>
+            </a-col>
+            <a-col :span="12">
+              <a-form-item
+                :label="pi.label('scaleUnit')"
+                name="scaleUnit"
+              >
+                <TaktSelect
+                  v-model:value="formState.scaleUnit"
+                  dict-type="logistics_unit_of_measure_code"
+                  :placeholder="pi.ph('scaleUnit')"
+                />
+              </a-form-item>
+            </a-col>
+            <a-col :span="12">
+              <a-form-item
+                :label="pi.label('scaleValue')"
+                name="scaleValue"
+              >
+                <a-input-number
+                  v-model:value="formState.scaleValue"
+                  :placeholder="pi.ph('scaleValue')"
+                  style="width: 100%"
+                />
+              </a-form-item>
+            </a-col>
+            <a-col :span="12">
+              <a-form-item
+                :label="pi.label('scaleCurrency')"
+                name="scaleCurrency"
+              >
+                <TaktSelect
+                  v-model:value="formState.scaleCurrency"
+                  dict-type="accounting_currency_code"
+                  :placeholder="pi.ph('scaleCurrency')"
+                />
+              </a-form-item>
+            </a-col>
+            <a-col :span="12">
+              <a-form-item
+                :label="pi.label('calculationType')"
+                name="calculationType"
+              >
+                <TaktSelect
+                  v-model:value="formState.calculationType"
+                  dict-type="logistics_calculation_type"
+                  :placeholder="pi.ph('calculationType')"
+                />
+              </a-form-item>
+            </a-col>
+            <a-col :span="12">
+              <a-form-item
+                :label="pi.label('price')"
+                name="price"
+              >
+                <a-input-number
+                  v-model:value="formState.price"
+                  :placeholder="pi.ph('price')"
+                  style="width: 100%"
+                />
+              </a-form-item>
+            </a-col>
+          </a-row>
+        </div>
+      </a-tab-pane>
+      <a-tab-pane
+        key="tab-1"
+        :tab="t('common.page.form.tabs.basicinfo') + ' (2/2)'"
+        force-render
+      >
+        <div :class="formContentClass">
+          <a-row :gutter="24">
+            <a-col :span="12">
+              <a-form-item
+                :label="pi.label('taxCode')"
+                name="taxCode"
+              >
+                <TaktSelect
+                  v-model:value="formState.taxCode"
+                  dict-type="accounting_tax_code"
+                  :placeholder="pi.ph('taxCode')"
                   :disabled="!!formData?.purchasePriceItemId"
                 />
               </a-form-item>
             </a-col>
             <a-col :span="12">
               <a-form-item
-                :label="t('entity.purchasepriceitem.materialname')"
-                name="materialName"
+                :label="pi.label('isObsolete')"
+                name="isObsolete"
+              >
+                <TaktSelect
+                  v-model:value="formState.isObsolete"
+                  dict-type="sys_yes_no_type"
+                  :placeholder="pi.ph('isObsolete')"
+                />
+              </a-form-item>
+            </a-col>
+            <a-col :span="12">
+              <a-form-item
+                :label="pi.label('scaleQuantities')"
+                name="scaleQuantities"
               >
                 <a-input
-                  v-model:value="formState.materialName"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.purchasepriceitem.materialname') })"
+                  v-model:value="formState.scaleQuantities"
+                  :placeholder="pi.ph('scaleQuantities')"
                   show-count
                   :maxlength="20"
                   allow-clear
@@ -69,65 +197,15 @@
             </a-col>
             <a-col :span="12">
               <a-form-item
-                :label="t('entity.purchasepriceitem.materialspecification')"
-                name="materialSpecification"
+                :label="pi.label('scaleValues')"
+                name="scaleValues"
               >
                 <a-input
-                  v-model:value="formState.materialSpecification"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.purchasepriceitem.materialspecification') })"
+                  v-model:value="formState.scaleValues"
+                  :placeholder="pi.ph('scaleValues')"
                   show-count
                   :maxlength="20"
                   allow-clear
-                />
-              </a-form-item>
-            </a-col>
-            <a-col :span="12">
-              <a-form-item
-                :label="t('entity.purchasepriceitem.purchaseunit')"
-                name="purchaseUnit"
-              >
-                <a-input
-                  v-model:value="formState.purchaseUnit"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.purchasepriceitem.purchaseunit') })"
-                  show-count
-                  :maxlength="20"
-                  allow-clear
-                />
-              </a-form-item>
-            </a-col>
-            <a-col :span="12">
-              <a-form-item
-                :label="t('entity.purchasepriceitem.purchaseprice')"
-                name="purchasePrice"
-              >
-                <a-input-number
-                  v-model:value="formState.purchasePrice"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.purchasepriceitem.purchaseprice') })"
-                  style="width: 100%"
-                />
-              </a-form-item>
-            </a-col>
-            <a-col :span="12">
-              <a-form-item
-                :label="t('entity.purchasepriceitem.minpurchasequantity')"
-                name="minPurchaseQuantity"
-              >
-                <a-input-number
-                  v-model:value="formState.minPurchaseQuantity"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.purchasepriceitem.minpurchasequantity') })"
-                  style="width: 100%"
-                />
-              </a-form-item>
-            </a-col>
-            <a-col :span="12">
-              <a-form-item
-                :label="t('entity.purchasepriceitem.maxpurchasequantity')"
-                name="maxPurchaseQuantity"
-              >
-                <a-input-number
-                  v-model:value="formState.maxPurchaseQuantity"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.purchasepriceitem.maxpurchasequantity') })"
-                  style="width: 100%"
                 />
               </a-form-item>
             </a-col>
@@ -143,10 +221,17 @@
  * Takt采购价格实体子表 purchasePriceItem 维护表单 · 由 generate-vue-master-detail-from-api.cjs 生成
  * @module views/logistics/procurement/purchase-price/components
  */
-import { reactive, watch, computed, ref } from 'vue'
+import { reactive, watch, computed, ref, onMounted } from 'vue'
 import { useI18n } from 'vue-i18n'
 import type { Rule } from 'ant-design-vue/es/form'
+import { usePurchasePriceItemI18n } from '../composables/use-purchase-price-item-i18n'
+
+/** 实体字段 i18n */
+const pi = usePurchasePriceItemI18n()
+
 import type { PurchasePriceItemCreate } from '@/types/logistics/procurement/purchase-price-item'
+import TaktSelect from '@/components/business/takt-select/index.vue'
+import { useDictDataStore } from '@/stores/foundation/dict-data'
 
 /** i18n 翻译函数 */
 const { t } = useI18n()
@@ -155,7 +240,8 @@ const formContentClass = computed(() => (formFields.length > 10 ? 'takt-form-con
 /** 当前激活的 Tab key */
 const activeTab = ref('tab-0')
 /** CreateDto 字段名列表（与 formState 键对齐） */
-const formFields = ["lineNumber","materialCode","materialName","materialSpecification","purchaseUnit","purchasePrice","minPurchaseQuantity","maxPurchaseQuantity"]
+const formFields = ["purchasePriceSeq","priceType","scaleType","scaleBasis","scaleQuantity","scaleUnit","scaleValue","scaleCurrency","calculationType","price","taxCode","isObsolete","scaleQuantities","scaleValues"]
+
 
 
 /** 父级传入的编辑 DTO；新增时为 undefined 或空对象 */
@@ -177,11 +263,28 @@ const props = withDefaults(defineProps<Props>(), {
 const formRef = ref()
 /** 表单双向绑定模型 */
 const formState = reactive<Record<string, any>>({})
-/** 表单字段默认值（无字典默认项） */
-function applyFormDefaults(target: Record<string, unknown>) {
-  void target
+/** 表单字段默认值（字典 IsDefault=1，来自 TaktDictDataSeedData） */
+const FORM_FIELD_DEFAULTS: Record<string, string | number> = {
+  priceType: "PB00",
+  scaleType: "A",
+  scaleBasis: "C",
+  scaleCurrency: "CNY",
+  calculationType: "A",
+  taxCode: "J1"
 }
 
+/** 写入表单默认值（新增 / resetFields / 弹窗再次打开时） */
+function applyFormDefaults(target: Record<string, unknown>) {
+  Object.assign(target, FORM_FIELD_DEFAULTS)
+}
+
+/** Pinia：字典缓存（TaktSelect dict-type 渲染前预热，避免选项空白） */
+const dictDataStore = useDictDataStore()
+
+/** 表单挂载时预加载全量字典 */
+onMounted(() => {
+  void dictDataStore.loadAllDictDataAsync()
+})
 
 /** 编辑态灌入 formData；新增态恢复默认值（须含 purchasePriceItemId 才视为编辑） */
 watch(
@@ -207,67 +310,80 @@ watch(
 
 /** 表单校验规则（与 FluentValidation 必填对齐） */
 const rules = computed<Record<string, Rule[]>>(() => ({
-  lineNumber: [{
+  purchasePriceSeq: [{
     validator: async (_rule, value) => {
       if (value === undefined || value === null || value === '') {
-        return Promise.reject(t('common.page.form.placeholder.select', { field: t('entity.purchasepriceitem.linenumber') }))
+        return Promise.reject(pi.ph('purchasePriceSeq'))
       }
       const num = typeof value === 'number' ? value : Number(value)
       if (!Number.isFinite(num)) {
-        return Promise.reject(t('common.page.form.placeholder.select', { field: t('entity.purchasepriceitem.linenumber') }))
+        return Promise.reject(pi.ph('purchasePriceSeq'))
       }
       return Promise.resolve()
     },
     trigger: 'change'
   }],
-  materialCode: [
+  priceType: [
     {
       required: true,
-      message: t('common.page.form.placeholder.required', { field: t('entity.purchasepriceitem.materialcode') }),
-      trigger: 'blur'
+      message: pi.ph('priceType'),
+      trigger: 'change'
     }
   ],
-  purchaseUnit: [
+  scaleQuantity: [{
+    validator: async (_rule, value) => {
+      if (value === undefined || value === null || value === '') {
+        return Promise.reject(pi.ph('scaleQuantity'))
+      }
+      const num = typeof value === 'number' ? value : Number(value)
+      if (!Number.isFinite(num)) {
+        return Promise.reject(pi.ph('scaleQuantity'))
+      }
+      return Promise.resolve()
+    },
+    trigger: 'change'
+  }],
+  scaleValue: [{
+    validator: async (_rule, value) => {
+      if (value === undefined || value === null || value === '') {
+        return Promise.reject(pi.ph('scaleValue'))
+      }
+      const num = typeof value === 'number' ? value : Number(value)
+      if (!Number.isFinite(num)) {
+        return Promise.reject(pi.ph('scaleValue'))
+      }
+      return Promise.resolve()
+    },
+    trigger: 'change'
+  }],
+  calculationType: [
     {
       required: true,
-      message: t('common.page.form.placeholder.required', { field: t('entity.purchasepriceitem.purchaseunit') }),
-      trigger: 'blur'
+      message: pi.ph('calculationType'),
+      trigger: 'change'
     }
   ],
-  purchasePrice: [{
+  price: [{
     validator: async (_rule, value) => {
       if (value === undefined || value === null || value === '') {
-        return Promise.reject(t('common.page.form.placeholder.select', { field: t('entity.purchasepriceitem.purchaseprice') }))
+        return Promise.reject(pi.ph('price'))
       }
       const num = typeof value === 'number' ? value : Number(value)
       if (!Number.isFinite(num)) {
-        return Promise.reject(t('common.page.form.placeholder.select', { field: t('entity.purchasepriceitem.purchaseprice') }))
+        return Promise.reject(pi.ph('price'))
       }
       return Promise.resolve()
     },
     trigger: 'change'
   }],
-  minPurchaseQuantity: [{
+  isObsolete: [{
     validator: async (_rule, value) => {
       if (value === undefined || value === null || value === '') {
-        return Promise.reject(t('common.page.form.placeholder.select', { field: t('entity.purchasepriceitem.minpurchasequantity') }))
+        return Promise.reject(pi.ph('isObsolete'))
       }
       const num = typeof value === 'number' ? value : Number(value)
       if (!Number.isFinite(num)) {
-        return Promise.reject(t('common.page.form.placeholder.select', { field: t('entity.purchasepriceitem.minpurchasequantity') }))
-      }
-      return Promise.resolve()
-    },
-    trigger: 'change'
-  }],
-  maxPurchaseQuantity: [{
-    validator: async (_rule, value) => {
-      if (value === undefined || value === null || value === '') {
-        return Promise.reject(t('common.page.form.placeholder.select', { field: t('entity.purchasepriceitem.maxpurchasequantity') }))
-      }
-      const num = typeof value === 'number' ? value : Number(value)
-      if (!Number.isFinite(num)) {
-        return Promise.reject(t('common.page.form.placeholder.select', { field: t('entity.purchasepriceitem.maxpurchasequantity') }))
+        return Promise.reject(pi.ph('isObsolete'))
       }
       return Promise.resolve()
     },
@@ -284,21 +400,25 @@ async function validate() {
 /** 映射为 Create/Update DTO（含主表外键 purchasePriceId） */
 function getValues(): Record<string, any> {
   const payload = { ...formState }
-  if ('lineNumber' in payload) {
-    const rawlineNumber = payload.lineNumber
-    payload.lineNumber = typeof rawlineNumber === 'number' ? rawlineNumber : Number(rawlineNumber)
+  if ('purchasePriceSeq' in payload) {
+    const rawpurchasePriceSeq = payload.purchasePriceSeq
+    payload.purchasePriceSeq = typeof rawpurchasePriceSeq === 'number' ? rawpurchasePriceSeq : Number(rawpurchasePriceSeq)
   }
-  if ('purchasePrice' in payload) {
-    const rawpurchasePrice = payload.purchasePrice
-    payload.purchasePrice = typeof rawpurchasePrice === 'number' ? rawpurchasePrice : Number(rawpurchasePrice)
+  if ('scaleQuantity' in payload) {
+    const rawscaleQuantity = payload.scaleQuantity
+    payload.scaleQuantity = typeof rawscaleQuantity === 'number' ? rawscaleQuantity : Number(rawscaleQuantity)
   }
-  if ('minPurchaseQuantity' in payload) {
-    const rawminPurchaseQuantity = payload.minPurchaseQuantity
-    payload.minPurchaseQuantity = typeof rawminPurchaseQuantity === 'number' ? rawminPurchaseQuantity : Number(rawminPurchaseQuantity)
+  if ('scaleValue' in payload) {
+    const rawscaleValue = payload.scaleValue
+    payload.scaleValue = typeof rawscaleValue === 'number' ? rawscaleValue : Number(rawscaleValue)
   }
-  if ('maxPurchaseQuantity' in payload) {
-    const rawmaxPurchaseQuantity = payload.maxPurchaseQuantity
-    payload.maxPurchaseQuantity = typeof rawmaxPurchaseQuantity === 'number' ? rawmaxPurchaseQuantity : Number(rawmaxPurchaseQuantity)
+  if ('price' in payload) {
+    const rawprice = payload.price
+    payload.price = typeof rawprice === 'number' ? rawprice : Number(rawprice)
+  }
+  if ('isObsolete' in payload) {
+    const rawisObsolete = payload.isObsolete
+    payload.isObsolete = typeof rawisObsolete === 'number' ? rawisObsolete : Number(rawisObsolete)
   }
   if ('sortOrder' in payload) delete payload.sortOrder
   payload.purchasePriceId = props.masterId

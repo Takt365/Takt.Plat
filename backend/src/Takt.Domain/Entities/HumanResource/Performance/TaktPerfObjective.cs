@@ -24,7 +24,7 @@ namespace Takt.Domain.Entities.HumanResource.Performance;
 public class TaktPerfObjective : TaktApprovalEntityBase
 {
     /// <summary>
-    /// 员工（关联 TaktEmployee.Id，选项 TaktEmployees/options）
+    /// 员工（选项 TaktEmployees/options，DictValue=Id）
     /// </summary>
     [SugarColumn(ColumnName = "employee_id", ColumnDescription = "员工ID", ColumnDataType = "bigint", IsNullable = false)]
     [JsonConverter(typeof(ValueToStringConverter))]
@@ -35,7 +35,7 @@ public class TaktPerfObjective : TaktApprovalEntityBase
     [SugarColumn(ColumnName = "employee_name", ColumnDescription = "员工姓名", ColumnDataType = "nvarchar", Length = 50, IsNullable = false)]
     public string EmployeeName { get; set; } = string.Empty;
     /// <summary>
-    /// 方案指标（关联 TaktPerfScheme.Id，选项 TaktPerfSchemes/options）
+    /// 方案指标（选项 TaktPerfSchemes/options，DictValue=Id）
     /// </summary>
     [SugarColumn(ColumnName = "scheme_metric_id", ColumnDescription = "方案指标ID", ColumnDataType = "bigint", IsNullable = false)]
     [JsonConverter(typeof(ValueToStringConverter))]
@@ -86,7 +86,7 @@ public class TaktPerfObjective : TaktApprovalEntityBase
     [SugarColumn(ColumnName = "achievement_notes", ColumnDescription = "目标达成说明", ColumnDataType = "nvarchar", Length = 1000, IsNullable = false)]
     public string AchievementNotes { get; set; } = string.Empty;
     /// <summary>
-    /// 关联工厂（关联 TaktPlant.PlantCode，选项 TaktPlants/options）
+    /// 关联工厂（选项 TaktPlants/options，DictValue=Id）
     /// </summary>
     [SugarColumn(ColumnName = "related_plant", ColumnDescription = "关联工厂", ColumnDataType = "nvarchar", Length = 4, IsNullable = false)]
     public string RelatedPlant { get; set; } = string.Empty;

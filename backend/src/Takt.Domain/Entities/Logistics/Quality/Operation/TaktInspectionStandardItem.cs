@@ -23,7 +23,7 @@ namespace Takt.Domain.Entities.Logistics.Quality.Operation;
 public class TaktInspectionStandardItem : TaktCompanyEntityBase
 {
     /// <summary>
-    /// 检验标准 ID（关联 TaktInspectionStandard.Id，选项 TaktInspectionStandards/options）
+    /// 检验标准 ID（选项 TaktInspectionStandards/options，DictValue=Id）
     /// </summary>
     [SugarColumn(ColumnName = "inspection_standard_id", ColumnDescription = "检验标准ID", ColumnDataType = "bigint", IsNullable = false)]
     [JsonConverter(typeof(ValueToStringConverter))]

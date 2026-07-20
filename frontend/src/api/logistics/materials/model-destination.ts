@@ -138,6 +138,32 @@ export function getModelDestinationOptions(): Promise<TaktSelectOption[]> {
 }
 
 /**
+ * 获取机种下拉选项（ModelCode 去重）
+ * @returns {Promise<TaktSelectOption[]>} 机种下拉选项
+ */
+export function getModelOptions(): Promise<TaktSelectOption[]> {
+  return request<TaktSelectOption[]>({
+    url: `${MODEL_DESTINATION_API_BASE}/model-options`,
+    method: 'get',
+  });
+}
+
+/**
+ * 根据机种编码获取级联物料选项（DictValue=物料编码）
+ * @param {string} modelCode 机种编码
+ * @returns {Promise<TaktSelectOption[]>} 物料下拉选项
+ */
+export function getMaterialOptionsByModel(modelCode: string): Promise<TaktSelectOption[]> {
+  return request<TaktSelectOption[]>({
+    url: `${MODEL_DESTINATION_API_BASE}/material-options-by-model`,
+    method: 'get',
+    params: {
+      modelCode,
+    },
+  });
+}
+
+/**
  * 根据物料编码获取机种名称与仕向地信息
  * @param {string} materialCode 物料编码
  * @returns {Promise<ModelDestination | null>} 型号目的地 DTO；未匹配时为 null

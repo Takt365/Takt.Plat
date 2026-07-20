@@ -675,6 +675,10 @@ const columns = computed<TableColumnsType>(() => [
     width: 120,
     resizable: true,
     ellipsis: true,
+    sorter: (a: StandardOperationTime, b: StandardOperationTime) =>
+      String(getStandardOperationTimeField(a, 'materialCode') ?? '').localeCompare(
+        String(getStandardOperationTimeField(b, 'materialCode') ?? ''),
+      ),
     customRender: ({ record }: { record: any }) => getStandardOperationTimeField(record, 'materialCode') ?? ''
   },
   {
@@ -702,6 +706,16 @@ const columns = computed<TableColumnsType>(() => [
     width: 120,
     resizable: true,
     ellipsis: true,
+    sorter: (a: StandardOperationTime, b: StandardOperationTime) => {
+      const av = Number(getStandardOperationTimeField(a, 'standardMinutes'))
+      const bv = Number(getStandardOperationTimeField(b, 'standardMinutes'))
+      const aOk = Number.isFinite(av)
+      const bOk = Number.isFinite(bv)
+      if (!aOk && !bOk) return 0
+      if (!aOk) return 1
+      if (!bOk) return -1
+      return av - bv
+    },
     customRender: ({ record }: { record: any }) => getStandardOperationTimeField(record, 'standardMinutes') ?? ''
   },
   {
@@ -720,6 +734,16 @@ const columns = computed<TableColumnsType>(() => [
     width: 120,
     resizable: true,
     ellipsis: true,
+    sorter: (a: StandardOperationTime, b: StandardOperationTime) => {
+      const av = Number(getStandardOperationTimeField(a, 'standardShorts'))
+      const bv = Number(getStandardOperationTimeField(b, 'standardShorts'))
+      const aOk = Number.isFinite(av)
+      const bOk = Number.isFinite(bv)
+      if (!aOk && !bOk) return 0
+      if (!aOk) return 1
+      if (!bOk) return -1
+      return av - bv
+    },
     customRender: ({ record }: { record: any }) => getStandardOperationTimeField(record, 'standardShorts') ?? ''
   },
   {

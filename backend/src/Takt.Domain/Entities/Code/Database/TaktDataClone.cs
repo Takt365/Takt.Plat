@@ -55,9 +55,9 @@ public class TaktDataClone : TaktCompanyEntityBase
     public string SourceCompanyCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 目标租户编码（3 位）
+    /// 目标租户（3 位）
     /// </summary>
-    [SugarColumn(ColumnName = "target_tenant_code", ColumnDescription = "目标租户编码", ColumnDataType = "varchar", Length = 3, IsNullable = false)]
+    [SugarColumn(ColumnName = "target_tenant_code", ColumnDescription = "目标租户", ColumnDataType = "varchar", Length = 3, IsNullable = false)]
     public string TargetTenantCode { get; set; } = string.Empty;
 
     /// <summary>

@@ -21,16 +21,19 @@ export const SALESPRICEITEM_SELF_I18N_KEY = buildEntitySelfI18nKey(SALESPRICEITE
 /** 列表业务列（不含主键） */
 export const SALESPRICEITEM_LIST_FIELDS = [
   'salesPriceId',
-  'salesPriceName',
   'salesPriceCode',
-  'lineNumber',
-  'materialCode',
-  'salesUnit',
-  'salesPerUnit',
-  'salesPrice',
-  'minOrderQuantity',
-  'maxOrderQuantity',
+  'salesPriceSeq',
+  'priceType',
+  'scaleType',
+  'scaleBasis',
+  'scaleQuantity',
+  'scaleUnit',
+  'scaleValue',
+  'scaleCurrency',
+  'calculationType',
   'price',
+  'taxCode',
+  'isObsolete',
 ] as const
 
 /** 表单控件默认占位类型（仅 UI/校验语义，不含 i18n 键） */
@@ -40,13 +43,18 @@ export const SALESPRICEITEM_PLACEHOLDER = {
   companyDefaultCulture: 'optional',
   salesPriceId: 'select',
   salesPriceCode: 'required',
-  lineNumber: 'select',
-  materialCode: 'select',
-  salesUnit: 'select',
-  salesPerUnit: 'select',
-  salesPrice: 'select',
-  minOrderQuantity: 'select',
-  maxOrderQuantity: 'select',
+  salesPriceSeq: 'select',
+  priceType: 'select',
+  scaleType: 'optional',
+  scaleBasis: 'optional',
+  scaleQuantity: 'select',
+  scaleUnit: 'optional',
+  scaleValue: 'select',
+  scaleCurrency: 'optional',
+  calculationType: 'select',
+  price: 'select',
+  taxCode: 'optional',
+  isObsolete: 'select',
   extField: 'optional',
   remark: 'optional',
 } as const satisfies Record<string, EntityFieldPlaceholderKind>
@@ -58,8 +66,13 @@ export type SalesPriceItemField = keyof typeof SALESPRICEITEM_PLACEHOLDER
 export const SALESPRICEITEM_QUERY_STRING_FIELDS = [
   'salesPriceId',
   'salesPriceCode',
-  'materialCode',
-  'salesUnit',
+  'priceType',
+  'scaleType',
+  'scaleBasis',
+  'scaleUnit',
+  'scaleCurrency',
+  'calculationType',
+  'taxCode',
   'createdAtStart',
   'createdAtEnd',
   'extField',
@@ -68,16 +81,16 @@ export const SALESPRICEITEM_QUERY_STRING_FIELDS = [
 
 export type SalesPriceItemQueryField =
   | (typeof SALESPRICEITEM_QUERY_STRING_FIELDS)[number]
-  | 'lineNumber' | 'salesPerUnit' | 'salesPrice' | 'minOrderQuantity' | 'maxOrderQuantity'
+  | 'salesPriceSeq' | 'scaleQuantity' | 'scaleValue' | 'price' | 'isObsolete'
 
 /** 高级查询抽屉全部字段（含数值） */
 export const SALESPRICEITEM_QUERY_FIELDS: readonly SalesPriceItemQueryField[] = [
   ...SALESPRICEITEM_QUERY_STRING_FIELDS,
-  'lineNumber',
-  'salesPerUnit',
-  'salesPrice',
-  'minOrderQuantity',
-  'maxOrderQuantity',
+  'salesPriceSeq',
+  'scaleQuantity',
+  'scaleValue',
+  'price',
+  'isObsolete',
 ]
 
 /**

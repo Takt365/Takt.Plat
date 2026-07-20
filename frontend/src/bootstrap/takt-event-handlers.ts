@@ -27,6 +27,7 @@ import { EventBus, type NotificationType } from '@/utils/event-bus';
 import { translateLocaleMessage } from '@/utils/takt-i18n-message';
 import { ensureTaktPaginationConfigAsync, resetTaktPaginationConfig } from '@/config/takt-pagination';
 import {
+  executeIdleLogoutNow,
   isLogoutInProgress,
   performHardLogoutRedirect,
   runServerSignOutIfLoggedInAsync,
@@ -34,6 +35,8 @@ import {
   TAKT_TABS_STORAGE_KEY,
   withLogoutInProgress,
 } from '@/bootstrap/takt-logout-flow';
+
+export { executeIdleLogoutNow };
 
 export { TAKT_LOGOUT_FLASH_STORAGE_KEY };
 
@@ -158,20 +161,13 @@ function showAntdMessage(type: NotificationType, content: string, description?: 
 }
 
 /**
- * 空闲超时登出：先服务端 signOut（token 仍在），再清前端并 warning 提示
+ * 空闲超时登出（兼容旧调用方）
  * @param message 提示文案；缺省 common.tip.session.idle.logout
  * @returns {Promise<void>}
  */
 export async function executeIdleLogoutAsync(message?: string): Promise<void> {
-  if (isLogoutInProgress()) {
-    return;
-  }
-
   const logoutMessage = message ?? translateLocaleMessage('common.tip.session.idle.logout');
-  await runServerSignOutIfLoggedInAsync();
-  await withLogoutInProgress(async () => {
-    performHardLogoutRedirect(logoutMessage, 'warning');
-  });
+  executeIdleLogoutNow(logoutMessage);
 }
 
 /**
@@ -237,7 +233,8 @@ export function registerTaktEventHandlers(): void {
   });
 
   EventBus.on('auth:idle-timeout', (payload) => {
-    void executeIdleLogoutAsync(payload?.message);
+    const logoutMessage = payload?.message ?? translateLocaleMessage('common.tip.session.idle.logout');
+    executeIdleLogoutNow(logoutMessage);
   });
 
   // 全局 Toast：request / Store 等非 UI 层通过 EventBus 触发

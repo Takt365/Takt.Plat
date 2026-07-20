@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Infrastructure.Data.Seeds.I18nSeedData.Accounting.Financial
 // 文件名称：TaktCountersignDetailI18nSeedData.cs
-// 创建时间：2026-07-09
+// 创建时间：2026-07-20
 // 创建人：Takt365(Auto Generated)
 // 功能描述：TaktCountersignDetail 实体字段国际化种子（无对应 frontend locales；TranslationText 取自 ColumnDescription，ContextNote 取自属性 XML summary）
 // 
@@ -127,13 +127,13 @@ public class TaktCountersignDetailI18nSeedData : ITaktSeedDataCoordinator
             new TranslationSeedItem("entity.countersigndetail.allocationcategory", "zh-HK", "分配类别_hk", "分配类别（字典 logistics_allocation_category：A=资产，K=成本中心，F=订单；会签明细、采购申请明细、费用单明细共用）"),
 
             // entity.countersigndetail.accounttitle
-            new TranslationSeedItem("entity.countersigndetail.accounttitle", "en-US", "会计科目_us", "会计科目（关联 TaktAccountTitle.AccountTitleCode，选项 TaktAccountTitles/options）"),
+            new TranslationSeedItem("entity.countersigndetail.accounttitle", "en-US", "会计科目_us", "会计科目（选项 TaktAccountTitles/options，DictValue=Id）"),
             // entity.countersigndetail.accounttitle
-            new TranslationSeedItem("entity.countersigndetail.accounttitle", "ja-JP", "会计科目_jp", "会计科目（关联 TaktAccountTitle.AccountTitleCode，选项 TaktAccountTitles/options）"),
+            new TranslationSeedItem("entity.countersigndetail.accounttitle", "ja-JP", "会计科目_jp", "会计科目（选项 TaktAccountTitles/options，DictValue=Id）"),
             // entity.countersigndetail.accounttitle
-            new TranslationSeedItem("entity.countersigndetail.accounttitle", "zh-CN", "会计科目", "会计科目（关联 TaktAccountTitle.AccountTitleCode，选项 TaktAccountTitles/options）"),
+            new TranslationSeedItem("entity.countersigndetail.accounttitle", "zh-CN", "会计科目", "会计科目（选项 TaktAccountTitles/options，DictValue=Id）"),
             // entity.countersigndetail.accounttitle
-            new TranslationSeedItem("entity.countersigndetail.accounttitle", "zh-HK", "会计科目_hk", "会计科目（关联 TaktAccountTitle.AccountTitleCode，选项 TaktAccountTitles/options）"),
+            new TranslationSeedItem("entity.countersigndetail.accounttitle", "zh-HK", "会计科目_hk", "会计科目（选项 TaktAccountTitles/options，DictValue=Id）"),
 
             // entity.countersigndetail.itemname
             new TranslationSeedItem("entity.countersigndetail.itemname", "en-US", "明细项名称_us", "明细项名称"),

@@ -47,7 +47,7 @@ public class TaktPurchaseGroup : TaktCompanyEntityBase
     [SugarColumn(ColumnName = "purchase_group_description", ColumnDescription = "采购组描述", ColumnDataType = "nvarchar", Length = 200, IsNullable = true)]
     public string? PurchaseGroupDescription { get; set; }
     /// <summary>
-    /// 采购组负责人用户 ID（关联 TaktUser.Id，选项 TaktUsers/options）
+    /// 采购组负责人用户 ID（选项 TaktUsers/options，DictValue=Id）
     /// </summary>
     [SugarColumn(ColumnName = "responsible_user_id", ColumnDescription = "负责人用户ID", ColumnDataType = "bigint", IsNullable = true)]
     [JsonConverter(typeof(ValueToStringConverter))]

@@ -38,7 +38,7 @@ index.vue（h-full flex flex-col min-h-0）
 
 | 层 | 文件 |
 |----|------|
-| 列表壳 | `views/logistics/manufacturing/scheduling/work-center/index.vue` |
+| 列表壳 | `views/logistics/manufacturing/aps/work-center/index.vue` |
 | 右侧从表面板 | `.../work-center/components/work-center-resource-panel.vue` |
 | 主表上下文 | `.../work-center/composables/use-work-center-master-context.ts` |
 | LR 组件 | `components/business/takt-master-detail-table-lr/index.vue` |

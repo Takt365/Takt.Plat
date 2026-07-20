@@ -4,7 +4,7 @@
 // 文件名称：TaktPcbaInspection.cs
 // 创建时间：2025-02-02
 // 创建人：Takt365(Cursor AI)
-// 功能描述：PCBA检查日报实体，按工厂、生产日期等记录检查主数据
+// 功能描述：PCBA检查日报实体，按工厂、工单等记录检查主数据（实装日期在明细 B/T 面）
 // 计算公式：不良率(%) = 明细不良数量合计 ÷ 明细检查数量合计 × 100%（分母为 0 时取 0）
 // 直行率(%) = (明细检查数量合计 - 明细不良数量合计) ÷ 明细检查数量合计 × 100%（数量取自 TaktPcbaInspectionDetail）
 //
@@ -24,8 +24,7 @@ namespace Takt.Domain.Entities.Logistics.Manufacturing.Defect;
 [SugarTable("takt_logistics_manufacturing_defect_pcba_inspection", "PCBA检查日报表")]
 [SugarIndex("ix_pcba_inspection_tenant", nameof(TenantCode), OrderByType.Asc, nameof(CompanyCode), OrderByType.Asc, false)]
 [SugarIndex("ix_pcba_inspection_is_deleted", nameof(TenantCode), OrderByType.Asc, nameof(CompanyCode), OrderByType.Asc, nameof(IsDeleted), OrderByType.Asc, false)]
-[SugarIndex("ix_takt_logistics_manufacturing_defect_pcba_inspection_unique", nameof(TenantCode), OrderByType.Asc, nameof(CompanyCode), OrderByType.Asc, nameof(ProdDate), OrderByType.Asc, nameof(ProdOrderCode), OrderByType.Asc, true)]
-[SugarIndex("ix_takt_logistics_manufacturing_defect_pcba_inspection_prod_date", nameof(TenantCode), OrderByType.Asc, nameof(CompanyCode), OrderByType.Asc, nameof(ProdDate), OrderByType.Desc, false)]
+[SugarIndex("ix_takt_logistics_manufacturing_defect_pcba_inspection_unique", nameof(TenantCode), OrderByType.Asc, nameof(CompanyCode), OrderByType.Asc, nameof(ProdOrderCode), OrderByType.Asc, true)]
 [SugarIndex("ix_takt_logistics_manufacturing_defect_pcba_inspection_prod_order_code", nameof(TenantCode), OrderByType.Asc, nameof(CompanyCode), OrderByType.Asc, nameof(ProdOrderCode), OrderByType.Asc, false)]
 public class TaktPcbaInspection : TaktCompanyEntityBase
 {
@@ -42,19 +41,13 @@ public class TaktPcbaInspection : TaktCompanyEntityBase
     public string ProdCategory { get; set; } = string.Empty;
 
     /// <summary>
-    /// 生产日期
-    /// </summary>
-    [SugarColumn(ColumnName = "prod_date", ColumnDescription = "生产日期", ColumnDataType = "date", IsNullable = false)]
-    public DateTime ProdDate { get; set; }
-
-    /// <summary>
     /// 工单类别（回填：随工单）
     /// </summary>
     [SugarColumn(ColumnName = "prod_order_type", ColumnDescription = "工单类别", Length = 20, ColumnDataType = "nvarchar", IsNullable = true)]
     public string? ProdOrderType { get; set; }
 
     /// <summary>
-    /// 工单号（选项 TaktProductionOrders/options，按 PlantCode 过滤）
+    /// 工单号（选项 TaktProductionOrders/options，DictValue=ProdOrderCode，ExtValue=PlantCode）
     /// </summary>
     [SugarColumn(ColumnName = "prod_order_code", ColumnDescription = "工单号", Length = 20, ColumnDataType = "nvarchar", IsNullable = false)]
     public string ProdOrderCode { get; set; } = string.Empty;

@@ -263,7 +263,7 @@ public class TaktFlowEngineController : TaktControllerBase
     /// 可发起流程方案列表（已发布、最新版、未挂起）
     /// </summary>
     /// <returns>方案摘要</returns>
-    [TaktPermission("workflow:instance:start", "可发起流程列表")]
+    [TaktPermission("workflow:instance:initiate", "可发起流程列表")]
     [HttpGet("startable-schemes")]
     public async Task<IActionResult> GetStartableSchemeListAsync()
     {
@@ -302,7 +302,7 @@ public class TaktFlowEngineController : TaktControllerBase
     /// </summary>
     /// <param name="dto">表名与业务主键</param>
     /// <returns>流程实例详情</returns>
-    [TaktPermission("workflow:instance:start", "按业务表提交审批")]
+    [TaktPermission("workflow:instance:initiate", "按业务表提交审批")]
     [HttpPost("submit-by-table")]
     public async Task<IActionResult> SubmitFlowApprovalByTableAsync([FromBody] TaktFlowSubmitByTableDto dto)
     {
@@ -325,7 +325,7 @@ public class TaktFlowEngineController : TaktControllerBase
     /// </summary>
     /// <param name="dto">发起参数</param>
     /// <returns>实例详情</returns>
-    [TaktPermission("workflow:instance:start", "发起流程")]
+    [TaktPermission("workflow:instance:initiate", "发起流程")]
     [HttpPost("start")]
     public async Task<IActionResult> StartFlowInstanceAsync([FromBody] TaktFlowStartDto dto)
     {
@@ -345,7 +345,7 @@ public class TaktFlowEngineController : TaktControllerBase
     /// </summary>
     /// <param name="dto">发起参数</param>
     /// <returns>实例详情</returns>
-    [TaktPermission("workflow:instance:start", "保存流程草稿")]
+    [TaktPermission("workflow:instance:initiate", "保存流程草稿")]
     [HttpPost("draft")]
     public async Task<IActionResult> CreateFlowInstanceDraftAsync([FromBody] TaktFlowStartDto dto)
     {
@@ -365,7 +365,7 @@ public class TaktFlowEngineController : TaktControllerBase
     /// </summary>
     /// <param name="id">实例 ID</param>
     /// <returns>实例详情</returns>
-    [TaktPermission("workflow:instance:start", "从草稿启动流程")]
+    [TaktPermission("workflow:instance:initiate", "从草稿启动流程")]
     [HttpPost("{id:long}/start-from-draft")]
     public async Task<IActionResult> StartFlowInstanceFromDraftAsync(long id)
     {

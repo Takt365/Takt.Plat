@@ -25,12 +25,12 @@ namespace Takt.Domain.Entities.HumanResource.Personnel;
 public class TaktEmployeeJoined : TaktApprovalEntityBase
 {
     /// <summary>
-    /// 员工（关联 TaktEmployee.Id，选项 TaktEmployees/options）
+    /// 员工（选项 TaktEmployees/options，DictValue=Id）
     /// </summary>
     [SugarColumn(ColumnName = "employee_id", ColumnDescription = "员工ID", ColumnDataType = "bigint", IsNullable = false)]
     public long EmployeeId { get; set; }
     /// <summary>
-    /// 入职待办（关联 TaktEmployeeOnboarding.Id，选项 TaktEmployeeOnboardings/options）
+    /// 入职待办（选项 TaktEmployeeOnboardings/options，DictValue=Id）
     /// </summary>
     [SugarColumn(ColumnName = "onboarding_id", ColumnDescription = "入职待办ID", ColumnDataType = "bigint", IsNullable = true)]
     public long? OnboardingId { get; set; }
@@ -60,7 +60,7 @@ public class TaktEmployeeJoined : TaktApprovalEntityBase
     [SugarColumn(ColumnName = "dept_name", ColumnDescription = "上岗部门名称", ColumnDataType = "nvarchar", Length = 100, IsNullable = false)]
     public string DeptName { get; set; } = string.Empty;
     /// <summary>
-    /// 上岗岗位（关联 TaktPost.Id，选项 TaktPosts/options）
+    /// 上岗岗位（选项 TaktPosts/options，DictValue=Id）
     /// </summary>
     [SugarColumn(ColumnName = "post_id", ColumnDescription = "上岗岗位ID", ColumnDataType = "bigint", IsNullable = true)]
     public long? PostId { get; set; }
@@ -85,7 +85,7 @@ public class TaktEmployeeJoined : TaktApprovalEntityBase
     [SugarColumn(ColumnName = "employment_type", ColumnDescription = "任职类型", ColumnDataType = "int", IsNullable = false, DefaultValue = "0")]
     public int EmploymentType { get; set; }
     /// <summary>
-    /// 直属上级（关联 TaktEmployee.Id，选项 TaktEmployees/options）
+    /// 直属上级（选项 TaktEmployees/options，DictValue=Id）
     /// </summary>
     [SugarColumn(ColumnName = "direct_manager_id", ColumnDescription = "直属上级员工ID", ColumnDataType = "bigint", IsNullable = true)]
     public long? DirectManagerId { get; set; }

@@ -15,6 +15,7 @@ using Mapster;
 using SqlSugar;
 using Takt.Application.Dtos.Logistics.Quality.Operation;
 using Takt.Domain.Entities.Logistics.Quality.Operation;
+using Takt.Domain.Entities.Logistics.Sales;
 using Takt.Domain.Interfaces;
 using Takt.Domain.Repositories;
 using Takt.Shared.Exceptions;
@@ -27,10 +28,11 @@ namespace Takt.Application.Services.Logistics.Quality.Operation;
 /// <summary>
 /// 出货检验单应用服务
 /// </summary>
-public class TaktFqcOrderService : TaktServiceBase, ITaktFqcOrderService
+public partial class TaktFqcOrderService : TaktServiceBase, ITaktFqcOrderService
 {
     private readonly ITaktCompanyRepository<TaktFqcOrder> _fqcOrderRepository;
     private readonly ITaktCompanyRepository<TaktFqcOrderItem> _fqcOrderItemRepository;
+    private readonly ITaktCompanyRepository<TaktCustomer> _customerRepository;
     private readonly ITaktLineNumberGenerator _lineNumberGenerator;
     private readonly ITaktUniqueValidator _uniqueValidator;
 
@@ -39,6 +41,7 @@ public class TaktFqcOrderService : TaktServiceBase, ITaktFqcOrderService
     /// </summary>
     /// <param name="fqcOrderRepository">出货检验单仓储</param>
     /// <param name="fqcOrderItemRepository">FqcOrderItem仓储</param>
+    /// <param name="customerRepository">客户仓储</param>
     /// <param name="lineNumberGenerator">明细行号生成器</param>
     /// <param name="uniqueValidator">唯一性验证器</param>
     /// <param name="userContext">用户上下文</param>
@@ -46,6 +49,7 @@ public class TaktFqcOrderService : TaktServiceBase, ITaktFqcOrderService
     public TaktFqcOrderService(
         ITaktCompanyRepository<TaktFqcOrder> fqcOrderRepository,
         ITaktCompanyRepository<TaktFqcOrderItem> fqcOrderItemRepository,
+        ITaktCompanyRepository<TaktCustomer> customerRepository,
         ITaktLineNumberGenerator lineNumberGenerator,
         ITaktUniqueValidator uniqueValidator,
         ITaktUserContext? userContext = null,
@@ -54,6 +58,7 @@ public class TaktFqcOrderService : TaktServiceBase, ITaktFqcOrderService
     {
         _fqcOrderRepository = fqcOrderRepository;
         _fqcOrderItemRepository = fqcOrderItemRepository;
+        _customerRepository = customerRepository;
         _lineNumberGenerator = lineNumberGenerator;
         _uniqueValidator = uniqueValidator;
     }

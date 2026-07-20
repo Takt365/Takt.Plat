@@ -1,0 +1,1257 @@
+<!-- ======================================== -->
+<!-- 项目名称：节拍数字工厂 · Takt Plat (TDF) -->
+<!-- 命名空间：@/views/logistics/manufacturing/mrp/material-requirements-planning -->
+<!-- 文件名称：index.vue -->
+<!-- 功能描述：物料需求计划 MRP 头表管理页面，含查询、增删改，由 generate-vue-master-detail-from-api.cjs 根据 types/api 自动生成 -->
+<!-- 版权信息：Copyright (c) 2025 Takt  All rights reserved. -->
+<!-- 免责声明：此软件使用 MIT License，作者不承担任何使用风险。 -->
+<!-- ======================================== -->
+
+<template>
+  <div class="p-4 flex flex-col min-h-0 h-full">
+    <!-- 左主右从 -->
+    <TaktMasterDetailTableLr
+      v-model:master-current="currentPage"
+      v-model:master-page-size="pageSize"
+      v-model:selected-master-key="selectedMasterKey"
+      class="min-h-0 flex-1"
+      :master-columns="columns"
+      :master-data-source="dataSource"
+      :master-loading="loading"
+      :master-row-key="getMaterialRequirementsPlanningId"
+      :master-row-selection="rowSelection"
+      master-id-column-key="materialRequirementsPlanningId"
+      :master-visible-column-keys="visibleColumnKeys"
+      master-table-mode="masterDetailMaster"
+      master-scroll-layout="masterDetailLr"
+      :master-total="total"
+      master-entity-scope="approval"
+      @master-change="handleTableChange"
+      @master-resize-column="handleResizeColumn"
+      @master-pagination-change="handleMasterPaginationChange"
+      @master-select="handleMasterSelect"
+    >
+      <template #master-toolbar>
+        <TaktQueryBar
+          v-model="queryKeyword"
+          :placeholder="searchPlaceholder"
+          :loading="loading"
+          @search="handleSearch"
+          @reset="handleReset"
+        />
+        <TaktToolsBar
+      create-permission="logistics:manufacturing:mrp:material:requirements:planning:create"
+      update-permission="logistics:manufacturing:mrp:material:requirements:planning:update"
+      delete-permission="logistics:manufacturing:mrp:material:requirements:planning:delete"
+      import-permission="logistics:manufacturing:mrp:material:requirements:planning:import"
+      export-permission="logistics:manufacturing:mrp:material:requirements:planning:export"
+      :show-create="true"
+      :show-update="true"
+      :show-delete="true"
+      :show-import="true"
+      :show-export="true"
+      :show-expand="false"
+      :show-advanced-query="true"
+      :show-column-setting="true"
+      :show-fullscreen="true"
+      :show-refresh="true"
+      :create-disabled="false"
+      :create-loading="loading"
+      :update-disabled="updateDisabled"
+      :update-loading="loading"
+      :delete-disabled="deleteDisabled"
+      :delete-loading="loading"
+      :refresh-loading="loading"
+      @create="handleCreate"
+      @update="handleUpdate"
+      @delete="handleDelete"
+      @import="handleImport"
+      @export="handleExport"
+      @advanced-query="handleAdvancedQuery"
+      @column-setting="handleColumnSetting"
+      @refresh="handleRefresh"
+        />
+      </template>
+      <template #detail>
+        <MaterialRequirementsPlanningItemPanel
+          ref="materialRequirementsPlanningItemPanelRef"
+          class="h-full min-h-0 flex-1"
+        />
+      </template>
+    </TaktMasterDetailTableLr>
+
+    <!-- 新增/编辑对话框 -->
+    <TaktModal
+      v-model:open="formVisible"
+      :title="formTitle"
+      width="1100px"
+      wrap-class-name="takt-form-modal-resizable"
+      :confirm-loading="formLoading"
+      @ok="handleFormSubmit"
+      @cancel="handleFormCancel"
+    >
+      <MaterialRequirementsPlanningForm
+        :key="formData?.materialRequirementsPlanningId ?? 'create'"
+        ref="formRef"
+        :form-data="formData"
+        :loading="formLoading"
+      />
+    </TaktModal>
+    <!-- 高级查询抽屉 -->
+    <TaktQueryDrawer
+      v-model:open="advancedQueryVisible"
+      v-model:visible-field-keys="visibleQueryFieldKeys"
+      :fields="queryFieldsMeta"
+      :storage-key="'takt-query-fields-logistics-manufacturing-mrp-material-requirements-planning'"
+      :form-model="advancedQueryForm"
+      @submit="handleAdvancedQuerySubmit"
+      @reset="handleAdvancedQueryReset"
+    >
+      <template #default="{ isFieldVisible }">
+      <div v-show="isFieldVisible('plantCode')">
+      <a-form-item :label="pi.queryLabel('plantCode')">
+        <TaktSelect
+          v-model:value="advancedQueryForm.plantCode"
+          api-url="TaktPlants/options"
+          :placeholder="pi.queryPh('plantCode', 'select')"
+          allow-clear
+        />
+      </a-form-item>
+      </div>
+      <div v-show="isFieldVisible('materialRequirementsPlanningCode')">
+      <a-form-item :label="pi.queryLabel('materialRequirementsPlanningCode')">
+        <a-input
+          v-model:value="advancedQueryForm.materialRequirementsPlanningCode"
+          :placeholder="pi.queryPh('materialRequirementsPlanningCode', 'required')"
+          show-count
+          :maxlength="10"
+          allow-clear
+        />
+      </a-form-item>
+      </div>
+      <div v-show="isFieldVisible('masterProductionScheduleId')">
+      <a-form-item :label="pi.queryLabel('masterProductionScheduleId')">
+        <a-input
+          v-model:value="advancedQueryForm.masterProductionScheduleId"
+          :placeholder="pi.queryPh('masterProductionScheduleId', 'required')"
+          show-count
+          :maxlength="20"
+          allow-clear
+        />
+      </a-form-item>
+      </div>
+      <div v-show="isFieldVisible('mpsCode')">
+      <a-form-item :label="pi.queryLabel('mpsCode')">
+        <a-input
+          v-model:value="advancedQueryForm.mpsCode"
+          :placeholder="pi.queryPh('mpsCode', 'required')"
+          show-count
+          :maxlength="40"
+          allow-clear
+        />
+      </a-form-item>
+      </div>
+      <div v-show="isFieldVisible('masterDemandScheduleId')">
+      <a-form-item :label="pi.queryLabel('masterDemandScheduleId')">
+        <a-input
+          v-model:value="advancedQueryForm.masterDemandScheduleId"
+          :placeholder="pi.queryPh('masterDemandScheduleId', 'required')"
+          show-count
+          :maxlength="20"
+          allow-clear
+        />
+      </a-form-item>
+      </div>
+      <div v-show="isFieldVisible('mdsCode')">
+      <a-form-item :label="pi.queryLabel('mdsCode')">
+        <a-input
+          v-model:value="advancedQueryForm.mdsCode"
+          :placeholder="pi.queryPh('mdsCode', 'required')"
+          show-count
+          :maxlength="40"
+          allow-clear
+        />
+      </a-form-item>
+      </div>
+      <div v-show="isFieldVisible('planDateStart')">
+      <a-form-item :label="pi.queryLabel('planDateStart')">
+        <a-date-picker
+          v-model:value="advancedQueryForm.planDateStart"
+          :placeholder="pi.queryPh('planDateStart', 'select')"
+          value-format="YYYY-MM-DD"
+          style="width: 100%"
+        />
+      </a-form-item>
+      </div>
+      <div v-show="isFieldVisible('planDateEnd')">
+      <a-form-item :label="pi.queryLabel('planDateEnd')">
+        <a-date-picker
+          v-model:value="advancedQueryForm.planDateEnd"
+          :placeholder="pi.queryPh('planDateEnd', 'select')"
+          value-format="YYYY-MM-DD"
+          style="width: 100%"
+        />
+      </a-form-item>
+      </div>
+      <div v-show="isFieldVisible('planPeriodStartStart')">
+      <a-form-item :label="pi.queryLabel('planPeriodStartStart')">
+        <a-date-picker
+          v-model:value="advancedQueryForm.planPeriodStartStart"
+          :placeholder="pi.queryPh('planPeriodStartStart', 'select')"
+          value-format="YYYY-MM-DD"
+          style="width: 100%"
+        />
+      </a-form-item>
+      </div>
+      <div v-show="isFieldVisible('planPeriodStartEnd')">
+      <a-form-item :label="pi.queryLabel('planPeriodStartEnd')">
+        <a-date-picker
+          v-model:value="advancedQueryForm.planPeriodStartEnd"
+          :placeholder="pi.queryPh('planPeriodStartEnd', 'select')"
+          value-format="YYYY-MM-DD"
+          style="width: 100%"
+        />
+      </a-form-item>
+      </div>
+      <div v-show="isFieldVisible('planPeriodEndStart')">
+      <a-form-item :label="pi.queryLabel('planPeriodEndStart')">
+        <a-date-picker
+          v-model:value="advancedQueryForm.planPeriodEndStart"
+          :placeholder="pi.queryPh('planPeriodEndStart', 'select')"
+          value-format="YYYY-MM-DD"
+          style="width: 100%"
+        />
+      </a-form-item>
+      </div>
+      <div v-show="isFieldVisible('planPeriodEndEnd')">
+      <a-form-item :label="pi.queryLabel('planPeriodEndEnd')">
+        <a-date-picker
+          v-model:value="advancedQueryForm.planPeriodEndEnd"
+          :placeholder="pi.queryPh('planPeriodEndEnd', 'select')"
+          value-format="YYYY-MM-DD"
+          style="width: 100%"
+        />
+      </a-form-item>
+      </div>
+      <div v-show="isFieldVisible('plannerId')">
+      <a-form-item :label="pi.queryLabel('plannerId')">
+        <TaktSelect
+          v-model:value="advancedQueryForm.plannerId"
+          api-url="TaktEmployees/options"
+          :placeholder="pi.queryPh('plannerId', 'select')"
+          allow-clear
+        />
+      </a-form-item>
+      </div>
+      <div v-show="isFieldVisible('planBy')">
+      <a-form-item :label="pi.queryLabel('planBy')">
+        <TaktSelect
+          v-model:value="advancedQueryForm.planBy"
+          api-url="TaktEmployees/options"
+          :placeholder="pi.queryPh('planBy', 'select')"
+          allow-clear
+        />
+      </a-form-item>
+      </div>
+      <div v-show="isFieldVisible('runStatus')">
+      <a-form-item :label="pi.queryLabel('runStatus')">
+        <a-input-number
+          v-model:value="advancedQueryForm.runStatus"
+          :placeholder="pi.queryPh('runStatus', 'required')"
+          style="width: 100%"
+        />
+      </a-form-item>
+      </div>
+      <div v-show="isFieldVisible('productionPlanId')">
+      <a-form-item :label="pi.queryLabel('productionPlanId')">
+        <a-input
+          v-model:value="advancedQueryForm.productionPlanId"
+          :placeholder="pi.queryPh('productionPlanId', 'required')"
+          show-count
+          :maxlength="20"
+          allow-clear
+        />
+      </a-form-item>
+      </div>
+      <div v-show="isFieldVisible('productionPlanCode')">
+      <a-form-item :label="pi.queryLabel('productionPlanCode')">
+        <a-input
+          v-model:value="advancedQueryForm.productionPlanCode"
+          :placeholder="pi.queryPh('productionPlanCode', 'required')"
+          show-count
+          :maxlength="10"
+          allow-clear
+        />
+      </a-form-item>
+      </div>
+      <div v-show="isFieldVisible('purchasePlanId')">
+      <a-form-item :label="pi.queryLabel('purchasePlanId')">
+        <a-input
+          v-model:value="advancedQueryForm.purchasePlanId"
+          :placeholder="pi.queryPh('purchasePlanId', 'required')"
+          show-count
+          :maxlength="20"
+          allow-clear
+        />
+      </a-form-item>
+      </div>
+      <div v-show="isFieldVisible('purchasePlanCode')">
+      <a-form-item :label="pi.queryLabel('purchasePlanCode')">
+        <a-input
+          v-model:value="advancedQueryForm.purchasePlanCode"
+          :placeholder="pi.queryPh('purchasePlanCode', 'required')"
+          show-count
+          :maxlength="10"
+          allow-clear
+        />
+      </a-form-item>
+      </div>
+      <div v-show="isFieldVisible('planDescription')">
+      <a-form-item :label="pi.queryLabel('planDescription')">
+        <a-textarea
+          v-model:value="advancedQueryForm.planDescription"
+          :placeholder="pi.queryPh('planDescription', 'optional')"
+          :rows="2"
+          allow-clear
+        />
+      </a-form-item>
+      </div>
+      <div v-show="isFieldVisible('approvalStatus')">
+      <a-form-item :label="pi.queryLabel('approvalStatus')">
+        <TaktSelect
+          v-model:value="advancedQueryForm.approvalStatus"
+          dict-type="sys_approval_status"
+          :placeholder="pi.queryPh('approvalStatus', 'select')"
+          allow-clear
+        />
+      </a-form-item>
+      </div>
+      <div v-show="isFieldVisible('initiatorId')">
+      <a-form-item :label="pi.queryLabel('initiatorId')">
+        <a-input
+          v-model:value="advancedQueryForm.initiatorId"
+          :placeholder="pi.queryPh('initiatorId', 'required')"
+          show-count
+          :maxlength="20"
+          allow-clear
+        />
+      </a-form-item>
+      </div>
+      <div v-show="isFieldVisible('initiatedAtStart')">
+      <a-form-item :label="pi.queryLabel('initiatedAtStart')">
+        <a-input
+          v-model:value="advancedQueryForm.initiatedAtStart"
+          :placeholder="pi.queryPh('initiatedAtStart', 'required')"
+          show-count
+          :maxlength="20"
+          allow-clear
+        />
+      </a-form-item>
+      </div>
+      <div v-show="isFieldVisible('initiatedAtEnd')">
+      <a-form-item :label="pi.queryLabel('initiatedAtEnd')">
+        <a-date-picker
+          v-model:value="advancedQueryForm.initiatedAtEnd"
+          :placeholder="pi.queryPh('initiatedAtEnd', 'select')"
+          value-format="YYYY-MM-DD"
+          style="width: 100%"
+        />
+      </a-form-item>
+      </div>
+      <div v-show="isFieldVisible('approvedBy')">
+      <a-form-item :label="pi.queryLabel('approvedBy')">
+        <a-input
+          v-model:value="advancedQueryForm.approvedBy"
+          :placeholder="pi.queryPh('approvedBy', 'required')"
+          show-count
+          :maxlength="20"
+          allow-clear
+        />
+      </a-form-item>
+      </div>
+      <div v-show="isFieldVisible('approvedAtStart')">
+      <a-form-item :label="pi.queryLabel('approvedAtStart')">
+        <a-input
+          v-model:value="advancedQueryForm.approvedAtStart"
+          :placeholder="pi.queryPh('approvedAtStart', 'required')"
+          show-count
+          :maxlength="20"
+          allow-clear
+        />
+      </a-form-item>
+      </div>
+      <div v-show="isFieldVisible('approvedAtEnd')">
+      <a-form-item :label="pi.queryLabel('approvedAtEnd')">
+        <a-date-picker
+          v-model:value="advancedQueryForm.approvedAtEnd"
+          :placeholder="pi.queryPh('approvedAtEnd', 'select')"
+          value-format="YYYY-MM-DD"
+          style="width: 100%"
+        />
+      </a-form-item>
+      </div>
+      <div v-show="isFieldVisible('flowInstanceId')">
+      <a-form-item :label="pi.queryLabel('flowInstanceId')">
+        <a-input
+          v-model:value="advancedQueryForm.flowInstanceId"
+          :placeholder="pi.queryPh('flowInstanceId', 'required')"
+          show-count
+          :maxlength="20"
+          allow-clear
+        />
+      </a-form-item>
+      </div>
+      <div v-show="isFieldVisible('createdAtStart')">
+      <a-form-item :label="pi.queryLabel('createdAtStart')">
+        <a-date-picker
+          v-model:value="advancedQueryForm.createdAtStart"
+          :placeholder="pi.queryPh('createdAtStart', 'select')"
+          value-format="YYYY-MM-DD HH:mm:ss"
+            show-time
+          style="width: 100%"
+        />
+      </a-form-item>
+      </div>
+      <div v-show="isFieldVisible('createdAtEnd')">
+      <a-form-item :label="pi.queryLabel('createdAtEnd')">
+        <a-date-picker
+          v-model:value="advancedQueryForm.createdAtEnd"
+          :placeholder="pi.queryPh('createdAtEnd', 'select')"
+          value-format="YYYY-MM-DD HH:mm:ss"
+            show-time
+          style="width: 100%"
+        />
+      </a-form-item>
+      </div>
+      <div v-show="isFieldVisible('extField')">
+      <a-form-item
+        name="extField"
+        class="takt-form-item-ext-field"
+        :label-col="{ style: { width: 'auto', maxWidth: 'none', flex: '0 0 auto' } }"
+        :wrapper-col="{ style: { flex: '1 1 0', minWidth: 0 } }"
+      >
+        <template #label>
+          <span class="takt-form-ext-field-label">
+            <a-tooltip
+              :title="t('common.page.entity.extfieldhint')"
+              placement="top"
+            >
+              <span class="takt-form-label-hint-icon"><RiQuestionLine class="takt-remix-icon" /></span>
+            </a-tooltip>
+            <span>{{ pi.queryLabel('extField') }}</span>
+          </span>
+        </template>
+        <a-textarea
+          v-model:value="advancedQueryForm.extField"
+          :placeholder="t('common.page.form.placeholder.extfield')"
+            :rows="4"
+            show-count
+            :maxlength="400"
+            allow-clear
+        />
+      </a-form-item>
+      </div>
+      <div v-show="isFieldVisible('remark')">
+      <a-form-item :label="pi.queryLabel('remark')">
+        <a-textarea
+          v-model:value="advancedQueryForm.remark"
+          :placeholder="pi.queryPh('remark', 'optional')"
+            :rows="4"
+            show-count
+            :maxlength="400"
+            allow-clear
+        />
+      </a-form-item>
+      </div>
+      </template>
+    </TaktQueryDrawer>
+
+    <!-- 导入对话框 -->
+    <TaktModal
+      v-model:open="importVisible"
+      :title="t('common.dialog.title.import', { entity: pi.self() })"
+      :width="600"
+      :footer="null"
+      :cancel-text="t('common.page.button.close')"
+      @cancel="handleImportCancel"
+    >
+      <TaktImportFile
+        v-if="importVisible"
+        :entity-i18n-key="MATERIALREQUIREMENTSPLANNING_SELF_I18N_KEY"
+        file-type="xlsx"
+        :sheet-name="excelNames.sheet"
+        :template-file-name="excelNames.fileBase"
+        :download-template="handleDownloadTemplate"
+        :import-file="handleImportFile"
+        :max-size="10"
+        :max-rows="1000"
+        @success="handleImportSuccess"
+      />
+    </TaktModal>
+    <!-- 列设置抽屉 -->
+    <TaktColumnDrawer
+      v-model:open="columnSettingVisible"
+      :columns="columns"
+      :checked-keys="visibleColumnKeys"
+      :id-column-key="'materialRequirementsPlanningId'"
+      :action-column-key="'action'"
+      entity-scope="approval"
+      table-mode="masterDetailMaster"
+      @update:checked-keys="handleColumnKeysChange"
+      @reset="handleColumnSettingReset"
+    />
+  </div>
+</template>
+
+<script setup lang="ts">
+/**
+ * 物料需求计划 MRP 头表管理页 · 由 generate-vue-master-detail-from-api.cjs 根据 types/api 生成
+ * @module views/logistics/manufacturing/mrp/material-requirements-planning
+ */
+import { ref, computed, onMounted } from 'vue'
+import { message, Modal } from 'ant-design-vue'
+import type { TableColumnsType } from 'ant-design-vue'
+import { CreateActionColumn } from '@/components/business/takt-action-column/index'
+import { useI18n } from 'vue-i18n'
+import { ensureTaktPaginationConfigAsync, getTaktDefaultPageIndex, getTaktDefaultPageSize } from '@/utils/takt-paged'
+import MaterialRequirementsPlanningForm from './components/material-requirements-planning-form.vue'
+import MaterialRequirementsPlanningItemPanel from './components/material-requirements-planning-item-panel.vue'
+import { provideMaterialRequirementsPlanningMasterContext, type MaterialRequirementsPlanningRowRecord } from './composables/use-material-requirements-planning-master-context'
+import { getMaterialRequirementsPlanningList, getMaterialRequirementsPlanningById, createMaterialRequirementsPlanning, updateMaterialRequirementsPlanning, deleteMaterialRequirementsPlanningById, deleteMaterialRequirementsPlanningBatch, getMaterialRequirementsPlanningTemplate, importMaterialRequirementsPlanning, exportMaterialRequirementsPlanning, updateMaterialRequirementsPlanningStatus } from '@/api/logistics/manufacturing/mrp/material-requirements-planning'
+import type { MaterialRequirementsPlanning, MaterialRequirementsPlanningQuery } from '@/types/logistics/manufacturing/mrp/material-requirements-planning'
+import { useDictDataStore } from '@/stores/foundation/dict-data'
+import { taktExcelEntityNames } from '@/utils/naming'
+import { resolveExportDownloadFileName } from '@/utils/export-download-name'
+import { normalizeImportResult, type TaktImportResult } from '@/utils/takt-import-result'
+import { RiEditLine, RiDeleteBinLine, RiQuestionLine } from '@remixicon/vue'
+
+import {
+  useMaterialRequirementsPlanningI18n,
+  MATERIALREQUIREMENTSPLANNING_LIST_FIELDS,
+  MATERIALREQUIREMENTSPLANNING_QUERY_STRING_FIELDS,
+  MATERIALREQUIREMENTSPLANNING_QUERY_FIELDS,
+  MATERIALREQUIREMENTSPLANNING_SELF_I18N_KEY,
+} from './composables/use-material-requirements-planning-i18n'
+
+/** 实体字段 i18n（标签/占位符统一入口） */
+const pi = useMaterialRequirementsPlanningI18n()
+
+/** i18n 翻译函数 */
+const { t } = useI18n()
+/** Excel 导入/导出默认 sheet 名与文件名前缀 */
+const excelNames = taktExcelEntityNames('TaktMaterialRequirementsPlanning')
+/** 列表快捷查询占位文案 */
+const searchPlaceholder = computed(
+  () => t('common.page.form.placeholder.search', { keyword: pi.self() })
+)
+
+/** 快捷查询关键字 */
+const queryKeyword = ref('')
+/** 列表 loading */
+const loading = ref(false)
+/** 分页列表数据 */
+const dataSource = ref<MaterialRequirementsPlanning[]>([])
+/** 当前页码 */
+const currentPage = ref(getTaktDefaultPageIndex())
+/** 每页条数 */
+const pageSize = ref(getTaktDefaultPageSize())
+/** 分页 total */
+const total = ref(0)
+/** 工具栏单选时当前行 */
+const selectedRow = ref<MaterialRequirementsPlanningRowRecord | null>(null)
+/** 表格多选行 */
+const selectedRows = ref<MaterialRequirementsPlanningRowRecord[]>([])
+/** 表格多选 row-key 集合 */
+const selectedRowKeys = ref<(string | number)[]>([])
+
+/** 新增/编辑弹窗是否打开 */
+const formVisible = ref(false)
+/** 弹窗标题（新增/编辑） */
+const formTitle = ref('')
+/** 传入内嵌表单的编辑数据 */
+const formData = ref<Partial<MaterialRequirementsPlanning> | null>(null)
+/** 表单提交 loading */
+const formLoading = ref(false)
+/** 内嵌表单组件 ref（validate / getValues / resetFields） */
+const formRef = ref()
+
+/** 高级查询抽屉是否打开 */
+const advancedQueryVisible = ref(false)
+/**
+ * 创建空的高级查询表单
+ * @returns {Record<string, unknown>} 高级查询初始模型
+ */
+function createEmptyAdvancedQueryForm() {
+  const form = Object.fromEntries(MATERIALREQUIREMENTSPLANNING_QUERY_STRING_FIELDS.map((key) => [key, ''])) as Record<
+    (typeof MATERIALREQUIREMENTSPLANNING_QUERY_STRING_FIELDS)[number],
+    string
+  >
+  return {
+    ...form,
+    runStatus: undefined as number | undefined,
+    approvalStatus: undefined as number | undefined,
+  }
+}
+/** 高级查询表单模型 */
+const advancedQueryForm = ref(createEmptyAdvancedQueryForm())
+/** 高级查询字段元数据（列显隐配置） */
+const queryFieldsMeta = computed(() =>
+  MATERIALREQUIREMENTSPLANNING_QUERY_FIELDS.map((key) => ({ key, label: pi.queryLabel(key) })),
+)
+/** 高级查询当前可见字段 key */
+const visibleQueryFieldKeys = ref<string[]>([])
+/** 列设置抽屉是否打开 */
+const columnSettingVisible = ref(false)
+/** 导入对话框是否打开 */
+const importVisible = ref(false)
+/** 表格当前可见列 key */
+const visibleColumnKeys = ref<string[]>([])
+/** 实体主键字段名（row-key、API 路径参数） */
+const entityIdName = 'materialRequirementsPlanningId'
+/** 工具栏「编辑」是否禁用（须恰好选中一行） */
+const updateDisabled = computed(() => selectedRows.value.length !== 1)
+/** 工具栏「删除」是否禁用（未选中任何行） */
+const deleteDisabled = computed(() => selectedRows.value.length === 0)
+
+/** Pinia：字典缓存（列表/查询 dict-type 渲染前预热） */
+const dictDataStore = useDictDataStore()
+/** 主表选中行上下文（右侧明细面板读取） */
+const { selectedMasterRow } = provideMaterialRequirementsPlanningMasterContext()
+const materialRequirementsPlanningItemPanelRef = ref<InstanceType<typeof MaterialRequirementsPlanningItemPanel> | null>(null)
+
+/**
+ * 构建列表/导出查询参数（空字符串与未填数值/日期不下发，避免后端 DateTime? 模型绑定 400）
+ * @param overrides 覆盖分页或导出上限等字段
+ * @returns {MaterialRequirementsPlanningQuery} 查询 DTO
+ */
+function buildListQuery(overrides?: Partial<MaterialRequirementsPlanningQuery>): MaterialRequirementsPlanningQuery {
+  const form = advancedQueryForm.value
+  const kw = (queryKeyword.value ?? '').trim()
+  const query: MaterialRequirementsPlanningQuery = {
+    pageIndex: currentPage.value,
+    pageSize: pageSize.value,
+    ...overrides,
+  }
+  if (kw.length > 0) {
+    query.keyWords = kw
+  }
+  const assignTrimmed = (key: keyof MaterialRequirementsPlanningQuery, value: string | undefined) => {
+    const v = (value ?? '').trim()
+    if (v.length > 0) {
+      query[key] = v as never
+    }
+  }
+  for (const key of MATERIALREQUIREMENTSPLANNING_QUERY_STRING_FIELDS) {
+    assignTrimmed(key, form[key])
+  }
+  if (form.runStatus !== undefined && form.runStatus !== null) {
+    query.runStatus = form.runStatus
+  }
+  if (form.approvalStatus !== undefined && form.approvalStatus !== null) {
+    query.approvalStatus = form.approvalStatus
+  }
+  return query
+}
+/** 页面挂载：租户上下文就绪后加载分页配置，再拉列表 */
+onMounted(async () => {
+  await ensureTaktPaginationConfigAsync()
+  void dictDataStore.loadAllDictDataAsync()
+  loadData()
+})
+
+
+/** 主表行点击选中 key（左右主子表高亮） */
+const selectedMasterKey = ref('')
+
+/** 同步主表选中行到右侧明细（子表由 *-panel watch 自动 reload） */
+function syncMasterSelection(record: MaterialRequirementsPlanningRowRecord | null) {
+  selectedMasterRow.value = record
+  selectedMasterKey.value = record ? getMaterialRequirementsPlanningId(record) : ''
+}
+
+/**
+ * 左右主子表：主表行选中
+ * @param record 主表行
+ */
+function handleMasterSelect(record: Record<string, unknown>) {
+  const row = record as unknown as MaterialRequirementsPlanningRowRecord
+  const key = getMaterialRequirementsPlanningId(row)
+  selectedRowKeys.value = [key]
+  selectedRows.value = [row]
+  selectedRow.value = row
+  syncMasterSelection(row)
+}
+
+/**
+ * 主表分页变更（v-model 已同步页码与 pageSize）
+ * @param _page 页码
+ * @param _pageSize 每页条数
+ */
+function handleMasterPaginationChange(_page: number, _pageSize: number) {
+  loadData()
+}
+
+/** 加载主表详情并回填当前页 dataSource */
+async function loadMaterialRequirementsPlanningDetail(record: MaterialRequirementsPlanningRowRecord): Promise<MaterialRequirementsPlanning | null> {
+  const id = getMaterialRequirementsPlanningId(record)
+  if (!id) {
+    return null
+  }
+  try {
+    const detail = await getMaterialRequirementsPlanningById(id)
+    const index = dataSource.value.findIndex((row) => getMaterialRequirementsPlanningId(row) === id)
+    if (index !== -1) {
+      dataSource.value[index] = { ...dataSource.value[index], ...detail } as MaterialRequirementsPlanning
+    }
+    return detail
+  } catch (error: any) {
+    message.error(error?.message || t('common.feedback.load.data.failed'))
+    return null
+  }
+}
+
+/** 表格列定义（i18n 随 locale 变化） */
+const columns = computed<TableColumnsType>(() => [
+  {
+    title: t('common.page.entity.id'),
+    dataIndex: 'materialRequirementsPlanningId',
+    key: 'materialRequirementsPlanningId',
+    width: 80,
+    resizable: true,
+    ellipsis: true,
+    fixed: 'left',
+    customRender: ({ record }: { record: any }) => getMaterialRequirementsPlanningField(record, 'materialRequirementsPlanningId') ?? ''
+  },
+  {
+    title: pi.label('plantCode'),
+    dataIndex: 'plantCode',
+    key: 'plantCode',
+    width: 120,
+    resizable: true,
+    ellipsis: true,
+    customRender: ({ record }: { record: any }) => getMaterialRequirementsPlanningField(record, 'plantCode') ?? ''
+  },
+  {
+    title: pi.label('materialRequirementsPlanningCode'),
+    dataIndex: 'materialRequirementsPlanningCode',
+    key: 'materialRequirementsPlanningCode',
+    width: 120,
+    resizable: true,
+    ellipsis: true,
+    customRender: ({ record }: { record: any }) => getMaterialRequirementsPlanningField(record, 'materialRequirementsPlanningCode') ?? ''
+  },
+  {
+    title: pi.label('masterProductionScheduleId'),
+    dataIndex: 'masterProductionScheduleId',
+    key: 'masterProductionScheduleId',
+    width: 120,
+    resizable: true,
+    ellipsis: true,
+    customRender: ({ record }: { record: any }) => getMaterialRequirementsPlanningField(record, 'masterProductionScheduleId') ?? ''
+  },
+  {
+    title: pi.label('mpsCode'),
+    dataIndex: 'mpsCode',
+    key: 'mpsCode',
+    width: 120,
+    resizable: true,
+    ellipsis: true,
+    customRender: ({ record }: { record: any }) => getMaterialRequirementsPlanningField(record, 'mpsCode') ?? ''
+  },
+  {
+    title: pi.label('masterDemandScheduleId'),
+    dataIndex: 'masterDemandScheduleId',
+    key: 'masterDemandScheduleId',
+    width: 120,
+    resizable: true,
+    ellipsis: true,
+    customRender: ({ record }: { record: any }) => getMaterialRequirementsPlanningField(record, 'masterDemandScheduleId') ?? ''
+  },
+  {
+    title: pi.label('mdsCode'),
+    dataIndex: 'mdsCode',
+    key: 'mdsCode',
+    width: 120,
+    resizable: true,
+    ellipsis: true,
+    customRender: ({ record }: { record: any }) => getMaterialRequirementsPlanningField(record, 'mdsCode') ?? ''
+  },
+  {
+    title: pi.label('planDate'),
+    dataIndex: 'planDate',
+    key: 'planDate',
+    width: 120,
+    resizable: true,
+    ellipsis: true,
+    customRender: ({ record }: { record: any }) => getMaterialRequirementsPlanningField(record, 'planDate') ?? ''
+  },
+  {
+    title: pi.label('planPeriodStart'),
+    dataIndex: 'planPeriodStart',
+    key: 'planPeriodStart',
+    width: 120,
+    resizable: true,
+    ellipsis: true,
+    customRender: ({ record }: { record: any }) => getMaterialRequirementsPlanningField(record, 'planPeriodStart') ?? ''
+  },
+  {
+    title: pi.label('planPeriodEnd'),
+    dataIndex: 'planPeriodEnd',
+    key: 'planPeriodEnd',
+    width: 120,
+    resizable: true,
+    ellipsis: true,
+    customRender: ({ record }: { record: any }) => getMaterialRequirementsPlanningField(record, 'planPeriodEnd') ?? ''
+  },
+  {
+    title: pi.label('plannerId'),
+    dataIndex: 'plannerId',
+    key: 'plannerId',
+    width: 120,
+    resizable: true,
+    ellipsis: true,
+    customRender: ({ record }: { record: any }) => getMaterialRequirementsPlanningField(record, 'plannerId') ?? ''
+  },
+  {
+    title: pi.label('planBy'),
+    dataIndex: 'planBy',
+    key: 'planBy',
+    width: 120,
+    resizable: true,
+    ellipsis: true,
+    customRender: ({ record }: { record: any }) => getMaterialRequirementsPlanningField(record, 'planBy') ?? ''
+  },
+  {
+    title: pi.label('runStatus'),
+    dataIndex: 'runStatus',
+    key: 'runStatus',
+    width: 120,
+    resizable: true,
+    ellipsis: true,
+    customRender: ({ record }: { record: any }) => getMaterialRequirementsPlanningField(record, 'runStatus') ?? ''
+  },
+  {
+    title: pi.label('productionPlanId'),
+    dataIndex: 'productionPlanId',
+    key: 'productionPlanId',
+    width: 120,
+    resizable: true,
+    ellipsis: true,
+    customRender: ({ record }: { record: any }) => getMaterialRequirementsPlanningField(record, 'productionPlanId') ?? ''
+  },
+  {
+    title: pi.label('productionPlanCode'),
+    dataIndex: 'productionPlanCode',
+    key: 'productionPlanCode',
+    width: 120,
+    resizable: true,
+    ellipsis: true,
+    customRender: ({ record }: { record: any }) => getMaterialRequirementsPlanningField(record, 'productionPlanCode') ?? ''
+  },
+  {
+    title: pi.label('purchasePlanId'),
+    dataIndex: 'purchasePlanId',
+    key: 'purchasePlanId',
+    width: 120,
+    resizable: true,
+    ellipsis: true,
+    customRender: ({ record }: { record: any }) => getMaterialRequirementsPlanningField(record, 'purchasePlanId') ?? ''
+  },
+  {
+    title: pi.label('purchasePlanCode'),
+    dataIndex: 'purchasePlanCode',
+    key: 'purchasePlanCode',
+    width: 120,
+    resizable: true,
+    ellipsis: true,
+    customRender: ({ record }: { record: any }) => getMaterialRequirementsPlanningField(record, 'purchasePlanCode') ?? ''
+  },
+  {
+    title: pi.label('planDescription'),
+    dataIndex: 'planDescription',
+    key: 'planDescription',
+    width: 120,
+    resizable: true,
+    ellipsis: true,
+    customRender: ({ record }: { record: any }) => getMaterialRequirementsPlanningField(record, 'planDescription') ?? ''
+  },
+  CreateActionColumn({
+    actions: [
+      {
+        key: 'update',
+        label: t('common.page.button.edit'),
+        shape: 'plain',
+        icon: RiEditLine,
+        permission: 'logistics:manufacturing:mrp:material:requirements:planning:update',
+        onClick: (record: MaterialRequirementsPlanningRowRecord) => handleEdit(record)
+      },
+      {
+        key: 'delete',
+        label: t('common.page.button.delete'),
+        shape: 'plain',
+        icon: RiDeleteBinLine,
+        permission: 'logistics:manufacturing:mrp:material:requirements:planning:delete',
+        onClick: (record: MaterialRequirementsPlanningRowRecord) => handleDeleteOne(record)
+      }
+    ]
+  })
+])
+
+/** 表格 row-key（优先实体主键字段） */
+const getMaterialRequirementsPlanningId = (record: MaterialRequirementsPlanningRowRecord): string => {
+  const id = (record as Record<string, unknown>)?.[entityIdName]
+  return id != null ? String(id) : ''
+}
+/**
+ * 读取行字段值
+ * @param record 行数据
+ * @param field 字段名
+ */
+const getMaterialRequirementsPlanningField = (record: any, field: string): any => record?.[field]
+
+
+
+/** 行选择配置 */
+const rowSelection = computed(() => ({
+  selectedRowKeys: selectedRowKeys.value,
+  onChange: (keys: (string | number)[], rows: MaterialRequirementsPlanningRowRecord[]) => {
+    selectedRowKeys.value = keys
+    selectedRows.value = rows
+    selectedRow.value = rows.length === 1 ? (rows[0] ?? null) : null
+    if (rows.length === 1 && rows[0]) {
+      syncMasterSelection(rows[0])
+    } else if (rows.length === 0) {
+      syncMasterSelection(null)
+    }
+  },
+  onSelect: (record: MaterialRequirementsPlanningRowRecord, selected: boolean) => {
+    if (selected) {
+      selectedRow.value = record
+      syncMasterSelection(record)
+    } else if (selectedRow.value && getMaterialRequirementsPlanningId(selectedRow.value) === getMaterialRequirementsPlanningId(record)) {
+      selectedRow.value = null
+      syncMasterSelection(null)
+    }
+  },
+  onSelectAll: (selected: boolean, selectedRowsData: MaterialRequirementsPlanningRowRecord[]) => {
+    selectedRow.value = selected && selectedRowsData.length === 1 ? (selectedRowsData[0] ?? null) : null
+    syncMasterSelection(selectedRow.value)
+  }
+}))
+
+/** 加载分页列表 */
+async function loadData() {
+  loading.value = true
+  try {
+    const res = await getMaterialRequirementsPlanningList(buildListQuery())
+    dataSource.value = res.data ?? []
+    total.value = res.total ?? 0
+  } catch (error: any) {
+    logger.error('[MaterialRequirementsPlanning] 加载数据失败', { error })
+    message.error(error?.message || t('common.feedback.load.data.failed'))
+    dataSource.value = []
+    total.value = 0
+  } finally {
+    loading.value = false
+  }
+}
+
+/** 租户/公司切换时由 bootstrap 发出 table:refresh，自动重载列表 */
+useTableRefresh(loadData)
+
+/** 快捷查询 */
+function handleSearch() {
+  currentPage.value = getTaktDefaultPageIndex()
+  loadData()
+}
+
+/** 重置查询条件并刷新列表 */
+function handleReset() {
+  queryKeyword.value = ''
+  advancedQueryForm.value = {
+  plantCode: '',
+  materialRequirementsPlanningCode: '',
+  masterProductionScheduleId: '',
+  mpsCode: '',
+  masterDemandScheduleId: '',
+  mdsCode: '',
+  planDateStart: '',
+  planDateEnd: '',
+  planPeriodStartStart: '',
+  planPeriodStartEnd: '',
+  planPeriodEndStart: '',
+  planPeriodEndEnd: '',
+  plannerId: '',
+  planBy: '',
+  runStatus: undefined as number | undefined,
+  productionPlanId: '',
+  productionPlanCode: '',
+  purchasePlanId: '',
+  purchasePlanCode: '',
+  planDescription: '',
+  approvalStatus: undefined as number | undefined,
+  initiatorId: '',
+  initiatedAtStart: '',
+  initiatedAtEnd: '',
+  approvedBy: '',
+  approvedAtStart: '',
+  approvedAtEnd: '',
+  flowInstanceId: '',
+  createdAtStart: '',
+  createdAtEnd: '',
+  extField: '',
+  remark: '',
+  }
+  currentPage.value = getTaktDefaultPageIndex()
+  loadData()
+}
+
+/** 打开新增弹窗 */
+function handleCreate() {
+  formTitle.value = t('common.dialog.title.create', { entity: pi.self() })
+  formData.value = null
+  formVisible.value = true
+  nextTick(() => formRef.value?.resetFields())
+}
+/** 打开编辑弹窗（主子表：先拉详情含子表） */
+async function handleEdit(record: MaterialRequirementsPlanningRowRecord) {
+  formTitle.value = t('common.dialog.title.edit', { entity: pi.self() })
+  formLoading.value = true
+  try {
+    const detail = await loadMaterialRequirementsPlanningDetail(record)
+    formData.value = detail ? { ...detail } : { ...record }
+    formVisible.value = true
+  } finally {
+    formLoading.value = false
+  }
+}
+
+/** 工具栏编辑：打开当前单选行 */
+function handleUpdate() {
+  if (selectedRow.value) {
+    void handleEdit(selectedRow.value)
+  } else {
+    message.warning(t('common.tip.select.to.action', { action: t('common.page.button.edit'), entity: pi.self() }))
+  }
+}
+/** 提交新增/编辑表单 */
+async function handleFormSubmit() {
+  const refInst = formRef.value
+  if (!refInst?.validate) return
+  try {
+    await refInst.validate()
+  } catch {
+    return
+  }
+  formLoading.value = true
+  try {
+    const payload = refInst.getValues?.() ?? { ...(formData.value as any) }
+    const id = (formData.value as any)?.[entityIdName]
+    if (id) {
+      await updateMaterialRequirementsPlanning(id, payload as any)
+      message.success(t('common.feedback.updated', { target: pi.self() }))
+    } else {
+      await createMaterialRequirementsPlanning(payload as any)
+      message.success(t('common.feedback.created', { target: pi.self() }))
+    }
+    formVisible.value = false
+    formData.value = null
+  nextTick(() => formRef.value?.resetFields())
+    if (selectedMasterKey.value) {
+  materialRequirementsPlanningItemPanelRef.value?.reload?.()
+    }
+    loadData()
+  } finally {
+    formLoading.value = false
+  }
+}
+
+/** 关闭新增/编辑弹窗（不提交） */
+function handleFormCancel() {
+  formVisible.value = false
+  formData.value = null
+  nextTick(() => formRef.value?.resetFields())
+}
+/** 打开导入对话框 */
+function handleImport() {
+  importVisible.value = true
+}
+
+/** 下载导入模板 Excel */
+async function handleDownloadTemplate(sheetName?: string, fileName?: string): Promise<Blob> {
+  const res = await getMaterialRequirementsPlanningTemplate(sheetName, fileName)
+  return (res as any)?.data ?? res
+}
+
+/** 上传并导入 Excel 文件（归一化后端 SuccessCount/successCount） */
+async function handleImportFile(file: File, sheetName?: string): Promise<TaktImportResult> {
+  const raw = await importMaterialRequirementsPlanning(file, sheetName)
+  return normalizeImportResult(raw)
+}
+
+/** 导入完成回调：刷新列表；全部成功时延迟关闭对话框 */
+function handleImportSuccess(result: TaktImportResult) {
+  loadData()
+
+      if (selectedMasterKey.value) {
+    materialRequirementsPlanningItemPanelRef.value?.reload?.()
+      }
+  if (result.fail === 0 && result.success > 0) {
+    setTimeout(() => { importVisible.value = false }, 2000)
+  }
+}
+
+/** 关闭导入对话框 */
+function handleImportCancel() {
+  importVisible.value = false
+}
+/** 导出当前查询条件下的 Excel */
+async function handleExport() {
+  try {
+    loading.value = true
+    const exportMeta = await exportMaterialRequirementsPlanning(
+      buildListQuery({ pageIndex: 1, pageSize: 100000 }),
+      excelNames.sheet,
+      excelNames.fileBase
+    )
+    const ts = new Date()
+    const pad = (n: number, w = 2) => String(n).padStart(w, '0')
+    const fallbackBase = `${excelNames.fileBase}_${ts.getFullYear()}${pad(ts.getMonth() + 1)}${pad(ts.getDate())}${pad(ts.getHours())}${pad(ts.getMinutes())}${pad(ts.getSeconds())}`
+    const fileName = resolveExportDownloadFileName({
+      contentDisposition: (exportMeta as any).contentDisposition ?? null,
+      contentType: (exportMeta as any).contentType ?? null,
+      fallbackBase
+    })
+    const blob = (exportMeta as any).blob ?? exportMeta
+    const url = window.URL.createObjectURL(blob)
+    const link = document.createElement('a')
+    link.href = url
+    link.download = fileName
+    link.style.display = 'none'
+    document.body.appendChild(link)
+    link.click()
+    document.body.removeChild(link)
+    setTimeout(() => window.URL.revokeObjectURL(url), 100)
+    message.success(t('common.feedback.export.success', { target: pi.self() }))
+  } catch (error: any) {
+    logger.error('[MaterialRequirementsPlanning] 导出失败', { error })
+    message.error(error?.message || t('common.feedback.export.failed', { target: pi.self() }))
+  } finally {
+    loading.value = false
+  }
+}
+/** 删除单行 */
+async function handleDeleteOne(record: MaterialRequirementsPlanningRowRecord) {
+  Modal.confirm({
+    title: t('common.tip.confirm.delete.title'),
+    content: t('common.tip.confirm.delete.entity', { entity: pi.self(), name: t('common.tip.this.target', { target: pi.self() }) }),
+    okText: t('common.page.button.delete'),
+    cancelText: t('common.page.button.cancel'),
+    onOk: async () => {
+      await deleteMaterialRequirementsPlanningById((record as any)[entityIdName])
+      message.success(t('common.feedback.deleted', { target: pi.self() }))
+      selectedRowKeys.value = []
+      selectedRows.value = []
+      selectedRow.value = null
+      syncMasterSelection(null)
+      loadData()
+    }
+  })
+}
+/** 批量删除选中行 */
+async function handleDelete() {
+  if (selectedRows.value.length === 0) {
+    message.warning(t('common.tip.select.to.action', { action: t('common.page.button.delete'), entity: pi.self() }))
+    return
+  }
+  Modal.confirm({
+    title: t('common.tip.confirm.delete.title'),
+    content: t('common.tip.confirm.delete.count', { entity: pi.self(), count: selectedRows.value.length }),
+    okText: t('common.page.button.delete'),
+    cancelText: t('common.page.button.cancel'),
+    onOk: async () => {
+      const ids = selectedRows.value.map((r: any) => r[entityIdName]).filter(Boolean)
+      await deleteMaterialRequirementsPlanningBatch(ids)
+      message.success(t('common.feedback.deleted', { target: pi.self() }))
+      selectedRowKeys.value = []
+      selectedRows.value = []
+      selectedRow.value = null
+      syncMasterSelection(null)
+      loadData()
+    }
+  })
+}
+/** 打开高级查询抽屉 */
+function handleAdvancedQuery() {
+  advancedQueryVisible.value = true
+}
+
+/** 高级查询提交：关闭抽屉并重置分页 */
+function handleAdvancedQuerySubmit() {
+  advancedQueryVisible.value = false
+  currentPage.value = getTaktDefaultPageIndex()
+  loadData()
+}
+
+function handleAdvancedQueryReset() {
+  advancedQueryForm.value = {
+  plantCode: '',
+  materialRequirementsPlanningCode: '',
+  masterProductionScheduleId: '',
+  mpsCode: '',
+  masterDemandScheduleId: '',
+  mdsCode: '',
+  planDateStart: '',
+  planDateEnd: '',
+  planPeriodStartStart: '',
+  planPeriodStartEnd: '',
+  planPeriodEndStart: '',
+  planPeriodEndEnd: '',
+  plannerId: '',
+  planBy: '',
+  runStatus: undefined as number | undefined,
+  productionPlanId: '',
+  productionPlanCode: '',
+  purchasePlanId: '',
+  purchasePlanCode: '',
+  planDescription: '',
+  approvalStatus: undefined as number | undefined,
+  initiatorId: '',
+  initiatedAtStart: '',
+  initiatedAtEnd: '',
+  approvedBy: '',
+  approvedAtStart: '',
+  approvedAtEnd: '',
+  flowInstanceId: '',
+  createdAtStart: '',
+  createdAtEnd: '',
+  extField: '',
+  remark: '',
+  }
+}
+
+/** 打开列设置抽屉 */
+function handleColumnSetting() {
+  columnSettingVisible.value = true
+}
+
+/** 列设置：更新可见列 key */
+function handleColumnKeysChange(keys: string[]) {
+  visibleColumnKeys.value = keys
+}
+
+/** 列设置：恢复默认可见列 */
+function handleColumnSettingReset() {
+  visibleColumnKeys.value = []
+}
+
+/** 刷新列表 */
+function handleRefresh() {
+  loadData()
+}
+
+/** 表格 change 占位 */
+function handleTableChange() {}
+/** 列宽拖拽回调占位 */
+function handleResizeColumn() {}
+</script>

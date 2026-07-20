@@ -52,7 +52,7 @@ public class TaktDefectGroup : TaktCompanyEntityBase
     [SugarColumn(ColumnName = "defect_group_description", ColumnDescription = "不良组描述", ColumnDataType = "nvarchar", Length = 200, IsNullable = true)]
     public string? DefectGroupDescription { get; set; }
     /// <summary>
-    /// 不良组负责人用户 ID（关联 TaktUser.Id，选项 TaktUsers/options）
+    /// 不良组负责人用户 ID（选项 TaktUsers/options，DictValue=Id）
     /// </summary>
     [SugarColumn(ColumnName = "responsible_user_id", ColumnDescription = "负责人用户ID", ColumnDataType = "bigint", IsNullable = true)]
     [JsonConverter(typeof(ValueToStringConverter))]

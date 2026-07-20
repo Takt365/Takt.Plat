@@ -25,12 +25,12 @@ namespace Takt.Domain.Entities.HumanResource.Personnel;
 public class TaktEmployeeDelegation : TaktCompanyEntityBase
 {
     /// <summary>
-    /// 代理人（关联 TaktEmployee.Id，选项 TaktEmployees/options）
+    /// 代理人（选项 TaktEmployees/options，DictValue=Id）
     /// </summary>
     [SugarColumn(ColumnName = "proxy_employee_id", ColumnDescription = "代理人ID", ColumnDataType = "bigint", IsNullable = false)]
     public long ProxyEmployeeId { get; set; }
     /// <summary>
-    /// 被代理人（关联 TaktEmployee.Id，选项 TaktEmployees/options）
+    /// 被代理人（选项 TaktEmployees/options，DictValue=Id）
     /// </summary>
     [SugarColumn(ColumnName = "original_employee_id", ColumnDescription = "被代理人ID", ColumnDataType = "bigint", IsNullable = false)]
     public long OriginalEmployeeId { get; set; }

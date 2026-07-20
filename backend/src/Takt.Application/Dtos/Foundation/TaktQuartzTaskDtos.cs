@@ -81,7 +81,7 @@ public class TaktQuartzTaskDto : TaktCompanyDtoBase
     public string? RequestMethod { get; set; } = string.Empty;
 
     /// <summary>
-    /// SQL 语句（任务类型为 SQL 时使用）
+    /// SQL 脚本路径（任务类型为 SQL 时使用；只可填相对 wwwroot 的 .sql 路径如 Quartz/sap_sync_ma.sql）
     /// </summary>
     public string? SqlScript { get; set; } = string.Empty;
 
@@ -219,7 +219,7 @@ public class TaktQuartzTaskQueryDto : TaktPagedQuery
     public string? RequestMethod { get; set; } = string.Empty;
 
     /// <summary>
-    /// SQL 语句（任务类型为 SQL 时使用）
+    /// SQL 脚本路径（任务类型为 SQL 时使用；只可填相对 wwwroot 的 .sql 路径如 Quartz/sap_sync_ma.sql）
     /// </summary>
     public string? SqlScript { get; set; } = string.Empty;
 
@@ -376,13 +376,11 @@ public class TaktQuartzTaskCreateDto
     /// <summary>
     /// 程序集名称（任务类型为程序集时使用）
     /// </summary>
-    [Required(ErrorMessage = "程序集名称（任务类型为程序集时使用）不能为空")]
     public string AssemblyName { get; set; } = string.Empty;
 
     /// <summary>
     /// 任务类名（任务类型为程序集时使用）
     /// </summary>
-    [Required(ErrorMessage = "任务类名（任务类型为程序集时使用）不能为空")]
     public string ClassName { get; set; } = string.Empty;
 
     /// <summary>
@@ -396,7 +394,7 @@ public class TaktQuartzTaskCreateDto
     public string? RequestMethod { get; set; } = string.Empty;
 
     /// <summary>
-    /// SQL 语句（任务类型为 SQL 时使用）
+    /// SQL 脚本路径（任务类型为 SQL 时使用；只可填相对 wwwroot 的 .sql 路径如 Quartz/sap_sync_ma.sql）
     /// </summary>
     public string? SqlScript { get; set; } = string.Empty;
 
@@ -408,7 +406,6 @@ public class TaktQuartzTaskCreateDto
     /// <summary>
     /// Cron 表达式（触发器类型为 Cron 时使用）
     /// </summary>
-    [Required(ErrorMessage = "Cron 表达式（触发器类型为 Cron 时使用）不能为空")]
     public string CronExpression { get; set; } = string.Empty;
 
     /// <summary>
@@ -587,7 +584,7 @@ public class TaktQuartzTaskTemplateDto
     public string? RequestMethod { get; set; } = string.Empty;
 
     /// <summary>
-    /// SQL 语句（任务类型为 SQL 时使用）
+    /// SQL 脚本路径（任务类型为 SQL 时使用；只可填相对 wwwroot 的 .sql 路径如 Quartz/sap_sync_ma.sql）
     /// </summary>
     public string? SqlScript { get; set; } = string.Empty;
 
@@ -734,7 +731,7 @@ public class TaktQuartzTaskImportDto
     public string? RequestMethod { get; set; } = string.Empty;
 
     /// <summary>
-    /// SQL 语句（任务类型为 SQL 时使用）
+    /// SQL 脚本路径（任务类型为 SQL 时使用；只可填相对 wwwroot 的 .sql 路径如 Quartz/sap_sync_ma.sql）
     /// </summary>
     public string? SqlScript { get; set; } = string.Empty;
 
@@ -882,7 +879,7 @@ public class TaktQuartzTaskExportDto
     public string? RequestMethod { get; set; } = string.Empty;
 
     /// <summary>
-    /// SQL 语句（任务类型为 SQL 时使用）
+    /// SQL 脚本路径（任务类型为 SQL 时使用；只可填相对 wwwroot 的 .sql 路径如 Quartz/sap_sync_ma.sql）
     /// </summary>
     public string? SqlScript { get; set; } = string.Empty;
 

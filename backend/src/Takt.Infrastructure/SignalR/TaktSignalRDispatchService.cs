@@ -441,6 +441,8 @@ public class TaktSignalRDispatchService : ITaktSignalRDispatchService
             push.TaskCode,
             push.TaskName,
             push.ExecuteStatus,
+            push.ExecuteMessage,
+            push.ErrorInfo,
             push.ExecuteDuration,
             push.ExecuteCount,
             push.LastRunAt,
@@ -453,6 +455,40 @@ public class TaktSignalRDispatchService : ITaktSignalRDispatchService
             .Group(TaktSignalRGroupNames.NotificationsGroup(companyCode))
             .SendAsync("QuartzTaskExecuted", payload);
         TaktSignalRLogging.LogQuartzPushed("task-executed", companyCode, push.TaskCode);
+    }
+
+    /// <inheritdoc />
+    public async Task PushBomMaterialCostItemRecalculateCompletedToUserAsync(TaktSignalRBomMaterialCostItemRecalculatePush push)
+    {
+        ArgumentNullException.ThrowIfNull(push);
+        var companyCode = push.CompanyCode?.Trim() ?? string.Empty;
+        var userName = push.TriggerUserName?.Trim() ?? string.Empty;
+        if (string.IsNullOrWhiteSpace(companyCode) || string.IsNullOrWhiteSpace(userName))
+        {
+            return;
+        }
+
+        var payload = new
+        {
+            TenantCode = push.TenantCode,
+            CompanyCode = companyCode,
+            TriggerUserName = userName,
+            push.ProcessedMonth,
+            push.ForceRecalculate,
+            push.ExecuteStatus,
+            push.ExecuteDuration,
+            push.ErrorMessage,
+            push.ScannedRowCount,
+            push.RefreshedGroupCount,
+            push.SkippedGroupCount,
+            push.ResetGroupCount,
+            push.ProcessedMonthCount,
+            CompletedAt = push.CompletedAt,
+        };
+
+        var userGroup = TaktSignalRGroupNames.UserGroup(companyCode, userName);
+        await _notificationHubContext.Clients.Group(userGroup).SendAsync("BomMaterialCostItemRecalculateCompleted", payload);
+        TaktSignalRLogging.LogWorkflowPushed("bom-material-cost-item-recalculate", companyCode, push.ProcessedMonth, userName);
     }
 
     /// <inheritdoc />

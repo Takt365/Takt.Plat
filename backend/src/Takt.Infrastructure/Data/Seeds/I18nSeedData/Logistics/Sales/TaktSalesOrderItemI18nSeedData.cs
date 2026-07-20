@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Infrastructure.Data.Seeds.I18nSeedData.Logistics.Sales
 // 文件名称：TaktSalesOrderItemI18nSeedData.cs
-// 创建时间：2026-07-09
+// 创建时间：2026-07-20
 // 创建人：Takt365(Auto Generated)
 // 功能描述：TaktSalesOrderItem 实体字段国际化种子（无对应 frontend locales；TranslationText 取自 ColumnDescription，ContextNote 取自属性 XML summary）
 // 
@@ -91,13 +91,13 @@ public class TaktSalesOrderItemI18nSeedData : ITaktSeedDataCoordinator
             new TranslationSeedItem("entity.salesorderitem._self", "zh-HK", "Takt销售订单明细信息_hk", "实体名称"),
 
             // entity.salesorderitem.salesorderid
-            new TranslationSeedItem("entity.salesorderitem.salesorderid", "en-US", "销售订单ID_us", "销售订单（关联 TaktSalesOrder.Id，选项 TaktSalesOrders/options）"),
+            new TranslationSeedItem("entity.salesorderitem.salesorderid", "en-US", "销售订单ID_us", "销售订单（选项 TaktSalesOrders/options，DictValue=Id）"),
             // entity.salesorderitem.salesorderid
-            new TranslationSeedItem("entity.salesorderitem.salesorderid", "ja-JP", "销售订单ID_jp", "销售订单（关联 TaktSalesOrder.Id，选项 TaktSalesOrders/options）"),
+            new TranslationSeedItem("entity.salesorderitem.salesorderid", "ja-JP", "销售订单ID_jp", "销售订单（选项 TaktSalesOrders/options，DictValue=Id）"),
             // entity.salesorderitem.salesorderid
-            new TranslationSeedItem("entity.salesorderitem.salesorderid", "zh-CN", "销售订单ID", "销售订单（关联 TaktSalesOrder.Id，选项 TaktSalesOrders/options）"),
+            new TranslationSeedItem("entity.salesorderitem.salesorderid", "zh-CN", "销售订单ID", "销售订单（选项 TaktSalesOrders/options，DictValue=Id）"),
             // entity.salesorderitem.salesorderid
-            new TranslationSeedItem("entity.salesorderitem.salesorderid", "zh-HK", "销售订单ID_hk", "销售订单（关联 TaktSalesOrder.Id，选项 TaktSalesOrders/options）"),
+            new TranslationSeedItem("entity.salesorderitem.salesorderid", "zh-HK", "销售订单ID_hk", "销售订单（选项 TaktSalesOrders/options，DictValue=Id）"),
 
             // entity.salesorderitem.salesordercode
             new TranslationSeedItem("entity.salesorderitem.salesordercode", "en-US", "销售订单编码_us", "销售订单编码（冗余字段，便于查询）"),
@@ -118,31 +118,31 @@ public class TaktSalesOrderItemI18nSeedData : ITaktSeedDataCoordinator
             new TranslationSeedItem("entity.salesorderitem.linenumber", "zh-HK", "行号_hk", "行号（项号/序号，固定步长=10）"),
 
             // entity.salesorderitem.materialcode
-            new TranslationSeedItem("entity.salesorderitem.materialcode", "en-US", "物料编码_us", "物料编码（选项 TaktMaterials/options，DictValue=MaterialCode）"),
+            new TranslationSeedItem("entity.salesorderitem.materialcode", "en-US", "物料编码_us", "物料编码（选项 TaktMaterialPlants/options，DictValue=MaterialCode，ExtValue=PlantCode）"),
             // entity.salesorderitem.materialcode
-            new TranslationSeedItem("entity.salesorderitem.materialcode", "ja-JP", "物料编码_jp", "物料编码（选项 TaktMaterials/options，DictValue=MaterialCode）"),
+            new TranslationSeedItem("entity.salesorderitem.materialcode", "ja-JP", "物料编码_jp", "物料编码（选项 TaktMaterialPlants/options，DictValue=MaterialCode，ExtValue=PlantCode）"),
             // entity.salesorderitem.materialcode
-            new TranslationSeedItem("entity.salesorderitem.materialcode", "zh-CN", "物料编码", "物料编码（选项 TaktMaterials/options，DictValue=MaterialCode）"),
+            new TranslationSeedItem("entity.salesorderitem.materialcode", "zh-CN", "物料编码", "物料编码（选项 TaktMaterialPlants/options，DictValue=MaterialCode，ExtValue=PlantCode）"),
             // entity.salesorderitem.materialcode
-            new TranslationSeedItem("entity.salesorderitem.materialcode", "zh-HK", "物料编码_hk", "物料编码（选项 TaktMaterials/options，DictValue=MaterialCode）"),
+            new TranslationSeedItem("entity.salesorderitem.materialcode", "zh-HK", "物料编码_hk", "物料编码（选项 TaktMaterialPlants/options，DictValue=MaterialCode，ExtValue=PlantCode）"),
 
             // entity.salesorderitem.materialname
-            new TranslationSeedItem("entity.salesorderitem.materialname", "en-US", "物料名称_us", "物料名称"),
+            new TranslationSeedItem("entity.salesorderitem.materialname", "en-US", "物料名称_us", "物料名称（回填：随物料）"),
             // entity.salesorderitem.materialname
-            new TranslationSeedItem("entity.salesorderitem.materialname", "ja-JP", "物料名称_jp", "物料名称"),
+            new TranslationSeedItem("entity.salesorderitem.materialname", "ja-JP", "物料名称_jp", "物料名称（回填：随物料）"),
             // entity.salesorderitem.materialname
-            new TranslationSeedItem("entity.salesorderitem.materialname", "zh-CN", "物料名称", "物料名称"),
+            new TranslationSeedItem("entity.salesorderitem.materialname", "zh-CN", "物料名称", "物料名称（回填：随物料）"),
             // entity.salesorderitem.materialname
-            new TranslationSeedItem("entity.salesorderitem.materialname", "zh-HK", "物料名称_hk", "物料名称"),
+            new TranslationSeedItem("entity.salesorderitem.materialname", "zh-HK", "物料名称_hk", "物料名称（回填：随物料）"),
 
             // entity.salesorderitem.materialspecification
-            new TranslationSeedItem("entity.salesorderitem.materialspecification", "en-US", "物料规格_us", "物料规格"),
+            new TranslationSeedItem("entity.salesorderitem.materialspecification", "en-US", "物料规格_us", "物料规格（回填：随物料）"),
             // entity.salesorderitem.materialspecification
-            new TranslationSeedItem("entity.salesorderitem.materialspecification", "ja-JP", "物料规格_jp", "物料规格"),
+            new TranslationSeedItem("entity.salesorderitem.materialspecification", "ja-JP", "物料规格_jp", "物料规格（回填：随物料）"),
             // entity.salesorderitem.materialspecification
-            new TranslationSeedItem("entity.salesorderitem.materialspecification", "zh-CN", "物料规格", "物料规格"),
+            new TranslationSeedItem("entity.salesorderitem.materialspecification", "zh-CN", "物料规格", "物料规格（回填：随物料）"),
             // entity.salesorderitem.materialspecification
-            new TranslationSeedItem("entity.salesorderitem.materialspecification", "zh-HK", "物料规格_hk", "物料规格"),
+            new TranslationSeedItem("entity.salesorderitem.materialspecification", "zh-HK", "物料规格_hk", "物料规格（回填：随物料）"),
 
             // entity.salesorderitem.salesunit
             new TranslationSeedItem("entity.salesorderitem.salesunit", "en-US", "销售单位_us", "销售单位（字典 logistics_unit_of_measure_code，DictValue=PC/EA 等；默认 PC）"),

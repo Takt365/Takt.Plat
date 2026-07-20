@@ -66,11 +66,14 @@ public class TaktDatabaseInfoService : TaktServiceBase, ITaktDatabaseInfoService
             throw new TaktBusinessException("租户编码不能为空");
         }
         var tables = await _schemaProvider.GetTablesAsync(tenantCode.Trim()).ConfigureAwait(false);
-        return tables.Select(t => new TaktDatabaseTableInfoDto
-        {
-            TableName = t.Name ?? string.Empty,
-            TableComment = t.Description
-        }).ToList();
+        return tables
+            .Select(t => new TaktDatabaseTableInfoDto
+            {
+                TableName = t.Name ?? string.Empty,
+                TableComment = t.Description
+            })
+            .OrderBy(t => t.TableName, StringComparer.OrdinalIgnoreCase)
+            .ToList();
     }
 
     /// <summary>
@@ -125,16 +128,19 @@ public class TaktDatabaseInfoService : TaktServiceBase, ITaktDatabaseInfoService
             throw new TaktBusinessException("表名不能为空");
         }
         var columns = await _schemaProvider.GetColumnsAsync(tenantCode.Trim(), tableName.Trim()).ConfigureAwait(false);
-        return columns.Select(c => new TaktDatabaseTableColumnInfoDto
-        {
-            DatabaseColumnName = c.DatabaseColumnName,
-            ColumnComment = c.ColumnComment,
-            DatabaseDataType = c.DatabaseDataType,
-            Length = c.Length,
-            DecimalDigits = c.DecimalDigits,
-            IsPrimaryKey = c.IsPrimaryKey,
-            IsIdentity = c.IsIdentity,
-            IsNullable = c.IsNullable
-        }).ToList();
+        return columns
+            .Select(c => new TaktDatabaseTableColumnInfoDto
+            {
+                DatabaseColumnName = c.DatabaseColumnName,
+                ColumnComment = c.ColumnComment,
+                DatabaseDataType = c.DatabaseDataType,
+                Length = c.Length,
+                DecimalDigits = c.DecimalDigits,
+                IsPrimaryKey = c.IsPrimaryKey,
+                IsIdentity = c.IsIdentity,
+                IsNullable = c.IsNullable
+            })
+            .OrderBy(c => c.DatabaseColumnName, StringComparer.OrdinalIgnoreCase)
+            .ToList();
     }
 }

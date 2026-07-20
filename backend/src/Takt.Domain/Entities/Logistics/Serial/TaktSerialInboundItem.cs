@@ -26,7 +26,7 @@ namespace Takt.Domain.Entities.Logistics.Serial;
 public class TaktSerialInboundItem : TaktCompanyEntityBase
 {
     /// <summary>
-    /// 入库主表 ID（关联 TaktSerialInbound.Id，选项 TaktSerialInbounds/options）
+    /// 入库主表 ID（选项 TaktSerialInbounds/options，DictValue=Id）
     /// </summary>
     [SugarColumn(ColumnName = "inbound_id", ColumnDescription = "入库ID", ColumnDataType = "bigint", IsNullable = false)]
     [JsonConverter(typeof(ValueToStringConverter))]

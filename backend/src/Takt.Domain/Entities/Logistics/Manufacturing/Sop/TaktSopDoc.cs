@@ -47,27 +47,27 @@ public class TaktSopDoc : TaktApprovalEntityBase
     public string SopName { get; set; } = string.Empty;
 
     /// <summary>
-    /// 产品/物料编码（关联 TaktMaterial.MaterialCode，选项 TaktMaterials/options）
+    /// 产品/物料编码（选项 TaktMaterialPlants/options，DictValue=MaterialCode，ExtValue=PlantCode）
     /// </summary>
     [SugarColumn(ColumnName = "material_code", ColumnDescription = "物料编码", ColumnDataType = "nvarchar", Length = 50, IsNullable = false)]
     public string MaterialCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 工艺路线明细 ID（关联 TaktRoutingItem.Id，选项 TaktRoutingItems/options）
+    /// 工艺路线明细 ID（选项 TaktRoutingItems/options，DictValue=Id）
     /// </summary>
     [SugarColumn(ColumnName = "routing_item_id", ColumnDescription = "工序ID", ColumnDataType = "bigint", IsNullable = false)]
     [JsonConverter(typeof(ValueToStringConverter))]
     public long RoutingItemId { get; set; }
 
     /// <summary>
-    /// 工位 ID（关联 TaktSopWorkstation.Id，选项 TaktSopWorkstations/options）
+    /// 工位 ID（选项 TaktSopWorkstations/options，DictValue=Id）
     /// </summary>
     [SugarColumn(ColumnName = "workstation_id", ColumnDescription = "工位ID", ColumnDataType = "bigint", IsNullable = true)]
     [JsonConverter(typeof(ValueToStringConverter))]
     public long? WorkstationId { get; set; }
 
     /// <summary>
-    /// 当前生效版本 ID（关联 TaktSopRevision.Id，选项 TaktSopRevisions/options）
+    /// 当前生效版本 ID（选项 TaktSopRevisions/options，DictValue=Id）
     /// </summary>
     [SugarColumn(ColumnName = "current_revision_id", ColumnDescription = "当前版本ID", ColumnDataType = "bigint", IsNullable = true)]
     [JsonConverter(typeof(ValueToStringConverter))]

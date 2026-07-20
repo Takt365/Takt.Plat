@@ -28,7 +28,7 @@ public class TaktIpqcDefectHandling : TaktCompanyEntityBase
     [SugarColumn(ColumnName = "ipqc_defect_handling_code", ColumnDescription = "IPQC不良处理编码", ColumnDataType = "nvarchar", Length = 50, IsNullable = false)]
     public string IpqcDefectHandlingCode { get; set; } = string.Empty;
     /// <summary>
-    /// IPQC检验单明细 ID（关联 TaktIpqcOrderItem.Id，选项 TaktIpqcOrderItems/options）
+    /// IPQC检验单明细 ID（选项 TaktIpqcOrderItems/options，DictValue=Id）
     /// </summary>
     [SugarColumn(ColumnName = "ipqc_order_item_id", ColumnDescription = "IPQC检验单明细ID", ColumnDataType = "bigint", IsNullable = false)]
     [JsonConverter(typeof(ValueToStringConverter))]

@@ -31,7 +31,7 @@
 }
 
 /* @takt-generated variants-begin */
-/* 共 133 个 .takt-button-{action}；每类仅注入 --takt-btn-*，交互见 button-interaction-base.css */
+/* 共 137 个 .takt-button-{action}；每类仅注入 --takt-btn-*，交互见 button-interaction-base.css */
 
 /* query · var(--takt-cn-qunqing) · fg var(--takt-btn-fg-solid) */
 .takt-button-query {
@@ -1095,5 +1095,37 @@
   --takt-btn-border: var(--takt-cn-bise);
   --takt-btn-fg: var(--takt-btn-fg-solid);
   --takt-btn-tone: var(--takt-cn-bise);
+}
+
+/* trend-all · var(--takt-cn-qunqing) · fg var(--takt-btn-fg-solid) · 涨跌筛选·全部 */
+.takt-button-trend-all {
+  --takt-btn-bg: var(--takt-cn-qunqing);
+  --takt-btn-border: var(--takt-cn-qunqing);
+  --takt-btn-fg: var(--takt-btn-fg-solid);
+  --takt-btn-tone: var(--takt-cn-qunqing);
+}
+
+/* trend-changed · var(--takt-cn-chengqian) · fg var(--takt-btn-fg-solid) · 涨跌筛选·仅涨跌 */
+.takt-button-trend-changed {
+  --takt-btn-bg: var(--takt-cn-chengqian);
+  --takt-btn-border: var(--takt-cn-chengqian);
+  --takt-btn-fg: var(--takt-btn-fg-solid);
+  --takt-btn-tone: var(--takt-cn-chengqian);
+}
+
+/* trend-up · var(--takt-cn-songbeilv) · fg var(--takt-btn-fg-solid) · 涨跌筛选·涨 */
+.takt-button-trend-up {
+  --takt-btn-bg: var(--takt-cn-songbeilv);
+  --takt-btn-border: var(--takt-cn-songbeilv);
+  --takt-btn-fg: var(--takt-btn-fg-solid);
+  --takt-btn-tone: var(--takt-cn-songbeilv);
+}
+
+/* trend-down · var(--takt-jp-shoujou) · fg var(--takt-btn-fg-solid) · 涨跌筛选·跌 */
+.takt-button-trend-down {
+  --takt-btn-bg: var(--takt-jp-shoujou);
+  --takt-btn-border: var(--takt-jp-shoujou);
+  --takt-btn-fg: var(--takt-btn-fg-solid);
+  --takt-btn-tone: var(--takt-jp-shoujou);
 }
 /* @takt-generated variants-end */

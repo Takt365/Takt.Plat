@@ -49,7 +49,7 @@ export interface PcbaRepairDetail extends CompanyDtoBase {
   lineNumber: number;
 
   /**
-   * PCBA板别（字典 logistics_pcba_panel_category，存 DictValue）
+   * PCBA板别（字典 logistics_pcba_function_category，存 DictValue）
    */
   pcbaBoardType?: string;
 
@@ -149,7 +149,7 @@ export interface PcbaRepairDetailQuery extends TaktPagedQuery {
   lineNumber?: number;
 
   /**
-   * PCBA板别（字典 logistics_pcba_panel_category，存 DictValue）
+   * PCBA板别（字典 logistics_pcba_function_category，存 DictValue）
    */
   pcbaBoardType?: string;
 
@@ -268,7 +268,7 @@ export interface PcbaRepairDetailCreate {
   lineNumber: number;
 
   /**
-   * PCBA板别（字典 logistics_pcba_panel_category，存 DictValue）
+   * PCBA板别（字典 logistics_pcba_function_category，存 DictValue）
    */
   pcbaBoardType?: string;
 
@@ -406,7 +406,7 @@ export interface PcbaRepairDetailTemplate {
   lineNumber?: number;
 
   /**
-   * PCBA板别（字典 logistics_pcba_panel_category，存 DictValue）
+   * PCBA板别（字典 logistics_pcba_function_category，存 DictValue）
    */
   pcbaBoardType?: string;
 
@@ -515,7 +515,7 @@ export interface PcbaRepairDetailImport {
   lineNumber?: number;
 
   /**
-   * PCBA板别（字典 logistics_pcba_panel_category，存 DictValue）
+   * PCBA板别（字典 logistics_pcba_function_category，存 DictValue）
    */
   pcbaBoardType?: string;
 
@@ -619,7 +619,7 @@ export interface PcbaRepairDetailExport {
   lineNumber: number;
 
   /**
-   * PCBA板别（字典 logistics_pcba_panel_category，存 DictValue）
+   * PCBA板别（字典 logistics_pcba_function_category，存 DictValue）
    */
   pcbaBoardType?: string;
 

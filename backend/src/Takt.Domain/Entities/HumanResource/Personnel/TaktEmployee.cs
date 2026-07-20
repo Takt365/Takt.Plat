@@ -268,7 +268,7 @@ public class TaktEmployee : TaktCompanyEntityBase
 
     /// <summary>
 
-    /// 当前主岗位（关联 TaktPost.Id，选项 TaktPosts/options；任职投影快照，未上岗可空）
+    /// 当前主岗位（选项 TaktPosts/options；任职投影快照，未上岗可空，DictValue=Id）
 
     /// </summary>
 

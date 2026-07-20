@@ -134,7 +134,7 @@ API getXxxTree → 内存保留 fullTableTree
 ```
 
 - **禁止**把整棵树未拍平直接绑大表格不分页
-- `takt-tree-right-table`：`showPagination` + `virtual`（拍平行数超阈值自动 virtual，见 `07-overflow-vue`）
+- `takt-tree-right-table`：`showPagination` + `virtual`（拍平行数超过 `TAKT_TABLE_AUTO_VIRTUAL_ROW_THRESHOLD`=5000 自动 virtual，见 `07-overflow-vue` / `table-scroll.ts`）
 - `expandedRowKeys` / `children`：树表展开列与拍平策略二选一，勿重复渲染
 
 ### 4.3 客户端工具函数（页面内）

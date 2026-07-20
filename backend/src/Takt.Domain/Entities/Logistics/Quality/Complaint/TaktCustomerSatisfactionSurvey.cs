@@ -34,7 +34,7 @@ public class TaktCustomerSatisfactionSurvey : TaktCompanyEntityBase
     [SugarColumn(ColumnName = "customer_satisfaction_survey_code", ColumnDescription = "调查表编号", ColumnDataType = "nvarchar", Length = 50, IsNullable = false)]
     public string CustomerSatisfactionSurveyCode { get; set; } = string.Empty;
     /// <summary>
-    /// 客户 ID（关联 TaktCustomer.Id，选项 TaktCustomers/options）
+    /// 客户 ID（选项 TaktCustomers/options，DictValue=Id）
     /// </summary>
     [SugarColumn(ColumnName = "customer_id", ColumnDescription = "客户ID", ColumnDataType = "bigint", IsNullable = false)]
     [JsonConverter(typeof(ValueToStringConverter))]
@@ -135,7 +135,7 @@ public class TaktCustomerSatisfactionSurvey : TaktCompanyEntityBase
     [SugarColumn(ColumnName = "improvement_plan", ColumnDescription = "改进计划", ColumnDataType = "nvarchar", Length = 2000, IsNullable = true)]
     public string? ImprovementPlan { get; set; }
     /// <summary>
-    /// 关联客诉 ID（关联 TaktCustomerComplaint.Id，选项 TaktCustomerComplaints/options）
+    /// 关联客诉 ID（选项 TaktCustomerComplaints/options，DictValue=Id）
     /// </summary>
     [SugarColumn(ColumnName = "related_complaint_id", ColumnDescription = "关联客诉ID", ColumnDataType = "bigint", IsNullable = true)]
     [JsonConverter(typeof(ValueToStringConverter))]

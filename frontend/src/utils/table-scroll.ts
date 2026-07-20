@@ -4,7 +4,7 @@
 // 文件名称：table-scroll.ts
 // 创建时间：2026-06-07
 // 创建人：Takt365(Cursor AI)
-// 功能描述：Ant Design Vue 表格 scroll 纯函数；scroll.y 为布局高度（与数据行数无关），空表亦保持固定高度
+// 功能描述：Ant Design Vue 表格 scroll / 列呈现 / 单元格溢出省略纯函数；scroll.y 为布局高度（与数据行数无关）
 //
 // 版权信息：Copyright (c) 2026 Takt  All rights reserved.
 // 免责声明：此软件使用 MIT License，作者不承担任何使用风险。
@@ -20,6 +20,9 @@ export const TAKT_TABLE_ROW_SELECTION_WIDTH = 48;
 
 /** 未显式配置 width 时的默认列宽 */
 export const TAKT_TABLE_DEFAULT_COLUMN_WIDTH = 120;
+
+/** 单元格溢出省略内层包裹 class（与 table-ellipsis-base.css 对齐） */
+export const TAKT_TABLE_CELL_ELLIPSIS_INNER_CLASS = 'takt-table-cell-ellipsis-inner';
 
 /** 表格默认 scroll.y 布局场景（全局唯一配置入口） */
 export type TaktTableScrollLayout =
@@ -68,6 +71,69 @@ export const TAKT_TABLE_VIEWPORT_HEIGHT_FALLBACK = 800;
 
 /** 左树虚拟滚动测量失败时的回退高度（px） */
 export const TAKT_TREE_LEFT_VIRTUAL_HEIGHT_FALLBACK = 400;
+
+/**
+ * 表格 / 树绑定行数超过此阈值时自动开启虚拟滚动（07-overflow-vue）
+ * @description 各 takt-*-table 共用；显式 virtual=true 仍始终开启；virtual=false 仅在未超阈值时关闭
+ */
+export const TAKT_TABLE_AUTO_VIRTUAL_ROW_THRESHOLD = 5000;
+
+/**
+ * 是否启用 Ant Design Vue Table / Tree 虚拟滚动
+ * @param rowCount 当前绑定行数（表格 dataSource.length 或树节点总数）
+ * @param virtualProp 组件 virtual 显式值；true 强制开；false 未超阈值时关；省略则仅按阈值
+ * @returns {boolean} 是否开启 virtual
+ */
+export function shouldUseTableVirtualScroll(
+  rowCount: number,
+  virtualProp?: boolean,
+): boolean {
+  const len = Number.isFinite(rowCount) && rowCount > 0 ? Math.floor(rowCount) : 0;
+  if (virtualProp === true) {
+    return true;
+  }
+  // 超大数据强制虚拟化，禁止页面以 virtual=false 关掉
+  if (len > TAKT_TABLE_AUTO_VIRTUAL_ROW_THRESHOLD) {
+    return true;
+  }
+  return false;
+}
+
+/**
+ * 统计树节点总数（含子孙；达到 stopAt 后提前结束，供虚拟化阈值判断）
+ * @param nodes 树根列表
+ * @param childrenField 子节点字段名
+ * @param stopAt 达到后停止计数（默认阈值 + 1）
+ * @returns {number} 节点数（可能截断为 stopAt）
+ */
+export function countTreeNodesForVirtualScroll(
+  nodes: readonly Record<string, unknown>[] | null | undefined,
+  childrenField = 'children',
+  stopAt: number = TAKT_TABLE_AUTO_VIRTUAL_ROW_THRESHOLD + 1,
+): number {
+  if (!nodes?.length || stopAt <= 0) {
+    return 0;
+  }
+  let count = 0;
+  const stack: Record<string, unknown>[] = [...nodes];
+  while (stack.length > 0 && count < stopAt) {
+    const node = stack.pop();
+    if (!node) {
+      continue;
+    }
+    count += 1;
+    const children = node[childrenField];
+    if (Array.isArray(children) && children.length > 0) {
+      for (let i = 0; i < children.length; i += 1) {
+        const child = children[i];
+        if (child && typeof child === 'object') {
+          stack.push(child as Record<string, unknown>);
+        }
+      }
+    }
+  }
+  return count;
+}
 
 /**
  * 解析用于计算的视口高度
@@ -234,6 +300,91 @@ export function sumTableColumnsPixelWidth(
 }
 
 /**
+ * 列是否启用溢出省略（操作列强制否）
+ * @param column 列配置
+ * @returns 是否省略
+ */
+export function isTableColumnEllipsisEnabled(
+  column: { key?: unknown; ellipsis?: unknown; className?: unknown } | null | undefined,
+): boolean {
+  if (column == null) {
+    return false;
+  }
+  const key = column.key != null ? String(column.key) : '';
+  if (key === 'action') {
+    return false;
+  }
+  const className = column.className != null ? String(column.className) : '';
+  if (className.split(/\s+/).includes('takt-action-column')) {
+    return false;
+  }
+  if (column.ellipsis === false) {
+    return false;
+  }
+  return column.ellipsis != null && column.ellipsis !== false;
+}
+
+/**
+ * 解析单元格溢出悬停文案（仅标量；复杂 VNode 不设 title）
+ * @param text bodyCell / 列文本
+ * @returns title 或 undefined
+ */
+export function resolveTableCellEllipsisTitle(text: unknown): string | undefined {
+  if (text == null || text === '') {
+    return undefined;
+  }
+  if (typeof text === 'string' || typeof text === 'number' || typeof text === 'boolean') {
+    const title = String(text).trim();
+    return title || undefined;
+  }
+  return undefined;
+}
+
+/** a-table #bodyCell 插槽参数（与 Ant Design Vue 对齐的最小形态） */
+export type TaktTableBodyCellSlotData = {
+  text?: unknown;
+  value?: unknown;
+  record?: Record<string, unknown>;
+  index?: number;
+  renderIndex?: number;
+  column?: ColumnType<Record<string, unknown>> & {
+    customRender?: (data: {
+      text: unknown;
+      value: unknown;
+      record?: Record<string, unknown>;
+      index?: number;
+      renderIndex?: number;
+      column?: unknown;
+    }) => unknown;
+  };
+};
+
+/**
+ * 表格已占用 #bodyCell 时的回退渲染：优先列 customRender，否则标量 text（禁止把对象 JSON 渲进单元格）
+ * @param slotData bodyCell 插槽参数
+ * @returns customRender 结果、标量文本或 null
+ */
+export function resolveTableBodyCellFallback(slotData: TaktTableBodyCellSlotData): unknown {
+  const column = slotData.column;
+  const customRender = column?.customRender;
+  if (typeof customRender === 'function') {
+    return customRender({
+      text: slotData.text,
+      value: slotData.value ?? slotData.text,
+      record: slotData.record,
+      index: slotData.index,
+      renderIndex: slotData.renderIndex ?? slotData.index,
+      column,
+    });
+  }
+  const text = slotData.text;
+  if (text != null && typeof text === 'object') {
+    return null;
+  }
+  return text ?? null;
+}
+
+/**
  * 为列补充默认 width 与 ellipsis（不修改原对象引用外的共享状态）
  * @param columns 列配置
  * @param defaultEllipsis 是否默认 ellipsis
@@ -250,11 +401,19 @@ export function applyTableColumnPresentation(
   }
   return columns.map((column) => {
     const processedColumn = { ...column } as ColumnType<Record<string, unknown>>;
+    const key = processedColumn.key != null ? String(processedColumn.key) : '';
+    const className = processedColumn.className != null ? String(processedColumn.className) : '';
+    const isActionColumn = key === 'action' || className.split(/\s+/).includes('takt-action-column');
     if (!processedColumn.width) {
       processedColumn.width = defaultWidth;
     }
-    if (defaultEllipsis && processedColumn.ellipsis === undefined) {
-      processedColumn.ellipsis = true;
+    if (isActionColumn) {
+      processedColumn.ellipsis = false;
+    } else if (defaultEllipsis && processedColumn.ellipsis === undefined) {
+      // showTitle:false：由 TaktSingleTable 统一用 title + 内层 class 控制，避免双层原生 tip
+      processedColumn.ellipsis = { showTitle: false };
+    } else if (processedColumn.ellipsis === true) {
+      processedColumn.ellipsis = { showTitle: false };
     }
     return processedColumn;
   });
@@ -288,7 +447,8 @@ export function resolveTableScrollConfig(options: {
   } = options;
   const resolvedVerticalHeight = verticalScrollHeight ?? resolveDefaultTableScrollY(scrollLayout);
   const config: TaktTableScrollConfig = { ...scroll };
-  if (config.x == null || config.x === true) {
+  // max-content 会按单元格内容撑开列宽，破坏列 width/ellipsis；与未传 x 一样按列宽总和锁定横滚
+  if (config.x == null || config.x === true || config.x === 'max-content') {
     let totalWidth = sumTableColumnsPixelWidth(columns);
     if (includeRowSelection) {
       totalWidth += TAKT_TABLE_ROW_SELECTION_WIDTH;

@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Infrastructure.Data.Seeds.I18nSeedData.Logistics.Sales
 // 文件名称：TaktSalesGroupI18nSeedData.cs
-// 创建时间：2026-07-09
+// 创建时间：2026-07-20
 // 创建人：Takt365(Auto Generated)
 // 功能描述：TaktSalesGroup 实体字段国际化种子（无对应 frontend locales；TranslationText 取自 ColumnDescription，ContextNote 取自属性 XML summary）
 // 
@@ -127,13 +127,13 @@ public class TaktSalesGroupI18nSeedData : ITaktSeedDataCoordinator
             new TranslationSeedItem("entity.salesgroup.description", "zh-HK", "销售组描述_hk", "销售组描述"),
 
             // entity.salesgroup.responsibleuserid
-            new TranslationSeedItem("entity.salesgroup.responsibleuserid", "en-US", "负责人用户ID_us", "销售组负责人用户 ID（关联 TaktUser.Id，选项 TaktUsers/options）"),
+            new TranslationSeedItem("entity.salesgroup.responsibleuserid", "en-US", "负责人用户ID_us", "销售组负责人用户 ID（选项 TaktUsers/options，DictValue=Id）"),
             // entity.salesgroup.responsibleuserid
-            new TranslationSeedItem("entity.salesgroup.responsibleuserid", "ja-JP", "负责人用户ID_jp", "销售组负责人用户 ID（关联 TaktUser.Id，选项 TaktUsers/options）"),
+            new TranslationSeedItem("entity.salesgroup.responsibleuserid", "ja-JP", "负责人用户ID_jp", "销售组负责人用户 ID（选项 TaktUsers/options，DictValue=Id）"),
             // entity.salesgroup.responsibleuserid
-            new TranslationSeedItem("entity.salesgroup.responsibleuserid", "zh-CN", "负责人用户ID", "销售组负责人用户 ID（关联 TaktUser.Id，选项 TaktUsers/options）"),
+            new TranslationSeedItem("entity.salesgroup.responsibleuserid", "zh-CN", "负责人用户ID", "销售组负责人用户 ID（选项 TaktUsers/options，DictValue=Id）"),
             // entity.salesgroup.responsibleuserid
-            new TranslationSeedItem("entity.salesgroup.responsibleuserid", "zh-HK", "负责人用户ID_hk", "销售组负责人用户 ID（关联 TaktUser.Id，选项 TaktUsers/options）"),
+            new TranslationSeedItem("entity.salesgroup.responsibleuserid", "zh-HK", "负责人用户ID_hk", "销售组负责人用户 ID（选项 TaktUsers/options，DictValue=Id）"),
 
             // entity.salesgroup.contactphone
             new TranslationSeedItem("entity.salesgroup.contactphone", "en-US", "联系电话_us", "联系电话"),

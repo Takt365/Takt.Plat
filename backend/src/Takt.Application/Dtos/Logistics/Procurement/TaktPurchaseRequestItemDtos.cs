@@ -52,6 +52,12 @@ public class TaktPurchaseRequestItemDto : TaktCompanyDtoBase
     public string PurchaseRequestCode { get; set; } = string.Empty;
 
     /// <summary>
+    /// 来源采购计划明细 ID（MRP 追溯）
+    /// </summary>
+    [JsonConverter(typeof(ValueToStringConverter))]
+    public long? PurchasePlanItemId { get; set; }
+
+    /// <summary>
     /// 行号（项号/序号，固定步长=10）
     /// </summary>
     public int LineNumber { get; set; } = 0;
@@ -280,6 +286,12 @@ public class TaktPurchaseRequestItemCreateDto
     /// </summary>
     [Required(ErrorMessage = "采购申请编码（冗余字段，便于查询）不能为空")]
     public string PurchaseRequestCode { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 来源采购计划明细 ID（MRP 追溯）
+    /// </summary>
+    [JsonConverter(typeof(ValueToStringConverter))]
+    public long? PurchasePlanItemId { get; set; }
 
     /// <summary>
     /// 行号（项号/序号，固定步长=10）
@@ -665,6 +677,12 @@ public class TaktPurchaseRequestItemExportDto
     /// 采购申请编码（冗余字段，便于查询）
     /// </summary>
     public string PurchaseRequestCode { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 来源采购计划明细 ID（MRP 追溯）
+    /// </summary>
+    [JsonConverter(typeof(ValueToStringConverter))]
+    public long? PurchasePlanItemId { get; set; }
 
     /// <summary>
     /// 行号（项号/序号，固定步长=10）

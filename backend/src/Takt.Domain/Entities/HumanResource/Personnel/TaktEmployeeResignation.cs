@@ -25,7 +25,7 @@ namespace Takt.Domain.Entities.HumanResource.Personnel;
 public class TaktEmployeeResignation : TaktApprovalEntityBase
 {
     /// <summary>
-    /// 员工（关联 TaktEmployee.Id，选项 TaktEmployees/options）
+    /// 员工（选项 TaktEmployees/options，DictValue=Id）
     /// </summary>
     [SugarColumn(ColumnName = "employee_id", ColumnDescription = "员工ID", ColumnDataType = "bigint", IsNullable = false)]
     public long EmployeeId { get; set; }

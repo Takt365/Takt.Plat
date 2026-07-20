@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Infrastructure.Data.Seeds.I18nSeedData.Foundation
 // 文件名称：TaktNumberingI18nSeedData.cs
-// 创建时间：2026-07-09
+// 创建时间：2026-07-20
 // 创建人：Takt365(Auto Generated)
 // 功能描述：TaktNumbering 实体字段国际化种子（已对齐前端 locales：src/locales/foundation/numbering）
 // 
@@ -118,13 +118,13 @@ public class TaktNumberingI18nSeedData : ITaktSeedDataCoordinator
             new TranslationSeedItem("entity.numbering.documenttype", "zh-HK", "单据类型_hk", "单据类型（关联 TaktMenu.Id，选项 TaktMenus/tree-options）"),
 
             // entity.numbering.deptcode
-            new TranslationSeedItem("entity.numbering.deptcode", "en-US", "部门编码_us", "部门编码（关联 TaktIsoCode.IsoCode，选项 TaktIsoCodes/options）"),
+            new TranslationSeedItem("entity.numbering.deptcode", "en-US", "部门编码_us", "部门编码（选项 TaktIsoCodes/options，DictValue=Id）"),
             // entity.numbering.deptcode
-            new TranslationSeedItem("entity.numbering.deptcode", "ja-JP", "部门编码_jp", "部门编码（关联 TaktIsoCode.IsoCode，选项 TaktIsoCodes/options）"),
+            new TranslationSeedItem("entity.numbering.deptcode", "ja-JP", "部门编码_jp", "部门编码（选项 TaktIsoCodes/options，DictValue=Id）"),
             // entity.numbering.deptcode
-            new TranslationSeedItem("entity.numbering.deptcode", "zh-CN", "部门编码", "部门编码（关联 TaktIsoCode.IsoCode，选项 TaktIsoCodes/options）"),
+            new TranslationSeedItem("entity.numbering.deptcode", "zh-CN", "部门编码", "部门编码（选项 TaktIsoCodes/options，DictValue=Id）"),
             // entity.numbering.deptcode
-            new TranslationSeedItem("entity.numbering.deptcode", "zh-HK", "部门编码_hk", "部门编码（关联 TaktIsoCode.IsoCode，选项 TaktIsoCodes/options）"),
+            new TranslationSeedItem("entity.numbering.deptcode", "zh-HK", "部门编码_hk", "部门编码（选项 TaktIsoCodes/options，DictValue=Id）"),
 
             // entity.numbering.prefixcode
             new TranslationSeedItem("entity.numbering.prefixcode", "en-US", "前缀编码_us", "前缀编码（如：PUR、SORD、ANN）"),

@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Infrastructure.Data.Seeds.I18nSeedData.Logistics.Procurement
 // 文件名称：TaktPurchaseInquiryItemI18nSeedData.cs
-// 创建时间：2026-07-09
+// 创建时间：2026-07-20
 // 创建人：Takt365(Auto Generated)
 // 功能描述：TaktPurchaseInquiryItem 实体字段国际化种子（无对应 frontend locales；TranslationText 取自 ColumnDescription，ContextNote 取自属性 XML summary）
 // 
@@ -91,13 +91,13 @@ public class TaktPurchaseInquiryItemI18nSeedData : ITaktSeedDataCoordinator
             new TranslationSeedItem("entity.purchaseinquiryitem._self", "zh-HK", "采购询价明细信息_hk", "实体名称"),
 
             // entity.purchaseinquiryitem.purchaseinquiryid
-            new TranslationSeedItem("entity.purchaseinquiryitem.purchaseinquiryid", "en-US", "采购询价ID_us", "采购询价 ID（关联 TaktPurchaseInquiry.Id，选项 TaktPurchaseInquirys/options）"),
+            new TranslationSeedItem("entity.purchaseinquiryitem.purchaseinquiryid", "en-US", "采购询价ID_us", "采购询价 ID（选项 TaktPurchaseInquirys/options，DictValue=Id）"),
             // entity.purchaseinquiryitem.purchaseinquiryid
-            new TranslationSeedItem("entity.purchaseinquiryitem.purchaseinquiryid", "ja-JP", "采购询价ID_jp", "采购询价 ID（关联 TaktPurchaseInquiry.Id，选项 TaktPurchaseInquirys/options）"),
+            new TranslationSeedItem("entity.purchaseinquiryitem.purchaseinquiryid", "ja-JP", "采购询价ID_jp", "采购询价 ID（选项 TaktPurchaseInquirys/options，DictValue=Id）"),
             // entity.purchaseinquiryitem.purchaseinquiryid
-            new TranslationSeedItem("entity.purchaseinquiryitem.purchaseinquiryid", "zh-CN", "采购询价ID", "采购询价 ID（关联 TaktPurchaseInquiry.Id，选项 TaktPurchaseInquirys/options）"),
+            new TranslationSeedItem("entity.purchaseinquiryitem.purchaseinquiryid", "zh-CN", "采购询价ID", "采购询价 ID（选项 TaktPurchaseInquirys/options，DictValue=Id）"),
             // entity.purchaseinquiryitem.purchaseinquiryid
-            new TranslationSeedItem("entity.purchaseinquiryitem.purchaseinquiryid", "zh-HK", "采购询价ID_hk", "采购询价 ID（关联 TaktPurchaseInquiry.Id，选项 TaktPurchaseInquirys/options）"),
+            new TranslationSeedItem("entity.purchaseinquiryitem.purchaseinquiryid", "zh-HK", "采购询价ID_hk", "采购询价 ID（选项 TaktPurchaseInquirys/options，DictValue=Id）"),
 
             // entity.purchaseinquiryitem.purchaseinquirycode
             new TranslationSeedItem("entity.purchaseinquiryitem.purchaseinquirycode", "en-US", "采购询价编码_us", "采购询价编码（冗余，便于查询）"),
@@ -127,40 +127,40 @@ public class TaktPurchaseInquiryItemI18nSeedData : ITaktSeedDataCoordinator
             new TranslationSeedItem("entity.purchaseinquiryitem.allocationcategory", "zh-HK", "分配类别_hk", "分配类别（字典 logistics_allocation_category；A=资产，K=成本中心，F=订单）"),
 
             // entity.purchaseinquiryitem.materialcode
-            new TranslationSeedItem("entity.purchaseinquiryitem.materialcode", "en-US", "物料编码_us", "物料编码（选项 TaktMaterials/options，DictValue=MaterialCode）"),
+            new TranslationSeedItem("entity.purchaseinquiryitem.materialcode", "en-US", "物料编码_us", "物料编码（选项 TaktMaterialPlants/options，DictValue=MaterialCode，ExtValue=PlantCode）"),
             // entity.purchaseinquiryitem.materialcode
-            new TranslationSeedItem("entity.purchaseinquiryitem.materialcode", "ja-JP", "物料编码_jp", "物料编码（选项 TaktMaterials/options，DictValue=MaterialCode）"),
+            new TranslationSeedItem("entity.purchaseinquiryitem.materialcode", "ja-JP", "物料编码_jp", "物料编码（选项 TaktMaterialPlants/options，DictValue=MaterialCode，ExtValue=PlantCode）"),
             // entity.purchaseinquiryitem.materialcode
-            new TranslationSeedItem("entity.purchaseinquiryitem.materialcode", "zh-CN", "物料编码", "物料编码（选项 TaktMaterials/options，DictValue=MaterialCode）"),
+            new TranslationSeedItem("entity.purchaseinquiryitem.materialcode", "zh-CN", "物料编码", "物料编码（选项 TaktMaterialPlants/options，DictValue=MaterialCode，ExtValue=PlantCode）"),
             // entity.purchaseinquiryitem.materialcode
-            new TranslationSeedItem("entity.purchaseinquiryitem.materialcode", "zh-HK", "物料编码_hk", "物料编码（选项 TaktMaterials/options，DictValue=MaterialCode）"),
+            new TranslationSeedItem("entity.purchaseinquiryitem.materialcode", "zh-HK", "物料编码_hk", "物料编码（选项 TaktMaterialPlants/options，DictValue=MaterialCode，ExtValue=PlantCode）"),
 
             // entity.purchaseinquiryitem.materialname
-            new TranslationSeedItem("entity.purchaseinquiryitem.materialname", "en-US", "物料名称_us", "物料名称"),
+            new TranslationSeedItem("entity.purchaseinquiryitem.materialname", "en-US", "物料名称_us", "物料名称（回填：随物料）"),
             // entity.purchaseinquiryitem.materialname
-            new TranslationSeedItem("entity.purchaseinquiryitem.materialname", "ja-JP", "物料名称_jp", "物料名称"),
+            new TranslationSeedItem("entity.purchaseinquiryitem.materialname", "ja-JP", "物料名称_jp", "物料名称（回填：随物料）"),
             // entity.purchaseinquiryitem.materialname
-            new TranslationSeedItem("entity.purchaseinquiryitem.materialname", "zh-CN", "物料名称", "物料名称"),
+            new TranslationSeedItem("entity.purchaseinquiryitem.materialname", "zh-CN", "物料名称", "物料名称（回填：随物料）"),
             // entity.purchaseinquiryitem.materialname
-            new TranslationSeedItem("entity.purchaseinquiryitem.materialname", "zh-HK", "物料名称_hk", "物料名称"),
+            new TranslationSeedItem("entity.purchaseinquiryitem.materialname", "zh-HK", "物料名称_hk", "物料名称（回填：随物料）"),
 
             // entity.purchaseinquiryitem.materialspecification
-            new TranslationSeedItem("entity.purchaseinquiryitem.materialspecification", "en-US", "物料规格_us", "物料规格"),
+            new TranslationSeedItem("entity.purchaseinquiryitem.materialspecification", "en-US", "物料规格_us", "物料规格（回填：随物料）"),
             // entity.purchaseinquiryitem.materialspecification
-            new TranslationSeedItem("entity.purchaseinquiryitem.materialspecification", "ja-JP", "物料规格_jp", "物料规格"),
+            new TranslationSeedItem("entity.purchaseinquiryitem.materialspecification", "ja-JP", "物料规格_jp", "物料规格（回填：随物料）"),
             // entity.purchaseinquiryitem.materialspecification
-            new TranslationSeedItem("entity.purchaseinquiryitem.materialspecification", "zh-CN", "物料规格", "物料规格"),
+            new TranslationSeedItem("entity.purchaseinquiryitem.materialspecification", "zh-CN", "物料规格", "物料规格（回填：随物料）"),
             // entity.purchaseinquiryitem.materialspecification
-            new TranslationSeedItem("entity.purchaseinquiryitem.materialspecification", "zh-HK", "物料规格_hk", "物料规格"),
+            new TranslationSeedItem("entity.purchaseinquiryitem.materialspecification", "zh-HK", "物料规格_hk", "物料规格（回填：随物料）"),
 
             // entity.purchaseinquiryitem.inquiryunit
-            new TranslationSeedItem("entity.purchaseinquiryitem.inquiryunit", "en-US", "询价单位_us", "询价单位"),
+            new TranslationSeedItem("entity.purchaseinquiryitem.inquiryunit", "en-US", "询价单位_us", "询价单位（字典 logistics_unit_of_measure_code，DictValue=PC/EA 等；默认 PC）"),
             // entity.purchaseinquiryitem.inquiryunit
-            new TranslationSeedItem("entity.purchaseinquiryitem.inquiryunit", "ja-JP", "询价单位_jp", "询价单位"),
+            new TranslationSeedItem("entity.purchaseinquiryitem.inquiryunit", "ja-JP", "询价单位_jp", "询价单位（字典 logistics_unit_of_measure_code，DictValue=PC/EA 等；默认 PC）"),
             // entity.purchaseinquiryitem.inquiryunit
-            new TranslationSeedItem("entity.purchaseinquiryitem.inquiryunit", "zh-CN", "询价单位", "询价单位"),
+            new TranslationSeedItem("entity.purchaseinquiryitem.inquiryunit", "zh-CN", "询价单位", "询价单位（字典 logistics_unit_of_measure_code，DictValue=PC/EA 等；默认 PC）"),
             // entity.purchaseinquiryitem.inquiryunit
-            new TranslationSeedItem("entity.purchaseinquiryitem.inquiryunit", "zh-HK", "询价单位_hk", "询价单位"),
+            new TranslationSeedItem("entity.purchaseinquiryitem.inquiryunit", "zh-HK", "询价单位_hk", "询价单位（字典 logistics_unit_of_measure_code，DictValue=PC/EA 等；默认 PC）"),
 
             // entity.purchaseinquiryitem.inquiryquantity
             new TranslationSeedItem("entity.purchaseinquiryitem.inquiryquantity", "en-US", "询价数量_us", "询价数量（基本单位数量，decimal(18,5)）"),

@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Infrastructure.Data.Seeds.I18nSeedData.Accounting.Financial
 // 文件名称：TaktExpenseI18nSeedData.cs
-// 创建时间：2026-07-09
+// 创建时间：2026-07-20
 // 创建人：Takt365(Auto Generated)
 // 功能描述：TaktExpense 实体字段国际化种子（无对应 frontend locales；TranslationText 取自 ColumnDescription，ContextNote 取自属性 XML summary）
 // 
@@ -109,22 +109,22 @@ public class TaktExpenseI18nSeedData : ITaktSeedDataCoordinator
             new TranslationSeedItem("entity.expense.title", "zh-HK", "费用标题_hk", "费用标题"),
 
             // entity.expense.type
-            new TranslationSeedItem("entity.expense.type", "en-US", "费用类型_us", "费用类型（字典 accounting_expense_type：1=月结供应商除原材料外的费用，2=月结供应商货款及公司其它费用，3=杂项购置费用）"),
+            new TranslationSeedItem("entity.expense.type", "en-US", "费用类型_us", "费用类型（字典 accounting_expense_type：1=月结供应商除原材料外的费用，2=月结供应商货款及公司其他费用，3=杂项购置费用）"),
             // entity.expense.type
-            new TranslationSeedItem("entity.expense.type", "ja-JP", "费用类型_jp", "费用类型（字典 accounting_expense_type：1=月结供应商除原材料外的费用，2=月结供应商货款及公司其它费用，3=杂项购置费用）"),
+            new TranslationSeedItem("entity.expense.type", "ja-JP", "费用类型_jp", "费用类型（字典 accounting_expense_type：1=月结供应商除原材料外的费用，2=月结供应商货款及公司其他费用，3=杂项购置费用）"),
             // entity.expense.type
-            new TranslationSeedItem("entity.expense.type", "zh-CN", "费用类型", "费用类型（字典 accounting_expense_type：1=月结供应商除原材料外的费用，2=月结供应商货款及公司其它费用，3=杂项购置费用）"),
+            new TranslationSeedItem("entity.expense.type", "zh-CN", "费用类型", "费用类型（字典 accounting_expense_type：1=月结供应商除原材料外的费用，2=月结供应商货款及公司其他费用，3=杂项购置费用）"),
             // entity.expense.type
-            new TranslationSeedItem("entity.expense.type", "zh-HK", "费用类型_hk", "费用类型（字典 accounting_expense_type：1=月结供应商除原材料外的费用，2=月结供应商货款及公司其它费用，3=杂项购置费用）"),
+            new TranslationSeedItem("entity.expense.type", "zh-HK", "费用类型_hk", "费用类型（字典 accounting_expense_type：1=月结供应商除原材料外的费用，2=月结供应商货款及公司其他费用，3=杂项购置费用）"),
 
             // entity.expense.suppliercode
-            new TranslationSeedItem("entity.expense.suppliercode", "en-US", "供应商编码_us", "供应商编码（关联 TaktSupplier.SupplierCode，选项 TaktSuppliers/options；整单唯一）"),
+            new TranslationSeedItem("entity.expense.suppliercode", "en-US", "供应商编码_us", "供应商编码（选项 TaktSuppliers/options；整单唯一，DictValue=Id）"),
             // entity.expense.suppliercode
-            new TranslationSeedItem("entity.expense.suppliercode", "ja-JP", "供应商编码_jp", "供应商编码（关联 TaktSupplier.SupplierCode，选项 TaktSuppliers/options；整单唯一）"),
+            new TranslationSeedItem("entity.expense.suppliercode", "ja-JP", "供应商编码_jp", "供应商编码（选项 TaktSuppliers/options；整单唯一，DictValue=Id）"),
             // entity.expense.suppliercode
-            new TranslationSeedItem("entity.expense.suppliercode", "zh-CN", "供应商编码", "供应商编码（关联 TaktSupplier.SupplierCode，选项 TaktSuppliers/options；整单唯一）"),
+            new TranslationSeedItem("entity.expense.suppliercode", "zh-CN", "供应商编码", "供应商编码（选项 TaktSuppliers/options；整单唯一，DictValue=Id）"),
             // entity.expense.suppliercode
-            new TranslationSeedItem("entity.expense.suppliercode", "zh-HK", "供应商编码_hk", "供应商编码（关联 TaktSupplier.SupplierCode，选项 TaktSuppliers/options；整单唯一）"),
+            new TranslationSeedItem("entity.expense.suppliercode", "zh-HK", "供应商编码_hk", "供应商编码（选项 TaktSuppliers/options；整单唯一，DictValue=Id）"),
 
             // entity.expense.suppliername
             new TranslationSeedItem("entity.expense.suppliername", "en-US", "供应商名称_us", "供应商名称（整单唯一）"),
@@ -136,13 +136,13 @@ public class TaktExpenseI18nSeedData : ITaktSeedDataCoordinator
             new TranslationSeedItem("entity.expense.suppliername", "zh-HK", "供应商名称_hk", "供应商名称（整单唯一）"),
 
             // entity.expense.applicantby
-            new TranslationSeedItem("entity.expense.applicantby", "en-US", "申请人_us", "申请人（关联 TaktEmployee.Id，选项 TaktEmployees/options）"),
+            new TranslationSeedItem("entity.expense.applicantby", "en-US", "申请人_us", "申请人（选项 TaktEmployees/options，DictValue=Id）"),
             // entity.expense.applicantby
-            new TranslationSeedItem("entity.expense.applicantby", "ja-JP", "申请人_jp", "申请人（关联 TaktEmployee.Id，选项 TaktEmployees/options）"),
+            new TranslationSeedItem("entity.expense.applicantby", "ja-JP", "申请人_jp", "申请人（选项 TaktEmployees/options，DictValue=Id）"),
             // entity.expense.applicantby
-            new TranslationSeedItem("entity.expense.applicantby", "zh-CN", "申请人", "申请人（关联 TaktEmployee.Id，选项 TaktEmployees/options）"),
+            new TranslationSeedItem("entity.expense.applicantby", "zh-CN", "申请人", "申请人（选项 TaktEmployees/options，DictValue=Id）"),
             // entity.expense.applicantby
-            new TranslationSeedItem("entity.expense.applicantby", "zh-HK", "申请人_hk", "申请人（关联 TaktEmployee.Id，选项 TaktEmployees/options）"),
+            new TranslationSeedItem("entity.expense.applicantby", "zh-HK", "申请人_hk", "申请人（选项 TaktEmployees/options，DictValue=Id）"),
 
             // entity.expense.applicationdept
             new TranslationSeedItem("entity.expense.applicationdept", "en-US", "申请部门_us", "申请部门（关联 TaktDept.Id，选项 TaktDepts/tree-options）"),
@@ -172,31 +172,31 @@ public class TaktExpenseI18nSeedData : ITaktSeedDataCoordinator
             new TranslationSeedItem("entity.expense.costcenter", "zh-HK", "成本中心_hk", "成本中心（关联 TaktCostCenter.CostCenterCode，选项 TaktCostCenters/tree-options）"),
 
             // entity.expense.countersignid
-            new TranslationSeedItem("entity.expense.countersignid", "en-US", "关联会签单ID_us", "关联会签单（关联 TaktCountersign.Id，选项 TaktCountersigns/options）"),
+            new TranslationSeedItem("entity.expense.countersignid", "en-US", "关联会签单ID_us", "关联会签单（选项 TaktCountersigns/options，DictValue=Id）"),
             // entity.expense.countersignid
-            new TranslationSeedItem("entity.expense.countersignid", "ja-JP", "关联会签单ID_jp", "关联会签单（关联 TaktCountersign.Id，选项 TaktCountersigns/options）"),
+            new TranslationSeedItem("entity.expense.countersignid", "ja-JP", "关联会签单ID_jp", "关联会签单（选项 TaktCountersigns/options，DictValue=Id）"),
             // entity.expense.countersignid
-            new TranslationSeedItem("entity.expense.countersignid", "zh-CN", "关联会签单ID", "关联会签单（关联 TaktCountersign.Id，选项 TaktCountersigns/options）"),
+            new TranslationSeedItem("entity.expense.countersignid", "zh-CN", "关联会签单ID", "关联会签单（选项 TaktCountersigns/options，DictValue=Id）"),
             // entity.expense.countersignid
-            new TranslationSeedItem("entity.expense.countersignid", "zh-HK", "关联会签单ID_hk", "关联会签单（关联 TaktCountersign.Id，选项 TaktCountersigns/options）"),
+            new TranslationSeedItem("entity.expense.countersignid", "zh-HK", "关联会签单ID_hk", "关联会签单（选项 TaktCountersigns/options，DictValue=Id）"),
 
             // entity.expense.purchaseordercode
-            new TranslationSeedItem("entity.expense.purchaseordercode", "en-US", "来源采购订单编码_us", "来源采购订单编码（关联 TaktPurchaseOrder.PurchaseOrderCode，选项 TaktPurchaseOrders/options；采购链路自动生成时写入）"),
+            new TranslationSeedItem("entity.expense.purchaseordercode", "en-US", "来源采购订单编码_us", "来源采购订单编码（选项 TaktPurchaseOrders/options；采购链路自动生成时写入，DictValue=Id）"),
             // entity.expense.purchaseordercode
-            new TranslationSeedItem("entity.expense.purchaseordercode", "ja-JP", "来源采购订单编码_jp", "来源采购订单编码（关联 TaktPurchaseOrder.PurchaseOrderCode，选项 TaktPurchaseOrders/options；采购链路自动生成时写入）"),
+            new TranslationSeedItem("entity.expense.purchaseordercode", "ja-JP", "来源采购订单编码_jp", "来源采购订单编码（选项 TaktPurchaseOrders/options；采购链路自动生成时写入，DictValue=Id）"),
             // entity.expense.purchaseordercode
-            new TranslationSeedItem("entity.expense.purchaseordercode", "zh-CN", "来源采购订单编码", "来源采购订单编码（关联 TaktPurchaseOrder.PurchaseOrderCode，选项 TaktPurchaseOrders/options；采购链路自动生成时写入）"),
+            new TranslationSeedItem("entity.expense.purchaseordercode", "zh-CN", "来源采购订单编码", "来源采购订单编码（选项 TaktPurchaseOrders/options；采购链路自动生成时写入，DictValue=Id）"),
             // entity.expense.purchaseordercode
-            new TranslationSeedItem("entity.expense.purchaseordercode", "zh-HK", "来源采购订单编码_hk", "来源采购订单编码（关联 TaktPurchaseOrder.PurchaseOrderCode，选项 TaktPurchaseOrders/options；采购链路自动生成时写入）"),
+            new TranslationSeedItem("entity.expense.purchaseordercode", "zh-HK", "来源采购订单编码_hk", "来源采购订单编码（选项 TaktPurchaseOrders/options；采购链路自动生成时写入，DictValue=Id）"),
 
             // entity.expense.purchaserequestcode
-            new TranslationSeedItem("entity.expense.purchaserequestcode", "en-US", "来源采购申请编码_us", "来源采购申请编码（关联 TaktPurchaseRequest.PurchaseRequestCode，选项 TaktPurchaseRequests/options；采购链路自动生成时写入）"),
+            new TranslationSeedItem("entity.expense.purchaserequestcode", "en-US", "来源采购申请编码_us", "来源采购申请编码（选项 TaktPurchaseRequests/options；采购链路自动生成时写入，DictValue=Id）"),
             // entity.expense.purchaserequestcode
-            new TranslationSeedItem("entity.expense.purchaserequestcode", "ja-JP", "来源采购申请编码_jp", "来源采购申请编码（关联 TaktPurchaseRequest.PurchaseRequestCode，选项 TaktPurchaseRequests/options；采购链路自动生成时写入）"),
+            new TranslationSeedItem("entity.expense.purchaserequestcode", "ja-JP", "来源采购申请编码_jp", "来源采购申请编码（选项 TaktPurchaseRequests/options；采购链路自动生成时写入，DictValue=Id）"),
             // entity.expense.purchaserequestcode
-            new TranslationSeedItem("entity.expense.purchaserequestcode", "zh-CN", "来源采购申请编码", "来源采购申请编码（关联 TaktPurchaseRequest.PurchaseRequestCode，选项 TaktPurchaseRequests/options；采购链路自动生成时写入）"),
+            new TranslationSeedItem("entity.expense.purchaserequestcode", "zh-CN", "来源采购申请编码", "来源采购申请编码（选项 TaktPurchaseRequests/options；采购链路自动生成时写入，DictValue=Id）"),
             // entity.expense.purchaserequestcode
-            new TranslationSeedItem("entity.expense.purchaserequestcode", "zh-HK", "来源采购申请编码_hk", "来源采购申请编码（关联 TaktPurchaseRequest.PurchaseRequestCode，选项 TaktPurchaseRequests/options；采购链路自动生成时写入）"),
+            new TranslationSeedItem("entity.expense.purchaserequestcode", "zh-HK", "来源采购申请编码_hk", "来源采购申请编码（选项 TaktPurchaseRequests/options；采购链路自动生成时写入，DictValue=Id）"),
 
             // entity.expense.amount
             new TranslationSeedItem("entity.expense.amount", "en-US", "费用金额_us", "费用金额"),
@@ -253,13 +253,13 @@ public class TaktExpenseI18nSeedData : ITaktSeedDataCoordinator
             new TranslationSeedItem("entity.expense.attachments", "zh-HK", "附件_hk", "附件 JSON"),
 
             // entity.expense.relatedplant
-            new TranslationSeedItem("entity.expense.relatedplant", "en-US", "关联工厂_us", "关联工厂（关联 TaktPlant.PlantCode，选项 TaktPlants/options）"),
+            new TranslationSeedItem("entity.expense.relatedplant", "en-US", "关联工厂_us", "关联工厂（选项 TaktPlants/options，DictValue=Id）"),
             // entity.expense.relatedplant
-            new TranslationSeedItem("entity.expense.relatedplant", "ja-JP", "关联工厂_jp", "关联工厂（关联 TaktPlant.PlantCode，选项 TaktPlants/options）"),
+            new TranslationSeedItem("entity.expense.relatedplant", "ja-JP", "关联工厂_jp", "关联工厂（选项 TaktPlants/options，DictValue=Id）"),
             // entity.expense.relatedplant
-            new TranslationSeedItem("entity.expense.relatedplant", "zh-CN", "关联工厂", "关联工厂（关联 TaktPlant.PlantCode，选项 TaktPlants/options）"),
+            new TranslationSeedItem("entity.expense.relatedplant", "zh-CN", "关联工厂", "关联工厂（选项 TaktPlants/options，DictValue=Id）"),
             // entity.expense.relatedplant
-            new TranslationSeedItem("entity.expense.relatedplant", "zh-HK", "关联工厂_hk", "关联工厂（关联 TaktPlant.PlantCode，选项 TaktPlants/options）"),
+            new TranslationSeedItem("entity.expense.relatedplant", "zh-HK", "关联工厂_hk", "关联工厂（选项 TaktPlants/options，DictValue=Id）"),
 
             // entity.expense.status
             new TranslationSeedItem("entity.expense.status", "en-US", "费用单状态_us", "费用单状态（字典 sys_approval_status；与 ApprovalStatus 取值一致）"),

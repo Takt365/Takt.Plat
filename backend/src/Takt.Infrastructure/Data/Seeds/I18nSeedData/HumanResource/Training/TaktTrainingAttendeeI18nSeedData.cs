@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Infrastructure.Data.Seeds.I18nSeedData.HumanResource.Training
 // 文件名称：TaktTrainingAttendeeI18nSeedData.cs
-// 创建时间：2026-07-09
+// 创建时间：2026-07-20
 // 创建人：Takt365(Auto Generated)
 // 功能描述：TaktTrainingAttendee 实体字段国际化种子（无对应 frontend locales；TranslationText 取自 ColumnDescription，ContextNote 取自属性 XML summary）
 // 
@@ -91,13 +91,13 @@ public class TaktTrainingAttendeeI18nSeedData : ITaktSeedDataCoordinator
             new TranslationSeedItem("entity.trainingattendee._self", "zh-HK", "员工培训结果记录信息_hk", "实体名称"),
 
             // entity.trainingattendee.employeeid
-            new TranslationSeedItem("entity.trainingattendee.employeeid", "en-US", "员工ID_us", "员工（关联 TaktEmployee.Id，选项 TaktEmployees/options）"),
+            new TranslationSeedItem("entity.trainingattendee.employeeid", "en-US", "员工ID_us", "员工（选项 TaktEmployees/options，DictValue=Id）"),
             // entity.trainingattendee.employeeid
-            new TranslationSeedItem("entity.trainingattendee.employeeid", "ja-JP", "员工ID_jp", "员工（关联 TaktEmployee.Id，选项 TaktEmployees/options）"),
+            new TranslationSeedItem("entity.trainingattendee.employeeid", "ja-JP", "员工ID_jp", "员工（选项 TaktEmployees/options，DictValue=Id）"),
             // entity.trainingattendee.employeeid
-            new TranslationSeedItem("entity.trainingattendee.employeeid", "zh-CN", "员工ID", "员工（关联 TaktEmployee.Id，选项 TaktEmployees/options）"),
+            new TranslationSeedItem("entity.trainingattendee.employeeid", "zh-CN", "员工ID", "员工（选项 TaktEmployees/options，DictValue=Id）"),
             // entity.trainingattendee.employeeid
-            new TranslationSeedItem("entity.trainingattendee.employeeid", "zh-HK", "员工ID_hk", "员工（关联 TaktEmployee.Id，选项 TaktEmployees/options）"),
+            new TranslationSeedItem("entity.trainingattendee.employeeid", "zh-HK", "员工ID_hk", "员工（选项 TaktEmployees/options，DictValue=Id）"),
 
             // entity.trainingattendee.employeename
             new TranslationSeedItem("entity.trainingattendee.employeename", "en-US", "员工姓名_us", "员工姓名"),
@@ -109,13 +109,13 @@ public class TaktTrainingAttendeeI18nSeedData : ITaktSeedDataCoordinator
             new TranslationSeedItem("entity.trainingattendee.employeename", "zh-HK", "员工姓名_hk", "员工姓名"),
 
             // entity.trainingattendee.trainingcourseid
-            new TranslationSeedItem("entity.trainingattendee.trainingcourseid", "en-US", "培训课程ID_us", "培训课程（关联 TaktTrainingCourse.Id，选项 TaktTrainingCourses/options）"),
+            new TranslationSeedItem("entity.trainingattendee.trainingcourseid", "en-US", "培训课程ID_us", "培训课程（选项 TaktTrainingCourses/options，DictValue=Id）"),
             // entity.trainingattendee.trainingcourseid
-            new TranslationSeedItem("entity.trainingattendee.trainingcourseid", "ja-JP", "培训课程ID_jp", "培训课程（关联 TaktTrainingCourse.Id，选项 TaktTrainingCourses/options）"),
+            new TranslationSeedItem("entity.trainingattendee.trainingcourseid", "ja-JP", "培训课程ID_jp", "培训课程（选项 TaktTrainingCourses/options，DictValue=Id）"),
             // entity.trainingattendee.trainingcourseid
-            new TranslationSeedItem("entity.trainingattendee.trainingcourseid", "zh-CN", "培训课程ID", "培训课程（关联 TaktTrainingCourse.Id，选项 TaktTrainingCourses/options）"),
+            new TranslationSeedItem("entity.trainingattendee.trainingcourseid", "zh-CN", "培训课程ID", "培训课程（选项 TaktTrainingCourses/options，DictValue=Id）"),
             // entity.trainingattendee.trainingcourseid
-            new TranslationSeedItem("entity.trainingattendee.trainingcourseid", "zh-HK", "培训课程ID_hk", "培训课程（关联 TaktTrainingCourse.Id，选项 TaktTrainingCourses/options）"),
+            new TranslationSeedItem("entity.trainingattendee.trainingcourseid", "zh-HK", "培训课程ID_hk", "培训课程（选项 TaktTrainingCourses/options，DictValue=Id）"),
 
             // entity.trainingattendee.coursename
             new TranslationSeedItem("entity.trainingattendee.coursename", "en-US", "培训课程名称_us", "培训课程名称"),
@@ -217,13 +217,13 @@ public class TaktTrainingAttendeeI18nSeedData : ITaktSeedDataCoordinator
             new TranslationSeedItem("entity.trainingattendee.trainingevaluation", "zh-HK", "培训评价_hk", "培训评价"),
 
             // entity.trainingattendee.relatedplant
-            new TranslationSeedItem("entity.trainingattendee.relatedplant", "en-US", "关联工厂_us", "关联工厂（关联 TaktPlant.PlantCode，选项 TaktPlants/options）"),
+            new TranslationSeedItem("entity.trainingattendee.relatedplant", "en-US", "关联工厂_us", "关联工厂（选项 TaktPlants/options，DictValue=Id）"),
             // entity.trainingattendee.relatedplant
-            new TranslationSeedItem("entity.trainingattendee.relatedplant", "ja-JP", "关联工厂_jp", "关联工厂（关联 TaktPlant.PlantCode，选项 TaktPlants/options）"),
+            new TranslationSeedItem("entity.trainingattendee.relatedplant", "ja-JP", "关联工厂_jp", "关联工厂（选项 TaktPlants/options，DictValue=Id）"),
             // entity.trainingattendee.relatedplant
-            new TranslationSeedItem("entity.trainingattendee.relatedplant", "zh-CN", "关联工厂", "关联工厂（关联 TaktPlant.PlantCode，选项 TaktPlants/options）"),
+            new TranslationSeedItem("entity.trainingattendee.relatedplant", "zh-CN", "关联工厂", "关联工厂（选项 TaktPlants/options，DictValue=Id）"),
             // entity.trainingattendee.relatedplant
-            new TranslationSeedItem("entity.trainingattendee.relatedplant", "zh-HK", "关联工厂_hk", "关联工厂（关联 TaktPlant.PlantCode，选项 TaktPlants/options）"),
+            new TranslationSeedItem("entity.trainingattendee.relatedplant", "zh-HK", "关联工厂_hk", "关联工厂（选项 TaktPlants/options，DictValue=Id）"),
 
             // entity.trainingattendee.trainingresultstatus
             new TranslationSeedItem("entity.trainingattendee.trainingresultstatus", "en-US", "状态_us", "参训记录状态（字典 sys_normal_disable_status；1=有效 0=无效）"),

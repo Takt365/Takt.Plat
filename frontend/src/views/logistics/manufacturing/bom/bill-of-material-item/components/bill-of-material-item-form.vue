@@ -392,7 +392,7 @@ import { RiQuestionLine } from '@remixicon/vue'
 import { useTenantStore } from '@/stores/identity/tenant'
 import { useUserStore } from '@/stores/identity/user'
 import { getMaterialPlantOptions, getMaterialPlantById } from '@/api/logistics/materials/material-plant'
-import { getWorkCenterOptions } from '@/api/logistics/manufacturing/scheduling/work-center'
+import { getWorkCenterOptions } from '@/api/logistics/manufacturing/aps/work-center'
 import { getBillOfMaterialById } from '@/api/logistics/manufacturing/bom/bill-of-material'
 
 /** i18n 翻译函数 */

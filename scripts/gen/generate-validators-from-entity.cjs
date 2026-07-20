@@ -865,7 +865,7 @@ function printUsage() {
 
 说明:
   - 全量扫描 Domain/Entities 下全部 Takt* 实体并生成验证器
-  - 仅支持无参或 --all / -all，不支持其它参数
+  - 仅支持无参或 --all / -all，不支持其他参数
 
 输出: backend/src/Takt.Application/Validators/{与实体相同路径}/Takt{Entity}Validators.cs
   - 聚合实体：Takt{Entity}CreateValidator / UpdateValidator / ImportValidator（*Dtos.cs 中存在的类才生成）

@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Infrastructure.Data.Seeds.I18nSeedData.Logistics.Procurement
 // 文件名称：TaktPurchaseOrderI18nSeedData.cs
-// 创建时间：2026-07-09
+// 创建时间：2026-07-20
 // 创建人：Takt365(Auto Generated)
 // 功能描述：TaktPurchaseOrder 实体字段国际化种子（无对应 frontend locales；TranslationText 取自 ColumnDescription，ContextNote 取自属性 XML summary）
 // 
@@ -109,13 +109,13 @@ public class TaktPurchaseOrderI18nSeedData : ITaktSeedDataCoordinator
             new TranslationSeedItem("entity.purchaseorder.code", "zh-HK", "采购订单编码_hk", "采购订单编码（唯一索引）"),
 
             // entity.purchaseorder.purchaserequestid
-            new TranslationSeedItem("entity.purchaseorder.purchaserequestid", "en-US", "来源采购申请ID_us", "来源采购申请 ID（关联 TaktPurchaseRequest.Id，选项 TaktPurchaseRequests/options）"),
+            new TranslationSeedItem("entity.purchaseorder.purchaserequestid", "en-US", "来源采购申请ID_us", "来源采购申请 ID（选项 TaktPurchaseRequests/options，DictValue=Id）"),
             // entity.purchaseorder.purchaserequestid
-            new TranslationSeedItem("entity.purchaseorder.purchaserequestid", "ja-JP", "来源采购申请ID_jp", "来源采购申请 ID（关联 TaktPurchaseRequest.Id，选项 TaktPurchaseRequests/options）"),
+            new TranslationSeedItem("entity.purchaseorder.purchaserequestid", "ja-JP", "来源采购申请ID_jp", "来源采购申请 ID（选项 TaktPurchaseRequests/options，DictValue=Id）"),
             // entity.purchaseorder.purchaserequestid
-            new TranslationSeedItem("entity.purchaseorder.purchaserequestid", "zh-CN", "来源采购申请ID", "来源采购申请 ID（关联 TaktPurchaseRequest.Id，选项 TaktPurchaseRequests/options）"),
+            new TranslationSeedItem("entity.purchaseorder.purchaserequestid", "zh-CN", "来源采购申请ID", "来源采购申请 ID（选项 TaktPurchaseRequests/options，DictValue=Id）"),
             // entity.purchaseorder.purchaserequestid
-            new TranslationSeedItem("entity.purchaseorder.purchaserequestid", "zh-HK", "来源采购申请ID_hk", "来源采购申请 ID（关联 TaktPurchaseRequest.Id，选项 TaktPurchaseRequests/options）"),
+            new TranslationSeedItem("entity.purchaseorder.purchaserequestid", "zh-HK", "来源采购申请ID_hk", "来源采购申请 ID（选项 TaktPurchaseRequests/options，DictValue=Id）"),
 
             // entity.purchaseorder.purchaserequestcode
             new TranslationSeedItem("entity.purchaseorder.purchaserequestcode", "en-US", "来源采购申请编码_us", "来源采购申请编码（冗余）"),

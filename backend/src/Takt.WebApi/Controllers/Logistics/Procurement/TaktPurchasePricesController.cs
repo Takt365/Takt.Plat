@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.WebApi.Controllers.Logistics.Procurement
 // 文件名称：TaktPurchasePricesController.cs
-// 创建时间：2026-06-24
+// 创建时间：2026-07-20
 // 创建人：Takt365(Cursor AI)
 // 功能描述：采购价格控制器
 // 
@@ -49,26 +49,6 @@ public class TaktPurchasePricesController : TaktControllerBase
         {
             var result = await _purchasePriceService.GetPurchasePriceListAsync(queryDto);
             return Success(result.Data, result.Total, result.PageIndex, result.PageSize, "查询成功");
-        }
-        catch (Exception ex)
-        {
-            return HandleException(ex);
-        }
-    }
-
-    /// <summary>
-    /// 获取采购价格月度波动分析
-    /// </summary>
-    /// <param name="queryDto">查询 DTO</param>
-    /// <returns>月度波动表</returns>
-    [TaktPermission("logistics:procurement:purchase:price:list", "采购价格波动分析")]
-    [HttpGet("price-trend-analysis")]
-    public async Task<IActionResult> GetPurchasePriceTrendAnalysisAsync([FromQuery] TaktPurchasePriceTrendQueryDto queryDto)
-    {
-        try
-        {
-            var result = await _purchasePriceService.GetPurchasePriceTrendAnalysisAsync(queryDto);
-            return Success(result, "查询成功");
         }
         catch (Exception ex)
         {
@@ -193,26 +173,6 @@ public class TaktPurchasePricesController : TaktControllerBase
         {
             await _purchasePriceService.DeletePurchasePriceBatchAsync(ids);
             return Success("删除成功");
-        }
-        catch (Exception ex)
-        {
-            return HandleException(ex);
-        }
-    }
-
-    /// <summary>
-    /// 更新采购价格状态
-    /// </summary>
-    /// <param name="dto">状态 DTO</param>
-    /// <returns>采购价格DTO</returns>
-    [TaktPermission("logistics:procurement:purchase:price:update", "更新采购价格状态")]
-    [HttpPut("status")]
-    public async Task<IActionResult> UpdatePurchasePriceStatusAsync([FromBody] TaktPurchasePriceStatusDto dto)
-    {
-        try
-        {
-            var result = await _purchasePriceService.UpdatePurchasePriceStatusAsync(dto);
-            return Success(result, "更新成功");
         }
         catch (Exception ex)
         {

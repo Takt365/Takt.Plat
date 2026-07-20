@@ -46,7 +46,7 @@ public class TaktExpenseDto : TaktApprovalDtoBase
     public string ExpenseTitle { get; set; } = string.Empty;
 
     /// <summary>
-    /// 费用类型（字典 accounting_expense_type：1=月结供应商除原材料外的费用，2=月结供应商货款及公司其它费用，3=杂项购置费用）
+    /// 费用类型（字典 accounting_expense_type：1=月结供应商除原材料外的费用，2=月结供应商货款及公司其他费用，3=杂项购置费用）
     /// </summary>
     public int ExpenseType { get; set; } = 0;
 
@@ -181,7 +181,7 @@ public class TaktExpenseQueryDto : TaktPagedQuery
     public string? ExpenseTitle { get; set; } = string.Empty;
 
     /// <summary>
-    /// 费用类型（字典 accounting_expense_type：1=月结供应商除原材料外的费用，2=月结供应商货款及公司其它费用，3=杂项购置费用）
+    /// 费用类型（字典 accounting_expense_type：1=月结供应商除原材料外的费用，2=月结供应商货款及公司其他费用，3=杂项购置费用）
     /// </summary>
     public int? ExpenseType { get; set; }
 
@@ -378,7 +378,7 @@ public class TaktExpenseCreateDto
     public string ExpenseTitle { get; set; } = string.Empty;
 
     /// <summary>
-    /// 费用类型（字典 accounting_expense_type：1=月结供应商除原材料外的费用，2=月结供应商货款及公司其它费用，3=杂项购置费用）
+    /// 费用类型（字典 accounting_expense_type：1=月结供应商除原材料外的费用，2=月结供应商货款及公司其他费用，3=杂项购置费用）
     /// </summary>
     public int ExpenseType { get; set; } = 0;
 
@@ -561,7 +561,7 @@ public class TaktExpenseTemplateDto
     public string? ExpenseTitle { get; set; } = string.Empty;
 
     /// <summary>
-    /// 费用类型（字典 accounting_expense_type：1=月结供应商除原材料外的费用，2=月结供应商货款及公司其它费用，3=杂项购置费用）
+    /// 费用类型（字典 accounting_expense_type：1=月结供应商除原材料外的费用，2=月结供应商货款及公司其他费用，3=杂项购置费用）
     /// </summary>
     public int? ExpenseType { get; set; }
 
@@ -700,7 +700,7 @@ public class TaktExpenseImportDto
     public string? ExpenseTitle { get; set; } = string.Empty;
 
     /// <summary>
-    /// 费用类型（字典 accounting_expense_type：1=月结供应商除原材料外的费用，2=月结供应商货款及公司其它费用，3=杂项购置费用）
+    /// 费用类型（字典 accounting_expense_type：1=月结供应商除原材料外的费用，2=月结供应商货款及公司其他费用，3=杂项购置费用）
     /// </summary>
     public int? ExpenseType { get; set; }
 
@@ -835,7 +835,7 @@ public class TaktExpenseExportDto
     public string ExpenseTitle { get; set; } = string.Empty;
 
     /// <summary>
-    /// 费用类型（字典 accounting_expense_type：1=月结供应商除原材料外的费用，2=月结供应商货款及公司其它费用，3=杂项购置费用）
+    /// 费用类型（字典 accounting_expense_type：1=月结供应商除原材料外的费用，2=月结供应商货款及公司其他费用，3=杂项购置费用）
     /// </summary>
     public int ExpenseType { get; set; } = 0;
 

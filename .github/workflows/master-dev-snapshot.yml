@@ -61,7 +61,7 @@ jobs:
             exit 0
           fi
 
-          # 仅处理本工作流创建的 dev_YYYYMMDDHHMMSS 形态，避免误删其它 dev_ 分支
+          # 仅处理本工作流创建的 dev_YYYYMMDDHHMMSS 形态，避免误删其他 dev_ 分支
           # 排除 master 和 changelog 分支（永远不被删除）
           mapfile -t all < <(
             git ls-remote --heads origin 'refs/heads/dev_*' \

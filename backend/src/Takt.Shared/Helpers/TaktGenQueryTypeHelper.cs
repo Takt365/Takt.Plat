@@ -18,7 +18,7 @@ namespace Takt.Shared.Helpers;
 public static class TaktGenQueryTypeHelper
 {
     /// <summary>
-    /// 按 IsQuery 解析 QueryType：IsQuery=0 一律空串；IsQuery=1 时保留有效值，否则 string/Guid 默认 like、其它默认 eq
+    /// 按 IsQuery 解析 QueryType：IsQuery=0 一律空串；IsQuery=1 时保留有效值，否则 string/Guid 默认 like、其他默认 eq
     /// </summary>
     /// <param name="isQuery">是否查询字段（1=是，0=否）</param>
     /// <param name="queryType">提交的查询方式（可为空）</param>

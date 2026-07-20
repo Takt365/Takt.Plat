@@ -14,6 +14,8 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Serilog;
+using Serilog.Filters;
+using Takt.Shared.Constants;
 using Takt.Shared.Helpers;
 using Takt.Shared.Options;
 
@@ -24,6 +26,12 @@ namespace Takt.Infrastructure.Extensions;
 /// </summary>
 public static class TaktLoggingCollectionExtensions
 {
+    /// <summary>
+    /// Quartz 执行独立文件输出模板（含租户/公司，便于可靠性排查）
+    /// </summary>
+    private const string QuartzFileOutputTemplate =
+        "{Timestamp:yyyy-MM-dd HH:mm:ss.fff zzz} [{Level:u3}] [tenant={TenantCode} company={CompanyCode} task={TaskCode}] {Message:lj}{NewLine}{Exception}";
+
     /// <summary>
     /// 创建全局 Serilog Logger（应用启动前调用）
     /// </summary>
@@ -42,6 +50,16 @@ public static class TaktLoggingCollectionExtensions
             .Enrich.WithProperty("AppName", loggingOptions.AppName)
             .Enrich.WithProperty("AppVersion", loggingOptions.AppVersion)
             .Enrich.WithProperty("Environment", loggingOptions.Environment)
+            .WriteTo.Logger(quartz => quartz
+                .Filter.ByIncludingOnly(Matching.WithProperty(
+                    TaktQuartzConstants.LogChannelPropertyName,
+                    TaktQuartzConstants.LogChannelValue))
+                .WriteTo.File(
+                    path: Path.Combine("logs", "quartz-", "quartz-.log"),
+                    rollingInterval: RollingInterval.Day,
+                    retainedFileCountLimit: 60,
+                    shared: true,
+                    outputTemplate: QuartzFileOutputTemplate))
             .CreateLogger();
     }
 

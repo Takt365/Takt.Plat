@@ -47,7 +47,7 @@ public class TaktCountersignDetail : TaktCompanyEntityBase
     [SugarColumn(ColumnName = "allocation_category", ColumnDescription = "分配类别", ColumnDataType = "varchar", Length = 40, IsNullable = false)]
     public string AllocationCategory { get; set; } = string.Empty;
     /// <summary>
-    /// 会计科目（关联 TaktAccountTitle.AccountTitleCode，选项 TaktAccountTitles/options）
+    /// 会计科目（选项 TaktAccountTitles/options，DictValue=Id）
     /// </summary>
     [SugarColumn(ColumnName = "account_title", ColumnDescription = "会计科目", ColumnDataType = "varchar", Length = 50, IsNullable = true)]
     public string? AccountTitle { get; set; }

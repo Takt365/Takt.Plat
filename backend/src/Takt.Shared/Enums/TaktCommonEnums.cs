@@ -138,6 +138,9 @@ public enum TaktSqlExecuteMode
     /// <summary>只读查询（仅 SELECT / WITH，禁止 DML/DDL）</summary>
     [Display(Name = "只读查询")]
     ReadOnly = 0,
+    /// <summary>非查询脚本（允许 MERGE/INSERT/UPDATE 等多语句；供 Quartz SqlScript 业务同步）</summary>
+    [Display(Name = "非查询脚本")]
+    NonQuery = 1,
 }
 
 /// <summary>

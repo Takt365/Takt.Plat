@@ -100,6 +100,49 @@ public class TaktModelDestinationsController : TaktControllerBase
     }
 
     /// <summary>
+    /// 获取机种下拉选项（ModelCode 去重）
+    /// </summary>
+    /// <returns>机种下拉选项</returns>
+    [TaktPermission("logistics:materials:model:destination:query", "机种选项")]
+    [HttpGet("model-options")]
+    public async Task<IActionResult> GetModelOptionsAsync()
+    {
+        try
+        {
+            var result = await _modelDestinationService.GetModelOptionsAsync();
+            return Success(result, "查询成功");
+        }
+        catch (Exception ex)
+        {
+            return HandleException(ex);
+        }
+    }
+
+    /// <summary>
+    /// 根据机种编码获取级联物料选项
+    /// </summary>
+    /// <param name="modelCode">机种编码</param>
+    /// <returns>物料下拉选项</returns>
+    [TaktPermission("logistics:materials:model:destination:query", "按机种查询物料选项")]
+    [HttpGet("material-options-by-model")]
+    public async Task<IActionResult> GetMaterialOptionsByModelAsync([FromQuery] string modelCode)
+    {
+        try
+        {
+            if (string.IsNullOrWhiteSpace(modelCode))
+            {
+                return Success(new List<TaktSelectOption>(), "查询成功");
+            }
+            var result = await _modelDestinationService.GetMaterialOptionsByModelAsync(modelCode);
+            return Success(result, "查询成功");
+        }
+        catch (Exception ex)
+        {
+            return HandleException(ex);
+        }
+    }
+
+    /// <summary>
     /// 根据物料编码获取机种名称与仕向地信息
     /// </summary>
     /// <param name="materialCode">物料编码</param>

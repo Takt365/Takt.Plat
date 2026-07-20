@@ -10,8 +10,11 @@
 // 免责声明：此软件使用 MIT License，作者不承担任何使用风险。
 // ========================================
 
+using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Options;
 using Quartz;
+using Takt.Shared.Options;
 
 namespace Takt.Infrastructure.Quartz;
 
@@ -39,7 +42,16 @@ public abstract class TaktQuartzJobBase : IJob
     /// <returns>任务</returns>
     public async Task Execute(IJobExecutionContext context)
     {
+        ArgumentNullException.ThrowIfNull(context);
         using var scope = _serviceScopeFactory.CreateScope();
+        // 必须先注入租户/公司，再解析 Scoped 服务；否则 ITaktUserContext 会落成无公司的 SeedUserContext
+        var data = context.MergedJobDataMap;
+        TaktQuartzAmbientHttpContext.Configure(
+            scope.ServiceProvider.GetRequiredService<IHttpContextAccessor>(),
+            scope.ServiceProvider.GetRequiredService<IOptions<TaktTenantContextOptions>>().Value,
+            TaktQuartzJobDataMapHelper.GetStringOrNull(data, TaktQuartzJobDataKeys.TenantCode),
+            TaktQuartzJobDataMapHelper.GetStringOrNull(data, TaktQuartzJobDataKeys.CompanyCode),
+            TaktQuartzJobDataMapHelper.GetStringOrNull(data, TaktQuartzJobDataKeys.UserName));
         var executor = scope.ServiceProvider.GetRequiredService<TaktQuartzJobExecutor>();
         await executor.ExecuteAsync(context, context.CancellationToken);
     }

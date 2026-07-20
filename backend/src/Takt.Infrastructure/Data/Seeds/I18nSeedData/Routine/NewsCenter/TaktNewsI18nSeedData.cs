@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Infrastructure.Data.Seeds.I18nSeedData.Routine.NewsCenter
 // 文件名称：TaktNewsI18nSeedData.cs
-// 创建时间：2026-07-09
+// 创建时间：2026-07-20
 // 创建人：Takt365(Auto Generated)
 // 功能描述：TaktNews 实体字段国际化种子（无对应 frontend locales；TranslationText 取自 ColumnDescription，ContextNote 取自属性 XML summary）
 // 
@@ -262,13 +262,13 @@ public class TaktNewsI18nSeedData : ITaktSeedDataCoordinator
             new TranslationSeedItem("entity.news.deptname", "zh-HK", "发布部门名称_hk", "发布部门名称"),
 
             // entity.news.publisherid
-            new TranslationSeedItem("entity.news.publisherid", "en-US", "发布人ID_us", "发布人 ID（关联 TaktUser.Id，选项 TaktUsers/options）"),
+            new TranslationSeedItem("entity.news.publisherid", "en-US", "发布人ID_us", "发布人 ID（选项 TaktUsers/options，DictValue=Id）"),
             // entity.news.publisherid
-            new TranslationSeedItem("entity.news.publisherid", "ja-JP", "发布人ID_jp", "发布人 ID（关联 TaktUser.Id，选项 TaktUsers/options）"),
+            new TranslationSeedItem("entity.news.publisherid", "ja-JP", "发布人ID_jp", "发布人 ID（选项 TaktUsers/options，DictValue=Id）"),
             // entity.news.publisherid
-            new TranslationSeedItem("entity.news.publisherid", "zh-CN", "发布人ID", "发布人 ID（关联 TaktUser.Id，选项 TaktUsers/options）"),
+            new TranslationSeedItem("entity.news.publisherid", "zh-CN", "发布人ID", "发布人 ID（选项 TaktUsers/options，DictValue=Id）"),
             // entity.news.publisherid
-            new TranslationSeedItem("entity.news.publisherid", "zh-HK", "发布人ID_hk", "发布人 ID（关联 TaktUser.Id，选项 TaktUsers/options）"),
+            new TranslationSeedItem("entity.news.publisherid", "zh-HK", "发布人ID_hk", "发布人 ID（选项 TaktUsers/options，DictValue=Id）"),
 
             // entity.news.publishername
             new TranslationSeedItem("entity.news.publishername", "en-US", "发布人姓名_us", "发布人姓名"),

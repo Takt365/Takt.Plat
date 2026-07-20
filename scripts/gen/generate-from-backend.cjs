@@ -947,7 +947,7 @@ function collectCommonBaseTypeImports(dtos) {
  * 生成完整的类型定义文件
  */
 /**
- * 收集当前 types 文件需从其它模块导入的 DTO 类型
+ * 收集当前 types 文件需从其他模块导入的 DTO 类型
  */
 function collectCrossModuleTypeImports(dtos, currentModuleName) {
   const groups = new Map();

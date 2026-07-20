@@ -4,8 +4,8 @@
  */
 const themeColorMap = {
   'klein-blue': '#002fa7',
-  'chinese-red': '#ff0000',
-  'mars-green': '#2e8b57',
+  'chinese-red': '#DE2910',
+  'mars-green': '#008C8C',
 };
 
 const legacyMap = {};
@@ -53,7 +53,7 @@ const cases = [
     name: '假日覆盖默认',
     setting: baseSetting,
     holiday: { isHolidayToday: true, holidayTheme: 'chinese-red' },
-    expect: '#ff0000',
+    expect: '#DE2910',
   },
   {
     name: '非假日不生效',
@@ -65,7 +65,7 @@ const cases = [
     name: '用户自定义覆盖假日',
     setting: { appearanceUserOverride: true, themeColor: { type: 'green' } },
     holiday: { isHolidayToday: true, holidayTheme: 'chinese-red' },
-    expect: '#2e8b57',
+    expect: '#008C8C',
   },
   {
     name: '用户自定义 hex',

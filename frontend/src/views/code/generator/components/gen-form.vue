@@ -1720,7 +1720,7 @@ const isEditMode = computed(() => !!formState.value.genTableId)
 const databaseConfigOptions = computed(() =>
   (props.databaseInfoList ?? []).map(c => ({ value: c.tenantCode, label: `${c.displayName} (${c.tenantCode})` }))
 )
-/** 同库其它表（主子表选父表） */
+/** 同库其他表（主子表选父表） */
 const databaseTableOptions = computed(() =>
   (props.databaseTables ?? []).map(t => ({
     value: t.tableName,

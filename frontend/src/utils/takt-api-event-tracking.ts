@@ -20,7 +20,7 @@ import {
   TAKT_TRACKING_LEVEL_ERROR,
   TAKT_TRACKING_LEVEL_WARN,
 } from '@/config/event-tracking';
-import type { EventTrackingLogTrackItem } from '@/types/statistics/logging/event-tracking-log';
+import type { TrackingLogTrackItem } from '@/types/statistics/logging/tracking-log';
 import { buildEventTrackingTrackItem } from '@/utils/takt-event-tracking-reporter';
 
 /**
@@ -54,14 +54,14 @@ export function isHttpSuccessStatus(status: number): boolean {
  * @param url 请求 URL
  * @param status HTTP 状态码
  * @param durationMs 耗时毫秒
- * @returns {EventTrackingLogTrackItem | null} 未达阈值返回 null
+ * @returns {TrackingLogTrackItem | null} 未达阈值返回 null
  */
 export function buildApiSlowTrackItem(
   method: string,
   url: string,
   status: number,
   durationMs: number
-): EventTrackingLogTrackItem | null {
+): TrackingLogTrackItem | null {
   const slowMs = getApiSlowThresholdMs();
   if (durationMs < slowMs) {
     return null;
@@ -90,7 +90,7 @@ export function buildApiSlowTrackItem(
  * @param status HTTP 状态码（无响应时为 0）
  * @param durationMs 耗时毫秒
  * @param message 错误摘要
- * @returns {EventTrackingLogTrackItem | null} 2xx 返回 null
+ * @returns {TrackingLogTrackItem | null} 2xx 返回 null
  */
 export function buildApiErrorTrackItem(
   method: string,
@@ -98,7 +98,7 @@ export function buildApiErrorTrackItem(
   status: number,
   durationMs: number,
   message?: string
-): EventTrackingLogTrackItem | null {
+): TrackingLogTrackItem | null {
   if (status >= 200 && status < 300) {
     return null;
   }

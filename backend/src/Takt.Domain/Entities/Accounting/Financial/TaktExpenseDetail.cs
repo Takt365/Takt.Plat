@@ -67,7 +67,7 @@ public class TaktExpenseDetail : TaktCompanyEntityBase
     [SugarColumn(ColumnName = "item_amount", ColumnDescription = "金额", ColumnDataType = "decimal", Length = 18, DecimalDigits = 4, IsNullable = false, DefaultValue = "0")]
     public decimal ItemAmount { get; set; }
     /// <summary>
-    /// 会计科目（关联 TaktAccountTitle.AccountTitleCode，选项 TaktAccountTitles/options）
+    /// 会计科目（选项 TaktAccountTitles/options，DictValue=Id）
     /// </summary>
     [SugarColumn(ColumnName = "account_title", ColumnDescription = "会计科目", ColumnDataType = "varchar", Length = 50, IsNullable = true)]
     public string? AccountTitle { get; set; }

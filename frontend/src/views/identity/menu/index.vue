@@ -106,6 +106,18 @@
               {{ getMenuField(record, 'menuName') }}
             </span>
           </template>
+          <template v-else-if="column.key === 'icon'">
+            <span
+              class="inline-flex items-center gap-1"
+              :title="String(getMenuField(record, 'icon') ?? '')"
+            >
+              <takt-remix-icon
+                :name="String(getMenuField(record, 'icon') ?? '')"
+                :size="18"
+                :show-placeholder="!!getMenuField(record, 'icon')"
+              />
+            </span>
+          </template>
           <template v-else-if="column.key === 'menuType'">
             <TaktDictTag
               :value="getMenuField(record, 'menuType')"

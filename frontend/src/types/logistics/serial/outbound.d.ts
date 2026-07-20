@@ -39,7 +39,7 @@ export interface SerialOutbound extends CompanyDtoBase {
   outboundNo: string;
 
   /**
-   * 出货发票号
+   * 发货单号
    */
   shippingInvoiceNo: string;
 
@@ -114,7 +114,7 @@ export interface SerialOutboundQuery extends TaktPagedQuery {
   outboundNo?: string;
 
   /**
-   * 出货发票号
+   * 发货单号
    */
   shippingInvoiceNo?: string;
 
@@ -213,7 +213,7 @@ export interface SerialOutboundCreate {
   outboundNo: string;
 
   /**
-   * 出货发票号
+   * 发货单号
    */
   shippingInvoiceNo: string;
 
@@ -312,7 +312,7 @@ export interface SerialOutboundTemplate {
   outboundNo?: string;
 
   /**
-   * 出货发票号
+   * 发货单号
    */
   shippingInvoiceNo?: string;
 
@@ -401,7 +401,7 @@ export interface SerialOutboundImport {
   outboundNo?: string;
 
   /**
-   * 出货发票号
+   * 发货单号
    */
   shippingInvoiceNo?: string;
 
@@ -485,7 +485,7 @@ export interface SerialOutboundExport {
   outboundNo: string;
 
   /**
-   * 出货发票号
+   * 发货单号
    */
   shippingInvoiceNo: string;
 

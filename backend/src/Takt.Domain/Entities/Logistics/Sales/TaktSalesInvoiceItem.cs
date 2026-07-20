@@ -25,7 +25,7 @@ namespace Takt.Domain.Entities.Logistics.Sales;
 public class TaktSalesInvoiceItem : TaktCompanyEntityBase
 {
     /// <summary>
-    /// 销售发票（关联 TaktSalesInvoice.Id，选项 TaktSalesInvoices/options）
+    /// 销售发票（选项 TaktSalesInvoices/options，DictValue=Id）
     /// </summary>
     [SugarColumn(ColumnName = "sales_invoice_id", ColumnDescription = "销售发票ID", ColumnDataType = "bigint", IsNullable = false)]
     [JsonConverter(typeof(ValueToStringConverter))]
@@ -56,7 +56,7 @@ public class TaktSalesInvoiceItem : TaktCompanyEntityBase
     [SugarColumn(ColumnName = "model_name", ColumnDescription = "机种名称", ColumnDataType = "nvarchar", Length = 200, IsNullable = true)]
     public string? ModelName { get; set; }
     /// <summary>
-    /// 物料编码（选项 TaktMaterials/options，DictValue=MaterialCode）
+    /// 物料编码（选项 TaktMaterialPlants/options，DictValue=MaterialCode，ExtValue=PlantCode）
     /// </summary>
     [SugarColumn(ColumnName = "material_code", ColumnDescription = "物料编码", ColumnDataType = "nvarchar", Length = 20, IsNullable = false)]
     public string MaterialCode { get; set; } = string.Empty;
@@ -66,17 +66,17 @@ public class TaktSalesInvoiceItem : TaktCompanyEntityBase
     [SugarColumn(ColumnName = "material_type", ColumnDescription = "物料类型", ColumnDataType = "nvarchar", Length = 4, IsNullable = false, DefaultValue = "ROH")]
     public string MaterialType { get; set; } = "ROH";
     /// <summary>
-    /// 物料名称
+    /// 物料名称（回填：随物料）
     /// </summary>
     [SugarColumn(ColumnName = "material_name", ColumnDescription = "物料名称", ColumnDataType = "nvarchar", Length = 40, IsNullable = false)]
     public string MaterialName { get; set; } = string.Empty;
     /// <summary>
-    /// 利润中心（关联 TaktProfitCenter.ProfitCenterCode，选项 TaktProfitCenters/options，DictValue=ProfitCenterCode）
+    /// 利润中心（选项 TaktProfitCenters/options，DictValue=ProfitCenterCode）
     /// </summary>
     [SugarColumn(ColumnName = "profit_center_code", ColumnDescription = "利润中心", ColumnDataType = "nvarchar", Length = 40, IsNullable = true)]
     public string? ProfitCenterCode { get; set; }
     /// <summary>
-    /// 会计科目（关联 TaktAccountTitle.AccountTitleCode，选项 TaktAccountTitles/options）
+    /// 会计科目（选项 TaktAccountTitles/options，DictValue=Id）
     /// </summary>
     [SugarColumn(ColumnName = "account_title", ColumnDescription = "会计科目", ColumnDataType = "varchar", Length = 40, IsNullable = true)]
     public string? AccountTitle { get; set; }
@@ -86,7 +86,7 @@ public class TaktSalesInvoiceItem : TaktCompanyEntityBase
     [SugarColumn(ColumnName = "quantity", ColumnDescription = "数量", ColumnDataType = "decimal", Length = 18, DecimalDigits = 4, IsNullable = false, DefaultValue = "0")]
     public decimal Quantity { get; set; } = 0;
     /// <summary>
-    /// 单位
+    /// 单位（字典 logistics_unit_of_measure_code，DictValue=PC/EA 等；默认 PC）
     /// </summary>
     [SugarColumn(ColumnName = "unit", ColumnDescription = "单位", ColumnDataType = "nvarchar", Length = 20, IsNullable = false, DefaultValue = "PC")]
     public string Unit { get; set; } = "PC";

@@ -24,7 +24,7 @@ namespace Takt.Domain.Entities.HumanResource.Personnel;
 public class TaktEmployeeOnboarding : TaktCompanyEntityBase
 {
     /// <summary>
-    /// 录用信息（关联 TaktTalentOffer.Id，选项 TaktTalentOffers/options）
+    /// 录用信息（选项 TaktTalentOffers/options，DictValue=Id）
     /// </summary>
     [SugarColumn(ColumnName = "offer_id", ColumnDescription = "录用信息ID", ColumnDataType = "bigint", IsNullable = false)]
     public long OfferId { get; set; }
@@ -49,7 +49,7 @@ public class TaktEmployeeOnboarding : TaktCompanyEntityBase
     [SugarColumn(ColumnName = "mobile", ColumnDescription = "候选人手机", ColumnDataType = "varchar", Length = 11, IsNullable = true)]
     public string? Mobile { get; set; }
     /// <summary>
-    /// 关联员工（关联 TaktEmployee.Id，选项 TaktEmployees/options；建档后回填，可空）
+    /// 关联员工（选项 TaktEmployees/options；建档后回填，可空，DictValue=Id）
     /// </summary>
     [SugarColumn(ColumnName = "employee_id", ColumnDescription = "关联员工ID", ColumnDataType = "bigint", IsNullable = true)]
     public long? EmployeeId { get; set; }

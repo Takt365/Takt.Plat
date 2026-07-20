@@ -4,8 +4,8 @@
 // 文件名称：TaktQuotesI18nSeedData.cs
 // 创建时间：2025-01-20
 // 创建人：Takt365(Cursor AI)
-// 功能描述：名言警句国际化翻译种子数据初始化（26条名言 × 4 种语言）
-// 
+// 功能描述：二十四节气文案种子（24 节气 × 4 语言；键 common.page.quote.{节气拼音}；中/繁诗句，en/ja 为节气季节问候）
+//
 // 版权信息：Copyright (c) 2025 Takt  All rights reserved.
 // 免责声明：此软件使用 MIT License，作者不承担任何使用风险。
 // ========================================
@@ -21,9 +21,9 @@ using Takt.Shared.Helpers;
 namespace Takt.Infrastructure.Data.Seeds.I18nSeedData;
 
 /// <summary>
-/// 名言警句国际化翻译种子数据初始化
+/// 二十四节气文案国际化种子（中/繁诗句；en-US / ja-JP 为二十四节气季节问候）
 /// 幂等性操作：存在则更新，不存在则创建
-/// 包含 26 条经典名言警句的英、日、中、港繁四语翻译
+/// 按立春→大寒顺序；en 为美式 Seasonal greeting，ja 为時候の挨拶
 /// </summary>
 public class TaktQuotesI18nSeedData : ITaktSeedDataCoordinator
 {
@@ -33,217 +33,170 @@ public class TaktQuotesI18nSeedData : ITaktSeedDataCoordinator
     public int Order => 50;
 
     /// <summary>
-    /// 初始化名言警句国际化翻译种子数据
+    /// 初始化二十四节气诗词国际化翻译种子数据
     /// </summary>
     /// <param name="serviceProvider">服务提供者</param>
     /// <param name="tenantCode">租户编码（由协调器传入）</param>
     /// <returns>返回插入和更新的记录数（插入数, 更新数）</returns>
     public async Task<(int InsertCount, int UpdateCount)> SeedAsync(IServiceProvider serviceProvider, string? tenantCode = null)
     {
-        TaktLogger.Information("开始初始化名言警句国际化翻译种子数据...");
-
-        // 参数验证
+        TaktLogger.Information("开始初始化二十四节气诗词国际化翻译种子数据...");
         if (string.IsNullOrEmpty(tenantCode))
         {
-            TaktLogger.Warning("租户编码为空，跳过名言警句国际化翻译种子数据初始化");
+            TaktLogger.Warning("租户编码为空，跳过二十四节气诗词国际化翻译种子数据初始化");
             return (0, 0);
         }
-
         var repository = serviceProvider.GetRequiredService<ITaktTenantSeedRepository<TaktTranslation>>();
         var cultureRepository = serviceProvider.GetRequiredService<ITaktTenantSeedRepository<TaktCulture>>();
         var cultureIdByCode = (await cultureRepository.GetListAsync(c => c.TenantCode == tenantCode))
             .ToDictionary(c => c.CultureCode, c => c.Id);
         int insertCount = 0;
         int updateCount = 0;
-
-        TaktLogger.Information("正在为租户 {TenantCode} 初始化名言警句翻译数据...", tenantCode);
-
-        foreach (var row in GetStandardQuotesTranslations())
+        TaktLogger.Information("正在为租户 {TenantCode} 初始化二十四节气诗词翻译数据...", tenantCode);
+        foreach (var row in GetSolarTermQuoteTranslations())
         {
             if (!cultureIdByCode.TryGetValue(row.CultureCode, out var cultureId))
             {
                 TaktLogger.Warning("未找到区域文化 {CultureCode}，跳过翻译 {I18nKey}", row.CultureCode, row.I18nKey);
                 continue;
             }
-
             var item = new TranslationSeedItem(row.I18nKey, row.CultureCode, row.TranslationText, row.ContextNote);
             var (_, i, u) = await CreateOrUpdateTranslationAsync(repository, tenantCode, cultureId, item);
             insertCount += i;
             updateCount += u;
         }
-
-        TaktLogger.Information("名言警句国际化翻译种子数据初始化完成: 插入 {InsertCount} 条，更新 {UpdateCount} 条", insertCount, updateCount);
-
+        TaktLogger.Information("二十四节气诗词国际化翻译种子数据初始化完成: 插入 {InsertCount} 条，更新 {UpdateCount} 条", insertCount, updateCount);
         return (insertCount, updateCount);
     }
 
     /// <summary>
-    /// 获取标准名言警句翻译列表
-    /// 包含 26 条经典名言的英、日、中、港繁四语翻译
+    /// 获取二十四节气文案列表（立春→大寒；键 common.page.quote.{拼音}）
+    /// zh-CN/zh-HK：中国古典诗；en-US：美式 24 Solar Terms seasonal greetings；ja-JP：時候の挨拶
     /// </summary>
-    private static List<(string I18nKey, string CultureCode, string TranslationText, string? ContextNote)> GetStandardQuotesTranslations()
+    private static List<(string I18nKey, string CultureCode, string TranslationText, string? ContextNote)> GetSolarTermQuoteTranslations()
     {
         return new List<(string, string, string, string?)>
         {
-            // ========================================
-            // 名言警句 A-Z (common.page.quote.*)
-            // ========================================
-            
-            // A
-            ("common.page.quote.a", "zh-CN", "长风破浪会有时，直挂云帆济沧海。", "李白"),
-            ("common.page.quote.a", "en-US", "Many hands make light work", "English Proverb"),
-            ("common.page.quote.a", "ja-JP", "人が心に抱き、信じられることは、すべて実現できる。", "名言"),
-            ("common.page.quote.a", "zh-HK", "長風破浪會有時，直掛雲帆濟滄海。", "李白"),
-            
-            // B
-            ("common.page.quote.b", "zh-CN", "老骥伏枥，志在千里；烈士暮年，壮心不已。", "曹操"),
-            ("common.page.quote.b", "en-US", "Strike while the iron is hot", "English Proverb"),
-            ("common.page.quote.b", "ja-JP", "成功者になるためではなく、価値のある者になるために努力せよ。", "アインシュタイン"),
-            ("common.page.quote.b", "zh-HK", "老驥伏櫪，志在千里；烈士暮年，壯心不已。", "曹操"),
-            
-            // C
-            ("common.page.quote.c", "zh-CN", "博观而约取，厚积而薄发。", "苏轼"),
-            ("common.page.quote.c", "en-US", "Honesty is the best policy", "Benjamin Franklin"),
-            ("common.page.quote.c", "ja-JP", "私が成功した理由はほかでもない、自分にも他人にも言い訳を許さなかったからだ。", "名言"),
-            ("common.page.quote.c", "zh-HK", "博觀而約取，厚積而薄發。", "苏轼"),
-            
-            // D
-            ("common.page.quote.d", "zh-CN", "不飞则已，一飞冲天；不鸣则已，一鸣惊人。", "司马迁"),
-            ("common.page.quote.d", "en-US", "The grass is always greener on the other side of the fence", "English Proverb"),
-            ("common.page.quote.d", "ja-JP", "打たないシュートは100%決まらない。", "マイケル・ジョーダン"),
-            ("common.page.quote.d", "zh-HK", "不飛則已，一飛沖天；不鳴則已，一鳴驚人。", "司马迁"),
-            
-            // E
-            ("common.page.quote.e", "zh-CN", "人生如逆旅，我亦是行人。", "苏轼"),
-            ("common.page.quote.e", "en-US", "Don't judge a book by its cover", "English Proverb"),
-            ("common.page.quote.e", "ja-JP", "一番難しいのは行動しようと腹をくくること。あとはただ粘り強さの問題だ。", "アメリア・イアハート"),
-            ("common.page.quote.e", "zh-HK", "人生如逆旅，我亦是行人。", "苏轼"),
-            
-            // F
-            ("common.page.quote.f", "zh-CN", "粉骨碎身浑不怕，要留清白在人间。", "于谦"),
-            ("common.page.quote.f", "en-US", "An apple a day keeps the doctor away", "English Proverb"),
-            ("common.page.quote.f", "ja-JP", "目的が明確であることは、あらゆる偉業の出発点である。", "W・クレメント・ストーン"),
-            ("common.page.quote.f", "zh-HK", "粉骨碎身渾不怕，要留清白在人間。", "于谦"),
-            
-            // G
-            ("common.page.quote.g", "zh-CN", "花开堪折直须折，莫待无花空折枝。", "杜秋娘"),
-            ("common.page.quote.g", "en-US", "Better late than never", "English Proverb"),
-            ("common.page.quote.g", "ja-JP", "過去は亡霊であり、未来は夢だ。ぼくらには今しかない。", "トーマス・ジェファーソン"),
-            ("common.page.quote.g", "zh-HK", "花開堪折直須折，莫待無花空折枝。", "杜秋娘"),
-            
-            // H
-            ("common.page.quote.h", "zh-CN", "千磨万击还坚劲，任尔东西南北风。", "郑板桥"),
-            ("common.page.quote.h", "en-US", "Don't bite the hand that feeds you", "English Proverb"),
-            ("common.page.quote.h", "ja-JP", "人生とは、あれこれ計画を立てるのに夢中になっている間に、ぼくらの身に起きていることだ。", "ジョン・レノン"),
-            ("common.page.quote.h", "zh-HK", "千磨萬擊還堅勁，任爾東西南北風。", "郑板桥"),
-            
-            // I
-            ("common.page.quote.i", "zh-CN", "臣心一片磁针石，不指南方不肯休。", "文天祥"),
-            ("common.page.quote.i", "en-US", "Rome wasn't built in a day", "English Proverb"),
-            ("common.page.quote.i", "ja-JP", "私たちは自分が思ったとおりの人間になる。", "ブッダ"),
-            ("common.page.quote.i", "zh-HK", "臣心一片磁針石，不指南方不肯休。", "文天祥"),
-            
-            // J
-            ("common.page.quote.j", "zh-CN", "黑发不知勤学早，白首方悔读书迟。", "颜真卿"),
-            ("common.page.quote.j", "en-US", "Curiosity killed the cat", "English Proverb"),
-            ("common.page.quote.j", "ja-JP", "過去は亡霊であり、未来は夢だ。ぼくらのには今しかない。", "トーマス・ジェファーソン"),
-            ("common.page.quote.j", "zh-HK", "黑髮不知勤學早，白首方悔讀書遲。", "颜真卿"),
-            
-            // K
-            ("common.page.quote.k", "zh-CN", "不畏浮云遮望眼，只缘身在最高层。", "王安石"),
-            ("common.page.quote.k", "en-US", "My hands are tied", "English Idiom"),
-            ("common.page.quote.k", "ja-JP", "成功の80%はそこに行くかどうかで決まる。", "ウディ・アレン"),
-            ("common.page.quote.k", "zh-HK", "不畏浮雲遮望眼，只緣身在最高層。", "王安石"),
-            
-            // L
-            ("common.page.quote.l", "zh-CN", "花门楼前见秋草，岂能贫贱相看老。", "岑参"),
-            ("common.page.quote.l", "en-US", "Out of sight, out of mind", "English Proverb"),
-            ("common.page.quote.l", "ja-JP", "勝つことがすべてではなく、勝ちたいと思うことがすべてだ。", "テッド・ウィリアムズ"),
-            ("common.page.quote.l", "zh-HK", "花門樓前見秋草，豈能貧賤相看老。", "岑参"),
-            
-            // M
-            ("common.page.quote.m", "zh-CN", "花门楼前见秋草，岂能贫贱相看老。", "岑参"),
-            ("common.page.quote.m", "en-US", "Easy come, easy go", "English Proverb"),
-            ("common.page.quote.m", "ja-JP", "私は自らをとりまく状況の産物ではない。自らの意思決定の産物だ。", "スティーブン・コヴィー"),
-            ("common.page.quote.m", "zh-HK", "花門樓前見秋草，豈能貧賤相看老。", "岑参"),
-            
-            // N
-            ("common.page.quote.n", "zh-CN", "亦余心之所善兮，虽九死其犹未悔。", "屈原"),
-            ("common.page.quote.n", "en-US", "You can't make an omelette without breaking a few eggs", "English Proverb"),
-            ("common.page.quote.n", "ja-JP", "子供はみな芸術家である。問題は大人になっても、どうやって芸術家であり続けるかだ。", "ピカソ"),
-            ("common.page.quote.n", "zh-HK", "亦餘心之所善兮，雖九死其猶未悔。", "屈原"),
-            
-            // O
-            ("common.page.quote.o", "zh-CN", "人与人之间最大的信任是精诚相见", "励志名言"),
-            ("common.page.quote.o", "en-US", "The forbidden fruit is always the sweetest", "English Proverb"),
-            ("common.page.quote.o", "ja-JP", "あなたが一日を支配するか、一日に支配されるかのいずれかだ。", "ジム・ローン"),
-            ("common.page.quote.o", "zh-HK", "人與人之間最大的信任是精誠相見", "励志名言"),
-            
-            // P
-            ("common.page.quote.p", "zh-CN", "青春须早为，岂能长少年。", "孟郊"),
-            ("common.page.quote.p", "en-US", "If you scratch my back, I'll scratch yours", "English Proverb"),
-            ("common.page.quote.p", "ja-JP", "自分にはできると思うのも、できないと思うのも、いずれも正しい。", "ヘンリー・フォード"),
-            ("common.page.quote.p", "zh-HK", "青春須早為，豈能長少年。", "孟郊"),
-            
-            // Q
-            ("common.page.quote.q", "zh-CN", "靡不有初，鲜克有终。", "诗经"),
-            ("common.page.quote.q", "en-US", "It's the tip of the iceberg", "English Idiom"),
-            ("common.page.quote.q", "ja-JP", "人生で最も重要な日を二つ挙げるなら、それは生まれた日と、その理由を見いだした日だ。", "マーク・トウェイン"),
-            ("common.page.quote.q", "zh-HK", "靡不有初，鮮克有終。", "诗经"),
-            
-            // R
-            ("common.page.quote.r", "zh-CN", "仰天大笑出门去，我辈岂是蓬蒿人。", "李白"),
-            ("common.page.quote.r", "en-US", "Learn to walk before you run", "English Proverb"),
-            ("common.page.quote.r", "ja-JP", "人生は勇気次第で縮みも広がりもする。", "アナイス・ニン"),
-            ("common.page.quote.r", "zh-HK", "仰天大笑出門去，我輩豈是蓬蒿人。", "李白"),
-            
-            // S
-            ("common.page.quote.s", "zh-CN", "沉舟侧畔千帆过，病树前头万木春。", "刘禹锡"),
-            ("common.page.quote.s", "en-US", "First things first", "English Proverb"),
-            ("common.page.quote.s", "ja-JP", "目を引くものはいろいろあっても、心をとらえるものだけを追い求めよ。", "スティーブ・ジョブズ"),
-            ("common.page.quote.s", "zh-HK", "沉舟側畔千帆過，病樹前頭萬木春。", "刘禹锡"),
-            
-            // T
-            ("common.page.quote.t", "zh-CN", "天生我材必有用，千金散尽还复来。", "李白"),
-            ("common.page.quote.t", "en-US", "Don't bite off more than you can chew", "English Proverb"),
-            ("common.page.quote.t", "ja-JP", "自分ならできると信じれば、半分は終わったようなものだ。", "セオドア・ルーズベルト"),
-            ("common.page.quote.t", "zh-HK", "天生我材必有用，千金散盡還復來。", "李白"),
-            
-            // U
-            ("common.page.quote.u", "zh-CN", "夜阑卧听风吹雨，铁马冰河入梦来。", "陆游"),
-            ("common.page.quote.u", "en-US", "It's better to be safe than sorry", "English Proverb"),
-            ("common.page.quote.u", "ja-JP", "これまで望んだことはすべて、恐れの裏返しである。", "ネール・ドナルド・ウォルシュ"),
-            ("common.page.quote.u", "zh-HK", "夜闌卧聽風吹雨，鐵馬冰河入夢來。", "陆游"),
-            
-            // V
-            ("common.page.quote.v", "zh-CN", "黄沙百战穿金甲，不破楼兰终不还。", "王昌龄"),
-            ("common.page.quote.v", "en-US", "The early bird catches the worm", "English Proverb"),
-            ("common.page.quote.v", "ja-JP", "七転び八起き――日本のことわざ。", "日本谚语"),
-            ("common.page.quote.v", "zh-HK", "黃沙百戰穿金甲，不破樓蘭終不還。", "王昌龄"),
-            
-            // W
-            ("common.page.quote.w", "zh-CN", "宁为百夫长，胜作一书生。", "杨炯"),
-            ("common.page.quote.w", "en-US", "Don't make a mountain out of an anthill (or molehill)", "English Proverb"),
-            ("common.page.quote.w", "ja-JP", "すべてのものに美しさはあるが、すべての者に見えるわけではない。", "孔子"),
-            ("common.page.quote.w", "zh-HK", "寧為百夫長，勝作一書生。", "杨炯"),
-
-            // X
-            ("common.page.quote.x", "zh-CN", "路漫漫其修远兮，吾将上下而求索。", "屈原"),
-            ("common.page.quote.x", "en-US", "Where there is a will, there is a way", "English Proverb"),
-            ("common.page.quote.x", "ja-JP", "千里の道も一歩から。", "老子"),
-            ("common.page.quote.x", "zh-HK", "路漫漫其修遠兮，吾將上下而求索。", "屈原"),
-
-            // Y
-            ("common.page.quote.y", "zh-CN", "业精于勤，荒于嬉；行成于思，毁于随。", "韩愈"),
-            ("common.page.quote.y", "en-US", "Practice makes perfect", "English Proverb"),
-            ("common.page.quote.y", "ja-JP", "継続は力なり。", "日本谚语"),
-            ("common.page.quote.y", "zh-HK", "業精於勤，荒於嬉；行成於思，毀於隨。", "韩愈"),
-
-            // Z
-            ("common.page.quote.z", "zh-CN", "志当存高远。", "诸葛亮"),
-            ("common.page.quote.z", "en-US", "A journey of a thousand miles begins with a single step", "Lao Tzu"),
-            ("common.page.quote.z", "ja-JP", "志高くんぞ、人に問わず。", "诸葛亮"),
-            ("common.page.quote.z", "zh-HK", "志當存高遠。", "诸葛亮"),
+            // 立春
+            ("common.page.quote.lichun", "zh-CN", "律回岁晚冰霜少，春到人间草木知。", "立春·张栻"),
+            ("common.page.quote.lichun", "en-US", "Still a bit chilly out there. Hope you're doing well.", "立春 · Seasonal greeting"),
+            ("common.page.quote.lichun", "ja-JP", "春寒の折柄、いかがお過ごしでしょうか。", "立春・時候の挨拶"),
+            ("common.page.quote.lichun", "zh-HK", "律回歲晚冰霜少，春到人間草木知。", "立春·張栻"),
+            // 雨水
+            ("common.page.quote.yushui", "zh-CN", "好雨知时节，当春乃发生。", "雨水·杜甫"),
+            ("common.page.quote.yushui", "en-US", "Snowmelt is feeding the land. Hope you're staying well.", "雨水 · Seasonal greeting"),
+            ("common.page.quote.yushui", "ja-JP", "雪解けの水が大地を潤す頃となりました。", "雨水・時候の挨拶"),
+            ("common.page.quote.yushui", "zh-HK", "好雨知時節，當春乃發生。", "雨水·杜甫"),
+            // 惊蛰
+            ("common.page.quote.jingzhe", "zh-CN", "微雨众卉新，一雷惊蛰始。", "惊蛰·韦应物"),
+            ("common.page.quote.jingzhe", "en-US", "The world is stirring again. Hope you're doing well.", "惊蛰 · Seasonal greeting"),
+            ("common.page.quote.jingzhe", "ja-JP", "冬ごもりの虫も動き出す頃となりました。", "啓蟄・時候の挨拶"),
+            ("common.page.quote.jingzhe", "zh-HK", "微雨眾卉新，一雷驚蟄始。", "驚蟄·韋應物"),
+            // 春分
+            ("common.page.quote.chunfen", "zh-CN", "等闲识得东风面，万紫千红总是春。", "春分·朱熹"),
+            ("common.page.quote.chunfen", "en-US", "Day and night are even. Hope you're enjoying the season.", "春分 · Seasonal greeting"),
+            ("common.page.quote.chunfen", "ja-JP", "春たけなわの折、いかがお過ごしでしょうか。", "春分・時候の挨拶"),
+            ("common.page.quote.chunfen", "zh-HK", "等閒識得東風面，萬紫千紅總是春。", "春分·朱熹"),
+            // 清明
+            ("common.page.quote.qingming", "zh-CN", "清明时节雨纷纷，路上行人欲断魂。", "清明·杜牧"),
+            ("common.page.quote.qingming", "en-US", "Soft spring air all around. Hope you're doing well.", "清明 · Seasonal greeting"),
+            ("common.page.quote.qingming", "ja-JP", "清らかな春の陽気に包まれる頃となりました。", "清明・時候の挨拶"),
+            ("common.page.quote.qingming", "zh-HK", "清明時節雨紛紛，路上行人欲斷魂。", "清明·杜牧"),
+            // 谷雨
+            ("common.page.quote.guyu", "zh-CN", "雨前初见花间蕊，雨后全无叶底花。", "谷雨·王驾"),
+            ("common.page.quote.guyu", "en-US", "Those spring showers that help the crops. Hope you're staying well.", "谷雨 · Seasonal greeting"),
+            ("common.page.quote.guyu", "ja-JP", "百穀を潤す恵みの雨の季節となりました。", "穀雨・時候の挨拶"),
+            ("common.page.quote.guyu", "zh-HK", "雨前初見花間蕊，雨後全無葉底花。", "穀雨·王駕"),
+            // 立夏
+            ("common.page.quote.lixia", "zh-CN", "孟夏草木长，绕屋树扶疏。", "立夏·陶渊明"),
+            ("common.page.quote.lixia", "en-US", "Fresh green everywhere. Hope you're doing well.", "立夏 · Seasonal greeting"),
+            ("common.page.quote.lixia", "ja-JP", "新緑まぶしい季節となりました。", "立夏・時候の挨拶"),
+            ("common.page.quote.lixia", "zh-HK", "孟夏草木長，繞屋樹扶疏。", "立夏·陶淵明"),
+            // 小满
+            ("common.page.quote.xiaoman", "zh-CN", "夜莺啼绿柳，皓月醒长空。", "小满·节气诗"),
+            ("common.page.quote.xiaoman", "en-US", "Everything's filling out nicely. Hope you're doing well.", "小满 · Seasonal greeting"),
+            ("common.page.quote.xiaoman", "ja-JP", "万物が満ち始める頃となりました。", "小満・時候の挨拶"),
+            ("common.page.quote.xiaoman", "zh-HK", "夜鶯啼綠柳，皓月醒長空。", "小滿·節氣詩"),
+            // 芒种
+            ("common.page.quote.mangzhong", "zh-CN", "绿遍山原白满川，子规声里雨如烟。", "芒种·翁卷"),
+            ("common.page.quote.mangzhong", "en-US", "Planting season is in full swing. Hope you're staying well.", "芒种 · Seasonal greeting"),
+            ("common.page.quote.mangzhong", "ja-JP", "稲の種まきを急ぐ頃となりました。", "芒種・時候の挨拶"),
+            ("common.page.quote.mangzhong", "zh-HK", "綠遍山原白滿川，子規聲裏雨如煙。", "芒種·翁卷"),
+            // 夏至
+            ("common.page.quote.xiazhi", "zh-CN", "绿树阴浓夏日长，楼台倒影入池塘。", "夏至·高骈"),
+            ("common.page.quote.xiazhi", "en-US", "The longest days of the year. Hope you're enjoying them.", "夏至 · Seasonal greeting"),
+            ("common.page.quote.xiazhi", "ja-JP", "一年で最も昼の長い季節となりました。", "夏至・時候の挨拶"),
+            ("common.page.quote.xiazhi", "zh-HK", "綠樹陰濃夏日長，樓臺倒影入池塘。", "夏至·高駢"),
+            // 小暑
+            ("common.page.quote.xiaoshu", "zh-CN", "倏忽温风至，因循小暑来。", "小暑·元稹"),
+            ("common.page.quote.xiaoshu", "en-US", "The real warmth is just getting started. Stay cool.", "小暑 · Seasonal greeting"),
+            ("common.page.quote.xiaoshu", "ja-JP", "本格的な暑さの始まりとなりました。", "小暑・時候の挨拶"),
+            ("common.page.quote.xiaoshu", "zh-HK", "倏忽溫風至，因循小暑來。", "小暑·元稹"),
+            // 大暑
+            ("common.page.quote.dashu", "zh-CN", "赤日炎炎似火烧，野田禾稻半枯焦。", "大暑·水浒传"),
+            ("common.page.quote.dashu", "en-US", "Peak summer heat is here. Stay cool and take care.", "大暑 · Seasonal greeting"),
+            ("common.page.quote.dashu", "ja-JP", "連日厳しい暑さが続いております。", "大暑・時候の挨拶"),
+            ("common.page.quote.dashu", "zh-HK", "赤日炎炎似火燒，野田禾稻半枯焦。", "大暑·水滸傳"),
+            // 立秋
+            ("common.page.quote.liqiu", "zh-CN", "乳鸦啼散玉屏空，一枕新凉一扇风。", "立秋·刘翰"),
+            ("common.page.quote.liqiu", "en-US", "Still plenty of heat left. Hope you're hanging in there.", "立秋 · Seasonal greeting"),
+            ("common.page.quote.liqiu", "ja-JP", "残暑厳しき折、いかがお過ごしでしょうか。", "立秋・時候の挨拶"),
+            ("common.page.quote.liqiu", "zh-HK", "乳鴉啼散玉屏空，一枕新涼一扇風。", "立秋·劉翰"),
+            // 处暑
+            ("common.page.quote.chushu", "zh-CN", "秋风萧瑟天气凉，草木摇落露为霜。", "处暑·曹丕"),
+            ("common.page.quote.chushu", "en-US", "Mornings and evenings are finally cooling off. Hope you're well.", "处暑 · Seasonal greeting"),
+            ("common.page.quote.chushu", "ja-JP", "朝晩しだいに涼しくなってまいりました。", "処暑・時候の挨拶"),
+            ("common.page.quote.chushu", "zh-HK", "秋風蕭瑟天氣涼，草木搖落露為霜。", "處暑·曹丕"),
+            // 白露
+            ("common.page.quote.bailu", "zh-CN", "蒹葭苍苍，白露为霜。", "白露·诗经"),
+            ("common.page.quote.bailu", "en-US", "Cool dew on the grass each morning. Hope you're doing well.", "白露 · Seasonal greeting"),
+            ("common.page.quote.bailu", "ja-JP", "草花に白い露が降りる頃となりました。", "白露・時候の挨拶"),
+            ("common.page.quote.bailu", "zh-HK", "蒹葭蒼蒼，白露為霜。", "白露·詩經"),
+            // 秋分
+            ("common.page.quote.qiufen", "zh-CN", "秋分气爽云天阔，红叶黄花处处明。", "秋分·节气诗"),
+            ("common.page.quote.qiufen", "en-US", "Fall is in full swing. Hope you're enjoying the season.", "秋分 · Seasonal greeting"),
+            ("common.page.quote.qiufen", "ja-JP", "秋たけなわの折、いかがお過ごしでしょうか。", "秋分・時候の挨拶"),
+            ("common.page.quote.qiufen", "zh-HK", "秋分氣爽雲天闊，紅葉黃花處處明。", "秋分·節氣詩"),
+            // 寒露
+            ("common.page.quote.hanlu", "zh-CN", "寒露惊秋晚，朝看菊渐黄。", "寒露·节气诗"),
+            ("common.page.quote.hanlu", "en-US", "Mornings are getting crisp. Hope you're staying warm.", "寒露 · Seasonal greeting"),
+            ("common.page.quote.hanlu", "ja-JP", "露も冷たく感じられる頃となりました。", "寒露・時候の挨拶"),
+            ("common.page.quote.hanlu", "zh-HK", "寒露驚秋晚，朝看菊漸黃。", "寒露·節氣詩"),
+            // 霜降
+            ("common.page.quote.shuangjiang", "zh-CN", "月落乌啼霜满天，江枫渔火对愁眠。", "霜降·张继"),
+            ("common.page.quote.shuangjiang", "en-US", "Fall is deepening. Hope you're doing well.", "霜降 · Seasonal greeting"),
+            ("common.page.quote.shuangjiang", "ja-JP", "霜が降り始め秋も深まってまいりました。", "霜降・時候の挨拶"),
+            ("common.page.quote.shuangjiang", "zh-HK", "月落烏啼霜滿天，江楓漁火對愁眠。", "霜降·張繼"),
+            // 立冬
+            ("common.page.quote.lidong", "zh-CN", "荷尽已无擎雨盖，菊残犹有傲霜枝。", "立冬·苏轼"),
+            ("common.page.quote.lidong", "en-US", "You can feel the season turning. Stay warm.", "立冬 · Seasonal greeting"),
+            ("common.page.quote.lidong", "ja-JP", "冬の気配が感じられる頃となりました。", "立冬・時候の挨拶"),
+            ("common.page.quote.lidong", "zh-HK", "荷盡已無擎雨蓋，菊殘猶有傲霜枝。", "立冬·蘇軾"),
+            // 小雪
+            ("common.page.quote.xiaoxue", "zh-CN", "夜深知雪重，时闻折竹声。", "小雪·白居易"),
+            ("common.page.quote.xiaoxue", "en-US", "The first flurries may be on the way. Stay warm.", "小雪 · Seasonal greeting"),
+            ("common.page.quote.xiaoxue", "ja-JP", "初雪の便りが届く頃となりました。", "小雪・時候の挨拶"),
+            ("common.page.quote.xiaoxue", "zh-HK", "夜深知雪重，時聞折竹聲。", "小雪·白居易"),
+            // 大雪
+            ("common.page.quote.daxue", "zh-CN", "燕山雪花大如席，片片吹落轩辕台。", "大雪·李白"),
+            ("common.page.quote.daxue", "en-US", "Winter is here in earnest. Stay warm and take care.", "大雪 · Seasonal greeting"),
+            ("common.page.quote.daxue", "ja-JP", "本格的な冬の到来となりました。", "大雪・時候の挨拶"),
+            ("common.page.quote.daxue", "zh-HK", "燕山雪花大如席，片片吹落軒轅台。", "大雪·李白"),
+            // 冬至
+            ("common.page.quote.dongzhi", "zh-CN", "邯郸驿里逢冬至，抱膝灯前影伴身。", "冬至·白居易"),
+            ("common.page.quote.dongzhi", "en-US", "The longest nights of the year. Hope you're doing well.", "冬至 · Seasonal greeting"),
+            ("common.page.quote.dongzhi", "ja-JP", "一年で最も夜の長い季節となりました。", "冬至・時候の挨拶"),
+            ("common.page.quote.dongzhi", "zh-HK", "邯鄲驛裏逢冬至，抱膝燈前影伴身。", "冬至·白居易"),
+            // 小寒
+            ("common.page.quote.xiaohan", "zh-CN", "小寒时节雪纷纷，笑语声声入梦中。", "小寒·节气诗"),
+            ("common.page.quote.xiaohan", "en-US", "The chill is really settling in. Stay warm.", "小寒 · Seasonal greeting"),
+            ("common.page.quote.xiaohan", "ja-JP", "寒さひとしお厳しくなってまいりました。", "小寒・時候の挨拶"),
+            ("common.page.quote.xiaohan", "zh-HK", "小寒時節雪紛紛，笑語聲聲入夢中。", "小寒·節氣詩"),
+            // 大寒
+            ("common.page.quote.dahan", "zh-CN", "岁寒然后知松柏之后凋也。", "大寒·论语"),
+            ("common.page.quote.dahan", "en-US", "The coldest stretch of the year. Stay warm and take care.", "大寒 · Seasonal greeting"),
+            ("common.page.quote.dahan", "ja-JP", "一年で最も寒い盛りとなりました。", "大寒・時候の挨拶"),
+            ("common.page.quote.dahan", "zh-HK", "歲寒然後知松柏之後凋也。", "大寒·論語"),
         };
     }
 
@@ -281,7 +234,6 @@ public class TaktQuotesI18nSeedData : ITaktSeedDataCoordinator
             t.TenantCode == tenantCode &&
             t.I18nKey == item.I18nKey &&
             t.CultureCode == item.CultureCode);
-
         if (translation == null)
         {
             translation = new TaktTranslation();
@@ -289,7 +241,6 @@ public class TaktQuotesI18nSeedData : ITaktSeedDataCoordinator
             translation = await repository.CreateAsync(translation);
             return (translation, 1, 0);
         }
-
         ApplyTranslationFields(translation, tenantCode, cultureId, item);
         await repository.UpdateAsync(translation);
         return (translation, 0, 1);

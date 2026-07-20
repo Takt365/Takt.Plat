@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Application.Services.Logistics.Procurement
 // 文件名称：TaktPurchasePriceItemService.cs
-// 创建时间：2026-07-09
+// 创建时间：2026-07-20
 // 创建人：Takt365(Cursor AI)
 // 功能描述：采购价格明细应用服务实现
 // 
@@ -30,8 +30,8 @@ namespace Takt.Application.Services.Logistics.Procurement;
 public class TaktPurchasePriceItemService : TaktServiceBase, ITaktPurchasePriceItemService
 {
     private readonly ITaktCompanyRepository<TaktPurchasePriceItem> _purchasePriceItemRepository;
-    private readonly ITaktCompanyRepository<TaktPurchasePriceScale> _purchasePriceScaleRepository;
-    private readonly ITaktSortOrderGenerator _sortOrderGenerator;
+    private readonly ITaktCompanyRepository<TaktPurchasePriceScaleQuantity> _purchasePriceScaleQuantityRepository;
+    private readonly ITaktCompanyRepository<TaktPurchasePriceScaleValue> _purchasePriceScaleValueRepository;
     private readonly ITaktLineNumberGenerator _lineNumberGenerator;
     private readonly ITaktUniqueValidator _uniqueValidator;
 
@@ -39,16 +39,16 @@ public class TaktPurchasePriceItemService : TaktServiceBase, ITaktPurchasePriceI
     /// 构造函数
     /// </summary>
     /// <param name="purchasePriceItemRepository">采购价格明细仓储</param>
-    /// <param name="purchasePriceScaleRepository">PurchasePriceScale仓储</param>
-    /// <param name="sortOrderGenerator">排序号生成器</param>
+    /// <param name="purchasePriceScaleQuantityRepository">PurchasePriceScaleQuantity仓储</param>
+    /// <param name="purchasePriceScaleValueRepository">PurchasePriceScaleValue仓储</param>
     /// <param name="lineNumberGenerator">明细行号生成器</param>
     /// <param name="uniqueValidator">唯一性验证器</param>
     /// <param name="userContext">用户上下文</param>
     /// <param name="localizationService">本地化服务</param>
     public TaktPurchasePriceItemService(
         ITaktCompanyRepository<TaktPurchasePriceItem> purchasePriceItemRepository,
-        ITaktCompanyRepository<TaktPurchasePriceScale> purchasePriceScaleRepository,
-        ITaktSortOrderGenerator sortOrderGenerator,
+        ITaktCompanyRepository<TaktPurchasePriceScaleQuantity> purchasePriceScaleQuantityRepository,
+        ITaktCompanyRepository<TaktPurchasePriceScaleValue> purchasePriceScaleValueRepository,
         ITaktLineNumberGenerator lineNumberGenerator,
         ITaktUniqueValidator uniqueValidator,
         ITaktUserContext? userContext = null,
@@ -56,8 +56,8 @@ public class TaktPurchasePriceItemService : TaktServiceBase, ITaktPurchasePriceI
         : base(userContext, localizationService)
     {
         _purchasePriceItemRepository = purchasePriceItemRepository;
-        _purchasePriceScaleRepository = purchasePriceScaleRepository;
-        _sortOrderGenerator = sortOrderGenerator;
+        _purchasePriceScaleQuantityRepository = purchasePriceScaleQuantityRepository;
+        _purchasePriceScaleValueRepository = purchasePriceScaleValueRepository;
         _lineNumberGenerator = lineNumberGenerator;
         _uniqueValidator = uniqueValidator;
     }
@@ -106,12 +106,12 @@ public class TaktPurchasePriceItemService : TaktServiceBase, ITaktPurchasePriceI
         EnsureThreeLayerContext();
         var list = await _purchasePriceItemRepository.GetListAsync(
             x => x.TenantCode == CurrentTenantCode && x.CompanyCode == CurrentCompanyCode,
-            x => x.MaterialName ?? string.Empty,
+            x => x.PurchasePriceCode ?? string.Empty,
             false);
         return list.Select(e => new TaktSelectOption
         {
             DictValue = e.Id,
-            DictLabel = e.MaterialName ?? e.Id.ToString(),
+            DictLabel = e.PurchasePriceCode ?? e.Id.ToString(),
         }).ToList();
     }
 
@@ -124,29 +124,13 @@ public class TaktPurchasePriceItemService : TaktServiceBase, ITaktPurchasePriceI
     {
         var entity = dto.Adapt<TaktPurchasePriceItem>();
         entity.IsObsolete = 0;
-        var isUnique_ix_takt_logistics_materials_purchase_price_item_price_line_unique = await _uniqueValidator.IsUniqueAsync(
+        var isUnique_ix_takt_logistics_materials_purchase_price_item_seq_unique = await _uniqueValidator.IsUniqueAsync(
             _purchasePriceItemRepository,
             x => x.PurchasePriceId == entity.PurchasePriceId
-                && x.LineNumber == entity.LineNumber
-                && x.MaterialCode == entity.MaterialCode);
-        if (!isUnique_ix_takt_logistics_materials_purchase_price_item_price_line_unique)
+                && x.PurchasePriceSeq == entity.PurchasePriceSeq);
+        if (!isUnique_ix_takt_logistics_materials_purchase_price_item_seq_unique)
         {
-            throw new TaktBusinessException("采购价格明细的PurchasePriceId、LineNumber、MaterialCode已存在");
-        }
-        if (entity.SortOrder <= 0)
-        {
-            var maxSort = await _purchasePriceItemRepository.GetMaxIntAsync(
-                x => x.TenantCode == CurrentTenantCode && x.CompanyCode == CurrentCompanyCode && x.PurchasePriceId == entity.PurchasePriceId,
-                x => x.SortOrder);
-            entity.SortOrder = _sortOrderGenerator.GenerateNextForMaster(entity.PurchasePriceId, maxSort);
-        }
-        if (entity.LineNumber <= 0)
-        {
-            var maxLine = await _purchasePriceItemRepository.GetMaxIntAsync(
-                x => x.TenantCode == CurrentTenantCode && x.CompanyCode == CurrentCompanyCode && x.PurchasePriceId == entity.PurchasePriceId,
-                x => x.LineNumber);
-            var businessCode = !string.IsNullOrWhiteSpace(entity.PurchasePriceCode) ? entity.PurchasePriceCode : entity.PurchasePriceId.ToString();
-            entity.LineNumber = _lineNumberGenerator.GenerateNext(businessCode, maxLine);
+            throw new TaktBusinessException("采购价格明细的PurchasePriceId、PurchasePriceSeq已存在");
         }
         entity = await _purchasePriceItemRepository.CreateAsync(entity);
                 await SavePurchasePriceItemChildrenAsync(entity, dto);
@@ -167,15 +151,14 @@ public class TaktPurchasePriceItemService : TaktServiceBase, ITaktPurchasePriceI
             throw new TaktBusinessException("采购价格明细不存在");
         }
         dto.Adapt(entity);
-        var isUnique_ix_takt_logistics_materials_purchase_price_item_price_line_unique = await _uniqueValidator.IsUniqueAsync(
+        var isUnique_ix_takt_logistics_materials_purchase_price_item_seq_unique = await _uniqueValidator.IsUniqueAsync(
             _purchasePriceItemRepository,
             x => x.PurchasePriceId == entity.PurchasePriceId
-                && x.LineNumber == entity.LineNumber
-                && x.MaterialCode == entity.MaterialCode,
+                && x.PurchasePriceSeq == entity.PurchasePriceSeq,
             id);
-        if (!isUnique_ix_takt_logistics_materials_purchase_price_item_price_line_unique)
+        if (!isUnique_ix_takt_logistics_materials_purchase_price_item_seq_unique)
         {
-            throw new TaktBusinessException("采购价格明细的PurchasePriceId、LineNumber、MaterialCode已存在");
+            throw new TaktBusinessException("采购价格明细的PurchasePriceId、PurchasePriceSeq已存在");
         }
         await _purchasePriceItemRepository.UpdateAsync(entity);
                 await SavePurchasePriceItemChildrenAsync(entity, dto);
@@ -194,7 +177,8 @@ public class TaktPurchasePriceItemService : TaktServiceBase, ITaktPurchasePriceI
         {
             throw new TaktBusinessException("采购价格明细不存在或已删除");
         }
-        await _purchasePriceScaleRepository.DeleteAsync(x => x.PurchasePriceItemId == entity.Id);
+        await _purchasePriceScaleQuantityRepository.DeleteAsync(x => x.PurchasePriceItemId == entity.Id);
+        await _purchasePriceScaleValueRepository.DeleteAsync(x => x.PurchasePriceItemId == entity.Id);
         var deleted = await _purchasePriceItemRepository.DeleteAsync(id);
         if (!deleted)
         {
@@ -218,23 +202,6 @@ public class TaktPurchasePriceItemService : TaktServiceBase, ITaktPurchasePriceI
         {
             await DeletePurchasePriceItemByIdAsync(id);
         }
-    }
-
-    /// <summary>
-    /// 更新采购价格明细排序
-    /// </summary>
-    /// <param name="dto">排序DTO</param>
-    /// <returns>DTO</returns>
-    public async Task<TaktPurchasePriceItemDto> UpdatePurchasePriceItemSortAsync(TaktPurchasePriceItemSortDto dto)
-    {
-        var entity = await _purchasePriceItemRepository.GetByIdAsync(dto.PurchasePriceItemId);
-        if (entity == null)
-        {
-            throw new TaktBusinessException("采购价格明细不存在");
-        }
-        entity.SortOrder = dto.SortOrder;
-        await _purchasePriceItemRepository.UpdateAsync(entity);
-        return await GetPurchasePriceItemByIdAsync(dto.PurchasePriceItemId) ?? throw new TaktBusinessException("采购价格明细不存在");
     }
 
     /// <summary>
@@ -294,34 +261,18 @@ public class TaktPurchasePriceItemService : TaktServiceBase, ITaktPurchasePriceI
             try
             {
                 var entity = rows[i].Adapt<TaktPurchasePriceItem>();
-                var importKey = $"{entity.PurchasePriceId}|{entity.LineNumber}|{entity.MaterialCode}";
+                var importKey = $"{entity.PurchasePriceId}|{entity.PurchasePriceSeq}";
                 if (!importSeenKeys.Add(importKey))
                 {
-                    throw new TaktBusinessException("与Excel中其他行重复（PurchasePriceId、LineNumber、MaterialCode）");
+                    throw new TaktBusinessException("与Excel中其他行重复（PurchasePriceId、PurchasePriceSeq）");
                 }
-                var isUnique_ix_takt_logistics_materials_purchase_price_item_price_line_unique = await _uniqueValidator.IsUniqueAsync(
+                var isUnique_ix_takt_logistics_materials_purchase_price_item_seq_unique = await _uniqueValidator.IsUniqueAsync(
                     _purchasePriceItemRepository,
                     x => x.PurchasePriceId == entity.PurchasePriceId
-                        && x.LineNumber == entity.LineNumber
-                        && x.MaterialCode == entity.MaterialCode);
-                if (!isUnique_ix_takt_logistics_materials_purchase_price_item_price_line_unique)
+                        && x.PurchasePriceSeq == entity.PurchasePriceSeq);
+                if (!isUnique_ix_takt_logistics_materials_purchase_price_item_seq_unique)
                 {
-                    throw new TaktBusinessException("采购价格明细的PurchasePriceId、LineNumber、MaterialCode已存在");
-                }
-                if (entity.SortOrder <= 0)
-                {
-                    var maxSort = await _purchasePriceItemRepository.GetMaxIntAsync(
-                        x => x.TenantCode == CurrentTenantCode && x.CompanyCode == CurrentCompanyCode && x.PurchasePriceId == entity.PurchasePriceId,
-                        x => x.SortOrder);
-                    entity.SortOrder = _sortOrderGenerator.GenerateNextForMaster(entity.PurchasePriceId, maxSort);
-                }
-                if (entity.LineNumber <= 0)
-                {
-                    var maxLine = await _purchasePriceItemRepository.GetMaxIntAsync(
-                        x => x.TenantCode == CurrentTenantCode && x.CompanyCode == CurrentCompanyCode && x.PurchasePriceId == entity.PurchasePriceId,
-                        x => x.LineNumber);
-                    var businessCode = !string.IsNullOrWhiteSpace(entity.PurchasePriceCode) ? entity.PurchasePriceCode : entity.PurchasePriceId.ToString();
-                    entity.LineNumber = _lineNumberGenerator.GenerateNext(businessCode, maxLine);
+                    throw new TaktBusinessException("采购价格明细的PurchasePriceId、PurchasePriceSeq已存在");
                 }
                 await _purchasePriceItemRepository.CreateAsync(entity);
                 success += 1;
@@ -365,17 +316,17 @@ public class TaktPurchasePriceItemService : TaktServiceBase, ITaktPurchasePriceI
     // ========================================
 
     /// <summary>
-    /// 将指定主表下全部未作废采购价格阶梯标记为作废（编辑清空子表）
+    /// 将指定主表下全部未作废采购价格数量等级标记为作废（编辑清空子表）
     /// </summary>
     /// <param name="purchasePriceItemId">主表主键</param>
     /// <returns>任务</returns>
-    private async Task MarkPurchasePriceScalesObsoleteAsync(long purchasePriceItemId)
+    private async Task MarkPurchasePriceScaleQuantitysObsoleteAsync(long purchasePriceItemId)
     {
         if (purchasePriceItemId <= 0)
         {
             return;
         }
-        var rows = await _purchasePriceScaleRepository.GetListAsync(
+        var rows = await _purchasePriceScaleQuantityRepository.GetListAsync(
             x => x.PurchasePriceItemId == purchasePriceItemId && x.IsObsolete == 0);
         if (rows.Count == 0)
         {
@@ -385,11 +336,35 @@ public class TaktPurchasePriceItemService : TaktServiceBase, ITaktPurchasePriceI
         {
             row.IsObsolete = 1;
         }
-        await _purchasePriceScaleRepository.UpdateRangeAsync(rows);
+        await _purchasePriceScaleQuantityRepository.UpdateRangeAsync(rows);
     }
 
     /// <summary>
-    /// 填充采购价格明细详情（加载 OneToMany 子表：采购价格阶梯）
+    /// 将指定主表下全部未作废采购价格价值等级标记为作废（编辑清空子表）
+    /// </summary>
+    /// <param name="purchasePriceItemId">主表主键</param>
+    /// <returns>任务</returns>
+    private async Task MarkPurchasePriceScaleValuesObsoleteAsync(long purchasePriceItemId)
+    {
+        if (purchasePriceItemId <= 0)
+        {
+            return;
+        }
+        var rows = await _purchasePriceScaleValueRepository.GetListAsync(
+            x => x.PurchasePriceItemId == purchasePriceItemId && x.IsObsolete == 0);
+        if (rows.Count == 0)
+        {
+            return;
+        }
+        foreach (var row in rows)
+        {
+            row.IsObsolete = 1;
+        }
+        await _purchasePriceScaleValueRepository.UpdateRangeAsync(rows);
+    }
+
+    /// <summary>
+    /// 填充采购价格明细详情（加载 OneToMany 子表：采购价格数量等级、采购价格价值等级）
     /// </summary>
     /// <param name="dto">响应 DTO</param>
     /// <param name="entity">主表实体</param>
@@ -400,82 +375,95 @@ public class TaktPurchasePriceItemService : TaktServiceBase, ITaktPurchasePriceI
         {
             return;
         }
-        // 采购价格阶梯 → dto.Scales（含作废行）
-        var scales = await _purchasePriceScaleRepository.GetListAsync(x => x.PurchasePriceItemId == entity.Id);
-        dto.Scales = scales.Adapt<List<TaktPurchasePriceScaleDto>>();
+        // 采购价格数量等级 → dto.ScaleQuantities（含作废行）
+        var scalequantities = await _purchasePriceScaleQuantityRepository.GetListAsync(x => x.PurchasePriceItemId == entity.Id);
+        dto.ScaleQuantities = scalequantities.Adapt<List<TaktPurchasePriceScaleQuantityDto>>();
+        // 采购价格价值等级 → dto.ScaleValues（含作废行）
+        var scalevalues = await _purchasePriceScaleValueRepository.GetListAsync(x => x.PurchasePriceItemId == entity.Id);
+        dto.ScaleValues = scalevalues.Adapt<List<TaktPurchasePriceScaleValueDto>>();
     }
 
     /// <summary>
-    /// 保存采购价格明细子表级联（采购价格阶梯；按子表 Id 增量新增/更新；未提交行标记作废，禁止先删后插）
+    /// 保存采购价格明细子表级联（采购价格数量等级、采购价格价值等级；按子表 Id 增量新增/更新；未提交行标记作废，禁止先删后插）
     /// </summary>
     /// <param name="entity">主表实体</param>
     /// <param name="dto">创建/更新 DTO（含子表集合；UpdateDto 须继承 CreateDto）</param>
     /// <returns>任务</returns>
     private async Task SavePurchasePriceItemChildrenAsync(TaktPurchasePriceItem entity, TaktPurchasePriceItemCreateDto dto)
     {
-        // 采购价格阶梯（Scales）
-        if (dto.Scales is not { Count: > 0 })
+        // 采购价格数量等级（ScaleQuantities）
+        List<TaktPurchasePriceScaleQuantityUpdateDto>? scaleQuantitiesForSave;
+        if (dto is TaktPurchasePriceItemUpdateDto updateDto && updateDto.ScaleQuantities != null)
         {
-            await MarkPurchasePriceScalesObsoleteAsync(entity.Id);
-            return;
+            scaleQuantitiesForSave = updateDto.ScaleQuantities;
+        }
+        else if (dto.ScaleQuantities != null)
+        {
+            scaleQuantitiesForSave = dto.ScaleQuantities.Adapt<List<TaktPurchasePriceScaleQuantityUpdateDto>>();
         }
         else
         {
-            var existingList = await _purchasePriceScaleRepository.GetListAsync(x => x.PurchasePriceItemId == entity.Id);
+            scaleQuantitiesForSave = null;
+        }
+        if (scaleQuantitiesForSave is not { Count: > 0 })
+        {
+            await MarkPurchasePriceScaleQuantitysObsoleteAsync(entity.Id);
+        }
+        else
+        {
+            var existingList = await _purchasePriceScaleQuantityRepository.GetListAsync(x => x.PurchasePriceItemId == entity.Id);
             var existingById = existingList.ToDictionary(x => x.Id);
             var submittedIds = new HashSet<long>();
-            var toCreate = new List<TaktPurchasePriceScale>();
+            var toCreate = new List<TaktPurchasePriceScaleQuantity>();
             var seenLineKeys = new HashSet<string>(StringComparer.Ordinal);
-            for (var i = 0; i < dto.Scales.Count; i++)
+            for (var i = 0; i < scaleQuantitiesForSave.Count; i++)
             {
-                var childDto = dto.Scales[i];
+                var childDto = scaleQuantitiesForSave[i];
                 childDto.PurchasePriceItemId = entity.Id;
                 var lineKey = $"{entity.CompanyCode}|{entity.Id}|{childDto.LineNumber}";
                 if (!seenLineKeys.Add(lineKey))
                 {
-                    throw new TaktBusinessException("采购价格阶梯第{i + 1}项与本次提交的其他项重复（CompanyCode、PurchasePriceItemId、LineNumber）");
+                    throw new TaktBusinessException("采购价格数量等级第{i + 1}项与本次提交的其他项重复（CompanyCode、PurchasePriceItemId、LineNumber）");
                 }
-                if (childDto.PurchasePriceScaleId > 0)
+                if (childDto.PurchasePriceScaleQuantityId > 0)
                 {
-                    if (!existingById.TryGetValue(childDto.PurchasePriceScaleId, out var target))
+                    if (!existingById.TryGetValue(childDto.PurchasePriceScaleQuantityId, out var target))
                     {
-                        throw new TaktBusinessException("采购价格阶梯不存在（PurchasePriceScaleId={childDto.PurchasePriceScaleId}）");
+                        throw new TaktBusinessException("采购价格数量等级不存在（PurchasePriceScaleQuantityId={childDto.PurchasePriceScaleQuantityId}）");
                     }
                     if (target.PurchasePriceItemId != entity.Id)
                     {
-                        throw new TaktBusinessException("采购价格阶梯不属于当前主表（PurchasePriceScaleId={childDto.PurchasePriceScaleId}）");
+                        throw new TaktBusinessException("采购价格数量等级不属于当前主表（PurchasePriceScaleQuantityId={childDto.PurchasePriceScaleQuantityId}）");
                     }
-                    submittedIds.Add(childDto.PurchasePriceScaleId);
-                    var isUniqueUpdate_ix_takt_logistics_materials_purchase_price_scale_item_line_unique = await _uniqueValidator.IsUniqueAsync(
-                        _purchasePriceScaleRepository,
+                    submittedIds.Add(childDto.PurchasePriceScaleQuantityId);
+                    var isUniqueUpdate_ix_takt_logistics_materials_purchase_price_scale_quantity_line_unique = await _uniqueValidator.IsUniqueAsync(
+                        _purchasePriceScaleQuantityRepository,
                         x => x.CompanyCode == x.CompanyCode
                 && x.PurchasePriceItemId == x.PurchasePriceItemId
-                && x.LineNumber == x.LineNumber
-                && x.StartQuantity == x.StartQuantity,
-                        childDto.PurchasePriceScaleId);
-                    if (!isUniqueUpdate_ix_takt_logistics_materials_purchase_price_scale_item_line_unique)
+                && x.LineNumber == x.LineNumber,
+                        childDto.PurchasePriceScaleQuantityId);
+                    if (!isUniqueUpdate_ix_takt_logistics_materials_purchase_price_scale_quantity_line_unique)
                     {
-                        throw new TaktBusinessException("采购价格阶梯的CompanyCode、PurchasePriceItemId、LineNumber、StartQuantity已存在");
+                        throw new TaktBusinessException("采购价格数量等级的CompanyCode、PurchasePriceItemId、LineNumber已存在");
                     }
                     childDto.Adapt(target);
-                    target.Id = childDto.PurchasePriceScaleId;
+                    target.Id = childDto.PurchasePriceScaleQuantityId;
                     target.PurchasePriceItemId = entity.Id;
                     target.IsObsolete = 0;
-                    await _purchasePriceScaleRepository.UpdateAsync(target);
+                    await _purchasePriceScaleQuantityRepository.UpdateAsync(target);
                 }
                 else
                 {
-                    var isUniqueCreate_ix_takt_logistics_materials_purchase_price_scale_item_line_unique = await _uniqueValidator.IsUniqueAsync(
-                        _purchasePriceScaleRepository,
+                    var isUniqueCreate_ix_takt_logistics_materials_purchase_price_scale_quantity_line_unique = await _uniqueValidator.IsUniqueAsync(
+                        _purchasePriceScaleQuantityRepository,
                         x => x.CompanyCode == x.CompanyCode
                 && x.PurchasePriceItemId == x.PurchasePriceItemId
-                && x.LineNumber == x.LineNumber
-                && x.StartQuantity == x.StartQuantity);
-                    if (!isUniqueCreate_ix_takt_logistics_materials_purchase_price_scale_item_line_unique)
+                && x.LineNumber == x.LineNumber);
+                    if (!isUniqueCreate_ix_takt_logistics_materials_purchase_price_scale_quantity_line_unique)
                     {
-                        throw new TaktBusinessException("采购价格阶梯的CompanyCode、PurchasePriceItemId、LineNumber、StartQuantity已存在");
+                        throw new TaktBusinessException("采购价格数量等级的CompanyCode、PurchasePriceItemId、LineNumber已存在");
                     }
-                    var child = childDto.Adapt<TaktPurchasePriceScale>();
+                    var child = childDto.Adapt<TaktPurchasePriceScaleQuantity>();
                     child.Id = 0;
                     child.PurchasePriceItemId = entity.Id;
                     child.IsObsolete = 0;
@@ -486,7 +474,7 @@ public class TaktPurchasePriceItemService : TaktServiceBase, ITaktPurchasePriceI
             foreach (var removed in toObsolete)
             {
                 removed.IsObsolete = 1;
-                await _purchasePriceScaleRepository.UpdateAsync(removed);
+                await _purchasePriceScaleQuantityRepository.UpdateAsync(removed);
             }
             if (toCreate.Count > 0)
             {
@@ -505,7 +493,112 @@ public class TaktPurchasePriceItemService : TaktServiceBase, ITaktPurchasePriceI
                         }
                     }
                 }
-                await _purchasePriceScaleRepository.CreateRangeAsync(toCreate);
+                await _purchasePriceScaleQuantityRepository.CreateRangeAsync(toCreate);
+            }
+        }
+        // 采购价格价值等级（ScaleValues）
+        List<TaktPurchasePriceScaleValueUpdateDto>? scaleValuesForSave;
+        if (dto is TaktPurchasePriceItemUpdateDto updateDtoForScaleValues && updateDtoForScaleValues.ScaleValues != null)
+        {
+            scaleValuesForSave = updateDtoForScaleValues.ScaleValues;
+        }
+        else if (dto.ScaleValues != null)
+        {
+            scaleValuesForSave = dto.ScaleValues.Adapt<List<TaktPurchasePriceScaleValueUpdateDto>>();
+        }
+        else
+        {
+            scaleValuesForSave = null;
+        }
+        if (scaleValuesForSave is not { Count: > 0 })
+        {
+            await MarkPurchasePriceScaleValuesObsoleteAsync(entity.Id);
+        }
+        else
+        {
+            var existingList = await _purchasePriceScaleValueRepository.GetListAsync(x => x.PurchasePriceItemId == entity.Id);
+            var existingById = existingList.ToDictionary(x => x.Id);
+            var submittedIds = new HashSet<long>();
+            var toCreate = new List<TaktPurchasePriceScaleValue>();
+            var seenLineKeys = new HashSet<string>(StringComparer.Ordinal);
+            for (var i = 0; i < scaleValuesForSave.Count; i++)
+            {
+                var childDto = scaleValuesForSave[i];
+                childDto.PurchasePriceItemId = entity.Id;
+                var lineKey = $"{entity.CompanyCode}|{entity.Id}|{childDto.LineNumber}";
+                if (!seenLineKeys.Add(lineKey))
+                {
+                    throw new TaktBusinessException("采购价格价值等级第{i + 1}项与本次提交的其他项重复（CompanyCode、PurchasePriceItemId、LineNumber）");
+                }
+                if (childDto.PurchasePriceScaleValueId > 0)
+                {
+                    if (!existingById.TryGetValue(childDto.PurchasePriceScaleValueId, out var target))
+                    {
+                        throw new TaktBusinessException("采购价格价值等级不存在（PurchasePriceScaleValueId={childDto.PurchasePriceScaleValueId}）");
+                    }
+                    if (target.PurchasePriceItemId != entity.Id)
+                    {
+                        throw new TaktBusinessException("采购价格价值等级不属于当前主表（PurchasePriceScaleValueId={childDto.PurchasePriceScaleValueId}）");
+                    }
+                    submittedIds.Add(childDto.PurchasePriceScaleValueId);
+                    var isUniqueUpdate_ix_takt_logistics_materials_purchase_price_scale_value_line_unique = await _uniqueValidator.IsUniqueAsync(
+                        _purchasePriceScaleValueRepository,
+                        x => x.CompanyCode == x.CompanyCode
+                && x.PurchasePriceItemId == x.PurchasePriceItemId
+                && x.LineNumber == x.LineNumber,
+                        childDto.PurchasePriceScaleValueId);
+                    if (!isUniqueUpdate_ix_takt_logistics_materials_purchase_price_scale_value_line_unique)
+                    {
+                        throw new TaktBusinessException("采购价格价值等级的CompanyCode、PurchasePriceItemId、LineNumber已存在");
+                    }
+                    childDto.Adapt(target);
+                    target.Id = childDto.PurchasePriceScaleValueId;
+                    target.PurchasePriceItemId = entity.Id;
+                    target.IsObsolete = 0;
+                    await _purchasePriceScaleValueRepository.UpdateAsync(target);
+                }
+                else
+                {
+                    var isUniqueCreate_ix_takt_logistics_materials_purchase_price_scale_value_line_unique = await _uniqueValidator.IsUniqueAsync(
+                        _purchasePriceScaleValueRepository,
+                        x => x.CompanyCode == x.CompanyCode
+                && x.PurchasePriceItemId == x.PurchasePriceItemId
+                && x.LineNumber == x.LineNumber);
+                    if (!isUniqueCreate_ix_takt_logistics_materials_purchase_price_scale_value_line_unique)
+                    {
+                        throw new TaktBusinessException("采购价格价值等级的CompanyCode、PurchasePriceItemId、LineNumber已存在");
+                    }
+                    var child = childDto.Adapt<TaktPurchasePriceScaleValue>();
+                    child.Id = 0;
+                    child.PurchasePriceItemId = entity.Id;
+                    child.IsObsolete = 0;
+                    toCreate.Add(child);
+                }
+            }
+            var toObsolete = existingList.Where(x => !submittedIds.Contains(x.Id) && x.IsObsolete == 0).ToList();
+            foreach (var removed in toObsolete)
+            {
+                removed.IsObsolete = 1;
+                await _purchasePriceScaleValueRepository.UpdateAsync(removed);
+            }
+            if (toCreate.Count > 0)
+            {
+                var needLine = toCreate.Where(c => c.LineNumber <= 0).ToList();
+                if (needLine.Count > 0)
+                {
+                    var businessCode = !string.IsNullOrWhiteSpace(entity.PurchasePriceCode) ? entity.PurchasePriceCode : entity.Id.ToString();
+                    var maxLine = existingList.Count > 0 ? existingList.Max(x => x.LineNumber) : 0;
+                    var lineSeq = _lineNumberGenerator.GenerateSequence(businessCode, needLine.Count, maxLine).ToList();
+                    var lineIdx = 0;
+                    foreach (var child in toCreate)
+                    {
+                        if (child.LineNumber <= 0)
+                        {
+                            child.LineNumber = lineSeq[lineIdx++];
+                        }
+                    }
+                }
+                await _purchasePriceScaleValueRepository.CreateRangeAsync(toCreate);
             }
         }
     }
@@ -537,16 +630,17 @@ public class TaktPurchasePriceItemService : TaktServiceBase, ITaktPurchasePriceI
             exp = exp.And(x =>
                 SqlFunc.ToString(x.PurchasePriceId).Contains(keywords)
                 || (x.PurchasePriceCode != null && x.PurchasePriceCode.Contains(keywords))
-                || SqlFunc.ToString(x.LineNumber).Contains(keywords)
-                || (x.MaterialCode != null && x.MaterialCode.Contains(keywords))
-                || (x.MaterialName != null && x.MaterialName.Contains(keywords))
-                || (x.MaterialSpecification != null && x.MaterialSpecification.Contains(keywords))
-                || (x.PurchaseUnit != null && x.PurchaseUnit.Contains(keywords))
-                || SqlFunc.ToString(x.PurchasePerUnit).Contains(keywords)
-                || SqlFunc.ToString(x.PurchasePrice).Contains(keywords)
-                || SqlFunc.ToString(x.MinPurchaseQuantity).Contains(keywords)
-                || SqlFunc.ToString(x.MaxPurchaseQuantity).Contains(keywords)
-                || SqlFunc.ToString(x.SortOrder).Contains(keywords)
+                || SqlFunc.ToString(x.PurchasePriceSeq).Contains(keywords)
+                || (x.PriceType != null && x.PriceType.Contains(keywords))
+                || (x.ScaleType != null && x.ScaleType.Contains(keywords))
+                || (x.ScaleBasis != null && x.ScaleBasis.Contains(keywords))
+                || SqlFunc.ToString(x.ScaleQuantity).Contains(keywords)
+                || (x.ScaleUnit != null && x.ScaleUnit.Contains(keywords))
+                || SqlFunc.ToString(x.ScaleValue).Contains(keywords)
+                || (x.ScaleCurrency != null && x.ScaleCurrency.Contains(keywords))
+                || (x.CalculationType != null && x.CalculationType.Contains(keywords))
+                || SqlFunc.ToString(x.Price).Contains(keywords)
+                || (x.TaxCode != null && x.TaxCode.Contains(keywords))
                 || (x.ExtField != null && x.ExtField.Contains(keywords))
                 || (x.Remark != null && x.Remark.Contains(keywords))
                 || SqlFunc.ToString(x.CreatedAt).Contains(keywords)
@@ -563,54 +657,59 @@ public class TaktPurchasePriceItemService : TaktServiceBase, ITaktPurchasePriceI
             exp = exp.And(x => x.PurchasePriceCode != null && x.PurchasePriceCode.Contains(queryDto.PurchasePriceCode));
         }
 
-        if (queryDto?.LineNumber.HasValue == true)
+        if (queryDto?.PurchasePriceSeq.HasValue == true)
         {
-            exp = exp.And(x => x.LineNumber == queryDto.LineNumber);
+            exp = exp.And(x => x.PurchasePriceSeq == queryDto.PurchasePriceSeq);
         }
 
-        if (!string.IsNullOrEmpty(queryDto?.MaterialCode))
+        if (!string.IsNullOrEmpty(queryDto?.PriceType))
         {
-            exp = exp.And(x => x.MaterialCode != null && x.MaterialCode.Contains(queryDto.MaterialCode));
+            exp = exp.And(x => x.PriceType != null && x.PriceType.Contains(queryDto.PriceType));
         }
 
-        if (!string.IsNullOrEmpty(queryDto?.MaterialName))
+        if (!string.IsNullOrEmpty(queryDto?.ScaleType))
         {
-            exp = exp.And(x => x.MaterialName != null && x.MaterialName.Contains(queryDto.MaterialName));
+            exp = exp.And(x => x.ScaleType != null && x.ScaleType.Contains(queryDto.ScaleType));
         }
 
-        if (!string.IsNullOrEmpty(queryDto?.MaterialSpecification))
+        if (!string.IsNullOrEmpty(queryDto?.ScaleBasis))
         {
-            exp = exp.And(x => x.MaterialSpecification != null && x.MaterialSpecification.Contains(queryDto.MaterialSpecification));
+            exp = exp.And(x => x.ScaleBasis != null && x.ScaleBasis.Contains(queryDto.ScaleBasis));
         }
 
-        if (!string.IsNullOrEmpty(queryDto?.PurchaseUnit))
+        if (queryDto?.ScaleQuantity.HasValue == true)
         {
-            exp = exp.And(x => x.PurchaseUnit != null && x.PurchaseUnit.Contains(queryDto.PurchaseUnit));
+            exp = exp.And(x => x.ScaleQuantity == queryDto.ScaleQuantity);
         }
 
-        if (queryDto?.PurchasePerUnit.HasValue == true)
+        if (!string.IsNullOrEmpty(queryDto?.ScaleUnit))
         {
-            exp = exp.And(x => x.PurchasePerUnit == queryDto.PurchasePerUnit);
+            exp = exp.And(x => x.ScaleUnit != null && x.ScaleUnit.Contains(queryDto.ScaleUnit));
         }
 
-        if (queryDto?.PurchasePrice.HasValue == true)
+        if (queryDto?.ScaleValue.HasValue == true)
         {
-            exp = exp.And(x => x.PurchasePrice == queryDto.PurchasePrice);
+            exp = exp.And(x => x.ScaleValue == queryDto.ScaleValue);
         }
 
-        if (queryDto?.MinPurchaseQuantity.HasValue == true)
+        if (!string.IsNullOrEmpty(queryDto?.ScaleCurrency))
         {
-            exp = exp.And(x => x.MinPurchaseQuantity == queryDto.MinPurchaseQuantity);
+            exp = exp.And(x => x.ScaleCurrency != null && x.ScaleCurrency.Contains(queryDto.ScaleCurrency));
         }
 
-        if (queryDto?.MaxPurchaseQuantity.HasValue == true)
+        if (!string.IsNullOrEmpty(queryDto?.CalculationType))
         {
-            exp = exp.And(x => x.MaxPurchaseQuantity == queryDto.MaxPurchaseQuantity);
+            exp = exp.And(x => x.CalculationType != null && x.CalculationType.Contains(queryDto.CalculationType));
         }
 
-        if (queryDto?.SortOrder.HasValue == true)
+        if (queryDto?.Price.HasValue == true)
         {
-            exp = exp.And(x => x.SortOrder == queryDto.SortOrder);
+            exp = exp.And(x => x.Price == queryDto.Price);
+        }
+
+        if (!string.IsNullOrEmpty(queryDto?.TaxCode))
+        {
+            exp = exp.And(x => x.TaxCode != null && x.TaxCode.Contains(queryDto.TaxCode));
         }
 
         if (!string.IsNullOrEmpty(queryDto?.ExtField))

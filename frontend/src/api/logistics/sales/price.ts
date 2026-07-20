@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：frontend/src/api/logistics/sales
 // 文件名称：price.ts
-// 创建时间：2026-07-09
+// 创建时间：2026-07-20
 // 创建人：Takt365(Auto Generated)
 // 功能描述：logistics/sales 模块 API（自动生成，请勿手改路由常量）
 // 
@@ -18,7 +18,6 @@ import type {
 import type {
   SalesPrice,
   SalesPriceCreate,
-  SalesPriceStatus,
   SalesPriceUpdate
 } from '@/types/logistics/sales/price';
 
@@ -106,19 +105,6 @@ export function deleteSalesPriceBatch(ids: string[]): Promise<void> {
     url: `${SALES_PRICE_API_BASE}/batch`,
     method: 'delete',
     data: ids,
-  });
-}
-
-/**
- * 更新销售价格状态
- * @param {SalesPriceStatus} dto 状态 DTO
- * @returns {Promise<SalesPrice>} 销售价格DTO
- */
-export function updateSalesPriceStatus(dto: SalesPriceStatus): Promise<SalesPrice> {
-  return request<SalesPrice>({
-    url: `${SALES_PRICE_API_BASE}/status`,
-    method: 'put',
-    data: dto,
   });
 }
 

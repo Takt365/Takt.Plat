@@ -55,19 +55,6 @@
             </a-col>
             <a-col :span="24">
               <a-form-item
-                :label="pi.label('prodDate')"
-                name="prodDate"
-              >
-                <a-date-picker
-                  v-model:value="formState.prodDate"
-                  :placeholder="pi.ph('prodDate')"
-                  value-format="YYYY-MM-DD"
-                  style="width: 100%"
-                />
-              </a-form-item>
-            </a-col>
-            <a-col :span="24">
-              <a-form-item
                 :label="pi.label('prodOrderType')"
                 name="prodOrderType"
               >
@@ -263,7 +250,7 @@
       <template #cell-pcbaBoardType="{ record }">
         <TaktSelect
           v-model:value="record.pcbaBoardType"
-          dict-type="logistics_pcba_panel_category"
+          dict-type="logistics_pcba_function_category"
           class="w-full"
           :get-popup-container="getSelectPopupContainer"
           :placeholder="pcbaInspectionDetailPi.ph('pcbaBoardType')"
@@ -412,7 +399,7 @@ const formContentClass = computed(() => (formFields.length > 10 ? 'takt-form-con
 /** 当前激活的 Tab key */
 const activeTab = ref('tab-0')
 /** CreateDto 字段名列表（与 formState 键对齐） */
-const formFields = ["tenantCode","companyCode","companyDefaultCulture","plantCode","prodCategory","prodDate","prodOrderType","prodOrderCode","prodOrderQty","modelCode","batchNo","materialCode","extField","remark"]
+const formFields = ["tenantCode","companyCode","companyDefaultCulture","plantCode","prodCategory","prodOrderType","prodOrderCode","prodOrderQty","modelCode","batchNo","materialCode","extField","remark"]
 
 
 import type { TaktEditableTableColumn } from '@/components/business/takt-editable-table/types'
@@ -699,13 +686,6 @@ const rules = computed<Record<string, Rule[]>>(() => ({
     {
       required: true,
       message: pi.ph('prodCategory'),
-      trigger: 'change'
-    }
-  ],
-  prodDate: [
-    {
-      required: true,
-      message: pi.ph('prodDate'),
       trigger: 'change'
     }
   ],

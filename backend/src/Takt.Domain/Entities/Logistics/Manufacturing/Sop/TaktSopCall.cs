@@ -32,14 +32,14 @@ public class TaktSopCall : TaktCompanyEntityBase
     public string PlantCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 工位 ID（关联 TaktSopWorkstation.Id，选项 TaktSopWorkstations/options）
+    /// 工位 ID（选项 TaktSopWorkstations/options，DictValue=Id）
     /// </summary>
     [SugarColumn(ColumnName = "workstation_id", ColumnDescription = "工位ID", ColumnDataType = "bigint", IsNullable = false)]
     [JsonConverter(typeof(ValueToStringConverter))]
     public long WorkstationId { get; set; }
 
     /// <summary>
-    /// 执行追溯 ID（关联 TaktSopExec.Id，选项 TaktSopExecs/options）
+    /// 执行追溯 ID（选项 TaktSopExecs/options，DictValue=Id）
     /// </summary>
     [SugarColumn(ColumnName = "exec_id", ColumnDescription = "执行追溯ID", ColumnDataType = "bigint", IsNullable = true)]
     [JsonConverter(typeof(ValueToStringConverter))]
@@ -52,7 +52,7 @@ public class TaktSopCall : TaktCompanyEntityBase
     public int CallType { get; set; } = 1;
 
     /// <summary>
-    /// 呼叫人 ID（关联 TaktEmployee.Id，选项 TaktEmployees/options）
+    /// 呼叫人 ID（选项 TaktEmployees/options，DictValue=Id）
     /// </summary>
     [SugarColumn(ColumnName = "caller_id", ColumnDescription = "呼叫人ID", ColumnDataType = "bigint", IsNullable = false)]
     [JsonConverter(typeof(ValueToStringConverter))]
@@ -65,7 +65,7 @@ public class TaktSopCall : TaktCompanyEntityBase
     public DateTime CalledAt { get; set; } = DateTime.Now;
 
     /// <summary>
-    /// 响应人 ID（关联 TaktEmployee.Id，选项 TaktEmployees/options）
+    /// 响应人 ID（选项 TaktEmployees/options，DictValue=Id）
     /// </summary>
     [SugarColumn(ColumnName = "responded_by", ColumnDescription = "响应人ID", ColumnDataType = "bigint", IsNullable = true)]
     [JsonConverter(typeof(ValueToStringConverter))]

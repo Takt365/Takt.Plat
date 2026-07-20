@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Application.Services.Logistics.Materials
 // 文件名称：TaktMaterialDocumentService.cs
-// 创建时间：2026-07-09
+// 创建时间：2026-07-15
 // 创建人：Takt365(Cursor AI)
 // 功能描述：物料凭证应用服务实现
 // 
@@ -355,7 +355,20 @@ public class TaktMaterialDocumentService : TaktServiceBase, ITaktMaterialDocumen
     private async Task SaveMaterialDocumentChildrenAsync(TaktMaterialDocument entity, TaktMaterialDocumentCreateDto dto)
     {
         // 物料凭证行项目（Items）
-        if (dto.Items is not { Count: > 0 })
+        List<TaktMaterialDocumentItemUpdateDto>? itemsForSave;
+        if (dto is TaktMaterialDocumentUpdateDto updateDto && updateDto.Items != null)
+        {
+            itemsForSave = updateDto.Items;
+        }
+        else if (dto.Items != null)
+        {
+            itemsForSave = dto.Items.Adapt<List<TaktMaterialDocumentItemUpdateDto>>();
+        }
+        else
+        {
+            itemsForSave = null;
+        }
+        if (itemsForSave is not { Count: > 0 })
         {
             await MarkMaterialDocumentItemsObsoleteAsync(entity.Id);
             return;
@@ -367,9 +380,9 @@ public class TaktMaterialDocumentService : TaktServiceBase, ITaktMaterialDocumen
             var submittedIds = new HashSet<long>();
             var toCreate = new List<TaktMaterialDocumentItem>();
             var seenLineKeys = new HashSet<string>(StringComparer.Ordinal);
-            for (var i = 0; i < dto.Items.Count; i++)
+            for (var i = 0; i < itemsForSave.Count; i++)
             {
-                var childDto = dto.Items[i];
+                var childDto = itemsForSave[i];
                 childDto.MaterialDocumentId = entity.Id;
                 var lineKey = $"{entity.CompanyCode}|{entity.Id}|{childDto.LineNumber}";
                 if (!seenLineKeys.Add(lineKey))

@@ -171,7 +171,7 @@ export async function fetchDashboardMetricIfPermitted<T>(
 }
 
 /**
- * 看板单项指标安全加载（失败时返回默认值，不影响其它指标）
+ * 看板单项指标安全加载（失败时返回默认值，不影响其他指标）
  * @param label 指标标识（日志用）
  * @param fetcher 加载函数
  * @param fallback 失败时的默认值

@@ -78,6 +78,27 @@ public interface ITaktQuartzTaskService
     Task<TaktQuartzTaskDto> UpdateQuartzTaskStatusAsync(TaktQuartzTaskStatusDto dto);
 
     /// <summary>
+    /// 启动（恢复）定时任务调度
+    /// </summary>
+    /// <param name="id">定时任务ID</param>
+    /// <returns>DTO</returns>
+    Task<TaktQuartzTaskDto> StartQuartzTaskAsync(long id);
+
+    /// <summary>
+    /// 暂停定时任务调度
+    /// </summary>
+    /// <param name="id">定时任务ID</param>
+    /// <returns>DTO</returns>
+    Task<TaktQuartzTaskDto> PauseQuartzTaskAsync(long id);
+
+    /// <summary>
+    /// 立即执行一次定时任务（不改变启动/暂停调度状态）
+    /// </summary>
+    /// <param name="id">定时任务ID</param>
+    /// <returns>DTO</returns>
+    Task<TaktQuartzTaskDto> ExecuteQuartzTaskNowAsync(long id);
+
+    /// <summary>
     /// 获取导入模板
     /// </summary>
     /// <param name="sheetName">工作表名称</param>

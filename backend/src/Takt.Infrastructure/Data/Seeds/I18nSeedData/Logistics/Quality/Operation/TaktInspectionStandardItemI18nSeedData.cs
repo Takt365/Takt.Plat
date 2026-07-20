@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Infrastructure.Data.Seeds.I18nSeedData.Logistics.Quality.Operation
 // 文件名称：TaktInspectionStandardItemI18nSeedData.cs
-// 创建时间：2026-07-09
+// 创建时间：2026-07-20
 // 创建人：Takt365(Auto Generated)
 // 功能描述：TaktInspectionStandardItem 实体字段国际化种子（无对应 frontend locales；TranslationText 取自 ColumnDescription，ContextNote 取自属性 XML summary）
 // 
@@ -91,13 +91,13 @@ public class TaktInspectionStandardItemI18nSeedData : ITaktSeedDataCoordinator
             new TranslationSeedItem("entity.inspectionstandarditem._self", "zh-HK", "检验标准明细信息_hk", "实体名称"),
 
             // entity.inspectionstandarditem.inspectionstandardid
-            new TranslationSeedItem("entity.inspectionstandarditem.inspectionstandardid", "en-US", "检验标准ID_us", "检验标准 ID（关联 TaktInspectionStandard.Id，选项 TaktInspectionStandards/options）"),
+            new TranslationSeedItem("entity.inspectionstandarditem.inspectionstandardid", "en-US", "检验标准ID_us", "检验标准 ID（选项 TaktInspectionStandards/options，DictValue=Id）"),
             // entity.inspectionstandarditem.inspectionstandardid
-            new TranslationSeedItem("entity.inspectionstandarditem.inspectionstandardid", "ja-JP", "检验标准ID_jp", "检验标准 ID（关联 TaktInspectionStandard.Id，选项 TaktInspectionStandards/options）"),
+            new TranslationSeedItem("entity.inspectionstandarditem.inspectionstandardid", "ja-JP", "检验标准ID_jp", "检验标准 ID（选项 TaktInspectionStandards/options，DictValue=Id）"),
             // entity.inspectionstandarditem.inspectionstandardid
-            new TranslationSeedItem("entity.inspectionstandarditem.inspectionstandardid", "zh-CN", "检验标准ID", "检验标准 ID（关联 TaktInspectionStandard.Id，选项 TaktInspectionStandards/options）"),
+            new TranslationSeedItem("entity.inspectionstandarditem.inspectionstandardid", "zh-CN", "检验标准ID", "检验标准 ID（选项 TaktInspectionStandards/options，DictValue=Id）"),
             // entity.inspectionstandarditem.inspectionstandardid
-            new TranslationSeedItem("entity.inspectionstandarditem.inspectionstandardid", "zh-HK", "检验标准ID_hk", "检验标准 ID（关联 TaktInspectionStandard.Id，选项 TaktInspectionStandards/options）"),
+            new TranslationSeedItem("entity.inspectionstandarditem.inspectionstandardid", "zh-HK", "检验标准ID_hk", "检验标准 ID（选项 TaktInspectionStandards/options，DictValue=Id）"),
 
             // entity.inspectionstandarditem.linenumber
             new TranslationSeedItem("entity.inspectionstandarditem.linenumber", "en-US", "行号_us", "行号（项号/序号，固定步长=10）"),

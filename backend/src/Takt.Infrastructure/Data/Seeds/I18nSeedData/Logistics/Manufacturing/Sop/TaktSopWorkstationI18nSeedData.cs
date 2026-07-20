@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Infrastructure.Data.Seeds.I18nSeedData.Logistics.Manufacturing.Sop
 // 文件名称：TaktSopWorkstationI18nSeedData.cs
-// 创建时间：2026-07-09
+// 创建时间：2026-07-20
 // 创建人：Takt365(Auto Generated)
 // 功能描述：TaktSopWorkstation 实体字段国际化种子（无对应 frontend locales；TranslationText 取自 ColumnDescription，ContextNote 取自属性 XML summary）
 // 
@@ -118,13 +118,13 @@ public class TaktSopWorkstationI18nSeedData : ITaktSeedDataCoordinator
             new TranslationSeedItem("entity.sopworkstation.workstationname", "zh-HK", "工位名称_hk", "工位名称"),
 
             // entity.sopworkstation.workcenter
-            new TranslationSeedItem("entity.sopworkstation.workcenter", "en-US", "工作中心_us", "工作中心（关联 TaktWorkCenter.WorkCenterCode，选项 TaktWorkCenters/options，DictValue=WorkCenterCode）"),
+            new TranslationSeedItem("entity.sopworkstation.workcenter", "en-US", "工作中心_us", "工作中心（选项 TaktWorkCenters/options，DictValue=WorkCenterCode）"),
             // entity.sopworkstation.workcenter
-            new TranslationSeedItem("entity.sopworkstation.workcenter", "ja-JP", "工作中心_jp", "工作中心（关联 TaktWorkCenter.WorkCenterCode，选项 TaktWorkCenters/options，DictValue=WorkCenterCode）"),
+            new TranslationSeedItem("entity.sopworkstation.workcenter", "ja-JP", "工作中心_jp", "工作中心（选项 TaktWorkCenters/options，DictValue=WorkCenterCode）"),
             // entity.sopworkstation.workcenter
-            new TranslationSeedItem("entity.sopworkstation.workcenter", "zh-CN", "工作中心", "工作中心（关联 TaktWorkCenter.WorkCenterCode，选项 TaktWorkCenters/options，DictValue=WorkCenterCode）"),
+            new TranslationSeedItem("entity.sopworkstation.workcenter", "zh-CN", "工作中心", "工作中心（选项 TaktWorkCenters/options，DictValue=WorkCenterCode）"),
             // entity.sopworkstation.workcenter
-            new TranslationSeedItem("entity.sopworkstation.workcenter", "zh-HK", "工作中心_hk", "工作中心（关联 TaktWorkCenter.WorkCenterCode，选项 TaktWorkCenters/options，DictValue=WorkCenterCode）"),
+            new TranslationSeedItem("entity.sopworkstation.workcenter", "zh-HK", "工作中心_hk", "工作中心（选项 TaktWorkCenters/options，DictValue=WorkCenterCode）"),
 
             // entity.sopworkstation.productionline
             new TranslationSeedItem("entity.sopworkstation.productionline", "en-US", "生产班组_us", "生产班组"),

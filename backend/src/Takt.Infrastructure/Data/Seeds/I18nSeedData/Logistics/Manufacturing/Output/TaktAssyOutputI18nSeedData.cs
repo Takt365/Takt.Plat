@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Infrastructure.Data.Seeds.I18nSeedData.Logistics.Manufacturing.Output
 // 文件名称：TaktAssyOutputI18nSeedData.cs
-// 创建时间：2026-07-09
+// 创建时间：2026-07-20
 // 创建人：Takt365(Auto Generated)
 // 功能描述：TaktAssyOutput 实体字段国际化种子（已对齐前端 locales：src/locales/logistics/manufacturing/output/assy-output）
 // 
@@ -118,13 +118,13 @@ public class TaktAssyOutputI18nSeedData : ITaktSeedDataCoordinator
             new TranslationSeedItem("entity.assyoutput.proddate", "zh-HK", "生产日期_hk", "生产日期"),
 
             // entity.assyoutput.prodteam
-            new TranslationSeedItem("entity.assyoutput.prodteam", "en-US", "生产班组_us", "生产班组（选项 TaktProductionTeams/options，存 TeamCode，ExtValue=PlantCode 过滤）"),
+            new TranslationSeedItem("entity.assyoutput.prodteam", "en-US", "生产班组_us", "生产班组（选项 TaktProductionTeams/options，DictValue=TeamCode，ExtValue=PlantCode）"),
             // entity.assyoutput.prodteam
-            new TranslationSeedItem("entity.assyoutput.prodteam", "ja-JP", "生产班组_jp", "生产班组（选项 TaktProductionTeams/options，存 TeamCode，ExtValue=PlantCode 过滤）"),
+            new TranslationSeedItem("entity.assyoutput.prodteam", "ja-JP", "生产班组_jp", "生产班组（选项 TaktProductionTeams/options，DictValue=TeamCode，ExtValue=PlantCode）"),
             // entity.assyoutput.prodteam
-            new TranslationSeedItem("entity.assyoutput.prodteam", "zh-CN", "生产班组", "生产班组（选项 TaktProductionTeams/options，存 TeamCode，ExtValue=PlantCode 过滤）"),
+            new TranslationSeedItem("entity.assyoutput.prodteam", "zh-CN", "生产班组", "生产班组（选项 TaktProductionTeams/options，DictValue=TeamCode，ExtValue=PlantCode）"),
             // entity.assyoutput.prodteam
-            new TranslationSeedItem("entity.assyoutput.prodteam", "zh-HK", "生产班组_hk", "生产班组（选项 TaktProductionTeams/options，存 TeamCode，ExtValue=PlantCode 过滤）"),
+            new TranslationSeedItem("entity.assyoutput.prodteam", "zh-HK", "生产班组_hk", "生产班组（选项 TaktProductionTeams/options，DictValue=TeamCode，ExtValue=PlantCode）"),
 
             // entity.assyoutput.directlabor
             new TranslationSeedItem("entity.assyoutput.directlabor", "en-US", "直接人员_us", "直接人员"),
@@ -163,13 +163,13 @@ public class TaktAssyOutputI18nSeedData : ITaktSeedDataCoordinator
             new TranslationSeedItem("entity.assyoutput.prodordertype", "zh-HK", "工单类别_hk", "工单类别（回填：随工单）"),
 
             // entity.assyoutput.prodordercode
-            new TranslationSeedItem("entity.assyoutput.prodordercode", "en-US", "工单号_us", "工单号（选项 TaktProductionOrders/options，按 PlantCode 过滤）"),
+            new TranslationSeedItem("entity.assyoutput.prodordercode", "en-US", "工单号_us", "工单号（选项 TaktProductionOrders/options，DictValue=ProdOrderCode，ExtValue=PlantCode）"),
             // entity.assyoutput.prodordercode
-            new TranslationSeedItem("entity.assyoutput.prodordercode", "ja-JP", "工单号_jp", "工单号（选项 TaktProductionOrders/options，按 PlantCode 过滤）"),
+            new TranslationSeedItem("entity.assyoutput.prodordercode", "ja-JP", "工单号_jp", "工单号（选项 TaktProductionOrders/options，DictValue=ProdOrderCode，ExtValue=PlantCode）"),
             // entity.assyoutput.prodordercode
-            new TranslationSeedItem("entity.assyoutput.prodordercode", "zh-CN", "工单号", "工单号（选项 TaktProductionOrders/options，按 PlantCode 过滤）"),
+            new TranslationSeedItem("entity.assyoutput.prodordercode", "zh-CN", "工单号", "工单号（选项 TaktProductionOrders/options，DictValue=ProdOrderCode，ExtValue=PlantCode）"),
             // entity.assyoutput.prodordercode
-            new TranslationSeedItem("entity.assyoutput.prodordercode", "zh-HK", "工单号_hk", "工单号（选项 TaktProductionOrders/options，按 PlantCode 过滤）"),
+            new TranslationSeedItem("entity.assyoutput.prodordercode", "zh-HK", "工单号_hk", "工单号（选项 TaktProductionOrders/options，DictValue=ProdOrderCode，ExtValue=PlantCode）"),
 
             // entity.assyoutput.modelcode
             new TranslationSeedItem("entity.assyoutput.modelcode", "en-US", "机种_us", "机种（回填：随工单）"),

@@ -401,7 +401,7 @@ public static class TaktRegexHelper
     public static readonly Regex NonWhiteSpace = new(@"\S", Opt);
 
     /// <summary>
-    /// 通用匹配入口：空值返回 false，其它值按指定正则进行 Trim 后匹配。
+    /// 通用匹配入口：空值返回 false，其他值按指定正则进行 Trim 后匹配。
     /// </summary>
     public static bool IsMatch(Regex regex, string? value)
     {

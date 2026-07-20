@@ -46,7 +46,7 @@ public class TaktBillOfMaterial : TaktCompanyEntityBase
     public string BomName { get; set; } = string.Empty;
 
     /// <summary>
-    /// 父物料ID（关联工厂物料 TaktMaterialPlant.Id，选项 TaktMaterialPlants/options）
+    /// 父物料ID（选项 TaktMaterialPlants/options，DictValue=Id，ExtValue=PlantCode）
     /// </summary>
     [SugarColumn(ColumnName = "parent_material_id", ColumnDescription = "父物料ID", ColumnDataType = "bigint", IsNullable = false)]
     [JsonConverter(typeof(ValueToStringConverter))]
@@ -59,7 +59,7 @@ public class TaktBillOfMaterial : TaktCompanyEntityBase
     public string ParentMaterialCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 父物料名称（冗余）
+    /// 父物料名称（冗余，回填：随物料）
     /// </summary>
     [SugarColumn(ColumnName = "parent_material_name", ColumnDescription = "父物料名称", ColumnDataType = "nvarchar", Length = 200, IsNullable = false)]
     public string ParentMaterialName { get; set; } = string.Empty;

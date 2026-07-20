@@ -34,7 +34,7 @@ public class TaktSupplierEvaluation : TaktCompanyEntityBase
     [SugarColumn(ColumnName = "supplier_evaluation_code", ColumnDescription = "评价表编号", ColumnDataType = "nvarchar", Length = 50, IsNullable = false)]
     public string SupplierEvaluationCode { get; set; } = string.Empty;
     /// <summary>
-    /// 供应商 ID（关联 TaktSupplier.Id，选项 TaktSuppliers/options）
+    /// 供应商 ID（选项 TaktSuppliers/options，DictValue=Id）
     /// </summary>
     [SugarColumn(ColumnName = "supplier_id", ColumnDescription = "供应商ID", ColumnDataType = "bigint", IsNullable = false)]
     [JsonConverter(typeof(ValueToStringConverter))]

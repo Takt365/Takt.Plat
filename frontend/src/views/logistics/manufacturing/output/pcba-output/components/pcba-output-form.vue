@@ -10,20 +10,12 @@
 <template>
   <a-form
     ref="formRef"
-    class="takt-generated-form pcba-output-form flex flex-col min-h-0"
+    class="takt-generated-form pcba-output-form flex flex-col min-h-0 overflow-visible"
     :model="formState"
     :rules="rules"
     layout="horizontal"
     label-align="right"
-    :disabled="loading || isMasterProdDateLocked"
   >
-    <a-alert
-      v-if="isMasterProdDateLocked"
-      type="warning"
-      show-icon
-      class="mb-3 shrink-0"
-      :message="prodDateLockedAlertMessage"
-    />
     <a-tabs
       v-model:active-key="activeTab"
       class="pcba-output-form-tabs"
@@ -37,54 +29,12 @@
           <a-row :gutter="24">
             <a-col :span="12">
               <a-form-item
-                :label="t('common.page.entity.tenantcode')"
-                name="tenantCode"
-              >
-                <a-input
-                  v-model:value="formState.tenantCode"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('common.page.entity.tenantcode') })"
-                  show-count
-                  :maxlength="20"
-                  disabled
-                />
-              </a-form-item>
-            </a-col>
-            <a-col :span="12">
-              <a-form-item
-                :label="t('common.page.entity.companycode')"
-                name="companyCode"
-              >
-                <a-input
-                  v-model:value="formState.companyCode"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('common.page.entity.companycode') })"
-                  show-count
-                  :maxlength="20"
-                  disabled
-                />
-              </a-form-item>
-            </a-col>
-            <a-col :span="12">
-              <a-form-item
-                :label="t('common.page.entity.companydefaultculture')"
-                name="companyDefaultCulture"
-              >
-                <a-input
-                  v-model:value="formState.companyDefaultCulture"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('common.page.entity.companydefaultculture') })"
-                  show-count
-                  :maxlength="20"
-                  disabled
-                />
-              </a-form-item>
-            </a-col>
-            <a-col :span="12">
-              <a-form-item
-                :label="t('entity.pcbaoutput.plantcode')"
+                :label="pi.label('plantCode')"
                 name="plantCode"
               >
                 <a-input
                   v-model:value="formState.plantCode"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.pcbaoutput.plantcode') })"
+                  :placeholder="pi.ph('plantCode')"
                   show-count
                   :maxlength="4"
                   disabled
@@ -93,83 +43,122 @@
             </a-col>
             <a-col :span="12">
               <a-form-item
-                :label="t('entity.pcbaoutput.prodcategory')"
+                :label="pi.label('prodCategory')"
                 name="prodCategory"
               >
                 <TaktSelect
                   v-model:value="formState.prodCategory"
                   dict-type="logistics_prod_category"
-                  :placeholder="t('common.page.form.placeholder.select', { field: t('entity.pcbaoutput.prodcategory') })"
+                  :placeholder="pi.ph('prodCategory')"
                 />
               </a-form-item>
             </a-col>
             <a-col :span="12">
               <a-form-item
-                :label="t('entity.pcbaoutput.proddate')"
+                :label="pi.label('prodDate')"
                 name="prodDate"
               >
                 <a-date-picker
                   v-model:value="formState.prodDate"
-                  :placeholder="t('common.page.form.placeholder.select', { field: t('entity.pcbaoutput.proddate') })"
+                  :placeholder="pi.ph('prodDate')"
                   value-format="YYYY-MM-DD"
                   style="width: 100%"
-                  :disabled-date="prodDatePickerDisabledDate"
                 />
               </a-form-item>
             </a-col>
             <a-col :span="12">
               <a-form-item
-                :label="t('entity.pcbaoutput.prodteam')"
-                name="prodTeam"
+                :label="pi.label('prodOrderType')"
+                name="prodOrderType"
               >
                 <a-input
-                  v-model:value="formState.prodTeam"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.pcbaoutput.prodteam') })"
+                  v-model:value="formState.prodOrderType"
+                  :placeholder="pi.ph('prodOrderType')"
                   show-count
                   :maxlength="20"
-                  allow-clear
+                  disabled
                 />
               </a-form-item>
             </a-col>
             <a-col :span="12">
               <a-form-item
-                :label="t('entity.pcbaoutput.shiftno')"
-                name="shiftNo"
-              >
-                <TaktSelect
-                  v-model:value="formState.shiftNo"
-                  dict-type="logistics_shift_category"
-                  :placeholder="t('common.page.form.placeholder.select', { field: t('entity.pcbaoutput.shiftno') })"
-                />
-              </a-form-item>
-            </a-col>
-            <a-col :span="12">
-              <a-form-item
-                :label="t('entity.pcbaoutput.prodordercode')"
+                :label="pi.label('prodOrderCode')"
                 name="prodOrderCode"
               >
-                <a-input
+                <TaktSelect
                   v-model:value="formState.prodOrderCode"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.pcbaoutput.prodordercode') })"
-                  show-count
-                  :maxlength="20"
-                  allow-clear
+                  api-url="TaktProductionOrders/options"
+                  :placeholder="pi.ph('prodOrderCode')"
                   :disabled="!!formData?.pcbaOutputId"
                 />
               </a-form-item>
             </a-col>
             <a-col :span="12">
               <a-form-item
-                :label="t('entity.pcbaoutput.modelcode')"
+                :label="pi.label('modelCode')"
                 name="modelCode"
               >
                 <a-input
                   v-model:value="formState.modelCode"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.pcbaoutput.modelcode') })"
+                  :placeholder="pi.ph('modelCode')"
                   show-count
                   :maxlength="20"
-                  allow-clear
-                  :disabled="!!formData?.pcbaOutputId"
+                  disabled
+                />
+              </a-form-item>
+            </a-col>
+            <a-col :span="12">
+              <a-form-item
+                :label="pi.label('materialCode')"
+                name="materialCode"
+              >
+                <a-input
+                  v-model:value="formState.materialCode"
+                  :placeholder="pi.ph('materialCode')"
+                  show-count
+                  :maxlength="20"
+                  disabled
+                />
+              </a-form-item>
+            </a-col>
+            <a-col :span="12">
+              <a-form-item
+                :label="pi.label('batchNo')"
+                name="batchNo"
+              >
+                <a-input
+                  v-model:value="formState.batchNo"
+                  :placeholder="pi.ph('batchNo')"
+                  show-count
+                  :maxlength="20"
+                  disabled
+                />
+              </a-form-item>
+            </a-col>
+            <a-col :span="12">
+              <a-form-item
+                :label="pi.label('prodOrderQty')"
+                name="prodOrderQty"
+              >
+                <a-input-number
+                  v-model:value="formState.prodOrderQty"
+                  :placeholder="pi.ph('prodOrderQty')"
+                  style="width: 100%"
+                  disabled
+                />
+              </a-form-item>
+            </a-col>
+            <a-col :span="12">
+              <a-form-item
+                :label="pi.label('serialNo')"
+                name="serialNo"
+              >
+                <a-input
+                  v-model:value="formState.serialNo"
+                  :placeholder="pi.ph('serialNo')"
+                  show-count
+                  :maxlength="80"
+                  disabled
                 />
               </a-form-item>
             </a-col>
@@ -185,78 +174,43 @@
           <a-row :gutter="24">
             <a-col :span="24">
               <a-form-item
-                :label="t('entity.pcbaoutput.batchno')"
-                name="batchNo"
+                :label="pi.label('tenantCode')"
+                name="tenantCode"
               >
                 <a-input
-                  v-model:value="formState.batchNo"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.pcbaoutput.batchno') })"
+                  v-model:value="formState.tenantCode"
+                  :placeholder="pi.ph('tenantCode')"
                   show-count
                   :maxlength="20"
-                  allow-clear
+                  disabled
                 />
               </a-form-item>
             </a-col>
             <a-col :span="24">
               <a-form-item
-                :label="t('entity.pcbaoutput.materialcode')"
-                name="materialCode"
+                :label="pi.label('companyCode')"
+                name="companyCode"
               >
                 <a-input
-                  v-model:value="formState.materialCode"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.pcbaoutput.materialcode') })"
+                  v-model:value="formState.companyCode"
+                  :placeholder="pi.ph('companyCode')"
                   show-count
                   :maxlength="20"
-                  allow-clear
-                  :disabled="!!formData?.pcbaOutputId"
+                  disabled
                 />
               </a-form-item>
             </a-col>
             <a-col :span="24">
               <a-form-item
-                :label="t('entity.pcbaoutput.prodorderqty')"
-                name="prodOrderQty"
+                :label="pi.label('companyDefaultCulture')"
+                name="companyDefaultCulture"
               >
-                <a-input-number
-                  v-model:value="formState.prodOrderQty"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.pcbaoutput.prodorderqty') })"
-                  style="width: 100%"
-                />
-              </a-form-item>
-            </a-col>
-            <a-col :span="24">
-              <a-form-item
-                :label="t('entity.pcbaoutput.stdminutes')"
-                name="stdMinutes"
-              >
-                <a-input-number
-                  v-model:value="formState.stdMinutes"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.pcbaoutput.stdminutes') })"
-                  style="width: 100%"
-                />
-              </a-form-item>
-            </a-col>
-            <a-col :span="24">
-              <a-form-item
-                :label="t('entity.pcbaoutput.stdshorts')"
-                name="stdShorts"
-              >
-                <a-input-number
-                  v-model:value="formState.stdShorts"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.pcbaoutput.stdshorts') })"
-                  style="width: 100%"
-                />
-              </a-form-item>
-            </a-col>
-            <a-col :span="24">
-              <a-form-item
-                :label="t('entity.pcbaoutput.stdcapacity')"
-                name="stdCapacity"
-              >
-                <a-input-number
-                  v-model:value="formState.stdCapacity"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.pcbaoutput.stdcapacity') })"
-                  style="width: 100%"
+                <a-input
+                  v-model:value="formState.companyDefaultCulture"
+                  :placeholder="pi.ph('companyDefaultCulture')"
+                  show-count
+                  :maxlength="20"
+                  disabled
                 />
               </a-form-item>
             </a-col>
@@ -273,7 +227,7 @@
                     >
                       <span class="takt-form-label-hint-icon"><RiQuestionLine class="takt-remix-icon" /></span>
                     </a-tooltip>
-                    <span>{{ t('common.page.entity.extfield') }}</span>
+                    <span>{{ pi.label('extField') }}</span>
                   </span>
                 </template>
                 <a-textarea
@@ -288,12 +242,12 @@
             </a-col>
             <a-col :span="24">
               <a-form-item
-                :label="t('common.page.entity.remark')"
+                :label="pi.label('remark')"
                 name="remark"
               >
                 <a-textarea
                   v-model:value="formState.remark"
-                  :placeholder="t('common.page.form.placeholder.optional', { field: t('common.page.entity.remark') })"
+                  :placeholder="pi.ph('remark')"
                   :rows="4"
                   show-count
                   :maxlength="400"
@@ -310,13 +264,104 @@
       ref="pcbaOutputDetailTableRef"
       v-model="childPcbaOutputDetailRows"
       :columns="pcbaOutputDetailFormColumns"
-      :title="t('entity.pcbaoutputdetail._self')"
-      :add-button-entity="t('entity.pcbaoutputdetail._self')"
+      :title="pcbaOutputDetailPi.self()"
+      :add-button-entity="pcbaOutputDetailPi.self()"
       id-field="pcbaOutputDetailId"
       :default-row="createDefaultPcbaOutputDetailRow"
-      :disabled="loading || isMasterProdDateLocked"
+      :disabled="loading"
+      :enable-vertical-scroll="false"
       section-border
-    />
+      class="w-full min-w-0"
+    >
+      <template #cell-prodTeam="{ record }">
+        <TaktSelect
+          v-model:value="record.prodTeam"
+          api-url="TaktProductionTeams/options"
+          class="w-full"
+          :get-popup-container="getSelectPopupContainer"
+          :placeholder="pcbaOutputDetailPi.queryPh('prodTeam', 'select')"
+          :disabled="loading"
+          allow-clear
+        />
+      </template>
+      <template #cell-productionEquipmentCode="{ record }">
+        <TaktSelect
+          v-model:value="record.productionEquipmentCode"
+          api-url="TaktProductionEquipments/options"
+          class="w-full"
+          :get-popup-container="getSelectPopupContainer"
+          :placeholder="pcbaOutputDetailPi.queryPh('productionEquipmentCode', 'select')"
+          :disabled="loading"
+          allow-clear
+        />
+      </template>
+      <template #cell-shiftNo="{ record }">
+        <TaktSelect
+          v-model:value="record.shiftNo"
+          dict-type="logistics_shift_category"
+          class="w-full"
+          :get-popup-container="getSelectPopupContainer"
+          :placeholder="pcbaOutputDetailPi.ph('shiftNo')"
+          :disabled="loading"
+          allow-clear
+        />
+      </template>
+      <template #cell-pcbBoardType="{ record }">
+        <TaktSelect
+          v-model:value="record.pcbBoardType"
+          dict-type="logistics_pcba_function_category"
+          class="w-full"
+          :get-popup-container="getSelectPopupContainer"
+          :placeholder="pcbaOutputDetailPi.ph('pcbBoardType')"
+          :disabled="loading"
+          allow-clear
+        />
+      </template>
+      <template #cell-panelSide="{ record }">
+        <TaktSelect
+          v-model:value="record.panelSide"
+          dict-type="logistics_pcba_side_category"
+          class="w-full"
+          :get-popup-container="getSelectPopupContainer"
+          :placeholder="pcbaOutputDetailPi.ph('panelSide')"
+          :disabled="loading"
+          allow-clear
+        />
+      </template>
+      <template #cell-downtimeReason="{ record }">
+        <TaktSelect
+          v-model:value="record.downtimeReason"
+          dict-type="logistics_stop_reason_category"
+          class="w-full"
+          :get-popup-container="getSelectPopupContainer"
+          :placeholder="pcbaOutputDetailPi.ph('downtimeReason')"
+          :disabled="loading"
+          allow-clear
+        />
+      </template>
+      <template #cell-unachievedReason="{ record }">
+        <TaktSelect
+          v-model:value="record.unachievedReason"
+          dict-type="logistics_nonachievement_reason_category"
+          class="w-full"
+          :get-popup-container="getSelectPopupContainer"
+          :placeholder="pcbaOutputDetailPi.ph('unachievedReason')"
+          :disabled="loading"
+          allow-clear
+        />
+      </template>
+      <template #cell-isObsolete="{ record }">
+        <TaktSelect
+          v-model:value="record.isObsolete"
+          dict-type="sys_yes_no_type"
+          class="w-full"
+          :get-popup-container="getSelectPopupContainer"
+          :placeholder="pcbaOutputDetailPi.ph('isObsolete')"
+          :disabled="loading"
+          allow-clear
+        />
+      </template>
+    </TaktEditableTable>
   </a-form>
 </template>
 
@@ -325,28 +370,28 @@
  * PCBA日报实体 达成率维护表单 · 由 generate-vue-master-detail-from-api.cjs 根据 types/api 生成
  * @module views/logistics/manufacturing/output/pcba-output/components
  */
-import { reactive, watch, computed, ref, onMounted } from 'vue'
+import { reactive, watch, computed, ref, onMounted, nextTick } from 'vue'
 import { useI18n } from 'vue-i18n'
 import type { Rule } from 'ant-design-vue/es/form'
+import { usePcbaOutputI18n } from '../composables/use-pcba-output-i18n'
+import { usePcbaOutputDetailDictFormat } from '../composables/use-pcba-output-detail-dict-format'
+import { getProductionOrderByCode } from '@/api/logistics/manufacturing/aps/production-order'
+import { getModelDestinationByMaterial } from '@/api/logistics/materials/model-destination'
+import { getPcbaOutputDefaultDetailsByMaterial } from '@/api/logistics/manufacturing/output/pcba-output'
+
+/** 实体字段 i18n */
+const pi = usePcbaOutputI18n()
+const { hydrateDetailDictFields, formatDetailDictFieldsForSubmit } = usePcbaOutputDetailDictFormat()
+
 import type { PcbaOutputCreate } from '@/types/logistics/manufacturing/output/pcba-output'
 import TaktSelect from '@/components/business/takt-select/index.vue'
 import { RiQuestionLine } from '@remixicon/vue'
 import { useDictDataStore } from '@/stores/foundation/dict-data'
 import { useTenantStore } from '@/stores/identity/tenant'
 import { useUserStore } from '@/stores/identity/user'
-import { getProductionOrderByCode } from '@/api/logistics/manufacturing/planning/production-order'
-import { getModelDestinationByMaterial } from '@/api/logistics/materials/model-destination'
-import {
-  isOutputProdDateLocked,
-  isOutputProdDateSelectable,
-  outputProdDatePickerDisabledDate,
-  resolveDefaultOutputProdDateYmd,
-} from '../../composables/takt-output-prod-date-edit-lock'
-import { useOutputProdDateI18n } from '../../composables/use-output-prod-date-i18n'
 
 /** i18n 翻译函数 */
 const { t } = useI18n()
-const prodDateI18n = useOutputProdDateI18n()
 
 /** Pinia：租户/公司上下文 */
 const tenantStore = useTenantStore()
@@ -374,99 +419,330 @@ const formContentClass = computed(() => (formFields.length > 10 ? 'takt-form-con
 /** 当前激活的 Tab key */
 const activeTab = ref('tab-0')
 /** CreateDto 字段名列表（与 formState 键对齐） */
-const formFields = ["tenantCode","companyCode","companyDefaultCulture","plantCode","prodCategory","prodDate","prodTeam","shiftNo","prodOrderCode","modelCode","batchNo","materialCode","prodOrderQty","stdMinutes","stdShorts","stdCapacity","extField","remark"]
+const formFields = ["tenantCode","companyCode","companyDefaultCulture","plantCode","prodCategory","prodDate","prodOrderType","prodOrderCode","modelCode","materialCode","batchNo","prodOrderQty","serialNo","extField","remark"]
+
 
 import type { TaktEditableTableColumn } from '@/components/business/takt-editable-table/types'
+import { resolveNextDetailLineNumber } from '@/utils/takt-sequence'
+import { usePcbaOutputDetailI18n } from '../composables/use-pcba-output-detail-i18n'
+
+const pcbaOutputDetailPi = usePcbaOutputDetailI18n()
+
+/** 弹窗/表格内 TaktSelect 下拉挂载容器（避免 overflow 裁剪与表头列错位） */
+function getSelectPopupContainer(triggerNode?: HTMLElement): HTMLElement {
+  return triggerNode?.ownerDocument?.body ?? document.body
+}
 
 const childPcbaOutputDetailRows = ref<Record<string, unknown>[]>([])
+/** 是否正在按工单回填主表（避免 watch 链重复触发） */
+const isBackfillingFromOrder = ref(false)
 const pcbaOutputDetailTableRef = ref<{
   getRows: () => Record<string, unknown>[]
   validate: () => Promise<unknown>
   resetRows: () => void
 } | null>(null)
 
+/** 是否已持久化的子表行 */
+function isPersistedPcbaOutputDetailRow(row: Record<string, unknown>): boolean {
+  const id = row.pcbaOutputDetailId
+  if (id == null || id === '') {
+    return false
+  }
+  return String(id) !== '0'
+}
+
+/** 分配下一可用子表行号（含作废行，仅据当前表格行递增） */
+function allocateNextPcbaOutputDetailLineNumber(): number {
+  const rows = pcbaOutputDetailTableRef.value?.getRows?.() ?? childPcbaOutputDetailRows.value
+  return resolveNextDetailLineNumber(0, rows)
+}
+
 /** 子表 pcbaOutputDetail 可编辑列 */
 const pcbaOutputDetailFormColumns = computed<TaktEditableTableColumn[]>(() => [
   {
     key: 'prodOrderCode',
-    title: t('entity.pcbaoutputdetail.prodordercode'),
+    title: pcbaOutputDetailPi.label('prodOrderCode'),
     editor: 'input',
     width: 140,
   },
   {
     key: 'lineNumber',
-    title: t('entity.pcbaoutputdetail.linenumber'),
-    editor: 'inputNumber',
-    width: 140, summary: 'sum',
+    title: pcbaOutputDetailPi.label('lineNumber'),
+    width: 140,
   },
   {
     key: 'timePeriod',
-    title: t('entity.pcbaoutputdetail.timeperiod'),
+    title: pcbaOutputDetailPi.label('timePeriod'),
     editor: 'input',
+    width: 140,
+  },
+  {
+    key: 'prodTeam',
+    title: pcbaOutputDetailPi.label('prodTeam'),
+    width: 140,
+  },
+  {
+    key: 'productionEquipmentCode',
+    title: pcbaOutputDetailPi.label('productionEquipmentCode'),
+    width: 140,
+  },
+  {
+    key: 'directLabor',
+    title: pcbaOutputDetailPi.label('directLabor'),
+    width: 140,
+  },
+  {
+    key: 'indirectLabor',
+    title: pcbaOutputDetailPi.label('indirectLabor'),
     width: 140,
   },
   {
     key: 'shiftNo',
-    title: t('entity.pcbaoutputdetail.shiftno'),
-    editor: 'inputNumber',
+    title: pcbaOutputDetailPi.label('shiftNo'),
+    width: 140,
+  },
+  {
+    key: 'stdShorts',
+    title: pcbaOutputDetailPi.label('stdShorts'),
     width: 140,
   },
   {
     key: 'pcbBoardType',
-    title: t('entity.pcbaoutputdetail.pcbboardtype'),
-    editor: 'input',
+    title: pcbaOutputDetailPi.label('pcbBoardType'),
     width: 140,
   },
   {
     key: 'panelSide',
-    title: t('entity.pcbaoutputdetail.panelside'),
-    editor: 'input',
+    title: pcbaOutputDetailPi.label('panelSide'),
     width: 140,
   },
   {
     key: 'batchQty',
-    title: t('entity.pcbaoutputdetail.batchqty'),
-    editor: 'inputNumber',
+    title: pcbaOutputDetailPi.label('batchQty'),
     width: 140,
   },
   {
     key: 'dailyCompletedQty',
-    title: t('entity.pcbaoutputdetail.dailycompletedqty'),
-    editor: 'inputNumber',
+    title: pcbaOutputDetailPi.label('dailyCompletedQty'),
+    width: 140,
+  },
+  {
+    key: 'serialNo',
+    title: pcbaOutputDetailPi.label('serialNo'),
+    editor: 'input',
+    width: 140, required: true, unique: true,
+  },
+  {
+    key: 'defectCount',
+    title: pcbaOutputDetailPi.label('defectCount'),
+    width: 140,
+  },
+  {
+    key: 'downtimeMinutes',
+    title: pcbaOutputDetailPi.label('downtimeMinutes'),
+    width: 140,
+  },
+  {
+    key: 'downtimeReason',
+    title: pcbaOutputDetailPi.label('downtimeReason'),
+    width: 140,
+  },
+  {
+    key: 'downtimeDescription',
+    title: pcbaOutputDetailPi.label('downtimeDescription'),
+    editor: 'textarea',
+    rows: 1,
+    placeholder: pcbaOutputDetailPi.ph('downtimeDescription'),
+    width: 180,
+  },
+  {
+    key: 'repairMinutes',
+    title: pcbaOutputDetailPi.label('repairMinutes'),
+    width: 140,
+  },
+  {
+    key: 'switchCount',
+    title: pcbaOutputDetailPi.label('switchCount'),
+    width: 140,
+  },
+  {
+    key: 'switchTime',
+    title: pcbaOutputDetailPi.label('switchTime'),
+    width: 140,
+  },
+  {
+    key: 'stopTime',
+    title: pcbaOutputDetailPi.label('stopTime'),
+    width: 140,
+  },
+  {
+    key: 'totalMinutes',
+    title: pcbaOutputDetailPi.label('totalMinutes'),
+    width: 140,
+  },
+  {
+    key: 'unachievedReason',
+    title: pcbaOutputDetailPi.label('unachievedReason'),
+    width: 140,
+  },
+  {
+    key: 'unachievedDescription',
+    title: pcbaOutputDetailPi.label('unachievedDescription'),
+    editor: 'textarea',
+    rows: 1,
+    placeholder: pcbaOutputDetailPi.ph('unachievedDescription'),
+    width: 180,
+  },
+  {
+    key: 'confirmMinutes',
+    title: pcbaOutputDetailPi.label('confirmMinutes'),
+    width: 140,
+  },
+  {
+    key: 'mixedProd',
+    title: pcbaOutputDetailPi.label('mixedProd'),
+    width: 140,
+  },
+  {
+    key: 'isObsolete',
+    title: pcbaOutputDetailPi.label('isObsolete'),
     width: 140,
   },
 ])
 
 /** 编辑态从 formData 同步各子表行 */
 function syncChildRowsFromFormData(val: Partial<PcbaOutputCreate & { pcbaOutputId?: string }> | null | undefined) {
-  childPcbaOutputDetailRows.value = ((val as any)?.pcbaOutputDetails ?? []) as Record<string, unknown>[]
+  const rows_pcbaOutputDetail = ((val as any)?.pcbaOutputDetails ?? []) as Record<string, unknown>[]
+  childPcbaOutputDetailRows.value = rows_pcbaOutputDetail.map((row) => {
+    const next = { ...row }
+    hydrateDetailDictFields(next)
+    return next
+  })
 }
 
 function createDefaultPcbaOutputDetailRow(): Record<string, unknown> {
   return {
     prodOrderCode: '',
-    lineNumber: (childPcbaOutputDetailRows.value.length + 1) * 10,
+    lineNumber: allocateNextPcbaOutputDetailLineNumber(),
     timePeriod: '',
+    prodTeam: '',
+    productionEquipmentCode: '',
+    directLabor: 0,
+    indirectLabor: 0,
     shiftNo: 0,
+    stdShorts: 0,
     pcbBoardType: '',
     panelSide: '',
     batchQty: 0,
     dailyCompletedQty: 0,
+    serialNo: '',
+    defectCount: 0,
+    downtimeMinutes: 0,
+    downtimeReason: '',
+    downtimeDescription: '',
+    repairMinutes: 0,
+    switchCount: 0,
+    switchTime: 0,
+    stopTime: 0,
+    totalMinutes: 0,
+    unachievedReason: '',
+    unachievedDescription: '',
+    confirmMinutes: 0,
+    mixedProd: 0,
+    isObsolete: 0,
+  }
+}
+
+/** 新增态：物料/工厂/生产日期就绪后按标准工序时间初始化子表行 */
+async function initDefaultDetailRowsIfNeeded() {
+  if (props.formData?.pcbaOutputId) {
+    return
+  }
+  const materialCode = String(formState.materialCode ?? '').trim()
+  const plantCode = String(formState.plantCode ?? '').trim()
+  const prodDate = String(formState.prodDate ?? '').trim()
+  if (!materialCode || !plantCode || !prodDate) {
+    return
+  }
+  if (childPcbaOutputDetailRows.value.length > 0) {
+    return
+  }
+  try {
+    const details = await getPcbaOutputDefaultDetailsByMaterial(materialCode, plantCode, prodDate)
+    const prodOrderCode = String(formState.prodOrderCode ?? '').trim()
+    childPcbaOutputDetailRows.value = (details ?? []).map((item) => ({
+      ...createDefaultPcbaOutputDetailRow(),
+      lineNumber: item.lineNumber,
+      timePeriod: item.workCenter,
+      stdShorts: item.standardShorts ?? 0,
+      prodOrderCode,
+    }))
+    await nextTick()
+  } catch {
+    childPcbaOutputDetailRows.value = []
+  }
+}
+
+/** 按工单号回填主表字段（仅新增态） */
+async function backfillFromProductionOrder() {
+  if (props.formData?.pcbaOutputId) {
+    return
+  }
+  const prodOrderCode = String(formState.prodOrderCode ?? '').trim()
+  if (!prodOrderCode) {
+    return
+  }
+  isBackfillingFromOrder.value = true
+  try {
+    const plantCode = String(formState.plantCode ?? '').trim()
+    const order = await getProductionOrderByCode(prodOrderCode, plantCode || undefined)
+    if (order.plantCode) {
+      formState.plantCode = order.plantCode
+    }
+    formState.prodOrderType = order.prodOrderType ?? ''
+    formState.materialCode = order.materialCode ?? ''
+    formState.prodOrderQty = order.prodOrderQty ?? 0
+    formState.batchNo = order.prodBatch ?? ''
+    formState.serialNo = order.serialNo ?? ''
+    if (order.materialCode) {
+      const model = await getModelDestinationByMaterial(order.materialCode)
+      if (model?.modelCode) {
+        formState.modelCode = model.modelCode
+      }
+    }
+    childPcbaOutputDetailRows.value = []
+    pcbaOutputDetailTableRef.value?.resetRows?.()
+    await initDefaultDetailRowsIfNeeded()
+  } catch {
+    // 工单不存在时保留用户已填内容
+  } finally {
+    isBackfillingFromOrder.value = false
   }
 }
 
 /** 组装 Create/Update 载荷（主表 + 子表数组） */
 function buildSubmitPayload() {
   const masterId = props.formData?.pcbaOutputId ?? ''
+  const isUpdate = Boolean(masterId)
+  const rawRows = pcbaOutputDetailTableRef.value?.getRows?.() ?? childPcbaOutputDetailRows.value
   return {
     ...formState,
-    pcbaOutputDetails: pcbaOutputDetailTableRef.value?.getRows?.() ?? childPcbaOutputDetailRows.value.map((rest) => ({
-      ...rest,
-      tenantCode: tenantStore.tenantCode,
-      companyCode: tenantStore.companyCode,
-      companyDefaultCulture: userStore.userInfo?.companyDefaultCulture ?? '',
-      pcbaOutputId: masterId,
-    })),
+    pcbaOutputDetails: rawRows.map((row) => {
+      const normalized = {
+        ...row,
+        tenantCode: tenantStore.tenantCode,
+        companyCode: tenantStore.companyCode,
+        companyDefaultCulture: userStore.userInfo?.companyDefaultCulture ?? '',
+        pcbaOutputId: masterId,
+      }
+      formatDetailDictFieldsForSubmit(normalized)
+      if (isUpdate && isPersistedPcbaOutputDetailRow(row)) {
+        normalized.pcbaOutputDetailId = row.pcbaOutputDetailId
+      } else {
+        delete normalized.pcbaOutputDetailId
+      }
+      return normalized
+    }),
   }
 }
 
@@ -486,25 +762,14 @@ const props = withDefaults(defineProps<Props>(), {
 const formRef = ref()
 /** 表单双向绑定模型 */
 const formState = reactive<Record<string, any>>({})
-
-/** 主表生产日期是否已锁定 */
-const isMasterProdDateLocked = computed(() =>
-  isOutputProdDateLocked(String(formState.prodDate ?? '').trim().slice(0, 10)),
-)
-/** 锁定提示文案 */
-const prodDateLockedAlertMessage = computed(() =>
-  prodDateI18n.prodDateLockedMessage(String(formState.prodDate ?? '').trim().slice(0, 10)),
-)
-/** 生产日期不可选已锁定/跨月/未来日期 */
-function prodDatePickerDisabledDate(current: Parameters<typeof outputProdDatePickerDisabledDate>[0]) {
-  return outputProdDatePickerDisabledDate(current)
+/** 表单字段默认值（字典 IsDefault=1，来自 TaktDictDataSeedData） */
+const FORM_FIELD_DEFAULTS: Record<string, string | number> = {
+  prodCategory: "FPP"
 }
 
-/** 表单字段默认值 */
+/** 写入表单默认值（新增 / resetFields / 弹窗再次打开时） */
 function applyFormDefaults(target: Record<string, unknown>) {
-  if (!target.prodDate) {
-    target.prodDate = resolveDefaultOutputProdDateYmd()
-  }
+  Object.assign(target, FORM_FIELD_DEFAULTS)
 }
 
 /** Pinia：字典缓存（TaktSelect dict-type 渲染前预热，避免选项空白） */
@@ -540,38 +805,26 @@ watch(
   { immediate: true }
 )
 
-/** 按工单号回填主表字段（仅新增态） */
-async function backfillFromProductionOrder() {
-  if (props.formData?.pcbaOutputId) {
-    return
-  }
-  const prodOrderCode = String(formState.prodOrderCode ?? '').trim()
-  if (!prodOrderCode) {
-    return
-  }
-  try {
-    const order = await getProductionOrderByCode(prodOrderCode)
-    if (order.plantCode) {
-      formState.plantCode = order.plantCode
-    }
-    formState.materialCode = order.materialCode ?? ''
-    formState.prodOrderQty = order.prodOrderQty ?? 0
-    formState.batchNo = order.prodBatch ?? ''
-    if (order.materialCode) {
-      const model = await getModelDestinationByMaterial(order.materialCode)
-      if (model?.modelCode) {
-        formState.modelCode = model.modelCode
-      }
-    }
-  } catch {
-    // 工单不存在时保留用户已填内容
-  }
-}
-
 watch(
   () => formState.prodOrderCode,
   () => {
     void backfillFromProductionOrder()
+  }
+)
+
+/** 生产日期变更后：新增态且已有物料/工厂时重建默认子表行 */
+watch(
+  () => formState.prodDate,
+  () => {
+    if (props.formData?.pcbaOutputId || isBackfillingFromOrder.value) {
+      return
+    }
+    if (!formState.materialCode || !formState.plantCode) {
+      return
+    }
+    childPcbaOutputDetailRows.value = []
+    pcbaOutputDetailTableRef.value?.resetRows?.()
+    void initDefaultDetailRowsIfNeeded()
   }
 )
 
@@ -588,143 +841,31 @@ watch(
 
 /** 表单校验规则（与 FluentValidation 必填对齐） */
 const rules = computed<Record<string, Rule[]>>(() => ({
-  plantCode: [
-    {
-      required: true,
-      message: t('common.page.form.placeholder.required', { field: t('entity.pcbaoutput.plantcode') }),
-      trigger: 'blur'
-    }
-  ],
   prodCategory: [
     {
       required: true,
-      message: t('common.page.form.placeholder.select', { field: t('entity.pcbaoutput.prodcategory') }),
+      message: pi.ph('prodCategory'),
       trigger: 'change'
     }
   ],
   prodDate: [
     {
       required: true,
-      message: t('common.page.form.placeholder.select', { field: t('entity.pcbaoutput.proddate') }),
+      message: pi.ph('prodDate'),
       trigger: 'change'
-    },
-    {
-      validator: async (_rule, value) => {
-        const ymd = String(value ?? '').trim().slice(0, 10)
-        if (!ymd) {
-          return Promise.resolve()
-        }
-        if (isOutputProdDateLocked(ymd)) {
-          return Promise.reject(prodDateI18n.prodDateLockedMessage(ymd))
-        }
-        if (!isOutputProdDateSelectable(ymd)) {
-          return Promise.reject(prodDateI18n.prodDateOutOfRangeMessage())
-        }
-        return Promise.resolve()
-      },
-      trigger: 'change',
-    },
-  ],
-  prodTeam: [
-    {
-      required: true,
-      message: t('common.page.form.placeholder.required', { field: t('entity.pcbaoutput.prodteam') }),
-      trigger: 'blur'
     }
   ],
-  shiftNo: [{
-    validator: async (_rule, value) => {
-      if (value === undefined || value === null || value === '') {
-        return Promise.reject(t('common.page.form.placeholder.select', { field: t('entity.pcbaoutput.shiftno') }))
-      }
-      const num = typeof value === 'number' ? value : Number(value)
-      if (!Number.isFinite(num)) {
-        return Promise.reject(t('common.page.form.placeholder.select', { field: t('entity.pcbaoutput.shiftno') }))
-      }
-      return Promise.resolve()
-    },
-    trigger: 'change'
-  }],
   prodOrderCode: [
     {
       required: true,
-      message: t('common.page.form.placeholder.required', { field: t('entity.pcbaoutput.prodordercode') }),
-      trigger: 'blur'
+      message: pi.ph('prodOrderCode'),
+      trigger: 'change'
     }
   ],
-  modelCode: [
-    {
-      required: true,
-      message: t('common.page.form.placeholder.required', { field: t('entity.pcbaoutput.modelcode') }),
-      trigger: 'blur'
-    }
-  ],
-  materialCode: [
-    {
-      required: true,
-      message: t('common.page.form.placeholder.required', { field: t('entity.pcbaoutput.materialcode') }),
-      trigger: 'blur'
-    }
-  ],
-  prodOrderQty: [{
-    validator: async (_rule, value) => {
-      if (value === undefined || value === null || value === '') {
-        return Promise.reject(t('common.page.form.placeholder.select', { field: t('entity.pcbaoutput.prodorderqty') }))
-      }
-      const num = typeof value === 'number' ? value : Number(value)
-      if (!Number.isFinite(num)) {
-        return Promise.reject(t('common.page.form.placeholder.select', { field: t('entity.pcbaoutput.prodorderqty') }))
-      }
-      return Promise.resolve()
-    },
-    trigger: 'change'
-  }],
-  stdMinutes: [{
-    validator: async (_rule, value) => {
-      if (value === undefined || value === null || value === '') {
-        return Promise.reject(t('common.page.form.placeholder.select', { field: t('entity.pcbaoutput.stdminutes') }))
-      }
-      const num = typeof value === 'number' ? value : Number(value)
-      if (!Number.isFinite(num)) {
-        return Promise.reject(t('common.page.form.placeholder.select', { field: t('entity.pcbaoutput.stdminutes') }))
-      }
-      return Promise.resolve()
-    },
-    trigger: 'change'
-  }],
-  stdShorts: [{
-    validator: async (_rule, value) => {
-      if (value === undefined || value === null || value === '') {
-        return Promise.reject(t('common.page.form.placeholder.select', { field: t('entity.pcbaoutput.stdshorts') }))
-      }
-      const num = typeof value === 'number' ? value : Number(value)
-      if (!Number.isFinite(num)) {
-        return Promise.reject(t('common.page.form.placeholder.select', { field: t('entity.pcbaoutput.stdshorts') }))
-      }
-      return Promise.resolve()
-    },
-    trigger: 'change'
-  }],
-  stdCapacity: [{
-    validator: async (_rule, value) => {
-      if (value === undefined || value === null || value === '') {
-        return Promise.reject(t('common.page.form.placeholder.select', { field: t('entity.pcbaoutput.stdcapacity') }))
-      }
-      const num = typeof value === 'number' ? value : Number(value)
-      if (!Number.isFinite(num)) {
-        return Promise.reject(t('common.page.form.placeholder.select', { field: t('entity.pcbaoutput.stdcapacity') }))
-      }
-      return Promise.resolve()
-    },
-    trigger: 'change'
-  }],
 }))
 
 /** 校验表单（失败 throw，供父级 handleFormSubmit 捕获） */
 async function validate() {
-  if (isMasterProdDateLocked.value) {
-    throw new Error(prodDateLockedAlertMessage.value)
-  }
   await formRef.value?.validate()
   await pcbaOutputDetailTableRef.value?.validate?.()
   return formState
@@ -733,26 +874,6 @@ async function validate() {
 /** 映射为 Create/Update DTO */
 function getValues(): Record<string, any> {
   const payload = buildSubmitPayload() as Record<string, unknown>
-  if ('shiftNo' in payload) {
-    const rawshiftNo = payload.shiftNo
-    payload.shiftNo = typeof rawshiftNo === 'number' ? rawshiftNo : Number(rawshiftNo)
-  }
-  if ('prodOrderQty' in payload) {
-    const rawprodOrderQty = payload.prodOrderQty
-    payload.prodOrderQty = typeof rawprodOrderQty === 'number' ? rawprodOrderQty : Number(rawprodOrderQty)
-  }
-  if ('stdMinutes' in payload) {
-    const rawstdMinutes = payload.stdMinutes
-    payload.stdMinutes = typeof rawstdMinutes === 'number' ? rawstdMinutes : Number(rawstdMinutes)
-  }
-  if ('stdShorts' in payload) {
-    const rawstdShorts = payload.stdShorts
-    payload.stdShorts = typeof rawstdShorts === 'number' ? rawstdShorts : Number(rawstdShorts)
-  }
-  if ('stdCapacity' in payload) {
-    const rawstdCapacity = payload.stdCapacity
-    payload.stdCapacity = typeof rawstdCapacity === 'number' ? rawstdCapacity : Number(rawstdCapacity)
-  }
   if ('sortOrder' in payload) delete payload.sortOrder
   return payload
 }

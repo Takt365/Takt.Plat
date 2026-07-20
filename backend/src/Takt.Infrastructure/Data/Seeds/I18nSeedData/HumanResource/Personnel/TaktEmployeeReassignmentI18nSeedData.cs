@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Infrastructure.Data.Seeds.I18nSeedData.HumanResource.Personnel
 // 文件名称：TaktEmployeeReassignmentI18nSeedData.cs
-// 创建时间：2026-07-09
+// 创建时间：2026-07-20
 // 创建人：Takt365(Auto Generated)
 // 功能描述：TaktEmployeeReassignment 实体字段国际化种子（无对应 frontend locales；TranslationText 取自 ColumnDescription，ContextNote 取自属性 XML summary）
 // 
@@ -91,13 +91,13 @@ public class TaktEmployeeReassignmentI18nSeedData : ITaktSeedDataCoordinator
             new TranslationSeedItem("entity.employeereassignment._self", "zh-HK", "员工调动记录信息_hk", "实体名称"),
 
             // entity.employeereassignment.employeeid
-            new TranslationSeedItem("entity.employeereassignment.employeeid", "en-US", "员工ID_us", "员工（关联 TaktEmployee.Id，选项 TaktEmployees/options）"),
+            new TranslationSeedItem("entity.employeereassignment.employeeid", "en-US", "员工ID_us", "员工（选项 TaktEmployees/options，DictValue=Id）"),
             // entity.employeereassignment.employeeid
-            new TranslationSeedItem("entity.employeereassignment.employeeid", "ja-JP", "员工ID_jp", "员工（关联 TaktEmployee.Id，选项 TaktEmployees/options）"),
+            new TranslationSeedItem("entity.employeereassignment.employeeid", "ja-JP", "员工ID_jp", "员工（选项 TaktEmployees/options，DictValue=Id）"),
             // entity.employeereassignment.employeeid
-            new TranslationSeedItem("entity.employeereassignment.employeeid", "zh-CN", "员工ID", "员工（关联 TaktEmployee.Id，选项 TaktEmployees/options）"),
+            new TranslationSeedItem("entity.employeereassignment.employeeid", "zh-CN", "员工ID", "员工（选项 TaktEmployees/options，DictValue=Id）"),
             // entity.employeereassignment.employeeid
-            new TranslationSeedItem("entity.employeereassignment.employeeid", "zh-HK", "员工ID_hk", "员工（关联 TaktEmployee.Id，选项 TaktEmployees/options）"),
+            new TranslationSeedItem("entity.employeereassignment.employeeid", "zh-HK", "员工ID_hk", "员工（选项 TaktEmployees/options，DictValue=Id）"),
 
             // entity.employeereassignment.reassignmenttype
             new TranslationSeedItem("entity.employeereassignment.reassignmenttype", "en-US", "调动类型_us", "调动类型（字典 hr_reassignment_type；0=转岗 1=调岗）"),
@@ -127,13 +127,13 @@ public class TaktEmployeeReassignmentI18nSeedData : ITaktSeedDataCoordinator
             new TranslationSeedItem("entity.employeereassignment.fromdeptname", "zh-HK", "调出部门名称_hk", "调出部门名称"),
 
             // entity.employeereassignment.frompostid
-            new TranslationSeedItem("entity.employeereassignment.frompostid", "en-US", "调出岗位ID_us", "调出岗位（关联 TaktPost.Id，选项 TaktPosts/options）"),
+            new TranslationSeedItem("entity.employeereassignment.frompostid", "en-US", "调出岗位ID_us", "调出岗位（选项 TaktPosts/options，DictValue=Id）"),
             // entity.employeereassignment.frompostid
-            new TranslationSeedItem("entity.employeereassignment.frompostid", "ja-JP", "调出岗位ID_jp", "调出岗位（关联 TaktPost.Id，选项 TaktPosts/options）"),
+            new TranslationSeedItem("entity.employeereassignment.frompostid", "ja-JP", "调出岗位ID_jp", "调出岗位（选项 TaktPosts/options，DictValue=Id）"),
             // entity.employeereassignment.frompostid
-            new TranslationSeedItem("entity.employeereassignment.frompostid", "zh-CN", "调出岗位ID", "调出岗位（关联 TaktPost.Id，选项 TaktPosts/options）"),
+            new TranslationSeedItem("entity.employeereassignment.frompostid", "zh-CN", "调出岗位ID", "调出岗位（选项 TaktPosts/options，DictValue=Id）"),
             // entity.employeereassignment.frompostid
-            new TranslationSeedItem("entity.employeereassignment.frompostid", "zh-HK", "调出岗位ID_hk", "调出岗位（关联 TaktPost.Id，选项 TaktPosts/options）"),
+            new TranslationSeedItem("entity.employeereassignment.frompostid", "zh-HK", "调出岗位ID_hk", "调出岗位（选项 TaktPosts/options，DictValue=Id）"),
 
             // entity.employeereassignment.frompostname
             new TranslationSeedItem("entity.employeereassignment.frompostname", "en-US", "调出岗位名称_us", "调出岗位名称"),
@@ -163,13 +163,13 @@ public class TaktEmployeeReassignmentI18nSeedData : ITaktSeedDataCoordinator
             new TranslationSeedItem("entity.employeereassignment.todeptname", "zh-HK", "调入部门名称_hk", "调入部门名称"),
 
             // entity.employeereassignment.topostid
-            new TranslationSeedItem("entity.employeereassignment.topostid", "en-US", "调入岗位ID_us", "调入岗位（关联 TaktPost.Id，选项 TaktPosts/options）"),
+            new TranslationSeedItem("entity.employeereassignment.topostid", "en-US", "调入岗位ID_us", "调入岗位（选项 TaktPosts/options，DictValue=Id）"),
             // entity.employeereassignment.topostid
-            new TranslationSeedItem("entity.employeereassignment.topostid", "ja-JP", "调入岗位ID_jp", "调入岗位（关联 TaktPost.Id，选项 TaktPosts/options）"),
+            new TranslationSeedItem("entity.employeereassignment.topostid", "ja-JP", "调入岗位ID_jp", "调入岗位（选项 TaktPosts/options，DictValue=Id）"),
             // entity.employeereassignment.topostid
-            new TranslationSeedItem("entity.employeereassignment.topostid", "zh-CN", "调入岗位ID", "调入岗位（关联 TaktPost.Id，选项 TaktPosts/options）"),
+            new TranslationSeedItem("entity.employeereassignment.topostid", "zh-CN", "调入岗位ID", "调入岗位（选项 TaktPosts/options，DictValue=Id）"),
             // entity.employeereassignment.topostid
-            new TranslationSeedItem("entity.employeereassignment.topostid", "zh-HK", "调入岗位ID_hk", "调入岗位（关联 TaktPost.Id，选项 TaktPosts/options）"),
+            new TranslationSeedItem("entity.employeereassignment.topostid", "zh-HK", "调入岗位ID_hk", "调入岗位（选项 TaktPosts/options，DictValue=Id）"),
 
             // entity.employeereassignment.topostname
             new TranslationSeedItem("entity.employeereassignment.topostname", "en-US", "调入岗位名称_us", "调入岗位名称"),

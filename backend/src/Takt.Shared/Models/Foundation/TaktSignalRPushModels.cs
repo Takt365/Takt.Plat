@@ -20,6 +20,11 @@ namespace Takt.Shared.Models.Foundation;
 public class TaktSignalRPrivateMessagePush
 {
     /// <summary>
+    /// 租户编码（后台任务推送时供统计刷新对齐隔离）
+    /// </summary>
+    public string? TenantCode { get; set; }
+
+    /// <summary>
     /// 公司编码
     /// </summary>
     public string CompanyCode { get; set; } = string.Empty;

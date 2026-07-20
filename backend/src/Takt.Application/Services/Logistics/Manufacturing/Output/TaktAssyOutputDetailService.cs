@@ -15,11 +15,11 @@ using System.Linq.Expressions;
 using Mapster;
 using SqlSugar;
 using Takt.Application.Dtos.Logistics.Manufacturing.Output;
+using Takt.Application.Services.Foundation;
 using Takt.Application.Services.Logistics.Manufacturing.Defect;
-using Takt.Domain.Entities.Foundation;
 using Takt.Domain.Entities.Logistics.Manufacturing.Defect;
 using Takt.Domain.Entities.Logistics.Manufacturing.Output;
-using Takt.Domain.Entities.Logistics.Manufacturing.Planning;
+using Takt.Domain.Entities.Logistics.Manufacturing.Aps;
 using Takt.Domain.Interfaces;
 using Takt.Domain.Repositories;
 using Takt.Shared.Exceptions;
@@ -45,7 +45,7 @@ public class TaktAssyOutputDetailService : TaktServiceBase, ITaktAssyOutputDetai
     private readonly ITaktCompanyRepository<TaktStandardOperationRate> _standardOperationRateRepository;
     private readonly ITaktLineNumberGenerator _lineNumberGenerator;
     private readonly ITaktUniqueValidator _uniqueValidator;
-    private readonly ITaktTenantRepository<TaktDictData> _dictDataRepository;
+    private readonly ITaktDictDataService _dictDataService;
 
     /// <summary>
     /// 构造函数
@@ -61,7 +61,7 @@ public class TaktAssyOutputDetailService : TaktServiceBase, ITaktAssyOutputDetai
     /// <param name="standardOperationRateRepository">标准生产稼动率仓储</param>
     /// <param name="lineNumberGenerator">明细行号生成器</param>
     /// <param name="uniqueValidator">唯一性验证器</param>
-    /// <param name="dictDataRepository">字典数据仓储（多选原因 sortOrder 排序）</param>
+    /// <param name="dictDataService">字典数据服务</param>
     /// <param name="userContext">用户上下文</param>
     /// <param name="localizationService">本地化服务</param>
     public TaktAssyOutputDetailService(
@@ -76,7 +76,7 @@ public class TaktAssyOutputDetailService : TaktServiceBase, ITaktAssyOutputDetai
         ITaktCompanyRepository<TaktStandardOperationRate> standardOperationRateRepository,
         ITaktLineNumberGenerator lineNumberGenerator,
         ITaktUniqueValidator uniqueValidator,
-        ITaktTenantRepository<TaktDictData> dictDataRepository,
+        ITaktDictDataService dictDataService,
         ITaktUserContext? userContext = null,
         ITaktLocalizationService? localizationService = null)
         : base(userContext, localizationService)
@@ -92,7 +92,7 @@ public class TaktAssyOutputDetailService : TaktServiceBase, ITaktAssyOutputDetai
         _standardOperationRateRepository = standardOperationRateRepository;
         _lineNumberGenerator = lineNumberGenerator;
         _uniqueValidator = uniqueValidator;
-        _dictDataRepository = dictDataRepository;
+        _dictDataService = dictDataService;
     }
 
     /// <summary>
@@ -154,9 +154,6 @@ public class TaktAssyOutputDetailService : TaktServiceBase, ITaktAssyOutputDetai
     /// <returns>DTO</returns>
     public async Task<TaktAssyOutputDetailDto> CreateAssyOutputDetailAsync(TaktAssyOutputDetailCreateDto dto)
     {
-        var (dictSnapshot, dictSortMaps) = await TaktOutputDictMultiFieldsHelper.LoadAsync(_dictDataRepository, CurrentTenantCode);
-        (dto.DowntimeReason, dto.UnachievedReason) = TaktOutputDictMultiFieldsHelper.NormalizeFields(
-            dto.DowntimeReason, dto.UnachievedReason, dictSnapshot, dictSortMaps);
         var entity = dto.Adapt<TaktAssyOutputDetail>();
         var master = await RequireAssyOutputMasterAsync(entity, dto);
         EnsureAssyOutputProdDateEditable(master.ProdDate);
@@ -208,9 +205,6 @@ public class TaktAssyOutputDetailService : TaktServiceBase, ITaktAssyOutputDetai
         var oldTimePeriod = entity.TimePeriod;
         var oldProdTeam = oldMaster?.ProdTeam;
         var oldProdDate = oldMaster?.ProdDate ?? default;
-        var (dictSnapshot, dictSortMaps) = await TaktOutputDictMultiFieldsHelper.LoadAsync(_dictDataRepository, CurrentTenantCode);
-        (dto.DowntimeReason, dto.UnachievedReason) = TaktOutputDictMultiFieldsHelper.NormalizeFields(
-            dto.DowntimeReason, dto.UnachievedReason, dictSnapshot, dictSortMaps);
         dto.Adapt(entity);
         var master = await RequireAssyOutputMasterAsync(entity, dto);
         EnsureAssyOutputProdDateEditable(master.ProdDate);
@@ -333,14 +327,18 @@ public class TaktAssyOutputDetailService : TaktServiceBase, ITaktAssyOutputDetai
         var importSeenKeys = new HashSet<string>(StringComparer.Ordinal);
         var importOutputIds = new HashSet<long>();
         var importBucketsToRefresh = new HashSet<(string ProdTeam, DateTime ProdDate, string TimePeriod)>();
-        var (dictSnapshot, dictSortMaps) = await TaktOutputDictMultiFieldsHelper.LoadAsync(_dictDataRepository, CurrentTenantCode);
+        var dictContext = await _dictDataService.CreateDictStorageContextAsync(
+            TaktDictStorageHelper.CollectDictTypeCodes(TaktOutputDetailDictImportBindings.AssyDetail).ToArray());
         for (var i = 0; i < rows.Count; i++)
         {
             try
             {
                 var importDto = rows[i].Adapt<TaktAssyOutputDetailCreateDto>();
-                (importDto.DowntimeReason, importDto.UnachievedReason) = TaktOutputDictMultiFieldsHelper.NormalizeFields(
-                    importDto.DowntimeReason, importDto.UnachievedReason, dictSnapshot, dictSortMaps);
+                TaktDictStorageHelper.ApplyStorageLabels(
+                    importDto,
+                    typeof(TaktAssyOutputDetailCreateDto),
+                    dictContext,
+                    TaktOutputDetailDictImportBindings.AssyDetail);
                 var entity = importDto.Adapt<TaktAssyOutputDetail>();
                 var master = await RequireAssyOutputMasterAsync(entity, importDto);
                 EnsureAssyOutputProdDateEditable(master.ProdDate);

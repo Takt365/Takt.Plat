@@ -60,16 +60,20 @@ public sealed class TaktQuartzSchedulerManager : ITaktQuartzSchedulerManager
     /// 调度定时任务（新增或覆盖）
     /// </summary>
     /// <param name="task">定时任务实体</param>
+    /// <param name="userName">触发/创建用户（写入 JobDataMap）</param>
     /// <param name="cancellationToken">取消令牌</param>
     /// <returns>任务</returns>
-    public async Task ScheduleQuartzTaskAsync(TaktQuartzTask task, CancellationToken cancellationToken = default)
+    public async Task ScheduleQuartzTaskAsync(
+        TaktQuartzTask task,
+        string? userName = null,
+        CancellationToken cancellationToken = default)
     {
         ArgumentNullException.ThrowIfNull(task);
         EnsureEnabled();
         var scheduler = await _schedulerFactory.GetScheduler(cancellationToken);
         var jobKey = BuildJobKey(task);
         var triggerKey = BuildTriggerKey(task);
-        var jobDetail = BuildJobDetail(task);
+        var jobDetail = BuildJobDetail(task, userName);
         var trigger = BuildTrigger(task, triggerKey);
         if (await scheduler.CheckExists(jobKey, cancellationToken))
         {
@@ -119,7 +123,7 @@ public sealed class TaktQuartzSchedulerManager : ITaktQuartzSchedulerManager
         var jobKey = BuildJobKey(task);
         if (!await scheduler.CheckExists(jobKey, cancellationToken))
         {
-            await ScheduleQuartzTaskAsync(task, cancellationToken);
+            await ScheduleQuartzTaskAsync(task, cancellationToken: cancellationToken);
             return;
         }
         await scheduler.ResumeJob(jobKey, cancellationToken);
@@ -161,7 +165,7 @@ public sealed class TaktQuartzSchedulerManager : ITaktQuartzSchedulerManager
         var jobKey = BuildJobKey(task);
         if (!await scheduler.CheckExists(jobKey, cancellationToken))
         {
-            await ScheduleQuartzTaskAsync(task, cancellationToken);
+            await ScheduleQuartzTaskAsync(task, cancellationToken: cancellationToken);
         }
         var data = new JobDataMap
         {
@@ -169,6 +173,7 @@ public sealed class TaktQuartzSchedulerManager : ITaktQuartzSchedulerManager
             { TaktQuartzJobDataKeys.ManualTrigger, 1 },
             { TaktQuartzJobDataKeys.ExecuteParams, task.ExecuteParams ?? string.Empty },
         };
+        TaktQuartzJobExecutionLogger.LogManualTrigger(task, userName, jobKey.ToString());
         await scheduler.TriggerJob(jobKey, data, cancellationToken);
     }
 
@@ -193,7 +198,7 @@ public sealed class TaktQuartzSchedulerManager : ITaktQuartzSchedulerManager
                 .ToListAsync(cancellationToken);
             foreach (var task in tasks)
             {
-                await ScheduleQuartzTaskAsync(task, cancellationToken);
+                await ScheduleQuartzTaskAsync(task, cancellationToken: cancellationToken);
                 loadedCount++;
             }
         }
@@ -240,14 +245,16 @@ public sealed class TaktQuartzSchedulerManager : ITaktQuartzSchedulerManager
     /// </summary>
     /// <param name="task">定时任务</param>
     /// <returns>JobDetail</returns>
-    private static IJobDetail BuildJobDetail(TaktQuartzTask task)
+    private static IJobDetail BuildJobDetail(TaktQuartzTask task, string? userName = null)
     {
         var jobType = task.Concurrent == 1 ? typeof(TaktQuartzConcurrentJob) : typeof(TaktQuartzSequentialJob);
         return JobBuilder.Create(jobType)
             .WithIdentity(BuildJobKey(task))
-            .UsingJobData(TaktQuartzJobDataKeys.TenantCode, task.TenantCode)
-            .UsingJobData(TaktQuartzJobDataKeys.CompanyCode, task.CompanyCode)
+            .UsingJobData(TaktQuartzJobDataKeys.TenantCode, task.TenantCode ?? string.Empty)
+            .UsingJobData(TaktQuartzJobDataKeys.CompanyCode, task.CompanyCode ?? string.Empty)
             .UsingJobData(TaktQuartzJobDataKeys.QuartzTaskId, task.Id)
+            .UsingJobData(TaktQuartzJobDataKeys.UserName, userName ?? string.Empty)
+            .UsingJobData(TaktQuartzJobDataKeys.ExecuteParams, task.ExecuteParams ?? string.Empty)
             .Build();
     }
 
@@ -280,6 +287,13 @@ public sealed class TaktQuartzSchedulerManager : ITaktQuartzSchedulerManager
             var cronBuilder = CronScheduleBuilder.CronSchedule(task.CronExpression);
             cronBuilder = ApplyCronMisfirePolicy(cronBuilder, task.MisfirePolicy);
             return builder.WithSchedule(cronBuilder).Build();
+        }
+        // IntervalSeconds<=0：一次性触发（用于后台备份等按 FirstRunAt 单次执行）
+        if (task.IntervalSeconds <= 0)
+        {
+            var oneShotBuilder = SimpleScheduleBuilder.Create().WithRepeatCount(0);
+            oneShotBuilder = ApplySimpleMisfirePolicy(oneShotBuilder, task.MisfirePolicy);
+            return builder.WithSchedule(oneShotBuilder).Build();
         }
         var interval = Math.Max(1, task.IntervalSeconds);
         var simpleBuilder = SimpleScheduleBuilder.Create()

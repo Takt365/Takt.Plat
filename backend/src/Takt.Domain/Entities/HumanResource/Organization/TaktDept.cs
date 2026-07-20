@@ -136,7 +136,7 @@ public class TaktDept : TaktCompanyEntityBase
 
     /// <summary>
 
-    /// 部门负责人（关联 TaktUser.Id，选项 TaktUsers/options）
+    /// 部门负责人（选项 TaktUsers/options，DictValue=Id）
 
     /// </summary>
 

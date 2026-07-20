@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：frontend/src/types/logistics/sales
 // 文件名称：price-item.d.ts
-// 创建时间：2026-07-09
+// 创建时间：2026-07-20
 // 创建人：Takt365(Auto Generated)
 // 功能描述：logistics/sales 模块类型定义（自动生成；类型名去 Takt 前缀与末尾 Dto，如 TaktCompanyDto → Company）
 // 
@@ -16,7 +16,7 @@ import type {
 } from '@/types/common';
 
 /**
- * Takt销售价格明细实体（客户物料价格明细表）
+ * Takt销售价格明细实体（定价记录条件行；主子表：TaktSalesPrice → Items → ScaleQuantities / ScaleValues）
  * 对应前端 TaktSalesPriceItemDto
  * 继承 TaktCompanyDtoBase
  * 对应前端 SalesPriceItem
@@ -29,54 +29,74 @@ export interface SalesPriceItem extends CompanyDtoBase {
   salesPriceItemId: string;
 
   /**
-   * 销售价格（关联 TaktSalesPrice.Id，选项 TaktSalesPrices/options）
+   * 销售价格 ID（主子表关系；选项 TaktSalesPrices/options，DictValue=Id）
    */
   salesPriceId: string;
 
   /**
-   * 销售价格（关联 TaktSalesPrice.Id，选项 TaktSalesPrices/options）
+   * 销售价格 名称（填充字段）
    */
   salesPriceName?: string;
 
   /**
-   * 销售价格编码（冗余字段，便于查询）
+   * 定价记录号（冗余；与主表 SalesPriceCode 一致，长度 20）
    */
   salesPriceCode: string;
 
   /**
-   * 行号（项号/序号，固定步长=10）
+   * 定价序号（项号/序号，固定步长=10）
    */
-  lineNumber: number;
+  salesPriceSeq: number;
 
   /**
-   * 物料编码（选项 TaktMaterials/options，DictValue=MaterialCode）
+   * 条件类型（冗余；字典 logistics_price_type；与主表 PriceType 一致，PB00/PR00/MWST/MWRK/NLXV）
    */
-  materialCode: string;
+  priceType: string;
 
   /**
-   * 销售单位（字典 logistics_unit_of_measure_code，DictValue=PC/EA 等；默认 PC）
+   * 等级类型（字典 logistics_scale_type；SAP STFKZ；A=基础等级，B=到等级，C=未使用，D=累进间隔等级）
    */
-  salesUnit: string;
+  scaleType?: string;
 
   /**
-   * 价格单位（字典 logistics_price_unit_param；1/10/100/1000；默认 1000）
+   * 等级基础（字典 logistics_scale_basis；SAP KZBZG；B=价值等级，C=数量规模，…）
    */
-  salesPerUnit: number;
+  scaleBasis?: string;
 
   /**
-   * 销售价格（decimal(18,5)）
+   * 等级数量
    */
-  salesPrice: number;
+  scaleQuantity: number;
 
   /**
-   * 最小订购量（基本单位数量，整数）
+   * 等级单位（字典 logistics_unit_of_measure_code，DictValue=PC/EA 等）
    */
-  minOrderQuantity: number;
+  scaleUnit?: string;
 
   /**
-   * 最大订购量（基本单位数量，0表示无限制，整数）
+   * 等级值
    */
-  maxOrderQuantity: number;
+  scaleValue: number;
+
+  /**
+   * 等级货币（字典 accounting_currency_code，DictValue=CNY/USD 等）
+   */
+  scaleCurrency?: string;
+
+  /**
+   * 计算类型（字典 logistics_calculation_type；SAP KRECH；默认 A=百分数）
+   */
+  calculationType: string;
+
+  /**
+   * 价格
+   */
+  price: number;
+
+  /**
+   * 税码（字典 accounting_tax_code，DictValue=J0/J1/J2…；SAP MWSKZ）
+   */
+  taxCode?: string;
 
   /**
    * 是否作废（字典 sys_yes_no_type，0=否 1=是；编辑移除子行时标记作废）
@@ -84,14 +104,14 @@ export interface SalesPriceItem extends CompanyDtoBase {
   isObsolete: number;
 
   /**
-   * 价格阶梯列表（主子表关系，一个物料价格可以有多个阶梯） （子表：TaktSalesPriceScale）
+   * 数量等级行列表（SAP KONM；主子表关系） （子表：TaktSalesPriceScaleQuantity）
    */
-  scales?: SalesPriceScale[];
+  scaleQuantities?: SalesPriceScaleQuantity[];
 
   /**
-   * 销售价格（主表） （主表：TaktSalesPrice）
+   * 价值等级行列表（SAP KONW；主子表关系） （子表：TaktSalesPriceScaleValue）
    */
-  price?: SalesPrice;
+  scaleValues?: SalesPriceScaleValue[];
 
 }
 
@@ -114,49 +134,69 @@ export interface SalesPriceItemQuery extends TaktPagedQuery {
   companyCode?: string;
 
   /**
-   * 销售价格（关联 TaktSalesPrice.Id，选项 TaktSalesPrices/options）
+   * 销售价格 ID（主子表关系；选项 TaktSalesPrices/options，DictValue=Id）
    */
   salesPriceId?: string;
 
   /**
-   * 销售价格编码（冗余字段，便于查询）
+   * 定价记录号（冗余；与主表 SalesPriceCode 一致，长度 20）
    */
   salesPriceCode?: string;
 
   /**
-   * 行号（项号/序号，固定步长=10）
+   * 定价序号（项号/序号，固定步长=10）
    */
-  lineNumber?: number;
+  salesPriceSeq?: number;
 
   /**
-   * 物料编码（选项 TaktMaterials/options，DictValue=MaterialCode）
+   * 条件类型（冗余；字典 logistics_price_type；与主表 PriceType 一致，PB00/PR00/MWST/MWRK/NLXV）
    */
-  materialCode?: string;
+  priceType?: string;
 
   /**
-   * 销售单位（字典 logistics_unit_of_measure_code，DictValue=PC/EA 等；默认 PC）
+   * 等级类型（字典 logistics_scale_type；SAP STFKZ；A=基础等级，B=到等级，C=未使用，D=累进间隔等级）
    */
-  salesUnit?: string;
+  scaleType?: string;
 
   /**
-   * 价格单位（字典 logistics_price_unit_param；1/10/100/1000；默认 1000）
+   * 等级基础（字典 logistics_scale_basis；SAP KZBZG；B=价值等级，C=数量规模，…）
    */
-  salesPerUnit?: number;
+  scaleBasis?: string;
 
   /**
-   * 销售价格（decimal(18,5)）
+   * 等级数量
    */
-  salesPrice?: number;
+  scaleQuantity?: number;
 
   /**
-   * 最小订购量（基本单位数量，整数）
+   * 等级单位（字典 logistics_unit_of_measure_code，DictValue=PC/EA 等）
    */
-  minOrderQuantity?: number;
+  scaleUnit?: string;
 
   /**
-   * 最大订购量（基本单位数量，0表示无限制，整数）
+   * 等级值
    */
-  maxOrderQuantity?: number;
+  scaleValue?: number;
+
+  /**
+   * 等级货币（字典 accounting_currency_code，DictValue=CNY/USD 等）
+   */
+  scaleCurrency?: string;
+
+  /**
+   * 计算类型（字典 logistics_calculation_type；SAP KRECH；默认 A=百分数）
+   */
+  calculationType?: string;
+
+  /**
+   * 价格
+   */
+  price?: number;
+
+  /**
+   * 税码（字典 accounting_tax_code，DictValue=J0/J1/J2…；SAP MWSKZ）
+   */
+  taxCode?: string;
 
   /**
    * 是否作废（字典 sys_yes_no_type，0=否 1=是；编辑移除子行时标记作废）
@@ -208,49 +248,69 @@ export interface SalesPriceItemCreate {
   companyDefaultCulture: string;
 
   /**
-   * 销售价格（关联 TaktSalesPrice.Id，选项 TaktSalesPrices/options）
+   * 销售价格 ID（主子表关系；选项 TaktSalesPrices/options，DictValue=Id）
    */
   salesPriceId: string;
 
   /**
-   * 销售价格编码（冗余字段，便于查询）
+   * 定价记录号（冗余；与主表 SalesPriceCode 一致，长度 20）
    */
   salesPriceCode: string;
 
   /**
-   * 行号（项号/序号，固定步长=10）
+   * 定价序号（项号/序号，固定步长=10）
    */
-  lineNumber: number;
+  salesPriceSeq: number;
 
   /**
-   * 物料编码（选项 TaktMaterials/options，DictValue=MaterialCode）
+   * 条件类型（冗余；字典 logistics_price_type；与主表 PriceType 一致，PB00/PR00/MWST/MWRK/NLXV）
    */
-  materialCode: string;
+  priceType: string;
 
   /**
-   * 销售单位（字典 logistics_unit_of_measure_code，DictValue=PC/EA 等；默认 PC）
+   * 等级类型（字典 logistics_scale_type；SAP STFKZ；A=基础等级，B=到等级，C=未使用，D=累进间隔等级）
    */
-  salesUnit: string;
+  scaleType?: string;
 
   /**
-   * 价格单位（字典 logistics_price_unit_param；1/10/100/1000；默认 1000）
+   * 等级基础（字典 logistics_scale_basis；SAP KZBZG；B=价值等级，C=数量规模，…）
    */
-  salesPerUnit: number;
+  scaleBasis?: string;
 
   /**
-   * 销售价格（decimal(18,5)）
+   * 等级数量
    */
-  salesPrice: number;
+  scaleQuantity: number;
 
   /**
-   * 最小订购量（基本单位数量，整数）
+   * 等级单位（字典 logistics_unit_of_measure_code，DictValue=PC/EA 等）
    */
-  minOrderQuantity: number;
+  scaleUnit?: string;
 
   /**
-   * 最大订购量（基本单位数量，0表示无限制，整数）
+   * 等级值
    */
-  maxOrderQuantity: number;
+  scaleValue: number;
+
+  /**
+   * 等级货币（字典 accounting_currency_code，DictValue=CNY/USD 等）
+   */
+  scaleCurrency?: string;
+
+  /**
+   * 计算类型（字典 logistics_calculation_type；SAP KRECH；默认 A=百分数）
+   */
+  calculationType: string;
+
+  /**
+   * 价格
+   */
+  price: number;
+
+  /**
+   * 税码（字典 accounting_tax_code，DictValue=J0/J1/J2…；SAP MWSKZ）
+   */
+  taxCode?: string;
 
   /**
    * 是否作废（字典 sys_yes_no_type，0=否 1=是；编辑移除子行时标记作废）
@@ -258,9 +318,14 @@ export interface SalesPriceItemCreate {
   isObsolete: number;
 
   /**
-   * 价格阶梯列表（主子表关系，一个物料价格可以有多个阶梯）（子表，级联保存）
+   * 数量等级行列表（SAP KONM；主子表关系）（子表，级联保存）
    */
-  scales?: SalesPriceScaleUpdate[];
+  scaleQuantities?: SalesPriceScaleQuantityCreate[];
+
+  /**
+   * 价值等级行列表（SAP KONW；主子表关系）（子表，级联保存）
+   */
+  scaleValues?: SalesPriceScaleValueCreate[];
 
   /**
    * 扩展字段JSON
@@ -286,6 +351,16 @@ export interface SalesPriceItemUpdate extends SalesPriceItemCreate {
    * SalesPriceItemID（标识要更新的实体）
    */
   salesPriceItemId: string;
+
+  /**
+   * 数量等级行列表（SAP KONM；主子表关系）（子表，级联保存）
+   */
+  scaleQuantities?: any;
+
+  /**
+   * 价值等级行列表（SAP KONW；主子表关系）（子表，级联保存）
+   */
+  scaleValues?: any;
 
 }
 
@@ -326,49 +401,69 @@ export interface SalesPriceItemTemplate {
   companyCode?: string;
 
   /**
-   * 销售价格（关联 TaktSalesPrice.Id，选项 TaktSalesPrices/options）
+   * 销售价格 ID（主子表关系；选项 TaktSalesPrices/options，DictValue=Id）
    */
   salesPriceId?: string;
 
   /**
-   * 销售价格编码（冗余字段，便于查询）
+   * 定价记录号（冗余；与主表 SalesPriceCode 一致，长度 20）
    */
   salesPriceCode?: string;
 
   /**
-   * 行号（项号/序号，固定步长=10）
+   * 定价序号（项号/序号，固定步长=10）
    */
-  lineNumber?: number;
+  salesPriceSeq?: number;
 
   /**
-   * 物料编码（选项 TaktMaterials/options，DictValue=MaterialCode）
+   * 条件类型（冗余；字典 logistics_price_type；与主表 PriceType 一致，PB00/PR00/MWST/MWRK/NLXV）
    */
-  materialCode?: string;
+  priceType?: string;
 
   /**
-   * 销售单位（字典 logistics_unit_of_measure_code，DictValue=PC/EA 等；默认 PC）
+   * 等级类型（字典 logistics_scale_type；SAP STFKZ；A=基础等级，B=到等级，C=未使用，D=累进间隔等级）
    */
-  salesUnit?: string;
+  scaleType?: string;
 
   /**
-   * 价格单位（字典 logistics_price_unit_param；1/10/100/1000；默认 1000）
+   * 等级基础（字典 logistics_scale_basis；SAP KZBZG；B=价值等级，C=数量规模，…）
    */
-  salesPerUnit?: number;
+  scaleBasis?: string;
 
   /**
-   * 销售价格（decimal(18,5)）
+   * 等级数量
    */
-  salesPrice?: number;
+  scaleQuantity?: number;
 
   /**
-   * 最小订购量（基本单位数量，整数）
+   * 等级单位（字典 logistics_unit_of_measure_code，DictValue=PC/EA 等）
    */
-  minOrderQuantity?: number;
+  scaleUnit?: string;
 
   /**
-   * 最大订购量（基本单位数量，0表示无限制，整数）
+   * 等级值
    */
-  maxOrderQuantity?: number;
+  scaleValue?: number;
+
+  /**
+   * 等级货币（字典 accounting_currency_code，DictValue=CNY/USD 等）
+   */
+  scaleCurrency?: string;
+
+  /**
+   * 计算类型（字典 logistics_calculation_type；SAP KRECH；默认 A=百分数）
+   */
+  calculationType?: string;
+
+  /**
+   * 价格
+   */
+  price?: number;
+
+  /**
+   * 税码（字典 accounting_tax_code，DictValue=J0/J1/J2…；SAP MWSKZ）
+   */
+  taxCode?: string;
 
   /**
    * 是否作废（字典 sys_yes_no_type，0=否 1=是；编辑移除子行时标记作废）
@@ -376,9 +471,14 @@ export interface SalesPriceItemTemplate {
   isObsolete?: number;
 
   /**
-   * 价格阶梯列表（主子表关系，一个物料价格可以有多个阶梯）（子表，级联保存）
+   * 数量等级行列表（SAP KONM；主子表关系）（子表，级联保存）
    */
-  scales?: SalesPriceScaleCreate[];
+  scaleQuantities?: SalesPriceScaleQuantityCreate[];
+
+  /**
+   * 价值等级行列表（SAP KONW；主子表关系）（子表，级联保存）
+   */
+  scaleValues?: SalesPriceScaleValueCreate[];
 
   /**
    * 扩展字段JSON
@@ -415,49 +515,69 @@ export interface SalesPriceItemImport {
   companyDefaultCulture?: string;
 
   /**
-   * 销售价格（关联 TaktSalesPrice.Id，选项 TaktSalesPrices/options）
+   * 销售价格 ID（主子表关系；选项 TaktSalesPrices/options，DictValue=Id）
    */
   salesPriceId?: string;
 
   /**
-   * 销售价格编码（冗余字段，便于查询）
+   * 定价记录号（冗余；与主表 SalesPriceCode 一致，长度 20）
    */
   salesPriceCode?: string;
 
   /**
-   * 行号（项号/序号，固定步长=10）
+   * 定价序号（项号/序号，固定步长=10）
    */
-  lineNumber?: number;
+  salesPriceSeq?: number;
 
   /**
-   * 物料编码（选项 TaktMaterials/options，DictValue=MaterialCode）
+   * 条件类型（冗余；字典 logistics_price_type；与主表 PriceType 一致，PB00/PR00/MWST/MWRK/NLXV）
    */
-  materialCode?: string;
+  priceType?: string;
 
   /**
-   * 销售单位（字典 logistics_unit_of_measure_code，DictValue=PC/EA 等；默认 PC）
+   * 等级类型（字典 logistics_scale_type；SAP STFKZ；A=基础等级，B=到等级，C=未使用，D=累进间隔等级）
    */
-  salesUnit?: string;
+  scaleType?: string;
 
   /**
-   * 价格单位（字典 logistics_price_unit_param；1/10/100/1000；默认 1000）
+   * 等级基础（字典 logistics_scale_basis；SAP KZBZG；B=价值等级，C=数量规模，…）
    */
-  salesPerUnit?: number;
+  scaleBasis?: string;
 
   /**
-   * 销售价格（decimal(18,5)）
+   * 等级数量
    */
-  salesPrice?: number;
+  scaleQuantity?: number;
 
   /**
-   * 最小订购量（基本单位数量，整数）
+   * 等级单位（字典 logistics_unit_of_measure_code，DictValue=PC/EA 等）
    */
-  minOrderQuantity?: number;
+  scaleUnit?: string;
 
   /**
-   * 最大订购量（基本单位数量，0表示无限制，整数）
+   * 等级值
    */
-  maxOrderQuantity?: number;
+  scaleValue?: number;
+
+  /**
+   * 等级货币（字典 accounting_currency_code，DictValue=CNY/USD 等）
+   */
+  scaleCurrency?: string;
+
+  /**
+   * 计算类型（字典 logistics_calculation_type；SAP KRECH；默认 A=百分数）
+   */
+  calculationType?: string;
+
+  /**
+   * 价格
+   */
+  price?: number;
+
+  /**
+   * 税码（字典 accounting_tax_code，DictValue=J0/J1/J2…；SAP MWSKZ）
+   */
+  taxCode?: string;
 
   /**
    * 是否作废（字典 sys_yes_no_type，0=否 1=是；编辑移除子行时标记作废）
@@ -465,9 +585,14 @@ export interface SalesPriceItemImport {
   isObsolete?: number;
 
   /**
-   * 价格阶梯列表（主子表关系，一个物料价格可以有多个阶梯）（子表，级联保存）
+   * 数量等级行列表（SAP KONM；主子表关系）（子表，级联保存）
    */
-  scales?: SalesPriceScaleCreate[];
+  scaleQuantities?: SalesPriceScaleQuantityCreate[];
+
+  /**
+   * 价值等级行列表（SAP KONW；主子表关系）（子表，级联保存）
+   */
+  scaleValues?: SalesPriceScaleValueCreate[];
 
   /**
    * 扩展字段JSON
@@ -499,49 +624,69 @@ export interface SalesPriceItemExport {
   companyCode: string;
 
   /**
-   * 销售价格（关联 TaktSalesPrice.Id，选项 TaktSalesPrices/options）
+   * 销售价格 ID（主子表关系；选项 TaktSalesPrices/options，DictValue=Id）
    */
   salesPriceId: string;
 
   /**
-   * 销售价格编码（冗余字段，便于查询）
+   * 定价记录号（冗余；与主表 SalesPriceCode 一致，长度 20）
    */
   salesPriceCode: string;
 
   /**
-   * 行号（项号/序号，固定步长=10）
+   * 定价序号（项号/序号，固定步长=10）
    */
-  lineNumber: number;
+  salesPriceSeq: number;
 
   /**
-   * 物料编码（选项 TaktMaterials/options，DictValue=MaterialCode）
+   * 条件类型（冗余；字典 logistics_price_type；与主表 PriceType 一致，PB00/PR00/MWST/MWRK/NLXV）
    */
-  materialCode: string;
+  priceType: string;
 
   /**
-   * 销售单位（字典 logistics_unit_of_measure_code，DictValue=PC/EA 等；默认 PC）
+   * 等级类型（字典 logistics_scale_type；SAP STFKZ；A=基础等级，B=到等级，C=未使用，D=累进间隔等级）
    */
-  salesUnit: string;
+  scaleType?: string;
 
   /**
-   * 价格单位（字典 logistics_price_unit_param；1/10/100/1000；默认 1000）
+   * 等级基础（字典 logistics_scale_basis；SAP KZBZG；B=价值等级，C=数量规模，…）
    */
-  salesPerUnit: number;
+  scaleBasis?: string;
 
   /**
-   * 销售价格（decimal(18,5)）
+   * 等级数量
    */
-  salesPrice: number;
+  scaleQuantity: number;
 
   /**
-   * 最小订购量（基本单位数量，整数）
+   * 等级单位（字典 logistics_unit_of_measure_code，DictValue=PC/EA 等）
    */
-  minOrderQuantity: number;
+  scaleUnit?: string;
 
   /**
-   * 最大订购量（基本单位数量，0表示无限制，整数）
+   * 等级值
    */
-  maxOrderQuantity: number;
+  scaleValue: number;
+
+  /**
+   * 等级货币（字典 accounting_currency_code，DictValue=CNY/USD 等）
+   */
+  scaleCurrency?: string;
+
+  /**
+   * 计算类型（字典 logistics_calculation_type；SAP KRECH；默认 A=百分数）
+   */
+  calculationType: string;
+
+  /**
+   * 价格
+   */
+  price: number;
+
+  /**
+   * 税码（字典 accounting_tax_code，DictValue=J0/J1/J2…；SAP MWSKZ）
+   */
+  taxCode?: string;
 
   /**
    * 是否作废（字典 sys_yes_no_type，0=否 1=是；编辑移除子行时标记作废）

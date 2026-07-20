@@ -917,7 +917,7 @@ function printUsage() {
 
 说明:
   - 本脚本固定全量扫描 Domain/Entities 下全部 Takt* 实体
-  - 仅支持无参或 --all / -all，不支持其它参数
+  - 仅支持无参或 --all / -all，不支持其他参数
 
 示例:
   node scripts/generate-entity-i18n-seed.cjs

@@ -20,17 +20,48 @@ export const SALESPRICEITEM_SELF_I18N_KEY = buildEntitySelfI18nKey(SALESPRICEITE
 
 /** 列表业务列（不含主键） */
 export const SALESPRICEITEM_LIST_FIELDS = [
-  'salesPriceName',
+  'salesPriceId',
   'salesPriceCode',
-  'lineNumber',
-  'materialCode',
-  'salesUnit',
-  'salesPerUnit',
-  'salesPrice',
-  'minOrderQuantity',
-  'maxOrderQuantity',
-  'scales',
+  'salesPriceSeq',
+  'priceType',
+  'scaleType',
+  'scaleBasis',
+  'scaleQuantity',
+  'scaleUnit',
+  'scaleValue',
+  'scaleCurrency',
+  'calculationType',
   'price',
+  'taxCode',
+  'isObsolete',
+] as const
+
+/** 明细右栏 panel 默认展示列（不含主键 id；含 action） */
+export const SALESPRICEITEM_DEFAULT_VISIBLE_COLUMN_KEYS = [
+  'salesPriceId',
+  'salesPriceCode',
+  'salesPriceSeq',
+  'priceType',
+  'scaleType',
+  'scaleBasis',
+  'scaleQuantity',
+  'scaleUnit',
+  'scaleValue',
+  'scaleCurrency',
+  'calculationType',
+  'price',
+  'taxCode',
+  'isObsolete',
+  'action',
+] as const
+
+/** 明细右栏 panel 合计列（当前页 dataSource 数值字段求和） */
+export const SALESPRICEITEM_SUMMARY_SUM_FIELDS = [
+  'salesPriceSeq',
+  'scaleQuantity',
+  'scaleValue',
+  'price',
+  'isObsolete',
 ] as const
 
 /** 表单控件默认占位类型（仅 UI/校验语义，不含 i18n 键） */
@@ -38,14 +69,20 @@ export const SALESPRICEITEM_PLACEHOLDER = {
   tenantCode: 'optional',
   companyCode: 'optional',
   companyDefaultCulture: 'optional',
-  lineNumber: 'select',
-  materialCode: 'select',
-  salesUnit: 'select',
-  salesPerUnit: 'select',
-  salesPrice: 'select',
-  minOrderQuantity: 'select',
-  maxOrderQuantity: 'select',
-  extField: 'optional',
+  salesPriceSeq: 'select',
+  priceType: 'select',
+  scaleType: 'optional',
+  scaleBasis: 'optional',
+  scaleQuantity: 'select',
+  scaleUnit: 'optional',
+  scaleValue: 'select',
+  scaleCurrency: 'optional',
+  calculationType: 'select',
+  price: 'select',
+  taxCode: 'optional',
+  isObsolete: 'select',
+  scaleQuantities: 'optional',
+  scaleValues: 'optional',
 } as const satisfies Record<string, EntityFieldPlaceholderKind>
 
 /** 表单 ph() 可接受的字段（与 PLACEHOLDER 键一致，避免与 LIST_FIELDS 导航列混用） */
@@ -54,8 +91,13 @@ export type SalesPriceItemField = keyof typeof SALESPRICEITEM_PLACEHOLDER
 /** 高级查询可 trim 的字符串字段 */
 export const SALESPRICEITEM_QUERY_STRING_FIELDS = [
   'salesPriceCode',
-  'materialCode',
-  'salesUnit',
+  'priceType',
+  'scaleType',
+  'scaleBasis',
+  'scaleUnit',
+  'scaleCurrency',
+  'calculationType',
+  'taxCode',
   'createdAtStart',
   'createdAtEnd',
   'extField',
@@ -64,16 +106,16 @@ export const SALESPRICEITEM_QUERY_STRING_FIELDS = [
 
 export type SalesPriceItemQueryField =
   | (typeof SALESPRICEITEM_QUERY_STRING_FIELDS)[number]
-  | 'lineNumber' | 'salesPerUnit' | 'salesPrice' | 'minOrderQuantity' | 'maxOrderQuantity'
+  | 'salesPriceSeq' | 'scaleQuantity' | 'scaleValue' | 'price' | 'isObsolete'
 
 /** 高级查询抽屉全部字段（含数值） */
 export const SALESPRICEITEM_QUERY_FIELDS: readonly SalesPriceItemQueryField[] = [
   ...SALESPRICEITEM_QUERY_STRING_FIELDS,
-  'lineNumber',
-  'salesPerUnit',
-  'salesPrice',
-  'minOrderQuantity',
-  'maxOrderQuantity',
+  'salesPriceSeq',
+  'scaleQuantity',
+  'scaleValue',
+  'price',
+  'isObsolete',
 ]
 
 /**

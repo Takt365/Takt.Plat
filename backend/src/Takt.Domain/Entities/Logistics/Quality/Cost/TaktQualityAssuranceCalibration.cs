@@ -27,7 +27,7 @@ namespace Takt.Domain.Entities.Logistics.Quality.Cost;
 public class TaktQualityAssuranceCalibration : TaktCompanyEntityBase
 {
     /// <summary>
-    /// 品质业务主表 ID（关联 TaktQualityAssurance.Id，选项 TaktQualityAssurances/options）
+    /// 品质业务主表 ID（选项 TaktQualityAssurances/options，DictValue=Id）
     /// </summary>
     [SugarColumn(ColumnName = "quality_assurance_id", ColumnDescription = "品质业务主表ID", ColumnDataType = "bigint", IsNullable = false)]
     [JsonConverter(typeof(ValueToStringConverter))]

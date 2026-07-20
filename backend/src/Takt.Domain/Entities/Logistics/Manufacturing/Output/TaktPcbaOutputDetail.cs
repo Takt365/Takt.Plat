@@ -4,8 +4,9 @@
 // 文件名称：TaktPcbaOutputDetail.cs
 // 创建时间：2025-02-02
 // 创建人：Takt365(Cursor AI)
-// 功能描述：PCBA明细实体，按生产时段、板别等记录完成数、工数、未达成等
+// 功能描述：PCBA明细实体，按生产时段、班组、设备、板别等记录完成数、标准产能、工数、未达成等
 // 累计完成数：按工单号+班次+PCB板别+面板别汇总全部明细当日完成数（见 TaktPcbaOutputDetailDerivedFieldsHelper）
+// 标准产能：人员小时产能 = DirectLabor×60÷StdMinutes×标准生产稼动率(%)；设备小时产能 = 60÷StdMinutes×设备时间稼动率(%)
 //
 // 版权信息：Copyright (c) 2025 Takt  All rights reserved.
 // 免责声明：此软件使用 MIT License，作者不承担任何使用风险。
@@ -53,13 +54,61 @@ public class TaktPcbaOutputDetail : TaktCompanyEntityBase
     public string TimePeriod { get; set; } = string.Empty;
 
     /// <summary>
+    /// 生产班组（选项 TaktProductionTeams/options，DictValue=TeamCode，ExtValue=PlantCode）
+    /// </summary>
+    [SugarColumn(ColumnName = "prod_team", ColumnDescription = "生产班组", Length = 20, ColumnDataType = "nvarchar", IsNullable = false)]
+    public string ProdTeam { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 生产设备编码（选项 TaktProductionEquipments/options，DictValue=Id）
+    /// </summary>
+    [SugarColumn(ColumnName = "production_equipment_code", ColumnDescription = "生产设备", Length = 40, ColumnDataType = "nvarchar", IsNullable = false)]
+    public string ProductionEquipmentCode { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 直接人员
+    /// </summary>
+    [SugarColumn(ColumnName = "direct_labor", ColumnDescription = "直接人员", ColumnDataType = "int", IsNullable = false, DefaultValue = "0")]
+    public int DirectLabor { get; set; } = 0;
+
+    /// <summary>
+    /// 间接人员
+    /// </summary>
+    [SugarColumn(ColumnName = "indirect_labor", ColumnDescription = "间接人员", ColumnDataType = "int", IsNullable = false, DefaultValue = "0")]
+    public int IndirectLabor { get; set; } = 0;
+
+    /// <summary>
     /// 班次（字典 logistics_shift_category；1=早 2=中 3=晚 4=白班 5=夜班）
     /// </summary>
     [SugarColumn(ColumnName = "shift_no", ColumnDescription = "班次", ColumnDataType = "int", IsNullable = false, DefaultValue = "1")]
     public int ShiftNo { get; set; } = 1;
 
     /// <summary>
-    /// PCB板别（字典 logistics_pcba_panel_category，存 DictValue）
+    /// 标准工时(分钟)（回填：按工作中心查询 TaktStandardOperationTime 转换工时）
+    /// </summary>
+    [SugarColumn(ColumnName = "std_minutes", ColumnDescription = "标准工时", ColumnDataType = "decimal", Length = 10, DecimalDigits = 2, IsNullable = false, DefaultValue = "0")]
+    public decimal StdMinutes { get; set; } = 0;
+
+    /// <summary>
+    /// 人员标准产能（计算结果：DirectLabor×60÷StdMinutes×标准生产稼动率）
+    /// </summary>
+    [SugarColumn(ColumnName = "std_labor_capacity", ColumnDescription = "人员标准产能", ColumnDataType = "decimal", Length = 18, DecimalDigits = 3, IsNullable = false, DefaultValue = "0")]
+    public decimal StdLaborCapacity { get; set; } = 0;
+
+    /// <summary>
+    /// 标准点数（PCBA 专用，按工作中心回填）
+    /// </summary>
+    [SugarColumn(ColumnName = "std_shorts", ColumnDescription = "标准点数", ColumnDataType = "int", IsNullable = false, DefaultValue = "0")]
+    public int StdShorts { get; set; } = 0;
+
+    /// <summary>
+    /// 设备标准产能（计算结果：60÷StdMinutes×设备时间稼动率）
+    /// </summary>
+    [SugarColumn(ColumnName = "std_equipment_capacity", ColumnDescription = "设备标准产能", ColumnDataType = "decimal", Length = 18, DecimalDigits = 3, IsNullable = false, DefaultValue = "0")]
+    public decimal StdEquipmentCapacity { get; set; } = 0;
+
+    /// <summary>
+    /// PCB板别（存 DictLabel；UI 提交由前端 dict-type 转换）
     /// </summary>
     [SugarColumn(ColumnName = "pcb_board_type", ColumnDescription = "PCB板别", Length = 40, ColumnDataType = "nvarchar", IsNullable = false)]
     public string PcbBoardType { get; set; } = string.Empty;
@@ -113,7 +162,7 @@ public class TaktPcbaOutputDetail : TaktCompanyEntityBase
     public int DowntimeMinutes { get; set; } = 0;
 
     /// <summary>
-    /// 停线原因（字典 logistics_stop_reason_category，多选 DictLabel 逗号分隔）
+    /// 停线原因（多选 DictLabel 逗号分隔；UI 提交由前端 dict-type 转换）
     /// </summary>
     [SugarColumn(ColumnName = "downtime_reason", ColumnDescription = "停线原因", Length = 500, ColumnDataType = "nvarchar", IsNullable = true)]
     public string? DowntimeReason { get; set; }
@@ -125,7 +174,7 @@ public class TaktPcbaOutputDetail : TaktCompanyEntityBase
     public string? DowntimeDescription { get; set; }
 
     /// <summary>
-    /// 投入工数(分钟)（计算结果：主表 DirectLabor×60）
+    /// 投入工数(分钟)（计算结果：明细 DirectLabor×60）
     /// </summary>
     [SugarColumn(ColumnName = "input_minutes", ColumnDescription = "投入工数", ColumnDataType = "decimal", Length = 10, DecimalDigits = 2, IsNullable = false, DefaultValue = "0")]
     public decimal InputMinutes { get; set; } = 0;
@@ -167,7 +216,7 @@ public class TaktPcbaOutputDetail : TaktCompanyEntityBase
     public decimal TotalMinutes { get; set; } = 0;
 
     /// <summary>
-    /// 未达成原因（字典 logistics_nonachievement_reason_category，多选 DictLabel 逗号分隔）
+    /// 未达成原因（多选 DictLabel 逗号分隔；UI 提交由前端 dict-type 转换）
     /// </summary>
     [SugarColumn(ColumnName = "unachieved_reason", ColumnDescription = "未达成原因", Length = 500, ColumnDataType = "nvarchar", IsNullable = true)]
     public string? UnachievedReason { get; set; }
@@ -191,7 +240,7 @@ public class TaktPcbaOutputDetail : TaktCompanyEntityBase
     public int MixedProd { get; set; } = 0;
 
     /// <summary>
-    /// 达成率(%)（计算结果：当日完成数÷主表标准产能×100%；标准产能为0时取0）
+    /// 达成率(%)（计算结果：当日完成数÷明细人员标准产能×100%；标准产能为0时取0）
     /// </summary>
     [SugarColumn(ColumnName = "achievement_rate", ColumnDescription = "达成率", ColumnDataType = "decimal", Length = 7, DecimalDigits = 2, IsNullable = false, DefaultValue = "0")]
     public decimal AchievementRate { get; set; } = 0;

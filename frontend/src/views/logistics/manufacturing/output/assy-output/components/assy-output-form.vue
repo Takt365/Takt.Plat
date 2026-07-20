@@ -456,7 +456,7 @@ import { useAssyOutputDetailDictMultiFormat } from '../composables/use-assy-outp
 import { useAssyOutputDetailEditableDict } from '../composables/use-assy-output-detail-editable-dict'
 import { useAssyOutputDetailFormColumns } from '../composables/use-assy-output-detail-form-columns'
 import { getAssyOutputDefaultTimePeriods } from '@/api/logistics/manufacturing/output/assy-output'
-import { getProductionOrderByCode } from '@/api/logistics/manufacturing/planning/production-order'
+import { getProductionOrderByCode } from '@/api/logistics/manufacturing/aps/production-order'
 import { getModelDestinationByMaterial } from '@/api/logistics/materials/model-destination'
 import {
   applyAssyCleaningPeriodDefaults,

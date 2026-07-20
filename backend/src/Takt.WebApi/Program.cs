@@ -104,6 +104,8 @@ try
         builder.Configuration.GetSection(TaktExcelOptions.SectionName));
     builder.Services.AddSingleton(excelOptions);
     TaktExcelHelper.Configure(excelOptions);
+    builder.Services.Configure<TaktDatabaseBackupOptions>(
+        builder.Configuration.GetSection(TaktDatabaseBackupOptions.SectionName));
     TaktLogger.Information(
         "  ✓ Excel 导入导出配置已加载 - 作者: {Author}, 导入行/Sheet/单Sheet: {ImportMaxRows}/{ImportMaxSheets}/{ImportMaxRowsPerSheet}, 导出请求/单Sheet/Sheet数: {ExportRequestMax}/{ExportSheetMaxRows}/{ExportMaxSheets}",
         excelOptions.Author,
@@ -325,6 +327,7 @@ try
     TaktLogger.Information("║    - 公司请求头: {CompanyHeader,-24} ║", tenantOptions.CompanyHeaderName);
     TaktLogger.Information("║  ✓ 日志系统: Serilog (分级存储)                          ║");
     TaktLogger.Information("║    - 综合日志: logs/takt-.log                           ║");
+    TaktLogger.Information("║    - Quartz执行: logs/quartz-/quartz-.log (60天)        ║");
     TaktLogger.Information("║    - 错误日志: logs/error/error-.log (90天)             ║");
     TaktLogger.Information("║    - 警告日志: logs/warning/warning-.log (60天)         ║");
     TaktLogger.Information("║    - 信息日志: logs/information/information-.log (30天) ║");

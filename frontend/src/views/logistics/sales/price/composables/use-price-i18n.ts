@@ -20,13 +20,15 @@ export const SALESPRICE_SELF_I18N_KEY = buildEntitySelfI18nKey(SALESPRICE_ENTITY
 
 /** 列表业务列（不含主键） */
 export const SALESPRICE_LIST_FIELDS = [
-  'plantCode',
   'salesPriceCode',
-  'customerCode',
   'priceType',
-  'effectiveStartDate',
-  'effectiveEndDate',
-  'priceStatus',
+  'customerCode',
+  'materialCode',
+  'validFrom',
+  'validTo',
+  'variableKey',
+  'salesQuotationId',
+  'salesQuotationCode',
 ] as const
 
 /** 表单控件默认占位类型（仅 UI/校验语义，不含 i18n 键） */
@@ -34,13 +36,15 @@ export const SALESPRICE_PLACEHOLDER = {
   tenantCode: 'optional',
   companyCode: 'optional',
   companyDefaultCulture: 'optional',
-  plantCode: 'select',
   salesPriceCode: 'required',
-  customerCode: 'optional',
   priceType: 'select',
-  effectiveStartDate: 'select',
-  effectiveEndDate: 'optional',
-  priceStatus: 'select',
+  customerCode: 'select',
+  materialCode: 'select',
+  validFrom: 'select',
+  validTo: 'select',
+  variableKey: 'optional',
+  salesQuotationId: 'optional',
+  salesQuotationCode: 'optional',
   extField: 'optional',
   remark: 'optional',
 } as const satisfies Record<string, EntityFieldPlaceholderKind>
@@ -50,29 +54,27 @@ export type SalesPriceField = keyof typeof SALESPRICE_PLACEHOLDER
 
 /** 高级查询可 trim 的字符串字段 */
 export const SALESPRICE_QUERY_STRING_FIELDS = [
-  'plantCode',
   'salesPriceCode',
-  'customerCode',
   'priceType',
-  'effectiveStartDateStart',
-  'effectiveStartDateEnd',
-  'effectiveEndDateStart',
-  'effectiveEndDateEnd',
+  'customerCode',
+  'materialCode',
+  'validFromStart',
+  'validFromEnd',
+  'validToStart',
+  'validToEnd',
+  'variableKey',
+  'salesQuotationId',
+  'salesQuotationCode',
   'createdAtStart',
   'createdAtEnd',
   'extField',
   'remark',
 ] as const satisfies readonly (keyof SalesPriceQuery)[]
 
-export type SalesPriceQueryField =
-  | (typeof SALESPRICE_QUERY_STRING_FIELDS)[number]
-  | 'priceStatus'
+export type SalesPriceQueryField = (typeof SALESPRICE_QUERY_STRING_FIELDS)[number]
 
 /** 高级查询抽屉全部字段（含数值） */
-export const SALESPRICE_QUERY_FIELDS: readonly SalesPriceQueryField[] = [
-  ...SALESPRICE_QUERY_STRING_FIELDS,
-  'priceStatus',
-]
+export const SALESPRICE_QUERY_FIELDS: readonly SalesPriceQueryField[] = [...SALESPRICE_QUERY_STRING_FIELDS]
 
 /**
  * Takt销售价格实体字段 i18n：index / price-form 统一入口

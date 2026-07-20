@@ -138,26 +138,6 @@
         />
       </a-form-item>
       </div>
-      <div v-show="isFieldVisible('prodDateStart')">
-      <a-form-item :label="pi.queryLabel('prodDateStart')">
-        <a-date-picker
-          v-model:value="advancedQueryForm.prodDateStart"
-          :placeholder="pi.queryPh('prodDateStart', 'select')"
-          value-format="YYYY-MM-DD"
-          style="width: 100%"
-        />
-      </a-form-item>
-      </div>
-      <div v-show="isFieldVisible('prodDateEnd')">
-      <a-form-item :label="pi.queryLabel('prodDateEnd')">
-        <a-date-picker
-          v-model:value="advancedQueryForm.prodDateEnd"
-          :placeholder="pi.queryPh('prodDateEnd', 'select')"
-          value-format="YYYY-MM-DD"
-          style="width: 100%"
-        />
-      </a-form-item>
-      </div>
       <div v-show="isFieldVisible('prodOrderType')">
       <a-form-item :label="pi.queryLabel('prodOrderType')">
         <a-input
@@ -556,15 +536,6 @@ const columns = computed<TableColumnsType>(() => [
     ellipsis: true,
   },
   {
-    title: pi.label('prodDate'),
-    dataIndex: 'prodDate',
-    key: 'prodDate',
-    width: 120,
-    resizable: true,
-    ellipsis: true,
-    customRender: ({ record }: { record: any }) => getPcbaInspectionField(record, 'prodDate') ?? ''
-  },
-  {
     title: pi.label('prodOrderType'),
     dataIndex: 'prodOrderType',
     key: 'prodOrderType',
@@ -728,8 +699,6 @@ function handleReset() {
   advancedQueryForm.value = {
   plantCode: '',
   prodCategory: '',
-  prodDateStart: '',
-  prodDateEnd: '',
   prodOrderType: '',
   prodOrderCode: '',
   prodOrderQty: undefined as number | undefined,
@@ -936,8 +905,6 @@ function handleAdvancedQueryReset() {
   advancedQueryForm.value = {
   plantCode: '',
   prodCategory: '',
-  prodDateStart: '',
-  prodDateEnd: '',
   prodOrderType: '',
   prodOrderCode: '',
   prodOrderQty: undefined as number | undefined,

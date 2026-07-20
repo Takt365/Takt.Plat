@@ -48,7 +48,7 @@
       >
         <TaktTreeSelect
           v-model:value="formState.resourceGroup"
-          api-url="/api/TaktMenus/tree-options"
+          api-url="TaktMenus/tree-options"
           :placeholder="t('common.page.form.placeholder.select', { field: t('entity.translation.resourcegroup') })"
           allow-clear
           :field-names="{ label: 'dictLabel', value: 'dictValue' }"

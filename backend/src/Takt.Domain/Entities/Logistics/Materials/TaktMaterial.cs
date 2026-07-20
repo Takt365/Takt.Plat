@@ -56,7 +56,7 @@ public class TaktMaterial : TaktTenantEntityBase
     [SugarColumn(ColumnName = "material_hierarchy", ColumnDescription = "物料层级", ColumnDataType = "nvarchar", Length = 200, IsNullable = true)]
     public string? MaterialHierarchy { get; set; }
     /// <summary>
-    /// 物料组（关联 TaktMaterialGroup.MaterialGroupCode，选项 TaktMaterialGroups/options，DictValue=MaterialGroupCode）
+    /// 物料组（选项 TaktMaterialGroups/options，DictValue=MaterialGroupCode）
     /// </summary>
     [SugarColumn(ColumnName = "material_group", ColumnDescription = "物料组", ColumnDataType = "varchar", Length = 20, IsNullable = false)]
     public string MaterialGroup { get; set; } = string.Empty;

@@ -164,7 +164,7 @@ const DEFAULT_FRONTEND_ROOT = path.join(REPO_ROOT, 'frontend');
 const ALL_ONLY_CLI_ALIASES = new Set(['--all', '--ALL', '-all', '-ALL']);
 
 /**
- * 解析全量生成 CLI（无参或 --all / -all，禁止其它参数）
+ * 解析全量生成 CLI（无参或 --all / -all，禁止其他参数）
  * @param {string[]} args process.argv.slice(2)
  * @param {() => void} printUsage
  */
@@ -320,7 +320,7 @@ function findDomainEntityFile(entityPascal, backendRoot = DEFAULT_BACKEND_ROOT) 
 }
 
 /**
- * 实体类头正则（含 Takt*EntityIncrementBase 库自增主键基类）
+ * 实体类头正则（含继承 Takt*EntityIncrementBase 的业务实体）
  */
 const ENTITY_CLASS_HEADER_REGEX = /public\s+(?:sealed\s+|abstract\s+)?class\s+(Takt\w+)\s*:\s*(Takt(?:Tenant|Company|Approval)Entity(?:Increment)?Base)\s*\{/;
 
@@ -334,6 +334,9 @@ const ENTITY_BASE_TO_DTO_BASE = {
   TaktApprovalEntityIncrementBase: 'TaktApprovalDtoBase',
 };
 
+/** 领域实体基类本身（非业务实体；DTO/Validator/i18n 生成必须跳过） */
+const ENTITY_BASE_CLASS_NAMES = new Set(Object.keys(ENTITY_BASE_TO_DTO_BASE));
+
 /**
  * 从 C# 实体源码解析类名与基类
  * @param {string} content
@@ -344,7 +347,12 @@ function parseEntityClassHeaderFromCsContent(content) {
   if (!match) {
     return null;
   }
-  return { className: match[1], entityBase: match[2] };
+  const className = match[1];
+  // TaktIncrementBase.cs 中 abstract 基类也匹配正则，须排除以免生成空 Validators/i18n
+  if (ENTITY_BASE_CLASS_NAMES.has(className)) {
+    return null;
+  }
+  return { className, entityBase: match[2] };
 }
 
 /**

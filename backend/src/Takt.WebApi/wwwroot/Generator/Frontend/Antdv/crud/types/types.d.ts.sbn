@@ -5,7 +5,7 @@
 // 创建时间：2025-02-02
 // 创建人：{{ table.gen_author }}
 // 功能描述：{{ table.comment }}相关类型定义，对应后端 {{ table.dto_namespace }}.{{ table.entity_class_name }}Dtos
-// 规则：主类型 extends TaktCompanyEntityBase；查询 extends TaktPagedQuery；更新 extends Create；其它类型不继承。
+// 规则：主类型 extends TaktCompanyEntityBase；查询 extends TaktPagedQuery；更新 extends Create；其他类型不继承。
 // 字段名均为小驼峰（与后端 Dto 属性一一对应，后端 PascalCase 对应前端 camelCase）。不生成模板/导入/导出类型。
 //
 // 版权信息：Copyright (c) 2025 Takt  All rights reserved.

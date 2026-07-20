@@ -50,7 +50,7 @@ public class TaktGenTableDto : TaktTenantDtoBase
     public string? TableComment { get; set; } = string.Empty;
 
     /// <summary>
-    /// 关联父表（选项 TaktDatabaseInfos/tables 同库其它表；sub 模板必填）
+    /// 关联父表（选项 TaktDatabaseInfos/tables 同库其他表；sub 模板必填）
     /// </summary>
     public string? SubTableName { get; set; } = string.Empty;
 
@@ -314,7 +314,7 @@ public class TaktGenTableQueryDto : TaktPagedQuery
     public string? TableComment { get; set; } = string.Empty;
 
     /// <summary>
-    /// 关联父表（选项 TaktDatabaseInfos/tables 同库其它表；sub 模板必填）
+    /// 关联父表（选项 TaktDatabaseInfos/tables 同库其他表；sub 模板必填）
     /// </summary>
     public string? SubTableName { get; set; } = string.Empty;
 
@@ -585,7 +585,7 @@ public class TaktGenTableCreateDto
     public string? TableComment { get; set; } = string.Empty;
 
     /// <summary>
-    /// 关联父表（选项 TaktDatabaseInfos/tables 同库其它表；sub 模板必填）
+    /// 关联父表（选项 TaktDatabaseInfos/tables 同库其他表；sub 模板必填）
     /// </summary>
     public string? SubTableName { get; set; } = string.Empty;
 
@@ -871,7 +871,7 @@ public class TaktGenTableTemplateDto
     public string? TableComment { get; set; } = string.Empty;
 
     /// <summary>
-    /// 关联父表（选项 TaktDatabaseInfos/tables 同库其它表；sub 模板必填）
+    /// 关联父表（选项 TaktDatabaseInfos/tables 同库其他表；sub 模板必填）
     /// </summary>
     public string? SubTableName { get; set; } = string.Empty;
 
@@ -953,7 +953,7 @@ public class TaktGenTableImportDto
     public string? TableComment { get; set; } = string.Empty;
 
     /// <summary>
-    /// 关联父表（选项 TaktDatabaseInfos/tables 同库其它表；sub 模板必填）
+    /// 关联父表（选项 TaktDatabaseInfos/tables 同库其他表；sub 模板必填）
     /// </summary>
     public string? SubTableName { get; set; } = string.Empty;
 
@@ -1041,7 +1041,7 @@ public class TaktGenTableExportDto
     public string? TableComment { get; set; } = string.Empty;
 
     /// <summary>
-    /// 关联父表（选项 TaktDatabaseInfos/tables 同库其它表；sub 模板必填）
+    /// 关联父表（选项 TaktDatabaseInfos/tables 同库其他表；sub 模板必填）
     /// </summary>
     public string? SubTableName { get; set; } = string.Empty;
 

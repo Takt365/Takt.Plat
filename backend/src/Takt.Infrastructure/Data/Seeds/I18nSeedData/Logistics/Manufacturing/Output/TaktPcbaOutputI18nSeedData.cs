@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Infrastructure.Data.Seeds.I18nSeedData.Logistics.Manufacturing.Output
 // 文件名称：TaktPcbaOutputI18nSeedData.cs
-// 创建时间：2026-07-09
+// 创建时间：2026-07-20
 // 创建人：Takt365(Auto Generated)
 // 功能描述：TaktPcbaOutput 实体字段国际化种子（无对应 frontend locales；TranslationText 取自 ColumnDescription，ContextNote 取自属性 XML summary）
 // 
@@ -117,42 +117,6 @@ public class TaktPcbaOutputI18nSeedData : ITaktSeedDataCoordinator
             // entity.pcbaoutput.proddate
             new TranslationSeedItem("entity.pcbaoutput.proddate", "zh-HK", "生产日期_hk", "生产日期"),
 
-            // entity.pcbaoutput.prodteam
-            new TranslationSeedItem("entity.pcbaoutput.prodteam", "en-US", "生产班组_us", "生产班组（选项 TaktProductionTeams/options，存 TeamCode，ExtValue=PlantCode 过滤）"),
-            // entity.pcbaoutput.prodteam
-            new TranslationSeedItem("entity.pcbaoutput.prodteam", "ja-JP", "生产班组_jp", "生产班组（选项 TaktProductionTeams/options，存 TeamCode，ExtValue=PlantCode 过滤）"),
-            // entity.pcbaoutput.prodteam
-            new TranslationSeedItem("entity.pcbaoutput.prodteam", "zh-CN", "生产班组", "生产班组（选项 TaktProductionTeams/options，存 TeamCode，ExtValue=PlantCode 过滤）"),
-            // entity.pcbaoutput.prodteam
-            new TranslationSeedItem("entity.pcbaoutput.prodteam", "zh-HK", "生产班组_hk", "生产班组（选项 TaktProductionTeams/options，存 TeamCode，ExtValue=PlantCode 过滤）"),
-
-            // entity.pcbaoutput.directlabor
-            new TranslationSeedItem("entity.pcbaoutput.directlabor", "en-US", "直接人员_us", "直接人员"),
-            // entity.pcbaoutput.directlabor
-            new TranslationSeedItem("entity.pcbaoutput.directlabor", "ja-JP", "直接人员_jp", "直接人员"),
-            // entity.pcbaoutput.directlabor
-            new TranslationSeedItem("entity.pcbaoutput.directlabor", "zh-CN", "直接人员", "直接人员"),
-            // entity.pcbaoutput.directlabor
-            new TranslationSeedItem("entity.pcbaoutput.directlabor", "zh-HK", "直接人员_hk", "直接人员"),
-
-            // entity.pcbaoutput.indirectlabor
-            new TranslationSeedItem("entity.pcbaoutput.indirectlabor", "en-US", "间接人员_us", "间接人员"),
-            // entity.pcbaoutput.indirectlabor
-            new TranslationSeedItem("entity.pcbaoutput.indirectlabor", "ja-JP", "间接人员_jp", "间接人员"),
-            // entity.pcbaoutput.indirectlabor
-            new TranslationSeedItem("entity.pcbaoutput.indirectlabor", "zh-CN", "间接人员", "间接人员"),
-            // entity.pcbaoutput.indirectlabor
-            new TranslationSeedItem("entity.pcbaoutput.indirectlabor", "zh-HK", "间接人员_hk", "间接人员"),
-
-            // entity.pcbaoutput.shiftno
-            new TranslationSeedItem("entity.pcbaoutput.shiftno", "en-US", "班次_us", "班次（字典 logistics_shift_category；1=早 2=中 3=晚 4=白班 5=夜班）"),
-            // entity.pcbaoutput.shiftno
-            new TranslationSeedItem("entity.pcbaoutput.shiftno", "ja-JP", "班次_jp", "班次（字典 logistics_shift_category；1=早 2=中 3=晚 4=白班 5=夜班）"),
-            // entity.pcbaoutput.shiftno
-            new TranslationSeedItem("entity.pcbaoutput.shiftno", "zh-CN", "班次", "班次（字典 logistics_shift_category；1=早 2=中 3=晚 4=白班 5=夜班）"),
-            // entity.pcbaoutput.shiftno
-            new TranslationSeedItem("entity.pcbaoutput.shiftno", "zh-HK", "班次_hk", "班次（字典 logistics_shift_category；1=早 2=中 3=晚 4=白班 5=夜班）"),
-
             // entity.pcbaoutput.prodordertype
             new TranslationSeedItem("entity.pcbaoutput.prodordertype", "en-US", "工单类别_us", "工单类别（回填：随工单）"),
             // entity.pcbaoutput.prodordertype
@@ -163,13 +127,13 @@ public class TaktPcbaOutputI18nSeedData : ITaktSeedDataCoordinator
             new TranslationSeedItem("entity.pcbaoutput.prodordertype", "zh-HK", "工单类别_hk", "工单类别（回填：随工单）"),
 
             // entity.pcbaoutput.prodordercode
-            new TranslationSeedItem("entity.pcbaoutput.prodordercode", "en-US", "工单号_us", "工单号（选项 TaktProductionOrders/options，按 PlantCode 过滤）"),
+            new TranslationSeedItem("entity.pcbaoutput.prodordercode", "en-US", "工单号_us", "工单号（选项 TaktProductionOrders/options，DictValue=ProdOrderCode，ExtValue=PlantCode）"),
             // entity.pcbaoutput.prodordercode
-            new TranslationSeedItem("entity.pcbaoutput.prodordercode", "ja-JP", "工单号_jp", "工单号（选项 TaktProductionOrders/options，按 PlantCode 过滤）"),
+            new TranslationSeedItem("entity.pcbaoutput.prodordercode", "ja-JP", "工单号_jp", "工单号（选项 TaktProductionOrders/options，DictValue=ProdOrderCode，ExtValue=PlantCode）"),
             // entity.pcbaoutput.prodordercode
-            new TranslationSeedItem("entity.pcbaoutput.prodordercode", "zh-CN", "工单号", "工单号（选项 TaktProductionOrders/options，按 PlantCode 过滤）"),
+            new TranslationSeedItem("entity.pcbaoutput.prodordercode", "zh-CN", "工单号", "工单号（选项 TaktProductionOrders/options，DictValue=ProdOrderCode，ExtValue=PlantCode）"),
             // entity.pcbaoutput.prodordercode
-            new TranslationSeedItem("entity.pcbaoutput.prodordercode", "zh-HK", "工单号_hk", "工单号（选项 TaktProductionOrders/options，按 PlantCode 过滤）"),
+            new TranslationSeedItem("entity.pcbaoutput.prodordercode", "zh-HK", "工单号_hk", "工单号（选项 TaktProductionOrders/options，DictValue=ProdOrderCode，ExtValue=PlantCode）"),
 
             // entity.pcbaoutput.modelcode
             new TranslationSeedItem("entity.pcbaoutput.modelcode", "en-US", "机种_us", "机种（回填：随工单）"),
@@ -215,33 +179,6 @@ public class TaktPcbaOutputI18nSeedData : ITaktSeedDataCoordinator
             new TranslationSeedItem("entity.pcbaoutput.serialno", "zh-CN", "序列号", "序列号（回填：随工单）"),
             // entity.pcbaoutput.serialno
             new TranslationSeedItem("entity.pcbaoutput.serialno", "zh-HK", "序列号_hk", "序列号（回填：随工单）"),
-
-            // entity.pcbaoutput.stdminutes
-            new TranslationSeedItem("entity.pcbaoutput.stdminutes", "en-US", "标准工时_us", "标准工时(分钟)（回填：按 MaterialCode 查询 TaktStandardOperationTime 汇总转换工时）"),
-            // entity.pcbaoutput.stdminutes
-            new TranslationSeedItem("entity.pcbaoutput.stdminutes", "ja-JP", "标准工时_jp", "标准工时(分钟)（回填：按 MaterialCode 查询 TaktStandardOperationTime 汇总转换工时）"),
-            // entity.pcbaoutput.stdminutes
-            new TranslationSeedItem("entity.pcbaoutput.stdminutes", "zh-CN", "标准工时", "标准工时(分钟)（回填：按 MaterialCode 查询 TaktStandardOperationTime 汇总转换工时）"),
-            // entity.pcbaoutput.stdminutes
-            new TranslationSeedItem("entity.pcbaoutput.stdminutes", "zh-HK", "标准工时_hk", "标准工时(分钟)（回填：按 MaterialCode 查询 TaktStandardOperationTime 汇总转换工时）"),
-
-            // entity.pcbaoutput.stdshorts
-            new TranslationSeedItem("entity.pcbaoutput.stdshorts", "en-US", "标准点数_us", "标准点数（PCBA 专用）"),
-            // entity.pcbaoutput.stdshorts
-            new TranslationSeedItem("entity.pcbaoutput.stdshorts", "ja-JP", "标准点数_jp", "标准点数（PCBA 专用）"),
-            // entity.pcbaoutput.stdshorts
-            new TranslationSeedItem("entity.pcbaoutput.stdshorts", "zh-CN", "标准点数", "标准点数（PCBA 专用）"),
-            // entity.pcbaoutput.stdshorts
-            new TranslationSeedItem("entity.pcbaoutput.stdshorts", "zh-HK", "标准点数_hk", "标准点数（PCBA 专用）"),
-
-            // entity.pcbaoutput.stdcapacity
-            new TranslationSeedItem("entity.pcbaoutput.stdcapacity", "en-US", "标准产能_us", "标准产能（计算结果：利用标准生产稼动率计算出小时产能，DirectLabor人数*60分钟/StdMinutes标准工时*标准生产稼动率）"),
-            // entity.pcbaoutput.stdcapacity
-            new TranslationSeedItem("entity.pcbaoutput.stdcapacity", "ja-JP", "标准产能_jp", "标准产能（计算结果：利用标准生产稼动率计算出小时产能，DirectLabor人数*60分钟/StdMinutes标准工时*标准生产稼动率）"),
-            // entity.pcbaoutput.stdcapacity
-            new TranslationSeedItem("entity.pcbaoutput.stdcapacity", "zh-CN", "标准产能", "标准产能（计算结果：利用标准生产稼动率计算出小时产能，DirectLabor人数*60分钟/StdMinutes标准工时*标准生产稼动率）"),
-            // entity.pcbaoutput.stdcapacity
-            new TranslationSeedItem("entity.pcbaoutput.stdcapacity", "zh-HK", "标准产能_hk", "标准产能（计算结果：利用标准生产稼动率计算出小时产能，DirectLabor人数*60分钟/StdMinutes标准工时*标准生产稼动率）"),
 
             // entity.pcbaoutput.details
             new TranslationSeedItem("entity.pcbaoutput.details", "en-US", "PCBA明细列表_us", "PCBA明细列表"),

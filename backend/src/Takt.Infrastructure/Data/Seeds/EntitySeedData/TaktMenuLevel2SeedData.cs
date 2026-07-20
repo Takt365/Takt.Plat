@@ -901,6 +901,46 @@ public class TaktMenuLevel2SeedData
             });
             insertCount += insertCodeDataClone;
             updateCount += updateCodeDataClone;
+
+            var (insertCodeDataArchive, updateCodeDataArchive) = await CreateOrUpdateMenuAsync(menuRepository, sqlSugarContext, tenantCode, "CODE_DATABASE_TABLE_ARCHIVE", menu =>
+            {
+                menu.MenuName = "数据表归档";
+                menu.MenuCode = "CODE_DATABASE_TABLE_ARCHIVE";
+                menu.I18nKey = "menu.code.database.table.archive";
+                menu.Icon = "RiArchiveDrawerLine";
+                menu.ParentId = codeMenu.Id;
+                menu.MenuType = 1;
+                menu.Permission = "code:database:table:archive:list";
+                menu.RoutePath = "/code/database/table-archive";
+                menu.ComponentPath = "code/database/table-archive/index";
+                menu.SortOrder = 5;
+                menu.MenuStatus = 1;
+                menu.IsVisible = 1;
+                menu.IsCached = 0;
+                menu.IsExternal = 0;
+            });
+            insertCount += insertCodeDataArchive;
+            updateCount += updateCodeDataArchive;
+
+            var (insertCodeDbBackup, updateCodeDbBackup) = await CreateOrUpdateMenuAsync(menuRepository, sqlSugarContext, tenantCode, "CODE_DATABASE_BACKUP", menu =>
+            {
+                menu.MenuName = "数据库备份";
+                menu.MenuCode = "CODE_DATABASE_BACKUP";
+                menu.I18nKey = "menu.code.database.backup";
+                menu.Icon = "RiDatabaseLine";
+                menu.ParentId = codeMenu.Id;
+                menu.MenuType = 1;
+                menu.Permission = "code:database:backup:list";
+                menu.RoutePath = "/code/database/database-backup";
+                menu.ComponentPath = "code/database/database-backup/index";
+                menu.SortOrder = 6;
+                menu.MenuStatus = 1;
+                menu.IsVisible = 1;
+                menu.IsCached = 0;
+                menu.IsExternal = 0;
+            });
+            insertCount += insertCodeDbBackup;
+            updateCount += updateCodeDbBackup;
         }
 
         // ========== 基础数据下的二级菜单 (SortOrder: 10) ==========

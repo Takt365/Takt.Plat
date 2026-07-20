@@ -4,13 +4,13 @@
 // 文件名称：takt-event-tracking-reporter.ts
 // 创建时间：2026-06-25
 // 创建人：Takt365(Cursor AI)
-// 功能描述：三位一体监控统一批量上报 TaktEventTrackingLogs/track-batch（运行时网关）
+// 功能描述：三位一体监控统一批量上报 TaktTrackingLogs/track-batch（运行时网关）
 //
 // 版权信息：Copyright (c) 2025 Takt  All rights reserved.
 // 免责声明：此软件使用 MIT License，作者不承担任何使用风险。
 // ========================================
 
-import { trackEventTrackingLogBatch } from '@/api/statistics/logging/event-tracking-log';
+import { trackTrackingLogBatch } from '@/api/statistics/logging/tracking-log';
 import {
   getEventTrackingBatchSize,
   getEventTrackingFlushMs,
@@ -18,7 +18,7 @@ import {
   TAKT_EVENT_TRACK_PROCESS_BUDGET_MS,
 } from '@/config/event-tracking';
 import { useUserStore } from '@/stores/identity/user';
-import type { EventTrackingLogTrackItem } from '@/types/statistics/logging/event-tracking-log';
+import type { TrackingLogTrackItem } from '@/types/statistics/logging/tracking-log';
 import { createLogger } from '@/utils/logger';
 import {
   buildEventTrackingDiagnosis,
@@ -56,7 +56,7 @@ export interface PerformanceEventContext {
 const reporterLogger = createLogger('takt-event-tracking-reporter');
 
 /** 待上报队列 */
-const queue: EventTrackingLogTrackItem[] = [];
+const queue: TrackingLogTrackItem[] = [];
 
 /** 定时 flush 句柄 */
 let flushTimer: ReturnType<typeof setInterval> | null = null;
@@ -70,14 +70,14 @@ let lifecycleRegistered = false;
 /**
  * 构建交互日志上报条目公共字段
  * @param partial 业务字段
- * @returns {EventTrackingLogTrackItem} 上报条目
+ * @returns {TrackingLogTrackItem} 上报条目
  */
 export function buildEventTrackingTrackItem(
   partial: Omit<
-    EventTrackingLogTrackItem,
+    TrackingLogTrackItem,
     'routePath' | 'pageUrl' | 'userAgent' | 'eventTime'
   > & { eventTime?: string }
-): EventTrackingLogTrackItem {
+): TrackingLogTrackItem {
   const context = mergeRuntimeContext({ module: 'event-tracking', action: partial.eventTrackingType });
   return {
     eventTime: partial.eventTime ?? new Date().toISOString(),
@@ -94,7 +94,7 @@ export function buildEventTrackingTrackItem(
  * @param context 关联上下文
  */
 export function enqueuePerformanceEvent(
-  item: EventTrackingLogTrackItem,
+  item: TrackingLogTrackItem,
   context: PerformanceEventContext = {}
 ): void {
   if (!isEventTrackingReportEnabled()) {
@@ -109,7 +109,7 @@ export function enqueuePerformanceEvent(
       entryName: item.entryName,
       containerName: item.containerName,
     }, diagnosisContext);
-    const enriched: EventTrackingLogTrackItem = diagnosis
+    const enriched: TrackingLogTrackItem = diagnosis
       ? { ...item, attributionJson: mergeDiagnosisIntoAttributionJson(item.attributionJson, diagnosis) }
       : item;
     recordCorrelatorFromItem(enriched, context);
@@ -141,7 +141,7 @@ export function enqueuePerformanceEvent(
  * @param context 上报上下文
  */
 function resolveDiagnosisContext(
-  item: EventTrackingLogTrackItem,
+  item: TrackingLogTrackItem,
   context: PerformanceEventContext
 ) {
   const type = item.eventTrackingType.trim().toLowerCase();
@@ -160,7 +160,7 @@ function resolveDiagnosisContext(
  * @param context 上报上下文
  */
 function recordCorrelatorFromItem(
-  item: EventTrackingLogTrackItem,
+  item: TrackingLogTrackItem,
   context: PerformanceEventContext
 ): void {
   const type = item.eventTrackingType.trim().toLowerCase();
@@ -182,7 +182,7 @@ function recordCorrelatorFromItem(
  * 入队交互日志条目（内部队列，不含诊断）
  * @param item 上报条目
  */
-export function enqueueEventTrackingItem(item: EventTrackingLogTrackItem): void {
+export function enqueueEventTrackingItem(item: TrackingLogTrackItem): void {
   if (!isEventTrackingReportEnabled()) {
     return;
   }
@@ -244,7 +244,7 @@ export async function flushEventTrackingQueue(_useBeacon = false): Promise<void>
   const items = queue.splice(0, batchSize);
   isFlushing = true;
   try {
-    await trackEventTrackingLogBatch({ items });
+    await trackTrackingLogBatch({ items });
     reporterLogger.debug('交互日志上报成功', { action: 'track-batch', count: items.length });
   } catch (error: unknown) {
     queue.unshift(...items);

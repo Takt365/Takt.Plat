@@ -36,8 +36,29 @@
         @change="handleTableChange"
         @resize-column="handleResizeColumn"
       >
+        <template #bodyCell="slotData">
+          <div
+            v-if="isTableColumnEllipsisEnabled(slotData.column)"
+            :class="TAKT_TABLE_CELL_ELLIPSIS_INNER_CLASS"
+            :title="resolveTableCellEllipsisTitle(slotData.text)"
+          >
+            <slot
+              name="bodyCell"
+              v-bind="slotData"
+            >
+              <TaktTableBodyCellFallback :slot-data="slotData" />
+            </slot>
+          </div>
+          <slot
+            v-else
+            name="bodyCell"
+            v-bind="slotData"
+          >
+            <TaktTableBodyCellFallback :slot-data="slotData" />
+          </slot>
+        </template>
         <template
-          v-for="(_, name) in $slots"
+          v-for="name in passthroughSlotNames"
           #[name]="slotData"
         >
           <slot
@@ -52,6 +73,14 @@
           <slot name="summary" />
         </template>
       </a-table>
+    </div>
+    <div
+      v-if="showFooterRemark"
+      class="takt-tree-right-table__footer-remark shrink-0 px-1 pt-2 text-sm leading-relaxed text-text-secondary"
+    >
+      <slot name="footerRemark">
+        {{ footerRemark }}
+      </slot>
     </div>
     <TaktPagination
       v-if="showPagination"
@@ -77,10 +106,15 @@ import {
 } from '@/utils/table-columns'
 import {
   applyTableColumnPresentation,
+  isTableColumnEllipsisEnabled,
+  resolveTableCellEllipsisTitle,
   resolveTableScrollConfig,
   resolveVerticalScrollY,
+  shouldUseTableVirtualScroll,
+  TAKT_TABLE_CELL_ELLIPSIS_INNER_CLASS,
   type TaktTableScrollLayout,
 } from '@/utils/table-scroll'
+import TaktTableBodyCellFallback from '@/components/business/takt-table-body-cell-fallback/index'
 import { useTaktTableViewportScrollY } from '@/composables/use-takt-table-viewport-scroll-y'
 import { useI18n } from 'vue-i18n'
 
@@ -141,6 +175,8 @@ interface Props {
   pageSize?: number
   /** 总条数（拍平后的行数） */
   total?: number
+  /** 表尾备注说明（合计行 / 表体下方、分页上方） */
+  footerRemark?: string
 }
 
 const props = withDefaults(defineProps<Props>(), {
@@ -165,25 +201,34 @@ const props = withDefaults(defineProps<Props>(), {
   idColumnKey: 'id',
   actionColumnKey: 'action',
   tableMode: 'tree',
+  footerRemark: '',
 })
 
 const { t } = useI18n()
+const slots = useSlots()
+
+/** 本组件承接、不向 a-table 透传的插槽 */
+const OWNED_SLOT_NAMES = new Set(['bodyCell', 'summary', 'footerRemark'])
+
+/** 透传给 a-table 的插槽名 */
+const passthroughSlotNames = computed(() =>
+  Object.keys(slots).filter((name) => !OWNED_SLOT_NAMES.has(name)),
+)
+
+/** 是否展示表尾备注 */
+const showFooterRemark = computed(
+  () => !!props.footerRemark?.trim() || !!slots.footerRemark,
+)
 
 /** 空数据占位（scroll.y 固定布局高度，与行数无关） */
 const tableLocale = computed(() => ({
   emptyText: t('common.status.empty'),
 }))
 
-/** 超过此行数时自动启用虚拟滚动（07-overflow-vue） */
-const AUTO_VIRTUAL_ROW_THRESHOLD = 50
-
-/** 是否启用虚拟滚动 */
-const shouldUseVirtual = computed(() => {
-  if (props.virtual === true) return true
-  const len = props.dataSource?.length ?? 0
-  if (props.virtual === false && len <= AUTO_VIRTUAL_ROW_THRESHOLD) return false
-  return len > AUTO_VIRTUAL_ROW_THRESHOLD
-})
+/** 是否启用虚拟滚动：显式 true，或拍平行数超过 5000 */
+const shouldUseVirtual = computed(() =>
+  shouldUseTableVirtualScroll(props.dataSource?.length ?? 0, props.virtual),
+)
 
 const emit = defineEmits<{
   'change': [pagination: TablePagination, filters: TableFilters, sorter: TableSorter]
@@ -337,10 +382,23 @@ const handlePaginationSizeChange = (_page: number, size: number) => {
 }
 
 /** scroll.y 兜底：空数据/少行时亦保持固定表体高度（不随数据撑开） */
+.takt-tree-right-table__body--fixed-y :deep(.ant-table-header) {
+  overflow-y: scroll !important;
+  scrollbar-gutter: stable;
+  scrollbar-width: none;
+}
+
+.takt-tree-right-table__body--fixed-y :deep(.ant-table-header::-webkit-scrollbar) {
+  width: 0;
+  height: 0;
+}
+
 .takt-tree-right-table__body--fixed-y :deep(.ant-table-body) {
   min-height: var(--takt-table-scroll-y);
   max-height: var(--takt-table-scroll-y);
+  overflow-x: auto !important;
   overflow-y: auto !important;
+  scrollbar-gutter: stable;
 }
 
 .takt-tree-right-table__body--fixed-y :deep(.ant-table-placeholder) {

@@ -20,6 +20,7 @@ export const MATERIALDOCUMENTITEM_SELF_I18N_KEY = buildEntitySelfI18nKey(MATERIA
 
 /** 列表业务列（不含主键） */
 export const MATERIALDOCUMENTITEM_LIST_FIELDS = [
+  'materialDocumentId',
   'materialDocumentCode',
   'lineNumber',
   'warehouseCode',
@@ -34,7 +35,34 @@ export const MATERIALDOCUMENTITEM_LIST_FIELDS = [
   'documentDate',
   'referenceDocumentCode',
   'customerCode',
-  'materialTransaction',
+  'isObsolete',
+] as const
+
+/** 明细右栏 panel 默认展示列（不含主键 id；无操作列） */
+export const MATERIALDOCUMENTITEM_DEFAULT_VISIBLE_COLUMN_KEYS = [
+  'materialDocumentId',
+  'materialDocumentCode',
+  'lineNumber',
+  'warehouseCode',
+  'movementType',
+  'postingDate',
+  'quantity',
+  'specialStock',
+  'purchaseOrderCode',
+  'productionOrderCode',
+  'projectCode',
+  'localCurrencyAmount',
+  'documentDate',
+  'referenceDocumentCode',
+  'customerCode',
+  'isObsolete',
+] as const
+
+/** 明细右栏 panel 合计列（当前页 dataSource 数值字段求和） */
+export const MATERIALDOCUMENTITEM_SUMMARY_SUM_FIELDS = [
+  'quantity',
+  'localCurrencyAmount',
+  'isObsolete',
 ] as const
 
 /** 表单控件默认占位类型（仅 UI/校验语义，不含 i18n 键） */
@@ -50,6 +78,12 @@ export const MATERIALDOCUMENTITEM_PLACEHOLDER = {
   specialStock: 'optional',
   purchaseOrderCode: 'optional',
   productionOrderCode: 'optional',
+  projectCode: 'optional',
+  localCurrencyAmount: 'select',
+  documentDate: 'select',
+  referenceDocumentCode: 'optional',
+  customerCode: 'optional',
+  isObsolete: 'select',
 } as const satisfies Record<string, EntityFieldPlaceholderKind>
 
 /** 表单 ph() 可接受的字段（与 PLACEHOLDER 键一致，避免与 LIST_FIELDS 导航列混用） */
@@ -78,7 +112,7 @@ export const MATERIALDOCUMENTITEM_QUERY_STRING_FIELDS = [
 
 export type MaterialDocumentItemQueryField =
   | (typeof MATERIALDOCUMENTITEM_QUERY_STRING_FIELDS)[number]
-  | 'lineNumber' | 'quantity' | 'localCurrencyAmount'
+  | 'lineNumber' | 'quantity' | 'localCurrencyAmount' | 'isObsolete'
 
 /** 高级查询抽屉全部字段（含数值） */
 export const MATERIALDOCUMENTITEM_QUERY_FIELDS: readonly MaterialDocumentItemQueryField[] = [
@@ -86,6 +120,7 @@ export const MATERIALDOCUMENTITEM_QUERY_FIELDS: readonly MaterialDocumentItemQue
   'lineNumber',
   'quantity',
   'localCurrencyAmount',
+  'isObsolete',
 ]
 
 /**

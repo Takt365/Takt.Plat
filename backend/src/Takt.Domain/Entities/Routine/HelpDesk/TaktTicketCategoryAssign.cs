@@ -31,7 +31,7 @@ public class TaktTicketCategoryAssign : TaktCompanyEntityBase
     public string CategoryCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 默认处理人 ID（关联 TaktUser.Id，选项 TaktUsers/options）
+    /// 默认处理人 ID（选项 TaktUsers/options，DictValue=Id）
     /// </summary>
     [SugarColumn(ColumnName = "assignee_id", ColumnDescription = "默认处理人ID", ColumnDataType = "bigint", IsNullable = false)]
     [JsonConverter(typeof(ValueToStringConverter))]

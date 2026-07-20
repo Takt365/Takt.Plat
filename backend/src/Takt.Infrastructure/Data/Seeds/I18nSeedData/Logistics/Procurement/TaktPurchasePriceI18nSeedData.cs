@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Infrastructure.Data.Seeds.I18nSeedData.Logistics.Procurement
 // 文件名称：TaktPurchasePriceI18nSeedData.cs
-// 创建时间：2026-07-09
+// 创建时间：2026-07-20
 // 创建人：Takt365(Auto Generated)
 // 功能描述：TaktPurchasePrice 实体字段国际化种子（无对应 frontend locales；TranslationText 取自 ColumnDescription，ContextNote 取自属性 XML summary）
 // 
@@ -90,41 +90,77 @@ public class TaktPurchasePriceI18nSeedData : ITaktSeedDataCoordinator
             // entity.purchaseprice._self
             new TranslationSeedItem("entity.purchaseprice._self", "zh-HK", "Takt采购价格信息_hk", "实体名称"),
 
-            // entity.purchaseprice.plantcode
-            new TranslationSeedItem("entity.purchaseprice.plantcode", "en-US", "工厂代码_us", "工厂代码（选项 TaktPlants/options，DictValue=PlantCode）"),
-            // entity.purchaseprice.plantcode
-            new TranslationSeedItem("entity.purchaseprice.plantcode", "ja-JP", "工厂代码_jp", "工厂代码（选项 TaktPlants/options，DictValue=PlantCode）"),
-            // entity.purchaseprice.plantcode
-            new TranslationSeedItem("entity.purchaseprice.plantcode", "zh-CN", "工厂代码", "工厂代码（选项 TaktPlants/options，DictValue=PlantCode）"),
-            // entity.purchaseprice.plantcode
-            new TranslationSeedItem("entity.purchaseprice.plantcode", "zh-HK", "工厂代码_hk", "工厂代码（选项 TaktPlants/options，DictValue=PlantCode）"),
+            // entity.purchaseprice.code
+            new TranslationSeedItem("entity.purchaseprice.code", "en-US", "定价记录号_us", "定价记录号（唯一索引；长度 20）"),
+            // entity.purchaseprice.code
+            new TranslationSeedItem("entity.purchaseprice.code", "ja-JP", "定价记录号_jp", "定价记录号（唯一索引；长度 20）"),
+            // entity.purchaseprice.code
+            new TranslationSeedItem("entity.purchaseprice.code", "zh-CN", "定价记录号", "定价记录号（唯一索引；长度 20）"),
+            // entity.purchaseprice.code
+            new TranslationSeedItem("entity.purchaseprice.code", "zh-HK", "定价记录号_hk", "定价记录号（唯一索引；长度 20）"),
 
-            // entity.purchaseprice.code
-            new TranslationSeedItem("entity.purchaseprice.code", "en-US", "采购价格编码_us", "采购价格编码（唯一索引）"),
-            // entity.purchaseprice.code
-            new TranslationSeedItem("entity.purchaseprice.code", "ja-JP", "采购价格编码_jp", "采购价格编码（唯一索引）"),
-            // entity.purchaseprice.code
-            new TranslationSeedItem("entity.purchaseprice.code", "zh-CN", "采购价格编码", "采购价格编码（唯一索引）"),
-            // entity.purchaseprice.code
-            new TranslationSeedItem("entity.purchaseprice.code", "zh-HK", "采购价格编码_hk", "采购价格编码（唯一索引）"),
+            // entity.purchaseprice.pricetype
+            new TranslationSeedItem("entity.purchaseprice.pricetype", "en-US", "条件类型_us", "条件类型（字典 logistics_price_type；PB00=采购总价 Gross Price，PR00=基本价格 Base Price，MWST=销项税/增值税，MWRK=不可抵扣进项税，NLXV=购置税）"),
+            // entity.purchaseprice.pricetype
+            new TranslationSeedItem("entity.purchaseprice.pricetype", "ja-JP", "条件类型_jp", "条件类型（字典 logistics_price_type；PB00=采购总价 Gross Price，PR00=基本价格 Base Price，MWST=销项税/增值税，MWRK=不可抵扣进项税，NLXV=购置税）"),
+            // entity.purchaseprice.pricetype
+            new TranslationSeedItem("entity.purchaseprice.pricetype", "zh-CN", "条件类型", "条件类型（字典 logistics_price_type；PB00=采购总价 Gross Price，PR00=基本价格 Base Price，MWST=销项税/增值税，MWRK=不可抵扣进项税，NLXV=购置税）"),
+            // entity.purchaseprice.pricetype
+            new TranslationSeedItem("entity.purchaseprice.pricetype", "zh-HK", "条件类型_hk", "条件类型（字典 logistics_price_type；PB00=采购总价 Gross Price，PR00=基本价格 Base Price，MWST=销项税/增值税，MWRK=不可抵扣进项税，NLXV=购置税）"),
 
             // entity.purchaseprice.suppliercode
-            new TranslationSeedItem("entity.purchaseprice.suppliercode", "en-US", "供应商编码_us", "供应商编码（选项 TaktSuppliers/options，DictValue=SupplierCode）"),
+            new TranslationSeedItem("entity.purchaseprice.suppliercode", "en-US", "供应商_us", "供应商编码（选项 TaktSuppliers/options，DictValue=SupplierCode）"),
             // entity.purchaseprice.suppliercode
-            new TranslationSeedItem("entity.purchaseprice.suppliercode", "ja-JP", "供应商编码_jp", "供应商编码（选项 TaktSuppliers/options，DictValue=SupplierCode）"),
+            new TranslationSeedItem("entity.purchaseprice.suppliercode", "ja-JP", "供应商_jp", "供应商编码（选项 TaktSuppliers/options，DictValue=SupplierCode）"),
             // entity.purchaseprice.suppliercode
-            new TranslationSeedItem("entity.purchaseprice.suppliercode", "zh-CN", "供应商编码", "供应商编码（选项 TaktSuppliers/options，DictValue=SupplierCode）"),
+            new TranslationSeedItem("entity.purchaseprice.suppliercode", "zh-CN", "供应商", "供应商编码（选项 TaktSuppliers/options，DictValue=SupplierCode）"),
             // entity.purchaseprice.suppliercode
-            new TranslationSeedItem("entity.purchaseprice.suppliercode", "zh-HK", "供应商编码_hk", "供应商编码（选项 TaktSuppliers/options，DictValue=SupplierCode）"),
+            new TranslationSeedItem("entity.purchaseprice.suppliercode", "zh-HK", "供应商_hk", "供应商编码（选项 TaktSuppliers/options，DictValue=SupplierCode）"),
+
+            // entity.purchaseprice.materialcode
+            new TranslationSeedItem("entity.purchaseprice.materialcode", "en-US", "物料_us", "物料编码（选项 TaktMaterialPlants/options，DictValue=MaterialCode）"),
+            // entity.purchaseprice.materialcode
+            new TranslationSeedItem("entity.purchaseprice.materialcode", "ja-JP", "物料_jp", "物料编码（选项 TaktMaterialPlants/options，DictValue=MaterialCode）"),
+            // entity.purchaseprice.materialcode
+            new TranslationSeedItem("entity.purchaseprice.materialcode", "zh-CN", "物料", "物料编码（选项 TaktMaterialPlants/options，DictValue=MaterialCode）"),
+            // entity.purchaseprice.materialcode
+            new TranslationSeedItem("entity.purchaseprice.materialcode", "zh-HK", "物料_hk", "物料编码（选项 TaktMaterialPlants/options，DictValue=MaterialCode）"),
+
+            // entity.purchaseprice.validfrom
+            new TranslationSeedItem("entity.purchaseprice.validfrom", "en-US", "有效起始日_us", "有效起始日"),
+            // entity.purchaseprice.validfrom
+            new TranslationSeedItem("entity.purchaseprice.validfrom", "ja-JP", "有效起始日_jp", "有效起始日"),
+            // entity.purchaseprice.validfrom
+            new TranslationSeedItem("entity.purchaseprice.validfrom", "zh-CN", "有效起始日", "有效起始日"),
+            // entity.purchaseprice.validfrom
+            new TranslationSeedItem("entity.purchaseprice.validfrom", "zh-HK", "有效起始日_hk", "有效起始日"),
+
+            // entity.purchaseprice.validto
+            new TranslationSeedItem("entity.purchaseprice.validto", "en-US", "有效截至日_us", "有效截至日"),
+            // entity.purchaseprice.validto
+            new TranslationSeedItem("entity.purchaseprice.validto", "ja-JP", "有效截至日_jp", "有效截至日"),
+            // entity.purchaseprice.validto
+            new TranslationSeedItem("entity.purchaseprice.validto", "zh-CN", "有效截至日", "有效截至日"),
+            // entity.purchaseprice.validto
+            new TranslationSeedItem("entity.purchaseprice.validto", "zh-HK", "有效截至日_hk", "有效截至日"),
+
+            // entity.purchaseprice.variablekey
+            new TranslationSeedItem("entity.purchaseprice.variablekey", "en-US", "可变关键字_us", "可变关键字"),
+            // entity.purchaseprice.variablekey
+            new TranslationSeedItem("entity.purchaseprice.variablekey", "ja-JP", "可变关键字_jp", "可变关键字"),
+            // entity.purchaseprice.variablekey
+            new TranslationSeedItem("entity.purchaseprice.variablekey", "zh-CN", "可变关键字", "可变关键字"),
+            // entity.purchaseprice.variablekey
+            new TranslationSeedItem("entity.purchaseprice.variablekey", "zh-HK", "可变关键字_hk", "可变关键字"),
 
             // entity.purchaseprice.purchaseinquiryid
-            new TranslationSeedItem("entity.purchaseprice.purchaseinquiryid", "en-US", "来源采购询价ID_us", "来源采购询价 ID（关联 TaktPurchaseInquiry.Id，选项 TaktPurchaseInquirys/options）"),
+            new TranslationSeedItem("entity.purchaseprice.purchaseinquiryid", "en-US", "来源采购询价ID_us", "来源采购询价 ID（选项 TaktPurchaseInquirys/options，DictValue=Id）"),
             // entity.purchaseprice.purchaseinquiryid
-            new TranslationSeedItem("entity.purchaseprice.purchaseinquiryid", "ja-JP", "来源采购询价ID_jp", "来源采购询价 ID（关联 TaktPurchaseInquiry.Id，选项 TaktPurchaseInquirys/options）"),
+            new TranslationSeedItem("entity.purchaseprice.purchaseinquiryid", "ja-JP", "来源采购询价ID_jp", "来源采购询价 ID（选项 TaktPurchaseInquirys/options，DictValue=Id）"),
             // entity.purchaseprice.purchaseinquiryid
-            new TranslationSeedItem("entity.purchaseprice.purchaseinquiryid", "zh-CN", "来源采购询价ID", "来源采购询价 ID（关联 TaktPurchaseInquiry.Id，选项 TaktPurchaseInquirys/options）"),
+            new TranslationSeedItem("entity.purchaseprice.purchaseinquiryid", "zh-CN", "来源采购询价ID", "来源采购询价 ID（选项 TaktPurchaseInquirys/options，DictValue=Id）"),
             // entity.purchaseprice.purchaseinquiryid
-            new TranslationSeedItem("entity.purchaseprice.purchaseinquiryid", "zh-HK", "来源采购询价ID_hk", "来源采购询价 ID（关联 TaktPurchaseInquiry.Id，选项 TaktPurchaseInquirys/options）"),
+            new TranslationSeedItem("entity.purchaseprice.purchaseinquiryid", "zh-HK", "来源采购询价ID_hk", "来源采购询价 ID（选项 TaktPurchaseInquirys/options，DictValue=Id）"),
 
             // entity.purchaseprice.purchaseinquirycode
             new TranslationSeedItem("entity.purchaseprice.purchaseinquirycode", "en-US", "来源采购询价编码_us", "来源采购询价编码（冗余）"),
@@ -135,50 +171,14 @@ public class TaktPurchasePriceI18nSeedData : ITaktSeedDataCoordinator
             // entity.purchaseprice.purchaseinquirycode
             new TranslationSeedItem("entity.purchaseprice.purchaseinquirycode", "zh-HK", "来源采购询价编码_hk", "来源采购询价编码（冗余）"),
 
-            // entity.purchaseprice.pricetype
-            new TranslationSeedItem("entity.purchaseprice.pricetype", "en-US", "价格类型_us", "价格类型（字典 logistics_price_type；0=标准价格，1=合同价格，2=临时价格，3=询价价格，4=历史价格）"),
-            // entity.purchaseprice.pricetype
-            new TranslationSeedItem("entity.purchaseprice.pricetype", "ja-JP", "价格类型_jp", "价格类型（字典 logistics_price_type；0=标准价格，1=合同价格，2=临时价格，3=询价价格，4=历史价格）"),
-            // entity.purchaseprice.pricetype
-            new TranslationSeedItem("entity.purchaseprice.pricetype", "zh-CN", "价格类型", "价格类型（字典 logistics_price_type；0=标准价格，1=合同价格，2=临时价格，3=询价价格，4=历史价格）"),
-            // entity.purchaseprice.pricetype
-            new TranslationSeedItem("entity.purchaseprice.pricetype", "zh-HK", "价格类型_hk", "价格类型（字典 logistics_price_type；0=标准价格，1=合同价格，2=临时价格，3=询价价格，4=历史价格）"),
-
-            // entity.purchaseprice.effectivestartdate
-            new TranslationSeedItem("entity.purchaseprice.effectivestartdate", "en-US", "生效日期_us", "生效日期"),
-            // entity.purchaseprice.effectivestartdate
-            new TranslationSeedItem("entity.purchaseprice.effectivestartdate", "ja-JP", "生效日期_jp", "生效日期"),
-            // entity.purchaseprice.effectivestartdate
-            new TranslationSeedItem("entity.purchaseprice.effectivestartdate", "zh-CN", "生效日期", "生效日期"),
-            // entity.purchaseprice.effectivestartdate
-            new TranslationSeedItem("entity.purchaseprice.effectivestartdate", "zh-HK", "生效日期_hk", "生效日期"),
-
-            // entity.purchaseprice.effectiveenddate
-            new TranslationSeedItem("entity.purchaseprice.effectiveenddate", "en-US", "失效日期_us", "失效日期（空表示长期有效）"),
-            // entity.purchaseprice.effectiveenddate
-            new TranslationSeedItem("entity.purchaseprice.effectiveenddate", "ja-JP", "失效日期_jp", "失效日期（空表示长期有效）"),
-            // entity.purchaseprice.effectiveenddate
-            new TranslationSeedItem("entity.purchaseprice.effectiveenddate", "zh-CN", "失效日期", "失效日期（空表示长期有效）"),
-            // entity.purchaseprice.effectiveenddate
-            new TranslationSeedItem("entity.purchaseprice.effectiveenddate", "zh-HK", "失效日期_hk", "失效日期（空表示长期有效）"),
-
-            // entity.purchaseprice.pricestatus
-            new TranslationSeedItem("entity.purchaseprice.pricestatus", "en-US", "价格状态_us", "价格状态（字典 sys_normal_disable_status；1=启用，0=禁用）"),
-            // entity.purchaseprice.pricestatus
-            new TranslationSeedItem("entity.purchaseprice.pricestatus", "ja-JP", "价格状态_jp", "价格状态（字典 sys_normal_disable_status；1=启用，0=禁用）"),
-            // entity.purchaseprice.pricestatus
-            new TranslationSeedItem("entity.purchaseprice.pricestatus", "zh-CN", "价格状态", "价格状态（字典 sys_normal_disable_status；1=启用，0=禁用）"),
-            // entity.purchaseprice.pricestatus
-            new TranslationSeedItem("entity.purchaseprice.pricestatus", "zh-HK", "价格状态_hk", "价格状态（字典 sys_normal_disable_status；1=启用，0=禁用）"),
-
             // entity.purchaseprice.items
-            new TranslationSeedItem("entity.purchaseprice.items", "en-US", "物料价格明细列表_us", "物料价格明细列表（主子表关系，一个供应商价格可以有多个物料价格）"),
+            new TranslationSeedItem("entity.purchaseprice.items", "en-US", "定价条件行列表_us", "定价条件行列表（主子表关系）"),
             // entity.purchaseprice.items
-            new TranslationSeedItem("entity.purchaseprice.items", "ja-JP", "物料价格明细列表_jp", "物料价格明细列表（主子表关系，一个供应商价格可以有多个物料价格）"),
+            new TranslationSeedItem("entity.purchaseprice.items", "ja-JP", "定价条件行列表_jp", "定价条件行列表（主子表关系）"),
             // entity.purchaseprice.items
-            new TranslationSeedItem("entity.purchaseprice.items", "zh-CN", "物料价格明细列表", "物料价格明细列表（主子表关系，一个供应商价格可以有多个物料价格）"),
+            new TranslationSeedItem("entity.purchaseprice.items", "zh-CN", "定价条件行列表", "定价条件行列表（主子表关系）"),
             // entity.purchaseprice.items
-            new TranslationSeedItem("entity.purchaseprice.items", "zh-HK", "物料价格明细列表_hk", "物料价格明细列表（主子表关系，一个供应商价格可以有多个物料价格）"),
+            new TranslationSeedItem("entity.purchaseprice.items", "zh-HK", "定价条件行列表_hk", "定价条件行列表（主子表关系）"),
         };
     }
 

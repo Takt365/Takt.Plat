@@ -296,7 +296,7 @@ const dictDataStore = useDictDataStore()
 
 /** 当前激活 Tab：employee | user | permission */
 const activeTab = ref('employee')
-/** 表单内容区纵向布局类名（与弹窗内其它表单一致） */
+/** 表单内容区纵向布局类名（与弹窗内其他表单一致） */
 const formContentClass = 'takt-form-content-rows-10'
 
 /**

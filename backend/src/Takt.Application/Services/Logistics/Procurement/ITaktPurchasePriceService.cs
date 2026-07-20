@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Application.Services.Logistics.Procurement
 // 文件名称：ITaktPurchasePriceService.cs
-// 创建时间：2026-07-09
+// 创建时间：2026-07-20
 // 创建人：Takt365(Cursor AI)
 // 功能描述：采购价格应用服务接口
 // 
@@ -71,13 +71,6 @@ public interface ITaktPurchasePriceService
     Task DeletePurchasePriceBatchAsync(IEnumerable<long> ids);
 
     /// <summary>
-    /// 更新采购价格状态
-    /// </summary>
-    /// <param name="dto">状态DTO</param>
-    /// <returns>DTO</returns>
-    Task<TaktPurchasePriceDto> UpdatePurchasePriceStatusAsync(TaktPurchasePriceStatusDto dto);
-
-    /// <summary>
     /// 获取导入模板
     /// </summary>
     /// <param name="sheetName">工作表名称</param>
@@ -101,12 +94,5 @@ public interface ITaktPurchasePriceService
     /// <param name="fileName">文件名</param>
     /// <returns>Excel 文件</returns>
     Task<(string fileName, byte[] fileContent)> ExportPurchasePriceAsync(TaktPurchasePriceQueryDto? query = null, string? sheetName = null, string? fileName = null);
-
-    /// <summary>
-    /// 获取采购价格月度波动分析（按物料编码与生效区间）
-    /// </summary>
-    /// <param name="queryDto">查询 DTO</param>
-    /// <returns>月度波动结果</returns>
-    Task<TaktPurchasePriceTrendResultDto> GetPurchasePriceTrendAnalysisAsync(TaktPurchasePriceTrendQueryDto queryDto);
 
 }

@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Infrastructure.Data.Seeds.I18nSeedData.Logistics.Quality.Complaint
 // 文件名称：TaktCustomerSatisfactionSurveyI18nSeedData.cs
-// 创建时间：2026-07-09
+// 创建时间：2026-07-20
 // 创建人：Takt365(Auto Generated)
 // 功能描述：TaktCustomerSatisfactionSurvey 实体字段国际化种子（无对应 frontend locales；TranslationText 取自 ColumnDescription，ContextNote 取自属性 XML summary）
 // 
@@ -100,13 +100,13 @@ public class TaktCustomerSatisfactionSurveyI18nSeedData : ITaktSeedDataCoordinat
             new TranslationSeedItem("entity.customersatisfactionsurvey.code", "zh-HK", "调查表编号_hk", "调查表编号（组合唯一索引）"),
 
             // entity.customersatisfactionsurvey.customerid
-            new TranslationSeedItem("entity.customersatisfactionsurvey.customerid", "en-US", "客户ID_us", "客户 ID（关联 TaktCustomer.Id，选项 TaktCustomers/options）"),
+            new TranslationSeedItem("entity.customersatisfactionsurvey.customerid", "en-US", "客户ID_us", "客户 ID（选项 TaktCustomers/options，DictValue=Id）"),
             // entity.customersatisfactionsurvey.customerid
-            new TranslationSeedItem("entity.customersatisfactionsurvey.customerid", "ja-JP", "客户ID_jp", "客户 ID（关联 TaktCustomer.Id，选项 TaktCustomers/options）"),
+            new TranslationSeedItem("entity.customersatisfactionsurvey.customerid", "ja-JP", "客户ID_jp", "客户 ID（选项 TaktCustomers/options，DictValue=Id）"),
             // entity.customersatisfactionsurvey.customerid
-            new TranslationSeedItem("entity.customersatisfactionsurvey.customerid", "zh-CN", "客户ID", "客户 ID（关联 TaktCustomer.Id，选项 TaktCustomers/options）"),
+            new TranslationSeedItem("entity.customersatisfactionsurvey.customerid", "zh-CN", "客户ID", "客户 ID（选项 TaktCustomers/options，DictValue=Id）"),
             // entity.customersatisfactionsurvey.customerid
-            new TranslationSeedItem("entity.customersatisfactionsurvey.customerid", "zh-HK", "客户ID_hk", "客户 ID（关联 TaktCustomer.Id，选项 TaktCustomers/options）"),
+            new TranslationSeedItem("entity.customersatisfactionsurvey.customerid", "zh-HK", "客户ID_hk", "客户 ID（选项 TaktCustomers/options，DictValue=Id）"),
 
             // entity.customersatisfactionsurvey.customername
             new TranslationSeedItem("entity.customersatisfactionsurvey.customername", "en-US", "客户名称_us", "客户名称"),
@@ -280,13 +280,13 @@ public class TaktCustomerSatisfactionSurveyI18nSeedData : ITaktSeedDataCoordinat
             new TranslationSeedItem("entity.customersatisfactionsurvey.improvementplan", "zh-HK", "改进计划_hk", "改进计划/措施"),
 
             // entity.customersatisfactionsurvey.relatedcomplaintid
-            new TranslationSeedItem("entity.customersatisfactionsurvey.relatedcomplaintid", "en-US", "关联客诉ID_us", "关联客诉 ID（关联 TaktCustomerComplaint.Id，选项 TaktCustomerComplaints/options）"),
+            new TranslationSeedItem("entity.customersatisfactionsurvey.relatedcomplaintid", "en-US", "关联客诉ID_us", "关联客诉 ID（选项 TaktCustomerComplaints/options，DictValue=Id）"),
             // entity.customersatisfactionsurvey.relatedcomplaintid
-            new TranslationSeedItem("entity.customersatisfactionsurvey.relatedcomplaintid", "ja-JP", "关联客诉ID_jp", "关联客诉 ID（关联 TaktCustomerComplaint.Id，选项 TaktCustomerComplaints/options）"),
+            new TranslationSeedItem("entity.customersatisfactionsurvey.relatedcomplaintid", "ja-JP", "关联客诉ID_jp", "关联客诉 ID（选项 TaktCustomerComplaints/options，DictValue=Id）"),
             // entity.customersatisfactionsurvey.relatedcomplaintid
-            new TranslationSeedItem("entity.customersatisfactionsurvey.relatedcomplaintid", "zh-CN", "关联客诉ID", "关联客诉 ID（关联 TaktCustomerComplaint.Id，选项 TaktCustomerComplaints/options）"),
+            new TranslationSeedItem("entity.customersatisfactionsurvey.relatedcomplaintid", "zh-CN", "关联客诉ID", "关联客诉 ID（选项 TaktCustomerComplaints/options，DictValue=Id）"),
             // entity.customersatisfactionsurvey.relatedcomplaintid
-            new TranslationSeedItem("entity.customersatisfactionsurvey.relatedcomplaintid", "zh-HK", "关联客诉ID_hk", "关联客诉 ID（关联 TaktCustomerComplaint.Id，选项 TaktCustomerComplaints/options）"),
+            new TranslationSeedItem("entity.customersatisfactionsurvey.relatedcomplaintid", "zh-HK", "关联客诉ID_hk", "关联客诉 ID（选项 TaktCustomerComplaints/options，DictValue=Id）"),
 
             // entity.customersatisfactionsurvey.attachments
             new TranslationSeedItem("entity.customersatisfactionsurvey.attachments", "en-US", "附件JSON_us", "附件 （JSON列表形式，由TaktFile 统一上传到服务器）"),

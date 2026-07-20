@@ -28,7 +28,7 @@ export interface TableClone {
   sourceDatabaseName: string;
 
   /**
-   * 目标租户编码（3 位）
+   * 目标租户（3 位）
    */
   targetTenantCode: string;
 

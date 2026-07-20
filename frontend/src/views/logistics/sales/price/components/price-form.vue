@@ -10,7 +10,7 @@
 <template>
   <a-form
     ref="formRef"
-    class="takt-generated-form price-form flex flex-col min-h-0"
+    class="takt-generated-form price-form flex flex-col min-h-0 overflow-visible"
     :model="formState"
     :rules="rules"
     layout="horizontal"
@@ -27,62 +27,7 @@
       >
         <div :class="formContentClass">
           <a-row :gutter="24">
-            <a-col :span="12">
-              <a-form-item
-                :label="pi.label('tenantCode')"
-                name="tenantCode"
-              >
-                <a-input
-                  v-model:value="formState.tenantCode"
-                  :placeholder="pi.ph('tenantCode')"
-                  show-count
-                  :maxlength="20"
-                  disabled
-                />
-              </a-form-item>
-            </a-col>
-            <a-col :span="12">
-              <a-form-item
-                :label="pi.label('companyCode')"
-                name="companyCode"
-              >
-                <a-input
-                  v-model:value="formState.companyCode"
-                  :placeholder="pi.ph('companyCode')"
-                  show-count
-                  :maxlength="20"
-                  disabled
-                />
-              </a-form-item>
-            </a-col>
-            <a-col :span="12">
-              <a-form-item
-                :label="pi.label('companyDefaultCulture')"
-                name="companyDefaultCulture"
-              >
-                <a-input
-                  v-model:value="formState.companyDefaultCulture"
-                  :placeholder="pi.ph('companyDefaultCulture')"
-                  show-count
-                  :maxlength="20"
-                  disabled
-                />
-              </a-form-item>
-            </a-col>
-            <a-col :span="12">
-              <a-form-item
-                :label="pi.label('plantCode')"
-                name="plantCode"
-              >
-                <TaktSelect
-                  v-model:value="formState.plantCode"
-                  api-url="TaktPlants/options"
-                  :placeholder="pi.ph('plantCode')"
-                  :disabled="!!formData?.salesPriceId"
-                />
-              </a-form-item>
-            </a-col>
-            <a-col :span="12">
+            <a-col :span="24">
               <a-form-item
                 :label="pi.label('salesPriceCode')"
                 name="salesPriceCode"
@@ -91,13 +36,25 @@
                   v-model:value="formState.salesPriceCode"
                   :placeholder="pi.ph('salesPriceCode')"
                   show-count
-                  :maxlength="50"
+                  :maxlength="20"
                   allow-clear
                   :disabled="!!formData?.salesPriceId"
                 />
               </a-form-item>
             </a-col>
-            <a-col :span="12">
+            <a-col :span="24">
+              <a-form-item
+                :label="pi.label('priceType')"
+                name="priceType"
+              >
+                <TaktSelect
+                  v-model:value="formState.priceType"
+                  dict-type="logistics_price_type"
+                  :placeholder="pi.ph('priceType')"
+                />
+              </a-form-item>
+            </a-col>
+            <a-col :span="24">
               <a-form-item
                 :label="pi.label('customerCode')"
                 name="customerCode"
@@ -110,53 +67,83 @@
                 />
               </a-form-item>
             </a-col>
-            <a-col :span="12">
+            <a-col :span="24">
               <a-form-item
-                :label="pi.label('priceType')"
-                name="priceType"
+                :label="pi.label('materialCode')"
+                name="materialCode"
               >
                 <TaktSelect
-                  v-model:value="formState.priceType"
-                  dict-type="logistics_sales_price_type"
-                  :placeholder="pi.ph('priceType')"
+                  v-model:value="formState.materialCode"
+                  api-url="TaktMaterialPlants/options"
+                  :placeholder="pi.ph('materialCode')"
+                  :disabled="!!formData?.salesPriceId"
                 />
               </a-form-item>
             </a-col>
-            <a-col :span="12">
+            <a-col :span="24">
               <a-form-item
-                :label="pi.label('effectiveStartDate')"
-                name="effectiveStartDate"
+                :label="pi.label('validFrom')"
+                name="validFrom"
               >
                 <a-date-picker
-                  v-model:value="formState.effectiveStartDate"
-                  :placeholder="pi.ph('effectiveStartDate')"
+                  v-model:value="formState.validFrom"
+                  :placeholder="pi.ph('validFrom')"
                   value-format="YYYY-MM-DD"
                   style="width: 100%"
                 />
               </a-form-item>
             </a-col>
-            <a-col :span="12">
+            <a-col :span="24">
               <a-form-item
-                :label="pi.label('effectiveEndDate')"
-                name="effectiveEndDate"
+                :label="pi.label('validTo')"
+                name="validTo"
               >
                 <a-date-picker
-                  v-model:value="formState.effectiveEndDate"
-                  :placeholder="pi.ph('effectiveEndDate')"
+                  v-model:value="formState.validTo"
+                  :placeholder="pi.ph('validTo')"
                   value-format="YYYY-MM-DD"
                   style="width: 100%"
                 />
               </a-form-item>
             </a-col>
-            <a-col :span="12">
+            <a-col :span="24">
               <a-form-item
-                :label="pi.label('priceStatus')"
-                name="priceStatus"
+                :label="pi.label('variableKey')"
+                name="variableKey"
+              >
+                <a-input
+                  v-model:value="formState.variableKey"
+                  :placeholder="pi.ph('variableKey')"
+                  show-count
+                  :maxlength="40"
+                  allow-clear
+                />
+              </a-form-item>
+            </a-col>
+            <a-col :span="24">
+              <a-form-item
+                :label="pi.label('salesQuotationId')"
+                name="salesQuotationId"
               >
                 <TaktSelect
-                  v-model:value="formState.priceStatus"
-                  dict-type="sys_normal_disable_status"
-                  :placeholder="pi.ph('priceStatus')"
+                  v-model:value="formState.salesQuotationId"
+                  api-url="TaktSalesQuotations/options"
+                  :placeholder="pi.ph('salesQuotationId')"
+                />
+              </a-form-item>
+            </a-col>
+            <a-col :span="24">
+              <a-form-item
+                :label="pi.label('salesQuotationCode')"
+                name="salesQuotationCode"
+              >
+                <a-input
+                  v-model:value="formState.salesQuotationCode"
+                  :placeholder="pi.ph('salesQuotationCode')"
+                  show-count
+                  :maxlength="40"
+                  allow-clear
+                  :disabled="!!formData?.salesPriceId"
                 />
               </a-form-item>
             </a-col>
@@ -170,6 +157,48 @@
       >
         <div :class="formContentClass">
           <a-row :gutter="24">
+            <a-col :span="24">
+              <a-form-item
+                :label="pi.label('tenantCode')"
+                name="tenantCode"
+              >
+                <a-input
+                  v-model:value="formState.tenantCode"
+                  :placeholder="pi.ph('tenantCode')"
+                  show-count
+                  :maxlength="20"
+                  disabled
+                />
+              </a-form-item>
+            </a-col>
+            <a-col :span="24">
+              <a-form-item
+                :label="pi.label('companyCode')"
+                name="companyCode"
+              >
+                <a-input
+                  v-model:value="formState.companyCode"
+                  :placeholder="pi.ph('companyCode')"
+                  show-count
+                  :maxlength="20"
+                  disabled
+                />
+              </a-form-item>
+            </a-col>
+            <a-col :span="24">
+              <a-form-item
+                :label="pi.label('companyDefaultCulture')"
+                name="companyDefaultCulture"
+              >
+                <a-input
+                  v-model:value="formState.companyDefaultCulture"
+                  :placeholder="pi.ph('companyDefaultCulture')"
+                  show-count
+                  :maxlength="20"
+                  disabled
+                />
+              </a-form-item>
+            </a-col>
             <a-col :span="24">
               <a-form-item
                 name="extField"
@@ -225,8 +254,99 @@
       id-field="salesPriceItemId"
       :default-row="createDefaultSalesPriceItemRow"
       :disabled="loading"
+      :enable-vertical-scroll="false"
       section-border
-    />
+      class="w-full min-w-0"
+    >
+      <template #cell-priceType="{ record }">
+        <TaktSelect
+          v-model:value="record.priceType"
+          dict-type="logistics_price_type"
+          class="w-full"
+          :get-popup-container="getSelectPopupContainer"
+          :placeholder="salesPriceItemPi.ph('priceType')"
+          :disabled="loading"
+          allow-clear
+        />
+      </template>
+      <template #cell-scaleType="{ record }">
+        <TaktSelect
+          v-model:value="record.scaleType"
+          dict-type="logistics_scale_type"
+          class="w-full"
+          :get-popup-container="getSelectPopupContainer"
+          :placeholder="salesPriceItemPi.ph('scaleType')"
+          :disabled="loading"
+          allow-clear
+        />
+      </template>
+      <template #cell-scaleBasis="{ record }">
+        <TaktSelect
+          v-model:value="record.scaleBasis"
+          dict-type="logistics_scale_basis"
+          class="w-full"
+          :get-popup-container="getSelectPopupContainer"
+          :placeholder="salesPriceItemPi.ph('scaleBasis')"
+          :disabled="loading"
+          allow-clear
+        />
+      </template>
+      <template #cell-scaleUnit="{ record }">
+        <TaktSelect
+          v-model:value="record.scaleUnit"
+          dict-type="logistics_unit_of_measure_code"
+          class="w-full"
+          :get-popup-container="getSelectPopupContainer"
+          :placeholder="salesPriceItemPi.ph('scaleUnit')"
+          :disabled="loading"
+          allow-clear
+        />
+      </template>
+      <template #cell-scaleCurrency="{ record }">
+        <TaktSelect
+          v-model:value="record.scaleCurrency"
+          dict-type="accounting_currency_code"
+          class="w-full"
+          :get-popup-container="getSelectPopupContainer"
+          :placeholder="salesPriceItemPi.ph('scaleCurrency')"
+          :disabled="loading"
+          allow-clear
+        />
+      </template>
+      <template #cell-calculationType="{ record }">
+        <TaktSelect
+          v-model:value="record.calculationType"
+          dict-type="logistics_calculation_type"
+          class="w-full"
+          :get-popup-container="getSelectPopupContainer"
+          :placeholder="salesPriceItemPi.ph('calculationType')"
+          :disabled="loading"
+          allow-clear
+        />
+      </template>
+      <template #cell-taxCode="{ record }">
+        <TaktSelect
+          v-model:value="record.taxCode"
+          dict-type="accounting_tax_code"
+          class="w-full"
+          :get-popup-container="getSelectPopupContainer"
+          :placeholder="salesPriceItemPi.ph('taxCode')"
+          :disabled="loading"
+          allow-clear
+        />
+      </template>
+      <template #cell-isObsolete="{ record }">
+        <TaktSelect
+          v-model:value="record.isObsolete"
+          dict-type="sys_yes_no_type"
+          class="w-full"
+          :get-popup-container="getSelectPopupContainer"
+          :placeholder="salesPriceItemPi.ph('isObsolete')"
+          :disabled="loading"
+          allow-clear
+        />
+      </template>
+    </TaktEditableTable>
   </a-form>
 </template>
 
@@ -279,13 +399,18 @@ const formContentClass = computed(() => (formFields.length > 10 ? 'takt-form-con
 /** 当前激活的 Tab key */
 const activeTab = ref('tab-0')
 /** CreateDto 字段名列表（与 formState 键对齐） */
-const formFields = ["tenantCode","companyCode","companyDefaultCulture","plantCode","salesPriceCode","customerCode","priceType","effectiveStartDate","effectiveEndDate","priceStatus","extField","remark"]
+const formFields = ["tenantCode","companyCode","companyDefaultCulture","salesPriceCode","priceType","customerCode","materialCode","validFrom","validTo","variableKey","salesQuotationId","salesQuotationCode","extField","remark"]
 
 
 import type { TaktEditableTableColumn } from '@/components/business/takt-editable-table/types'
 import { useSalesPriceItemI18n } from '../composables/use-price-item-i18n'
 
 const salesPriceItemPi = useSalesPriceItemI18n()
+
+/** 弹窗/表格内 TaktSelect 下拉挂载容器（避免 overflow 裁剪与表头列错位） */
+function getSelectPopupContainer(triggerNode?: HTMLElement): HTMLElement {
+  return triggerNode?.ownerDocument?.body ?? document.body
+}
 
 const childSalesPriceItemRows = ref<Record<string, unknown>[]>([])
 const salesPriceItemTableRef = ref<{
@@ -297,78 +422,108 @@ const salesPriceItemTableRef = ref<{
 /** 子表 salesPriceItem 可编辑列 */
 const salesPriceItemFormColumns = computed<TaktEditableTableColumn[]>(() => [
   {
-    key: 'lineNumber',
-    title: salesPriceItemPi.label('lineNumber'),
-    editor: 'inputNumber',
-    width: 140, summary: 'sum',
+    key: 'salesPriceSeq',
+    title: salesPriceItemPi.label('salesPriceSeq'),
+    width: 140,
   },
   {
-    key: 'materialCode',
-    title: salesPriceItemPi.label('materialCode'),
+    key: 'priceType',
+    title: salesPriceItemPi.label('priceType'),
+    width: 140,
+  },
+  {
+    key: 'scaleType',
+    title: salesPriceItemPi.label('scaleType'),
+    width: 140,
+  },
+  {
+    key: 'scaleBasis',
+    title: salesPriceItemPi.label('scaleBasis'),
+    width: 140,
+  },
+  {
+    key: 'scaleQuantity',
+    title: salesPriceItemPi.label('scaleQuantity'),
+    width: 140,
+  },
+  {
+    key: 'scaleUnit',
+    title: salesPriceItemPi.label('scaleUnit'),
+    width: 140,
+  },
+  {
+    key: 'scaleValue',
+    title: salesPriceItemPi.label('scaleValue'),
+    width: 140,
+  },
+  {
+    key: 'scaleCurrency',
+    title: salesPriceItemPi.label('scaleCurrency'),
+    width: 140,
+  },
+  {
+    key: 'calculationType',
+    title: salesPriceItemPi.label('calculationType'),
+    width: 140,
+  },
+  {
+    key: 'price',
+    title: salesPriceItemPi.label('price'),
+    width: 140,
+  },
+  {
+    key: 'taxCode',
+    title: salesPriceItemPi.label('taxCode'),
+    width: 140,
+  },
+  {
+    key: 'isObsolete',
+    title: salesPriceItemPi.label('isObsolete'),
+    width: 140,
+  },
+  {
+    key: 'scaleQuantities',
+    title: salesPriceItemPi.label('scaleQuantities'),
     editor: 'input',
-    width: 140,
+    width: 140, allowClear: true, placeholder: salesPriceItemPi.ph('scaleQuantities'),
   },
   {
-    key: 'salesUnit',
-    title: salesPriceItemPi.label('salesUnit'),
+    key: 'scaleValues',
+    title: salesPriceItemPi.label('scaleValues'),
     editor: 'input',
-    width: 140,
-  },
-  {
-    key: 'salesPerUnit',
-    title: salesPriceItemPi.label('salesPerUnit'),
-    editor: 'inputNumber',
-    width: 140,
-  },
-  {
-    key: 'salesPrice',
-    title: salesPriceItemPi.label('salesPrice'),
-    editor: 'inputNumber',
-    width: 140,
-  },
-  {
-    key: 'minOrderQuantity',
-    title: salesPriceItemPi.label('minOrderQuantity'),
-    editor: 'inputNumber',
-    width: 140,
-  },
-  {
-    key: 'maxOrderQuantity',
-    title: salesPriceItemPi.label('maxOrderQuantity'),
-    editor: 'inputNumber',
-    width: 140,
-  },
-  {
-    key: 'extField',
-    title: salesPriceItemPi.label('extField'),
-    editor: 'textarea',
-    rows: 2,
-    placeholder: t('common.page.form.placeholder.extfield'),
-    width: 140,
+    width: 140, allowClear: true, placeholder: salesPriceItemPi.ph('scaleValues'),
   },
 ])
 
 /** 编辑态从 formData 同步各子表行 */
 function syncChildRowsFromFormData(val: Partial<SalesPriceCreate & { salesPriceId?: string }> | null | undefined) {
-  childSalesPriceItemRows.value = ((val as any)?.items ?? []) as Record<string, unknown>[]
+  const rows_salesPriceItem = ((val as any)?.items ?? []) as Record<string, unknown>[]
+  childSalesPriceItemRows.value = rows_salesPriceItem
 }
 
 function createDefaultSalesPriceItemRow(): Record<string, unknown> {
   return {
-    lineNumber: (childSalesPriceItemRows.value.length + 1) * 10,
-    materialCode: '',
-    salesUnit: '',
-    salesPerUnit: 0,
-    salesPrice: 0,
-    minOrderQuantity: 0,
-    maxOrderQuantity: 0,
-    extField: '',
+    salesPriceSeq: 0,
+    priceType: '',
+    scaleType: '',
+    scaleBasis: '',
+    scaleQuantity: 0,
+    scaleUnit: '',
+    scaleValue: 0,
+    scaleCurrency: '',
+    calculationType: '',
+    price: 0,
+    taxCode: '',
+    isObsolete: 0,
+    scaleQuantities: '',
+    scaleValues: '',
   }
 }
 
 /** 组装 Create/Update 载荷（主表 + 子表数组） */
 function buildSubmitPayload() {
   const masterId = props.formData?.salesPriceId ?? ''
+  const isUpdate = Boolean(masterId)
   return {
     ...formState,
     items: salesPriceItemTableRef.value?.getRows?.() ?? childSalesPriceItemRows.value.map((rest) => ({
@@ -376,7 +531,7 @@ function buildSubmitPayload() {
       tenantCode: tenantStore.tenantCode,
       companyCode: tenantStore.companyCode,
       companyDefaultCulture: userStore.userInfo?.companyDefaultCulture ?? '',
-      scales: masterId,
+      salesPriceId: masterId,
     })),
   }
 }
@@ -399,8 +554,7 @@ const formRef = ref()
 const formState = reactive<Record<string, any>>({})
 /** 表单字段默认值（字典 IsDefault=1，来自 TaktDictDataSeedData） */
 const FORM_FIELD_DEFAULTS: Record<string, string | number> = {
-  priceType: "PR00",
-  priceStatus: 1
+  priceType: "PB00"
 }
 
 /** 写入表单默认值（新增 / resetFields / 弹窗再次打开时） */
@@ -454,13 +608,6 @@ watch(
 
 /** 表单校验规则（与 FluentValidation 必填对齐） */
 const rules = computed<Record<string, Rule[]>>(() => ({
-  plantCode: [
-    {
-      required: true,
-      message: pi.ph('plantCode'),
-      trigger: 'change'
-    }
-  ],
   salesPriceCode: [
     {
       required: true,
@@ -475,26 +622,34 @@ const rules = computed<Record<string, Rule[]>>(() => ({
       trigger: 'change'
     }
   ],
-  effectiveStartDate: [
+  customerCode: [
     {
       required: true,
-      message: pi.ph('effectiveStartDate'),
+      message: pi.ph('customerCode'),
       trigger: 'change'
     }
   ],
-  priceStatus: [{
-    validator: async (_rule, value) => {
-      if (value === undefined || value === null || value === '') {
-        return Promise.reject(pi.ph('priceStatus'))
-      }
-      const num = typeof value === 'number' ? value : Number(value)
-      if (!Number.isFinite(num)) {
-        return Promise.reject(pi.ph('priceStatus'))
-      }
-      return Promise.resolve()
-    },
-    trigger: 'change'
-  }],
+  materialCode: [
+    {
+      required: true,
+      message: pi.ph('materialCode'),
+      trigger: 'change'
+    }
+  ],
+  validFrom: [
+    {
+      required: true,
+      message: pi.ph('validFrom'),
+      trigger: 'change'
+    }
+  ],
+  validTo: [
+    {
+      required: true,
+      message: pi.ph('validTo'),
+      trigger: 'change'
+    }
+  ],
 }))
 
 /** 校验表单（失败 throw，供父级 handleFormSubmit 捕获） */
@@ -507,10 +662,6 @@ async function validate() {
 /** 映射为 Create/Update DTO */
 function getValues(): Record<string, any> {
   const payload = buildSubmitPayload() as Record<string, unknown>
-  if ('priceStatus' in payload) {
-    const rawpriceStatus = payload.priceStatus
-    payload.priceStatus = typeof rawpriceStatus === 'number' ? rawpriceStatus : Number(rawpriceStatus)
-  }
   if ('sortOrder' in payload) delete payload.sortOrder
   return payload
 }

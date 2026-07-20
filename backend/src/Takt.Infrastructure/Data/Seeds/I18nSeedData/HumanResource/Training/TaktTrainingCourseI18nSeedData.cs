@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Infrastructure.Data.Seeds.I18nSeedData.HumanResource.Training
 // 文件名称：TaktTrainingCourseI18nSeedData.cs
-// 创建时间：2026-07-09
+// 创建时间：2026-07-20
 // 创建人：Takt365(Auto Generated)
 // 功能描述：TaktTrainingCourse 实体字段国际化种子（无对应 frontend locales；TranslationText 取自 ColumnDescription，ContextNote 取自属性 XML summary）
 // 
@@ -190,13 +190,13 @@ public class TaktTrainingCourseI18nSeedData : ITaktSeedDataCoordinator
             new TranslationSeedItem("entity.trainingcourse.passingscore", "zh-HK", "及格分数线_hk", "及格分数线"),
 
             // entity.trainingcourse.relatedplant
-            new TranslationSeedItem("entity.trainingcourse.relatedplant", "en-US", "关联工厂_us", "关联工厂（关联 TaktPlant.PlantCode，选项 TaktPlants/options）"),
+            new TranslationSeedItem("entity.trainingcourse.relatedplant", "en-US", "关联工厂_us", "关联工厂（选项 TaktPlants/options，DictValue=Id）"),
             // entity.trainingcourse.relatedplant
-            new TranslationSeedItem("entity.trainingcourse.relatedplant", "ja-JP", "关联工厂_jp", "关联工厂（关联 TaktPlant.PlantCode，选项 TaktPlants/options）"),
+            new TranslationSeedItem("entity.trainingcourse.relatedplant", "ja-JP", "关联工厂_jp", "关联工厂（选项 TaktPlants/options，DictValue=Id）"),
             // entity.trainingcourse.relatedplant
-            new TranslationSeedItem("entity.trainingcourse.relatedplant", "zh-CN", "关联工厂", "关联工厂（关联 TaktPlant.PlantCode，选项 TaktPlants/options）"),
+            new TranslationSeedItem("entity.trainingcourse.relatedplant", "zh-CN", "关联工厂", "关联工厂（选项 TaktPlants/options，DictValue=Id）"),
             // entity.trainingcourse.relatedplant
-            new TranslationSeedItem("entity.trainingcourse.relatedplant", "zh-HK", "关联工厂_hk", "关联工厂（关联 TaktPlant.PlantCode，选项 TaktPlants/options）"),
+            new TranslationSeedItem("entity.trainingcourse.relatedplant", "zh-HK", "关联工厂_hk", "关联工厂（选项 TaktPlants/options，DictValue=Id）"),
 
             // entity.trainingcourse.sortorder
             new TranslationSeedItem("entity.trainingcourse.sortorder", "en-US", "排序号_us", "排序号"),

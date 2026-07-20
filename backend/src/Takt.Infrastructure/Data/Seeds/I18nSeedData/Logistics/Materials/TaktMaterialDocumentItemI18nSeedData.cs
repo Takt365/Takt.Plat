@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Infrastructure.Data.Seeds.I18nSeedData.Logistics.Materials
 // 文件名称：TaktMaterialDocumentItemI18nSeedData.cs
-// 创建时间：2026-07-09
+// 创建时间：2026-07-20
 // 创建人：Takt365(Auto Generated)
 // 功能描述：TaktMaterialDocumentItem 实体字段国际化种子（无对应 frontend locales；TranslationText 取自 ColumnDescription，ContextNote 取自属性 XML summary）
 // 
@@ -91,13 +91,13 @@ public class TaktMaterialDocumentItemI18nSeedData : ITaktSeedDataCoordinator
             new TranslationSeedItem("entity.materialdocumentitem._self", "zh-HK", "Takt物料凭证行项目信息_hk", "实体名称"),
 
             // entity.materialdocumentitem.materialdocumentid
-            new TranslationSeedItem("entity.materialdocumentitem.materialdocumentid", "en-US", "物料凭证ID_us", "物料凭证 ID（关联 TaktMaterialDocument.Id，选项 TaktMaterialDocuments/options）"),
+            new TranslationSeedItem("entity.materialdocumentitem.materialdocumentid", "en-US", "物料凭证ID_us", "物料凭证 ID（选项 TaktMaterialDocuments/options，DictValue=Id）"),
             // entity.materialdocumentitem.materialdocumentid
-            new TranslationSeedItem("entity.materialdocumentitem.materialdocumentid", "ja-JP", "物料凭证ID_jp", "物料凭证 ID（关联 TaktMaterialDocument.Id，选项 TaktMaterialDocuments/options）"),
+            new TranslationSeedItem("entity.materialdocumentitem.materialdocumentid", "ja-JP", "物料凭证ID_jp", "物料凭证 ID（选项 TaktMaterialDocuments/options，DictValue=Id）"),
             // entity.materialdocumentitem.materialdocumentid
-            new TranslationSeedItem("entity.materialdocumentitem.materialdocumentid", "zh-CN", "物料凭证ID", "物料凭证 ID（关联 TaktMaterialDocument.Id，选项 TaktMaterialDocuments/options）"),
+            new TranslationSeedItem("entity.materialdocumentitem.materialdocumentid", "zh-CN", "物料凭证ID", "物料凭证 ID（选项 TaktMaterialDocuments/options，DictValue=Id）"),
             // entity.materialdocumentitem.materialdocumentid
-            new TranslationSeedItem("entity.materialdocumentitem.materialdocumentid", "zh-HK", "物料凭证ID_hk", "物料凭证 ID（关联 TaktMaterialDocument.Id，选项 TaktMaterialDocuments/options）"),
+            new TranslationSeedItem("entity.materialdocumentitem.materialdocumentid", "zh-HK", "物料凭证ID_hk", "物料凭证 ID（选项 TaktMaterialDocuments/options，DictValue=Id）"),
 
             // entity.materialdocumentitem.materialdocumentcode
             new TranslationSeedItem("entity.materialdocumentitem.materialdocumentcode", "en-US", "物料凭证号_us", "物料凭证号（冗余）"),
@@ -118,13 +118,13 @@ public class TaktMaterialDocumentItemI18nSeedData : ITaktSeedDataCoordinator
             new TranslationSeedItem("entity.materialdocumentitem.linenumber", "zh-HK", "行号_hk", "行号（固定步长=10）"),
 
             // entity.materialdocumentitem.warehousecode
-            new TranslationSeedItem("entity.materialdocumentitem.warehousecode", "en-US", "库存地点_us", "库存地点（关联 TaktWarehouse.WarehouseCode，选项 TaktWarehouses/options，DictValue=WarehouseCode）"),
+            new TranslationSeedItem("entity.materialdocumentitem.warehousecode", "en-US", "库存地点_us", "库存地点（选项 TaktWarehouses/options，DictValue=WarehouseCode）"),
             // entity.materialdocumentitem.warehousecode
-            new TranslationSeedItem("entity.materialdocumentitem.warehousecode", "ja-JP", "库存地点_jp", "库存地点（关联 TaktWarehouse.WarehouseCode，选项 TaktWarehouses/options，DictValue=WarehouseCode）"),
+            new TranslationSeedItem("entity.materialdocumentitem.warehousecode", "ja-JP", "库存地点_jp", "库存地点（选项 TaktWarehouses/options，DictValue=WarehouseCode）"),
             // entity.materialdocumentitem.warehousecode
-            new TranslationSeedItem("entity.materialdocumentitem.warehousecode", "zh-CN", "库存地点", "库存地点（关联 TaktWarehouse.WarehouseCode，选项 TaktWarehouses/options，DictValue=WarehouseCode）"),
+            new TranslationSeedItem("entity.materialdocumentitem.warehousecode", "zh-CN", "库存地点", "库存地点（选项 TaktWarehouses/options，DictValue=WarehouseCode）"),
             // entity.materialdocumentitem.warehousecode
-            new TranslationSeedItem("entity.materialdocumentitem.warehousecode", "zh-HK", "库存地点_hk", "库存地点（关联 TaktWarehouse.WarehouseCode，选项 TaktWarehouses/options，DictValue=WarehouseCode）"),
+            new TranslationSeedItem("entity.materialdocumentitem.warehousecode", "zh-HK", "库存地点_hk", "库存地点（选项 TaktWarehouses/options，DictValue=WarehouseCode）"),
 
             // entity.materialdocumentitem.movementtype
             new TranslationSeedItem("entity.materialdocumentitem.movementtype", "en-US", "移动类型_us", "移动类型（字典 logistics_movement_type，如 101=收货）"),
@@ -217,13 +217,13 @@ public class TaktMaterialDocumentItemI18nSeedData : ITaktSeedDataCoordinator
             new TranslationSeedItem("entity.materialdocumentitem.referencedocumentcode", "zh-HK", "收货/发货单编号_hk", "收货/发货单编号"),
 
             // entity.materialdocumentitem.customercode
-            new TranslationSeedItem("entity.materialdocumentitem.customercode", "en-US", "客户_us", "客户（关联 TaktCustomer.CustomerCode，选项 TaktCustomers/options）"),
+            new TranslationSeedItem("entity.materialdocumentitem.customercode", "en-US", "客户_us", "客户（选项 TaktCustomers/options，DictValue=Id）"),
             // entity.materialdocumentitem.customercode
-            new TranslationSeedItem("entity.materialdocumentitem.customercode", "ja-JP", "客户_jp", "客户（关联 TaktCustomer.CustomerCode，选项 TaktCustomers/options）"),
+            new TranslationSeedItem("entity.materialdocumentitem.customercode", "ja-JP", "客户_jp", "客户（选项 TaktCustomers/options，DictValue=Id）"),
             // entity.materialdocumentitem.customercode
-            new TranslationSeedItem("entity.materialdocumentitem.customercode", "zh-CN", "客户", "客户（关联 TaktCustomer.CustomerCode，选项 TaktCustomers/options）"),
+            new TranslationSeedItem("entity.materialdocumentitem.customercode", "zh-CN", "客户", "客户（选项 TaktCustomers/options，DictValue=Id）"),
             // entity.materialdocumentitem.customercode
-            new TranslationSeedItem("entity.materialdocumentitem.customercode", "zh-HK", "客户_hk", "客户（关联 TaktCustomer.CustomerCode，选项 TaktCustomers/options）"),
+            new TranslationSeedItem("entity.materialdocumentitem.customercode", "zh-HK", "客户_hk", "客户（选项 TaktCustomers/options，DictValue=Id）"),
 
             // entity.materialdocumentitem.isobsolete
             new TranslationSeedItem("entity.materialdocumentitem.isobsolete", "en-US", "是否作废_us", "是否作废（字典 sys_yes_no_type，0=否 1=是；编辑移除子行时标记作废）"),

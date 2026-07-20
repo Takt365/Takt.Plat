@@ -66,6 +66,7 @@ import { useUserStore } from '@/stores/identity/user'
 import { useLocaleStore } from '@/stores/foundation/locale'
 import type { HolidayTheme } from '@/types/human-resource/attendance/holiday'
 import { normalizeUserInfoProfile } from '@/utils/takt-user-profile-normalize'
+import { resolveTaktSolarTermQuoteI18nKey } from '@/utils/takt-solar-term'
 
 dayjs.extend(localizedFormat)
 dayjs.extend(utc)
@@ -198,7 +199,7 @@ const greetingText = computed(() => {
 })
 
 /**
- * 引用区：假日且 isHolidayToday 时使用 holidayQuote，否则按日轮换 common.page.quote.*
+ * 引用区：假日且 isHolidayToday 时使用 holidayQuote，否则按当前二十四节气取 common.page.quote.*
  */
 const quoteText = computed(() => {
   void currentLocale.value
@@ -206,10 +207,7 @@ const quoteText = computed(() => {
   if (holiday?.isHolidayToday && safeTrim(holiday.holidayQuote)) {
     return holiday.holidayQuote.trim()
   }
-
-  const letters = 'abcdefghijklmnopqrstuvwxyz'
-  const idx = now.value.getDate() % 26
-  return t(`common.page.quote.${letters[idx]}`)
+  return t(resolveTaktSolarTermQuoteI18nKey(now.value))
 })
 
 onMounted(() => {

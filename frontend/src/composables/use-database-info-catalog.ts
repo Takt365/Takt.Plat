@@ -69,7 +69,9 @@ export function useDatabaseInfoCatalog() {
     tablesLoadingTenants.value = [...tablesLoadingTenants.value, code];
     try {
       const list = await getDatabaseTableInfoList(code);
-      const tables = list ?? [];
+      const tables = [...(list ?? [])].sort((a, b) =>
+        String(a.tableName ?? '').localeCompare(String(b.tableName ?? ''), undefined, { sensitivity: 'base' }),
+      );
       tablesByTenant.value = { ...tablesByTenant.value, [code]: tables };
       return tables;
     } catch (error) {

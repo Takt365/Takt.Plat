@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Infrastructure.Data.Seeds.I18nSeedData.HumanResource.Organization
 // 文件名称：TaktEmployeePostI18nSeedData.cs
-// 创建时间：2026-07-09
+// 创建时间：2026-07-20
 // 创建人：Takt365(Auto Generated)
 // 功能描述：TaktEmployeePost 实体字段国际化种子（无对应 frontend locales；TranslationText 取自 ColumnDescription，ContextNote 取自属性 XML summary）
 // 
@@ -91,22 +91,22 @@ public class TaktEmployeePostI18nSeedData : ITaktSeedDataCoordinator
             new TranslationSeedItem("entity.employeepost._self", "zh-HK", "员工-岗位关联信息_hk", "实体名称"),
 
             // entity.employeepost.employeeid
-            new TranslationSeedItem("entity.employeepost.employeeid", "en-US", "员工ID_us", "员工（关联 TaktEmployee.Id，选项 TaktEmployees/options）"),
+            new TranslationSeedItem("entity.employeepost.employeeid", "en-US", "员工ID_us", "员工（选项 TaktEmployees/options，DictValue=Id）"),
             // entity.employeepost.employeeid
-            new TranslationSeedItem("entity.employeepost.employeeid", "ja-JP", "员工ID_jp", "员工（关联 TaktEmployee.Id，选项 TaktEmployees/options）"),
+            new TranslationSeedItem("entity.employeepost.employeeid", "ja-JP", "员工ID_jp", "员工（选项 TaktEmployees/options，DictValue=Id）"),
             // entity.employeepost.employeeid
-            new TranslationSeedItem("entity.employeepost.employeeid", "zh-CN", "员工ID", "员工（关联 TaktEmployee.Id，选项 TaktEmployees/options）"),
+            new TranslationSeedItem("entity.employeepost.employeeid", "zh-CN", "员工ID", "员工（选项 TaktEmployees/options，DictValue=Id）"),
             // entity.employeepost.employeeid
-            new TranslationSeedItem("entity.employeepost.employeeid", "zh-HK", "员工ID_hk", "员工（关联 TaktEmployee.Id，选项 TaktEmployees/options）"),
+            new TranslationSeedItem("entity.employeepost.employeeid", "zh-HK", "员工ID_hk", "员工（选项 TaktEmployees/options，DictValue=Id）"),
 
             // entity.employeepost.postid
-            new TranslationSeedItem("entity.employeepost.postid", "en-US", "岗位ID_us", "岗位（关联 TaktPost.Id，选项 TaktPosts/options）"),
+            new TranslationSeedItem("entity.employeepost.postid", "en-US", "岗位ID_us", "岗位（选项 TaktPosts/options，DictValue=Id）"),
             // entity.employeepost.postid
-            new TranslationSeedItem("entity.employeepost.postid", "ja-JP", "岗位ID_jp", "岗位（关联 TaktPost.Id，选项 TaktPosts/options）"),
+            new TranslationSeedItem("entity.employeepost.postid", "ja-JP", "岗位ID_jp", "岗位（选项 TaktPosts/options，DictValue=Id）"),
             // entity.employeepost.postid
-            new TranslationSeedItem("entity.employeepost.postid", "zh-CN", "岗位ID", "岗位（关联 TaktPost.Id，选项 TaktPosts/options）"),
+            new TranslationSeedItem("entity.employeepost.postid", "zh-CN", "岗位ID", "岗位（选项 TaktPosts/options，DictValue=Id）"),
             // entity.employeepost.postid
-            new TranslationSeedItem("entity.employeepost.postid", "zh-HK", "岗位ID_hk", "岗位（关联 TaktPost.Id，选项 TaktPosts/options）"),
+            new TranslationSeedItem("entity.employeepost.postid", "zh-HK", "岗位ID_hk", "岗位（选项 TaktPosts/options，DictValue=Id）"),
 
             // entity.employeepost.employee
             new TranslationSeedItem("entity.employeepost.employee", "en-US", "员工_us", "员工（多对一）"),

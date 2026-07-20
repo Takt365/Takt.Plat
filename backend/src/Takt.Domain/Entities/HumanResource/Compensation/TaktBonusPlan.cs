@@ -44,7 +44,7 @@ public class TaktBonusPlan : TaktCompanyEntityBase
     [SugarColumn(ColumnName = "calc_method", ColumnDescription = "计算方式", ColumnDataType = "int", IsNullable = false, DefaultValue = "0")]
     public int CalcMethod { get; set; } = 0;
     /// <summary>
-    /// 计算公式（关联 TaktSalaryFormula.Id，选项 TaktSalaryFormulas/options；calc_method=3 按公式时使用）
+    /// 计算公式（选项 TaktSalaryFormulas/options；calc_method=3 按公式时使用，DictValue=Id）
     /// </summary>
     [SugarColumn(ColumnName = "salary_formula_id", ColumnDescription = "计算公式ID", ColumnDataType = "bigint", IsNullable = true)]
     [JsonConverter(typeof(ValueToStringConverter))]
@@ -65,7 +65,7 @@ public class TaktBonusPlan : TaktCompanyEntityBase
     [SugarColumn(ColumnName = "bonus_plan_description", ColumnDescription = "方案说明", ColumnDataType = "nvarchar", Length = 500, IsNullable = true)]
     public string? BonusPlanDescription { get; set; }
     /// <summary>
-    /// 关联工厂（关联 TaktPlant.PlantCode，选项 TaktPlants/options）
+    /// 关联工厂（选项 TaktPlants/options，DictValue=Id）
     /// </summary>
     [SugarColumn(ColumnName = "related_plant", ColumnDescription = "关联工厂", ColumnDataType = "nvarchar", Length = 4, IsNullable = false)]
     public string RelatedPlant { get; set; } = string.Empty;

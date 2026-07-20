@@ -130,7 +130,7 @@ public class TaktAsset : TaktCompanyEntityBase
     [SugarColumn(ColumnName = "monthly_depreciation", ColumnDescription = "每月折旧金额", ColumnDataType = "decimal", Length = 18, DecimalDigits = 2, IsNullable = false, DefaultValue = "0")]
     public decimal MonthlyDepreciation { get; set; }
     /// <summary>
-    /// 关联工厂（关联 TaktPlant.PlantCode，选项 TaktPlants/options）
+    /// 关联工厂（选项 TaktPlants/options，DictValue=Id）
     /// </summary>
     [SugarColumn(ColumnName = "related_plant", ColumnDescription = "关联工厂", ColumnDataType = "varchar", Length = 4, IsNullable = false)]
     public string RelatedPlant { get; set; } = string.Empty;

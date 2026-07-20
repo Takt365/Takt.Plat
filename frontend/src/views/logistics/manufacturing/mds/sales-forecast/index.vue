@@ -1,0 +1,1305 @@
+<!-- ======================================== -->
+<!-- 项目名称：节拍数字工厂 · Takt Plat (TDF) -->
+<!-- 命名空间：@/views/logistics/manufacturing/mds/sales-forecast -->
+<!-- 文件名称：index.vue -->
+<!-- 功能描述：Takt销售预测实体管理页面，含查询、增删改，由 generate-vue-master-detail-from-api.cjs 根据 types/api 自动生成 -->
+<!-- 版权信息：Copyright (c) 2025 Takt  All rights reserved. -->
+<!-- 免责声明：此软件使用 MIT License，作者不承担任何使用风险。 -->
+<!-- ======================================== -->
+
+<template>
+  <div class="p-4 flex flex-col min-h-0 h-full">
+    <!-- 左主右从 -->
+    <TaktMasterDetailTableLr
+      v-model:master-current="currentPage"
+      v-model:master-page-size="pageSize"
+      v-model:selected-master-key="selectedMasterKey"
+      class="min-h-0 flex-1"
+      :master-columns="columns"
+      :master-data-source="dataSource"
+      :master-loading="loading"
+      :master-row-key="getSalesForecastId"
+      :master-row-selection="rowSelection"
+      master-id-column-key="salesForecastId"
+      :master-visible-column-keys="visibleColumnKeys"
+      master-table-mode="masterDetailMaster"
+      master-scroll-layout="masterDetailLr"
+      :master-total="total"
+      master-entity-scope="approval"
+      @master-change="handleTableChange"
+      @master-resize-column="handleResizeColumn"
+      @master-pagination-change="handleMasterPaginationChange"
+      @master-select="handleMasterSelect"
+    >
+      <template #master-toolbar>
+        <TaktQueryBar
+          v-model="queryKeyword"
+          :placeholder="searchPlaceholder"
+          :loading="loading"
+          @search="handleSearch"
+          @reset="handleReset"
+        />
+        <TaktToolsBar
+      create-permission="logistics:manufacturing:mds:sales:forecast:create"
+      update-permission="logistics:manufacturing:mds:sales:forecast:update"
+      delete-permission="logistics:manufacturing:mds:sales:forecast:delete"
+      import-permission="logistics:manufacturing:mds:sales:forecast:import"
+      export-permission="logistics:manufacturing:mds:sales:forecast:export"
+      :show-create="true"
+      :show-update="true"
+      :show-delete="true"
+      :show-import="true"
+      :show-export="true"
+      :show-expand="false"
+      :show-advanced-query="true"
+      :show-column-setting="true"
+      :show-fullscreen="true"
+      :show-refresh="true"
+      :create-disabled="false"
+      :create-loading="loading"
+      :update-disabled="updateDisabled"
+      :update-loading="loading"
+      :delete-disabled="deleteDisabled"
+      :delete-loading="loading"
+      :refresh-loading="loading"
+      @create="handleCreate"
+      @update="handleUpdate"
+      @delete="handleDelete"
+      @import="handleImport"
+      @export="handleExport"
+      @advanced-query="handleAdvancedQuery"
+      @column-setting="handleColumnSetting"
+      @refresh="handleRefresh"
+        />
+      </template>
+      <!-- 字典/开关列渲染 -->
+      <template #bodyCell="{ column, record }">
+        <template v-if="column.key === 'planStatus'">
+          <a-switch
+            :checked="getSalesForecastDictValue(record, 'planStatus') === 1"
+            :checked-children="t('common.page.button.enable')" :un-checked-children="t('common.page.button.disable')"
+            @change="(checked: unknown) => handlePlanStatusChange(record, Boolean(checked))"
+          />
+        </template>
+        <template v-else-if="column.key === 'convertedStatus'">
+          <TaktDictTag
+            :value="getSalesForecastDictValue(record, 'convertedStatus')"
+            dict-type="sys_convert_status"
+          />
+        </template>
+      </template>
+      <template #detail>
+        <SalesForecastItemPanel
+          ref="salesForecastItemPanelRef"
+          class="h-full min-h-0 flex-1"
+        />
+      </template>
+    </TaktMasterDetailTableLr>
+
+    <!-- 新增/编辑对话框 -->
+    <TaktModal
+      v-model:open="formVisible"
+      :title="formTitle"
+      width="1100px"
+      wrap-class-name="takt-form-modal-resizable"
+      :confirm-loading="formLoading"
+      @ok="handleFormSubmit"
+      @cancel="handleFormCancel"
+    >
+      <SalesForecastForm
+        :key="formData?.salesForecastId ?? 'create'"
+        ref="formRef"
+        :form-data="formData"
+        :loading="formLoading"
+      />
+    </TaktModal>
+    <!-- 高级查询抽屉 -->
+    <TaktQueryDrawer
+      v-model:open="advancedQueryVisible"
+      v-model:visible-field-keys="visibleQueryFieldKeys"
+      :fields="queryFieldsMeta"
+      :storage-key="'takt-query-fields-logistics-manufacturing-mds-sales-forecast'"
+      :form-model="advancedQueryForm"
+      @submit="handleAdvancedQuerySubmit"
+      @reset="handleAdvancedQueryReset"
+    >
+      <template #default="{ isFieldVisible }">
+      <div v-show="isFieldVisible('plantCode')">
+      <a-form-item :label="pi.queryLabel('plantCode')">
+        <TaktSelect
+          v-model:value="advancedQueryForm.plantCode"
+          api-url="TaktPlants/options"
+          :placeholder="pi.queryPh('plantCode', 'select')"
+          allow-clear
+        />
+      </a-form-item>
+      </div>
+      <div v-show="isFieldVisible('salesForecastCode')">
+      <a-form-item :label="pi.queryLabel('salesForecastCode')">
+        <a-input
+          v-model:value="advancedQueryForm.salesForecastCode"
+          :placeholder="pi.queryPh('salesForecastCode', 'required')"
+          show-count
+          :maxlength="10"
+          allow-clear
+        />
+      </a-form-item>
+      </div>
+      <div v-show="isFieldVisible('planDateStart')">
+      <a-form-item :label="pi.queryLabel('planDateStart')">
+        <a-date-picker
+          v-model:value="advancedQueryForm.planDateStart"
+          :placeholder="pi.queryPh('planDateStart', 'select')"
+          value-format="YYYY-MM-DD"
+          style="width: 100%"
+        />
+      </a-form-item>
+      </div>
+      <div v-show="isFieldVisible('planDateEnd')">
+      <a-form-item :label="pi.queryLabel('planDateEnd')">
+        <a-date-picker
+          v-model:value="advancedQueryForm.planDateEnd"
+          :placeholder="pi.queryPh('planDateEnd', 'select')"
+          value-format="YYYY-MM-DD"
+          style="width: 100%"
+        />
+      </a-form-item>
+      </div>
+      <div v-show="isFieldVisible('planPeriodStartStart')">
+      <a-form-item :label="pi.queryLabel('planPeriodStartStart')">
+        <a-date-picker
+          v-model:value="advancedQueryForm.planPeriodStartStart"
+          :placeholder="pi.queryPh('planPeriodStartStart', 'select')"
+          value-format="YYYY-MM-DD"
+          style="width: 100%"
+        />
+      </a-form-item>
+      </div>
+      <div v-show="isFieldVisible('planPeriodStartEnd')">
+      <a-form-item :label="pi.queryLabel('planPeriodStartEnd')">
+        <a-date-picker
+          v-model:value="advancedQueryForm.planPeriodStartEnd"
+          :placeholder="pi.queryPh('planPeriodStartEnd', 'select')"
+          value-format="YYYY-MM-DD"
+          style="width: 100%"
+        />
+      </a-form-item>
+      </div>
+      <div v-show="isFieldVisible('planPeriodEndStart')">
+      <a-form-item :label="pi.queryLabel('planPeriodEndStart')">
+        <a-date-picker
+          v-model:value="advancedQueryForm.planPeriodEndStart"
+          :placeholder="pi.queryPh('planPeriodEndStart', 'select')"
+          value-format="YYYY-MM-DD"
+          style="width: 100%"
+        />
+      </a-form-item>
+      </div>
+      <div v-show="isFieldVisible('planPeriodEndEnd')">
+      <a-form-item :label="pi.queryLabel('planPeriodEndEnd')">
+        <a-date-picker
+          v-model:value="advancedQueryForm.planPeriodEndEnd"
+          :placeholder="pi.queryPh('planPeriodEndEnd', 'select')"
+          value-format="YYYY-MM-DD"
+          style="width: 100%"
+        />
+      </a-form-item>
+      </div>
+      <div v-show="isFieldVisible('customerCode')">
+      <a-form-item :label="pi.queryLabel('customerCode')">
+        <TaktSelect
+          v-model:value="advancedQueryForm.customerCode"
+          api-url="TaktCustomers/options"
+          :placeholder="pi.queryPh('customerCode', 'select')"
+          allow-clear
+        />
+      </a-form-item>
+      </div>
+      <div v-show="isFieldVisible('customerName')">
+      <a-form-item :label="pi.queryLabel('customerName')">
+        <a-input
+          v-model:value="advancedQueryForm.customerName"
+          :placeholder="pi.queryPh('customerName', 'required')"
+          show-count
+          :maxlength="200"
+          allow-clear
+        />
+      </a-form-item>
+      </div>
+      <div v-show="isFieldVisible('plannerId')">
+      <a-form-item :label="pi.queryLabel('plannerId')">
+        <TaktSelect
+          v-model:value="advancedQueryForm.plannerId"
+          api-url="TaktEmployees/options"
+          :placeholder="pi.queryPh('plannerId', 'select')"
+          allow-clear
+        />
+      </a-form-item>
+      </div>
+      <div v-show="isFieldVisible('planBy')">
+      <a-form-item :label="pi.queryLabel('planBy')">
+        <TaktSelect
+          v-model:value="advancedQueryForm.planBy"
+          api-url="TaktEmployees/options"
+          :placeholder="pi.queryPh('planBy', 'select')"
+          allow-clear
+        />
+      </a-form-item>
+      </div>
+      <div v-show="isFieldVisible('totalQuantity')">
+      <a-form-item :label="pi.queryLabel('totalQuantity')">
+        <a-input-number
+          v-model:value="advancedQueryForm.totalQuantity"
+          :placeholder="pi.queryPh('totalQuantity', 'required')"
+          style="width: 100%"
+        />
+      </a-form-item>
+      </div>
+      <div v-show="isFieldVisible('totalAmount')">
+      <a-form-item :label="pi.queryLabel('totalAmount')">
+        <a-input-number
+          v-model:value="advancedQueryForm.totalAmount"
+          :placeholder="pi.queryPh('totalAmount', 'required')"
+          style="width: 100%"
+        />
+      </a-form-item>
+      </div>
+      <div v-show="isFieldVisible('convertedQuantity')">
+      <a-form-item :label="pi.queryLabel('convertedQuantity')">
+        <a-input-number
+          v-model:value="advancedQueryForm.convertedQuantity"
+          :placeholder="pi.queryPh('convertedQuantity', 'required')"
+          style="width: 100%"
+        />
+      </a-form-item>
+      </div>
+      <div v-show="isFieldVisible('convertedAmount')">
+      <a-form-item :label="pi.queryLabel('convertedAmount')">
+        <a-input-number
+          v-model:value="advancedQueryForm.convertedAmount"
+          :placeholder="pi.queryPh('convertedAmount', 'required')"
+          style="width: 100%"
+        />
+      </a-form-item>
+      </div>
+      <div v-show="isFieldVisible('planStatus')">
+      <a-form-item :label="pi.queryLabel('planStatus')">
+        <TaktSelect
+          v-model:value="advancedQueryForm.planStatus"
+          dict-type="sys_normal_disable_status"
+          :placeholder="pi.queryPh('planStatus', 'select')"
+          allow-clear
+        />
+      </a-form-item>
+      </div>
+      <div v-show="isFieldVisible('convertedStatus')">
+      <a-form-item :label="pi.queryLabel('convertedStatus')">
+        <TaktSelect
+          v-model:value="advancedQueryForm.convertedStatus"
+          dict-type="sys_convert_status"
+          :placeholder="pi.queryPh('convertedStatus', 'select')"
+          allow-clear
+        />
+      </a-form-item>
+      </div>
+      <div v-show="isFieldVisible('planDescription')">
+      <a-form-item :label="pi.queryLabel('planDescription')">
+        <a-textarea
+          v-model:value="advancedQueryForm.planDescription"
+          :placeholder="pi.queryPh('planDescription', 'optional')"
+          :rows="2"
+          allow-clear
+        />
+      </a-form-item>
+      </div>
+      <div v-show="isFieldVisible('approvalStatus')">
+      <a-form-item :label="pi.queryLabel('approvalStatus')">
+        <TaktSelect
+          v-model:value="advancedQueryForm.approvalStatus"
+          dict-type="sys_approval_status"
+          :placeholder="pi.queryPh('approvalStatus', 'select')"
+          allow-clear
+        />
+      </a-form-item>
+      </div>
+      <div v-show="isFieldVisible('initiatorId')">
+      <a-form-item :label="pi.queryLabel('initiatorId')">
+        <a-input
+          v-model:value="advancedQueryForm.initiatorId"
+          :placeholder="pi.queryPh('initiatorId', 'required')"
+          show-count
+          :maxlength="20"
+          allow-clear
+        />
+      </a-form-item>
+      </div>
+      <div v-show="isFieldVisible('initiatedAtStart')">
+      <a-form-item :label="pi.queryLabel('initiatedAtStart')">
+        <a-input
+          v-model:value="advancedQueryForm.initiatedAtStart"
+          :placeholder="pi.queryPh('initiatedAtStart', 'required')"
+          show-count
+          :maxlength="20"
+          allow-clear
+        />
+      </a-form-item>
+      </div>
+      <div v-show="isFieldVisible('initiatedAtEnd')">
+      <a-form-item :label="pi.queryLabel('initiatedAtEnd')">
+        <a-date-picker
+          v-model:value="advancedQueryForm.initiatedAtEnd"
+          :placeholder="pi.queryPh('initiatedAtEnd', 'select')"
+          value-format="YYYY-MM-DD"
+          style="width: 100%"
+        />
+      </a-form-item>
+      </div>
+      <div v-show="isFieldVisible('approvedBy')">
+      <a-form-item :label="pi.queryLabel('approvedBy')">
+        <a-input
+          v-model:value="advancedQueryForm.approvedBy"
+          :placeholder="pi.queryPh('approvedBy', 'required')"
+          show-count
+          :maxlength="20"
+          allow-clear
+        />
+      </a-form-item>
+      </div>
+      <div v-show="isFieldVisible('approvedAtStart')">
+      <a-form-item :label="pi.queryLabel('approvedAtStart')">
+        <a-input
+          v-model:value="advancedQueryForm.approvedAtStart"
+          :placeholder="pi.queryPh('approvedAtStart', 'required')"
+          show-count
+          :maxlength="20"
+          allow-clear
+        />
+      </a-form-item>
+      </div>
+      <div v-show="isFieldVisible('approvedAtEnd')">
+      <a-form-item :label="pi.queryLabel('approvedAtEnd')">
+        <a-date-picker
+          v-model:value="advancedQueryForm.approvedAtEnd"
+          :placeholder="pi.queryPh('approvedAtEnd', 'select')"
+          value-format="YYYY-MM-DD"
+          style="width: 100%"
+        />
+      </a-form-item>
+      </div>
+      <div v-show="isFieldVisible('flowInstanceId')">
+      <a-form-item :label="pi.queryLabel('flowInstanceId')">
+        <a-input
+          v-model:value="advancedQueryForm.flowInstanceId"
+          :placeholder="pi.queryPh('flowInstanceId', 'required')"
+          show-count
+          :maxlength="20"
+          allow-clear
+        />
+      </a-form-item>
+      </div>
+      <div v-show="isFieldVisible('createdAtStart')">
+      <a-form-item :label="pi.queryLabel('createdAtStart')">
+        <a-date-picker
+          v-model:value="advancedQueryForm.createdAtStart"
+          :placeholder="pi.queryPh('createdAtStart', 'select')"
+          value-format="YYYY-MM-DD HH:mm:ss"
+            show-time
+          style="width: 100%"
+        />
+      </a-form-item>
+      </div>
+      <div v-show="isFieldVisible('createdAtEnd')">
+      <a-form-item :label="pi.queryLabel('createdAtEnd')">
+        <a-date-picker
+          v-model:value="advancedQueryForm.createdAtEnd"
+          :placeholder="pi.queryPh('createdAtEnd', 'select')"
+          value-format="YYYY-MM-DD HH:mm:ss"
+            show-time
+          style="width: 100%"
+        />
+      </a-form-item>
+      </div>
+      <div v-show="isFieldVisible('extField')">
+      <a-form-item
+        name="extField"
+        class="takt-form-item-ext-field"
+        :label-col="{ style: { width: 'auto', maxWidth: 'none', flex: '0 0 auto' } }"
+        :wrapper-col="{ style: { flex: '1 1 0', minWidth: 0 } }"
+      >
+        <template #label>
+          <span class="takt-form-ext-field-label">
+            <a-tooltip
+              :title="t('common.page.entity.extfieldhint')"
+              placement="top"
+            >
+              <span class="takt-form-label-hint-icon"><RiQuestionLine class="takt-remix-icon" /></span>
+            </a-tooltip>
+            <span>{{ pi.queryLabel('extField') }}</span>
+          </span>
+        </template>
+        <a-textarea
+          v-model:value="advancedQueryForm.extField"
+          :placeholder="t('common.page.form.placeholder.extfield')"
+            :rows="4"
+            show-count
+            :maxlength="400"
+            allow-clear
+        />
+      </a-form-item>
+      </div>
+      <div v-show="isFieldVisible('remark')">
+      <a-form-item :label="pi.queryLabel('remark')">
+        <a-textarea
+          v-model:value="advancedQueryForm.remark"
+          :placeholder="pi.queryPh('remark', 'optional')"
+            :rows="4"
+            show-count
+            :maxlength="400"
+            allow-clear
+        />
+      </a-form-item>
+      </div>
+      </template>
+    </TaktQueryDrawer>
+
+    <!-- 导入对话框 -->
+    <TaktModal
+      v-model:open="importVisible"
+      :title="t('common.dialog.title.import', { entity: pi.self() })"
+      :width="600"
+      :footer="null"
+      :cancel-text="t('common.page.button.close')"
+      @cancel="handleImportCancel"
+    >
+      <TaktImportFile
+        v-if="importVisible"
+        :entity-i18n-key="SALESFORECAST_SELF_I18N_KEY"
+        file-type="xlsx"
+        :sheet-name="excelNames.sheet"
+        :template-file-name="excelNames.fileBase"
+        :download-template="handleDownloadTemplate"
+        :import-file="handleImportFile"
+        :max-size="10"
+        :max-rows="1000"
+        @success="handleImportSuccess"
+      />
+    </TaktModal>
+    <!-- 列设置抽屉 -->
+    <TaktColumnDrawer
+      v-model:open="columnSettingVisible"
+      :columns="columns"
+      :checked-keys="visibleColumnKeys"
+      :id-column-key="'salesForecastId'"
+      :action-column-key="'action'"
+      entity-scope="approval"
+      table-mode="masterDetailMaster"
+      @update:checked-keys="handleColumnKeysChange"
+      @reset="handleColumnSettingReset"
+    />
+  </div>
+</template>
+
+<script setup lang="ts">
+/**
+ * Takt销售预测实体管理页 · 由 generate-vue-master-detail-from-api.cjs 根据 types/api 生成
+ * @module views/logistics/manufacturing/mds/sales-forecast
+ */
+import { ref, computed, onMounted } from 'vue'
+import { message, Modal } from 'ant-design-vue'
+import type { TableColumnsType } from 'ant-design-vue'
+import { CreateActionColumn } from '@/components/business/takt-action-column/index'
+import { useI18n } from 'vue-i18n'
+import { ensureTaktPaginationConfigAsync, getTaktDefaultPageIndex, getTaktDefaultPageSize } from '@/utils/takt-paged'
+import SalesForecastForm from './components/sales-forecast-form.vue'
+import SalesForecastItemPanel from './components/sales-forecast-item-panel.vue'
+import { provideSalesForecastMasterContext, type SalesForecastRowRecord } from './composables/use-sales-forecast-master-context'
+import { getSalesForecastList, getSalesForecastById, createSalesForecast, updateSalesForecast, deleteSalesForecastById, deleteSalesForecastBatch, getSalesForecastTemplate, importSalesForecast, exportSalesForecast, updateSalesForecastStatus } from '@/api/logistics/manufacturing/mds/sales-forecast'
+import type { SalesForecast, SalesForecastQuery } from '@/types/logistics/manufacturing/mds/sales-forecast'
+import { useDictDataStore } from '@/stores/foundation/dict-data'
+import { taktExcelEntityNames } from '@/utils/naming'
+import { resolveExportDownloadFileName } from '@/utils/export-download-name'
+import { normalizeImportResult, type TaktImportResult } from '@/utils/takt-import-result'
+import { RiEditLine, RiDeleteBinLine, RiQuestionLine } from '@remixicon/vue'
+
+import {
+  useSalesForecastI18n,
+  SALESFORECAST_LIST_FIELDS,
+  SALESFORECAST_QUERY_STRING_FIELDS,
+  SALESFORECAST_QUERY_FIELDS,
+  SALESFORECAST_SELF_I18N_KEY,
+} from './composables/use-sales-forecast-i18n'
+
+/** 实体字段 i18n（标签/占位符统一入口） */
+const pi = useSalesForecastI18n()
+
+/** i18n 翻译函数 */
+const { t } = useI18n()
+/** Excel 导入/导出默认 sheet 名与文件名前缀 */
+const excelNames = taktExcelEntityNames('TaktSalesForecast')
+/** 列表快捷查询占位文案 */
+const searchPlaceholder = computed(
+  () => t('common.page.form.placeholder.search', { keyword: pi.self() })
+)
+
+/** 快捷查询关键字 */
+const queryKeyword = ref('')
+/** 列表 loading */
+const loading = ref(false)
+/** 分页列表数据 */
+const dataSource = ref<SalesForecast[]>([])
+/** 当前页码 */
+const currentPage = ref(getTaktDefaultPageIndex())
+/** 每页条数 */
+const pageSize = ref(getTaktDefaultPageSize())
+/** 分页 total */
+const total = ref(0)
+/** 工具栏单选时当前行 */
+const selectedRow = ref<SalesForecastRowRecord | null>(null)
+/** 表格多选行 */
+const selectedRows = ref<SalesForecastRowRecord[]>([])
+/** 表格多选 row-key 集合 */
+const selectedRowKeys = ref<(string | number)[]>([])
+
+/** 新增/编辑弹窗是否打开 */
+const formVisible = ref(false)
+/** 弹窗标题（新增/编辑） */
+const formTitle = ref('')
+/** 传入内嵌表单的编辑数据 */
+const formData = ref<Partial<SalesForecast> | null>(null)
+/** 表单提交 loading */
+const formLoading = ref(false)
+/** 内嵌表单组件 ref（validate / getValues / resetFields） */
+const formRef = ref()
+
+/** 高级查询抽屉是否打开 */
+const advancedQueryVisible = ref(false)
+/**
+ * 创建空的高级查询表单
+ * @returns {Record<string, unknown>} 高级查询初始模型
+ */
+function createEmptyAdvancedQueryForm() {
+  const form = Object.fromEntries(SALESFORECAST_QUERY_STRING_FIELDS.map((key) => [key, ''])) as Record<
+    (typeof SALESFORECAST_QUERY_STRING_FIELDS)[number],
+    string
+  >
+  return {
+    ...form,
+    totalQuantity: undefined as number | undefined,
+    totalAmount: undefined as number | undefined,
+    convertedQuantity: undefined as number | undefined,
+    convertedAmount: undefined as number | undefined,
+    planStatus: undefined as number | undefined,
+    convertedStatus: undefined as number | undefined,
+    approvalStatus: undefined as number | undefined,
+  }
+}
+/** 高级查询表单模型 */
+const advancedQueryForm = ref(createEmptyAdvancedQueryForm())
+/** 高级查询字段元数据（列显隐配置） */
+const queryFieldsMeta = computed(() =>
+  SALESFORECAST_QUERY_FIELDS.map((key) => ({ key, label: pi.queryLabel(key) })),
+)
+/** 高级查询当前可见字段 key */
+const visibleQueryFieldKeys = ref<string[]>([])
+/** 列设置抽屉是否打开 */
+const columnSettingVisible = ref(false)
+/** 导入对话框是否打开 */
+const importVisible = ref(false)
+/** 表格当前可见列 key */
+const visibleColumnKeys = ref<string[]>([])
+/** 实体主键字段名（row-key、API 路径参数） */
+const entityIdName = 'salesForecastId'
+/** 工具栏「编辑」是否禁用（须恰好选中一行） */
+const updateDisabled = computed(() => selectedRows.value.length !== 1)
+/** 工具栏「删除」是否禁用（未选中任何行） */
+const deleteDisabled = computed(() => selectedRows.value.length === 0)
+
+/** Pinia：字典缓存（列表/查询 dict-type 渲染前预热） */
+const dictDataStore = useDictDataStore()
+/** 主表选中行上下文（右侧明细面板读取） */
+const { selectedMasterRow } = provideSalesForecastMasterContext()
+const salesForecastItemPanelRef = ref<InstanceType<typeof SalesForecastItemPanel> | null>(null)
+
+/**
+ * 构建列表/导出查询参数（空字符串与未填数值/日期不下发，避免后端 DateTime? 模型绑定 400）
+ * @param overrides 覆盖分页或导出上限等字段
+ * @returns {SalesForecastQuery} 查询 DTO
+ */
+function buildListQuery(overrides?: Partial<SalesForecastQuery>): SalesForecastQuery {
+  const form = advancedQueryForm.value
+  const kw = (queryKeyword.value ?? '').trim()
+  const query: SalesForecastQuery = {
+    pageIndex: currentPage.value,
+    pageSize: pageSize.value,
+    ...overrides,
+  }
+  if (kw.length > 0) {
+    query.keyWords = kw
+  }
+  const assignTrimmed = (key: keyof SalesForecastQuery, value: string | undefined) => {
+    const v = (value ?? '').trim()
+    if (v.length > 0) {
+      query[key] = v as never
+    }
+  }
+  for (const key of SALESFORECAST_QUERY_STRING_FIELDS) {
+    assignTrimmed(key, form[key])
+  }
+  if (form.totalQuantity !== undefined && form.totalQuantity !== null) {
+    query.totalQuantity = form.totalQuantity
+  }
+  if (form.totalAmount !== undefined && form.totalAmount !== null) {
+    query.totalAmount = form.totalAmount
+  }
+  if (form.convertedQuantity !== undefined && form.convertedQuantity !== null) {
+    query.convertedQuantity = form.convertedQuantity
+  }
+  if (form.convertedAmount !== undefined && form.convertedAmount !== null) {
+    query.convertedAmount = form.convertedAmount
+  }
+  if (form.planStatus !== undefined && form.planStatus !== null) {
+    query.planStatus = form.planStatus
+  }
+  if (form.convertedStatus !== undefined && form.convertedStatus !== null) {
+    query.convertedStatus = form.convertedStatus
+  }
+  if (form.approvalStatus !== undefined && form.approvalStatus !== null) {
+    query.approvalStatus = form.approvalStatus
+  }
+  return query
+}
+/** 页面挂载：租户上下文就绪后加载分页配置，再拉列表 */
+onMounted(async () => {
+  await ensureTaktPaginationConfigAsync()
+  void dictDataStore.loadAllDictDataAsync()
+  loadData()
+})
+
+
+/** 主表行点击选中 key（左右主子表高亮） */
+const selectedMasterKey = ref('')
+
+/** 同步主表选中行到右侧明细（子表由 *-panel watch 自动 reload） */
+function syncMasterSelection(record: SalesForecastRowRecord | null) {
+  selectedMasterRow.value = record
+  selectedMasterKey.value = record ? getSalesForecastId(record) : ''
+}
+
+/**
+ * 左右主子表：主表行选中
+ * @param record 主表行
+ */
+function handleMasterSelect(record: Record<string, unknown>) {
+  const row = record as unknown as SalesForecastRowRecord
+  const key = getSalesForecastId(row)
+  selectedRowKeys.value = [key]
+  selectedRows.value = [row]
+  selectedRow.value = row
+  syncMasterSelection(row)
+}
+
+/**
+ * 主表分页变更（v-model 已同步页码与 pageSize）
+ * @param _page 页码
+ * @param _pageSize 每页条数
+ */
+function handleMasterPaginationChange(_page: number, _pageSize: number) {
+  loadData()
+}
+
+/** 加载主表详情并回填当前页 dataSource */
+async function loadSalesForecastDetail(record: SalesForecastRowRecord): Promise<SalesForecast | null> {
+  const id = getSalesForecastId(record)
+  if (!id) {
+    return null
+  }
+  try {
+    const detail = await getSalesForecastById(id)
+    const index = dataSource.value.findIndex((row) => getSalesForecastId(row) === id)
+    if (index !== -1) {
+      dataSource.value[index] = { ...dataSource.value[index], ...detail } as SalesForecast
+    }
+    return detail
+  } catch (error: any) {
+    message.error(error?.message || t('common.feedback.load.data.failed'))
+    return null
+  }
+}
+
+/** 表格列定义（i18n 随 locale 变化） */
+const columns = computed<TableColumnsType>(() => [
+  {
+    title: t('common.page.entity.id'),
+    dataIndex: 'salesForecastId',
+    key: 'salesForecastId',
+    width: 80,
+    resizable: true,
+    ellipsis: true,
+    fixed: 'left',
+    customRender: ({ record }: { record: any }) => getSalesForecastField(record, 'salesForecastId') ?? ''
+  },
+  {
+    title: pi.label('plantCode'),
+    dataIndex: 'plantCode',
+    key: 'plantCode',
+    width: 120,
+    resizable: true,
+    ellipsis: true,
+    customRender: ({ record }: { record: any }) => getSalesForecastField(record, 'plantCode') ?? ''
+  },
+  {
+    title: pi.label('salesForecastCode'),
+    dataIndex: 'salesForecastCode',
+    key: 'salesForecastCode',
+    width: 120,
+    resizable: true,
+    ellipsis: true,
+    customRender: ({ record }: { record: any }) => getSalesForecastField(record, 'salesForecastCode') ?? ''
+  },
+  {
+    title: pi.label('planDate'),
+    dataIndex: 'planDate',
+    key: 'planDate',
+    width: 120,
+    resizable: true,
+    ellipsis: true,
+    customRender: ({ record }: { record: any }) => getSalesForecastField(record, 'planDate') ?? ''
+  },
+  {
+    title: pi.label('planPeriodStart'),
+    dataIndex: 'planPeriodStart',
+    key: 'planPeriodStart',
+    width: 120,
+    resizable: true,
+    ellipsis: true,
+    customRender: ({ record }: { record: any }) => getSalesForecastField(record, 'planPeriodStart') ?? ''
+  },
+  {
+    title: pi.label('planPeriodEnd'),
+    dataIndex: 'planPeriodEnd',
+    key: 'planPeriodEnd',
+    width: 120,
+    resizable: true,
+    ellipsis: true,
+    customRender: ({ record }: { record: any }) => getSalesForecastField(record, 'planPeriodEnd') ?? ''
+  },
+  {
+    title: pi.label('customerCode'),
+    dataIndex: 'customerCode',
+    key: 'customerCode',
+    width: 120,
+    resizable: true,
+    ellipsis: true,
+    customRender: ({ record }: { record: any }) => getSalesForecastField(record, 'customerCode') ?? ''
+  },
+  {
+    title: pi.label('customerName'),
+    dataIndex: 'customerName',
+    key: 'customerName',
+    width: 120,
+    resizable: true,
+    ellipsis: true,
+    customRender: ({ record }: { record: any }) => getSalesForecastField(record, 'customerName') ?? ''
+  },
+  {
+    title: pi.label('plannerId'),
+    dataIndex: 'plannerId',
+    key: 'plannerId',
+    width: 120,
+    resizable: true,
+    ellipsis: true,
+    customRender: ({ record }: { record: any }) => getSalesForecastField(record, 'plannerId') ?? ''
+  },
+  {
+    title: pi.label('planBy'),
+    dataIndex: 'planBy',
+    key: 'planBy',
+    width: 120,
+    resizable: true,
+    ellipsis: true,
+    customRender: ({ record }: { record: any }) => getSalesForecastField(record, 'planBy') ?? ''
+  },
+  {
+    title: pi.label('totalQuantity'),
+    dataIndex: 'totalQuantity',
+    key: 'totalQuantity',
+    width: 120,
+    resizable: true,
+    ellipsis: true,
+    customRender: ({ record }: { record: any }) => getSalesForecastField(record, 'totalQuantity') ?? ''
+  },
+  {
+    title: pi.label('totalAmount'),
+    dataIndex: 'totalAmount',
+    key: 'totalAmount',
+    width: 120,
+    resizable: true,
+    ellipsis: true,
+    customRender: ({ record }: { record: any }) => getSalesForecastField(record, 'totalAmount') ?? ''
+  },
+  {
+    title: pi.label('convertedQuantity'),
+    dataIndex: 'convertedQuantity',
+    key: 'convertedQuantity',
+    width: 120,
+    resizable: true,
+    ellipsis: true,
+    customRender: ({ record }: { record: any }) => getSalesForecastField(record, 'convertedQuantity') ?? ''
+  },
+  {
+    title: pi.label('convertedAmount'),
+    dataIndex: 'convertedAmount',
+    key: 'convertedAmount',
+    width: 120,
+    resizable: true,
+    ellipsis: true,
+    customRender: ({ record }: { record: any }) => getSalesForecastField(record, 'convertedAmount') ?? ''
+  },
+  {
+    title: pi.label('planStatus'),
+    dataIndex: 'planStatus',
+    key: 'planStatus',
+    width: 120,
+    resizable: true,
+    ellipsis: true,
+  },
+  {
+    title: pi.label('convertedStatus'),
+    dataIndex: 'convertedStatus',
+    key: 'convertedStatus',
+    width: 120,
+    resizable: true,
+    ellipsis: true,
+  },
+  {
+    title: pi.label('planDescription'),
+    dataIndex: 'planDescription',
+    key: 'planDescription',
+    width: 120,
+    resizable: true,
+    ellipsis: true,
+    customRender: ({ record }: { record: any }) => getSalesForecastField(record, 'planDescription') ?? ''
+  },
+  CreateActionColumn({
+    actions: [
+      {
+        key: 'update',
+        label: t('common.page.button.edit'),
+        shape: 'plain',
+        icon: RiEditLine,
+        permission: 'logistics:manufacturing:mds:sales:forecast:update',
+        onClick: (record: SalesForecastRowRecord) => handleEdit(record)
+      },
+      {
+        key: 'delete',
+        label: t('common.page.button.delete'),
+        shape: 'plain',
+        icon: RiDeleteBinLine,
+        permission: 'logistics:manufacturing:mds:sales:forecast:delete',
+        onClick: (record: SalesForecastRowRecord) => handleDeleteOne(record)
+      }
+    ]
+  })
+])
+
+/** 表格 row-key（优先实体主键字段） */
+const getSalesForecastId = (record: SalesForecastRowRecord): string => {
+  const id = (record as Record<string, unknown>)?.[entityIdName]
+  return id != null ? String(id) : ''
+}
+/**
+ * 读取行字段值
+ * @param record 行数据
+ * @param field 字段名
+ */
+const getSalesForecastField = (record: any, field: string): any => record?.[field]
+/**
+ * 供 TaktDictTag 等组件使用的标量字典值
+ * @param record 行数据
+ * @param field 字段名
+ */
+const getSalesForecastDictValue = (
+  record: SalesForecastRowRecord,
+  field: string,
+): string | number | undefined => {
+  const value = (record as Record<string, unknown>)?.[field]
+  if (value === null || value === undefined) return undefined
+  if (typeof value === 'string' || typeof value === 'number') return value
+  return String(value)
+}
+
+/** 将行字段/字典值转为有限 number */
+const toSalesForecastNumber = (value: string | number | undefined | null): number => {
+  if (typeof value === 'number' && Number.isFinite(value)) return value
+  const num = Number(value ?? 0)
+  return Number.isFinite(num) ? num : 0
+}
+
+
+
+/** 行选择配置 */
+const rowSelection = computed(() => ({
+  selectedRowKeys: selectedRowKeys.value,
+  onChange: (keys: (string | number)[], rows: SalesForecastRowRecord[]) => {
+    selectedRowKeys.value = keys
+    selectedRows.value = rows
+    selectedRow.value = rows.length === 1 ? (rows[0] ?? null) : null
+    if (rows.length === 1 && rows[0]) {
+      syncMasterSelection(rows[0])
+    } else if (rows.length === 0) {
+      syncMasterSelection(null)
+    }
+  },
+  onSelect: (record: SalesForecastRowRecord, selected: boolean) => {
+    if (selected) {
+      selectedRow.value = record
+      syncMasterSelection(record)
+    } else if (selectedRow.value && getSalesForecastId(selectedRow.value) === getSalesForecastId(record)) {
+      selectedRow.value = null
+      syncMasterSelection(null)
+    }
+  },
+  onSelectAll: (selected: boolean, selectedRowsData: SalesForecastRowRecord[]) => {
+    selectedRow.value = selected && selectedRowsData.length === 1 ? (selectedRowsData[0] ?? null) : null
+    syncMasterSelection(selectedRow.value)
+  }
+}))
+
+/** 加载分页列表 */
+async function loadData() {
+  loading.value = true
+  try {
+    const res = await getSalesForecastList(buildListQuery())
+    dataSource.value = res.data ?? []
+    total.value = res.total ?? 0
+  } catch (error: any) {
+    logger.error('[SalesForecast] 加载数据失败', { error })
+    message.error(error?.message || t('common.feedback.load.data.failed'))
+    dataSource.value = []
+    total.value = 0
+  } finally {
+    loading.value = false
+  }
+}
+
+/** 租户/公司切换时由 bootstrap 发出 table:refresh，自动重载列表 */
+useTableRefresh(loadData)
+
+/** 快捷查询 */
+function handleSearch() {
+  currentPage.value = getTaktDefaultPageIndex()
+  loadData()
+}
+
+/** 重置查询条件并刷新列表 */
+function handleReset() {
+  queryKeyword.value = ''
+  advancedQueryForm.value = {
+  plantCode: '',
+  salesForecastCode: '',
+  planDateStart: '',
+  planDateEnd: '',
+  planPeriodStartStart: '',
+  planPeriodStartEnd: '',
+  planPeriodEndStart: '',
+  planPeriodEndEnd: '',
+  customerCode: '',
+  customerName: '',
+  plannerId: '',
+  planBy: '',
+  totalQuantity: undefined as number | undefined,
+  totalAmount: undefined as number | undefined,
+  convertedQuantity: undefined as number | undefined,
+  convertedAmount: undefined as number | undefined,
+  planStatus: undefined as number | undefined,
+  convertedStatus: undefined as number | undefined,
+  planDescription: '',
+  approvalStatus: undefined as number | undefined,
+  initiatorId: '',
+  initiatedAtStart: '',
+  initiatedAtEnd: '',
+  approvedBy: '',
+  approvedAtStart: '',
+  approvedAtEnd: '',
+  flowInstanceId: '',
+  createdAtStart: '',
+  createdAtEnd: '',
+  extField: '',
+  remark: '',
+  }
+  currentPage.value = getTaktDefaultPageIndex()
+  loadData()
+}
+
+/** 打开新增弹窗 */
+function handleCreate() {
+  formTitle.value = t('common.dialog.title.create', { entity: pi.self() })
+  formData.value = null
+  formVisible.value = true
+  nextTick(() => formRef.value?.resetFields())
+}
+/** 打开编辑弹窗（主子表：先拉详情含子表） */
+async function handleEdit(record: SalesForecastRowRecord) {
+  formTitle.value = t('common.dialog.title.edit', { entity: pi.self() })
+  formLoading.value = true
+  try {
+    const detail = await loadSalesForecastDetail(record)
+    formData.value = detail ? { ...detail } : { ...record }
+    formVisible.value = true
+  } finally {
+    formLoading.value = false
+  }
+}
+
+/** 工具栏编辑：打开当前单选行 */
+function handleUpdate() {
+  if (selectedRow.value) {
+    void handleEdit(selectedRow.value)
+  } else {
+    message.warning(t('common.tip.select.to.action', { action: t('common.page.button.edit'), entity: pi.self() }))
+  }
+}
+/** 提交新增/编辑表单 */
+async function handleFormSubmit() {
+  const refInst = formRef.value
+  if (!refInst?.validate) return
+  try {
+    await refInst.validate()
+  } catch {
+    return
+  }
+  formLoading.value = true
+  try {
+    const payload = refInst.getValues?.() ?? { ...(formData.value as any) }
+    const id = (formData.value as any)?.[entityIdName]
+    if (id) {
+      await updateSalesForecast(id, payload as any)
+      message.success(t('common.feedback.updated', { target: pi.self() }))
+    } else {
+      await createSalesForecast(payload as any)
+      message.success(t('common.feedback.created', { target: pi.self() }))
+    }
+    formVisible.value = false
+    formData.value = null
+  nextTick(() => formRef.value?.resetFields())
+    if (selectedMasterKey.value) {
+  salesForecastItemPanelRef.value?.reload?.()
+    }
+    loadData()
+  } finally {
+    formLoading.value = false
+  }
+}
+
+/** 关闭新增/编辑弹窗（不提交） */
+function handleFormCancel() {
+  formVisible.value = false
+  formData.value = null
+  nextTick(() => formRef.value?.resetFields())
+}
+/** 打开导入对话框 */
+function handleImport() {
+  importVisible.value = true
+}
+
+/** 下载导入模板 Excel */
+async function handleDownloadTemplate(sheetName?: string, fileName?: string): Promise<Blob> {
+  const res = await getSalesForecastTemplate(sheetName, fileName)
+  return (res as any)?.data ?? res
+}
+
+/** 上传并导入 Excel 文件（归一化后端 SuccessCount/successCount） */
+async function handleImportFile(file: File, sheetName?: string): Promise<TaktImportResult> {
+  const raw = await importSalesForecast(file, sheetName)
+  return normalizeImportResult(raw)
+}
+
+/** 导入完成回调：刷新列表；全部成功时延迟关闭对话框 */
+function handleImportSuccess(result: TaktImportResult) {
+  loadData()
+
+      if (selectedMasterKey.value) {
+    salesForecastItemPanelRef.value?.reload?.()
+      }
+  if (result.fail === 0 && result.success > 0) {
+    setTimeout(() => { importVisible.value = false }, 2000)
+  }
+}
+
+/** 关闭导入对话框 */
+function handleImportCancel() {
+  importVisible.value = false
+}
+/** 导出当前查询条件下的 Excel */
+async function handleExport() {
+  try {
+    loading.value = true
+    const exportMeta = await exportSalesForecast(
+      buildListQuery({ pageIndex: 1, pageSize: 100000 }),
+      excelNames.sheet,
+      excelNames.fileBase
+    )
+    const ts = new Date()
+    const pad = (n: number, w = 2) => String(n).padStart(w, '0')
+    const fallbackBase = `${excelNames.fileBase}_${ts.getFullYear()}${pad(ts.getMonth() + 1)}${pad(ts.getDate())}${pad(ts.getHours())}${pad(ts.getMinutes())}${pad(ts.getSeconds())}`
+    const fileName = resolveExportDownloadFileName({
+      contentDisposition: (exportMeta as any).contentDisposition ?? null,
+      contentType: (exportMeta as any).contentType ?? null,
+      fallbackBase
+    })
+    const blob = (exportMeta as any).blob ?? exportMeta
+    const url = window.URL.createObjectURL(blob)
+    const link = document.createElement('a')
+    link.href = url
+    link.download = fileName
+    link.style.display = 'none'
+    document.body.appendChild(link)
+    link.click()
+    document.body.removeChild(link)
+    setTimeout(() => window.URL.revokeObjectURL(url), 100)
+    message.success(t('common.feedback.export.success', { target: pi.self() }))
+  } catch (error: any) {
+    logger.error('[SalesForecast] 导出失败', { error })
+    message.error(error?.message || t('common.feedback.export.failed', { target: pi.self() }))
+  } finally {
+    loading.value = false
+  }
+}
+/** 删除单行 */
+async function handleDeleteOne(record: SalesForecastRowRecord) {
+  Modal.confirm({
+    title: t('common.tip.confirm.delete.title'),
+    content: t('common.tip.confirm.delete.entity', { entity: pi.self(), name: t('common.tip.this.target', { target: pi.self() }) }),
+    okText: t('common.page.button.delete'),
+    cancelText: t('common.page.button.cancel'),
+    onOk: async () => {
+      await deleteSalesForecastById((record as any)[entityIdName])
+      message.success(t('common.feedback.deleted', { target: pi.self() }))
+      selectedRowKeys.value = []
+      selectedRows.value = []
+      selectedRow.value = null
+      syncMasterSelection(null)
+      loadData()
+    }
+  })
+}
+/** 批量删除选中行 */
+async function handleDelete() {
+  if (selectedRows.value.length === 0) {
+    message.warning(t('common.tip.select.to.action', { action: t('common.page.button.delete'), entity: pi.self() }))
+    return
+  }
+  Modal.confirm({
+    title: t('common.tip.confirm.delete.title'),
+    content: t('common.tip.confirm.delete.count', { entity: pi.self(), count: selectedRows.value.length }),
+    okText: t('common.page.button.delete'),
+    cancelText: t('common.page.button.cancel'),
+    onOk: async () => {
+      const ids = selectedRows.value.map((r: any) => r[entityIdName]).filter(Boolean)
+      await deleteSalesForecastBatch(ids)
+      message.success(t('common.feedback.deleted', { target: pi.self() }))
+      selectedRowKeys.value = []
+      selectedRows.value = []
+      selectedRow.value = null
+      syncMasterSelection(null)
+      loadData()
+    }
+  })
+}
+/**
+ * 行内状态切换
+ * @param record 当前行
+ * @param checked 是否启用
+ */
+async function handlePlanStatusChange(record: SalesForecastRowRecord, checked: boolean) {
+  const newVal = checked ? 1 : 0
+  const oldVal = toSalesForecastNumber(getSalesForecastDictValue(record, 'planStatus'))
+  const id = getSalesForecastId(record)
+  const row = dataSource.value.find((item) => getSalesForecastId(item) === id)
+  if (row) {
+    row.planStatus = newVal
+  }
+  try {
+    await updateSalesForecastStatus({ salesForecastId: id, planStatus: newVal })
+    message.success(t('common.feedback.updated'))
+    
+  } catch (error: unknown) {
+    if (row) {
+      row.planStatus = oldVal
+    }
+    message.error(t('common.feedback.failed'))
+  }
+}
+/** 打开高级查询抽屉 */
+function handleAdvancedQuery() {
+  advancedQueryVisible.value = true
+}
+
+/** 高级查询提交：关闭抽屉并重置分页 */
+function handleAdvancedQuerySubmit() {
+  advancedQueryVisible.value = false
+  currentPage.value = getTaktDefaultPageIndex()
+  loadData()
+}
+
+function handleAdvancedQueryReset() {
+  advancedQueryForm.value = {
+  plantCode: '',
+  salesForecastCode: '',
+  planDateStart: '',
+  planDateEnd: '',
+  planPeriodStartStart: '',
+  planPeriodStartEnd: '',
+  planPeriodEndStart: '',
+  planPeriodEndEnd: '',
+  customerCode: '',
+  customerName: '',
+  plannerId: '',
+  planBy: '',
+  totalQuantity: undefined as number | undefined,
+  totalAmount: undefined as number | undefined,
+  convertedQuantity: undefined as number | undefined,
+  convertedAmount: undefined as number | undefined,
+  planStatus: undefined as number | undefined,
+  convertedStatus: undefined as number | undefined,
+  planDescription: '',
+  approvalStatus: undefined as number | undefined,
+  initiatorId: '',
+  initiatedAtStart: '',
+  initiatedAtEnd: '',
+  approvedBy: '',
+  approvedAtStart: '',
+  approvedAtEnd: '',
+  flowInstanceId: '',
+  createdAtStart: '',
+  createdAtEnd: '',
+  extField: '',
+  remark: '',
+  }
+}
+
+/** 打开列设置抽屉 */
+function handleColumnSetting() {
+  columnSettingVisible.value = true
+}
+
+/** 列设置：更新可见列 key */
+function handleColumnKeysChange(keys: string[]) {
+  visibleColumnKeys.value = keys
+}
+
+/** 列设置：恢复默认可见列 */
+function handleColumnSettingReset() {
+  visibleColumnKeys.value = []
+}
+
+/** 刷新列表 */
+function handleRefresh() {
+  loadData()
+}
+
+/** 表格 change 占位 */
+function handleTableChange() {}
+/** 列宽拖拽回调占位 */
+function handleResizeColumn() {}
+</script>

@@ -39,7 +39,7 @@ public class TaktPurchaseOrder : TaktCompanyEntityBase
     [SugarColumn(ColumnName = "purchase_order_code", ColumnDescription = "采购订单编码", ColumnDataType = "nvarchar", Length = 10, IsNullable = false)]
     public string PurchaseOrderCode { get; set; } = string.Empty;
     /// <summary>
-    /// 来源采购申请 ID（关联 TaktPurchaseRequest.Id，选项 TaktPurchaseRequests/options）
+    /// 来源采购申请 ID（选项 TaktPurchaseRequests/options，DictValue=Id）
     /// </summary>
     [SugarColumn(ColumnName = "purchase_request_id", ColumnDescription = "来源采购申请ID", ColumnDataType = "bigint", IsNullable = true)]
     [JsonConverter(typeof(ValueToStringConverter))]

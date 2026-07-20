@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Infrastructure.Data.Seeds.I18nSeedData.Logistics.Procurement
 // 文件名称：TaktPurchaseInquiryI18nSeedData.cs
-// 创建时间：2026-07-09
+// 创建时间：2026-07-20
 // 创建人：Takt365(Auto Generated)
 // 功能描述：TaktPurchaseInquiry 实体字段国际化种子（无对应 frontend locales；TranslationText 取自 ColumnDescription，ContextNote 取自属性 XML summary）
 // 
@@ -127,13 +127,13 @@ public class TaktPurchaseInquiryI18nSeedData : ITaktSeedDataCoordinator
             new TranslationSeedItem("entity.purchaseinquiry.quotedeadlinedate", "zh-HK", "报价截止日期_hk", "报价截止日期"),
 
             // entity.purchaseinquiry.inquiryid
-            new TranslationSeedItem("entity.purchaseinquiry.inquiryid", "en-US", "询价人员工ID_us", "询价人员工 ID（关联 TaktEmployee.Id，选项 TaktEmployees/options）"),
+            new TranslationSeedItem("entity.purchaseinquiry.inquiryid", "en-US", "询价人员工ID_us", "询价人员工 ID（选项 TaktEmployees/options，DictValue=Id）"),
             // entity.purchaseinquiry.inquiryid
-            new TranslationSeedItem("entity.purchaseinquiry.inquiryid", "ja-JP", "询价人员工ID_jp", "询价人员工 ID（关联 TaktEmployee.Id，选项 TaktEmployees/options）"),
+            new TranslationSeedItem("entity.purchaseinquiry.inquiryid", "ja-JP", "询价人员工ID_jp", "询价人员工 ID（选项 TaktEmployees/options，DictValue=Id）"),
             // entity.purchaseinquiry.inquiryid
-            new TranslationSeedItem("entity.purchaseinquiry.inquiryid", "zh-CN", "询价人员工ID", "询价人员工 ID（关联 TaktEmployee.Id，选项 TaktEmployees/options）"),
+            new TranslationSeedItem("entity.purchaseinquiry.inquiryid", "zh-CN", "询价人员工ID", "询价人员工 ID（选项 TaktEmployees/options，DictValue=Id）"),
             // entity.purchaseinquiry.inquiryid
-            new TranslationSeedItem("entity.purchaseinquiry.inquiryid", "zh-HK", "询价人员工ID_hk", "询价人员工 ID（关联 TaktEmployee.Id，选项 TaktEmployees/options）"),
+            new TranslationSeedItem("entity.purchaseinquiry.inquiryid", "zh-HK", "询价人员工ID_hk", "询价人员工 ID（选项 TaktEmployees/options，DictValue=Id）"),
 
             // entity.purchaseinquiry.inquiryby
             new TranslationSeedItem("entity.purchaseinquiry.inquiryby", "en-US", "询价人_us", "询价人（人员代码）"),

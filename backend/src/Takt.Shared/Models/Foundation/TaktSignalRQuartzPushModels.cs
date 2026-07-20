@@ -99,9 +99,19 @@ public class TaktSignalRQuartzTaskExecutedPush
     public string TaskName { get; set; } = string.Empty;
 
     /// <summary>
-    /// 执行状态（int，与 TaktExecuteStatus 一致）
+    /// 执行状态（int，与 TaktExecuteStatus 一致：0 失败 / 1 成功）
     /// </summary>
     public int ExecuteStatus { get; set; }
+
+    /// <summary>
+    /// 执行摘要消息（来自 TaktQuartzLog.ExecuteMessage）
+    /// </summary>
+    public string? ExecuteMessage { get; set; }
+
+    /// <summary>
+    /// 错误信息（来自 TaktQuartzLog.ErrorInfo；成功时为空）
+    /// </summary>
+    public string? ErrorInfo { get; set; }
 
     /// <summary>
     /// 执行耗时（毫秒）

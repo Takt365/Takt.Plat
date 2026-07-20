@@ -45,6 +45,7 @@
       :bordered="bordered"
       :loading="loading"
       :locale="tableLocale"
+      :virtual="shouldUseVirtual"
       :custom-row="resolveCustomRow"
     >
       <template #emptyText>
@@ -182,6 +183,14 @@
         </template>
       </template>
     </a-table>
+    <div
+      v-if="showFooterRemark"
+      class="takt-editable-table__footer-remark shrink-0 pt-2 text-sm leading-relaxed text-text-secondary"
+    >
+      <slot name="footerRemark">
+        {{ footerRemark }}
+      </slot>
+    </div>
   </div>
 </template>
 
@@ -205,8 +214,10 @@ import {
 import {
   resolveTableScrollConfig,
   resolveVerticalScrollY,
+  shouldUseTableVirtualScroll,
   type TaktTableScrollLayout,
 } from '@/utils/table-scroll'
+import { resolveTableSummaryLabelColumnKey } from '@/utils/table-columns'
 import { useTaktTableViewportScrollY } from '@/composables/use-takt-table-viewport-scroll-y'
 import {
   TAKT_EDITABLE_ROW_KEY,
@@ -317,6 +328,12 @@ interface Props {
   showSummary?: boolean
   /** 汇总行首列标签 */
   summaryLabel?: string
+  /** 表尾备注说明（合计行 / 表体下方） */
+  footerRemark?: string
+  /**
+   * 虚拟滚动；省略时按行数自动：超过 TAKT_TABLE_AUTO_VIRTUAL_ROW_THRESHOLD（5000）强制开启
+   */
+  virtual?: boolean
   /** validate 最少行数 */
   minRows?: number
   /** 是否启用方向键 / 回车键在可编辑单元格间导航（Excel 风格） */
@@ -350,6 +367,8 @@ const props = withDefaults(defineProps<Props>(), {
   emptyDescription: '',
   showSummary: undefined,
   summaryLabel: '',
+  footerRemark: '',
+  virtual: undefined,
   minRows: 0,
   enableArrowNavigation: true,
   obsoleteField: '',
@@ -437,6 +456,11 @@ const hasSummaryRow = computed(() => {
   return props.columns.some((col) => !!col.summary)
 })
 
+/** 是否展示表尾备注 */
+const showFooterRemark = computed(
+  () => !!props.footerRemark?.trim() || !!cellSlots.footerRemark,
+)
+
 /** 汇总用行（排除作废行） */
 const summarySourceRows = computed(() =>
   filterActiveEditableRows(innerRows.value, props.obsoleteField || undefined, props.obsoleteValue),
@@ -453,19 +477,21 @@ const resolvedSummaryLabel = computed(() => {
   return t('components.business.page.editabletable.summarylabel')
 })
 
-/** 汇总行单元格（index 与 a-table columns 列序一致，禁止额外插入标签列） */
+/** 汇总行单元格（index 与 a-table columns 列序一致；文案跳过序号列，落在第一个业务数据列） */
 const summaryCells = computed(() => {
+  const labelKey = resolveTableSummaryLabelColumnKey(props.columns)
   const cells: Array<{ key: string; text: string; index: number }> = []
   props.columns.forEach((column, columnIndex) => {
+    const key = String(column.key)
     let text = ''
-    if (columnIndex === 0) {
+    if (labelKey && key === labelKey) {
       text = resolvedSummaryLabel.value
     } else if (column.summary) {
       const raw = summaryValueMap.value[column.key]
       text = formatSummaryValue(raw, column.summaryPrecision ?? 2)
     }
     cells.push({
-      key: String(column.key),
+      key,
       index: columnIndex,
       text,
     })
@@ -491,6 +517,11 @@ const mergedScroll = computed(() => {
 
 /** 视口动态 scroll.y（px）；editable 场景默认固定 240，仍走统一计算入口 */
 const viewportScrollYPx = useTaktTableViewportScrollY(() => props.scrollLayout)
+
+/** 是否启用虚拟滚动：显式 true，或行数超过 5000 */
+const shouldUseVirtual = computed(() =>
+  shouldUseTableVirtualScroll(innerRows.value.length, props.virtual),
+)
 
 /** 表格 scroll */
 const scrollConfig = computed(() =>

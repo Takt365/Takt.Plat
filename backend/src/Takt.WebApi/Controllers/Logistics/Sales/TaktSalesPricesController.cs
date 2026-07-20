@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.WebApi.Controllers.Logistics.Sales
 // 文件名称：TaktSalesPricesController.cs
-// 创建时间：2026-07-01
+// 创建时间：2026-07-20
 // 创建人：Takt365(Cursor AI)
 // 功能描述：销售价格控制器
 // 
@@ -173,26 +173,6 @@ public class TaktSalesPricesController : TaktControllerBase
         {
             await _salesPriceService.DeleteSalesPriceBatchAsync(ids);
             return Success("删除成功");
-        }
-        catch (Exception ex)
-        {
-            return HandleException(ex);
-        }
-    }
-
-    /// <summary>
-    /// 更新销售价格状态
-    /// </summary>
-    /// <param name="dto">状态 DTO</param>
-    /// <returns>销售价格DTO</returns>
-    [TaktPermission("logistics:sales:price:update", "更新销售价格状态")]
-    [HttpPut("status")]
-    public async Task<IActionResult> UpdateSalesPriceStatusAsync([FromBody] TaktSalesPriceStatusDto dto)
-    {
-        try
-        {
-            var result = await _salesPriceService.UpdateSalesPriceStatusAsync(dto);
-            return Success(result, "更新成功");
         }
         catch (Exception ex)
         {

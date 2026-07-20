@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：frontend/src/types/logistics/sales
 // 文件名称：price.d.ts
-// 创建时间：2026-07-09
+// 创建时间：2026-07-20
 // 创建人：Takt365(Auto Generated)
 // 功能描述：logistics/sales 模块类型定义（自动生成；类型名去 Takt 前缀与末尾 Dto，如 TaktCompanyDto → Company）
 // 
@@ -16,7 +16,7 @@ import type {
 } from '@/types/common';
 
 /**
- * Takt销售价格实体（客户价格主表，一个客户可以有多个物料价格）
+ * Takt销售价格实体（定价记录；条件类型 + 客户 + 物料 + 有效期；含子表 Items）
  * 对应前端 TaktSalesPriceDto
  * 继承 TaktCompanyDtoBase
  * 对应前端 SalesPrice
@@ -29,42 +29,57 @@ export interface SalesPrice extends CompanyDtoBase {
   salesPriceId: string;
 
   /**
-   * 工厂代码（选项 TaktPlants/options，DictValue=PlantCode）
-   */
-  plantCode: string;
-
-  /**
-   * 销售价格编码（唯一索引）
+   * 定价记录号（唯一索引；长度 20）
    */
   salesPriceCode: string;
 
   /**
-   * 客户编码（选项 TaktCustomers/options，DictValue=CustomerCode；为空表示通用价格）
-   */
-  customerCode?: string;
-
-  /**
-   * 价格类型（字典 logistics_sales_price_type；SAP 定价条件类型 KSCHL，如 PR00/PB00；默认 PR00）
+   * 条件类型（字典 logistics_price_type；PB00=采购总价 Gross Price，PR00=基本价格 Base Price，MWST=销项税/增值税，MWRK=不可抵扣进项税，NLXV=购置税）
    */
   priceType: string;
 
   /**
-   * 生效日期
+   * 客户编码（选项 TaktCustomers/options，DictValue=CustomerCode）
    */
-  effectiveStartDate: string;
+  customerCode: string;
 
   /**
-   * 失效日期（空表示长期有效）
+   * 物料编码（选项 TaktMaterialPlants/options，DictValue=MaterialCode）
    */
-  effectiveEndDate?: string;
+  materialCode: string;
 
   /**
-   * 价格状态（字典 sys_normal_disable_status；1=启用 0=禁用）
+   * 有效起始日
    */
-  priceStatus: number;
+  validFrom: string;
 
   /**
-   * 物料价格明细列表（主子表关系，一个客户价格可以有多个物料价格） （子表：TaktSalesPriceItem）
+   * 有效截至日
+   */
+  validTo: string;
+
+  /**
+   * 可变关键字
+   */
+  variableKey?: string;
+
+  /**
+   * 来源销售报价 ID（选项 TaktSalesQuotations/options，DictValue=Id；对应采购侧来源询价）
+   */
+  salesQuotationId?: string;
+
+  /**
+   * 来源销售报价 名称（填充字段）
+   */
+  salesQuotationName?: string;
+
+  /**
+   * 来源销售报价编码（冗余）
+   */
+  salesQuotationCode?: string;
+
+  /**
+   * 定价条件行列表（主子表关系） （子表：TaktSalesPriceItem）
    */
   items?: SalesPriceItem[];
 
@@ -89,49 +104,59 @@ export interface SalesPriceQuery extends TaktPagedQuery {
   companyCode?: string;
 
   /**
-   * 工厂代码（选项 TaktPlants/options，DictValue=PlantCode）
-   */
-  plantCode?: string;
-
-  /**
-   * 销售价格编码（唯一索引）
+   * 定价记录号（唯一索引；长度 20）
    */
   salesPriceCode?: string;
 
   /**
-   * 客户编码（选项 TaktCustomers/options，DictValue=CustomerCode；为空表示通用价格）
-   */
-  customerCode?: string;
-
-  /**
-   * 价格类型（字典 logistics_sales_price_type；SAP 定价条件类型 KSCHL，如 PR00/PB00；默认 PR00）
+   * 条件类型（字典 logistics_price_type；PB00=采购总价 Gross Price，PR00=基本价格 Base Price，MWST=销项税/增值税，MWRK=不可抵扣进项税，NLXV=购置税）
    */
   priceType?: string;
 
   /**
-   * 生效日期（范围查询-开始）
+   * 客户编码（选项 TaktCustomers/options，DictValue=CustomerCode）
    */
-  effectiveStartDateStart?: string;
+  customerCode?: string;
 
   /**
-   * 生效日期（范围查询-结束）
+   * 物料编码（选项 TaktMaterialPlants/options，DictValue=MaterialCode）
    */
-  effectiveStartDateEnd?: string;
+  materialCode?: string;
 
   /**
-   * 失效日期（空表示长期有效）（范围查询-开始）
+   * 有效起始日（范围查询-开始）
    */
-  effectiveEndDateStart?: string;
+  validFromStart?: string;
 
   /**
-   * 失效日期（空表示长期有效）（范围查询-结束）
+   * 有效起始日（范围查询-结束）
    */
-  effectiveEndDateEnd?: string;
+  validFromEnd?: string;
 
   /**
-   * 价格状态（字典 sys_normal_disable_status；1=启用 0=禁用）
+   * 有效截至日（范围查询-开始）
    */
-  priceStatus?: number;
+  validToStart?: string;
+
+  /**
+   * 有效截至日（范围查询-结束）
+   */
+  validToEnd?: string;
+
+  /**
+   * 可变关键字
+   */
+  variableKey?: string;
+
+  /**
+   * 来源销售报价 ID（选项 TaktSalesQuotations/options，DictValue=Id；对应采购侧来源询价）
+   */
+  salesQuotationId?: string;
+
+  /**
+   * 来源销售报价编码（冗余）
+   */
+  salesQuotationCode?: string;
 
   /**
    * 创建时间（范围查询-开始）
@@ -178,44 +203,54 @@ export interface SalesPriceCreate {
   companyDefaultCulture: string;
 
   /**
-   * 工厂代码（选项 TaktPlants/options，DictValue=PlantCode）
-   */
-  plantCode: string;
-
-  /**
-   * 销售价格编码（唯一索引）
+   * 定价记录号（唯一索引；长度 20）
    */
   salesPriceCode: string;
 
   /**
-   * 客户编码（选项 TaktCustomers/options，DictValue=CustomerCode；为空表示通用价格）
-   */
-  customerCode?: string;
-
-  /**
-   * 价格类型（字典 logistics_sales_price_type；SAP 定价条件类型 KSCHL，如 PR00/PB00；默认 PR00）
+   * 条件类型（字典 logistics_price_type；PB00=采购总价 Gross Price，PR00=基本价格 Base Price，MWST=销项税/增值税，MWRK=不可抵扣进项税，NLXV=购置税）
    */
   priceType: string;
 
   /**
-   * 生效日期
+   * 客户编码（选项 TaktCustomers/options，DictValue=CustomerCode）
    */
-  effectiveStartDate: string;
+  customerCode: string;
 
   /**
-   * 失效日期（空表示长期有效）
+   * 物料编码（选项 TaktMaterialPlants/options，DictValue=MaterialCode）
    */
-  effectiveEndDate?: string;
+  materialCode: string;
 
   /**
-   * 价格状态（字典 sys_normal_disable_status；1=启用 0=禁用）
+   * 有效起始日
    */
-  priceStatus: number;
+  validFrom: string;
 
   /**
-   * 物料价格明细列表（主子表关系，一个客户价格可以有多个物料价格）（子表，级联保存）
+   * 有效截至日
    */
-  items?: SalesPriceItemUpdate[];
+  validTo: string;
+
+  /**
+   * 可变关键字
+   */
+  variableKey?: string;
+
+  /**
+   * 来源销售报价 ID（选项 TaktSalesQuotations/options，DictValue=Id；对应采购侧来源询价）
+   */
+  salesQuotationId?: string;
+
+  /**
+   * 来源销售报价编码（冗余）
+   */
+  salesQuotationCode?: string;
+
+  /**
+   * 定价条件行列表（主子表关系）（子表，级联保存）
+   */
+  items?: SalesPriceItemCreate[];
 
   /**
    * 扩展字段JSON
@@ -242,24 +277,10 @@ export interface SalesPriceUpdate extends SalesPriceCreate {
    */
   salesPriceId: string;
 
-}
-
-
-/**
- * SalesPrice 状态更新 DTO
- * 对应前端 SalesPriceStatus
- * @description 对应后端 TaktSalesPriceStatusDto
- */
-export interface SalesPriceStatus {
   /**
-   * SalesPriceID
+   * 定价条件行列表（主子表关系）（子表，级联保存）
    */
-  salesPriceId: string;
-
-  /**
-   * 价格状态（字典 sys_normal_disable_status；1=启用 0=禁用）
-   */
-  priceStatus: number;
+  items?: any;
 
 }
 
@@ -281,42 +302,52 @@ export interface SalesPriceTemplate {
   companyCode?: string;
 
   /**
-   * 工厂代码（选项 TaktPlants/options，DictValue=PlantCode）
-   */
-  plantCode?: string;
-
-  /**
-   * 销售价格编码（唯一索引）
+   * 定价记录号（唯一索引；长度 20）
    */
   salesPriceCode?: string;
 
   /**
-   * 客户编码（选项 TaktCustomers/options，DictValue=CustomerCode；为空表示通用价格）
-   */
-  customerCode?: string;
-
-  /**
-   * 价格类型（字典 logistics_sales_price_type；SAP 定价条件类型 KSCHL，如 PR00/PB00；默认 PR00）
+   * 条件类型（字典 logistics_price_type；PB00=采购总价 Gross Price，PR00=基本价格 Base Price，MWST=销项税/增值税，MWRK=不可抵扣进项税，NLXV=购置税）
    */
   priceType?: string;
 
   /**
-   * 生效日期
+   * 客户编码（选项 TaktCustomers/options，DictValue=CustomerCode）
    */
-  effectiveStartDate?: string;
+  customerCode?: string;
 
   /**
-   * 失效日期（空表示长期有效）
+   * 物料编码（选项 TaktMaterialPlants/options，DictValue=MaterialCode）
    */
-  effectiveEndDate?: string;
+  materialCode?: string;
 
   /**
-   * 价格状态（字典 sys_normal_disable_status；1=启用 0=禁用）
+   * 有效起始日
    */
-  priceStatus?: number;
+  validFrom?: string;
 
   /**
-   * 物料价格明细列表（主子表关系，一个客户价格可以有多个物料价格）（子表，级联保存）
+   * 有效截至日
+   */
+  validTo?: string;
+
+  /**
+   * 可变关键字
+   */
+  variableKey?: string;
+
+  /**
+   * 来源销售报价 ID（选项 TaktSalesQuotations/options，DictValue=Id；对应采购侧来源询价）
+   */
+  salesQuotationId?: string;
+
+  /**
+   * 来源销售报价编码（冗余）
+   */
+  salesQuotationCode?: string;
+
+  /**
+   * 定价条件行列表（主子表关系）（子表，级联保存）
    */
   items?: SalesPriceItemCreate[];
 
@@ -355,42 +386,52 @@ export interface SalesPriceImport {
   companyDefaultCulture?: string;
 
   /**
-   * 工厂代码（选项 TaktPlants/options，DictValue=PlantCode）
-   */
-  plantCode?: string;
-
-  /**
-   * 销售价格编码（唯一索引）
+   * 定价记录号（唯一索引；长度 20）
    */
   salesPriceCode?: string;
 
   /**
-   * 客户编码（选项 TaktCustomers/options，DictValue=CustomerCode；为空表示通用价格）
-   */
-  customerCode?: string;
-
-  /**
-   * 价格类型（字典 logistics_sales_price_type；SAP 定价条件类型 KSCHL，如 PR00/PB00；默认 PR00）
+   * 条件类型（字典 logistics_price_type；PB00=采购总价 Gross Price，PR00=基本价格 Base Price，MWST=销项税/增值税，MWRK=不可抵扣进项税，NLXV=购置税）
    */
   priceType?: string;
 
   /**
-   * 生效日期
+   * 客户编码（选项 TaktCustomers/options，DictValue=CustomerCode）
    */
-  effectiveStartDate?: string;
+  customerCode?: string;
 
   /**
-   * 失效日期（空表示长期有效）
+   * 物料编码（选项 TaktMaterialPlants/options，DictValue=MaterialCode）
    */
-  effectiveEndDate?: string;
+  materialCode?: string;
 
   /**
-   * 价格状态（字典 sys_normal_disable_status；1=启用 0=禁用）
+   * 有效起始日
    */
-  priceStatus?: number;
+  validFrom?: string;
 
   /**
-   * 物料价格明细列表（主子表关系，一个客户价格可以有多个物料价格）（子表，级联保存）
+   * 有效截至日
+   */
+  validTo?: string;
+
+  /**
+   * 可变关键字
+   */
+  variableKey?: string;
+
+  /**
+   * 来源销售报价 ID（选项 TaktSalesQuotations/options，DictValue=Id；对应采购侧来源询价）
+   */
+  salesQuotationId?: string;
+
+  /**
+   * 来源销售报价编码（冗余）
+   */
+  salesQuotationCode?: string;
+
+  /**
+   * 定价条件行列表（主子表关系）（子表，级联保存）
    */
   items?: SalesPriceItemCreate[];
 
@@ -424,39 +465,49 @@ export interface SalesPriceExport {
   companyCode: string;
 
   /**
-   * 工厂代码（选项 TaktPlants/options，DictValue=PlantCode）
-   */
-  plantCode: string;
-
-  /**
-   * 销售价格编码（唯一索引）
+   * 定价记录号（唯一索引；长度 20）
    */
   salesPriceCode: string;
 
   /**
-   * 客户编码（选项 TaktCustomers/options，DictValue=CustomerCode；为空表示通用价格）
-   */
-  customerCode?: string;
-
-  /**
-   * 价格类型（字典 logistics_sales_price_type；SAP 定价条件类型 KSCHL，如 PR00/PB00；默认 PR00）
+   * 条件类型（字典 logistics_price_type；PB00=采购总价 Gross Price，PR00=基本价格 Base Price，MWST=销项税/增值税，MWRK=不可抵扣进项税，NLXV=购置税）
    */
   priceType: string;
 
   /**
-   * 生效日期
+   * 客户编码（选项 TaktCustomers/options，DictValue=CustomerCode）
    */
-  effectiveStartDate: string;
+  customerCode: string;
 
   /**
-   * 失效日期（空表示长期有效）
+   * 物料编码（选项 TaktMaterialPlants/options，DictValue=MaterialCode）
    */
-  effectiveEndDate?: string;
+  materialCode: string;
 
   /**
-   * 价格状态（字典 sys_normal_disable_status；1=启用 0=禁用）
+   * 有效起始日
    */
-  priceStatus: number;
+  validFrom: string;
+
+  /**
+   * 有效截至日
+   */
+  validTo: string;
+
+  /**
+   * 可变关键字
+   */
+  variableKey?: string;
+
+  /**
+   * 来源销售报价 ID（选项 TaktSalesQuotations/options，DictValue=Id；对应采购侧来源询价）
+   */
+  salesQuotationId?: string;
+
+  /**
+   * 来源销售报价编码（冗余）
+   */
+  salesQuotationCode?: string;
 
   /**
    * 扩展字段JSON

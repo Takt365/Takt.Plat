@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：@/utils/takt-dict-convert
 // 文件名称：takt-dict-convert.ts
-// 功能描述：字典 DictValue↔DictLabel 转换（单选/多选逗号分隔；与后端 TaktDictMultiValueHelper、TaktDictSnapshot 对齐）
+// 功能描述：字典 DictValue↔DictLabel 转换（单选/多选逗号分隔；与后端 TaktDictValueHelper、TaktDictMultiValueHelper 对齐）
 //
 // 版权信息：Copyright (c) 2025 Takt  All rights reserved.
 // 免责声明：此软件使用 MIT License，作者不承担任何使用风险。
@@ -250,6 +250,31 @@ export function normalizeCommaSeparatedDictStorage(
     return joinCommaSeparatedDictParts(labels)
   }
   return joinCommaSeparatedDictParts(sortedValues)
+}
+
+/**
+ * 规范化单选字典落库（输入可为 DictValue 或 DictLabel；含逗号时按多选处理）
+ * @param raw 原始值
+ * @param options 字典项列表
+ * @param storageFormat 目标存储格式：value 或 label
+ * @returns 规范化后的值
+ */
+export function normalizeSingleDictStorage(
+  raw: string | number | null | undefined,
+  options: readonly TaktDictConvertOption[],
+  storageFormat: TaktDictMultiStorageFormat,
+): string {
+  const text = raw == null ? '' : String(raw).trim()
+  if (!text) {
+    return ''
+  }
+  if (text.includes(',')) {
+    return normalizeCommaSeparatedDictStorage(text, options, storageFormat)
+  }
+  if (storageFormat === 'label') {
+    return resolveDictPartToLabel(text, options)
+  }
+  return resolveDictPartToValue(text, options)
 }
 
 /**

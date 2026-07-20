@@ -25,7 +25,7 @@ namespace Takt.Domain.Entities.HumanResource.Personnel;
 public class TaktEmployeeReassignment : TaktApprovalEntityBase
 {
     /// <summary>
-    /// 员工（关联 TaktEmployee.Id，选项 TaktEmployees/options）
+    /// 员工（选项 TaktEmployees/options，DictValue=Id）
     /// </summary>
     [SugarColumn(ColumnName = "employee_id", ColumnDescription = "员工ID", ColumnDataType = "bigint", IsNullable = false)]
     public long EmployeeId { get; set; }
@@ -45,7 +45,7 @@ public class TaktEmployeeReassignment : TaktApprovalEntityBase
     [SugarColumn(ColumnName = "from_dept_name", ColumnDescription = "调出部门名称", ColumnDataType = "nvarchar", Length = 100, IsNullable = false)]
     public string FromDeptName { get; set; } = string.Empty;
     /// <summary>
-    /// 调出岗位（关联 TaktPost.Id，选项 TaktPosts/options）
+    /// 调出岗位（选项 TaktPosts/options，DictValue=Id）
     /// </summary>
     [SugarColumn(ColumnName = "from_post_id", ColumnDescription = "调出岗位ID", ColumnDataType = "bigint", IsNullable = true)]
     public long? FromPostId { get; set; }
@@ -65,7 +65,7 @@ public class TaktEmployeeReassignment : TaktApprovalEntityBase
     [SugarColumn(ColumnName = "to_dept_name", ColumnDescription = "调入部门名称", ColumnDataType = "nvarchar", Length = 100, IsNullable = false)]
     public string ToDeptName { get; set; } = string.Empty;
     /// <summary>
-    /// 调入岗位（关联 TaktPost.Id，选项 TaktPosts/options）
+    /// 调入岗位（选项 TaktPosts/options，DictValue=Id）
     /// </summary>
     [SugarColumn(ColumnName = "to_post_id", ColumnDescription = "调入岗位ID", ColumnDataType = "bigint", IsNullable = true)]
     public long? ToPostId { get; set; }

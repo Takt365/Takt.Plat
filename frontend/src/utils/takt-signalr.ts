@@ -35,6 +35,7 @@ import type {
   QuartzTaskChangedEvent,
   QuartzTaskExecutedEvent,
 } from '@/types/foundation/quartz-signal-r';
+import type { BomMaterialCostItemRecalculateCompletedEvent } from '@/types/logistics/manufacturing/bom/material-cost-item-signal-r';
 import type {
   EcChangeClosedEvent,
   EcChangeNotificationEvent,
@@ -245,12 +246,41 @@ export function normalizeQuartzTaskExecuted(raw: unknown): QuartzTaskExecutedEve
     taskCode: readSignalRPayloadString(payload, 'taskCode', 'TaskCode'),
     taskName: readSignalRPayloadString(payload, 'taskName', 'TaskName'),
     executeStatus: readSignalRPayloadNumber(payload, 'executeStatus', 'ExecuteStatus', 0),
+    executeMessage: readSignalRPayloadString(payload, 'executeMessage', 'ExecuteMessage') || undefined,
+    errorInfo: readSignalRPayloadString(payload, 'errorInfo', 'ErrorInfo') || undefined,
     executeDuration: readSignalRPayloadNumber(payload, 'executeDuration', 'ExecuteDuration', 0),
     executeCount: readSignalRPayloadNumber(payload, 'executeCount', 'ExecuteCount', 0),
     lastRunAt: readSignalRPayloadString(payload, 'lastRunAt', 'LastRunAt') || undefined,
     nextRunAt: readSignalRPayloadString(payload, 'nextRunAt', 'NextRunAt') || undefined,
     triggerUserName: readSignalRPayloadString(payload, 'triggerUserName', 'TriggerUserName') || undefined,
     executedAt: readSignalRPayloadString(payload, 'executedAt', 'ExecutedAt'),
+  };
+}
+
+/**
+ * 规范化 BOM 物料成本机种月平均重算完成载荷
+ * @param raw Hub 原始载荷
+ * @returns 重算完成事件
+ */
+export function normalizeBomMaterialCostItemRecalculateCompleted(raw: unknown): BomMaterialCostItemRecalculateCompletedEvent {
+  const payload = raw != null && typeof raw === 'object'
+    ? raw as Record<string, unknown>
+    : {};
+  return {
+    tenantCode: readSignalRPayloadString(payload, 'tenantCode', 'TenantCode'),
+    companyCode: readSignalRPayloadString(payload, 'companyCode', 'CompanyCode'),
+    triggerUserName: readSignalRPayloadString(payload, 'triggerUserName', 'TriggerUserName'),
+    processedMonth: readSignalRPayloadString(payload, 'processedMonth', 'ProcessedMonth'),
+    forceRecalculate: Boolean(payload.forceRecalculate ?? payload.ForceRecalculate),
+    executeStatus: readSignalRPayloadNumber(payload, 'executeStatus', 'ExecuteStatus', 0),
+    executeDuration: readSignalRPayloadNumber(payload, 'executeDuration', 'ExecuteDuration', 0),
+    errorMessage: readSignalRPayloadString(payload, 'errorMessage', 'ErrorMessage') || undefined,
+    scannedRowCount: readSignalRPayloadNumber(payload, 'scannedRowCount', 'ScannedRowCount', 0),
+    refreshedGroupCount: readSignalRPayloadNumber(payload, 'refreshedGroupCount', 'RefreshedGroupCount', 0),
+    skippedGroupCount: readSignalRPayloadNumber(payload, 'skippedGroupCount', 'SkippedGroupCount', 0),
+    resetGroupCount: readSignalRPayloadNumber(payload, 'resetGroupCount', 'ResetGroupCount', 0),
+    processedMonthCount: readSignalRPayloadNumber(payload, 'processedMonthCount', 'ProcessedMonthCount', 0),
+    completedAt: readSignalRPayloadString(payload, 'completedAt', 'CompletedAt'),
   };
 }
 
@@ -462,6 +492,11 @@ export interface TaktSignalRCallbacks {
    * 定时任务执行完成
    */
   onQuartzTaskExecuted?: (event: QuartzTaskExecutedEvent) => void;
+
+  /**
+   * BOM 物料成本机种月平均重算完成
+   */
+  onBomMaterialCostItemRecalculateCompleted?: (event: BomMaterialCostItemRecalculateCompletedEvent) => void;
 
   /**
    * 工程变更通知推送
@@ -714,6 +749,10 @@ export class TaktSignalRManager {
 
     this.notificationHub.on('QuartzTaskExecuted', (payload: unknown) => {
       callbacks?.onQuartzTaskExecuted?.(normalizeQuartzTaskExecuted(payload));
+    });
+
+    this.notificationHub.on('BomMaterialCostItemRecalculateCompleted', (payload: unknown) => {
+      callbacks?.onBomMaterialCostItemRecalculateCompleted?.(normalizeBomMaterialCostItemRecalculateCompleted(payload));
     });
   }
 

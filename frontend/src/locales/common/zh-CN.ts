@@ -115,5 +115,21 @@ export default {
       profile: "个人中心",
       checkall: "全选",
     },
+    icon: {
+      picker: {
+        title: "选择图标",
+        placeholder: "请选择图标",
+        search: "搜索图标名称（如 grid、user）",
+        selected: "已选：",
+        clear: "清空选择",
+        empty: "无匹配图标",
+        total: "共 {total} 个",
+        variant: {
+          line: "线性",
+          fill: "填充",
+          all: "全部",
+        },
+      },
+    },
   },
 };

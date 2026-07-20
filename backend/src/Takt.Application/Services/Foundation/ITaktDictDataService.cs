@@ -116,4 +116,11 @@ public interface ITaktDictDataService
     /// <returns>租户级预加载快照</returns>
     Task<TaktDictSnapshot> CreateDictSnapshotAsync(params string[] dictTypeCodes);
 
+    /// <summary>
+    /// 按字典类型编码构建落库上下文（快照 + 多选排序映射）
+    /// </summary>
+    /// <param name="dictTypeCodes">字典类型编码</param>
+    /// <returns>落库上下文</returns>
+    Task<TaktDictStorageContext> CreateDictStorageContextAsync(params string[] dictTypeCodes);
+
 }

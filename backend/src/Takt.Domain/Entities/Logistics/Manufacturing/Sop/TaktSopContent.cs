@@ -26,14 +26,14 @@ namespace Takt.Domain.Entities.Logistics.Manufacturing.Sop;
 public class TaktSopContent : TaktCompanyEntityBase
 {
     /// <summary>
-    /// 版本 ID（关联 TaktSopRevision.Id，选项 TaktSopRevisions/options）
+    /// 版本 ID（选项 TaktSopRevisions/options，DictValue=Id）
     /// </summary>
     [SugarColumn(ColumnName = "revision_id", ColumnDescription = "版本ID", ColumnDataType = "bigint", IsNullable = false)]
     [JsonConverter(typeof(ValueToStringConverter))]
     public long RevisionId { get; set; }
 
     /// <summary>
-    /// SOP 主档 ID（关联 TaktSopDoc.Id，选项 TaktSopDocs/options）
+    /// SOP 主档 ID（选项 TaktSopDocs/options，DictValue=Id）
     /// </summary>
     [SugarColumn(ColumnName = "sop_id", ColumnDescription = "SOP主档ID", ColumnDataType = "bigint", IsNullable = false)]
     [JsonConverter(typeof(ValueToStringConverter))]

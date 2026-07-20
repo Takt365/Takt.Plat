@@ -10,7 +10,7 @@
 
 using Takt.Application.Dtos.Logistics.Manufacturing.Output;
 using Takt.Domain.Entities.Logistics.Manufacturing.Output;
-using Takt.Domain.Entities.Logistics.Manufacturing.Planning;
+using Takt.Domain.Entities.Logistics.Manufacturing.Aps;
 using Takt.Domain.Repositories;
 using Takt.Shared.Exceptions;
 

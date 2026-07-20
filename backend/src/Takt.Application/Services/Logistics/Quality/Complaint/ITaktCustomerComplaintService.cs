@@ -109,4 +109,23 @@ public interface ITaktCustomerComplaintService
     /// <returns>Excel 文件</returns>
     Task<(string fileName, byte[] fileContent)> ExportCustomerComplaintAsync(TaktCustomerComplaintQueryDto? query = null, string? sheetName = null, string? fileName = null);
 
+    /// <summary>
+    /// 顾客投诉月度推移转置分析
+    /// </summary>
+    /// <param name="queryDto">查询 DTO</param>
+    /// <returns>分析结果</returns>
+    Task<TaktCustomerComplaintMonthlyTrendResultDto> GetCustomerComplaintMonthlyTrendAnalysisAsync(
+        TaktCustomerComplaintMonthlyTrendQueryDto queryDto);
+
+    /// <summary>
+    /// 导出顾客投诉月度推移转置分析
+    /// </summary>
+    /// <param name="query">查询 DTO</param>
+    /// <param name="sheetName">工作表名</param>
+    /// <param name="fileName">文件名</param>
+    /// <returns>Excel 文件</returns>
+    Task<(string fileName, byte[] fileContent)> ExportCustomerComplaintMonthlyTrendAnalysisAsync(
+        TaktCustomerComplaintMonthlyTrendQueryDto query,
+        string? sheetName = null,
+        string? fileName = null);
 }

@@ -6,6 +6,7 @@
 // biome-ignore lint: disable
 export {}
 declare global {
+  const BOM_MATERIAL_COST_ITEM_TABLE_NAME: typeof import('./composables/use-bom-material-cost-item-recalculate-signalr').BOM_MATERIAL_COST_ITEM_TABLE_NAME
   const EC_NOTIFICATION_TABLE_NAME: typeof import('./composables/use-ec-change-signalr-refresh').EC_NOTIFICATION_TABLE_NAME
   const EffectScope: typeof import('vue').EffectScope
   const Modal: typeof import('ant-design-vue').Modal
@@ -24,6 +25,7 @@ declare global {
   const defineComponent: typeof import('vue').defineComponent
   const defineStore: typeof import('pinia').defineStore
   const effectScope: typeof import('vue').effectScope
+  const formatBomMaterialCostItemRecalculateDuration: typeof import('./composables/use-bom-material-cost-item-recalculate-signalr').formatBomMaterialCostItemRecalculateDuration
   const getActivePinia: typeof import('pinia').getActivePinia
   const getCurrentInstance: typeof import('vue').getCurrentInstance
   const getCurrentScope: typeof import('vue').getCurrentScope
@@ -70,6 +72,7 @@ declare global {
   const readonly: typeof import('vue').readonly
   const ref: typeof import('vue').ref
   const resolveComponent: typeof import('vue').resolveComponent
+  const resolveCurrentCompanyRelatedPlantCode: typeof import('./composables/use-company-related-plant').resolveCurrentCompanyRelatedPlantCode
   const setActivePinia: typeof import('pinia').setActivePinia
   const setMapStoreSuffix: typeof import('pinia').setMapStoreSuffix
   const shallowReactive: typeof import('vue').shallowReactive
@@ -83,7 +86,9 @@ declare global {
   const triggerRef: typeof import('vue').triggerRef
   const unref: typeof import('vue').unref
   const useAttrs: typeof import('vue').useAttrs
+  const useBomMaterialCostItemRecalculateSignalR: typeof import('./composables/use-bom-material-cost-item-recalculate-signalr').useBomMaterialCostItemRecalculateSignalR
   const useBusinessScopeRouteKey: typeof import('./composables/use-business-scope-route-key').useBusinessScopeRouteKey
+  const useCompanyRelatedPlant: typeof import('./composables/use-company-related-plant').useCompanyRelatedPlant
   const useCssModule: typeof import('vue').useCssModule
   const useCssVars: typeof import('vue').useCssVars
   const useDatabaseInfoCatalog: typeof import('./composables/use-database-info-catalog').useDatabaseInfoCatalog
@@ -139,6 +144,7 @@ import { UnwrapRef } from 'vue'
 declare module 'vue' {
   interface GlobalComponents {}
   interface ComponentCustomProperties {
+    readonly BOM_MATERIAL_COST_ITEM_TABLE_NAME: UnwrapRef<typeof import('./composables/use-bom-material-cost-item-recalculate-signalr')['BOM_MATERIAL_COST_ITEM_TABLE_NAME']>
     readonly EC_NOTIFICATION_TABLE_NAME: UnwrapRef<typeof import('./composables/use-ec-change-signalr-refresh')['EC_NOTIFICATION_TABLE_NAME']>
     readonly EffectScope: UnwrapRef<typeof import('vue')['EffectScope']>
     readonly Modal: UnwrapRef<typeof import('ant-design-vue')['Modal']>
@@ -157,6 +163,7 @@ declare module 'vue' {
     readonly defineComponent: UnwrapRef<typeof import('vue')['defineComponent']>
     readonly defineStore: UnwrapRef<typeof import('pinia')['defineStore']>
     readonly effectScope: UnwrapRef<typeof import('vue')['effectScope']>
+    readonly formatBomMaterialCostItemRecalculateDuration: UnwrapRef<typeof import('./composables/use-bom-material-cost-item-recalculate-signalr')['formatBomMaterialCostItemRecalculateDuration']>
     readonly getActivePinia: UnwrapRef<typeof import('pinia')['getActivePinia']>
     readonly getCurrentInstance: UnwrapRef<typeof import('vue')['getCurrentInstance']>
     readonly getCurrentScope: UnwrapRef<typeof import('vue')['getCurrentScope']>
@@ -203,6 +210,7 @@ declare module 'vue' {
     readonly readonly: UnwrapRef<typeof import('vue')['readonly']>
     readonly ref: UnwrapRef<typeof import('vue')['ref']>
     readonly resolveComponent: UnwrapRef<typeof import('vue')['resolveComponent']>
+    readonly resolveCurrentCompanyRelatedPlantCode: UnwrapRef<typeof import('./composables/use-company-related-plant')['resolveCurrentCompanyRelatedPlantCode']>
     readonly setActivePinia: UnwrapRef<typeof import('pinia')['setActivePinia']>
     readonly setMapStoreSuffix: UnwrapRef<typeof import('pinia')['setMapStoreSuffix']>
     readonly shallowReactive: UnwrapRef<typeof import('vue')['shallowReactive']>
@@ -216,7 +224,9 @@ declare module 'vue' {
     readonly triggerRef: UnwrapRef<typeof import('vue')['triggerRef']>
     readonly unref: UnwrapRef<typeof import('vue')['unref']>
     readonly useAttrs: UnwrapRef<typeof import('vue')['useAttrs']>
+    readonly useBomMaterialCostItemRecalculateSignalR: UnwrapRef<typeof import('./composables/use-bom-material-cost-item-recalculate-signalr')['useBomMaterialCostItemRecalculateSignalR']>
     readonly useBusinessScopeRouteKey: UnwrapRef<typeof import('./composables/use-business-scope-route-key')['useBusinessScopeRouteKey']>
+    readonly useCompanyRelatedPlant: UnwrapRef<typeof import('./composables/use-company-related-plant')['useCompanyRelatedPlant']>
     readonly useCssModule: UnwrapRef<typeof import('vue')['useCssModule']>
     readonly useCssVars: UnwrapRef<typeof import('vue')['useCssVars']>
     readonly useDatabaseInfoCatalog: UnwrapRef<typeof import('./composables/use-database-info-catalog')['useDatabaseInfoCatalog']>

@@ -14,15 +14,15 @@ using System.Linq.Expressions;
 using Mapster;
 using SqlSugar;
 using Takt.Application.Dtos.Foundation;
+using Takt.Application.Dtos.Statistics.Logging;
 using Takt.Domain.Entities.Foundation;
+using Takt.Domain.Entities.Statistics.Logging;
 using Takt.Domain.Interfaces;
 using Takt.Domain.Repositories;
 using Takt.Shared.Exceptions;
 using Takt.Shared.Helpers;
 using Takt.Shared.Models;
 using Takt.Shared.Options;
-using Takt.Application.Dtos.Statistics.Logging;
-using Takt.Domain.Entities.Statistics.Logging;
 
 namespace Takt.Application.Services.Foundation;
 
@@ -31,9 +31,13 @@ namespace Takt.Application.Services.Foundation;
 /// </summary>
 public class TaktQuartzTaskService : TaktServiceBase, ITaktQuartzTaskService
 {
+    private const int TaskStatusNormal = 0;
+    private const int TaskStatusPaused = 1;
+
     private readonly ITaktCompanyRepository<TaktQuartzTask> _quartzTaskRepository;
     private readonly ITaktCompanyRepository<TaktQuartzLog> _quartzLogRepository;
     private readonly ITaktUniqueValidator _uniqueValidator;
+    private readonly ITaktQuartzSchedulerManager _quartzSchedulerManager;
 
     /// <summary>
     /// 构造函数
@@ -41,12 +45,14 @@ public class TaktQuartzTaskService : TaktServiceBase, ITaktQuartzTaskService
     /// <param name="quartzTaskRepository">定时任务仓储</param>
     /// <param name="quartzLogRepository">QuartzLog仓储</param>
     /// <param name="uniqueValidator">唯一性验证器</param>
+    /// <param name="quartzSchedulerManager">Quartz 调度管理器</param>
     /// <param name="userContext">用户上下文</param>
     /// <param name="localizationService">本地化服务</param>
     public TaktQuartzTaskService(
         ITaktCompanyRepository<TaktQuartzTask> quartzTaskRepository,
         ITaktCompanyRepository<TaktQuartzLog> quartzLogRepository,
         ITaktUniqueValidator uniqueValidator,
+        ITaktQuartzSchedulerManager quartzSchedulerManager,
         ITaktUserContext? userContext = null,
         ITaktLocalizationService? localizationService = null)
         : base(userContext, localizationService)
@@ -54,6 +60,7 @@ public class TaktQuartzTaskService : TaktServiceBase, ITaktQuartzTaskService
         _quartzTaskRepository = quartzTaskRepository;
         _quartzLogRepository = quartzLogRepository;
         _uniqueValidator = uniqueValidator;
+        _quartzSchedulerManager = quartzSchedulerManager;
     }
 
     /// <summary>
@@ -125,7 +132,8 @@ public class TaktQuartzTaskService : TaktServiceBase, ITaktQuartzTaskService
             throw new TaktBusinessException("定时任务的TaskCode已存在");
         }
         entity = await _quartzTaskRepository.CreateAsync(entity);
-                await SaveQuartzTaskChildrenAsync(entity, dto);
+        await SaveQuartzTaskChildrenAsync(entity, dto);
+        await _quartzSchedulerManager.ScheduleQuartzTaskAsync(entity, CurrentUserName);
         return await GetQuartzTaskByIdAsync(entity.Id) ?? entity.Adapt<TaktQuartzTaskDto>();
     }
 
@@ -152,7 +160,8 @@ public class TaktQuartzTaskService : TaktServiceBase, ITaktQuartzTaskService
             throw new TaktBusinessException("定时任务的TaskCode已存在");
         }
         await _quartzTaskRepository.UpdateAsync(entity);
-                await SaveQuartzTaskChildrenAsync(entity, dto);
+        await SaveQuartzTaskChildrenAsync(entity, dto);
+        await _quartzSchedulerManager.ScheduleQuartzTaskAsync(entity, CurrentUserName);
         return await GetQuartzTaskByIdAsync(id) ?? throw new TaktBusinessException("定时任务不存在");
     }
 
@@ -168,6 +177,7 @@ public class TaktQuartzTaskService : TaktServiceBase, ITaktQuartzTaskService
         {
             throw new TaktBusinessException("定时任务不存在或已删除");
         }
+        await _quartzSchedulerManager.RemoveQuartzTaskAsync(entity);
         await _quartzLogRepository.DeleteAsync(x => x.QuartzTaskId == entity.Id);
         var deleted = await _quartzTaskRepository.DeleteAsync(id);
         if (!deleted)
@@ -201,14 +211,75 @@ public class TaktQuartzTaskService : TaktServiceBase, ITaktQuartzTaskService
     /// <returns>DTO</returns>
     public async Task<TaktQuartzTaskDto> UpdateQuartzTaskStatusAsync(TaktQuartzTaskStatusDto dto)
     {
-        var entity = await _quartzTaskRepository.GetByIdAsync(dto.QuartzTaskId);
-        if (entity == null)
+        var entity = await GetOwnedQuartzTaskOrThrowAsync(dto.QuartzTaskId);
+        entity.TaskStatus = dto.TaskStatus;
+        await _quartzTaskRepository.UpdateAsync(entity);
+        if (entity.TaskStatus == TaskStatusPaused)
+        {
+            await _quartzSchedulerManager.PauseQuartzTaskAsync(entity);
+        }
+        else
+        {
+            await _quartzSchedulerManager.StartQuartzTaskAsync(entity);
+        }
+        return await GetQuartzTaskByIdAsync(dto.QuartzTaskId) ?? throw new TaktBusinessException("定时任务不存在");
+    }
+
+    /// <summary>
+    /// 启动（恢复）定时任务调度
+    /// </summary>
+    /// <param name="id">定时任务ID</param>
+    /// <returns>DTO</returns>
+    public async Task<TaktQuartzTaskDto> StartQuartzTaskAsync(long id)
+    {
+        var entity = await GetOwnedQuartzTaskOrThrowAsync(id);
+        entity.TaskStatus = TaskStatusNormal;
+        await _quartzTaskRepository.UpdateAsync(entity);
+        await _quartzSchedulerManager.StartQuartzTaskAsync(entity);
+        return await GetQuartzTaskByIdAsync(id) ?? throw new TaktBusinessException("定时任务不存在");
+    }
+
+    /// <summary>
+    /// 暂停定时任务调度
+    /// </summary>
+    /// <param name="id">定时任务ID</param>
+    /// <returns>DTO</returns>
+    public async Task<TaktQuartzTaskDto> PauseQuartzTaskAsync(long id)
+    {
+        var entity = await GetOwnedQuartzTaskOrThrowAsync(id);
+        entity.TaskStatus = TaskStatusPaused;
+        await _quartzTaskRepository.UpdateAsync(entity);
+        await _quartzSchedulerManager.PauseQuartzTaskAsync(entity);
+        return await GetQuartzTaskByIdAsync(id) ?? throw new TaktBusinessException("定时任务不存在");
+    }
+
+    /// <summary>
+    /// 立即执行一次定时任务（不改变启动/暂停调度状态）
+    /// </summary>
+    /// <param name="id">定时任务ID</param>
+    /// <returns>DTO</returns>
+    public async Task<TaktQuartzTaskDto> ExecuteQuartzTaskNowAsync(long id)
+    {
+        var entity = await GetOwnedQuartzTaskOrThrowAsync(id);
+        await _quartzSchedulerManager.RunQuartzTaskNowAsync(entity, CurrentUserName);
+        return await GetQuartzTaskByIdAsync(id) ?? throw new TaktBusinessException("定时任务不存在");
+    }
+
+    /// <summary>
+    /// 获取当前租户公司下的任务，不存在则抛业务异常
+    /// </summary>
+    /// <param name="id">定时任务ID</param>
+    /// <returns>实体</returns>
+    private async Task<TaktQuartzTask> GetOwnedQuartzTaskOrThrowAsync(long id)
+    {
+        var entity = await _quartzTaskRepository.GetByIdAsync(id);
+        if (entity == null
+            || entity.TenantCode != CurrentTenantCode
+            || entity.CompanyCode != CurrentCompanyCode)
         {
             throw new TaktBusinessException("定时任务不存在");
         }
-        entity.TaskStatus = dto.TaskStatus;
-        await _quartzTaskRepository.UpdateAsync(entity);
-        return await GetQuartzTaskByIdAsync(dto.QuartzTaskId) ?? throw new TaktBusinessException("定时任务不存在");
+        return entity;
     }
 
     /// <summary>

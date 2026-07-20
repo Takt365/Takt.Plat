@@ -26,7 +26,7 @@ namespace Takt.Domain.Entities.Logistics.Serial;
 public class TaktSerialOutboundItem : TaktCompanyEntityBase
 {
     /// <summary>
-    /// 出库主表 ID（关联 TaktSerialOutbound.Id，选项 TaktSerialOutbounds/options）
+    /// 出库主表 ID（选项 TaktSerialOutbounds/options，DictValue=Id）
     /// </summary>
     [SugarColumn(ColumnName = "outbound_id", ColumnDescription = "出库ID", ColumnDataType = "bigint", IsNullable = false)]
     [JsonConverter(typeof(ValueToStringConverter))]
@@ -47,7 +47,7 @@ public class TaktSerialOutboundItem : TaktCompanyEntityBase
     [SugarColumn(ColumnName = "outbound_serial_no", ColumnDescription = "出库序列号", ColumnDataType = "nvarchar", Length = 100, IsNullable = false)]
     public string OutboundSerialNo { get; set; } = string.Empty;
     /// <summary>
-    /// 关联入库主表 ID（关联 TaktSerialInbound.Id，选项 TaktSerialInbounds/options）
+    /// 关联入库主表 ID（选项 TaktSerialInbounds/options，DictValue=Id）
     /// </summary>
     [SugarColumn(ColumnName = "reference_inbound_id", ColumnDescription = "关联入库ID", ColumnDataType = "bigint", IsNullable = false, DefaultValue = "0")]
     [JsonConverter(typeof(ValueToStringConverter))]

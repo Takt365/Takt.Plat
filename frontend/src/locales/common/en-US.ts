@@ -115,5 +115,21 @@ export default {
       profile: "Profile",
       checkall: "Select All",
     },
+    icon: {
+      picker: {
+        title: "Select Icon",
+        placeholder: "Select an icon",
+        search: "Search icon name (e.g. grid, user)",
+        selected: "Selected:",
+        clear: "Clear",
+        empty: "No matching icons",
+        total: "{total} icons",
+        variant: {
+          line: "Line",
+          fill: "Fill",
+          all: "All",
+        },
+      },
+    },
   },
 };

@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Infrastructure.Data.Seeds.I18nSeedData.Logistics.Manufacturing.Bom
 // 文件名称：TaktRoutingI18nSeedData.cs
-// 创建时间：2026-07-09
+// 创建时间：2026-07-20
 // 创建人：Takt365(Auto Generated)
 // 功能描述：TaktRouting 实体字段国际化种子（无对应 frontend locales；TranslationText 取自 ColumnDescription，ContextNote 取自属性 XML summary）
 // 
@@ -100,13 +100,13 @@ public class TaktRoutingI18nSeedData : ITaktSeedDataCoordinator
             new TranslationSeedItem("entity.routing.plantcode", "zh-HK", "工厂代码_hk", "工厂代码（选项 TaktPlants/options，DictValue=PlantCode）"),
 
             // entity.routing.workcenter
-            new TranslationSeedItem("entity.routing.workcenter", "en-US", "工作中心_us", "工作中心（选项 TaktWorkCenters/options，按工厂 ExtValue 过滤）"),
+            new TranslationSeedItem("entity.routing.workcenter", "en-US", "工作中心_us", "工作中心（选项 TaktWorkCenters/options，DictValue=WorkCenterCode，ExtValue=PlantCode）"),
             // entity.routing.workcenter
-            new TranslationSeedItem("entity.routing.workcenter", "ja-JP", "工作中心_jp", "工作中心（选项 TaktWorkCenters/options，按工厂 ExtValue 过滤）"),
+            new TranslationSeedItem("entity.routing.workcenter", "ja-JP", "工作中心_jp", "工作中心（选项 TaktWorkCenters/options，DictValue=WorkCenterCode，ExtValue=PlantCode）"),
             // entity.routing.workcenter
-            new TranslationSeedItem("entity.routing.workcenter", "zh-CN", "工作中心", "工作中心（选项 TaktWorkCenters/options，按工厂 ExtValue 过滤）"),
+            new TranslationSeedItem("entity.routing.workcenter", "zh-CN", "工作中心", "工作中心（选项 TaktWorkCenters/options，DictValue=WorkCenterCode，ExtValue=PlantCode）"),
             // entity.routing.workcenter
-            new TranslationSeedItem("entity.routing.workcenter", "zh-HK", "工作中心_hk", "工作中心（选项 TaktWorkCenters/options，按工厂 ExtValue 过滤）"),
+            new TranslationSeedItem("entity.routing.workcenter", "zh-HK", "工作中心_hk", "工作中心（选项 TaktWorkCenters/options，DictValue=WorkCenterCode，ExtValue=PlantCode）"),
 
             // entity.routing.code
             new TranslationSeedItem("entity.routing.code", "en-US", "工艺路线编码_us", "工艺路线编码"),
@@ -136,13 +136,13 @@ public class TaktRoutingI18nSeedData : ITaktSeedDataCoordinator
             new TranslationSeedItem("entity.routing.purpose", "zh-HK", "用途_hk", "用途（字典 logistics_routing_purpose：1=生产，2=工程/设计，3=万能，4=工厂维护）"),
 
             // entity.routing.materialcode
-            new TranslationSeedItem("entity.routing.materialcode", "en-US", "物料编码_us", "适用物料编码（选项 TaktMaterials/options）"),
+            new TranslationSeedItem("entity.routing.materialcode", "en-US", "物料编码_us", "适用物料编码（选项 TaktMaterialPlants/options，DictValue=MaterialCode，ExtValue=PlantCode）"),
             // entity.routing.materialcode
-            new TranslationSeedItem("entity.routing.materialcode", "ja-JP", "物料编码_jp", "适用物料编码（选项 TaktMaterials/options）"),
+            new TranslationSeedItem("entity.routing.materialcode", "ja-JP", "物料编码_jp", "适用物料编码（选项 TaktMaterialPlants/options，DictValue=MaterialCode，ExtValue=PlantCode）"),
             // entity.routing.materialcode
-            new TranslationSeedItem("entity.routing.materialcode", "zh-CN", "物料编码", "适用物料编码（选项 TaktMaterials/options）"),
+            new TranslationSeedItem("entity.routing.materialcode", "zh-CN", "物料编码", "适用物料编码（选项 TaktMaterialPlants/options，DictValue=MaterialCode，ExtValue=PlantCode）"),
             // entity.routing.materialcode
-            new TranslationSeedItem("entity.routing.materialcode", "zh-HK", "物料编码_hk", "适用物料编码（选项 TaktMaterials/options）"),
+            new TranslationSeedItem("entity.routing.materialcode", "zh-HK", "物料编码_hk", "适用物料编码（选项 TaktMaterialPlants/options，DictValue=MaterialCode，ExtValue=PlantCode）"),
 
             // entity.routing.version
             new TranslationSeedItem("entity.routing.version", "en-US", "版本号_us", "版本号"),

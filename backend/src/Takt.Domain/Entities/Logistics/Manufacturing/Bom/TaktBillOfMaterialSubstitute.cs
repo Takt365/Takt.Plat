@@ -60,7 +60,7 @@ public class TaktBillOfMaterialSubstitute : TaktCompanyEntityBase
     public int LineNumber { get; set; } = 10;
 
     /// <summary>
-    /// 替代物料ID（关联工厂物料 TaktMaterialPlant.Id，选项 TaktMaterialPlants/options）
+    /// 替代物料ID（选项 TaktMaterialPlants/options，DictValue=Id，ExtValue=PlantCode）
     /// </summary>
     [SugarColumn(ColumnName = "substitute_material_id", ColumnDescription = "替代物料ID", ColumnDataType = "bigint", IsNullable = false)]
     [JsonConverter(typeof(ValueToStringConverter))]

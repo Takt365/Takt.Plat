@@ -67,7 +67,7 @@ export const useSettingStore = defineStore('setting', () => {
   }
 
   /**
-   * 标记用户已手动选择主题外观（明暗/主色）；布局等其它偏好不受影响
+   * 标记用户已手动选择主题外观（明暗/主色）；布局等其他偏好不受影响
    */
   function markAppearanceUserOverride(): void {
     if (!setting.value.appearanceUserOverride) {

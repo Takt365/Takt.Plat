@@ -16,6 +16,7 @@ using SqlSugar;
 using Takt.Application.Dtos.Foundation;
 using Takt.Domain.Entities.Foundation;
 using Takt.Domain.Entities.Identity;
+using Takt.Domain.Entities.Statistics.Logging;
 using Takt.Domain.Interfaces;
 using Takt.Domain.Repositories;
 using Takt.Shared.Constants;
@@ -412,6 +413,70 @@ public class TaktMessageService : TaktServiceBase, ITaktMessageService
         entity = await _messageRepository.CreateAsync(entity);
         var push = new TaktSignalRPrivateMessagePush
         {
+            CompanyCode = companyCode,
+            MessageId = entity.Id,
+            FromUserName = entity.FromUserName,
+            FromUserId = entity.FromUserId,
+            ToUserName = entity.ToUserName,
+            ToUserId = entity.ToUserId,
+            MessageTitle = entity.MessageTitle,
+            MessageContent = entity.MessageContent,
+            Attachments = entity.MessageAttachments,
+            MessageType = entity.MessageType,
+            MessageGroup = entity.MessageGroup,
+            SendTime = entity.SendTime,
+            ReadTime = entity.ReadTime,
+            ReadStatus = entity.ReadStatus,
+        };
+        await _signalRDispatchService.PushPrivateMessageAsync(push);
+    }
+
+    /// <inheritdoc />
+    public async Task CreateAndSendQuartzTaskExecutedMessageAsync(
+        TaktQuartzTask task,
+        TaktQuartzLog log,
+        string? triggerUserName)
+    {
+        ArgumentNullException.ThrowIfNull(task);
+        ArgumentNullException.ThrowIfNull(log);
+        var tenantCode = task.TenantCode?.Trim() ?? string.Empty;
+        var companyCode = task.CompanyCode?.Trim() ?? string.Empty;
+        if (string.IsNullOrWhiteSpace(tenantCode) || string.IsNullOrWhiteSpace(companyCode))
+        {
+            throw new TaktBusinessException("Quartz 执行消息缺少租户/公司信息");
+        }
+
+        var (fromUserId, fromUserName) = await ResolveQuartzMessageExecutorAsync(tenantCode, triggerUserName);
+        var (toUserId, toUserName) = await ResolveQuartzMessageRecipientAsync(
+            tenantCode,
+            triggerUserName,
+            task.CreatedBy);
+        var content = BuildQuartzExecutedMessageContent(task, log, fromUserName, toUserName);
+        var entity = new TaktMessage
+        {
+            TenantCode = tenantCode,
+            CompanyCode = companyCode,
+            FromUserId = fromUserId,
+            FromUserName = fromUserName,
+            ToUserId = toUserId,
+            ToUserName = toUserName,
+            MessageTitle = BuildAutoMessageTitle(
+                TaktQuartzConstants.ExecutedMessageType,
+                TaktQuartzConstants.ExecutedMessageGroup,
+                content),
+            MessageContent = content,
+            MessageType = TaktQuartzConstants.ExecutedMessageType,
+            MessageGroup = TaktQuartzConstants.ExecutedMessageGroup,
+            SendTime = DateTime.Now,
+            IsCc = 0,
+            ReadStatus = 0,
+            MessageExtData = BuildQuartzExecutedMessageExtData(task, log, fromUserName, toUserName),
+            CreatedBy = fromUserId > 0 ? fromUserId : TaktConstants.SystemAuditUser.Id,
+        };
+        entity = await _messageRepository.CreateAsync(entity);
+        var push = new TaktSignalRPrivateMessagePush
+        {
+            TenantCode = tenantCode,
             CompanyCode = companyCode,
             MessageId = entity.Id,
             FromUserName = entity.FromUserName,
@@ -1099,6 +1164,155 @@ public class TaktMessageService : TaktServiceBase, ITaktMessageService
         }
 
         return trimmed;
+    }
+
+    /// <summary>
+    /// 解析 Quartz 执行人（From）：手动触发用户优先，否则系统 admin
+    /// </summary>
+    /// <param name="tenantCode">租户编码</param>
+    /// <param name="triggerUserName">触发用户名</param>
+    /// <returns>执行人 ID 与登录名</returns>
+    private async Task<(long UserId, string UserName)> ResolveQuartzMessageExecutorAsync(
+        string tenantCode,
+        string? triggerUserName)
+    {
+        var normalized = NormalizeMessageUserNameLabel(triggerUserName);
+        if (!string.IsNullOrWhiteSpace(normalized))
+        {
+            var byName = await _userRepository.FirstAsync(user =>
+                user.TenantCode == tenantCode && user.Username == normalized);
+            if (byName != null && !string.IsNullOrWhiteSpace(byName.Username))
+            {
+                return (byName.Id, byName.Username.Trim());
+            }
+        }
+
+        return await ResolveSystemMessageSenderAsync(tenantCode);
+    }
+
+    /// <summary>
+    /// 解析 Quartz 推送对象（To）：手动触发用户优先，否则任务 CreatedBy，再回退系统用户
+    /// </summary>
+    /// <param name="tenantCode">租户编码</param>
+    /// <param name="triggerUserName">触发用户名</param>
+    /// <param name="taskCreatedBy">任务创建人</param>
+    /// <returns>接收者 ID 与登录名</returns>
+    private async Task<(long UserId, string UserName)> ResolveQuartzMessageRecipientAsync(
+        string tenantCode,
+        string? triggerUserName,
+        long taskCreatedBy)
+    {
+        var normalized = NormalizeMessageUserNameLabel(triggerUserName);
+        if (!string.IsNullOrWhiteSpace(normalized))
+        {
+            var byName = await _userRepository.FirstAsync(user =>
+                user.TenantCode == tenantCode && user.Username == normalized);
+            if (byName != null && !string.IsNullOrWhiteSpace(byName.Username))
+            {
+                return (byName.Id, byName.Username.Trim());
+            }
+        }
+
+        if (taskCreatedBy > 0)
+        {
+            var creator = await _userRepository.GetByIdAsync(taskCreatedBy);
+            if (creator != null
+                && creator.TenantCode == tenantCode
+                && !string.IsNullOrWhiteSpace(creator.Username))
+            {
+                return (creator.Id, creator.Username.Trim());
+            }
+        }
+
+        return await ResolveSystemMessageSenderAsync(tenantCode);
+    }
+
+    /// <summary>
+    /// 解析系统消息发送者（admin / SystemAuditUser.Id）
+    /// </summary>
+    /// <param name="tenantCode">租户编码</param>
+    /// <returns>系统用户</returns>
+    private async Task<(long UserId, string UserName)> ResolveSystemMessageSenderAsync(string tenantCode)
+    {
+        var byId = await _userRepository.GetByIdAsync(TaktConstants.SystemAuditUser.Id);
+        if (byId != null
+            && byId.TenantCode == tenantCode
+            && !string.IsNullOrWhiteSpace(byId.Username))
+        {
+            return (byId.Id, byId.Username.Trim());
+        }
+
+        var systemName = TaktQuartzConstants.SystemSenderUserName;
+        var byName = await _userRepository.FirstAsync(user =>
+            user.TenantCode == tenantCode && user.Username == systemName);
+        if (byName != null && !string.IsNullOrWhiteSpace(byName.Username))
+        {
+            return (byName.Id, byName.Username.Trim());
+        }
+
+        return (TaktConstants.SystemAuditUser.Id, systemName);
+    }
+
+    /// <summary>
+    /// 构建 Quartz 执行完成消息正文
+    /// </summary>
+    /// <param name="task">任务</param>
+    /// <param name="log">日志</param>
+    /// <param name="executorUserName">执行人</param>
+    /// <param name="recipientUserName">推送对象</param>
+    /// <returns>正文</returns>
+    private static string BuildQuartzExecutedMessageContent(
+        TaktQuartzTask task,
+        TaktQuartzLog log,
+        string executorUserName,
+        string recipientUserName)
+    {
+        var statusText = log.ExecuteStatus == TaktExecuteStatus.Success ? "成功" : "失败";
+        var summary = string.IsNullOrWhiteSpace(log.ExecuteMessage)
+            ? "（无摘要）"
+            : log.ExecuteMessage.Trim();
+        if (summary.Length > 800)
+        {
+            summary = summary[..800] + "…";
+        }
+
+        var errorPart = string.IsNullOrWhiteSpace(log.ErrorInfo)
+            ? string.Empty
+            : $"；错误：{log.ErrorInfo.Trim()}";
+        return
+            $"定时任务【{task.TaskName}】（{task.TaskCode}）执行{statusText}。"
+            + $"执行人：{executorUserName}；推送：{recipientUserName}；"
+            + $"耗时 {log.ExecuteDuration} ms。"
+            + $"摘要：{summary}{errorPart}";
+    }
+
+    /// <summary>
+    /// 构建 Quartz 执行完成消息扩展 JSON
+    /// </summary>
+    /// <param name="task">任务</param>
+    /// <param name="log">日志</param>
+    /// <param name="executorUserName">执行人</param>
+    /// <param name="recipientUserName">推送对象</param>
+    /// <returns>JSON</returns>
+    private static string BuildQuartzExecutedMessageExtData(
+        TaktQuartzTask task,
+        TaktQuartzLog log,
+        string executorUserName,
+        string recipientUserName)
+    {
+        var payload = new
+        {
+            quartzTaskId = task.Id.ToString(),
+            quartzLogId = log.Id.ToString(),
+            taskCode = task.TaskCode ?? string.Empty,
+            taskName = task.TaskName ?? string.Empty,
+            executeStatus = (int)log.ExecuteStatus,
+            executeDuration = log.ExecuteDuration,
+            executorUserName,
+            recipientUserName,
+            sqlScript = task.SqlScript ?? string.Empty,
+        };
+        return Newtonsoft.Json.JsonConvert.SerializeObject(payload);
     }
 
     /// <summary>

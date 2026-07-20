@@ -159,6 +159,15 @@
   box-shadow: none;
 }
 
+/* Plain 选中态（工具栏右侧筛选等）：与 hover 同色，依赖各 .takt-button-{action} 的 --takt-btn-* */
+.ant-btn[class*='takt-button-'].takt-button-plain.takt-button-plain-active:not(:disabled, .ant-btn-disabled, .ant-btn-loading),
+[class*='takt-button-'].takt-button-plain.takt-button-plain-active:not(:disabled, .ant-btn-disabled, .ant-btn-loading) {
+  background-color: var(--takt-btn-tone) !important;
+  border-color: var(--takt-btn-tone) !important;
+  border-width: 1px !important;
+  color: var(--takt-btn-fg-solid) !important;
+}
+
 .ant-btn[class*='takt-button-']:is(.takt-button-plain, .ant-btn-text, .ant-btn-link, .ant-btn-ghost):is(:disabled, .ant-btn-disabled),
 .takt-button-plain:is(:disabled, .ant-btn-disabled),
 [class*='takt-button-'].takt-button-plain:is(:disabled, .ant-btn-disabled) {

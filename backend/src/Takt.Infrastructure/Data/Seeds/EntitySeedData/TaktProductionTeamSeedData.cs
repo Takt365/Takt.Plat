@@ -4,7 +4,7 @@
 // 文件名称：TaktProductionTeamSeedData.cs
 // 创建时间：2026-07-06
 // 创建人：Takt365(Cursor AI)
-// 功能描述：生产班组种子（按 logistics_team_category 分类；制造工厂 C100/T100/H100；幂等创建或更新）
+// 功能描述：生产班组种子（按 logistics_team_category 分类；仅制造工厂 C100/公司 2300；幂等创建或更新）
 //
 // 版权信息：Copyright (c) 2026 Takt  All rights reserved.
 // 免责声明：此软件使用 MIT License，作者不承担任何使用风险。
@@ -13,7 +13,7 @@
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Takt.Domain.Entities.Accounting.Financial;
-using Takt.Domain.Entities.Logistics.Manufacturing.Output;
+using Takt.Domain.Entities.Logistics.Manufacturing.Mps;
 using Takt.Domain.Interfaces;
 using Takt.Domain.Repositories;
 using Takt.Shared.Helpers;
@@ -22,19 +22,14 @@ using Takt.Shared.Options;
 namespace Takt.Infrastructure.Data.Seeds.EntitySeedData;
 
 /// <summary>
-/// 生产班组种子数据（组立/PCBA/SMT/质检；按 Database:CompanyCodes 对应制造工厂写入）
+/// 生产班组种子数据（组立/PCBA/SMT/质检；仅工厂 C100 / 公司 2300）
 /// </summary>
 public class TaktProductionTeamSeedData : ITaktSeedDataCoordinator
 {
     private const int StatusEnabled = 1;
     private const int DefaultShiftNo = 1;
 
-    private static readonly HashSet<string> ManufacturingPlantCodes = new(StringComparer.Ordinal)
-    {
-        "C100",
-        "T100",
-        "H100",
-    };
+    private static readonly HashSet<string> TargetPlantCodes = new(StringComparer.Ordinal) { "C100" };
 
     /// <summary>
     /// 执行顺序（工厂、编号规则之后）
@@ -96,10 +91,10 @@ public class TaktProductionTeamSeedData : ITaktSeedDataCoordinator
                     ex.Message);
                 continue;
             }
-            if (!ManufacturingPlantCodes.Contains(plantCode))
+            if (!TargetPlantCodes.Contains(plantCode))
             {
                 TaktLogger.Information(
-                    "公司 {CompanyCode} 工厂 {PlantCode} 非制造工厂，跳过生产班组种子",
+                    "公司 {CompanyCode} 工厂 {PlantCode} 非目标工厂 C100，跳过生产班组种子",
                     company.CompanyCode,
                     plantCode);
                 continue;
@@ -128,7 +123,7 @@ public class TaktProductionTeamSeedData : ITaktSeedDataCoordinator
     }
 
     /// <summary>
-    /// 标准生产班组目录（A=组立 P=PCBA自插 S=SMT Q=质检）
+    /// 标准生产班组目录（A=组立 P=PCBA Q=质检；RWC/SUB/SMT/MI/AI 及质检均为 1～2）
     /// </summary>
     /// <returns>班组种子项列表</returns>
     private static List<ProductionTeamSeedItem> GetStandardProductionTeams()
@@ -136,27 +131,20 @@ public class TaktProductionTeamSeedData : ITaktSeedDataCoordinator
         var items = new List<ProductionTeamSeedItem>();
         for (var i = 1; i <= 15; i++)
         {
+            // 组立班组
             items.Add(new ProductionTeamSeedItem(i.ToString(), $"{i}班", "A"));
         }
-        items.Add(new ProductionTeamSeedItem("JG", "加工班", "A"));
-        for (var i = 1; i <= 4; i++)
-        {
-            items.Add(new ProductionTeamSeedItem($"XZ{i}", $"修正{i}班", "A"));
-        }
+        // PCBA 工艺统计排序：1=SMT → 2=AI → 3=MI → 4=RWC（修正）
+        // RWC=Rework/Correction；SUB=Sub-assembly；SMT=Surface Mount Technology；
+        // MI=Manual Insertion（人工插件，亦称 DIP）；AI=Auto Insertion（自插）
         for (var i = 1; i <= 2; i++)
         {
-            items.Add(new ProductionTeamSeedItem($"ZCX{i}", $"自插{i}线", "P"));
-        }
-        for (var i = 1; i <= 2; i++)
-        {
-            items.Add(new ProductionTeamSeedItem($"1SMT{i}", $"SMT{i}线", "S"));
-        }
-        for (var i = 1; i <= 2; i++)
-        {
+            items.Add(new ProductionTeamSeedItem($"SUB{i}", $"加工{i}班", "A"));
+            items.Add(new ProductionTeamSeedItem($"SMT{i}", $"SMT{i}线", "P"));
+            items.Add(new ProductionTeamSeedItem($"AI{i}", $"AI{i}线", "P"));
+            items.Add(new ProductionTeamSeedItem($"MI{i}", $"手插{i}线", "P"));
+            items.Add(new ProductionTeamSeedItem($"RWC{i}", $"修正{i}班", "P"));
             items.Add(new ProductionTeamSeedItem($"IQC{i}", $"IQC{i}班", "Q"));
-        }
-        for (var i = 1; i <= 2; i++)
-        {
             items.Add(new ProductionTeamSeedItem($"QA{i}", $"QA{i}班", "Q"));
         }
         return items;

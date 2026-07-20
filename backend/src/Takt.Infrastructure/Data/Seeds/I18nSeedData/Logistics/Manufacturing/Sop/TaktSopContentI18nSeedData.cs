@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Infrastructure.Data.Seeds.I18nSeedData.Logistics.Manufacturing.Sop
 // 文件名称：TaktSopContentI18nSeedData.cs
-// 创建时间：2026-07-09
+// 创建时间：2026-07-20
 // 创建人：Takt365(Auto Generated)
 // 功能描述：TaktSopContent 实体字段国际化种子（无对应 frontend locales；TranslationText 取自 ColumnDescription，ContextNote 取自属性 XML summary）
 // 
@@ -91,22 +91,22 @@ public class TaktSopContentI18nSeedData : ITaktSeedDataCoordinator
             new TranslationSeedItem("entity.sopcontent._self", "zh-HK", "SOP 多语言正文信息_hk", "实体名称"),
 
             // entity.sopcontent.revisionid
-            new TranslationSeedItem("entity.sopcontent.revisionid", "en-US", "版本ID_us", "版本 ID（关联 TaktSopRevision.Id，选项 TaktSopRevisions/options）"),
+            new TranslationSeedItem("entity.sopcontent.revisionid", "en-US", "版本ID_us", "版本 ID（选项 TaktSopRevisions/options，DictValue=Id）"),
             // entity.sopcontent.revisionid
-            new TranslationSeedItem("entity.sopcontent.revisionid", "ja-JP", "版本ID_jp", "版本 ID（关联 TaktSopRevision.Id，选项 TaktSopRevisions/options）"),
+            new TranslationSeedItem("entity.sopcontent.revisionid", "ja-JP", "版本ID_jp", "版本 ID（选项 TaktSopRevisions/options，DictValue=Id）"),
             // entity.sopcontent.revisionid
-            new TranslationSeedItem("entity.sopcontent.revisionid", "zh-CN", "版本ID", "版本 ID（关联 TaktSopRevision.Id，选项 TaktSopRevisions/options）"),
+            new TranslationSeedItem("entity.sopcontent.revisionid", "zh-CN", "版本ID", "版本 ID（选项 TaktSopRevisions/options，DictValue=Id）"),
             // entity.sopcontent.revisionid
-            new TranslationSeedItem("entity.sopcontent.revisionid", "zh-HK", "版本ID_hk", "版本 ID（关联 TaktSopRevision.Id，选项 TaktSopRevisions/options）"),
+            new TranslationSeedItem("entity.sopcontent.revisionid", "zh-HK", "版本ID_hk", "版本 ID（选项 TaktSopRevisions/options，DictValue=Id）"),
 
             // entity.sopcontent.sopid
-            new TranslationSeedItem("entity.sopcontent.sopid", "en-US", "SOP主档ID_us", "SOP 主档 ID（关联 TaktSopDoc.Id，选项 TaktSopDocs/options）"),
+            new TranslationSeedItem("entity.sopcontent.sopid", "en-US", "SOP主档ID_us", "SOP 主档 ID（选项 TaktSopDocs/options，DictValue=Id）"),
             // entity.sopcontent.sopid
-            new TranslationSeedItem("entity.sopcontent.sopid", "ja-JP", "SOP主档ID_jp", "SOP 主档 ID（关联 TaktSopDoc.Id，选项 TaktSopDocs/options）"),
+            new TranslationSeedItem("entity.sopcontent.sopid", "ja-JP", "SOP主档ID_jp", "SOP 主档 ID（选项 TaktSopDocs/options，DictValue=Id）"),
             // entity.sopcontent.sopid
-            new TranslationSeedItem("entity.sopcontent.sopid", "zh-CN", "SOP主档ID", "SOP 主档 ID（关联 TaktSopDoc.Id，选项 TaktSopDocs/options）"),
+            new TranslationSeedItem("entity.sopcontent.sopid", "zh-CN", "SOP主档ID", "SOP 主档 ID（选项 TaktSopDocs/options，DictValue=Id）"),
             // entity.sopcontent.sopid
-            new TranslationSeedItem("entity.sopcontent.sopid", "zh-HK", "SOP主档ID_hk", "SOP 主档 ID（关联 TaktSopDoc.Id，选项 TaktSopDocs/options）"),
+            new TranslationSeedItem("entity.sopcontent.sopid", "zh-HK", "SOP主档ID_hk", "SOP 主档 ID（选项 TaktSopDocs/options，DictValue=Id）"),
 
             // entity.sopcontent.contentlang
             new TranslationSeedItem("entity.sopcontent.contentlang", "en-US", "正文语言_us", "正文语言（选项 TaktCultures/options，DictValue=CultureCode）"),

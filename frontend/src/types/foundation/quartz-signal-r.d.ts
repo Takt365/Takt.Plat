@@ -50,6 +50,10 @@ export interface QuartzTaskExecutedEvent {
   taskName: string;
   /** 执行状态（int） */
   executeStatus: number;
+  /** 执行摘要消息 */
+  executeMessage?: string;
+  /** 错误信息（失败时） */
+  errorInfo?: string;
   /** 执行耗时（毫秒） */
   executeDuration: number;
   /** 累计执行次数 */

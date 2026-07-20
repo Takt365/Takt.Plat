@@ -112,7 +112,7 @@ alwaysApply: true
 | 审批通过/驳回 | `workflow:todo:approve` |
 | 转办 | `workflow:todo:transfer` |
 | 加签/减签 | `workflow:todo:addsign` / `workflow:todo:reducesign` |
-| 发起 | `workflow:instance:start` |
+| 发起 | `workflow:instance:initiate` |
 | 撤回 | `workflow:instance:withdraw` |
 | 方案设计 | `workflow:scheme:design` / `workflow:scheme:publish` |
 

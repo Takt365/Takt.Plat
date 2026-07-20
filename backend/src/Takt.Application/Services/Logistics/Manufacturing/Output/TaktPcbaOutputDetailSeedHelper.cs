@@ -69,11 +69,11 @@ internal static class TaktPcbaOutputDetailSeedHelper
         {
             return;
         }
-        var submittedByWorkCenter = (dto.PcbaOutputDetails ?? new List<TaktPcbaOutputDetailUpdateDto>())
+        var submittedByWorkCenter = (dto.PcbaOutputDetails ?? new List<TaktPcbaOutputDetailCreateDto>())
             .Where(d => !string.IsNullOrWhiteSpace(d.TimePeriod))
             .GroupBy(d => d.TimePeriod.Trim(), StringComparer.Ordinal)
             .ToDictionary(g => g.Key, g => g.First(), StringComparer.Ordinal);
-        var details = new List<TaktPcbaOutputDetailUpdateDto>();
+        var details = new List<TaktPcbaOutputDetailCreateDto>();
         var lineNumber = 10;
         foreach (var operationTime in operationTimes.OrderBy(x => x.WorkCenter, StringComparer.Ordinal))
         {
@@ -103,16 +103,15 @@ internal static class TaktPcbaOutputDetailSeedHelper
                 }
                 if (existing.ShiftNo <= 0)
                 {
-                    existing.ShiftNo = dto.ShiftNo;
+                    existing.ShiftNo = 1;
                 }
                 existing.TimePeriod = workCenter;
                 details.Add(existing);
             }
             else
             {
-                details.Add(new TaktPcbaOutputDetailUpdateDto
+                details.Add(new TaktPcbaOutputDetailCreateDto
                 {
-                    PcbaOutputDetailId = 0,
                     TenantCode = dto.TenantCode,
                     CompanyCode = dto.CompanyCode,
                     CompanyDefaultCulture = dto.CompanyDefaultCulture,
@@ -120,7 +119,7 @@ internal static class TaktPcbaOutputDetailSeedHelper
                     ProdOrderCode = dto.ProdOrderCode,
                     LineNumber = lineNumber,
                     TimePeriod = workCenter,
-                    ShiftNo = dto.ShiftNo,
+                    ShiftNo = 1,
                 });
             }
             lineNumber += 10;

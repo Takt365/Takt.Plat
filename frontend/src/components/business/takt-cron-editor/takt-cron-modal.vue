@@ -24,6 +24,23 @@
     @cancel="handleCancel"
   >
     <div class="takt-cron-modal-body border border-border rounded bg-container">
+      <div
+        v-if="sourceExpression"
+        class="mx-4 mt-4 mb-2 px-3 py-2 rounded bg-page border border-border text-sm"
+      >
+        <div class="text-text-secondary mb-1">
+          {{ t('foundation.quartz-task.page.cron.sourceExpression') }}
+        </div>
+        <div class="font-mono text-text break-all mb-2">
+          {{ sourceExpression }}
+        </div>
+        <div class="text-text-secondary mb-1">
+          {{ t('foundation.quartz-task.page.cron.sourceMeaning') }}
+        </div>
+        <div class="text-text">
+          {{ sourceDescription }}
+        </div>
+      </div>
       <a-tabs
         v-model:active-key="activeTabKey"
         type="card"
@@ -556,6 +573,7 @@ import {
   buildQuartzCronExpression,
   buildQuartzCronSegments,
   createDefaultQuartzCronEditorState,
+  describeQuartzCronExpression,
   parseQuartzCronExpression,
   type QuartzCronEditorState,
 } from '@/components/business/takt-cron-editor/quartz-cron-core'
@@ -584,6 +602,8 @@ const { t } = useI18n()
 
 /** 当前 Tab */
 const activeTabKey = ref('second')
+/** 打开弹窗时锁定的原表达式（说明用，编辑过程不随确认前变更覆盖） */
+const sourceExpression = ref('')
 /** 弹窗内编辑 state */
 const editorState = reactive<QuartzCronEditorState>(createDefaultQuartzCronEditorState())
 
@@ -654,6 +674,33 @@ const segmentHeaders = computed(() => [
 const cronSegments = computed(() => buildQuartzCronSegments(editorState))
 /** 完整 Cron 字符串 */
 const cronExpression = computed(() => buildQuartzCronExpression(editorState))
+/** 原表达式人类可读说明 */
+const sourceDescription = computed(() => {
+  const weekdayKeys = ['sun', 'mon', 'tue', 'wed', 'thu', 'fri', 'sat'] as const
+  return describeQuartzCronExpression(sourceExpression.value, {
+    everySecond: t('foundation.quartz-task.page.cron.everySecond'),
+    everyMinute: t('foundation.quartz-task.page.cron.everyMinute'),
+    everyHour: t('foundation.quartz-task.page.cron.everyHour'),
+    everyDay: t('foundation.quartz-task.page.cron.everyDay'),
+    everyMonth: t('foundation.quartz-task.page.cron.everyMonth'),
+    atTime: (h, m, s) => t('foundation.quartz-task.page.cron.describe.atTime', { h, m, s }),
+    intervalSeconds: (start, step) => t('foundation.quartz-task.page.cron.describe.intervalSeconds', { start, step }),
+    intervalMinutes: (start, step) => t('foundation.quartz-task.page.cron.describe.intervalMinutes', { start, step }),
+    intervalHours: (start, step) => t('foundation.quartz-task.page.cron.describe.intervalHours', { start, step }),
+    specificSeconds: (values) => t('foundation.quartz-task.page.cron.describe.specificSeconds', { values }),
+    specificMinutes: (values) => t('foundation.quartz-task.page.cron.describe.specificMinutes', { values }),
+    specificHours: (values) => t('foundation.quartz-task.page.cron.describe.specificHours', { values }),
+    specificDays: (values) => t('foundation.quartz-task.page.cron.describe.specificDays', { values }),
+    specificMonths: (values) => t('foundation.quartz-task.page.cron.describe.specificMonths', { values }),
+    specificWeeks: (values) => t('foundation.quartz-task.page.cron.describe.specificWeeks', { values }),
+    weekday: (n) => {
+      const idx = Math.min(7, Math.max(1, Math.trunc(n))) - 1
+      return t(`foundation.quartz-task.page.cron.weekday.${weekdayKeys[idx]}`)
+    },
+    unknown: t('foundation.quartz-task.page.cron.describe.unknown'),
+    join: t('foundation.quartz-task.page.cron.describe.join'),
+  })
+})
 /** 最近 5 次运行时间（cron-parser 异步懒加载） */
 const nextRunTimes = ref<string[]>([])
 
@@ -670,15 +717,23 @@ watch(
 )
 
 /**
- * 将 props.expression 灌入 editorState
+ * 将 props.expression 灌入 editorState，并记录原表达式说明
  * @param expression Cron 字符串
  */
 function hydrateEditorState(expression: string) {
-  const parsed = parseQuartzCronExpression(expression)
-  Object.assign(editorState, parsed)
+  const source = String(expression ?? '').trim()
+  sourceExpression.value = source
+  const parsed = parseQuartzCronExpression(source)
+  Object.assign(editorState.second, parsed.second)
+  Object.assign(editorState.minute, parsed.minute)
+  Object.assign(editorState.hour, parsed.hour)
+  Object.assign(editorState.day, parsed.day)
+  Object.assign(editorState.week, parsed.week)
+  Object.assign(editorState.month, parsed.month)
+  Object.assign(editorState.year, parsed.year)
 }
 
-/** 打开弹窗时反解析表达式 */
+/** 打开弹窗时反解析表达式（含 v-if 首次挂载 open=true） */
 watch(
   () => props.open,
   (visible) => {
@@ -687,6 +742,7 @@ watch(
       activeTabKey.value = 'second'
     }
   },
+  { immediate: true },
 )
 
 /** 取消：关闭弹窗 */
@@ -696,7 +752,14 @@ function handleCancel() {
 
 /** 重置为默认 Tab 配置 */
 function handleReset() {
-  Object.assign(editorState, createDefaultQuartzCronEditorState())
+  const defaults = createDefaultQuartzCronEditorState()
+  Object.assign(editorState.second, defaults.second)
+  Object.assign(editorState.minute, defaults.minute)
+  Object.assign(editorState.hour, defaults.hour)
+  Object.assign(editorState.day, defaults.day)
+  Object.assign(editorState.week, defaults.week)
+  Object.assign(editorState.month, defaults.month)
+  Object.assign(editorState.year, defaults.year)
 }
 
 /** 确定：回写 Cron 并关闭 */

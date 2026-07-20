@@ -22,6 +22,27 @@ namespace Takt.Application.Services.Logistics.Manufacturing.Output;
 internal static class TaktPcbaOutputDetailDerivedFieldsHelper
 {
     /// <summary>
+    /// 写入明细投入工数、实际工时与达成率（基于明细人员标准产能）
+    /// </summary>
+    /// <param name="detail">PCBA日报明细</param>
+    public static void ApplyLaborDerivedFields(TaktPcbaOutputDetail detail)
+    {
+        ArgumentNullException.ThrowIfNull(detail);
+        detail.InputMinutes = detail.DirectLabor > 0 ? detail.DirectLabor * 60m : 0m;
+        if (detail.MixedProd == 0)
+        {
+            detail.ActualMinutes = Math.Max(0m, detail.InputMinutes - detail.DowntimeMinutes);
+        }
+        else
+        {
+            detail.ActualMinutes = Math.Max(0m, detail.ConfirmMinutes - detail.DowntimeMinutes);
+        }
+        detail.AchievementRate = TaktProductionStatHelper.CalculateAchievementRatePercent(
+            detail.DailyCompletedQty,
+            detail.StdLaborCapacity);
+    }
+
+    /// <summary>
     /// 按桶内当日完成数合计写入单条明细累计完成数与完成状态
     /// </summary>
     /// <param name="detail">PCBA日报明细</param>

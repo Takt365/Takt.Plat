@@ -69,15 +69,17 @@ public sealed class TaktQuartzJobExecutor
     {
         ArgumentNullException.ThrowIfNull(context);
         var data = context.MergedJobDataMap;
-        var tenantCode = data.GetString(TaktQuartzJobDataKeys.TenantCode) ?? string.Empty;
-        var companyCode = data.GetString(TaktQuartzJobDataKeys.CompanyCode) ?? string.Empty;
-        var taskId = data.GetLong(TaktQuartzJobDataKeys.QuartzTaskId);
-        var userName = data.GetString(TaktQuartzJobDataKeys.UserName);
-        var triggerExecuteParams = data.GetString(TaktQuartzJobDataKeys.ExecuteParams);
-        var manualTrigger = data.GetInt(TaktQuartzJobDataKeys.ManualTrigger) == 1;
+        var tenantCode = TaktQuartzJobDataMapHelper.GetStringOrNull(data, TaktQuartzJobDataKeys.TenantCode) ?? string.Empty;
+        var companyCode = TaktQuartzJobDataMapHelper.GetStringOrNull(data, TaktQuartzJobDataKeys.CompanyCode) ?? string.Empty;
+        var taskId = TaktQuartzJobDataMapHelper.GetLongOrDefault(data, TaktQuartzJobDataKeys.QuartzTaskId);
+        var userName = TaktQuartzJobDataMapHelper.GetStringOrNull(data, TaktQuartzJobDataKeys.UserName);
+        var triggerExecuteParams = TaktQuartzJobDataMapHelper.GetStringOrNull(data, TaktQuartzJobDataKeys.ExecuteParams);
+        var manualTrigger = TaktQuartzJobDataMapHelper.GetIntOrDefault(data, TaktQuartzJobDataKeys.ManualTrigger) == 1;
         if (string.IsNullOrWhiteSpace(tenantCode) || string.IsNullOrWhiteSpace(companyCode) || taskId <= 0)
         {
-            throw new InvalidOperationException("Quartz JobDataMap 缺少 TenantCode/CompanyCode/QuartzTaskId");
+            var mapEx = new InvalidOperationException("Quartz JobDataMap 缺少 TenantCode/CompanyCode/QuartzTaskId");
+            TaktQuartzJobExecutionLogger.LogInfrastructureFailure(mapEx, tenantCode, companyCode, taskId);
+            throw mapEx;
         }
         using var seedContext = new TaktSeedContext(_configuration, tenantCode);
         var task = await seedContext.Db.Queryable<TaktQuartzTask>()
@@ -88,53 +90,85 @@ public sealed class TaktQuartzJobExecutor
             .FirstAsync(cancellationToken);
         if (task == null)
         {
-            throw new InvalidOperationException($"定时任务不存在：Id={taskId}, Tenant={tenantCode}, Company={companyCode}");
+            var missingEx = new InvalidOperationException(
+                $"定时任务不存在：Id={taskId}, Tenant={tenantCode}, Company={companyCode}");
+            TaktQuartzJobExecutionLogger.LogInfrastructureFailure(missingEx, tenantCode, companyCode, taskId);
+            throw missingEx;
         }
-        var stopwatch = Stopwatch.StartNew();
-        var executeTime = DateTime.Now;
-        var executeMessage = string.Empty;
-        var errorInfo = string.Empty;
-        var executeStatus = TaktExecuteStatus.Success;
-        var effectiveExecuteParams = TaktQuartzSchedulingHelper.ResolveEffectiveExecuteParams(task, triggerExecuteParams);
-        Exception? executionException = null;
-        TaktQuartzLog? executionLog = null;
-        try
+        using (TaktQuartzJobExecutionLogger.BeginExecutionScope(
+            tenantCode,
+            companyCode,
+            task.Id,
+            task.TaskCode,
+            task.TaskType,
+            userName,
+            manualTrigger))
         {
-            TaktQuartzSchedulingHelper.ValidateQuartzTaskForExecution(task, manualTrigger);
-            executeMessage = await DispatchAsync(
-                task,
-                effectiveExecuteParams,
-                userName,
-                seedContext,
-                cancellationToken);
-        }
-        catch (Exception ex)
-        {
-            executeStatus = TaktExecuteStatus.Failed;
-            errorInfo = ex.Message;
-            executeMessage = string.IsNullOrWhiteSpace(executeMessage) ? "执行失败" : executeMessage;
-            executionException = ex;
-            TaktLogger.Error(ex, "[Quartz] 任务执行失败 TaskId={TaskId}, Code={TaskCode}", task.Id, task.TaskCode);
-        }
-        finally
-        {
-            stopwatch.Stop();
-            executionLog = await PersistExecutionResultAsync(
-                seedContext,
-                task,
-                executeTime,
-                stopwatch.ElapsedMilliseconds,
-                effectiveExecuteParams,
-                executeMessage,
-                errorInfo,
-                executeStatus,
-                context,
-                cancellationToken);
-        }
-        await _quartzJobSignalRPushService.PushTaskExecutedAsync(task, executionLog, userName);
-        if (executionException != null)
-        {
-            throw new JobExecutionException(executionException, refireImmediately: false);
+            var stopwatch = Stopwatch.StartNew();
+            var executeTime = DateTime.Now;
+            var executeMessage = string.Empty;
+            var errorInfo = string.Empty;
+            var executeStatus = TaktExecuteStatus.Success;
+            var effectiveExecuteParams = TaktQuartzSchedulingHelper.ResolveEffectiveExecuteParams(task, triggerExecuteParams);
+            Exception? executionException = null;
+            TaktQuartzLog? executionLog = null;
+            TaktQuartzJobExecutionLogger.LogStarted(task, manualTrigger, userName);
+            try
+            {
+                TaktQuartzSchedulingHelper.ValidateQuartzTaskForExecution(task, manualTrigger);
+                executeMessage = await DispatchAsync(
+                    task,
+                    effectiveExecuteParams,
+                    userName,
+                    seedContext,
+                    cancellationToken);
+            }
+            catch (Exception ex)
+            {
+                executeStatus = TaktExecuteStatus.Failed;
+                errorInfo = TaktQuartzJobExecutionLogger.FormatErrorInfoForPersist(ex);
+                executeMessage = string.IsNullOrWhiteSpace(executeMessage) ? "执行失败" : executeMessage;
+                executionException = ex;
+                TaktQuartzJobExecutionLogger.LogFailed(ex, task, stopwatch.ElapsedMilliseconds);
+            }
+            finally
+            {
+                stopwatch.Stop();
+                try
+                {
+                    executionLog = await PersistExecutionResultAsync(
+                        seedContext,
+                        task,
+                        executeTime,
+                        stopwatch.ElapsedMilliseconds,
+                        effectiveExecuteParams,
+                        executeMessage,
+                        errorInfo,
+                        executeStatus,
+                        context,
+                        cancellationToken);
+                }
+                catch (Exception persistEx)
+                {
+                    TaktQuartzJobExecutionLogger.LogFailed(persistEx, task, stopwatch.ElapsedMilliseconds);
+                    executionException ??= persistEx;
+                }
+            }
+            if (executionLog != null)
+            {
+                TaktQuartzJobExecutionLogger.LogCompleted(
+                    task,
+                    executeStatus,
+                    executionLog.ExecuteDuration,
+                    executionLog.Id,
+                    executeMessage,
+                    errorInfo);
+                await _quartzJobSignalRPushService.PushTaskExecutedAsync(task, executionLog, userName);
+            }
+            if (executionException != null)
+            {
+                throw new JobExecutionException(executionException, refireImmediately: false);
+            }
         }
     }
 
@@ -196,7 +230,11 @@ public sealed class TaktQuartzJobExecutor
         var assemblyHint = string.IsNullOrWhiteSpace(task.AssemblyName)
             ? handler.GetType().Assembly.GetName().Name
             : task.AssemblyName;
-        return $"程序集任务已执行：{assemblyHint}/{handler.HandlerKey}";
+        var message = string.IsNullOrWhiteSpace(jobContext.ExecuteMessage)
+            ? $"程序集任务已执行：{assemblyHint}/{handler.HandlerKey}"
+            : jobContext.ExecuteMessage.Trim();
+        TaktQuartzJobExecutionLogger.LogProgress(message, task.Id);
+        return message;
     }
 
     /// <summary>
@@ -229,11 +267,14 @@ public sealed class TaktQuartzJobExecutor
             throw new InvalidOperationException(
                 $"HTTP 任务失败：{(int)response.StatusCode} {response.ReasonPhrase}，URL={task.ApiUrl}");
         }
-        return $"HTTP {method} 成功，状态码 {(int)response.StatusCode}，URL={task.ApiUrl}，响应长度 {body.Length}";
+        var message =
+            $"HTTP {method} 成功，状态码 {(int)response.StatusCode}，URL={task.ApiUrl}，响应长度 {body.Length}";
+        TaktQuartzJobExecutionLogger.LogProgress(message, task.Id);
+        return message;
     }
 
     /// <summary>
-    /// 执行只读 SQL 任务
+    /// 执行 SQL 任务：只读 SELECT → 查询；含 MERGE/DML 的脚本 → ExecuteCommand
     /// </summary>
     /// <param name="task">定时任务</param>
     /// <param name="seedContext">租户上下文</param>
@@ -244,9 +285,69 @@ public sealed class TaktQuartzJobExecutor
         TaktSeedContext seedContext,
         CancellationToken cancellationToken)
     {
-        TaktSqlExecutorValidator.Validate(task.SqlScript!, TaktSqlExecuteOptions.ReadOnlyDefault);
-        var rows = await TaktRepositoryReadOnlySql.QueryAsync(seedContext.Db, task.SqlScript!, null, cancellationToken);
-        return $"SQL 执行成功，返回 {rows.Count} 行";
+        var sql = await TaktQuartzSqlScriptHelper.ResolveExecutableSqlAsync(
+            task.SqlScript,
+            task.TenantCode,
+            task.CompanyCode,
+            cancellationToken);
+        TaktQuartzJobExecutionLogger.LogProgress(
+            $"SQL 已解析，路径={task.SqlScript}，SqlLength={sql.Length}",
+            task.Id);
+        if (IsReadOnlySelectScript(sql))
+        {
+            TaktSqlExecutorValidator.Validate(sql, TaktSqlExecuteOptions.ReadOnlyDefault);
+            var rows = await TaktRepositoryReadOnlySql.QueryAsync(seedContext.Db, sql, null, cancellationToken);
+            var message = $"SQL 查询成功，路径={task.SqlScript}，返回 {rows.Count} 行";
+            TaktQuartzJobExecutionLogger.LogProgress(message, task.Id);
+            return message;
+        }
+        TaktSqlExecutorValidator.Validate(sql, TaktSqlExecuteOptions.NonQueryDefault);
+        var previousTimeout = seedContext.Db.Ado.CommandTimeOut;
+        seedContext.Db.Ado.CommandTimeOut = 1800;
+        try
+        {
+            // SET NOCOUNT 时 ExecuteCommand 影响行数为 -1；改为读取脚本末尾 QUARTZ_SYNC_SUMMARY
+            var message = await TaktQuartzSqlResultReader.ExecuteAndFormatSummaryAsync(
+                seedContext.Db,
+                sql,
+                task.SqlScript,
+                cancellationToken);
+            TaktQuartzJobExecutionLogger.LogProgress(message, task.Id);
+            return message;
+        }
+        finally
+        {
+            seedContext.Db.Ado.CommandTimeOut = previousTimeout;
+        }
+    }
+
+    /// <summary>
+    /// 是否为只读 SELECT/WITH 查询（无 DML/DDL 关键字）
+    /// </summary>
+    /// <param name="sql">SQL 文本</param>
+    /// <returns>是则走查询路径</returns>
+    private static bool IsReadOnlySelectScript(string sql)
+    {
+        var trimmed = sql.TrimStart();
+        while (trimmed.StartsWith("/*", StringComparison.Ordinal))
+        {
+            var end = trimmed.IndexOf("*/", StringComparison.Ordinal);
+            if (end < 0)
+            {
+                break;
+            }
+            trimmed = trimmed[(end + 2)..].TrimStart();
+        }
+        if (!trimmed.StartsWith("SELECT", StringComparison.OrdinalIgnoreCase)
+            && !trimmed.StartsWith("WITH", StringComparison.OrdinalIgnoreCase))
+        {
+            return false;
+        }
+        return !System.Text.RegularExpressions.Regex.IsMatch(
+            sql,
+            @"\b(INSERT|UPDATE|DELETE|DROP|ALTER|TRUNCATE|EXEC|EXECUTE|MERGE|CREATE|GRANT|REVOKE)\b",
+            System.Text.RegularExpressions.RegexOptions.IgnoreCase
+            | System.Text.RegularExpressions.RegexOptions.CultureInvariant);
     }
 
     /// <summary>

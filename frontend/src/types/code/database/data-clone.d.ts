@@ -38,7 +38,7 @@ export interface DataClone {
   sourceCompanyCode: string;
 
   /**
-   * 目标租户编码（3 位）
+   * 目标租户（3 位）
    */
   targetTenantCode: string;
 

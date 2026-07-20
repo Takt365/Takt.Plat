@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Infrastructure.Data.Seeds.I18nSeedData.Logistics.Materials
 // 文件名称：TaktMaterialDocumentI18nSeedData.cs
-// 创建时间：2026-07-09
+// 创建时间：2026-07-20
 // 创建人：Takt365(Auto Generated)
 // 功能描述：TaktMaterialDocument 实体字段国际化种子（无对应 frontend locales；TranslationText 取自 ColumnDescription，ContextNote 取自属性 XML summary）
 // 
@@ -100,13 +100,13 @@ public class TaktMaterialDocumentI18nSeedData : ITaktSeedDataCoordinator
             new TranslationSeedItem("entity.materialdocument.plantcode", "zh-HK", "工厂代码_hk", "工厂代码（选项 TaktPlants/options，DictValue=PlantCode）"),
 
             // entity.materialdocument.materialcode
-            new TranslationSeedItem("entity.materialdocument.materialcode", "en-US", "物料编码_us", "物料编码（关联 TaktMaterial.MaterialCode，选项 TaktMaterials/options；从物料主数据跳转按此字段查凭证列表）"),
+            new TranslationSeedItem("entity.materialdocument.materialcode", "en-US", "物料编码_us", "物料编码（选项 TaktMaterialPlants/options，DictValue=MaterialCode，ExtValue=PlantCode）"),
             // entity.materialdocument.materialcode
-            new TranslationSeedItem("entity.materialdocument.materialcode", "ja-JP", "物料编码_jp", "物料编码（关联 TaktMaterial.MaterialCode，选项 TaktMaterials/options；从物料主数据跳转按此字段查凭证列表）"),
+            new TranslationSeedItem("entity.materialdocument.materialcode", "ja-JP", "物料编码_jp", "物料编码（选项 TaktMaterialPlants/options，DictValue=MaterialCode，ExtValue=PlantCode）"),
             // entity.materialdocument.materialcode
-            new TranslationSeedItem("entity.materialdocument.materialcode", "zh-CN", "物料编码", "物料编码（关联 TaktMaterial.MaterialCode，选项 TaktMaterials/options；从物料主数据跳转按此字段查凭证列表）"),
+            new TranslationSeedItem("entity.materialdocument.materialcode", "zh-CN", "物料编码", "物料编码（选项 TaktMaterialPlants/options，DictValue=MaterialCode，ExtValue=PlantCode）"),
             // entity.materialdocument.materialcode
-            new TranslationSeedItem("entity.materialdocument.materialcode", "zh-HK", "物料编码_hk", "物料编码（关联 TaktMaterial.MaterialCode，选项 TaktMaterials/options；从物料主数据跳转按此字段查凭证列表）"),
+            new TranslationSeedItem("entity.materialdocument.materialcode", "zh-HK", "物料编码_hk", "物料编码（选项 TaktMaterialPlants/options，DictValue=MaterialCode，ExtValue=PlantCode）"),
 
             // entity.materialdocument.code
             new TranslationSeedItem("entity.materialdocument.code", "en-US", "物料凭证号_us", "物料凭证号（租户+公司+工厂内唯一）"),
@@ -118,13 +118,13 @@ public class TaktMaterialDocumentI18nSeedData : ITaktSeedDataCoordinator
             new TranslationSeedItem("entity.materialdocument.code", "zh-HK", "物料凭证号_hk", "物料凭证号（租户+公司+工厂内唯一）"),
 
             // entity.materialdocument.postedby
-            new TranslationSeedItem("entity.materialdocument.postedby", "en-US", "过账人_us", "过账人（关联 TaktEmployee.EmployeeNo，选项 TaktEmployees/options，DictValue=EmployeeNo）"),
+            new TranslationSeedItem("entity.materialdocument.postedby", "en-US", "过账人_us", "过账人（选项 TaktEmployees/options，DictValue=EmployeeNo）"),
             // entity.materialdocument.postedby
-            new TranslationSeedItem("entity.materialdocument.postedby", "ja-JP", "过账人_jp", "过账人（关联 TaktEmployee.EmployeeNo，选项 TaktEmployees/options，DictValue=EmployeeNo）"),
+            new TranslationSeedItem("entity.materialdocument.postedby", "ja-JP", "过账人_jp", "过账人（选项 TaktEmployees/options，DictValue=EmployeeNo）"),
             // entity.materialdocument.postedby
-            new TranslationSeedItem("entity.materialdocument.postedby", "zh-CN", "过账人", "过账人（关联 TaktEmployee.EmployeeNo，选项 TaktEmployees/options，DictValue=EmployeeNo）"),
+            new TranslationSeedItem("entity.materialdocument.postedby", "zh-CN", "过账人", "过账人（选项 TaktEmployees/options，DictValue=EmployeeNo）"),
             // entity.materialdocument.postedby
-            new TranslationSeedItem("entity.materialdocument.postedby", "zh-HK", "过账人_hk", "过账人（关联 TaktEmployee.EmployeeNo，选项 TaktEmployees/options，DictValue=EmployeeNo）"),
+            new TranslationSeedItem("entity.materialdocument.postedby", "zh-HK", "过账人_hk", "过账人（选项 TaktEmployees/options，DictValue=EmployeeNo）"),
 
             // entity.materialdocument.status
             new TranslationSeedItem("entity.materialdocument.status", "en-US", "物料凭证状态_us", "物料凭证状态（0=草稿，1=已过账，2=已作废）"),

@@ -29,7 +29,7 @@ public class TaktDataCloneOptions
     /// <summary>源公司编码（4 位）</summary>
     public string SourceCompanyCode { get; set; } = string.Empty;
 
-    /// <summary>目标租户编码（3 位）</summary>
+    /// <summary>目标租户（3 位）</summary>
     public string TargetTenantCode { get; set; } = string.Empty;
 
     /// <summary>目标数据库展示名</summary>

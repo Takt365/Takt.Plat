@@ -12,6 +12,11 @@
 
 export default {
   page: {
+    executeSubmitted: 'バックグラウンド実行を受け付けました。完了後に通知します',
+    signalr: {
+      executeSucceeded: 'タスク {code} 実行成功（{duration}ms）',
+      executeFailed: 'タスク {code} 実行失敗（{duration}ms）',
+    },
     cron: {
       modalTitle: 'Cron 式',
       inputPlaceholder: 'クリックして Cron 式を設定',
@@ -27,6 +32,22 @@ export default {
       specify: '指定',
       nextRuns: '直近 5 回の実行時刻',
       noNextRuns: '現在の式を解析できません',
+      sourceExpression: '元の式',
+      sourceMeaning: '意味の説明',
+      describe: {
+        atTime: '毎日 {h}:{m}:{s} に実行',
+        intervalSeconds: '{start} 秒から {step} 秒ごと',
+        intervalMinutes: '{start} 分から {step} 分ごと',
+        intervalHours: '{start} 時から {step} 時間ごと',
+        specificSeconds: '指定秒：{values}',
+        specificMinutes: '指定分：{values}',
+        specificHours: '指定時：{values}',
+        specificDays: '指定日：{values}',
+        specificMonths: '指定月：{values}',
+        specificWeeks: '指定曜日：{values}',
+        unknown: 'この式を自動説明できません。下の項目で編集してください',
+        join: '；',
+      },
       tab: {
         second: '秒',
         minute: '分',

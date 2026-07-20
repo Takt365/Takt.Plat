@@ -39,7 +39,7 @@ public class TaktCustomerComplaintHandling : TaktCompanyEntityBase
     [SugarColumn(ColumnName = "complaint_handling_code", ColumnDescription = "客诉处理记录编码", ColumnDataType = "nvarchar", Length = 50, IsNullable = false)]
     public string ComplaintHandlingCode { get; set; } = string.Empty;
     /// <summary>
-    /// 客诉 ID（关联 TaktCustomerComplaint.Id，选项 TaktCustomerComplaints/options）
+    /// 客诉 ID（选项 TaktCustomerComplaints/options，DictValue=Id）
     /// </summary>
     [SugarColumn(ColumnName = "complaint_id", ColumnDescription = "客诉ID", ColumnDataType = "bigint", IsNullable = false)]
     [JsonConverter(typeof(ValueToStringConverter))]
@@ -50,7 +50,7 @@ public class TaktCustomerComplaintHandling : TaktCompanyEntityBase
     [SugarColumn(ColumnName = "complaint_no", ColumnDescription = "客诉单号", ColumnDataType = "nvarchar", Length = 50, IsNullable = false)]
     public string ComplaintNo { get; set; } = string.Empty;
     /// <summary>
-    /// 客诉明细 ID（关联 TaktCustomerComplaintItem.Id，选项 TaktCustomerComplaintItems/options）
+    /// 客诉明细 ID（选项 TaktCustomerComplaintItems/options，DictValue=Id）
     /// </summary>
     [SugarColumn(ColumnName = "complaint_item_id", ColumnDescription = "客诉明细ID", ColumnDataType = "bigint", IsNullable = true)]
     [JsonConverter(typeof(ValueToStringConverter))]

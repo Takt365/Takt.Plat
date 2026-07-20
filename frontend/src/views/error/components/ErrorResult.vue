@@ -1,7 +1,7 @@
 ﻿<template>
   <div class="takt-error-page">
     <div v-if="code" class="takt-error-code">{{ code }}</div>
-    <a-result :status="status" :title="t(titleKey)" :sub-title="t(subtitleKey)">
+    <a-result :status="status" :title="resolvedTitle" :sub-title="t(subtitleKey)">
       <template #extra>
         <a-space wrap>
           <a-button v-if="showReload" @click="handleReload">
@@ -37,7 +37,10 @@ const props = withDefaults(
   defineProps<{
     status: ErrorResultStatus
     code?: string
-    titleKey: string
+    /** 文案键；与 title 二选一，title 优先 */
+    titleKey?: string
+    /** 直接标题（如菜单占位页取自 route.meta.titleKey） */
+    title?: string
     subtitleKey: string
     showBack?: boolean
     showHome?: boolean
@@ -54,6 +57,17 @@ const props = withDefaults(
 
 const { t } = useI18n()
 const router = useRouter()
+
+/** 结果页主标题 */
+const resolvedTitle = computed(() => {
+  if (props.title?.trim()) {
+    return props.title.trim()
+  }
+  if (props.titleKey?.trim()) {
+    return t(props.titleKey)
+  }
+  return ''
+})
 
 function handleHome() {
   router.push('/dashboard/workspace')

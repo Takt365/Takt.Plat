@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Infrastructure.Data.Seeds.I18nSeedData.Routine.VisitorCenter
 // 文件名称：TaktVisitorCompanionI18nSeedData.cs
-// 创建时间：2026-07-09
+// 创建时间：2026-07-20
 // 创建人：Takt365(Auto Generated)
 // 功能描述：TaktVisitorCompanion 实体字段国际化种子（无对应 frontend locales；TranslationText 取自 ColumnDescription，ContextNote 取自属性 XML summary）
 // 
@@ -91,13 +91,13 @@ public class TaktVisitorCompanionI18nSeedData : ITaktSeedDataCoordinator
             new TranslationSeedItem("entity.visitorcompanion._self", "zh-HK", "来访人员子信息_hk", "实体名称"),
 
             // entity.visitorcompanion.visitorid
-            new TranslationSeedItem("entity.visitorcompanion.visitorid", "en-US", "来访记录ID_us", "来访记录 ID（关联 TaktVisitor.Id，选项 TaktVisitors/options）"),
+            new TranslationSeedItem("entity.visitorcompanion.visitorid", "en-US", "来访记录ID_us", "来访记录 ID（选项 TaktVisitors/options，DictValue=Id）"),
             // entity.visitorcompanion.visitorid
-            new TranslationSeedItem("entity.visitorcompanion.visitorid", "ja-JP", "来访记录ID_jp", "来访记录 ID（关联 TaktVisitor.Id，选项 TaktVisitors/options）"),
+            new TranslationSeedItem("entity.visitorcompanion.visitorid", "ja-JP", "来访记录ID_jp", "来访记录 ID（选项 TaktVisitors/options，DictValue=Id）"),
             // entity.visitorcompanion.visitorid
-            new TranslationSeedItem("entity.visitorcompanion.visitorid", "zh-CN", "来访记录ID", "来访记录 ID（关联 TaktVisitor.Id，选项 TaktVisitors/options）"),
+            new TranslationSeedItem("entity.visitorcompanion.visitorid", "zh-CN", "来访记录ID", "来访记录 ID（选项 TaktVisitors/options，DictValue=Id）"),
             // entity.visitorcompanion.visitorid
-            new TranslationSeedItem("entity.visitorcompanion.visitorid", "zh-HK", "来访记录ID_hk", "来访记录 ID（关联 TaktVisitor.Id，选项 TaktVisitors/options）"),
+            new TranslationSeedItem("entity.visitorcompanion.visitorid", "zh-HK", "来访记录ID_hk", "来访记录 ID（选项 TaktVisitors/options，DictValue=Id）"),
 
             // entity.visitorcompanion.department
             new TranslationSeedItem("entity.visitorcompanion.department", "en-US", "部门_us", "部门"),

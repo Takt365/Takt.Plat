@@ -15,6 +15,7 @@
 @import './button-base.css';
 @import './dict-tag-base.css';
 @import './menu-base.css';
+@import './table-ellipsis-base.css';
 @import './utilities.css';
 @import 'tailwindcss';
 

@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Infrastructure.Data.Seeds.I18nSeedData.HumanResource.Compensation
 // 文件名称：TaktBonusPlanI18nSeedData.cs
-// 创建时间：2026-07-09
+// 创建时间：2026-07-20
 // 创建人：Takt365(Auto Generated)
 // 功能描述：TaktBonusPlan 实体字段国际化种子（无对应 frontend locales；TranslationText 取自 ColumnDescription，ContextNote 取自属性 XML summary）
 // 
@@ -127,13 +127,13 @@ public class TaktBonusPlanI18nSeedData : ITaktSeedDataCoordinator
             new TranslationSeedItem("entity.bonusplan.calcmethod", "zh-HK", "计算方式_hk", "计算方式（字典 hr_comp_bonus_calc_method_type；1=固定金额 2=按比例 3=按公式）"),
 
             // entity.bonusplan.salaryformulaid
-            new TranslationSeedItem("entity.bonusplan.salaryformulaid", "en-US", "计算公式ID_us", "计算公式（关联 TaktSalaryFormula.Id，选项 TaktSalaryFormulas/options；calc_method=3 按公式时使用）"),
+            new TranslationSeedItem("entity.bonusplan.salaryformulaid", "en-US", "计算公式ID_us", "计算公式（选项 TaktSalaryFormulas/options；calc_method=3 按公式时使用，DictValue=Id）"),
             // entity.bonusplan.salaryformulaid
-            new TranslationSeedItem("entity.bonusplan.salaryformulaid", "ja-JP", "计算公式ID_jp", "计算公式（关联 TaktSalaryFormula.Id，选项 TaktSalaryFormulas/options；calc_method=3 按公式时使用）"),
+            new TranslationSeedItem("entity.bonusplan.salaryformulaid", "ja-JP", "计算公式ID_jp", "计算公式（选项 TaktSalaryFormulas/options；calc_method=3 按公式时使用，DictValue=Id）"),
             // entity.bonusplan.salaryformulaid
-            new TranslationSeedItem("entity.bonusplan.salaryformulaid", "zh-CN", "计算公式ID", "计算公式（关联 TaktSalaryFormula.Id，选项 TaktSalaryFormulas/options；calc_method=3 按公式时使用）"),
+            new TranslationSeedItem("entity.bonusplan.salaryformulaid", "zh-CN", "计算公式ID", "计算公式（选项 TaktSalaryFormulas/options；calc_method=3 按公式时使用，DictValue=Id）"),
             // entity.bonusplan.salaryformulaid
-            new TranslationSeedItem("entity.bonusplan.salaryformulaid", "zh-HK", "计算公式ID_hk", "计算公式（关联 TaktSalaryFormula.Id，选项 TaktSalaryFormulas/options；calc_method=3 按公式时使用）"),
+            new TranslationSeedItem("entity.bonusplan.salaryformulaid", "zh-HK", "计算公式ID_hk", "计算公式（选项 TaktSalaryFormulas/options；calc_method=3 按公式时使用，DictValue=Id）"),
 
             // entity.bonusplan.defaultamount
             new TranslationSeedItem("entity.bonusplan.defaultamount", "en-US", "默认金额_us", "默认奖金金额或基数（元）"),
@@ -163,13 +163,13 @@ public class TaktBonusPlanI18nSeedData : ITaktSeedDataCoordinator
             new TranslationSeedItem("entity.bonusplan.description", "zh-HK", "方案说明_hk", "方案说明"),
 
             // entity.bonusplan.relatedplant
-            new TranslationSeedItem("entity.bonusplan.relatedplant", "en-US", "关联工厂_us", "关联工厂（关联 TaktPlant.PlantCode，选项 TaktPlants/options）"),
+            new TranslationSeedItem("entity.bonusplan.relatedplant", "en-US", "关联工厂_us", "关联工厂（选项 TaktPlants/options，DictValue=Id）"),
             // entity.bonusplan.relatedplant
-            new TranslationSeedItem("entity.bonusplan.relatedplant", "ja-JP", "关联工厂_jp", "关联工厂（关联 TaktPlant.PlantCode，选项 TaktPlants/options）"),
+            new TranslationSeedItem("entity.bonusplan.relatedplant", "ja-JP", "关联工厂_jp", "关联工厂（选项 TaktPlants/options，DictValue=Id）"),
             // entity.bonusplan.relatedplant
-            new TranslationSeedItem("entity.bonusplan.relatedplant", "zh-CN", "关联工厂", "关联工厂（关联 TaktPlant.PlantCode，选项 TaktPlants/options）"),
+            new TranslationSeedItem("entity.bonusplan.relatedplant", "zh-CN", "关联工厂", "关联工厂（选项 TaktPlants/options，DictValue=Id）"),
             // entity.bonusplan.relatedplant
-            new TranslationSeedItem("entity.bonusplan.relatedplant", "zh-HK", "关联工厂_hk", "关联工厂（关联 TaktPlant.PlantCode，选项 TaktPlants/options）"),
+            new TranslationSeedItem("entity.bonusplan.relatedplant", "zh-HK", "关联工厂_hk", "关联工厂（选项 TaktPlants/options，DictValue=Id）"),
 
             // entity.bonusplan.planstatus
             new TranslationSeedItem("entity.bonusplan.planstatus", "en-US", "状态_us", "状态（字典 sys_normal_disable_status；0=禁用 1=启用 2=锁定）"),

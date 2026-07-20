@@ -212,7 +212,7 @@ public class TaktMenuButtonSeedData
     }
 
     /// <summary>
-    /// 通用 CRUD 按钮显示名称（分组：CRUD → 导入导出 → 审批流 → 复制克隆 → 树表 → 明细行 → 其它；末项固定「批量」）。
+    /// 通用 CRUD 按钮显示名称（分组：CRUD → 导入导出 → 审批流 → 复制克隆 → 树表 → 明细行 → 其他；末项固定「批量」）。
     /// 「撤销」(revoke) 与「撤回」(withdraw) 为全项目共用后缀，模块扩展不得重复定义。
     /// </summary>
     private static readonly string[] GenericButtonNames =
@@ -261,12 +261,14 @@ public class TaktMenuButtonSeedData
         "reverse", "void"
     };
 
-    /// <summary>代码生成模块扩展按钮（分组：生成下载 → 同步元数据 → 初始化克隆 → 清空截断）。</summary>
+    /// <summary>代码生成模块扩展按钮（分组：生成下载 → 同步元数据 → 初始化克隆 → 数据表归档 → 备份调度 → 清空截断）。</summary>
     private static readonly string[] CodeExtraNames =
     {
         "生成", "下载",
         "同步", "字段", "表", "数据库",
         "初始化", "克隆",
+        "归档",
+        "立即备份", "后台备份",
         "清空", "截断"
     };
 
@@ -275,6 +277,8 @@ public class TaktMenuButtonSeedData
         "generate", "download",
         "sync", "columns", "tables", "databases",
         "initialize", "clone",
+        "archive",
+        "run", "schedule",
         "empty", "truncate"
     };
 
@@ -331,7 +335,7 @@ public class TaktMenuButtonSeedData
     private static readonly string[] RoutineExtraNames =
     {
         "克隆", "复制",
-        "保存草稿", "删除草稿", "发送", "转发", "回复", "已读", "未读", "传阅", "签收", "催办", "确认",
+        "草稿", "删除草稿", "发送", "转发", "回复", "已读", "未读", "传阅", "签收", "催办", "确认",
         "点赞", "取消点赞", "收藏", "取消收藏", "分享", "取消分享", "评论", "取消评论", "举报", "取消举报", "关注", "取消关注",
         "上传", "下载", "归档", "销毁", "版本",
         "置顶", "置底",
@@ -357,28 +361,28 @@ public class TaktMenuButtonSeedData
     /// </summary>
     private static readonly string[] WorkflowExtraNames =
     {
-        "启动", "发起流程", "保存草稿", "提交",
+        "启动", "发起", "草稿", "提交",
         "转办", "加签", "减签",
         "挂起", "恢复", "终止",
         "设计", "发布", "验证", "部署",
-        "认领", "抄送", "退回", "委托", "跳转", "跟踪开始", "跟踪", "释放", "发起人", "切换"
+        "认领", "抄送", "退回", "委托", "跳转", "跟踪", "释放", "发起人", "切换"
     };
 
     /// <summary>工作流模块扩展按钮权限后缀（与 WorkflowExtraNames 一一对应）。</summary>
     private static readonly string[] WorkflowExtraPerms =
     {
-        "start", "startflow", "draft", "submit",
+        "start", "initiate", "draft", "submit",
         "transfer", "addsign", "reducesign",
         "suspend", "resume", "terminate",
         "design", "publish", "validate", "deploy",
-        "claim", "cc", "return", "delegate", "jump", "tracestart", "trace", "release", "initiator", "toggle"
+        "claim", "cc", "return", "delegate", "jump", "trace", "release", "initiator", "toggle"
     };
 
     /// <summary>统计看板模块扩展按钮（分组：刷新 → 日志清理 → 归档销毁 → 导出同步 → 核算转置 → 系统控制）。</summary>
     private static readonly string[] StatisticsExtraNames =
     {
         "刷新",
-        "清空", "清空7天", "清空30天", "清空全部", "清理", "截断",
+        "清空", "清理", "截断",
         "归档", "销毁",
         "下载", "同步",
         "核算", "转置",
@@ -388,20 +392,24 @@ public class TaktMenuButtonSeedData
     private static readonly string[] StatisticsExtraPerms =
     {
         "refresh",
-        "empty", "empty7d", "empty30d", "emptyall", "clean", "truncate",
+        "empty", "clean", "truncate",
         "archive", "destroy",
         "download", "sync",
         "calculate", "transpose",
         "reset", "run", "stop", "restart"
     };
 
-    /// <summary>后勤/物料模块扩展按钮（分组：收发货 → 库内作业 → 领借还 → 调拨核销）。</summary>
+    /// <summary>
+    /// 后勤/物料/制造模块扩展按钮（分组：收发货 → 库内作业 → 领借还 → 调拨核销 → 制造编排通用操作）。
+    /// 权限末段用通用操作：generate / run / publish / release / schedule / convertto。
+    /// </summary>
     private static readonly string[] LogisticsExtraNames =
     {
         "收货", "发货", "退货",
         "移库", "盘点", "调整", "报废",
         "领用", "借调", "归还", "报损",
-        "调拨", "核销"
+        "调拨", "核销",
+        "生成", "运行", "发布", "释放", "排程", "转换"
     };
 
     private static readonly string[] LogisticsExtraPerms =
@@ -409,7 +417,8 @@ public class TaktMenuButtonSeedData
         "receive", "shipping", "returns",
         "transfer", "stocktake", "adjust", "scrap",
         "requisition", "secondment", "restore", "lossreport",
-        "allot", "writeoff"
+        "allot", "writeoff",
+        "generate", "run", "publish", "release", "schedule", "convertto"
     };
 
     /// <summary>
@@ -439,7 +448,8 @@ public class TaktMenuButtonSeedData
     /// <summary>
     /// 按模块前缀返回按钮显示名称数组与权限后缀（英文）数组；两者长度一致、一一对应。
     /// 各模块继承 GenericButtonNames，仅追加特有操作；匹配顺序：
-    /// Accounting → Code → Foundation → HumanResource → Identity → Routine → Workflow → Statistics。
+    /// Accounting → Code → Foundation → HumanResource → Identity → Routine → Workflow → Statistics → Logistics。
+    /// 禁止再按单个 list 菜单特立 Append* 追加权限后缀。
     /// </summary>
     /// <param name="modulePrefix">
     /// 模块前缀，如 <c>identity</c>、<c>workflow</c>、<c>routine</c> 等；

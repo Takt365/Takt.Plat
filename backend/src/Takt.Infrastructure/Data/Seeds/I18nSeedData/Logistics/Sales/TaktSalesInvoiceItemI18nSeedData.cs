@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Infrastructure.Data.Seeds.I18nSeedData.Logistics.Sales
 // 文件名称：TaktSalesInvoiceItemI18nSeedData.cs
-// 创建时间：2026-07-09
+// 创建时间：2026-07-20
 // 创建人：Takt365(Auto Generated)
 // 功能描述：TaktSalesInvoiceItem 实体字段国际化种子（无对应 frontend locales；TranslationText 取自 ColumnDescription，ContextNote 取自属性 XML summary）
 // 
@@ -91,13 +91,13 @@ public class TaktSalesInvoiceItemI18nSeedData : ITaktSeedDataCoordinator
             new TranslationSeedItem("entity.salesinvoiceitem._self", "zh-HK", "Takt销售发票明细信息_hk", "实体名称"),
 
             // entity.salesinvoiceitem.salesinvoiceid
-            new TranslationSeedItem("entity.salesinvoiceitem.salesinvoiceid", "en-US", "销售发票ID_us", "销售发票（关联 TaktSalesInvoice.Id，选项 TaktSalesInvoices/options）"),
+            new TranslationSeedItem("entity.salesinvoiceitem.salesinvoiceid", "en-US", "销售发票ID_us", "销售发票（选项 TaktSalesInvoices/options，DictValue=Id）"),
             // entity.salesinvoiceitem.salesinvoiceid
-            new TranslationSeedItem("entity.salesinvoiceitem.salesinvoiceid", "ja-JP", "销售发票ID_jp", "销售发票（关联 TaktSalesInvoice.Id，选项 TaktSalesInvoices/options）"),
+            new TranslationSeedItem("entity.salesinvoiceitem.salesinvoiceid", "ja-JP", "销售发票ID_jp", "销售发票（选项 TaktSalesInvoices/options，DictValue=Id）"),
             // entity.salesinvoiceitem.salesinvoiceid
-            new TranslationSeedItem("entity.salesinvoiceitem.salesinvoiceid", "zh-CN", "销售发票ID", "销售发票（关联 TaktSalesInvoice.Id，选项 TaktSalesInvoices/options）"),
+            new TranslationSeedItem("entity.salesinvoiceitem.salesinvoiceid", "zh-CN", "销售发票ID", "销售发票（选项 TaktSalesInvoices/options，DictValue=Id）"),
             // entity.salesinvoiceitem.salesinvoiceid
-            new TranslationSeedItem("entity.salesinvoiceitem.salesinvoiceid", "zh-HK", "销售发票ID_hk", "销售发票（关联 TaktSalesInvoice.Id，选项 TaktSalesInvoices/options）"),
+            new TranslationSeedItem("entity.salesinvoiceitem.salesinvoiceid", "zh-HK", "销售发票ID_hk", "销售发票（选项 TaktSalesInvoices/options，DictValue=Id）"),
 
             // entity.salesinvoiceitem.accountingdocumentcode
             new TranslationSeedItem("entity.salesinvoiceitem.accountingdocumentcode", "en-US", "会计凭证编号_us", "会计凭证编号（冗余，与主表 AccountingDocumentCode 一致）"),
@@ -145,13 +145,13 @@ public class TaktSalesInvoiceItemI18nSeedData : ITaktSeedDataCoordinator
             new TranslationSeedItem("entity.salesinvoiceitem.modelname", "zh-HK", "机种名称_hk", "机种名称"),
 
             // entity.salesinvoiceitem.materialcode
-            new TranslationSeedItem("entity.salesinvoiceitem.materialcode", "en-US", "物料编码_us", "物料编码（选项 TaktMaterials/options，DictValue=MaterialCode）"),
+            new TranslationSeedItem("entity.salesinvoiceitem.materialcode", "en-US", "物料编码_us", "物料编码（选项 TaktMaterialPlants/options，DictValue=MaterialCode，ExtValue=PlantCode）"),
             // entity.salesinvoiceitem.materialcode
-            new TranslationSeedItem("entity.salesinvoiceitem.materialcode", "ja-JP", "物料编码_jp", "物料编码（选项 TaktMaterials/options，DictValue=MaterialCode）"),
+            new TranslationSeedItem("entity.salesinvoiceitem.materialcode", "ja-JP", "物料编码_jp", "物料编码（选项 TaktMaterialPlants/options，DictValue=MaterialCode，ExtValue=PlantCode）"),
             // entity.salesinvoiceitem.materialcode
-            new TranslationSeedItem("entity.salesinvoiceitem.materialcode", "zh-CN", "物料编码", "物料编码（选项 TaktMaterials/options，DictValue=MaterialCode）"),
+            new TranslationSeedItem("entity.salesinvoiceitem.materialcode", "zh-CN", "物料编码", "物料编码（选项 TaktMaterialPlants/options，DictValue=MaterialCode，ExtValue=PlantCode）"),
             // entity.salesinvoiceitem.materialcode
-            new TranslationSeedItem("entity.salesinvoiceitem.materialcode", "zh-HK", "物料编码_hk", "物料编码（选项 TaktMaterials/options，DictValue=MaterialCode）"),
+            new TranslationSeedItem("entity.salesinvoiceitem.materialcode", "zh-HK", "物料编码_hk", "物料编码（选项 TaktMaterialPlants/options，DictValue=MaterialCode，ExtValue=PlantCode）"),
 
             // entity.salesinvoiceitem.materialtype
             new TranslationSeedItem("entity.salesinvoiceitem.materialtype", "en-US", "物料类型_us", "物料类型（字典 logistics_material_type，DictValue=ROH/HALB 等；默认 ROH）"),
@@ -163,31 +163,31 @@ public class TaktSalesInvoiceItemI18nSeedData : ITaktSeedDataCoordinator
             new TranslationSeedItem("entity.salesinvoiceitem.materialtype", "zh-HK", "物料类型_hk", "物料类型（字典 logistics_material_type，DictValue=ROH/HALB 等；默认 ROH）"),
 
             // entity.salesinvoiceitem.materialname
-            new TranslationSeedItem("entity.salesinvoiceitem.materialname", "en-US", "物料名称_us", "物料名称"),
+            new TranslationSeedItem("entity.salesinvoiceitem.materialname", "en-US", "物料名称_us", "物料名称（回填：随物料）"),
             // entity.salesinvoiceitem.materialname
-            new TranslationSeedItem("entity.salesinvoiceitem.materialname", "ja-JP", "物料名称_jp", "物料名称"),
+            new TranslationSeedItem("entity.salesinvoiceitem.materialname", "ja-JP", "物料名称_jp", "物料名称（回填：随物料）"),
             // entity.salesinvoiceitem.materialname
-            new TranslationSeedItem("entity.salesinvoiceitem.materialname", "zh-CN", "物料名称", "物料名称"),
+            new TranslationSeedItem("entity.salesinvoiceitem.materialname", "zh-CN", "物料名称", "物料名称（回填：随物料）"),
             // entity.salesinvoiceitem.materialname
-            new TranslationSeedItem("entity.salesinvoiceitem.materialname", "zh-HK", "物料名称_hk", "物料名称"),
+            new TranslationSeedItem("entity.salesinvoiceitem.materialname", "zh-HK", "物料名称_hk", "物料名称（回填：随物料）"),
 
             // entity.salesinvoiceitem.profitcentercode
-            new TranslationSeedItem("entity.salesinvoiceitem.profitcentercode", "en-US", "利润中心_us", "利润中心（关联 TaktProfitCenter.ProfitCenterCode，选项 TaktProfitCenters/options，DictValue=ProfitCenterCode）"),
+            new TranslationSeedItem("entity.salesinvoiceitem.profitcentercode", "en-US", "利润中心_us", "利润中心（选项 TaktProfitCenters/options，DictValue=ProfitCenterCode）"),
             // entity.salesinvoiceitem.profitcentercode
-            new TranslationSeedItem("entity.salesinvoiceitem.profitcentercode", "ja-JP", "利润中心_jp", "利润中心（关联 TaktProfitCenter.ProfitCenterCode，选项 TaktProfitCenters/options，DictValue=ProfitCenterCode）"),
+            new TranslationSeedItem("entity.salesinvoiceitem.profitcentercode", "ja-JP", "利润中心_jp", "利润中心（选项 TaktProfitCenters/options，DictValue=ProfitCenterCode）"),
             // entity.salesinvoiceitem.profitcentercode
-            new TranslationSeedItem("entity.salesinvoiceitem.profitcentercode", "zh-CN", "利润中心", "利润中心（关联 TaktProfitCenter.ProfitCenterCode，选项 TaktProfitCenters/options，DictValue=ProfitCenterCode）"),
+            new TranslationSeedItem("entity.salesinvoiceitem.profitcentercode", "zh-CN", "利润中心", "利润中心（选项 TaktProfitCenters/options，DictValue=ProfitCenterCode）"),
             // entity.salesinvoiceitem.profitcentercode
-            new TranslationSeedItem("entity.salesinvoiceitem.profitcentercode", "zh-HK", "利润中心_hk", "利润中心（关联 TaktProfitCenter.ProfitCenterCode，选项 TaktProfitCenters/options，DictValue=ProfitCenterCode）"),
+            new TranslationSeedItem("entity.salesinvoiceitem.profitcentercode", "zh-HK", "利润中心_hk", "利润中心（选项 TaktProfitCenters/options，DictValue=ProfitCenterCode）"),
 
             // entity.salesinvoiceitem.accounttitle
-            new TranslationSeedItem("entity.salesinvoiceitem.accounttitle", "en-US", "会计科目_us", "会计科目（关联 TaktAccountTitle.AccountTitleCode，选项 TaktAccountTitles/options）"),
+            new TranslationSeedItem("entity.salesinvoiceitem.accounttitle", "en-US", "会计科目_us", "会计科目（选项 TaktAccountTitles/options，DictValue=Id）"),
             // entity.salesinvoiceitem.accounttitle
-            new TranslationSeedItem("entity.salesinvoiceitem.accounttitle", "ja-JP", "会计科目_jp", "会计科目（关联 TaktAccountTitle.AccountTitleCode，选项 TaktAccountTitles/options）"),
+            new TranslationSeedItem("entity.salesinvoiceitem.accounttitle", "ja-JP", "会计科目_jp", "会计科目（选项 TaktAccountTitles/options，DictValue=Id）"),
             // entity.salesinvoiceitem.accounttitle
-            new TranslationSeedItem("entity.salesinvoiceitem.accounttitle", "zh-CN", "会计科目", "会计科目（关联 TaktAccountTitle.AccountTitleCode，选项 TaktAccountTitles/options）"),
+            new TranslationSeedItem("entity.salesinvoiceitem.accounttitle", "zh-CN", "会计科目", "会计科目（选项 TaktAccountTitles/options，DictValue=Id）"),
             // entity.salesinvoiceitem.accounttitle
-            new TranslationSeedItem("entity.salesinvoiceitem.accounttitle", "zh-HK", "会计科目_hk", "会计科目（关联 TaktAccountTitle.AccountTitleCode，选项 TaktAccountTitles/options）"),
+            new TranslationSeedItem("entity.salesinvoiceitem.accounttitle", "zh-HK", "会计科目_hk", "会计科目（选项 TaktAccountTitles/options，DictValue=Id）"),
 
             // entity.salesinvoiceitem.quantity
             new TranslationSeedItem("entity.salesinvoiceitem.quantity", "en-US", "数量_us", "数量"),
@@ -199,13 +199,13 @@ public class TaktSalesInvoiceItemI18nSeedData : ITaktSeedDataCoordinator
             new TranslationSeedItem("entity.salesinvoiceitem.quantity", "zh-HK", "数量_hk", "数量"),
 
             // entity.salesinvoiceitem.unit
-            new TranslationSeedItem("entity.salesinvoiceitem.unit", "en-US", "单位_us", "单位"),
+            new TranslationSeedItem("entity.salesinvoiceitem.unit", "en-US", "单位_us", "单位（字典 logistics_unit_of_measure_code，DictValue=PC/EA 等；默认 PC）"),
             // entity.salesinvoiceitem.unit
-            new TranslationSeedItem("entity.salesinvoiceitem.unit", "ja-JP", "单位_jp", "单位"),
+            new TranslationSeedItem("entity.salesinvoiceitem.unit", "ja-JP", "单位_jp", "单位（字典 logistics_unit_of_measure_code，DictValue=PC/EA 等；默认 PC）"),
             // entity.salesinvoiceitem.unit
-            new TranslationSeedItem("entity.salesinvoiceitem.unit", "zh-CN", "单位", "单位"),
+            new TranslationSeedItem("entity.salesinvoiceitem.unit", "zh-CN", "单位", "单位（字典 logistics_unit_of_measure_code，DictValue=PC/EA 等；默认 PC）"),
             // entity.salesinvoiceitem.unit
-            new TranslationSeedItem("entity.salesinvoiceitem.unit", "zh-HK", "单位_hk", "单位"),
+            new TranslationSeedItem("entity.salesinvoiceitem.unit", "zh-HK", "单位_hk", "单位（字典 logistics_unit_of_measure_code，DictValue=PC/EA 等；默认 PC）"),
 
             // entity.salesinvoiceitem.localcurrencyamount
             new TranslationSeedItem("entity.salesinvoiceitem.localcurrencyamount", "en-US", "本位币金额_us", "本位币金额"),

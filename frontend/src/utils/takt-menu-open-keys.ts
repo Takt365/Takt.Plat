@@ -59,7 +59,7 @@ export function buildMenuParentKeyMap(
 }
 
 /**
- * 手风琴模式：保留「最后展开项」到根节点的完整祖先链（同级其它分支收起）
+ * 手风琴模式：保留「最后展开项」到根节点的完整祖先链（同级其他分支收起）
  * @param keys 当前 openKeys
  * @param parentByKey key → 父 key
  */

@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Infrastructure.Data.Seeds.I18nSeedData.Logistics.Quality.Cost
 // 文件名称：TaktQualityAssuranceReliabilityI18nSeedData.cs
-// 创建时间：2026-07-09
+// 创建时间：2026-07-20
 // 创建人：Takt365(Auto Generated)
 // 功能描述：TaktQualityAssuranceReliability 实体字段国际化种子（无对应 frontend locales；TranslationText 取自 ColumnDescription，ContextNote 取自属性 XML summary）
 // 
@@ -91,13 +91,13 @@ public class TaktQualityAssuranceReliabilityI18nSeedData : ITaktSeedDataCoordina
             new TranslationSeedItem("entity.qualityassurancereliability._self", "zh-HK", "品质业务明细 - 信赖性评价/ORT费用信息_hk", "实体名称"),
 
             // entity.qualityassurancereliability.qualityassuranceid
-            new TranslationSeedItem("entity.qualityassurancereliability.qualityassuranceid", "en-US", "品质业务主表ID_us", "品质业务主表 ID（关联 TaktQualityAssurance.Id，选项 TaktQualityAssurances/options）"),
+            new TranslationSeedItem("entity.qualityassurancereliability.qualityassuranceid", "en-US", "品质业务主表ID_us", "品质业务主表 ID（选项 TaktQualityAssurances/options，DictValue=Id）"),
             // entity.qualityassurancereliability.qualityassuranceid
-            new TranslationSeedItem("entity.qualityassurancereliability.qualityassuranceid", "ja-JP", "品质业务主表ID_jp", "品质业务主表 ID（关联 TaktQualityAssurance.Id，选项 TaktQualityAssurances/options）"),
+            new TranslationSeedItem("entity.qualityassurancereliability.qualityassuranceid", "ja-JP", "品质业务主表ID_jp", "品质业务主表 ID（选项 TaktQualityAssurances/options，DictValue=Id）"),
             // entity.qualityassurancereliability.qualityassuranceid
-            new TranslationSeedItem("entity.qualityassurancereliability.qualityassuranceid", "zh-CN", "品质业务主表ID", "品质业务主表 ID（关联 TaktQualityAssurance.Id，选项 TaktQualityAssurances/options）"),
+            new TranslationSeedItem("entity.qualityassurancereliability.qualityassuranceid", "zh-CN", "品质业务主表ID", "品质业务主表 ID（选项 TaktQualityAssurances/options，DictValue=Id）"),
             // entity.qualityassurancereliability.qualityassuranceid
-            new TranslationSeedItem("entity.qualityassurancereliability.qualityassuranceid", "zh-HK", "品质业务主表ID_hk", "品质业务主表 ID（关联 TaktQualityAssurance.Id，选项 TaktQualityAssurances/options）"),
+            new TranslationSeedItem("entity.qualityassurancereliability.qualityassuranceid", "zh-HK", "品质业务主表ID_hk", "品质业务主表 ID（选项 TaktQualityAssurances/options，DictValue=Id）"),
 
             // entity.qualityassurancereliability.qualityassurancecode
             new TranslationSeedItem("entity.qualityassurancereliability.qualityassurancecode", "en-US", "品质业务编码_us", "品质业务编码（冗余字段,便于查询）"),

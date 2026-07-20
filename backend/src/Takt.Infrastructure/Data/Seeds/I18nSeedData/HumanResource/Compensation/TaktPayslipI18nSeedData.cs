@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Infrastructure.Data.Seeds.I18nSeedData.HumanResource.Compensation
 // 文件名称：TaktPayslipI18nSeedData.cs
-// 创建时间：2026-07-09
+// 创建时间：2026-07-20
 // 创建人：Takt365(Auto Generated)
 // 功能描述：TaktPayslip 实体字段国际化种子（无对应 frontend locales；TranslationText 取自 ColumnDescription，ContextNote 取自属性 XML summary）
 // 
@@ -91,13 +91,13 @@ public class TaktPayslipI18nSeedData : ITaktSeedDataCoordinator
             new TranslationSeedItem("entity.payslip._self", "zh-HK", "员工工资条信息_hk", "实体名称"),
 
             // entity.payslip.employeeid
-            new TranslationSeedItem("entity.payslip.employeeid", "en-US", "员工ID_us", "员工（关联 TaktEmployee.Id，选项 TaktEmployees/options）"),
+            new TranslationSeedItem("entity.payslip.employeeid", "en-US", "员工ID_us", "员工（选项 TaktEmployees/options，DictValue=Id）"),
             // entity.payslip.employeeid
-            new TranslationSeedItem("entity.payslip.employeeid", "ja-JP", "员工ID_jp", "员工（关联 TaktEmployee.Id，选项 TaktEmployees/options）"),
+            new TranslationSeedItem("entity.payslip.employeeid", "ja-JP", "员工ID_jp", "员工（选项 TaktEmployees/options，DictValue=Id）"),
             // entity.payslip.employeeid
-            new TranslationSeedItem("entity.payslip.employeeid", "zh-CN", "员工ID", "员工（关联 TaktEmployee.Id，选项 TaktEmployees/options）"),
+            new TranslationSeedItem("entity.payslip.employeeid", "zh-CN", "员工ID", "员工（选项 TaktEmployees/options，DictValue=Id）"),
             // entity.payslip.employeeid
-            new TranslationSeedItem("entity.payslip.employeeid", "zh-HK", "员工ID_hk", "员工（关联 TaktEmployee.Id，选项 TaktEmployees/options）"),
+            new TranslationSeedItem("entity.payslip.employeeid", "zh-HK", "员工ID_hk", "员工（选项 TaktEmployees/options，DictValue=Id）"),
 
             // entity.payslip.employeename
             new TranslationSeedItem("entity.payslip.employeename", "en-US", "员工姓名_us", "员工姓名"),
@@ -235,13 +235,13 @@ public class TaktPayslipI18nSeedData : ITaktSeedDataCoordinator
             new TranslationSeedItem("entity.payslip.issuedate", "zh-HK", "发放日期_hk", "发放日期"),
 
             // entity.payslip.relatedplant
-            new TranslationSeedItem("entity.payslip.relatedplant", "en-US", "关联工厂_us", "关联工厂（关联 TaktPlant.PlantCode，选项 TaktPlants/options）"),
+            new TranslationSeedItem("entity.payslip.relatedplant", "en-US", "关联工厂_us", "关联工厂（选项 TaktPlants/options，DictValue=Id）"),
             // entity.payslip.relatedplant
-            new TranslationSeedItem("entity.payslip.relatedplant", "ja-JP", "关联工厂_jp", "关联工厂（关联 TaktPlant.PlantCode，选项 TaktPlants/options）"),
+            new TranslationSeedItem("entity.payslip.relatedplant", "ja-JP", "关联工厂_jp", "关联工厂（选项 TaktPlants/options，DictValue=Id）"),
             // entity.payslip.relatedplant
-            new TranslationSeedItem("entity.payslip.relatedplant", "zh-CN", "关联工厂", "关联工厂（关联 TaktPlant.PlantCode，选项 TaktPlants/options）"),
+            new TranslationSeedItem("entity.payslip.relatedplant", "zh-CN", "关联工厂", "关联工厂（选项 TaktPlants/options，DictValue=Id）"),
             // entity.payslip.relatedplant
-            new TranslationSeedItem("entity.payslip.relatedplant", "zh-HK", "关联工厂_hk", "关联工厂（关联 TaktPlant.PlantCode，选项 TaktPlants/options）"),
+            new TranslationSeedItem("entity.payslip.relatedplant", "zh-HK", "关联工厂_hk", "关联工厂（选项 TaktPlants/options，DictValue=Id）"),
 
             // entity.payslip.issuestatus
             new TranslationSeedItem("entity.payslip.issuestatus", "en-US", "发放状态_us", "发放状态（字典 hr_payslip_issue_status；0=待发放 1=已发放 2=已确认）"),

@@ -21,7 +21,7 @@ const SQL_USER = process.env.TAKT_SYNC_SQL_USER || 'sa';
 /** SQL 登录密码 */
 const SQL_PWD = process.env.TAKT_SYNC_SQL_PWD || 'Tac26901333.';
 /** Takt 业务库 */
-const DB = process.env.TAKT_SYNC_DB || 'Takt_000_Dev';
+const DB = process.env.TAKT_SYNC_DB || 'zTakt_000_Dev';
 /** 批大小；0=全量（可用 TAKT_SYNC_BATCH_SIZE 覆盖） */
 const BATCH_SIZE = Number(process.env.TAKT_SYNC_BATCH_SIZE ?? 0);
 /** sqlcmd 可执行路径 */

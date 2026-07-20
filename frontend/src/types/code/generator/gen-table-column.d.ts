@@ -129,7 +129,7 @@ export interface GenTableColumn extends TenantDtoBase {
   isQuery: number;
 
   /**
-   * 查询方式（字典 gen_query_type：eq/ne/gt/gte/lt/lte/like/between）。IsQuery=0 时必须为空串；IsQuery=1 时必填，字符串默认 like、其它类型默认 eq
+   * 查询方式（字典 gen_query_type：eq/ne/gt/gte/lt/lte/like/between）。IsQuery=0 时必须为空串；IsQuery=1 时必填，字符串默认 like、其他类型默认 eq
    */
   queryType: string;
 
@@ -259,7 +259,7 @@ export interface GenTableColumnQuery extends TaktPagedQuery {
   isQuery?: number;
 
   /**
-   * 查询方式（字典 gen_query_type：eq/ne/gt/gte/lt/lte/like/between）。IsQuery=0 时必须为空串；IsQuery=1 时必填，字符串默认 like、其它类型默认 eq
+   * 查询方式（字典 gen_query_type：eq/ne/gt/gte/lt/lte/like/between）。IsQuery=0 时必须为空串；IsQuery=1 时必填，字符串默认 like、其他类型默认 eq
    */
   queryType?: string;
 
@@ -403,7 +403,7 @@ export interface GenTableColumnCreate {
   isQuery: number;
 
   /**
-   * 查询方式（字典 gen_query_type：eq/ne/gt/gte/lt/lte/like/between）。IsQuery=0 时必须为空串；IsQuery=1 时必填，字符串默认 like、其它类型默认 eq
+   * 查询方式（字典 gen_query_type：eq/ne/gt/gte/lt/lte/like/between）。IsQuery=0 时必须为空串；IsQuery=1 时必填，字符串默认 like、其他类型默认 eq
    */
   queryType: string;
 
@@ -739,7 +739,7 @@ export interface GenTableColumnExport {
   isQuery: number;
 
   /**
-   * 查询方式（字典 gen_query_type：eq/ne/gt/gte/lt/lte/like/between）。IsQuery=0 时必须为空串；IsQuery=1 时必填，字符串默认 like、其它类型默认 eq
+   * 查询方式（字典 gen_query_type：eq/ne/gt/gte/lt/lte/like/between）。IsQuery=0 时必须为空串；IsQuery=1 时必填，字符串默认 like、其他类型默认 eq
    */
   queryType: string;
 

@@ -176,7 +176,7 @@ public class TaktUserCompanySeedData : ITaktSeedDataCoordinator
     }
 
     /// <summary>
-    /// 清除用户其它公司关联上残留的 IsDefault=1，保证仅默认公司（2300）为默认登录公司
+    /// 清除用户其他公司关联上残留的 IsDefault=1，保证仅默认公司（2300）为默认登录公司
     /// </summary>
     /// <param name="userCompanyRepository">用户-公司关联仓储</param>
     /// <param name="tenantCode">租户编码</param>

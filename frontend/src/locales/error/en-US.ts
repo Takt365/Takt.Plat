@@ -40,6 +40,10 @@ export default {
       title: "Service unavailable",
       subtitle: "Service temporarily unavailable. Please try again later.",
     },
+    comingsoon: {
+      title: "Coming soon",
+      subtitle: "This feature is coming soon. Please stay tuned.",
+    },
     http: {
       network: "Cannot connect to the backend. Please ensure the API is running.",
       timeout: "Request timed out. Please try again later.",

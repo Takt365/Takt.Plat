@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Application.Validators.Logistics.Sales
 // 文件名称：TaktSalesPriceItemValidators.cs
-// 创建时间：2026-07-09
+// 创建时间：2026-07-20
 // 创建人：Takt365(Auto Generated)
 // 功能描述：SalesPriceItem 模块 FluentValidation 验证器（由 generate-validators-from-entity.cjs 根据 TaktSalesPriceItem 生成，请按需审阅）
 // 
@@ -36,16 +36,16 @@ public class TaktSalesPriceItemCreateValidator : AbstractValidator<TaktSalesPric
             .NotEmpty().WithMessage("公司代码不能为空")
             .MaximumLength(4).WithMessage("公司代码长度不能超过4个字符");
         RuleFor(x => x.SalesPriceId)
-            .GreaterThanOrEqualTo(0).WithMessage("销售价格不能为负数");
+            .GreaterThanOrEqualTo(0).WithMessage("销售价格 ID不能为负数");
         RuleFor(x => x.SalesPriceCode)
-            .NotEmpty().WithMessage("销售价格编码不能为空")
-            .MaximumLength(50).WithMessage("销售价格编码长度不能超过50个字符");
-        RuleFor(x => x.MaterialCode)
-            .NotEmpty().WithMessage("物料编码不能为空")
-            .MaximumLength(20).WithMessage("物料编码长度不能超过20个字符");
-        RuleFor(x => x.SalesUnit)
-            .NotEmpty().WithMessage("销售单位不能为空")
-            .MaximumLength(5).WithMessage("销售单位长度不能超过5个字符");
+            .NotEmpty().WithMessage("定价记录号不能为空")
+            .MaximumLength(20).WithMessage("定价记录号长度不能超过20个字符");
+        RuleFor(x => x.PriceType)
+            .NotEmpty().WithMessage("条件类型不能为空")
+            .MaximumLength(4).WithMessage("条件类型长度不能超过4个字符");
+        RuleFor(x => x.CalculationType)
+            .NotEmpty().WithMessage("计算类型不能为空")
+            .MaximumLength(1).WithMessage("计算类型长度不能超过1个字符");
         RuleFor(x => x.ExtField)
             .MaximumLength(4000).WithMessage("扩展字段JSON长度不能超过4000个字符");
         RuleFor(x => x.Remark)
@@ -76,16 +76,16 @@ public class TaktSalesPriceItemUpdateValidator : AbstractValidator<TaktSalesPric
             .NotEmpty().WithMessage("公司代码不能为空")
             .MaximumLength(4).WithMessage("公司代码长度不能超过4个字符");
         RuleFor(x => x.SalesPriceId)
-            .GreaterThanOrEqualTo(0).WithMessage("销售价格不能为负数");
+            .GreaterThanOrEqualTo(0).WithMessage("销售价格 ID不能为负数");
         RuleFor(x => x.SalesPriceCode)
-            .NotEmpty().WithMessage("销售价格编码不能为空")
-            .MaximumLength(50).WithMessage("销售价格编码长度不能超过50个字符");
-        RuleFor(x => x.MaterialCode)
-            .NotEmpty().WithMessage("物料编码不能为空")
-            .MaximumLength(20).WithMessage("物料编码长度不能超过20个字符");
-        RuleFor(x => x.SalesUnit)
-            .NotEmpty().WithMessage("销售单位不能为空")
-            .MaximumLength(5).WithMessage("销售单位长度不能超过5个字符");
+            .NotEmpty().WithMessage("定价记录号不能为空")
+            .MaximumLength(20).WithMessage("定价记录号长度不能超过20个字符");
+        RuleFor(x => x.PriceType)
+            .NotEmpty().WithMessage("条件类型不能为空")
+            .MaximumLength(4).WithMessage("条件类型长度不能超过4个字符");
+        RuleFor(x => x.CalculationType)
+            .NotEmpty().WithMessage("计算类型不能为空")
+            .MaximumLength(1).WithMessage("计算类型长度不能超过1个字符");
         RuleFor(x => x.ExtField)
             .MaximumLength(4000).WithMessage("扩展字段JSON长度不能超过4000个字符");
         RuleFor(x => x.Remark)
@@ -112,16 +112,16 @@ public class TaktSalesPriceItemImportValidator : AbstractValidator<TaktSalesPric
         RuleFor(x => x.CompanyCode)
             .MaximumLength(4).WithMessage("公司代码长度不能超过4个字符").When(x => !string.IsNullOrWhiteSpace(x.CompanyCode));
         RuleFor(x => x.SalesPriceId)
-            .GreaterThanOrEqualTo(0).WithMessage("销售价格不能为负数");
+            .GreaterThanOrEqualTo(0).WithMessage("销售价格 ID不能为负数");
         RuleFor(x => x.SalesPriceCode)
-            .NotEmpty().WithMessage("销售价格编码不能为空")
-            .MaximumLength(50).WithMessage("销售价格编码长度不能超过50个字符");
-        RuleFor(x => x.MaterialCode)
-            .NotEmpty().WithMessage("物料编码不能为空")
-            .MaximumLength(20).WithMessage("物料编码长度不能超过20个字符");
-        RuleFor(x => x.SalesUnit)
-            .NotEmpty().WithMessage("销售单位不能为空")
-            .MaximumLength(5).WithMessage("销售单位长度不能超过5个字符");
+            .NotEmpty().WithMessage("定价记录号不能为空")
+            .MaximumLength(20).WithMessage("定价记录号长度不能超过20个字符");
+        RuleFor(x => x.PriceType)
+            .NotEmpty().WithMessage("条件类型不能为空")
+            .MaximumLength(4).WithMessage("条件类型长度不能超过4个字符");
+        RuleFor(x => x.CalculationType)
+            .NotEmpty().WithMessage("计算类型不能为空")
+            .MaximumLength(1).WithMessage("计算类型长度不能超过1个字符");
         RuleFor(x => x.ExtField)
             .MaximumLength(4000).WithMessage("扩展字段JSON长度不能超过4000个字符").When(x => !string.IsNullOrWhiteSpace(x.ExtField));
         RuleFor(x => x.Remark)

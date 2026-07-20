@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Infrastructure.Data.Seeds.I18nSeedData.Logistics.Quality.Cost
 // 文件名称：TaktQualityIssuePcbaReworkI18nSeedData.cs
-// 创建时间：2026-07-09
+// 创建时间：2026-07-20
 // 创建人：Takt365(Auto Generated)
 // 功能描述：TaktQualityIssuePcbaRework 实体字段国际化种子（无对应 frontend locales；TranslationText 取自 ColumnDescription，ContextNote 取自属性 XML summary）
 // 
@@ -91,13 +91,13 @@ public class TaktQualityIssuePcbaReworkI18nSeedData : ITaktSeedDataCoordinator
             new TranslationSeedItem("entity.qualityissuepcbarework._self", "zh-HK", "品质问题应对明细 - PCBA不良改修应对信息_hk", "实体名称"),
 
             // entity.qualityissuepcbarework.qualityissueid
-            new TranslationSeedItem("entity.qualityissuepcbarework.qualityissueid", "en-US", "品质问题主表ID_us", "品质问题主表 ID（关联 TaktQualityIssue.Id，选项 TaktQualityIssues/options）"),
+            new TranslationSeedItem("entity.qualityissuepcbarework.qualityissueid", "en-US", "品质问题主表ID_us", "品质问题主表 ID（选项 TaktQualityIssues/options，DictValue=Id）"),
             // entity.qualityissuepcbarework.qualityissueid
-            new TranslationSeedItem("entity.qualityissuepcbarework.qualityissueid", "ja-JP", "品质问题主表ID_jp", "品质问题主表 ID（关联 TaktQualityIssue.Id，选项 TaktQualityIssues/options）"),
+            new TranslationSeedItem("entity.qualityissuepcbarework.qualityissueid", "ja-JP", "品质问题主表ID_jp", "品质问题主表 ID（选项 TaktQualityIssues/options，DictValue=Id）"),
             // entity.qualityissuepcbarework.qualityissueid
-            new TranslationSeedItem("entity.qualityissuepcbarework.qualityissueid", "zh-CN", "品质问题主表ID", "品质问题主表 ID（关联 TaktQualityIssue.Id，选项 TaktQualityIssues/options）"),
+            new TranslationSeedItem("entity.qualityissuepcbarework.qualityissueid", "zh-CN", "品质问题主表ID", "品质问题主表 ID（选项 TaktQualityIssues/options，DictValue=Id）"),
             // entity.qualityissuepcbarework.qualityissueid
-            new TranslationSeedItem("entity.qualityissuepcbarework.qualityissueid", "zh-HK", "品质问题主表ID_hk", "品质问题主表 ID（关联 TaktQualityIssue.Id，选项 TaktQualityIssues/options）"),
+            new TranslationSeedItem("entity.qualityissuepcbarework.qualityissueid", "zh-HK", "品质问题主表ID_hk", "品质问题主表 ID（选项 TaktQualityIssues/options，DictValue=Id）"),
 
             // entity.qualityissuepcbarework.qualityissuecode
             new TranslationSeedItem("entity.qualityissuepcbarework.qualityissuecode", "en-US", "品质问题编码_us", "品质问题编码（冗余字段，便于查询）"),

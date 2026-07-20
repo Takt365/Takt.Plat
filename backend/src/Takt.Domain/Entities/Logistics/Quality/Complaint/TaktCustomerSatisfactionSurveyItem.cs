@@ -27,7 +27,7 @@ namespace Takt.Domain.Entities.Logistics.Quality.Complaint;
 public class TaktCustomerSatisfactionSurveyItem : TaktCompanyEntityBase
 {
     /// <summary>
-    /// 调查表 ID（关联 TaktCustomerSatisfactionSurvey.Id，选项 TaktCustomerSatisfactionSurveys/options）
+    /// 调查表 ID（选项 TaktCustomerSatisfactionSurveys/options，DictValue=Id）
     /// </summary>
     [SugarColumn(ColumnName = "survey_id", ColumnDescription = "调查表ID", ColumnDataType = "bigint", IsNullable = false)]
     [JsonConverter(typeof(ValueToStringConverter))]

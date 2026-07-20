@@ -9,17 +9,37 @@
 
 <template>
   <div class="p-4 flex flex-col min-h-0 h-full">
-    <!-- 查询栏 -->
-    <TaktQueryBar
-      v-model="queryKeyword"
-      :placeholder="searchPlaceholder"
-      :loading="loading"
-      @search="handleSearch"
-      @reset="handleReset"
-    />
-
-    <!-- 工具栏 -->
-    <TaktToolsBar
+    <!-- 左主右从 -->
+    <TaktMasterDetailTableLr
+      v-model:master-current="currentPage"
+      v-model:master-page-size="pageSize"
+      v-model:selected-master-key="selectedMasterKey"
+      class="min-h-0 flex-1"
+      :master-columns="columns"
+      :master-data-source="dataSource"
+      :master-loading="loading"
+      :master-row-key="getSalesPriceId"
+      :master-row-selection="rowSelection"
+      master-id-column-key="salesPriceId"
+      :master-visible-column-keys="visibleColumnKeys"
+      master-table-mode="masterDetailMaster"
+      master-scroll-layout="masterDetailLr"
+      :master-total="total"
+      master-entity-scope="company"
+      @master-change="handleTableChange"
+      @master-resize-column="handleResizeColumn"
+      @master-pagination-change="handleMasterPaginationChange"
+      @master-select="handleMasterSelect"
+    >
+      <template #master-toolbar>
+        <TaktQueryBar
+          v-model="queryKeyword"
+          :placeholder="searchPlaceholder"
+          :loading="loading"
+          @search="handleSearch"
+          @reset="handleReset"
+        />
+        <TaktToolsBar
       create-permission="logistics:sales:price:create"
       update-permission="logistics:sales:price:update"
       delete-permission="logistics:sales:price:delete"
@@ -50,43 +70,14 @@
       @advanced-query="handleAdvancedQuery"
       @column-setting="handleColumnSetting"
       @refresh="handleRefresh"
-    />
-
-    <!-- 左主右从 -->
-    <TaktMasterDetailTableLr
-      v-model:master-current="currentPage"
-      v-model:master-page-size="pageSize"
-      v-model:selected-master-key="selectedMasterKey"
-      class="min-h-0 flex-1"
-      :master-columns="columns"
-      :master-data-source="dataSource"
-      :master-loading="loading"
-      :master-row-key="getSalesPriceId"
-      :master-row-selection="rowSelection"
-      master-id-column-key="salesPriceId"
-      :master-visible-column-keys="visibleColumnKeys"
-      master-table-mode="masterDetailMaster"
-      master-scroll-layout="masterDetailLr"
-      :master-total="total"
-      master-entity-scope="company"
-      @master-change="handleTableChange"
-      @master-resize-column="handleResizeColumn"
-      @master-pagination-change="handleMasterPaginationChange"
-      @master-select="handleMasterSelect"
-    >
+        />
+      </template>
       <!-- 字典/开关列渲染 -->
       <template #bodyCell="{ column, record }">
-        <template v-if="column.key === 'priceStatus'">
-          <a-switch
-            :checked="getSalesPriceDictValue(record, 'priceStatus') === 1"
-            :checked-children="t('common.page.button.enable')" :un-checked-children="t('common.page.button.disable')"
-            @change="(checked: unknown) => handlePriceStatusChange(record, Boolean(checked))"
-          />
-        </template>
-        <template v-else-if="column.key === 'priceType'">
+        <template v-if="column.key === 'priceType'">
           <TaktDictTag
             :value="getSalesPriceDictValue(record, 'priceType')"
-            dict-type="logistics_sales_price_type"
+            dict-type="logistics_price_type"
           />
         </template>
       </template>
@@ -126,23 +117,23 @@
       @reset="handleAdvancedQueryReset"
     >
       <template #default="{ isFieldVisible }">
-      <div v-show="isFieldVisible('plantCode')">
-      <a-form-item :label="pi.queryLabel('plantCode')">
-        <TaktSelect
-          v-model:value="advancedQueryForm.plantCode"
-          api-url="TaktPlants/options"
-          :placeholder="pi.queryPh('plantCode', 'select')"
-          allow-clear
-        />
-      </a-form-item>
-      </div>
       <div v-show="isFieldVisible('salesPriceCode')">
       <a-form-item :label="pi.queryLabel('salesPriceCode')">
         <a-input
           v-model:value="advancedQueryForm.salesPriceCode"
           :placeholder="pi.queryPh('salesPriceCode', 'required')"
           show-count
-          :maxlength="50"
+          :maxlength="20"
+          allow-clear
+        />
+      </a-form-item>
+      </div>
+      <div v-show="isFieldVisible('priceType')">
+      <a-form-item :label="pi.queryLabel('priceType')">
+        <TaktSelect
+          v-model:value="advancedQueryForm.priceType"
+          dict-type="logistics_price_type"
+          :placeholder="pi.queryPh('priceType', 'select')"
           allow-clear
         />
       </a-form-item>
@@ -157,62 +148,84 @@
         />
       </a-form-item>
       </div>
-      <div v-show="isFieldVisible('priceType')">
-      <a-form-item :label="pi.queryLabel('priceType')">
+      <div v-show="isFieldVisible('materialCode')">
+      <a-form-item :label="pi.queryLabel('materialCode')">
         <TaktSelect
-          v-model:value="advancedQueryForm.priceType"
-          dict-type="logistics_sales_price_type"
-          :placeholder="pi.queryPh('priceType', 'select')"
+          v-model:value="advancedQueryForm.materialCode"
+          api-url="TaktMaterialPlants/options"
+          :placeholder="pi.queryPh('materialCode', 'select')"
           allow-clear
         />
       </a-form-item>
       </div>
-      <div v-show="isFieldVisible('effectiveStartDateStart')">
-      <a-form-item :label="pi.queryLabel('effectiveStartDateStart')">
+      <div v-show="isFieldVisible('validFromStart')">
+      <a-form-item :label="pi.queryLabel('validFromStart')">
         <a-date-picker
-          v-model:value="advancedQueryForm.effectiveStartDateStart"
-          :placeholder="pi.queryPh('effectiveStartDateStart', 'select')"
+          v-model:value="advancedQueryForm.validFromStart"
+          :placeholder="pi.queryPh('validFromStart', 'select')"
           value-format="YYYY-MM-DD"
           style="width: 100%"
         />
       </a-form-item>
       </div>
-      <div v-show="isFieldVisible('effectiveStartDateEnd')">
-      <a-form-item :label="pi.queryLabel('effectiveStartDateEnd')">
+      <div v-show="isFieldVisible('validFromEnd')">
+      <a-form-item :label="pi.queryLabel('validFromEnd')">
         <a-date-picker
-          v-model:value="advancedQueryForm.effectiveStartDateEnd"
-          :placeholder="pi.queryPh('effectiveStartDateEnd', 'select')"
+          v-model:value="advancedQueryForm.validFromEnd"
+          :placeholder="pi.queryPh('validFromEnd', 'select')"
           value-format="YYYY-MM-DD"
           style="width: 100%"
         />
       </a-form-item>
       </div>
-      <div v-show="isFieldVisible('effectiveEndDateStart')">
-      <a-form-item :label="pi.queryLabel('effectiveEndDateStart')">
+      <div v-show="isFieldVisible('validToStart')">
+      <a-form-item :label="pi.queryLabel('validToStart')">
         <a-date-picker
-          v-model:value="advancedQueryForm.effectiveEndDateStart"
-          :placeholder="pi.queryPh('effectiveEndDateStart', 'select')"
+          v-model:value="advancedQueryForm.validToStart"
+          :placeholder="pi.queryPh('validToStart', 'select')"
           value-format="YYYY-MM-DD"
           style="width: 100%"
         />
       </a-form-item>
       </div>
-      <div v-show="isFieldVisible('effectiveEndDateEnd')">
-      <a-form-item :label="pi.queryLabel('effectiveEndDateEnd')">
+      <div v-show="isFieldVisible('validToEnd')">
+      <a-form-item :label="pi.queryLabel('validToEnd')">
         <a-date-picker
-          v-model:value="advancedQueryForm.effectiveEndDateEnd"
-          :placeholder="pi.queryPh('effectiveEndDateEnd', 'select')"
+          v-model:value="advancedQueryForm.validToEnd"
+          :placeholder="pi.queryPh('validToEnd', 'select')"
           value-format="YYYY-MM-DD"
           style="width: 100%"
         />
       </a-form-item>
       </div>
-      <div v-show="isFieldVisible('priceStatus')">
-      <a-form-item :label="pi.queryLabel('priceStatus')">
+      <div v-show="isFieldVisible('variableKey')">
+      <a-form-item :label="pi.queryLabel('variableKey')">
+        <a-input
+          v-model:value="advancedQueryForm.variableKey"
+          :placeholder="pi.queryPh('variableKey', 'required')"
+          show-count
+          :maxlength="40"
+          allow-clear
+        />
+      </a-form-item>
+      </div>
+      <div v-show="isFieldVisible('salesQuotationId')">
+      <a-form-item :label="pi.queryLabel('salesQuotationId')">
         <TaktSelect
-          v-model:value="advancedQueryForm.priceStatus"
-          dict-type="sys_normal_disable_status"
-          :placeholder="pi.queryPh('priceStatus', 'select')"
+          v-model:value="advancedQueryForm.salesQuotationId"
+          api-url="TaktSalesQuotations/options"
+          :placeholder="pi.queryPh('salesQuotationId', 'select')"
+          allow-clear
+        />
+      </a-form-item>
+      </div>
+      <div v-show="isFieldVisible('salesQuotationCode')">
+      <a-form-item :label="pi.queryLabel('salesQuotationCode')">
+        <a-input
+          v-model:value="advancedQueryForm.salesQuotationCode"
+          :placeholder="pi.queryPh('salesQuotationCode', 'required')"
+          show-count
+          :maxlength="40"
           allow-clear
         />
       </a-form-item>
@@ -333,7 +346,7 @@ import { ensureTaktPaginationConfigAsync, getTaktDefaultPageIndex, getTaktDefaul
 import SalesPriceForm from './components/price-form.vue'
 import SalesPriceItemPanel from './components/price-item-panel.vue'
 import { provideSalesPriceMasterContext, type SalesPriceRowRecord } from './composables/use-price-master-context'
-import { getSalesPriceList, getSalesPriceById, createSalesPrice, updateSalesPrice, deleteSalesPriceById, deleteSalesPriceBatch, getSalesPriceTemplate, importSalesPrice, exportSalesPrice, updateSalesPriceStatus } from '@/api/logistics/sales/price'
+import { getSalesPriceList, getSalesPriceById, createSalesPrice, updateSalesPrice, deleteSalesPriceById, deleteSalesPriceBatch, getSalesPriceTemplate, importSalesPrice, exportSalesPrice } from '@/api/logistics/sales/price'
 import type { SalesPrice, SalesPriceQuery } from '@/types/logistics/sales/price'
 import { useDictDataStore } from '@/stores/foundation/dict-data'
 import { taktExcelEntityNames } from '@/utils/naming'
@@ -404,7 +417,7 @@ function createEmptyAdvancedQueryForm() {
   >
   return {
     ...form,
-    priceStatus: undefined as number | undefined,
+
   }
 }
 /** 高级查询表单模型 */
@@ -458,9 +471,6 @@ function buildListQuery(overrides?: Partial<SalesPriceQuery>): SalesPriceQuery {
   }
   for (const key of SALESPRICE_QUERY_STRING_FIELDS) {
     assignTrimmed(key, form[key])
-  }
-  if (form.priceStatus !== undefined && form.priceStatus !== null) {
-    query.priceStatus = form.priceStatus
   }
   return query
 }
@@ -535,15 +545,6 @@ const columns = computed<TableColumnsType>(() => [
     customRender: ({ record }: { record: any }) => getSalesPriceField(record, 'salesPriceId') ?? ''
   },
   {
-    title: pi.label('plantCode'),
-    dataIndex: 'plantCode',
-    key: 'plantCode',
-    width: 120,
-    resizable: true,
-    ellipsis: true,
-    customRender: ({ record }: { record: any }) => getSalesPriceField(record, 'plantCode') ?? ''
-  },
-  {
     title: pi.label('salesPriceCode'),
     dataIndex: 'salesPriceCode',
     key: 'salesPriceCode',
@@ -551,6 +552,14 @@ const columns = computed<TableColumnsType>(() => [
     resizable: true,
     ellipsis: true,
     customRender: ({ record }: { record: any }) => getSalesPriceField(record, 'salesPriceCode') ?? ''
+  },
+  {
+    title: pi.label('priceType'),
+    dataIndex: 'priceType',
+    key: 'priceType',
+    width: 120,
+    resizable: true,
+    ellipsis: true,
   },
   {
     title: pi.label('customerCode'),
@@ -562,38 +571,58 @@ const columns = computed<TableColumnsType>(() => [
     customRender: ({ record }: { record: any }) => getSalesPriceField(record, 'customerCode') ?? ''
   },
   {
-    title: pi.label('priceType'),
-    dataIndex: 'priceType',
-    key: 'priceType',
+    title: pi.label('materialCode'),
+    dataIndex: 'materialCode',
+    key: 'materialCode',
     width: 120,
     resizable: true,
     ellipsis: true,
+    customRender: ({ record }: { record: any }) => getSalesPriceField(record, 'materialCode') ?? ''
   },
   {
-    title: pi.label('effectiveStartDate'),
-    dataIndex: 'effectiveStartDate',
-    key: 'effectiveStartDate',
+    title: pi.label('validFrom'),
+    dataIndex: 'validFrom',
+    key: 'validFrom',
     width: 120,
     resizable: true,
     ellipsis: true,
-    customRender: ({ record }: { record: any }) => getSalesPriceField(record, 'effectiveStartDate') ?? ''
+    customRender: ({ record }: { record: any }) => getSalesPriceField(record, 'validFrom') ?? ''
   },
   {
-    title: pi.label('effectiveEndDate'),
-    dataIndex: 'effectiveEndDate',
-    key: 'effectiveEndDate',
+    title: pi.label('validTo'),
+    dataIndex: 'validTo',
+    key: 'validTo',
     width: 120,
     resizable: true,
     ellipsis: true,
-    customRender: ({ record }: { record: any }) => getSalesPriceField(record, 'effectiveEndDate') ?? ''
+    customRender: ({ record }: { record: any }) => getSalesPriceField(record, 'validTo') ?? ''
   },
   {
-    title: pi.label('priceStatus'),
-    dataIndex: 'priceStatus',
-    key: 'priceStatus',
+    title: pi.label('variableKey'),
+    dataIndex: 'variableKey',
+    key: 'variableKey',
     width: 120,
     resizable: true,
     ellipsis: true,
+    customRender: ({ record }: { record: any }) => getSalesPriceField(record, 'variableKey') ?? ''
+  },
+  {
+    title: pi.label('salesQuotationId'),
+    dataIndex: 'salesQuotationId',
+    key: 'salesQuotationId',
+    width: 120,
+    resizable: true,
+    ellipsis: true,
+    customRender: ({ record }: { record: any }) => getSalesPriceField(record, 'salesQuotationId') ?? ''
+  },
+  {
+    title: pi.label('salesQuotationCode'),
+    dataIndex: 'salesQuotationCode',
+    key: 'salesQuotationCode',
+    width: 120,
+    resizable: true,
+    ellipsis: true,
+    customRender: ({ record }: { record: any }) => getSalesPriceField(record, 'salesQuotationCode') ?? ''
   },
   CreateActionColumn({
     actions: [
@@ -641,13 +670,6 @@ const getSalesPriceDictValue = (
   if (value === null || value === undefined) return undefined
   if (typeof value === 'string' || typeof value === 'number') return value
   return String(value)
-}
-
-/** 将行字段/字典值转为有限 number */
-const toSalesPriceNumber = (value: string | number | undefined | null): number => {
-  if (typeof value === 'number' && Number.isFinite(value)) return value
-  const num = Number(value ?? 0)
-  return Number.isFinite(num) ? num : 0
 }
 
 
@@ -710,15 +732,17 @@ function handleSearch() {
 function handleReset() {
   queryKeyword.value = ''
   advancedQueryForm.value = {
-  plantCode: '',
   salesPriceCode: '',
-  customerCode: '',
   priceType: '',
-  effectiveStartDateStart: '',
-  effectiveStartDateEnd: '',
-  effectiveEndDateStart: '',
-  effectiveEndDateEnd: '',
-  priceStatus: undefined as number | undefined,
+  customerCode: '',
+  materialCode: '',
+  validFromStart: '',
+  validFromEnd: '',
+  validToStart: '',
+  validToEnd: '',
+  variableKey: '',
+  salesQuotationId: '',
+  salesQuotationCode: '',
   createdAtStart: '',
   createdAtEnd: '',
   extField: '',
@@ -903,30 +927,6 @@ async function handleDelete() {
     }
   })
 }
-/**
- * 行内状态切换
- * @param record 当前行
- * @param checked 是否启用
- */
-async function handlePriceStatusChange(record: SalesPriceRowRecord, checked: boolean) {
-  const newVal = checked ? 1 : 0
-  const oldVal = toSalesPriceNumber(getSalesPriceDictValue(record, 'priceStatus'))
-  const id = getSalesPriceId(record)
-  const row = dataSource.value.find((item) => getSalesPriceId(item) === id)
-  if (row) {
-    row.priceStatus = newVal
-  }
-  try {
-    await updateSalesPriceStatus({ salesPriceId: id, priceStatus: newVal })
-    message.success(t('common.feedback.updated'))
-    
-  } catch (error: unknown) {
-    if (row) {
-      row.priceStatus = oldVal
-    }
-    message.error(t('common.feedback.failed'))
-  }
-}
 /** 打开高级查询抽屉 */
 function handleAdvancedQuery() {
   advancedQueryVisible.value = true
@@ -941,15 +941,17 @@ function handleAdvancedQuerySubmit() {
 
 function handleAdvancedQueryReset() {
   advancedQueryForm.value = {
-  plantCode: '',
   salesPriceCode: '',
-  customerCode: '',
   priceType: '',
-  effectiveStartDateStart: '',
-  effectiveStartDateEnd: '',
-  effectiveEndDateStart: '',
-  effectiveEndDateEnd: '',
-  priceStatus: undefined as number | undefined,
+  customerCode: '',
+  materialCode: '',
+  validFromStart: '',
+  validFromEnd: '',
+  validToStart: '',
+  validToEnd: '',
+  variableKey: '',
+  salesQuotationId: '',
+  salesQuotationCode: '',
   createdAtStart: '',
   createdAtEnd: '',
   extField: '',

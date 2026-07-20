@@ -17,9 +17,9 @@ export default {
       loadfail: "路由模塊加載失敗，請檢查開發服務器是否正常運行，或刷新頁面重試。",
     },
     session: {
-      canceltext: "立即登出",
-      content: "您已長時間未操作，系統將在 {minutes} 分鐘後自動登出。請點擊\"繼續使用\"保持登錄狀態。",
-      oktext: "繼續使用",
+      canceltext: "繼續使用",
+      content: "您已長時間未操作，系統將在 {minutes} 分鐘後自動登出。任意鍵鼠操作將自動延長會話，無需確認。",
+      oktext: "立即登出",
       title: "會話即將過期",
     },
   },

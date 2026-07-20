@@ -126,6 +126,9 @@ export const TAKT_REFRESH_TOKEN_STORAGE_KEY = 'takt.refresh_token';
 /** 访问令牌过期时间 localStorage 键 */
 export const TAKT_TOKEN_EXPIRES_STORAGE_KEY = 'takt.token_expires_at';
 
+/** 空闲会话上次真实活动时间 sessionStorage 键（毫秒时间戳） */
+export const TAKT_IDLE_LAST_ACTIVITY_STORAGE_KEY = 'takt.idle.last_activity_at';
+
 /** 当前租户编码 localStorage 键 */
 export const TAKT_TENANT_CODE_STORAGE_KEY = 'tenantCode';
 
@@ -174,12 +177,13 @@ export const TAKT_AUTH_IDLE_DEFAULT_TIMEOUT_MINUTES = 30;
 /** 空闲登出预警默认时长（分钟；到期前弹窗，用户可点「继续使用」续期） */
 export const TAKT_AUTH_IDLE_DEFAULT_WARNING_MINUTES = 5;
 
-/** 空闲会话视为用户活动的 DOM 事件（不含 mousemove，避免扩展脚本/微动持续重置计时） */
+/**
+ * 空闲会话视为用户活动的 DOM 事件
+ * @description 仅显式交互；不含 mousemove / wheel / pointerdown（触控板与指针微动易误重置）
+ */
 export const TAKT_IDLE_ACTIVITY_EVENTS = [
-  'pointerdown',
   'keydown',
   'click',
-  'wheel',
   'touchstart',
 ] as const;
 

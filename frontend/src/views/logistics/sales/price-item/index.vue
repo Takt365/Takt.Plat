@@ -9,17 +9,37 @@
 
 <template>
   <div class="p-4 flex flex-col min-h-0 h-full">
-    <!-- 查询栏 -->
-    <TaktQueryBar
-      v-model="queryKeyword"
-      :placeholder="searchPlaceholder"
-      :loading="loading"
-      @search="handleSearch"
-      @reset="handleReset"
-    />
-
-    <!-- 工具栏 -->
-    <TaktToolsBar
+    <!-- 左主右从 -->
+    <TaktMasterDetailTableLr
+      v-model:master-current="currentPage"
+      v-model:master-page-size="pageSize"
+      v-model:selected-master-key="selectedMasterKey"
+      class="min-h-0 flex-1"
+      :master-columns="columns"
+      :master-data-source="dataSource"
+      :master-loading="loading"
+      :master-row-key="getSalesPriceItemId"
+      :master-row-selection="rowSelection"
+      master-id-column-key="salesPriceItemId"
+      :master-visible-column-keys="visibleColumnKeys"
+      master-table-mode="masterDetailMaster"
+      master-scroll-layout="masterDetailLr"
+      :master-total="total"
+      master-entity-scope="company"
+      @master-change="handleTableChange"
+      @master-resize-column="handleResizeColumn"
+      @master-pagination-change="handleMasterPaginationChange"
+      @master-select="handleMasterSelect"
+    >
+      <template #master-toolbar>
+        <TaktQueryBar
+          v-model="queryKeyword"
+          :placeholder="searchPlaceholder"
+          :loading="loading"
+          @search="handleSearch"
+          @reset="handleReset"
+        />
+        <TaktToolsBar
       create-permission="logistics:sales:price:create"
       update-permission="logistics:sales:price:update"
       delete-permission="logistics:sales:price:delete"
@@ -50,48 +70,62 @@
       @advanced-query="handleAdvancedQuery"
       @column-setting="handleColumnSetting"
       @refresh="handleRefresh"
-    />
-
-    <!-- 左主右从 -->
-    <TaktMasterDetailTableLr
-      v-model:master-current="currentPage"
-      v-model:master-page-size="pageSize"
-      v-model:selected-master-key="selectedMasterKey"
-      class="min-h-0 flex-1"
-      :master-columns="columns"
-      :master-data-source="dataSource"
-      :master-loading="loading"
-      :master-row-key="getSalesPriceItemId"
-      :master-row-selection="rowSelection"
-      master-id-column-key="salesPriceItemId"
-      :master-visible-column-keys="visibleColumnKeys"
-      master-table-mode="masterDetailMaster"
-      master-scroll-layout="masterDetailLr"
-      :master-total="total"
-      master-entity-scope="company"
-      @master-change="handleTableChange"
-      @master-resize-column="handleResizeColumn"
-      @master-pagination-change="handleMasterPaginationChange"
-      @master-select="handleMasterSelect"
-    >
+        />
+      </template>
       <!-- 字典/开关列渲染 -->
       <template #bodyCell="{ column, record }">
-        <template v-if="column.key === 'salesUnit'">
+        <template v-if="column.key === 'priceType'">
           <TaktDictTag
-            :value="getSalesPriceItemDictValue(record, 'salesUnit')"
+            :value="getSalesPriceItemDictValue(record, 'priceType')"
+            dict-type="logistics_price_type"
+          />
+        </template>
+        <template v-else-if="column.key === 'scaleType'">
+          <TaktDictTag
+            :value="getSalesPriceItemDictValue(record, 'scaleType')"
+            dict-type="logistics_scale_type"
+          />
+        </template>
+        <template v-else-if="column.key === 'scaleBasis'">
+          <TaktDictTag
+            :value="getSalesPriceItemDictValue(record, 'scaleBasis')"
+            dict-type="logistics_scale_basis"
+          />
+        </template>
+        <template v-else-if="column.key === 'scaleUnit'">
+          <TaktDictTag
+            :value="getSalesPriceItemDictValue(record, 'scaleUnit')"
             dict-type="logistics_unit_of_measure_code"
           />
         </template>
-        <template v-else-if="column.key === 'salesPerUnit'">
+        <template v-else-if="column.key === 'scaleCurrency'">
           <TaktDictTag
-            :value="getSalesPriceItemDictValue(record, 'salesPerUnit')"
-            dict-type="logistics_price_unit_param"
+            :value="getSalesPriceItemDictValue(record, 'scaleCurrency')"
+            dict-type="accounting_currency_code"
+          />
+        </template>
+        <template v-else-if="column.key === 'calculationType'">
+          <TaktDictTag
+            :value="getSalesPriceItemDictValue(record, 'calculationType')"
+            dict-type="logistics_calculation_type"
+          />
+        </template>
+        <template v-else-if="column.key === 'taxCode'">
+          <TaktDictTag
+            :value="getSalesPriceItemDictValue(record, 'taxCode')"
+            dict-type="accounting_tax_code"
+          />
+        </template>
+        <template v-else-if="column.key === 'isObsolete'">
+          <TaktDictTag
+            :value="getSalesPriceItemDictValue(record, 'isObsolete')"
+            dict-type="sys_yes_no_type"
           />
         </template>
       </template>
       <template #detail>
-        <SalesPriceScalePanel
-          ref="salesPriceScalePanelRef"
+        <SalesPriceScaleQuantityPanel
+          ref="salesPriceScaleQuantityPanelRef"
           class="h-full min-h-0 flex-1"
         />
       </template>
@@ -141,74 +175,124 @@
           v-model:value="advancedQueryForm.salesPriceCode"
           :placeholder="pi.queryPh('salesPriceCode', 'required')"
           show-count
-          :maxlength="50"
+          :maxlength="20"
           allow-clear
         />
       </a-form-item>
       </div>
-      <div v-show="isFieldVisible('lineNumber')">
-      <a-form-item :label="pi.queryLabel('lineNumber')">
+      <div v-show="isFieldVisible('salesPriceSeq')">
+      <a-form-item :label="pi.queryLabel('salesPriceSeq')">
         <a-input-number
-          v-model:value="advancedQueryForm.lineNumber"
-          :placeholder="pi.queryPh('lineNumber', 'required')"
+          v-model:value="advancedQueryForm.salesPriceSeq"
+          :placeholder="pi.queryPh('salesPriceSeq', 'required')"
           style="width: 100%"
         />
       </a-form-item>
       </div>
-      <div v-show="isFieldVisible('materialCode')">
-      <a-form-item :label="pi.queryLabel('materialCode')">
+      <div v-show="isFieldVisible('priceType')">
+      <a-form-item :label="pi.queryLabel('priceType')">
         <TaktSelect
-          v-model:value="advancedQueryForm.materialCode"
-          api-url="TaktMaterials/options"
-          :placeholder="pi.queryPh('materialCode', 'select')"
+          v-model:value="advancedQueryForm.priceType"
+          dict-type="logistics_price_type"
+          :placeholder="pi.queryPh('priceType', 'select')"
           allow-clear
         />
       </a-form-item>
       </div>
-      <div v-show="isFieldVisible('salesUnit')">
-      <a-form-item :label="pi.queryLabel('salesUnit')">
+      <div v-show="isFieldVisible('scaleType')">
+      <a-form-item :label="pi.queryLabel('scaleType')">
         <TaktSelect
-          v-model:value="advancedQueryForm.salesUnit"
+          v-model:value="advancedQueryForm.scaleType"
+          dict-type="logistics_scale_type"
+          :placeholder="pi.queryPh('scaleType', 'select')"
+          allow-clear
+        />
+      </a-form-item>
+      </div>
+      <div v-show="isFieldVisible('scaleBasis')">
+      <a-form-item :label="pi.queryLabel('scaleBasis')">
+        <TaktSelect
+          v-model:value="advancedQueryForm.scaleBasis"
+          dict-type="logistics_scale_basis"
+          :placeholder="pi.queryPh('scaleBasis', 'select')"
+          allow-clear
+        />
+      </a-form-item>
+      </div>
+      <div v-show="isFieldVisible('scaleQuantity')">
+      <a-form-item :label="pi.queryLabel('scaleQuantity')">
+        <a-input-number
+          v-model:value="advancedQueryForm.scaleQuantity"
+          :placeholder="pi.queryPh('scaleQuantity', 'required')"
+          style="width: 100%"
+        />
+      </a-form-item>
+      </div>
+      <div v-show="isFieldVisible('scaleUnit')">
+      <a-form-item :label="pi.queryLabel('scaleUnit')">
+        <TaktSelect
+          v-model:value="advancedQueryForm.scaleUnit"
           dict-type="logistics_unit_of_measure_code"
-          :placeholder="pi.queryPh('salesUnit', 'select')"
+          :placeholder="pi.queryPh('scaleUnit', 'select')"
           allow-clear
         />
       </a-form-item>
       </div>
-      <div v-show="isFieldVisible('salesPerUnit')">
-      <a-form-item :label="pi.queryLabel('salesPerUnit')">
+      <div v-show="isFieldVisible('scaleValue')">
+      <a-form-item :label="pi.queryLabel('scaleValue')">
+        <a-input-number
+          v-model:value="advancedQueryForm.scaleValue"
+          :placeholder="pi.queryPh('scaleValue', 'required')"
+          style="width: 100%"
+        />
+      </a-form-item>
+      </div>
+      <div v-show="isFieldVisible('scaleCurrency')">
+      <a-form-item :label="pi.queryLabel('scaleCurrency')">
         <TaktSelect
-          v-model:value="advancedQueryForm.salesPerUnit"
-          dict-type="logistics_price_unit_param"
-          :placeholder="pi.queryPh('salesPerUnit', 'select')"
+          v-model:value="advancedQueryForm.scaleCurrency"
+          dict-type="accounting_currency_code"
+          :placeholder="pi.queryPh('scaleCurrency', 'select')"
           allow-clear
         />
       </a-form-item>
       </div>
-      <div v-show="isFieldVisible('salesPrice')">
-      <a-form-item :label="pi.queryLabel('salesPrice')">
+      <div v-show="isFieldVisible('calculationType')">
+      <a-form-item :label="pi.queryLabel('calculationType')">
+        <TaktSelect
+          v-model:value="advancedQueryForm.calculationType"
+          dict-type="logistics_calculation_type"
+          :placeholder="pi.queryPh('calculationType', 'select')"
+          allow-clear
+        />
+      </a-form-item>
+      </div>
+      <div v-show="isFieldVisible('price')">
+      <a-form-item :label="pi.queryLabel('price')">
         <a-input-number
-          v-model:value="advancedQueryForm.salesPrice"
-          :placeholder="pi.queryPh('salesPrice', 'required')"
+          v-model:value="advancedQueryForm.price"
+          :placeholder="pi.queryPh('price', 'required')"
           style="width: 100%"
         />
       </a-form-item>
       </div>
-      <div v-show="isFieldVisible('minOrderQuantity')">
-      <a-form-item :label="pi.queryLabel('minOrderQuantity')">
-        <a-input-number
-          v-model:value="advancedQueryForm.minOrderQuantity"
-          :placeholder="pi.queryPh('minOrderQuantity', 'required')"
-          style="width: 100%"
+      <div v-show="isFieldVisible('taxCode')">
+      <a-form-item :label="pi.queryLabel('taxCode')">
+        <TaktSelect
+          v-model:value="advancedQueryForm.taxCode"
+          dict-type="accounting_tax_code"
+          :placeholder="pi.queryPh('taxCode', 'select')"
+          allow-clear
         />
       </a-form-item>
       </div>
-      <div v-show="isFieldVisible('maxOrderQuantity')">
-      <a-form-item :label="pi.queryLabel('maxOrderQuantity')">
-        <a-input-number
-          v-model:value="advancedQueryForm.maxOrderQuantity"
-          :placeholder="pi.queryPh('maxOrderQuantity', 'required')"
-          style="width: 100%"
+      <div v-show="isFieldVisible('isObsolete')">
+      <a-form-item :label="pi.queryLabel('isObsolete')">
+        <TaktSelect
+          v-model:value="advancedQueryForm.isObsolete"
+          dict-type="sys_yes_no_type"
+          :placeholder="pi.queryPh('isObsolete', 'select')"
+          allow-clear
         />
       </a-form-item>
       </div>
@@ -326,7 +410,7 @@ import { CreateActionColumn } from '@/components/business/takt-action-column/ind
 import { useI18n } from 'vue-i18n'
 import { ensureTaktPaginationConfigAsync, getTaktDefaultPageIndex, getTaktDefaultPageSize } from '@/utils/takt-paged'
 import SalesPriceItemForm from './components/price-item-form.vue'
-import SalesPriceScalePanel from './components/price-scale-panel.vue'
+import SalesPriceScaleQuantityPanel from './components/price-scale-quantity-panel.vue'
 import { provideSalesPriceItemMasterContext, type SalesPriceItemRowRecord } from './composables/use-price-item-master-context'
 import { getSalesPriceItemList, getSalesPriceItemById, createSalesPriceItem, updateSalesPriceItem, deleteSalesPriceItemById, deleteSalesPriceItemBatch, getSalesPriceItemTemplate, importSalesPriceItem, exportSalesPriceItem } from '@/api/logistics/sales/price-item'
 import type { SalesPriceItem, SalesPriceItemQuery } from '@/types/logistics/sales/price-item'
@@ -399,11 +483,11 @@ function createEmptyAdvancedQueryForm() {
   >
   return {
     ...form,
-    lineNumber: undefined as number | undefined,
-    salesPerUnit: undefined as number | undefined,
-    salesPrice: undefined as number | undefined,
-    minOrderQuantity: undefined as number | undefined,
-    maxOrderQuantity: undefined as number | undefined,
+    salesPriceSeq: undefined as number | undefined,
+    scaleQuantity: undefined as number | undefined,
+    scaleValue: undefined as number | undefined,
+    price: undefined as number | undefined,
+    isObsolete: undefined as number | undefined,
   }
 }
 /** 高级查询表单模型 */
@@ -431,7 +515,7 @@ const deleteDisabled = computed(() => selectedRows.value.length === 0)
 const dictDataStore = useDictDataStore()
 /** 主表选中行上下文（右侧明细面板读取） */
 const { selectedMasterRow } = provideSalesPriceItemMasterContext()
-const salesPriceScalePanelRef = ref<InstanceType<typeof SalesPriceScalePanel> | null>(null)
+const salesPriceScaleQuantityPanelRef = ref<InstanceType<typeof SalesPriceScaleQuantityPanel> | null>(null)
 
 /**
  * 构建列表/导出查询参数（空字符串与未填数值/日期不下发，避免后端 DateTime? 模型绑定 400）
@@ -458,20 +542,20 @@ function buildListQuery(overrides?: Partial<SalesPriceItemQuery>): SalesPriceIte
   for (const key of SALESPRICEITEM_QUERY_STRING_FIELDS) {
     assignTrimmed(key, form[key])
   }
-  if (form.lineNumber !== undefined && form.lineNumber !== null) {
-    query.lineNumber = form.lineNumber
+  if (form.salesPriceSeq !== undefined && form.salesPriceSeq !== null) {
+    query.salesPriceSeq = form.salesPriceSeq
   }
-  if (form.salesPerUnit !== undefined && form.salesPerUnit !== null) {
-    query.salesPerUnit = form.salesPerUnit
+  if (form.scaleQuantity !== undefined && form.scaleQuantity !== null) {
+    query.scaleQuantity = form.scaleQuantity
   }
-  if (form.salesPrice !== undefined && form.salesPrice !== null) {
-    query.salesPrice = form.salesPrice
+  if (form.scaleValue !== undefined && form.scaleValue !== null) {
+    query.scaleValue = form.scaleValue
   }
-  if (form.minOrderQuantity !== undefined && form.minOrderQuantity !== null) {
-    query.minOrderQuantity = form.minOrderQuantity
+  if (form.price !== undefined && form.price !== null) {
+    query.price = form.price
   }
-  if (form.maxOrderQuantity !== undefined && form.maxOrderQuantity !== null) {
-    query.maxOrderQuantity = form.maxOrderQuantity
+  if (form.isObsolete !== undefined && form.isObsolete !== null) {
+    query.isObsolete = form.isObsolete
   }
   return query
 }
@@ -555,15 +639,6 @@ const columns = computed<TableColumnsType>(() => [
     customRender: ({ record }: { record: any }) => getSalesPriceItemField(record, 'salesPriceId') ?? ''
   },
   {
-    title: pi.label('salesPriceName'),
-    dataIndex: 'salesPriceName',
-    key: 'salesPriceName',
-    width: 120,
-    resizable: true,
-    ellipsis: true,
-    customRender: ({ record }: { record: any }) => getSalesPriceItemField(record, 'salesPriceName') ?? ''
-  },
-  {
     title: pi.label('salesPriceCode'),
     dataIndex: 'salesPriceCode',
     key: 'salesPriceCode',
@@ -573,65 +648,79 @@ const columns = computed<TableColumnsType>(() => [
     customRender: ({ record }: { record: any }) => getSalesPriceItemField(record, 'salesPriceCode') ?? ''
   },
   {
-    title: pi.label('lineNumber'),
-    dataIndex: 'lineNumber',
-    key: 'lineNumber',
+    title: pi.label('salesPriceSeq'),
+    dataIndex: 'salesPriceSeq',
+    key: 'salesPriceSeq',
     width: 120,
     resizable: true,
     ellipsis: true,
-    customRender: ({ record }: { record: any }) => getSalesPriceItemField(record, 'lineNumber') ?? ''
+    customRender: ({ record }: { record: any }) => getSalesPriceItemField(record, 'salesPriceSeq') ?? ''
   },
   {
-    title: pi.label('materialCode'),
-    dataIndex: 'materialCode',
-    key: 'materialCode',
-    width: 120,
-    resizable: true,
-    ellipsis: true,
-    customRender: ({ record }: { record: any }) => getSalesPriceItemField(record, 'materialCode') ?? ''
-  },
-  {
-    title: pi.label('salesUnit'),
-    dataIndex: 'salesUnit',
-    key: 'salesUnit',
+    title: pi.label('priceType'),
+    dataIndex: 'priceType',
+    key: 'priceType',
     width: 120,
     resizable: true,
     ellipsis: true,
   },
   {
-    title: pi.label('salesPerUnit'),
-    dataIndex: 'salesPerUnit',
-    key: 'salesPerUnit',
+    title: pi.label('scaleType'),
+    dataIndex: 'scaleType',
+    key: 'scaleType',
     width: 120,
     resizable: true,
     ellipsis: true,
   },
   {
-    title: pi.label('salesPrice'),
-    dataIndex: 'salesPrice',
-    key: 'salesPrice',
+    title: pi.label('scaleBasis'),
+    dataIndex: 'scaleBasis',
+    key: 'scaleBasis',
     width: 120,
     resizable: true,
     ellipsis: true,
-    customRender: ({ record }: { record: any }) => getSalesPriceItemField(record, 'salesPrice') ?? ''
   },
   {
-    title: pi.label('minOrderQuantity'),
-    dataIndex: 'minOrderQuantity',
-    key: 'minOrderQuantity',
+    title: pi.label('scaleQuantity'),
+    dataIndex: 'scaleQuantity',
+    key: 'scaleQuantity',
     width: 120,
     resizable: true,
     ellipsis: true,
-    customRender: ({ record }: { record: any }) => getSalesPriceItemField(record, 'minOrderQuantity') ?? ''
+    customRender: ({ record }: { record: any }) => getSalesPriceItemField(record, 'scaleQuantity') ?? ''
   },
   {
-    title: pi.label('maxOrderQuantity'),
-    dataIndex: 'maxOrderQuantity',
-    key: 'maxOrderQuantity',
+    title: pi.label('scaleUnit'),
+    dataIndex: 'scaleUnit',
+    key: 'scaleUnit',
     width: 120,
     resizable: true,
     ellipsis: true,
-    customRender: ({ record }: { record: any }) => getSalesPriceItemField(record, 'maxOrderQuantity') ?? ''
+  },
+  {
+    title: pi.label('scaleValue'),
+    dataIndex: 'scaleValue',
+    key: 'scaleValue',
+    width: 120,
+    resizable: true,
+    ellipsis: true,
+    customRender: ({ record }: { record: any }) => getSalesPriceItemField(record, 'scaleValue') ?? ''
+  },
+  {
+    title: pi.label('scaleCurrency'),
+    dataIndex: 'scaleCurrency',
+    key: 'scaleCurrency',
+    width: 120,
+    resizable: true,
+    ellipsis: true,
+  },
+  {
+    title: pi.label('calculationType'),
+    dataIndex: 'calculationType',
+    key: 'calculationType',
+    width: 120,
+    resizable: true,
+    ellipsis: true,
   },
   {
     title: pi.label('price'),
@@ -641,6 +730,22 @@ const columns = computed<TableColumnsType>(() => [
     resizable: true,
     ellipsis: true,
     customRender: ({ record }: { record: any }) => getSalesPriceItemField(record, 'price') ?? ''
+  },
+  {
+    title: pi.label('taxCode'),
+    dataIndex: 'taxCode',
+    key: 'taxCode',
+    width: 120,
+    resizable: true,
+    ellipsis: true,
+  },
+  {
+    title: pi.label('isObsolete'),
+    dataIndex: 'isObsolete',
+    key: 'isObsolete',
+    width: 120,
+    resizable: true,
+    ellipsis: true,
   },
   CreateActionColumn({
     actions: [
@@ -752,13 +857,18 @@ function handleReset() {
   advancedQueryForm.value = {
   salesPriceId: '',
   salesPriceCode: '',
-  lineNumber: undefined as number | undefined,
-  materialCode: '',
-  salesUnit: '',
-  salesPerUnit: undefined as number | undefined,
-  salesPrice: undefined as number | undefined,
-  minOrderQuantity: undefined as number | undefined,
-  maxOrderQuantity: undefined as number | undefined,
+  salesPriceSeq: undefined as number | undefined,
+  priceType: '',
+  scaleType: '',
+  scaleBasis: '',
+  scaleQuantity: undefined as number | undefined,
+  scaleUnit: '',
+  scaleValue: undefined as number | undefined,
+  scaleCurrency: '',
+  calculationType: '',
+  price: undefined as number | undefined,
+  taxCode: '',
+  isObsolete: undefined as number | undefined,
   createdAtStart: '',
   createdAtEnd: '',
   extField: '',
@@ -820,7 +930,7 @@ async function handleFormSubmit() {
     formData.value = null
   nextTick(() => formRef.value?.resetFields())
     if (selectedMasterKey.value) {
-  salesPriceScalePanelRef.value?.reload?.()
+  salesPriceScaleQuantityPanelRef.value?.reload?.()
     }
     loadData()
   } finally {
@@ -856,7 +966,7 @@ function handleImportSuccess(result: TaktImportResult) {
   loadData()
 
       if (selectedMasterKey.value) {
-    salesPriceScalePanelRef.value?.reload?.()
+    salesPriceScaleQuantityPanelRef.value?.reload?.()
       }
   if (result.fail === 0 && result.success > 0) {
     setTimeout(() => { importVisible.value = false }, 2000)
@@ -959,13 +1069,18 @@ function handleAdvancedQueryReset() {
   advancedQueryForm.value = {
   salesPriceId: '',
   salesPriceCode: '',
-  lineNumber: undefined as number | undefined,
-  materialCode: '',
-  salesUnit: '',
-  salesPerUnit: undefined as number | undefined,
-  salesPrice: undefined as number | undefined,
-  minOrderQuantity: undefined as number | undefined,
-  maxOrderQuantity: undefined as number | undefined,
+  salesPriceSeq: undefined as number | undefined,
+  priceType: '',
+  scaleType: '',
+  scaleBasis: '',
+  scaleQuantity: undefined as number | undefined,
+  scaleUnit: '',
+  scaleValue: undefined as number | undefined,
+  scaleCurrency: '',
+  calculationType: '',
+  price: undefined as number | undefined,
+  taxCode: '',
+  isObsolete: undefined as number | undefined,
   createdAtStart: '',
   createdAtEnd: '',
   extField: '',

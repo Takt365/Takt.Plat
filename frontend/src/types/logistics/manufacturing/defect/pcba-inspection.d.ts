@@ -39,11 +39,6 @@ export interface PcbaInspection extends CompanyDtoBase {
   prodCategory: string;
 
   /**
-   * 生产日期
-   */
-  prodDate: string;
-
-  /**
    * 工单类别（回填：随工单）
    */
   prodOrderType?: string;
@@ -107,16 +102,6 @@ export interface PcbaInspectionQuery extends TaktPagedQuery {
    * 生产类别（字典 logistics_prod_category，存 DictValue：EPP/FPP/RWP/MDP/CPP）
    */
   prodCategory?: string;
-
-  /**
-   * 生产日期（范围查询-开始）
-   */
-  prodDateStart?: string;
-
-  /**
-   * 生产日期（范围查询-结束）
-   */
-  prodDateEnd?: string;
 
   /**
    * 工单类别（回填：随工单）
@@ -201,11 +186,6 @@ export interface PcbaInspectionCreate {
    * 生产类别（字典 logistics_prod_category，存 DictValue：EPP/FPP/RWP/MDP/CPP）
    */
   prodCategory: string;
-
-  /**
-   * 生产日期
-   */
-  prodDate: string;
 
   /**
    * 工单类别（回填：随工单）
@@ -297,11 +277,6 @@ export interface PcbaInspectionTemplate {
   prodCategory?: string;
 
   /**
-   * 生产日期
-   */
-  prodDate?: string;
-
-  /**
    * 工单类别（回填：随工单）
    */
   prodOrderType?: string;
@@ -381,11 +356,6 @@ export interface PcbaInspectionImport {
   prodCategory?: string;
 
   /**
-   * 生产日期
-   */
-  prodDate?: string;
-
-  /**
    * 工单类别（回填：随工单）
    */
   prodOrderType?: string;
@@ -458,11 +428,6 @@ export interface PcbaInspectionExport {
    * 生产类别（字典 logistics_prod_category，存 DictValue：EPP/FPP/RWP/MDP/CPP）
    */
   prodCategory: string;
-
-  /**
-   * 生产日期
-   */
-  prodDate: string;
 
   /**
    * 工单类别（回填：随工单）

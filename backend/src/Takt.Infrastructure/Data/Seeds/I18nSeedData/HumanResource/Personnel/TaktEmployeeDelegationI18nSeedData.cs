@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Infrastructure.Data.Seeds.I18nSeedData.HumanResource.Personnel
 // 文件名称：TaktEmployeeDelegationI18nSeedData.cs
-// 创建时间：2026-07-09
+// 创建时间：2026-07-20
 // 创建人：Takt365(Auto Generated)
 // 功能描述：TaktEmployeeDelegation 实体字段国际化种子（无对应 frontend locales；TranslationText 取自 ColumnDescription，ContextNote 取自属性 XML summary）
 // 
@@ -91,22 +91,22 @@ public class TaktEmployeeDelegationI18nSeedData : ITaktSeedDataCoordinator
             new TranslationSeedItem("entity.employeedelegation._self", "zh-HK", "员工代理关系信息_hk", "实体名称"),
 
             // entity.employeedelegation.proxyemployeeid
-            new TranslationSeedItem("entity.employeedelegation.proxyemployeeid", "en-US", "代理人ID_us", "代理人（关联 TaktEmployee.Id，选项 TaktEmployees/options）"),
+            new TranslationSeedItem("entity.employeedelegation.proxyemployeeid", "en-US", "代理人ID_us", "代理人（选项 TaktEmployees/options，DictValue=Id）"),
             // entity.employeedelegation.proxyemployeeid
-            new TranslationSeedItem("entity.employeedelegation.proxyemployeeid", "ja-JP", "代理人ID_jp", "代理人（关联 TaktEmployee.Id，选项 TaktEmployees/options）"),
+            new TranslationSeedItem("entity.employeedelegation.proxyemployeeid", "ja-JP", "代理人ID_jp", "代理人（选项 TaktEmployees/options，DictValue=Id）"),
             // entity.employeedelegation.proxyemployeeid
-            new TranslationSeedItem("entity.employeedelegation.proxyemployeeid", "zh-CN", "代理人ID", "代理人（关联 TaktEmployee.Id，选项 TaktEmployees/options）"),
+            new TranslationSeedItem("entity.employeedelegation.proxyemployeeid", "zh-CN", "代理人ID", "代理人（选项 TaktEmployees/options，DictValue=Id）"),
             // entity.employeedelegation.proxyemployeeid
-            new TranslationSeedItem("entity.employeedelegation.proxyemployeeid", "zh-HK", "代理人ID_hk", "代理人（关联 TaktEmployee.Id，选项 TaktEmployees/options）"),
+            new TranslationSeedItem("entity.employeedelegation.proxyemployeeid", "zh-HK", "代理人ID_hk", "代理人（选项 TaktEmployees/options，DictValue=Id）"),
 
             // entity.employeedelegation.originalemployeeid
-            new TranslationSeedItem("entity.employeedelegation.originalemployeeid", "en-US", "被代理人ID_us", "被代理人（关联 TaktEmployee.Id，选项 TaktEmployees/options）"),
+            new TranslationSeedItem("entity.employeedelegation.originalemployeeid", "en-US", "被代理人ID_us", "被代理人（选项 TaktEmployees/options，DictValue=Id）"),
             // entity.employeedelegation.originalemployeeid
-            new TranslationSeedItem("entity.employeedelegation.originalemployeeid", "ja-JP", "被代理人ID_jp", "被代理人（关联 TaktEmployee.Id，选项 TaktEmployees/options）"),
+            new TranslationSeedItem("entity.employeedelegation.originalemployeeid", "ja-JP", "被代理人ID_jp", "被代理人（选项 TaktEmployees/options，DictValue=Id）"),
             // entity.employeedelegation.originalemployeeid
-            new TranslationSeedItem("entity.employeedelegation.originalemployeeid", "zh-CN", "被代理人ID", "被代理人（关联 TaktEmployee.Id，选项 TaktEmployees/options）"),
+            new TranslationSeedItem("entity.employeedelegation.originalemployeeid", "zh-CN", "被代理人ID", "被代理人（选项 TaktEmployees/options，DictValue=Id）"),
             // entity.employeedelegation.originalemployeeid
-            new TranslationSeedItem("entity.employeedelegation.originalemployeeid", "zh-HK", "被代理人ID_hk", "被代理人（关联 TaktEmployee.Id，选项 TaktEmployees/options）"),
+            new TranslationSeedItem("entity.employeedelegation.originalemployeeid", "zh-HK", "被代理人ID_hk", "被代理人（选项 TaktEmployees/options，DictValue=Id）"),
 
             // entity.employeedelegation.delegationtype
             new TranslationSeedItem("entity.employeedelegation.delegationtype", "en-US", "代理类型_us", "代理类型（字典 hr_employee_delegation_type；1=完全代理 2=部分代理 3=审批代理）"),

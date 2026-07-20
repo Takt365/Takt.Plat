@@ -43,7 +43,7 @@ public class TaktGenTable : TaktTenantEntityBase
     public string? TableComment { get; set; }
 
     /// <summary>
-    /// 关联父表（选项 TaktDatabaseInfos/tables 同库其它表；sub 模板必填）
+    /// 关联父表（选项 TaktDatabaseInfos/tables 同库其他表；sub 模板必填）
     /// </summary>
     [SugarColumn(ColumnName = "sub_table_name", ColumnDescription = "关联父表", ColumnDataType = "nvarchar", Length = 100, IsNullable = true)]
     public string? SubTableName { get; set; }

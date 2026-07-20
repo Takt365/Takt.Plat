@@ -466,7 +466,7 @@ public class TaktAuthService : TaktServiceBase, ITaktAuthService
     }
 
     /// <summary>
-    /// 解析登录会话使用的租户与公司（用户 TaktUserCompany.is_default + TaktCompany 启用，无其它公司兜底）
+    /// 解析登录会话使用的租户与公司（用户 TaktUserCompany.is_default + TaktCompany 启用，无其他公司兜底）
     /// </summary>
     /// <param name="userId">用户 ID</param>
     /// <param name="tenantCode">登录所选租户</param>
@@ -564,7 +564,7 @@ public class TaktAuthService : TaktServiceBase, ITaktAuthService
     }
 
     /// <summary>
-    /// 获取当前登录用户可切换的公司下拉选项（按数据权限过滤，ExtLabel 标记当前公司）
+    /// 获取当前登录用户可切换的公司下拉选项（按数据权限过滤；ExtLabel 标记当前公司，ExtValue 为关联工厂 RelatedPlant）
     /// </summary>
     /// <returns>公司选项列表；未登录返回空列表</returns>
     public async Task<List<TaktSelectOption>> GetUserCompanyOptionsAsync()
@@ -593,12 +593,14 @@ public class TaktAuthService : TaktServiceBase, ITaktAuthService
             .Where(c => accessible.Contains(c.CompanyCode, StringComparer.OrdinalIgnoreCase))
             .ToList();
 
+        // ExtLabel=1 表示当前激活公司；ExtValue=关联工厂 PlantCode（TaktCompany.RelatedPlant）
         return accessibleOrdered
             .Select((e, index) => new TaktSelectOption
             {
                 DictValue = e.CompanyCode,
                 DictLabel = !string.IsNullOrWhiteSpace(e.CompanyShortName) ? e.CompanyShortName : e.CompanyName,
                 ExtLabel = string.Equals(e.CompanyCode, activeCompany, StringComparison.OrdinalIgnoreCase) ? "1" : "0",
+                ExtValue = e.RelatedPlant ?? string.Empty,
                 SortOrder = index,
             })
             .ToList();

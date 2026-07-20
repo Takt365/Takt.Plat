@@ -27,7 +27,7 @@ namespace Takt.Application.Services.Logistics.Quality.Operation;
 /// <summary>
 /// 制程检验单应用服务
 /// </summary>
-public class TaktIpqcOrderService : TaktServiceBase, ITaktIpqcOrderService
+public partial class TaktIpqcOrderService : TaktServiceBase, ITaktIpqcOrderService
 {
     private readonly ITaktCompanyRepository<TaktIpqcOrder> _ipqcOrderRepository;
     private readonly ITaktCompanyRepository<TaktIpqcOrderItem> _ipqcOrderItemRepository;

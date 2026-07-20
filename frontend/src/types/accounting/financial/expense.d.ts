@@ -39,7 +39,7 @@ export interface Expense extends ApprovalDtoBase {
   expenseTitle: string;
 
   /**
-   * 费用类型（字典 accounting_expense_type：1=月结供应商除原材料外的费用，2=月结供应商货款及公司其它费用，3=杂项购置费用）
+   * 费用类型（字典 accounting_expense_type：1=月结供应商除原材料外的费用，2=月结供应商货款及公司其他费用，3=杂项购置费用）
    */
   expenseType: number;
 
@@ -169,7 +169,7 @@ export interface ExpenseQuery extends TaktPagedQuery {
   expenseTitle?: string;
 
   /**
-   * 费用类型（字典 accounting_expense_type：1=月结供应商除原材料外的费用，2=月结供应商货款及公司其它费用，3=杂项购置费用）
+   * 费用类型（字典 accounting_expense_type：1=月结供应商除原材料外的费用，2=月结供应商货款及公司其他费用，3=杂项购置费用）
    */
   expenseType?: number;
 
@@ -358,7 +358,7 @@ export interface ExpenseCreate {
   expenseTitle: string;
 
   /**
-   * 费用类型（字典 accounting_expense_type：1=月结供应商除原材料外的费用，2=月结供应商货款及公司其它费用，3=杂项购置费用）
+   * 费用类型（字典 accounting_expense_type：1=月结供应商除原材料外的费用，2=月结供应商货款及公司其他费用，3=杂项购置费用）
    */
   expenseType: number;
 
@@ -526,7 +526,7 @@ export interface ExpenseTemplate {
   expenseTitle?: string;
 
   /**
-   * 费用类型（字典 accounting_expense_type：1=月结供应商除原材料外的费用，2=月结供应商货款及公司其它费用，3=杂项购置费用）
+   * 费用类型（字典 accounting_expense_type：1=月结供应商除原材料外的费用，2=月结供应商货款及公司其他费用，3=杂项购置费用）
    */
   expenseType?: number;
 
@@ -665,7 +665,7 @@ export interface ExpenseImport {
   expenseTitle?: string;
 
   /**
-   * 费用类型（字典 accounting_expense_type：1=月结供应商除原材料外的费用，2=月结供应商货款及公司其它费用，3=杂项购置费用）
+   * 费用类型（字典 accounting_expense_type：1=月结供应商除原材料外的费用，2=月结供应商货款及公司其他费用，3=杂项购置费用）
    */
   expenseType?: number;
 
@@ -794,7 +794,7 @@ export interface ExpenseExport {
   expenseTitle: string;
 
   /**
-   * 费用类型（字典 accounting_expense_type：1=月结供应商除原材料外的费用，2=月结供应商货款及公司其它费用，3=杂项购置费用）
+   * 费用类型（字典 accounting_expense_type：1=月结供应商除原材料外的费用，2=月结供应商货款及公司其他费用，3=杂项购置费用）
    */
   expenseType: number;
 

@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Application.Dtos.Logistics.Procurement
 // 文件名称：TaktPurchasePriceDtos.cs
-// 创建时间：2026-07-09
+// 创建时间：2026-07-20
 // 创建人：Takt365(Auto Generated)
 // 功能描述：PurchasePrice 模块 DTO（由 generate-dtos-from-entity.cjs 根据 TaktPurchasePrice 生成，请按需审阅）
 // 
@@ -22,7 +22,7 @@ namespace Takt.Application.Dtos.Logistics.Procurement;
 // ========================================
 
 /// <summary>
-/// Takt采购价格实体（供应商价格主表，一个供应商可以有多个物料价格）
+/// Takt采购价格实体（定价记录；条件类型 + 供应商 + 物料 + 有效期；含子表 Items）
 /// 对应前端 TaktPurchasePriceDto
 /// 继承 TaktCompanyDtoBase
 /// </summary>
@@ -36,14 +36,14 @@ public class TaktPurchasePriceDto : TaktCompanyDtoBase
     public long PurchasePriceId { get; set; }
 
     /// <summary>
-    /// 工厂代码（选项 TaktPlants/options，DictValue=PlantCode）
-    /// </summary>
-    public string PlantCode { get; set; } = string.Empty;
-
-    /// <summary>
-    /// 采购价格编码（唯一索引）
+    /// 定价记录号（唯一索引；长度 20）
     /// </summary>
     public string PurchasePriceCode { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 条件类型（字典 logistics_price_type；PB00=采购总价 Gross Price，PR00=基本价格 Base Price，MWST=销项税/增值税，MWRK=不可抵扣进项税，NLXV=购置税）
+    /// </summary>
+    public string PriceType { get; set; } = string.Empty;
 
     /// <summary>
     /// 供应商编码（选项 TaktSuppliers/options，DictValue=SupplierCode）
@@ -51,7 +51,27 @@ public class TaktPurchasePriceDto : TaktCompanyDtoBase
     public string SupplierCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 来源采购询价 ID（关联 TaktPurchaseInquiry.Id，选项 TaktPurchaseInquirys/options）
+    /// 物料编码（选项 TaktMaterialPlants/options，DictValue=MaterialCode）
+    /// </summary>
+    public string MaterialCode { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 有效起始日
+    /// </summary>
+    public DateTime ValidFrom { get; set; }
+
+    /// <summary>
+    /// 有效截至日
+    /// </summary>
+    public DateTime ValidTo { get; set; }
+
+    /// <summary>
+    /// 可变关键字
+    /// </summary>
+    public string? VariableKey { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 来源采购询价 ID（选项 TaktPurchaseInquirys/options，DictValue=Id）
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
     public long? PurchaseInquiryId { get; set; }
@@ -67,27 +87,7 @@ public class TaktPurchasePriceDto : TaktCompanyDtoBase
     public string? PurchaseInquiryCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 价格类型（字典 logistics_price_type；0=标准价格，1=合同价格，2=临时价格，3=询价价格，4=历史价格）
-    /// </summary>
-    public int PriceType { get; set; } = 0;
-
-    /// <summary>
-    /// 生效日期
-    /// </summary>
-    public DateTime EffectiveStartDate { get; set; }
-
-    /// <summary>
-    /// 失效日期（空表示长期有效）
-    /// </summary>
-    public DateTime? EffectiveEndDate { get; set; }
-
-    /// <summary>
-    /// 价格状态（字典 sys_normal_disable_status；1=启用，0=禁用）
-    /// </summary>
-    public int PriceStatus { get; set; } = 0;
-
-    /// <summary>
-    /// 物料价格明细列表（主子表关系，一个供应商价格可以有多个物料价格）
+    /// 定价条件行列表（主子表关系）
     /// （子表：TaktPurchasePriceItem）
     /// </summary>
     public List<TaktPurchasePriceItemDto>? Items { get; set; }
@@ -115,14 +115,14 @@ public class TaktPurchasePriceQueryDto : TaktPagedQuery
     public string? CompanyCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 工厂代码（选项 TaktPlants/options，DictValue=PlantCode）
-    /// </summary>
-    public string? PlantCode { get; set; } = string.Empty;
-
-    /// <summary>
-    /// 采购价格编码（唯一索引）
+    /// 定价记录号（唯一索引；长度 20）
     /// </summary>
     public string? PurchasePriceCode { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 条件类型（字典 logistics_price_type；PB00=采购总价 Gross Price，PR00=基本价格 Base Price，MWST=销项税/增值税，MWRK=不可抵扣进项税，NLXV=购置税）
+    /// </summary>
+    public string? PriceType { get; set; } = string.Empty;
 
     /// <summary>
     /// 供应商编码（选项 TaktSuppliers/options，DictValue=SupplierCode）
@@ -130,7 +130,37 @@ public class TaktPurchasePriceQueryDto : TaktPagedQuery
     public string? SupplierCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 来源采购询价 ID（关联 TaktPurchaseInquiry.Id，选项 TaktPurchaseInquirys/options）
+    /// 物料编码（选项 TaktMaterialPlants/options，DictValue=MaterialCode）
+    /// </summary>
+    public string? MaterialCode { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 有效起始日（范围查询-开始）
+    /// </summary>
+    public DateTime? ValidFromStart { get; set; }
+
+    /// <summary>
+    /// 有效起始日（范围查询-结束）
+    /// </summary>
+    public DateTime? ValidFromEnd { get; set; }
+
+    /// <summary>
+    /// 有效截至日（范围查询-开始）
+    /// </summary>
+    public DateTime? ValidToStart { get; set; }
+
+    /// <summary>
+    /// 有效截至日（范围查询-结束）
+    /// </summary>
+    public DateTime? ValidToEnd { get; set; }
+
+    /// <summary>
+    /// 可变关键字
+    /// </summary>
+    public string? VariableKey { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 来源采购询价 ID（选项 TaktPurchaseInquirys/options，DictValue=Id）
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
     public long? PurchaseInquiryId { get; set; }
@@ -139,36 +169,6 @@ public class TaktPurchasePriceQueryDto : TaktPagedQuery
     /// 来源采购询价编码（冗余）
     /// </summary>
     public string? PurchaseInquiryCode { get; set; } = string.Empty;
-
-    /// <summary>
-    /// 价格类型（字典 logistics_price_type；0=标准价格，1=合同价格，2=临时价格，3=询价价格，4=历史价格）
-    /// </summary>
-    public int? PriceType { get; set; }
-
-    /// <summary>
-    /// 生效日期（范围查询-开始）
-    /// </summary>
-    public DateTime? EffectiveStartDateStart { get; set; }
-
-    /// <summary>
-    /// 生效日期（范围查询-结束）
-    /// </summary>
-    public DateTime? EffectiveStartDateEnd { get; set; }
-
-    /// <summary>
-    /// 失效日期（空表示长期有效）（范围查询-开始）
-    /// </summary>
-    public DateTime? EffectiveEndDateStart { get; set; }
-
-    /// <summary>
-    /// 失效日期（空表示长期有效）（范围查询-结束）
-    /// </summary>
-    public DateTime? EffectiveEndDateEnd { get; set; }
-
-    /// <summary>
-    /// 价格状态（字典 sys_normal_disable_status；1=启用，0=禁用）
-    /// </summary>
-    public int? PriceStatus { get; set; }
 
     /// <summary>
     /// 创建时间（范围查询-开始）
@@ -216,16 +216,16 @@ public class TaktPurchasePriceCreateDto
     public string CompanyDefaultCulture { get; set; } = string.Empty;
 
     /// <summary>
-    /// 工厂代码（选项 TaktPlants/options，DictValue=PlantCode）
+    /// 定价记录号（唯一索引；长度 20）
     /// </summary>
-    [Required(ErrorMessage = "工厂代码（选项 TaktPlants/options，DictValue=PlantCode）不能为空")]
-    public string PlantCode { get; set; } = string.Empty;
+    [Required(ErrorMessage = "定价记录号（唯一索引；长度 20）不能为空")]
+    public string PurchasePriceCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 采购价格编码（唯一索引）
+    /// 条件类型（字典 logistics_price_type；PB00=采购总价 Gross Price，PR00=基本价格 Base Price，MWST=销项税/增值税，MWRK=不可抵扣进项税，NLXV=购置税）
     /// </summary>
-    [Required(ErrorMessage = "采购价格编码（唯一索引）不能为空")]
-    public string PurchasePriceCode { get; set; } = string.Empty;
+    [Required(ErrorMessage = "条件类型（字典 logistics_price_type；PB00=采购总价 Gross Price，PR00=基本价格 Base Price，MWST=销项税/增值税，MWRK=不可抵扣进项税，NLXV=购置税）不能为空")]
+    public string PriceType { get; set; } = string.Empty;
 
     /// <summary>
     /// 供应商编码（选项 TaktSuppliers/options，DictValue=SupplierCode）
@@ -234,7 +234,28 @@ public class TaktPurchasePriceCreateDto
     public string SupplierCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 来源采购询价 ID（关联 TaktPurchaseInquiry.Id，选项 TaktPurchaseInquirys/options）
+    /// 物料编码（选项 TaktMaterialPlants/options，DictValue=MaterialCode）
+    /// </summary>
+    [Required(ErrorMessage = "物料编码（选项 TaktMaterialPlants/options，DictValue=MaterialCode）不能为空")]
+    public string MaterialCode { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 有效起始日
+    /// </summary>
+    public DateTime ValidFrom { get; set; }
+
+    /// <summary>
+    /// 有效截至日
+    /// </summary>
+    public DateTime ValidTo { get; set; }
+
+    /// <summary>
+    /// 可变关键字
+    /// </summary>
+    public string? VariableKey { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 来源采购询价 ID（选项 TaktPurchaseInquirys/options，DictValue=Id）
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
     public long? PurchaseInquiryId { get; set; }
@@ -245,29 +266,9 @@ public class TaktPurchasePriceCreateDto
     public string? PurchaseInquiryCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 价格类型（字典 logistics_price_type；0=标准价格，1=合同价格，2=临时价格，3=询价价格，4=历史价格）
+    /// 定价条件行列表（主子表关系）（子表，级联保存）
     /// </summary>
-    public int PriceType { get; set; } = 0;
-
-    /// <summary>
-    /// 生效日期
-    /// </summary>
-    public DateTime EffectiveStartDate { get; set; }
-
-    /// <summary>
-    /// 失效日期（空表示长期有效）
-    /// </summary>
-    public DateTime? EffectiveEndDate { get; set; }
-
-    /// <summary>
-    /// 价格状态（字典 sys_normal_disable_status；1=启用，0=禁用）
-    /// </summary>
-    public int PriceStatus { get; set; } = 0;
-
-    /// <summary>
-    /// 物料价格明细列表（主子表关系，一个供应商价格可以有多个物料价格）（子表，级联保存）
-    /// </summary>
-    public List<TaktPurchasePriceItemUpdateDto>? Items { get; set; }
+    public List<TaktPurchasePriceItemCreateDto>? Items { get; set; }
 
     /// <summary>
     /// 扩展字段JSON
@@ -299,30 +300,11 @@ public class TaktPurchasePriceUpdateDto : TaktPurchasePriceCreateDto
     [JsonConverter(typeof(ValueToStringConverter))]
     public long PurchasePriceId { get; set; }
 
-}
-
-// ========================================
-// PurchasePrice 状态 DTO
-// ========================================
-
-/// <summary>
-/// PurchasePrice 状态更新 DTO
-/// </summary>
-public class TaktPurchasePriceStatusDto
-{
     /// <summary>
-    /// PurchasePriceID
+    /// 定价条件行列表（主子表关系）（子表，级联保存）
     /// </summary>
-    [Required(ErrorMessage = "ID不能为空")]
-    [AdaptMember("Id")]
-    [JsonConverter(typeof(ValueToStringConverter))]
-    public long PurchasePriceId { get; set; }
+    public new List<TaktPurchasePriceItemUpdateDto>? Items { get; set; }
 
-    /// <summary>
-    /// 价格状态（字典 sys_normal_disable_status；1=启用，0=禁用）
-    /// </summary>
-    [Required(ErrorMessage = "价格状态（字典 sys_normal_disable_status；1=启用，0=禁用）不能为空")]
-    public int PriceStatus { get; set; } = 0;
 }
 
 // ========================================
@@ -345,14 +327,14 @@ public class TaktPurchasePriceTemplateDto
     public string? CompanyCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 工厂代码（选项 TaktPlants/options，DictValue=PlantCode）
-    /// </summary>
-    public string? PlantCode { get; set; } = string.Empty;
-
-    /// <summary>
-    /// 采购价格编码（唯一索引）
+    /// 定价记录号（唯一索引；长度 20）
     /// </summary>
     public string? PurchasePriceCode { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 条件类型（字典 logistics_price_type；PB00=采购总价 Gross Price，PR00=基本价格 Base Price，MWST=销项税/增值税，MWRK=不可抵扣进项税，NLXV=购置税）
+    /// </summary>
+    public string? PriceType { get; set; } = string.Empty;
 
     /// <summary>
     /// 供应商编码（选项 TaktSuppliers/options，DictValue=SupplierCode）
@@ -360,7 +342,27 @@ public class TaktPurchasePriceTemplateDto
     public string? SupplierCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 来源采购询价 ID（关联 TaktPurchaseInquiry.Id，选项 TaktPurchaseInquirys/options）
+    /// 物料编码（选项 TaktMaterialPlants/options，DictValue=MaterialCode）
+    /// </summary>
+    public string? MaterialCode { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 有效起始日
+    /// </summary>
+    public DateTime? ValidFrom { get; set; }
+
+    /// <summary>
+    /// 有效截至日
+    /// </summary>
+    public DateTime? ValidTo { get; set; }
+
+    /// <summary>
+    /// 可变关键字
+    /// </summary>
+    public string? VariableKey { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 来源采购询价 ID（选项 TaktPurchaseInquirys/options，DictValue=Id）
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
     public long? PurchaseInquiryId { get; set; }
@@ -371,27 +373,7 @@ public class TaktPurchasePriceTemplateDto
     public string? PurchaseInquiryCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 价格类型（字典 logistics_price_type；0=标准价格，1=合同价格，2=临时价格，3=询价价格，4=历史价格）
-    /// </summary>
-    public int? PriceType { get; set; }
-
-    /// <summary>
-    /// 生效日期
-    /// </summary>
-    public DateTime? EffectiveStartDate { get; set; }
-
-    /// <summary>
-    /// 失效日期（空表示长期有效）
-    /// </summary>
-    public DateTime? EffectiveEndDate { get; set; }
-
-    /// <summary>
-    /// 价格状态（字典 sys_normal_disable_status；1=启用，0=禁用）
-    /// </summary>
-    public int? PriceStatus { get; set; }
-
-    /// <summary>
-    /// 物料价格明细列表（主子表关系，一个供应商价格可以有多个物料价格）（子表，级联保存）
+    /// 定价条件行列表（主子表关系）（子表，级联保存）
     /// </summary>
     public List<TaktPurchasePriceItemCreateDto>? Items { get; set; }
 
@@ -428,14 +410,14 @@ public class TaktPurchasePriceImportDto
     public string? CompanyDefaultCulture { get; set; } = string.Empty;
 
     /// <summary>
-    /// 工厂代码（选项 TaktPlants/options，DictValue=PlantCode）
-    /// </summary>
-    public string? PlantCode { get; set; } = string.Empty;
-
-    /// <summary>
-    /// 采购价格编码（唯一索引）
+    /// 定价记录号（唯一索引；长度 20）
     /// </summary>
     public string? PurchasePriceCode { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 条件类型（字典 logistics_price_type；PB00=采购总价 Gross Price，PR00=基本价格 Base Price，MWST=销项税/增值税，MWRK=不可抵扣进项税，NLXV=购置税）
+    /// </summary>
+    public string? PriceType { get; set; } = string.Empty;
 
     /// <summary>
     /// 供应商编码（选项 TaktSuppliers/options，DictValue=SupplierCode）
@@ -443,7 +425,27 @@ public class TaktPurchasePriceImportDto
     public string? SupplierCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 来源采购询价 ID（关联 TaktPurchaseInquiry.Id，选项 TaktPurchaseInquirys/options）
+    /// 物料编码（选项 TaktMaterialPlants/options，DictValue=MaterialCode）
+    /// </summary>
+    public string? MaterialCode { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 有效起始日
+    /// </summary>
+    public DateTime? ValidFrom { get; set; }
+
+    /// <summary>
+    /// 有效截至日
+    /// </summary>
+    public DateTime? ValidTo { get; set; }
+
+    /// <summary>
+    /// 可变关键字
+    /// </summary>
+    public string? VariableKey { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 来源采购询价 ID（选项 TaktPurchaseInquirys/options，DictValue=Id）
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
     public long? PurchaseInquiryId { get; set; }
@@ -454,27 +456,7 @@ public class TaktPurchasePriceImportDto
     public string? PurchaseInquiryCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 价格类型（字典 logistics_price_type；0=标准价格，1=合同价格，2=临时价格，3=询价价格，4=历史价格）
-    /// </summary>
-    public int? PriceType { get; set; }
-
-    /// <summary>
-    /// 生效日期
-    /// </summary>
-    public DateTime? EffectiveStartDate { get; set; }
-
-    /// <summary>
-    /// 失效日期（空表示长期有效）
-    /// </summary>
-    public DateTime? EffectiveEndDate { get; set; }
-
-    /// <summary>
-    /// 价格状态（字典 sys_normal_disable_status；1=启用，0=禁用）
-    /// </summary>
-    public int? PriceStatus { get; set; }
-
-    /// <summary>
-    /// 物料价格明细列表（主子表关系，一个供应商价格可以有多个物料价格）（子表，级联保存）
+    /// 定价条件行列表（主子表关系）（子表，级联保存）
     /// </summary>
     public List<TaktPurchasePriceItemCreateDto>? Items { get; set; }
 
@@ -512,14 +494,14 @@ public class TaktPurchasePriceExportDto
     public string CompanyCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 工厂代码（选项 TaktPlants/options，DictValue=PlantCode）
-    /// </summary>
-    public string PlantCode { get; set; } = string.Empty;
-
-    /// <summary>
-    /// 采购价格编码（唯一索引）
+    /// 定价记录号（唯一索引；长度 20）
     /// </summary>
     public string PurchasePriceCode { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 条件类型（字典 logistics_price_type；PB00=采购总价 Gross Price，PR00=基本价格 Base Price，MWST=销项税/增值税，MWRK=不可抵扣进项税，NLXV=购置税）
+    /// </summary>
+    public string PriceType { get; set; } = string.Empty;
 
     /// <summary>
     /// 供应商编码（选项 TaktSuppliers/options，DictValue=SupplierCode）
@@ -527,7 +509,27 @@ public class TaktPurchasePriceExportDto
     public string SupplierCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 来源采购询价 ID（关联 TaktPurchaseInquiry.Id，选项 TaktPurchaseInquirys/options）
+    /// 物料编码（选项 TaktMaterialPlants/options，DictValue=MaterialCode）
+    /// </summary>
+    public string MaterialCode { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 有效起始日
+    /// </summary>
+    public DateTime ValidFrom { get; set; }
+
+    /// <summary>
+    /// 有效截至日
+    /// </summary>
+    public DateTime ValidTo { get; set; }
+
+    /// <summary>
+    /// 可变关键字
+    /// </summary>
+    public string? VariableKey { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 来源采购询价 ID（选项 TaktPurchaseInquirys/options，DictValue=Id）
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
     public long? PurchaseInquiryId { get; set; }
@@ -536,26 +538,6 @@ public class TaktPurchasePriceExportDto
     /// 来源采购询价编码（冗余）
     /// </summary>
     public string? PurchaseInquiryCode { get; set; } = string.Empty;
-
-    /// <summary>
-    /// 价格类型（字典 logistics_price_type；0=标准价格，1=合同价格，2=临时价格，3=询价价格，4=历史价格）
-    /// </summary>
-    public int PriceType { get; set; } = 0;
-
-    /// <summary>
-    /// 生效日期
-    /// </summary>
-    public DateTime EffectiveStartDate { get; set; }
-
-    /// <summary>
-    /// 失效日期（空表示长期有效）
-    /// </summary>
-    public DateTime? EffectiveEndDate { get; set; }
-
-    /// <summary>
-    /// 价格状态（字典 sys_normal_disable_status；1=启用，0=禁用）
-    /// </summary>
-    public int PriceStatus { get; set; } = 0;
 
     /// <summary>
     /// 扩展字段JSON

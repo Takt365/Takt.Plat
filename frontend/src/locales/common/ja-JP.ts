@@ -115,5 +115,21 @@ export default {
       profile: "プロフィール",
       checkall: "すべて選択",
     },
+    icon: {
+      picker: {
+        title: "アイコン選択",
+        placeholder: "アイコンを選択",
+        search: "アイコン名で検索（例 grid、user）",
+        selected: "選択中：",
+        clear: "クリア",
+        empty: "一致するアイコンがありません",
+        total: "全 {total} 件",
+        variant: {
+          line: "ライン",
+          fill: "フィル",
+          all: "すべて",
+        },
+      },
+    },
   },
 };

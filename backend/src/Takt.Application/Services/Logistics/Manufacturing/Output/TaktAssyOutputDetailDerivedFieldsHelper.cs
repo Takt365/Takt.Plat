@@ -90,7 +90,7 @@ internal static class TaktAssyOutputDetailDerivedFieldsHelper
     }
 
     /// <summary>
-    /// 仅写入混合生产笔数与混合生产备注（不改动投入/实际工时等其它派生字段）
+    /// 仅写入混合生产笔数与混合生产备注（不改动投入/实际工时等其他派生字段）
     /// </summary>
     /// <param name="detail">组立日报明细</param>
     /// <param name="mixedProdCount">同桶内有产量/报工明细总数（≥2 为混合）</param>

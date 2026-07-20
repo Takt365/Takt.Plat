@@ -9,7 +9,7 @@
 // ========================================
 
 import { getStandardOperationTimeByMaterial } from '@/api/logistics/manufacturing/bom/standard-operation-time'
-import { getEffectiveStandardOperationRatePercent } from '@/api/logistics/manufacturing/planning/standard-operation-rate'
+import { getEffectiveStandardOperationRatePercent } from '@/api/logistics/manufacturing/mps/standard-operation-rate'
 import {
   ASSY_STANDARD_OPERATION_RATE_TYPE_PERSONNEL,
   calculateAchievementRatePercent,

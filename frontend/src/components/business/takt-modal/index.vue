@@ -78,6 +78,7 @@
           </a-button>
           <a-button
             type="primary"
+            :loading="props.confirmLoading"
             @click="handleOk"
           >
             <template #icon>
@@ -107,6 +108,8 @@ interface Props {
   okText?: string | undefined
   /** 取消按钮文本,默认为"取消" */
   cancelText?: string | undefined
+  /** 确定按钮 loading（与 a-modal confirmLoading 对齐） */
+  confirmLoading?: boolean
   /** 是否显示对话框 */
   open?: boolean
   /** 是否使用视口默认尺寸（70vw×85vh）；紧凑弹窗（如验证码）设为 false */
@@ -118,6 +121,7 @@ interface Props {
 const props = withDefaults(defineProps<Props>(), {
   okText: undefined,
   cancelText: undefined,
+  confirmLoading: false,
   open: false,
   useViewportSize: true,
   hideFooter: false,

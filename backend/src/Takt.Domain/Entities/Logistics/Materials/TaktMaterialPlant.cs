@@ -33,22 +33,22 @@ public class TaktMaterialPlant : TaktCompanyEntityBase
     [SugarColumn(ColumnName = "plant_code", ColumnDescription = "工厂代码", ColumnDataType = "nvarchar", Length = 50, IsNullable = false)]
     public string PlantCode { get; set; } = string.Empty;
     /// <summary>
-    /// 物料编码（关联 TaktMaterial.MaterialCode，选项 TaktMaterials/options）
+    /// 物料编码（选项 TaktMaterials/options，DictValue=MaterialCode）
     /// </summary>
     [SugarColumn(ColumnName = "material_code", ColumnDescription = "物料编码", ColumnDataType = "nvarchar", Length = 20, IsNullable = false)]
     public string MaterialCode { get; set; } = string.Empty;
     /// <summary>
-    /// 物料名称
+    /// 物料名称（回填：随物料）
     /// </summary>
     [SugarColumn(ColumnName = "material_name", ColumnDescription = "物料名称", ColumnDataType = "nvarchar", Length = 40, IsNullable = false)]
     public string MaterialName { get; set; } = string.Empty;
     /// <summary>
-    /// 物料规格
+    /// 物料规格（回填：随物料）
     /// </summary>
     [SugarColumn(ColumnName = "material_specification", ColumnDescription = "物料规格", ColumnDataType = "nvarchar", Length = 80, IsNullable = true)]
     public string? MaterialSpecification { get; set; }
     /// <summary>
-    /// 物料描述
+    /// 物料描述（回填：随物料）
     /// </summary>
     [SugarColumn(ColumnName = "material_description", ColumnDescription = "物料描述", ColumnDataType = "nvarchar", Length = 80, IsNullable = true)]
     public string? MaterialDescription { get; set; }
@@ -63,7 +63,7 @@ public class TaktMaterialPlant : TaktCompanyEntityBase
     [SugarColumn(ColumnName = "material_hierarchy", ColumnDescription = "物料层级", ColumnDataType = "nvarchar", Length = 200, IsNullable = true)]
     public string? MaterialHierarchy { get; set; }
     /// <summary>
-    /// 物料组（关联 TaktMaterialGroup.MaterialGroupCode，选项 TaktMaterialGroups/options，DictValue=MaterialGroupCode）
+    /// 物料组（选项 TaktMaterialGroups/options，DictValue=MaterialGroupCode）
     /// </summary>
     [SugarColumn(ColumnName = "material_group", ColumnDescription = "物料组", ColumnDataType = "varchar", Length = 20, IsNullable = false)]
     public string MaterialGroup { get; set; } = string.Empty;
@@ -78,7 +78,7 @@ public class TaktMaterialPlant : TaktCompanyEntityBase
     [SugarColumn(ColumnName = "base_unit", ColumnDescription = "基本单位", ColumnDataType = "nvarchar", Length = 5, IsNullable = false, DefaultValue = "PC")]
     public string BaseUnit { get; set; } = "PC";
     /// <summary>
-    /// 采购组（关联 TaktPurchaseGroup.PurchaseGroupCode，选项 TaktPurchaseGroups/options，DictValue=PurchaseGroupCode）
+    /// 采购组（选项 TaktPurchaseGroups/options，DictValue=PurchaseGroupCode）
     /// </summary>
     [SugarColumn(ColumnName = "purchase_group", ColumnDescription = "采购组", ColumnDataType = "nvarchar", Length = 3, IsNullable = false)]
     public string PurchaseGroup { get; set; } = string.Empty;
@@ -123,7 +123,7 @@ public class TaktMaterialPlant : TaktCompanyEntityBase
     [SugarColumn(ColumnName = "manufacturer", ColumnDescription = "制造商", ColumnDataType = "nvarchar", Length = 200, IsNullable = true)]
     public string? Manufacturer { get; set; }
     /// <summary>
-    /// 制造商物料编码（关联 TaktManufacturerMaterial.ManufacturerMaterialCode，选项 TaktManufacturerMaterials/options）
+    /// 制造商物料编码（选项 TaktManufacturerMaterials/options，DictValue=Id）
     /// </summary>
     [SugarColumn(ColumnName = "manufacturer_material_code", ColumnDescription = "制造商物料编码", ColumnDataType = "nvarchar", Length = 40, IsNullable = true)]
     public string? ManufacturerMaterialCode { get; set; }
@@ -158,7 +158,7 @@ public class TaktMaterialPlant : TaktCompanyEntityBase
     [SugarColumn(ColumnName = "difference_code", ColumnDescription = "差异码", ColumnDataType = "nvarchar", Length = 6, IsNullable = true)]
     public string? DifferenceCode { get; set; }
     /// <summary>
-    /// 利润中心（关联 TaktProfitCenter.ProfitCenterCode，选项 TaktProfitCenters/options，DictValue=ProfitCenterCode）
+    /// 利润中心（选项 TaktProfitCenters/options，DictValue=ProfitCenterCode）
     /// </summary>
     [SugarColumn(ColumnName = "profit_center", ColumnDescription = "利润中心", ColumnDataType = "nvarchar", Length = 4, IsNullable = false)]
     public string ProfitCenter { get; set; } = string.Empty;
@@ -168,17 +168,17 @@ public class TaktMaterialPlant : TaktCompanyEntityBase
     [SugarColumn(ColumnName = "current_stock", ColumnDescription = "当前库存", ColumnDataType = "decimal", Length = 18, DecimalDigits = 4, IsNullable = false, DefaultValue = "0")]
     public decimal CurrentStock { get; set; } = 0;
     /// <summary>
-    /// 生产仓储（关联 TaktWarehouse.WarehouseCode，选项 TaktWarehouses/options，DictValue=WarehouseCode）
+    /// 生产仓储（选项 TaktWarehouses/options，DictValue=WarehouseCode）
     /// </summary>
     [SugarColumn(ColumnName = "production_location", ColumnDescription = "生产仓储", ColumnDataType = "nvarchar", Length = 4, IsNullable = false)]
     public string ProductionLocation { get; set; } = string.Empty;
     /// <summary>
-    /// 采购仓储（关联 TaktWarehouse.WarehouseCode，选项 TaktWarehouses/options，DictValue=WarehouseCode）
+    /// 采购仓储（选项 TaktWarehouses/options，DictValue=WarehouseCode）
     /// </summary>
     [SugarColumn(ColumnName = "purchasing_location", ColumnDescription = "采购仓储", ColumnDataType = "nvarchar", Length = 4, IsNullable = false)]
     public string PurchasingLocation { get; set; } = string.Empty;
     /// <summary>
-    /// 库位（关联 TaktStorageLocation.LocationCode，选项 TaktStorageLocations/options，DictValue=LocationCode）
+    /// 库位（选项 TaktStorageLocations/options，DictValue=LocationCode）
     /// </summary>
     [SugarColumn(ColumnName = "storage_location", ColumnDescription = "库位", ColumnDataType = "nvarchar", Length = 40, IsNullable = false)]
     public string StorageLocation { get; set; } = string.Empty;

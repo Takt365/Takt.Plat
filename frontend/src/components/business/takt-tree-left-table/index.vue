@@ -32,9 +32,9 @@
         :selectable="selectable"
         :draggable="draggable"
         :expand-action="expandAction"
-        :virtual="virtual"
+        :virtual="effectiveVirtual"
         v-bind="{
-          ...(virtual && computedVirtualHeight !== undefined ? { height: computedVirtualHeight } : {}),
+          ...(effectiveVirtual && computedVirtualHeight !== undefined ? { height: computedVirtualHeight } : {}),
           ...(itemHeight !== undefined ? { itemHeight } : {})
         }"
         @select="handleSelect"
@@ -54,12 +54,24 @@
         </template>
       </a-tree>
     </a-spin>
+    <div
+      v-if="showFooterRemark"
+      class="takt-tree-left-table__footer-remark shrink-0 px-1 pt-2 text-sm leading-relaxed text-text-secondary"
+    >
+      <slot name="footerRemark">
+        {{ footerRemark }}
+      </slot>
+    </div>
   </div>
 </template>
 
 <script setup lang="ts">
 import { createLogger } from '@/utils/logger'
-import { TAKT_TREE_LEFT_VIRTUAL_HEIGHT_FALLBACK } from '@/utils/table-scroll'
+import {
+  countTreeNodesForVirtualScroll,
+  shouldUseTableVirtualScroll,
+  TAKT_TREE_LEFT_VIRTUAL_HEIGHT_FALLBACK,
+} from '@/utils/table-scroll'
 
 const treeLeftTableLogger = createLogger('takt-tree-left-table')
 
@@ -104,6 +116,8 @@ interface Props {
   draggable?: boolean
   /** 点击节点标题时展开/收起子级（false 则仅点击三角图标） */
   expandAction?: 'click' | 'doubleclick' | false
+  /** 表尾备注说明（树区域下方） */
+  footerRemark?: string
 }
 
 const props = withDefaults(defineProps<Props>(), {
@@ -118,22 +132,21 @@ const props = withDefaults(defineProps<Props>(), {
   selectable: true,
   virtual: true,
   draggable: false,
-  expandAction: 'click'
+  expandAction: 'click',
+  footerRemark: '',
 })
+
+const slots = useSlots()
+
+/** 是否展示表尾备注 */
+const showFooterRemark = computed(
+  () => !!props.footerRemark?.trim() || !!slots.footerRemark,
+)
 
 /** 根节点 ref，用于按视口计算虚拟滚动高度 */
 const containerRef = ref<HTMLElement | null>(null)
 /** 虚拟滚动高度 = 从本组件内容区顶部到视口底部的可见高度，与树收缩/展开无关 */
 const measuredHeight = ref(0)
-
-const computedVirtualHeight = computed(() => {
-  if (!props.virtual) return undefined
-  if (props.height != null && props.height > 0) {
-    return props.height
-  }
-  const h = measuredHeight.value > 0 ? measuredHeight.value : TAKT_TREE_LEFT_VIRTUAL_HEIGHT_FALLBACK
-  return h > 0 ? h : TAKT_TREE_LEFT_VIRTUAL_HEIGHT_FALLBACK
-})
 
 /** 按视口动态计算：从本组件内容区顶部到视口底部的距离作为虚拟列表高度，不依赖父级或树内容高度 */
 function doUpdateHeight() {
@@ -234,6 +247,28 @@ const fieldNames = computed(() => ({
   key: props.treeFieldNames?.key ?? 'key',
   children: props.treeFieldNames?.children ?? 'children'
 }))
+
+/** 树节点总数（截断计数，用于 ≥5000 自动虚拟化） */
+const treeNodeCount = computed(() =>
+  countTreeNodesForVirtualScroll(
+    props.treeData as Record<string, unknown>[] | undefined,
+    fieldNames.value.children || 'children',
+  ),
+)
+
+/** 是否启用虚拟滚动：显式 true，或节点数超过 5000 */
+const effectiveVirtual = computed(() =>
+  shouldUseTableVirtualScroll(treeNodeCount.value, props.virtual),
+)
+
+const computedVirtualHeight = computed(() => {
+  if (!effectiveVirtual.value) return undefined
+  if (props.height != null && props.height > 0) {
+    return props.height
+  }
+  const h = measuredHeight.value > 0 ? measuredHeight.value : TAKT_TREE_LEFT_VIRTUAL_HEIGHT_FALLBACK
+  return h > 0 ? h : TAKT_TREE_LEFT_VIRTUAL_HEIGHT_FALLBACK
+})
 
 /** 左侧宽度：内容视口的 1/5（treeWidthRatio 0.2 = 20%） */
 const leftStyle = computed(() => {

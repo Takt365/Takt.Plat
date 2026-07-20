@@ -98,11 +98,32 @@ public static class TaktPrimaryKeyInsertHelper
         PrimaryKeyTypeOptions options,
         CancellationToken cancellationToken = default) where T : class, new()
     {
+        await InsertEntityAsync(db, entity, options, asTableName: null, cancellationToken).ConfigureAwait(false);
+    }
+
+    /// <summary>
+    /// 单条实体插入（可指定物理表名，供年分表路由）
+    /// </summary>
+    /// <typeparam name="T">实体类型</typeparam>
+    /// <param name="db">SqlSugar 客户端</param>
+    /// <param name="entity">待插入实体</param>
+    /// <param name="options">主键类型配置</param>
+    /// <param name="asTableName">物理表名；空则用实体默认表</param>
+    /// <param name="cancellationToken">取消令牌</param>
+    public static async Task InsertEntityAsync<T>(
+        ISqlSugarClient db,
+        T entity,
+        PrimaryKeyTypeOptions options,
+        string? asTableName,
+        CancellationToken cancellationToken = default) where T : class, new()
+    {
         ArgumentNullException.ThrowIfNull(db);
         ArgumentNullException.ThrowIfNull(entity);
         ArgumentNullException.ThrowIfNull(options);
 
-        var insertable = db.Insertable(entity);
+        var insertable = string.IsNullOrWhiteSpace(asTableName)
+            ? db.Insertable(entity)
+            : db.Insertable(entity).AS(asTableName.Trim());
         var entityType = typeof(T);
         var idProperty = ResolveIdProperty(entityType);
         var idType = idProperty?.PropertyType;

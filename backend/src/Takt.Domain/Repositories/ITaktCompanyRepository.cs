@@ -31,15 +31,17 @@ public interface ITaktCompanyRepository<TEntity> : ITaktUniqueExistenceRepositor
     /// 根据ID查询实体
     /// </summary>
     /// <param name="id">实体ID</param>
+    /// <param name="asTableName">可选物理表名（年分表路由）</param>
     /// <returns>实体对象</returns>
-    Task<TEntity?> GetByIdAsync(long id);
+    Task<TEntity?> GetByIdAsync(long id, string? asTableName = null);
 
     /// <summary>
     /// 根据条件查询单个实体
     /// </summary>
     /// <param name="predicate">查询条件</param>
+    /// <param name="asTableName">可选物理表名（年分表路由）</param>
     /// <returns>实体对象</returns>
-    Task<TEntity?> FirstAsync(Expression<Func<TEntity, bool>> predicate);
+    Task<TEntity?> FirstAsync(Expression<Func<TEntity, bool>> predicate, string? asTableName = null);
 
     /// <summary>
     /// 查询所有实体（带租户和公司过滤）
@@ -51,8 +53,9 @@ public interface ITaktCompanyRepository<TEntity> : ITaktUniqueExistenceRepositor
     /// 根据条件查询列表
     /// </summary>
     /// <param name="predicate">查询条件</param>
+    /// <param name="asTableName">可选物理表名（年分表路由）</param>
     /// <returns>实体列表</returns>
-    Task<List<TEntity>> GetListAsync(Expression<Func<TEntity, bool>> predicate);
+    Task<List<TEntity>> GetListAsync(Expression<Func<TEntity, bool>> predicate, string? asTableName = null);
 
     /// <summary>
     /// 根据条件查询列表（带排序）
@@ -60,16 +63,25 @@ public interface ITaktCompanyRepository<TEntity> : ITaktUniqueExistenceRepositor
     /// <param name="predicate">查询条件</param>
     /// <param name="orderBy">排序字段</param>
     /// <param name="isDesc">是否降序</param>
+    /// <param name="asTableName">可选物理表名（年分表路由）</param>
     /// <returns>实体列表</returns>
-    Task<List<TEntity>> GetListAsync(Expression<Func<TEntity, bool>> predicate, Expression<Func<TEntity, object>> orderBy, bool isDesc = true);
+    Task<List<TEntity>> GetListAsync(
+        Expression<Func<TEntity, bool>> predicate,
+        Expression<Func<TEntity, object>> orderBy,
+        bool isDesc = true,
+        string? asTableName = null);
 
     /// <summary>
     /// 导出用条件查询（带上限行数上限，防止全表加载 OOM）
     /// </summary>
     /// <param name="predicate">查询条件</param>
     /// <param name="maxRows">最大行数；为空时使用 <c>Excel:Export:MaxRowsPerRequest</c> 配置</param>
+    /// <param name="asTableName">可选物理表名（年分表路由）</param>
     /// <returns>实体列表</returns>
-    Task<List<TEntity>> GetListForExportAsync(Expression<Func<TEntity, bool>> predicate, int? maxRows = null);
+    Task<List<TEntity>> GetListForExportAsync(
+        Expression<Func<TEntity, bool>> predicate,
+        int? maxRows = null,
+        string? asTableName = null);
 
     // ========================================
     // 分页查询
@@ -109,7 +121,8 @@ public interface ITaktCompanyRepository<TEntity> : ITaktUniqueExistenceRepositor
         int pageIndex,
         int pageSize,
         Expression<Func<TEntity, object>>? orderBy = null,
-        bool isDesc = true);
+        bool isDesc = true,
+        string? asTableName = null);
 
     // ========================================
     // 新增操作
@@ -119,8 +132,9 @@ public interface ITaktCompanyRepository<TEntity> : ITaktUniqueExistenceRepositor
     /// 创建实体
     /// </summary>
     /// <param name="entity">实体对象</param>
+    /// <param name="asTableName">可选物理表名（年分表路由，如 takt_xxx_2026）</param>
     /// <returns>创建的实体</returns>
-    Task<TEntity> CreateAsync(TEntity entity);
+    Task<TEntity> CreateAsync(TEntity entity, string? asTableName = null);
 
     /// <summary>
     /// 批量创建实体
@@ -137,8 +151,9 @@ public interface ITaktCompanyRepository<TEntity> : ITaktUniqueExistenceRepositor
     /// 更新实体
     /// </summary>
     /// <param name="entity">实体对象</param>
+    /// <param name="asTableName">可选物理表名（年分表路由）</param>
     /// <returns>是否成功</returns>
-    Task<bool> UpdateAsync(TEntity entity);
+    Task<bool> UpdateAsync(TEntity entity, string? asTableName = null);
 
     /// <summary>
     /// 批量更新实体
@@ -163,8 +178,9 @@ public interface ITaktCompanyRepository<TEntity> : ITaktUniqueExistenceRepositor
     /// 软删除实体
     /// </summary>
     /// <param name="id">实体ID</param>
+    /// <param name="asTableName">可选物理表名（年分表路由）</param>
     /// <returns>是否成功</returns>
-    Task<bool> DeleteAsync(long id);
+    Task<bool> DeleteAsync(long id, string? asTableName = null);
 
     /// <summary>
     /// 根据条件软删除
@@ -236,8 +252,15 @@ public interface ITaktCompanyRepository<TEntity> : ITaktUniqueExistenceRepositor
     Task<TResult> MedianAsync<TResult>(Expression<Func<TEntity, TResult>> fieldSelector, Expression<Func<TEntity, bool>>? predicate = null) where TResult : struct;
 
     // ========================================
-    // 序列与只读脚本
+    // 物理表与序列、只读脚本
     // ========================================
+
+    /// <summary>
+    /// 判断当前库是否存在指定物理表（年分表探测用；不含租户过滤）
+    /// </summary>
+    /// <param name="tableName">物理表名</param>
+    /// <returns>存在为 true</returns>
+    Task<bool> PhysicalTableExistsAsync(string tableName);
 
     /// <summary>
     /// 按条件取整型字段最大值（当前租户与公司范围内；默认未删除）

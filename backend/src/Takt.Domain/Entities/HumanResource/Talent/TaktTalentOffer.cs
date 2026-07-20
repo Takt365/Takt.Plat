@@ -26,7 +26,7 @@ namespace Takt.Domain.Entities.HumanResource.Talent;
 public class TaktTalentOffer : TaktApprovalEntityBase
 {
     /// <summary>
-    /// 职位发布（关联 TaktTalentJobPosting.Id，选项 TaktTalentJobPostings/options）
+    /// 职位发布（选项 TaktTalentJobPostings/options，DictValue=Id）
     /// </summary>
     [SugarColumn(ColumnName = "job_posting_id", ColumnDescription = "职位发布ID", ColumnDataType = "bigint", IsNullable = false)]
     public long JobPostingId { get; set; }
@@ -41,7 +41,7 @@ public class TaktTalentOffer : TaktApprovalEntityBase
     [SugarColumn(ColumnName = "hire_date", ColumnDescription = "录用日期", ColumnDataType = "datetime", IsNullable = false)]
     public DateTime HireDate { get; set; }
     /// <summary>
-    /// 关联员工（关联 TaktEmployee.Id，选项 TaktEmployees/options；录用通过并建档后回填，可空）
+    /// 关联员工（选项 TaktEmployees/options；录用通过并建档后回填，可空，DictValue=Id）
     /// </summary>
     [SugarColumn(ColumnName = "employee_id", ColumnDescription = "关联员工ID", ColumnDataType = "bigint", IsNullable = true)]
     public long? EmployeeId { get; set; }
@@ -56,7 +56,7 @@ public class TaktTalentOffer : TaktApprovalEntityBase
     [SugarColumn(ColumnName = "dept_name", ColumnDescription = "拟录用部门名称", ColumnDataType = "nvarchar", Length = 100, IsNullable = false)]
     public string DeptName { get; set; } = string.Empty;
     /// <summary>
-    /// 拟录用岗位（关联 TaktPost.Id，选项 TaktPosts/options，可空）
+    /// 拟录用岗位（选项 TaktPosts/options，可空，DictValue=Id）
     /// </summary>
     [SugarColumn(ColumnName = "post_id", ColumnDescription = "拟录用岗位ID", ColumnDataType = "bigint", IsNullable = true)]
     public long? PostId { get; set; }

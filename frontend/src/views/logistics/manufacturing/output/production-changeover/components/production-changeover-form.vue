@@ -386,7 +386,7 @@ import { RiQuestionLine } from '@remixicon/vue'
 import { useDictDataStore } from '@/stores/foundation/dict-data'
 import { useTenantStore } from '@/stores/identity/tenant'
 import { useUserStore } from '@/stores/identity/user'
-import { getProductionOrderByCode } from '@/api/logistics/manufacturing/planning/production-order'
+import { getProductionOrderByCode } from '@/api/logistics/manufacturing/aps/production-order'
 import { getModelDestinationByMaterial } from '@/api/logistics/materials/model-destination'
 import {
   isOutputProdDateLocked,

@@ -27,7 +27,7 @@ namespace Takt.Domain.Entities.Logistics.Quality.Complaint;
 public class TaktSupplierEvaluationItem : TaktCompanyEntityBase
 {
     /// <summary>
-    /// 评价表 ID（关联 TaktSupplierEvaluation.Id，选项 TaktSupplierEvaluations/options）
+    /// 评价表 ID（选项 TaktSupplierEvaluations/options，DictValue=Id）
     /// </summary>
     [SugarColumn(ColumnName = "evaluation_id", ColumnDescription = "评价表ID", ColumnDataType = "bigint", IsNullable = false)]
     [JsonConverter(typeof(ValueToStringConverter))]

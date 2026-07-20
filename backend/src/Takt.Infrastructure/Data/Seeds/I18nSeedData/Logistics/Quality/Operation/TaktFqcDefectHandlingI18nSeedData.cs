@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Infrastructure.Data.Seeds.I18nSeedData.Logistics.Quality.Operation
 // 文件名称：TaktFqcDefectHandlingI18nSeedData.cs
-// 创建时间：2026-07-09
+// 创建时间：2026-07-20
 // 创建人：Takt365(Auto Generated)
 // 功能描述：TaktFqcDefectHandling 实体字段国际化种子（无对应 frontend locales；TranslationText 取自 ColumnDescription，ContextNote 取自属性 XML summary）
 // 
@@ -100,13 +100,13 @@ public class TaktFqcDefectHandlingI18nSeedData : ITaktSeedDataCoordinator
             new TranslationSeedItem("entity.fqcdefecthandling.code", "zh-HK", "FQC不良处理编码_hk", "FQC不良处理编码"),
 
             // entity.fqcdefecthandling.fqcorderitemid
-            new TranslationSeedItem("entity.fqcdefecthandling.fqcorderitemid", "en-US", "FQC检验单明细ID_us", "FQC检验单明细 ID（关联 TaktFqcOrderItem.Id，选项 TaktFqcOrderItems/options）"),
+            new TranslationSeedItem("entity.fqcdefecthandling.fqcorderitemid", "en-US", "FQC检验单明细ID_us", "FQC检验单明细 ID（选项 TaktFqcOrderItems/options，DictValue=Id）"),
             // entity.fqcdefecthandling.fqcorderitemid
-            new TranslationSeedItem("entity.fqcdefecthandling.fqcorderitemid", "ja-JP", "FQC检验单明细ID_jp", "FQC检验单明细 ID（关联 TaktFqcOrderItem.Id，选项 TaktFqcOrderItems/options）"),
+            new TranslationSeedItem("entity.fqcdefecthandling.fqcorderitemid", "ja-JP", "FQC检验单明细ID_jp", "FQC检验单明细 ID（选项 TaktFqcOrderItems/options，DictValue=Id）"),
             // entity.fqcdefecthandling.fqcorderitemid
-            new TranslationSeedItem("entity.fqcdefecthandling.fqcorderitemid", "zh-CN", "FQC检验单明细ID", "FQC检验单明细 ID（关联 TaktFqcOrderItem.Id，选项 TaktFqcOrderItems/options）"),
+            new TranslationSeedItem("entity.fqcdefecthandling.fqcorderitemid", "zh-CN", "FQC检验单明细ID", "FQC检验单明细 ID（选项 TaktFqcOrderItems/options，DictValue=Id）"),
             // entity.fqcdefecthandling.fqcorderitemid
-            new TranslationSeedItem("entity.fqcdefecthandling.fqcorderitemid", "zh-HK", "FQC检验单明细ID_hk", "FQC检验单明细 ID（关联 TaktFqcOrderItem.Id，选项 TaktFqcOrderItems/options）"),
+            new TranslationSeedItem("entity.fqcdefecthandling.fqcorderitemid", "zh-HK", "FQC检验单明细ID_hk", "FQC检验单明细 ID（选项 TaktFqcOrderItems/options，DictValue=Id）"),
 
             // entity.fqcdefecthandling.fqcordercode
             new TranslationSeedItem("entity.fqcdefecthandling.fqcordercode", "en-US", "FQC检验单编码_us", "FQC检验单编码（冗余字段，便于查询）"),

@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：frontend/src/api/logistics/procurement
 // 文件名称：purchase-price-item.ts
-// 创建时间：2026-07-09
+// 创建时间：2026-07-20
 // 创建人：Takt365(Auto Generated)
 // 功能描述：logistics/procurement 模块 API（自动生成，请勿手改路由常量）
 // 
@@ -19,7 +19,6 @@ import type {
   PurchasePriceItem,
   PurchasePriceItemCreate,
   PurchasePriceItemObsolete,
-  PurchasePriceItemSort,
   PurchasePriceItemUpdate
 } from '@/types/logistics/procurement/purchase-price-item';
 
@@ -107,19 +106,6 @@ export function deletePurchasePriceItemBatch(ids: string[]): Promise<void> {
     url: `${PURCHASE_PRICE_ITEM_API_BASE}/batch`,
     method: 'delete',
     data: ids,
-  });
-}
-
-/**
- * 更新采购价格明细排序
- * @param {PurchasePriceItemSort} dto 排序DTO
- * @returns {Promise<PurchasePriceItem>} 采购价格明细DTO
- */
-export function updatePurchasePriceItemSort(dto: PurchasePriceItemSort): Promise<PurchasePriceItem> {
-  return request<PurchasePriceItem>({
-    url: `${PURCHASE_PRICE_ITEM_API_BASE}/sort`,
-    method: 'put',
-    data: dto,
   });
 }
 

@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Application.Dtos.Logistics.Sales
 // 文件名称：TaktSalesPriceItemDtos.cs
-// 创建时间：2026-07-09
+// 创建时间：2026-07-20
 // 创建人：Takt365(Auto Generated)
 // 功能描述：SalesPriceItem 模块 DTO（由 generate-dtos-from-entity.cjs 根据 TaktSalesPriceItem 生成，请按需审阅）
 // 
@@ -22,7 +22,7 @@ namespace Takt.Application.Dtos.Logistics.Sales;
 // ========================================
 
 /// <summary>
-/// Takt销售价格明细实体（客户物料价格明细表）
+/// Takt销售价格明细实体（定价记录条件行；主子表：TaktSalesPrice → Items → ScaleQuantities / ScaleValues）
 /// 对应前端 TaktSalesPriceItemDto
 /// 继承 TaktCompanyDtoBase
 /// </summary>
@@ -36,55 +36,75 @@ public class TaktSalesPriceItemDto : TaktCompanyDtoBase
     public long SalesPriceItemId { get; set; }
 
     /// <summary>
-    /// 销售价格（关联 TaktSalesPrice.Id，选项 TaktSalesPrices/options）
+    /// 销售价格 ID（主子表关系；选项 TaktSalesPrices/options，DictValue=Id）
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
     public long SalesPriceId { get; set; }
 
     /// <summary>
-    /// 销售价格（关联 TaktSalesPrice.Id，选项 TaktSalesPrices/options）
+    /// 销售价格 名称（填充字段）
     /// </summary>
     public string? SalesPriceName { get; set; }
 
     /// <summary>
-    /// 销售价格编码（冗余字段，便于查询）
+    /// 定价记录号（冗余；与主表 SalesPriceCode 一致，长度 20）
     /// </summary>
     public string SalesPriceCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 行号（项号/序号，固定步长=10）
+    /// 定价序号（项号/序号，固定步长=10）
     /// </summary>
-    public int LineNumber { get; set; } = 0;
+    public int SalesPriceSeq { get; set; } = 0;
 
     /// <summary>
-    /// 物料编码（选项 TaktMaterials/options，DictValue=MaterialCode）
+    /// 条件类型（冗余；字典 logistics_price_type；与主表 PriceType 一致，PB00/PR00/MWST/MWRK/NLXV）
     /// </summary>
-    public string MaterialCode { get; set; } = string.Empty;
+    public string PriceType { get; set; } = string.Empty;
 
     /// <summary>
-    /// 销售单位（字典 logistics_unit_of_measure_code，DictValue=PC/EA 等；默认 PC）
+    /// 等级类型（字典 logistics_scale_type；SAP STFKZ；A=基础等级，B=到等级，C=未使用，D=累进间隔等级）
     /// </summary>
-    public string SalesUnit { get; set; } = string.Empty;
+    public string? ScaleType { get; set; } = string.Empty;
 
     /// <summary>
-    /// 价格单位（字典 logistics_price_unit_param；1/10/100/1000；默认 1000）
+    /// 等级基础（字典 logistics_scale_basis；SAP KZBZG；B=价值等级，C=数量规模，…）
     /// </summary>
-    public int SalesPerUnit { get; set; } = 0;
+    public string? ScaleBasis { get; set; } = string.Empty;
 
     /// <summary>
-    /// 销售价格（decimal(18,5)）
+    /// 等级数量
     /// </summary>
-    public decimal SalesPrice { get; set; }
+    public decimal ScaleQuantity { get; set; }
 
     /// <summary>
-    /// 最小订购量（基本单位数量，整数）
+    /// 等级单位（字典 logistics_unit_of_measure_code，DictValue=PC/EA 等）
     /// </summary>
-    public int MinOrderQuantity { get; set; } = 0;
+    public string? ScaleUnit { get; set; } = string.Empty;
 
     /// <summary>
-    /// 最大订购量（基本单位数量，0表示无限制，整数）
+    /// 等级值
     /// </summary>
-    public int MaxOrderQuantity { get; set; } = 0;
+    public decimal ScaleValue { get; set; }
+
+    /// <summary>
+    /// 等级货币（字典 accounting_currency_code，DictValue=CNY/USD 等）
+    /// </summary>
+    public string? ScaleCurrency { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 计算类型（字典 logistics_calculation_type；SAP KRECH；默认 A=百分数）
+    /// </summary>
+    public string CalculationType { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 价格
+    /// </summary>
+    public decimal Price { get; set; }
+
+    /// <summary>
+    /// 税码（字典 accounting_tax_code，DictValue=J0/J1/J2…；SAP MWSKZ）
+    /// </summary>
+    public string? TaxCode { get; set; } = string.Empty;
 
     /// <summary>
     /// 是否作废（字典 sys_yes_no_type，0=否 1=是；编辑移除子行时标记作废）
@@ -92,16 +112,16 @@ public class TaktSalesPriceItemDto : TaktCompanyDtoBase
     public int IsObsolete { get; set; } = 0;
 
     /// <summary>
-    /// 价格阶梯列表（主子表关系，一个物料价格可以有多个阶梯）
-    /// （子表：TaktSalesPriceScale）
+    /// 数量等级行列表（SAP KONM；主子表关系）
+    /// （子表：TaktSalesPriceScaleQuantity）
     /// </summary>
-    public List<TaktSalesPriceScaleDto>? Scales { get; set; }
+    public List<TaktSalesPriceScaleQuantityDto>? ScaleQuantities { get; set; }
 
     /// <summary>
-    /// 销售价格（主表）
-    /// （主表：TaktSalesPrice）
+    /// 价值等级行列表（SAP KONW；主子表关系）
+    /// （子表：TaktSalesPriceScaleValue）
     /// </summary>
-    public TaktSalesPriceDto? Price { get; set; }
+    public List<TaktSalesPriceScaleValueDto>? ScaleValues { get; set; }
 
 }
 
@@ -126,50 +146,70 @@ public class TaktSalesPriceItemQueryDto : TaktPagedQuery
     public string? CompanyCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 销售价格（关联 TaktSalesPrice.Id，选项 TaktSalesPrices/options）
+    /// 销售价格 ID（主子表关系；选项 TaktSalesPrices/options，DictValue=Id）
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
     public long? SalesPriceId { get; set; }
 
     /// <summary>
-    /// 销售价格编码（冗余字段，便于查询）
+    /// 定价记录号（冗余；与主表 SalesPriceCode 一致，长度 20）
     /// </summary>
     public string? SalesPriceCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 行号（项号/序号，固定步长=10）
+    /// 定价序号（项号/序号，固定步长=10）
     /// </summary>
-    public int? LineNumber { get; set; }
+    public int? SalesPriceSeq { get; set; }
 
     /// <summary>
-    /// 物料编码（选项 TaktMaterials/options，DictValue=MaterialCode）
+    /// 条件类型（冗余；字典 logistics_price_type；与主表 PriceType 一致，PB00/PR00/MWST/MWRK/NLXV）
     /// </summary>
-    public string? MaterialCode { get; set; } = string.Empty;
+    public string? PriceType { get; set; } = string.Empty;
 
     /// <summary>
-    /// 销售单位（字典 logistics_unit_of_measure_code，DictValue=PC/EA 等；默认 PC）
+    /// 等级类型（字典 logistics_scale_type；SAP STFKZ；A=基础等级，B=到等级，C=未使用，D=累进间隔等级）
     /// </summary>
-    public string? SalesUnit { get; set; } = string.Empty;
+    public string? ScaleType { get; set; } = string.Empty;
 
     /// <summary>
-    /// 价格单位（字典 logistics_price_unit_param；1/10/100/1000；默认 1000）
+    /// 等级基础（字典 logistics_scale_basis；SAP KZBZG；B=价值等级，C=数量规模，…）
     /// </summary>
-    public int? SalesPerUnit { get; set; }
+    public string? ScaleBasis { get; set; } = string.Empty;
 
     /// <summary>
-    /// 销售价格（decimal(18,5)）
+    /// 等级数量
     /// </summary>
-    public decimal? SalesPrice { get; set; }
+    public decimal? ScaleQuantity { get; set; }
 
     /// <summary>
-    /// 最小订购量（基本单位数量，整数）
+    /// 等级单位（字典 logistics_unit_of_measure_code，DictValue=PC/EA 等）
     /// </summary>
-    public int? MinOrderQuantity { get; set; }
+    public string? ScaleUnit { get; set; } = string.Empty;
 
     /// <summary>
-    /// 最大订购量（基本单位数量，0表示无限制，整数）
+    /// 等级值
     /// </summary>
-    public int? MaxOrderQuantity { get; set; }
+    public decimal? ScaleValue { get; set; }
+
+    /// <summary>
+    /// 等级货币（字典 accounting_currency_code，DictValue=CNY/USD 等）
+    /// </summary>
+    public string? ScaleCurrency { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 计算类型（字典 logistics_calculation_type；SAP KRECH；默认 A=百分数）
+    /// </summary>
+    public string? CalculationType { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 价格
+    /// </summary>
+    public decimal? Price { get; set; }
+
+    /// <summary>
+    /// 税码（字典 accounting_tax_code，DictValue=J0/J1/J2…；SAP MWSKZ）
+    /// </summary>
+    public string? TaxCode { get; set; } = string.Empty;
 
     /// <summary>
     /// 是否作废（字典 sys_yes_no_type，0=否 1=是；编辑移除子行时标记作废）
@@ -222,53 +262,73 @@ public class TaktSalesPriceItemCreateDto
     public string CompanyDefaultCulture { get; set; } = string.Empty;
 
     /// <summary>
-    /// 销售价格（关联 TaktSalesPrice.Id，选项 TaktSalesPrices/options）
+    /// 销售价格 ID（主子表关系；选项 TaktSalesPrices/options，DictValue=Id）
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
     public long SalesPriceId { get; set; }
 
     /// <summary>
-    /// 销售价格编码（冗余字段，便于查询）
+    /// 定价记录号（冗余；与主表 SalesPriceCode 一致，长度 20）
     /// </summary>
-    [Required(ErrorMessage = "销售价格编码（冗余字段，便于查询）不能为空")]
+    [Required(ErrorMessage = "定价记录号（冗余；与主表 SalesPriceCode 一致，长度 20）不能为空")]
     public string SalesPriceCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 行号（项号/序号，固定步长=10）
+    /// 定价序号（项号/序号，固定步长=10）
     /// </summary>
-    public int LineNumber { get; set; } = 0;
+    public int SalesPriceSeq { get; set; } = 0;
 
     /// <summary>
-    /// 物料编码（选项 TaktMaterials/options，DictValue=MaterialCode）
+    /// 条件类型（冗余；字典 logistics_price_type；与主表 PriceType 一致，PB00/PR00/MWST/MWRK/NLXV）
     /// </summary>
-    [Required(ErrorMessage = "物料编码（选项 TaktMaterials/options，DictValue=MaterialCode）不能为空")]
-    public string MaterialCode { get; set; } = string.Empty;
+    [Required(ErrorMessage = "条件类型（冗余；字典 logistics_price_type；与主表 PriceType 一致，PB00/PR00/MWST/MWRK/NLXV）不能为空")]
+    public string PriceType { get; set; } = string.Empty;
 
     /// <summary>
-    /// 销售单位（字典 logistics_unit_of_measure_code，DictValue=PC/EA 等；默认 PC）
+    /// 等级类型（字典 logistics_scale_type；SAP STFKZ；A=基础等级，B=到等级，C=未使用，D=累进间隔等级）
     /// </summary>
-    [Required(ErrorMessage = "销售单位（字典 logistics_unit_of_measure_code，DictValue=PC/EA 等；默认 PC）不能为空")]
-    public string SalesUnit { get; set; } = string.Empty;
+    public string? ScaleType { get; set; } = string.Empty;
 
     /// <summary>
-    /// 价格单位（字典 logistics_price_unit_param；1/10/100/1000；默认 1000）
+    /// 等级基础（字典 logistics_scale_basis；SAP KZBZG；B=价值等级，C=数量规模，…）
     /// </summary>
-    public int SalesPerUnit { get; set; } = 0;
+    public string? ScaleBasis { get; set; } = string.Empty;
 
     /// <summary>
-    /// 销售价格（decimal(18,5)）
+    /// 等级数量
     /// </summary>
-    public decimal SalesPrice { get; set; }
+    public decimal ScaleQuantity { get; set; }
 
     /// <summary>
-    /// 最小订购量（基本单位数量，整数）
+    /// 等级单位（字典 logistics_unit_of_measure_code，DictValue=PC/EA 等）
     /// </summary>
-    public int MinOrderQuantity { get; set; } = 0;
+    public string? ScaleUnit { get; set; } = string.Empty;
 
     /// <summary>
-    /// 最大订购量（基本单位数量，0表示无限制，整数）
+    /// 等级值
     /// </summary>
-    public int MaxOrderQuantity { get; set; } = 0;
+    public decimal ScaleValue { get; set; }
+
+    /// <summary>
+    /// 等级货币（字典 accounting_currency_code，DictValue=CNY/USD 等）
+    /// </summary>
+    public string? ScaleCurrency { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 计算类型（字典 logistics_calculation_type；SAP KRECH；默认 A=百分数）
+    /// </summary>
+    [Required(ErrorMessage = "计算类型（字典 logistics_calculation_type；SAP KRECH；默认 A=百分数）不能为空")]
+    public string CalculationType { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 价格
+    /// </summary>
+    public decimal Price { get; set; }
+
+    /// <summary>
+    /// 税码（字典 accounting_tax_code，DictValue=J0/J1/J2…；SAP MWSKZ）
+    /// </summary>
+    public string? TaxCode { get; set; } = string.Empty;
 
     /// <summary>
     /// 是否作废（字典 sys_yes_no_type，0=否 1=是；编辑移除子行时标记作废）
@@ -276,9 +336,14 @@ public class TaktSalesPriceItemCreateDto
     public int IsObsolete { get; set; } = 0;
 
     /// <summary>
-    /// 价格阶梯列表（主子表关系，一个物料价格可以有多个阶梯）（子表，级联保存）
+    /// 数量等级行列表（SAP KONM；主子表关系）（子表，级联保存）
     /// </summary>
-    public List<TaktSalesPriceScaleUpdateDto>? Scales { get; set; }
+    public List<TaktSalesPriceScaleQuantityCreateDto>? ScaleQuantities { get; set; }
+
+    /// <summary>
+    /// 价值等级行列表（SAP KONW；主子表关系）（子表，级联保存）
+    /// </summary>
+    public List<TaktSalesPriceScaleValueCreateDto>? ScaleValues { get; set; }
 
     /// <summary>
     /// 扩展字段JSON
@@ -309,6 +374,16 @@ public class TaktSalesPriceItemUpdateDto : TaktSalesPriceItemCreateDto
     [AdaptMember("Id")]
     [JsonConverter(typeof(ValueToStringConverter))]
     public long SalesPriceItemId { get; set; }
+
+    /// <summary>
+    /// 数量等级行列表（SAP KONM；主子表关系）（子表，级联保存）
+    /// </summary>
+    public new List<TaktSalesPriceScaleQuantityUpdateDto>? ScaleQuantities { get; set; }
+
+    /// <summary>
+    /// 价值等级行列表（SAP KONW；主子表关系）（子表，级联保存）
+    /// </summary>
+    public new List<TaktSalesPriceScaleValueUpdateDto>? ScaleValues { get; set; }
 
 }
 
@@ -355,50 +430,70 @@ public class TaktSalesPriceItemTemplateDto
     public string? CompanyCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 销售价格（关联 TaktSalesPrice.Id，选项 TaktSalesPrices/options）
+    /// 销售价格 ID（主子表关系；选项 TaktSalesPrices/options，DictValue=Id）
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
     public long? SalesPriceId { get; set; }
 
     /// <summary>
-    /// 销售价格编码（冗余字段，便于查询）
+    /// 定价记录号（冗余；与主表 SalesPriceCode 一致，长度 20）
     /// </summary>
     public string? SalesPriceCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 行号（项号/序号，固定步长=10）
+    /// 定价序号（项号/序号，固定步长=10）
     /// </summary>
-    public int? LineNumber { get; set; }
+    public int? SalesPriceSeq { get; set; }
 
     /// <summary>
-    /// 物料编码（选项 TaktMaterials/options，DictValue=MaterialCode）
+    /// 条件类型（冗余；字典 logistics_price_type；与主表 PriceType 一致，PB00/PR00/MWST/MWRK/NLXV）
     /// </summary>
-    public string? MaterialCode { get; set; } = string.Empty;
+    public string? PriceType { get; set; } = string.Empty;
 
     /// <summary>
-    /// 销售单位（字典 logistics_unit_of_measure_code，DictValue=PC/EA 等；默认 PC）
+    /// 等级类型（字典 logistics_scale_type；SAP STFKZ；A=基础等级，B=到等级，C=未使用，D=累进间隔等级）
     /// </summary>
-    public string? SalesUnit { get; set; } = string.Empty;
+    public string? ScaleType { get; set; } = string.Empty;
 
     /// <summary>
-    /// 价格单位（字典 logistics_price_unit_param；1/10/100/1000；默认 1000）
+    /// 等级基础（字典 logistics_scale_basis；SAP KZBZG；B=价值等级，C=数量规模，…）
     /// </summary>
-    public int? SalesPerUnit { get; set; }
+    public string? ScaleBasis { get; set; } = string.Empty;
 
     /// <summary>
-    /// 销售价格（decimal(18,5)）
+    /// 等级数量
     /// </summary>
-    public decimal? SalesPrice { get; set; }
+    public decimal? ScaleQuantity { get; set; }
 
     /// <summary>
-    /// 最小订购量（基本单位数量，整数）
+    /// 等级单位（字典 logistics_unit_of_measure_code，DictValue=PC/EA 等）
     /// </summary>
-    public int? MinOrderQuantity { get; set; }
+    public string? ScaleUnit { get; set; } = string.Empty;
 
     /// <summary>
-    /// 最大订购量（基本单位数量，0表示无限制，整数）
+    /// 等级值
     /// </summary>
-    public int? MaxOrderQuantity { get; set; }
+    public decimal? ScaleValue { get; set; }
+
+    /// <summary>
+    /// 等级货币（字典 accounting_currency_code，DictValue=CNY/USD 等）
+    /// </summary>
+    public string? ScaleCurrency { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 计算类型（字典 logistics_calculation_type；SAP KRECH；默认 A=百分数）
+    /// </summary>
+    public string? CalculationType { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 价格
+    /// </summary>
+    public decimal? Price { get; set; }
+
+    /// <summary>
+    /// 税码（字典 accounting_tax_code，DictValue=J0/J1/J2…；SAP MWSKZ）
+    /// </summary>
+    public string? TaxCode { get; set; } = string.Empty;
 
     /// <summary>
     /// 是否作废（字典 sys_yes_no_type，0=否 1=是；编辑移除子行时标记作废）
@@ -406,9 +501,14 @@ public class TaktSalesPriceItemTemplateDto
     public int? IsObsolete { get; set; }
 
     /// <summary>
-    /// 价格阶梯列表（主子表关系，一个物料价格可以有多个阶梯）（子表，级联保存）
+    /// 数量等级行列表（SAP KONM；主子表关系）（子表，级联保存）
     /// </summary>
-    public List<TaktSalesPriceScaleCreateDto>? Scales { get; set; }
+    public List<TaktSalesPriceScaleQuantityCreateDto>? ScaleQuantities { get; set; }
+
+    /// <summary>
+    /// 价值等级行列表（SAP KONW；主子表关系）（子表，级联保存）
+    /// </summary>
+    public List<TaktSalesPriceScaleValueCreateDto>? ScaleValues { get; set; }
 
     /// <summary>
     /// 扩展字段JSON
@@ -443,50 +543,70 @@ public class TaktSalesPriceItemImportDto
     public string? CompanyDefaultCulture { get; set; } = string.Empty;
 
     /// <summary>
-    /// 销售价格（关联 TaktSalesPrice.Id，选项 TaktSalesPrices/options）
+    /// 销售价格 ID（主子表关系；选项 TaktSalesPrices/options，DictValue=Id）
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
     public long? SalesPriceId { get; set; }
 
     /// <summary>
-    /// 销售价格编码（冗余字段，便于查询）
+    /// 定价记录号（冗余；与主表 SalesPriceCode 一致，长度 20）
     /// </summary>
     public string? SalesPriceCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 行号（项号/序号，固定步长=10）
+    /// 定价序号（项号/序号，固定步长=10）
     /// </summary>
-    public int? LineNumber { get; set; }
+    public int? SalesPriceSeq { get; set; }
 
     /// <summary>
-    /// 物料编码（选项 TaktMaterials/options，DictValue=MaterialCode）
+    /// 条件类型（冗余；字典 logistics_price_type；与主表 PriceType 一致，PB00/PR00/MWST/MWRK/NLXV）
     /// </summary>
-    public string? MaterialCode { get; set; } = string.Empty;
+    public string? PriceType { get; set; } = string.Empty;
 
     /// <summary>
-    /// 销售单位（字典 logistics_unit_of_measure_code，DictValue=PC/EA 等；默认 PC）
+    /// 等级类型（字典 logistics_scale_type；SAP STFKZ；A=基础等级，B=到等级，C=未使用，D=累进间隔等级）
     /// </summary>
-    public string? SalesUnit { get; set; } = string.Empty;
+    public string? ScaleType { get; set; } = string.Empty;
 
     /// <summary>
-    /// 价格单位（字典 logistics_price_unit_param；1/10/100/1000；默认 1000）
+    /// 等级基础（字典 logistics_scale_basis；SAP KZBZG；B=价值等级，C=数量规模，…）
     /// </summary>
-    public int? SalesPerUnit { get; set; }
+    public string? ScaleBasis { get; set; } = string.Empty;
 
     /// <summary>
-    /// 销售价格（decimal(18,5)）
+    /// 等级数量
     /// </summary>
-    public decimal? SalesPrice { get; set; }
+    public decimal? ScaleQuantity { get; set; }
 
     /// <summary>
-    /// 最小订购量（基本单位数量，整数）
+    /// 等级单位（字典 logistics_unit_of_measure_code，DictValue=PC/EA 等）
     /// </summary>
-    public int? MinOrderQuantity { get; set; }
+    public string? ScaleUnit { get; set; } = string.Empty;
 
     /// <summary>
-    /// 最大订购量（基本单位数量，0表示无限制，整数）
+    /// 等级值
     /// </summary>
-    public int? MaxOrderQuantity { get; set; }
+    public decimal? ScaleValue { get; set; }
+
+    /// <summary>
+    /// 等级货币（字典 accounting_currency_code，DictValue=CNY/USD 等）
+    /// </summary>
+    public string? ScaleCurrency { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 计算类型（字典 logistics_calculation_type；SAP KRECH；默认 A=百分数）
+    /// </summary>
+    public string? CalculationType { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 价格
+    /// </summary>
+    public decimal? Price { get; set; }
+
+    /// <summary>
+    /// 税码（字典 accounting_tax_code，DictValue=J0/J1/J2…；SAP MWSKZ）
+    /// </summary>
+    public string? TaxCode { get; set; } = string.Empty;
 
     /// <summary>
     /// 是否作废（字典 sys_yes_no_type，0=否 1=是；编辑移除子行时标记作废）
@@ -494,9 +614,14 @@ public class TaktSalesPriceItemImportDto
     public int? IsObsolete { get; set; }
 
     /// <summary>
-    /// 价格阶梯列表（主子表关系，一个物料价格可以有多个阶梯）（子表，级联保存）
+    /// 数量等级行列表（SAP KONM；主子表关系）（子表，级联保存）
     /// </summary>
-    public List<TaktSalesPriceScaleCreateDto>? Scales { get; set; }
+    public List<TaktSalesPriceScaleQuantityCreateDto>? ScaleQuantities { get; set; }
+
+    /// <summary>
+    /// 价值等级行列表（SAP KONW；主子表关系）（子表，级联保存）
+    /// </summary>
+    public List<TaktSalesPriceScaleValueCreateDto>? ScaleValues { get; set; }
 
     /// <summary>
     /// 扩展字段JSON
@@ -532,50 +657,70 @@ public class TaktSalesPriceItemExportDto
     public string CompanyCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 销售价格（关联 TaktSalesPrice.Id，选项 TaktSalesPrices/options）
+    /// 销售价格 ID（主子表关系；选项 TaktSalesPrices/options，DictValue=Id）
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
     public long SalesPriceId { get; set; }
 
     /// <summary>
-    /// 销售价格编码（冗余字段，便于查询）
+    /// 定价记录号（冗余；与主表 SalesPriceCode 一致，长度 20）
     /// </summary>
     public string SalesPriceCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 行号（项号/序号，固定步长=10）
+    /// 定价序号（项号/序号，固定步长=10）
     /// </summary>
-    public int LineNumber { get; set; } = 0;
+    public int SalesPriceSeq { get; set; } = 0;
 
     /// <summary>
-    /// 物料编码（选项 TaktMaterials/options，DictValue=MaterialCode）
+    /// 条件类型（冗余；字典 logistics_price_type；与主表 PriceType 一致，PB00/PR00/MWST/MWRK/NLXV）
     /// </summary>
-    public string MaterialCode { get; set; } = string.Empty;
+    public string PriceType { get; set; } = string.Empty;
 
     /// <summary>
-    /// 销售单位（字典 logistics_unit_of_measure_code，DictValue=PC/EA 等；默认 PC）
+    /// 等级类型（字典 logistics_scale_type；SAP STFKZ；A=基础等级，B=到等级，C=未使用，D=累进间隔等级）
     /// </summary>
-    public string SalesUnit { get; set; } = string.Empty;
+    public string? ScaleType { get; set; } = string.Empty;
 
     /// <summary>
-    /// 价格单位（字典 logistics_price_unit_param；1/10/100/1000；默认 1000）
+    /// 等级基础（字典 logistics_scale_basis；SAP KZBZG；B=价值等级，C=数量规模，…）
     /// </summary>
-    public int SalesPerUnit { get; set; } = 0;
+    public string? ScaleBasis { get; set; } = string.Empty;
 
     /// <summary>
-    /// 销售价格（decimal(18,5)）
+    /// 等级数量
     /// </summary>
-    public decimal SalesPrice { get; set; }
+    public decimal ScaleQuantity { get; set; }
 
     /// <summary>
-    /// 最小订购量（基本单位数量，整数）
+    /// 等级单位（字典 logistics_unit_of_measure_code，DictValue=PC/EA 等）
     /// </summary>
-    public int MinOrderQuantity { get; set; } = 0;
+    public string? ScaleUnit { get; set; } = string.Empty;
 
     /// <summary>
-    /// 最大订购量（基本单位数量，0表示无限制，整数）
+    /// 等级值
     /// </summary>
-    public int MaxOrderQuantity { get; set; } = 0;
+    public decimal ScaleValue { get; set; }
+
+    /// <summary>
+    /// 等级货币（字典 accounting_currency_code，DictValue=CNY/USD 等）
+    /// </summary>
+    public string? ScaleCurrency { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 计算类型（字典 logistics_calculation_type；SAP KRECH；默认 A=百分数）
+    /// </summary>
+    public string CalculationType { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 价格
+    /// </summary>
+    public decimal Price { get; set; }
+
+    /// <summary>
+    /// 税码（字典 accounting_tax_code，DictValue=J0/J1/J2…；SAP MWSKZ）
+    /// </summary>
+    public string? TaxCode { get; set; } = string.Empty;
 
     /// <summary>
     /// 是否作废（字典 sys_yes_no_type，0=否 1=是；编辑移除子行时标记作废）

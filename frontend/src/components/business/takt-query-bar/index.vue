@@ -4,7 +4,7 @@
 文件名称:index.vue
 创建时间:2025-01-20
 创建人:Takt365(Cursor AI)
-功能描述:查询栏组件,提供关键字搜索、查询和重置功能
+功能描述:查询栏组件；默认关键字搜索，可通过 #fields 插槽扩展条件（工厂/期间等），统一查询/重置按钮
 
 版权信息:Copyright (c) 2025 Takt  All rights reserved.
 免责声明:此软件使用 MIT License,作者不承担任何使用风险。
@@ -13,20 +13,26 @@
   <div
     v-if="show"
     class="takt-query-bar"
+    :class="{ 'takt-query-bar--custom-fields': hasFieldsSlot }"
   >
-    <a-input
-      v-model:value="keyword"
-      :placeholder="placeholder ?? defaultPlaceholder"
-      :size="size"
-      :allow-clear="allowClear"
-      :max-length="maxLength"
-      @press-enter="handleSearch"
-      @change="handleChange"
-    >
-      <template #prefix>
-        <RiSearchLine class="takt-remix-icon" />
-      </template>
-    </a-input>
+    <div class="takt-query-bar__fields">
+      <slot name="fields" />
+      <a-input
+        v-if="showKeyword"
+        v-model:value="keyword"
+        class="takt-query-bar__keyword"
+        :placeholder="placeholder ?? defaultPlaceholder"
+        :size="size"
+        :allow-clear="allowClear"
+        :max-length="maxLength"
+        @press-enter="handleSearch"
+        @change="handleChange"
+      >
+        <template #prefix>
+          <RiSearchLine class="takt-remix-icon" />
+        </template>
+      </a-input>
+    </div>
     <a-space class="query-actions">
       <a-button
         class="takt-button-query"
@@ -54,8 +60,13 @@
 <script setup lang="ts">
 import { RiSearchLine, RiRefreshLine } from '@remixicon/vue'
 import { useI18n } from 'vue-i18n'
+import { useSlots } from 'vue'
 
 const { t } = useI18n()
+const slots = useSlots()
+
+/** 是否使用了 #fields 自定义条件 */
+const hasFieldsSlot = computed(() => Boolean(slots.fields))
 
 /** 默认占位：search + common.page.form.keyword */
 const defaultPlaceholder = computed(() =>
@@ -77,6 +88,11 @@ interface Props {
   loading?: boolean
   /** 最大长度 */
   maxLength?: number | undefined
+  /**
+   * 是否显示关键字框
+   * @description 仅用 #fields 时建议 false；默认 true 保持原 CRUD 页行为
+   */
+  showKeyword?: boolean
 }
 
 const props = withDefaults(defineProps<Props>(), {
@@ -86,7 +102,8 @@ const props = withDefaults(defineProps<Props>(), {
   size: 'middle',
   allowClear: true,
   loading: false,
-  maxLength: undefined
+  maxLength: undefined,
+  showKeyword: true,
 })
 
 const emit = defineEmits<{
@@ -98,12 +115,10 @@ const emit = defineEmits<{
 
 const keyword = ref(props.modelValue)
 
-// 监听 props 变化
 watch(() => props.modelValue, (val) => {
   keyword.value = val
 })
 
-// 监听内部值变化
 watch(keyword, (val) => {
   emit('update:modelValue', val)
 })
@@ -123,11 +138,10 @@ const handleChange = (e: Event) => {
   emit('change', value)
 }
 
-// 暴露方法供父组件调用
 defineExpose({
   keyword,
   clear: handleReset,
-  search: handleSearch
+  search: handleSearch,
 })
 </script>
 
@@ -140,33 +154,49 @@ defineExpose({
   gap: 8px;
   width: 100%;
   box-sizing: border-box;
+}
 
-  :deep(.ant-input-affix-wrapper) {
-    width: 50vw;
-    flex: 0 0 50vw;
-    min-width: 0;
+.takt-query-bar__fields {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px;
+}
 
-    .ant-input-prefix {
-      margin-inline-end: 4px;
+.takt-query-bar__keyword {
+  width: 50vw;
+  flex: 0 0 50vw;
+  min-width: 0;
+}
 
-      svg {
-        color: var(--ant-color-text-secondary);
-        fill: currentColor;
-      }
+.takt-query-bar--custom-fields .takt-query-bar__keyword {
+  width: 16rem;
+  flex: 0 0 16rem;
+}
+
+:deep(.ant-input-affix-wrapper) {
+  .ant-input-prefix {
+    margin-inline-end: 4px;
+
+    svg {
+      color: var(--ant-color-text-secondary);
+      fill: currentColor;
     }
   }
+}
 
-  .query-actions {
-    flex-shrink: 0;
+.query-actions {
+  flex-shrink: 0;
 
-    :deep(.ant-btn) {
-      display: inline-flex;
-      align-items: center;
-      gap: 4px;
+  :deep(.ant-btn) {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
 
-      .anticon {
-        margin-inline-end: 0 !important;
-      }
+    .anticon {
+      margin-inline-end: 0 !important;
     }
   }
 }

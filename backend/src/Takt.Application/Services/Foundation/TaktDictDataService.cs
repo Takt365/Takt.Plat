@@ -345,6 +345,56 @@ public class TaktDictDataService : TaktServiceBase, ITaktDictDataService
     }
 
     /// <summary>
+    /// 按字典类型编码构建落库上下文（快照 + 多选排序映射）
+    /// </summary>
+    /// <param name="dictTypeCodes">字典类型编码</param>
+    /// <returns>落库上下文</returns>
+    public async Task<TaktDictStorageContext> CreateDictStorageContextAsync(params string[] dictTypeCodes)
+    {
+        if (dictTypeCodes == null || dictTypeCodes.Length == 0)
+        {
+            return new TaktDictStorageContext();
+        }
+        var codes = dictTypeCodes
+            .Where(code => !string.IsNullOrWhiteSpace(code))
+            .Select(code => code.Trim())
+            .Distinct(StringComparer.Ordinal)
+            .ToArray();
+        if (codes.Length == 0)
+        {
+            return new TaktDictStorageContext();
+        }
+        var list = await _dictDataRepository.GetListAsync(
+            x => x.TenantCode == CurrentTenantCode && codes.Contains(x.DictTypeCode),
+            x => x.SortOrder,
+            false);
+        var sortMaps = new Dictionary<string, Dictionary<string, int>>(StringComparer.Ordinal);
+        foreach (var code in codes)
+        {
+            sortMaps[code] = new Dictionary<string, int>(StringComparer.Ordinal);
+        }
+        foreach (var item in list)
+        {
+            if (string.IsNullOrWhiteSpace(item.DictTypeCode)
+                || string.IsNullOrWhiteSpace(item.DictValue)
+                || !sortMaps.TryGetValue(item.DictTypeCode, out var map))
+            {
+                continue;
+            }
+            map[item.DictValue.Trim()] = item.SortOrder;
+        }
+        var rows = list.Select(x => (x.DictTypeCode, x.DictValue, x.DictLabel));
+        return new TaktDictStorageContext
+        {
+            Snapshot = TaktDictSnapshot.CreateFromRows(rows, codes),
+            SortMapsByTypeCode = sortMaps.ToDictionary(
+                kv => kv.Key,
+                kv => (IReadOnlyDictionary<string, int>)kv.Value,
+                StringComparer.Ordinal),
+        };
+    }
+
+    /// <summary>
     /// 将字典数据实体映射为下拉选项
     /// </summary>
     /// <param name="entity">字典数据实体</param>

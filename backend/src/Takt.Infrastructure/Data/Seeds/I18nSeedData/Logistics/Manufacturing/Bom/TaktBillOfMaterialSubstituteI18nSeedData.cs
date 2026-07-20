@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Infrastructure.Data.Seeds.I18nSeedData.Logistics.Manufacturing.Bom
 // 文件名称：TaktBillOfMaterialSubstituteI18nSeedData.cs
-// 创建时间：2026-07-09
+// 创建时间：2026-07-20
 // 创建人：Takt365(Auto Generated)
 // 功能描述：TaktBillOfMaterialSubstitute 实体字段国际化种子（无对应 frontend locales；TranslationText 取自 ColumnDescription，ContextNote 取自属性 XML summary）
 // 
@@ -136,13 +136,13 @@ public class TaktBillOfMaterialSubstituteI18nSeedData : ITaktSeedDataCoordinator
             new TranslationSeedItem("entity.billofmaterialsubstitute.linenumber", "zh-HK", "替代行号_hk", "替代行号（步长10：10/20/30…）"),
 
             // entity.billofmaterialsubstitute.substitutematerialid
-            new TranslationSeedItem("entity.billofmaterialsubstitute.substitutematerialid", "en-US", "替代物料ID_us", "替代物料ID（关联工厂物料 TaktMaterialPlant.Id，选项 TaktMaterialPlants/options）"),
+            new TranslationSeedItem("entity.billofmaterialsubstitute.substitutematerialid", "en-US", "替代物料ID_us", "替代物料ID（选项 TaktMaterialPlants/options，DictValue=Id，ExtValue=PlantCode）"),
             // entity.billofmaterialsubstitute.substitutematerialid
-            new TranslationSeedItem("entity.billofmaterialsubstitute.substitutematerialid", "ja-JP", "替代物料ID_jp", "替代物料ID（关联工厂物料 TaktMaterialPlant.Id，选项 TaktMaterialPlants/options）"),
+            new TranslationSeedItem("entity.billofmaterialsubstitute.substitutematerialid", "ja-JP", "替代物料ID_jp", "替代物料ID（选项 TaktMaterialPlants/options，DictValue=Id，ExtValue=PlantCode）"),
             // entity.billofmaterialsubstitute.substitutematerialid
-            new TranslationSeedItem("entity.billofmaterialsubstitute.substitutematerialid", "zh-CN", "替代物料ID", "替代物料ID（关联工厂物料 TaktMaterialPlant.Id，选项 TaktMaterialPlants/options）"),
+            new TranslationSeedItem("entity.billofmaterialsubstitute.substitutematerialid", "zh-CN", "替代物料ID", "替代物料ID（选项 TaktMaterialPlants/options，DictValue=Id，ExtValue=PlantCode）"),
             // entity.billofmaterialsubstitute.substitutematerialid
-            new TranslationSeedItem("entity.billofmaterialsubstitute.substitutematerialid", "zh-HK", "替代物料ID_hk", "替代物料ID（关联工厂物料 TaktMaterialPlant.Id，选项 TaktMaterialPlants/options）"),
+            new TranslationSeedItem("entity.billofmaterialsubstitute.substitutematerialid", "zh-HK", "替代物料ID_hk", "替代物料ID（选项 TaktMaterialPlants/options，DictValue=Id，ExtValue=PlantCode）"),
 
             // entity.billofmaterialsubstitute.substitutematerialcode
             new TranslationSeedItem("entity.billofmaterialsubstitute.substitutematerialcode", "en-US", "替代物料编码_us", "替代物料编码（冗余）"),

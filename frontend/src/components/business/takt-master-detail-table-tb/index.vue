@@ -37,6 +37,7 @@
           :page-size="masterPageSize"
           :total="masterTotal"
           :custom-row="masterCustomRow"
+          :footer-remark="masterFooterRemark"
           @change="(p, f, s) => emit('master-change', p, f, s)"
           @pagination-change="handleMasterPaginationChange"
           @resize-column="(w, col) => emit('master-resize-column', w, col)"
@@ -84,6 +85,7 @@
             :size="size"
             :bordered="bordered"
             :show-pagination="false"
+            :footer-remark="detailFooterRemark"
             @change="(p, f, s) => emit('detail-change', p, f, s)"
             @resize-column="(w, col) => emit('detail-resize-column', w, col)"
           >
@@ -121,7 +123,7 @@ import { useI18n } from 'vue-i18n'
 import type { TableColumnsType, TableProps } from 'ant-design-vue'
 import type { FilterValue } from 'ant-design-vue/es/table/interface'
 import type { TaktEntityScope, TaktTableLayoutMode } from '@/utils/table-columns'
-import type { TaktTableScrollLayout } from '@/utils/table-scroll'
+import { shouldUseTableVirtualScroll, type TaktTableScrollLayout } from '@/utils/table-scroll'
 import { createLogger } from '@/utils/logger'
 
 /** 表格行 */
@@ -139,9 +141,6 @@ type TableFilters = Record<string, FilterValue | null>
 const masterDetailTbLogger = createLogger('takt-master-detail-table-tb')
 const { t } = useI18n()
 const slots = useSlots()
-
-/** 超过此行数或主表 pageSize 时自动启用虚拟滚动（07-overflow-vue） */
-const AUTO_VIRTUAL_ROW_THRESHOLD = 50
 
 /** 保留给主表转发的插槽名（排除 layout / detail-*） */
 const RESERVED_SLOT_NAMES = new Set(['master-toolbar', 'detail-toolbar', 'detail-empty'])
@@ -192,6 +191,10 @@ interface Props {
   selectedMasterKey?: string
   detailTitle?: string
   detailEmptyDescription?: string
+  /** 主表表尾备注（合计下方；也可用 #footerRemark） */
+  masterFooterRemark?: string
+  /** 从表表尾备注（合计下方；也可用 #detail-footerRemark） */
+  detailFooterRemark?: string
   /** 选中主表行后加载从表（不分页） */
   loadDetailData?: (masterRecord: TableRecord) => void | Promise<void>
 }
@@ -231,6 +234,8 @@ const props = withDefaults(defineProps<Props>(), {
   selectedMasterKey: '',
   detailTitle: '',
   detailEmptyDescription: '',
+  masterFooterRemark: '',
+  detailFooterRemark: '',
 })
 
 const emit = defineEmits<{
@@ -279,30 +284,17 @@ const resolvedDetailEmptyDescription = computed(() => {
 /** 是否已选中主表行 */
 const hasMasterSelection = computed(() => !!props.selectedMasterKey)
 
-/** 主表是否启用虚拟滚动 */
+/** 主表是否启用虚拟滚动（行数或 pageSize 超过 5000 强制开） */
 const shouldUseMasterVirtual = computed(() => {
-  if (props.masterVirtual === true) {
-    return true
-  }
   const len = props.masterDataSource?.length ?? 0
   const pageSize = props.masterPageSize ?? 10
-  if (props.masterVirtual === false && len <= AUTO_VIRTUAL_ROW_THRESHOLD && pageSize <= AUTO_VIRTUAL_ROW_THRESHOLD) {
-    return false
-  }
-  return len > AUTO_VIRTUAL_ROW_THRESHOLD || pageSize > AUTO_VIRTUAL_ROW_THRESHOLD
+  return shouldUseTableVirtualScroll(Math.max(len, pageSize), props.masterVirtual)
 })
 
-/** 从表是否启用虚拟滚动 */
-const shouldUseDetailVirtual = computed(() => {
-  if (props.detailVirtual === true) {
-    return true
-  }
-  const len = props.detailDataSource?.length ?? 0
-  if (props.detailVirtual === false && len <= AUTO_VIRTUAL_ROW_THRESHOLD) {
-    return false
-  }
-  return len > AUTO_VIRTUAL_ROW_THRESHOLD
-})
+/** 从表是否启用虚拟滚动（行数超过 5000 强制开） */
+const shouldUseDetailVirtual = computed(() =>
+  shouldUseTableVirtualScroll(props.detailDataSource?.length ?? 0, props.detailVirtual),
+)
 
 /**
  * 解析主表 row-key

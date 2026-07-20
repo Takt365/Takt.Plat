@@ -127,7 +127,7 @@ import type { {{ table.entity_name_pascal }} } from '@/types/{{ table.frontend_m
 
 const { t } = useI18n()
 
-/** 表单内容区纵向布局类名（与弹窗内其它表单一致，同 user-form.vue） */
+/** 表单内容区纵向布局类名（与弹窗内其他表单一致，同 user-form.vue） */
 const formContentClass = 'takt-form-content-rows-10'
 
 /** 当前激活的标签 key（tab-0、tab-1…），与 a-tab-pane 的 key 一致 */

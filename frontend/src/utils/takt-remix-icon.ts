@@ -19,6 +19,12 @@ let remixIconModulePromise: Promise<Record<string, unknown>> | null = null;
 /** 已解析的 Remix 图标组件缓存（键为规范化组件名，如 RiGridLine） */
 const remixIconComponentCache = new Map<string, Component>();
 
+/** 全量 Remix 导出名缓存（排序后） */
+let remixIconNameListCache: string[] | null = null;
+
+/** 图标变体：Line / Fill / 全部 */
+export type TaktRemixIconVariant = 'line' | 'fill' | 'all';
+
 /**
  * 规范化 Remix 图标组件名（后端种子多为 RiGridLine；兼容 ri-grid-line）
  * @param raw 原始图标名
@@ -99,6 +105,74 @@ export function getRemixIconComponent(rawIconName: string | undefined | null): C
   return remixIconComponentCache.get(name);
 }
 
+/**
+ * 确保图标已加载并返回组件（未命中缓存时按需预加载）
+ * @param rawIconName 后端 Icon 字段
+ * @returns {Promise<Component | undefined>} Vue 组件
+ */
+export async function ensureRemixIconLoaded(
+  rawIconName: string | undefined | null,
+): Promise<Component | undefined> {
+  const name = normalizeRemixIconName(rawIconName);
+  if (!name) {
+    return undefined;
+  }
+
+  const cached = remixIconComponentCache.get(name);
+  if (cached) {
+    return cached;
+  }
+
+  await preloadRemixIcons([name]);
+  return remixIconComponentCache.get(name);
+}
+
+/**
+ * 列出 @remixicon/vue 导出名（可按 Line/Fill 过滤；结果缓存）
+ * @param options.variant 变体，默认 line（菜单种子多为 *Line）
+ * @returns {Promise<string[]>} 图标组件名列表
+ */
+export async function listRemixIconNames(options?: {
+  variant?: TaktRemixIconVariant
+}): Promise<string[]> {
+  if (!remixIconNameListCache) {
+    const module = await loadRemixIconModule();
+    remixIconNameListCache = Object.keys(module)
+      .filter((key) => /^Ri[A-Za-z0-9]+$/.test(key))
+      .sort((a, b) => a.localeCompare(b));
+  }
+
+  const variant = options?.variant ?? 'line';
+  if (variant === 'all') {
+    return remixIconNameListCache;
+  }
+
+  if (variant === 'fill') {
+    return remixIconNameListCache.filter((name) => name.endsWith('Fill'));
+  }
+
+  return remixIconNameListCache.filter((name) => name.endsWith('Line'));
+}
+
+/**
+ * 按关键字过滤图标名（忽略大小写；空关键字返回原列表）
+ * @param names 候选列表
+ * @param keyword 搜索关键字
+ * @returns {string[]} 过滤后列表
+ */
+export function filterRemixIconNames(names: readonly string[], keyword: string | undefined | null): string[] {
+  if (!names?.length) {
+    return [];
+  }
+
+  const q = String(keyword ?? '').trim().toLowerCase();
+  if (!q) {
+    return [...names];
+  }
+
+  return names.filter((name) => name.toLowerCase().includes(q));
+}
+
 /** 菜单树遍历最大深度（07-overflow-vue） */
 const TAKT_MAX_MENU_TREE_DEPTH = 10;
 
@@ -135,4 +209,5 @@ export function collectMenuIconNames(menus: MenuTree[]): string[] {
 export function clearRemixIconCache(): void {
   remixIconComponentCache.clear();
   remixIconModulePromise = null;
+  remixIconNameListCache = null;
 }

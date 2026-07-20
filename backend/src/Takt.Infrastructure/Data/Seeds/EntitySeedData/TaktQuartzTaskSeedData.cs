@@ -16,6 +16,7 @@ using Takt.Domain.Entities.Accounting.Financial;
 using Takt.Domain.Entities.Foundation;
 using Takt.Domain.Interfaces;
 using Takt.Domain.Repositories;
+using Takt.Infrastructure.Services.Logistics.Manufacturing.Bom.Quartz;
 using Takt.Shared.Constants;
 using Takt.Shared.Options;
 
@@ -135,12 +136,12 @@ public class TaktQuartzTaskSeedData : ITaktSeedDataCoordinator
                 TaskName: "示例：只读 SQL 统计",
                 JobName: "demo_sql_dict_count",
                 TaskType: TaskTypeSql,
-                SqlScript: "SELECT COUNT(*) AS dict_type_count FROM takt_foundation_dict_type WHERE is_deleted = 0",
+                SqlScript: "Quartz/demo_sql_dict_count.sql",
                 TriggerType: TriggerTypeSimple,
                 IntervalSeconds: 3600,
                 CronExpression: string.Empty,
                 TaskStatus: TaskStatusPaused,
-                Description: "种子示例：Simple 触发器 + SQL 只读任务（默认暂停，可手动执行验证）"),
+                Description: "种子示例：Simple 触发器 + wwwroot/Quartz/demo_sql_dict_count.sql（默认暂停）"),
             new(
                 TaskCode: "QT_DEMO_HTTP",
                 TaskName: "示例：HTTP 健康检查",
@@ -158,12 +159,12 @@ public class TaktQuartzTaskSeedData : ITaktSeedDataCoordinator
                 TaskName: "示例：Cron SQL",
                 JobName: "demo_cron_sql_ping",
                 TaskType: TaskTypeSql,
-                SqlScript: "SELECT 1 AS ok",
+                SqlScript: "Quartz/demo_cron_sql_ping.sql",
                 TriggerType: TriggerTypeCron,
                 IntervalSeconds: 0,
                 CronExpression: "0 0 2 * * ?",
                 TaskStatus: TaskStatusPaused,
-                Description: "种子示例：Cron 触发器（每日 02:00）+ SQL 只读任务（默认暂停）"),
+                Description: "种子示例：Cron 触发器（每日 02:00）+ wwwroot/Quartz/demo_cron_sql_ping.sql（默认暂停）"),
             new(
                 TaskCode: "QT_EC_TASK_OVERDUE_SCAN",
                 TaskName: "工程变更执行任务超时扫描",
@@ -176,6 +177,109 @@ public class TaktQuartzTaskSeedData : ITaktSeedDataCoordinator
                 AssemblyName: "Takt.Application",
                 ClassName: TaktEcFlowConstants.QuartzHandlerEcTaskOverdueScan,
                 Description: "扫描设变执行任务超时/阻塞并 SignalR 预警（默认暂停，启用后每 30 分钟）"),
+            // SAP 同步链：每日 07:30 起依次间隔 10 分钟（ma → md → st → ec → so）
+            // 月度链（每月 3 日，自 03:00 起依次间隔 30 分钟）：mb → bc → 成本合计 → 重算
+            new(
+                TaskCode: "QT_SAP_SYNC_MA",
+                TaskName: "SAP同步：物料主数据",
+                JobName: "sap_sync_ma",
+                TaskType: TaskTypeSql,
+                SqlScript: "Quartz/sap_sync_ma.sql",
+                TriggerType: TriggerTypeCron,
+                IntervalSeconds: 0,
+                CronExpression: "0 30 7 * * ?",
+                TaskStatus: TaskStatusPaused,
+                Description: "每日 07:30 执行 wwwroot/Quartz/sap_sync_ma.sql（默认暂停；链首）"),
+            new(
+                TaskCode: "QT_SAP_SYNC_MD",
+                TaskName: "SAP同步：机种目的地",
+                JobName: "sap_sync_md",
+                TaskType: TaskTypeSql,
+                SqlScript: "Quartz/sap_sync_md.sql",
+                TriggerType: TriggerTypeCron,
+                IntervalSeconds: 0,
+                CronExpression: "0 40 7 * * ?",
+                TaskStatus: TaskStatusPaused,
+                Description: "每日 07:40 执行 wwwroot/Quartz/sap_sync_md.sql（默认暂停）"),
+            new(
+                TaskCode: "QT_SAP_SYNC_ST",
+                TaskName: "SAP同步：标准工时",
+                JobName: "sap_sync_st",
+                TaskType: TaskTypeSql,
+                SqlScript: "Quartz/sap_sync_st.sql",
+                TriggerType: TriggerTypeCron,
+                IntervalSeconds: 0,
+                CronExpression: "0 50 7 * * ?",
+                TaskStatus: TaskStatusPaused,
+                Description: "每日 07:50 执行 wwwroot/Quartz/sap_sync_st.sql（默认暂停）"),
+            new(
+                TaskCode: "QT_SAP_SYNC_EC",
+                TaskName: "SAP同步：工程变更",
+                JobName: "sap_sync_ec",
+                TaskType: TaskTypeSql,
+                SqlScript: "Quartz/sap_sync_ec.sql",
+                TriggerType: TriggerTypeCron,
+                IntervalSeconds: 0,
+                CronExpression: "0 0 8 * * ?",
+                TaskStatus: TaskStatusPaused,
+                Description: "每日 08:00 执行 wwwroot/Quartz/sap_sync_ec.sql（默认暂停）"),
+            new(
+                TaskCode: "QT_SAP_SYNC_SO",
+                TaskName: "SAP同步：生产工单",
+                JobName: "sap_sync_so",
+                TaskType: TaskTypeSql,
+                SqlScript: "Quartz/sap_sync_so.sql",
+                TriggerType: TriggerTypeCron,
+                IntervalSeconds: 0,
+                CronExpression: "0 10 8 * * ?",
+                TaskStatus: TaskStatusPaused,
+                Description: "每日 08:10 执行 wwwroot/Quartz/sap_sync_so.sql（默认暂停）"),
+            new(
+                TaskCode: "QT_SAP_SYNC_MB",
+                TaskName: "SAP同步：移动价格",
+                JobName: "sap_sync_mb",
+                TaskType: TaskTypeSql,
+                SqlScript: "Quartz/sap_sync_mb.sql",
+                TriggerType: TriggerTypeCron,
+                IntervalSeconds: 0,
+                CronExpression: "0 0 3 3 * ?",
+                TaskStatus: TaskStatusPaused,
+                Description: "每月 3 日 03:00 执行 wwwroot/Quartz/sap_sync_mb.sql（PP_Sap_Mbewh → 移动价格；月度链首；默认暂停）"),
+            new(
+                TaskCode: "QT_SAP_SYNC_BC",
+                TaskName: "SAP同步：BOM物料成本",
+                JobName: "sap_sync_bc",
+                TaskType: TaskTypeSql,
+                SqlScript: "Quartz/sap_sync_bc.sql",
+                TriggerType: TriggerTypeCron,
+                IntervalSeconds: 0,
+                CronExpression: "0 30 3 3 * ?",
+                TaskStatus: TaskStatusPaused,
+                Description: "每月 3 日 03:30 执行 wwwroot/Quartz/sap_sync_bc.sql（PP_Sap_Zp002 → BOM物料成本明细；MB 后间隔 30 分钟；默认暂停）"),
+            new(
+                TaskCode: "QT_BOM_MATERIAL_COST_SUM",
+                TaskName: "BOM物料成本合计",
+                JobName: "bom_material_cost_sum",
+                TaskType: TaskTypeAssembly,
+                TriggerType: TriggerTypeCron,
+                IntervalSeconds: 0,
+                CronExpression: "0 0 4 3 * ?",
+                TaskStatus: TaskStatusPaused,
+                AssemblyName: "Takt.Infrastructure",
+                ClassName: nameof(TaktBomMaterialCostSumJobHandler),
+                Description: "每月 3 日 04:00 仅合计 CostingDate 当月（完成后落库消息并推送；BC 后间隔 30 分钟；默认暂停）"),
+            new(
+                TaskCode: "QT_BOM_MATERIAL_COST_RECALC",
+                TaskName: "BOM物料成本重算",
+                JobName: "bom_material_cost_recalc",
+                TaskType: TaskTypeAssembly,
+                TriggerType: TriggerTypeCron,
+                IntervalSeconds: 0,
+                CronExpression: "0 30 4 3 * ?",
+                TaskStatus: TaskStatusPaused,
+                AssemblyName: "Takt.Infrastructure",
+                ClassName: nameof(TaktBomMaterialCostRecalculateJobHandler),
+                Description: "每月 3 日 04:30 force 重算 CostingDate 当月（完成后落库消息并推送；合计后间隔 30 分钟；默认暂停；链尾）"),
         };
     }
 
@@ -216,7 +320,7 @@ public class TaktQuartzTaskSeedData : ITaktSeedDataCoordinator
                 TriggerType = template.TriggerType,
                 CronExpression = template.CronExpression,
                 IntervalSeconds = template.IntervalSeconds,
-                ExecuteParams = null,
+                ExecuteParams = template.ExecuteParams,
                 TaskStatus = template.TaskStatus,
                 Concurrent = 0,
                 MisfirePolicy = 0,
@@ -238,6 +342,7 @@ public class TaktQuartzTaskSeedData : ITaktSeedDataCoordinator
         entity.TriggerType = template.TriggerType;
         entity.CronExpression = template.CronExpression;
         entity.IntervalSeconds = template.IntervalSeconds;
+        entity.ExecuteParams = template.ExecuteParams;
         entity.TaskStatus = template.TaskStatus;
         entity.Concurrent = 0;
         entity.MisfirePolicy = 0;
@@ -254,7 +359,7 @@ public class TaktQuartzTaskSeedData : ITaktSeedDataCoordinator
     /// <param name="TaskName">任务名称</param>
     /// <param name="JobName">Job 名称</param>
     /// <param name="TaskType">任务类型</param>
-    /// <param name="SqlScript">SQL 脚本</param>
+    /// <param name="SqlScript">相对 wwwroot 的 .sql 路径（如 Quartz/sap_sync_ma.sql；禁止内联 SQL）</param>
     /// <param name="ApiUrl">API 地址</param>
     /// <param name="RequestMethod">请求方式</param>
     /// <param name="TriggerType">触发器类型</param>
@@ -262,6 +367,9 @@ public class TaktQuartzTaskSeedData : ITaktSeedDataCoordinator
     /// <param name="CronExpression">Cron 表达式</param>
     /// <param name="TaskStatus">任务状态</param>
     /// <param name="Description">任务描述</param>
+    /// <param name="AssemblyName">程序集名</param>
+    /// <param name="ClassName">Handler 类名</param>
+    /// <param name="ExecuteParams">执行参数</param>
     private sealed record QuartzTaskSeedTemplate(
         string TaskCode,
         string TaskName,
@@ -276,5 +384,6 @@ public class TaktQuartzTaskSeedData : ITaktSeedDataCoordinator
         int TaskStatus = 1,
         string? Description = null,
         string? AssemblyName = null,
-        string? ClassName = null);
+        string? ClassName = null,
+        string? ExecuteParams = null);
 }

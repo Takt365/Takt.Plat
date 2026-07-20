@@ -45,7 +45,7 @@ public class TaktSopWorkstation : TaktCompanyEntityBase
     public string WorkstationName { get; set; } = string.Empty;
 
     /// <summary>
-    /// 工作中心（关联 TaktWorkCenter.WorkCenterCode，选项 TaktWorkCenters/options，DictValue=WorkCenterCode）
+    /// 工作中心（选项 TaktWorkCenters/options，DictValue=WorkCenterCode）
     /// </summary>
     [SugarColumn(ColumnName = "work_center", ColumnDescription = "工作中心", ColumnDataType = "nvarchar", Length = 20, IsNullable = true)]
     public string? WorkCenter { get; set; }

@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Infrastructure.Data.Seeds.I18nSeedData.Logistics.Materials
 // 文件名称：TaktWarehouseI18nSeedData.cs
-// 创建时间：2026-07-09
+// 创建时间：2026-07-20
 // 创建人：Takt365(Auto Generated)
 // 功能描述：TaktWarehouse 实体字段国际化种子（无对应 frontend locales；TranslationText 取自 ColumnDescription，ContextNote 取自属性 XML summary）
 // 
@@ -154,13 +154,13 @@ public class TaktWarehouseI18nSeedData : ITaktSeedDataCoordinator
             new TranslationSeedItem("entity.warehouse.contactphone", "zh-HK", "联系电话_hk", "联系电话（contact_phone）"),
 
             // entity.warehouse.managerusercode
-            new TranslationSeedItem("entity.warehouse.managerusercode", "en-US", "仓库负责人用户编码_us", "仓库负责人用户编码（关联 TaktUser.Username，选项 TaktUsers/options，DictValue=Username）"),
+            new TranslationSeedItem("entity.warehouse.managerusercode", "en-US", "仓库负责人用户编码_us", "仓库负责人用户编码（选项 TaktUsers/options，DictValue=Username）"),
             // entity.warehouse.managerusercode
-            new TranslationSeedItem("entity.warehouse.managerusercode", "ja-JP", "仓库负责人用户编码_jp", "仓库负责人用户编码（关联 TaktUser.Username，选项 TaktUsers/options，DictValue=Username）"),
+            new TranslationSeedItem("entity.warehouse.managerusercode", "ja-JP", "仓库负责人用户编码_jp", "仓库负责人用户编码（选项 TaktUsers/options，DictValue=Username）"),
             // entity.warehouse.managerusercode
-            new TranslationSeedItem("entity.warehouse.managerusercode", "zh-CN", "仓库负责人用户编码", "仓库负责人用户编码（关联 TaktUser.Username，选项 TaktUsers/options，DictValue=Username）"),
+            new TranslationSeedItem("entity.warehouse.managerusercode", "zh-CN", "仓库负责人用户编码", "仓库负责人用户编码（选项 TaktUsers/options，DictValue=Username）"),
             // entity.warehouse.managerusercode
-            new TranslationSeedItem("entity.warehouse.managerusercode", "zh-HK", "仓库负责人用户编码_hk", "仓库负责人用户编码（关联 TaktUser.Username，选项 TaktUsers/options，DictValue=Username）"),
+            new TranslationSeedItem("entity.warehouse.managerusercode", "zh-HK", "仓库负责人用户编码_hk", "仓库负责人用户编码（选项 TaktUsers/options，DictValue=Username）"),
 
             // entity.warehouse.isvirtual
             new TranslationSeedItem("entity.warehouse.isvirtual", "en-US", "虚拟仓_us", "虚拟仓（is_virtual；字典 sys_yes_no_type；0=实体仓，1=虚拟仓）"),

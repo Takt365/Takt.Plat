@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Infrastructure.Data.Seeds.I18nSeedData.HumanResource.Performance
 // 文件名称：TaktPerfAnalysisI18nSeedData.cs
-// 创建时间：2026-07-09
+// 创建时间：2026-07-20
 // 创建人：Takt365(Auto Generated)
 // 功能描述：TaktPerfAnalysis 实体字段国际化种子（无对应 frontend locales；TranslationText 取自 ColumnDescription，ContextNote 取自属性 XML summary）
 // 
@@ -91,13 +91,13 @@ public class TaktPerfAnalysisI18nSeedData : ITaktSeedDataCoordinator
             new TranslationSeedItem("entity.perfanalysis._self", "zh-HK", "分析改进信息_hk", "实体名称"),
 
             // entity.perfanalysis.employeeid
-            new TranslationSeedItem("entity.perfanalysis.employeeid", "en-US", "员工ID_us", "员工（关联 TaktEmployee.Id，选项 TaktEmployees/options）"),
+            new TranslationSeedItem("entity.perfanalysis.employeeid", "en-US", "员工ID_us", "员工（选项 TaktEmployees/options，DictValue=Id）"),
             // entity.perfanalysis.employeeid
-            new TranslationSeedItem("entity.perfanalysis.employeeid", "ja-JP", "员工ID_jp", "员工（关联 TaktEmployee.Id，选项 TaktEmployees/options）"),
+            new TranslationSeedItem("entity.perfanalysis.employeeid", "ja-JP", "员工ID_jp", "员工（选项 TaktEmployees/options，DictValue=Id）"),
             // entity.perfanalysis.employeeid
-            new TranslationSeedItem("entity.perfanalysis.employeeid", "zh-CN", "员工ID", "员工（关联 TaktEmployee.Id，选项 TaktEmployees/options）"),
+            new TranslationSeedItem("entity.perfanalysis.employeeid", "zh-CN", "员工ID", "员工（选项 TaktEmployees/options，DictValue=Id）"),
             // entity.perfanalysis.employeeid
-            new TranslationSeedItem("entity.perfanalysis.employeeid", "zh-HK", "员工ID_hk", "员工（关联 TaktEmployee.Id，选项 TaktEmployees/options）"),
+            new TranslationSeedItem("entity.perfanalysis.employeeid", "zh-HK", "员工ID_hk", "员工（选项 TaktEmployees/options，DictValue=Id）"),
 
             // entity.perfanalysis.employeename
             new TranslationSeedItem("entity.perfanalysis.employeename", "en-US", "员工姓名_us", "员工姓名"),
@@ -109,13 +109,13 @@ public class TaktPerfAnalysisI18nSeedData : ITaktSeedDataCoordinator
             new TranslationSeedItem("entity.perfanalysis.employeename", "zh-HK", "员工姓名_hk", "员工姓名"),
 
             // entity.perfanalysis.assessmentid
-            new TranslationSeedItem("entity.perfanalysis.assessmentid", "en-US", "考核评估ID_us", "考核评估（关联 TaktPerfAssessment.Id，选项 TaktPerfAssessments/options）"),
+            new TranslationSeedItem("entity.perfanalysis.assessmentid", "en-US", "考核评估ID_us", "考核评估（选项 TaktPerfAssessments/options，DictValue=Id）"),
             // entity.perfanalysis.assessmentid
-            new TranslationSeedItem("entity.perfanalysis.assessmentid", "ja-JP", "考核评估ID_jp", "考核评估（关联 TaktPerfAssessment.Id，选项 TaktPerfAssessments/options）"),
+            new TranslationSeedItem("entity.perfanalysis.assessmentid", "ja-JP", "考核评估ID_jp", "考核评估（选项 TaktPerfAssessments/options，DictValue=Id）"),
             // entity.perfanalysis.assessmentid
-            new TranslationSeedItem("entity.perfanalysis.assessmentid", "zh-CN", "考核评估ID", "考核评估（关联 TaktPerfAssessment.Id，选项 TaktPerfAssessments/options）"),
+            new TranslationSeedItem("entity.perfanalysis.assessmentid", "zh-CN", "考核评估ID", "考核评估（选项 TaktPerfAssessments/options，DictValue=Id）"),
             // entity.perfanalysis.assessmentid
-            new TranslationSeedItem("entity.perfanalysis.assessmentid", "zh-HK", "考核评估ID_hk", "考核评估（关联 TaktPerfAssessment.Id，选项 TaktPerfAssessments/options）"),
+            new TranslationSeedItem("entity.perfanalysis.assessmentid", "zh-HK", "考核评估ID_hk", "考核评估（选项 TaktPerfAssessments/options，DictValue=Id）"),
 
             // entity.perfanalysis.plantitle
             new TranslationSeedItem("entity.perfanalysis.plantitle", "en-US", "改进计划标题_us", "改进计划标题"),
@@ -199,22 +199,22 @@ public class TaktPerfAnalysisI18nSeedData : ITaktSeedDataCoordinator
             new TranslationSeedItem("entity.perfanalysis.resultdescription", "zh-HK", "改进结果说明_hk", "改进结果说明"),
 
             // entity.perfanalysis.mentorid
-            new TranslationSeedItem("entity.perfanalysis.mentorid", "en-US", "指导老师ID_us", "指导老师（关联 TaktEmployee.Id，选项 TaktEmployees/options）"),
+            new TranslationSeedItem("entity.perfanalysis.mentorid", "en-US", "指导老师ID_us", "指导老师（选项 TaktEmployees/options，DictValue=Id）"),
             // entity.perfanalysis.mentorid
-            new TranslationSeedItem("entity.perfanalysis.mentorid", "ja-JP", "指导老师ID_jp", "指导老师（关联 TaktEmployee.Id，选项 TaktEmployees/options）"),
+            new TranslationSeedItem("entity.perfanalysis.mentorid", "ja-JP", "指导老师ID_jp", "指导老师（选项 TaktEmployees/options，DictValue=Id）"),
             // entity.perfanalysis.mentorid
-            new TranslationSeedItem("entity.perfanalysis.mentorid", "zh-CN", "指导老师ID", "指导老师（关联 TaktEmployee.Id，选项 TaktEmployees/options）"),
+            new TranslationSeedItem("entity.perfanalysis.mentorid", "zh-CN", "指导老师ID", "指导老师（选项 TaktEmployees/options，DictValue=Id）"),
             // entity.perfanalysis.mentorid
-            new TranslationSeedItem("entity.perfanalysis.mentorid", "zh-HK", "指导老师ID_hk", "指导老师（关联 TaktEmployee.Id，选项 TaktEmployees/options）"),
+            new TranslationSeedItem("entity.perfanalysis.mentorid", "zh-HK", "指导老师ID_hk", "指导老师（选项 TaktEmployees/options，DictValue=Id）"),
 
             // entity.perfanalysis.relatedplant
-            new TranslationSeedItem("entity.perfanalysis.relatedplant", "en-US", "关联工厂_us", "关联工厂（关联 TaktPlant.PlantCode，选项 TaktPlants/options）"),
+            new TranslationSeedItem("entity.perfanalysis.relatedplant", "en-US", "关联工厂_us", "关联工厂（选项 TaktPlants/options，DictValue=Id）"),
             // entity.perfanalysis.relatedplant
-            new TranslationSeedItem("entity.perfanalysis.relatedplant", "ja-JP", "关联工厂_jp", "关联工厂（关联 TaktPlant.PlantCode，选项 TaktPlants/options）"),
+            new TranslationSeedItem("entity.perfanalysis.relatedplant", "ja-JP", "关联工厂_jp", "关联工厂（选项 TaktPlants/options，DictValue=Id）"),
             // entity.perfanalysis.relatedplant
-            new TranslationSeedItem("entity.perfanalysis.relatedplant", "zh-CN", "关联工厂", "关联工厂（关联 TaktPlant.PlantCode，选项 TaktPlants/options）"),
+            new TranslationSeedItem("entity.perfanalysis.relatedplant", "zh-CN", "关联工厂", "关联工厂（选项 TaktPlants/options，DictValue=Id）"),
             // entity.perfanalysis.relatedplant
-            new TranslationSeedItem("entity.perfanalysis.relatedplant", "zh-HK", "关联工厂_hk", "关联工厂（关联 TaktPlant.PlantCode，选项 TaktPlants/options）"),
+            new TranslationSeedItem("entity.perfanalysis.relatedplant", "zh-HK", "关联工厂_hk", "关联工厂（选项 TaktPlants/options，DictValue=Id）"),
 
             // entity.perfanalysis.improvementstatus
             new TranslationSeedItem("entity.perfanalysis.improvementstatus", "en-US", "业务状态_us", "业务状态（字典 hr_perf_improvement_status；0=待审批 1=进行中 2=已完成 3=已关闭）"),

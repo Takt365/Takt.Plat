@@ -23,12 +23,11 @@
       create-permission="foundation:quartz:task:create"
       update-permission="foundation:quartz:task:update"
       delete-permission="foundation:quartz:task:delete"
-      import-permission="foundation:quartz:task:import"
       export-permission="foundation:quartz:task:export"
       :show-create="true"
       :show-update="true"
       :show-delete="true"
-      :show-import="true"
+      :show-import="false"
       :show-export="true"
       :show-expand="false"
       :show-advanced-query="true"
@@ -45,7 +44,6 @@
       @create="handleCreate"
       @update="handleUpdate"
       @delete="handleDelete"
-      @import="handleImport"
       @export="handleExport"
       @advanced-query="handleAdvancedQuery"
       @column-setting="handleColumnSetting"
@@ -477,28 +475,6 @@
       </template>
     </TaktQueryDrawer>
 
-    <!-- 导入对话框 -->
-    <TaktModal
-      v-model:open="importVisible"
-      :title="t('common.dialog.title.import', { entity: t('entity.quartztask._self') })"
-      :width="600"
-      :footer="null"
-      :cancel-text="t('common.page.button.close')"
-      @cancel="handleImportCancel"
-    >
-      <TaktImportFile
-        v-if="importVisible"
-        entity-i18n-key="entity.quartztask._self"
-        file-type="xlsx"
-        :sheet-name="excelNames.sheet"
-        :template-file-name="excelNames.fileBase"
-        :download-template="handleDownloadTemplate"
-        :import-file="handleImportFile"
-        :max-size="10"
-        :max-rows="1000"
-        @success="handleImportSuccess"
-      />
-    </TaktModal>
     <!-- 列设置抽屉 -->
     <TaktColumnDrawer
       v-model:open="columnSettingVisible"
@@ -526,17 +502,16 @@ import { CreateActionColumn } from '@/components/business/takt-action-column/ind
 import { useI18n } from 'vue-i18n'
 import { ensureTaktPaginationConfigAsync, getTaktDefaultPageIndex, getTaktDefaultPageSize } from '@/utils/takt-paged'
 import QuartzTaskForm from './components/quartz-task-form.vue'
-import { getQuartzTaskList, getQuartzTaskById, createQuartzTask, updateQuartzTask, deleteQuartzTaskById, deleteQuartzTaskBatch, getQuartzTaskTemplate, importQuartzTask, exportQuartzTask, updateQuartzTaskStatus } from '@/api/foundation/quartz-task'
+import { getQuartzTaskList, getQuartzTaskById, createQuartzTask, updateQuartzTask, deleteQuartzTaskById, deleteQuartzTaskBatch, exportQuartzTask, updateQuartzTaskStatus, startQuartzTask, pauseQuartzTask, executeQuartzTaskNow } from '@/api/foundation/quartz-task'
 import type { QuartzTask, QuartzTaskQuery } from '@/types/foundation/quartz-task'
 import { useDictDataStore } from '@/stores/foundation/dict-data'
 import { taktExcelEntityNames } from '@/utils/naming'
 import { resolveExportDownloadFileName } from '@/utils/export-download-name'
-import { normalizeImportResult, type TaktImportResult } from '@/utils/takt-import-result'
-import { RiEditLine, RiDeleteBinLine, RiQuestionLine } from '@remixicon/vue'
+import { RiEditLine, RiDeleteBinLine, RiQuestionLine, RiPlayLine, RiPauseLine, RiFlashlightLine } from '@remixicon/vue'
 
 /** i18n 翻译函数 */
 const { t } = useI18n()
-/** Excel 导入/导出默认 sheet 名与文件名前缀 */
+/** Excel 导出默认 sheet 名与文件名前缀 */
 const excelNames = taktExcelEntityNames('TaktQuartzTask')
 /** 列表快捷查询占位文案 */
 const searchPlaceholder = computed(
@@ -643,8 +618,6 @@ const queryFieldsMeta = computed(() => [
 const visibleQueryFieldKeys = ref<string[]>([])
 /** 列设置抽屉是否打开 */
 const columnSettingVisible = ref(false)
-/** 导入对话框是否打开 */
-const importVisible = ref(false)
 /** 表格当前可见列 key */
 const visibleColumnKeys = ref<string[]>([])
 /** 实体主键字段名（row-key、API 路径参数） */
@@ -941,7 +914,40 @@ const columns = computed<TableColumnsType>(() => [
     ellipsis: true,
   },
   CreateActionColumn({
+    width: 240,
     actions: [
+      {
+        // 立即执行一次（与启动/暂停调度状态无关）
+        key: 'execute',
+        label: t('common.page.button.execute'),
+        shape: 'plain',
+        icon: RiFlashlightLine,
+        buttonClass: 'takt-button-run',
+        permission: 'foundation:quartz:task:execute',
+        onClick: (record: QuartzTask) => handleExecute(record)
+      },
+      {
+        // 将任务置为启动（恢复调度）状态
+        key: 'start',
+        label: t('common.page.button.start'),
+        shape: 'plain',
+        icon: RiPlayLine,
+        buttonClass: 'takt-button-start',
+        permission: 'foundation:quartz:task:start',
+        visible: (record: QuartzTask) => Number(record.taskStatus) === 1,
+        onClick: (record: QuartzTask) => handleStart(record)
+      },
+      {
+        // 将任务置为暂停状态
+        key: 'pause',
+        label: t('common.page.button.pause'),
+        shape: 'plain',
+        icon: RiPauseLine,
+        buttonClass: 'takt-button-suspend',
+        permission: 'foundation:quartz:task:pause',
+        visible: (record: QuartzTask) => Number(record.taskStatus) === 0,
+        onClick: (record: QuartzTask) => handlePause(record)
+      },
       {
         key: 'update',
         label: t('common.page.button.edit'),
@@ -1027,8 +1033,8 @@ async function loadData() {
   }
 }
 
-/** 租户/公司切换时由 bootstrap 发出 table:refresh，自动重载列表 */
-useTableRefresh(loadData)
+/** 租户/公司切换与 Quartz 执行完成时刷新列表 */
+useQuartzSignalRRefresh(loadData)
 
 /** 快捷查询 */
 function handleSearch() {
@@ -1088,6 +1094,68 @@ function handleEdit(record: QuartzTask) {
   formVisible.value = true
 }
 
+/**
+ * 启动（恢复）定时任务调度
+ * @param record 行数据
+ */
+async function handleStart(record: QuartzTask) {
+  const id = getQuartzTaskId(record)
+  if (!id) {
+    return
+  }
+  try {
+    await startQuartzTask(id)
+    message.success(t('common.feedback.action.success', { action: t('common.page.button.start') }))
+    await loadData()
+  } catch {
+    /* request 层已提示 */
+  }
+}
+
+/**
+ * 暂停定时任务调度
+ * @param record 行数据
+ */
+async function handlePause(record: QuartzTask) {
+  const id = getQuartzTaskId(record)
+  if (!id) {
+    return
+  }
+  try {
+    await pauseQuartzTask(id)
+    message.success(t('common.feedback.action.success', { action: t('common.page.button.pause') }))
+    await loadData()
+  } catch {
+    /* request 层已提示 */
+  }
+}
+
+/**
+ * 立即执行一次定时任务（不改变启动/暂停调度状态）
+ * @param record 行数据
+ */
+async function handleExecute(record: QuartzTask) {
+  const id = getQuartzTaskId(record)
+  if (!id) {
+    return
+  }
+  Modal.confirm({
+    title: t('common.tip.confirm.title', { action: t('common.page.button.execute') }),
+    content: t('common.tip.confirm.entity.action', {
+      action: t('common.page.button.execute'),
+      entity: t('entity.quartztask._self'),
+      name: record.taskName || id,
+    }),
+    okText: t('common.page.button.ok'),
+    cancelText: t('common.page.button.cancel'),
+    async onOk() {
+      await executeQuartzTaskNow(id)
+      message.success(t('foundation.quartz-task.page.executeSubmitted'))
+      await loadData()
+    },
+  })
+}
+
 /** 工具栏编辑：打开当前单选行 */
 function handleUpdate() {
   if (selectedRow.value) {
@@ -1130,35 +1198,6 @@ function handleFormCancel() {
   formVisible.value = false
   formData.value = null
   nextTick(() => formRef.value?.resetFields())
-}
-/** 打开导入对话框 */
-function handleImport() {
-  importVisible.value = true
-}
-
-/** 下载导入模板 Excel */
-async function handleDownloadTemplate(sheetName?: string, fileName?: string): Promise<Blob> {
-  const res = await getQuartzTaskTemplate(sheetName, fileName)
-  return (res as any)?.data ?? res
-}
-
-/** 上传并导入 Excel 文件（归一化后端 SuccessCount/successCount） */
-async function handleImportFile(file: File, sheetName?: string): Promise<TaktImportResult> {
-  const raw = await importQuartzTask(file, sheetName)
-  return normalizeImportResult(raw)
-}
-
-/** 导入完成回调：刷新列表；全部成功时延迟关闭对话框 */
-function handleImportSuccess(result: TaktImportResult) {
-  loadData()
-  if (result.fail === 0 && result.success > 0) {
-    setTimeout(() => { importVisible.value = false }, 2000)
-  }
-}
-
-/** 关闭导入对话框 */
-function handleImportCancel() {
-  importVisible.value = false
 }
 /** 导出当前查询条件下的 Excel */
 async function handleExport() {

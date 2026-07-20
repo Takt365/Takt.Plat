@@ -715,4 +715,30 @@ public static class TaktStringHelper
             return input;
         }
     }
+
+    /// <summary>
+    /// SAP 18 位纯数字物料编码归一化为 10 位（去除前 8 位，保留后 10 位）；其他形态仅 Trim 后原样返回
+    /// </summary>
+    /// <param name="code">产品/组件编码</param>
+    /// <returns>归一化后的编码</returns>
+    public static string NormalizeSapNumericMaterialCode(string? code)
+    {
+        if (string.IsNullOrWhiteSpace(code))
+        {
+            return string.Empty;
+        }
+        var trimmed = code.Trim();
+        if (trimmed.Length != 18)
+        {
+            return trimmed;
+        }
+        for (var i = 0; i < trimmed.Length; i++)
+        {
+            if (!char.IsDigit(trimmed[i]))
+            {
+                return trimmed;
+            }
+        }
+        return trimmed.Substring(8, 10);
+    }
 }

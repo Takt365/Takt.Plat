@@ -108,7 +108,7 @@ public class TaktDtoCategoryDescriptor
     public string TsExtendsName { get; set; } = string.Empty;
 }
 
-/// <summary>翻译 SQL 单行数据，供 menu_and_translation.sql 模板使用，每行 Id 由 SnowFlakeSingle.Instance.NextId() 生成。ResourceGroup：菜单标题为 menu，其它字段为 page。</summary>
+/// <summary>翻译 SQL 单行数据，供 menu_and_translation.sql 模板使用，每行 Id 由 SnowFlakeSingle.Instance.NextId() 生成。ResourceGroup：菜单标题为 menu，其他字段为 page。</summary>
 public class TaktSqlTranslationRowItem
 {
     public long Id { get; set; }

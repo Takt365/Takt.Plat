@@ -578,25 +578,31 @@ public class TaktProcurementChainOrchestratorService : TaktServiceBase, ITaktPro
             return;
         }
         var priceCode = TaktProcurementHelper.DeriveShortCode("P", inquiry.Id);
+        var firstItem = items.FirstOrDefault();
+        if (firstItem == null || string.IsNullOrWhiteSpace(firstItem.MaterialCode))
+        {
+            return;
+        }
+        // 新定价模型：一头一物料；询价多物料时以首行物料建档，条件行承载报价
         var createDto = new TaktPurchasePriceCreateDto
         {
-            PlantCode = inquiry.PlantCode,
             PurchasePriceCode = priceCode,
             SupplierCode = supplierCode,
-            PriceType = TaktProcurementConstants.PriceTypeInquiry,
-            EffectiveStartDate = inquiry.InquiryDate,
-            EffectiveEndDate = inquiry.QuoteDeadlineDate,
-            PriceStatus = 1,
-            Items = items.Select(item => new TaktPurchasePriceItemUpdateDto
+            MaterialCode = firstItem.MaterialCode,
+            PriceType = "PB00",
+            ValidFrom = inquiry.InquiryDate,
+            ValidTo = inquiry.QuoteDeadlineDate ?? new DateTime(9999, 12, 31, 23, 59, 59),
+            PurchaseInquiryId = inquiry.Id,
+            PurchaseInquiryCode = inquiry.PurchaseInquiryCode,
+            Items = items.Select((item, index) => new TaktPurchasePriceItemCreateDto
             {
-                PurchasePriceItemId = 0,
-                LineNumber = item.LineNumber,
-                MaterialCode = item.MaterialCode ?? string.Empty,
-                MaterialName = item.MaterialName,
-                MaterialSpecification = item.MaterialSpecification,
-                PurchaseUnit = item.InquiryUnit,
-                PurchasePrice = item.QuotedUnitPrice,
-                MinPurchaseQuantity = (int)item.InquiryQuantity
+                PurchasePriceCode = priceCode,
+                PurchasePriceSeq = (index + 1) * 10,
+                PriceType = "PB00",
+                ScaleBasis = "C",
+                ScaleUnit = item.InquiryUnit,
+                CalculationType = "A",
+                Price = item.QuotedUnitPrice,
             }).ToList()
         };
         var created = await _purchasePriceService.CreatePurchasePriceAsync(createDto);

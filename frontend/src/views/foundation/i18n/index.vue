@@ -159,7 +159,7 @@
       <a-form-item :label="t('entity.translation.resourcegroup')">
         <TaktTreeSelect
           v-model:value="translationAdvancedForm.resourceGroup"
-          api-url="/api/TaktMenus/tree-options"
+          api-url="TaktMenus/tree-options"
           allow-clear
           :field-names="{ label: 'dictLabel', value: 'dictValue' }"
           :placeholder="t('common.page.form.placeholder.select', { field: t('entity.translation.resourcegroup') })"

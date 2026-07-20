@@ -26,14 +26,14 @@ namespace Takt.Domain.Entities.Logistics.Manufacturing.Sop;
 public class TaktSopExecStep : TaktCompanyEntityBase
 {
     /// <summary>
-    /// 执行追溯 ID（关联 TaktSopExec.Id，选项 TaktSopExecs/options）
+    /// 执行追溯 ID（选项 TaktSopExecs/options，DictValue=Id）
     /// </summary>
     [SugarColumn(ColumnName = "exec_id", ColumnDescription = "执行追溯ID", ColumnDataType = "bigint", IsNullable = false)]
     [JsonConverter(typeof(ValueToStringConverter))]
     public long ExecId { get; set; }
 
     /// <summary>
-    /// 工步 ID（关联 TaktSopStep.Id，选项 TaktSopSteps/options）
+    /// 工步 ID（选项 TaktSopSteps/options，DictValue=Id）
     /// </summary>
     [SugarColumn(ColumnName = "step_id", ColumnDescription = "工步ID", ColumnDataType = "bigint", IsNullable = false)]
     [JsonConverter(typeof(ValueToStringConverter))]
@@ -64,7 +64,7 @@ public class TaktSopExecStep : TaktCompanyEntityBase
     public int? StepResult { get; set; }
 
     /// <summary>
-    /// 确认人 ID（关联 TaktEmployee.Id，选项 TaktEmployees/options）
+    /// 确认人 ID（选项 TaktEmployees/options，DictValue=Id）
     /// </summary>
     [SugarColumn(ColumnName = "confirmed_by", ColumnDescription = "确认人ID", ColumnDataType = "bigint", IsNullable = true)]
     [JsonConverter(typeof(ValueToStringConverter))]

@@ -393,16 +393,9 @@ const validateFileRows = async (file: File): Promise<boolean> => {
           return false
         }
         break
-      case 'xlsx': {
-        // 对于 xlsx 文件，前端只做基本验证，详细的行数验证在服务端进行
-        // 检查文件大小，如果文件太大可能超过限制
-        const fileSizeKB = file.size / 1024
-        if (fileSizeKB > 500) {
-          message.warning(t('components.common.page.import.filelargehint', { size: Math.round(fileSizeKB), max: props.maxRows }))
-        }
-        // xlsx 文件的行数验证在服务端进行，这里只通过文件类型验证
+      case 'xlsx':
+        // xlsx 行数上限由服务端校验（文案 common.data.import.row.limit.exceeded）
         return true
-      }
       default:
         message.error(t('components.common.page.import.unsupportedfiletype', { type: props.fileType }))
         return false

@@ -72,6 +72,13 @@ export const useTenantStore = defineStore('tenant', () => {
   );
 
   /**
+   * 当前登录公司关联工厂（来自公司选项 ExtValue = TaktCompany.RelatedPlant）
+   */
+  const currentCompanyRelatedPlant = computed(() =>
+    String(currentCompanyOption.value?.extValue ?? '').trim(),
+  );
+
+  /**
    * 清除当前租户选择（不预选、不恢复 localStorage）
    */
   function resetTenantSelection(): void {
@@ -413,6 +420,7 @@ export const useTenantStore = defineStore('tenant', () => {
     tenantLoaded,
     currentTenantOption,
     currentCompanyOption,
+    currentCompanyRelatedPlant,
     resetCompanySelection,
     setTenant,
     setCompany,

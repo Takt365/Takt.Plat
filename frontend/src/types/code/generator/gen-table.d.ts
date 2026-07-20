@@ -44,7 +44,7 @@ export interface GenTable extends TenantDtoBase {
   tableComment?: string;
 
   /**
-   * 关联父表（选项 TaktDatabaseInfos/tables 同库其它表；sub 模板必填）
+   * 关联父表（选项 TaktDatabaseInfos/tables 同库其他表；sub 模板必填）
    */
   subTableName?: string;
 
@@ -304,7 +304,7 @@ export interface GenTableQuery extends TaktPagedQuery {
   tableComment?: string;
 
   /**
-   * 关联父表（选项 TaktDatabaseInfos/tables 同库其它表；sub 模板必填）
+   * 关联父表（选项 TaktDatabaseInfos/tables 同库其他表；sub 模板必填）
    */
   subTableName?: string;
 
@@ -573,7 +573,7 @@ export interface GenTableCreate {
   tableComment?: string;
 
   /**
-   * 关联父表（选项 TaktDatabaseInfos/tables 同库其它表；sub 模板必填）
+   * 关联父表（选项 TaktDatabaseInfos/tables 同库其他表；sub 模板必填）
    */
   subTableName?: string;
 
@@ -852,7 +852,7 @@ export interface GenTableTemplate {
   tableComment?: string;
 
   /**
-   * 关联父表（选项 TaktDatabaseInfos/tables 同库其它表；sub 模板必填）
+   * 关联父表（选项 TaktDatabaseInfos/tables 同库其他表；sub 模板必填）
    */
   subTableName?: string;
 
@@ -936,7 +936,7 @@ export interface GenTableImport {
   tableComment?: string;
 
   /**
-   * 关联父表（选项 TaktDatabaseInfos/tables 同库其它表；sub 模板必填）
+   * 关联父表（选项 TaktDatabaseInfos/tables 同库其他表；sub 模板必填）
    */
   subTableName?: string;
 
@@ -1020,7 +1020,7 @@ export interface GenTableExport {
   tableComment?: string;
 
   /**
-   * 关联父表（选项 TaktDatabaseInfos/tables 同库其它表；sub 模板必填）
+   * 关联父表（选项 TaktDatabaseInfos/tables 同库其他表；sub 模板必填）
    */
   subTableName?: string;
 

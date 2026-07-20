@@ -57,7 +57,7 @@ public class TaktPcbaRepairDetailDto : TaktCompanyDtoBase
     public int LineNumber { get; set; } = 0;
 
     /// <summary>
-    /// PCBA板别（字典 logistics_pcba_panel_category，存 DictValue）
+    /// PCBA板别（字典 logistics_pcba_function_category，存 DictValue）
     /// </summary>
     public string? PcbaBoardType { get; set; } = string.Empty;
 
@@ -161,7 +161,7 @@ public class TaktPcbaRepairDetailQueryDto : TaktPagedQuery
     public int? LineNumber { get; set; }
 
     /// <summary>
-    /// PCBA板别（字典 logistics_pcba_panel_category，存 DictValue）
+    /// PCBA板别（字典 logistics_pcba_function_category，存 DictValue）
     /// </summary>
     public string? PcbaBoardType { get; set; } = string.Empty;
 
@@ -283,7 +283,7 @@ public class TaktPcbaRepairDetailCreateDto
     public int LineNumber { get; set; } = 0;
 
     /// <summary>
-    /// PCBA板别（字典 logistics_pcba_panel_category，存 DictValue）
+    /// PCBA板别（字典 logistics_pcba_function_category，存 DictValue）
     /// </summary>
     public string? PcbaBoardType { get; set; } = string.Empty;
 
@@ -433,7 +433,7 @@ public class TaktPcbaRepairDetailTemplateDto
     public int? LineNumber { get; set; }
 
     /// <summary>
-    /// PCBA板别（字典 logistics_pcba_panel_category，存 DictValue）
+    /// PCBA板别（字典 logistics_pcba_function_category，存 DictValue）
     /// </summary>
     public string? PcbaBoardType { get; set; } = string.Empty;
 
@@ -541,7 +541,7 @@ public class TaktPcbaRepairDetailImportDto
     public int? LineNumber { get; set; }
 
     /// <summary>
-    /// PCBA板别（字典 logistics_pcba_panel_category，存 DictValue）
+    /// PCBA板别（字典 logistics_pcba_function_category，存 DictValue）
     /// </summary>
     public string? PcbaBoardType { get; set; } = string.Empty;
 
@@ -650,7 +650,7 @@ public class TaktPcbaRepairDetailExportDto
     public int LineNumber { get; set; } = 0;
 
     /// <summary>
-    /// PCBA板别（字典 logistics_pcba_panel_category，存 DictValue）
+    /// PCBA板别（字典 logistics_pcba_function_category，存 DictValue）
     /// </summary>
     public string? PcbaBoardType { get; set; } = string.Empty;
 

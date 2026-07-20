@@ -207,7 +207,7 @@ public class TaktPlant : TaktTenantEntityBase
     [SugarColumn(ColumnName = "plant_existence", ColumnDescription = "存续状态", ColumnDataType = "int", IsNullable = false, DefaultValue = "1")]
     public int PlantExistence { get; set; } = 1;
     /// <summary>
-    /// 关联公司（关联 TaktCompany.CompanyCode，选项 TaktCompanies/options）
+    /// 关联公司（选项 TaktCompanies/options，DictValue=Id）
     /// </summary>
     [SugarColumn(ColumnName = "related_company", ColumnDescription = "关联公司", ColumnDataType = "varchar", Length = 4, IsNullable = false)]
     public string RelatedCompany { get; set; } = string.Empty;

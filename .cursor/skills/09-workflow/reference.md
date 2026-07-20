@@ -24,4 +24,4 @@
 
 ## 权限示例
 
-`workflow:todo:list`、`workflow:todo:approve`、`workflow:instance:start`、`workflow:instance:withdraw`、`workflow:scheme:design`
+`workflow:todo:list`、`workflow:todo:approve`、`workflow:instance:initiate`、`workflow:instance:withdraw`、`workflow:scheme:design`

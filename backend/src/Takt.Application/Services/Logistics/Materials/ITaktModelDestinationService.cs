@@ -42,6 +42,19 @@ public interface ITaktModelDestinationService
     Task<List<TaktSelectOption>> GetModelDestinationOptionsAsync();
 
     /// <summary>
+    /// 获取机种下拉选项（ModelCode 去重，DictValue=机种编码）
+    /// </summary>
+    /// <returns>机种下拉选项</returns>
+    Task<List<TaktSelectOption>> GetModelOptionsAsync();
+
+    /// <summary>
+    /// 根据机种编码获取级联物料选项（DictValue=物料编码，供产品/BOM 查询级联）
+    /// </summary>
+    /// <param name="modelCode">机种编码</param>
+    /// <returns>物料下拉选项</returns>
+    Task<List<TaktSelectOption>> GetMaterialOptionsByModelAsync(string modelCode);
+
+    /// <summary>
     /// 根据物料编码获取机种名称与仕向地信息（首条）
     /// </summary>
     /// <param name="materialCode">物料编码</param>

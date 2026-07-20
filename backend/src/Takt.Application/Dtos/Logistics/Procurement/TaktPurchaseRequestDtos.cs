@@ -62,6 +62,17 @@ public class TaktPurchaseRequestDto : TaktApprovalDtoBase
     public string? PurchaseInquiryCode { get; set; } = string.Empty;
 
     /// <summary>
+    /// 来源采购计划 ID（MRP 下推，关联 TaktPurchasePlan.Id）
+    /// </summary>
+    [JsonConverter(typeof(ValueToStringConverter))]
+    public long? PurchasePlanId { get; set; }
+
+    /// <summary>
+    /// 来源采购计划编码（冗余）
+    /// </summary>
+    public string? PurchasePlanCode { get; set; } = string.Empty;
+
+    /// <summary>
     /// 采购链路方案（字典 logistics_procurement_chain_scheme；1=方案一，2=方案二）
     /// </summary>
     public int ChainScheme { get; set; } = 0;
@@ -196,6 +207,17 @@ public class TaktPurchaseRequestQueryDto : TaktPagedQuery
     /// 来源采购询价编码（冗余）
     /// </summary>
     public string? PurchaseInquiryCode { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 来源采购计划 ID（MRP 下推，关联 TaktPurchasePlan.Id）
+    /// </summary>
+    [JsonConverter(typeof(ValueToStringConverter))]
+    public long? PurchasePlanId { get; set; }
+
+    /// <summary>
+    /// 来源采购计划编码（冗余）
+    /// </summary>
+    public string? PurchasePlanCode { get; set; } = string.Empty;
 
     /// <summary>
     /// 采购链路方案（字典 logistics_procurement_chain_scheme；1=方案一，2=方案二）
@@ -396,6 +418,17 @@ public class TaktPurchaseRequestCreateDto
     public string? PurchaseInquiryCode { get; set; } = string.Empty;
 
     /// <summary>
+    /// 来源采购计划 ID（MRP 下推，关联 TaktPurchasePlan.Id）
+    /// </summary>
+    [JsonConverter(typeof(ValueToStringConverter))]
+    public long? PurchasePlanId { get; set; }
+
+    /// <summary>
+    /// 来源采购计划编码（冗余）
+    /// </summary>
+    public string? PurchasePlanCode { get; set; } = string.Empty;
+
+    /// <summary>
     /// 采购链路方案（字典 logistics_procurement_chain_scheme；1=方案一，2=方案二）
     /// </summary>
     public int ChainScheme { get; set; } = 0;
@@ -575,6 +608,17 @@ public class TaktPurchaseRequestTemplateDto
     public string? PurchaseInquiryCode { get; set; } = string.Empty;
 
     /// <summary>
+    /// 来源采购计划 ID（MRP 下推，关联 TaktPurchasePlan.Id）
+    /// </summary>
+    [JsonConverter(typeof(ValueToStringConverter))]
+    public long? PurchasePlanId { get; set; }
+
+    /// <summary>
+    /// 来源采购计划编码（冗余）
+    /// </summary>
+    public string? PurchasePlanCode { get; set; } = string.Empty;
+
+    /// <summary>
     /// 采购链路方案（字典 logistics_procurement_chain_scheme；1=方案一，2=方案二）
     /// </summary>
     public int? ChainScheme { get; set; }
@@ -710,6 +754,17 @@ public class TaktPurchaseRequestImportDto
     public string? PurchaseInquiryCode { get; set; } = string.Empty;
 
     /// <summary>
+    /// 来源采购计划 ID（MRP 下推，关联 TaktPurchasePlan.Id）
+    /// </summary>
+    [JsonConverter(typeof(ValueToStringConverter))]
+    public long? PurchasePlanId { get; set; }
+
+    /// <summary>
+    /// 来源采购计划编码（冗余）
+    /// </summary>
+    public string? PurchasePlanCode { get; set; } = string.Empty;
+
+    /// <summary>
     /// 采购链路方案（字典 logistics_procurement_chain_scheme；1=方案一，2=方案二）
     /// </summary>
     public int? ChainScheme { get; set; }
@@ -839,6 +894,17 @@ public class TaktPurchaseRequestExportDto
     /// 来源采购询价编码（冗余）
     /// </summary>
     public string? PurchaseInquiryCode { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 来源采购计划 ID（MRP 下推，关联 TaktPurchasePlan.Id）
+    /// </summary>
+    [JsonConverter(typeof(ValueToStringConverter))]
+    public long? PurchasePlanId { get; set; }
+
+    /// <summary>
+    /// 来源采购计划编码（冗余）
+    /// </summary>
+    public string? PurchasePlanCode { get; set; } = string.Empty;
 
     /// <summary>
     /// 采购链路方案（字典 logistics_procurement_chain_scheme；1=方案一，2=方案二）

@@ -26,7 +26,7 @@ namespace Takt.Domain.Entities.Logistics.Procurement;
 public class TaktPurchaseInquiryItem : TaktCompanyEntityBase
 {
     /// <summary>
-    /// 采购询价 ID（关联 TaktPurchaseInquiry.Id，选项 TaktPurchaseInquirys/options）
+    /// 采购询价 ID（选项 TaktPurchaseInquirys/options，DictValue=Id）
     /// </summary>
     [SugarColumn(ColumnName = "purchase_inquiry_id", ColumnDescription = "采购询价ID", ColumnDataType = "bigint", IsNullable = false)]
     [JsonConverter(typeof(ValueToStringConverter))]
@@ -47,22 +47,22 @@ public class TaktPurchaseInquiryItem : TaktCompanyEntityBase
     [SugarColumn(ColumnName = "allocation_category", ColumnDescription = "分配类别", ColumnDataType = "varchar", Length = 40, IsNullable = false)]
     public string AllocationCategory { get; set; } = string.Empty;
     /// <summary>
-    /// 物料编码（选项 TaktMaterials/options，DictValue=MaterialCode）
+    /// 物料编码（选项 TaktMaterialPlants/options，DictValue=MaterialCode，ExtValue=PlantCode）
     /// </summary>
     [SugarColumn(ColumnName = "material_code", ColumnDescription = "物料编码", ColumnDataType = "varchar", Length = 40, IsNullable = true)]
     public string? MaterialCode { get; set; }
     /// <summary>
-    /// 物料名称
+    /// 物料名称（回填：随物料）
     /// </summary>
     [SugarColumn(ColumnName = "material_name", ColumnDescription = "物料名称", ColumnDataType = "nvarchar", Length = 200, IsNullable = false)]
     public string MaterialName { get; set; } = string.Empty;
     /// <summary>
-    /// 物料规格
+    /// 物料规格（回填：随物料）
     /// </summary>
     [SugarColumn(ColumnName = "material_specification", ColumnDescription = "物料规格", ColumnDataType = "nvarchar", Length = 200, IsNullable = true)]
     public string? MaterialSpecification { get; set; }
     /// <summary>
-    /// 询价单位
+    /// 询价单位（字典 logistics_unit_of_measure_code，DictValue=PC/EA 等；默认 PC）
     /// </summary>
     [SugarColumn(ColumnName = "inquiry_unit", ColumnDescription = "询价单位", ColumnDataType = "varchar", Length = 40, IsNullable = false, DefaultValue = "PC")]
     public string InquiryUnit { get; set; } = "PC";

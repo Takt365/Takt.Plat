@@ -38,7 +38,7 @@ public class TaktTalentStaffingRequirement : TaktApprovalEntityBase
     [SugarColumn(ColumnName = "dept_id", ColumnDescription = "申请部门ID", ColumnDataType = "bigint", IsNullable = false)]
     public long DeptId { get; set; }
     /// <summary>
-    /// 申请岗位（关联 TaktPost.Id，选项 TaktPosts/options）
+    /// 申请岗位（选项 TaktPosts/options，DictValue=Id）
     /// </summary>
     [SugarColumn(ColumnName = "post_id", ColumnDescription = "申请岗位ID", ColumnDataType = "bigint", IsNullable = false)]
     public long PostId { get; set; }
@@ -63,7 +63,7 @@ public class TaktTalentStaffingRequirement : TaktApprovalEntityBase
     [SugarColumn(ColumnName = "reason_code", ColumnDescription = "需求原因", ColumnDataType = "varchar", Length = 30, IsNullable = false)]
     public string ReasonCode { get; set; } = string.Empty;
     /// <summary>
-    /// 替补员工（关联 TaktEmployee.Id，选项 TaktEmployees/options；离职补充时填原员工，可空）
+    /// 替补员工（选项 TaktEmployees/options；离职补充时填原员工，可空，DictValue=Id）
     /// </summary>
     [SugarColumn(ColumnName = "replace_employee_id", ColumnDescription = "替补员工ID", ColumnDataType = "bigint", IsNullable = true)]
     public long? ReplaceEmployeeId { get; set; }

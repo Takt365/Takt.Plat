@@ -164,19 +164,32 @@ public class TaktCompanyRepository<TEntity> : ITaktCompanyRepository<TEntity> wh
     // ========================================
 
     /// <summary>
+    /// 构造带租户/公司范围的查询（可切换物理表）
+    /// </summary>
+    /// <param name="asTableName">年分表物理名；空则用实体默认表</param>
+    /// <returns>可查询对象</returns>
+    private ISugarQueryable<TEntity> CreateScopedQuery(string? asTableName = null)
+    {
+        var query = string.IsNullOrWhiteSpace(asTableName)
+            ? Db.Queryable<TEntity>()
+            : Db.Queryable<TEntity>().AS(asTableName.Trim());
+        return ApplyReadScope(query);
+    }
+
+    /// <summary>
     /// 根据ID查询实体
     /// </summary>
-    public virtual async Task<TEntity?> GetByIdAsync(long id)
+    public virtual async Task<TEntity?> GetByIdAsync(long id, string? asTableName = null)
     {
-        return await ApplyReadScope(Db.Queryable<TEntity>().Where(x => x.Id == id)).FirstAsync();
+        return await CreateScopedQuery(asTableName).Where(x => x.Id == id).FirstAsync();
     }
 
     /// <summary>
     /// 根据条件查询单个实体
     /// </summary>
-    public virtual async Task<TEntity?> FirstAsync(Expression<Func<TEntity, bool>> predicate)
+    public virtual async Task<TEntity?> FirstAsync(Expression<Func<TEntity, bool>> predicate, string? asTableName = null)
     {
-        return await ApplyReadScope(Db.Queryable<TEntity>().Where(predicate)).FirstAsync();
+        return await CreateScopedQuery(asTableName).Where(predicate).FirstAsync();
     }
 
     /// <summary>
@@ -184,7 +197,7 @@ public class TaktCompanyRepository<TEntity> : ITaktCompanyRepository<TEntity> wh
     /// </summary>
     public virtual async Task<List<TEntity>> GetAllAsync()
     {
-        return await ApplyReadScope(Db.Queryable<TEntity>())
+        return await CreateScopedQuery()
             .OrderByDescending(x => x.CreatedAt)
             .ToListAsync();
     }
@@ -192,9 +205,9 @@ public class TaktCompanyRepository<TEntity> : ITaktCompanyRepository<TEntity> wh
     /// <summary>
     /// 根据条件查询列表
     /// </summary>
-    public virtual async Task<List<TEntity>> GetListAsync(Expression<Func<TEntity, bool>> predicate)
+    public virtual async Task<List<TEntity>> GetListAsync(Expression<Func<TEntity, bool>> predicate, string? asTableName = null)
     {
-        return await ApplyReadScope(Db.Queryable<TEntity>().Where(predicate))
+        return await CreateScopedQuery(asTableName).Where(predicate)
             .OrderByDescending(x => x.CreatedAt)
             .ToListAsync();
     }
@@ -205,9 +218,10 @@ public class TaktCompanyRepository<TEntity> : ITaktCompanyRepository<TEntity> wh
     public virtual async Task<List<TEntity>> GetListAsync(
         Expression<Func<TEntity, bool>> predicate,
         Expression<Func<TEntity, object>> orderBy,
-        bool isDesc = true)
+        bool isDesc = true,
+        string? asTableName = null)
     {
-        var query = ApplyReadScope(Db.Queryable<TEntity>().Where(predicate));
+        var query = CreateScopedQuery(asTableName).Where(predicate);
 
         return isDesc
             ? await query.OrderByDescending(orderBy).ToListAsync()
@@ -220,15 +234,17 @@ public class TaktCompanyRepository<TEntity> : ITaktCompanyRepository<TEntity> wh
     /// </summary>
     /// <param name="predicate">查询条件</param>
     /// <param name="maxRows">最大行数；为空时使用 Excel:Export:MaxRowsPerRequest 配置</param>
+    /// <param name="asTableName">年分表物理名；空则用实体默认表</param>
     /// <returns>不超过上限的实体列表</returns>
     /// <exception cref="ArgumentOutOfRangeException">maxRows 小于等于 0 时抛出</exception>
     public virtual async Task<List<TEntity>> GetListForExportAsync(
         Expression<Func<TEntity, bool>> predicate,
-        int? maxRows = null)
+        int? maxRows = null,
+        string? asTableName = null)
     {
         var take = maxRows ?? _excelOptions.Export.MaxRowsPerRequest;
         ArgumentOutOfRangeException.ThrowIfNegativeOrZero(take);
-        return await ApplyReadScope(Db.Queryable<TEntity>().Where(predicate))
+        return await CreateScopedQuery(asTableName).Where(predicate)
             .OrderByDescending(x => x.CreatedAt)
             .Take(take)
             .ToListAsync();
@@ -274,11 +290,12 @@ public class TaktCompanyRepository<TEntity> : ITaktCompanyRepository<TEntity> wh
         int pageIndex,
         int pageSize,
         Expression<Func<TEntity, object>>? orderBy = null,
-        bool isDesc = true)
+        bool isDesc = true,
+        string? asTableName = null)
     {
         pageIndex = TaktPagedClamp.NormalizePageIndex(pageIndex);
         pageSize = TaktPagedClamp.NormalizePageSize(pageSize);
-        var filterQuery = ApplyReadScope(Db.Queryable<TEntity>().Where(predicate));
+        var filterQuery = CreateScopedQuery(asTableName).Where(predicate);
 
         var total = await filterQuery.CountAsync();
 
@@ -307,7 +324,7 @@ public class TaktCompanyRepository<TEntity> : ITaktCompanyRepository<TEntity> wh
     /// <summary>
     /// 创建实体
     /// </summary>
-    public virtual async Task<TEntity> CreateAsync(TEntity entity)
+    public virtual async Task<TEntity> CreateAsync(TEntity entity, string? asTableName = null)
     {
         // 自动设置租户和公司编码(仅在未设置时才自动填充)
         if (string.IsNullOrEmpty(entity.TenantCode))
@@ -323,7 +340,14 @@ public class TaktCompanyRepository<TEntity> : ITaktCompanyRepository<TEntity> wh
         // 自动设置审计字段
         entity.ApplyCreate(CurrentUserId);
 
-        await TaktPrimaryKeyInsertHelper.InsertEntityAsync(Db, entity, _primaryKeyTypeOptions);
+        if (string.IsNullOrWhiteSpace(asTableName))
+        {
+            await TaktPrimaryKeyInsertHelper.InsertEntityAsync(Db, entity, _primaryKeyTypeOptions);
+        }
+        else
+        {
+            await TaktPrimaryKeyInsertHelper.InsertEntityAsync(Db, entity, _primaryKeyTypeOptions, asTableName.Trim());
+        }
 
         return entity;
     }
@@ -360,12 +384,15 @@ public class TaktCompanyRepository<TEntity> : ITaktCompanyRepository<TEntity> wh
     /// <summary>
     /// 更新实体
     /// </summary>
-    public virtual async Task<bool> UpdateAsync(TEntity entity)
+    public virtual async Task<bool> UpdateAsync(TEntity entity, string? asTableName = null)
     {
         // 自动设置审计字段
         entity.ApplyUpdate(CurrentUserId);
 
-        var rows = await Db.Updateable(entity).ExecuteCommandAsync();
+        var updateable = string.IsNullOrWhiteSpace(asTableName)
+            ? Db.Updateable(entity)
+            : Db.Updateable(entity).AS(asTableName.Trim());
+        var rows = await updateable.ExecuteCommandAsync();
         return rows > 0;
     }
 
@@ -403,9 +430,9 @@ public class TaktCompanyRepository<TEntity> : ITaktCompanyRepository<TEntity> wh
     /// <summary>
     /// 软删除实体
     /// </summary>
-    public virtual async Task<bool> DeleteAsync(long id)
+    public virtual async Task<bool> DeleteAsync(long id, string? asTableName = null)
     {
-        var entity = await GetByIdAsync(id);
+        var entity = await GetByIdAsync(id, asTableName);
         if (entity == null)
         {
             return false;
@@ -417,7 +444,10 @@ public class TaktCompanyRepository<TEntity> : ITaktCompanyRepository<TEntity> wh
         }
         var now = DateTime.Now;
         var operatorUserId = TaktEntityAuditExtensions.ResolveOperatorUserId(CurrentUserId);
-        var rows = await ApplyWriteScope(Db.Updateable<TEntity>()
+        var updateable = string.IsNullOrWhiteSpace(asTableName)
+            ? Db.Updateable<TEntity>()
+            : Db.Updateable<TEntity>().AS(asTableName.Trim());
+        var rows = await ApplyWriteScope(updateable
             .SetColumns(x => new TEntity
             {
                 IsDeleted = 1,
@@ -563,6 +593,18 @@ public class TaktCompanyRepository<TEntity> : ITaktCompanyRepository<TEntity> wh
             return 0;
         }
         return await query.MaxAsync(fieldSelector);
+    }
+
+    /// <summary>
+    /// 判断当前库是否存在指定物理表（年分表探测用；不含租户过滤）
+    /// </summary>
+    /// <param name="tableName">物理表名</param>
+    /// <returns>存在为 true</returns>
+    public virtual Task<bool> PhysicalTableExistsAsync(string tableName)
+    {
+        ArgumentException.ThrowIfNullOrWhiteSpace(tableName);
+        var name = tableName.Trim();
+        return Task.FromResult(Db.DbMaintenance.IsAnyTable(name, false));
     }
 
     /// <summary>

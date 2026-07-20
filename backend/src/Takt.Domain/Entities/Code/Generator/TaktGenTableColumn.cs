@@ -142,7 +142,7 @@ public class TaktGenTableColumn : TaktTenantEntityBase
     public int IsQuery { get; set; } = 0;
 
     /// <summary>
-    /// 查询方式（字典 gen_query_type：eq/ne/gt/gte/lt/lte/like/between）。IsQuery=0 时必须为空串；IsQuery=1 时必填，字符串默认 like、其它类型默认 eq
+    /// 查询方式（字典 gen_query_type：eq/ne/gt/gte/lt/lte/like/between）。IsQuery=0 时必须为空串；IsQuery=1 时必填，字符串默认 like、其他类型默认 eq
     /// </summary>
     [SugarColumn(ColumnName = "query_type", ColumnDescription = "查询方式", ColumnDataType = "nvarchar", Length = 20, IsNullable = false, DefaultValue = "")]
     public string QueryType { get; set; } = string.Empty;
@@ -154,7 +154,7 @@ public class TaktGenTableColumn : TaktTenantEntityBase
     public string HtmlType { get; set; } = "input";
 
     /// <summary>
-    /// 字典类型（关联 TaktDictType.DictTypeCode，选项 TaktDictTypes/options）
+    /// 字典类型（选项 TaktDictTypes/options，DictValue=Id）
     /// </summary>
     [SugarColumn(ColumnName = "dict_type", ColumnDescription = "字典类型", ColumnDataType = "nvarchar", Length = 100, IsNullable = true)]
     public string? DictType { get; set; }

@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：frontend/src/types/logistics/manufacturing/output
 // 文件名称：pcba-output-detail.d.ts
-// 创建时间：2026-07-09
+// 创建时间：2026-07-13
 // 创建人：Takt365(Auto Generated)
 // 功能描述：logistics/manufacturing/output 模块类型定义（自动生成；类型名去 Takt 前缀与末尾 Dto，如 TaktCompanyDto → Company）
 // 
@@ -54,12 +54,52 @@ export interface PcbaOutputDetail extends CompanyDtoBase {
   timePeriod: string;
 
   /**
+   * 生产班组（选项 TaktProductionTeams/options，存 TeamCode，ExtValue=PlantCode 过滤）
+   */
+  prodTeam: string;
+
+  /**
+   * 生产设备编码（关联 TaktProductionEquipment.ProductionEquipmentCode，选项 TaktProductionEquipments/options）
+   */
+  productionEquipmentCode: string;
+
+  /**
+   * 直接人员
+   */
+  directLabor: number;
+
+  /**
+   * 间接人员
+   */
+  indirectLabor: number;
+
+  /**
    * 班次（字典 logistics_shift_category；1=早 2=中 3=晚 4=白班 5=夜班）
    */
   shiftNo: number;
 
   /**
-   * PCB板别（字典 logistics_pcba_panel_category，存 DictValue）
+   * 标准工时(分钟)（回填：按工作中心查询 TaktStandardOperationTime 转换工时）
+   */
+  stdMinutes: number;
+
+  /**
+   * 人员标准产能（计算结果：DirectLabor×60÷StdMinutes×标准生产稼动率）
+   */
+  stdLaborCapacity: number;
+
+  /**
+   * 标准点数（PCBA 专用，按工作中心回填）
+   */
+  stdShorts: number;
+
+  /**
+   * 设备标准产能（计算结果：60÷StdMinutes×设备时间稼动率）
+   */
+  stdEquipmentCapacity: number;
+
+  /**
+   * PCB板别（字典 logistics_pcba_function_category，存 DictValue）
    */
   pcbBoardType: string;
 
@@ -114,7 +154,7 @@ export interface PcbaOutputDetail extends CompanyDtoBase {
   downtimeDescription?: string;
 
   /**
-   * 投入工数(分钟)（计算结果：主表 DirectLabor×60）
+   * 投入工数(分钟)（计算结果：明细 DirectLabor×60）
    */
   inputMinutes: number;
 
@@ -169,7 +209,7 @@ export interface PcbaOutputDetail extends CompanyDtoBase {
   mixedProd: number;
 
   /**
-   * 达成率(%)（计算结果：当日完成数÷主表标准产能×100%；标准产能为0时取0）
+   * 达成率(%)（计算结果：当日完成数÷明细人员标准产能×100%；标准产能为0时取0）
    */
   achievementRate: number;
 
@@ -224,12 +264,52 @@ export interface PcbaOutputDetailQuery extends TaktPagedQuery {
   timePeriod?: string;
 
   /**
+   * 生产班组（选项 TaktProductionTeams/options，存 TeamCode，ExtValue=PlantCode 过滤）
+   */
+  prodTeam?: string;
+
+  /**
+   * 生产设备编码（关联 TaktProductionEquipment.ProductionEquipmentCode，选项 TaktProductionEquipments/options）
+   */
+  productionEquipmentCode?: string;
+
+  /**
+   * 直接人员
+   */
+  directLabor?: number;
+
+  /**
+   * 间接人员
+   */
+  indirectLabor?: number;
+
+  /**
    * 班次（字典 logistics_shift_category；1=早 2=中 3=晚 4=白班 5=夜班）
    */
   shiftNo?: number;
 
   /**
-   * PCB板别（字典 logistics_pcba_panel_category，存 DictValue）
+   * 标准工时(分钟)（回填：按工作中心查询 TaktStandardOperationTime 转换工时）
+   */
+  stdMinutes?: number;
+
+  /**
+   * 人员标准产能（计算结果：DirectLabor×60÷StdMinutes×标准生产稼动率）
+   */
+  stdLaborCapacity?: number;
+
+  /**
+   * 标准点数（PCBA 专用，按工作中心回填）
+   */
+  stdShorts?: number;
+
+  /**
+   * 设备标准产能（计算结果：60÷StdMinutes×设备时间稼动率）
+   */
+  stdEquipmentCapacity?: number;
+
+  /**
+   * PCB板别（字典 logistics_pcba_function_category，存 DictValue）
    */
   pcbBoardType?: string;
 
@@ -284,7 +364,7 @@ export interface PcbaOutputDetailQuery extends TaktPagedQuery {
   downtimeDescription?: string;
 
   /**
-   * 投入工数(分钟)（计算结果：主表 DirectLabor×60）
+   * 投入工数(分钟)（计算结果：明细 DirectLabor×60）
    */
   inputMinutes?: number;
 
@@ -339,7 +419,7 @@ export interface PcbaOutputDetailQuery extends TaktPagedQuery {
   mixedProd?: number;
 
   /**
-   * 达成率(%)（计算结果：当日完成数÷主表标准产能×100%；标准产能为0时取0）
+   * 达成率(%)（计算结果：当日完成数÷明细人员标准产能×100%；标准产能为0时取0）
    */
   achievementRate?: number;
 
@@ -413,12 +493,52 @@ export interface PcbaOutputDetailCreate {
   timePeriod: string;
 
   /**
+   * 生产班组（选项 TaktProductionTeams/options，存 TeamCode，ExtValue=PlantCode 过滤）
+   */
+  prodTeam: string;
+
+  /**
+   * 生产设备编码（关联 TaktProductionEquipment.ProductionEquipmentCode，选项 TaktProductionEquipments/options）
+   */
+  productionEquipmentCode: string;
+
+  /**
+   * 直接人员
+   */
+  directLabor: number;
+
+  /**
+   * 间接人员
+   */
+  indirectLabor: number;
+
+  /**
    * 班次（字典 logistics_shift_category；1=早 2=中 3=晚 4=白班 5=夜班）
    */
   shiftNo: number;
 
   /**
-   * PCB板别（字典 logistics_pcba_panel_category，存 DictValue）
+   * 标准工时(分钟)（回填：按工作中心查询 TaktStandardOperationTime 转换工时）
+   */
+  stdMinutes: number;
+
+  /**
+   * 人员标准产能（计算结果：DirectLabor×60÷StdMinutes×标准生产稼动率）
+   */
+  stdLaborCapacity: number;
+
+  /**
+   * 标准点数（PCBA 专用，按工作中心回填）
+   */
+  stdShorts: number;
+
+  /**
+   * 设备标准产能（计算结果：60÷StdMinutes×设备时间稼动率）
+   */
+  stdEquipmentCapacity: number;
+
+  /**
+   * PCB板别（字典 logistics_pcba_function_category，存 DictValue）
    */
   pcbBoardType: string;
 
@@ -473,7 +593,7 @@ export interface PcbaOutputDetailCreate {
   downtimeDescription?: string;
 
   /**
-   * 投入工数(分钟)（计算结果：主表 DirectLabor×60）
+   * 投入工数(分钟)（计算结果：明细 DirectLabor×60）
    */
   inputMinutes: number;
 
@@ -528,7 +648,7 @@ export interface PcbaOutputDetailCreate {
   mixedProd: number;
 
   /**
-   * 达成率(%)（计算结果：当日完成数÷主表标准产能×100%；标准产能为0时取0）
+   * 达成率(%)（计算结果：当日完成数÷明细人员标准产能×100%；标准产能为0时取0）
    */
   achievementRate: number;
 
@@ -640,12 +760,52 @@ export interface PcbaOutputDetailTemplate {
   timePeriod?: string;
 
   /**
+   * 生产班组（选项 TaktProductionTeams/options，存 TeamCode，ExtValue=PlantCode 过滤）
+   */
+  prodTeam?: string;
+
+  /**
+   * 生产设备编码（关联 TaktProductionEquipment.ProductionEquipmentCode，选项 TaktProductionEquipments/options）
+   */
+  productionEquipmentCode?: string;
+
+  /**
+   * 直接人员
+   */
+  directLabor?: number;
+
+  /**
+   * 间接人员
+   */
+  indirectLabor?: number;
+
+  /**
    * 班次（字典 logistics_shift_category；1=早 2=中 3=晚 4=白班 5=夜班）
    */
   shiftNo?: number;
 
   /**
-   * PCB板别（字典 logistics_pcba_panel_category，存 DictValue）
+   * 标准工时(分钟)（回填：按工作中心查询 TaktStandardOperationTime 转换工时）
+   */
+  stdMinutes?: number;
+
+  /**
+   * 人员标准产能（计算结果：DirectLabor×60÷StdMinutes×标准生产稼动率）
+   */
+  stdLaborCapacity?: number;
+
+  /**
+   * 标准点数（PCBA 专用，按工作中心回填）
+   */
+  stdShorts?: number;
+
+  /**
+   * 设备标准产能（计算结果：60÷StdMinutes×设备时间稼动率）
+   */
+  stdEquipmentCapacity?: number;
+
+  /**
+   * PCB板别（字典 logistics_pcba_function_category，存 DictValue）
    */
   pcbBoardType?: string;
 
@@ -700,7 +860,7 @@ export interface PcbaOutputDetailTemplate {
   downtimeDescription?: string;
 
   /**
-   * 投入工数(分钟)（计算结果：主表 DirectLabor×60）
+   * 投入工数(分钟)（计算结果：明细 DirectLabor×60）
    */
   inputMinutes?: number;
 
@@ -755,7 +915,7 @@ export interface PcbaOutputDetailTemplate {
   mixedProd?: number;
 
   /**
-   * 达成率(%)（计算结果：当日完成数÷主表标准产能×100%；标准产能为0时取0）
+   * 达成率(%)（计算结果：当日完成数÷明细人员标准产能×100%；标准产能为0时取0）
    */
   achievementRate?: number;
 
@@ -819,12 +979,52 @@ export interface PcbaOutputDetailImport {
   timePeriod?: string;
 
   /**
+   * 生产班组（选项 TaktProductionTeams/options，存 TeamCode，ExtValue=PlantCode 过滤）
+   */
+  prodTeam?: string;
+
+  /**
+   * 生产设备编码（关联 TaktProductionEquipment.ProductionEquipmentCode，选项 TaktProductionEquipments/options）
+   */
+  productionEquipmentCode?: string;
+
+  /**
+   * 直接人员
+   */
+  directLabor?: number;
+
+  /**
+   * 间接人员
+   */
+  indirectLabor?: number;
+
+  /**
    * 班次（字典 logistics_shift_category；1=早 2=中 3=晚 4=白班 5=夜班）
    */
   shiftNo?: number;
 
   /**
-   * PCB板别（字典 logistics_pcba_panel_category，存 DictValue）
+   * 标准工时(分钟)（回填：按工作中心查询 TaktStandardOperationTime 转换工时）
+   */
+  stdMinutes?: number;
+
+  /**
+   * 人员标准产能（计算结果：DirectLabor×60÷StdMinutes×标准生产稼动率）
+   */
+  stdLaborCapacity?: number;
+
+  /**
+   * 标准点数（PCBA 专用，按工作中心回填）
+   */
+  stdShorts?: number;
+
+  /**
+   * 设备标准产能（计算结果：60÷StdMinutes×设备时间稼动率）
+   */
+  stdEquipmentCapacity?: number;
+
+  /**
+   * PCB板别（字典 logistics_pcba_function_category，存 DictValue）
    */
   pcbBoardType?: string;
 
@@ -879,7 +1079,7 @@ export interface PcbaOutputDetailImport {
   downtimeDescription?: string;
 
   /**
-   * 投入工数(分钟)（计算结果：主表 DirectLabor×60）
+   * 投入工数(分钟)（计算结果：明细 DirectLabor×60）
    */
   inputMinutes?: number;
 
@@ -934,7 +1134,7 @@ export interface PcbaOutputDetailImport {
   mixedProd?: number;
 
   /**
-   * 达成率(%)（计算结果：当日完成数÷主表标准产能×100%；标准产能为0时取0）
+   * 达成率(%)（计算结果：当日完成数÷明细人员标准产能×100%；标准产能为0时取0）
    */
   achievementRate?: number;
 
@@ -993,12 +1193,52 @@ export interface PcbaOutputDetailExport {
   timePeriod: string;
 
   /**
+   * 生产班组（选项 TaktProductionTeams/options，存 TeamCode，ExtValue=PlantCode 过滤）
+   */
+  prodTeam: string;
+
+  /**
+   * 生产设备编码（关联 TaktProductionEquipment.ProductionEquipmentCode，选项 TaktProductionEquipments/options）
+   */
+  productionEquipmentCode: string;
+
+  /**
+   * 直接人员
+   */
+  directLabor: number;
+
+  /**
+   * 间接人员
+   */
+  indirectLabor: number;
+
+  /**
    * 班次（字典 logistics_shift_category；1=早 2=中 3=晚 4=白班 5=夜班）
    */
   shiftNo: number;
 
   /**
-   * PCB板别（字典 logistics_pcba_panel_category，存 DictValue）
+   * 标准工时(分钟)（回填：按工作中心查询 TaktStandardOperationTime 转换工时）
+   */
+  stdMinutes: number;
+
+  /**
+   * 人员标准产能（计算结果：DirectLabor×60÷StdMinutes×标准生产稼动率）
+   */
+  stdLaborCapacity: number;
+
+  /**
+   * 标准点数（PCBA 专用，按工作中心回填）
+   */
+  stdShorts: number;
+
+  /**
+   * 设备标准产能（计算结果：60÷StdMinutes×设备时间稼动率）
+   */
+  stdEquipmentCapacity: number;
+
+  /**
+   * PCB板别（字典 logistics_pcba_function_category，存 DictValue）
    */
   pcbBoardType: string;
 
@@ -1053,7 +1293,7 @@ export interface PcbaOutputDetailExport {
   downtimeDescription?: string;
 
   /**
-   * 投入工数(分钟)（计算结果：主表 DirectLabor×60）
+   * 投入工数(分钟)（计算结果：明细 DirectLabor×60）
    */
   inputMinutes: number;
 
@@ -1108,7 +1348,7 @@ export interface PcbaOutputDetailExport {
   mixedProd: number;
 
   /**
-   * 达成率(%)（计算结果：当日完成数÷主表标准产能×100%；标准产能为0时取0）
+   * 达成率(%)（计算结果：当日完成数÷明细人员标准产能×100%；标准产能为0时取0）
    */
   achievementRate: number;
 

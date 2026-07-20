@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Infrastructure.Data.Seeds.I18nSeedData.Accounting.Financial
 // 文件名称：TaktCountersignI18nSeedData.cs
-// 创建时间：2026-07-09
+// 创建时间：2026-07-20
 // 创建人：Takt365(Auto Generated)
 // 功能描述：TaktCountersign 实体字段国际化种子（无对应 frontend locales；TranslationText 取自 ColumnDescription，ContextNote 取自属性 XML summary）
 // 
@@ -181,13 +181,13 @@ public class TaktCountersignI18nSeedData : ITaktSeedDataCoordinator
             new TranslationSeedItem("entity.countersign.executiveoffice", "zh-HK", "总经室_hk", "总经室 JSON"),
 
             // entity.countersign.applicantby
-            new TranslationSeedItem("entity.countersign.applicantby", "en-US", "申请人_us", "申请人（关联 TaktEmployee.Id，选项 TaktEmployees/options）"),
+            new TranslationSeedItem("entity.countersign.applicantby", "en-US", "申请人_us", "申请人（选项 TaktEmployees/options，DictValue=Id）"),
             // entity.countersign.applicantby
-            new TranslationSeedItem("entity.countersign.applicantby", "ja-JP", "申请人_jp", "申请人（关联 TaktEmployee.Id，选项 TaktEmployees/options）"),
+            new TranslationSeedItem("entity.countersign.applicantby", "ja-JP", "申请人_jp", "申请人（选项 TaktEmployees/options，DictValue=Id）"),
             // entity.countersign.applicantby
-            new TranslationSeedItem("entity.countersign.applicantby", "zh-CN", "申请人", "申请人（关联 TaktEmployee.Id，选项 TaktEmployees/options）"),
+            new TranslationSeedItem("entity.countersign.applicantby", "zh-CN", "申请人", "申请人（选项 TaktEmployees/options，DictValue=Id）"),
             // entity.countersign.applicantby
-            new TranslationSeedItem("entity.countersign.applicantby", "zh-HK", "申请人_hk", "申请人（关联 TaktEmployee.Id，选项 TaktEmployees/options）"),
+            new TranslationSeedItem("entity.countersign.applicantby", "zh-HK", "申请人_hk", "申请人（选项 TaktEmployees/options，DictValue=Id）"),
 
             // entity.countersign.applicationdept
             new TranslationSeedItem("entity.countersign.applicationdept", "en-US", "申请部门_us", "申请部门（关联 TaktDept.Id，选项 TaktDepts/tree-options）"),

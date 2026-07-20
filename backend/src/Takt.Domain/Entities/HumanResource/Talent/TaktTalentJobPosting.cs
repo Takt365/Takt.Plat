@@ -25,7 +25,7 @@ namespace Takt.Domain.Entities.HumanResource.Talent;
 public class TaktTalentJobPosting : TaktCompanyEntityBase
 {
     /// <summary>
-    /// 用人需求（关联 TaktTalentStaffingRequirement.Id，选项 TaktTalentStaffingRequirements/options）
+    /// 用人需求（选项 TaktTalentStaffingRequirements/options，DictValue=Id）
     /// </summary>
     [SugarColumn(ColumnName = "staffing_requirement_id", ColumnDescription = "用人需求ID", ColumnDataType = "bigint", IsNullable = false)]
     public long StaffingRequirementId { get; set; }

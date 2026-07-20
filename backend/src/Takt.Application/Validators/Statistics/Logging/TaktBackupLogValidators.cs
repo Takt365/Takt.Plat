@@ -1,0 +1,102 @@
+// ========================================
+// 项目名称：节拍工厂·Takt Plat
+// 命名空间：Takt.Application.Validators.Statistics.Logging
+// 文件名称：TaktBackupLogValidators.cs
+// 创建时间：2026-07-20
+// 创建人：Takt365(Auto Generated)
+// 功能描述：BackupLog 模块 FluentValidation 验证器（由 generate-validators-from-entity.cjs 根据 TaktBackupLog 生成，请按需审阅）
+// 
+// 版权信息：Copyright (c) 2025 Takt  All rights reserved.
+// 免责声明：此软件使用 MIT License，作者不承担任何使用风险。
+// ========================================
+
+using FluentValidation;
+using Takt.Application.Dtos.Statistics.Logging;
+
+namespace Takt.Application.Validators.Statistics.Logging;
+
+// ========================================
+// 创建BackupLog 验证器
+// ========================================
+
+/// <summary>
+/// 创建BackupLog DTO 验证器
+/// </summary>
+public class TaktBackupLogCreateValidator : AbstractValidator<TaktBackupLogCreateDto>
+{
+    /// <summary>
+    /// 初始化 创建BackupLog 校验规则
+    /// </summary>
+    public TaktBackupLogCreateValidator()
+    {
+        RuleFor(x => x.TenantCode)
+            .NotEmpty().WithMessage("租户编码不能为空")
+            .MaximumLength(3).WithMessage("租户编码长度不能超过3个字符");
+        RuleFor(x => x.CompanyCode)
+            .NotEmpty().WithMessage("公司代码不能为空")
+            .MaximumLength(4).WithMessage("公司代码长度不能超过4个字符");
+        RuleFor(x => x.BackupKind)
+            .NotEmpty().WithMessage("备份种类不能为空")
+            .MaximumLength(40).WithMessage("备份种类长度不能超过40个字符");
+        RuleFor(x => x.SourceId)
+            .NotEmpty().WithMessage("来源业务键不能为空")
+            .MaximumLength(40).WithMessage("来源业务键长度不能超过40个字符");
+        RuleFor(x => x.SourceCode)
+            .NotEmpty().WithMessage("来源编码快照不能为空")
+            .MaximumLength(40).WithMessage("来源编码快照长度不能超过40个字符");
+        RuleFor(x => x.TargetName)
+            .NotEmpty().WithMessage("目标名称不能为空")
+            .MaximumLength(200).WithMessage("目标名称长度不能超过200个字符");
+        RuleFor(x => x.TargetScope)
+            .NotEmpty().WithMessage("目标范围不能为空")
+            .MaximumLength(100).WithMessage("目标范围长度不能超过100个字符");
+        RuleFor(x => x.ExtField)
+            .MaximumLength(4000).WithMessage("扩展字段JSON长度不能超过4000个字符");
+        RuleFor(x => x.Remark)
+            .MaximumLength(500).WithMessage("备注长度不能超过500个字符");
+    }
+}
+
+// ========================================
+// 更新BackupLog 验证器
+// ========================================
+
+/// <summary>
+/// 更新BackupLog DTO 验证器
+/// </summary>
+public class TaktBackupLogUpdateValidator : AbstractValidator<TaktBackupLogUpdateDto>
+{
+    /// <summary>
+    /// 初始化 更新BackupLog 校验规则
+    /// </summary>
+    public TaktBackupLogUpdateValidator()
+    {
+        RuleFor(x => x.BackupLogId)
+            .GreaterThan(0).WithMessage("BackupLogID无效");
+        RuleFor(x => x.TenantCode)
+            .NotEmpty().WithMessage("租户编码不能为空")
+            .MaximumLength(3).WithMessage("租户编码长度不能超过3个字符");
+        RuleFor(x => x.CompanyCode)
+            .NotEmpty().WithMessage("公司代码不能为空")
+            .MaximumLength(4).WithMessage("公司代码长度不能超过4个字符");
+        RuleFor(x => x.BackupKind)
+            .NotEmpty().WithMessage("备份种类不能为空")
+            .MaximumLength(40).WithMessage("备份种类长度不能超过40个字符");
+        RuleFor(x => x.SourceId)
+            .NotEmpty().WithMessage("来源业务键不能为空")
+            .MaximumLength(40).WithMessage("来源业务键长度不能超过40个字符");
+        RuleFor(x => x.SourceCode)
+            .NotEmpty().WithMessage("来源编码快照不能为空")
+            .MaximumLength(40).WithMessage("来源编码快照长度不能超过40个字符");
+        RuleFor(x => x.TargetName)
+            .NotEmpty().WithMessage("目标名称不能为空")
+            .MaximumLength(200).WithMessage("目标名称长度不能超过200个字符");
+        RuleFor(x => x.TargetScope)
+            .NotEmpty().WithMessage("目标范围不能为空")
+            .MaximumLength(100).WithMessage("目标范围长度不能超过100个字符");
+        RuleFor(x => x.ExtField)
+            .MaximumLength(4000).WithMessage("扩展字段JSON长度不能超过4000个字符");
+        RuleFor(x => x.Remark)
+            .MaximumLength(500).WithMessage("备注长度不能超过500个字符");
+    }
+}

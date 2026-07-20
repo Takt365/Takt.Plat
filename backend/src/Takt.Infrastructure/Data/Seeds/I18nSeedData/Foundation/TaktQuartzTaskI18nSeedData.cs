@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Infrastructure.Data.Seeds.I18nSeedData.Foundation
 // 文件名称：TaktQuartzTaskI18nSeedData.cs
-// 创建时间：2026-07-09
+// 创建时间：2026-07-20
 // 创建人：Takt365(Auto Generated)
 // 功能描述：TaktQuartzTask 实体字段国际化种子（已对齐前端 locales：src/locales/foundation/quartz-task）
 // 
@@ -172,13 +172,13 @@ public class TaktQuartzTaskI18nSeedData : ITaktSeedDataCoordinator
             new TranslationSeedItem("entity.quartztask.requestmethod", "zh-HK", "网络请求方式_hk", "网络请求方式（GET/POST 等）"),
 
             // entity.quartztask.sqlscript
-            new TranslationSeedItem("entity.quartztask.sqlscript", "en-US", "SQL语句_us", "SQL 语句（任务类型为 SQL 时使用）"),
+            new TranslationSeedItem("entity.quartztask.sqlscript", "en-US", "SQL脚本路径_us", "SQL 脚本路径（任务类型为 SQL 时使用；只可填相对 wwwroot 的 .sql 路径如 Quartz/sap_sync_ma.sql，禁止内联 SQL）"),
             // entity.quartztask.sqlscript
-            new TranslationSeedItem("entity.quartztask.sqlscript", "ja-JP", "SQL语句_jp", "SQL 语句（任务类型为 SQL 时使用）"),
+            new TranslationSeedItem("entity.quartztask.sqlscript", "ja-JP", "SQL脚本路径_jp", "SQL 脚本路径（任务类型为 SQL 时使用；只可填相对 wwwroot 的 .sql 路径如 Quartz/sap_sync_ma.sql，禁止内联 SQL）"),
             // entity.quartztask.sqlscript
-            new TranslationSeedItem("entity.quartztask.sqlscript", "zh-CN", "SQL语句", "SQL 语句（任务类型为 SQL 时使用）"),
+            new TranslationSeedItem("entity.quartztask.sqlscript", "zh-CN", "SQL脚本路径", "SQL 脚本路径（任务类型为 SQL 时使用；只可填相对 wwwroot 的 .sql 路径如 Quartz/sap_sync_ma.sql，禁止内联 SQL）"),
             // entity.quartztask.sqlscript
-            new TranslationSeedItem("entity.quartztask.sqlscript", "zh-HK", "SQL语句_hk", "SQL 语句（任务类型为 SQL 时使用）"),
+            new TranslationSeedItem("entity.quartztask.sqlscript", "zh-HK", "SQL脚本路径_hk", "SQL 脚本路径（任务类型为 SQL 时使用；只可填相对 wwwroot 的 .sql 路径如 Quartz/sap_sync_ma.sql，禁止内联 SQL）"),
 
             // entity.quartztask.triggertype
             new TranslationSeedItem("entity.quartztask.triggertype", "en-US", "触发器类型_us", "触发器类型（字典 sys_quartz_trigger_type；0=Simple 1=Cron）"),

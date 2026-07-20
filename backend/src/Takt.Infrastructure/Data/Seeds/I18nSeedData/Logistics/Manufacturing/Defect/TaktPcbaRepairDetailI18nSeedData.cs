@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Infrastructure.Data.Seeds.I18nSeedData.Logistics.Manufacturing.Defect
 // 文件名称：TaktPcbaRepairDetailI18nSeedData.cs
-// 创建时间：2026-07-09
+// 创建时间：2026-07-20
 // 创建人：Takt365(Auto Generated)
 // 功能描述：TaktPcbaRepairDetail 实体字段国际化种子（无对应 frontend locales；TranslationText 取自 ColumnDescription，ContextNote 取自属性 XML summary）
 // 
@@ -118,13 +118,13 @@ public class TaktPcbaRepairDetailI18nSeedData : ITaktSeedDataCoordinator
             new TranslationSeedItem("entity.pcbarepairdetail.linenumber", "zh-HK", "行号_hk", "行号（项号/序号，固定步长=10）"),
 
             // entity.pcbarepairdetail.pcbaboardtype
-            new TranslationSeedItem("entity.pcbarepairdetail.pcbaboardtype", "en-US", "PCBA板别_us", "PCBA板别（字典 logistics_pcba_panel_category，存 DictValue）"),
+            new TranslationSeedItem("entity.pcbarepairdetail.pcbaboardtype", "en-US", "PCBA板别_us", "PCBA板别（字典 logistics_pcba_function_category，存 DictValue）"),
             // entity.pcbarepairdetail.pcbaboardtype
-            new TranslationSeedItem("entity.pcbarepairdetail.pcbaboardtype", "ja-JP", "PCBA板别_jp", "PCBA板别（字典 logistics_pcba_panel_category，存 DictValue）"),
+            new TranslationSeedItem("entity.pcbarepairdetail.pcbaboardtype", "ja-JP", "PCBA板别_jp", "PCBA板别（字典 logistics_pcba_function_category，存 DictValue）"),
             // entity.pcbarepairdetail.pcbaboardtype
-            new TranslationSeedItem("entity.pcbarepairdetail.pcbaboardtype", "zh-CN", "PCBA板别", "PCBA板别（字典 logistics_pcba_panel_category，存 DictValue）"),
+            new TranslationSeedItem("entity.pcbarepairdetail.pcbaboardtype", "zh-CN", "PCBA板别", "PCBA板别（字典 logistics_pcba_function_category，存 DictValue）"),
             // entity.pcbarepairdetail.pcbaboardtype
-            new TranslationSeedItem("entity.pcbarepairdetail.pcbaboardtype", "zh-HK", "PCBA板别_hk", "PCBA板别（字典 logistics_pcba_panel_category，存 DictValue）"),
+            new TranslationSeedItem("entity.pcbarepairdetail.pcbaboardtype", "zh-HK", "PCBA板别_hk", "PCBA板别（字典 logistics_pcba_function_category，存 DictValue）"),
 
             // entity.pcbarepairdetail.prodactualqty
             new TranslationSeedItem("entity.pcbarepairdetail.prodactualqty", "en-US", "生产实绩_us", "生产实绩"),
@@ -136,13 +136,13 @@ public class TaktPcbaRepairDetailI18nSeedData : ITaktSeedDataCoordinator
             new TranslationSeedItem("entity.pcbarepairdetail.prodactualqty", "zh-HK", "生产实绩_hk", "生产实绩"),
 
             // entity.pcbarepairdetail.prodteam
-            new TranslationSeedItem("entity.pcbarepairdetail.prodteam", "en-US", "生产班组_us", "生产班组（选项 TaktProductionTeams/options，存 TeamCode，ExtValue=PlantCode 过滤）"),
+            new TranslationSeedItem("entity.pcbarepairdetail.prodteam", "en-US", "生产班组_us", "生产班组（选项 TaktProductionTeams/options，DictValue=TeamCode，ExtValue=PlantCode）"),
             // entity.pcbarepairdetail.prodteam
-            new TranslationSeedItem("entity.pcbarepairdetail.prodteam", "ja-JP", "生产班组_jp", "生产班组（选项 TaktProductionTeams/options，存 TeamCode，ExtValue=PlantCode 过滤）"),
+            new TranslationSeedItem("entity.pcbarepairdetail.prodteam", "ja-JP", "生产班组_jp", "生产班组（选项 TaktProductionTeams/options，DictValue=TeamCode，ExtValue=PlantCode）"),
             // entity.pcbarepairdetail.prodteam
-            new TranslationSeedItem("entity.pcbarepairdetail.prodteam", "zh-CN", "生产班组", "生产班组（选项 TaktProductionTeams/options，存 TeamCode，ExtValue=PlantCode 过滤）"),
+            new TranslationSeedItem("entity.pcbarepairdetail.prodteam", "zh-CN", "生产班组", "生产班组（选项 TaktProductionTeams/options，DictValue=TeamCode，ExtValue=PlantCode）"),
             // entity.pcbarepairdetail.prodteam
-            new TranslationSeedItem("entity.pcbarepairdetail.prodteam", "zh-HK", "生产班组_hk", "生产班组（选项 TaktProductionTeams/options，存 TeamCode，ExtValue=PlantCode 过滤）"),
+            new TranslationSeedItem("entity.pcbarepairdetail.prodteam", "zh-HK", "生产班组_hk", "生产班组（选项 TaktProductionTeams/options，DictValue=TeamCode，ExtValue=PlantCode）"),
 
             // entity.pcbarepairdetail.cardno
             new TranslationSeedItem("entity.pcbarepairdetail.cardno", "en-US", "卡号_us", "卡号"),
@@ -208,13 +208,13 @@ public class TaktPcbaRepairDetailI18nSeedData : ITaktSeedDataCoordinator
             new TranslationSeedItem("entity.pcbarepairdetail.defectnature", "zh-HK", "不良性质_hk", "不良性质（字典 logistics_defect_nature_category，存 DictValue）"),
 
             // entity.pcbarepairdetail.repairoperator
-            new TranslationSeedItem("entity.pcbarepairdetail.repairoperator", "en-US", "修理员_us", "修理员（关联 TaktEmployee.Id，选项 TaktEmployees/options）"),
+            new TranslationSeedItem("entity.pcbarepairdetail.repairoperator", "en-US", "修理员_us", "修理员（选项 TaktEmployees/options，DictValue=Id）"),
             // entity.pcbarepairdetail.repairoperator
-            new TranslationSeedItem("entity.pcbarepairdetail.repairoperator", "ja-JP", "修理员_jp", "修理员（关联 TaktEmployee.Id，选项 TaktEmployees/options）"),
+            new TranslationSeedItem("entity.pcbarepairdetail.repairoperator", "ja-JP", "修理员_jp", "修理员（选项 TaktEmployees/options，DictValue=Id）"),
             // entity.pcbarepairdetail.repairoperator
-            new TranslationSeedItem("entity.pcbarepairdetail.repairoperator", "zh-CN", "修理员", "修理员（关联 TaktEmployee.Id，选项 TaktEmployees/options）"),
+            new TranslationSeedItem("entity.pcbarepairdetail.repairoperator", "zh-CN", "修理员", "修理员（选项 TaktEmployees/options，DictValue=Id）"),
             // entity.pcbarepairdetail.repairoperator
-            new TranslationSeedItem("entity.pcbarepairdetail.repairoperator", "zh-HK", "修理员_hk", "修理员（关联 TaktEmployee.Id，选项 TaktEmployees/options）"),
+            new TranslationSeedItem("entity.pcbarepairdetail.repairoperator", "zh-HK", "修理员_hk", "修理员（选项 TaktEmployees/options，DictValue=Id）"),
 
             // entity.pcbarepairdetail.isobsolete
             new TranslationSeedItem("entity.pcbarepairdetail.isobsolete", "en-US", "是否作废_us", "是否作废（字典 sys_yes_no_type，0=否 1=是；编辑移除子行时标记作废）"),

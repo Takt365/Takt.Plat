@@ -12,6 +12,11 @@
 
 export default {
   page: {
+    executeSubmitted: '已提交后台执行，完成后将通知并刷新列表',
+    signalr: {
+      executeSucceeded: '任务 {code} 执行成功（{duration}ms）',
+      executeFailed: '任务 {code} 执行失败（{duration}ms）',
+    },
     cron: {
       modalTitle: 'Cron 表达式',
       inputPlaceholder: '点击输入框配置 Cron 表达式',
@@ -27,6 +32,22 @@ export default {
       specify: '指定',
       nextRuns: '最近 5 次运行时间',
       noNextRuns: '无法解析当前表达式',
+      sourceExpression: '原表达式',
+      sourceMeaning: '含义说明',
+      describe: {
+        atTime: '每天 {h}:{m}:{s} 执行',
+        intervalSeconds: '从第 {start} 秒起，每隔 {step} 秒',
+        intervalMinutes: '从第 {start} 分起，每隔 {step} 分钟',
+        intervalHours: '从 {start} 点起，每隔 {step} 小时',
+        specificSeconds: '指定秒：{values}',
+        specificMinutes: '指定分：{values}',
+        specificHours: '指定时：{values}',
+        specificDays: '指定日：{values}',
+        specificMonths: '指定月：{values}',
+        specificWeeks: '指定星期：{values}',
+        unknown: '无法自动解释该表达式，请对照下方分段编辑',
+        join: '；',
+      },
       tab: {
         second: '秒',
         minute: '分钟',

@@ -36,19 +36,19 @@ public class TaktCalendar : TaktCompanyEntityBase
     [SugarColumn(ColumnName = "is_working_day", ColumnDescription = "是否工作日", ColumnDataType = "int", IsNullable = false, DefaultValue = "0")]
     public int IsWorkingDay { get; set; }
     /// <summary>
-    /// 关联假日（关联 TaktHoliday.Id，选项 TaktHolidays/options）
+    /// 关联假日（选项 TaktHolidays/options，DictValue=Id）
     /// </summary>
     [SugarColumn(ColumnName = "holiday_id", ColumnDescription = "关联假日ID", ColumnDataType = "bigint", IsNullable = true)]
     [JsonConverter(typeof(ValueToStringConverter))]
     public long? HolidayId { get; set; }
     /// <summary>
-    /// 关联班次（关联 TaktWorkShift.Id，选项 TaktWorkShifts/options）
+    /// 关联班次（选项 TaktWorkShifts/options，DictValue=Id）
     /// </summary>
     [SugarColumn(ColumnName = "shift_id", ColumnDescription = "关联班次ID", ColumnDataType = "bigint", IsNullable = true)]
     [JsonConverter(typeof(ValueToStringConverter))]
     public long? ShiftId { get; set; }
     /// <summary>
-    /// 关联工厂（关联 TaktPlant.PlantCode，选项 TaktPlants/options）
+    /// 关联工厂（选项 TaktPlants/options，DictValue=Id）
     /// </summary>
     [SugarColumn(ColumnName = "related_plant", ColumnDescription = "关联工厂", ColumnDataType = "nvarchar", Length = 4, IsNullable = false)]
     public string RelatedPlant { get; set; } = string.Empty;

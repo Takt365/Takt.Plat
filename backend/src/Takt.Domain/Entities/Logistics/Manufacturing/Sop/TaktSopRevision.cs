@@ -26,7 +26,7 @@ namespace Takt.Domain.Entities.Logistics.Manufacturing.Sop;
 public class TaktSopRevision : TaktCompanyEntityBase
 {
     /// <summary>
-    /// SOP 文档头 ID（关联 TaktSopDoc.Id，选项 TaktSopDocs/options）
+    /// SOP 文档头 ID（选项 TaktSopDocs/options，DictValue=Id）
     /// </summary>
     [SugarColumn(ColumnName = "sop_id", ColumnDescription = "SOP文档头ID", ColumnDataType = "bigint", IsNullable = false)]
     [JsonConverter(typeof(ValueToStringConverter))]
@@ -51,7 +51,7 @@ public class TaktSopRevision : TaktCompanyEntityBase
     public string? ChangeDesc { get; set; }
 
     /// <summary>
-    /// 关联 ECN 主表 ID（关联 TaktEc.Id，选项 TaktEcs/options）
+    /// 关联 ECN 主表 ID（选项 TaktEcs/options，DictValue=Id）
     /// </summary>
     [SugarColumn(ColumnName = "ecn_id", ColumnDescription = "ECN主表ID", ColumnDataType = "bigint", IsNullable = true)]
     [JsonConverter(typeof(ValueToStringConverter))]

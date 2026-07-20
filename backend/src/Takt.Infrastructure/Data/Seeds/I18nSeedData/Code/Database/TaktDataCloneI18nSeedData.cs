@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Infrastructure.Data.Seeds.I18nSeedData.Code.Database
 // 文件名称：TaktDataCloneI18nSeedData.cs
-// 创建时间：2026-07-09
+// 创建时间：2026-07-20
 // 创建人：Takt365(Auto Generated)
 // 功能描述：TaktDataClone 实体字段国际化种子（已对齐前端 locales：src/locales/code/database/data-clone）
 // 
@@ -127,13 +127,13 @@ public class TaktDataCloneI18nSeedData : ITaktSeedDataCoordinator
             new TranslationSeedItem("entity.dataclone.sourcecompanycode", "zh-HK", "源公司编码_hk", "源公司编码（4 位）"),
 
             // entity.dataclone.targettenantcode
-            new TranslationSeedItem("entity.dataclone.targettenantcode", "en-US", "目标租户编码_us", "目标租户编码（3 位）"),
+            new TranslationSeedItem("entity.dataclone.targettenantcode", "en-US", "目标租户_us", "目标租户（3 位）"),
             // entity.dataclone.targettenantcode
-            new TranslationSeedItem("entity.dataclone.targettenantcode", "ja-JP", "目标租户编码_jp", "目标租户编码（3 位）"),
+            new TranslationSeedItem("entity.dataclone.targettenantcode", "ja-JP", "目标租户_jp", "目标租户（3 位）"),
             // entity.dataclone.targettenantcode
-            new TranslationSeedItem("entity.dataclone.targettenantcode", "zh-CN", "目标租户编码", "目标租户编码（3 位）"),
+            new TranslationSeedItem("entity.dataclone.targettenantcode", "zh-CN", "目标租户", "目标租户（3 位）"),
             // entity.dataclone.targettenantcode
-            new TranslationSeedItem("entity.dataclone.targettenantcode", "zh-HK", "目标租户编码_hk", "目标租户编码（3 位）"),
+            new TranslationSeedItem("entity.dataclone.targettenantcode", "zh-HK", "目标租户_hk", "目标租户（3 位）"),
 
             // entity.dataclone.targetdatabasename
             new TranslationSeedItem("entity.dataclone.targetdatabasename", "en-US", "目标数据库_us", "目标数据库展示名"),

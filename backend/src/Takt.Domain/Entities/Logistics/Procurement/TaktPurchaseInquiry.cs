@@ -48,7 +48,7 @@ public class TaktPurchaseInquiry : TaktCompanyEntityBase
     [SugarColumn(ColumnName = "quote_deadline_date", ColumnDescription = "报价截止日期", ColumnDataType = "datetime", IsNullable = true)]
     public DateTime? QuoteDeadlineDate { get; set; }
     /// <summary>
-    /// 询价人员工 ID（关联 TaktEmployee.Id，选项 TaktEmployees/options）
+    /// 询价人员工 ID（选项 TaktEmployees/options，DictValue=Id）
     /// </summary>
     [SugarColumn(ColumnName = "inquiry_id", ColumnDescription = "询价人员工ID", ColumnDataType = "bigint", IsNullable = true)]
     [JsonConverter(typeof(ValueToStringConverter))]

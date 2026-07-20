@@ -30,7 +30,7 @@ export default {
       size: {
         exceeded: "檔案大小超出了限制，系統僅支持500Mb",
       },
-      unsupported: "上傳的檔案不被支持。請聯繫管理員或重新上傳其它檔案",
+      unsupported: "上傳的檔案不被支持。請聯繫管理員或重新上傳其他檔案",
       hint: "支持常見壓縮包、圖片、音視頻、Office 新格式及 pdf/txt/xml/json；單檔不超過 {max}MB",
     },
     oss: {

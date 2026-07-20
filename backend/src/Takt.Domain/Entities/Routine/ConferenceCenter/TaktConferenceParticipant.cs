@@ -27,13 +27,13 @@ namespace Takt.Domain.Entities.Routine.ConferenceCenter;
 public class TaktConferenceParticipant : TaktCompanyEntityBase
 {
     /// <summary>
-    /// 会议 ID（关联 TaktConference.Id，选项 TaktConferences/options）
+    /// 会议 ID（选项 TaktConferences/options，DictValue=Id）
     /// </summary>
     [SugarColumn(ColumnName = "conference_id", ColumnDescription = "会议ID", ColumnDataType = "bigint", IsNullable = false)]
     [JsonConverter(typeof(ValueToStringConverter))]
     public long ConferenceId { get; set; }
     /// <summary>
-    /// 用户 ID（关联 TaktUser.Id，选项 TaktUsers/options）
+    /// 用户 ID（选项 TaktUsers/options，DictValue=Id）
     /// </summary>
     [SugarColumn(ColumnName = "user_id", ColumnDescription = "用户ID", ColumnDataType = "bigint", IsNullable = false)]
     [JsonConverter(typeof(ValueToStringConverter))]

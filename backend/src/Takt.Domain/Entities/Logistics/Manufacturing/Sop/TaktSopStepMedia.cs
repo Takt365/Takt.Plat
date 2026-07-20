@@ -26,7 +26,7 @@ namespace Takt.Domain.Entities.Logistics.Manufacturing.Sop;
 public class TaktSopStepMedia : TaktCompanyEntityBase
 {
     /// <summary>
-    /// 工步 ID（关联 TaktSopStep.Id，选项 TaktSopSteps/options）
+    /// 工步 ID（选项 TaktSopSteps/options，DictValue=Id）
     /// </summary>
     [SugarColumn(ColumnName = "step_id", ColumnDescription = "工步ID", ColumnDataType = "bigint", IsNullable = false)]
     [JsonConverter(typeof(ValueToStringConverter))]

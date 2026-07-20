@@ -34,7 +34,7 @@ public class TaktPayroll : TaktCompanyEntityBase
     [SugarColumn(ColumnName = "payroll_name", ColumnDescription = "薪酬体系名称", ColumnDataType = "nvarchar", Length = 80, IsNullable = false)]
     public string PayrollName { get; set; } = string.Empty;
     /// <summary>
-    /// 薪级表（关联 TaktPayScale.Id，选项 TaktPayScales/options）
+    /// 薪级表（选项 TaktPayScales/options，DictValue=Id）
     /// </summary>
     [SugarColumn(ColumnName = "pay_scale_id", ColumnDescription = "薪级表ID", ColumnDataType = "bigint", IsNullable = true)]
     [JsonConverter(typeof(ValueToStringConverter))]
@@ -60,7 +60,7 @@ public class TaktPayroll : TaktCompanyEntityBase
     [SugarColumn(ColumnName = "payroll_description", ColumnDescription = "说明", ColumnDataType = "nvarchar", Length = 500, IsNullable = true)]
     public string? PayrollDescription { get; set; }
     /// <summary>
-    /// 关联工厂（关联 TaktPlant.PlantCode，选项 TaktPlants/options）
+    /// 关联工厂（选项 TaktPlants/options，DictValue=Id）
     /// </summary>
     [SugarColumn(ColumnName = "related_plant", ColumnDescription = "关联工厂", ColumnDataType = "nvarchar", Length = 4, IsNullable = false)]
     public string RelatedPlant { get; set; } = string.Empty;

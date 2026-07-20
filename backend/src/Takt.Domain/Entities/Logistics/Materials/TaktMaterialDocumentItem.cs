@@ -27,7 +27,7 @@ namespace Takt.Domain.Entities.Logistics.Materials;
 public class TaktMaterialDocumentItem : TaktCompanyEntityBase
 {
     /// <summary>
-    /// 物料凭证 ID（关联 TaktMaterialDocument.Id，选项 TaktMaterialDocuments/options）
+    /// 物料凭证 ID（选项 TaktMaterialDocuments/options，DictValue=Id）
     /// </summary>
     [SugarColumn(ColumnName = "material_document_id", ColumnDescription = "物料凭证ID", ColumnDataType = "bigint", IsNullable = false)]
     [JsonConverter(typeof(ValueToStringConverter))]
@@ -43,7 +43,7 @@ public class TaktMaterialDocumentItem : TaktCompanyEntityBase
     [SugarColumn(ColumnName = "line_number", ColumnDescription = "行号", ColumnDataType = "int", IsNullable = false, DefaultValue = "0")]
     public int LineNumber { get; set; } = 0;
     /// <summary>
-    /// 库存地点（关联 TaktWarehouse.WarehouseCode，选项 TaktWarehouses/options，DictValue=WarehouseCode）
+    /// 库存地点（选项 TaktWarehouses/options，DictValue=WarehouseCode）
     /// </summary>
     [SugarColumn(ColumnName = "warehouse_code", ColumnDescription = "库存地点", ColumnDataType = "nvarchar", Length = 4, IsNullable = false)]
     public string WarehouseCode { get; set; } = string.Empty;
@@ -98,7 +98,7 @@ public class TaktMaterialDocumentItem : TaktCompanyEntityBase
     [SugarColumn(ColumnName = "reference_document_code", ColumnDescription = "收货/发货单编号", ColumnDataType = "nvarchar", Length = 16, IsNullable = true)]
     public string? ReferenceDocumentCode { get; set; }
     /// <summary>
-    /// 客户（关联 TaktCustomer.CustomerCode，选项 TaktCustomers/options）
+    /// 客户（选项 TaktCustomers/options，DictValue=Id）
     /// </summary>
     [SugarColumn(ColumnName = "customer_code", ColumnDescription = "客户", ColumnDataType = "nvarchar", Length = 20, IsNullable = true)]
     public string? CustomerCode { get; set; }

@@ -47,12 +47,12 @@ public class TaktSerialInbound : TaktCompanyEntityBase
     [SugarColumn(ColumnName = "inbound_type", ColumnDescription = "入库类型", ColumnDataType = "int", IsNullable = false, DefaultValue = "4")]
     public int InboundType { get; set; } = 4;
     /// <summary>
-    /// 仓库编码（关联 TaktWarehouse.WarehouseCode，选项 TaktWarehouses/options）
+    /// 仓库编码（选项 TaktWarehouses/options，DictValue=Id）
     /// </summary>
     [SugarColumn(ColumnName = "warehouse_code", ColumnDescription = "仓库编码", ColumnDataType = "nvarchar", Length = 4, IsNullable = false, DefaultValue = "C008")]
     public string WarehouseCode { get; set; } = "C008";
     /// <summary>
-    /// 库位编码（关联 TaktStorageLocation.LocationCode，选项 TaktStorageLocations/options）
+    /// 库位编码（选项 TaktStorageLocations/options，DictValue=Id）
     /// </summary>
     [SugarColumn(ColumnName = "location_code", ColumnDescription = "库位编码", ColumnDataType = "nvarchar", Length = 40, IsNullable = false, DefaultValue = "1F-2")]
     public string LocationCode { get; set; } = "1F-2";

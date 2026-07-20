@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.WebApi.Controllers.Logistics.Procurement
 // 文件名称：TaktPurchasePriceItemsController.cs
-// 创建时间：2026-07-09
+// 创建时间：2026-07-20
 // 创建人：Takt365(Cursor AI)
 // 功能描述：采购价格明细控制器
 // 
@@ -173,26 +173,6 @@ public class TaktPurchasePriceItemsController : TaktControllerBase
         {
             await _purchasePriceItemService.DeletePurchasePriceItemBatchAsync(ids);
             return Success("删除成功");
-        }
-        catch (Exception ex)
-        {
-            return HandleException(ex);
-        }
-    }
-
-    /// <summary>
-    /// 更新采购价格明细排序
-    /// </summary>
-    /// <param name="dto">排序DTO</param>
-    /// <returns>采购价格明细DTO</returns>
-    [TaktPermission("logistics:procurement:purchase:price:update", "更新采购价格明细排序")]
-    [HttpPut("sort")]
-    public async Task<IActionResult> UpdatePurchasePriceItemSortAsync([FromBody] TaktPurchasePriceItemSortDto dto)
-    {
-        try
-        {
-            var result = await _purchasePriceItemService.UpdatePurchasePriceItemSortAsync(dto);
-            return Success(result, "更新成功");
         }
         catch (Exception ex)
         {

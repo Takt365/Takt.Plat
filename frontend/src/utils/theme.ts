@@ -56,17 +56,17 @@ export const themeColorPresetKeys: readonly TaktThemeColorPreset[] = [
 
 /** 预设主题色映射（色值与 color-base.css --takt-* 相同） */
 export const themeColorMap: Record<TaktThemeColorPreset, string> = {
-  'mars-green': '#2e8b57',
-  'tiffany-blue': '#00a0b0',
-  'chinese-red': '#ff0000',
-  'titian-red': '#ff6347',
-  'burgundy-red': '#990033',
-  'bordeaux-red': '#8c1515',
-  'klein-blue': '#002fa7',
-  'vandyke-brown': '#4c2b18',
-  'prussian-blue': '#003153',
-  'sennelier-yellow': '#f4d35e',
-  'memorial-gray': '#808080',
+  'mars-green': '#008C8C',// 马尔斯绿
+  'tiffany-blue': '#81D8D0',// 蒂芙尼蓝 #A5D3D4
+  'chinese-red': '#DE2910',// 中国红 #E60000
+  'titian-red': '#B05923',// 提香红#BD5620
+  'burgundy-red': '#800020',// 勃艮第红
+  'bordeaux-red': '#7B1B38',// 波尔多红
+  'klein-blue': '#002fa7',// 克莱因蓝
+  'vandyke-brown': '#492D22',// 凡戴克棕 #664228
+  'prussian-blue': '#003153',// 普鲁士蓝
+  'sennelier-yellow': '#FBD26A',// 申布伦黄
+  'memorial-gray': '#808080',// 纪念灰
 };
 
 /** color-base.css「著名色彩」CSS 变量（与 themeColorPresetKeys 顺序一致） */

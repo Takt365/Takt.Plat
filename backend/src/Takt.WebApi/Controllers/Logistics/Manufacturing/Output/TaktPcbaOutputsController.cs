@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.WebApi.Controllers.Logistics.Manufacturing.Output
 // 文件名称：TaktPcbaOutputsController.cs
-// 创建时间：2026-06-30
+// 创建时间：2026-07-13
 // 创建人：Takt365(Cursor AI)
 // 功能描述：PCBA日报控制器
 // 
@@ -57,26 +57,6 @@ public class TaktPcbaOutputsController : TaktControllerBase
     }
 
     /// <summary>
-    /// 获取 PCBA 生产统计（数据看板）
-    /// </summary>
-    /// <param name="queryDto">查询 DTO</param>
-    /// <returns>生产统计</returns>
-    [TaktPermission("logistics:manufacturing:output:pcba:list", "PCBA生产统计")]
-    [HttpGet("production-stat")]
-    public async Task<IActionResult> GetPcbaOutputProductionStatAsync([FromQuery] TaktOutputProductionStatQueryDto queryDto)
-    {
-        try
-        {
-            var result = await _pcbaOutputService.GetPcbaOutputProductionStatAsync(queryDto);
-            return Success(result, "查询成功");
-        }
-        catch (Exception ex)
-        {
-            return HandleException(ex);
-        }
-    }
-
-    /// <summary>
     /// 根据ID获取PCBA日报
     /// </summary>
     /// <param name="id">PCBA日报ID</param>
@@ -111,34 +91,6 @@ public class TaktPcbaOutputsController : TaktControllerBase
         try
         {
             var result = await _pcbaOutputService.GetPcbaOutputOptionsAsync();
-            return Success(result, "查询成功");
-        }
-        catch (Exception ex)
-        {
-            return HandleException(ex);
-        }
-    }
-
-    /// <summary>
-    /// 按物料获取 PCBA 日报新增时默认明细行（生产时段=工作中心）
-    /// </summary>
-    /// <param name="materialCode">物料编码</param>
-    /// <param name="plantCode">工厂代码</param>
-    /// <param name="prodDate">生产日期</param>
-    /// <returns>默认明细预览列表</returns>
-    [TaktPermission("logistics:manufacturing:output:pcba:query", "PCBA日报默认明细")]
-    [HttpGet("default-details-by-material")]
-    public async Task<IActionResult> GetPcbaOutputDefaultDetailsByMaterialAsync(
-        [FromQuery] string materialCode,
-        [FromQuery] string plantCode,
-        [FromQuery] DateTime prodDate)
-    {
-        try
-        {
-            var result = await _pcbaOutputService.GetPcbaOutputDefaultDetailsByMaterialAsync(
-                materialCode,
-                plantCode,
-                prodDate);
             return Success(result, "查询成功");
         }
         catch (Exception ex)
@@ -221,6 +173,34 @@ public class TaktPcbaOutputsController : TaktControllerBase
         {
             await _pcbaOutputService.DeletePcbaOutputBatchAsync(ids);
             return Success("删除成功");
+        }
+        catch (Exception ex)
+        {
+            return HandleException(ex);
+        }
+    }
+
+    /// <summary>
+    /// 按物料获取 PCBA 日报默认明细预览（新增表单）
+    /// </summary>
+    /// <param name="materialCode">物料编码</param>
+    /// <param name="plantCode">工厂代码</param>
+    /// <param name="prodDate">生产日期</param>
+    /// <returns>默认明细预览列表</returns>
+    [TaktPermission("logistics:manufacturing:output:pcba:query", "PCBA日报默认明细")]
+    [HttpGet("default-details-by-material")]
+    public async Task<IActionResult> GetPcbaOutputDefaultDetailsByMaterialAsync(
+        [FromQuery] string materialCode,
+        [FromQuery] string plantCode,
+        [FromQuery] DateTime prodDate)
+    {
+        try
+        {
+            var result = await _pcbaOutputService.GetPcbaOutputDefaultDetailsByMaterialAsync(
+                materialCode,
+                plantCode,
+                prodDate);
+            return Success(result, "查询成功");
         }
         catch (Exception ex)
         {

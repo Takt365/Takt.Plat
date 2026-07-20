@@ -19,6 +19,7 @@ import router from './router';
 import i18n from './locales';
 import { registerTaktEventHandlers } from '@/bootstrap/takt-event-handlers';
 import { initTaktIdleSession } from '@/bootstrap/takt-idle-session';
+import { initTaktTokenSession } from '@/bootstrap/takt-token-session';
 import { initTaktClientPerformanceMonitor } from '@/bootstrap/takt-client-performance-monitor';
 import { ensureTaktPaginationConfigAsync } from '@/config/takt-pagination';
 import { registerPermissionDirective } from '@/directives/permission';
@@ -85,6 +86,7 @@ app.use(FcDesigner.formCreate);
 
 registerTaktEventHandlers();
 initTaktIdleSession();
+initTaktTokenSession();
 registerPermissionDirective(app);
 initEventBus();
 initLogger(app, undefined, router);

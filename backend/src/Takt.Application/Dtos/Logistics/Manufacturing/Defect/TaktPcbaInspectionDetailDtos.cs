@@ -57,7 +57,7 @@ public class TaktPcbaInspectionDetailDto : TaktCompanyDtoBase
     public int LineNumber { get; set; } = 0;
 
     /// <summary>
-    /// PCBA板别（字典 logistics_pcba_panel_category，存 DictValue）
+    /// PCBA板别（字典 logistics_pcba_function_category，存 DictValue）
     /// </summary>
     public string? PcbaBoardType { get; set; } = string.Empty;
 
@@ -196,7 +196,7 @@ public class TaktPcbaInspectionDetailQueryDto : TaktPagedQuery
     public int? LineNumber { get; set; }
 
     /// <summary>
-    /// PCBA板别（字典 logistics_pcba_panel_category，存 DictValue）
+    /// PCBA板别（字典 logistics_pcba_function_category，存 DictValue）
     /// </summary>
     public string? PcbaBoardType { get; set; } = string.Empty;
 
@@ -363,7 +363,7 @@ public class TaktPcbaInspectionDetailCreateDto
     public int LineNumber { get; set; } = 0;
 
     /// <summary>
-    /// PCBA板别（字典 logistics_pcba_panel_category，存 DictValue）
+    /// PCBA板别（字典 logistics_pcba_function_category，存 DictValue）
     /// </summary>
     public string? PcbaBoardType { get; set; } = string.Empty;
 
@@ -572,7 +572,7 @@ public class TaktPcbaInspectionDetailTemplateDto
     public int? LineNumber { get; set; }
 
     /// <summary>
-    /// PCBA板别（字典 logistics_pcba_panel_category，存 DictValue）
+    /// PCBA板别（字典 logistics_pcba_function_category，存 DictValue）
     /// </summary>
     public string? PcbaBoardType { get; set; } = string.Empty;
 
@@ -715,7 +715,7 @@ public class TaktPcbaInspectionDetailImportDto
     public int? LineNumber { get; set; }
 
     /// <summary>
-    /// PCBA板别（字典 logistics_pcba_panel_category，存 DictValue）
+    /// PCBA板别（字典 logistics_pcba_function_category，存 DictValue）
     /// </summary>
     public string? PcbaBoardType { get; set; } = string.Empty;
 
@@ -859,7 +859,7 @@ public class TaktPcbaInspectionDetailExportDto
     public int LineNumber { get; set; } = 0;
 
     /// <summary>
-    /// PCBA板别（字典 logistics_pcba_panel_category，存 DictValue）
+    /// PCBA板别（字典 logistics_pcba_function_category，存 DictValue）
     /// </summary>
     public string? PcbaBoardType { get; set; } = string.Empty;
 

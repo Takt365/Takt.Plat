@@ -20,7 +20,7 @@ function printUsage() {
 
 说明:
   - 固定从 TaktMenuLevel1~4SeedData.cs 全量生成 menu.* 导航翻译种子
-  - 仅支持无参或 --all / -all，不支持其它参数
+  - 仅支持无参或 --all / -all，不支持其他参数
 
 示例:
   node scripts/generate-menu-i18n-seed.cjs

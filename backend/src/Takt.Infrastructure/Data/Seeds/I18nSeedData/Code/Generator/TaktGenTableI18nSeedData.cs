@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Infrastructure.Data.Seeds.I18nSeedData.Code.Generator
 // 文件名称：TaktGenTableI18nSeedData.cs
-// 创建时间：2026-07-09
+// 创建时间：2026-07-20
 // 创建人：Takt365(Auto Generated)
 // 功能描述：TaktGenTable 实体字段国际化种子（无对应 frontend locales；TranslationText 取自 ColumnDescription，ContextNote 取自属性 XML summary）
 // 
@@ -118,13 +118,13 @@ public class TaktGenTableI18nSeedData : ITaktSeedDataCoordinator
             new TranslationSeedItem("entity.gentable.tablecomment", "zh-HK", "表描述_hk", "表描述（表注释）"),
 
             // entity.gentable.subtablename
-            new TranslationSeedItem("entity.gentable.subtablename", "en-US", "关联父表_us", "关联父表（选项 TaktDatabaseInfos/tables 同库其它表；sub 模板必填）"),
+            new TranslationSeedItem("entity.gentable.subtablename", "en-US", "关联父表_us", "关联父表（选项 TaktDatabaseInfos/tables 同库其他表；sub 模板必填）"),
             // entity.gentable.subtablename
-            new TranslationSeedItem("entity.gentable.subtablename", "ja-JP", "关联父表_jp", "关联父表（选项 TaktDatabaseInfos/tables 同库其它表；sub 模板必填）"),
+            new TranslationSeedItem("entity.gentable.subtablename", "ja-JP", "关联父表_jp", "关联父表（选项 TaktDatabaseInfos/tables 同库其他表；sub 模板必填）"),
             // entity.gentable.subtablename
-            new TranslationSeedItem("entity.gentable.subtablename", "zh-CN", "关联父表", "关联父表（选项 TaktDatabaseInfos/tables 同库其它表；sub 模板必填）"),
+            new TranslationSeedItem("entity.gentable.subtablename", "zh-CN", "关联父表", "关联父表（选项 TaktDatabaseInfos/tables 同库其他表；sub 模板必填）"),
             // entity.gentable.subtablename
-            new TranslationSeedItem("entity.gentable.subtablename", "zh-HK", "关联父表_hk", "关联父表（选项 TaktDatabaseInfos/tables 同库其它表；sub 模板必填）"),
+            new TranslationSeedItem("entity.gentable.subtablename", "zh-HK", "关联父表_hk", "关联父表（选项 TaktDatabaseInfos/tables 同库其他表；sub 模板必填）"),
 
             // entity.gentable.subtablefkname
             new TranslationSeedItem("entity.gentable.subtablefkname", "en-US", "关联外键_us", "关联外键（选项本表 columnList.databaseColumnName；sub 模板必填）"),

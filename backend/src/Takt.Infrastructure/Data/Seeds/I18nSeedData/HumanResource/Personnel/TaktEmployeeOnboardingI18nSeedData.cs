@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Infrastructure.Data.Seeds.I18nSeedData.HumanResource.Personnel
 // 文件名称：TaktEmployeeOnboardingI18nSeedData.cs
-// 创建时间：2026-07-09
+// 创建时间：2026-07-20
 // 创建人：Takt365(Auto Generated)
 // 功能描述：TaktEmployeeOnboarding 实体字段国际化种子（无对应 frontend locales；TranslationText 取自 ColumnDescription，ContextNote 取自属性 XML summary）
 // 
@@ -91,13 +91,13 @@ public class TaktEmployeeOnboardingI18nSeedData : ITaktSeedDataCoordinator
             new TranslationSeedItem("entity.employeeonboarding._self", "zh-HK", "入职待办信息_hk", "实体名称"),
 
             // entity.employeeonboarding.offerid
-            new TranslationSeedItem("entity.employeeonboarding.offerid", "en-US", "录用信息ID_us", "录用信息（关联 TaktTalentOffer.Id，选项 TaktTalentOffers/options）"),
+            new TranslationSeedItem("entity.employeeonboarding.offerid", "en-US", "录用信息ID_us", "录用信息（选项 TaktTalentOffers/options，DictValue=Id）"),
             // entity.employeeonboarding.offerid
-            new TranslationSeedItem("entity.employeeonboarding.offerid", "ja-JP", "录用信息ID_jp", "录用信息（关联 TaktTalentOffer.Id，选项 TaktTalentOffers/options）"),
+            new TranslationSeedItem("entity.employeeonboarding.offerid", "ja-JP", "录用信息ID_jp", "录用信息（选项 TaktTalentOffers/options，DictValue=Id）"),
             // entity.employeeonboarding.offerid
-            new TranslationSeedItem("entity.employeeonboarding.offerid", "zh-CN", "录用信息ID", "录用信息（关联 TaktTalentOffer.Id，选项 TaktTalentOffers/options）"),
+            new TranslationSeedItem("entity.employeeonboarding.offerid", "zh-CN", "录用信息ID", "录用信息（选项 TaktTalentOffers/options，DictValue=Id）"),
             // entity.employeeonboarding.offerid
-            new TranslationSeedItem("entity.employeeonboarding.offerid", "zh-HK", "录用信息ID_hk", "录用信息（关联 TaktTalentOffer.Id，选项 TaktTalentOffers/options）"),
+            new TranslationSeedItem("entity.employeeonboarding.offerid", "zh-HK", "录用信息ID_hk", "录用信息（选项 TaktTalentOffers/options，DictValue=Id）"),
 
             // entity.employeeonboarding.todono
             new TranslationSeedItem("entity.employeeonboarding.todono", "en-US", "待办单号_us", "待办单号（租户+公司内业务编号）"),
@@ -136,13 +136,13 @@ public class TaktEmployeeOnboardingI18nSeedData : ITaktSeedDataCoordinator
             new TranslationSeedItem("entity.employeeonboarding.mobile", "zh-HK", "候选人手机_hk", "候选人手机（快照）"),
 
             // entity.employeeonboarding.employeeid
-            new TranslationSeedItem("entity.employeeonboarding.employeeid", "en-US", "关联员工ID_us", "关联员工（关联 TaktEmployee.Id，选项 TaktEmployees/options；建档后回填，可空）"),
+            new TranslationSeedItem("entity.employeeonboarding.employeeid", "en-US", "关联员工ID_us", "关联员工（选项 TaktEmployees/options；建档后回填，可空，DictValue=Id）"),
             // entity.employeeonboarding.employeeid
-            new TranslationSeedItem("entity.employeeonboarding.employeeid", "ja-JP", "关联员工ID_jp", "关联员工（关联 TaktEmployee.Id，选项 TaktEmployees/options；建档后回填，可空）"),
+            new TranslationSeedItem("entity.employeeonboarding.employeeid", "ja-JP", "关联员工ID_jp", "关联员工（选项 TaktEmployees/options；建档后回填，可空，DictValue=Id）"),
             // entity.employeeonboarding.employeeid
-            new TranslationSeedItem("entity.employeeonboarding.employeeid", "zh-CN", "关联员工ID", "关联员工（关联 TaktEmployee.Id，选项 TaktEmployees/options；建档后回填，可空）"),
+            new TranslationSeedItem("entity.employeeonboarding.employeeid", "zh-CN", "关联员工ID", "关联员工（选项 TaktEmployees/options；建档后回填，可空，DictValue=Id）"),
             // entity.employeeonboarding.employeeid
-            new TranslationSeedItem("entity.employeeonboarding.employeeid", "zh-HK", "关联员工ID_hk", "关联员工（关联 TaktEmployee.Id，选项 TaktEmployees/options；建档后回填，可空）"),
+            new TranslationSeedItem("entity.employeeonboarding.employeeid", "zh-HK", "关联员工ID_hk", "关联员工（选项 TaktEmployees/options；建档后回填，可空，DictValue=Id）"),
 
             // entity.employeeonboarding.employeejoinedid
             new TranslationSeedItem("entity.employeeonboarding.employeejoinedid", "en-US", "入职上岗单ID_us", "入职上岗单（关联 TaktEmployeeJoined.Id；待办完成后回填，可空）"),

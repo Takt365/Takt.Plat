@@ -32,7 +32,7 @@ const props = withDefaults(
     modelValue?: string
     /** 设计器 config（FcDesigner config），透传给 @form-create/antd-designer */
     designerConfig?: Record<string, unknown>
-    /** 额外透传给 fc-designer 的其它 props（不含 config/locale/handle） */
+    /** 额外透传给 fc-designer 的其他 props（不含 config/locale/handle） */
     designerAttrs?: Record<string, unknown>
   }>(),
   {

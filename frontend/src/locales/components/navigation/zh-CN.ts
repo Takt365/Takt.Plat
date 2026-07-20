@@ -16,7 +16,7 @@ export default {
       closeall: "关闭全部",
       closecurrent: "关闭当前",
       closeleft: "关闭左侧",
-      closeothers: "关闭其它",
+      closeothers: "关闭其他",
       closeright: "关闭右侧",
       home: "首页",
       refreshcurrent: "刷新当前",

@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Infrastructure.Data.Seeds.I18nSeedData.Logistics.Manufacturing.Bom
 // 文件名称：TaktBillOfMaterialI18nSeedData.cs
-// 创建时间：2026-07-09
+// 创建时间：2026-07-20
 // 创建人：Takt365(Auto Generated)
 // 功能描述：TaktBillOfMaterial 实体字段国际化种子（已对齐前端 locales：src/locales/logistics/manufacturing/bom/bill-of-material）
 // 
@@ -118,13 +118,13 @@ public class TaktBillOfMaterialI18nSeedData : ITaktSeedDataCoordinator
             new TranslationSeedItem("entity.billofmaterial.bomname", "zh-HK", "BOM名称_hk", "BOM名称"),
 
             // entity.billofmaterial.parentmaterialid
-            new TranslationSeedItem("entity.billofmaterial.parentmaterialid", "en-US", "父物料ID_us", "父物料ID（关联工厂物料 TaktMaterialPlant.Id，选项 TaktMaterialPlants/options）"),
+            new TranslationSeedItem("entity.billofmaterial.parentmaterialid", "en-US", "父物料ID_us", "父物料ID（选项 TaktMaterialPlants/options，DictValue=Id，ExtValue=PlantCode）"),
             // entity.billofmaterial.parentmaterialid
-            new TranslationSeedItem("entity.billofmaterial.parentmaterialid", "ja-JP", "父物料ID_jp", "父物料ID（关联工厂物料 TaktMaterialPlant.Id，选项 TaktMaterialPlants/options）"),
+            new TranslationSeedItem("entity.billofmaterial.parentmaterialid", "ja-JP", "父物料ID_jp", "父物料ID（选项 TaktMaterialPlants/options，DictValue=Id，ExtValue=PlantCode）"),
             // entity.billofmaterial.parentmaterialid
-            new TranslationSeedItem("entity.billofmaterial.parentmaterialid", "zh-CN", "父物料ID", "父物料ID（关联工厂物料 TaktMaterialPlant.Id，选项 TaktMaterialPlants/options）"),
+            new TranslationSeedItem("entity.billofmaterial.parentmaterialid", "zh-CN", "父物料ID", "父物料ID（选项 TaktMaterialPlants/options，DictValue=Id，ExtValue=PlantCode）"),
             // entity.billofmaterial.parentmaterialid
-            new TranslationSeedItem("entity.billofmaterial.parentmaterialid", "zh-HK", "父物料ID_hk", "父物料ID（关联工厂物料 TaktMaterialPlant.Id，选项 TaktMaterialPlants/options）"),
+            new TranslationSeedItem("entity.billofmaterial.parentmaterialid", "zh-HK", "父物料ID_hk", "父物料ID（选项 TaktMaterialPlants/options，DictValue=Id，ExtValue=PlantCode）"),
 
             // entity.billofmaterial.parentmaterialcode
             new TranslationSeedItem("entity.billofmaterial.parentmaterialcode", "en-US", "父物料编码_us", "父物料编码（父项物料编码 item_code，冗余）"),
@@ -136,13 +136,13 @@ public class TaktBillOfMaterialI18nSeedData : ITaktSeedDataCoordinator
             new TranslationSeedItem("entity.billofmaterial.parentmaterialcode", "zh-HK", "父物料编码_hk", "父物料编码（父项物料编码 item_code，冗余）"),
 
             // entity.billofmaterial.parentmaterialname
-            new TranslationSeedItem("entity.billofmaterial.parentmaterialname", "en-US", "父物料名称_us", "父物料名称（冗余）"),
+            new TranslationSeedItem("entity.billofmaterial.parentmaterialname", "en-US", "父物料名称_us", "父物料名称（冗余，回填：随物料）"),
             // entity.billofmaterial.parentmaterialname
-            new TranslationSeedItem("entity.billofmaterial.parentmaterialname", "ja-JP", "父物料名称_jp", "父物料名称（冗余）"),
+            new TranslationSeedItem("entity.billofmaterial.parentmaterialname", "ja-JP", "父物料名称_jp", "父物料名称（冗余，回填：随物料）"),
             // entity.billofmaterial.parentmaterialname
-            new TranslationSeedItem("entity.billofmaterial.parentmaterialname", "zh-CN", "父物料名称", "父物料名称（冗余）"),
+            new TranslationSeedItem("entity.billofmaterial.parentmaterialname", "zh-CN", "父物料名称", "父物料名称（冗余，回填：随物料）"),
             // entity.billofmaterial.parentmaterialname
-            new TranslationSeedItem("entity.billofmaterial.parentmaterialname", "zh-HK", "父物料名称_hk", "父物料名称（冗余）"),
+            new TranslationSeedItem("entity.billofmaterial.parentmaterialname", "zh-HK", "父物料名称_hk", "父物料名称（冗余，回填：随物料）"),
 
             // entity.billofmaterial.bomversion
             new TranslationSeedItem("entity.billofmaterial.bomversion", "en-US", "BOM版本号_us", "BOM版本号"),

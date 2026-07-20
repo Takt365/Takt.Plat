@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Application.Validators.Logistics.Serial
 // 文件名称：TaktSerialOutboundValidators.cs
-// 创建时间：2026-07-09
+// 创建时间：2026-07-20
 // 创建人：Takt365(Auto Generated)
 // 功能描述：SerialOutbound 模块 FluentValidation 验证器（由 generate-validators-from-entity.cjs 根据 TaktSerialOutbound 生成，请按需审阅）
 // 
@@ -42,8 +42,8 @@ public class TaktSerialOutboundCreateValidator : AbstractValidator<TaktSerialOut
             .NotEmpty().WithMessage("出库单号不能为空")
             .MaximumLength(50).WithMessage("出库单号长度不能超过50个字符");
         RuleFor(x => x.ShippingInvoiceNo)
-            .NotEmpty().WithMessage("出货发票号不能为空")
-            .MaximumLength(50).WithMessage("出货发票号长度不能超过50个字符");
+            .NotEmpty().WithMessage("发货单号不能为空")
+            .MaximumLength(50).WithMessage("发货单号长度不能超过50个字符");
         RuleFor(x => x.Destination)
             .NotEmpty().WithMessage("仕向地不能为空")
             .MaximumLength(40).WithMessage("仕向地长度不能超过40个字符");
@@ -92,8 +92,8 @@ public class TaktSerialOutboundUpdateValidator : AbstractValidator<TaktSerialOut
             .NotEmpty().WithMessage("出库单号不能为空")
             .MaximumLength(50).WithMessage("出库单号长度不能超过50个字符");
         RuleFor(x => x.ShippingInvoiceNo)
-            .NotEmpty().WithMessage("出货发票号不能为空")
-            .MaximumLength(50).WithMessage("出货发票号长度不能超过50个字符");
+            .NotEmpty().WithMessage("发货单号不能为空")
+            .MaximumLength(50).WithMessage("发货单号长度不能超过50个字符");
         RuleFor(x => x.Destination)
             .NotEmpty().WithMessage("仕向地不能为空")
             .MaximumLength(40).WithMessage("仕向地长度不能超过40个字符");
@@ -138,8 +138,8 @@ public class TaktSerialOutboundImportValidator : AbstractValidator<TaktSerialOut
             .NotEmpty().WithMessage("出库单号不能为空")
             .MaximumLength(50).WithMessage("出库单号长度不能超过50个字符");
         RuleFor(x => x.ShippingInvoiceNo)
-            .NotEmpty().WithMessage("出货发票号不能为空")
-            .MaximumLength(50).WithMessage("出货发票号长度不能超过50个字符");
+            .NotEmpty().WithMessage("发货单号不能为空")
+            .MaximumLength(50).WithMessage("发货单号长度不能超过50个字符");
         RuleFor(x => x.Destination)
             .NotEmpty().WithMessage("仕向地不能为空")
             .MaximumLength(40).WithMessage("仕向地长度不能超过40个字符");

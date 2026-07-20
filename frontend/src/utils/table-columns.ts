@@ -4,7 +4,7 @@
 // 文件名称：table-columns.ts
 // 创建时间：2025-01-20
 // 创建人：Takt365(Cursor AI)
-// 功能描述：表格列工具；三个实体基类字段直接映射（对齐 common.d.ts，不含 id）
+// 功能描述：表格列工具；三个实体基类字段直接映射（对齐 common.d.ts，不含 id）；合计文案列解析
 //
 // 版权信息：Copyright (c) 2025 Takt  All rights reserved.
 // 免责声明：此软件使用 MIT License，作者不承担任何使用风险。
@@ -154,6 +154,63 @@ export function getTableColumnKey(col: ColumnItem | Record<string, unknown>): st
   const c = col as { key?: string | number; dataIndex?: string | number };
   const k = c.key ?? c.dataIndex;
   return k != null && k !== '' ? String(k) : undefined;
+}
+
+/** 合计文案不得落在这些列（序号等） */
+const TABLE_SUMMARY_LABEL_SKIP_KEY_SET = new Set([
+  'sequenceNo',
+  'seqNo',
+  'serialNo',
+  'rowNo',
+  'lineNo',
+]);
+
+/**
+ * 是否为合计文案应跳过的列键（序号列等）
+ * @param key 列 key
+ * @returns 是否跳过
+ */
+export function isTableSummaryLabelSkipKey(key: string | null | undefined): boolean {
+  if (key == null || !String(key).trim()) {
+    return true;
+  }
+  const normalized = String(key).trim();
+  if (TABLE_SUMMARY_LABEL_SKIP_KEY_SET.has(normalized)) {
+    return true;
+  }
+  return /^(sequence|seq|serial|row|line)(no|num|number)?$/i.test(normalized);
+}
+
+/**
+ * 合计文案所在列：跳过序号，取第一个业务数据列
+ * @param columns 展示列（与汇总单元格业务列序一致）
+ * @returns 列 key；无可用列时 undefined
+ */
+export function resolveTableSummaryLabelColumnKey(
+  columns: ReadonlyArray<{ key?: unknown; dataIndex?: unknown }>,
+): string | undefined {
+  if (!columns?.length) {
+    return undefined;
+  }
+  for (const col of columns) {
+    const key = getTableColumnKey(col as ColumnItem);
+    if (!key || isTableSummaryLabelSkipKey(key)) {
+      continue;
+    }
+    return key;
+  }
+  return undefined;
+}
+
+/**
+ * a-table 汇总单元格 index（有行选择列时业务列从 1 起）
+ * @param columnIndex 业务列 0-based 下标
+ * @param hasRowSelection 是否展示行选择列
+ * @returns 传给 a-table-summary-cell 的 index
+ */
+export function resolveTableSummaryCellIndex(columnIndex: number, hasRowSelection: boolean): number {
+  const base = Number.isFinite(columnIndex) ? Math.max(0, Math.trunc(columnIndex)) : 0;
+  return hasRowSelection ? base + 1 : base;
 }
 
 /**

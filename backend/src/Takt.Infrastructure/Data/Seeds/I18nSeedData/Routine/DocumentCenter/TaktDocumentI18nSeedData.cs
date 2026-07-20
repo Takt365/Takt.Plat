@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Infrastructure.Data.Seeds.I18nSeedData.Routine.DocumentCenter
 // 文件名称：TaktDocumentI18nSeedData.cs
-// 创建时间：2026-07-09
+// 创建时间：2026-07-20
 // 创建人：Takt365(Auto Generated)
 // 功能描述：TaktDocument 实体字段国际化种子（无对应 frontend locales；TranslationText 取自 ColumnDescription，ContextNote 取自属性 XML summary）
 // 
@@ -163,13 +163,13 @@ public class TaktDocumentI18nSeedData : ITaktSeedDataCoordinator
             new TranslationSeedItem("entity.document.tags", "zh-HK", "标签_hk", "标签（逗号分隔或 JSON 数组存储）"),
 
             // entity.document.fileid
-            new TranslationSeedItem("entity.document.fileid", "en-US", "当前文件ID_us", "当前文件 ID（关联 TaktFile.Id，选项 TaktFiles/options）"),
+            new TranslationSeedItem("entity.document.fileid", "en-US", "当前文件ID_us", "当前文件 ID（选项 TaktFiles/options，DictValue=Id）"),
             // entity.document.fileid
-            new TranslationSeedItem("entity.document.fileid", "ja-JP", "当前文件ID_jp", "当前文件 ID（关联 TaktFile.Id，选项 TaktFiles/options）"),
+            new TranslationSeedItem("entity.document.fileid", "ja-JP", "当前文件ID_jp", "当前文件 ID（选项 TaktFiles/options，DictValue=Id）"),
             // entity.document.fileid
-            new TranslationSeedItem("entity.document.fileid", "zh-CN", "当前文件ID", "当前文件 ID（关联 TaktFile.Id，选项 TaktFiles/options）"),
+            new TranslationSeedItem("entity.document.fileid", "zh-CN", "当前文件ID", "当前文件 ID（选项 TaktFiles/options，DictValue=Id）"),
             // entity.document.fileid
-            new TranslationSeedItem("entity.document.fileid", "zh-HK", "当前文件ID_hk", "当前文件 ID（关联 TaktFile.Id，选项 TaktFiles/options）"),
+            new TranslationSeedItem("entity.document.fileid", "zh-HK", "当前文件ID_hk", "当前文件 ID（选项 TaktFiles/options，DictValue=Id）"),
 
             // entity.document.filename
             new TranslationSeedItem("entity.document.filename", "en-US", "当前文件名称_us", "当前文件名称"),
@@ -244,13 +244,13 @@ public class TaktDocumentI18nSeedData : ITaktSeedDataCoordinator
             new TranslationSeedItem("entity.document.publishtime", "zh-HK", "发布时间_hk", "发布时间"),
 
             // entity.document.publisherid
-            new TranslationSeedItem("entity.document.publisherid", "en-US", "发布人ID_us", "发布人 ID（关联 TaktUser.Id，选项 TaktUsers/options）"),
+            new TranslationSeedItem("entity.document.publisherid", "en-US", "发布人ID_us", "发布人 ID（选项 TaktUsers/options，DictValue=Id）"),
             // entity.document.publisherid
-            new TranslationSeedItem("entity.document.publisherid", "ja-JP", "发布人ID_jp", "发布人 ID（关联 TaktUser.Id，选项 TaktUsers/options）"),
+            new TranslationSeedItem("entity.document.publisherid", "ja-JP", "发布人ID_jp", "发布人 ID（选项 TaktUsers/options，DictValue=Id）"),
             // entity.document.publisherid
-            new TranslationSeedItem("entity.document.publisherid", "zh-CN", "发布人ID", "发布人 ID（关联 TaktUser.Id，选项 TaktUsers/options）"),
+            new TranslationSeedItem("entity.document.publisherid", "zh-CN", "发布人ID", "发布人 ID（选项 TaktUsers/options，DictValue=Id）"),
             // entity.document.publisherid
-            new TranslationSeedItem("entity.document.publisherid", "zh-HK", "发布人ID_hk", "发布人 ID（关联 TaktUser.Id，选项 TaktUsers/options）"),
+            new TranslationSeedItem("entity.document.publisherid", "zh-HK", "发布人ID_hk", "发布人 ID（选项 TaktUsers/options，DictValue=Id）"),
 
             // entity.document.publishername
             new TranslationSeedItem("entity.document.publishername", "en-US", "发布人姓名_us", "发布人姓名"),

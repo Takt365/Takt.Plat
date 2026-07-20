@@ -77,7 +77,7 @@ public class TaktCountersign : TaktApprovalEntityBase
     [SugarColumn(ColumnName = "executive_office", ColumnDescription = "总经室", ColumnDataType = "nvarchar", Length = -1, IsNullable = true)]
     public string? ExecutiveOffice { get; set; }
     /// <summary>
-    /// 申请人（关联 TaktEmployee.Id，选项 TaktEmployees/options）
+    /// 申请人（选项 TaktEmployees/options，DictValue=Id）
     /// </summary>
     [SugarColumn(ColumnName = "applicant_by", ColumnDescription = "申请人", ColumnDataType = "bigint", IsNullable = false)]
     [JsonConverter(typeof(ValueToStringConverter))]

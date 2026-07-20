@@ -17,9 +17,9 @@ export default {
       loadfail: "Failed to load route module. Please check if the dev server is running or refresh the page.",
     },
     session: {
-      canceltext: "Logout Now",
-      content: "You have been inactive. You will be logged out in {minutes} minute(s). Click \"Continue\" to stay logged in.",
-      oktext: "Continue",
+      canceltext: "Continue",
+      content: "You have been inactive. You will be logged out in {minutes} minute(s). Any keyboard or mouse action will extend the session automatically.",
+      oktext: "Logout Now",
       title: "Session Expiring",
     },
   },

@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Infrastructure.Data.Seeds.I18nSeedData.Logistics.Manufacturing.Sop
 // 文件名称：TaktSopEsdCheckI18nSeedData.cs
-// 创建时间：2026-07-09
+// 创建时间：2026-07-20
 // 创建人：Takt365(Auto Generated)
 // 功能描述：TaktSopEsdCheck 实体字段国际化种子（无对应 frontend locales；TranslationText 取自 ColumnDescription，ContextNote 取自属性 XML summary）
 // 
@@ -100,31 +100,31 @@ public class TaktSopEsdCheckI18nSeedData : ITaktSeedDataCoordinator
             new TranslationSeedItem("entity.sopesdcheck.plantcode", "zh-HK", "工厂代码_hk", "工厂代码（选项 TaktPlants/options，DictValue=PlantCode）"),
 
             // entity.sopesdcheck.workstationid
-            new TranslationSeedItem("entity.sopesdcheck.workstationid", "en-US", "工位ID_us", "工位 ID（关联 TaktSopWorkstation.Id，选项 TaktSopWorkstations/options）"),
+            new TranslationSeedItem("entity.sopesdcheck.workstationid", "en-US", "工位ID_us", "工位 ID（选项 TaktSopWorkstations/options，DictValue=Id）"),
             // entity.sopesdcheck.workstationid
-            new TranslationSeedItem("entity.sopesdcheck.workstationid", "ja-JP", "工位ID_jp", "工位 ID（关联 TaktSopWorkstation.Id，选项 TaktSopWorkstations/options）"),
+            new TranslationSeedItem("entity.sopesdcheck.workstationid", "ja-JP", "工位ID_jp", "工位 ID（选项 TaktSopWorkstations/options，DictValue=Id）"),
             // entity.sopesdcheck.workstationid
-            new TranslationSeedItem("entity.sopesdcheck.workstationid", "zh-CN", "工位ID", "工位 ID（关联 TaktSopWorkstation.Id，选项 TaktSopWorkstations/options）"),
+            new TranslationSeedItem("entity.sopesdcheck.workstationid", "zh-CN", "工位ID", "工位 ID（选项 TaktSopWorkstations/options，DictValue=Id）"),
             // entity.sopesdcheck.workstationid
-            new TranslationSeedItem("entity.sopesdcheck.workstationid", "zh-HK", "工位ID_hk", "工位 ID（关联 TaktSopWorkstation.Id，选项 TaktSopWorkstations/options）"),
+            new TranslationSeedItem("entity.sopesdcheck.workstationid", "zh-HK", "工位ID_hk", "工位 ID（选项 TaktSopWorkstations/options，DictValue=Id）"),
 
             // entity.sopesdcheck.execid
-            new TranslationSeedItem("entity.sopesdcheck.execid", "en-US", "执行追溯ID_us", "执行追溯 ID（关联 TaktSopExec.Id，选项 TaktSopExecs/options）"),
+            new TranslationSeedItem("entity.sopesdcheck.execid", "en-US", "执行追溯ID_us", "执行追溯 ID（选项 TaktSopExecs/options，DictValue=Id）"),
             // entity.sopesdcheck.execid
-            new TranslationSeedItem("entity.sopesdcheck.execid", "ja-JP", "执行追溯ID_jp", "执行追溯 ID（关联 TaktSopExec.Id，选项 TaktSopExecs/options）"),
+            new TranslationSeedItem("entity.sopesdcheck.execid", "ja-JP", "执行追溯ID_jp", "执行追溯 ID（选项 TaktSopExecs/options，DictValue=Id）"),
             // entity.sopesdcheck.execid
-            new TranslationSeedItem("entity.sopesdcheck.execid", "zh-CN", "执行追溯ID", "执行追溯 ID（关联 TaktSopExec.Id，选项 TaktSopExecs/options）"),
+            new TranslationSeedItem("entity.sopesdcheck.execid", "zh-CN", "执行追溯ID", "执行追溯 ID（选项 TaktSopExecs/options，DictValue=Id）"),
             // entity.sopesdcheck.execid
-            new TranslationSeedItem("entity.sopesdcheck.execid", "zh-HK", "执行追溯ID_hk", "执行追溯 ID（关联 TaktSopExec.Id，选项 TaktSopExecs/options）"),
+            new TranslationSeedItem("entity.sopesdcheck.execid", "zh-HK", "执行追溯ID_hk", "执行追溯 ID（选项 TaktSopExecs/options，DictValue=Id）"),
 
             // entity.sopesdcheck.employeeid
-            new TranslationSeedItem("entity.sopesdcheck.employeeid", "en-US", "员工ID_us", "员工 ID（关联 TaktEmployee.Id，选项 TaktEmployees/options）"),
+            new TranslationSeedItem("entity.sopesdcheck.employeeid", "en-US", "员工ID_us", "员工 ID（选项 TaktEmployees/options，DictValue=Id）"),
             // entity.sopesdcheck.employeeid
-            new TranslationSeedItem("entity.sopesdcheck.employeeid", "ja-JP", "员工ID_jp", "员工 ID（关联 TaktEmployee.Id，选项 TaktEmployees/options）"),
+            new TranslationSeedItem("entity.sopesdcheck.employeeid", "ja-JP", "员工ID_jp", "员工 ID（选项 TaktEmployees/options，DictValue=Id）"),
             // entity.sopesdcheck.employeeid
-            new TranslationSeedItem("entity.sopesdcheck.employeeid", "zh-CN", "员工ID", "员工 ID（关联 TaktEmployee.Id，选项 TaktEmployees/options）"),
+            new TranslationSeedItem("entity.sopesdcheck.employeeid", "zh-CN", "员工ID", "员工 ID（选项 TaktEmployees/options，DictValue=Id）"),
             // entity.sopesdcheck.employeeid
-            new TranslationSeedItem("entity.sopesdcheck.employeeid", "zh-HK", "员工ID_hk", "员工 ID（关联 TaktEmployee.Id，选项 TaktEmployees/options）"),
+            new TranslationSeedItem("entity.sopesdcheck.employeeid", "zh-HK", "员工ID_hk", "员工 ID（选项 TaktEmployees/options，DictValue=Id）"),
 
             // entity.sopesdcheck.devicecode
             new TranslationSeedItem("entity.sopesdcheck.devicecode", "en-US", "监测设备编码_us", "监测设备编码"),

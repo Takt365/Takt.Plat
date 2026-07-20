@@ -77,7 +77,7 @@ public static class TaktEcDetailMaterialPlantMapper
     /// 解析物料显示文本（名称优先，其次描述）
     /// </summary>
     /// <param name="material">工厂物料</param>
-    /// <returns>物料文本</returns>
+    /// <returns>物料描述</returns>
     private static string ResolveMaterialText(TaktMaterialPlant material)
     {
         ArgumentNullException.ThrowIfNull(material);

@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Infrastructure.Data.Seeds.I18nSeedData
 // 文件名称：TaktDictI18nSeedData.cs
-// 创建时间：2026-07-09
+// 创建时间：2026-07-20
 // 创建人：Takt365(Cursor AI)
 // 功能描述：字典项国际化翻译种子（dict.* 键，与 TaktDictDataSeedData I18nKey 对齐）
 // 
@@ -501,13 +501,13 @@ public class TaktDictI18nSeedData : ITaktSeedDataCoordinator
             ("dict.accounting.cost.center.category.info", "zh-HK", "信息类_hk", "成本中心类别.信息类"),
 
             // dict.accounting.cost.center.category.ems
-            ("dict.accounting.cost.center.category.ems", "en-US", "ems_us", "成本中心类别.ems"),
+            ("dict.accounting.cost.center.category.ems", "en-US", "EMS_us", "成本中心类别.ems"),
             // dict.accounting.cost.center.category.ems
-            ("dict.accounting.cost.center.category.ems", "ja-JP", "ems_jp", "成本中心类别.ems"),
+            ("dict.accounting.cost.center.category.ems", "ja-JP", "EMS_jp", "成本中心类别.ems"),
             // dict.accounting.cost.center.category.ems
-            ("dict.accounting.cost.center.category.ems", "zh-CN", "ems", "成本中心类别.ems"),
+            ("dict.accounting.cost.center.category.ems", "zh-CN", "EMS", "成本中心类别.ems"),
             // dict.accounting.cost.center.category.ems
-            ("dict.accounting.cost.center.category.ems", "zh-HK", "ems_hk", "成本中心类别.ems"),
+            ("dict.accounting.cost.center.category.ems", "zh-HK", "EMS_hk", "成本中心类别.ems"),
 
             // dict.accounting.cost.element.category.katyp01
             ("dict.accounting.cost.element.category.katyp01", "en-US", "01 初级成本/成本抵减收入_us", "成本要素类别.KATYP01"),
@@ -878,6 +878,204 @@ public class TaktDictI18nSeedData : ITaktSeedDataCoordinator
             // dict.accounting.financial.year.category.us
             ("dict.accounting.financial.year.category.us", "zh-HK", "美国财年_hk", "财务年度类别.美国财年"),
 
+            // dict.accounting.balance.sheet.line.category.current.asset
+            ("dict.accounting.balance.sheet.line.category.current.asset", "en-US", "流动资产_us", "资产负债表行类别.流动资产"),
+            // dict.accounting.balance.sheet.line.category.current.asset
+            ("dict.accounting.balance.sheet.line.category.current.asset", "ja-JP", "流动资产_jp", "资产负债表行类别.流动资产"),
+            // dict.accounting.balance.sheet.line.category.current.asset
+            ("dict.accounting.balance.sheet.line.category.current.asset", "zh-CN", "流动资产", "资产负债表行类别.流动资产"),
+            // dict.accounting.balance.sheet.line.category.current.asset
+            ("dict.accounting.balance.sheet.line.category.current.asset", "zh-HK", "流动资产_hk", "资产负债表行类别.流动资产"),
+
+            // dict.accounting.balance.sheet.line.category.noncurrent.asset
+            ("dict.accounting.balance.sheet.line.category.noncurrent.asset", "en-US", "非流动资产_us", "资产负债表行类别.非流动资产"),
+            // dict.accounting.balance.sheet.line.category.noncurrent.asset
+            ("dict.accounting.balance.sheet.line.category.noncurrent.asset", "ja-JP", "非流动资产_jp", "资产负债表行类别.非流动资产"),
+            // dict.accounting.balance.sheet.line.category.noncurrent.asset
+            ("dict.accounting.balance.sheet.line.category.noncurrent.asset", "zh-CN", "非流动资产", "资产负债表行类别.非流动资产"),
+            // dict.accounting.balance.sheet.line.category.noncurrent.asset
+            ("dict.accounting.balance.sheet.line.category.noncurrent.asset", "zh-HK", "非流动资产_hk", "资产负债表行类别.非流动资产"),
+
+            // dict.accounting.balance.sheet.line.category.current.liability
+            ("dict.accounting.balance.sheet.line.category.current.liability", "en-US", "流动负债_us", "资产负债表行类别.流动负债"),
+            // dict.accounting.balance.sheet.line.category.current.liability
+            ("dict.accounting.balance.sheet.line.category.current.liability", "ja-JP", "流动负债_jp", "资产负债表行类别.流动负债"),
+            // dict.accounting.balance.sheet.line.category.current.liability
+            ("dict.accounting.balance.sheet.line.category.current.liability", "zh-CN", "流动负债", "资产负债表行类别.流动负债"),
+            // dict.accounting.balance.sheet.line.category.current.liability
+            ("dict.accounting.balance.sheet.line.category.current.liability", "zh-HK", "流动负债_hk", "资产负债表行类别.流动负债"),
+
+            // dict.accounting.balance.sheet.line.category.noncurrent.liability
+            ("dict.accounting.balance.sheet.line.category.noncurrent.liability", "en-US", "非流动负债_us", "资产负债表行类别.非流动负债"),
+            // dict.accounting.balance.sheet.line.category.noncurrent.liability
+            ("dict.accounting.balance.sheet.line.category.noncurrent.liability", "ja-JP", "非流动负债_jp", "资产负债表行类别.非流动负债"),
+            // dict.accounting.balance.sheet.line.category.noncurrent.liability
+            ("dict.accounting.balance.sheet.line.category.noncurrent.liability", "zh-CN", "非流动负债", "资产负债表行类别.非流动负债"),
+            // dict.accounting.balance.sheet.line.category.noncurrent.liability
+            ("dict.accounting.balance.sheet.line.category.noncurrent.liability", "zh-HK", "非流动负债_hk", "资产负债表行类别.非流动负债"),
+
+            // dict.accounting.balance.sheet.line.category.equity
+            ("dict.accounting.balance.sheet.line.category.equity", "en-US", "所有者权益_us", "资产负债表行类别.所有者权益"),
+            // dict.accounting.balance.sheet.line.category.equity
+            ("dict.accounting.balance.sheet.line.category.equity", "ja-JP", "所有者权益_jp", "资产负债表行类别.所有者权益"),
+            // dict.accounting.balance.sheet.line.category.equity
+            ("dict.accounting.balance.sheet.line.category.equity", "zh-CN", "所有者权益", "资产负债表行类别.所有者权益"),
+            // dict.accounting.balance.sheet.line.category.equity
+            ("dict.accounting.balance.sheet.line.category.equity", "zh-HK", "所有者权益_hk", "资产负债表行类别.所有者权益"),
+
+            // dict.accounting.profit.loss.line.category.revenue
+            ("dict.accounting.profit.loss.line.category.revenue", "en-US", "营业收入_us", "利润表行类别.营业收入"),
+            // dict.accounting.profit.loss.line.category.revenue
+            ("dict.accounting.profit.loss.line.category.revenue", "ja-JP", "营业收入_jp", "利润表行类别.营业收入"),
+            // dict.accounting.profit.loss.line.category.revenue
+            ("dict.accounting.profit.loss.line.category.revenue", "zh-CN", "营业收入", "利润表行类别.营业收入"),
+            // dict.accounting.profit.loss.line.category.revenue
+            ("dict.accounting.profit.loss.line.category.revenue", "zh-HK", "营业收入_hk", "利润表行类别.营业收入"),
+
+            // dict.accounting.profit.loss.line.category.cogs
+            ("dict.accounting.profit.loss.line.category.cogs", "en-US", "营业成本_us", "利润表行类别.营业成本"),
+            // dict.accounting.profit.loss.line.category.cogs
+            ("dict.accounting.profit.loss.line.category.cogs", "ja-JP", "营业成本_jp", "利润表行类别.营业成本"),
+            // dict.accounting.profit.loss.line.category.cogs
+            ("dict.accounting.profit.loss.line.category.cogs", "zh-CN", "营业成本", "利润表行类别.营业成本"),
+            // dict.accounting.profit.loss.line.category.cogs
+            ("dict.accounting.profit.loss.line.category.cogs", "zh-HK", "营业成本_hk", "利润表行类别.营业成本"),
+
+            // dict.accounting.profit.loss.line.category.tax.surcharge
+            ("dict.accounting.profit.loss.line.category.tax.surcharge", "en-US", "税金及附加_us", "利润表行类别.税金及附加"),
+            // dict.accounting.profit.loss.line.category.tax.surcharge
+            ("dict.accounting.profit.loss.line.category.tax.surcharge", "ja-JP", "税金及附加_jp", "利润表行类别.税金及附加"),
+            // dict.accounting.profit.loss.line.category.tax.surcharge
+            ("dict.accounting.profit.loss.line.category.tax.surcharge", "zh-CN", "税金及附加", "利润表行类别.税金及附加"),
+            // dict.accounting.profit.loss.line.category.tax.surcharge
+            ("dict.accounting.profit.loss.line.category.tax.surcharge", "zh-HK", "税金及附加_hk", "利润表行类别.税金及附加"),
+
+            // dict.accounting.profit.loss.line.category.period.expense
+            ("dict.accounting.profit.loss.line.category.period.expense", "en-US", "期间费用_us", "利润表行类别.期间费用"),
+            // dict.accounting.profit.loss.line.category.period.expense
+            ("dict.accounting.profit.loss.line.category.period.expense", "ja-JP", "期间费用_jp", "利润表行类别.期间费用"),
+            // dict.accounting.profit.loss.line.category.period.expense
+            ("dict.accounting.profit.loss.line.category.period.expense", "zh-CN", "期间费用", "利润表行类别.期间费用"),
+            // dict.accounting.profit.loss.line.category.period.expense
+            ("dict.accounting.profit.loss.line.category.period.expense", "zh-HK", "期间费用_hk", "利润表行类别.期间费用"),
+
+            // dict.accounting.profit.loss.line.category.other.gain.loss
+            ("dict.accounting.profit.loss.line.category.other.gain.loss", "en-US", "其他收益损失_us", "利润表行类别.其他收益损失"),
+            // dict.accounting.profit.loss.line.category.other.gain.loss
+            ("dict.accounting.profit.loss.line.category.other.gain.loss", "ja-JP", "其他收益损失_jp", "利润表行类别.其他收益损失"),
+            // dict.accounting.profit.loss.line.category.other.gain.loss
+            ("dict.accounting.profit.loss.line.category.other.gain.loss", "zh-CN", "其他收益损失", "利润表行类别.其他收益损失"),
+            // dict.accounting.profit.loss.line.category.other.gain.loss
+            ("dict.accounting.profit.loss.line.category.other.gain.loss", "zh-HK", "其他收益损失_hk", "利润表行类别.其他收益损失"),
+
+            // dict.accounting.profit.loss.line.category.operating.profit
+            ("dict.accounting.profit.loss.line.category.operating.profit", "en-US", "营业利润_us", "利润表行类别.营业利润"),
+            // dict.accounting.profit.loss.line.category.operating.profit
+            ("dict.accounting.profit.loss.line.category.operating.profit", "ja-JP", "营业利润_jp", "利润表行类别.营业利润"),
+            // dict.accounting.profit.loss.line.category.operating.profit
+            ("dict.accounting.profit.loss.line.category.operating.profit", "zh-CN", "营业利润", "利润表行类别.营业利润"),
+            // dict.accounting.profit.loss.line.category.operating.profit
+            ("dict.accounting.profit.loss.line.category.operating.profit", "zh-HK", "营业利润_hk", "利润表行类别.营业利润"),
+
+            // dict.accounting.profit.loss.line.category.nonoperating
+            ("dict.accounting.profit.loss.line.category.nonoperating", "en-US", "营业外收支_us", "利润表行类别.营业外收支"),
+            // dict.accounting.profit.loss.line.category.nonoperating
+            ("dict.accounting.profit.loss.line.category.nonoperating", "ja-JP", "营业外收支_jp", "利润表行类别.营业外收支"),
+            // dict.accounting.profit.loss.line.category.nonoperating
+            ("dict.accounting.profit.loss.line.category.nonoperating", "zh-CN", "营业外收支", "利润表行类别.营业外收支"),
+            // dict.accounting.profit.loss.line.category.nonoperating
+            ("dict.accounting.profit.loss.line.category.nonoperating", "zh-HK", "营业外收支_hk", "利润表行类别.营业外收支"),
+
+            // dict.accounting.profit.loss.line.category.profit.before.tax
+            ("dict.accounting.profit.loss.line.category.profit.before.tax", "en-US", "利润总额_us", "利润表行类别.利润总额"),
+            // dict.accounting.profit.loss.line.category.profit.before.tax
+            ("dict.accounting.profit.loss.line.category.profit.before.tax", "ja-JP", "利润总额_jp", "利润表行类别.利润总额"),
+            // dict.accounting.profit.loss.line.category.profit.before.tax
+            ("dict.accounting.profit.loss.line.category.profit.before.tax", "zh-CN", "利润总额", "利润表行类别.利润总额"),
+            // dict.accounting.profit.loss.line.category.profit.before.tax
+            ("dict.accounting.profit.loss.line.category.profit.before.tax", "zh-HK", "利润总额_hk", "利润表行类别.利润总额"),
+
+            // dict.accounting.profit.loss.line.category.income.tax
+            ("dict.accounting.profit.loss.line.category.income.tax", "en-US", "所得税费用_us", "利润表行类别.所得税费用"),
+            // dict.accounting.profit.loss.line.category.income.tax
+            ("dict.accounting.profit.loss.line.category.income.tax", "ja-JP", "所得税费用_jp", "利润表行类别.所得税费用"),
+            // dict.accounting.profit.loss.line.category.income.tax
+            ("dict.accounting.profit.loss.line.category.income.tax", "zh-CN", "所得税费用", "利润表行类别.所得税费用"),
+            // dict.accounting.profit.loss.line.category.income.tax
+            ("dict.accounting.profit.loss.line.category.income.tax", "zh-HK", "所得税费用_hk", "利润表行类别.所得税费用"),
+
+            // dict.accounting.profit.loss.line.category.net.profit
+            ("dict.accounting.profit.loss.line.category.net.profit", "en-US", "净利润_us", "利润表行类别.净利润"),
+            // dict.accounting.profit.loss.line.category.net.profit
+            ("dict.accounting.profit.loss.line.category.net.profit", "ja-JP", "净利润_jp", "利润表行类别.净利润"),
+            // dict.accounting.profit.loss.line.category.net.profit
+            ("dict.accounting.profit.loss.line.category.net.profit", "zh-CN", "净利润", "利润表行类别.净利润"),
+            // dict.accounting.profit.loss.line.category.net.profit
+            ("dict.accounting.profit.loss.line.category.net.profit", "zh-HK", "净利润_hk", "利润表行类别.净利润"),
+
+            // dict.accounting.profit.loss.line.category.oci
+            ("dict.accounting.profit.loss.line.category.oci", "en-US", "其他综合收益_us", "利润表行类别.其他综合收益"),
+            // dict.accounting.profit.loss.line.category.oci
+            ("dict.accounting.profit.loss.line.category.oci", "ja-JP", "其他综合收益_jp", "利润表行类别.其他综合收益"),
+            // dict.accounting.profit.loss.line.category.oci
+            ("dict.accounting.profit.loss.line.category.oci", "zh-CN", "其他综合收益", "利润表行类别.其他综合收益"),
+            // dict.accounting.profit.loss.line.category.oci
+            ("dict.accounting.profit.loss.line.category.oci", "zh-HK", "其他综合收益_hk", "利润表行类别.其他综合收益"),
+
+            // dict.accounting.profit.loss.line.category.total.comprehensive.income
+            ("dict.accounting.profit.loss.line.category.total.comprehensive.income", "en-US", "综合收益总额_us", "利润表行类别.综合收益总额"),
+            // dict.accounting.profit.loss.line.category.total.comprehensive.income
+            ("dict.accounting.profit.loss.line.category.total.comprehensive.income", "ja-JP", "综合收益总额_jp", "利润表行类别.综合收益总额"),
+            // dict.accounting.profit.loss.line.category.total.comprehensive.income
+            ("dict.accounting.profit.loss.line.category.total.comprehensive.income", "zh-CN", "综合收益总额", "利润表行类别.综合收益总额"),
+            // dict.accounting.profit.loss.line.category.total.comprehensive.income
+            ("dict.accounting.profit.loss.line.category.total.comprehensive.income", "zh-HK", "综合收益总额_hk", "利润表行类别.综合收益总额"),
+
+            // dict.accounting.budget.type.operating
+            ("dict.accounting.budget.type.operating", "en-US", "经营预算_us", "预算类型.经营预算"),
+            // dict.accounting.budget.type.operating
+            ("dict.accounting.budget.type.operating", "ja-JP", "经营预算_jp", "预算类型.经营预算"),
+            // dict.accounting.budget.type.operating
+            ("dict.accounting.budget.type.operating", "zh-CN", "经营预算", "预算类型.经营预算"),
+            // dict.accounting.budget.type.operating
+            ("dict.accounting.budget.type.operating", "zh-HK", "经营预算_hk", "预算类型.经营预算"),
+
+            // dict.accounting.budget.type.capital
+            ("dict.accounting.budget.type.capital", "en-US", "资本预算_us", "预算类型.资本预算"),
+            // dict.accounting.budget.type.capital
+            ("dict.accounting.budget.type.capital", "ja-JP", "资本预算_jp", "预算类型.资本预算"),
+            // dict.accounting.budget.type.capital
+            ("dict.accounting.budget.type.capital", "zh-CN", "资本预算", "预算类型.资本预算"),
+            // dict.accounting.budget.type.capital
+            ("dict.accounting.budget.type.capital", "zh-HK", "资本预算_hk", "预算类型.资本预算"),
+
+            // dict.accounting.budget.type.financial
+            ("dict.accounting.budget.type.financial", "en-US", "财务预算_us", "预算类型.财务预算"),
+            // dict.accounting.budget.type.financial
+            ("dict.accounting.budget.type.financial", "ja-JP", "财务预算_jp", "预算类型.财务预算"),
+            // dict.accounting.budget.type.financial
+            ("dict.accounting.budget.type.financial", "zh-CN", "财务预算", "预算类型.财务预算"),
+            // dict.accounting.budget.type.financial
+            ("dict.accounting.budget.type.financial", "zh-HK", "财务预算_hk", "预算类型.财务预算"),
+
+            // dict.accounting.budget.measure.type.amount
+            ("dict.accounting.budget.measure.type.amount", "en-US", "金额_us", "预算计量类型.金额"),
+            // dict.accounting.budget.measure.type.amount
+            ("dict.accounting.budget.measure.type.amount", "ja-JP", "金额_jp", "预算计量类型.金额"),
+            // dict.accounting.budget.measure.type.amount
+            ("dict.accounting.budget.measure.type.amount", "zh-CN", "金额", "预算计量类型.金额"),
+            // dict.accounting.budget.measure.type.amount
+            ("dict.accounting.budget.measure.type.amount", "zh-HK", "金额_hk", "预算计量类型.金额"),
+
+            // dict.accounting.budget.measure.type.quantity
+            ("dict.accounting.budget.measure.type.quantity", "en-US", "数量_us", "预算计量类型.数量"),
+            // dict.accounting.budget.measure.type.quantity
+            ("dict.accounting.budget.measure.type.quantity", "ja-JP", "数量_jp", "预算计量类型.数量"),
+            // dict.accounting.budget.measure.type.quantity
+            ("dict.accounting.budget.measure.type.quantity", "zh-CN", "数量", "预算计量类型.数量"),
+            // dict.accounting.budget.measure.type.quantity
+            ("dict.accounting.budget.measure.type.quantity", "zh-HK", "数量_hk", "预算计量类型.数量"),
+
             // dict.accounting.payment.terms.param.adv100
             ("dict.accounting.payment.terms.param.adv100", "en-US", "预付全款_us", "付款条件.预付全款"),
             // dict.accounting.payment.terms.param.adv100
@@ -1094,6 +1292,114 @@ public class TaktDictI18nSeedData : ITaktSeedDataCoordinator
             // dict.accounting.tax.rate.param.0
             ("dict.accounting.tax.rate.param.0", "zh-HK", "0%_hk", "税率.0%"),
 
+            // dict.accounting.tax.code.j0
+            ("dict.accounting.tax.code.j0", "en-US", "进项税0%_us", "税码.J0"),
+            // dict.accounting.tax.code.j0
+            ("dict.accounting.tax.code.j0", "ja-JP", "进项税0%_jp", "税码.J0"),
+            // dict.accounting.tax.code.j0
+            ("dict.accounting.tax.code.j0", "zh-CN", "进项税0%", "税码.J0"),
+            // dict.accounting.tax.code.j0
+            ("dict.accounting.tax.code.j0", "zh-HK", "进项税0%_hk", "税码.J0"),
+
+            // dict.accounting.tax.code.j1
+            ("dict.accounting.tax.code.j1", "en-US", "进项税13%_us", "税码.J1"),
+            // dict.accounting.tax.code.j1
+            ("dict.accounting.tax.code.j1", "ja-JP", "进项税13%_jp", "税码.J1"),
+            // dict.accounting.tax.code.j1
+            ("dict.accounting.tax.code.j1", "zh-CN", "进项税13%", "税码.J1"),
+            // dict.accounting.tax.code.j1
+            ("dict.accounting.tax.code.j1", "zh-HK", "进项税13%_hk", "税码.J1"),
+
+            // dict.accounting.tax.code.j2
+            ("dict.accounting.tax.code.j2", "en-US", "进项税9%_us", "税码.J2"),
+            // dict.accounting.tax.code.j2
+            ("dict.accounting.tax.code.j2", "ja-JP", "进项税9%_jp", "税码.J2"),
+            // dict.accounting.tax.code.j2
+            ("dict.accounting.tax.code.j2", "zh-CN", "进项税9%", "税码.J2"),
+            // dict.accounting.tax.code.j2
+            ("dict.accounting.tax.code.j2", "zh-HK", "进项税9%_hk", "税码.J2"),
+
+            // dict.accounting.tax.code.j3
+            ("dict.accounting.tax.code.j3", "en-US", "进项税6%_us", "税码.J3"),
+            // dict.accounting.tax.code.j3
+            ("dict.accounting.tax.code.j3", "ja-JP", "进项税6%_jp", "税码.J3"),
+            // dict.accounting.tax.code.j3
+            ("dict.accounting.tax.code.j3", "zh-CN", "进项税6%", "税码.J3"),
+            // dict.accounting.tax.code.j3
+            ("dict.accounting.tax.code.j3", "zh-HK", "进项税6%_hk", "税码.J3"),
+
+            // dict.accounting.tax.code.j4
+            ("dict.accounting.tax.code.j4", "en-US", "进项税5%_us", "税码.J4"),
+            // dict.accounting.tax.code.j4
+            ("dict.accounting.tax.code.j4", "ja-JP", "进项税5%_jp", "税码.J4"),
+            // dict.accounting.tax.code.j4
+            ("dict.accounting.tax.code.j4", "zh-CN", "进项税5%", "税码.J4"),
+            // dict.accounting.tax.code.j4
+            ("dict.accounting.tax.code.j4", "zh-HK", "进项税5%_hk", "税码.J4"),
+
+            // dict.accounting.tax.code.j5
+            ("dict.accounting.tax.code.j5", "en-US", "进项税3%_us", "税码.J5"),
+            // dict.accounting.tax.code.j5
+            ("dict.accounting.tax.code.j5", "ja-JP", "进项税3%_jp", "税码.J5"),
+            // dict.accounting.tax.code.j5
+            ("dict.accounting.tax.code.j5", "zh-CN", "进项税3%", "税码.J5"),
+            // dict.accounting.tax.code.j5
+            ("dict.accounting.tax.code.j5", "zh-HK", "进项税3%_hk", "税码.J5"),
+
+            // dict.accounting.tax.code.j6
+            ("dict.accounting.tax.code.j6", "en-US", "进项税1%_us", "税码.J6"),
+            // dict.accounting.tax.code.j6
+            ("dict.accounting.tax.code.j6", "ja-JP", "进项税1%_jp", "税码.J6"),
+            // dict.accounting.tax.code.j6
+            ("dict.accounting.tax.code.j6", "zh-CN", "进项税1%", "税码.J6"),
+            // dict.accounting.tax.code.j6
+            ("dict.accounting.tax.code.j6", "zh-HK", "进项税1%_hk", "税码.J6"),
+
+            // dict.accounting.tax.category.excludingtax
+            ("dict.accounting.tax.category.excludingtax", "en-US", "不含税_us", "税别.不含税"),
+            // dict.accounting.tax.category.excludingtax
+            ("dict.accounting.tax.category.excludingtax", "ja-JP", "不含税_jp", "税别.不含税"),
+            // dict.accounting.tax.category.excludingtax
+            ("dict.accounting.tax.category.excludingtax", "zh-CN", "不含税", "税别.不含税"),
+            // dict.accounting.tax.category.excludingtax
+            ("dict.accounting.tax.category.excludingtax", "zh-HK", "不含税_hk", "税别.不含税"),
+
+            // dict.accounting.tax.category.includingtax
+            ("dict.accounting.tax.category.includingtax", "en-US", "含税_us", "税别.含税"),
+            // dict.accounting.tax.category.includingtax
+            ("dict.accounting.tax.category.includingtax", "ja-JP", "含税_jp", "税别.含税"),
+            // dict.accounting.tax.category.includingtax
+            ("dict.accounting.tax.category.includingtax", "zh-CN", "含税", "税别.含税"),
+            // dict.accounting.tax.category.includingtax
+            ("dict.accounting.tax.category.includingtax", "zh-HK", "含税_hk", "税别.含税"),
+
+            // dict.accounting.tax.category.exempt
+            ("dict.accounting.tax.category.exempt", "en-US", "免税_us", "税别.免税"),
+            // dict.accounting.tax.category.exempt
+            ("dict.accounting.tax.category.exempt", "ja-JP", "免税_jp", "税别.免税"),
+            // dict.accounting.tax.category.exempt
+            ("dict.accounting.tax.category.exempt", "zh-CN", "免税", "税别.免税"),
+            // dict.accounting.tax.category.exempt
+            ("dict.accounting.tax.category.exempt", "zh-HK", "免税_hk", "税别.免税"),
+
+            // dict.accounting.tax.category.vatspecial
+            ("dict.accounting.tax.category.vatspecial", "en-US", "增值税专票_us", "税别.增值税专票"),
+            // dict.accounting.tax.category.vatspecial
+            ("dict.accounting.tax.category.vatspecial", "ja-JP", "增值税专票_jp", "税别.增值税专票"),
+            // dict.accounting.tax.category.vatspecial
+            ("dict.accounting.tax.category.vatspecial", "zh-CN", "增值税专票", "税别.增值税专票"),
+            // dict.accounting.tax.category.vatspecial
+            ("dict.accounting.tax.category.vatspecial", "zh-HK", "增值税专票_hk", "税别.增值税专票"),
+
+            // dict.accounting.tax.category.vatnormal
+            ("dict.accounting.tax.category.vatnormal", "en-US", "增值税普票_us", "税别.增值税普票"),
+            // dict.accounting.tax.category.vatnormal
+            ("dict.accounting.tax.category.vatnormal", "ja-JP", "增值税普票_jp", "税别.增值税普票"),
+            // dict.accounting.tax.category.vatnormal
+            ("dict.accounting.tax.category.vatnormal", "zh-CN", "增值税普票", "税别.增值税普票"),
+            // dict.accounting.tax.category.vatnormal
+            ("dict.accounting.tax.category.vatnormal", "zh-HK", "增值税普票_hk", "税别.增值税普票"),
+
             // dict.accounting.expense.type.monthlysuppliernonraw
             ("dict.accounting.expense.type.monthlysuppliernonraw", "en-US", "月结供应商除原材料外的费用_us", "费用类型.月结供应商除原材料外的费用"),
             // dict.accounting.expense.type.monthlysuppliernonraw
@@ -1104,13 +1410,13 @@ public class TaktDictI18nSeedData : ITaktSeedDataCoordinator
             ("dict.accounting.expense.type.monthlysuppliernonraw", "zh-HK", "月结供应商除原材料外的费用_hk", "费用类型.月结供应商除原材料外的费用"),
 
             // dict.accounting.expense.type.monthlysupplierother
-            ("dict.accounting.expense.type.monthlysupplierother", "en-US", "月结供应商货款及公司其它费用_us", "费用类型.月结供应商货款及公司其它费用"),
+            ("dict.accounting.expense.type.monthlysupplierother", "en-US", "月结供应商货款及公司其他费用_us", "费用类型.月结供应商货款及公司其他费用"),
             // dict.accounting.expense.type.monthlysupplierother
-            ("dict.accounting.expense.type.monthlysupplierother", "ja-JP", "月结供应商货款及公司其它费用_jp", "费用类型.月结供应商货款及公司其它费用"),
+            ("dict.accounting.expense.type.monthlysupplierother", "ja-JP", "月结供应商货款及公司其他费用_jp", "费用类型.月结供应商货款及公司其他费用"),
             // dict.accounting.expense.type.monthlysupplierother
-            ("dict.accounting.expense.type.monthlysupplierother", "zh-CN", "月结供应商货款及公司其它费用", "费用类型.月结供应商货款及公司其它费用"),
+            ("dict.accounting.expense.type.monthlysupplierother", "zh-CN", "月结供应商货款及公司其他费用", "费用类型.月结供应商货款及公司其他费用"),
             // dict.accounting.expense.type.monthlysupplierother
-            ("dict.accounting.expense.type.monthlysupplierother", "zh-HK", "月结供应商货款及公司其它费用_hk", "费用类型.月结供应商货款及公司其它费用"),
+            ("dict.accounting.expense.type.monthlysupplierother", "zh-HK", "月结供应商货款及公司其他费用_hk", "费用类型.月结供应商货款及公司其他费用"),
 
             // dict.accounting.expense.type.miscpurchase
             ("dict.accounting.expense.type.miscpurchase", "en-US", "杂项购置费用_us", "费用类型.杂项购置费用"),
@@ -1653,13 +1959,13 @@ public class TaktDictI18nSeedData : ITaktSeedDataCoordinator
             ("dict.gen.button.category.clean", "zh-HK", "流转清理_hk", "代码生成操作后缀.流转清理"),
 
             // dict.gen.button.category.draft
-            ("dict.gen.button.category.draft", "en-US", "保存草稿_us", "代码生成操作后缀.保存草稿"),
+            ("dict.gen.button.category.draft", "en-US", "草稿_us", "代码生成操作后缀.草稿"),
             // dict.gen.button.category.draft
-            ("dict.gen.button.category.draft", "ja-JP", "保存草稿_jp", "代码生成操作后缀.保存草稿"),
+            ("dict.gen.button.category.draft", "ja-JP", "草稿_jp", "代码生成操作后缀.草稿"),
             // dict.gen.button.category.draft
-            ("dict.gen.button.category.draft", "zh-CN", "保存草稿", "代码生成操作后缀.保存草稿"),
+            ("dict.gen.button.category.draft", "zh-CN", "草稿", "代码生成操作后缀.草稿"),
             // dict.gen.button.category.draft
-            ("dict.gen.button.category.draft", "zh-HK", "保存草稿_hk", "代码生成操作后缀.保存草稿"),
+            ("dict.gen.button.category.draft", "zh-HK", "草稿_hk", "代码生成操作后缀.草稿"),
 
             // dict.gen.button.category.deletedraft
             ("dict.gen.button.category.deletedraft", "en-US", "删除草稿_us", "代码生成操作后缀.删除草稿"),
@@ -2049,94 +2355,94 @@ public class TaktDictI18nSeedData : ITaktSeedDataCoordinator
             ("dict.gen.button.style.config.1", "zh-HK", "标准_hk", "操作按钮样式.标准"),
 
             // dict.gen.csharp.data.type.bool
-            ("dict.gen.csharp.data.type.bool", "en-US", "bool_us", "c#数据类型.bool"),
+            ("dict.gen.csharp.data.type.bool", "en-US", "BOOL_us", "c#数据类型.bool"),
             // dict.gen.csharp.data.type.bool
-            ("dict.gen.csharp.data.type.bool", "ja-JP", "bool_jp", "c#数据类型.bool"),
+            ("dict.gen.csharp.data.type.bool", "ja-JP", "BOOL_jp", "c#数据类型.bool"),
             // dict.gen.csharp.data.type.bool
-            ("dict.gen.csharp.data.type.bool", "zh-CN", "bool", "c#数据类型.bool"),
+            ("dict.gen.csharp.data.type.bool", "zh-CN", "BOOL", "c#数据类型.bool"),
             // dict.gen.csharp.data.type.bool
-            ("dict.gen.csharp.data.type.bool", "zh-HK", "bool_hk", "c#数据类型.bool"),
+            ("dict.gen.csharp.data.type.bool", "zh-HK", "BOOL_hk", "c#数据类型.bool"),
 
             // dict.gen.csharp.data.type.byte
-            ("dict.gen.csharp.data.type.byte", "en-US", "byte_us", "c#数据类型.byte"),
+            ("dict.gen.csharp.data.type.byte", "en-US", "BYTE_us", "c#数据类型.byte"),
             // dict.gen.csharp.data.type.byte
-            ("dict.gen.csharp.data.type.byte", "ja-JP", "byte_jp", "c#数据类型.byte"),
+            ("dict.gen.csharp.data.type.byte", "ja-JP", "BYTE_jp", "c#数据类型.byte"),
             // dict.gen.csharp.data.type.byte
-            ("dict.gen.csharp.data.type.byte", "zh-CN", "byte", "c#数据类型.byte"),
+            ("dict.gen.csharp.data.type.byte", "zh-CN", "BYTE", "c#数据类型.byte"),
             // dict.gen.csharp.data.type.byte
-            ("dict.gen.csharp.data.type.byte", "zh-HK", "byte_hk", "c#数据类型.byte"),
+            ("dict.gen.csharp.data.type.byte", "zh-HK", "BYTE_hk", "c#数据类型.byte"),
 
             // dict.gen.csharp.data.type.datetime
-            ("dict.gen.csharp.data.type.datetime", "en-US", "datetime_us", "c#数据类型.datetime"),
+            ("dict.gen.csharp.data.type.datetime", "en-US", "DATETIME_us", "c#数据类型.datetime"),
             // dict.gen.csharp.data.type.datetime
-            ("dict.gen.csharp.data.type.datetime", "ja-JP", "datetime_jp", "c#数据类型.datetime"),
+            ("dict.gen.csharp.data.type.datetime", "ja-JP", "DATETIME_jp", "c#数据类型.datetime"),
             // dict.gen.csharp.data.type.datetime
-            ("dict.gen.csharp.data.type.datetime", "zh-CN", "datetime", "c#数据类型.datetime"),
+            ("dict.gen.csharp.data.type.datetime", "zh-CN", "DATETIME", "c#数据类型.datetime"),
             // dict.gen.csharp.data.type.datetime
-            ("dict.gen.csharp.data.type.datetime", "zh-HK", "datetime_hk", "c#数据类型.datetime"),
+            ("dict.gen.csharp.data.type.datetime", "zh-HK", "DATETIME_hk", "c#数据类型.datetime"),
 
             // dict.gen.csharp.data.type.decimal
-            ("dict.gen.csharp.data.type.decimal", "en-US", "decimal_us", "c#数据类型.decimal"),
+            ("dict.gen.csharp.data.type.decimal", "en-US", "DECIMAL_us", "c#数据类型.decimal"),
             // dict.gen.csharp.data.type.decimal
-            ("dict.gen.csharp.data.type.decimal", "ja-JP", "decimal_jp", "c#数据类型.decimal"),
+            ("dict.gen.csharp.data.type.decimal", "ja-JP", "DECIMAL_jp", "c#数据类型.decimal"),
             // dict.gen.csharp.data.type.decimal
-            ("dict.gen.csharp.data.type.decimal", "zh-CN", "decimal", "c#数据类型.decimal"),
+            ("dict.gen.csharp.data.type.decimal", "zh-CN", "DECIMAL", "c#数据类型.decimal"),
             // dict.gen.csharp.data.type.decimal
-            ("dict.gen.csharp.data.type.decimal", "zh-HK", "decimal_hk", "c#数据类型.decimal"),
+            ("dict.gen.csharp.data.type.decimal", "zh-HK", "DECIMAL_hk", "c#数据类型.decimal"),
 
             // dict.gen.csharp.data.type.double
-            ("dict.gen.csharp.data.type.double", "en-US", "double_us", "c#数据类型.double"),
+            ("dict.gen.csharp.data.type.double", "en-US", "DOUBLE_us", "c#数据类型.double"),
             // dict.gen.csharp.data.type.double
-            ("dict.gen.csharp.data.type.double", "ja-JP", "double_jp", "c#数据类型.double"),
+            ("dict.gen.csharp.data.type.double", "ja-JP", "DOUBLE_jp", "c#数据类型.double"),
             // dict.gen.csharp.data.type.double
-            ("dict.gen.csharp.data.type.double", "zh-CN", "double", "c#数据类型.double"),
+            ("dict.gen.csharp.data.type.double", "zh-CN", "DOUBLE", "c#数据类型.double"),
             // dict.gen.csharp.data.type.double
-            ("dict.gen.csharp.data.type.double", "zh-HK", "double_hk", "c#数据类型.double"),
+            ("dict.gen.csharp.data.type.double", "zh-HK", "DOUBLE_hk", "c#数据类型.double"),
 
             // dict.gen.csharp.data.type.float
-            ("dict.gen.csharp.data.type.float", "en-US", "float_us", "c#数据类型.float"),
+            ("dict.gen.csharp.data.type.float", "en-US", "FLOAT_us", "c#数据类型.float"),
             // dict.gen.csharp.data.type.float
-            ("dict.gen.csharp.data.type.float", "ja-JP", "float_jp", "c#数据类型.float"),
+            ("dict.gen.csharp.data.type.float", "ja-JP", "FLOAT_jp", "c#数据类型.float"),
             // dict.gen.csharp.data.type.float
-            ("dict.gen.csharp.data.type.float", "zh-CN", "float", "c#数据类型.float"),
+            ("dict.gen.csharp.data.type.float", "zh-CN", "FLOAT", "c#数据类型.float"),
             // dict.gen.csharp.data.type.float
-            ("dict.gen.csharp.data.type.float", "zh-HK", "float_hk", "c#数据类型.float"),
+            ("dict.gen.csharp.data.type.float", "zh-HK", "FLOAT_hk", "c#数据类型.float"),
 
             // dict.gen.csharp.data.type.guid
-            ("dict.gen.csharp.data.type.guid", "en-US", "guid_us", "c#数据类型.guid"),
+            ("dict.gen.csharp.data.type.guid", "en-US", "GUID_us", "c#数据类型.guid"),
             // dict.gen.csharp.data.type.guid
-            ("dict.gen.csharp.data.type.guid", "ja-JP", "guid_jp", "c#数据类型.guid"),
+            ("dict.gen.csharp.data.type.guid", "ja-JP", "GUID_jp", "c#数据类型.guid"),
             // dict.gen.csharp.data.type.guid
-            ("dict.gen.csharp.data.type.guid", "zh-CN", "guid", "c#数据类型.guid"),
+            ("dict.gen.csharp.data.type.guid", "zh-CN", "GUID", "c#数据类型.guid"),
             // dict.gen.csharp.data.type.guid
-            ("dict.gen.csharp.data.type.guid", "zh-HK", "guid_hk", "c#数据类型.guid"),
+            ("dict.gen.csharp.data.type.guid", "zh-HK", "GUID_hk", "c#数据类型.guid"),
 
             // dict.gen.csharp.data.type.int
-            ("dict.gen.csharp.data.type.int", "en-US", "int_us", "c#数据类型.int"),
+            ("dict.gen.csharp.data.type.int", "en-US", "INT_us", "c#数据类型.int"),
             // dict.gen.csharp.data.type.int
-            ("dict.gen.csharp.data.type.int", "ja-JP", "int_jp", "c#数据类型.int"),
+            ("dict.gen.csharp.data.type.int", "ja-JP", "INT_jp", "c#数据类型.int"),
             // dict.gen.csharp.data.type.int
-            ("dict.gen.csharp.data.type.int", "zh-CN", "int", "c#数据类型.int"),
+            ("dict.gen.csharp.data.type.int", "zh-CN", "INT", "c#数据类型.int"),
             // dict.gen.csharp.data.type.int
-            ("dict.gen.csharp.data.type.int", "zh-HK", "int_hk", "c#数据类型.int"),
+            ("dict.gen.csharp.data.type.int", "zh-HK", "INT_hk", "c#数据类型.int"),
 
             // dict.gen.csharp.data.type.long
-            ("dict.gen.csharp.data.type.long", "en-US", "long_us", "c#数据类型.long"),
+            ("dict.gen.csharp.data.type.long", "en-US", "LONG_us", "c#数据类型.long"),
             // dict.gen.csharp.data.type.long
-            ("dict.gen.csharp.data.type.long", "ja-JP", "long_jp", "c#数据类型.long"),
+            ("dict.gen.csharp.data.type.long", "ja-JP", "LONG_jp", "c#数据类型.long"),
             // dict.gen.csharp.data.type.long
-            ("dict.gen.csharp.data.type.long", "zh-CN", "long", "c#数据类型.long"),
+            ("dict.gen.csharp.data.type.long", "zh-CN", "LONG", "c#数据类型.long"),
             // dict.gen.csharp.data.type.long
-            ("dict.gen.csharp.data.type.long", "zh-HK", "long_hk", "c#数据类型.long"),
+            ("dict.gen.csharp.data.type.long", "zh-HK", "LONG_hk", "c#数据类型.long"),
 
             // dict.gen.csharp.data.type.string
-            ("dict.gen.csharp.data.type.string", "en-US", "string_us", "c#数据类型.string"),
+            ("dict.gen.csharp.data.type.string", "en-US", "STRING_us", "c#数据类型.string"),
             // dict.gen.csharp.data.type.string
-            ("dict.gen.csharp.data.type.string", "ja-JP", "string_jp", "c#数据类型.string"),
+            ("dict.gen.csharp.data.type.string", "ja-JP", "STRING_jp", "c#数据类型.string"),
             // dict.gen.csharp.data.type.string
-            ("dict.gen.csharp.data.type.string", "zh-CN", "string", "c#数据类型.string"),
+            ("dict.gen.csharp.data.type.string", "zh-CN", "STRING", "c#数据类型.string"),
             // dict.gen.csharp.data.type.string
-            ("dict.gen.csharp.data.type.string", "zh-HK", "string_hk", "c#数据类型.string"),
+            ("dict.gen.csharp.data.type.string", "zh-HK", "STRING_hk", "c#数据类型.string"),
 
             // dict.gen.display.type.input
             ("dict.gen.display.type.input", "en-US", "文本框_us", "显示类型.文本框"),
@@ -2283,22 +2589,22 @@ public class TaktDictI18nSeedData : ITaktSeedDataCoordinator
             ("dict.gen.frontend.form.layout.config.24", "zh-HK", "一行两列_hk", "前端表单布局.一行两列"),
 
             // dict.gen.frontend.ui.type.1
-            ("dict.gen.frontend.ui.type.1", "en-US", "element plus_us", "前端ui框架.element plus"),
+            ("dict.gen.frontend.ui.type.1", "en-US", "ELEMENT PLUS_us", "前端ui框架.element plus"),
             // dict.gen.frontend.ui.type.1
-            ("dict.gen.frontend.ui.type.1", "ja-JP", "element plus_jp", "前端ui框架.element plus"),
+            ("dict.gen.frontend.ui.type.1", "ja-JP", "ELEMENT PLUS_jp", "前端ui框架.element plus"),
             // dict.gen.frontend.ui.type.1
-            ("dict.gen.frontend.ui.type.1", "zh-CN", "element plus", "前端ui框架.element plus"),
+            ("dict.gen.frontend.ui.type.1", "zh-CN", "ELEMENT PLUS", "前端ui框架.element plus"),
             // dict.gen.frontend.ui.type.1
-            ("dict.gen.frontend.ui.type.1", "zh-HK", "element plus_hk", "前端ui框架.element plus"),
+            ("dict.gen.frontend.ui.type.1", "zh-HK", "ELEMENT PLUS_hk", "前端ui框架.element plus"),
 
             // dict.gen.frontend.ui.type.2
-            ("dict.gen.frontend.ui.type.2", "en-US", "ant design vue_us", "前端ui框架.ant design vue"),
+            ("dict.gen.frontend.ui.type.2", "en-US", "ANT DESIGN VUE_us", "前端ui框架.ant design vue"),
             // dict.gen.frontend.ui.type.2
-            ("dict.gen.frontend.ui.type.2", "ja-JP", "ant design vue_jp", "前端ui框架.ant design vue"),
+            ("dict.gen.frontend.ui.type.2", "ja-JP", "ANT DESIGN VUE_jp", "前端ui框架.ant design vue"),
             // dict.gen.frontend.ui.type.2
-            ("dict.gen.frontend.ui.type.2", "zh-CN", "ant design vue", "前端ui框架.ant design vue"),
+            ("dict.gen.frontend.ui.type.2", "zh-CN", "ANT DESIGN VUE", "前端ui框架.ant design vue"),
             // dict.gen.frontend.ui.type.2
-            ("dict.gen.frontend.ui.type.2", "zh-HK", "ant design vue_hk", "前端ui框架.ant design vue"),
+            ("dict.gen.frontend.ui.type.2", "zh-HK", "ANT DESIGN VUE_hk", "前端ui框架.ant design vue"),
 
             // dict.gen.function.type.query
             ("dict.gen.function.type.query", "en-US", "查询_us", "生成功能.查询"),
@@ -2382,13 +2688,13 @@ public class TaktDictI18nSeedData : ITaktSeedDataCoordinator
             ("dict.gen.function.type.export", "zh-HK", "导出_hk", "生成功能.导出"),
 
             // dict.gen.method.type.0
-            ("dict.gen.method.type.0", "en-US", "zip 压缩包_us", "生成方式.zip 压缩包"),
+            ("dict.gen.method.type.0", "en-US", "ZIP 压缩包_us", "生成方式.zip 压缩包"),
             // dict.gen.method.type.0
-            ("dict.gen.method.type.0", "ja-JP", "zip 压缩包_jp", "生成方式.zip 压缩包"),
+            ("dict.gen.method.type.0", "ja-JP", "ZIP 压缩包_jp", "生成方式.zip 压缩包"),
             // dict.gen.method.type.0
-            ("dict.gen.method.type.0", "zh-CN", "zip 压缩包", "生成方式.zip 压缩包"),
+            ("dict.gen.method.type.0", "zh-CN", "ZIP 压缩包", "生成方式.zip 压缩包"),
             // dict.gen.method.type.0
-            ("dict.gen.method.type.0", "zh-HK", "zip 压缩包_hk", "生成方式.zip 压缩包"),
+            ("dict.gen.method.type.0", "zh-HK", "ZIP 压缩包_hk", "生成方式.zip 压缩包"),
 
             // dict.gen.method.type.1
             ("dict.gen.method.type.1", "en-US", "自定义路径_us", "生成方式.自定义路径"),
@@ -2418,13 +2724,13 @@ public class TaktDictI18nSeedData : ITaktSeedDataCoordinator
             ("dict.gen.path.type.root", "zh-HK", "默认根路径_hk", "生成路径.默认根路径"),
 
             // dict.gen.path.type.solution
-            ("dict.gen.path.type.solution", "en-US", "Solution 根目录_us", "生成路径.Solution 根目录"),
+            ("dict.gen.path.type.solution", "en-US", "SOLUTION 根目录_us", "生成路径.Solution 根目录"),
             // dict.gen.path.type.solution
-            ("dict.gen.path.type.solution", "ja-JP", "Solution 根目录_jp", "生成路径.Solution 根目录"),
+            ("dict.gen.path.type.solution", "ja-JP", "SOLUTION 根目录_jp", "生成路径.Solution 根目录"),
             // dict.gen.path.type.solution
-            ("dict.gen.path.type.solution", "zh-CN", "Solution 根目录", "生成路径.Solution 根目录"),
+            ("dict.gen.path.type.solution", "zh-CN", "SOLUTION 根目录", "生成路径.Solution 根目录"),
             // dict.gen.path.type.solution
-            ("dict.gen.path.type.solution", "zh-HK", "Solution 根目录_hk", "生成路径.Solution 根目录"),
+            ("dict.gen.path.type.solution", "zh-HK", "SOLUTION 根目录_hk", "生成路径.Solution 根目录"),
 
             // dict.gen.path.type.output
             ("dict.gen.path.type.output", "en-US", "输出目录_us", "生成路径.输出目录"),
@@ -4479,13 +4785,13 @@ public class TaktDictI18nSeedData : ITaktSeedDataCoordinator
             ("dict.logistics.equipment.category.office", "zh-HK", "办公设备_hk", "设备类别.办公设备"),
 
             // dict.logistics.equipment.category.it
-            ("dict.logistics.equipment.category.it", "en-US", "it设备_us", "设备类别.it设备"),
+            ("dict.logistics.equipment.category.it", "en-US", "IT设备_us", "设备类别.it设备"),
             // dict.logistics.equipment.category.it
-            ("dict.logistics.equipment.category.it", "ja-JP", "it设备_jp", "设备类别.it设备"),
+            ("dict.logistics.equipment.category.it", "ja-JP", "IT设备_jp", "设备类别.it设备"),
             // dict.logistics.equipment.category.it
-            ("dict.logistics.equipment.category.it", "zh-CN", "it设备", "设备类别.it设备"),
+            ("dict.logistics.equipment.category.it", "zh-CN", "IT设备", "设备类别.it设备"),
             // dict.logistics.equipment.category.it
-            ("dict.logistics.equipment.category.it", "zh-HK", "it设备_hk", "设备类别.it设备"),
+            ("dict.logistics.equipment.category.it", "zh-HK", "IT设备_hk", "设备类别.it设备"),
 
             // dict.logistics.equipment.category.power
             ("dict.logistics.equipment.category.power", "en-US", "动力设备_us", "设备类别.动力设备"),
@@ -4513,6 +4819,69 @@ public class TaktDictI18nSeedData : ITaktSeedDataCoordinator
             ("dict.logistics.equipment.category.special", "zh-CN", "特种设备", "设备类别.特种设备"),
             // dict.logistics.equipment.category.special
             ("dict.logistics.equipment.category.special", "zh-HK", "特种设备_hk", "设备类别.特种设备"),
+
+            // dict.logistics.equipment.category.smt
+            ("dict.logistics.equipment.category.smt", "en-US", "SMT设备_us", "设备类别.SMT设备"),
+            // dict.logistics.equipment.category.smt
+            ("dict.logistics.equipment.category.smt", "ja-JP", "SMT设备_jp", "设备类别.SMT设备"),
+            // dict.logistics.equipment.category.smt
+            ("dict.logistics.equipment.category.smt", "zh-CN", "SMT设备", "设备类别.SMT设备"),
+            // dict.logistics.equipment.category.smt
+            ("dict.logistics.equipment.category.smt", "zh-HK", "SMT设备_hk", "设备类别.SMT设备"),
+
+            // dict.logistics.equipment.category.ai
+            ("dict.logistics.equipment.category.ai", "en-US", "AI设备_us", "设备类别.AI设备"),
+            // dict.logistics.equipment.category.ai
+            ("dict.logistics.equipment.category.ai", "ja-JP", "AI设备_jp", "设备类别.AI设备"),
+            // dict.logistics.equipment.category.ai
+            ("dict.logistics.equipment.category.ai", "zh-CN", "AI设备", "设备类别.AI设备"),
+            // dict.logistics.equipment.category.ai
+            ("dict.logistics.equipment.category.ai", "zh-HK", "AI设备_hk", "设备类别.AI设备"),
+
+            // dict.logistics.equipment.category.screenprinter
+            ("dict.logistics.equipment.category.screenprinter", "en-US", "锡膏印刷设备_us", "设备类别.锡膏印刷设备"),
+            // dict.logistics.equipment.category.screenprinter
+            ("dict.logistics.equipment.category.screenprinter", "ja-JP", "锡膏印刷设备_jp", "设备类别.锡膏印刷设备"),
+            // dict.logistics.equipment.category.screenprinter
+            ("dict.logistics.equipment.category.screenprinter", "zh-CN", "锡膏印刷设备", "设备类别.锡膏印刷设备"),
+            // dict.logistics.equipment.category.screenprinter
+            ("dict.logistics.equipment.category.screenprinter", "zh-HK", "锡膏印刷设备_hk", "设备类别.锡膏印刷设备"),
+
+            // dict.logistics.equipment.category.reflow
+            ("dict.logistics.equipment.category.reflow", "en-US", "回流焊设备_us", "设备类别.回流焊设备"),
+            // dict.logistics.equipment.category.reflow
+            ("dict.logistics.equipment.category.reflow", "ja-JP", "回流焊设备_jp", "设备类别.回流焊设备"),
+            // dict.logistics.equipment.category.reflow
+            ("dict.logistics.equipment.category.reflow", "zh-CN", "回流焊设备", "设备类别.回流焊设备"),
+            // dict.logistics.equipment.category.reflow
+            ("dict.logistics.equipment.category.reflow", "zh-HK", "回流焊设备_hk", "设备类别.回流焊设备"),
+
+            // dict.logistics.equipment.category.selectivesolder
+            ("dict.logistics.equipment.category.selectivesolder", "en-US", "选择性焊接设备_us", "设备类别.选择性焊接设备"),
+            // dict.logistics.equipment.category.selectivesolder
+            ("dict.logistics.equipment.category.selectivesolder", "ja-JP", "选择性焊接设备_jp", "设备类别.选择性焊接设备"),
+            // dict.logistics.equipment.category.selectivesolder
+            ("dict.logistics.equipment.category.selectivesolder", "zh-CN", "选择性焊接设备", "设备类别.选择性焊接设备"),
+            // dict.logistics.equipment.category.selectivesolder
+            ("dict.logistics.equipment.category.selectivesolder", "zh-HK", "选择性焊接设备_hk", "设备类别.选择性焊接设备"),
+
+            // dict.logistics.equipment.category.spi
+            ("dict.logistics.equipment.category.spi", "en-US", "SPI设备_us", "设备类别.SPI设备"),
+            // dict.logistics.equipment.category.spi
+            ("dict.logistics.equipment.category.spi", "ja-JP", "SPI设备_jp", "设备类别.SPI设备"),
+            // dict.logistics.equipment.category.spi
+            ("dict.logistics.equipment.category.spi", "zh-CN", "SPI设备", "设备类别.SPI设备"),
+            // dict.logistics.equipment.category.spi
+            ("dict.logistics.equipment.category.spi", "zh-HK", "SPI设备_hk", "设备类别.SPI设备"),
+
+            // dict.logistics.equipment.category.cleaning
+            ("dict.logistics.equipment.category.cleaning", "en-US", "清洗设备_us", "设备类别.清洗设备"),
+            // dict.logistics.equipment.category.cleaning
+            ("dict.logistics.equipment.category.cleaning", "ja-JP", "清洗设备_jp", "设备类别.清洗设备"),
+            // dict.logistics.equipment.category.cleaning
+            ("dict.logistics.equipment.category.cleaning", "zh-CN", "清洗设备", "设备类别.清洗设备"),
+            // dict.logistics.equipment.category.cleaning
+            ("dict.logistics.equipment.category.cleaning", "zh-HK", "清洗设备_hk", "设备类别.清洗设备"),
 
             // dict.logistics.grade.category.0
             ("dict.logistics.grade.category.0", "en-US", "普通_us", "等级类别.普通"),
@@ -5163,13 +5532,13 @@ public class TaktDictI18nSeedData : ITaktSeedDataCoordinator
             ("dict.logistics.maintenance.category.preventive", "zh-HK", "预防性维护_hk", "维护类别.预防性维护"),
 
             // dict.logistics.maintenance.category.corrective
-            ("dict.logistics.maintenance.category.corrective", "en-US", "corrective维护_us", "维护类别. corrective维护"),
+            ("dict.logistics.maintenance.category.corrective", "en-US", "CORRECTIVE维护_us", "维护类别. corrective维护"),
             // dict.logistics.maintenance.category.corrective
-            ("dict.logistics.maintenance.category.corrective", "ja-JP", "corrective维护_jp", "维护类别. corrective维护"),
+            ("dict.logistics.maintenance.category.corrective", "ja-JP", "CORRECTIVE维护_jp", "维护类别. corrective维护"),
             // dict.logistics.maintenance.category.corrective
-            ("dict.logistics.maintenance.category.corrective", "zh-CN", "corrective维护", "维护类别. corrective维护"),
+            ("dict.logistics.maintenance.category.corrective", "zh-CN", "CORRECTIVE维护", "维护类别. corrective维护"),
             // dict.logistics.maintenance.category.corrective
-            ("dict.logistics.maintenance.category.corrective", "zh-HK", "corrective维护_hk", "维护类别. corrective维护"),
+            ("dict.logistics.maintenance.category.corrective", "zh-HK", "CORRECTIVE维护_hk", "维护类别. corrective维护"),
 
             // dict.logistics.maintenance.category.predictive
             ("dict.logistics.maintenance.category.predictive", "en-US", "预测性维护_us", "维护类别.预测性维护"),
@@ -5397,13 +5766,13 @@ public class TaktDictI18nSeedData : ITaktSeedDataCoordinator
             ("dict.logistics.quality.certification.10", "zh-HK", "ISO/IEC 17025_hk", "质量认证.ISOIEC17025"),
 
             // dict.logistics.quality.certification.11
-            ("dict.logistics.quality.certification.11", "en-US", "Gt/b 50430_us", "质量认证.GBT50430"),
+            ("dict.logistics.quality.certification.11", "en-US", "GT/B 50430_us", "质量认证.GBT50430"),
             // dict.logistics.quality.certification.11
-            ("dict.logistics.quality.certification.11", "ja-JP", "Gt/b 50430_jp", "质量认证.GBT50430"),
+            ("dict.logistics.quality.certification.11", "ja-JP", "GT/B 50430_jp", "质量认证.GBT50430"),
             // dict.logistics.quality.certification.11
-            ("dict.logistics.quality.certification.11", "zh-CN", "Gt/b 50430", "质量认证.GBT50430"),
+            ("dict.logistics.quality.certification.11", "zh-CN", "GT/B 50430", "质量认证.GBT50430"),
             // dict.logistics.quality.certification.11
-            ("dict.logistics.quality.certification.11", "zh-HK", "Gt/b 50430_hk", "质量认证.GBT50430"),
+            ("dict.logistics.quality.certification.11", "zh-HK", "GT/B 50430_hk", "质量认证.GBT50430"),
 
             // dict.logistics.material.type.roh
             ("dict.logistics.material.type.roh", "en-US", "原材料_us", "物料类型.原材料"),
@@ -5720,104 +6089,419 @@ public class TaktDictI18nSeedData : ITaktSeedDataCoordinator
             // dict.logistics.price.control.type.v
             ("dict.logistics.price.control.type.v", "zh-HK", "移动平均价格/周期单价_hk", "价格控制.移动平均价格/周期单价"),
 
-            // dict.logistics.price.type.0
-            ("dict.logistics.price.type.0", "en-US", "标准价格_us", "价格类型.标准价格"),
-            // dict.logistics.price.type.0
-            ("dict.logistics.price.type.0", "ja-JP", "标准价格_jp", "价格类型.标准价格"),
-            // dict.logistics.price.type.0
-            ("dict.logistics.price.type.0", "zh-CN", "标准价格", "价格类型.标准价格"),
-            // dict.logistics.price.type.0
-            ("dict.logistics.price.type.0", "zh-HK", "标准价格_hk", "价格类型.标准价格"),
+            // dict.logistics.price.type.pb00
+            ("dict.logistics.price.type.pb00", "en-US", "采购总价（Gross Price）_us", "价格条件类型.PB00"),
+            // dict.logistics.price.type.pb00
+            ("dict.logistics.price.type.pb00", "ja-JP", "采购总价（Gross Price）_jp", "价格条件类型.PB00"),
+            // dict.logistics.price.type.pb00
+            ("dict.logistics.price.type.pb00", "zh-CN", "采购总价（Gross Price）", "价格条件类型.PB00"),
+            // dict.logistics.price.type.pb00
+            ("dict.logistics.price.type.pb00", "zh-HK", "采购总价（Gross Price）_hk", "价格条件类型.PB00"),
 
-            // dict.logistics.price.type.1
-            ("dict.logistics.price.type.1", "en-US", "合同价格_us", "价格类型.合同价格"),
-            // dict.logistics.price.type.1
-            ("dict.logistics.price.type.1", "ja-JP", "合同价格_jp", "价格类型.合同价格"),
-            // dict.logistics.price.type.1
-            ("dict.logistics.price.type.1", "zh-CN", "合同价格", "价格类型.合同价格"),
-            // dict.logistics.price.type.1
-            ("dict.logistics.price.type.1", "zh-HK", "合同价格_hk", "价格类型.合同价格"),
+            // dict.logistics.price.type.pr00
+            ("dict.logistics.price.type.pr00", "en-US", "基本价格（Base Price）_us", "价格条件类型.PR00"),
+            // dict.logistics.price.type.pr00
+            ("dict.logistics.price.type.pr00", "ja-JP", "基本价格（Base Price）_jp", "价格条件类型.PR00"),
+            // dict.logistics.price.type.pr00
+            ("dict.logistics.price.type.pr00", "zh-CN", "基本价格（Base Price）", "价格条件类型.PR00"),
+            // dict.logistics.price.type.pr00
+            ("dict.logistics.price.type.pr00", "zh-HK", "基本价格（Base Price）_hk", "价格条件类型.PR00"),
 
-            // dict.logistics.price.type.2
-            ("dict.logistics.price.type.2", "en-US", "临时价格_us", "价格类型.临时价格"),
-            // dict.logistics.price.type.2
-            ("dict.logistics.price.type.2", "ja-JP", "临时价格_jp", "价格类型.临时价格"),
-            // dict.logistics.price.type.2
-            ("dict.logistics.price.type.2", "zh-CN", "临时价格", "价格类型.临时价格"),
-            // dict.logistics.price.type.2
-            ("dict.logistics.price.type.2", "zh-HK", "临时价格_hk", "价格类型.临时价格"),
+            // dict.logistics.price.type.mwst
+            ("dict.logistics.price.type.mwst", "en-US", "销项税/增值税（VAT/Tax）_us", "价格条件类型.MWST"),
+            // dict.logistics.price.type.mwst
+            ("dict.logistics.price.type.mwst", "ja-JP", "销项税/增值税（VAT/Tax）_jp", "价格条件类型.MWST"),
+            // dict.logistics.price.type.mwst
+            ("dict.logistics.price.type.mwst", "zh-CN", "销项税/增值税（VAT/Tax）", "价格条件类型.MWST"),
+            // dict.logistics.price.type.mwst
+            ("dict.logistics.price.type.mwst", "zh-HK", "销项税/增值税（VAT/Tax）_hk", "价格条件类型.MWST"),
 
-            // dict.logistics.price.type.3
-            ("dict.logistics.price.type.3", "en-US", "询价价格_us", "价格类型.询价价格"),
-            // dict.logistics.price.type.3
-            ("dict.logistics.price.type.3", "ja-JP", "询价价格_jp", "价格类型.询价价格"),
-            // dict.logistics.price.type.3
-            ("dict.logistics.price.type.3", "zh-CN", "询价价格", "价格类型.询价价格"),
-            // dict.logistics.price.type.3
-            ("dict.logistics.price.type.3", "zh-HK", "询价价格_hk", "价格类型.询价价格"),
+            // dict.logistics.price.type.mwrk
+            ("dict.logistics.price.type.mwrk", "en-US", "不可抵扣进项税（Non-deductible Input Tax）_us", "价格条件类型.MWRK"),
+            // dict.logistics.price.type.mwrk
+            ("dict.logistics.price.type.mwrk", "ja-JP", "不可抵扣进项税（Non-deductible Input Tax）_jp", "价格条件类型.MWRK"),
+            // dict.logistics.price.type.mwrk
+            ("dict.logistics.price.type.mwrk", "zh-CN", "不可抵扣进项税（Non-deductible Input Tax）", "价格条件类型.MWRK"),
+            // dict.logistics.price.type.mwrk
+            ("dict.logistics.price.type.mwrk", "zh-HK", "不可抵扣进项税（Non-deductible Input Tax）_hk", "价格条件类型.MWRK"),
 
-            // dict.logistics.price.type.4
-            ("dict.logistics.price.type.4", "en-US", "历史价格_us", "价格类型.历史价格"),
-            // dict.logistics.price.type.4
-            ("dict.logistics.price.type.4", "ja-JP", "历史价格_jp", "价格类型.历史价格"),
-            // dict.logistics.price.type.4
-            ("dict.logistics.price.type.4", "zh-CN", "历史价格", "价格类型.历史价格"),
-            // dict.logistics.price.type.4
-            ("dict.logistics.price.type.4", "zh-HK", "历史价格_hk", "价格类型.历史价格"),
+            // dict.logistics.price.type.nlxv
+            ("dict.logistics.price.type.nlxv", "en-US", "购置税（Acquisition Tax Debit）_us", "价格条件类型.NLXV"),
+            // dict.logistics.price.type.nlxv
+            ("dict.logistics.price.type.nlxv", "ja-JP", "购置税（Acquisition Tax Debit）_jp", "价格条件类型.NLXV"),
+            // dict.logistics.price.type.nlxv
+            ("dict.logistics.price.type.nlxv", "zh-CN", "购置税（Acquisition Tax Debit）", "价格条件类型.NLXV"),
+            // dict.logistics.price.type.nlxv
+            ("dict.logistics.price.type.nlxv", "zh-HK", "购置税（Acquisition Tax Debit）_hk", "价格条件类型.NLXV"),
 
-            // dict.logistics.price.type.5
-            ("dict.logistics.price.type.5", "en-US", "客户价格_us", "价格类型.客户价格"),
-            // dict.logistics.price.type.5
-            ("dict.logistics.price.type.5", "ja-JP", "客户价格_jp", "价格类型.客户价格"),
-            // dict.logistics.price.type.5
-            ("dict.logistics.price.type.5", "zh-CN", "客户价格", "价格类型.客户价格"),
-            // dict.logistics.price.type.5
-            ("dict.logistics.price.type.5", "zh-HK", "客户价格_hk", "价格类型.客户价格"),
+            // dict.logistics.calculation.type.a
+            ("dict.logistics.calculation.type.a", "en-US", "百分数_us", "计算类型.A"),
+            // dict.logistics.calculation.type.a
+            ("dict.logistics.calculation.type.a", "ja-JP", "百分数_jp", "计算类型.A"),
+            // dict.logistics.calculation.type.a
+            ("dict.logistics.calculation.type.a", "zh-CN", "百分数", "计算类型.A"),
+            // dict.logistics.calculation.type.a
+            ("dict.logistics.calculation.type.a", "zh-HK", "百分数_hk", "计算类型.A"),
 
-            // dict.logistics.price.type.6
-            ("dict.logistics.price.type.6", "en-US", "促销价格_us", "价格类型.促销价格"),
-            // dict.logistics.price.type.6
-            ("dict.logistics.price.type.6", "ja-JP", "促销价格_jp", "价格类型.促销价格"),
-            // dict.logistics.price.type.6
-            ("dict.logistics.price.type.6", "zh-CN", "促销价格", "价格类型.促销价格"),
-            // dict.logistics.price.type.6
-            ("dict.logistics.price.type.6", "zh-HK", "促销价格_hk", "价格类型.促销价格"),
+            // dict.logistics.calculation.type.b
+            ("dict.logistics.calculation.type.b", "en-US", "固定金额_us", "计算类型.B"),
+            // dict.logistics.calculation.type.b
+            ("dict.logistics.calculation.type.b", "ja-JP", "固定金额_jp", "计算类型.B"),
+            // dict.logistics.calculation.type.b
+            ("dict.logistics.calculation.type.b", "zh-CN", "固定金额", "计算类型.B"),
+            // dict.logistics.calculation.type.b
+            ("dict.logistics.calculation.type.b", "zh-HK", "固定金额_hk", "计算类型.B"),
 
-            // dict.logistics.price.type.7
-            ("dict.logistics.price.type.7", "en-US", "成本价_us", "价格类型.成本价"),
-            // dict.logistics.price.type.7
-            ("dict.logistics.price.type.7", "ja-JP", "成本价_jp", "价格类型.成本价"),
-            // dict.logistics.price.type.7
-            ("dict.logistics.price.type.7", "zh-CN", "成本价", "价格类型.成本价"),
-            // dict.logistics.price.type.7
-            ("dict.logistics.price.type.7", "zh-HK", "成本价_hk", "价格类型.成本价"),
+            // dict.logistics.calculation.type.c
+            ("dict.logistics.calculation.type.c", "en-US", "数量_us", "计算类型.C"),
+            // dict.logistics.calculation.type.c
+            ("dict.logistics.calculation.type.c", "ja-JP", "数量_jp", "计算类型.C"),
+            // dict.logistics.calculation.type.c
+            ("dict.logistics.calculation.type.c", "zh-CN", "数量", "计算类型.C"),
+            // dict.logistics.calculation.type.c
+            ("dict.logistics.calculation.type.c", "zh-HK", "数量_hk", "计算类型.C"),
 
-            // dict.logistics.price.type.8
-            ("dict.logistics.price.type.8", "en-US", "批发价_us", "价格类型.批发价"),
-            // dict.logistics.price.type.8
-            ("dict.logistics.price.type.8", "ja-JP", "批发价_jp", "价格类型.批发价"),
-            // dict.logistics.price.type.8
-            ("dict.logistics.price.type.8", "zh-CN", "批发价", "价格类型.批发价"),
-            // dict.logistics.price.type.8
-            ("dict.logistics.price.type.8", "zh-HK", "批发价_hk", "价格类型.批发价"),
+            // dict.logistics.calculation.type.d
+            ("dict.logistics.calculation.type.d", "en-US", "毛重量_us", "计算类型.D"),
+            // dict.logistics.calculation.type.d
+            ("dict.logistics.calculation.type.d", "ja-JP", "毛重量_jp", "计算类型.D"),
+            // dict.logistics.calculation.type.d
+            ("dict.logistics.calculation.type.d", "zh-CN", "毛重量", "计算类型.D"),
+            // dict.logistics.calculation.type.d
+            ("dict.logistics.calculation.type.d", "zh-HK", "毛重量_hk", "计算类型.D"),
 
-            // dict.logistics.price.type.9
-            ("dict.logistics.price.type.9", "en-US", "零售价_us", "价格类型.零售价"),
-            // dict.logistics.price.type.9
-            ("dict.logistics.price.type.9", "ja-JP", "零售价_jp", "价格类型.零售价"),
-            // dict.logistics.price.type.9
-            ("dict.logistics.price.type.9", "zh-CN", "零售价", "价格类型.零售价"),
-            // dict.logistics.price.type.9
-            ("dict.logistics.price.type.9", "zh-HK", "零售价_hk", "价格类型.零售价"),
+            // dict.logistics.calculation.type.e
+            ("dict.logistics.calculation.type.e", "en-US", "净重_us", "计算类型.E"),
+            // dict.logistics.calculation.type.e
+            ("dict.logistics.calculation.type.e", "ja-JP", "净重_jp", "计算类型.E"),
+            // dict.logistics.calculation.type.e
+            ("dict.logistics.calculation.type.e", "zh-CN", "净重", "计算类型.E"),
+            // dict.logistics.calculation.type.e
+            ("dict.logistics.calculation.type.e", "zh-HK", "净重_hk", "计算类型.E"),
 
-            // dict.logistics.price.type.10
-            ("dict.logistics.price.type.10", "en-US", "协议价_us", "价格类型.协议价"),
-            // dict.logistics.price.type.10
-            ("dict.logistics.price.type.10", "ja-JP", "协议价_jp", "价格类型.协议价"),
-            // dict.logistics.price.type.10
-            ("dict.logistics.price.type.10", "zh-CN", "协议价", "价格类型.协议价"),
-            // dict.logistics.price.type.10
-            ("dict.logistics.price.type.10", "zh-HK", "协议价_hk", "价格类型.协议价"),
+            // dict.logistics.calculation.type.f
+            ("dict.logistics.calculation.type.f", "en-US", "体积_us", "计算类型.F"),
+            // dict.logistics.calculation.type.f
+            ("dict.logistics.calculation.type.f", "ja-JP", "体积_jp", "计算类型.F"),
+            // dict.logistics.calculation.type.f
+            ("dict.logistics.calculation.type.f", "zh-CN", "体积", "计算类型.F"),
+            // dict.logistics.calculation.type.f
+            ("dict.logistics.calculation.type.f", "zh-HK", "体积_hk", "计算类型.F"),
+
+            // dict.logistics.calculation.type.g
+            ("dict.logistics.calculation.type.g", "en-US", "公式_us", "计算类型.G"),
+            // dict.logistics.calculation.type.g
+            ("dict.logistics.calculation.type.g", "ja-JP", "公式_jp", "计算类型.G"),
+            // dict.logistics.calculation.type.g
+            ("dict.logistics.calculation.type.g", "zh-CN", "公式", "计算类型.G"),
+            // dict.logistics.calculation.type.g
+            ("dict.logistics.calculation.type.g", "zh-HK", "公式_hk", "计算类型.G"),
+
+            // dict.logistics.calculation.type.h
+            ("dict.logistics.calculation.type.h", "en-US", "百分比（以百计）_us", "计算类型.H"),
+            // dict.logistics.calculation.type.h
+            ("dict.logistics.calculation.type.h", "ja-JP", "百分比（以百计）_jp", "计算类型.H"),
+            // dict.logistics.calculation.type.h
+            ("dict.logistics.calculation.type.h", "zh-CN", "百分比（以百计）", "计算类型.H"),
+            // dict.logistics.calculation.type.h
+            ("dict.logistics.calculation.type.h", "zh-HK", "百分比（以百计）_hk", "计算类型.H"),
+
+            // dict.logistics.calculation.type.i
+            ("dict.logistics.calculation.type.i", "en-US", "百分数(旅行费用)_us", "计算类型.I"),
+            // dict.logistics.calculation.type.i
+            ("dict.logistics.calculation.type.i", "ja-JP", "百分数(旅行费用)_jp", "计算类型.I"),
+            // dict.logistics.calculation.type.i
+            ("dict.logistics.calculation.type.i", "zh-CN", "百分数(旅行费用)", "计算类型.I"),
+            // dict.logistics.calculation.type.i
+            ("dict.logistics.calculation.type.i", "zh-HK", "百分数(旅行费用)_hk", "计算类型.I"),
+
+            // dict.logistics.calculation.type.j
+            ("dict.logistics.calculation.type.j", "en-US", "千分比_us", "计算类型.J"),
+            // dict.logistics.calculation.type.j
+            ("dict.logistics.calculation.type.j", "ja-JP", "千分比_jp", "计算类型.J"),
+            // dict.logistics.calculation.type.j
+            ("dict.logistics.calculation.type.j", "zh-CN", "千分比", "计算类型.J"),
+            // dict.logistics.calculation.type.j
+            ("dict.logistics.calculation.type.j", "zh-HK", "千分比_hk", "计算类型.J"),
+
+            // dict.logistics.calculation.type.k
+            ("dict.logistics.calculation.type.k", "en-US", "千分比（以千计）_us", "计算类型.K"),
+            // dict.logistics.calculation.type.k
+            ("dict.logistics.calculation.type.k", "ja-JP", "千分比（以千计）_jp", "计算类型.K"),
+            // dict.logistics.calculation.type.k
+            ("dict.logistics.calculation.type.k", "zh-CN", "千分比（以千计）", "计算类型.K"),
+            // dict.logistics.calculation.type.k
+            ("dict.logistics.calculation.type.k", "zh-HK", "千分比（以千计）_hk", "计算类型.K"),
+
+            // dict.logistics.calculation.type.l
+            ("dict.logistics.calculation.type.l", "en-US", "点数_us", "计算类型.L"),
+            // dict.logistics.calculation.type.l
+            ("dict.logistics.calculation.type.l", "ja-JP", "点数_jp", "计算类型.L"),
+            // dict.logistics.calculation.type.l
+            ("dict.logistics.calculation.type.l", "zh-CN", "点数", "计算类型.L"),
+            // dict.logistics.calculation.type.l
+            ("dict.logistics.calculation.type.l", "zh-HK", "点数_hk", "计算类型.L"),
+
+            // dict.logistics.calculation.type.m
+            ("dict.logistics.calculation.type.m", "en-US", "数量 - 每月价格_us", "计算类型.M"),
+            // dict.logistics.calculation.type.m
+            ("dict.logistics.calculation.type.m", "ja-JP", "数量 - 每月价格_jp", "计算类型.M"),
+            // dict.logistics.calculation.type.m
+            ("dict.logistics.calculation.type.m", "zh-CN", "数量 - 每月价格", "计算类型.M"),
+            // dict.logistics.calculation.type.m
+            ("dict.logistics.calculation.type.m", "zh-HK", "数量 - 每月价格_hk", "计算类型.M"),
+
+            // dict.logistics.calculation.type.n
+            ("dict.logistics.calculation.type.n", "en-US", "数量 - 每年价格_us", "计算类型.N"),
+            // dict.logistics.calculation.type.n
+            ("dict.logistics.calculation.type.n", "ja-JP", "数量 - 每年价格_jp", "计算类型.N"),
+            // dict.logistics.calculation.type.n
+            ("dict.logistics.calculation.type.n", "zh-CN", "数量 - 每年价格", "计算类型.N"),
+            // dict.logistics.calculation.type.n
+            ("dict.logistics.calculation.type.n", "zh-HK", "数量 - 每年价格_hk", "计算类型.N"),
+
+            // dict.logistics.calculation.type.o
+            ("dict.logistics.calculation.type.o", "en-US", "数量 - 每日价格_us", "计算类型.O"),
+            // dict.logistics.calculation.type.o
+            ("dict.logistics.calculation.type.o", "ja-JP", "数量 - 每日价格_jp", "计算类型.O"),
+            // dict.logistics.calculation.type.o
+            ("dict.logistics.calculation.type.o", "zh-CN", "数量 - 每日价格", "计算类型.O"),
+            // dict.logistics.calculation.type.o
+            ("dict.logistics.calculation.type.o", "zh-HK", "数量 - 每日价格_hk", "计算类型.O"),
+
+            // dict.logistics.calculation.type.p
+            ("dict.logistics.calculation.type.p", "en-US", "数量 - 每周价格_us", "计算类型.P"),
+            // dict.logistics.calculation.type.p
+            ("dict.logistics.calculation.type.p", "ja-JP", "数量 - 每周价格_jp", "计算类型.P"),
+            // dict.logistics.calculation.type.p
+            ("dict.logistics.calculation.type.p", "zh-CN", "数量 - 每周价格", "计算类型.P"),
+            // dict.logistics.calculation.type.p
+            ("dict.logistics.calculation.type.p", "zh-HK", "数量 - 每周价格_hk", "计算类型.P"),
+
+            // dict.logistics.calculation.type.q
+            ("dict.logistics.calculation.type.q", "en-US", "商品价格_us", "计算类型.Q"),
+            // dict.logistics.calculation.type.q
+            ("dict.logistics.calculation.type.q", "ja-JP", "商品价格_jp", "计算类型.Q"),
+            // dict.logistics.calculation.type.q
+            ("dict.logistics.calculation.type.q", "zh-CN", "商品价格", "计算类型.Q"),
+            // dict.logistics.calculation.type.q
+            ("dict.logistics.calculation.type.q", "zh-HK", "商品价格_hk", "计算类型.Q"),
+
+            // dict.logistics.calculation.type.r
+            ("dict.logistics.calculation.type.r", "en-US", "距离－依赖_us", "计算类型.R"),
+            // dict.logistics.calculation.type.r
+            ("dict.logistics.calculation.type.r", "ja-JP", "距离－依赖_jp", "计算类型.R"),
+            // dict.logistics.calculation.type.r
+            ("dict.logistics.calculation.type.r", "zh-CN", "距离－依赖", "计算类型.R"),
+            // dict.logistics.calculation.type.r
+            ("dict.logistics.calculation.type.r", "zh-HK", "距离－依赖_hk", "计算类型.R"),
+
+            // dict.logistics.calculation.type.s
+            ("dict.logistics.calculation.type.s", "en-US", "发运单位数_us", "计算类型.S"),
+            // dict.logistics.calculation.type.s
+            ("dict.logistics.calculation.type.s", "ja-JP", "发运单位数_jp", "计算类型.S"),
+            // dict.logistics.calculation.type.s
+            ("dict.logistics.calculation.type.s", "zh-CN", "发运单位数", "计算类型.S"),
+            // dict.logistics.calculation.type.s
+            ("dict.logistics.calculation.type.s", "zh-HK", "发运单位数_hk", "计算类型.S"),
+
+            // dict.logistics.calculation.type.t
+            ("dict.logistics.calculation.type.t", "en-US", "多重层次_us", "计算类型.T"),
+            // dict.logistics.calculation.type.t
+            ("dict.logistics.calculation.type.t", "ja-JP", "多重层次_jp", "计算类型.T"),
+            // dict.logistics.calculation.type.t
+            ("dict.logistics.calculation.type.t", "zh-CN", "多重层次", "计算类型.T"),
+            // dict.logistics.calculation.type.t
+            ("dict.logistics.calculation.type.t", "zh-HK", "多重层次_hk", "计算类型.T"),
+
+            // dict.logistics.calculation.type.u
+            ("dict.logistics.calculation.type.u", "en-US", "百分比 FIN (仅 CRM)_us", "计算类型.U"),
+            // dict.logistics.calculation.type.u
+            ("dict.logistics.calculation.type.u", "ja-JP", "百分比 FIN (仅 CRM)_jp", "计算类型.U"),
+            // dict.logistics.calculation.type.u
+            ("dict.logistics.calculation.type.u", "zh-CN", "百分比 FIN (仅 CRM)", "计算类型.U"),
+            // dict.logistics.calculation.type.u
+            ("dict.logistics.calculation.type.u", "zh-HK", "百分比 FIN (仅 CRM)_hk", "计算类型.U"),
+
+            // dict.logistics.calculation.type.v
+            ("dict.logistics.calculation.type.v", "en-US", "数量调整_us", "计算类型.V"),
+            // dict.logistics.calculation.type.v
+            ("dict.logistics.calculation.type.v", "ja-JP", "数量调整_jp", "计算类型.V"),
+            // dict.logistics.calculation.type.v
+            ("dict.logistics.calculation.type.v", "zh-CN", "数量调整", "计算类型.V"),
+            // dict.logistics.calculation.type.v
+            ("dict.logistics.calculation.type.v", "zh-HK", "数量调整_hk", "计算类型.V"),
+
+            // dict.logistics.scale.type.a
+            ("dict.logistics.scale.type.a", "en-US", "基础等级_us", "等级类型.A"),
+            // dict.logistics.scale.type.a
+            ("dict.logistics.scale.type.a", "ja-JP", "基础等级_jp", "等级类型.A"),
+            // dict.logistics.scale.type.a
+            ("dict.logistics.scale.type.a", "zh-CN", "基础等级", "等级类型.A"),
+            // dict.logistics.scale.type.a
+            ("dict.logistics.scale.type.a", "zh-HK", "基础等级_hk", "等级类型.A"),
+
+            // dict.logistics.scale.type.b
+            ("dict.logistics.scale.type.b", "en-US", "到等级_us", "等级类型.B"),
+            // dict.logistics.scale.type.b
+            ("dict.logistics.scale.type.b", "ja-JP", "到等级_jp", "等级类型.B"),
+            // dict.logistics.scale.type.b
+            ("dict.logistics.scale.type.b", "zh-CN", "到等级", "等级类型.B"),
+            // dict.logistics.scale.type.b
+            ("dict.logistics.scale.type.b", "zh-HK", "到等级_hk", "等级类型.B"),
+
+            // dict.logistics.scale.type.c
+            ("dict.logistics.scale.type.c", "en-US", "未使用_us", "等级类型.C"),
+            // dict.logistics.scale.type.c
+            ("dict.logistics.scale.type.c", "ja-JP", "未使用_jp", "等级类型.C"),
+            // dict.logistics.scale.type.c
+            ("dict.logistics.scale.type.c", "zh-CN", "未使用", "等级类型.C"),
+            // dict.logistics.scale.type.c
+            ("dict.logistics.scale.type.c", "zh-HK", "未使用_hk", "等级类型.C"),
+
+            // dict.logistics.scale.type.d
+            ("dict.logistics.scale.type.d", "en-US", "累进间隔等级_us", "等级类型.D"),
+            // dict.logistics.scale.type.d
+            ("dict.logistics.scale.type.d", "ja-JP", "累进间隔等级_jp", "等级类型.D"),
+            // dict.logistics.scale.type.d
+            ("dict.logistics.scale.type.d", "zh-CN", "累进间隔等级", "等级类型.D"),
+            // dict.logistics.scale.type.d
+            ("dict.logistics.scale.type.d", "zh-HK", "累进间隔等级_hk", "等级类型.D"),
+
+            // dict.logistics.scale.basis.b
+            ("dict.logistics.scale.basis.b", "en-US", "价值等级_us", "等级基础.B"),
+            // dict.logistics.scale.basis.b
+            ("dict.logistics.scale.basis.b", "ja-JP", "价值等级_jp", "等级基础.B"),
+            // dict.logistics.scale.basis.b
+            ("dict.logistics.scale.basis.b", "zh-CN", "价值等级", "等级基础.B"),
+            // dict.logistics.scale.basis.b
+            ("dict.logistics.scale.basis.b", "zh-HK", "价值等级_hk", "等级基础.B"),
+
+            // dict.logistics.scale.basis.c
+            ("dict.logistics.scale.basis.c", "en-US", "数量规模_us", "等级基础.C"),
+            // dict.logistics.scale.basis.c
+            ("dict.logistics.scale.basis.c", "ja-JP", "数量规模_jp", "等级基础.C"),
+            // dict.logistics.scale.basis.c
+            ("dict.logistics.scale.basis.c", "zh-CN", "数量规模", "等级基础.C"),
+            // dict.logistics.scale.basis.c
+            ("dict.logistics.scale.basis.c", "zh-HK", "数量规模_hk", "等级基础.C"),
+
+            // dict.logistics.scale.basis.d
+            ("dict.logistics.scale.basis.d", "en-US", "毛重等级_us", "等级基础.D"),
+            // dict.logistics.scale.basis.d
+            ("dict.logistics.scale.basis.d", "ja-JP", "毛重等级_jp", "等级基础.D"),
+            // dict.logistics.scale.basis.d
+            ("dict.logistics.scale.basis.d", "zh-CN", "毛重等级", "等级基础.D"),
+            // dict.logistics.scale.basis.d
+            ("dict.logistics.scale.basis.d", "zh-HK", "毛重等级_hk", "等级基础.D"),
+
+            // dict.logistics.scale.basis.e
+            ("dict.logistics.scale.basis.e", "en-US", "净重量等级_us", "等级基础.E"),
+            // dict.logistics.scale.basis.e
+            ("dict.logistics.scale.basis.e", "ja-JP", "净重量等级_jp", "等级基础.E"),
+            // dict.logistics.scale.basis.e
+            ("dict.logistics.scale.basis.e", "zh-CN", "净重量等级", "等级基础.E"),
+            // dict.logistics.scale.basis.e
+            ("dict.logistics.scale.basis.e", "zh-HK", "净重量等级_hk", "等级基础.E"),
+
+            // dict.logistics.scale.basis.f
+            ("dict.logistics.scale.basis.f", "en-US", "体积等级_us", "等级基础.F"),
+            // dict.logistics.scale.basis.f
+            ("dict.logistics.scale.basis.f", "ja-JP", "体积等级_jp", "等级基础.F"),
+            // dict.logistics.scale.basis.f
+            ("dict.logistics.scale.basis.f", "zh-CN", "体积等级", "等级基础.F"),
+            // dict.logistics.scale.basis.f
+            ("dict.logistics.scale.basis.f", "zh-HK", "体积等级_hk", "等级基础.F"),
+
+            // dict.logistics.scale.basis.g
+            ("dict.logistics.scale.basis.g", "en-US", "基于公式的等级_us", "等级基础.G"),
+            // dict.logistics.scale.basis.g
+            ("dict.logistics.scale.basis.g", "ja-JP", "基于公式的等级_jp", "等级基础.G"),
+            // dict.logistics.scale.basis.g
+            ("dict.logistics.scale.basis.g", "zh-CN", "基于公式的等级", "等级基础.G"),
+            // dict.logistics.scale.basis.g
+            ("dict.logistics.scale.basis.g", "zh-HK", "基于公式的等级_hk", "等级基础.G"),
+
+            // dict.logistics.scale.basis.l
+            ("dict.logistics.scale.basis.l", "en-US", "点等级_us", "等级基础.L"),
+            // dict.logistics.scale.basis.l
+            ("dict.logistics.scale.basis.l", "ja-JP", "点等级_jp", "等级基础.L"),
+            // dict.logistics.scale.basis.l
+            ("dict.logistics.scale.basis.l", "zh-CN", "点等级", "等级基础.L"),
+            // dict.logistics.scale.basis.l
+            ("dict.logistics.scale.basis.l", "zh-HK", "点等级_hk", "等级基础.L"),
+
+            // dict.logistics.scale.basis.m
+            ("dict.logistics.scale.basis.m", "en-US", "时间期间等级 - 月_us", "等级基础.M"),
+            // dict.logistics.scale.basis.m
+            ("dict.logistics.scale.basis.m", "ja-JP", "时间期间等级 - 月_jp", "等级基础.M"),
+            // dict.logistics.scale.basis.m
+            ("dict.logistics.scale.basis.m", "zh-CN", "时间期间等级 - 月", "等级基础.M"),
+            // dict.logistics.scale.basis.m
+            ("dict.logistics.scale.basis.m", "zh-HK", "时间期间等级 - 月_hk", "等级基础.M"),
+
+            // dict.logistics.scale.basis.n
+            ("dict.logistics.scale.basis.n", "en-US", "时间期间等级 - 年_us", "等级基础.N"),
+            // dict.logistics.scale.basis.n
+            ("dict.logistics.scale.basis.n", "ja-JP", "时间期间等级 - 年_jp", "等级基础.N"),
+            // dict.logistics.scale.basis.n
+            ("dict.logistics.scale.basis.n", "zh-CN", "时间期间等级 - 年", "等级基础.N"),
+            // dict.logistics.scale.basis.n
+            ("dict.logistics.scale.basis.n", "zh-HK", "时间期间等级 - 年_hk", "等级基础.N"),
+
+            // dict.logistics.scale.basis.o
+            ("dict.logistics.scale.basis.o", "en-US", "时间期间等级 - 天_us", "等级基础.O"),
+            // dict.logistics.scale.basis.o
+            ("dict.logistics.scale.basis.o", "ja-JP", "时间期间等级 - 天_jp", "等级基础.O"),
+            // dict.logistics.scale.basis.o
+            ("dict.logistics.scale.basis.o", "zh-CN", "时间期间等级 - 天", "等级基础.O"),
+            // dict.logistics.scale.basis.o
+            ("dict.logistics.scale.basis.o", "zh-HK", "时间期间等级 - 天_hk", "等级基础.O"),
+
+            // dict.logistics.scale.basis.p
+            ("dict.logistics.scale.basis.p", "en-US", "时间期间等级 - 周_us", "等级基础.P"),
+            // dict.logistics.scale.basis.p
+            ("dict.logistics.scale.basis.p", "ja-JP", "时间期间等级 - 周_jp", "等级基础.P"),
+            // dict.logistics.scale.basis.p
+            ("dict.logistics.scale.basis.p", "zh-CN", "时间期间等级 - 周", "等级基础.P"),
+            // dict.logistics.scale.basis.p
+            ("dict.logistics.scale.basis.p", "zh-HK", "时间期间等级 - 周_hk", "等级基础.P"),
+
+            // dict.logistics.scale.basis.r
+            ("dict.logistics.scale.basis.r", "en-US", "距离_us", "等级基础.R"),
+            // dict.logistics.scale.basis.r
+            ("dict.logistics.scale.basis.r", "ja-JP", "距离_jp", "等级基础.R"),
+            // dict.logistics.scale.basis.r
+            ("dict.logistics.scale.basis.r", "zh-CN", "距离", "等级基础.R"),
+            // dict.logistics.scale.basis.r
+            ("dict.logistics.scale.basis.r", "zh-HK", "距离_hk", "等级基础.R"),
+
+            // dict.logistics.scale.basis.s
+            ("dict.logistics.scale.basis.s", "en-US", "发运单位数_us", "等级基础.S"),
+            // dict.logistics.scale.basis.s
+            ("dict.logistics.scale.basis.s", "ja-JP", "发运单位数_jp", "等级基础.S"),
+            // dict.logistics.scale.basis.s
+            ("dict.logistics.scale.basis.s", "zh-CN", "发运单位数", "等级基础.S"),
+            // dict.logistics.scale.basis.s
+            ("dict.logistics.scale.basis.s", "zh-HK", "发运单位数_hk", "等级基础.S"),
+
+            // dict.logistics.scale.basis.t
+            ("dict.logistics.scale.basis.t", "en-US", "保留的 (IS-OIL, 时间价格)_us", "等级基础.T"),
+            // dict.logistics.scale.basis.t
+            ("dict.logistics.scale.basis.t", "ja-JP", "保留的 (IS-OIL, 时间价格)_jp", "等级基础.T"),
+            // dict.logistics.scale.basis.t
+            ("dict.logistics.scale.basis.t", "zh-CN", "保留的 (IS-OIL, 时间价格)", "等级基础.T"),
+            // dict.logistics.scale.basis.t
+            ("dict.logistics.scale.basis.t", "zh-HK", "保留的 (IS-OIL, 时间价格)_hk", "等级基础.T"),
+
+            // dict.logistics.scale.basis.x
+            ("dict.logistics.scale.basis.x", "en-US", "保留的 (IS-OIL, 天价格)_us", "等级基础.X"),
+            // dict.logistics.scale.basis.x
+            ("dict.logistics.scale.basis.x", "ja-JP", "保留的 (IS-OIL, 天价格)_jp", "等级基础.X"),
+            // dict.logistics.scale.basis.x
+            ("dict.logistics.scale.basis.x", "zh-CN", "保留的 (IS-OIL, 天价格)", "等级基础.X"),
+            // dict.logistics.scale.basis.x
+            ("dict.logistics.scale.basis.x", "zh-HK", "保留的 (IS-OIL, 天价格)_hk", "等级基础.X"),
 
             // dict.logistics.price.unit.param.1
             ("dict.logistics.price.unit.param.1", "en-US", "1_us", "价格单位.1"),
@@ -5955,49 +6639,49 @@ public class TaktDictI18nSeedData : ITaktSeedDataCoordinator
             ("dict.logistics.countersign.business.type.standalone", "zh-HK", "独立会签_hk", "会签业务类型.独立会签"),
 
             // dict.logistics.sampling.scheme.type.gb2828
-            ("dict.logistics.sampling.scheme.type.gb2828", "en-US", "gt/b 2828.1_us", "抽样方案类型.gt/b 2828.1"),
+            ("dict.logistics.sampling.scheme.type.gb2828", "en-US", "GT/B 2828.1_us", "抽样方案类型.gt/b 2828.1"),
             // dict.logistics.sampling.scheme.type.gb2828
-            ("dict.logistics.sampling.scheme.type.gb2828", "ja-JP", "gt/b 2828.1_jp", "抽样方案类型.gt/b 2828.1"),
+            ("dict.logistics.sampling.scheme.type.gb2828", "ja-JP", "GT/B 2828.1_jp", "抽样方案类型.gt/b 2828.1"),
             // dict.logistics.sampling.scheme.type.gb2828
-            ("dict.logistics.sampling.scheme.type.gb2828", "zh-CN", "gt/b 2828.1", "抽样方案类型.gt/b 2828.1"),
+            ("dict.logistics.sampling.scheme.type.gb2828", "zh-CN", "GT/B 2828.1", "抽样方案类型.gt/b 2828.1"),
             // dict.logistics.sampling.scheme.type.gb2828
-            ("dict.logistics.sampling.scheme.type.gb2828", "zh-HK", "gt/b 2828.1_hk", "抽样方案类型.gt/b 2828.1"),
+            ("dict.logistics.sampling.scheme.type.gb2828", "zh-HK", "GT/B 2828.1_hk", "抽样方案类型.gt/b 2828.1"),
 
             // dict.logistics.sampling.scheme.type.mil105e
-            ("dict.logistics.sampling.scheme.type.mil105e", "en-US", "mil-std-105e_us", "抽样方案类型.mil-std-105e"),
+            ("dict.logistics.sampling.scheme.type.mil105e", "en-US", "MIL-STD-105E_us", "抽样方案类型.mil-std-105e"),
             // dict.logistics.sampling.scheme.type.mil105e
-            ("dict.logistics.sampling.scheme.type.mil105e", "ja-JP", "mil-std-105e_jp", "抽样方案类型.mil-std-105e"),
+            ("dict.logistics.sampling.scheme.type.mil105e", "ja-JP", "MIL-STD-105E_jp", "抽样方案类型.mil-std-105e"),
             // dict.logistics.sampling.scheme.type.mil105e
-            ("dict.logistics.sampling.scheme.type.mil105e", "zh-CN", "mil-std-105e", "抽样方案类型.mil-std-105e"),
+            ("dict.logistics.sampling.scheme.type.mil105e", "zh-CN", "MIL-STD-105E", "抽样方案类型.mil-std-105e"),
             // dict.logistics.sampling.scheme.type.mil105e
-            ("dict.logistics.sampling.scheme.type.mil105e", "zh-HK", "mil-std-105e_hk", "抽样方案类型.mil-std-105e"),
+            ("dict.logistics.sampling.scheme.type.mil105e", "zh-HK", "MIL-STD-105E_hk", "抽样方案类型.mil-std-105e"),
 
             // dict.logistics.sampling.scheme.type.iso2859
-            ("dict.logistics.sampling.scheme.type.iso2859", "en-US", "iso 2859-1_us", "抽样方案类型.iso 2859-1"),
+            ("dict.logistics.sampling.scheme.type.iso2859", "en-US", "ISO 2859-1_us", "抽样方案类型.iso 2859-1"),
             // dict.logistics.sampling.scheme.type.iso2859
-            ("dict.logistics.sampling.scheme.type.iso2859", "ja-JP", "iso 2859-1_jp", "抽样方案类型.iso 2859-1"),
+            ("dict.logistics.sampling.scheme.type.iso2859", "ja-JP", "ISO 2859-1_jp", "抽样方案类型.iso 2859-1"),
             // dict.logistics.sampling.scheme.type.iso2859
-            ("dict.logistics.sampling.scheme.type.iso2859", "zh-CN", "iso 2859-1", "抽样方案类型.iso 2859-1"),
+            ("dict.logistics.sampling.scheme.type.iso2859", "zh-CN", "ISO 2859-1", "抽样方案类型.iso 2859-1"),
             // dict.logistics.sampling.scheme.type.iso2859
-            ("dict.logistics.sampling.scheme.type.iso2859", "zh-HK", "iso 2859-1_hk", "抽样方案类型.iso 2859-1"),
+            ("dict.logistics.sampling.scheme.type.iso2859", "zh-HK", "ISO 2859-1_hk", "抽样方案类型.iso 2859-1"),
 
             // dict.logistics.sampling.scheme.type.gb2829
-            ("dict.logistics.sampling.scheme.type.gb2829", "en-US", "gt/b 2829_us", "抽样方案类型.gt/b 2829"),
+            ("dict.logistics.sampling.scheme.type.gb2829", "en-US", "GT/B 2829_us", "抽样方案类型.gt/b 2829"),
             // dict.logistics.sampling.scheme.type.gb2829
-            ("dict.logistics.sampling.scheme.type.gb2829", "ja-JP", "gt/b 2829_jp", "抽样方案类型.gt/b 2829"),
+            ("dict.logistics.sampling.scheme.type.gb2829", "ja-JP", "GT/B 2829_jp", "抽样方案类型.gt/b 2829"),
             // dict.logistics.sampling.scheme.type.gb2829
-            ("dict.logistics.sampling.scheme.type.gb2829", "zh-CN", "gt/b 2829", "抽样方案类型.gt/b 2829"),
+            ("dict.logistics.sampling.scheme.type.gb2829", "zh-CN", "GT/B 2829", "抽样方案类型.gt/b 2829"),
             // dict.logistics.sampling.scheme.type.gb2829
-            ("dict.logistics.sampling.scheme.type.gb2829", "zh-HK", "gt/b 2829_hk", "抽样方案类型.gt/b 2829"),
+            ("dict.logistics.sampling.scheme.type.gb2829", "zh-HK", "GT/B 2829_hk", "抽样方案类型.gt/b 2829"),
 
             // dict.logistics.sampling.scheme.type.c_zero
-            ("dict.logistics.sampling.scheme.type.c_zero", "en-US", "c=0抽样_us", "抽样方案类型.c=0抽样"),
+            ("dict.logistics.sampling.scheme.type.c_zero", "en-US", "C=0抽样_us", "抽样方案类型.c=0抽样"),
             // dict.logistics.sampling.scheme.type.c_zero
-            ("dict.logistics.sampling.scheme.type.c_zero", "ja-JP", "c=0抽样_jp", "抽样方案类型.c=0抽样"),
+            ("dict.logistics.sampling.scheme.type.c_zero", "ja-JP", "C=0抽样_jp", "抽样方案类型.c=0抽样"),
             // dict.logistics.sampling.scheme.type.c_zero
-            ("dict.logistics.sampling.scheme.type.c_zero", "zh-CN", "c=0抽样", "抽样方案类型.c=0抽样"),
+            ("dict.logistics.sampling.scheme.type.c_zero", "zh-CN", "C=0抽样", "抽样方案类型.c=0抽样"),
             // dict.logistics.sampling.scheme.type.c_zero
-            ("dict.logistics.sampling.scheme.type.c_zero", "zh-HK", "c=0抽样_hk", "抽样方案类型.c=0抽样"),
+            ("dict.logistics.sampling.scheme.type.c_zero", "zh-HK", "C=0抽样_hk", "抽样方案类型.c=0抽样"),
 
             // dict.logistics.sampling.scheme.type.continuous
             ("dict.logistics.sampling.scheme.type.continuous", "en-US", "连续抽样_us", "抽样方案类型.连续抽样"),
@@ -6268,6 +6952,24 @@ public class TaktDictI18nSeedData : ITaktSeedDataCoordinator
             ("dict.logistics.valuation.class.category.z300", "zh-CN", "原材料", "评估类别.原材料"),
             // dict.logistics.valuation.class.category.z300
             ("dict.logistics.valuation.class.category.z300", "zh-HK", "原材料_hk", "评估类别.原材料"),
+
+            // dict.logistics.inventory.provision.scope.item
+            ("dict.logistics.inventory.provision.scope.item", "en-US", "按单个存货项目_us", "存货跌价计提范围.按单个存货项目"),
+            // dict.logistics.inventory.provision.scope.item
+            ("dict.logistics.inventory.provision.scope.item", "ja-JP", "按单个存货项目_jp", "存货跌价计提范围.按单个存货项目"),
+            // dict.logistics.inventory.provision.scope.item
+            ("dict.logistics.inventory.provision.scope.item", "zh-CN", "按单个存货项目", "存货跌价计提范围.按单个存货项目"),
+            // dict.logistics.inventory.provision.scope.item
+            ("dict.logistics.inventory.provision.scope.item", "zh-HK", "按单个存货项目_hk", "存货跌价计提范围.按单个存货项目"),
+
+            // dict.logistics.inventory.provision.scope.category
+            ("dict.logistics.inventory.provision.scope.category", "en-US", "按存货类别_us", "存货跌价计提范围.按存货类别"),
+            // dict.logistics.inventory.provision.scope.category
+            ("dict.logistics.inventory.provision.scope.category", "ja-JP", "按存货类别_jp", "存货跌价计提范围.按存货类别"),
+            // dict.logistics.inventory.provision.scope.category
+            ("dict.logistics.inventory.provision.scope.category", "zh-CN", "按存货类别", "存货跌价计提范围.按存货类别"),
+            // dict.logistics.inventory.provision.scope.category
+            ("dict.logistics.inventory.provision.scope.category", "zh-HK", "按存货类别_hk", "存货跌价计提范围.按存货类别"),
 
             // dict.logistics.inbound.type.0
             ("dict.logistics.inbound.type.0", "en-US", "采购入库_us", "入库类型.采购入库"),
@@ -9087,31 +9789,31 @@ public class TaktDictI18nSeedData : ITaktSeedDataCoordinator
             ("dict.logistics.destination.port.code.naisha.truck", "zh-HK", "南沙_卡车_hk", "目的地港.南沙_卡车"),
 
             // dict.logistics.destination.port.code.other.air
-            ("dict.logistics.destination.port.code.other.air", "en-US", "其它_空运_us", "目的地港.其它_空运"),
+            ("dict.logistics.destination.port.code.other.air", "en-US", "其他_空运_us", "目的地港.其他_空运"),
             // dict.logistics.destination.port.code.other.air
-            ("dict.logistics.destination.port.code.other.air", "ja-JP", "其它_空运_jp", "目的地港.其它_空运"),
+            ("dict.logistics.destination.port.code.other.air", "ja-JP", "其他_空运_jp", "目的地港.其他_空运"),
             // dict.logistics.destination.port.code.other.air
-            ("dict.logistics.destination.port.code.other.air", "zh-CN", "其它_空运", "目的地港.其它_空运"),
+            ("dict.logistics.destination.port.code.other.air", "zh-CN", "其他_空运", "目的地港.其他_空运"),
             // dict.logistics.destination.port.code.other.air
-            ("dict.logistics.destination.port.code.other.air", "zh-HK", "其它_空运_hk", "目的地港.其它_空运"),
+            ("dict.logistics.destination.port.code.other.air", "zh-HK", "其他_空运_hk", "目的地港.其他_空运"),
 
             // dict.logistics.destination.port.code.other.boat
-            ("dict.logistics.destination.port.code.other.boat", "en-US", "其它_船运_us", "目的地港.其它_船运"),
+            ("dict.logistics.destination.port.code.other.boat", "en-US", "其他_船运_us", "目的地港.其他_船运"),
             // dict.logistics.destination.port.code.other.boat
-            ("dict.logistics.destination.port.code.other.boat", "ja-JP", "其它_船运_jp", "目的地港.其它_船运"),
+            ("dict.logistics.destination.port.code.other.boat", "ja-JP", "其他_船运_jp", "目的地港.其他_船运"),
             // dict.logistics.destination.port.code.other.boat
-            ("dict.logistics.destination.port.code.other.boat", "zh-CN", "其它_船运", "目的地港.其它_船运"),
+            ("dict.logistics.destination.port.code.other.boat", "zh-CN", "其他_船运", "目的地港.其他_船运"),
             // dict.logistics.destination.port.code.other.boat
-            ("dict.logistics.destination.port.code.other.boat", "zh-HK", "其它_船运_hk", "目的地港.其它_船运"),
+            ("dict.logistics.destination.port.code.other.boat", "zh-HK", "其他_船运_hk", "目的地港.其他_船运"),
 
             // dict.logistics.destination.port.code.other.truck
-            ("dict.logistics.destination.port.code.other.truck", "en-US", "其它_卡车_us", "目的地港.其它_卡车"),
+            ("dict.logistics.destination.port.code.other.truck", "en-US", "其他_卡车_us", "目的地港.其他_卡车"),
             // dict.logistics.destination.port.code.other.truck
-            ("dict.logistics.destination.port.code.other.truck", "ja-JP", "其它_卡车_jp", "目的地港.其它_卡车"),
+            ("dict.logistics.destination.port.code.other.truck", "ja-JP", "其他_卡车_jp", "目的地港.其他_卡车"),
             // dict.logistics.destination.port.code.other.truck
-            ("dict.logistics.destination.port.code.other.truck", "zh-CN", "其它_卡车", "目的地港.其它_卡车"),
+            ("dict.logistics.destination.port.code.other.truck", "zh-CN", "其他_卡车", "目的地港.其他_卡车"),
             // dict.logistics.destination.port.code.other.truck
-            ("dict.logistics.destination.port.code.other.truck", "zh-HK", "其它_卡车_hk", "目的地港.其它_卡车"),
+            ("dict.logistics.destination.port.code.other.truck", "zh-HK", "其他_卡车_hk", "目的地港.其他_卡车"),
 
             // dict.logistics.destination.port.code.rotterdam.air
             ("dict.logistics.destination.port.code.rotterdam.air", "en-US", "鹿特丹_空运_us", "目的地港.鹿特丹_空运"),
@@ -9816,13 +10518,13 @@ public class TaktDictI18nSeedData : ITaktSeedDataCoordinator
             ("dict.logistics.sales.price.type.pr00", "zh-HK", "标准销售价格（净价）_hk", "销售价格条件类型.PR00"),
 
             // dict.logistics.sales.price.type.pb00
-            ("dict.logistics.sales.price.type.pb00", "en-US", "毛价（Gross Price）_us", "销售价格条件类型.PB00"),
+            ("dict.logistics.sales.price.type.pb00", "en-US", "毛价（GROSS PRICE）_us", "销售价格条件类型.PB00"),
             // dict.logistics.sales.price.type.pb00
-            ("dict.logistics.sales.price.type.pb00", "ja-JP", "毛价（Gross Price）_jp", "销售价格条件类型.PB00"),
+            ("dict.logistics.sales.price.type.pb00", "ja-JP", "毛价（GROSS PRICE）_jp", "销售价格条件类型.PB00"),
             // dict.logistics.sales.price.type.pb00
-            ("dict.logistics.sales.price.type.pb00", "zh-CN", "毛价（Gross Price）", "销售价格条件类型.PB00"),
+            ("dict.logistics.sales.price.type.pb00", "zh-CN", "毛价（GROSS PRICE）", "销售价格条件类型.PB00"),
             // dict.logistics.sales.price.type.pb00
-            ("dict.logistics.sales.price.type.pb00", "zh-HK", "毛价（Gross Price）_hk", "销售价格条件类型.PB00"),
+            ("dict.logistics.sales.price.type.pb00", "zh-HK", "毛价（GROSS PRICE）_hk", "销售价格条件类型.PB00"),
 
             // dict.logistics.sales.price.type.vkp0
             ("dict.logistics.sales.price.type.vkp0", "en-US", "零售价/销售价_us", "销售价格条件类型.VKP0"),
@@ -10014,13 +10716,13 @@ public class TaktDictI18nSeedData : ITaktSeedDataCoordinator
             ("dict.logistics.aoi.inspection.line.category.2", "zh-HK", "2_hk", "aoi线别.2"),
 
             // dict.logistics.aoi.inspection.line.category.1a
-            ("dict.logistics.aoi.inspection.line.category.1a", "en-US", "1a_us", "aoi线别.1a"),
+            ("dict.logistics.aoi.inspection.line.category.1a", "en-US", "1A_us", "aoi线别.1a"),
             // dict.logistics.aoi.inspection.line.category.1a
-            ("dict.logistics.aoi.inspection.line.category.1a", "ja-JP", "1a_jp", "aoi线别.1a"),
+            ("dict.logistics.aoi.inspection.line.category.1a", "ja-JP", "1A_jp", "aoi线别.1a"),
             // dict.logistics.aoi.inspection.line.category.1a
-            ("dict.logistics.aoi.inspection.line.category.1a", "zh-CN", "1a", "aoi线别.1a"),
+            ("dict.logistics.aoi.inspection.line.category.1a", "zh-CN", "1A", "aoi线别.1a"),
             // dict.logistics.aoi.inspection.line.category.1a
-            ("dict.logistics.aoi.inspection.line.category.1a", "zh-HK", "1a_hk", "aoi线别.1a"),
+            ("dict.logistics.aoi.inspection.line.category.1a", "zh-HK", "1A_hk", "aoi线别.1a"),
 
             // dict.logistics.defect.category.1
             ("dict.logistics.defect.category.1", "en-US", "自插_us", "不良区分.自插"),
@@ -10086,13 +10788,13 @@ public class TaktDictI18nSeedData : ITaktSeedDataCoordinator
             ("dict.logistics.defect.category.7", "zh-HK", "组立_hk", "不良区分.组立"),
 
             // dict.logistics.defect.category.8
-            ("dict.logistics.defect.category.8", "en-US", "smt_us", "不良区分.smt"),
+            ("dict.logistics.defect.category.8", "en-US", "SMT_us", "不良区分.smt"),
             // dict.logistics.defect.category.8
-            ("dict.logistics.defect.category.8", "ja-JP", "smt_jp", "不良区分.smt"),
+            ("dict.logistics.defect.category.8", "ja-JP", "SMT_jp", "不良区分.smt"),
             // dict.logistics.defect.category.8
-            ("dict.logistics.defect.category.8", "zh-CN", "smt", "不良区分.smt"),
+            ("dict.logistics.defect.category.8", "zh-CN", "SMT", "不良区分.smt"),
             // dict.logistics.defect.category.8
-            ("dict.logistics.defect.category.8", "zh-HK", "smt_hk", "不良区分.smt"),
+            ("dict.logistics.defect.category.8", "zh-HK", "SMT_hk", "不良区分.smt"),
 
             // dict.logistics.defect.category.9
             ("dict.logistics.defect.category.9", "en-US", "其他_us", "不良区分.其他"),
@@ -10248,13 +10950,13 @@ public class TaktDictI18nSeedData : ITaktSeedDataCoordinator
             ("dict.logistics.ec.status.3", "zh-HK", "发行的_hk", "设变状态.发行的"),
 
             // dict.logistics.ec.status.4
-            ("dict.logistics.ec.status.4", "en-US", "p.p中变更的_us", "设变状态.p.p中变更的"),
+            ("dict.logistics.ec.status.4", "en-US", "P.P中变更的_us", "设变状态.p.p中变更的"),
             // dict.logistics.ec.status.4
-            ("dict.logistics.ec.status.4", "ja-JP", "p.p中变更的_jp", "设变状态.p.p中变更的"),
+            ("dict.logistics.ec.status.4", "ja-JP", "P.P中变更的_jp", "设变状态.p.p中变更的"),
             // dict.logistics.ec.status.4
-            ("dict.logistics.ec.status.4", "zh-CN", "p.p中变更的", "设变状态.p.p中变更的"),
+            ("dict.logistics.ec.status.4", "zh-CN", "P.P中变更的", "设变状态.p.p中变更的"),
             // dict.logistics.ec.status.4
-            ("dict.logistics.ec.status.4", "zh-HK", "p.p中变更的_hk", "设变状态.p.p中变更的"),
+            ("dict.logistics.ec.status.4", "zh-HK", "P.P中变更的_hk", "设变状态.p.p中变更的"),
 
             // dict.logistics.ec.status.5
             ("dict.logistics.ec.status.5", "en-US", "固定的_us", "设变状态.固定的"),
@@ -10761,22 +11463,22 @@ public class TaktDictI18nSeedData : ITaktSeedDataCoordinator
             ("dict.logistics.nonachievement.reason.category.6", "zh-HK", "部品不良,欠料_hk", "未达成原因.部品不良,欠料"),
 
             // dict.logistics.nonachievement.reason.category.7
-            ("dict.logistics.nonachievement.reason.category.7", "en-US", "st差异大_us", "未达成原因.st差异大"),
+            ("dict.logistics.nonachievement.reason.category.7", "en-US", "ST差异大_us", "未达成原因.st差异大"),
             // dict.logistics.nonachievement.reason.category.7
-            ("dict.logistics.nonachievement.reason.category.7", "ja-JP", "st差异大_jp", "未达成原因.st差异大"),
+            ("dict.logistics.nonachievement.reason.category.7", "ja-JP", "ST差异大_jp", "未达成原因.st差异大"),
             // dict.logistics.nonachievement.reason.category.7
-            ("dict.logistics.nonachievement.reason.category.7", "zh-CN", "st差异大", "未达成原因.st差异大"),
+            ("dict.logistics.nonachievement.reason.category.7", "zh-CN", "ST差异大", "未达成原因.st差异大"),
             // dict.logistics.nonachievement.reason.category.7
-            ("dict.logistics.nonachievement.reason.category.7", "zh-HK", "st差异大_hk", "未达成原因.st差异大"),
+            ("dict.logistics.nonachievement.reason.category.7", "zh-HK", "ST差异大_hk", "未达成原因.st差异大"),
 
             // dict.logistics.nonachievement.reason.category.8
-            ("dict.logistics.nonachievement.reason.category.8", "en-US", "仪器设备,设置,调试,检查,故障,切换_us", "未达成原因.仪器设备,设置,调试,检查,故障,切换"),
+            ("dict.logistics.nonachievement.reason.category.8", "en-US", "仪器设备,设置,调试,检查,故障_us", "未达成原因.仪器设备,设置,调试,检查,故障"),
             // dict.logistics.nonachievement.reason.category.8
-            ("dict.logistics.nonachievement.reason.category.8", "ja-JP", "仪器设备,设置,调试,检查,故障,切换_jp", "未达成原因.仪器设备,设置,调试,检查,故障,切换"),
+            ("dict.logistics.nonachievement.reason.category.8", "ja-JP", "仪器设备,设置,调试,检查,故障_jp", "未达成原因.仪器设备,设置,调试,检查,故障"),
             // dict.logistics.nonachievement.reason.category.8
-            ("dict.logistics.nonachievement.reason.category.8", "zh-CN", "仪器设备,设置,调试,检查,故障,切换", "未达成原因.仪器设备,设置,调试,检查,故障,切换"),
+            ("dict.logistics.nonachievement.reason.category.8", "zh-CN", "仪器设备,设置,调试,检查,故障", "未达成原因.仪器设备,设置,调试,检查,故障"),
             // dict.logistics.nonachievement.reason.category.8
-            ("dict.logistics.nonachievement.reason.category.8", "zh-HK", "仪器设备,设置,调试,检查,故障,切换_hk", "未达成原因.仪器设备,设置,调试,检查,故障,切换"),
+            ("dict.logistics.nonachievement.reason.category.8", "zh-HK", "仪器设备,设置,调试,检查,故障_hk", "未达成原因.仪器设备,设置,调试,检查,故障"),
 
             // dict.logistics.nonachievement.reason.category.9
             ("dict.logistics.nonachievement.reason.category.9", "en-US", "请假,旷工_us", "未达成原因.请假,旷工"),
@@ -10806,76 +11508,112 @@ public class TaktDictI18nSeedData : ITaktSeedDataCoordinator
             ("dict.logistics.nonachievement.reason.category.11", "zh-HK", "切换机种,仕向_hk", "未达成原因.切换机种,仕向"),
 
             // dict.logistics.nonachievement.reason.category.12
-            ("dict.logistics.nonachievement.reason.category.12", "en-US", "组立慢,加工多,工程多,下机慢,作业困难,升级慢_us", "未达成原因.组立慢,加工多,工程多,下机慢,作业困难,升级慢"),
+            ("dict.logistics.nonachievement.reason.category.12", "en-US", "作业困难_us", "未达成原因.作业困难"),
             // dict.logistics.nonachievement.reason.category.12
-            ("dict.logistics.nonachievement.reason.category.12", "ja-JP", "组立慢,加工多,工程多,下机慢,作业困难,升级慢_jp", "未达成原因.组立慢,加工多,工程多,下机慢,作业困难,升级慢"),
+            ("dict.logistics.nonachievement.reason.category.12", "ja-JP", "作业困难_jp", "未达成原因.作业困难"),
             // dict.logistics.nonachievement.reason.category.12
-            ("dict.logistics.nonachievement.reason.category.12", "zh-CN", "组立慢,加工多,工程多,下机慢,作业困难,升级慢", "未达成原因.组立慢,加工多,工程多,下机慢,作业困难,升级慢"),
+            ("dict.logistics.nonachievement.reason.category.12", "zh-CN", "作业困难", "未达成原因.作业困难"),
             // dict.logistics.nonachievement.reason.category.12
-            ("dict.logistics.nonachievement.reason.category.12", "zh-HK", "组立慢,加工多,工程多,下机慢,作业困难,升级慢_hk", "未达成原因.组立慢,加工多,工程多,下机慢,作业困难,升级慢"),
+            ("dict.logistics.nonachievement.reason.category.12", "zh-HK", "作业困难_hk", "未达成原因.作业困难"),
 
             // dict.logistics.nonachievement.reason.category.13
-            ("dict.logistics.nonachievement.reason.category.13", "en-US", "改修_us", "未达成原因.改修"),
+            ("dict.logistics.nonachievement.reason.category.13", "en-US", "组立慢_us", "未达成原因.组立慢"),
             // dict.logistics.nonachievement.reason.category.13
-            ("dict.logistics.nonachievement.reason.category.13", "ja-JP", "改修_jp", "未达成原因.改修"),
+            ("dict.logistics.nonachievement.reason.category.13", "ja-JP", "组立慢_jp", "未达成原因.组立慢"),
             // dict.logistics.nonachievement.reason.category.13
-            ("dict.logistics.nonachievement.reason.category.13", "zh-CN", "改修", "未达成原因.改修"),
+            ("dict.logistics.nonachievement.reason.category.13", "zh-CN", "组立慢", "未达成原因.组立慢"),
             // dict.logistics.nonachievement.reason.category.13
-            ("dict.logistics.nonachievement.reason.category.13", "zh-HK", "改修_hk", "未达成原因.改修"),
+            ("dict.logistics.nonachievement.reason.category.13", "zh-HK", "组立慢_hk", "未达成原因.组立慢"),
 
             // dict.logistics.nonachievement.reason.category.14
-            ("dict.logistics.nonachievement.reason.category.14", "en-US", "坏机多,不良多_us", "未达成原因.坏机多,不良多"),
+            ("dict.logistics.nonachievement.reason.category.14", "en-US", "下机慢_us", "未达成原因.下机慢"),
             // dict.logistics.nonachievement.reason.category.14
-            ("dict.logistics.nonachievement.reason.category.14", "ja-JP", "坏机多,不良多_jp", "未达成原因.坏机多,不良多"),
+            ("dict.logistics.nonachievement.reason.category.14", "ja-JP", "下机慢_jp", "未达成原因.下机慢"),
             // dict.logistics.nonachievement.reason.category.14
-            ("dict.logistics.nonachievement.reason.category.14", "zh-CN", "坏机多,不良多", "未达成原因.坏机多,不良多"),
+            ("dict.logistics.nonachievement.reason.category.14", "zh-CN", "下机慢", "未达成原因.下机慢"),
             // dict.logistics.nonachievement.reason.category.14
-            ("dict.logistics.nonachievement.reason.category.14", "zh-HK", "坏机多,不良多_hk", "未达成原因.坏机多,不良多"),
+            ("dict.logistics.nonachievement.reason.category.14", "zh-HK", "下机慢_hk", "未达成原因.下机慢"),
 
             // dict.logistics.nonachievement.reason.category.15
-            ("dict.logistics.nonachievement.reason.category.15", "en-US", "人员借调_us", "未达成原因.人员借调"),
+            ("dict.logistics.nonachievement.reason.category.15", "en-US", "加工多_us", "未达成原因.加工多"),
             // dict.logistics.nonachievement.reason.category.15
-            ("dict.logistics.nonachievement.reason.category.15", "ja-JP", "人员借调_jp", "未达成原因.人员借调"),
+            ("dict.logistics.nonachievement.reason.category.15", "ja-JP", "加工多_jp", "未达成原因.加工多"),
             // dict.logistics.nonachievement.reason.category.15
-            ("dict.logistics.nonachievement.reason.category.15", "zh-CN", "人员借调", "未达成原因.人员借调"),
+            ("dict.logistics.nonachievement.reason.category.15", "zh-CN", "加工多", "未达成原因.加工多"),
             // dict.logistics.nonachievement.reason.category.15
-            ("dict.logistics.nonachievement.reason.category.15", "zh-HK", "人员借调_hk", "未达成原因.人员借调"),
+            ("dict.logistics.nonachievement.reason.category.15", "zh-HK", "加工多_hk", "未达成原因.加工多"),
 
             // dict.logistics.nonachievement.reason.category.16
-            ("dict.logistics.nonachievement.reason.category.16", "en-US", "返工_us", "未达成原因.返工"),
+            ("dict.logistics.nonachievement.reason.category.16", "en-US", "升级慢_us", "未达成原因.升级慢"),
             // dict.logistics.nonachievement.reason.category.16
-            ("dict.logistics.nonachievement.reason.category.16", "ja-JP", "返工_jp", "未达成原因.返工"),
+            ("dict.logistics.nonachievement.reason.category.16", "ja-JP", "升级慢_jp", "未达成原因.升级慢"),
             // dict.logistics.nonachievement.reason.category.16
-            ("dict.logistics.nonachievement.reason.category.16", "zh-CN", "返工", "未达成原因.返工"),
+            ("dict.logistics.nonachievement.reason.category.16", "zh-CN", "升级慢", "未达成原因.升级慢"),
             // dict.logistics.nonachievement.reason.category.16
-            ("dict.logistics.nonachievement.reason.category.16", "zh-HK", "返工_hk", "未达成原因.返工"),
+            ("dict.logistics.nonachievement.reason.category.16", "zh-HK", "升级慢_hk", "未达成原因.升级慢"),
 
             // dict.logistics.nonachievement.reason.category.17
-            ("dict.logistics.nonachievement.reason.category.17", "en-US", "机台工程复杂，下机慢_us", "未达成原因.下机慢"),
+            ("dict.logistics.nonachievement.reason.category.17", "en-US", "改修_us", "未达成原因.改修"),
             // dict.logistics.nonachievement.reason.category.17
-            ("dict.logistics.nonachievement.reason.category.17", "ja-JP", "机台工程复杂，下机慢_jp", "未达成原因.下机慢"),
+            ("dict.logistics.nonachievement.reason.category.17", "ja-JP", "改修_jp", "未达成原因.改修"),
             // dict.logistics.nonachievement.reason.category.17
-            ("dict.logistics.nonachievement.reason.category.17", "zh-CN", "机台工程复杂，下机慢", "未达成原因.下机慢"),
+            ("dict.logistics.nonachievement.reason.category.17", "zh-CN", "改修", "未达成原因.改修"),
             // dict.logistics.nonachievement.reason.category.17
-            ("dict.logistics.nonachievement.reason.category.17", "zh-HK", "机台工程复杂，下机慢_hk", "未达成原因.下机慢"),
+            ("dict.logistics.nonachievement.reason.category.17", "zh-HK", "改修_hk", "未达成原因.改修"),
 
             // dict.logistics.nonachievement.reason.category.18
-            ("dict.logistics.nonachievement.reason.category.18", "en-US", "学习中,新人员学习,开会_us", "未达成原因.学习中,新人员学习,开会"),
+            ("dict.logistics.nonachievement.reason.category.18", "en-US", "坏机多,不良多_us", "未达成原因.坏机多,不良多"),
             // dict.logistics.nonachievement.reason.category.18
-            ("dict.logistics.nonachievement.reason.category.18", "ja-JP", "学习中,新人员学习,开会_jp", "未达成原因.学习中,新人员学习,开会"),
+            ("dict.logistics.nonachievement.reason.category.18", "ja-JP", "坏机多,不良多_jp", "未达成原因.坏机多,不良多"),
             // dict.logistics.nonachievement.reason.category.18
-            ("dict.logistics.nonachievement.reason.category.18", "zh-CN", "学习中,新人员学习,开会", "未达成原因.学习中,新人员学习,开会"),
+            ("dict.logistics.nonachievement.reason.category.18", "zh-CN", "坏机多,不良多", "未达成原因.坏机多,不良多"),
             // dict.logistics.nonachievement.reason.category.18
-            ("dict.logistics.nonachievement.reason.category.18", "zh-HK", "学习中,新人员学习,开会_hk", "未达成原因.学习中,新人员学习,开会"),
+            ("dict.logistics.nonachievement.reason.category.18", "zh-HK", "坏机多,不良多_hk", "未达成原因.坏机多,不良多"),
 
             // dict.logistics.nonachievement.reason.category.19
-            ("dict.logistics.nonachievement.reason.category.19", "en-US", "正常_us", "未达成原因.正常"),
+            ("dict.logistics.nonachievement.reason.category.19", "en-US", "人员借调_us", "未达成原因.人员借调"),
             // dict.logistics.nonachievement.reason.category.19
-            ("dict.logistics.nonachievement.reason.category.19", "ja-JP", "正常_jp", "未达成原因.正常"),
+            ("dict.logistics.nonachievement.reason.category.19", "ja-JP", "人员借调_jp", "未达成原因.人员借调"),
             // dict.logistics.nonachievement.reason.category.19
-            ("dict.logistics.nonachievement.reason.category.19", "zh-CN", "正常", "未达成原因.正常"),
+            ("dict.logistics.nonachievement.reason.category.19", "zh-CN", "人员借调", "未达成原因.人员借调"),
             // dict.logistics.nonachievement.reason.category.19
-            ("dict.logistics.nonachievement.reason.category.19", "zh-HK", "正常_hk", "未达成原因.正常"),
+            ("dict.logistics.nonachievement.reason.category.19", "zh-HK", "人员借调_hk", "未达成原因.人员借调"),
+
+            // dict.logistics.nonachievement.reason.category.20
+            ("dict.logistics.nonachievement.reason.category.20", "en-US", "返工_us", "未达成原因.返工"),
+            // dict.logistics.nonachievement.reason.category.20
+            ("dict.logistics.nonachievement.reason.category.20", "ja-JP", "返工_jp", "未达成原因.返工"),
+            // dict.logistics.nonachievement.reason.category.20
+            ("dict.logistics.nonachievement.reason.category.20", "zh-CN", "返工", "未达成原因.返工"),
+            // dict.logistics.nonachievement.reason.category.20
+            ("dict.logistics.nonachievement.reason.category.20", "zh-HK", "返工_hk", "未达成原因.返工"),
+
+            // dict.logistics.nonachievement.reason.category.21
+            ("dict.logistics.nonachievement.reason.category.21", "en-US", "工程复杂，下机慢_us", "未达成原因.工程复杂，下机慢"),
+            // dict.logistics.nonachievement.reason.category.21
+            ("dict.logistics.nonachievement.reason.category.21", "ja-JP", "工程复杂，下机慢_jp", "未达成原因.工程复杂，下机慢"),
+            // dict.logistics.nonachievement.reason.category.21
+            ("dict.logistics.nonachievement.reason.category.21", "zh-CN", "工程复杂，下机慢", "未达成原因.工程复杂，下机慢"),
+            // dict.logistics.nonachievement.reason.category.21
+            ("dict.logistics.nonachievement.reason.category.21", "zh-HK", "工程复杂，下机慢_hk", "未达成原因.工程复杂，下机慢"),
+
+            // dict.logistics.nonachievement.reason.category.22
+            ("dict.logistics.nonachievement.reason.category.22", "en-US", "学习中,新人员学习,开会_us", "未达成原因.学习中,新人员学习,开会"),
+            // dict.logistics.nonachievement.reason.category.22
+            ("dict.logistics.nonachievement.reason.category.22", "ja-JP", "学习中,新人员学习,开会_jp", "未达成原因.学习中,新人员学习,开会"),
+            // dict.logistics.nonachievement.reason.category.22
+            ("dict.logistics.nonachievement.reason.category.22", "zh-CN", "学习中,新人员学习,开会", "未达成原因.学习中,新人员学习,开会"),
+            // dict.logistics.nonachievement.reason.category.22
+            ("dict.logistics.nonachievement.reason.category.22", "zh-HK", "学习中,新人员学习,开会_hk", "未达成原因.学习中,新人员学习,开会"),
+
+            // dict.logistics.nonachievement.reason.category.23
+            ("dict.logistics.nonachievement.reason.category.23", "en-US", "正常_us", "未达成原因.正常"),
+            // dict.logistics.nonachievement.reason.category.23
+            ("dict.logistics.nonachievement.reason.category.23", "ja-JP", "正常_jp", "未达成原因.正常"),
+            // dict.logistics.nonachievement.reason.category.23
+            ("dict.logistics.nonachievement.reason.category.23", "zh-CN", "正常", "未达成原因.正常"),
+            // dict.logistics.nonachievement.reason.category.23
+            ("dict.logistics.nonachievement.reason.category.23", "zh-HK", "正常_hk", "未达成原因.正常"),
 
             // dict.logistics.pcb.location.category.1
             ("dict.logistics.pcb.location.category.1", "en-US", "翘脚_us", "pcb个所.翘脚"),
@@ -10932,13 +11670,13 @@ public class TaktDictI18nSeedData : ITaktSeedDataCoordinator
             ("dict.logistics.pcb.location.category.6", "zh-HK", "发黄_hk", "pcb个所.发黄"),
 
             // dict.logistics.pcb.location.category.7
-            ("dict.logistics.pcb.location.category.7", "en-US", "ic pin 竖立_us", "pcb个所.ic pin 竖立"),
+            ("dict.logistics.pcb.location.category.7", "en-US", "IC PIN 竖立_us", "pcb个所.ic pin 竖立"),
             // dict.logistics.pcb.location.category.7
-            ("dict.logistics.pcb.location.category.7", "ja-JP", "ic pin 竖立_jp", "pcb个所.ic pin 竖立"),
+            ("dict.logistics.pcb.location.category.7", "ja-JP", "IC PIN 竖立_jp", "pcb个所.ic pin 竖立"),
             // dict.logistics.pcb.location.category.7
-            ("dict.logistics.pcb.location.category.7", "zh-CN", "ic pin 竖立", "pcb个所.ic pin 竖立"),
+            ("dict.logistics.pcb.location.category.7", "zh-CN", "IC PIN 竖立", "pcb个所.ic pin 竖立"),
             // dict.logistics.pcb.location.category.7
-            ("dict.logistics.pcb.location.category.7", "zh-HK", "ic pin 竖立_hk", "pcb个所.ic pin 竖立"),
+            ("dict.logistics.pcb.location.category.7", "zh-HK", "IC PIN 竖立_hk", "pcb个所.ic pin 竖立"),
 
             // dict.logistics.pcb.location.category.8
             ("dict.logistics.pcb.location.category.8", "en-US", "连锡_us", "pcb个所.连锡"),
@@ -10977,13 +11715,13 @@ public class TaktDictI18nSeedData : ITaktSeedDataCoordinator
             ("dict.logistics.pcb.location.category.11", "zh-HK", "基板不良_hk", "pcb个所.基板不良"),
 
             // dict.logistics.pcb.location.category.12
-            ("dict.logistics.pcb.location.category.12", "en-US", "ic pin 浮高_us", "pcb个所.ic pin 浮高"),
+            ("dict.logistics.pcb.location.category.12", "en-US", "IC PIN 浮高_us", "pcb个所.ic pin 浮高"),
             // dict.logistics.pcb.location.category.12
-            ("dict.logistics.pcb.location.category.12", "ja-JP", "ic pin 浮高_jp", "pcb个所.ic pin 浮高"),
+            ("dict.logistics.pcb.location.category.12", "ja-JP", "IC PIN 浮高_jp", "pcb个所.ic pin 浮高"),
             // dict.logistics.pcb.location.category.12
-            ("dict.logistics.pcb.location.category.12", "zh-CN", "ic pin 浮高", "pcb个所.ic pin 浮高"),
+            ("dict.logistics.pcb.location.category.12", "zh-CN", "IC PIN 浮高", "pcb个所.ic pin 浮高"),
             // dict.logistics.pcb.location.category.12
-            ("dict.logistics.pcb.location.category.12", "zh-HK", "ic pin 浮高_hk", "pcb个所.ic pin 浮高"),
+            ("dict.logistics.pcb.location.category.12", "zh-HK", "IC PIN 浮高_hk", "pcb个所.ic pin 浮高"),
 
             // dict.logistics.pcb.location.category.13
             ("dict.logistics.pcb.location.category.13", "en-US", "红胶不良_us", "pcb个所.红胶不良"),
@@ -11085,13 +11823,13 @@ public class TaktDictI18nSeedData : ITaktSeedDataCoordinator
             ("dict.logistics.pcb.location.category.23", "zh-HK", "反向_hk", "pcb个所.反向"),
 
             // dict.logistics.pcb.location.category.24
-            ("dict.logistics.pcb.location.category.24", "en-US", "pcb不良_us", "pcb个所.pcb不良"),
+            ("dict.logistics.pcb.location.category.24", "en-US", "PCB不良_us", "pcb个所.pcb不良"),
             // dict.logistics.pcb.location.category.24
-            ("dict.logistics.pcb.location.category.24", "ja-JP", "pcb不良_jp", "pcb个所.pcb不良"),
+            ("dict.logistics.pcb.location.category.24", "ja-JP", "PCB不良_jp", "pcb个所.pcb不良"),
             // dict.logistics.pcb.location.category.24
-            ("dict.logistics.pcb.location.category.24", "zh-CN", "pcb不良", "pcb个所.pcb不良"),
+            ("dict.logistics.pcb.location.category.24", "zh-CN", "PCB不良", "pcb个所.pcb不良"),
             // dict.logistics.pcb.location.category.24
-            ("dict.logistics.pcb.location.category.24", "zh-HK", "pcb不良_hk", "pcb个所.pcb不良"),
+            ("dict.logistics.pcb.location.category.24", "zh-HK", "PCB不良_hk", "pcb个所.pcb不良"),
 
             // dict.logistics.pcb.location.category.25
             ("dict.logistics.pcb.location.category.25", "en-US", "焊接不良_us", "pcb个所.焊接不良"),
@@ -11130,2380 +11868,2146 @@ public class TaktDictI18nSeedData : ITaktSeedDataCoordinator
             ("dict.logistics.pcb.location.category.28", "zh-HK", "锡少_hk", "pcb个所.锡少"),
 
             // dict.logistics.pcba.function.category.1
-            ("dict.logistics.pcba.function.category.1", "en-US", "a_us", "pcba功能类别.a"),
+            ("dict.logistics.pcba.function.category.1", "en-US", "A2IO_us", "pcba功能类别.a2io"),
             // dict.logistics.pcba.function.category.1
-            ("dict.logistics.pcba.function.category.1", "ja-JP", "a_jp", "pcba功能类别.a"),
+            ("dict.logistics.pcba.function.category.1", "ja-JP", "A2IO_jp", "pcba功能类别.a2io"),
             // dict.logistics.pcba.function.category.1
-            ("dict.logistics.pcba.function.category.1", "zh-CN", "a", "pcba功能类别.a"),
+            ("dict.logistics.pcba.function.category.1", "zh-CN", "A2IO", "pcba功能类别.a2io"),
             // dict.logistics.pcba.function.category.1
-            ("dict.logistics.pcba.function.category.1", "zh-HK", "a_hk", "pcba功能类别.a"),
+            ("dict.logistics.pcba.function.category.1", "zh-HK", "A2IO_hk", "pcba功能类别.a2io"),
 
             // dict.logistics.pcba.function.category.2
-            ("dict.logistics.pcba.function.category.2", "en-US", "adoc_us", "pcba功能类别.adoc"),
+            ("dict.logistics.pcba.function.category.2", "en-US", "A2IO B_us", "pcba功能类别.a2io b"),
             // dict.logistics.pcba.function.category.2
-            ("dict.logistics.pcba.function.category.2", "ja-JP", "adoc_jp", "pcba功能类别.adoc"),
+            ("dict.logistics.pcba.function.category.2", "ja-JP", "A2IO B_jp", "pcba功能类别.a2io b"),
             // dict.logistics.pcba.function.category.2
-            ("dict.logistics.pcba.function.category.2", "zh-CN", "adoc", "pcba功能类别.adoc"),
+            ("dict.logistics.pcba.function.category.2", "zh-CN", "A2IO B", "pcba功能类别.a2io b"),
             // dict.logistics.pcba.function.category.2
-            ("dict.logistics.pcba.function.category.2", "zh-HK", "adoc_hk", "pcba功能类别.adoc"),
+            ("dict.logistics.pcba.function.category.2", "zh-HK", "A2IO B_hk", "pcba功能类别.a2io b"),
 
             // dict.logistics.pcba.function.category.3
-            ("dict.logistics.pcba.function.category.3", "en-US", "ana_us", "pcba功能类别.ana"),
+            ("dict.logistics.pcba.function.category.3", "en-US", "A2IO T_us", "pcba功能类别.a2io t"),
             // dict.logistics.pcba.function.category.3
-            ("dict.logistics.pcba.function.category.3", "ja-JP", "ana_jp", "pcba功能类别.ana"),
+            ("dict.logistics.pcba.function.category.3", "ja-JP", "A2IO T_jp", "pcba功能类别.a2io t"),
             // dict.logistics.pcba.function.category.3
-            ("dict.logistics.pcba.function.category.3", "zh-CN", "ana", "pcba功能类别.ana"),
+            ("dict.logistics.pcba.function.category.3", "zh-CN", "A2IO T", "pcba功能类别.a2io t"),
             // dict.logistics.pcba.function.category.3
-            ("dict.logistics.pcba.function.category.3", "zh-HK", "ana_hk", "pcba功能类别.ana"),
+            ("dict.logistics.pcba.function.category.3", "zh-HK", "A2IO T_hk", "pcba功能类别.a2io t"),
 
             // dict.logistics.pcba.function.category.4
-            ("dict.logistics.pcba.function.category.4", "en-US", "audio_us", "pcba功能类别.audio"),
+            ("dict.logistics.pcba.function.category.4", "en-US", "A4IN B_us", "pcba功能类别.a4in b"),
             // dict.logistics.pcba.function.category.4
-            ("dict.logistics.pcba.function.category.4", "ja-JP", "audio_jp", "pcba功能类别.audio"),
+            ("dict.logistics.pcba.function.category.4", "ja-JP", "A4IN B_jp", "pcba功能类别.a4in b"),
             // dict.logistics.pcba.function.category.4
-            ("dict.logistics.pcba.function.category.4", "zh-CN", "audio", "pcba功能类别.audio"),
+            ("dict.logistics.pcba.function.category.4", "zh-CN", "A4IN B", "pcba功能类别.a4in b"),
             // dict.logistics.pcba.function.category.4
-            ("dict.logistics.pcba.function.category.4", "zh-HK", "audio_hk", "pcba功能类别.audio"),
+            ("dict.logistics.pcba.function.category.4", "zh-HK", "A4IN B_hk", "pcba功能类别.a4in b"),
 
             // dict.logistics.pcba.function.category.5
-            ("dict.logistics.pcba.function.category.5", "en-US", "b_us", "pcba功能类别.b"),
+            ("dict.logistics.pcba.function.category.5", "en-US", "A4IN T_us", "pcba功能类别.a4in t"),
             // dict.logistics.pcba.function.category.5
-            ("dict.logistics.pcba.function.category.5", "ja-JP", "b_jp", "pcba功能类别.b"),
+            ("dict.logistics.pcba.function.category.5", "ja-JP", "A4IN T_jp", "pcba功能类别.a4in t"),
             // dict.logistics.pcba.function.category.5
-            ("dict.logistics.pcba.function.category.5", "zh-CN", "b", "pcba功能类别.b"),
+            ("dict.logistics.pcba.function.category.5", "zh-CN", "A4IN T", "pcba功能类别.a4in t"),
             // dict.logistics.pcba.function.category.5
-            ("dict.logistics.pcba.function.category.5", "zh-HK", "b_hk", "pcba功能类别.b"),
+            ("dict.logistics.pcba.function.category.5", "zh-HK", "A4IN T_hk", "pcba功能类别.a4in t"),
 
             // dict.logistics.pcba.function.category.6
-            ("dict.logistics.pcba.function.category.6", "en-US", "bottom_us", "pcba功能类别.bottom"),
+            ("dict.logistics.pcba.function.category.6", "en-US", "A4OUT B_us", "pcba功能类别.a4out b"),
             // dict.logistics.pcba.function.category.6
-            ("dict.logistics.pcba.function.category.6", "ja-JP", "bottom_jp", "pcba功能类别.bottom"),
+            ("dict.logistics.pcba.function.category.6", "ja-JP", "A4OUT B_jp", "pcba功能类别.a4out b"),
             // dict.logistics.pcba.function.category.6
-            ("dict.logistics.pcba.function.category.6", "zh-CN", "bottom", "pcba功能类别.bottom"),
+            ("dict.logistics.pcba.function.category.6", "zh-CN", "A4OUT B", "pcba功能类别.a4out b"),
             // dict.logistics.pcba.function.category.6
-            ("dict.logistics.pcba.function.category.6", "zh-HK", "bottom_hk", "pcba功能类别.bottom"),
+            ("dict.logistics.pcba.function.category.6", "zh-HK", "A4OUT B_hk", "pcba功能类别.a4out b"),
 
             // dict.logistics.pcba.function.category.7
-            ("dict.logistics.pcba.function.category.7", "en-US", "btice_us", "pcba功能类别.btice"),
+            ("dict.logistics.pcba.function.category.7", "en-US", "A4OUT T_us", "pcba功能类别.a4out t"),
             // dict.logistics.pcba.function.category.7
-            ("dict.logistics.pcba.function.category.7", "ja-JP", "btice_jp", "pcba功能类别.btice"),
+            ("dict.logistics.pcba.function.category.7", "ja-JP", "A4OUT T_jp", "pcba功能类别.a4out t"),
             // dict.logistics.pcba.function.category.7
-            ("dict.logistics.pcba.function.category.7", "zh-CN", "btice", "pcba功能类别.btice"),
+            ("dict.logistics.pcba.function.category.7", "zh-CN", "A4OUT T", "pcba功能类别.a4out t"),
             // dict.logistics.pcba.function.category.7
-            ("dict.logistics.pcba.function.category.7", "zh-HK", "btice_hk", "pcba功能类别.btice"),
+            ("dict.logistics.pcba.function.category.7", "zh-HK", "A4OUT T_hk", "pcba功能类别.a4out t"),
 
             // dict.logistics.pcba.function.category.8
-            ("dict.logistics.pcba.function.category.8", "en-US", "c_us", "pcba功能类别.c"),
+            ("dict.logistics.pcba.function.category.8", "en-US", "AD04 T_us", "pcba功能类别.ad04 t"),
             // dict.logistics.pcba.function.category.8
-            ("dict.logistics.pcba.function.category.8", "ja-JP", "c_jp", "pcba功能类别.c"),
+            ("dict.logistics.pcba.function.category.8", "ja-JP", "AD04 T_jp", "pcba功能类别.ad04 t"),
             // dict.logistics.pcba.function.category.8
-            ("dict.logistics.pcba.function.category.8", "zh-CN", "c", "pcba功能类别.c"),
+            ("dict.logistics.pcba.function.category.8", "zh-CN", "AD04 T", "pcba功能类别.ad04 t"),
             // dict.logistics.pcba.function.category.8
-            ("dict.logistics.pcba.function.category.8", "zh-HK", "c_hk", "pcba功能类别.c"),
+            ("dict.logistics.pcba.function.category.8", "zh-HK", "AD04 T_hk", "pcba功能类别.ad04 t"),
 
             // dict.logistics.pcba.function.category.9
-            ("dict.logistics.pcba.function.category.9", "en-US", "dspl_us", "pcba功能类别.dspl"),
+            ("dict.logistics.pcba.function.category.9", "en-US", "ADDA B_us", "pcba功能类别.adda b"),
             // dict.logistics.pcba.function.category.9
-            ("dict.logistics.pcba.function.category.9", "ja-JP", "dspl_jp", "pcba功能类别.dspl"),
+            ("dict.logistics.pcba.function.category.9", "ja-JP", "ADDA B_jp", "pcba功能类别.adda b"),
             // dict.logistics.pcba.function.category.9
-            ("dict.logistics.pcba.function.category.9", "zh-CN", "dspl", "pcba功能类别.dspl"),
+            ("dict.logistics.pcba.function.category.9", "zh-CN", "ADDA B", "pcba功能类别.adda b"),
             // dict.logistics.pcba.function.category.9
-            ("dict.logistics.pcba.function.category.9", "zh-HK", "dspl_hk", "pcba功能类别.dspl"),
+            ("dict.logistics.pcba.function.category.9", "zh-HK", "ADDA B_hk", "pcba功能类别.adda b"),
 
             // dict.logistics.pcba.function.category.10
-            ("dict.logistics.pcba.function.category.10", "en-US", "enc_us", "pcba功能类别.enc"),
+            ("dict.logistics.pcba.function.category.10", "en-US", "ADDA T/B_us", "pcba功能类别.adda t/b"),
             // dict.logistics.pcba.function.category.10
-            ("dict.logistics.pcba.function.category.10", "ja-JP", "enc_jp", "pcba功能类别.enc"),
+            ("dict.logistics.pcba.function.category.10", "ja-JP", "ADDA T/B_jp", "pcba功能类别.adda t/b"),
             // dict.logistics.pcba.function.category.10
-            ("dict.logistics.pcba.function.category.10", "zh-CN", "enc", "pcba功能类别.enc"),
+            ("dict.logistics.pcba.function.category.10", "zh-CN", "ADDA T/B", "pcba功能类别.adda t/b"),
             // dict.logistics.pcba.function.category.10
-            ("dict.logistics.pcba.function.category.10", "zh-HK", "enc_hk", "pcba功能类别.enc"),
+            ("dict.logistics.pcba.function.category.10", "zh-HK", "ADDA T/B_hk", "pcba功能类别.adda t/b"),
 
             // dict.logistics.pcba.function.category.11
-            ("dict.logistics.pcba.function.category.11", "en-US", "front_us", "pcba功能类别.front"),
+            ("dict.logistics.pcba.function.category.11", "en-US", "ADDA T_us", "pcba功能类别.adda t"),
             // dict.logistics.pcba.function.category.11
-            ("dict.logistics.pcba.function.category.11", "ja-JP", "front_jp", "pcba功能类别.front"),
+            ("dict.logistics.pcba.function.category.11", "ja-JP", "ADDA T_jp", "pcba功能类别.adda t"),
             // dict.logistics.pcba.function.category.11
-            ("dict.logistics.pcba.function.category.11", "zh-CN", "front", "pcba功能类别.front"),
+            ("dict.logistics.pcba.function.category.11", "zh-CN", "ADDA T", "pcba功能类别.adda t"),
             // dict.logistics.pcba.function.category.11
-            ("dict.logistics.pcba.function.category.11", "zh-HK", "front_hk", "pcba功能类别.front"),
+            ("dict.logistics.pcba.function.category.11", "zh-HK", "ADDA T_hk", "pcba功能类别.adda t"),
 
             // dict.logistics.pcba.function.category.12
-            ("dict.logistics.pcba.function.category.12", "en-US", "input_us", "pcba功能类别.input"),
+            ("dict.logistics.pcba.function.category.12", "en-US", "ADOC_us", "pcba功能类别.adoc"),
             // dict.logistics.pcba.function.category.12
-            ("dict.logistics.pcba.function.category.12", "ja-JP", "input_jp", "pcba功能类别.input"),
+            ("dict.logistics.pcba.function.category.12", "ja-JP", "ADOC_jp", "pcba功能类别.adoc"),
             // dict.logistics.pcba.function.category.12
-            ("dict.logistics.pcba.function.category.12", "zh-CN", "input", "pcba功能类别.input"),
+            ("dict.logistics.pcba.function.category.12", "zh-CN", "ADOC", "pcba功能类别.adoc"),
             // dict.logistics.pcba.function.category.12
-            ("dict.logistics.pcba.function.category.12", "zh-HK", "input_hk", "pcba功能类别.input"),
+            ("dict.logistics.pcba.function.category.12", "zh-HK", "ADOC_hk", "pcba功能类别.adoc"),
 
             // dict.logistics.pcba.function.category.13
-            ("dict.logistics.pcba.function.category.13", "en-US", "io_us", "pcba功能类别.io"),
+            ("dict.logistics.pcba.function.category.13", "en-US", "ADOC B_us", "pcba功能类别.adoc b"),
             // dict.logistics.pcba.function.category.13
-            ("dict.logistics.pcba.function.category.13", "ja-JP", "io_jp", "pcba功能类别.io"),
+            ("dict.logistics.pcba.function.category.13", "ja-JP", "ADOC B_jp", "pcba功能类别.adoc b"),
             // dict.logistics.pcba.function.category.13
-            ("dict.logistics.pcba.function.category.13", "zh-CN", "io", "pcba功能类别.io"),
+            ("dict.logistics.pcba.function.category.13", "zh-CN", "ADOC B", "pcba功能类别.adoc b"),
             // dict.logistics.pcba.function.category.13
-            ("dict.logistics.pcba.function.category.13", "zh-HK", "io_hk", "pcba功能类别.io"),
+            ("dict.logistics.pcba.function.category.13", "zh-HK", "ADOC B_hk", "pcba功能类别.adoc b"),
 
             // dict.logistics.pcba.function.category.14
-            ("dict.logistics.pcba.function.category.14", "en-US", "jack_us", "pcba功能类别.jack"),
+            ("dict.logistics.pcba.function.category.14", "en-US", "ADOC T/B_us", "pcba功能类别.adoc t/b"),
             // dict.logistics.pcba.function.category.14
-            ("dict.logistics.pcba.function.category.14", "ja-JP", "jack_jp", "pcba功能类别.jack"),
+            ("dict.logistics.pcba.function.category.14", "ja-JP", "ADOC T/B_jp", "pcba功能类别.adoc t/b"),
             // dict.logistics.pcba.function.category.14
-            ("dict.logistics.pcba.function.category.14", "zh-CN", "jack", "pcba功能类别.jack"),
+            ("dict.logistics.pcba.function.category.14", "zh-CN", "ADOC T/B", "pcba功能类别.adoc t/b"),
             // dict.logistics.pcba.function.category.14
-            ("dict.logistics.pcba.function.category.14", "zh-HK", "jack_hk", "pcba功能类别.jack"),
+            ("dict.logistics.pcba.function.category.14", "zh-HK", "ADOC T/B_hk", "pcba功能类别.adoc t/b"),
 
             // dict.logistics.pcba.function.category.15
-            ("dict.logistics.pcba.function.category.15", "en-US", "l_us", "pcba功能类别.l"),
+            ("dict.logistics.pcba.function.category.15", "en-US", "ADOC T_us", "pcba功能类别.adoc t"),
             // dict.logistics.pcba.function.category.15
-            ("dict.logistics.pcba.function.category.15", "ja-JP", "l_jp", "pcba功能类别.l"),
+            ("dict.logistics.pcba.function.category.15", "ja-JP", "ADOC T_jp", "pcba功能类别.adoc t"),
             // dict.logistics.pcba.function.category.15
-            ("dict.logistics.pcba.function.category.15", "zh-CN", "l", "pcba功能类别.l"),
+            ("dict.logistics.pcba.function.category.15", "zh-CN", "ADOC T", "pcba功能类别.adoc t"),
             // dict.logistics.pcba.function.category.15
-            ("dict.logistics.pcba.function.category.15", "zh-HK", "l_hk", "pcba功能类别.l"),
+            ("dict.logistics.pcba.function.category.15", "zh-HK", "ADOC T_hk", "pcba功能类别.adoc t"),
 
             // dict.logistics.pcba.function.category.16
-            ("dict.logistics.pcba.function.category.16", "en-US", "lcd_us", "pcba功能类别.lcd"),
+            ("dict.logistics.pcba.function.category.16", "en-US", "AES4 B_us", "pcba功能类别.aes4 b"),
             // dict.logistics.pcba.function.category.16
-            ("dict.logistics.pcba.function.category.16", "ja-JP", "lcd_jp", "pcba功能类别.lcd"),
+            ("dict.logistics.pcba.function.category.16", "ja-JP", "AES4 B_jp", "pcba功能类别.aes4 b"),
             // dict.logistics.pcba.function.category.16
-            ("dict.logistics.pcba.function.category.16", "zh-CN", "lcd", "pcba功能类别.lcd"),
+            ("dict.logistics.pcba.function.category.16", "zh-CN", "AES4 B", "pcba功能类别.aes4 b"),
             // dict.logistics.pcba.function.category.16
-            ("dict.logistics.pcba.function.category.16", "zh-HK", "lcd_hk", "pcba功能类别.lcd"),
+            ("dict.logistics.pcba.function.category.16", "zh-HK", "AES4 B_hk", "pcba功能类别.aes4 b"),
 
             // dict.logistics.pcba.function.category.17
-            ("dict.logistics.pcba.function.category.17", "en-US", "main_us", "pcba功能类别.main"),
+            ("dict.logistics.pcba.function.category.17", "en-US", "AES4 T/B_us", "pcba功能类别.aes4 t/b"),
             // dict.logistics.pcba.function.category.17
-            ("dict.logistics.pcba.function.category.17", "ja-JP", "main_jp", "pcba功能类别.main"),
+            ("dict.logistics.pcba.function.category.17", "ja-JP", "AES4 T/B_jp", "pcba功能类别.aes4 t/b"),
             // dict.logistics.pcba.function.category.17
-            ("dict.logistics.pcba.function.category.17", "zh-CN", "main", "pcba功能类别.main"),
+            ("dict.logistics.pcba.function.category.17", "zh-CN", "AES4 T/B", "pcba功能类别.aes4 t/b"),
             // dict.logistics.pcba.function.category.17
-            ("dict.logistics.pcba.function.category.17", "zh-HK", "main_hk", "pcba功能类别.main"),
+            ("dict.logistics.pcba.function.category.17", "zh-HK", "AES4 T/B_hk", "pcba功能类别.aes4 t/b"),
 
             // dict.logistics.pcba.function.category.18
-            ("dict.logistics.pcba.function.category.18", "en-US", "panel_us", "pcba功能类别.panel"),
+            ("dict.logistics.pcba.function.category.18", "en-US", "AES4 T_us", "pcba功能类别.aes4 t"),
             // dict.logistics.pcba.function.category.18
-            ("dict.logistics.pcba.function.category.18", "ja-JP", "panel_jp", "pcba功能类别.panel"),
+            ("dict.logistics.pcba.function.category.18", "ja-JP", "AES4 T_jp", "pcba功能类别.aes4 t"),
             // dict.logistics.pcba.function.category.18
-            ("dict.logistics.pcba.function.category.18", "zh-CN", "panel", "pcba功能类别.panel"),
+            ("dict.logistics.pcba.function.category.18", "zh-CN", "AES4 T", "pcba功能类别.aes4 t"),
             // dict.logistics.pcba.function.category.18
-            ("dict.logistics.pcba.function.category.18", "zh-HK", "panel_hk", "pcba功能类别.panel"),
+            ("dict.logistics.pcba.function.category.18", "zh-HK", "AES4 T_hk", "pcba功能类别.aes4 t"),
 
             // dict.logistics.pcba.function.category.19
-            ("dict.logistics.pcba.function.category.19", "en-US", "power_us", "pcba功能类别.power"),
+            ("dict.logistics.pcba.function.category.19", "en-US", "ANA_us", "pcba功能类别.ana"),
             // dict.logistics.pcba.function.category.19
-            ("dict.logistics.pcba.function.category.19", "ja-JP", "power_jp", "pcba功能类别.power"),
+            ("dict.logistics.pcba.function.category.19", "ja-JP", "ANA_jp", "pcba功能类别.ana"),
             // dict.logistics.pcba.function.category.19
-            ("dict.logistics.pcba.function.category.19", "zh-CN", "power", "pcba功能类别.power"),
+            ("dict.logistics.pcba.function.category.19", "zh-CN", "ANA", "pcba功能类别.ana"),
             // dict.logistics.pcba.function.category.19
-            ("dict.logistics.pcba.function.category.19", "zh-HK", "power_hk", "pcba功能类别.power"),
-
-            // dict.logistics.pcba.function.category.20
-            ("dict.logistics.pcba.function.category.20", "en-US", "rear_us", "pcba功能类别.rear"),
-            // dict.logistics.pcba.function.category.20
-            ("dict.logistics.pcba.function.category.20", "ja-JP", "rear_jp", "pcba功能类别.rear"),
-            // dict.logistics.pcba.function.category.20
-            ("dict.logistics.pcba.function.category.20", "zh-CN", "rear", "pcba功能类别.rear"),
-            // dict.logistics.pcba.function.category.20
-            ("dict.logistics.pcba.function.category.20", "zh-HK", "rear_hk", "pcba功能类别.rear"),
-
-            // dict.logistics.pcba.function.category.21
-            ("dict.logistics.pcba.function.category.21", "en-US", "rmn-1_us", "pcba功能类别.rmn-1"),
-            // dict.logistics.pcba.function.category.21
-            ("dict.logistics.pcba.function.category.21", "ja-JP", "rmn-1_jp", "pcba功能类别.rmn-1"),
-            // dict.logistics.pcba.function.category.21
-            ("dict.logistics.pcba.function.category.21", "zh-CN", "rmn-1", "pcba功能类别.rmn-1"),
-            // dict.logistics.pcba.function.category.21
-            ("dict.logistics.pcba.function.category.21", "zh-HK", "rmn-1_hk", "pcba功能类别.rmn-1"),
-
-            // dict.logistics.pcba.function.category.22
-            ("dict.logistics.pcba.function.category.22", "en-US", "sata_us", "pcba功能类别.sata"),
-            // dict.logistics.pcba.function.category.22
-            ("dict.logistics.pcba.function.category.22", "ja-JP", "sata_jp", "pcba功能类别.sata"),
-            // dict.logistics.pcba.function.category.22
-            ("dict.logistics.pcba.function.category.22", "zh-CN", "sata", "pcba功能类别.sata"),
-            // dict.logistics.pcba.function.category.22
-            ("dict.logistics.pcba.function.category.22", "zh-HK", "sata_hk", "pcba功能类别.sata"),
-
-            // dict.logistics.pcba.function.category.23
-            ("dict.logistics.pcba.function.category.23", "en-US", "seq_us", "pcba功能类别.seq"),
-            // dict.logistics.pcba.function.category.23
-            ("dict.logistics.pcba.function.category.23", "ja-JP", "seq_jp", "pcba功能类别.seq"),
-            // dict.logistics.pcba.function.category.23
-            ("dict.logistics.pcba.function.category.23", "zh-CN", "seq", "pcba功能类别.seq"),
-            // dict.logistics.pcba.function.category.23
-            ("dict.logistics.pcba.function.category.23", "zh-HK", "seq_hk", "pcba功能类别.seq"),
+            ("dict.logistics.pcba.function.category.19", "zh-HK", "ANA_hk", "pcba功能类别.ana"),
 
             // dict.logistics.pcba.function.category.24
-            ("dict.logistics.pcba.function.category.24", "en-US", "sys_us", "pcba功能类别.sys"),
+            ("dict.logistics.pcba.function.category.24", "en-US", "ANA A_us", "pcba功能类别.ana a"),
             // dict.logistics.pcba.function.category.24
-            ("dict.logistics.pcba.function.category.24", "ja-JP", "sys_jp", "pcba功能类别.sys"),
+            ("dict.logistics.pcba.function.category.24", "ja-JP", "ANA A_jp", "pcba功能类别.ana a"),
             // dict.logistics.pcba.function.category.24
-            ("dict.logistics.pcba.function.category.24", "zh-CN", "sys", "pcba功能类别.sys"),
+            ("dict.logistics.pcba.function.category.24", "zh-CN", "ANA A", "pcba功能类别.ana a"),
             // dict.logistics.pcba.function.category.24
-            ("dict.logistics.pcba.function.category.24", "zh-HK", "sys_hk", "pcba功能类别.sys"),
+            ("dict.logistics.pcba.function.category.24", "zh-HK", "ANA A_hk", "pcba功能类别.ana a"),
 
             // dict.logistics.pcba.function.category.25
-            ("dict.logistics.pcba.function.category.25", "en-US", "top_us", "pcba功能类别.top"),
+            ("dict.logistics.pcba.function.category.25", "en-US", "ANA B_us", "pcba功能类别.ana b"),
             // dict.logistics.pcba.function.category.25
-            ("dict.logistics.pcba.function.category.25", "ja-JP", "top_jp", "pcba功能类别.top"),
+            ("dict.logistics.pcba.function.category.25", "ja-JP", "ANA B_jp", "pcba功能类别.ana b"),
             // dict.logistics.pcba.function.category.25
-            ("dict.logistics.pcba.function.category.25", "zh-CN", "top", "pcba功能类别.top"),
+            ("dict.logistics.pcba.function.category.25", "zh-CN", "ANA B", "pcba功能类别.ana b"),
             // dict.logistics.pcba.function.category.25
-            ("dict.logistics.pcba.function.category.25", "zh-HK", "top_hk", "pcba功能类别.top"),
+            ("dict.logistics.pcba.function.category.25", "zh-HK", "ANA B_hk", "pcba功能类别.ana b"),
 
             // dict.logistics.pcba.function.category.26
-            ("dict.logistics.pcba.function.category.26", "en-US", "usb_us", "pcba功能类别.usb"),
+            ("dict.logistics.pcba.function.category.26", "en-US", "ANA T/B_us", "pcba功能类别.ana t/b"),
             // dict.logistics.pcba.function.category.26
-            ("dict.logistics.pcba.function.category.26", "ja-JP", "usb_jp", "pcba功能类别.usb"),
+            ("dict.logistics.pcba.function.category.26", "ja-JP", "ANA T/B_jp", "pcba功能类别.ana t/b"),
             // dict.logistics.pcba.function.category.26
-            ("dict.logistics.pcba.function.category.26", "zh-CN", "usb", "pcba功能类别.usb"),
+            ("dict.logistics.pcba.function.category.26", "zh-CN", "ANA T/B", "pcba功能类别.ana t/b"),
             // dict.logistics.pcba.function.category.26
-            ("dict.logistics.pcba.function.category.26", "zh-HK", "usb_hk", "pcba功能类别.usb"),
-
-            // dict.logistics.pcba.panel.category.1
-            ("dict.logistics.pcba.panel.category.1", "en-US", "a2io_us", "pcba板位类别.a2io"),
-            // dict.logistics.pcba.panel.category.1
-            ("dict.logistics.pcba.panel.category.1", "ja-JP", "a2io_jp", "pcba板位类别.a2io"),
-            // dict.logistics.pcba.panel.category.1
-            ("dict.logistics.pcba.panel.category.1", "zh-CN", "a2io", "pcba板位类别.a2io"),
-            // dict.logistics.pcba.panel.category.1
-            ("dict.logistics.pcba.panel.category.1", "zh-HK", "a2io_hk", "pcba板位类别.a2io"),
-
-            // dict.logistics.pcba.panel.category.2
-            ("dict.logistics.pcba.panel.category.2", "en-US", "a2io b_us", "pcba板位类别.a2io b"),
-            // dict.logistics.pcba.panel.category.2
-            ("dict.logistics.pcba.panel.category.2", "ja-JP", "a2io b_jp", "pcba板位类别.a2io b"),
-            // dict.logistics.pcba.panel.category.2
-            ("dict.logistics.pcba.panel.category.2", "zh-CN", "a2io b", "pcba板位类别.a2io b"),
-            // dict.logistics.pcba.panel.category.2
-            ("dict.logistics.pcba.panel.category.2", "zh-HK", "a2io b_hk", "pcba板位类别.a2io b"),
-
-            // dict.logistics.pcba.panel.category.3
-            ("dict.logistics.pcba.panel.category.3", "en-US", "a2io t_us", "pcba板位类别.a2io t"),
-            // dict.logistics.pcba.panel.category.3
-            ("dict.logistics.pcba.panel.category.3", "ja-JP", "a2io t_jp", "pcba板位类别.a2io t"),
-            // dict.logistics.pcba.panel.category.3
-            ("dict.logistics.pcba.panel.category.3", "zh-CN", "a2io t", "pcba板位类别.a2io t"),
-            // dict.logistics.pcba.panel.category.3
-            ("dict.logistics.pcba.panel.category.3", "zh-HK", "a2io t_hk", "pcba板位类别.a2io t"),
-
-            // dict.logistics.pcba.panel.category.4
-            ("dict.logistics.pcba.panel.category.4", "en-US", "a4in b_us", "pcba板位类别.a4in b"),
-            // dict.logistics.pcba.panel.category.4
-            ("dict.logistics.pcba.panel.category.4", "ja-JP", "a4in b_jp", "pcba板位类别.a4in b"),
-            // dict.logistics.pcba.panel.category.4
-            ("dict.logistics.pcba.panel.category.4", "zh-CN", "a4in b", "pcba板位类别.a4in b"),
-            // dict.logistics.pcba.panel.category.4
-            ("dict.logistics.pcba.panel.category.4", "zh-HK", "a4in b_hk", "pcba板位类别.a4in b"),
-
-            // dict.logistics.pcba.panel.category.5
-            ("dict.logistics.pcba.panel.category.5", "en-US", "a4in t_us", "pcba板位类别.a4in t"),
-            // dict.logistics.pcba.panel.category.5
-            ("dict.logistics.pcba.panel.category.5", "ja-JP", "a4in t_jp", "pcba板位类别.a4in t"),
-            // dict.logistics.pcba.panel.category.5
-            ("dict.logistics.pcba.panel.category.5", "zh-CN", "a4in t", "pcba板位类别.a4in t"),
-            // dict.logistics.pcba.panel.category.5
-            ("dict.logistics.pcba.panel.category.5", "zh-HK", "a4in t_hk", "pcba板位类别.a4in t"),
-
-            // dict.logistics.pcba.panel.category.6
-            ("dict.logistics.pcba.panel.category.6", "en-US", "a4out b_us", "pcba板位类别.a4out b"),
-            // dict.logistics.pcba.panel.category.6
-            ("dict.logistics.pcba.panel.category.6", "ja-JP", "a4out b_jp", "pcba板位类别.a4out b"),
-            // dict.logistics.pcba.panel.category.6
-            ("dict.logistics.pcba.panel.category.6", "zh-CN", "a4out b", "pcba板位类别.a4out b"),
-            // dict.logistics.pcba.panel.category.6
-            ("dict.logistics.pcba.panel.category.6", "zh-HK", "a4out b_hk", "pcba板位类别.a4out b"),
-
-            // dict.logistics.pcba.panel.category.7
-            ("dict.logistics.pcba.panel.category.7", "en-US", "a4out t_us", "pcba板位类别.a4out t"),
-            // dict.logistics.pcba.panel.category.7
-            ("dict.logistics.pcba.panel.category.7", "ja-JP", "a4out t_jp", "pcba板位类别.a4out t"),
-            // dict.logistics.pcba.panel.category.7
-            ("dict.logistics.pcba.panel.category.7", "zh-CN", "a4out t", "pcba板位类别.a4out t"),
-            // dict.logistics.pcba.panel.category.7
-            ("dict.logistics.pcba.panel.category.7", "zh-HK", "a4out t_hk", "pcba板位类别.a4out t"),
-
-            // dict.logistics.pcba.panel.category.8
-            ("dict.logistics.pcba.panel.category.8", "en-US", "ad04 t_us", "pcba板位类别.ad04 t"),
-            // dict.logistics.pcba.panel.category.8
-            ("dict.logistics.pcba.panel.category.8", "ja-JP", "ad04 t_jp", "pcba板位类别.ad04 t"),
-            // dict.logistics.pcba.panel.category.8
-            ("dict.logistics.pcba.panel.category.8", "zh-CN", "ad04 t", "pcba板位类别.ad04 t"),
-            // dict.logistics.pcba.panel.category.8
-            ("dict.logistics.pcba.panel.category.8", "zh-HK", "ad04 t_hk", "pcba板位类别.ad04 t"),
-
-            // dict.logistics.pcba.panel.category.9
-            ("dict.logistics.pcba.panel.category.9", "en-US", "adda b_us", "pcba板位类别.adda b"),
-            // dict.logistics.pcba.panel.category.9
-            ("dict.logistics.pcba.panel.category.9", "ja-JP", "adda b_jp", "pcba板位类别.adda b"),
-            // dict.logistics.pcba.panel.category.9
-            ("dict.logistics.pcba.panel.category.9", "zh-CN", "adda b", "pcba板位类别.adda b"),
-            // dict.logistics.pcba.panel.category.9
-            ("dict.logistics.pcba.panel.category.9", "zh-HK", "adda b_hk", "pcba板位类别.adda b"),
-
-            // dict.logistics.pcba.panel.category.10
-            ("dict.logistics.pcba.panel.category.10", "en-US", "adda t/b_us", "pcba板位类别.adda t/b"),
-            // dict.logistics.pcba.panel.category.10
-            ("dict.logistics.pcba.panel.category.10", "ja-JP", "adda t/b_jp", "pcba板位类别.adda t/b"),
-            // dict.logistics.pcba.panel.category.10
-            ("dict.logistics.pcba.panel.category.10", "zh-CN", "adda t/b", "pcba板位类别.adda t/b"),
-            // dict.logistics.pcba.panel.category.10
-            ("dict.logistics.pcba.panel.category.10", "zh-HK", "adda t/b_hk", "pcba板位类别.adda t/b"),
-
-            // dict.logistics.pcba.panel.category.11
-            ("dict.logistics.pcba.panel.category.11", "en-US", "adda t_us", "pcba板位类别.adda t"),
-            // dict.logistics.pcba.panel.category.11
-            ("dict.logistics.pcba.panel.category.11", "ja-JP", "adda t_jp", "pcba板位类别.adda t"),
-            // dict.logistics.pcba.panel.category.11
-            ("dict.logistics.pcba.panel.category.11", "zh-CN", "adda t", "pcba板位类别.adda t"),
-            // dict.logistics.pcba.panel.category.11
-            ("dict.logistics.pcba.panel.category.11", "zh-HK", "adda t_hk", "pcba板位类别.adda t"),
-
-            // dict.logistics.pcba.panel.category.12
-            ("dict.logistics.pcba.panel.category.12", "en-US", "adoc_us", "pcba板位类别.adoc"),
-            // dict.logistics.pcba.panel.category.12
-            ("dict.logistics.pcba.panel.category.12", "ja-JP", "adoc_jp", "pcba板位类别.adoc"),
-            // dict.logistics.pcba.panel.category.12
-            ("dict.logistics.pcba.panel.category.12", "zh-CN", "adoc", "pcba板位类别.adoc"),
-            // dict.logistics.pcba.panel.category.12
-            ("dict.logistics.pcba.panel.category.12", "zh-HK", "adoc_hk", "pcba板位类别.adoc"),
-
-            // dict.logistics.pcba.panel.category.13
-            ("dict.logistics.pcba.panel.category.13", "en-US", "adoc b_us", "pcba板位类别.adoc b"),
-            // dict.logistics.pcba.panel.category.13
-            ("dict.logistics.pcba.panel.category.13", "ja-JP", "adoc b_jp", "pcba板位类别.adoc b"),
-            // dict.logistics.pcba.panel.category.13
-            ("dict.logistics.pcba.panel.category.13", "zh-CN", "adoc b", "pcba板位类别.adoc b"),
-            // dict.logistics.pcba.panel.category.13
-            ("dict.logistics.pcba.panel.category.13", "zh-HK", "adoc b_hk", "pcba板位类别.adoc b"),
-
-            // dict.logistics.pcba.panel.category.14
-            ("dict.logistics.pcba.panel.category.14", "en-US", "adoc t/b_us", "pcba板位类别.adoc t/b"),
-            // dict.logistics.pcba.panel.category.14
-            ("dict.logistics.pcba.panel.category.14", "ja-JP", "adoc t/b_jp", "pcba板位类别.adoc t/b"),
-            // dict.logistics.pcba.panel.category.14
-            ("dict.logistics.pcba.panel.category.14", "zh-CN", "adoc t/b", "pcba板位类别.adoc t/b"),
-            // dict.logistics.pcba.panel.category.14
-            ("dict.logistics.pcba.panel.category.14", "zh-HK", "adoc t/b_hk", "pcba板位类别.adoc t/b"),
-
-            // dict.logistics.pcba.panel.category.15
-            ("dict.logistics.pcba.panel.category.15", "en-US", "adoc t_us", "pcba板位类别.adoc t"),
-            // dict.logistics.pcba.panel.category.15
-            ("dict.logistics.pcba.panel.category.15", "ja-JP", "adoc t_jp", "pcba板位类别.adoc t"),
-            // dict.logistics.pcba.panel.category.15
-            ("dict.logistics.pcba.panel.category.15", "zh-CN", "adoc t", "pcba板位类别.adoc t"),
-            // dict.logistics.pcba.panel.category.15
-            ("dict.logistics.pcba.panel.category.15", "zh-HK", "adoc t_hk", "pcba板位类别.adoc t"),
-
-            // dict.logistics.pcba.panel.category.16
-            ("dict.logistics.pcba.panel.category.16", "en-US", "aes4 b_us", "pcba板位类别.aes4 b"),
-            // dict.logistics.pcba.panel.category.16
-            ("dict.logistics.pcba.panel.category.16", "ja-JP", "aes4 b_jp", "pcba板位类别.aes4 b"),
-            // dict.logistics.pcba.panel.category.16
-            ("dict.logistics.pcba.panel.category.16", "zh-CN", "aes4 b", "pcba板位类别.aes4 b"),
-            // dict.logistics.pcba.panel.category.16
-            ("dict.logistics.pcba.panel.category.16", "zh-HK", "aes4 b_hk", "pcba板位类别.aes4 b"),
-
-            // dict.logistics.pcba.panel.category.17
-            ("dict.logistics.pcba.panel.category.17", "en-US", "aes4 t/b_us", "pcba板位类别.aes4 t/b"),
-            // dict.logistics.pcba.panel.category.17
-            ("dict.logistics.pcba.panel.category.17", "ja-JP", "aes4 t/b_jp", "pcba板位类别.aes4 t/b"),
-            // dict.logistics.pcba.panel.category.17
-            ("dict.logistics.pcba.panel.category.17", "zh-CN", "aes4 t/b", "pcba板位类别.aes4 t/b"),
-            // dict.logistics.pcba.panel.category.17
-            ("dict.logistics.pcba.panel.category.17", "zh-HK", "aes4 t/b_hk", "pcba板位类别.aes4 t/b"),
-
-            // dict.logistics.pcba.panel.category.18
-            ("dict.logistics.pcba.panel.category.18", "en-US", "aes4 t_us", "pcba板位类别.aes4 t"),
-            // dict.logistics.pcba.panel.category.18
-            ("dict.logistics.pcba.panel.category.18", "ja-JP", "aes4 t_jp", "pcba板位类别.aes4 t"),
-            // dict.logistics.pcba.panel.category.18
-            ("dict.logistics.pcba.panel.category.18", "zh-CN", "aes4 t", "pcba板位类别.aes4 t"),
-            // dict.logistics.pcba.panel.category.18
-            ("dict.logistics.pcba.panel.category.18", "zh-HK", "aes4 t_hk", "pcba板位类别.aes4 t"),
-
-            // dict.logistics.pcba.panel.category.19
-            ("dict.logistics.pcba.panel.category.19", "en-US", "ana_us", "pcba板位类别.ana"),
-            // dict.logistics.pcba.panel.category.19
-            ("dict.logistics.pcba.panel.category.19", "ja-JP", "ana_jp", "pcba板位类别.ana"),
-            // dict.logistics.pcba.panel.category.19
-            ("dict.logistics.pcba.panel.category.19", "zh-CN", "ana", "pcba板位类别.ana"),
-            // dict.logistics.pcba.panel.category.19
-            ("dict.logistics.pcba.panel.category.19", "zh-HK", "ana_hk", "pcba板位类别.ana"),
-
-            // dict.logistics.pcba.panel.category.24
-            ("dict.logistics.pcba.panel.category.24", "en-US", "ana a_us", "pcba板位类别.ana a"),
-            // dict.logistics.pcba.panel.category.24
-            ("dict.logistics.pcba.panel.category.24", "ja-JP", "ana a_jp", "pcba板位类别.ana a"),
-            // dict.logistics.pcba.panel.category.24
-            ("dict.logistics.pcba.panel.category.24", "zh-CN", "ana a", "pcba板位类别.ana a"),
-            // dict.logistics.pcba.panel.category.24
-            ("dict.logistics.pcba.panel.category.24", "zh-HK", "ana a_hk", "pcba板位类别.ana a"),
-
-            // dict.logistics.pcba.panel.category.25
-            ("dict.logistics.pcba.panel.category.25", "en-US", "ana b_us", "pcba板位类别.ana b"),
-            // dict.logistics.pcba.panel.category.25
-            ("dict.logistics.pcba.panel.category.25", "ja-JP", "ana b_jp", "pcba板位类别.ana b"),
-            // dict.logistics.pcba.panel.category.25
-            ("dict.logistics.pcba.panel.category.25", "zh-CN", "ana b", "pcba板位类别.ana b"),
-            // dict.logistics.pcba.panel.category.25
-            ("dict.logistics.pcba.panel.category.25", "zh-HK", "ana b_hk", "pcba板位类别.ana b"),
-
-            // dict.logistics.pcba.panel.category.26
-            ("dict.logistics.pcba.panel.category.26", "en-US", "ana t/b_us", "pcba板位类别.ana t/b"),
-            // dict.logistics.pcba.panel.category.26
-            ("dict.logistics.pcba.panel.category.26", "ja-JP", "ana t/b_jp", "pcba板位类别.ana t/b"),
-            // dict.logistics.pcba.panel.category.26
-            ("dict.logistics.pcba.panel.category.26", "zh-CN", "ana t/b", "pcba板位类别.ana t/b"),
-            // dict.logistics.pcba.panel.category.26
-            ("dict.logistics.pcba.panel.category.26", "zh-HK", "ana t/b_hk", "pcba板位类别.ana t/b"),
-
-            // dict.logistics.pcba.panel.category.27
-            ("dict.logistics.pcba.panel.category.27", "en-US", "ana t_us", "pcba板位类别.ana t"),
-            // dict.logistics.pcba.panel.category.27
-            ("dict.logistics.pcba.panel.category.27", "ja-JP", "ana t_jp", "pcba板位类别.ana t"),
-            // dict.logistics.pcba.panel.category.27
-            ("dict.logistics.pcba.panel.category.27", "zh-CN", "ana t", "pcba板位类别.ana t"),
-            // dict.logistics.pcba.panel.category.27
-            ("dict.logistics.pcba.panel.category.27", "zh-HK", "ana t_hk", "pcba板位类别.ana t"),
-
-            // dict.logistics.pcba.panel.category.28
-            ("dict.logistics.pcba.panel.category.28", "en-US", "panel t_us", "pcba板位类别.panel t"),
-            // dict.logistics.pcba.panel.category.28
-            ("dict.logistics.pcba.panel.category.28", "ja-JP", "panel t_jp", "pcba板位类别.panel t"),
-            // dict.logistics.pcba.panel.category.28
-            ("dict.logistics.pcba.panel.category.28", "zh-CN", "panel t", "pcba板位类别.panel t"),
-            // dict.logistics.pcba.panel.category.28
-            ("dict.logistics.pcba.panel.category.28", "zh-HK", "panel t_hk", "pcba板位类别.panel t"),
-
-            // dict.logistics.pcba.panel.category.29
-            ("dict.logistics.pcba.panel.category.29", "en-US", "audio_us", "pcba板位类别.audio"),
-            // dict.logistics.pcba.panel.category.29
-            ("dict.logistics.pcba.panel.category.29", "ja-JP", "audio_jp", "pcba板位类别.audio"),
-            // dict.logistics.pcba.panel.category.29
-            ("dict.logistics.pcba.panel.category.29", "zh-CN", "audio", "pcba板位类别.audio"),
-            // dict.logistics.pcba.panel.category.29
-            ("dict.logistics.pcba.panel.category.29", "zh-HK", "audio_hk", "pcba板位类别.audio"),
-
-            // dict.logistics.pcba.panel.category.30
-            ("dict.logistics.pcba.panel.category.30", "en-US", "audio a_us", "pcba板位类别.audio a"),
-            // dict.logistics.pcba.panel.category.30
-            ("dict.logistics.pcba.panel.category.30", "ja-JP", "audio a_jp", "pcba板位类别.audio a"),
-            // dict.logistics.pcba.panel.category.30
-            ("dict.logistics.pcba.panel.category.30", "zh-CN", "audio a", "pcba板位类别.audio a"),
-            // dict.logistics.pcba.panel.category.30
-            ("dict.logistics.pcba.panel.category.30", "zh-HK", "audio a_hk", "pcba板位类别.audio a"),
-
-            // dict.logistics.pcba.panel.category.31
-            ("dict.logistics.pcba.panel.category.31", "en-US", "audio alt b_us", "pcba板位类别.audio alt b"),
-            // dict.logistics.pcba.panel.category.31
-            ("dict.logistics.pcba.panel.category.31", "ja-JP", "audio alt b_jp", "pcba板位类别.audio alt b"),
-            // dict.logistics.pcba.panel.category.31
-            ("dict.logistics.pcba.panel.category.31", "zh-CN", "audio alt b", "pcba板位类别.audio alt b"),
-            // dict.logistics.pcba.panel.category.31
-            ("dict.logistics.pcba.panel.category.31", "zh-HK", "audio alt b_hk", "pcba板位类别.audio alt b"),
-
-            // dict.logistics.pcba.panel.category.32
-            ("dict.logistics.pcba.panel.category.32", "en-US", "audio alt t_us", "pcba板位类别.audio alt t"),
-            // dict.logistics.pcba.panel.category.32
-            ("dict.logistics.pcba.panel.category.32", "ja-JP", "audio alt t_jp", "pcba板位类别.audio alt t"),
-            // dict.logistics.pcba.panel.category.32
-            ("dict.logistics.pcba.panel.category.32", "zh-CN", "audio alt t", "pcba板位类别.audio alt t"),
-            // dict.logistics.pcba.panel.category.32
-            ("dict.logistics.pcba.panel.category.32", "zh-HK", "audio alt t_hk", "pcba板位类别.audio alt t"),
-
-            // dict.logistics.pcba.panel.category.33
-            ("dict.logistics.pcba.panel.category.33", "en-US", "audio b_us", "pcba板位类别.audio b"),
-            // dict.logistics.pcba.panel.category.33
-            ("dict.logistics.pcba.panel.category.33", "ja-JP", "audio b_jp", "pcba板位类别.audio b"),
-            // dict.logistics.pcba.panel.category.33
-            ("dict.logistics.pcba.panel.category.33", "zh-CN", "audio b", "pcba板位类别.audio b"),
-            // dict.logistics.pcba.panel.category.33
-            ("dict.logistics.pcba.panel.category.33", "zh-HK", "audio b_hk", "pcba板位类别.audio b"),
-
-            // dict.logistics.pcba.panel.category.34
-            ("dict.logistics.pcba.panel.category.34", "en-US", "audio t/b_us", "pcba板位类别.audio t/b"),
-            // dict.logistics.pcba.panel.category.34
-            ("dict.logistics.pcba.panel.category.34", "ja-JP", "audio t/b_jp", "pcba板位类别.audio t/b"),
-            // dict.logistics.pcba.panel.category.34
-            ("dict.logistics.pcba.panel.category.34", "zh-CN", "audio t/b", "pcba板位类别.audio t/b"),
-            // dict.logistics.pcba.panel.category.34
-            ("dict.logistics.pcba.panel.category.34", "zh-HK", "audio t/b_hk", "pcba板位类别.audio t/b"),
-
-            // dict.logistics.pcba.panel.category.35
-            ("dict.logistics.pcba.panel.category.35", "en-US", "audio t_us", "pcba板位类别.audio t"),
-            // dict.logistics.pcba.panel.category.35
-            ("dict.logistics.pcba.panel.category.35", "ja-JP", "audio t_jp", "pcba板位类别.audio t"),
-            // dict.logistics.pcba.panel.category.35
-            ("dict.logistics.pcba.panel.category.35", "zh-CN", "audio t", "pcba板位类别.audio t"),
-            // dict.logistics.pcba.panel.category.35
-            ("dict.logistics.pcba.panel.category.35", "zh-HK", "audio t_hk", "pcba板位类别.audio t"),
-
-            // dict.logistics.pcba.panel.category.36
-            ("dict.logistics.pcba.panel.category.36", "en-US", "audio-00-b_us", "pcba板位类别.audio-00-b"),
-            // dict.logistics.pcba.panel.category.36
-            ("dict.logistics.pcba.panel.category.36", "ja-JP", "audio-00-b_jp", "pcba板位类别.audio-00-b"),
-            // dict.logistics.pcba.panel.category.36
-            ("dict.logistics.pcba.panel.category.36", "zh-CN", "audio-00-b", "pcba板位类别.audio-00-b"),
-            // dict.logistics.pcba.panel.category.36
-            ("dict.logistics.pcba.panel.category.36", "zh-HK", "audio-00-b_hk", "pcba板位类别.audio-00-b"),
-
-            // dict.logistics.pcba.panel.category.37
-            ("dict.logistics.pcba.panel.category.37", "en-US", "audio-00-t_us", "pcba板位类别.audio-00-t"),
-            // dict.logistics.pcba.panel.category.37
-            ("dict.logistics.pcba.panel.category.37", "ja-JP", "audio-00-t_jp", "pcba板位类别.audio-00-t"),
-            // dict.logistics.pcba.panel.category.37
-            ("dict.logistics.pcba.panel.category.37", "zh-CN", "audio-00-t", "pcba板位类别.audio-00-t"),
-            // dict.logistics.pcba.panel.category.37
-            ("dict.logistics.pcba.panel.category.37", "zh-HK", "audio-00-t_hk", "pcba板位类别.audio-00-t"),
-
-            // dict.logistics.pcba.panel.category.38
-            ("dict.logistics.pcba.panel.category.38", "en-US", "audio-10-b_us", "pcba板位类别.audio-10-b"),
-            // dict.logistics.pcba.panel.category.38
-            ("dict.logistics.pcba.panel.category.38", "ja-JP", "audio-10-b_jp", "pcba板位类别.audio-10-b"),
-            // dict.logistics.pcba.panel.category.38
-            ("dict.logistics.pcba.panel.category.38", "zh-CN", "audio-10-b", "pcba板位类别.audio-10-b"),
-            // dict.logistics.pcba.panel.category.38
-            ("dict.logistics.pcba.panel.category.38", "zh-HK", "audio-10-b_hk", "pcba板位类别.audio-10-b"),
-
-            // dict.logistics.pcba.panel.category.39
-            ("dict.logistics.pcba.panel.category.39", "en-US", "audio-10-t_us", "pcba板位类别.audio-10-t"),
-            // dict.logistics.pcba.panel.category.39
-            ("dict.logistics.pcba.panel.category.39", "ja-JP", "audio-10-t_jp", "pcba板位类别.audio-10-t"),
-            // dict.logistics.pcba.panel.category.39
-            ("dict.logistics.pcba.panel.category.39", "zh-CN", "audio-10-t", "pcba板位类别.audio-10-t"),
-            // dict.logistics.pcba.panel.category.39
-            ("dict.logistics.pcba.panel.category.39", "zh-HK", "audio-10-t_hk", "pcba板位类别.audio-10-t"),
-
-            // dict.logistics.pcba.panel.category.40
-            ("dict.logistics.pcba.panel.category.40", "en-US", "audio-20-b_us", "pcba板位类别.audio-20-b"),
-            // dict.logistics.pcba.panel.category.40
-            ("dict.logistics.pcba.panel.category.40", "ja-JP", "audio-20-b_jp", "pcba板位类别.audio-20-b"),
-            // dict.logistics.pcba.panel.category.40
-            ("dict.logistics.pcba.panel.category.40", "zh-CN", "audio-20-b", "pcba板位类别.audio-20-b"),
-            // dict.logistics.pcba.panel.category.40
-            ("dict.logistics.pcba.panel.category.40", "zh-HK", "audio-20-b_hk", "pcba板位类别.audio-20-b"),
-
-            // dict.logistics.pcba.panel.category.41
-            ("dict.logistics.pcba.panel.category.41", "en-US", "audio-20-t_us", "pcba板位类别.audio-20-t"),
-            // dict.logistics.pcba.panel.category.41
-            ("dict.logistics.pcba.panel.category.41", "ja-JP", "audio-20-t_jp", "pcba板位类别.audio-20-t"),
-            // dict.logistics.pcba.panel.category.41
-            ("dict.logistics.pcba.panel.category.41", "zh-CN", "audio-20-t", "pcba板位类别.audio-20-t"),
-            // dict.logistics.pcba.panel.category.41
-            ("dict.logistics.pcba.panel.category.41", "zh-HK", "audio-20-t_hk", "pcba板位类别.audio-20-t"),
-
-            // dict.logistics.pcba.panel.category.42
-            ("dict.logistics.pcba.panel.category.42", "en-US", "bottom b_us", "pcba板位类别.bottom b"),
-            // dict.logistics.pcba.panel.category.42
-            ("dict.logistics.pcba.panel.category.42", "ja-JP", "bottom b_jp", "pcba板位类别.bottom b"),
-            // dict.logistics.pcba.panel.category.42
-            ("dict.logistics.pcba.panel.category.42", "zh-CN", "bottom b", "pcba板位类别.bottom b"),
-            // dict.logistics.pcba.panel.category.42
-            ("dict.logistics.pcba.panel.category.42", "zh-HK", "bottom b_hk", "pcba板位类别.bottom b"),
-
-            // dict.logistics.pcba.panel.category.43
-            ("dict.logistics.pcba.panel.category.43", "en-US", "ccl b_us", "pcba板位类别.ccl b"),
-            // dict.logistics.pcba.panel.category.43
-            ("dict.logistics.pcba.panel.category.43", "ja-JP", "ccl b_jp", "pcba板位类别.ccl b"),
-            // dict.logistics.pcba.panel.category.43
-            ("dict.logistics.pcba.panel.category.43", "zh-CN", "ccl b", "pcba板位类别.ccl b"),
-            // dict.logistics.pcba.panel.category.43
-            ("dict.logistics.pcba.panel.category.43", "zh-HK", "ccl b_hk", "pcba板位类别.ccl b"),
-
-            // dict.logistics.pcba.panel.category.44
-            ("dict.logistics.pcba.panel.category.44", "en-US", "ccl t/b_us", "pcba板位类别.ccl t/b"),
-            // dict.logistics.pcba.panel.category.44
-            ("dict.logistics.pcba.panel.category.44", "ja-JP", "ccl t/b_jp", "pcba板位类别.ccl t/b"),
-            // dict.logistics.pcba.panel.category.44
-            ("dict.logistics.pcba.panel.category.44", "zh-CN", "ccl t/b", "pcba板位类别.ccl t/b"),
-            // dict.logistics.pcba.panel.category.44
-            ("dict.logistics.pcba.panel.category.44", "zh-HK", "ccl t/b_hk", "pcba板位类别.ccl t/b"),
-
-            // dict.logistics.pcba.panel.category.45
-            ("dict.logistics.pcba.panel.category.45", "en-US", "ccl t_us", "pcba板位类别.ccl t"),
-            // dict.logistics.pcba.panel.category.45
-            ("dict.logistics.pcba.panel.category.45", "ja-JP", "ccl t_jp", "pcba板位类别.ccl t"),
-            // dict.logistics.pcba.panel.category.45
-            ("dict.logistics.pcba.panel.category.45", "zh-CN", "ccl t", "pcba板位类别.ccl t"),
-            // dict.logistics.pcba.panel.category.45
-            ("dict.logistics.pcba.panel.category.45", "zh-HK", "ccl t_hk", "pcba板位类别.ccl t"),
-
-            // dict.logistics.pcba.panel.category.46
-            ("dict.logistics.pcba.panel.category.46", "en-US", "cd b_us", "pcba板位类别.cd b"),
-            // dict.logistics.pcba.panel.category.46
-            ("dict.logistics.pcba.panel.category.46", "ja-JP", "cd b_jp", "pcba板位类别.cd b"),
-            // dict.logistics.pcba.panel.category.46
-            ("dict.logistics.pcba.panel.category.46", "zh-CN", "cd b", "pcba板位类别.cd b"),
-            // dict.logistics.pcba.panel.category.46
-            ("dict.logistics.pcba.panel.category.46", "zh-HK", "cd b_hk", "pcba板位类别.cd b"),
-
-            // dict.logistics.pcba.panel.category.47
-            ("dict.logistics.pcba.panel.category.47", "en-US", "cd t_us", "pcba板位类别.cd t"),
-            // dict.logistics.pcba.panel.category.47
-            ("dict.logistics.pcba.panel.category.47", "ja-JP", "cd t_jp", "pcba板位类别.cd t"),
-            // dict.logistics.pcba.panel.category.47
-            ("dict.logistics.pcba.panel.category.47", "zh-CN", "cd t", "pcba板位类别.cd t"),
-            // dict.logistics.pcba.panel.category.47
-            ("dict.logistics.pcba.panel.category.47", "zh-HK", "cd t_hk", "pcba板位类别.cd t"),
-
-            // dict.logistics.pcba.panel.category.48
-            ("dict.logistics.pcba.panel.category.48", "en-US", "cd-main_us", "pcba板位类别.cd-main"),
-            // dict.logistics.pcba.panel.category.48
-            ("dict.logistics.pcba.panel.category.48", "ja-JP", "cd-main_jp", "pcba板位类别.cd-main"),
-            // dict.logistics.pcba.panel.category.48
-            ("dict.logistics.pcba.panel.category.48", "zh-CN", "cd-main", "pcba板位类别.cd-main"),
-            // dict.logistics.pcba.panel.category.48
-            ("dict.logistics.pcba.panel.category.48", "zh-HK", "cd-main_hk", "pcba板位类别.cd-main"),
-
-            // dict.logistics.pcba.panel.category.49
-            ("dict.logistics.pcba.panel.category.49", "en-US", "cd-main b_us", "pcba板位类别.cd-main b"),
-            // dict.logistics.pcba.panel.category.49
-            ("dict.logistics.pcba.panel.category.49", "ja-JP", "cd-main b_jp", "pcba板位类别.cd-main b"),
-            // dict.logistics.pcba.panel.category.49
-            ("dict.logistics.pcba.panel.category.49", "zh-CN", "cd-main b", "pcba板位类别.cd-main b"),
-            // dict.logistics.pcba.panel.category.49
-            ("dict.logistics.pcba.panel.category.49", "zh-HK", "cd-main b_hk", "pcba板位类别.cd-main b"),
-
-            // dict.logistics.pcba.panel.category.50
-            ("dict.logistics.pcba.panel.category.50", "en-US", "cdmcu_us", "pcba板位类别.cdmcu"),
-            // dict.logistics.pcba.panel.category.50
-            ("dict.logistics.pcba.panel.category.50", "ja-JP", "cdmcu_jp", "pcba板位类别.cdmcu"),
-            // dict.logistics.pcba.panel.category.50
-            ("dict.logistics.pcba.panel.category.50", "zh-CN", "cdmcu", "pcba板位类别.cdmcu"),
-            // dict.logistics.pcba.panel.category.50
-            ("dict.logistics.pcba.panel.category.50", "zh-HK", "cdmcu_hk", "pcba板位类别.cdmcu"),
-
-            // dict.logistics.pcba.panel.category.51
-            ("dict.logistics.pcba.panel.category.51", "en-US", "cdmcu b_us", "pcba板位类别.cdmcu b"),
-            // dict.logistics.pcba.panel.category.51
-            ("dict.logistics.pcba.panel.category.51", "ja-JP", "cdmcu b_jp", "pcba板位类别.cdmcu b"),
-            // dict.logistics.pcba.panel.category.51
-            ("dict.logistics.pcba.panel.category.51", "zh-CN", "cdmcu b", "pcba板位类别.cdmcu b"),
-            // dict.logistics.pcba.panel.category.51
-            ("dict.logistics.pcba.panel.category.51", "zh-HK", "cdmcu b_hk", "pcba板位类别.cdmcu b"),
-
-            // dict.logistics.pcba.panel.category.52
-            ("dict.logistics.pcba.panel.category.52", "en-US", "cdmcu t/b_us", "pcba板位类别.cdmcu t/b"),
-            // dict.logistics.pcba.panel.category.52
-            ("dict.logistics.pcba.panel.category.52", "ja-JP", "cdmcu t/b_jp", "pcba板位类别.cdmcu t/b"),
-            // dict.logistics.pcba.panel.category.52
-            ("dict.logistics.pcba.panel.category.52", "zh-CN", "cdmcu t/b", "pcba板位类别.cdmcu t/b"),
-            // dict.logistics.pcba.panel.category.52
-            ("dict.logistics.pcba.panel.category.52", "zh-HK", "cdmcu t/b_hk", "pcba板位类别.cdmcu t/b"),
-
-            // dict.logistics.pcba.panel.category.53
-            ("dict.logistics.pcba.panel.category.53", "en-US", "cdmcu t_us", "pcba板位类别.cdmcu t"),
-            // dict.logistics.pcba.panel.category.53
-            ("dict.logistics.pcba.panel.category.53", "ja-JP", "cdmcu t_jp", "pcba板位类别.cdmcu t"),
-            // dict.logistics.pcba.panel.category.53
-            ("dict.logistics.pcba.panel.category.53", "zh-CN", "cdmcu t", "pcba板位类别.cdmcu t"),
-            // dict.logistics.pcba.panel.category.53
-            ("dict.logistics.pcba.panel.category.53", "zh-HK", "cdmcu t_hk", "pcba板位类别.cdmcu t"),
-
-            // dict.logistics.pcba.panel.category.54
-            ("dict.logistics.pcba.panel.category.54", "en-US", "comb b_us", "pcba板位类别.comb b"),
-            // dict.logistics.pcba.panel.category.54
-            ("dict.logistics.pcba.panel.category.54", "ja-JP", "comb b_jp", "pcba板位类别.comb b"),
-            // dict.logistics.pcba.panel.category.54
-            ("dict.logistics.pcba.panel.category.54", "zh-CN", "comb b", "pcba板位类别.comb b"),
-            // dict.logistics.pcba.panel.category.54
-            ("dict.logistics.pcba.panel.category.54", "zh-HK", "comb b_hk", "pcba板位类别.comb b"),
-
-            // dict.logistics.pcba.panel.category.55
-            ("dict.logistics.pcba.panel.category.55", "en-US", "comb t_us", "pcba板位类别.comb t"),
-            // dict.logistics.pcba.panel.category.55
-            ("dict.logistics.pcba.panel.category.55", "ja-JP", "comb t_jp", "pcba板位类别.comb t"),
-            // dict.logistics.pcba.panel.category.55
-            ("dict.logistics.pcba.panel.category.55", "zh-CN", "comb t", "pcba板位类别.comb t"),
-            // dict.logistics.pcba.panel.category.55
-            ("dict.logistics.pcba.panel.category.55", "zh-HK", "comb t_hk", "pcba板位类别.comb t"),
-
-            // dict.logistics.pcba.panel.category.56
-            ("dict.logistics.pcba.panel.category.56", "en-US", "combo b_us", "pcba板位类别.combo b"),
-            // dict.logistics.pcba.panel.category.56
-            ("dict.logistics.pcba.panel.category.56", "ja-JP", "combo b_jp", "pcba板位类别.combo b"),
-            // dict.logistics.pcba.panel.category.56
-            ("dict.logistics.pcba.panel.category.56", "zh-CN", "combo b", "pcba板位类别.combo b"),
-            // dict.logistics.pcba.panel.category.56
-            ("dict.logistics.pcba.panel.category.56", "zh-HK", "combo b_hk", "pcba板位类别.combo b"),
-
-            // dict.logistics.pcba.panel.category.57
-            ("dict.logistics.pcba.panel.category.57", "en-US", "combo t_us", "pcba板位类别.combo t"),
-            // dict.logistics.pcba.panel.category.57
-            ("dict.logistics.pcba.panel.category.57", "ja-JP", "combo t_jp", "pcba板位类别.combo t"),
-            // dict.logistics.pcba.panel.category.57
-            ("dict.logistics.pcba.panel.category.57", "zh-CN", "combo t", "pcba板位类别.combo t"),
-            // dict.logistics.pcba.panel.category.57
-            ("dict.logistics.pcba.panel.category.57", "zh-HK", "combo t_hk", "pcba板位类别.combo t"),
-
-            // dict.logistics.pcba.panel.category.58
-            ("dict.logistics.pcba.panel.category.58", "en-US", "conn_us", "pcba板位类别.conn"),
-            // dict.logistics.pcba.panel.category.58
-            ("dict.logistics.pcba.panel.category.58", "ja-JP", "conn_jp", "pcba板位类别.conn"),
-            // dict.logistics.pcba.panel.category.58
-            ("dict.logistics.pcba.panel.category.58", "zh-CN", "conn", "pcba板位类别.conn"),
-            // dict.logistics.pcba.panel.category.58
-            ("dict.logistics.pcba.panel.category.58", "zh-HK", "conn_hk", "pcba板位类别.conn"),
-
-            // dict.logistics.pcba.panel.category.59
-            ("dict.logistics.pcba.panel.category.59", "en-US", "conn a_us", "pcba板位类别.conn a"),
-            // dict.logistics.pcba.panel.category.59
-            ("dict.logistics.pcba.panel.category.59", "ja-JP", "conn a_jp", "pcba板位类别.conn a"),
-            // dict.logistics.pcba.panel.category.59
-            ("dict.logistics.pcba.panel.category.59", "zh-CN", "conn a", "pcba板位类别.conn a"),
-            // dict.logistics.pcba.panel.category.59
-            ("dict.logistics.pcba.panel.category.59", "zh-HK", "conn a_hk", "pcba板位类别.conn a"),
-
-            // dict.logistics.pcba.panel.category.60
-            ("dict.logistics.pcba.panel.category.60", "en-US", "conn b_us", "pcba板位类别.conn b"),
-            // dict.logistics.pcba.panel.category.60
-            ("dict.logistics.pcba.panel.category.60", "ja-JP", "conn b_jp", "pcba板位类别.conn b"),
-            // dict.logistics.pcba.panel.category.60
-            ("dict.logistics.pcba.panel.category.60", "zh-CN", "conn b", "pcba板位类别.conn b"),
-            // dict.logistics.pcba.panel.category.60
-            ("dict.logistics.pcba.panel.category.60", "zh-HK", "conn b_hk", "pcba板位类别.conn b"),
-
-            // dict.logistics.pcba.panel.category.61
-            ("dict.logistics.pcba.panel.category.61", "en-US", "conn t/b_us", "pcba板位类别.conn t/b"),
-            // dict.logistics.pcba.panel.category.61
-            ("dict.logistics.pcba.panel.category.61", "ja-JP", "conn t/b_jp", "pcba板位类别.conn t/b"),
-            // dict.logistics.pcba.panel.category.61
-            ("dict.logistics.pcba.panel.category.61", "zh-CN", "conn t/b", "pcba板位类别.conn t/b"),
-            // dict.logistics.pcba.panel.category.61
-            ("dict.logistics.pcba.panel.category.61", "zh-HK", "conn t/b_hk", "pcba板位类别.conn t/b"),
-
-            // dict.logistics.pcba.panel.category.62
-            ("dict.logistics.pcba.panel.category.62", "en-US", "conn t_us", "pcba板位类别.conn t"),
-            // dict.logistics.pcba.panel.category.62
-            ("dict.logistics.pcba.panel.category.62", "ja-JP", "conn t_jp", "pcba板位类别.conn t"),
-            // dict.logistics.pcba.panel.category.62
-            ("dict.logistics.pcba.panel.category.62", "zh-CN", "conn t", "pcba板位类别.conn t"),
-            // dict.logistics.pcba.panel.category.62
-            ("dict.logistics.pcba.panel.category.62", "zh-HK", "conn t_hk", "pcba板位类别.conn t"),
-
-            // dict.logistics.pcba.panel.category.63
-            ("dict.logistics.pcba.panel.category.63", "en-US", "contact_us", "pcba板位类别.contact"),
-            // dict.logistics.pcba.panel.category.63
-            ("dict.logistics.pcba.panel.category.63", "ja-JP", "contact_jp", "pcba板位类别.contact"),
-            // dict.logistics.pcba.panel.category.63
-            ("dict.logistics.pcba.panel.category.63", "zh-CN", "contact", "pcba板位类别.contact"),
-            // dict.logistics.pcba.panel.category.63
-            ("dict.logistics.pcba.panel.category.63", "zh-HK", "contact_hk", "pcba板位类别.contact"),
-
-            // dict.logistics.pcba.panel.category.64
-            ("dict.logistics.pcba.panel.category.64", "en-US", "da_us", "pcba板位类别.da"),
-            // dict.logistics.pcba.panel.category.64
-            ("dict.logistics.pcba.panel.category.64", "ja-JP", "da_jp", "pcba板位类别.da"),
-            // dict.logistics.pcba.panel.category.64
-            ("dict.logistics.pcba.panel.category.64", "zh-CN", "da", "pcba板位类别.da"),
-            // dict.logistics.pcba.panel.category.64
-            ("dict.logistics.pcba.panel.category.64", "zh-HK", "da_hk", "pcba板位类别.da"),
-
-            // dict.logistics.pcba.panel.category.65
-            ("dict.logistics.pcba.panel.category.65", "en-US", "da b_us", "pcba板位类别.da b"),
-            // dict.logistics.pcba.panel.category.65
-            ("dict.logistics.pcba.panel.category.65", "ja-JP", "da b_jp", "pcba板位类别.da b"),
-            // dict.logistics.pcba.panel.category.65
-            ("dict.logistics.pcba.panel.category.65", "zh-CN", "da b", "pcba板位类别.da b"),
-            // dict.logistics.pcba.panel.category.65
-            ("dict.logistics.pcba.panel.category.65", "zh-HK", "da b_hk", "pcba板位类别.da b"),
-
-            // dict.logistics.pcba.panel.category.66
-            ("dict.logistics.pcba.panel.category.66", "en-US", "da t_us", "pcba板位类别.da t"),
-            // dict.logistics.pcba.panel.category.66
-            ("dict.logistics.pcba.panel.category.66", "ja-JP", "da t_jp", "pcba板位类别.da t"),
-            // dict.logistics.pcba.panel.category.66
-            ("dict.logistics.pcba.panel.category.66", "zh-CN", "da t", "pcba板位类别.da t"),
-            // dict.logistics.pcba.panel.category.66
-            ("dict.logistics.pcba.panel.category.66", "zh-HK", "da t_hk", "pcba板位类别.da t"),
-
-            // dict.logistics.pcba.panel.category.67
-            ("dict.logistics.pcba.panel.category.67", "en-US", "da t/b_us", "pcba板位类别.da t/b"),
-            // dict.logistics.pcba.panel.category.67
-            ("dict.logistics.pcba.panel.category.67", "ja-JP", "da t/b_jp", "pcba板位类别.da t/b"),
-            // dict.logistics.pcba.panel.category.67
-            ("dict.logistics.pcba.panel.category.67", "zh-CN", "da t/b", "pcba板位类别.da t/b"),
-            // dict.logistics.pcba.panel.category.67
-            ("dict.logistics.pcba.panel.category.67", "zh-HK", "da t/b_hk", "pcba板位类别.da t/b"),
-
-            // dict.logistics.pcba.panel.category.68
-            ("dict.logistics.pcba.panel.category.68", "en-US", "dany b_us", "pcba板位类别.dany b"),
-            // dict.logistics.pcba.panel.category.68
-            ("dict.logistics.pcba.panel.category.68", "ja-JP", "dany b_jp", "pcba板位类别.dany b"),
-            // dict.logistics.pcba.panel.category.68
-            ("dict.logistics.pcba.panel.category.68", "zh-CN", "dany b", "pcba板位类别.dany b"),
-            // dict.logistics.pcba.panel.category.68
-            ("dict.logistics.pcba.panel.category.68", "zh-HK", "dany b_hk", "pcba板位类别.dany b"),
-
-            // dict.logistics.pcba.panel.category.70
-            ("dict.logistics.pcba.panel.category.70", "en-US", "dsp b_us", "pcba板位类别.dsp b"),
-            // dict.logistics.pcba.panel.category.70
-            ("dict.logistics.pcba.panel.category.70", "ja-JP", "dsp b_jp", "pcba板位类别.dsp b"),
-            // dict.logistics.pcba.panel.category.70
-            ("dict.logistics.pcba.panel.category.70", "zh-CN", "dsp b", "pcba板位类别.dsp b"),
-            // dict.logistics.pcba.panel.category.70
-            ("dict.logistics.pcba.panel.category.70", "zh-HK", "dsp b_hk", "pcba板位类别.dsp b"),
-
-            // dict.logistics.pcba.panel.category.71
-            ("dict.logistics.pcba.panel.category.71", "en-US", "dsp t_us", "pcba板位类别.dsp t"),
-            // dict.logistics.pcba.panel.category.71
-            ("dict.logistics.pcba.panel.category.71", "ja-JP", "dsp t_jp", "pcba板位类别.dsp t"),
-            // dict.logistics.pcba.panel.category.71
-            ("dict.logistics.pcba.panel.category.71", "zh-CN", "dsp t", "pcba板位类别.dsp t"),
-            // dict.logistics.pcba.panel.category.71
-            ("dict.logistics.pcba.panel.category.71", "zh-HK", "dsp t_hk", "pcba板位类别.dsp t"),
-
-            // dict.logistics.pcba.panel.category.73
-            ("dict.logistics.pcba.panel.category.73", "en-US", "dspl a_us", "pcba板位类别.dspl a"),
-            // dict.logistics.pcba.panel.category.73
-            ("dict.logistics.pcba.panel.category.73", "ja-JP", "dspl a_jp", "pcba板位类别.dspl a"),
-            // dict.logistics.pcba.panel.category.73
-            ("dict.logistics.pcba.panel.category.73", "zh-CN", "dspl a", "pcba板位类别.dspl a"),
-            // dict.logistics.pcba.panel.category.73
-            ("dict.logistics.pcba.panel.category.73", "zh-HK", "dspl a_hk", "pcba板位类别.dspl a"),
-
-            // dict.logistics.pcba.panel.category.74
-            ("dict.logistics.pcba.panel.category.74", "en-US", "dspl b_us", "pcba板位类别.dspl b"),
-            // dict.logistics.pcba.panel.category.74
-            ("dict.logistics.pcba.panel.category.74", "ja-JP", "dspl b_jp", "pcba板位类别.dspl b"),
-            // dict.logistics.pcba.panel.category.74
-            ("dict.logistics.pcba.panel.category.74", "zh-CN", "dspl b", "pcba板位类别.dspl b"),
-            // dict.logistics.pcba.panel.category.74
-            ("dict.logistics.pcba.panel.category.74", "zh-HK", "dspl b_hk", "pcba板位类别.dspl b"),
-
-            // dict.logistics.pcba.panel.category.75
-            ("dict.logistics.pcba.panel.category.75", "en-US", "dspl t/b_us", "pcba板位类别.dspl t/b"),
-            // dict.logistics.pcba.panel.category.75
-            ("dict.logistics.pcba.panel.category.75", "ja-JP", "dspl t/b_jp", "pcba板位类别.dspl t/b"),
-            // dict.logistics.pcba.panel.category.75
-            ("dict.logistics.pcba.panel.category.75", "zh-CN", "dspl t/b", "pcba板位类别.dspl t/b"),
-            // dict.logistics.pcba.panel.category.75
-            ("dict.logistics.pcba.panel.category.75", "zh-HK", "dspl t/b_hk", "pcba板位类别.dspl t/b"),
-
-            // dict.logistics.pcba.panel.category.76
-            ("dict.logistics.pcba.panel.category.76", "en-US", "dspl t_us", "pcba板位类别.dspl t"),
-            // dict.logistics.pcba.panel.category.76
-            ("dict.logistics.pcba.panel.category.76", "ja-JP", "dspl t_jp", "pcba板位类别.dspl t"),
-            // dict.logistics.pcba.panel.category.76
-            ("dict.logistics.pcba.panel.category.76", "zh-CN", "dspl t", "pcba板位类别.dspl t"),
-            // dict.logistics.pcba.panel.category.76
-            ("dict.logistics.pcba.panel.category.76", "zh-HK", "dspl t_hk", "pcba板位类别.dspl t"),
-
-            // dict.logistics.pcba.panel.category.77
-            ("dict.logistics.pcba.panel.category.77", "en-US", "dsub b_us", "pcba板位类别.dsub b"),
-            // dict.logistics.pcba.panel.category.77
-            ("dict.logistics.pcba.panel.category.77", "ja-JP", "dsub b_jp", "pcba板位类别.dsub b"),
-            // dict.logistics.pcba.panel.category.77
-            ("dict.logistics.pcba.panel.category.77", "zh-CN", "dsub b", "pcba板位类别.dsub b"),
-            // dict.logistics.pcba.panel.category.77
-            ("dict.logistics.pcba.panel.category.77", "zh-HK", "dsub b_hk", "pcba板位类别.dsub b"),
-
-            // dict.logistics.pcba.panel.category.78
-            ("dict.logistics.pcba.panel.category.78", "en-US", "dsub t_us", "pcba板位类别.dsub t"),
-            // dict.logistics.pcba.panel.category.78
-            ("dict.logistics.pcba.panel.category.78", "ja-JP", "dsub t_jp", "pcba板位类别.dsub t"),
-            // dict.logistics.pcba.panel.category.78
-            ("dict.logistics.pcba.panel.category.78", "zh-CN", "dsub t", "pcba板位类别.dsub t"),
-            // dict.logistics.pcba.panel.category.78
-            ("dict.logistics.pcba.panel.category.78", "zh-HK", "dsub t_hk", "pcba板位类别.dsub t"),
-
-            // dict.logistics.pcba.panel.category.79
-            ("dict.logistics.pcba.panel.category.79", "en-US", "dyna b_us", "pcba板位类别.dyna b"),
-            // dict.logistics.pcba.panel.category.79
-            ("dict.logistics.pcba.panel.category.79", "ja-JP", "dyna b_jp", "pcba板位类别.dyna b"),
-            // dict.logistics.pcba.panel.category.79
-            ("dict.logistics.pcba.panel.category.79", "zh-CN", "dyna b", "pcba板位类别.dyna b"),
-            // dict.logistics.pcba.panel.category.79
-            ("dict.logistics.pcba.panel.category.79", "zh-HK", "dyna b_hk", "pcba板位类别.dyna b"),
-
-            // dict.logistics.pcba.panel.category.80
-            ("dict.logistics.pcba.panel.category.80", "en-US", "dyna t_us", "pcba板位类别.dyna t"),
-            // dict.logistics.pcba.panel.category.80
-            ("dict.logistics.pcba.panel.category.80", "ja-JP", "dyna t_jp", "pcba板位类别.dyna t"),
-            // dict.logistics.pcba.panel.category.80
-            ("dict.logistics.pcba.panel.category.80", "zh-CN", "dyna t", "pcba板位类别.dyna t"),
-            // dict.logistics.pcba.panel.category.80
-            ("dict.logistics.pcba.panel.category.80", "zh-HK", "dyna t_hk", "pcba板位类别.dyna t"),
-
-            // dict.logistics.pcba.panel.category.81
-            ("dict.logistics.pcba.panel.category.81", "en-US", "dyna t/b_us", "pcba板位类别.dyna t/b"),
-            // dict.logistics.pcba.panel.category.81
-            ("dict.logistics.pcba.panel.category.81", "ja-JP", "dyna t/b_jp", "pcba板位类别.dyna t/b"),
-            // dict.logistics.pcba.panel.category.81
-            ("dict.logistics.pcba.panel.category.81", "zh-CN", "dyna t/b", "pcba板位类别.dyna t/b"),
-            // dict.logistics.pcba.panel.category.81
-            ("dict.logistics.pcba.panel.category.81", "zh-HK", "dyna t/b_hk", "pcba板位类别.dyna t/b"),
-
-            // dict.logistics.pcba.panel.category.82
-            ("dict.logistics.pcba.panel.category.82", "en-US", "encoder_us", "pcba板位类别.encoder"),
-            // dict.logistics.pcba.panel.category.82
-            ("dict.logistics.pcba.panel.category.82", "ja-JP", "encoder_jp", "pcba板位类别.encoder"),
-            // dict.logistics.pcba.panel.category.82
-            ("dict.logistics.pcba.panel.category.82", "zh-CN", "encoder", "pcba板位类别.encoder"),
-            // dict.logistics.pcba.panel.category.82
-            ("dict.logistics.pcba.panel.category.82", "zh-HK", "encoder_hk", "pcba板位类别.encoder"),
-
-            // dict.logistics.pcba.panel.category.84
-            ("dict.logistics.pcba.panel.category.84", "en-US", "ether_us", "pcba板位类别.ether"),
-            // dict.logistics.pcba.panel.category.84
-            ("dict.logistics.pcba.panel.category.84", "ja-JP", "ether_jp", "pcba板位类别.ether"),
-            // dict.logistics.pcba.panel.category.84
-            ("dict.logistics.pcba.panel.category.84", "zh-CN", "ether", "pcba板位类别.ether"),
-            // dict.logistics.pcba.panel.category.84
-            ("dict.logistics.pcba.panel.category.84", "zh-HK", "ether_hk", "pcba板位类别.ether"),
-
-            // dict.logistics.pcba.panel.category.85
-            ("dict.logistics.pcba.panel.category.85", "en-US", "ether b_us", "pcba板位类别.ether b"),
-            // dict.logistics.pcba.panel.category.85
-            ("dict.logistics.pcba.panel.category.85", "ja-JP", "ether b_jp", "pcba板位类别.ether b"),
-            // dict.logistics.pcba.panel.category.85
-            ("dict.logistics.pcba.panel.category.85", "zh-CN", "ether b", "pcba板位类别.ether b"),
-            // dict.logistics.pcba.panel.category.85
-            ("dict.logistics.pcba.panel.category.85", "zh-HK", "ether b_hk", "pcba板位类别.ether b"),
-
-            // dict.logistics.pcba.panel.category.86
-            ("dict.logistics.pcba.panel.category.86", "en-US", "ether t_us", "pcba板位类别.ether t"),
-            // dict.logistics.pcba.panel.category.86
-            ("dict.logistics.pcba.panel.category.86", "ja-JP", "ether t_jp", "pcba板位类别.ether t"),
-            // dict.logistics.pcba.panel.category.86
-            ("dict.logistics.pcba.panel.category.86", "zh-CN", "ether t", "pcba板位类别.ether t"),
-            // dict.logistics.pcba.panel.category.86
-            ("dict.logistics.pcba.panel.category.86", "zh-HK", "ether t_hk", "pcba板位类别.ether t"),
-
-            // dict.logistics.pcba.panel.category.87
-            ("dict.logistics.pcba.panel.category.87", "en-US", "euro_us", "pcba板位类别.euro"),
-            // dict.logistics.pcba.panel.category.87
-            ("dict.logistics.pcba.panel.category.87", "ja-JP", "euro_jp", "pcba板位类别.euro"),
-            // dict.logistics.pcba.panel.category.87
-            ("dict.logistics.pcba.panel.category.87", "zh-CN", "euro", "pcba板位类别.euro"),
-            // dict.logistics.pcba.panel.category.87
-            ("dict.logistics.pcba.panel.category.87", "zh-HK", "euro_hk", "pcba板位类别.euro"),
-
-            // dict.logistics.pcba.panel.category.88
-            ("dict.logistics.pcba.panel.category.88", "en-US", "euro b_us", "pcba板位类别.euro b"),
-            // dict.logistics.pcba.panel.category.88
-            ("dict.logistics.pcba.panel.category.88", "ja-JP", "euro b_jp", "pcba板位类别.euro b"),
-            // dict.logistics.pcba.panel.category.88
-            ("dict.logistics.pcba.panel.category.88", "zh-CN", "euro b", "pcba板位类别.euro b"),
-            // dict.logistics.pcba.panel.category.88
-            ("dict.logistics.pcba.panel.category.88", "zh-HK", "euro b_hk", "pcba板位类别.euro b"),
-
-            // dict.logistics.pcba.panel.category.89
-            ("dict.logistics.pcba.panel.category.89", "en-US", "euro t/b_us", "pcba板位类别.euro t/b"),
-            // dict.logistics.pcba.panel.category.89
-            ("dict.logistics.pcba.panel.category.89", "ja-JP", "euro t/b_jp", "pcba板位类别.euro t/b"),
-            // dict.logistics.pcba.panel.category.89
-            ("dict.logistics.pcba.panel.category.89", "zh-CN", "euro t/b", "pcba板位类别.euro t/b"),
-            // dict.logistics.pcba.panel.category.89
-            ("dict.logistics.pcba.panel.category.89", "zh-HK", "euro t/b_hk", "pcba板位类别.euro t/b"),
-
-            // dict.logistics.pcba.panel.category.90
-            ("dict.logistics.pcba.panel.category.90", "en-US", "euro t_us", "pcba板位类别.euro t"),
-            // dict.logistics.pcba.panel.category.90
-            ("dict.logistics.pcba.panel.category.90", "ja-JP", "euro t_jp", "pcba板位类别.euro t"),
-            // dict.logistics.pcba.panel.category.90
-            ("dict.logistics.pcba.panel.category.90", "zh-CN", "euro t", "pcba板位类别.euro t"),
-            // dict.logistics.pcba.panel.category.90
-            ("dict.logistics.pcba.panel.category.90", "zh-HK", "euro t_hk", "pcba板位类别.euro t"),
-
-            // dict.logistics.pcba.panel.category.91
-            ("dict.logistics.pcba.panel.category.91", "en-US", "fader b_us", "pcba板位类别.fader b"),
-            // dict.logistics.pcba.panel.category.91
-            ("dict.logistics.pcba.panel.category.91", "ja-JP", "fader b_jp", "pcba板位类别.fader b"),
-            // dict.logistics.pcba.panel.category.91
-            ("dict.logistics.pcba.panel.category.91", "zh-CN", "fader b", "pcba板位类别.fader b"),
-            // dict.logistics.pcba.panel.category.91
-            ("dict.logistics.pcba.panel.category.91", "zh-HK", "fader b_hk", "pcba板位类别.fader b"),
-
-            // dict.logistics.pcba.panel.category.92
-            ("dict.logistics.pcba.panel.category.92", "en-US", "fader t/b_us", "pcba板位类别.fader t/b"),
-            // dict.logistics.pcba.panel.category.92
-            ("dict.logistics.pcba.panel.category.92", "ja-JP", "fader t/b_jp", "pcba板位类别.fader t/b"),
-            // dict.logistics.pcba.panel.category.92
-            ("dict.logistics.pcba.panel.category.92", "zh-CN", "fader t/b", "pcba板位类别.fader t/b"),
-            // dict.logistics.pcba.panel.category.92
-            ("dict.logistics.pcba.panel.category.92", "zh-HK", "fader t/b_hk", "pcba板位类别.fader t/b"),
-
-            // dict.logistics.pcba.panel.category.93
-            ("dict.logistics.pcba.panel.category.93", "en-US", "fader t_us", "pcba板位类别.fader t"),
-            // dict.logistics.pcba.panel.category.93
-            ("dict.logistics.pcba.panel.category.93", "ja-JP", "fader t_jp", "pcba板位类别.fader t"),
-            // dict.logistics.pcba.panel.category.93
-            ("dict.logistics.pcba.panel.category.93", "zh-CN", "fader t", "pcba板位类别.fader t"),
-            // dict.logistics.pcba.panel.category.93
-            ("dict.logistics.pcba.panel.category.93", "zh-HK", "fader t_hk", "pcba板位类别.fader t"),
-
-            // dict.logistics.pcba.panel.category.96
-            ("dict.logistics.pcba.panel.category.96", "en-US", "front_us", "pcba板位类别.front"),
-            // dict.logistics.pcba.panel.category.96
-            ("dict.logistics.pcba.panel.category.96", "ja-JP", "front_jp", "pcba板位类别.front"),
-            // dict.logistics.pcba.panel.category.96
-            ("dict.logistics.pcba.panel.category.96", "zh-CN", "front", "pcba板位类别.front"),
-            // dict.logistics.pcba.panel.category.96
-            ("dict.logistics.pcba.panel.category.96", "zh-HK", "front_hk", "pcba板位类别.front"),
-
-            // dict.logistics.pcba.panel.category.97
-            ("dict.logistics.pcba.panel.category.97", "en-US", "front a_us", "pcba板位类别.front a"),
-            // dict.logistics.pcba.panel.category.97
-            ("dict.logistics.pcba.panel.category.97", "ja-JP", "front a_jp", "pcba板位类别.front a"),
-            // dict.logistics.pcba.panel.category.97
-            ("dict.logistics.pcba.panel.category.97", "zh-CN", "front a", "pcba板位类别.front a"),
-            // dict.logistics.pcba.panel.category.97
-            ("dict.logistics.pcba.panel.category.97", "zh-HK", "front a_hk", "pcba板位类别.front a"),
-
-            // dict.logistics.pcba.panel.category.98
-            ("dict.logistics.pcba.panel.category.98", "en-US", "front b_us", "pcba板位类别.front b"),
-            // dict.logistics.pcba.panel.category.98
-            ("dict.logistics.pcba.panel.category.98", "ja-JP", "front b_jp", "pcba板位类别.front b"),
-            // dict.logistics.pcba.panel.category.98
-            ("dict.logistics.pcba.panel.category.98", "zh-CN", "front b", "pcba板位类别.front b"),
-            // dict.logistics.pcba.panel.category.98
-            ("dict.logistics.pcba.panel.category.98", "zh-HK", "front b_hk", "pcba板位类别.front b"),
-
-            // dict.logistics.pcba.panel.category.99
-            ("dict.logistics.pcba.panel.category.99", "en-US", "front t/b_us", "pcba板位类别.front t/b"),
-            // dict.logistics.pcba.panel.category.99
-            ("dict.logistics.pcba.panel.category.99", "ja-JP", "front t/b_jp", "pcba板位类别.front t/b"),
-            // dict.logistics.pcba.panel.category.99
-            ("dict.logistics.pcba.panel.category.99", "zh-CN", "front t/b", "pcba板位类别.front t/b"),
-            // dict.logistics.pcba.panel.category.99
-            ("dict.logistics.pcba.panel.category.99", "zh-HK", "front t/b_hk", "pcba板位类别.front t/b"),
-
-            // dict.logistics.pcba.panel.category.100
-            ("dict.logistics.pcba.panel.category.100", "en-US", "front sys t_us", "pcba板位类别.front sys t"),
-            // dict.logistics.pcba.panel.category.100
-            ("dict.logistics.pcba.panel.category.100", "ja-JP", "front sys t_jp", "pcba板位类别.front sys t"),
-            // dict.logistics.pcba.panel.category.100
-            ("dict.logistics.pcba.panel.category.100", "zh-CN", "front sys t", "pcba板位类别.front sys t"),
-            // dict.logistics.pcba.panel.category.100
-            ("dict.logistics.pcba.panel.category.100", "zh-HK", "front sys t_hk", "pcba板位类别.front sys t"),
-
-            // dict.logistics.pcba.panel.category.101
-            ("dict.logistics.pcba.panel.category.101", "en-US", "front t_us", "pcba板位类别.front t"),
-            // dict.logistics.pcba.panel.category.101
-            ("dict.logistics.pcba.panel.category.101", "ja-JP", "front t_jp", "pcba板位类别.front t"),
-            // dict.logistics.pcba.panel.category.101
-            ("dict.logistics.pcba.panel.category.101", "zh-CN", "front t", "pcba板位类别.front t"),
-            // dict.logistics.pcba.panel.category.101
-            ("dict.logistics.pcba.panel.category.101", "zh-HK", "front t_hk", "pcba板位类别.front t"),
-
-            // dict.logistics.pcba.panel.category.104
-            ("dict.logistics.pcba.panel.category.104", "en-US", "gather_us", "pcba板位类别.gather"),
-            // dict.logistics.pcba.panel.category.104
-            ("dict.logistics.pcba.panel.category.104", "ja-JP", "gather_jp", "pcba板位类别.gather"),
-            // dict.logistics.pcba.panel.category.104
-            ("dict.logistics.pcba.panel.category.104", "zh-CN", "gather", "pcba板位类别.gather"),
-            // dict.logistics.pcba.panel.category.104
-            ("dict.logistics.pcba.panel.category.104", "zh-HK", "gather_hk", "pcba板位类别.gather"),
-
-            // dict.logistics.pcba.panel.category.105
-            ("dict.logistics.pcba.panel.category.105", "en-US", "gather a_us", "pcba板位类别.gather a"),
-            // dict.logistics.pcba.panel.category.105
-            ("dict.logistics.pcba.panel.category.105", "ja-JP", "gather a_jp", "pcba板位类别.gather a"),
-            // dict.logistics.pcba.panel.category.105
-            ("dict.logistics.pcba.panel.category.105", "zh-CN", "gather a", "pcba板位类别.gather a"),
-            // dict.logistics.pcba.panel.category.105
-            ("dict.logistics.pcba.panel.category.105", "zh-HK", "gather a_hk", "pcba板位类别.gather a"),
-
-            // dict.logistics.pcba.panel.category.106
-            ("dict.logistics.pcba.panel.category.106", "en-US", "gather alt b_us", "pcba板位类别.gather alt b"),
-            // dict.logistics.pcba.panel.category.106
-            ("dict.logistics.pcba.panel.category.106", "ja-JP", "gather alt b_jp", "pcba板位类别.gather alt b"),
-            // dict.logistics.pcba.panel.category.106
-            ("dict.logistics.pcba.panel.category.106", "zh-CN", "gather alt b", "pcba板位类别.gather alt b"),
-            // dict.logistics.pcba.panel.category.106
-            ("dict.logistics.pcba.panel.category.106", "zh-HK", "gather alt b_hk", "pcba板位类别.gather alt b"),
-
-            // dict.logistics.pcba.panel.category.107
-            ("dict.logistics.pcba.panel.category.107", "en-US", "gather alt t_us", "pcba板位类别.gather alt t"),
-            // dict.logistics.pcba.panel.category.107
-            ("dict.logistics.pcba.panel.category.107", "ja-JP", "gather alt t_jp", "pcba板位类别.gather alt t"),
-            // dict.logistics.pcba.panel.category.107
-            ("dict.logistics.pcba.panel.category.107", "zh-CN", "gather alt t", "pcba板位类别.gather alt t"),
-            // dict.logistics.pcba.panel.category.107
-            ("dict.logistics.pcba.panel.category.107", "zh-HK", "gather alt t_hk", "pcba板位类别.gather alt t"),
-
-            // dict.logistics.pcba.panel.category.108
-            ("dict.logistics.pcba.panel.category.108", "en-US", "gather b_us", "pcba板位类别.gather b"),
-            // dict.logistics.pcba.panel.category.108
-            ("dict.logistics.pcba.panel.category.108", "ja-JP", "gather b_jp", "pcba板位类别.gather b"),
-            // dict.logistics.pcba.panel.category.108
-            ("dict.logistics.pcba.panel.category.108", "zh-CN", "gather b", "pcba板位类别.gather b"),
-            // dict.logistics.pcba.panel.category.108
-            ("dict.logistics.pcba.panel.category.108", "zh-HK", "gather b_hk", "pcba板位类别.gather b"),
-
-            // dict.logistics.pcba.panel.category.109
-            ("dict.logistics.pcba.panel.category.109", "en-US", "gather t/b_us", "pcba板位类别.gather t/b"),
-            // dict.logistics.pcba.panel.category.109
-            ("dict.logistics.pcba.panel.category.109", "ja-JP", "gather t/b_jp", "pcba板位类别.gather t/b"),
-            // dict.logistics.pcba.panel.category.109
-            ("dict.logistics.pcba.panel.category.109", "zh-CN", "gather t/b", "pcba板位类别.gather t/b"),
-            // dict.logistics.pcba.panel.category.109
-            ("dict.logistics.pcba.panel.category.109", "zh-HK", "gather t/b_hk", "pcba板位类别.gather t/b"),
-
-            // dict.logistics.pcba.panel.category.110
-            ("dict.logistics.pcba.panel.category.110", "en-US", "gather c_us", "pcba板位类别.gather c"),
-            // dict.logistics.pcba.panel.category.110
-            ("dict.logistics.pcba.panel.category.110", "ja-JP", "gather c_jp", "pcba板位类别.gather c"),
-            // dict.logistics.pcba.panel.category.110
-            ("dict.logistics.pcba.panel.category.110", "zh-CN", "gather c", "pcba板位类别.gather c"),
-            // dict.logistics.pcba.panel.category.110
-            ("dict.logistics.pcba.panel.category.110", "zh-HK", "gather c_hk", "pcba板位类别.gather c"),
-
-            // dict.logistics.pcba.panel.category.111
-            ("dict.logistics.pcba.panel.category.111", "en-US", "gather t_us", "pcba板位类别.gather t"),
-            // dict.logistics.pcba.panel.category.111
-            ("dict.logistics.pcba.panel.category.111", "ja-JP", "gather t_jp", "pcba板位类别.gather t"),
-            // dict.logistics.pcba.panel.category.111
-            ("dict.logistics.pcba.panel.category.111", "zh-CN", "gather t", "pcba板位类别.gather t"),
-            // dict.logistics.pcba.panel.category.111
-            ("dict.logistics.pcba.panel.category.111", "zh-HK", "gather t_hk", "pcba板位类别.gather t"),
-
-            // dict.logistics.pcba.panel.category.113
-            ("dict.logistics.pcba.panel.category.113", "en-US", "gather j_us", "pcba板位类别.gather j"),
-            // dict.logistics.pcba.panel.category.113
-            ("dict.logistics.pcba.panel.category.113", "ja-JP", "gather j_jp", "pcba板位类别.gather j"),
-            // dict.logistics.pcba.panel.category.113
-            ("dict.logistics.pcba.panel.category.113", "zh-CN", "gather j", "pcba板位类别.gather j"),
-            // dict.logistics.pcba.panel.category.113
-            ("dict.logistics.pcba.panel.category.113", "zh-HK", "gather j_hk", "pcba板位类别.gather j"),
-
-            // dict.logistics.pcba.panel.category.114
-            ("dict.logistics.pcba.panel.category.114", "en-US", "if_us", "pcba板位类别.if"),
-            // dict.logistics.pcba.panel.category.114
-            ("dict.logistics.pcba.panel.category.114", "ja-JP", "if_jp", "pcba板位类别.if"),
-            // dict.logistics.pcba.panel.category.114
-            ("dict.logistics.pcba.panel.category.114", "zh-CN", "if", "pcba板位类别.if"),
-            // dict.logistics.pcba.panel.category.114
-            ("dict.logistics.pcba.panel.category.114", "zh-HK", "if_hk", "pcba板位类别.if"),
-
-            // dict.logistics.pcba.panel.category.117
-            ("dict.logistics.pcba.panel.category.117", "en-US", "if b_us", "pcba板位类别.if b"),
-            // dict.logistics.pcba.panel.category.117
-            ("dict.logistics.pcba.panel.category.117", "ja-JP", "if b_jp", "pcba板位类别.if b"),
-            // dict.logistics.pcba.panel.category.117
-            ("dict.logistics.pcba.panel.category.117", "zh-CN", "if b", "pcba板位类别.if b"),
-            // dict.logistics.pcba.panel.category.117
-            ("dict.logistics.pcba.panel.category.117", "zh-HK", "if b_hk", "pcba板位类别.if b"),
-
-            // dict.logistics.pcba.panel.category.118
-            ("dict.logistics.pcba.panel.category.118", "en-US", "if t_us", "pcba板位类别.if t"),
-            // dict.logistics.pcba.panel.category.118
-            ("dict.logistics.pcba.panel.category.118", "ja-JP", "if t_jp", "pcba板位类别.if t"),
-            // dict.logistics.pcba.panel.category.118
-            ("dict.logistics.pcba.panel.category.118", "zh-CN", "if t", "pcba板位类别.if t"),
-            // dict.logistics.pcba.panel.category.118
-            ("dict.logistics.pcba.panel.category.118", "zh-HK", "if t_hk", "pcba板位类别.if t"),
-
-            // dict.logistics.pcba.panel.category.119
-            ("dict.logistics.pcba.panel.category.119", "en-US", "input_us", "pcba板位类别.input"),
-            // dict.logistics.pcba.panel.category.119
-            ("dict.logistics.pcba.panel.category.119", "ja-JP", "input_jp", "pcba板位类别.input"),
-            // dict.logistics.pcba.panel.category.119
-            ("dict.logistics.pcba.panel.category.119", "zh-CN", "input", "pcba板位类别.input"),
-            // dict.logistics.pcba.panel.category.119
-            ("dict.logistics.pcba.panel.category.119", "zh-HK", "input_hk", "pcba板位类别.input"),
-
-            // dict.logistics.pcba.panel.category.120
-            ("dict.logistics.pcba.panel.category.120", "en-US", "io_us", "pcba板位类别.io"),
-            // dict.logistics.pcba.panel.category.120
-            ("dict.logistics.pcba.panel.category.120", "ja-JP", "io_jp", "pcba板位类别.io"),
-            // dict.logistics.pcba.panel.category.120
-            ("dict.logistics.pcba.panel.category.120", "zh-CN", "io", "pcba板位类别.io"),
-            // dict.logistics.pcba.panel.category.120
-            ("dict.logistics.pcba.panel.category.120", "zh-HK", "io_hk", "pcba板位类别.io"),
-
-            // dict.logistics.pcba.panel.category.115
-            ("dict.logistics.pcba.panel.category.115", "en-US", "io b_us", "pcba板位类别.io b"),
-            // dict.logistics.pcba.panel.category.115
-            ("dict.logistics.pcba.panel.category.115", "ja-JP", "io b_jp", "pcba板位类别.io b"),
-            // dict.logistics.pcba.panel.category.115
-            ("dict.logistics.pcba.panel.category.115", "zh-CN", "io b", "pcba板位类别.io b"),
-            // dict.logistics.pcba.panel.category.115
-            ("dict.logistics.pcba.panel.category.115", "zh-HK", "io b_hk", "pcba板位类别.io b"),
-
-            // dict.logistics.pcba.panel.category.121
-            ("dict.logistics.pcba.panel.category.121", "en-US", "io t/b_us", "pcba板位类别.io t/b"),
-            // dict.logistics.pcba.panel.category.121
-            ("dict.logistics.pcba.panel.category.121", "ja-JP", "io t/b_jp", "pcba板位类别.io t/b"),
-            // dict.logistics.pcba.panel.category.121
-            ("dict.logistics.pcba.panel.category.121", "zh-CN", "io t/b", "pcba板位类别.io t/b"),
-            // dict.logistics.pcba.panel.category.121
-            ("dict.logistics.pcba.panel.category.121", "zh-HK", "io t/b_hk", "pcba板位类别.io t/b"),
-
-            // dict.logistics.pcba.panel.category.122
-            ("dict.logistics.pcba.panel.category.122", "en-US", "io t_us", "pcba板位类别.io t"),
-            // dict.logistics.pcba.panel.category.122
-            ("dict.logistics.pcba.panel.category.122", "ja-JP", "io t_jp", "pcba板位类别.io t"),
-            // dict.logistics.pcba.panel.category.122
-            ("dict.logistics.pcba.panel.category.122", "zh-CN", "io t", "pcba板位类别.io t"),
-            // dict.logistics.pcba.panel.category.122
-            ("dict.logistics.pcba.panel.category.122", "zh-HK", "io t_hk", "pcba板位类别.io t"),
-
-            // dict.logistics.pcba.panel.category.123
-            ("dict.logistics.pcba.panel.category.123", "en-US", "jack_us", "pcba板位类别.jack"),
-            // dict.logistics.pcba.panel.category.123
-            ("dict.logistics.pcba.panel.category.123", "ja-JP", "jack_jp", "pcba板位类别.jack"),
-            // dict.logistics.pcba.panel.category.123
-            ("dict.logistics.pcba.panel.category.123", "zh-CN", "jack", "pcba板位类别.jack"),
-            // dict.logistics.pcba.panel.category.123
-            ("dict.logistics.pcba.panel.category.123", "zh-HK", "jack_hk", "pcba板位类别.jack"),
-
-            // dict.logistics.pcba.panel.category.124
-            ("dict.logistics.pcba.panel.category.124", "en-US", "jack a_us", "pcba板位类别.jack a"),
-            // dict.logistics.pcba.panel.category.124
-            ("dict.logistics.pcba.panel.category.124", "ja-JP", "jack a_jp", "pcba板位类别.jack a"),
-            // dict.logistics.pcba.panel.category.124
-            ("dict.logistics.pcba.panel.category.124", "zh-CN", "jack a", "pcba板位类别.jack a"),
-            // dict.logistics.pcba.panel.category.124
-            ("dict.logistics.pcba.panel.category.124", "zh-HK", "jack a_hk", "pcba板位类别.jack a"),
-
-            // dict.logistics.pcba.panel.category.125
-            ("dict.logistics.pcba.panel.category.125", "en-US", "jack b_us", "pcba板位类别.jack b"),
-            // dict.logistics.pcba.panel.category.125
-            ("dict.logistics.pcba.panel.category.125", "ja-JP", "jack b_jp", "pcba板位类别.jack b"),
-            // dict.logistics.pcba.panel.category.125
-            ("dict.logistics.pcba.panel.category.125", "zh-CN", "jack b", "pcba板位类别.jack b"),
-            // dict.logistics.pcba.panel.category.125
-            ("dict.logistics.pcba.panel.category.125", "zh-HK", "jack b_hk", "pcba板位类别.jack b"),
-
-            // dict.logistics.pcba.panel.category.126
-            ("dict.logistics.pcba.panel.category.126", "en-US", "jack t/b_us", "pcba板位类别.jack t/b"),
-            // dict.logistics.pcba.panel.category.126
-            ("dict.logistics.pcba.panel.category.126", "ja-JP", "jack t/b_jp", "pcba板位类别.jack t/b"),
-            // dict.logistics.pcba.panel.category.126
-            ("dict.logistics.pcba.panel.category.126", "zh-CN", "jack t/b", "pcba板位类别.jack t/b"),
-            // dict.logistics.pcba.panel.category.126
-            ("dict.logistics.pcba.panel.category.126", "zh-HK", "jack t/b_hk", "pcba板位类别.jack t/b"),
-
-            // dict.logistics.pcba.panel.category.127
-            ("dict.logistics.pcba.panel.category.127", "en-US", "jack t_us", "pcba板位类别.jack t"),
-            // dict.logistics.pcba.panel.category.127
-            ("dict.logistics.pcba.panel.category.127", "ja-JP", "jack t_jp", "pcba板位类别.jack t"),
-            // dict.logistics.pcba.panel.category.127
-            ("dict.logistics.pcba.panel.category.127", "zh-CN", "jack t", "pcba板位类别.jack t"),
-            // dict.logistics.pcba.panel.category.127
-            ("dict.logistics.pcba.panel.category.127", "zh-HK", "jack t_hk", "pcba板位类别.jack t"),
-
-            // dict.logistics.pcba.panel.category.128
-            ("dict.logistics.pcba.panel.category.128", "en-US", "jack-00 b_us", "pcba板位类别.jack-00 b"),
-            // dict.logistics.pcba.panel.category.128
-            ("dict.logistics.pcba.panel.category.128", "ja-JP", "jack-00 b_jp", "pcba板位类别.jack-00 b"),
-            // dict.logistics.pcba.panel.category.128
-            ("dict.logistics.pcba.panel.category.128", "zh-CN", "jack-00 b", "pcba板位类别.jack-00 b"),
-            // dict.logistics.pcba.panel.category.128
-            ("dict.logistics.pcba.panel.category.128", "zh-HK", "jack-00 b_hk", "pcba板位类别.jack-00 b"),
-
-            // dict.logistics.pcba.panel.category.132
-            ("dict.logistics.pcba.panel.category.132", "en-US", "jack-00 t_us", "pcba板位类别.jack-00 t"),
-            // dict.logistics.pcba.panel.category.132
-            ("dict.logistics.pcba.panel.category.132", "ja-JP", "jack-00 t_jp", "pcba板位类别.jack-00 t"),
-            // dict.logistics.pcba.panel.category.132
-            ("dict.logistics.pcba.panel.category.132", "zh-CN", "jack-00 t", "pcba板位类别.jack-00 t"),
-            // dict.logistics.pcba.panel.category.132
-            ("dict.logistics.pcba.panel.category.132", "zh-HK", "jack-00 t_hk", "pcba板位类别.jack-00 t"),
-
-            // dict.logistics.pcba.panel.category.133
-            ("dict.logistics.pcba.panel.category.133", "en-US", "jack-10 b_us", "pcba板位类别.jack-10 b"),
-            // dict.logistics.pcba.panel.category.133
-            ("dict.logistics.pcba.panel.category.133", "ja-JP", "jack-10 b_jp", "pcba板位类别.jack-10 b"),
-            // dict.logistics.pcba.panel.category.133
-            ("dict.logistics.pcba.panel.category.133", "zh-CN", "jack-10 b", "pcba板位类别.jack-10 b"),
-            // dict.logistics.pcba.panel.category.133
-            ("dict.logistics.pcba.panel.category.133", "zh-HK", "jack-10 b_hk", "pcba板位类别.jack-10 b"),
-
-            // dict.logistics.pcba.panel.category.134
-            ("dict.logistics.pcba.panel.category.134", "en-US", "jack-10 t_us", "pcba板位类别.jack-10 t"),
-            // dict.logistics.pcba.panel.category.134
-            ("dict.logistics.pcba.panel.category.134", "ja-JP", "jack-10 t_jp", "pcba板位类别.jack-10 t"),
-            // dict.logistics.pcba.panel.category.134
-            ("dict.logistics.pcba.panel.category.134", "zh-CN", "jack-10 t", "pcba板位类别.jack-10 t"),
-            // dict.logistics.pcba.panel.category.134
-            ("dict.logistics.pcba.panel.category.134", "zh-HK", "jack-10 t_hk", "pcba板位类别.jack-10 t"),
-
-            // dict.logistics.pcba.panel.category.135
-            ("dict.logistics.pcba.panel.category.135", "en-US", "jack-20 b_us", "pcba板位类别.jack-20 b"),
-            // dict.logistics.pcba.panel.category.135
-            ("dict.logistics.pcba.panel.category.135", "ja-JP", "jack-20 b_jp", "pcba板位类别.jack-20 b"),
-            // dict.logistics.pcba.panel.category.135
-            ("dict.logistics.pcba.panel.category.135", "zh-CN", "jack-20 b", "pcba板位类别.jack-20 b"),
-            // dict.logistics.pcba.panel.category.135
-            ("dict.logistics.pcba.panel.category.135", "zh-HK", "jack-20 b_hk", "pcba板位类别.jack-20 b"),
-
-            // dict.logistics.pcba.panel.category.136
-            ("dict.logistics.pcba.panel.category.136", "en-US", "jack-20 t_us", "pcba板位类别.jack-20 t"),
-            // dict.logistics.pcba.panel.category.136
-            ("dict.logistics.pcba.panel.category.136", "ja-JP", "jack-20 t_jp", "pcba板位类别.jack-20 t"),
-            // dict.logistics.pcba.panel.category.136
-            ("dict.logistics.pcba.panel.category.136", "zh-CN", "jack-20 t", "pcba板位类别.jack-20 t"),
-            // dict.logistics.pcba.panel.category.136
-            ("dict.logistics.pcba.panel.category.136", "zh-HK", "jack-20 t_hk", "pcba板位类别.jack-20 t"),
-
-            // dict.logistics.pcba.panel.category.137
-            ("dict.logistics.pcba.panel.category.137", "en-US", "jack-30 b_us", "pcba板位类别.jack-30 b"),
-            // dict.logistics.pcba.panel.category.137
-            ("dict.logistics.pcba.panel.category.137", "ja-JP", "jack-30 b_jp", "pcba板位类别.jack-30 b"),
-            // dict.logistics.pcba.panel.category.137
-            ("dict.logistics.pcba.panel.category.137", "zh-CN", "jack-30 b", "pcba板位类别.jack-30 b"),
-            // dict.logistics.pcba.panel.category.137
-            ("dict.logistics.pcba.panel.category.137", "zh-HK", "jack-30 b_hk", "pcba板位类别.jack-30 b"),
-
-            // dict.logistics.pcba.panel.category.138
-            ("dict.logistics.pcba.panel.category.138", "en-US", "jack-30 t_us", "pcba板位类别.jack-30 t"),
-            // dict.logistics.pcba.panel.category.138
-            ("dict.logistics.pcba.panel.category.138", "ja-JP", "jack-30 t_jp", "pcba板位类别.jack-30 t"),
-            // dict.logistics.pcba.panel.category.138
-            ("dict.logistics.pcba.panel.category.138", "zh-CN", "jack-30 t", "pcba板位类别.jack-30 t"),
-            // dict.logistics.pcba.panel.category.138
-            ("dict.logistics.pcba.panel.category.138", "zh-HK", "jack-30 t_hk", "pcba板位类别.jack-30 t"),
-
-            // dict.logistics.pcba.panel.category.139
-            ("dict.logistics.pcba.panel.category.139", "en-US", "join_us", "pcba板位类别.join"),
-            // dict.logistics.pcba.panel.category.139
-            ("dict.logistics.pcba.panel.category.139", "ja-JP", "join_jp", "pcba板位类别.join"),
-            // dict.logistics.pcba.panel.category.139
-            ("dict.logistics.pcba.panel.category.139", "zh-CN", "join", "pcba板位类别.join"),
-            // dict.logistics.pcba.panel.category.139
-            ("dict.logistics.pcba.panel.category.139", "zh-HK", "join_hk", "pcba板位类别.join"),
-
-            // dict.logistics.pcba.panel.category.140
-            ("dict.logistics.pcba.panel.category.140", "en-US", "jointc a_us", "pcba板位类别.jointc a"),
-            // dict.logistics.pcba.panel.category.140
-            ("dict.logistics.pcba.panel.category.140", "ja-JP", "jointc a_jp", "pcba板位类别.jointc a"),
-            // dict.logistics.pcba.panel.category.140
-            ("dict.logistics.pcba.panel.category.140", "zh-CN", "jointc a", "pcba板位类别.jointc a"),
-            // dict.logistics.pcba.panel.category.140
-            ("dict.logistics.pcba.panel.category.140", "zh-HK", "jointc a_hk", "pcba板位类别.jointc a"),
-
-            // dict.logistics.pcba.panel.category.141
-            ("dict.logistics.pcba.panel.category.141", "en-US", "jointc b_us", "pcba板位类别.jointc b"),
-            // dict.logistics.pcba.panel.category.141
-            ("dict.logistics.pcba.panel.category.141", "ja-JP", "jointc b_jp", "pcba板位类别.jointc b"),
-            // dict.logistics.pcba.panel.category.141
-            ("dict.logistics.pcba.panel.category.141", "zh-CN", "jointc b", "pcba板位类别.jointc b"),
-            // dict.logistics.pcba.panel.category.141
-            ("dict.logistics.pcba.panel.category.141", "zh-HK", "jointc b_hk", "pcba板位类别.jointc b"),
-
-            // dict.logistics.pcba.panel.category.142
-            ("dict.logistics.pcba.panel.category.142", "en-US", "jointc t_us", "pcba板位类别.jointc t"),
-            // dict.logistics.pcba.panel.category.142
-            ("dict.logistics.pcba.panel.category.142", "ja-JP", "jointc t_jp", "pcba板位类别.jointc t"),
-            // dict.logistics.pcba.panel.category.142
-            ("dict.logistics.pcba.panel.category.142", "zh-CN", "jointc t", "pcba板位类别.jointc t"),
-            // dict.logistics.pcba.panel.category.142
-            ("dict.logistics.pcba.panel.category.142", "zh-HK", "jointc t_hk", "pcba板位类别.jointc t"),
-
-            // dict.logistics.pcba.panel.category.143
-            ("dict.logistics.pcba.panel.category.143", "en-US", "jointf a_us", "pcba板位类别.jointf a"),
-            // dict.logistics.pcba.panel.category.143
-            ("dict.logistics.pcba.panel.category.143", "ja-JP", "jointf a_jp", "pcba板位类别.jointf a"),
-            // dict.logistics.pcba.panel.category.143
-            ("dict.logistics.pcba.panel.category.143", "zh-CN", "jointf a", "pcba板位类别.jointf a"),
-            // dict.logistics.pcba.panel.category.143
-            ("dict.logistics.pcba.panel.category.143", "zh-HK", "jointf a_hk", "pcba板位类别.jointf a"),
-
-            // dict.logistics.pcba.panel.category.144
-            ("dict.logistics.pcba.panel.category.144", "en-US", "jointf b_us", "pcba板位类别.jointf b"),
-            // dict.logistics.pcba.panel.category.144
-            ("dict.logistics.pcba.panel.category.144", "ja-JP", "jointf b_jp", "pcba板位类别.jointf b"),
-            // dict.logistics.pcba.panel.category.144
-            ("dict.logistics.pcba.panel.category.144", "zh-CN", "jointf b", "pcba板位类别.jointf b"),
-            // dict.logistics.pcba.panel.category.144
-            ("dict.logistics.pcba.panel.category.144", "zh-HK", "jointf b_hk", "pcba板位类别.jointf b"),
-
-            // dict.logistics.pcba.panel.category.145
-            ("dict.logistics.pcba.panel.category.145", "en-US", "jointf t_us", "pcba板位类别.jointf t"),
-            // dict.logistics.pcba.panel.category.145
-            ("dict.logistics.pcba.panel.category.145", "ja-JP", "jointf t_jp", "pcba板位类别.jointf t"),
-            // dict.logistics.pcba.panel.category.145
-            ("dict.logistics.pcba.panel.category.145", "zh-CN", "jointf t", "pcba板位类别.jointf t"),
-            // dict.logistics.pcba.panel.category.145
-            ("dict.logistics.pcba.panel.category.145", "zh-HK", "jointf t_hk", "pcba板位类别.jointf t"),
-
-            // dict.logistics.pcba.panel.category.146
-            ("dict.logistics.pcba.panel.category.146", "en-US", "joints_us", "pcba板位类别.joints"),
-            // dict.logistics.pcba.panel.category.146
-            ("dict.logistics.pcba.panel.category.146", "ja-JP", "joints_jp", "pcba板位类别.joints"),
-            // dict.logistics.pcba.panel.category.146
-            ("dict.logistics.pcba.panel.category.146", "zh-CN", "joints", "pcba板位类别.joints"),
-            // dict.logistics.pcba.panel.category.146
-            ("dict.logistics.pcba.panel.category.146", "zh-HK", "joints_hk", "pcba板位类别.joints"),
-
-            // dict.logistics.pcba.panel.category.147
-            ("dict.logistics.pcba.panel.category.147", "en-US", "key_us", "pcba板位类别.key"),
-            // dict.logistics.pcba.panel.category.147
-            ("dict.logistics.pcba.panel.category.147", "ja-JP", "key_jp", "pcba板位类别.key"),
-            // dict.logistics.pcba.panel.category.147
-            ("dict.logistics.pcba.panel.category.147", "zh-CN", "key", "pcba板位类别.key"),
-            // dict.logistics.pcba.panel.category.147
-            ("dict.logistics.pcba.panel.category.147", "zh-HK", "key_hk", "pcba板位类别.key"),
-
-            // dict.logistics.pcba.panel.category.148
-            ("dict.logistics.pcba.panel.category.148", "en-US", "key b_us", "pcba板位类别.key b"),
-            // dict.logistics.pcba.panel.category.148
-            ("dict.logistics.pcba.panel.category.148", "ja-JP", "key b_jp", "pcba板位类别.key b"),
-            // dict.logistics.pcba.panel.category.148
-            ("dict.logistics.pcba.panel.category.148", "zh-CN", "key b", "pcba板位类别.key b"),
-            // dict.logistics.pcba.panel.category.148
-            ("dict.logistics.pcba.panel.category.148", "zh-HK", "key b_hk", "pcba板位类别.key b"),
-
-            // dict.logistics.pcba.panel.category.149
-            ("dict.logistics.pcba.panel.category.149", "en-US", "key t/b_us", "pcba板位类别.key t/b"),
-            // dict.logistics.pcba.panel.category.149
-            ("dict.logistics.pcba.panel.category.149", "ja-JP", "key t/b_jp", "pcba板位类别.key t/b"),
-            // dict.logistics.pcba.panel.category.149
-            ("dict.logistics.pcba.panel.category.149", "zh-CN", "key t/b", "pcba板位类别.key t/b"),
-            // dict.logistics.pcba.panel.category.149
-            ("dict.logistics.pcba.panel.category.149", "zh-HK", "key t/b_hk", "pcba板位类别.key t/b"),
-
-            // dict.logistics.pcba.panel.category.150
-            ("dict.logistics.pcba.panel.category.150", "en-US", "key t_us", "pcba板位类别.key t"),
-            // dict.logistics.pcba.panel.category.150
-            ("dict.logistics.pcba.panel.category.150", "ja-JP", "key t_jp", "pcba板位类别.key t"),
-            // dict.logistics.pcba.panel.category.150
-            ("dict.logistics.pcba.panel.category.150", "zh-CN", "key t", "pcba板位类别.key t"),
-            // dict.logistics.pcba.panel.category.150
-            ("dict.logistics.pcba.panel.category.150", "zh-HK", "key t_hk", "pcba板位类别.key t"),
-
-            // dict.logistics.pcba.panel.category.151
-            ("dict.logistics.pcba.panel.category.151", "en-US", "lcd a_us", "pcba板位类别.lcd a"),
-            // dict.logistics.pcba.panel.category.151
-            ("dict.logistics.pcba.panel.category.151", "ja-JP", "lcd a_jp", "pcba板位类别.lcd a"),
-            // dict.logistics.pcba.panel.category.151
-            ("dict.logistics.pcba.panel.category.151", "zh-CN", "lcd a", "pcba板位类别.lcd a"),
-            // dict.logistics.pcba.panel.category.151
-            ("dict.logistics.pcba.panel.category.151", "zh-HK", "lcd a_hk", "pcba板位类别.lcd a"),
-
-            // dict.logistics.pcba.panel.category.152
-            ("dict.logistics.pcba.panel.category.152", "en-US", "lcd b_us", "pcba板位类别.lcd b"),
-            // dict.logistics.pcba.panel.category.152
-            ("dict.logistics.pcba.panel.category.152", "ja-JP", "lcd b_jp", "pcba板位类别.lcd b"),
-            // dict.logistics.pcba.panel.category.152
-            ("dict.logistics.pcba.panel.category.152", "zh-CN", "lcd b", "pcba板位类别.lcd b"),
-            // dict.logistics.pcba.panel.category.152
-            ("dict.logistics.pcba.panel.category.152", "zh-HK", "lcd b_hk", "pcba板位类别.lcd b"),
-
-            // dict.logistics.pcba.panel.category.153
-            ("dict.logistics.pcba.panel.category.153", "en-US", "lcd t/b_us", "pcba板位类别.lcd t/b"),
-            // dict.logistics.pcba.panel.category.153
-            ("dict.logistics.pcba.panel.category.153", "ja-JP", "lcd t/b_jp", "pcba板位类别.lcd t/b"),
-            // dict.logistics.pcba.panel.category.153
-            ("dict.logistics.pcba.panel.category.153", "zh-CN", "lcd t/b", "pcba板位类别.lcd t/b"),
-            // dict.logistics.pcba.panel.category.153
-            ("dict.logistics.pcba.panel.category.153", "zh-HK", "lcd t/b_hk", "pcba板位类别.lcd t/b"),
-
-            // dict.logistics.pcba.panel.category.154
-            ("dict.logistics.pcba.panel.category.154", "en-US", "lcd ex_us", "pcba板位类别.lcd ex"),
-            // dict.logistics.pcba.panel.category.154
-            ("dict.logistics.pcba.panel.category.154", "ja-JP", "lcd ex_jp", "pcba板位类别.lcd ex"),
-            // dict.logistics.pcba.panel.category.154
-            ("dict.logistics.pcba.panel.category.154", "zh-CN", "lcd ex", "pcba板位类别.lcd ex"),
-            // dict.logistics.pcba.panel.category.154
-            ("dict.logistics.pcba.panel.category.154", "zh-HK", "lcd ex_hk", "pcba板位类别.lcd ex"),
-
-            // dict.logistics.pcba.panel.category.155
-            ("dict.logistics.pcba.panel.category.155", "en-US", "lcd ex b_us", "pcba板位类别.lcd ex b"),
-            // dict.logistics.pcba.panel.category.155
-            ("dict.logistics.pcba.panel.category.155", "ja-JP", "lcd ex b_jp", "pcba板位类别.lcd ex b"),
-            // dict.logistics.pcba.panel.category.155
-            ("dict.logistics.pcba.panel.category.155", "zh-CN", "lcd ex b", "pcba板位类别.lcd ex b"),
-            // dict.logistics.pcba.panel.category.155
-            ("dict.logistics.pcba.panel.category.155", "zh-HK", "lcd ex b_hk", "pcba板位类别.lcd ex b"),
-
-            // dict.logistics.pcba.panel.category.156
-            ("dict.logistics.pcba.panel.category.156", "en-US", "lcd ex t/b_us", "pcba板位类别.lcd ex t/b"),
-            // dict.logistics.pcba.panel.category.156
-            ("dict.logistics.pcba.panel.category.156", "ja-JP", "lcd ex t/b_jp", "pcba板位类别.lcd ex t/b"),
-            // dict.logistics.pcba.panel.category.156
-            ("dict.logistics.pcba.panel.category.156", "zh-CN", "lcd ex t/b", "pcba板位类别.lcd ex t/b"),
-            // dict.logistics.pcba.panel.category.156
-            ("dict.logistics.pcba.panel.category.156", "zh-HK", "lcd ex t/b_hk", "pcba板位类别.lcd ex t/b"),
-
-            // dict.logistics.pcba.panel.category.157
-            ("dict.logistics.pcba.panel.category.157", "en-US", "lcd ex t_us", "pcba板位类别.lcd ex t"),
-            // dict.logistics.pcba.panel.category.157
-            ("dict.logistics.pcba.panel.category.157", "ja-JP", "lcd ex t_jp", "pcba板位类别.lcd ex t"),
-            // dict.logistics.pcba.panel.category.157
-            ("dict.logistics.pcba.panel.category.157", "zh-CN", "lcd ex t", "pcba板位类别.lcd ex t"),
-            // dict.logistics.pcba.panel.category.157
-            ("dict.logistics.pcba.panel.category.157", "zh-HK", "lcd ex t_hk", "pcba板位类别.lcd ex t"),
-
-            // dict.logistics.pcba.panel.category.159
-            ("dict.logistics.pcba.panel.category.159", "en-US", "lcd t_us", "pcba板位类别.lcd t"),
-            // dict.logistics.pcba.panel.category.159
-            ("dict.logistics.pcba.panel.category.159", "ja-JP", "lcd t_jp", "pcba板位类别.lcd t"),
-            // dict.logistics.pcba.panel.category.159
-            ("dict.logistics.pcba.panel.category.159", "zh-CN", "lcd t", "pcba板位类别.lcd t"),
-            // dict.logistics.pcba.panel.category.159
-            ("dict.logistics.pcba.panel.category.159", "zh-HK", "lcd t_hk", "pcba板位类别.lcd t"),
-
-            // dict.logistics.pcba.panel.category.158
-            ("dict.logistics.pcba.panel.category.158", "en-US", "madi b_us", "pcba板位类别.madi b"),
-            // dict.logistics.pcba.panel.category.158
-            ("dict.logistics.pcba.panel.category.158", "ja-JP", "madi b_jp", "pcba板位类别.madi b"),
-            // dict.logistics.pcba.panel.category.158
-            ("dict.logistics.pcba.panel.category.158", "zh-CN", "madi b", "pcba板位类别.madi b"),
-            // dict.logistics.pcba.panel.category.158
-            ("dict.logistics.pcba.panel.category.158", "zh-HK", "madi b_hk", "pcba板位类别.madi b"),
-
-            // dict.logistics.pcba.panel.category.161
-            ("dict.logistics.pcba.panel.category.161", "en-US", "madi t/b_us", "pcba板位类别.madi t/b"),
-            // dict.logistics.pcba.panel.category.161
-            ("dict.logistics.pcba.panel.category.161", "ja-JP", "madi t/b_jp", "pcba板位类别.madi t/b"),
-            // dict.logistics.pcba.panel.category.161
-            ("dict.logistics.pcba.panel.category.161", "zh-CN", "madi t/b", "pcba板位类别.madi t/b"),
-            // dict.logistics.pcba.panel.category.161
-            ("dict.logistics.pcba.panel.category.161", "zh-HK", "madi t/b_hk", "pcba板位类别.madi t/b"),
-
-            // dict.logistics.pcba.panel.category.162
-            ("dict.logistics.pcba.panel.category.162", "en-US", "madi t_us", "pcba板位类别.madi t"),
-            // dict.logistics.pcba.panel.category.162
-            ("dict.logistics.pcba.panel.category.162", "ja-JP", "madi t_jp", "pcba板位类别.madi t"),
-            // dict.logistics.pcba.panel.category.162
-            ("dict.logistics.pcba.panel.category.162", "zh-CN", "madi t", "pcba板位类别.madi t"),
-            // dict.logistics.pcba.panel.category.162
-            ("dict.logistics.pcba.panel.category.162", "zh-HK", "madi t_hk", "pcba板位类别.madi t"),
-
-            // dict.logistics.pcba.panel.category.163
-            ("dict.logistics.pcba.panel.category.163", "en-US", "mafad a_us", "pcba板位类别.mafad a"),
-            // dict.logistics.pcba.panel.category.163
-            ("dict.logistics.pcba.panel.category.163", "ja-JP", "mafad a_jp", "pcba板位类别.mafad a"),
-            // dict.logistics.pcba.panel.category.163
-            ("dict.logistics.pcba.panel.category.163", "zh-CN", "mafad a", "pcba板位类别.mafad a"),
-            // dict.logistics.pcba.panel.category.163
-            ("dict.logistics.pcba.panel.category.163", "zh-HK", "mafad a_hk", "pcba板位类别.mafad a"),
-
-            // dict.logistics.pcba.panel.category.164
-            ("dict.logistics.pcba.panel.category.164", "en-US", "mafad b_us", "pcba板位类别.mafad b"),
-            // dict.logistics.pcba.panel.category.164
-            ("dict.logistics.pcba.panel.category.164", "ja-JP", "mafad b_jp", "pcba板位类别.mafad b"),
-            // dict.logistics.pcba.panel.category.164
-            ("dict.logistics.pcba.panel.category.164", "zh-CN", "mafad b", "pcba板位类别.mafad b"),
-            // dict.logistics.pcba.panel.category.164
-            ("dict.logistics.pcba.panel.category.164", "zh-HK", "mafad b_hk", "pcba板位类别.mafad b"),
-
-            // dict.logistics.pcba.panel.category.166
-            ("dict.logistics.pcba.panel.category.166", "en-US", "mafad t/b_us", "pcba板位类别.mafad t/b"),
-            // dict.logistics.pcba.panel.category.166
-            ("dict.logistics.pcba.panel.category.166", "ja-JP", "mafad t/b_jp", "pcba板位类别.mafad t/b"),
-            // dict.logistics.pcba.panel.category.166
-            ("dict.logistics.pcba.panel.category.166", "zh-CN", "mafad t/b", "pcba板位类别.mafad t/b"),
-            // dict.logistics.pcba.panel.category.166
-            ("dict.logistics.pcba.panel.category.166", "zh-HK", "mafad t/b_hk", "pcba板位类别.mafad t/b"),
-
-            // dict.logistics.pcba.panel.category.169
-            ("dict.logistics.pcba.panel.category.169", "en-US", "mafad t_us", "pcba板位类别.mafad t"),
-            // dict.logistics.pcba.panel.category.169
-            ("dict.logistics.pcba.panel.category.169", "ja-JP", "mafad t_jp", "pcba板位类别.mafad t"),
-            // dict.logistics.pcba.panel.category.169
-            ("dict.logistics.pcba.panel.category.169", "zh-CN", "mafad t", "pcba板位类别.mafad t"),
-            // dict.logistics.pcba.panel.category.169
-            ("dict.logistics.pcba.panel.category.169", "zh-HK", "mafad t_hk", "pcba板位类别.mafad t"),
-
-            // dict.logistics.pcba.panel.category.168
-            ("dict.logistics.pcba.panel.category.168", "en-US", "main_us", "pcba板位类别.main"),
-            // dict.logistics.pcba.panel.category.168
-            ("dict.logistics.pcba.panel.category.168", "ja-JP", "main_jp", "pcba板位类别.main"),
-            // dict.logistics.pcba.panel.category.168
-            ("dict.logistics.pcba.panel.category.168", "zh-CN", "main", "pcba板位类别.main"),
-            // dict.logistics.pcba.panel.category.168
-            ("dict.logistics.pcba.panel.category.168", "zh-HK", "main_hk", "pcba板位类别.main"),
-
-            // dict.logistics.pcba.panel.category.171
-            ("dict.logistics.pcba.panel.category.171", "en-US", "main a_us", "pcba板位类别.main a"),
-            // dict.logistics.pcba.panel.category.171
-            ("dict.logistics.pcba.panel.category.171", "ja-JP", "main a_jp", "pcba板位类别.main a"),
-            // dict.logistics.pcba.panel.category.171
-            ("dict.logistics.pcba.panel.category.171", "zh-CN", "main a", "pcba板位类别.main a"),
-            // dict.logistics.pcba.panel.category.171
-            ("dict.logistics.pcba.panel.category.171", "zh-HK", "main a_hk", "pcba板位类别.main a"),
-
-            // dict.logistics.pcba.panel.category.172
-            ("dict.logistics.pcba.panel.category.172", "en-US", "main alt b_us", "pcba板位类别.main alt b"),
-            // dict.logistics.pcba.panel.category.172
-            ("dict.logistics.pcba.panel.category.172", "ja-JP", "main alt b_jp", "pcba板位类别.main alt b"),
-            // dict.logistics.pcba.panel.category.172
-            ("dict.logistics.pcba.panel.category.172", "zh-CN", "main alt b", "pcba板位类别.main alt b"),
-            // dict.logistics.pcba.panel.category.172
-            ("dict.logistics.pcba.panel.category.172", "zh-HK", "main alt b_hk", "pcba板位类别.main alt b"),
-
-            // dict.logistics.pcba.panel.category.173
-            ("dict.logistics.pcba.panel.category.173", "en-US", "main alt t_us", "pcba板位类别.main alt t"),
-            // dict.logistics.pcba.panel.category.173
-            ("dict.logistics.pcba.panel.category.173", "ja-JP", "main alt t_jp", "pcba板位类别.main alt t"),
-            // dict.logistics.pcba.panel.category.173
-            ("dict.logistics.pcba.panel.category.173", "zh-CN", "main alt t", "pcba板位类别.main alt t"),
-            // dict.logistics.pcba.panel.category.173
-            ("dict.logistics.pcba.panel.category.173", "zh-HK", "main alt t_hk", "pcba板位类别.main alt t"),
-
-            // dict.logistics.pcba.panel.category.174
-            ("dict.logistics.pcba.panel.category.174", "en-US", "main b_us", "pcba板位类别.main b"),
-            // dict.logistics.pcba.panel.category.174
-            ("dict.logistics.pcba.panel.category.174", "ja-JP", "main b_jp", "pcba板位类别.main b"),
-            // dict.logistics.pcba.panel.category.174
-            ("dict.logistics.pcba.panel.category.174", "zh-CN", "main b", "pcba板位类别.main b"),
-            // dict.logistics.pcba.panel.category.174
-            ("dict.logistics.pcba.panel.category.174", "zh-HK", "main b_hk", "pcba板位类别.main b"),
-
-            // dict.logistics.pcba.panel.category.175
-            ("dict.logistics.pcba.panel.category.175", "en-US", "main t/b_us", "pcba板位类别.main t/b"),
-            // dict.logistics.pcba.panel.category.175
-            ("dict.logistics.pcba.panel.category.175", "ja-JP", "main t/b_jp", "pcba板位类别.main t/b"),
-            // dict.logistics.pcba.panel.category.175
-            ("dict.logistics.pcba.panel.category.175", "zh-CN", "main t/b", "pcba板位类别.main t/b"),
-            // dict.logistics.pcba.panel.category.175
-            ("dict.logistics.pcba.panel.category.175", "zh-HK", "main t/b_hk", "pcba板位类别.main t/b"),
-
-            // dict.logistics.pcba.panel.category.177
-            ("dict.logistics.pcba.panel.category.177", "en-US", "main t_us", "pcba板位类别.main t"),
-            // dict.logistics.pcba.panel.category.177
-            ("dict.logistics.pcba.panel.category.177", "ja-JP", "main t_jp", "pcba板位类别.main t"),
-            // dict.logistics.pcba.panel.category.177
-            ("dict.logistics.pcba.panel.category.177", "zh-CN", "main t", "pcba板位类别.main t"),
-            // dict.logistics.pcba.panel.category.177
-            ("dict.logistics.pcba.panel.category.177", "zh-HK", "main t_hk", "pcba板位类别.main t"),
-
-            // dict.logistics.pcba.panel.category.176
-            ("dict.logistics.pcba.panel.category.176", "en-US", "mother t/b_us", "pcba板位类别.mother t/b"),
-            // dict.logistics.pcba.panel.category.176
-            ("dict.logistics.pcba.panel.category.176", "ja-JP", "mother t/b_jp", "pcba板位类别.mother t/b"),
-            // dict.logistics.pcba.panel.category.176
-            ("dict.logistics.pcba.panel.category.176", "zh-CN", "mother t/b", "pcba板位类别.mother t/b"),
-            // dict.logistics.pcba.panel.category.176
-            ("dict.logistics.pcba.panel.category.176", "zh-HK", "mother t/b_hk", "pcba板位类别.mother t/b"),
-
-            // dict.logistics.pcba.panel.category.179
-            ("dict.logistics.pcba.panel.category.179", "en-US", "meter_us", "pcba板位类别.meter"),
-            // dict.logistics.pcba.panel.category.179
-            ("dict.logistics.pcba.panel.category.179", "ja-JP", "meter_jp", "pcba板位类别.meter"),
-            // dict.logistics.pcba.panel.category.179
-            ("dict.logistics.pcba.panel.category.179", "zh-CN", "meter", "pcba板位类别.meter"),
-            // dict.logistics.pcba.panel.category.179
-            ("dict.logistics.pcba.panel.category.179", "zh-HK", "meter_hk", "pcba板位类别.meter"),
-
-            // dict.logistics.pcba.panel.category.180
-            ("dict.logistics.pcba.panel.category.180", "en-US", "mic_us", "pcba板位类别.mic"),
-            // dict.logistics.pcba.panel.category.180
-            ("dict.logistics.pcba.panel.category.180", "ja-JP", "mic_jp", "pcba板位类别.mic"),
-            // dict.logistics.pcba.panel.category.180
-            ("dict.logistics.pcba.panel.category.180", "zh-CN", "mic", "pcba板位类别.mic"),
-            // dict.logistics.pcba.panel.category.180
-            ("dict.logistics.pcba.panel.category.180", "zh-HK", "mic_hk", "pcba板位类别.mic"),
-
-            // dict.logistics.pcba.panel.category.181
-            ("dict.logistics.pcba.panel.category.181", "en-US", "naub b_us", "pcba板位类别.naub b"),
-            // dict.logistics.pcba.panel.category.181
-            ("dict.logistics.pcba.panel.category.181", "ja-JP", "naub b_jp", "pcba板位类别.naub b"),
-            // dict.logistics.pcba.panel.category.181
-            ("dict.logistics.pcba.panel.category.181", "zh-CN", "naub b", "pcba板位类别.naub b"),
-            // dict.logistics.pcba.panel.category.181
-            ("dict.logistics.pcba.panel.category.181", "zh-HK", "naub b_hk", "pcba板位类别.naub b"),
-
-            // dict.logistics.pcba.panel.category.182
-            ("dict.logistics.pcba.panel.category.182", "en-US", "panel_us", "pcba板位类别.panel"),
-            // dict.logistics.pcba.panel.category.182
-            ("dict.logistics.pcba.panel.category.182", "ja-JP", "panel_jp", "pcba板位类别.panel"),
-            // dict.logistics.pcba.panel.category.182
-            ("dict.logistics.pcba.panel.category.182", "zh-CN", "panel", "pcba板位类别.panel"),
-            // dict.logistics.pcba.panel.category.182
-            ("dict.logistics.pcba.panel.category.182", "zh-HK", "panel_hk", "pcba板位类别.panel"),
-
-            // dict.logistics.pcba.panel.category.183
-            ("dict.logistics.pcba.panel.category.183", "en-US", "panel a_us", "pcba板位类别.panel a"),
-            // dict.logistics.pcba.panel.category.183
-            ("dict.logistics.pcba.panel.category.183", "ja-JP", "panel a_jp", "pcba板位类别.panel a"),
-            // dict.logistics.pcba.panel.category.183
-            ("dict.logistics.pcba.panel.category.183", "zh-CN", "panel a", "pcba板位类别.panel a"),
-            // dict.logistics.pcba.panel.category.183
-            ("dict.logistics.pcba.panel.category.183", "zh-HK", "panel a_hk", "pcba板位类别.panel a"),
-
-            // dict.logistics.pcba.panel.category.184
-            ("dict.logistics.pcba.panel.category.184", "en-US", "panel b_us", "pcba板位类别.panel b"),
-            // dict.logistics.pcba.panel.category.184
-            ("dict.logistics.pcba.panel.category.184", "ja-JP", "panel b_jp", "pcba板位类别.panel b"),
-            // dict.logistics.pcba.panel.category.184
-            ("dict.logistics.pcba.panel.category.184", "zh-CN", "panel b", "pcba板位类别.panel b"),
-            // dict.logistics.pcba.panel.category.184
-            ("dict.logistics.pcba.panel.category.184", "zh-HK", "panel b_hk", "pcba板位类别.panel b"),
-
-            // dict.logistics.pcba.panel.category.185
-            ("dict.logistics.pcba.panel.category.185", "en-US", "panel t/b_us", "pcba板位类别.panel t/b"),
-            // dict.logistics.pcba.panel.category.185
-            ("dict.logistics.pcba.panel.category.185", "ja-JP", "panel t/b_jp", "pcba板位类别.panel t/b"),
-            // dict.logistics.pcba.panel.category.185
-            ("dict.logistics.pcba.panel.category.185", "zh-CN", "panel t/b", "pcba板位类别.panel t/b"),
-            // dict.logistics.pcba.panel.category.185
-            ("dict.logistics.pcba.panel.category.185", "zh-HK", "panel t/b_hk", "pcba板位类别.panel t/b"),
-
-            // dict.logistics.pcba.panel.category.186
-            ("dict.logistics.pcba.panel.category.186", "en-US", "panel l_us", "pcba板位类别.panel l"),
-            // dict.logistics.pcba.panel.category.186
-            ("dict.logistics.pcba.panel.category.186", "ja-JP", "panel l_jp", "pcba板位类别.panel l"),
-            // dict.logistics.pcba.panel.category.186
-            ("dict.logistics.pcba.panel.category.186", "zh-CN", "panel l", "pcba板位类别.panel l"),
-            // dict.logistics.pcba.panel.category.186
-            ("dict.logistics.pcba.panel.category.186", "zh-HK", "panel l_hk", "pcba板位类别.panel l"),
-
-            // dict.logistics.pcba.panel.category.187
-            ("dict.logistics.pcba.panel.category.187", "en-US", "panel r_us", "pcba板位类别.panel r"),
-            // dict.logistics.pcba.panel.category.187
-            ("dict.logistics.pcba.panel.category.187", "ja-JP", "panel r_jp", "pcba板位类别.panel r"),
-            // dict.logistics.pcba.panel.category.187
-            ("dict.logistics.pcba.panel.category.187", "zh-CN", "panel r", "pcba板位类别.panel r"),
-            // dict.logistics.pcba.panel.category.187
-            ("dict.logistics.pcba.panel.category.187", "zh-HK", "panel r_hk", "pcba板位类别.panel r"),
-
-            // dict.logistics.pcba.panel.category.188
-            ("dict.logistics.pcba.panel.category.188", "en-US", "panel t_us", "pcba板位类别.panel t"),
-            // dict.logistics.pcba.panel.category.188
-            ("dict.logistics.pcba.panel.category.188", "ja-JP", "panel t_jp", "pcba板位类别.panel t"),
-            // dict.logistics.pcba.panel.category.188
-            ("dict.logistics.pcba.panel.category.188", "zh-CN", "panel t", "pcba板位类别.panel t"),
-            // dict.logistics.pcba.panel.category.188
-            ("dict.logistics.pcba.panel.category.188", "zh-HK", "panel t_hk", "pcba板位类别.panel t"),
-
-            // dict.logistics.pcba.panel.category.189
-            ("dict.logistics.pcba.panel.category.189", "en-US", "phone_us", "pcba板位类别.phone"),
-            // dict.logistics.pcba.panel.category.189
-            ("dict.logistics.pcba.panel.category.189", "ja-JP", "phone_jp", "pcba板位类别.phone"),
-            // dict.logistics.pcba.panel.category.189
-            ("dict.logistics.pcba.panel.category.189", "zh-CN", "phone", "pcba板位类别.phone"),
-            // dict.logistics.pcba.panel.category.189
-            ("dict.logistics.pcba.panel.category.189", "zh-HK", "phone_hk", "pcba板位类别.phone"),
-
-            // dict.logistics.pcba.panel.category.190
-            ("dict.logistics.pcba.panel.category.190", "en-US", "power_us", "pcba板位类别.power"),
-            // dict.logistics.pcba.panel.category.190
-            ("dict.logistics.pcba.panel.category.190", "ja-JP", "power_jp", "pcba板位类别.power"),
-            // dict.logistics.pcba.panel.category.190
-            ("dict.logistics.pcba.panel.category.190", "zh-CN", "power", "pcba板位类别.power"),
-            // dict.logistics.pcba.panel.category.190
-            ("dict.logistics.pcba.panel.category.190", "zh-HK", "power_hk", "pcba板位类别.power"),
-
-            // dict.logistics.pcba.panel.category.191
-            ("dict.logistics.pcba.panel.category.191", "en-US", "power a_us", "pcba板位类别.power a"),
-            // dict.logistics.pcba.panel.category.191
-            ("dict.logistics.pcba.panel.category.191", "ja-JP", "power a_jp", "pcba板位类别.power a"),
-            // dict.logistics.pcba.panel.category.191
-            ("dict.logistics.pcba.panel.category.191", "zh-CN", "power a", "pcba板位类别.power a"),
-            // dict.logistics.pcba.panel.category.191
-            ("dict.logistics.pcba.panel.category.191", "zh-HK", "power a_hk", "pcba板位类别.power a"),
-
-            // dict.logistics.pcba.panel.category.192
-            ("dict.logistics.pcba.panel.category.192", "en-US", "power b_us", "pcba板位类别.power b"),
-            // dict.logistics.pcba.panel.category.192
-            ("dict.logistics.pcba.panel.category.192", "ja-JP", "power b_jp", "pcba板位类别.power b"),
-            // dict.logistics.pcba.panel.category.192
-            ("dict.logistics.pcba.panel.category.192", "zh-CN", "power b", "pcba板位类别.power b"),
-            // dict.logistics.pcba.panel.category.192
-            ("dict.logistics.pcba.panel.category.192", "zh-HK", "power b_hk", "pcba板位类别.power b"),
-
-            // dict.logistics.pcba.panel.category.193
-            ("dict.logistics.pcba.panel.category.193", "en-US", "power t/b_us", "pcba板位类别.power t/b"),
-            // dict.logistics.pcba.panel.category.193
-            ("dict.logistics.pcba.panel.category.193", "ja-JP", "power t/b_jp", "pcba板位类别.power t/b"),
-            // dict.logistics.pcba.panel.category.193
-            ("dict.logistics.pcba.panel.category.193", "zh-CN", "power t/b", "pcba板位类别.power t/b"),
-            // dict.logistics.pcba.panel.category.193
-            ("dict.logistics.pcba.panel.category.193", "zh-HK", "power t/b_hk", "pcba板位类别.power t/b"),
-
-            // dict.logistics.pcba.panel.category.194
-            ("dict.logistics.pcba.panel.category.194", "en-US", "power t_us", "pcba板位类别.power t"),
-            // dict.logistics.pcba.panel.category.194
-            ("dict.logistics.pcba.panel.category.194", "ja-JP", "power t_jp", "pcba板位类别.power t"),
-            // dict.logistics.pcba.panel.category.194
-            ("dict.logistics.pcba.panel.category.194", "zh-CN", "power t", "pcba板位类别.power t"),
-            // dict.logistics.pcba.panel.category.194
-            ("dict.logistics.pcba.panel.category.194", "zh-HK", "power t_hk", "pcba板位类别.power t"),
-
-            // dict.logistics.pcba.panel.category.195
-            ("dict.logistics.pcba.panel.category.195", "en-US", "prm b_us", "pcba板位类别.prm b"),
-            // dict.logistics.pcba.panel.category.195
-            ("dict.logistics.pcba.panel.category.195", "ja-JP", "prm b_jp", "pcba板位类别.prm b"),
-            // dict.logistics.pcba.panel.category.195
-            ("dict.logistics.pcba.panel.category.195", "zh-CN", "prm b", "pcba板位类别.prm b"),
-            // dict.logistics.pcba.panel.category.195
-            ("dict.logistics.pcba.panel.category.195", "zh-HK", "prm b_hk", "pcba板位类别.prm b"),
-
-            // dict.logistics.pcba.panel.category.196
-            ("dict.logistics.pcba.panel.category.196", "en-US", "prm t/b_us", "pcba板位类别.prm t/b"),
-            // dict.logistics.pcba.panel.category.196
-            ("dict.logistics.pcba.panel.category.196", "ja-JP", "prm t/b_jp", "pcba板位类别.prm t/b"),
-            // dict.logistics.pcba.panel.category.196
-            ("dict.logistics.pcba.panel.category.196", "zh-CN", "prm t/b", "pcba板位类别.prm t/b"),
-            // dict.logistics.pcba.panel.category.196
-            ("dict.logistics.pcba.panel.category.196", "zh-HK", "prm t/b_hk", "pcba板位类别.prm t/b"),
-
-            // dict.logistics.pcba.panel.category.197
-            ("dict.logistics.pcba.panel.category.197", "en-US", "prm t_us", "pcba板位类别.prm t"),
-            // dict.logistics.pcba.panel.category.197
-            ("dict.logistics.pcba.panel.category.197", "ja-JP", "prm t_jp", "pcba板位类别.prm t"),
-            // dict.logistics.pcba.panel.category.197
-            ("dict.logistics.pcba.panel.category.197", "zh-CN", "prm t", "pcba板位类别.prm t"),
-            // dict.logistics.pcba.panel.category.197
-            ("dict.logistics.pcba.panel.category.197", "zh-HK", "prm t_hk", "pcba板位类别.prm t"),
-
-            // dict.logistics.pcba.panel.category.198
-            ("dict.logistics.pcba.panel.category.198", "en-US", "psl_us", "pcba板位类别.psl"),
-            // dict.logistics.pcba.panel.category.198
-            ("dict.logistics.pcba.panel.category.198", "ja-JP", "psl_jp", "pcba板位类别.psl"),
-            // dict.logistics.pcba.panel.category.198
-            ("dict.logistics.pcba.panel.category.198", "zh-CN", "psl", "pcba板位类别.psl"),
-            // dict.logistics.pcba.panel.category.198
-            ("dict.logistics.pcba.panel.category.198", "zh-HK", "psl_hk", "pcba板位类别.psl"),
-
-            // dict.logistics.pcba.panel.category.199
-            ("dict.logistics.pcba.panel.category.199", "en-US", "psl b_us", "pcba板位类别.psl b"),
-            // dict.logistics.pcba.panel.category.199
-            ("dict.logistics.pcba.panel.category.199", "ja-JP", "psl b_jp", "pcba板位类别.psl b"),
-            // dict.logistics.pcba.panel.category.199
-            ("dict.logistics.pcba.panel.category.199", "zh-CN", "psl b", "pcba板位类别.psl b"),
-            // dict.logistics.pcba.panel.category.199
-            ("dict.logistics.pcba.panel.category.199", "zh-HK", "psl b_hk", "pcba板位类别.psl b"),
-
-            // dict.logistics.pcba.panel.category.200
-            ("dict.logistics.pcba.panel.category.200", "en-US", "psl t/b_us", "pcba板位类别.psl t/b"),
-            // dict.logistics.pcba.panel.category.200
-            ("dict.logistics.pcba.panel.category.200", "ja-JP", "psl t/b_jp", "pcba板位类别.psl t/b"),
-            // dict.logistics.pcba.panel.category.200
-            ("dict.logistics.pcba.panel.category.200", "zh-CN", "psl t/b", "pcba板位类别.psl t/b"),
-            // dict.logistics.pcba.panel.category.200
-            ("dict.logistics.pcba.panel.category.200", "zh-HK", "psl t/b_hk", "pcba板位类别.psl t/b"),
-
-            // dict.logistics.pcba.panel.category.201
-            ("dict.logistics.pcba.panel.category.201", "en-US", "psl t_us", "pcba板位类别.psl t"),
-            // dict.logistics.pcba.panel.category.201
-            ("dict.logistics.pcba.panel.category.201", "ja-JP", "psl t_jp", "pcba板位类别.psl t"),
-            // dict.logistics.pcba.panel.category.201
-            ("dict.logistics.pcba.panel.category.201", "zh-CN", "psl t", "pcba板位类别.psl t"),
-            // dict.logistics.pcba.panel.category.201
-            ("dict.logistics.pcba.panel.category.201", "zh-HK", "psl t_hk", "pcba板位类别.psl t"),
-
-            // dict.logistics.pcba.panel.category.202
-            ("dict.logistics.pcba.panel.category.202", "en-US", "ptst_us", "pcba板位类别.ptst"),
-            // dict.logistics.pcba.panel.category.202
-            ("dict.logistics.pcba.panel.category.202", "ja-JP", "ptst_jp", "pcba板位类别.ptst"),
-            // dict.logistics.pcba.panel.category.202
-            ("dict.logistics.pcba.panel.category.202", "zh-CN", "ptst", "pcba板位类别.ptst"),
-            // dict.logistics.pcba.panel.category.202
-            ("dict.logistics.pcba.panel.category.202", "zh-HK", "ptst_hk", "pcba板位类别.ptst"),
-
-            // dict.logistics.pcba.panel.category.203
-            ("dict.logistics.pcba.panel.category.203", "en-US", "ptst b_us", "pcba板位类别.ptst b"),
-            // dict.logistics.pcba.panel.category.203
-            ("dict.logistics.pcba.panel.category.203", "ja-JP", "ptst b_jp", "pcba板位类别.ptst b"),
-            // dict.logistics.pcba.panel.category.203
-            ("dict.logistics.pcba.panel.category.203", "zh-CN", "ptst b", "pcba板位类别.ptst b"),
-            // dict.logistics.pcba.panel.category.203
-            ("dict.logistics.pcba.panel.category.203", "zh-HK", "ptst b_hk", "pcba板位类别.ptst b"),
-
-            // dict.logistics.pcba.panel.category.204
-            ("dict.logistics.pcba.panel.category.204", "en-US", "ptst t/b_us", "pcba板位类别.ptst t/b"),
-            // dict.logistics.pcba.panel.category.204
-            ("dict.logistics.pcba.panel.category.204", "ja-JP", "ptst t/b_jp", "pcba板位类别.ptst t/b"),
-            // dict.logistics.pcba.panel.category.204
-            ("dict.logistics.pcba.panel.category.204", "zh-CN", "ptst t/b", "pcba板位类别.ptst t/b"),
-            // dict.logistics.pcba.panel.category.204
-            ("dict.logistics.pcba.panel.category.204", "zh-HK", "ptst t/b_hk", "pcba板位类别.ptst t/b"),
-
-            // dict.logistics.pcba.panel.category.205
-            ("dict.logistics.pcba.panel.category.205", "en-US", "ptst t_us", "pcba板位类别.ptst t"),
-            // dict.logistics.pcba.panel.category.205
-            ("dict.logistics.pcba.panel.category.205", "ja-JP", "ptst t_jp", "pcba板位类别.ptst t"),
-            // dict.logistics.pcba.panel.category.205
-            ("dict.logistics.pcba.panel.category.205", "zh-CN", "ptst t", "pcba板位类别.ptst t"),
-            // dict.logistics.pcba.panel.category.205
-            ("dict.logistics.pcba.panel.category.205", "zh-HK", "ptst t_hk", "pcba板位类别.ptst t"),
-
-            // dict.logistics.pcba.panel.category.206
-            ("dict.logistics.pcba.panel.category.206", "en-US", "pwrsub_us", "pcba板位类别.pwrsub"),
-            // dict.logistics.pcba.panel.category.206
-            ("dict.logistics.pcba.panel.category.206", "ja-JP", "pwrsub_jp", "pcba板位类别.pwrsub"),
-            // dict.logistics.pcba.panel.category.206
-            ("dict.logistics.pcba.panel.category.206", "zh-CN", "pwrsub", "pcba板位类别.pwrsub"),
-            // dict.logistics.pcba.panel.category.206
-            ("dict.logistics.pcba.panel.category.206", "zh-HK", "pwrsub_hk", "pcba板位类别.pwrsub"),
-
-            // dict.logistics.pcba.panel.category.207
-            ("dict.logistics.pcba.panel.category.207", "en-US", "rear_us", "pcba板位类别.rear"),
-            // dict.logistics.pcba.panel.category.207
-            ("dict.logistics.pcba.panel.category.207", "ja-JP", "rear_jp", "pcba板位类别.rear"),
-            // dict.logistics.pcba.panel.category.207
-            ("dict.logistics.pcba.panel.category.207", "zh-CN", "rear", "pcba板位类别.rear"),
-            // dict.logistics.pcba.panel.category.207
-            ("dict.logistics.pcba.panel.category.207", "zh-HK", "rear_hk", "pcba板位类别.rear"),
-
-            // dict.logistics.pcba.panel.category.208
-            ("dict.logistics.pcba.panel.category.208", "en-US", "rear a_us", "pcba板位类别.rear a"),
-            // dict.logistics.pcba.panel.category.208
-            ("dict.logistics.pcba.panel.category.208", "ja-JP", "rear a_jp", "pcba板位类别.rear a"),
-            // dict.logistics.pcba.panel.category.208
-            ("dict.logistics.pcba.panel.category.208", "zh-CN", "rear a", "pcba板位类别.rear a"),
-            // dict.logistics.pcba.panel.category.208
-            ("dict.logistics.pcba.panel.category.208", "zh-HK", "rear a_hk", "pcba板位类别.rear a"),
-
-            // dict.logistics.pcba.panel.category.209
-            ("dict.logistics.pcba.panel.category.209", "en-US", "rear b_us", "pcba板位类别.rear b"),
-            // dict.logistics.pcba.panel.category.209
-            ("dict.logistics.pcba.panel.category.209", "ja-JP", "rear b_jp", "pcba板位类别.rear b"),
-            // dict.logistics.pcba.panel.category.209
-            ("dict.logistics.pcba.panel.category.209", "zh-CN", "rear b", "pcba板位类别.rear b"),
-            // dict.logistics.pcba.panel.category.209
-            ("dict.logistics.pcba.panel.category.209", "zh-HK", "rear b_hk", "pcba板位类别.rear b"),
-
-            // dict.logistics.pcba.panel.category.210
-            ("dict.logistics.pcba.panel.category.210", "en-US", "rear t_us", "pcba板位类别.rear t"),
-            // dict.logistics.pcba.panel.category.210
-            ("dict.logistics.pcba.panel.category.210", "ja-JP", "rear t_jp", "pcba板位类别.rear t"),
-            // dict.logistics.pcba.panel.category.210
-            ("dict.logistics.pcba.panel.category.210", "zh-CN", "rear t", "pcba板位类别.rear t"),
-            // dict.logistics.pcba.panel.category.210
-            ("dict.logistics.pcba.panel.category.210", "zh-HK", "rear t_hk", "pcba板位类别.rear t"),
-
-            // dict.logistics.pcba.panel.category.211
-            ("dict.logistics.pcba.panel.category.211", "en-US", "relay_us", "pcba板位类别.relay"),
-            // dict.logistics.pcba.panel.category.211
-            ("dict.logistics.pcba.panel.category.211", "ja-JP", "relay_jp", "pcba板位类别.relay"),
-            // dict.logistics.pcba.panel.category.211
-            ("dict.logistics.pcba.panel.category.211", "zh-CN", "relay", "pcba板位类别.relay"),
-            // dict.logistics.pcba.panel.category.211
-            ("dict.logistics.pcba.panel.category.211", "zh-HK", "relay_hk", "pcba板位类别.relay"),
-
-            // dict.logistics.pcba.panel.category.212
-            ("dict.logistics.pcba.panel.category.212", "en-US", "rfp a_us", "pcba板位类别.rfp a"),
-            // dict.logistics.pcba.panel.category.212
-            ("dict.logistics.pcba.panel.category.212", "ja-JP", "rfp a_jp", "pcba板位类别.rfp a"),
-            // dict.logistics.pcba.panel.category.212
-            ("dict.logistics.pcba.panel.category.212", "zh-CN", "rfp a", "pcba板位类别.rfp a"),
-            // dict.logistics.pcba.panel.category.212
-            ("dict.logistics.pcba.panel.category.212", "zh-HK", "rfp a_hk", "pcba板位类别.rfp a"),
-
-            // dict.logistics.pcba.panel.category.213
-            ("dict.logistics.pcba.panel.category.213", "en-US", "rfp b_us", "pcba板位类别.rfp b"),
-            // dict.logistics.pcba.panel.category.213
-            ("dict.logistics.pcba.panel.category.213", "ja-JP", "rfp b_jp", "pcba板位类别.rfp b"),
-            // dict.logistics.pcba.panel.category.213
-            ("dict.logistics.pcba.panel.category.213", "zh-CN", "rfp b", "pcba板位类别.rfp b"),
-            // dict.logistics.pcba.panel.category.213
-            ("dict.logistics.pcba.panel.category.213", "zh-HK", "rfp b_hk", "pcba板位类别.rfp b"),
-
-            // dict.logistics.pcba.panel.category.214
-            ("dict.logistics.pcba.panel.category.214", "en-US", "rfp t/b_us", "pcba板位类别.rfp t/b"),
-            // dict.logistics.pcba.panel.category.214
-            ("dict.logistics.pcba.panel.category.214", "ja-JP", "rfp t/b_jp", "pcba板位类别.rfp t/b"),
-            // dict.logistics.pcba.panel.category.214
-            ("dict.logistics.pcba.panel.category.214", "zh-CN", "rfp t/b", "pcba板位类别.rfp t/b"),
-            // dict.logistics.pcba.panel.category.214
-            ("dict.logistics.pcba.panel.category.214", "zh-HK", "rfp t/b_hk", "pcba板位类别.rfp t/b"),
-
-            // dict.logistics.pcba.panel.category.215
-            ("dict.logistics.pcba.panel.category.215", "en-US", "rfp t_us", "pcba板位类别.rfp t"),
-            // dict.logistics.pcba.panel.category.215
-            ("dict.logistics.pcba.panel.category.215", "ja-JP", "rfp t_jp", "pcba板位类别.rfp t"),
-            // dict.logistics.pcba.panel.category.215
-            ("dict.logistics.pcba.panel.category.215", "zh-CN", "rfp t", "pcba板位类别.rfp t"),
-            // dict.logistics.pcba.panel.category.215
-            ("dict.logistics.pcba.panel.category.215", "zh-HK", "rfp t_hk", "pcba板位类别.rfp t"),
-
-            // dict.logistics.pcba.panel.category.216
-            ("dict.logistics.pcba.panel.category.216", "en-US", "rmn b_us", "pcba板位类别.rmn b"),
-            // dict.logistics.pcba.panel.category.216
-            ("dict.logistics.pcba.panel.category.216", "ja-JP", "rmn b_jp", "pcba板位类别.rmn b"),
-            // dict.logistics.pcba.panel.category.216
-            ("dict.logistics.pcba.panel.category.216", "zh-CN", "rmn b", "pcba板位类别.rmn b"),
-            // dict.logistics.pcba.panel.category.216
-            ("dict.logistics.pcba.panel.category.216", "zh-HK", "rmn b_hk", "pcba板位类别.rmn b"),
-
-            // dict.logistics.pcba.panel.category.217
-            ("dict.logistics.pcba.panel.category.217", "en-US", "rmn t/b_us", "pcba板位类别.rmn t/b"),
-            // dict.logistics.pcba.panel.category.217
-            ("dict.logistics.pcba.panel.category.217", "ja-JP", "rmn t/b_jp", "pcba板位类别.rmn t/b"),
-            // dict.logistics.pcba.panel.category.217
-            ("dict.logistics.pcba.panel.category.217", "zh-CN", "rmn t/b", "pcba板位类别.rmn t/b"),
-            // dict.logistics.pcba.panel.category.217
-            ("dict.logistics.pcba.panel.category.217", "zh-HK", "rmn t/b_hk", "pcba板位类别.rmn t/b"),
-
-            // dict.logistics.pcba.panel.category.218
-            ("dict.logistics.pcba.panel.category.218", "en-US", "rmn t_us", "pcba板位类别.rmn t"),
-            // dict.logistics.pcba.panel.category.218
-            ("dict.logistics.pcba.panel.category.218", "ja-JP", "rmn t_jp", "pcba板位类别.rmn t"),
-            // dict.logistics.pcba.panel.category.218
-            ("dict.logistics.pcba.panel.category.218", "zh-CN", "rmn t", "pcba板位类别.rmn t"),
-            // dict.logistics.pcba.panel.category.218
-            ("dict.logistics.pcba.panel.category.218", "zh-HK", "rmn t_hk", "pcba板位类别.rmn t"),
-
-            // dict.logistics.pcba.panel.category.219
-            ("dict.logistics.pcba.panel.category.219", "en-US", "rmt_us", "pcba板位类别.rmt"),
-            // dict.logistics.pcba.panel.category.219
-            ("dict.logistics.pcba.panel.category.219", "ja-JP", "rmt_jp", "pcba板位类别.rmt"),
-            // dict.logistics.pcba.panel.category.219
-            ("dict.logistics.pcba.panel.category.219", "zh-CN", "rmt", "pcba板位类别.rmt"),
-            // dict.logistics.pcba.panel.category.219
-            ("dict.logistics.pcba.panel.category.219", "zh-HK", "rmt_hk", "pcba板位类别.rmt"),
-
-            // dict.logistics.pcba.panel.category.220
-            ("dict.logistics.pcba.panel.category.220", "en-US", "rsb b_us", "pcba板位类别.rsb b"),
-            // dict.logistics.pcba.panel.category.220
-            ("dict.logistics.pcba.panel.category.220", "ja-JP", "rsb b_jp", "pcba板位类别.rsb b"),
-            // dict.logistics.pcba.panel.category.220
-            ("dict.logistics.pcba.panel.category.220", "zh-CN", "rsb b", "pcba板位类别.rsb b"),
-            // dict.logistics.pcba.panel.category.220
-            ("dict.logistics.pcba.panel.category.220", "zh-HK", "rsb b_hk", "pcba板位类别.rsb b"),
-
-            // dict.logistics.pcba.panel.category.221
-            ("dict.logistics.pcba.panel.category.221", "en-US", "rsb t/b_us", "pcba板位类别.rsb t/b"),
-            // dict.logistics.pcba.panel.category.221
-            ("dict.logistics.pcba.panel.category.221", "ja-JP", "rsb t/b_jp", "pcba板位类别.rsb t/b"),
-            // dict.logistics.pcba.panel.category.221
-            ("dict.logistics.pcba.panel.category.221", "zh-CN", "rsb t/b", "pcba板位类别.rsb t/b"),
-            // dict.logistics.pcba.panel.category.221
-            ("dict.logistics.pcba.panel.category.221", "zh-HK", "rsb t/b_hk", "pcba板位类别.rsb t/b"),
-
-            // dict.logistics.pcba.panel.category.222
-            ("dict.logistics.pcba.panel.category.222", "en-US", "rsb t_us", "pcba板位类别.rsb t"),
-            // dict.logistics.pcba.panel.category.222
-            ("dict.logistics.pcba.panel.category.222", "ja-JP", "rsb t_jp", "pcba板位类别.rsb t"),
-            // dict.logistics.pcba.panel.category.222
-            ("dict.logistics.pcba.panel.category.222", "zh-CN", "rsb t", "pcba板位类别.rsb t"),
-            // dict.logistics.pcba.panel.category.222
-            ("dict.logistics.pcba.panel.category.222", "zh-HK", "rsb t_hk", "pcba板位类别.rsb t"),
-
-            // dict.logistics.pcba.panel.category.223
-            ("dict.logistics.pcba.panel.category.223", "en-US", "sata_us", "pcba板位类别.sata"),
-            // dict.logistics.pcba.panel.category.223
-            ("dict.logistics.pcba.panel.category.223", "ja-JP", "sata_jp", "pcba板位类别.sata"),
-            // dict.logistics.pcba.panel.category.223
-            ("dict.logistics.pcba.panel.category.223", "zh-CN", "sata", "pcba板位类别.sata"),
-            // dict.logistics.pcba.panel.category.223
-            ("dict.logistics.pcba.panel.category.223", "zh-HK", "sata_hk", "pcba板位类别.sata"),
-
-            // dict.logistics.pcba.panel.category.224
-            ("dict.logistics.pcba.panel.category.224", "en-US", "sbty_us", "pcba板位类别.sbty"),
-            // dict.logistics.pcba.panel.category.224
-            ("dict.logistics.pcba.panel.category.224", "ja-JP", "sbty_jp", "pcba板位类别.sbty"),
-            // dict.logistics.pcba.panel.category.224
-            ("dict.logistics.pcba.panel.category.224", "zh-CN", "sbty", "pcba板位类别.sbty"),
-            // dict.logistics.pcba.panel.category.224
-            ("dict.logistics.pcba.panel.category.224", "zh-HK", "sbty_hk", "pcba板位类别.sbty"),
-
-            // dict.logistics.pcba.panel.category.225
-            ("dict.logistics.pcba.panel.category.225", "en-US", "seq_us", "pcba板位类别.seq"),
-            // dict.logistics.pcba.panel.category.225
-            ("dict.logistics.pcba.panel.category.225", "ja-JP", "seq_jp", "pcba板位类别.seq"),
-            // dict.logistics.pcba.panel.category.225
-            ("dict.logistics.pcba.panel.category.225", "zh-CN", "seq", "pcba板位类别.seq"),
-            // dict.logistics.pcba.panel.category.225
-            ("dict.logistics.pcba.panel.category.225", "zh-HK", "seq_hk", "pcba板位类别.seq"),
-
-            // dict.logistics.pcba.panel.category.226
-            ("dict.logistics.pcba.panel.category.226", "en-US", "slot_us", "pcba板位类别.slot"),
-            // dict.logistics.pcba.panel.category.226
-            ("dict.logistics.pcba.panel.category.226", "ja-JP", "slot_jp", "pcba板位类别.slot"),
-            // dict.logistics.pcba.panel.category.226
-            ("dict.logistics.pcba.panel.category.226", "zh-CN", "slot", "pcba板位类别.slot"),
-            // dict.logistics.pcba.panel.category.226
-            ("dict.logistics.pcba.panel.category.226", "zh-HK", "slot_hk", "pcba板位类别.slot"),
-
-            // dict.logistics.pcba.panel.category.227
-            ("dict.logistics.pcba.panel.category.227", "en-US", "slot a_us", "pcba板位类别.slot a"),
-            // dict.logistics.pcba.panel.category.227
-            ("dict.logistics.pcba.panel.category.227", "ja-JP", "slot a_jp", "pcba板位类别.slot a"),
-            // dict.logistics.pcba.panel.category.227
-            ("dict.logistics.pcba.panel.category.227", "zh-CN", "slot a", "pcba板位类别.slot a"),
-            // dict.logistics.pcba.panel.category.227
-            ("dict.logistics.pcba.panel.category.227", "zh-HK", "slot a_hk", "pcba板位类别.slot a"),
-
-            // dict.logistics.pcba.panel.category.228
-            ("dict.logistics.pcba.panel.category.228", "en-US", "slot b_us", "pcba板位类别.slot b"),
-            // dict.logistics.pcba.panel.category.228
-            ("dict.logistics.pcba.panel.category.228", "ja-JP", "slot b_jp", "pcba板位类别.slot b"),
-            // dict.logistics.pcba.panel.category.228
-            ("dict.logistics.pcba.panel.category.228", "zh-CN", "slot b", "pcba板位类别.slot b"),
-            // dict.logistics.pcba.panel.category.228
-            ("dict.logistics.pcba.panel.category.228", "zh-HK", "slot b_hk", "pcba板位类别.slot b"),
-
-            // dict.logistics.pcba.panel.category.229
-            ("dict.logistics.pcba.panel.category.229", "en-US", "slot t/b_us", "pcba板位类别.slot t/b"),
-            // dict.logistics.pcba.panel.category.229
-            ("dict.logistics.pcba.panel.category.229", "ja-JP", "slot t/b_jp", "pcba板位类别.slot t/b"),
-            // dict.logistics.pcba.panel.category.229
-            ("dict.logistics.pcba.panel.category.229", "zh-CN", "slot t/b", "pcba板位类别.slot t/b"),
-            // dict.logistics.pcba.panel.category.229
-            ("dict.logistics.pcba.panel.category.229", "zh-HK", "slot t/b_hk", "pcba板位类别.slot t/b"),
-
-            // dict.logistics.pcba.panel.category.230
-            ("dict.logistics.pcba.panel.category.230", "en-US", "slot t_us", "pcba板位类别.slot t"),
-            // dict.logistics.pcba.panel.category.230
-            ("dict.logistics.pcba.panel.category.230", "ja-JP", "slot t_jp", "pcba板位类别.slot t"),
-            // dict.logistics.pcba.panel.category.230
-            ("dict.logistics.pcba.panel.category.230", "zh-CN", "slot t", "pcba板位类别.slot t"),
-            // dict.logistics.pcba.panel.category.230
-            ("dict.logistics.pcba.panel.category.230", "zh-HK", "slot t_hk", "pcba板位类别.slot t"),
-
-            // dict.logistics.pcba.panel.category.231
-            ("dict.logistics.pcba.panel.category.231", "en-US", "spl t_us", "pcba板位类别.spl t"),
-            // dict.logistics.pcba.panel.category.231
-            ("dict.logistics.pcba.panel.category.231", "ja-JP", "spl t_jp", "pcba板位类别.spl t"),
-            // dict.logistics.pcba.panel.category.231
-            ("dict.logistics.pcba.panel.category.231", "zh-CN", "spl t", "pcba板位类别.spl t"),
-            // dict.logistics.pcba.panel.category.231
-            ("dict.logistics.pcba.panel.category.231", "zh-HK", "spl t_hk", "pcba板位类别.spl t"),
-
-            // dict.logistics.pcba.panel.category.232
-            ("dict.logistics.pcba.panel.category.232", "en-US", "stby_us", "pcba板位类别.stby"),
-            // dict.logistics.pcba.panel.category.232
-            ("dict.logistics.pcba.panel.category.232", "ja-JP", "stby_jp", "pcba板位类别.stby"),
-            // dict.logistics.pcba.panel.category.232
-            ("dict.logistics.pcba.panel.category.232", "zh-CN", "stby", "pcba板位类别.stby"),
-            // dict.logistics.pcba.panel.category.232
-            ("dict.logistics.pcba.panel.category.232", "zh-HK", "stby_hk", "pcba板位类别.stby"),
-
-            // dict.logistics.pcba.panel.category.233
-            ("dict.logistics.pcba.panel.category.233", "en-US", "sts b_us", "pcba板位类别.sts b"),
-            // dict.logistics.pcba.panel.category.233
-            ("dict.logistics.pcba.panel.category.233", "ja-JP", "sts b_jp", "pcba板位类别.sts b"),
-            // dict.logistics.pcba.panel.category.233
-            ("dict.logistics.pcba.panel.category.233", "zh-CN", "sts b", "pcba板位类别.sts b"),
-            // dict.logistics.pcba.panel.category.233
-            ("dict.logistics.pcba.panel.category.233", "zh-HK", "sts b_hk", "pcba板位类别.sts b"),
-
-            // dict.logistics.pcba.panel.category.234
-            ("dict.logistics.pcba.panel.category.234", "en-US", "swusb_us", "pcba板位类别.swusb"),
-            // dict.logistics.pcba.panel.category.234
-            ("dict.logistics.pcba.panel.category.234", "ja-JP", "swusb_jp", "pcba板位类别.swusb"),
-            // dict.logistics.pcba.panel.category.234
-            ("dict.logistics.pcba.panel.category.234", "zh-CN", "swusb", "pcba板位类别.swusb"),
-            // dict.logistics.pcba.panel.category.234
-            ("dict.logistics.pcba.panel.category.234", "zh-HK", "swusb_hk", "pcba板位类别.swusb"),
-
-            // dict.logistics.pcba.panel.category.235
-            ("dict.logistics.pcba.panel.category.235", "en-US", "swusb akm b_us", "pcba板位类别.swusb akm b"),
-            // dict.logistics.pcba.panel.category.235
-            ("dict.logistics.pcba.panel.category.235", "ja-JP", "swusb akm b_jp", "pcba板位类别.swusb akm b"),
-            // dict.logistics.pcba.panel.category.235
-            ("dict.logistics.pcba.panel.category.235", "zh-CN", "swusb akm b", "pcba板位类别.swusb akm b"),
-            // dict.logistics.pcba.panel.category.235
-            ("dict.logistics.pcba.panel.category.235", "zh-HK", "swusb akm b_hk", "pcba板位类别.swusb akm b"),
-
-            // dict.logistics.pcba.panel.category.236
-            ("dict.logistics.pcba.panel.category.236", "en-US", "swusb akm t/b_us", "pcba板位类别.swusb akm t/b"),
-            // dict.logistics.pcba.panel.category.236
-            ("dict.logistics.pcba.panel.category.236", "ja-JP", "swusb akm t/b_jp", "pcba板位类别.swusb akm t/b"),
-            // dict.logistics.pcba.panel.category.236
-            ("dict.logistics.pcba.panel.category.236", "zh-CN", "swusb akm t/b", "pcba板位类别.swusb akm t/b"),
-            // dict.logistics.pcba.panel.category.236
-            ("dict.logistics.pcba.panel.category.236", "zh-HK", "swusb akm t/b_hk", "pcba板位类别.swusb akm t/b"),
-
-            // dict.logistics.pcba.panel.category.237
-            ("dict.logistics.pcba.panel.category.237", "en-US", "swusb akm t_us", "pcba板位类别.swusb akm t"),
-            // dict.logistics.pcba.panel.category.237
-            ("dict.logistics.pcba.panel.category.237", "ja-JP", "swusb akm t_jp", "pcba板位类别.swusb akm t"),
-            // dict.logistics.pcba.panel.category.237
-            ("dict.logistics.pcba.panel.category.237", "zh-CN", "swusb akm t", "pcba板位类别.swusb akm t"),
-            // dict.logistics.pcba.panel.category.237
-            ("dict.logistics.pcba.panel.category.237", "zh-HK", "swusb akm t_hk", "pcba板位类别.swusb akm t"),
-
-            // dict.logistics.pcba.panel.category.238
-            ("dict.logistics.pcba.panel.category.238", "en-US", "swusb b_us", "pcba板位类别.swusb b"),
-            // dict.logistics.pcba.panel.category.238
-            ("dict.logistics.pcba.panel.category.238", "ja-JP", "swusb b_jp", "pcba板位类别.swusb b"),
-            // dict.logistics.pcba.panel.category.238
-            ("dict.logistics.pcba.panel.category.238", "zh-CN", "swusb b", "pcba板位类别.swusb b"),
-            // dict.logistics.pcba.panel.category.238
-            ("dict.logistics.pcba.panel.category.238", "zh-HK", "swusb b_hk", "pcba板位类别.swusb b"),
-
-            // dict.logistics.pcba.panel.category.239
-            ("dict.logistics.pcba.panel.category.239", "en-US", "swusb t/b_us", "pcba板位类别.swusb t/b"),
-            // dict.logistics.pcba.panel.category.239
-            ("dict.logistics.pcba.panel.category.239", "ja-JP", "swusb t/b_jp", "pcba板位类别.swusb t/b"),
-            // dict.logistics.pcba.panel.category.239
-            ("dict.logistics.pcba.panel.category.239", "zh-CN", "swusb t/b", "pcba板位类别.swusb t/b"),
-            // dict.logistics.pcba.panel.category.239
-            ("dict.logistics.pcba.panel.category.239", "zh-HK", "swusb t/b_hk", "pcba板位类别.swusb t/b"),
-
-            // dict.logistics.pcba.panel.category.240
-            ("dict.logistics.pcba.panel.category.240", "en-US", "swusb t_us", "pcba板位类别.swusb t"),
-            // dict.logistics.pcba.panel.category.240
-            ("dict.logistics.pcba.panel.category.240", "ja-JP", "swusb t_jp", "pcba板位类别.swusb t"),
-            // dict.logistics.pcba.panel.category.240
-            ("dict.logistics.pcba.panel.category.240", "zh-CN", "swusb t", "pcba板位类别.swusb t"),
-            // dict.logistics.pcba.panel.category.240
-            ("dict.logistics.pcba.panel.category.240", "zh-HK", "swusb t_hk", "pcba板位类别.swusb t"),
-
-            // dict.logistics.pcba.panel.category.241
-            ("dict.logistics.pcba.panel.category.241", "en-US", "sys b_us", "pcba板位类别.sys b"),
-            // dict.logistics.pcba.panel.category.241
-            ("dict.logistics.pcba.panel.category.241", "ja-JP", "sys b_jp", "pcba板位类别.sys b"),
-            // dict.logistics.pcba.panel.category.241
-            ("dict.logistics.pcba.panel.category.241", "zh-CN", "sys b", "pcba板位类别.sys b"),
-            // dict.logistics.pcba.panel.category.241
-            ("dict.logistics.pcba.panel.category.241", "zh-HK", "sys b_hk", "pcba板位类别.sys b"),
-
-            // dict.logistics.pcba.panel.category.242
-            ("dict.logistics.pcba.panel.category.242", "en-US", "sys t_us", "pcba板位类别.sys t"),
-            // dict.logistics.pcba.panel.category.242
-            ("dict.logistics.pcba.panel.category.242", "ja-JP", "sys t_jp", "pcba板位类别.sys t"),
-            // dict.logistics.pcba.panel.category.242
-            ("dict.logistics.pcba.panel.category.242", "zh-CN", "sys t", "pcba板位类别.sys t"),
-            // dict.logistics.pcba.panel.category.242
-            ("dict.logistics.pcba.panel.category.242", "zh-HK", "sys t_hk", "pcba板位类别.sys t"),
-
-            // dict.logistics.pcba.panel.category.243
-            ("dict.logistics.pcba.panel.category.243", "en-US", "top_us", "pcba板位类别.top"),
-            // dict.logistics.pcba.panel.category.243
-            ("dict.logistics.pcba.panel.category.243", "ja-JP", "top_jp", "pcba板位类别.top"),
-            // dict.logistics.pcba.panel.category.243
-            ("dict.logistics.pcba.panel.category.243", "zh-CN", "top", "pcba板位类别.top"),
-            // dict.logistics.pcba.panel.category.243
-            ("dict.logistics.pcba.panel.category.243", "zh-HK", "top_hk", "pcba板位类别.top"),
-
-            // dict.logistics.pcba.panel.category.244
-            ("dict.logistics.pcba.panel.category.244", "en-US", "usb b_us", "pcba板位类别.usb b"),
-            // dict.logistics.pcba.panel.category.244
-            ("dict.logistics.pcba.panel.category.244", "ja-JP", "usb b_jp", "pcba板位类别.usb b"),
-            // dict.logistics.pcba.panel.category.244
-            ("dict.logistics.pcba.panel.category.244", "zh-CN", "usb b", "pcba板位类别.usb b"),
-            // dict.logistics.pcba.panel.category.244
-            ("dict.logistics.pcba.panel.category.244", "zh-HK", "usb b_hk", "pcba板位类别.usb b"),
-
-            // dict.logistics.pcba.panel.category.245
-            ("dict.logistics.pcba.panel.category.245", "en-US", "usb t/b_us", "pcba板位类别.usb t/b"),
-            // dict.logistics.pcba.panel.category.245
-            ("dict.logistics.pcba.panel.category.245", "ja-JP", "usb t/b_jp", "pcba板位类别.usb t/b"),
-            // dict.logistics.pcba.panel.category.245
-            ("dict.logistics.pcba.panel.category.245", "zh-CN", "usb t/b", "pcba板位类别.usb t/b"),
-            // dict.logistics.pcba.panel.category.245
-            ("dict.logistics.pcba.panel.category.245", "zh-HK", "usb t/b_hk", "pcba板位类别.usb t/b"),
-
-            // dict.logistics.pcba.panel.category.247
-            ("dict.logistics.pcba.panel.category.247", "en-US", "usb t_us", "pcba板位类别.usb t"),
-            // dict.logistics.pcba.panel.category.247
-            ("dict.logistics.pcba.panel.category.247", "ja-JP", "usb t_jp", "pcba板位类别.usb t"),
-            // dict.logistics.pcba.panel.category.247
-            ("dict.logistics.pcba.panel.category.247", "zh-CN", "usb t", "pcba板位类别.usb t"),
-            // dict.logistics.pcba.panel.category.247
-            ("dict.logistics.pcba.panel.category.247", "zh-HK", "usb t_hk", "pcba板位类别.usb t"),
-
-            // dict.logistics.pcba.panel.category.246
-            ("dict.logistics.pcba.panel.category.246", "en-US", "xlr_us", "pcba板位类别.xlr"),
-            // dict.logistics.pcba.panel.category.246
-            ("dict.logistics.pcba.panel.category.246", "ja-JP", "xlr_jp", "pcba板位类别.xlr"),
-            // dict.logistics.pcba.panel.category.246
-            ("dict.logistics.pcba.panel.category.246", "zh-CN", "xlr", "pcba板位类别.xlr"),
-            // dict.logistics.pcba.panel.category.246
-            ("dict.logistics.pcba.panel.category.246", "zh-HK", "xlr_hk", "pcba板位类别.xlr"),
-
-            // dict.logistics.pcba.panel.category.249
-            ("dict.logistics.pcba.panel.category.249", "en-US", "xlr a_us", "pcba板位类别.xlr a"),
-            // dict.logistics.pcba.panel.category.249
-            ("dict.logistics.pcba.panel.category.249", "ja-JP", "xlr a_jp", "pcba板位类别.xlr a"),
-            // dict.logistics.pcba.panel.category.249
-            ("dict.logistics.pcba.panel.category.249", "zh-CN", "xlr a", "pcba板位类别.xlr a"),
-            // dict.logistics.pcba.panel.category.249
-            ("dict.logistics.pcba.panel.category.249", "zh-HK", "xlr a_hk", "pcba板位类别.xlr a"),
-
-            // dict.logistics.pcba.panel.category.250
-            ("dict.logistics.pcba.panel.category.250", "en-US", "xlr b_us", "pcba板位类别.xlr b"),
-            // dict.logistics.pcba.panel.category.250
-            ("dict.logistics.pcba.panel.category.250", "ja-JP", "xlr b_jp", "pcba板位类别.xlr b"),
-            // dict.logistics.pcba.panel.category.250
-            ("dict.logistics.pcba.panel.category.250", "zh-CN", "xlr b", "pcba板位类别.xlr b"),
-            // dict.logistics.pcba.panel.category.250
-            ("dict.logistics.pcba.panel.category.250", "zh-HK", "xlr b_hk", "pcba板位类别.xlr b"),
-
-            // dict.logistics.pcba.panel.category.251
-            ("dict.logistics.pcba.panel.category.251", "en-US", "xlr t_us", "pcba板位类别.xlr t"),
-            // dict.logistics.pcba.panel.category.251
-            ("dict.logistics.pcba.panel.category.251", "ja-JP", "xlr t_jp", "pcba板位类别.xlr t"),
-            // dict.logistics.pcba.panel.category.251
-            ("dict.logistics.pcba.panel.category.251", "zh-CN", "xlr t", "pcba板位类别.xlr t"),
-            // dict.logistics.pcba.panel.category.251
-            ("dict.logistics.pcba.panel.category.251", "zh-HK", "xlr t_hk", "pcba板位类别.xlr t"),
-
-            // dict.logistics.pcba.panel.category.252
-            ("dict.logistics.pcba.panel.category.252", "en-US", "xlrin b_us", "pcba板位类别.xlrin b"),
-            // dict.logistics.pcba.panel.category.252
-            ("dict.logistics.pcba.panel.category.252", "ja-JP", "xlrin b_jp", "pcba板位类别.xlrin b"),
-            // dict.logistics.pcba.panel.category.252
-            ("dict.logistics.pcba.panel.category.252", "zh-CN", "xlrin b", "pcba板位类别.xlrin b"),
-            // dict.logistics.pcba.panel.category.252
-            ("dict.logistics.pcba.panel.category.252", "zh-HK", "xlrin b_hk", "pcba板位类别.xlrin b"),
-
-            // dict.logistics.pcba.panel.category.253
-            ("dict.logistics.pcba.panel.category.253", "en-US", "xlrin t/b_us", "pcba板位类别.xlrin t/b"),
-            // dict.logistics.pcba.panel.category.253
-            ("dict.logistics.pcba.panel.category.253", "ja-JP", "xlrin t/b_jp", "pcba板位类别.xlrin t/b"),
-            // dict.logistics.pcba.panel.category.253
-            ("dict.logistics.pcba.panel.category.253", "zh-CN", "xlrin t/b", "pcba板位类别.xlrin t/b"),
-            // dict.logistics.pcba.panel.category.253
-            ("dict.logistics.pcba.panel.category.253", "zh-HK", "xlrin t/b_hk", "pcba板位类别.xlrin t/b"),
-
-            // dict.logistics.pcba.panel.category.254
-            ("dict.logistics.pcba.panel.category.254", "en-US", "xlrin t_us", "pcba板位类别.xlrin t"),
-            // dict.logistics.pcba.panel.category.254
-            ("dict.logistics.pcba.panel.category.254", "ja-JP", "xlrin t_jp", "pcba板位类别.xlrin t"),
-            // dict.logistics.pcba.panel.category.254
-            ("dict.logistics.pcba.panel.category.254", "zh-CN", "xlrin t", "pcba板位类别.xlrin t"),
-            // dict.logistics.pcba.panel.category.254
-            ("dict.logistics.pcba.panel.category.254", "zh-HK", "xlrin t_hk", "pcba板位类别.xlrin t"),
-
-            // dict.logistics.pcba.panel.category.255
-            ("dict.logistics.pcba.panel.category.255", "en-US", "xlrio b_us", "pcba板位类别.xlrio b"),
-            // dict.logistics.pcba.panel.category.255
-            ("dict.logistics.pcba.panel.category.255", "ja-JP", "xlrio b_jp", "pcba板位类别.xlrio b"),
-            // dict.logistics.pcba.panel.category.255
-            ("dict.logistics.pcba.panel.category.255", "zh-CN", "xlrio b", "pcba板位类别.xlrio b"),
-            // dict.logistics.pcba.panel.category.255
-            ("dict.logistics.pcba.panel.category.255", "zh-HK", "xlrio b_hk", "pcba板位类别.xlrio b"),
-
-            // dict.logistics.pcba.panel.category.256
-            ("dict.logistics.pcba.panel.category.256", "en-US", "xlrio t/b_us", "pcba板位类别.xlrio t/b"),
-            // dict.logistics.pcba.panel.category.256
-            ("dict.logistics.pcba.panel.category.256", "ja-JP", "xlrio t/b_jp", "pcba板位类别.xlrio t/b"),
-            // dict.logistics.pcba.panel.category.256
-            ("dict.logistics.pcba.panel.category.256", "zh-CN", "xlrio t/b", "pcba板位类别.xlrio t/b"),
-            // dict.logistics.pcba.panel.category.256
-            ("dict.logistics.pcba.panel.category.256", "zh-HK", "xlrio t/b_hk", "pcba板位类别.xlrio t/b"),
-
-            // dict.logistics.pcba.panel.category.257
-            ("dict.logistics.pcba.panel.category.257", "en-US", "xlrio t_us", "pcba板位类别.xlrio t"),
-            // dict.logistics.pcba.panel.category.257
-            ("dict.logistics.pcba.panel.category.257", "ja-JP", "xlrio t_jp", "pcba板位类别.xlrio t"),
-            // dict.logistics.pcba.panel.category.257
-            ("dict.logistics.pcba.panel.category.257", "zh-CN", "xlrio t", "pcba板位类别.xlrio t"),
-            // dict.logistics.pcba.panel.category.257
-            ("dict.logistics.pcba.panel.category.257", "zh-HK", "xlrio t_hk", "pcba板位类别.xlrio t"),
-
-            // dict.logistics.pcba.panel.category.258
-            ("dict.logistics.pcba.panel.category.258", "en-US", "xlrout_us", "pcba板位类别.xlrout"),
-            // dict.logistics.pcba.panel.category.258
-            ("dict.logistics.pcba.panel.category.258", "ja-JP", "xlrout_jp", "pcba板位类别.xlrout"),
-            // dict.logistics.pcba.panel.category.258
-            ("dict.logistics.pcba.panel.category.258", "zh-CN", "xlrout", "pcba板位类别.xlrout"),
-            // dict.logistics.pcba.panel.category.258
-            ("dict.logistics.pcba.panel.category.258", "zh-HK", "xlrout_hk", "pcba板位类别.xlrout"),
+            ("dict.logistics.pcba.function.category.26", "zh-HK", "ANA T/B_hk", "pcba功能类别.ana t/b"),
+
+            // dict.logistics.pcba.function.category.27
+            ("dict.logistics.pcba.function.category.27", "en-US", "ANA T_us", "pcba功能类别.ana t"),
+            // dict.logistics.pcba.function.category.27
+            ("dict.logistics.pcba.function.category.27", "ja-JP", "ANA T_jp", "pcba功能类别.ana t"),
+            // dict.logistics.pcba.function.category.27
+            ("dict.logistics.pcba.function.category.27", "zh-CN", "ANA T", "pcba功能类别.ana t"),
+            // dict.logistics.pcba.function.category.27
+            ("dict.logistics.pcba.function.category.27", "zh-HK", "ANA T_hk", "pcba功能类别.ana t"),
+
+            // dict.logistics.pcba.function.category.28
+            ("dict.logistics.pcba.function.category.28", "en-US", "PANEL T_us", "pcba功能类别.panel t"),
+            // dict.logistics.pcba.function.category.28
+            ("dict.logistics.pcba.function.category.28", "ja-JP", "PANEL T_jp", "pcba功能类别.panel t"),
+            // dict.logistics.pcba.function.category.28
+            ("dict.logistics.pcba.function.category.28", "zh-CN", "PANEL T", "pcba功能类别.panel t"),
+            // dict.logistics.pcba.function.category.28
+            ("dict.logistics.pcba.function.category.28", "zh-HK", "PANEL T_hk", "pcba功能类别.panel t"),
+
+            // dict.logistics.pcba.function.category.29
+            ("dict.logistics.pcba.function.category.29", "en-US", "AUDIO_us", "pcba功能类别.audio"),
+            // dict.logistics.pcba.function.category.29
+            ("dict.logistics.pcba.function.category.29", "ja-JP", "AUDIO_jp", "pcba功能类别.audio"),
+            // dict.logistics.pcba.function.category.29
+            ("dict.logistics.pcba.function.category.29", "zh-CN", "AUDIO", "pcba功能类别.audio"),
+            // dict.logistics.pcba.function.category.29
+            ("dict.logistics.pcba.function.category.29", "zh-HK", "AUDIO_hk", "pcba功能类别.audio"),
+
+            // dict.logistics.pcba.function.category.30
+            ("dict.logistics.pcba.function.category.30", "en-US", "AUDIO A_us", "pcba功能类别.audio a"),
+            // dict.logistics.pcba.function.category.30
+            ("dict.logistics.pcba.function.category.30", "ja-JP", "AUDIO A_jp", "pcba功能类别.audio a"),
+            // dict.logistics.pcba.function.category.30
+            ("dict.logistics.pcba.function.category.30", "zh-CN", "AUDIO A", "pcba功能类别.audio a"),
+            // dict.logistics.pcba.function.category.30
+            ("dict.logistics.pcba.function.category.30", "zh-HK", "AUDIO A_hk", "pcba功能类别.audio a"),
+
+            // dict.logistics.pcba.function.category.31
+            ("dict.logistics.pcba.function.category.31", "en-US", "AUDIO ALT B_us", "pcba功能类别.audio alt b"),
+            // dict.logistics.pcba.function.category.31
+            ("dict.logistics.pcba.function.category.31", "ja-JP", "AUDIO ALT B_jp", "pcba功能类别.audio alt b"),
+            // dict.logistics.pcba.function.category.31
+            ("dict.logistics.pcba.function.category.31", "zh-CN", "AUDIO ALT B", "pcba功能类别.audio alt b"),
+            // dict.logistics.pcba.function.category.31
+            ("dict.logistics.pcba.function.category.31", "zh-HK", "AUDIO ALT B_hk", "pcba功能类别.audio alt b"),
+
+            // dict.logistics.pcba.function.category.32
+            ("dict.logistics.pcba.function.category.32", "en-US", "AUDIO ALT T_us", "pcba功能类别.audio alt t"),
+            // dict.logistics.pcba.function.category.32
+            ("dict.logistics.pcba.function.category.32", "ja-JP", "AUDIO ALT T_jp", "pcba功能类别.audio alt t"),
+            // dict.logistics.pcba.function.category.32
+            ("dict.logistics.pcba.function.category.32", "zh-CN", "AUDIO ALT T", "pcba功能类别.audio alt t"),
+            // dict.logistics.pcba.function.category.32
+            ("dict.logistics.pcba.function.category.32", "zh-HK", "AUDIO ALT T_hk", "pcba功能类别.audio alt t"),
+
+            // dict.logistics.pcba.function.category.33
+            ("dict.logistics.pcba.function.category.33", "en-US", "AUDIO B_us", "pcba功能类别.audio b"),
+            // dict.logistics.pcba.function.category.33
+            ("dict.logistics.pcba.function.category.33", "ja-JP", "AUDIO B_jp", "pcba功能类别.audio b"),
+            // dict.logistics.pcba.function.category.33
+            ("dict.logistics.pcba.function.category.33", "zh-CN", "AUDIO B", "pcba功能类别.audio b"),
+            // dict.logistics.pcba.function.category.33
+            ("dict.logistics.pcba.function.category.33", "zh-HK", "AUDIO B_hk", "pcba功能类别.audio b"),
+
+            // dict.logistics.pcba.function.category.34
+            ("dict.logistics.pcba.function.category.34", "en-US", "AUDIO T/B_us", "pcba功能类别.audio t/b"),
+            // dict.logistics.pcba.function.category.34
+            ("dict.logistics.pcba.function.category.34", "ja-JP", "AUDIO T/B_jp", "pcba功能类别.audio t/b"),
+            // dict.logistics.pcba.function.category.34
+            ("dict.logistics.pcba.function.category.34", "zh-CN", "AUDIO T/B", "pcba功能类别.audio t/b"),
+            // dict.logistics.pcba.function.category.34
+            ("dict.logistics.pcba.function.category.34", "zh-HK", "AUDIO T/B_hk", "pcba功能类别.audio t/b"),
+
+            // dict.logistics.pcba.function.category.35
+            ("dict.logistics.pcba.function.category.35", "en-US", "AUDIO T_us", "pcba功能类别.audio t"),
+            // dict.logistics.pcba.function.category.35
+            ("dict.logistics.pcba.function.category.35", "ja-JP", "AUDIO T_jp", "pcba功能类别.audio t"),
+            // dict.logistics.pcba.function.category.35
+            ("dict.logistics.pcba.function.category.35", "zh-CN", "AUDIO T", "pcba功能类别.audio t"),
+            // dict.logistics.pcba.function.category.35
+            ("dict.logistics.pcba.function.category.35", "zh-HK", "AUDIO T_hk", "pcba功能类别.audio t"),
+
+            // dict.logistics.pcba.function.category.36
+            ("dict.logistics.pcba.function.category.36", "en-US", "AUDIO-00-B_us", "pcba功能类别.audio-00-b"),
+            // dict.logistics.pcba.function.category.36
+            ("dict.logistics.pcba.function.category.36", "ja-JP", "AUDIO-00-B_jp", "pcba功能类别.audio-00-b"),
+            // dict.logistics.pcba.function.category.36
+            ("dict.logistics.pcba.function.category.36", "zh-CN", "AUDIO-00-B", "pcba功能类别.audio-00-b"),
+            // dict.logistics.pcba.function.category.36
+            ("dict.logistics.pcba.function.category.36", "zh-HK", "AUDIO-00-B_hk", "pcba功能类别.audio-00-b"),
+
+            // dict.logistics.pcba.function.category.37
+            ("dict.logistics.pcba.function.category.37", "en-US", "AUDIO-00-T_us", "pcba功能类别.audio-00-t"),
+            // dict.logistics.pcba.function.category.37
+            ("dict.logistics.pcba.function.category.37", "ja-JP", "AUDIO-00-T_jp", "pcba功能类别.audio-00-t"),
+            // dict.logistics.pcba.function.category.37
+            ("dict.logistics.pcba.function.category.37", "zh-CN", "AUDIO-00-T", "pcba功能类别.audio-00-t"),
+            // dict.logistics.pcba.function.category.37
+            ("dict.logistics.pcba.function.category.37", "zh-HK", "AUDIO-00-T_hk", "pcba功能类别.audio-00-t"),
+
+            // dict.logistics.pcba.function.category.38
+            ("dict.logistics.pcba.function.category.38", "en-US", "AUDIO-10-B_us", "pcba功能类别.audio-10-b"),
+            // dict.logistics.pcba.function.category.38
+            ("dict.logistics.pcba.function.category.38", "ja-JP", "AUDIO-10-B_jp", "pcba功能类别.audio-10-b"),
+            // dict.logistics.pcba.function.category.38
+            ("dict.logistics.pcba.function.category.38", "zh-CN", "AUDIO-10-B", "pcba功能类别.audio-10-b"),
+            // dict.logistics.pcba.function.category.38
+            ("dict.logistics.pcba.function.category.38", "zh-HK", "AUDIO-10-B_hk", "pcba功能类别.audio-10-b"),
+
+            // dict.logistics.pcba.function.category.39
+            ("dict.logistics.pcba.function.category.39", "en-US", "AUDIO-10-T_us", "pcba功能类别.audio-10-t"),
+            // dict.logistics.pcba.function.category.39
+            ("dict.logistics.pcba.function.category.39", "ja-JP", "AUDIO-10-T_jp", "pcba功能类别.audio-10-t"),
+            // dict.logistics.pcba.function.category.39
+            ("dict.logistics.pcba.function.category.39", "zh-CN", "AUDIO-10-T", "pcba功能类别.audio-10-t"),
+            // dict.logistics.pcba.function.category.39
+            ("dict.logistics.pcba.function.category.39", "zh-HK", "AUDIO-10-T_hk", "pcba功能类别.audio-10-t"),
+
+            // dict.logistics.pcba.function.category.40
+            ("dict.logistics.pcba.function.category.40", "en-US", "AUDIO-20-B_us", "pcba功能类别.audio-20-b"),
+            // dict.logistics.pcba.function.category.40
+            ("dict.logistics.pcba.function.category.40", "ja-JP", "AUDIO-20-B_jp", "pcba功能类别.audio-20-b"),
+            // dict.logistics.pcba.function.category.40
+            ("dict.logistics.pcba.function.category.40", "zh-CN", "AUDIO-20-B", "pcba功能类别.audio-20-b"),
+            // dict.logistics.pcba.function.category.40
+            ("dict.logistics.pcba.function.category.40", "zh-HK", "AUDIO-20-B_hk", "pcba功能类别.audio-20-b"),
+
+            // dict.logistics.pcba.function.category.41
+            ("dict.logistics.pcba.function.category.41", "en-US", "AUDIO-20-T_us", "pcba功能类别.audio-20-t"),
+            // dict.logistics.pcba.function.category.41
+            ("dict.logistics.pcba.function.category.41", "ja-JP", "AUDIO-20-T_jp", "pcba功能类别.audio-20-t"),
+            // dict.logistics.pcba.function.category.41
+            ("dict.logistics.pcba.function.category.41", "zh-CN", "AUDIO-20-T", "pcba功能类别.audio-20-t"),
+            // dict.logistics.pcba.function.category.41
+            ("dict.logistics.pcba.function.category.41", "zh-HK", "AUDIO-20-T_hk", "pcba功能类别.audio-20-t"),
+
+            // dict.logistics.pcba.function.category.42
+            ("dict.logistics.pcba.function.category.42", "en-US", "BOTTOM B_us", "pcba功能类别.bottom b"),
+            // dict.logistics.pcba.function.category.42
+            ("dict.logistics.pcba.function.category.42", "ja-JP", "BOTTOM B_jp", "pcba功能类别.bottom b"),
+            // dict.logistics.pcba.function.category.42
+            ("dict.logistics.pcba.function.category.42", "zh-CN", "BOTTOM B", "pcba功能类别.bottom b"),
+            // dict.logistics.pcba.function.category.42
+            ("dict.logistics.pcba.function.category.42", "zh-HK", "BOTTOM B_hk", "pcba功能类别.bottom b"),
+
+            // dict.logistics.pcba.function.category.43
+            ("dict.logistics.pcba.function.category.43", "en-US", "CCL B_us", "pcba功能类别.ccl b"),
+            // dict.logistics.pcba.function.category.43
+            ("dict.logistics.pcba.function.category.43", "ja-JP", "CCL B_jp", "pcba功能类别.ccl b"),
+            // dict.logistics.pcba.function.category.43
+            ("dict.logistics.pcba.function.category.43", "zh-CN", "CCL B", "pcba功能类别.ccl b"),
+            // dict.logistics.pcba.function.category.43
+            ("dict.logistics.pcba.function.category.43", "zh-HK", "CCL B_hk", "pcba功能类别.ccl b"),
+
+            // dict.logistics.pcba.function.category.44
+            ("dict.logistics.pcba.function.category.44", "en-US", "CCL T/B_us", "pcba功能类别.ccl t/b"),
+            // dict.logistics.pcba.function.category.44
+            ("dict.logistics.pcba.function.category.44", "ja-JP", "CCL T/B_jp", "pcba功能类别.ccl t/b"),
+            // dict.logistics.pcba.function.category.44
+            ("dict.logistics.pcba.function.category.44", "zh-CN", "CCL T/B", "pcba功能类别.ccl t/b"),
+            // dict.logistics.pcba.function.category.44
+            ("dict.logistics.pcba.function.category.44", "zh-HK", "CCL T/B_hk", "pcba功能类别.ccl t/b"),
+
+            // dict.logistics.pcba.function.category.45
+            ("dict.logistics.pcba.function.category.45", "en-US", "CCL T_us", "pcba功能类别.ccl t"),
+            // dict.logistics.pcba.function.category.45
+            ("dict.logistics.pcba.function.category.45", "ja-JP", "CCL T_jp", "pcba功能类别.ccl t"),
+            // dict.logistics.pcba.function.category.45
+            ("dict.logistics.pcba.function.category.45", "zh-CN", "CCL T", "pcba功能类别.ccl t"),
+            // dict.logistics.pcba.function.category.45
+            ("dict.logistics.pcba.function.category.45", "zh-HK", "CCL T_hk", "pcba功能类别.ccl t"),
+
+            // dict.logistics.pcba.function.category.46
+            ("dict.logistics.pcba.function.category.46", "en-US", "CD B_us", "pcba功能类别.cd b"),
+            // dict.logistics.pcba.function.category.46
+            ("dict.logistics.pcba.function.category.46", "ja-JP", "CD B_jp", "pcba功能类别.cd b"),
+            // dict.logistics.pcba.function.category.46
+            ("dict.logistics.pcba.function.category.46", "zh-CN", "CD B", "pcba功能类别.cd b"),
+            // dict.logistics.pcba.function.category.46
+            ("dict.logistics.pcba.function.category.46", "zh-HK", "CD B_hk", "pcba功能类别.cd b"),
+
+            // dict.logistics.pcba.function.category.47
+            ("dict.logistics.pcba.function.category.47", "en-US", "CD T_us", "pcba功能类别.cd t"),
+            // dict.logistics.pcba.function.category.47
+            ("dict.logistics.pcba.function.category.47", "ja-JP", "CD T_jp", "pcba功能类别.cd t"),
+            // dict.logistics.pcba.function.category.47
+            ("dict.logistics.pcba.function.category.47", "zh-CN", "CD T", "pcba功能类别.cd t"),
+            // dict.logistics.pcba.function.category.47
+            ("dict.logistics.pcba.function.category.47", "zh-HK", "CD T_hk", "pcba功能类别.cd t"),
+
+            // dict.logistics.pcba.function.category.48
+            ("dict.logistics.pcba.function.category.48", "en-US", "CD-MAIN_us", "pcba功能类别.cd-main"),
+            // dict.logistics.pcba.function.category.48
+            ("dict.logistics.pcba.function.category.48", "ja-JP", "CD-MAIN_jp", "pcba功能类别.cd-main"),
+            // dict.logistics.pcba.function.category.48
+            ("dict.logistics.pcba.function.category.48", "zh-CN", "CD-MAIN", "pcba功能类别.cd-main"),
+            // dict.logistics.pcba.function.category.48
+            ("dict.logistics.pcba.function.category.48", "zh-HK", "CD-MAIN_hk", "pcba功能类别.cd-main"),
+
+            // dict.logistics.pcba.function.category.49
+            ("dict.logistics.pcba.function.category.49", "en-US", "CD-MAIN B_us", "pcba功能类别.cd-main b"),
+            // dict.logistics.pcba.function.category.49
+            ("dict.logistics.pcba.function.category.49", "ja-JP", "CD-MAIN B_jp", "pcba功能类别.cd-main b"),
+            // dict.logistics.pcba.function.category.49
+            ("dict.logistics.pcba.function.category.49", "zh-CN", "CD-MAIN B", "pcba功能类别.cd-main b"),
+            // dict.logistics.pcba.function.category.49
+            ("dict.logistics.pcba.function.category.49", "zh-HK", "CD-MAIN B_hk", "pcba功能类别.cd-main b"),
+
+            // dict.logistics.pcba.function.category.50
+            ("dict.logistics.pcba.function.category.50", "en-US", "CDMCU_us", "pcba功能类别.cdmcu"),
+            // dict.logistics.pcba.function.category.50
+            ("dict.logistics.pcba.function.category.50", "ja-JP", "CDMCU_jp", "pcba功能类别.cdmcu"),
+            // dict.logistics.pcba.function.category.50
+            ("dict.logistics.pcba.function.category.50", "zh-CN", "CDMCU", "pcba功能类别.cdmcu"),
+            // dict.logistics.pcba.function.category.50
+            ("dict.logistics.pcba.function.category.50", "zh-HK", "CDMCU_hk", "pcba功能类别.cdmcu"),
+
+            // dict.logistics.pcba.function.category.51
+            ("dict.logistics.pcba.function.category.51", "en-US", "CDMCU B_us", "pcba功能类别.cdmcu b"),
+            // dict.logistics.pcba.function.category.51
+            ("dict.logistics.pcba.function.category.51", "ja-JP", "CDMCU B_jp", "pcba功能类别.cdmcu b"),
+            // dict.logistics.pcba.function.category.51
+            ("dict.logistics.pcba.function.category.51", "zh-CN", "CDMCU B", "pcba功能类别.cdmcu b"),
+            // dict.logistics.pcba.function.category.51
+            ("dict.logistics.pcba.function.category.51", "zh-HK", "CDMCU B_hk", "pcba功能类别.cdmcu b"),
+
+            // dict.logistics.pcba.function.category.52
+            ("dict.logistics.pcba.function.category.52", "en-US", "CDMCU T/B_us", "pcba功能类别.cdmcu t/b"),
+            // dict.logistics.pcba.function.category.52
+            ("dict.logistics.pcba.function.category.52", "ja-JP", "CDMCU T/B_jp", "pcba功能类别.cdmcu t/b"),
+            // dict.logistics.pcba.function.category.52
+            ("dict.logistics.pcba.function.category.52", "zh-CN", "CDMCU T/B", "pcba功能类别.cdmcu t/b"),
+            // dict.logistics.pcba.function.category.52
+            ("dict.logistics.pcba.function.category.52", "zh-HK", "CDMCU T/B_hk", "pcba功能类别.cdmcu t/b"),
+
+            // dict.logistics.pcba.function.category.53
+            ("dict.logistics.pcba.function.category.53", "en-US", "CDMCU T_us", "pcba功能类别.cdmcu t"),
+            // dict.logistics.pcba.function.category.53
+            ("dict.logistics.pcba.function.category.53", "ja-JP", "CDMCU T_jp", "pcba功能类别.cdmcu t"),
+            // dict.logistics.pcba.function.category.53
+            ("dict.logistics.pcba.function.category.53", "zh-CN", "CDMCU T", "pcba功能类别.cdmcu t"),
+            // dict.logistics.pcba.function.category.53
+            ("dict.logistics.pcba.function.category.53", "zh-HK", "CDMCU T_hk", "pcba功能类别.cdmcu t"),
+
+            // dict.logistics.pcba.function.category.54
+            ("dict.logistics.pcba.function.category.54", "en-US", "COMB B_us", "pcba功能类别.comb b"),
+            // dict.logistics.pcba.function.category.54
+            ("dict.logistics.pcba.function.category.54", "ja-JP", "COMB B_jp", "pcba功能类别.comb b"),
+            // dict.logistics.pcba.function.category.54
+            ("dict.logistics.pcba.function.category.54", "zh-CN", "COMB B", "pcba功能类别.comb b"),
+            // dict.logistics.pcba.function.category.54
+            ("dict.logistics.pcba.function.category.54", "zh-HK", "COMB B_hk", "pcba功能类别.comb b"),
+
+            // dict.logistics.pcba.function.category.55
+            ("dict.logistics.pcba.function.category.55", "en-US", "COMB T_us", "pcba功能类别.comb t"),
+            // dict.logistics.pcba.function.category.55
+            ("dict.logistics.pcba.function.category.55", "ja-JP", "COMB T_jp", "pcba功能类别.comb t"),
+            // dict.logistics.pcba.function.category.55
+            ("dict.logistics.pcba.function.category.55", "zh-CN", "COMB T", "pcba功能类别.comb t"),
+            // dict.logistics.pcba.function.category.55
+            ("dict.logistics.pcba.function.category.55", "zh-HK", "COMB T_hk", "pcba功能类别.comb t"),
+
+            // dict.logistics.pcba.function.category.56
+            ("dict.logistics.pcba.function.category.56", "en-US", "COMBO B_us", "pcba功能类别.combo b"),
+            // dict.logistics.pcba.function.category.56
+            ("dict.logistics.pcba.function.category.56", "ja-JP", "COMBO B_jp", "pcba功能类别.combo b"),
+            // dict.logistics.pcba.function.category.56
+            ("dict.logistics.pcba.function.category.56", "zh-CN", "COMBO B", "pcba功能类别.combo b"),
+            // dict.logistics.pcba.function.category.56
+            ("dict.logistics.pcba.function.category.56", "zh-HK", "COMBO B_hk", "pcba功能类别.combo b"),
+
+            // dict.logistics.pcba.function.category.57
+            ("dict.logistics.pcba.function.category.57", "en-US", "COMBO T_us", "pcba功能类别.combo t"),
+            // dict.logistics.pcba.function.category.57
+            ("dict.logistics.pcba.function.category.57", "ja-JP", "COMBO T_jp", "pcba功能类别.combo t"),
+            // dict.logistics.pcba.function.category.57
+            ("dict.logistics.pcba.function.category.57", "zh-CN", "COMBO T", "pcba功能类别.combo t"),
+            // dict.logistics.pcba.function.category.57
+            ("dict.logistics.pcba.function.category.57", "zh-HK", "COMBO T_hk", "pcba功能类别.combo t"),
+
+            // dict.logistics.pcba.function.category.58
+            ("dict.logistics.pcba.function.category.58", "en-US", "CONN_us", "pcba功能类别.conn"),
+            // dict.logistics.pcba.function.category.58
+            ("dict.logistics.pcba.function.category.58", "ja-JP", "CONN_jp", "pcba功能类别.conn"),
+            // dict.logistics.pcba.function.category.58
+            ("dict.logistics.pcba.function.category.58", "zh-CN", "CONN", "pcba功能类别.conn"),
+            // dict.logistics.pcba.function.category.58
+            ("dict.logistics.pcba.function.category.58", "zh-HK", "CONN_hk", "pcba功能类别.conn"),
+
+            // dict.logistics.pcba.function.category.59
+            ("dict.logistics.pcba.function.category.59", "en-US", "CONN A_us", "pcba功能类别.conn a"),
+            // dict.logistics.pcba.function.category.59
+            ("dict.logistics.pcba.function.category.59", "ja-JP", "CONN A_jp", "pcba功能类别.conn a"),
+            // dict.logistics.pcba.function.category.59
+            ("dict.logistics.pcba.function.category.59", "zh-CN", "CONN A", "pcba功能类别.conn a"),
+            // dict.logistics.pcba.function.category.59
+            ("dict.logistics.pcba.function.category.59", "zh-HK", "CONN A_hk", "pcba功能类别.conn a"),
+
+            // dict.logistics.pcba.function.category.60
+            ("dict.logistics.pcba.function.category.60", "en-US", "CONN B_us", "pcba功能类别.conn b"),
+            // dict.logistics.pcba.function.category.60
+            ("dict.logistics.pcba.function.category.60", "ja-JP", "CONN B_jp", "pcba功能类别.conn b"),
+            // dict.logistics.pcba.function.category.60
+            ("dict.logistics.pcba.function.category.60", "zh-CN", "CONN B", "pcba功能类别.conn b"),
+            // dict.logistics.pcba.function.category.60
+            ("dict.logistics.pcba.function.category.60", "zh-HK", "CONN B_hk", "pcba功能类别.conn b"),
+
+            // dict.logistics.pcba.function.category.61
+            ("dict.logistics.pcba.function.category.61", "en-US", "CONN T/B_us", "pcba功能类别.conn t/b"),
+            // dict.logistics.pcba.function.category.61
+            ("dict.logistics.pcba.function.category.61", "ja-JP", "CONN T/B_jp", "pcba功能类别.conn t/b"),
+            // dict.logistics.pcba.function.category.61
+            ("dict.logistics.pcba.function.category.61", "zh-CN", "CONN T/B", "pcba功能类别.conn t/b"),
+            // dict.logistics.pcba.function.category.61
+            ("dict.logistics.pcba.function.category.61", "zh-HK", "CONN T/B_hk", "pcba功能类别.conn t/b"),
+
+            // dict.logistics.pcba.function.category.62
+            ("dict.logistics.pcba.function.category.62", "en-US", "CONN T_us", "pcba功能类别.conn t"),
+            // dict.logistics.pcba.function.category.62
+            ("dict.logistics.pcba.function.category.62", "ja-JP", "CONN T_jp", "pcba功能类别.conn t"),
+            // dict.logistics.pcba.function.category.62
+            ("dict.logistics.pcba.function.category.62", "zh-CN", "CONN T", "pcba功能类别.conn t"),
+            // dict.logistics.pcba.function.category.62
+            ("dict.logistics.pcba.function.category.62", "zh-HK", "CONN T_hk", "pcba功能类别.conn t"),
+
+            // dict.logistics.pcba.function.category.63
+            ("dict.logistics.pcba.function.category.63", "en-US", "CONTACT_us", "pcba功能类别.contact"),
+            // dict.logistics.pcba.function.category.63
+            ("dict.logistics.pcba.function.category.63", "ja-JP", "CONTACT_jp", "pcba功能类别.contact"),
+            // dict.logistics.pcba.function.category.63
+            ("dict.logistics.pcba.function.category.63", "zh-CN", "CONTACT", "pcba功能类别.contact"),
+            // dict.logistics.pcba.function.category.63
+            ("dict.logistics.pcba.function.category.63", "zh-HK", "CONTACT_hk", "pcba功能类别.contact"),
+
+            // dict.logistics.pcba.function.category.64
+            ("dict.logistics.pcba.function.category.64", "en-US", "DA_us", "pcba功能类别.da"),
+            // dict.logistics.pcba.function.category.64
+            ("dict.logistics.pcba.function.category.64", "ja-JP", "DA_jp", "pcba功能类别.da"),
+            // dict.logistics.pcba.function.category.64
+            ("dict.logistics.pcba.function.category.64", "zh-CN", "DA", "pcba功能类别.da"),
+            // dict.logistics.pcba.function.category.64
+            ("dict.logistics.pcba.function.category.64", "zh-HK", "DA_hk", "pcba功能类别.da"),
+
+            // dict.logistics.pcba.function.category.65
+            ("dict.logistics.pcba.function.category.65", "en-US", "DA B_us", "pcba功能类别.da b"),
+            // dict.logistics.pcba.function.category.65
+            ("dict.logistics.pcba.function.category.65", "ja-JP", "DA B_jp", "pcba功能类别.da b"),
+            // dict.logistics.pcba.function.category.65
+            ("dict.logistics.pcba.function.category.65", "zh-CN", "DA B", "pcba功能类别.da b"),
+            // dict.logistics.pcba.function.category.65
+            ("dict.logistics.pcba.function.category.65", "zh-HK", "DA B_hk", "pcba功能类别.da b"),
+
+            // dict.logistics.pcba.function.category.66
+            ("dict.logistics.pcba.function.category.66", "en-US", "DA T_us", "pcba功能类别.da t"),
+            // dict.logistics.pcba.function.category.66
+            ("dict.logistics.pcba.function.category.66", "ja-JP", "DA T_jp", "pcba功能类别.da t"),
+            // dict.logistics.pcba.function.category.66
+            ("dict.logistics.pcba.function.category.66", "zh-CN", "DA T", "pcba功能类别.da t"),
+            // dict.logistics.pcba.function.category.66
+            ("dict.logistics.pcba.function.category.66", "zh-HK", "DA T_hk", "pcba功能类别.da t"),
+
+            // dict.logistics.pcba.function.category.67
+            ("dict.logistics.pcba.function.category.67", "en-US", "DA T/B_us", "pcba功能类别.da t/b"),
+            // dict.logistics.pcba.function.category.67
+            ("dict.logistics.pcba.function.category.67", "ja-JP", "DA T/B_jp", "pcba功能类别.da t/b"),
+            // dict.logistics.pcba.function.category.67
+            ("dict.logistics.pcba.function.category.67", "zh-CN", "DA T/B", "pcba功能类别.da t/b"),
+            // dict.logistics.pcba.function.category.67
+            ("dict.logistics.pcba.function.category.67", "zh-HK", "DA T/B_hk", "pcba功能类别.da t/b"),
+
+            // dict.logistics.pcba.function.category.68
+            ("dict.logistics.pcba.function.category.68", "en-US", "DANY B_us", "pcba功能类别.dany b"),
+            // dict.logistics.pcba.function.category.68
+            ("dict.logistics.pcba.function.category.68", "ja-JP", "DANY B_jp", "pcba功能类别.dany b"),
+            // dict.logistics.pcba.function.category.68
+            ("dict.logistics.pcba.function.category.68", "zh-CN", "DANY B", "pcba功能类别.dany b"),
+            // dict.logistics.pcba.function.category.68
+            ("dict.logistics.pcba.function.category.68", "zh-HK", "DANY B_hk", "pcba功能类别.dany b"),
+
+            // dict.logistics.pcba.function.category.70
+            ("dict.logistics.pcba.function.category.70", "en-US", "DSP B_us", "pcba功能类别.dsp b"),
+            // dict.logistics.pcba.function.category.70
+            ("dict.logistics.pcba.function.category.70", "ja-JP", "DSP B_jp", "pcba功能类别.dsp b"),
+            // dict.logistics.pcba.function.category.70
+            ("dict.logistics.pcba.function.category.70", "zh-CN", "DSP B", "pcba功能类别.dsp b"),
+            // dict.logistics.pcba.function.category.70
+            ("dict.logistics.pcba.function.category.70", "zh-HK", "DSP B_hk", "pcba功能类别.dsp b"),
+
+            // dict.logistics.pcba.function.category.71
+            ("dict.logistics.pcba.function.category.71", "en-US", "DSP T_us", "pcba功能类别.dsp t"),
+            // dict.logistics.pcba.function.category.71
+            ("dict.logistics.pcba.function.category.71", "ja-JP", "DSP T_jp", "pcba功能类别.dsp t"),
+            // dict.logistics.pcba.function.category.71
+            ("dict.logistics.pcba.function.category.71", "zh-CN", "DSP T", "pcba功能类别.dsp t"),
+            // dict.logistics.pcba.function.category.71
+            ("dict.logistics.pcba.function.category.71", "zh-HK", "DSP T_hk", "pcba功能类别.dsp t"),
+
+            // dict.logistics.pcba.function.category.73
+            ("dict.logistics.pcba.function.category.73", "en-US", "DSPL A_us", "pcba功能类别.dspl a"),
+            // dict.logistics.pcba.function.category.73
+            ("dict.logistics.pcba.function.category.73", "ja-JP", "DSPL A_jp", "pcba功能类别.dspl a"),
+            // dict.logistics.pcba.function.category.73
+            ("dict.logistics.pcba.function.category.73", "zh-CN", "DSPL A", "pcba功能类别.dspl a"),
+            // dict.logistics.pcba.function.category.73
+            ("dict.logistics.pcba.function.category.73", "zh-HK", "DSPL A_hk", "pcba功能类别.dspl a"),
+
+            // dict.logistics.pcba.function.category.74
+            ("dict.logistics.pcba.function.category.74", "en-US", "DSPL B_us", "pcba功能类别.dspl b"),
+            // dict.logistics.pcba.function.category.74
+            ("dict.logistics.pcba.function.category.74", "ja-JP", "DSPL B_jp", "pcba功能类别.dspl b"),
+            // dict.logistics.pcba.function.category.74
+            ("dict.logistics.pcba.function.category.74", "zh-CN", "DSPL B", "pcba功能类别.dspl b"),
+            // dict.logistics.pcba.function.category.74
+            ("dict.logistics.pcba.function.category.74", "zh-HK", "DSPL B_hk", "pcba功能类别.dspl b"),
+
+            // dict.logistics.pcba.function.category.75
+            ("dict.logistics.pcba.function.category.75", "en-US", "DSPL T/B_us", "pcba功能类别.dspl t/b"),
+            // dict.logistics.pcba.function.category.75
+            ("dict.logistics.pcba.function.category.75", "ja-JP", "DSPL T/B_jp", "pcba功能类别.dspl t/b"),
+            // dict.logistics.pcba.function.category.75
+            ("dict.logistics.pcba.function.category.75", "zh-CN", "DSPL T/B", "pcba功能类别.dspl t/b"),
+            // dict.logistics.pcba.function.category.75
+            ("dict.logistics.pcba.function.category.75", "zh-HK", "DSPL T/B_hk", "pcba功能类别.dspl t/b"),
+
+            // dict.logistics.pcba.function.category.76
+            ("dict.logistics.pcba.function.category.76", "en-US", "DSPL T_us", "pcba功能类别.dspl t"),
+            // dict.logistics.pcba.function.category.76
+            ("dict.logistics.pcba.function.category.76", "ja-JP", "DSPL T_jp", "pcba功能类别.dspl t"),
+            // dict.logistics.pcba.function.category.76
+            ("dict.logistics.pcba.function.category.76", "zh-CN", "DSPL T", "pcba功能类别.dspl t"),
+            // dict.logistics.pcba.function.category.76
+            ("dict.logistics.pcba.function.category.76", "zh-HK", "DSPL T_hk", "pcba功能类别.dspl t"),
+
+            // dict.logistics.pcba.function.category.77
+            ("dict.logistics.pcba.function.category.77", "en-US", "DSUB B_us", "pcba功能类别.dsub b"),
+            // dict.logistics.pcba.function.category.77
+            ("dict.logistics.pcba.function.category.77", "ja-JP", "DSUB B_jp", "pcba功能类别.dsub b"),
+            // dict.logistics.pcba.function.category.77
+            ("dict.logistics.pcba.function.category.77", "zh-CN", "DSUB B", "pcba功能类别.dsub b"),
+            // dict.logistics.pcba.function.category.77
+            ("dict.logistics.pcba.function.category.77", "zh-HK", "DSUB B_hk", "pcba功能类别.dsub b"),
+
+            // dict.logistics.pcba.function.category.78
+            ("dict.logistics.pcba.function.category.78", "en-US", "DSUB T_us", "pcba功能类别.dsub t"),
+            // dict.logistics.pcba.function.category.78
+            ("dict.logistics.pcba.function.category.78", "ja-JP", "DSUB T_jp", "pcba功能类别.dsub t"),
+            // dict.logistics.pcba.function.category.78
+            ("dict.logistics.pcba.function.category.78", "zh-CN", "DSUB T", "pcba功能类别.dsub t"),
+            // dict.logistics.pcba.function.category.78
+            ("dict.logistics.pcba.function.category.78", "zh-HK", "DSUB T_hk", "pcba功能类别.dsub t"),
+
+            // dict.logistics.pcba.function.category.79
+            ("dict.logistics.pcba.function.category.79", "en-US", "DYNA B_us", "pcba功能类别.dyna b"),
+            // dict.logistics.pcba.function.category.79
+            ("dict.logistics.pcba.function.category.79", "ja-JP", "DYNA B_jp", "pcba功能类别.dyna b"),
+            // dict.logistics.pcba.function.category.79
+            ("dict.logistics.pcba.function.category.79", "zh-CN", "DYNA B", "pcba功能类别.dyna b"),
+            // dict.logistics.pcba.function.category.79
+            ("dict.logistics.pcba.function.category.79", "zh-HK", "DYNA B_hk", "pcba功能类别.dyna b"),
+
+            // dict.logistics.pcba.function.category.80
+            ("dict.logistics.pcba.function.category.80", "en-US", "DYNA T_us", "pcba功能类别.dyna t"),
+            // dict.logistics.pcba.function.category.80
+            ("dict.logistics.pcba.function.category.80", "ja-JP", "DYNA T_jp", "pcba功能类别.dyna t"),
+            // dict.logistics.pcba.function.category.80
+            ("dict.logistics.pcba.function.category.80", "zh-CN", "DYNA T", "pcba功能类别.dyna t"),
+            // dict.logistics.pcba.function.category.80
+            ("dict.logistics.pcba.function.category.80", "zh-HK", "DYNA T_hk", "pcba功能类别.dyna t"),
+
+            // dict.logistics.pcba.function.category.81
+            ("dict.logistics.pcba.function.category.81", "en-US", "DYNA T/B_us", "pcba功能类别.dyna t/b"),
+            // dict.logistics.pcba.function.category.81
+            ("dict.logistics.pcba.function.category.81", "ja-JP", "DYNA T/B_jp", "pcba功能类别.dyna t/b"),
+            // dict.logistics.pcba.function.category.81
+            ("dict.logistics.pcba.function.category.81", "zh-CN", "DYNA T/B", "pcba功能类别.dyna t/b"),
+            // dict.logistics.pcba.function.category.81
+            ("dict.logistics.pcba.function.category.81", "zh-HK", "DYNA T/B_hk", "pcba功能类别.dyna t/b"),
+
+            // dict.logistics.pcba.function.category.82
+            ("dict.logistics.pcba.function.category.82", "en-US", "ENCODER_us", "pcba功能类别.encoder"),
+            // dict.logistics.pcba.function.category.82
+            ("dict.logistics.pcba.function.category.82", "ja-JP", "ENCODER_jp", "pcba功能类别.encoder"),
+            // dict.logistics.pcba.function.category.82
+            ("dict.logistics.pcba.function.category.82", "zh-CN", "ENCODER", "pcba功能类别.encoder"),
+            // dict.logistics.pcba.function.category.82
+            ("dict.logistics.pcba.function.category.82", "zh-HK", "ENCODER_hk", "pcba功能类别.encoder"),
+
+            // dict.logistics.pcba.function.category.84
+            ("dict.logistics.pcba.function.category.84", "en-US", "ETHER_us", "pcba功能类别.ether"),
+            // dict.logistics.pcba.function.category.84
+            ("dict.logistics.pcba.function.category.84", "ja-JP", "ETHER_jp", "pcba功能类别.ether"),
+            // dict.logistics.pcba.function.category.84
+            ("dict.logistics.pcba.function.category.84", "zh-CN", "ETHER", "pcba功能类别.ether"),
+            // dict.logistics.pcba.function.category.84
+            ("dict.logistics.pcba.function.category.84", "zh-HK", "ETHER_hk", "pcba功能类别.ether"),
+
+            // dict.logistics.pcba.function.category.85
+            ("dict.logistics.pcba.function.category.85", "en-US", "ETHER B_us", "pcba功能类别.ether b"),
+            // dict.logistics.pcba.function.category.85
+            ("dict.logistics.pcba.function.category.85", "ja-JP", "ETHER B_jp", "pcba功能类别.ether b"),
+            // dict.logistics.pcba.function.category.85
+            ("dict.logistics.pcba.function.category.85", "zh-CN", "ETHER B", "pcba功能类别.ether b"),
+            // dict.logistics.pcba.function.category.85
+            ("dict.logistics.pcba.function.category.85", "zh-HK", "ETHER B_hk", "pcba功能类别.ether b"),
+
+            // dict.logistics.pcba.function.category.86
+            ("dict.logistics.pcba.function.category.86", "en-US", "ETHER T_us", "pcba功能类别.ether t"),
+            // dict.logistics.pcba.function.category.86
+            ("dict.logistics.pcba.function.category.86", "ja-JP", "ETHER T_jp", "pcba功能类别.ether t"),
+            // dict.logistics.pcba.function.category.86
+            ("dict.logistics.pcba.function.category.86", "zh-CN", "ETHER T", "pcba功能类别.ether t"),
+            // dict.logistics.pcba.function.category.86
+            ("dict.logistics.pcba.function.category.86", "zh-HK", "ETHER T_hk", "pcba功能类别.ether t"),
+
+            // dict.logistics.pcba.function.category.87
+            ("dict.logistics.pcba.function.category.87", "en-US", "EURO_us", "pcba功能类别.euro"),
+            // dict.logistics.pcba.function.category.87
+            ("dict.logistics.pcba.function.category.87", "ja-JP", "EURO_jp", "pcba功能类别.euro"),
+            // dict.logistics.pcba.function.category.87
+            ("dict.logistics.pcba.function.category.87", "zh-CN", "EURO", "pcba功能类别.euro"),
+            // dict.logistics.pcba.function.category.87
+            ("dict.logistics.pcba.function.category.87", "zh-HK", "EURO_hk", "pcba功能类别.euro"),
+
+            // dict.logistics.pcba.function.category.88
+            ("dict.logistics.pcba.function.category.88", "en-US", "EURO B_us", "pcba功能类别.euro b"),
+            // dict.logistics.pcba.function.category.88
+            ("dict.logistics.pcba.function.category.88", "ja-JP", "EURO B_jp", "pcba功能类别.euro b"),
+            // dict.logistics.pcba.function.category.88
+            ("dict.logistics.pcba.function.category.88", "zh-CN", "EURO B", "pcba功能类别.euro b"),
+            // dict.logistics.pcba.function.category.88
+            ("dict.logistics.pcba.function.category.88", "zh-HK", "EURO B_hk", "pcba功能类别.euro b"),
+
+            // dict.logistics.pcba.function.category.89
+            ("dict.logistics.pcba.function.category.89", "en-US", "EURO T/B_us", "pcba功能类别.euro t/b"),
+            // dict.logistics.pcba.function.category.89
+            ("dict.logistics.pcba.function.category.89", "ja-JP", "EURO T/B_jp", "pcba功能类别.euro t/b"),
+            // dict.logistics.pcba.function.category.89
+            ("dict.logistics.pcba.function.category.89", "zh-CN", "EURO T/B", "pcba功能类别.euro t/b"),
+            // dict.logistics.pcba.function.category.89
+            ("dict.logistics.pcba.function.category.89", "zh-HK", "EURO T/B_hk", "pcba功能类别.euro t/b"),
+
+            // dict.logistics.pcba.function.category.90
+            ("dict.logistics.pcba.function.category.90", "en-US", "EURO T_us", "pcba功能类别.euro t"),
+            // dict.logistics.pcba.function.category.90
+            ("dict.logistics.pcba.function.category.90", "ja-JP", "EURO T_jp", "pcba功能类别.euro t"),
+            // dict.logistics.pcba.function.category.90
+            ("dict.logistics.pcba.function.category.90", "zh-CN", "EURO T", "pcba功能类别.euro t"),
+            // dict.logistics.pcba.function.category.90
+            ("dict.logistics.pcba.function.category.90", "zh-HK", "EURO T_hk", "pcba功能类别.euro t"),
+
+            // dict.logistics.pcba.function.category.91
+            ("dict.logistics.pcba.function.category.91", "en-US", "FADER B_us", "pcba功能类别.fader b"),
+            // dict.logistics.pcba.function.category.91
+            ("dict.logistics.pcba.function.category.91", "ja-JP", "FADER B_jp", "pcba功能类别.fader b"),
+            // dict.logistics.pcba.function.category.91
+            ("dict.logistics.pcba.function.category.91", "zh-CN", "FADER B", "pcba功能类别.fader b"),
+            // dict.logistics.pcba.function.category.91
+            ("dict.logistics.pcba.function.category.91", "zh-HK", "FADER B_hk", "pcba功能类别.fader b"),
+
+            // dict.logistics.pcba.function.category.92
+            ("dict.logistics.pcba.function.category.92", "en-US", "FADER T/B_us", "pcba功能类别.fader t/b"),
+            // dict.logistics.pcba.function.category.92
+            ("dict.logistics.pcba.function.category.92", "ja-JP", "FADER T/B_jp", "pcba功能类别.fader t/b"),
+            // dict.logistics.pcba.function.category.92
+            ("dict.logistics.pcba.function.category.92", "zh-CN", "FADER T/B", "pcba功能类别.fader t/b"),
+            // dict.logistics.pcba.function.category.92
+            ("dict.logistics.pcba.function.category.92", "zh-HK", "FADER T/B_hk", "pcba功能类别.fader t/b"),
+
+            // dict.logistics.pcba.function.category.93
+            ("dict.logistics.pcba.function.category.93", "en-US", "FADER T_us", "pcba功能类别.fader t"),
+            // dict.logistics.pcba.function.category.93
+            ("dict.logistics.pcba.function.category.93", "ja-JP", "FADER T_jp", "pcba功能类别.fader t"),
+            // dict.logistics.pcba.function.category.93
+            ("dict.logistics.pcba.function.category.93", "zh-CN", "FADER T", "pcba功能类别.fader t"),
+            // dict.logistics.pcba.function.category.93
+            ("dict.logistics.pcba.function.category.93", "zh-HK", "FADER T_hk", "pcba功能类别.fader t"),
+
+            // dict.logistics.pcba.function.category.96
+            ("dict.logistics.pcba.function.category.96", "en-US", "FRONT_us", "pcba功能类别.front"),
+            // dict.logistics.pcba.function.category.96
+            ("dict.logistics.pcba.function.category.96", "ja-JP", "FRONT_jp", "pcba功能类别.front"),
+            // dict.logistics.pcba.function.category.96
+            ("dict.logistics.pcba.function.category.96", "zh-CN", "FRONT", "pcba功能类别.front"),
+            // dict.logistics.pcba.function.category.96
+            ("dict.logistics.pcba.function.category.96", "zh-HK", "FRONT_hk", "pcba功能类别.front"),
+
+            // dict.logistics.pcba.function.category.97
+            ("dict.logistics.pcba.function.category.97", "en-US", "FRONT A_us", "pcba功能类别.front a"),
+            // dict.logistics.pcba.function.category.97
+            ("dict.logistics.pcba.function.category.97", "ja-JP", "FRONT A_jp", "pcba功能类别.front a"),
+            // dict.logistics.pcba.function.category.97
+            ("dict.logistics.pcba.function.category.97", "zh-CN", "FRONT A", "pcba功能类别.front a"),
+            // dict.logistics.pcba.function.category.97
+            ("dict.logistics.pcba.function.category.97", "zh-HK", "FRONT A_hk", "pcba功能类别.front a"),
+
+            // dict.logistics.pcba.function.category.98
+            ("dict.logistics.pcba.function.category.98", "en-US", "FRONT B_us", "pcba功能类别.front b"),
+            // dict.logistics.pcba.function.category.98
+            ("dict.logistics.pcba.function.category.98", "ja-JP", "FRONT B_jp", "pcba功能类别.front b"),
+            // dict.logistics.pcba.function.category.98
+            ("dict.logistics.pcba.function.category.98", "zh-CN", "FRONT B", "pcba功能类别.front b"),
+            // dict.logistics.pcba.function.category.98
+            ("dict.logistics.pcba.function.category.98", "zh-HK", "FRONT B_hk", "pcba功能类别.front b"),
+
+            // dict.logistics.pcba.function.category.99
+            ("dict.logistics.pcba.function.category.99", "en-US", "FRONT T/B_us", "pcba功能类别.front t/b"),
+            // dict.logistics.pcba.function.category.99
+            ("dict.logistics.pcba.function.category.99", "ja-JP", "FRONT T/B_jp", "pcba功能类别.front t/b"),
+            // dict.logistics.pcba.function.category.99
+            ("dict.logistics.pcba.function.category.99", "zh-CN", "FRONT T/B", "pcba功能类别.front t/b"),
+            // dict.logistics.pcba.function.category.99
+            ("dict.logistics.pcba.function.category.99", "zh-HK", "FRONT T/B_hk", "pcba功能类别.front t/b"),
+
+            // dict.logistics.pcba.function.category.100
+            ("dict.logistics.pcba.function.category.100", "en-US", "FRONT SYS T_us", "pcba功能类别.front sys t"),
+            // dict.logistics.pcba.function.category.100
+            ("dict.logistics.pcba.function.category.100", "ja-JP", "FRONT SYS T_jp", "pcba功能类别.front sys t"),
+            // dict.logistics.pcba.function.category.100
+            ("dict.logistics.pcba.function.category.100", "zh-CN", "FRONT SYS T", "pcba功能类别.front sys t"),
+            // dict.logistics.pcba.function.category.100
+            ("dict.logistics.pcba.function.category.100", "zh-HK", "FRONT SYS T_hk", "pcba功能类别.front sys t"),
+
+            // dict.logistics.pcba.function.category.101
+            ("dict.logistics.pcba.function.category.101", "en-US", "FRONT T_us", "pcba功能类别.front t"),
+            // dict.logistics.pcba.function.category.101
+            ("dict.logistics.pcba.function.category.101", "ja-JP", "FRONT T_jp", "pcba功能类别.front t"),
+            // dict.logistics.pcba.function.category.101
+            ("dict.logistics.pcba.function.category.101", "zh-CN", "FRONT T", "pcba功能类别.front t"),
+            // dict.logistics.pcba.function.category.101
+            ("dict.logistics.pcba.function.category.101", "zh-HK", "FRONT T_hk", "pcba功能类别.front t"),
+
+            // dict.logistics.pcba.function.category.104
+            ("dict.logistics.pcba.function.category.104", "en-US", "GATHER_us", "pcba功能类别.gather"),
+            // dict.logistics.pcba.function.category.104
+            ("dict.logistics.pcba.function.category.104", "ja-JP", "GATHER_jp", "pcba功能类别.gather"),
+            // dict.logistics.pcba.function.category.104
+            ("dict.logistics.pcba.function.category.104", "zh-CN", "GATHER", "pcba功能类别.gather"),
+            // dict.logistics.pcba.function.category.104
+            ("dict.logistics.pcba.function.category.104", "zh-HK", "GATHER_hk", "pcba功能类别.gather"),
+
+            // dict.logistics.pcba.function.category.105
+            ("dict.logistics.pcba.function.category.105", "en-US", "GATHER A_us", "pcba功能类别.gather a"),
+            // dict.logistics.pcba.function.category.105
+            ("dict.logistics.pcba.function.category.105", "ja-JP", "GATHER A_jp", "pcba功能类别.gather a"),
+            // dict.logistics.pcba.function.category.105
+            ("dict.logistics.pcba.function.category.105", "zh-CN", "GATHER A", "pcba功能类别.gather a"),
+            // dict.logistics.pcba.function.category.105
+            ("dict.logistics.pcba.function.category.105", "zh-HK", "GATHER A_hk", "pcba功能类别.gather a"),
+
+            // dict.logistics.pcba.function.category.106
+            ("dict.logistics.pcba.function.category.106", "en-US", "GATHER ALT B_us", "pcba功能类别.gather alt b"),
+            // dict.logistics.pcba.function.category.106
+            ("dict.logistics.pcba.function.category.106", "ja-JP", "GATHER ALT B_jp", "pcba功能类别.gather alt b"),
+            // dict.logistics.pcba.function.category.106
+            ("dict.logistics.pcba.function.category.106", "zh-CN", "GATHER ALT B", "pcba功能类别.gather alt b"),
+            // dict.logistics.pcba.function.category.106
+            ("dict.logistics.pcba.function.category.106", "zh-HK", "GATHER ALT B_hk", "pcba功能类别.gather alt b"),
+
+            // dict.logistics.pcba.function.category.107
+            ("dict.logistics.pcba.function.category.107", "en-US", "GATHER ALT T_us", "pcba功能类别.gather alt t"),
+            // dict.logistics.pcba.function.category.107
+            ("dict.logistics.pcba.function.category.107", "ja-JP", "GATHER ALT T_jp", "pcba功能类别.gather alt t"),
+            // dict.logistics.pcba.function.category.107
+            ("dict.logistics.pcba.function.category.107", "zh-CN", "GATHER ALT T", "pcba功能类别.gather alt t"),
+            // dict.logistics.pcba.function.category.107
+            ("dict.logistics.pcba.function.category.107", "zh-HK", "GATHER ALT T_hk", "pcba功能类别.gather alt t"),
+
+            // dict.logistics.pcba.function.category.108
+            ("dict.logistics.pcba.function.category.108", "en-US", "GATHER B_us", "pcba功能类别.gather b"),
+            // dict.logistics.pcba.function.category.108
+            ("dict.logistics.pcba.function.category.108", "ja-JP", "GATHER B_jp", "pcba功能类别.gather b"),
+            // dict.logistics.pcba.function.category.108
+            ("dict.logistics.pcba.function.category.108", "zh-CN", "GATHER B", "pcba功能类别.gather b"),
+            // dict.logistics.pcba.function.category.108
+            ("dict.logistics.pcba.function.category.108", "zh-HK", "GATHER B_hk", "pcba功能类别.gather b"),
+
+            // dict.logistics.pcba.function.category.109
+            ("dict.logistics.pcba.function.category.109", "en-US", "GATHER T/B_us", "pcba功能类别.gather t/b"),
+            // dict.logistics.pcba.function.category.109
+            ("dict.logistics.pcba.function.category.109", "ja-JP", "GATHER T/B_jp", "pcba功能类别.gather t/b"),
+            // dict.logistics.pcba.function.category.109
+            ("dict.logistics.pcba.function.category.109", "zh-CN", "GATHER T/B", "pcba功能类别.gather t/b"),
+            // dict.logistics.pcba.function.category.109
+            ("dict.logistics.pcba.function.category.109", "zh-HK", "GATHER T/B_hk", "pcba功能类别.gather t/b"),
+
+            // dict.logistics.pcba.function.category.110
+            ("dict.logistics.pcba.function.category.110", "en-US", "GATHER C_us", "pcba功能类别.gather c"),
+            // dict.logistics.pcba.function.category.110
+            ("dict.logistics.pcba.function.category.110", "ja-JP", "GATHER C_jp", "pcba功能类别.gather c"),
+            // dict.logistics.pcba.function.category.110
+            ("dict.logistics.pcba.function.category.110", "zh-CN", "GATHER C", "pcba功能类别.gather c"),
+            // dict.logistics.pcba.function.category.110
+            ("dict.logistics.pcba.function.category.110", "zh-HK", "GATHER C_hk", "pcba功能类别.gather c"),
+
+            // dict.logistics.pcba.function.category.111
+            ("dict.logistics.pcba.function.category.111", "en-US", "GATHER T_us", "pcba功能类别.gather t"),
+            // dict.logistics.pcba.function.category.111
+            ("dict.logistics.pcba.function.category.111", "ja-JP", "GATHER T_jp", "pcba功能类别.gather t"),
+            // dict.logistics.pcba.function.category.111
+            ("dict.logistics.pcba.function.category.111", "zh-CN", "GATHER T", "pcba功能类别.gather t"),
+            // dict.logistics.pcba.function.category.111
+            ("dict.logistics.pcba.function.category.111", "zh-HK", "GATHER T_hk", "pcba功能类别.gather t"),
+
+            // dict.logistics.pcba.function.category.113
+            ("dict.logistics.pcba.function.category.113", "en-US", "GATHER J_us", "pcba功能类别.gather j"),
+            // dict.logistics.pcba.function.category.113
+            ("dict.logistics.pcba.function.category.113", "ja-JP", "GATHER J_jp", "pcba功能类别.gather j"),
+            // dict.logistics.pcba.function.category.113
+            ("dict.logistics.pcba.function.category.113", "zh-CN", "GATHER J", "pcba功能类别.gather j"),
+            // dict.logistics.pcba.function.category.113
+            ("dict.logistics.pcba.function.category.113", "zh-HK", "GATHER J_hk", "pcba功能类别.gather j"),
+
+            // dict.logistics.pcba.function.category.114
+            ("dict.logistics.pcba.function.category.114", "en-US", "IF_us", "pcba功能类别.if"),
+            // dict.logistics.pcba.function.category.114
+            ("dict.logistics.pcba.function.category.114", "ja-JP", "IF_jp", "pcba功能类别.if"),
+            // dict.logistics.pcba.function.category.114
+            ("dict.logistics.pcba.function.category.114", "zh-CN", "IF", "pcba功能类别.if"),
+            // dict.logistics.pcba.function.category.114
+            ("dict.logistics.pcba.function.category.114", "zh-HK", "IF_hk", "pcba功能类别.if"),
+
+            // dict.logistics.pcba.function.category.117
+            ("dict.logistics.pcba.function.category.117", "en-US", "IF B_us", "pcba功能类别.if b"),
+            // dict.logistics.pcba.function.category.117
+            ("dict.logistics.pcba.function.category.117", "ja-JP", "IF B_jp", "pcba功能类别.if b"),
+            // dict.logistics.pcba.function.category.117
+            ("dict.logistics.pcba.function.category.117", "zh-CN", "IF B", "pcba功能类别.if b"),
+            // dict.logistics.pcba.function.category.117
+            ("dict.logistics.pcba.function.category.117", "zh-HK", "IF B_hk", "pcba功能类别.if b"),
+
+            // dict.logistics.pcba.function.category.118
+            ("dict.logistics.pcba.function.category.118", "en-US", "IF T_us", "pcba功能类别.if t"),
+            // dict.logistics.pcba.function.category.118
+            ("dict.logistics.pcba.function.category.118", "ja-JP", "IF T_jp", "pcba功能类别.if t"),
+            // dict.logistics.pcba.function.category.118
+            ("dict.logistics.pcba.function.category.118", "zh-CN", "IF T", "pcba功能类别.if t"),
+            // dict.logistics.pcba.function.category.118
+            ("dict.logistics.pcba.function.category.118", "zh-HK", "IF T_hk", "pcba功能类别.if t"),
+
+            // dict.logistics.pcba.function.category.119
+            ("dict.logistics.pcba.function.category.119", "en-US", "INPUT_us", "pcba功能类别.input"),
+            // dict.logistics.pcba.function.category.119
+            ("dict.logistics.pcba.function.category.119", "ja-JP", "INPUT_jp", "pcba功能类别.input"),
+            // dict.logistics.pcba.function.category.119
+            ("dict.logistics.pcba.function.category.119", "zh-CN", "INPUT", "pcba功能类别.input"),
+            // dict.logistics.pcba.function.category.119
+            ("dict.logistics.pcba.function.category.119", "zh-HK", "INPUT_hk", "pcba功能类别.input"),
+
+            // dict.logistics.pcba.function.category.120
+            ("dict.logistics.pcba.function.category.120", "en-US", "IO_us", "pcba功能类别.io"),
+            // dict.logistics.pcba.function.category.120
+            ("dict.logistics.pcba.function.category.120", "ja-JP", "IO_jp", "pcba功能类别.io"),
+            // dict.logistics.pcba.function.category.120
+            ("dict.logistics.pcba.function.category.120", "zh-CN", "IO", "pcba功能类别.io"),
+            // dict.logistics.pcba.function.category.120
+            ("dict.logistics.pcba.function.category.120", "zh-HK", "IO_hk", "pcba功能类别.io"),
+
+            // dict.logistics.pcba.function.category.115
+            ("dict.logistics.pcba.function.category.115", "en-US", "IO B_us", "pcba功能类别.io b"),
+            // dict.logistics.pcba.function.category.115
+            ("dict.logistics.pcba.function.category.115", "ja-JP", "IO B_jp", "pcba功能类别.io b"),
+            // dict.logistics.pcba.function.category.115
+            ("dict.logistics.pcba.function.category.115", "zh-CN", "IO B", "pcba功能类别.io b"),
+            // dict.logistics.pcba.function.category.115
+            ("dict.logistics.pcba.function.category.115", "zh-HK", "IO B_hk", "pcba功能类别.io b"),
+
+            // dict.logistics.pcba.function.category.121
+            ("dict.logistics.pcba.function.category.121", "en-US", "IO T/B_us", "pcba功能类别.io t/b"),
+            // dict.logistics.pcba.function.category.121
+            ("dict.logistics.pcba.function.category.121", "ja-JP", "IO T/B_jp", "pcba功能类别.io t/b"),
+            // dict.logistics.pcba.function.category.121
+            ("dict.logistics.pcba.function.category.121", "zh-CN", "IO T/B", "pcba功能类别.io t/b"),
+            // dict.logistics.pcba.function.category.121
+            ("dict.logistics.pcba.function.category.121", "zh-HK", "IO T/B_hk", "pcba功能类别.io t/b"),
+
+            // dict.logistics.pcba.function.category.122
+            ("dict.logistics.pcba.function.category.122", "en-US", "IO T_us", "pcba功能类别.io t"),
+            // dict.logistics.pcba.function.category.122
+            ("dict.logistics.pcba.function.category.122", "ja-JP", "IO T_jp", "pcba功能类别.io t"),
+            // dict.logistics.pcba.function.category.122
+            ("dict.logistics.pcba.function.category.122", "zh-CN", "IO T", "pcba功能类别.io t"),
+            // dict.logistics.pcba.function.category.122
+            ("dict.logistics.pcba.function.category.122", "zh-HK", "IO T_hk", "pcba功能类别.io t"),
+
+            // dict.logistics.pcba.function.category.123
+            ("dict.logistics.pcba.function.category.123", "en-US", "JACK_us", "pcba功能类别.jack"),
+            // dict.logistics.pcba.function.category.123
+            ("dict.logistics.pcba.function.category.123", "ja-JP", "JACK_jp", "pcba功能类别.jack"),
+            // dict.logistics.pcba.function.category.123
+            ("dict.logistics.pcba.function.category.123", "zh-CN", "JACK", "pcba功能类别.jack"),
+            // dict.logistics.pcba.function.category.123
+            ("dict.logistics.pcba.function.category.123", "zh-HK", "JACK_hk", "pcba功能类别.jack"),
+
+            // dict.logistics.pcba.function.category.124
+            ("dict.logistics.pcba.function.category.124", "en-US", "JACK A_us", "pcba功能类别.jack a"),
+            // dict.logistics.pcba.function.category.124
+            ("dict.logistics.pcba.function.category.124", "ja-JP", "JACK A_jp", "pcba功能类别.jack a"),
+            // dict.logistics.pcba.function.category.124
+            ("dict.logistics.pcba.function.category.124", "zh-CN", "JACK A", "pcba功能类别.jack a"),
+            // dict.logistics.pcba.function.category.124
+            ("dict.logistics.pcba.function.category.124", "zh-HK", "JACK A_hk", "pcba功能类别.jack a"),
+
+            // dict.logistics.pcba.function.category.125
+            ("dict.logistics.pcba.function.category.125", "en-US", "JACK B_us", "pcba功能类别.jack b"),
+            // dict.logistics.pcba.function.category.125
+            ("dict.logistics.pcba.function.category.125", "ja-JP", "JACK B_jp", "pcba功能类别.jack b"),
+            // dict.logistics.pcba.function.category.125
+            ("dict.logistics.pcba.function.category.125", "zh-CN", "JACK B", "pcba功能类别.jack b"),
+            // dict.logistics.pcba.function.category.125
+            ("dict.logistics.pcba.function.category.125", "zh-HK", "JACK B_hk", "pcba功能类别.jack b"),
+
+            // dict.logistics.pcba.function.category.126
+            ("dict.logistics.pcba.function.category.126", "en-US", "JACK T/B_us", "pcba功能类别.jack t/b"),
+            // dict.logistics.pcba.function.category.126
+            ("dict.logistics.pcba.function.category.126", "ja-JP", "JACK T/B_jp", "pcba功能类别.jack t/b"),
+            // dict.logistics.pcba.function.category.126
+            ("dict.logistics.pcba.function.category.126", "zh-CN", "JACK T/B", "pcba功能类别.jack t/b"),
+            // dict.logistics.pcba.function.category.126
+            ("dict.logistics.pcba.function.category.126", "zh-HK", "JACK T/B_hk", "pcba功能类别.jack t/b"),
+
+            // dict.logistics.pcba.function.category.127
+            ("dict.logistics.pcba.function.category.127", "en-US", "JACK T_us", "pcba功能类别.jack t"),
+            // dict.logistics.pcba.function.category.127
+            ("dict.logistics.pcba.function.category.127", "ja-JP", "JACK T_jp", "pcba功能类别.jack t"),
+            // dict.logistics.pcba.function.category.127
+            ("dict.logistics.pcba.function.category.127", "zh-CN", "JACK T", "pcba功能类别.jack t"),
+            // dict.logistics.pcba.function.category.127
+            ("dict.logistics.pcba.function.category.127", "zh-HK", "JACK T_hk", "pcba功能类别.jack t"),
+
+            // dict.logistics.pcba.function.category.128
+            ("dict.logistics.pcba.function.category.128", "en-US", "JACK-00 B_us", "pcba功能类别.jack-00 b"),
+            // dict.logistics.pcba.function.category.128
+            ("dict.logistics.pcba.function.category.128", "ja-JP", "JACK-00 B_jp", "pcba功能类别.jack-00 b"),
+            // dict.logistics.pcba.function.category.128
+            ("dict.logistics.pcba.function.category.128", "zh-CN", "JACK-00 B", "pcba功能类别.jack-00 b"),
+            // dict.logistics.pcba.function.category.128
+            ("dict.logistics.pcba.function.category.128", "zh-HK", "JACK-00 B_hk", "pcba功能类别.jack-00 b"),
+
+            // dict.logistics.pcba.function.category.132
+            ("dict.logistics.pcba.function.category.132", "en-US", "JACK-00 T_us", "pcba功能类别.jack-00 t"),
+            // dict.logistics.pcba.function.category.132
+            ("dict.logistics.pcba.function.category.132", "ja-JP", "JACK-00 T_jp", "pcba功能类别.jack-00 t"),
+            // dict.logistics.pcba.function.category.132
+            ("dict.logistics.pcba.function.category.132", "zh-CN", "JACK-00 T", "pcba功能类别.jack-00 t"),
+            // dict.logistics.pcba.function.category.132
+            ("dict.logistics.pcba.function.category.132", "zh-HK", "JACK-00 T_hk", "pcba功能类别.jack-00 t"),
+
+            // dict.logistics.pcba.function.category.133
+            ("dict.logistics.pcba.function.category.133", "en-US", "JACK-10 B_us", "pcba功能类别.jack-10 b"),
+            // dict.logistics.pcba.function.category.133
+            ("dict.logistics.pcba.function.category.133", "ja-JP", "JACK-10 B_jp", "pcba功能类别.jack-10 b"),
+            // dict.logistics.pcba.function.category.133
+            ("dict.logistics.pcba.function.category.133", "zh-CN", "JACK-10 B", "pcba功能类别.jack-10 b"),
+            // dict.logistics.pcba.function.category.133
+            ("dict.logistics.pcba.function.category.133", "zh-HK", "JACK-10 B_hk", "pcba功能类别.jack-10 b"),
+
+            // dict.logistics.pcba.function.category.134
+            ("dict.logistics.pcba.function.category.134", "en-US", "JACK-10 T_us", "pcba功能类别.jack-10 t"),
+            // dict.logistics.pcba.function.category.134
+            ("dict.logistics.pcba.function.category.134", "ja-JP", "JACK-10 T_jp", "pcba功能类别.jack-10 t"),
+            // dict.logistics.pcba.function.category.134
+            ("dict.logistics.pcba.function.category.134", "zh-CN", "JACK-10 T", "pcba功能类别.jack-10 t"),
+            // dict.logistics.pcba.function.category.134
+            ("dict.logistics.pcba.function.category.134", "zh-HK", "JACK-10 T_hk", "pcba功能类别.jack-10 t"),
+
+            // dict.logistics.pcba.function.category.135
+            ("dict.logistics.pcba.function.category.135", "en-US", "JACK-20 B_us", "pcba功能类别.jack-20 b"),
+            // dict.logistics.pcba.function.category.135
+            ("dict.logistics.pcba.function.category.135", "ja-JP", "JACK-20 B_jp", "pcba功能类别.jack-20 b"),
+            // dict.logistics.pcba.function.category.135
+            ("dict.logistics.pcba.function.category.135", "zh-CN", "JACK-20 B", "pcba功能类别.jack-20 b"),
+            // dict.logistics.pcba.function.category.135
+            ("dict.logistics.pcba.function.category.135", "zh-HK", "JACK-20 B_hk", "pcba功能类别.jack-20 b"),
+
+            // dict.logistics.pcba.function.category.136
+            ("dict.logistics.pcba.function.category.136", "en-US", "JACK-20 T_us", "pcba功能类别.jack-20 t"),
+            // dict.logistics.pcba.function.category.136
+            ("dict.logistics.pcba.function.category.136", "ja-JP", "JACK-20 T_jp", "pcba功能类别.jack-20 t"),
+            // dict.logistics.pcba.function.category.136
+            ("dict.logistics.pcba.function.category.136", "zh-CN", "JACK-20 T", "pcba功能类别.jack-20 t"),
+            // dict.logistics.pcba.function.category.136
+            ("dict.logistics.pcba.function.category.136", "zh-HK", "JACK-20 T_hk", "pcba功能类别.jack-20 t"),
+
+            // dict.logistics.pcba.function.category.137
+            ("dict.logistics.pcba.function.category.137", "en-US", "JACK-30 B_us", "pcba功能类别.jack-30 b"),
+            // dict.logistics.pcba.function.category.137
+            ("dict.logistics.pcba.function.category.137", "ja-JP", "JACK-30 B_jp", "pcba功能类别.jack-30 b"),
+            // dict.logistics.pcba.function.category.137
+            ("dict.logistics.pcba.function.category.137", "zh-CN", "JACK-30 B", "pcba功能类别.jack-30 b"),
+            // dict.logistics.pcba.function.category.137
+            ("dict.logistics.pcba.function.category.137", "zh-HK", "JACK-30 B_hk", "pcba功能类别.jack-30 b"),
+
+            // dict.logistics.pcba.function.category.138
+            ("dict.logistics.pcba.function.category.138", "en-US", "JACK-30 T_us", "pcba功能类别.jack-30 t"),
+            // dict.logistics.pcba.function.category.138
+            ("dict.logistics.pcba.function.category.138", "ja-JP", "JACK-30 T_jp", "pcba功能类别.jack-30 t"),
+            // dict.logistics.pcba.function.category.138
+            ("dict.logistics.pcba.function.category.138", "zh-CN", "JACK-30 T", "pcba功能类别.jack-30 t"),
+            // dict.logistics.pcba.function.category.138
+            ("dict.logistics.pcba.function.category.138", "zh-HK", "JACK-30 T_hk", "pcba功能类别.jack-30 t"),
+
+            // dict.logistics.pcba.function.category.139
+            ("dict.logistics.pcba.function.category.139", "en-US", "JOIN_us", "pcba功能类别.join"),
+            // dict.logistics.pcba.function.category.139
+            ("dict.logistics.pcba.function.category.139", "ja-JP", "JOIN_jp", "pcba功能类别.join"),
+            // dict.logistics.pcba.function.category.139
+            ("dict.logistics.pcba.function.category.139", "zh-CN", "JOIN", "pcba功能类别.join"),
+            // dict.logistics.pcba.function.category.139
+            ("dict.logistics.pcba.function.category.139", "zh-HK", "JOIN_hk", "pcba功能类别.join"),
+
+            // dict.logistics.pcba.function.category.140
+            ("dict.logistics.pcba.function.category.140", "en-US", "JOINTC A_us", "pcba功能类别.jointc a"),
+            // dict.logistics.pcba.function.category.140
+            ("dict.logistics.pcba.function.category.140", "ja-JP", "JOINTC A_jp", "pcba功能类别.jointc a"),
+            // dict.logistics.pcba.function.category.140
+            ("dict.logistics.pcba.function.category.140", "zh-CN", "JOINTC A", "pcba功能类别.jointc a"),
+            // dict.logistics.pcba.function.category.140
+            ("dict.logistics.pcba.function.category.140", "zh-HK", "JOINTC A_hk", "pcba功能类别.jointc a"),
+
+            // dict.logistics.pcba.function.category.141
+            ("dict.logistics.pcba.function.category.141", "en-US", "JOINTC B_us", "pcba功能类别.jointc b"),
+            // dict.logistics.pcba.function.category.141
+            ("dict.logistics.pcba.function.category.141", "ja-JP", "JOINTC B_jp", "pcba功能类别.jointc b"),
+            // dict.logistics.pcba.function.category.141
+            ("dict.logistics.pcba.function.category.141", "zh-CN", "JOINTC B", "pcba功能类别.jointc b"),
+            // dict.logistics.pcba.function.category.141
+            ("dict.logistics.pcba.function.category.141", "zh-HK", "JOINTC B_hk", "pcba功能类别.jointc b"),
+
+            // dict.logistics.pcba.function.category.142
+            ("dict.logistics.pcba.function.category.142", "en-US", "JOINTC T_us", "pcba功能类别.jointc t"),
+            // dict.logistics.pcba.function.category.142
+            ("dict.logistics.pcba.function.category.142", "ja-JP", "JOINTC T_jp", "pcba功能类别.jointc t"),
+            // dict.logistics.pcba.function.category.142
+            ("dict.logistics.pcba.function.category.142", "zh-CN", "JOINTC T", "pcba功能类别.jointc t"),
+            // dict.logistics.pcba.function.category.142
+            ("dict.logistics.pcba.function.category.142", "zh-HK", "JOINTC T_hk", "pcba功能类别.jointc t"),
+
+            // dict.logistics.pcba.function.category.143
+            ("dict.logistics.pcba.function.category.143", "en-US", "JOINTF A_us", "pcba功能类别.jointf a"),
+            // dict.logistics.pcba.function.category.143
+            ("dict.logistics.pcba.function.category.143", "ja-JP", "JOINTF A_jp", "pcba功能类别.jointf a"),
+            // dict.logistics.pcba.function.category.143
+            ("dict.logistics.pcba.function.category.143", "zh-CN", "JOINTF A", "pcba功能类别.jointf a"),
+            // dict.logistics.pcba.function.category.143
+            ("dict.logistics.pcba.function.category.143", "zh-HK", "JOINTF A_hk", "pcba功能类别.jointf a"),
+
+            // dict.logistics.pcba.function.category.144
+            ("dict.logistics.pcba.function.category.144", "en-US", "JOINTF B_us", "pcba功能类别.jointf b"),
+            // dict.logistics.pcba.function.category.144
+            ("dict.logistics.pcba.function.category.144", "ja-JP", "JOINTF B_jp", "pcba功能类别.jointf b"),
+            // dict.logistics.pcba.function.category.144
+            ("dict.logistics.pcba.function.category.144", "zh-CN", "JOINTF B", "pcba功能类别.jointf b"),
+            // dict.logistics.pcba.function.category.144
+            ("dict.logistics.pcba.function.category.144", "zh-HK", "JOINTF B_hk", "pcba功能类别.jointf b"),
+
+            // dict.logistics.pcba.function.category.145
+            ("dict.logistics.pcba.function.category.145", "en-US", "JOINTF T_us", "pcba功能类别.jointf t"),
+            // dict.logistics.pcba.function.category.145
+            ("dict.logistics.pcba.function.category.145", "ja-JP", "JOINTF T_jp", "pcba功能类别.jointf t"),
+            // dict.logistics.pcba.function.category.145
+            ("dict.logistics.pcba.function.category.145", "zh-CN", "JOINTF T", "pcba功能类别.jointf t"),
+            // dict.logistics.pcba.function.category.145
+            ("dict.logistics.pcba.function.category.145", "zh-HK", "JOINTF T_hk", "pcba功能类别.jointf t"),
+
+            // dict.logistics.pcba.function.category.146
+            ("dict.logistics.pcba.function.category.146", "en-US", "JOINTS_us", "pcba功能类别.joints"),
+            // dict.logistics.pcba.function.category.146
+            ("dict.logistics.pcba.function.category.146", "ja-JP", "JOINTS_jp", "pcba功能类别.joints"),
+            // dict.logistics.pcba.function.category.146
+            ("dict.logistics.pcba.function.category.146", "zh-CN", "JOINTS", "pcba功能类别.joints"),
+            // dict.logistics.pcba.function.category.146
+            ("dict.logistics.pcba.function.category.146", "zh-HK", "JOINTS_hk", "pcba功能类别.joints"),
+
+            // dict.logistics.pcba.function.category.147
+            ("dict.logistics.pcba.function.category.147", "en-US", "KEY_us", "pcba功能类别.key"),
+            // dict.logistics.pcba.function.category.147
+            ("dict.logistics.pcba.function.category.147", "ja-JP", "KEY_jp", "pcba功能类别.key"),
+            // dict.logistics.pcba.function.category.147
+            ("dict.logistics.pcba.function.category.147", "zh-CN", "KEY", "pcba功能类别.key"),
+            // dict.logistics.pcba.function.category.147
+            ("dict.logistics.pcba.function.category.147", "zh-HK", "KEY_hk", "pcba功能类别.key"),
+
+            // dict.logistics.pcba.function.category.148
+            ("dict.logistics.pcba.function.category.148", "en-US", "KEY B_us", "pcba功能类别.key b"),
+            // dict.logistics.pcba.function.category.148
+            ("dict.logistics.pcba.function.category.148", "ja-JP", "KEY B_jp", "pcba功能类别.key b"),
+            // dict.logistics.pcba.function.category.148
+            ("dict.logistics.pcba.function.category.148", "zh-CN", "KEY B", "pcba功能类别.key b"),
+            // dict.logistics.pcba.function.category.148
+            ("dict.logistics.pcba.function.category.148", "zh-HK", "KEY B_hk", "pcba功能类别.key b"),
+
+            // dict.logistics.pcba.function.category.149
+            ("dict.logistics.pcba.function.category.149", "en-US", "KEY T/B_us", "pcba功能类别.key t/b"),
+            // dict.logistics.pcba.function.category.149
+            ("dict.logistics.pcba.function.category.149", "ja-JP", "KEY T/B_jp", "pcba功能类别.key t/b"),
+            // dict.logistics.pcba.function.category.149
+            ("dict.logistics.pcba.function.category.149", "zh-CN", "KEY T/B", "pcba功能类别.key t/b"),
+            // dict.logistics.pcba.function.category.149
+            ("dict.logistics.pcba.function.category.149", "zh-HK", "KEY T/B_hk", "pcba功能类别.key t/b"),
+
+            // dict.logistics.pcba.function.category.150
+            ("dict.logistics.pcba.function.category.150", "en-US", "KEY T_us", "pcba功能类别.key t"),
+            // dict.logistics.pcba.function.category.150
+            ("dict.logistics.pcba.function.category.150", "ja-JP", "KEY T_jp", "pcba功能类别.key t"),
+            // dict.logistics.pcba.function.category.150
+            ("dict.logistics.pcba.function.category.150", "zh-CN", "KEY T", "pcba功能类别.key t"),
+            // dict.logistics.pcba.function.category.150
+            ("dict.logistics.pcba.function.category.150", "zh-HK", "KEY T_hk", "pcba功能类别.key t"),
+
+            // dict.logistics.pcba.function.category.151
+            ("dict.logistics.pcba.function.category.151", "en-US", "LCD A_us", "pcba功能类别.lcd a"),
+            // dict.logistics.pcba.function.category.151
+            ("dict.logistics.pcba.function.category.151", "ja-JP", "LCD A_jp", "pcba功能类别.lcd a"),
+            // dict.logistics.pcba.function.category.151
+            ("dict.logistics.pcba.function.category.151", "zh-CN", "LCD A", "pcba功能类别.lcd a"),
+            // dict.logistics.pcba.function.category.151
+            ("dict.logistics.pcba.function.category.151", "zh-HK", "LCD A_hk", "pcba功能类别.lcd a"),
+
+            // dict.logistics.pcba.function.category.152
+            ("dict.logistics.pcba.function.category.152", "en-US", "LCD B_us", "pcba功能类别.lcd b"),
+            // dict.logistics.pcba.function.category.152
+            ("dict.logistics.pcba.function.category.152", "ja-JP", "LCD B_jp", "pcba功能类别.lcd b"),
+            // dict.logistics.pcba.function.category.152
+            ("dict.logistics.pcba.function.category.152", "zh-CN", "LCD B", "pcba功能类别.lcd b"),
+            // dict.logistics.pcba.function.category.152
+            ("dict.logistics.pcba.function.category.152", "zh-HK", "LCD B_hk", "pcba功能类别.lcd b"),
+
+            // dict.logistics.pcba.function.category.153
+            ("dict.logistics.pcba.function.category.153", "en-US", "LCD T/B_us", "pcba功能类别.lcd t/b"),
+            // dict.logistics.pcba.function.category.153
+            ("dict.logistics.pcba.function.category.153", "ja-JP", "LCD T/B_jp", "pcba功能类别.lcd t/b"),
+            // dict.logistics.pcba.function.category.153
+            ("dict.logistics.pcba.function.category.153", "zh-CN", "LCD T/B", "pcba功能类别.lcd t/b"),
+            // dict.logistics.pcba.function.category.153
+            ("dict.logistics.pcba.function.category.153", "zh-HK", "LCD T/B_hk", "pcba功能类别.lcd t/b"),
+
+            // dict.logistics.pcba.function.category.154
+            ("dict.logistics.pcba.function.category.154", "en-US", "LCD EX_us", "pcba功能类别.lcd ex"),
+            // dict.logistics.pcba.function.category.154
+            ("dict.logistics.pcba.function.category.154", "ja-JP", "LCD EX_jp", "pcba功能类别.lcd ex"),
+            // dict.logistics.pcba.function.category.154
+            ("dict.logistics.pcba.function.category.154", "zh-CN", "LCD EX", "pcba功能类别.lcd ex"),
+            // dict.logistics.pcba.function.category.154
+            ("dict.logistics.pcba.function.category.154", "zh-HK", "LCD EX_hk", "pcba功能类别.lcd ex"),
+
+            // dict.logistics.pcba.function.category.155
+            ("dict.logistics.pcba.function.category.155", "en-US", "LCD EX B_us", "pcba功能类别.lcd ex b"),
+            // dict.logistics.pcba.function.category.155
+            ("dict.logistics.pcba.function.category.155", "ja-JP", "LCD EX B_jp", "pcba功能类别.lcd ex b"),
+            // dict.logistics.pcba.function.category.155
+            ("dict.logistics.pcba.function.category.155", "zh-CN", "LCD EX B", "pcba功能类别.lcd ex b"),
+            // dict.logistics.pcba.function.category.155
+            ("dict.logistics.pcba.function.category.155", "zh-HK", "LCD EX B_hk", "pcba功能类别.lcd ex b"),
+
+            // dict.logistics.pcba.function.category.156
+            ("dict.logistics.pcba.function.category.156", "en-US", "LCD EX T/B_us", "pcba功能类别.lcd ex t/b"),
+            // dict.logistics.pcba.function.category.156
+            ("dict.logistics.pcba.function.category.156", "ja-JP", "LCD EX T/B_jp", "pcba功能类别.lcd ex t/b"),
+            // dict.logistics.pcba.function.category.156
+            ("dict.logistics.pcba.function.category.156", "zh-CN", "LCD EX T/B", "pcba功能类别.lcd ex t/b"),
+            // dict.logistics.pcba.function.category.156
+            ("dict.logistics.pcba.function.category.156", "zh-HK", "LCD EX T/B_hk", "pcba功能类别.lcd ex t/b"),
+
+            // dict.logistics.pcba.function.category.157
+            ("dict.logistics.pcba.function.category.157", "en-US", "LCD EX T_us", "pcba功能类别.lcd ex t"),
+            // dict.logistics.pcba.function.category.157
+            ("dict.logistics.pcba.function.category.157", "ja-JP", "LCD EX T_jp", "pcba功能类别.lcd ex t"),
+            // dict.logistics.pcba.function.category.157
+            ("dict.logistics.pcba.function.category.157", "zh-CN", "LCD EX T", "pcba功能类别.lcd ex t"),
+            // dict.logistics.pcba.function.category.157
+            ("dict.logistics.pcba.function.category.157", "zh-HK", "LCD EX T_hk", "pcba功能类别.lcd ex t"),
+
+            // dict.logistics.pcba.function.category.159
+            ("dict.logistics.pcba.function.category.159", "en-US", "LCD T_us", "pcba功能类别.lcd t"),
+            // dict.logistics.pcba.function.category.159
+            ("dict.logistics.pcba.function.category.159", "ja-JP", "LCD T_jp", "pcba功能类别.lcd t"),
+            // dict.logistics.pcba.function.category.159
+            ("dict.logistics.pcba.function.category.159", "zh-CN", "LCD T", "pcba功能类别.lcd t"),
+            // dict.logistics.pcba.function.category.159
+            ("dict.logistics.pcba.function.category.159", "zh-HK", "LCD T_hk", "pcba功能类别.lcd t"),
+
+            // dict.logistics.pcba.function.category.158
+            ("dict.logistics.pcba.function.category.158", "en-US", "MADI B_us", "pcba功能类别.madi b"),
+            // dict.logistics.pcba.function.category.158
+            ("dict.logistics.pcba.function.category.158", "ja-JP", "MADI B_jp", "pcba功能类别.madi b"),
+            // dict.logistics.pcba.function.category.158
+            ("dict.logistics.pcba.function.category.158", "zh-CN", "MADI B", "pcba功能类别.madi b"),
+            // dict.logistics.pcba.function.category.158
+            ("dict.logistics.pcba.function.category.158", "zh-HK", "MADI B_hk", "pcba功能类别.madi b"),
+
+            // dict.logistics.pcba.function.category.161
+            ("dict.logistics.pcba.function.category.161", "en-US", "MADI T/B_us", "pcba功能类别.madi t/b"),
+            // dict.logistics.pcba.function.category.161
+            ("dict.logistics.pcba.function.category.161", "ja-JP", "MADI T/B_jp", "pcba功能类别.madi t/b"),
+            // dict.logistics.pcba.function.category.161
+            ("dict.logistics.pcba.function.category.161", "zh-CN", "MADI T/B", "pcba功能类别.madi t/b"),
+            // dict.logistics.pcba.function.category.161
+            ("dict.logistics.pcba.function.category.161", "zh-HK", "MADI T/B_hk", "pcba功能类别.madi t/b"),
+
+            // dict.logistics.pcba.function.category.162
+            ("dict.logistics.pcba.function.category.162", "en-US", "MADI T_us", "pcba功能类别.madi t"),
+            // dict.logistics.pcba.function.category.162
+            ("dict.logistics.pcba.function.category.162", "ja-JP", "MADI T_jp", "pcba功能类别.madi t"),
+            // dict.logistics.pcba.function.category.162
+            ("dict.logistics.pcba.function.category.162", "zh-CN", "MADI T", "pcba功能类别.madi t"),
+            // dict.logistics.pcba.function.category.162
+            ("dict.logistics.pcba.function.category.162", "zh-HK", "MADI T_hk", "pcba功能类别.madi t"),
+
+            // dict.logistics.pcba.function.category.163
+            ("dict.logistics.pcba.function.category.163", "en-US", "MAFAD A_us", "pcba功能类别.mafad a"),
+            // dict.logistics.pcba.function.category.163
+            ("dict.logistics.pcba.function.category.163", "ja-JP", "MAFAD A_jp", "pcba功能类别.mafad a"),
+            // dict.logistics.pcba.function.category.163
+            ("dict.logistics.pcba.function.category.163", "zh-CN", "MAFAD A", "pcba功能类别.mafad a"),
+            // dict.logistics.pcba.function.category.163
+            ("dict.logistics.pcba.function.category.163", "zh-HK", "MAFAD A_hk", "pcba功能类别.mafad a"),
+
+            // dict.logistics.pcba.function.category.164
+            ("dict.logistics.pcba.function.category.164", "en-US", "MAFAD B_us", "pcba功能类别.mafad b"),
+            // dict.logistics.pcba.function.category.164
+            ("dict.logistics.pcba.function.category.164", "ja-JP", "MAFAD B_jp", "pcba功能类别.mafad b"),
+            // dict.logistics.pcba.function.category.164
+            ("dict.logistics.pcba.function.category.164", "zh-CN", "MAFAD B", "pcba功能类别.mafad b"),
+            // dict.logistics.pcba.function.category.164
+            ("dict.logistics.pcba.function.category.164", "zh-HK", "MAFAD B_hk", "pcba功能类别.mafad b"),
+
+            // dict.logistics.pcba.function.category.166
+            ("dict.logistics.pcba.function.category.166", "en-US", "MAFAD T/B_us", "pcba功能类别.mafad t/b"),
+            // dict.logistics.pcba.function.category.166
+            ("dict.logistics.pcba.function.category.166", "ja-JP", "MAFAD T/B_jp", "pcba功能类别.mafad t/b"),
+            // dict.logistics.pcba.function.category.166
+            ("dict.logistics.pcba.function.category.166", "zh-CN", "MAFAD T/B", "pcba功能类别.mafad t/b"),
+            // dict.logistics.pcba.function.category.166
+            ("dict.logistics.pcba.function.category.166", "zh-HK", "MAFAD T/B_hk", "pcba功能类别.mafad t/b"),
+
+            // dict.logistics.pcba.function.category.169
+            ("dict.logistics.pcba.function.category.169", "en-US", "MAFAD T_us", "pcba功能类别.mafad t"),
+            // dict.logistics.pcba.function.category.169
+            ("dict.logistics.pcba.function.category.169", "ja-JP", "MAFAD T_jp", "pcba功能类别.mafad t"),
+            // dict.logistics.pcba.function.category.169
+            ("dict.logistics.pcba.function.category.169", "zh-CN", "MAFAD T", "pcba功能类别.mafad t"),
+            // dict.logistics.pcba.function.category.169
+            ("dict.logistics.pcba.function.category.169", "zh-HK", "MAFAD T_hk", "pcba功能类别.mafad t"),
+
+            // dict.logistics.pcba.function.category.168
+            ("dict.logistics.pcba.function.category.168", "en-US", "MAIN_us", "pcba功能类别.main"),
+            // dict.logistics.pcba.function.category.168
+            ("dict.logistics.pcba.function.category.168", "ja-JP", "MAIN_jp", "pcba功能类别.main"),
+            // dict.logistics.pcba.function.category.168
+            ("dict.logistics.pcba.function.category.168", "zh-CN", "MAIN", "pcba功能类别.main"),
+            // dict.logistics.pcba.function.category.168
+            ("dict.logistics.pcba.function.category.168", "zh-HK", "MAIN_hk", "pcba功能类别.main"),
+
+            // dict.logistics.pcba.function.category.171
+            ("dict.logistics.pcba.function.category.171", "en-US", "MAIN A_us", "pcba功能类别.main a"),
+            // dict.logistics.pcba.function.category.171
+            ("dict.logistics.pcba.function.category.171", "ja-JP", "MAIN A_jp", "pcba功能类别.main a"),
+            // dict.logistics.pcba.function.category.171
+            ("dict.logistics.pcba.function.category.171", "zh-CN", "MAIN A", "pcba功能类别.main a"),
+            // dict.logistics.pcba.function.category.171
+            ("dict.logistics.pcba.function.category.171", "zh-HK", "MAIN A_hk", "pcba功能类别.main a"),
+
+            // dict.logistics.pcba.function.category.172
+            ("dict.logistics.pcba.function.category.172", "en-US", "MAIN ALT B_us", "pcba功能类别.main alt b"),
+            // dict.logistics.pcba.function.category.172
+            ("dict.logistics.pcba.function.category.172", "ja-JP", "MAIN ALT B_jp", "pcba功能类别.main alt b"),
+            // dict.logistics.pcba.function.category.172
+            ("dict.logistics.pcba.function.category.172", "zh-CN", "MAIN ALT B", "pcba功能类别.main alt b"),
+            // dict.logistics.pcba.function.category.172
+            ("dict.logistics.pcba.function.category.172", "zh-HK", "MAIN ALT B_hk", "pcba功能类别.main alt b"),
+
+            // dict.logistics.pcba.function.category.173
+            ("dict.logistics.pcba.function.category.173", "en-US", "MAIN ALT T_us", "pcba功能类别.main alt t"),
+            // dict.logistics.pcba.function.category.173
+            ("dict.logistics.pcba.function.category.173", "ja-JP", "MAIN ALT T_jp", "pcba功能类别.main alt t"),
+            // dict.logistics.pcba.function.category.173
+            ("dict.logistics.pcba.function.category.173", "zh-CN", "MAIN ALT T", "pcba功能类别.main alt t"),
+            // dict.logistics.pcba.function.category.173
+            ("dict.logistics.pcba.function.category.173", "zh-HK", "MAIN ALT T_hk", "pcba功能类别.main alt t"),
+
+            // dict.logistics.pcba.function.category.174
+            ("dict.logistics.pcba.function.category.174", "en-US", "MAIN B_us", "pcba功能类别.main b"),
+            // dict.logistics.pcba.function.category.174
+            ("dict.logistics.pcba.function.category.174", "ja-JP", "MAIN B_jp", "pcba功能类别.main b"),
+            // dict.logistics.pcba.function.category.174
+            ("dict.logistics.pcba.function.category.174", "zh-CN", "MAIN B", "pcba功能类别.main b"),
+            // dict.logistics.pcba.function.category.174
+            ("dict.logistics.pcba.function.category.174", "zh-HK", "MAIN B_hk", "pcba功能类别.main b"),
+
+            // dict.logistics.pcba.function.category.175
+            ("dict.logistics.pcba.function.category.175", "en-US", "MAIN T/B_us", "pcba功能类别.main t/b"),
+            // dict.logistics.pcba.function.category.175
+            ("dict.logistics.pcba.function.category.175", "ja-JP", "MAIN T/B_jp", "pcba功能类别.main t/b"),
+            // dict.logistics.pcba.function.category.175
+            ("dict.logistics.pcba.function.category.175", "zh-CN", "MAIN T/B", "pcba功能类别.main t/b"),
+            // dict.logistics.pcba.function.category.175
+            ("dict.logistics.pcba.function.category.175", "zh-HK", "MAIN T/B_hk", "pcba功能类别.main t/b"),
+
+            // dict.logistics.pcba.function.category.177
+            ("dict.logistics.pcba.function.category.177", "en-US", "MAIN T_us", "pcba功能类别.main t"),
+            // dict.logistics.pcba.function.category.177
+            ("dict.logistics.pcba.function.category.177", "ja-JP", "MAIN T_jp", "pcba功能类别.main t"),
+            // dict.logistics.pcba.function.category.177
+            ("dict.logistics.pcba.function.category.177", "zh-CN", "MAIN T", "pcba功能类别.main t"),
+            // dict.logistics.pcba.function.category.177
+            ("dict.logistics.pcba.function.category.177", "zh-HK", "MAIN T_hk", "pcba功能类别.main t"),
+
+            // dict.logistics.pcba.function.category.176
+            ("dict.logistics.pcba.function.category.176", "en-US", "MOTHER T/B_us", "pcba功能类别.mother t/b"),
+            // dict.logistics.pcba.function.category.176
+            ("dict.logistics.pcba.function.category.176", "ja-JP", "MOTHER T/B_jp", "pcba功能类别.mother t/b"),
+            // dict.logistics.pcba.function.category.176
+            ("dict.logistics.pcba.function.category.176", "zh-CN", "MOTHER T/B", "pcba功能类别.mother t/b"),
+            // dict.logistics.pcba.function.category.176
+            ("dict.logistics.pcba.function.category.176", "zh-HK", "MOTHER T/B_hk", "pcba功能类别.mother t/b"),
+
+            // dict.logistics.pcba.function.category.179
+            ("dict.logistics.pcba.function.category.179", "en-US", "METER_us", "pcba功能类别.meter"),
+            // dict.logistics.pcba.function.category.179
+            ("dict.logistics.pcba.function.category.179", "ja-JP", "METER_jp", "pcba功能类别.meter"),
+            // dict.logistics.pcba.function.category.179
+            ("dict.logistics.pcba.function.category.179", "zh-CN", "METER", "pcba功能类别.meter"),
+            // dict.logistics.pcba.function.category.179
+            ("dict.logistics.pcba.function.category.179", "zh-HK", "METER_hk", "pcba功能类别.meter"),
+
+            // dict.logistics.pcba.function.category.180
+            ("dict.logistics.pcba.function.category.180", "en-US", "MIC_us", "pcba功能类别.mic"),
+            // dict.logistics.pcba.function.category.180
+            ("dict.logistics.pcba.function.category.180", "ja-JP", "MIC_jp", "pcba功能类别.mic"),
+            // dict.logistics.pcba.function.category.180
+            ("dict.logistics.pcba.function.category.180", "zh-CN", "MIC", "pcba功能类别.mic"),
+            // dict.logistics.pcba.function.category.180
+            ("dict.logistics.pcba.function.category.180", "zh-HK", "MIC_hk", "pcba功能类别.mic"),
+
+            // dict.logistics.pcba.function.category.181
+            ("dict.logistics.pcba.function.category.181", "en-US", "NAUB B_us", "pcba功能类别.naub b"),
+            // dict.logistics.pcba.function.category.181
+            ("dict.logistics.pcba.function.category.181", "ja-JP", "NAUB B_jp", "pcba功能类别.naub b"),
+            // dict.logistics.pcba.function.category.181
+            ("dict.logistics.pcba.function.category.181", "zh-CN", "NAUB B", "pcba功能类别.naub b"),
+            // dict.logistics.pcba.function.category.181
+            ("dict.logistics.pcba.function.category.181", "zh-HK", "NAUB B_hk", "pcba功能类别.naub b"),
+
+            // dict.logistics.pcba.function.category.182
+            ("dict.logistics.pcba.function.category.182", "en-US", "PANEL_us", "pcba功能类别.panel"),
+            // dict.logistics.pcba.function.category.182
+            ("dict.logistics.pcba.function.category.182", "ja-JP", "PANEL_jp", "pcba功能类别.panel"),
+            // dict.logistics.pcba.function.category.182
+            ("dict.logistics.pcba.function.category.182", "zh-CN", "PANEL", "pcba功能类别.panel"),
+            // dict.logistics.pcba.function.category.182
+            ("dict.logistics.pcba.function.category.182", "zh-HK", "PANEL_hk", "pcba功能类别.panel"),
+
+            // dict.logistics.pcba.function.category.183
+            ("dict.logistics.pcba.function.category.183", "en-US", "PANEL A_us", "pcba功能类别.panel a"),
+            // dict.logistics.pcba.function.category.183
+            ("dict.logistics.pcba.function.category.183", "ja-JP", "PANEL A_jp", "pcba功能类别.panel a"),
+            // dict.logistics.pcba.function.category.183
+            ("dict.logistics.pcba.function.category.183", "zh-CN", "PANEL A", "pcba功能类别.panel a"),
+            // dict.logistics.pcba.function.category.183
+            ("dict.logistics.pcba.function.category.183", "zh-HK", "PANEL A_hk", "pcba功能类别.panel a"),
+
+            // dict.logistics.pcba.function.category.184
+            ("dict.logistics.pcba.function.category.184", "en-US", "PANEL B_us", "pcba功能类别.panel b"),
+            // dict.logistics.pcba.function.category.184
+            ("dict.logistics.pcba.function.category.184", "ja-JP", "PANEL B_jp", "pcba功能类别.panel b"),
+            // dict.logistics.pcba.function.category.184
+            ("dict.logistics.pcba.function.category.184", "zh-CN", "PANEL B", "pcba功能类别.panel b"),
+            // dict.logistics.pcba.function.category.184
+            ("dict.logistics.pcba.function.category.184", "zh-HK", "PANEL B_hk", "pcba功能类别.panel b"),
+
+            // dict.logistics.pcba.function.category.185
+            ("dict.logistics.pcba.function.category.185", "en-US", "PANEL T/B_us", "pcba功能类别.panel t/b"),
+            // dict.logistics.pcba.function.category.185
+            ("dict.logistics.pcba.function.category.185", "ja-JP", "PANEL T/B_jp", "pcba功能类别.panel t/b"),
+            // dict.logistics.pcba.function.category.185
+            ("dict.logistics.pcba.function.category.185", "zh-CN", "PANEL T/B", "pcba功能类别.panel t/b"),
+            // dict.logistics.pcba.function.category.185
+            ("dict.logistics.pcba.function.category.185", "zh-HK", "PANEL T/B_hk", "pcba功能类别.panel t/b"),
+
+            // dict.logistics.pcba.function.category.186
+            ("dict.logistics.pcba.function.category.186", "en-US", "PANEL L_us", "pcba功能类别.panel l"),
+            // dict.logistics.pcba.function.category.186
+            ("dict.logistics.pcba.function.category.186", "ja-JP", "PANEL L_jp", "pcba功能类别.panel l"),
+            // dict.logistics.pcba.function.category.186
+            ("dict.logistics.pcba.function.category.186", "zh-CN", "PANEL L", "pcba功能类别.panel l"),
+            // dict.logistics.pcba.function.category.186
+            ("dict.logistics.pcba.function.category.186", "zh-HK", "PANEL L_hk", "pcba功能类别.panel l"),
+
+            // dict.logistics.pcba.function.category.187
+            ("dict.logistics.pcba.function.category.187", "en-US", "PANEL R_us", "pcba功能类别.panel r"),
+            // dict.logistics.pcba.function.category.187
+            ("dict.logistics.pcba.function.category.187", "ja-JP", "PANEL R_jp", "pcba功能类别.panel r"),
+            // dict.logistics.pcba.function.category.187
+            ("dict.logistics.pcba.function.category.187", "zh-CN", "PANEL R", "pcba功能类别.panel r"),
+            // dict.logistics.pcba.function.category.187
+            ("dict.logistics.pcba.function.category.187", "zh-HK", "PANEL R_hk", "pcba功能类别.panel r"),
+
+            // dict.logistics.pcba.function.category.188
+            ("dict.logistics.pcba.function.category.188", "en-US", "PANEL T_us", "pcba功能类别.panel t"),
+            // dict.logistics.pcba.function.category.188
+            ("dict.logistics.pcba.function.category.188", "ja-JP", "PANEL T_jp", "pcba功能类别.panel t"),
+            // dict.logistics.pcba.function.category.188
+            ("dict.logistics.pcba.function.category.188", "zh-CN", "PANEL T", "pcba功能类别.panel t"),
+            // dict.logistics.pcba.function.category.188
+            ("dict.logistics.pcba.function.category.188", "zh-HK", "PANEL T_hk", "pcba功能类别.panel t"),
+
+            // dict.logistics.pcba.function.category.189
+            ("dict.logistics.pcba.function.category.189", "en-US", "PHONE_us", "pcba功能类别.phone"),
+            // dict.logistics.pcba.function.category.189
+            ("dict.logistics.pcba.function.category.189", "ja-JP", "PHONE_jp", "pcba功能类别.phone"),
+            // dict.logistics.pcba.function.category.189
+            ("dict.logistics.pcba.function.category.189", "zh-CN", "PHONE", "pcba功能类别.phone"),
+            // dict.logistics.pcba.function.category.189
+            ("dict.logistics.pcba.function.category.189", "zh-HK", "PHONE_hk", "pcba功能类别.phone"),
+
+            // dict.logistics.pcba.function.category.190
+            ("dict.logistics.pcba.function.category.190", "en-US", "POWER_us", "pcba功能类别.power"),
+            // dict.logistics.pcba.function.category.190
+            ("dict.logistics.pcba.function.category.190", "ja-JP", "POWER_jp", "pcba功能类别.power"),
+            // dict.logistics.pcba.function.category.190
+            ("dict.logistics.pcba.function.category.190", "zh-CN", "POWER", "pcba功能类别.power"),
+            // dict.logistics.pcba.function.category.190
+            ("dict.logistics.pcba.function.category.190", "zh-HK", "POWER_hk", "pcba功能类别.power"),
+
+            // dict.logistics.pcba.function.category.191
+            ("dict.logistics.pcba.function.category.191", "en-US", "POWER A_us", "pcba功能类别.power a"),
+            // dict.logistics.pcba.function.category.191
+            ("dict.logistics.pcba.function.category.191", "ja-JP", "POWER A_jp", "pcba功能类别.power a"),
+            // dict.logistics.pcba.function.category.191
+            ("dict.logistics.pcba.function.category.191", "zh-CN", "POWER A", "pcba功能类别.power a"),
+            // dict.logistics.pcba.function.category.191
+            ("dict.logistics.pcba.function.category.191", "zh-HK", "POWER A_hk", "pcba功能类别.power a"),
+
+            // dict.logistics.pcba.function.category.192
+            ("dict.logistics.pcba.function.category.192", "en-US", "POWER B_us", "pcba功能类别.power b"),
+            // dict.logistics.pcba.function.category.192
+            ("dict.logistics.pcba.function.category.192", "ja-JP", "POWER B_jp", "pcba功能类别.power b"),
+            // dict.logistics.pcba.function.category.192
+            ("dict.logistics.pcba.function.category.192", "zh-CN", "POWER B", "pcba功能类别.power b"),
+            // dict.logistics.pcba.function.category.192
+            ("dict.logistics.pcba.function.category.192", "zh-HK", "POWER B_hk", "pcba功能类别.power b"),
+
+            // dict.logistics.pcba.function.category.193
+            ("dict.logistics.pcba.function.category.193", "en-US", "POWER T/B_us", "pcba功能类别.power t/b"),
+            // dict.logistics.pcba.function.category.193
+            ("dict.logistics.pcba.function.category.193", "ja-JP", "POWER T/B_jp", "pcba功能类别.power t/b"),
+            // dict.logistics.pcba.function.category.193
+            ("dict.logistics.pcba.function.category.193", "zh-CN", "POWER T/B", "pcba功能类别.power t/b"),
+            // dict.logistics.pcba.function.category.193
+            ("dict.logistics.pcba.function.category.193", "zh-HK", "POWER T/B_hk", "pcba功能类别.power t/b"),
+
+            // dict.logistics.pcba.function.category.194
+            ("dict.logistics.pcba.function.category.194", "en-US", "POWER T_us", "pcba功能类别.power t"),
+            // dict.logistics.pcba.function.category.194
+            ("dict.logistics.pcba.function.category.194", "ja-JP", "POWER T_jp", "pcba功能类别.power t"),
+            // dict.logistics.pcba.function.category.194
+            ("dict.logistics.pcba.function.category.194", "zh-CN", "POWER T", "pcba功能类别.power t"),
+            // dict.logistics.pcba.function.category.194
+            ("dict.logistics.pcba.function.category.194", "zh-HK", "POWER T_hk", "pcba功能类别.power t"),
+
+            // dict.logistics.pcba.function.category.195
+            ("dict.logistics.pcba.function.category.195", "en-US", "PRM B_us", "pcba功能类别.prm b"),
+            // dict.logistics.pcba.function.category.195
+            ("dict.logistics.pcba.function.category.195", "ja-JP", "PRM B_jp", "pcba功能类别.prm b"),
+            // dict.logistics.pcba.function.category.195
+            ("dict.logistics.pcba.function.category.195", "zh-CN", "PRM B", "pcba功能类别.prm b"),
+            // dict.logistics.pcba.function.category.195
+            ("dict.logistics.pcba.function.category.195", "zh-HK", "PRM B_hk", "pcba功能类别.prm b"),
+
+            // dict.logistics.pcba.function.category.196
+            ("dict.logistics.pcba.function.category.196", "en-US", "PRM T/B_us", "pcba功能类别.prm t/b"),
+            // dict.logistics.pcba.function.category.196
+            ("dict.logistics.pcba.function.category.196", "ja-JP", "PRM T/B_jp", "pcba功能类别.prm t/b"),
+            // dict.logistics.pcba.function.category.196
+            ("dict.logistics.pcba.function.category.196", "zh-CN", "PRM T/B", "pcba功能类别.prm t/b"),
+            // dict.logistics.pcba.function.category.196
+            ("dict.logistics.pcba.function.category.196", "zh-HK", "PRM T/B_hk", "pcba功能类别.prm t/b"),
+
+            // dict.logistics.pcba.function.category.197
+            ("dict.logistics.pcba.function.category.197", "en-US", "PRM T_us", "pcba功能类别.prm t"),
+            // dict.logistics.pcba.function.category.197
+            ("dict.logistics.pcba.function.category.197", "ja-JP", "PRM T_jp", "pcba功能类别.prm t"),
+            // dict.logistics.pcba.function.category.197
+            ("dict.logistics.pcba.function.category.197", "zh-CN", "PRM T", "pcba功能类别.prm t"),
+            // dict.logistics.pcba.function.category.197
+            ("dict.logistics.pcba.function.category.197", "zh-HK", "PRM T_hk", "pcba功能类别.prm t"),
+
+            // dict.logistics.pcba.function.category.198
+            ("dict.logistics.pcba.function.category.198", "en-US", "PSL_us", "pcba功能类别.psl"),
+            // dict.logistics.pcba.function.category.198
+            ("dict.logistics.pcba.function.category.198", "ja-JP", "PSL_jp", "pcba功能类别.psl"),
+            // dict.logistics.pcba.function.category.198
+            ("dict.logistics.pcba.function.category.198", "zh-CN", "PSL", "pcba功能类别.psl"),
+            // dict.logistics.pcba.function.category.198
+            ("dict.logistics.pcba.function.category.198", "zh-HK", "PSL_hk", "pcba功能类别.psl"),
+
+            // dict.logistics.pcba.function.category.199
+            ("dict.logistics.pcba.function.category.199", "en-US", "PSL B_us", "pcba功能类别.psl b"),
+            // dict.logistics.pcba.function.category.199
+            ("dict.logistics.pcba.function.category.199", "ja-JP", "PSL B_jp", "pcba功能类别.psl b"),
+            // dict.logistics.pcba.function.category.199
+            ("dict.logistics.pcba.function.category.199", "zh-CN", "PSL B", "pcba功能类别.psl b"),
+            // dict.logistics.pcba.function.category.199
+            ("dict.logistics.pcba.function.category.199", "zh-HK", "PSL B_hk", "pcba功能类别.psl b"),
+
+            // dict.logistics.pcba.function.category.200
+            ("dict.logistics.pcba.function.category.200", "en-US", "PSL T/B_us", "pcba功能类别.psl t/b"),
+            // dict.logistics.pcba.function.category.200
+            ("dict.logistics.pcba.function.category.200", "ja-JP", "PSL T/B_jp", "pcba功能类别.psl t/b"),
+            // dict.logistics.pcba.function.category.200
+            ("dict.logistics.pcba.function.category.200", "zh-CN", "PSL T/B", "pcba功能类别.psl t/b"),
+            // dict.logistics.pcba.function.category.200
+            ("dict.logistics.pcba.function.category.200", "zh-HK", "PSL T/B_hk", "pcba功能类别.psl t/b"),
+
+            // dict.logistics.pcba.function.category.201
+            ("dict.logistics.pcba.function.category.201", "en-US", "PSL T_us", "pcba功能类别.psl t"),
+            // dict.logistics.pcba.function.category.201
+            ("dict.logistics.pcba.function.category.201", "ja-JP", "PSL T_jp", "pcba功能类别.psl t"),
+            // dict.logistics.pcba.function.category.201
+            ("dict.logistics.pcba.function.category.201", "zh-CN", "PSL T", "pcba功能类别.psl t"),
+            // dict.logistics.pcba.function.category.201
+            ("dict.logistics.pcba.function.category.201", "zh-HK", "PSL T_hk", "pcba功能类别.psl t"),
+
+            // dict.logistics.pcba.function.category.202
+            ("dict.logistics.pcba.function.category.202", "en-US", "PTST_us", "pcba功能类别.ptst"),
+            // dict.logistics.pcba.function.category.202
+            ("dict.logistics.pcba.function.category.202", "ja-JP", "PTST_jp", "pcba功能类别.ptst"),
+            // dict.logistics.pcba.function.category.202
+            ("dict.logistics.pcba.function.category.202", "zh-CN", "PTST", "pcba功能类别.ptst"),
+            // dict.logistics.pcba.function.category.202
+            ("dict.logistics.pcba.function.category.202", "zh-HK", "PTST_hk", "pcba功能类别.ptst"),
+
+            // dict.logistics.pcba.function.category.203
+            ("dict.logistics.pcba.function.category.203", "en-US", "PTST B_us", "pcba功能类别.ptst b"),
+            // dict.logistics.pcba.function.category.203
+            ("dict.logistics.pcba.function.category.203", "ja-JP", "PTST B_jp", "pcba功能类别.ptst b"),
+            // dict.logistics.pcba.function.category.203
+            ("dict.logistics.pcba.function.category.203", "zh-CN", "PTST B", "pcba功能类别.ptst b"),
+            // dict.logistics.pcba.function.category.203
+            ("dict.logistics.pcba.function.category.203", "zh-HK", "PTST B_hk", "pcba功能类别.ptst b"),
+
+            // dict.logistics.pcba.function.category.204
+            ("dict.logistics.pcba.function.category.204", "en-US", "PTST T/B_us", "pcba功能类别.ptst t/b"),
+            // dict.logistics.pcba.function.category.204
+            ("dict.logistics.pcba.function.category.204", "ja-JP", "PTST T/B_jp", "pcba功能类别.ptst t/b"),
+            // dict.logistics.pcba.function.category.204
+            ("dict.logistics.pcba.function.category.204", "zh-CN", "PTST T/B", "pcba功能类别.ptst t/b"),
+            // dict.logistics.pcba.function.category.204
+            ("dict.logistics.pcba.function.category.204", "zh-HK", "PTST T/B_hk", "pcba功能类别.ptst t/b"),
+
+            // dict.logistics.pcba.function.category.205
+            ("dict.logistics.pcba.function.category.205", "en-US", "PTST T_us", "pcba功能类别.ptst t"),
+            // dict.logistics.pcba.function.category.205
+            ("dict.logistics.pcba.function.category.205", "ja-JP", "PTST T_jp", "pcba功能类别.ptst t"),
+            // dict.logistics.pcba.function.category.205
+            ("dict.logistics.pcba.function.category.205", "zh-CN", "PTST T", "pcba功能类别.ptst t"),
+            // dict.logistics.pcba.function.category.205
+            ("dict.logistics.pcba.function.category.205", "zh-HK", "PTST T_hk", "pcba功能类别.ptst t"),
+
+            // dict.logistics.pcba.function.category.206
+            ("dict.logistics.pcba.function.category.206", "en-US", "PWRSUB_us", "pcba功能类别.pwrsub"),
+            // dict.logistics.pcba.function.category.206
+            ("dict.logistics.pcba.function.category.206", "ja-JP", "PWRSUB_jp", "pcba功能类别.pwrsub"),
+            // dict.logistics.pcba.function.category.206
+            ("dict.logistics.pcba.function.category.206", "zh-CN", "PWRSUB", "pcba功能类别.pwrsub"),
+            // dict.logistics.pcba.function.category.206
+            ("dict.logistics.pcba.function.category.206", "zh-HK", "PWRSUB_hk", "pcba功能类别.pwrsub"),
+
+            // dict.logistics.pcba.function.category.207
+            ("dict.logistics.pcba.function.category.207", "en-US", "REAR_us", "pcba功能类别.rear"),
+            // dict.logistics.pcba.function.category.207
+            ("dict.logistics.pcba.function.category.207", "ja-JP", "REAR_jp", "pcba功能类别.rear"),
+            // dict.logistics.pcba.function.category.207
+            ("dict.logistics.pcba.function.category.207", "zh-CN", "REAR", "pcba功能类别.rear"),
+            // dict.logistics.pcba.function.category.207
+            ("dict.logistics.pcba.function.category.207", "zh-HK", "REAR_hk", "pcba功能类别.rear"),
+
+            // dict.logistics.pcba.function.category.208
+            ("dict.logistics.pcba.function.category.208", "en-US", "REAR A_us", "pcba功能类别.rear a"),
+            // dict.logistics.pcba.function.category.208
+            ("dict.logistics.pcba.function.category.208", "ja-JP", "REAR A_jp", "pcba功能类别.rear a"),
+            // dict.logistics.pcba.function.category.208
+            ("dict.logistics.pcba.function.category.208", "zh-CN", "REAR A", "pcba功能类别.rear a"),
+            // dict.logistics.pcba.function.category.208
+            ("dict.logistics.pcba.function.category.208", "zh-HK", "REAR A_hk", "pcba功能类别.rear a"),
+
+            // dict.logistics.pcba.function.category.209
+            ("dict.logistics.pcba.function.category.209", "en-US", "REAR B_us", "pcba功能类别.rear b"),
+            // dict.logistics.pcba.function.category.209
+            ("dict.logistics.pcba.function.category.209", "ja-JP", "REAR B_jp", "pcba功能类别.rear b"),
+            // dict.logistics.pcba.function.category.209
+            ("dict.logistics.pcba.function.category.209", "zh-CN", "REAR B", "pcba功能类别.rear b"),
+            // dict.logistics.pcba.function.category.209
+            ("dict.logistics.pcba.function.category.209", "zh-HK", "REAR B_hk", "pcba功能类别.rear b"),
+
+            // dict.logistics.pcba.function.category.210
+            ("dict.logistics.pcba.function.category.210", "en-US", "REAR T_us", "pcba功能类别.rear t"),
+            // dict.logistics.pcba.function.category.210
+            ("dict.logistics.pcba.function.category.210", "ja-JP", "REAR T_jp", "pcba功能类别.rear t"),
+            // dict.logistics.pcba.function.category.210
+            ("dict.logistics.pcba.function.category.210", "zh-CN", "REAR T", "pcba功能类别.rear t"),
+            // dict.logistics.pcba.function.category.210
+            ("dict.logistics.pcba.function.category.210", "zh-HK", "REAR T_hk", "pcba功能类别.rear t"),
+
+            // dict.logistics.pcba.function.category.211
+            ("dict.logistics.pcba.function.category.211", "en-US", "RELAY_us", "pcba功能类别.relay"),
+            // dict.logistics.pcba.function.category.211
+            ("dict.logistics.pcba.function.category.211", "ja-JP", "RELAY_jp", "pcba功能类别.relay"),
+            // dict.logistics.pcba.function.category.211
+            ("dict.logistics.pcba.function.category.211", "zh-CN", "RELAY", "pcba功能类别.relay"),
+            // dict.logistics.pcba.function.category.211
+            ("dict.logistics.pcba.function.category.211", "zh-HK", "RELAY_hk", "pcba功能类别.relay"),
+
+            // dict.logistics.pcba.function.category.212
+            ("dict.logistics.pcba.function.category.212", "en-US", "RFP A_us", "pcba功能类别.rfp a"),
+            // dict.logistics.pcba.function.category.212
+            ("dict.logistics.pcba.function.category.212", "ja-JP", "RFP A_jp", "pcba功能类别.rfp a"),
+            // dict.logistics.pcba.function.category.212
+            ("dict.logistics.pcba.function.category.212", "zh-CN", "RFP A", "pcba功能类别.rfp a"),
+            // dict.logistics.pcba.function.category.212
+            ("dict.logistics.pcba.function.category.212", "zh-HK", "RFP A_hk", "pcba功能类别.rfp a"),
+
+            // dict.logistics.pcba.function.category.213
+            ("dict.logistics.pcba.function.category.213", "en-US", "RFP B_us", "pcba功能类别.rfp b"),
+            // dict.logistics.pcba.function.category.213
+            ("dict.logistics.pcba.function.category.213", "ja-JP", "RFP B_jp", "pcba功能类别.rfp b"),
+            // dict.logistics.pcba.function.category.213
+            ("dict.logistics.pcba.function.category.213", "zh-CN", "RFP B", "pcba功能类别.rfp b"),
+            // dict.logistics.pcba.function.category.213
+            ("dict.logistics.pcba.function.category.213", "zh-HK", "RFP B_hk", "pcba功能类别.rfp b"),
+
+            // dict.logistics.pcba.function.category.214
+            ("dict.logistics.pcba.function.category.214", "en-US", "RFP T/B_us", "pcba功能类别.rfp t/b"),
+            // dict.logistics.pcba.function.category.214
+            ("dict.logistics.pcba.function.category.214", "ja-JP", "RFP T/B_jp", "pcba功能类别.rfp t/b"),
+            // dict.logistics.pcba.function.category.214
+            ("dict.logistics.pcba.function.category.214", "zh-CN", "RFP T/B", "pcba功能类别.rfp t/b"),
+            // dict.logistics.pcba.function.category.214
+            ("dict.logistics.pcba.function.category.214", "zh-HK", "RFP T/B_hk", "pcba功能类别.rfp t/b"),
+
+            // dict.logistics.pcba.function.category.215
+            ("dict.logistics.pcba.function.category.215", "en-US", "RFP T_us", "pcba功能类别.rfp t"),
+            // dict.logistics.pcba.function.category.215
+            ("dict.logistics.pcba.function.category.215", "ja-JP", "RFP T_jp", "pcba功能类别.rfp t"),
+            // dict.logistics.pcba.function.category.215
+            ("dict.logistics.pcba.function.category.215", "zh-CN", "RFP T", "pcba功能类别.rfp t"),
+            // dict.logistics.pcba.function.category.215
+            ("dict.logistics.pcba.function.category.215", "zh-HK", "RFP T_hk", "pcba功能类别.rfp t"),
+
+            // dict.logistics.pcba.function.category.216
+            ("dict.logistics.pcba.function.category.216", "en-US", "RMN B_us", "pcba功能类别.rmn b"),
+            // dict.logistics.pcba.function.category.216
+            ("dict.logistics.pcba.function.category.216", "ja-JP", "RMN B_jp", "pcba功能类别.rmn b"),
+            // dict.logistics.pcba.function.category.216
+            ("dict.logistics.pcba.function.category.216", "zh-CN", "RMN B", "pcba功能类别.rmn b"),
+            // dict.logistics.pcba.function.category.216
+            ("dict.logistics.pcba.function.category.216", "zh-HK", "RMN B_hk", "pcba功能类别.rmn b"),
+
+            // dict.logistics.pcba.function.category.217
+            ("dict.logistics.pcba.function.category.217", "en-US", "RMN T/B_us", "pcba功能类别.rmn t/b"),
+            // dict.logistics.pcba.function.category.217
+            ("dict.logistics.pcba.function.category.217", "ja-JP", "RMN T/B_jp", "pcba功能类别.rmn t/b"),
+            // dict.logistics.pcba.function.category.217
+            ("dict.logistics.pcba.function.category.217", "zh-CN", "RMN T/B", "pcba功能类别.rmn t/b"),
+            // dict.logistics.pcba.function.category.217
+            ("dict.logistics.pcba.function.category.217", "zh-HK", "RMN T/B_hk", "pcba功能类别.rmn t/b"),
+
+            // dict.logistics.pcba.function.category.218
+            ("dict.logistics.pcba.function.category.218", "en-US", "RMN T_us", "pcba功能类别.rmn t"),
+            // dict.logistics.pcba.function.category.218
+            ("dict.logistics.pcba.function.category.218", "ja-JP", "RMN T_jp", "pcba功能类别.rmn t"),
+            // dict.logistics.pcba.function.category.218
+            ("dict.logistics.pcba.function.category.218", "zh-CN", "RMN T", "pcba功能类别.rmn t"),
+            // dict.logistics.pcba.function.category.218
+            ("dict.logistics.pcba.function.category.218", "zh-HK", "RMN T_hk", "pcba功能类别.rmn t"),
+
+            // dict.logistics.pcba.function.category.219
+            ("dict.logistics.pcba.function.category.219", "en-US", "RMT_us", "pcba功能类别.rmt"),
+            // dict.logistics.pcba.function.category.219
+            ("dict.logistics.pcba.function.category.219", "ja-JP", "RMT_jp", "pcba功能类别.rmt"),
+            // dict.logistics.pcba.function.category.219
+            ("dict.logistics.pcba.function.category.219", "zh-CN", "RMT", "pcba功能类别.rmt"),
+            // dict.logistics.pcba.function.category.219
+            ("dict.logistics.pcba.function.category.219", "zh-HK", "RMT_hk", "pcba功能类别.rmt"),
+
+            // dict.logistics.pcba.function.category.220
+            ("dict.logistics.pcba.function.category.220", "en-US", "RSB B_us", "pcba功能类别.rsb b"),
+            // dict.logistics.pcba.function.category.220
+            ("dict.logistics.pcba.function.category.220", "ja-JP", "RSB B_jp", "pcba功能类别.rsb b"),
+            // dict.logistics.pcba.function.category.220
+            ("dict.logistics.pcba.function.category.220", "zh-CN", "RSB B", "pcba功能类别.rsb b"),
+            // dict.logistics.pcba.function.category.220
+            ("dict.logistics.pcba.function.category.220", "zh-HK", "RSB B_hk", "pcba功能类别.rsb b"),
+
+            // dict.logistics.pcba.function.category.221
+            ("dict.logistics.pcba.function.category.221", "en-US", "RSB T/B_us", "pcba功能类别.rsb t/b"),
+            // dict.logistics.pcba.function.category.221
+            ("dict.logistics.pcba.function.category.221", "ja-JP", "RSB T/B_jp", "pcba功能类别.rsb t/b"),
+            // dict.logistics.pcba.function.category.221
+            ("dict.logistics.pcba.function.category.221", "zh-CN", "RSB T/B", "pcba功能类别.rsb t/b"),
+            // dict.logistics.pcba.function.category.221
+            ("dict.logistics.pcba.function.category.221", "zh-HK", "RSB T/B_hk", "pcba功能类别.rsb t/b"),
+
+            // dict.logistics.pcba.function.category.222
+            ("dict.logistics.pcba.function.category.222", "en-US", "RSB T_us", "pcba功能类别.rsb t"),
+            // dict.logistics.pcba.function.category.222
+            ("dict.logistics.pcba.function.category.222", "ja-JP", "RSB T_jp", "pcba功能类别.rsb t"),
+            // dict.logistics.pcba.function.category.222
+            ("dict.logistics.pcba.function.category.222", "zh-CN", "RSB T", "pcba功能类别.rsb t"),
+            // dict.logistics.pcba.function.category.222
+            ("dict.logistics.pcba.function.category.222", "zh-HK", "RSB T_hk", "pcba功能类别.rsb t"),
+
+            // dict.logistics.pcba.function.category.223
+            ("dict.logistics.pcba.function.category.223", "en-US", "SATA_us", "pcba功能类别.sata"),
+            // dict.logistics.pcba.function.category.223
+            ("dict.logistics.pcba.function.category.223", "ja-JP", "SATA_jp", "pcba功能类别.sata"),
+            // dict.logistics.pcba.function.category.223
+            ("dict.logistics.pcba.function.category.223", "zh-CN", "SATA", "pcba功能类别.sata"),
+            // dict.logistics.pcba.function.category.223
+            ("dict.logistics.pcba.function.category.223", "zh-HK", "SATA_hk", "pcba功能类别.sata"),
+
+            // dict.logistics.pcba.function.category.224
+            ("dict.logistics.pcba.function.category.224", "en-US", "SBTY_us", "pcba功能类别.sbty"),
+            // dict.logistics.pcba.function.category.224
+            ("dict.logistics.pcba.function.category.224", "ja-JP", "SBTY_jp", "pcba功能类别.sbty"),
+            // dict.logistics.pcba.function.category.224
+            ("dict.logistics.pcba.function.category.224", "zh-CN", "SBTY", "pcba功能类别.sbty"),
+            // dict.logistics.pcba.function.category.224
+            ("dict.logistics.pcba.function.category.224", "zh-HK", "SBTY_hk", "pcba功能类别.sbty"),
+
+            // dict.logistics.pcba.function.category.225
+            ("dict.logistics.pcba.function.category.225", "en-US", "SEQ_us", "pcba功能类别.seq"),
+            // dict.logistics.pcba.function.category.225
+            ("dict.logistics.pcba.function.category.225", "ja-JP", "SEQ_jp", "pcba功能类别.seq"),
+            // dict.logistics.pcba.function.category.225
+            ("dict.logistics.pcba.function.category.225", "zh-CN", "SEQ", "pcba功能类别.seq"),
+            // dict.logistics.pcba.function.category.225
+            ("dict.logistics.pcba.function.category.225", "zh-HK", "SEQ_hk", "pcba功能类别.seq"),
+
+            // dict.logistics.pcba.function.category.226
+            ("dict.logistics.pcba.function.category.226", "en-US", "SLOT_us", "pcba功能类别.slot"),
+            // dict.logistics.pcba.function.category.226
+            ("dict.logistics.pcba.function.category.226", "ja-JP", "SLOT_jp", "pcba功能类别.slot"),
+            // dict.logistics.pcba.function.category.226
+            ("dict.logistics.pcba.function.category.226", "zh-CN", "SLOT", "pcba功能类别.slot"),
+            // dict.logistics.pcba.function.category.226
+            ("dict.logistics.pcba.function.category.226", "zh-HK", "SLOT_hk", "pcba功能类别.slot"),
+
+            // dict.logistics.pcba.function.category.227
+            ("dict.logistics.pcba.function.category.227", "en-US", "SLOT A_us", "pcba功能类别.slot a"),
+            // dict.logistics.pcba.function.category.227
+            ("dict.logistics.pcba.function.category.227", "ja-JP", "SLOT A_jp", "pcba功能类别.slot a"),
+            // dict.logistics.pcba.function.category.227
+            ("dict.logistics.pcba.function.category.227", "zh-CN", "SLOT A", "pcba功能类别.slot a"),
+            // dict.logistics.pcba.function.category.227
+            ("dict.logistics.pcba.function.category.227", "zh-HK", "SLOT A_hk", "pcba功能类别.slot a"),
+
+            // dict.logistics.pcba.function.category.228
+            ("dict.logistics.pcba.function.category.228", "en-US", "SLOT B_us", "pcba功能类别.slot b"),
+            // dict.logistics.pcba.function.category.228
+            ("dict.logistics.pcba.function.category.228", "ja-JP", "SLOT B_jp", "pcba功能类别.slot b"),
+            // dict.logistics.pcba.function.category.228
+            ("dict.logistics.pcba.function.category.228", "zh-CN", "SLOT B", "pcba功能类别.slot b"),
+            // dict.logistics.pcba.function.category.228
+            ("dict.logistics.pcba.function.category.228", "zh-HK", "SLOT B_hk", "pcba功能类别.slot b"),
+
+            // dict.logistics.pcba.function.category.229
+            ("dict.logistics.pcba.function.category.229", "en-US", "SLOT T/B_us", "pcba功能类别.slot t/b"),
+            // dict.logistics.pcba.function.category.229
+            ("dict.logistics.pcba.function.category.229", "ja-JP", "SLOT T/B_jp", "pcba功能类别.slot t/b"),
+            // dict.logistics.pcba.function.category.229
+            ("dict.logistics.pcba.function.category.229", "zh-CN", "SLOT T/B", "pcba功能类别.slot t/b"),
+            // dict.logistics.pcba.function.category.229
+            ("dict.logistics.pcba.function.category.229", "zh-HK", "SLOT T/B_hk", "pcba功能类别.slot t/b"),
+
+            // dict.logistics.pcba.function.category.230
+            ("dict.logistics.pcba.function.category.230", "en-US", "SLOT T_us", "pcba功能类别.slot t"),
+            // dict.logistics.pcba.function.category.230
+            ("dict.logistics.pcba.function.category.230", "ja-JP", "SLOT T_jp", "pcba功能类别.slot t"),
+            // dict.logistics.pcba.function.category.230
+            ("dict.logistics.pcba.function.category.230", "zh-CN", "SLOT T", "pcba功能类别.slot t"),
+            // dict.logistics.pcba.function.category.230
+            ("dict.logistics.pcba.function.category.230", "zh-HK", "SLOT T_hk", "pcba功能类别.slot t"),
+
+            // dict.logistics.pcba.function.category.231
+            ("dict.logistics.pcba.function.category.231", "en-US", "SPL T_us", "pcba功能类别.spl t"),
+            // dict.logistics.pcba.function.category.231
+            ("dict.logistics.pcba.function.category.231", "ja-JP", "SPL T_jp", "pcba功能类别.spl t"),
+            // dict.logistics.pcba.function.category.231
+            ("dict.logistics.pcba.function.category.231", "zh-CN", "SPL T", "pcba功能类别.spl t"),
+            // dict.logistics.pcba.function.category.231
+            ("dict.logistics.pcba.function.category.231", "zh-HK", "SPL T_hk", "pcba功能类别.spl t"),
+
+            // dict.logistics.pcba.function.category.232
+            ("dict.logistics.pcba.function.category.232", "en-US", "STBY_us", "pcba功能类别.stby"),
+            // dict.logistics.pcba.function.category.232
+            ("dict.logistics.pcba.function.category.232", "ja-JP", "STBY_jp", "pcba功能类别.stby"),
+            // dict.logistics.pcba.function.category.232
+            ("dict.logistics.pcba.function.category.232", "zh-CN", "STBY", "pcba功能类别.stby"),
+            // dict.logistics.pcba.function.category.232
+            ("dict.logistics.pcba.function.category.232", "zh-HK", "STBY_hk", "pcba功能类别.stby"),
+
+            // dict.logistics.pcba.function.category.233
+            ("dict.logistics.pcba.function.category.233", "en-US", "STS B_us", "pcba功能类别.sts b"),
+            // dict.logistics.pcba.function.category.233
+            ("dict.logistics.pcba.function.category.233", "ja-JP", "STS B_jp", "pcba功能类别.sts b"),
+            // dict.logistics.pcba.function.category.233
+            ("dict.logistics.pcba.function.category.233", "zh-CN", "STS B", "pcba功能类别.sts b"),
+            // dict.logistics.pcba.function.category.233
+            ("dict.logistics.pcba.function.category.233", "zh-HK", "STS B_hk", "pcba功能类别.sts b"),
+
+            // dict.logistics.pcba.function.category.234
+            ("dict.logistics.pcba.function.category.234", "en-US", "SWUSB_us", "pcba功能类别.swusb"),
+            // dict.logistics.pcba.function.category.234
+            ("dict.logistics.pcba.function.category.234", "ja-JP", "SWUSB_jp", "pcba功能类别.swusb"),
+            // dict.logistics.pcba.function.category.234
+            ("dict.logistics.pcba.function.category.234", "zh-CN", "SWUSB", "pcba功能类别.swusb"),
+            // dict.logistics.pcba.function.category.234
+            ("dict.logistics.pcba.function.category.234", "zh-HK", "SWUSB_hk", "pcba功能类别.swusb"),
+
+            // dict.logistics.pcba.function.category.235
+            ("dict.logistics.pcba.function.category.235", "en-US", "SWUSB AKM B_us", "pcba功能类别.swusb akm b"),
+            // dict.logistics.pcba.function.category.235
+            ("dict.logistics.pcba.function.category.235", "ja-JP", "SWUSB AKM B_jp", "pcba功能类别.swusb akm b"),
+            // dict.logistics.pcba.function.category.235
+            ("dict.logistics.pcba.function.category.235", "zh-CN", "SWUSB AKM B", "pcba功能类别.swusb akm b"),
+            // dict.logistics.pcba.function.category.235
+            ("dict.logistics.pcba.function.category.235", "zh-HK", "SWUSB AKM B_hk", "pcba功能类别.swusb akm b"),
+
+            // dict.logistics.pcba.function.category.236
+            ("dict.logistics.pcba.function.category.236", "en-US", "SWUSB AKM T/B_us", "pcba功能类别.swusb akm t/b"),
+            // dict.logistics.pcba.function.category.236
+            ("dict.logistics.pcba.function.category.236", "ja-JP", "SWUSB AKM T/B_jp", "pcba功能类别.swusb akm t/b"),
+            // dict.logistics.pcba.function.category.236
+            ("dict.logistics.pcba.function.category.236", "zh-CN", "SWUSB AKM T/B", "pcba功能类别.swusb akm t/b"),
+            // dict.logistics.pcba.function.category.236
+            ("dict.logistics.pcba.function.category.236", "zh-HK", "SWUSB AKM T/B_hk", "pcba功能类别.swusb akm t/b"),
+
+            // dict.logistics.pcba.function.category.237
+            ("dict.logistics.pcba.function.category.237", "en-US", "SWUSB AKM T_us", "pcba功能类别.swusb akm t"),
+            // dict.logistics.pcba.function.category.237
+            ("dict.logistics.pcba.function.category.237", "ja-JP", "SWUSB AKM T_jp", "pcba功能类别.swusb akm t"),
+            // dict.logistics.pcba.function.category.237
+            ("dict.logistics.pcba.function.category.237", "zh-CN", "SWUSB AKM T", "pcba功能类别.swusb akm t"),
+            // dict.logistics.pcba.function.category.237
+            ("dict.logistics.pcba.function.category.237", "zh-HK", "SWUSB AKM T_hk", "pcba功能类别.swusb akm t"),
+
+            // dict.logistics.pcba.function.category.238
+            ("dict.logistics.pcba.function.category.238", "en-US", "SWUSB B_us", "pcba功能类别.swusb b"),
+            // dict.logistics.pcba.function.category.238
+            ("dict.logistics.pcba.function.category.238", "ja-JP", "SWUSB B_jp", "pcba功能类别.swusb b"),
+            // dict.logistics.pcba.function.category.238
+            ("dict.logistics.pcba.function.category.238", "zh-CN", "SWUSB B", "pcba功能类别.swusb b"),
+            // dict.logistics.pcba.function.category.238
+            ("dict.logistics.pcba.function.category.238", "zh-HK", "SWUSB B_hk", "pcba功能类别.swusb b"),
+
+            // dict.logistics.pcba.function.category.239
+            ("dict.logistics.pcba.function.category.239", "en-US", "SWUSB T/B_us", "pcba功能类别.swusb t/b"),
+            // dict.logistics.pcba.function.category.239
+            ("dict.logistics.pcba.function.category.239", "ja-JP", "SWUSB T/B_jp", "pcba功能类别.swusb t/b"),
+            // dict.logistics.pcba.function.category.239
+            ("dict.logistics.pcba.function.category.239", "zh-CN", "SWUSB T/B", "pcba功能类别.swusb t/b"),
+            // dict.logistics.pcba.function.category.239
+            ("dict.logistics.pcba.function.category.239", "zh-HK", "SWUSB T/B_hk", "pcba功能类别.swusb t/b"),
+
+            // dict.logistics.pcba.function.category.240
+            ("dict.logistics.pcba.function.category.240", "en-US", "SWUSB T_us", "pcba功能类别.swusb t"),
+            // dict.logistics.pcba.function.category.240
+            ("dict.logistics.pcba.function.category.240", "ja-JP", "SWUSB T_jp", "pcba功能类别.swusb t"),
+            // dict.logistics.pcba.function.category.240
+            ("dict.logistics.pcba.function.category.240", "zh-CN", "SWUSB T", "pcba功能类别.swusb t"),
+            // dict.logistics.pcba.function.category.240
+            ("dict.logistics.pcba.function.category.240", "zh-HK", "SWUSB T_hk", "pcba功能类别.swusb t"),
+
+            // dict.logistics.pcba.function.category.241
+            ("dict.logistics.pcba.function.category.241", "en-US", "SYS B_us", "pcba功能类别.sys b"),
+            // dict.logistics.pcba.function.category.241
+            ("dict.logistics.pcba.function.category.241", "ja-JP", "SYS B_jp", "pcba功能类别.sys b"),
+            // dict.logistics.pcba.function.category.241
+            ("dict.logistics.pcba.function.category.241", "zh-CN", "SYS B", "pcba功能类别.sys b"),
+            // dict.logistics.pcba.function.category.241
+            ("dict.logistics.pcba.function.category.241", "zh-HK", "SYS B_hk", "pcba功能类别.sys b"),
+
+            // dict.logistics.pcba.function.category.242
+            ("dict.logistics.pcba.function.category.242", "en-US", "SYS T_us", "pcba功能类别.sys t"),
+            // dict.logistics.pcba.function.category.242
+            ("dict.logistics.pcba.function.category.242", "ja-JP", "SYS T_jp", "pcba功能类别.sys t"),
+            // dict.logistics.pcba.function.category.242
+            ("dict.logistics.pcba.function.category.242", "zh-CN", "SYS T", "pcba功能类别.sys t"),
+            // dict.logistics.pcba.function.category.242
+            ("dict.logistics.pcba.function.category.242", "zh-HK", "SYS T_hk", "pcba功能类别.sys t"),
+
+            // dict.logistics.pcba.function.category.243
+            ("dict.logistics.pcba.function.category.243", "en-US", "TOP_us", "pcba功能类别.top"),
+            // dict.logistics.pcba.function.category.243
+            ("dict.logistics.pcba.function.category.243", "ja-JP", "TOP_jp", "pcba功能类别.top"),
+            // dict.logistics.pcba.function.category.243
+            ("dict.logistics.pcba.function.category.243", "zh-CN", "TOP", "pcba功能类别.top"),
+            // dict.logistics.pcba.function.category.243
+            ("dict.logistics.pcba.function.category.243", "zh-HK", "TOP_hk", "pcba功能类别.top"),
+
+            // dict.logistics.pcba.function.category.244
+            ("dict.logistics.pcba.function.category.244", "en-US", "USB B_us", "pcba功能类别.usb b"),
+            // dict.logistics.pcba.function.category.244
+            ("dict.logistics.pcba.function.category.244", "ja-JP", "USB B_jp", "pcba功能类别.usb b"),
+            // dict.logistics.pcba.function.category.244
+            ("dict.logistics.pcba.function.category.244", "zh-CN", "USB B", "pcba功能类别.usb b"),
+            // dict.logistics.pcba.function.category.244
+            ("dict.logistics.pcba.function.category.244", "zh-HK", "USB B_hk", "pcba功能类别.usb b"),
+
+            // dict.logistics.pcba.function.category.245
+            ("dict.logistics.pcba.function.category.245", "en-US", "USB T/B_us", "pcba功能类别.usb t/b"),
+            // dict.logistics.pcba.function.category.245
+            ("dict.logistics.pcba.function.category.245", "ja-JP", "USB T/B_jp", "pcba功能类别.usb t/b"),
+            // dict.logistics.pcba.function.category.245
+            ("dict.logistics.pcba.function.category.245", "zh-CN", "USB T/B", "pcba功能类别.usb t/b"),
+            // dict.logistics.pcba.function.category.245
+            ("dict.logistics.pcba.function.category.245", "zh-HK", "USB T/B_hk", "pcba功能类别.usb t/b"),
+
+            // dict.logistics.pcba.function.category.247
+            ("dict.logistics.pcba.function.category.247", "en-US", "USB T_us", "pcba功能类别.usb t"),
+            // dict.logistics.pcba.function.category.247
+            ("dict.logistics.pcba.function.category.247", "ja-JP", "USB T_jp", "pcba功能类别.usb t"),
+            // dict.logistics.pcba.function.category.247
+            ("dict.logistics.pcba.function.category.247", "zh-CN", "USB T", "pcba功能类别.usb t"),
+            // dict.logistics.pcba.function.category.247
+            ("dict.logistics.pcba.function.category.247", "zh-HK", "USB T_hk", "pcba功能类别.usb t"),
+
+            // dict.logistics.pcba.function.category.246
+            ("dict.logistics.pcba.function.category.246", "en-US", "XLR_us", "pcba功能类别.xlr"),
+            // dict.logistics.pcba.function.category.246
+            ("dict.logistics.pcba.function.category.246", "ja-JP", "XLR_jp", "pcba功能类别.xlr"),
+            // dict.logistics.pcba.function.category.246
+            ("dict.logistics.pcba.function.category.246", "zh-CN", "XLR", "pcba功能类别.xlr"),
+            // dict.logistics.pcba.function.category.246
+            ("dict.logistics.pcba.function.category.246", "zh-HK", "XLR_hk", "pcba功能类别.xlr"),
+
+            // dict.logistics.pcba.function.category.249
+            ("dict.logistics.pcba.function.category.249", "en-US", "XLR A_us", "pcba功能类别.xlr a"),
+            // dict.logistics.pcba.function.category.249
+            ("dict.logistics.pcba.function.category.249", "ja-JP", "XLR A_jp", "pcba功能类别.xlr a"),
+            // dict.logistics.pcba.function.category.249
+            ("dict.logistics.pcba.function.category.249", "zh-CN", "XLR A", "pcba功能类别.xlr a"),
+            // dict.logistics.pcba.function.category.249
+            ("dict.logistics.pcba.function.category.249", "zh-HK", "XLR A_hk", "pcba功能类别.xlr a"),
+
+            // dict.logistics.pcba.function.category.250
+            ("dict.logistics.pcba.function.category.250", "en-US", "XLR B_us", "pcba功能类别.xlr b"),
+            // dict.logistics.pcba.function.category.250
+            ("dict.logistics.pcba.function.category.250", "ja-JP", "XLR B_jp", "pcba功能类别.xlr b"),
+            // dict.logistics.pcba.function.category.250
+            ("dict.logistics.pcba.function.category.250", "zh-CN", "XLR B", "pcba功能类别.xlr b"),
+            // dict.logistics.pcba.function.category.250
+            ("dict.logistics.pcba.function.category.250", "zh-HK", "XLR B_hk", "pcba功能类别.xlr b"),
+
+            // dict.logistics.pcba.function.category.251
+            ("dict.logistics.pcba.function.category.251", "en-US", "XLR T_us", "pcba功能类别.xlr t"),
+            // dict.logistics.pcba.function.category.251
+            ("dict.logistics.pcba.function.category.251", "ja-JP", "XLR T_jp", "pcba功能类别.xlr t"),
+            // dict.logistics.pcba.function.category.251
+            ("dict.logistics.pcba.function.category.251", "zh-CN", "XLR T", "pcba功能类别.xlr t"),
+            // dict.logistics.pcba.function.category.251
+            ("dict.logistics.pcba.function.category.251", "zh-HK", "XLR T_hk", "pcba功能类别.xlr t"),
+
+            // dict.logistics.pcba.function.category.252
+            ("dict.logistics.pcba.function.category.252", "en-US", "XLRIN B_us", "pcba功能类别.xlrin b"),
+            // dict.logistics.pcba.function.category.252
+            ("dict.logistics.pcba.function.category.252", "ja-JP", "XLRIN B_jp", "pcba功能类别.xlrin b"),
+            // dict.logistics.pcba.function.category.252
+            ("dict.logistics.pcba.function.category.252", "zh-CN", "XLRIN B", "pcba功能类别.xlrin b"),
+            // dict.logistics.pcba.function.category.252
+            ("dict.logistics.pcba.function.category.252", "zh-HK", "XLRIN B_hk", "pcba功能类别.xlrin b"),
+
+            // dict.logistics.pcba.function.category.253
+            ("dict.logistics.pcba.function.category.253", "en-US", "XLRIN T/B_us", "pcba功能类别.xlrin t/b"),
+            // dict.logistics.pcba.function.category.253
+            ("dict.logistics.pcba.function.category.253", "ja-JP", "XLRIN T/B_jp", "pcba功能类别.xlrin t/b"),
+            // dict.logistics.pcba.function.category.253
+            ("dict.logistics.pcba.function.category.253", "zh-CN", "XLRIN T/B", "pcba功能类别.xlrin t/b"),
+            // dict.logistics.pcba.function.category.253
+            ("dict.logistics.pcba.function.category.253", "zh-HK", "XLRIN T/B_hk", "pcba功能类别.xlrin t/b"),
+
+            // dict.logistics.pcba.function.category.254
+            ("dict.logistics.pcba.function.category.254", "en-US", "XLRIN T_us", "pcba功能类别.xlrin t"),
+            // dict.logistics.pcba.function.category.254
+            ("dict.logistics.pcba.function.category.254", "ja-JP", "XLRIN T_jp", "pcba功能类别.xlrin t"),
+            // dict.logistics.pcba.function.category.254
+            ("dict.logistics.pcba.function.category.254", "zh-CN", "XLRIN T", "pcba功能类别.xlrin t"),
+            // dict.logistics.pcba.function.category.254
+            ("dict.logistics.pcba.function.category.254", "zh-HK", "XLRIN T_hk", "pcba功能类别.xlrin t"),
+
+            // dict.logistics.pcba.function.category.255
+            ("dict.logistics.pcba.function.category.255", "en-US", "XLRIO B_us", "pcba功能类别.xlrio b"),
+            // dict.logistics.pcba.function.category.255
+            ("dict.logistics.pcba.function.category.255", "ja-JP", "XLRIO B_jp", "pcba功能类别.xlrio b"),
+            // dict.logistics.pcba.function.category.255
+            ("dict.logistics.pcba.function.category.255", "zh-CN", "XLRIO B", "pcba功能类别.xlrio b"),
+            // dict.logistics.pcba.function.category.255
+            ("dict.logistics.pcba.function.category.255", "zh-HK", "XLRIO B_hk", "pcba功能类别.xlrio b"),
+
+            // dict.logistics.pcba.function.category.256
+            ("dict.logistics.pcba.function.category.256", "en-US", "XLRIO T/B_us", "pcba功能类别.xlrio t/b"),
+            // dict.logistics.pcba.function.category.256
+            ("dict.logistics.pcba.function.category.256", "ja-JP", "XLRIO T/B_jp", "pcba功能类别.xlrio t/b"),
+            // dict.logistics.pcba.function.category.256
+            ("dict.logistics.pcba.function.category.256", "zh-CN", "XLRIO T/B", "pcba功能类别.xlrio t/b"),
+            // dict.logistics.pcba.function.category.256
+            ("dict.logistics.pcba.function.category.256", "zh-HK", "XLRIO T/B_hk", "pcba功能类别.xlrio t/b"),
+
+            // dict.logistics.pcba.function.category.257
+            ("dict.logistics.pcba.function.category.257", "en-US", "XLRIO T_us", "pcba功能类别.xlrio t"),
+            // dict.logistics.pcba.function.category.257
+            ("dict.logistics.pcba.function.category.257", "ja-JP", "XLRIO T_jp", "pcba功能类别.xlrio t"),
+            // dict.logistics.pcba.function.category.257
+            ("dict.logistics.pcba.function.category.257", "zh-CN", "XLRIO T", "pcba功能类别.xlrio t"),
+            // dict.logistics.pcba.function.category.257
+            ("dict.logistics.pcba.function.category.257", "zh-HK", "XLRIO T_hk", "pcba功能类别.xlrio t"),
+
+            // dict.logistics.pcba.function.category.258
+            ("dict.logistics.pcba.function.category.258", "en-US", "XLROUT_us", "pcba功能类别.xlrout"),
+            // dict.logistics.pcba.function.category.258
+            ("dict.logistics.pcba.function.category.258", "ja-JP", "XLROUT_jp", "pcba功能类别.xlrout"),
+            // dict.logistics.pcba.function.category.258
+            ("dict.logistics.pcba.function.category.258", "zh-CN", "XLROUT", "pcba功能类别.xlrout"),
+            // dict.logistics.pcba.function.category.258
+            ("dict.logistics.pcba.function.category.258", "zh-HK", "XLROUT_hk", "pcba功能类别.xlrout"),
 
             // dict.logistics.pcba.side.category.b
-            ("dict.logistics.pcba.side.category.b", "en-US", "b面_us", "pcba面别.b面"),
+            ("dict.logistics.pcba.side.category.b", "en-US", "B面_us", "pcba面别.b面"),
             // dict.logistics.pcba.side.category.b
-            ("dict.logistics.pcba.side.category.b", "ja-JP", "b面_jp", "pcba面别.b面"),
+            ("dict.logistics.pcba.side.category.b", "ja-JP", "B面_jp", "pcba面别.b面"),
             // dict.logistics.pcba.side.category.b
-            ("dict.logistics.pcba.side.category.b", "zh-CN", "b面", "pcba面别.b面"),
+            ("dict.logistics.pcba.side.category.b", "zh-CN", "B面", "pcba面别.b面"),
             // dict.logistics.pcba.side.category.b
-            ("dict.logistics.pcba.side.category.b", "zh-HK", "b面_hk", "pcba面别.b面"),
+            ("dict.logistics.pcba.side.category.b", "zh-HK", "B面_hk", "pcba面别.b面"),
 
             // dict.logistics.pcba.side.category.t
-            ("dict.logistics.pcba.side.category.t", "en-US", "t面_us", "pcba面别.t面"),
+            ("dict.logistics.pcba.side.category.t", "en-US", "T面_us", "pcba面别.t面"),
             // dict.logistics.pcba.side.category.t
-            ("dict.logistics.pcba.side.category.t", "ja-JP", "t面_jp", "pcba面别.t面"),
+            ("dict.logistics.pcba.side.category.t", "ja-JP", "T面_jp", "pcba面别.t面"),
             // dict.logistics.pcba.side.category.t
-            ("dict.logistics.pcba.side.category.t", "zh-CN", "t面", "pcba面别.t面"),
+            ("dict.logistics.pcba.side.category.t", "zh-CN", "T面", "pcba面别.t面"),
             // dict.logistics.pcba.side.category.t
-            ("dict.logistics.pcba.side.category.t", "zh-HK", "t面_hk", "pcba面别.t面"),
+            ("dict.logistics.pcba.side.category.t", "zh-HK", "T面_hk", "pcba面别.t面"),
 
             // dict.logistics.prod.category.epp
             ("dict.logistics.prod.category.epp", "en-US", "试产_us", "生产类别.试产"),
@@ -13649,15 +14153,6 @@ public class TaktDictI18nSeedData : ITaktSeedDataCoordinator
             // dict.logistics.team.category.p
             ("dict.logistics.team.category.p", "zh-HK", "PCBA_hk", "班组分类.PCBA"),
 
-            // dict.logistics.team.category.s
-            ("dict.logistics.team.category.s", "en-US", "SMT_us", "班组分类.SMT"),
-            // dict.logistics.team.category.s
-            ("dict.logistics.team.category.s", "ja-JP", "SMT_jp", "班组分类.SMT"),
-            // dict.logistics.team.category.s
-            ("dict.logistics.team.category.s", "zh-CN", "SMT", "班组分类.SMT"),
-            // dict.logistics.team.category.s
-            ("dict.logistics.team.category.s", "zh-HK", "SMT_hk", "班组分类.SMT"),
-
             // dict.logistics.team.category.q
             ("dict.logistics.team.category.q", "en-US", "质检_us", "班组分类.质检"),
             // dict.logistics.team.category.q
@@ -13739,6 +14234,33 @@ public class TaktDictI18nSeedData : ITaktSeedDataCoordinator
             // dict.logistics.stop.reason.category.1
             ("dict.logistics.stop.reason.category.1", "zh-HK", "切换停止时间_hk", "停线原因.切换停止时间"),
 
+            // dict.logistics.stop.reason.category.7
+            ("dict.logistics.stop.reason.category.7", "en-US", "切换机种_us", "停线原因.切换机种"),
+            // dict.logistics.stop.reason.category.7
+            ("dict.logistics.stop.reason.category.7", "ja-JP", "切换机种_jp", "停线原因.切换机种"),
+            // dict.logistics.stop.reason.category.7
+            ("dict.logistics.stop.reason.category.7", "zh-CN", "切换机种", "停线原因.切换机种"),
+            // dict.logistics.stop.reason.category.7
+            ("dict.logistics.stop.reason.category.7", "zh-HK", "切换机种_hk", "停线原因.切换机种"),
+
+            // dict.logistics.stop.reason.category.8
+            ("dict.logistics.stop.reason.category.8", "en-US", "早会_us", "停线原因.早会"),
+            // dict.logistics.stop.reason.category.8
+            ("dict.logistics.stop.reason.category.8", "ja-JP", "早会_jp", "停线原因.早会"),
+            // dict.logistics.stop.reason.category.8
+            ("dict.logistics.stop.reason.category.8", "zh-CN", "早会", "停线原因.早会"),
+            // dict.logistics.stop.reason.category.8
+            ("dict.logistics.stop.reason.category.8", "zh-HK", "早会_hk", "停线原因.早会"),
+
+            // dict.logistics.stop.reason.category.6
+            ("dict.logistics.stop.reason.category.6", "en-US", "班会_us", "停线原因.班会"),
+            // dict.logistics.stop.reason.category.6
+            ("dict.logistics.stop.reason.category.6", "ja-JP", "班会_jp", "停线原因.班会"),
+            // dict.logistics.stop.reason.category.6
+            ("dict.logistics.stop.reason.category.6", "zh-CN", "班会", "停线原因.班会"),
+            // dict.logistics.stop.reason.category.6
+            ("dict.logistics.stop.reason.category.6", "zh-HK", "班会_hk", "停线原因.班会"),
+
             // dict.logistics.stop.reason.category.2
             ("dict.logistics.stop.reason.category.2", "en-US", "周会_us", "停线原因.周会"),
             // dict.logistics.stop.reason.category.2
@@ -13748,14 +14270,68 @@ public class TaktDictI18nSeedData : ITaktSeedDataCoordinator
             // dict.logistics.stop.reason.category.2
             ("dict.logistics.stop.reason.category.2", "zh-HK", "周会_hk", "停线原因.周会"),
 
-            // dict.logistics.stop.reason.category.3
-            ("dict.logistics.stop.reason.category.3", "en-US", "其他_us", "停线原因.其他"),
-            // dict.logistics.stop.reason.category.3
-            ("dict.logistics.stop.reason.category.3", "ja-JP", "其他_jp", "停线原因.其他"),
-            // dict.logistics.stop.reason.category.3
-            ("dict.logistics.stop.reason.category.3", "zh-CN", "其他", "停线原因.其他"),
-            // dict.logistics.stop.reason.category.3
-            ("dict.logistics.stop.reason.category.3", "zh-HK", "其他_hk", "停线原因.其他"),
+            // dict.logistics.stop.reason.category.10
+            ("dict.logistics.stop.reason.category.10", "en-US", "学习_us", "停线原因.学习"),
+            // dict.logistics.stop.reason.category.10
+            ("dict.logistics.stop.reason.category.10", "ja-JP", "学习_jp", "停线原因.学习"),
+            // dict.logistics.stop.reason.category.10
+            ("dict.logistics.stop.reason.category.10", "zh-CN", "学习", "停线原因.学习"),
+            // dict.logistics.stop.reason.category.10
+            ("dict.logistics.stop.reason.category.10", "zh-HK", "学习_hk", "停线原因.学习"),
+
+            // dict.logistics.stop.reason.category.9
+            ("dict.logistics.stop.reason.category.9", "en-US", "组立_us", "停线原因.组立"),
+            // dict.logistics.stop.reason.category.9
+            ("dict.logistics.stop.reason.category.9", "ja-JP", "组立_jp", "停线原因.组立"),
+            // dict.logistics.stop.reason.category.9
+            ("dict.logistics.stop.reason.category.9", "zh-CN", "组立", "停线原因.组立"),
+            // dict.logistics.stop.reason.category.9
+            ("dict.logistics.stop.reason.category.9", "zh-HK", "组立_hk", "停线原因.组立"),
+
+            // dict.logistics.stop.reason.category.14
+            ("dict.logistics.stop.reason.category.14", "en-US", "读工程表_us", "停线原因.读工程表"),
+            // dict.logistics.stop.reason.category.14
+            ("dict.logistics.stop.reason.category.14", "ja-JP", "读工程表_jp", "停线原因.读工程表"),
+            // dict.logistics.stop.reason.category.14
+            ("dict.logistics.stop.reason.category.14", "zh-CN", "读工程表", "停线原因.读工程表"),
+            // dict.logistics.stop.reason.category.14
+            ("dict.logistics.stop.reason.category.14", "zh-HK", "读工程表_hk", "停线原因.读工程表"),
+
+            // dict.logistics.stop.reason.category.15
+            ("dict.logistics.stop.reason.category.15", "en-US", "程序烧录错误_us", "停线原因.程序烧录错误"),
+            // dict.logistics.stop.reason.category.15
+            ("dict.logistics.stop.reason.category.15", "ja-JP", "程序烧录错误_jp", "停线原因.程序烧录错误"),
+            // dict.logistics.stop.reason.category.15
+            ("dict.logistics.stop.reason.category.15", "zh-CN", "程序烧录错误", "停线原因.程序烧录错误"),
+            // dict.logistics.stop.reason.category.15
+            ("dict.logistics.stop.reason.category.15", "zh-HK", "程序烧录错误_hk", "停线原因.程序烧录错误"),
+
+            // dict.logistics.stop.reason.category.16
+            ("dict.logistics.stop.reason.category.16", "en-US", "拆机_us", "停线原因.拆机"),
+            // dict.logistics.stop.reason.category.16
+            ("dict.logistics.stop.reason.category.16", "ja-JP", "拆机_jp", "停线原因.拆机"),
+            // dict.logistics.stop.reason.category.16
+            ("dict.logistics.stop.reason.category.16", "zh-CN", "拆机", "停线原因.拆机"),
+            // dict.logistics.stop.reason.category.16
+            ("dict.logistics.stop.reason.category.16", "zh-HK", "拆机_hk", "停线原因.拆机"),
+
+            // dict.logistics.stop.reason.category.11
+            ("dict.logistics.stop.reason.category.11", "en-US", "仪设_us", "停线原因.仪设"),
+            // dict.logistics.stop.reason.category.11
+            ("dict.logistics.stop.reason.category.11", "ja-JP", "仪设_jp", "停线原因.仪设"),
+            // dict.logistics.stop.reason.category.11
+            ("dict.logistics.stop.reason.category.11", "zh-CN", "仪设", "停线原因.仪设"),
+            // dict.logistics.stop.reason.category.11
+            ("dict.logistics.stop.reason.category.11", "zh-HK", "仪设_hk", "停线原因.仪设"),
+
+            // dict.logistics.stop.reason.category.12
+            ("dict.logistics.stop.reason.category.12", "en-US", "清洁_us", "停线原因.清洁"),
+            // dict.logistics.stop.reason.category.12
+            ("dict.logistics.stop.reason.category.12", "ja-JP", "清洁_jp", "停线原因.清洁"),
+            // dict.logistics.stop.reason.category.12
+            ("dict.logistics.stop.reason.category.12", "zh-CN", "清洁", "停线原因.清洁"),
+            // dict.logistics.stop.reason.category.12
+            ("dict.logistics.stop.reason.category.12", "zh-HK", "清洁_hk", "停线原因.清洁"),
 
             // dict.logistics.stop.reason.category.4
             ("dict.logistics.stop.reason.category.4", "en-US", "欠料_us", "停线原因.欠料"),
@@ -13775,68 +14351,23 @@ public class TaktDictI18nSeedData : ITaktSeedDataCoordinator
             // dict.logistics.stop.reason.category.5
             ("dict.logistics.stop.reason.category.5", "zh-HK", "停电_hk", "停线原因.停电"),
 
-            // dict.logistics.stop.reason.category.6
-            ("dict.logistics.stop.reason.category.6", "en-US", "班会_us", "停线原因.班会"),
-            // dict.logistics.stop.reason.category.6
-            ("dict.logistics.stop.reason.category.6", "ja-JP", "班会_jp", "停线原因.班会"),
-            // dict.logistics.stop.reason.category.6
-            ("dict.logistics.stop.reason.category.6", "zh-CN", "班会", "停线原因.班会"),
-            // dict.logistics.stop.reason.category.6
-            ("dict.logistics.stop.reason.category.6", "zh-HK", "班会_hk", "停线原因.班会"),
+            // dict.logistics.stop.reason.category.13
+            ("dict.logistics.stop.reason.category.13", "en-US", "消防演习_us", "停线原因.消防演习"),
+            // dict.logistics.stop.reason.category.13
+            ("dict.logistics.stop.reason.category.13", "ja-JP", "消防演习_jp", "停线原因.消防演习"),
+            // dict.logistics.stop.reason.category.13
+            ("dict.logistics.stop.reason.category.13", "zh-CN", "消防演习", "停线原因.消防演习"),
+            // dict.logistics.stop.reason.category.13
+            ("dict.logistics.stop.reason.category.13", "zh-HK", "消防演习_hk", "停线原因.消防演习"),
 
-            // dict.logistics.stop.reason.category.7
-            ("dict.logistics.stop.reason.category.7", "en-US", "切换机种_us", "停线原因.切换机种"),
-            // dict.logistics.stop.reason.category.7
-            ("dict.logistics.stop.reason.category.7", "ja-JP", "切换机种_jp", "停线原因.切换机种"),
-            // dict.logistics.stop.reason.category.7
-            ("dict.logistics.stop.reason.category.7", "zh-CN", "切换机种", "停线原因.切换机种"),
-            // dict.logistics.stop.reason.category.7
-            ("dict.logistics.stop.reason.category.7", "zh-HK", "切换机种_hk", "停线原因.切换机种"),
-
-            // dict.logistics.stop.reason.category.8
-            ("dict.logistics.stop.reason.category.8", "en-US", "早会_us", "停线原因.早会"),
-            // dict.logistics.stop.reason.category.8
-            ("dict.logistics.stop.reason.category.8", "ja-JP", "早会_jp", "停线原因.早会"),
-            // dict.logistics.stop.reason.category.8
-            ("dict.logistics.stop.reason.category.8", "zh-CN", "早会", "停线原因.早会"),
-            // dict.logistics.stop.reason.category.8
-            ("dict.logistics.stop.reason.category.8", "zh-HK", "早会_hk", "停线原因.早会"),
-
-            // dict.logistics.stop.reason.category.9
-            ("dict.logistics.stop.reason.category.9", "en-US", "组立_us", "停线原因.组立"),
-            // dict.logistics.stop.reason.category.9
-            ("dict.logistics.stop.reason.category.9", "ja-JP", "组立_jp", "停线原因.组立"),
-            // dict.logistics.stop.reason.category.9
-            ("dict.logistics.stop.reason.category.9", "zh-CN", "组立", "停线原因.组立"),
-            // dict.logistics.stop.reason.category.9
-            ("dict.logistics.stop.reason.category.9", "zh-HK", "组立_hk", "停线原因.组立"),
-
-            // dict.logistics.stop.reason.category.10
-            ("dict.logistics.stop.reason.category.10", "en-US", "学习_us", "停线原因.学习"),
-            // dict.logistics.stop.reason.category.10
-            ("dict.logistics.stop.reason.category.10", "ja-JP", "学习_jp", "停线原因.学习"),
-            // dict.logistics.stop.reason.category.10
-            ("dict.logistics.stop.reason.category.10", "zh-CN", "学习", "停线原因.学习"),
-            // dict.logistics.stop.reason.category.10
-            ("dict.logistics.stop.reason.category.10", "zh-HK", "学习_hk", "停线原因.学习"),
-
-            // dict.logistics.stop.reason.category.11
-            ("dict.logistics.stop.reason.category.11", "en-US", "仪设_us", "停线原因.仪设"),
-            // dict.logistics.stop.reason.category.11
-            ("dict.logistics.stop.reason.category.11", "ja-JP", "仪设_jp", "停线原因.仪设"),
-            // dict.logistics.stop.reason.category.11
-            ("dict.logistics.stop.reason.category.11", "zh-CN", "仪设", "停线原因.仪设"),
-            // dict.logistics.stop.reason.category.11
-            ("dict.logistics.stop.reason.category.11", "zh-HK", "仪设_hk", "停线原因.仪设"),
-
-            // dict.logistics.stop.reason.category.12
-            ("dict.logistics.stop.reason.category.12", "en-US", "清洁_us", "停线原因.清洁"),
-            // dict.logistics.stop.reason.category.12
-            ("dict.logistics.stop.reason.category.12", "ja-JP", "清洁_jp", "停线原因.清洁"),
-            // dict.logistics.stop.reason.category.12
-            ("dict.logistics.stop.reason.category.12", "zh-CN", "清洁", "停线原因.清洁"),
-            // dict.logistics.stop.reason.category.12
-            ("dict.logistics.stop.reason.category.12", "zh-HK", "清洁_hk", "停线原因.清洁"),
+            // dict.logistics.stop.reason.category.3
+            ("dict.logistics.stop.reason.category.3", "en-US", "其他_us", "停线原因.其他"),
+            // dict.logistics.stop.reason.category.3
+            ("dict.logistics.stop.reason.category.3", "ja-JP", "其他_jp", "停线原因.其他"),
+            // dict.logistics.stop.reason.category.3
+            ("dict.logistics.stop.reason.category.3", "zh-CN", "其他", "停线原因.其他"),
+            // dict.logistics.stop.reason.category.3
+            ("dict.logistics.stop.reason.category.3", "zh-HK", "其他_hk", "停线原因.其他"),
 
             // dict.logistics.visual.inspection.line.category.1
             ("dict.logistics.visual.inspection.line.category.1", "en-US", "1_us", "目视线别.1"),
@@ -14343,13 +14874,13 @@ public class TaktDictI18nSeedData : ITaktSeedDataCoordinator
             ("dict.logistics.work.center.category.0020", "zh-HK", "混合（人机）_hk", "工作中心类别.混合（人机联合作业）"),
 
             // dict.sys.culture.code.af-za
-            ("dict.sys.culture.code.af-za", "en-US", "Afrikaans", "区域文化编码.Afrikaans"),
+            ("dict.sys.culture.code.af-za", "en-US", "AFRIKAANS", "区域文化编码.Afrikaans"),
             // dict.sys.culture.code.af-za
-            ("dict.sys.culture.code.af-za", "ja-JP", "Afrikaans", "区域文化编码.Afrikaans"),
+            ("dict.sys.culture.code.af-za", "ja-JP", "AFRIKAANS", "区域文化编码.Afrikaans"),
             // dict.sys.culture.code.af-za
-            ("dict.sys.culture.code.af-za", "zh-CN", "Afrikaans", "区域文化编码.Afrikaans"),
+            ("dict.sys.culture.code.af-za", "zh-CN", "AFRIKAANS", "区域文化编码.Afrikaans"),
             // dict.sys.culture.code.af-za
-            ("dict.sys.culture.code.af-za", "zh-HK", "Afrikaans", "区域文化编码.Afrikaans"),
+            ("dict.sys.culture.code.af-za", "zh-HK", "AFRIKAANS", "区域文化编码.Afrikaans"),
 
             // dict.sys.culture.code.ar-ae
             ("dict.sys.culture.code.ar-ae", "en-US", "العربية", "区域文化编码.العربية"),
@@ -14370,40 +14901,40 @@ public class TaktDictI18nSeedData : ITaktSeedDataCoordinator
             ("dict.sys.culture.code.be-by", "zh-HK", "Беларуская", "区域文化编码.Беларуская (BY)"),
 
             // dict.sys.culture.code.cs-cz
-            ("dict.sys.culture.code.cs-cz", "en-US", "čeština", "区域文化编码.čeština"),
+            ("dict.sys.culture.code.cs-cz", "en-US", "čEšTINA", "区域文化编码.čeština"),
             // dict.sys.culture.code.cs-cz
-            ("dict.sys.culture.code.cs-cz", "ja-JP", "čeština", "区域文化编码.čeština"),
+            ("dict.sys.culture.code.cs-cz", "ja-JP", "čEšTINA", "区域文化编码.čeština"),
             // dict.sys.culture.code.cs-cz
-            ("dict.sys.culture.code.cs-cz", "zh-CN", "čeština", "区域文化编码.čeština"),
+            ("dict.sys.culture.code.cs-cz", "zh-CN", "čEšTINA", "区域文化编码.čeština"),
             // dict.sys.culture.code.cs-cz
-            ("dict.sys.culture.code.cs-cz", "zh-HK", "čeština", "区域文化编码.čeština"),
+            ("dict.sys.culture.code.cs-cz", "zh-HK", "čEšTINA", "区域文化编码.čeština"),
 
             // dict.sys.culture.code.cy-gb
-            ("dict.sys.culture.code.cy-gb", "en-US", "Cymraeg", "区域文化编码.Cymraeg"),
+            ("dict.sys.culture.code.cy-gb", "en-US", "CYMRAEG", "区域文化编码.Cymraeg"),
             // dict.sys.culture.code.cy-gb
-            ("dict.sys.culture.code.cy-gb", "ja-JP", "Cymraeg", "区域文化编码.Cymraeg"),
+            ("dict.sys.culture.code.cy-gb", "ja-JP", "CYMRAEG", "区域文化编码.Cymraeg"),
             // dict.sys.culture.code.cy-gb
-            ("dict.sys.culture.code.cy-gb", "zh-CN", "Cymraeg", "区域文化编码.Cymraeg"),
+            ("dict.sys.culture.code.cy-gb", "zh-CN", "CYMRAEG", "区域文化编码.Cymraeg"),
             // dict.sys.culture.code.cy-gb
-            ("dict.sys.culture.code.cy-gb", "zh-HK", "Cymraeg", "区域文化编码.Cymraeg"),
+            ("dict.sys.culture.code.cy-gb", "zh-HK", "CYMRAEG", "区域文化编码.Cymraeg"),
 
             // dict.sys.culture.code.da-dk
-            ("dict.sys.culture.code.da-dk", "en-US", "dansk", "区域文化编码.dansk"),
+            ("dict.sys.culture.code.da-dk", "en-US", "DANSK", "区域文化编码.dansk"),
             // dict.sys.culture.code.da-dk
-            ("dict.sys.culture.code.da-dk", "ja-JP", "dansk", "区域文化编码.dansk"),
+            ("dict.sys.culture.code.da-dk", "ja-JP", "DANSK", "区域文化编码.dansk"),
             // dict.sys.culture.code.da-dk
-            ("dict.sys.culture.code.da-dk", "zh-CN", "dansk", "区域文化编码.dansk"),
+            ("dict.sys.culture.code.da-dk", "zh-CN", "DANSK", "区域文化编码.dansk"),
             // dict.sys.culture.code.da-dk
-            ("dict.sys.culture.code.da-dk", "zh-HK", "dansk", "区域文化编码.dansk"),
+            ("dict.sys.culture.code.da-dk", "zh-HK", "DANSK", "区域文化编码.dansk"),
 
             // dict.sys.culture.code.de-de
-            ("dict.sys.culture.code.de-de", "en-US", "Deutsch", "区域文化编码.Deutsch"),
+            ("dict.sys.culture.code.de-de", "en-US", "DEUTSCH", "区域文化编码.Deutsch"),
             // dict.sys.culture.code.de-de
-            ("dict.sys.culture.code.de-de", "ja-JP", "Deutsch", "区域文化编码.Deutsch"),
+            ("dict.sys.culture.code.de-de", "ja-JP", "DEUTSCH", "区域文化编码.Deutsch"),
             // dict.sys.culture.code.de-de
-            ("dict.sys.culture.code.de-de", "zh-CN", "Deutsch", "区域文化编码.Deutsch"),
+            ("dict.sys.culture.code.de-de", "zh-CN", "DEUTSCH", "区域文化编码.Deutsch"),
             // dict.sys.culture.code.de-de
-            ("dict.sys.culture.code.de-de", "zh-HK", "Deutsch", "区域文化编码.Deutsch"),
+            ("dict.sys.culture.code.de-de", "zh-HK", "DEUTSCH", "区域文化编码.Deutsch"),
 
             // dict.sys.culture.code.el-gr
             ("dict.sys.culture.code.el-gr", "en-US", "Ελληνικά", "区域文化编码.Ελληνικά"),
@@ -14415,67 +14946,67 @@ public class TaktDictI18nSeedData : ITaktSeedDataCoordinator
             ("dict.sys.culture.code.el-gr", "zh-HK", "Ελληνικά", "区域文化编码.Ελληνικά"),
 
             // dict.sys.culture.code.en-au
-            ("dict.sys.culture.code.en-au", "en-US", "English(AU)", "区域文化编码.English (AU)"),
+            ("dict.sys.culture.code.en-au", "en-US", "ENGLISH(AU)", "区域文化编码.English (AU)"),
             // dict.sys.culture.code.en-au
-            ("dict.sys.culture.code.en-au", "ja-JP", "English(AU)", "区域文化编码.English (AU)"),
+            ("dict.sys.culture.code.en-au", "ja-JP", "ENGLISH(AU)", "区域文化编码.English (AU)"),
             // dict.sys.culture.code.en-au
-            ("dict.sys.culture.code.en-au", "zh-CN", "English(AU)", "区域文化编码.English (AU)"),
+            ("dict.sys.culture.code.en-au", "zh-CN", "ENGLISH(AU)", "区域文化编码.English (AU)"),
             // dict.sys.culture.code.en-au
-            ("dict.sys.culture.code.en-au", "zh-HK", "English(AU)", "区域文化编码.English (AU)"),
+            ("dict.sys.culture.code.en-au", "zh-HK", "ENGLISH(AU)", "区域文化编码.English (AU)"),
 
             // dict.sys.culture.code.en-gb
-            ("dict.sys.culture.code.en-gb", "en-US", "English(UK)", "区域文化编码.English (UK)"),
+            ("dict.sys.culture.code.en-gb", "en-US", "ENGLISH(UK)", "区域文化编码.English (UK)"),
             // dict.sys.culture.code.en-gb
-            ("dict.sys.culture.code.en-gb", "ja-JP", "English(UK)", "区域文化编码.English (UK)"),
+            ("dict.sys.culture.code.en-gb", "ja-JP", "ENGLISH(UK)", "区域文化编码.English (UK)"),
             // dict.sys.culture.code.en-gb
-            ("dict.sys.culture.code.en-gb", "zh-CN", "English(UK)", "区域文化编码.English (UK)"),
+            ("dict.sys.culture.code.en-gb", "zh-CN", "ENGLISH(UK)", "区域文化编码.English (UK)"),
             // dict.sys.culture.code.en-gb
-            ("dict.sys.culture.code.en-gb", "zh-HK", "English(UK)", "区域文化编码.English (UK)"),
+            ("dict.sys.culture.code.en-gb", "zh-HK", "ENGLISH(UK)", "区域文化编码.English (UK)"),
 
             // dict.sys.culture.code.en-us
-            ("dict.sys.culture.code.en-us", "en-US", "English(US)", "区域文化编码.English (US)"),
+            ("dict.sys.culture.code.en-us", "en-US", "ENGLISH(US)", "区域文化编码.English (US)"),
             // dict.sys.culture.code.en-us
-            ("dict.sys.culture.code.en-us", "ja-JP", "English(US)", "区域文化编码.English (US)"),
+            ("dict.sys.culture.code.en-us", "ja-JP", "ENGLISH(US)", "区域文化编码.English (US)"),
             // dict.sys.culture.code.en-us
-            ("dict.sys.culture.code.en-us", "zh-CN", "English(US)", "区域文化编码.English (US)"),
+            ("dict.sys.culture.code.en-us", "zh-CN", "ENGLISH(US)", "区域文化编码.English (US)"),
             // dict.sys.culture.code.en-us
-            ("dict.sys.culture.code.en-us", "zh-HK", "English(US)", "区域文化编码.English (US)"),
+            ("dict.sys.culture.code.en-us", "zh-HK", "ENGLISH(US)", "区域文化编码.English (US)"),
 
             // dict.sys.culture.code.es-es
-            ("dict.sys.culture.code.es-es", "en-US", "Español", "区域文化编码.Español"),
+            ("dict.sys.culture.code.es-es", "en-US", "ESPAñOL", "区域文化编码.Español"),
             // dict.sys.culture.code.es-es
-            ("dict.sys.culture.code.es-es", "ja-JP", "Español", "区域文化编码.Español"),
+            ("dict.sys.culture.code.es-es", "ja-JP", "ESPAñOL", "区域文化编码.Español"),
             // dict.sys.culture.code.es-es
-            ("dict.sys.culture.code.es-es", "zh-CN", "Español", "区域文化编码.Español"),
+            ("dict.sys.culture.code.es-es", "zh-CN", "ESPAñOL", "区域文化编码.Español"),
             // dict.sys.culture.code.es-es
-            ("dict.sys.culture.code.es-es", "zh-HK", "Español", "区域文化编码.Español"),
+            ("dict.sys.culture.code.es-es", "zh-HK", "ESPAñOL", "区域文化编码.Español"),
 
             // dict.sys.culture.code.et-ee
-            ("dict.sys.culture.code.et-ee", "en-US", "eesti", "区域文化编码.eesti"),
+            ("dict.sys.culture.code.et-ee", "en-US", "EESTI", "区域文化编码.eesti"),
             // dict.sys.culture.code.et-ee
-            ("dict.sys.culture.code.et-ee", "ja-JP", "eesti", "区域文化编码.eesti"),
+            ("dict.sys.culture.code.et-ee", "ja-JP", "EESTI", "区域文化编码.eesti"),
             // dict.sys.culture.code.et-ee
-            ("dict.sys.culture.code.et-ee", "zh-CN", "eesti", "区域文化编码.eesti"),
+            ("dict.sys.culture.code.et-ee", "zh-CN", "EESTI", "区域文化编码.eesti"),
             // dict.sys.culture.code.et-ee
-            ("dict.sys.culture.code.et-ee", "zh-HK", "eesti", "区域文化编码.eesti"),
+            ("dict.sys.culture.code.et-ee", "zh-HK", "EESTI", "区域文化编码.eesti"),
 
             // dict.sys.culture.code.fi-fi
-            ("dict.sys.culture.code.fi-fi", "en-US", "suomi", "区域文化编码.suomi"),
+            ("dict.sys.culture.code.fi-fi", "en-US", "SUOMI", "区域文化编码.suomi"),
             // dict.sys.culture.code.fi-fi
-            ("dict.sys.culture.code.fi-fi", "ja-JP", "suomi", "区域文化编码.suomi"),
+            ("dict.sys.culture.code.fi-fi", "ja-JP", "SUOMI", "区域文化编码.suomi"),
             // dict.sys.culture.code.fi-fi
-            ("dict.sys.culture.code.fi-fi", "zh-CN", "suomi", "区域文化编码.suomi"),
+            ("dict.sys.culture.code.fi-fi", "zh-CN", "SUOMI", "区域文化编码.suomi"),
             // dict.sys.culture.code.fi-fi
-            ("dict.sys.culture.code.fi-fi", "zh-HK", "suomi", "区域文化编码.suomi"),
+            ("dict.sys.culture.code.fi-fi", "zh-HK", "SUOMI", "区域文化编码.suomi"),
 
             // dict.sys.culture.code.fr-fr
-            ("dict.sys.culture.code.fr-fr", "en-US", "français", "区域文化编码.français"),
+            ("dict.sys.culture.code.fr-fr", "en-US", "FRANçAIS", "区域文化编码.français"),
             // dict.sys.culture.code.fr-fr
-            ("dict.sys.culture.code.fr-fr", "ja-JP", "français", "区域文化编码.français"),
+            ("dict.sys.culture.code.fr-fr", "ja-JP", "FRANçAIS", "区域文化编码.français"),
             // dict.sys.culture.code.fr-fr
-            ("dict.sys.culture.code.fr-fr", "zh-CN", "français", "区域文化编码.français"),
+            ("dict.sys.culture.code.fr-fr", "zh-CN", "FRANçAIS", "区域文化编码.français"),
             // dict.sys.culture.code.fr-fr
-            ("dict.sys.culture.code.fr-fr", "zh-HK", "français", "区域文化编码.français"),
+            ("dict.sys.culture.code.fr-fr", "zh-HK", "FRANçAIS", "区域文化编码.français"),
 
             // dict.sys.culture.code.hi-in
             ("dict.sys.culture.code.hi-in", "en-US", "हिंदी", "区域文化编码.हिंदी"),
@@ -14487,22 +15018,22 @@ public class TaktDictI18nSeedData : ITaktSeedDataCoordinator
             ("dict.sys.culture.code.hi-in", "zh-HK", "हिंदी", "区域文化编码.हिंदी"),
 
             // dict.sys.culture.code.hr-hr
-            ("dict.sys.culture.code.hr-hr", "en-US", "hrvatski", "区域文化编码.hrvatski"),
+            ("dict.sys.culture.code.hr-hr", "en-US", "HRVATSKI", "区域文化编码.hrvatski"),
             // dict.sys.culture.code.hr-hr
-            ("dict.sys.culture.code.hr-hr", "ja-JP", "hrvatski", "区域文化编码.hrvatski"),
+            ("dict.sys.culture.code.hr-hr", "ja-JP", "HRVATSKI", "区域文化编码.hrvatski"),
             // dict.sys.culture.code.hr-hr
-            ("dict.sys.culture.code.hr-hr", "zh-CN", "hrvatski", "区域文化编码.hrvatski"),
+            ("dict.sys.culture.code.hr-hr", "zh-CN", "HRVATSKI", "区域文化编码.hrvatski"),
             // dict.sys.culture.code.hr-hr
-            ("dict.sys.culture.code.hr-hr", "zh-HK", "hrvatski", "区域文化编码.hrvatski"),
+            ("dict.sys.culture.code.hr-hr", "zh-HK", "HRVATSKI", "区域文化编码.hrvatski"),
 
             // dict.sys.culture.code.it-it
-            ("dict.sys.culture.code.it-it", "en-US", "italiano", "区域文化编码.italiano"),
+            ("dict.sys.culture.code.it-it", "en-US", "ITALIANO", "区域文化编码.italiano"),
             // dict.sys.culture.code.it-it
-            ("dict.sys.culture.code.it-it", "ja-JP", "italiano", "区域文化编码.italiano"),
+            ("dict.sys.culture.code.it-it", "ja-JP", "ITALIANO", "区域文化编码.italiano"),
             // dict.sys.culture.code.it-it
-            ("dict.sys.culture.code.it-it", "zh-CN", "italiano", "区域文化编码.italiano"),
+            ("dict.sys.culture.code.it-it", "zh-CN", "ITALIANO", "区域文化编码.italiano"),
             // dict.sys.culture.code.it-it
-            ("dict.sys.culture.code.it-it", "zh-HK", "italiano", "区域文化编码.italiano"),
+            ("dict.sys.culture.code.it-it", "zh-HK", "ITALIANO", "区域文化编码.italiano"),
 
             // dict.sys.culture.code.ja-jp
             ("dict.sys.culture.code.ja-jp", "en-US", "日本語(JP)", "区域文化编码.日本語"),
@@ -14532,31 +15063,31 @@ public class TaktDictI18nSeedData : ITaktSeedDataCoordinator
             ("dict.sys.culture.code.ko-kr", "zh-HK", "한국어", "区域文化编码.한국어"),
 
             // dict.sys.culture.code.nl-nl
-            ("dict.sys.culture.code.nl-nl", "en-US", "Nederlands", "区域文化编码.Nederlands"),
+            ("dict.sys.culture.code.nl-nl", "en-US", "NEDERLANDS", "区域文化编码.Nederlands"),
             // dict.sys.culture.code.nl-nl
-            ("dict.sys.culture.code.nl-nl", "ja-JP", "Nederlands", "区域文化编码.Nederlands"),
+            ("dict.sys.culture.code.nl-nl", "ja-JP", "NEDERLANDS", "区域文化编码.Nederlands"),
             // dict.sys.culture.code.nl-nl
-            ("dict.sys.culture.code.nl-nl", "zh-CN", "Nederlands", "区域文化编码.Nederlands"),
+            ("dict.sys.culture.code.nl-nl", "zh-CN", "NEDERLANDS", "区域文化编码.Nederlands"),
             // dict.sys.culture.code.nl-nl
-            ("dict.sys.culture.code.nl-nl", "zh-HK", "Nederlands", "区域文化编码.Nederlands"),
+            ("dict.sys.culture.code.nl-nl", "zh-HK", "NEDERLANDS", "区域文化编码.Nederlands"),
 
             // dict.sys.culture.code.pl-pl
-            ("dict.sys.culture.code.pl-pl", "en-US", "Polski", "区域文化编码.Polski"),
+            ("dict.sys.culture.code.pl-pl", "en-US", "POLSKI", "区域文化编码.Polski"),
             // dict.sys.culture.code.pl-pl
-            ("dict.sys.culture.code.pl-pl", "ja-JP", "Polski", "区域文化编码.Polski"),
+            ("dict.sys.culture.code.pl-pl", "ja-JP", "POLSKI", "区域文化编码.Polski"),
             // dict.sys.culture.code.pl-pl
-            ("dict.sys.culture.code.pl-pl", "zh-CN", "Polski", "区域文化编码.Polski"),
+            ("dict.sys.culture.code.pl-pl", "zh-CN", "POLSKI", "区域文化编码.Polski"),
             // dict.sys.culture.code.pl-pl
-            ("dict.sys.culture.code.pl-pl", "zh-HK", "Polski", "区域文化编码.Polski"),
+            ("dict.sys.culture.code.pl-pl", "zh-HK", "POLSKI", "区域文化编码.Polski"),
 
             // dict.sys.culture.code.ro-ro
-            ("dict.sys.culture.code.ro-ro", "en-US", "română", "区域文化编码.română"),
+            ("dict.sys.culture.code.ro-ro", "en-US", "ROMâNă", "区域文化编码.română"),
             // dict.sys.culture.code.ro-ro
-            ("dict.sys.culture.code.ro-ro", "ja-JP", "română", "区域文化编码.română"),
+            ("dict.sys.culture.code.ro-ro", "ja-JP", "ROMâNă", "区域文化编码.română"),
             // dict.sys.culture.code.ro-ro
-            ("dict.sys.culture.code.ro-ro", "zh-CN", "română", "区域文化编码.română"),
+            ("dict.sys.culture.code.ro-ro", "zh-CN", "ROMâNă", "区域文化编码.română"),
             // dict.sys.culture.code.ro-ro
-            ("dict.sys.culture.code.ro-ro", "zh-HK", "română", "区域文化编码.română"),
+            ("dict.sys.culture.code.ro-ro", "zh-HK", "ROMâNă", "区域文化编码.română"),
 
             // dict.sys.culture.code.ru-ru
             ("dict.sys.culture.code.ru-ru", "en-US", "Русский", "区域文化编码.Русский"),
@@ -14568,13 +15099,13 @@ public class TaktDictI18nSeedData : ITaktSeedDataCoordinator
             ("dict.sys.culture.code.ru-ru", "zh-HK", "Русский", "区域文化编码.Русский"),
 
             // dict.sys.culture.code.sv-se
-            ("dict.sys.culture.code.sv-se", "en-US", "svenska", "区域文化编码.svenska"),
+            ("dict.sys.culture.code.sv-se", "en-US", "SVENSKA", "区域文化编码.svenska"),
             // dict.sys.culture.code.sv-se
-            ("dict.sys.culture.code.sv-se", "ja-JP", "svenska", "区域文化编码.svenska"),
+            ("dict.sys.culture.code.sv-se", "ja-JP", "SVENSKA", "区域文化编码.svenska"),
             // dict.sys.culture.code.sv-se
-            ("dict.sys.culture.code.sv-se", "zh-CN", "svenska", "区域文化编码.svenska"),
+            ("dict.sys.culture.code.sv-se", "zh-CN", "SVENSKA", "区域文化编码.svenska"),
             // dict.sys.culture.code.sv-se
-            ("dict.sys.culture.code.sv-se", "zh-HK", "svenska", "区域文化编码.svenska"),
+            ("dict.sys.culture.code.sv-se", "zh-HK", "SVENSKA", "区域文化编码.svenska"),
 
             // dict.sys.culture.code.th-th
             ("dict.sys.culture.code.th-th", "en-US", "ไทย", "区域文化编码.ไทย"),
@@ -14586,13 +15117,13 @@ public class TaktDictI18nSeedData : ITaktSeedDataCoordinator
             ("dict.sys.culture.code.th-th", "zh-HK", "ไทย", "区域文化编码.ไทย"),
 
             // dict.sys.culture.code.vi-vn
-            ("dict.sys.culture.code.vi-vn", "en-US", "Tiếng Việt", "区域文化编码.Tiếng Việt"),
+            ("dict.sys.culture.code.vi-vn", "en-US", "TIếNG VIệT", "区域文化编码.Tiếng Việt"),
             // dict.sys.culture.code.vi-vn
-            ("dict.sys.culture.code.vi-vn", "ja-JP", "Tiếng Việt", "区域文化编码.Tiếng Việt"),
+            ("dict.sys.culture.code.vi-vn", "ja-JP", "TIếNG VIệT", "区域文化编码.Tiếng Việt"),
             // dict.sys.culture.code.vi-vn
-            ("dict.sys.culture.code.vi-vn", "zh-CN", "Tiếng Việt", "区域文化编码.Tiếng Việt"),
+            ("dict.sys.culture.code.vi-vn", "zh-CN", "TIếNG VIệT", "区域文化编码.Tiếng Việt"),
             // dict.sys.culture.code.vi-vn
-            ("dict.sys.culture.code.vi-vn", "zh-HK", "Tiếng Việt", "区域文化编码.Tiếng Việt"),
+            ("dict.sys.culture.code.vi-vn", "zh-HK", "TIếNG VIệT", "区域文化编码.Tiếng Việt"),
 
             // dict.sys.culture.code.zh-cn
             ("dict.sys.culture.code.zh-cn", "en-US", "中文(简体)", "区域文化编码.中文 (简体)"),
@@ -14694,103 +15225,130 @@ public class TaktDictI18nSeedData : ITaktSeedDataCoordinator
             ("dict.sys.data.source.type.0", "zh-HK", "系统表_hk", "数据源.系统表"),
 
             // dict.sys.data.source.type.1
-            ("dict.sys.data.source.type.1", "en-US", "sql查询_us", "数据源.sql查询"),
+            ("dict.sys.data.source.type.1", "en-US", "SQL查询_us", "数据源.sql查询"),
             // dict.sys.data.source.type.1
-            ("dict.sys.data.source.type.1", "ja-JP", "sql查询_jp", "数据源.sql查询"),
+            ("dict.sys.data.source.type.1", "ja-JP", "SQL查询_jp", "数据源.sql查询"),
             // dict.sys.data.source.type.1
-            ("dict.sys.data.source.type.1", "zh-CN", "sql查询", "数据源.sql查询"),
+            ("dict.sys.data.source.type.1", "zh-CN", "SQL查询", "数据源.sql查询"),
             // dict.sys.data.source.type.1
-            ("dict.sys.data.source.type.1", "zh-HK", "sql查询_hk", "数据源.sql查询"),
+            ("dict.sys.data.source.type.1", "zh-HK", "SQL查询_hk", "数据源.sql查询"),
 
             // dict.sys.db.data.type.bigint
-            ("dict.sys.db.data.type.bigint", "en-US", "bigint_us", "数据库数据类型.bigint"),
+            ("dict.sys.db.data.type.bigint", "en-US", "BIGINT_us", "数据库数据类型.bigint"),
             // dict.sys.db.data.type.bigint
-            ("dict.sys.db.data.type.bigint", "ja-JP", "bigint_jp", "数据库数据类型.bigint"),
+            ("dict.sys.db.data.type.bigint", "ja-JP", "BIGINT_jp", "数据库数据类型.bigint"),
             // dict.sys.db.data.type.bigint
-            ("dict.sys.db.data.type.bigint", "zh-CN", "bigint", "数据库数据类型.bigint"),
+            ("dict.sys.db.data.type.bigint", "zh-CN", "BIGINT", "数据库数据类型.bigint"),
             // dict.sys.db.data.type.bigint
-            ("dict.sys.db.data.type.bigint", "zh-HK", "bigint_hk", "数据库数据类型.bigint"),
+            ("dict.sys.db.data.type.bigint", "zh-HK", "BIGINT_hk", "数据库数据类型.bigint"),
 
             // dict.sys.db.data.type.bit
-            ("dict.sys.db.data.type.bit", "en-US", "bit_us", "数据库数据类型.bit"),
+            ("dict.sys.db.data.type.bit", "en-US", "BIT_us", "数据库数据类型.bit"),
             // dict.sys.db.data.type.bit
-            ("dict.sys.db.data.type.bit", "ja-JP", "bit_jp", "数据库数据类型.bit"),
+            ("dict.sys.db.data.type.bit", "ja-JP", "BIT_jp", "数据库数据类型.bit"),
             // dict.sys.db.data.type.bit
-            ("dict.sys.db.data.type.bit", "zh-CN", "bit", "数据库数据类型.bit"),
+            ("dict.sys.db.data.type.bit", "zh-CN", "BIT", "数据库数据类型.bit"),
             // dict.sys.db.data.type.bit
-            ("dict.sys.db.data.type.bit", "zh-HK", "bit_hk", "数据库数据类型.bit"),
+            ("dict.sys.db.data.type.bit", "zh-HK", "BIT_hk", "数据库数据类型.bit"),
 
             // dict.sys.db.data.type.datetime
-            ("dict.sys.db.data.type.datetime", "en-US", "datetime_us", "数据库数据类型.datetime"),
+            ("dict.sys.db.data.type.datetime", "en-US", "DATETIME_us", "数据库数据类型.datetime"),
             // dict.sys.db.data.type.datetime
-            ("dict.sys.db.data.type.datetime", "ja-JP", "datetime_jp", "数据库数据类型.datetime"),
+            ("dict.sys.db.data.type.datetime", "ja-JP", "DATETIME_jp", "数据库数据类型.datetime"),
             // dict.sys.db.data.type.datetime
-            ("dict.sys.db.data.type.datetime", "zh-CN", "datetime", "数据库数据类型.datetime"),
+            ("dict.sys.db.data.type.datetime", "zh-CN", "DATETIME", "数据库数据类型.datetime"),
             // dict.sys.db.data.type.datetime
-            ("dict.sys.db.data.type.datetime", "zh-HK", "datetime_hk", "数据库数据类型.datetime"),
+            ("dict.sys.db.data.type.datetime", "zh-HK", "DATETIME_hk", "数据库数据类型.datetime"),
 
             // dict.sys.db.data.type.decimal
-            ("dict.sys.db.data.type.decimal", "en-US", "decimal_us", "数据库数据类型.decimal"),
+            ("dict.sys.db.data.type.decimal", "en-US", "DECIMAL_us", "数据库数据类型.decimal"),
             // dict.sys.db.data.type.decimal
-            ("dict.sys.db.data.type.decimal", "ja-JP", "decimal_jp", "数据库数据类型.decimal"),
+            ("dict.sys.db.data.type.decimal", "ja-JP", "DECIMAL_jp", "数据库数据类型.decimal"),
             // dict.sys.db.data.type.decimal
-            ("dict.sys.db.data.type.decimal", "zh-CN", "decimal", "数据库数据类型.decimal"),
+            ("dict.sys.db.data.type.decimal", "zh-CN", "DECIMAL", "数据库数据类型.decimal"),
             // dict.sys.db.data.type.decimal
-            ("dict.sys.db.data.type.decimal", "zh-HK", "decimal_hk", "数据库数据类型.decimal"),
+            ("dict.sys.db.data.type.decimal", "zh-HK", "DECIMAL_hk", "数据库数据类型.decimal"),
 
             // dict.sys.db.data.type.int
-            ("dict.sys.db.data.type.int", "en-US", "int_us", "数据库数据类型.int"),
+            ("dict.sys.db.data.type.int", "en-US", "INT_us", "数据库数据类型.int"),
             // dict.sys.db.data.type.int
-            ("dict.sys.db.data.type.int", "ja-JP", "int_jp", "数据库数据类型.int"),
+            ("dict.sys.db.data.type.int", "ja-JP", "INT_jp", "数据库数据类型.int"),
             // dict.sys.db.data.type.int
-            ("dict.sys.db.data.type.int", "zh-CN", "int", "数据库数据类型.int"),
+            ("dict.sys.db.data.type.int", "zh-CN", "INT", "数据库数据类型.int"),
             // dict.sys.db.data.type.int
-            ("dict.sys.db.data.type.int", "zh-HK", "int_hk", "数据库数据类型.int"),
+            ("dict.sys.db.data.type.int", "zh-HK", "INT_hk", "数据库数据类型.int"),
 
             // dict.sys.db.data.type.ntext
-            ("dict.sys.db.data.type.ntext", "en-US", "ntext_us", "数据库数据类型.ntext"),
+            ("dict.sys.db.data.type.ntext", "en-US", "NTEXT_us", "数据库数据类型.ntext"),
             // dict.sys.db.data.type.ntext
-            ("dict.sys.db.data.type.ntext", "ja-JP", "ntext_jp", "数据库数据类型.ntext"),
+            ("dict.sys.db.data.type.ntext", "ja-JP", "NTEXT_jp", "数据库数据类型.ntext"),
             // dict.sys.db.data.type.ntext
-            ("dict.sys.db.data.type.ntext", "zh-CN", "ntext", "数据库数据类型.ntext"),
+            ("dict.sys.db.data.type.ntext", "zh-CN", "NTEXT", "数据库数据类型.ntext"),
             // dict.sys.db.data.type.ntext
-            ("dict.sys.db.data.type.ntext", "zh-HK", "ntext_hk", "数据库数据类型.ntext"),
+            ("dict.sys.db.data.type.ntext", "zh-HK", "NTEXT_hk", "数据库数据类型.ntext"),
 
             // dict.sys.db.data.type.nvarchar
-            ("dict.sys.db.data.type.nvarchar", "en-US", "nvarchar_us", "数据库数据类型.nvarchar"),
+            ("dict.sys.db.data.type.nvarchar", "en-US", "NVARCHAR_us", "数据库数据类型.nvarchar"),
             // dict.sys.db.data.type.nvarchar
-            ("dict.sys.db.data.type.nvarchar", "ja-JP", "nvarchar_jp", "数据库数据类型.nvarchar"),
+            ("dict.sys.db.data.type.nvarchar", "ja-JP", "NVARCHAR_jp", "数据库数据类型.nvarchar"),
             // dict.sys.db.data.type.nvarchar
-            ("dict.sys.db.data.type.nvarchar", "zh-CN", "nvarchar", "数据库数据类型.nvarchar"),
+            ("dict.sys.db.data.type.nvarchar", "zh-CN", "NVARCHAR", "数据库数据类型.nvarchar"),
             // dict.sys.db.data.type.nvarchar
-            ("dict.sys.db.data.type.nvarchar", "zh-HK", "nvarchar_hk", "数据库数据类型.nvarchar"),
+            ("dict.sys.db.data.type.nvarchar", "zh-HK", "NVARCHAR_hk", "数据库数据类型.nvarchar"),
 
             // dict.sys.db.data.type.text
-            ("dict.sys.db.data.type.text", "en-US", "text_us", "数据库数据类型.text"),
+            ("dict.sys.db.data.type.text", "en-US", "TEXT_us", "数据库数据类型.text"),
             // dict.sys.db.data.type.text
-            ("dict.sys.db.data.type.text", "ja-JP", "text_jp", "数据库数据类型.text"),
+            ("dict.sys.db.data.type.text", "ja-JP", "TEXT_jp", "数据库数据类型.text"),
             // dict.sys.db.data.type.text
-            ("dict.sys.db.data.type.text", "zh-CN", "text", "数据库数据类型.text"),
+            ("dict.sys.db.data.type.text", "zh-CN", "TEXT", "数据库数据类型.text"),
             // dict.sys.db.data.type.text
-            ("dict.sys.db.data.type.text", "zh-HK", "text_hk", "数据库数据类型.text"),
+            ("dict.sys.db.data.type.text", "zh-HK", "TEXT_hk", "数据库数据类型.text"),
 
             // dict.sys.db.data.type.uniqueidentifier
-            ("dict.sys.db.data.type.uniqueidentifier", "en-US", "uniqueidentifier_us", "数据库数据类型.uniqueidentifier"),
+            ("dict.sys.db.data.type.uniqueidentifier", "en-US", "UNIQUEIDENTIFIER_us", "数据库数据类型.uniqueidentifier"),
             // dict.sys.db.data.type.uniqueidentifier
-            ("dict.sys.db.data.type.uniqueidentifier", "ja-JP", "uniqueidentifier_jp", "数据库数据类型.uniqueidentifier"),
+            ("dict.sys.db.data.type.uniqueidentifier", "ja-JP", "UNIQUEIDENTIFIER_jp", "数据库数据类型.uniqueidentifier"),
             // dict.sys.db.data.type.uniqueidentifier
-            ("dict.sys.db.data.type.uniqueidentifier", "zh-CN", "uniqueidentifier", "数据库数据类型.uniqueidentifier"),
+            ("dict.sys.db.data.type.uniqueidentifier", "zh-CN", "UNIQUEIDENTIFIER", "数据库数据类型.uniqueidentifier"),
             // dict.sys.db.data.type.uniqueidentifier
-            ("dict.sys.db.data.type.uniqueidentifier", "zh-HK", "uniqueidentifier_hk", "数据库数据类型.uniqueidentifier"),
+            ("dict.sys.db.data.type.uniqueidentifier", "zh-HK", "UNIQUEIDENTIFIER_hk", "数据库数据类型.uniqueidentifier"),
 
             // dict.sys.db.data.type.varchar
-            ("dict.sys.db.data.type.varchar", "en-US", "varchar_us", "数据库数据类型.varchar"),
+            ("dict.sys.db.data.type.varchar", "en-US", "VARCHAR_us", "数据库数据类型.varchar"),
             // dict.sys.db.data.type.varchar
-            ("dict.sys.db.data.type.varchar", "ja-JP", "varchar_jp", "数据库数据类型.varchar"),
+            ("dict.sys.db.data.type.varchar", "ja-JP", "VARCHAR_jp", "数据库数据类型.varchar"),
             // dict.sys.db.data.type.varchar
-            ("dict.sys.db.data.type.varchar", "zh-CN", "varchar", "数据库数据类型.varchar"),
+            ("dict.sys.db.data.type.varchar", "zh-CN", "VARCHAR", "数据库数据类型.varchar"),
             // dict.sys.db.data.type.varchar
-            ("dict.sys.db.data.type.varchar", "zh-HK", "varchar_hk", "数据库数据类型.varchar"),
+            ("dict.sys.db.data.type.varchar", "zh-HK", "VARCHAR_hk", "数据库数据类型.varchar"),
+
+            // dict.sys.archive.key.kind.yyyymmddhhmmss
+            ("dict.sys.archive.key.kind.yyyymmddhhmmss", "en-US", "yyyyMMddHHmmss_us", "归档键类型.yyyyMMddHHmmss"),
+            // dict.sys.archive.key.kind.yyyymmddhhmmss
+            ("dict.sys.archive.key.kind.yyyymmddhhmmss", "ja-JP", "yyyyMMddHHmmss_jp", "归档键类型.yyyyMMddHHmmss"),
+            // dict.sys.archive.key.kind.yyyymmddhhmmss
+            ("dict.sys.archive.key.kind.yyyymmddhhmmss", "zh-CN", "yyyyMMddHHmmss", "归档键类型.yyyyMMddHHmmss"),
+            // dict.sys.archive.key.kind.yyyymmddhhmmss
+            ("dict.sys.archive.key.kind.yyyymmddhhmmss", "zh-HK", "yyyyMMddHHmmss_hk", "归档键类型.yyyyMMddHHmmss"),
+
+            // dict.sys.archive.key.kind.yyyymm
+            ("dict.sys.archive.key.kind.yyyymm", "en-US", "yyyyMM_us", "归档键类型.yyyyMM"),
+            // dict.sys.archive.key.kind.yyyymm
+            ("dict.sys.archive.key.kind.yyyymm", "ja-JP", "yyyyMM_jp", "归档键类型.yyyyMM"),
+            // dict.sys.archive.key.kind.yyyymm
+            ("dict.sys.archive.key.kind.yyyymm", "zh-CN", "yyyyMM", "归档键类型.yyyyMM"),
+            // dict.sys.archive.key.kind.yyyymm
+            ("dict.sys.archive.key.kind.yyyymm", "zh-HK", "yyyyMM_hk", "归档键类型.yyyyMM"),
+
+            // dict.sys.archive.key.kind.yyyy
+            ("dict.sys.archive.key.kind.yyyy", "en-US", "yyyy_us", "归档键类型.yyyy"),
+            // dict.sys.archive.key.kind.yyyy
+            ("dict.sys.archive.key.kind.yyyy", "ja-JP", "yyyy_jp", "归档键类型.yyyy"),
+            // dict.sys.archive.key.kind.yyyy
+            ("dict.sys.archive.key.kind.yyyy", "zh-CN", "yyyy", "归档键类型.yyyy"),
+            // dict.sys.archive.key.kind.yyyy
+            ("dict.sys.archive.key.kind.yyyy", "zh-HK", "yyyy_hk", "归档键类型.yyyy"),
 
             // dict.sys.dept.type.0
             ("dict.sys.dept.type.0", "en-US", "直接_us", "部门类型.直接"),
@@ -14946,22 +15504,22 @@ public class TaktDictI18nSeedData : ITaktSeedDataCoordinator
             ("dict.sys.form.type.2", "zh-HK", "自定义表单_hk", "表单类型.自定义表单"),
 
             // dict.sys.ftp.provider.type.teac_cn
-            ("dict.sys.ftp.provider.type.teac_cn", "en-US", "teac ftp中国_us", "ftp服务提供商.teac ftp中国"),
+            ("dict.sys.ftp.provider.type.teac_cn", "en-US", "TEAC FTP中国_us", "ftp服务提供商.teac ftp中国"),
             // dict.sys.ftp.provider.type.teac_cn
-            ("dict.sys.ftp.provider.type.teac_cn", "ja-JP", "teac ftp中国_jp", "ftp服务提供商.teac ftp中国"),
+            ("dict.sys.ftp.provider.type.teac_cn", "ja-JP", "TEAC FTP中国_jp", "ftp服务提供商.teac ftp中国"),
             // dict.sys.ftp.provider.type.teac_cn
-            ("dict.sys.ftp.provider.type.teac_cn", "zh-CN", "teac ftp中国", "ftp服务提供商.teac ftp中国"),
+            ("dict.sys.ftp.provider.type.teac_cn", "zh-CN", "TEAC FTP中国", "ftp服务提供商.teac ftp中国"),
             // dict.sys.ftp.provider.type.teac_cn
-            ("dict.sys.ftp.provider.type.teac_cn", "zh-HK", "teac ftp中国_hk", "ftp服务提供商.teac ftp中国"),
+            ("dict.sys.ftp.provider.type.teac_cn", "zh-HK", "TEAC FTP中国_hk", "ftp服务提供商.teac ftp中国"),
 
             // dict.sys.ftp.provider.type.teac_jp
-            ("dict.sys.ftp.provider.type.teac_jp", "en-US", "teac ftp日本_us", "ftp服务提供商.teac ftp日本"),
+            ("dict.sys.ftp.provider.type.teac_jp", "en-US", "TEAC FTP日本_us", "ftp服务提供商.teac ftp日本"),
             // dict.sys.ftp.provider.type.teac_jp
-            ("dict.sys.ftp.provider.type.teac_jp", "ja-JP", "teac ftp日本_jp", "ftp服务提供商.teac ftp日本"),
+            ("dict.sys.ftp.provider.type.teac_jp", "ja-JP", "TEAC FTP日本_jp", "ftp服务提供商.teac ftp日本"),
             // dict.sys.ftp.provider.type.teac_jp
-            ("dict.sys.ftp.provider.type.teac_jp", "zh-CN", "teac ftp日本", "ftp服务提供商.teac ftp日本"),
+            ("dict.sys.ftp.provider.type.teac_jp", "zh-CN", "TEAC FTP日本", "ftp服务提供商.teac ftp日本"),
             // dict.sys.ftp.provider.type.teac_jp
-            ("dict.sys.ftp.provider.type.teac_jp", "zh-HK", "teac ftp日本_hk", "ftp服务提供商.teac ftp日本"),
+            ("dict.sys.ftp.provider.type.teac_jp", "zh-HK", "TEAC FTP日本_hk", "ftp服务提供商.teac ftp日本"),
 
             // dict.sys.is.builtin.type.1
             ("dict.sys.is.builtin.type.1", "en-US", "是_us", "内置.是"),
@@ -16656,40 +17214,40 @@ public class TaktDictI18nSeedData : ITaktSeedDataCoordinator
             ("dict.sys.online.status.2", "zh-HK", "离开_hk", "在线状态.离开"),
 
             // dict.sys.oss.provider.type.aliyun
-            ("dict.sys.oss.provider.type.aliyun", "en-US", "阿里云oss_us", "oss提供商类型.阿里云oss"),
+            ("dict.sys.oss.provider.type.aliyun", "en-US", "阿里云OSS_us", "oss提供商类型.阿里云oss"),
             // dict.sys.oss.provider.type.aliyun
-            ("dict.sys.oss.provider.type.aliyun", "ja-JP", "阿里云oss_jp", "oss提供商类型.阿里云oss"),
+            ("dict.sys.oss.provider.type.aliyun", "ja-JP", "阿里云OSS_jp", "oss提供商类型.阿里云oss"),
             // dict.sys.oss.provider.type.aliyun
-            ("dict.sys.oss.provider.type.aliyun", "zh-CN", "阿里云oss", "oss提供商类型.阿里云oss"),
+            ("dict.sys.oss.provider.type.aliyun", "zh-CN", "阿里云OSS", "oss提供商类型.阿里云oss"),
             // dict.sys.oss.provider.type.aliyun
-            ("dict.sys.oss.provider.type.aliyun", "zh-HK", "阿里云oss_hk", "oss提供商类型.阿里云oss"),
+            ("dict.sys.oss.provider.type.aliyun", "zh-HK", "阿里云OSS_hk", "oss提供商类型.阿里云oss"),
 
             // dict.sys.oss.provider.type.tencent
-            ("dict.sys.oss.provider.type.tencent", "en-US", "腾讯云cos_us", "oss提供商类型.腾讯云cos"),
+            ("dict.sys.oss.provider.type.tencent", "en-US", "腾讯云COS_us", "oss提供商类型.腾讯云cos"),
             // dict.sys.oss.provider.type.tencent
-            ("dict.sys.oss.provider.type.tencent", "ja-JP", "腾讯云cos_jp", "oss提供商类型.腾讯云cos"),
+            ("dict.sys.oss.provider.type.tencent", "ja-JP", "腾讯云COS_jp", "oss提供商类型.腾讯云cos"),
             // dict.sys.oss.provider.type.tencent
-            ("dict.sys.oss.provider.type.tencent", "zh-CN", "腾讯云cos", "oss提供商类型.腾讯云cos"),
+            ("dict.sys.oss.provider.type.tencent", "zh-CN", "腾讯云COS", "oss提供商类型.腾讯云cos"),
             // dict.sys.oss.provider.type.tencent
-            ("dict.sys.oss.provider.type.tencent", "zh-HK", "腾讯云cos_hk", "oss提供商类型.腾讯云cos"),
+            ("dict.sys.oss.provider.type.tencent", "zh-HK", "腾讯云COS_hk", "oss提供商类型.腾讯云cos"),
 
             // dict.sys.oss.provider.type.huawei
-            ("dict.sys.oss.provider.type.huawei", "en-US", "华为云obs_us", "oss提供商类型.华为云obs"),
+            ("dict.sys.oss.provider.type.huawei", "en-US", "华为云OBS_us", "oss提供商类型.华为云obs"),
             // dict.sys.oss.provider.type.huawei
-            ("dict.sys.oss.provider.type.huawei", "ja-JP", "华为云obs_jp", "oss提供商类型.华为云obs"),
+            ("dict.sys.oss.provider.type.huawei", "ja-JP", "华为云OBS_jp", "oss提供商类型.华为云obs"),
             // dict.sys.oss.provider.type.huawei
-            ("dict.sys.oss.provider.type.huawei", "zh-CN", "华为云obs", "oss提供商类型.华为云obs"),
+            ("dict.sys.oss.provider.type.huawei", "zh-CN", "华为云OBS", "oss提供商类型.华为云obs"),
             // dict.sys.oss.provider.type.huawei
-            ("dict.sys.oss.provider.type.huawei", "zh-HK", "华为云obs_hk", "oss提供商类型.华为云obs"),
+            ("dict.sys.oss.provider.type.huawei", "zh-HK", "华为云OBS_hk", "oss提供商类型.华为云obs"),
 
             // dict.sys.oss.provider.type.aws
-            ("dict.sys.oss.provider.type.aws", "en-US", "aws s3_us", "oss提供商类型.aws s3"),
+            ("dict.sys.oss.provider.type.aws", "en-US", "AWS S3_us", "oss提供商类型.aws s3"),
             // dict.sys.oss.provider.type.aws
-            ("dict.sys.oss.provider.type.aws", "ja-JP", "aws s3_jp", "oss提供商类型.aws s3"),
+            ("dict.sys.oss.provider.type.aws", "ja-JP", "AWS S3_jp", "oss提供商类型.aws s3"),
             // dict.sys.oss.provider.type.aws
-            ("dict.sys.oss.provider.type.aws", "zh-CN", "aws s3", "oss提供商类型.aws s3"),
+            ("dict.sys.oss.provider.type.aws", "zh-CN", "AWS S3", "oss提供商类型.aws s3"),
             // dict.sys.oss.provider.type.aws
-            ("dict.sys.oss.provider.type.aws", "zh-HK", "aws s3_hk", "oss提供商类型.aws s3"),
+            ("dict.sys.oss.provider.type.aws", "zh-HK", "AWS S3_hk", "oss提供商类型.aws s3"),
 
             // dict.sys.post.category.mgt
             ("dict.sys.post.category.mgt", "en-US", "管理岗_us", "岗位类别.管理岗"),
@@ -16809,13 +17367,13 @@ public class TaktDictI18nSeedData : ITaktSeedDataCoordinator
             ("dict.sys.post.level.category.m4", "zh-HK", "副总裁_hk", "M序列.副总裁"),
 
             // dict.sys.post.level.category.m5
-            ("dict.sys.post.level.category.m5", "en-US", "C-Level_us", "M序列.C-Level"),
+            ("dict.sys.post.level.category.m5", "en-US", "C-LEVEL_us", "M序列.C-Level"),
             // dict.sys.post.level.category.m5
-            ("dict.sys.post.level.category.m5", "ja-JP", "C-Level_jp", "M序列.C-Level"),
+            ("dict.sys.post.level.category.m5", "ja-JP", "C-LEVEL_jp", "M序列.C-Level"),
             // dict.sys.post.level.category.m5
-            ("dict.sys.post.level.category.m5", "zh-CN", "C-Level", "M序列.C-Level"),
+            ("dict.sys.post.level.category.m5", "zh-CN", "C-LEVEL", "M序列.C-Level"),
             // dict.sys.post.level.category.m5
-            ("dict.sys.post.level.category.m5", "zh-HK", "C-Level_hk", "M序列.C-Level"),
+            ("dict.sys.post.level.category.m5", "zh-HK", "C-LEVEL_hk", "M序列.C-Level"),
 
             // dict.sys.priority.level.category.1
             ("dict.sys.priority.level.category.1", "en-US", "最高_us", "优先级.最高"),
@@ -17070,22 +17628,22 @@ public class TaktDictI18nSeedData : ITaktSeedDataCoordinator
             ("dict.sys.storage.type.0", "zh-HK", "本地存储_hk", "存储方式.本地存储"),
 
             // dict.sys.storage.type.1
-            ("dict.sys.storage.type.1", "en-US", "oss对象存储_us", "存储方式.oss对象存储"),
+            ("dict.sys.storage.type.1", "en-US", "OSS对象存储_us", "存储方式.oss对象存储"),
             // dict.sys.storage.type.1
-            ("dict.sys.storage.type.1", "ja-JP", "oss对象存储_jp", "存储方式.oss对象存储"),
+            ("dict.sys.storage.type.1", "ja-JP", "OSS对象存储_jp", "存储方式.oss对象存储"),
             // dict.sys.storage.type.1
-            ("dict.sys.storage.type.1", "zh-CN", "oss对象存储", "存储方式.oss对象存储"),
+            ("dict.sys.storage.type.1", "zh-CN", "OSS对象存储", "存储方式.oss对象存储"),
             // dict.sys.storage.type.1
-            ("dict.sys.storage.type.1", "zh-HK", "oss对象存储_hk", "存储方式.oss对象存储"),
+            ("dict.sys.storage.type.1", "zh-HK", "OSS对象存储_hk", "存储方式.oss对象存储"),
 
             // dict.sys.storage.type.2
-            ("dict.sys.storage.type.2", "en-US", "ftp_us", "存储方式.ftp"),
+            ("dict.sys.storage.type.2", "en-US", "FTP_us", "存储方式.ftp"),
             // dict.sys.storage.type.2
-            ("dict.sys.storage.type.2", "ja-JP", "ftp_jp", "存储方式.ftp"),
+            ("dict.sys.storage.type.2", "ja-JP", "FTP_jp", "存储方式.ftp"),
             // dict.sys.storage.type.2
-            ("dict.sys.storage.type.2", "zh-CN", "ftp", "存储方式.ftp"),
+            ("dict.sys.storage.type.2", "zh-CN", "FTP", "存储方式.ftp"),
             // dict.sys.storage.type.2
-            ("dict.sys.storage.type.2", "zh-HK", "ftp_hk", "存储方式.ftp"),
+            ("dict.sys.storage.type.2", "zh-HK", "FTP_hk", "存储方式.ftp"),
 
             // dict.sys.urgency.level.category.1
             ("dict.sys.urgency.level.category.1", "en-US", "高_us", "紧急度.高"),
@@ -17313,40 +17871,40 @@ public class TaktDictI18nSeedData : ITaktSeedDataCoordinator
             ("dict.sys.numbering.date.format.config.none", "zh-HK", "不使用_hk", "编号日期格式.不使用"),
 
             // dict.sys.numbering.date.format.config.yyyy
-            ("dict.sys.numbering.date.format.config.yyyy", "en-US", "年(yyyy)_us", "编号日期格式.年"),
+            ("dict.sys.numbering.date.format.config.yyyy", "en-US", "年(YYYY)_us", "编号日期格式.年"),
             // dict.sys.numbering.date.format.config.yyyy
-            ("dict.sys.numbering.date.format.config.yyyy", "ja-JP", "年(yyyy)_jp", "编号日期格式.年"),
+            ("dict.sys.numbering.date.format.config.yyyy", "ja-JP", "年(YYYY)_jp", "编号日期格式.年"),
             // dict.sys.numbering.date.format.config.yyyy
-            ("dict.sys.numbering.date.format.config.yyyy", "zh-CN", "年(yyyy)", "编号日期格式.年"),
+            ("dict.sys.numbering.date.format.config.yyyy", "zh-CN", "年(YYYY)", "编号日期格式.年"),
             // dict.sys.numbering.date.format.config.yyyy
-            ("dict.sys.numbering.date.format.config.yyyy", "zh-HK", "年(yyyy)_hk", "编号日期格式.年"),
+            ("dict.sys.numbering.date.format.config.yyyy", "zh-HK", "年(YYYY)_hk", "编号日期格式.年"),
 
             // dict.sys.numbering.date.format.config.yyyymm
-            ("dict.sys.numbering.date.format.config.yyyymm", "en-US", "年月(yyyyMM)_us", "编号日期格式.年月"),
+            ("dict.sys.numbering.date.format.config.yyyymm", "en-US", "年月(YYYYMM)_us", "编号日期格式.年月"),
             // dict.sys.numbering.date.format.config.yyyymm
-            ("dict.sys.numbering.date.format.config.yyyymm", "ja-JP", "年月(yyyyMM)_jp", "编号日期格式.年月"),
+            ("dict.sys.numbering.date.format.config.yyyymm", "ja-JP", "年月(YYYYMM)_jp", "编号日期格式.年月"),
             // dict.sys.numbering.date.format.config.yyyymm
-            ("dict.sys.numbering.date.format.config.yyyymm", "zh-CN", "年月(yyyyMM)", "编号日期格式.年月"),
+            ("dict.sys.numbering.date.format.config.yyyymm", "zh-CN", "年月(YYYYMM)", "编号日期格式.年月"),
             // dict.sys.numbering.date.format.config.yyyymm
-            ("dict.sys.numbering.date.format.config.yyyymm", "zh-HK", "年月(yyyyMM)_hk", "编号日期格式.年月"),
+            ("dict.sys.numbering.date.format.config.yyyymm", "zh-HK", "年月(YYYYMM)_hk", "编号日期格式.年月"),
 
             // dict.sys.numbering.date.format.config.yyyymmdd
-            ("dict.sys.numbering.date.format.config.yyyymmdd", "en-US", "年月日(yyyyMMdd)_us", "编号日期格式.年月日"),
+            ("dict.sys.numbering.date.format.config.yyyymmdd", "en-US", "年月日(YYYYMMDD)_us", "编号日期格式.年月日"),
             // dict.sys.numbering.date.format.config.yyyymmdd
-            ("dict.sys.numbering.date.format.config.yyyymmdd", "ja-JP", "年月日(yyyyMMdd)_jp", "编号日期格式.年月日"),
+            ("dict.sys.numbering.date.format.config.yyyymmdd", "ja-JP", "年月日(YYYYMMDD)_jp", "编号日期格式.年月日"),
             // dict.sys.numbering.date.format.config.yyyymmdd
-            ("dict.sys.numbering.date.format.config.yyyymmdd", "zh-CN", "年月日(yyyyMMdd)", "编号日期格式.年月日"),
+            ("dict.sys.numbering.date.format.config.yyyymmdd", "zh-CN", "年月日(YYYYMMDD)", "编号日期格式.年月日"),
             // dict.sys.numbering.date.format.config.yyyymmdd
-            ("dict.sys.numbering.date.format.config.yyyymmdd", "zh-HK", "年月日(yyyyMMdd)_hk", "编号日期格式.年月日"),
+            ("dict.sys.numbering.date.format.config.yyyymmdd", "zh-HK", "年月日(YYYYMMDD)_hk", "编号日期格式.年月日"),
 
             // dict.sys.numbering.date.format.config.yyyymmddhh
-            ("dict.sys.numbering.date.format.config.yyyymmddhh", "en-US", "年月日时(yyyyMMddHH)_us", "编号日期格式.年月日时"),
+            ("dict.sys.numbering.date.format.config.yyyymmddhh", "en-US", "年月日时(YYYYMMDDHH)_us", "编号日期格式.年月日时"),
             // dict.sys.numbering.date.format.config.yyyymmddhh
-            ("dict.sys.numbering.date.format.config.yyyymmddhh", "ja-JP", "年月日时(yyyyMMddHH)_jp", "编号日期格式.年月日时"),
+            ("dict.sys.numbering.date.format.config.yyyymmddhh", "ja-JP", "年月日时(YYYYMMDDHH)_jp", "编号日期格式.年月日时"),
             // dict.sys.numbering.date.format.config.yyyymmddhh
-            ("dict.sys.numbering.date.format.config.yyyymmddhh", "zh-CN", "年月日时(yyyyMMddHH)", "编号日期格式.年月日时"),
+            ("dict.sys.numbering.date.format.config.yyyymmddhh", "zh-CN", "年月日时(YYYYMMDDHH)", "编号日期格式.年月日时"),
             // dict.sys.numbering.date.format.config.yyyymmddhh
-            ("dict.sys.numbering.date.format.config.yyyymmddhh", "zh-HK", "年月日时(yyyyMMddHH)_hk", "编号日期格式.年月日时"),
+            ("dict.sys.numbering.date.format.config.yyyymmddhh", "zh-HK", "年月日时(YYYYMMDDHH)_hk", "编号日期格式.年月日时"),
 
             // dict.routine.ticket.source.type.0
             ("dict.routine.ticket.source.type.0", "en-US", "门户网站_us", "工单来源.门户"),
@@ -20490,31 +21048,31 @@ public class TaktDictI18nSeedData : ITaktSeedDataCoordinator
             ("dict.logistics.quality.group.inspection.category.2", "zh-HK", "IPQC_hk", "质量组检查类别.IPQC"),
 
             // dict.logistics.manufacturing.defect.group.category.0
-            ("dict.logistics.manufacturing.defect.group.category.0", "en-US", "Assy_us", "不良组类别.Assy"),
+            ("dict.logistics.manufacturing.defect.group.category.0", "en-US", "ASSY_us", "不良组类别.Assy"),
             // dict.logistics.manufacturing.defect.group.category.0
-            ("dict.logistics.manufacturing.defect.group.category.0", "ja-JP", "Assy_jp", "不良组类别.Assy"),
+            ("dict.logistics.manufacturing.defect.group.category.0", "ja-JP", "ASSY_jp", "不良组类别.Assy"),
             // dict.logistics.manufacturing.defect.group.category.0
-            ("dict.logistics.manufacturing.defect.group.category.0", "zh-CN", "Assy", "不良组类别.Assy"),
+            ("dict.logistics.manufacturing.defect.group.category.0", "zh-CN", "ASSY", "不良组类别.Assy"),
             // dict.logistics.manufacturing.defect.group.category.0
-            ("dict.logistics.manufacturing.defect.group.category.0", "zh-HK", "Assy_hk", "不良组类别.Assy"),
+            ("dict.logistics.manufacturing.defect.group.category.0", "zh-HK", "ASSY_hk", "不良组类别.Assy"),
 
             // dict.logistics.manufacturing.defect.group.category.1
-            ("dict.logistics.manufacturing.defect.group.category.1", "en-US", "Inspection_us", "不良组类别.Inspection"),
+            ("dict.logistics.manufacturing.defect.group.category.1", "en-US", "INSPECTION_us", "不良组类别.Inspection"),
             // dict.logistics.manufacturing.defect.group.category.1
-            ("dict.logistics.manufacturing.defect.group.category.1", "ja-JP", "Inspection_jp", "不良组类别.Inspection"),
+            ("dict.logistics.manufacturing.defect.group.category.1", "ja-JP", "INSPECTION_jp", "不良组类别.Inspection"),
             // dict.logistics.manufacturing.defect.group.category.1
-            ("dict.logistics.manufacturing.defect.group.category.1", "zh-CN", "Inspection", "不良组类别.Inspection"),
+            ("dict.logistics.manufacturing.defect.group.category.1", "zh-CN", "INSPECTION", "不良组类别.Inspection"),
             // dict.logistics.manufacturing.defect.group.category.1
-            ("dict.logistics.manufacturing.defect.group.category.1", "zh-HK", "Inspection_hk", "不良组类别.Inspection"),
+            ("dict.logistics.manufacturing.defect.group.category.1", "zh-HK", "INSPECTION_hk", "不良组类别.Inspection"),
 
             // dict.logistics.manufacturing.defect.group.category.2
-            ("dict.logistics.manufacturing.defect.group.category.2", "en-US", "Repair_us", "不良组类别.Repair"),
+            ("dict.logistics.manufacturing.defect.group.category.2", "en-US", "REPAIR_us", "不良组类别.Repair"),
             // dict.logistics.manufacturing.defect.group.category.2
-            ("dict.logistics.manufacturing.defect.group.category.2", "ja-JP", "Repair_jp", "不良组类别.Repair"),
+            ("dict.logistics.manufacturing.defect.group.category.2", "ja-JP", "REPAIR_jp", "不良组类别.Repair"),
             // dict.logistics.manufacturing.defect.group.category.2
-            ("dict.logistics.manufacturing.defect.group.category.2", "zh-CN", "Repair", "不良组类别.Repair"),
+            ("dict.logistics.manufacturing.defect.group.category.2", "zh-CN", "REPAIR", "不良组类别.Repair"),
             // dict.logistics.manufacturing.defect.group.category.2
-            ("dict.logistics.manufacturing.defect.group.category.2", "zh-HK", "Repair_hk", "不良组类别.Repair"),
+            ("dict.logistics.manufacturing.defect.group.category.2", "zh-HK", "REPAIR_hk", "不良组类别.Repair"),
 
             // dict.logistics.procurement.purchase.group.c01
             ("dict.logistics.procurement.purchase.group.c01", "en-US", "张三_us", "采购组.C01"),
@@ -20841,22 +21399,22 @@ public class TaktDictI18nSeedData : ITaktSeedDataCoordinator
             ("dict.logistics.quality.sampling.scheme.type.3", "zh-HK", "计量调整型_hk", "抽样方案类型.计量调整型"),
 
             // dict.logistics.quality.sampling.standard.0
-            ("dict.logistics.quality.sampling.standard.0", "en-US", "Gt/b 2828.1_us", "抽样标准.Gt/b 2828.1"),
+            ("dict.logistics.quality.sampling.standard.0", "en-US", "GT/B 2828.1_us", "抽样标准.Gt/b 2828.1"),
             // dict.logistics.quality.sampling.standard.0
-            ("dict.logistics.quality.sampling.standard.0", "ja-JP", "Gt/b 2828.1_jp", "抽样标准.Gt/b 2828.1"),
+            ("dict.logistics.quality.sampling.standard.0", "ja-JP", "GT/B 2828.1_jp", "抽样标准.Gt/b 2828.1"),
             // dict.logistics.quality.sampling.standard.0
-            ("dict.logistics.quality.sampling.standard.0", "zh-CN", "Gt/b 2828.1", "抽样标准.Gt/b 2828.1"),
+            ("dict.logistics.quality.sampling.standard.0", "zh-CN", "GT/B 2828.1", "抽样标准.Gt/b 2828.1"),
             // dict.logistics.quality.sampling.standard.0
-            ("dict.logistics.quality.sampling.standard.0", "zh-HK", "Gt/b 2828.1_hk", "抽样标准.Gt/b 2828.1"),
+            ("dict.logistics.quality.sampling.standard.0", "zh-HK", "GT/B 2828.1_hk", "抽样标准.Gt/b 2828.1"),
 
             // dict.logistics.quality.sampling.standard.1
-            ("dict.logistics.quality.sampling.standard.1", "en-US", "Gt/b 6378_us", "抽样标准.Gt/b 6378"),
+            ("dict.logistics.quality.sampling.standard.1", "en-US", "GT/B 6378_us", "抽样标准.Gt/b 6378"),
             // dict.logistics.quality.sampling.standard.1
-            ("dict.logistics.quality.sampling.standard.1", "ja-JP", "Gt/b 6378_jp", "抽样标准.Gt/b 6378"),
+            ("dict.logistics.quality.sampling.standard.1", "ja-JP", "GT/B 6378_jp", "抽样标准.Gt/b 6378"),
             // dict.logistics.quality.sampling.standard.1
-            ("dict.logistics.quality.sampling.standard.1", "zh-CN", "Gt/b 6378", "抽样标准.Gt/b 6378"),
+            ("dict.logistics.quality.sampling.standard.1", "zh-CN", "GT/B 6378", "抽样标准.Gt/b 6378"),
             // dict.logistics.quality.sampling.standard.1
-            ("dict.logistics.quality.sampling.standard.1", "zh-HK", "Gt/b 6378_hk", "抽样标准.Gt/b 6378"),
+            ("dict.logistics.quality.sampling.standard.1", "zh-HK", "GT/B 6378_hk", "抽样标准.Gt/b 6378"),
 
             // dict.logistics.quality.sampling.standard.2
             ("dict.logistics.quality.sampling.standard.2", "en-US", "MIL-STD-105E_us", "抽样标准.MIL-STD-105E"),
@@ -21885,22 +22443,22 @@ public class TaktDictI18nSeedData : ITaktSeedDataCoordinator
             ("dict.sys.quartz.job.group.report", "zh-HK", "报表_hk", "Quartz任务分组.报表"),
 
             // dict.sys.quartz.trigger.type.0
-            ("dict.sys.quartz.trigger.type.0", "en-US", "Simple间隔_us", "Quartz触发器类型.Simple间隔"),
+            ("dict.sys.quartz.trigger.type.0", "en-US", "SIMPLE间隔_us", "Quartz触发器类型.Simple间隔"),
             // dict.sys.quartz.trigger.type.0
-            ("dict.sys.quartz.trigger.type.0", "ja-JP", "Simple间隔_jp", "Quartz触发器类型.Simple间隔"),
+            ("dict.sys.quartz.trigger.type.0", "ja-JP", "SIMPLE间隔_jp", "Quartz触发器类型.Simple间隔"),
             // dict.sys.quartz.trigger.type.0
-            ("dict.sys.quartz.trigger.type.0", "zh-CN", "Simple间隔", "Quartz触发器类型.Simple间隔"),
+            ("dict.sys.quartz.trigger.type.0", "zh-CN", "SIMPLE间隔", "Quartz触发器类型.Simple间隔"),
             // dict.sys.quartz.trigger.type.0
-            ("dict.sys.quartz.trigger.type.0", "zh-HK", "Simple间隔_hk", "Quartz触发器类型.Simple间隔"),
+            ("dict.sys.quartz.trigger.type.0", "zh-HK", "SIMPLE间隔_hk", "Quartz触发器类型.Simple间隔"),
 
             // dict.sys.quartz.trigger.type.1
-            ("dict.sys.quartz.trigger.type.1", "en-US", "Cron表达式_us", "Quartz触发器类型.Cron表达式"),
+            ("dict.sys.quartz.trigger.type.1", "en-US", "CRON表达式_us", "Quartz触发器类型.Cron表达式"),
             // dict.sys.quartz.trigger.type.1
-            ("dict.sys.quartz.trigger.type.1", "ja-JP", "Cron表达式_jp", "Quartz触发器类型.Cron表达式"),
+            ("dict.sys.quartz.trigger.type.1", "ja-JP", "CRON表达式_jp", "Quartz触发器类型.Cron表达式"),
             // dict.sys.quartz.trigger.type.1
-            ("dict.sys.quartz.trigger.type.1", "zh-CN", "Cron表达式", "Quartz触发器类型.Cron表达式"),
+            ("dict.sys.quartz.trigger.type.1", "zh-CN", "CRON表达式", "Quartz触发器类型.Cron表达式"),
             // dict.sys.quartz.trigger.type.1
-            ("dict.sys.quartz.trigger.type.1", "zh-HK", "Cron表达式_hk", "Quartz触发器类型.Cron表达式"),
+            ("dict.sys.quartz.trigger.type.1", "zh-HK", "CRON表达式_hk", "Quartz触发器类型.Cron表达式"),
 
             // dict.sys.quartz.misfire.policy.0
             ("dict.sys.quartz.misfire.policy.0", "en-US", "默认_us", "Quartz Misfire策略.默认"),

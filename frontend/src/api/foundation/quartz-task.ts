@@ -122,6 +122,42 @@ export function updateQuartzTaskStatus(dto: QuartzTaskStatus): Promise<QuartzTas
   });
 }
 
+/**
+ * 启动（恢复）定时任务调度
+ * @param {string} id 定时任务ID
+ * @returns {Promise<QuartzTask>} 定时任务DTO
+ */
+export function startQuartzTask(id: string): Promise<QuartzTask> {
+  return request<QuartzTask>({
+    url: `${QUARTZ_TASK_API_BASE}/${id}/start`,
+    method: 'put',
+  });
+}
+
+/**
+ * 暂停定时任务调度
+ * @param {string} id 定时任务ID
+ * @returns {Promise<QuartzTask>} 定时任务DTO
+ */
+export function pauseQuartzTask(id: string): Promise<QuartzTask> {
+  return request<QuartzTask>({
+    url: `${QUARTZ_TASK_API_BASE}/${id}/pause`,
+    method: 'put',
+  });
+}
+
+/**
+ * 立即执行一次定时任务（不改变启动/暂停调度状态）
+ * @param {string} id 定时任务ID
+ * @returns {Promise<QuartzTask>} 定时任务DTO
+ */
+export function executeQuartzTaskNow(id: string): Promise<QuartzTask> {
+  return request<QuartzTask>({
+    url: `${QUARTZ_TASK_API_BASE}/${id}/execute`,
+    method: 'post',
+  });
+}
+
 // ========================================
 // 选项
 // ========================================

@@ -144,6 +144,13 @@ public interface ITaktSignalRDispatchService
     Task PushEcExecutionTaskAlertAsync(TaktEcExecutionTaskAlertPush push);
 
     /// <summary>
+    /// 向触发用户推送 BOM 物料成本机种月平均重算完成事件
+    /// </summary>
+    /// <param name="push">推送模型</param>
+    /// <returns>任务</returns>
+    Task PushBomMaterialCostItemRecalculateCompletedToUserAsync(TaktSignalRBomMaterialCostItemRecalculatePush push);
+
+    /// <summary>
     /// 向发起人推送部门确认通知
     /// </summary>
     /// <param name="companyCode">公司编码</param>

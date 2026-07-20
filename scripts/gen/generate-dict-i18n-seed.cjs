@@ -20,7 +20,7 @@ function printUsage() {
 
 说明:
   - 固定从 TaktDictDataSeedData.cs 全量生成 dict.* 翻译种子
-  - 仅支持无参或 --all / -all，不支持其它参数
+  - 仅支持无参或 --all / -all，不支持其他参数
 
 示例:
   node scripts/generate-dict-i18n-seed.cjs

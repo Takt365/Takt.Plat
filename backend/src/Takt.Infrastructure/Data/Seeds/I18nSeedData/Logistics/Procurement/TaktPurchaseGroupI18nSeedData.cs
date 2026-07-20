@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Infrastructure.Data.Seeds.I18nSeedData.Logistics.Procurement
 // 文件名称：TaktPurchaseGroupI18nSeedData.cs
-// 创建时间：2026-07-09
+// 创建时间：2026-07-20
 // 创建人：Takt365(Auto Generated)
 // 功能描述：TaktPurchaseGroup 实体字段国际化种子（无对应 frontend locales；TranslationText 取自 ColumnDescription，ContextNote 取自属性 XML summary）
 // 
@@ -127,13 +127,13 @@ public class TaktPurchaseGroupI18nSeedData : ITaktSeedDataCoordinator
             new TranslationSeedItem("entity.purchasegroup.description", "zh-HK", "采购组描述_hk", "采购组描述"),
 
             // entity.purchasegroup.responsibleuserid
-            new TranslationSeedItem("entity.purchasegroup.responsibleuserid", "en-US", "负责人用户ID_us", "采购组负责人用户 ID（关联 TaktUser.Id，选项 TaktUsers/options）"),
+            new TranslationSeedItem("entity.purchasegroup.responsibleuserid", "en-US", "负责人用户ID_us", "采购组负责人用户 ID（选项 TaktUsers/options，DictValue=Id）"),
             // entity.purchasegroup.responsibleuserid
-            new TranslationSeedItem("entity.purchasegroup.responsibleuserid", "ja-JP", "负责人用户ID_jp", "采购组负责人用户 ID（关联 TaktUser.Id，选项 TaktUsers/options）"),
+            new TranslationSeedItem("entity.purchasegroup.responsibleuserid", "ja-JP", "负责人用户ID_jp", "采购组负责人用户 ID（选项 TaktUsers/options，DictValue=Id）"),
             // entity.purchasegroup.responsibleuserid
-            new TranslationSeedItem("entity.purchasegroup.responsibleuserid", "zh-CN", "负责人用户ID", "采购组负责人用户 ID（关联 TaktUser.Id，选项 TaktUsers/options）"),
+            new TranslationSeedItem("entity.purchasegroup.responsibleuserid", "zh-CN", "负责人用户ID", "采购组负责人用户 ID（选项 TaktUsers/options，DictValue=Id）"),
             // entity.purchasegroup.responsibleuserid
-            new TranslationSeedItem("entity.purchasegroup.responsibleuserid", "zh-HK", "负责人用户ID_hk", "采购组负责人用户 ID（关联 TaktUser.Id，选项 TaktUsers/options）"),
+            new TranslationSeedItem("entity.purchasegroup.responsibleuserid", "zh-HK", "负责人用户ID_hk", "采购组负责人用户 ID（选项 TaktUsers/options，DictValue=Id）"),
 
             // entity.purchasegroup.contactphone
             new TranslationSeedItem("entity.purchasegroup.contactphone", "en-US", "联系电话_us", "联系电话"),

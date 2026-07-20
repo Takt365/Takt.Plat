@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Infrastructure.Data.Seeds.I18nSeedData.Routine.NewsCenter
 // 文件名称：TaktNewsShareI18nSeedData.cs
-// 创建时间：2026-07-09
+// 创建时间：2026-07-20
 // 创建人：Takt365(Auto Generated)
 // 功能描述：TaktNewsShare 实体字段国际化种子（无对应 frontend locales；TranslationText 取自 ColumnDescription，ContextNote 取自属性 XML summary）
 // 
@@ -91,22 +91,22 @@ public class TaktNewsShareI18nSeedData : ITaktSeedDataCoordinator
             new TranslationSeedItem("entity.newsshare._self", "zh-HK", "新闻中心分享记录信息_hk", "实体名称"),
 
             // entity.newsshare.newsid
-            new TranslationSeedItem("entity.newsshare.newsid", "en-US", "新闻ID_us", "新闻 ID（关联 TaktNews.Id，选项 TaktNews/options）"),
+            new TranslationSeedItem("entity.newsshare.newsid", "en-US", "新闻ID_us", "新闻 ID（选项 TaktNews/options，DictValue=Id）"),
             // entity.newsshare.newsid
-            new TranslationSeedItem("entity.newsshare.newsid", "ja-JP", "新闻ID_jp", "新闻 ID（关联 TaktNews.Id，选项 TaktNews/options）"),
+            new TranslationSeedItem("entity.newsshare.newsid", "ja-JP", "新闻ID_jp", "新闻 ID（选项 TaktNews/options，DictValue=Id）"),
             // entity.newsshare.newsid
-            new TranslationSeedItem("entity.newsshare.newsid", "zh-CN", "新闻ID", "新闻 ID（关联 TaktNews.Id，选项 TaktNews/options）"),
+            new TranslationSeedItem("entity.newsshare.newsid", "zh-CN", "新闻ID", "新闻 ID（选项 TaktNews/options，DictValue=Id）"),
             // entity.newsshare.newsid
-            new TranslationSeedItem("entity.newsshare.newsid", "zh-HK", "新闻ID_hk", "新闻 ID（关联 TaktNews.Id，选项 TaktNews/options）"),
+            new TranslationSeedItem("entity.newsshare.newsid", "zh-HK", "新闻ID_hk", "新闻 ID（选项 TaktNews/options，DictValue=Id）"),
 
             // entity.newsshare.userid
-            new TranslationSeedItem("entity.newsshare.userid", "en-US", "分享人ID_us", "分享人 ID（关联 TaktUser.Id，选项 TaktUsers/options）"),
+            new TranslationSeedItem("entity.newsshare.userid", "en-US", "分享人ID_us", "分享人 ID（选项 TaktUsers/options，DictValue=Id）"),
             // entity.newsshare.userid
-            new TranslationSeedItem("entity.newsshare.userid", "ja-JP", "分享人ID_jp", "分享人 ID（关联 TaktUser.Id，选项 TaktUsers/options）"),
+            new TranslationSeedItem("entity.newsshare.userid", "ja-JP", "分享人ID_jp", "分享人 ID（选项 TaktUsers/options，DictValue=Id）"),
             // entity.newsshare.userid
-            new TranslationSeedItem("entity.newsshare.userid", "zh-CN", "分享人ID", "分享人 ID（关联 TaktUser.Id，选项 TaktUsers/options）"),
+            new TranslationSeedItem("entity.newsshare.userid", "zh-CN", "分享人ID", "分享人 ID（选项 TaktUsers/options，DictValue=Id）"),
             // entity.newsshare.userid
-            new TranslationSeedItem("entity.newsshare.userid", "zh-HK", "分享人ID_hk", "分享人 ID（关联 TaktUser.Id，选项 TaktUsers/options）"),
+            new TranslationSeedItem("entity.newsshare.userid", "zh-HK", "分享人ID_hk", "分享人 ID（选项 TaktUsers/options，DictValue=Id）"),
 
             // entity.newsshare.username
             new TranslationSeedItem("entity.newsshare.username", "en-US", "分享人姓名_us", "分享人姓名"),

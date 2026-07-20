@@ -201,6 +201,66 @@ public class TaktQuartzTasksController : TaktControllerBase
     }
 
     /// <summary>
+    /// 启动（恢复）定时任务调度
+    /// </summary>
+    /// <param name="id">定时任务ID</param>
+    /// <returns>定时任务DTO</returns>
+    [TaktPermission("foundation:quartz:task:start", "启动定时任务")]
+    [HttpPut("{id}/start")]
+    public async Task<IActionResult> StartQuartzTaskAsync(long id)
+    {
+        try
+        {
+            var result = await _quartzTaskService.StartQuartzTaskAsync(id);
+            return Success(result, "启动成功");
+        }
+        catch (Exception ex)
+        {
+            return HandleException(ex);
+        }
+    }
+
+    /// <summary>
+    /// 暂停定时任务调度
+    /// </summary>
+    /// <param name="id">定时任务ID</param>
+    /// <returns>定时任务DTO</returns>
+    [TaktPermission("foundation:quartz:task:pause", "暂停定时任务")]
+    [HttpPut("{id}/pause")]
+    public async Task<IActionResult> PauseQuartzTaskAsync(long id)
+    {
+        try
+        {
+            var result = await _quartzTaskService.PauseQuartzTaskAsync(id);
+            return Success(result, "暂停成功");
+        }
+        catch (Exception ex)
+        {
+            return HandleException(ex);
+        }
+    }
+
+    /// <summary>
+    /// 立即执行一次定时任务（不改变启动/暂停调度状态）
+    /// </summary>
+    /// <param name="id">定时任务ID</param>
+    /// <returns>定时任务DTO</returns>
+    [TaktPermission("foundation:quartz:task:execute", "执行定时任务")]
+    [HttpPost("{id}/execute")]
+    public async Task<IActionResult> ExecuteQuartzTaskNowAsync(long id)
+    {
+        try
+        {
+            var result = await _quartzTaskService.ExecuteQuartzTaskNowAsync(id);
+            return Success(result, "已触发执行");
+        }
+        catch (Exception ex)
+        {
+            return HandleException(ex);
+        }
+    }
+
+    /// <summary>
     /// 获取导入模板
     /// </summary>
     /// <returns>Excel文件</returns>

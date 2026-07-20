@@ -26,21 +26,21 @@ namespace Takt.Domain.Entities.Logistics.Manufacturing.Sop;
 public class TaktSopArgument : TaktCompanyEntityBase
 {
     /// <summary>
-    /// 执行追溯 ID（关联 TaktSopExec.Id，选项 TaktSopExecs/options）
+    /// 执行追溯 ID（选项 TaktSopExecs/options，DictValue=Id）
     /// </summary>
     [SugarColumn(ColumnName = "exec_id", ColumnDescription = "执行追溯ID", ColumnDataType = "bigint", IsNullable = false)]
     [JsonConverter(typeof(ValueToStringConverter))]
     public long ExecId { get; set; }
 
     /// <summary>
-    /// 工步执行明细 ID（关联 TaktSopExecStep.Id，选项 TaktSopExecSteps/options）
+    /// 工步执行明细 ID（选项 TaktSopExecSteps/options，DictValue=Id）
     /// </summary>
     [SugarColumn(ColumnName = "exec_step_id", ColumnDescription = "工步执行明细ID", ColumnDataType = "bigint", IsNullable = true)]
     [JsonConverter(typeof(ValueToStringConverter))]
     public long? ExecStepId { get; set; }
 
     /// <summary>
-    /// 工序参数定义 ID（关联 TaktRoutingItemArgument.Id，选项 TaktRoutingItemArguments/options）
+    /// 工序参数定义 ID（选项 TaktRoutingItemArguments/options，DictValue=Id）
     /// </summary>
     [SugarColumn(ColumnName = "routing_item_parameter_id", ColumnDescription = "工序参数定义ID", ColumnDataType = "bigint", IsNullable = true)]
     [JsonConverter(typeof(ValueToStringConverter))]

@@ -208,17 +208,30 @@ internal static class TaktPcbaOutputInspectionRepairSyncHelper
                 smtLines.Add((output, detail));
             }
         }
-        var inspection = await FindInspectionByDailyOrderAsync(
+        var inspection = await FindInspectionByOrderAsync(
             pcbaInspectionRepository,
             tenantCode,
             companyCode,
-            prodDate,
             prodOrderCode);
         if (smtLines.Count == 0)
         {
-            if (inspection != null)
+            if (inspection == null)
             {
-                await pcbaInspectionDetailRepository.DeleteAsync(x => x.PcbaInspectionId == inspection.Id);
+                return;
+            }
+            var outputIds = outputs.Select(o => o.Id).ToHashSet();
+            var existingDetails = await pcbaInspectionDetailRepository.GetListAsync(x => x.PcbaInspectionId == inspection.Id);
+            foreach (var detail in existingDetails)
+            {
+                if (TryParseSyncExtField(detail.ExtField, out var outputId, out _)
+                    && outputIds.Contains(outputId))
+                {
+                    await pcbaInspectionDetailRepository.DeleteAsync(detail.Id);
+                }
+            }
+            var remaining = await pcbaInspectionDetailRepository.GetListAsync(x => x.PcbaInspectionId == inspection.Id);
+            if (remaining.Count == 0)
+            {
                 await pcbaInspectionRepository.DeleteAsync(inspection.Id);
             }
             return;
@@ -282,12 +295,12 @@ internal static class TaktPcbaOutputInspectionRepairSyncHelper
                 TenantCode = tenantCode,
                 CompanyCode = companyCode,
             };
-            CopyOutputHeaderToRepair(output, repair);
+            CopyOutputHeaderToRepair(output, repair, repairLines.FirstOrDefault());
             repair = await pcbaRepairRepository.CreateAsync(repair);
         }
         else
         {
-            CopyOutputHeaderToRepair(output, repair);
+            CopyOutputHeaderToRepair(output, repair, repairLines.FirstOrDefault());
             await pcbaRepairRepository.UpdateAsync(repair);
         }
         await SyncRepairDetailsAsync(
@@ -441,8 +454,8 @@ internal static class TaktPcbaOutputInspectionRepairSyncHelper
     {
         inspectionDetail.ProdOrderCode = output.ProdOrderCode;
         inspectionDetail.PcbaBoardType = detail.PcbBoardType;
-        inspectionDetail.ShiftNo = detail.ShiftNo > 0 ? detail.ShiftNo : output.ShiftNo;
-        inspectionDetail.ProdTeam = output.ProdTeam;
+        inspectionDetail.ShiftNo = detail.ShiftNo;
+        inspectionDetail.ProdTeam = detail.ProdTeam;
         inspectionDetail.DailyCompletedQty = detail.DailyCompletedQty;
         ApplyPanelSideAssemblyDates(output.ProdDate, detail.PanelSide, inspectionDetail);
     }
@@ -457,7 +470,7 @@ internal static class TaktPcbaOutputInspectionRepairSyncHelper
     {
         repairDetail.ProdOrderCode = output.ProdOrderCode;
         repairDetail.PcbaBoardType = detail.PcbBoardType;
-        repairDetail.ProdTeam = output.ProdTeam;
+        repairDetail.ProdTeam = detail.ProdTeam;
         repairDetail.ProdActualQty = detail.DailyCompletedQty;
     }
 
@@ -517,7 +530,6 @@ internal static class TaktPcbaOutputInspectionRepairSyncHelper
     {
         inspection.PlantCode = output.PlantCode;
         inspection.ProdCategory = output.ProdCategory;
-        inspection.ProdDate = output.ProdDate;
         inspection.ProdOrderType = output.ProdOrderType;
         inspection.ProdOrderCode = output.ProdOrderCode;
         inspection.ProdOrderQty = output.ProdOrderQty;
@@ -527,15 +539,18 @@ internal static class TaktPcbaOutputInspectionRepairSyncHelper
     }
 
     /// <summary>
-    /// 复制产出主表头到改修日报
+    /// 复制产出主表头到改修日报（班组/班次取自首条修正明细）
     /// </summary>
-    private static void CopyOutputHeaderToRepair(TaktPcbaOutput output, TaktPcbaRepair repair)
+    private static void CopyOutputHeaderToRepair(
+        TaktPcbaOutput output,
+        TaktPcbaRepair repair,
+        TaktPcbaOutputDetail? headerDetail)
     {
         repair.PlantCode = output.PlantCode;
         repair.ProdCategory = output.ProdCategory;
         repair.ProdDate = output.ProdDate;
-        repair.ProdTeam = output.ProdTeam;
-        repair.ShiftNo = output.ShiftNo;
+        repair.ProdTeam = headerDetail?.ProdTeam ?? string.Empty;
+        repair.ShiftNo = headerDetail is { ShiftNo: > 0 } ? headerDetail.ShiftNo : 1;
         repair.ProdOrderType = output.ProdOrderType;
         repair.ProdOrderCode = output.ProdOrderCode;
         repair.ProdOrderQty = output.ProdOrderQty;
@@ -545,20 +560,17 @@ internal static class TaktPcbaOutputInspectionRepairSyncHelper
     }
 
     /// <summary>
-    /// 按「生产日期 + 工单号」查找检查日报
+    /// 按工单号查找检查日报
     /// </summary>
-    private static Task<TaktPcbaInspection?> FindInspectionByDailyOrderAsync(
+    private static Task<TaktPcbaInspection?> FindInspectionByOrderAsync(
         ITaktCompanyRepository<TaktPcbaInspection> repository,
         string tenantCode,
         string companyCode,
-        DateTime prodDate,
         string prodOrderCode)
     {
-        var dateOnly = prodDate.Date;
         return repository.FirstAsync(x =>
             x.TenantCode == tenantCode
             && x.CompanyCode == companyCode
-            && x.ProdDate == dateOnly
             && x.ProdOrderCode == prodOrderCode);
     }
 
@@ -587,7 +599,6 @@ internal static class TaktPcbaOutputInspectionRepairSyncHelper
     {
         return before.PlantCode == after.PlantCode
             && before.ProdCategory == after.ProdCategory
-            && before.ProdDate == after.ProdDate
             && before.ProdOrderCode == after.ProdOrderCode;
     }
 
@@ -599,8 +610,6 @@ internal static class TaktPcbaOutputInspectionRepairSyncHelper
         return before.PlantCode == after.PlantCode
             && before.ProdCategory == after.ProdCategory
             && before.ProdDate == after.ProdDate
-            && before.ProdTeam == after.ProdTeam
-            && before.ShiftNo == after.ShiftNo
             && before.ProdOrderCode == after.ProdOrderCode;
     }
 }

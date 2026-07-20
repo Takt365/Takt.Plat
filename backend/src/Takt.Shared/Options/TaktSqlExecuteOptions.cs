@@ -28,6 +28,16 @@ public sealed class TaktSqlExecuteOptions
     };
 
     /// <summary>
+    /// 非查询脚本默认选项（允许多语句；不校验只读禁止关键字）
+    /// </summary>
+    public static TaktSqlExecuteOptions NonQueryDefault { get; } = new()
+    {
+        Mode = TaktSqlExecuteMode.NonQuery,
+        AllowMultipleStatements = true,
+        ValidateForbiddenKeywords = false,
+    };
+
+    /// <summary>
     /// 执行模式
     /// </summary>
     public TaktSqlExecuteMode Mode { get; init; } = TaktSqlExecuteMode.ReadOnly;

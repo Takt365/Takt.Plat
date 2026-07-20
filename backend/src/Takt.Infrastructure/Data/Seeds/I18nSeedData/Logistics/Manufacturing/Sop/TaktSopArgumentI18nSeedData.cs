@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Infrastructure.Data.Seeds.I18nSeedData.Logistics.Manufacturing.Sop
 // 文件名称：TaktSopArgumentI18nSeedData.cs
-// 创建时间：2026-07-09
+// 创建时间：2026-07-20
 // 创建人：Takt365(Auto Generated)
 // 功能描述：TaktSopArgument 实体字段国际化种子（无对应 frontend locales；TranslationText 取自 ColumnDescription，ContextNote 取自属性 XML summary）
 // 
@@ -91,31 +91,31 @@ public class TaktSopArgumentI18nSeedData : ITaktSeedDataCoordinator
             new TranslationSeedItem("entity.sopargument._self", "zh-HK", "SOP 作业参数信息_hk", "实体名称"),
 
             // entity.sopargument.execid
-            new TranslationSeedItem("entity.sopargument.execid", "en-US", "执行追溯ID_us", "执行追溯 ID（关联 TaktSopExec.Id，选项 TaktSopExecs/options）"),
+            new TranslationSeedItem("entity.sopargument.execid", "en-US", "执行追溯ID_us", "执行追溯 ID（选项 TaktSopExecs/options，DictValue=Id）"),
             // entity.sopargument.execid
-            new TranslationSeedItem("entity.sopargument.execid", "ja-JP", "执行追溯ID_jp", "执行追溯 ID（关联 TaktSopExec.Id，选项 TaktSopExecs/options）"),
+            new TranslationSeedItem("entity.sopargument.execid", "ja-JP", "执行追溯ID_jp", "执行追溯 ID（选项 TaktSopExecs/options，DictValue=Id）"),
             // entity.sopargument.execid
-            new TranslationSeedItem("entity.sopargument.execid", "zh-CN", "执行追溯ID", "执行追溯 ID（关联 TaktSopExec.Id，选项 TaktSopExecs/options）"),
+            new TranslationSeedItem("entity.sopargument.execid", "zh-CN", "执行追溯ID", "执行追溯 ID（选项 TaktSopExecs/options，DictValue=Id）"),
             // entity.sopargument.execid
-            new TranslationSeedItem("entity.sopargument.execid", "zh-HK", "执行追溯ID_hk", "执行追溯 ID（关联 TaktSopExec.Id，选项 TaktSopExecs/options）"),
+            new TranslationSeedItem("entity.sopargument.execid", "zh-HK", "执行追溯ID_hk", "执行追溯 ID（选项 TaktSopExecs/options，DictValue=Id）"),
 
             // entity.sopargument.execstepid
-            new TranslationSeedItem("entity.sopargument.execstepid", "en-US", "工步执行明细ID_us", "工步执行明细 ID（关联 TaktSopExecStep.Id，选项 TaktSopExecSteps/options）"),
+            new TranslationSeedItem("entity.sopargument.execstepid", "en-US", "工步执行明细ID_us", "工步执行明细 ID（选项 TaktSopExecSteps/options，DictValue=Id）"),
             // entity.sopargument.execstepid
-            new TranslationSeedItem("entity.sopargument.execstepid", "ja-JP", "工步执行明细ID_jp", "工步执行明细 ID（关联 TaktSopExecStep.Id，选项 TaktSopExecSteps/options）"),
+            new TranslationSeedItem("entity.sopargument.execstepid", "ja-JP", "工步执行明细ID_jp", "工步执行明细 ID（选项 TaktSopExecSteps/options，DictValue=Id）"),
             // entity.sopargument.execstepid
-            new TranslationSeedItem("entity.sopargument.execstepid", "zh-CN", "工步执行明细ID", "工步执行明细 ID（关联 TaktSopExecStep.Id，选项 TaktSopExecSteps/options）"),
+            new TranslationSeedItem("entity.sopargument.execstepid", "zh-CN", "工步执行明细ID", "工步执行明细 ID（选项 TaktSopExecSteps/options，DictValue=Id）"),
             // entity.sopargument.execstepid
-            new TranslationSeedItem("entity.sopargument.execstepid", "zh-HK", "工步执行明细ID_hk", "工步执行明细 ID（关联 TaktSopExecStep.Id，选项 TaktSopExecSteps/options）"),
+            new TranslationSeedItem("entity.sopargument.execstepid", "zh-HK", "工步执行明细ID_hk", "工步执行明细 ID（选项 TaktSopExecSteps/options，DictValue=Id）"),
 
             // entity.sopargument.routingitemparameterid
-            new TranslationSeedItem("entity.sopargument.routingitemparameterid", "en-US", "工序参数定义ID_us", "工序参数定义 ID（关联 TaktRoutingItemArgument.Id，选项 TaktRoutingItemArguments/options）"),
+            new TranslationSeedItem("entity.sopargument.routingitemparameterid", "en-US", "工序参数定义ID_us", "工序参数定义 ID（选项 TaktRoutingItemArguments/options，DictValue=Id）"),
             // entity.sopargument.routingitemparameterid
-            new TranslationSeedItem("entity.sopargument.routingitemparameterid", "ja-JP", "工序参数定义ID_jp", "工序参数定义 ID（关联 TaktRoutingItemArgument.Id，选项 TaktRoutingItemArguments/options）"),
+            new TranslationSeedItem("entity.sopargument.routingitemparameterid", "ja-JP", "工序参数定义ID_jp", "工序参数定义 ID（选项 TaktRoutingItemArguments/options，DictValue=Id）"),
             // entity.sopargument.routingitemparameterid
-            new TranslationSeedItem("entity.sopargument.routingitemparameterid", "zh-CN", "工序参数定义ID", "工序参数定义 ID（关联 TaktRoutingItemArgument.Id，选项 TaktRoutingItemArguments/options）"),
+            new TranslationSeedItem("entity.sopargument.routingitemparameterid", "zh-CN", "工序参数定义ID", "工序参数定义 ID（选项 TaktRoutingItemArguments/options，DictValue=Id）"),
             // entity.sopargument.routingitemparameterid
-            new TranslationSeedItem("entity.sopargument.routingitemparameterid", "zh-HK", "工序参数定义ID_hk", "工序参数定义 ID（关联 TaktRoutingItemArgument.Id，选项 TaktRoutingItemArguments/options）"),
+            new TranslationSeedItem("entity.sopargument.routingitemparameterid", "zh-HK", "工序参数定义ID_hk", "工序参数定义 ID（选项 TaktRoutingItemArguments/options，DictValue=Id）"),
 
             // entity.sopargument.paramcode
             new TranslationSeedItem("entity.sopargument.paramcode", "en-US", "参数编码_us", "参数编码"),

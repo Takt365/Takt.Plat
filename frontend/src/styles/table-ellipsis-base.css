@@ -1,0 +1,40 @@
+/* ========================================
+ * 项目名称：节拍工厂·Takt Plat
+ * 命名空间：frontend/src/styles
+ * 文件名称：table-ellipsis-base.css
+ * 创建时间：2026-07-18
+ * 创建人：Takt365(Cursor AI)
+ * 功能描述：表格列溢出省略通用样式（配合 table-layout:fixed + 数值 scroll.x + 列 width）
+ *
+ * 版权信息：Copyright (c) 2026 Takt  All rights reserved.
+ * 免责声明：此软件使用 MIT License，作者不承担任何使用风险。
+ * ======================================== */
+
+/**
+ * 启用 ellipsis 的数据列：锁定单元格溢出（排除操作列）
+ * 根类覆盖 TaktSingleTable / 树表 / 可编辑表 / 主子表内嵌表格
+ */
+.takt-single-table .ant-table-cell-ellipsis:not(.takt-action-column),
+.takt-tree-right-table .ant-table-cell-ellipsis:not(.takt-action-column),
+.takt-tree-left-table .ant-table-cell-ellipsis:not(.takt-action-column),
+.takt-editable-table .ant-table-cell-ellipsis:not(.takt-action-column),
+.takt-master-detail-table-lr .ant-table-cell-ellipsis:not(.takt-action-column),
+.takt-master-detail-table-tb .ant-table-cell-ellipsis:not(.takt-action-column) {
+  overflow: hidden !important;
+  white-space: nowrap !important;
+  text-overflow: ellipsis !important;
+  word-break: keep-all;
+}
+
+/**
+ * 组件内统一包裹层：自定义 bodyCell 时仍按列宽截断
+ */
+.takt-table-cell-ellipsis-inner {
+  display: block;
+  min-width: 0;
+  max-width: 100%;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  word-break: keep-all;
+}

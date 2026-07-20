@@ -33,6 +33,11 @@ public class TaktQuartzJobContext
     /// 触发用户
     /// </summary>
     public string? UserName { get; set; }
+
+    /// <summary>
+    /// 执行摘要（Handler 写入；落库 TaktQuartzLog.ExecuteMessage 并随完成消息推送）
+    /// </summary>
+    public string? ExecuteMessage { get; set; }
 }
 
 /// <summary>

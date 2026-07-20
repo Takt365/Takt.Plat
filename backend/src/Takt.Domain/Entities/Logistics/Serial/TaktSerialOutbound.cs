@@ -37,9 +37,9 @@ public class TaktSerialOutbound : TaktCompanyEntityBase
     [SugarColumn(ColumnName = "outbound_no", ColumnDescription = "出库单号", ColumnDataType = "nvarchar", Length = 50, IsNullable = false)]
     public string OutboundNo { get; set; } = string.Empty;
     /// <summary>
-    /// 出货发票号
+    /// 发货单号
     /// </summary>
-    [SugarColumn(ColumnName = "shipping_invoice_no", ColumnDescription = "出货发票号", ColumnDataType = "nvarchar", Length = 50, IsNullable = false, DefaultValue = "")]
+    [SugarColumn(ColumnName = "shipping_invoice_no", ColumnDescription = "发货单号", ColumnDataType = "nvarchar", Length = 50, IsNullable = false, DefaultValue = "")]
     public string ShippingInvoiceNo { get; set; } = string.Empty;
     /// <summary>
     /// 装车日期
@@ -62,12 +62,12 @@ public class TaktSerialOutbound : TaktCompanyEntityBase
     [SugarColumn(ColumnName = "outbound_type", ColumnDescription = "出库类型", ColumnDataType = "int", IsNullable = false, DefaultValue = "5")]
     public int OutboundType { get; set; } = 5;
     /// <summary>
-    /// 仓库编码（关联 TaktWarehouse.WarehouseCode，选项 TaktWarehouses/options）
+    /// 仓库编码（选项 TaktWarehouses/options，DictValue=Id）
     /// </summary>
     [SugarColumn(ColumnName = "warehouse_code", ColumnDescription = "仓库编码", ColumnDataType = "nvarchar", Length = 4, IsNullable = false, DefaultValue = "C008")]
     public string WarehouseCode { get; set; } = "C008";
     /// <summary>
-    /// 库位编码（关联 TaktStorageLocation.LocationCode，选项 TaktStorageLocations/options）
+    /// 库位编码（选项 TaktStorageLocations/options，DictValue=Id）
     /// </summary>
     [SugarColumn(ColumnName = "location_code", ColumnDescription = "库位编码", ColumnDataType = "nvarchar", Length = 40, IsNullable = false, DefaultValue = "1F-2")]
     public string LocationCode { get; set; } = "1F-2";

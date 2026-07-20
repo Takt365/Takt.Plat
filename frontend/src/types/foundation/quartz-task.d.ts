@@ -74,7 +74,7 @@ export interface QuartzTask extends CompanyDtoBase {
   requestMethod?: string;
 
   /**
-   * SQL 语句（任务类型为 SQL 时使用）
+   * SQL 脚本路径（任务类型为 SQL 时使用；只可填相对 wwwroot 的 .sql 路径如 Quartz/sap_sync_ma.sql）
    */
   sqlScript?: string;
 
@@ -209,7 +209,7 @@ export interface QuartzTaskQuery extends TaktPagedQuery {
   requestMethod?: string;
 
   /**
-   * SQL 语句（任务类型为 SQL 时使用）
+   * SQL 脚本路径（任务类型为 SQL 时使用；只可填相对 wwwroot 的 .sql 路径如 Quartz/sap_sync_ma.sql）
    */
   sqlScript?: string;
 
@@ -378,7 +378,7 @@ export interface QuartzTaskCreate {
   requestMethod?: string;
 
   /**
-   * SQL 语句（任务类型为 SQL 时使用）
+   * SQL 脚本路径（任务类型为 SQL 时使用；只可填相对 wwwroot 的 .sql 路径如 Quartz/sap_sync_ma.sql）
    */
   sqlScript?: string;
 
@@ -556,7 +556,7 @@ export interface QuartzTaskTemplate {
   requestMethod?: string;
 
   /**
-   * SQL 语句（任务类型为 SQL 时使用）
+   * SQL 脚本路径（任务类型为 SQL 时使用；只可填相对 wwwroot 的 .sql 路径如 Quartz/sap_sync_ma.sql）
    */
   sqlScript?: string;
 
@@ -705,7 +705,7 @@ export interface QuartzTaskImport {
   requestMethod?: string;
 
   /**
-   * SQL 语句（任务类型为 SQL 时使用）
+   * SQL 脚本路径（任务类型为 SQL 时使用；只可填相对 wwwroot 的 .sql 路径如 Quartz/sap_sync_ma.sql）
    */
   sqlScript?: string;
 
@@ -849,7 +849,7 @@ export interface QuartzTaskExport {
   requestMethod?: string;
 
   /**
-   * SQL 语句（任务类型为 SQL 时使用）
+   * SQL 脚本路径（任务类型为 SQL 时使用；只可填相对 wwwroot 的 .sql 路径如 Quartz/sap_sync_ma.sql）
    */
   sqlScript?: string;
 

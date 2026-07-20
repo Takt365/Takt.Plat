@@ -40,6 +40,10 @@ export default {
       title: "服務不可用",
       subtitle: "服務暫不可用，請稍後重試",
     },
+    comingsoon: {
+      title: "即將推出",
+      subtitle: "功能即將推出，敬請期待",
+    },
     http: {
       network: "無法連接後端服務，請確認 API 已啓動",
       timeout: "請求超時，請稍後重試",

@@ -9,17 +9,37 @@
 
 <template>
   <div class="p-4 flex flex-col min-h-0 h-full">
-    <!-- 查询栏 -->
-    <TaktQueryBar
-      v-model="queryKeyword"
-      :placeholder="searchPlaceholder"
-      :loading="loading"
-      @search="handleSearch"
-      @reset="handleReset"
-    />
-
-    <!-- 工具栏 -->
-    <TaktToolsBar
+    <!-- 左主右从 -->
+    <TaktMasterDetailTableLr
+      v-model:master-current="currentPage"
+      v-model:master-page-size="pageSize"
+      v-model:selected-master-key="selectedMasterKey"
+      class="min-h-0 flex-1"
+      :master-columns="columns"
+      :master-data-source="dataSource"
+      :master-loading="loading"
+      :master-row-key="getPurchasePriceId"
+      :master-row-selection="rowSelection"
+      master-id-column-key="purchasePriceId"
+      :master-visible-column-keys="visibleColumnKeys"
+      master-table-mode="masterDetailMaster"
+      master-scroll-layout="masterDetailLr"
+      :master-total="total"
+      master-entity-scope="company"
+      @master-change="handleTableChange"
+      @master-resize-column="handleResizeColumn"
+      @master-pagination-change="handleMasterPaginationChange"
+      @master-select="handleMasterSelect"
+    >
+      <template #master-toolbar>
+        <TaktQueryBar
+          v-model="queryKeyword"
+          :placeholder="searchPlaceholder"
+          :loading="loading"
+          @search="handleSearch"
+          @reset="handleReset"
+        />
+        <TaktToolsBar
       create-permission="logistics:procurement:purchase:price:create"
       update-permission="logistics:procurement:purchase:price:update"
       delete-permission="logistics:procurement:purchase:price:delete"
@@ -50,40 +70,13 @@
       @advanced-query="handleAdvancedQuery"
       @column-setting="handleColumnSetting"
       @refresh="handleRefresh"
-    />
-
-    <!-- 左主右从 -->
-    <TaktMasterDetailTableLr
-      v-model:master-current="currentPage"
-      v-model:master-page-size="pageSize"
-      v-model:selected-master-key="selectedMasterKey"
-      class="min-h-0 flex-1"
-      :master-columns="columns"
-      :master-data-source="dataSource"
-      :master-loading="loading"
-      :master-row-key="getPurchasePriceId"
-      :master-row-selection="rowSelection"
-      master-id-column-key="purchasePriceId"
-      :master-visible-column-keys="visibleColumnKeys"
-      :master-total="total"
-      master-entity-scope="company"
-      @master-change="handleTableChange"
-      @master-resize-column="handleResizeColumn"
-      @master-pagination-change="handleMasterPaginationChange"
-      @master-select="handleMasterSelect"
-    >
+        />
+      </template>
       <!-- 字典/开关列渲染 -->
       <template #bodyCell="{ column, record }">
-        <template v-if="column.key === 'priceStatus'">
-          <a-switch
-            :checked="getPurchasePriceField(record, 'priceStatus') === 1"
-            :checked-children="t('common.page.button.enable')" :un-checked-children="t('common.page.button.disable')"
-            @change="(checked: unknown) => handlePriceStatusChange(record, Boolean(checked))"
-          />
-        </template>
-        <template v-else-if="column.key === 'priceType'">
+        <template v-if="column.key === 'priceType'">
           <TaktDictTag
-            :value="getPurchasePriceField(record, 'priceType')"
+            :value="getPurchasePriceDictValue(record, 'priceType')"
             dict-type="logistics_price_type"
           />
         </template>
@@ -124,126 +117,124 @@
       @reset="handleAdvancedQueryReset"
     >
       <template #default="{ isFieldVisible }">
-      <div v-show="isFieldVisible('plantCode')">
-      <a-form-item :label="t('entity.purchaseprice.plantcode')">
-        <a-input
-          v-model:value="advancedQueryForm.plantCode"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.purchaseprice.plantcode') })"
-          show-count
-          :maxlength="50"
-          allow-clear
-        />
-      </a-form-item>
-      </div>
       <div v-show="isFieldVisible('purchasePriceCode')">
-      <a-form-item :label="t('entity.purchaseprice.code')">
+      <a-form-item :label="pi.queryLabel('purchasePriceCode')">
         <a-input
           v-model:value="advancedQueryForm.purchasePriceCode"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.purchaseprice.code') })"
-          show-count
-          :maxlength="10"
-          allow-clear
-        />
-      </a-form-item>
-      </div>
-      <div v-show="isFieldVisible('supplierCode')">
-      <a-form-item :label="t('entity.purchaseprice.suppliercode')">
-        <a-input
-          v-model:value="advancedQueryForm.supplierCode"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.purchaseprice.suppliercode') })"
-          show-count
-          :maxlength="50"
-          allow-clear
-        />
-      </a-form-item>
-      </div>
-      <div v-show="isFieldVisible('purchaseInquiryId')">
-      <a-form-item :label="t('entity.purchaseprice.purchaseinquiryid')">
-        <a-input
-          v-model:value="advancedQueryForm.purchaseInquiryId"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.purchaseprice.purchaseinquiryid') })"
+          :placeholder="pi.queryPh('purchasePriceCode', 'required')"
           show-count
           :maxlength="20"
           allow-clear
         />
       </a-form-item>
       </div>
-      <div v-show="isFieldVisible('purchaseInquiryCode')">
-      <a-form-item :label="t('entity.purchaseprice.purchaseinquirycode')">
+      <div v-show="isFieldVisible('priceType')">
+      <a-form-item :label="pi.queryLabel('priceType')">
+        <TaktSelect
+          v-model:value="advancedQueryForm.priceType"
+          dict-type="logistics_price_type"
+          :placeholder="pi.queryPh('priceType', 'select')"
+          allow-clear
+        />
+      </a-form-item>
+      </div>
+      <div v-show="isFieldVisible('supplierCode')">
+      <a-form-item :label="pi.queryLabel('supplierCode')">
+        <TaktSelect
+          v-model:value="advancedQueryForm.supplierCode"
+          api-url="TaktSuppliers/options"
+          :placeholder="pi.queryPh('supplierCode', 'select')"
+          allow-clear
+        />
+      </a-form-item>
+      </div>
+      <div v-show="isFieldVisible('materialCode')">
+      <a-form-item :label="pi.queryLabel('materialCode')">
+        <TaktSelect
+          v-model:value="advancedQueryForm.materialCode"
+          api-url="TaktMaterialPlants/options"
+          :placeholder="pi.queryPh('materialCode', 'select')"
+          allow-clear
+        />
+      </a-form-item>
+      </div>
+      <div v-show="isFieldVisible('validFromStart')">
+      <a-form-item :label="pi.queryLabel('validFromStart')">
+        <a-date-picker
+          v-model:value="advancedQueryForm.validFromStart"
+          :placeholder="pi.queryPh('validFromStart', 'select')"
+          value-format="YYYY-MM-DD"
+          style="width: 100%"
+        />
+      </a-form-item>
+      </div>
+      <div v-show="isFieldVisible('validFromEnd')">
+      <a-form-item :label="pi.queryLabel('validFromEnd')">
+        <a-date-picker
+          v-model:value="advancedQueryForm.validFromEnd"
+          :placeholder="pi.queryPh('validFromEnd', 'select')"
+          value-format="YYYY-MM-DD"
+          style="width: 100%"
+        />
+      </a-form-item>
+      </div>
+      <div v-show="isFieldVisible('validToStart')">
+      <a-form-item :label="pi.queryLabel('validToStart')">
+        <a-date-picker
+          v-model:value="advancedQueryForm.validToStart"
+          :placeholder="pi.queryPh('validToStart', 'select')"
+          value-format="YYYY-MM-DD"
+          style="width: 100%"
+        />
+      </a-form-item>
+      </div>
+      <div v-show="isFieldVisible('validToEnd')">
+      <a-form-item :label="pi.queryLabel('validToEnd')">
+        <a-date-picker
+          v-model:value="advancedQueryForm.validToEnd"
+          :placeholder="pi.queryPh('validToEnd', 'select')"
+          value-format="YYYY-MM-DD"
+          style="width: 100%"
+        />
+      </a-form-item>
+      </div>
+      <div v-show="isFieldVisible('variableKey')">
+      <a-form-item :label="pi.queryLabel('variableKey')">
         <a-input
-          v-model:value="advancedQueryForm.purchaseInquiryCode"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.purchaseprice.purchaseinquirycode') })"
+          v-model:value="advancedQueryForm.variableKey"
+          :placeholder="pi.queryPh('variableKey', 'required')"
           show-count
           :maxlength="40"
           allow-clear
         />
       </a-form-item>
       </div>
-      <div v-show="isFieldVisible('priceType')">
-      <a-form-item :label="t('entity.purchaseprice.pricetype')">
+      <div v-show="isFieldVisible('purchaseInquiryId')">
+      <a-form-item :label="pi.queryLabel('purchaseInquiryId')">
         <TaktSelect
-          v-model:value="advancedQueryForm.priceType"
-          dict-type="logistics_price_type"
-          :placeholder="t('common.page.form.placeholder.select', { field: t('entity.purchaseprice.pricetype') })"
+          v-model:value="advancedQueryForm.purchaseInquiryId"
+          api-url="TaktPurchaseInquirys/options"
+          :placeholder="pi.queryPh('purchaseInquiryId', 'select')"
           allow-clear
         />
       </a-form-item>
       </div>
-      <div v-show="isFieldVisible('effectiveStartDateStart')">
-      <a-form-item :label="t('entity.purchaseprice.effectivestartdatestart')">
-        <a-date-picker
-          v-model:value="advancedQueryForm.effectiveStartDateStart"
-          :placeholder="t('common.page.form.placeholder.select', { field: t('entity.purchaseprice.effectivestartdatestart') })"
-          value-format="YYYY-MM-DD"
-          style="width: 100%"
-        />
-      </a-form-item>
-      </div>
-      <div v-show="isFieldVisible('effectiveStartDateEnd')">
-      <a-form-item :label="t('entity.purchaseprice.effectivestartdateend')">
-        <a-date-picker
-          v-model:value="advancedQueryForm.effectiveStartDateEnd"
-          :placeholder="t('common.page.form.placeholder.select', { field: t('entity.purchaseprice.effectivestartdateend') })"
-          value-format="YYYY-MM-DD"
-          style="width: 100%"
-        />
-      </a-form-item>
-      </div>
-      <div v-show="isFieldVisible('effectiveEndDateStart')">
-      <a-form-item :label="t('entity.purchaseprice.effectiveenddatestart')">
-        <a-date-picker
-          v-model:value="advancedQueryForm.effectiveEndDateStart"
-          :placeholder="t('common.page.form.placeholder.select', { field: t('entity.purchaseprice.effectiveenddatestart') })"
-          value-format="YYYY-MM-DD"
-          style="width: 100%"
-        />
-      </a-form-item>
-      </div>
-      <div v-show="isFieldVisible('effectiveEndDateEnd')">
-      <a-form-item :label="t('entity.purchaseprice.effectiveenddateend')">
-        <a-date-picker
-          v-model:value="advancedQueryForm.effectiveEndDateEnd"
-          :placeholder="t('common.page.form.placeholder.select', { field: t('entity.purchaseprice.effectiveenddateend') })"
-          value-format="YYYY-MM-DD"
-          style="width: 100%"
-        />
-      </a-form-item>
-      </div>
-      <div v-show="isFieldVisible('priceStatus')">
-      <a-form-item :label="t('entity.purchaseprice.pricestatus')">
-        <TaktSelect
-          v-model:value="advancedQueryForm.priceStatus"
-          dict-type="sys_normal_disable_status"
-          :placeholder="t('common.page.form.placeholder.select', { field: t('entity.purchaseprice.pricestatus') })"
+      <div v-show="isFieldVisible('purchaseInquiryCode')">
+      <a-form-item :label="pi.queryLabel('purchaseInquiryCode')">
+        <a-input
+          v-model:value="advancedQueryForm.purchaseInquiryCode"
+          :placeholder="pi.queryPh('purchaseInquiryCode', 'required')"
+          show-count
+          :maxlength="40"
           allow-clear
         />
       </a-form-item>
       </div>
       <div v-show="isFieldVisible('createdAtStart')">
-      <a-form-item :label="t('common.page.entity.createdatstart')">
+      <a-form-item :label="pi.queryLabel('createdAtStart')">
         <a-date-picker
           v-model:value="advancedQueryForm.createdAtStart"
-          :placeholder="t('common.page.form.placeholder.select', { field: t('common.page.entity.createdatstart') })"
+          :placeholder="pi.queryPh('createdAtStart', 'select')"
           value-format="YYYY-MM-DD HH:mm:ss"
             show-time
           style="width: 100%"
@@ -251,10 +242,10 @@
       </a-form-item>
       </div>
       <div v-show="isFieldVisible('createdAtEnd')">
-      <a-form-item :label="t('common.page.entity.createdatend')">
+      <a-form-item :label="pi.queryLabel('createdAtEnd')">
         <a-date-picker
           v-model:value="advancedQueryForm.createdAtEnd"
-          :placeholder="t('common.page.form.placeholder.select', { field: t('common.page.entity.createdatend') })"
+          :placeholder="pi.queryPh('createdAtEnd', 'select')"
           value-format="YYYY-MM-DD HH:mm:ss"
             show-time
           style="width: 100%"
@@ -276,7 +267,7 @@
             >
               <span class="takt-form-label-hint-icon"><RiQuestionLine class="takt-remix-icon" /></span>
             </a-tooltip>
-            <span>{{ t('common.page.entity.extfield') }}</span>
+            <span>{{ pi.queryLabel('extField') }}</span>
           </span>
         </template>
         <a-textarea
@@ -290,10 +281,10 @@
       </a-form-item>
       </div>
       <div v-show="isFieldVisible('remark')">
-      <a-form-item :label="t('common.page.entity.remark')">
+      <a-form-item :label="pi.queryLabel('remark')">
         <a-textarea
           v-model:value="advancedQueryForm.remark"
-          :placeholder="t('common.page.form.placeholder.optional', { field: t('common.page.entity.remark') })"
+          :placeholder="pi.queryPh('remark', 'optional')"
             :rows="4"
             show-count
             :maxlength="400"
@@ -307,14 +298,15 @@
     <!-- 导入对话框 -->
     <TaktModal
       v-model:open="importVisible"
-      :title="t('common.dialog.title.import', { entity: t('entity.purchaseprice._self') })"
+      :title="t('common.dialog.title.import', { entity: pi.self() })"
       :width="600"
       :footer="null"
       :cancel-text="t('common.page.button.close')"
       @cancel="handleImportCancel"
     >
       <TaktImportFile
-        entity-i18n-key="entity.purchaseprice._self"
+        v-if="importVisible"
+        :entity-i18n-key="PURCHASEPRICE_SELF_I18N_KEY"
         file-type="xlsx"
         :sheet-name="excelNames.sheet"
         :template-file-name="excelNames.fileBase"
@@ -333,7 +325,7 @@
       :id-column-key="'purchasePriceId'"
       :action-column-key="'action'"
       entity-scope="company"
-      table-mode="single"
+      table-mode="masterDetailMaster"
       @update:checked-keys="handleColumnKeysChange"
       @reset="handleColumnSettingReset"
     />
@@ -353,13 +345,25 @@ import { useI18n } from 'vue-i18n'
 import { ensureTaktPaginationConfigAsync, getTaktDefaultPageIndex, getTaktDefaultPageSize } from '@/utils/takt-paged'
 import PurchasePriceForm from './components/purchase-price-form.vue'
 import PurchasePriceItemPanel from './components/purchase-price-item-panel.vue'
-import { providePurchasePriceMasterContext } from './composables/use-purchase-price-master-context'
-import { getPurchasePriceList, getPurchasePriceById, createPurchasePrice, updatePurchasePrice, deletePurchasePriceById, deletePurchasePriceBatch, getPurchasePriceTemplate, importPurchasePrice, exportPurchasePrice, updatePurchasePriceStatus } from '@/api/logistics/procurement/purchase-price'
+import { providePurchasePriceMasterContext, type PurchasePriceRowRecord } from './composables/use-purchase-price-master-context'
+import { getPurchasePriceList, getPurchasePriceById, createPurchasePrice, updatePurchasePrice, deletePurchasePriceById, deletePurchasePriceBatch, getPurchasePriceTemplate, importPurchasePrice, exportPurchasePrice } from '@/api/logistics/procurement/purchase-price'
 import type { PurchasePrice, PurchasePriceQuery } from '@/types/logistics/procurement/purchase-price'
 import { useDictDataStore } from '@/stores/foundation/dict-data'
 import { taktExcelEntityNames } from '@/utils/naming'
 import { resolveExportDownloadFileName } from '@/utils/export-download-name'
+import { normalizeImportResult, type TaktImportResult } from '@/utils/takt-import-result'
 import { RiEditLine, RiDeleteBinLine, RiQuestionLine } from '@remixicon/vue'
+
+import {
+  usePurchasePriceI18n,
+  PURCHASEPRICE_LIST_FIELDS,
+  PURCHASEPRICE_QUERY_STRING_FIELDS,
+  PURCHASEPRICE_QUERY_FIELDS,
+  PURCHASEPRICE_SELF_I18N_KEY,
+} from './composables/use-purchase-price-i18n'
+
+/** 实体字段 i18n（标签/占位符统一入口） */
+const pi = usePurchasePriceI18n()
 
 /** i18n 翻译函数 */
 const { t } = useI18n()
@@ -367,7 +371,7 @@ const { t } = useI18n()
 const excelNames = taktExcelEntityNames('TaktPurchasePrice')
 /** 列表快捷查询占位文案 */
 const searchPlaceholder = computed(
-  () => t('common.page.form.placeholder.search', { keyword: t('entity.purchaseprice._self') })
+  () => t('common.page.form.placeholder.search', { keyword: pi.self() })
 )
 
 /** 快捷查询关键字 */
@@ -383,9 +387,9 @@ const pageSize = ref(getTaktDefaultPageSize())
 /** 分页 total */
 const total = ref(0)
 /** 工具栏单选时当前行 */
-const selectedRow = ref<PurchasePrice | null>(null)
+const selectedRow = ref<PurchasePriceRowRecord | null>(null)
 /** 表格多选行 */
-const selectedRows = ref<PurchasePrice[]>([])
+const selectedRows = ref<PurchasePriceRowRecord[]>([])
 /** 表格多选 row-key 集合 */
 const selectedRowKeys = ref<(string | number)[]>([])
 
@@ -402,42 +406,26 @@ const formRef = ref()
 
 /** 高级查询抽屉是否打开 */
 const advancedQueryVisible = ref(false)
+/**
+ * 创建空的高级查询表单
+ * @returns {Record<string, unknown>} 高级查询初始模型
+ */
+function createEmptyAdvancedQueryForm() {
+  const form = Object.fromEntries(PURCHASEPRICE_QUERY_STRING_FIELDS.map((key) => [key, ''])) as Record<
+    (typeof PURCHASEPRICE_QUERY_STRING_FIELDS)[number],
+    string
+  >
+  return {
+    ...form,
+
+  }
+}
 /** 高级查询表单模型 */
-const advancedQueryForm = ref({
-  plantCode: '',
-  purchasePriceCode: '',
-  supplierCode: '',
-  purchaseInquiryId: '',
-  purchaseInquiryCode: '',
-  priceType: undefined as number | undefined,
-  effectiveStartDateStart: '',
-  effectiveStartDateEnd: '',
-  effectiveEndDateStart: '',
-  effectiveEndDateEnd: '',
-  priceStatus: undefined as number | undefined,
-  createdAtStart: '',
-  createdAtEnd: '',
-  extField: '',
-  remark: '',
-})
+const advancedQueryForm = ref(createEmptyAdvancedQueryForm())
 /** 高级查询字段元数据（列显隐配置） */
-const queryFieldsMeta = computed(() => [
-  { key: 'plantCode', label: t('entity.purchaseprice.plantcode') },
-  { key: 'purchasePriceCode', label: t('entity.purchaseprice.code') },
-  { key: 'supplierCode', label: t('entity.purchaseprice.suppliercode') },
-  { key: 'purchaseInquiryId', label: t('entity.purchaseprice.purchaseinquiryid') },
-  { key: 'purchaseInquiryCode', label: t('entity.purchaseprice.purchaseinquirycode') },
-  { key: 'priceType', label: t('entity.purchaseprice.pricetype') },
-  { key: 'effectiveStartDateStart', label: t('common.page.entity.createdatstart').replace(t('common.page.entity.createdat'), t('entity.purchaseprice.effectivestartdate')) },
-  { key: 'effectiveStartDateEnd', label: t('common.page.entity.createdatend').replace(t('common.page.entity.createdat'), t('entity.purchaseprice.effectivestartdate')) },
-  { key: 'effectiveEndDateStart', label: t('common.page.entity.createdatstart').replace(t('common.page.entity.createdat'), t('entity.purchaseprice.effectiveenddate')) },
-  { key: 'effectiveEndDateEnd', label: t('common.page.entity.createdatend').replace(t('common.page.entity.createdat'), t('entity.purchaseprice.effectiveenddate')) },
-  { key: 'priceStatus', label: t('entity.purchaseprice.pricestatus') },
-  { key: 'createdAtStart', label: t('common.page.entity.createdatstart') },
-  { key: 'createdAtEnd', label: t('common.page.entity.createdatend') },
-  { key: 'extField', label: t('common.page.entity.extfield') },
-  { key: 'remark', label: t('common.page.entity.remark') },
-])
+const queryFieldsMeta = computed(() =>
+  PURCHASEPRICE_QUERY_FIELDS.map((key) => ({ key, label: pi.queryLabel(key) })),
+)
 /** 高级查询当前可见字段 key */
 const visibleQueryFieldKeys = ref<string[]>([])
 /** 列设置抽屉是否打开 */
@@ -481,25 +469,9 @@ function buildListQuery(overrides?: Partial<PurchasePriceQuery>): PurchasePriceQ
       query[key] = v as never
     }
   }
-  assignTrimmed('plantCode', form.plantCode)
-  assignTrimmed('purchasePriceCode', form.purchasePriceCode)
-  assignTrimmed('supplierCode', form.supplierCode)
-  assignTrimmed('purchaseInquiryId', form.purchaseInquiryId)
-  assignTrimmed('purchaseInquiryCode', form.purchaseInquiryCode)
-  if (form.priceType !== undefined && form.priceType !== null) {
-    query.priceType = form.priceType
+  for (const key of PURCHASEPRICE_QUERY_STRING_FIELDS) {
+    assignTrimmed(key, form[key])
   }
-  assignTrimmed('effectiveStartDateStart', form.effectiveStartDateStart)
-  assignTrimmed('effectiveStartDateEnd', form.effectiveStartDateEnd)
-  assignTrimmed('effectiveEndDateStart', form.effectiveEndDateStart)
-  assignTrimmed('effectiveEndDateEnd', form.effectiveEndDateEnd)
-  if (form.priceStatus !== undefined && form.priceStatus !== null) {
-    query.priceStatus = form.priceStatus
-  }
-  assignTrimmed('createdAtStart', form.createdAtStart)
-  assignTrimmed('createdAtEnd', form.createdAtEnd)
-  assignTrimmed('extField', form.extField)
-  assignTrimmed('remark', form.remark)
   return query
 }
 /** 页面挂载：租户上下文就绪后加载分页配置，再拉列表 */
@@ -514,7 +486,7 @@ onMounted(async () => {
 const selectedMasterKey = ref('')
 
 /** 同步主表选中行到右侧明细（子表由 *-panel watch 自动 reload） */
-function syncMasterSelection(record: PurchasePrice | null) {
+function syncMasterSelection(record: PurchasePriceRowRecord | null) {
   selectedMasterRow.value = record
   selectedMasterKey.value = record ? getPurchasePriceId(record) : ''
 }
@@ -524,7 +496,7 @@ function syncMasterSelection(record: PurchasePrice | null) {
  * @param record 主表行
  */
 function handleMasterSelect(record: Record<string, unknown>) {
-  const row = record as unknown as PurchasePrice
+  const row = record as unknown as PurchasePriceRowRecord
   const key = getPurchasePriceId(row)
   selectedRowKeys.value = [key]
   selectedRows.value = [row]
@@ -542,7 +514,7 @@ function handleMasterPaginationChange(_page: number, _pageSize: number) {
 }
 
 /** 加载主表详情并回填当前页 dataSource */
-async function loadPurchasePriceDetail(record: PurchasePrice): Promise<PurchasePrice | null> {
+async function loadPurchasePriceDetail(record: PurchasePriceRowRecord): Promise<PurchasePrice | null> {
   const id = getPurchasePriceId(record)
   if (!id) {
     return null
@@ -573,16 +545,7 @@ const columns = computed<TableColumnsType>(() => [
     customRender: ({ record }: { record: any }) => getPurchasePriceField(record, 'purchasePriceId') ?? ''
   },
   {
-    title: t('entity.purchaseprice.plantcode'),
-    dataIndex: 'plantCode',
-    key: 'plantCode',
-    width: 120,
-    resizable: true,
-    ellipsis: true,
-    customRender: ({ record }: { record: any }) => getPurchasePriceField(record, 'plantCode') ?? ''
-  },
-  {
-    title: t('entity.purchaseprice.code'),
+    title: pi.label('purchasePriceCode'),
     dataIndex: 'purchasePriceCode',
     key: 'purchasePriceCode',
     width: 120,
@@ -591,7 +554,15 @@ const columns = computed<TableColumnsType>(() => [
     customRender: ({ record }: { record: any }) => getPurchasePriceField(record, 'purchasePriceCode') ?? ''
   },
   {
-    title: t('entity.purchaseprice.suppliercode'),
+    title: pi.label('priceType'),
+    dataIndex: 'priceType',
+    key: 'priceType',
+    width: 120,
+    resizable: true,
+    ellipsis: true,
+  },
+  {
+    title: pi.label('supplierCode'),
     dataIndex: 'supplierCode',
     key: 'supplierCode',
     width: 120,
@@ -600,7 +571,43 @@ const columns = computed<TableColumnsType>(() => [
     customRender: ({ record }: { record: any }) => getPurchasePriceField(record, 'supplierCode') ?? ''
   },
   {
-    title: t('entity.purchaseprice.purchaseinquiryid'),
+    title: pi.label('materialCode'),
+    dataIndex: 'materialCode',
+    key: 'materialCode',
+    width: 120,
+    resizable: true,
+    ellipsis: true,
+    customRender: ({ record }: { record: any }) => getPurchasePriceField(record, 'materialCode') ?? ''
+  },
+  {
+    title: pi.label('validFrom'),
+    dataIndex: 'validFrom',
+    key: 'validFrom',
+    width: 120,
+    resizable: true,
+    ellipsis: true,
+    customRender: ({ record }: { record: any }) => getPurchasePriceField(record, 'validFrom') ?? ''
+  },
+  {
+    title: pi.label('validTo'),
+    dataIndex: 'validTo',
+    key: 'validTo',
+    width: 120,
+    resizable: true,
+    ellipsis: true,
+    customRender: ({ record }: { record: any }) => getPurchasePriceField(record, 'validTo') ?? ''
+  },
+  {
+    title: pi.label('variableKey'),
+    dataIndex: 'variableKey',
+    key: 'variableKey',
+    width: 120,
+    resizable: true,
+    ellipsis: true,
+    customRender: ({ record }: { record: any }) => getPurchasePriceField(record, 'variableKey') ?? ''
+  },
+  {
+    title: pi.label('purchaseInquiryId'),
     dataIndex: 'purchaseInquiryId',
     key: 'purchaseInquiryId',
     width: 120,
@@ -609,47 +616,13 @@ const columns = computed<TableColumnsType>(() => [
     customRender: ({ record }: { record: any }) => getPurchasePriceField(record, 'purchaseInquiryId') ?? ''
   },
   {
-    title: t('entity.purchaseprice.purchaseinquirycode'),
+    title: pi.label('purchaseInquiryCode'),
     dataIndex: 'purchaseInquiryCode',
     key: 'purchaseInquiryCode',
     width: 120,
     resizable: true,
     ellipsis: true,
     customRender: ({ record }: { record: any }) => getPurchasePriceField(record, 'purchaseInquiryCode') ?? ''
-  },
-  {
-    title: t('entity.purchaseprice.pricetype'),
-    dataIndex: 'priceType',
-    key: 'priceType',
-    width: 120,
-    resizable: true,
-    ellipsis: true,
-  },
-  {
-    title: t('entity.purchaseprice.effectivestartdate'),
-    dataIndex: 'effectiveStartDate',
-    key: 'effectiveStartDate',
-    width: 120,
-    resizable: true,
-    ellipsis: true,
-    customRender: ({ record }: { record: any }) => getPurchasePriceField(record, 'effectiveStartDate') ?? ''
-  },
-  {
-    title: t('entity.purchaseprice.effectiveenddate'),
-    dataIndex: 'effectiveEndDate',
-    key: 'effectiveEndDate',
-    width: 120,
-    resizable: true,
-    ellipsis: true,
-    customRender: ({ record }: { record: any }) => getPurchasePriceField(record, 'effectiveEndDate') ?? ''
-  },
-  {
-    title: t('entity.purchaseprice.pricestatus'),
-    dataIndex: 'priceStatus',
-    key: 'priceStatus',
-    width: 120,
-    resizable: true,
-    ellipsis: true,
   },
   CreateActionColumn({
     actions: [
@@ -659,7 +632,7 @@ const columns = computed<TableColumnsType>(() => [
         shape: 'plain',
         icon: RiEditLine,
         permission: 'logistics:procurement:purchase:price:update',
-        onClick: (record: PurchasePrice) => handleEdit(record)
+        onClick: (record: PurchasePriceRowRecord) => handleEdit(record)
       },
       {
         key: 'delete',
@@ -667,26 +640,44 @@ const columns = computed<TableColumnsType>(() => [
         shape: 'plain',
         icon: RiDeleteBinLine,
         permission: 'logistics:procurement:purchase:price:delete',
-        onClick: (record: PurchasePrice) => handleDeleteOne(record)
+        onClick: (record: PurchasePriceRowRecord) => handleDeleteOne(record)
       }
     ]
   })
 ])
 
 /** 表格 row-key（优先实体主键字段） */
-const getPurchasePriceId = (record: any): string => record?.[entityIdName] ?? ''
+const getPurchasePriceId = (record: PurchasePriceRowRecord): string => {
+  const id = (record as Record<string, unknown>)?.[entityIdName]
+  return id != null ? String(id) : ''
+}
 /**
  * 读取行字段值
  * @param record 行数据
  * @param field 字段名
  */
 const getPurchasePriceField = (record: any, field: string): any => record?.[field]
+/**
+ * 供 TaktDictTag 等组件使用的标量字典值
+ * @param record 行数据
+ * @param field 字段名
+ */
+const getPurchasePriceDictValue = (
+  record: PurchasePriceRowRecord,
+  field: string,
+): string | number | undefined => {
+  const value = (record as Record<string, unknown>)?.[field]
+  if (value === null || value === undefined) return undefined
+  if (typeof value === 'string' || typeof value === 'number') return value
+  return String(value)
+}
+
 
 
 /** 行选择配置 */
 const rowSelection = computed(() => ({
   selectedRowKeys: selectedRowKeys.value,
-  onChange: (keys: (string | number)[], rows: PurchasePrice[]) => {
+  onChange: (keys: (string | number)[], rows: PurchasePriceRowRecord[]) => {
     selectedRowKeys.value = keys
     selectedRows.value = rows
     selectedRow.value = rows.length === 1 ? (rows[0] ?? null) : null
@@ -696,7 +687,7 @@ const rowSelection = computed(() => ({
       syncMasterSelection(null)
     }
   },
-  onSelect: (record: PurchasePrice, selected: boolean) => {
+  onSelect: (record: PurchasePriceRowRecord, selected: boolean) => {
     if (selected) {
       selectedRow.value = record
       syncMasterSelection(record)
@@ -705,7 +696,7 @@ const rowSelection = computed(() => ({
       syncMasterSelection(null)
     }
   },
-  onSelectAll: (selected: boolean, selectedRowsData: PurchasePrice[]) => {
+  onSelectAll: (selected: boolean, selectedRowsData: PurchasePriceRowRecord[]) => {
     selectedRow.value = selected && selectedRowsData.length === 1 ? (selectedRowsData[0] ?? null) : null
     syncMasterSelection(selectedRow.value)
   }
@@ -741,17 +732,17 @@ function handleSearch() {
 function handleReset() {
   queryKeyword.value = ''
   advancedQueryForm.value = {
-  plantCode: '',
   purchasePriceCode: '',
+  priceType: '',
   supplierCode: '',
+  materialCode: '',
+  validFromStart: '',
+  validFromEnd: '',
+  validToStart: '',
+  validToEnd: '',
+  variableKey: '',
   purchaseInquiryId: '',
   purchaseInquiryCode: '',
-  priceType: undefined as number | undefined,
-  effectiveStartDateStart: '',
-  effectiveStartDateEnd: '',
-  effectiveEndDateStart: '',
-  effectiveEndDateEnd: '',
-  priceStatus: undefined as number | undefined,
   createdAtStart: '',
   createdAtEnd: '',
   extField: '',
@@ -763,14 +754,14 @@ function handleReset() {
 
 /** 打开新增弹窗 */
 function handleCreate() {
-  formTitle.value = t('common.dialog.title.create', { entity: t('entity.purchaseprice._self') })
+  formTitle.value = t('common.dialog.title.create', { entity: pi.self() })
   formData.value = null
   formVisible.value = true
   nextTick(() => formRef.value?.resetFields())
 }
 /** 打开编辑弹窗（主子表：先拉详情含子表） */
-async function handleEdit(record: PurchasePrice) {
-  formTitle.value = t('common.dialog.title.edit', { entity: t('entity.purchaseprice._self') })
+async function handleEdit(record: PurchasePriceRowRecord) {
+  formTitle.value = t('common.dialog.title.edit', { entity: pi.self() })
   formLoading.value = true
   try {
     const detail = await loadPurchasePriceDetail(record)
@@ -786,7 +777,7 @@ function handleUpdate() {
   if (selectedRow.value) {
     void handleEdit(selectedRow.value)
   } else {
-    message.warning(t('common.tip.select.to.action', { action: t('common.page.button.edit'), entity: t('entity.purchaseprice._self') }))
+    message.warning(t('common.tip.select.to.action', { action: t('common.page.button.edit'), entity: pi.self() }))
   }
 }
 /** 提交新增/编辑表单 */
@@ -804,10 +795,10 @@ async function handleFormSubmit() {
     const id = (formData.value as any)?.[entityIdName]
     if (id) {
       await updatePurchasePrice(id, payload as any)
-      message.success(t('common.feedback.updated', { target: t('entity.purchaseprice._self') }))
+      message.success(t('common.feedback.updated', { target: pi.self() }))
     } else {
       await createPurchasePrice(payload as any)
-      message.success(t('common.feedback.created', { target: t('entity.purchaseprice._self') }))
+      message.success(t('common.feedback.created', { target: pi.self() }))
     }
     formVisible.value = false
     formData.value = null
@@ -838,15 +829,22 @@ async function handleDownloadTemplate(sheetName?: string, fileName?: string): Pr
   return (res as any)?.data ?? res
 }
 
-/** 上传并导入 Excel 文件 */
-async function handleImportFile(file: File, sheetName?: string): Promise<{ success: number; fail: number; errors: string[] }> {
-  return await importPurchasePrice(file, sheetName)
+/** 上传并导入 Excel 文件（归一化后端 SuccessCount/successCount） */
+async function handleImportFile(file: File, sheetName?: string): Promise<TaktImportResult> {
+  const raw = await importPurchasePrice(file, sheetName)
+  return normalizeImportResult(raw)
 }
 
-/** 导入完成回调：刷新列表并可选关闭对话框 */
-function handleImportSuccess(result: { success: number; fail: number; errors: string[] }) {
+/** 导入完成回调：刷新列表；全部成功时延迟关闭对话框 */
+function handleImportSuccess(result: TaktImportResult) {
   loadData()
-  if (result.fail === 0) setTimeout(() => { importVisible.value = false }, 2000)
+
+      if (selectedMasterKey.value) {
+    purchasePriceItemPanelRef.value?.reload?.()
+      }
+  if (result.fail === 0 && result.success > 0) {
+    setTimeout(() => { importVisible.value = false }, 2000)
+  }
 }
 
 /** 关闭导入对话框 */
@@ -880,24 +878,24 @@ async function handleExport() {
     link.click()
     document.body.removeChild(link)
     setTimeout(() => window.URL.revokeObjectURL(url), 100)
-    message.success(t('common.feedback.export.success', { target: t('entity.purchaseprice._self') }))
+    message.success(t('common.feedback.export.success', { target: pi.self() }))
   } catch (error: any) {
     logger.error('[PurchasePrice] 导出失败', { error })
-    message.error(error?.message || t('common.feedback.export.failed', { target: t('entity.purchaseprice._self') }))
+    message.error(error?.message || t('common.feedback.export.failed', { target: pi.self() }))
   } finally {
     loading.value = false
   }
 }
 /** 删除单行 */
-async function handleDeleteOne(record: PurchasePrice) {
+async function handleDeleteOne(record: PurchasePriceRowRecord) {
   Modal.confirm({
     title: t('common.tip.confirm.delete.title'),
-    content: t('common.tip.confirm.delete.entity', { entity: t('entity.purchaseprice._self'), name: t('common.tip.this.target', { target: t('entity.purchaseprice._self') }) }),
+    content: t('common.tip.confirm.delete.entity', { entity: pi.self(), name: t('common.tip.this.target', { target: pi.self() }) }),
     okText: t('common.page.button.delete'),
     cancelText: t('common.page.button.cancel'),
     onOk: async () => {
       await deletePurchasePriceById((record as any)[entityIdName])
-      message.success(t('common.feedback.deleted', { target: t('entity.purchaseprice._self') }))
+      message.success(t('common.feedback.deleted', { target: pi.self() }))
       selectedRowKeys.value = []
       selectedRows.value = []
       selectedRow.value = null
@@ -909,18 +907,18 @@ async function handleDeleteOne(record: PurchasePrice) {
 /** 批量删除选中行 */
 async function handleDelete() {
   if (selectedRows.value.length === 0) {
-    message.warning(t('common.tip.select.to.action', { action: t('common.page.button.delete'), entity: t('entity.purchaseprice._self') }))
+    message.warning(t('common.tip.select.to.action', { action: t('common.page.button.delete'), entity: pi.self() }))
     return
   }
   Modal.confirm({
     title: t('common.tip.confirm.delete.title'),
-    content: t('common.tip.confirm.delete.count', { entity: t('entity.purchaseprice._self'), count: selectedRows.value.length }),
+    content: t('common.tip.confirm.delete.count', { entity: pi.self(), count: selectedRows.value.length }),
     okText: t('common.page.button.delete'),
     cancelText: t('common.page.button.cancel'),
     onOk: async () => {
       const ids = selectedRows.value.map((r: any) => r[entityIdName]).filter(Boolean)
       await deletePurchasePriceBatch(ids)
-      message.success(t('common.feedback.deleted', { target: t('entity.purchaseprice._self') }))
+      message.success(t('common.feedback.deleted', { target: pi.self() }))
       selectedRowKeys.value = []
       selectedRows.value = []
       selectedRow.value = null
@@ -928,30 +926,6 @@ async function handleDelete() {
       loadData()
     }
   })
-}
-/**
- * 行内状态切换
- * @param record 当前行
- * @param checked 是否启用
- */
-async function handlePriceStatusChange(record: PurchasePrice, checked: boolean) {
-  const newVal = checked ? 1 : 0
-  const oldVal = getPurchasePriceField(record, 'priceStatus')
-  const id = getPurchasePriceId(record)
-  const row = dataSource.value.find((item) => getPurchasePriceId(item) === id)
-  if (row) {
-    row.priceStatus = newVal
-  }
-  try {
-    await updatePurchasePriceStatus({ purchasePriceId: id, priceStatus: newVal })
-    message.success(t('common.feedback.updated'))
-    
-  } catch (error: unknown) {
-    if (row) {
-      row.priceStatus = oldVal
-    }
-    message.error(t('common.feedback.failed'))
-  }
 }
 /** 打开高级查询抽屉 */
 function handleAdvancedQuery() {
@@ -967,17 +941,17 @@ function handleAdvancedQuerySubmit() {
 
 function handleAdvancedQueryReset() {
   advancedQueryForm.value = {
-  plantCode: '',
   purchasePriceCode: '',
+  priceType: '',
   supplierCode: '',
+  materialCode: '',
+  validFromStart: '',
+  validFromEnd: '',
+  validToStart: '',
+  validToEnd: '',
+  variableKey: '',
   purchaseInquiryId: '',
   purchaseInquiryCode: '',
-  priceType: undefined as number | undefined,
-  effectiveStartDateStart: '',
-  effectiveStartDateEnd: '',
-  effectiveEndDateStart: '',
-  effectiveEndDateEnd: '',
-  priceStatus: undefined as number | undefined,
   createdAtStart: '',
   createdAtEnd: '',
   extField: '',

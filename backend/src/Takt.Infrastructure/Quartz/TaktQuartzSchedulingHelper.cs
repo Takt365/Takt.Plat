@@ -66,7 +66,11 @@ public static class TaktQuartzSchedulingHelper
                 ArgumentException.ThrowIfNullOrWhiteSpace(task.ApiUrl);
                 break;
             case "sql":
-                ArgumentException.ThrowIfNullOrWhiteSpace(task.SqlScript);
+                if (!TaktQuartzSqlPathHelper.IsValidWwwRootRelativeSqlPath(task.SqlScript))
+                {
+                    throw new InvalidOperationException(
+                        "SqlScript 只可填相对 wwwroot 的 .sql 路径（如 Quartz/sap_sync_ma.sql），不允许填写具体 SQL 语句");
+                }
                 break;
             default:
                 throw new InvalidOperationException($"不支持的任务类型：{task.TaskType}");
@@ -127,7 +131,7 @@ public static class TaktQuartzSchedulingHelper
             ExecuteDuration = durationMs,
             ExecuteParams = Truncate(executeParams, 1000),
             ExecuteMessage = Truncate(executeMessage, 2000),
-            ErrorInfo = Truncate(errorInfo, 2000),
+            ErrorInfo = Truncate(errorInfo, TaktQuartzJobExecutionLogger.MaxErrorInfoLength),
             ExecuteIp = Truncate(executeIp, 50),
             ExecuteHost = Truncate(executeHost, 100),
             ExecuteStatus = executeStatus,

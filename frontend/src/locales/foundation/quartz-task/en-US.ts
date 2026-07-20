@@ -12,6 +12,11 @@
 
 export default {
   page: {
+    executeSubmitted: 'Submitted for background execution; you will be notified when finished',
+    signalr: {
+      executeSucceeded: 'Task {code} succeeded ({duration}ms)',
+      executeFailed: 'Task {code} failed ({duration}ms)',
+    },
     cron: {
       modalTitle: 'Cron Expression',
       inputPlaceholder: 'Click to configure cron expression',
@@ -27,6 +32,22 @@ export default {
       specify: 'Specify',
       nextRuns: 'Next 5 Run Times',
       noNextRuns: 'Unable to parse current expression',
+      sourceExpression: 'Original expression',
+      sourceMeaning: 'Meaning',
+      describe: {
+        atTime: 'Every day at {h}:{m}:{s}',
+        intervalSeconds: 'From second {start}, every {step} second(s)',
+        intervalMinutes: 'From minute {start}, every {step} minute(s)',
+        intervalHours: 'From hour {start}, every {step} hour(s)',
+        specificSeconds: 'Seconds: {values}',
+        specificMinutes: 'Minutes: {values}',
+        specificHours: 'Hours: {values}',
+        specificDays: 'Days of month: {values}',
+        specificMonths: 'Months: {values}',
+        specificWeeks: 'Weekdays: {values}',
+        unknown: 'Cannot auto-explain this expression; edit by field below',
+        join: '; ',
+      },
       tab: {
         second: 'Second',
         minute: 'Minute',

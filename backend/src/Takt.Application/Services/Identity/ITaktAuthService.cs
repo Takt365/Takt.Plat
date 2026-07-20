@@ -116,7 +116,7 @@ public interface ITaktAuthService
         CancellationToken cancellationToken = default);
 
     /// <summary>
-    /// 获取当前用户可切换的公司选项（已登录；按权限过滤）
+    /// 获取当前用户可切换的公司选项（已登录；按权限过滤；ExtValue=关联工厂 RelatedPlant）
     /// </summary>
     /// <returns>公司下拉选项</returns>
     Task<List<TaktSelectOption>> GetUserCompanyOptionsAsync();

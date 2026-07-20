@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Infrastructure.Data.Seeds.I18nSeedData.Logistics.Manufacturing.Bom
 // 文件名称：TaktStandardOperationTimeI18nSeedData.cs
-// 创建时间：2026-07-09
+// 创建时间：2026-07-20
 // 创建人：Takt365(Auto Generated)
 // 功能描述：TaktStandardOperationTime 实体字段国际化种子（无对应 frontend locales；TranslationText 取自 ColumnDescription，ContextNote 取自属性 XML summary）
 // 
@@ -91,31 +91,31 @@ public class TaktStandardOperationTimeI18nSeedData : ITaktSeedDataCoordinator
             new TranslationSeedItem("entity.standardoperationtime._self", "zh-HK", "标准工序时间信息_hk", "实体名称"),
 
             // entity.standardoperationtime.plantcode
-            new TranslationSeedItem("entity.standardoperationtime.plantcode", "en-US", "工厂代码_us", "工厂代码（选项 TaktPlants/options）"),
+            new TranslationSeedItem("entity.standardoperationtime.plantcode", "en-US", "工厂代码_us", "工厂代码（选项 TaktPlants/options，DictValue=PlantCode）"),
             // entity.standardoperationtime.plantcode
-            new TranslationSeedItem("entity.standardoperationtime.plantcode", "ja-JP", "工厂代码_jp", "工厂代码（选项 TaktPlants/options）"),
+            new TranslationSeedItem("entity.standardoperationtime.plantcode", "ja-JP", "工厂代码_jp", "工厂代码（选项 TaktPlants/options，DictValue=PlantCode）"),
             // entity.standardoperationtime.plantcode
-            new TranslationSeedItem("entity.standardoperationtime.plantcode", "zh-CN", "工厂代码", "工厂代码（选项 TaktPlants/options）"),
+            new TranslationSeedItem("entity.standardoperationtime.plantcode", "zh-CN", "工厂代码", "工厂代码（选项 TaktPlants/options，DictValue=PlantCode）"),
             // entity.standardoperationtime.plantcode
-            new TranslationSeedItem("entity.standardoperationtime.plantcode", "zh-HK", "工厂代码_hk", "工厂代码（选项 TaktPlants/options）"),
+            new TranslationSeedItem("entity.standardoperationtime.plantcode", "zh-HK", "工厂代码_hk", "工厂代码（选项 TaktPlants/options，DictValue=PlantCode）"),
 
             // entity.standardoperationtime.materialcode
-            new TranslationSeedItem("entity.standardoperationtime.materialcode", "en-US", "物料编码_us", "物料编码（选项 TaktMaterials/options）"),
+            new TranslationSeedItem("entity.standardoperationtime.materialcode", "en-US", "物料编码_us", "物料编码（选项 TaktMaterialPlants/options，DictValue=MaterialCode，ExtValue=PlantCode）"),
             // entity.standardoperationtime.materialcode
-            new TranslationSeedItem("entity.standardoperationtime.materialcode", "ja-JP", "物料编码_jp", "物料编码（选项 TaktMaterials/options）"),
+            new TranslationSeedItem("entity.standardoperationtime.materialcode", "ja-JP", "物料编码_jp", "物料编码（选项 TaktMaterialPlants/options，DictValue=MaterialCode，ExtValue=PlantCode）"),
             // entity.standardoperationtime.materialcode
-            new TranslationSeedItem("entity.standardoperationtime.materialcode", "zh-CN", "物料编码", "物料编码（选项 TaktMaterials/options）"),
+            new TranslationSeedItem("entity.standardoperationtime.materialcode", "zh-CN", "物料编码", "物料编码（选项 TaktMaterialPlants/options，DictValue=MaterialCode，ExtValue=PlantCode）"),
             // entity.standardoperationtime.materialcode
-            new TranslationSeedItem("entity.standardoperationtime.materialcode", "zh-HK", "物料编码_hk", "物料编码（选项 TaktMaterials/options）"),
+            new TranslationSeedItem("entity.standardoperationtime.materialcode", "zh-HK", "物料编码_hk", "物料编码（选项 TaktMaterialPlants/options，DictValue=MaterialCode，ExtValue=PlantCode）"),
 
             // entity.standardoperationtime.workcenter
-            new TranslationSeedItem("entity.standardoperationtime.workcenter", "en-US", "工作中心_us", "工作中心（选项 TaktWorkCenters/options，按工厂 ExtValue 过滤）"),
+            new TranslationSeedItem("entity.standardoperationtime.workcenter", "en-US", "工作中心_us", "工作中心（选项 TaktWorkCenters/options，DictValue=WorkCenterCode，ExtValue=PlantCode）"),
             // entity.standardoperationtime.workcenter
-            new TranslationSeedItem("entity.standardoperationtime.workcenter", "ja-JP", "工作中心_jp", "工作中心（选项 TaktWorkCenters/options，按工厂 ExtValue 过滤）"),
+            new TranslationSeedItem("entity.standardoperationtime.workcenter", "ja-JP", "工作中心_jp", "工作中心（选项 TaktWorkCenters/options，DictValue=WorkCenterCode，ExtValue=PlantCode）"),
             // entity.standardoperationtime.workcenter
-            new TranslationSeedItem("entity.standardoperationtime.workcenter", "zh-CN", "工作中心", "工作中心（选项 TaktWorkCenters/options，按工厂 ExtValue 过滤）"),
+            new TranslationSeedItem("entity.standardoperationtime.workcenter", "zh-CN", "工作中心", "工作中心（选项 TaktWorkCenters/options，DictValue=WorkCenterCode，ExtValue=PlantCode）"),
             // entity.standardoperationtime.workcenter
-            new TranslationSeedItem("entity.standardoperationtime.workcenter", "zh-HK", "工作中心_hk", "工作中心（选项 TaktWorkCenters/options，按工厂 ExtValue 过滤）"),
+            new TranslationSeedItem("entity.standardoperationtime.workcenter", "zh-HK", "工作中心_hk", "工作中心（选项 TaktWorkCenters/options，DictValue=WorkCenterCode，ExtValue=PlantCode）"),
 
             // entity.standardoperationtime.operationdesc
             new TranslationSeedItem("entity.standardoperationtime.operationdesc", "en-US", "工序描述_us", "工序描述"),

@@ -12,6 +12,7 @@
 
 using Takt.Application.Dtos.Foundation;
 using Takt.Domain.Entities.Foundation;
+using Takt.Domain.Entities.Statistics.Logging;
 using Takt.Shared.Models;
 using Takt.Shared.Options;
 
@@ -92,6 +93,18 @@ public interface ITaktMessageService
         string messageGroup,
         long? fromUserId = null,
         string? fromUserName = null);
+
+    /// <summary>
+    /// Quartz 任务执行完成后落库在线消息并私信推送（From=执行人，To=推送对象；适用于 SQL 同步等后台任务）
+    /// </summary>
+    /// <param name="task">定时任务实体</param>
+    /// <param name="log">执行日志</param>
+    /// <param name="triggerUserName">手动触发用户名（可空；空则回退任务 CreatedBy）</param>
+    /// <returns>任务</returns>
+    Task CreateAndSendQuartzTaskExecutedMessageAsync(
+        TaktQuartzTask task,
+        TaktQuartzLog log,
+        string? triggerUserName);
 
     /// <summary>
     /// 删除在线消息

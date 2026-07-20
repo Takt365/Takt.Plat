@@ -26,7 +26,7 @@ namespace Takt.Domain.Entities.Logistics.Procurement;
 public class TaktPurchaseRequestItem : TaktCompanyEntityBase
 {
     /// <summary>
-    /// 采购申请 ID（关联 TaktPurchaseRequest.Id，选项 TaktPurchaseRequests/options）
+    /// 采购申请 ID（选项 TaktPurchaseRequests/options，DictValue=Id）
     /// </summary>
     [SugarColumn(ColumnName = "purchase_request_id", ColumnDescription = "采购申请ID", ColumnDataType = "bigint", IsNullable = false)]
     [JsonConverter(typeof(ValueToStringConverter))]
@@ -39,6 +39,13 @@ public class TaktPurchaseRequestItem : TaktCompanyEntityBase
     public string PurchaseRequestCode { get; set; } = string.Empty;
 
     /// <summary>
+    /// 来源采购计划明细 ID（MRP 追溯，关联 TaktPurchasePlanItem.Id）
+    /// </summary>
+    [SugarColumn(ColumnName = "purchase_plan_item_id", ColumnDescription = "来源采购计划明细ID", ColumnDataType = "bigint", IsNullable = true)]
+    [JsonConverter(typeof(ValueToStringConverter))]
+    public long? PurchasePlanItemId { get; set; }
+
+    /// <summary>
     /// 行号（项号/序号，固定步长=10）
     /// </summary>
     [SugarColumn(ColumnName = "line_number", ColumnDescription = "行号", ColumnDataType = "int", IsNullable = false, DefaultValue = "0")]
@@ -49,25 +56,25 @@ public class TaktPurchaseRequestItem : TaktCompanyEntityBase
     [SugarColumn(ColumnName = "allocation_category", ColumnDescription = "分配类别", ColumnDataType = "varchar", Length = 40, IsNullable = false)]
     public string AllocationCategory { get; set; } = string.Empty;
     /// <summary>
-    /// 物料编码
+    /// 物料编码（选项 TaktMaterialPlants/options，DictValue=MaterialCode，ExtValue=PlantCode）
     /// </summary>
     [SugarColumn(ColumnName = "material_code", ColumnDescription = "物料编码", ColumnDataType = "nvarchar", Length = 20, IsNullable = true)]
     public string? MaterialCode { get; set; }
 
     /// <summary>
-    /// 物料名称
+    /// 物料名称（回填：随物料）
     /// </summary>
     [SugarColumn(ColumnName = "material_name", ColumnDescription = "物料名称", ColumnDataType = "nvarchar", Length = 40, IsNullable = false)]
     public string MaterialName { get; set; } = string.Empty;
 
     /// <summary>
-    /// 物料规格
+    /// 物料规格（回填：随物料）
     /// </summary>
     [SugarColumn(ColumnName = "material_specification", ColumnDescription = "物料规格", ColumnDataType = "nvarchar", Length = 80, IsNullable = true)]
     public string? MaterialSpecification { get; set; }
 
     /// <summary>
-    /// 申请单位
+    /// 申请单位（字典 logistics_unit_of_measure_code，DictValue=PC/EA 等；默认 PC）
     /// </summary>
     [SugarColumn(ColumnName = "request_unit", ColumnDescription = "申请单位", ColumnDataType = "nvarchar", Length = 20, IsNullable = false, DefaultValue = "PC")]
     public string RequestUnit { get; set; } = "PC";

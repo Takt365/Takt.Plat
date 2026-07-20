@@ -40,7 +40,7 @@ export function isTaktCaptchaDisabledError(error: unknown): boolean {
 /**
  * 探测当前是否需要展示登录会话验证码弹窗
  * @returns {Promise<boolean>} 需要验证码时为 true；未启用时为 false
- * @throws 网络或其它非「未启用」错误
+ * @throws 网络或其他非「未启用」错误
  */
 export async function probeSessionCaptchaRequiredAsync(): Promise<boolean> {
   try {

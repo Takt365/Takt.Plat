@@ -49,7 +49,7 @@ export interface PcbaInspectionDetail extends CompanyDtoBase {
   lineNumber: number;
 
   /**
-   * PCBA板别（字典 logistics_pcba_panel_category，存 DictValue）
+   * PCBA板别（字典 logistics_pcba_function_category，存 DictValue）
    */
   pcbaBoardType?: string;
 
@@ -184,7 +184,7 @@ export interface PcbaInspectionDetailQuery extends TaktPagedQuery {
   lineNumber?: number;
 
   /**
-   * PCBA板别（字典 logistics_pcba_panel_category，存 DictValue）
+   * PCBA板别（字典 logistics_pcba_function_category，存 DictValue）
    */
   pcbaBoardType?: string;
 
@@ -348,7 +348,7 @@ export interface PcbaInspectionDetailCreate {
   lineNumber: number;
 
   /**
-   * PCBA板别（字典 logistics_pcba_panel_category，存 DictValue）
+   * PCBA板别（字典 logistics_pcba_function_category，存 DictValue）
    */
   pcbaBoardType?: string;
 
@@ -540,7 +540,7 @@ export interface PcbaInspectionDetailTemplate {
   lineNumber?: number;
 
   /**
-   * PCBA板别（字典 logistics_pcba_panel_category，存 DictValue）
+   * PCBA板别（字典 logistics_pcba_function_category，存 DictValue）
    */
   pcbaBoardType?: string;
 
@@ -684,7 +684,7 @@ export interface PcbaInspectionDetailImport {
   lineNumber?: number;
 
   /**
-   * PCBA板别（字典 logistics_pcba_panel_category，存 DictValue）
+   * PCBA板别（字典 logistics_pcba_function_category，存 DictValue）
    */
   pcbaBoardType?: string;
 
@@ -823,7 +823,7 @@ export interface PcbaInspectionDetailExport {
   lineNumber: number;
 
   /**
-   * PCBA板别（字典 logistics_pcba_panel_category，存 DictValue）
+   * PCBA板别（字典 logistics_pcba_function_category，存 DictValue）
    */
   pcbaBoardType?: string;
 

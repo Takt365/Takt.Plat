@@ -276,7 +276,7 @@
                   v-model:value="formState.sqlScript"
                   :placeholder="t(QUARTZ_TASK_EXEC_FIELD_I18N.sqlScript.placeholder)"
                   show-count
-                  :maxlength="20"
+                  :maxlength="200"
                   allow-clear
                 />
               </a-form-item>
@@ -683,6 +683,27 @@ const rules = computed<Record<string, Rule[]>>(() => ({
     {
       required: true,
       message: t('common.page.form.placeholder.required', { field: t(QUARTZ_TASK_EXEC_FIELD_I18N.sqlScript.label) }),
+      trigger: 'blur'
+    },
+    {
+      validator: async (_rule, value) => {
+        const raw = typeof value === 'string' ? value.trim() : ''
+        if (!raw) {
+          return Promise.resolve()
+        }
+        if (
+          raw.length > 200
+          || /\s/.test(raw)
+          || raw.includes('..')
+          || !/\.sql$/i.test(raw)
+          || raw.startsWith('/')
+          || raw.startsWith('~/')
+          || /^[a-zA-Z]:[\\/]/.test(raw)
+        ) {
+          return Promise.reject(t(QUARTZ_TASK_EXEC_FIELD_I18N.sqlScript.hint))
+        }
+        return Promise.resolve()
+      },
       trigger: 'blur'
     }
   ] : [],

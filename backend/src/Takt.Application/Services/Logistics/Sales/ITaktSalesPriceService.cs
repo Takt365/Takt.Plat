@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Application.Services.Logistics.Sales
 // 文件名称：ITaktSalesPriceService.cs
-// 创建时间：2026-07-09
+// 创建时间：2026-07-20
 // 创建人：Takt365(Cursor AI)
 // 功能描述：销售价格应用服务接口
 // 
@@ -69,13 +69,6 @@ public interface ITaktSalesPriceService
     /// <param name="ids">ID列表</param>
     /// <returns>任务</returns>
     Task DeleteSalesPriceBatchAsync(IEnumerable<long> ids);
-
-    /// <summary>
-    /// 更新销售价格状态
-    /// </summary>
-    /// <param name="dto">状态DTO</param>
-    /// <returns>DTO</returns>
-    Task<TaktSalesPriceDto> UpdateSalesPriceStatusAsync(TaktSalesPriceStatusDto dto);
 
     /// <summary>
     /// 获取导入模板

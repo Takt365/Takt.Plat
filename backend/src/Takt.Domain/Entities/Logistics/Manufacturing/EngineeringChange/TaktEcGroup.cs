@@ -46,7 +46,7 @@ public class TaktEcGroup : TaktCompanyEntityBase
     [SugarColumn(ColumnName = "ec_group_description", ColumnDescription = "设变组描述", ColumnDataType = "nvarchar", Length = 200, IsNullable = true)]
     public string? EcGroupDescription { get; set; }
     /// <summary>
-    /// 设变组负责人用户 ID（关联 TaktUser.Id，选项 TaktUsers/options）
+    /// 设变组负责人用户 ID（选项 TaktUsers/options，DictValue=Id）
     /// </summary>
     [SugarColumn(ColumnName = "responsible_user_id", ColumnDescription = "负责人用户ID", ColumnDataType = "bigint", IsNullable = true)]
     [JsonConverter(typeof(ValueToStringConverter))]

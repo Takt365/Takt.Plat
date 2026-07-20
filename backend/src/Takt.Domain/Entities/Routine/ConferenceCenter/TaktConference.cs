@@ -85,7 +85,7 @@ public class TaktConference : TaktApprovalEntityBase
     [SugarColumn(ColumnName = "conference_tags", ColumnDescription = "标签", ColumnDataType = "nvarchar", Length = 500, IsNullable = true)]
     public string? ConferenceTags { get; set; }
     /// <summary>
-    /// 组织人 ID（关联 TaktUser.Id，选项 TaktUsers/options）
+    /// 组织人 ID（选项 TaktUsers/options，DictValue=Id）
     /// </summary>
     [SugarColumn(ColumnName = "organizer_id", ColumnDescription = "组织人ID", ColumnDataType = "bigint", IsNullable = false)]
     [JsonConverter(typeof(ValueToStringConverter))]
@@ -117,7 +117,7 @@ public class TaktConference : TaktApprovalEntityBase
     [SugarColumn(ColumnName = "reminder_minutes", ColumnDescription = "提前提醒分钟数", ColumnDataType = "int", IsNullable = false, DefaultValue = "0")]
     public int ReminderMinutes { get; set; } = 0;
     /// <summary>
-    /// 会议室 ID（关联 TaktConferenceRoom.Id，选项 TaktConferenceRooms/options）
+    /// 会议室 ID（选项 TaktConferenceRooms/options，DictValue=Id）
     /// </summary>
     [SugarColumn(ColumnName = "conference_room_id", ColumnDescription = "会议室ID", ColumnDataType = "bigint", IsNullable = true)]
     [JsonConverter(typeof(ValueToStringConverter))]

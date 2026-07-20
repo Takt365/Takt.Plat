@@ -25,6 +25,11 @@ import type {
   IqcOrderStat
 } from '@/types/logistics/quality/operation/iqc-order-stat';
 import type {
+  IqcOrderMonthlyTrendQuery,
+  QualityInspectionMonthlyTrendResult,
+  IqcOrderMonthlyTrend,
+} from '@/types/logistics/quality/operation/inspection-trend';
+import type {
   QualityStatQuery
 } from '@/types/logistics/quality/operation/quality-stat-query';
 
@@ -220,6 +225,45 @@ export function exportIqcOrder(
       ...query,
       sheetName,
       exportName
+    },
+    responseType: 'blob',
+  });
+}
+
+/**
+ * IQC 进货检验月推移转置分析
+ * @param {IqcOrderMonthlyTrendQuery} queryDto 查询条件
+ * @returns {Promise<QualityInspectionMonthlyTrendResult<IqcOrderMonthlyTrend>>} 分析结果
+ */
+export function getIqcOrderMonthlyTrendAnalysis(
+  queryDto: IqcOrderMonthlyTrendQuery
+): Promise<QualityInspectionMonthlyTrendResult<IqcOrderMonthlyTrend>> {
+  return request<QualityInspectionMonthlyTrendResult<IqcOrderMonthlyTrend>>({
+    url: `${IQC_ORDER_API_BASE}/monthly-trend-analysis`,
+    method: 'get',
+    params: queryDto,
+  });
+}
+
+/**
+ * 导出 IQC 进货检验月推移
+ * @param {IqcOrderMonthlyTrendQuery} query 查询条件
+ * @param {string} [sheetName] 工作表名
+ * @param {string} [exportName] 导出文件名
+ * @returns {Promise<Blob>} Excel 文件
+ */
+export function exportIqcOrderMonthlyTrendAnalysis(
+  query: IqcOrderMonthlyTrendQuery,
+  sheetName?: string,
+  exportName?: string
+): Promise<Blob> {
+  return request<Blob>({
+    url: `${IQC_ORDER_API_BASE}/monthly-trend-analysis/export`,
+    method: 'get',
+    params: {
+      ...query,
+      sheetName,
+      exportName,
     },
     responseType: 'blob',
   });

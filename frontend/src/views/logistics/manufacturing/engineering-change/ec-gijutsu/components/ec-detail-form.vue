@@ -219,7 +219,7 @@
               >
                 <TaktSelect
                   v-model:value="formState.ecOldWarehouse"
-                  api-url="/api/TaktWarehouses/options"
+                  api-url="TaktWarehouses/options"
                   allow-clear
                   :placeholder="t('common.page.form.placeholder.select', { field: t('entity.ecdetail.ecoldwarehouse') })"
                 />
@@ -323,7 +323,7 @@
               >
                 <TaktSelect
                   v-model:value="formState.ecNewWarehouse"
-                  api-url="/api/TaktWarehouses/options"
+                  api-url="TaktWarehouses/options"
                   allow-clear
                   :placeholder="t('common.page.form.placeholder.select', { field: t('entity.ecdetail.ecnewwarehouse') })"
                 />

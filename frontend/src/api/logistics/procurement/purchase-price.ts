@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：frontend/src/api/logistics/procurement
 // 文件名称：purchase-price.ts
-// 创建时间：2026-07-09
+// 创建时间：2026-07-20
 // 创建人：Takt365(Auto Generated)
 // 功能描述：logistics/procurement 模块 API（自动生成，请勿手改路由常量）
 // 
@@ -18,15 +18,8 @@ import type {
 import type {
   PurchasePrice,
   PurchasePriceCreate,
-  PurchasePriceStatus,
   PurchasePriceUpdate
 } from '@/types/logistics/procurement/purchase-price';
-import type {
-  PurchasePriceTrendQuery
-} from '@/types/logistics/procurement/purchase-price-trend-query';
-import type {
-  PurchasePriceTrendResult
-} from '@/types/logistics/procurement/purchase-price-trend-result';
 
 /**
  * API 路径前缀（相对 request baseURL，对应后端 [controller]）
@@ -46,19 +39,6 @@ const PURCHASE_PRICE_API_BASE = 'TaktPurchasePrices';
 export function getPurchasePriceList(queryDto: any): Promise<TaktPagedResult<PurchasePrice>> {
   return request<TaktPagedResult<PurchasePrice>>({
     url: `${PURCHASE_PRICE_API_BASE}/list`,
-    method: 'get',
-    params: queryDto,
-  });
-}
-
-/**
- * 获取采购价格月度波动分析
- * @param {PurchasePriceTrendQuery} queryDto 查询 DTO
- * @returns {Promise<PurchasePriceTrendResult>} 月度波动表
- */
-export function getPurchasePriceTrendAnalysis(queryDto: PurchasePriceTrendQuery): Promise<PurchasePriceTrendResult> {
-  return request<PurchasePriceTrendResult>({
-    url: `${PURCHASE_PRICE_API_BASE}/price-trend-analysis`,
     method: 'get',
     params: queryDto,
   });
@@ -125,19 +105,6 @@ export function deletePurchasePriceBatch(ids: string[]): Promise<void> {
     url: `${PURCHASE_PRICE_API_BASE}/batch`,
     method: 'delete',
     data: ids,
-  });
-}
-
-/**
- * 更新采购价格状态
- * @param {PurchasePriceStatus} dto 状态 DTO
- * @returns {Promise<PurchasePrice>} 采购价格DTO
- */
-export function updatePurchasePriceStatus(dto: PurchasePriceStatus): Promise<PurchasePrice> {
-  return request<PurchasePrice>({
-    url: `${PURCHASE_PRICE_API_BASE}/status`,
-    method: 'put',
-    data: dto,
   });
 }
 

@@ -32,9 +32,9 @@ public class TaktTableCloneDto
     public string SourceDatabaseName { get; set; } = string.Empty;
 
     /// <summary>
-    /// 目标租户编码（3 位）
+    /// 目标租户（3 位）
     /// </summary>
-    [Required(ErrorMessage = "目标租户编码不能为空")]
+    [Required(ErrorMessage = "目标租户不能为空")]
     public string TargetTenantCode { get; set; } = string.Empty;
 
     /// <summary>

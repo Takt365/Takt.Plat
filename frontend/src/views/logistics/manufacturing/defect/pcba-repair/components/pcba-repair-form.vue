@@ -297,7 +297,7 @@
       <template #cell-pcbaBoardType="{ record }">
         <TaktSelect
           v-model:value="record.pcbaBoardType"
-          dict-type="logistics_pcba_panel_category"
+          dict-type="logistics_pcba_function_category"
           class="w-full"
           :get-popup-container="getSelectPopupContainer"
           :placeholder="pcbaRepairDetailPi.ph('pcbaBoardType')"

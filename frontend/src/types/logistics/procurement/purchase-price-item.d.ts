@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：frontend/src/types/logistics/procurement
 // 文件名称：purchase-price-item.d.ts
-// 创建时间：2026-07-09
+// 创建时间：2026-07-20
 // 创建人：Takt365(Auto Generated)
 // 功能描述：logistics/procurement 模块类型定义（自动生成；类型名去 Takt 前缀与末尾 Dto，如 TaktCompanyDto → Company）
 // 
@@ -16,7 +16,7 @@ import type {
 } from '@/types/common';
 
 /**
- * Takt采购价格明细实体（供应商物料价格明细表）
+ * Takt采购价格明细实体（定价记录条件行；主子表：TaktPurchasePrice → Items → ScaleQuantities / ScaleValues）
  * 对应前端 TaktPurchasePriceItemDto
  * 继承 TaktCompanyDtoBase
  * 对应前端 PurchasePriceItem
@@ -29,7 +29,7 @@ export interface PurchasePriceItem extends CompanyDtoBase {
   purchasePriceItemId: string;
 
   /**
-   * 采购价格 ID（关联 TaktPurchasePrice.Id，选项 TaktPurchasePrices/options）
+   * 采购价格 ID（主子表关系；选项 TaktPurchasePrices/options，DictValue=Id）
    */
   purchasePriceId: string;
 
@@ -39,59 +39,64 @@ export interface PurchasePriceItem extends CompanyDtoBase {
   purchasePriceName?: string;
 
   /**
-   * 采购价格编码（冗余字段，便于查询）
+   * 定价记录号（冗余；与主表 PurchasePriceCode 一致，长度 20）
    */
   purchasePriceCode: string;
 
   /**
-   * 行号（项号/序号，固定步长=10）
+   * 定价序号（项号/序号，固定步长=10）
    */
-  lineNumber: number;
+  purchasePriceSeq: number;
 
   /**
-   * 物料编码
+   * 条件类型（冗余；字典 logistics_price_type；与主表 PriceType 一致，PB00/PR00/MWST/MWRK/NLXV）
    */
-  materialCode: string;
+  priceType: string;
 
   /**
-   * 物料名称
+   * 等级类型（字典 logistics_scale_type；SAP STFKZ；A=基础等级，B=到等级，C=未使用，D=累进间隔等级）
    */
-  materialName?: string;
+  scaleType?: string;
 
   /**
-   * 物料规格
+   * 等级基础（字典 logistics_scale_basis；SAP KZBZG；B=价值等级，C=数量规模，…）
    */
-  materialSpecification?: string;
+  scaleBasis?: string;
 
   /**
-   * 采购单位
+   * 等级数量
    */
-  purchaseUnit: string;
+  scaleQuantity: number;
 
   /**
-   * 价格单位（字典 logistics_price_unit_param：1/100/1000/10000；默认 1000）
+   * 等级单位（字典 logistics_unit_of_measure_code，DictValue=PC/EA 等）
    */
-  purchasePerUnit: number;
+  scaleUnit?: string;
 
   /**
-   * 采购价格（decimal(18,5)）
+   * 等级值
    */
-  purchasePrice: number;
+  scaleValue: number;
 
   /**
-   * 最小采购量（基本单位数量）
+   * 等级货币（字典 accounting_currency_code，DictValue=CNY/USD 等）
    */
-  minPurchaseQuantity: number;
+  scaleCurrency?: string;
 
   /**
-   * 最大采购量（基本单位数量，0表示无限制）
+   * 计算类型（字典 logistics_calculation_type；SAP KRECH；默认 A=百分数）
    */
-  maxPurchaseQuantity: number;
+  calculationType: string;
 
   /**
-   * 排序号（越小越靠前）
+   * 价格
    */
-  sortOrder: number;
+  price: number;
+
+  /**
+   * 税码（字典 accounting_tax_code，DictValue=J0/J1/J2…；SAP MWSKZ）
+   */
+  taxCode?: string;
 
   /**
    * 是否作废（字典 sys_yes_no_type，0=否 1=是；编辑移除子行时标记作废）
@@ -99,9 +104,14 @@ export interface PurchasePriceItem extends CompanyDtoBase {
   isObsolete: number;
 
   /**
-   * 价格阶梯列表（主子表关系，一个物料价格可以有多个阶梯） （子表：TaktPurchasePriceScale）
+   * 数量等级行列表（SAP KONM；主子表关系） （子表：TaktPurchasePriceScaleQuantity）
    */
-  scales?: PurchasePriceScale[];
+  scaleQuantities?: PurchasePriceScaleQuantity[];
+
+  /**
+   * 价值等级行列表（SAP KONW；主子表关系） （子表：TaktPurchasePriceScaleValue）
+   */
+  scaleValues?: PurchasePriceScaleValue[];
 
 }
 
@@ -124,64 +134,69 @@ export interface PurchasePriceItemQuery extends TaktPagedQuery {
   companyCode?: string;
 
   /**
-   * 采购价格 ID（关联 TaktPurchasePrice.Id，选项 TaktPurchasePrices/options）
+   * 采购价格 ID（主子表关系；选项 TaktPurchasePrices/options，DictValue=Id）
    */
   purchasePriceId?: string;
 
   /**
-   * 采购价格编码（冗余字段，便于查询）
+   * 定价记录号（冗余；与主表 PurchasePriceCode 一致，长度 20）
    */
   purchasePriceCode?: string;
 
   /**
-   * 行号（项号/序号，固定步长=10）
+   * 定价序号（项号/序号，固定步长=10）
    */
-  lineNumber?: number;
+  purchasePriceSeq?: number;
 
   /**
-   * 物料编码
+   * 条件类型（冗余；字典 logistics_price_type；与主表 PriceType 一致，PB00/PR00/MWST/MWRK/NLXV）
    */
-  materialCode?: string;
+  priceType?: string;
 
   /**
-   * 物料名称
+   * 等级类型（字典 logistics_scale_type；SAP STFKZ；A=基础等级，B=到等级，C=未使用，D=累进间隔等级）
    */
-  materialName?: string;
+  scaleType?: string;
 
   /**
-   * 物料规格
+   * 等级基础（字典 logistics_scale_basis；SAP KZBZG；B=价值等级，C=数量规模，…）
    */
-  materialSpecification?: string;
+  scaleBasis?: string;
 
   /**
-   * 采购单位
+   * 等级数量
    */
-  purchaseUnit?: string;
+  scaleQuantity?: number;
 
   /**
-   * 价格单位（字典 logistics_price_unit_param：1/100/1000/10000；默认 1000）
+   * 等级单位（字典 logistics_unit_of_measure_code，DictValue=PC/EA 等）
    */
-  purchasePerUnit?: number;
+  scaleUnit?: string;
 
   /**
-   * 采购价格（decimal(18,5)）
+   * 等级值
    */
-  purchasePrice?: number;
+  scaleValue?: number;
 
   /**
-   * 最小采购量（基本单位数量）
+   * 等级货币（字典 accounting_currency_code，DictValue=CNY/USD 等）
    */
-  minPurchaseQuantity?: number;
+  scaleCurrency?: string;
 
   /**
-   * 最大采购量（基本单位数量，0表示无限制）
+   * 计算类型（字典 logistics_calculation_type；SAP KRECH；默认 A=百分数）
    */
-  maxPurchaseQuantity?: number;
+  calculationType?: string;
 
   /**
-   * 排序号（越小越靠前）
+   * 价格
    */
-  sortOrder?: number;
+  price?: number;
+
+  /**
+   * 税码（字典 accounting_tax_code，DictValue=J0/J1/J2…；SAP MWSKZ）
+   */
+  taxCode?: string;
 
   /**
    * 是否作废（字典 sys_yes_no_type，0=否 1=是；编辑移除子行时标记作废）
@@ -233,59 +248,69 @@ export interface PurchasePriceItemCreate {
   companyDefaultCulture: string;
 
   /**
-   * 采购价格 ID（关联 TaktPurchasePrice.Id，选项 TaktPurchasePrices/options）
+   * 采购价格 ID（主子表关系；选项 TaktPurchasePrices/options，DictValue=Id）
    */
   purchasePriceId: string;
 
   /**
-   * 采购价格编码（冗余字段，便于查询）
+   * 定价记录号（冗余；与主表 PurchasePriceCode 一致，长度 20）
    */
   purchasePriceCode: string;
 
   /**
-   * 行号（项号/序号，固定步长=10）
+   * 定价序号（项号/序号，固定步长=10）
    */
-  lineNumber: number;
+  purchasePriceSeq: number;
 
   /**
-   * 物料编码
+   * 条件类型（冗余；字典 logistics_price_type；与主表 PriceType 一致，PB00/PR00/MWST/MWRK/NLXV）
    */
-  materialCode: string;
+  priceType: string;
 
   /**
-   * 物料名称
+   * 等级类型（字典 logistics_scale_type；SAP STFKZ；A=基础等级，B=到等级，C=未使用，D=累进间隔等级）
    */
-  materialName?: string;
+  scaleType?: string;
 
   /**
-   * 物料规格
+   * 等级基础（字典 logistics_scale_basis；SAP KZBZG；B=价值等级，C=数量规模，…）
    */
-  materialSpecification?: string;
+  scaleBasis?: string;
 
   /**
-   * 采购单位
+   * 等级数量
    */
-  purchaseUnit: string;
+  scaleQuantity: number;
 
   /**
-   * 价格单位（字典 logistics_price_unit_param：1/100/1000/10000；默认 1000）
+   * 等级单位（字典 logistics_unit_of_measure_code，DictValue=PC/EA 等）
    */
-  purchasePerUnit: number;
+  scaleUnit?: string;
 
   /**
-   * 采购价格（decimal(18,5)）
+   * 等级值
    */
-  purchasePrice: number;
+  scaleValue: number;
 
   /**
-   * 最小采购量（基本单位数量）
+   * 等级货币（字典 accounting_currency_code，DictValue=CNY/USD 等）
    */
-  minPurchaseQuantity: number;
+  scaleCurrency?: string;
 
   /**
-   * 最大采购量（基本单位数量，0表示无限制）
+   * 计算类型（字典 logistics_calculation_type；SAP KRECH；默认 A=百分数）
    */
-  maxPurchaseQuantity: number;
+  calculationType: string;
+
+  /**
+   * 价格
+   */
+  price: number;
+
+  /**
+   * 税码（字典 accounting_tax_code，DictValue=J0/J1/J2…；SAP MWSKZ）
+   */
+  taxCode?: string;
 
   /**
    * 是否作废（字典 sys_yes_no_type，0=否 1=是；编辑移除子行时标记作废）
@@ -293,9 +318,14 @@ export interface PurchasePriceItemCreate {
   isObsolete: number;
 
   /**
-   * 价格阶梯列表（主子表关系，一个物料价格可以有多个阶梯）（子表，级联保存）
+   * 数量等级行列表（SAP KONM；主子表关系）（子表，级联保存）
    */
-  scales?: PurchasePriceScaleUpdate[];
+  scaleQuantities?: PurchasePriceScaleQuantityCreate[];
+
+  /**
+   * 价值等级行列表（SAP KONW；主子表关系）（子表，级联保存）
+   */
+  scaleValues?: PurchasePriceScaleValueCreate[];
 
   /**
    * 扩展字段JSON
@@ -322,24 +352,15 @@ export interface PurchasePriceItemUpdate extends PurchasePriceItemCreate {
    */
   purchasePriceItemId: string;
 
-}
-
-
-/**
- * PurchasePriceItem 排序更新 DTO
- * 对应前端 PurchasePriceItemSort
- * @description 对应后端 TaktPurchasePriceItemSortDto
- */
-export interface PurchasePriceItemSort {
   /**
-   * PurchasePriceItemID
+   * 数量等级行列表（SAP KONM；主子表关系）（子表，级联保存）
    */
-  purchasePriceItemId: string;
+  scaleQuantities?: any;
 
   /**
-   * 排序号（越小越靠前）
+   * 价值等级行列表（SAP KONW；主子表关系）（子表，级联保存）
    */
-  sortOrder: number;
+  scaleValues?: any;
 
 }
 
@@ -380,59 +401,69 @@ export interface PurchasePriceItemTemplate {
   companyCode?: string;
 
   /**
-   * 采购价格 ID（关联 TaktPurchasePrice.Id，选项 TaktPurchasePrices/options）
+   * 采购价格 ID（主子表关系；选项 TaktPurchasePrices/options，DictValue=Id）
    */
   purchasePriceId?: string;
 
   /**
-   * 采购价格编码（冗余字段，便于查询）
+   * 定价记录号（冗余；与主表 PurchasePriceCode 一致，长度 20）
    */
   purchasePriceCode?: string;
 
   /**
-   * 行号（项号/序号，固定步长=10）
+   * 定价序号（项号/序号，固定步长=10）
    */
-  lineNumber?: number;
+  purchasePriceSeq?: number;
 
   /**
-   * 物料编码
+   * 条件类型（冗余；字典 logistics_price_type；与主表 PriceType 一致，PB00/PR00/MWST/MWRK/NLXV）
    */
-  materialCode?: string;
+  priceType?: string;
 
   /**
-   * 物料名称
+   * 等级类型（字典 logistics_scale_type；SAP STFKZ；A=基础等级，B=到等级，C=未使用，D=累进间隔等级）
    */
-  materialName?: string;
+  scaleType?: string;
 
   /**
-   * 物料规格
+   * 等级基础（字典 logistics_scale_basis；SAP KZBZG；B=价值等级，C=数量规模，…）
    */
-  materialSpecification?: string;
+  scaleBasis?: string;
 
   /**
-   * 采购单位
+   * 等级数量
    */
-  purchaseUnit?: string;
+  scaleQuantity?: number;
 
   /**
-   * 价格单位（字典 logistics_price_unit_param：1/100/1000/10000；默认 1000）
+   * 等级单位（字典 logistics_unit_of_measure_code，DictValue=PC/EA 等）
    */
-  purchasePerUnit?: number;
+  scaleUnit?: string;
 
   /**
-   * 采购价格（decimal(18,5)）
+   * 等级值
    */
-  purchasePrice?: number;
+  scaleValue?: number;
 
   /**
-   * 最小采购量（基本单位数量）
+   * 等级货币（字典 accounting_currency_code，DictValue=CNY/USD 等）
    */
-  minPurchaseQuantity?: number;
+  scaleCurrency?: string;
 
   /**
-   * 最大采购量（基本单位数量，0表示无限制）
+   * 计算类型（字典 logistics_calculation_type；SAP KRECH；默认 A=百分数）
    */
-  maxPurchaseQuantity?: number;
+  calculationType?: string;
+
+  /**
+   * 价格
+   */
+  price?: number;
+
+  /**
+   * 税码（字典 accounting_tax_code，DictValue=J0/J1/J2…；SAP MWSKZ）
+   */
+  taxCode?: string;
 
   /**
    * 是否作废（字典 sys_yes_no_type，0=否 1=是；编辑移除子行时标记作废）
@@ -440,9 +471,14 @@ export interface PurchasePriceItemTemplate {
   isObsolete?: number;
 
   /**
-   * 价格阶梯列表（主子表关系，一个物料价格可以有多个阶梯）（子表，级联保存）
+   * 数量等级行列表（SAP KONM；主子表关系）（子表，级联保存）
    */
-  scales?: PurchasePriceScaleCreate[];
+  scaleQuantities?: PurchasePriceScaleQuantityCreate[];
+
+  /**
+   * 价值等级行列表（SAP KONW；主子表关系）（子表，级联保存）
+   */
+  scaleValues?: PurchasePriceScaleValueCreate[];
 
   /**
    * 扩展字段JSON
@@ -479,59 +515,69 @@ export interface PurchasePriceItemImport {
   companyDefaultCulture?: string;
 
   /**
-   * 采购价格 ID（关联 TaktPurchasePrice.Id，选项 TaktPurchasePrices/options）
+   * 采购价格 ID（主子表关系；选项 TaktPurchasePrices/options，DictValue=Id）
    */
   purchasePriceId?: string;
 
   /**
-   * 采购价格编码（冗余字段，便于查询）
+   * 定价记录号（冗余；与主表 PurchasePriceCode 一致，长度 20）
    */
   purchasePriceCode?: string;
 
   /**
-   * 行号（项号/序号，固定步长=10）
+   * 定价序号（项号/序号，固定步长=10）
    */
-  lineNumber?: number;
+  purchasePriceSeq?: number;
 
   /**
-   * 物料编码
+   * 条件类型（冗余；字典 logistics_price_type；与主表 PriceType 一致，PB00/PR00/MWST/MWRK/NLXV）
    */
-  materialCode?: string;
+  priceType?: string;
 
   /**
-   * 物料名称
+   * 等级类型（字典 logistics_scale_type；SAP STFKZ；A=基础等级，B=到等级，C=未使用，D=累进间隔等级）
    */
-  materialName?: string;
+  scaleType?: string;
 
   /**
-   * 物料规格
+   * 等级基础（字典 logistics_scale_basis；SAP KZBZG；B=价值等级，C=数量规模，…）
    */
-  materialSpecification?: string;
+  scaleBasis?: string;
 
   /**
-   * 采购单位
+   * 等级数量
    */
-  purchaseUnit?: string;
+  scaleQuantity?: number;
 
   /**
-   * 价格单位（字典 logistics_price_unit_param：1/100/1000/10000；默认 1000）
+   * 等级单位（字典 logistics_unit_of_measure_code，DictValue=PC/EA 等）
    */
-  purchasePerUnit?: number;
+  scaleUnit?: string;
 
   /**
-   * 采购价格（decimal(18,5)）
+   * 等级值
    */
-  purchasePrice?: number;
+  scaleValue?: number;
 
   /**
-   * 最小采购量（基本单位数量）
+   * 等级货币（字典 accounting_currency_code，DictValue=CNY/USD 等）
    */
-  minPurchaseQuantity?: number;
+  scaleCurrency?: string;
 
   /**
-   * 最大采购量（基本单位数量，0表示无限制）
+   * 计算类型（字典 logistics_calculation_type；SAP KRECH；默认 A=百分数）
    */
-  maxPurchaseQuantity?: number;
+  calculationType?: string;
+
+  /**
+   * 价格
+   */
+  price?: number;
+
+  /**
+   * 税码（字典 accounting_tax_code，DictValue=J0/J1/J2…；SAP MWSKZ）
+   */
+  taxCode?: string;
 
   /**
    * 是否作废（字典 sys_yes_no_type，0=否 1=是；编辑移除子行时标记作废）
@@ -539,9 +585,14 @@ export interface PurchasePriceItemImport {
   isObsolete?: number;
 
   /**
-   * 价格阶梯列表（主子表关系，一个物料价格可以有多个阶梯）（子表，级联保存）
+   * 数量等级行列表（SAP KONM；主子表关系）（子表，级联保存）
    */
-  scales?: PurchasePriceScaleCreate[];
+  scaleQuantities?: PurchasePriceScaleQuantityCreate[];
+
+  /**
+   * 价值等级行列表（SAP KONW；主子表关系）（子表，级联保存）
+   */
+  scaleValues?: PurchasePriceScaleValueCreate[];
 
   /**
    * 扩展字段JSON
@@ -573,64 +624,69 @@ export interface PurchasePriceItemExport {
   companyCode: string;
 
   /**
-   * 采购价格 ID（关联 TaktPurchasePrice.Id，选项 TaktPurchasePrices/options）
+   * 采购价格 ID（主子表关系；选项 TaktPurchasePrices/options，DictValue=Id）
    */
   purchasePriceId: string;
 
   /**
-   * 采购价格编码（冗余字段，便于查询）
+   * 定价记录号（冗余；与主表 PurchasePriceCode 一致，长度 20）
    */
   purchasePriceCode: string;
 
   /**
-   * 行号（项号/序号，固定步长=10）
+   * 定价序号（项号/序号，固定步长=10）
    */
-  lineNumber: number;
+  purchasePriceSeq: number;
 
   /**
-   * 物料编码
+   * 条件类型（冗余；字典 logistics_price_type；与主表 PriceType 一致，PB00/PR00/MWST/MWRK/NLXV）
    */
-  materialCode: string;
+  priceType: string;
 
   /**
-   * 物料名称
+   * 等级类型（字典 logistics_scale_type；SAP STFKZ；A=基础等级，B=到等级，C=未使用，D=累进间隔等级）
    */
-  materialName?: string;
+  scaleType?: string;
 
   /**
-   * 物料规格
+   * 等级基础（字典 logistics_scale_basis；SAP KZBZG；B=价值等级，C=数量规模，…）
    */
-  materialSpecification?: string;
+  scaleBasis?: string;
 
   /**
-   * 采购单位
+   * 等级数量
    */
-  purchaseUnit: string;
+  scaleQuantity: number;
 
   /**
-   * 价格单位（字典 logistics_price_unit_param：1/100/1000/10000；默认 1000）
+   * 等级单位（字典 logistics_unit_of_measure_code，DictValue=PC/EA 等）
    */
-  purchasePerUnit: number;
+  scaleUnit?: string;
 
   /**
-   * 采购价格（decimal(18,5)）
+   * 等级值
    */
-  purchasePrice: number;
+  scaleValue: number;
 
   /**
-   * 最小采购量（基本单位数量）
+   * 等级货币（字典 accounting_currency_code，DictValue=CNY/USD 等）
    */
-  minPurchaseQuantity: number;
+  scaleCurrency?: string;
 
   /**
-   * 最大采购量（基本单位数量，0表示无限制）
+   * 计算类型（字典 logistics_calculation_type；SAP KRECH；默认 A=百分数）
    */
-  maxPurchaseQuantity: number;
+  calculationType: string;
 
   /**
-   * 排序号（越小越靠前）
+   * 价格
    */
-  sortOrder: number;
+  price: number;
+
+  /**
+   * 税码（字典 accounting_tax_code，DictValue=J0/J1/J2…；SAP MWSKZ）
+   */
+  taxCode?: string;
 
   /**
    * 是否作废（字典 sys_yes_no_type，0=否 1=是；编辑移除子行时标记作废）

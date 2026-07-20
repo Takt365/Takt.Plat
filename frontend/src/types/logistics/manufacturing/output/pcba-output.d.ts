@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：frontend/src/types/logistics/manufacturing/output
 // 文件名称：pcba-output.d.ts
-// 创建时间：2026-06-30
+// 创建时间：2026-07-13
 // 创建人：Takt365(Auto Generated)
 // 功能描述：logistics/manufacturing/output 模块类型定义（自动生成；类型名去 Takt 前缀与末尾 Dto，如 TaktCompanyDto → Company）
 // 
@@ -16,7 +16,7 @@ import type {
 } from '@/types/common';
 
 /**
- * PCBA日报实体 达成率(%) = 明细当日完成数量合计 ÷ 主表标准产能合计 × 100%。
+ * PCBA日报实体 达成率(%) = 明细当日完成数量合计 ÷ 明细人员标准产能合计 × 100%。
  * 对应前端 TaktPcbaOutputDto
  * 继承 TaktCompanyDtoBase
  * 对应前端 PcbaOutput
@@ -44,14 +44,9 @@ export interface PcbaOutput extends CompanyDtoBase {
   prodDate: string;
 
   /**
-   * 生产班组（选项 TaktProductionTeams/options，存 TeamCode，ExtValue=PlantCode 过滤）
+   * 工单类别（回填：随工单）
    */
-  prodTeam: string;
-
-  /**
-   * 班次（字典 logistics_shift_category；1=早 2=中 3=晚 4=白班 5=夜班）
-   */
-  shiftNo: number;
+  prodOrderType?: string;
 
   /**
    * 工单号（选项 TaktProductionOrders/options，按 PlantCode 过滤）
@@ -59,39 +54,29 @@ export interface PcbaOutput extends CompanyDtoBase {
   prodOrderCode: string;
 
   /**
-   * 机种
+   * 机种（回填：随工单）
    */
   modelCode: string;
 
   /**
-   * 批次
-   */
-  batchNo?: string;
-
-  /**
-   * 物料编码
+   * 物料编码（回填：随工单）
    */
   materialCode: string;
 
   /**
-   * 订单数量
+   * 批次（回填：随工单）
+   */
+  batchNo?: string;
+
+  /**
+   * 工单数量（回填：随工单）
    */
   prodOrderQty: number;
 
   /**
-   * 标准工时(分钟)
+   * 序列号（回填：随工单）
    */
-  stdMinutes: number;
-
-  /**
-   * 标准点数
-   */
-  stdShorts: number;
-
-  /**
-   * 标准产能
-   */
-  stdCapacity: number;
+  serialNo?: string;
 
   /**
    * PCBA明细列表 （子表：TaktPcbaOutputDetail）
@@ -139,14 +124,9 @@ export interface PcbaOutputQuery extends TaktPagedQuery {
   prodDateEnd?: string;
 
   /**
-   * 生产班组（选项 TaktProductionTeams/options，存 TeamCode，ExtValue=PlantCode 过滤）
+   * 工单类别（回填：随工单）
    */
-  prodTeam?: string;
-
-  /**
-   * 班次（字典 logistics_shift_category；1=早 2=中 3=晚 4=白班 5=夜班）
-   */
-  shiftNo?: number;
+  prodOrderType?: string;
 
   /**
    * 工单号（选项 TaktProductionOrders/options，按 PlantCode 过滤）
@@ -154,39 +134,29 @@ export interface PcbaOutputQuery extends TaktPagedQuery {
   prodOrderCode?: string;
 
   /**
-   * 机种
+   * 机种（回填：随工单）
    */
   modelCode?: string;
 
   /**
-   * 批次
-   */
-  batchNo?: string;
-
-  /**
-   * 物料编码
+   * 物料编码（回填：随工单）
    */
   materialCode?: string;
 
   /**
-   * 订单数量
+   * 批次（回填：随工单）
+   */
+  batchNo?: string;
+
+  /**
+   * 工单数量（回填：随工单）
    */
   prodOrderQty?: number;
 
   /**
-   * 标准工时(分钟)
+   * 序列号（回填：随工单）
    */
-  stdMinutes?: number;
-
-  /**
-   * 标准点数
-   */
-  stdShorts?: number;
-
-  /**
-   * 标准产能
-   */
-  stdCapacity?: number;
+  serialNo?: string;
 
   /**
    * 创建时间（范围查询-开始）
@@ -248,14 +218,9 @@ export interface PcbaOutputCreate {
   prodDate: string;
 
   /**
-   * 生产班组（选项 TaktProductionTeams/options，存 TeamCode，ExtValue=PlantCode 过滤）
+   * 工单类别（回填：随工单）
    */
-  prodTeam: string;
-
-  /**
-   * 班次（字典 logistics_shift_category；1=早 2=中 3=晚 4=白班 5=夜班）
-   */
-  shiftNo: number;
+  prodOrderType?: string;
 
   /**
    * 工单号（选项 TaktProductionOrders/options，按 PlantCode 过滤）
@@ -263,39 +228,29 @@ export interface PcbaOutputCreate {
   prodOrderCode: string;
 
   /**
-   * 机种
+   * 机种（回填：随工单）
    */
   modelCode: string;
 
   /**
-   * 批次
-   */
-  batchNo?: string;
-
-  /**
-   * 物料编码
+   * 物料编码（回填：随工单）
    */
   materialCode: string;
 
   /**
-   * 订单数量
+   * 批次（回填：随工单）
+   */
+  batchNo?: string;
+
+  /**
+   * 工单数量（回填：随工单）
    */
   prodOrderQty: number;
 
   /**
-   * 标准工时(分钟)
+   * 序列号（回填：随工单）
    */
-  stdMinutes: number;
-
-  /**
-   * 标准点数
-   */
-  stdShorts: number;
-
-  /**
-   * 标准产能
-   */
-  stdCapacity: number;
+  serialNo?: string;
 
   /**
    * PCBA明细列表（子表，级联保存）
@@ -326,6 +281,11 @@ export interface PcbaOutputUpdate extends PcbaOutputCreate {
    * PcbaOutputID（标识要更新的实体）
    */
   pcbaOutputId: string;
+
+  /**
+   * PCBA明细列表（子表，级联保存）
+   */
+  pcbaOutputDetails?: any;
 
 }
 
@@ -362,14 +322,9 @@ export interface PcbaOutputTemplate {
   prodDate?: string;
 
   /**
-   * 生产班组（选项 TaktProductionTeams/options，存 TeamCode，ExtValue=PlantCode 过滤）
+   * 工单类别（回填：随工单）
    */
-  prodTeam?: string;
-
-  /**
-   * 班次（字典 logistics_shift_category；1=早 2=中 3=晚 4=白班 5=夜班）
-   */
-  shiftNo?: number;
+  prodOrderType?: string;
 
   /**
    * 工单号（选项 TaktProductionOrders/options，按 PlantCode 过滤）
@@ -377,39 +332,29 @@ export interface PcbaOutputTemplate {
   prodOrderCode?: string;
 
   /**
-   * 机种
+   * 机种（回填：随工单）
    */
   modelCode?: string;
 
   /**
-   * 批次
-   */
-  batchNo?: string;
-
-  /**
-   * 物料编码
+   * 物料编码（回填：随工单）
    */
   materialCode?: string;
 
   /**
-   * 订单数量
+   * 批次（回填：随工单）
+   */
+  batchNo?: string;
+
+  /**
+   * 工单数量（回填：随工单）
    */
   prodOrderQty?: number;
 
   /**
-   * 标准工时(分钟)
+   * 序列号（回填：随工单）
    */
-  stdMinutes?: number;
-
-  /**
-   * 标准点数
-   */
-  stdShorts?: number;
-
-  /**
-   * 标准产能
-   */
-  stdCapacity?: number;
+  serialNo?: string;
 
   /**
    * PCBA明细列表（子表，级联保存）
@@ -466,14 +411,9 @@ export interface PcbaOutputImport {
   prodDate?: string;
 
   /**
-   * 生产班组（选项 TaktProductionTeams/options，存 TeamCode，ExtValue=PlantCode 过滤）
+   * 工单类别（回填：随工单）
    */
-  prodTeam?: string;
-
-  /**
-   * 班次（字典 logistics_shift_category；1=早 2=中 3=晚 4=白班 5=夜班）
-   */
-  shiftNo?: number;
+  prodOrderType?: string;
 
   /**
    * 工单号（选项 TaktProductionOrders/options，按 PlantCode 过滤）
@@ -481,39 +421,29 @@ export interface PcbaOutputImport {
   prodOrderCode?: string;
 
   /**
-   * 机种
+   * 机种（回填：随工单）
    */
   modelCode?: string;
 
   /**
-   * 批次
-   */
-  batchNo?: string;
-
-  /**
-   * 物料编码
+   * 物料编码（回填：随工单）
    */
   materialCode?: string;
 
   /**
-   * 订单数量
+   * 批次（回填：随工单）
+   */
+  batchNo?: string;
+
+  /**
+   * 工单数量（回填：随工单）
    */
   prodOrderQty?: number;
 
   /**
-   * 标准工时(分钟)
+   * 序列号（回填：随工单）
    */
-  stdMinutes?: number;
-
-  /**
-   * 标准点数
-   */
-  stdShorts?: number;
-
-  /**
-   * 标准产能
-   */
-  stdCapacity?: number;
+  serialNo?: string;
 
   /**
    * PCBA明细列表（子表，级联保存）
@@ -565,14 +495,9 @@ export interface PcbaOutputExport {
   prodDate: string;
 
   /**
-   * 生产班组（选项 TaktProductionTeams/options，存 TeamCode，ExtValue=PlantCode 过滤）
+   * 工单类别（回填：随工单）
    */
-  prodTeam: string;
-
-  /**
-   * 班次（字典 logistics_shift_category；1=早 2=中 3=晚 4=白班 5=夜班）
-   */
-  shiftNo: number;
+  prodOrderType?: string;
 
   /**
    * 工单号（选项 TaktProductionOrders/options，按 PlantCode 过滤）
@@ -580,39 +505,29 @@ export interface PcbaOutputExport {
   prodOrderCode: string;
 
   /**
-   * 机种
+   * 机种（回填：随工单）
    */
   modelCode: string;
 
   /**
-   * 批次
-   */
-  batchNo?: string;
-
-  /**
-   * 物料编码
+   * 物料编码（回填：随工单）
    */
   materialCode: string;
 
   /**
-   * 订单数量
+   * 批次（回填：随工单）
+   */
+  batchNo?: string;
+
+  /**
+   * 工单数量（回填：随工单）
    */
   prodOrderQty: number;
 
   /**
-   * 标准工时(分钟)
+   * 序列号（回填：随工单）
    */
-  stdMinutes: number;
-
-  /**
-   * 标准点数
-   */
-  stdShorts: number;
-
-  /**
-   * 标准产能
-   */
-  stdCapacity: number;
+  serialNo?: string;
 
   /**
    * 扩展字段JSON
@@ -632,25 +547,16 @@ export interface PcbaOutputExport {
 }
 
 /**
- * PCBA 生产统计（数据看板 production-stat）
- * @description 对应后端 TaktPcbaOutputProductionStatDto
+ * PCBA 日报新增时按标准工序时间生成的默认明细预览
  */
-export interface PcbaOutputProductionStat {
-  /** 统计月份 yyyy-MM */
-  statMonth: string;
-  /** 月标准产能合计 */
-  monthStdCapacity: number;
-  /** 月实际产量合计 */
-  monthProdActualQty: number;
-  /** 月达成率（%） */
-  monthAchievementRate: number;
-  /** 月停线损失（分钟） */
-  monthDowntimeMinutes: number;
-  /** 月投入工时（分钟） */
-  monthInputMinutes: number;
-  /** 月生产工时（分钟） */
-  monthProdMinutes: number;
-  /** 月实际工时（分钟） */
-  monthActualMinutes: number;
+export interface PcbaOutputDefaultDetail {
+  /** 行号 */
+  lineNumber: number;
+  /** 工作中心（对应明细 timePeriod） */
+  workCenter: string;
+  /** 工序描述 */
+  operationDesc?: string;
+  /** 标准点数 */
+  standardShorts: number;
 }
 

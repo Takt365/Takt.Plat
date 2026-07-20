@@ -46,11 +46,6 @@ public class TaktPcbaInspectionDto : TaktCompanyDtoBase
     public string ProdCategory { get; set; } = string.Empty;
 
     /// <summary>
-    /// 生产日期
-    /// </summary>
-    public DateTime ProdDate { get; set; }
-
-    /// <summary>
     /// 工单类别（回填：随工单）
     /// </summary>
     public string? ProdOrderType { get; set; } = string.Empty;
@@ -117,16 +112,6 @@ public class TaktPcbaInspectionQueryDto : TaktPagedQuery
     /// 生产类别（字典 logistics_prod_category，存 DictValue：EPP/FPP/RWP/MDP/CPP）
     /// </summary>
     public string? ProdCategory { get; set; } = string.Empty;
-
-    /// <summary>
-    /// 生产日期（范围查询-开始）
-    /// </summary>
-    public DateTime? ProdDateStart { get; set; }
-
-    /// <summary>
-    /// 生产日期（范围查询-结束）
-    /// </summary>
-    public DateTime? ProdDateEnd { get; set; }
 
     /// <summary>
     /// 工单类别（回填：随工单）
@@ -214,11 +199,6 @@ public class TaktPcbaInspectionCreateDto
     /// </summary>
     [Required(ErrorMessage = "生产类别（字典 logistics_prod_category，存 DictValue：EPP/FPP/RWP/MDP/CPP）不能为空")]
     public string ProdCategory { get; set; } = string.Empty;
-
-    /// <summary>
-    /// 生产日期
-    /// </summary>
-    public DateTime ProdDate { get; set; }
 
     /// <summary>
     /// 工单类别（回填：随工单）
@@ -320,11 +300,6 @@ public class TaktPcbaInspectionTemplateDto
     public string? ProdCategory { get; set; } = string.Empty;
 
     /// <summary>
-    /// 生产日期
-    /// </summary>
-    public DateTime? ProdDate { get; set; }
-
-    /// <summary>
     /// 工单类别（回填：随工单）
     /// </summary>
     public string? ProdOrderType { get; set; } = string.Empty;
@@ -400,11 +375,6 @@ public class TaktPcbaInspectionImportDto
     /// 生产类别（字典 logistics_prod_category，存 DictValue：EPP/FPP/RWP/MDP/CPP）
     /// </summary>
     public string? ProdCategory { get; set; } = string.Empty;
-
-    /// <summary>
-    /// 生产日期
-    /// </summary>
-    public DateTime? ProdDate { get; set; }
 
     /// <summary>
     /// 工单类别（回填：随工单）
@@ -483,11 +453,6 @@ public class TaktPcbaInspectionExportDto
     /// 生产类别（字典 logistics_prod_category，存 DictValue：EPP/FPP/RWP/MDP/CPP）
     /// </summary>
     public string ProdCategory { get; set; } = string.Empty;
-
-    /// <summary>
-    /// 生产日期
-    /// </summary>
-    public DateTime ProdDate { get; set; }
 
     /// <summary>
     /// 工单类别（回填：随工单）

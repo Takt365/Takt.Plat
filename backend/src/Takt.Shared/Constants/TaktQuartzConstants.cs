@@ -28,6 +28,29 @@ public static class TaktQuartzConstants
     /// <summary>JobGroup 列最大长度</summary>
     public const int MaxJobGroupLength = 40;
 
+    /// <summary>Serilog 模块名（TaktLogContext.Module）</summary>
+    public const string LogModuleName = "Quartz";
+
+    /// <summary>独立执行日志通道属性名（Filter → logs/quartz-/quartz-.log）</summary>
+    public const string LogChannelPropertyName = "TaktLogChannel";
+
+    /// <summary>独立执行日志通道属性值</summary>
+    public const string LogChannelValue = "QuartzJob";
+
+    /// <summary>
+    /// SQL 同步脚本结果集标识（与 Quartz/*.sql 末尾 SELECT summary_tag 一致）
+    /// </summary>
+    public const string SqlSyncSummaryTag = "QUARTZ_SYNC_SUMMARY";
+
+    /// <summary>任务执行完成落库消息类型（字典 sys_message_type DictValue）</summary>
+    public const string ExecutedMessageType = "system";
+
+    /// <summary>任务执行完成落库消息分组（字典 sys_message_group_category DictValue）</summary>
+    public const string ExecutedMessageGroup = "reminder";
+
+    /// <summary>无触发用户时的系统发送者登录名（与种子 admin / SystemAuditUser 对齐）</summary>
+    public const string SystemSenderUserName = "admin";
+
     /// <summary>
     /// 规范化 JobGroup（空则 DEFAULT，超长截断至 40）
     /// </summary>

@@ -40,7 +40,7 @@
             <template #icon>
               <RiSendPlane2Line class="takt-remix-icon" />
             </template>
-            {{ t('common.page.button.startflow') }}
+            {{ t('common.page.button.initiate') }}
           </a-button>
           <a-button
             v-if="canSendMessage"
@@ -298,23 +298,7 @@
               </template>
             </a-button>
           </a-tooltip>
-          <!-- 刷新 -->
-          <a-tooltip
-            v-if="showRefresh"
-            :title="t('common.page.button.refresh')"
-          >
-            <a-button
-              class="takt-button-refresh takt-button-plain takt-button-plain-icon-only"
-              :disabled="refreshDisabled"
-              :loading="refreshLoading"
-              @click="handleRefresh"
-            >
-              <template #icon>
-                <RiRefreshLine class="takt-remix-icon" />
-              </template>
-            </a-button>
-          </a-tooltip>
-          <!-- 自定义右侧按钮 -->
+          <!-- 自定义右侧按钮：仅图标 + 悬停提示；配色走 button-base .takt-button-{action} -->
           <a-tooltip
             v-for="action in filteredRightActions"
             :key="action.key"
@@ -323,9 +307,9 @@
             <a-button
               :class="[
                 action.buttonClass || `takt-button-${action.key}`,
-                action.shape === 'plain' ? 'takt-button-plain' : undefined,
-                action.shape === 'plain' && !action.label ? 'takt-button-plain-icon-only' : undefined,
-                action.shape === 'circle' ? 'takt-button-circle' : undefined
+                'takt-button-plain',
+                'takt-button-plain-icon-only',
+                action.active ? 'takt-button-plain-active' : undefined,
               ]"
               :disabled="action.disabled ?? false"
               :loading="action.loading ?? false"
@@ -345,8 +329,21 @@
                   class="takt-remix-icon"
                 />
               </template>
-              <template v-if="action.shape !== 'circle' && action.label">
-                {{ action.label }}
+            </a-button>
+          </a-tooltip>
+          <!-- 刷新 -->
+          <a-tooltip
+            v-if="showRefresh"
+            :title="t('common.page.button.refresh')"
+          >
+            <a-button
+              class="takt-button-refresh takt-button-plain takt-button-plain-icon-only"
+              :disabled="refreshDisabled"
+              :loading="refreshLoading"
+              @click="handleRefresh"
+            >
+              <template #icon>
+                <RiRefreshLine class="takt-remix-icon" />
               </template>
             </a-button>
           </a-tooltip>
@@ -388,13 +385,15 @@ const { t } = useI18n()
 export interface ToolBarAction {
   key: string
   label?: string
-  /** 悬停提示文案（右侧图标按钮建议设置） */
+  /** 悬停提示文案（右侧自定义按钮必填语义，仅图标展示时用此文案） */
   tooltip?: string
-  /** 按钮形状：standard（标准，图标+文本）、plain（透明背景，图标或图标+文本）、circle（圆形，只显示图标） */
+  /** 按钮形状：standard（标准，图标+文本）、plain（透明背景，图标或图标+文本）、circle（圆形，只显示图标）；右侧 rightActions 固定为仅图标 plain */
   shape?: 'standard' | 'plain' | 'circle'
+  /** 是否选中（右侧筛选等：叠加 takt-button-plain-active，配色同 button-base） */
+  active?: boolean
   disabled?: boolean
   loading?: boolean
-  /** 图标组件或 CSS 类名（如 'ri-edit-line'） */
+  /** 图标组件或 CSS 类名（右侧 rightActions 必须提供） */
   icon?: Component | string
   permission?: string
   /** 按钮样式类名（如：takt-button-detail） */
@@ -415,7 +414,7 @@ interface Props {
   importPermission?: string | undefined
   /** 导出权限标识(如:identity:user:export) */
   exportPermission?: string | undefined
-  /** 发起流程权限标识(如:workflow:instance:start) */
+  /** 发起权限标识(如:workflow:instance:initiate；会议等模块同后缀 initiate) */
   startFlowPermission?: string | undefined
   /** 发送消息权限标识(如:signalr:message:send) */
   sendMessagePermission?: string | undefined
@@ -435,7 +434,7 @@ interface Props {
   showImport?: boolean
   /** 显示导出按钮（必须同时满足此属性和权限检查） */
   showExport?: boolean
-  /** 显示发起流程按钮（必须同时满足此属性和权限检查） */
+  /** 显示发起按钮（流程/会议等；必须同时满足此属性和权限检查） */
   showStartFlow?: boolean
   /** 显示发送消息按钮（必须同时满足此属性和权限检查） */
   showSendMessage?: boolean
@@ -467,7 +466,7 @@ interface Props {
   importDisabled?: boolean
   /** 导出按钮禁用 */
   exportDisabled?: boolean
-  /** 发起流程按钮禁用 */
+  /** 发起按钮禁用 */
   startFlowDisabled?: boolean
   /** 发送消息按钮禁用 */
   sendMessageDisabled?: boolean
@@ -501,7 +500,7 @@ interface Props {
   importLoading?: boolean
   /** 导出按钮加载状态 */
   exportLoading?: boolean
-  /** 发起流程按钮加载状态 */
+  /** 发起按钮加载状态 */
   startFlowLoading?: boolean
   /** 发送消息按钮加载状态 */
   sendMessageLoading?: boolean
@@ -515,7 +514,7 @@ interface Props {
   emptyLoading?: boolean
   /** 自定义左侧操作按钮 */
   leftActions?: ToolBarAction[]
-  /** 自定义右侧操作按钮 */
+  /** 自定义右侧操作按钮（固定仅图标 + tooltip，与展开/刷新同组同风格；须提供 icon） */
   rightActions?: ToolBarAction[]
 }
 
@@ -874,7 +873,6 @@ const handleAction = (action: ToolBarAction) => {
   }
 }
 
-
 .takt-tools-bar-right-group {
   :deep(.ant-btn) {
     display: inline-flex;
@@ -886,7 +884,6 @@ const handleAction = (action: ToolBarAction) => {
     line-height: 1;
   }
 }
-
 
 @media (max-width: 768px) {
   .takt-tools-bar {

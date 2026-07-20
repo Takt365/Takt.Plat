@@ -32,8 +32,8 @@ public class TaktTableCloneValidator : AbstractValidator<TaktTableCloneDto>
         RuleFor(x => x.SourceDatabaseName)
             .NotEmpty().WithMessage("源数据库不能为空");
         RuleFor(x => x.TargetTenantCode)
-            .NotEmpty().WithMessage("目标租户编码不能为空")
-            .Length(3).WithMessage("目标租户编码必须为 3 位");
+            .NotEmpty().WithMessage("目标租户不能为空")
+            .Length(3).WithMessage("目标租户必须为 3 位");
         RuleFor(x => x.TargetDatabaseName)
             .NotEmpty().WithMessage("目标数据库不能为空");
         RuleFor(x => x)

@@ -30,6 +30,7 @@ namespace Takt.Application.Services.Logistics.Materials;
 public class TaktModelDestinationService : TaktServiceBase, ITaktModelDestinationService
 {
     private const int MaxModelDestinationRowsByMaterial = 50;
+    private const int MaxCascadeSelectOptions = 500;
 
     private readonly ITaktTenantRepository<TaktModelDestination> _modelDestinationRepository;
     private readonly ITaktSortOrderGenerator _sortOrderGenerator;
@@ -105,6 +106,72 @@ public class TaktModelDestinationService : TaktServiceBase, ITaktModelDestinatio
             DictValue = e.DestinationCode,
             DictLabel = e.DestinationName ?? e.DestinationCode,
         }).ToList();
+    }
+
+    /// <summary>
+    /// 获取机种下拉选项（ModelCode 去重）
+    /// </summary>
+    /// <returns>机种下拉选项</returns>
+    public async Task<List<TaktSelectOption>> GetModelOptionsAsync()
+    {
+        var list = await _modelDestinationRepository.GetListAsync(
+            x => x.TenantCode == CurrentTenantCode,
+            x => x.SortOrder,
+            false);
+        return list
+            .Where(e => !string.IsNullOrWhiteSpace(e.ModelCode))
+            .GroupBy(e => e.ModelCode, StringComparer.OrdinalIgnoreCase)
+            .OrderBy(g => g.Key, StringComparer.Ordinal)
+            .Take(MaxCascadeSelectOptions)
+            .Select(g =>
+            {
+                var first = g.First();
+                var label = string.IsNullOrWhiteSpace(first.ModelName) ? g.Key : first.ModelName;
+                return new TaktSelectOption
+                {
+                    DictValue = g.Key,
+                    DictLabel = label,
+                    SortOrder = first.SortOrder,
+                };
+            })
+            .ToList();
+    }
+
+    /// <summary>
+    /// 根据机种编码获取级联物料选项（MaterialCode 去重）
+    /// </summary>
+    /// <param name="modelCode">机种编码</param>
+    /// <returns>物料下拉选项</returns>
+    public async Task<List<TaktSelectOption>> GetMaterialOptionsByModelAsync(string modelCode)
+    {
+        ArgumentException.ThrowIfNullOrWhiteSpace(modelCode);
+        var trimmedModelCode = modelCode.Trim();
+        var list = await _modelDestinationRepository.GetListAsync(
+            x => x.TenantCode == CurrentTenantCode
+                && x.ModelCode != null
+                && x.ModelCode == trimmedModelCode,
+            x => x.SortOrder,
+            false);
+        return list
+            .Where(e => !string.IsNullOrWhiteSpace(e.MaterialCode))
+            .GroupBy(e => e.MaterialCode, StringComparer.OrdinalIgnoreCase)
+            .OrderBy(g => g.Key, StringComparer.Ordinal)
+            .Take(MaxCascadeSelectOptions)
+            .Select(g =>
+            {
+                var first = g.First();
+                var materialName = first.MaterialName?.Trim();
+                var label = string.IsNullOrWhiteSpace(materialName) ? g.Key : $"{g.Key} - {materialName}";
+                return new TaktSelectOption
+                {
+                    DictValue = g.Key,
+                    DictLabel = label,
+                    ExtValue = first.ModelCode,
+                    ExtLabel = first.ModelName,
+                    SortOrder = first.SortOrder,
+                };
+            })
+            .ToList();
     }
 
     /// <summary>

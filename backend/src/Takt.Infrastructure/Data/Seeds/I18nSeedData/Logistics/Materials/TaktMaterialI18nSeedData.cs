@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Infrastructure.Data.Seeds.I18nSeedData.Logistics.Materials
 // 文件名称：TaktMaterialI18nSeedData.cs
-// 创建时间：2026-07-09
+// 创建时间：2026-07-20
 // 创建人：Takt365(Auto Generated)
 // 功能描述：TaktMaterial 实体字段国际化种子（无对应 frontend locales；TranslationText 取自 ColumnDescription，ContextNote 取自属性 XML summary）
 // 
@@ -145,13 +145,13 @@ public class TaktMaterialI18nSeedData : ITaktSeedDataCoordinator
             new TranslationSeedItem("entity.material.hierarchy", "zh-HK", "物料层级_hk", "物料层级"),
 
             // entity.material.group
-            new TranslationSeedItem("entity.material.group", "en-US", "物料组_us", "物料组（关联 TaktMaterialGroup.MaterialGroupCode，选项 TaktMaterialGroups/options，DictValue=MaterialGroupCode）"),
+            new TranslationSeedItem("entity.material.group", "en-US", "物料组_us", "物料组（选项 TaktMaterialGroups/options，DictValue=MaterialGroupCode）"),
             // entity.material.group
-            new TranslationSeedItem("entity.material.group", "ja-JP", "物料组_jp", "物料组（关联 TaktMaterialGroup.MaterialGroupCode，选项 TaktMaterialGroups/options，DictValue=MaterialGroupCode）"),
+            new TranslationSeedItem("entity.material.group", "ja-JP", "物料组_jp", "物料组（选项 TaktMaterialGroups/options，DictValue=MaterialGroupCode）"),
             // entity.material.group
-            new TranslationSeedItem("entity.material.group", "zh-CN", "物料组", "物料组（关联 TaktMaterialGroup.MaterialGroupCode，选项 TaktMaterialGroups/options，DictValue=MaterialGroupCode）"),
+            new TranslationSeedItem("entity.material.group", "zh-CN", "物料组", "物料组（选项 TaktMaterialGroups/options，DictValue=MaterialGroupCode）"),
             // entity.material.group
-            new TranslationSeedItem("entity.material.group", "zh-HK", "物料组_hk", "物料组（关联 TaktMaterialGroup.MaterialGroupCode，选项 TaktMaterialGroups/options，DictValue=MaterialGroupCode）"),
+            new TranslationSeedItem("entity.material.group", "zh-HK", "物料组_hk", "物料组（选项 TaktMaterialGroups/options，DictValue=MaterialGroupCode）"),
 
             // entity.material.type
             new TranslationSeedItem("entity.material.type", "en-US", "物料类型_us", "物料类型（字典 logistics_material_type，DictValue=ROH/HALB 等；默认 ROH）"),

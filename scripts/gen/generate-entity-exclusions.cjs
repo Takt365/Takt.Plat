@@ -40,9 +40,12 @@ const MANUAL_STANDALONE_SERVICE_ENTITY_NAMES = new Set([
 /**
  * 手工维护 DTO 的实体（含脚本无法生成的附加 DTO 类，禁止 generate-dtos-from-entity 覆盖）
  * TaktHoliday：TaktHolidayThemeDto（登录前假日主题预览，与实体字段并列但非实体映射）
+ * TableArchive / DatabaseBackup：数据归档与备份编排（CRUD 外另有 preview/execute/run/schedule，禁止流水线覆盖）
  */
 const MANUAL_DTO_ENTITY_SHORT_NAMES = new Set([
   'Holiday',
+  'TableArchive',
+  'DatabaseBackup',
 ]);
 
 /**
@@ -159,13 +162,16 @@ function entityShortFromControllerName(controllerName) {
 }
 
 /**
- * 前端脚本：是否跳过控制器（RBAC 八表 + 独立服务）
+ * 前端脚本：是否跳过控制器（RBAC 八表 + 独立服务 + 手工维护模块）
  * @param {string} controllerName
  * @returns {boolean}
  */
 function shouldExcludeController(controllerName) {
   const entityShort = entityShortFromControllerName(controllerName);
   if (isRbacJunctionEntity(entityShort)) {
+    return true;
+  }
+  if (isManualDtoEntity(entityShort)) {
     return true;
   }
   const entityName = entityShort ? `Takt${entityShort}` : '';

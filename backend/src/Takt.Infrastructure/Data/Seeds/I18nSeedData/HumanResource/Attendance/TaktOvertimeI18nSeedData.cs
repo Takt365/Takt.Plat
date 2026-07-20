@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Infrastructure.Data.Seeds.I18nSeedData.HumanResource.Attendance
 // 文件名称：TaktOvertimeI18nSeedData.cs
-// 创建时间：2026-07-09
+// 创建时间：2026-07-20
 // 创建人：Takt365(Auto Generated)
 // 功能描述：TaktOvertime 实体字段国际化种子（无对应 frontend locales；TranslationText 取自 ColumnDescription，ContextNote 取自属性 XML summary）
 // 
@@ -181,13 +181,13 @@ public class TaktOvertimeI18nSeedData : ITaktSeedDataCoordinator
             new TranslationSeedItem("entity.overtime.reason", "zh-HK", "加班原因_hk", "加班原因"),
 
             // entity.overtime.handlingby
-            new TranslationSeedItem("entity.overtime.handlingby", "en-US", "经办人_us", "经办人（关联 TaktEmployee.Id，选项 TaktEmployees/options）"),
+            new TranslationSeedItem("entity.overtime.handlingby", "en-US", "经办人_us", "经办人（选项 TaktEmployees/options，DictValue=Id）"),
             // entity.overtime.handlingby
-            new TranslationSeedItem("entity.overtime.handlingby", "ja-JP", "经办人_jp", "经办人（关联 TaktEmployee.Id，选项 TaktEmployees/options）"),
+            new TranslationSeedItem("entity.overtime.handlingby", "ja-JP", "经办人_jp", "经办人（选项 TaktEmployees/options，DictValue=Id）"),
             // entity.overtime.handlingby
-            new TranslationSeedItem("entity.overtime.handlingby", "zh-CN", "经办人", "经办人（关联 TaktEmployee.Id，选项 TaktEmployees/options）"),
+            new TranslationSeedItem("entity.overtime.handlingby", "zh-CN", "经办人", "经办人（选项 TaktEmployees/options，DictValue=Id）"),
             // entity.overtime.handlingby
-            new TranslationSeedItem("entity.overtime.handlingby", "zh-HK", "经办人_hk", "经办人（关联 TaktEmployee.Id，选项 TaktEmployees/options）"),
+            new TranslationSeedItem("entity.overtime.handlingby", "zh-HK", "经办人_hk", "经办人（选项 TaktEmployees/options，DictValue=Id）"),
 
             // entity.overtime.handlingat
             new TranslationSeedItem("entity.overtime.handlingat", "en-US", "经办时间_us", "经办时间"),
@@ -208,13 +208,13 @@ public class TaktOvertimeI18nSeedData : ITaktSeedDataCoordinator
             new TranslationSeedItem("entity.overtime.handlingcomment", "zh-HK", "经办备注_hk", "经办备注"),
 
             // entity.overtime.relatedplant
-            new TranslationSeedItem("entity.overtime.relatedplant", "en-US", "关联工厂_us", "关联工厂（关联 TaktPlant.PlantCode，选项 TaktPlants/options）"),
+            new TranslationSeedItem("entity.overtime.relatedplant", "en-US", "关联工厂_us", "关联工厂（选项 TaktPlants/options，DictValue=Id）"),
             // entity.overtime.relatedplant
-            new TranslationSeedItem("entity.overtime.relatedplant", "ja-JP", "关联工厂_jp", "关联工厂（关联 TaktPlant.PlantCode，选项 TaktPlants/options）"),
+            new TranslationSeedItem("entity.overtime.relatedplant", "ja-JP", "关联工厂_jp", "关联工厂（选项 TaktPlants/options，DictValue=Id）"),
             // entity.overtime.relatedplant
-            new TranslationSeedItem("entity.overtime.relatedplant", "zh-CN", "关联工厂", "关联工厂（关联 TaktPlant.PlantCode，选项 TaktPlants/options）"),
+            new TranslationSeedItem("entity.overtime.relatedplant", "zh-CN", "关联工厂", "关联工厂（选项 TaktPlants/options，DictValue=Id）"),
             // entity.overtime.relatedplant
-            new TranslationSeedItem("entity.overtime.relatedplant", "zh-HK", "关联工厂_hk", "关联工厂（关联 TaktPlant.PlantCode，选项 TaktPlants/options）"),
+            new TranslationSeedItem("entity.overtime.relatedplant", "zh-HK", "关联工厂_hk", "关联工厂（选项 TaktPlants/options，DictValue=Id）"),
 
             // entity.overtime.status
             new TranslationSeedItem("entity.overtime.status", "en-US", "加班状态_us", "加班状态（字典 sys_approval_status；0=待审批 1=审批中 2=已通过 3=已驳回 4=已撤回 5=已终止）"),

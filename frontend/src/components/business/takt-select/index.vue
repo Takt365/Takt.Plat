@@ -493,6 +493,24 @@ const effectiveMaxTagCount = computed<number | 'responsive'>(() => {
   return 3
 })
 
+/**
+ * apiParams 已传入时，是否满足发起请求（各级联参数字段均非空）
+ * @returns 是否可请求
+ */
+function canLoadApiOptions(): boolean {
+  if (props.disabled) {
+    return false
+  }
+  if (!props.apiParams) {
+    return true
+  }
+  const entries = Object.entries(props.apiParams)
+  if (entries.length === 0) {
+    return true
+  }
+  return entries.every(([, val]) => val !== undefined && val !== null && String(val).trim() !== '')
+}
+
 // 加载数据
 const loadData = async () => {
   // 如果提供了 options，直接使用，不需要加载
@@ -515,6 +533,10 @@ const loadData = async () => {
 
   // 如果提供了 apiUrl，通过 API 加载数据
   if (props.apiUrl) {
+    if (!canLoadApiOptions()) {
+      rawData.value = []
+      return
+    }
     try {
       loading.value = true
       const params: Record<string, string | number | boolean> = {}
@@ -620,8 +642,8 @@ const handleSearch = (value: string) => {
   }, props.searchDebounceMs)
 }
 
-// 监听 dictType、API URL、options 与 apiParams 变化
-watch(() => [props.dictType, props.apiUrl, props.options, props.apiParams], () => {
+// 监听 dictType、API URL、options、apiParams 与 disabled 变化
+watch(() => [props.dictType, props.apiUrl, props.options, props.apiParams, props.disabled], () => {
   if (props.options?.length) {
     return
   }

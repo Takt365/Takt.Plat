@@ -121,11 +121,10 @@ public class TaktPcbaInspectionService : TaktServiceBase, ITaktPcbaInspectionSer
         var entity = dto.Adapt<TaktPcbaInspection>();
         var isUnique_ix_takt_logistics_manufacturing_defect_pcba_inspection_unique = await _uniqueValidator.IsUniqueAsync(
             _pcbaInspectionRepository,
-            x => x.ProdDate == entity.ProdDate
-                && x.ProdOrderCode == entity.ProdOrderCode);
+            x => x.ProdOrderCode == entity.ProdOrderCode);
         if (!isUnique_ix_takt_logistics_manufacturing_defect_pcba_inspection_unique)
         {
-            throw new TaktBusinessException("PCBA检查日报的ProdDate、ProdOrderCode已存在");
+            throw new TaktBusinessException("PCBA检查日报的ProdOrderCode已存在");
         }
         entity = await _pcbaInspectionRepository.CreateAsync(entity);
                 await SavePcbaInspectionChildrenAsync(entity, dto);
@@ -148,12 +147,11 @@ public class TaktPcbaInspectionService : TaktServiceBase, ITaktPcbaInspectionSer
         dto.Adapt(entity);
         var isUnique_ix_takt_logistics_manufacturing_defect_pcba_inspection_unique = await _uniqueValidator.IsUniqueAsync(
             _pcbaInspectionRepository,
-            x => x.ProdDate == entity.ProdDate
-                && x.ProdOrderCode == entity.ProdOrderCode,
+            x => x.ProdOrderCode == entity.ProdOrderCode,
             id);
         if (!isUnique_ix_takt_logistics_manufacturing_defect_pcba_inspection_unique)
         {
-            throw new TaktBusinessException("PCBA检查日报的ProdDate、ProdOrderCode已存在");
+            throw new TaktBusinessException("PCBA检查日报的ProdOrderCode已存在");
         }
         await _pcbaInspectionRepository.UpdateAsync(entity);
                 await SavePcbaInspectionChildrenAsync(entity, dto);
@@ -234,18 +232,17 @@ public class TaktPcbaInspectionService : TaktServiceBase, ITaktPcbaInspectionSer
             try
             {
                 var entity = rows[i].Adapt<TaktPcbaInspection>();
-                var importKey = $"{entity.ProdDate}|{entity.ProdOrderCode}";
+                var importKey = entity.ProdOrderCode;
                 if (!importSeenKeys.Add(importKey))
                 {
-                    throw new TaktBusinessException("与Excel中其他行重复（ProdDate、ProdOrderCode）");
+                    throw new TaktBusinessException("与Excel中其他行重复（ProdOrderCode）");
                 }
                 var isUnique_ix_takt_logistics_manufacturing_defect_pcba_inspection_unique = await _uniqueValidator.IsUniqueAsync(
                     _pcbaInspectionRepository,
-                    x => x.ProdDate == entity.ProdDate
-                        && x.ProdOrderCode == entity.ProdOrderCode);
+                    x => x.ProdOrderCode == entity.ProdOrderCode);
                 if (!isUnique_ix_takt_logistics_manufacturing_defect_pcba_inspection_unique)
                 {
-                    throw new TaktBusinessException("PCBA检查日报的ProdDate、ProdOrderCode已存在");
+                    throw new TaktBusinessException("PCBA检查日报的ProdOrderCode已存在");
                 }
                 await _pcbaInspectionRepository.CreateAsync(entity);
                 success += 1;
@@ -458,7 +455,6 @@ public class TaktPcbaInspectionService : TaktServiceBase, ITaktPcbaInspectionSer
                 || (x.MaterialCode != null && x.MaterialCode.Contains(keywords))
                 || (x.ExtField != null && x.ExtField.Contains(keywords))
                 || (x.Remark != null && x.Remark.Contains(keywords))
-                || SqlFunc.ToString(x.ProdDate).Contains(keywords)
                 || SqlFunc.ToString(x.CreatedAt).Contains(keywords)
             );
         }
@@ -511,16 +507,6 @@ public class TaktPcbaInspectionService : TaktServiceBase, ITaktPcbaInspectionSer
         if (!string.IsNullOrEmpty(queryDto?.Remark))
         {
             exp = exp.And(x => x.Remark != null && x.Remark.Contains(queryDto.Remark));
-        }
-
-        if (queryDto?.ProdDateStart.HasValue == true)
-        {
-            exp = exp.And(x => x.ProdDate >= queryDto.ProdDateStart);
-        }
-
-        if (queryDto?.ProdDateEnd.HasValue == true)
-        {
-            exp = exp.And(x => x.ProdDate <= queryDto.ProdDateEnd);
         }
 
         if (queryDto?.CreatedAtStart.HasValue == true)

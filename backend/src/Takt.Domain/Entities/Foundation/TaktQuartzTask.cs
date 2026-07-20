@@ -70,9 +70,9 @@ public class TaktQuartzTask : TaktCompanyEntityBase
     [SugarColumn(ColumnName = "request_method", ColumnDescription = "网络请求方式", ColumnDataType = "varchar", Length = 10, IsNullable = true)]
     public string? RequestMethod { get; set; }
     /// <summary>
-    /// SQL 语句（任务类型为 SQL 时使用）
+    /// SQL 脚本路径（任务类型为 SQL 时使用；只可填相对 wwwroot 的 .sql 路径如 Quartz/sap_sync_ma.sql，禁止内联 SQL）
     /// </summary>
-    [SugarColumn(ColumnName = "sql_script", ColumnDescription = "SQL语句", ColumnDataType = "text", IsNullable = true)]
+    [SugarColumn(ColumnName = "sql_script", ColumnDescription = "SQL脚本路径", ColumnDataType = "varchar", Length = 200, IsNullable = true)]
     public string? SqlScript { get; set; }
     /// <summary>
     /// 触发器类型（字典 sys_quartz_trigger_type；0=Simple 1=Cron）

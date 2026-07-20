@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Infrastructure.Data.Seeds.I18nSeedData.HumanResource.Compensation
 // 文件名称：TaktSalaryFormulaI18nSeedData.cs
-// 创建时间：2026-07-09
+// 创建时间：2026-07-20
 // 创建人：Takt365(Auto Generated)
 // 功能描述：TaktSalaryFormula 实体字段国际化种子（无对应 frontend locales；TranslationText 取自 ColumnDescription，ContextNote 取自属性 XML summary）
 // 
@@ -109,13 +109,13 @@ public class TaktSalaryFormulaI18nSeedData : ITaktSeedDataCoordinator
             new TranslationSeedItem("entity.salaryformula.setname", "zh-HK", "公式方案名称_hk", "公式方案名称"),
 
             // entity.salaryformula.payrollid
-            new TranslationSeedItem("entity.salaryformula.payrollid", "en-US", "薪酬体系ID_us", "薪酬体系（关联 TaktPayroll.Id，选项 TaktPayrolls/options；同 set_code 各行取值应一致）"),
+            new TranslationSeedItem("entity.salaryformula.payrollid", "en-US", "薪酬体系ID_us", "薪酬体系（选项 TaktPayrolls/options；同 set_code 各行取值应一致，DictValue=Id）"),
             // entity.salaryformula.payrollid
-            new TranslationSeedItem("entity.salaryformula.payrollid", "ja-JP", "薪酬体系ID_jp", "薪酬体系（关联 TaktPayroll.Id，选项 TaktPayrolls/options；同 set_code 各行取值应一致）"),
+            new TranslationSeedItem("entity.salaryformula.payrollid", "ja-JP", "薪酬体系ID_jp", "薪酬体系（选项 TaktPayrolls/options；同 set_code 各行取值应一致，DictValue=Id）"),
             // entity.salaryformula.payrollid
-            new TranslationSeedItem("entity.salaryformula.payrollid", "zh-CN", "薪酬体系ID", "薪酬体系（关联 TaktPayroll.Id，选项 TaktPayrolls/options；同 set_code 各行取值应一致）"),
+            new TranslationSeedItem("entity.salaryformula.payrollid", "zh-CN", "薪酬体系ID", "薪酬体系（选项 TaktPayrolls/options；同 set_code 各行取值应一致，DictValue=Id）"),
             // entity.salaryformula.payrollid
-            new TranslationSeedItem("entity.salaryformula.payrollid", "zh-HK", "薪酬体系ID_hk", "薪酬体系（关联 TaktPayroll.Id，选项 TaktPayrolls/options；同 set_code 各行取值应一致）"),
+            new TranslationSeedItem("entity.salaryformula.payrollid", "zh-HK", "薪酬体系ID_hk", "薪酬体系（选项 TaktPayrolls/options；同 set_code 各行取值应一致，DictValue=Id）"),
 
             // entity.salaryformula.formulacode
             new TranslationSeedItem("entity.salaryformula.formulacode", "en-US", "步骤编码_us", "步骤编码（同方案内唯一，如 GROSS、SS_EMP、HF_EMP、TAX、NET）"),
@@ -190,13 +190,13 @@ public class TaktSalaryFormulaI18nSeedData : ITaktSeedDataCoordinator
             new TranslationSeedItem("entity.salaryformula.expirydate", "zh-HK", "失效日期_hk", "方案失效日期"),
 
             // entity.salaryformula.relatedplant
-            new TranslationSeedItem("entity.salaryformula.relatedplant", "en-US", "关联工厂_us", "关联工厂（关联 TaktPlant.PlantCode，选项 TaktPlants/options）"),
+            new TranslationSeedItem("entity.salaryformula.relatedplant", "en-US", "关联工厂_us", "关联工厂（选项 TaktPlants/options，DictValue=Id）"),
             // entity.salaryformula.relatedplant
-            new TranslationSeedItem("entity.salaryformula.relatedplant", "ja-JP", "关联工厂_jp", "关联工厂（关联 TaktPlant.PlantCode，选项 TaktPlants/options）"),
+            new TranslationSeedItem("entity.salaryformula.relatedplant", "ja-JP", "关联工厂_jp", "关联工厂（选项 TaktPlants/options，DictValue=Id）"),
             // entity.salaryformula.relatedplant
-            new TranslationSeedItem("entity.salaryformula.relatedplant", "zh-CN", "关联工厂", "关联工厂（关联 TaktPlant.PlantCode，选项 TaktPlants/options）"),
+            new TranslationSeedItem("entity.salaryformula.relatedplant", "zh-CN", "关联工厂", "关联工厂（选项 TaktPlants/options，DictValue=Id）"),
             // entity.salaryformula.relatedplant
-            new TranslationSeedItem("entity.salaryformula.relatedplant", "zh-HK", "关联工厂_hk", "关联工厂（关联 TaktPlant.PlantCode，选项 TaktPlants/options）"),
+            new TranslationSeedItem("entity.salaryformula.relatedplant", "zh-HK", "关联工厂_hk", "关联工厂（选项 TaktPlants/options，DictValue=Id）"),
 
             // entity.salaryformula.sortorder
             new TranslationSeedItem("entity.salaryformula.sortorder", "en-US", "执行顺序_us", "执行顺序（同一 set_code 内从小到大；应发=1 … 实发=5）"),

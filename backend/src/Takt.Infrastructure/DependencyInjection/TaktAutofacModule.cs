@@ -156,6 +156,14 @@ public class TaktAutofacModule : Autofac.Module
             .As<Takt.Domain.Interfaces.ITaktDataCloneProvider>()
             .InstancePerLifetimeScope();
 
+        builder.RegisterType<Takt.Infrastructure.Data.Schema.TaktTableArchiveProvider>()
+            .As<Takt.Domain.Interfaces.ITaktTableArchiveProvider>()
+            .InstancePerLifetimeScope();
+
+        builder.RegisterType<Takt.Infrastructure.Data.Schema.TaktDatabaseBackupProvider>()
+            .As<Takt.Domain.Interfaces.ITaktDatabaseBackupProvider>()
+            .InstancePerLifetimeScope();
+
         builder.RegisterType<Takt.Application.Services.Workflow.FlowEngine.TaktFlowApproverResolverService>()
             .AsSelf()
             .InstancePerLifetimeScope();

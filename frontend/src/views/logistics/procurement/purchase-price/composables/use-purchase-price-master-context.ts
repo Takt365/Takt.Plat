@@ -9,10 +9,13 @@
 import { inject, provide, type InjectionKey, type Ref, ref } from 'vue'
 import type { PurchasePrice } from '@/types/logistics/procurement/purchase-price'
 
+/** 表格行类型（与 index 列表行、TaktSingleTable slot record 一致） */
+export type PurchasePriceRowRecord = PurchasePrice | Record<string, unknown>
+
 /** 主表选中行上下文 */
 export interface PurchasePriceMasterContext {
   /** 当前选中的主表行（右侧明细依赖） */
-  selectedMasterRow: Ref<PurchasePrice | null>
+  selectedMasterRow: Ref<PurchasePriceRowRecord | null>
 }
 
 const purchasePriceMasterContextKey: InjectionKey<PurchasePriceMasterContext> = Symbol('purchase-priceMasterContext')
@@ -22,7 +25,7 @@ const purchasePriceMasterContextKey: InjectionKey<PurchasePriceMasterContext> = 
  * @returns {PurchasePriceMasterContext} 主表上下文
  */
 export function providePurchasePriceMasterContext(): PurchasePriceMasterContext {
-  const selectedMasterRow = ref<PurchasePrice | null>(null)
+  const selectedMasterRow = ref<PurchasePriceRowRecord | null>(null)
   const ctx: PurchasePriceMasterContext = { selectedMasterRow }
   provide(purchasePriceMasterContextKey, ctx)
   return ctx

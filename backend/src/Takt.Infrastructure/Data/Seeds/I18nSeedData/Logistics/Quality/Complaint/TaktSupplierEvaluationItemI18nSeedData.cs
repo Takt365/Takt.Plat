@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Infrastructure.Data.Seeds.I18nSeedData.Logistics.Quality.Complaint
 // 文件名称：TaktSupplierEvaluationItemI18nSeedData.cs
-// 创建时间：2026-07-09
+// 创建时间：2026-07-20
 // 创建人：Takt365(Auto Generated)
 // 功能描述：TaktSupplierEvaluationItem 实体字段国际化种子（无对应 frontend locales；TranslationText 取自 ColumnDescription，ContextNote 取自属性 XML summary）
 // 
@@ -91,13 +91,13 @@ public class TaktSupplierEvaluationItemI18nSeedData : ITaktSeedDataCoordinator
             new TranslationSeedItem("entity.supplierevaluationitem._self", "zh-HK", "供应商评价考核项目明细信息_hk", "实体名称"),
 
             // entity.supplierevaluationitem.evaluationid
-            new TranslationSeedItem("entity.supplierevaluationitem.evaluationid", "en-US", "评价表ID_us", "评价表 ID（关联 TaktSupplierEvaluation.Id，选项 TaktSupplierEvaluations/options）"),
+            new TranslationSeedItem("entity.supplierevaluationitem.evaluationid", "en-US", "评价表ID_us", "评价表 ID（选项 TaktSupplierEvaluations/options，DictValue=Id）"),
             // entity.supplierevaluationitem.evaluationid
-            new TranslationSeedItem("entity.supplierevaluationitem.evaluationid", "ja-JP", "评价表ID_jp", "评价表 ID（关联 TaktSupplierEvaluation.Id，选项 TaktSupplierEvaluations/options）"),
+            new TranslationSeedItem("entity.supplierevaluationitem.evaluationid", "ja-JP", "评价表ID_jp", "评价表 ID（选项 TaktSupplierEvaluations/options，DictValue=Id）"),
             // entity.supplierevaluationitem.evaluationid
-            new TranslationSeedItem("entity.supplierevaluationitem.evaluationid", "zh-CN", "评价表ID", "评价表 ID（关联 TaktSupplierEvaluation.Id，选项 TaktSupplierEvaluations/options）"),
+            new TranslationSeedItem("entity.supplierevaluationitem.evaluationid", "zh-CN", "评价表ID", "评价表 ID（选项 TaktSupplierEvaluations/options，DictValue=Id）"),
             // entity.supplierevaluationitem.evaluationid
-            new TranslationSeedItem("entity.supplierevaluationitem.evaluationid", "zh-HK", "评价表ID_hk", "评价表 ID（关联 TaktSupplierEvaluation.Id，选项 TaktSupplierEvaluations/options）"),
+            new TranslationSeedItem("entity.supplierevaluationitem.evaluationid", "zh-HK", "评价表ID_hk", "评价表 ID（选项 TaktSupplierEvaluations/options，DictValue=Id）"),
 
             // entity.supplierevaluationitem.supplierevaluationcode
             new TranslationSeedItem("entity.supplierevaluationitem.supplierevaluationcode", "en-US", "评价表编号_us", "评价表编号（冗余字段，便于查询）"),

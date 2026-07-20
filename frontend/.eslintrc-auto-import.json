@@ -1,5 +1,6 @@
 {
   "globals": {
+    "BOM_MATERIAL_COST_ITEM_TABLE_NAME": true,
     "Component": true,
     "ComponentPublicInstance": true,
     "ComputedRef": true,
@@ -41,6 +42,7 @@
     "defineComponent": true,
     "defineStore": true,
     "effectScope": true,
+    "formatBomMaterialCostItemRecalculateDuration": true,
     "getActivePinia": true,
     "getCurrentInstance": true,
     "getCurrentScope": true,
@@ -87,6 +89,7 @@
     "readonly": true,
     "ref": true,
     "resolveComponent": true,
+    "resolveCurrentCompanyRelatedPlantCode": true,
     "setActivePinia": true,
     "setMapStoreSuffix": true,
     "shallowReactive": true,
@@ -100,7 +103,9 @@
     "triggerRef": true,
     "unref": true,
     "useAttrs": true,
+    "useBomMaterialCostItemRecalculateSignalR": true,
     "useBusinessScopeRouteKey": true,
+    "useCompanyRelatedPlant": true,
     "useCssModule": true,
     "useCssVars": true,
     "useDatabaseInfoCatalog": true,

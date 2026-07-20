@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Application.Services.Logistics.Manufacturing.Output
 // 文件名称：TaktPcbaOutputDetailService.cs
-// 创建时间：2026-07-09
+// 创建时间：2026-07-13
 // 创建人：Takt365(Cursor AI)
 // 功能描述：PCBA日报明细应用服务实现
 // 
@@ -14,6 +14,7 @@ using System.Linq.Expressions;
 using Mapster;
 using SqlSugar;
 using Takt.Application.Dtos.Logistics.Manufacturing.Output;
+using Takt.Application.Services.Foundation;
 using Takt.Domain.Entities.Logistics.Manufacturing.Output;
 using Takt.Domain.Interfaces;
 using Takt.Domain.Repositories;
@@ -33,6 +34,7 @@ public class TaktPcbaOutputDetailService : TaktServiceBase, ITaktPcbaOutputDetai
     private readonly ITaktCompanyRepository<TaktPcbaOutput> _pcbaOutputRepository;
     private readonly ITaktLineNumberGenerator _lineNumberGenerator;
     private readonly ITaktUniqueValidator _uniqueValidator;
+    private readonly ITaktDictDataService _dictDataService;
 
     /// <summary>
     /// 构造函数
@@ -41,6 +43,7 @@ public class TaktPcbaOutputDetailService : TaktServiceBase, ITaktPcbaOutputDetai
     /// <param name="pcbaOutputRepository">PCBA日报仓储</param>
     /// <param name="lineNumberGenerator">明细行号生成器</param>
     /// <param name="uniqueValidator">唯一性验证器</param>
+    /// <param name="dictDataService">字典数据服务</param>
     /// <param name="userContext">用户上下文</param>
     /// <param name="localizationService">本地化服务</param>
     public TaktPcbaOutputDetailService(
@@ -48,6 +51,7 @@ public class TaktPcbaOutputDetailService : TaktServiceBase, ITaktPcbaOutputDetai
         ITaktCompanyRepository<TaktPcbaOutput> pcbaOutputRepository,
         ITaktLineNumberGenerator lineNumberGenerator,
         ITaktUniqueValidator uniqueValidator,
+        ITaktDictDataService dictDataService,
         ITaktUserContext? userContext = null,
         ITaktLocalizationService? localizationService = null)
         : base(userContext, localizationService)
@@ -56,6 +60,7 @@ public class TaktPcbaOutputDetailService : TaktServiceBase, ITaktPcbaOutputDetai
         _pcbaOutputRepository = pcbaOutputRepository;
         _lineNumberGenerator = lineNumberGenerator;
         _uniqueValidator = uniqueValidator;
+        _dictDataService = dictDataService;
     }
 
     /// <summary>
@@ -278,6 +283,8 @@ public class TaktPcbaOutputDetailService : TaktServiceBase, ITaktPcbaOutputDetai
             errors.Add("Excel文件中没有数据");
             return (0, 0, errors);
         }
+        var dictContext = await _dictDataService.CreateDictStorageContextAsync(
+            TaktDictStorageHelper.CollectDictTypeCodes(TaktOutputDetailDictImportBindings.PcbaDetail).ToArray());
         var importSeenKeys = new HashSet<string>(StringComparer.Ordinal);
         for (var i = 0; i < rows.Count; i++)
         {
@@ -285,6 +292,14 @@ public class TaktPcbaOutputDetailService : TaktServiceBase, ITaktPcbaOutputDetai
             {
                 var entity = rows[i].Adapt<TaktPcbaOutputDetail>();
                 var importDto = rows[i].Adapt<TaktPcbaOutputDetailCreateDto>();
+                TaktDictStorageHelper.ApplyStorageLabels(
+                    importDto,
+                    typeof(TaktPcbaOutputDetailCreateDto),
+                    dictContext,
+                    TaktOutputDetailDictImportBindings.PcbaDetail);
+                entity.DowntimeReason = importDto.DowntimeReason;
+                entity.UnachievedReason = importDto.UnachievedReason;
+                entity.PcbBoardType = importDto.PcbBoardType;
                 await StampPcbaOutputDetailPcbaOutputAsync(entity, importDto);
                 var importKey = $"{entity.PcbaOutputId}|{entity.LineNumber}";
                 if (!importSeenKeys.Add(importKey))
@@ -397,7 +412,15 @@ public class TaktPcbaOutputDetailService : TaktServiceBase, ITaktPcbaOutputDetai
                 || (x.ProdOrderCode != null && x.ProdOrderCode.Contains(keywords))
                 || SqlFunc.ToString(x.LineNumber).Contains(keywords)
                 || (x.TimePeriod != null && x.TimePeriod.Contains(keywords))
+                || (x.ProdTeam != null && x.ProdTeam.Contains(keywords))
+                || (x.ProductionEquipmentCode != null && x.ProductionEquipmentCode.Contains(keywords))
+                || SqlFunc.ToString(x.DirectLabor).Contains(keywords)
+                || SqlFunc.ToString(x.IndirectLabor).Contains(keywords)
                 || SqlFunc.ToString(x.ShiftNo).Contains(keywords)
+                || SqlFunc.ToString(x.StdMinutes).Contains(keywords)
+                || SqlFunc.ToString(x.StdLaborCapacity).Contains(keywords)
+                || SqlFunc.ToString(x.StdShorts).Contains(keywords)
+                || SqlFunc.ToString(x.StdEquipmentCapacity).Contains(keywords)
                 || (x.PcbBoardType != null && x.PcbBoardType.Contains(keywords))
                 || (x.PanelSide != null && x.PanelSide.Contains(keywords))
                 || SqlFunc.ToString(x.BatchQty).Contains(keywords)
@@ -447,9 +470,49 @@ public class TaktPcbaOutputDetailService : TaktServiceBase, ITaktPcbaOutputDetai
             exp = exp.And(x => x.TimePeriod != null && x.TimePeriod.Contains(queryDto.TimePeriod));
         }
 
+        if (!string.IsNullOrEmpty(queryDto?.ProdTeam))
+        {
+            exp = exp.And(x => x.ProdTeam != null && x.ProdTeam.Contains(queryDto.ProdTeam));
+        }
+
+        if (!string.IsNullOrEmpty(queryDto?.ProductionEquipmentCode))
+        {
+            exp = exp.And(x => x.ProductionEquipmentCode != null && x.ProductionEquipmentCode.Contains(queryDto.ProductionEquipmentCode));
+        }
+
+        if (queryDto?.DirectLabor.HasValue == true)
+        {
+            exp = exp.And(x => x.DirectLabor == queryDto.DirectLabor);
+        }
+
+        if (queryDto?.IndirectLabor.HasValue == true)
+        {
+            exp = exp.And(x => x.IndirectLabor == queryDto.IndirectLabor);
+        }
+
         if (queryDto?.ShiftNo.HasValue == true)
         {
             exp = exp.And(x => x.ShiftNo == queryDto.ShiftNo);
+        }
+
+        if (queryDto?.StdMinutes.HasValue == true)
+        {
+            exp = exp.And(x => x.StdMinutes == queryDto.StdMinutes);
+        }
+
+        if (queryDto?.StdLaborCapacity.HasValue == true)
+        {
+            exp = exp.And(x => x.StdLaborCapacity == queryDto.StdLaborCapacity);
+        }
+
+        if (queryDto?.StdShorts.HasValue == true)
+        {
+            exp = exp.And(x => x.StdShorts == queryDto.StdShorts);
+        }
+
+        if (queryDto?.StdEquipmentCapacity.HasValue == true)
+        {
+            exp = exp.And(x => x.StdEquipmentCapacity == queryDto.StdEquipmentCapacity);
         }
 
         if (!string.IsNullOrEmpty(queryDto?.PcbBoardType))

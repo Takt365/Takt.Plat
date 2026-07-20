@@ -52,7 +52,7 @@ public class TaktQualityGroup : TaktCompanyEntityBase
     [SugarColumn(ColumnName = "quality_group_description", ColumnDescription = "质量组描述", ColumnDataType = "nvarchar", Length = 200, IsNullable = true)]
     public string? QualityGroupDescription { get; set; }
     /// <summary>
-    /// 质量组负责人用户 ID（关联 TaktUser.Id，选项 TaktUsers/options）
+    /// 质量组负责人用户 ID（选项 TaktUsers/options，DictValue=Id）
     /// </summary>
     [SugarColumn(ColumnName = "responsible_user_id", ColumnDescription = "负责人用户ID", ColumnDataType = "bigint", IsNullable = true)]
     [JsonConverter(typeof(ValueToStringConverter))]

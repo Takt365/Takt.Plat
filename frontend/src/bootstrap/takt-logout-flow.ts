@@ -16,6 +16,7 @@ import { useUserStore } from '@/stores/identity/user';
 import type { NotificationType } from '@/types/event';
 import {
   TAKT_ACCESS_TOKEN_STORAGE_KEY,
+  TAKT_IDLE_LAST_ACTIVITY_STORAGE_KEY,
   TAKT_REFRESH_TOKEN_STORAGE_KEY,
   TAKT_TOKEN_EXPIRES_STORAGE_KEY,
 } from '@/utils/common';
@@ -97,6 +98,11 @@ export function performHardLogoutRedirect(
   localStorage.removeItem(TAKT_REFRESH_TOKEN_STORAGE_KEY);
   localStorage.removeItem(TAKT_TOKEN_EXPIRES_STORAGE_KEY);
   localStorage.removeItem(TAKT_TABS_STORAGE_KEY);
+  try {
+    sessionStorage.removeItem(TAKT_IDLE_LAST_ACTIVITY_STORAGE_KEY);
+  } catch {
+    // sessionStorage 不可用时忽略
+  }
 
   const loginHref = router.resolve({ name: 'Login' }).href;
   window.location.replace(loginHref);
@@ -110,4 +116,13 @@ export async function executeForceLogoutAsync(message?: string): Promise<void> {
   await withLogoutInProgress(async () => {
     performHardLogoutRedirect(message, 'warning');
   });
+}
+
+/**
+ * 空闲超时登出：异步尽力 signOut + 同步硬跳登录页（不 await、不依赖 logoutInProgress）
+ * @param toastMessage 登录页 flash 提示
+ */
+export function executeIdleLogoutNow(toastMessage?: string): void {
+  void runServerSignOutIfLoggedInAsync();
+  performHardLogoutRedirect(toastMessage, 'warning');
 }

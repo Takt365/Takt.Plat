@@ -122,6 +122,11 @@ export interface Events {
   'foundation:quartz-task:executed': import('@/types/foundation/quartz-signal-r').QuartzTaskExecutedEvent;
 
   /**
+   * BOM 物料成本机种月平均重算完成（SignalR）
+   */
+  'logistics:bom-material-cost-item:recalculate-completed': import('@/types/logistics/manufacturing/bom/material-cost-item-signal-r').BomMaterialCostItemRecalculateCompletedEvent;
+
+  /**
    * 刷新菜单
    */
   'menu:refresh': undefined;

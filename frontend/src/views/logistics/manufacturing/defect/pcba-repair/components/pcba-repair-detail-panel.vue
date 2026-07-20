@@ -146,7 +146,7 @@
       <a-form-item :label="pi.queryLabel('pcbaBoardType')">
         <TaktSelect
           v-model:value="advancedQueryForm.pcbaBoardType"
-          dict-type="logistics_pcba_panel_category"
+          dict-type="logistics_pcba_function_category"
           :placeholder="pi.queryPh('pcbaBoardType', 'select')"
           allow-clear
         />

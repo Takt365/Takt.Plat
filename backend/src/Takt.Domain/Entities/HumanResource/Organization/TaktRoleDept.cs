@@ -28,7 +28,7 @@ namespace Takt.Domain.Entities.HumanResource.Organization;
 public class TaktRoleDept : TaktCompanyEntityBase
 {
     /// <summary>
-    /// 角色（关联 TaktRole.Id，选项 TaktRoles/options）
+    /// 角色（选项 TaktRoles/options，DictValue=Id）
     /// </summary>
     [SugarColumn(ColumnName = "role_id", ColumnDescription = "角色ID", ColumnDataType = "bigint", IsNullable = false)]
     public long RoleId { get; set; }

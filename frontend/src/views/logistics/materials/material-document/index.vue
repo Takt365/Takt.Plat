@@ -2,56 +2,13 @@
 <!-- 项目名称：节拍数字工厂 · Takt Plat (TDF) -->
 <!-- 命名空间：@/views/logistics/materials/material-document -->
 <!-- 文件名称：index.vue -->
-<!-- 功能描述：Takt物料凭证主表实体管理页面，含查询、增删改，由 generate-vue-master-detail-from-api.cjs 根据 types/api 自动生成 -->
+<!-- 功能描述：物料凭证主从表列表（仅查询/导入/导出；无新增、更新、删除；主表点击行仍驱动右侧明细） -->
 <!-- 版权信息：Copyright (c) 2025 Takt  All rights reserved. -->
 <!-- 免责声明：此软件使用 MIT License，作者不承担任何使用风险。 -->
 <!-- ======================================== -->
 
 <template>
   <div class="p-4 flex flex-col min-h-0 h-full">
-    <!-- 查询栏 -->
-    <TaktQueryBar
-      v-model="queryKeyword"
-      :placeholder="searchPlaceholder"
-      :loading="loading"
-      @search="handleSearch"
-      @reset="handleReset"
-    />
-
-    <!-- 工具栏 -->
-    <TaktToolsBar
-      create-permission="logistics:materials:material:document:create"
-      update-permission="logistics:materials:material:document:update"
-      delete-permission="logistics:materials:material:document:delete"
-      import-permission="logistics:materials:material:document:import"
-      export-permission="logistics:materials:material:document:export"
-      :show-create="true"
-      :show-update="true"
-      :show-delete="true"
-      :show-import="true"
-      :show-export="true"
-      :show-expand="false"
-      :show-advanced-query="true"
-      :show-column-setting="true"
-      :show-fullscreen="true"
-      :show-refresh="true"
-      :create-disabled="false"
-      :create-loading="loading"
-      :update-disabled="updateDisabled"
-      :update-loading="loading"
-      :delete-disabled="deleteDisabled"
-      :delete-loading="loading"
-      :refresh-loading="loading"
-      @create="handleCreate"
-      @update="handleUpdate"
-      @delete="handleDelete"
-      @import="handleImport"
-      @export="handleExport"
-      @advanced-query="handleAdvancedQuery"
-      @column-setting="handleColumnSetting"
-      @refresh="handleRefresh"
-    />
-
     <!-- 左主右从 -->
     <TaktMasterDetailTableLr
       v-model:master-current="currentPage"
@@ -62,7 +19,7 @@
       :master-data-source="dataSource"
       :master-loading="loading"
       :master-row-key="getMaterialDocumentId"
-      :master-row-selection="rowSelection"
+      :show-master-row-selection="false"
       master-id-column-key="materialDocumentId"
       :master-visible-column-keys="visibleColumnKeys"
       master-table-mode="masterDetailMaster"
@@ -74,6 +31,36 @@
       @master-pagination-change="handleMasterPaginationChange"
       @master-select="handleMasterSelect"
     >
+      <template #master-toolbar>
+        <TaktQueryBar
+          v-model="queryKeyword"
+          :placeholder="searchPlaceholder"
+          :loading="loading"
+          @search="handleSearch"
+          @reset="handleReset"
+        />
+        <!-- 工具栏：仅导入/导出（无新增、更新、删除） -->
+        <TaktToolsBar
+          import-permission="logistics:materials:material:document:import"
+          export-permission="logistics:materials:material:document:export"
+          :show-create="false"
+          :show-update="false"
+          :show-delete="false"
+          :show-import="true"
+          :show-export="true"
+          :show-expand="false"
+          :show-advanced-query="true"
+          :show-column-setting="true"
+          :show-fullscreen="true"
+          :show-refresh="true"
+          :refresh-loading="loading"
+          @import="handleImport"
+          @export="handleExport"
+          @advanced-query="handleAdvancedQuery"
+          @column-setting="handleColumnSetting"
+          @refresh="handleRefresh"
+        />
+      </template>
       <template #detail>
         <MaterialDocumentItemPanel
           ref="materialDocumentItemPanelRef"
@@ -82,23 +69,6 @@
       </template>
     </TaktMasterDetailTableLr>
 
-    <!-- 新增/编辑对话框 -->
-    <TaktModal
-      v-model:open="formVisible"
-      :title="formTitle"
-      width="1100px"
-      wrap-class-name="takt-form-modal-resizable"
-      :confirm-loading="formLoading"
-      @ok="handleFormSubmit"
-      @cancel="handleFormCancel"
-    >
-      <MaterialDocumentForm
-        :key="formData?.materialDocumentId ?? 'create'"
-        ref="formRef"
-        :form-data="formData"
-        :loading="formLoading"
-      />
-    </TaktModal>
     <!-- 高级查询抽屉 -->
     <TaktQueryDrawer
       v-model:open="advancedQueryVisible"
@@ -264,28 +234,30 @@
 
 <script setup lang="ts">
 /**
- * Takt物料凭证主表实体管理页 · 由 generate-vue-master-detail-from-api.cjs 根据 types/api 生成
+ * 物料凭证主从表列表（仅查询 / 导入 / 导出；主表点击行驱动右侧明细）
  * @module views/logistics/materials/material-document
  */
 import { ref, computed, onMounted } from 'vue'
-import { message, Modal } from 'ant-design-vue'
+import { message } from 'ant-design-vue'
 import type { TableColumnsType } from 'ant-design-vue'
-import { CreateActionColumn } from '@/components/business/takt-action-column/index'
 import { useI18n } from 'vue-i18n'
 import { ensureTaktPaginationConfigAsync, getTaktDefaultPageIndex, getTaktDefaultPageSize } from '@/utils/takt-paged'
-import MaterialDocumentForm from './components/material-document-form.vue'
 import MaterialDocumentItemPanel from './components/material-document-item-panel.vue'
 import { provideMaterialDocumentMasterContext, type MaterialDocumentRowRecord } from './composables/use-material-document-master-context'
-import { getMaterialDocumentList, getMaterialDocumentById, createMaterialDocument, updateMaterialDocument, deleteMaterialDocumentById, deleteMaterialDocumentBatch, getMaterialDocumentTemplate, importMaterialDocument, exportMaterialDocument, updateMaterialDocumentStatus } from '@/api/logistics/materials/material-document'
+import {
+  getMaterialDocumentList,
+  getMaterialDocumentTemplate,
+  importMaterialDocument,
+  exportMaterialDocument,
+} from '@/api/logistics/materials/material-document'
 import type { MaterialDocument, MaterialDocumentQuery } from '@/types/logistics/materials/material-document'
 import { taktExcelEntityNames } from '@/utils/naming'
 import { resolveExportDownloadFileName } from '@/utils/export-download-name'
 import { normalizeImportResult, type TaktImportResult } from '@/utils/takt-import-result'
-import { RiEditLine, RiDeleteBinLine, RiQuestionLine } from '@remixicon/vue'
+import { RiQuestionLine } from '@remixicon/vue'
 
 import {
   useMaterialDocumentI18n,
-  MATERIALDOCUMENT_LIST_FIELDS,
   MATERIALDOCUMENT_QUERY_STRING_FIELDS,
   MATERIALDOCUMENT_QUERY_FIELDS,
   MATERIALDOCUMENT_SELF_I18N_KEY,
@@ -315,23 +287,6 @@ const currentPage = ref(getTaktDefaultPageIndex())
 const pageSize = ref(getTaktDefaultPageSize())
 /** 分页 total */
 const total = ref(0)
-/** 工具栏单选时当前行 */
-const selectedRow = ref<MaterialDocumentRowRecord | null>(null)
-/** 表格多选行 */
-const selectedRows = ref<MaterialDocumentRowRecord[]>([])
-/** 表格多选 row-key 集合 */
-const selectedRowKeys = ref<(string | number)[]>([])
-
-/** 新增/编辑弹窗是否打开 */
-const formVisible = ref(false)
-/** 弹窗标题（新增/编辑） */
-const formTitle = ref('')
-/** 传入内嵌表单的编辑数据 */
-const formData = ref<Partial<MaterialDocument> | null>(null)
-/** 表单提交 loading */
-const formLoading = ref(false)
-/** 内嵌表单组件 ref（validate / getValues / resetFields） */
-const formRef = ref()
 
 /** 高级查询抽屉是否打开 */
 const advancedQueryVisible = ref(false)
@@ -363,12 +318,8 @@ const columnSettingVisible = ref(false)
 const importVisible = ref(false)
 /** 表格当前可见列 key */
 const visibleColumnKeys = ref<string[]>([])
-/** 实体主键字段名（row-key、API 路径参数） */
+/** 实体主键字段名（row-key） */
 const entityIdName = 'materialDocumentId'
-/** 工具栏「编辑」是否禁用（须恰好选中一行） */
-const updateDisabled = computed(() => selectedRows.value.length !== 1)
-/** 工具栏「删除」是否禁用（未选中任何行） */
-const deleteDisabled = computed(() => selectedRows.value.length === 0)
 
 /** 主表选中行上下文（右侧明细面板读取） */
 const { selectedMasterRow } = provideMaterialDocumentMasterContext()
@@ -410,7 +361,6 @@ onMounted(async () => {
   loadData()
 })
 
-
 /** 主表行点击选中 key（左右主子表高亮） */
 const selectedMasterKey = ref('')
 
@@ -421,16 +371,11 @@ function syncMasterSelection(record: MaterialDocumentRowRecord | null) {
 }
 
 /**
- * 左右主子表：主表行选中
+ * 左右主子表：主表行选中（驱动右侧明细，非 CRUD 勾选）
  * @param record 主表行
  */
 function handleMasterSelect(record: Record<string, unknown>) {
-  const row = record as unknown as MaterialDocumentRowRecord
-  const key = getMaterialDocumentId(row)
-  selectedRowKeys.value = [key]
-  selectedRows.value = [row]
-  selectedRow.value = row
-  syncMasterSelection(row)
+  syncMasterSelection(record as unknown as MaterialDocumentRowRecord)
 }
 
 /**
@@ -442,26 +387,7 @@ function handleMasterPaginationChange(_page: number, _pageSize: number) {
   loadData()
 }
 
-/** 加载主表详情并回填当前页 dataSource */
-async function loadMaterialDocumentDetail(record: MaterialDocumentRowRecord): Promise<MaterialDocument | null> {
-  const id = getMaterialDocumentId(record)
-  if (!id) {
-    return null
-  }
-  try {
-    const detail = await getMaterialDocumentById(id)
-    const index = dataSource.value.findIndex((row) => getMaterialDocumentId(row) === id)
-    if (index !== -1) {
-      dataSource.value[index] = { ...dataSource.value[index], ...detail } as MaterialDocument
-    }
-    return detail
-  } catch (error: any) {
-    message.error(error?.message || t('common.feedback.load.data.failed'))
-    return null
-  }
-}
-
-/** 表格列定义（i18n 随 locale 变化） */
+/** 表格列定义（i18n 随 locale 变化；无操作列） */
 const columns = computed<TableColumnsType>(() => [
   {
     title: t('common.page.entity.id'),
@@ -518,26 +444,6 @@ const columns = computed<TableColumnsType>(() => [
     ellipsis: true,
     customRender: ({ record }: { record: any }) => getMaterialDocumentField(record, 'materialDocumentStatus') ?? ''
   },
-  CreateActionColumn({
-    actions: [
-      {
-        key: 'update',
-        label: t('common.page.button.edit'),
-        shape: 'plain',
-        icon: RiEditLine,
-        permission: 'logistics:materials:material:document:update',
-        onClick: (record: MaterialDocumentRowRecord) => handleEdit(record)
-      },
-      {
-        key: 'delete',
-        label: t('common.page.button.delete'),
-        shape: 'plain',
-        icon: RiDeleteBinLine,
-        permission: 'logistics:materials:material:document:delete',
-        onClick: (record: MaterialDocumentRowRecord) => handleDeleteOne(record)
-      }
-    ]
-  })
 ])
 
 /** 表格 row-key（优先实体主键字段） */
@@ -551,36 +457,6 @@ const getMaterialDocumentId = (record: MaterialDocumentRowRecord): string => {
  * @param field 字段名
  */
 const getMaterialDocumentField = (record: any, field: string): any => record?.[field]
-
-
-
-/** 行选择配置 */
-const rowSelection = computed(() => ({
-  selectedRowKeys: selectedRowKeys.value,
-  onChange: (keys: (string | number)[], rows: MaterialDocumentRowRecord[]) => {
-    selectedRowKeys.value = keys
-    selectedRows.value = rows
-    selectedRow.value = rows.length === 1 ? (rows[0] ?? null) : null
-    if (rows.length === 1 && rows[0]) {
-      syncMasterSelection(rows[0])
-    } else if (rows.length === 0) {
-      syncMasterSelection(null)
-    }
-  },
-  onSelect: (record: MaterialDocumentRowRecord, selected: boolean) => {
-    if (selected) {
-      selectedRow.value = record
-      syncMasterSelection(record)
-    } else if (selectedRow.value && getMaterialDocumentId(selectedRow.value) === getMaterialDocumentId(record)) {
-      selectedRow.value = null
-      syncMasterSelection(null)
-    }
-  },
-  onSelectAll: (selected: boolean, selectedRowsData: MaterialDocumentRowRecord[]) => {
-    selectedRow.value = selected && selectedRowsData.length === 1 ? (selectedRowsData[0] ?? null) : null
-    syncMasterSelection(selectedRow.value)
-  }
-}))
 
 /** 加载分页列表 */
 async function loadData() {
@@ -611,87 +487,11 @@ function handleSearch() {
 /** 重置查询条件并刷新列表 */
 function handleReset() {
   queryKeyword.value = ''
-  advancedQueryForm.value = {
-  plantCode: '',
-  materialCode: '',
-  materialDocumentCode: '',
-  postedBy: '',
-  materialDocumentStatus: undefined as number | undefined,
-  createdAtStart: '',
-  createdAtEnd: '',
-  extField: '',
-  remark: '',
-  }
+  advancedQueryForm.value = createEmptyAdvancedQueryForm()
   currentPage.value = getTaktDefaultPageIndex()
   loadData()
 }
 
-/** 打开新增弹窗 */
-function handleCreate() {
-  formTitle.value = t('common.dialog.title.create', { entity: pi.self() })
-  formData.value = null
-  formVisible.value = true
-  nextTick(() => formRef.value?.resetFields())
-}
-/** 打开编辑弹窗（主子表：先拉详情含子表） */
-async function handleEdit(record: MaterialDocumentRowRecord) {
-  formTitle.value = t('common.dialog.title.edit', { entity: pi.self() })
-  formLoading.value = true
-  try {
-    const detail = await loadMaterialDocumentDetail(record)
-    formData.value = detail ? { ...detail } : { ...record }
-    formVisible.value = true
-  } finally {
-    formLoading.value = false
-  }
-}
-
-/** 工具栏编辑：打开当前单选行 */
-function handleUpdate() {
-  if (selectedRow.value) {
-    void handleEdit(selectedRow.value)
-  } else {
-    message.warning(t('common.tip.select.to.action', { action: t('common.page.button.edit'), entity: pi.self() }))
-  }
-}
-/** 提交新增/编辑表单 */
-async function handleFormSubmit() {
-  const refInst = formRef.value
-  if (!refInst?.validate) return
-  try {
-    await refInst.validate()
-  } catch {
-    return
-  }
-  formLoading.value = true
-  try {
-    const payload = refInst.getValues?.() ?? { ...(formData.value as any) }
-    const id = (formData.value as any)?.[entityIdName]
-    if (id) {
-      await updateMaterialDocument(id, payload as any)
-      message.success(t('common.feedback.updated', { target: pi.self() }))
-    } else {
-      await createMaterialDocument(payload as any)
-      message.success(t('common.feedback.created', { target: pi.self() }))
-    }
-    formVisible.value = false
-    formData.value = null
-  nextTick(() => formRef.value?.resetFields())
-    if (selectedMasterKey.value) {
-  materialDocumentItemPanelRef.value?.reload?.()
-    }
-    loadData()
-  } finally {
-    formLoading.value = false
-  }
-}
-
-/** 关闭新增/编辑弹窗（不提交） */
-function handleFormCancel() {
-  formVisible.value = false
-  formData.value = null
-  nextTick(() => formRef.value?.resetFields())
-}
 /** 打开导入对话框 */
 function handleImport() {
   importVisible.value = true
@@ -712,10 +512,9 @@ async function handleImportFile(file: File, sheetName?: string): Promise<TaktImp
 /** 导入完成回调：刷新列表；全部成功时延迟关闭对话框 */
 function handleImportSuccess(result: TaktImportResult) {
   loadData()
-
-      if (selectedMasterKey.value) {
+  if (selectedMasterKey.value) {
     materialDocumentItemPanelRef.value?.reload?.()
-      }
+  }
   if (result.fail === 0 && result.success > 0) {
     setTimeout(() => { importVisible.value = false }, 2000)
   }
@@ -760,47 +559,6 @@ async function handleExport() {
     loading.value = false
   }
 }
-/** 删除单行 */
-async function handleDeleteOne(record: MaterialDocumentRowRecord) {
-  Modal.confirm({
-    title: t('common.tip.confirm.delete.title'),
-    content: t('common.tip.confirm.delete.entity', { entity: pi.self(), name: t('common.tip.this.target', { target: pi.self() }) }),
-    okText: t('common.page.button.delete'),
-    cancelText: t('common.page.button.cancel'),
-    onOk: async () => {
-      await deleteMaterialDocumentById((record as any)[entityIdName])
-      message.success(t('common.feedback.deleted', { target: pi.self() }))
-      selectedRowKeys.value = []
-      selectedRows.value = []
-      selectedRow.value = null
-      syncMasterSelection(null)
-      loadData()
-    }
-  })
-}
-/** 批量删除选中行 */
-async function handleDelete() {
-  if (selectedRows.value.length === 0) {
-    message.warning(t('common.tip.select.to.action', { action: t('common.page.button.delete'), entity: pi.self() }))
-    return
-  }
-  Modal.confirm({
-    title: t('common.tip.confirm.delete.title'),
-    content: t('common.tip.confirm.delete.count', { entity: pi.self(), count: selectedRows.value.length }),
-    okText: t('common.page.button.delete'),
-    cancelText: t('common.page.button.cancel'),
-    onOk: async () => {
-      const ids = selectedRows.value.map((r: any) => r[entityIdName]).filter(Boolean)
-      await deleteMaterialDocumentBatch(ids)
-      message.success(t('common.feedback.deleted', { target: pi.self() }))
-      selectedRowKeys.value = []
-      selectedRows.value = []
-      selectedRow.value = null
-      syncMasterSelection(null)
-      loadData()
-    }
-  })
-}
 /** 打开高级查询抽屉 */
 function handleAdvancedQuery() {
   advancedQueryVisible.value = true
@@ -814,17 +572,7 @@ function handleAdvancedQuerySubmit() {
 }
 
 function handleAdvancedQueryReset() {
-  advancedQueryForm.value = {
-  plantCode: '',
-  materialCode: '',
-  materialDocumentCode: '',
-  postedBy: '',
-  materialDocumentStatus: undefined as number | undefined,
-  createdAtStart: '',
-  createdAtEnd: '',
-  extField: '',
-  remark: '',
-  }
+  advancedQueryForm.value = createEmptyAdvancedQueryForm()
 }
 
 /** 打开列设置抽屉 */

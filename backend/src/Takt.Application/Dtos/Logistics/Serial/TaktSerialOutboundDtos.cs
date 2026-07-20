@@ -46,7 +46,7 @@ public class TaktSerialOutboundDto : TaktCompanyDtoBase
     public string OutboundNo { get; set; } = string.Empty;
 
     /// <summary>
-    /// 出货发票号
+    /// 发货单号
     /// </summary>
     public string ShippingInvoiceNo { get; set; } = string.Empty;
 
@@ -124,7 +124,7 @@ public class TaktSerialOutboundQueryDto : TaktPagedQuery
     public string? OutboundNo { get; set; } = string.Empty;
 
     /// <summary>
-    /// 出货发票号
+    /// 发货单号
     /// </summary>
     public string? ShippingInvoiceNo { get; set; } = string.Empty;
 
@@ -226,9 +226,9 @@ public class TaktSerialOutboundCreateDto
     public string OutboundNo { get; set; } = string.Empty;
 
     /// <summary>
-    /// 出货发票号
+    /// 发货单号
     /// </summary>
-    [Required(ErrorMessage = "出货发票号不能为空")]
+    [Required(ErrorMessage = "发货单号不能为空")]
     public string ShippingInvoiceNo { get; set; } = string.Empty;
 
     /// <summary>
@@ -337,7 +337,7 @@ public class TaktSerialOutboundTemplateDto
     public string? OutboundNo { get; set; } = string.Empty;
 
     /// <summary>
-    /// 出货发票号
+    /// 发货单号
     /// </summary>
     public string? ShippingInvoiceNo { get; set; } = string.Empty;
 
@@ -424,7 +424,7 @@ public class TaktSerialOutboundImportDto
     public string? OutboundNo { get; set; } = string.Empty;
 
     /// <summary>
-    /// 出货发票号
+    /// 发货单号
     /// </summary>
     public string? ShippingInvoiceNo { get; set; } = string.Empty;
 
@@ -512,7 +512,7 @@ public class TaktSerialOutboundExportDto
     public string OutboundNo { get; set; } = string.Empty;
 
     /// <summary>
-    /// 出货发票号
+    /// 发货单号
     /// </summary>
     public string ShippingInvoiceNo { get; set; } = string.Empty;
 

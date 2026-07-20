@@ -48,6 +48,27 @@ public static class TaktSqlExecutorValidator
         if (executeOptions.Mode == TaktSqlExecuteMode.ReadOnly)
         {
             ValidateReadOnly(script, executeOptions);
+            return;
+        }
+        if (executeOptions.Mode == TaktSqlExecuteMode.NonQuery)
+        {
+            ValidateNonQuery(script);
+        }
+    }
+
+    /// <summary>
+    /// 非查询脚本校验：非空；禁止极其危险的语句
+    /// </summary>
+    /// <param name="script">已 Trim 的 SQL 文本</param>
+    /// <exception cref="TaktBusinessException">含危险语句时抛出</exception>
+    private static void ValidateNonQuery(string script)
+    {
+        if (Regex.IsMatch(
+                script,
+                @"\b(DROP\s+DATABASE|ALTER\s+DATABASE|SHUTDOWN)\b",
+                RegexOptions.IgnoreCase | RegexOptions.CultureInvariant))
+        {
+            throw new TaktBusinessException("SQL 脚本包含不允许的危险语句");
         }
     }
 

@@ -60,7 +60,7 @@
               >
                 <TaktSelect
                   v-model:value="formState.pcbaBoardType"
-                  dict-type="logistics_pcba_panel_category"
+                  dict-type="logistics_pcba_function_category"
                   :placeholder="pi.ph('pcbaBoardType')"
                 />
               </a-form-item>

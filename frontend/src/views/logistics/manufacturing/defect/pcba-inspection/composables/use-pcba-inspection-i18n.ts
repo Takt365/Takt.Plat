@@ -22,7 +22,6 @@ export const PCBAINSPECTION_SELF_I18N_KEY = buildEntitySelfI18nKey(PCBAINSPECTIO
 export const PCBAINSPECTION_LIST_FIELDS = [
   'plantCode',
   'prodCategory',
-  'prodDate',
   'prodOrderType',
   'prodOrderCode',
   'prodOrderQty',
@@ -38,7 +37,6 @@ export const PCBAINSPECTION_PLACEHOLDER = {
   companyDefaultCulture: 'optional',
   plantCode: 'optional',
   prodCategory: 'select',
-  prodDate: 'select',
   prodOrderType: 'optional',
   prodOrderCode: 'select',
   prodOrderQty: 'select',
@@ -56,8 +54,6 @@ export type PcbaInspectionField = keyof typeof PCBAINSPECTION_PLACEHOLDER
 export const PCBAINSPECTION_QUERY_STRING_FIELDS = [
   'plantCode',
   'prodCategory',
-  'prodDateStart',
-  'prodDateEnd',
   'prodOrderType',
   'prodOrderCode',
   'modelCode',

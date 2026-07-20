@@ -124,7 +124,7 @@ export const TAKT_EVENT_TRACK_FLUSH_MS_DEFAULT = 10000;
 export const TAKT_EVENT_TRACK_BATCH_MAX = 50;
 
 /** 排除 API 监控的路径片段（避免 track-batch 递归） */
-export const TAKT_API_TRACK_EXCLUDED_PATH = 'TaktEventTrackingLogs/track-batch';
+export const TAKT_API_TRACK_EXCLUDED_PATH = 'TaktTrackingLogs/track-batch';
 
 /**
  * 是否启用客户端性能监控总开关

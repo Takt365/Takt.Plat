@@ -279,6 +279,9 @@ function parseSecondPart(value: string): QuartzCronFieldState {
     second.cronEvery = '4'
     second.rangeStart = Number(start)
     second.rangeEnd = Number(end)
+  } else if (/^\d+$/.test(value)) {
+    second.cronEvery = '3'
+    second.specificSpecific = [Number(value)]
   } else {
     second.cronEvery = '1'
   }
@@ -302,6 +305,9 @@ function parseMinutePart(value: string): QuartzCronFieldState {
     minute.cronEvery = '4'
     minute.rangeStart = Number(start)
     minute.rangeEnd = Number(end)
+  } else if (/^\d+$/.test(value)) {
+    minute.cronEvery = '3'
+    minute.specificSpecific = [Number(value)]
   } else {
     minute.cronEvery = '1'
   }
@@ -325,6 +331,9 @@ function parseHourPart(value: string): QuartzCronFieldState {
     hour.cronEvery = '4'
     hour.rangeStart = Number(start)
     hour.rangeEnd = Number(end)
+  } else if (/^\d+$/.test(value)) {
+    hour.cronEvery = '3'
+    hour.specificSpecific = [Number(value)]
   } else {
     hour.cronEvery = '1'
   }
@@ -367,6 +376,10 @@ function parseDayWeekParts(dayValue: string, weekValue: string): Pick<QuartzCron
         day.cronEvery = '10'
         day.cronDaysNearestWeekday = Number(dayValue.split('W')[0])
         break
+      case /^\d+$/.test(dayValue):
+        day.cronEvery = '5'
+        day.specificSpecific = [Number(dayValue)]
+        break
       default:
         day.cronEvery = '1'
     }
@@ -389,6 +402,10 @@ function parseDayWeekParts(dayValue: string, weekValue: string): Pick<QuartzCron
       case /^\d+L$/.test(weekValue):
         day.cronEvery = '8'
         day.cronLastSpecificDomDay = Number(weekValue.replace('L', ''))
+        break
+      case /^\d+$/.test(weekValue):
+        day.cronEvery = '4'
+        week.specificSpecific = [Number(weekValue)]
         break
       default:
         day.cronEvery = '1'
@@ -414,6 +431,9 @@ function parseMonthPart(value: string): QuartzCronFieldState {
     month.cronEvery = '4'
     month.rangeStart = Number(start)
     month.rangeEnd = Number(end)
+  } else if (/^\d+$/.test(value)) {
+    month.cronEvery = '3'
+    month.specificSpecific = [Number(value)]
   } else {
     month.cronEvery = '1'
   }
@@ -445,4 +465,108 @@ export function parseQuartzCronExpression(expression: string): QuartzCronEditorS
     month: parseMonthPart(month),
     year: createDefaultQuartzCronEditorState().year,
   }
+}
+
+/** 人类可读说明用的字段标签（由调用方 i18n 注入） */
+export interface QuartzCronDescribeLabels {
+  everySecond: string
+  everyMinute: string
+  everyHour: string
+  everyDay: string
+  everyMonth: string
+  atTime: (h: string, m: string, s: string) => string
+  intervalSeconds: (start: string, step: string) => string
+  intervalMinutes: (start: string, step: string) => string
+  intervalHours: (start: string, step: string) => string
+  specificSeconds: (values: string) => string
+  specificMinutes: (values: string) => string
+  specificHours: (values: string) => string
+  specificDays: (values: string) => string
+  specificMonths: (values: string) => string
+  specificWeeks: (values: string) => string
+  weekday: (n: number) => string
+  unknown: string
+  join: string
+}
+
+/**
+ * 格式化两位时间片段
+ * @param n 数字
+ * @returns 两位字符串
+ */
+function pad2(n: number): string {
+  return String(Math.max(0, Math.trunc(n))).padStart(2, '0')
+}
+
+/**
+ * 将字段段简述为可读文案（无法识别时返回空串，由上层拼装）
+ * @param field 段原始文本
+ * @param kind second|minute|hour|day|month|week
+ * @param labels 文案
+ * @returns 简述；空表示该段用通配可不单独强调
+ */
+function describeFieldPart(
+  field: string,
+  kind: 'second' | 'minute' | 'hour' | 'day' | 'month' | 'week',
+  labels: QuartzCronDescribeLabels,
+): string {
+  const v = String(field ?? '').trim()
+  if (!v || v === '*' || v === '?') {
+    return ''
+  }
+  if (v.includes('/')) {
+    const [start, step] = v.split('/')
+    if (kind === 'second') return labels.intervalSeconds(start, step)
+    if (kind === 'minute') return labels.intervalMinutes(start, step)
+    if (kind === 'hour') return labels.intervalHours(start, step)
+  }
+  if (/^[\d,]+$/.test(v)) {
+    if (kind === 'second') return labels.specificSeconds(v)
+    if (kind === 'minute') return labels.specificMinutes(v)
+    if (kind === 'hour') return labels.specificHours(v)
+    if (kind === 'day') return labels.specificDays(v)
+    if (kind === 'month') return labels.specificMonths(v)
+    if (kind === 'week') {
+      const names = v.split(',').map((x) => labels.weekday(Number(x))).join(',')
+      return labels.specificWeeks(names)
+    }
+  }
+  return ''
+}
+
+/**
+ * 生成 Cron 人类可读说明（打开弹窗时展示原参数含义）
+ * @param expression Quartz 六段表达式
+ * @param labels i18n 文案
+ * @returns 说明文本；无法解析时返回 unknown
+ */
+export function describeQuartzCronExpression(expression: string, labels: QuartzCronDescribeLabels): string {
+  const trimmed = String(expression ?? '').trim()
+  if (!trimmed) {
+    return labels.unknown
+  }
+  const parts = trimmed.split(/\s+/)
+  if (parts.length < 6) {
+    return labels.unknown
+  }
+  const [second, minute, hour, day, month, week] = parts
+  // 高频：0 0 H * * ? → 每天 HH:00:00
+  if (/^\d+$/.test(second) && /^\d+$/.test(minute) && /^\d+$/.test(hour) && day === '*' && month === '*' && week === '?') {
+    return labels.atTime(pad2(Number(hour)), pad2(Number(minute)), pad2(Number(second)))
+  }
+  const chunks = [
+    describeFieldPart(second, 'second', labels),
+    describeFieldPart(minute, 'minute', labels),
+    describeFieldPart(hour, 'hour', labels),
+    describeFieldPart(day, 'day', labels),
+    describeFieldPart(month, 'month', labels),
+    describeFieldPart(week, 'week', labels),
+  ].filter(Boolean)
+  if (chunks.length === 0) {
+    if (second === '*' && minute === '*' && hour === '*') {
+      return labels.everySecond
+    }
+    return labels.unknown
+  }
+  return chunks.join(labels.join)
 }

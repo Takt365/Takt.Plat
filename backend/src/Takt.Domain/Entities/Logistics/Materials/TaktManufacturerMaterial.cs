@@ -39,7 +39,7 @@ namespace Takt.Domain.Entities.Logistics.Materials;
 public class TaktManufacturerMaterial : TaktCompanyEntityBase
 {
     /// <summary>
-    /// 制造商 ID（关联 TaktManufacturer.Id，选项 TaktManufacturers/options）
+    /// 制造商 ID（选项 TaktManufacturers/options，DictValue=Id）
     /// </summary>
     [SugarColumn(ColumnName = "manufacturer_id", ColumnDescription = "制造商ID", ColumnDataType = "bigint", IsNullable = false)]
     public long ManufacturerId { get; set; }
@@ -75,7 +75,7 @@ public class TaktManufacturerMaterial : TaktCompanyEntityBase
     public string? ManufacturerMaterialSpecification { get; set; }
 
     /// <summary>
-    /// 物料编码（关联 TaktMaterial.MaterialCode，选项 TaktMaterials/options）
+    /// 物料编码（选项 TaktMaterialPlants/options，DictValue=MaterialCode，ExtValue=PlantCode）
     /// </summary>
     [SugarColumn(ColumnName = "material_code", ColumnDescription = "物料编码", ColumnDataType = "nvarchar", Length = 20, IsNullable = false)]
     public string MaterialCode { get; set; } = string.Empty;

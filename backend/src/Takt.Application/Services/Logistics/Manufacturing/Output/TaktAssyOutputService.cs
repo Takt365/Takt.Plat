@@ -16,11 +16,10 @@ using Mapster;
 using SqlSugar;
 using Takt.Application.Dtos.Logistics.Manufacturing.Output;
 using Takt.Application.Services.Logistics.Manufacturing.Defect;
-using Takt.Domain.Entities.Foundation;
 using Takt.Domain.Entities.Logistics.Manufacturing.Bom;
 using Takt.Domain.Entities.Logistics.Manufacturing.Defect;
 using Takt.Domain.Entities.Logistics.Manufacturing.Output;
-using Takt.Domain.Entities.Logistics.Manufacturing.Planning;
+using Takt.Domain.Entities.Logistics.Manufacturing.Aps;
 using Takt.Domain.Interfaces;
 using Takt.Domain.Repositories;
 using Takt.Shared.Constants;
@@ -48,7 +47,6 @@ public class TaktAssyOutputService : TaktServiceBase, ITaktAssyOutputService
     private readonly ITaktCompanyRepository<TaktProductionChangeover> _productionChangeoverRepository;
     private readonly ITaktLineNumberGenerator _lineNumberGenerator;
     private readonly ITaktUniqueValidator _uniqueValidator;
-    private readonly ITaktTenantRepository<TaktDictData> _dictDataRepository;
 
     /// <summary>
     /// 构造函数
@@ -65,7 +63,6 @@ public class TaktAssyOutputService : TaktServiceBase, ITaktAssyOutputService
     /// <param name="productionChangeoverRepository">生产切换记录仓储</param>
     /// <param name="lineNumberGenerator">明细行号生成器</param>
     /// <param name="uniqueValidator">唯一性验证器</param>
-    /// <param name="dictDataRepository">字典数据仓储（多选原因 sortOrder 排序）</param>
     /// <param name="userContext">用户上下文</param>
     /// <param name="localizationService">本地化服务</param>
     public TaktAssyOutputService(
@@ -81,7 +78,6 @@ public class TaktAssyOutputService : TaktServiceBase, ITaktAssyOutputService
         ITaktCompanyRepository<TaktProductionChangeover> productionChangeoverRepository,
         ITaktLineNumberGenerator lineNumberGenerator,
         ITaktUniqueValidator uniqueValidator,
-        ITaktTenantRepository<TaktDictData> dictDataRepository,
         ITaktUserContext? userContext = null,
         ITaktLocalizationService? localizationService = null)
         : base(userContext, localizationService)
@@ -98,7 +94,6 @@ public class TaktAssyOutputService : TaktServiceBase, ITaktAssyOutputService
         _productionChangeoverRepository = productionChangeoverRepository;
         _lineNumberGenerator = lineNumberGenerator;
         _uniqueValidator = uniqueValidator;
-        _dictDataRepository = dictDataRepository;
     }
 
     /// <summary>
@@ -498,12 +493,6 @@ public class TaktAssyOutputService : TaktServiceBase, ITaktAssyOutputService
             await RefreshAssyOutputDetailMixedProdBucketsAsync(bucketsToRefresh);
             return;
         }
-        var (dictSnapshot, dictSortMaps) = await TaktOutputDictMultiFieldsHelper.LoadAsync(_dictDataRepository, CurrentTenantCode);
-        foreach (var childDto in dto.AssyOutputDetails)
-        {
-            (childDto.DowntimeReason, childDto.UnachievedReason) = TaktOutputDictMultiFieldsHelper.NormalizeFields(
-                childDto.DowntimeReason, childDto.UnachievedReason, dictSnapshot, dictSortMaps);
-        }
         var assyoutputdetails = dto.AssyOutputDetails.Adapt<List<TaktAssyOutputDetail>>();
         foreach (var child in assyoutputdetails)
         {
@@ -613,7 +602,6 @@ public class TaktAssyOutputService : TaktServiceBase, ITaktAssyOutputService
             .Where(x => !string.IsNullOrWhiteSpace(x.TimePeriod))
             .ToDictionary(x => x.TimePeriod.Trim(), x => x, StringComparer.Ordinal);
         var bucketsToRefresh = CollectAssyOutputDetailMixedProdBuckets(entity, existingList);
-        var (dictSnapshot, dictSortMaps) = await TaktOutputDictMultiFieldsHelper.LoadAsync(_dictDataRepository, CurrentTenantCode);
         var operationRatePercent = await TaktAssyOutputDerivedFieldsHelper.ResolvePersonnelOperationRatePercentAsync(
             _standardOperationRateRepository,
             CurrentTenantCode,
@@ -623,8 +611,6 @@ public class TaktAssyOutputService : TaktServiceBase, ITaktAssyOutputService
         for (var i = 0; i < dto.AssyOutputDetails.Count; i++)
         {
             var childDto = dto.AssyOutputDetails[i];
-            (childDto.DowntimeReason, childDto.UnachievedReason) = TaktOutputDictMultiFieldsHelper.NormalizeFields(
-                childDto.DowntimeReason, childDto.UnachievedReason, dictSnapshot, dictSortMaps);
             var periodKey = (childDto.TimePeriod ?? string.Empty).Trim();
             if (string.IsNullOrWhiteSpace(periodKey) || !existingByPeriod.TryGetValue(periodKey, out var existing))
             {

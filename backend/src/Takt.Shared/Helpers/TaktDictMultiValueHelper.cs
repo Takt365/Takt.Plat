@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Shared.Helpers
 // 文件名称：TaktDictMultiValueHelper.cs
-// 功能描述：多选字典逗号分隔串：sortOrder 排序、DictValue↔DictLabel 转换（与前端 takt-dict-convert.ts 对齐）
+// 功能描述：多选字典逗号分隔串：sortOrder 排序、DictValue↔DictLabel 转换（单选见 TaktDictValueHelper；与前端 takt-dict-convert.ts 对齐）
 //
 // 版权信息：Copyright (c) 2026 Takt  All rights reserved.
 // 免责声明：此软件使用 MIT License，作者不承担任何使用风险。

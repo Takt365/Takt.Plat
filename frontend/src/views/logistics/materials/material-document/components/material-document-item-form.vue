@@ -21,7 +21,7 @@
     >
       <a-tab-pane
         key="tab-0"
-        :tab="t('common.page.form.tabs.basicinfo')"
+        :tab="t('common.page.form.tabs.basicinfo') + ' (1/2)'"
         force-render
       >
         <div :class="formContentClass">
@@ -130,6 +130,96 @@
                 />
               </a-form-item>
             </a-col>
+            <a-col :span="12">
+              <a-form-item
+                :label="pi.label('projectCode')"
+                name="projectCode"
+              >
+                <a-input
+                  v-model:value="formState.projectCode"
+                  :placeholder="pi.ph('projectCode')"
+                  show-count
+                  :maxlength="20"
+                  allow-clear
+                  :disabled="!!formData?.materialDocumentItemId"
+                />
+              </a-form-item>
+            </a-col>
+            <a-col :span="12">
+              <a-form-item
+                :label="pi.label('localCurrencyAmount')"
+                name="localCurrencyAmount"
+              >
+                <a-input-number
+                  v-model:value="formState.localCurrencyAmount"
+                  :placeholder="pi.ph('localCurrencyAmount')"
+                  style="width: 100%"
+                />
+              </a-form-item>
+            </a-col>
+          </a-row>
+        </div>
+      </a-tab-pane>
+      <a-tab-pane
+        key="tab-1"
+        :tab="t('common.page.form.tabs.basicinfo') + ' (2/2)'"
+        force-render
+      >
+        <div :class="formContentClass">
+          <a-row :gutter="24">
+            <a-col :span="12">
+              <a-form-item
+                :label="pi.label('documentDate')"
+                name="documentDate"
+              >
+                <a-date-picker
+                  v-model:value="formState.documentDate"
+                  :placeholder="pi.ph('documentDate')"
+                  value-format="YYYY-MM-DD"
+                  style="width: 100%"
+                />
+              </a-form-item>
+            </a-col>
+            <a-col :span="12">
+              <a-form-item
+                :label="pi.label('referenceDocumentCode')"
+                name="referenceDocumentCode"
+              >
+                <a-input
+                  v-model:value="formState.referenceDocumentCode"
+                  :placeholder="pi.ph('referenceDocumentCode')"
+                  show-count
+                  :maxlength="20"
+                  allow-clear
+                  :disabled="!!formData?.materialDocumentItemId"
+                />
+              </a-form-item>
+            </a-col>
+            <a-col :span="12">
+              <a-form-item
+                :label="pi.label('customerCode')"
+                name="customerCode"
+              >
+                <TaktSelect
+                  v-model:value="formState.customerCode"
+                  api-url="TaktCustomers/options"
+                  :placeholder="pi.ph('customerCode')"
+                  :disabled="!!formData?.materialDocumentItemId"
+                />
+              </a-form-item>
+            </a-col>
+            <a-col :span="12">
+              <a-form-item
+                :label="pi.label('isObsolete')"
+                name="isObsolete"
+              >
+                <TaktSelect
+                  v-model:value="formState.isObsolete"
+                  dict-type="sys_yes_no_type"
+                  :placeholder="pi.ph('isObsolete')"
+                />
+              </a-form-item>
+            </a-col>
           </a-row>
         </div>
       </a-tab-pane>
@@ -161,7 +251,7 @@ const formContentClass = computed(() => (formFields.length > 10 ? 'takt-form-con
 /** 当前激活的 Tab key */
 const activeTab = ref('tab-0')
 /** CreateDto 字段名列表（与 formState 键对齐） */
-const formFields = ["lineNumber","warehouseCode","movementType","postingDate","quantity","specialStock","purchaseOrderCode","productionOrderCode"]
+const formFields = ["lineNumber","warehouseCode","movementType","postingDate","quantity","specialStock","purchaseOrderCode","productionOrderCode","projectCode","localCurrencyAmount","documentDate","referenceDocumentCode","customerCode","isObsolete"]
 
 
 
@@ -274,6 +364,39 @@ const rules = computed<Record<string, Rule[]>>(() => ({
     },
     trigger: 'change'
   }],
+  localCurrencyAmount: [{
+    validator: async (_rule, value) => {
+      if (value === undefined || value === null || value === '') {
+        return Promise.reject(pi.ph('localCurrencyAmount'))
+      }
+      const num = typeof value === 'number' ? value : Number(value)
+      if (!Number.isFinite(num)) {
+        return Promise.reject(pi.ph('localCurrencyAmount'))
+      }
+      return Promise.resolve()
+    },
+    trigger: 'change'
+  }],
+  documentDate: [
+    {
+      required: true,
+      message: pi.ph('documentDate'),
+      trigger: 'change'
+    }
+  ],
+  isObsolete: [{
+    validator: async (_rule, value) => {
+      if (value === undefined || value === null || value === '') {
+        return Promise.reject(pi.ph('isObsolete'))
+      }
+      const num = typeof value === 'number' ? value : Number(value)
+      if (!Number.isFinite(num)) {
+        return Promise.reject(pi.ph('isObsolete'))
+      }
+      return Promise.resolve()
+    },
+    trigger: 'change'
+  }],
 }))
 
 /** 校验表单（失败 throw，供父级 handleFormSubmit 捕获） */
@@ -292,6 +415,14 @@ function getValues(): Record<string, any> {
   if ('quantity' in payload) {
     const rawquantity = payload.quantity
     payload.quantity = typeof rawquantity === 'number' ? rawquantity : Number(rawquantity)
+  }
+  if ('localCurrencyAmount' in payload) {
+    const rawlocalCurrencyAmount = payload.localCurrencyAmount
+    payload.localCurrencyAmount = typeof rawlocalCurrencyAmount === 'number' ? rawlocalCurrencyAmount : Number(rawlocalCurrencyAmount)
+  }
+  if ('isObsolete' in payload) {
+    const rawisObsolete = payload.isObsolete
+    payload.isObsolete = typeof rawisObsolete === 'number' ? rawisObsolete : Number(rawisObsolete)
   }
   if ('sortOrder' in payload) delete payload.sortOrder
   payload.materialDocumentId = props.masterId

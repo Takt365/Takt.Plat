@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Infrastructure.Data.Seeds.I18nSeedData.Accounting.Financial
 // 文件名称：TaktExpenseDetailI18nSeedData.cs
-// 创建时间：2026-07-09
+// 创建时间：2026-07-20
 // 创建人：Takt365(Auto Generated)
 // 功能描述：TaktExpenseDetail 实体字段国际化种子（无对应 frontend locales；TranslationText 取自 ColumnDescription，ContextNote 取自属性 XML summary）
 // 
@@ -163,13 +163,13 @@ public class TaktExpenseDetailI18nSeedData : ITaktSeedDataCoordinator
             new TranslationSeedItem("entity.expensedetail.itemamount", "zh-HK", "金额_hk", "金额"),
 
             // entity.expensedetail.accounttitle
-            new TranslationSeedItem("entity.expensedetail.accounttitle", "en-US", "会计科目_us", "会计科目（关联 TaktAccountTitle.AccountTitleCode，选项 TaktAccountTitles/options）"),
+            new TranslationSeedItem("entity.expensedetail.accounttitle", "en-US", "会计科目_us", "会计科目（选项 TaktAccountTitles/options，DictValue=Id）"),
             // entity.expensedetail.accounttitle
-            new TranslationSeedItem("entity.expensedetail.accounttitle", "ja-JP", "会计科目_jp", "会计科目（关联 TaktAccountTitle.AccountTitleCode，选项 TaktAccountTitles/options）"),
+            new TranslationSeedItem("entity.expensedetail.accounttitle", "ja-JP", "会计科目_jp", "会计科目（选项 TaktAccountTitles/options，DictValue=Id）"),
             // entity.expensedetail.accounttitle
-            new TranslationSeedItem("entity.expensedetail.accounttitle", "zh-CN", "会计科目", "会计科目（关联 TaktAccountTitle.AccountTitleCode，选项 TaktAccountTitles/options）"),
+            new TranslationSeedItem("entity.expensedetail.accounttitle", "zh-CN", "会计科目", "会计科目（选项 TaktAccountTitles/options，DictValue=Id）"),
             // entity.expensedetail.accounttitle
-            new TranslationSeedItem("entity.expensedetail.accounttitle", "zh-HK", "会计科目_hk", "会计科目（关联 TaktAccountTitle.AccountTitleCode，选项 TaktAccountTitles/options）"),
+            new TranslationSeedItem("entity.expensedetail.accounttitle", "zh-HK", "会计科目_hk", "会计科目（选项 TaktAccountTitles/options，DictValue=Id）"),
 
             // entity.expensedetail.invoiceno
             new TranslationSeedItem("entity.expensedetail.invoiceno", "en-US", "发票号码_us", "发票号码"),

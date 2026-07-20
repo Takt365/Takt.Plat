@@ -74,7 +74,7 @@ public class TaktBenefitItem : TaktCompanyEntityBase
     [SugarColumn(ColumnName = "is_mandatory", ColumnDescription = "是否强制福利", ColumnDataType = "int", IsNullable = false, DefaultValue = "0")]
     public int IsMandatory { get; set; } = 0;
     /// <summary>
-    /// 关联工厂（关联 TaktPlant.PlantCode，选项 TaktPlants/options）
+    /// 关联工厂（选项 TaktPlants/options，DictValue=Id）
     /// </summary>
     [SugarColumn(ColumnName = "related_plant", ColumnDescription = "关联工厂", ColumnDataType = "nvarchar", Length = 4, IsNullable = false)]
     public string RelatedPlant { get; set; } = string.Empty;
