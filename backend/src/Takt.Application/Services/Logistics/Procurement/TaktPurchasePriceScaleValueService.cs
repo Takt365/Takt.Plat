@@ -111,14 +111,14 @@ public class TaktPurchasePriceScaleValueService : TaktServiceBase, ITaktPurchase
     {
         var entity = dto.Adapt<TaktPurchasePriceScaleValue>();
         entity.IsObsolete = 0;
-        var isUnique_ix_takt_logistics_materials_purchase_price_scale_value_unique = await _uniqueValidator.IsUniqueAsync(
+        var isUnique_ix_takt_logistics_procurement_purchase_price_scale_value_unique = await _uniqueValidator.IsUniqueAsync(
             _purchasePriceScaleValueRepository,
             x => x.PurchasePriceItemId == entity.PurchasePriceItemId
                 && x.PurchasePriceCode == entity.PurchasePriceCode
                 && x.PurchasePriceSeq == entity.PurchasePriceSeq
                 && x.PurchaseScaleSeq == entity.PurchaseScaleSeq
                 && x.ScaleValue == entity.ScaleValue);
-        if (!isUnique_ix_takt_logistics_materials_purchase_price_scale_value_unique)
+        if (!isUnique_ix_takt_logistics_procurement_purchase_price_scale_value_unique)
         {
             throw new TaktBusinessException("采购价格价值等级的PurchasePriceItemId、PurchasePriceCode、PurchasePriceSeq、PurchaseScaleSeq、ScaleValue已存在");
         }
@@ -140,7 +140,7 @@ public class TaktPurchasePriceScaleValueService : TaktServiceBase, ITaktPurchase
             throw new TaktBusinessException("采购价格价值等级不存在");
         }
         dto.Adapt(entity);
-        var isUnique_ix_takt_logistics_materials_purchase_price_scale_value_unique = await _uniqueValidator.IsUniqueAsync(
+        var isUnique_ix_takt_logistics_procurement_purchase_price_scale_value_unique = await _uniqueValidator.IsUniqueAsync(
             _purchasePriceScaleValueRepository,
             x => x.PurchasePriceItemId == entity.PurchasePriceItemId
                 && x.PurchasePriceCode == entity.PurchasePriceCode
@@ -148,7 +148,7 @@ public class TaktPurchasePriceScaleValueService : TaktServiceBase, ITaktPurchase
                 && x.PurchaseScaleSeq == entity.PurchaseScaleSeq
                 && x.ScaleValue == entity.ScaleValue,
             id);
-        if (!isUnique_ix_takt_logistics_materials_purchase_price_scale_value_unique)
+        if (!isUnique_ix_takt_logistics_procurement_purchase_price_scale_value_unique)
         {
             throw new TaktBusinessException("采购价格价值等级的PurchasePriceItemId、PurchasePriceCode、PurchasePriceSeq、PurchaseScaleSeq、ScaleValue已存在");
         }
@@ -260,14 +260,14 @@ public class TaktPurchasePriceScaleValueService : TaktServiceBase, ITaktPurchase
                 {
                     throw new TaktBusinessException("与Excel中其他行重复（PurchasePriceItemId、PurchasePriceCode、PurchasePriceSeq、PurchaseScaleSeq、ScaleValue）");
                 }
-                var isUnique_ix_takt_logistics_materials_purchase_price_scale_value_unique = await _uniqueValidator.IsUniqueAsync(
+                var isUnique_ix_takt_logistics_procurement_purchase_price_scale_value_unique = await _uniqueValidator.IsUniqueAsync(
                     _purchasePriceScaleValueRepository,
                     x => x.PurchasePriceItemId == entity.PurchasePriceItemId
                         && x.PurchasePriceCode == entity.PurchasePriceCode
                         && x.PurchasePriceSeq == entity.PurchasePriceSeq
                         && x.PurchaseScaleSeq == entity.PurchaseScaleSeq
                         && x.ScaleValue == entity.ScaleValue);
-                if (!isUnique_ix_takt_logistics_materials_purchase_price_scale_value_unique)
+                if (!isUnique_ix_takt_logistics_procurement_purchase_price_scale_value_unique)
                 {
                     throw new TaktBusinessException("采购价格价值等级的PurchasePriceItemId、PurchasePriceCode、PurchasePriceSeq、PurchaseScaleSeq、ScaleValue已存在");
                 }

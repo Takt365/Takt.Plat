@@ -18,12 +18,12 @@ namespace Takt.Domain.Entities.Logistics.Manufacturing.Aps;
 /// <summary>
 /// 生产工单实体
 /// </summary>
-[SugarTable("takt_logistics_manufacturing_planning_production_order", "生产工单表")]
+[SugarTable("takt_logistics_manufacturing_aps_production_order", "生产工单表")]
 [SugarIndex("ix_production_order_tenant", nameof(TenantCode), OrderByType.Asc, nameof(CompanyCode), OrderByType.Asc, false)]
 [SugarIndex("ix_production_order_is_deleted", nameof(TenantCode), OrderByType.Asc, nameof(CompanyCode), OrderByType.Asc, nameof(IsDeleted), OrderByType.Asc, false)]
-[SugarIndex("ix_takt_logistics_manufacturing_planning_production_order_plant_order_unique", nameof(TenantCode), OrderByType.Asc, nameof(CompanyCode), OrderByType.Asc, nameof(PlantCode), OrderByType.Asc, nameof(ProdOrderType), OrderByType.Asc, nameof(ProdOrderCode), OrderByType.Asc, nameof(MaterialCode), OrderByType.Asc, true)]
-[SugarIndex("ix_takt_logistics_manufacturing_planning_production_order_material_code", nameof(TenantCode), OrderByType.Asc, nameof(CompanyCode), OrderByType.Asc, nameof(MaterialCode), OrderByType.Asc, false)]
-[SugarIndex("ix_takt_logistics_manufacturing_planning_production_order_plant_code", nameof(TenantCode), OrderByType.Asc, nameof(CompanyCode), OrderByType.Asc, nameof(PlantCode), OrderByType.Asc, false)]
+[SugarIndex("ix_takt_logistics_manufacturing_aps_production_order_plant_order_unique", nameof(TenantCode), OrderByType.Asc, nameof(CompanyCode), OrderByType.Asc, nameof(PlantCode), OrderByType.Asc, nameof(ProdOrderType), OrderByType.Asc, nameof(ProdOrderCode), OrderByType.Asc, nameof(MaterialCode), OrderByType.Asc, true)]
+[SugarIndex("ix_takt_logistics_manufacturing_aps_production_order_material_code", nameof(TenantCode), OrderByType.Asc, nameof(CompanyCode), OrderByType.Asc, nameof(MaterialCode), OrderByType.Asc, false)]
+[SugarIndex("ix_takt_logistics_manufacturing_aps_production_order_plant_code", nameof(TenantCode), OrderByType.Asc, nameof(CompanyCode), OrderByType.Asc, nameof(PlantCode), OrderByType.Asc, false)]
 public class TaktProductionOrder : TaktCompanyEntityBase
 {
     /// <summary>

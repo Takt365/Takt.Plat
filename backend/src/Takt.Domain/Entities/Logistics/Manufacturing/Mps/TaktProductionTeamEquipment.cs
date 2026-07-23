@@ -18,12 +18,12 @@ namespace Takt.Domain.Entities.Logistics.Manufacturing.Mps;
 /// <summary>
 /// 生产班组设备组明细（主子表；PCBA 线体生产设备及台数）
 /// </summary>
-[SugarTable("takt_logistics_manufacturing_planning_production_team_equipment", "生产班组设备组表")]
+[SugarTable("takt_logistics_manufacturing_mps_production_team_equipment", "生产班组设备组表")]
 [SugarIndex("ix_production_team_equipment_tenant", nameof(TenantCode), OrderByType.Asc, nameof(CompanyCode), OrderByType.Asc, false)]
 [SugarIndex("ix_production_team_equipment_is_deleted", nameof(TenantCode), OrderByType.Asc, nameof(CompanyCode), OrderByType.Asc, nameof(IsDeleted), OrderByType.Asc, false)]
-[SugarIndex("ix_takt_logistics_manufacturing_planning_production_team_equipment_unique", nameof(TenantCode), OrderByType.Asc, nameof(CompanyCode), OrderByType.Asc, nameof(PlantCode), OrderByType.Asc, nameof(ProductionTeamId), OrderByType.Asc, nameof(ProductionEquipmentId), OrderByType.Asc, true)]
-[SugarIndex("ix_takt_logistics_manufacturing_planning_production_team_equipment_line_unique", nameof(TenantCode), OrderByType.Asc, nameof(CompanyCode), OrderByType.Asc, nameof(ProductionTeamId), OrderByType.Asc, nameof(LineNumber), OrderByType.Asc, nameof(ProductionEquipmentCode), OrderByType.Asc, true)]
-[SugarIndex("ix_takt_logistics_manufacturing_planning_production_team_equipment_team_code", nameof(TenantCode), OrderByType.Asc, nameof(CompanyCode), OrderByType.Asc, nameof(TeamCode), OrderByType.Asc, false)]
+[SugarIndex("ix_takt_logistics_manufacturing_mps_production_team_equipment_unique", nameof(TenantCode), OrderByType.Asc, nameof(CompanyCode), OrderByType.Asc, nameof(PlantCode), OrderByType.Asc, nameof(ProductionTeamId), OrderByType.Asc, nameof(ProductionEquipmentId), OrderByType.Asc, true)]
+[SugarIndex("ix_takt_logistics_manufacturing_mps_production_team_equipment_line_unique", nameof(TenantCode), OrderByType.Asc, nameof(CompanyCode), OrderByType.Asc, nameof(ProductionTeamId), OrderByType.Asc, nameof(LineNumber), OrderByType.Asc, nameof(ProductionEquipmentCode), OrderByType.Asc, true)]
+[SugarIndex("ix_takt_logistics_manufacturing_mps_production_team_equipment_team_code", nameof(TenantCode), OrderByType.Asc, nameof(CompanyCode), OrderByType.Asc, nameof(TeamCode), OrderByType.Asc, false)]
 public class TaktProductionTeamEquipment : TaktCompanyEntityBase
 {
     /// <summary>

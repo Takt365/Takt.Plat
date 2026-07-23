@@ -397,16 +397,16 @@ public class TaktMenuLevel2SeedData
             insertCount += insertLogistics4;
             updateCount += updateLogistics4;
 
-            var (insertLogistics5, updateLogistics5) = await CreateOrUpdateMenuAsync(menuRepository, sqlSugarContext, tenantCode, "LOGISTICS_SERVICE", menu =>
+            var (insertLogistics5, updateLogistics5) = await CreateOrUpdateMenuAsync(menuRepository, sqlSugarContext, tenantCode, "LOGISTICS_CUSTOMER_SERVICE", menu =>
             {
                 menu.MenuName = "客户服务";
-                menu.MenuCode = "LOGISTICS_SERVICE";
-                menu.I18nKey = "menu.logistics.service._self";
+                menu.MenuCode = "LOGISTICS_CUSTOMER_SERVICE";
+                menu.I18nKey = "menu.logistics.customer.service._self";
                 menu.Icon = "RiCustomerServiceLine";
                 menu.ParentId = logisticsMenu.Id;
                 menu.MenuType = 0;
-                menu.RoutePath = "/logistics/service";
-                menu.ComponentPath = "logistics/service";
+                menu.RoutePath = "/logistics/customer-service";
+                menu.ComponentPath = "logistics/customer-service";
                 menu.SortOrder = 6;
                 menu.MenuStatus = 1;
                 menu.IsVisible = 1;

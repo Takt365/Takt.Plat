@@ -18,11 +18,11 @@ namespace Takt.Domain.Entities.Logistics.Manufacturing.Aps;
 /// <summary>
 /// 计划订单（MRP 自制件净需求固化为可排程计划订单，下推 APS）
 /// </summary>
-[SugarTable("takt_logistics_manufacturing_planning_planned_order", "计划订单表")]
+[SugarTable("takt_logistics_manufacturing_aps_planned_order", "APS计划订单表")]
 [SugarIndex("ix_planned_order_tenant", nameof(TenantCode), OrderByType.Asc, nameof(CompanyCode), OrderByType.Asc, false)]
 [SugarIndex("ix_planned_order_is_deleted", nameof(TenantCode), OrderByType.Asc, nameof(CompanyCode), OrderByType.Asc, nameof(IsDeleted), OrderByType.Asc, false)]
-[SugarIndex("ix_takt_logistics_manufacturing_planning_planned_order_unique", nameof(TenantCode), OrderByType.Asc, nameof(CompanyCode), OrderByType.Asc, nameof(PlantCode), OrderByType.Asc, nameof(PlannedOrderCode), OrderByType.Asc, true)]
-[SugarIndex("ix_takt_logistics_manufacturing_planning_planned_order_mrp_item", nameof(TenantCode), OrderByType.Asc, nameof(CompanyCode), OrderByType.Asc, nameof(MaterialRequirementsPlanningItemId), OrderByType.Asc, false)]
+[SugarIndex("ix_takt_logistics_manufacturing_aps_planned_order_unique", nameof(TenantCode), OrderByType.Asc, nameof(CompanyCode), OrderByType.Asc, nameof(PlantCode), OrderByType.Asc, nameof(PlannedOrderCode), OrderByType.Asc, true)]
+[SugarIndex("ix_takt_logistics_manufacturing_aps_planned_order_mrp_item", nameof(TenantCode), OrderByType.Asc, nameof(CompanyCode), OrderByType.Asc, nameof(MaterialRequirementsPlanningItemId), OrderByType.Asc, false)]
 public class TaktPlannedOrder : TaktCompanyEntityBase
 {
     /// <summary>

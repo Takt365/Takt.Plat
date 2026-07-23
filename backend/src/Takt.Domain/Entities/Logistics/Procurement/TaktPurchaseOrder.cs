@@ -18,13 +18,13 @@ namespace Takt.Domain.Entities.Logistics.Procurement;
 /// <summary>
 /// Takt采购订单实体
 /// </summary>
-[SugarTable("takt_logistics_materials_purchase_order", "采购订单表")]
+[SugarTable("takt_logistics_procurement_purchase_order", "采购订单表")]
 [SugarIndex("ix_purchase_order_tenant", nameof(TenantCode), OrderByType.Asc, nameof(CompanyCode), OrderByType.Asc, false)]
 [SugarIndex("ix_purchase_order_is_deleted", nameof(TenantCode), OrderByType.Asc, nameof(CompanyCode), OrderByType.Asc, nameof(IsDeleted), OrderByType.Asc, false)]
-[SugarIndex("ix_takt_logistics_materials_purchase_order_po_unique", nameof(TenantCode), OrderByType.Asc, nameof(CompanyCode), OrderByType.Asc, nameof(PlantCode), OrderByType.Asc, nameof(PurchaseOrderCode), OrderByType.Asc, nameof(SupplierCode), OrderByType.Asc, nameof(OrderDate), OrderByType.Asc, true)]
-[SugarIndex("ix_takt_logistics_materials_purchase_order_order_date", nameof(TenantCode), OrderByType.Asc, nameof(CompanyCode), OrderByType.Asc, nameof(OrderDate), OrderByType.Desc, false)]
-[SugarIndex("ix_takt_logistics_materials_purchase_order_order_status", nameof(TenantCode), OrderByType.Asc, nameof(CompanyCode), OrderByType.Asc, nameof(OrderStatus), OrderByType.Asc, false)]
-[SugarIndex("ix_takt_logistics_materials_purchase_order_purchase_group", nameof(TenantCode), OrderByType.Asc, nameof(CompanyCode), OrderByType.Asc, nameof(PurchaseGroup), OrderByType.Asc, false)]
+[SugarIndex("ix_takt_logistics_procurement_purchase_order_po_unique", nameof(TenantCode), OrderByType.Asc, nameof(CompanyCode), OrderByType.Asc, nameof(PlantCode), OrderByType.Asc, nameof(PurchaseOrderCode), OrderByType.Asc, nameof(SupplierCode), OrderByType.Asc, nameof(OrderDate), OrderByType.Asc, true)]
+[SugarIndex("ix_takt_logistics_procurement_purchase_order_order_date", nameof(TenantCode), OrderByType.Asc, nameof(CompanyCode), OrderByType.Asc, nameof(OrderDate), OrderByType.Desc, false)]
+[SugarIndex("ix_takt_logistics_procurement_purchase_order_order_status", nameof(TenantCode), OrderByType.Asc, nameof(CompanyCode), OrderByType.Asc, nameof(OrderStatus), OrderByType.Asc, false)]
+[SugarIndex("ix_takt_logistics_procurement_purchase_order_purchase_group", nameof(TenantCode), OrderByType.Asc, nameof(CompanyCode), OrderByType.Asc, nameof(PurchaseGroup), OrderByType.Asc, false)]
 public class TaktPurchaseOrder : TaktCompanyEntityBase
 {
     /// <summary>

@@ -18,10 +18,10 @@ namespace Takt.Domain.Entities.Logistics.Manufacturing.Aps;
 /// <summary>
 /// 工作中心资源（设备/人员/模具等）
 /// </summary>
-[SugarTable("takt_logistics_manufacturing_scheduling_work_center_resource", "工作中心资源表")]
+[SugarTable("takt_logistics_manufacturing_aps_work_center_resource", "工作中心资源表")]
 [SugarIndex("ix_work_center_resource_tenant", nameof(TenantCode), OrderByType.Asc, nameof(CompanyCode), OrderByType.Asc, false)]
 [SugarIndex("ix_work_center_resource_is_deleted", nameof(TenantCode), OrderByType.Asc, nameof(CompanyCode), OrderByType.Asc, nameof(IsDeleted), OrderByType.Asc, false)]
-[SugarIndex("ix_takt_logistics_manufacturing_scheduling_wc_resource_unique", nameof(TenantCode), OrderByType.Asc, nameof(CompanyCode), OrderByType.Asc, nameof(WorkCenterId), OrderByType.Asc, nameof(ResourceCode), OrderByType.Asc, true)]
+[SugarIndex("ix_takt_logistics_manufacturing_aps_work_center_resource_unique", nameof(TenantCode), OrderByType.Asc, nameof(CompanyCode), OrderByType.Asc, nameof(WorkCenterId), OrderByType.Asc, nameof(ResourceCode), OrderByType.Asc, true)]
 public class TaktWorkCenterResource : TaktCompanyEntityBase
 {
     /// <summary>

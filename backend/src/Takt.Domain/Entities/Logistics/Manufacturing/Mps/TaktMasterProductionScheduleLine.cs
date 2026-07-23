@@ -18,11 +18,11 @@ namespace Takt.Domain.Entities.Logistics.Manufacturing.Mps;
 /// <summary>
 /// 主生产计划 MPS 行（MDS 明细 + 时间桶 + ATP；下推 MRP）
 /// </summary>
-[SugarTable("takt_logistics_manufacturing_planning_master_production_schedule_line", "主生产计划MPS行表")]
+[SugarTable("takt_logistics_manufacturing_mps_master_production_schedule_line", "主生产计划MPS行表")]
 [SugarIndex("ix_mps_line_tenant", nameof(TenantCode), OrderByType.Asc, nameof(CompanyCode), OrderByType.Asc, false)]
 [SugarIndex("ix_mps_line_is_deleted", nameof(TenantCode), OrderByType.Asc, nameof(CompanyCode), OrderByType.Asc, nameof(IsDeleted), OrderByType.Asc, false)]
-[SugarIndex("ix_takt_logistics_manufacturing_planning_mps_line_bucket_unique", nameof(TenantCode), OrderByType.Asc, nameof(CompanyCode), OrderByType.Asc, nameof(MasterProductionScheduleId), OrderByType.Asc, nameof(MaterialCode), OrderByType.Asc, nameof(BucketStart), OrderByType.Asc, true)]
-[SugarIndex("ix_takt_logistics_manufacturing_planning_mps_line_line_unique", nameof(TenantCode), OrderByType.Asc, nameof(CompanyCode), OrderByType.Asc, nameof(MasterProductionScheduleId), OrderByType.Asc, nameof(LineNumber), OrderByType.Asc, nameof(MaterialCode), OrderByType.Asc, true)]
+[SugarIndex("ix_takt_logistics_manufacturing_mps_master_production_schedule_line_bucket_unique", nameof(TenantCode), OrderByType.Asc, nameof(CompanyCode), OrderByType.Asc, nameof(MasterProductionScheduleId), OrderByType.Asc, nameof(MaterialCode), OrderByType.Asc, nameof(BucketStart), OrderByType.Asc, true)]
+[SugarIndex("ix_takt_logistics_manufacturing_mps_master_production_schedule_line_line_unique", nameof(TenantCode), OrderByType.Asc, nameof(CompanyCode), OrderByType.Asc, nameof(MasterProductionScheduleId), OrderByType.Asc, nameof(LineNumber), OrderByType.Asc, nameof(MaterialCode), OrderByType.Asc, true)]
 public class TaktMasterProductionScheduleLine : TaktCompanyEntityBase
 {
     /// <summary>

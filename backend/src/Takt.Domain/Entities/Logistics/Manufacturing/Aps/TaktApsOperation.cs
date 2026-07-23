@@ -18,10 +18,10 @@ namespace Takt.Domain.Entities.Logistics.Manufacturing.Aps;
 /// <summary>
 /// APS 工序排程（APS_Order → Operation，关联 RoutingItem 与 WC/Resource）
 /// </summary>
-[SugarTable("takt_logistics_manufacturing_scheduling_aps_operation", "APS工序排程表")]
+[SugarTable("takt_logistics_manufacturing_aps_operation", "APS工序排程表")]
 [SugarIndex("ix_aps_operation_tenant", nameof(TenantCode), OrderByType.Asc, nameof(CompanyCode), OrderByType.Asc, false)]
 [SugarIndex("ix_aps_operation_is_deleted", nameof(TenantCode), OrderByType.Asc, nameof(CompanyCode), OrderByType.Asc, nameof(IsDeleted), OrderByType.Asc, false)]
-[SugarIndex("ix_takt_logistics_manufacturing_scheduling_aps_operation_line_unique", nameof(TenantCode), OrderByType.Asc, nameof(CompanyCode), OrderByType.Asc, nameof(ApsOrderId), OrderByType.Asc, nameof(LineNumber), OrderByType.Asc, true)]
+[SugarIndex("ix_takt_logistics_manufacturing_aps_operation_line_unique", nameof(TenantCode), OrderByType.Asc, nameof(CompanyCode), OrderByType.Asc, nameof(ApsOrderId), OrderByType.Asc, nameof(LineNumber), OrderByType.Asc, true)]
 public class TaktApsOperation : TaktCompanyEntityBase
 {
     /// <summary>

@@ -4,7 +4,7 @@
 // 文件名称：TaktTicketConstants.cs
 // 创建时间：2026-06-18
 // 创建人：Takt365(Cursor AI)
-// 功能描述：通用工单状态常量（字典 sys_ticket_status；与 TaktTicket、TaktServiceTicket、TaktMaintenanceWorkOrder 等共用）
+// 功能描述：通用工单状态常量（字典 sys_ticket_status；与 TaktTicket、TaktCustomerServiceTicket、TaktMaintenanceWorkOrder 等共用）
 //
 // 版权信息：Copyright (c) 2026 Takt  All rights reserved.
 // 免责声明：此软件使用 MIT License，作者不承担任何使用风险。

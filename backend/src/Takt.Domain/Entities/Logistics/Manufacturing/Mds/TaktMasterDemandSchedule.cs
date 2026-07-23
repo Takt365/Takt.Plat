@@ -18,10 +18,10 @@ namespace Takt.Domain.Entities.Logistics.Manufacturing.Mds;
 /// <summary>
 /// 主需求计划 MDS 头表（公司级；承接销售订单与预测，下推 MPS）
 /// </summary>
-[SugarTable("takt_logistics_manufacturing_planning_master_demand_schedule", "主需求计划MDS头表")]
+[SugarTable("takt_logistics_manufacturing_mds_master_demand_schedule", "主需求计划MDS头表")]
 [SugarIndex("ix_mds_tenant", nameof(TenantCode), OrderByType.Asc, nameof(CompanyCode), OrderByType.Asc, false)]
 [SugarIndex("ix_mds_is_deleted", nameof(TenantCode), OrderByType.Asc, nameof(CompanyCode), OrderByType.Asc, nameof(IsDeleted), OrderByType.Asc, false)]
-[SugarIndex("ix_takt_logistics_manufacturing_planning_mds_unique", nameof(TenantCode), OrderByType.Asc, nameof(CompanyCode), OrderByType.Asc, nameof(PlantCode), OrderByType.Asc, nameof(MdsCode), OrderByType.Asc, true)]
+[SugarIndex("ix_takt_logistics_manufacturing_mds_master_demand_schedule_unique", nameof(TenantCode), OrderByType.Asc, nameof(CompanyCode), OrderByType.Asc, nameof(PlantCode), OrderByType.Asc, nameof(MdsCode), OrderByType.Asc, true)]
 public class TaktMasterDemandSchedule : TaktApprovalEntityBase
 {
     /// <summary>

@@ -18,13 +18,13 @@ namespace Takt.Domain.Entities.Logistics.Manufacturing.Mds;
 /// <summary>
 /// 主需求计划 MDS 行（物料 + 时间桶 + 需求来源）
 /// </summary>
-[SugarTable("takt_logistics_manufacturing_planning_master_demand_schedule_line", "主需求计划MDS行表")]
+[SugarTable("takt_logistics_manufacturing_mds_master_demand_schedule_line", "主需求计划MDS行表")]
 [SugarIndex("ix_mds_line_tenant", nameof(TenantCode), OrderByType.Asc, nameof(CompanyCode), OrderByType.Asc, false)]
 [SugarIndex("ix_mds_line_is_deleted", nameof(TenantCode), OrderByType.Asc, nameof(CompanyCode), OrderByType.Asc, nameof(IsDeleted), OrderByType.Asc, false)]
-[SugarIndex("ix_takt_logistics_manufacturing_planning_mds_line_bucket_unique", nameof(TenantCode), OrderByType.Asc, nameof(CompanyCode), OrderByType.Asc, nameof(MasterDemandScheduleId), OrderByType.Asc, nameof(MaterialCode), OrderByType.Asc, nameof(BucketStart), OrderByType.Asc, nameof(DemandSourceType), OrderByType.Asc, true)]
-[SugarIndex("ix_takt_logistics_manufacturing_planning_mds_line_line_unique", nameof(TenantCode), OrderByType.Asc, nameof(CompanyCode), OrderByType.Asc, nameof(MasterDemandScheduleId), OrderByType.Asc, nameof(LineNumber), OrderByType.Asc, nameof(MaterialCode), OrderByType.Asc, true)]
-[SugarIndex("ix_takt_logistics_manufacturing_planning_mds_line_sales_order", nameof(TenantCode), OrderByType.Asc, nameof(CompanyCode), OrderByType.Asc, nameof(SalesOrderId), OrderByType.Asc, false)]
-[SugarIndex("ix_takt_logistics_manufacturing_planning_mds_line_sales_plan", nameof(TenantCode), OrderByType.Asc, nameof(CompanyCode), OrderByType.Asc, nameof(SalesForecastId), OrderByType.Asc, false)]
+[SugarIndex("ix_takt_logistics_manufacturing_mds_master_demand_schedule_line_bucket_unique", nameof(TenantCode), OrderByType.Asc, nameof(CompanyCode), OrderByType.Asc, nameof(MasterDemandScheduleId), OrderByType.Asc, nameof(MaterialCode), OrderByType.Asc, nameof(BucketStart), OrderByType.Asc, nameof(DemandSourceType), OrderByType.Asc, true)]
+[SugarIndex("ix_takt_logistics_manufacturing_mds_master_demand_schedule_line_line_unique", nameof(TenantCode), OrderByType.Asc, nameof(CompanyCode), OrderByType.Asc, nameof(MasterDemandScheduleId), OrderByType.Asc, nameof(LineNumber), OrderByType.Asc, nameof(MaterialCode), OrderByType.Asc, true)]
+[SugarIndex("ix_takt_logistics_manufacturing_mds_master_demand_schedule_line_sales_order", nameof(TenantCode), OrderByType.Asc, nameof(CompanyCode), OrderByType.Asc, nameof(SalesOrderId), OrderByType.Asc, false)]
+[SugarIndex("ix_takt_logistics_manufacturing_mds_master_demand_schedule_line_sales_plan", nameof(TenantCode), OrderByType.Asc, nameof(CompanyCode), OrderByType.Asc, nameof(SalesForecastId), OrderByType.Asc, false)]
 public class TaktMasterDemandScheduleLine : TaktCompanyEntityBase
 {
     /// <summary>

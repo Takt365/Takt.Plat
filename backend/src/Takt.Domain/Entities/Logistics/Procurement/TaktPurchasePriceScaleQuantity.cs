@@ -18,11 +18,11 @@ namespace Takt.Domain.Entities.Logistics.Procurement;
 /// <summary>
 /// Takt采购价格数量等级实体（；主子表：TaktPurchasePriceItem → ScaleQuantities；与价值等级仅差 ScaleQuantity↔ScaleValue）
 /// </summary>
-[SugarTable("takt_logistics_materials_purchase_price_scale_quantity", "采购价格数量等级表")]
+[SugarTable("takt_logistics_procurement_purchase_price_scale_quantity", "采购价格数量等级表")]
 [SugarIndex("ix_purchase_price_scale_quantity_tenant", nameof(TenantCode), OrderByType.Asc, nameof(CompanyCode), OrderByType.Asc, false)]
 [SugarIndex("ix_purchase_price_scale_quantity_is_deleted", nameof(TenantCode), OrderByType.Asc, nameof(CompanyCode), OrderByType.Asc, nameof(IsDeleted), OrderByType.Asc, false)]
-[SugarIndex("ix_takt_logistics_materials_purchase_price_scale_quantity_unique", nameof(TenantCode), OrderByType.Asc, nameof(CompanyCode), OrderByType.Asc, nameof(PurchasePriceItemId), OrderByType.Asc, nameof(PurchasePriceCode), OrderByType.Asc, nameof(PurchasePriceSeq), OrderByType.Asc, nameof(PurchaseScaleSeq), OrderByType.Asc, nameof(ScaleQuantity), OrderByType.Asc, true)]
-[SugarIndex("ix_takt_logistics_materials_purchase_price_scale_quantity_code_seq", nameof(TenantCode), OrderByType.Asc, nameof(CompanyCode), OrderByType.Asc, nameof(PurchasePriceCode), OrderByType.Asc, nameof(PurchasePriceSeq), OrderByType.Asc, false)]
+[SugarIndex("ix_takt_logistics_procurement_purchase_price_scale_quantity_unique", nameof(TenantCode), OrderByType.Asc, nameof(CompanyCode), OrderByType.Asc, nameof(PurchasePriceItemId), OrderByType.Asc, nameof(PurchasePriceCode), OrderByType.Asc, nameof(PurchasePriceSeq), OrderByType.Asc, nameof(PurchaseScaleSeq), OrderByType.Asc, nameof(ScaleQuantity), OrderByType.Asc, true)]
+[SugarIndex("ix_takt_logistics_procurement_purchase_price_scale_quantity_code_seq", nameof(TenantCode), OrderByType.Asc, nameof(CompanyCode), OrderByType.Asc, nameof(PurchasePriceCode), OrderByType.Asc, nameof(PurchasePriceSeq), OrderByType.Asc, false)]
 public class TaktPurchasePriceScaleQuantity : TaktCompanyEntityBase
 {
     /// <summary>

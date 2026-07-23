@@ -16,12 +16,12 @@ namespace Takt.Domain.Entities.Logistics.Manufacturing.Aps;
 /// <summary>
 /// APS排程明细（排程的具体工序任务）
 /// </summary>
-[SugarTable("takt_logistics_manufacturing_scheduling_aps_item", "APS排程明细表")]
+[SugarTable("takt_logistics_manufacturing_aps_schedule_item", "APS排程明细表")]
 [SugarIndex("ix_aps_schedule_item_tenant", nameof(TenantCode), OrderByType.Asc, nameof(CompanyCode), OrderByType.Asc, false)]
 [SugarIndex("ix_aps_schedule_item_is_deleted", nameof(TenantCode), OrderByType.Asc, nameof(CompanyCode), OrderByType.Asc, nameof(IsDeleted), OrderByType.Asc, false)]
-[SugarIndex("ix_takt_logistics_manufacturing_scheduling_aps_item_line_unique", nameof(TenantCode), OrderByType.Asc, nameof(CompanyCode), OrderByType.Asc, nameof(ApsScheduleId), OrderByType.Asc, nameof(LineNumber), OrderByType.Asc, true)]
-[SugarIndex("ix_takt_logistics_manufacturing_scheduling_aps_item_aps_schedule_id", nameof(TenantCode), OrderByType.Asc, nameof(CompanyCode), OrderByType.Asc, nameof(ApsScheduleId), OrderByType.Asc, false)]
-[SugarIndex("ix_takt_logistics_manufacturing_scheduling_aps_item_process_code", nameof(TenantCode), OrderByType.Asc, nameof(CompanyCode), OrderByType.Asc, nameof(ProcessCode), OrderByType.Asc, false)]
+[SugarIndex("ix_takt_logistics_manufacturing_aps_schedule_item_line_unique", nameof(TenantCode), OrderByType.Asc, nameof(CompanyCode), OrderByType.Asc, nameof(ApsScheduleId), OrderByType.Asc, nameof(LineNumber), OrderByType.Asc, true)]
+[SugarIndex("ix_takt_logistics_manufacturing_aps_schedule_item_aps_schedule_id", nameof(TenantCode), OrderByType.Asc, nameof(CompanyCode), OrderByType.Asc, nameof(ApsScheduleId), OrderByType.Asc, false)]
+[SugarIndex("ix_takt_logistics_manufacturing_aps_schedule_item_process_code", nameof(TenantCode), OrderByType.Asc, nameof(CompanyCode), OrderByType.Asc, nameof(ProcessCode), OrderByType.Asc, false)]
 public class TaktApsScheduleItem : TaktCompanyEntityBase
 {
     /// <summary>

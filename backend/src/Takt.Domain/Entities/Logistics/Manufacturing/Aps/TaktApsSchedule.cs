@@ -16,13 +16,13 @@ namespace Takt.Domain.Entities.Logistics.Manufacturing.Aps;
 /// <summary>
 /// APS排程主表（高级计划与排程）
 /// </summary>
-[SugarTable("takt_logistics_manufacturing_scheduling_aps", "APS排程主表")]
+[SugarTable("takt_logistics_manufacturing_aps_schedule", "APS排程主表")]
 [SugarIndex("ix_aps_schedule_tenant", nameof(TenantCode), OrderByType.Asc, nameof(CompanyCode), OrderByType.Asc, false)]
 [SugarIndex("ix_aps_schedule_is_deleted", nameof(TenantCode), OrderByType.Asc, nameof(CompanyCode), OrderByType.Asc, nameof(IsDeleted), OrderByType.Asc, false)]
-[SugarIndex("ix_takt_logistics_manufacturing_scheduling_aps_plant_code_unique", nameof(TenantCode), OrderByType.Asc, nameof(CompanyCode), OrderByType.Asc, nameof(PlantCode), OrderByType.Asc, nameof(ScheduleCode), OrderByType.Asc, true)]
-[SugarIndex("ix_takt_logistics_manufacturing_scheduling_aps_plan_date", nameof(TenantCode), OrderByType.Asc, nameof(CompanyCode), OrderByType.Asc, nameof(PlanDate), OrderByType.Asc, false)]
-[SugarIndex("ix_takt_logistics_manufacturing_scheduling_aps_mrp", nameof(TenantCode), OrderByType.Asc, nameof(CompanyCode), OrderByType.Asc, nameof(MaterialRequirementsPlanningId), OrderByType.Asc, false)]
-[SugarIndex("ix_takt_logistics_manufacturing_scheduling_aps_schedule_status", nameof(TenantCode), OrderByType.Asc, nameof(CompanyCode), OrderByType.Asc, nameof(ScheduleStatus), OrderByType.Asc, false)]
+[SugarIndex("ix_takt_logistics_manufacturing_aps_schedule_plant_code_unique", nameof(TenantCode), OrderByType.Asc, nameof(CompanyCode), OrderByType.Asc, nameof(PlantCode), OrderByType.Asc, nameof(ScheduleCode), OrderByType.Asc, true)]
+[SugarIndex("ix_takt_logistics_manufacturing_aps_schedule_plan_date", nameof(TenantCode), OrderByType.Asc, nameof(CompanyCode), OrderByType.Asc, nameof(PlanDate), OrderByType.Asc, false)]
+[SugarIndex("ix_takt_logistics_manufacturing_aps_schedule_mrp", nameof(TenantCode), OrderByType.Asc, nameof(CompanyCode), OrderByType.Asc, nameof(MaterialRequirementsPlanningId), OrderByType.Asc, false)]
+[SugarIndex("ix_takt_logistics_manufacturing_aps_schedule_status", nameof(TenantCode), OrderByType.Asc, nameof(CompanyCode), OrderByType.Asc, nameof(ScheduleStatus), OrderByType.Asc, false)]
 public class TaktApsSchedule : TaktCompanyEntityBase
 {
     /// <summary>

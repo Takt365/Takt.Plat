@@ -190,7 +190,7 @@ public class TaktNumberingSeedData : ITaktSeedDataCoordinator
                 "yyyy",
                 "year",
                 SegmentsCompanyLevel,
-                "内置：TaktServiceContract.ServiceContractCode"),
+                "内置：TaktCustomerServiceContract.ServiceContractCode"),
             new NumberingSeedTemplate(
                 "LG-SVC-ORD",
                 "服务订单编码",
@@ -200,7 +200,7 @@ public class TaktNumberingSeedData : ITaktSeedDataCoordinator
                 "yyyy",
                 "year",
                 SegmentsCompanyLevel,
-                "内置：TaktServiceOrder.ServiceOrderCode"),
+                "内置：TaktCustomerServiceOrder.ServiceOrderCode"),
             new NumberingSeedTemplate(
                 "LG-SVC-REQ",
                 "服务请求单号",
@@ -210,7 +210,7 @@ public class TaktNumberingSeedData : ITaktSeedDataCoordinator
                 "yyyy",
                 "year",
                 SegmentsCompanyLevel,
-                "内置：TaktServiceRequest.ServiceRequestCode"),
+                "内置：TaktCustomerServiceRequest.ServiceRequestCode"),
             new NumberingSeedTemplate(
                 "LG-SVC-TKT",
                 "服务工单编码",
@@ -220,7 +220,7 @@ public class TaktNumberingSeedData : ITaktSeedDataCoordinator
                 "yyyy",
                 "year",
                 SegmentsCompanyLevel,
-                "内置：TaktServiceTicket.ServiceTicketCode"),
+                "内置：TaktCustomerServiceTicket.ServiceTicketCode"),
             new NumberingSeedTemplate(
                 "LG-EQP",
                 "设备编码",

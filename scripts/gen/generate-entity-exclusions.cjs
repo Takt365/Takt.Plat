@@ -54,9 +54,9 @@ const MANUAL_DTO_ENTITY_SHORT_NAMES = new Set([
  */
 const STANDALONE_CHILD_VUE_ENTITY_SHORT_NAMES = new Set([
   'QuartzLog',
-  'ServiceRequest',
-  'ServiceOrder',
-  'ServiceTicket',
+  'CustomerServiceRequest',
+  'CustomerServiceOrder',
+  'CustomerServiceTicket',
 ]);
 
 /**

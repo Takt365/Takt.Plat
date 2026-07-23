@@ -18,11 +18,11 @@ namespace Takt.Domain.Entities.Logistics.Manufacturing.Aps;
 /// <summary>
 /// APS 排程订单（Planned Order 释放后进入 APS 排程）
 /// </summary>
-[SugarTable("takt_logistics_manufacturing_scheduling_aps_order", "APS排程订单表")]
+[SugarTable("takt_logistics_manufacturing_aps_order", "APS排程订单表")]
 [SugarIndex("ix_aps_order_tenant", nameof(TenantCode), OrderByType.Asc, nameof(CompanyCode), OrderByType.Asc, false)]
 [SugarIndex("ix_aps_order_is_deleted", nameof(TenantCode), OrderByType.Asc, nameof(CompanyCode), OrderByType.Asc, nameof(IsDeleted), OrderByType.Asc, false)]
-[SugarIndex("ix_takt_logistics_manufacturing_scheduling_aps_order_unique", nameof(TenantCode), OrderByType.Asc, nameof(CompanyCode), OrderByType.Asc, nameof(PlantCode), OrderByType.Asc, nameof(ApsOrderCode), OrderByType.Asc, true)]
-[SugarIndex("ix_takt_logistics_manufacturing_scheduling_aps_order_planned", nameof(TenantCode), OrderByType.Asc, nameof(CompanyCode), OrderByType.Asc, nameof(PlannedOrderId), OrderByType.Asc, false)]
+[SugarIndex("ix_takt_logistics_manufacturing_aps_order_unique", nameof(TenantCode), OrderByType.Asc, nameof(CompanyCode), OrderByType.Asc, nameof(PlantCode), OrderByType.Asc, nameof(ApsOrderCode), OrderByType.Asc, true)]
+[SugarIndex("ix_takt_logistics_manufacturing_aps_order_planned", nameof(TenantCode), OrderByType.Asc, nameof(CompanyCode), OrderByType.Asc, nameof(PlannedOrderId), OrderByType.Asc, false)]
 public class TaktApsOrder : TaktCompanyEntityBase
 {
     /// <summary>

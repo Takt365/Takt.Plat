@@ -18,10 +18,10 @@ namespace Takt.Domain.Entities.Logistics.Manufacturing.Aps;
 /// <summary>
 /// 换型矩阵（工作中心 + 前产品 → 后产品的换型时间）
 /// </summary>
-[SugarTable("takt_logistics_manufacturing_scheduling_changeover_matrix", "换型矩阵表")]
+[SugarTable("takt_logistics_manufacturing_changeover_matrix", "换型矩阵表")]
 [SugarIndex("ix_changeover_matrix_tenant", nameof(TenantCode), OrderByType.Asc, nameof(CompanyCode), OrderByType.Asc, false)]
 [SugarIndex("ix_changeover_matrix_is_deleted", nameof(TenantCode), OrderByType.Asc, nameof(CompanyCode), OrderByType.Asc, nameof(IsDeleted), OrderByType.Asc, false)]
-[SugarIndex("ix_takt_logistics_manufacturing_scheduling_changeover_unique", nameof(TenantCode), OrderByType.Asc, nameof(CompanyCode), OrderByType.Asc, nameof(PlantCode), OrderByType.Asc, nameof(WorkCenterCode), OrderByType.Asc, nameof(FromMaterialCode), OrderByType.Asc, nameof(ToMaterialCode), OrderByType.Asc, true)]
+[SugarIndex("ix_takt_logistics_manufacturing_changeover_matrix_unique", nameof(TenantCode), OrderByType.Asc, nameof(CompanyCode), OrderByType.Asc, nameof(PlantCode), OrderByType.Asc, nameof(WorkCenterCode), OrderByType.Asc, nameof(FromMaterialCode), OrderByType.Asc, nameof(ToMaterialCode), OrderByType.Asc, true)]
 public class TaktChangeoverMatrix : TaktCompanyEntityBase
 {
     /// <summary>

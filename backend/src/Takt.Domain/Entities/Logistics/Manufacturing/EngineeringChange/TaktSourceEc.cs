@@ -18,7 +18,7 @@ namespace Takt.Domain.Entities.Logistics.Manufacturing.EngineeringChange;
 /// <summary>
 /// 设变来源明细列表
 /// </summary>
-[SugarTable("takt_logistics_manufacturing_source_ec", "设变来源主表")]
+[SugarTable("takt_logistics_manufacturing_ec_source", "设变来源主表")]
 [SugarIndex("ix_source_ec_tenant", nameof(TenantCode), OrderByType.Asc, nameof(CompanyCode), OrderByType.Asc, false)]
 [SugarIndex("ix_source_ec_is_deleted", nameof(TenantCode), OrderByType.Asc, nameof(CompanyCode), OrderByType.Asc, nameof(IsDeleted), OrderByType.Asc, false)]
 [SugarIndex("ix_source_ec_no_unique", nameof(TenantCode), OrderByType.Asc, nameof(CompanyCode), OrderByType.Asc, nameof(SourceEcNo), OrderByType.Asc, true)]

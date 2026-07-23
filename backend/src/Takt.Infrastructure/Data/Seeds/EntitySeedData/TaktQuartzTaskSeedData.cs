@@ -244,7 +244,7 @@ public class TaktQuartzTaskSeedData : ITaktSeedDataCoordinator
                 IntervalSeconds: 0,
                 CronExpression: "0 20 8 * * ?",
                 TaskStatus: TaskStatusPaused,
-                Description: "每日 08:20 执行 wwwroot/Quartz/sap_sync_pp.sql（Sap_Data.takt_logistics_materials_purchase_price* 四级→租户库；默认暂停）"),
+                Description: "每日 08:20 执行 wwwroot/Quartz/sap_sync_pp.sql（Sap_Data.takt_logistics_procurement_purchase_price* 四级→租户库；默认暂停）"),
             new(
                 TaskCode: "QT_SAP_SYNC_SP",
                 TaskName: "SAP同步：销售价格",

@@ -320,14 +320,14 @@ public class TaktMenuI18nSeedData : ITaktSeedDataCoordinator
             // menu.logistics.quality._self
             ("menu.logistics.quality._self", "zh-HK", "质量管理_hk", "菜单导航"),
 
-            // menu.logistics.service._self
-            ("menu.logistics.service._self", "en-US", "客户服务_us", "菜单导航"),
-            // menu.logistics.service._self
-            ("menu.logistics.service._self", "ja-JP", "客户服务_jp", "菜单导航"),
-            // menu.logistics.service._self
-            ("menu.logistics.service._self", "zh-CN", "客户服务", "菜单导航"),
-            // menu.logistics.service._self
-            ("menu.logistics.service._self", "zh-HK", "客户服务_hk", "菜单导航"),
+            // menu.logistics.customer.service._self
+            ("menu.logistics.customer.service._self", "en-US", "客户服务_us", "菜单导航"),
+            // menu.logistics.customer.service._self
+            ("menu.logistics.customer.service._self", "ja-JP", "客户服务_jp", "菜单导航"),
+            // menu.logistics.customer.service._self
+            ("menu.logistics.customer.service._self", "zh-CN", "客户服务", "菜单导航"),
+            // menu.logistics.customer.service._self
+            ("menu.logistics.customer.service._self", "zh-HK", "客户服务_hk", "菜单导航"),
 
             // menu.logistics.maintenance._self
             ("menu.logistics.maintenance._self", "en-US", "工厂维护_us", "菜单导航"),
@@ -1139,41 +1139,41 @@ public class TaktMenuI18nSeedData : ITaktSeedDataCoordinator
             // menu.logistics.quality.complaint._self
             ("menu.logistics.quality.complaint._self", "zh-HK", "客诉管理_hk", "菜单导航"),
 
-            // menu.logistics.service.request
-            ("menu.logistics.service.request", "en-US", "服务请求_us", "菜单导航"),
-            // menu.logistics.service.request
-            ("menu.logistics.service.request", "ja-JP", "服务请求_jp", "菜单导航"),
-            // menu.logistics.service.request
-            ("menu.logistics.service.request", "zh-CN", "服务请求", "菜单导航"),
-            // menu.logistics.service.request
-            ("menu.logistics.service.request", "zh-HK", "服务请求_hk", "菜单导航"),
+            // menu.logistics.customer.service.request
+            ("menu.logistics.customer.service.request", "en-US", "服务请求_us", "菜单导航"),
+            // menu.logistics.customer.service.request
+            ("menu.logistics.customer.service.request", "ja-JP", "服务请求_jp", "菜单导航"),
+            // menu.logistics.customer.service.request
+            ("menu.logistics.customer.service.request", "zh-CN", "服务请求", "菜单导航"),
+            // menu.logistics.customer.service.request
+            ("menu.logistics.customer.service.request", "zh-HK", "服务请求_hk", "菜单导航"),
 
-            // menu.logistics.service.contract
-            ("menu.logistics.service.contract", "en-US", "服务合同_us", "菜单导航"),
-            // menu.logistics.service.contract
-            ("menu.logistics.service.contract", "ja-JP", "服务合同_jp", "菜单导航"),
-            // menu.logistics.service.contract
-            ("menu.logistics.service.contract", "zh-CN", "服务合同", "菜单导航"),
-            // menu.logistics.service.contract
-            ("menu.logistics.service.contract", "zh-HK", "服务合同_hk", "菜单导航"),
+            // menu.logistics.customer.service.contract
+            ("menu.logistics.customer.service.contract", "en-US", "服务合同_us", "菜单导航"),
+            // menu.logistics.customer.service.contract
+            ("menu.logistics.customer.service.contract", "ja-JP", "服务合同_jp", "菜单导航"),
+            // menu.logistics.customer.service.contract
+            ("menu.logistics.customer.service.contract", "zh-CN", "服务合同", "菜单导航"),
+            // menu.logistics.customer.service.contract
+            ("menu.logistics.customer.service.contract", "zh-HK", "服务合同_hk", "菜单导航"),
 
-            // menu.logistics.service.order
-            ("menu.logistics.service.order", "en-US", "服务订单_us", "菜单导航"),
-            // menu.logistics.service.order
-            ("menu.logistics.service.order", "ja-JP", "服务订单_jp", "菜单导航"),
-            // menu.logistics.service.order
-            ("menu.logistics.service.order", "zh-CN", "服务订单", "菜单导航"),
-            // menu.logistics.service.order
-            ("menu.logistics.service.order", "zh-HK", "服务订单_hk", "菜单导航"),
+            // menu.logistics.customer.service.order
+            ("menu.logistics.customer.service.order", "en-US", "服务订单_us", "菜单导航"),
+            // menu.logistics.customer.service.order
+            ("menu.logistics.customer.service.order", "ja-JP", "服务订单_jp", "菜单导航"),
+            // menu.logistics.customer.service.order
+            ("menu.logistics.customer.service.order", "zh-CN", "服务订单", "菜单导航"),
+            // menu.logistics.customer.service.order
+            ("menu.logistics.customer.service.order", "zh-HK", "服务订单_hk", "菜单导航"),
 
-            // menu.logistics.service.ticket
-            ("menu.logistics.service.ticket", "en-US", "服务工单_us", "菜单导航"),
-            // menu.logistics.service.ticket
-            ("menu.logistics.service.ticket", "ja-JP", "服务工单_jp", "菜单导航"),
-            // menu.logistics.service.ticket
-            ("menu.logistics.service.ticket", "zh-CN", "服务工单", "菜单导航"),
-            // menu.logistics.service.ticket
-            ("menu.logistics.service.ticket", "zh-HK", "服务工单_hk", "菜单导航"),
+            // menu.logistics.customer.service.ticket
+            ("menu.logistics.customer.service.ticket", "en-US", "服务工单_us", "菜单导航"),
+            // menu.logistics.customer.service.ticket
+            ("menu.logistics.customer.service.ticket", "ja-JP", "服务工单_jp", "菜单导航"),
+            // menu.logistics.customer.service.ticket
+            ("menu.logistics.customer.service.ticket", "zh-CN", "服务工单", "菜单导航"),
+            // menu.logistics.customer.service.ticket
+            ("menu.logistics.customer.service.ticket", "zh-HK", "服务工单_hk", "菜单导航"),
 
             // menu.logistics.maintenance.equipment
             ("menu.logistics.maintenance.equipment", "en-US", "设备信息_us", "菜单导航"),

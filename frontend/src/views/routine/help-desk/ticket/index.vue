@@ -2,7 +2,7 @@
 <!-- 项目名称：节拍数字工厂 · Takt Plat (TDF) -->
 <!-- 命名空间：@/views/routine/help-desk/ticket -->
 <!-- 文件名称：index.vue -->
-<!-- 功能描述：Takt工单实体管理页面，含查询、增删改，由 generate-vue-crud-from-api.cjs 根据 types/api 自动生成 -->
+<!-- 功能描述：服务工单实体管理页面，含查询、增删改，由 generate-vue-crud-from-api.cjs 根据 types/api 自动生成 -->
 <!-- 版权信息：Copyright (c) 2025 Takt  All rights reserved. -->
 <!-- 免责声明：此软件使用 MIT License，作者不承担任何使用风险。 -->
 <!-- ======================================== -->
@@ -20,11 +20,11 @@
 
     <!-- 工具栏 -->
     <TaktToolsBar
-      create-permission="routine:help:desk:ticket:create"
-      update-permission="routine:help:desk:ticket:update"
-      delete-permission="routine:help:desk:ticket:delete"
-      import-permission="routine:help:desk:ticket:import"
-      export-permission="routine:help:desk:ticket:export"
+      create-permission="logistics:service:customer:ticket:create"
+      update-permission="logistics:service:customer:ticket:update"
+      delete-permission="logistics:service:customer:ticket:delete"
+      import-permission="logistics:service:customer:ticket:import"
+      export-permission="logistics:service:customer:ticket:export"
       :show-create="true"
       :show-update="true"
       :show-delete="true"
@@ -52,28 +52,18 @@
       @refresh="handleRefresh"
     />
 
-    <div class="mb-2">
-      <a-button
-        v-permission="'routine:help:desk:ticket:update'"
-        class="takt-button-query"
-        :disabled="!selectedRow"
-        @click="handleOpenWorkflow"
-      >
-        {{ t('routine.help-desk.ticket.page.workflow.title') }}
-      </a-button>
-    </div>
-
     <!-- 表格 -->
     <TaktSingleTable
       entity-scope="company"
       :columns="columns"
       :visible-column-keys="visibleColumnKeys"
-      :id-column-key="'ticketId'"
+      :id-column-key="'customerServiceTicketId'"
       table-mode="single"
       :data-source="dataSource"
       :loading="loading"
       :stripe="true"
-      :row-key="getTicketId"
+      :virtual="true"
+      :row-key="getCustomerServiceTicketId"
       :row-selection="rowSelection"
       :custom-row="onClickRow"
 
@@ -82,28 +72,16 @@
     >
       <!-- 字典/开关列渲染 -->
       <template #bodyCell="{ column, record }">
-        <template v-if="column.key === 'ticketStatus'">
+        <template v-if="column.key === 'priority'">
           <TaktDictTag
-            :value="getTicketField(record, 'ticketStatus')"
-            dict-type="sys_ticket_status"
-          />
-        </template>
-        <template v-else-if="column.key === 'priority'">
-          <TaktDictTag
-            :value="getTicketField(record, 'priority')"
+            :value="getCustomerServiceTicketDictValue(record, 'priority')"
             dict-type="sys_priority_level_category"
           />
         </template>
-        <template v-else-if="column.key === 'urgency'">
+        <template v-else-if="column.key === 'ticketStatus'">
           <TaktDictTag
-            :value="getTicketField(record, 'urgency')"
-            dict-type="sys_urgency_level_category"
-          />
-        </template>
-        <template v-else-if="column.key === 'impact'">
-          <TaktDictTag
-            :value="getTicketField(record, 'impact')"
-            dict-type="sys_impact_level_category"
+            :value="getCustomerServiceTicketDictValue(record, 'ticketStatus')"
+            dict-type="sys_ticket_status"
           />
         </template>
       </template>
@@ -129,8 +107,8 @@
       @ok="handleFormSubmit"
       @cancel="handleFormCancel"
     >
-      <TicketForm
-        :key="formData?.ticketId ?? 'create'"
+      <CustomerServiceTicketForm
+        :key="formData?.customerServiceTicketId ?? 'create'"
         ref="formRef"
         :form-data="formData"
         :loading="formLoading"
@@ -147,343 +125,346 @@
       @reset="handleAdvancedQueryReset"
     >
       <template #default="{ isFieldVisible }">
-      <div v-show="isFieldVisible('ticketNo')">
-      <a-form-item :label="t('entity.ticket.no')">
+      <div v-show="isFieldVisible('plantCode')">
+      <a-form-item :label="pi.queryLabel('plantCode')">
         <a-input
-          v-model:value="advancedQueryForm.ticketNo"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.ticket.no') })"
+          v-model:value="advancedQueryForm.plantCode"
+          :placeholder="pi.queryPh('plantCode', 'required')"
+          show-count
+          :maxlength="4"
+          allow-clear
+        />
+      </a-form-item>
+      </div>
+      <div v-show="isFieldVisible('serviceTicketCode')">
+      <a-form-item :label="pi.queryLabel('serviceTicketCode')">
+        <a-input
+          v-model:value="advancedQueryForm.serviceTicketCode"
+          :placeholder="pi.queryPh('serviceTicketCode', 'required')"
           show-count
           :maxlength="50"
           allow-clear
         />
       </a-form-item>
       </div>
-      <div v-show="isFieldVisible('title')">
-      <a-form-item :label="t('entity.ticket.title')">
+      <div v-show="isFieldVisible('clientId')">
+      <a-form-item :label="pi.queryLabel('clientId')">
         <a-input
-          v-model:value="advancedQueryForm.title"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.ticket.title') })"
+          v-model:value="advancedQueryForm.clientId"
+          :placeholder="pi.queryPh('clientId', 'required')"
+          show-count
+          :maxlength="20"
+          allow-clear
+        />
+      </a-form-item>
+      </div>
+      <div v-show="isFieldVisible('clientCode')">
+      <a-form-item :label="pi.queryLabel('clientCode')">
+        <a-input
+          v-model:value="advancedQueryForm.clientCode"
+          :placeholder="pi.queryPh('clientCode', 'required')"
+          show-count
+          :maxlength="20"
+          allow-clear
+        />
+      </a-form-item>
+      </div>
+      <div v-show="isFieldVisible('clientName1')">
+      <a-form-item :label="pi.queryLabel('clientName1')">
+        <a-input
+          v-model:value="advancedQueryForm.clientName1"
+          :placeholder="pi.queryPh('clientName1', 'required')"
+          show-count
+          :maxlength="140"
+          allow-clear
+        />
+      </a-form-item>
+      </div>
+      <div v-show="isFieldVisible('serviceRequestId')">
+      <a-form-item :label="pi.queryLabel('serviceRequestId')">
+        <a-input
+          v-model:value="advancedQueryForm.serviceRequestId"
+          :placeholder="pi.queryPh('serviceRequestId', 'required')"
+          show-count
+          :maxlength="20"
+          allow-clear
+        />
+      </a-form-item>
+      </div>
+      <div v-show="isFieldVisible('serviceRequestCode')">
+      <a-form-item :label="pi.queryLabel('serviceRequestCode')">
+        <a-input
+          v-model:value="advancedQueryForm.serviceRequestCode"
+          :placeholder="pi.queryPh('serviceRequestCode', 'required')"
+          show-count
+          :maxlength="50"
+          allow-clear
+        />
+      </a-form-item>
+      </div>
+      <div v-show="isFieldVisible('serviceOrderId')">
+      <a-form-item :label="pi.queryLabel('serviceOrderId')">
+        <a-input
+          v-model:value="advancedQueryForm.serviceOrderId"
+          :placeholder="pi.queryPh('serviceOrderId', 'required')"
+          show-count
+          :maxlength="20"
+          allow-clear
+        />
+      </a-form-item>
+      </div>
+      <div v-show="isFieldVisible('serviceOrderCode')">
+      <a-form-item :label="pi.queryLabel('serviceOrderCode')">
+        <a-input
+          v-model:value="advancedQueryForm.serviceOrderCode"
+          :placeholder="pi.queryPh('serviceOrderCode', 'required')"
+          show-count
+          :maxlength="50"
+          allow-clear
+        />
+      </a-form-item>
+      </div>
+      <div v-show="isFieldVisible('serviceContractId')">
+      <a-form-item :label="pi.queryLabel('serviceContractId')">
+        <a-input
+          v-model:value="advancedQueryForm.serviceContractId"
+          :placeholder="pi.queryPh('serviceContractId', 'required')"
+          show-count
+          :maxlength="20"
+          allow-clear
+        />
+      </a-form-item>
+      </div>
+      <div v-show="isFieldVisible('serviceContractCode')">
+      <a-form-item :label="pi.queryLabel('serviceContractCode')">
+        <a-input
+          v-model:value="advancedQueryForm.serviceContractCode"
+          :placeholder="pi.queryPh('serviceContractCode', 'required')"
+          show-count
+          :maxlength="50"
+          allow-clear
+        />
+      </a-form-item>
+      </div>
+      <div v-show="isFieldVisible('ticketType')">
+      <a-form-item :label="pi.queryLabel('ticketType')">
+        <a-input-number
+          v-model:value="advancedQueryForm.ticketType"
+          :placeholder="pi.queryPh('ticketType', 'required')"
+          style="width: 100%"
+        />
+      </a-form-item>
+      </div>
+      <div v-show="isFieldVisible('priority')">
+      <a-form-item :label="pi.queryLabel('priority')">
+        <TaktSelect
+          v-model:value="advancedQueryForm.priority"
+          dict-type="sys_priority_level_category"
+          :placeholder="pi.queryPh('priority', 'select')"
+          allow-clear
+        />
+      </a-form-item>
+      </div>
+      <div v-show="isFieldVisible('ticketStatus')">
+      <a-form-item :label="pi.queryLabel('ticketStatus')">
+        <TaktSelect
+          v-model:value="advancedQueryForm.ticketStatus"
+          dict-type="sys_ticket_status"
+          :placeholder="pi.queryPh('ticketStatus', 'select')"
+          allow-clear
+        />
+      </a-form-item>
+      </div>
+      <div v-show="isFieldVisible('ticketSubject')">
+      <a-form-item :label="pi.queryLabel('ticketSubject')">
+        <a-input
+          v-model:value="advancedQueryForm.ticketSubject"
+          :placeholder="pi.queryPh('ticketSubject', 'required')"
           show-count
           :maxlength="200"
           allow-clear
         />
       </a-form-item>
       </div>
-      <div v-show="isFieldVisible('content')">
-      <a-form-item :label="t('entity.ticket.content')">
+      <div v-show="isFieldVisible('faultDescription')">
+      <a-form-item :label="pi.queryLabel('faultDescription')">
         <a-textarea
-          v-model:value="advancedQueryForm.content"
-          :placeholder="t('common.page.form.placeholder.optional', { field: t('entity.ticket.content') })"
+          v-model:value="advancedQueryForm.faultDescription"
+          :placeholder="pi.queryPh('faultDescription', 'optional')"
           :rows="2"
           allow-clear
         />
       </a-form-item>
       </div>
-      <div v-show="isFieldVisible('attachments')">
-      <a-form-item :label="t('entity.ticket.attachments')">
+      <div v-show="isFieldVisible('solutionDescription')">
+      <a-form-item :label="pi.queryLabel('solutionDescription')">
+        <a-textarea
+          v-model:value="advancedQueryForm.solutionDescription"
+          :placeholder="pi.queryPh('solutionDescription', 'optional')"
+          :rows="2"
+          allow-clear
+        />
+      </a-form-item>
+      </div>
+      <div v-show="isFieldVisible('serviceLocation')">
+      <a-form-item :label="pi.queryLabel('serviceLocation')">
         <a-input
-          v-model:value="advancedQueryForm.attachments"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.ticket.attachments') })"
+          v-model:value="advancedQueryForm.serviceLocation"
+          :placeholder="pi.queryPh('serviceLocation', 'required')"
+          show-count
+          :maxlength="500"
+          allow-clear
+        />
+      </a-form-item>
+      </div>
+      <div v-show="isFieldVisible('assignedEmployeeId')">
+      <a-form-item :label="pi.queryLabel('assignedEmployeeId')">
+        <a-input
+          v-model:value="advancedQueryForm.assignedEmployeeId"
+          :placeholder="pi.queryPh('assignedEmployeeId', 'required')"
           show-count
           :maxlength="20"
           allow-clear
         />
       </a-form-item>
       </div>
-      <div v-show="isFieldVisible('ticketStatus')">
-      <a-form-item :label="t('entity.ticket.status')">
-        <TaktSelect
-          v-model:value="advancedQueryForm.ticketStatus"
-          dict-type="sys_ticket_status"
-          :placeholder="t('common.page.form.placeholder.select', { field: t('entity.ticket.status') })"
-          allow-clear
-        />
-      </a-form-item>
-      </div>
-      <div v-show="isFieldVisible('priority')">
-      <a-form-item :label="t('entity.ticket.priority')">
-        <TaktSelect
-          v-model:value="advancedQueryForm.priority"
-          dict-type="sys_priority_level_category"
-          :placeholder="t('common.page.form.placeholder.select', { field: t('entity.ticket.priority') })"
-          allow-clear
-        />
-      </a-form-item>
-      </div>
-      <div v-show="isFieldVisible('urgency')">
-      <a-form-item :label="t('entity.ticket.urgency')">
-        <TaktSelect
-          v-model:value="advancedQueryForm.urgency"
-          dict-type="sys_urgency_level_category"
-          :placeholder="t('common.page.form.placeholder.select', { field: t('entity.ticket.urgency') })"
-          allow-clear
-        />
-      </a-form-item>
-      </div>
-      <div v-show="isFieldVisible('impact')">
-      <a-form-item :label="t('entity.ticket.impact')">
-        <TaktSelect
-          v-model:value="advancedQueryForm.impact"
-          dict-type="sys_impact_level_category"
-          :placeholder="t('common.page.form.placeholder.select', { field: t('entity.ticket.impact') })"
-          allow-clear
-        />
-      </a-form-item>
-      </div>
-      <div v-show="isFieldVisible('categoryCode')">
-      <a-form-item :label="t('entity.ticket.categorycode')">
+      <div v-show="isFieldVisible('assignedEmployeeName')">
+      <a-form-item :label="pi.queryLabel('assignedEmployeeName')">
         <a-input
-          v-model:value="advancedQueryForm.categoryCode"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.ticket.categorycode') })"
+          v-model:value="advancedQueryForm.assignedEmployeeName"
+          :placeholder="pi.queryPh('assignedEmployeeName', 'required')"
           show-count
           :maxlength="50"
           allow-clear
         />
       </a-form-item>
       </div>
-      <div v-show="isFieldVisible('ticketSource')">
-      <a-form-item :label="t('entity.ticket.source')">
+      <div v-show="isFieldVisible('scheduledStartTimeStart')">
+      <a-form-item :label="pi.queryLabel('scheduledStartTimeStart')">
+        <a-date-picker
+          v-model:value="advancedQueryForm.scheduledStartTimeStart"
+          :placeholder="pi.queryPh('scheduledStartTimeStart', 'select')"
+          value-format="YYYY-MM-DD"
+          style="width: 100%"
+        />
+      </a-form-item>
+      </div>
+      <div v-show="isFieldVisible('scheduledStartTimeEnd')">
+      <a-form-item :label="pi.queryLabel('scheduledStartTimeEnd')">
+        <a-date-picker
+          v-model:value="advancedQueryForm.scheduledStartTimeEnd"
+          :placeholder="pi.queryPh('scheduledStartTimeEnd', 'select')"
+          value-format="YYYY-MM-DD"
+          style="width: 100%"
+        />
+      </a-form-item>
+      </div>
+      <div v-show="isFieldVisible('scheduledEndTimeStart')">
+      <a-form-item :label="pi.queryLabel('scheduledEndTimeStart')">
+        <a-date-picker
+          v-model:value="advancedQueryForm.scheduledEndTimeStart"
+          :placeholder="pi.queryPh('scheduledEndTimeStart', 'select')"
+          value-format="YYYY-MM-DD"
+          style="width: 100%"
+        />
+      </a-form-item>
+      </div>
+      <div v-show="isFieldVisible('scheduledEndTimeEnd')">
+      <a-form-item :label="pi.queryLabel('scheduledEndTimeEnd')">
+        <a-date-picker
+          v-model:value="advancedQueryForm.scheduledEndTimeEnd"
+          :placeholder="pi.queryPh('scheduledEndTimeEnd', 'select')"
+          value-format="YYYY-MM-DD"
+          style="width: 100%"
+        />
+      </a-form-item>
+      </div>
+      <div v-show="isFieldVisible('actualStartTimeStart')">
+      <a-form-item :label="pi.queryLabel('actualStartTimeStart')">
+        <a-date-picker
+          v-model:value="advancedQueryForm.actualStartTimeStart"
+          :placeholder="pi.queryPh('actualStartTimeStart', 'select')"
+          value-format="YYYY-MM-DD"
+          style="width: 100%"
+        />
+      </a-form-item>
+      </div>
+      <div v-show="isFieldVisible('actualStartTimeEnd')">
+      <a-form-item :label="pi.queryLabel('actualStartTimeEnd')">
+        <a-date-picker
+          v-model:value="advancedQueryForm.actualStartTimeEnd"
+          :placeholder="pi.queryPh('actualStartTimeEnd', 'select')"
+          value-format="YYYY-MM-DD"
+          style="width: 100%"
+        />
+      </a-form-item>
+      </div>
+      <div v-show="isFieldVisible('actualEndTimeStart')">
+      <a-form-item :label="pi.queryLabel('actualEndTimeStart')">
+        <a-date-picker
+          v-model:value="advancedQueryForm.actualEndTimeStart"
+          :placeholder="pi.queryPh('actualEndTimeStart', 'select')"
+          value-format="YYYY-MM-DD"
+          style="width: 100%"
+        />
+      </a-form-item>
+      </div>
+      <div v-show="isFieldVisible('actualEndTimeEnd')">
+      <a-form-item :label="pi.queryLabel('actualEndTimeEnd')">
+        <a-date-picker
+          v-model:value="advancedQueryForm.actualEndTimeEnd"
+          :placeholder="pi.queryPh('actualEndTimeEnd', 'select')"
+          value-format="YYYY-MM-DD"
+          style="width: 100%"
+        />
+      </a-form-item>
+      </div>
+      <div v-show="isFieldVisible('acceptanceResult')">
+      <a-form-item :label="pi.queryLabel('acceptanceResult')">
         <a-input-number
-          v-model:value="advancedQueryForm.ticketSource"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.ticket.source') })"
+          v-model:value="advancedQueryForm.acceptanceResult"
+          :placeholder="pi.queryPh('acceptanceResult', 'required')"
           style="width: 100%"
         />
       </a-form-item>
       </div>
-      <div v-show="isFieldVisible('submitterId')">
-      <a-form-item :label="t('entity.ticket.submitterid')">
+      <div v-show="isFieldVisible('acceptedBy')">
+      <a-form-item :label="pi.queryLabel('acceptedBy')">
         <a-input
-          v-model:value="advancedQueryForm.submitterId"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.ticket.submitterid') })"
+          v-model:value="advancedQueryForm.acceptedBy"
+          :placeholder="pi.queryPh('acceptedBy', 'required')"
+          show-count
+          :maxlength="50"
+          allow-clear
+        />
+      </a-form-item>
+      </div>
+      <div v-show="isFieldVisible('acceptedAtStart')">
+      <a-form-item :label="pi.queryLabel('acceptedAtStart')">
+        <a-input
+          v-model:value="advancedQueryForm.acceptedAtStart"
+          :placeholder="pi.queryPh('acceptedAtStart', 'required')"
           show-count
           :maxlength="20"
           allow-clear
         />
       </a-form-item>
       </div>
-      <div v-show="isFieldVisible('submitterName')">
-      <a-form-item :label="t('entity.ticket.submittername')">
-        <a-input
-          v-model:value="advancedQueryForm.submitterName"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.ticket.submittername') })"
-          show-count
-          :maxlength="20"
-          allow-clear
-        />
-      </a-form-item>
-      </div>
-      <div v-show="isFieldVisible('assigneeId')">
-      <a-form-item :label="t('entity.ticket.assigneeid')">
-        <a-input
-          v-model:value="advancedQueryForm.assigneeId"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.ticket.assigneeid') })"
-          show-count
-          :maxlength="20"
-          allow-clear
-        />
-      </a-form-item>
-      </div>
-      <div v-show="isFieldVisible('assigneeName')">
-      <a-form-item :label="t('entity.ticket.assigneename')">
-        <a-input
-          v-model:value="advancedQueryForm.assigneeName"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.ticket.assigneename') })"
-          show-count
-          :maxlength="20"
-          allow-clear
-        />
-      </a-form-item>
-      </div>
-      <div v-show="isFieldVisible('knowledgeId')">
-      <a-form-item :label="t('entity.ticket.knowledgeid')">
-        <a-input
-          v-model:value="advancedQueryForm.knowledgeId"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.ticket.knowledgeid') })"
-          show-count
-          :maxlength="20"
-          allow-clear
-        />
-      </a-form-item>
-      </div>
-      <div v-show="isFieldVisible('parentTicketId')">
-      <a-form-item :label="t('entity.ticket.parentticketid')">
-        <a-input
-          v-model:value="advancedQueryForm.parentTicketId"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.ticket.parentticketid') })"
-          show-count
-          :maxlength="20"
-          allow-clear
-        />
-      </a-form-item>
-      </div>
-      <div v-show="isFieldVisible('firstResponseAtStart')">
-      <a-form-item :label="t('entity.ticket.firstresponseatstart')">
-        <a-input
-          v-model:value="advancedQueryForm.firstResponseAtStart"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.ticket.firstresponseatstart') })"
-          show-count
-          :maxlength="20"
-          allow-clear
-        />
-      </a-form-item>
-      </div>
-      <div v-show="isFieldVisible('firstResponseAtEnd')">
-      <a-form-item :label="t('entity.ticket.firstresponseatend')">
-        <a-input
-          v-model:value="advancedQueryForm.firstResponseAtEnd"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.ticket.firstresponseatend') })"
-          show-count
-          :maxlength="20"
-          allow-clear
-        />
-      </a-form-item>
-      </div>
-      <div v-show="isFieldVisible('firstResponseDueByStart')">
-      <a-form-item :label="t('entity.ticket.firstresponseduebystart')">
-        <a-input
-          v-model:value="advancedQueryForm.firstResponseDueByStart"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.ticket.firstresponseduebystart') })"
-          show-count
-          :maxlength="20"
-          allow-clear
-        />
-      </a-form-item>
-      </div>
-      <div v-show="isFieldVisible('firstResponseDueByEnd')">
-      <a-form-item :label="t('entity.ticket.firstresponseduebyend')">
-        <a-input
-          v-model:value="advancedQueryForm.firstResponseDueByEnd"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.ticket.firstresponseduebyend') })"
-          show-count
-          :maxlength="20"
-          allow-clear
-        />
-      </a-form-item>
-      </div>
-      <div v-show="isFieldVisible('resolvedAtStart')">
-      <a-form-item :label="t('entity.ticket.resolvedatstart')">
-        <a-input
-          v-model:value="advancedQueryForm.resolvedAtStart"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.ticket.resolvedatstart') })"
-          show-count
-          :maxlength="20"
-          allow-clear
-        />
-      </a-form-item>
-      </div>
-      <div v-show="isFieldVisible('resolvedAtEnd')">
-      <a-form-item :label="t('entity.ticket.resolvedatend')">
+      <div v-show="isFieldVisible('acceptedAtEnd')">
+      <a-form-item :label="pi.queryLabel('acceptedAtEnd')">
         <a-date-picker
-          v-model:value="advancedQueryForm.resolvedAtEnd"
-          :placeholder="t('common.page.form.placeholder.select', { field: t('entity.ticket.resolvedatend') })"
+          v-model:value="advancedQueryForm.acceptedAtEnd"
+          :placeholder="pi.queryPh('acceptedAtEnd', 'select')"
           value-format="YYYY-MM-DD"
           style="width: 100%"
-        />
-      </a-form-item>
-      </div>
-      <div v-show="isFieldVisible('resolutionDueByStart')">
-      <a-form-item :label="t('entity.ticket.resolutionduebystart')">
-        <a-input
-          v-model:value="advancedQueryForm.resolutionDueByStart"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.ticket.resolutionduebystart') })"
-          show-count
-          :maxlength="20"
-          allow-clear
-        />
-      </a-form-item>
-      </div>
-      <div v-show="isFieldVisible('resolutionDueByEnd')">
-      <a-form-item :label="t('entity.ticket.resolutionduebyend')">
-        <a-input
-          v-model:value="advancedQueryForm.resolutionDueByEnd"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.ticket.resolutionduebyend') })"
-          show-count
-          :maxlength="20"
-          allow-clear
-        />
-      </a-form-item>
-      </div>
-      <div v-show="isFieldVisible('closedAtStart')">
-      <a-form-item :label="t('entity.ticket.closedatstart')">
-        <a-input
-          v-model:value="advancedQueryForm.closedAtStart"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.ticket.closedatstart') })"
-          show-count
-          :maxlength="20"
-          allow-clear
-        />
-      </a-form-item>
-      </div>
-      <div v-show="isFieldVisible('closedAtEnd')">
-      <a-form-item :label="t('entity.ticket.closedatend')">
-        <a-date-picker
-          v-model:value="advancedQueryForm.closedAtEnd"
-          :placeholder="t('common.page.form.placeholder.select', { field: t('entity.ticket.closedatend') })"
-          value-format="YYYY-MM-DD"
-          style="width: 100%"
-        />
-      </a-form-item>
-      </div>
-      <div v-show="isFieldVisible('itAssetId')">
-      <a-form-item :label="t('entity.ticket.itassetid')">
-        <a-input
-          v-model:value="advancedQueryForm.itAssetId"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.ticket.itassetid') })"
-          show-count
-          :maxlength="20"
-          allow-clear
-        />
-      </a-form-item>
-      </div>
-      <div v-show="isFieldVisible('assetCode')">
-      <a-form-item :label="t('entity.ticket.assetcode')">
-        <a-input
-          v-model:value="advancedQueryForm.assetCode"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.ticket.assetcode') })"
-          show-count
-          :maxlength="40"
-          allow-clear
-        />
-      </a-form-item>
-      </div>
-      <div v-show="isFieldVisible('applicantDeptId')">
-      <a-form-item :label="t('entity.ticket.applicantdeptid')">
-        <a-input
-          v-model:value="advancedQueryForm.applicantDeptId"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.ticket.applicantdeptid') })"
-          show-count
-          :maxlength="20"
-          allow-clear
-        />
-      </a-form-item>
-      </div>
-      <div v-show="isFieldVisible('applicantDeptName')">
-      <a-form-item :label="t('entity.ticket.applicantdeptname')">
-        <a-input
-          v-model:value="advancedQueryForm.applicantDeptName"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.ticket.applicantdeptname') })"
-          show-count
-          :maxlength="100"
-          allow-clear
-        />
-      </a-form-item>
-      </div>
-      <div v-show="isFieldVisible('applicantBy')">
-      <a-form-item :label="t('entity.ticket.applicantby')">
-        <a-input
-          v-model:value="advancedQueryForm.applicantBy"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.ticket.applicantby') })"
-          show-count
-          :maxlength="20"
-          allow-clear
         />
       </a-form-item>
       </div>
       <div v-show="isFieldVisible('createdAtStart')">
-      <a-form-item :label="t('common.page.entity.createdatstart')">
+      <a-form-item :label="pi.queryLabel('createdAtStart')">
         <a-date-picker
           v-model:value="advancedQueryForm.createdAtStart"
-          :placeholder="t('common.page.form.placeholder.select', { field: t('common.page.entity.createdatstart') })"
+          :placeholder="pi.queryPh('createdAtStart', 'select')"
           value-format="YYYY-MM-DD HH:mm:ss"
             show-time
           style="width: 100%"
@@ -491,10 +472,10 @@
       </a-form-item>
       </div>
       <div v-show="isFieldVisible('createdAtEnd')">
-      <a-form-item :label="t('common.page.entity.createdatend')">
+      <a-form-item :label="pi.queryLabel('createdAtEnd')">
         <a-date-picker
           v-model:value="advancedQueryForm.createdAtEnd"
-          :placeholder="t('common.page.form.placeholder.select', { field: t('common.page.entity.createdatend') })"
+          :placeholder="pi.queryPh('createdAtEnd', 'select')"
           value-format="YYYY-MM-DD HH:mm:ss"
             show-time
           style="width: 100%"
@@ -516,7 +497,7 @@
             >
               <span class="takt-form-label-hint-icon"><RiQuestionLine class="takt-remix-icon" /></span>
             </a-tooltip>
-            <span>{{ t('common.page.entity.extfield') }}</span>
+            <span>{{ pi.queryLabel('extField') }}</span>
           </span>
         </template>
         <a-textarea
@@ -530,10 +511,10 @@
       </a-form-item>
       </div>
       <div v-show="isFieldVisible('remark')">
-      <a-form-item :label="t('common.page.entity.remark')">
+      <a-form-item :label="pi.queryLabel('remark')">
         <a-textarea
           v-model:value="advancedQueryForm.remark"
-          :placeholder="t('common.page.form.placeholder.optional', { field: t('common.page.entity.remark') })"
+          :placeholder="pi.queryPh('remark', 'optional')"
             :rows="4"
             show-count
             :maxlength="400"
@@ -547,14 +528,15 @@
     <!-- 导入对话框 -->
     <TaktModal
       v-model:open="importVisible"
-      :title="t('common.dialog.title.import', { entity: t('entity.ticket._self') })"
+      :title="t('common.dialog.title.import', { entity: pi.self() })"
       :width="600"
       :footer="null"
       :cancel-text="t('common.page.button.close')"
       @cancel="handleImportCancel"
     >
       <TaktImportFile
-        entity-i18n-key="entity.ticket._self"
+        v-if="importVisible"
+        :entity-i18n-key="CUSTOMERSERVICETICKET_SELF_I18N_KEY"
         file-type="xlsx"
         :sheet-name="excelNames.sheet"
         :template-file-name="excelNames.fileBase"
@@ -570,24 +552,19 @@
       v-model:open="columnSettingVisible"
       :columns="columns"
       :checked-keys="visibleColumnKeys"
-      :id-column-key="'ticketId'"
+      :id-column-key="'customerServiceTicketId'"
       :action-column-key="'action'"
       entity-scope="company"
       table-mode="single"
       @update:checked-keys="handleColumnKeysChange"
       @reset="handleColumnSettingReset"
     />
-    <TicketWorkflowDrawer
-      v-model:open="workflowVisible"
-      :ticket-id="workflowTicketId"
-      @changed="loadData"
-    />
   </div>
 </template>
 
 <script setup lang="ts">
 /**
- * Takt工单实体管理页 · 由 generate-vue-crud-from-api.cjs 根据 types/api 生成
+ * 服务工单实体管理页 · 由 generate-vue-crud-from-api.cjs 根据 types/api 生成
  * @module views/routine/help-desk/ticket
  */
 import { ref, computed, onMounted } from 'vue'
@@ -596,22 +573,34 @@ import type { TableColumnsType } from 'ant-design-vue'
 import { CreateActionColumn } from '@/components/business/takt-action-column/index'
 import { useI18n } from 'vue-i18n'
 import { ensureTaktPaginationConfigAsync, getTaktDefaultPageIndex, getTaktDefaultPageSize } from '@/utils/takt-paged'
-import TicketForm from './components/ticket-form.vue'
-import TicketWorkflowDrawer from './components/ticket-workflow-drawer.vue'
-import { getTicketList, getTicketById, createTicket, updateTicket, deleteTicketById, deleteTicketBatch, getTicketTemplate, importTicket, exportTicket, updateTicketStatus } from '@/api/routine/help-desk/ticket'
-import type { Ticket, TicketQuery } from '@/types/routine/help-desk/ticket'
+import CustomerServiceTicketForm from './components/ticket-form.vue'
+import { getCustomerServiceTicketList, getCustomerServiceTicketById, createCustomerServiceTicket, updateCustomerServiceTicket, deleteCustomerServiceTicketById, deleteCustomerServiceTicketBatch, getCustomerServiceTicketTemplate, importCustomerServiceTicket, exportCustomerServiceTicket, updateCustomerServiceTicketStatus } from '@/api/logistics/customer-service/ticket'
+import type { CustomerServiceTicket, CustomerServiceTicketQuery } from '@/types/logistics/customer-service/ticket'
 import { useDictDataStore } from '@/stores/foundation/dict-data'
 import { taktExcelEntityNames } from '@/utils/naming'
 import { resolveExportDownloadFileName } from '@/utils/export-download-name'
-import { RiEditLine, RiDeleteBinLine, RiQuestionLine, RiCustomerService2Line } from '@remixicon/vue'
+import { normalizeImportResult, type TaktImportResult } from '@/utils/takt-import-result'
+import { RiEditLine, RiDeleteBinLine, RiQuestionLine } from '@remixicon/vue'
 
+import {
+  useCustomerServiceTicketI18n,
+  CUSTOMERSERVICETICKET_LIST_FIELDS,
+  CUSTOMERSERVICETICKET_QUERY_STRING_FIELDS,
+  CUSTOMERSERVICETICKET_QUERY_FIELDS,
+  CUSTOMERSERVICETICKET_SELF_I18N_KEY,
+} from './composables/use-ticket-i18n'
+
+/** 实体字段 i18n（标签/占位符统一入口） */
+const pi = useCustomerServiceTicketI18n()
+/** 表格行类型（TaktSingleTable slot record 与 dataSource 行兼容） */
+type CustomerServiceTicketRowRecord = CustomerServiceTicket | Record<string, unknown>
 /** i18n 翻译函数 */
 const { t } = useI18n()
 /** Excel 导入/导出默认 sheet 名与文件名前缀 */
-const excelNames = taktExcelEntityNames('TaktTicket')
+const excelNames = taktExcelEntityNames('TaktCustomerServiceTicket')
 /** 列表快捷查询占位文案 */
 const searchPlaceholder = computed(
-  () => t('common.page.form.placeholder.search', { keyword: t('entity.ticket._self') })
+  () => t('common.page.form.placeholder.search', { keyword: pi.self() })
 )
 
 /** 快捷查询关键字 */
@@ -619,7 +608,7 @@ const queryKeyword = ref('')
 /** 列表 loading */
 const loading = ref(false)
 /** 分页列表数据 */
-const dataSource = ref<Ticket[]>([])
+const dataSource = ref<CustomerServiceTicket[]>([])
 /** 当前页码 */
 const currentPage = ref(getTaktDefaultPageIndex())
 /** 每页条数 */
@@ -627,9 +616,9 @@ const pageSize = ref(getTaktDefaultPageSize())
 /** 分页 total */
 const total = ref(0)
 /** 工具栏单选时当前行 */
-const selectedRow = ref<Ticket | null>(null)
+const selectedRow = ref<CustomerServiceTicketRowRecord | null>(null)
 /** 表格多选行 */
-const selectedRows = ref<Ticket[]>([])
+const selectedRows = ref<CustomerServiceTicketRowRecord[]>([])
 /** 表格多选 row-key 集合 */
 const selectedRowKeys = ref<(string | number)[]>([])
 
@@ -638,94 +627,37 @@ const formVisible = ref(false)
 /** 弹窗标题（新增/编辑） */
 const formTitle = ref('')
 /** 传入内嵌表单的编辑数据 */
-const formData = ref<Partial<Ticket> | null>(null)
+const formData = ref<Partial<CustomerServiceTicket> | null>(null)
 /** 表单提交 loading */
 const formLoading = ref(false)
 /** 内嵌表单组件 ref（validate / getValues / resetFields） */
 const formRef = ref()
-/** 工作流抽屉是否打开 */
-const workflowVisible = ref(false)
-/** 工作流抽屉当前工单 ID */
-const workflowTicketId = ref<string | null>(null)
 
 /** 高级查询抽屉是否打开 */
 const advancedQueryVisible = ref(false)
+/**
+ * 创建空的高级查询表单
+ * @returns {Record<string, unknown>} 高级查询初始模型
+ */
+function createEmptyAdvancedQueryForm() {
+  const form = Object.fromEntries(CUSTOMERSERVICETICKET_QUERY_STRING_FIELDS.map((key) => [key, ''])) as Record<
+    (typeof CUSTOMERSERVICETICKET_QUERY_STRING_FIELDS)[number],
+    string
+  >
+  return {
+    ...form,
+    ticketType: undefined as number | undefined,
+    priority: undefined as number | undefined,
+    ticketStatus: undefined as number | undefined,
+    acceptanceResult: undefined as number | undefined,
+  }
+}
 /** 高级查询表单模型 */
-const advancedQueryForm = ref({
-  ticketNo: '',
-  title: '',
-  content: '',
-  attachments: '',
-  ticketStatus: undefined as number | undefined,
-  priority: undefined as number | undefined,
-  urgency: undefined as number | undefined,
-  impact: undefined as number | undefined,
-  categoryCode: '',
-  ticketSource: undefined as number | undefined,
-  submitterId: '',
-  submitterName: '',
-  assigneeId: '',
-  assigneeName: '',
-  knowledgeId: '',
-  parentTicketId: '',
-  firstResponseAtStart: '',
-  firstResponseAtEnd: '',
-  firstResponseDueByStart: '',
-  firstResponseDueByEnd: '',
-  resolvedAtStart: '',
-  resolvedAtEnd: '',
-  resolutionDueByStart: '',
-  resolutionDueByEnd: '',
-  closedAtStart: '',
-  closedAtEnd: '',
-  itAssetId: '',
-  assetCode: '',
-  applicantDeptId: '',
-  applicantDeptName: '',
-  applicantBy: '',
-  createdAtStart: '',
-  createdAtEnd: '',
-  extField: '',
-  remark: '',
-})
+const advancedQueryForm = ref(createEmptyAdvancedQueryForm())
 /** 高级查询字段元数据（列显隐配置） */
-const queryFieldsMeta = computed(() => [
-  { key: 'ticketNo', label: t('entity.ticket.no') },
-  { key: 'title', label: t('entity.ticket.title') },
-  { key: 'content', label: t('entity.ticket.content') },
-  { key: 'attachments', label: t('entity.ticket.attachments') },
-  { key: 'ticketStatus', label: t('entity.ticket.status') },
-  { key: 'priority', label: t('entity.ticket.priority') },
-  { key: 'urgency', label: t('entity.ticket.urgency') },
-  { key: 'impact', label: t('entity.ticket.impact') },
-  { key: 'categoryCode', label: t('entity.ticket.categorycode') },
-  { key: 'ticketSource', label: t('entity.ticket.source') },
-  { key: 'submitterId', label: t('entity.ticket.submitterid') },
-  { key: 'submitterName', label: t('entity.ticket.submittername') },
-  { key: 'assigneeId', label: t('entity.ticket.assigneeid') },
-  { key: 'assigneeName', label: t('entity.ticket.assigneename') },
-  { key: 'knowledgeId', label: t('entity.ticket.knowledgeid') },
-  { key: 'parentTicketId', label: t('entity.ticket.parentticketid') },
-  { key: 'firstResponseAtStart', label: t('entity.ticket.firstresponseatstart') },
-  { key: 'firstResponseAtEnd', label: t('entity.ticket.firstresponseatend') },
-  { key: 'firstResponseDueByStart', label: t('entity.ticket.firstresponseduebystart') },
-  { key: 'firstResponseDueByEnd', label: t('entity.ticket.firstresponseduebyend') },
-  { key: 'resolvedAtStart', label: t('entity.ticket.resolvedatstart') },
-  { key: 'resolvedAtEnd', label: t('entity.ticket.resolvedatend') },
-  { key: 'resolutionDueByStart', label: t('entity.ticket.resolutionduebystart') },
-  { key: 'resolutionDueByEnd', label: t('entity.ticket.resolutionduebyend') },
-  { key: 'closedAtStart', label: t('entity.ticket.closedatstart') },
-  { key: 'closedAtEnd', label: t('entity.ticket.closedatend') },
-  { key: 'itAssetId', label: t('entity.ticket.itassetid') },
-  { key: 'assetCode', label: t('entity.ticket.assetcode') },
-  { key: 'applicantDeptId', label: t('entity.ticket.applicantdeptid') },
-  { key: 'applicantDeptName', label: t('entity.ticket.applicantdeptname') },
-  { key: 'applicantBy', label: t('entity.ticket.applicantby') },
-  { key: 'createdAtStart', label: t('common.page.entity.createdatstart') },
-  { key: 'createdAtEnd', label: t('common.page.entity.createdatend') },
-  { key: 'extField', label: t('common.page.entity.extfield') },
-  { key: 'remark', label: t('common.page.entity.remark') },
-])
+const queryFieldsMeta = computed(() =>
+  CUSTOMERSERVICETICKET_QUERY_FIELDS.map((key) => ({ key, label: pi.queryLabel(key) })),
+)
 /** 高级查询当前可见字段 key */
 const visibleQueryFieldKeys = ref<string[]>([])
 /** 列设置抽屉是否打开 */
@@ -735,7 +667,7 @@ const importVisible = ref(false)
 /** 表格当前可见列 key */
 const visibleColumnKeys = ref<string[]>([])
 /** 实体主键字段名（row-key、API 路径参数） */
-const entityIdName = 'ticketId'
+const entityIdName = 'customerServiceTicketId'
 /** 工具栏「编辑」是否禁用（须恰好选中一行） */
 const updateDisabled = computed(() => selectedRows.value.length !== 1)
 /** 工具栏「删除」是否禁用（未选中任何行） */
@@ -748,12 +680,12 @@ const dictDataStore = useDictDataStore()
 /**
  * 构建列表/导出查询参数（空字符串与未填数值/日期不下发，避免后端 DateTime? 模型绑定 400）
  * @param overrides 覆盖分页或导出上限等字段
- * @returns {TicketQuery} 查询 DTO
+ * @returns {CustomerServiceTicketQuery} 查询 DTO
  */
-function buildListQuery(overrides?: Partial<TicketQuery>): TicketQuery {
+function buildListQuery(overrides?: Partial<CustomerServiceTicketQuery>): CustomerServiceTicketQuery {
   const form = advancedQueryForm.value
   const kw = (queryKeyword.value ?? '').trim()
-  const query: TicketQuery = {
+  const query: CustomerServiceTicketQuery = {
     pageIndex: currentPage.value,
     pageSize: pageSize.value,
     ...overrides,
@@ -761,57 +693,27 @@ function buildListQuery(overrides?: Partial<TicketQuery>): TicketQuery {
   if (kw.length > 0) {
     query.keyWords = kw
   }
-  const assignTrimmed = (key: keyof TicketQuery, value: string | undefined) => {
+  const assignTrimmed = (key: keyof CustomerServiceTicketQuery, value: string | undefined) => {
     const v = (value ?? '').trim()
     if (v.length > 0) {
       query[key] = v as never
     }
   }
-  assignTrimmed('ticketNo', form.ticketNo)
-  assignTrimmed('title', form.title)
-  assignTrimmed('content', form.content)
-  assignTrimmed('attachments', form.attachments)
-  if (form.ticketStatus !== undefined && form.ticketStatus !== null) {
-    query.ticketStatus = form.ticketStatus
+  for (const key of CUSTOMERSERVICETICKET_QUERY_STRING_FIELDS) {
+    assignTrimmed(key, form[key])
+  }
+  if (form.ticketType !== undefined && form.ticketType !== null) {
+    query.ticketType = form.ticketType
   }
   if (form.priority !== undefined && form.priority !== null) {
     query.priority = form.priority
   }
-  if (form.urgency !== undefined && form.urgency !== null) {
-    query.urgency = form.urgency
+  if (form.ticketStatus !== undefined && form.ticketStatus !== null) {
+    query.ticketStatus = form.ticketStatus
   }
-  if (form.impact !== undefined && form.impact !== null) {
-    query.impact = form.impact
+  if (form.acceptanceResult !== undefined && form.acceptanceResult !== null) {
+    query.acceptanceResult = form.acceptanceResult
   }
-  assignTrimmed('categoryCode', form.categoryCode)
-  if (form.ticketSource !== undefined && form.ticketSource !== null) {
-    query.ticketSource = form.ticketSource
-  }
-  assignTrimmed('submitterId', form.submitterId)
-  assignTrimmed('submitterName', form.submitterName)
-  assignTrimmed('assigneeId', form.assigneeId)
-  assignTrimmed('assigneeName', form.assigneeName)
-  assignTrimmed('knowledgeId', form.knowledgeId)
-  assignTrimmed('parentTicketId', form.parentTicketId)
-  assignTrimmed('firstResponseAtStart', form.firstResponseAtStart)
-  assignTrimmed('firstResponseAtEnd', form.firstResponseAtEnd)
-  assignTrimmed('firstResponseDueByStart', form.firstResponseDueByStart)
-  assignTrimmed('firstResponseDueByEnd', form.firstResponseDueByEnd)
-  assignTrimmed('resolvedAtStart', form.resolvedAtStart)
-  assignTrimmed('resolvedAtEnd', form.resolvedAtEnd)
-  assignTrimmed('resolutionDueByStart', form.resolutionDueByStart)
-  assignTrimmed('resolutionDueByEnd', form.resolutionDueByEnd)
-  assignTrimmed('closedAtStart', form.closedAtStart)
-  assignTrimmed('closedAtEnd', form.closedAtEnd)
-  assignTrimmed('itAssetId', form.itAssetId)
-  assignTrimmed('assetCode', form.assetCode)
-  assignTrimmed('applicantDeptId', form.applicantDeptId)
-  assignTrimmed('applicantDeptName', form.applicantDeptName)
-  assignTrimmed('applicantBy', form.applicantBy)
-  assignTrimmed('createdAtStart', form.createdAtStart)
-  assignTrimmed('createdAtEnd', form.createdAtEnd)
-  assignTrimmed('extField', form.extField)
-  assignTrimmed('remark', form.remark)
   return query
 }
 /** 页面挂载：租户上下文就绪后加载分页配置，再拉列表 */
@@ -822,333 +724,107 @@ onMounted(async () => {
 })
 
 
-
-
-
-
+/**
+ * 构建列表标准文本列
+ * @param key 列 key / dataIndex
+ * @param title 列标题
+ * @param options 宽度与固定列
+ */
+function buildCustomerServiceTicketListColumn(
+  key: string,
+  title: string,
+  options?: { width?: number; fixed?: 'left' },
+) {
+  return {
+    title,
+    dataIndex: key,
+    key,
+    width: options?.width ?? 120,
+    resizable: true,
+    ellipsis: true,
+    ...(options?.fixed ? { fixed: options.fixed } : {}),
+  }
+}
 
 /** 表格列定义（i18n 随 locale 变化） */
 const columns = computed<TableColumnsType>(() => [
-  {
-    title: t('common.page.entity.id'),
-    dataIndex: 'ticketId',
-    key: 'ticketId',
-    width: 80,
-    resizable: true,
-    ellipsis: true,
-    fixed: 'left',
-    customRender: ({ record }: { record: any }) => getTicketField(record, 'ticketId') ?? ''
-  },
-  {
-    title: t('entity.ticket.no'),
-    dataIndex: 'ticketNo',
-    key: 'ticketNo',
-    width: 120,
-    resizable: true,
-    ellipsis: true,
-    customRender: ({ record }: { record: any }) => getTicketField(record, 'ticketNo') ?? ''
-  },
-  {
-    title: t('entity.ticket.title'),
-    dataIndex: 'title',
-    key: 'title',
-    width: 120,
-    resizable: true,
-    ellipsis: true,
-    customRender: ({ record }: { record: any }) => getTicketField(record, 'title') ?? ''
-  },
-  {
-    title: t('entity.ticket.content'),
-    dataIndex: 'content',
-    key: 'content',
-    width: 120,
-    resizable: true,
-    ellipsis: true,
-    customRender: ({ record }: { record: any }) => getTicketField(record, 'content') ?? ''
-  },
-  {
-    title: t('entity.ticket.attachments'),
-    dataIndex: 'attachments',
-    key: 'attachments',
-    width: 120,
-    resizable: true,
-    ellipsis: true,
-    customRender: ({ record }: { record: any }) => getTicketField(record, 'attachments') ?? ''
-  },
-  {
-    title: t('entity.ticket.status'),
-    dataIndex: 'ticketStatus',
-    key: 'ticketStatus',
-    width: 120,
-    resizable: true,
-    ellipsis: true,
-  },
-  {
-    title: t('entity.ticket.priority'),
-    dataIndex: 'priority',
-    key: 'priority',
-    width: 120,
-    resizable: true,
-    ellipsis: true,
-  },
-  {
-    title: t('entity.ticket.urgency'),
-    dataIndex: 'urgency',
-    key: 'urgency',
-    width: 120,
-    resizable: true,
-    ellipsis: true,
-  },
-  {
-    title: t('entity.ticket.impact'),
-    dataIndex: 'impact',
-    key: 'impact',
-    width: 120,
-    resizable: true,
-    ellipsis: true,
-  },
-  {
-    title: t('entity.ticket.categorycode'),
-    dataIndex: 'categoryCode',
-    key: 'categoryCode',
-    width: 120,
-    resizable: true,
-    ellipsis: true,
-    customRender: ({ record }: { record: any }) => getTicketField(record, 'categoryCode') ?? ''
-  },
-  {
-    title: t('entity.ticket.source'),
-    dataIndex: 'ticketSource',
-    key: 'ticketSource',
-    width: 120,
-    resizable: true,
-    ellipsis: true,
-    customRender: ({ record }: { record: any }) => getTicketField(record, 'ticketSource') ?? ''
-  },
-  {
-    title: t('entity.ticket.submitterid'),
-    dataIndex: 'submitterId',
-    key: 'submitterId',
-    width: 120,
-    resizable: true,
-    ellipsis: true,
-    customRender: ({ record }: { record: any }) => getTicketField(record, 'submitterId') ?? ''
-  },
-  {
-    title: t('entity.ticket.submittername'),
-    dataIndex: 'submitterName',
-    key: 'submitterName',
-    width: 120,
-    resizable: true,
-    ellipsis: true,
-    customRender: ({ record }: { record: any }) => getTicketField(record, 'submitterName') ?? ''
-  },
-  {
-    title: t('entity.ticket.assigneeid'),
-    dataIndex: 'assigneeId',
-    key: 'assigneeId',
-    width: 120,
-    resizable: true,
-    ellipsis: true,
-    customRender: ({ record }: { record: any }) => getTicketField(record, 'assigneeId') ?? ''
-  },
-  {
-    title: t('entity.ticket.assigneename'),
-    dataIndex: 'assigneeName',
-    key: 'assigneeName',
-    width: 120,
-    resizable: true,
-    ellipsis: true,
-    customRender: ({ record }: { record: any }) => getTicketField(record, 'assigneeName') ?? ''
-  },
-  {
-    title: t('entity.ticket.knowledgeid'),
-    dataIndex: 'knowledgeId',
-    key: 'knowledgeId',
-    width: 120,
-    resizable: true,
-    ellipsis: true,
-    customRender: ({ record }: { record: any }) => getTicketField(record, 'knowledgeId') ?? ''
-  },
-  {
-    title: t('entity.ticket.parentticketid'),
-    dataIndex: 'parentTicketId',
-    key: 'parentTicketId',
-    width: 120,
-    resizable: true,
-    ellipsis: true,
-    customRender: ({ record }: { record: any }) => getTicketField(record, 'parentTicketId') ?? ''
-  },
-  {
-    title: t('entity.ticket.firstresponseat'),
-    dataIndex: 'firstResponseAt',
-    key: 'firstResponseAt',
-    width: 120,
-    resizable: true,
-    ellipsis: true,
-    customRender: ({ record }: { record: any }) => getTicketField(record, 'firstResponseAt') ?? ''
-  },
-  {
-    title: t('entity.ticket.firstresponsedueby'),
-    dataIndex: 'firstResponseDueBy',
-    key: 'firstResponseDueBy',
-    width: 120,
-    resizable: true,
-    ellipsis: true,
-    customRender: ({ record }: { record: any }) => getTicketField(record, 'firstResponseDueBy') ?? ''
-  },
-  {
-    title: t('entity.ticket.resolvedat'),
-    dataIndex: 'resolvedAt',
-    key: 'resolvedAt',
-    width: 120,
-    resizable: true,
-    ellipsis: true,
-    customRender: ({ record }: { record: any }) => getTicketField(record, 'resolvedAt') ?? ''
-  },
-  {
-    title: t('entity.ticket.resolutiondueby'),
-    dataIndex: 'resolutionDueBy',
-    key: 'resolutionDueBy',
-    width: 120,
-    resizable: true,
-    ellipsis: true,
-    customRender: ({ record }: { record: any }) => getTicketField(record, 'resolutionDueBy') ?? ''
-  },
-  {
-    title: t('entity.ticket.closedat'),
-    dataIndex: 'closedAt',
-    key: 'closedAt',
-    width: 120,
-    resizable: true,
-    ellipsis: true,
-    customRender: ({ record }: { record: any }) => getTicketField(record, 'closedAt') ?? ''
-  },
-  {
-    title: t('entity.ticket.itassetid'),
-    dataIndex: 'itAssetId',
-    key: 'itAssetId',
-    width: 120,
-    resizable: true,
-    ellipsis: true,
-    customRender: ({ record }: { record: any }) => getTicketField(record, 'itAssetId') ?? ''
-  },
-  {
-    title: t('entity.ticket.assetcode'),
-    dataIndex: 'assetCode',
-    key: 'assetCode',
-    width: 120,
-    resizable: true,
-    ellipsis: true,
-    customRender: ({ record }: { record: any }) => getTicketField(record, 'assetCode') ?? ''
-  },
-  {
-    title: t('entity.ticket.applicantdeptid'),
-    dataIndex: 'applicantDeptId',
-    key: 'applicantDeptId',
-    width: 120,
-    resizable: true,
-    ellipsis: true,
-    customRender: ({ record }: { record: any }) => getTicketField(record, 'applicantDeptId') ?? ''
-  },
-  {
-    title: t('entity.ticket.applicantdeptname'),
-    dataIndex: 'applicantDeptName',
-    key: 'applicantDeptName',
-    width: 120,
-    resizable: true,
-    ellipsis: true,
-    customRender: ({ record }: { record: any }) => getTicketField(record, 'applicantDeptName') ?? ''
-  },
-  {
-    title: t('entity.ticket.applicantby'),
-    dataIndex: 'applicantBy',
-    key: 'applicantBy',
-    width: 120,
-    resizable: true,
-    ellipsis: true,
-    customRender: ({ record }: { record: any }) => getTicketField(record, 'applicantBy') ?? ''
-  },
-  {
-    title: t('entity.ticket.childtickets'),
-    dataIndex: 'childTickets',
-    key: 'childTickets',
-    width: 120,
-    resizable: true,
-    ellipsis: true,
-    customRender: ({ record }: { record: any }) => getTicketField(record, 'childTickets') ?? ''
-  },
+  buildCustomerServiceTicketListColumn('customerServiceTicketId', t('common.page.entity.id'), { width: 80, fixed: 'left' }),
+  ...CUSTOMERSERVICETICKET_LIST_FIELDS.map((key) => buildCustomerServiceTicketListColumn(key, pi.label(key))),
   CreateActionColumn({
     actions: [
-      {
-        key: 'workflow',
-        label: t('routine.help-desk.ticket.page.workflow.title'),
-        shape: 'plain',
-        icon: RiCustomerService2Line,
-        permission: 'routine:help:desk:ticket:update',
-        onClick: (record: Ticket) => handleOpenWorkflowForRecord(record)
-      },
       {
         key: 'update',
         label: t('common.page.button.edit'),
         shape: 'plain',
         icon: RiEditLine,
-        permission: 'routine:help:desk:ticket:update',
-        onClick: (record: Ticket) => handleEdit(record)
+        permission: 'logistics:service:customer:ticket:update',
+        onClick: (record: CustomerServiceTicketRowRecord) => handleEdit(record)
       },
       {
         key: 'delete',
         label: t('common.page.button.delete'),
         shape: 'plain',
         icon: RiDeleteBinLine,
-        permission: 'routine:help:desk:ticket:delete',
-        onClick: (record: Ticket) => handleDeleteOne(record)
+        permission: 'logistics:service:customer:ticket:delete',
+        onClick: (record: CustomerServiceTicketRowRecord) => handleDeleteOne(record)
       }
     ]
   })
 ])
 
 /** 表格 row-key（优先实体主键字段） */
-const getTicketId = (record: any): string => record?.[entityIdName] ?? ''
+const getCustomerServiceTicketId = (record: CustomerServiceTicketRowRecord): string => {
+  const id = (record as Record<string, unknown>)?.[entityIdName]
+  return id != null ? String(id) : ''
+}
 /**
- * 读取行字段值
+ * 供 TaktDictTag 等组件使用的标量字典值
  * @param record 行数据
  * @param field 字段名
  */
-const getTicketField = (record: any, field: string): any => record?.[field]
+const getCustomerServiceTicketDictValue = (
+  record: CustomerServiceTicketRowRecord,
+  field: string,
+): string | number | undefined => {
+  const value = (record as Record<string, unknown>)?.[field]
+  if (value === null || value === undefined) return undefined
+  if (typeof value === 'string' || typeof value === 'number') return value
+  return String(value)
+}
+
 
 
 /** 行选择配置 */
 const rowSelection = computed(() => ({
   selectedRowKeys: selectedRowKeys.value,
-  onChange: (keys: (string | number)[], rows: Ticket[]) => {
+  onChange: (keys: (string | number)[], rows: CustomerServiceTicketRowRecord[]) => {
     selectedRowKeys.value = keys
     selectedRows.value = rows
     selectedRow.value = rows.length === 1 ? (rows[0] ?? null) : null
   },
-  onSelect: (record: Ticket, selected: boolean) => {
+  onSelect: (record: CustomerServiceTicketRowRecord, selected: boolean) => {
     if (selected) {
       selectedRow.value = record
-    } else if (selectedRow.value && getTicketId(selectedRow.value) === getTicketId(record)) {
+    } else if (selectedRow.value && getCustomerServiceTicketId(selectedRow.value) === getCustomerServiceTicketId(record)) {
       selectedRow.value = null
     }
   },
-  onSelectAll: (selected: boolean, selectedRowsData: Ticket[]) => {
+  onSelectAll: (selected: boolean, selectedRowsData: CustomerServiceTicketRowRecord[]) => {
     selectedRow.value = selected && selectedRowsData.length === 1 ? (selectedRowsData[0] ?? null) : null
   }
 }))
 
 /** 行点击切换选中（与 rowSelection 联动） */
-const onClickRow = (record: Ticket) => ({
+const onClickRow = (record: CustomerServiceTicketRowRecord) => ({
   onClick: () => {
-    const key = getTicketId(record)
+    const key = getCustomerServiceTicketId(record)
     const index = selectedRowKeys.value.indexOf(key)
     if (index > -1) {
       selectedRowKeys.value.splice(index, 1)
     } else {
       selectedRowKeys.value.push(key)
     }
-    selectedRows.value = dataSource.value.filter((item) => selectedRowKeys.value.includes(getTicketId(item)))
+    selectedRows.value = dataSource.value.filter((item) => selectedRowKeys.value.includes(getCustomerServiceTicketId(item)))
     selectedRow.value = selectedRowKeys.value.length === 1 ? (selectedRows.value[0] ?? null) : null
     if (rowSelection.value.onChange) {
       rowSelection.value.onChange(selectedRowKeys.value, selectedRows.value)
@@ -1160,11 +836,11 @@ const onClickRow = (record: Ticket) => ({
 async function loadData() {
   loading.value = true
   try {
-    const res = await getTicketList(buildListQuery())
+    const res = await getCustomerServiceTicketList(buildListQuery())
     dataSource.value = res.data ?? []
     total.value = res.total ?? 0
   } catch (error: any) {
-    logger.error('[Ticket] 加载数据失败', { error })
+    logger.error('[CustomerServiceTicket] 加载数据失败', { error })
     message.error(error?.message || t('common.feedback.load.data.failed'))
     dataSource.value = []
     total.value = 0
@@ -1185,90 +861,43 @@ function handleSearch() {
 /** 重置查询条件并刷新列表 */
 function handleReset() {
   queryKeyword.value = ''
-  advancedQueryForm.value = {
-  ticketNo: '',
-  title: '',
-  content: '',
-  attachments: '',
-  ticketStatus: undefined as number | undefined,
-  priority: undefined as number | undefined,
-  urgency: undefined as number | undefined,
-  impact: undefined as number | undefined,
-  categoryCode: '',
-  ticketSource: undefined as number | undefined,
-  submitterId: '',
-  submitterName: '',
-  assigneeId: '',
-  assigneeName: '',
-  knowledgeId: '',
-  parentTicketId: '',
-  firstResponseAtStart: '',
-  firstResponseAtEnd: '',
-  firstResponseDueByStart: '',
-  firstResponseDueByEnd: '',
-  resolvedAtStart: '',
-  resolvedAtEnd: '',
-  resolutionDueByStart: '',
-  resolutionDueByEnd: '',
-  closedAtStart: '',
-  closedAtEnd: '',
-  itAssetId: '',
-  assetCode: '',
-  applicantDeptId: '',
-  applicantDeptName: '',
-  applicantBy: '',
-  createdAtStart: '',
-  createdAtEnd: '',
-  extField: '',
-  remark: '',
-  }
+  advancedQueryForm.value = createEmptyAdvancedQueryForm()
   currentPage.value = getTaktDefaultPageIndex()
   loadData()
 }
 
-/** 打开工作流抽屉（工具栏：当前选中行） */
-function handleOpenWorkflow() {
-  if (!selectedRow.value) {
-    message.warning(t('common.tip.select.to.action', {
-      action: t('routine.help-desk.ticket.page.workflow.title'),
-      entity: t('entity.ticket._self'),
-    }))
-    return
-  }
-  handleOpenWorkflowForRecord(selectedRow.value)
-}
-
-/**
- * 打开工作流抽屉（指定行）
- * @param {Ticket} record 工单行
- */
-function handleOpenWorkflowForRecord(record: Ticket) {
-  const id = getTicketId(record)
-  if (!id) return
-  workflowTicketId.value = id
-  workflowVisible.value = true
-}
-
 /** 打开新增弹窗 */
 function handleCreate() {
-  formTitle.value = t('common.dialog.title.create', { entity: t('entity.ticket._self') })
+  formTitle.value = t('common.dialog.title.create', { entity: pi.self() })
   formData.value = null
   formVisible.value = true
   nextTick(() => formRef.value?.resetFields())
 }
-/** 打开编辑弹窗 */
-function handleEdit(record: Ticket) {
-  formTitle.value = t('common.dialog.title.edit', { entity: t('entity.ticket._self') })
-  formData.value = { ...record }
-  formVisible.value = true
+/** 打开编辑弹窗（拉取详情，避免列表列裁剪字段） */
+async function handleEdit(record: CustomerServiceTicketRowRecord) {
+  const id = getCustomerServiceTicketId(record)
+  if (!id) {
+    return
+  }
+  formTitle.value = t('common.dialog.title.edit', { entity: pi.self() })
+  formLoading.value = true
+  try {
+    const detail = await getCustomerServiceTicketById(id)
+    formData.value = detail ?? ({ ...record } as Partial<CustomerServiceTicket>)
+    formVisible.value = true
+  } catch (error: unknown) {
+    message.error(t('common.feedback.load.data.failed'))
+  } finally {
+    formLoading.value = false
+  }
 }
 
 /** 工具栏编辑：打开当前单选行 */
 function handleUpdate() {
   if (selectedRow.value) {
-    handleEdit(selectedRow.value)
+    void handleEdit(selectedRow.value)
   } else {
-    message.warning(t('common.tip.select.to.action', { action: t('common.page.button.edit'), entity: t('entity.ticket._self') }))
+    message.warning(t('common.tip.select.to.action', { action: t('common.page.button.edit'), entity: pi.self() }))
   }
 }
 /** 提交新增/编辑表单 */
@@ -1285,11 +914,11 @@ async function handleFormSubmit() {
     const payload = refInst.getValues?.() ?? { ...(formData.value as any) }
     const id = (formData.value as any)?.[entityIdName]
     if (id) {
-      await updateTicket(id, payload as any)
-      message.success(t('common.feedback.updated', { target: t('entity.ticket._self') }))
+      await updateCustomerServiceTicket(id, payload as any)
+      message.success(t('common.feedback.updated', { target: pi.self() }))
     } else {
-      await createTicket(payload as any)
-      message.success(t('common.feedback.created', { target: t('entity.ticket._self') }))
+      await createCustomerServiceTicket(payload as any)
+      message.success(t('common.feedback.created', { target: pi.self() }))
     }
     formVisible.value = false
     formData.value = null
@@ -1313,19 +942,22 @@ function handleImport() {
 
 /** 下载导入模板 Excel */
 async function handleDownloadTemplate(sheetName?: string, fileName?: string): Promise<Blob> {
-  const res = await getTicketTemplate(sheetName, fileName)
+  const res = await getCustomerServiceTicketTemplate(sheetName, fileName)
   return (res as any)?.data ?? res
 }
 
-/** 上传并导入 Excel 文件 */
-async function handleImportFile(file: File, sheetName?: string): Promise<{ success: number; fail: number; errors: string[] }> {
-  return await importTicket(file, sheetName)
+/** 上传并导入 Excel 文件（归一化后端 SuccessCount/successCount） */
+async function handleImportFile(file: File, sheetName?: string): Promise<TaktImportResult> {
+  const raw = await importCustomerServiceTicket(file, sheetName)
+  return normalizeImportResult(raw)
 }
 
-/** 导入完成回调：刷新列表并可选关闭对话框 */
-function handleImportSuccess(result: { success: number; fail: number; errors: string[] }) {
+/** 导入完成回调：刷新列表；全部成功时延迟关闭对话框 */
+function handleImportSuccess(result: TaktImportResult) {
   loadData()
-  if (result.fail === 0) setTimeout(() => { importVisible.value = false }, 2000)
+  if (result.fail === 0 && result.success > 0) {
+    setTimeout(() => { importVisible.value = false }, 2000)
+  }
 }
 
 /** 关闭导入对话框 */
@@ -1336,7 +968,7 @@ function handleImportCancel() {
 async function handleExport() {
   try {
     loading.value = true
-    const exportMeta = await exportTicket(
+    const exportMeta = await exportCustomerServiceTicket(
       buildListQuery({ pageIndex: 1, pageSize: 100000 }),
       excelNames.sheet,
       excelNames.fileBase
@@ -1359,24 +991,24 @@ async function handleExport() {
     link.click()
     document.body.removeChild(link)
     setTimeout(() => window.URL.revokeObjectURL(url), 100)
-    message.success(t('common.feedback.export.success', { target: t('entity.ticket._self') }))
+    message.success(t('common.feedback.export.success', { target: pi.self() }))
   } catch (error: any) {
-    logger.error('[Ticket] 导出失败', { error })
-    message.error(error?.message || t('common.feedback.export.failed', { target: t('entity.ticket._self') }))
+    logger.error('[CustomerServiceTicket] 导出失败', { error })
+    message.error(error?.message || t('common.feedback.export.failed', { target: pi.self() }))
   } finally {
     loading.value = false
   }
 }
 /** 删除单行 */
-async function handleDeleteOne(record: Ticket) {
+async function handleDeleteOne(record: CustomerServiceTicketRowRecord) {
   Modal.confirm({
     title: t('common.tip.confirm.delete.title'),
-    content: t('common.tip.confirm.delete.entity', { entity: t('entity.ticket._self'), name: t('common.tip.this.target', { target: t('entity.ticket._self') }) }),
+    content: t('common.tip.confirm.delete.entity', { entity: pi.self(), name: t('common.tip.this.target', { target: pi.self() }) }),
     okText: t('common.page.button.delete'),
     cancelText: t('common.page.button.cancel'),
     onOk: async () => {
-      await deleteTicketById((record as any)[entityIdName])
-      message.success(t('common.feedback.deleted', { target: t('entity.ticket._self') }))
+      await deleteCustomerServiceTicketById((record as any)[entityIdName])
+      message.success(t('common.feedback.deleted', { target: pi.self() }))
       loadData()
     }
   })
@@ -1384,18 +1016,18 @@ async function handleDeleteOne(record: Ticket) {
 /** 批量删除选中行 */
 async function handleDelete() {
   if (selectedRows.value.length === 0) {
-    message.warning(t('common.tip.select.to.action', { action: t('common.page.button.delete'), entity: t('entity.ticket._self') }))
+    message.warning(t('common.tip.select.to.action', { action: t('common.page.button.delete'), entity: pi.self() }))
     return
   }
   Modal.confirm({
     title: t('common.tip.confirm.delete.title'),
-    content: t('common.tip.confirm.delete.count', { entity: t('entity.ticket._self'), count: selectedRows.value.length }),
+    content: t('common.tip.confirm.delete.count', { entity: pi.self(), count: selectedRows.value.length }),
     okText: t('common.page.button.delete'),
     cancelText: t('common.page.button.cancel'),
     onOk: async () => {
       const ids = selectedRows.value.map((r: any) => r[entityIdName]).filter(Boolean)
-      await deleteTicketBatch(ids)
-      message.success(t('common.feedback.deleted', { target: t('entity.ticket._self') }))
+      await deleteCustomerServiceTicketBatch(ids)
+      message.success(t('common.feedback.deleted', { target: pi.self() }))
       loadData()
     }
   })
@@ -1413,43 +1045,7 @@ function handleAdvancedQuerySubmit() {
 }
 
 function handleAdvancedQueryReset() {
-  advancedQueryForm.value = {
-  ticketNo: '',
-  title: '',
-  content: '',
-  attachments: '',
-  ticketStatus: undefined as number | undefined,
-  priority: undefined as number | undefined,
-  urgency: undefined as number | undefined,
-  impact: undefined as number | undefined,
-  categoryCode: '',
-  ticketSource: undefined as number | undefined,
-  submitterId: '',
-  submitterName: '',
-  assigneeId: '',
-  assigneeName: '',
-  knowledgeId: '',
-  parentTicketId: '',
-  firstResponseAtStart: '',
-  firstResponseAtEnd: '',
-  firstResponseDueByStart: '',
-  firstResponseDueByEnd: '',
-  resolvedAtStart: '',
-  resolvedAtEnd: '',
-  resolutionDueByStart: '',
-  resolutionDueByEnd: '',
-  closedAtStart: '',
-  closedAtEnd: '',
-  itAssetId: '',
-  assetCode: '',
-  applicantDeptId: '',
-  applicantDeptName: '',
-  applicantBy: '',
-  createdAtStart: '',
-  createdAtEnd: '',
-  extField: '',
-  remark: '',
-  }
+  advancedQueryForm.value = createEmptyAdvancedQueryForm()
 }
 
 /** 打开列设置抽屉 */

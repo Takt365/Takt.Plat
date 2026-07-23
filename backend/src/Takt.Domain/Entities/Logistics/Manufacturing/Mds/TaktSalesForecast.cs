@@ -18,13 +18,13 @@ namespace Takt.Domain.Entities.Logistics.Manufacturing.Mds;
 /// <summary>
 /// Takt销售预测实体（公司级；MDS 独立需求源头，可下达生产计划或销售订单）
 /// </summary>
-[SugarTable("takt_logistics_manufacturing_planning_sales_plan", "销售预测表")]
+[SugarTable("takt_logistics_manufacturing_mds_sales_forecast", "销售预测表")]
 [SugarIndex("ix_sales_plan_tenant", nameof(TenantCode), OrderByType.Asc, nameof(CompanyCode), OrderByType.Asc, false)]
 [SugarIndex("ix_sales_plan_is_deleted", nameof(TenantCode), OrderByType.Asc, nameof(CompanyCode), OrderByType.Asc, nameof(IsDeleted), OrderByType.Asc, false)]
-[SugarIndex("ix_takt_logistics_manufacturing_planning_sales_plan_unique", nameof(TenantCode), OrderByType.Asc, nameof(CompanyCode), OrderByType.Asc, nameof(PlantCode), OrderByType.Asc, nameof(SalesForecastCode), OrderByType.Asc, nameof(PlanDate), OrderByType.Asc, true)]
-[SugarIndex("ix_takt_logistics_manufacturing_planning_sales_plan_flow_instance_id", nameof(TenantCode), OrderByType.Asc, nameof(CompanyCode), OrderByType.Asc, nameof(FlowInstanceId), OrderByType.Asc, false)]
-[SugarIndex("ix_takt_logistics_manufacturing_planning_sales_plan_plan_date", nameof(TenantCode), OrderByType.Asc, nameof(CompanyCode), OrderByType.Asc, nameof(PlanDate), OrderByType.Desc, false)]
-[SugarIndex("ix_takt_logistics_manufacturing_planning_sales_plan_customer", nameof(TenantCode), OrderByType.Asc, nameof(CompanyCode), OrderByType.Asc, nameof(CustomerCode), OrderByType.Asc, false)]
+[SugarIndex("ix_takt_logistics_manufacturing_mds_sales_forecast_unique", nameof(TenantCode), OrderByType.Asc, nameof(CompanyCode), OrderByType.Asc, nameof(PlantCode), OrderByType.Asc, nameof(SalesForecastCode), OrderByType.Asc, nameof(PlanDate), OrderByType.Asc, true)]
+[SugarIndex("ix_takt_logistics_manufacturing_mds_sales_forecast_flow_instance_id", nameof(TenantCode), OrderByType.Asc, nameof(CompanyCode), OrderByType.Asc, nameof(FlowInstanceId), OrderByType.Asc, false)]
+[SugarIndex("ix_takt_logistics_manufacturing_mds_sales_forecast_plan_date", nameof(TenantCode), OrderByType.Asc, nameof(CompanyCode), OrderByType.Asc, nameof(PlanDate), OrderByType.Desc, false)]
+[SugarIndex("ix_takt_logistics_manufacturing_mds_sales_forecast_customer", nameof(TenantCode), OrderByType.Asc, nameof(CompanyCode), OrderByType.Asc, nameof(CustomerCode), OrderByType.Asc, false)]
 public class TaktSalesForecast : TaktApprovalEntityBase
 {
     /// <summary>

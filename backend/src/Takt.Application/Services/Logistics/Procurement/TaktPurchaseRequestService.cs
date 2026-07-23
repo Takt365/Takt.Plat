@@ -120,12 +120,12 @@ public class TaktPurchaseRequestService : TaktServiceBase, ITaktPurchaseRequestS
     public async Task<TaktPurchaseRequestDto> CreatePurchaseRequestAsync(TaktPurchaseRequestCreateDto dto)
     {
         var entity = dto.Adapt<TaktPurchaseRequest>();
-        var isUnique_ix_takt_logistics_materials_purchase_request_pr_unique = await _uniqueValidator.IsUniqueAsync(
+        var isUnique_ix_takt_logistics_procurement_purchase_request_pr_unique = await _uniqueValidator.IsUniqueAsync(
             _purchaseRequestRepository,
             x => x.PlantCode == entity.PlantCode
                 && x.PurchaseRequestCode == entity.PurchaseRequestCode
                 && x.RequestDate == entity.RequestDate);
-        if (!isUnique_ix_takt_logistics_materials_purchase_request_pr_unique)
+        if (!isUnique_ix_takt_logistics_procurement_purchase_request_pr_unique)
         {
             throw new TaktBusinessException("采购申请的PlantCode、PurchaseRequestCode、RequestDate已存在");
         }
@@ -148,13 +148,13 @@ public class TaktPurchaseRequestService : TaktServiceBase, ITaktPurchaseRequestS
             throw new TaktBusinessException("采购申请不存在");
         }
         dto.Adapt(entity);
-        var isUnique_ix_takt_logistics_materials_purchase_request_pr_unique = await _uniqueValidator.IsUniqueAsync(
+        var isUnique_ix_takt_logistics_procurement_purchase_request_pr_unique = await _uniqueValidator.IsUniqueAsync(
             _purchaseRequestRepository,
             x => x.PlantCode == entity.PlantCode
                 && x.PurchaseRequestCode == entity.PurchaseRequestCode
                 && x.RequestDate == entity.RequestDate,
             id);
-        if (!isUnique_ix_takt_logistics_materials_purchase_request_pr_unique)
+        if (!isUnique_ix_takt_logistics_procurement_purchase_request_pr_unique)
         {
             throw new TaktBusinessException("采购申请的PlantCode、PurchaseRequestCode、RequestDate已存在");
         }
@@ -259,12 +259,12 @@ public class TaktPurchaseRequestService : TaktServiceBase, ITaktPurchaseRequestS
                 {
                     throw new TaktBusinessException("与Excel中其他行重复（PlantCode、PurchaseRequestCode、RequestDate）");
                 }
-                var isUnique_ix_takt_logistics_materials_purchase_request_pr_unique = await _uniqueValidator.IsUniqueAsync(
+                var isUnique_ix_takt_logistics_procurement_purchase_request_pr_unique = await _uniqueValidator.IsUniqueAsync(
                     _purchaseRequestRepository,
                     x => x.PlantCode == entity.PlantCode
                         && x.PurchaseRequestCode == entity.PurchaseRequestCode
                         && x.RequestDate == entity.RequestDate);
-                if (!isUnique_ix_takt_logistics_materials_purchase_request_pr_unique)
+                if (!isUnique_ix_takt_logistics_procurement_purchase_request_pr_unique)
                 {
                     throw new TaktBusinessException("采购申请的PlantCode、PurchaseRequestCode、RequestDate已存在");
                 }
@@ -404,14 +404,14 @@ public class TaktPurchaseRequestService : TaktServiceBase, ITaktPurchaseRequestS
                         throw new TaktBusinessException("采购申请明细不属于当前主表（PurchaseRequestItemId={childDto.PurchaseRequestItemId}）");
                     }
                     submittedIds.Add(childDto.PurchaseRequestItemId);
-                    var isUniqueUpdate_ix_takt_logistics_materials_purchase_request_item_request_line_unique = await _uniqueValidator.IsUniqueAsync(
+                    var isUniqueUpdate_ix_takt_logistics_procurement_purchase_request_item_request_line_unique = await _uniqueValidator.IsUniqueAsync(
                         _purchaseRequestItemRepository,
                         x => x.CompanyCode == x.CompanyCode
                 && x.PurchaseRequestId == x.PurchaseRequestId
                 && x.LineNumber == x.LineNumber
                 && x.MaterialCode == x.MaterialCode,
                         childDto.PurchaseRequestItemId);
-                    if (!isUniqueUpdate_ix_takt_logistics_materials_purchase_request_item_request_line_unique)
+                    if (!isUniqueUpdate_ix_takt_logistics_procurement_purchase_request_item_request_line_unique)
                     {
                         throw new TaktBusinessException("采购申请明细的CompanyCode、PurchaseRequestId、LineNumber、MaterialCode已存在");
                     }
@@ -423,13 +423,13 @@ public class TaktPurchaseRequestService : TaktServiceBase, ITaktPurchaseRequestS
                 }
                 else
                 {
-                    var isUniqueCreate_ix_takt_logistics_materials_purchase_request_item_request_line_unique = await _uniqueValidator.IsUniqueAsync(
+                    var isUniqueCreate_ix_takt_logistics_procurement_purchase_request_item_request_line_unique = await _uniqueValidator.IsUniqueAsync(
                         _purchaseRequestItemRepository,
                         x => x.CompanyCode == x.CompanyCode
                 && x.PurchaseRequestId == x.PurchaseRequestId
                 && x.LineNumber == x.LineNumber
                 && x.MaterialCode == x.MaterialCode);
-                    if (!isUniqueCreate_ix_takt_logistics_materials_purchase_request_item_request_line_unique)
+                    if (!isUniqueCreate_ix_takt_logistics_procurement_purchase_request_item_request_line_unique)
                     {
                         throw new TaktBusinessException("采购申请明细的CompanyCode、PurchaseRequestId、LineNumber、MaterialCode已存在");
                     }

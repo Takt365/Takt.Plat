@@ -23,14 +23,14 @@ namespace Takt.Domain.Entities.Logistics.Manufacturing.Mps;
 /// 机器稼动率实体（生产设备运行效率记录）
 /// 时间稼动率(%) = 稼动时间 ÷ 负荷时间 × 100%；为 OEE（设备综合效率）基础之一。
 /// </summary>
-[SugarTable("takt_logistics_manufacturing_planning_equipment_operation_rate", "机器稼动率表")]
+[SugarTable("takt_logistics_manufacturing_mps_equipment_operation_rate", "机器稼动率表")]
 [SugarIndex("ix_equipment_operation_rate_tenant", nameof(TenantCode), OrderByType.Asc, nameof(CompanyCode), OrderByType.Asc, false)]
 [SugarIndex("ix_equipment_operation_rate_is_deleted", nameof(TenantCode), OrderByType.Asc, nameof(CompanyCode), OrderByType.Asc, nameof(IsDeleted), OrderByType.Asc, false)]
-[SugarIndex("ix_takt_logistics_manufacturing_planning_equipment_operation_rate_eor_unique", nameof(TenantCode), OrderByType.Asc, nameof(CompanyCode), OrderByType.Asc, nameof(PlantCode), OrderByType.Asc, nameof(EquipmentCode), OrderByType.Asc, nameof(TimeCategory), OrderByType.Asc, nameof(StartDate), OrderByType.Asc, nameof(ShiftNo), OrderByType.Asc, true)]
-[SugarIndex("ix_takt_logistics_manufacturing_planning_equipment_operation_rate_equipment_code", nameof(TenantCode), OrderByType.Asc, nameof(CompanyCode), OrderByType.Asc, nameof(EquipmentCode), OrderByType.Asc, false)]
-[SugarIndex("ix_takt_logistics_manufacturing_planning_equipment_operation_rate_plant_code", nameof(TenantCode), OrderByType.Asc, nameof(CompanyCode), OrderByType.Asc, nameof(PlantCode), OrderByType.Asc, false)]
-[SugarIndex("ix_takt_logistics_manufacturing_planning_equipment_operation_rate_prod_team", nameof(TenantCode), OrderByType.Asc, nameof(CompanyCode), OrderByType.Asc, nameof(ProdTeam), OrderByType.Asc, false)]
-[SugarIndex("ix_takt_logistics_manufacturing_planning_equipment_operation_rate_start_date", nameof(TenantCode), OrderByType.Asc, nameof(CompanyCode), OrderByType.Asc, nameof(StartDate), OrderByType.Asc, false)]
+[SugarIndex("ix_takt_logistics_manufacturing_mps_equipment_operation_rate_eor_unique", nameof(TenantCode), OrderByType.Asc, nameof(CompanyCode), OrderByType.Asc, nameof(PlantCode), OrderByType.Asc, nameof(EquipmentCode), OrderByType.Asc, nameof(TimeCategory), OrderByType.Asc, nameof(StartDate), OrderByType.Asc, nameof(ShiftNo), OrderByType.Asc, true)]
+[SugarIndex("ix_takt_logistics_manufacturing_mps_equipment_operation_rate_equipment_code", nameof(TenantCode), OrderByType.Asc, nameof(CompanyCode), OrderByType.Asc, nameof(EquipmentCode), OrderByType.Asc, false)]
+[SugarIndex("ix_takt_logistics_manufacturing_mps_equipment_operation_rate_plant_code", nameof(TenantCode), OrderByType.Asc, nameof(CompanyCode), OrderByType.Asc, nameof(PlantCode), OrderByType.Asc, false)]
+[SugarIndex("ix_takt_logistics_manufacturing_mps_equipment_operation_rate_prod_team", nameof(TenantCode), OrderByType.Asc, nameof(CompanyCode), OrderByType.Asc, nameof(ProdTeam), OrderByType.Asc, false)]
+[SugarIndex("ix_takt_logistics_manufacturing_mps_equipment_operation_rate_start_date", nameof(TenantCode), OrderByType.Asc, nameof(CompanyCode), OrderByType.Asc, nameof(StartDate), OrderByType.Asc, false)]
 public class TaktEquipmentOperationRate : TaktCompanyEntityBase
 {
     /// <summary>

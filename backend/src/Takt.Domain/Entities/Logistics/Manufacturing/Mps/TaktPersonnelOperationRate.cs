@@ -23,13 +23,13 @@ namespace Takt.Domain.Entities.Logistics.Manufacturing.Mps;
 /// 人员稼动率实体（生产线人员作业效率记录）
 /// 人员稼动率(%) = 在岗作业时间 ÷ 出勤时间 × 100%（在岗作业率）。
 /// </summary>
-[SugarTable("takt_logistics_manufacturing_planning_personnel_operation_rate", "人员稼动率表")]
+[SugarTable("takt_logistics_manufacturing_mps_personnel_operation_rate", "人员稼动率表")]
 [SugarIndex("ix_personnel_operation_rate_tenant", nameof(TenantCode), OrderByType.Asc, nameof(CompanyCode), OrderByType.Asc, false)]
 [SugarIndex("ix_personnel_operation_rate_is_deleted", nameof(TenantCode), OrderByType.Asc, nameof(CompanyCode), OrderByType.Asc, nameof(IsDeleted), OrderByType.Asc, false)]
-[SugarIndex("ix_takt_logistics_manufacturing_planning_personnel_operation_rate_por_unique", nameof(TenantCode), OrderByType.Asc, nameof(CompanyCode), OrderByType.Asc, nameof(PlantCode), OrderByType.Asc, nameof(ProdTeam), OrderByType.Asc, nameof(TimeCategory), OrderByType.Asc, nameof(StartDate), OrderByType.Asc, nameof(ShiftNo), OrderByType.Asc, true)]
-[SugarIndex("ix_takt_logistics_manufacturing_planning_personnel_operation_rate_plant_code", nameof(TenantCode), OrderByType.Asc, nameof(CompanyCode), OrderByType.Asc, nameof(PlantCode), OrderByType.Asc, false)]
-[SugarIndex("ix_takt_logistics_manufacturing_planning_personnel_operation_rate_prod_team", nameof(TenantCode), OrderByType.Asc, nameof(CompanyCode), OrderByType.Asc, nameof(ProdTeam), OrderByType.Asc, false)]
-[SugarIndex("ix_takt_logistics_manufacturing_planning_personnel_operation_rate_start_date", nameof(TenantCode), OrderByType.Asc, nameof(CompanyCode), OrderByType.Asc, nameof(StartDate), OrderByType.Asc, false)]
+[SugarIndex("ix_takt_logistics_manufacturing_mps_personnel_operation_rate_por_unique", nameof(TenantCode), OrderByType.Asc, nameof(CompanyCode), OrderByType.Asc, nameof(PlantCode), OrderByType.Asc, nameof(ProdTeam), OrderByType.Asc, nameof(TimeCategory), OrderByType.Asc, nameof(StartDate), OrderByType.Asc, nameof(ShiftNo), OrderByType.Asc, true)]
+[SugarIndex("ix_takt_logistics_manufacturing_mps_personnel_operation_rate_plant_code", nameof(TenantCode), OrderByType.Asc, nameof(CompanyCode), OrderByType.Asc, nameof(PlantCode), OrderByType.Asc, false)]
+[SugarIndex("ix_takt_logistics_manufacturing_mps_personnel_operation_rate_prod_team", nameof(TenantCode), OrderByType.Asc, nameof(CompanyCode), OrderByType.Asc, nameof(ProdTeam), OrderByType.Asc, false)]
+[SugarIndex("ix_takt_logistics_manufacturing_mps_personnel_operation_rate_start_date", nameof(TenantCode), OrderByType.Asc, nameof(CompanyCode), OrderByType.Asc, nameof(StartDate), OrderByType.Asc, false)]
 public class TaktPersonnelOperationRate : TaktCompanyEntityBase
 {
     /// <summary>

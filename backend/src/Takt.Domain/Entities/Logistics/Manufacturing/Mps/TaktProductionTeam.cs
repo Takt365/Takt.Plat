@@ -19,10 +19,10 @@ namespace Takt.Domain.Entities.Logistics.Manufacturing.Mps;
 /// <summary>
 /// 生产班组实体（生产线班组主数据）
 /// </summary>
-[SugarTable("takt_logistics_manufacturing_planning_production_team", "生产班组表")]
+[SugarTable("takt_logistics_manufacturing_mps_production_team", "生产班组表")]
 [SugarIndex("ix_production_team_tenant", nameof(TenantCode), OrderByType.Asc, nameof(CompanyCode), OrderByType.Asc, false)]
 [SugarIndex("ix_production_team_is_deleted", nameof(TenantCode), OrderByType.Asc, nameof(CompanyCode), OrderByType.Asc, nameof(IsDeleted), OrderByType.Asc, false)]
-[SugarIndex("ix_takt_logistics_manufacturing_planning_production_team_team_unique", nameof(TenantCode), OrderByType.Asc, nameof(CompanyCode), OrderByType.Asc, nameof(PlantCode), OrderByType.Asc, nameof(TeamCode), OrderByType.Asc, nameof(TeamCategory), OrderByType.Asc, true)]
+[SugarIndex("ix_takt_logistics_manufacturing_mps_production_team_team_unique", nameof(TenantCode), OrderByType.Asc, nameof(CompanyCode), OrderByType.Asc, nameof(PlantCode), OrderByType.Asc, nameof(TeamCode), OrderByType.Asc, nameof(TeamCategory), OrderByType.Asc, true)]
 public class TaktProductionTeam : TaktCompanyEntityBase
 {
     /// <summary>

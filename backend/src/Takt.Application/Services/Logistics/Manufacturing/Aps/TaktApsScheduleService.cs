@@ -123,11 +123,11 @@ public class TaktApsScheduleService : TaktServiceBase, ITaktApsScheduleService
     public async Task<TaktApsScheduleDto> CreateApsScheduleAsync(TaktApsScheduleCreateDto dto)
     {
         var entity = dto.Adapt<TaktApsSchedule>();
-        var isUnique_ix_takt_logistics_manufacturing_scheduling_aps_plant_code_unique = await _uniqueValidator.IsUniqueAsync(
+        var isUnique_ix_takt_logistics_manufacturing_aps_plant_code_unique = await _uniqueValidator.IsUniqueAsync(
             _apsScheduleRepository,
             x => x.PlantCode == entity.PlantCode
                 && x.ScheduleCode == entity.ScheduleCode);
-        if (!isUnique_ix_takt_logistics_manufacturing_scheduling_aps_plant_code_unique)
+        if (!isUnique_ix_takt_logistics_manufacturing_aps_plant_code_unique)
         {
             throw new TaktBusinessException("APS排程主的PlantCode、ScheduleCode已存在");
         }
@@ -150,12 +150,12 @@ public class TaktApsScheduleService : TaktServiceBase, ITaktApsScheduleService
             throw new TaktBusinessException("APS排程主不存在");
         }
         dto.Adapt(entity);
-        var isUnique_ix_takt_logistics_manufacturing_scheduling_aps_plant_code_unique = await _uniqueValidator.IsUniqueAsync(
+        var isUnique_ix_takt_logistics_manufacturing_aps_plant_code_unique = await _uniqueValidator.IsUniqueAsync(
             _apsScheduleRepository,
             x => x.PlantCode == entity.PlantCode
                 && x.ScheduleCode == entity.ScheduleCode,
             id);
-        if (!isUnique_ix_takt_logistics_manufacturing_scheduling_aps_plant_code_unique)
+        if (!isUnique_ix_takt_logistics_manufacturing_aps_plant_code_unique)
         {
             throw new TaktBusinessException("APS排程主的PlantCode、ScheduleCode已存在");
         }
@@ -261,11 +261,11 @@ public class TaktApsScheduleService : TaktServiceBase, ITaktApsScheduleService
                 {
                     throw new TaktBusinessException("与Excel中其他行重复（PlantCode、ScheduleCode）");
                 }
-                var isUnique_ix_takt_logistics_manufacturing_scheduling_aps_plant_code_unique = await _uniqueValidator.IsUniqueAsync(
+                var isUnique_ix_takt_logistics_manufacturing_aps_plant_code_unique = await _uniqueValidator.IsUniqueAsync(
                     _apsScheduleRepository,
                     x => x.PlantCode == entity.PlantCode
                         && x.ScheduleCode == entity.ScheduleCode);
-                if (!isUnique_ix_takt_logistics_manufacturing_scheduling_aps_plant_code_unique)
+                if (!isUnique_ix_takt_logistics_manufacturing_aps_plant_code_unique)
                 {
                     throw new TaktBusinessException("APS排程主的PlantCode、ScheduleCode已存在");
                 }
@@ -469,13 +469,13 @@ public class TaktApsScheduleService : TaktServiceBase, ITaktApsScheduleService
                         throw new TaktBusinessException("APS排程明细不属于当前主表（ApsScheduleItemId={childDto.ApsScheduleItemId}）");
                     }
                     submittedIds.Add(childDto.ApsScheduleItemId);
-                    var isUniqueUpdate_ix_takt_logistics_manufacturing_scheduling_aps_item_line_unique = await _uniqueValidator.IsUniqueAsync(
+                    var isUniqueUpdate_ix_takt_logistics_manufacturing_aps_item_line_unique = await _uniqueValidator.IsUniqueAsync(
                         _apsScheduleItemRepository,
                         x => x.CompanyCode == x.CompanyCode
                 && x.ApsScheduleId == x.ApsScheduleId
                 && x.LineNumber == x.LineNumber,
                         childDto.ApsScheduleItemId);
-                    if (!isUniqueUpdate_ix_takt_logistics_manufacturing_scheduling_aps_item_line_unique)
+                    if (!isUniqueUpdate_ix_takt_logistics_manufacturing_aps_item_line_unique)
                     {
                         throw new TaktBusinessException("APS排程明细的CompanyCode、ApsScheduleId、LineNumber已存在");
                     }
@@ -487,12 +487,12 @@ public class TaktApsScheduleService : TaktServiceBase, ITaktApsScheduleService
                 }
                 else
                 {
-                    var isUniqueCreate_ix_takt_logistics_manufacturing_scheduling_aps_item_line_unique = await _uniqueValidator.IsUniqueAsync(
+                    var isUniqueCreate_ix_takt_logistics_manufacturing_aps_item_line_unique = await _uniqueValidator.IsUniqueAsync(
                         _apsScheduleItemRepository,
                         x => x.CompanyCode == x.CompanyCode
                 && x.ApsScheduleId == x.ApsScheduleId
                 && x.LineNumber == x.LineNumber);
-                    if (!isUniqueCreate_ix_takt_logistics_manufacturing_scheduling_aps_item_line_unique)
+                    if (!isUniqueCreate_ix_takt_logistics_manufacturing_aps_item_line_unique)
                     {
                         throw new TaktBusinessException("APS排程明细的CompanyCode、ApsScheduleId、LineNumber已存在");
                     }

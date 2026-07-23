@@ -7,9 +7,9 @@
 USE [Sap_Data];
 GO
 
-IF OBJECT_ID(N'dbo.takt_logistics_materials_purchase_price', N'U') IS NULL
+IF OBJECT_ID(N'dbo.takt_logistics_procurement_purchase_price', N'U') IS NULL
 BEGIN
-  CREATE TABLE [dbo].[takt_logistics_materials_purchase_price] (
+  CREATE TABLE [dbo].[takt_logistics_procurement_purchase_price] (
     [plant_code] NVARCHAR(4) NOT NULL,
     [purchase_price_code] NVARCHAR(20) NOT NULL,
     [price_type] NVARCHAR(4) NULL,
@@ -26,13 +26,13 @@ BEGIN
     [variable_key] NVARCHAR(40) NULL
   );
   CREATE UNIQUE INDEX [ux_sap_purchase_price]
-    ON [dbo].[takt_logistics_materials_purchase_price] ([plant_code], [purchase_price_code]);
+    ON [dbo].[takt_logistics_procurement_purchase_price] ([plant_code], [purchase_price_code]);
 END
 GO
 
-IF OBJECT_ID(N'dbo.takt_logistics_materials_purchase_price_item', N'U') IS NULL
+IF OBJECT_ID(N'dbo.takt_logistics_procurement_purchase_price_item', N'U') IS NULL
 BEGIN
-  CREATE TABLE [dbo].[takt_logistics_materials_purchase_price_item] (
+  CREATE TABLE [dbo].[takt_logistics_procurement_purchase_price_item] (
     [purchase_price_code] NVARCHAR(20) NOT NULL,
     [purchase_price_seq] INT NOT NULL,
     [price_type] NVARCHAR(4) NULL,
@@ -55,13 +55,13 @@ BEGIN
     [is_obsolete] INT NULL
   );
   CREATE UNIQUE INDEX [ux_sap_purchase_price_item]
-    ON [dbo].[takt_logistics_materials_purchase_price_item] ([purchase_price_code], [purchase_price_seq]);
+    ON [dbo].[takt_logistics_procurement_purchase_price_item] ([purchase_price_code], [purchase_price_seq]);
 END
 GO
 
-IF OBJECT_ID(N'dbo.takt_logistics_materials_purchase_price_scale_quantity', N'U') IS NULL
+IF OBJECT_ID(N'dbo.takt_logistics_procurement_purchase_price_scale_quantity', N'U') IS NULL
 BEGIN
-  CREATE TABLE [dbo].[takt_logistics_materials_purchase_price_scale_quantity] (
+  CREATE TABLE [dbo].[takt_logistics_procurement_purchase_price_scale_quantity] (
     [purchase_price_code] NVARCHAR(20) NOT NULL,
     [purchase_price_seq] INT NOT NULL,
     [purchase_scale_seq] INT NOT NULL,
@@ -72,14 +72,14 @@ BEGIN
     [is_obsolete] INT NULL
   );
   CREATE UNIQUE INDEX [ux_sap_purchase_price_scale_qty]
-    ON [dbo].[takt_logistics_materials_purchase_price_scale_quantity]
+    ON [dbo].[takt_logistics_procurement_purchase_price_scale_quantity]
     ([purchase_price_code], [purchase_price_seq], [purchase_scale_seq], [scale_quantity]);
 END
 GO
 
-IF OBJECT_ID(N'dbo.takt_logistics_materials_purchase_price_scale_value', N'U') IS NULL
+IF OBJECT_ID(N'dbo.takt_logistics_procurement_purchase_price_scale_value', N'U') IS NULL
 BEGIN
-  CREATE TABLE [dbo].[takt_logistics_materials_purchase_price_scale_value] (
+  CREATE TABLE [dbo].[takt_logistics_procurement_purchase_price_scale_value] (
     [purchase_price_code] NVARCHAR(20) NOT NULL,
     [purchase_price_seq] INT NOT NULL,
     [purchase_scale_seq] INT NOT NULL,
@@ -90,7 +90,7 @@ BEGIN
     [is_obsolete] INT NULL
   );
   CREATE UNIQUE INDEX [ux_sap_purchase_price_scale_val]
-    ON [dbo].[takt_logistics_materials_purchase_price_scale_value]
+    ON [dbo].[takt_logistics_procurement_purchase_price_scale_value]
     ([purchase_price_code], [purchase_price_seq], [purchase_scale_seq], [scale_value]);
 END
 GO

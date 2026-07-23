@@ -18,11 +18,11 @@ namespace Takt.Domain.Entities.Logistics.Manufacturing.Mps;
 /// <summary>
 /// 主生产计划 MPS 头表（公司级；MDS 下推，成品级何时做多少、粗产能校验）
 /// </summary>
-[SugarTable("takt_logistics_manufacturing_planning_master_production_schedule", "主生产计划MPS头表")]
+[SugarTable("takt_logistics_manufacturing_mps_master_production_schedule", "主生产计划MPS头表")]
 [SugarIndex("ix_mps_tenant", nameof(TenantCode), OrderByType.Asc, nameof(CompanyCode), OrderByType.Asc, false)]
 [SugarIndex("ix_mps_is_deleted", nameof(TenantCode), OrderByType.Asc, nameof(CompanyCode), OrderByType.Asc, nameof(IsDeleted), OrderByType.Asc, false)]
-[SugarIndex("ix_takt_logistics_manufacturing_planning_mps_unique", nameof(TenantCode), OrderByType.Asc, nameof(CompanyCode), OrderByType.Asc, nameof(PlantCode), OrderByType.Asc, nameof(MpsCode), OrderByType.Asc, true)]
-[SugarIndex("ix_takt_logistics_manufacturing_planning_mps_mds", nameof(TenantCode), OrderByType.Asc, nameof(CompanyCode), OrderByType.Asc, nameof(MasterDemandScheduleId), OrderByType.Asc, false)]
+[SugarIndex("ix_takt_logistics_manufacturing_mps_master_production_schedule_unique", nameof(TenantCode), OrderByType.Asc, nameof(CompanyCode), OrderByType.Asc, nameof(PlantCode), OrderByType.Asc, nameof(MpsCode), OrderByType.Asc, true)]
+[SugarIndex("ix_takt_logistics_manufacturing_mps_master_production_schedule_mds", nameof(TenantCode), OrderByType.Asc, nameof(CompanyCode), OrderByType.Asc, nameof(MasterDemandScheduleId), OrderByType.Asc, false)]
 public class TaktMasterProductionSchedule : TaktApprovalEntityBase
 {
     /// <summary>

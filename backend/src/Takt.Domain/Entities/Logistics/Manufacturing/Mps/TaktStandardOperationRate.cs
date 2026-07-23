@@ -21,10 +21,10 @@ namespace Takt.Domain.Entities.Logistics.Manufacturing.Mps;
 /// 标准生产稼动率实体
 /// OperationRate 为标准对标目标值；对比参考：达成率(%) = 实际稼动率 ÷ 标准稼动率 × 100%。
 /// </summary>
-[SugarTable("takt_logistics_manufacturing_planning_standard_operation_rate", "标准生产稼动率表")]
+[SugarTable("takt_logistics_manufacturing_mps_standard_operation_rate", "标准生产稼动率表")]
 [SugarIndex("ix_standard_operation_rate_tenant", nameof(TenantCode), OrderByType.Asc, nameof(CompanyCode), OrderByType.Asc, false)]
 [SugarIndex("ix_standard_operation_rate_is_deleted", nameof(TenantCode), OrderByType.Asc, nameof(CompanyCode), OrderByType.Asc, nameof(IsDeleted), OrderByType.Asc, false)]
-[SugarIndex("ix_takt_logistics_manufacturing_planning_standard_operation_rate_sor_unique", nameof(TenantCode), OrderByType.Asc, nameof(CompanyCode), OrderByType.Asc, nameof(PlantCode), OrderByType.Asc, nameof(FinancialYear), OrderByType.Asc, nameof(OperationType), OrderByType.Asc, true)]
+[SugarIndex("ix_takt_logistics_manufacturing_mps_standard_operation_rate_sor_unique", nameof(TenantCode), OrderByType.Asc, nameof(CompanyCode), OrderByType.Asc, nameof(PlantCode), OrderByType.Asc, nameof(FinancialYear), OrderByType.Asc, nameof(OperationType), OrderByType.Asc, true)]
 public class TaktStandardOperationRate : TaktCompanyEntityBase
 {
     /// <summary>

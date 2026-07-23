@@ -18,10 +18,10 @@ namespace Takt.Domain.Entities.Logistics.Manufacturing.EngineeringChange;
 /// <summary>
 /// 设变来源主表
 /// </summary>
-[SugarTable("takt_logistics_manufacturing_source_ec_detail", "设变来源子表")]
-[SugarIndex("ix_source_ec_detail_tenant", nameof(TenantCode), OrderByType.Asc, nameof(CompanyCode), OrderByType.Asc, false)]
-[SugarIndex("ix_source_ec_detail_is_deleted", nameof(TenantCode), OrderByType.Asc, nameof(CompanyCode), OrderByType.Asc, nameof(IsDeleted), OrderByType.Asc, false)]
-[SugarIndex("ix_source_ec_detail_ecid", nameof(TenantCode), OrderByType.Asc, nameof(CompanyCode), OrderByType.Asc, nameof(SourceEcId), OrderByType.Asc, false)]
+[SugarTable("takt_logistics_manufacturing_ec_source_detail", "设变来源子表")]
+[SugarIndex("ix_ec_source_detail_tenant", nameof(TenantCode), OrderByType.Asc, nameof(CompanyCode), OrderByType.Asc, false)]
+[SugarIndex("ix_ec_source_detail_is_deleted", nameof(TenantCode), OrderByType.Asc, nameof(CompanyCode), OrderByType.Asc, nameof(IsDeleted), OrderByType.Asc, false)]
+[SugarIndex("ix_ec_source_detail_ecid", nameof(TenantCode), OrderByType.Asc, nameof(CompanyCode), OrderByType.Asc, nameof(SourceEcId), OrderByType.Asc, false)]
 public class TaktSourceEcDetail : TaktCompanyEntityBase
 {
     /// <summary>

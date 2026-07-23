@@ -115,11 +115,11 @@ public class TaktApsOperationService : TaktServiceBase, ITaktApsOperationService
     {
         var entity = dto.Adapt<TaktApsOperation>();
         entity.IsObsolete = 0;
-        var isUnique_ix_takt_logistics_manufacturing_scheduling_aps_operation_line_unique = await _uniqueValidator.IsUniqueAsync(
+        var isUnique_ix_takt_logistics_manufacturing_aps_operation_line_unique = await _uniqueValidator.IsUniqueAsync(
             _apsOperationRepository,
             x => x.ApsOrderId == entity.ApsOrderId
                 && x.LineNumber == entity.LineNumber);
-        if (!isUnique_ix_takt_logistics_manufacturing_scheduling_aps_operation_line_unique)
+        if (!isUnique_ix_takt_logistics_manufacturing_aps_operation_line_unique)
         {
             throw new TaktBusinessException("APS工序排程的ApsOrderId、LineNumber已存在");
         }
@@ -149,12 +149,12 @@ public class TaktApsOperationService : TaktServiceBase, ITaktApsOperationService
             throw new TaktBusinessException("APS工序排程不存在");
         }
         dto.Adapt(entity);
-        var isUnique_ix_takt_logistics_manufacturing_scheduling_aps_operation_line_unique = await _uniqueValidator.IsUniqueAsync(
+        var isUnique_ix_takt_logistics_manufacturing_aps_operation_line_unique = await _uniqueValidator.IsUniqueAsync(
             _apsOperationRepository,
             x => x.ApsOrderId == entity.ApsOrderId
                 && x.LineNumber == entity.LineNumber,
             id);
-        if (!isUnique_ix_takt_logistics_manufacturing_scheduling_aps_operation_line_unique)
+        if (!isUnique_ix_takt_logistics_manufacturing_aps_operation_line_unique)
         {
             throw new TaktBusinessException("APS工序排程的ApsOrderId、LineNumber已存在");
         }
@@ -283,11 +283,11 @@ public class TaktApsOperationService : TaktServiceBase, ITaktApsOperationService
                 {
                     throw new TaktBusinessException("与Excel中其他行重复（ApsOrderId、LineNumber）");
                 }
-                var isUnique_ix_takt_logistics_manufacturing_scheduling_aps_operation_line_unique = await _uniqueValidator.IsUniqueAsync(
+                var isUnique_ix_takt_logistics_manufacturing_aps_operation_line_unique = await _uniqueValidator.IsUniqueAsync(
                     _apsOperationRepository,
                     x => x.ApsOrderId == entity.ApsOrderId
                         && x.LineNumber == entity.LineNumber);
-                if (!isUnique_ix_takt_logistics_manufacturing_scheduling_aps_operation_line_unique)
+                if (!isUnique_ix_takt_logistics_manufacturing_aps_operation_line_unique)
                 {
                     throw new TaktBusinessException("APS工序排程的ApsOrderId、LineNumber已存在");
                 }

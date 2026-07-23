@@ -8,8 +8,8 @@ DECLARE @now DATETIME = GETDATE();
 DECLARE @base_id BIGINT = DATEDIFF_BIG(MICROSECOND, '1970-01-01', @now) * 1000;
 
 -- 源表 / 目标表：同名 + 列与实体一致（TaktPurchasePrice / Item / ScaleQuantity / ScaleValue）
--- Sap_Data.dbo.takt_logistics_materials_purchase_price*
---   → 当前租户库 dbo.takt_logistics_materials_purchase_price*
+-- Sap_Data.dbo.takt_logistics_procurement_purchase_price*
+--   → 当前租户库 dbo.takt_logistics_procurement_purchase_price*
 -- 列对照（仅业务列；基类 tenant/company/审计列由本脚本写入目标）：
 --   主表 TaktPurchasePrice：plant_code, purchase_price_code, price_type, supplier_code, material_code,
 --     purchase_group, tax_code, gr_based_invoice_inspection, pricing_date_control,
@@ -105,7 +105,7 @@ FROM (
     NULLIF(LTRIM(RTRIM(R.[purchase_inquiry_code])), N'') AS [purchase_inquiry_code],
     NULLIF(LTRIM(RTRIM(R.[variable_key])), N'') AS [variable_key],
     ROW_NUMBER() OVER (ORDER BY LTRIM(RTRIM(R.[plant_code])), LTRIM(RTRIM(R.[purchase_price_code]))) AS rn
-  FROM [Sap_Data].[dbo].[takt_logistics_materials_purchase_price] R
+  FROM [Sap_Data].[dbo].[takt_logistics_procurement_purchase_price] R
   WHERE LTRIM(RTRIM(ISNULL(R.[purchase_price_code], N''))) <> N''
     AND LTRIM(RTRIM(ISNULL(R.[plant_code], N''))) <> N''
 ) S
@@ -113,7 +113,7 @@ WHERE @batch_size = 0 OR S.rn <= @batch_size;
 
 DECLARE @hdr_source INT = (SELECT COUNT(*) FROM #hdr);
 DECLARE @hdr_sap_raw INT = (
-  SELECT COUNT(*) FROM [Sap_Data].[dbo].[takt_logistics_materials_purchase_price] R
+  SELECT COUNT(*) FROM [Sap_Data].[dbo].[takt_logistics_procurement_purchase_price] R
   WHERE LTRIM(RTRIM(ISNULL(R.[purchase_price_code], N''))) <> N''
     AND LTRIM(RTRIM(ISNULL(R.[plant_code], N''))) <> N''
 );
@@ -160,7 +160,7 @@ FROM (
     COALESCE(TRY_CAST(R.[planned_delivery_time_days] AS INT), 0) AS [planned_delivery_time_days],
     COALESCE(TRY_CAST(R.[is_obsolete] AS INT), 0) AS [is_obsolete],
     ROW_NUMBER() OVER (ORDER BY LTRIM(RTRIM(R.[purchase_price_code])), COALESCE(TRY_CAST(R.[purchase_price_seq] AS INT), 10)) AS rn
-  FROM [Sap_Data].[dbo].[takt_logistics_materials_purchase_price_item] R
+  FROM [Sap_Data].[dbo].[takt_logistics_procurement_purchase_price_item] R
   WHERE LTRIM(RTRIM(ISNULL(R.[purchase_price_code], N''))) <> N''
     AND EXISTS (
       SELECT 1 FROM #hdr H
@@ -170,7 +170,7 @@ FROM (
 
 DECLARE @item_source INT = (SELECT COUNT(*) FROM #item);
 DECLARE @item_sap_raw INT = (
-  SELECT COUNT(*) FROM [Sap_Data].[dbo].[takt_logistics_materials_purchase_price_item] R
+  SELECT COUNT(*) FROM [Sap_Data].[dbo].[takt_logistics_procurement_purchase_price_item] R
   WHERE LTRIM(RTRIM(ISNULL(R.[purchase_price_code], N''))) <> N''
     AND EXISTS (
       SELECT 1 FROM #hdr H
@@ -208,7 +208,7 @@ FROM (
       ORDER BY LTRIM(RTRIM(R.[purchase_price_code])), COALESCE(TRY_CAST(R.[purchase_price_seq] AS INT), 10),
         COALESCE(TRY_CAST(R.[purchase_scale_seq] AS INT), 10), COALESCE(TRY_CAST(R.[scale_quantity] AS DECIMAL(18,8)), 0)
     ) AS rn
-  FROM [Sap_Data].[dbo].[takt_logistics_materials_purchase_price_scale_quantity] R
+  FROM [Sap_Data].[dbo].[takt_logistics_procurement_purchase_price_scale_quantity] R
   WHERE LTRIM(RTRIM(ISNULL(R.[purchase_price_code], N''))) <> N''
     AND EXISTS (
       SELECT 1 FROM #item I
@@ -219,7 +219,7 @@ FROM (
 
 DECLARE @sq_source INT = (SELECT COUNT(*) FROM #sq);
 DECLARE @sq_sap_raw INT = (
-  SELECT COUNT(*) FROM [Sap_Data].[dbo].[takt_logistics_materials_purchase_price_scale_quantity] R
+  SELECT COUNT(*) FROM [Sap_Data].[dbo].[takt_logistics_procurement_purchase_price_scale_quantity] R
   WHERE LTRIM(RTRIM(ISNULL(R.[purchase_price_code], N''))) <> N''
     AND EXISTS (
       SELECT 1 FROM #item I
@@ -251,7 +251,7 @@ FROM (
       ORDER BY LTRIM(RTRIM(R.[purchase_price_code])), COALESCE(TRY_CAST(R.[purchase_price_seq] AS INT), 10),
         COALESCE(TRY_CAST(R.[purchase_scale_seq] AS INT), 10), COALESCE(TRY_CAST(R.[scale_value] AS DECIMAL(18,8)), 0)
     ) AS rn
-  FROM [Sap_Data].[dbo].[takt_logistics_materials_purchase_price_scale_value] R
+  FROM [Sap_Data].[dbo].[takt_logistics_procurement_purchase_price_scale_value] R
   WHERE LTRIM(RTRIM(ISNULL(R.[purchase_price_code], N''))) <> N''
     AND EXISTS (
       SELECT 1 FROM #item I
@@ -262,7 +262,7 @@ FROM (
 
 DECLARE @sv_source INT = (SELECT COUNT(*) FROM #sv);
 DECLARE @sv_sap_raw INT = (
-  SELECT COUNT(*) FROM [Sap_Data].[dbo].[takt_logistics_materials_purchase_price_scale_value] R
+  SELECT COUNT(*) FROM [Sap_Data].[dbo].[takt_logistics_procurement_purchase_price_scale_value] R
   WHERE LTRIM(RTRIM(ISNULL(R.[purchase_price_code], N''))) <> N''
     AND EXISTS (
       SELECT 1 FROM #item I
@@ -276,12 +276,12 @@ BEGIN
   THROW 50003, @sv_src_msg, 1;
 END;
 
-DECLARE @hdr_before INT = (SELECT COUNT(*) FROM [takt_logistics_materials_purchase_price] WHERE [tenant_code]=@tenant_code AND [company_code]=@company_code AND [is_deleted]=0);
-DECLARE @item_before INT = (SELECT COUNT(*) FROM [takt_logistics_materials_purchase_price_item] WHERE [tenant_code]=@tenant_code AND [company_code]=@company_code AND [is_deleted]=0);
-DECLARE @sq_before INT = (SELECT COUNT(*) FROM [takt_logistics_materials_purchase_price_scale_quantity] WHERE [tenant_code]=@tenant_code AND [company_code]=@company_code AND [is_deleted]=0);
-DECLARE @sv_before INT = (SELECT COUNT(*) FROM [takt_logistics_materials_purchase_price_scale_value] WHERE [tenant_code]=@tenant_code AND [company_code]=@company_code AND [is_deleted]=0);
+DECLARE @hdr_before INT = (SELECT COUNT(*) FROM [takt_logistics_procurement_purchase_price] WHERE [tenant_code]=@tenant_code AND [company_code]=@company_code AND [is_deleted]=0);
+DECLARE @item_before INT = (SELECT COUNT(*) FROM [takt_logistics_procurement_purchase_price_item] WHERE [tenant_code]=@tenant_code AND [company_code]=@company_code AND [is_deleted]=0);
+DECLARE @sq_before INT = (SELECT COUNT(*) FROM [takt_logistics_procurement_purchase_price_scale_quantity] WHERE [tenant_code]=@tenant_code AND [company_code]=@company_code AND [is_deleted]=0);
+DECLARE @sv_before INT = (SELECT COUNT(*) FROM [takt_logistics_procurement_purchase_price_scale_value] WHERE [tenant_code]=@tenant_code AND [company_code]=@company_code AND [is_deleted]=0);
 
-MERGE INTO [takt_logistics_materials_purchase_price] AS T
+MERGE INTO [takt_logistics_procurement_purchase_price] AS T
 USING #hdr AS S
 ON T.[tenant_code]=@tenant_code AND T.[company_code]=@company_code
  AND LTRIM(RTRIM(T.[plant_code]))=S.[plant_code]
@@ -325,12 +325,12 @@ INTO #hdr_delta(rn, oper_type, id, plant_code, price_code);
 
 UPDATE S SET S.[id]=T.[id]
 FROM #hdr S
-INNER JOIN [takt_logistics_materials_purchase_price] T
+INNER JOIN [takt_logistics_procurement_purchase_price] T
   ON T.[tenant_code]=@tenant_code AND T.[company_code]=@company_code AND T.[is_deleted]=0
  AND LTRIM(RTRIM(T.[plant_code]))=S.[plant_code] AND LTRIM(RTRIM(T.[purchase_price_code]))=S.[purchase_price_code];
 
 UPDATE T SET T.[is_deleted]=1, T.[deleted_by]=@sync_user_id, T.[deleted_at]=@now, T.[updated_by]=@sync_user_id, T.[updated_at]=@now
-FROM [takt_logistics_materials_purchase_price] T
+FROM [takt_logistics_procurement_purchase_price] T
 WHERE T.[tenant_code]=@tenant_code AND T.[company_code]=@company_code AND T.[is_deleted]=0
   AND NOT EXISTS (SELECT 1 FROM #hdr S WHERE S.[plant_code]=LTRIM(RTRIM(T.[plant_code])) AND S.[purchase_price_code]=LTRIM(RTRIM(T.[purchase_price_code])));
 DECLARE @hdr_del INT = @@ROWCOUNT;
@@ -340,7 +340,7 @@ FROM #item I
 INNER JOIN #hdr H ON H.[purchase_price_code]=I.[purchase_price_code];
 DELETE FROM #item WHERE [purchase_price_id]=0 OR [purchase_price_id] IS NULL;
 
-MERGE INTO [takt_logistics_materials_purchase_price_item] AS T
+MERGE INTO [takt_logistics_procurement_purchase_price_item] AS T
 USING #item AS S
 ON T.[tenant_code]=@tenant_code AND T.[company_code]=@company_code
  AND T.[purchase_price_id]=S.[purchase_price_id] AND T.[purchase_price_seq]=S.[purchase_price_seq]
@@ -399,12 +399,12 @@ INTO #item_delta(rn, oper_type, id, price_code, price_seq);
 
 UPDATE S SET S.[id]=T.[id]
 FROM #item S
-INNER JOIN [takt_logistics_materials_purchase_price_item] T
+INNER JOIN [takt_logistics_procurement_purchase_price_item] T
   ON T.[tenant_code]=@tenant_code AND T.[company_code]=@company_code AND T.[is_deleted]=0
  AND T.[purchase_price_id]=S.[purchase_price_id] AND T.[purchase_price_seq]=S.[purchase_price_seq];
 
 UPDATE T SET T.[is_deleted]=1, T.[deleted_by]=@sync_user_id, T.[deleted_at]=@now, T.[updated_by]=@sync_user_id, T.[updated_at]=@now
-FROM [takt_logistics_materials_purchase_price_item] T
+FROM [takt_logistics_procurement_purchase_price_item] T
 WHERE T.[tenant_code]=@tenant_code AND T.[company_code]=@company_code AND T.[is_deleted]=0
   AND NOT EXISTS (SELECT 1 FROM #item S WHERE S.[purchase_price_id]=T.[purchase_price_id] AND S.[purchase_price_seq]=T.[purchase_price_seq]);
 DECLARE @item_del INT = @@ROWCOUNT;
@@ -417,7 +417,7 @@ UPDATE V SET V.[purchase_price_item_id]=I.[id]
 FROM #sv V INNER JOIN #item I ON I.[purchase_price_code]=V.[purchase_price_code] AND I.[purchase_price_seq]=V.[purchase_price_seq];
 DELETE FROM #sv WHERE [purchase_price_item_id]=0 OR [purchase_price_item_id] IS NULL;
 
-MERGE INTO [takt_logistics_materials_purchase_price_scale_quantity] AS T
+MERGE INTO [takt_logistics_procurement_purchase_price_scale_quantity] AS T
 USING #sq AS S
 ON T.[tenant_code]=@tenant_code AND T.[company_code]=@company_code
  AND T.[purchase_price_item_id]=S.[purchase_price_item_id] AND T.[purchase_price_seq]=S.[purchase_price_seq]
@@ -445,7 +445,7 @@ OUTPUT S.rn, $action, INSERTED.[id], INSERTED.[purchase_price_code], INSERTED.[p
 INTO #sq_delta(rn, oper_type, id, price_code, price_seq, scale_seq);
 
 UPDATE T SET T.[is_deleted]=1, T.[deleted_by]=@sync_user_id, T.[deleted_at]=@now, T.[updated_by]=@sync_user_id, T.[updated_at]=@now
-FROM [takt_logistics_materials_purchase_price_scale_quantity] T
+FROM [takt_logistics_procurement_purchase_price_scale_quantity] T
 WHERE T.[tenant_code]=@tenant_code AND T.[company_code]=@company_code AND T.[is_deleted]=0
   AND NOT EXISTS (
     SELECT 1 FROM #sq S
@@ -454,7 +454,7 @@ WHERE T.[tenant_code]=@tenant_code AND T.[company_code]=@company_code AND T.[is_
   );
 DECLARE @sq_del INT = @@ROWCOUNT;
 
-MERGE INTO [takt_logistics_materials_purchase_price_scale_value] AS T
+MERGE INTO [takt_logistics_procurement_purchase_price_scale_value] AS T
 USING #sv AS S
 ON T.[tenant_code]=@tenant_code AND T.[company_code]=@company_code
  AND T.[purchase_price_item_id]=S.[purchase_price_item_id] AND T.[purchase_price_seq]=S.[purchase_price_seq]
@@ -482,7 +482,7 @@ OUTPUT S.rn, $action, INSERTED.[id], INSERTED.[purchase_price_code], INSERTED.[p
 INTO #sv_delta(rn, oper_type, id, price_code, price_seq, scale_seq);
 
 UPDATE T SET T.[is_deleted]=1, T.[deleted_by]=@sync_user_id, T.[deleted_at]=@now, T.[updated_by]=@sync_user_id, T.[updated_at]=@now
-FROM [takt_logistics_materials_purchase_price_scale_value] T
+FROM [takt_logistics_procurement_purchase_price_scale_value] T
 WHERE T.[tenant_code]=@tenant_code AND T.[company_code]=@company_code AND T.[is_deleted]=0
   AND NOT EXISTS (
     SELECT 1 FROM #sv S
@@ -491,10 +491,10 @@ WHERE T.[tenant_code]=@tenant_code AND T.[company_code]=@company_code AND T.[is_
   );
 DECLARE @sv_del INT = @@ROWCOUNT;
 
-DECLARE @hdr_after INT = (SELECT COUNT(*) FROM [takt_logistics_materials_purchase_price] WHERE [tenant_code]=@tenant_code AND [company_code]=@company_code AND [is_deleted]=0);
-DECLARE @item_after INT = (SELECT COUNT(*) FROM [takt_logistics_materials_purchase_price_item] WHERE [tenant_code]=@tenant_code AND [company_code]=@company_code AND [is_deleted]=0);
-DECLARE @sq_after INT = (SELECT COUNT(*) FROM [takt_logistics_materials_purchase_price_scale_quantity] WHERE [tenant_code]=@tenant_code AND [company_code]=@company_code AND [is_deleted]=0);
-DECLARE @sv_after INT = (SELECT COUNT(*) FROM [takt_logistics_materials_purchase_price_scale_value] WHERE [tenant_code]=@tenant_code AND [company_code]=@company_code AND [is_deleted]=0);
+DECLARE @hdr_after INT = (SELECT COUNT(*) FROM [takt_logistics_procurement_purchase_price] WHERE [tenant_code]=@tenant_code AND [company_code]=@company_code AND [is_deleted]=0);
+DECLARE @item_after INT = (SELECT COUNT(*) FROM [takt_logistics_procurement_purchase_price_item] WHERE [tenant_code]=@tenant_code AND [company_code]=@company_code AND [is_deleted]=0);
+DECLARE @sq_after INT = (SELECT COUNT(*) FROM [takt_logistics_procurement_purchase_price_scale_quantity] WHERE [tenant_code]=@tenant_code AND [company_code]=@company_code AND [is_deleted]=0);
+DECLARE @sv_after INT = (SELECT COUNT(*) FROM [takt_logistics_procurement_purchase_price_scale_value] WHERE [tenant_code]=@tenant_code AND [company_code]=@company_code AND [is_deleted]=0);
 
 DECLARE @hdr_ins INT = (SELECT COUNT(*) FROM #hdr_delta WHERE oper_type='INSERT');
 DECLARE @hdr_upd INT = (SELECT COUNT(*) FROM #hdr_delta WHERE oper_type='UPDATE');

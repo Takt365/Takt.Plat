@@ -18,11 +18,11 @@ namespace Takt.Domain.Entities.Logistics.Procurement;
 /// <summary>
 /// Takt采购价格明细实体（定价记录条件行；主子表：TaktPurchasePrice → Items → ScaleQuantities / ScaleValues）
 /// </summary>
-[SugarTable("takt_logistics_materials_purchase_price_item", "采购价格明细表")]
+[SugarTable("takt_logistics_procurement_purchase_price_item", "采购价格明细表")]
 [SugarIndex("ix_purchase_price_item_tenant", nameof(TenantCode), OrderByType.Asc, nameof(CompanyCode), OrderByType.Asc, false)]
 [SugarIndex("ix_purchase_price_item_is_deleted", nameof(TenantCode), OrderByType.Asc, nameof(CompanyCode), OrderByType.Asc, nameof(IsDeleted), OrderByType.Asc, false)]
-[SugarIndex("ix_takt_logistics_materials_purchase_price_item_seq_unique", nameof(TenantCode), OrderByType.Asc, nameof(CompanyCode), OrderByType.Asc, nameof(PurchasePriceId), OrderByType.Asc, nameof(PurchasePriceSeq), OrderByType.Asc, true)]
-[SugarIndex("ix_takt_logistics_materials_purchase_price_item_code", nameof(TenantCode), OrderByType.Asc, nameof(CompanyCode), OrderByType.Asc, nameof(PurchasePriceCode), OrderByType.Asc, false)]
+[SugarIndex("ix_takt_logistics_procurement_purchase_price_item_seq_unique", nameof(TenantCode), OrderByType.Asc, nameof(CompanyCode), OrderByType.Asc, nameof(PurchasePriceId), OrderByType.Asc, nameof(PurchasePriceSeq), OrderByType.Asc, true)]
+[SugarIndex("ix_takt_logistics_procurement_purchase_price_item_code", nameof(TenantCode), OrderByType.Asc, nameof(CompanyCode), OrderByType.Asc, nameof(PurchasePriceCode), OrderByType.Asc, false)]
 public class TaktPurchasePriceItem : TaktCompanyEntityBase
 {
     /// <summary>

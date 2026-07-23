@@ -18,16 +18,16 @@ namespace Takt.Domain.Entities.Logistics.Manufacturing.Mrp;
 /// <summary>
 /// Takt采购计划实体（公司级；TaktMaterialRequirementsPlanning 运算产出，可转采购申请或订单）
 /// </summary>
-[SugarTable("takt_logistics_manufacturing_planning_purchase_plan", "采购计划表")]
+[SugarTable("takt_logistics_manufacturing_mrp_purchase_plan", "采购计划表")]
 [SugarIndex("ix_purchase_plan_tenant", nameof(TenantCode), OrderByType.Asc, nameof(CompanyCode), OrderByType.Asc, false)]
 [SugarIndex("ix_purchase_plan_is_deleted", nameof(TenantCode), OrderByType.Asc, nameof(CompanyCode), OrderByType.Asc, nameof(IsDeleted), OrderByType.Asc, false)]
-[SugarIndex("ix_takt_logistics_manufacturing_planning_purchase_plan_unique", nameof(TenantCode), OrderByType.Asc, nameof(CompanyCode), OrderByType.Asc, nameof(PlantCode), OrderByType.Asc, nameof(PurchasePlanCode), OrderByType.Asc, nameof(PlanDate), OrderByType.Asc, true)]
-[SugarIndex("ix_takt_logistics_manufacturing_planning_purchase_plan_flow_instance_id", nameof(TenantCode), OrderByType.Asc, nameof(CompanyCode), OrderByType.Asc, nameof(FlowInstanceId), OrderByType.Asc, false)]
-[SugarIndex("ix_takt_logistics_manufacturing_planning_purchase_plan_plan_by", nameof(TenantCode), OrderByType.Asc, nameof(CompanyCode), OrderByType.Asc, nameof(PlanBy), OrderByType.Asc, false)]
-[SugarIndex("ix_takt_logistics_manufacturing_planning_purchase_plan_plan_date", nameof(TenantCode), OrderByType.Asc, nameof(CompanyCode), OrderByType.Asc, nameof(PlanDate), OrderByType.Desc, false)]
-[SugarIndex("ix_takt_logistics_manufacturing_planning_purchase_plan_planner_id", nameof(TenantCode), OrderByType.Asc, nameof(CompanyCode), OrderByType.Asc, nameof(PlannerId), OrderByType.Asc, false)]
-[SugarIndex("ix_takt_logistics_manufacturing_planning_purchase_plan_mrp", nameof(TenantCode), OrderByType.Asc, nameof(CompanyCode), OrderByType.Asc, nameof(MaterialRequirementsPlanningId), OrderByType.Asc, false)]
-[SugarIndex("ix_takt_logistics_manufacturing_planning_purchase_plan_production_plan", nameof(TenantCode), OrderByType.Asc, nameof(CompanyCode), OrderByType.Asc, nameof(ProductionPlanId), OrderByType.Asc, false)]
+[SugarIndex("ix_takt_logistics_manufacturing_mrp_purchase_plan_unique", nameof(TenantCode), OrderByType.Asc, nameof(CompanyCode), OrderByType.Asc, nameof(PlantCode), OrderByType.Asc, nameof(PurchasePlanCode), OrderByType.Asc, nameof(PlanDate), OrderByType.Asc, true)]
+[SugarIndex("ix_takt_logistics_manufacturing_mrp_purchase_plan_flow_instance_id", nameof(TenantCode), OrderByType.Asc, nameof(CompanyCode), OrderByType.Asc, nameof(FlowInstanceId), OrderByType.Asc, false)]
+[SugarIndex("ix_takt_logistics_manufacturing_mrp_purchase_plan_plan_by", nameof(TenantCode), OrderByType.Asc, nameof(CompanyCode), OrderByType.Asc, nameof(PlanBy), OrderByType.Asc, false)]
+[SugarIndex("ix_takt_logistics_manufacturing_mrp_purchase_plan_plan_date", nameof(TenantCode), OrderByType.Asc, nameof(CompanyCode), OrderByType.Asc, nameof(PlanDate), OrderByType.Desc, false)]
+[SugarIndex("ix_takt_logistics_manufacturing_mrp_purchase_plan_planner_id", nameof(TenantCode), OrderByType.Asc, nameof(CompanyCode), OrderByType.Asc, nameof(PlannerId), OrderByType.Asc, false)]
+[SugarIndex("ix_takt_logistics_manufacturing_mrp_purchase_plan_mrp", nameof(TenantCode), OrderByType.Asc, nameof(CompanyCode), OrderByType.Asc, nameof(MaterialRequirementsPlanningId), OrderByType.Asc, false)]
+[SugarIndex("ix_takt_logistics_manufacturing_mrp_purchase_plan_production_plan", nameof(TenantCode), OrderByType.Asc, nameof(CompanyCode), OrderByType.Asc, nameof(ProductionPlanId), OrderByType.Asc, false)]
 public class TaktPurchasePlan : TaktApprovalEntityBase
 {
     /// <summary>

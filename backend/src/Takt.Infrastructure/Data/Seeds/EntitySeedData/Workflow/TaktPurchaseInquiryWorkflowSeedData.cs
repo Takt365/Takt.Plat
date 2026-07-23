@@ -4,7 +4,7 @@
 // 文件名称：TaktPurchaseInquiryWorkflowSeedData.cs
 // 创建时间：2026-06-24
 // 创建人：Takt365(Cursor AI)
-// 功能描述：采购询价工作流种子（purchase_inquiry_form、PurchaseInquiry 方案，关联 takt_logistics_materials_purchase_inquiry）
+// 功能描述：采购询价工作流种子（purchase_inquiry_form、PurchaseInquiry 方案，关联 takt_logistics_procurement_purchase_inquiry）
 //
 // 版权信息：Copyright (c) 2026 Takt  All rights reserved.
 // 免责声明：此软件使用 MIT License，作者不承担任何使用风险。
@@ -179,7 +179,7 @@ public class TaktPurchaseInquiryWorkflowSeedData : ITaktSeedDataCoordinator
                 FormVersion = "v1.0.0",
                 IsDatasource = 1,
                 RelatedDataBaseName = tenantCode,
-                RelatedTableName = "takt_logistics_materials_purchase_inquiry",
+                RelatedTableName = "takt_logistics_procurement_purchase_inquiry",
                 RelatedFormField = relatedField,
                 SortOrder = 14,
                 FormStatus = 1
@@ -190,7 +190,7 @@ public class TaktPurchaseInquiryWorkflowSeedData : ITaktSeedDataCoordinator
         form.FormName = "采购询价审批表";
         form.FormConfig = formConfig;
         form.RelatedDataBaseName = tenantCode;
-        form.RelatedTableName = "takt_logistics_materials_purchase_inquiry";
+        form.RelatedTableName = "takt_logistics_procurement_purchase_inquiry";
         form.RelatedFormField = relatedField;
         form.IsDatasource = 1;
         form.FormStatus = 1;

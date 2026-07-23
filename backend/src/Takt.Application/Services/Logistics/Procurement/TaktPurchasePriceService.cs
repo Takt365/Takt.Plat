@@ -199,11 +199,11 @@ public class TaktPurchasePriceService : TaktServiceBase, ITaktPurchasePriceServi
     public async Task<TaktPurchasePriceDto> CreatePurchasePriceAsync(TaktPurchasePriceCreateDto dto)
     {
         var entity = dto.Adapt<TaktPurchasePrice>();
-        var isUnique_ix_takt_logistics_materials_purchase_price_code_unique = await _uniqueValidator.IsUniqueAsync(
+        var isUnique_ix_takt_logistics_procurement_purchase_price_code_unique = await _uniqueValidator.IsUniqueAsync(
             _purchasePriceRepository,
             x => x.PlantCode == entity.PlantCode
                 && x.PurchasePriceCode == entity.PurchasePriceCode);
-        if (!isUnique_ix_takt_logistics_materials_purchase_price_code_unique)
+        if (!isUnique_ix_takt_logistics_procurement_purchase_price_code_unique)
         {
             throw new TaktBusinessException("采购价格的PlantCode、PurchasePriceCode已存在");
         }
@@ -226,12 +226,12 @@ public class TaktPurchasePriceService : TaktServiceBase, ITaktPurchasePriceServi
             throw new TaktBusinessException("采购价格不存在");
         }
         dto.Adapt(entity);
-        var isUnique_ix_takt_logistics_materials_purchase_price_code_unique = await _uniqueValidator.IsUniqueAsync(
+        var isUnique_ix_takt_logistics_procurement_purchase_price_code_unique = await _uniqueValidator.IsUniqueAsync(
             _purchasePriceRepository,
             x => x.PlantCode == entity.PlantCode
                 && x.PurchasePriceCode == entity.PurchasePriceCode,
             id);
-        if (!isUnique_ix_takt_logistics_materials_purchase_price_code_unique)
+        if (!isUnique_ix_takt_logistics_procurement_purchase_price_code_unique)
         {
             throw new TaktBusinessException("采购价格的PlantCode、PurchasePriceCode已存在");
         }
@@ -319,11 +319,11 @@ public class TaktPurchasePriceService : TaktServiceBase, ITaktPurchasePriceServi
                 {
                     throw new TaktBusinessException("与Excel中其他行重复（PlantCode、PurchasePriceCode）");
                 }
-                var isUnique_ix_takt_logistics_materials_purchase_price_code_unique = await _uniqueValidator.IsUniqueAsync(
+                var isUnique_ix_takt_logistics_procurement_purchase_price_code_unique = await _uniqueValidator.IsUniqueAsync(
                     _purchasePriceRepository,
                     x => x.PlantCode == entity.PlantCode
                         && x.PurchasePriceCode == entity.PurchasePriceCode);
-                if (!isUnique_ix_takt_logistics_materials_purchase_price_code_unique)
+                if (!isUnique_ix_takt_logistics_procurement_purchase_price_code_unique)
                 {
                     throw new TaktBusinessException("采购价格的PlantCode、PurchasePriceCode已存在");
                 }

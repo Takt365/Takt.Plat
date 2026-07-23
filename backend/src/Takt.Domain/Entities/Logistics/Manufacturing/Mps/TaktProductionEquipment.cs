@@ -18,10 +18,10 @@ namespace Takt.Domain.Entities.Logistics.Manufacturing.Mps;
 /// <summary>
 /// 生产设备主数据（排程资源；粗能力 StdEquipmentHourlyCapacity=(60÷StdMinutesPerUnit)×AvailabilityRate×PerformanceRate；多穴=(60÷StdMinutesPerCycle)×CavityCount×AvailabilityRate）
 /// </summary>
-[SugarTable("takt_logistics_manufacturing_planning_production_equipment", "生产设备表")]
+[SugarTable("takt_logistics_manufacturing_mps_production_equipment", "生产设备表")]
 [SugarIndex("ix_production_equipment_tenant", nameof(TenantCode), OrderByType.Asc, nameof(CompanyCode), OrderByType.Asc, false)]
 [SugarIndex("ix_production_equipment_is_deleted", nameof(TenantCode), OrderByType.Asc, nameof(CompanyCode), OrderByType.Asc, nameof(IsDeleted), OrderByType.Asc, false)]
-[SugarIndex("ix_takt_logistics_manufacturing_planning_production_equipment_unique", nameof(TenantCode), OrderByType.Asc, nameof(CompanyCode), OrderByType.Asc, nameof(PlantCode), OrderByType.Asc, nameof(StorageLocation), OrderByType.Asc, nameof(ProductionEquipmentCode), OrderByType.Asc, true)]
+[SugarIndex("ix_takt_logistics_manufacturing_mps_production_equipment_unique", nameof(TenantCode), OrderByType.Asc, nameof(CompanyCode), OrderByType.Asc, nameof(PlantCode), OrderByType.Asc, nameof(StorageLocation), OrderByType.Asc, nameof(ProductionEquipmentCode), OrderByType.Asc, true)]
 public class TaktProductionEquipment : TaktCompanyEntityBase
 {
     // ---- 基础标识 ----

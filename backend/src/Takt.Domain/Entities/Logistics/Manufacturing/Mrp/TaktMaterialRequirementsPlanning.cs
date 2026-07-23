@@ -18,12 +18,12 @@ namespace Takt.Domain.Entities.Logistics.Manufacturing.Mrp;
 /// <summary>
 /// 物料需求计划 MRP 头表（公司级；MPS 下推，产出 TaktPlannedOrder / TaktProductionPlan / TaktPurchasePlan）
 /// </summary>
-[SugarTable("takt_logistics_manufacturing_planning_material_requirements_planning", "物料需求计划MRP头表")]
+[SugarTable("takt_logistics_manufacturing_mrp_material_requirements_planning", "物料需求计划MRP头表")]
 [SugarIndex("ix_mrp_tenant", nameof(TenantCode), OrderByType.Asc, nameof(CompanyCode), OrderByType.Asc, false)]
 [SugarIndex("ix_mrp_is_deleted", nameof(TenantCode), OrderByType.Asc, nameof(CompanyCode), OrderByType.Asc, nameof(IsDeleted), OrderByType.Asc, false)]
-[SugarIndex("ix_takt_logistics_manufacturing_planning_mrp_unique", nameof(TenantCode), OrderByType.Asc, nameof(CompanyCode), OrderByType.Asc, nameof(PlantCode), OrderByType.Asc, nameof(MaterialRequirementsPlanningCode), OrderByType.Asc, nameof(PlanDate), OrderByType.Asc, true)]
-[SugarIndex("ix_takt_logistics_manufacturing_planning_mrp_mps", nameof(TenantCode), OrderByType.Asc, nameof(CompanyCode), OrderByType.Asc, nameof(MasterProductionScheduleId), OrderByType.Asc, false)]
-[SugarIndex("ix_takt_logistics_manufacturing_planning_mrp_mds", nameof(TenantCode), OrderByType.Asc, nameof(CompanyCode), OrderByType.Asc, nameof(MasterDemandScheduleId), OrderByType.Asc, false)]
+[SugarIndex("ix_takt_logistics_manufacturing_mrp_material_requirements_planning_unique", nameof(TenantCode), OrderByType.Asc, nameof(CompanyCode), OrderByType.Asc, nameof(PlantCode), OrderByType.Asc, nameof(MaterialRequirementsPlanningCode), OrderByType.Asc, nameof(PlanDate), OrderByType.Asc, true)]
+[SugarIndex("ix_takt_logistics_manufacturing_mrp_material_requirements_planning_mps", nameof(TenantCode), OrderByType.Asc, nameof(CompanyCode), OrderByType.Asc, nameof(MasterProductionScheduleId), OrderByType.Asc, false)]
+[SugarIndex("ix_takt_logistics_manufacturing_mrp_material_requirements_planning_mds", nameof(TenantCode), OrderByType.Asc, nameof(CompanyCode), OrderByType.Asc, nameof(MasterDemandScheduleId), OrderByType.Asc, false)]
 public class TaktMaterialRequirementsPlanning : TaktApprovalEntityBase
 {
     /// <summary>

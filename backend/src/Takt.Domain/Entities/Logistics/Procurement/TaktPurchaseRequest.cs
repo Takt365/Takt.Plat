@@ -18,15 +18,15 @@ namespace Takt.Domain.Entities.Logistics.Procurement;
 /// <summary>
 /// Takt采购申请实体
 /// </summary>
-[SugarTable("takt_logistics_materials_purchase_request", "采购申请表")]
+[SugarTable("takt_logistics_procurement_purchase_request", "采购申请表")]
 [SugarIndex("ix_purchase_request_tenant", nameof(TenantCode), OrderByType.Asc, nameof(CompanyCode), OrderByType.Asc, false)]
 [SugarIndex("ix_purchase_request_is_deleted", nameof(TenantCode), OrderByType.Asc, nameof(CompanyCode), OrderByType.Asc, nameof(IsDeleted), OrderByType.Asc, false)]
-[SugarIndex("ix_takt_logistics_materials_purchase_request_pr_unique", nameof(TenantCode), OrderByType.Asc, nameof(CompanyCode), OrderByType.Asc, nameof(PlantCode), OrderByType.Asc, nameof(PurchaseRequestCode), OrderByType.Asc, nameof(RequestDate), OrderByType.Asc, true)]
-[SugarIndex("ix_takt_logistics_materials_purchase_request_flow_instance_id", nameof(TenantCode), OrderByType.Asc, nameof(CompanyCode), OrderByType.Asc, nameof(FlowInstanceId), OrderByType.Asc, false)]
-[SugarIndex("ix_takt_logistics_materials_purchase_request_request_by", nameof(TenantCode), OrderByType.Asc, nameof(CompanyCode), OrderByType.Asc, nameof(RequestBy), OrderByType.Asc, false)]
-[SugarIndex("ix_takt_logistics_materials_purchase_request_request_date", nameof(TenantCode), OrderByType.Asc, nameof(CompanyCode), OrderByType.Asc, nameof(RequestDate), OrderByType.Desc, false)]
-[SugarIndex("ix_takt_logistics_materials_purchase_request_request_id", nameof(TenantCode), OrderByType.Asc, nameof(CompanyCode), OrderByType.Asc, nameof(RequestId), OrderByType.Asc, false)]
-[SugarIndex("ix_takt_logistics_materials_purchase_request_supplier_code", nameof(TenantCode), OrderByType.Asc, nameof(CompanyCode), OrderByType.Asc, nameof(SupplierCode), OrderByType.Asc, false)]
+[SugarIndex("ix_takt_logistics_procurement_purchase_request_pr_unique", nameof(TenantCode), OrderByType.Asc, nameof(CompanyCode), OrderByType.Asc, nameof(PlantCode), OrderByType.Asc, nameof(PurchaseRequestCode), OrderByType.Asc, nameof(RequestDate), OrderByType.Asc, true)]
+[SugarIndex("ix_takt_logistics_procurement_purchase_request_flow_instance_id", nameof(TenantCode), OrderByType.Asc, nameof(CompanyCode), OrderByType.Asc, nameof(FlowInstanceId), OrderByType.Asc, false)]
+[SugarIndex("ix_takt_logistics_procurement_purchase_request_request_by", nameof(TenantCode), OrderByType.Asc, nameof(CompanyCode), OrderByType.Asc, nameof(RequestBy), OrderByType.Asc, false)]
+[SugarIndex("ix_takt_logistics_procurement_purchase_request_request_date", nameof(TenantCode), OrderByType.Asc, nameof(CompanyCode), OrderByType.Asc, nameof(RequestDate), OrderByType.Desc, false)]
+[SugarIndex("ix_takt_logistics_procurement_purchase_request_request_id", nameof(TenantCode), OrderByType.Asc, nameof(CompanyCode), OrderByType.Asc, nameof(RequestId), OrderByType.Asc, false)]
+[SugarIndex("ix_takt_logistics_procurement_purchase_request_supplier_code", nameof(TenantCode), OrderByType.Asc, nameof(CompanyCode), OrderByType.Asc, nameof(SupplierCode), OrderByType.Asc, false)]
 public class TaktPurchaseRequest : TaktApprovalEntityBase
 {
     /// <summary>

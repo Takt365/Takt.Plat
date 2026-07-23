@@ -41,11 +41,13 @@ declare global {
   const logger: typeof import('@/utils/logger').logger
   const mapActions: typeof import('pinia').mapActions
   const mapGetters: typeof import('pinia').mapGetters
+  const mapLazyTreeNodes: typeof import('./composables/use-lazy-tree').mapLazyTreeNodes
   const mapState: typeof import('pinia').mapState
   const mapStores: typeof import('pinia').mapStores
   const mapWritableState: typeof import('pinia').mapWritableState
   const markRaw: typeof import('vue').markRaw
   const measureMasterDetailLrTableScrollY: typeof import('./composables/use-takt-master-detail-lr-scroll-y').measureMasterDetailLrTableScrollY
+  const mergeLoadedChildren: typeof import('./composables/use-lazy-tree').mergeLoadedChildren
   const message: typeof import('ant-design-vue').message
   const nextTick: typeof import('vue').nextTick
   const notification: typeof import('ant-design-vue').notification
@@ -79,6 +81,7 @@ declare global {
   const shallowReadonly: typeof import('vue').shallowReadonly
   const shallowRef: typeof import('vue').shallowRef
   const storeToRefs: typeof import('pinia').storeToRefs
+  const taktIsLeafFlag: typeof import('./composables/use-lazy-tree').taktIsLeafFlag
   const toRaw: typeof import('vue').toRaw
   const toRef: typeof import('vue').toRef
   const toRefs: typeof import('vue').toRefs
@@ -128,6 +131,9 @@ declare global {
   // @ts-ignore
   export type { EntityFieldPlaceholderKind } from './composables/use-entity-field-i18n'
   import('./composables/use-entity-field-i18n')
+  // @ts-ignore
+  export type { TaktLazyTreeNode, MapLazyTreeNodesOptions, MergeLazyTreeOptions } from './composables/use-lazy-tree'
+  import('./composables/use-lazy-tree')
   // @ts-ignore
   export type { UseLoginFieldSyncOptions } from './composables/use-login-field-sync'
   import('./composables/use-login-field-sync')
@@ -179,11 +185,13 @@ declare module 'vue' {
     readonly logger: UnwrapRef<typeof import('@/utils/logger')['logger']>
     readonly mapActions: UnwrapRef<typeof import('pinia')['mapActions']>
     readonly mapGetters: UnwrapRef<typeof import('pinia')['mapGetters']>
+    readonly mapLazyTreeNodes: UnwrapRef<typeof import('./composables/use-lazy-tree')['mapLazyTreeNodes']>
     readonly mapState: UnwrapRef<typeof import('pinia')['mapState']>
     readonly mapStores: UnwrapRef<typeof import('pinia')['mapStores']>
     readonly mapWritableState: UnwrapRef<typeof import('pinia')['mapWritableState']>
     readonly markRaw: UnwrapRef<typeof import('vue')['markRaw']>
     readonly measureMasterDetailLrTableScrollY: UnwrapRef<typeof import('./composables/use-takt-master-detail-lr-scroll-y')['measureMasterDetailLrTableScrollY']>
+    readonly mergeLoadedChildren: UnwrapRef<typeof import('./composables/use-lazy-tree')['mergeLoadedChildren']>
     readonly message: UnwrapRef<typeof import('ant-design-vue')['message']>
     readonly nextTick: UnwrapRef<typeof import('vue')['nextTick']>
     readonly notification: UnwrapRef<typeof import('ant-design-vue')['notification']>
@@ -217,6 +225,7 @@ declare module 'vue' {
     readonly shallowReadonly: UnwrapRef<typeof import('vue')['shallowReadonly']>
     readonly shallowRef: UnwrapRef<typeof import('vue')['shallowRef']>
     readonly storeToRefs: UnwrapRef<typeof import('pinia')['storeToRefs']>
+    readonly taktIsLeafFlag: UnwrapRef<typeof import('./composables/use-lazy-tree')['taktIsLeafFlag']>
     readonly toRaw: UnwrapRef<typeof import('vue')['toRaw']>
     readonly toRef: UnwrapRef<typeof import('vue')['toRef']>
     readonly toRefs: UnwrapRef<typeof import('vue')['toRefs']>

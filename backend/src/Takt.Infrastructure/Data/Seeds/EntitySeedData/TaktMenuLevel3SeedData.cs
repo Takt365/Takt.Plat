@@ -81,7 +81,7 @@ public class TaktMenuLevel3SeedData
             .Where(m => m.TenantCode == tenantCode && m.MenuCode == "LOGISTICS_QUALITY" && m.IsDeleted == 0)
             .FirstAsync();
         var logisticsServiceMenu = await seedContext.Db.Queryable<TaktMenu>()
-            .Where(m => m.TenantCode == tenantCode && m.MenuCode == "LOGISTICS_SERVICE" && m.IsDeleted == 0)
+            .Where(m => m.TenantCode == tenantCode && m.MenuCode == "LOGISTICS_CUSTOMER_SERVICE" && m.IsDeleted == 0)
             .FirstAsync();
         var logisticsMaintenanceMenu = await seedContext.Db.Queryable<TaktMenu>()
             .Where(m => m.TenantCode == tenantCode && m.MenuCode == "LOGISTICS_MAINTENANCE" && m.IsDeleted == 0)
@@ -1147,20 +1147,20 @@ public class TaktMenuLevel3SeedData
             updateCount += updateLQ3;
         }
 
-        // ========== 客户服务下的三级菜单 (LOGISTICS_SERVICE，不含客诉；客诉见 LOGISTICS_QUALITY_COMPLAINT) ==========
+        // ========== 客户服务下的三级菜单 (LOGISTICS_CUSTOMER_SERVICE，不含客诉；客诉见 LOGISTICS_QUALITY_COMPLAINT) ==========
         if (logisticsServiceMenu != null)
         {
-            var (insertLS1, updateLS1) = await CreateOrUpdateMenuAsync(menuRepository, seedContext, tenantCode, "LOGISTICS_SERVICE_REQUEST", menu =>
+            var (insertLS1, updateLS1) = await CreateOrUpdateMenuAsync(menuRepository, seedContext, tenantCode, "LOGISTICS_CUSTOMER_SERVICE_REQUEST", menu =>
             {
                 menu.MenuName = "服务请求";
-                menu.MenuCode = "LOGISTICS_SERVICE_REQUEST";
-                menu.I18nKey = "menu.logistics.service.request";
+                menu.MenuCode = "LOGISTICS_CUSTOMER_SERVICE_REQUEST";
+                menu.I18nKey = "menu.logistics.customer.service.request";
                 menu.Icon = "RiQuestionAnswerLine";
                 menu.ParentId = logisticsServiceMenu.Id;
                 menu.MenuType = 1;
-                menu.Permission = "logistics:service:request:list";
-                menu.RoutePath = "/logistics/service/service-request";
-                menu.ComponentPath = "logistics/service/service-request/index";
+                menu.Permission = "logistics:customer:service:request:list";
+                menu.RoutePath = "/logistics/customer-service/request";
+                menu.ComponentPath = "logistics/customer-service/request/index";
                 menu.SortOrder = 1;
                 menu.MenuStatus = 1;
                 menu.IsVisible = 1;
@@ -1170,17 +1170,17 @@ public class TaktMenuLevel3SeedData
             insertCount += insertLS1;
             updateCount += updateLS1;
 
-            var (insertLS2, updateLS2) = await CreateOrUpdateMenuAsync(menuRepository, seedContext, tenantCode, "LOGISTICS_SERVICE_CONTRACT", menu =>
+            var (insertLS2, updateLS2) = await CreateOrUpdateMenuAsync(menuRepository, seedContext, tenantCode, "LOGISTICS_CUSTOMER_SERVICE_CONTRACT", menu =>
             {
                 menu.MenuName = "服务合同";
-                menu.MenuCode = "LOGISTICS_SERVICE_CONTRACT";
-                menu.I18nKey = "menu.logistics.service.contract";
+                menu.MenuCode = "LOGISTICS_CUSTOMER_SERVICE_CONTRACT";
+                menu.I18nKey = "menu.logistics.customer.service.contract";
                 menu.Icon = "RiFileTextLine";
                 menu.ParentId = logisticsServiceMenu.Id;
                 menu.MenuType = 1;
-                menu.Permission = "logistics:service:contract:list";
-                menu.RoutePath = "/logistics/service/service-contract";
-                menu.ComponentPath = "logistics/service/service-contract/index";
+                menu.Permission = "logistics:customer:service:contract:list";
+                menu.RoutePath = "/logistics/customer-service/contract";
+                menu.ComponentPath = "logistics/customer-service/contract/index";
                 menu.SortOrder = 2;
                 menu.MenuStatus = 1;
                 menu.IsVisible = 1;
@@ -1190,17 +1190,17 @@ public class TaktMenuLevel3SeedData
             insertCount += insertLS2;
             updateCount += updateLS2;
 
-            var (insertLS3, updateLS3) = await CreateOrUpdateMenuAsync(menuRepository, seedContext, tenantCode, "LOGISTICS_SERVICE_ORDER", menu =>
+            var (insertLS3, updateLS3) = await CreateOrUpdateMenuAsync(menuRepository, seedContext, tenantCode, "LOGISTICS_CUSTOMER_SERVICE_ORDER", menu =>
             {
                 menu.MenuName = "服务订单";
-                menu.MenuCode = "LOGISTICS_SERVICE_ORDER";
-                menu.I18nKey = "menu.logistics.service.order";
+                menu.MenuCode = "LOGISTICS_CUSTOMER_SERVICE_ORDER";
+                menu.I18nKey = "menu.logistics.customer.service.order";
                 menu.Icon = "RiFileList3Line";
                 menu.ParentId = logisticsServiceMenu.Id;
                 menu.MenuType = 1;
-                menu.Permission = "logistics:service:order:list";
-                menu.RoutePath = "/logistics/service/service-order";
-                menu.ComponentPath = "logistics/service/service-order/index";
+                menu.Permission = "logistics:customer:service:order:list";
+                menu.RoutePath = "/logistics/customer-service/order";
+                menu.ComponentPath = "logistics/customer-service/order/index";
                 menu.SortOrder = 3;
                 menu.MenuStatus = 1;
                 menu.IsVisible = 1;
@@ -1210,17 +1210,17 @@ public class TaktMenuLevel3SeedData
             insertCount += insertLS3;
             updateCount += updateLS3;
 
-            var (insertLS4, updateLS4) = await CreateOrUpdateMenuAsync(menuRepository, seedContext, tenantCode, "LOGISTICS_SERVICE_TICKET", menu =>
+            var (insertLS4, updateLS4) = await CreateOrUpdateMenuAsync(menuRepository, seedContext, tenantCode, "LOGISTICS_CUSTOMER_SERVICE_TICKET", menu =>
             {
                 menu.MenuName = "服务工单";
-                menu.MenuCode = "LOGISTICS_SERVICE_TICKET";
-                menu.I18nKey = "menu.logistics.service.ticket";
+                menu.MenuCode = "LOGISTICS_CUSTOMER_SERVICE_TICKET";
+                menu.I18nKey = "menu.logistics.customer.service.ticket";
                 menu.Icon = "RiTicketLine";
                 menu.ParentId = logisticsServiceMenu.Id;
                 menu.MenuType = 1;
-                menu.Permission = "logistics:service:ticket:list";
-                menu.RoutePath = "/logistics/service/service-ticket";
-                menu.ComponentPath = "logistics/service/service-ticket/index";
+                menu.Permission = "logistics:customer:service:ticket:list";
+                menu.RoutePath = "/logistics/customer-service/ticket";
+                menu.ComponentPath = "logistics/customer-service/ticket/index";
                 menu.SortOrder = 4;
                 menu.MenuStatus = 1;
                 menu.IsVisible = 1;
