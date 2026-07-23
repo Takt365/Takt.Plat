@@ -1,3 +1,0 @@
-/// BOM 物料成本行（单层展开成本构成：父件产品 + 子件组件 + 价格快照）
-/// </summary>
-[SugarTable("takt_logistics_manufacturing_bom_material_cost_item", "BOM物料成本明细表")]

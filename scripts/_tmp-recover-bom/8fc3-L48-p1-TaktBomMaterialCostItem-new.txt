@@ -1,1 +1,0 @@
-[SugarTable("takt_logistics_manufacturing_bom_material_cost_item", "BOM物料成本明细表")]

@@ -7,6 +7,8 @@ backend/**/bin/
 backend/**/obj/
 backend/.vs/
 scripts/.tmp/
+scripts/_tmp*/
+scripts/_tmp*
 *.user
 *.suo
 

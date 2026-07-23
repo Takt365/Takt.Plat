@@ -1,2 +1,0 @@
-                ScannedRowCount = result?.ScannedRowCount ?? 0,
-                RefreshedGroupCount = result?.RefreshedGroupCount ?? 0,
