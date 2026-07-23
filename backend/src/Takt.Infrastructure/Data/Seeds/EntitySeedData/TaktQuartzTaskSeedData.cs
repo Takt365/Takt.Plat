@@ -177,7 +177,7 @@ public class TaktQuartzTaskSeedData : ITaktSeedDataCoordinator
                 AssemblyName: "Takt.Application",
                 ClassName: TaktEcFlowConstants.QuartzHandlerEcTaskOverdueScan,
                 Description: "扫描设变执行任务超时/阻塞并 SignalR 预警（默认暂停，启用后每 30 分钟）"),
-            // SAP 同步链：每日 07:30 起依次间隔 10 分钟（ma → md → st → ec → so）
+            // SAP 同步链：每日 07:30 起依次间隔 10 分钟（ma → md → st → ec → so → pp → sp）
             // 月度链（每月 3 日，自 03:00 起依次间隔 30 分钟）：mb → bc → 成本合计 → 重算
             new(
                 TaskCode: "QT_SAP_SYNC_MA",
@@ -235,6 +235,39 @@ public class TaktQuartzTaskSeedData : ITaktSeedDataCoordinator
                 TaskStatus: TaskStatusPaused,
                 Description: "每日 08:10 执行 wwwroot/Quartz/sap_sync_so.sql（默认暂停）"),
             new(
+                TaskCode: "QT_SAP_SYNC_PP",
+                TaskName: "SAP同步：采购价格",
+                JobName: "sap_sync_pp",
+                TaskType: TaskTypeSql,
+                SqlScript: "Quartz/sap_sync_pp.sql",
+                TriggerType: TriggerTypeCron,
+                IntervalSeconds: 0,
+                CronExpression: "0 20 8 * * ?",
+                TaskStatus: TaskStatusPaused,
+                Description: "每日 08:20 执行 wwwroot/Quartz/sap_sync_pp.sql（Sap_Data.takt_logistics_materials_purchase_price* 四级→租户库；默认暂停）"),
+            new(
+                TaskCode: "QT_SAP_SYNC_SP",
+                TaskName: "SAP同步：销售价格",
+                JobName: "sap_sync_sp",
+                TaskType: TaskTypeSql,
+                SqlScript: "Quartz/sap_sync_sp.sql",
+                TriggerType: TriggerTypeCron,
+                IntervalSeconds: 0,
+                CronExpression: "0 30 8 * * ?",
+                TaskStatus: TaskStatusPaused,
+                Description: "每日 08:30 执行 wwwroot/Quartz/sap_sync_sp.sql（Sap_Data.takt_logistics_sales_price* 四级→租户库；默认暂停；日链尾）"),
+            new(
+                TaskCode: "QT_SAP_SYNC_AD",
+                TaskName: "SAP同步：行政区划",
+                JobName: "sap_sync_ad",
+                TaskType: TaskTypeSql,
+                SqlScript: "Quartz/sap_sync_ad.sql",
+                TriggerType: TriggerTypeCron,
+                IntervalSeconds: 0,
+                CronExpression: "0 0 2 1 * ?",
+                TaskStatus: TaskStatusPaused,
+                Description: "每月 1 日 02:00 执行 wwwroot/Quartz/sap_sync_ad.sql（Sap_Data.takt_foundation_admin_division → 租户库同名表；按 DivisionCode 同步并重映射父级；默认暂停）"),
+            new(
                 TaskCode: "QT_SAP_SYNC_MB",
                 TaskName: "SAP同步：移动价格",
                 JobName: "sap_sync_mb",
@@ -247,7 +280,7 @@ public class TaktQuartzTaskSeedData : ITaktSeedDataCoordinator
                 Description: "每月 3 日 03:00 执行 wwwroot/Quartz/sap_sync_mb.sql（PP_Sap_Mbewh → 移动价格；月度链首；默认暂停）"),
             new(
                 TaskCode: "QT_SAP_SYNC_BC",
-                TaskName: "SAP同步：BOM物料成本",
+                TaskName: "SAP同步：BOM物料成本明细",
                 JobName: "sap_sync_bc",
                 TaskType: TaskTypeSql,
                 SqlScript: "Quartz/sap_sync_bc.sql",
@@ -256,6 +289,17 @@ public class TaktQuartzTaskSeedData : ITaktSeedDataCoordinator
                 CronExpression: "0 30 3 3 * ?",
                 TaskStatus: TaskStatusPaused,
                 Description: "每月 3 日 03:30 执行 wwwroot/Quartz/sap_sync_bc.sql（PP_Sap_Zp002 → BOM物料成本明细；MB 后间隔 30 分钟；默认暂停）"),
+            new(
+                TaskCode: "QT_SAP_SYNC_BV",
+                TaskName: "SAP同步：BOM物料成本汇总",
+                JobName: "sap_sync_bv",
+                TaskType: TaskTypeSql,
+                SqlScript: "Quartz/sap_sync_bv.sql",
+                TriggerType: TriggerTypeCron,
+                IntervalSeconds: 0,
+                CronExpression: "0 45 3 3 * ?",
+                TaskStatus: TaskStatusPaused,
+                Description: "每月 3 日 03:45 执行 wwwroot/Quartz/sap_sync_bv.sql（Sap_Data.takt_logistics_manufacturing_bom_material_cost → 租户库同名表；BC 后间隔 15 分钟；默认暂停）"),
             new(
                 TaskCode: "QT_BOM_MATERIAL_COST_SUM",
                 TaskName: "BOM物料成本合计",
@@ -267,7 +311,7 @@ public class TaktQuartzTaskSeedData : ITaktSeedDataCoordinator
                 TaskStatus: TaskStatusPaused,
                 AssemblyName: "Takt.Infrastructure",
                 ClassName: nameof(TaktBomMaterialCostSumJobHandler),
-                Description: "每月 3 日 04:00 仅合计 CostingDate 当月（完成后落库消息并推送；BC 后间隔 30 分钟；默认暂停）"),
+                Description: "每月 3 日 04:00 仅合计 CostingDate 当月（完成后落库消息并推送；BV 后间隔 15 分钟；默认暂停）"),
             new(
                 TaskCode: "QT_BOM_MATERIAL_COST_RECALC",
                 TaskName: "BOM物料成本重算",
@@ -330,6 +374,7 @@ public class TaktQuartzTaskSeedData : ITaktSeedDataCoordinator
             entity = await repository.CreateAsync(entity);
             return (entity, 1, 0);
         }
+        // 仅刷新定义字段；TaskStatus 由管理页启停维护，禁止种子每次启动写回「暂停」导致已启用任务丢失调度
         entity.TaskName = template.TaskName;
         entity.JobName = template.JobName;
         entity.JobGroup = "DEFAULT";
@@ -343,9 +388,6 @@ public class TaktQuartzTaskSeedData : ITaktSeedDataCoordinator
         entity.CronExpression = template.CronExpression;
         entity.IntervalSeconds = template.IntervalSeconds;
         entity.ExecuteParams = template.ExecuteParams;
-        entity.TaskStatus = template.TaskStatus;
-        entity.Concurrent = 0;
-        entity.MisfirePolicy = 0;
         entity.TaskDescription = template.Description;
         entity.Remark = "系统内置示例任务种子";
         await repository.UpdateAsync(entity);
