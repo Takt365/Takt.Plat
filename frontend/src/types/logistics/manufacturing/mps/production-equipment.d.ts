@@ -39,7 +39,7 @@ export interface ProductionEquipment extends CompanyDtoBase {
   equipmentCategory: number;
 
   /**
-   * 生产设备编码（租户+公司+工厂内唯一；EquipmentCode / 资产MES编号）
+   * 生产设备编码（租户+公司+工厂内唯一；EquipmentCode / 资产MES编码）
    */
   productionEquipmentCode: string;
 
@@ -374,7 +374,7 @@ export interface ProductionEquipmentQuery extends TaktPagedQuery {
   equipmentCategory?: number;
 
   /**
-   * 生产设备编码（租户+公司+工厂内唯一；EquipmentCode / 资产MES编号）
+   * 生产设备编码（租户+公司+工厂内唯一；EquipmentCode / 资产MES编码）
    */
   productionEquipmentCode?: string;
 
@@ -733,7 +733,7 @@ export interface ProductionEquipmentCreate {
   equipmentCategory: number;
 
   /**
-   * 生产设备编码（租户+公司+工厂内唯一；EquipmentCode / 资产MES编号）
+   * 生产设备编码（租户+公司+工厂内唯一；EquipmentCode / 资产MES编码）
    */
   productionEquipmentCode: string;
 
@@ -1125,7 +1125,7 @@ export interface ProductionEquipmentTemplate {
   equipmentCategory?: number;
 
   /**
-   * 生产设备编码（租户+公司+工厂内唯一；EquipmentCode / 资产MES编号）
+   * 生产设备编码（租户+公司+工厂内唯一；EquipmentCode / 资产MES编码）
    */
   productionEquipmentCode?: string;
 
@@ -1469,7 +1469,7 @@ export interface ProductionEquipmentImport {
   equipmentCategory?: number;
 
   /**
-   * 生产设备编码（租户+公司+工厂内唯一；EquipmentCode / 资产MES编号）
+   * 生产设备编码（租户+公司+工厂内唯一；EquipmentCode / 资产MES编码）
    */
   productionEquipmentCode?: string;
 
@@ -1808,7 +1808,7 @@ export interface ProductionEquipmentExport {
   equipmentCategory: number;
 
   /**
-   * 生产设备编码（租户+公司+工厂内唯一；EquipmentCode / 资产MES编号）
+   * 生产设备编码（租户+公司+工厂内唯一；EquipmentCode / 资产MES编码）
    */
   productionEquipmentCode: string;
 

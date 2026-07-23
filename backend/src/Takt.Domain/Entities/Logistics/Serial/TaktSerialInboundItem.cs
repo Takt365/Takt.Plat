@@ -26,7 +26,7 @@ namespace Takt.Domain.Entities.Logistics.Serial;
 public class TaktSerialInboundItem : TaktCompanyEntityBase
 {
     /// <summary>
-    /// 入库主表 ID（选项 TaktSerialInbounds/options，DictValue=Id）
+    /// 入库主表 ID（选项 TaktSerialInbounds/options；DictValue=Id）
     /// </summary>
     [SugarColumn(ColumnName = "inbound_id", ColumnDescription = "入库ID", ColumnDataType = "bigint", IsNullable = false)]
     [JsonConverter(typeof(ValueToStringConverter))]
@@ -48,7 +48,7 @@ public class TaktSerialInboundItem : TaktCompanyEntityBase
     public string InboundSerialNo { get; set; } = string.Empty;
 
     /// <summary>
-    /// 是否作废（字典 sys_yes_no_type，0=否 1=是；编辑移除子行时标记作废）
+    /// 是否作废（字典 sys_yes_no_type；0=否 1=是；编辑移除子行时标记作废）
     /// </summary>
     [SugarColumn(ColumnName = "is_obsolete", ColumnDescription = "是否作废", ColumnDataType = "int", IsNullable = false, DefaultValue = "0")]
     public int IsObsolete { get; set; } = 0;

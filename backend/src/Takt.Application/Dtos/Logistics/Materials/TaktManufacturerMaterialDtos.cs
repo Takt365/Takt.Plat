@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Application.Dtos.Logistics.Materials
 // 文件名称：TaktManufacturerMaterialDtos.cs
-// 创建时间：2026-07-09
+// 创建时间：2026-07-23
 // 创建人：Takt365(Auto Generated)
 // 功能描述：ManufacturerMaterial 模块 DTO（由 generate-dtos-from-entity.cjs 根据 TaktManufacturerMaterial 生成，请按需审阅）
 // 
@@ -36,7 +36,7 @@ public class TaktManufacturerMaterialDto : TaktCompanyDtoBase
     public long ManufacturerMaterialId { get; set; }
 
     /// <summary>
-    /// 制造商 ID（关联 TaktManufacturer.Id，选项 TaktManufacturers/options）
+    /// 制造商 ID（选项 TaktManufacturers/options；DictValue=Id）
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
     public long ManufacturerId { get; set; }
@@ -57,7 +57,7 @@ public class TaktManufacturerMaterialDto : TaktCompanyDtoBase
     public int LineNumber { get; set; } = 0;
 
     /// <summary>
-    /// 制造商物料编码（制造商内部的物料编号）
+    /// 制造商物料编码（制造商内部的物料编码）
     /// </summary>
     public string ManufacturerMaterialCode { get; set; } = string.Empty;
 
@@ -72,12 +72,12 @@ public class TaktManufacturerMaterialDto : TaktCompanyDtoBase
     public string? ManufacturerMaterialSpecification { get; set; } = string.Empty;
 
     /// <summary>
-    /// 物料编码（关联 TaktMaterial.MaterialCode，选项 TaktMaterials/options）
+    /// 物料编码（选项 TaktMaterialPlants/options；DictValue=MaterialCode，ExtValue=PlantCode）
     /// </summary>
     public string MaterialCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 是否作废（字典 sys_yes_no_type，0=否 1=是；编辑移除子行时标记作废）
+    /// 是否作废（字典 sys_yes_no_type；0=否 1=是；编辑移除子行时标记作废）
     /// </summary>
     public int IsObsolete { get; set; } = 0;
 
@@ -104,7 +104,7 @@ public class TaktManufacturerMaterialQueryDto : TaktPagedQuery
     public string? CompanyCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 制造商 ID（关联 TaktManufacturer.Id，选项 TaktManufacturers/options）
+    /// 制造商 ID（选项 TaktManufacturers/options；DictValue=Id）
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
     public long? ManufacturerId { get; set; }
@@ -120,7 +120,7 @@ public class TaktManufacturerMaterialQueryDto : TaktPagedQuery
     public int? LineNumber { get; set; }
 
     /// <summary>
-    /// 制造商物料编码（制造商内部的物料编号）
+    /// 制造商物料编码（制造商内部的物料编码）
     /// </summary>
     public string? ManufacturerMaterialCode { get; set; } = string.Empty;
 
@@ -135,12 +135,12 @@ public class TaktManufacturerMaterialQueryDto : TaktPagedQuery
     public string? ManufacturerMaterialSpecification { get; set; } = string.Empty;
 
     /// <summary>
-    /// 物料编码（关联 TaktMaterial.MaterialCode，选项 TaktMaterials/options）
+    /// 物料编码（选项 TaktMaterialPlants/options；DictValue=MaterialCode，ExtValue=PlantCode）
     /// </summary>
     public string? MaterialCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 是否作废（字典 sys_yes_no_type，0=否 1=是；编辑移除子行时标记作废）
+    /// 是否作废（字典 sys_yes_no_type；0=否 1=是；编辑移除子行时标记作废）
     /// </summary>
     public int? IsObsolete { get; set; }
 
@@ -190,7 +190,7 @@ public class TaktManufacturerMaterialCreateDto
     public string CompanyDefaultCulture { get; set; } = string.Empty;
 
     /// <summary>
-    /// 制造商 ID（关联 TaktManufacturer.Id，选项 TaktManufacturers/options）
+    /// 制造商 ID（选项 TaktManufacturers/options；DictValue=Id）
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
     public long ManufacturerId { get; set; }
@@ -207,9 +207,9 @@ public class TaktManufacturerMaterialCreateDto
     public int LineNumber { get; set; } = 0;
 
     /// <summary>
-    /// 制造商物料编码（制造商内部的物料编号）
+    /// 制造商物料编码（制造商内部的物料编码）
     /// </summary>
-    [Required(ErrorMessage = "制造商物料编码（制造商内部的物料编号）不能为空")]
+    [Required(ErrorMessage = "制造商物料编码（制造商内部的物料编码）不能为空")]
     public string ManufacturerMaterialCode { get; set; } = string.Empty;
 
     /// <summary>
@@ -224,13 +224,13 @@ public class TaktManufacturerMaterialCreateDto
     public string? ManufacturerMaterialSpecification { get; set; } = string.Empty;
 
     /// <summary>
-    /// 物料编码（关联 TaktMaterial.MaterialCode，选项 TaktMaterials/options）
+    /// 物料编码（选项 TaktMaterialPlants/options；DictValue=MaterialCode，ExtValue=PlantCode）
     /// </summary>
-    [Required(ErrorMessage = "物料编码（关联 TaktMaterial.MaterialCode，选项 TaktMaterials/options）不能为空")]
+    [Required(ErrorMessage = "物料编码（选项 TaktMaterialPlants/options；DictValue=MaterialCode，ExtValue=PlantCode）不能为空")]
     public string MaterialCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 是否作废（字典 sys_yes_no_type，0=否 1=是；编辑移除子行时标记作废）
+    /// 是否作废（字典 sys_yes_no_type；0=否 1=是；编辑移除子行时标记作废）
     /// </summary>
     public int IsObsolete { get; set; } = 0;
 
@@ -309,7 +309,7 @@ public class TaktManufacturerMaterialTemplateDto
     public string? CompanyCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 制造商 ID（关联 TaktManufacturer.Id，选项 TaktManufacturers/options）
+    /// 制造商 ID（选项 TaktManufacturers/options；DictValue=Id）
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
     public long? ManufacturerId { get; set; }
@@ -325,7 +325,7 @@ public class TaktManufacturerMaterialTemplateDto
     public int? LineNumber { get; set; }
 
     /// <summary>
-    /// 制造商物料编码（制造商内部的物料编号）
+    /// 制造商物料编码（制造商内部的物料编码）
     /// </summary>
     public string? ManufacturerMaterialCode { get; set; } = string.Empty;
 
@@ -340,12 +340,12 @@ public class TaktManufacturerMaterialTemplateDto
     public string? ManufacturerMaterialSpecification { get; set; } = string.Empty;
 
     /// <summary>
-    /// 物料编码（关联 TaktMaterial.MaterialCode，选项 TaktMaterials/options）
+    /// 物料编码（选项 TaktMaterialPlants/options；DictValue=MaterialCode，ExtValue=PlantCode）
     /// </summary>
     public string? MaterialCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 是否作废（字典 sys_yes_no_type，0=否 1=是；编辑移除子行时标记作废）
+    /// 是否作废（字典 sys_yes_no_type；0=否 1=是；编辑移除子行时标记作废）
     /// </summary>
     public int? IsObsolete { get; set; }
 
@@ -382,7 +382,7 @@ public class TaktManufacturerMaterialImportDto
     public string? CompanyDefaultCulture { get; set; } = string.Empty;
 
     /// <summary>
-    /// 制造商 ID（关联 TaktManufacturer.Id，选项 TaktManufacturers/options）
+    /// 制造商 ID（选项 TaktManufacturers/options；DictValue=Id）
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
     public long? ManufacturerId { get; set; }
@@ -398,7 +398,7 @@ public class TaktManufacturerMaterialImportDto
     public int? LineNumber { get; set; }
 
     /// <summary>
-    /// 制造商物料编码（制造商内部的物料编号）
+    /// 制造商物料编码（制造商内部的物料编码）
     /// </summary>
     public string? ManufacturerMaterialCode { get; set; } = string.Empty;
 
@@ -413,12 +413,12 @@ public class TaktManufacturerMaterialImportDto
     public string? ManufacturerMaterialSpecification { get; set; } = string.Empty;
 
     /// <summary>
-    /// 物料编码（关联 TaktMaterial.MaterialCode，选项 TaktMaterials/options）
+    /// 物料编码（选项 TaktMaterialPlants/options；DictValue=MaterialCode，ExtValue=PlantCode）
     /// </summary>
     public string? MaterialCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 是否作废（字典 sys_yes_no_type，0=否 1=是；编辑移除子行时标记作废）
+    /// 是否作废（字典 sys_yes_no_type；0=否 1=是；编辑移除子行时标记作废）
     /// </summary>
     public int? IsObsolete { get; set; }
 
@@ -456,7 +456,7 @@ public class TaktManufacturerMaterialExportDto
     public string CompanyCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 制造商 ID（关联 TaktManufacturer.Id，选项 TaktManufacturers/options）
+    /// 制造商 ID（选项 TaktManufacturers/options；DictValue=Id）
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
     public long ManufacturerId { get; set; }
@@ -472,7 +472,7 @@ public class TaktManufacturerMaterialExportDto
     public int LineNumber { get; set; } = 0;
 
     /// <summary>
-    /// 制造商物料编码（制造商内部的物料编号）
+    /// 制造商物料编码（制造商内部的物料编码）
     /// </summary>
     public string ManufacturerMaterialCode { get; set; } = string.Empty;
 
@@ -487,12 +487,12 @@ public class TaktManufacturerMaterialExportDto
     public string? ManufacturerMaterialSpecification { get; set; } = string.Empty;
 
     /// <summary>
-    /// 物料编码（关联 TaktMaterial.MaterialCode，选项 TaktMaterials/options）
+    /// 物料编码（选项 TaktMaterialPlants/options；DictValue=MaterialCode，ExtValue=PlantCode）
     /// </summary>
     public string MaterialCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 是否作废（字典 sys_yes_no_type，0=否 1=是；编辑移除子行时标记作废）
+    /// 是否作废（字典 sys_yes_no_type；0=否 1=是；编辑移除子行时标记作废）
     /// </summary>
     public int IsObsolete { get; set; } = 0;
 

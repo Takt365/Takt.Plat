@@ -584,7 +584,7 @@ public class TaktMaterialMovingPriceMonthlyTrendQueryDto : TaktPagedQuery
     public string? MaterialCode { get; set; }
 
     /// <summary>
-    /// 涨跌筛选：空=全部；up/down/flat/none；changed=仅涨或跌
+    /// 涨跌筛选：空=物料价格推移全部 / 机种推移默认领涨领跌各 50；leading=领涨领跌各 50；all=全部；up/down/flat/none；changed=仅涨或跌
     /// </summary>
     public string? TrendFilter { get; set; }
 }

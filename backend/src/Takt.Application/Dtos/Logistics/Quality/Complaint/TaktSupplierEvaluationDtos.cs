@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Application.Dtos.Logistics.Quality.Complaint
 // 文件名称：TaktSupplierEvaluationDtos.cs
-// 创建时间：2026-07-09
+// 创建时间：2026-07-23
 // 创建人：Takt365(Auto Generated)
 // 功能描述：SupplierEvaluation 模块 DTO（由 generate-dtos-from-entity.cjs 根据 TaktSupplierEvaluation 生成，请按需审阅）
 // 
@@ -36,23 +36,28 @@ public class TaktSupplierEvaluationDto : TaktCompanyDtoBase
     public long SupplierEvaluationId { get; set; }
 
     /// <summary>
-    /// 评价表编号（组合唯一索引）
+    /// 评价表编码（组合唯一索引）
     /// </summary>
     public string SupplierEvaluationCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 供应商 ID（关联 TaktSupplier.Id，选项 TaktSuppliers/options）
+    /// 供应商 ID（选项 TaktSuppliers/options；DictValue=Id）
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
     public long SupplierId { get; set; }
 
     /// <summary>
-    /// 供应商名称
+    /// 供应商 名称（填充字段）
     /// </summary>
-    public string SupplierName { get; set; } = string.Empty;
+    public string? SupplierName { get; set; }
 
     /// <summary>
-    /// 供应商编码（选项 TaktSuppliers/options，DictValue=SupplierCode）
+    /// 供应商名称
+    /// </summary>
+    public string SupplierName1 { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 供应商编码（选项 TaktSuppliers/options；DictValue=SupplierCode）
     /// </summary>
     public string? SupplierCode { get; set; } = string.Empty;
 
@@ -72,12 +77,12 @@ public class TaktSupplierEvaluationDto : TaktCompanyDtoBase
     public int EvaluationType { get; set; } = 0;
 
     /// <summary>
-    /// 评价人（选项 TaktEmployees/options，DictValue=EmployeeCode）
+    /// 评价人（选项 TaktEmployees/options；DictValue=EmployeeCode）
     /// </summary>
     public string? EvaluatorBy { get; set; } = string.Empty;
 
     /// <summary>
-    /// 评价部门（选项 TaktDepts/tree-options，DictValue=DeptCode）
+    /// 评价部门（选项 TaktDepts/tree-options；DictValue=DeptCode）
     /// </summary>
     public string? EvaluationDept { get; set; } = string.Empty;
 
@@ -152,7 +157,7 @@ public class TaktSupplierEvaluationDto : TaktCompanyDtoBase
     public int EvaluationStatus { get; set; } = 0;
 
     /// <summary>
-    /// 关联工厂（选项 TaktPlants/options，DictValue=PlantCode）
+    /// 关联工厂（选项 TaktPlants/options；DictValue=PlantCode）
     /// </summary>
     public string RelatedPlant { get; set; } = string.Empty;
 
@@ -195,12 +200,12 @@ public class TaktSupplierEvaluationQueryDto : TaktPagedQuery
     public string? CompanyCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 评价表编号（组合唯一索引）
+    /// 评价表编码（组合唯一索引）
     /// </summary>
     public string? SupplierEvaluationCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 供应商 ID（关联 TaktSupplier.Id，选项 TaktSuppliers/options）
+    /// 供应商 ID（选项 TaktSuppliers/options；DictValue=Id）
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
     public long? SupplierId { get; set; }
@@ -208,10 +213,10 @@ public class TaktSupplierEvaluationQueryDto : TaktPagedQuery
     /// <summary>
     /// 供应商名称
     /// </summary>
-    public string? SupplierName { get; set; } = string.Empty;
+    public string? SupplierName1 { get; set; } = string.Empty;
 
     /// <summary>
-    /// 供应商编码（选项 TaktSuppliers/options，DictValue=SupplierCode）
+    /// 供应商编码（选项 TaktSuppliers/options；DictValue=SupplierCode）
     /// </summary>
     public string? SupplierCode { get; set; } = string.Empty;
 
@@ -236,12 +241,12 @@ public class TaktSupplierEvaluationQueryDto : TaktPagedQuery
     public int? EvaluationType { get; set; }
 
     /// <summary>
-    /// 评价人（选项 TaktEmployees/options，DictValue=EmployeeCode）
+    /// 评价人（选项 TaktEmployees/options；DictValue=EmployeeCode）
     /// </summary>
     public string? EvaluatorBy { get; set; } = string.Empty;
 
     /// <summary>
-    /// 评价部门（选项 TaktDepts/tree-options，DictValue=DeptCode）
+    /// 评价部门（选项 TaktDepts/tree-options；DictValue=DeptCode）
     /// </summary>
     public string? EvaluationDept { get; set; } = string.Empty;
 
@@ -321,7 +326,7 @@ public class TaktSupplierEvaluationQueryDto : TaktPagedQuery
     public int? EvaluationStatus { get; set; }
 
     /// <summary>
-    /// 关联工厂（选项 TaktPlants/options，DictValue=PlantCode）
+    /// 关联工厂（选项 TaktPlants/options；DictValue=PlantCode）
     /// </summary>
     public string? RelatedPlant { get; set; } = string.Empty;
 
@@ -381,13 +386,13 @@ public class TaktSupplierEvaluationCreateDto
     public string CompanyDefaultCulture { get; set; } = string.Empty;
 
     /// <summary>
-    /// 评价表编号（组合唯一索引）
+    /// 评价表编码（组合唯一索引）
     /// </summary>
-    [Required(ErrorMessage = "评价表编号（组合唯一索引）不能为空")]
+    [Required(ErrorMessage = "评价表编码（组合唯一索引）不能为空")]
     public string SupplierEvaluationCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 供应商 ID（关联 TaktSupplier.Id，选项 TaktSuppliers/options）
+    /// 供应商 ID（选项 TaktSuppliers/options；DictValue=Id）
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
     public long SupplierId { get; set; }
@@ -396,10 +401,10 @@ public class TaktSupplierEvaluationCreateDto
     /// 供应商名称
     /// </summary>
     [Required(ErrorMessage = "供应商名称不能为空")]
-    public string SupplierName { get; set; } = string.Empty;
+    public string SupplierName1 { get; set; } = string.Empty;
 
     /// <summary>
-    /// 供应商编码（选项 TaktSuppliers/options，DictValue=SupplierCode）
+    /// 供应商编码（选项 TaktSuppliers/options；DictValue=SupplierCode）
     /// </summary>
     public string? SupplierCode { get; set; } = string.Empty;
 
@@ -419,12 +424,12 @@ public class TaktSupplierEvaluationCreateDto
     public int EvaluationType { get; set; } = 0;
 
     /// <summary>
-    /// 评价人（选项 TaktEmployees/options，DictValue=EmployeeCode）
+    /// 评价人（选项 TaktEmployees/options；DictValue=EmployeeCode）
     /// </summary>
     public string? EvaluatorBy { get; set; } = string.Empty;
 
     /// <summary>
-    /// 评价部门（选项 TaktDepts/tree-options，DictValue=DeptCode）
+    /// 评价部门（选项 TaktDepts/tree-options；DictValue=DeptCode）
     /// </summary>
     public string? EvaluationDept { get; set; } = string.Empty;
 
@@ -499,9 +504,9 @@ public class TaktSupplierEvaluationCreateDto
     public int EvaluationStatus { get; set; } = 0;
 
     /// <summary>
-    /// 关联工厂（选项 TaktPlants/options，DictValue=PlantCode）
+    /// 关联工厂（选项 TaktPlants/options；DictValue=PlantCode）
     /// </summary>
-    [Required(ErrorMessage = "关联工厂（选项 TaktPlants/options，DictValue=PlantCode）不能为空")]
+    [Required(ErrorMessage = "关联工厂（选项 TaktPlants/options；DictValue=PlantCode）不能为空")]
     public string RelatedPlant { get; set; } = string.Empty;
 
     /// <summary>
@@ -512,7 +517,7 @@ public class TaktSupplierEvaluationCreateDto
     /// <summary>
     /// 评价项目明细列表（主子表关系）（子表，级联保存）
     /// </summary>
-    public List<TaktSupplierEvaluationItemUpdateDto>? Items { get; set; }
+    public List<TaktSupplierEvaluationItemCreateDto>? Items { get; set; }
 
     /// <summary>
     /// 扩展字段JSON
@@ -543,6 +548,11 @@ public class TaktSupplierEvaluationUpdateDto : TaktSupplierEvaluationCreateDto
     [AdaptMember("Id")]
     [JsonConverter(typeof(ValueToStringConverter))]
     public long SupplierEvaluationId { get; set; }
+
+    /// <summary>
+    /// 评价项目明细列表（主子表关系）（子表，级联保存）
+    /// </summary>
+    public new List<TaktSupplierEvaluationItemUpdateDto>? Items { get; set; }
 
 }
 
@@ -614,12 +624,12 @@ public class TaktSupplierEvaluationTemplateDto
     public string? CompanyCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 评价表编号（组合唯一索引）
+    /// 评价表编码（组合唯一索引）
     /// </summary>
     public string? SupplierEvaluationCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 供应商 ID（关联 TaktSupplier.Id，选项 TaktSuppliers/options）
+    /// 供应商 ID（选项 TaktSuppliers/options；DictValue=Id）
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
     public long? SupplierId { get; set; }
@@ -627,10 +637,10 @@ public class TaktSupplierEvaluationTemplateDto
     /// <summary>
     /// 供应商名称
     /// </summary>
-    public string? SupplierName { get; set; } = string.Empty;
+    public string? SupplierName1 { get; set; } = string.Empty;
 
     /// <summary>
-    /// 供应商编码（选项 TaktSuppliers/options，DictValue=SupplierCode）
+    /// 供应商编码（选项 TaktSuppliers/options；DictValue=SupplierCode）
     /// </summary>
     public string? SupplierCode { get; set; } = string.Empty;
 
@@ -650,12 +660,12 @@ public class TaktSupplierEvaluationTemplateDto
     public int? EvaluationType { get; set; }
 
     /// <summary>
-    /// 评价人（选项 TaktEmployees/options，DictValue=EmployeeCode）
+    /// 评价人（选项 TaktEmployees/options；DictValue=EmployeeCode）
     /// </summary>
     public string? EvaluatorBy { get; set; } = string.Empty;
 
     /// <summary>
-    /// 评价部门（选项 TaktDepts/tree-options，DictValue=DeptCode）
+    /// 评价部门（选项 TaktDepts/tree-options；DictValue=DeptCode）
     /// </summary>
     public string? EvaluationDept { get; set; } = string.Empty;
 
@@ -730,7 +740,7 @@ public class TaktSupplierEvaluationTemplateDto
     public int? EvaluationStatus { get; set; }
 
     /// <summary>
-    /// 关联工厂（选项 TaktPlants/options，DictValue=PlantCode）
+    /// 关联工厂（选项 TaktPlants/options；DictValue=PlantCode）
     /// </summary>
     public string? RelatedPlant { get; set; } = string.Empty;
 
@@ -777,12 +787,12 @@ public class TaktSupplierEvaluationImportDto
     public string? CompanyDefaultCulture { get; set; } = string.Empty;
 
     /// <summary>
-    /// 评价表编号（组合唯一索引）
+    /// 评价表编码（组合唯一索引）
     /// </summary>
     public string? SupplierEvaluationCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 供应商 ID（关联 TaktSupplier.Id，选项 TaktSuppliers/options）
+    /// 供应商 ID（选项 TaktSuppliers/options；DictValue=Id）
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
     public long? SupplierId { get; set; }
@@ -790,10 +800,10 @@ public class TaktSupplierEvaluationImportDto
     /// <summary>
     /// 供应商名称
     /// </summary>
-    public string? SupplierName { get; set; } = string.Empty;
+    public string? SupplierName1 { get; set; } = string.Empty;
 
     /// <summary>
-    /// 供应商编码（选项 TaktSuppliers/options，DictValue=SupplierCode）
+    /// 供应商编码（选项 TaktSuppliers/options；DictValue=SupplierCode）
     /// </summary>
     public string? SupplierCode { get; set; } = string.Empty;
 
@@ -813,12 +823,12 @@ public class TaktSupplierEvaluationImportDto
     public int? EvaluationType { get; set; }
 
     /// <summary>
-    /// 评价人（选项 TaktEmployees/options，DictValue=EmployeeCode）
+    /// 评价人（选项 TaktEmployees/options；DictValue=EmployeeCode）
     /// </summary>
     public string? EvaluatorBy { get; set; } = string.Empty;
 
     /// <summary>
-    /// 评价部门（选项 TaktDepts/tree-options，DictValue=DeptCode）
+    /// 评价部门（选项 TaktDepts/tree-options；DictValue=DeptCode）
     /// </summary>
     public string? EvaluationDept { get; set; } = string.Empty;
 
@@ -893,7 +903,7 @@ public class TaktSupplierEvaluationImportDto
     public int? EvaluationStatus { get; set; }
 
     /// <summary>
-    /// 关联工厂（选项 TaktPlants/options，DictValue=PlantCode）
+    /// 关联工厂（选项 TaktPlants/options；DictValue=PlantCode）
     /// </summary>
     public string? RelatedPlant { get; set; } = string.Empty;
 
@@ -941,12 +951,12 @@ public class TaktSupplierEvaluationExportDto
     public string CompanyCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 评价表编号（组合唯一索引）
+    /// 评价表编码（组合唯一索引）
     /// </summary>
     public string SupplierEvaluationCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 供应商 ID（关联 TaktSupplier.Id，选项 TaktSuppliers/options）
+    /// 供应商 ID（选项 TaktSuppliers/options；DictValue=Id）
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
     public long SupplierId { get; set; }
@@ -954,10 +964,10 @@ public class TaktSupplierEvaluationExportDto
     /// <summary>
     /// 供应商名称
     /// </summary>
-    public string SupplierName { get; set; } = string.Empty;
+    public string SupplierName1 { get; set; } = string.Empty;
 
     /// <summary>
-    /// 供应商编码（选项 TaktSuppliers/options，DictValue=SupplierCode）
+    /// 供应商编码（选项 TaktSuppliers/options；DictValue=SupplierCode）
     /// </summary>
     public string? SupplierCode { get; set; } = string.Empty;
 
@@ -977,12 +987,12 @@ public class TaktSupplierEvaluationExportDto
     public int EvaluationType { get; set; } = 0;
 
     /// <summary>
-    /// 评价人（选项 TaktEmployees/options，DictValue=EmployeeCode）
+    /// 评价人（选项 TaktEmployees/options；DictValue=EmployeeCode）
     /// </summary>
     public string? EvaluatorBy { get; set; } = string.Empty;
 
     /// <summary>
-    /// 评价部门（选项 TaktDepts/tree-options，DictValue=DeptCode）
+    /// 评价部门（选项 TaktDepts/tree-options；DictValue=DeptCode）
     /// </summary>
     public string? EvaluationDept { get; set; } = string.Empty;
 
@@ -1057,7 +1067,7 @@ public class TaktSupplierEvaluationExportDto
     public int EvaluationStatus { get; set; } = 0;
 
     /// <summary>
-    /// 关联工厂（选项 TaktPlants/options，DictValue=PlantCode）
+    /// 关联工厂（选项 TaktPlants/options；DictValue=PlantCode）
     /// </summary>
     public string RelatedPlant { get; set; } = string.Empty;
 

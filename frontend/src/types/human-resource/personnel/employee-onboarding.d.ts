@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：frontend/src/types/human-resource/personnel
 // 文件名称：employee-onboarding.d.ts
-// 创建时间：2026-06-23
+// 创建时间：2026-07-23
 // 创建人：Takt365(Auto Generated)
 // 功能描述：human-resource/personnel 模块类型定义（自动生成；类型名去 Takt 前缀与末尾 Dto，如 TaktCompanyDto → Company）
 // 
@@ -16,7 +16,7 @@ import type {
 } from '@/types/common';
 
 /**
- * 入职待办（办理待办单，非审批单；状态见 todo_status）
+ * 入职待办（办理待办单，非审批单；状态见 TodoStatus）
  * 对应前端 TaktEmployeeOnboardingDto
  * 继承 TaktCompanyDtoBase
  * 对应前端 EmployeeOnboarding
@@ -29,24 +29,19 @@ export interface EmployeeOnboarding extends CompanyDtoBase {
   employeeOnboardingId: string;
 
   /**
-   * 录用信息ID（人才管理 TaktTalentOffer）
+   * 录用信息（选项 TaktTalentOffers/options；DictValue=Id）
    */
   offerId: string;
 
   /**
-   * 录用信息名称（填充字段）
+   * 录用信息（选项 TaktTalentOffers/options；DictValue=Id）
    */
   offerName?: string;
 
   /**
-   * 待办单号（租户+公司内业务编号）
+   * 待办单号（租户+公司内业务编码）
    */
   todoNo: string;
-
-  /**
-   * 待办状态（0=待办理，1=办理中，2=已完成，3=已取消）
-   */
-  todoStatus: number;
 
   /**
    * 计划上岗日期（JoinedDate 计划值）
@@ -64,22 +59,27 @@ export interface EmployeeOnboarding extends CompanyDtoBase {
   mobile?: string;
 
   /**
-   * 关联员工ID（建档后回填，可空）
+   * 关联员工（选项 TaktEmployees/options；建档后回填，可空，DictValue=Id）
    */
   employeeId?: string;
 
   /**
-   * 关联员工名称（填充字段）
+   * 员工编码（冗余，与 TaktEmployee.EmployeeCode 对齐；建档回填后可写，建档前可空）
+   */
+  employeeCode?: string;
+
+  /**
+   * 员工姓名（冗余，与 TaktEmployee.EmployeeName 对齐；建档回填后可写，建档前可空）
    */
   employeeName?: string;
 
   /**
-   * 入职上岗单ID（待办完成后回填，可空）
+   * 入职上岗单（关联 TaktEmployeeJoined.Id；待办完成后回填，可空）
    */
   employeeJoinedId?: string;
 
   /**
-   * 入职上岗单名称（填充字段）
+   * 入职上岗单（关联 TaktEmployeeJoined.Id；待办完成后回填，可空）
    */
   employeeJoinedName?: string;
 
@@ -87,6 +87,11 @@ export interface EmployeeOnboarding extends CompanyDtoBase {
    * 待办说明
    */
   reason?: string;
+
+  /**
+   * 待办状态（字典 hr_personnel_onboarding_status；0=待办理 1=办理中 2=已完成 3=已取消）
+   */
+  todoStatus: number;
 
   /**
    * 录用信息 （主表：TaktTalentOffer）
@@ -119,19 +124,14 @@ export interface EmployeeOnboardingQuery extends TaktPagedQuery {
   companyCode?: string;
 
   /**
-   * 录用信息ID（人才管理 TaktTalentOffer）
+   * 录用信息（选项 TaktTalentOffers/options；DictValue=Id）
    */
   offerId?: string;
 
   /**
-   * 待办单号（租户+公司内业务编号）
+   * 待办单号（租户+公司内业务编码）
    */
   todoNo?: string;
-
-  /**
-   * 待办状态（0=待办理，1=办理中，2=已完成，3=已取消）
-   */
-  todoStatus?: number;
 
   /**
    * 计划上岗日期（JoinedDate 计划值）（范围查询-开始）
@@ -154,12 +154,22 @@ export interface EmployeeOnboardingQuery extends TaktPagedQuery {
   mobile?: string;
 
   /**
-   * 关联员工ID（建档后回填，可空）
+   * 关联员工（选项 TaktEmployees/options；建档后回填，可空，DictValue=Id）
    */
   employeeId?: string;
 
   /**
-   * 入职上岗单ID（待办完成后回填，可空）
+   * 员工编码（冗余，与 TaktEmployee.EmployeeCode 对齐；建档回填后可写，建档前可空）
+   */
+  employeeCode?: string;
+
+  /**
+   * 员工姓名（冗余，与 TaktEmployee.EmployeeName 对齐；建档回填后可写，建档前可空）
+   */
+  employeeName?: string;
+
+  /**
+   * 入职上岗单（关联 TaktEmployeeJoined.Id；待办完成后回填，可空）
    */
   employeeJoinedId?: string;
 
@@ -167,6 +177,11 @@ export interface EmployeeOnboardingQuery extends TaktPagedQuery {
    * 待办说明
    */
   reason?: string;
+
+  /**
+   * 待办状态（字典 hr_personnel_onboarding_status；0=待办理 1=办理中 2=已完成 3=已取消）
+   */
+  todoStatus?: number;
 
   /**
    * 创建时间（范围查询-开始）
@@ -213,19 +228,14 @@ export interface EmployeeOnboardingCreate {
   companyDefaultCulture: string;
 
   /**
-   * 录用信息ID（人才管理 TaktTalentOffer）
+   * 录用信息（选项 TaktTalentOffers/options；DictValue=Id）
    */
   offerId: string;
 
   /**
-   * 待办单号（租户+公司内业务编号）
+   * 待办单号（租户+公司内业务编码）
    */
   todoNo: string;
-
-  /**
-   * 待办状态（0=待办理，1=办理中，2=已完成，3=已取消）
-   */
-  todoStatus: number;
 
   /**
    * 计划上岗日期（JoinedDate 计划值）
@@ -243,12 +253,22 @@ export interface EmployeeOnboardingCreate {
   mobile?: string;
 
   /**
-   * 关联员工ID（建档后回填，可空）
+   * 关联员工（选项 TaktEmployees/options；建档后回填，可空，DictValue=Id）
    */
   employeeId?: string;
 
   /**
-   * 入职上岗单ID（待办完成后回填，可空）
+   * 员工编码（冗余，与 TaktEmployee.EmployeeCode 对齐；建档回填后可写，建档前可空）
+   */
+  employeeCode?: string;
+
+  /**
+   * 员工姓名（冗余，与 TaktEmployee.EmployeeName 对齐；建档回填后可写，建档前可空）
+   */
+  employeeName?: string;
+
+  /**
+   * 入职上岗单（关联 TaktEmployeeJoined.Id；待办完成后回填，可空）
    */
   employeeJoinedId?: string;
 
@@ -256,6 +276,11 @@ export interface EmployeeOnboardingCreate {
    * 待办说明
    */
   reason?: string;
+
+  /**
+   * 待办状态（字典 hr_personnel_onboarding_status；0=待办理 1=办理中 2=已完成 3=已取消）
+   */
+  todoStatus: number;
 
   /**
    * 扩展字段JSON
@@ -297,7 +322,7 @@ export interface EmployeeOnboardingStatus {
   employeeOnboardingId: string;
 
   /**
-   * 待办状态（0=待办理，1=办理中，2=已完成，3=已取消）
+   * 待办状态（字典 hr_personnel_onboarding_status；0=待办理 1=办理中 2=已完成 3=已取消）
    */
   todoStatus: number;
 
@@ -321,19 +346,14 @@ export interface EmployeeOnboardingTemplate {
   companyCode?: string;
 
   /**
-   * 录用信息ID（人才管理 TaktTalentOffer）
+   * 录用信息（选项 TaktTalentOffers/options；DictValue=Id）
    */
   offerId?: string;
 
   /**
-   * 待办单号（租户+公司内业务编号）
+   * 待办单号（租户+公司内业务编码）
    */
   todoNo?: string;
-
-  /**
-   * 待办状态（0=待办理，1=办理中，2=已完成，3=已取消）
-   */
-  todoStatus?: number;
 
   /**
    * 计划上岗日期（JoinedDate 计划值）
@@ -351,12 +371,22 @@ export interface EmployeeOnboardingTemplate {
   mobile?: string;
 
   /**
-   * 关联员工ID（建档后回填，可空）
+   * 关联员工（选项 TaktEmployees/options；建档后回填，可空，DictValue=Id）
    */
   employeeId?: string;
 
   /**
-   * 入职上岗单ID（待办完成后回填，可空）
+   * 员工编码（冗余，与 TaktEmployee.EmployeeCode 对齐；建档回填后可写，建档前可空）
+   */
+  employeeCode?: string;
+
+  /**
+   * 员工姓名（冗余，与 TaktEmployee.EmployeeName 对齐；建档回填后可写，建档前可空）
+   */
+  employeeName?: string;
+
+  /**
+   * 入职上岗单（关联 TaktEmployeeJoined.Id；待办完成后回填，可空）
    */
   employeeJoinedId?: string;
 
@@ -364,6 +394,11 @@ export interface EmployeeOnboardingTemplate {
    * 待办说明
    */
   reason?: string;
+
+  /**
+   * 待办状态（字典 hr_personnel_onboarding_status；0=待办理 1=办理中 2=已完成 3=已取消）
+   */
+  todoStatus?: number;
 
   /**
    * 扩展字段JSON
@@ -400,19 +435,14 @@ export interface EmployeeOnboardingImport {
   companyDefaultCulture?: string;
 
   /**
-   * 录用信息ID（人才管理 TaktTalentOffer）
+   * 录用信息（选项 TaktTalentOffers/options；DictValue=Id）
    */
   offerId?: string;
 
   /**
-   * 待办单号（租户+公司内业务编号）
+   * 待办单号（租户+公司内业务编码）
    */
   todoNo?: string;
-
-  /**
-   * 待办状态（0=待办理，1=办理中，2=已完成，3=已取消）
-   */
-  todoStatus?: number;
 
   /**
    * 计划上岗日期（JoinedDate 计划值）
@@ -430,12 +460,22 @@ export interface EmployeeOnboardingImport {
   mobile?: string;
 
   /**
-   * 关联员工ID（建档后回填，可空）
+   * 关联员工（选项 TaktEmployees/options；建档后回填，可空，DictValue=Id）
    */
   employeeId?: string;
 
   /**
-   * 入职上岗单ID（待办完成后回填，可空）
+   * 员工编码（冗余，与 TaktEmployee.EmployeeCode 对齐；建档回填后可写，建档前可空）
+   */
+  employeeCode?: string;
+
+  /**
+   * 员工姓名（冗余，与 TaktEmployee.EmployeeName 对齐；建档回填后可写，建档前可空）
+   */
+  employeeName?: string;
+
+  /**
+   * 入职上岗单（关联 TaktEmployeeJoined.Id；待办完成后回填，可空）
    */
   employeeJoinedId?: string;
 
@@ -443,6 +483,11 @@ export interface EmployeeOnboardingImport {
    * 待办说明
    */
   reason?: string;
+
+  /**
+   * 待办状态（字典 hr_personnel_onboarding_status；0=待办理 1=办理中 2=已完成 3=已取消）
+   */
+  todoStatus?: number;
 
   /**
    * 扩展字段JSON
@@ -474,19 +519,14 @@ export interface EmployeeOnboardingExport {
   companyCode: string;
 
   /**
-   * 录用信息ID（人才管理 TaktTalentOffer）
+   * 录用信息（选项 TaktTalentOffers/options；DictValue=Id）
    */
   offerId: string;
 
   /**
-   * 待办单号（租户+公司内业务编号）
+   * 待办单号（租户+公司内业务编码）
    */
   todoNo: string;
-
-  /**
-   * 待办状态（0=待办理，1=办理中，2=已完成，3=已取消）
-   */
-  todoStatus: number;
 
   /**
    * 计划上岗日期（JoinedDate 计划值）
@@ -504,12 +544,22 @@ export interface EmployeeOnboardingExport {
   mobile?: string;
 
   /**
-   * 关联员工ID（建档后回填，可空）
+   * 关联员工（选项 TaktEmployees/options；建档后回填，可空，DictValue=Id）
    */
   employeeId?: string;
 
   /**
-   * 入职上岗单ID（待办完成后回填，可空）
+   * 员工编码（冗余，与 TaktEmployee.EmployeeCode 对齐；建档回填后可写，建档前可空）
+   */
+  employeeCode?: string;
+
+  /**
+   * 员工姓名（冗余，与 TaktEmployee.EmployeeName 对齐；建档回填后可写，建档前可空）
+   */
+  employeeName?: string;
+
+  /**
+   * 入职上岗单（关联 TaktEmployeeJoined.Id；待办完成后回填，可空）
    */
   employeeJoinedId?: string;
 
@@ -517,6 +567,11 @@ export interface EmployeeOnboardingExport {
    * 待办说明
    */
   reason?: string;
+
+  /**
+   * 待办状态（字典 hr_personnel_onboarding_status；0=待办理 1=办理中 2=已完成 3=已取消）
+   */
+  todoStatus: number;
 
   /**
    * 扩展字段JSON

@@ -28,7 +28,7 @@ public class TaktIpqcDefectHandling : TaktCompanyEntityBase
     [SugarColumn(ColumnName = "ipqc_defect_handling_code", ColumnDescription = "IPQC不良处理编码", ColumnDataType = "nvarchar", Length = 50, IsNullable = false)]
     public string IpqcDefectHandlingCode { get; set; } = string.Empty;
     /// <summary>
-    /// IPQC检验单明细 ID（选项 TaktIpqcOrderItems/options，DictValue=Id）
+    /// IPQC检验单明细 ID（选项 TaktIpqcOrderItems/options；DictValue=Id）
     /// </summary>
     [SugarColumn(ColumnName = "ipqc_order_item_id", ColumnDescription = "IPQC检验单明细ID", ColumnDataType = "bigint", IsNullable = false)]
     [JsonConverter(typeof(ValueToStringConverter))]
@@ -115,7 +115,7 @@ public class TaktIpqcDefectHandling : TaktCompanyEntityBase
     public int HandlingStatus { get; set; } = 0;
 
     /// <summary>
-    /// 是否作废（字典 sys_yes_no_type，0=否 1=是；编辑移除子行时标记作废）
+    /// 是否作废（字典 sys_yes_no_type；0=否 1=是；编辑移除子行时标记作废）
     /// </summary>
     [SugarColumn(ColumnName = "is_obsolete", ColumnDescription = "是否作废", ColumnDataType = "int", IsNullable = false, DefaultValue = "0")]
     public int IsObsolete { get; set; } = 0;

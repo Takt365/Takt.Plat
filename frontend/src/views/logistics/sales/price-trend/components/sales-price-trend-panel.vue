@@ -101,7 +101,7 @@ import {
   exportSalesPriceMonthlyTrendAnalysis,
   getSalesPriceModelTrendAnalysis,
   getSalesPriceMonthlyTrendAnalysis,
-} from '@/api/logistics/sales/price'
+} from '@/api/logistics/sales/price-trend'
 import type {
   SalesPriceModelTrend,
   SalesPriceMonthlyTrend,
@@ -129,7 +129,7 @@ const props = defineProps<{
   /** 物料编码关键字 */
   materialCode?: string
   /** 价格类型 */
-  priceType?: number
+  priceType?: string
 }>()
 
 const loading = defineModel<boolean>('loading', { default: false })

@@ -124,7 +124,7 @@ public class TaktCountersignWorkflowSeedData : ITaktSeedDataCoordinator
     {
         var rules = new object[]
         {
-            new { field = "countersignCode", title = "会签编号", type = "input" },
+            new { field = "countersignCode", title = "会签编码", type = "input" },
             new { field = "countersignTitle", title = "标题", type = "input" },
             new { field = "applicationAmount", title = "申请金额", type = "inputNumber" },
             new { field = "applicationReason", title = "申请原因", type = "textarea", props = new { rows = 4 } }
@@ -138,7 +138,7 @@ public class TaktCountersignWorkflowSeedData : ITaktSeedDataCoordinator
         {
             fields = new object[]
             {
-                new { dbColumnName = "countersign_code", csharpColumnName = "countersignCode", columnDescription = "会签编号", dataType = "varchar", displayType = "input" },
+                new { dbColumnName = "countersign_code", csharpColumnName = "countersignCode", columnDescription = "会签编码", dataType = "varchar", displayType = "input" },
                 new { dbColumnName = "countersign_title", csharpColumnName = "countersignTitle", columnDescription = "标题", dataType = "nvarchar", displayType = "input" },
                 new { dbColumnName = "application_amount", csharpColumnName = "applicationAmount", columnDescription = "申请金额", dataType = "decimal", displayType = "inputNumber" },
                 new { dbColumnName = "applicant_by", csharpColumnName = "applicantBy", columnDescription = "申请人", dataType = "bigint", displayType = "select", optionsSource = "employee" },

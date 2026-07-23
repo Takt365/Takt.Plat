@@ -38,21 +38,21 @@ public class TaktApsScheduleItem : TaktCompanyEntityBase
     public string ApsScheduleCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// APS 订单 ID（选项 TaktApsOrders/options，DictValue=Id）
+    /// APS 订单 ID（选项 TaktApsOrders/options；DictValue=Id）
     /// </summary>
     [SugarColumn(ColumnName = "aps_order_id", ColumnDescription = "APS订单ID", ColumnDataType = "bigint", IsNullable = true)]
     [JsonConverter(typeof(ValueToStringConverter))]
     public long? ApsOrderId { get; set; }
 
     /// <summary>
-    /// APS 工序排程 ID（选项 TaktApsOperations/options，DictValue=Id）
+    /// APS 工序排程 ID（选项 TaktApsOperations/options；DictValue=Id）
     /// </summary>
     [SugarColumn(ColumnName = "aps_operation_id", ColumnDescription = "APS工序排程ID", ColumnDataType = "bigint", IsNullable = true)]
     [JsonConverter(typeof(ValueToStringConverter))]
     public long? ApsOperationId { get; set; }
 
     /// <summary>
-    /// 工艺路线工序 ID（选项 TaktRoutingItems/options，DictValue=Id）
+    /// 工艺路线工序 ID（选项 TaktRoutingItems/options；DictValue=Id）
     /// </summary>
     [SugarColumn(ColumnName = "routing_item_id", ColumnDescription = "工艺路线工序ID", ColumnDataType = "bigint", IsNullable = true)]
     [JsonConverter(typeof(ValueToStringConverter))]
@@ -65,13 +65,13 @@ public class TaktApsScheduleItem : TaktCompanyEntityBase
     public int LineNumber { get; set; } = 0;
 
     /// <summary>
-    /// 生产工单编码（选项 TaktProductionOrders/options，DictValue=ProdOrderCode）
+    /// 生产工单编码（选项 TaktProductionOrders/options；DictValue=ProdOrderCode）
     /// </summary>
     [SugarColumn(ColumnName = "work_order_code", ColumnDescription = "生产工单编码", ColumnDataType = "nvarchar", Length = 50, IsNullable = false)]
     public string WorkOrderCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 产品编码（选项 TaktMaterialPlants/options，DictValue=MaterialCode，ExtValue=PlantCode）
+    /// 产品编码（选项 TaktMaterialPlants/options；DictValue=MaterialCode，ExtValue=PlantCode）
     /// </summary>
     [SugarColumn(ColumnName = "product_code", ColumnDescription = "产品编码", ColumnDataType = "nvarchar", Length = 50, IsNullable = false)]
     public string ProductCode { get; set; } = string.Empty;
@@ -83,7 +83,7 @@ public class TaktApsScheduleItem : TaktCompanyEntityBase
     public string ProductName { get; set; } = string.Empty;
 
     /// <summary>
-    /// 工作中心编码（选项 TaktWorkCenters/options，DictValue=WorkCenterCode）
+    /// 工作中心编码（选项 TaktWorkCenters/options；DictValue=WorkCenterCode）
     /// </summary>
     [SugarColumn(ColumnName = "work_center_code", ColumnDescription = "工作中心编码", ColumnDataType = "nvarchar", Length = 50, IsNullable = true)]
     public string? WorkCenterCode { get; set; }
@@ -173,7 +173,7 @@ public class TaktApsScheduleItem : TaktCompanyEntityBase
     public int Priority { get; set; } = 0;
 
     /// <summary>
-    /// 是否作废（字典 sys_yes_no_type，0=否 1=是；编辑移除子行时标记作废）
+    /// 是否作废（字典 sys_yes_no_type；0=否 1=是；编辑移除子行时标记作废）
     /// </summary>
     [SugarColumn(ColumnName = "is_obsolete", ColumnDescription = "是否作废", ColumnDataType = "int", IsNullable = false, DefaultValue = "0")]
     public int IsObsolete { get; set; } = 0;

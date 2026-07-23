@@ -127,7 +127,7 @@ Takt.Shared          → 分页、异常、Options、工具类
 | 领域 | 子模块 | 主要能力 |
 |------|--------|----------|
 | **Identity** | 用户、角色、菜单、租户、RBAC、认证 | 登录鉴权、权限分配、多租户/多公司授权 |
-| **Foundation** | 字典、翻译、设置、编号、消息、在线、文化 | 平台基础数据、站内消息、动态 i18n |
+| **Foundation** | 字典、翻译、设置、编码、消息、在线、文化 | 平台基础数据、站内消息、动态 i18n |
 | **HumanResource** | Organization（部门/岗位）、Personnel（员工）、Attendance（节假日）、Talent | 组织架构、人事主档 |
 | **Logistics · Materials** | 物料、供应商、厂商、采购申请/订单/价格、工厂 | 采购与主数据 |
 | **Logistics · Sales** | 客户、销售订单/价格 | 销售管理 |

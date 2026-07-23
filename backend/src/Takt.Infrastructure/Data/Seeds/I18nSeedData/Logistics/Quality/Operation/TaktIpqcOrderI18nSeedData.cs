@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Infrastructure.Data.Seeds.I18nSeedData.Logistics.Quality.Operation
 // 文件名称：TaktIpqcOrderI18nSeedData.cs
-// 创建时间：2026-07-20
+// 创建时间：2026-07-23
 // 创建人：Takt365(Auto Generated)
 // 功能描述：TaktIpqcOrder 实体字段国际化种子（无对应 frontend locales；TranslationText 取自 ColumnDescription，ContextNote 取自属性 XML summary）
 // 
@@ -100,13 +100,13 @@ public class TaktIpqcOrderI18nSeedData : ITaktSeedDataCoordinator
             new TranslationSeedItem("entity.ipqcorder.plantcode", "zh-HK", "工厂代码_hk", "工厂代码（选项 TaktPlants/options，DictValue=PlantCode）"),
 
             // entity.ipqcorder.sourcecode
-            new TranslationSeedItem("entity.ipqcorder.sourcecode", "en-US", "来源单号_us", "来源单号（选项 TaktProductionOrders/options，DictValue=ProdOrderCode）"),
+            new TranslationSeedItem("entity.ipqcorder.sourcecode", "en-US", "来源单号_us", "来源单号（选项 TaktProductionOrders/options；DictValue=ProdOrderCode）"),
             // entity.ipqcorder.sourcecode
-            new TranslationSeedItem("entity.ipqcorder.sourcecode", "ja-JP", "来源单号_jp", "来源单号（选项 TaktProductionOrders/options，DictValue=ProdOrderCode）"),
+            new TranslationSeedItem("entity.ipqcorder.sourcecode", "ja-JP", "来源单号_jp", "来源单号（选项 TaktProductionOrders/options；DictValue=ProdOrderCode）"),
             // entity.ipqcorder.sourcecode
-            new TranslationSeedItem("entity.ipqcorder.sourcecode", "zh-CN", "来源单号", "来源单号（选项 TaktProductionOrders/options，DictValue=ProdOrderCode）"),
+            new TranslationSeedItem("entity.ipqcorder.sourcecode", "zh-CN", "来源单号", "来源单号（选项 TaktProductionOrders/options；DictValue=ProdOrderCode）"),
             // entity.ipqcorder.sourcecode
-            new TranslationSeedItem("entity.ipqcorder.sourcecode", "zh-HK", "来源单号_hk", "来源单号（选项 TaktProductionOrders/options，DictValue=ProdOrderCode）"),
+            new TranslationSeedItem("entity.ipqcorder.sourcecode", "zh-HK", "来源单号_hk", "来源单号（选项 TaktProductionOrders/options；DictValue=ProdOrderCode）"),
 
             // entity.ipqcorder.inspectiondate
             new TranslationSeedItem("entity.ipqcorder.inspectiondate", "en-US", "检验日期_us", "检验日期"),

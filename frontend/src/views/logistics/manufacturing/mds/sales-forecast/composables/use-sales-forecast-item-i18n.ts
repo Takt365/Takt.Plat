@@ -73,7 +73,7 @@ export const SALESFORECASTITEM_PLACEHOLDER = {
   companyDefaultCulture: 'optional',
   lineNumber: 'select',
   materialCode: 'select',
-  materialName: 'required',
+  materialName: 'optional',
   materialSpecification: 'optional',
   modelCode: 'optional',
   modelName: 'optional',

@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：frontend/src/api/logistics/procurement
 // 文件名称：purchase-order.ts
-// 创建时间：2026-07-09
+// 创建时间：2026-07-23
 // 创建人：Takt365(Auto Generated)
 // 功能描述：logistics/procurement 模块 API（自动生成，请勿手改路由常量）
 // 
@@ -16,17 +16,11 @@ import type {
   TaktSelectOption
 } from '@/types/common';
 import type {
-  ProcurementStatQuery
-} from '@/types/logistics/procurement/procurement-stat-query';
-import type {
   PurchaseOrder,
   PurchaseOrderCreate,
   PurchaseOrderStatus,
   PurchaseOrderUpdate
 } from '@/types/logistics/procurement/purchase-order';
-import type {
-  PurchaseOrderStat
-} from '@/types/logistics/procurement/purchase-order-stat';
 
 /**
  * API 路径前缀（相对 request baseURL，对应后端 [controller]）
@@ -46,19 +40,6 @@ const PURCHASE_ORDER_API_BASE = 'TaktPurchaseOrders';
 export function getPurchaseOrderList(queryDto: any): Promise<TaktPagedResult<PurchaseOrder>> {
   return request<TaktPagedResult<PurchaseOrder>>({
     url: `${PURCHASE_ORDER_API_BASE}/list`,
-    method: 'get',
-    params: queryDto,
-  });
-}
-
-/**
- * 获取采购订单统计（数据看板）
- * @param {ProcurementStatQuery} queryDto 查询 DTO
- * @returns {Promise<PurchaseOrderStat>} 采购订单统计
- */
-export function getPurchaseOrderStat(queryDto: ProcurementStatQuery): Promise<PurchaseOrderStat> {
-  return request<PurchaseOrderStat>({
-    url: `${PURCHASE_ORDER_API_BASE}/order-stat`,
     method: 'get',
     params: queryDto,
   });

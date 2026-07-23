@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Infrastructure.Data.Seeds.I18nSeedData.Logistics.Quality.Operation
 // 文件名称：TaktQualityGroupI18nSeedData.cs
-// 创建时间：2026-07-20
+// 创建时间：2026-07-23
 // 创建人：Takt365(Auto Generated)
 // 功能描述：TaktQualityGroup 实体字段国际化种子（无对应 frontend locales；TranslationText 取自 ColumnDescription，ContextNote 取自属性 XML summary）
 // 
@@ -91,13 +91,13 @@ public class TaktQualityGroupI18nSeedData : ITaktSeedDataCoordinator
             new TranslationSeedItem("entity.qualitygroup._self", "zh-HK", "质量组主数据信息_hk", "实体名称"),
 
             // entity.qualitygroup.plantcode
-            new TranslationSeedItem("entity.qualitygroup.plantcode", "en-US", "工厂代码_us", "工厂代码（选项 TaktPlants/options，DictValue=PlantCode）"),
+            new TranslationSeedItem("entity.qualitygroup.plantcode", "en-US", "工厂代码_us", "工厂代码（选项 TaktPlants/options；DictValue=PlantCode）"),
             // entity.qualitygroup.plantcode
-            new TranslationSeedItem("entity.qualitygroup.plantcode", "ja-JP", "工厂代码_jp", "工厂代码（选项 TaktPlants/options，DictValue=PlantCode）"),
+            new TranslationSeedItem("entity.qualitygroup.plantcode", "ja-JP", "工厂代码_jp", "工厂代码（选项 TaktPlants/options；DictValue=PlantCode）"),
             // entity.qualitygroup.plantcode
-            new TranslationSeedItem("entity.qualitygroup.plantcode", "zh-CN", "工厂代码", "工厂代码（选项 TaktPlants/options，DictValue=PlantCode）"),
+            new TranslationSeedItem("entity.qualitygroup.plantcode", "zh-CN", "工厂代码", "工厂代码（选项 TaktPlants/options；DictValue=PlantCode）"),
             // entity.qualitygroup.plantcode
-            new TranslationSeedItem("entity.qualitygroup.plantcode", "zh-HK", "工厂代码_hk", "工厂代码（选项 TaktPlants/options，DictValue=PlantCode）"),
+            new TranslationSeedItem("entity.qualitygroup.plantcode", "zh-HK", "工厂代码_hk", "工厂代码（选项 TaktPlants/options；DictValue=PlantCode）"),
 
             // entity.qualitygroup.inspectioncategory
             new TranslationSeedItem("entity.qualitygroup.inspectioncategory", "en-US", "检查类别_us", "检查类别（字典 logistics_quality_group_inspection_category；0=IQC，1=QA，2=IPQC）"),
@@ -136,13 +136,13 @@ public class TaktQualityGroupI18nSeedData : ITaktSeedDataCoordinator
             new TranslationSeedItem("entity.qualitygroup.description", "zh-HK", "质量组描述_hk", "质量组描述"),
 
             // entity.qualitygroup.responsibleuserid
-            new TranslationSeedItem("entity.qualitygroup.responsibleuserid", "en-US", "负责人用户ID_us", "质量组负责人用户 ID（选项 TaktUsers/options，DictValue=Id）"),
+            new TranslationSeedItem("entity.qualitygroup.responsibleuserid", "en-US", "负责人用户ID_us", "质量组负责人用户 ID（选项 TaktUsers/options；DictValue=Id）"),
             // entity.qualitygroup.responsibleuserid
-            new TranslationSeedItem("entity.qualitygroup.responsibleuserid", "ja-JP", "负责人用户ID_jp", "质量组负责人用户 ID（选项 TaktUsers/options，DictValue=Id）"),
+            new TranslationSeedItem("entity.qualitygroup.responsibleuserid", "ja-JP", "负责人用户ID_jp", "质量组负责人用户 ID（选项 TaktUsers/options；DictValue=Id）"),
             // entity.qualitygroup.responsibleuserid
-            new TranslationSeedItem("entity.qualitygroup.responsibleuserid", "zh-CN", "负责人用户ID", "质量组负责人用户 ID（选项 TaktUsers/options，DictValue=Id）"),
+            new TranslationSeedItem("entity.qualitygroup.responsibleuserid", "zh-CN", "负责人用户ID", "质量组负责人用户 ID（选项 TaktUsers/options；DictValue=Id）"),
             // entity.qualitygroup.responsibleuserid
-            new TranslationSeedItem("entity.qualitygroup.responsibleuserid", "zh-HK", "负责人用户ID_hk", "质量组负责人用户 ID（选项 TaktUsers/options，DictValue=Id）"),
+            new TranslationSeedItem("entity.qualitygroup.responsibleuserid", "zh-HK", "负责人用户ID_hk", "质量组负责人用户 ID（选项 TaktUsers/options；DictValue=Id）"),
 
             // entity.qualitygroup.contactphone
             new TranslationSeedItem("entity.qualitygroup.contactphone", "en-US", "联系电话_us", "联系电话"),

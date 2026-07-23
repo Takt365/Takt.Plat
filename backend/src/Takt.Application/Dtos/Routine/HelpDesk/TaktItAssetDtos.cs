@@ -61,9 +61,9 @@ public class TaktItAssetDto : TaktCompanyDtoBase
     public string? WarrantyProvider { get; set; } = string.Empty;
 
     /// <summary>
-    /// 保修合同编号
+    /// 保修合同编码
     /// </summary>
-    public string? WarrantyContractNo { get; set; } = string.Empty;
+    public string? WarrantyContractCode { get; set; } = string.Empty;
 
     /// <summary>
     /// 服务电话
@@ -152,9 +152,9 @@ public class TaktItAssetQueryDto : TaktPagedQuery
     public string? WarrantyProvider { get; set; } = string.Empty;
 
     /// <summary>
-    /// 保修合同编号
+    /// 保修合同编码
     /// </summary>
-    public string? WarrantyContractNo { get; set; } = string.Empty;
+    public string? WarrantyContractCode { get; set; } = string.Empty;
 
     /// <summary>
     /// 服务电话
@@ -273,9 +273,9 @@ public class TaktItAssetCreateDto
     public string? WarrantyProvider { get; set; } = string.Empty;
 
     /// <summary>
-    /// 保修合同编号
+    /// 保修合同编码
     /// </summary>
-    public string? WarrantyContractNo { get; set; } = string.Empty;
+    public string? WarrantyContractCode { get; set; } = string.Empty;
 
     /// <summary>
     /// 服务电话
@@ -384,9 +384,9 @@ public class TaktItAssetTemplateDto
     public string? WarrantyProvider { get; set; } = string.Empty;
 
     /// <summary>
-    /// 保修合同编号
+    /// 保修合同编码
     /// </summary>
-    public string? WarrantyContractNo { get; set; } = string.Empty;
+    public string? WarrantyContractCode { get; set; } = string.Empty;
 
     /// <summary>
     /// 服务电话
@@ -476,9 +476,9 @@ public class TaktItAssetImportDto
     public string? WarrantyProvider { get; set; } = string.Empty;
 
     /// <summary>
-    /// 保修合同编号
+    /// 保修合同编码
     /// </summary>
-    public string? WarrantyContractNo { get; set; } = string.Empty;
+    public string? WarrantyContractCode { get; set; } = string.Empty;
 
     /// <summary>
     /// 服务电话
@@ -569,9 +569,9 @@ public class TaktItAssetExportDto
     public string? WarrantyProvider { get; set; } = string.Empty;
 
     /// <summary>
-    /// 保修合同编号
+    /// 保修合同编码
     /// </summary>
-    public string? WarrantyContractNo { get; set; } = string.Empty;
+    public string? WarrantyContractCode { get; set; } = string.Empty;
 
     /// <summary>
     /// 服务电话

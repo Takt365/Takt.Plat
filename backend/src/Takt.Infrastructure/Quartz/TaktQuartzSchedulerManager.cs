@@ -112,6 +112,10 @@ public sealed class TaktQuartzSchedulerManager : ITaktQuartzSchedulerManager
     /// <summary>
     /// 启动（恢复）定时任务调度
     /// </summary>
+    /// <remarks>
+    /// 必须重新 Schedule，不能仅 Resume：应用启动时 LoadAll 只装载 TaskStatus=正常 的任务；
+    /// 原先「暂停」任务不在内存调度器中，若只 Resume 会出现「库中已是正常、调度器却无 Job」而永不触发。
+    /// </remarks>
     /// <param name="task">定时任务实体</param>
     /// <param name="cancellationToken">取消令牌</param>
     /// <returns>任务</returns>
@@ -119,14 +123,7 @@ public sealed class TaktQuartzSchedulerManager : ITaktQuartzSchedulerManager
     {
         ArgumentNullException.ThrowIfNull(task);
         EnsureEnabled();
-        var scheduler = await _schedulerFactory.GetScheduler(cancellationToken);
-        var jobKey = BuildJobKey(task);
-        if (!await scheduler.CheckExists(jobKey, cancellationToken))
-        {
-            await ScheduleQuartzTaskAsync(task, cancellationToken: cancellationToken);
-            return;
-        }
-        await scheduler.ResumeJob(jobKey, cancellationToken);
+        await ScheduleQuartzTaskAsync(task, cancellationToken: cancellationToken);
     }
 
     /// <summary>

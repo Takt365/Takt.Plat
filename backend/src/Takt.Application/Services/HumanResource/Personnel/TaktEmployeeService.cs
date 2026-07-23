@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Application.Services.HumanResource.Personnel
 // 文件名称：TaktEmployeeService.cs
-// 创建时间：2026-06-23
+// 创建时间：2026-07-23
 // 创建人：Takt365(Cursor AI)
 // 功能描述：员工应用服务实现
 // 
@@ -33,6 +33,17 @@ public class TaktEmployeeService : TaktServiceBase, ITaktEmployeeService
     private readonly ITaktCompanyRepository<TaktEmployee> _employeeRepository;
     private readonly ITaktRbacService _rbacService;
 
+    private readonly ITaktCompanyRepository<TaktEmployeeAddress> _employeeAddressRepository;
+    private readonly ITaktCompanyRepository<TaktEmployeeEducation> _employeeEducationRepository;
+    private readonly ITaktCompanyRepository<TaktEmployeeFamily> _employeeFamilyRepository;
+    private readonly ITaktCompanyRepository<TaktEmployeeExperience> _employeeExperienceRepository;
+    private readonly ITaktCompanyRepository<TaktEmployeeSkill> _employeeSkillRepository;
+    private readonly ITaktCompanyRepository<TaktEmployeeContract> _employeeContractRepository;
+    private readonly ITaktApprovalRepository<TaktEmployeeJoined> _employeeJoinedRepository;
+    private readonly ITaktCompanyRepository<TaktEmployeeOnboarding> _employeeOnboardingRepository;
+    private readonly ITaktApprovalRepository<TaktEmployeeReassignment> _employeeReassignmentRepository;
+    private readonly ITaktApprovalRepository<TaktEmployeeResignation> _employeeResignationRepository;
+    private readonly ITaktCompanyRepository<TaktEmployeeAttachment> _employeeAttachmentRepository;
     private readonly ITaktUniqueValidator _uniqueValidator;
 
     /// <summary>
@@ -41,6 +52,17 @@ public class TaktEmployeeService : TaktServiceBase, ITaktEmployeeService
     /// <param name="employeeRepository">员工仓储</param>
     /// <param name="rbacService">RBAC 关联分配服务</param>
 
+    /// <param name="employeeAddressRepository">EmployeeAddress仓储</param>
+    /// <param name="employeeEducationRepository">EmployeeEducation仓储</param>
+    /// <param name="employeeFamilyRepository">EmployeeFamily仓储</param>
+    /// <param name="employeeExperienceRepository">EmployeeExperience仓储</param>
+    /// <param name="employeeSkillRepository">EmployeeSkill仓储</param>
+    /// <param name="employeeContractRepository">EmployeeContract仓储</param>
+    /// <param name="employeeJoinedRepository">EmployeeJoined仓储</param>
+    /// <param name="employeeOnboardingRepository">EmployeeOnboarding仓储</param>
+    /// <param name="employeeReassignmentRepository">EmployeeReassignment仓储</param>
+    /// <param name="employeeResignationRepository">EmployeeResignation仓储</param>
+    /// <param name="employeeAttachmentRepository">EmployeeAttachment仓储</param>
     /// <param name="uniqueValidator">唯一性验证器</param>
     /// <param name="userContext">用户上下文</param>
     /// <param name="localizationService">本地化服务</param>
@@ -48,6 +70,17 @@ public class TaktEmployeeService : TaktServiceBase, ITaktEmployeeService
         ITaktCompanyRepository<TaktEmployee> employeeRepository,
         ITaktRbacService rbacService,
 
+        ITaktCompanyRepository<TaktEmployeeAddress> employeeAddressRepository,
+        ITaktCompanyRepository<TaktEmployeeEducation> employeeEducationRepository,
+        ITaktCompanyRepository<TaktEmployeeFamily> employeeFamilyRepository,
+        ITaktCompanyRepository<TaktEmployeeExperience> employeeExperienceRepository,
+        ITaktCompanyRepository<TaktEmployeeSkill> employeeSkillRepository,
+        ITaktCompanyRepository<TaktEmployeeContract> employeeContractRepository,
+        ITaktApprovalRepository<TaktEmployeeJoined> employeeJoinedRepository,
+        ITaktCompanyRepository<TaktEmployeeOnboarding> employeeOnboardingRepository,
+        ITaktApprovalRepository<TaktEmployeeReassignment> employeeReassignmentRepository,
+        ITaktApprovalRepository<TaktEmployeeResignation> employeeResignationRepository,
+        ITaktCompanyRepository<TaktEmployeeAttachment> employeeAttachmentRepository,
         ITaktUniqueValidator uniqueValidator,
         ITaktUserContext? userContext = null,
         ITaktLocalizationService? localizationService = null)
@@ -56,6 +89,17 @@ public class TaktEmployeeService : TaktServiceBase, ITaktEmployeeService
         _employeeRepository = employeeRepository;
         _rbacService = rbacService;
 
+        _employeeAddressRepository = employeeAddressRepository;
+        _employeeEducationRepository = employeeEducationRepository;
+        _employeeFamilyRepository = employeeFamilyRepository;
+        _employeeExperienceRepository = employeeExperienceRepository;
+        _employeeSkillRepository = employeeSkillRepository;
+        _employeeContractRepository = employeeContractRepository;
+        _employeeJoinedRepository = employeeJoinedRepository;
+        _employeeOnboardingRepository = employeeOnboardingRepository;
+        _employeeReassignmentRepository = employeeReassignmentRepository;
+        _employeeResignationRepository = employeeResignationRepository;
+        _employeeAttachmentRepository = employeeAttachmentRepository;
         _uniqueValidator = uniqueValidator;
     }
 
@@ -103,13 +147,13 @@ public class TaktEmployeeService : TaktServiceBase, ITaktEmployeeService
     {
         EnsureThreeLayerContext();
         var list = await _employeeRepository.GetListAsync(
-            x => x.TenantCode == CurrentTenantCode && x.CompanyCode == CurrentCompanyCode && x.PoliticalStatus == 1,
+            x => x.TenantCode == CurrentTenantCode && x.CompanyCode == CurrentCompanyCode && x.MaritalStatus == 1,
             x => x.EmployeeName ?? string.Empty,
             false);
         return list.Select(e => new TaktSelectOption
         {
-            DictValue = e.Id,
-            DictLabel = e.EmployeeName ?? e.Id.ToString(),
+            DictValue = e.EmployeeCode,
+            DictLabel = e.EmployeeName ?? e.EmployeeCode,
         }).ToList();
     }
 
@@ -122,12 +166,12 @@ public class TaktEmployeeService : TaktServiceBase, ITaktEmployeeService
     {
         var entity = dto.Adapt<TaktEmployee>();
         entity.IsBuiltIn = 0;
-        var isUnique_ix_employee_no_unique = await _uniqueValidator.IsUniqueAsync(
+        var isUnique_ix_employee_code_unique = await _uniqueValidator.IsUniqueAsync(
             _employeeRepository,
-            x => x.EmployeeNo == entity.EmployeeNo);
-        if (!isUnique_ix_employee_no_unique)
+            x => x.EmployeeCode == entity.EmployeeCode);
+        if (!isUnique_ix_employee_code_unique)
         {
-            throw new TaktBusinessException("员工的EmployeeNo已存在");
+            throw new TaktBusinessException("员工的EmployeeCode已存在");
         }
         entity = await _employeeRepository.CreateAsync(entity);
         if (dto.EmployeeDeptIds != null)
@@ -138,6 +182,7 @@ public class TaktEmployeeService : TaktServiceBase, ITaktEmployeeService
         {
             await _rbacService.AssignEmployeePostsAsync(entity.Id, dto.EmployeePostIds);
         }
+                await SaveEmployeeChildrenAsync(entity, dto);
         return await GetEmployeeByIdAsync(entity.Id) ?? entity.Adapt<TaktEmployeeDto>();
     }
 
@@ -163,13 +208,13 @@ public class TaktEmployeeService : TaktServiceBase, ITaktEmployeeService
         {
             throw new TaktBusinessException("不允许将内置员工设为离职或退休");
         }
-        var isUnique_ix_employee_no_unique = await _uniqueValidator.IsUniqueAsync(
+        var isUnique_ix_employee_code_unique = await _uniqueValidator.IsUniqueAsync(
             _employeeRepository,
-            x => x.EmployeeNo == entity.EmployeeNo,
+            x => x.EmployeeCode == entity.EmployeeCode,
             id);
-        if (!isUnique_ix_employee_no_unique)
+        if (!isUnique_ix_employee_code_unique)
         {
-            throw new TaktBusinessException("员工的EmployeeNo已存在");
+            throw new TaktBusinessException("员工的EmployeeCode已存在");
         }
         await _employeeRepository.UpdateAsync(entity);
         if (dto.EmployeeDeptIds != null)
@@ -180,6 +225,7 @@ public class TaktEmployeeService : TaktServiceBase, ITaktEmployeeService
         {
             await _rbacService.AssignEmployeePostsAsync(id, dto.EmployeePostIds);
         }
+                await SaveEmployeeChildrenAsync(entity, dto);
         return await GetEmployeeByIdAsync(id) ?? throw new TaktBusinessException("员工不存在");
     }
 
@@ -242,7 +288,7 @@ public class TaktEmployeeService : TaktServiceBase, ITaktEmployeeService
         {
             throw new TaktBusinessException("员工不存在");
         }
-        entity.PoliticalStatus = dto.PoliticalStatus;
+        entity.MaritalStatus = dto.MaritalStatus;
         await _employeeRepository.UpdateAsync(entity);
         return await GetEmployeeByIdAsync(dto.EmployeeId) ?? throw new TaktBusinessException("员工不存在");
     }
@@ -284,17 +330,17 @@ public class TaktEmployeeService : TaktServiceBase, ITaktEmployeeService
             {
                 var entity = rows[i].Adapt<TaktEmployee>();
                 entity.IsBuiltIn = 0;
-                var importKey = $"{entity.EmployeeNo}";
+                var importKey = $"{entity.EmployeeCode}";
                 if (!importSeenKeys.Add(importKey))
                 {
-                    throw new TaktBusinessException("与Excel中其他行重复（EmployeeNo）");
+                    throw new TaktBusinessException("与Excel中其他行重复（EmployeeCode）");
                 }
-                var isUnique_ix_employee_no_unique = await _uniqueValidator.IsUniqueAsync(
+                var isUnique_ix_employee_code_unique = await _uniqueValidator.IsUniqueAsync(
                     _employeeRepository,
-                    x => x.EmployeeNo == entity.EmployeeNo);
-                if (!isUnique_ix_employee_no_unique)
+                    x => x.EmployeeCode == entity.EmployeeCode);
+                if (!isUnique_ix_employee_code_unique)
                 {
-                    throw new TaktBusinessException("员工的EmployeeNo已存在");
+                    throw new TaktBusinessException("员工的EmployeeCode已存在");
                 }
                 await _employeeRepository.CreateAsync(entity);
                 success += 1;
@@ -334,6 +380,737 @@ public class TaktEmployeeService : TaktServiceBase, ITaktEmployeeService
     }
 
     // ========================================
+    // 主子表级联（OneToMany）
+    // ========================================
+
+    /// <summary>
+    /// 填充员工详情（加载 OneToMany 子表：员工地址、员工教育经历、员工家庭成员、员工工作经历、员工技能、员工劳动合同、员工入职上岗、入职待办、员工调动、员工离职、员工附件）
+    /// </summary>
+    /// <param name="dto">响应 DTO</param>
+    /// <param name="entity">主表实体</param>
+    /// <returns>任务</returns>
+    private async Task FillEmployeeDetailsAsync(TaktEmployeeDto dto, TaktEmployee entity)
+    {
+        if (dto == null)
+        {
+            return;
+        }
+        // 员工地址 → dto.EmployeeAddresses
+        var employeeaddresses = await _employeeAddressRepository.GetListAsync(x => x.EmployeeId == entity.Id);
+        dto.EmployeeAddresses = employeeaddresses.Adapt<List<TaktEmployeeAddressDto>>();
+        // 员工教育经历 → dto.EmployeeEducations
+        var employeeeducations = await _employeeEducationRepository.GetListAsync(x => x.EmployeeId == entity.Id);
+        dto.EmployeeEducations = employeeeducations.Adapt<List<TaktEmployeeEducationDto>>();
+        // 员工家庭成员 → dto.EmployeeFamilies
+        var employeefamilies = await _employeeFamilyRepository.GetListAsync(x => x.EmployeeId == entity.Id);
+        dto.EmployeeFamilies = employeefamilies.Adapt<List<TaktEmployeeFamilyDto>>();
+        // 员工工作经历 → dto.EmployeeExperiences
+        var employeeexperiences = await _employeeExperienceRepository.GetListAsync(x => x.EmployeeId == entity.Id);
+        dto.EmployeeExperiences = employeeexperiences.Adapt<List<TaktEmployeeExperienceDto>>();
+        // 员工技能 → dto.EmployeeSkills
+        var employeeskills = await _employeeSkillRepository.GetListAsync(x => x.EmployeeId == entity.Id);
+        dto.EmployeeSkills = employeeskills.Adapt<List<TaktEmployeeSkillDto>>();
+        // 员工劳动合同 → dto.EmployeeContracts
+        var employeecontracts = await _employeeContractRepository.GetListAsync(x => x.EmployeeId == entity.Id);
+        dto.EmployeeContracts = employeecontracts.Adapt<List<TaktEmployeeContractDto>>();
+        // 员工入职上岗 → dto.EmployeeJoineds
+        var employeejoineds = await _employeeJoinedRepository.GetListAsync(x => x.EmployeeId == entity.Id);
+        dto.EmployeeJoineds = employeejoineds.Adapt<List<TaktEmployeeJoinedDto>>();
+        // 入职待办 → dto.EmployeeOnboardings
+        var employeeonboardings = await _employeeOnboardingRepository.GetListAsync(x => x.EmployeeId == entity.Id);
+        dto.EmployeeOnboardings = employeeonboardings.Adapt<List<TaktEmployeeOnboardingDto>>();
+        // 员工调动 → dto.EmployeeReassignments
+        var employeereassignments = await _employeeReassignmentRepository.GetListAsync(x => x.EmployeeId == entity.Id);
+        dto.EmployeeReassignments = employeereassignments.Adapt<List<TaktEmployeeReassignmentDto>>();
+        // 员工离职 → dto.EmployeeResignations
+        var employeeresignations = await _employeeResignationRepository.GetListAsync(x => x.EmployeeId == entity.Id);
+        dto.EmployeeResignations = employeeresignations.Adapt<List<TaktEmployeeResignationDto>>();
+        // 员工附件 → dto.EmployeeAttachments
+        var employeeattachments = await _employeeAttachmentRepository.GetListAsync(x => x.EmployeeId == entity.Id);
+        dto.EmployeeAttachments = employeeattachments.Adapt<List<TaktEmployeeAttachmentDto>>();
+    }
+
+    /// <summary>
+    /// 保存员工子表级联（员工地址、员工教育经历、员工家庭成员、员工工作经历、员工技能、员工劳动合同、员工入职上岗、入职待办、员工调动、员工离职、员工附件；按子表 Id 增量新增/更新；未提交行标记作废，禁止先删后插）
+    /// </summary>
+    /// <param name="entity">主表实体</param>
+    /// <param name="dto">创建/更新 DTO（含子表集合；UpdateDto 须继承 CreateDto）</param>
+    /// <returns>任务</returns>
+    private async Task SaveEmployeeChildrenAsync(TaktEmployee entity, TaktEmployeeCreateDto dto)
+    {
+        // 员工地址（EmployeeAddresses）
+        List<TaktEmployeeAddressUpdateDto>? employeeAddressesForSave;
+        if (dto is TaktEmployeeUpdateDto updateDtoForEmployeeAddresses && updateDtoForEmployeeAddresses.EmployeeAddresses != null)
+        {
+            employeeAddressesForSave = updateDtoForEmployeeAddresses.EmployeeAddresses;
+        }
+        else if (dto.EmployeeAddresses != null)
+        {
+            employeeAddressesForSave = dto.EmployeeAddresses.Adapt<List<TaktEmployeeAddressUpdateDto>>();
+        }
+        else
+        {
+            employeeAddressesForSave = null;
+        }
+        if (employeeAddressesForSave is not { Count: > 0 })
+        {
+            await _employeeAddressRepository.DeleteAsync(x => x.EmployeeId == entity.Id);
+        }
+        else
+        {
+            var existingList = await _employeeAddressRepository.GetListAsync(x => x.EmployeeId == entity.Id);
+            var existingById = existingList.ToDictionary(x => x.Id);
+            var submittedIds = new HashSet<long>();
+            var toCreate = new List<TaktEmployeeAddress>();
+            for (var i = 0; i < employeeAddressesForSave.Count; i++)
+            {
+                var childDto = employeeAddressesForSave[i];
+                childDto.EmployeeId = entity.Id;
+                if (childDto.EmployeeAddressId > 0)
+                {
+                    if (!existingById.TryGetValue(childDto.EmployeeAddressId, out var target))
+                    {
+                        throw new TaktBusinessException("员工地址不存在（EmployeeAddressId={childDto.EmployeeAddressId}）");
+                    }
+                    if (target.EmployeeId != entity.Id)
+                    {
+                        throw new TaktBusinessException("员工地址不属于当前主表（EmployeeAddressId={childDto.EmployeeAddressId}）");
+                    }
+                    submittedIds.Add(childDto.EmployeeAddressId);
+                    childDto.Adapt(target);
+                    target.Id = childDto.EmployeeAddressId;
+                    target.EmployeeId = entity.Id;
+                    await _employeeAddressRepository.UpdateAsync(target);
+                }
+                else
+                {
+                    var child = childDto.Adapt<TaktEmployeeAddress>();
+                    child.Id = 0;
+                    child.EmployeeId = entity.Id;
+                    toCreate.Add(child);
+                }
+            }
+            foreach (var removed in existingList.Where(x => !submittedIds.Contains(x.Id)))
+            {
+                await _employeeAddressRepository.DeleteAsync(removed.Id);
+            }
+            if (toCreate.Count > 0)
+            {
+                await _employeeAddressRepository.CreateRangeAsync(toCreate);
+            }
+        }
+        // 员工教育经历（EmployeeEducations）
+        List<TaktEmployeeEducationUpdateDto>? employeeEducationsForSave;
+        if (dto is TaktEmployeeUpdateDto updateDtoForEmployeeEducations && updateDtoForEmployeeEducations.EmployeeEducations != null)
+        {
+            employeeEducationsForSave = updateDtoForEmployeeEducations.EmployeeEducations;
+        }
+        else if (dto.EmployeeEducations != null)
+        {
+            employeeEducationsForSave = dto.EmployeeEducations.Adapt<List<TaktEmployeeEducationUpdateDto>>();
+        }
+        else
+        {
+            employeeEducationsForSave = null;
+        }
+        if (employeeEducationsForSave is not { Count: > 0 })
+        {
+            await _employeeEducationRepository.DeleteAsync(x => x.EmployeeId == entity.Id);
+        }
+        else
+        {
+            var existingList = await _employeeEducationRepository.GetListAsync(x => x.EmployeeId == entity.Id);
+            var existingById = existingList.ToDictionary(x => x.Id);
+            var submittedIds = new HashSet<long>();
+            var toCreate = new List<TaktEmployeeEducation>();
+            for (var i = 0; i < employeeEducationsForSave.Count; i++)
+            {
+                var childDto = employeeEducationsForSave[i];
+                childDto.EmployeeId = entity.Id;
+                if (childDto.EmployeeEducationId > 0)
+                {
+                    if (!existingById.TryGetValue(childDto.EmployeeEducationId, out var target))
+                    {
+                        throw new TaktBusinessException("员工教育经历不存在（EmployeeEducationId={childDto.EmployeeEducationId}）");
+                    }
+                    if (target.EmployeeId != entity.Id)
+                    {
+                        throw new TaktBusinessException("员工教育经历不属于当前主表（EmployeeEducationId={childDto.EmployeeEducationId}）");
+                    }
+                    submittedIds.Add(childDto.EmployeeEducationId);
+                    childDto.Adapt(target);
+                    target.Id = childDto.EmployeeEducationId;
+                    target.EmployeeId = entity.Id;
+                    await _employeeEducationRepository.UpdateAsync(target);
+                }
+                else
+                {
+                    var child = childDto.Adapt<TaktEmployeeEducation>();
+                    child.Id = 0;
+                    child.EmployeeId = entity.Id;
+                    toCreate.Add(child);
+                }
+            }
+            foreach (var removed in existingList.Where(x => !submittedIds.Contains(x.Id)))
+            {
+                await _employeeEducationRepository.DeleteAsync(removed.Id);
+            }
+            if (toCreate.Count > 0)
+            {
+                await _employeeEducationRepository.CreateRangeAsync(toCreate);
+            }
+        }
+        // 员工家庭成员（EmployeeFamilies）
+        List<TaktEmployeeFamilyUpdateDto>? employeeFamiliesForSave;
+        if (dto is TaktEmployeeUpdateDto updateDtoForEmployeeFamilies && updateDtoForEmployeeFamilies.EmployeeFamilies != null)
+        {
+            employeeFamiliesForSave = updateDtoForEmployeeFamilies.EmployeeFamilies;
+        }
+        else if (dto.EmployeeFamilies != null)
+        {
+            employeeFamiliesForSave = dto.EmployeeFamilies.Adapt<List<TaktEmployeeFamilyUpdateDto>>();
+        }
+        else
+        {
+            employeeFamiliesForSave = null;
+        }
+        if (employeeFamiliesForSave is not { Count: > 0 })
+        {
+            await _employeeFamilyRepository.DeleteAsync(x => x.EmployeeId == entity.Id);
+        }
+        else
+        {
+            var existingList = await _employeeFamilyRepository.GetListAsync(x => x.EmployeeId == entity.Id);
+            var existingById = existingList.ToDictionary(x => x.Id);
+            var submittedIds = new HashSet<long>();
+            var toCreate = new List<TaktEmployeeFamily>();
+            for (var i = 0; i < employeeFamiliesForSave.Count; i++)
+            {
+                var childDto = employeeFamiliesForSave[i];
+                childDto.EmployeeId = entity.Id;
+                if (childDto.EmployeeFamilyId > 0)
+                {
+                    if (!existingById.TryGetValue(childDto.EmployeeFamilyId, out var target))
+                    {
+                        throw new TaktBusinessException("员工家庭成员不存在（EmployeeFamilyId={childDto.EmployeeFamilyId}）");
+                    }
+                    if (target.EmployeeId != entity.Id)
+                    {
+                        throw new TaktBusinessException("员工家庭成员不属于当前主表（EmployeeFamilyId={childDto.EmployeeFamilyId}）");
+                    }
+                    submittedIds.Add(childDto.EmployeeFamilyId);
+                    childDto.Adapt(target);
+                    target.Id = childDto.EmployeeFamilyId;
+                    target.EmployeeId = entity.Id;
+                    await _employeeFamilyRepository.UpdateAsync(target);
+                }
+                else
+                {
+                    var child = childDto.Adapt<TaktEmployeeFamily>();
+                    child.Id = 0;
+                    child.EmployeeId = entity.Id;
+                    toCreate.Add(child);
+                }
+            }
+            foreach (var removed in existingList.Where(x => !submittedIds.Contains(x.Id)))
+            {
+                await _employeeFamilyRepository.DeleteAsync(removed.Id);
+            }
+            if (toCreate.Count > 0)
+            {
+                await _employeeFamilyRepository.CreateRangeAsync(toCreate);
+            }
+        }
+        // 员工工作经历（EmployeeExperiences）
+        List<TaktEmployeeExperienceUpdateDto>? employeeExperiencesForSave;
+        if (dto is TaktEmployeeUpdateDto updateDtoForEmployeeExperiences && updateDtoForEmployeeExperiences.EmployeeExperiences != null)
+        {
+            employeeExperiencesForSave = updateDtoForEmployeeExperiences.EmployeeExperiences;
+        }
+        else if (dto.EmployeeExperiences != null)
+        {
+            employeeExperiencesForSave = dto.EmployeeExperiences.Adapt<List<TaktEmployeeExperienceUpdateDto>>();
+        }
+        else
+        {
+            employeeExperiencesForSave = null;
+        }
+        if (employeeExperiencesForSave is not { Count: > 0 })
+        {
+            await _employeeExperienceRepository.DeleteAsync(x => x.EmployeeId == entity.Id);
+        }
+        else
+        {
+            var existingList = await _employeeExperienceRepository.GetListAsync(x => x.EmployeeId == entity.Id);
+            var existingById = existingList.ToDictionary(x => x.Id);
+            var submittedIds = new HashSet<long>();
+            var toCreate = new List<TaktEmployeeExperience>();
+            for (var i = 0; i < employeeExperiencesForSave.Count; i++)
+            {
+                var childDto = employeeExperiencesForSave[i];
+                childDto.EmployeeId = entity.Id;
+                if (childDto.EmployeeExperienceId > 0)
+                {
+                    if (!existingById.TryGetValue(childDto.EmployeeExperienceId, out var target))
+                    {
+                        throw new TaktBusinessException("员工工作经历不存在（EmployeeExperienceId={childDto.EmployeeExperienceId}）");
+                    }
+                    if (target.EmployeeId != entity.Id)
+                    {
+                        throw new TaktBusinessException("员工工作经历不属于当前主表（EmployeeExperienceId={childDto.EmployeeExperienceId}）");
+                    }
+                    submittedIds.Add(childDto.EmployeeExperienceId);
+                    childDto.Adapt(target);
+                    target.Id = childDto.EmployeeExperienceId;
+                    target.EmployeeId = entity.Id;
+                    await _employeeExperienceRepository.UpdateAsync(target);
+                }
+                else
+                {
+                    var child = childDto.Adapt<TaktEmployeeExperience>();
+                    child.Id = 0;
+                    child.EmployeeId = entity.Id;
+                    toCreate.Add(child);
+                }
+            }
+            foreach (var removed in existingList.Where(x => !submittedIds.Contains(x.Id)))
+            {
+                await _employeeExperienceRepository.DeleteAsync(removed.Id);
+            }
+            if (toCreate.Count > 0)
+            {
+                await _employeeExperienceRepository.CreateRangeAsync(toCreate);
+            }
+        }
+        // 员工技能（EmployeeSkills）
+        List<TaktEmployeeSkillUpdateDto>? employeeSkillsForSave;
+        if (dto is TaktEmployeeUpdateDto updateDtoForEmployeeSkills && updateDtoForEmployeeSkills.EmployeeSkills != null)
+        {
+            employeeSkillsForSave = updateDtoForEmployeeSkills.EmployeeSkills;
+        }
+        else if (dto.EmployeeSkills != null)
+        {
+            employeeSkillsForSave = dto.EmployeeSkills.Adapt<List<TaktEmployeeSkillUpdateDto>>();
+        }
+        else
+        {
+            employeeSkillsForSave = null;
+        }
+        if (employeeSkillsForSave is not { Count: > 0 })
+        {
+            await _employeeSkillRepository.DeleteAsync(x => x.EmployeeId == entity.Id);
+        }
+        else
+        {
+            var existingList = await _employeeSkillRepository.GetListAsync(x => x.EmployeeId == entity.Id);
+            var existingById = existingList.ToDictionary(x => x.Id);
+            var submittedIds = new HashSet<long>();
+            var toCreate = new List<TaktEmployeeSkill>();
+            for (var i = 0; i < employeeSkillsForSave.Count; i++)
+            {
+                var childDto = employeeSkillsForSave[i];
+                childDto.EmployeeId = entity.Id;
+                if (childDto.EmployeeSkillId > 0)
+                {
+                    if (!existingById.TryGetValue(childDto.EmployeeSkillId, out var target))
+                    {
+                        throw new TaktBusinessException("员工技能不存在（EmployeeSkillId={childDto.EmployeeSkillId}）");
+                    }
+                    if (target.EmployeeId != entity.Id)
+                    {
+                        throw new TaktBusinessException("员工技能不属于当前主表（EmployeeSkillId={childDto.EmployeeSkillId}）");
+                    }
+                    submittedIds.Add(childDto.EmployeeSkillId);
+                    childDto.Adapt(target);
+                    target.Id = childDto.EmployeeSkillId;
+                    target.EmployeeId = entity.Id;
+                    await _employeeSkillRepository.UpdateAsync(target);
+                }
+                else
+                {
+                    var child = childDto.Adapt<TaktEmployeeSkill>();
+                    child.Id = 0;
+                    child.EmployeeId = entity.Id;
+                    toCreate.Add(child);
+                }
+            }
+            foreach (var removed in existingList.Where(x => !submittedIds.Contains(x.Id)))
+            {
+                await _employeeSkillRepository.DeleteAsync(removed.Id);
+            }
+            if (toCreate.Count > 0)
+            {
+                await _employeeSkillRepository.CreateRangeAsync(toCreate);
+            }
+        }
+        // 员工劳动合同（EmployeeContracts）
+        List<TaktEmployeeContractUpdateDto>? employeeContractsForSave;
+        if (dto is TaktEmployeeUpdateDto updateDtoForEmployeeContracts && updateDtoForEmployeeContracts.EmployeeContracts != null)
+        {
+            employeeContractsForSave = updateDtoForEmployeeContracts.EmployeeContracts;
+        }
+        else if (dto.EmployeeContracts != null)
+        {
+            employeeContractsForSave = dto.EmployeeContracts.Adapt<List<TaktEmployeeContractUpdateDto>>();
+        }
+        else
+        {
+            employeeContractsForSave = null;
+        }
+        if (employeeContractsForSave is not { Count: > 0 })
+        {
+            await _employeeContractRepository.DeleteAsync(x => x.EmployeeId == entity.Id);
+        }
+        else
+        {
+            var existingList = await _employeeContractRepository.GetListAsync(x => x.EmployeeId == entity.Id);
+            var existingById = existingList.ToDictionary(x => x.Id);
+            var submittedIds = new HashSet<long>();
+            var toCreate = new List<TaktEmployeeContract>();
+            for (var i = 0; i < employeeContractsForSave.Count; i++)
+            {
+                var childDto = employeeContractsForSave[i];
+                childDto.EmployeeId = entity.Id;
+                if (childDto.EmployeeContractId > 0)
+                {
+                    if (!existingById.TryGetValue(childDto.EmployeeContractId, out var target))
+                    {
+                        throw new TaktBusinessException("员工劳动合同不存在（EmployeeContractId={childDto.EmployeeContractId}）");
+                    }
+                    if (target.EmployeeId != entity.Id)
+                    {
+                        throw new TaktBusinessException("员工劳动合同不属于当前主表（EmployeeContractId={childDto.EmployeeContractId}）");
+                    }
+                    submittedIds.Add(childDto.EmployeeContractId);
+                    childDto.Adapt(target);
+                    target.Id = childDto.EmployeeContractId;
+                    target.EmployeeId = entity.Id;
+                    await _employeeContractRepository.UpdateAsync(target);
+                }
+                else
+                {
+                    var child = childDto.Adapt<TaktEmployeeContract>();
+                    child.Id = 0;
+                    child.EmployeeId = entity.Id;
+                    toCreate.Add(child);
+                }
+            }
+            foreach (var removed in existingList.Where(x => !submittedIds.Contains(x.Id)))
+            {
+                await _employeeContractRepository.DeleteAsync(removed.Id);
+            }
+            if (toCreate.Count > 0)
+            {
+                await _employeeContractRepository.CreateRangeAsync(toCreate);
+            }
+        }
+        // 员工入职上岗（EmployeeJoineds）
+        List<TaktEmployeeJoinedUpdateDto>? employeeJoinedsForSave;
+        if (dto is TaktEmployeeUpdateDto updateDtoForEmployeeJoineds && updateDtoForEmployeeJoineds.EmployeeJoineds != null)
+        {
+            employeeJoinedsForSave = updateDtoForEmployeeJoineds.EmployeeJoineds;
+        }
+        else if (dto.EmployeeJoineds != null)
+        {
+            employeeJoinedsForSave = dto.EmployeeJoineds.Adapt<List<TaktEmployeeJoinedUpdateDto>>();
+        }
+        else
+        {
+            employeeJoinedsForSave = null;
+        }
+        if (employeeJoinedsForSave is not { Count: > 0 })
+        {
+            await _employeeJoinedRepository.DeleteAsync(x => x.EmployeeId == entity.Id);
+        }
+        else
+        {
+            var existingList = await _employeeJoinedRepository.GetListAsync(x => x.EmployeeId == entity.Id);
+            var existingById = existingList.ToDictionary(x => x.Id);
+            var submittedIds = new HashSet<long>();
+            var toCreate = new List<TaktEmployeeJoined>();
+            for (var i = 0; i < employeeJoinedsForSave.Count; i++)
+            {
+                var childDto = employeeJoinedsForSave[i];
+                childDto.EmployeeId = entity.Id;
+                if (childDto.EmployeeJoinedId > 0)
+                {
+                    if (!existingById.TryGetValue(childDto.EmployeeJoinedId, out var target))
+                    {
+                        throw new TaktBusinessException("员工入职上岗不存在（EmployeeJoinedId={childDto.EmployeeJoinedId}）");
+                    }
+                    if (target.EmployeeId != entity.Id)
+                    {
+                        throw new TaktBusinessException("员工入职上岗不属于当前主表（EmployeeJoinedId={childDto.EmployeeJoinedId}）");
+                    }
+                    submittedIds.Add(childDto.EmployeeJoinedId);
+                    childDto.Adapt(target);
+                    target.Id = childDto.EmployeeJoinedId;
+                    target.EmployeeId = entity.Id;
+                    await _employeeJoinedRepository.UpdateAsync(target);
+                }
+                else
+                {
+                    var child = childDto.Adapt<TaktEmployeeJoined>();
+                    child.Id = 0;
+                    child.EmployeeId = entity.Id;
+                    toCreate.Add(child);
+                }
+            }
+            foreach (var removed in existingList.Where(x => !submittedIds.Contains(x.Id)))
+            {
+                await _employeeJoinedRepository.DeleteAsync(removed.Id);
+            }
+            if (toCreate.Count > 0)
+            {
+                await _employeeJoinedRepository.CreateRangeAsync(toCreate);
+            }
+        }
+        // 入职待办（EmployeeOnboardings）
+        List<TaktEmployeeOnboardingUpdateDto>? employeeOnboardingsForSave;
+        if (dto is TaktEmployeeUpdateDto updateDtoForEmployeeOnboardings && updateDtoForEmployeeOnboardings.EmployeeOnboardings != null)
+        {
+            employeeOnboardingsForSave = updateDtoForEmployeeOnboardings.EmployeeOnboardings;
+        }
+        else if (dto.EmployeeOnboardings != null)
+        {
+            employeeOnboardingsForSave = dto.EmployeeOnboardings.Adapt<List<TaktEmployeeOnboardingUpdateDto>>();
+        }
+        else
+        {
+            employeeOnboardingsForSave = null;
+        }
+        if (employeeOnboardingsForSave is not { Count: > 0 })
+        {
+            await _employeeOnboardingRepository.DeleteAsync(x => x.EmployeeId == entity.Id);
+        }
+        else
+        {
+            var existingList = await _employeeOnboardingRepository.GetListAsync(x => x.EmployeeId == entity.Id);
+            var existingById = existingList.ToDictionary(x => x.Id);
+            var submittedIds = new HashSet<long>();
+            var toCreate = new List<TaktEmployeeOnboarding>();
+            for (var i = 0; i < employeeOnboardingsForSave.Count; i++)
+            {
+                var childDto = employeeOnboardingsForSave[i];
+                childDto.EmployeeId = entity.Id;
+                if (childDto.EmployeeOnboardingId > 0)
+                {
+                    if (!existingById.TryGetValue(childDto.EmployeeOnboardingId, out var target))
+                    {
+                        throw new TaktBusinessException("入职待办不存在（EmployeeOnboardingId={childDto.EmployeeOnboardingId}）");
+                    }
+                    if (target.EmployeeId != entity.Id)
+                    {
+                        throw new TaktBusinessException("入职待办不属于当前主表（EmployeeOnboardingId={childDto.EmployeeOnboardingId}）");
+                    }
+                    submittedIds.Add(childDto.EmployeeOnboardingId);
+                    childDto.Adapt(target);
+                    target.Id = childDto.EmployeeOnboardingId;
+                    target.EmployeeId = entity.Id;
+                    await _employeeOnboardingRepository.UpdateAsync(target);
+                }
+                else
+                {
+                    var child = childDto.Adapt<TaktEmployeeOnboarding>();
+                    child.Id = 0;
+                    child.EmployeeId = entity.Id;
+                    toCreate.Add(child);
+                }
+            }
+            foreach (var removed in existingList.Where(x => !submittedIds.Contains(x.Id)))
+            {
+                await _employeeOnboardingRepository.DeleteAsync(removed.Id);
+            }
+            if (toCreate.Count > 0)
+            {
+                await _employeeOnboardingRepository.CreateRangeAsync(toCreate);
+            }
+        }
+        // 员工调动（EmployeeReassignments）
+        List<TaktEmployeeReassignmentUpdateDto>? employeeReassignmentsForSave;
+        if (dto is TaktEmployeeUpdateDto updateDtoForEmployeeReassignments && updateDtoForEmployeeReassignments.EmployeeReassignments != null)
+        {
+            employeeReassignmentsForSave = updateDtoForEmployeeReassignments.EmployeeReassignments;
+        }
+        else if (dto.EmployeeReassignments != null)
+        {
+            employeeReassignmentsForSave = dto.EmployeeReassignments.Adapt<List<TaktEmployeeReassignmentUpdateDto>>();
+        }
+        else
+        {
+            employeeReassignmentsForSave = null;
+        }
+        if (employeeReassignmentsForSave is not { Count: > 0 })
+        {
+            await _employeeReassignmentRepository.DeleteAsync(x => x.EmployeeId == entity.Id);
+        }
+        else
+        {
+            var existingList = await _employeeReassignmentRepository.GetListAsync(x => x.EmployeeId == entity.Id);
+            var existingById = existingList.ToDictionary(x => x.Id);
+            var submittedIds = new HashSet<long>();
+            var toCreate = new List<TaktEmployeeReassignment>();
+            for (var i = 0; i < employeeReassignmentsForSave.Count; i++)
+            {
+                var childDto = employeeReassignmentsForSave[i];
+                childDto.EmployeeId = entity.Id;
+                if (childDto.EmployeeReassignmentId > 0)
+                {
+                    if (!existingById.TryGetValue(childDto.EmployeeReassignmentId, out var target))
+                    {
+                        throw new TaktBusinessException("员工调动不存在（EmployeeReassignmentId={childDto.EmployeeReassignmentId}）");
+                    }
+                    if (target.EmployeeId != entity.Id)
+                    {
+                        throw new TaktBusinessException("员工调动不属于当前主表（EmployeeReassignmentId={childDto.EmployeeReassignmentId}）");
+                    }
+                    submittedIds.Add(childDto.EmployeeReassignmentId);
+                    childDto.Adapt(target);
+                    target.Id = childDto.EmployeeReassignmentId;
+                    target.EmployeeId = entity.Id;
+                    await _employeeReassignmentRepository.UpdateAsync(target);
+                }
+                else
+                {
+                    var child = childDto.Adapt<TaktEmployeeReassignment>();
+                    child.Id = 0;
+                    child.EmployeeId = entity.Id;
+                    toCreate.Add(child);
+                }
+            }
+            foreach (var removed in existingList.Where(x => !submittedIds.Contains(x.Id)))
+            {
+                await _employeeReassignmentRepository.DeleteAsync(removed.Id);
+            }
+            if (toCreate.Count > 0)
+            {
+                await _employeeReassignmentRepository.CreateRangeAsync(toCreate);
+            }
+        }
+        // 员工离职（EmployeeResignations）
+        List<TaktEmployeeResignationUpdateDto>? employeeResignationsForSave;
+        if (dto is TaktEmployeeUpdateDto updateDtoForEmployeeResignations && updateDtoForEmployeeResignations.EmployeeResignations != null)
+        {
+            employeeResignationsForSave = updateDtoForEmployeeResignations.EmployeeResignations;
+        }
+        else if (dto.EmployeeResignations != null)
+        {
+            employeeResignationsForSave = dto.EmployeeResignations.Adapt<List<TaktEmployeeResignationUpdateDto>>();
+        }
+        else
+        {
+            employeeResignationsForSave = null;
+        }
+        if (employeeResignationsForSave is not { Count: > 0 })
+        {
+            await _employeeResignationRepository.DeleteAsync(x => x.EmployeeId == entity.Id);
+        }
+        else
+        {
+            var existingList = await _employeeResignationRepository.GetListAsync(x => x.EmployeeId == entity.Id);
+            var existingById = existingList.ToDictionary(x => x.Id);
+            var submittedIds = new HashSet<long>();
+            var toCreate = new List<TaktEmployeeResignation>();
+            for (var i = 0; i < employeeResignationsForSave.Count; i++)
+            {
+                var childDto = employeeResignationsForSave[i];
+                childDto.EmployeeId = entity.Id;
+                if (childDto.EmployeeResignationId > 0)
+                {
+                    if (!existingById.TryGetValue(childDto.EmployeeResignationId, out var target))
+                    {
+                        throw new TaktBusinessException("员工离职不存在（EmployeeResignationId={childDto.EmployeeResignationId}）");
+                    }
+                    if (target.EmployeeId != entity.Id)
+                    {
+                        throw new TaktBusinessException("员工离职不属于当前主表（EmployeeResignationId={childDto.EmployeeResignationId}）");
+                    }
+                    submittedIds.Add(childDto.EmployeeResignationId);
+                    childDto.Adapt(target);
+                    target.Id = childDto.EmployeeResignationId;
+                    target.EmployeeId = entity.Id;
+                    await _employeeResignationRepository.UpdateAsync(target);
+                }
+                else
+                {
+                    var child = childDto.Adapt<TaktEmployeeResignation>();
+                    child.Id = 0;
+                    child.EmployeeId = entity.Id;
+                    toCreate.Add(child);
+                }
+            }
+            foreach (var removed in existingList.Where(x => !submittedIds.Contains(x.Id)))
+            {
+                await _employeeResignationRepository.DeleteAsync(removed.Id);
+            }
+            if (toCreate.Count > 0)
+            {
+                await _employeeResignationRepository.CreateRangeAsync(toCreate);
+            }
+        }
+        // 员工附件（EmployeeAttachments）
+        List<TaktEmployeeAttachmentUpdateDto>? employeeAttachmentsForSave;
+        if (dto is TaktEmployeeUpdateDto updateDtoForEmployeeAttachments && updateDtoForEmployeeAttachments.EmployeeAttachments != null)
+        {
+            employeeAttachmentsForSave = updateDtoForEmployeeAttachments.EmployeeAttachments;
+        }
+        else if (dto.EmployeeAttachments != null)
+        {
+            employeeAttachmentsForSave = dto.EmployeeAttachments.Adapt<List<TaktEmployeeAttachmentUpdateDto>>();
+        }
+        else
+        {
+            employeeAttachmentsForSave = null;
+        }
+        if (employeeAttachmentsForSave is not { Count: > 0 })
+        {
+            await _employeeAttachmentRepository.DeleteAsync(x => x.EmployeeId == entity.Id);
+        }
+        else
+        {
+            var existingList = await _employeeAttachmentRepository.GetListAsync(x => x.EmployeeId == entity.Id);
+            var existingById = existingList.ToDictionary(x => x.Id);
+            var submittedIds = new HashSet<long>();
+            var toCreate = new List<TaktEmployeeAttachment>();
+            for (var i = 0; i < employeeAttachmentsForSave.Count; i++)
+            {
+                var childDto = employeeAttachmentsForSave[i];
+                childDto.EmployeeId = entity.Id;
+                if (childDto.EmployeeAttachmentId > 0)
+                {
+                    if (!existingById.TryGetValue(childDto.EmployeeAttachmentId, out var target))
+                    {
+                        throw new TaktBusinessException("员工附件不存在（EmployeeAttachmentId={childDto.EmployeeAttachmentId}）");
+                    }
+                    if (target.EmployeeId != entity.Id)
+                    {
+                        throw new TaktBusinessException("员工附件不属于当前主表（EmployeeAttachmentId={childDto.EmployeeAttachmentId}）");
+                    }
+                    submittedIds.Add(childDto.EmployeeAttachmentId);
+                    childDto.Adapt(target);
+                    target.Id = childDto.EmployeeAttachmentId;
+                    target.EmployeeId = entity.Id;
+                    await _employeeAttachmentRepository.UpdateAsync(target);
+                }
+                else
+                {
+                    var child = childDto.Adapt<TaktEmployeeAttachment>();
+                    child.Id = 0;
+                    child.EmployeeId = entity.Id;
+                    toCreate.Add(child);
+                }
+            }
+            foreach (var removed in existingList.Where(x => !submittedIds.Contains(x.Id)))
+            {
+                await _employeeAttachmentRepository.DeleteAsync(removed.Id);
+            }
+            if (toCreate.Count > 0)
+            {
+                await _employeeAttachmentRepository.CreateRangeAsync(toCreate);
+            }
+        }
+    }
+    // ========================================
     // 查询表达式
     // ========================================
 
@@ -350,7 +1127,7 @@ public class TaktEmployeeService : TaktServiceBase, ITaktEmployeeService
         {
             var keywords = queryDto.KeyWords;
             exp = exp.And(x =>
-                (x.EmployeeNo != null && x.EmployeeNo.Contains(keywords))
+                (x.EmployeeCode != null && x.EmployeeCode.Contains(keywords))
                 || (x.EmployeeName != null && x.EmployeeName.Contains(keywords))
                 || SqlFunc.ToString(x.Gender).Contains(keywords)
                 || (x.IdCardNo != null && x.IdCardNo.Contains(keywords))
@@ -358,36 +1135,21 @@ public class TaktEmployeeService : TaktServiceBase, ITaktEmployeeService
                 || (x.Email != null && x.Email.Contains(keywords))
                 || (x.NativePlace != null && x.NativePlace.Contains(keywords))
                 || SqlFunc.ToString(x.Ethnicity).Contains(keywords)
-                || SqlFunc.ToString(x.PoliticalStatus).Contains(keywords)
+                || SqlFunc.ToString(x.PoliticalAffiliation).Contains(keywords)
                 || SqlFunc.ToString(x.MaritalStatus).Contains(keywords)
-                || SqlFunc.ToString(x.Education).Contains(keywords)
-                || (x.GraduateSchool != null && x.GraduateSchool.Contains(keywords))
-                || (x.Major != null && x.Major.Contains(keywords))
-                || SqlFunc.ToString(x.ResignationType).Contains(keywords)
-                || (x.ResignationReason != null && x.ResignationReason.Contains(keywords))
                 || SqlFunc.ToString(x.EmployeeStatus).Contains(keywords)
-                || SqlFunc.ToString(x.PrimaryDeptId).Contains(keywords)
-                || SqlFunc.ToString(x.PrimaryPostId).Contains(keywords)
                 || SqlFunc.ToString(x.IsBuiltIn).Contains(keywords)
-                || (x.EmergencyContactName != null && x.EmergencyContactName.Contains(keywords))
-                || (x.EmergencyContactPhone != null && x.EmergencyContactPhone.Contains(keywords))
-                || (x.HomeAddress != null && x.HomeAddress.Contains(keywords))
                 || (x.Avatar != null && x.Avatar.Contains(keywords))
                 || (x.ExtField != null && x.ExtField.Contains(keywords))
                 || (x.Remark != null && x.Remark.Contains(keywords))
                 || SqlFunc.ToString(x.BirthDate).Contains(keywords)
-                || SqlFunc.ToString(x.JoinedDate).Contains(keywords)
-                || SqlFunc.ToString(x.ProbationEndDate).Contains(keywords)
-                || SqlFunc.ToString(x.RegularDate).Contains(keywords)
-                || SqlFunc.ToString(x.TerminationDate).Contains(keywords)
-                || SqlFunc.ToString(x.LastWorkDate).Contains(keywords)
                 || SqlFunc.ToString(x.CreatedAt).Contains(keywords)
             );
         }
 
-        if (!string.IsNullOrEmpty(queryDto?.EmployeeNo))
+        if (!string.IsNullOrEmpty(queryDto?.EmployeeCode))
         {
-            exp = exp.And(x => x.EmployeeNo != null && x.EmployeeNo.Contains(queryDto.EmployeeNo));
+            exp = exp.And(x => x.EmployeeCode != null && x.EmployeeCode.Contains(queryDto.EmployeeCode));
         }
 
         if (!string.IsNullOrEmpty(queryDto?.EmployeeName))
@@ -425,9 +1187,9 @@ public class TaktEmployeeService : TaktServiceBase, ITaktEmployeeService
             exp = exp.And(x => x.Ethnicity == queryDto.Ethnicity);
         }
 
-        if (queryDto?.PoliticalStatus.HasValue == true)
+        if (queryDto?.PoliticalAffiliation.HasValue == true)
         {
-            exp = exp.And(x => x.PoliticalStatus == queryDto.PoliticalStatus);
+            exp = exp.And(x => x.PoliticalAffiliation == queryDto.PoliticalAffiliation);
         }
 
         if (queryDto?.MaritalStatus.HasValue == true)
@@ -435,64 +1197,14 @@ public class TaktEmployeeService : TaktServiceBase, ITaktEmployeeService
             exp = exp.And(x => x.MaritalStatus == queryDto.MaritalStatus);
         }
 
-        if (queryDto?.Education.HasValue == true)
-        {
-            exp = exp.And(x => x.Education == queryDto.Education);
-        }
-
-        if (!string.IsNullOrEmpty(queryDto?.GraduateSchool))
-        {
-            exp = exp.And(x => x.GraduateSchool != null && x.GraduateSchool.Contains(queryDto.GraduateSchool));
-        }
-
-        if (!string.IsNullOrEmpty(queryDto?.Major))
-        {
-            exp = exp.And(x => x.Major != null && x.Major.Contains(queryDto.Major));
-        }
-
-        if (queryDto?.ResignationType.HasValue == true)
-        {
-            exp = exp.And(x => x.ResignationType == queryDto.ResignationType);
-        }
-
-        if (!string.IsNullOrEmpty(queryDto?.ResignationReason))
-        {
-            exp = exp.And(x => x.ResignationReason != null && x.ResignationReason.Contains(queryDto.ResignationReason));
-        }
-
         if (queryDto?.EmployeeStatus.HasValue == true)
         {
             exp = exp.And(x => x.EmployeeStatus == queryDto.EmployeeStatus);
         }
 
-        if (queryDto?.PrimaryDeptId.HasValue == true)
-        {
-            exp = exp.And(x => x.PrimaryDeptId == queryDto.PrimaryDeptId);
-        }
-
-        if (queryDto?.PrimaryPostId.HasValue == true)
-        {
-            exp = exp.And(x => x.PrimaryPostId == queryDto.PrimaryPostId);
-        }
-
         if (queryDto?.IsBuiltIn.HasValue == true)
         {
             exp = exp.And(x => x.IsBuiltIn == queryDto.IsBuiltIn);
-        }
-
-        if (!string.IsNullOrEmpty(queryDto?.EmergencyContactName))
-        {
-            exp = exp.And(x => x.EmergencyContactName != null && x.EmergencyContactName.Contains(queryDto.EmergencyContactName));
-        }
-
-        if (!string.IsNullOrEmpty(queryDto?.EmergencyContactPhone))
-        {
-            exp = exp.And(x => x.EmergencyContactPhone != null && x.EmergencyContactPhone.Contains(queryDto.EmergencyContactPhone));
-        }
-
-        if (!string.IsNullOrEmpty(queryDto?.HomeAddress))
-        {
-            exp = exp.And(x => x.HomeAddress != null && x.HomeAddress.Contains(queryDto.HomeAddress));
         }
 
         if (!string.IsNullOrEmpty(queryDto?.Avatar))
@@ -518,56 +1230,6 @@ public class TaktEmployeeService : TaktServiceBase, ITaktEmployeeService
         if (queryDto?.BirthDateEnd.HasValue == true)
         {
             exp = exp.And(x => x.BirthDate <= queryDto.BirthDateEnd);
-        }
-
-        if (queryDto?.JoinedDateStart.HasValue == true)
-        {
-            exp = exp.And(x => x.JoinedDate >= queryDto.JoinedDateStart);
-        }
-
-        if (queryDto?.JoinedDateEnd.HasValue == true)
-        {
-            exp = exp.And(x => x.JoinedDate <= queryDto.JoinedDateEnd);
-        }
-
-        if (queryDto?.ProbationEndDateStart.HasValue == true)
-        {
-            exp = exp.And(x => x.ProbationEndDate >= queryDto.ProbationEndDateStart);
-        }
-
-        if (queryDto?.ProbationEndDateEnd.HasValue == true)
-        {
-            exp = exp.And(x => x.ProbationEndDate <= queryDto.ProbationEndDateEnd);
-        }
-
-        if (queryDto?.RegularDateStart.HasValue == true)
-        {
-            exp = exp.And(x => x.RegularDate >= queryDto.RegularDateStart);
-        }
-
-        if (queryDto?.RegularDateEnd.HasValue == true)
-        {
-            exp = exp.And(x => x.RegularDate <= queryDto.RegularDateEnd);
-        }
-
-        if (queryDto?.TerminationDateStart.HasValue == true)
-        {
-            exp = exp.And(x => x.TerminationDate >= queryDto.TerminationDateStart);
-        }
-
-        if (queryDto?.TerminationDateEnd.HasValue == true)
-        {
-            exp = exp.And(x => x.TerminationDate <= queryDto.TerminationDateEnd);
-        }
-
-        if (queryDto?.LastWorkDateStart.HasValue == true)
-        {
-            exp = exp.And(x => x.LastWorkDate >= queryDto.LastWorkDateStart);
-        }
-
-        if (queryDto?.LastWorkDateEnd.HasValue == true)
-        {
-            exp = exp.And(x => x.LastWorkDate <= queryDto.LastWorkDateEnd);
         }
 
         if (queryDto?.CreatedAtStart.HasValue == true)

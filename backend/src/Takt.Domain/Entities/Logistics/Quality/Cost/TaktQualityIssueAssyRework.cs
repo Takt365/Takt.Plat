@@ -27,7 +27,7 @@ namespace Takt.Domain.Entities.Logistics.Quality.Cost;
 public class TaktQualityIssueAssyRework : TaktCompanyEntityBase
 {
     /// <summary>
-    /// 品质问题主表 ID（选项 TaktQualityIssues/options，DictValue=Id）
+    /// 品质问题主表 ID（选项 TaktQualityIssues/options；DictValue=Id）
     /// </summary>
     [SugarColumn(ColumnName = "quality_issue_id", ColumnDescription = "品质问题主表ID", ColumnDataType = "bigint", IsNullable = false)]
     [JsonConverter(typeof(ValueToStringConverter))]
@@ -102,8 +102,8 @@ public class TaktQualityIssueAssyRework : TaktCompanyEntityBase
     /// <summary>
     /// 组装顾客名
     /// </summary>
-    [SugarColumn(ColumnName = "assy_customer_name", ColumnDescription = "组装顾客名", Length = 50, ColumnDataType = "nvarchar", IsNullable = true)]
-    public string? AssyCustomerName { get; set; }
+    [SugarColumn(ColumnName = "assy_customer_name1", ColumnDescription = "组装顾客名1", Length = 140, ColumnDataType = "nvarchar", IsNullable = true)]
+    public string? AssyCustomerName1 { get; set; }
 
     /// <summary>
     /// 组装 Debit Note No
@@ -130,7 +130,7 @@ public class TaktQualityIssueAssyRework : TaktCompanyEntityBase
     public string? AssyRecorder { get; set; }
 
     /// <summary>
-    /// 是否作废（字典 sys_yes_no_type，0=否 1=是；编辑移除子行时标记作废）
+    /// 是否作废（字典 sys_yes_no_type；0=否 1=是；编辑移除子行时标记作废）
     /// </summary>
     [SugarColumn(ColumnName = "is_obsolete", ColumnDescription = "是否作废", ColumnDataType = "int", IsNullable = false, DefaultValue = "0")]
     public int IsObsolete { get; set; } = 0;

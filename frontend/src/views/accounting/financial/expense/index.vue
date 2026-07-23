@@ -9,17 +9,37 @@
 
 <template>
   <div class="p-4 flex flex-col min-h-0 h-full">
-    <!-- 查询栏 -->
-    <TaktQueryBar
-      v-model="queryKeyword"
-      :placeholder="searchPlaceholder"
-      :loading="loading"
-      @search="handleSearch"
-      @reset="handleReset"
-    />
-
-    <!-- 工具栏 -->
-    <TaktToolsBar
+    <!-- 左主右从 -->
+    <TaktMasterDetailTableLr
+      v-model:master-current="currentPage"
+      v-model:master-page-size="pageSize"
+      v-model:selected-master-key="selectedMasterKey"
+      class="min-h-0 flex-1"
+      :master-columns="columns"
+      :master-data-source="dataSource"
+      :master-loading="loading"
+      :master-row-key="getExpenseId"
+      :master-row-selection="rowSelection"
+      master-id-column-key="expenseId"
+      :master-visible-column-keys="visibleColumnKeys"
+      master-table-mode="masterDetailMaster"
+      master-scroll-layout="masterDetailLr"
+      :master-total="total"
+      master-entity-scope="approval"
+      @master-change="handleTableChange"
+      @master-resize-column="handleResizeColumn"
+      @master-pagination-change="handleMasterPaginationChange"
+      @master-select="handleMasterSelect"
+    >
+      <template #master-toolbar>
+        <TaktQueryBar
+          v-model="queryKeyword"
+          :placeholder="searchPlaceholder"
+          :loading="loading"
+          @search="handleSearch"
+          @reset="handleReset"
+        />
+        <TaktToolsBar
       create-permission="accounting:financial:expense:create"
       update-permission="accounting:financial:expense:update"
       delete-permission="accounting:financial:expense:delete"
@@ -50,46 +70,26 @@
       @advanced-query="handleAdvancedQuery"
       @column-setting="handleColumnSetting"
       @refresh="handleRefresh"
-    />
-
-    <!-- 左主右从 -->
-    <TaktMasterDetailTableLr
-      v-model:master-current="currentPage"
-      v-model:master-page-size="pageSize"
-      v-model:selected-master-key="selectedMasterKey"
-      class="min-h-0 flex-1"
-      :master-columns="columns"
-      :master-data-source="dataSource"
-      :master-loading="loading"
-      :master-row-key="getExpenseId"
-      :master-row-selection="rowSelection"
-      master-id-column-key="expenseId"
-      :master-visible-column-keys="visibleColumnKeys"
-      :master-total="total"
-      master-entity-scope="approval"
-      @master-change="handleTableChange"
-      @master-resize-column="handleResizeColumn"
-      @master-pagination-change="handleMasterPaginationChange"
-      @master-select="handleMasterSelect"
-    >
+        />
+      </template>
       <!-- 字典/开关列渲染 -->
       <template #bodyCell="{ column, record }">
         <template v-if="column.key === 'expenseType'">
           <TaktDictTag
-            :value="getExpenseField(record, 'expenseType')"
+            :value="getExpenseDictValue(record, 'expenseType')"
             dict-type="accounting_expense_type"
-          />
-        </template>
-        <template v-else-if="column.key === 'expenseStatus'">
-          <TaktDictTag
-            :value="getExpenseField(record, 'expenseStatus')"
-            dict-type="sys_approval_status"
           />
         </template>
         <template v-else-if="column.key === 'taxRate'">
           <TaktDictTag
-            :value="getExpenseField(record, 'taxRate')"
+            :value="getExpenseDictValue(record, 'taxRate')"
             dict-type="accounting_tax_rate_param"
+          />
+        </template>
+        <template v-else-if="column.key === 'expenseStatus'">
+          <TaktDictTag
+            :value="getExpenseDictValue(record, 'expenseStatus')"
+            dict-type="sys_approval_status"
           />
         </template>
       </template>
@@ -130,10 +130,10 @@
     >
       <template #default="{ isFieldVisible }">
       <div v-show="isFieldVisible('expenseCode')">
-      <a-form-item :label="t('entity.expense.code')">
+      <a-form-item :label="pi.queryLabel('expenseCode')">
         <a-input
           v-model:value="advancedQueryForm.expenseCode"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.expense.code') })"
+          :placeholder="pi.queryPh('expenseCode', 'required')"
           show-count
           :maxlength="40"
           allow-clear
@@ -141,10 +141,10 @@
       </a-form-item>
       </div>
       <div v-show="isFieldVisible('expenseTitle')">
-      <a-form-item :label="t('entity.expense.title')">
+      <a-form-item :label="pi.queryLabel('expenseTitle')">
         <a-input
           v-model:value="advancedQueryForm.expenseTitle"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.expense.title') })"
+          :placeholder="pi.queryPh('expenseTitle', 'required')"
           show-count
           :maxlength="200"
           allow-clear
@@ -152,159 +152,159 @@
       </a-form-item>
       </div>
       <div v-show="isFieldVisible('expenseType')">
-      <a-form-item :label="t('entity.expense.type')">
+      <a-form-item :label="pi.queryLabel('expenseType')">
         <TaktSelect
           v-model:value="advancedQueryForm.expenseType"
           dict-type="accounting_expense_type"
-          :placeholder="t('common.page.form.placeholder.select', { field: t('entity.expense.type') })"
+          :placeholder="pi.queryPh('expenseType', 'select')"
           allow-clear
         />
       </a-form-item>
       </div>
       <div v-show="isFieldVisible('supplierCode')">
-      <a-form-item :label="t('entity.expense.suppliercode')">
+      <a-form-item :label="pi.queryLabel('supplierCode')">
         <TaktSelect
           v-model:value="advancedQueryForm.supplierCode"
           api-url="TaktSuppliers/options"
-          :placeholder="t('common.page.form.placeholder.select', { field: t('entity.expense.suppliercode') })"
+          :placeholder="pi.queryPh('supplierCode', 'select')"
           allow-clear
         />
       </a-form-item>
       </div>
-      <div v-show="isFieldVisible('supplierName')">
-      <a-form-item :label="t('entity.expense.suppliername')">
+      <div v-show="isFieldVisible('supplierName1')">
+      <a-form-item :label="pi.queryLabel('supplierName1')">
         <a-input
-          v-model:value="advancedQueryForm.supplierName"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.expense.suppliername') })"
+          v-model:value="advancedQueryForm.supplierName1"
+          :placeholder="pi.queryPh('supplierName1', 'required')"
           show-count
-          :maxlength="200"
+          :maxlength="140"
           allow-clear
         />
       </a-form-item>
       </div>
       <div v-show="isFieldVisible('applicantBy')">
-      <a-form-item :label="t('entity.expense.applicantby')">
+      <a-form-item :label="pi.queryLabel('applicantBy')">
         <TaktSelect
           v-model:value="advancedQueryForm.applicantBy"
           api-url="TaktEmployees/options"
-          :placeholder="t('common.page.form.placeholder.select', { field: t('entity.expense.applicantby') })"
+          :placeholder="pi.queryPh('applicantBy', 'select')"
           allow-clear
         />
       </a-form-item>
       </div>
       <div v-show="isFieldVisible('applicationDept')">
-      <a-form-item :label="t('entity.expense.applicationdept')">
-        <TaktTreeSelect
+      <a-form-item :label="pi.queryLabel('applicationDept')">
+        <TaktSelect
           v-model:value="advancedQueryForm.applicationDept"
           api-url="TaktDepts/tree-options"
-          :placeholder="t('common.page.form.placeholder.select', { field: t('entity.expense.applicationdept') })"
+          :placeholder="pi.queryPh('applicationDept', 'select')"
           allow-clear
         />
       </a-form-item>
       </div>
       <div v-show="isFieldVisible('costBearerDept')">
-      <a-form-item :label="t('entity.expense.costbearerdept')">
-        <TaktTreeSelect
+      <a-form-item :label="pi.queryLabel('costBearerDept')">
+        <TaktSelect
           v-model:value="advancedQueryForm.costBearerDept"
           api-url="TaktDepts/tree-options"
-          :placeholder="t('common.page.form.placeholder.select', { field: t('entity.expense.costbearerdept') })"
+          :placeholder="pi.queryPh('costBearerDept', 'select')"
           allow-clear
         />
       </a-form-item>
       </div>
       <div v-show="isFieldVisible('costCenter')">
-      <a-form-item :label="t('entity.expense.costcenter')">
-        <TaktTreeSelect
+      <a-form-item :label="pi.queryLabel('costCenter')">
+        <TaktSelect
           v-model:value="advancedQueryForm.costCenter"
           api-url="TaktCostCenters/tree-options"
-          :placeholder="t('common.page.form.placeholder.select', { field: t('entity.expense.costcenter') })"
+          :placeholder="pi.queryPh('costCenter', 'select')"
           allow-clear
         />
       </a-form-item>
       </div>
       <div v-show="isFieldVisible('countersignId')">
-      <a-form-item :label="t('entity.expense.countersignid')">
+      <a-form-item :label="pi.queryLabel('countersignId')">
         <TaktSelect
           v-model:value="advancedQueryForm.countersignId"
           api-url="TaktCountersigns/options"
-          :placeholder="t('common.page.form.placeholder.select', { field: t('entity.expense.countersignid') })"
+          :placeholder="pi.queryPh('countersignId', 'select')"
           allow-clear
         />
       </a-form-item>
       </div>
       <div v-show="isFieldVisible('purchaseOrderCode')">
-      <a-form-item :label="t('entity.expense.purchaseordercode')">
+      <a-form-item :label="pi.queryLabel('purchaseOrderCode')">
         <TaktSelect
           v-model:value="advancedQueryForm.purchaseOrderCode"
           api-url="TaktPurchaseOrders/options"
-          :placeholder="t('common.page.form.placeholder.select', { field: t('entity.expense.purchaseordercode') })"
+          :placeholder="pi.queryPh('purchaseOrderCode', 'select')"
           allow-clear
         />
       </a-form-item>
       </div>
       <div v-show="isFieldVisible('purchaseRequestCode')">
-      <a-form-item :label="t('entity.expense.purchaserequestcode')">
+      <a-form-item :label="pi.queryLabel('purchaseRequestCode')">
         <TaktSelect
           v-model:value="advancedQueryForm.purchaseRequestCode"
           api-url="TaktPurchaseRequests/options"
-          :placeholder="t('common.page.form.placeholder.select', { field: t('entity.expense.purchaserequestcode') })"
+          :placeholder="pi.queryPh('purchaseRequestCode', 'select')"
           allow-clear
         />
       </a-form-item>
       </div>
       <div v-show="isFieldVisible('expenseAmount')">
-      <a-form-item :label="t('entity.expense.amount')">
+      <a-form-item :label="pi.queryLabel('expenseAmount')">
         <a-input-number
           v-model:value="advancedQueryForm.expenseAmount"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.expense.amount') })"
+          :placeholder="pi.queryPh('expenseAmount', 'required')"
           style="width: 100%"
         />
       </a-form-item>
       </div>
       <div v-show="isFieldVisible('taxRate')">
-      <a-form-item :label="t('entity.expense.taxrate')">
+      <a-form-item :label="pi.queryLabel('taxRate')">
         <TaktSelect
           v-model:value="advancedQueryForm.taxRate"
           dict-type="accounting_tax_rate_param"
-          :placeholder="t('common.page.form.placeholder.select', { field: t('entity.expense.taxrate') })"
+          :placeholder="pi.queryPh('taxRate', 'select')"
           allow-clear
         />
       </a-form-item>
       </div>
       <div v-show="isFieldVisible('taxAmount')">
-      <a-form-item :label="t('entity.expense.taxamount')">
+      <a-form-item :label="pi.queryLabel('taxAmount')">
         <a-input-number
           v-model:value="advancedQueryForm.taxAmount"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.expense.taxamount') })"
+          :placeholder="pi.queryPh('taxAmount', 'required')"
           style="width: 100%"
         />
       </a-form-item>
       </div>
       <div v-show="isFieldVisible('expenseDateStart')">
-      <a-form-item :label="t('entity.expense.datestart')">
+      <a-form-item :label="pi.queryLabel('expenseDateStart')">
         <a-date-picker
           v-model:value="advancedQueryForm.expenseDateStart"
-          :placeholder="t('common.page.form.placeholder.select', { field: t('entity.expense.datestart') })"
+          :placeholder="pi.queryPh('expenseDateStart', 'select')"
           value-format="YYYY-MM-DD"
           style="width: 100%"
         />
       </a-form-item>
       </div>
       <div v-show="isFieldVisible('expenseDateEnd')">
-      <a-form-item :label="t('entity.expense.dateend')">
+      <a-form-item :label="pi.queryLabel('expenseDateEnd')">
         <a-date-picker
           v-model:value="advancedQueryForm.expenseDateEnd"
-          :placeholder="t('common.page.form.placeholder.select', { field: t('entity.expense.dateend') })"
+          :placeholder="pi.queryPh('expenseDateEnd', 'select')"
           value-format="YYYY-MM-DD"
           style="width: 100%"
         />
       </a-form-item>
       </div>
       <div v-show="isFieldVisible('applicationReason')">
-      <a-form-item :label="t('entity.expense.applicationreason')">
+      <a-form-item :label="pi.queryLabel('applicationReason')">
         <a-input
           v-model:value="advancedQueryForm.applicationReason"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.expense.applicationreason') })"
+          :placeholder="pi.queryPh('applicationReason', 'required')"
           show-count
           :maxlength="20"
           allow-clear
@@ -312,10 +312,10 @@
       </a-form-item>
       </div>
       <div v-show="isFieldVisible('attachments')">
-      <a-form-item :label="t('entity.expense.attachments')">
+      <a-form-item :label="pi.queryLabel('attachments')">
         <a-input
           v-model:value="advancedQueryForm.attachments"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.expense.attachments') })"
+          :placeholder="pi.queryPh('attachments', 'required')"
           show-count
           :maxlength="20"
           allow-clear
@@ -323,40 +323,40 @@
       </a-form-item>
       </div>
       <div v-show="isFieldVisible('relatedPlant')">
-      <a-form-item :label="t('entity.expense.relatedplant')">
+      <a-form-item :label="pi.queryLabel('relatedPlant')">
         <TaktSelect
           v-model:value="advancedQueryForm.relatedPlant"
           api-url="TaktPlants/options"
-          :placeholder="t('common.page.form.placeholder.select', { field: t('entity.expense.relatedplant') })"
+          :placeholder="pi.queryPh('relatedPlant', 'select')"
           allow-clear
         />
       </a-form-item>
       </div>
       <div v-show="isFieldVisible('expenseStatus')">
-      <a-form-item :label="t('entity.expense.status')">
+      <a-form-item :label="pi.queryLabel('expenseStatus')">
         <TaktSelect
           v-model:value="advancedQueryForm.expenseStatus"
           dict-type="sys_approval_status"
-          :placeholder="t('common.page.form.placeholder.select', { field: t('entity.expense.status') })"
+          :placeholder="pi.queryPh('expenseStatus', 'select')"
           allow-clear
         />
       </a-form-item>
       </div>
       <div v-show="isFieldVisible('approvalStatus')">
-      <a-form-item :label="t('entity.expense.approvalstatus')">
+      <a-form-item :label="pi.queryLabel('approvalStatus')">
         <TaktSelect
           v-model:value="advancedQueryForm.approvalStatus"
           dict-type="sys_approval_status"
-          :placeholder="t('common.page.form.placeholder.select', { field: t('entity.expense.approvalstatus') })"
+          :placeholder="pi.queryPh('approvalStatus', 'select')"
           allow-clear
         />
       </a-form-item>
       </div>
       <div v-show="isFieldVisible('initiatorId')">
-      <a-form-item :label="t('entity.expense.initiatorid')">
+      <a-form-item :label="pi.queryLabel('initiatorId')">
         <a-input
           v-model:value="advancedQueryForm.initiatorId"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.expense.initiatorid') })"
+          :placeholder="pi.queryPh('initiatorId', 'required')"
           show-count
           :maxlength="20"
           allow-clear
@@ -364,10 +364,10 @@
       </a-form-item>
       </div>
       <div v-show="isFieldVisible('initiatedAtStart')">
-      <a-form-item :label="t('entity.expense.initiatedatstart')">
+      <a-form-item :label="pi.queryLabel('initiatedAtStart')">
         <a-input
           v-model:value="advancedQueryForm.initiatedAtStart"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.expense.initiatedatstart') })"
+          :placeholder="pi.queryPh('initiatedAtStart', 'required')"
           show-count
           :maxlength="20"
           allow-clear
@@ -375,20 +375,20 @@
       </a-form-item>
       </div>
       <div v-show="isFieldVisible('initiatedAtEnd')">
-      <a-form-item :label="t('entity.expense.initiatedatend')">
+      <a-form-item :label="pi.queryLabel('initiatedAtEnd')">
         <a-date-picker
           v-model:value="advancedQueryForm.initiatedAtEnd"
-          :placeholder="t('common.page.form.placeholder.select', { field: t('entity.expense.initiatedatend') })"
+          :placeholder="pi.queryPh('initiatedAtEnd', 'select')"
           value-format="YYYY-MM-DD"
           style="width: 100%"
         />
       </a-form-item>
       </div>
       <div v-show="isFieldVisible('approvedBy')">
-      <a-form-item :label="t('entity.expense.approvedby')">
+      <a-form-item :label="pi.queryLabel('approvedBy')">
         <a-input
           v-model:value="advancedQueryForm.approvedBy"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.expense.approvedby') })"
+          :placeholder="pi.queryPh('approvedBy', 'required')"
           show-count
           :maxlength="20"
           allow-clear
@@ -396,10 +396,10 @@
       </a-form-item>
       </div>
       <div v-show="isFieldVisible('approvedAtStart')">
-      <a-form-item :label="t('entity.expense.approvedatstart')">
+      <a-form-item :label="pi.queryLabel('approvedAtStart')">
         <a-input
           v-model:value="advancedQueryForm.approvedAtStart"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.expense.approvedatstart') })"
+          :placeholder="pi.queryPh('approvedAtStart', 'required')"
           show-count
           :maxlength="20"
           allow-clear
@@ -407,20 +407,20 @@
       </a-form-item>
       </div>
       <div v-show="isFieldVisible('approvedAtEnd')">
-      <a-form-item :label="t('entity.expense.approvedatend')">
+      <a-form-item :label="pi.queryLabel('approvedAtEnd')">
         <a-date-picker
           v-model:value="advancedQueryForm.approvedAtEnd"
-          :placeholder="t('common.page.form.placeholder.select', { field: t('entity.expense.approvedatend') })"
+          :placeholder="pi.queryPh('approvedAtEnd', 'select')"
           value-format="YYYY-MM-DD"
           style="width: 100%"
         />
       </a-form-item>
       </div>
       <div v-show="isFieldVisible('flowInstanceId')">
-      <a-form-item :label="t('entity.expense.flowinstanceid')">
+      <a-form-item :label="pi.queryLabel('flowInstanceId')">
         <a-input
           v-model:value="advancedQueryForm.flowInstanceId"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.expense.flowinstanceid') })"
+          :placeholder="pi.queryPh('flowInstanceId', 'required')"
           show-count
           :maxlength="20"
           allow-clear
@@ -428,10 +428,10 @@
       </a-form-item>
       </div>
       <div v-show="isFieldVisible('createdAtStart')">
-      <a-form-item :label="t('common.page.entity.createdatstart')">
+      <a-form-item :label="pi.queryLabel('createdAtStart')">
         <a-date-picker
           v-model:value="advancedQueryForm.createdAtStart"
-          :placeholder="t('common.page.form.placeholder.select', { field: t('common.page.entity.createdatstart') })"
+          :placeholder="pi.queryPh('createdAtStart', 'select')"
           value-format="YYYY-MM-DD HH:mm:ss"
             show-time
           style="width: 100%"
@@ -439,10 +439,10 @@
       </a-form-item>
       </div>
       <div v-show="isFieldVisible('createdAtEnd')">
-      <a-form-item :label="t('common.page.entity.createdatend')">
+      <a-form-item :label="pi.queryLabel('createdAtEnd')">
         <a-date-picker
           v-model:value="advancedQueryForm.createdAtEnd"
-          :placeholder="t('common.page.form.placeholder.select', { field: t('common.page.entity.createdatend') })"
+          :placeholder="pi.queryPh('createdAtEnd', 'select')"
           value-format="YYYY-MM-DD HH:mm:ss"
             show-time
           style="width: 100%"
@@ -464,7 +464,7 @@
             >
               <span class="takt-form-label-hint-icon"><RiQuestionLine class="takt-remix-icon" /></span>
             </a-tooltip>
-            <span>{{ t('common.page.entity.extfield') }}</span>
+            <span>{{ pi.queryLabel('extField') }}</span>
           </span>
         </template>
         <a-textarea
@@ -478,10 +478,10 @@
       </a-form-item>
       </div>
       <div v-show="isFieldVisible('remark')">
-      <a-form-item :label="t('common.page.entity.remark')">
+      <a-form-item :label="pi.queryLabel('remark')">
         <a-textarea
           v-model:value="advancedQueryForm.remark"
-          :placeholder="t('common.page.form.placeholder.optional', { field: t('common.page.entity.remark') })"
+          :placeholder="pi.queryPh('remark', 'optional')"
             :rows="4"
             show-count
             :maxlength="400"
@@ -495,14 +495,15 @@
     <!-- 导入对话框 -->
     <TaktModal
       v-model:open="importVisible"
-      :title="t('common.dialog.title.import', { entity: t('entity.expense._self') })"
+      :title="t('common.dialog.title.import', { entity: pi.self() })"
       :width="600"
       :footer="null"
       :cancel-text="t('common.page.button.close')"
       @cancel="handleImportCancel"
     >
       <TaktImportFile
-        entity-i18n-key="entity.expense._self"
+        v-if="importVisible"
+        :entity-i18n-key="EXPENSE_SELF_I18N_KEY"
         file-type="xlsx"
         :sheet-name="excelNames.sheet"
         :template-file-name="excelNames.fileBase"
@@ -521,7 +522,7 @@
       :id-column-key="'expenseId'"
       :action-column-key="'action'"
       entity-scope="approval"
-      table-mode="single"
+      table-mode="masterDetailMaster"
       @update:checked-keys="handleColumnKeysChange"
       @reset="handleColumnSettingReset"
     />
@@ -541,13 +542,25 @@ import { useI18n } from 'vue-i18n'
 import { ensureTaktPaginationConfigAsync, getTaktDefaultPageIndex, getTaktDefaultPageSize } from '@/utils/takt-paged'
 import ExpenseForm from './components/expense-form.vue'
 import ExpenseDetailPanel from './components/expense-detail-panel.vue'
-import { provideExpenseMasterContext } from './composables/use-expense-master-context'
+import { provideExpenseMasterContext, type ExpenseRowRecord } from './composables/use-expense-master-context'
 import { getExpenseList, getExpenseById, createExpense, updateExpense, deleteExpenseById, deleteExpenseBatch, getExpenseTemplate, importExpense, exportExpense, updateExpenseStatus } from '@/api/accounting/financial/expense'
 import type { Expense, ExpenseQuery } from '@/types/accounting/financial/expense'
 import { useDictDataStore } from '@/stores/foundation/dict-data'
 import { taktExcelEntityNames } from '@/utils/naming'
 import { resolveExportDownloadFileName } from '@/utils/export-download-name'
+import { normalizeImportResult, type TaktImportResult } from '@/utils/takt-import-result'
 import { RiEditLine, RiDeleteBinLine, RiQuestionLine } from '@remixicon/vue'
+
+import {
+  useExpenseI18n,
+  EXPENSE_LIST_FIELDS,
+  EXPENSE_QUERY_STRING_FIELDS,
+  EXPENSE_QUERY_FIELDS,
+  EXPENSE_SELF_I18N_KEY,
+} from './composables/use-expense-i18n'
+
+/** 实体字段 i18n（标签/占位符统一入口） */
+const pi = useExpenseI18n()
 
 /** i18n 翻译函数 */
 const { t } = useI18n()
@@ -555,7 +568,7 @@ const { t } = useI18n()
 const excelNames = taktExcelEntityNames('TaktExpense')
 /** 列表快捷查询占位文案 */
 const searchPlaceholder = computed(
-  () => t('common.page.form.placeholder.search', { keyword: t('entity.expense._self') })
+  () => t('common.page.form.placeholder.search', { keyword: pi.self() })
 )
 
 /** 快捷查询关键字 */
@@ -571,9 +584,9 @@ const pageSize = ref(getTaktDefaultPageSize())
 /** 分页 total */
 const total = ref(0)
 /** 工具栏单选时当前行 */
-const selectedRow = ref<Expense | null>(null)
+const selectedRow = ref<ExpenseRowRecord | null>(null)
 /** 表格多选行 */
-const selectedRows = ref<Expense[]>([])
+const selectedRows = ref<ExpenseRowRecord[]>([])
 /** 表格多选 row-key 集合 */
 const selectedRowKeys = ref<(string | number)[]>([])
 
@@ -590,78 +603,31 @@ const formRef = ref()
 
 /** 高级查询抽屉是否打开 */
 const advancedQueryVisible = ref(false)
+/**
+ * 创建空的高级查询表单
+ * @returns {Record<string, unknown>} 高级查询初始模型
+ */
+function createEmptyAdvancedQueryForm() {
+  const form = Object.fromEntries(EXPENSE_QUERY_STRING_FIELDS.map((key) => [key, ''])) as Record<
+    (typeof EXPENSE_QUERY_STRING_FIELDS)[number],
+    string
+  >
+  return {
+    ...form,
+    expenseType: undefined as number | undefined,
+    expenseAmount: undefined as number | undefined,
+    taxRate: undefined as number | undefined,
+    taxAmount: undefined as number | undefined,
+    expenseStatus: undefined as number | undefined,
+    approvalStatus: undefined as number | undefined,
+  }
+}
 /** 高级查询表单模型 */
-const advancedQueryForm = ref({
-  expenseCode: '',
-  expenseTitle: '',
-  expenseType: undefined as number | undefined,
-  supplierCode: '',
-  supplierName: '',
-  applicantBy: '',
-  applicationDept: '',
-  costBearerDept: '',
-  costCenter: '',
-  countersignId: '',
-  purchaseOrderCode: '',
-  purchaseRequestCode: '',
-  expenseAmount: undefined as number | undefined,
-  taxRate: undefined as number | undefined,
-  taxAmount: undefined as number | undefined,
-  expenseDateStart: '',
-  expenseDateEnd: '',
-  applicationReason: '',
-  attachments: '',
-  relatedPlant: '',
-  expenseStatus: undefined as number | undefined,
-  approvalStatus: undefined as number | undefined,
-  initiatorId: '',
-  initiatedAtStart: '',
-  initiatedAtEnd: '',
-  approvedBy: '',
-  approvedAtStart: '',
-  approvedAtEnd: '',
-  flowInstanceId: '',
-  createdAtStart: '',
-  createdAtEnd: '',
-  extField: '',
-  remark: '',
-})
+const advancedQueryForm = ref(createEmptyAdvancedQueryForm())
 /** 高级查询字段元数据（列显隐配置） */
-const queryFieldsMeta = computed(() => [
-  { key: 'expenseCode', label: t('entity.expense.code') },
-  { key: 'expenseTitle', label: t('entity.expense.title') },
-  { key: 'expenseType', label: t('entity.expense.type') },
-  { key: 'supplierCode', label: t('entity.expense.suppliercode') },
-  { key: 'supplierName', label: t('entity.expense.suppliername') },
-  { key: 'applicantBy', label: t('entity.expense.applicantby') },
-  { key: 'applicationDept', label: t('entity.expense.applicationdept') },
-  { key: 'costBearerDept', label: t('entity.expense.costbearerdept') },
-  { key: 'costCenter', label: t('entity.expense.costcenter') },
-  { key: 'countersignId', label: t('entity.expense.countersignid') },
-  { key: 'purchaseOrderCode', label: t('entity.expense.purchaseordercode') },
-  { key: 'purchaseRequestCode', label: t('entity.expense.purchaserequestcode') },
-  { key: 'expenseAmount', label: t('entity.expense.amount') },
-  { key: 'taxRate', label: t('entity.expense.taxrate') },
-  { key: 'taxAmount', label: t('entity.expense.taxamount') },
-  { key: 'expenseDateStart', label: t('common.page.entity.createdatstart').replace(t('common.page.entity.createdat'), t('entity.expense.date')) },
-  { key: 'expenseDateEnd', label: t('common.page.entity.createdatend').replace(t('common.page.entity.createdat'), t('entity.expense.date')) },
-  { key: 'applicationReason', label: t('entity.expense.applicationreason') },
-  { key: 'attachments', label: t('entity.expense.attachments') },
-  { key: 'relatedPlant', label: t('entity.expense.relatedplant') },
-  { key: 'expenseStatus', label: t('entity.expense.status') },
-  { key: 'approvalStatus', label: t('entity.expense.approvalstatus') },
-  { key: 'initiatorId', label: t('entity.expense.initiatorid') },
-  { key: 'initiatedAtStart', label: t('entity.expense.initiatedatstart') },
-  { key: 'initiatedAtEnd', label: t('entity.expense.initiatedatend') },
-  { key: 'approvedBy', label: t('entity.expense.approvedby') },
-  { key: 'approvedAtStart', label: t('entity.expense.approvedatstart') },
-  { key: 'approvedAtEnd', label: t('entity.expense.approvedatend') },
-  { key: 'flowInstanceId', label: t('entity.expense.flowinstanceid') },
-  { key: 'createdAtStart', label: t('common.page.entity.createdatstart') },
-  { key: 'createdAtEnd', label: t('common.page.entity.createdatend') },
-  { key: 'extField', label: t('common.page.entity.extfield') },
-  { key: 'remark', label: t('common.page.entity.remark') },
-])
+const queryFieldsMeta = computed(() =>
+  EXPENSE_QUERY_FIELDS.map((key) => ({ key, label: pi.queryLabel(key) })),
+)
 /** 高级查询当前可见字段 key */
 const visibleQueryFieldKeys = ref<string[]>([])
 /** 列设置抽屉是否打开 */
@@ -705,20 +671,12 @@ function buildListQuery(overrides?: Partial<ExpenseQuery>): ExpenseQuery {
       query[key] = v as never
     }
   }
-  assignTrimmed('expenseCode', form.expenseCode)
-  assignTrimmed('expenseTitle', form.expenseTitle)
+  for (const key of EXPENSE_QUERY_STRING_FIELDS) {
+    assignTrimmed(key, form[key])
+  }
   if (form.expenseType !== undefined && form.expenseType !== null) {
     query.expenseType = form.expenseType
   }
-  assignTrimmed('supplierCode', form.supplierCode)
-  assignTrimmed('supplierName', form.supplierName)
-  assignTrimmed('applicantBy', form.applicantBy)
-  assignTrimmed('applicationDept', form.applicationDept)
-  assignTrimmed('costBearerDept', form.costBearerDept)
-  assignTrimmed('costCenter', form.costCenter)
-  assignTrimmed('countersignId', form.countersignId)
-  assignTrimmed('purchaseOrderCode', form.purchaseOrderCode)
-  assignTrimmed('purchaseRequestCode', form.purchaseRequestCode)
   if (form.expenseAmount !== undefined && form.expenseAmount !== null) {
     query.expenseAmount = form.expenseAmount
   }
@@ -728,28 +686,12 @@ function buildListQuery(overrides?: Partial<ExpenseQuery>): ExpenseQuery {
   if (form.taxAmount !== undefined && form.taxAmount !== null) {
     query.taxAmount = form.taxAmount
   }
-  assignTrimmed('expenseDateStart', form.expenseDateStart)
-  assignTrimmed('expenseDateEnd', form.expenseDateEnd)
-  assignTrimmed('applicationReason', form.applicationReason)
-  assignTrimmed('attachments', form.attachments)
-  assignTrimmed('relatedPlant', form.relatedPlant)
   if (form.expenseStatus !== undefined && form.expenseStatus !== null) {
     query.expenseStatus = form.expenseStatus
   }
   if (form.approvalStatus !== undefined && form.approvalStatus !== null) {
     query.approvalStatus = form.approvalStatus
   }
-  assignTrimmed('initiatorId', form.initiatorId)
-  assignTrimmed('initiatedAtStart', form.initiatedAtStart)
-  assignTrimmed('initiatedAtEnd', form.initiatedAtEnd)
-  assignTrimmed('approvedBy', form.approvedBy)
-  assignTrimmed('approvedAtStart', form.approvedAtStart)
-  assignTrimmed('approvedAtEnd', form.approvedAtEnd)
-  assignTrimmed('flowInstanceId', form.flowInstanceId)
-  assignTrimmed('createdAtStart', form.createdAtStart)
-  assignTrimmed('createdAtEnd', form.createdAtEnd)
-  assignTrimmed('extField', form.extField)
-  assignTrimmed('remark', form.remark)
   return query
 }
 /** 页面挂载：租户上下文就绪后加载分页配置，再拉列表 */
@@ -764,7 +706,7 @@ onMounted(async () => {
 const selectedMasterKey = ref('')
 
 /** 同步主表选中行到右侧明细（子表由 *-panel watch 自动 reload） */
-function syncMasterSelection(record: Expense | null) {
+function syncMasterSelection(record: ExpenseRowRecord | null) {
   selectedMasterRow.value = record
   selectedMasterKey.value = record ? getExpenseId(record) : ''
 }
@@ -774,7 +716,7 @@ function syncMasterSelection(record: Expense | null) {
  * @param record 主表行
  */
 function handleMasterSelect(record: Record<string, unknown>) {
-  const row = record as unknown as Expense
+  const row = record as unknown as ExpenseRowRecord
   const key = getExpenseId(row)
   selectedRowKeys.value = [key]
   selectedRows.value = [row]
@@ -792,7 +734,7 @@ function handleMasterPaginationChange(_page: number, _pageSize: number) {
 }
 
 /** 加载主表详情并回填当前页 dataSource */
-async function loadExpenseDetail(record: Expense): Promise<Expense | null> {
+async function loadExpenseDetail(record: ExpenseRowRecord): Promise<Expense | null> {
   const id = getExpenseId(record)
   if (!id) {
     return null
@@ -823,7 +765,7 @@ const columns = computed<TableColumnsType>(() => [
     customRender: ({ record }: { record: any }) => getExpenseField(record, 'expenseId') ?? ''
   },
   {
-    title: t('entity.expense.code'),
+    title: pi.label('expenseCode'),
     dataIndex: 'expenseCode',
     key: 'expenseCode',
     width: 120,
@@ -832,7 +774,7 @@ const columns = computed<TableColumnsType>(() => [
     customRender: ({ record }: { record: any }) => getExpenseField(record, 'expenseCode') ?? ''
   },
   {
-    title: t('entity.expense.title'),
+    title: pi.label('expenseTitle'),
     dataIndex: 'expenseTitle',
     key: 'expenseTitle',
     width: 120,
@@ -841,7 +783,7 @@ const columns = computed<TableColumnsType>(() => [
     customRender: ({ record }: { record: any }) => getExpenseField(record, 'expenseTitle') ?? ''
   },
   {
-    title: t('entity.expense.type'),
+    title: pi.label('expenseType'),
     dataIndex: 'expenseType',
     key: 'expenseType',
     width: 120,
@@ -849,7 +791,7 @@ const columns = computed<TableColumnsType>(() => [
     ellipsis: true,
   },
   {
-    title: t('entity.expense.suppliercode'),
+    title: pi.label('supplierCode'),
     dataIndex: 'supplierCode',
     key: 'supplierCode',
     width: 120,
@@ -858,16 +800,16 @@ const columns = computed<TableColumnsType>(() => [
     customRender: ({ record }: { record: any }) => getExpenseField(record, 'supplierCode') ?? ''
   },
   {
-    title: t('entity.expense.suppliername'),
-    dataIndex: 'supplierName',
-    key: 'supplierName',
+    title: pi.label('supplierName1'),
+    dataIndex: 'supplierName1',
+    key: 'supplierName1',
     width: 120,
     resizable: true,
     ellipsis: true,
-    customRender: ({ record }: { record: any }) => getExpenseField(record, 'supplierName') ?? ''
+    customRender: ({ record }: { record: any }) => getExpenseField(record, 'supplierName1') ?? ''
   },
   {
-    title: t('entity.expense.applicantby'),
+    title: pi.label('applicantBy'),
     dataIndex: 'applicantBy',
     key: 'applicantBy',
     width: 120,
@@ -876,7 +818,7 @@ const columns = computed<TableColumnsType>(() => [
     customRender: ({ record }: { record: any }) => getExpenseField(record, 'applicantBy') ?? ''
   },
   {
-    title: t('entity.expense.applicationdept'),
+    title: pi.label('applicationDept'),
     dataIndex: 'applicationDept',
     key: 'applicationDept',
     width: 120,
@@ -885,7 +827,7 @@ const columns = computed<TableColumnsType>(() => [
     customRender: ({ record }: { record: any }) => getExpenseField(record, 'applicationDept') ?? ''
   },
   {
-    title: t('entity.expense.costbearerdept'),
+    title: pi.label('costBearerDept'),
     dataIndex: 'costBearerDept',
     key: 'costBearerDept',
     width: 120,
@@ -894,7 +836,7 @@ const columns = computed<TableColumnsType>(() => [
     customRender: ({ record }: { record: any }) => getExpenseField(record, 'costBearerDept') ?? ''
   },
   {
-    title: t('entity.expense.costcenter'),
+    title: pi.label('costCenter'),
     dataIndex: 'costCenter',
     key: 'costCenter',
     width: 120,
@@ -903,7 +845,7 @@ const columns = computed<TableColumnsType>(() => [
     customRender: ({ record }: { record: any }) => getExpenseField(record, 'costCenter') ?? ''
   },
   {
-    title: t('entity.expense.countersignid'),
+    title: pi.label('countersignId'),
     dataIndex: 'countersignId',
     key: 'countersignId',
     width: 120,
@@ -912,7 +854,16 @@ const columns = computed<TableColumnsType>(() => [
     customRender: ({ record }: { record: any }) => getExpenseField(record, 'countersignId') ?? ''
   },
   {
-    title: t('entity.expense.purchaseordercode'),
+    title: pi.label('countersignName'),
+    dataIndex: 'countersignName',
+    key: 'countersignName',
+    width: 120,
+    resizable: true,
+    ellipsis: true,
+    customRender: ({ record }: { record: any }) => getExpenseField(record, 'countersignName') ?? ''
+  },
+  {
+    title: pi.label('purchaseOrderCode'),
     dataIndex: 'purchaseOrderCode',
     key: 'purchaseOrderCode',
     width: 120,
@@ -921,7 +872,7 @@ const columns = computed<TableColumnsType>(() => [
     customRender: ({ record }: { record: any }) => getExpenseField(record, 'purchaseOrderCode') ?? ''
   },
   {
-    title: t('entity.expense.purchaserequestcode'),
+    title: pi.label('purchaseRequestCode'),
     dataIndex: 'purchaseRequestCode',
     key: 'purchaseRequestCode',
     width: 120,
@@ -930,7 +881,7 @@ const columns = computed<TableColumnsType>(() => [
     customRender: ({ record }: { record: any }) => getExpenseField(record, 'purchaseRequestCode') ?? ''
   },
   {
-    title: t('entity.expense.amount'),
+    title: pi.label('expenseAmount'),
     dataIndex: 'expenseAmount',
     key: 'expenseAmount',
     width: 120,
@@ -939,16 +890,15 @@ const columns = computed<TableColumnsType>(() => [
     customRender: ({ record }: { record: any }) => getExpenseField(record, 'expenseAmount') ?? ''
   },
   {
-    title: t('entity.expense.taxrate'),
+    title: pi.label('taxRate'),
     dataIndex: 'taxRate',
     key: 'taxRate',
     width: 120,
     resizable: true,
     ellipsis: true,
-    customRender: ({ record }: { record: any }) => getExpenseField(record, 'taxRate') ?? ''
   },
   {
-    title: t('entity.expense.taxamount'),
+    title: pi.label('taxAmount'),
     dataIndex: 'taxAmount',
     key: 'taxAmount',
     width: 120,
@@ -957,7 +907,7 @@ const columns = computed<TableColumnsType>(() => [
     customRender: ({ record }: { record: any }) => getExpenseField(record, 'taxAmount') ?? ''
   },
   {
-    title: t('entity.expense.date'),
+    title: pi.label('expenseDate'),
     dataIndex: 'expenseDate',
     key: 'expenseDate',
     width: 120,
@@ -966,7 +916,7 @@ const columns = computed<TableColumnsType>(() => [
     customRender: ({ record }: { record: any }) => getExpenseField(record, 'expenseDate') ?? ''
   },
   {
-    title: t('entity.expense.applicationreason'),
+    title: pi.label('applicationReason'),
     dataIndex: 'applicationReason',
     key: 'applicationReason',
     width: 120,
@@ -975,7 +925,7 @@ const columns = computed<TableColumnsType>(() => [
     customRender: ({ record }: { record: any }) => getExpenseField(record, 'applicationReason') ?? ''
   },
   {
-    title: t('entity.expense.attachments'),
+    title: pi.label('attachments'),
     dataIndex: 'attachments',
     key: 'attachments',
     width: 120,
@@ -984,7 +934,7 @@ const columns = computed<TableColumnsType>(() => [
     customRender: ({ record }: { record: any }) => getExpenseField(record, 'attachments') ?? ''
   },
   {
-    title: t('entity.expense.relatedplant'),
+    title: pi.label('relatedPlant'),
     dataIndex: 'relatedPlant',
     key: 'relatedPlant',
     width: 120,
@@ -993,13 +943,12 @@ const columns = computed<TableColumnsType>(() => [
     customRender: ({ record }: { record: any }) => getExpenseField(record, 'relatedPlant') ?? ''
   },
   {
-    title: t('entity.expense.status'),
+    title: pi.label('expenseStatus'),
     dataIndex: 'expenseStatus',
     key: 'expenseStatus',
     width: 120,
     resizable: true,
     ellipsis: true,
-    customRender: ({ record }: { record: any }) => getExpenseField(record, 'expenseStatus') ?? ''
   },
   CreateActionColumn({
     actions: [
@@ -1009,7 +958,7 @@ const columns = computed<TableColumnsType>(() => [
         shape: 'plain',
         icon: RiEditLine,
         permission: 'accounting:financial:expense:update',
-        onClick: (record: Expense) => handleEdit(record)
+        onClick: (record: ExpenseRowRecord) => handleEdit(record)
       },
       {
         key: 'delete',
@@ -1017,26 +966,44 @@ const columns = computed<TableColumnsType>(() => [
         shape: 'plain',
         icon: RiDeleteBinLine,
         permission: 'accounting:financial:expense:delete',
-        onClick: (record: Expense) => handleDeleteOne(record)
+        onClick: (record: ExpenseRowRecord) => handleDeleteOne(record)
       }
     ]
   })
 ])
 
 /** 表格 row-key（优先实体主键字段） */
-const getExpenseId = (record: any): string => record?.[entityIdName] ?? ''
+const getExpenseId = (record: ExpenseRowRecord): string => {
+  const id = (record as Record<string, unknown>)?.[entityIdName]
+  return id != null ? String(id) : ''
+}
 /**
  * 读取行字段值
  * @param record 行数据
  * @param field 字段名
  */
 const getExpenseField = (record: any, field: string): any => record?.[field]
+/**
+ * 供 TaktDictTag 等组件使用的标量字典值
+ * @param record 行数据
+ * @param field 字段名
+ */
+const getExpenseDictValue = (
+  record: ExpenseRowRecord,
+  field: string,
+): string | number | undefined => {
+  const value = (record as Record<string, unknown>)?.[field]
+  if (value === null || value === undefined) return undefined
+  if (typeof value === 'string' || typeof value === 'number') return value
+  return String(value)
+}
+
 
 
 /** 行选择配置 */
 const rowSelection = computed(() => ({
   selectedRowKeys: selectedRowKeys.value,
-  onChange: (keys: (string | number)[], rows: Expense[]) => {
+  onChange: (keys: (string | number)[], rows: ExpenseRowRecord[]) => {
     selectedRowKeys.value = keys
     selectedRows.value = rows
     selectedRow.value = rows.length === 1 ? (rows[0] ?? null) : null
@@ -1046,7 +1013,7 @@ const rowSelection = computed(() => ({
       syncMasterSelection(null)
     }
   },
-  onSelect: (record: Expense, selected: boolean) => {
+  onSelect: (record: ExpenseRowRecord, selected: boolean) => {
     if (selected) {
       selectedRow.value = record
       syncMasterSelection(record)
@@ -1055,7 +1022,7 @@ const rowSelection = computed(() => ({
       syncMasterSelection(null)
     }
   },
-  onSelectAll: (selected: boolean, selectedRowsData: Expense[]) => {
+  onSelectAll: (selected: boolean, selectedRowsData: ExpenseRowRecord[]) => {
     selectedRow.value = selected && selectedRowsData.length === 1 ? (selectedRowsData[0] ?? null) : null
     syncMasterSelection(selectedRow.value)
   }
@@ -1095,7 +1062,7 @@ function handleReset() {
   expenseTitle: '',
   expenseType: undefined as number | undefined,
   supplierCode: '',
-  supplierName: '',
+  supplierName1: '',
   applicantBy: '',
   applicationDept: '',
   costBearerDept: '',
@@ -1131,14 +1098,14 @@ function handleReset() {
 
 /** 打开新增弹窗 */
 function handleCreate() {
-  formTitle.value = t('common.dialog.title.create', { entity: t('entity.expense._self') })
+  formTitle.value = t('common.dialog.title.create', { entity: pi.self() })
   formData.value = null
   formVisible.value = true
   nextTick(() => formRef.value?.resetFields())
 }
 /** 打开编辑弹窗（主子表：先拉详情含子表） */
-async function handleEdit(record: Expense) {
-  formTitle.value = t('common.dialog.title.edit', { entity: t('entity.expense._self') })
+async function handleEdit(record: ExpenseRowRecord) {
+  formTitle.value = t('common.dialog.title.edit', { entity: pi.self() })
   formLoading.value = true
   try {
     const detail = await loadExpenseDetail(record)
@@ -1154,7 +1121,7 @@ function handleUpdate() {
   if (selectedRow.value) {
     void handleEdit(selectedRow.value)
   } else {
-    message.warning(t('common.tip.select.to.action', { action: t('common.page.button.edit'), entity: t('entity.expense._self') }))
+    message.warning(t('common.tip.select.to.action', { action: t('common.page.button.edit'), entity: pi.self() }))
   }
 }
 /** 提交新增/编辑表单 */
@@ -1172,10 +1139,10 @@ async function handleFormSubmit() {
     const id = (formData.value as any)?.[entityIdName]
     if (id) {
       await updateExpense(id, payload as any)
-      message.success(t('common.feedback.updated', { target: t('entity.expense._self') }))
+      message.success(t('common.feedback.updated', { target: pi.self() }))
     } else {
       await createExpense(payload as any)
-      message.success(t('common.feedback.created', { target: t('entity.expense._self') }))
+      message.success(t('common.feedback.created', { target: pi.self() }))
     }
     formVisible.value = false
     formData.value = null
@@ -1206,15 +1173,22 @@ async function handleDownloadTemplate(sheetName?: string, fileName?: string): Pr
   return (res as any)?.data ?? res
 }
 
-/** 上传并导入 Excel 文件 */
-async function handleImportFile(file: File, sheetName?: string): Promise<{ success: number; fail: number; errors: string[] }> {
-  return await importExpense(file, sheetName)
+/** 上传并导入 Excel 文件（归一化后端 SuccessCount/successCount） */
+async function handleImportFile(file: File, sheetName?: string): Promise<TaktImportResult> {
+  const raw = await importExpense(file, sheetName)
+  return normalizeImportResult(raw)
 }
 
-/** 导入完成回调：刷新列表并可选关闭对话框 */
-function handleImportSuccess(result: { success: number; fail: number; errors: string[] }) {
+/** 导入完成回调：刷新列表；全部成功时延迟关闭对话框 */
+function handleImportSuccess(result: TaktImportResult) {
   loadData()
-  if (result.fail === 0) setTimeout(() => { importVisible.value = false }, 2000)
+
+      if (selectedMasterKey.value) {
+    expenseDetailPanelRef.value?.reload?.()
+      }
+  if (result.fail === 0 && result.success > 0) {
+    setTimeout(() => { importVisible.value = false }, 2000)
+  }
 }
 
 /** 关闭导入对话框 */
@@ -1248,24 +1222,24 @@ async function handleExport() {
     link.click()
     document.body.removeChild(link)
     setTimeout(() => window.URL.revokeObjectURL(url), 100)
-    message.success(t('common.feedback.export.success', { target: t('entity.expense._self') }))
+    message.success(t('common.feedback.export.success', { target: pi.self() }))
   } catch (error: any) {
     logger.error('[Expense] 导出失败', { error })
-    message.error(error?.message || t('common.feedback.export.failed', { target: t('entity.expense._self') }))
+    message.error(error?.message || t('common.feedback.export.failed', { target: pi.self() }))
   } finally {
     loading.value = false
   }
 }
 /** 删除单行 */
-async function handleDeleteOne(record: Expense) {
+async function handleDeleteOne(record: ExpenseRowRecord) {
   Modal.confirm({
     title: t('common.tip.confirm.delete.title'),
-    content: t('common.tip.confirm.delete.entity', { entity: t('entity.expense._self'), name: t('common.tip.this.target', { target: t('entity.expense._self') }) }),
+    content: t('common.tip.confirm.delete.entity', { entity: pi.self(), name: t('common.tip.this.target', { target: pi.self() }) }),
     okText: t('common.page.button.delete'),
     cancelText: t('common.page.button.cancel'),
     onOk: async () => {
       await deleteExpenseById((record as any)[entityIdName])
-      message.success(t('common.feedback.deleted', { target: t('entity.expense._self') }))
+      message.success(t('common.feedback.deleted', { target: pi.self() }))
       selectedRowKeys.value = []
       selectedRows.value = []
       selectedRow.value = null
@@ -1277,18 +1251,18 @@ async function handleDeleteOne(record: Expense) {
 /** 批量删除选中行 */
 async function handleDelete() {
   if (selectedRows.value.length === 0) {
-    message.warning(t('common.tip.select.to.action', { action: t('common.page.button.delete'), entity: t('entity.expense._self') }))
+    message.warning(t('common.tip.select.to.action', { action: t('common.page.button.delete'), entity: pi.self() }))
     return
   }
   Modal.confirm({
     title: t('common.tip.confirm.delete.title'),
-    content: t('common.tip.confirm.delete.count', { entity: t('entity.expense._self'), count: selectedRows.value.length }),
+    content: t('common.tip.confirm.delete.count', { entity: pi.self(), count: selectedRows.value.length }),
     okText: t('common.page.button.delete'),
     cancelText: t('common.page.button.cancel'),
     onOk: async () => {
       const ids = selectedRows.value.map((r: any) => r[entityIdName]).filter(Boolean)
       await deleteExpenseBatch(ids)
-      message.success(t('common.feedback.deleted', { target: t('entity.expense._self') }))
+      message.success(t('common.feedback.deleted', { target: pi.self() }))
       selectedRowKeys.value = []
       selectedRows.value = []
       selectedRow.value = null
@@ -1315,7 +1289,7 @@ function handleAdvancedQueryReset() {
   expenseTitle: '',
   expenseType: undefined as number | undefined,
   supplierCode: '',
-  supplierName: '',
+  supplierName1: '',
   applicantBy: '',
   applicationDept: '',
   costBearerDept: '',

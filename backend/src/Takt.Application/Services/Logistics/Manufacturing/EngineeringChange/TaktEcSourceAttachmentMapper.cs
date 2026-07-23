@@ -24,14 +24,14 @@ public static class TaktEcSourceAttachmentMapper
     private const string PlaceholderAccessUrl = "-";
 
     /// <summary>
-    /// 将来源设变主表上的文档编号映射为设变附件行（技联书→TL，PP番号→FPP）
+    /// 将来源设变主表上的文档编码映射为设变附件行（技联书→TL，PP番号→FPP）
     /// </summary>
     /// <param name="sourceEc">来源设变主</param>
     /// <param name="ecNo">设变单号</param>
     /// <param name="tenantCode">租户编码</param>
     /// <param name="companyCode">公司代码</param>
     /// <param name="companyDefaultCulture">公司默认文化</param>
-    /// <returns>附件创建 DTO 列表（无对应编号时为空列表）</returns>
+    /// <returns>附件创建 DTO 列表（无对应编码时为空列表）</returns>
     public static List<TaktEcAttachmentCreateDto> MapAttachments(
         TaktSourceEc sourceEc,
         string ecNo,
@@ -70,7 +70,7 @@ public static class TaktEcSourceAttachmentMapper
     }
 
     /// <summary>
-    /// 文档编号非空时追加一行附件 DTO
+    /// 文档编码非空时追加一行附件 DTO
     /// </summary>
     private static void AppendIfPresent(
         List<TaktEcAttachmentCreateDto> target,

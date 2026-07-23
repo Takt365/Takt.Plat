@@ -29,9 +29,9 @@ namespace Takt.Domain.Entities.Routine.HelpDesk;
 public class TaktTicket : TaktCompanyEntityBase
 {
     /// <summary>
-    /// 工单编号（唯一）
+    /// 工单编码（唯一）
     /// </summary>
-    [SugarColumn(ColumnName = "ticket_no", ColumnDescription = "工单编号", ColumnDataType = "nvarchar", Length = 50, IsNullable = false)]
+    [SugarColumn(ColumnName = "ticket_no", ColumnDescription = "工单编码", ColumnDataType = "nvarchar", Length = 50, IsNullable = false)]
     public string TicketNo { get; set; } = string.Empty;
     /// <summary>
     /// 工单标题
@@ -74,7 +74,7 @@ public class TaktTicket : TaktCompanyEntityBase
     [SugarColumn(ColumnName = "ticket_source", ColumnDescription = "工单来源", ColumnDataType = "int", IsNullable = false, DefaultValue = "0")]
     public int TicketSource { get; set; } = 0;
     /// <summary>
-    /// 提交人 ID（选项 TaktUsers/options，DictValue=Id）
+    /// 提交人 ID（选项 TaktUsers/options；DictValue=Id）
     /// </summary>
     [SugarColumn(ColumnName = "submitter_id", ColumnDescription = "提交人ID", ColumnDataType = "bigint", IsNullable = false)]
     [JsonConverter(typeof(ValueToStringConverter))]
@@ -85,7 +85,7 @@ public class TaktTicket : TaktCompanyEntityBase
     [SugarColumn(ColumnName = "submitter_name", ColumnDescription = "提交人姓名", ColumnDataType = "varchar", Length = 20, IsNullable = true)]
     public string? SubmitterName { get; set; }
     /// <summary>
-    /// 处理人 ID（选项 TaktUsers/options，DictValue=Id）
+    /// 处理人 ID（选项 TaktUsers/options；DictValue=Id）
     /// </summary>
     [SugarColumn(ColumnName = "assignee_id", ColumnDescription = "处理人ID", ColumnDataType = "bigint", IsNullable = true)]
     [JsonConverter(typeof(ValueToStringConverter))]
@@ -96,7 +96,7 @@ public class TaktTicket : TaktCompanyEntityBase
     [SugarColumn(ColumnName = "assignee_name", ColumnDescription = "处理人姓名", ColumnDataType = "varchar", Length = 20, IsNullable = true)]
     public string? AssigneeName { get; set; }
     /// <summary>
-    /// 关联知识 ID（选项 TaktKnowledges/options，DictValue=Id）
+    /// 关联知识 ID（选项 TaktKnowledges/options；DictValue=Id）
     /// </summary>
     [SugarColumn(ColumnName = "knowledge_id", ColumnDescription = "关联知识ID", ColumnDataType = "bigint", IsNullable = true)]
     [JsonConverter(typeof(ValueToStringConverter))]
@@ -133,7 +133,7 @@ public class TaktTicket : TaktCompanyEntityBase
     [SugarColumn(ColumnName = "closed_at", ColumnDescription = "关闭时间", ColumnDataType = "datetime", IsNullable = true)]
     public DateTime? ClosedAt { get; set; }
     /// <summary>
-    /// IT 设备保修扩展 ID（选项 TaktItAssets/options，DictValue=Id）
+    /// IT 设备保修扩展 ID（选项 TaktItAssets/options；DictValue=Id）
     /// </summary>
     [SugarColumn(ColumnName = "it_asset_id", ColumnDescription = "IT设备ID", ColumnDataType = "bigint", IsNullable = true)]
     [JsonConverter(typeof(ValueToStringConverter))]

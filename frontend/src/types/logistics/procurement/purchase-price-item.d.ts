@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：frontend/src/types/logistics/procurement
 // 文件名称：purchase-price-item.d.ts
-// 创建时间：2026-07-20
+// 创建时间：2026-07-21
 // 创建人：Takt365(Auto Generated)
 // 功能描述：logistics/procurement 模块类型定义（自动生成；类型名去 Takt 前缀与末尾 Dto，如 TaktCompanyDto → Company）
 // 
@@ -94,9 +94,44 @@ export interface PurchasePriceItem extends CompanyDtoBase {
   price: number;
 
   /**
-   * 税码（字典 accounting_tax_code，DictValue=J0/J1/J2…；SAP MWSKZ）
+   * 未税价格（冗余；可由 Price 与税码推算后回写）
    */
-  taxCode?: string;
+  untaxedPrice: number;
+
+  /**
+   * 含税价格（冗余；可由 Price 与税码推算后回写）
+   */
+  taxIncludedPrice: number;
+
+  /**
+   * 条件货币（字典 accounting_currency_code，DictValue=CNY/USD 等；SAP KONWA；默认 CNY）
+   */
+  conditionCurrency: string;
+
+  /**
+   * 定价单位（字典 logistics_price_unit_param；1/10/100/1000；SAP KPEIN；默认 1000）
+   */
+  priceUnit: number;
+
+  /**
+   * 计量单位（字典 logistics_unit_of_measure_code，DictValue=PC/EA 等；SAP KMEIN；默认 PC）
+   */
+  unitOfMeasure: string;
+
+  /**
+   * 最小起订量（计量单位数量，整数；SAP MINBM）
+   */
+  minOrderQuantity: number;
+
+  /**
+   * 舍入值（基本单位数量，用于数量舍入，整数；SAP BSTRF）
+   */
+  roundingValue: number;
+
+  /**
+   * 计划交货时间（天数，整数；SAP PLIFZ）
+   */
+  plannedDeliveryTimeDays: number;
 
   /**
    * 是否作废（字典 sys_yes_no_type，0=否 1=是；编辑移除子行时标记作废）
@@ -194,9 +229,44 @@ export interface PurchasePriceItemQuery extends TaktPagedQuery {
   price?: number;
 
   /**
-   * 税码（字典 accounting_tax_code，DictValue=J0/J1/J2…；SAP MWSKZ）
+   * 未税价格（冗余；可由 Price 与税码推算后回写）
    */
-  taxCode?: string;
+  untaxedPrice?: number;
+
+  /**
+   * 含税价格（冗余；可由 Price 与税码推算后回写）
+   */
+  taxIncludedPrice?: number;
+
+  /**
+   * 条件货币（字典 accounting_currency_code，DictValue=CNY/USD 等；SAP KONWA；默认 CNY）
+   */
+  conditionCurrency?: string;
+
+  /**
+   * 定价单位（字典 logistics_price_unit_param；1/10/100/1000；SAP KPEIN；默认 1000）
+   */
+  priceUnit?: number;
+
+  /**
+   * 计量单位（字典 logistics_unit_of_measure_code，DictValue=PC/EA 等；SAP KMEIN；默认 PC）
+   */
+  unitOfMeasure?: string;
+
+  /**
+   * 最小起订量（计量单位数量，整数；SAP MINBM）
+   */
+  minOrderQuantity?: number;
+
+  /**
+   * 舍入值（基本单位数量，用于数量舍入，整数；SAP BSTRF）
+   */
+  roundingValue?: number;
+
+  /**
+   * 计划交货时间（天数，整数；SAP PLIFZ）
+   */
+  plannedDeliveryTimeDays?: number;
 
   /**
    * 是否作废（字典 sys_yes_no_type，0=否 1=是；编辑移除子行时标记作废）
@@ -308,9 +378,44 @@ export interface PurchasePriceItemCreate {
   price: number;
 
   /**
-   * 税码（字典 accounting_tax_code，DictValue=J0/J1/J2…；SAP MWSKZ）
+   * 未税价格（冗余；可由 Price 与税码推算后回写）
    */
-  taxCode?: string;
+  untaxedPrice: number;
+
+  /**
+   * 含税价格（冗余；可由 Price 与税码推算后回写）
+   */
+  taxIncludedPrice: number;
+
+  /**
+   * 条件货币（字典 accounting_currency_code，DictValue=CNY/USD 等；SAP KONWA；默认 CNY）
+   */
+  conditionCurrency: string;
+
+  /**
+   * 定价单位（字典 logistics_price_unit_param；1/10/100/1000；SAP KPEIN；默认 1000）
+   */
+  priceUnit: number;
+
+  /**
+   * 计量单位（字典 logistics_unit_of_measure_code，DictValue=PC/EA 等；SAP KMEIN；默认 PC）
+   */
+  unitOfMeasure: string;
+
+  /**
+   * 最小起订量（计量单位数量，整数；SAP MINBM）
+   */
+  minOrderQuantity: number;
+
+  /**
+   * 舍入值（基本单位数量，用于数量舍入，整数；SAP BSTRF）
+   */
+  roundingValue: number;
+
+  /**
+   * 计划交货时间（天数，整数；SAP PLIFZ）
+   */
+  plannedDeliveryTimeDays: number;
 
   /**
    * 是否作废（字典 sys_yes_no_type，0=否 1=是；编辑移除子行时标记作废）
@@ -461,9 +566,44 @@ export interface PurchasePriceItemTemplate {
   price?: number;
 
   /**
-   * 税码（字典 accounting_tax_code，DictValue=J0/J1/J2…；SAP MWSKZ）
+   * 未税价格（冗余；可由 Price 与税码推算后回写）
    */
-  taxCode?: string;
+  untaxedPrice?: number;
+
+  /**
+   * 含税价格（冗余；可由 Price 与税码推算后回写）
+   */
+  taxIncludedPrice?: number;
+
+  /**
+   * 条件货币（字典 accounting_currency_code，DictValue=CNY/USD 等；SAP KONWA；默认 CNY）
+   */
+  conditionCurrency?: string;
+
+  /**
+   * 定价单位（字典 logistics_price_unit_param；1/10/100/1000；SAP KPEIN；默认 1000）
+   */
+  priceUnit?: number;
+
+  /**
+   * 计量单位（字典 logistics_unit_of_measure_code，DictValue=PC/EA 等；SAP KMEIN；默认 PC）
+   */
+  unitOfMeasure?: string;
+
+  /**
+   * 最小起订量（计量单位数量，整数；SAP MINBM）
+   */
+  minOrderQuantity?: number;
+
+  /**
+   * 舍入值（基本单位数量，用于数量舍入，整数；SAP BSTRF）
+   */
+  roundingValue?: number;
+
+  /**
+   * 计划交货时间（天数，整数；SAP PLIFZ）
+   */
+  plannedDeliveryTimeDays?: number;
 
   /**
    * 是否作废（字典 sys_yes_no_type，0=否 1=是；编辑移除子行时标记作废）
@@ -575,9 +715,44 @@ export interface PurchasePriceItemImport {
   price?: number;
 
   /**
-   * 税码（字典 accounting_tax_code，DictValue=J0/J1/J2…；SAP MWSKZ）
+   * 未税价格（冗余；可由 Price 与税码推算后回写）
    */
-  taxCode?: string;
+  untaxedPrice?: number;
+
+  /**
+   * 含税价格（冗余；可由 Price 与税码推算后回写）
+   */
+  taxIncludedPrice?: number;
+
+  /**
+   * 条件货币（字典 accounting_currency_code，DictValue=CNY/USD 等；SAP KONWA；默认 CNY）
+   */
+  conditionCurrency?: string;
+
+  /**
+   * 定价单位（字典 logistics_price_unit_param；1/10/100/1000；SAP KPEIN；默认 1000）
+   */
+  priceUnit?: number;
+
+  /**
+   * 计量单位（字典 logistics_unit_of_measure_code，DictValue=PC/EA 等；SAP KMEIN；默认 PC）
+   */
+  unitOfMeasure?: string;
+
+  /**
+   * 最小起订量（计量单位数量，整数；SAP MINBM）
+   */
+  minOrderQuantity?: number;
+
+  /**
+   * 舍入值（基本单位数量，用于数量舍入，整数；SAP BSTRF）
+   */
+  roundingValue?: number;
+
+  /**
+   * 计划交货时间（天数，整数；SAP PLIFZ）
+   */
+  plannedDeliveryTimeDays?: number;
 
   /**
    * 是否作废（字典 sys_yes_no_type，0=否 1=是；编辑移除子行时标记作废）
@@ -684,9 +859,44 @@ export interface PurchasePriceItemExport {
   price: number;
 
   /**
-   * 税码（字典 accounting_tax_code，DictValue=J0/J1/J2…；SAP MWSKZ）
+   * 未税价格（冗余；可由 Price 与税码推算后回写）
    */
-  taxCode?: string;
+  untaxedPrice: number;
+
+  /**
+   * 含税价格（冗余；可由 Price 与税码推算后回写）
+   */
+  taxIncludedPrice: number;
+
+  /**
+   * 条件货币（字典 accounting_currency_code，DictValue=CNY/USD 等；SAP KONWA；默认 CNY）
+   */
+  conditionCurrency: string;
+
+  /**
+   * 定价单位（字典 logistics_price_unit_param；1/10/100/1000；SAP KPEIN；默认 1000）
+   */
+  priceUnit: number;
+
+  /**
+   * 计量单位（字典 logistics_unit_of_measure_code，DictValue=PC/EA 等；SAP KMEIN；默认 PC）
+   */
+  unitOfMeasure: string;
+
+  /**
+   * 最小起订量（计量单位数量，整数；SAP MINBM）
+   */
+  minOrderQuantity: number;
+
+  /**
+   * 舍入值（基本单位数量，用于数量舍入，整数；SAP BSTRF）
+   */
+  roundingValue: number;
+
+  /**
+   * 计划交货时间（天数，整数；SAP PLIFZ）
+   */
+  plannedDeliveryTimeDays: number;
 
   /**
    * 是否作废（字典 sys_yes_no_type，0=否 1=是；编辑移除子行时标记作废）

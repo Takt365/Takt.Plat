@@ -192,6 +192,30 @@ HTTP 路由、权限末段与前端 API 完整映射见 `@.cursor/rules/12-crud.
 
 **字典与分层**（§1.8.2）：有 `DictTypeCode` 的字段用 `int` + 字典；禁止平行枚举；后端比较用 `TaktDictValueConstants`。
 
+**实体字段 XML summary 字典/选项注释（强制，全局统一）**：
+
+| 形态 | 写法 |
+|------|------|
+| 仅字典类型 | `字段名（字典 {dict_type_code}）` |
+| 字典 + 取值说明 | `字段名（字典 {dict_type_code}；0=否 1=是）` 或 `…；DictValue=Z1～Z4` |
+| 选项列表 | `字段名（选项 TaktXxxs/options；DictValue=XxxCode）` |
+
+| 规则 | 说明 |
+|------|------|
+| 分隔符 | 字典/选项编码后**一律全角分号 `；`**；❌ 禁止 `字典 xxx，0=` / `字典 xxx，DictValue=` 混用逗号 |
+| 取值列举 | `0=文案` 多项之间空格或 `，` 均可，但同一实体内保持一致 |
+| ❌ 禁止 | 在 summary 写 `SAP VSBED` / `SAP XVERR` 等外部系统字段码（完全多余） |
+
+```text
+✅ 客户端等级（字典 logistics_customer_level_category；0=普通 1=重要 2=VIP 3=战略）
+✅ 具有供应商的清算（字典 sys_yes_no_type；0=否 1=是）
+✅ 注册国家（字典 sys_country_code；DictValue=ISO alpha-2）
+❌ 具有供应商的清算（字典 sys_yes_no_type，0=否 1=是；SAP XVERR）
+❌ 装运条件（字典 logistics_shipping_conditions；DictValue=Z1～Z3；SAP VSBED）
+```
+
+规范化脚本（可选）：`node scripts/gen/normalize-entity-dict-xml-comments.cjs`
+
 **新增实体检查清单**：
 1. 选定上表基类之一（定义见 `@backend/src/Takt.Domain/Entities/TaktEntityBase.cs`）
 2. 多库按 `TenantCode` 映射：`ConnectionStrings:Tenant_{tenantCode}`；启动初始化见 `Program.cs` → `TaktSeedDataCoordinator.InitializeAllAsync`

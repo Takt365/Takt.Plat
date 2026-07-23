@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Application.Dtos.Logistics.Materials
 // 文件名称：TaktManufacturerDtos.cs
-// 创建时间：2026-07-09
+// 创建时间：2026-07-23
 // 创建人：Takt365(Auto Generated)
 // 功能描述：Manufacturer 模块 DTO（由 generate-dtos-from-entity.cjs 根据 TaktManufacturer 生成，请按需审阅）
 // 
@@ -41,9 +41,14 @@ public class TaktManufacturerDto : TaktCompanyDtoBase
     public string ManufacturerCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 制造商名称
+    /// 制造商名称1
     /// </summary>
-    public string ManufacturerName { get; set; } = string.Empty;
+    public string ManufacturerName1 { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 制造商名称2
+    /// </summary>
+    public string? ManufacturerName2 { get; set; } = string.Empty;
 
     /// <summary>
     /// 制造商简称
@@ -56,7 +61,7 @@ public class TaktManufacturerDto : TaktCompanyDtoBase
     public int ManufacturerType { get; set; } = 0;
 
     /// <summary>
-    /// 行业领域（字典 logistics_industry_sector，DictValue=A/C/M/P）
+    /// 行业领域（字典 logistics_industry_sector；DictValue=A/C/M/P）
     /// </summary>
     public string? IndustrySector { get; set; } = string.Empty;
 
@@ -66,9 +71,19 @@ public class TaktManufacturerDto : TaktCompanyDtoBase
     public string? ManufacturerTaxNumber { get; set; } = string.Empty;
 
     /// <summary>
-    /// 注册国家（ISO 3166-1 alpha-2 两位代码，选项 TaktIsoCodes/options，DictValue=IsoCode）
+    /// 注册国家（字典 sys_country_code；DictValue=ISO alpha-2）
     /// </summary>
     public string? RegistrationCountry { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 注册省（选项 TaktAdminDivisions/options；DictValue=DivisionCode；建议 Level=2）
+    /// </summary>
+    public string? RegistrationProvince { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 注册市（选项 TaktAdminDivisions/options；DictValue=DivisionCode；建议 Level=3）
+    /// </summary>
+    public string? RegistrationCity { get; set; } = string.Empty;
 
     /// <summary>
     /// 注册地址1
@@ -79,11 +94,6 @@ public class TaktManufacturerDto : TaktCompanyDtoBase
     /// 注册地址2
     /// </summary>
     public string? RegistrationAddress2 { get; set; } = string.Empty;
-
-    /// <summary>
-    /// 注册地址3
-    /// </summary>
-    public string? RegistrationAddress3 { get; set; } = string.Empty;
 
     /// <summary>
     /// 制造商电话
@@ -179,9 +189,14 @@ public class TaktManufacturerQueryDto : TaktPagedQuery
     public string? ManufacturerCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 制造商名称
+    /// 制造商名称1
     /// </summary>
-    public string? ManufacturerName { get; set; } = string.Empty;
+    public string? ManufacturerName1 { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 制造商名称2
+    /// </summary>
+    public string? ManufacturerName2 { get; set; } = string.Empty;
 
     /// <summary>
     /// 制造商简称
@@ -194,7 +209,7 @@ public class TaktManufacturerQueryDto : TaktPagedQuery
     public int? ManufacturerType { get; set; }
 
     /// <summary>
-    /// 行业领域（字典 logistics_industry_sector，DictValue=A/C/M/P）
+    /// 行业领域（字典 logistics_industry_sector；DictValue=A/C/M/P）
     /// </summary>
     public string? IndustrySector { get; set; } = string.Empty;
 
@@ -204,9 +219,19 @@ public class TaktManufacturerQueryDto : TaktPagedQuery
     public string? ManufacturerTaxNumber { get; set; } = string.Empty;
 
     /// <summary>
-    /// 注册国家（ISO 3166-1 alpha-2 两位代码，选项 TaktIsoCodes/options，DictValue=IsoCode）
+    /// 注册国家（字典 sys_country_code；DictValue=ISO alpha-2）
     /// </summary>
     public string? RegistrationCountry { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 注册省（选项 TaktAdminDivisions/options；DictValue=DivisionCode；建议 Level=2）
+    /// </summary>
+    public string? RegistrationProvince { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 注册市（选项 TaktAdminDivisions/options；DictValue=DivisionCode；建议 Level=3）
+    /// </summary>
+    public string? RegistrationCity { get; set; } = string.Empty;
 
     /// <summary>
     /// 注册地址1
@@ -217,11 +242,6 @@ public class TaktManufacturerQueryDto : TaktPagedQuery
     /// 注册地址2
     /// </summary>
     public string? RegistrationAddress2 { get; set; } = string.Empty;
-
-    /// <summary>
-    /// 注册地址3
-    /// </summary>
-    public string? RegistrationAddress3 { get; set; } = string.Empty;
 
     /// <summary>
     /// 制造商电话
@@ -335,10 +355,15 @@ public class TaktManufacturerCreateDto
     public string ManufacturerCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 制造商名称
+    /// 制造商名称1
     /// </summary>
-    [Required(ErrorMessage = "制造商名称不能为空")]
-    public string ManufacturerName { get; set; } = string.Empty;
+    [Required(ErrorMessage = "制造商名称1不能为空")]
+    public string ManufacturerName1 { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 制造商名称2
+    /// </summary>
+    public string? ManufacturerName2 { get; set; } = string.Empty;
 
     /// <summary>
     /// 制造商简称
@@ -351,7 +376,7 @@ public class TaktManufacturerCreateDto
     public int ManufacturerType { get; set; } = 0;
 
     /// <summary>
-    /// 行业领域（字典 logistics_industry_sector，DictValue=A/C/M/P）
+    /// 行业领域（字典 logistics_industry_sector；DictValue=A/C/M/P）
     /// </summary>
     public string? IndustrySector { get; set; } = string.Empty;
 
@@ -361,9 +386,19 @@ public class TaktManufacturerCreateDto
     public string? ManufacturerTaxNumber { get; set; } = string.Empty;
 
     /// <summary>
-    /// 注册国家（ISO 3166-1 alpha-2 两位代码，选项 TaktIsoCodes/options，DictValue=IsoCode）
+    /// 注册国家（字典 sys_country_code；DictValue=ISO alpha-2）
     /// </summary>
     public string? RegistrationCountry { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 注册省（选项 TaktAdminDivisions/options；DictValue=DivisionCode；建议 Level=2）
+    /// </summary>
+    public string? RegistrationProvince { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 注册市（选项 TaktAdminDivisions/options；DictValue=DivisionCode；建议 Level=3）
+    /// </summary>
+    public string? RegistrationCity { get; set; } = string.Empty;
 
     /// <summary>
     /// 注册地址1
@@ -374,11 +409,6 @@ public class TaktManufacturerCreateDto
     /// 注册地址2
     /// </summary>
     public string? RegistrationAddress2 { get; set; } = string.Empty;
-
-    /// <summary>
-    /// 注册地址3
-    /// </summary>
-    public string? RegistrationAddress3 { get; set; } = string.Empty;
 
     /// <summary>
     /// 制造商电话
@@ -438,7 +468,7 @@ public class TaktManufacturerCreateDto
     /// <summary>
     /// 导航属性：制造商物料明细列表（子表，级联保存）
     /// </summary>
-    public List<TaktManufacturerMaterialUpdateDto>? ManufacturerMaterials { get; set; }
+    public List<TaktManufacturerMaterialCreateDto>? ManufacturerMaterials { get; set; }
 
     /// <summary>
     /// 扩展字段JSON
@@ -469,6 +499,11 @@ public class TaktManufacturerUpdateDto : TaktManufacturerCreateDto
     [AdaptMember("Id")]
     [JsonConverter(typeof(ValueToStringConverter))]
     public long ManufacturerId { get; set; }
+
+    /// <summary>
+    /// 导航属性：制造商物料明细列表（子表，级联保存）
+    /// </summary>
+    public new List<TaktManufacturerMaterialUpdateDto>? ManufacturerMaterials { get; set; }
 
 }
 
@@ -545,9 +580,14 @@ public class TaktManufacturerTemplateDto
     public string? ManufacturerCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 制造商名称
+    /// 制造商名称1
     /// </summary>
-    public string? ManufacturerName { get; set; } = string.Empty;
+    public string? ManufacturerName1 { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 制造商名称2
+    /// </summary>
+    public string? ManufacturerName2 { get; set; } = string.Empty;
 
     /// <summary>
     /// 制造商简称
@@ -560,7 +600,7 @@ public class TaktManufacturerTemplateDto
     public int? ManufacturerType { get; set; }
 
     /// <summary>
-    /// 行业领域（字典 logistics_industry_sector，DictValue=A/C/M/P）
+    /// 行业领域（字典 logistics_industry_sector；DictValue=A/C/M/P）
     /// </summary>
     public string? IndustrySector { get; set; } = string.Empty;
 
@@ -570,9 +610,19 @@ public class TaktManufacturerTemplateDto
     public string? ManufacturerTaxNumber { get; set; } = string.Empty;
 
     /// <summary>
-    /// 注册国家（ISO 3166-1 alpha-2 两位代码，选项 TaktIsoCodes/options，DictValue=IsoCode）
+    /// 注册国家（字典 sys_country_code；DictValue=ISO alpha-2）
     /// </summary>
     public string? RegistrationCountry { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 注册省（选项 TaktAdminDivisions/options；DictValue=DivisionCode；建议 Level=2）
+    /// </summary>
+    public string? RegistrationProvince { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 注册市（选项 TaktAdminDivisions/options；DictValue=DivisionCode；建议 Level=3）
+    /// </summary>
+    public string? RegistrationCity { get; set; } = string.Empty;
 
     /// <summary>
     /// 注册地址1
@@ -583,11 +633,6 @@ public class TaktManufacturerTemplateDto
     /// 注册地址2
     /// </summary>
     public string? RegistrationAddress2 { get; set; } = string.Empty;
-
-    /// <summary>
-    /// 注册地址3
-    /// </summary>
-    public string? RegistrationAddress3 { get; set; } = string.Empty;
 
     /// <summary>
     /// 制造商电话
@@ -687,9 +732,14 @@ public class TaktManufacturerImportDto
     public string? ManufacturerCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 制造商名称
+    /// 制造商名称1
     /// </summary>
-    public string? ManufacturerName { get; set; } = string.Empty;
+    public string? ManufacturerName1 { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 制造商名称2
+    /// </summary>
+    public string? ManufacturerName2 { get; set; } = string.Empty;
 
     /// <summary>
     /// 制造商简称
@@ -702,7 +752,7 @@ public class TaktManufacturerImportDto
     public int? ManufacturerType { get; set; }
 
     /// <summary>
-    /// 行业领域（字典 logistics_industry_sector，DictValue=A/C/M/P）
+    /// 行业领域（字典 logistics_industry_sector；DictValue=A/C/M/P）
     /// </summary>
     public string? IndustrySector { get; set; } = string.Empty;
 
@@ -712,9 +762,19 @@ public class TaktManufacturerImportDto
     public string? ManufacturerTaxNumber { get; set; } = string.Empty;
 
     /// <summary>
-    /// 注册国家（ISO 3166-1 alpha-2 两位代码，选项 TaktIsoCodes/options，DictValue=IsoCode）
+    /// 注册国家（字典 sys_country_code；DictValue=ISO alpha-2）
     /// </summary>
     public string? RegistrationCountry { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 注册省（选项 TaktAdminDivisions/options；DictValue=DivisionCode；建议 Level=2）
+    /// </summary>
+    public string? RegistrationProvince { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 注册市（选项 TaktAdminDivisions/options；DictValue=DivisionCode；建议 Level=3）
+    /// </summary>
+    public string? RegistrationCity { get; set; } = string.Empty;
 
     /// <summary>
     /// 注册地址1
@@ -725,11 +785,6 @@ public class TaktManufacturerImportDto
     /// 注册地址2
     /// </summary>
     public string? RegistrationAddress2 { get; set; } = string.Empty;
-
-    /// <summary>
-    /// 注册地址3
-    /// </summary>
-    public string? RegistrationAddress3 { get; set; } = string.Empty;
 
     /// <summary>
     /// 制造商电话
@@ -830,9 +885,14 @@ public class TaktManufacturerExportDto
     public string ManufacturerCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 制造商名称
+    /// 制造商名称1
     /// </summary>
-    public string ManufacturerName { get; set; } = string.Empty;
+    public string ManufacturerName1 { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 制造商名称2
+    /// </summary>
+    public string? ManufacturerName2 { get; set; } = string.Empty;
 
     /// <summary>
     /// 制造商简称
@@ -845,7 +905,7 @@ public class TaktManufacturerExportDto
     public int ManufacturerType { get; set; } = 0;
 
     /// <summary>
-    /// 行业领域（字典 logistics_industry_sector，DictValue=A/C/M/P）
+    /// 行业领域（字典 logistics_industry_sector；DictValue=A/C/M/P）
     /// </summary>
     public string? IndustrySector { get; set; } = string.Empty;
 
@@ -855,9 +915,19 @@ public class TaktManufacturerExportDto
     public string? ManufacturerTaxNumber { get; set; } = string.Empty;
 
     /// <summary>
-    /// 注册国家（ISO 3166-1 alpha-2 两位代码，选项 TaktIsoCodes/options，DictValue=IsoCode）
+    /// 注册国家（字典 sys_country_code；DictValue=ISO alpha-2）
     /// </summary>
     public string? RegistrationCountry { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 注册省（选项 TaktAdminDivisions/options；DictValue=DivisionCode；建议 Level=2）
+    /// </summary>
+    public string? RegistrationProvince { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 注册市（选项 TaktAdminDivisions/options；DictValue=DivisionCode；建议 Level=3）
+    /// </summary>
+    public string? RegistrationCity { get; set; } = string.Empty;
 
     /// <summary>
     /// 注册地址1
@@ -868,11 +938,6 @@ public class TaktManufacturerExportDto
     /// 注册地址2
     /// </summary>
     public string? RegistrationAddress2 { get; set; } = string.Empty;
-
-    /// <summary>
-    /// 注册地址3
-    /// </summary>
-    public string? RegistrationAddress3 { get; set; } = string.Empty;
 
     /// <summary>
     /// 制造商电话

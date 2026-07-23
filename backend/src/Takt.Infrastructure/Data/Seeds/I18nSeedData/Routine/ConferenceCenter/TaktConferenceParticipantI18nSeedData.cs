@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Infrastructure.Data.Seeds.I18nSeedData.Routine.ConferenceCenter
 // 文件名称：TaktConferenceParticipantI18nSeedData.cs
-// 创建时间：2026-07-20
+// 创建时间：2026-07-23
 // 创建人：Takt365(Auto Generated)
 // 功能描述：TaktConferenceParticipant 实体字段国际化种子（无对应 frontend locales；TranslationText 取自 ColumnDescription，ContextNote 取自属性 XML summary）
 // 
@@ -91,22 +91,22 @@ public class TaktConferenceParticipantI18nSeedData : ITaktSeedDataCoordinator
             new TranslationSeedItem("entity.conferenceparticipant._self", "zh-HK", "会议参与人子信息_hk", "实体名称"),
 
             // entity.conferenceparticipant.conferenceid
-            new TranslationSeedItem("entity.conferenceparticipant.conferenceid", "en-US", "会议ID_us", "会议 ID（选项 TaktConferences/options，DictValue=Id）"),
+            new TranslationSeedItem("entity.conferenceparticipant.conferenceid", "en-US", "会议ID_us", "会议 ID（选项 TaktConferences/options；DictValue=Id）"),
             // entity.conferenceparticipant.conferenceid
-            new TranslationSeedItem("entity.conferenceparticipant.conferenceid", "ja-JP", "会议ID_jp", "会议 ID（选项 TaktConferences/options，DictValue=Id）"),
+            new TranslationSeedItem("entity.conferenceparticipant.conferenceid", "ja-JP", "会议ID_jp", "会议 ID（选项 TaktConferences/options；DictValue=Id）"),
             // entity.conferenceparticipant.conferenceid
-            new TranslationSeedItem("entity.conferenceparticipant.conferenceid", "zh-CN", "会议ID", "会议 ID（选项 TaktConferences/options，DictValue=Id）"),
+            new TranslationSeedItem("entity.conferenceparticipant.conferenceid", "zh-CN", "会议ID", "会议 ID（选项 TaktConferences/options；DictValue=Id）"),
             // entity.conferenceparticipant.conferenceid
-            new TranslationSeedItem("entity.conferenceparticipant.conferenceid", "zh-HK", "会议ID_hk", "会议 ID（选项 TaktConferences/options，DictValue=Id）"),
+            new TranslationSeedItem("entity.conferenceparticipant.conferenceid", "zh-HK", "会议ID_hk", "会议 ID（选项 TaktConferences/options；DictValue=Id）"),
 
             // entity.conferenceparticipant.userid
-            new TranslationSeedItem("entity.conferenceparticipant.userid", "en-US", "用户ID_us", "用户 ID（选项 TaktUsers/options，DictValue=Id）"),
+            new TranslationSeedItem("entity.conferenceparticipant.userid", "en-US", "用户ID_us", "用户 ID（选项 TaktUsers/options；DictValue=Id）"),
             // entity.conferenceparticipant.userid
-            new TranslationSeedItem("entity.conferenceparticipant.userid", "ja-JP", "用户ID_jp", "用户 ID（选项 TaktUsers/options，DictValue=Id）"),
+            new TranslationSeedItem("entity.conferenceparticipant.userid", "ja-JP", "用户ID_jp", "用户 ID（选项 TaktUsers/options；DictValue=Id）"),
             // entity.conferenceparticipant.userid
-            new TranslationSeedItem("entity.conferenceparticipant.userid", "zh-CN", "用户ID", "用户 ID（选项 TaktUsers/options，DictValue=Id）"),
+            new TranslationSeedItem("entity.conferenceparticipant.userid", "zh-CN", "用户ID", "用户 ID（选项 TaktUsers/options；DictValue=Id）"),
             // entity.conferenceparticipant.userid
-            new TranslationSeedItem("entity.conferenceparticipant.userid", "zh-HK", "用户ID_hk", "用户 ID（选项 TaktUsers/options，DictValue=Id）"),
+            new TranslationSeedItem("entity.conferenceparticipant.userid", "zh-HK", "用户ID_hk", "用户 ID（选项 TaktUsers/options；DictValue=Id）"),
 
             // entity.conferenceparticipant.username
             new TranslationSeedItem("entity.conferenceparticipant.username", "en-US", "用户姓名_us", "用户姓名"),

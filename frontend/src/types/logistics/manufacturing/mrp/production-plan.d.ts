@@ -94,7 +94,7 @@ export interface ProductionPlan extends ApprovalDtoBase {
   plannerName?: string;
 
   /**
-   * 计划人（关联 TaktEmployee.EmployeeNo，选项 TaktEmployees/options，DictValue=EmployeeNo）
+   * 计划人（关联 TaktEmployee.EmployeeCode，选项 TaktEmployees/options，DictValue=EmployeeCode）
    */
   planBy: string;
 
@@ -224,7 +224,7 @@ export interface ProductionPlanQuery extends TaktPagedQuery {
   plannerId?: string;
 
   /**
-   * 计划人（关联 TaktEmployee.EmployeeNo，选项 TaktEmployees/options，DictValue=EmployeeNo）
+   * 计划人（关联 TaktEmployee.EmployeeCode，选项 TaktEmployees/options，DictValue=EmployeeCode）
    */
   planBy?: string;
 
@@ -398,7 +398,7 @@ export interface ProductionPlanCreate {
   plannerId?: string;
 
   /**
-   * 计划人（关联 TaktEmployee.EmployeeNo，选项 TaktEmployees/options，DictValue=EmployeeNo）
+   * 计划人（关联 TaktEmployee.EmployeeCode，选项 TaktEmployees/options，DictValue=EmployeeCode）
    */
   planBy: string;
 
@@ -561,7 +561,7 @@ export interface ProductionPlanTemplate {
   plannerId?: string;
 
   /**
-   * 计划人（关联 TaktEmployee.EmployeeNo，选项 TaktEmployees/options，DictValue=EmployeeNo）
+   * 计划人（关联 TaktEmployee.EmployeeCode，选项 TaktEmployees/options，DictValue=EmployeeCode）
    */
   planBy?: string;
 
@@ -690,7 +690,7 @@ export interface ProductionPlanImport {
   plannerId?: string;
 
   /**
-   * 计划人（关联 TaktEmployee.EmployeeNo，选项 TaktEmployees/options，DictValue=EmployeeNo）
+   * 计划人（关联 TaktEmployee.EmployeeCode，选项 TaktEmployees/options，DictValue=EmployeeCode）
    */
   planBy?: string;
 
@@ -809,7 +809,7 @@ export interface ProductionPlanExport {
   plannerId?: string;
 
   /**
-   * 计划人（关联 TaktEmployee.EmployeeNo，选项 TaktEmployees/options，DictValue=EmployeeNo）
+   * 计划人（关联 TaktEmployee.EmployeeCode，选项 TaktEmployees/options，DictValue=EmployeeCode）
    */
   planBy: string;
 

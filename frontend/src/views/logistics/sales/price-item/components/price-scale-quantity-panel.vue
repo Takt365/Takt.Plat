@@ -63,6 +63,7 @@
         :data-source="dataSource"
         :loading="loading"
         :stripe="true"
+        :virtual="true"
         :row-key="getSalesPriceScaleQuantityId"
         :row-selection="rowSelection"
         :custom-row="onClickRow"
@@ -142,11 +143,11 @@
         />
       </a-form-item>
       </div>
-      <div v-show="isFieldVisible('lineNumber')">
-      <a-form-item :label="pi.queryLabel('lineNumber')">
+      <div v-show="isFieldVisible('salesScaleSeq')">
+      <a-form-item :label="pi.queryLabel('salesScaleSeq')">
         <a-input-number
-          v-model:value="advancedQueryForm.lineNumber"
-          :placeholder="pi.queryPh('lineNumber', 'required')"
+          v-model:value="advancedQueryForm.salesScaleSeq"
+          :placeholder="pi.queryPh('salesScaleSeq', 'required')"
           style="width: 100%"
         />
       </a-form-item>
@@ -160,11 +161,38 @@
         />
       </a-form-item>
       </div>
-      <div v-show="isFieldVisible('amount')">
-      <a-form-item :label="pi.queryLabel('amount')">
+      <div v-show="isFieldVisible('price')">
+      <a-form-item :label="pi.queryLabel('price')">
         <a-input-number
-          v-model:value="advancedQueryForm.amount"
-          :placeholder="pi.queryPh('amount', 'required')"
+          v-model:value="advancedQueryForm.price"
+          :placeholder="pi.queryPh('price', 'required')"
+          style="width: 100%"
+        />
+      </a-form-item>
+      </div>
+      <div v-show="isFieldVisible('untaxedPrice')">
+      <a-form-item :label="pi.queryLabel('untaxedPrice')">
+        <a-input-number
+          v-model:value="advancedQueryForm.untaxedPrice"
+          :placeholder="pi.queryPh('untaxedPrice', 'required')"
+          style="width: 100%"
+        />
+      </a-form-item>
+      </div>
+      <div v-show="isFieldVisible('taxIncludedPrice')">
+      <a-form-item :label="pi.queryLabel('taxIncludedPrice')">
+        <a-input-number
+          v-model:value="advancedQueryForm.taxIncludedPrice"
+          :placeholder="pi.queryPh('taxIncludedPrice', 'required')"
+          style="width: 100%"
+        />
+      </a-form-item>
+      </div>
+      <div v-show="isFieldVisible('taxAmount')">
+      <a-form-item :label="pi.queryLabel('taxAmount')">
+        <a-input-number
+          v-model:value="advancedQueryForm.taxAmount"
+          :placeholder="pi.queryPh('taxAmount', 'required')"
           style="width: 100%"
         />
       </a-form-item>
@@ -403,9 +431,12 @@ function createEmptyAdvancedQueryForm() {
   return {
     ...form,
     salesPriceSeq: undefined as number | undefined,
-    lineNumber: undefined as number | undefined,
+    salesScaleSeq: undefined as number | undefined,
     scaleQuantity: undefined as number | undefined,
-    amount: undefined as number | undefined,
+    price: undefined as number | undefined,
+    untaxedPrice: undefined as number | undefined,
+    taxIncludedPrice: undefined as number | undefined,
+    taxAmount: undefined as number | undefined,
     isObsolete: undefined as number | undefined,
   }
 }
@@ -507,14 +538,14 @@ const columns = computed<TableColumnsType>(() => [
       String(getSalesPriceScaleQuantityField(record, 'salesPriceSeq') ?? ''),
   },
   {
-    title: pi.label('lineNumber'),
-    dataIndex: 'lineNumber',
-    key: 'lineNumber',
+    title: pi.label('salesScaleSeq'),
+    dataIndex: 'salesScaleSeq',
+    key: 'salesScaleSeq',
     width: 120,
     resizable: true,
     ellipsis: true,
     customRender: ({ record }: { record: SalesPriceScaleQuantity }) =>
-      String(getSalesPriceScaleQuantityField(record, 'lineNumber') ?? ''),
+      String(getSalesPriceScaleQuantityField(record, 'salesScaleSeq') ?? ''),
   },
   {
     title: pi.label('scaleQuantity'),
@@ -527,14 +558,44 @@ const columns = computed<TableColumnsType>(() => [
       String(getSalesPriceScaleQuantityField(record, 'scaleQuantity') ?? ''),
   },
   {
-    title: pi.label('amount'),
-    dataIndex: 'amount',
-    key: 'amount',
+    title: pi.label('price'),
+    dataIndex: 'price',
+    key: 'price',
     width: 120,
     resizable: true,
     ellipsis: true,
     customRender: ({ record }: { record: SalesPriceScaleQuantity }) =>
-      String(getSalesPriceScaleQuantityField(record, 'amount') ?? ''),
+      String(getSalesPriceScaleQuantityField(record, 'price') ?? ''),
+  },
+  {
+    title: pi.label('untaxedPrice'),
+    dataIndex: 'untaxedPrice',
+    key: 'untaxedPrice',
+    width: 120,
+    resizable: true,
+    ellipsis: true,
+    customRender: ({ record }: { record: SalesPriceScaleQuantity }) =>
+      String(getSalesPriceScaleQuantityField(record, 'untaxedPrice') ?? ''),
+  },
+  {
+    title: pi.label('taxIncludedPrice'),
+    dataIndex: 'taxIncludedPrice',
+    key: 'taxIncludedPrice',
+    width: 120,
+    resizable: true,
+    ellipsis: true,
+    customRender: ({ record }: { record: SalesPriceScaleQuantity }) =>
+      String(getSalesPriceScaleQuantityField(record, 'taxIncludedPrice') ?? ''),
+  },
+  {
+    title: pi.label('taxAmount'),
+    dataIndex: 'taxAmount',
+    key: 'taxAmount',
+    width: 120,
+    resizable: true,
+    ellipsis: true,
+    customRender: ({ record }: { record: SalesPriceScaleQuantity }) =>
+      String(getSalesPriceScaleQuantityField(record, 'taxAmount') ?? ''),
   },
   {
     title: pi.label('isObsolete'),
@@ -703,14 +764,23 @@ function buildListQuery(overrides?: Partial<SalesPriceScaleQuantityQuery>): Sale
   if (form.salesPriceSeq !== undefined && form.salesPriceSeq !== null) {
     query.salesPriceSeq = form.salesPriceSeq
   }
-  if (form.lineNumber !== undefined && form.lineNumber !== null) {
-    query.lineNumber = form.lineNumber
+  if (form.salesScaleSeq !== undefined && form.salesScaleSeq !== null) {
+    query.salesScaleSeq = form.salesScaleSeq
   }
   if (form.scaleQuantity !== undefined && form.scaleQuantity !== null) {
     query.scaleQuantity = form.scaleQuantity
   }
-  if (form.amount !== undefined && form.amount !== null) {
-    query.amount = form.amount
+  if (form.price !== undefined && form.price !== null) {
+    query.price = form.price
+  }
+  if (form.untaxedPrice !== undefined && form.untaxedPrice !== null) {
+    query.untaxedPrice = form.untaxedPrice
+  }
+  if (form.taxIncludedPrice !== undefined && form.taxIncludedPrice !== null) {
+    query.taxIncludedPrice = form.taxIncludedPrice
+  }
+  if (form.taxAmount !== undefined && form.taxAmount !== null) {
+    query.taxAmount = form.taxAmount
   }
   if (form.isObsolete !== undefined && form.isObsolete !== null) {
     query.isObsolete = form.isObsolete

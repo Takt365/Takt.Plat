@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：frontend/src/types/logistics/sales
 // 文件名称：price-item.d.ts
-// 创建时间：2026-07-20
+// 创建时间：2026-07-23
 // 创建人：Takt365(Auto Generated)
 // 功能描述：logistics/sales 模块类型定义（自动生成；类型名去 Takt 前缀与末尾 Dto，如 TaktCompanyDto → Company）
 // 
@@ -54,12 +54,12 @@ export interface SalesPriceItem extends CompanyDtoBase {
   priceType: string;
 
   /**
-   * 等级类型（字典 logistics_scale_type；SAP STFKZ；A=基础等级，B=到等级，C=未使用，D=累进间隔等级）
+   * 等级类型（字典 logistics_scale_type；A=基础等级，B=到等级，C=未使用，D=累进间隔等级）
    */
   scaleType?: string;
 
   /**
-   * 等级基础（字典 logistics_scale_basis；SAP KZBZG；B=价值等级，C=数量规模，…）
+   * 等级基础（字典 logistics_scale_basis；B=价值等级，C=数量规模，…）
    */
   scaleBasis?: string;
 
@@ -69,7 +69,7 @@ export interface SalesPriceItem extends CompanyDtoBase {
   scaleQuantity: number;
 
   /**
-   * 等级单位（字典 logistics_unit_of_measure_code，DictValue=PC/EA 等）
+   * 等级单位（字典 logistics_unit_of_measure_code；DictValue=PC/EA 等）
    */
   scaleUnit?: string;
 
@@ -79,12 +79,12 @@ export interface SalesPriceItem extends CompanyDtoBase {
   scaleValue: number;
 
   /**
-   * 等级货币（字典 accounting_currency_code，DictValue=CNY/USD 等）
+   * 等级货币（字典 accounting_currency_code；DictValue=CNY/USD 等）
    */
   scaleCurrency?: string;
 
   /**
-   * 计算类型（字典 logistics_calculation_type；SAP KRECH；默认 A=百分数）
+   * 计算类型（字典 logistics_calculation_type；默认 A=百分数）
    */
   calculationType: string;
 
@@ -94,22 +94,62 @@ export interface SalesPriceItem extends CompanyDtoBase {
   price: number;
 
   /**
-   * 税码（字典 accounting_tax_code，DictValue=J0/J1/J2…；SAP MWSKZ）
+   * 未税价格（冗余；可由 Price 与税码推算后回写）
    */
-  taxCode?: string;
+  untaxedPrice: number;
 
   /**
-   * 是否作废（字典 sys_yes_no_type，0=否 1=是；编辑移除子行时标记作废）
+   * 含税价格（冗余；可由 Price 与税码推算后回写）
+   */
+  taxIncludedPrice: number;
+
+  /**
+   * 税费（冗余；含税−未税，打印用）
+   */
+  taxAmount: number;
+
+  /**
+   * 条件货币（字典 accounting_currency_code；DictValue=CNY/USD 等；默认 CNY）
+   */
+  conditionCurrency: string;
+
+  /**
+   * 定价单位（字典 logistics_price_unit_param；1/10/100/1000；默认 1000）
+   */
+  priceUnit: number;
+
+  /**
+   * 计量单位（字典 logistics_unit_of_measure_code；DictValue=PC/EA 等；默认 PC）
+   */
+  unitOfMeasure: string;
+
+  /**
+   * 最小起订量（计量单位数量，整数）
+   */
+  minOrderQuantity: number;
+
+  /**
+   * 舍入值（基本单位数量，用于数量舍入，整数）
+   */
+  roundingValue: number;
+
+  /**
+   * 计划交货时间（天数，整数）
+   */
+  plannedDeliveryTimeDays: number;
+
+  /**
+   * 是否作废（字典 sys_yes_no_type；0=否 1=是；编辑移除子行时标记作废）
    */
   isObsolete: number;
 
   /**
-   * 数量等级行列表（SAP KONM；主子表关系） （子表：TaktSalesPriceScaleQuantity）
+   * 数量等级行列表（；主子表关系） （子表：TaktSalesPriceScaleQuantity）
    */
   scaleQuantities?: SalesPriceScaleQuantity[];
 
   /**
-   * 价值等级行列表（SAP KONW；主子表关系） （子表：TaktSalesPriceScaleValue）
+   * 价值等级行列表（；主子表关系） （子表：TaktSalesPriceScaleValue）
    */
   scaleValues?: SalesPriceScaleValue[];
 
@@ -154,12 +194,12 @@ export interface SalesPriceItemQuery extends TaktPagedQuery {
   priceType?: string;
 
   /**
-   * 等级类型（字典 logistics_scale_type；SAP STFKZ；A=基础等级，B=到等级，C=未使用，D=累进间隔等级）
+   * 等级类型（字典 logistics_scale_type；A=基础等级，B=到等级，C=未使用，D=累进间隔等级）
    */
   scaleType?: string;
 
   /**
-   * 等级基础（字典 logistics_scale_basis；SAP KZBZG；B=价值等级，C=数量规模，…）
+   * 等级基础（字典 logistics_scale_basis；B=价值等级，C=数量规模，…）
    */
   scaleBasis?: string;
 
@@ -169,7 +209,7 @@ export interface SalesPriceItemQuery extends TaktPagedQuery {
   scaleQuantity?: number;
 
   /**
-   * 等级单位（字典 logistics_unit_of_measure_code，DictValue=PC/EA 等）
+   * 等级单位（字典 logistics_unit_of_measure_code；DictValue=PC/EA 等）
    */
   scaleUnit?: string;
 
@@ -179,12 +219,12 @@ export interface SalesPriceItemQuery extends TaktPagedQuery {
   scaleValue?: number;
 
   /**
-   * 等级货币（字典 accounting_currency_code，DictValue=CNY/USD 等）
+   * 等级货币（字典 accounting_currency_code；DictValue=CNY/USD 等）
    */
   scaleCurrency?: string;
 
   /**
-   * 计算类型（字典 logistics_calculation_type；SAP KRECH；默认 A=百分数）
+   * 计算类型（字典 logistics_calculation_type；默认 A=百分数）
    */
   calculationType?: string;
 
@@ -194,12 +234,52 @@ export interface SalesPriceItemQuery extends TaktPagedQuery {
   price?: number;
 
   /**
-   * 税码（字典 accounting_tax_code，DictValue=J0/J1/J2…；SAP MWSKZ）
+   * 未税价格（冗余；可由 Price 与税码推算后回写）
    */
-  taxCode?: string;
+  untaxedPrice?: number;
 
   /**
-   * 是否作废（字典 sys_yes_no_type，0=否 1=是；编辑移除子行时标记作废）
+   * 含税价格（冗余；可由 Price 与税码推算后回写）
+   */
+  taxIncludedPrice?: number;
+
+  /**
+   * 税费（冗余；含税−未税，打印用）
+   */
+  taxAmount?: number;
+
+  /**
+   * 条件货币（字典 accounting_currency_code；DictValue=CNY/USD 等；默认 CNY）
+   */
+  conditionCurrency?: string;
+
+  /**
+   * 定价单位（字典 logistics_price_unit_param；1/10/100/1000；默认 1000）
+   */
+  priceUnit?: number;
+
+  /**
+   * 计量单位（字典 logistics_unit_of_measure_code；DictValue=PC/EA 等；默认 PC）
+   */
+  unitOfMeasure?: string;
+
+  /**
+   * 最小起订量（计量单位数量，整数）
+   */
+  minOrderQuantity?: number;
+
+  /**
+   * 舍入值（基本单位数量，用于数量舍入，整数）
+   */
+  roundingValue?: number;
+
+  /**
+   * 计划交货时间（天数，整数）
+   */
+  plannedDeliveryTimeDays?: number;
+
+  /**
+   * 是否作废（字典 sys_yes_no_type；0=否 1=是；编辑移除子行时标记作废）
    */
   isObsolete?: number;
 
@@ -268,12 +348,12 @@ export interface SalesPriceItemCreate {
   priceType: string;
 
   /**
-   * 等级类型（字典 logistics_scale_type；SAP STFKZ；A=基础等级，B=到等级，C=未使用，D=累进间隔等级）
+   * 等级类型（字典 logistics_scale_type；A=基础等级，B=到等级，C=未使用，D=累进间隔等级）
    */
   scaleType?: string;
 
   /**
-   * 等级基础（字典 logistics_scale_basis；SAP KZBZG；B=价值等级，C=数量规模，…）
+   * 等级基础（字典 logistics_scale_basis；B=价值等级，C=数量规模，…）
    */
   scaleBasis?: string;
 
@@ -283,7 +363,7 @@ export interface SalesPriceItemCreate {
   scaleQuantity: number;
 
   /**
-   * 等级单位（字典 logistics_unit_of_measure_code，DictValue=PC/EA 等）
+   * 等级单位（字典 logistics_unit_of_measure_code；DictValue=PC/EA 等）
    */
   scaleUnit?: string;
 
@@ -293,12 +373,12 @@ export interface SalesPriceItemCreate {
   scaleValue: number;
 
   /**
-   * 等级货币（字典 accounting_currency_code，DictValue=CNY/USD 等）
+   * 等级货币（字典 accounting_currency_code；DictValue=CNY/USD 等）
    */
   scaleCurrency?: string;
 
   /**
-   * 计算类型（字典 logistics_calculation_type；SAP KRECH；默认 A=百分数）
+   * 计算类型（字典 logistics_calculation_type；默认 A=百分数）
    */
   calculationType: string;
 
@@ -308,22 +388,62 @@ export interface SalesPriceItemCreate {
   price: number;
 
   /**
-   * 税码（字典 accounting_tax_code，DictValue=J0/J1/J2…；SAP MWSKZ）
+   * 未税价格（冗余；可由 Price 与税码推算后回写）
    */
-  taxCode?: string;
+  untaxedPrice: number;
 
   /**
-   * 是否作废（字典 sys_yes_no_type，0=否 1=是；编辑移除子行时标记作废）
+   * 含税价格（冗余；可由 Price 与税码推算后回写）
+   */
+  taxIncludedPrice: number;
+
+  /**
+   * 税费（冗余；含税−未税，打印用）
+   */
+  taxAmount: number;
+
+  /**
+   * 条件货币（字典 accounting_currency_code；DictValue=CNY/USD 等；默认 CNY）
+   */
+  conditionCurrency: string;
+
+  /**
+   * 定价单位（字典 logistics_price_unit_param；1/10/100/1000；默认 1000）
+   */
+  priceUnit: number;
+
+  /**
+   * 计量单位（字典 logistics_unit_of_measure_code；DictValue=PC/EA 等；默认 PC）
+   */
+  unitOfMeasure: string;
+
+  /**
+   * 最小起订量（计量单位数量，整数）
+   */
+  minOrderQuantity: number;
+
+  /**
+   * 舍入值（基本单位数量，用于数量舍入，整数）
+   */
+  roundingValue: number;
+
+  /**
+   * 计划交货时间（天数，整数）
+   */
+  plannedDeliveryTimeDays: number;
+
+  /**
+   * 是否作废（字典 sys_yes_no_type；0=否 1=是；编辑移除子行时标记作废）
    */
   isObsolete: number;
 
   /**
-   * 数量等级行列表（SAP KONM；主子表关系）（子表，级联保存）
+   * 数量等级行列表（；主子表关系）（子表，级联保存）
    */
   scaleQuantities?: SalesPriceScaleQuantityCreate[];
 
   /**
-   * 价值等级行列表（SAP KONW；主子表关系）（子表，级联保存）
+   * 价值等级行列表（；主子表关系）（子表，级联保存）
    */
   scaleValues?: SalesPriceScaleValueCreate[];
 
@@ -353,12 +473,12 @@ export interface SalesPriceItemUpdate extends SalesPriceItemCreate {
   salesPriceItemId: string;
 
   /**
-   * 数量等级行列表（SAP KONM；主子表关系）（子表，级联保存）
+   * 数量等级行列表（；主子表关系）（子表，级联保存）
    */
   scaleQuantities?: any;
 
   /**
-   * 价值等级行列表（SAP KONW；主子表关系）（子表，级联保存）
+   * 价值等级行列表（；主子表关系）（子表，级联保存）
    */
   scaleValues?: any;
 
@@ -421,12 +541,12 @@ export interface SalesPriceItemTemplate {
   priceType?: string;
 
   /**
-   * 等级类型（字典 logistics_scale_type；SAP STFKZ；A=基础等级，B=到等级，C=未使用，D=累进间隔等级）
+   * 等级类型（字典 logistics_scale_type；A=基础等级，B=到等级，C=未使用，D=累进间隔等级）
    */
   scaleType?: string;
 
   /**
-   * 等级基础（字典 logistics_scale_basis；SAP KZBZG；B=价值等级，C=数量规模，…）
+   * 等级基础（字典 logistics_scale_basis；B=价值等级，C=数量规模，…）
    */
   scaleBasis?: string;
 
@@ -436,7 +556,7 @@ export interface SalesPriceItemTemplate {
   scaleQuantity?: number;
 
   /**
-   * 等级单位（字典 logistics_unit_of_measure_code，DictValue=PC/EA 等）
+   * 等级单位（字典 logistics_unit_of_measure_code；DictValue=PC/EA 等）
    */
   scaleUnit?: string;
 
@@ -446,12 +566,12 @@ export interface SalesPriceItemTemplate {
   scaleValue?: number;
 
   /**
-   * 等级货币（字典 accounting_currency_code，DictValue=CNY/USD 等）
+   * 等级货币（字典 accounting_currency_code；DictValue=CNY/USD 等）
    */
   scaleCurrency?: string;
 
   /**
-   * 计算类型（字典 logistics_calculation_type；SAP KRECH；默认 A=百分数）
+   * 计算类型（字典 logistics_calculation_type；默认 A=百分数）
    */
   calculationType?: string;
 
@@ -461,22 +581,62 @@ export interface SalesPriceItemTemplate {
   price?: number;
 
   /**
-   * 税码（字典 accounting_tax_code，DictValue=J0/J1/J2…；SAP MWSKZ）
+   * 未税价格（冗余；可由 Price 与税码推算后回写）
    */
-  taxCode?: string;
+  untaxedPrice?: number;
 
   /**
-   * 是否作废（字典 sys_yes_no_type，0=否 1=是；编辑移除子行时标记作废）
+   * 含税价格（冗余；可由 Price 与税码推算后回写）
+   */
+  taxIncludedPrice?: number;
+
+  /**
+   * 税费（冗余；含税−未税，打印用）
+   */
+  taxAmount?: number;
+
+  /**
+   * 条件货币（字典 accounting_currency_code；DictValue=CNY/USD 等；默认 CNY）
+   */
+  conditionCurrency?: string;
+
+  /**
+   * 定价单位（字典 logistics_price_unit_param；1/10/100/1000；默认 1000）
+   */
+  priceUnit?: number;
+
+  /**
+   * 计量单位（字典 logistics_unit_of_measure_code；DictValue=PC/EA 等；默认 PC）
+   */
+  unitOfMeasure?: string;
+
+  /**
+   * 最小起订量（计量单位数量，整数）
+   */
+  minOrderQuantity?: number;
+
+  /**
+   * 舍入值（基本单位数量，用于数量舍入，整数）
+   */
+  roundingValue?: number;
+
+  /**
+   * 计划交货时间（天数，整数）
+   */
+  plannedDeliveryTimeDays?: number;
+
+  /**
+   * 是否作废（字典 sys_yes_no_type；0=否 1=是；编辑移除子行时标记作废）
    */
   isObsolete?: number;
 
   /**
-   * 数量等级行列表（SAP KONM；主子表关系）（子表，级联保存）
+   * 数量等级行列表（；主子表关系）（子表，级联保存）
    */
   scaleQuantities?: SalesPriceScaleQuantityCreate[];
 
   /**
-   * 价值等级行列表（SAP KONW；主子表关系）（子表，级联保存）
+   * 价值等级行列表（；主子表关系）（子表，级联保存）
    */
   scaleValues?: SalesPriceScaleValueCreate[];
 
@@ -535,12 +695,12 @@ export interface SalesPriceItemImport {
   priceType?: string;
 
   /**
-   * 等级类型（字典 logistics_scale_type；SAP STFKZ；A=基础等级，B=到等级，C=未使用，D=累进间隔等级）
+   * 等级类型（字典 logistics_scale_type；A=基础等级，B=到等级，C=未使用，D=累进间隔等级）
    */
   scaleType?: string;
 
   /**
-   * 等级基础（字典 logistics_scale_basis；SAP KZBZG；B=价值等级，C=数量规模，…）
+   * 等级基础（字典 logistics_scale_basis；B=价值等级，C=数量规模，…）
    */
   scaleBasis?: string;
 
@@ -550,7 +710,7 @@ export interface SalesPriceItemImport {
   scaleQuantity?: number;
 
   /**
-   * 等级单位（字典 logistics_unit_of_measure_code，DictValue=PC/EA 等）
+   * 等级单位（字典 logistics_unit_of_measure_code；DictValue=PC/EA 等）
    */
   scaleUnit?: string;
 
@@ -560,12 +720,12 @@ export interface SalesPriceItemImport {
   scaleValue?: number;
 
   /**
-   * 等级货币（字典 accounting_currency_code，DictValue=CNY/USD 等）
+   * 等级货币（字典 accounting_currency_code；DictValue=CNY/USD 等）
    */
   scaleCurrency?: string;
 
   /**
-   * 计算类型（字典 logistics_calculation_type；SAP KRECH；默认 A=百分数）
+   * 计算类型（字典 logistics_calculation_type；默认 A=百分数）
    */
   calculationType?: string;
 
@@ -575,22 +735,62 @@ export interface SalesPriceItemImport {
   price?: number;
 
   /**
-   * 税码（字典 accounting_tax_code，DictValue=J0/J1/J2…；SAP MWSKZ）
+   * 未税价格（冗余；可由 Price 与税码推算后回写）
    */
-  taxCode?: string;
+  untaxedPrice?: number;
 
   /**
-   * 是否作废（字典 sys_yes_no_type，0=否 1=是；编辑移除子行时标记作废）
+   * 含税价格（冗余；可由 Price 与税码推算后回写）
+   */
+  taxIncludedPrice?: number;
+
+  /**
+   * 税费（冗余；含税−未税，打印用）
+   */
+  taxAmount?: number;
+
+  /**
+   * 条件货币（字典 accounting_currency_code；DictValue=CNY/USD 等；默认 CNY）
+   */
+  conditionCurrency?: string;
+
+  /**
+   * 定价单位（字典 logistics_price_unit_param；1/10/100/1000；默认 1000）
+   */
+  priceUnit?: number;
+
+  /**
+   * 计量单位（字典 logistics_unit_of_measure_code；DictValue=PC/EA 等；默认 PC）
+   */
+  unitOfMeasure?: string;
+
+  /**
+   * 最小起订量（计量单位数量，整数）
+   */
+  minOrderQuantity?: number;
+
+  /**
+   * 舍入值（基本单位数量，用于数量舍入，整数）
+   */
+  roundingValue?: number;
+
+  /**
+   * 计划交货时间（天数，整数）
+   */
+  plannedDeliveryTimeDays?: number;
+
+  /**
+   * 是否作废（字典 sys_yes_no_type；0=否 1=是；编辑移除子行时标记作废）
    */
   isObsolete?: number;
 
   /**
-   * 数量等级行列表（SAP KONM；主子表关系）（子表，级联保存）
+   * 数量等级行列表（；主子表关系）（子表，级联保存）
    */
   scaleQuantities?: SalesPriceScaleQuantityCreate[];
 
   /**
-   * 价值等级行列表（SAP KONW；主子表关系）（子表，级联保存）
+   * 价值等级行列表（；主子表关系）（子表，级联保存）
    */
   scaleValues?: SalesPriceScaleValueCreate[];
 
@@ -644,12 +844,12 @@ export interface SalesPriceItemExport {
   priceType: string;
 
   /**
-   * 等级类型（字典 logistics_scale_type；SAP STFKZ；A=基础等级，B=到等级，C=未使用，D=累进间隔等级）
+   * 等级类型（字典 logistics_scale_type；A=基础等级，B=到等级，C=未使用，D=累进间隔等级）
    */
   scaleType?: string;
 
   /**
-   * 等级基础（字典 logistics_scale_basis；SAP KZBZG；B=价值等级，C=数量规模，…）
+   * 等级基础（字典 logistics_scale_basis；B=价值等级，C=数量规模，…）
    */
   scaleBasis?: string;
 
@@ -659,7 +859,7 @@ export interface SalesPriceItemExport {
   scaleQuantity: number;
 
   /**
-   * 等级单位（字典 logistics_unit_of_measure_code，DictValue=PC/EA 等）
+   * 等级单位（字典 logistics_unit_of_measure_code；DictValue=PC/EA 等）
    */
   scaleUnit?: string;
 
@@ -669,12 +869,12 @@ export interface SalesPriceItemExport {
   scaleValue: number;
 
   /**
-   * 等级货币（字典 accounting_currency_code，DictValue=CNY/USD 等）
+   * 等级货币（字典 accounting_currency_code；DictValue=CNY/USD 等）
    */
   scaleCurrency?: string;
 
   /**
-   * 计算类型（字典 logistics_calculation_type；SAP KRECH；默认 A=百分数）
+   * 计算类型（字典 logistics_calculation_type；默认 A=百分数）
    */
   calculationType: string;
 
@@ -684,12 +884,52 @@ export interface SalesPriceItemExport {
   price: number;
 
   /**
-   * 税码（字典 accounting_tax_code，DictValue=J0/J1/J2…；SAP MWSKZ）
+   * 未税价格（冗余；可由 Price 与税码推算后回写）
    */
-  taxCode?: string;
+  untaxedPrice: number;
 
   /**
-   * 是否作废（字典 sys_yes_no_type，0=否 1=是；编辑移除子行时标记作废）
+   * 含税价格（冗余；可由 Price 与税码推算后回写）
+   */
+  taxIncludedPrice: number;
+
+  /**
+   * 税费（冗余；含税−未税，打印用）
+   */
+  taxAmount: number;
+
+  /**
+   * 条件货币（字典 accounting_currency_code；DictValue=CNY/USD 等；默认 CNY）
+   */
+  conditionCurrency: string;
+
+  /**
+   * 定价单位（字典 logistics_price_unit_param；1/10/100/1000；默认 1000）
+   */
+  priceUnit: number;
+
+  /**
+   * 计量单位（字典 logistics_unit_of_measure_code；DictValue=PC/EA 等；默认 PC）
+   */
+  unitOfMeasure: string;
+
+  /**
+   * 最小起订量（计量单位数量，整数）
+   */
+  minOrderQuantity: number;
+
+  /**
+   * 舍入值（基本单位数量，用于数量舍入，整数）
+   */
+  roundingValue: number;
+
+  /**
+   * 计划交货时间（天数，整数）
+   */
+  plannedDeliveryTimeDays: number;
+
+  /**
+   * 是否作废（字典 sys_yes_no_type；0=否 1=是；编辑移除子行时标记作废）
    */
   isObsolete: number;
 

@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Application.Services.Logistics.Sales
 // 文件名称：TaktSalesPriceScaleValueService.cs
-// 创建时间：2026-07-20
+// 创建时间：2026-07-23
 // 创建人：Takt365(Cursor AI)
 // 功能描述：销售价格价值等级应用服务实现
 // 
@@ -30,27 +30,23 @@ namespace Takt.Application.Services.Logistics.Sales;
 public class TaktSalesPriceScaleValueService : TaktServiceBase, ITaktSalesPriceScaleValueService
 {
     private readonly ITaktCompanyRepository<TaktSalesPriceScaleValue> _salesPriceScaleValueRepository;
-    private readonly ITaktLineNumberGenerator _lineNumberGenerator;
     private readonly ITaktUniqueValidator _uniqueValidator;
 
     /// <summary>
     /// 构造函数
     /// </summary>
     /// <param name="salesPriceScaleValueRepository">销售价格价值等级仓储</param>
-    /// <param name="lineNumberGenerator">明细行号生成器</param>
     /// <param name="uniqueValidator">唯一性验证器</param>
     /// <param name="userContext">用户上下文</param>
     /// <param name="localizationService">本地化服务</param>
     public TaktSalesPriceScaleValueService(
         ITaktCompanyRepository<TaktSalesPriceScaleValue> salesPriceScaleValueRepository,
-        ITaktLineNumberGenerator lineNumberGenerator,
         ITaktUniqueValidator uniqueValidator,
         ITaktUserContext? userContext = null,
         ITaktLocalizationService? localizationService = null)
         : base(userContext, localizationService)
     {
         _salesPriceScaleValueRepository = salesPriceScaleValueRepository;
-        _lineNumberGenerator = lineNumberGenerator;
         _uniqueValidator = uniqueValidator;
     }
 
@@ -101,8 +97,8 @@ public class TaktSalesPriceScaleValueService : TaktServiceBase, ITaktSalesPriceS
             false);
         return list.Select(e => new TaktSelectOption
         {
-            DictValue = e.Id,
-            DictLabel = e.SalesPriceCode ?? e.Id.ToString(),
+            DictValue = e.SalesPriceCode,
+            DictLabel = e.SalesPriceCode,
         }).ToList();
     }
 
@@ -115,21 +111,16 @@ public class TaktSalesPriceScaleValueService : TaktServiceBase, ITaktSalesPriceS
     {
         var entity = dto.Adapt<TaktSalesPriceScaleValue>();
         entity.IsObsolete = 0;
-        var isUnique_ix_takt_logistics_sales_price_scale_value_line_unique = await _uniqueValidator.IsUniqueAsync(
+        var isUnique_ix_takt_logistics_sales_price_scale_value_unique = await _uniqueValidator.IsUniqueAsync(
             _salesPriceScaleValueRepository,
             x => x.SalesPriceItemId == entity.SalesPriceItemId
-                && x.LineNumber == entity.LineNumber);
-        if (!isUnique_ix_takt_logistics_sales_price_scale_value_line_unique)
+                && x.SalesPriceCode == entity.SalesPriceCode
+                && x.SalesPriceSeq == entity.SalesPriceSeq
+                && x.SalesScaleSeq == entity.SalesScaleSeq
+                && x.ScaleValue == entity.ScaleValue);
+        if (!isUnique_ix_takt_logistics_sales_price_scale_value_unique)
         {
-            throw new TaktBusinessException("销售价格价值等级的SalesPriceItemId、LineNumber已存在");
-        }
-        if (entity.LineNumber <= 0)
-        {
-            var maxLine = await _salesPriceScaleValueRepository.GetMaxIntAsync(
-                x => x.TenantCode == CurrentTenantCode && x.CompanyCode == CurrentCompanyCode && x.SalesPriceItemId == entity.SalesPriceItemId,
-                x => x.LineNumber);
-            var businessCode = entity.SalesPriceItemId.ToString();
-            entity.LineNumber = _lineNumberGenerator.GenerateNext(businessCode, maxLine);
+            throw new TaktBusinessException("销售价格价值等级的SalesPriceItemId、SalesPriceCode、SalesPriceSeq、SalesScaleSeq、ScaleValue已存在");
         }
         entity = await _salesPriceScaleValueRepository.CreateAsync(entity);
         return await GetSalesPriceScaleValueByIdAsync(entity.Id) ?? entity.Adapt<TaktSalesPriceScaleValueDto>();
@@ -149,14 +140,17 @@ public class TaktSalesPriceScaleValueService : TaktServiceBase, ITaktSalesPriceS
             throw new TaktBusinessException("销售价格价值等级不存在");
         }
         dto.Adapt(entity);
-        var isUnique_ix_takt_logistics_sales_price_scale_value_line_unique = await _uniqueValidator.IsUniqueAsync(
+        var isUnique_ix_takt_logistics_sales_price_scale_value_unique = await _uniqueValidator.IsUniqueAsync(
             _salesPriceScaleValueRepository,
             x => x.SalesPriceItemId == entity.SalesPriceItemId
-                && x.LineNumber == entity.LineNumber,
+                && x.SalesPriceCode == entity.SalesPriceCode
+                && x.SalesPriceSeq == entity.SalesPriceSeq
+                && x.SalesScaleSeq == entity.SalesScaleSeq
+                && x.ScaleValue == entity.ScaleValue,
             id);
-        if (!isUnique_ix_takt_logistics_sales_price_scale_value_line_unique)
+        if (!isUnique_ix_takt_logistics_sales_price_scale_value_unique)
         {
-            throw new TaktBusinessException("销售价格价值等级的SalesPriceItemId、LineNumber已存在");
+            throw new TaktBusinessException("销售价格价值等级的SalesPriceItemId、SalesPriceCode、SalesPriceSeq、SalesScaleSeq、ScaleValue已存在");
         }
         await _salesPriceScaleValueRepository.UpdateAsync(entity);
         return await GetSalesPriceScaleValueByIdAsync(id) ?? throw new TaktBusinessException("销售价格价值等级不存在");
@@ -261,26 +255,21 @@ public class TaktSalesPriceScaleValueService : TaktServiceBase, ITaktSalesPriceS
             try
             {
                 var entity = rows[i].Adapt<TaktSalesPriceScaleValue>();
-                var importKey = $"{entity.SalesPriceItemId}|{entity.LineNumber}";
+                var importKey = $"{entity.SalesPriceItemId}|{entity.SalesPriceCode}|{entity.SalesPriceSeq}|{entity.SalesScaleSeq}|{entity.ScaleValue}";
                 if (!importSeenKeys.Add(importKey))
                 {
-                    throw new TaktBusinessException("与Excel中其他行重复（SalesPriceItemId、LineNumber）");
+                    throw new TaktBusinessException("与Excel中其他行重复（SalesPriceItemId、SalesPriceCode、SalesPriceSeq、SalesScaleSeq、ScaleValue）");
                 }
-                var isUnique_ix_takt_logistics_sales_price_scale_value_line_unique = await _uniqueValidator.IsUniqueAsync(
+                var isUnique_ix_takt_logistics_sales_price_scale_value_unique = await _uniqueValidator.IsUniqueAsync(
                     _salesPriceScaleValueRepository,
                     x => x.SalesPriceItemId == entity.SalesPriceItemId
-                        && x.LineNumber == entity.LineNumber);
-                if (!isUnique_ix_takt_logistics_sales_price_scale_value_line_unique)
+                        && x.SalesPriceCode == entity.SalesPriceCode
+                        && x.SalesPriceSeq == entity.SalesPriceSeq
+                        && x.SalesScaleSeq == entity.SalesScaleSeq
+                        && x.ScaleValue == entity.ScaleValue);
+                if (!isUnique_ix_takt_logistics_sales_price_scale_value_unique)
                 {
-                    throw new TaktBusinessException("销售价格价值等级的SalesPriceItemId、LineNumber已存在");
-                }
-                if (entity.LineNumber <= 0)
-                {
-                    var maxLine = await _salesPriceScaleValueRepository.GetMaxIntAsync(
-                        x => x.TenantCode == CurrentTenantCode && x.CompanyCode == CurrentCompanyCode && x.SalesPriceItemId == entity.SalesPriceItemId,
-                        x => x.LineNumber);
-                    var businessCode = entity.SalesPriceItemId.ToString();
-                    entity.LineNumber = _lineNumberGenerator.GenerateNext(businessCode, maxLine);
+                    throw new TaktBusinessException("销售价格价值等级的SalesPriceItemId、SalesPriceCode、SalesPriceSeq、SalesScaleSeq、ScaleValue已存在");
                 }
                 await _salesPriceScaleValueRepository.CreateAsync(entity);
                 success += 1;
@@ -348,9 +337,12 @@ public class TaktSalesPriceScaleValueService : TaktServiceBase, ITaktSalesPriceS
                 SqlFunc.ToString(x.SalesPriceItemId).Contains(keywords)
                 || (x.SalesPriceCode != null && x.SalesPriceCode.Contains(keywords))
                 || SqlFunc.ToString(x.SalesPriceSeq).Contains(keywords)
-                || SqlFunc.ToString(x.LineNumber).Contains(keywords)
+                || SqlFunc.ToString(x.SalesScaleSeq).Contains(keywords)
                 || SqlFunc.ToString(x.ScaleValue).Contains(keywords)
-                || SqlFunc.ToString(x.Amount).Contains(keywords)
+                || SqlFunc.ToString(x.Price).Contains(keywords)
+                || SqlFunc.ToString(x.UntaxedPrice).Contains(keywords)
+                || SqlFunc.ToString(x.TaxIncludedPrice).Contains(keywords)
+                || SqlFunc.ToString(x.TaxAmount).Contains(keywords)
                 || (x.ExtField != null && x.ExtField.Contains(keywords))
                 || (x.Remark != null && x.Remark.Contains(keywords))
                 || SqlFunc.ToString(x.CreatedAt).Contains(keywords)
@@ -372,9 +364,9 @@ public class TaktSalesPriceScaleValueService : TaktServiceBase, ITaktSalesPriceS
             exp = exp.And(x => x.SalesPriceSeq == queryDto.SalesPriceSeq);
         }
 
-        if (queryDto?.LineNumber.HasValue == true)
+        if (queryDto?.SalesScaleSeq.HasValue == true)
         {
-            exp = exp.And(x => x.LineNumber == queryDto.LineNumber);
+            exp = exp.And(x => x.SalesScaleSeq == queryDto.SalesScaleSeq);
         }
 
         if (queryDto?.ScaleValue.HasValue == true)
@@ -382,9 +374,24 @@ public class TaktSalesPriceScaleValueService : TaktServiceBase, ITaktSalesPriceS
             exp = exp.And(x => x.ScaleValue == queryDto.ScaleValue);
         }
 
-        if (queryDto?.Amount.HasValue == true)
+        if (queryDto?.Price.HasValue == true)
         {
-            exp = exp.And(x => x.Amount == queryDto.Amount);
+            exp = exp.And(x => x.Price == queryDto.Price);
+        }
+
+        if (queryDto?.UntaxedPrice.HasValue == true)
+        {
+            exp = exp.And(x => x.UntaxedPrice == queryDto.UntaxedPrice);
+        }
+
+        if (queryDto?.TaxIncludedPrice.HasValue == true)
+        {
+            exp = exp.And(x => x.TaxIncludedPrice == queryDto.TaxIncludedPrice);
+        }
+
+        if (queryDto?.TaxAmount.HasValue == true)
+        {
+            exp = exp.And(x => x.TaxAmount == queryDto.TaxAmount);
         }
 
         if (!string.IsNullOrEmpty(queryDto?.ExtField))

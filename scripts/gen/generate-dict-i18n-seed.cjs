@@ -42,8 +42,10 @@ const outPath = path.join(
 );
 
 const content = fs.readFileSync(dictSeedPath, 'utf8');
+// 元组：DictTypeCode, DictLabel, DictValue, I18nKey, ListClass, CssClass, IsDefault, Remark, SortOrder, CultureCode[, ExtLabel, ExtValue]
+// 仅匹配至 CultureCode；扩展字段可选，不参与 i18n 解析
 const lineRegex =
-  /\("([^"]*)","([^"]*)","([^"]*)","([^"]*)"[^)]*?"([^"]*)",\s*\d+\),/g;
+  /\("([^"]*)","([^"]*)","([^"]*)","([^"]*)",\d+,\d+,\d+,"([^"]*)",\d+,"[^"]*"/g;
 
 const items = [];
 let match;
@@ -108,13 +110,17 @@ function withCultureTranslationSuffix(text, culture) {
 }
 
 /**
- * DictLabel 为基准；sys_culture_code 的 TranslationText 与 DictLabel 相同（本族语全球统一展示，不做 UI 语言后缀）
+ * DictLabel 为基准；sys_culture_code / sys_country_code 的 TranslationText 与 DictLabel 相同
+ * （本族语/本国语言全球统一展示，不做 UI 语言后缀）
  * @param {{ dictLabel: string, i18nKey: string }} item
  * @param {string} culture
  * @returns {string}
  */
 function resolveTranslationText(item, culture) {
-  if (item.i18nKey.startsWith('dict.sys.culture.code.')) {
+  if (
+    item.i18nKey.startsWith('dict.sys.culture.code.')
+    || item.i18nKey.startsWith('dict.sys.country.code.')
+  ) {
     return (item.dictLabel || '').trim();
   }
   return withCultureTranslationSuffix(item.dictLabel, culture);

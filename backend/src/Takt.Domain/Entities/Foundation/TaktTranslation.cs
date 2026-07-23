@@ -33,7 +33,7 @@ public class TaktTranslation : TaktTenantEntityBase
     public long CultureId { get; set; } 
 
     /// <summary>
-    /// 文化编码（选项 TaktCultures/options，DictValue=Id）
+    /// 文化编码（选项 TaktCultures/options；DictValue=Id）
     /// </summary>
     [SugarColumn(ColumnName = "culture_code", ColumnDescription = "文化编码", ColumnDataType = "varchar", Length = 5, IsNullable = false, DefaultValue = "")]
     public string CultureCode { get; set; } = string.Empty;

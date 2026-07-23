@@ -24,7 +24,7 @@ namespace Takt.Domain.Entities.HumanResource.Training;
 public class TaktTrainingAttendee : TaktCompanyEntityBase
 {
     /// <summary>
-    /// 员工（选项 TaktEmployees/options，DictValue=Id）
+    /// 员工（选项 TaktEmployees/options；DictValue=Id）
     /// </summary>
     [SugarColumn(ColumnName = "employee_id", ColumnDescription = "员工ID", ColumnDataType = "bigint", IsNullable = false)]
     [JsonConverter(typeof(ValueToStringConverter))]
@@ -35,7 +35,7 @@ public class TaktTrainingAttendee : TaktCompanyEntityBase
     [SugarColumn(ColumnName = "employee_name", ColumnDescription = "员工姓名", ColumnDataType = "nvarchar", Length = 40, IsNullable = false)]
     public string EmployeeName { get; set; } = string.Empty;
     /// <summary>
-    /// 培训课程（选项 TaktTrainingCourses/options，DictValue=Id）
+    /// 培训课程（选项 TaktTrainingCourses/options；DictValue=Id）
     /// </summary>
     [SugarColumn(ColumnName = "training_course_id", ColumnDescription = "培训课程ID", ColumnDataType = "bigint", IsNullable = false)]
     [JsonConverter(typeof(ValueToStringConverter))]
@@ -86,17 +86,17 @@ public class TaktTrainingAttendee : TaktCompanyEntityBase
     [SugarColumn(ColumnName = "is_passed", ColumnDescription = "是否通过", ColumnDataType = "int", IsNullable = false, DefaultValue = "0")]
     public int IsPassed { get; set; } = 0;
     /// <summary>
-    /// 证书编号
+    /// 证书编码
     /// </summary>
-    [SugarColumn(ColumnName = "certificate_no", ColumnDescription = "证书编号", ColumnDataType = "nvarchar", Length = 50, IsNullable = false)]
-    public string CertificateNo { get; set; } = string.Empty;
+    [SugarColumn(ColumnName = "certificate_code", ColumnDescription = "证书编码", ColumnDataType = "nvarchar", Length = 50, IsNullable = false)]
+    public string CertificateCode { get; set; } = string.Empty;
     /// <summary>
     /// 培训评价
     /// </summary>
     [SugarColumn(ColumnName = "training_evaluation", ColumnDescription = "培训评价", ColumnDataType = "nvarchar", Length = 500, IsNullable = false)]
     public string TrainingEvaluation { get; set; } = string.Empty;
     /// <summary>
-    /// 关联工厂（选项 TaktPlants/options，DictValue=Id）
+    /// 关联工厂（选项 TaktPlants/options；DictValue=Id）
     /// </summary>
     [SugarColumn(ColumnName = "related_plant", ColumnDescription = "关联工厂", ColumnDataType = "nvarchar", Length = 4, IsNullable = false)]
     public string RelatedPlant { get; set; } = string.Empty;

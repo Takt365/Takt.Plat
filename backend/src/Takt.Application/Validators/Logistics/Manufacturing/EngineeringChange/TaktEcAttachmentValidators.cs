@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Application.Validators.Logistics.Manufacturing.EngineeringChange
 // 文件名称：TaktEcAttachmentValidators.cs
-// 创建时间：2026-07-20
+// 创建时间：2026-07-23
 // 创建人：Takt365(Auto Generated)
 // 功能描述：EcAttachment 模块 FluentValidation 验证器（由 generate-validators-from-entity.cjs 根据 TaktEcAttachment 生成，请按需审阅）
 // 
@@ -44,8 +44,8 @@ public class TaktEcAttachmentCreateValidator : AbstractValidator<TaktEcAttachmen
             .NotEmpty().WithMessage("文件类别不能为空")
             .MaximumLength(8).WithMessage("文件类别长度不能超过8个字符");
         RuleFor(x => x.DocNo)
-            .NotEmpty().WithMessage("文件编号不能为空")
-            .MaximumLength(50).WithMessage("文件编号长度不能超过50个字符");
+            .NotEmpty().WithMessage("文件编码不能为空")
+            .MaximumLength(50).WithMessage("文件编码长度不能超过50个字符");
         RuleFor(x => x.FileName)
             .NotEmpty().WithMessage("文件名称不能为空")
             .MaximumLength(200).WithMessage("文件名称长度不能超过200个字符");
@@ -90,8 +90,8 @@ public class TaktEcAttachmentUpdateValidator : AbstractValidator<TaktEcAttachmen
             .NotEmpty().WithMessage("文件类别不能为空")
             .MaximumLength(8).WithMessage("文件类别长度不能超过8个字符");
         RuleFor(x => x.DocNo)
-            .NotEmpty().WithMessage("文件编号不能为空")
-            .MaximumLength(50).WithMessage("文件编号长度不能超过50个字符");
+            .NotEmpty().WithMessage("文件编码不能为空")
+            .MaximumLength(50).WithMessage("文件编码长度不能超过50个字符");
         RuleFor(x => x.FileName)
             .NotEmpty().WithMessage("文件名称不能为空")
             .MaximumLength(200).WithMessage("文件名称长度不能超过200个字符");
@@ -132,8 +132,8 @@ public class TaktEcAttachmentImportValidator : AbstractValidator<TaktEcAttachmen
             .NotEmpty().WithMessage("文件类别不能为空")
             .MaximumLength(8).WithMessage("文件类别长度不能超过8个字符");
         RuleFor(x => x.DocNo)
-            .NotEmpty().WithMessage("文件编号不能为空")
-            .MaximumLength(50).WithMessage("文件编号长度不能超过50个字符");
+            .NotEmpty().WithMessage("文件编码不能为空")
+            .MaximumLength(50).WithMessage("文件编码长度不能超过50个字符");
         RuleFor(x => x.FileName)
             .NotEmpty().WithMessage("文件名称不能为空")
             .MaximumLength(200).WithMessage("文件名称长度不能超过200个字符");

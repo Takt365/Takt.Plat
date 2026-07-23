@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Application.Dtos.Logistics.Quality.Cost
 // 文件名称：TaktQualityAssuranceOutgoingDtos.cs
-// 创建时间：2026-07-09
+// 创建时间：2026-07-23
 // 创建人：Takt365(Auto Generated)
 // 功能描述：QualityAssuranceOutgoing 模块 DTO（由 generate-dtos-from-entity.cjs 根据 TaktQualityAssuranceOutgoing 生成，请按需审阅）
 // 
@@ -36,7 +36,7 @@ public class TaktQualityAssuranceOutgoingDto : TaktCompanyDtoBase
     public long QualityAssuranceOutgoingId { get; set; }
 
     /// <summary>
-    /// 品质业务主表 ID（关联 TaktQualityAssurance.Id，选项 TaktQualityAssurances/options）
+    /// 品质业务主表 ID（选项 TaktQualityAssurances/options；DictValue=Id）
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
     public long QualityAssuranceId { get; set; }
@@ -77,7 +77,7 @@ public class TaktQualityAssuranceOutgoingDto : TaktCompanyDtoBase
     public string? OutgoingNote { get; set; } = string.Empty;
 
     /// <summary>
-    /// 是否作废（字典 sys_yes_no_type，0=否 1=是；编辑移除子行时标记作废）
+    /// 是否作废（字典 sys_yes_no_type；0=否 1=是；编辑移除子行时标记作废）
     /// </summary>
     public int IsObsolete { get; set; } = 0;
 
@@ -110,7 +110,7 @@ public class TaktQualityAssuranceOutgoingQueryDto : TaktPagedQuery
     public string? CompanyCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 品质业务主表 ID（关联 TaktQualityAssurance.Id，选项 TaktQualityAssurances/options）
+    /// 品质业务主表 ID（选项 TaktQualityAssurances/options；DictValue=Id）
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
     public long? QualityAssuranceId { get; set; }
@@ -146,7 +146,7 @@ public class TaktQualityAssuranceOutgoingQueryDto : TaktPagedQuery
     public string? OutgoingNote { get; set; } = string.Empty;
 
     /// <summary>
-    /// 是否作废（字典 sys_yes_no_type，0=否 1=是；编辑移除子行时标记作废）
+    /// 是否作废（字典 sys_yes_no_type；0=否 1=是；编辑移除子行时标记作废）
     /// </summary>
     public int? IsObsolete { get; set; }
 
@@ -196,7 +196,7 @@ public class TaktQualityAssuranceOutgoingCreateDto
     public string CompanyDefaultCulture { get; set; } = string.Empty;
 
     /// <summary>
-    /// 品质业务主表 ID（关联 TaktQualityAssurance.Id，选项 TaktQualityAssurances/options）
+    /// 品质业务主表 ID（选项 TaktQualityAssurances/options；DictValue=Id）
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
     public long QualityAssuranceId { get; set; }
@@ -233,7 +233,7 @@ public class TaktQualityAssuranceOutgoingCreateDto
     public string? OutgoingNote { get; set; } = string.Empty;
 
     /// <summary>
-    /// 是否作废（字典 sys_yes_no_type，0=否 1=是；编辑移除子行时标记作废）
+    /// 是否作废（字典 sys_yes_no_type；0=否 1=是；编辑移除子行时标记作废）
     /// </summary>
     public int IsObsolete { get; set; } = 0;
 
@@ -312,7 +312,7 @@ public class TaktQualityAssuranceOutgoingTemplateDto
     public string? CompanyCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 品质业务主表 ID（关联 TaktQualityAssurance.Id，选项 TaktQualityAssurances/options）
+    /// 品质业务主表 ID（选项 TaktQualityAssurances/options；DictValue=Id）
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
     public long? QualityAssuranceId { get; set; }
@@ -348,7 +348,7 @@ public class TaktQualityAssuranceOutgoingTemplateDto
     public string? OutgoingNote { get; set; } = string.Empty;
 
     /// <summary>
-    /// 是否作废（字典 sys_yes_no_type，0=否 1=是；编辑移除子行时标记作废）
+    /// 是否作废（字典 sys_yes_no_type；0=否 1=是；编辑移除子行时标记作废）
     /// </summary>
     public int? IsObsolete { get; set; }
 
@@ -385,7 +385,7 @@ public class TaktQualityAssuranceOutgoingImportDto
     public string? CompanyDefaultCulture { get; set; } = string.Empty;
 
     /// <summary>
-    /// 品质业务主表 ID（关联 TaktQualityAssurance.Id，选项 TaktQualityAssurances/options）
+    /// 品质业务主表 ID（选项 TaktQualityAssurances/options；DictValue=Id）
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
     public long? QualityAssuranceId { get; set; }
@@ -421,7 +421,7 @@ public class TaktQualityAssuranceOutgoingImportDto
     public string? OutgoingNote { get; set; } = string.Empty;
 
     /// <summary>
-    /// 是否作废（字典 sys_yes_no_type，0=否 1=是；编辑移除子行时标记作废）
+    /// 是否作废（字典 sys_yes_no_type；0=否 1=是；编辑移除子行时标记作废）
     /// </summary>
     public int? IsObsolete { get; set; }
 
@@ -459,7 +459,7 @@ public class TaktQualityAssuranceOutgoingExportDto
     public string CompanyCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 品质业务主表 ID（关联 TaktQualityAssurance.Id，选项 TaktQualityAssurances/options）
+    /// 品质业务主表 ID（选项 TaktQualityAssurances/options；DictValue=Id）
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
     public long QualityAssuranceId { get; set; }
@@ -495,7 +495,7 @@ public class TaktQualityAssuranceOutgoingExportDto
     public string? OutgoingNote { get; set; } = string.Empty;
 
     /// <summary>
-    /// 是否作废（字典 sys_yes_no_type，0=否 1=是；编辑移除子行时标记作废）
+    /// 是否作废（字典 sys_yes_no_type；0=否 1=是；编辑移除子行时标记作废）
     /// </summary>
     public int IsObsolete { get; set; } = 0;
 

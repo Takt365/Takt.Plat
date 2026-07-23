@@ -63,6 +63,7 @@
         :data-source="dataSource"
         :loading="loading"
         :stripe="true"
+        :virtual="true"
         :row-key="getFqcDefectHandlingId"
         :row-selection="rowSelection"
         :custom-row="onClickRow"

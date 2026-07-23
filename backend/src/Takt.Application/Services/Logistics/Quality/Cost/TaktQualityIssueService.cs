@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Application.Services.Logistics.Quality.Cost
 // 文件名称：TaktQualityIssueService.cs
-// 创建时间：2026-07-09
+// 创建时间：2026-07-23
 // 创建人：Takt365(Cursor AI)
 // 功能描述：品质问题应对主应用服务实现
 // 
@@ -110,12 +110,12 @@ public class TaktQualityIssueService : TaktServiceBase, ITaktQualityIssueService
         EnsureThreeLayerContext();
         var list = await _qualityIssueRepository.GetListAsync(
             x => x.TenantCode == CurrentTenantCode && x.CompanyCode == CurrentCompanyCode,
-            x => x.PlantCode ?? string.Empty,
+            x => x.QualityIssueCode ?? string.Empty,
             false);
         return list.Select(e => new TaktSelectOption
         {
-            DictValue = e.Id,
-            DictLabel = e.PlantCode ?? e.Id.ToString(),
+            DictValue = e.QualityIssueCode,
+            DictLabel = e.QualityIssueCode,
         }).ToList();
     }
 
@@ -405,7 +405,20 @@ public class TaktQualityIssueService : TaktServiceBase, ITaktQualityIssueService
     private async Task SaveQualityIssueChildrenAsync(TaktQualityIssue entity, TaktQualityIssueCreateDto dto)
     {
         // 质量问题会议调查试验费用明细（MeetingItems）
-        if (dto.MeetingItems is not { Count: > 0 })
+        List<TaktQualityIssueMeetingUpdateDto>? meetingItemsForSave;
+        if (dto is TaktQualityIssueUpdateDto updateDtoForMeetingItems && updateDtoForMeetingItems.MeetingItems != null)
+        {
+            meetingItemsForSave = updateDtoForMeetingItems.MeetingItems;
+        }
+        else if (dto.MeetingItems != null)
+        {
+            meetingItemsForSave = dto.MeetingItems.Adapt<List<TaktQualityIssueMeetingUpdateDto>>();
+        }
+        else
+        {
+            meetingItemsForSave = null;
+        }
+        if (meetingItemsForSave is not { Count: > 0 })
         {
             await MarkQualityIssueMeetingsObsoleteAsync(entity.Id);
         }
@@ -416,9 +429,9 @@ public class TaktQualityIssueService : TaktServiceBase, ITaktQualityIssueService
             var submittedIds = new HashSet<long>();
             var toCreate = new List<TaktQualityIssueMeeting>();
             var seenLineKeys = new HashSet<string>(StringComparer.Ordinal);
-            for (var i = 0; i < dto.MeetingItems.Count; i++)
+            for (var i = 0; i < meetingItemsForSave.Count; i++)
             {
-                var childDto = dto.MeetingItems[i];
+                var childDto = meetingItemsForSave[i];
                 childDto.QualityIssueId = entity.Id;
                 var lineKey = $"{entity.CompanyCode}|{entity.Id}|{childDto.LineNumber}";
                 if (!seenLineKeys.Add(lineKey))
@@ -497,7 +510,20 @@ public class TaktQualityIssueService : TaktServiceBase, ITaktQualityIssueService
             }
         }
         // 质量问题组装不良改修费用明细（AssyReworkItems）
-        if (dto.AssyReworkItems is not { Count: > 0 })
+        List<TaktQualityIssueAssyReworkUpdateDto>? assyReworkItemsForSave;
+        if (dto is TaktQualityIssueUpdateDto updateDtoForAssyReworkItems && updateDtoForAssyReworkItems.AssyReworkItems != null)
+        {
+            assyReworkItemsForSave = updateDtoForAssyReworkItems.AssyReworkItems;
+        }
+        else if (dto.AssyReworkItems != null)
+        {
+            assyReworkItemsForSave = dto.AssyReworkItems.Adapt<List<TaktQualityIssueAssyReworkUpdateDto>>();
+        }
+        else
+        {
+            assyReworkItemsForSave = null;
+        }
+        if (assyReworkItemsForSave is not { Count: > 0 })
         {
             await MarkQualityIssueAssyReworksObsoleteAsync(entity.Id);
         }
@@ -508,9 +534,9 @@ public class TaktQualityIssueService : TaktServiceBase, ITaktQualityIssueService
             var submittedIds = new HashSet<long>();
             var toCreate = new List<TaktQualityIssueAssyRework>();
             var seenLineKeys = new HashSet<string>(StringComparer.Ordinal);
-            for (var i = 0; i < dto.AssyReworkItems.Count; i++)
+            for (var i = 0; i < assyReworkItemsForSave.Count; i++)
             {
-                var childDto = dto.AssyReworkItems[i];
+                var childDto = assyReworkItemsForSave[i];
                 childDto.QualityIssueId = entity.Id;
                 var lineKey = $"{entity.CompanyCode}|{entity.Id}|{childDto.LineNumber}";
                 if (!seenLineKeys.Add(lineKey))
@@ -589,7 +615,20 @@ public class TaktQualityIssueService : TaktServiceBase, ITaktQualityIssueService
             }
         }
         // 质量问题PCBA不良改修费用明细（PcbaReworkItems）
-        if (dto.PcbaReworkItems is not { Count: > 0 })
+        List<TaktQualityIssuePcbaReworkUpdateDto>? pcbaReworkItemsForSave;
+        if (dto is TaktQualityIssueUpdateDto updateDtoForPcbaReworkItems && updateDtoForPcbaReworkItems.PcbaReworkItems != null)
+        {
+            pcbaReworkItemsForSave = updateDtoForPcbaReworkItems.PcbaReworkItems;
+        }
+        else if (dto.PcbaReworkItems != null)
+        {
+            pcbaReworkItemsForSave = dto.PcbaReworkItems.Adapt<List<TaktQualityIssuePcbaReworkUpdateDto>>();
+        }
+        else
+        {
+            pcbaReworkItemsForSave = null;
+        }
+        if (pcbaReworkItemsForSave is not { Count: > 0 })
         {
             await MarkQualityIssuePcbaReworksObsoleteAsync(entity.Id);
         }
@@ -600,9 +639,9 @@ public class TaktQualityIssueService : TaktServiceBase, ITaktQualityIssueService
             var submittedIds = new HashSet<long>();
             var toCreate = new List<TaktQualityIssuePcbaRework>();
             var seenLineKeys = new HashSet<string>(StringComparer.Ordinal);
-            for (var i = 0; i < dto.PcbaReworkItems.Count; i++)
+            for (var i = 0; i < pcbaReworkItemsForSave.Count; i++)
             {
-                var childDto = dto.PcbaReworkItems[i];
+                var childDto = pcbaReworkItemsForSave[i];
                 childDto.QualityIssueId = entity.Id;
                 var lineKey = $"{entity.CompanyCode}|{entity.Id}|{childDto.LineNumber}";
                 if (!seenLineKeys.Add(lineKey))

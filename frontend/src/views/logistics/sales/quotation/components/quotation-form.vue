@@ -10,7 +10,7 @@
 <template>
   <a-form
     ref="formRef"
-    class="takt-generated-form quotation-form flex flex-col min-h-0"
+    class="takt-generated-form quotation-form flex flex-col min-h-0 overflow-visible"
     :model="formState"
     :rules="rules"
     layout="horizontal"
@@ -22,53 +22,11 @@
     >
       <a-tab-pane
         key="tab-0"
-        :tab="t('common.page.form.tabs.basicinfo') + ' (1/2)'"
+        :tab="t('common.page.form.tabs.basicinfo') + ' (1/3)'"
         force-render
       >
         <div :class="formContentClass">
           <a-row :gutter="24">
-            <a-col :span="12">
-              <a-form-item
-                :label="pi.label('tenantCode')"
-                name="tenantCode"
-              >
-                <a-input
-                  v-model:value="formState.tenantCode"
-                  :placeholder="pi.ph('tenantCode')"
-                  show-count
-                  :maxlength="20"
-                  disabled
-                />
-              </a-form-item>
-            </a-col>
-            <a-col :span="12">
-              <a-form-item
-                :label="pi.label('companyCode')"
-                name="companyCode"
-              >
-                <a-input
-                  v-model:value="formState.companyCode"
-                  :placeholder="pi.ph('companyCode')"
-                  show-count
-                  :maxlength="20"
-                  disabled
-                />
-              </a-form-item>
-            </a-col>
-            <a-col :span="12">
-              <a-form-item
-                :label="pi.label('companyDefaultCulture')"
-                name="companyDefaultCulture"
-              >
-                <a-input
-                  v-model:value="formState.companyDefaultCulture"
-                  :placeholder="pi.ph('companyDefaultCulture')"
-                  show-count
-                  :maxlength="20"
-                  disabled
-                />
-              </a-form-item>
-            </a-col>
             <a-col :span="12">
               <a-form-item
                 :label="pi.label('plantCode')"
@@ -112,14 +70,14 @@
             </a-col>
             <a-col :span="12">
               <a-form-item
-                :label="pi.label('customerName')"
-                name="customerName"
+                :label="pi.label('customerName1')"
+                name="customerName1"
               >
                 <a-input
-                  v-model:value="formState.customerName"
-                  :placeholder="pi.ph('customerName')"
+                  v-model:value="formState.customerName1"
+                  :placeholder="pi.ph('customerName1')"
                   show-count
-                  :maxlength="200"
+                  :maxlength="140"
                   allow-clear
                 />
               </a-form-item>
@@ -162,17 +120,7 @@
                 />
               </a-form-item>
             </a-col>
-          </a-row>
-        </div>
-      </a-tab-pane>
-      <a-tab-pane
-        key="tab-1"
-        :tab="t('common.page.form.tabs.basicinfo') + ' (2/2)'"
-        force-render
-      >
-        <div :class="formContentClass">
-          <a-row :gutter="24">
-            <a-col :span="24">
+            <a-col :span="12">
               <a-form-item
                 :label="pi.label('totalQuantity')"
                 name="totalQuantity"
@@ -184,7 +132,7 @@
                 />
               </a-form-item>
             </a-col>
-            <a-col :span="24">
+            <a-col :span="12">
               <a-form-item
                 :label="pi.label('totalAmount')"
                 name="totalAmount"
@@ -196,7 +144,7 @@
                 />
               </a-form-item>
             </a-col>
-            <a-col :span="24">
+            <a-col :span="12">
               <a-form-item
                 :label="pi.label('discountAmount')"
                 name="discountAmount"
@@ -205,6 +153,41 @@
                   v-model:value="formState.discountAmount"
                   :placeholder="pi.ph('discountAmount')"
                   style="width: 100%"
+                />
+              </a-form-item>
+            </a-col>
+          </a-row>
+        </div>
+      </a-tab-pane>
+      <a-tab-pane
+        key="tab-1"
+        :tab="t('common.page.form.tabs.basicinfo') + ' (2/3)'"
+        force-render
+      >
+        <div :class="formContentClass">
+          <a-row :gutter="24">
+            <a-col :span="24">
+              <a-form-item
+                :label="pi.label('currencyCode')"
+                name="currencyCode"
+              >
+                <TaktSelect
+                  v-model:value="formState.currencyCode"
+                  dict-type="accounting_currency_code"
+                  :placeholder="pi.ph('currencyCode')"
+                  :disabled="!!formData?.salesQuotationId"
+                />
+              </a-form-item>
+            </a-col>
+            <a-col :span="24">
+              <a-form-item
+                :label="pi.label('taxRate')"
+                name="taxRate"
+              >
+                <TaktSelect
+                  v-model:value="formState.taxRate"
+                  dict-type="accounting_tax_rate_param"
+                  :placeholder="pi.ph('taxRate')"
                 />
               </a-form-item>
             </a-col>
@@ -254,6 +237,58 @@
                   v-model:value="formState.quotationStatus"
                   dict-type="logistics_quotation_status"
                   :placeholder="pi.ph('quotationStatus')"
+                />
+              </a-form-item>
+            </a-col>
+          </a-row>
+        </div>
+      </a-tab-pane>
+      <a-tab-pane
+        key="tab-2"
+        :tab="t('common.page.form.tabs.basicinfo') + ' (3/3)'"
+        force-render
+      >
+        <div :class="formContentClass">
+          <a-row :gutter="24">
+            <a-col :span="24">
+              <a-form-item
+                :label="pi.label('tenantCode')"
+                name="tenantCode"
+              >
+                <a-input
+                  v-model:value="formState.tenantCode"
+                  :placeholder="pi.ph('tenantCode')"
+                  show-count
+                  :maxlength="20"
+                  disabled
+                />
+              </a-form-item>
+            </a-col>
+            <a-col :span="24">
+              <a-form-item
+                :label="pi.label('companyCode')"
+                name="companyCode"
+              >
+                <a-input
+                  v-model:value="formState.companyCode"
+                  :placeholder="pi.ph('companyCode')"
+                  show-count
+                  :maxlength="20"
+                  disabled
+                />
+              </a-form-item>
+            </a-col>
+            <a-col :span="24">
+              <a-form-item
+                :label="pi.label('companyDefaultCulture')"
+                name="companyDefaultCulture"
+              >
+                <a-input
+                  v-model:value="formState.companyDefaultCulture"
+                  :placeholder="pi.ph('companyDefaultCulture')"
+                  show-count
+                  :maxlength="20"
+                  disabled
                 />
               </a-form-item>
             </a-col>
@@ -312,8 +347,66 @@
       id-field="salesQuotationItemId"
       :default-row="createDefaultSalesQuotationItemRow"
       :disabled="loading"
+      :enable-vertical-scroll="false"
       section-border
-    />
+      class="w-full min-w-0"
+    >
+      <template #cell-materialCode="{ record }">
+        <TaktSelect
+          v-model:value="record.materialCode"
+          api-url="TaktMaterialPlants/options"
+          class="w-full"
+          :get-popup-container="getSelectPopupContainer"
+          :placeholder="salesQuotationItemPi.queryPh('materialCode', 'select')"
+          :disabled="loading"
+          allow-clear
+        />
+      </template>
+      <template #cell-salesUnit="{ record }">
+        <TaktSelect
+          v-model:value="record.salesUnit"
+          dict-type="logistics_unit_of_measure_code"
+          class="w-full"
+          :get-popup-container="getSelectPopupContainer"
+          :placeholder="salesQuotationItemPi.ph('salesUnit')"
+          :disabled="loading"
+          allow-clear
+        />
+      </template>
+      <template #cell-salesPerUnit="{ record }">
+        <TaktSelect
+          v-model:value="record.salesPerUnit"
+          dict-type="logistics_price_unit_param"
+          class="w-full"
+          :get-popup-container="getSelectPopupContainer"
+          :placeholder="salesQuotationItemPi.ph('salesPerUnit')"
+          :disabled="loading"
+          allow-clear
+        />
+      </template>
+      <template #cell-discountRate="{ record }">
+        <TaktSelect
+          v-model:value="record.discountRate"
+          dict-type="logistics_discount_rate_param"
+          class="w-full"
+          :get-popup-container="getSelectPopupContainer"
+          :placeholder="salesQuotationItemPi.ph('discountRate')"
+          :disabled="loading"
+          allow-clear
+        />
+      </template>
+      <template #cell-isObsolete="{ record }">
+        <TaktSelect
+          v-model:value="record.isObsolete"
+          dict-type="sys_yes_no_type"
+          class="w-full"
+          :get-popup-container="getSelectPopupContainer"
+          :placeholder="salesQuotationItemPi.ph('isObsolete')"
+          :disabled="loading"
+          allow-clear
+        />
+      </template>
+    </TaktEditableTable>
   </a-form>
 </template>
 
@@ -366,13 +459,19 @@ const formContentClass = computed(() => (formFields.length > 10 ? 'takt-form-con
 /** 当前激活的 Tab key */
 const activeTab = ref('tab-0')
 /** CreateDto 字段名列表（与 formState 键对齐） */
-const formFields = ["tenantCode","companyCode","companyDefaultCulture","plantCode","salesQuotationCode","customerCode","customerName","quotationDate","validUntilDate","salesBy","totalQuantity","totalAmount","discountAmount","taxAmount","actualAmount","salesOrderCode","quotationStatus","extField","remark"]
+const formFields = ["tenantCode","companyCode","companyDefaultCulture","plantCode","salesQuotationCode","customerCode","customerName1","quotationDate","validUntilDate","salesBy","totalQuantity","totalAmount","discountAmount","currencyCode","taxRate","taxAmount","actualAmount","salesOrderCode","quotationStatus","extField","remark"]
 
 
 import type { TaktEditableTableColumn } from '@/components/business/takt-editable-table/types'
+import { resolveNextDetailLineNumber } from '@/utils/takt-sequence'
 import { useSalesQuotationItemI18n } from '../composables/use-quotation-item-i18n'
 
 const salesQuotationItemPi = useSalesQuotationItemI18n()
+
+/** 弹窗/表格内 TaktSelect 下拉挂载容器（避免 overflow 裁剪与表头列错位） */
+function getSelectPopupContainer(triggerNode?: HTMLElement): HTMLElement {
+  return triggerNode?.ownerDocument?.body ?? document.body
+}
 
 const childSalesQuotationItemRows = ref<Record<string, unknown>[]>([])
 const salesQuotationItemTableRef = ref<{
@@ -381,88 +480,129 @@ const salesQuotationItemTableRef = ref<{
   resetRows: () => void
 } | null>(null)
 
+/** 是否已持久化的子表行 */
+function isPersistedSalesQuotationItemRow(row: Record<string, unknown>): boolean {
+  const id = row.salesQuotationItemId
+  if (id == null || id === '') {
+    return false
+  }
+  return String(id) !== '0'
+}
+
+/** 分配下一可用子表行号（含作废行，仅据当前表格行递增） */
+function allocateNextSalesQuotationItemLineNumber(): number {
+  const rows = salesQuotationItemTableRef.value?.getRows?.() ?? childSalesQuotationItemRows.value
+  return resolveNextDetailLineNumber(0, rows)
+}
+
 /** 子表 salesQuotationItem 可编辑列 */
 const salesQuotationItemFormColumns = computed<TaktEditableTableColumn[]>(() => [
   {
     key: 'lineNumber',
     title: salesQuotationItemPi.label('lineNumber'),
-    editor: 'inputNumber',
-    width: 140, summary: 'sum',
+    width: 140,
   },
   {
     key: 'materialCode',
     title: salesQuotationItemPi.label('materialCode'),
-    editor: 'input',
     width: 140,
-  },
-  {
-    key: 'materialName',
-    title: salesQuotationItemPi.label('materialName'),
-    editor: 'input',
-    width: 140,
-  },
-  {
-    key: 'materialSpecification',
-    title: salesQuotationItemPi.label('materialSpecification'),
-    editor: 'input',
-    width: 140, allowClear: true, placeholder: salesQuotationItemPi.ph('materialSpecification'),
   },
   {
     key: 'salesUnit',
     title: salesQuotationItemPi.label('salesUnit'),
-    editor: 'input',
     width: 140,
   },
   {
     key: 'quotationQuantity',
     title: salesQuotationItemPi.label('quotationQuantity'),
-    editor: 'inputNumber',
     width: 140,
   },
   {
     key: 'salesPerUnit',
     title: salesQuotationItemPi.label('salesPerUnit'),
-    editor: 'inputNumber',
     width: 140,
   },
   {
-    key: 'unitPrice',
-    title: salesQuotationItemPi.label('unitPrice'),
-    editor: 'inputNumber',
+    key: 'quotationUnitPrice',
+    title: salesQuotationItemPi.label('quotationUnitPrice'),
+    width: 140,
+  },
+  {
+    key: 'discountRate',
+    title: salesQuotationItemPi.label('discountRate'),
+    width: 140,
+  },
+  {
+    key: 'discountAmount',
+    title: salesQuotationItemPi.label('discountAmount'),
+    width: 140,
+  },
+  {
+    key: 'taxIncludedAmount',
+    title: salesQuotationItemPi.label('taxIncludedAmount'),
+    width: 140,
+  },
+  {
+    key: 'untaxedAmount',
+    title: salesQuotationItemPi.label('untaxedAmount'),
+    width: 140,
+  },
+  {
+    key: 'taxAmount',
+    title: salesQuotationItemPi.label('taxAmount'),
+    width: 140,
+  },
+  {
+    key: 'isObsolete',
+    title: salesQuotationItemPi.label('isObsolete'),
     width: 140,
   },
 ])
 
 /** 编辑态从 formData 同步各子表行 */
 function syncChildRowsFromFormData(val: Partial<SalesQuotationCreate & { salesQuotationId?: string }> | null | undefined) {
-  childSalesQuotationItemRows.value = ((val as any)?.items ?? []) as Record<string, unknown>[]
+  const rows_salesQuotationItem = ((val as any)?.items ?? []) as Record<string, unknown>[]
+  childSalesQuotationItemRows.value = rows_salesQuotationItem
 }
 
 function createDefaultSalesQuotationItemRow(): Record<string, unknown> {
   return {
-    lineNumber: (childSalesQuotationItemRows.value.length + 1) * 10,
+    lineNumber: allocateNextSalesQuotationItemLineNumber(),
     materialCode: '',
-    materialName: '',
-    materialSpecification: '',
     salesUnit: '',
     quotationQuantity: 0,
     salesPerUnit: 0,
-    unitPrice: 0,
+    quotationUnitPrice: 0,
+    discountRate: 0,
+    discountAmount: 0,
+    taxIncludedAmount: 0,
+    untaxedAmount: 0,
+    taxAmount: 0,
+    isObsolete: 0,
   }
 }
 
 /** 组装 Create/Update 载荷（主表 + 子表数组） */
 function buildSubmitPayload() {
   const masterId = props.formData?.salesQuotationId ?? ''
+  const isUpdate = Boolean(masterId)
   return {
     ...formState,
-    items: salesQuotationItemTableRef.value?.getRows?.() ?? childSalesQuotationItemRows.value.map((rest) => ({
-      ...rest,
-      tenantCode: tenantStore.tenantCode,
-      companyCode: tenantStore.companyCode,
-      companyDefaultCulture: userStore.userInfo?.companyDefaultCulture ?? '',
-      salesQuotationId: masterId,
-    })),
+    items: salesQuotationItemTableRef.value?.getRows?.() ?? childSalesQuotationItemRows.value.map((row) => {
+      const normalized = {
+        ...row,
+        tenantCode: tenantStore.tenantCode,
+        companyCode: tenantStore.companyCode,
+        companyDefaultCulture: userStore.userInfo?.companyDefaultCulture ?? '',
+        salesQuotationId: masterId,
+      }
+      if (isUpdate && isPersistedSalesQuotationItemRow(row)) {
+        normalized.salesQuotationItemId = row.salesQuotationItemId
+      } else {
+        delete normalized.salesQuotationItemId
+      }
+      return normalized
+    }),
   }
 }
 
@@ -484,6 +624,8 @@ const formRef = ref()
 const formState = reactive<Record<string, any>>({})
 /** 表单字段默认值（字典 IsDefault=1，来自 TaktDictDataSeedData） */
 const FORM_FIELD_DEFAULTS: Record<string, string | number> = {
+  currencyCode: "CNY",
+  taxRate: 10,
   quotationStatus: 0
 }
 
@@ -559,10 +701,10 @@ const rules = computed<Record<string, Rule[]>>(() => ({
       trigger: 'change'
     }
   ],
-  customerName: [
+  customerName1: [
     {
       required: true,
-      message: pi.ph('customerName'),
+      message: pi.ph('customerName1'),
       trigger: 'blur'
     }
   ],
@@ -607,6 +749,26 @@ const rules = computed<Record<string, Rule[]>>(() => ({
       const num = typeof value === 'number' ? value : Number(value)
       if (!Number.isFinite(num)) {
         return Promise.reject(pi.ph('discountAmount'))
+      }
+      return Promise.resolve()
+    },
+    trigger: 'change'
+  }],
+  currencyCode: [
+    {
+      required: true,
+      message: pi.ph('currencyCode'),
+      trigger: 'change'
+    }
+  ],
+  taxRate: [{
+    validator: async (_rule, value) => {
+      if (value === undefined || value === null || value === '') {
+        return Promise.reject(pi.ph('taxRate'))
+      }
+      const num = typeof value === 'number' ? value : Number(value)
+      if (!Number.isFinite(num)) {
+        return Promise.reject(pi.ph('taxRate'))
       }
       return Promise.resolve()
     },
@@ -674,6 +836,10 @@ function getValues(): Record<string, any> {
   if ('discountAmount' in payload) {
     const rawdiscountAmount = payload.discountAmount
     payload.discountAmount = typeof rawdiscountAmount === 'number' ? rawdiscountAmount : Number(rawdiscountAmount)
+  }
+  if ('taxRate' in payload) {
+    const rawtaxRate = payload.taxRate
+    payload.taxRate = typeof rawtaxRate === 'number' ? rawtaxRate : Number(rawtaxRate)
   }
   if ('taxAmount' in payload) {
     const rawtaxAmount = payload.taxAmount

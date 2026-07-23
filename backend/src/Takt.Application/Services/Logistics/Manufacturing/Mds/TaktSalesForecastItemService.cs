@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Application.Services.Logistics.Manufacturing.Mds
 // 文件名称：TaktSalesForecastItemService.cs
-// 创建时间：2026-07-13
+// 创建时间：2026-07-23
 // 创建人：Takt365(Cursor AI)
 // 功能描述：销售预测明细应用服务实现
 // 
@@ -89,20 +89,20 @@ public class TaktSalesForecastItemService : TaktServiceBase, ITaktSalesForecastI
     }
 
     /// <summary>
-    /// 获取销售计划明细选项列表
+    /// 获取销售预测明细选项列表
     /// </summary>
     /// <returns>下拉选项</returns>
     public async Task<List<TaktSelectOption>> GetSalesForecastItemOptionsAsync()
     {
         EnsureThreeLayerContext();
         var list = await _salesForecastItemRepository.GetListAsync(
-            x => x.TenantCode == CurrentTenantCode && x.CompanyCode == CurrentCompanyCode,
+            x => x.TenantCode == CurrentTenantCode && x.CompanyCode == CurrentCompanyCode && x.IsObsolete == 0,
             x => x.MaterialName ?? string.Empty,
             false);
         return list.Select(e => new TaktSelectOption
         {
-            DictValue = e.Id,
-            DictLabel = e.MaterialName ?? e.Id.ToString(),
+            DictValue = e.SalesForecastCode,
+            DictLabel = e.MaterialName ?? e.SalesForecastCode,
         }).ToList();
     }
 

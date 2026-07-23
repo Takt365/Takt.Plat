@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Application.Services.Logistics.Quality.Operation
 // 文件名称：TaktFqcOrderItemService.cs
-// 创建时间：2026-07-09
+// 创建时间：2026-07-23
 // 创建人：Takt365(Cursor AI)
 // 功能描述：出货检验单明细应用服务实现
 // 
@@ -101,13 +101,13 @@ public class TaktFqcOrderItemService : TaktServiceBase, ITaktFqcOrderItemService
     {
         EnsureThreeLayerContext();
         var list = await _fqcOrderItemRepository.GetListAsync(
-            x => x.TenantCode == CurrentTenantCode && x.CompanyCode == CurrentCompanyCode && x.JudgeStatus == 1,
+            x => x.TenantCode == CurrentTenantCode && x.CompanyCode == CurrentCompanyCode && x.JudgeStatus == 1 && x.IsObsolete == 0,
             x => x.MaterialName ?? string.Empty,
             false);
         return list.Select(e => new TaktSelectOption
         {
-            DictValue = e.Id,
-            DictLabel = e.MaterialName ?? e.Id.ToString(),
+            DictValue = e.FqcOrderCode,
+            DictLabel = e.MaterialName ?? e.FqcOrderCode,
         }).ToList();
     }
 
@@ -394,9 +394,9 @@ public class TaktFqcOrderItemService : TaktServiceBase, ITaktFqcOrderItemService
     {
         // 出货检验不良处理记录（DefectHandlings）
         List<TaktFqcDefectHandlingUpdateDto>? defectHandlingsForSave;
-        if (dto is TaktFqcOrderItemUpdateDto updateDto && updateDto.DefectHandlings != null)
+        if (dto is TaktFqcOrderItemUpdateDto updateDtoForDefectHandlings && updateDtoForDefectHandlings.DefectHandlings != null)
         {
-            defectHandlingsForSave = updateDto.DefectHandlings;
+            defectHandlingsForSave = updateDtoForDefectHandlings.DefectHandlings;
         }
         else if (dto.DefectHandlings != null)
         {

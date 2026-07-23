@@ -27,7 +27,7 @@ namespace Takt.Domain.Entities.Logistics.Quality.Cost;
 public class TaktQualityAssurance : TaktCompanyEntityBase
 {
     /// <summary>
-    /// 工厂代码（选项 TaktPlants/options，DictValue=PlantCode）
+    /// 工厂代码（选项 TaktPlants/options；DictValue=PlantCode）
     /// </summary>
     [SugarColumn(ColumnName = "plant_code", ColumnDescription = "工厂代码", Length = 4, ColumnDataType = "nvarchar", IsNullable = false)]
     public string PlantCode { get; set; } = string.Empty;
@@ -47,10 +47,10 @@ public class TaktQualityAssurance : TaktCompanyEntityBase
     public string AssuranceMonth { get; set; } = string.Empty;
 
     /// <summary>
-    /// 顾客名
+    /// 客户名称1（冗余，与 TaktCustomer.CustomerName1 对齐）
     /// </summary>
-    [SugarColumn(ColumnName = "customer_name", ColumnDescription = "顾客名", Length = 50, ColumnDataType = "nvarchar", IsNullable = true)]
-    public string? CustomerName { get; set; }
+    [SugarColumn(ColumnName = "customer_name1", ColumnDescription = "客户名称1", Length = 140, ColumnDataType = "nvarchar", IsNullable = true)]
+    public string? CustomerName1 { get; set; }
 
     /// <summary>
     /// Debit Note No

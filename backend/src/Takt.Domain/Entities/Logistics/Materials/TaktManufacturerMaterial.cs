@@ -39,7 +39,7 @@ namespace Takt.Domain.Entities.Logistics.Materials;
 public class TaktManufacturerMaterial : TaktCompanyEntityBase
 {
     /// <summary>
-    /// 制造商 ID（选项 TaktManufacturers/options，DictValue=Id）
+    /// 制造商 ID（选项 TaktManufacturers/options；DictValue=Id）
     /// </summary>
     [SugarColumn(ColumnName = "manufacturer_id", ColumnDescription = "制造商ID", ColumnDataType = "bigint", IsNullable = false)]
     public long ManufacturerId { get; set; }
@@ -57,7 +57,7 @@ public class TaktManufacturerMaterial : TaktCompanyEntityBase
     public int LineNumber { get; set; } = 0;
 
     /// <summary>
-    /// 制造商物料编码（制造商内部的物料编号）
+    /// 制造商物料编码（制造商内部的物料编码）
     /// </summary>
     [SugarColumn(ColumnName = "manufacturer_material_code", ColumnDescription = "制造商物料编码", ColumnDataType = "nvarchar", Length = 40, IsNullable = false)]
     public string ManufacturerMaterialCode { get; set; } = string.Empty;
@@ -75,13 +75,13 @@ public class TaktManufacturerMaterial : TaktCompanyEntityBase
     public string? ManufacturerMaterialSpecification { get; set; }
 
     /// <summary>
-    /// 物料编码（选项 TaktMaterialPlants/options，DictValue=MaterialCode，ExtValue=PlantCode）
+    /// 物料编码（选项 TaktMaterialPlants/options；DictValue=MaterialCode，ExtValue=PlantCode）
     /// </summary>
     [SugarColumn(ColumnName = "material_code", ColumnDescription = "物料编码", ColumnDataType = "nvarchar", Length = 20, IsNullable = false)]
     public string MaterialCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 是否作废（字典 sys_yes_no_type，0=否 1=是；编辑移除子行时标记作废）
+    /// 是否作废（字典 sys_yes_no_type；0=否 1=是；编辑移除子行时标记作废）
     /// </summary>
     [SugarColumn(ColumnName = "is_obsolete", ColumnDescription = "是否作废", ColumnDataType = "int", IsNullable = false, DefaultValue = "0")]
     public int IsObsolete { get; set; } = 0;

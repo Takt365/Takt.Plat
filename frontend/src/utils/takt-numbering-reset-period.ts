@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Frontend.Utils
 // 文件名称：takt-numbering-reset-period.ts
-// 功能描述：编号规则 DateFormat ↔ ResetPeriod 对齐（与 TaktNumberingHelper 一致）
+// 功能描述：编码规则 DateFormat ↔ ResetPeriod 对齐（与 TaktNumberingHelper 一致）
 // ========================================
 
 /** 日期格式 → 必须使用的重置周期（sys_reset_period_config dictValue） */

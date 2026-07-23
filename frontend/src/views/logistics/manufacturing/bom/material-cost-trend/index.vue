@@ -2,7 +2,7 @@
 <!-- 项目名称：节拍数字工厂 · Takt Plat (TDF) -->
 <!-- 命名空间：@/views/logistics/manufacturing/bom/material-cost-trend -->
 <!-- 文件名称：index.vue -->
-<!-- 功能描述：产品成本分析报表：必选单个产品 → 明细表组件月材料成本转置涨跌 -->
+<!-- 功能描述：产品成本推移报表：必选单个产品 → 明细表组件月材料成本转置涨跌 -->
 <!-- 版权信息：Copyright (c) 2026 Takt  All rights reserved. -->
 <!-- 免责声明：此软件使用 MIT License，作者不承担任何使用风险。 -->
 <!-- ======================================== -->
@@ -49,7 +49,7 @@
 
 <script setup lang="ts">
 /**
- * 产品成本分析报表：必选单个产品，展示明细表组件行转置
+ * 产品成本推移报表：必选单个产品，展示明细表组件行转置
  */
 import { message } from 'ant-design-vue'
 import { useI18n } from 'vue-i18n'

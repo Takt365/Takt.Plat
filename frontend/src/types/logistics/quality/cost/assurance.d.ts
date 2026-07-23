@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：frontend/src/types/logistics/quality/cost
 // 文件名称：assurance.d.ts
-// 创建时间：2026-06-30
+// 创建时间：2026-07-23
 // 创建人：Takt365(Auto Generated)
 // 功能描述：logistics/quality/cost 模块类型定义（自动生成；类型名去 Takt 前缀与末尾 Dto，如 TaktCompanyDto → Company）
 // 
@@ -29,7 +29,7 @@ export interface QualityAssurance extends CompanyDtoBase {
   qualityAssuranceId: string;
 
   /**
-   * 工厂代码（选项 TaktPlants/options，DictValue=PlantCode）
+   * 工厂代码（选项 TaktPlants/options；DictValue=PlantCode）
    */
   plantCode: string;
 
@@ -44,9 +44,9 @@ export interface QualityAssurance extends CompanyDtoBase {
   assuranceMonth: string;
 
   /**
-   * 顾客名
+   * 客户名称1（冗余，与 TaktCustomer.CustomerName1 对齐）
    */
-  customerName?: string;
+  customerName1?: string;
 
   /**
    * Debit Note No
@@ -124,7 +124,7 @@ export interface QualityAssuranceQuery extends TaktPagedQuery {
   companyCode?: string;
 
   /**
-   * 工厂代码（选项 TaktPlants/options，DictValue=PlantCode）
+   * 工厂代码（选项 TaktPlants/options；DictValue=PlantCode）
    */
   plantCode?: string;
 
@@ -139,9 +139,9 @@ export interface QualityAssuranceQuery extends TaktPagedQuery {
   assuranceMonth?: string;
 
   /**
-   * 顾客名
+   * 客户名称1（冗余，与 TaktCustomer.CustomerName1 对齐）
    */
-  customerName?: string;
+  customerName1?: string;
 
   /**
    * Debit Note No
@@ -208,7 +208,7 @@ export interface QualityAssuranceCreate {
   companyDefaultCulture: string;
 
   /**
-   * 工厂代码（选项 TaktPlants/options，DictValue=PlantCode）
+   * 工厂代码（选项 TaktPlants/options；DictValue=PlantCode）
    */
   plantCode: string;
 
@@ -223,9 +223,9 @@ export interface QualityAssuranceCreate {
   assuranceMonth: string;
 
   /**
-   * 顾客名
+   * 客户名称1（冗余，与 TaktCustomer.CustomerName1 对齐）
    */
-  customerName?: string;
+  customerName1?: string;
 
   /**
    * Debit Note No
@@ -307,6 +307,41 @@ export interface QualityAssuranceUpdate extends QualityAssuranceCreate {
    */
   qualityAssuranceId: string;
 
+  /**
+   * 来料检验费用明细列表（子表，级联保存）
+   */
+  incomingItems?: any;
+
+  /**
+   * 初期/定期检定费用明细列表（子表，级联保存）
+   */
+  firstArticleItems?: any;
+
+  /**
+   * 设备校正费用明细列表（子表，级联保存）
+   */
+  calibrationItems?: any;
+
+  /**
+   * 其他通常业务费用明细列表（子表，级联保存）
+   */
+  otherItems?: any;
+
+  /**
+   * 出货检验费用明细列表（子表，级联保存）
+   */
+  outgoingItems?: any;
+
+  /**
+   * 信赖性评价/ORT费用明细列表（子表，级联保存）
+   */
+  reliabilityItems?: any;
+
+  /**
+   * 顾客品质要求对应费用明细列表（子表，级联保存）
+   */
+  customerResponseItems?: any;
+
 }
 
 
@@ -327,7 +362,7 @@ export interface QualityAssuranceTemplate {
   companyCode?: string;
 
   /**
-   * 工厂代码（选项 TaktPlants/options，DictValue=PlantCode）
+   * 工厂代码（选项 TaktPlants/options；DictValue=PlantCode）
    */
   plantCode?: string;
 
@@ -342,9 +377,9 @@ export interface QualityAssuranceTemplate {
   assuranceMonth?: string;
 
   /**
-   * 顾客名
+   * 客户名称1（冗余，与 TaktCustomer.CustomerName1 对齐）
    */
-  customerName?: string;
+  customerName1?: string;
 
   /**
    * Debit Note No
@@ -436,7 +471,7 @@ export interface QualityAssuranceImport {
   companyDefaultCulture?: string;
 
   /**
-   * 工厂代码（选项 TaktPlants/options，DictValue=PlantCode）
+   * 工厂代码（选项 TaktPlants/options；DictValue=PlantCode）
    */
   plantCode?: string;
 
@@ -451,9 +486,9 @@ export interface QualityAssuranceImport {
   assuranceMonth?: string;
 
   /**
-   * 顾客名
+   * 客户名称1（冗余，与 TaktCustomer.CustomerName1 对齐）
    */
-  customerName?: string;
+  customerName1?: string;
 
   /**
    * Debit Note No
@@ -540,7 +575,7 @@ export interface QualityAssuranceExport {
   companyCode: string;
 
   /**
-   * 工厂代码（选项 TaktPlants/options，DictValue=PlantCode）
+   * 工厂代码（选项 TaktPlants/options；DictValue=PlantCode）
    */
   plantCode: string;
 
@@ -555,9 +590,9 @@ export interface QualityAssuranceExport {
   assuranceMonth: string;
 
   /**
-   * 顾客名
+   * 客户名称1（冗余，与 TaktCustomer.CustomerName1 对齐）
    */
-  customerName?: string;
+  customerName1?: string;
 
   /**
    * Debit Note No

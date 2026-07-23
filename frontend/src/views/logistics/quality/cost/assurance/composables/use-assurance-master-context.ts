@@ -9,10 +9,13 @@
 import { inject, provide, type InjectionKey, type Ref, ref } from 'vue'
 import type { QualityAssurance } from '@/types/logistics/quality/cost/assurance'
 
+/** 表格行类型（与 index 列表行、TaktSingleTable slot record 一致） */
+export type QualityAssuranceRowRecord = QualityAssurance | Record<string, unknown>
+
 /** 主表选中行上下文 */
 export interface QualityAssuranceMasterContext {
   /** 当前选中的主表行（右侧明细依赖） */
-  selectedMasterRow: Ref<QualityAssurance | null>
+  selectedMasterRow: Ref<QualityAssuranceRowRecord | null>
 }
 
 const qualityAssuranceMasterContextKey: InjectionKey<QualityAssuranceMasterContext> = Symbol('assuranceMasterContext')
@@ -22,7 +25,7 @@ const qualityAssuranceMasterContextKey: InjectionKey<QualityAssuranceMasterConte
  * @returns {QualityAssuranceMasterContext} 主表上下文
  */
 export function provideQualityAssuranceMasterContext(): QualityAssuranceMasterContext {
-  const selectedMasterRow = ref<QualityAssurance | null>(null)
+  const selectedMasterRow = ref<QualityAssuranceRowRecord | null>(null)
   const ctx: QualityAssuranceMasterContext = { selectedMasterRow }
   provide(qualityAssuranceMasterContextKey, ctx)
   return ctx

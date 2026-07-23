@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Infrastructure.Data.Seeds.I18nSeedData.Logistics.Serial
 // 文件名称：TaktSerialUploadI18nSeedData.cs
-// 创建时间：2026-07-20
+// 创建时间：2026-07-23
 // 创建人：Takt365(Auto Generated)
 // 功能描述：TaktSerialUpload 实体字段国际化种子（无对应 frontend locales；TranslationText 取自 ColumnDescription，ContextNote 取自属性 XML summary）
 // 
@@ -91,13 +91,13 @@ public class TaktSerialUploadI18nSeedData : ITaktSeedDataCoordinator
             new TranslationSeedItem("entity.serialupload._self", "zh-HK", "序列号上传信息_hk", "实体名称"),
 
             // entity.serialupload.plantcode
-            new TranslationSeedItem("entity.serialupload.plantcode", "en-US", "工厂代码_us", "工厂代码（选项 TaktPlants/options，DictValue=PlantCode）"),
+            new TranslationSeedItem("entity.serialupload.plantcode", "en-US", "工厂代码_us", "工厂代码（选项 TaktPlants/options；DictValue=PlantCode）"),
             // entity.serialupload.plantcode
-            new TranslationSeedItem("entity.serialupload.plantcode", "ja-JP", "工厂代码_jp", "工厂代码（选项 TaktPlants/options，DictValue=PlantCode）"),
+            new TranslationSeedItem("entity.serialupload.plantcode", "ja-JP", "工厂代码_jp", "工厂代码（选项 TaktPlants/options；DictValue=PlantCode）"),
             // entity.serialupload.plantcode
-            new TranslationSeedItem("entity.serialupload.plantcode", "zh-CN", "工厂代码", "工厂代码（选项 TaktPlants/options，DictValue=PlantCode）"),
+            new TranslationSeedItem("entity.serialupload.plantcode", "zh-CN", "工厂代码", "工厂代码（选项 TaktPlants/options；DictValue=PlantCode）"),
             // entity.serialupload.plantcode
-            new TranslationSeedItem("entity.serialupload.plantcode", "zh-HK", "工厂代码_hk", "工厂代码（选项 TaktPlants/options，DictValue=PlantCode）"),
+            new TranslationSeedItem("entity.serialupload.plantcode", "zh-HK", "工厂代码_hk", "工厂代码（选项 TaktPlants/options；DictValue=PlantCode）"),
 
             // entity.serialupload.outbounddate
             new TranslationSeedItem("entity.serialupload.outbounddate", "en-US", "出库日期_us", "出库日期"),
@@ -127,13 +127,13 @@ public class TaktSerialUploadI18nSeedData : ITaktSeedDataCoordinator
             new TranslationSeedItem("entity.serialupload.sequenceno", "zh-HK", "序号_hk", "序号（同一工厂+发货单号内唯一）"),
 
             // entity.serialupload.materialcode
-            new TranslationSeedItem("entity.serialupload.materialcode", "en-US", "产品物料_us", "产品物料（选项 TaktMaterialPlants/options，DictValue=MaterialCode，ExtValue=PlantCode；最长 20）"),
+            new TranslationSeedItem("entity.serialupload.materialcode", "en-US", "产品物料_us", "产品物料（选项 TaktMaterialPlants/options；DictValue=MaterialCode，ExtValue=PlantCode；最长 20）"),
             // entity.serialupload.materialcode
-            new TranslationSeedItem("entity.serialupload.materialcode", "ja-JP", "产品物料_jp", "产品物料（选项 TaktMaterialPlants/options，DictValue=MaterialCode，ExtValue=PlantCode；最长 20）"),
+            new TranslationSeedItem("entity.serialupload.materialcode", "ja-JP", "产品物料_jp", "产品物料（选项 TaktMaterialPlants/options；DictValue=MaterialCode，ExtValue=PlantCode；最长 20）"),
             // entity.serialupload.materialcode
-            new TranslationSeedItem("entity.serialupload.materialcode", "zh-CN", "产品物料", "产品物料（选项 TaktMaterialPlants/options，DictValue=MaterialCode，ExtValue=PlantCode；最长 20）"),
+            new TranslationSeedItem("entity.serialupload.materialcode", "zh-CN", "产品物料", "产品物料（选项 TaktMaterialPlants/options；DictValue=MaterialCode，ExtValue=PlantCode；最长 20）"),
             // entity.serialupload.materialcode
-            new TranslationSeedItem("entity.serialupload.materialcode", "zh-HK", "产品物料_hk", "产品物料（选项 TaktMaterialPlants/options，DictValue=MaterialCode，ExtValue=PlantCode；最长 20）"),
+            new TranslationSeedItem("entity.serialupload.materialcode", "zh-HK", "产品物料_hk", "产品物料（选项 TaktMaterialPlants/options；DictValue=MaterialCode，ExtValue=PlantCode；最长 20）"),
 
             // entity.serialupload.totalquantity
             new TranslationSeedItem("entity.serialupload.totalquantity", "en-US", "合计数量_us", "合计数量"),

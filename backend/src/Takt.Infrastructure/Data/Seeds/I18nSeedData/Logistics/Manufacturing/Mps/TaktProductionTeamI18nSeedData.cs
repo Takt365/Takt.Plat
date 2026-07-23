@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Infrastructure.Data.Seeds.I18nSeedData.Logistics.Manufacturing.Mps
 // 文件名称：TaktProductionTeamI18nSeedData.cs
-// 创建时间：2026-07-20
+// 创建时间：2026-07-23
 // 创建人：Takt365(Auto Generated)
 // 功能描述：TaktProductionTeam 实体字段国际化种子（无对应 frontend locales；TranslationText 取自 ColumnDescription，ContextNote 取自属性 XML summary）
 // 
@@ -91,13 +91,13 @@ public class TaktProductionTeamI18nSeedData : ITaktSeedDataCoordinator
             new TranslationSeedItem("entity.productionteam._self", "zh-HK", "生产班组信息_hk", "实体名称"),
 
             // entity.productionteam.plantcode
-            new TranslationSeedItem("entity.productionteam.plantcode", "en-US", "工厂代码_us", "工厂代码（选项 TaktPlants/options，DictValue=Id）"),
+            new TranslationSeedItem("entity.productionteam.plantcode", "en-US", "工厂代码_us", "工厂代码（选项 TaktPlants/options；DictValue=Id）"),
             // entity.productionteam.plantcode
-            new TranslationSeedItem("entity.productionteam.plantcode", "ja-JP", "工厂代码_jp", "工厂代码（选项 TaktPlants/options，DictValue=Id）"),
+            new TranslationSeedItem("entity.productionteam.plantcode", "ja-JP", "工厂代码_jp", "工厂代码（选项 TaktPlants/options；DictValue=Id）"),
             // entity.productionteam.plantcode
-            new TranslationSeedItem("entity.productionteam.plantcode", "zh-CN", "工厂代码", "工厂代码（选项 TaktPlants/options，DictValue=Id）"),
+            new TranslationSeedItem("entity.productionteam.plantcode", "zh-CN", "工厂代码", "工厂代码（选项 TaktPlants/options；DictValue=Id）"),
             // entity.productionteam.plantcode
-            new TranslationSeedItem("entity.productionteam.plantcode", "zh-HK", "工厂代码_hk", "工厂代码（选项 TaktPlants/options，DictValue=Id）"),
+            new TranslationSeedItem("entity.productionteam.plantcode", "zh-HK", "工厂代码_hk", "工厂代码（选项 TaktPlants/options；DictValue=Id）"),
 
             // entity.productionteam.teamcode
             new TranslationSeedItem("entity.productionteam.teamcode", "en-US", "班组编码_us", "班组编码（唯一标识，例如：1、1SMT1、1SMT2、2自插A 等）"),
@@ -118,13 +118,13 @@ public class TaktProductionTeamI18nSeedData : ITaktSeedDataCoordinator
             new TranslationSeedItem("entity.productionteam.teamname", "zh-HK", "班组名称_hk", "班组名称（显示名称，如：SMT一班、手插二班等）"),
 
             // entity.productionteam.teamcategory
-            new TranslationSeedItem("entity.productionteam.teamcategory", "en-US", "班组分类编码_us", "班组分类（字典 logistics_team_category，存 DictValue；A=组立 P=PCBA Q=质检 O=其他；PCBA 线体如 SMT/AI/手插须维护设备组）"),
+            new TranslationSeedItem("entity.productionteam.teamcategory", "en-US", "班组分类编码_us", "班组分类（字典 logistics_team_category；存 DictValue；A=组立 P=PCBA Q=质检 O=其他；PCBA 线体如 SMT/AI/手插须维护设备组）"),
             // entity.productionteam.teamcategory
-            new TranslationSeedItem("entity.productionteam.teamcategory", "ja-JP", "班组分类编码_jp", "班组分类（字典 logistics_team_category，存 DictValue；A=组立 P=PCBA Q=质检 O=其他；PCBA 线体如 SMT/AI/手插须维护设备组）"),
+            new TranslationSeedItem("entity.productionteam.teamcategory", "ja-JP", "班组分类编码_jp", "班组分类（字典 logistics_team_category；存 DictValue；A=组立 P=PCBA Q=质检 O=其他；PCBA 线体如 SMT/AI/手插须维护设备组）"),
             // entity.productionteam.teamcategory
-            new TranslationSeedItem("entity.productionteam.teamcategory", "zh-CN", "班组分类编码", "班组分类（字典 logistics_team_category，存 DictValue；A=组立 P=PCBA Q=质检 O=其他；PCBA 线体如 SMT/AI/手插须维护设备组）"),
+            new TranslationSeedItem("entity.productionteam.teamcategory", "zh-CN", "班组分类编码", "班组分类（字典 logistics_team_category；存 DictValue；A=组立 P=PCBA Q=质检 O=其他；PCBA 线体如 SMT/AI/手插须维护设备组）"),
             // entity.productionteam.teamcategory
-            new TranslationSeedItem("entity.productionteam.teamcategory", "zh-HK", "班组分类编码_hk", "班组分类（字典 logistics_team_category，存 DictValue；A=组立 P=PCBA Q=质检 O=其他；PCBA 线体如 SMT/AI/手插须维护设备组）"),
+            new TranslationSeedItem("entity.productionteam.teamcategory", "zh-HK", "班组分类编码_hk", "班组分类（字典 logistics_team_category；存 DictValue；A=组立 P=PCBA Q=质检 O=其他；PCBA 线体如 SMT/AI/手插须维护设备组）"),
 
             // entity.productionteam.teamleadername
             new TranslationSeedItem("entity.productionteam.teamleadername", "en-US", "班组长姓名_us", "班组长姓名（选项 TaktEmployees/options，存员工姓名或工号）"),

@@ -50,13 +50,13 @@ public class TaktShiftSchedule : TaktCompanyEntityBase
     [SugarColumn(ColumnName = "schedule_date", ColumnDescription = "排班日期", ColumnDataType = "date", IsNullable = false)]
     public DateTime ScheduleDate { get; set; }
     /// <summary>
-    /// 班次（选项 TaktWorkShifts/options，DictValue=Id）
+    /// 班次（选项 TaktWorkShifts/options；DictValue=Id）
     /// </summary>
     [SugarColumn(ColumnName = "shift_id", ColumnDescription = "班次ID", ColumnDataType = "bigint", IsNullable = false)]
     [JsonConverter(typeof(ValueToStringConverter))]
     public long ShiftId { get; set; }
     /// <summary>
-    /// 关联工厂（选项 TaktPlants/options，DictValue=Id）
+    /// 关联工厂（选项 TaktPlants/options；DictValue=Id）
     /// </summary>
     [SugarColumn(ColumnName = "related_plant", ColumnDescription = "关联工厂", ColumnDataType = "nvarchar", Length = 4, IsNullable = false)]
     public string RelatedPlant { get; set; } = string.Empty;

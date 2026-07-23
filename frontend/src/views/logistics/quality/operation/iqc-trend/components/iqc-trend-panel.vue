@@ -93,7 +93,7 @@ import { useI18n } from 'vue-i18n'
 import {
   exportIqcOrderMonthlyTrendAnalysis,
   getIqcOrderMonthlyTrendAnalysis,
-} from '@/api/logistics/quality/operation/iqc-order'
+} from '@/api/logistics/quality/operation/iqc-order-trend'
 import type { IqcOrderMonthlyTrend } from '@/types/logistics/quality/operation/inspection-trend'
 import { useTableRefresh } from '@/composables/use-table-refresh'
 import {

@@ -671,7 +671,7 @@ public class TaktUserService : TaktServiceBase, ITaktUserService
 
                     if (string.IsNullOrWhiteSpace(row.EmployeeCode))
                     {
-                        errors.Add($"第{rowNumber}行：员工编号不能为空");
+                        errors.Add($"第{rowNumber}行：员工编码不能为空");
                         fail++;
                         continue;
                     }
@@ -688,10 +688,10 @@ public class TaktUserService : TaktServiceBase, ITaktUserService
 
                     // 查找员工
                     var employee = await _employeeRepository.FirstAsync(e => 
-                        e.TenantCode == CurrentTenantCode && e.EmployeeNo == row.EmployeeCode);
+                        e.TenantCode == CurrentTenantCode && e.EmployeeCode == row.EmployeeCode);
                     if (employee == null)
                     {
-                        errors.Add($"第{rowNumber}行：员工编号{row.EmployeeCode}不存在");
+                        errors.Add($"第{rowNumber}行：员工编码{row.EmployeeCode}不存在");
                         fail++;
                         continue;
                     }

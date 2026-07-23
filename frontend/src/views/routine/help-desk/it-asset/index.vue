@@ -180,11 +180,11 @@
         />
       </a-form-item>
       </div>
-      <div v-show="isFieldVisible('warrantyContractNo')">
-      <a-form-item :label="t('entity.itasset.warrantycontractno')">
+      <div v-show="isFieldVisible('warrantyContractCode')">
+      <a-form-item :label="t('entity.itasset.warrantyContractCode')">
         <a-input
-          v-model:value="advancedQueryForm.warrantyContractNo"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.itasset.warrantycontractno') })"
+          v-model:value="advancedQueryForm.warrantyContractCode"
+          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.itasset.warrantyContractCode') })"
           show-count
           :maxlength="100"
           allow-clear
@@ -452,7 +452,7 @@ const advancedQueryForm = ref({
   warrantyExpiryDateStart: '',
   warrantyExpiryDateEnd: '',
   warrantyProvider: '',
-  warrantyContractNo: '',
+  warrantyContractCode: '',
   serviceHotline: '',
   serviceEmail: '',
   maintenanceExpiryDateStart: '',
@@ -476,7 +476,7 @@ const queryFieldsMeta = computed(() => [
   { key: 'warrantyExpiryDateStart', label: t('common.page.entity.createdatstart').replace(t('common.page.entity.createdat'), t('entity.itasset.warrantyexpirydate')) },
   { key: 'warrantyExpiryDateEnd', label: t('common.page.entity.createdatend').replace(t('common.page.entity.createdat'), t('entity.itasset.warrantyexpirydate')) },
   { key: 'warrantyProvider', label: t('entity.itasset.warrantyprovider') },
-  { key: 'warrantyContractNo', label: t('entity.itasset.warrantycontractno') },
+  { key: 'warrantyContractCode', label: t('entity.itasset.warrantyContractCode') },
   { key: 'serviceHotline', label: t('entity.itasset.servicehotline') },
   { key: 'serviceEmail', label: t('entity.itasset.serviceemail') },
   { key: 'maintenanceExpiryDateStart', label: t('common.page.entity.createdatstart').replace(t('common.page.entity.createdat'), t('entity.itasset.maintenanceexpirydate')) },
@@ -539,7 +539,7 @@ function buildListQuery(overrides?: Partial<ItAssetQuery>): ItAssetQuery {
   assignTrimmed('warrantyExpiryDateStart', form.warrantyExpiryDateStart)
   assignTrimmed('warrantyExpiryDateEnd', form.warrantyExpiryDateEnd)
   assignTrimmed('warrantyProvider', form.warrantyProvider)
-  assignTrimmed('warrantyContractNo', form.warrantyContractNo)
+  assignTrimmed('warrantyContractCode', form.warrantyContractCode)
   assignTrimmed('serviceHotline', form.serviceHotline)
   assignTrimmed('serviceEmail', form.serviceEmail)
   assignTrimmed('maintenanceExpiryDateStart', form.maintenanceExpiryDateStart)
@@ -625,13 +625,13 @@ const columns = computed<TableColumnsType>(() => [
     customRender: ({ record }: { record: any }) => getItAssetField(record, 'warrantyProvider') ?? ''
   },
   {
-    title: t('entity.itasset.warrantycontractno'),
-    dataIndex: 'warrantyContractNo',
-    key: 'warrantyContractNo',
+    title: t('entity.itasset.warrantyContractCode'),
+    dataIndex: 'warrantyContractCode',
+    key: 'warrantyContractCode',
     width: 120,
     resizable: true,
     ellipsis: true,
-    customRender: ({ record }: { record: any }) => getItAssetField(record, 'warrantyContractNo') ?? ''
+    customRender: ({ record }: { record: any }) => getItAssetField(record, 'warrantyContractCode') ?? ''
   },
   {
     title: t('entity.itasset.servicehotline'),
@@ -794,7 +794,7 @@ function handleReset() {
   warrantyExpiryDateStart: '',
   warrantyExpiryDateEnd: '',
   warrantyProvider: '',
-  warrantyContractNo: '',
+  warrantyContractCode: '',
   serviceHotline: '',
   serviceEmail: '',
   maintenanceExpiryDateStart: '',
@@ -985,7 +985,7 @@ function handleAdvancedQueryReset() {
   warrantyExpiryDateStart: '',
   warrantyExpiryDateEnd: '',
   warrantyProvider: '',
-  warrantyContractNo: '',
+  warrantyContractCode: '',
   serviceHotline: '',
   serviceEmail: '',
   maintenanceExpiryDateStart: '',

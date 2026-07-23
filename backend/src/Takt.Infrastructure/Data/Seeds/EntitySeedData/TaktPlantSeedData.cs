@@ -92,9 +92,9 @@ public class TaktPlantSeedData : ITaktSeedDataCoordinator
                 "C001", "Takt Technologies Co., Ltd.", "TKC", "TKC", "zh-CN", "0001",
                 "150", "I", "XS",
                 "软件开发；软件销售；信息系统集成服务；智能控制系统集成；信息技术咨询服务；技术服务、技术开发、技术咨询、技术交流、技术转让、技术推广；电子产品销售；电力电子元器件销售；计算机软硬件及辅助设备零售；办公设备销售；办公设备耗材销售；电子专用设备销售；数字视频监控系统制造；机械零件、零部件销售；机械设备销售。（除依法须经批准的项目外，凭营业执照依法自主开展经营活动）",
-                "中国", "北京市", "海淀区", "北京市海淀区中关村", "中关村软件园二期", "100085",
-                "中国", "北京市", "海淀区", "北京市海淀区中关村", "中关村软件园二期", "100085",
-                "北京市海淀区中关村", "中关村软件园二期", "100085",
+                "CN", "北京市", "海淀区", "北京市海淀区中关村", "中关村软件园二期",
+                "CN", "北京市", "海淀区", "北京市海淀区中关村", "中关村软件园二期",
+                "北京市海淀区中关村", "中关村软件园二期",
                 "+86-10-62600001", "info@takt365.com", "+86-10-62600002", "https://www.takt365.cn",
                 "91110108MA01234567", "91110108MA01234567", "张三", "李四",
                 1000000m, new DateTime(2010, 1, 1), 1),
@@ -102,9 +102,9 @@ public class TaktPlantSeedData : ITaktSeedDataCoordinator
                 "T100", "ティアック株式会社", "TCJ", "TCJ", "ja-JP", "1000",
                 "160", "C", "S",
                 "音響機器事業：プレミアムオーディオ機器（ESOTERICブランド）、ハイエンドオーディオ製品（TEACブランド）、業務用・音楽制作用音響機器（TASCAMブランド）の開発・製造・販売、情報機器事業：計測機器（データレコーダー、センサー・トランスデューサー）、医用画像記録再生機器、航空機搭載用記録再生機器（IFE）、産業用光ドライブ等の開発・製造・販売、ならびにソリューションビジネス・EMS事業",
-                "日本", "东京都", "多摩市", "〒206-8530　東京都多摩市落合1丁目47番地", "TEAC本社", "206-8530",
-                "日本", "东京都", "多摩市", "〒206-8530　東京都多摩市落合1丁目47番地", "TEAC本社", "206-8530",
-                "〒206-8530　東京都多摩市落合1丁目47番地", "TEAC本社", "206-8530",
+                "JP", "东京都", "多摩市", "〒206-8530　東京都多摩市落合1丁目47番地", "TEAC本社",
+                "JP", "东京都", "多摩市", "〒206-8530　東京都多摩市落合1丁目47番地", "TEAC本社",
+                "〒206-8530　東京都多摩市落合1丁目47番地", "TEAC本社",
                 "+81-42-374-1311", "info@teac.co.jp", "+81-42-374-1312", "https://www.teac.co.jp",
                 "T4010001234567", "T4010001234567", "山下 太郎", "田中 花子",
                 2000000m, new DateTime(1953, 8, 1), 2),
@@ -112,9 +112,9 @@ public class TaktPlantSeedData : ITaktSeedDataCoordinator
                 "C100", "东莞蒂雅克电子有限公司", "DTA", "DTA", "zh-CN", "2300",
                 "330", "C", "S",
                 "电子元器件制造；电子元器件批发；电子元器件零售；音响设备制造；音响设备销售；影视录放设备制造；家用视听设备销售；电气信号设备装置制造；电气信号设备装置销售；日用电器修理。",
-                "中国", "广东省", "东莞市", "广东省东莞市长安镇上角社区上兴路1号", "上角社区", "523000",
-                "中国", "广东省", "东莞市", "广东省东莞市长安镇上角社区上兴路1号", "上角社区", "523000",
-                "广东省东莞市长安镇上角社区上兴路1号", "上角社区", "523000",
+                "CN", "广东省", "东莞市", "广东省东莞市长安镇上角社区上兴路1号", "上角社区",
+                "CN", "广东省", "东莞市", "广东省东莞市长安镇上角社区上兴路1号", "上角社区",
+                "广东省东莞市长安镇上角社区上兴路1号", "上角社区",
                 "+86-769-85331234", "info@teac.com.cn", "+86-769-85331235", "https://www.teac.com.cn",
                 "91441900712345678X", "91441900712345678X", "王二", "王五",
                 1000000m, new DateTime(1996, 3, 16), 3),
@@ -122,9 +122,9 @@ public class TaktPlantSeedData : ITaktSeedDataCoordinator
                 "H100", "TEAC AUDIO (CHINA) CO., LTD.", "TAC", "TAC", "zh-HK", "2400",
                 "330", "C", "S",
                 "Wholesale of miscellaneous durable goods / Import and Export Trading",
-                "中国", "香港特别行政区", "沙田", "沙田小瀝源安心街19號匯貿中心8樓9室", "匯貿中心", "000000",
-                "中国", "香港特别行政区", "沙田", "沙田小瀝源安心街19號匯貿中心8樓9室", "匯貿中心", "000000",
-                "沙田小瀝源安心街19號匯貿中心8樓9室", "匯貿中心", "000000",
+                "HK", "香港特别行政区", "沙田", "沙田小瀝源安心街19號匯貿中心8樓9室", "匯貿中心",
+                "HK", "香港特别行政区", "沙田", "沙田小瀝源安心街19號匯貿中心8樓9室", "匯貿中心",
+                "沙田小瀝源安心街19號匯貿中心8樓9室", "匯貿中心",
                 "+852-26461234", "tac@teac.com.hk", "+852-26461235", "https://www.teac.com.hk",
                 "12345678-000-08-23-A", "12345678-000-08-23-A", "赵六", "钱七",
                 500000m, new DateTime(1995, 12, 1), 4),
@@ -132,9 +132,9 @@ public class TaktPlantSeedData : ITaktSeedDataCoordinator
                 "C700", "蒂雅克商贸(深圳)有限公司", "TSZ", "TSZ", "zh-CN", "2700",
                 "330", "C", "S",
                 "音响设备及其零配件、电子产品及其零配件、电子元器件的研发、批发、佣金代理（拍卖除外）、进出口及相关配套服务。",
-                "中国", "广东省", "深圳市", "深圳市福田区深南大道南泰然九路西喜年中心A座817房", "喜年中心A座", "518000",
-                "中国", "广东省", "深圳市", "深圳市福田区深南大道南泰然九路西喜年中心A座817房", "喜年中心A座", "518000",
-                "深圳市福田区深南大道南泰然九路西喜年中心A座817房", "喜年中心A座", "518000",
+                "CN", "广东省", "深圳市", "深圳市福田区深南大道南泰然九路西喜年中心A座817房", "喜年中心A座",
+                "CN", "广东省", "深圳市", "深圳市福田区深南大道南泰然九路西喜年中心A座817房", "喜年中心A座",
+                "深圳市福田区深南大道南泰然九路西喜年中心A座817房", "喜年中心A座",
                 "+86-755-82851234", "tsz@teac.com.cn", "+86-755-82851235", "https://www.teac.com.cn",
                 "91440300765432109X", "91440300765432109X", "孙八", "周九",
                 500000m, new DateTime(2012, 1, 1), 5),
@@ -142,9 +142,9 @@ public class TaktPlantSeedData : ITaktSeedDataCoordinator
                 "A300", "TEAC AMERICA, INC.", "TCA", "TCA", "en-US", "3000",
                 "330", "C", "S",
                 "Engaged in the distribution, wholesale, import/export, and after-sales service of high-fidelity audio equipment (Hi-Fi / Esoteric brand), consumer audio-video electronics, professional audio recording equipment (TASCAM brand), and computer data storage and peripheral devices (including CD/DVD drives and disc publishing systems) throughout the United States and North America.",
-                "美国", "California", "Santa Fe Springs", "14525 Valley View Ave., Suite I, Santa Fe Springs, California 90670, U.S.A", "Suite I", "90670",
-                "美国", "California", "Santa Fe Springs", "14525 Valley View Ave., Suite I, Santa Fe Springs, California 90670, U.S.A", "Suite I", "90670",
-                "14525 Valley View Ave., Suite I, Santa Fe Springs, California 90670, U.S.A", "Suite I", "90670",
+                "US", "California", "Santa Fe Springs", "14525 Valley View Ave., Suite I, Santa Fe Springs, California 90670, U.S.A", "Suite I",
+                "US", "California", "Santa Fe Springs", "14525 Valley View Ave., Suite I, Santa Fe Springs, California 90670, U.S.A", "Suite I",
+                "14525 Valley View Ave., Suite I, Santa Fe Springs, California 90670, U.S.A", "Suite I",
                 "+1-562-903-9600", "info@teac-audio.com", "+1-562-903-9601", "https://www.teac-audio.com",
                 "95-1234567", "95-1234567", "John Smith", "Emily Johnson",
                 3000000m, new DateTime(1967, 5, 1), 6),
@@ -178,7 +178,7 @@ public class TaktPlantSeedData : ITaktSeedDataCoordinator
     private static void ApplySeed(TaktPlant plant, TaktPlantSeedItem seed)
     {
         plant.PlantCode = seed.PlantCode;
-        plant.PlantName = seed.PlantName;
+        plant.PlantName1 = seed.PlantName1;
         plant.PlantShortName = seed.PlantShortName;
         plant.CodeAlias = seed.CodeAlias;
         plant.DefaultCulture = seed.DefaultCulture;
@@ -191,16 +191,13 @@ public class TaktPlantSeedData : ITaktSeedDataCoordinator
         plant.RegistrationCity = seed.RegistrationCity;
         plant.RegistrationAddress1 = seed.RegistrationAddress1;
         plant.RegistrationAddress2 = seed.RegistrationAddress2;
-        plant.RegistrationAddress3 = seed.RegistrationAddress3;
         plant.BusinessRegion = seed.BusinessRegion;
         plant.BusinessProvince = seed.BusinessProvince;
         plant.BusinessCity = seed.BusinessCity;
         plant.BusinessAddress1 = seed.BusinessAddress1;
         plant.BusinessAddress2 = seed.BusinessAddress2;
-        plant.BusinessAddress3 = seed.BusinessAddress3;
         plant.PlantAddress1 = seed.PlantAddress1;
         plant.PlantAddress2 = seed.PlantAddress2;
-        plant.PlantAddress3 = seed.PlantAddress3;
         plant.PlantPhone = seed.PlantPhone;
         plant.PlantEmail = seed.PlantEmail;
         plant.PlantFax = seed.PlantFax;
@@ -223,7 +220,7 @@ public class TaktPlantSeedData : ITaktSeedDataCoordinator
     /// </summary>
     private sealed record TaktPlantSeedItem(
         string PlantCode,
-        string PlantName,
+        string PlantName1,
         string PlantShortName,
         string CodeAlias,
         string DefaultCulture,
@@ -237,16 +234,13 @@ public class TaktPlantSeedData : ITaktSeedDataCoordinator
         string RegistrationCity,
         string RegistrationAddress1,
         string RegistrationAddress2,
-        string RegistrationAddress3,
         string BusinessRegion,
         string BusinessProvince,
         string BusinessCity,
         string BusinessAddress1,
         string BusinessAddress2,
-        string BusinessAddress3,
         string PlantAddress1,
         string PlantAddress2,
-        string PlantAddress3,
         string PlantPhone,
         string PlantEmail,
         string PlantFax,

@@ -26,7 +26,7 @@ namespace Takt.Domain.Entities.Logistics.Manufacturing.Aps;
 public class TaktProductionDispatch : TaktCompanyEntityBase
 {
     /// <summary>
-    /// 工厂代码（选项 TaktPlants/options，DictValue=PlantCode）
+    /// 工厂代码（选项 TaktPlants/options；DictValue=PlantCode）
     /// </summary>
     [SugarColumn(ColumnName = "plant_code", ColumnDescription = "工厂代码", ColumnDataType = "nvarchar", Length = 40, IsNullable = false)]
     public string PlantCode { get; set; } = string.Empty;
@@ -38,7 +38,7 @@ public class TaktProductionDispatch : TaktCompanyEntityBase
     public string DispatchCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 生产工单 ID（选项 TaktProductionOrders/options，DictValue=Id）
+    /// 生产工单 ID（选项 TaktProductionOrders/options；DictValue=Id）
     /// </summary>
     [SugarColumn(ColumnName = "production_order_id", ColumnDescription = "生产工单ID", ColumnDataType = "bigint", IsNullable = false)]
     [JsonConverter(typeof(ValueToStringConverter))]
@@ -51,14 +51,14 @@ public class TaktProductionDispatch : TaktCompanyEntityBase
     public string ProdOrderCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// APS 工序排程 ID（选项 TaktApsOperations/options，DictValue=Id）
+    /// APS 工序排程 ID（选项 TaktApsOperations/options；DictValue=Id）
     /// </summary>
     [SugarColumn(ColumnName = "aps_operation_id", ColumnDescription = "APS工序排程ID", ColumnDataType = "bigint", IsNullable = true)]
     [JsonConverter(typeof(ValueToStringConverter))]
     public long? ApsOperationId { get; set; }
 
     /// <summary>
-    /// 工作中心编码（选项 TaktWorkCenters/options，DictValue=WorkCenterCode）
+    /// 工作中心编码（选项 TaktWorkCenters/options；DictValue=WorkCenterCode）
     /// </summary>
     [SugarColumn(ColumnName = "work_center_code", ColumnDescription = "工作中心编码", ColumnDataType = "nvarchar", Length = 40, IsNullable = true)]
     public string? WorkCenterCode { get; set; }

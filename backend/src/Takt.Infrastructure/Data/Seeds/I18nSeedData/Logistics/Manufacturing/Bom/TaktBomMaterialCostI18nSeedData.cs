@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Infrastructure.Data.Seeds.I18nSeedData.Logistics.Manufacturing.Bom
 // 文件名称：TaktBomMaterialCostI18nSeedData.cs
-// 创建时间：2026-07-20
+// 创建时间：2026-07-23
 // 创建人：Takt365(Auto Generated)
 // 功能描述：TaktBomMaterialCost 实体字段国际化种子（无对应 frontend locales；TranslationText 取自 ColumnDescription，ContextNote 取自属性 XML summary）
 // 
@@ -91,13 +91,13 @@ public class TaktBomMaterialCostI18nSeedData : ITaktSeedDataCoordinator
             new TranslationSeedItem("entity.bommaterialcost._self", "zh-HK", "BOM 物料成本汇总表信息_hk", "实体名称"),
 
             // entity.bommaterialcost.plantcode
-            new TranslationSeedItem("entity.bommaterialcost.plantcode", "en-US", "工厂代码_us", "工厂代码（选项 TaktPlants/options，DictValue=PlantCode）"),
+            new TranslationSeedItem("entity.bommaterialcost.plantcode", "en-US", "工厂代码_us", "工厂代码（选项 TaktPlants/options；DictValue=PlantCode）"),
             // entity.bommaterialcost.plantcode
-            new TranslationSeedItem("entity.bommaterialcost.plantcode", "ja-JP", "工厂代码_jp", "工厂代码（选项 TaktPlants/options，DictValue=PlantCode）"),
+            new TranslationSeedItem("entity.bommaterialcost.plantcode", "ja-JP", "工厂代码_jp", "工厂代码（选项 TaktPlants/options；DictValue=PlantCode）"),
             // entity.bommaterialcost.plantcode
-            new TranslationSeedItem("entity.bommaterialcost.plantcode", "zh-CN", "工厂代码", "工厂代码（选项 TaktPlants/options，DictValue=PlantCode）"),
+            new TranslationSeedItem("entity.bommaterialcost.plantcode", "zh-CN", "工厂代码", "工厂代码（选项 TaktPlants/options；DictValue=PlantCode）"),
             // entity.bommaterialcost.plantcode
-            new TranslationSeedItem("entity.bommaterialcost.plantcode", "zh-HK", "工厂代码_hk", "工厂代码（选项 TaktPlants/options，DictValue=PlantCode）"),
+            new TranslationSeedItem("entity.bommaterialcost.plantcode", "zh-HK", "工厂代码_hk", "工厂代码（选项 TaktPlants/options；DictValue=PlantCode）"),
 
             // entity.bommaterialcost.modelcode
             new TranslationSeedItem("entity.bommaterialcost.modelcode", "en-US", "机种编码_us", "机种编码（关联 TaktModelDestination.ModelCode）"),
@@ -145,13 +145,13 @@ public class TaktBomMaterialCostI18nSeedData : ITaktSeedDataCoordinator
             new TranslationSeedItem("entity.bommaterialcost.productmonthlycost", "zh-HK", "产品月成本_hk", "产品月成本（该产品在核算月份下 BOM 材料成本明细汇总）"),
 
             // entity.bommaterialcost.currencycode
-            new TranslationSeedItem("entity.bommaterialcost.currencycode", "en-US", "币种_us", "币种（字典 accounting_currency_code，如 CNY/USD）"),
+            new TranslationSeedItem("entity.bommaterialcost.currencycode", "en-US", "币种_us", "币种（字典 accounting_currency_code；如 CNY/USD）"),
             // entity.bommaterialcost.currencycode
-            new TranslationSeedItem("entity.bommaterialcost.currencycode", "ja-JP", "币种_jp", "币种（字典 accounting_currency_code，如 CNY/USD）"),
+            new TranslationSeedItem("entity.bommaterialcost.currencycode", "ja-JP", "币种_jp", "币种（字典 accounting_currency_code；如 CNY/USD）"),
             // entity.bommaterialcost.currencycode
-            new TranslationSeedItem("entity.bommaterialcost.currencycode", "zh-CN", "币种", "币种（字典 accounting_currency_code，如 CNY/USD）"),
+            new TranslationSeedItem("entity.bommaterialcost.currencycode", "zh-CN", "币种", "币种（字典 accounting_currency_code；如 CNY/USD）"),
             // entity.bommaterialcost.currencycode
-            new TranslationSeedItem("entity.bommaterialcost.currencycode", "zh-HK", "币种_hk", "币种（字典 accounting_currency_code，如 CNY/USD）"),
+            new TranslationSeedItem("entity.bommaterialcost.currencycode", "zh-HK", "币种_hk", "币种（字典 accounting_currency_code；如 CNY/USD）"),
 
             // entity.bommaterialcost.costingperiod
             new TranslationSeedItem("entity.bommaterialcost.costingperiod", "en-US", "核算期间_us", "核算期间（yyyy-MM；由核算日期推导；与工厂+机种+产品构成唯一键，同月仅一行）"),

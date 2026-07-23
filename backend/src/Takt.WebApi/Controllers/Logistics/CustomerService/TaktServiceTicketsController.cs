@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.WebApi.Controllers.Logistics.CustomerService
 // 文件名称：TaktServiceTicketsController.cs
-// 创建时间：2026-06-23
+// 创建时间：2026-07-23
 // 创建人：Takt365(Cursor AI)
 // 功能描述：服务工单控制器
 // 
@@ -49,26 +49,6 @@ public class TaktServiceTicketsController : TaktControllerBase
         {
             var result = await _serviceTicketService.GetServiceTicketListAsync(queryDto);
             return Success(result.Data, result.Total, result.PageIndex, result.PageSize, "查询成功");
-        }
-        catch (Exception ex)
-        {
-            return HandleException(ex);
-        }
-    }
-
-    /// <summary>
-    /// 获取服务工单统计（数据看板）
-    /// </summary>
-    /// <param name="queryDto">查询 DTO</param>
-    /// <returns>服务工单统计</returns>
-    [TaktPermission("logistics:service:ticket:list", "服务工单统计")]
-    [HttpGet("ticket-stat")]
-    public async Task<IActionResult> GetServiceTicketStatAsync([FromQuery] TaktServiceTicketStatQueryDto queryDto)
-    {
-        try
-        {
-            var result = await _serviceTicketService.GetServiceTicketStatAsync(queryDto);
-            return Success(result, "查询成功");
         }
         catch (Exception ex)
         {

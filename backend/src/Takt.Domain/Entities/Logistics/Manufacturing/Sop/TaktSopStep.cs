@@ -26,7 +26,7 @@ namespace Takt.Domain.Entities.Logistics.Manufacturing.Sop;
 public class TaktSopStep : TaktCompanyEntityBase
 {
     /// <summary>
-    /// 正文 ID（选项 TaktSopContents/options，DictValue=Id）
+    /// 正文 ID（选项 TaktSopContents/options；DictValue=Id）
     /// </summary>
     [SugarColumn(ColumnName = "content_id", ColumnDescription = "正文ID", ColumnDataType = "bigint", IsNullable = false)]
     [JsonConverter(typeof(ValueToStringConverter))]

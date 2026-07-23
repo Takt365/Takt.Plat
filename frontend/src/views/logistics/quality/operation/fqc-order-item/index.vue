@@ -163,7 +163,7 @@
       <a-form-item :label="pi.queryLabel('materialCode')">
         <TaktSelect
           v-model:value="advancedQueryForm.materialCode"
-          api-url="TaktMaterials/options"
+          api-url="TaktMaterialPlants/options"
           :placeholder="pi.queryPh('materialCode', 'select')"
           allow-clear
         />

@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：frontend/src/types/logistics/manufacturing/mds
 // 文件名称：sales-forecast.d.ts
-// 创建时间：2026-07-13
+// 创建时间：2026-07-23
 // 创建人：Takt365(Auto Generated)
 // 功能描述：logistics/manufacturing/mds 模块类型定义（自动生成；类型名去 Takt 前缀与末尾 Dto，如 TaktCompanyDto → Company）
 // 
@@ -29,7 +29,7 @@ export interface SalesForecast extends ApprovalDtoBase {
   salesForecastId: string;
 
   /**
-   * 工厂代码（选项 TaktPlants/options，DictValue=PlantCode）
+   * 工厂代码（选项 TaktPlants/options；DictValue=PlantCode）
    */
   plantCode: string;
 
@@ -54,17 +54,17 @@ export interface SalesForecast extends ApprovalDtoBase {
   planPeriodEnd: string;
 
   /**
-   * 客户编码（关联 TaktCustomer.CustomerCode，选项 TaktCustomers/options；汇总计划时可为空）
+   * 客户编码（选项 TaktCustomers/options；汇总计划时可为空，DictValue=Id）
    */
   customerCode?: string;
 
   /**
-   * 客户名称（冗余字段，便于查询展示）
+   * 客户名称1（冗余，与 TaktCustomer.CustomerName1 对齐）
    */
-  customerName?: string;
+  customerName1?: string;
 
   /**
-   * 计划人员工ID（关联 TaktEmployee.Id，选项 TaktEmployees/options）
+   * 计划人员工ID（选项 TaktEmployees/options；DictValue=Id）
    */
   plannerId?: string;
 
@@ -74,7 +74,7 @@ export interface SalesForecast extends ApprovalDtoBase {
   plannerName?: string;
 
   /**
-   * 计划人（关联 TaktEmployee.EmployeeNo，选项 TaktEmployees/options，DictValue=EmployeeNo）
+   * 计划人（选项 TaktEmployees/options；DictValue=EmployeeCode）
    */
   planBy: string;
 
@@ -139,7 +139,7 @@ export interface SalesForecastQuery extends TaktPagedQuery {
   companyCode?: string;
 
   /**
-   * 工厂代码（选项 TaktPlants/options，DictValue=PlantCode）
+   * 工厂代码（选项 TaktPlants/options；DictValue=PlantCode）
    */
   plantCode?: string;
 
@@ -179,22 +179,22 @@ export interface SalesForecastQuery extends TaktPagedQuery {
   planPeriodEndEnd?: string;
 
   /**
-   * 客户编码（关联 TaktCustomer.CustomerCode，选项 TaktCustomers/options；汇总计划时可为空）
+   * 客户编码（选项 TaktCustomers/options；汇总计划时可为空，DictValue=Id）
    */
   customerCode?: string;
 
   /**
-   * 客户名称（冗余字段，便于查询展示）
+   * 客户名称1（冗余，与 TaktCustomer.CustomerName1 对齐）
    */
-  customerName?: string;
+  customerName1?: string;
 
   /**
-   * 计划人员工ID（关联 TaktEmployee.Id，选项 TaktEmployees/options）
+   * 计划人员工ID（选项 TaktEmployees/options；DictValue=Id）
    */
   plannerId?: string;
 
   /**
-   * 计划人（关联 TaktEmployee.EmployeeNo，选项 TaktEmployees/options，DictValue=EmployeeNo）
+   * 计划人（选项 TaktEmployees/options；DictValue=EmployeeCode）
    */
   planBy?: string;
 
@@ -318,7 +318,7 @@ export interface SalesForecastCreate {
   companyDefaultCulture: string;
 
   /**
-   * 工厂代码（选项 TaktPlants/options，DictValue=PlantCode）
+   * 工厂代码（选项 TaktPlants/options；DictValue=PlantCode）
    */
   plantCode: string;
 
@@ -343,22 +343,22 @@ export interface SalesForecastCreate {
   planPeriodEnd: string;
 
   /**
-   * 客户编码（关联 TaktCustomer.CustomerCode，选项 TaktCustomers/options；汇总计划时可为空）
+   * 客户编码（选项 TaktCustomers/options；汇总计划时可为空，DictValue=Id）
    */
   customerCode?: string;
 
   /**
-   * 客户名称（冗余字段，便于查询展示）
+   * 客户名称1（冗余，与 TaktCustomer.CustomerName1 对齐）
    */
-  customerName?: string;
+  customerName1?: string;
 
   /**
-   * 计划人员工ID（关联 TaktEmployee.Id，选项 TaktEmployees/options）
+   * 计划人员工ID（选项 TaktEmployees/options；DictValue=Id）
    */
   plannerId?: string;
 
   /**
-   * 计划人（关联 TaktEmployee.EmployeeNo，选项 TaktEmployees/options，DictValue=EmployeeNo）
+   * 计划人（选项 TaktEmployees/options；DictValue=EmployeeCode）
    */
   planBy: string;
 
@@ -471,7 +471,7 @@ export interface SalesForecastTemplate {
   companyCode?: string;
 
   /**
-   * 工厂代码（选项 TaktPlants/options，DictValue=PlantCode）
+   * 工厂代码（选项 TaktPlants/options；DictValue=PlantCode）
    */
   plantCode?: string;
 
@@ -496,22 +496,22 @@ export interface SalesForecastTemplate {
   planPeriodEnd?: string;
 
   /**
-   * 客户编码（关联 TaktCustomer.CustomerCode，选项 TaktCustomers/options；汇总计划时可为空）
+   * 客户编码（选项 TaktCustomers/options；汇总计划时可为空，DictValue=Id）
    */
   customerCode?: string;
 
   /**
-   * 客户名称（冗余字段，便于查询展示）
+   * 客户名称1（冗余，与 TaktCustomer.CustomerName1 对齐）
    */
-  customerName?: string;
+  customerName1?: string;
 
   /**
-   * 计划人员工ID（关联 TaktEmployee.Id，选项 TaktEmployees/options）
+   * 计划人员工ID（选项 TaktEmployees/options；DictValue=Id）
    */
   plannerId?: string;
 
   /**
-   * 计划人（关联 TaktEmployee.EmployeeNo，选项 TaktEmployees/options，DictValue=EmployeeNo）
+   * 计划人（选项 TaktEmployees/options；DictValue=EmployeeCode）
    */
   planBy?: string;
 
@@ -590,7 +590,7 @@ export interface SalesForecastImport {
   companyDefaultCulture?: string;
 
   /**
-   * 工厂代码（选项 TaktPlants/options，DictValue=PlantCode）
+   * 工厂代码（选项 TaktPlants/options；DictValue=PlantCode）
    */
   plantCode?: string;
 
@@ -615,22 +615,22 @@ export interface SalesForecastImport {
   planPeriodEnd?: string;
 
   /**
-   * 客户编码（关联 TaktCustomer.CustomerCode，选项 TaktCustomers/options；汇总计划时可为空）
+   * 客户编码（选项 TaktCustomers/options；汇总计划时可为空，DictValue=Id）
    */
   customerCode?: string;
 
   /**
-   * 客户名称（冗余字段，便于查询展示）
+   * 客户名称1（冗余，与 TaktCustomer.CustomerName1 对齐）
    */
-  customerName?: string;
+  customerName1?: string;
 
   /**
-   * 计划人员工ID（关联 TaktEmployee.Id，选项 TaktEmployees/options）
+   * 计划人员工ID（选项 TaktEmployees/options；DictValue=Id）
    */
   plannerId?: string;
 
   /**
-   * 计划人（关联 TaktEmployee.EmployeeNo，选项 TaktEmployees/options，DictValue=EmployeeNo）
+   * 计划人（选项 TaktEmployees/options；DictValue=EmployeeCode）
    */
   planBy?: string;
 
@@ -699,7 +699,7 @@ export interface SalesForecastExport {
   salesForecastId: string;
 
   /**
-   * 工厂代码（选项 TaktPlants/options，DictValue=PlantCode）
+   * 工厂代码（选项 TaktPlants/options；DictValue=PlantCode）
    */
   plantCode: string;
 
@@ -724,22 +724,22 @@ export interface SalesForecastExport {
   planPeriodEnd: string;
 
   /**
-   * 客户编码（关联 TaktCustomer.CustomerCode，选项 TaktCustomers/options；汇总计划时可为空）
+   * 客户编码（选项 TaktCustomers/options；汇总计划时可为空，DictValue=Id）
    */
   customerCode?: string;
 
   /**
-   * 客户名称（冗余字段，便于查询展示）
+   * 客户名称1（冗余，与 TaktCustomer.CustomerName1 对齐）
    */
-  customerName?: string;
+  customerName1?: string;
 
   /**
-   * 计划人员工ID（关联 TaktEmployee.Id，选项 TaktEmployees/options）
+   * 计划人员工ID（选项 TaktEmployees/options；DictValue=Id）
    */
   plannerId?: string;
 
   /**
-   * 计划人（关联 TaktEmployee.EmployeeNo，选项 TaktEmployees/options，DictValue=EmployeeNo）
+   * 计划人（选项 TaktEmployees/options；DictValue=EmployeeCode）
    */
   planBy: string;
 

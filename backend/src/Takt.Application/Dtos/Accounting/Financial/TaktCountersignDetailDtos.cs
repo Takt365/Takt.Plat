@@ -47,7 +47,7 @@ public class TaktCountersignDetailDto : TaktCompanyDtoBase
     public string? CountersignName { get; set; }
 
     /// <summary>
-    /// 会签编号（冗余，便于查询）
+    /// 会签编码（冗余，便于查询）
     /// </summary>
     public string CountersignCode { get; set; } = string.Empty;
 
@@ -120,7 +120,7 @@ public class TaktCountersignDetailQueryDto : TaktPagedQuery
     public long? CountersignId { get; set; }
 
     /// <summary>
-    /// 会签编号（冗余，便于查询）
+    /// 会签编码（冗余，便于查询）
     /// </summary>
     public string? CountersignCode { get; set; } = string.Empty;
 
@@ -216,9 +216,9 @@ public class TaktCountersignDetailCreateDto
     public long CountersignId { get; set; }
 
     /// <summary>
-    /// 会签编号（冗余，便于查询）
+    /// 会签编码（冗余，便于查询）
     /// </summary>
-    [Required(ErrorMessage = "会签编号（冗余，便于查询）不能为空")]
+    [Required(ErrorMessage = "会签编码（冗余，便于查询）不能为空")]
     public string CountersignCode { get; set; } = string.Empty;
 
     /// <summary>
@@ -344,7 +344,7 @@ public class TaktCountersignDetailTemplateDto
     public long? CountersignId { get; set; }
 
     /// <summary>
-    /// 会签编号（冗余，便于查询）
+    /// 会签编码（冗余，便于查询）
     /// </summary>
     public string? CountersignCode { get; set; } = string.Empty;
 
@@ -427,7 +427,7 @@ public class TaktCountersignDetailImportDto
     public long? CountersignId { get; set; }
 
     /// <summary>
-    /// 会签编号（冗余，便于查询）
+    /// 会签编码（冗余，便于查询）
     /// </summary>
     public string? CountersignCode { get; set; } = string.Empty;
 
@@ -511,7 +511,7 @@ public class TaktCountersignDetailExportDto
     public long CountersignId { get; set; }
 
     /// <summary>
-    /// 会签编号（冗余，便于查询）
+    /// 会签编码（冗余，便于查询）
     /// </summary>
     public string CountersignCode { get; set; } = string.Empty;
 

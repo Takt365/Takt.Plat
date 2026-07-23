@@ -29,7 +29,7 @@ public class TaktIpqcOrder : TaktCompanyEntityBase
     [SugarColumn(ColumnName = "plant_code", ColumnDescription = "工厂代码", ColumnDataType = "nvarchar", Length = 4, IsNullable = false)]
     public string PlantCode { get; set; } = string.Empty;
     /// <summary>
-    /// 来源单号（选项 TaktProductionOrders/options，DictValue=ProdOrderCode）
+    /// 来源单号（选项 TaktProductionOrders/options；DictValue=ProdOrderCode）
     /// </summary>
     [SugarColumn(ColumnName = "source_code", ColumnDescription = "来源单号", ColumnDataType = "nvarchar", Length = 50, IsNullable = false)]
     public string SourceCode { get; set; } = string.Empty;

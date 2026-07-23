@@ -72,11 +72,11 @@ alwaysApply: true
 
 ### 2.5 表格约束
 
-- `TaktSingleTable`：`:row-key="getXxxId"`；`:pagination="false"` + 外置 `TaktPagination`
+- `TaktSingleTable`：`:row-key="getXxxId"`；`:pagination="false"` + 外置 `TaktPagination`；**`:virtual="true"`（默认已开）**
 - 列标题：`entity.*`；行内字典 `TaktDictTag`；状态 `a-switch` → `updateXxxStatus`
-- 大列表：`virtual` 或分页（`07-overflow-vue`）
+- 取数：服务端分页；渲染：虚拟滚动（`07-overflow-vue`）
 
-❌ 硬编码中文；❌ 双层 `a-modal`；❌ `pageSize` 9999 全量拉数。
+❌ 硬编码中文；❌ 双层 `a-modal`；❌ 一次请求拉全表替代分页。
 
 ---
 

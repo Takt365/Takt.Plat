@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Application.Dtos.HumanResource.Personnel
 // 文件名称：TaktEmployeeContractDtos.cs
-// 创建时间：2026-06-24
+// 创建时间：2026-07-23
 // 创建人：Takt365(Auto Generated)
 // 功能描述：EmployeeContract 模块 DTO（由 generate-dtos-from-entity.cjs 根据 TaktEmployeeContract 生成，请按需审阅）
 // 
@@ -36,23 +36,28 @@ public class TaktEmployeeContractDto : TaktCompanyDtoBase
     public long EmployeeContractId { get; set; }
 
     /// <summary>
-    /// 员工ID
+    /// 员工（选项 TaktEmployees/options；DictValue=Id）
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
     public long EmployeeId { get; set; }
 
     /// <summary>
-    /// 员工名称（填充字段）
+    /// 员工编码（冗余，与 TaktEmployee.EmployeeCode 对齐）
     /// </summary>
-    public string? EmployeeName { get; set; }
+    public string EmployeeCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 合同编号
+    /// 员工姓名（冗余，与 TaktEmployee.EmployeeName 对齐）
     /// </summary>
-    public string ContractNo { get; set; } = string.Empty;
+    public string EmployeeName { get; set; } = string.Empty;
 
     /// <summary>
-    /// 合同类型（0=固定期限，1=无固定期限，2=以完成一定工作任务为期限，3=实习）
+    /// 合同编码
+    /// </summary>
+    public string ContractCode { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 合同类型（字典 hr_employee_contract_type；0=固定期限 1=无固定期限 2=以完成一定工作任务为期限 3=实习）
     /// </summary>
     public int ContractType { get; set; } = 0;
 
@@ -82,7 +87,7 @@ public class TaktEmployeeContractDto : TaktCompanyDtoBase
     public string? SignCompany { get; set; } = string.Empty;
 
     /// <summary>
-    /// 合同状态（0=草稿，1=生效，2=到期，3=终止）
+    /// 合同状态（字典 hr_employee_contract_status；0=草稿 1=生效 2=到期 3=终止）
     /// </summary>
     public int ContractStatus { get; set; } = 0;
 
@@ -109,18 +114,28 @@ public class TaktEmployeeContractQueryDto : TaktPagedQuery
     public string? CompanyCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 员工ID
+    /// 员工（选项 TaktEmployees/options；DictValue=Id）
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
     public long? EmployeeId { get; set; }
 
     /// <summary>
-    /// 合同编号
+    /// 员工编码（冗余，与 TaktEmployee.EmployeeCode 对齐）
     /// </summary>
-    public string? ContractNo { get; set; } = string.Empty;
+    public string? EmployeeCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 合同类型（0=固定期限，1=无固定期限，2=以完成一定工作任务为期限，3=实习）
+    /// 员工姓名（冗余，与 TaktEmployee.EmployeeName 对齐）
+    /// </summary>
+    public string? EmployeeName { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 合同编码
+    /// </summary>
+    public string? ContractCode { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 合同类型（字典 hr_employee_contract_type；0=固定期限 1=无固定期限 2=以完成一定工作任务为期限 3=实习）
     /// </summary>
     public int? ContractType { get; set; }
 
@@ -170,7 +185,7 @@ public class TaktEmployeeContractQueryDto : TaktPagedQuery
     public string? SignCompany { get; set; } = string.Empty;
 
     /// <summary>
-    /// 合同状态（0=草稿，1=生效，2=到期，3=终止）
+    /// 合同状态（字典 hr_employee_contract_status；0=草稿 1=生效 2=到期 3=终止）
     /// </summary>
     public int? ContractStatus { get; set; }
 
@@ -220,19 +235,31 @@ public class TaktEmployeeContractCreateDto
     public string CompanyDefaultCulture { get; set; } = string.Empty;
 
     /// <summary>
-    /// 员工ID
+    /// 员工（选项 TaktEmployees/options；DictValue=Id）
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
     public long EmployeeId { get; set; }
 
     /// <summary>
-    /// 合同编号
+    /// 员工编码（冗余，与 TaktEmployee.EmployeeCode 对齐）
     /// </summary>
-    [Required(ErrorMessage = "合同编号不能为空")]
-    public string ContractNo { get; set; } = string.Empty;
+    [Required(ErrorMessage = "员工编码（冗余，与 TaktEmployee.EmployeeCode 对齐）不能为空")]
+    public string EmployeeCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 合同类型（0=固定期限，1=无固定期限，2=以完成一定工作任务为期限，3=实习）
+    /// 员工姓名（冗余，与 TaktEmployee.EmployeeName 对齐）
+    /// </summary>
+    [Required(ErrorMessage = "员工姓名（冗余，与 TaktEmployee.EmployeeName 对齐）不能为空")]
+    public string EmployeeName { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 合同编码
+    /// </summary>
+    [Required(ErrorMessage = "合同编码不能为空")]
+    public string ContractCode { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 合同类型（字典 hr_employee_contract_type；0=固定期限 1=无固定期限 2=以完成一定工作任务为期限 3=实习）
     /// </summary>
     public int ContractType { get; set; } = 0;
 
@@ -262,7 +289,7 @@ public class TaktEmployeeContractCreateDto
     public string? SignCompany { get; set; } = string.Empty;
 
     /// <summary>
-    /// 合同状态（0=草稿，1=生效，2=到期，3=终止）
+    /// 合同状态（字典 hr_employee_contract_status；0=草稿 1=生效 2=到期 3=终止）
     /// </summary>
     public int ContractStatus { get; set; } = 0;
 
@@ -316,9 +343,9 @@ public class TaktEmployeeContractStatusDto
     public long EmployeeContractId { get; set; }
 
     /// <summary>
-    /// 合同状态（0=草稿，1=生效，2=到期，3=终止）
+    /// 合同状态（字典 hr_employee_contract_status；0=草稿 1=生效 2=到期 3=终止）
     /// </summary>
-    [Required(ErrorMessage = "合同状态（0=草稿，1=生效，2=到期，3=终止）不能为空")]
+    [Required(ErrorMessage = "合同状态（字典 hr_employee_contract_status；0=草稿 1=生效 2=到期 3=终止）不能为空")]
     public int ContractStatus { get; set; } = 0;
 }
 
@@ -342,18 +369,28 @@ public class TaktEmployeeContractTemplateDto
     public string? CompanyCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 员工ID
+    /// 员工（选项 TaktEmployees/options；DictValue=Id）
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
     public long? EmployeeId { get; set; }
 
     /// <summary>
-    /// 合同编号
+    /// 员工编码（冗余，与 TaktEmployee.EmployeeCode 对齐）
     /// </summary>
-    public string? ContractNo { get; set; } = string.Empty;
+    public string? EmployeeCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 合同类型（0=固定期限，1=无固定期限，2=以完成一定工作任务为期限，3=实习）
+    /// 员工姓名（冗余，与 TaktEmployee.EmployeeName 对齐）
+    /// </summary>
+    public string? EmployeeName { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 合同编码
+    /// </summary>
+    public string? ContractCode { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 合同类型（字典 hr_employee_contract_type；0=固定期限 1=无固定期限 2=以完成一定工作任务为期限 3=实习）
     /// </summary>
     public int? ContractType { get; set; }
 
@@ -383,7 +420,7 @@ public class TaktEmployeeContractTemplateDto
     public string? SignCompany { get; set; } = string.Empty;
 
     /// <summary>
-    /// 合同状态（0=草稿，1=生效，2=到期，3=终止）
+    /// 合同状态（字典 hr_employee_contract_status；0=草稿 1=生效 2=到期 3=终止）
     /// </summary>
     public int? ContractStatus { get; set; }
 
@@ -420,18 +457,28 @@ public class TaktEmployeeContractImportDto
     public string? CompanyDefaultCulture { get; set; } = string.Empty;
 
     /// <summary>
-    /// 员工ID
+    /// 员工（选项 TaktEmployees/options；DictValue=Id）
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
     public long? EmployeeId { get; set; }
 
     /// <summary>
-    /// 合同编号
+    /// 员工编码（冗余，与 TaktEmployee.EmployeeCode 对齐）
     /// </summary>
-    public string? ContractNo { get; set; } = string.Empty;
+    public string? EmployeeCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 合同类型（0=固定期限，1=无固定期限，2=以完成一定工作任务为期限，3=实习）
+    /// 员工姓名（冗余，与 TaktEmployee.EmployeeName 对齐）
+    /// </summary>
+    public string? EmployeeName { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 合同编码
+    /// </summary>
+    public string? ContractCode { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 合同类型（字典 hr_employee_contract_type；0=固定期限 1=无固定期限 2=以完成一定工作任务为期限 3=实习）
     /// </summary>
     public int? ContractType { get; set; }
 
@@ -461,7 +508,7 @@ public class TaktEmployeeContractImportDto
     public string? SignCompany { get; set; } = string.Empty;
 
     /// <summary>
-    /// 合同状态（0=草稿，1=生效，2=到期，3=终止）
+    /// 合同状态（字典 hr_employee_contract_status；0=草稿 1=生效 2=到期 3=终止）
     /// </summary>
     public int? ContractStatus { get; set; }
 
@@ -499,18 +546,28 @@ public class TaktEmployeeContractExportDto
     public string CompanyCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 员工ID
+    /// 员工（选项 TaktEmployees/options；DictValue=Id）
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
     public long EmployeeId { get; set; }
 
     /// <summary>
-    /// 合同编号
+    /// 员工编码（冗余，与 TaktEmployee.EmployeeCode 对齐）
     /// </summary>
-    public string ContractNo { get; set; } = string.Empty;
+    public string EmployeeCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 合同类型（0=固定期限，1=无固定期限，2=以完成一定工作任务为期限，3=实习）
+    /// 员工姓名（冗余，与 TaktEmployee.EmployeeName 对齐）
+    /// </summary>
+    public string EmployeeName { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 合同编码
+    /// </summary>
+    public string ContractCode { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 合同类型（字典 hr_employee_contract_type；0=固定期限 1=无固定期限 2=以完成一定工作任务为期限 3=实习）
     /// </summary>
     public int ContractType { get; set; } = 0;
 
@@ -540,7 +597,7 @@ public class TaktEmployeeContractExportDto
     public string? SignCompany { get; set; } = string.Empty;
 
     /// <summary>
-    /// 合同状态（0=草稿，1=生效，2=到期，3=终止）
+    /// 合同状态（字典 hr_employee_contract_status；0=草稿 1=生效 2=到期 3=终止）
     /// </summary>
     public int ContractStatus { get; set; } = 0;
 

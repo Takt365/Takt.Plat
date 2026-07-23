@@ -183,12 +183,21 @@ export function getAccountTitleParentTreeOptions(): Promise<TaktTreeSelectOption
 
 /**
  * 获取会计科目选项列表
+ * @param reconciliationOnly 为 true 时仅返回带统驭标识的科目
+ * @param auxiliaryType 可选统驭标识（D=客户、K=供应商等）
  * @returns {Promise<TaktSelectOption[]>} 下拉选项
  */
-export function getAccountTitleOptions(): Promise<TaktSelectOption[]> {
+export function getAccountTitleOptions(
+  reconciliationOnly?: boolean,
+  auxiliaryType?: string,
+): Promise<TaktSelectOption[]> {
   return request<TaktSelectOption[]>({
     url: `${ACCOUNT_TITLE_API_BASE}/options`,
     method: 'get',
+    params: {
+      ...(reconciliationOnly != null ? { reconciliationOnly } : {}),
+      ...(auxiliaryType ? { auxiliaryType } : {}),
+    },
   });
 }
 

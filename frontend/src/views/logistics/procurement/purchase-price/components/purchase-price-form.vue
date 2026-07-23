@@ -22,12 +22,25 @@
     >
       <a-tab-pane
         key="tab-0"
-        :tab="t('common.page.form.tabs.basicinfo') + ' (1/2)'"
+        :tab="t('common.page.form.tabs.basicinfo') + ' (1/3)'"
         force-render
       >
         <div :class="formContentClass">
           <a-row :gutter="24">
-            <a-col :span="24">
+            <a-col :span="12">
+              <a-form-item
+                :label="pi.label('plantCode')"
+                name="plantCode"
+              >
+                <TaktSelect
+                  v-model:value="formState.plantCode"
+                  api-url="TaktPlants/options"
+                  :placeholder="pi.ph('plantCode')"
+                  :disabled="!!formData?.purchasePriceId"
+                />
+              </a-form-item>
+            </a-col>
+            <a-col :span="12">
               <a-form-item
                 :label="pi.label('purchasePriceCode')"
                 name="purchasePriceCode"
@@ -42,7 +55,7 @@
                 />
               </a-form-item>
             </a-col>
-            <a-col :span="24">
+            <a-col :span="12">
               <a-form-item
                 :label="pi.label('priceType')"
                 name="priceType"
@@ -54,7 +67,7 @@
                 />
               </a-form-item>
             </a-col>
-            <a-col :span="24">
+            <a-col :span="12">
               <a-form-item
                 :label="pi.label('supplierCode')"
                 name="supplierCode"
@@ -67,7 +80,7 @@
                 />
               </a-form-item>
             </a-col>
-            <a-col :span="24">
+            <a-col :span="12">
               <a-form-item
                 :label="pi.label('materialCode')"
                 name="materialCode"
@@ -80,7 +93,56 @@
                 />
               </a-form-item>
             </a-col>
-            <a-col :span="24">
+            <a-col :span="12">
+              <a-form-item
+                :label="pi.label('purchaseGroup')"
+                name="purchaseGroup"
+              >
+                <TaktSelect
+                  v-model:value="formState.purchaseGroup"
+                  api-url="TaktPurchaseGroups/options"
+                  :placeholder="pi.ph('purchaseGroup')"
+                />
+              </a-form-item>
+            </a-col>
+            <a-col :span="12">
+              <a-form-item
+                :label="pi.label('taxCode')"
+                name="taxCode"
+              >
+                <TaktSelect
+                  v-model:value="formState.taxCode"
+                  dict-type="accounting_tax_code"
+                  :placeholder="pi.ph('taxCode')"
+                  :disabled="!!formData?.purchasePriceId"
+                />
+              </a-form-item>
+            </a-col>
+            <a-col :span="12">
+              <a-form-item
+                :label="pi.label('grBasedInvoiceInspection')"
+                name="grBasedInvoiceInspection"
+              >
+                <TaktSelect
+                  v-model:value="formState.grBasedInvoiceInspection"
+                  dict-type="sys_yes_no_type"
+                  :placeholder="pi.ph('grBasedInvoiceInspection')"
+                />
+              </a-form-item>
+            </a-col>
+            <a-col :span="12">
+              <a-form-item
+                :label="pi.label('pricingDateControl')"
+                name="pricingDateControl"
+              >
+                <TaktSelect
+                  v-model:value="formState.pricingDateControl"
+                  dict-type="logistics_pricing_date_control"
+                  :placeholder="pi.ph('pricingDateControl')"
+                />
+              </a-form-item>
+            </a-col>
+            <a-col :span="12">
               <a-form-item
                 :label="pi.label('validFrom')"
                 name="validFrom"
@@ -93,6 +155,16 @@
                 />
               </a-form-item>
             </a-col>
+          </a-row>
+        </div>
+      </a-tab-pane>
+      <a-tab-pane
+        key="tab-1"
+        :tab="t('common.page.form.tabs.basicinfo') + ' (2/3)'"
+        force-render
+      >
+        <div :class="formContentClass">
+          <a-row :gutter="24">
             <a-col :span="24">
               <a-form-item
                 :label="pi.label('validTo')"
@@ -103,20 +175,6 @@
                   :placeholder="pi.ph('validTo')"
                   value-format="YYYY-MM-DD"
                   style="width: 100%"
-                />
-              </a-form-item>
-            </a-col>
-            <a-col :span="24">
-              <a-form-item
-                :label="pi.label('variableKey')"
-                name="variableKey"
-              >
-                <a-input
-                  v-model:value="formState.variableKey"
-                  :placeholder="pi.ph('variableKey')"
-                  show-count
-                  :maxlength="40"
-                  allow-clear
                 />
               </a-form-item>
             </a-col>
@@ -147,12 +205,26 @@
                 />
               </a-form-item>
             </a-col>
+            <a-col :span="24">
+              <a-form-item
+                :label="pi.label('variableKey')"
+                name="variableKey"
+              >
+                <a-input
+                  v-model:value="formState.variableKey"
+                  :placeholder="pi.ph('variableKey')"
+                  show-count
+                  :maxlength="40"
+                  allow-clear
+                />
+              </a-form-item>
+            </a-col>
           </a-row>
         </div>
       </a-tab-pane>
       <a-tab-pane
-        key="tab-1"
-        :tab="t('common.page.form.tabs.basicinfo') + ' (2/2)'"
+        key="tab-2"
+        :tab="t('common.page.form.tabs.basicinfo') + ' (3/3)'"
         force-render
       >
         <div :class="formContentClass">
@@ -324,13 +396,35 @@
           allow-clear
         />
       </template>
-      <template #cell-taxCode="{ record }">
+      <template #cell-conditionCurrency="{ record }">
         <TaktSelect
-          v-model:value="record.taxCode"
-          dict-type="accounting_tax_code"
+          v-model:value="record.conditionCurrency"
+          dict-type="accounting_currency_code"
           class="w-full"
           :get-popup-container="getSelectPopupContainer"
-          :placeholder="purchasePriceItemPi.ph('taxCode')"
+          :placeholder="purchasePriceItemPi.ph('conditionCurrency')"
+          :disabled="loading"
+          allow-clear
+        />
+      </template>
+      <template #cell-priceUnit="{ record }">
+        <TaktSelect
+          v-model:value="record.priceUnit"
+          dict-type="logistics_price_unit_param"
+          class="w-full"
+          :get-popup-container="getSelectPopupContainer"
+          :placeholder="purchasePriceItemPi.ph('priceUnit')"
+          :disabled="loading"
+          allow-clear
+        />
+      </template>
+      <template #cell-unitOfMeasure="{ record }">
+        <TaktSelect
+          v-model:value="record.unitOfMeasure"
+          dict-type="logistics_unit_of_measure_code"
+          class="w-full"
+          :get-popup-container="getSelectPopupContainer"
+          :placeholder="purchasePriceItemPi.ph('unitOfMeasure')"
           :disabled="loading"
           allow-clear
         />
@@ -399,7 +493,7 @@ const formContentClass = computed(() => (formFields.length > 10 ? 'takt-form-con
 /** 当前激活的 Tab key */
 const activeTab = ref('tab-0')
 /** CreateDto 字段名列表（与 formState 键对齐） */
-const formFields = ["tenantCode","companyCode","companyDefaultCulture","purchasePriceCode","priceType","supplierCode","materialCode","validFrom","validTo","variableKey","purchaseInquiryId","purchaseInquiryCode","extField","remark"]
+const formFields = ["tenantCode","companyCode","companyDefaultCulture","plantCode","purchasePriceCode","priceType","supplierCode","materialCode","purchaseGroup","taxCode","grBasedInvoiceInspection","pricingDateControl","validFrom","validTo","purchaseInquiryId","purchaseInquiryCode","variableKey","extField","remark"]
 
 
 import type { TaktEditableTableColumn } from '@/components/business/takt-editable-table/types'
@@ -472,8 +566,43 @@ const purchasePriceItemFormColumns = computed<TaktEditableTableColumn[]>(() => [
     width: 140,
   },
   {
-    key: 'taxCode',
-    title: purchasePriceItemPi.label('taxCode'),
+    key: 'untaxedPrice',
+    title: purchasePriceItemPi.label('untaxedPrice'),
+    width: 140,
+  },
+  {
+    key: 'taxIncludedPrice',
+    title: purchasePriceItemPi.label('taxIncludedPrice'),
+    width: 140,
+  },
+  {
+    key: 'conditionCurrency',
+    title: purchasePriceItemPi.label('conditionCurrency'),
+    width: 140,
+  },
+  {
+    key: 'priceUnit',
+    title: purchasePriceItemPi.label('priceUnit'),
+    width: 140,
+  },
+  {
+    key: 'unitOfMeasure',
+    title: purchasePriceItemPi.label('unitOfMeasure'),
+    width: 140,
+  },
+  {
+    key: 'minOrderQuantity',
+    title: purchasePriceItemPi.label('minOrderQuantity'),
+    width: 140,
+  },
+  {
+    key: 'roundingValue',
+    title: purchasePriceItemPi.label('roundingValue'),
+    width: 140,
+  },
+  {
+    key: 'plannedDeliveryTimeDays',
+    title: purchasePriceItemPi.label('plannedDeliveryTimeDays'),
     width: 140,
   },
   {
@@ -513,7 +642,14 @@ function createDefaultPurchasePriceItemRow(): Record<string, unknown> {
     scaleCurrency: '',
     calculationType: '',
     price: 0,
-    taxCode: '',
+    untaxedPrice: 0,
+    taxIncludedPrice: 0,
+    conditionCurrency: '',
+    priceUnit: 0,
+    unitOfMeasure: '',
+    minOrderQuantity: 0,
+    roundingValue: 0,
+    plannedDeliveryTimeDays: 0,
     isObsolete: 0,
     scaleQuantities: '',
     scaleValues: '',
@@ -554,7 +690,8 @@ const formRef = ref()
 const formState = reactive<Record<string, any>>({})
 /** 表单字段默认值（字典 IsDefault=1，来自 TaktDictDataSeedData） */
 const FORM_FIELD_DEFAULTS: Record<string, string | number> = {
-  priceType: "PB00"
+  priceType: "PB00",
+  taxCode: "J2"
 }
 
 /** 写入表单默认值（新增 / resetFields / 弹窗再次打开时） */
@@ -608,6 +745,13 @@ watch(
 
 /** 表单校验规则（与 FluentValidation 必填对齐） */
 const rules = computed<Record<string, Rule[]>>(() => ({
+  plantCode: [
+    {
+      required: true,
+      message: pi.ph('plantCode'),
+      trigger: 'change'
+    }
+  ],
   purchasePriceCode: [
     {
       required: true,
@@ -636,6 +780,32 @@ const rules = computed<Record<string, Rule[]>>(() => ({
       trigger: 'change'
     }
   ],
+  grBasedInvoiceInspection: [{
+    validator: async (_rule, value) => {
+      if (value === undefined || value === null || value === '') {
+        return Promise.reject(pi.ph('grBasedInvoiceInspection'))
+      }
+      const num = typeof value === 'number' ? value : Number(value)
+      if (!Number.isFinite(num)) {
+        return Promise.reject(pi.ph('grBasedInvoiceInspection'))
+      }
+      return Promise.resolve()
+    },
+    trigger: 'change'
+  }],
+  pricingDateControl: [{
+    validator: async (_rule, value) => {
+      if (value === undefined || value === null || value === '') {
+        return Promise.reject(pi.ph('pricingDateControl'))
+      }
+      const num = typeof value === 'number' ? value : Number(value)
+      if (!Number.isFinite(num)) {
+        return Promise.reject(pi.ph('pricingDateControl'))
+      }
+      return Promise.resolve()
+    },
+    trigger: 'change'
+  }],
   validFrom: [
     {
       required: true,
@@ -662,6 +832,14 @@ async function validate() {
 /** 映射为 Create/Update DTO */
 function getValues(): Record<string, any> {
   const payload = buildSubmitPayload() as Record<string, unknown>
+  if ('grBasedInvoiceInspection' in payload) {
+    const rawgrBasedInvoiceInspection = payload.grBasedInvoiceInspection
+    payload.grBasedInvoiceInspection = typeof rawgrBasedInvoiceInspection === 'number' ? rawgrBasedInvoiceInspection : Number(rawgrBasedInvoiceInspection)
+  }
+  if ('pricingDateControl' in payload) {
+    const rawpricingDateControl = payload.pricingDateControl
+    payload.pricingDateControl = typeof rawpricingDateControl === 'number' ? rawpricingDateControl : Number(rawpricingDateControl)
+  }
   if ('sortOrder' in payload) delete payload.sortOrder
   return payload
 }

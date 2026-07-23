@@ -14,7 +14,6 @@ using System.Linq.Expressions;
 using Mapster;
 using SqlSugar;
 using Takt.Application.Dtos.Logistics.Quality.Operation;
-using Takt.Domain.Entities.Logistics.Procurement;
 using Takt.Domain.Entities.Logistics.Quality.Operation;
 using Takt.Domain.Interfaces;
 using Takt.Domain.Repositories;
@@ -28,11 +27,10 @@ namespace Takt.Application.Services.Logistics.Quality.Operation;
 /// <summary>
 /// 进货检验单应用服务
 /// </summary>
-public partial class TaktIqcOrderService : TaktServiceBase, ITaktIqcOrderService
+public class TaktIqcOrderService : TaktServiceBase, ITaktIqcOrderService
 {
     private readonly ITaktCompanyRepository<TaktIqcOrder> _iqcOrderRepository;
     private readonly ITaktCompanyRepository<TaktIqcOrderItem> _iqcOrderItemRepository;
-    private readonly ITaktCompanyRepository<TaktSupplier> _supplierRepository;
     private readonly ITaktLineNumberGenerator _lineNumberGenerator;
     private readonly ITaktUniqueValidator _uniqueValidator;
 
@@ -41,7 +39,6 @@ public partial class TaktIqcOrderService : TaktServiceBase, ITaktIqcOrderService
     /// </summary>
     /// <param name="iqcOrderRepository">进货检验单仓储</param>
     /// <param name="iqcOrderItemRepository">IqcOrderItem仓储</param>
-    /// <param name="supplierRepository">供应商仓储</param>
     /// <param name="lineNumberGenerator">明细行号生成器</param>
     /// <param name="uniqueValidator">唯一性验证器</param>
     /// <param name="userContext">用户上下文</param>
@@ -49,7 +46,6 @@ public partial class TaktIqcOrderService : TaktServiceBase, ITaktIqcOrderService
     public TaktIqcOrderService(
         ITaktCompanyRepository<TaktIqcOrder> iqcOrderRepository,
         ITaktCompanyRepository<TaktIqcOrderItem> iqcOrderItemRepository,
-        ITaktCompanyRepository<TaktSupplier> supplierRepository,
         ITaktLineNumberGenerator lineNumberGenerator,
         ITaktUniqueValidator uniqueValidator,
         ITaktUserContext? userContext = null,
@@ -58,7 +54,6 @@ public partial class TaktIqcOrderService : TaktServiceBase, ITaktIqcOrderService
     {
         _iqcOrderRepository = iqcOrderRepository;
         _iqcOrderItemRepository = iqcOrderItemRepository;
-        _supplierRepository = supplierRepository;
         _lineNumberGenerator = lineNumberGenerator;
         _uniqueValidator = uniqueValidator;
     }

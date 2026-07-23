@@ -28,7 +28,7 @@ namespace Takt.Domain.Entities.Logistics.Manufacturing.Mds;
 public class TaktSalesForecast : TaktApprovalEntityBase
 {
     /// <summary>
-    /// 工厂代码（选项 TaktPlants/options，DictValue=PlantCode）
+    /// 工厂代码（选项 TaktPlants/options；DictValue=PlantCode）
     /// </summary>
     [SugarColumn(ColumnName = "plant_code", ColumnDescription = "工厂代码", ColumnDataType = "nvarchar", Length = 50, IsNullable = false)]
     public string PlantCode { get; set; } = string.Empty;
@@ -64,20 +64,20 @@ public class TaktSalesForecast : TaktApprovalEntityBase
     public string? CustomerCode { get; set; }
 
     /// <summary>
-    /// 客户名称（冗余字段，便于查询展示）
+    /// 客户名称1（冗余，与 TaktCustomer.CustomerName1 对齐）
     /// </summary>
-    [SugarColumn(ColumnName = "customer_name", ColumnDescription = "客户名称", ColumnDataType = "nvarchar", Length = 200, IsNullable = true)]
-    public string? CustomerName { get; set; }
+    [SugarColumn(ColumnName = "customer_name1", ColumnDescription = "客户名称1", ColumnDataType = "nvarchar", Length = 140, IsNullable = true)]
+    public string? CustomerName1 { get; set; }
 
     /// <summary>
-    /// 计划人员工ID（选项 TaktEmployees/options，DictValue=Id）
+    /// 计划人员工ID（选项 TaktEmployees/options；DictValue=Id）
     /// </summary>
     [SugarColumn(ColumnName = "planner_id", ColumnDescription = "计划人员工ID", ColumnDataType = "bigint", IsNullable = true)]
     [JsonConverter(typeof(ValueToStringConverter))]
     public long? PlannerId { get; set; }
 
     /// <summary>
-    /// 计划人（选项 TaktEmployees/options，DictValue=EmployeeNo）
+    /// 计划人（选项 TaktEmployees/options；DictValue=EmployeeCode）
     /// </summary>
     [SugarColumn(ColumnName = "plan_by", ColumnDescription = "计划人", ColumnDataType = "nvarchar", Length = 50, IsNullable = false)]
     public string PlanBy { get; set; } = string.Empty;

@@ -41,7 +41,7 @@ public class TaktDictDataService : TaktServiceBase, ITaktDictDataService
     /// <param name="dictTypeRepository">字典类型仓储</param>
     /// <param name="uniqueValidator">唯一性验证器</param>
     /// <param name="userContext">用户上下文</param>
-    /// <param name="localizationService">本地化服务</param>
+    /// <param name="localizationService">本地化服务（Accept-Language）</param>
     public TaktDictDataService(
         ITaktTenantRepository<TaktDictData> dictDataRepository,
         ITaktTenantRepository<TaktDictType> dictTypeRepository,
@@ -95,8 +95,10 @@ public class TaktDictDataService : TaktServiceBase, ITaktDictDataService
     /// <returns>下拉选项</returns>
     public async Task<List<TaktSelectOption>> GetDictDataOptionsAsync()
     {
+        var cultureCode = ResolveCurrentRequestCultureCode();
         var list = await _dictDataRepository.GetListAsync(
-            x => x.TenantCode == CurrentTenantCode,
+            x => x.TenantCode == CurrentTenantCode
+                && (x.CultureCode == "eo" || x.CultureCode == cultureCode),
             x => x.DictTypeCode ?? string.Empty,
             false);
         return list.Select(e => new TaktSelectOption
@@ -114,15 +116,17 @@ public class TaktDictDataService : TaktServiceBase, ITaktDictDataService
     public async Task<TaktDictDataDto> CreateDictDataAsync(TaktDictDataCreateDto dto)
     {
         var entity = dto.Adapt<TaktDictData>();
+        entity.CultureCode = NormalizeCultureCode(entity.CultureCode);
         await StampDictDataDictTypeAsync(entity, dto);
         var isUnique_ix_dict_data_type_label_i18n_unique = await _uniqueValidator.IsUniqueAsync(
             _dictDataRepository,
             x => x.DictTypeId == entity.DictTypeId
+                && x.CultureCode == entity.CultureCode
                 && x.DictLabel == entity.DictLabel
                 && x.I18nKey == entity.I18nKey);
         if (!isUnique_ix_dict_data_type_label_i18n_unique)
         {
-            throw new TaktBusinessException("字典数据的DictTypeId、DictLabel、I18nKey已存在");
+            throw new TaktBusinessException("字典数据的DictTypeId、CultureCode、DictLabel、I18nKey已存在");
         }
         entity = await _dictDataRepository.CreateAsync(entity);
         return await GetDictDataByIdAsync(entity.Id) ?? entity.Adapt<TaktDictDataDto>();
@@ -142,16 +146,18 @@ public class TaktDictDataService : TaktServiceBase, ITaktDictDataService
             throw new TaktBusinessException("字典数据不存在");
         }
         dto.Adapt(entity);
+        entity.CultureCode = NormalizeCultureCode(entity.CultureCode);
         await StampDictDataDictTypeAsync(entity, dto);
         var isUnique_ix_dict_data_type_label_i18n_unique = await _uniqueValidator.IsUniqueAsync(
             _dictDataRepository,
             x => x.DictTypeId == entity.DictTypeId
+                && x.CultureCode == entity.CultureCode
                 && x.DictLabel == entity.DictLabel
                 && x.I18nKey == entity.I18nKey,
             id);
         if (!isUnique_ix_dict_data_type_label_i18n_unique)
         {
-            throw new TaktBusinessException("字典数据的DictTypeId、DictLabel、I18nKey已存在");
+            throw new TaktBusinessException("字典数据的DictTypeId、CultureCode、DictLabel、I18nKey已存在");
         }
         await _dictDataRepository.UpdateAsync(entity);
         return await GetDictDataByIdAsync(id) ?? throw new TaktBusinessException("字典数据不存在");
@@ -296,13 +302,15 @@ public class TaktDictDataService : TaktServiceBase, ITaktDictDataService
     }
 
     /// <summary>
-    /// 获取当前租户下全部字典数据（扁平列表，含 DictTypeCode）
+    /// 获取当前登录 UI 语言下全部字典数据（CultureCode eo=全局通用，或匹配 Accept-Language）
     /// </summary>
     /// <returns>全部字典数据 DTO</returns>
     public async Task<TaktDataDictAllDto> GetDataDictAllAsync()
     {
+        var cultureCode = ResolveCurrentRequestCultureCode();
         var list = await _dictDataRepository.GetListAsync(
-            x => x.TenantCode == CurrentTenantCode,
+            x => x.TenantCode == CurrentTenantCode
+                && (x.CultureCode == "eo" || x.CultureCode == cultureCode),
             x => x.SortOrder,
             false);
         var items = list
@@ -320,7 +328,7 @@ public class TaktDictDataService : TaktServiceBase, ITaktDictDataService
     /// 按字典类型编码批量构建双向快照（导入 GetCode / 导出 GetName）
     /// </summary>
     /// <param name="dictTypeCodes">字典类型编码（与种子 dict_type_code 一致）</param>
-    /// <returns>租户级预加载快照</returns>
+    /// <returns>当前 UI 语言预加载快照</returns>
     public async Task<TaktDictSnapshot> CreateDictSnapshotAsync(params string[] dictTypeCodes)
     {
         if (dictTypeCodes == null || dictTypeCodes.Length == 0)
@@ -336,8 +344,11 @@ public class TaktDictDataService : TaktServiceBase, ITaktDictDataService
         {
             return TaktDictSnapshot.CreateFromRows(Array.Empty<(string, string, string)>());
         }
+        var cultureCode = ResolveCurrentRequestCultureCode();
         var list = await _dictDataRepository.GetListAsync(
-            x => x.TenantCode == CurrentTenantCode && codes.Contains(x.DictTypeCode),
+            x => x.TenantCode == CurrentTenantCode
+                && codes.Contains(x.DictTypeCode)
+                && (x.CultureCode == "eo" || x.CultureCode == cultureCode),
             x => x.SortOrder,
             false);
         var rows = list.Select(x => (x.DictTypeCode, x.DictValue, x.DictLabel));
@@ -364,8 +375,11 @@ public class TaktDictDataService : TaktServiceBase, ITaktDictDataService
         {
             return new TaktDictStorageContext();
         }
+        var cultureCode = ResolveCurrentRequestCultureCode();
         var list = await _dictDataRepository.GetListAsync(
-            x => x.TenantCode == CurrentTenantCode && codes.Contains(x.DictTypeCode),
+            x => x.TenantCode == CurrentTenantCode
+                && codes.Contains(x.DictTypeCode)
+                && (x.CultureCode == "eo" || x.CultureCode == cultureCode),
             x => x.SortOrder,
             false);
         var sortMaps = new Dictionary<string, Dictionary<string, int>>(StringComparer.Ordinal);
@@ -407,12 +421,36 @@ public class TaktDictDataService : TaktServiceBase, ITaktDictDataService
             DictValue = entity.DictValue,
             I18nKey = entity.I18nKey,
             DictTypeCode = entity.DictTypeCode,
+            CultureCode = entity.CultureCode,
             ExtLabel = entity.ExtLabel,
             ExtValue = entity.ExtValue,
             CssClass = entity.CssClass,
             ListClass = entity.ListClass,
             SortOrder = entity.SortOrder,
+            IsDefault = entity.IsDefault,
         };
+    }
+
+    /// <summary>
+    /// 解析当前请求 UI 语言（Accept-Language，与前端 vue-i18n / resolveRequestLocale 一致）
+    /// </summary>
+    /// <returns>CultureCode</returns>
+    private string ResolveCurrentRequestCultureCode()
+    {
+        var culture = _localizationService?.GetCurrentCulture();
+        return string.IsNullOrWhiteSpace(culture) ? "zh-CN" : culture.Trim();
+    }
+
+    /// <summary>
+    /// 规范化 CultureCode（trim；禁止空串）
+    /// </summary>
+    /// <param name="cultureCode">区域编码</param>
+    /// <returns>规范化后的编码</returns>
+    private static string NormalizeCultureCode(string? cultureCode)
+    {
+        return string.IsNullOrWhiteSpace(cultureCode)
+            ? throw new TaktBusinessException("区域文化编码不能为空")
+            : cultureCode.Trim();
     }
 
     // ========================================
@@ -478,6 +516,7 @@ public class TaktDictDataService : TaktServiceBase, ITaktDictDataService
             exp = exp.And(x =>
                 SqlFunc.ToString(x.DictTypeId).Contains(keywords)
                 || (x.DictTypeCode != null && x.DictTypeCode.Contains(keywords))
+                || (x.CultureCode != null && x.CultureCode.Contains(keywords))
                 || (x.DictLabel != null && x.DictLabel.Contains(keywords))
                 || (x.DictValue != null && x.DictValue.Contains(keywords))
                 || (x.I18nKey != null && x.I18nKey.Contains(keywords))
@@ -501,6 +540,11 @@ public class TaktDictDataService : TaktServiceBase, ITaktDictDataService
         if (!string.IsNullOrEmpty(queryDto?.DictTypeCode))
         {
             exp = exp.And(x => x.DictTypeCode != null && x.DictTypeCode.Contains(queryDto.DictTypeCode));
+        }
+
+        if (!string.IsNullOrEmpty(queryDto?.CultureCode))
+        {
+            exp = exp.And(x => x.CultureCode != null && x.CultureCode.Contains(queryDto.CultureCode));
         }
 
         if (!string.IsNullOrEmpty(queryDto?.DictLabel))

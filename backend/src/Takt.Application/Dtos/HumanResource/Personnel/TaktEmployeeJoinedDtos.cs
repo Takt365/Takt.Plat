@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Application.Dtos.HumanResource.Personnel
 // 文件名称：TaktEmployeeJoinedDtos.cs
-// 创建时间：2026-06-23
+// 创建时间：2026-07-23
 // 创建人：Takt365(Auto Generated)
 // 功能描述：EmployeeJoined 模块 DTO（由 generate-dtos-from-entity.cjs 根据 TaktEmployeeJoined 生成，请按需审阅）
 // 
@@ -22,7 +22,7 @@ namespace Takt.Application.Dtos.HumanResource.Personnel;
 // ========================================
 
 /// <summary>
-/// 员工入职上岗办理记录（审批单，Joined=实际上班；审批状态见 TaktApprovalDtoBase.ApprovalStatus）
+/// 员工入职上岗办理记录（审批单，Joined=实际上班；审批态见基类 ApprovalStatus，字典 sys_approval_status）
 /// 对应前端 TaktEmployeeJoinedDto
 /// 继承 TaktApprovalDtoBase
 /// </summary>
@@ -36,24 +36,29 @@ public class TaktEmployeeJoinedDto : TaktApprovalDtoBase
     public long EmployeeJoinedId { get; set; }
 
     /// <summary>
-    /// 员工ID
+    /// 员工（选项 TaktEmployees/options；DictValue=Id）
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
     public long EmployeeId { get; set; }
 
     /// <summary>
-    /// 员工名称（填充字段）
+    /// 员工编码（冗余，与 TaktEmployee.EmployeeCode 对齐）
     /// </summary>
-    public string? EmployeeName { get; set; }
+    public string EmployeeCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 入职待办ID（由入职待办办结后生成上岗单时回填，可空）
+    /// 员工姓名（冗余，与 TaktEmployee.EmployeeName 对齐）
+    /// </summary>
+    public string EmployeeName { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 入职待办（选项 TaktEmployeeOnboardings/options；DictValue=Id）
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
     public long? OnboardingId { get; set; }
 
     /// <summary>
-    /// 入职待办名称（填充字段）
+    /// 入职待办（选项 TaktEmployeeOnboardings/options；DictValue=Id）
     /// </summary>
     public string? OnboardingName { get; set; }
 
@@ -73,7 +78,7 @@ public class TaktEmployeeJoinedDto : TaktApprovalDtoBase
     public DateTime? RegularDate { get; set; }
 
     /// <summary>
-    /// 上岗部门ID
+    /// 上岗部门（关联 TaktDept.Id，选项 TaktDepts/tree-options）
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
     public long DeptId { get; set; }
@@ -84,7 +89,7 @@ public class TaktEmployeeJoinedDto : TaktApprovalDtoBase
     public string DeptName { get; set; } = string.Empty;
 
     /// <summary>
-    /// 上岗岗位ID
+    /// 上岗岗位（选项 TaktPosts/options；DictValue=Id）
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
     public long? PostId { get; set; }
@@ -100,17 +105,17 @@ public class TaktEmployeeJoinedDto : TaktApprovalDtoBase
     public string? JobTitle { get; set; } = string.Empty;
 
     /// <summary>
-    /// 工作性质（0=全职，1=兼职，2=实习，3=外包，4=其他）
+    /// 工作性质（字典 hr_employee_work_nature_type；0=全职 1=兼职 2=实习 3=外包 4=其他）
     /// </summary>
     public int WorkNature { get; set; } = 0;
 
     /// <summary>
-    /// 任职类型（0=主职，1=兼职，2=借调，3=挂职）
+    /// 任职类型（字典 hr_employee_employment_type；0=主职 1=兼职 2=借调 3=挂职）
     /// </summary>
     public int EmploymentType { get; set; } = 0;
 
     /// <summary>
-    /// 直属上级员工ID
+    /// 直属上级（选项 TaktEmployees/options；DictValue=Id）
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
     public long? DirectManagerId { get; set; }
@@ -143,13 +148,23 @@ public class TaktEmployeeJoinedQueryDto : TaktPagedQuery
     public string? CompanyCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 员工ID
+    /// 员工（选项 TaktEmployees/options；DictValue=Id）
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
     public long? EmployeeId { get; set; }
 
     /// <summary>
-    /// 入职待办ID（由入职待办办结后生成上岗单时回填，可空）
+    /// 员工编码（冗余，与 TaktEmployee.EmployeeCode 对齐）
+    /// </summary>
+    public string? EmployeeCode { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 员工姓名（冗余，与 TaktEmployee.EmployeeName 对齐）
+    /// </summary>
+    public string? EmployeeName { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 入职待办（选项 TaktEmployeeOnboardings/options；DictValue=Id）
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
     public long? OnboardingId { get; set; }
@@ -185,7 +200,7 @@ public class TaktEmployeeJoinedQueryDto : TaktPagedQuery
     public DateTime? RegularDateEnd { get; set; }
 
     /// <summary>
-    /// 上岗部门ID
+    /// 上岗部门（关联 TaktDept.Id，选项 TaktDepts/tree-options）
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
     public long? DeptId { get; set; }
@@ -196,7 +211,7 @@ public class TaktEmployeeJoinedQueryDto : TaktPagedQuery
     public string? DeptName { get; set; } = string.Empty;
 
     /// <summary>
-    /// 上岗岗位ID
+    /// 上岗岗位（选项 TaktPosts/options；DictValue=Id）
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
     public long? PostId { get; set; }
@@ -212,17 +227,17 @@ public class TaktEmployeeJoinedQueryDto : TaktPagedQuery
     public string? JobTitle { get; set; } = string.Empty;
 
     /// <summary>
-    /// 工作性质（0=全职，1=兼职，2=实习，3=外包，4=其他）
+    /// 工作性质（字典 hr_employee_work_nature_type；0=全职 1=兼职 2=实习 3=外包 4=其他）
     /// </summary>
     public int? WorkNature { get; set; }
 
     /// <summary>
-    /// 任职类型（0=主职，1=兼职，2=借调，3=挂职）
+    /// 任职类型（字典 hr_employee_employment_type；0=主职 1=兼职 2=借调 3=挂职）
     /// </summary>
     public int? EmploymentType { get; set; }
 
     /// <summary>
-    /// 直属上级员工ID
+    /// 直属上级（选项 TaktEmployees/options；DictValue=Id）
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
     public long? DirectManagerId { get; set; }
@@ -321,13 +336,25 @@ public class TaktEmployeeJoinedCreateDto
     public string CompanyDefaultCulture { get; set; } = string.Empty;
 
     /// <summary>
-    /// 员工ID
+    /// 员工（选项 TaktEmployees/options；DictValue=Id）
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
     public long EmployeeId { get; set; }
 
     /// <summary>
-    /// 入职待办ID（由入职待办办结后生成上岗单时回填，可空）
+    /// 员工编码（冗余，与 TaktEmployee.EmployeeCode 对齐）
+    /// </summary>
+    [Required(ErrorMessage = "员工编码（冗余，与 TaktEmployee.EmployeeCode 对齐）不能为空")]
+    public string EmployeeCode { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 员工姓名（冗余，与 TaktEmployee.EmployeeName 对齐）
+    /// </summary>
+    [Required(ErrorMessage = "员工姓名（冗余，与 TaktEmployee.EmployeeName 对齐）不能为空")]
+    public string EmployeeName { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 入职待办（选项 TaktEmployeeOnboardings/options；DictValue=Id）
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
     public long? OnboardingId { get; set; }
@@ -348,7 +375,7 @@ public class TaktEmployeeJoinedCreateDto
     public DateTime? RegularDate { get; set; }
 
     /// <summary>
-    /// 上岗部门ID
+    /// 上岗部门（关联 TaktDept.Id，选项 TaktDepts/tree-options）
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
     public long DeptId { get; set; }
@@ -360,7 +387,7 @@ public class TaktEmployeeJoinedCreateDto
     public string DeptName { get; set; } = string.Empty;
 
     /// <summary>
-    /// 上岗岗位ID
+    /// 上岗岗位（选项 TaktPosts/options；DictValue=Id）
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
     public long? PostId { get; set; }
@@ -376,17 +403,17 @@ public class TaktEmployeeJoinedCreateDto
     public string? JobTitle { get; set; } = string.Empty;
 
     /// <summary>
-    /// 工作性质（0=全职，1=兼职，2=实习，3=外包，4=其他）
+    /// 工作性质（字典 hr_employee_work_nature_type；0=全职 1=兼职 2=实习 3=外包 4=其他）
     /// </summary>
     public int WorkNature { get; set; } = 0;
 
     /// <summary>
-    /// 任职类型（0=主职，1=兼职，2=借调，3=挂职）
+    /// 任职类型（字典 hr_employee_employment_type；0=主职 1=兼职 2=借调 3=挂职）
     /// </summary>
     public int EmploymentType { get; set; } = 0;
 
     /// <summary>
-    /// 直属上级员工ID
+    /// 直属上级（选项 TaktEmployees/options；DictValue=Id）
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
     public long? DirectManagerId { get; set; }
@@ -448,13 +475,23 @@ public class TaktEmployeeJoinedTemplateDto
     public string? CompanyCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 员工ID
+    /// 员工（选项 TaktEmployees/options；DictValue=Id）
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
     public long? EmployeeId { get; set; }
 
     /// <summary>
-    /// 入职待办ID（由入职待办办结后生成上岗单时回填，可空）
+    /// 员工编码（冗余，与 TaktEmployee.EmployeeCode 对齐）
+    /// </summary>
+    public string? EmployeeCode { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 员工姓名（冗余，与 TaktEmployee.EmployeeName 对齐）
+    /// </summary>
+    public string? EmployeeName { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 入职待办（选项 TaktEmployeeOnboardings/options；DictValue=Id）
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
     public long? OnboardingId { get; set; }
@@ -475,7 +512,7 @@ public class TaktEmployeeJoinedTemplateDto
     public DateTime? RegularDate { get; set; }
 
     /// <summary>
-    /// 上岗部门ID
+    /// 上岗部门（关联 TaktDept.Id，选项 TaktDepts/tree-options）
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
     public long? DeptId { get; set; }
@@ -486,7 +523,7 @@ public class TaktEmployeeJoinedTemplateDto
     public string? DeptName { get; set; } = string.Empty;
 
     /// <summary>
-    /// 上岗岗位ID
+    /// 上岗岗位（选项 TaktPosts/options；DictValue=Id）
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
     public long? PostId { get; set; }
@@ -502,17 +539,17 @@ public class TaktEmployeeJoinedTemplateDto
     public string? JobTitle { get; set; } = string.Empty;
 
     /// <summary>
-    /// 工作性质（0=全职，1=兼职，2=实习，3=外包，4=其他）
+    /// 工作性质（字典 hr_employee_work_nature_type；0=全职 1=兼职 2=实习 3=外包 4=其他）
     /// </summary>
     public int? WorkNature { get; set; }
 
     /// <summary>
-    /// 任职类型（0=主职，1=兼职，2=借调，3=挂职）
+    /// 任职类型（字典 hr_employee_employment_type；0=主职 1=兼职 2=借调 3=挂职）
     /// </summary>
     public int? EmploymentType { get; set; }
 
     /// <summary>
-    /// 直属上级员工ID
+    /// 直属上级（选项 TaktEmployees/options；DictValue=Id）
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
     public long? DirectManagerId { get; set; }
@@ -555,13 +592,23 @@ public class TaktEmployeeJoinedImportDto
     public string? CompanyDefaultCulture { get; set; } = string.Empty;
 
     /// <summary>
-    /// 员工ID
+    /// 员工（选项 TaktEmployees/options；DictValue=Id）
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
     public long? EmployeeId { get; set; }
 
     /// <summary>
-    /// 入职待办ID（由入职待办办结后生成上岗单时回填，可空）
+    /// 员工编码（冗余，与 TaktEmployee.EmployeeCode 对齐）
+    /// </summary>
+    public string? EmployeeCode { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 员工姓名（冗余，与 TaktEmployee.EmployeeName 对齐）
+    /// </summary>
+    public string? EmployeeName { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 入职待办（选项 TaktEmployeeOnboardings/options；DictValue=Id）
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
     public long? OnboardingId { get; set; }
@@ -582,7 +629,7 @@ public class TaktEmployeeJoinedImportDto
     public DateTime? RegularDate { get; set; }
 
     /// <summary>
-    /// 上岗部门ID
+    /// 上岗部门（关联 TaktDept.Id，选项 TaktDepts/tree-options）
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
     public long? DeptId { get; set; }
@@ -593,7 +640,7 @@ public class TaktEmployeeJoinedImportDto
     public string? DeptName { get; set; } = string.Empty;
 
     /// <summary>
-    /// 上岗岗位ID
+    /// 上岗岗位（选项 TaktPosts/options；DictValue=Id）
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
     public long? PostId { get; set; }
@@ -609,17 +656,17 @@ public class TaktEmployeeJoinedImportDto
     public string? JobTitle { get; set; } = string.Empty;
 
     /// <summary>
-    /// 工作性质（0=全职，1=兼职，2=实习，3=外包，4=其他）
+    /// 工作性质（字典 hr_employee_work_nature_type；0=全职 1=兼职 2=实习 3=外包 4=其他）
     /// </summary>
     public int? WorkNature { get; set; }
 
     /// <summary>
-    /// 任职类型（0=主职，1=兼职，2=借调，3=挂职）
+    /// 任职类型（字典 hr_employee_employment_type；0=主职 1=兼职 2=借调 3=挂职）
     /// </summary>
     public int? EmploymentType { get; set; }
 
     /// <summary>
-    /// 直属上级员工ID
+    /// 直属上级（选项 TaktEmployees/options；DictValue=Id）
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
     public long? DirectManagerId { get; set; }
@@ -658,13 +705,23 @@ public class TaktEmployeeJoinedExportDto
     public long EmployeeJoinedId { get; set; }
 
     /// <summary>
-    /// 员工ID
+    /// 员工（选项 TaktEmployees/options；DictValue=Id）
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
     public long EmployeeId { get; set; }
 
     /// <summary>
-    /// 入职待办ID（由入职待办办结后生成上岗单时回填，可空）
+    /// 员工编码（冗余，与 TaktEmployee.EmployeeCode 对齐）
+    /// </summary>
+    public string EmployeeCode { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 员工姓名（冗余，与 TaktEmployee.EmployeeName 对齐）
+    /// </summary>
+    public string EmployeeName { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 入职待办（选项 TaktEmployeeOnboardings/options；DictValue=Id）
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
     public long? OnboardingId { get; set; }
@@ -685,7 +742,7 @@ public class TaktEmployeeJoinedExportDto
     public DateTime? RegularDate { get; set; }
 
     /// <summary>
-    /// 上岗部门ID
+    /// 上岗部门（关联 TaktDept.Id，选项 TaktDepts/tree-options）
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
     public long DeptId { get; set; }
@@ -696,7 +753,7 @@ public class TaktEmployeeJoinedExportDto
     public string DeptName { get; set; } = string.Empty;
 
     /// <summary>
-    /// 上岗岗位ID
+    /// 上岗岗位（选项 TaktPosts/options；DictValue=Id）
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
     public long? PostId { get; set; }
@@ -712,17 +769,17 @@ public class TaktEmployeeJoinedExportDto
     public string? JobTitle { get; set; } = string.Empty;
 
     /// <summary>
-    /// 工作性质（0=全职，1=兼职，2=实习，3=外包，4=其他）
+    /// 工作性质（字典 hr_employee_work_nature_type；0=全职 1=兼职 2=实习 3=外包 4=其他）
     /// </summary>
     public int WorkNature { get; set; } = 0;
 
     /// <summary>
-    /// 任职类型（0=主职，1=兼职，2=借调，3=挂职）
+    /// 任职类型（字典 hr_employee_employment_type；0=主职 1=兼职 2=借调 3=挂职）
     /// </summary>
     public int EmploymentType { get; set; } = 0;
 
     /// <summary>
-    /// 直属上级员工ID
+    /// 直属上级（选项 TaktEmployees/options；DictValue=Id）
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
     public long? DirectManagerId { get; set; }

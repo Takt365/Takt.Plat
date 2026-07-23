@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Application.Services.HumanResource.Personnel
 // 文件名称：TaktEmployeeEducationService.cs
-// 创建时间：2026-06-23
+// 创建时间：2026-07-23
 // 创建人：Takt365(Cursor AI)
 // 功能描述：员工教育经历应用服务实现
 // 
@@ -93,12 +93,12 @@ public class TaktEmployeeEducationService : TaktServiceBase, ITaktEmployeeEducat
         EnsureThreeLayerContext();
         var list = await _employeeEducationRepository.GetListAsync(
             x => x.TenantCode == CurrentTenantCode && x.CompanyCode == CurrentCompanyCode,
-            x => x.SchoolName ?? string.Empty,
+            x => x.EmployeeName ?? string.Empty,
             false);
         return list.Select(e => new TaktSelectOption
         {
-            DictValue = e.Id,
-            DictLabel = e.SchoolName ?? e.Id.ToString(),
+            DictValue = e.EmployeeCode,
+            DictLabel = e.EmployeeName ?? e.EmployeeCode,
         }).ToList();
     }
 
@@ -254,11 +254,13 @@ public class TaktEmployeeEducationService : TaktServiceBase, ITaktEmployeeEducat
             var keywords = queryDto.KeyWords;
             exp = exp.And(x =>
                 SqlFunc.ToString(x.EmployeeId).Contains(keywords)
+                || (x.EmployeeCode != null && x.EmployeeCode.Contains(keywords))
+                || (x.EmployeeName != null && x.EmployeeName.Contains(keywords))
                 || (x.SchoolName != null && x.SchoolName.Contains(keywords))
                 || SqlFunc.ToString(x.EducationLevel).Contains(keywords)
                 || SqlFunc.ToString(x.DegreeLevel).Contains(keywords)
                 || (x.MajorName != null && x.MajorName.Contains(keywords))
-                || (x.CertificateNo != null && x.CertificateNo.Contains(keywords))
+                || (x.CertificateCode != null && x.CertificateCode.Contains(keywords))
                 || SqlFunc.ToString(x.IsHighest).Contains(keywords)
                 || (x.ExtField != null && x.ExtField.Contains(keywords))
                 || (x.Remark != null && x.Remark.Contains(keywords))
@@ -271,6 +273,16 @@ public class TaktEmployeeEducationService : TaktServiceBase, ITaktEmployeeEducat
         if (queryDto?.EmployeeId.HasValue == true)
         {
             exp = exp.And(x => x.EmployeeId == queryDto.EmployeeId);
+        }
+
+        if (!string.IsNullOrEmpty(queryDto?.EmployeeCode))
+        {
+            exp = exp.And(x => x.EmployeeCode != null && x.EmployeeCode.Contains(queryDto.EmployeeCode));
+        }
+
+        if (!string.IsNullOrEmpty(queryDto?.EmployeeName))
+        {
+            exp = exp.And(x => x.EmployeeName != null && x.EmployeeName.Contains(queryDto.EmployeeName));
         }
 
         if (!string.IsNullOrEmpty(queryDto?.SchoolName))
@@ -293,9 +305,9 @@ public class TaktEmployeeEducationService : TaktServiceBase, ITaktEmployeeEducat
             exp = exp.And(x => x.MajorName != null && x.MajorName.Contains(queryDto.MajorName));
         }
 
-        if (!string.IsNullOrEmpty(queryDto?.CertificateNo))
+        if (!string.IsNullOrEmpty(queryDto?.CertificateCode))
         {
-            exp = exp.And(x => x.CertificateNo != null && x.CertificateNo.Contains(queryDto.CertificateNo));
+            exp = exp.And(x => x.CertificateCode != null && x.CertificateCode.Contains(queryDto.CertificateCode));
         }
 
         if (queryDto?.IsHighest.HasValue == true)

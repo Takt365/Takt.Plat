@@ -25,14 +25,14 @@ namespace Takt.Domain.Entities.HumanResource.Talent;
 public class TaktTalentJobPosting : TaktCompanyEntityBase
 {
     /// <summary>
-    /// 用人需求（选项 TaktTalentStaffingRequirements/options，DictValue=Id）
+    /// 用人需求（选项 TaktTalentStaffingRequirements/options；DictValue=Id）
     /// </summary>
     [SugarColumn(ColumnName = "staffing_requirement_id", ColumnDescription = "用人需求ID", ColumnDataType = "bigint", IsNullable = false)]
     public long StaffingRequirementId { get; set; }
     /// <summary>
-    /// 发布编号（租户+公司内唯一）
+    /// 发布编码（租户+公司内唯一）
     /// </summary>
-    [SugarColumn(ColumnName = "posting_code", ColumnDescription = "发布编号", ColumnDataType = "varchar", Length = 20, IsNullable = false)]
+    [SugarColumn(ColumnName = "posting_code", ColumnDescription = "发布编码", ColumnDataType = "varchar", Length = 20, IsNullable = false)]
     public string PostingCode { get; set; } = string.Empty;
     /// <summary>
     /// 职位标题

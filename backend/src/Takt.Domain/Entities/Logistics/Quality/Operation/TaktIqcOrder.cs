@@ -29,7 +29,7 @@ public class TaktIqcOrder : TaktCompanyEntityBase
     [SugarColumn(ColumnName = "plant_code", ColumnDescription = "工厂代码", ColumnDataType = "nvarchar", Length = 4, IsNullable = false)]
     public string PlantCode { get; set; } = string.Empty;
     /// <summary>
-    /// 来源单号（选项 TaktPurchaseOrders/options，DictValue=PurchaseOrderCode）
+    /// 来源单号（选项 TaktPurchaseOrders/options；DictValue=PurchaseOrderCode）
     /// </summary>
     [SugarColumn(ColumnName = "source_code", ColumnDescription = "来源单号", ColumnDataType = "nvarchar", Length = 50, IsNullable = false)]
     public string SourceCode { get; set; } = string.Empty;
@@ -44,7 +44,7 @@ public class TaktIqcOrder : TaktCompanyEntityBase
     [SugarColumn(ColumnName = "iqc_order_code", ColumnDescription = "IQC检验单编码", ColumnDataType = "nvarchar", Length = 50, IsNullable = false)]
     public string IqcOrderCode { get; set; } = string.Empty;
     /// <summary>
-    /// 供应商编码（选项 TaktSuppliers/options，DictValue=SupplierCode）
+    /// 供应商编码（选项 TaktSuppliers/options；DictValue=SupplierCode）
     /// </summary>
     [SugarColumn(ColumnName = "supplier_code", ColumnDescription = "供应商编码", ColumnDataType = "nvarchar", Length = 50, IsNullable = false)]
     public string SupplierCode { get; set; } = string.Empty;

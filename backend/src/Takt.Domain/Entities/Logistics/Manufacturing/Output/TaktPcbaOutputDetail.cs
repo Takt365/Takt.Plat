@@ -54,13 +54,13 @@ public class TaktPcbaOutputDetail : TaktCompanyEntityBase
     public string TimePeriod { get; set; } = string.Empty;
 
     /// <summary>
-    /// 生产班组（选项 TaktProductionTeams/options，DictValue=TeamCode，ExtValue=PlantCode）
+    /// 生产班组（选项 TaktProductionTeams/options；DictValue=TeamCode，ExtValue=PlantCode）
     /// </summary>
     [SugarColumn(ColumnName = "prod_team", ColumnDescription = "生产班组", Length = 20, ColumnDataType = "nvarchar", IsNullable = false)]
     public string ProdTeam { get; set; } = string.Empty;
 
     /// <summary>
-    /// 生产设备编码（选项 TaktProductionEquipments/options，DictValue=Id）
+    /// 生产设备编码（选项 TaktProductionEquipments/options；DictValue=Id）
     /// </summary>
     [SugarColumn(ColumnName = "production_equipment_code", ColumnDescription = "生产设备", Length = 40, ColumnDataType = "nvarchar", IsNullable = false)]
     public string ProductionEquipmentCode { get; set; } = string.Empty;
@@ -114,7 +114,7 @@ public class TaktPcbaOutputDetail : TaktCompanyEntityBase
     public string PcbBoardType { get; set; } = string.Empty;
 
     /// <summary>
-    /// 面板别（字典 logistics_pcba_side_category，存 DictValue：b= B面 t= T面）
+    /// 面板别（字典 logistics_pcba_side_category；存 DictValue：b= B面 t= T面）
     /// </summary>
     [SugarColumn(ColumnName = "panel_side", ColumnDescription = "面板别", Length = 40, ColumnDataType = "nvarchar", IsNullable = false)]
     public string PanelSide { get; set; } = string.Empty;
@@ -246,7 +246,7 @@ public class TaktPcbaOutputDetail : TaktCompanyEntityBase
     public decimal AchievementRate { get; set; } = 0;
 
     /// <summary>
-    /// 是否作废（字典 sys_yes_no_type，0=否 1=是；编辑移除子行时标记作废）
+    /// 是否作废（字典 sys_yes_no_type；0=否 1=是；编辑移除子行时标记作废）
     /// </summary>
     [SugarColumn(ColumnName = "is_obsolete", ColumnDescription = "是否作废", ColumnDataType = "int", IsNullable = false, DefaultValue = "0")]
     public int IsObsolete { get; set; } = 0;

@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：frontend/src/types/logistics/quality/complaint
 // 文件名称：customer-satisfaction-survey-item.d.ts
-// 创建时间：2026-07-09
+// 创建时间：2026-07-23
 // 创建人：Takt365(Auto Generated)
 // 功能描述：logistics/quality/complaint 模块类型定义（自动生成；类型名去 Takt 前缀与末尾 Dto，如 TaktCompanyDto → Company）
 // 
@@ -29,7 +29,7 @@ export interface CustomerSatisfactionSurveyItem extends CompanyDtoBase {
   customerSatisfactionSurveyItemId: string;
 
   /**
-   * 调查表 ID（关联 TaktCustomerSatisfactionSurvey.Id，选项 TaktCustomerSatisfactionSurveys/options）
+   * 调查表 ID（选项 TaktCustomerSatisfactionSurveys/options；DictValue=Id）
    */
   surveyId: string;
 
@@ -39,7 +39,7 @@ export interface CustomerSatisfactionSurveyItem extends CompanyDtoBase {
   surveyName?: string;
 
   /**
-   * 调查表编号（冗余字段，便于查询）
+   * 调查表编码（冗余字段，便于查询）
    */
   customerSatisfactionSurveyCode: string;
 
@@ -99,7 +99,7 @@ export interface CustomerSatisfactionSurveyItem extends CompanyDtoBase {
   followUpStatus: number;
 
   /**
-   * 是否作废（字典 sys_yes_no_type，0=否 1=是；编辑移除子行时标记作废）
+   * 是否作废（字典 sys_yes_no_type；0=否 1=是；编辑移除子行时标记作废）
    */
   isObsolete: number;
 
@@ -129,12 +129,12 @@ export interface CustomerSatisfactionSurveyItemQuery extends TaktPagedQuery {
   companyCode?: string;
 
   /**
-   * 调查表 ID（关联 TaktCustomerSatisfactionSurvey.Id，选项 TaktCustomerSatisfactionSurveys/options）
+   * 调查表 ID（选项 TaktCustomerSatisfactionSurveys/options；DictValue=Id）
    */
   surveyId?: string;
 
   /**
-   * 调查表编号（冗余字段，便于查询）
+   * 调查表编码（冗余字段，便于查询）
    */
   customerSatisfactionSurveyCode?: string;
 
@@ -194,7 +194,7 @@ export interface CustomerSatisfactionSurveyItemQuery extends TaktPagedQuery {
   followUpStatus?: number;
 
   /**
-   * 是否作废（字典 sys_yes_no_type，0=否 1=是；编辑移除子行时标记作废）
+   * 是否作废（字典 sys_yes_no_type；0=否 1=是；编辑移除子行时标记作废）
    */
   isObsolete?: number;
 
@@ -243,12 +243,12 @@ export interface CustomerSatisfactionSurveyItemCreate {
   companyDefaultCulture: string;
 
   /**
-   * 调查表 ID（关联 TaktCustomerSatisfactionSurvey.Id，选项 TaktCustomerSatisfactionSurveys/options）
+   * 调查表 ID（选项 TaktCustomerSatisfactionSurveys/options；DictValue=Id）
    */
   surveyId: string;
 
   /**
-   * 调查表编号（冗余字段，便于查询）
+   * 调查表编码（冗余字段，便于查询）
    */
   customerSatisfactionSurveyCode: string;
 
@@ -308,7 +308,7 @@ export interface CustomerSatisfactionSurveyItemCreate {
   followUpStatus: number;
 
   /**
-   * 是否作废（字典 sys_yes_no_type，0=否 1=是；编辑移除子行时标记作废）
+   * 是否作废（字典 sys_yes_no_type；0=否 1=是；编辑移除子行时标记作废）
    */
   isObsolete: number;
 
@@ -395,12 +395,12 @@ export interface CustomerSatisfactionSurveyItemTemplate {
   companyCode?: string;
 
   /**
-   * 调查表 ID（关联 TaktCustomerSatisfactionSurvey.Id，选项 TaktCustomerSatisfactionSurveys/options）
+   * 调查表 ID（选项 TaktCustomerSatisfactionSurveys/options；DictValue=Id）
    */
   surveyId?: string;
 
   /**
-   * 调查表编号（冗余字段，便于查询）
+   * 调查表编码（冗余字段，便于查询）
    */
   customerSatisfactionSurveyCode?: string;
 
@@ -460,7 +460,7 @@ export interface CustomerSatisfactionSurveyItemTemplate {
   followUpStatus?: number;
 
   /**
-   * 是否作废（字典 sys_yes_no_type，0=否 1=是；编辑移除子行时标记作废）
+   * 是否作废（字典 sys_yes_no_type；0=否 1=是；编辑移除子行时标记作废）
    */
   isObsolete?: number;
 
@@ -499,12 +499,12 @@ export interface CustomerSatisfactionSurveyItemImport {
   companyDefaultCulture?: string;
 
   /**
-   * 调查表 ID（关联 TaktCustomerSatisfactionSurvey.Id，选项 TaktCustomerSatisfactionSurveys/options）
+   * 调查表 ID（选项 TaktCustomerSatisfactionSurveys/options；DictValue=Id）
    */
   surveyId?: string;
 
   /**
-   * 调查表编号（冗余字段，便于查询）
+   * 调查表编码（冗余字段，便于查询）
    */
   customerSatisfactionSurveyCode?: string;
 
@@ -564,7 +564,7 @@ export interface CustomerSatisfactionSurveyItemImport {
   followUpStatus?: number;
 
   /**
-   * 是否作废（字典 sys_yes_no_type，0=否 1=是；编辑移除子行时标记作废）
+   * 是否作废（字典 sys_yes_no_type；0=否 1=是；编辑移除子行时标记作废）
    */
   isObsolete?: number;
 
@@ -598,12 +598,12 @@ export interface CustomerSatisfactionSurveyItemExport {
   companyCode: string;
 
   /**
-   * 调查表 ID（关联 TaktCustomerSatisfactionSurvey.Id，选项 TaktCustomerSatisfactionSurveys/options）
+   * 调查表 ID（选项 TaktCustomerSatisfactionSurveys/options；DictValue=Id）
    */
   surveyId: string;
 
   /**
-   * 调查表编号（冗余字段，便于查询）
+   * 调查表编码（冗余字段，便于查询）
    */
   customerSatisfactionSurveyCode: string;
 
@@ -663,7 +663,7 @@ export interface CustomerSatisfactionSurveyItemExport {
   followUpStatus: number;
 
   /**
-   * 是否作废（字典 sys_yes_no_type，0=否 1=是；编辑移除子行时标记作废）
+   * 是否作废（字典 sys_yes_no_type；0=否 1=是；编辑移除子行时标记作废）
    */
   isObsolete: number;
 

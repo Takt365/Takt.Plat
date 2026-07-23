@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Infrastructure.Data.Seeds.I18nSeedData.Logistics.Manufacturing.Output
 // 文件名称：TaktProductionChangeoverI18nSeedData.cs
-// 创建时间：2026-07-20
+// 创建时间：2026-07-23
 // 创建人：Takt365(Auto Generated)
 // 功能描述：TaktProductionChangeover 实体字段国际化种子（无对应 frontend locales；TranslationText 取自 ColumnDescription，ContextNote 取自属性 XML summary）
 // 
@@ -100,22 +100,22 @@ public class TaktProductionChangeoverI18nSeedData : ITaktSeedDataCoordinator
             new TranslationSeedItem("entity.productionchangeover.plantcode", "zh-HK", "生产工厂_hk", "生产工厂（回填：随工单）"),
 
             // entity.productionchangeover.prodcategory
-            new TranslationSeedItem("entity.productionchangeover.prodcategory", "en-US", "生产类别_us", "生产类别（字典 logistics_prod_category，存 DictValue：EPP/FPP/RWP/MDP/CPP）"),
+            new TranslationSeedItem("entity.productionchangeover.prodcategory", "en-US", "生产类别_us", "生产类别（字典 logistics_prod_category；存 DictValue：EPP/FPP/RWP/MDP/CPP）"),
             // entity.productionchangeover.prodcategory
-            new TranslationSeedItem("entity.productionchangeover.prodcategory", "ja-JP", "生产类别_jp", "生产类别（字典 logistics_prod_category，存 DictValue：EPP/FPP/RWP/MDP/CPP）"),
+            new TranslationSeedItem("entity.productionchangeover.prodcategory", "ja-JP", "生产类别_jp", "生产类别（字典 logistics_prod_category；存 DictValue：EPP/FPP/RWP/MDP/CPP）"),
             // entity.productionchangeover.prodcategory
-            new TranslationSeedItem("entity.productionchangeover.prodcategory", "zh-CN", "生产类别", "生产类别（字典 logistics_prod_category，存 DictValue：EPP/FPP/RWP/MDP/CPP）"),
+            new TranslationSeedItem("entity.productionchangeover.prodcategory", "zh-CN", "生产类别", "生产类别（字典 logistics_prod_category；存 DictValue：EPP/FPP/RWP/MDP/CPP）"),
             // entity.productionchangeover.prodcategory
-            new TranslationSeedItem("entity.productionchangeover.prodcategory", "zh-HK", "生产类别_hk", "生产类别（字典 logistics_prod_category，存 DictValue：EPP/FPP/RWP/MDP/CPP）"),
+            new TranslationSeedItem("entity.productionchangeover.prodcategory", "zh-HK", "生产类别_hk", "生产类别（字典 logistics_prod_category；存 DictValue：EPP/FPP/RWP/MDP/CPP）"),
 
             // entity.productionchangeover.changeovercategory
-            new TranslationSeedItem("entity.productionchangeover.changeovercategory", "en-US", "切换类别_us", "切换类别（字典 logistics_changeover_category，存 DictValue：ASSY/PCBA）"),
+            new TranslationSeedItem("entity.productionchangeover.changeovercategory", "en-US", "切换类别_us", "切换类别（字典 logistics_changeover_category；存 DictValue：ASSY/PCBA）"),
             // entity.productionchangeover.changeovercategory
-            new TranslationSeedItem("entity.productionchangeover.changeovercategory", "ja-JP", "切换类别_jp", "切换类别（字典 logistics_changeover_category，存 DictValue：ASSY/PCBA）"),
+            new TranslationSeedItem("entity.productionchangeover.changeovercategory", "ja-JP", "切换类别_jp", "切换类别（字典 logistics_changeover_category；存 DictValue：ASSY/PCBA）"),
             // entity.productionchangeover.changeovercategory
-            new TranslationSeedItem("entity.productionchangeover.changeovercategory", "zh-CN", "切换类别", "切换类别（字典 logistics_changeover_category，存 DictValue：ASSY/PCBA）"),
+            new TranslationSeedItem("entity.productionchangeover.changeovercategory", "zh-CN", "切换类别", "切换类别（字典 logistics_changeover_category；存 DictValue：ASSY/PCBA）"),
             // entity.productionchangeover.changeovercategory
-            new TranslationSeedItem("entity.productionchangeover.changeovercategory", "zh-HK", "切换类别_hk", "切换类别（字典 logistics_changeover_category，存 DictValue：ASSY/PCBA）"),
+            new TranslationSeedItem("entity.productionchangeover.changeovercategory", "zh-HK", "切换类别_hk", "切换类别（字典 logistics_changeover_category；存 DictValue：ASSY/PCBA）"),
 
             // entity.productionchangeover.proddate
             new TranslationSeedItem("entity.productionchangeover.proddate", "en-US", "生产日期_us", "生产日期"),

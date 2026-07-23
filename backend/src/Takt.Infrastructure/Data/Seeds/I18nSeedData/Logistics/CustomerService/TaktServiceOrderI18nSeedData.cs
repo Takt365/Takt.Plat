@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Infrastructure.Data.Seeds.I18nSeedData.Logistics.CustomerService
 // 文件名称：TaktServiceOrderI18nSeedData.cs
-// 创建时间：2026-07-20
+// 创建时间：2026-07-23
 // 创建人：Takt365(Auto Generated)
 // 功能描述：TaktServiceOrder 实体字段国际化种子（无对应 frontend locales；TranslationText 取自 ColumnDescription，ContextNote 取自属性 XML summary）
 // 
@@ -126,14 +126,14 @@ public class TaktServiceOrderI18nSeedData : ITaktSeedDataCoordinator
             // entity.serviceorder.clientcode
             new TranslationSeedItem("entity.serviceorder.clientcode", "zh-HK", "客户端编码_hk", "客户端编码（冗余字段，便于查询）"),
 
-            // entity.serviceorder.clientname
-            new TranslationSeedItem("entity.serviceorder.clientname", "en-US", "客户端名称_us", "客户端名称（冗余字段，便于查询）"),
-            // entity.serviceorder.clientname
-            new TranslationSeedItem("entity.serviceorder.clientname", "ja-JP", "客户端名称_jp", "客户端名称（冗余字段，便于查询）"),
-            // entity.serviceorder.clientname
-            new TranslationSeedItem("entity.serviceorder.clientname", "zh-CN", "客户端名称", "客户端名称（冗余字段，便于查询）"),
-            // entity.serviceorder.clientname
-            new TranslationSeedItem("entity.serviceorder.clientname", "zh-HK", "客户端名称_hk", "客户端名称（冗余字段，便于查询）"),
+            // entity.serviceorder.clientname1
+            new TranslationSeedItem("entity.serviceorder.clientname1", "en-US", "客户端名称1_us", "客户端名称（冗余字段，便于查询）"),
+            // entity.serviceorder.clientname1
+            new TranslationSeedItem("entity.serviceorder.clientname1", "ja-JP", "客户端名称1_jp", "客户端名称（冗余字段，便于查询）"),
+            // entity.serviceorder.clientname1
+            new TranslationSeedItem("entity.serviceorder.clientname1", "zh-CN", "客户端名称1", "客户端名称（冗余字段，便于查询）"),
+            // entity.serviceorder.clientname1
+            new TranslationSeedItem("entity.serviceorder.clientname1", "zh-HK", "客户端名称1_hk", "客户端名称（冗余字段，便于查询）"),
 
             // entity.serviceorder.servicecontractid
             new TranslationSeedItem("entity.serviceorder.servicecontractid", "en-US", "关联服务合同ID_us", "关联服务合同ID（序列化为string以避免Javascript精度问题）"),

@@ -27,7 +27,7 @@ namespace Takt.Domain.Entities.Logistics.Quality.Operation;
 public class TaktQualityGroup : TaktCompanyEntityBase
 {
     /// <summary>
-    /// 工厂代码（选项 TaktPlants/options，DictValue=PlantCode）
+    /// 工厂代码（选项 TaktPlants/options；DictValue=PlantCode）
     /// </summary>
     [SugarColumn(ColumnName = "plant_code", ColumnDescription = "工厂代码", ColumnDataType = "nvarchar", Length = 4, IsNullable = false)]
     public string PlantCode { get; set; } = string.Empty;
@@ -52,7 +52,7 @@ public class TaktQualityGroup : TaktCompanyEntityBase
     [SugarColumn(ColumnName = "quality_group_description", ColumnDescription = "质量组描述", ColumnDataType = "nvarchar", Length = 200, IsNullable = true)]
     public string? QualityGroupDescription { get; set; }
     /// <summary>
-    /// 质量组负责人用户 ID（选项 TaktUsers/options，DictValue=Id）
+    /// 质量组负责人用户 ID（选项 TaktUsers/options；DictValue=Id）
     /// </summary>
     [SugarColumn(ColumnName = "responsible_user_id", ColumnDescription = "负责人用户ID", ColumnDataType = "bigint", IsNullable = true)]
     [JsonConverter(typeof(ValueToStringConverter))]

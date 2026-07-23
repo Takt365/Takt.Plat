@@ -75,7 +75,7 @@ public class TaktPostSeedData : ITaktSeedDataCoordinator
 
         foreach (var company in orderedCompanies)
         {
-            TaktLogger.Information("正在为公司 {CompanyCode} ({CompanyName}) 初始化岗位...", company.CompanyCode, company.CompanyName);
+            TaktLogger.Information("正在为公司 {CompanyCode} ({CompanyName1}) 初始化岗位...", company.CompanyCode, company.CompanyName1);
             
             var posts = GetStandardPosts(tenantCode, company.CompanyCode);
             var deptRepository = serviceProvider.GetRequiredService<ITaktCompanySeedRepository<Takt.Domain.Entities.HumanResource.Organization.TaktDept>>();

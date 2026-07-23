@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Application.Services.Logistics.Quality.Operation
 // 文件名称：TaktFqcOrderService.cs
-// 创建时间：2026-07-09
+// 创建时间：2026-07-23
 // 创建人：Takt365(Cursor AI)
 // 功能描述：出货检验单应用服务实现
 // 
@@ -15,7 +15,6 @@ using Mapster;
 using SqlSugar;
 using Takt.Application.Dtos.Logistics.Quality.Operation;
 using Takt.Domain.Entities.Logistics.Quality.Operation;
-using Takt.Domain.Entities.Logistics.Sales;
 using Takt.Domain.Interfaces;
 using Takt.Domain.Repositories;
 using Takt.Shared.Exceptions;
@@ -28,11 +27,10 @@ namespace Takt.Application.Services.Logistics.Quality.Operation;
 /// <summary>
 /// 出货检验单应用服务
 /// </summary>
-public partial class TaktFqcOrderService : TaktServiceBase, ITaktFqcOrderService
+public class TaktFqcOrderService : TaktServiceBase, ITaktFqcOrderService
 {
     private readonly ITaktCompanyRepository<TaktFqcOrder> _fqcOrderRepository;
     private readonly ITaktCompanyRepository<TaktFqcOrderItem> _fqcOrderItemRepository;
-    private readonly ITaktCompanyRepository<TaktCustomer> _customerRepository;
     private readonly ITaktLineNumberGenerator _lineNumberGenerator;
     private readonly ITaktUniqueValidator _uniqueValidator;
 
@@ -41,7 +39,6 @@ public partial class TaktFqcOrderService : TaktServiceBase, ITaktFqcOrderService
     /// </summary>
     /// <param name="fqcOrderRepository">出货检验单仓储</param>
     /// <param name="fqcOrderItemRepository">FqcOrderItem仓储</param>
-    /// <param name="customerRepository">客户仓储</param>
     /// <param name="lineNumberGenerator">明细行号生成器</param>
     /// <param name="uniqueValidator">唯一性验证器</param>
     /// <param name="userContext">用户上下文</param>
@@ -49,7 +46,6 @@ public partial class TaktFqcOrderService : TaktServiceBase, ITaktFqcOrderService
     public TaktFqcOrderService(
         ITaktCompanyRepository<TaktFqcOrder> fqcOrderRepository,
         ITaktCompanyRepository<TaktFqcOrderItem> fqcOrderItemRepository,
-        ITaktCompanyRepository<TaktCustomer> customerRepository,
         ITaktLineNumberGenerator lineNumberGenerator,
         ITaktUniqueValidator uniqueValidator,
         ITaktUserContext? userContext = null,
@@ -58,7 +54,6 @@ public partial class TaktFqcOrderService : TaktServiceBase, ITaktFqcOrderService
     {
         _fqcOrderRepository = fqcOrderRepository;
         _fqcOrderItemRepository = fqcOrderItemRepository;
-        _customerRepository = customerRepository;
         _lineNumberGenerator = lineNumberGenerator;
         _uniqueValidator = uniqueValidator;
     }
@@ -107,12 +102,12 @@ public partial class TaktFqcOrderService : TaktServiceBase, ITaktFqcOrderService
         EnsureThreeLayerContext();
         var list = await _fqcOrderRepository.GetListAsync(
             x => x.TenantCode == CurrentTenantCode && x.CompanyCode == CurrentCompanyCode && x.JudgeStatus == 1,
-            x => x.PlantCode ?? string.Empty,
+            x => x.FqcOrderCode ?? string.Empty,
             false);
         return list.Select(e => new TaktSelectOption
         {
-            DictValue = e.Id,
-            DictLabel = e.PlantCode ?? e.Id.ToString(),
+            DictValue = e.FqcOrderCode,
+            DictLabel = e.FqcOrderCode,
         }).ToList();
     }
 
@@ -361,9 +356,9 @@ public partial class TaktFqcOrderService : TaktServiceBase, ITaktFqcOrderService
     {
         // 出货检验单明细（Items）
         List<TaktFqcOrderItemUpdateDto>? itemsForSave;
-        if (dto is TaktFqcOrderUpdateDto updateDto && updateDto.Items != null)
+        if (dto is TaktFqcOrderUpdateDto updateDtoForItems && updateDtoForItems.Items != null)
         {
-            itemsForSave = updateDto.Items;
+            itemsForSave = updateDtoForItems.Items;
         }
         else if (dto.Items != null)
         {

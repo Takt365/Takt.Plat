@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Application.Validators.Logistics.Materials
 // 文件名称：TaktManufacturerValidators.cs
-// 创建时间：2026-07-20
+// 创建时间：2026-07-23
 // 创建人：Takt365(Auto Generated)
 // 功能描述：Manufacturer 模块 FluentValidation 验证器（由 generate-validators-from-entity.cjs 根据 TaktManufacturer 生成，请按需审阅）
 // 
@@ -38,9 +38,9 @@ public class TaktManufacturerCreateValidator : AbstractValidator<TaktManufacture
         RuleFor(x => x.ManufacturerCode)
             .NotEmpty().WithMessage("制造商编码不能为空")
             .MaximumLength(20).WithMessage("制造商编码长度不能超过20个字符");
-        RuleFor(x => x.ManufacturerName)
-            .NotEmpty().WithMessage("制造商名称不能为空")
-            .MaximumLength(80).WithMessage("制造商名称长度不能超过80个字符");
+        RuleFor(x => x.ManufacturerName1)
+            .NotEmpty().WithMessage("制造商名称1不能为空")
+            .MaximumLength(140).WithMessage("制造商名称1长度不能超过140个字符");
         RuleFor(x => x.ExtField)
             .MaximumLength(4000).WithMessage("扩展字段JSON长度不能超过4000个字符");
         RuleFor(x => x.Remark)
@@ -73,9 +73,9 @@ public class TaktManufacturerUpdateValidator : AbstractValidator<TaktManufacture
         RuleFor(x => x.ManufacturerCode)
             .NotEmpty().WithMessage("制造商编码不能为空")
             .MaximumLength(20).WithMessage("制造商编码长度不能超过20个字符");
-        RuleFor(x => x.ManufacturerName)
-            .NotEmpty().WithMessage("制造商名称不能为空")
-            .MaximumLength(80).WithMessage("制造商名称长度不能超过80个字符");
+        RuleFor(x => x.ManufacturerName1)
+            .NotEmpty().WithMessage("制造商名称1不能为空")
+            .MaximumLength(140).WithMessage("制造商名称1长度不能超过140个字符");
         RuleFor(x => x.ExtField)
             .MaximumLength(4000).WithMessage("扩展字段JSON长度不能超过4000个字符");
         RuleFor(x => x.Remark)
@@ -104,9 +104,9 @@ public class TaktManufacturerImportValidator : AbstractValidator<TaktManufacture
         RuleFor(x => x.ManufacturerCode)
             .NotEmpty().WithMessage("制造商编码不能为空")
             .MaximumLength(20).WithMessage("制造商编码长度不能超过20个字符");
-        RuleFor(x => x.ManufacturerName)
-            .NotEmpty().WithMessage("制造商名称不能为空")
-            .MaximumLength(80).WithMessage("制造商名称长度不能超过80个字符");
+        RuleFor(x => x.ManufacturerName1)
+            .NotEmpty().WithMessage("制造商名称1不能为空")
+            .MaximumLength(140).WithMessage("制造商名称1长度不能超过140个字符");
         RuleFor(x => x.ExtField)
             .MaximumLength(4000).WithMessage("扩展字段JSON长度不能超过4000个字符").When(x => !string.IsNullOrWhiteSpace(x.ExtField));
         RuleFor(x => x.Remark)

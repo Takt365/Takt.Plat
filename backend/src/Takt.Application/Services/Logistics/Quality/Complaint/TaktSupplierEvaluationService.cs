@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Application.Services.Logistics.Quality.Complaint
 // 文件名称：TaktSupplierEvaluationService.cs
-// 创建时间：2026-07-09
+// 创建时间：2026-07-23
 // 创建人：Takt365(Cursor AI)
 // 功能描述：供应商评价考核应用服务实现
 // 
@@ -106,12 +106,12 @@ public class TaktSupplierEvaluationService : TaktServiceBase, ITaktSupplierEvalu
         EnsureThreeLayerContext();
         var list = await _supplierEvaluationRepository.GetListAsync(
             x => x.TenantCode == CurrentTenantCode && x.CompanyCode == CurrentCompanyCode && x.EvaluationStatus == 1,
-            x => x.SupplierName ?? string.Empty,
+            x => x.SupplierEvaluationCode ?? string.Empty,
             false);
         return list.Select(e => new TaktSelectOption
         {
-            DictValue = e.Id,
-            DictLabel = e.SupplierName ?? e.Id.ToString(),
+            DictValue = e.SupplierEvaluationCode,
+            DictLabel = e.SupplierEvaluationCode,
         }).ToList();
     }
 
@@ -390,7 +390,20 @@ public class TaktSupplierEvaluationService : TaktServiceBase, ITaktSupplierEvalu
     private async Task SaveSupplierEvaluationChildrenAsync(TaktSupplierEvaluation entity, TaktSupplierEvaluationCreateDto dto)
     {
         // 供应商评价考核项目明细（Items）
-        if (dto.Items is not { Count: > 0 })
+        List<TaktSupplierEvaluationItemUpdateDto>? itemsForSave;
+        if (dto is TaktSupplierEvaluationUpdateDto updateDtoForItems && updateDtoForItems.Items != null)
+        {
+            itemsForSave = updateDtoForItems.Items;
+        }
+        else if (dto.Items != null)
+        {
+            itemsForSave = dto.Items.Adapt<List<TaktSupplierEvaluationItemUpdateDto>>();
+        }
+        else
+        {
+            itemsForSave = null;
+        }
+        if (itemsForSave is not { Count: > 0 })
         {
             await MarkSupplierEvaluationItemsObsoleteAsync(entity.Id);
             return;
@@ -402,9 +415,9 @@ public class TaktSupplierEvaluationService : TaktServiceBase, ITaktSupplierEvalu
             var submittedIds = new HashSet<long>();
             var toCreate = new List<TaktSupplierEvaluationItem>();
             var seenLineKeys = new HashSet<string>(StringComparer.Ordinal);
-            for (var i = 0; i < dto.Items.Count; i++)
+            for (var i = 0; i < itemsForSave.Count; i++)
             {
-                var childDto = dto.Items[i];
+                var childDto = itemsForSave[i];
                 childDto.EvaluationId = entity.Id;
                 var lineKey = $"{entity.CompanyCode}|{entity.Id}|{childDto.LineNumber}";
                 if (!seenLineKeys.Add(lineKey))
@@ -502,7 +515,7 @@ public class TaktSupplierEvaluationService : TaktServiceBase, ITaktSupplierEvalu
             exp = exp.And(x =>
                 (x.SupplierEvaluationCode != null && x.SupplierEvaluationCode.Contains(keywords))
                 || SqlFunc.ToString(x.SupplierId).Contains(keywords)
-                || (x.SupplierName != null && x.SupplierName.Contains(keywords))
+                || (x.SupplierName1 != null && x.SupplierName1.Contains(keywords))
                 || (x.SupplierCode != null && x.SupplierCode.Contains(keywords))
                 || SqlFunc.ToString(x.EvaluationPeriod).Contains(keywords)
                 || SqlFunc.ToString(x.EvaluationType).Contains(keywords)
@@ -542,9 +555,9 @@ public class TaktSupplierEvaluationService : TaktServiceBase, ITaktSupplierEvalu
             exp = exp.And(x => x.SupplierId == queryDto.SupplierId);
         }
 
-        if (!string.IsNullOrEmpty(queryDto?.SupplierName))
+        if (!string.IsNullOrEmpty(queryDto?.SupplierName1))
         {
-            exp = exp.And(x => x.SupplierName != null && x.SupplierName.Contains(queryDto.SupplierName));
+            exp = exp.And(x => x.SupplierName1 != null && x.SupplierName1.Contains(queryDto.SupplierName1));
         }
 
         if (!string.IsNullOrEmpty(queryDto?.SupplierCode))

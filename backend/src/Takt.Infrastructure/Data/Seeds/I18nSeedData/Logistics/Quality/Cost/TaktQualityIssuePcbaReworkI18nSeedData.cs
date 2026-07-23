@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Infrastructure.Data.Seeds.I18nSeedData.Logistics.Quality.Cost
 // 文件名称：TaktQualityIssuePcbaReworkI18nSeedData.cs
-// 创建时间：2026-07-20
+// 创建时间：2026-07-23
 // 创建人：Takt365(Auto Generated)
 // 功能描述：TaktQualityIssuePcbaRework 实体字段国际化种子（无对应 frontend locales；TranslationText 取自 ColumnDescription，ContextNote 取自属性 XML summary）
 // 
@@ -91,13 +91,13 @@ public class TaktQualityIssuePcbaReworkI18nSeedData : ITaktSeedDataCoordinator
             new TranslationSeedItem("entity.qualityissuepcbarework._self", "zh-HK", "品质问题应对明细 - PCBA不良改修应对信息_hk", "实体名称"),
 
             // entity.qualityissuepcbarework.qualityissueid
-            new TranslationSeedItem("entity.qualityissuepcbarework.qualityissueid", "en-US", "品质问题主表ID_us", "品质问题主表 ID（选项 TaktQualityIssues/options，DictValue=Id）"),
+            new TranslationSeedItem("entity.qualityissuepcbarework.qualityissueid", "en-US", "品质问题主表ID_us", "品质问题主表 ID（选项 TaktQualityIssues/options；DictValue=Id）"),
             // entity.qualityissuepcbarework.qualityissueid
-            new TranslationSeedItem("entity.qualityissuepcbarework.qualityissueid", "ja-JP", "品质问题主表ID_jp", "品质问题主表 ID（选项 TaktQualityIssues/options，DictValue=Id）"),
+            new TranslationSeedItem("entity.qualityissuepcbarework.qualityissueid", "ja-JP", "品质问题主表ID_jp", "品质问题主表 ID（选项 TaktQualityIssues/options；DictValue=Id）"),
             // entity.qualityissuepcbarework.qualityissueid
-            new TranslationSeedItem("entity.qualityissuepcbarework.qualityissueid", "zh-CN", "品质问题主表ID", "品质问题主表 ID（选项 TaktQualityIssues/options，DictValue=Id）"),
+            new TranslationSeedItem("entity.qualityissuepcbarework.qualityissueid", "zh-CN", "品质问题主表ID", "品质问题主表 ID（选项 TaktQualityIssues/options；DictValue=Id）"),
             // entity.qualityissuepcbarework.qualityissueid
-            new TranslationSeedItem("entity.qualityissuepcbarework.qualityissueid", "zh-HK", "品质问题主表ID_hk", "品质问题主表 ID（选项 TaktQualityIssues/options，DictValue=Id）"),
+            new TranslationSeedItem("entity.qualityissuepcbarework.qualityissueid", "zh-HK", "品质问题主表ID_hk", "品质问题主表 ID（选项 TaktQualityIssues/options；DictValue=Id）"),
 
             // entity.qualityissuepcbarework.qualityissuecode
             new TranslationSeedItem("entity.qualityissuepcbarework.qualityissuecode", "en-US", "品质问题编码_us", "品质问题编码（冗余字段，便于查询）"),
@@ -198,14 +198,14 @@ public class TaktQualityIssuePcbaReworkI18nSeedData : ITaktSeedDataCoordinator
             // entity.qualityissuepcbarework.pcbascrapcost
             new TranslationSeedItem("entity.qualityissuepcbarework.pcbascrapcost", "zh-HK", "PCBA向顾客费用请求_hk", "PCBA向顾客的费用请求（元）"),
 
-            // entity.qualityissuepcbarework.pcbacustomername
-            new TranslationSeedItem("entity.qualityissuepcbarework.pcbacustomername", "en-US", "PCBA顾客名_us", "PCBA顾客名"),
-            // entity.qualityissuepcbarework.pcbacustomername
-            new TranslationSeedItem("entity.qualityissuepcbarework.pcbacustomername", "ja-JP", "PCBA顾客名_jp", "PCBA顾客名"),
-            // entity.qualityissuepcbarework.pcbacustomername
-            new TranslationSeedItem("entity.qualityissuepcbarework.pcbacustomername", "zh-CN", "PCBA顾客名", "PCBA顾客名"),
-            // entity.qualityissuepcbarework.pcbacustomername
-            new TranslationSeedItem("entity.qualityissuepcbarework.pcbacustomername", "zh-HK", "PCBA顾客名_hk", "PCBA顾客名"),
+            // entity.qualityissuepcbarework.pcbacustomername1
+            new TranslationSeedItem("entity.qualityissuepcbarework.pcbacustomername1", "en-US", "PCBA顾客名1_us", "PCBA顾客名"),
+            // entity.qualityissuepcbarework.pcbacustomername1
+            new TranslationSeedItem("entity.qualityissuepcbarework.pcbacustomername1", "ja-JP", "PCBA顾客名1_jp", "PCBA顾客名"),
+            // entity.qualityissuepcbarework.pcbacustomername1
+            new TranslationSeedItem("entity.qualityissuepcbarework.pcbacustomername1", "zh-CN", "PCBA顾客名1", "PCBA顾客名"),
+            // entity.qualityissuepcbarework.pcbacustomername1
+            new TranslationSeedItem("entity.qualityissuepcbarework.pcbacustomername1", "zh-HK", "PCBA顾客名1_hk", "PCBA顾客名"),
 
             // entity.qualityissuepcbarework.pcbadebitnoteno
             new TranslationSeedItem("entity.qualityissuepcbarework.pcbadebitnoteno", "en-US", "PCBA Debit Note No_us", "PCBA Debit Note No"),
@@ -244,13 +244,13 @@ public class TaktQualityIssuePcbaReworkI18nSeedData : ITaktSeedDataCoordinator
             new TranslationSeedItem("entity.qualityissuepcbarework.pcbarecorder", "zh-HK", "PCBA不良改修对应记录者_hk", "PCBA不良改修应对记录者"),
 
             // entity.qualityissuepcbarework.isobsolete
-            new TranslationSeedItem("entity.qualityissuepcbarework.isobsolete", "en-US", "是否作废_us", "是否作废（字典 sys_yes_no_type，0=否 1=是；编辑移除子行时标记作废）"),
+            new TranslationSeedItem("entity.qualityissuepcbarework.isobsolete", "en-US", "是否作废_us", "是否作废（字典 sys_yes_no_type；0=否 1=是；编辑移除子行时标记作废）"),
             // entity.qualityissuepcbarework.isobsolete
-            new TranslationSeedItem("entity.qualityissuepcbarework.isobsolete", "ja-JP", "是否作废_jp", "是否作废（字典 sys_yes_no_type，0=否 1=是；编辑移除子行时标记作废）"),
+            new TranslationSeedItem("entity.qualityissuepcbarework.isobsolete", "ja-JP", "是否作废_jp", "是否作废（字典 sys_yes_no_type；0=否 1=是；编辑移除子行时标记作废）"),
             // entity.qualityissuepcbarework.isobsolete
-            new TranslationSeedItem("entity.qualityissuepcbarework.isobsolete", "zh-CN", "是否作废", "是否作废（字典 sys_yes_no_type，0=否 1=是；编辑移除子行时标记作废）"),
+            new TranslationSeedItem("entity.qualityissuepcbarework.isobsolete", "zh-CN", "是否作废", "是否作废（字典 sys_yes_no_type；0=否 1=是；编辑移除子行时标记作废）"),
             // entity.qualityissuepcbarework.isobsolete
-            new TranslationSeedItem("entity.qualityissuepcbarework.isobsolete", "zh-HK", "是否作废_hk", "是否作废（字典 sys_yes_no_type，0=否 1=是；编辑移除子行时标记作废）"),
+            new TranslationSeedItem("entity.qualityissuepcbarework.isobsolete", "zh-HK", "是否作废_hk", "是否作废（字典 sys_yes_no_type；0=否 1=是；编辑移除子行时标记作废）"),
 
             // entity.qualityissuepcbarework.issue
             new TranslationSeedItem("entity.qualityissuepcbarework.issue", "en-US", "质量问题主表_us", "质量问题主表（导航属性）"),

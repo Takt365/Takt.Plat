@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：frontend/src/types/logistics/manufacturing/mrp
 // 文件名称：purchase-plan-item.d.ts
-// 创建时间：2026-07-13
+// 创建时间：2026-07-23
 // 创建人：Takt365(Auto Generated)
 // 功能描述：logistics/manufacturing/mrp 模块类型定义（自动生成；类型名去 Takt 前缀与末尾 Dto，如 TaktCompanyDto → Company）
 // 
@@ -79,22 +79,22 @@ export interface PurchasePlanItem extends CompanyDtoBase {
   materialRequirementsPlanningItemName?: string;
 
   /**
-   * 物料编码（关联 TaktMaterial.MaterialCode，选项 TaktMaterials/options）
+   * 物料编码（选项 TaktMaterialPlants/options；DictValue=MaterialCode，ExtValue=PlantCode）
    */
   materialCode: string;
 
   /**
-   * 物料名称
+   * 物料名称（回填：随物料）
    */
   materialName: string;
 
   /**
-   * 物料规格
+   * 物料规格（回填：随物料）
    */
   materialSpecification?: string;
 
   /**
-   * 计划单位（字典 logistics_unit_of_measure_code，DictValue=PC/EA 等；默认 PC）
+   * 计划单位（字典 logistics_unit_of_measure_code；DictValue=PC/EA 等；默认 PC）
    */
   planUnit: string;
 
@@ -124,17 +124,32 @@ export interface PurchasePlanItem extends CompanyDtoBase {
   estimatedAmount: number;
 
   /**
-   * 参考供货商编码（关联 TaktSupplier.SupplierCode，选项 TaktSuppliers/options，DictValue=SupplierCode）
+   * 含税价格（打印用；如 100.00）
+   */
+  taxIncludedPrice: number;
+
+  /**
+   * 未税价格（打印用；如 88.50）
+   */
+  untaxedPrice: number;
+
+  /**
+   * 税费（打印用；行税额，如 11.50）
+   */
+  taxAmount: number;
+
+  /**
+   * 参考供货商编码（选项 TaktSuppliers/options；DictValue=SupplierCode）
    */
   referenceSupplierCode?: string;
 
   /**
    * 参考供货商名称
    */
-  referenceSupplierName?: string;
+  referenceSupplierName1?: string;
 
   /**
-   * 是否作废（字典 sys_yes_no_type，0=否 1=是；编辑移除子行时标记作废）
+   * 是否作废（字典 sys_yes_no_type；0=否 1=是；编辑移除子行时标记作废）
    */
   isObsolete: number;
 
@@ -194,22 +209,22 @@ export interface PurchasePlanItemQuery extends TaktPagedQuery {
   materialRequirementsPlanningItemId?: string;
 
   /**
-   * 物料编码（关联 TaktMaterial.MaterialCode，选项 TaktMaterials/options）
+   * 物料编码（选项 TaktMaterialPlants/options；DictValue=MaterialCode，ExtValue=PlantCode）
    */
   materialCode?: string;
 
   /**
-   * 物料名称
+   * 物料名称（回填：随物料）
    */
   materialName?: string;
 
   /**
-   * 物料规格
+   * 物料规格（回填：随物料）
    */
   materialSpecification?: string;
 
   /**
-   * 计划单位（字典 logistics_unit_of_measure_code，DictValue=PC/EA 等；默认 PC）
+   * 计划单位（字典 logistics_unit_of_measure_code；DictValue=PC/EA 等；默认 PC）
    */
   planUnit?: string;
 
@@ -244,17 +259,32 @@ export interface PurchasePlanItemQuery extends TaktPagedQuery {
   estimatedAmount?: number;
 
   /**
-   * 参考供货商编码（关联 TaktSupplier.SupplierCode，选项 TaktSuppliers/options，DictValue=SupplierCode）
+   * 含税价格（打印用；如 100.00）
+   */
+  taxIncludedPrice?: number;
+
+  /**
+   * 未税价格（打印用；如 88.50）
+   */
+  untaxedPrice?: number;
+
+  /**
+   * 税费（打印用；行税额，如 11.50）
+   */
+  taxAmount?: number;
+
+  /**
+   * 参考供货商编码（选项 TaktSuppliers/options；DictValue=SupplierCode）
    */
   referenceSupplierCode?: string;
 
   /**
    * 参考供货商名称
    */
-  referenceSupplierName?: string;
+  referenceSupplierName1?: string;
 
   /**
-   * 是否作废（字典 sys_yes_no_type，0=否 1=是；编辑移除子行时标记作废）
+   * 是否作废（字典 sys_yes_no_type；0=否 1=是；编辑移除子行时标记作废）
    */
   isObsolete?: number;
 
@@ -338,22 +368,22 @@ export interface PurchasePlanItemCreate {
   materialRequirementsPlanningItemId?: string;
 
   /**
-   * 物料编码（关联 TaktMaterial.MaterialCode，选项 TaktMaterials/options）
+   * 物料编码（选项 TaktMaterialPlants/options；DictValue=MaterialCode，ExtValue=PlantCode）
    */
   materialCode: string;
 
   /**
-   * 物料名称
+   * 物料名称（回填：随物料）
    */
   materialName: string;
 
   /**
-   * 物料规格
+   * 物料规格（回填：随物料）
    */
   materialSpecification?: string;
 
   /**
-   * 计划单位（字典 logistics_unit_of_measure_code，DictValue=PC/EA 等；默认 PC）
+   * 计划单位（字典 logistics_unit_of_measure_code；DictValue=PC/EA 等；默认 PC）
    */
   planUnit: string;
 
@@ -383,17 +413,32 @@ export interface PurchasePlanItemCreate {
   estimatedAmount: number;
 
   /**
-   * 参考供货商编码（关联 TaktSupplier.SupplierCode，选项 TaktSuppliers/options，DictValue=SupplierCode）
+   * 含税价格（打印用；如 100.00）
+   */
+  taxIncludedPrice: number;
+
+  /**
+   * 未税价格（打印用；如 88.50）
+   */
+  untaxedPrice: number;
+
+  /**
+   * 税费（打印用；行税额，如 11.50）
+   */
+  taxAmount: number;
+
+  /**
+   * 参考供货商编码（选项 TaktSuppliers/options；DictValue=SupplierCode）
    */
   referenceSupplierCode?: string;
 
   /**
    * 参考供货商名称
    */
-  referenceSupplierName?: string;
+  referenceSupplierName1?: string;
 
   /**
-   * 是否作废（字典 sys_yes_no_type，0=否 1=是；编辑移除子行时标记作废）
+   * 是否作废（字典 sys_yes_no_type；0=否 1=是；编辑移除子行时标记作废）
    */
   isObsolete: number;
 
@@ -496,22 +541,22 @@ export interface PurchasePlanItemTemplate {
   materialRequirementsPlanningItemId?: string;
 
   /**
-   * 物料编码（关联 TaktMaterial.MaterialCode，选项 TaktMaterials/options）
+   * 物料编码（选项 TaktMaterialPlants/options；DictValue=MaterialCode，ExtValue=PlantCode）
    */
   materialCode?: string;
 
   /**
-   * 物料名称
+   * 物料名称（回填：随物料）
    */
   materialName?: string;
 
   /**
-   * 物料规格
+   * 物料规格（回填：随物料）
    */
   materialSpecification?: string;
 
   /**
-   * 计划单位（字典 logistics_unit_of_measure_code，DictValue=PC/EA 等；默认 PC）
+   * 计划单位（字典 logistics_unit_of_measure_code；DictValue=PC/EA 等；默认 PC）
    */
   planUnit?: string;
 
@@ -541,17 +586,32 @@ export interface PurchasePlanItemTemplate {
   estimatedAmount?: number;
 
   /**
-   * 参考供货商编码（关联 TaktSupplier.SupplierCode，选项 TaktSuppliers/options，DictValue=SupplierCode）
+   * 含税价格（打印用；如 100.00）
+   */
+  taxIncludedPrice?: number;
+
+  /**
+   * 未税价格（打印用；如 88.50）
+   */
+  untaxedPrice?: number;
+
+  /**
+   * 税费（打印用；行税额，如 11.50）
+   */
+  taxAmount?: number;
+
+  /**
+   * 参考供货商编码（选项 TaktSuppliers/options；DictValue=SupplierCode）
    */
   referenceSupplierCode?: string;
 
   /**
    * 参考供货商名称
    */
-  referenceSupplierName?: string;
+  referenceSupplierName1?: string;
 
   /**
-   * 是否作废（字典 sys_yes_no_type，0=否 1=是；编辑移除子行时标记作废）
+   * 是否作废（字典 sys_yes_no_type；0=否 1=是；编辑移除子行时标记作废）
    */
   isObsolete?: number;
 
@@ -625,22 +685,22 @@ export interface PurchasePlanItemImport {
   materialRequirementsPlanningItemId?: string;
 
   /**
-   * 物料编码（关联 TaktMaterial.MaterialCode，选项 TaktMaterials/options）
+   * 物料编码（选项 TaktMaterialPlants/options；DictValue=MaterialCode，ExtValue=PlantCode）
    */
   materialCode?: string;
 
   /**
-   * 物料名称
+   * 物料名称（回填：随物料）
    */
   materialName?: string;
 
   /**
-   * 物料规格
+   * 物料规格（回填：随物料）
    */
   materialSpecification?: string;
 
   /**
-   * 计划单位（字典 logistics_unit_of_measure_code，DictValue=PC/EA 等；默认 PC）
+   * 计划单位（字典 logistics_unit_of_measure_code；DictValue=PC/EA 等；默认 PC）
    */
   planUnit?: string;
 
@@ -670,17 +730,32 @@ export interface PurchasePlanItemImport {
   estimatedAmount?: number;
 
   /**
-   * 参考供货商编码（关联 TaktSupplier.SupplierCode，选项 TaktSuppliers/options，DictValue=SupplierCode）
+   * 含税价格（打印用；如 100.00）
+   */
+  taxIncludedPrice?: number;
+
+  /**
+   * 未税价格（打印用；如 88.50）
+   */
+  untaxedPrice?: number;
+
+  /**
+   * 税费（打印用；行税额，如 11.50）
+   */
+  taxAmount?: number;
+
+  /**
+   * 参考供货商编码（选项 TaktSuppliers/options；DictValue=SupplierCode）
    */
   referenceSupplierCode?: string;
 
   /**
    * 参考供货商名称
    */
-  referenceSupplierName?: string;
+  referenceSupplierName1?: string;
 
   /**
-   * 是否作废（字典 sys_yes_no_type，0=否 1=是；编辑移除子行时标记作废）
+   * 是否作废（字典 sys_yes_no_type；0=否 1=是；编辑移除子行时标记作废）
    */
   isObsolete?: number;
 
@@ -749,22 +824,22 @@ export interface PurchasePlanItemExport {
   materialRequirementsPlanningItemId?: string;
 
   /**
-   * 物料编码（关联 TaktMaterial.MaterialCode，选项 TaktMaterials/options）
+   * 物料编码（选项 TaktMaterialPlants/options；DictValue=MaterialCode，ExtValue=PlantCode）
    */
   materialCode: string;
 
   /**
-   * 物料名称
+   * 物料名称（回填：随物料）
    */
   materialName: string;
 
   /**
-   * 物料规格
+   * 物料规格（回填：随物料）
    */
   materialSpecification?: string;
 
   /**
-   * 计划单位（字典 logistics_unit_of_measure_code，DictValue=PC/EA 等；默认 PC）
+   * 计划单位（字典 logistics_unit_of_measure_code；DictValue=PC/EA 等；默认 PC）
    */
   planUnit: string;
 
@@ -794,17 +869,32 @@ export interface PurchasePlanItemExport {
   estimatedAmount: number;
 
   /**
-   * 参考供货商编码（关联 TaktSupplier.SupplierCode，选项 TaktSuppliers/options，DictValue=SupplierCode）
+   * 含税价格（打印用；如 100.00）
+   */
+  taxIncludedPrice: number;
+
+  /**
+   * 未税价格（打印用；如 88.50）
+   */
+  untaxedPrice: number;
+
+  /**
+   * 税费（打印用；行税额，如 11.50）
+   */
+  taxAmount: number;
+
+  /**
+   * 参考供货商编码（选项 TaktSuppliers/options；DictValue=SupplierCode）
    */
   referenceSupplierCode?: string;
 
   /**
    * 参考供货商名称
    */
-  referenceSupplierName?: string;
+  referenceSupplierName1?: string;
 
   /**
-   * 是否作废（字典 sys_yes_no_type，0=否 1=是；编辑移除子行时标记作废）
+   * 是否作废（字典 sys_yes_no_type；0=否 1=是；编辑移除子行时标记作废）
    */
   isObsolete: number;
 

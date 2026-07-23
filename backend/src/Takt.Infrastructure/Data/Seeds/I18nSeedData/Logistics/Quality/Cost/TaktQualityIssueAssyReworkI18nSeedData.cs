@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Infrastructure.Data.Seeds.I18nSeedData.Logistics.Quality.Cost
 // 文件名称：TaktQualityIssueAssyReworkI18nSeedData.cs
-// 创建时间：2026-07-20
+// 创建时间：2026-07-23
 // 创建人：Takt365(Auto Generated)
 // 功能描述：TaktQualityIssueAssyRework 实体字段国际化种子（无对应 frontend locales；TranslationText 取自 ColumnDescription，ContextNote 取自属性 XML summary）
 // 
@@ -91,13 +91,13 @@ public class TaktQualityIssueAssyReworkI18nSeedData : ITaktSeedDataCoordinator
             new TranslationSeedItem("entity.qualityissueassyrework._self", "zh-HK", "品质问题应对明细 - 组装不良改修应对信息_hk", "实体名称"),
 
             // entity.qualityissueassyrework.qualityissueid
-            new TranslationSeedItem("entity.qualityissueassyrework.qualityissueid", "en-US", "品质问题主表ID_us", "品质问题主表 ID（选项 TaktQualityIssues/options，DictValue=Id）"),
+            new TranslationSeedItem("entity.qualityissueassyrework.qualityissueid", "en-US", "品质问题主表ID_us", "品质问题主表 ID（选项 TaktQualityIssues/options；DictValue=Id）"),
             // entity.qualityissueassyrework.qualityissueid
-            new TranslationSeedItem("entity.qualityissueassyrework.qualityissueid", "ja-JP", "品质问题主表ID_jp", "品质问题主表 ID（选项 TaktQualityIssues/options，DictValue=Id）"),
+            new TranslationSeedItem("entity.qualityissueassyrework.qualityissueid", "ja-JP", "品质问题主表ID_jp", "品质问题主表 ID（选项 TaktQualityIssues/options；DictValue=Id）"),
             // entity.qualityissueassyrework.qualityissueid
-            new TranslationSeedItem("entity.qualityissueassyrework.qualityissueid", "zh-CN", "品质问题主表ID", "品质问题主表 ID（选项 TaktQualityIssues/options，DictValue=Id）"),
+            new TranslationSeedItem("entity.qualityissueassyrework.qualityissueid", "zh-CN", "品质问题主表ID", "品质问题主表 ID（选项 TaktQualityIssues/options；DictValue=Id）"),
             // entity.qualityissueassyrework.qualityissueid
-            new TranslationSeedItem("entity.qualityissueassyrework.qualityissueid", "zh-HK", "品质问题主表ID_hk", "品质问题主表 ID（选项 TaktQualityIssues/options，DictValue=Id）"),
+            new TranslationSeedItem("entity.qualityissueassyrework.qualityissueid", "zh-HK", "品质问题主表ID_hk", "品质问题主表 ID（选项 TaktQualityIssues/options；DictValue=Id）"),
 
             // entity.qualityissueassyrework.qualityissuecode
             new TranslationSeedItem("entity.qualityissueassyrework.qualityissuecode", "en-US", "品质问题编码_us", "品质问题编码（冗余字段，便于查询）"),
@@ -198,14 +198,14 @@ public class TaktQualityIssueAssyReworkI18nSeedData : ITaktSeedDataCoordinator
             // entity.qualityissueassyrework.assyscrapcost
             new TranslationSeedItem("entity.qualityissueassyrework.assyscrapcost", "zh-HK", "组装向顾客费用请求_hk", "组装向顾客的费用请求(元)"),
 
-            // entity.qualityissueassyrework.assycustomername
-            new TranslationSeedItem("entity.qualityissueassyrework.assycustomername", "en-US", "组装顾客名_us", "组装顾客名"),
-            // entity.qualityissueassyrework.assycustomername
-            new TranslationSeedItem("entity.qualityissueassyrework.assycustomername", "ja-JP", "组装顾客名_jp", "组装顾客名"),
-            // entity.qualityissueassyrework.assycustomername
-            new TranslationSeedItem("entity.qualityissueassyrework.assycustomername", "zh-CN", "组装顾客名", "组装顾客名"),
-            // entity.qualityissueassyrework.assycustomername
-            new TranslationSeedItem("entity.qualityissueassyrework.assycustomername", "zh-HK", "组装顾客名_hk", "组装顾客名"),
+            // entity.qualityissueassyrework.assycustomername1
+            new TranslationSeedItem("entity.qualityissueassyrework.assycustomername1", "en-US", "组装顾客名1_us", "组装顾客名"),
+            // entity.qualityissueassyrework.assycustomername1
+            new TranslationSeedItem("entity.qualityissueassyrework.assycustomername1", "ja-JP", "组装顾客名1_jp", "组装顾客名"),
+            // entity.qualityissueassyrework.assycustomername1
+            new TranslationSeedItem("entity.qualityissueassyrework.assycustomername1", "zh-CN", "组装顾客名1", "组装顾客名"),
+            // entity.qualityissueassyrework.assycustomername1
+            new TranslationSeedItem("entity.qualityissueassyrework.assycustomername1", "zh-HK", "组装顾客名1_hk", "组装顾客名"),
 
             // entity.qualityissueassyrework.assydebitnoteno
             new TranslationSeedItem("entity.qualityissueassyrework.assydebitnoteno", "en-US", "组装 Debit Note No_us", "组装 Debit Note No"),
@@ -244,13 +244,13 @@ public class TaktQualityIssueAssyReworkI18nSeedData : ITaktSeedDataCoordinator
             new TranslationSeedItem("entity.qualityissueassyrework.assyrecorder", "zh-HK", "组装不良改修对应记录者_hk", "组装不良改修应对记录者"),
 
             // entity.qualityissueassyrework.isobsolete
-            new TranslationSeedItem("entity.qualityissueassyrework.isobsolete", "en-US", "是否作废_us", "是否作废（字典 sys_yes_no_type，0=否 1=是；编辑移除子行时标记作废）"),
+            new TranslationSeedItem("entity.qualityissueassyrework.isobsolete", "en-US", "是否作废_us", "是否作废（字典 sys_yes_no_type；0=否 1=是；编辑移除子行时标记作废）"),
             // entity.qualityissueassyrework.isobsolete
-            new TranslationSeedItem("entity.qualityissueassyrework.isobsolete", "ja-JP", "是否作废_jp", "是否作废（字典 sys_yes_no_type，0=否 1=是；编辑移除子行时标记作废）"),
+            new TranslationSeedItem("entity.qualityissueassyrework.isobsolete", "ja-JP", "是否作废_jp", "是否作废（字典 sys_yes_no_type；0=否 1=是；编辑移除子行时标记作废）"),
             // entity.qualityissueassyrework.isobsolete
-            new TranslationSeedItem("entity.qualityissueassyrework.isobsolete", "zh-CN", "是否作废", "是否作废（字典 sys_yes_no_type，0=否 1=是；编辑移除子行时标记作废）"),
+            new TranslationSeedItem("entity.qualityissueassyrework.isobsolete", "zh-CN", "是否作废", "是否作废（字典 sys_yes_no_type；0=否 1=是；编辑移除子行时标记作废）"),
             // entity.qualityissueassyrework.isobsolete
-            new TranslationSeedItem("entity.qualityissueassyrework.isobsolete", "zh-HK", "是否作废_hk", "是否作废（字典 sys_yes_no_type，0=否 1=是；编辑移除子行时标记作废）"),
+            new TranslationSeedItem("entity.qualityissueassyrework.isobsolete", "zh-HK", "是否作废_hk", "是否作废（字典 sys_yes_no_type；0=否 1=是；编辑移除子行时标记作废）"),
 
             // entity.qualityissueassyrework.issue
             new TranslationSeedItem("entity.qualityissueassyrework.issue", "en-US", "品质问题主表_us", "品质问题主表(导航属性)"),

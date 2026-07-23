@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：frontend/src/types/human-resource/personnel
 // 文件名称：employee-skill.d.ts
-// 创建时间：2026-06-23
+// 创建时间：2026-07-23
 // 创建人：Takt365(Auto Generated)
 // 功能描述：human-resource/personnel 模块类型定义（自动生成；类型名去 Takt 前缀与末尾 Dto，如 TaktCompanyDto → Company）
 // 
@@ -29,14 +29,19 @@ export interface EmployeeSkill extends CompanyDtoBase {
   employeeSkillId: string;
 
   /**
-   * 员工ID
+   * 员工（选项 TaktEmployees/options；DictValue=Id）
    */
   employeeId: string;
 
   /**
-   * 员工名称（填充字段）
+   * 员工编码（冗余，与 TaktEmployee.EmployeeCode 对齐）
    */
-  employeeName?: string;
+  employeeCode: string;
+
+  /**
+   * 员工姓名（冗余，与 TaktEmployee.EmployeeName 对齐）
+   */
+  employeeName: string;
 
   /**
    * 技能名称
@@ -44,7 +49,7 @@ export interface EmployeeSkill extends CompanyDtoBase {
   skillName: string;
 
   /**
-   * 技能等级（0=入门，1=熟练，2=精通，3=专家）
+   * 技能等级（字典 hr_employee_skill_level；0=入门 1=熟练 2=精通 3=专家）
    */
   skillLevel: number;
 
@@ -54,9 +59,9 @@ export interface EmployeeSkill extends CompanyDtoBase {
   certificateName?: string;
 
   /**
-   * 证书编号
+   * 证书编码
    */
-  certificateNo?: string;
+  certificateCode?: string;
 
   /**
    * 取得日期
@@ -89,9 +94,19 @@ export interface EmployeeSkillQuery extends TaktPagedQuery {
   companyCode?: string;
 
   /**
-   * 员工ID
+   * 员工（选项 TaktEmployees/options；DictValue=Id）
    */
   employeeId?: string;
+
+  /**
+   * 员工编码（冗余，与 TaktEmployee.EmployeeCode 对齐）
+   */
+  employeeCode?: string;
+
+  /**
+   * 员工姓名（冗余，与 TaktEmployee.EmployeeName 对齐）
+   */
+  employeeName?: string;
 
   /**
    * 技能名称
@@ -99,7 +114,7 @@ export interface EmployeeSkillQuery extends TaktPagedQuery {
   skillName?: string;
 
   /**
-   * 技能等级（0=入门，1=熟练，2=精通，3=专家）
+   * 技能等级（字典 hr_employee_skill_level；0=入门 1=熟练 2=精通 3=专家）
    */
   skillLevel?: number;
 
@@ -109,9 +124,9 @@ export interface EmployeeSkillQuery extends TaktPagedQuery {
   certificateName?: string;
 
   /**
-   * 证书编号
+   * 证书编码
    */
-  certificateNo?: string;
+  certificateCode?: string;
 
   /**
    * 取得日期（范围查询-开始）
@@ -178,9 +193,19 @@ export interface EmployeeSkillCreate {
   companyDefaultCulture: string;
 
   /**
-   * 员工ID
+   * 员工（选项 TaktEmployees/options；DictValue=Id）
    */
   employeeId: string;
+
+  /**
+   * 员工编码（冗余，与 TaktEmployee.EmployeeCode 对齐）
+   */
+  employeeCode: string;
+
+  /**
+   * 员工姓名（冗余，与 TaktEmployee.EmployeeName 对齐）
+   */
+  employeeName: string;
 
   /**
    * 技能名称
@@ -188,7 +213,7 @@ export interface EmployeeSkillCreate {
   skillName: string;
 
   /**
-   * 技能等级（0=入门，1=熟练，2=精通，3=专家）
+   * 技能等级（字典 hr_employee_skill_level；0=入门 1=熟练 2=精通 3=专家）
    */
   skillLevel: number;
 
@@ -198,9 +223,9 @@ export interface EmployeeSkillCreate {
   certificateName?: string;
 
   /**
-   * 证书编号
+   * 证书编码
    */
-  certificateNo?: string;
+  certificateCode?: string;
 
   /**
    * 取得日期
@@ -257,9 +282,19 @@ export interface EmployeeSkillTemplate {
   companyCode?: string;
 
   /**
-   * 员工ID
+   * 员工（选项 TaktEmployees/options；DictValue=Id）
    */
   employeeId?: string;
+
+  /**
+   * 员工编码（冗余，与 TaktEmployee.EmployeeCode 对齐）
+   */
+  employeeCode?: string;
+
+  /**
+   * 员工姓名（冗余，与 TaktEmployee.EmployeeName 对齐）
+   */
+  employeeName?: string;
 
   /**
    * 技能名称
@@ -267,7 +302,7 @@ export interface EmployeeSkillTemplate {
   skillName?: string;
 
   /**
-   * 技能等级（0=入门，1=熟练，2=精通，3=专家）
+   * 技能等级（字典 hr_employee_skill_level；0=入门 1=熟练 2=精通 3=专家）
    */
   skillLevel?: number;
 
@@ -277,9 +312,9 @@ export interface EmployeeSkillTemplate {
   certificateName?: string;
 
   /**
-   * 证书编号
+   * 证书编码
    */
-  certificateNo?: string;
+  certificateCode?: string;
 
   /**
    * 取得日期
@@ -326,9 +361,19 @@ export interface EmployeeSkillImport {
   companyDefaultCulture?: string;
 
   /**
-   * 员工ID
+   * 员工（选项 TaktEmployees/options；DictValue=Id）
    */
   employeeId?: string;
+
+  /**
+   * 员工编码（冗余，与 TaktEmployee.EmployeeCode 对齐）
+   */
+  employeeCode?: string;
+
+  /**
+   * 员工姓名（冗余，与 TaktEmployee.EmployeeName 对齐）
+   */
+  employeeName?: string;
 
   /**
    * 技能名称
@@ -336,7 +381,7 @@ export interface EmployeeSkillImport {
   skillName?: string;
 
   /**
-   * 技能等级（0=入门，1=熟练，2=精通，3=专家）
+   * 技能等级（字典 hr_employee_skill_level；0=入门 1=熟练 2=精通 3=专家）
    */
   skillLevel?: number;
 
@@ -346,9 +391,9 @@ export interface EmployeeSkillImport {
   certificateName?: string;
 
   /**
-   * 证书编号
+   * 证书编码
    */
-  certificateNo?: string;
+  certificateCode?: string;
 
   /**
    * 取得日期
@@ -390,9 +435,19 @@ export interface EmployeeSkillExport {
   companyCode: string;
 
   /**
-   * 员工ID
+   * 员工（选项 TaktEmployees/options；DictValue=Id）
    */
   employeeId: string;
+
+  /**
+   * 员工编码（冗余，与 TaktEmployee.EmployeeCode 对齐）
+   */
+  employeeCode: string;
+
+  /**
+   * 员工姓名（冗余，与 TaktEmployee.EmployeeName 对齐）
+   */
+  employeeName: string;
 
   /**
    * 技能名称
@@ -400,7 +455,7 @@ export interface EmployeeSkillExport {
   skillName: string;
 
   /**
-   * 技能等级（0=入门，1=熟练，2=精通，3=专家）
+   * 技能等级（字典 hr_employee_skill_level；0=入门 1=熟练 2=精通 3=专家）
    */
   skillLevel: number;
 
@@ -410,9 +465,9 @@ export interface EmployeeSkillExport {
   certificateName?: string;
 
   /**
-   * 证书编号
+   * 证书编码
    */
-  certificateNo?: string;
+  certificateCode?: string;
 
   /**
    * 取得日期

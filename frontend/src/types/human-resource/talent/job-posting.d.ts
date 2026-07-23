@@ -39,7 +39,7 @@ export interface TalentJobPosting extends CompanyDtoBase {
   staffingRequirementName?: string;
 
   /**
-   * 发布编号（租户+公司内唯一）
+   * 发布编码（租户+公司内唯一）
    */
   postingCode: string;
 
@@ -114,7 +114,7 @@ export interface TalentJobPostingQuery extends TaktPagedQuery {
   staffingRequirementId?: string;
 
   /**
-   * 发布编号（租户+公司内唯一）
+   * 发布编码（租户+公司内唯一）
    */
   postingCode?: string;
 
@@ -218,7 +218,7 @@ export interface TalentJobPostingCreate {
   staffingRequirementId: string;
 
   /**
-   * 发布编号（租户+公司内唯一）
+   * 发布编码（租户+公司内唯一）
    */
   postingCode: string;
 
@@ -331,7 +331,7 @@ export interface TalentJobPostingTemplate {
   staffingRequirementId?: string;
 
   /**
-   * 发布编号（租户+公司内唯一）
+   * 发布编码（租户+公司内唯一）
    */
   postingCode?: string;
 
@@ -415,7 +415,7 @@ export interface TalentJobPostingImport {
   staffingRequirementId?: string;
 
   /**
-   * 发布编号（租户+公司内唯一）
+   * 发布编码（租户+公司内唯一）
    */
   postingCode?: string;
 
@@ -494,7 +494,7 @@ export interface TalentJobPostingExport {
   staffingRequirementId: string;
 
   /**
-   * 发布编号（租户+公司内唯一）
+   * 发布编码（租户+公司内唯一）
    */
   postingCode: string;
 

@@ -2,7 +2,7 @@
 <!-- 项目名称：节拍数字工厂 · Takt Plat (TDF) -->
 <!-- 命名空间：@/views/logistics/manufacturing/bom/material-cost-trend/components -->
 <!-- 文件名称：material-cost-trend-panel.vue -->
-<!-- 功能描述：产品成本分析报表：单个产品下明细组件×月材料成本转置涨跌 -->
+<!-- 功能描述：产品成本推移报表：单个产品下明细组件×月材料成本转置涨跌 -->
 <!-- 版权信息：Copyright (c) 2026 Takt  All rights reserved. -->
 <!-- 免责声明：此软件使用 MIT License，作者不承担任何使用风险。 -->
 <!-- ======================================== -->
@@ -30,7 +30,32 @@
       >
         <template #bodyCell="{ column, record, text }">
           <template v-if="String(column.key).startsWith('period_')">
-            {{ formatPeriodCost(record as BomMaterialCostItemComponentMovingPrice, String(column.key)) }}
+            <div class="inline-flex max-w-full flex-wrap items-center justify-end gap-1">
+              <span
+                v-if="isPresenceChangeType(getPeriodChangeType(record as BomMaterialCostItemComponentMovingPrice, String(column.key)))"
+                :class="periodChangeTypeClass(getPeriodChangeType(record as BomMaterialCostItemComponentMovingPrice, String(column.key)))"
+              >
+                {{ periodChangeTypeLabel(getPeriodChangeType(record as BomMaterialCostItemComponentMovingPrice, String(column.key))) }}
+              </span>
+              <span
+                v-if="hasPeriodCost(record as BomMaterialCostItemComponentMovingPrice, String(column.key))"
+                :class="periodChangeTypeClass(getPeriodChangeType(record as BomMaterialCostItemComponentMovingPrice, String(column.key)))"
+              >
+                {{ formatPeriodCost(record as BomMaterialCostItemComponentMovingPrice, String(column.key)) }}
+              </span>
+              <span
+                v-else-if="getPeriodChangeType(record as BomMaterialCostItemComponentMovingPrice, String(column.key)) === 'removed'"
+                :class="periodChangeTypeClass('removed')"
+              >
+                —
+              </span>
+              <span
+                v-else
+                class="text-text-secondary"
+              >
+                —
+              </span>
+            </div>
           </template>
           <template v-else-if="column.key === 'currency'">
             <TaktDictTag
@@ -57,23 +82,6 @@
             {{ text }}
           </template>
         </template>
-        <template
-          v-if="total > 0"
-          #summary
-        >
-          <a-table-summary fixed>
-            <a-table-summary-row>
-              <a-table-summary-cell
-                v-for="cell in summaryCells"
-                :key="cell.key"
-                :index="cell.index"
-                :align="cell.align"
-              >
-                <span :class="cell.className">{{ cell.text }}</span>
-              </a-table-summary-cell>
-            </a-table-summary-row>
-          </a-table-summary>
-        </template>
         <template #footerRemark>
           <div class="space-y-1">
             <div class="truncate">
@@ -89,7 +97,28 @@
                 up: upCount,
                 down: downCount,
                 flat: flatCount,
+                added: newCount,
+                removed: removedCount,
               }) }}
+            </div>
+            <div
+              v-if="total > 0 && periodOrder.length > 0"
+              class="flex max-w-full flex-wrap gap-x-3 gap-y-1 text-sm text-text"
+            >
+              <span class="font-medium shrink-0">{{ summaryLabel }}</span>
+              <span
+                v-for="period in periodOrder"
+                :key="period"
+                class="shrink-0"
+              >
+                {{ period }}: {{ formatCost(periodCostTotals[period]) }}
+              </span>
+              <span
+                class="shrink-0 font-medium"
+                :class="varianceClass(varianceAmountTotal)"
+              >
+                {{ t(`${localePrefix}.columns.varianceAmount`) }}: {{ formatCost(varianceAmountTotal) }}
+              </span>
             </div>
           </div>
         </template>
@@ -108,12 +137,11 @@
 
 <script setup lang="ts">
 /**
- * 产品成本分析：单个产品下明细表组件行转置
+ * 产品成本推移：单个产品下明细表组件行转置
  */
 import { message } from 'ant-design-vue'
 import type { TableColumnsType } from 'ant-design-vue'
 import { useI18n } from 'vue-i18n'
-import { resolveTableSummaryLabelColumnKey } from '@/utils/table-columns'
 import { TAKT_TABLE_SCROLL_Y_MIN } from '@/utils/table-scroll'
 import {
   exportBomMaterialCostItemComponentMovingPriceAnalysis,
@@ -149,7 +177,7 @@ const hasRows = defineModel<boolean>('hasRows', { default: false })
 
 const localePrefix = MATERIAL_COST_ANALYSIS_LOCALE_PREFIX
 const { t } = useI18n()
-const { formatCost, formatPercent, trendLabel, trendClass, varianceClass } = useMaterialCostAnalysis()
+const { formatCost, formatPercent, trendLabel, trendClass, varianceClass, periodChangeTypeLabel, periodChangeTypeClass } = useMaterialCostAnalysis()
 const { queryPlantCode, queryModelCode, queryProductCode, periodRange } =
   useBomMaterialCostAnalysisMasterContext()
 
@@ -165,6 +193,8 @@ const comparePeriod = ref('')
 const upCount = ref(0)
 const downCount = ref(0)
 const flatCount = ref(0)
+const newCount = ref(0)
+const removedCount = ref(0)
 /** 分页 */
 const pageIndex = ref(1)
 const pageSize = ref(20)
@@ -303,52 +333,13 @@ const columns = computed<TableColumnsType>(() => {
 
 const visibleColumnKeys = computed(() => columns.value.map((c) => String(c.key)))
 
-/** 合计行首列文案 */
+/** 合计首列文案 */
 const summaryLabel = computed(() => t('components.business.page.editabletable.summarylabel'))
 
 /** 全量期间成本合计（API：分页前、已应用涨跌筛选） */
 const periodCostTotals = ref<Record<string, number>>({})
 /** 全量环比差额合计（API：分页前、已应用涨跌筛选） */
 const varianceAmountTotal = ref<number | null>(null)
-
-/**
- * 合计文案所在列：跳过序号，取第一个业务数据列（如 BOM 层级）
- * @returns {string | undefined} 列 key
- */
-const summaryLabelColumnKey = computed(() => resolveTableSummaryLabelColumnKey(columns.value))
-
-/** 表尾合计单元格（全量周期成本 + 环比差额；文案在第一个业务数据列，无行选择偏移） */
-const summaryCells = computed(() => {
-  const labelKey = summaryLabelColumnKey.value
-  return columns.value.map((col, index) => {
-    const key = String(col.key ?? index)
-    const align = (col.align as 'left' | 'right' | 'center' | undefined) ?? 'left'
-    if (labelKey && key === labelKey) {
-      return { key, index, align, text: summaryLabel.value, className: 'font-medium text-text' }
-    }
-    if (key.startsWith('period_')) {
-      const period = key.replace(/^period_/, '')
-      const totalVal = periodCostTotals.value[period]
-      return {
-        key,
-        index,
-        align: 'right' as const,
-        text: totalVal == null ? '' : formatCost(totalVal),
-        className: 'font-medium text-text',
-      }
-    }
-    if (key === 'varianceAmount') {
-      return {
-        key,
-        index,
-        align: 'right' as const,
-        text: formatCost(varianceAmountTotal.value),
-        className: `font-medium ${varianceClass(varianceAmountTotal.value)}`.trim(),
-      }
-    }
-    return { key, index, align, text: '', className: '' }
-  })
-})
 
 /**
  * 行主键
@@ -377,9 +368,44 @@ function getRowKey(record: BomMaterialCostItemComponentMovingPrice): string {
  */
 function formatPeriodCost(record: BomMaterialCostItemComponentMovingPrice, columnKey: string): string {
   const period = columnKey.replace(/^period_/, '')
-  const value = record.periodMaterialCosts?.[period] ?? record.periodUnitPrices?.[period]
+  const value = record.periodMaterialCosts?.[period]
   if (value == null || Number.isNaN(value)) return '—'
   return formatCost(value)
+}
+
+/**
+ * 期间变动码
+ * @param record 行
+ * @param columnKey period_yyyy-MM
+ * @returns present / absent / new / removed / up / down / flat
+ */
+function getPeriodChangeType(
+  record: BomMaterialCostItemComponentMovingPrice,
+  columnKey: string,
+): string {
+  const period = columnKey.replace(/^period_/, '')
+  return record.periodChangeTypes?.[period] || (hasPeriodCost(record, columnKey) ? 'present' : 'absent')
+}
+
+/**
+ * 是否有该月成本
+ * @param record 行
+ * @param columnKey period_yyyy-MM
+ * @returns 是否有值
+ */
+function hasPeriodCost(record: BomMaterialCostItemComponentMovingPrice, columnKey: string): boolean {
+  const period = columnKey.replace(/^period_/, '')
+  const value = record.periodMaterialCosts?.[period]
+  return value != null && !Number.isNaN(value)
+}
+
+/**
+ * 是否为「有无物料」类标识（新增/剔除优先于价格）
+ * @param changeType 变动码
+ * @returns 是否展示存在标识
+ */
+function isPresenceChangeType(changeType: string): boolean {
+  return changeType === 'new' || changeType === 'removed'
 }
 
 /**
@@ -417,6 +443,8 @@ function clear() {
   upCount.value = 0
   downCount.value = 0
   flatCount.value = 0
+  newCount.value = 0
+  removedCount.value = 0
   total.value = 0
   pageIndex.value = getTaktDefaultPageIndex()
   hasRows.value = false
@@ -443,6 +471,8 @@ async function loadData() {
     upCount.value = result.upCount ?? 0
     downCount.value = result.downCount ?? 0
     flatCount.value = result.flatCount ?? 0
+    newCount.value = result.newCount ?? 0
+    removedCount.value = result.removedCount ?? 0
     hasRows.value = rows.value.length > 0
   } catch (error: unknown) {
     clear()
@@ -480,7 +510,7 @@ async function handleExport() {
     return
   }
   try {
-    const exportBase = buildBomExportBaseName('DTA 产品成本分析表', [
+    const exportBase = buildBomExportBaseName('DTA 产品成本推移表', [
       query.plantCode,
       query.modelCode,
       query.productCode,
@@ -491,8 +521,8 @@ async function handleExport() {
         pageIndex: 1,
         pageSize: 100000,
       },
-      'DTA 产品成本分析表',
-      buildBomExportFileName('DTA 产品成本分析表', [
+      'DTA 产品成本推移表',
+      buildBomExportFileName('DTA 产品成本推移表', [
         query.plantCode,
         query.modelCode,
         query.productCode,
@@ -523,8 +553,7 @@ async function handleExport() {
 function recalcTableScrollY(): void {
   const wrap = tableWrapRef.value
   if (!wrap || wrap.clientHeight <= 0) return
-  const summaryH = total.value > 0 ? 39 : 0
-  tableScrollY.value = Math.max(TAKT_TABLE_SCROLL_Y_MIN, wrap.clientHeight - 47 - summaryH)
+  tableScrollY.value = Math.max(TAKT_TABLE_SCROLL_Y_MIN, wrap.clientHeight - 47)
 }
 
 function startTableScrollObserve(): void {

@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Application.Dtos.Logistics.Sales
 // 文件名称：TaktSalesPriceDtos.cs
-// 创建时间：2026-07-20
+// 创建时间：2026-07-23
 // 创建人：Takt365(Auto Generated)
 // 功能描述：SalesPrice 模块 DTO（由 generate-dtos-from-entity.cjs 根据 TaktSalesPrice 生成，请按需审阅）
 // 
@@ -36,6 +36,11 @@ public class TaktSalesPriceDto : TaktCompanyDtoBase
     public long SalesPriceId { get; set; }
 
     /// <summary>
+    /// 工厂代码（选项 TaktPlants/options；DictValue=PlantCode）
+    /// </summary>
+    public string PlantCode { get; set; } = string.Empty;
+
+    /// <summary>
     /// 定价记录号（唯一索引；长度 20）
     /// </summary>
     public string SalesPriceCode { get; set; } = string.Empty;
@@ -46,14 +51,34 @@ public class TaktSalesPriceDto : TaktCompanyDtoBase
     public string PriceType { get; set; } = string.Empty;
 
     /// <summary>
-    /// 客户编码（选项 TaktCustomers/options，DictValue=CustomerCode）
+    /// 客户编码（选项 TaktCustomers/options；DictValue=CustomerCode）
     /// </summary>
     public string CustomerCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 物料编码（选项 TaktMaterialPlants/options，DictValue=MaterialCode）
+    /// 物料编码（选项 TaktMaterialPlants/options；DictValue=MaterialCode）
     /// </summary>
     public string MaterialCode { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 销售组（选项 TaktSalesGroups/options；DictValue=SalesGroupCode）
+    /// </summary>
+    public string? SalesGroup { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 税码（字典 accounting_tax_code；DictValue=J0～J8/L1/X0～X3；中国）
+    /// </summary>
+    public string? TaxCode { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 基于收货的发票检验（字典 sys_yes_no_type；0=否 1=是）
+    /// </summary>
+    public int GrBasedInvoiceInspection { get; set; } = 0;
+
+    /// <summary>
+    /// 定价日期控制（字典 logistics_pricing_date_control；1=采购订单日期，2=交货日期，3=当前日期，4=手动，5=收货日期；默认 1）
+    /// </summary>
+    public int PricingDateControl { get; set; } = 0;
 
     /// <summary>
     /// 有效起始日
@@ -66,12 +91,7 @@ public class TaktSalesPriceDto : TaktCompanyDtoBase
     public DateTime ValidTo { get; set; }
 
     /// <summary>
-    /// 可变关键字
-    /// </summary>
-    public string? VariableKey { get; set; } = string.Empty;
-
-    /// <summary>
-    /// 来源销售报价 ID（选项 TaktSalesQuotations/options，DictValue=Id；对应采购侧来源询价）
+    /// 来源销售报价 ID（选项 TaktSalesQuotations/options；DictValue=Id；对应采购侧来源询价）
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
     public long? SalesQuotationId { get; set; }
@@ -85,6 +105,11 @@ public class TaktSalesPriceDto : TaktCompanyDtoBase
     /// 来源销售报价编码（冗余）
     /// </summary>
     public string? SalesQuotationCode { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 可变关键字
+    /// </summary>
+    public string? VariableKey { get; set; } = string.Empty;
 
     /// <summary>
     /// 定价条件行列表（主子表关系）
@@ -115,6 +140,11 @@ public class TaktSalesPriceQueryDto : TaktPagedQuery
     public string? CompanyCode { get; set; } = string.Empty;
 
     /// <summary>
+    /// 工厂代码（选项 TaktPlants/options；DictValue=PlantCode）
+    /// </summary>
+    public string? PlantCode { get; set; } = string.Empty;
+
+    /// <summary>
     /// 定价记录号（唯一索引；长度 20）
     /// </summary>
     public string? SalesPriceCode { get; set; } = string.Empty;
@@ -125,14 +155,34 @@ public class TaktSalesPriceQueryDto : TaktPagedQuery
     public string? PriceType { get; set; } = string.Empty;
 
     /// <summary>
-    /// 客户编码（选项 TaktCustomers/options，DictValue=CustomerCode）
+    /// 客户编码（选项 TaktCustomers/options；DictValue=CustomerCode）
     /// </summary>
     public string? CustomerCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 物料编码（选项 TaktMaterialPlants/options，DictValue=MaterialCode）
+    /// 物料编码（选项 TaktMaterialPlants/options；DictValue=MaterialCode）
     /// </summary>
     public string? MaterialCode { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 销售组（选项 TaktSalesGroups/options；DictValue=SalesGroupCode）
+    /// </summary>
+    public string? SalesGroup { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 税码（字典 accounting_tax_code；DictValue=J0～J8/L1/X0～X3；中国）
+    /// </summary>
+    public string? TaxCode { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 基于收货的发票检验（字典 sys_yes_no_type；0=否 1=是）
+    /// </summary>
+    public int? GrBasedInvoiceInspection { get; set; }
+
+    /// <summary>
+    /// 定价日期控制（字典 logistics_pricing_date_control；1=采购订单日期，2=交货日期，3=当前日期，4=手动，5=收货日期；默认 1）
+    /// </summary>
+    public int? PricingDateControl { get; set; }
 
     /// <summary>
     /// 有效起始日（范围查询-开始）
@@ -155,12 +205,7 @@ public class TaktSalesPriceQueryDto : TaktPagedQuery
     public DateTime? ValidToEnd { get; set; }
 
     /// <summary>
-    /// 可变关键字
-    /// </summary>
-    public string? VariableKey { get; set; } = string.Empty;
-
-    /// <summary>
-    /// 来源销售报价 ID（选项 TaktSalesQuotations/options，DictValue=Id；对应采购侧来源询价）
+    /// 来源销售报价 ID（选项 TaktSalesQuotations/options；DictValue=Id；对应采购侧来源询价）
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
     public long? SalesQuotationId { get; set; }
@@ -169,6 +214,11 @@ public class TaktSalesPriceQueryDto : TaktPagedQuery
     /// 来源销售报价编码（冗余）
     /// </summary>
     public string? SalesQuotationCode { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 可变关键字
+    /// </summary>
+    public string? VariableKey { get; set; } = string.Empty;
 
     /// <summary>
     /// 创建时间（范围查询-开始）
@@ -216,6 +266,12 @@ public class TaktSalesPriceCreateDto
     public string CompanyDefaultCulture { get; set; } = string.Empty;
 
     /// <summary>
+    /// 工厂代码（选项 TaktPlants/options；DictValue=PlantCode）
+    /// </summary>
+    [Required(ErrorMessage = "工厂代码（选项 TaktPlants/options；DictValue=PlantCode）不能为空")]
+    public string PlantCode { get; set; } = string.Empty;
+
+    /// <summary>
     /// 定价记录号（唯一索引；长度 20）
     /// </summary>
     [Required(ErrorMessage = "定价记录号（唯一索引；长度 20）不能为空")]
@@ -228,16 +284,36 @@ public class TaktSalesPriceCreateDto
     public string PriceType { get; set; } = string.Empty;
 
     /// <summary>
-    /// 客户编码（选项 TaktCustomers/options，DictValue=CustomerCode）
+    /// 客户编码（选项 TaktCustomers/options；DictValue=CustomerCode）
     /// </summary>
-    [Required(ErrorMessage = "客户编码（选项 TaktCustomers/options，DictValue=CustomerCode）不能为空")]
+    [Required(ErrorMessage = "客户编码（选项 TaktCustomers/options；DictValue=CustomerCode）不能为空")]
     public string CustomerCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 物料编码（选项 TaktMaterialPlants/options，DictValue=MaterialCode）
+    /// 物料编码（选项 TaktMaterialPlants/options；DictValue=MaterialCode）
     /// </summary>
-    [Required(ErrorMessage = "物料编码（选项 TaktMaterialPlants/options，DictValue=MaterialCode）不能为空")]
+    [Required(ErrorMessage = "物料编码（选项 TaktMaterialPlants/options；DictValue=MaterialCode）不能为空")]
     public string MaterialCode { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 销售组（选项 TaktSalesGroups/options；DictValue=SalesGroupCode）
+    /// </summary>
+    public string? SalesGroup { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 税码（字典 accounting_tax_code；DictValue=J0～J8/L1/X0～X3；中国）
+    /// </summary>
+    public string? TaxCode { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 基于收货的发票检验（字典 sys_yes_no_type；0=否 1=是）
+    /// </summary>
+    public int GrBasedInvoiceInspection { get; set; } = 0;
+
+    /// <summary>
+    /// 定价日期控制（字典 logistics_pricing_date_control；1=采购订单日期，2=交货日期，3=当前日期，4=手动，5=收货日期；默认 1）
+    /// </summary>
+    public int PricingDateControl { get; set; } = 0;
 
     /// <summary>
     /// 有效起始日
@@ -250,12 +326,7 @@ public class TaktSalesPriceCreateDto
     public DateTime ValidTo { get; set; }
 
     /// <summary>
-    /// 可变关键字
-    /// </summary>
-    public string? VariableKey { get; set; } = string.Empty;
-
-    /// <summary>
-    /// 来源销售报价 ID（选项 TaktSalesQuotations/options，DictValue=Id；对应采购侧来源询价）
+    /// 来源销售报价 ID（选项 TaktSalesQuotations/options；DictValue=Id；对应采购侧来源询价）
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
     public long? SalesQuotationId { get; set; }
@@ -264,6 +335,11 @@ public class TaktSalesPriceCreateDto
     /// 来源销售报价编码（冗余）
     /// </summary>
     public string? SalesQuotationCode { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 可变关键字
+    /// </summary>
+    public string? VariableKey { get; set; } = string.Empty;
 
     /// <summary>
     /// 定价条件行列表（主子表关系）（子表，级联保存）
@@ -327,6 +403,11 @@ public class TaktSalesPriceTemplateDto
     public string? CompanyCode { get; set; } = string.Empty;
 
     /// <summary>
+    /// 工厂代码（选项 TaktPlants/options；DictValue=PlantCode）
+    /// </summary>
+    public string? PlantCode { get; set; } = string.Empty;
+
+    /// <summary>
     /// 定价记录号（唯一索引；长度 20）
     /// </summary>
     public string? SalesPriceCode { get; set; } = string.Empty;
@@ -337,14 +418,34 @@ public class TaktSalesPriceTemplateDto
     public string? PriceType { get; set; } = string.Empty;
 
     /// <summary>
-    /// 客户编码（选项 TaktCustomers/options，DictValue=CustomerCode）
+    /// 客户编码（选项 TaktCustomers/options；DictValue=CustomerCode）
     /// </summary>
     public string? CustomerCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 物料编码（选项 TaktMaterialPlants/options，DictValue=MaterialCode）
+    /// 物料编码（选项 TaktMaterialPlants/options；DictValue=MaterialCode）
     /// </summary>
     public string? MaterialCode { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 销售组（选项 TaktSalesGroups/options；DictValue=SalesGroupCode）
+    /// </summary>
+    public string? SalesGroup { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 税码（字典 accounting_tax_code；DictValue=J0～J8/L1/X0～X3；中国）
+    /// </summary>
+    public string? TaxCode { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 基于收货的发票检验（字典 sys_yes_no_type；0=否 1=是）
+    /// </summary>
+    public int? GrBasedInvoiceInspection { get; set; }
+
+    /// <summary>
+    /// 定价日期控制（字典 logistics_pricing_date_control；1=采购订单日期，2=交货日期，3=当前日期，4=手动，5=收货日期；默认 1）
+    /// </summary>
+    public int? PricingDateControl { get; set; }
 
     /// <summary>
     /// 有效起始日
@@ -357,12 +458,7 @@ public class TaktSalesPriceTemplateDto
     public DateTime? ValidTo { get; set; }
 
     /// <summary>
-    /// 可变关键字
-    /// </summary>
-    public string? VariableKey { get; set; } = string.Empty;
-
-    /// <summary>
-    /// 来源销售报价 ID（选项 TaktSalesQuotations/options，DictValue=Id；对应采购侧来源询价）
+    /// 来源销售报价 ID（选项 TaktSalesQuotations/options；DictValue=Id；对应采购侧来源询价）
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
     public long? SalesQuotationId { get; set; }
@@ -371,6 +467,11 @@ public class TaktSalesPriceTemplateDto
     /// 来源销售报价编码（冗余）
     /// </summary>
     public string? SalesQuotationCode { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 可变关键字
+    /// </summary>
+    public string? VariableKey { get; set; } = string.Empty;
 
     /// <summary>
     /// 定价条件行列表（主子表关系）（子表，级联保存）
@@ -410,6 +511,11 @@ public class TaktSalesPriceImportDto
     public string? CompanyDefaultCulture { get; set; } = string.Empty;
 
     /// <summary>
+    /// 工厂代码（选项 TaktPlants/options；DictValue=PlantCode）
+    /// </summary>
+    public string? PlantCode { get; set; } = string.Empty;
+
+    /// <summary>
     /// 定价记录号（唯一索引；长度 20）
     /// </summary>
     public string? SalesPriceCode { get; set; } = string.Empty;
@@ -420,14 +526,34 @@ public class TaktSalesPriceImportDto
     public string? PriceType { get; set; } = string.Empty;
 
     /// <summary>
-    /// 客户编码（选项 TaktCustomers/options，DictValue=CustomerCode）
+    /// 客户编码（选项 TaktCustomers/options；DictValue=CustomerCode）
     /// </summary>
     public string? CustomerCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 物料编码（选项 TaktMaterialPlants/options，DictValue=MaterialCode）
+    /// 物料编码（选项 TaktMaterialPlants/options；DictValue=MaterialCode）
     /// </summary>
     public string? MaterialCode { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 销售组（选项 TaktSalesGroups/options；DictValue=SalesGroupCode）
+    /// </summary>
+    public string? SalesGroup { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 税码（字典 accounting_tax_code；DictValue=J0～J8/L1/X0～X3；中国）
+    /// </summary>
+    public string? TaxCode { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 基于收货的发票检验（字典 sys_yes_no_type；0=否 1=是）
+    /// </summary>
+    public int? GrBasedInvoiceInspection { get; set; }
+
+    /// <summary>
+    /// 定价日期控制（字典 logistics_pricing_date_control；1=采购订单日期，2=交货日期，3=当前日期，4=手动，5=收货日期；默认 1）
+    /// </summary>
+    public int? PricingDateControl { get; set; }
 
     /// <summary>
     /// 有效起始日
@@ -440,12 +566,7 @@ public class TaktSalesPriceImportDto
     public DateTime? ValidTo { get; set; }
 
     /// <summary>
-    /// 可变关键字
-    /// </summary>
-    public string? VariableKey { get; set; } = string.Empty;
-
-    /// <summary>
-    /// 来源销售报价 ID（选项 TaktSalesQuotations/options，DictValue=Id；对应采购侧来源询价）
+    /// 来源销售报价 ID（选项 TaktSalesQuotations/options；DictValue=Id；对应采购侧来源询价）
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
     public long? SalesQuotationId { get; set; }
@@ -454,6 +575,11 @@ public class TaktSalesPriceImportDto
     /// 来源销售报价编码（冗余）
     /// </summary>
     public string? SalesQuotationCode { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 可变关键字
+    /// </summary>
+    public string? VariableKey { get; set; } = string.Empty;
 
     /// <summary>
     /// 定价条件行列表（主子表关系）（子表，级联保存）
@@ -494,6 +620,11 @@ public class TaktSalesPriceExportDto
     public string CompanyCode { get; set; } = string.Empty;
 
     /// <summary>
+    /// 工厂代码（选项 TaktPlants/options；DictValue=PlantCode）
+    /// </summary>
+    public string PlantCode { get; set; } = string.Empty;
+
+    /// <summary>
     /// 定价记录号（唯一索引；长度 20）
     /// </summary>
     public string SalesPriceCode { get; set; } = string.Empty;
@@ -504,14 +635,34 @@ public class TaktSalesPriceExportDto
     public string PriceType { get; set; } = string.Empty;
 
     /// <summary>
-    /// 客户编码（选项 TaktCustomers/options，DictValue=CustomerCode）
+    /// 客户编码（选项 TaktCustomers/options；DictValue=CustomerCode）
     /// </summary>
     public string CustomerCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 物料编码（选项 TaktMaterialPlants/options，DictValue=MaterialCode）
+    /// 物料编码（选项 TaktMaterialPlants/options；DictValue=MaterialCode）
     /// </summary>
     public string MaterialCode { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 销售组（选项 TaktSalesGroups/options；DictValue=SalesGroupCode）
+    /// </summary>
+    public string? SalesGroup { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 税码（字典 accounting_tax_code；DictValue=J0～J8/L1/X0～X3；中国）
+    /// </summary>
+    public string? TaxCode { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 基于收货的发票检验（字典 sys_yes_no_type；0=否 1=是）
+    /// </summary>
+    public int GrBasedInvoiceInspection { get; set; } = 0;
+
+    /// <summary>
+    /// 定价日期控制（字典 logistics_pricing_date_control；1=采购订单日期，2=交货日期，3=当前日期，4=手动，5=收货日期；默认 1）
+    /// </summary>
+    public int PricingDateControl { get; set; } = 0;
 
     /// <summary>
     /// 有效起始日
@@ -524,12 +675,7 @@ public class TaktSalesPriceExportDto
     public DateTime ValidTo { get; set; }
 
     /// <summary>
-    /// 可变关键字
-    /// </summary>
-    public string? VariableKey { get; set; } = string.Empty;
-
-    /// <summary>
-    /// 来源销售报价 ID（选项 TaktSalesQuotations/options，DictValue=Id；对应采购侧来源询价）
+    /// 来源销售报价 ID（选项 TaktSalesQuotations/options；DictValue=Id；对应采购侧来源询价）
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
     public long? SalesQuotationId { get; set; }
@@ -538,6 +684,11 @@ public class TaktSalesPriceExportDto
     /// 来源销售报价编码（冗余）
     /// </summary>
     public string? SalesQuotationCode { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 可变关键字
+    /// </summary>
+    public string? VariableKey { get; set; } = string.Empty;
 
     /// <summary>
     /// 扩展字段JSON

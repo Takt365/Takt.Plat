@@ -100,10 +100,10 @@ const plantCode = ref<string | undefined>()
 const periodRange = ref<[string, string] | null>(null)
 /** 客户编码 */
 const customerCode = ref<string | undefined>()
-/** 物料编码关键字 */
-const materialCode = ref('')
+/** 物料编码 */
+const materialCode = ref<string | undefined>()
 /** 价格类型 */
-const priceType = ref<number | undefined>()
+const priceType = ref<string | undefined>()
 /** 明细面板 loading */
 const panelLoading = ref(false)
 /** 导出 loading */
@@ -191,7 +191,7 @@ async function applyDefaultPlantFromCompany(): Promise<void> {
 async function handleReset() {
   await applyDefaultPlantFromCompany()
   customerCode.value = undefined
-  materialCode.value = ''
+  materialCode.value = undefined
   priceType.value = undefined
   applyDefaultPeriodRange()
   trendFilter.value = ''

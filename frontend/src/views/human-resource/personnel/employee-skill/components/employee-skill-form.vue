@@ -125,12 +125,12 @@
             </a-col>
             <a-col :span="12">
               <a-form-item
-                :label="t('entity.employeeskill.certificateno')"
-                name="certificateNo"
+                :label="t('entity.employeeskill.CertificateCode')"
+                name="CertificateCode"
               >
                 <a-input
-                  v-model:value="formState.certificateNo"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.employeeskill.certificateno') })"
+                  v-model:value="formState.CertificateCode"
+                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.employeeskill.CertificateCode') })"
                   show-count
                   :maxlength="100"
                   allow-clear
@@ -263,7 +263,7 @@ const formContentClass = computed(() => (formFields.length > 10 ? 'takt-form-con
 /** 当前激活的 Tab key */
 const activeTab = ref('tab-0')
 /** CreateDto 字段名列表（与 formState 键对齐） */
-const formFields = ["tenantCode","companyCode","companyDefaultCulture","employeeId","skillName","skillLevel","certificateName","certificateNo","obtainedDate","expiryDate","extField","remark"]
+const formFields = ["tenantCode","companyCode","companyDefaultCulture","employeeId","skillName","skillLevel","certificateName","CertificateCode","obtainedDate","expiryDate","extField","remark"]
 
 
 /** 父级传入的编辑 DTO；新增时为 undefined 或空对象 */

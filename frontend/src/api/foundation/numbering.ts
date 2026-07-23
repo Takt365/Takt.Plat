@@ -33,7 +33,7 @@ const NUMBERING_API_BASE = 'TaktNumberings';
 // ========================================
 
 /**
- * 获取编号规则列表（分页）
+ * 获取编码规则列表（分页）
  * @param {any} queryDto 查询DTO
  * @returns {Promise<TaktPagedResult<Numbering>>} 分页结果
  */
@@ -46,9 +46,9 @@ export function getNumberingList(queryDto: any): Promise<TaktPagedResult<Numberi
 }
 
 /**
- * 根据ID获取编号规则
- * @param {string} id 编号规则ID
- * @returns {Promise<Numbering>} 编号规则DTO
+ * 根据ID获取编码规则
+ * @param {string} id 编码规则ID
+ * @returns {Promise<Numbering>} 编码规则DTO
  */
 export function getNumberingById(id: string): Promise<Numbering> {
   return request<Numbering>({
@@ -58,9 +58,9 @@ export function getNumberingById(id: string): Promise<Numbering> {
 }
 
 /**
- * 创建编号规则
+ * 创建编码规则
  * @param {NumberingCreate} dto 创建DTO
- * @returns {Promise<Numbering>} 编号规则DTO
+ * @returns {Promise<Numbering>} 编码规则DTO
  */
 export function createNumbering(dto: NumberingCreate): Promise<Numbering> {
   return request<Numbering>({
@@ -71,10 +71,10 @@ export function createNumbering(dto: NumberingCreate): Promise<Numbering> {
 }
 
 /**
- * 更新编号规则
- * @param {string} id 编号规则ID
+ * 更新编码规则
+ * @param {string} id 编码规则ID
  * @param {NumberingUpdate} dto 更新DTO
- * @returns {Promise<Numbering>} 编号规则DTO
+ * @returns {Promise<Numbering>} 编码规则DTO
  */
 export function updateNumbering(id: string, dto: NumberingUpdate): Promise<Numbering> {
   return request<Numbering>({
@@ -85,8 +85,8 @@ export function updateNumbering(id: string, dto: NumberingUpdate): Promise<Numbe
 }
 
 /**
- * 删除编号规则
- * @param {string} id 编号规则ID
+ * 删除编码规则
+ * @param {string} id 编码规则ID
  * @returns {Promise<void>} 操作结果
  */
 export function deleteNumberingById(id: string): Promise<void> {
@@ -97,7 +97,7 @@ export function deleteNumberingById(id: string): Promise<void> {
 }
 
 /**
- * 批量删除编号规则
+ * 批量删除编码规则
  * @param {string[]} ids ID列表
  * @returns {Promise<void>} 操作结果
  */
@@ -110,9 +110,9 @@ export function deleteNumberingBatch(ids: string[]): Promise<void> {
 }
 
 /**
- * 更新编号规则状态
+ * 更新编码规则状态
  * @param {NumberingStatus} dto 状态 DTO
- * @returns {Promise<Numbering>} 编号规则DTO
+ * @returns {Promise<Numbering>} 编码规则DTO
  */
 export function updateNumberingStatus(dto: NumberingStatus): Promise<Numbering> {
   return request<Numbering>({
@@ -127,7 +127,7 @@ export function updateNumberingStatus(dto: NumberingStatus): Promise<Numbering> 
 // ========================================
 
 /**
- * 获取编号规则选项列表
+ * 获取编码规则选项列表
  * @returns {Promise<TaktSelectOption[]>} 下拉选项
  */
 export function getNumberingOptions(): Promise<TaktSelectOption[]> {
@@ -160,7 +160,7 @@ export function getNumberingTemplate(sheetName?: string, templateName?: string):
 }
 
 /**
- * 导入编号规则
+ * 导入编码规则
  * @param {globalThis.File} file Excel文件
  * @param {string} sheetName sheetName
  * @returns {Promise<{ success: number; fail: number; errors: string[] }>} 导入结果
@@ -183,7 +183,7 @@ export function importNumbering(file: globalThis.File, sheetName?: string): Prom
 }
 
 /**
- * 导出编号规则
+ * 导出编码规则
  * @param {any} query query
  * @param {string} sheetName sheetName
  * @param {string} exportName exportName

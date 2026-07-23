@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Infrastructure.Data.Seeds.I18nSeedData.Logistics.Quality.Cost
 // 文件名称：TaktQualityIncidentItemI18nSeedData.cs
-// 创建时间：2026-07-20
+// 创建时间：2026-07-23
 // 创建人：Takt365(Auto Generated)
 // 功能描述：TaktQualityIncidentItem 实体字段国际化种子（无对应 frontend locales；TranslationText 取自 ColumnDescription，ContextNote 取自属性 XML summary）
 // 
@@ -91,13 +91,13 @@ public class TaktQualityIncidentItemI18nSeedData : ITaktSeedDataCoordinator
             new TranslationSeedItem("entity.qualityincidentitem._self", "zh-HK", "品质事故明细 - 废弃零件明细行信息_hk", "实体名称"),
 
             // entity.qualityincidentitem.qualityincidentid
-            new TranslationSeedItem("entity.qualityincidentitem.qualityincidentid", "en-US", "品质事故主表ID_us", "品质事故主表 ID（选项 TaktQualityIncidents/options，DictValue=Id）"),
+            new TranslationSeedItem("entity.qualityincidentitem.qualityincidentid", "en-US", "品质事故主表ID_us", "品质事故主表 ID（选项 TaktQualityIncidents/options；DictValue=Id）"),
             // entity.qualityincidentitem.qualityincidentid
-            new TranslationSeedItem("entity.qualityincidentitem.qualityincidentid", "ja-JP", "品质事故主表ID_jp", "品质事故主表 ID（选项 TaktQualityIncidents/options，DictValue=Id）"),
+            new TranslationSeedItem("entity.qualityincidentitem.qualityincidentid", "ja-JP", "品质事故主表ID_jp", "品质事故主表 ID（选项 TaktQualityIncidents/options；DictValue=Id）"),
             // entity.qualityincidentitem.qualityincidentid
-            new TranslationSeedItem("entity.qualityincidentitem.qualityincidentid", "zh-CN", "品质事故主表ID", "品质事故主表 ID（选项 TaktQualityIncidents/options，DictValue=Id）"),
+            new TranslationSeedItem("entity.qualityincidentitem.qualityincidentid", "zh-CN", "品质事故主表ID", "品质事故主表 ID（选项 TaktQualityIncidents/options；DictValue=Id）"),
             // entity.qualityincidentitem.qualityincidentid
-            new TranslationSeedItem("entity.qualityincidentitem.qualityincidentid", "zh-HK", "品质事故主表ID_hk", "品质事故主表 ID（选项 TaktQualityIncidents/options，DictValue=Id）"),
+            new TranslationSeedItem("entity.qualityincidentitem.qualityincidentid", "zh-HK", "品质事故主表ID_hk", "品质事故主表 ID（选项 TaktQualityIncidents/options；DictValue=Id）"),
 
             // entity.qualityincidentitem.qualityincidentcode
             new TranslationSeedItem("entity.qualityincidentitem.qualityincidentcode", "en-US", "品质事故编码_us", "品质事故编码（冗余字段，便于查询）"),
@@ -118,13 +118,13 @@ public class TaktQualityIncidentItemI18nSeedData : ITaktSeedDataCoordinator
             new TranslationSeedItem("entity.qualityincidentitem.linenumber", "zh-HK", "行号_hk", "行号（项号/序号，固定步长=10）"),
 
             // entity.qualityincidentitem.materialcode
-            new TranslationSeedItem("entity.qualityincidentitem.materialcode", "en-US", "物料编码_us", "物料编码（选项 TaktMaterialPlants/options，DictValue=MaterialCode，ExtValue=PlantCode）"),
+            new TranslationSeedItem("entity.qualityincidentitem.materialcode", "en-US", "物料编码_us", "物料编码（选项 TaktMaterialPlants/options；DictValue=MaterialCode，ExtValue=PlantCode）"),
             // entity.qualityincidentitem.materialcode
-            new TranslationSeedItem("entity.qualityincidentitem.materialcode", "ja-JP", "物料编码_jp", "物料编码（选项 TaktMaterialPlants/options，DictValue=MaterialCode，ExtValue=PlantCode）"),
+            new TranslationSeedItem("entity.qualityincidentitem.materialcode", "ja-JP", "物料编码_jp", "物料编码（选项 TaktMaterialPlants/options；DictValue=MaterialCode，ExtValue=PlantCode）"),
             // entity.qualityincidentitem.materialcode
-            new TranslationSeedItem("entity.qualityincidentitem.materialcode", "zh-CN", "物料编码", "物料编码（选项 TaktMaterialPlants/options，DictValue=MaterialCode，ExtValue=PlantCode）"),
+            new TranslationSeedItem("entity.qualityincidentitem.materialcode", "zh-CN", "物料编码", "物料编码（选项 TaktMaterialPlants/options；DictValue=MaterialCode，ExtValue=PlantCode）"),
             // entity.qualityincidentitem.materialcode
-            new TranslationSeedItem("entity.qualityincidentitem.materialcode", "zh-HK", "物料编码_hk", "物料编码（选项 TaktMaterialPlants/options，DictValue=MaterialCode，ExtValue=PlantCode）"),
+            new TranslationSeedItem("entity.qualityincidentitem.materialcode", "zh-HK", "物料编码_hk", "物料编码（选项 TaktMaterialPlants/options；DictValue=MaterialCode，ExtValue=PlantCode）"),
 
             // entity.qualityincidentitem.materialname
             new TranslationSeedItem("entity.qualityincidentitem.materialname", "en-US", "物料名称_us", "物料名称（回填：随物料）"),
@@ -226,13 +226,13 @@ public class TaktQualityIncidentItemI18nSeedData : ITaktSeedDataCoordinator
             new TranslationSeedItem("entity.qualityincidentitem.scrapnote", "zh-HK", "废弃备注_hk", "废弃备注"),
 
             // entity.qualityincidentitem.isobsolete
-            new TranslationSeedItem("entity.qualityincidentitem.isobsolete", "en-US", "是否作废_us", "是否作废（字典 sys_yes_no_type，0=否 1=是；编辑移除子行时标记作废）"),
+            new TranslationSeedItem("entity.qualityincidentitem.isobsolete", "en-US", "是否作废_us", "是否作废（字典 sys_yes_no_type；0=否 1=是；编辑移除子行时标记作废）"),
             // entity.qualityincidentitem.isobsolete
-            new TranslationSeedItem("entity.qualityincidentitem.isobsolete", "ja-JP", "是否作废_jp", "是否作废（字典 sys_yes_no_type，0=否 1=是；编辑移除子行时标记作废）"),
+            new TranslationSeedItem("entity.qualityincidentitem.isobsolete", "ja-JP", "是否作废_jp", "是否作废（字典 sys_yes_no_type；0=否 1=是；编辑移除子行时标记作废）"),
             // entity.qualityincidentitem.isobsolete
-            new TranslationSeedItem("entity.qualityincidentitem.isobsolete", "zh-CN", "是否作废", "是否作废（字典 sys_yes_no_type，0=否 1=是；编辑移除子行时标记作废）"),
+            new TranslationSeedItem("entity.qualityincidentitem.isobsolete", "zh-CN", "是否作废", "是否作废（字典 sys_yes_no_type；0=否 1=是；编辑移除子行时标记作废）"),
             // entity.qualityincidentitem.isobsolete
-            new TranslationSeedItem("entity.qualityincidentitem.isobsolete", "zh-HK", "是否作废_hk", "是否作废（字典 sys_yes_no_type，0=否 1=是；编辑移除子行时标记作废）"),
+            new TranslationSeedItem("entity.qualityincidentitem.isobsolete", "zh-HK", "是否作废_hk", "是否作废（字典 sys_yes_no_type；0=否 1=是；编辑移除子行时标记作废）"),
 
             // entity.qualityincidentitem.incident
             new TranslationSeedItem("entity.qualityincidentitem.incident", "en-US", "品质事故主表_us", "品质事故主表(导航属性)"),

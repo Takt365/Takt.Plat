@@ -10,57 +10,24 @@
 <template>
   <a-form
     ref="formRef"
-    class="takt-generated-form invoice-form flex flex-col min-h-0"
+    class="takt-generated-form invoice-form flex flex-col min-h-0 overflow-visible"
     :model="formState"
     :rules="rules"
     layout="horizontal"
     label-align="right"
   >
-    <div :class="formContentClass">
-      <a-row :gutter="24">
-            <a-col :span="12">
-              <a-form-item
-                :label="pi.label('tenantCode')"
-                name="tenantCode"
-              >
-                <a-input
-                  v-model:value="formState.tenantCode"
-                  :placeholder="pi.ph('tenantCode')"
-                  show-count
-                  :maxlength="20"
-                  disabled
-                />
-              </a-form-item>
-            </a-col>
-            <a-col :span="12">
-              <a-form-item
-                :label="pi.label('companyCode')"
-                name="companyCode"
-              >
-                <a-input
-                  v-model:value="formState.companyCode"
-                  :placeholder="pi.ph('companyCode')"
-                  show-count
-                  :maxlength="20"
-                  disabled
-                />
-              </a-form-item>
-            </a-col>
-            <a-col :span="12">
-              <a-form-item
-                :label="pi.label('companyDefaultCulture')"
-                name="companyDefaultCulture"
-              >
-                <a-input
-                  v-model:value="formState.companyDefaultCulture"
-                  :placeholder="pi.ph('companyDefaultCulture')"
-                  show-count
-                  :maxlength="20"
-                  disabled
-                />
-              </a-form-item>
-            </a-col>
-            <a-col :span="12">
+    <a-tabs
+      v-model:active-key="activeTab"
+      class="invoice-form-tabs"
+    >
+      <a-tab-pane
+        key="tab-0"
+        :tab="t('common.page.form.tabs.basicinfo') + ' (1/2)'"
+        force-render
+      >
+        <div :class="formContentClass">
+          <a-row :gutter="24">
+            <a-col :span="24">
               <a-form-item
                 :label="pi.label('plantCode')"
                 name="plantCode"
@@ -73,7 +40,7 @@
                 />
               </a-form-item>
             </a-col>
-            <a-col :span="12">
+            <a-col :span="24">
               <a-form-item
                 :label="pi.label('yearMonth')"
                 name="yearMonth"
@@ -87,7 +54,7 @@
                 />
               </a-form-item>
             </a-col>
-            <a-col :span="12">
+            <a-col :span="24">
               <a-form-item
                 :label="pi.label('customerCode')"
                 name="customerCode"
@@ -100,21 +67,58 @@
                 />
               </a-form-item>
             </a-col>
-            <a-col :span="12">
+            <a-col :span="24">
               <a-form-item
-                :label="pi.label('customerName')"
-                name="customerName"
+                :label="pi.label('customerName1')"
+                name="customerName1"
               >
                 <a-input
-                  v-model:value="formState.customerName"
-                  :placeholder="pi.ph('customerName')"
+                  v-model:value="formState.customerName1"
+                  :placeholder="pi.ph('customerName1')"
                   show-count
-                  :maxlength="200"
+                  :maxlength="140"
                   allow-clear
                 />
               </a-form-item>
             </a-col>
-            <a-col :span="12">
+            <a-col :span="24">
+              <a-form-item
+                :label="pi.label('currencyCode')"
+                name="currencyCode"
+              >
+                <TaktSelect
+                  v-model:value="formState.currencyCode"
+                  dict-type="accounting_currency_code"
+                  :placeholder="pi.ph('currencyCode')"
+                  :disabled="!!formData?.salesInvoiceId"
+                />
+              </a-form-item>
+            </a-col>
+            <a-col :span="24">
+              <a-form-item
+                :label="pi.label('taxRate')"
+                name="taxRate"
+              >
+                <TaktSelect
+                  v-model:value="formState.taxRate"
+                  dict-type="accounting_tax_rate_param"
+                  :placeholder="pi.ph('taxRate')"
+                />
+              </a-form-item>
+            </a-col>
+            <a-col :span="24">
+              <a-form-item
+                :label="pi.label('taxAmount')"
+                name="taxAmount"
+              >
+                <a-input-number
+                  v-model:value="formState.taxAmount"
+                  :placeholder="pi.ph('taxAmount')"
+                  style="width: 100%"
+                />
+              </a-form-item>
+            </a-col>
+            <a-col :span="24">
               <a-form-item
                 :label="pi.label('accountingDocumentCode')"
                 name="accountingDocumentCode"
@@ -126,6 +130,58 @@
                   :maxlength="40"
                   allow-clear
                   :disabled="!!formData?.salesInvoiceId"
+                />
+              </a-form-item>
+            </a-col>
+          </a-row>
+        </div>
+      </a-tab-pane>
+      <a-tab-pane
+        key="tab-1"
+        :tab="t('common.page.form.tabs.basicinfo') + ' (2/2)'"
+        force-render
+      >
+        <div :class="formContentClass">
+          <a-row :gutter="24">
+            <a-col :span="24">
+              <a-form-item
+                :label="pi.label('tenantCode')"
+                name="tenantCode"
+              >
+                <a-input
+                  v-model:value="formState.tenantCode"
+                  :placeholder="pi.ph('tenantCode')"
+                  show-count
+                  :maxlength="20"
+                  disabled
+                />
+              </a-form-item>
+            </a-col>
+            <a-col :span="24">
+              <a-form-item
+                :label="pi.label('companyCode')"
+                name="companyCode"
+              >
+                <a-input
+                  v-model:value="formState.companyCode"
+                  :placeholder="pi.ph('companyCode')"
+                  show-count
+                  :maxlength="20"
+                  disabled
+                />
+              </a-form-item>
+            </a-col>
+            <a-col :span="24">
+              <a-form-item
+                :label="pi.label('companyDefaultCulture')"
+                name="companyDefaultCulture"
+              >
+                <a-input
+                  v-model:value="formState.companyDefaultCulture"
+                  :placeholder="pi.ph('companyDefaultCulture')"
+                  show-count
+                  :maxlength="20"
+                  disabled
                 />
               </a-form-item>
             </a-col>
@@ -170,8 +226,10 @@
                 />
               </a-form-item>
             </a-col>
-      </a-row>
-    </div>
+          </a-row>
+        </div>
+      </a-tab-pane>
+    </a-tabs>
     <!-- 下：子表 items -->
     <TaktEditableTable
       ref="salesInvoiceItemTableRef"
@@ -182,8 +240,88 @@
       id-field="salesInvoiceItemId"
       :default-row="createDefaultSalesInvoiceItemRow"
       :disabled="loading"
+      :enable-vertical-scroll="false"
       section-border
-    />
+      class="w-full min-w-0"
+    >
+      <template #cell-materialCode="{ record }">
+        <TaktSelect
+          v-model:value="record.materialCode"
+          api-url="TaktMaterialPlants/options"
+          class="w-full"
+          :get-popup-container="getSelectPopupContainer"
+          :placeholder="salesInvoiceItemPi.queryPh('materialCode', 'select')"
+          :disabled="loading"
+          allow-clear
+        />
+      </template>
+      <template #cell-materialType="{ record }">
+        <TaktSelect
+          v-model:value="record.materialType"
+          dict-type="logistics_material_type"
+          class="w-full"
+          :get-popup-container="getSelectPopupContainer"
+          :placeholder="salesInvoiceItemPi.ph('materialType')"
+          :disabled="loading"
+          allow-clear
+        />
+      </template>
+      <template #cell-profitCenterCode="{ record }">
+        <TaktSelect
+          v-model:value="record.profitCenterCode"
+          api-url="TaktProfitCenters/options"
+          class="w-full"
+          :get-popup-container="getSelectPopupContainer"
+          :placeholder="salesInvoiceItemPi.queryPh('profitCenterCode', 'select')"
+          :disabled="loading"
+          allow-clear
+        />
+      </template>
+      <template #cell-accountTitle="{ record }">
+        <TaktSelect
+          v-model:value="record.accountTitle"
+          api-url="TaktAccountTitles/options"
+          class="w-full"
+          :get-popup-container="getSelectPopupContainer"
+          :placeholder="salesInvoiceItemPi.queryPh('accountTitle', 'select')"
+          :disabled="loading"
+          allow-clear
+        />
+      </template>
+      <template #cell-unit="{ record }">
+        <TaktSelect
+          v-model:value="record.unit"
+          dict-type="logistics_unit_of_measure_code"
+          class="w-full"
+          :get-popup-container="getSelectPopupContainer"
+          :placeholder="salesInvoiceItemPi.ph('unit')"
+          :disabled="loading"
+          allow-clear
+        />
+      </template>
+      <template #cell-documentType="{ record }">
+        <TaktSelect
+          v-model:value="record.documentType"
+          dict-type="logistics_accounting_document_type"
+          class="w-full"
+          :get-popup-container="getSelectPopupContainer"
+          :placeholder="salesInvoiceItemPi.ph('documentType')"
+          :disabled="loading"
+          allow-clear
+        />
+      </template>
+      <template #cell-isObsolete="{ record }">
+        <TaktSelect
+          v-model:value="record.isObsolete"
+          dict-type="sys_yes_no_type"
+          class="w-full"
+          :get-popup-container="getSelectPopupContainer"
+          :placeholder="salesInvoiceItemPi.ph('isObsolete')"
+          :disabled="loading"
+          allow-clear
+        />
+      </template>
+    </TaktEditableTable>
   </a-form>
 </template>
 
@@ -192,7 +330,7 @@
  * Takt销售发票实体维护表单 · 由 generate-vue-master-detail-from-api.cjs 根据 types/api 生成
  * @module views/logistics/sales/sales-invoice/components
  */
-import { reactive, watch, computed, ref } from 'vue'
+import { reactive, watch, computed, ref, onMounted } from 'vue'
 import { useI18n } from 'vue-i18n'
 import type { Rule } from 'ant-design-vue/es/form'
 import { useSalesInvoiceI18n } from '../composables/use-invoice-i18n'
@@ -201,7 +339,9 @@ import { useSalesInvoiceI18n } from '../composables/use-invoice-i18n'
 const pi = useSalesInvoiceI18n()
 
 import type { SalesInvoiceCreate } from '@/types/logistics/sales/invoice'
+import TaktSelect from '@/components/business/takt-select/index.vue'
 import { RiQuestionLine } from '@remixicon/vue'
+import { useDictDataStore } from '@/stores/foundation/dict-data'
 import { useTenantStore } from '@/stores/identity/tenant'
 import { useUserStore } from '@/stores/identity/user'
 
@@ -229,14 +369,24 @@ function applyScopeDefaults(target: Record<string, unknown>, force = false) {
     target.companyDefaultCulture = userStore.userInfo?.companyDefaultCulture ?? ''
   }
 }
+/** 表单内容区高度 class（字段多时 tab-10 行） */
+const formContentClass = computed(() => (formFields.length > 10 ? 'takt-form-content-rows-10' : 'takt-form-content-rows-5'))
+/** 当前激活的 Tab key */
+const activeTab = ref('tab-0')
 /** CreateDto 字段名列表（与 formState 键对齐） */
-const formFields = ["tenantCode","companyCode","companyDefaultCulture","plantCode","yearMonth","customerCode","customerName","accountingDocumentCode","extField","remark"]
+const formFields = ["tenantCode","companyCode","companyDefaultCulture","plantCode","yearMonth","customerCode","customerName1","currencyCode","taxRate","taxAmount","accountingDocumentCode","extField","remark"]
 
 
 import type { TaktEditableTableColumn } from '@/components/business/takt-editable-table/types'
+import { resolveNextDetailLineNumber } from '@/utils/takt-sequence'
 import { useSalesInvoiceItemI18n } from '../composables/use-invoice-item-i18n'
 
 const salesInvoiceItemPi = useSalesInvoiceItemI18n()
+
+/** 弹窗/表格内 TaktSelect 下拉挂载容器（避免 overflow 裁剪与表头列错位） */
+function getSelectPopupContainer(triggerNode?: HTMLElement): HTMLElement {
+  return triggerNode?.ownerDocument?.body ?? document.body
+}
 
 const childSalesInvoiceItemRows = ref<Record<string, unknown>[]>([])
 const salesInvoiceItemTableRef = ref<{
@@ -244,6 +394,21 @@ const salesInvoiceItemTableRef = ref<{
   validate: () => Promise<unknown>
   resetRows: () => void
 } | null>(null)
+
+/** 是否已持久化的子表行 */
+function isPersistedSalesInvoiceItemRow(row: Record<string, unknown>): boolean {
+  const id = row.salesInvoiceItemId
+  if (id == null || id === '') {
+    return false
+  }
+  return String(id) !== '0'
+}
+
+/** 分配下一可用子表行号（含作废行，仅据当前表格行递增） */
+function allocateNextSalesInvoiceItemLineNumber(): number {
+  const rows = salesInvoiceItemTableRef.value?.getRows?.() ?? childSalesInvoiceItemRows.value
+  return resolveNextDetailLineNumber(0, rows)
+}
 
 /** 子表 salesInvoiceItem 可编辑列 */
 const salesInvoiceItemFormColumns = computed<TaktEditableTableColumn[]>(() => [
@@ -256,20 +421,13 @@ const salesInvoiceItemFormColumns = computed<TaktEditableTableColumn[]>(() => [
   {
     key: 'lineNumber',
     title: salesInvoiceItemPi.label('lineNumber'),
-    editor: 'inputNumber',
-    width: 140, summary: 'sum',
+    width: 140,
   },
   {
     key: 'postingDate',
     title: salesInvoiceItemPi.label('postingDate'),
     editor: 'datePicker',
     valueFormat: 'YYYY-MM-DD',
-    width: 140,
-  },
-  {
-    key: 'currency',
-    title: salesInvoiceItemPi.label('currency'),
-    editor: 'input',
     width: 140,
   },
   {
@@ -281,53 +439,132 @@ const salesInvoiceItemFormColumns = computed<TaktEditableTableColumn[]>(() => [
   {
     key: 'materialCode',
     title: salesInvoiceItemPi.label('materialCode'),
-    editor: 'input',
     width: 140,
   },
   {
     key: 'materialType',
     title: salesInvoiceItemPi.label('materialType'),
-    editor: 'input',
     width: 140,
   },
   {
-    key: 'materialName',
-    title: salesInvoiceItemPi.label('materialName'),
+    key: 'profitCenterCode',
+    title: salesInvoiceItemPi.label('profitCenterCode'),
+    width: 140,
+  },
+  {
+    key: 'accountTitle',
+    title: salesInvoiceItemPi.label('accountTitle'),
+    width: 140,
+  },
+  {
+    key: 'quantity',
+    title: salesInvoiceItemPi.label('quantity'),
+    width: 140,
+  },
+  {
+    key: 'unit',
+    title: salesInvoiceItemPi.label('unit'),
+    width: 140,
+  },
+  {
+    key: 'localCurrencyAmount',
+    title: salesInvoiceItemPi.label('localCurrencyAmount'),
+    width: 140,
+  },
+  {
+    key: 'transactionCurrencyAmount',
+    title: salesInvoiceItemPi.label('transactionCurrencyAmount'),
+    width: 140,
+  },
+  {
+    key: 'taxIncludedPrice',
+    title: salesInvoiceItemPi.label('taxIncludedPrice'),
+    width: 140,
+  },
+  {
+    key: 'untaxedPrice',
+    title: salesInvoiceItemPi.label('untaxedPrice'),
+    width: 140,
+  },
+  {
+    key: 'taxAmount',
+    title: salesInvoiceItemPi.label('taxAmount'),
+    width: 140,
+  },
+  {
+    key: 'documentType',
+    title: salesInvoiceItemPi.label('documentType'),
+    width: 140,
+  },
+  {
+    key: 'referenceDocumentCode',
+    title: salesInvoiceItemPi.label('referenceDocumentCode'),
     editor: 'input',
+    width: 140, allowClear: true, placeholder: salesInvoiceItemPi.ph('referenceDocumentCode'),
+  },
+  {
+    key: 'referenceDocumentItem',
+    title: salesInvoiceItemPi.label('referenceDocumentItem'),
+    width: 140,
+  },
+  {
+    key: 'isObsolete',
+    title: salesInvoiceItemPi.label('isObsolete'),
     width: 140,
   },
 ])
 
 /** 编辑态从 formData 同步各子表行 */
 function syncChildRowsFromFormData(val: Partial<SalesInvoiceCreate & { salesInvoiceId?: string }> | null | undefined) {
-  childSalesInvoiceItemRows.value = ((val as any)?.items ?? []) as Record<string, unknown>[]
+  const rows_salesInvoiceItem = ((val as any)?.items ?? []) as Record<string, unknown>[]
+  childSalesInvoiceItemRows.value = rows_salesInvoiceItem
 }
 
 function createDefaultSalesInvoiceItemRow(): Record<string, unknown> {
   return {
     accountingDocumentCode: '',
-    lineNumber: (childSalesInvoiceItemRows.value.length + 1) * 10,
+    lineNumber: allocateNextSalesInvoiceItemLineNumber(),
     postingDate: '',
-    currency: '',
     modelName: '',
     materialCode: '',
     materialType: '',
-    materialName: '',
+    profitCenterCode: '',
+    accountTitle: '',
+    quantity: 0,
+    unit: '',
+    localCurrencyAmount: 0,
+    transactionCurrencyAmount: 0,
+    taxIncludedPrice: 0,
+    untaxedPrice: 0,
+    taxAmount: 0,
+    documentType: '',
+    referenceDocumentCode: '',
+    referenceDocumentItem: 0,
+    isObsolete: 0,
   }
 }
 
 /** 组装 Create/Update 载荷（主表 + 子表数组） */
 function buildSubmitPayload() {
   const masterId = props.formData?.salesInvoiceId ?? ''
+  const isUpdate = Boolean(masterId)
   return {
     ...formState,
-    items: salesInvoiceItemTableRef.value?.getRows?.() ?? childSalesInvoiceItemRows.value.map((rest) => ({
-      ...rest,
-      tenantCode: tenantStore.tenantCode,
-      companyCode: tenantStore.companyCode,
-      companyDefaultCulture: userStore.userInfo?.companyDefaultCulture ?? '',
-      salesInvoiceId: masterId,
-    })),
+    items: salesInvoiceItemTableRef.value?.getRows?.() ?? childSalesInvoiceItemRows.value.map((row) => {
+      const normalized = {
+        ...row,
+        tenantCode: tenantStore.tenantCode,
+        companyCode: tenantStore.companyCode,
+        companyDefaultCulture: userStore.userInfo?.companyDefaultCulture ?? '',
+        salesInvoiceId: masterId,
+      }
+      if (isUpdate && isPersistedSalesInvoiceItemRow(row)) {
+        normalized.salesInvoiceItemId = row.salesInvoiceItemId
+      } else {
+        delete normalized.salesInvoiceItemId
+      }
+      return normalized
+    }),
   }
 }
 
@@ -347,11 +584,24 @@ const props = withDefaults(defineProps<Props>(), {
 const formRef = ref()
 /** 表单双向绑定模型 */
 const formState = reactive<Record<string, any>>({})
-/** 表单字段默认值（无字典默认项） */
-function applyFormDefaults(target: Record<string, unknown>) {
-  void target
+/** 表单字段默认值（字典 IsDefault=1，来自 TaktDictDataSeedData） */
+const FORM_FIELD_DEFAULTS: Record<string, string | number> = {
+  currencyCode: "CNY",
+  taxRate: 10
 }
 
+/** 写入表单默认值（新增 / resetFields / 弹窗再次打开时） */
+function applyFormDefaults(target: Record<string, unknown>) {
+  Object.assign(target, FORM_FIELD_DEFAULTS)
+}
+
+/** Pinia：字典缓存（TaktSelect dict-type 渲染前预热，避免选项空白） */
+const dictDataStore = useDictDataStore()
+
+/** 表单挂载时预加载全量字典 */
+onMounted(() => {
+  void dictDataStore.loadAllDictDataAsync()
+})
 
 /** 编辑态灌入 formData；新增态恢复默认值（须含 salesInvoiceId 才视为编辑） */
 watch(
@@ -412,13 +662,46 @@ const rules = computed<Record<string, Rule[]>>(() => ({
       trigger: 'change'
     }
   ],
-  customerName: [
+  customerName1: [
     {
       required: true,
-      message: pi.ph('customerName'),
+      message: pi.ph('customerName1'),
       trigger: 'blur'
     }
   ],
+  currencyCode: [
+    {
+      required: true,
+      message: pi.ph('currencyCode'),
+      trigger: 'change'
+    }
+  ],
+  taxRate: [{
+    validator: async (_rule, value) => {
+      if (value === undefined || value === null || value === '') {
+        return Promise.reject(pi.ph('taxRate'))
+      }
+      const num = typeof value === 'number' ? value : Number(value)
+      if (!Number.isFinite(num)) {
+        return Promise.reject(pi.ph('taxRate'))
+      }
+      return Promise.resolve()
+    },
+    trigger: 'change'
+  }],
+  taxAmount: [{
+    validator: async (_rule, value) => {
+      if (value === undefined || value === null || value === '') {
+        return Promise.reject(pi.ph('taxAmount'))
+      }
+      const num = typeof value === 'number' ? value : Number(value)
+      if (!Number.isFinite(num)) {
+        return Promise.reject(pi.ph('taxAmount'))
+      }
+      return Promise.resolve()
+    },
+    trigger: 'change'
+  }],
   accountingDocumentCode: [
     {
       required: true,
@@ -438,6 +721,14 @@ async function validate() {
 /** 映射为 Create/Update DTO */
 function getValues(): Record<string, any> {
   const payload = buildSubmitPayload() as Record<string, unknown>
+  if ('taxRate' in payload) {
+    const rawtaxRate = payload.taxRate
+    payload.taxRate = typeof rawtaxRate === 'number' ? rawtaxRate : Number(rawtaxRate)
+  }
+  if ('taxAmount' in payload) {
+    const rawtaxAmount = payload.taxAmount
+    payload.taxAmount = typeof rawtaxAmount === 'number' ? rawtaxAmount : Number(rawtaxAmount)
+  }
   if ('sortOrder' in payload) delete payload.sortOrder
   return payload
 }
@@ -452,9 +743,19 @@ function resetFields() {
   applyScopeDefaults(formState as Record<string, unknown>, !props.formData?.salesInvoiceId)
   childSalesInvoiceItemRows.value = []
   salesInvoiceItemTableRef.value?.resetRows?.()
+  activeTab.value = 'tab-0'
   formRef.value?.clearValidate()
 }
 
 defineExpose({ validate, getValues, resetFields })
 </script>
 
+<style scoped lang="css">
+:deep(.ant-tabs-content-holder) {
+  min-height: 50vh;
+}
+
+:deep(.ant-tabs-tabpane) {
+  min-height: 50vh;
+}
+</style>

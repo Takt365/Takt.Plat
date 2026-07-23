@@ -284,6 +284,11 @@ export interface TaktSelectOption {
   dictTypeCode?: string;
 
   /**
+   * 区域文化编码（eo=全局；与 Accept-Language 对齐的区域项；批量加载去重时区域项优先于 eo）
+   */
+  cultureCode?: string;
+
+  /**
    * 扩展标签
    */
   extLabel?: string;
@@ -307,6 +312,11 @@ export interface TaktSelectOption {
    * 排序号
    */
   sortOrder: number;
+
+  /**
+   * 是否默认项（1=是，0=否；与 TaktDictData.IsDefault / sys_yes_no 一致）
+   */
+  isDefault?: number;
 }
 
 /**
@@ -314,9 +324,14 @@ export interface TaktSelectOption {
  */
 export interface TaktTreeSelectOption extends TaktSelectOption {
   /**
-   * 子节点列表
+   * 子节点列表（懒加载：非叶子保持 undefined，勿传空数组）
    */
   children?: TaktTreeSelectOption[];
+
+  /**
+   * 是否叶子（懒加载树；true 不可展开）
+   */
+  isLeaf?: boolean;
 }
 
 /**

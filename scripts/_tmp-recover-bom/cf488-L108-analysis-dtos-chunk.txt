@@ -1,0 +1,11 @@
+public class TaktBomMaterialCostTransposedDto
+{
+    /// <summary>
+    /// 工厂代码
+    /// </summary>
+    public string PlantCode { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 产品编码
+    /// </summary>
+    public string ProductCode { get; set; } = string.Empty;

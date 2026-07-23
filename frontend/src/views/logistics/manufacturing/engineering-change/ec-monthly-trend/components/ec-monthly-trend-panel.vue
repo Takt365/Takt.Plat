@@ -32,12 +32,6 @@
           <template v-if="String(column.key).startsWith('period_')">
             {{ formatPeriodCount(record, String(column.key)) }}
           </template>
-          <template v-else-if="column.key === 'ecDistinction'">
-            <TaktDictTag
-              dict-type="logistics_ec_distinction_category"
-              :value="(record as EcMonthlyTrend).ecDistinction"
-            />
-          </template>
           <template v-else-if="column.key === 'trend'">
             <span :class="trendClass(getTrend(record))">
               {{ trendLabel(getTrend(record)) }}
@@ -126,6 +120,8 @@ const props = defineProps<{
   plantCode?: string
   /** 年月区间 */
   periodRange?: [string, string] | null
+  /** 设变单号 */
+  ecNo?: string
   /** 区分 */
   ecDistinction?: number
   /** 变更状态 */
@@ -172,7 +168,7 @@ const hasQuery = computed(() => !!props.plantCode?.trim())
 
 /** 标识列 */
 const idColumnKey = computed(() =>
-  props.activeTab === 'implement' ? 'deptCode' : 'ecDistinction',
+  props.activeTab === 'implement' ? 'deptCode' : 'ecNo',
 )
 
 /** 摘要 */
@@ -253,9 +249,17 @@ const columns = computed<TableColumnsType>(() => {
       fixed: 'left',
     },
     {
-      title: t('entity.ec.distinction'),
-      dataIndex: 'ecDistinction',
-      key: 'ecDistinction',
+      title: t('entity.ecgijutsu.ecno'),
+      dataIndex: 'ecNo',
+      key: 'ecNo',
+      width: 140,
+      ellipsis: true,
+      fixed: 'left',
+    },
+    {
+      title: t(`${localePrefix}.deptCode`),
+      dataIndex: 'deptCode',
+      key: 'deptCode',
       width: 120,
       ellipsis: true,
       fixed: 'left',
@@ -311,7 +315,7 @@ function getRowKey(record: EcTrendRow): string {
     return `${row.plantCode}|${row.deptCode}`
   }
   const row = record as EcMonthlyTrend
-  return `${row.plantCode}|${row.ecDistinction}`
+  return `${row.plantCode}|${row.ecNo}|${row.deptCode}`
 }
 
 /**
@@ -436,6 +440,8 @@ function buildIssueQuery() {
   }
   return {
     plantCode: plant,
+    ecNo: props.ecNo?.trim() || undefined,
+    deptCode: props.deptCode?.trim() || undefined,
     ecDistinction: props.ecDistinction,
     changeStatus: props.changeStatus,
     ecStatus: props.ecStatus,

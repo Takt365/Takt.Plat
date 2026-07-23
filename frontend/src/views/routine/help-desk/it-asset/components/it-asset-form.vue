@@ -138,12 +138,12 @@
             </a-col>
             <a-col :span="12">
               <a-form-item
-                :label="t('entity.itasset.warrantycontractno')"
-                name="warrantyContractNo"
+                :label="t('entity.itasset.warrantyContractCode')"
+                name="warrantyContractCode"
               >
                 <a-input
-                  v-model:value="formState.warrantyContractNo"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.itasset.warrantycontractno') })"
+                  v-model:value="formState.warrantyContractCode"
+                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.itasset.warrantyContractCode') })"
                   show-count
                   :maxlength="100"
                   allow-clear
@@ -329,7 +329,7 @@ const formContentClass = computed(() => (formFields.length > 10 ? 'takt-form-con
 /** 当前激活的 Tab key */
 const activeTab = ref('tab-0')
 /** CreateDto 字段名列表（与 formState 键对齐） */
-const formFields = ["tenantCode","companyCode","companyDefaultCulture","assetCode","warrantyType","warrantyStartDate","warrantyExpiryDate","warrantyProvider","warrantyContractNo","serviceHotline","serviceEmail","maintenanceExpiryDate","lastMaintenanceDate","nextMaintenanceDate","warrantyRemark","extField","remark"]
+const formFields = ["tenantCode","companyCode","companyDefaultCulture","assetCode","warrantyType","warrantyStartDate","warrantyExpiryDate","warrantyProvider","warrantyContractCode","serviceHotline","serviceEmail","maintenanceExpiryDate","lastMaintenanceDate","nextMaintenanceDate","warrantyRemark","extField","remark"]
 
 
 /** 父级传入的编辑 DTO；新增时为 undefined 或空对象 */

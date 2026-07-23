@@ -26,7 +26,7 @@ namespace Takt.Domain.Entities.Logistics.Serial;
 public class TaktSerialOutboundItem : TaktCompanyEntityBase
 {
     /// <summary>
-    /// 出库主表 ID（选项 TaktSerialOutbounds/options，DictValue=Id）
+    /// 出库主表 ID（选项 TaktSerialOutbounds/options；DictValue=Id）
     /// </summary>
     [SugarColumn(ColumnName = "outbound_id", ColumnDescription = "出库ID", ColumnDataType = "bigint", IsNullable = false)]
     [JsonConverter(typeof(ValueToStringConverter))]
@@ -47,13 +47,13 @@ public class TaktSerialOutboundItem : TaktCompanyEntityBase
     [SugarColumn(ColumnName = "outbound_serial_no", ColumnDescription = "出库序列号", ColumnDataType = "nvarchar", Length = 100, IsNullable = false)]
     public string OutboundSerialNo { get; set; } = string.Empty;
     /// <summary>
-    /// 关联入库主表 ID（选项 TaktSerialInbounds/options，DictValue=Id）
+    /// 关联入库主表 ID（选项 TaktSerialInbounds/options；DictValue=Id）
     /// </summary>
     [SugarColumn(ColumnName = "reference_inbound_id", ColumnDescription = "关联入库ID", ColumnDataType = "bigint", IsNullable = false, DefaultValue = "0")]
     [JsonConverter(typeof(ValueToStringConverter))]
     public long ReferenceInboundId { get; set; }
     /// <summary>
-    /// 关联入库单号（选项 TaktSerialInbounds/options，DictValue=InboundNo）
+    /// 关联入库单号（选项 TaktSerialInbounds/options；DictValue=InboundNo）
     /// </summary>
     [SugarColumn(ColumnName = "reference_inbound_no", ColumnDescription = "关联入库单号", ColumnDataType = "nvarchar", Length = 50, IsNullable = false, DefaultValue = "")]
     public string ReferenceInboundNo { get; set; } = string.Empty;
@@ -64,7 +64,7 @@ public class TaktSerialOutboundItem : TaktCompanyEntityBase
     public int ReferenceInboundLineNumber { get; set; } = 0;
 
     /// <summary>
-    /// 是否作废（字典 sys_yes_no_type，0=否 1=是；编辑移除子行时标记作废）
+    /// 是否作废（字典 sys_yes_no_type；0=否 1=是；编辑移除子行时标记作废）
     /// </summary>
     [SugarColumn(ColumnName = "is_obsolete", ColumnDescription = "是否作废", ColumnDataType = "int", IsNullable = false, DefaultValue = "0")]
     public int IsObsolete { get; set; } = 0;

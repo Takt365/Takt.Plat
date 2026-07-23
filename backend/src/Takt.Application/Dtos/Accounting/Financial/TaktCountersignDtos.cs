@@ -36,7 +36,7 @@ public class TaktCountersignDto : TaktApprovalDtoBase
     public long CountersignId { get; set; }
 
     /// <summary>
-    /// 会签编号
+    /// 会签编码
     /// </summary>
     public string CountersignCode { get; set; } = string.Empty;
 
@@ -186,7 +186,7 @@ public class TaktCountersignQueryDto : TaktPagedQuery
     public string? CompanyCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 会签编号
+    /// 会签编码
     /// </summary>
     public string? CountersignCode { get; set; } = string.Empty;
 
@@ -391,9 +391,9 @@ public class TaktCountersignCreateDto
     public string CompanyDefaultCulture { get; set; } = string.Empty;
 
     /// <summary>
-    /// 会签编号
+    /// 会签编码
     /// </summary>
-    [Required(ErrorMessage = "会签编号不能为空")]
+    [Required(ErrorMessage = "会签编码不能为空")]
     public string CountersignCode { get; set; } = string.Empty;
 
     /// <summary>
@@ -590,7 +590,7 @@ public class TaktCountersignTemplateDto
     public string? CompanyCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 会签编号
+    /// 会签编码
     /// </summary>
     public string? CountersignCode { get; set; } = string.Empty;
 
@@ -744,7 +744,7 @@ public class TaktCountersignImportDto
     public string? CompanyDefaultCulture { get; set; } = string.Empty;
 
     /// <summary>
-    /// 会签编号
+    /// 会签编码
     /// </summary>
     public string? CountersignCode { get; set; } = string.Empty;
 
@@ -894,7 +894,7 @@ public class TaktCountersignExportDto
     public long CountersignId { get; set; }
 
     /// <summary>
-    /// 会签编号
+    /// 会签编码
     /// </summary>
     public string CountersignCode { get; set; } = string.Empty;
 

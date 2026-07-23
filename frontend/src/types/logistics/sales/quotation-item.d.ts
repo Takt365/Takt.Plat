@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：frontend/src/types/logistics/sales
 // 文件名称：quotation-item.d.ts
-// 创建时间：2026-07-09
+// 创建时间：2026-07-23
 // 创建人：Takt365(Auto Generated)
 // 功能描述：logistics/sales 模块类型定义（自动生成；类型名去 Takt 前缀与末尾 Dto，如 TaktCompanyDto → Company）
 // 
@@ -29,12 +29,12 @@ export interface SalesQuotationItem extends CompanyDtoBase {
   salesQuotationItemId: string;
 
   /**
-   * 销售报价（关联 TaktSalesQuotation.Id，选项 TaktSalesQuotations/options）
+   * 销售报价（选项 TaktSalesQuotations/options；DictValue=Id）
    */
   salesQuotationId: string;
 
   /**
-   * 销售报价（关联 TaktSalesQuotation.Id，选项 TaktSalesQuotations/options）
+   * 销售报价（选项 TaktSalesQuotations/options；DictValue=Id）
    */
   salesQuotationName?: string;
 
@@ -49,22 +49,22 @@ export interface SalesQuotationItem extends CompanyDtoBase {
   lineNumber: number;
 
   /**
-   * 物料编码（选项 TaktMaterials/options，DictValue=MaterialCode）
+   * 物料编码（选项 TaktMaterialPlants/options；DictValue=MaterialCode，ExtValue=PlantCode）
    */
   materialCode: string;
 
   /**
-   * 物料名称
+   * 物料名称（回填：随物料）
    */
   materialName: string;
 
   /**
-   * 物料规格
+   * 物料规格（回填：随物料）
    */
   materialSpecification?: string;
 
   /**
-   * 销售单位（字典 logistics_unit_of_measure_code，DictValue=PC/EA 等；默认 PC）
+   * 销售单位（字典 logistics_unit_of_measure_code；DictValue=PC/EA 等；默认 PC）
    */
   salesUnit: string;
 
@@ -79,9 +79,9 @@ export interface SalesQuotationItem extends CompanyDtoBase {
   salesPerUnit: number;
 
   /**
-   * 单价
+   * 报价单价
    */
-  unitPrice: number;
+  quotationUnitPrice: number;
 
   /**
    * 折扣率（字典 logistics_discount_rate_param 预设或手输；0-100，表示折扣百分比）
@@ -94,9 +94,14 @@ export interface SalesQuotationItem extends CompanyDtoBase {
   discountAmount: number;
 
   /**
-   * 税费率（字典 accounting_tax_rate_param 预设或手输；0-100，表示税费百分比）
+   * 含税金额
    */
-  taxRate: number;
+  taxIncludedAmount: number;
+
+  /**
+   * 未税金额
+   */
+  untaxedAmount: number;
 
   /**
    * 税费
@@ -104,12 +109,7 @@ export interface SalesQuotationItem extends CompanyDtoBase {
   taxAmount: number;
 
   /**
-   * 小计金额
-   */
-  subtotalAmount: number;
-
-  /**
-   * 是否作废（字典 sys_yes_no_type，0=否 1=是；编辑移除子行时标记作废）
+   * 是否作废（字典 sys_yes_no_type；0=否 1=是；编辑移除子行时标记作废）
    */
   isObsolete: number;
 
@@ -139,7 +139,7 @@ export interface SalesQuotationItemQuery extends TaktPagedQuery {
   companyCode?: string;
 
   /**
-   * 销售报价（关联 TaktSalesQuotation.Id，选项 TaktSalesQuotations/options）
+   * 销售报价（选项 TaktSalesQuotations/options；DictValue=Id）
    */
   salesQuotationId?: string;
 
@@ -154,22 +154,22 @@ export interface SalesQuotationItemQuery extends TaktPagedQuery {
   lineNumber?: number;
 
   /**
-   * 物料编码（选项 TaktMaterials/options，DictValue=MaterialCode）
+   * 物料编码（选项 TaktMaterialPlants/options；DictValue=MaterialCode，ExtValue=PlantCode）
    */
   materialCode?: string;
 
   /**
-   * 物料名称
+   * 物料名称（回填：随物料）
    */
   materialName?: string;
 
   /**
-   * 物料规格
+   * 物料规格（回填：随物料）
    */
   materialSpecification?: string;
 
   /**
-   * 销售单位（字典 logistics_unit_of_measure_code，DictValue=PC/EA 等；默认 PC）
+   * 销售单位（字典 logistics_unit_of_measure_code；DictValue=PC/EA 等；默认 PC）
    */
   salesUnit?: string;
 
@@ -184,9 +184,9 @@ export interface SalesQuotationItemQuery extends TaktPagedQuery {
   salesPerUnit?: number;
 
   /**
-   * 单价
+   * 报价单价
    */
-  unitPrice?: number;
+  quotationUnitPrice?: number;
 
   /**
    * 折扣率（字典 logistics_discount_rate_param 预设或手输；0-100，表示折扣百分比）
@@ -199,9 +199,14 @@ export interface SalesQuotationItemQuery extends TaktPagedQuery {
   discountAmount?: number;
 
   /**
-   * 税费率（字典 accounting_tax_rate_param 预设或手输；0-100，表示税费百分比）
+   * 含税金额
    */
-  taxRate?: number;
+  taxIncludedAmount?: number;
+
+  /**
+   * 未税金额
+   */
+  untaxedAmount?: number;
 
   /**
    * 税费
@@ -209,12 +214,7 @@ export interface SalesQuotationItemQuery extends TaktPagedQuery {
   taxAmount?: number;
 
   /**
-   * 小计金额
-   */
-  subtotalAmount?: number;
-
-  /**
-   * 是否作废（字典 sys_yes_no_type，0=否 1=是；编辑移除子行时标记作废）
+   * 是否作废（字典 sys_yes_no_type；0=否 1=是；编辑移除子行时标记作废）
    */
   isObsolete?: number;
 
@@ -263,7 +263,7 @@ export interface SalesQuotationItemCreate {
   companyDefaultCulture: string;
 
   /**
-   * 销售报价（关联 TaktSalesQuotation.Id，选项 TaktSalesQuotations/options）
+   * 销售报价（选项 TaktSalesQuotations/options；DictValue=Id）
    */
   salesQuotationId: string;
 
@@ -278,22 +278,22 @@ export interface SalesQuotationItemCreate {
   lineNumber: number;
 
   /**
-   * 物料编码（选项 TaktMaterials/options，DictValue=MaterialCode）
+   * 物料编码（选项 TaktMaterialPlants/options；DictValue=MaterialCode，ExtValue=PlantCode）
    */
   materialCode: string;
 
   /**
-   * 物料名称
+   * 物料名称（回填：随物料）
    */
   materialName: string;
 
   /**
-   * 物料规格
+   * 物料规格（回填：随物料）
    */
   materialSpecification?: string;
 
   /**
-   * 销售单位（字典 logistics_unit_of_measure_code，DictValue=PC/EA 等；默认 PC）
+   * 销售单位（字典 logistics_unit_of_measure_code；DictValue=PC/EA 等；默认 PC）
    */
   salesUnit: string;
 
@@ -308,9 +308,9 @@ export interface SalesQuotationItemCreate {
   salesPerUnit: number;
 
   /**
-   * 单价
+   * 报价单价
    */
-  unitPrice: number;
+  quotationUnitPrice: number;
 
   /**
    * 折扣率（字典 logistics_discount_rate_param 预设或手输；0-100，表示折扣百分比）
@@ -323,9 +323,14 @@ export interface SalesQuotationItemCreate {
   discountAmount: number;
 
   /**
-   * 税费率（字典 accounting_tax_rate_param 预设或手输；0-100，表示税费百分比）
+   * 含税金额
    */
-  taxRate: number;
+  taxIncludedAmount: number;
+
+  /**
+   * 未税金额
+   */
+  untaxedAmount: number;
 
   /**
    * 税费
@@ -333,12 +338,7 @@ export interface SalesQuotationItemCreate {
   taxAmount: number;
 
   /**
-   * 小计金额
-   */
-  subtotalAmount: number;
-
-  /**
-   * 是否作废（字典 sys_yes_no_type，0=否 1=是；编辑移除子行时标记作废）
+   * 是否作废（字典 sys_yes_no_type；0=否 1=是；编辑移除子行时标记作废）
    */
   isObsolete: number;
 
@@ -406,7 +406,7 @@ export interface SalesQuotationItemTemplate {
   companyCode?: string;
 
   /**
-   * 销售报价（关联 TaktSalesQuotation.Id，选项 TaktSalesQuotations/options）
+   * 销售报价（选项 TaktSalesQuotations/options；DictValue=Id）
    */
   salesQuotationId?: string;
 
@@ -421,22 +421,22 @@ export interface SalesQuotationItemTemplate {
   lineNumber?: number;
 
   /**
-   * 物料编码（选项 TaktMaterials/options，DictValue=MaterialCode）
+   * 物料编码（选项 TaktMaterialPlants/options；DictValue=MaterialCode，ExtValue=PlantCode）
    */
   materialCode?: string;
 
   /**
-   * 物料名称
+   * 物料名称（回填：随物料）
    */
   materialName?: string;
 
   /**
-   * 物料规格
+   * 物料规格（回填：随物料）
    */
   materialSpecification?: string;
 
   /**
-   * 销售单位（字典 logistics_unit_of_measure_code，DictValue=PC/EA 等；默认 PC）
+   * 销售单位（字典 logistics_unit_of_measure_code；DictValue=PC/EA 等；默认 PC）
    */
   salesUnit?: string;
 
@@ -451,9 +451,9 @@ export interface SalesQuotationItemTemplate {
   salesPerUnit?: number;
 
   /**
-   * 单价
+   * 报价单价
    */
-  unitPrice?: number;
+  quotationUnitPrice?: number;
 
   /**
    * 折扣率（字典 logistics_discount_rate_param 预设或手输；0-100，表示折扣百分比）
@@ -466,9 +466,14 @@ export interface SalesQuotationItemTemplate {
   discountAmount?: number;
 
   /**
-   * 税费率（字典 accounting_tax_rate_param 预设或手输；0-100，表示税费百分比）
+   * 含税金额
    */
-  taxRate?: number;
+  taxIncludedAmount?: number;
+
+  /**
+   * 未税金额
+   */
+  untaxedAmount?: number;
 
   /**
    * 税费
@@ -476,12 +481,7 @@ export interface SalesQuotationItemTemplate {
   taxAmount?: number;
 
   /**
-   * 小计金额
-   */
-  subtotalAmount?: number;
-
-  /**
-   * 是否作废（字典 sys_yes_no_type，0=否 1=是；编辑移除子行时标记作废）
+   * 是否作废（字典 sys_yes_no_type；0=否 1=是；编辑移除子行时标记作废）
    */
   isObsolete?: number;
 
@@ -520,7 +520,7 @@ export interface SalesQuotationItemImport {
   companyDefaultCulture?: string;
 
   /**
-   * 销售报价（关联 TaktSalesQuotation.Id，选项 TaktSalesQuotations/options）
+   * 销售报价（选项 TaktSalesQuotations/options；DictValue=Id）
    */
   salesQuotationId?: string;
 
@@ -535,22 +535,22 @@ export interface SalesQuotationItemImport {
   lineNumber?: number;
 
   /**
-   * 物料编码（选项 TaktMaterials/options，DictValue=MaterialCode）
+   * 物料编码（选项 TaktMaterialPlants/options；DictValue=MaterialCode，ExtValue=PlantCode）
    */
   materialCode?: string;
 
   /**
-   * 物料名称
+   * 物料名称（回填：随物料）
    */
   materialName?: string;
 
   /**
-   * 物料规格
+   * 物料规格（回填：随物料）
    */
   materialSpecification?: string;
 
   /**
-   * 销售单位（字典 logistics_unit_of_measure_code，DictValue=PC/EA 等；默认 PC）
+   * 销售单位（字典 logistics_unit_of_measure_code；DictValue=PC/EA 等；默认 PC）
    */
   salesUnit?: string;
 
@@ -565,9 +565,9 @@ export interface SalesQuotationItemImport {
   salesPerUnit?: number;
 
   /**
-   * 单价
+   * 报价单价
    */
-  unitPrice?: number;
+  quotationUnitPrice?: number;
 
   /**
    * 折扣率（字典 logistics_discount_rate_param 预设或手输；0-100，表示折扣百分比）
@@ -580,9 +580,14 @@ export interface SalesQuotationItemImport {
   discountAmount?: number;
 
   /**
-   * 税费率（字典 accounting_tax_rate_param 预设或手输；0-100，表示税费百分比）
+   * 含税金额
    */
-  taxRate?: number;
+  taxIncludedAmount?: number;
+
+  /**
+   * 未税金额
+   */
+  untaxedAmount?: number;
 
   /**
    * 税费
@@ -590,12 +595,7 @@ export interface SalesQuotationItemImport {
   taxAmount?: number;
 
   /**
-   * 小计金额
-   */
-  subtotalAmount?: number;
-
-  /**
-   * 是否作废（字典 sys_yes_no_type，0=否 1=是；编辑移除子行时标记作废）
+   * 是否作废（字典 sys_yes_no_type；0=否 1=是；编辑移除子行时标记作废）
    */
   isObsolete?: number;
 
@@ -629,7 +629,7 @@ export interface SalesQuotationItemExport {
   companyCode: string;
 
   /**
-   * 销售报价（关联 TaktSalesQuotation.Id，选项 TaktSalesQuotations/options）
+   * 销售报价（选项 TaktSalesQuotations/options；DictValue=Id）
    */
   salesQuotationId: string;
 
@@ -644,22 +644,22 @@ export interface SalesQuotationItemExport {
   lineNumber: number;
 
   /**
-   * 物料编码（选项 TaktMaterials/options，DictValue=MaterialCode）
+   * 物料编码（选项 TaktMaterialPlants/options；DictValue=MaterialCode，ExtValue=PlantCode）
    */
   materialCode: string;
 
   /**
-   * 物料名称
+   * 物料名称（回填：随物料）
    */
   materialName: string;
 
   /**
-   * 物料规格
+   * 物料规格（回填：随物料）
    */
   materialSpecification?: string;
 
   /**
-   * 销售单位（字典 logistics_unit_of_measure_code，DictValue=PC/EA 等；默认 PC）
+   * 销售单位（字典 logistics_unit_of_measure_code；DictValue=PC/EA 等；默认 PC）
    */
   salesUnit: string;
 
@@ -674,9 +674,9 @@ export interface SalesQuotationItemExport {
   salesPerUnit: number;
 
   /**
-   * 单价
+   * 报价单价
    */
-  unitPrice: number;
+  quotationUnitPrice: number;
 
   /**
    * 折扣率（字典 logistics_discount_rate_param 预设或手输；0-100，表示折扣百分比）
@@ -689,9 +689,14 @@ export interface SalesQuotationItemExport {
   discountAmount: number;
 
   /**
-   * 税费率（字典 accounting_tax_rate_param 预设或手输；0-100，表示税费百分比）
+   * 含税金额
    */
-  taxRate: number;
+  taxIncludedAmount: number;
+
+  /**
+   * 未税金额
+   */
+  untaxedAmount: number;
 
   /**
    * 税费
@@ -699,12 +704,7 @@ export interface SalesQuotationItemExport {
   taxAmount: number;
 
   /**
-   * 小计金额
-   */
-  subtotalAmount: number;
-
-  /**
-   * 是否作废（字典 sys_yes_no_type，0=否 1=是；编辑移除子行时标记作废）
+   * 是否作废（字典 sys_yes_no_type；0=否 1=是；编辑移除子行时标记作废）
    */
   isObsolete: number;
 

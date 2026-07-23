@@ -215,13 +215,13 @@
         />
       </a-form-item>
       </div>
-      <div v-show="isFieldVisible('customerName')">
-      <a-form-item :label="pi.queryLabel('customerName')">
+      <div v-show="isFieldVisible('customerName1')">
+      <a-form-item :label="pi.queryLabel('customerName1')">
         <a-input
-          v-model:value="advancedQueryForm.customerName"
-          :placeholder="pi.queryPh('customerName', 'required')"
+          v-model:value="advancedQueryForm.customerName1"
+          :placeholder="pi.queryPh('customerName1', 'required')"
           show-count
-          :maxlength="200"
+          :maxlength="140"
           allow-clear
         />
       </a-form-item>
@@ -793,13 +793,13 @@ const columns = computed<TableColumnsType>(() => [
     customRender: ({ record }: { record: any }) => getSalesForecastField(record, 'customerCode') ?? ''
   },
   {
-    title: pi.label('customerName'),
-    dataIndex: 'customerName',
-    key: 'customerName',
+    title: pi.label('customerName1'),
+    dataIndex: 'customerName1',
+    key: 'customerName1',
     width: 120,
     resizable: true,
     ellipsis: true,
-    customRender: ({ record }: { record: any }) => getSalesForecastField(record, 'customerName') ?? ''
+    customRender: ({ record }: { record: any }) => getSalesForecastField(record, 'customerName1') ?? ''
   },
   {
     title: pi.label('plannerId'),
@@ -1004,7 +1004,7 @@ function handleReset() {
   planPeriodEndStart: '',
   planPeriodEndEnd: '',
   customerCode: '',
-  customerName: '',
+  customerName1: '',
   plannerId: '',
   planBy: '',
   totalQuantity: undefined as number | undefined,
@@ -1253,7 +1253,7 @@ function handleAdvancedQueryReset() {
   planPeriodEndStart: '',
   planPeriodEndEnd: '',
   customerCode: '',
-  customerName: '',
+  customerName1: '',
   plannerId: '',
   planBy: '',
   totalQuantity: undefined as number | undefined,

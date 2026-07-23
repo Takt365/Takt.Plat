@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：frontend/src/types/logistics/materials
 // 文件名称：plant.d.ts
-// 创建时间：2026-07-01
+// 创建时间：2026-07-23
 // 创建人：Takt365(Auto Generated)
 // 功能描述：logistics/materials 模块类型定义（自动生成；类型名去 Takt 前缀与末尾 Dto，如 TaktCompanyDto → Company）
 // 
@@ -34,9 +34,14 @@ export interface Plant extends TenantDtoBase {
   plantCode: string;
 
   /**
-   * 工厂名称
+   * 工厂名称1
    */
-  plantName: string;
+  plantName1: string;
+
+  /**
+   * 工厂名称2
+   */
+  plantName2?: string;
 
   /**
    * 工厂简称
@@ -49,22 +54,22 @@ export interface Plant extends TenantDtoBase {
   codeAlias: string;
 
   /**
-   * 区域文化编码（字典 sys_culture_code，选项 TaktCultures/options，DictValue=CultureCode）
+   * 区域文化编码（字典 sys_culture_code；选项 TaktCultures/options，DictValue=CultureCode；即语言/区域文化）
    */
   defaultCulture: string;
 
   /**
-   * 企业性质（字典 sys_enterprise_nature_type，DictValue=150 等）
+   * 企业性质（字典 sys_enterprise_nature_type；DictValue=150 等）
    */
   enterpriseNature: string;
 
   /**
-   * 行业属性（字典 sys_industry_attribute_type，DictValue=C 等）
+   * 行业属性（字典 sys_industry_attribute_type；DictValue=C 等）
    */
   industryAttribute: string;
 
   /**
-   * 企业规模（字典 sys_enterprise_scale_type，DictValue=M 等）
+   * 企业规模（字典 sys_enterprise_scale_type；DictValue=M 等）
    */
   enterpriseScale: string;
 
@@ -84,37 +89,32 @@ export interface Plant extends TenantDtoBase {
   registrationAddress2?: string;
 
   /**
-   * 注册地址3
-   */
-  registrationAddress3?: string;
-
-  /**
-   * 注册国家
+   * 注册国家（字典 sys_country_code；DictValue=ISO alpha-2）
    */
   registrationRegion: string;
 
   /**
-   * 注册省
+   * 注册省（选项 TaktAdminDivisions/options；DictValue=DivisionCode；建议 Level=2）
    */
   registrationProvince: string;
 
   /**
-   * 注册市
+   * 注册市（选项 TaktAdminDivisions/options；DictValue=DivisionCode；建议 Level=3）
    */
   registrationCity: string;
 
   /**
-   * 经营国家
+   * 经营国家（字典 sys_country_code；DictValue=ISO alpha-2）
    */
   businessRegion: string;
 
   /**
-   * 经营地区-省
+   * 经营地区-省（选项 TaktAdminDivisions/options；DictValue=DivisionCode；建议 Level=2）
    */
   businessProvince: string;
 
   /**
-   * 经营地区-市
+   * 经营地区-市（选项 TaktAdminDivisions/options；DictValue=DivisionCode；建议 Level=3）
    */
   businessCity: string;
 
@@ -129,11 +129,6 @@ export interface Plant extends TenantDtoBase {
   businessAddress2?: string;
 
   /**
-   * 经营地址3
-   */
-  businessAddress3?: string;
-
-  /**
    * 工厂地址1
    */
   plantAddress1?: string;
@@ -142,11 +137,6 @@ export interface Plant extends TenantDtoBase {
    * 工厂地址2
    */
   plantAddress2?: string;
-
-  /**
-   * 工厂地址3
-   */
-  plantAddress3?: string;
 
   /**
    * 工厂电话
@@ -209,7 +199,72 @@ export interface Plant extends TenantDtoBase {
   plantExistence: number;
 
   /**
-   * 关联公司（关联 TaktCompany.CompanyCode，选项 TaktCompanies/options）
+   * 银行代码（选项 TaktBanks/options；DictValue=BankCode）
+   */
+  bankCode: string;
+
+  /**
+   * 银行帐号
+   */
+  bankAccount: string;
+
+  /**
+   * 帐户持有人
+   */
+  accountHolder: string;
+
+  /**
+   * 采购组织（选项 TaktPlants/options；DictValue=PlantCode）
+   */
+  purchasingOrganization: string;
+
+  /**
+   * 销售组织（选项 TaktCompanies/options；DictValue=CompanyCode）
+   */
+  salesOrganization: string;
+
+  /**
+   * 物料需求计划（MRP 范围/控制；对齐）
+   */
+  materialRequirementsPlanning: string;
+
+  /**
+   * 分销渠道
+   */
+  distributionChannel: string;
+
+  /**
+   * 公司间出具发票产品组（产品组/Division）
+   */
+  intercompanyBillingProductGroup: string;
+
+  /**
+   * 税收标识
+   */
+  taxIndicator: string;
+
+  /**
+   * 评估范围（选项 TaktPlants/options；DictValue=PlantCode；常与工厂代码相同）
+   */
+  valuationArea: string;
+
+  /**
+   * 工厂供应商号码（工厂作为供应商）
+   */
+  plantVendorNumber: string;
+
+  /**
+   * 客户编码-工厂（工厂作为客户）
+   */
+  plantCustomerNumber: string;
+
+  /**
+   * 工厂日历
+   */
+  factoryCalendar: string;
+
+  /**
+   * 关联公司（选项 TaktCompanies/options；DictValue=Id）
    */
   relatedCompany: string;
 
@@ -244,9 +299,14 @@ export interface PlantQuery extends TaktPagedQuery {
   plantCode?: string;
 
   /**
-   * 工厂名称
+   * 工厂名称1
    */
-  plantName?: string;
+  plantName1?: string;
+
+  /**
+   * 工厂名称2
+   */
+  plantName2?: string;
 
   /**
    * 工厂简称
@@ -259,22 +319,22 @@ export interface PlantQuery extends TaktPagedQuery {
   codeAlias?: string;
 
   /**
-   * 区域文化编码（字典 sys_culture_code，选项 TaktCultures/options，DictValue=CultureCode）
+   * 区域文化编码（字典 sys_culture_code；选项 TaktCultures/options，DictValue=CultureCode；即语言/区域文化）
    */
   defaultCulture?: string;
 
   /**
-   * 企业性质（字典 sys_enterprise_nature_type，DictValue=150 等）
+   * 企业性质（字典 sys_enterprise_nature_type；DictValue=150 等）
    */
   enterpriseNature?: string;
 
   /**
-   * 行业属性（字典 sys_industry_attribute_type，DictValue=C 等）
+   * 行业属性（字典 sys_industry_attribute_type；DictValue=C 等）
    */
   industryAttribute?: string;
 
   /**
-   * 企业规模（字典 sys_enterprise_scale_type，DictValue=M 等）
+   * 企业规模（字典 sys_enterprise_scale_type；DictValue=M 等）
    */
   enterpriseScale?: string;
 
@@ -294,37 +354,32 @@ export interface PlantQuery extends TaktPagedQuery {
   registrationAddress2?: string;
 
   /**
-   * 注册地址3
-   */
-  registrationAddress3?: string;
-
-  /**
-   * 注册国家
+   * 注册国家（字典 sys_country_code；DictValue=ISO alpha-2）
    */
   registrationRegion?: string;
 
   /**
-   * 注册省
+   * 注册省（选项 TaktAdminDivisions/options；DictValue=DivisionCode；建议 Level=2）
    */
   registrationProvince?: string;
 
   /**
-   * 注册市
+   * 注册市（选项 TaktAdminDivisions/options；DictValue=DivisionCode；建议 Level=3）
    */
   registrationCity?: string;
 
   /**
-   * 经营国家
+   * 经营国家（字典 sys_country_code；DictValue=ISO alpha-2）
    */
   businessRegion?: string;
 
   /**
-   * 经营地区-省
+   * 经营地区-省（选项 TaktAdminDivisions/options；DictValue=DivisionCode；建议 Level=2）
    */
   businessProvince?: string;
 
   /**
-   * 经营地区-市
+   * 经营地区-市（选项 TaktAdminDivisions/options；DictValue=DivisionCode；建议 Level=3）
    */
   businessCity?: string;
 
@@ -339,11 +394,6 @@ export interface PlantQuery extends TaktPagedQuery {
   businessAddress2?: string;
 
   /**
-   * 经营地址3
-   */
-  businessAddress3?: string;
-
-  /**
    * 工厂地址1
    */
   plantAddress1?: string;
@@ -352,11 +402,6 @@ export interface PlantQuery extends TaktPagedQuery {
    * 工厂地址2
    */
   plantAddress2?: string;
-
-  /**
-   * 工厂地址3
-   */
-  plantAddress3?: string;
 
   /**
    * 工厂电话
@@ -429,7 +474,72 @@ export interface PlantQuery extends TaktPagedQuery {
   plantExistence?: number;
 
   /**
-   * 关联公司（关联 TaktCompany.CompanyCode，选项 TaktCompanies/options）
+   * 银行代码（选项 TaktBanks/options；DictValue=BankCode）
+   */
+  bankCode?: string;
+
+  /**
+   * 银行帐号
+   */
+  bankAccount?: string;
+
+  /**
+   * 帐户持有人
+   */
+  accountHolder?: string;
+
+  /**
+   * 采购组织（选项 TaktPlants/options；DictValue=PlantCode）
+   */
+  purchasingOrganization?: string;
+
+  /**
+   * 销售组织（选项 TaktCompanies/options；DictValue=CompanyCode）
+   */
+  salesOrganization?: string;
+
+  /**
+   * 物料需求计划（MRP 范围/控制；对齐）
+   */
+  materialRequirementsPlanning?: string;
+
+  /**
+   * 分销渠道
+   */
+  distributionChannel?: string;
+
+  /**
+   * 公司间出具发票产品组（产品组/Division）
+   */
+  intercompanyBillingProductGroup?: string;
+
+  /**
+   * 税收标识
+   */
+  taxIndicator?: string;
+
+  /**
+   * 评估范围（选项 TaktPlants/options；DictValue=PlantCode；常与工厂代码相同）
+   */
+  valuationArea?: string;
+
+  /**
+   * 工厂供应商号码（工厂作为供应商）
+   */
+  plantVendorNumber?: string;
+
+  /**
+   * 客户编码-工厂（工厂作为客户）
+   */
+  plantCustomerNumber?: string;
+
+  /**
+   * 工厂日历
+   */
+  factoryCalendar?: string;
+
+  /**
+   * 关联公司（选项 TaktCompanies/options；DictValue=Id）
    */
   relatedCompany?: string;
 
@@ -483,9 +593,14 @@ export interface PlantCreate {
   plantCode: string;
 
   /**
-   * 工厂名称
+   * 工厂名称1
    */
-  plantName: string;
+  plantName1: string;
+
+  /**
+   * 工厂名称2
+   */
+  plantName2?: string;
 
   /**
    * 工厂简称
@@ -498,22 +613,22 @@ export interface PlantCreate {
   codeAlias: string;
 
   /**
-   * 区域文化编码（字典 sys_culture_code，选项 TaktCultures/options，DictValue=CultureCode）
+   * 区域文化编码（字典 sys_culture_code；选项 TaktCultures/options，DictValue=CultureCode；即语言/区域文化）
    */
   defaultCulture: string;
 
   /**
-   * 企业性质（字典 sys_enterprise_nature_type，DictValue=150 等）
+   * 企业性质（字典 sys_enterprise_nature_type；DictValue=150 等）
    */
   enterpriseNature: string;
 
   /**
-   * 行业属性（字典 sys_industry_attribute_type，DictValue=C 等）
+   * 行业属性（字典 sys_industry_attribute_type；DictValue=C 等）
    */
   industryAttribute: string;
 
   /**
-   * 企业规模（字典 sys_enterprise_scale_type，DictValue=M 等）
+   * 企业规模（字典 sys_enterprise_scale_type；DictValue=M 等）
    */
   enterpriseScale: string;
 
@@ -533,37 +648,32 @@ export interface PlantCreate {
   registrationAddress2?: string;
 
   /**
-   * 注册地址3
-   */
-  registrationAddress3?: string;
-
-  /**
-   * 注册国家
+   * 注册国家（字典 sys_country_code；DictValue=ISO alpha-2）
    */
   registrationRegion: string;
 
   /**
-   * 注册省
+   * 注册省（选项 TaktAdminDivisions/options；DictValue=DivisionCode；建议 Level=2）
    */
   registrationProvince: string;
 
   /**
-   * 注册市
+   * 注册市（选项 TaktAdminDivisions/options；DictValue=DivisionCode；建议 Level=3）
    */
   registrationCity: string;
 
   /**
-   * 经营国家
+   * 经营国家（字典 sys_country_code；DictValue=ISO alpha-2）
    */
   businessRegion: string;
 
   /**
-   * 经营地区-省
+   * 经营地区-省（选项 TaktAdminDivisions/options；DictValue=DivisionCode；建议 Level=2）
    */
   businessProvince: string;
 
   /**
-   * 经营地区-市
+   * 经营地区-市（选项 TaktAdminDivisions/options；DictValue=DivisionCode；建议 Level=3）
    */
   businessCity: string;
 
@@ -578,11 +688,6 @@ export interface PlantCreate {
   businessAddress2?: string;
 
   /**
-   * 经营地址3
-   */
-  businessAddress3?: string;
-
-  /**
    * 工厂地址1
    */
   plantAddress1?: string;
@@ -591,11 +696,6 @@ export interface PlantCreate {
    * 工厂地址2
    */
   plantAddress2?: string;
-
-  /**
-   * 工厂地址3
-   */
-  plantAddress3?: string;
 
   /**
    * 工厂电话
@@ -658,7 +758,72 @@ export interface PlantCreate {
   plantExistence: number;
 
   /**
-   * 关联公司（关联 TaktCompany.CompanyCode，选项 TaktCompanies/options）
+   * 银行代码（选项 TaktBanks/options；DictValue=BankCode）
+   */
+  bankCode: string;
+
+  /**
+   * 银行帐号
+   */
+  bankAccount: string;
+
+  /**
+   * 帐户持有人
+   */
+  accountHolder: string;
+
+  /**
+   * 采购组织（选项 TaktPlants/options；DictValue=PlantCode）
+   */
+  purchasingOrganization: string;
+
+  /**
+   * 销售组织（选项 TaktCompanies/options；DictValue=CompanyCode）
+   */
+  salesOrganization: string;
+
+  /**
+   * 物料需求计划（MRP 范围/控制；对齐）
+   */
+  materialRequirementsPlanning: string;
+
+  /**
+   * 分销渠道
+   */
+  distributionChannel: string;
+
+  /**
+   * 公司间出具发票产品组（产品组/Division）
+   */
+  intercompanyBillingProductGroup: string;
+
+  /**
+   * 税收标识
+   */
+  taxIndicator: string;
+
+  /**
+   * 评估范围（选项 TaktPlants/options；DictValue=PlantCode；常与工厂代码相同）
+   */
+  valuationArea: string;
+
+  /**
+   * 工厂供应商号码（工厂作为供应商）
+   */
+  plantVendorNumber: string;
+
+  /**
+   * 客户编码-工厂（工厂作为客户）
+   */
+  plantCustomerNumber: string;
+
+  /**
+   * 工厂日历
+   */
+  factoryCalendar: string;
+
+  /**
+   * 关联公司（选项 TaktCompanies/options；DictValue=Id）
    */
   relatedCompany: string;
 
@@ -750,9 +915,14 @@ export interface PlantTemplate {
   plantCode?: string;
 
   /**
-   * 工厂名称
+   * 工厂名称1
    */
-  plantName?: string;
+  plantName1?: string;
+
+  /**
+   * 工厂名称2
+   */
+  plantName2?: string;
 
   /**
    * 工厂简称
@@ -765,22 +935,22 @@ export interface PlantTemplate {
   codeAlias?: string;
 
   /**
-   * 区域文化编码（字典 sys_culture_code，选项 TaktCultures/options，DictValue=CultureCode）
+   * 区域文化编码（字典 sys_culture_code；选项 TaktCultures/options，DictValue=CultureCode；即语言/区域文化）
    */
   defaultCulture?: string;
 
   /**
-   * 企业性质（字典 sys_enterprise_nature_type，DictValue=150 等）
+   * 企业性质（字典 sys_enterprise_nature_type；DictValue=150 等）
    */
   enterpriseNature?: string;
 
   /**
-   * 行业属性（字典 sys_industry_attribute_type，DictValue=C 等）
+   * 行业属性（字典 sys_industry_attribute_type；DictValue=C 等）
    */
   industryAttribute?: string;
 
   /**
-   * 企业规模（字典 sys_enterprise_scale_type，DictValue=M 等）
+   * 企业规模（字典 sys_enterprise_scale_type；DictValue=M 等）
    */
   enterpriseScale?: string;
 
@@ -800,37 +970,32 @@ export interface PlantTemplate {
   registrationAddress2?: string;
 
   /**
-   * 注册地址3
-   */
-  registrationAddress3?: string;
-
-  /**
-   * 注册国家
+   * 注册国家（字典 sys_country_code；DictValue=ISO alpha-2）
    */
   registrationRegion?: string;
 
   /**
-   * 注册省
+   * 注册省（选项 TaktAdminDivisions/options；DictValue=DivisionCode；建议 Level=2）
    */
   registrationProvince?: string;
 
   /**
-   * 注册市
+   * 注册市（选项 TaktAdminDivisions/options；DictValue=DivisionCode；建议 Level=3）
    */
   registrationCity?: string;
 
   /**
-   * 经营国家
+   * 经营国家（字典 sys_country_code；DictValue=ISO alpha-2）
    */
   businessRegion?: string;
 
   /**
-   * 经营地区-省
+   * 经营地区-省（选项 TaktAdminDivisions/options；DictValue=DivisionCode；建议 Level=2）
    */
   businessProvince?: string;
 
   /**
-   * 经营地区-市
+   * 经营地区-市（选项 TaktAdminDivisions/options；DictValue=DivisionCode；建议 Level=3）
    */
   businessCity?: string;
 
@@ -845,11 +1010,6 @@ export interface PlantTemplate {
   businessAddress2?: string;
 
   /**
-   * 经营地址3
-   */
-  businessAddress3?: string;
-
-  /**
    * 工厂地址1
    */
   plantAddress1?: string;
@@ -858,11 +1018,6 @@ export interface PlantTemplate {
    * 工厂地址2
    */
   plantAddress2?: string;
-
-  /**
-   * 工厂地址3
-   */
-  plantAddress3?: string;
 
   /**
    * 工厂电话
@@ -925,7 +1080,72 @@ export interface PlantTemplate {
   plantExistence?: number;
 
   /**
-   * 关联公司（关联 TaktCompany.CompanyCode，选项 TaktCompanies/options）
+   * 银行代码（选项 TaktBanks/options；DictValue=BankCode）
+   */
+  bankCode?: string;
+
+  /**
+   * 银行帐号
+   */
+  bankAccount?: string;
+
+  /**
+   * 帐户持有人
+   */
+  accountHolder?: string;
+
+  /**
+   * 采购组织（选项 TaktPlants/options；DictValue=PlantCode）
+   */
+  purchasingOrganization?: string;
+
+  /**
+   * 销售组织（选项 TaktCompanies/options；DictValue=CompanyCode）
+   */
+  salesOrganization?: string;
+
+  /**
+   * 物料需求计划（MRP 范围/控制；对齐）
+   */
+  materialRequirementsPlanning?: string;
+
+  /**
+   * 分销渠道
+   */
+  distributionChannel?: string;
+
+  /**
+   * 公司间出具发票产品组（产品组/Division）
+   */
+  intercompanyBillingProductGroup?: string;
+
+  /**
+   * 税收标识
+   */
+  taxIndicator?: string;
+
+  /**
+   * 评估范围（选项 TaktPlants/options；DictValue=PlantCode；常与工厂代码相同）
+   */
+  valuationArea?: string;
+
+  /**
+   * 工厂供应商号码（工厂作为供应商）
+   */
+  plantVendorNumber?: string;
+
+  /**
+   * 客户编码-工厂（工厂作为客户）
+   */
+  plantCustomerNumber?: string;
+
+  /**
+   * 工厂日历
+   */
+  factoryCalendar?: string;
+
+  /**
+   * 关联公司（选项 TaktCompanies/options；DictValue=Id）
    */
   relatedCompany?: string;
 
@@ -964,9 +1184,14 @@ export interface PlantImport {
   plantCode?: string;
 
   /**
-   * 工厂名称
+   * 工厂名称1
    */
-  plantName?: string;
+  plantName1?: string;
+
+  /**
+   * 工厂名称2
+   */
+  plantName2?: string;
 
   /**
    * 工厂简称
@@ -979,22 +1204,22 @@ export interface PlantImport {
   codeAlias?: string;
 
   /**
-   * 区域文化编码（字典 sys_culture_code，选项 TaktCultures/options，DictValue=CultureCode）
+   * 区域文化编码（字典 sys_culture_code；选项 TaktCultures/options，DictValue=CultureCode；即语言/区域文化）
    */
   defaultCulture?: string;
 
   /**
-   * 企业性质（字典 sys_enterprise_nature_type，DictValue=150 等）
+   * 企业性质（字典 sys_enterprise_nature_type；DictValue=150 等）
    */
   enterpriseNature?: string;
 
   /**
-   * 行业属性（字典 sys_industry_attribute_type，DictValue=C 等）
+   * 行业属性（字典 sys_industry_attribute_type；DictValue=C 等）
    */
   industryAttribute?: string;
 
   /**
-   * 企业规模（字典 sys_enterprise_scale_type，DictValue=M 等）
+   * 企业规模（字典 sys_enterprise_scale_type；DictValue=M 等）
    */
   enterpriseScale?: string;
 
@@ -1014,37 +1239,32 @@ export interface PlantImport {
   registrationAddress2?: string;
 
   /**
-   * 注册地址3
-   */
-  registrationAddress3?: string;
-
-  /**
-   * 注册国家
+   * 注册国家（字典 sys_country_code；DictValue=ISO alpha-2）
    */
   registrationRegion?: string;
 
   /**
-   * 注册省
+   * 注册省（选项 TaktAdminDivisions/options；DictValue=DivisionCode；建议 Level=2）
    */
   registrationProvince?: string;
 
   /**
-   * 注册市
+   * 注册市（选项 TaktAdminDivisions/options；DictValue=DivisionCode；建议 Level=3）
    */
   registrationCity?: string;
 
   /**
-   * 经营国家
+   * 经营国家（字典 sys_country_code；DictValue=ISO alpha-2）
    */
   businessRegion?: string;
 
   /**
-   * 经营地区-省
+   * 经营地区-省（选项 TaktAdminDivisions/options；DictValue=DivisionCode；建议 Level=2）
    */
   businessProvince?: string;
 
   /**
-   * 经营地区-市
+   * 经营地区-市（选项 TaktAdminDivisions/options；DictValue=DivisionCode；建议 Level=3）
    */
   businessCity?: string;
 
@@ -1059,11 +1279,6 @@ export interface PlantImport {
   businessAddress2?: string;
 
   /**
-   * 经营地址3
-   */
-  businessAddress3?: string;
-
-  /**
    * 工厂地址1
    */
   plantAddress1?: string;
@@ -1072,11 +1287,6 @@ export interface PlantImport {
    * 工厂地址2
    */
   plantAddress2?: string;
-
-  /**
-   * 工厂地址3
-   */
-  plantAddress3?: string;
 
   /**
    * 工厂电话
@@ -1139,7 +1349,72 @@ export interface PlantImport {
   plantExistence?: number;
 
   /**
-   * 关联公司（关联 TaktCompany.CompanyCode，选项 TaktCompanies/options）
+   * 银行代码（选项 TaktBanks/options；DictValue=BankCode）
+   */
+  bankCode?: string;
+
+  /**
+   * 银行帐号
+   */
+  bankAccount?: string;
+
+  /**
+   * 帐户持有人
+   */
+  accountHolder?: string;
+
+  /**
+   * 采购组织（选项 TaktPlants/options；DictValue=PlantCode）
+   */
+  purchasingOrganization?: string;
+
+  /**
+   * 销售组织（选项 TaktCompanies/options；DictValue=CompanyCode）
+   */
+  salesOrganization?: string;
+
+  /**
+   * 物料需求计划（MRP 范围/控制；对齐）
+   */
+  materialRequirementsPlanning?: string;
+
+  /**
+   * 分销渠道
+   */
+  distributionChannel?: string;
+
+  /**
+   * 公司间出具发票产品组（产品组/Division）
+   */
+  intercompanyBillingProductGroup?: string;
+
+  /**
+   * 税收标识
+   */
+  taxIndicator?: string;
+
+  /**
+   * 评估范围（选项 TaktPlants/options；DictValue=PlantCode；常与工厂代码相同）
+   */
+  valuationArea?: string;
+
+  /**
+   * 工厂供应商号码（工厂作为供应商）
+   */
+  plantVendorNumber?: string;
+
+  /**
+   * 客户编码-工厂（工厂作为客户）
+   */
+  plantCustomerNumber?: string;
+
+  /**
+   * 工厂日历
+   */
+  factoryCalendar?: string;
+
+  /**
+   * 关联公司（选项 TaktCompanies/options；DictValue=Id）
    */
   relatedCompany?: string;
 
@@ -1178,9 +1453,14 @@ export interface PlantExport {
   plantCode: string;
 
   /**
-   * 工厂名称
+   * 工厂名称1
    */
-  plantName: string;
+  plantName1: string;
+
+  /**
+   * 工厂名称2
+   */
+  plantName2?: string;
 
   /**
    * 工厂简称
@@ -1193,22 +1473,22 @@ export interface PlantExport {
   codeAlias: string;
 
   /**
-   * 区域文化编码（字典 sys_culture_code，选项 TaktCultures/options，DictValue=CultureCode）
+   * 区域文化编码（字典 sys_culture_code；选项 TaktCultures/options，DictValue=CultureCode；即语言/区域文化）
    */
   defaultCulture: string;
 
   /**
-   * 企业性质（字典 sys_enterprise_nature_type，DictValue=150 等）
+   * 企业性质（字典 sys_enterprise_nature_type；DictValue=150 等）
    */
   enterpriseNature: string;
 
   /**
-   * 行业属性（字典 sys_industry_attribute_type，DictValue=C 等）
+   * 行业属性（字典 sys_industry_attribute_type；DictValue=C 等）
    */
   industryAttribute: string;
 
   /**
-   * 企业规模（字典 sys_enterprise_scale_type，DictValue=M 等）
+   * 企业规模（字典 sys_enterprise_scale_type；DictValue=M 等）
    */
   enterpriseScale: string;
 
@@ -1228,37 +1508,32 @@ export interface PlantExport {
   registrationAddress2?: string;
 
   /**
-   * 注册地址3
-   */
-  registrationAddress3?: string;
-
-  /**
-   * 注册国家
+   * 注册国家（字典 sys_country_code；DictValue=ISO alpha-2）
    */
   registrationRegion: string;
 
   /**
-   * 注册省
+   * 注册省（选项 TaktAdminDivisions/options；DictValue=DivisionCode；建议 Level=2）
    */
   registrationProvince: string;
 
   /**
-   * 注册市
+   * 注册市（选项 TaktAdminDivisions/options；DictValue=DivisionCode；建议 Level=3）
    */
   registrationCity: string;
 
   /**
-   * 经营国家
+   * 经营国家（字典 sys_country_code；DictValue=ISO alpha-2）
    */
   businessRegion: string;
 
   /**
-   * 经营地区-省
+   * 经营地区-省（选项 TaktAdminDivisions/options；DictValue=DivisionCode；建议 Level=2）
    */
   businessProvince: string;
 
   /**
-   * 经营地区-市
+   * 经营地区-市（选项 TaktAdminDivisions/options；DictValue=DivisionCode；建议 Level=3）
    */
   businessCity: string;
 
@@ -1273,11 +1548,6 @@ export interface PlantExport {
   businessAddress2?: string;
 
   /**
-   * 经营地址3
-   */
-  businessAddress3?: string;
-
-  /**
    * 工厂地址1
    */
   plantAddress1?: string;
@@ -1286,11 +1556,6 @@ export interface PlantExport {
    * 工厂地址2
    */
   plantAddress2?: string;
-
-  /**
-   * 工厂地址3
-   */
-  plantAddress3?: string;
 
   /**
    * 工厂电话
@@ -1353,7 +1618,72 @@ export interface PlantExport {
   plantExistence: number;
 
   /**
-   * 关联公司（关联 TaktCompany.CompanyCode，选项 TaktCompanies/options）
+   * 银行代码（选项 TaktBanks/options；DictValue=BankCode）
+   */
+  bankCode: string;
+
+  /**
+   * 银行帐号
+   */
+  bankAccount: string;
+
+  /**
+   * 帐户持有人
+   */
+  accountHolder: string;
+
+  /**
+   * 采购组织（选项 TaktPlants/options；DictValue=PlantCode）
+   */
+  purchasingOrganization: string;
+
+  /**
+   * 销售组织（选项 TaktCompanies/options；DictValue=CompanyCode）
+   */
+  salesOrganization: string;
+
+  /**
+   * 物料需求计划（MRP 范围/控制；对齐）
+   */
+  materialRequirementsPlanning: string;
+
+  /**
+   * 分销渠道
+   */
+  distributionChannel: string;
+
+  /**
+   * 公司间出具发票产品组（产品组/Division）
+   */
+  intercompanyBillingProductGroup: string;
+
+  /**
+   * 税收标识
+   */
+  taxIndicator: string;
+
+  /**
+   * 评估范围（选项 TaktPlants/options；DictValue=PlantCode；常与工厂代码相同）
+   */
+  valuationArea: string;
+
+  /**
+   * 工厂供应商号码（工厂作为供应商）
+   */
+  plantVendorNumber: string;
+
+  /**
+   * 客户编码-工厂（工厂作为客户）
+   */
+  plantCustomerNumber: string;
+
+  /**
+   * 工厂日历
+   */
+  factoryCalendar: string;
+
+  /**
+   * 关联公司（选项 TaktCompanies/options；DictValue=Id）
    */
   relatedCompany: string;
 

@@ -8,9 +8,6 @@
 
 <template>
   <div class="invoice-item-panel flex h-full min-h-0 flex-col overflow-hidden">
-    <div class="mb-2 text-sm font-medium text-text">
-      {{ pi.self() }}
-    </div>
     <TaktQueryBar
       v-model="queryKeyword"
       :placeholder="searchPlaceholder"
@@ -55,7 +52,10 @@
       @delete="handleDelete"
       @refresh="handleRefresh"
     />
-    <div class="invoice-item-panel__table-wrap min-h-0 flex-1 overflow-hidden">
+    <div
+      ref="detailTableWrapRef"
+      class="invoice-item-panel__table-wrap min-h-0 flex-1 overflow-hidden"
+    >
       <TaktSingleTable
         class="h-full min-h-0"
         :columns="columns"
@@ -63,6 +63,7 @@
         :data-source="dataSource"
         :loading="loading"
         :stripe="true"
+        :virtual="true"
         :row-key="getSalesInvoiceItemId"
         :row-selection="rowSelection"
         :custom-row="onClickRow"
@@ -74,11 +75,27 @@
         :total="total"
         scroll-layout="masterDetailLr"
         table-mode="masterDetailDetail"
+        :scroll="{ y: detailTableScrollY }"
         :show-row-selection="true"
         @change="handleTableChange"
         @pagination-change="handleMasterDetailPaginationChange"
         @resize-column="handleResizeColumn"
-      />
+      >
+        <template #summary>
+          <a-table-summary fixed>
+            <a-table-summary-row>
+              <a-table-summary-cell :index="0" />
+              <a-table-summary-cell
+                v-for="cell in summaryCells"
+                :key="cell.key"
+                :index="cell.index"
+              >
+                <span class="text-sm font-medium">{{ cell.text }}</span>
+              </a-table-summary-cell>
+            </a-table-summary-row>
+          </a-table-summary>
+        </template>
+      </TaktSingleTable>
     </div>
     <TaktModal
       v-model:open="formVisible"
@@ -146,16 +163,6 @@
         />
       </a-form-item>
       </div>
-      <div v-show="isFieldVisible('currency')">
-      <a-form-item :label="pi.queryLabel('currency')">
-        <TaktSelect
-          v-model:value="advancedQueryForm.currency"
-          dict-type="accounting_currency_code"
-          :placeholder="pi.queryPh('currency', 'select')"
-          allow-clear
-        />
-      </a-form-item>
-      </div>
       <div v-show="isFieldVisible('modelName')">
       <a-form-item :label="pi.queryLabel('modelName')">
         <a-input
@@ -171,7 +178,7 @@
       <a-form-item :label="pi.queryLabel('materialCode')">
         <TaktSelect
           v-model:value="advancedQueryForm.materialCode"
-          api-url="TaktMaterials/options"
+          api-url="TaktMaterialPlants/options"
           :placeholder="pi.queryPh('materialCode', 'select')"
           allow-clear
         />
@@ -229,11 +236,10 @@
       </div>
       <div v-show="isFieldVisible('unit')">
       <a-form-item :label="pi.queryLabel('unit')">
-        <a-input
+        <TaktSelect
           v-model:value="advancedQueryForm.unit"
-          :placeholder="pi.queryPh('unit', 'required')"
-          show-count
-          :maxlength="20"
+          dict-type="logistics_unit_of_measure_code"
+          :placeholder="pi.queryPh('unit', 'select')"
           allow-clear
         />
       </a-form-item>
@@ -252,6 +258,33 @@
         <a-input-number
           v-model:value="advancedQueryForm.transactionCurrencyAmount"
           :placeholder="pi.queryPh('transactionCurrencyAmount', 'required')"
+          style="width: 100%"
+        />
+      </a-form-item>
+      </div>
+      <div v-show="isFieldVisible('taxIncludedPrice')">
+      <a-form-item :label="pi.queryLabel('taxIncludedPrice')">
+        <a-input-number
+          v-model:value="advancedQueryForm.taxIncludedPrice"
+          :placeholder="pi.queryPh('taxIncludedPrice', 'required')"
+          style="width: 100%"
+        />
+      </a-form-item>
+      </div>
+      <div v-show="isFieldVisible('untaxedPrice')">
+      <a-form-item :label="pi.queryLabel('untaxedPrice')">
+        <a-input-number
+          v-model:value="advancedQueryForm.untaxedPrice"
+          :placeholder="pi.queryPh('untaxedPrice', 'required')"
+          style="width: 100%"
+        />
+      </a-form-item>
+      </div>
+      <div v-show="isFieldVisible('taxAmount')">
+      <a-form-item :label="pi.queryLabel('taxAmount')">
+        <a-input-number
+          v-model:value="advancedQueryForm.taxAmount"
+          :placeholder="pi.queryPh('taxAmount', 'required')"
           style="width: 100%"
         />
       </a-form-item>
@@ -283,6 +316,16 @@
           v-model:value="advancedQueryForm.referenceDocumentItem"
           :placeholder="pi.queryPh('referenceDocumentItem', 'required')"
           style="width: 100%"
+        />
+      </a-form-item>
+      </div>
+      <div v-show="isFieldVisible('isObsolete')">
+      <a-form-item :label="pi.queryLabel('isObsolete')">
+        <TaktSelect
+          v-model:value="advancedQueryForm.isObsolete"
+          dict-type="sys_yes_no_type"
+          :placeholder="pi.queryPh('isObsolete', 'select')"
+          allow-clear
         />
       </a-form-item>
       </div>
@@ -391,14 +434,23 @@
  * Takt销售发票实体子表 salesInvoiceItem 右栏面板
  * @module views/logistics/sales/sales-invoice/components
  */
-import { ref, computed, watch } from 'vue'
+import { ref, computed, watch, onMounted, onBeforeUnmount, nextTick } from 'vue'
 import { message, Modal } from 'ant-design-vue'
 import type { TableColumnsType } from 'ant-design-vue'
 import { useI18n } from 'vue-i18n'
+import { measureMasterDetailLrTableScrollY } from '@/composables/use-takt-master-detail-lr-scroll-y'
+import { TAKT_TABLE_SCROLL_Y_MIN } from '@/utils/table-scroll'
 import { getTaktDefaultPageIndex, getTaktDefaultPageSize } from '@/utils/takt-paged'
 import { taktExcelEntityNames } from '@/utils/naming'
 import { resolveExportDownloadFileName } from '@/utils/export-download-name'
 import { normalizeImportResult, type TaktImportResult } from '@/utils/takt-import-result'
+import {
+  filterMergedColumnsByDefaultVisible,
+  filterTableColumnsByVisibleKeys,
+  mergeDefaultColumns,
+  normalizeUserTableColumns,
+} from '@/utils/table-columns'
+import { formatSummaryValue } from '@/components/business/takt-editable-table/editable-table-utils'
 import { CreateActionColumn } from '@/components/business/takt-action-column/index'
 import { RiEditLine, RiDeleteBinLine, RiQuestionLine } from '@remixicon/vue'
 import SalesInvoiceItemForm from './invoice-item-form.vue'
@@ -418,7 +470,8 @@ import type { SalesInvoiceItem, SalesInvoiceItemQuery } from '@/types/logistics/
 
 import {
   useSalesInvoiceItemI18n,
-  SALESINVOICEITEM_LIST_FIELDS,
+  SALESINVOICEITEM_DEFAULT_VISIBLE_COLUMN_KEYS,
+  SALESINVOICEITEM_SUMMARY_SUM_FIELDS,
   SALESINVOICEITEM_QUERY_STRING_FIELDS,
   SALESINVOICEITEM_QUERY_FIELDS,
   SALESINVOICEITEM_SELF_I18N_KEY,
@@ -438,6 +491,41 @@ const searchPlaceholder = computed(
 )
 
 const loading = ref(false)
+
+/** 子表滚动区容器（扣除查询/工具栏后剩余高度） */
+const detailTableWrapRef = ref<HTMLElement | null>(null)
+/** 子表 scroll.y（按 __table-wrap 实测，避免沿用主表共享高度导致双滚动条） */
+const detailTableScrollY = ref(TAKT_TABLE_SCROLL_Y_MIN)
+let detailTableScrollResizeObserver: ResizeObserver | null = null
+
+/** 按子表容器重算 scroll.y（扣除表头 + 汇总行，避免合计被裁切或双滚动条） */
+function recalcDetailTableScrollY(): void {
+  const wrap = detailTableWrapRef.value
+  if (!wrap) {
+    return
+  }
+  detailTableScrollY.value = measureMasterDetailLrTableScrollY(wrap, { reserveSummaryRow: true })
+}
+
+/** 监听子表容器尺寸变化 */
+function startDetailTableScrollObserve(): void {
+  stopDetailTableScrollObserve()
+  recalcDetailTableScrollY()
+  const wrap = detailTableWrapRef.value
+  if (!wrap) {
+    return
+  }
+  detailTableScrollResizeObserver = new ResizeObserver(() => {
+    recalcDetailTableScrollY()
+  })
+  detailTableScrollResizeObserver.observe(wrap)
+}
+
+/** 停止监听子表容器尺寸 */
+function stopDetailTableScrollObserve(): void {
+  detailTableScrollResizeObserver?.disconnect()
+  detailTableScrollResizeObserver = null
+}
 const dataSource = ref<SalesInvoiceItem[]>([])
 const currentPage = ref(getTaktDefaultPageIndex())
 const pageSize = ref(getTaktDefaultPageSize())
@@ -468,7 +556,11 @@ function createEmptyAdvancedQueryForm() {
     quantity: undefined as number | undefined,
     localCurrencyAmount: undefined as number | undefined,
     transactionCurrencyAmount: undefined as number | undefined,
+    taxIncludedPrice: undefined as number | undefined,
+    untaxedPrice: undefined as number | undefined,
+    taxAmount: undefined as number | undefined,
     referenceDocumentItem: undefined as number | undefined,
+    isObsolete: undefined as number | undefined,
   }
 }
 const advancedQueryForm = ref(createEmptyAdvancedQueryForm())
@@ -493,8 +585,8 @@ function handleAdvancedQueryReset() {
   advancedQueryForm.value = createEmptyAdvancedQueryForm()
 }
 const columnSettingVisible = ref(false)
-/** 表格当前可见列 key（空数组时按 tableMode=masterDetailDetail 默认 id+4 业务列） */
-const visibleColumnKeys = ref<string[]>([])
+/** 表格当前可见列 key */
+const visibleColumnKeys = ref<string[]>([...SALESINVOICEITEM_DEFAULT_VISIBLE_COLUMN_KEYS])
 
 function handleColumnSetting() {
   columnSettingVisible.value = true
@@ -505,7 +597,7 @@ function handleColumnKeysChange(keys: string[]) {
 }
 
 function handleColumnSettingReset() {
-  visibleColumnKeys.value = []
+  visibleColumnKeys.value = [...SALESINVOICEITEM_DEFAULT_VISIBLE_COLUMN_KEYS]
 }
 const importVisible = ref(false)
 
@@ -537,6 +629,16 @@ const columns = computed<TableColumnsType>(() => [
     fixed: 'left',
     customRender: ({ record }: { record: SalesInvoiceItem }) =>
       String(getSalesInvoiceItemField(record, 'salesInvoiceItemId') ?? ''),
+  },
+  {
+    title: pi.label('salesInvoiceId'),
+    dataIndex: 'salesInvoiceId',
+    key: 'salesInvoiceId',
+    width: 120,
+    resizable: true,
+    ellipsis: true,
+    customRender: ({ record }: { record: SalesInvoiceItem }) =>
+      String(getSalesInvoiceItemField(record, 'salesInvoiceId') ?? ''),
   },
   {
     title: pi.label('salesInvoiceName'),
@@ -577,16 +679,6 @@ const columns = computed<TableColumnsType>(() => [
     ellipsis: true,
     customRender: ({ record }: { record: SalesInvoiceItem }) =>
       String(getSalesInvoiceItemField(record, 'postingDate') ?? ''),
-  },
-  {
-    title: pi.label('currency'),
-    dataIndex: 'currency',
-    key: 'currency',
-    width: 120,
-    resizable: true,
-    ellipsis: true,
-    customRender: ({ record }: { record: SalesInvoiceItem }) =>
-      String(getSalesInvoiceItemField(record, 'currency') ?? ''),
   },
   {
     title: pi.label('modelName'),
@@ -689,6 +781,36 @@ const columns = computed<TableColumnsType>(() => [
       String(getSalesInvoiceItemField(record, 'transactionCurrencyAmount') ?? ''),
   },
   {
+    title: pi.label('taxIncludedPrice'),
+    dataIndex: 'taxIncludedPrice',
+    key: 'taxIncludedPrice',
+    width: 120,
+    resizable: true,
+    ellipsis: true,
+    customRender: ({ record }: { record: SalesInvoiceItem }) =>
+      String(getSalesInvoiceItemField(record, 'taxIncludedPrice') ?? ''),
+  },
+  {
+    title: pi.label('untaxedPrice'),
+    dataIndex: 'untaxedPrice',
+    key: 'untaxedPrice',
+    width: 120,
+    resizable: true,
+    ellipsis: true,
+    customRender: ({ record }: { record: SalesInvoiceItem }) =>
+      String(getSalesInvoiceItemField(record, 'untaxedPrice') ?? ''),
+  },
+  {
+    title: pi.label('taxAmount'),
+    dataIndex: 'taxAmount',
+    key: 'taxAmount',
+    width: 120,
+    resizable: true,
+    ellipsis: true,
+    customRender: ({ record }: { record: SalesInvoiceItem }) =>
+      String(getSalesInvoiceItemField(record, 'taxAmount') ?? ''),
+  },
+  {
     title: pi.label('documentType'),
     dataIndex: 'documentType',
     key: 'documentType',
@@ -719,14 +841,14 @@ const columns = computed<TableColumnsType>(() => [
       String(getSalesInvoiceItemField(record, 'referenceDocumentItem') ?? ''),
   },
   {
-    title: pi.label('salesInvoice'),
-    dataIndex: 'salesInvoice',
-    key: 'salesInvoice',
+    title: pi.label('isObsolete'),
+    dataIndex: 'isObsolete',
+    key: 'isObsolete',
     width: 120,
     resizable: true,
     ellipsis: true,
     customRender: ({ record }: { record: SalesInvoiceItem }) =>
-      String(getSalesInvoiceItemField(record, 'salesInvoice') ?? ''),
+      String(getSalesInvoiceItemField(record, 'isObsolete') ?? ''),
   },
   CreateActionColumn({
     actions: [
@@ -750,6 +872,75 @@ const columns = computed<TableColumnsType>(() => [
   }),
 ])
 
+/** 与 TaktSingleTable 展示列对齐（用于汇总行单元格） */
+const resolvedSummaryColumns = computed(() => {
+  const userCols = normalizeUserTableColumns(columns.value)
+  const merged = mergeDefaultColumns(userCols, t, true, 'company')
+  const keys = visibleColumnKeys.value
+  if (keys.length > 0) {
+    return filterTableColumnsByVisibleKeys(merged, keys, merged)
+  }
+  return filterMergedColumnsByDefaultVisible(merged, userCols, {
+    idColumnKey: 'salesInvoiceItemId',
+    actionColumnKey: 'action',
+    tableMode: 'masterDetailDetail',
+    entityScope: 'company',
+  })
+})
+
+const summarySumFieldSet = new Set<string>(SALESINVOICEITEM_SUMMARY_SUM_FIELDS)
+
+/** 汇总行首列文案 */
+const summaryLabel = computed(() => t('components.business.page.editabletable.summarylabel'))
+
+/** 汇总行单元格（index 与 a-table 列序一致：0=行选择，1..n=展示列） */
+const summaryCells = computed(() => {
+  const cells: Array<{ key: string; text: string; index: number }> = []
+  resolvedSummaryColumns.value.forEach((col, columnIndex) => {
+    const key = String(col.key ?? columnIndex)
+    let text = ''
+    if (columnIndex === 0) {
+      text = summaryLabel.value
+    } else if (isSummarySumField(key)) {
+      text = formatSummaryFieldTotal(key)
+    }
+    cells.push({
+      key,
+      text,
+      index: columnIndex + 1,
+    })
+  })
+  return cells
+})
+
+/** 是否参与当前页合计 */
+function isSummarySumField(field: string): boolean {
+  return summarySumFieldSet.has(field)
+}
+
+/** 当前页 dataSource 各合计列求和 */
+const summaryFieldTotals = computed(() => {
+  const totals = Object.fromEntries(
+    SALESINVOICEITEM_SUMMARY_SUM_FIELDS.map((field) => [field, 0]),
+  ) as Record<(typeof SALESINVOICEITEM_SUMMARY_SUM_FIELDS)[number], number>
+  for (const row of dataSource.value) {
+    for (const field of SALESINVOICEITEM_SUMMARY_SUM_FIELDS) {
+      const num = Number(getSalesInvoiceItemField(row, field))
+      if (Number.isFinite(num)) {
+        totals[field] += num
+      }
+    }
+  }
+  return totals
+})
+
+/** 格式化合计单元格展示值 */
+function formatSummaryFieldTotal(field: string): string {
+  if (!isSummarySumField(field)) {
+    return ''
+  }
+  return formatSummaryValue(summaryFieldTotals.value[field as keyof typeof summaryFieldTotals.value])
+}
 const rowSelection = computed(() => ({
   selectedRowKeys: selectedRowKeys.value,
   onChange: (keys: (string | number)[], rows: SalesInvoiceItem[]) => {
@@ -825,8 +1016,20 @@ function buildListQuery(overrides?: Partial<SalesInvoiceItemQuery>): SalesInvoic
   if (form.transactionCurrencyAmount !== undefined && form.transactionCurrencyAmount !== null) {
     query.transactionCurrencyAmount = form.transactionCurrencyAmount
   }
+  if (form.taxIncludedPrice !== undefined && form.taxIncludedPrice !== null) {
+    query.taxIncludedPrice = form.taxIncludedPrice
+  }
+  if (form.untaxedPrice !== undefined && form.untaxedPrice !== null) {
+    query.untaxedPrice = form.untaxedPrice
+  }
+  if (form.taxAmount !== undefined && form.taxAmount !== null) {
+    query.taxAmount = form.taxAmount
+  }
   if (form.referenceDocumentItem !== undefined && form.referenceDocumentItem !== null) {
     query.referenceDocumentItem = form.referenceDocumentItem
+  }
+  if (form.isObsolete !== undefined && form.isObsolete !== null) {
+    query.isObsolete = form.isObsolete
   }
   return query
 }
@@ -867,6 +1070,36 @@ watch(masterSalesInvoiceId, () => {
 
 /** 租户/公司切换时刷新子表 */
 useTableRefresh(loadData)
+
+onMounted(() => {
+  startDetailTableScrollObserve()
+})
+
+onBeforeUnmount(() => {
+  stopDetailTableScrollObserve()
+})
+
+watch(
+  () => loading.value,
+  (isLoading) => {
+    if (!isLoading) {
+      void nextTick(() => recalcDetailTableScrollY())
+    }
+  },
+)
+
+watch(
+  () => [dataSource.value.length, visibleColumnKeys.value.join(',')],
+  () => {
+    void nextTick(() => recalcDetailTableScrollY())
+  },
+)
+
+watch(hasMasterSelection, (selected) => {
+  if (selected) {
+    void nextTick(() => startDetailTableScrollObserve())
+  }
+})
 
 function handleSearch() {
   currentPage.value = getTaktDefaultPageIndex()

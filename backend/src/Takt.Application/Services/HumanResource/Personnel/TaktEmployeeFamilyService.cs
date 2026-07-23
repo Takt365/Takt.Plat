@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Application.Services.HumanResource.Personnel
 // 文件名称：TaktEmployeeFamilyService.cs
-// 创建时间：2026-06-23
+// 创建时间：2026-07-23
 // 创建人：Takt365(Cursor AI)
 // 功能描述：员工家庭成员应用服务实现
 // 
@@ -93,12 +93,12 @@ public class TaktEmployeeFamilyService : TaktServiceBase, ITaktEmployeeFamilySer
         EnsureThreeLayerContext();
         var list = await _employeeFamilyRepository.GetListAsync(
             x => x.TenantCode == CurrentTenantCode && x.CompanyCode == CurrentCompanyCode,
-            x => x.MemberName ?? string.Empty,
+            x => x.EmployeeName ?? string.Empty,
             false);
         return list.Select(e => new TaktSelectOption
         {
-            DictValue = e.Id,
-            DictLabel = e.MemberName ?? e.Id.ToString(),
+            DictValue = e.EmployeeCode,
+            DictLabel = e.EmployeeName ?? e.EmployeeCode,
         }).ToList();
     }
 
@@ -254,6 +254,8 @@ public class TaktEmployeeFamilyService : TaktServiceBase, ITaktEmployeeFamilySer
             var keywords = queryDto.KeyWords;
             exp = exp.And(x =>
                 SqlFunc.ToString(x.EmployeeId).Contains(keywords)
+                || (x.EmployeeCode != null && x.EmployeeCode.Contains(keywords))
+                || (x.EmployeeName != null && x.EmployeeName.Contains(keywords))
                 || (x.MemberName != null && x.MemberName.Contains(keywords))
                 || SqlFunc.ToString(x.RelationType).Contains(keywords)
                 || (x.PhoneNumber != null && x.PhoneNumber.Contains(keywords))
@@ -270,6 +272,16 @@ public class TaktEmployeeFamilyService : TaktServiceBase, ITaktEmployeeFamilySer
         if (queryDto?.EmployeeId.HasValue == true)
         {
             exp = exp.And(x => x.EmployeeId == queryDto.EmployeeId);
+        }
+
+        if (!string.IsNullOrEmpty(queryDto?.EmployeeCode))
+        {
+            exp = exp.And(x => x.EmployeeCode != null && x.EmployeeCode.Contains(queryDto.EmployeeCode));
+        }
+
+        if (!string.IsNullOrEmpty(queryDto?.EmployeeName))
+        {
+            exp = exp.And(x => x.EmployeeName != null && x.EmployeeName.Contains(queryDto.EmployeeName));
         }
 
         if (!string.IsNullOrEmpty(queryDto?.MemberName))

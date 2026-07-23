@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：frontend/src/types/human-resource/personnel
 // 文件名称：employee.d.ts
-// 创建时间：2026-06-24
+// 创建时间：2026-07-23
 // 创建人：Takt365(Auto Generated)
 // 功能描述：human-resource/personnel 模块类型定义（自动生成；类型名去 Takt 前缀与末尾 Dto，如 TaktCompanyDto → Company）
 // 
@@ -16,7 +16,7 @@ import type {
 } from '@/types/common';
 
 /**
- * 员工实体（人事主档，公司级档案非审批单） 员工与系统用户分离；子表承载合同、调动、任职、教育、家庭、技能、外部履历、附件等全场景明细 参照 SAP Personnel Number (PERNR) 设计
+ * 员工实体（人事主档，公司级档案非审批单） 仅保留身份与档案基本属性；明细见导航子表： 教育→Education；地址→Address；家庭/紧急联系人→Family； 上岗日期/试用/转正/主部门岗位→Joined；离职→Resignation； 合同→Contract；调动→Reassignment；技能→Skill；履历→Experience； 附件→Attachment；代理→Delegation；入职待办→Onboarding 参照 SAP Personnel Number (PERNR) 设计
  * 对应前端 TaktEmployeeDto
  * 继承 TaktCompanyDtoBase
  * 对应前端 Employee
@@ -29,9 +29,9 @@ export interface Employee extends CompanyDtoBase {
   employeeId: string;
 
   /**
-   * 员工编号（租户+公司内唯一）
+   * 员工编码（租户+公司内唯一）
    */
-  employeeNo: string;
+  employeeCode: string;
 
   /**
    * 姓名
@@ -39,7 +39,7 @@ export interface Employee extends CompanyDtoBase {
   employeeName: string;
 
   /**
-   * 性别（0=未知，1=男，2=女）
+   * 性别（字典 sys_user_gender_category；0=未知 1=男 2=女）
    */
   gender: number;
 
@@ -64,122 +64,37 @@ export interface Employee extends CompanyDtoBase {
   email?: string;
 
   /**
-   * 籍贯（字典 hr_native_place_code 的 6 位 GB 行政区划代码，人事档案必填）
+   * 籍贯（字典 hr_native_place_code；列存 6 位 GB 行政区划代码，人事档案必填；与住址子表无关）
    */
   nativePlace: string;
 
   /**
-   * 民族（字典 hr_ethnic_code，1～56）
+   * 民族（字典 hr_ethnic_code；DictValue 1～56）
    */
   ethnicity: number;
 
   /**
-   * 政治面貌（字典 hr_political_status，0～12；人事档案必填）
+   * 政治面貌（字典 hr_political_affiliation；0～12；人事档案必填）
    */
-  politicalStatus: number;
+  politicalAffiliation: number;
 
   /**
-   * 婚姻状况（0=未婚，1=已婚，2=离异，3=丧偶；人事档案必填）
+   * 婚姻状况（字典 hr_marital_status；0=未婚 1=已婚 2=离异 3=丧偶；人事档案必填）
    */
   maritalStatus: number;
 
   /**
-   * 最高学历摘要（1=高中及以下，2=大专，3=本科，4=硕士，5=博士；明细见 EmployeeEducations）
-   */
-  education?: number;
-
-  /**
-   * 毕业院校（最高学历摘要）
-   */
-  graduateSchool?: string;
-
-  /**
-   * 专业（最高学历摘要）
-   */
-  major?: string;
-
-  /**
-   * 实际上岗日期（JoinedDate：入职上班；投影字段，由上岗审批通过后回写，未上岗可空）
-   */
-  joinedDate?: string;
-
-  /**
-   * 试用期结束日期（投影字段，由上岗审批通过后回写）
-   */
-  probationEndDate?: string;
-
-  /**
-   * 转正日期（投影字段，由上岗审批通过后回写）
-   */
-  regularDate?: string;
-
-  /**
-   * 离职日期（投影字段，由离职审批通过后回写）
-   */
-  terminationDate?: string;
-
-  /**
-   * 最后工作日（投影字段，由离职审批通过后回写）
-   */
-  lastWorkDate?: string;
-
-  /**
-   * 离职类型（投影字段，由离职审批通过后回写；0=主动辞职，1=公司辞退，2=合同到期，3=退休，9=其他）
-   */
-  resignationType?: number;
-
-  /**
-   * 离职原因（投影字段，由离职审批通过后回写）
-   */
-  resignationReason?: string;
-
-  /**
-   * 员工状态（1=试用期，2=正式，3=离职，4=退休）
+   * 员工状态（字典 hr_employee_status；1=试用期 2=正式 3=离职 4=退休）
    */
   employeeStatus: number;
 
   /**
-   * 当前主部门ID（任职投影快照；未上岗可空，在岗员工由投影服务保证有值）
-   */
-  primaryDeptId?: string;
-
-  /**
-   * 当前主部门名称（填充字段）
-   */
-  primaryDeptName?: string;
-
-  /**
-   * 当前主岗位ID（任职投影快照；未上岗可空，在岗员工由投影服务保证有值）
-   */
-  primaryPostId?: string;
-
-  /**
-   * 当前主岗位名称（填充字段）
-   */
-  primaryPostName?: string;
-
-  /**
-   * 内置（种子员工不可删）
+   * 内置（字典 sys_yes_no_type；0=否 1=是；种子员工不可删）
    */
   isBuiltIn: number;
 
   /**
-   * 紧急联系人姓名（人事档案必填）
-   */
-  emergencyContactName: string;
-
-  /**
-   * 紧急联系人电话（人事档案必填）
-   */
-  emergencyContactPhone: string;
-
-  /**
-   * 家庭住址（人事档案必填）
-   */
-  homeAddress: string;
-
-  /**
-   * 照片URL
+   * 头像URL（展示用；档案附件明细见 EmployeeAttachments）
    */
   avatar?: string;
 
@@ -192,6 +107,61 @@ export interface Employee extends CompanyDtoBase {
    * 员工岗位关联（RBAC，表 takt_human_resource_organization_employeepost） （子表：TaktEmployeePost）
    */
   employeePosts?: EmployeePost[];
+
+  /**
+   * 员工地址（家庭/工作/常住） （子表：TaktEmployeeAddress）
+   */
+  employeeAddresses?: EmployeeAddress[];
+
+  /**
+   * 教育经历（含最高学历 IsHighest） （子表：TaktEmployeeEducation）
+   */
+  employeeEducations?: EmployeeEducation[];
+
+  /**
+   * 家庭成员（含紧急联系人 IsEmergencyContact） （子表：TaktEmployeeFamily）
+   */
+  employeeFamilies?: EmployeeFamily[];
+
+  /**
+   * 外部工作经历 （子表：TaktEmployeeExperience）
+   */
+  employeeExperiences?: EmployeeExperience[];
+
+  /**
+   * 技能与证书 （子表：TaktEmployeeSkill）
+   */
+  employeeSkills?: EmployeeSkill[];
+
+  /**
+   * 劳动合同 （子表：TaktEmployeeContract）
+   */
+  employeeContracts?: EmployeeContract[];
+
+  /**
+   * 入职上岗办理（实际上岗日/试用/转正/部门岗位） （子表：TaktEmployeeJoined）
+   */
+  employeeJoineds?: EmployeeJoined[];
+
+  /**
+   * 入职待办 （子表：TaktEmployeeOnboarding）
+   */
+  employeeOnboardings?: EmployeeOnboarding[];
+
+  /**
+   * 调动记录 （子表：TaktEmployeeReassignment）
+   */
+  employeeReassignments?: EmployeeReassignment[];
+
+  /**
+   * 离职办理 （子表：TaktEmployeeResignation）
+   */
+  employeeResignations?: EmployeeResignation[];
+
+  /**
+   * 档案附件 （子表：TaktEmployeeAttachment）
+   */
+  employeeAttachments?: EmployeeAttachment[];
 
 }
 
@@ -214,9 +184,9 @@ export interface EmployeeQuery extends TaktPagedQuery {
   companyCode?: string;
 
   /**
-   * 员工编号（租户+公司内唯一）
+   * 员工编码（租户+公司内唯一）
    */
-  employeeNo?: string;
+  employeeCode?: string;
 
   /**
    * 姓名
@@ -224,7 +194,7 @@ export interface EmployeeQuery extends TaktPagedQuery {
   employeeName?: string;
 
   /**
-   * 性别（0=未知，1=男，2=女）
+   * 性别（字典 sys_user_gender_category；0=未知 1=男 2=女）
    */
   gender?: number;
 
@@ -254,137 +224,37 @@ export interface EmployeeQuery extends TaktPagedQuery {
   email?: string;
 
   /**
-   * 籍贯（字典 hr_native_place_code 的 6 位 GB 行政区划代码，人事档案必填）
+   * 籍贯（字典 hr_native_place_code；列存 6 位 GB 行政区划代码，人事档案必填；与住址子表无关）
    */
   nativePlace?: string;
 
   /**
-   * 民族（字典 hr_ethnic_code，1～56）
+   * 民族（字典 hr_ethnic_code；DictValue 1～56）
    */
   ethnicity?: number;
 
   /**
-   * 政治面貌（字典 hr_political_status，0～12；人事档案必填）
+   * 政治面貌（字典 hr_political_affiliation；0～12；人事档案必填）
    */
-  politicalStatus?: number;
+  politicalAffiliation?: number;
 
   /**
-   * 婚姻状况（0=未婚，1=已婚，2=离异，3=丧偶；人事档案必填）
+   * 婚姻状况（字典 hr_marital_status；0=未婚 1=已婚 2=离异 3=丧偶；人事档案必填）
    */
   maritalStatus?: number;
 
   /**
-   * 最高学历摘要（1=高中及以下，2=大专，3=本科，4=硕士，5=博士；明细见 EmployeeEducations）
-   */
-  education?: number;
-
-  /**
-   * 毕业院校（最高学历摘要）
-   */
-  graduateSchool?: string;
-
-  /**
-   * 专业（最高学历摘要）
-   */
-  major?: string;
-
-  /**
-   * 实际上岗日期（JoinedDate：入职上班；投影字段，由上岗审批通过后回写，未上岗可空）（范围查询-开始）
-   */
-  joinedDateStart?: string;
-
-  /**
-   * 实际上岗日期（JoinedDate：入职上班；投影字段，由上岗审批通过后回写，未上岗可空）（范围查询-结束）
-   */
-  joinedDateEnd?: string;
-
-  /**
-   * 试用期结束日期（投影字段，由上岗审批通过后回写）（范围查询-开始）
-   */
-  probationEndDateStart?: string;
-
-  /**
-   * 试用期结束日期（投影字段，由上岗审批通过后回写）（范围查询-结束）
-   */
-  probationEndDateEnd?: string;
-
-  /**
-   * 转正日期（投影字段，由上岗审批通过后回写）（范围查询-开始）
-   */
-  regularDateStart?: string;
-
-  /**
-   * 转正日期（投影字段，由上岗审批通过后回写）（范围查询-结束）
-   */
-  regularDateEnd?: string;
-
-  /**
-   * 离职日期（投影字段，由离职审批通过后回写）（范围查询-开始）
-   */
-  terminationDateStart?: string;
-
-  /**
-   * 离职日期（投影字段，由离职审批通过后回写）（范围查询-结束）
-   */
-  terminationDateEnd?: string;
-
-  /**
-   * 最后工作日（投影字段，由离职审批通过后回写）（范围查询-开始）
-   */
-  lastWorkDateStart?: string;
-
-  /**
-   * 最后工作日（投影字段，由离职审批通过后回写）（范围查询-结束）
-   */
-  lastWorkDateEnd?: string;
-
-  /**
-   * 离职类型（投影字段，由离职审批通过后回写；0=主动辞职，1=公司辞退，2=合同到期，3=退休，9=其他）
-   */
-  resignationType?: number;
-
-  /**
-   * 离职原因（投影字段，由离职审批通过后回写）
-   */
-  resignationReason?: string;
-
-  /**
-   * 员工状态（1=试用期，2=正式，3=离职，4=退休）
+   * 员工状态（字典 hr_employee_status；1=试用期 2=正式 3=离职 4=退休）
    */
   employeeStatus?: number;
 
   /**
-   * 当前主部门ID（任职投影快照；未上岗可空，在岗员工由投影服务保证有值）
-   */
-  primaryDeptId?: string;
-
-  /**
-   * 当前主岗位ID（任职投影快照；未上岗可空，在岗员工由投影服务保证有值）
-   */
-  primaryPostId?: string;
-
-  /**
-   * 内置（种子员工不可删）
+   * 内置（字典 sys_yes_no_type；0=否 1=是；种子员工不可删）
    */
   isBuiltIn?: number;
 
   /**
-   * 紧急联系人姓名（人事档案必填）
-   */
-  emergencyContactName?: string;
-
-  /**
-   * 紧急联系人电话（人事档案必填）
-   */
-  emergencyContactPhone?: string;
-
-  /**
-   * 家庭住址（人事档案必填）
-   */
-  homeAddress?: string;
-
-  /**
-   * 照片URL
+   * 头像URL（展示用；档案附件明细见 EmployeeAttachments）
    */
   avatar?: string;
 
@@ -433,9 +303,9 @@ export interface EmployeeCreate {
   companyDefaultCulture: string;
 
   /**
-   * 员工编号（租户+公司内唯一）
+   * 员工编码（租户+公司内唯一）
    */
-  employeeNo: string;
+  employeeCode: string;
 
   /**
    * 姓名
@@ -443,7 +313,7 @@ export interface EmployeeCreate {
   employeeName: string;
 
   /**
-   * 性别（0=未知，1=男，2=女）
+   * 性别（字典 sys_user_gender_category；0=未知 1=男 2=女）
    */
   gender: number;
 
@@ -468,112 +338,37 @@ export interface EmployeeCreate {
   email?: string;
 
   /**
-   * 籍贯（字典 hr_native_place_code 的 6 位 GB 行政区划代码，人事档案必填）
+   * 籍贯（字典 hr_native_place_code；列存 6 位 GB 行政区划代码，人事档案必填；与住址子表无关）
    */
   nativePlace: string;
 
   /**
-   * 民族（字典 hr_ethnic_code，1～56）
+   * 民族（字典 hr_ethnic_code；DictValue 1～56）
    */
   ethnicity: number;
 
   /**
-   * 政治面貌（字典 hr_political_status，0～12；人事档案必填）
+   * 政治面貌（字典 hr_political_affiliation；0～12；人事档案必填）
    */
-  politicalStatus: number;
+  politicalAffiliation: number;
 
   /**
-   * 婚姻状况（0=未婚，1=已婚，2=离异，3=丧偶；人事档案必填）
+   * 婚姻状况（字典 hr_marital_status；0=未婚 1=已婚 2=离异 3=丧偶；人事档案必填）
    */
   maritalStatus: number;
 
   /**
-   * 最高学历摘要（1=高中及以下，2=大专，3=本科，4=硕士，5=博士；明细见 EmployeeEducations）
-   */
-  education?: number;
-
-  /**
-   * 毕业院校（最高学历摘要）
-   */
-  graduateSchool?: string;
-
-  /**
-   * 专业（最高学历摘要）
-   */
-  major?: string;
-
-  /**
-   * 实际上岗日期（JoinedDate：入职上班；投影字段，由上岗审批通过后回写，未上岗可空）
-   */
-  joinedDate?: string;
-
-  /**
-   * 试用期结束日期（投影字段，由上岗审批通过后回写）
-   */
-  probationEndDate?: string;
-
-  /**
-   * 转正日期（投影字段，由上岗审批通过后回写）
-   */
-  regularDate?: string;
-
-  /**
-   * 离职日期（投影字段，由离职审批通过后回写）
-   */
-  terminationDate?: string;
-
-  /**
-   * 最后工作日（投影字段，由离职审批通过后回写）
-   */
-  lastWorkDate?: string;
-
-  /**
-   * 离职类型（投影字段，由离职审批通过后回写；0=主动辞职，1=公司辞退，2=合同到期，3=退休，9=其他）
-   */
-  resignationType?: number;
-
-  /**
-   * 离职原因（投影字段，由离职审批通过后回写）
-   */
-  resignationReason?: string;
-
-  /**
-   * 员工状态（1=试用期，2=正式，3=离职，4=退休）
+   * 员工状态（字典 hr_employee_status；1=试用期 2=正式 3=离职 4=退休）
    */
   employeeStatus: number;
 
   /**
-   * 当前主部门ID（任职投影快照；未上岗可空，在岗员工由投影服务保证有值）
-   */
-  primaryDeptId?: string;
-
-  /**
-   * 当前主岗位ID（任职投影快照；未上岗可空，在岗员工由投影服务保证有值）
-   */
-  primaryPostId?: string;
-
-  /**
-   * 内置（种子员工不可删）
+   * 内置（字典 sys_yes_no_type；0=否 1=是；种子员工不可删）
    */
   isBuiltIn: number;
 
   /**
-   * 紧急联系人姓名（人事档案必填）
-   */
-  emergencyContactName: string;
-
-  /**
-   * 紧急联系人电话（人事档案必填）
-   */
-  emergencyContactPhone: string;
-
-  /**
-   * 家庭住址（人事档案必填）
-   */
-  homeAddress: string;
-
-  /**
-   * 照片URL
+   * 头像URL（展示用；档案附件明细见 EmployeeAttachments）
    */
   avatar?: string;
 
@@ -586,6 +381,61 @@ export interface EmployeeCreate {
    * 员工岗位关联（RBAC 全量覆盖，分配走 ITaktRbacService）
    */
   employeePostIds?: any;
+
+  /**
+   * 员工地址（家庭/工作/常住）（子表，级联保存）
+   */
+  employeeAddresses?: EmployeeAddressCreate[];
+
+  /**
+   * 教育经历（含最高学历 IsHighest）（子表，级联保存）
+   */
+  employeeEducations?: EmployeeEducationCreate[];
+
+  /**
+   * 家庭成员（含紧急联系人 IsEmergencyContact）（子表，级联保存）
+   */
+  employeeFamilies?: EmployeeFamilyCreate[];
+
+  /**
+   * 外部工作经历（子表，级联保存）
+   */
+  employeeExperiences?: EmployeeExperienceCreate[];
+
+  /**
+   * 技能与证书（子表，级联保存）
+   */
+  employeeSkills?: EmployeeSkillCreate[];
+
+  /**
+   * 劳动合同（子表，级联保存）
+   */
+  employeeContracts?: EmployeeContractCreate[];
+
+  /**
+   * 入职上岗办理（实际上岗日/试用/转正/部门岗位）（子表，级联保存）
+   */
+  employeeJoineds?: EmployeeJoinedCreate[];
+
+  /**
+   * 入职待办（子表，级联保存）
+   */
+  employeeOnboardings?: EmployeeOnboardingCreate[];
+
+  /**
+   * 调动记录（子表，级联保存）
+   */
+  employeeReassignments?: EmployeeReassignmentCreate[];
+
+  /**
+   * 离职办理（子表，级联保存）
+   */
+  employeeResignations?: EmployeeResignationCreate[];
+
+  /**
+   * 档案附件（子表，级联保存）
+   */
+  employeeAttachments?: EmployeeAttachmentCreate[];
 
   /**
    * 扩展字段JSON
@@ -612,6 +462,61 @@ export interface EmployeeUpdate extends EmployeeCreate {
    */
   employeeId: string;
 
+  /**
+   * 员工地址（家庭/工作/常住）（子表，级联保存）
+   */
+  employeeAddresses?: any;
+
+  /**
+   * 教育经历（含最高学历 IsHighest）（子表，级联保存）
+   */
+  employeeEducations?: any;
+
+  /**
+   * 家庭成员（含紧急联系人 IsEmergencyContact）（子表，级联保存）
+   */
+  employeeFamilies?: any;
+
+  /**
+   * 外部工作经历（子表，级联保存）
+   */
+  employeeExperiences?: any;
+
+  /**
+   * 技能与证书（子表，级联保存）
+   */
+  employeeSkills?: any;
+
+  /**
+   * 劳动合同（子表，级联保存）
+   */
+  employeeContracts?: any;
+
+  /**
+   * 入职上岗办理（实际上岗日/试用/转正/部门岗位）（子表，级联保存）
+   */
+  employeeJoineds?: any;
+
+  /**
+   * 入职待办（子表，级联保存）
+   */
+  employeeOnboardings?: any;
+
+  /**
+   * 调动记录（子表，级联保存）
+   */
+  employeeReassignments?: any;
+
+  /**
+   * 离职办理（子表，级联保存）
+   */
+  employeeResignations?: any;
+
+  /**
+   * 档案附件（子表，级联保存）
+   */
+  employeeAttachments?: any;
+
 }
 
 
@@ -627,9 +532,9 @@ export interface EmployeeStatus {
   employeeId: string;
 
   /**
-   * 政治面貌（字典 hr_political_status，0～12；人事档案必填）
+   * 婚姻状况（字典 hr_marital_status；0=未婚 1=已婚 2=离异 3=丧偶；人事档案必填）
    */
-  politicalStatus: number;
+  maritalStatus: number;
 
 }
 
@@ -651,9 +556,9 @@ export interface EmployeeTemplate {
   companyCode?: string;
 
   /**
-   * 员工编号（租户+公司内唯一）
+   * 员工编码（租户+公司内唯一）
    */
-  employeeNo?: string;
+  employeeCode?: string;
 
   /**
    * 姓名
@@ -661,7 +566,7 @@ export interface EmployeeTemplate {
   employeeName?: string;
 
   /**
-   * 性别（0=未知，1=男，2=女）
+   * 性别（字典 sys_user_gender_category；0=未知 1=男 2=女）
    */
   gender?: number;
 
@@ -686,112 +591,37 @@ export interface EmployeeTemplate {
   email?: string;
 
   /**
-   * 籍贯（字典 hr_native_place_code 的 6 位 GB 行政区划代码，人事档案必填）
+   * 籍贯（字典 hr_native_place_code；列存 6 位 GB 行政区划代码，人事档案必填；与住址子表无关）
    */
   nativePlace?: string;
 
   /**
-   * 民族（字典 hr_ethnic_code，1～56）
+   * 民族（字典 hr_ethnic_code；DictValue 1～56）
    */
   ethnicity?: number;
 
   /**
-   * 政治面貌（字典 hr_political_status，0～12；人事档案必填）
+   * 政治面貌（字典 hr_political_affiliation；0～12；人事档案必填）
    */
-  politicalStatus?: number;
+  politicalAffiliation?: number;
 
   /**
-   * 婚姻状况（0=未婚，1=已婚，2=离异，3=丧偶；人事档案必填）
+   * 婚姻状况（字典 hr_marital_status；0=未婚 1=已婚 2=离异 3=丧偶；人事档案必填）
    */
   maritalStatus?: number;
 
   /**
-   * 最高学历摘要（1=高中及以下，2=大专，3=本科，4=硕士，5=博士；明细见 EmployeeEducations）
-   */
-  education?: number;
-
-  /**
-   * 毕业院校（最高学历摘要）
-   */
-  graduateSchool?: string;
-
-  /**
-   * 专业（最高学历摘要）
-   */
-  major?: string;
-
-  /**
-   * 实际上岗日期（JoinedDate：入职上班；投影字段，由上岗审批通过后回写，未上岗可空）
-   */
-  joinedDate?: string;
-
-  /**
-   * 试用期结束日期（投影字段，由上岗审批通过后回写）
-   */
-  probationEndDate?: string;
-
-  /**
-   * 转正日期（投影字段，由上岗审批通过后回写）
-   */
-  regularDate?: string;
-
-  /**
-   * 离职日期（投影字段，由离职审批通过后回写）
-   */
-  terminationDate?: string;
-
-  /**
-   * 最后工作日（投影字段，由离职审批通过后回写）
-   */
-  lastWorkDate?: string;
-
-  /**
-   * 离职类型（投影字段，由离职审批通过后回写；0=主动辞职，1=公司辞退，2=合同到期，3=退休，9=其他）
-   */
-  resignationType?: number;
-
-  /**
-   * 离职原因（投影字段，由离职审批通过后回写）
-   */
-  resignationReason?: string;
-
-  /**
-   * 员工状态（1=试用期，2=正式，3=离职，4=退休）
+   * 员工状态（字典 hr_employee_status；1=试用期 2=正式 3=离职 4=退休）
    */
   employeeStatus?: number;
 
   /**
-   * 当前主部门ID（任职投影快照；未上岗可空，在岗员工由投影服务保证有值）
-   */
-  primaryDeptId?: string;
-
-  /**
-   * 当前主岗位ID（任职投影快照；未上岗可空，在岗员工由投影服务保证有值）
-   */
-  primaryPostId?: string;
-
-  /**
-   * 内置（种子员工不可删）
+   * 内置（字典 sys_yes_no_type；0=否 1=是；种子员工不可删）
    */
   isBuiltIn?: number;
 
   /**
-   * 紧急联系人姓名（人事档案必填）
-   */
-  emergencyContactName?: string;
-
-  /**
-   * 紧急联系人电话（人事档案必填）
-   */
-  emergencyContactPhone?: string;
-
-  /**
-   * 家庭住址（人事档案必填）
-   */
-  homeAddress?: string;
-
-  /**
-   * 照片URL
+   * 头像URL（展示用；档案附件明细见 EmployeeAttachments）
    */
   avatar?: string;
 
@@ -804,6 +634,61 @@ export interface EmployeeTemplate {
    * 员工岗位关联（RBAC 全量覆盖，分配走 ITaktRbacService）
    */
   employeePostIds?: any;
+
+  /**
+   * 员工地址（家庭/工作/常住）（子表，级联保存）
+   */
+  employeeAddresses?: EmployeeAddressCreate[];
+
+  /**
+   * 教育经历（含最高学历 IsHighest）（子表，级联保存）
+   */
+  employeeEducations?: EmployeeEducationCreate[];
+
+  /**
+   * 家庭成员（含紧急联系人 IsEmergencyContact）（子表，级联保存）
+   */
+  employeeFamilies?: EmployeeFamilyCreate[];
+
+  /**
+   * 外部工作经历（子表，级联保存）
+   */
+  employeeExperiences?: EmployeeExperienceCreate[];
+
+  /**
+   * 技能与证书（子表，级联保存）
+   */
+  employeeSkills?: EmployeeSkillCreate[];
+
+  /**
+   * 劳动合同（子表，级联保存）
+   */
+  employeeContracts?: EmployeeContractCreate[];
+
+  /**
+   * 入职上岗办理（实际上岗日/试用/转正/部门岗位）（子表，级联保存）
+   */
+  employeeJoineds?: EmployeeJoinedCreate[];
+
+  /**
+   * 入职待办（子表，级联保存）
+   */
+  employeeOnboardings?: EmployeeOnboardingCreate[];
+
+  /**
+   * 调动记录（子表，级联保存）
+   */
+  employeeReassignments?: EmployeeReassignmentCreate[];
+
+  /**
+   * 离职办理（子表，级联保存）
+   */
+  employeeResignations?: EmployeeResignationCreate[];
+
+  /**
+   * 档案附件（子表，级联保存）
+   */
+  employeeAttachments?: EmployeeAttachmentCreate[];
 
   /**
    * 扩展字段JSON
@@ -840,9 +725,9 @@ export interface EmployeeImport {
   companyDefaultCulture?: string;
 
   /**
-   * 员工编号（租户+公司内唯一）
+   * 员工编码（租户+公司内唯一）
    */
-  employeeNo?: string;
+  employeeCode?: string;
 
   /**
    * 姓名
@@ -850,7 +735,7 @@ export interface EmployeeImport {
   employeeName?: string;
 
   /**
-   * 性别（0=未知，1=男，2=女）
+   * 性别（字典 sys_user_gender_category；0=未知 1=男 2=女）
    */
   gender?: number;
 
@@ -875,112 +760,37 @@ export interface EmployeeImport {
   email?: string;
 
   /**
-   * 籍贯（字典 hr_native_place_code 的 6 位 GB 行政区划代码，人事档案必填）
+   * 籍贯（字典 hr_native_place_code；列存 6 位 GB 行政区划代码，人事档案必填；与住址子表无关）
    */
   nativePlace?: string;
 
   /**
-   * 民族（字典 hr_ethnic_code，1～56）
+   * 民族（字典 hr_ethnic_code；DictValue 1～56）
    */
   ethnicity?: number;
 
   /**
-   * 政治面貌（字典 hr_political_status，0～12；人事档案必填）
+   * 政治面貌（字典 hr_political_affiliation；0～12；人事档案必填）
    */
-  politicalStatus?: number;
+  politicalAffiliation?: number;
 
   /**
-   * 婚姻状况（0=未婚，1=已婚，2=离异，3=丧偶；人事档案必填）
+   * 婚姻状况（字典 hr_marital_status；0=未婚 1=已婚 2=离异 3=丧偶；人事档案必填）
    */
   maritalStatus?: number;
 
   /**
-   * 最高学历摘要（1=高中及以下，2=大专，3=本科，4=硕士，5=博士；明细见 EmployeeEducations）
-   */
-  education?: number;
-
-  /**
-   * 毕业院校（最高学历摘要）
-   */
-  graduateSchool?: string;
-
-  /**
-   * 专业（最高学历摘要）
-   */
-  major?: string;
-
-  /**
-   * 实际上岗日期（JoinedDate：入职上班；投影字段，由上岗审批通过后回写，未上岗可空）
-   */
-  joinedDate?: string;
-
-  /**
-   * 试用期结束日期（投影字段，由上岗审批通过后回写）
-   */
-  probationEndDate?: string;
-
-  /**
-   * 转正日期（投影字段，由上岗审批通过后回写）
-   */
-  regularDate?: string;
-
-  /**
-   * 离职日期（投影字段，由离职审批通过后回写）
-   */
-  terminationDate?: string;
-
-  /**
-   * 最后工作日（投影字段，由离职审批通过后回写）
-   */
-  lastWorkDate?: string;
-
-  /**
-   * 离职类型（投影字段，由离职审批通过后回写；0=主动辞职，1=公司辞退，2=合同到期，3=退休，9=其他）
-   */
-  resignationType?: number;
-
-  /**
-   * 离职原因（投影字段，由离职审批通过后回写）
-   */
-  resignationReason?: string;
-
-  /**
-   * 员工状态（1=试用期，2=正式，3=离职，4=退休）
+   * 员工状态（字典 hr_employee_status；1=试用期 2=正式 3=离职 4=退休）
    */
   employeeStatus?: number;
 
   /**
-   * 当前主部门ID（任职投影快照；未上岗可空，在岗员工由投影服务保证有值）
-   */
-  primaryDeptId?: string;
-
-  /**
-   * 当前主岗位ID（任职投影快照；未上岗可空，在岗员工由投影服务保证有值）
-   */
-  primaryPostId?: string;
-
-  /**
-   * 内置（种子员工不可删）
+   * 内置（字典 sys_yes_no_type；0=否 1=是；种子员工不可删）
    */
   isBuiltIn?: number;
 
   /**
-   * 紧急联系人姓名（人事档案必填）
-   */
-  emergencyContactName?: string;
-
-  /**
-   * 紧急联系人电话（人事档案必填）
-   */
-  emergencyContactPhone?: string;
-
-  /**
-   * 家庭住址（人事档案必填）
-   */
-  homeAddress?: string;
-
-  /**
-   * 照片URL
+   * 头像URL（展示用；档案附件明细见 EmployeeAttachments）
    */
   avatar?: string;
 
@@ -993,6 +803,61 @@ export interface EmployeeImport {
    * 员工岗位关联（RBAC 全量覆盖，分配走 ITaktRbacService）
    */
   employeePostIds?: any;
+
+  /**
+   * 员工地址（家庭/工作/常住）（子表，级联保存）
+   */
+  employeeAddresses?: EmployeeAddressCreate[];
+
+  /**
+   * 教育经历（含最高学历 IsHighest）（子表，级联保存）
+   */
+  employeeEducations?: EmployeeEducationCreate[];
+
+  /**
+   * 家庭成员（含紧急联系人 IsEmergencyContact）（子表，级联保存）
+   */
+  employeeFamilies?: EmployeeFamilyCreate[];
+
+  /**
+   * 外部工作经历（子表，级联保存）
+   */
+  employeeExperiences?: EmployeeExperienceCreate[];
+
+  /**
+   * 技能与证书（子表，级联保存）
+   */
+  employeeSkills?: EmployeeSkillCreate[];
+
+  /**
+   * 劳动合同（子表，级联保存）
+   */
+  employeeContracts?: EmployeeContractCreate[];
+
+  /**
+   * 入职上岗办理（实际上岗日/试用/转正/部门岗位）（子表，级联保存）
+   */
+  employeeJoineds?: EmployeeJoinedCreate[];
+
+  /**
+   * 入职待办（子表，级联保存）
+   */
+  employeeOnboardings?: EmployeeOnboardingCreate[];
+
+  /**
+   * 调动记录（子表，级联保存）
+   */
+  employeeReassignments?: EmployeeReassignmentCreate[];
+
+  /**
+   * 离职办理（子表，级联保存）
+   */
+  employeeResignations?: EmployeeResignationCreate[];
+
+  /**
+   * 档案附件（子表，级联保存）
+   */
+  employeeAttachments?: EmployeeAttachmentCreate[];
 
   /**
    * 扩展字段JSON
@@ -1024,9 +889,9 @@ export interface EmployeeExport {
   companyCode: string;
 
   /**
-   * 员工编号（租户+公司内唯一）
+   * 员工编码（租户+公司内唯一）
    */
-  employeeNo: string;
+  employeeCode: string;
 
   /**
    * 姓名
@@ -1034,7 +899,7 @@ export interface EmployeeExport {
   employeeName: string;
 
   /**
-   * 性别（0=未知，1=男，2=女）
+   * 性别（字典 sys_user_gender_category；0=未知 1=男 2=女）
    */
   gender: number;
 
@@ -1059,112 +924,37 @@ export interface EmployeeExport {
   email?: string;
 
   /**
-   * 籍贯（字典 hr_native_place_code 的 6 位 GB 行政区划代码，人事档案必填）
+   * 籍贯（字典 hr_native_place_code；列存 6 位 GB 行政区划代码，人事档案必填；与住址子表无关）
    */
   nativePlace: string;
 
   /**
-   * 民族（字典 hr_ethnic_code，1～56）
+   * 民族（字典 hr_ethnic_code；DictValue 1～56）
    */
   ethnicity: number;
 
   /**
-   * 政治面貌（字典 hr_political_status，0～12；人事档案必填）
+   * 政治面貌（字典 hr_political_affiliation；0～12；人事档案必填）
    */
-  politicalStatus: number;
+  politicalAffiliation: number;
 
   /**
-   * 婚姻状况（0=未婚，1=已婚，2=离异，3=丧偶；人事档案必填）
+   * 婚姻状况（字典 hr_marital_status；0=未婚 1=已婚 2=离异 3=丧偶；人事档案必填）
    */
   maritalStatus: number;
 
   /**
-   * 最高学历摘要（1=高中及以下，2=大专，3=本科，4=硕士，5=博士；明细见 EmployeeEducations）
-   */
-  education?: number;
-
-  /**
-   * 毕业院校（最高学历摘要）
-   */
-  graduateSchool?: string;
-
-  /**
-   * 专业（最高学历摘要）
-   */
-  major?: string;
-
-  /**
-   * 实际上岗日期（JoinedDate：入职上班；投影字段，由上岗审批通过后回写，未上岗可空）
-   */
-  joinedDate?: string;
-
-  /**
-   * 试用期结束日期（投影字段，由上岗审批通过后回写）
-   */
-  probationEndDate?: string;
-
-  /**
-   * 转正日期（投影字段，由上岗审批通过后回写）
-   */
-  regularDate?: string;
-
-  /**
-   * 离职日期（投影字段，由离职审批通过后回写）
-   */
-  terminationDate?: string;
-
-  /**
-   * 最后工作日（投影字段，由离职审批通过后回写）
-   */
-  lastWorkDate?: string;
-
-  /**
-   * 离职类型（投影字段，由离职审批通过后回写；0=主动辞职，1=公司辞退，2=合同到期，3=退休，9=其他）
-   */
-  resignationType?: number;
-
-  /**
-   * 离职原因（投影字段，由离职审批通过后回写）
-   */
-  resignationReason?: string;
-
-  /**
-   * 员工状态（1=试用期，2=正式，3=离职，4=退休）
+   * 员工状态（字典 hr_employee_status；1=试用期 2=正式 3=离职 4=退休）
    */
   employeeStatus: number;
 
   /**
-   * 当前主部门ID（任职投影快照；未上岗可空，在岗员工由投影服务保证有值）
-   */
-  primaryDeptId?: string;
-
-  /**
-   * 当前主岗位ID（任职投影快照；未上岗可空，在岗员工由投影服务保证有值）
-   */
-  primaryPostId?: string;
-
-  /**
-   * 内置（种子员工不可删）
+   * 内置（字典 sys_yes_no_type；0=否 1=是；种子员工不可删）
    */
   isBuiltIn: number;
 
   /**
-   * 紧急联系人姓名（人事档案必填）
-   */
-  emergencyContactName: string;
-
-  /**
-   * 紧急联系人电话（人事档案必填）
-   */
-  emergencyContactPhone: string;
-
-  /**
-   * 家庭住址（人事档案必填）
-   */
-  homeAddress: string;
-
-  /**
-   * 照片URL
+   * 头像URL（展示用；档案附件明细见 EmployeeAttachments）
    */
   avatar?: string;
 

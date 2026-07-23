@@ -55,12 +55,12 @@
             </a-col>
             <a-col :span="12">
               <a-form-item
-                :label="pi.label('lineNumber')"
-                name="lineNumber"
+                :label="pi.label('purchaseScaleSeq')"
+                name="purchaseScaleSeq"
               >
                 <a-input-number
-                  v-model:value="formState.lineNumber"
-                  :placeholder="pi.ph('lineNumber')"
+                  v-model:value="formState.purchaseScaleSeq"
+                  :placeholder="pi.ph('purchaseScaleSeq')"
                   style="width: 100%"
                 />
               </a-form-item>
@@ -79,12 +79,36 @@
             </a-col>
             <a-col :span="12">
               <a-form-item
-                :label="pi.label('amount')"
-                name="amount"
+                :label="pi.label('price')"
+                name="price"
               >
                 <a-input-number
-                  v-model:value="formState.amount"
-                  :placeholder="pi.ph('amount')"
+                  v-model:value="formState.price"
+                  :placeholder="pi.ph('price')"
+                  style="width: 100%"
+                />
+              </a-form-item>
+            </a-col>
+            <a-col :span="12">
+              <a-form-item
+                :label="pi.label('untaxedPrice')"
+                name="untaxedPrice"
+              >
+                <a-input-number
+                  v-model:value="formState.untaxedPrice"
+                  :placeholder="pi.ph('untaxedPrice')"
+                  style="width: 100%"
+                />
+              </a-form-item>
+            </a-col>
+            <a-col :span="12">
+              <a-form-item
+                :label="pi.label('taxIncludedPrice')"
+                name="taxIncludedPrice"
+              >
+                <a-input-number
+                  v-model:value="formState.taxIncludedPrice"
+                  :placeholder="pi.ph('taxIncludedPrice')"
                   style="width: 100%"
                 />
               </a-form-item>
@@ -132,7 +156,7 @@ const formContentClass = computed(() => (formFields.length > 10 ? 'takt-form-con
 /** 当前激活的 Tab key */
 const activeTab = ref('tab-0')
 /** CreateDto 字段名列表（与 formState 键对齐） */
-const formFields = ["purchasePriceCode","purchasePriceSeq","lineNumber","scaleQuantity","amount","isObsolete"]
+const formFields = ["purchasePriceCode","purchasePriceSeq","purchaseScaleSeq","scaleQuantity","price","untaxedPrice","taxIncludedPrice","isObsolete"]
 
 
 
@@ -212,14 +236,14 @@ const rules = computed<Record<string, Rule[]>>(() => ({
     },
     trigger: 'change'
   }],
-  lineNumber: [{
+  purchaseScaleSeq: [{
     validator: async (_rule, value) => {
       if (value === undefined || value === null || value === '') {
-        return Promise.reject(pi.ph('lineNumber'))
+        return Promise.reject(pi.ph('purchaseScaleSeq'))
       }
       const num = typeof value === 'number' ? value : Number(value)
       if (!Number.isFinite(num)) {
-        return Promise.reject(pi.ph('lineNumber'))
+        return Promise.reject(pi.ph('purchaseScaleSeq'))
       }
       return Promise.resolve()
     },
@@ -238,14 +262,40 @@ const rules = computed<Record<string, Rule[]>>(() => ({
     },
     trigger: 'change'
   }],
-  amount: [{
+  price: [{
     validator: async (_rule, value) => {
       if (value === undefined || value === null || value === '') {
-        return Promise.reject(pi.ph('amount'))
+        return Promise.reject(pi.ph('price'))
       }
       const num = typeof value === 'number' ? value : Number(value)
       if (!Number.isFinite(num)) {
-        return Promise.reject(pi.ph('amount'))
+        return Promise.reject(pi.ph('price'))
+      }
+      return Promise.resolve()
+    },
+    trigger: 'change'
+  }],
+  untaxedPrice: [{
+    validator: async (_rule, value) => {
+      if (value === undefined || value === null || value === '') {
+        return Promise.reject(pi.ph('untaxedPrice'))
+      }
+      const num = typeof value === 'number' ? value : Number(value)
+      if (!Number.isFinite(num)) {
+        return Promise.reject(pi.ph('untaxedPrice'))
+      }
+      return Promise.resolve()
+    },
+    trigger: 'change'
+  }],
+  taxIncludedPrice: [{
+    validator: async (_rule, value) => {
+      if (value === undefined || value === null || value === '') {
+        return Promise.reject(pi.ph('taxIncludedPrice'))
+      }
+      const num = typeof value === 'number' ? value : Number(value)
+      if (!Number.isFinite(num)) {
+        return Promise.reject(pi.ph('taxIncludedPrice'))
       }
       return Promise.resolve()
     },
@@ -279,17 +329,25 @@ function getValues(): Record<string, any> {
     const rawpurchasePriceSeq = payload.purchasePriceSeq
     payload.purchasePriceSeq = typeof rawpurchasePriceSeq === 'number' ? rawpurchasePriceSeq : Number(rawpurchasePriceSeq)
   }
-  if ('lineNumber' in payload) {
-    const rawlineNumber = payload.lineNumber
-    payload.lineNumber = typeof rawlineNumber === 'number' ? rawlineNumber : Number(rawlineNumber)
+  if ('purchaseScaleSeq' in payload) {
+    const rawpurchaseScaleSeq = payload.purchaseScaleSeq
+    payload.purchaseScaleSeq = typeof rawpurchaseScaleSeq === 'number' ? rawpurchaseScaleSeq : Number(rawpurchaseScaleSeq)
   }
   if ('scaleQuantity' in payload) {
     const rawscaleQuantity = payload.scaleQuantity
     payload.scaleQuantity = typeof rawscaleQuantity === 'number' ? rawscaleQuantity : Number(rawscaleQuantity)
   }
-  if ('amount' in payload) {
-    const rawamount = payload.amount
-    payload.amount = typeof rawamount === 'number' ? rawamount : Number(rawamount)
+  if ('price' in payload) {
+    const rawprice = payload.price
+    payload.price = typeof rawprice === 'number' ? rawprice : Number(rawprice)
+  }
+  if ('untaxedPrice' in payload) {
+    const rawuntaxedPrice = payload.untaxedPrice
+    payload.untaxedPrice = typeof rawuntaxedPrice === 'number' ? rawuntaxedPrice : Number(rawuntaxedPrice)
+  }
+  if ('taxIncludedPrice' in payload) {
+    const rawtaxIncludedPrice = payload.taxIncludedPrice
+    payload.taxIncludedPrice = typeof rawtaxIncludedPrice === 'number' ? rawtaxIncludedPrice : Number(rawtaxIncludedPrice)
   }
   if ('isObsolete' in payload) {
     const rawisObsolete = payload.isObsolete

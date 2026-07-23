@@ -36,8 +36,11 @@ export const PURCHASEPLANITEM_LIST_FIELDS = [
   'convertedQuantity',
   'estimatedUnitPrice',
   'estimatedAmount',
+  'taxIncludedPrice',
+  'untaxedPrice',
+  'taxAmount',
   'referenceSupplierCode',
-  'referenceSupplierName',
+  'referenceSupplierName1',
   'isObsolete',
 ] as const
 
@@ -59,8 +62,11 @@ export const PURCHASEPLANITEM_DEFAULT_VISIBLE_COLUMN_KEYS = [
   'convertedQuantity',
   'estimatedUnitPrice',
   'estimatedAmount',
+  'taxIncludedPrice',
+  'untaxedPrice',
+  'taxAmount',
   'referenceSupplierCode',
-  'referenceSupplierName',
+  'referenceSupplierName1',
   'isObsolete',
   'action',
 ] as const
@@ -72,6 +78,9 @@ export const PURCHASEPLANITEM_SUMMARY_SUM_FIELDS = [
   'convertedQuantity',
   'estimatedUnitPrice',
   'estimatedAmount',
+  'taxIncludedPrice',
+  'untaxedPrice',
+  'taxAmount',
   'isObsolete',
 ] as const
 
@@ -86,7 +95,7 @@ export const PURCHASEPLANITEM_PLACEHOLDER = {
   productionPlanLineNumber: 'optional',
   materialRequirementsPlanningItemId: 'optional',
   materialCode: 'select',
-  materialName: 'required',
+  materialName: 'optional',
   materialSpecification: 'optional',
   planUnit: 'select',
   planQuantity: 'select',
@@ -94,8 +103,11 @@ export const PURCHASEPLANITEM_PLACEHOLDER = {
   convertedQuantity: 'select',
   estimatedUnitPrice: 'select',
   estimatedAmount: 'select',
+  taxIncludedPrice: 'select',
+  untaxedPrice: 'select',
+  taxAmount: 'select',
   referenceSupplierCode: 'optional',
-  referenceSupplierName: 'optional',
+  referenceSupplierName1: 'optional',
   isObsolete: 'select',
 } as const satisfies Record<string, EntityFieldPlaceholderKind>
 
@@ -115,7 +127,7 @@ export const PURCHASEPLANITEM_QUERY_STRING_FIELDS = [
   'plannedArrivalDateStart',
   'plannedArrivalDateEnd',
   'referenceSupplierCode',
-  'referenceSupplierName',
+  'referenceSupplierName1',
   'createdAtStart',
   'createdAtEnd',
   'extField',
@@ -124,7 +136,7 @@ export const PURCHASEPLANITEM_QUERY_STRING_FIELDS = [
 
 export type PurchasePlanItemQueryField =
   | (typeof PURCHASEPLANITEM_QUERY_STRING_FIELDS)[number]
-  | 'lineNumber' | 'productionPlanLineNumber' | 'planQuantity' | 'convertedQuantity' | 'estimatedUnitPrice' | 'estimatedAmount' | 'isObsolete'
+  | 'lineNumber' | 'productionPlanLineNumber' | 'planQuantity' | 'convertedQuantity' | 'estimatedUnitPrice' | 'estimatedAmount' | 'taxIncludedPrice' | 'untaxedPrice' | 'taxAmount' | 'isObsolete'
 
 /** 高级查询抽屉全部字段（含数值） */
 export const PURCHASEPLANITEM_QUERY_FIELDS: readonly PurchasePlanItemQueryField[] = [
@@ -135,6 +147,9 @@ export const PURCHASEPLANITEM_QUERY_FIELDS: readonly PurchasePlanItemQueryField[
   'convertedQuantity',
   'estimatedUnitPrice',
   'estimatedAmount',
+  'taxIncludedPrice',
+  'untaxedPrice',
+  'taxAmount',
   'isObsolete',
 ]
 

@@ -29,7 +29,7 @@ export interface Ticket extends CompanyDtoBase {
   ticketId: string;
 
   /**
-   * 工单编号（唯一）
+   * 工单编码（唯一）
    */
   ticketNo: string;
 
@@ -209,7 +209,7 @@ export interface TicketQuery extends TaktPagedQuery {
   companyCode?: string;
 
   /**
-   * 工单编号（唯一）
+   * 工单编码（唯一）
    */
   ticketNo?: string;
 
@@ -408,7 +408,7 @@ export interface TicketCreate {
   companyDefaultCulture: string;
 
   /**
-   * 工单编号（唯一）
+   * 工单编码（唯一）
    */
   ticketNo: string;
 
@@ -606,7 +606,7 @@ export interface TicketTemplate {
   companyCode?: string;
 
   /**
-   * 工单编号（唯一）
+   * 工单编码（唯一）
    */
   ticketNo?: string;
 
@@ -775,7 +775,7 @@ export interface TicketImport {
   companyDefaultCulture?: string;
 
   /**
-   * 工单编号（唯一）
+   * 工单编码（唯一）
    */
   ticketNo?: string;
 
@@ -939,7 +939,7 @@ export interface TicketExport {
   companyCode: string;
 
   /**
-   * 工单编号（唯一）
+   * 工单编码（唯一）
    */
   ticketNo: string;
 

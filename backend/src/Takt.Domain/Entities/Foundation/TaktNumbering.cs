@@ -4,7 +4,7 @@
 // 文件名称：TaktNumbering.cs
 // 创建时间：2025-01-20
 // 创建人：Takt365(Cursor AI)
-// 功能描述：编号规则实体，定义各类业务单据的编号生成规则
+// 功能描述：编码规则实体，定义各类业务单据的编码生成规则
 // 
 // 版权信息：Copyright (c) 2025 Takt  All rights reserved.
 // 免责声明：此软件使用 MIT License，作者不承担任何使用风险。
@@ -16,14 +16,14 @@ using Takt.Domain.Entities;
 namespace Takt.Domain.Entities.Foundation;
 
 /// <summary>
-/// 编号规则实体
-/// 定义系统中各类业务单据的编号生成规则，如：订单号、合同号、发票号等
+/// 编码规则实体
+/// 定义系统中各类业务单据的编码生成规则，如：订单号、合同号、发票号等
 /// 支持灵活的前缀、日期格式、流水号组合
 /// 
 /// 编码顺序：单据类型-公司-部门-前缀-日期-流水号
 /// 示例：order-1000-DEPT01-SO-20250120-000001
 /// </summary>
-[SugarTable("takt_foundation_numbering", "编号规则表")]
+[SugarTable("takt_foundation_numbering", "编码规则表")]
 [SugarIndex("ix_numbering_tenant", nameof(TenantCode), OrderByType.Asc, nameof(CompanyCode), OrderByType.Asc, false)]
 [SugarIndex("ix_numbering_is_deleted", nameof(TenantCode), OrderByType.Asc, nameof(CompanyCode), OrderByType.Asc, nameof(IsDeleted), OrderByType.Asc, false)]
 [SugarIndex("ix_numbering_code_unique", nameof(TenantCode), OrderByType.Asc, nameof(CompanyCode), OrderByType.Asc, nameof(RuleCode), OrderByType.Asc, true)]
@@ -44,7 +44,7 @@ public class TaktNumbering : TaktCompanyEntityBase
     [SugarColumn(ColumnName = "document_type", ColumnDescription = "单据类型", ColumnDataType = "varchar", Length = 40, IsNullable = false, DefaultValue = "")]
     public string DocumentType { get; set; } = string.Empty;
     /// <summary>
-    /// 部门编码（选项 TaktIsoCodes/options，DictValue=Id）
+    /// 部门编码（选项 TaktIsoCodes/options；DictValue=Id）
     /// </summary>
     [SugarColumn(ColumnName = "dept_code", ColumnDescription = "部门编码", ColumnDataType = "varchar", Length = 50, IsNullable = false)]
     public string DeptCode { get; set; } = string.Empty;
@@ -84,8 +84,8 @@ public class TaktNumbering : TaktCompanyEntityBase
     [SugarColumn(ColumnName = "current_sequence", ColumnDescription = "当前流水", ColumnDataType = "int", IsNullable = false, DefaultValue = "0")]
     public int CurrentSequence { get; set; } = 0;
     /// <summary>
-    /// 起始编码（新增时必填；完整业务编号样例，末段为当前流水号）
-    /// 如：SO-20250120-000001；生成编号后会更新为最近一次产出编码
+    /// 起始编码（新增时必填；完整业务编码样例，末段为当前流水号）
+    /// 如：SO-20250120-000001；生成编码后会更新为最近一次产出编码
     /// </summary>
     [SugarColumn(ColumnName = "example_code", ColumnDescription = "起始编码", ColumnDataType = "varchar", Length = 100, IsNullable = false)]
     public string ExampleCode { get; set; } = string.Empty;

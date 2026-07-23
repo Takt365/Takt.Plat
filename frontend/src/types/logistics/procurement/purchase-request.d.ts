@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：frontend/src/types/logistics/procurement
 // 文件名称：purchase-request.d.ts
-// 创建时间：2026-07-09
+// 创建时间：2026-07-23
 // 创建人：Takt365(Auto Generated)
 // 功能描述：logistics/procurement 模块类型定义（自动生成；类型名去 Takt 前缀与末尾 Dto，如 TaktCompanyDto → Company）
 // 
@@ -29,7 +29,7 @@ export interface PurchaseRequest extends ApprovalDtoBase {
   purchaseRequestId: string;
 
   /**
-   * 工厂代码（选项 TaktPlants/options，DictValue=PlantCode）
+   * 工厂代码（选项 TaktPlants/options；DictValue=PlantCode）
    */
   plantCode: string;
 
@@ -39,7 +39,7 @@ export interface PurchaseRequest extends ApprovalDtoBase {
   purchaseRequestCode: string;
 
   /**
-   * 来源采购询价 ID（关联 TaktPurchaseInquiry.Id，选项 TaktPurchaseInquirys/options）
+   * 来源采购询价 ID（选项 TaktPurchaseInquirys/options；DictValue=Id）
    */
   purchaseInquiryId?: string;
 
@@ -54,6 +54,21 @@ export interface PurchaseRequest extends ApprovalDtoBase {
   purchaseInquiryCode?: string;
 
   /**
+   * 来源采购计划 ID（MRP 下推，关联 TaktPurchasePlan.Id）
+   */
+  purchasePlanId?: string;
+
+  /**
+   * 来源采购计划 名称（填充字段）
+   */
+  purchasePlanName?: string;
+
+  /**
+   * 来源采购计划编码（冗余）
+   */
+  purchasePlanCode?: string;
+
+  /**
    * 采购链路方案（字典 logistics_procurement_chain_scheme；1=方案一，2=方案二）
    */
   chainScheme: number;
@@ -64,7 +79,7 @@ export interface PurchaseRequest extends ApprovalDtoBase {
   poDecision?: number;
 
   /**
-   * PR 会签单 ID（关联 TaktCountersign.Id，选项 TaktCountersigns/options）
+   * PR 会签单 ID（选项 TaktCountersigns/options；DictValue=Id）
    */
   countersignId?: string;
 
@@ -74,7 +89,7 @@ export interface PurchaseRequest extends ApprovalDtoBase {
   countersignName?: string;
 
   /**
-   * PR 会签编号（冗余）
+   * PR 会签编码（冗余）
    */
   countersignCode?: string;
 
@@ -89,7 +104,7 @@ export interface PurchaseRequest extends ApprovalDtoBase {
   requiredArrivalDate?: string;
 
   /**
-   * 申请人员工 ID（关联 TaktEmployee.Id，选项 TaktEmployees/options）
+   * 申请人员工 ID（选项 TaktEmployees/options；DictValue=Id）
    */
   requestId?: string;
 
@@ -102,6 +117,31 @@ export interface PurchaseRequest extends ApprovalDtoBase {
    * 申请人（人员代码）
    */
   requestBy: string;
+
+  /**
+   * 供应商编码（选项 TaktSuppliers/options；DictValue=SupplierCode；一单一供应商，明细禁止再挂供应商）
+   */
+  supplierCode: string;
+
+  /**
+   * 供应商名称1（冗余，与 TaktSupplier.SupplierName1 对齐）
+   */
+  supplierName1: string;
+
+  /**
+   * 结算币种（字典 accounting_currency_code；DictValue=CNY/USD 等；一单一币种）
+   */
+  currencyCode: string;
+
+  /**
+   * 税率（字典 accounting_tax_rate_param；13=13%，9=9%，0=0% 等；一单一税率）
+   */
+  taxRate: number;
+
+  /**
+   * 税费（精确到分）
+   */
+  taxAmount: number;
 
   /**
    * 申请总数量（基本单位数量）
@@ -164,7 +204,7 @@ export interface PurchaseRequestQuery extends TaktPagedQuery {
   companyCode?: string;
 
   /**
-   * 工厂代码（选项 TaktPlants/options，DictValue=PlantCode）
+   * 工厂代码（选项 TaktPlants/options；DictValue=PlantCode）
    */
   plantCode?: string;
 
@@ -174,7 +214,7 @@ export interface PurchaseRequestQuery extends TaktPagedQuery {
   purchaseRequestCode?: string;
 
   /**
-   * 来源采购询价 ID（关联 TaktPurchaseInquiry.Id，选项 TaktPurchaseInquirys/options）
+   * 来源采购询价 ID（选项 TaktPurchaseInquirys/options；DictValue=Id）
    */
   purchaseInquiryId?: string;
 
@@ -182,6 +222,16 @@ export interface PurchaseRequestQuery extends TaktPagedQuery {
    * 来源采购询价编码（冗余）
    */
   purchaseInquiryCode?: string;
+
+  /**
+   * 来源采购计划 ID（MRP 下推，关联 TaktPurchasePlan.Id）
+   */
+  purchasePlanId?: string;
+
+  /**
+   * 来源采购计划编码（冗余）
+   */
+  purchasePlanCode?: string;
 
   /**
    * 采购链路方案（字典 logistics_procurement_chain_scheme；1=方案一，2=方案二）
@@ -194,12 +244,12 @@ export interface PurchaseRequestQuery extends TaktPagedQuery {
   poDecision?: number;
 
   /**
-   * PR 会签单 ID（关联 TaktCountersign.Id，选项 TaktCountersigns/options）
+   * PR 会签单 ID（选项 TaktCountersigns/options；DictValue=Id）
    */
   countersignId?: string;
 
   /**
-   * PR 会签编号（冗余）
+   * PR 会签编码（冗余）
    */
   countersignCode?: string;
 
@@ -224,7 +274,7 @@ export interface PurchaseRequestQuery extends TaktPagedQuery {
   requiredArrivalDateEnd?: string;
 
   /**
-   * 申请人员工 ID（关联 TaktEmployee.Id，选项 TaktEmployees/options）
+   * 申请人员工 ID（选项 TaktEmployees/options；DictValue=Id）
    */
   requestId?: string;
 
@@ -232,6 +282,31 @@ export interface PurchaseRequestQuery extends TaktPagedQuery {
    * 申请人（人员代码）
    */
   requestBy?: string;
+
+  /**
+   * 供应商编码（选项 TaktSuppliers/options；DictValue=SupplierCode；一单一供应商，明细禁止再挂供应商）
+   */
+  supplierCode?: string;
+
+  /**
+   * 供应商名称1（冗余，与 TaktSupplier.SupplierName1 对齐）
+   */
+  supplierName1?: string;
+
+  /**
+   * 结算币种（字典 accounting_currency_code；DictValue=CNY/USD 等；一单一币种）
+   */
+  currencyCode?: string;
+
+  /**
+   * 税率（字典 accounting_tax_rate_param；13=13%，9=9%，0=0% 等；一单一税率）
+   */
+  taxRate?: number;
+
+  /**
+   * 税费（精确到分）
+   */
+  taxAmount?: number;
 
   /**
    * 申请总数量（基本单位数量）
@@ -353,7 +428,7 @@ export interface PurchaseRequestCreate {
   companyDefaultCulture: string;
 
   /**
-   * 工厂代码（选项 TaktPlants/options，DictValue=PlantCode）
+   * 工厂代码（选项 TaktPlants/options；DictValue=PlantCode）
    */
   plantCode: string;
 
@@ -363,7 +438,7 @@ export interface PurchaseRequestCreate {
   purchaseRequestCode: string;
 
   /**
-   * 来源采购询价 ID（关联 TaktPurchaseInquiry.Id，选项 TaktPurchaseInquirys/options）
+   * 来源采购询价 ID（选项 TaktPurchaseInquirys/options；DictValue=Id）
    */
   purchaseInquiryId?: string;
 
@@ -371,6 +446,16 @@ export interface PurchaseRequestCreate {
    * 来源采购询价编码（冗余）
    */
   purchaseInquiryCode?: string;
+
+  /**
+   * 来源采购计划 ID（MRP 下推，关联 TaktPurchasePlan.Id）
+   */
+  purchasePlanId?: string;
+
+  /**
+   * 来源采购计划编码（冗余）
+   */
+  purchasePlanCode?: string;
 
   /**
    * 采购链路方案（字典 logistics_procurement_chain_scheme；1=方案一，2=方案二）
@@ -383,12 +468,12 @@ export interface PurchaseRequestCreate {
   poDecision?: number;
 
   /**
-   * PR 会签单 ID（关联 TaktCountersign.Id，选项 TaktCountersigns/options）
+   * PR 会签单 ID（选项 TaktCountersigns/options；DictValue=Id）
    */
   countersignId?: string;
 
   /**
-   * PR 会签编号（冗余）
+   * PR 会签编码（冗余）
    */
   countersignCode?: string;
 
@@ -403,7 +488,7 @@ export interface PurchaseRequestCreate {
   requiredArrivalDate?: string;
 
   /**
-   * 申请人员工 ID（关联 TaktEmployee.Id，选项 TaktEmployees/options）
+   * 申请人员工 ID（选项 TaktEmployees/options；DictValue=Id）
    */
   requestId?: string;
 
@@ -411,6 +496,31 @@ export interface PurchaseRequestCreate {
    * 申请人（人员代码）
    */
   requestBy: string;
+
+  /**
+   * 供应商编码（选项 TaktSuppliers/options；DictValue=SupplierCode；一单一供应商，明细禁止再挂供应商）
+   */
+  supplierCode: string;
+
+  /**
+   * 供应商名称1（冗余，与 TaktSupplier.SupplierName1 对齐）
+   */
+  supplierName1: string;
+
+  /**
+   * 结算币种（字典 accounting_currency_code；DictValue=CNY/USD 等；一单一币种）
+   */
+  currencyCode: string;
+
+  /**
+   * 税率（字典 accounting_tax_rate_param；13=13%，9=9%，0=0% 等；一单一税率）
+   */
+  taxRate: number;
+
+  /**
+   * 税费（精确到分）
+   */
+  taxAmount: number;
 
   /**
    * 申请总数量（基本单位数量）
@@ -450,7 +560,7 @@ export interface PurchaseRequestCreate {
   /**
    * 采购申请明细列表（主子表关系，一个申请可以有多个明细）（子表，级联保存）
    */
-  items?: PurchaseRequestItemUpdate[];
+  items?: PurchaseRequestItemCreate[];
 
   /**
    * 扩展字段JSON
@@ -476,6 +586,11 @@ export interface PurchaseRequestUpdate extends PurchaseRequestCreate {
    * PurchaseRequestID（标识要更新的实体）
    */
   purchaseRequestId: string;
+
+  /**
+   * 采购申请明细列表（主子表关系，一个申请可以有多个明细）（子表，级联保存）
+   */
+  items?: any;
 
 }
 
@@ -516,7 +631,7 @@ export interface PurchaseRequestTemplate {
   companyCode?: string;
 
   /**
-   * 工厂代码（选项 TaktPlants/options，DictValue=PlantCode）
+   * 工厂代码（选项 TaktPlants/options；DictValue=PlantCode）
    */
   plantCode?: string;
 
@@ -526,7 +641,7 @@ export interface PurchaseRequestTemplate {
   purchaseRequestCode?: string;
 
   /**
-   * 来源采购询价 ID（关联 TaktPurchaseInquiry.Id，选项 TaktPurchaseInquirys/options）
+   * 来源采购询价 ID（选项 TaktPurchaseInquirys/options；DictValue=Id）
    */
   purchaseInquiryId?: string;
 
@@ -534,6 +649,16 @@ export interface PurchaseRequestTemplate {
    * 来源采购询价编码（冗余）
    */
   purchaseInquiryCode?: string;
+
+  /**
+   * 来源采购计划 ID（MRP 下推，关联 TaktPurchasePlan.Id）
+   */
+  purchasePlanId?: string;
+
+  /**
+   * 来源采购计划编码（冗余）
+   */
+  purchasePlanCode?: string;
 
   /**
    * 采购链路方案（字典 logistics_procurement_chain_scheme；1=方案一，2=方案二）
@@ -546,12 +671,12 @@ export interface PurchaseRequestTemplate {
   poDecision?: number;
 
   /**
-   * PR 会签单 ID（关联 TaktCountersign.Id，选项 TaktCountersigns/options）
+   * PR 会签单 ID（选项 TaktCountersigns/options；DictValue=Id）
    */
   countersignId?: string;
 
   /**
-   * PR 会签编号（冗余）
+   * PR 会签编码（冗余）
    */
   countersignCode?: string;
 
@@ -566,7 +691,7 @@ export interface PurchaseRequestTemplate {
   requiredArrivalDate?: string;
 
   /**
-   * 申请人员工 ID（关联 TaktEmployee.Id，选项 TaktEmployees/options）
+   * 申请人员工 ID（选项 TaktEmployees/options；DictValue=Id）
    */
   requestId?: string;
 
@@ -574,6 +699,31 @@ export interface PurchaseRequestTemplate {
    * 申请人（人员代码）
    */
   requestBy?: string;
+
+  /**
+   * 供应商编码（选项 TaktSuppliers/options；DictValue=SupplierCode；一单一供应商，明细禁止再挂供应商）
+   */
+  supplierCode?: string;
+
+  /**
+   * 供应商名称1（冗余，与 TaktSupplier.SupplierName1 对齐）
+   */
+  supplierName1?: string;
+
+  /**
+   * 结算币种（字典 accounting_currency_code；DictValue=CNY/USD 等；一单一币种）
+   */
+  currencyCode?: string;
+
+  /**
+   * 税率（字典 accounting_tax_rate_param；13=13%，9=9%，0=0% 等；一单一税率）
+   */
+  taxRate?: number;
+
+  /**
+   * 税费（精确到分）
+   */
+  taxAmount?: number;
 
   /**
    * 申请总数量（基本单位数量）
@@ -650,7 +800,7 @@ export interface PurchaseRequestImport {
   companyDefaultCulture?: string;
 
   /**
-   * 工厂代码（选项 TaktPlants/options，DictValue=PlantCode）
+   * 工厂代码（选项 TaktPlants/options；DictValue=PlantCode）
    */
   plantCode?: string;
 
@@ -660,7 +810,7 @@ export interface PurchaseRequestImport {
   purchaseRequestCode?: string;
 
   /**
-   * 来源采购询价 ID（关联 TaktPurchaseInquiry.Id，选项 TaktPurchaseInquirys/options）
+   * 来源采购询价 ID（选项 TaktPurchaseInquirys/options；DictValue=Id）
    */
   purchaseInquiryId?: string;
 
@@ -668,6 +818,16 @@ export interface PurchaseRequestImport {
    * 来源采购询价编码（冗余）
    */
   purchaseInquiryCode?: string;
+
+  /**
+   * 来源采购计划 ID（MRP 下推，关联 TaktPurchasePlan.Id）
+   */
+  purchasePlanId?: string;
+
+  /**
+   * 来源采购计划编码（冗余）
+   */
+  purchasePlanCode?: string;
 
   /**
    * 采购链路方案（字典 logistics_procurement_chain_scheme；1=方案一，2=方案二）
@@ -680,12 +840,12 @@ export interface PurchaseRequestImport {
   poDecision?: number;
 
   /**
-   * PR 会签单 ID（关联 TaktCountersign.Id，选项 TaktCountersigns/options）
+   * PR 会签单 ID（选项 TaktCountersigns/options；DictValue=Id）
    */
   countersignId?: string;
 
   /**
-   * PR 会签编号（冗余）
+   * PR 会签编码（冗余）
    */
   countersignCode?: string;
 
@@ -700,7 +860,7 @@ export interface PurchaseRequestImport {
   requiredArrivalDate?: string;
 
   /**
-   * 申请人员工 ID（关联 TaktEmployee.Id，选项 TaktEmployees/options）
+   * 申请人员工 ID（选项 TaktEmployees/options；DictValue=Id）
    */
   requestId?: string;
 
@@ -708,6 +868,31 @@ export interface PurchaseRequestImport {
    * 申请人（人员代码）
    */
   requestBy?: string;
+
+  /**
+   * 供应商编码（选项 TaktSuppliers/options；DictValue=SupplierCode；一单一供应商，明细禁止再挂供应商）
+   */
+  supplierCode?: string;
+
+  /**
+   * 供应商名称1（冗余，与 TaktSupplier.SupplierName1 对齐）
+   */
+  supplierName1?: string;
+
+  /**
+   * 结算币种（字典 accounting_currency_code；DictValue=CNY/USD 等；一单一币种）
+   */
+  currencyCode?: string;
+
+  /**
+   * 税率（字典 accounting_tax_rate_param；13=13%，9=9%，0=0% 等；一单一税率）
+   */
+  taxRate?: number;
+
+  /**
+   * 税费（精确到分）
+   */
+  taxAmount?: number;
 
   /**
    * 申请总数量（基本单位数量）
@@ -774,7 +959,7 @@ export interface PurchaseRequestExport {
   purchaseRequestId: string;
 
   /**
-   * 工厂代码（选项 TaktPlants/options，DictValue=PlantCode）
+   * 工厂代码（选项 TaktPlants/options；DictValue=PlantCode）
    */
   plantCode: string;
 
@@ -784,7 +969,7 @@ export interface PurchaseRequestExport {
   purchaseRequestCode: string;
 
   /**
-   * 来源采购询价 ID（关联 TaktPurchaseInquiry.Id，选项 TaktPurchaseInquirys/options）
+   * 来源采购询价 ID（选项 TaktPurchaseInquirys/options；DictValue=Id）
    */
   purchaseInquiryId?: string;
 
@@ -792,6 +977,16 @@ export interface PurchaseRequestExport {
    * 来源采购询价编码（冗余）
    */
   purchaseInquiryCode?: string;
+
+  /**
+   * 来源采购计划 ID（MRP 下推，关联 TaktPurchasePlan.Id）
+   */
+  purchasePlanId?: string;
+
+  /**
+   * 来源采购计划编码（冗余）
+   */
+  purchasePlanCode?: string;
 
   /**
    * 采购链路方案（字典 logistics_procurement_chain_scheme；1=方案一，2=方案二）
@@ -804,12 +999,12 @@ export interface PurchaseRequestExport {
   poDecision?: number;
 
   /**
-   * PR 会签单 ID（关联 TaktCountersign.Id，选项 TaktCountersigns/options）
+   * PR 会签单 ID（选项 TaktCountersigns/options；DictValue=Id）
    */
   countersignId?: string;
 
   /**
-   * PR 会签编号（冗余）
+   * PR 会签编码（冗余）
    */
   countersignCode?: string;
 
@@ -824,7 +1019,7 @@ export interface PurchaseRequestExport {
   requiredArrivalDate?: string;
 
   /**
-   * 申请人员工 ID（关联 TaktEmployee.Id，选项 TaktEmployees/options）
+   * 申请人员工 ID（选项 TaktEmployees/options；DictValue=Id）
    */
   requestId?: string;
 
@@ -832,6 +1027,31 @@ export interface PurchaseRequestExport {
    * 申请人（人员代码）
    */
   requestBy: string;
+
+  /**
+   * 供应商编码（选项 TaktSuppliers/options；DictValue=SupplierCode；一单一供应商，明细禁止再挂供应商）
+   */
+  supplierCode: string;
+
+  /**
+   * 供应商名称1（冗余，与 TaktSupplier.SupplierName1 对齐）
+   */
+  supplierName1: string;
+
+  /**
+   * 结算币种（字典 accounting_currency_code；DictValue=CNY/USD 等；一单一币种）
+   */
+  currencyCode: string;
+
+  /**
+   * 税率（字典 accounting_tax_rate_param；13=13%，9=9%，0=0% 等；一单一税率）
+   */
+  taxRate: number;
+
+  /**
+   * 税费（精确到分）
+   */
+  taxAmount: number;
 
   /**
    * 申请总数量（基本单位数量）

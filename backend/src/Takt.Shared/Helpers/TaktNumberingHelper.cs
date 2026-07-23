@@ -4,7 +4,7 @@
 // 文件名称：TaktNumberingHelper.cs
 // 创建时间：2025-01-20
 // 创建人：Takt365(Cursor AI)
-// 功能描述：编号规则归一化、段配置、业务编号拼接与流水计算（无 I/O；与 TaktNumberingService / TaktNumberingGenerator 一致）
+// 功能描述：编码规则归一化、段配置、业务编码拼接与流水计算（无 I/O；与 TaktNumberingService / TaktNumberingGenerator 一致）
 //
 // 版权信息：Copyright (c) 2026 Takt  All rights reserved.
 // 免责声明：此软件使用 MIT License，作者不承担任何使用风险。
@@ -16,7 +16,7 @@ using Takt.Shared.Models;
 namespace Takt.Shared.Helpers;
 
 /// <summary>
-/// 编号规则辅助（DateFormat/ResetPeriod 对齐、段配置、编码拼接与流水计算）
+/// 编码规则辅助（DateFormat/ResetPeriod 对齐、段配置、编码拼接与流水计算）
 /// </summary>
 public static class TaktNumberingHelper
 {
@@ -231,9 +231,9 @@ public static class TaktNumberingHelper
     }
 
     /// <summary>
-    /// 规范化编号规则快照默认值
+    /// 规范化编码规则快照默认值
     /// </summary>
-    /// <param name="rule">编号规则快照</param>
+    /// <param name="rule">编码规则快照</param>
     public static void NormalizeNumberingModel(TaktNumberingModel rule)
     {
         if (rule.SequenceLength <= 0)
@@ -274,12 +274,12 @@ public static class TaktNumberingHelper
     }
 
     /// <summary>
-    /// 按编号规则拼接业务编号
+    /// 按编码规则拼接业务编码
     /// </summary>
-    /// <param name="rule">编号规则快照</param>
+    /// <param name="rule">编码规则快照</param>
     /// <param name="sequence">流水号</param>
     /// <param name="referenceTime">参考时间</param>
-    /// <returns>业务编号</returns>
+    /// <returns>业务编码</returns>
     public static string FormatBusinessCode(TaktNumberingModel rule, int sequence, DateTime? referenceTime = null)
     {
         if (sequence < 0)
@@ -312,7 +312,7 @@ public static class TaktNumberingHelper
     /// <summary>
     /// 计算预览用下一个流水号（不持久化）
     /// </summary>
-    /// <param name="rule">编号规则快照</param>
+    /// <param name="rule">编码规则快照</param>
     /// <param name="now">当前时间</param>
     /// <returns>预览流水号</returns>
     public static int ComputePreviewSequence(TaktNumberingModel rule, DateTime now)
@@ -328,7 +328,7 @@ public static class TaktNumberingHelper
     /// <summary>
     /// 解析创建/导入时的起始编码与当前流水
     /// </summary>
-    /// <param name="rule">编号规则快照</param>
+    /// <param name="rule">编码规则快照</param>
     /// <param name="exampleCodeInput">起始编码输入</param>
     /// <param name="autoGenerateWhenEmpty">为空时是否自动生成</param>
     /// <returns>起始编码与当前流水</returns>
@@ -359,9 +359,9 @@ public static class TaktNumberingHelper
     }
 
     /// <summary>
-    /// 按规则生成初始业务编号
+    /// 按规则生成初始业务编码
     /// </summary>
-    /// <param name="rule">编号规则快照</param>
+    /// <param name="rule">编码规则快照</param>
     /// <param name="referenceTime">参考时间</param>
     /// <returns>起始编码与当前流水号</returns>
     public static (string ExampleCode, int CurrentSequence) BuildInitialExampleCode(
@@ -375,11 +375,11 @@ public static class TaktNumberingHelper
     }
 
     /// <summary>
-    /// 按规则生成下一个业务编号（含重置周期判断）
+    /// 按规则生成下一个业务编码（含重置周期判断）
     /// </summary>
-    /// <param name="rule">编号规则快照（会临时修改 CurrentSequence 以应用重置）</param>
+    /// <param name="rule">编码规则快照（会临时修改 CurrentSequence 以应用重置）</param>
     /// <param name="now">当前时间</param>
-    /// <returns>业务编号与下一流水号</returns>
+    /// <returns>业务编码与下一流水号</returns>
     public static (string BusinessCode, int NextSequence) BuildNextBusinessCode(TaktNumberingModel rule, DateTime now)
     {
         if (ShouldResetSequence(rule.ResetPeriod, rule.UpdatedAt, now))

@@ -23,7 +23,10 @@ export const SALESINVOICE_LIST_FIELDS = [
   'plantCode',
   'yearMonth',
   'customerCode',
-  'customerName',
+  'customerName1',
+  'currencyCode',
+  'taxRate',
+  'taxAmount',
   'accountingDocumentCode',
 ] as const
 
@@ -35,7 +38,10 @@ export const SALESINVOICE_PLACEHOLDER = {
   plantCode: 'select',
   yearMonth: 'required',
   customerCode: 'select',
-  customerName: 'required',
+  customerName1: 'required',
+  currencyCode: 'select',
+  taxRate: 'select',
+  taxAmount: 'select',
   accountingDocumentCode: 'required',
   extField: 'optional',
   remark: 'optional',
@@ -49,7 +55,8 @@ export const SALESINVOICE_QUERY_STRING_FIELDS = [
   'plantCode',
   'yearMonth',
   'customerCode',
-  'customerName',
+  'customerName1',
+  'currencyCode',
   'accountingDocumentCode',
   'createdAtStart',
   'createdAtEnd',
@@ -57,10 +64,16 @@ export const SALESINVOICE_QUERY_STRING_FIELDS = [
   'remark',
 ] as const satisfies readonly (keyof SalesInvoiceQuery)[]
 
-export type SalesInvoiceQueryField = (typeof SALESINVOICE_QUERY_STRING_FIELDS)[number]
+export type SalesInvoiceQueryField =
+  | (typeof SALESINVOICE_QUERY_STRING_FIELDS)[number]
+  | 'taxRate' | 'taxAmount'
 
 /** 高级查询抽屉全部字段（含数值） */
-export const SALESINVOICE_QUERY_FIELDS: readonly SalesInvoiceQueryField[] = [...SALESINVOICE_QUERY_STRING_FIELDS]
+export const SALESINVOICE_QUERY_FIELDS: readonly SalesInvoiceQueryField[] = [
+  ...SALESINVOICE_QUERY_STRING_FIELDS,
+  'taxRate',
+  'taxAmount',
+]
 
 /**
  * Takt销售发票实体字段 i18n：index / invoice-form 统一入口

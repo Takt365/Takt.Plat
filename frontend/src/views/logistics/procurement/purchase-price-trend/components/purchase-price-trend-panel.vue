@@ -2,7 +2,7 @@
 <!-- 项目名称：节拍数字工厂 · Takt Plat (TDF) -->
 <!-- 命名空间：@/views/logistics/procurement/purchase-price-trend/components -->
 <!-- 文件名称：purchase-price-trend-panel.vue -->
-<!-- 功能描述：采购价格月推移转置表（工厂×物料×供应商×月份） -->
+<!-- 功能描述：采购价格推移 / 机种价格推移转置涨跌表 -->
 <!-- 版权信息：Copyright (c) 2026 Takt  All rights reserved. -->
 <!-- 免责声明：此软件使用 MIT License，作者不承担任何使用风险。 -->
 <!-- ======================================== -->
@@ -91,7 +91,7 @@
 
 <script setup lang="ts">
 /**
- * 采购价格月推移转置分析表
+ * 采购价格推移：采购价格 / 机种价格转置涨跌表
  */
 import { message } from 'ant-design-vue'
 import type { TableColumnsType } from 'ant-design-vue'
@@ -101,7 +101,7 @@ import {
   exportPurchasePriceMonthlyTrendAnalysis,
   getPurchasePriceModelTrendAnalysis,
   getPurchasePriceMonthlyTrendAnalysis,
-} from '@/api/logistics/procurement/purchase-price'
+} from '@/api/logistics/procurement/purchase-price-trend'
 import type {
   PurchasePriceModelTrend,
   PurchasePriceMonthlyTrend,
@@ -129,7 +129,7 @@ const props = defineProps<{
   /** 物料编码关键字 */
   materialCode?: string
   /** 价格类型 */
-  priceType?: number
+  priceType?: string
 }>()
 
 const loading = defineModel<boolean>('loading', { default: false })
@@ -179,10 +179,11 @@ const summaryText = computed(() => {
 
 /** 动态列 */
 const columns = computed<TableColumnsType>(() => {
+  // 机种价格推移：对齐 material-moving-trend model Tab（物料 + BOM 组 + 期间）；采购多供应商维度
   if (props.activeTab === 'model') {
     const cols: TableColumnsType = [
       {
-        title: t('entity.purchasepriceitem.materialcode'),
+        title: t('entity.purchaseprice.materialcode'),
         dataIndex: 'materialCode',
         key: 'materialCode',
         width: 140,
@@ -215,13 +216,6 @@ const columns = computed<TableColumnsType>(() => {
         dataIndex: 'supplierCode',
         key: 'supplierCode',
         width: 120,
-        ellipsis: true,
-      },
-      {
-        title: t('entity.purchaseprice.suppliername'),
-        dataIndex: 'supplierName',
-        key: 'supplierName',
-        width: 160,
         ellipsis: true,
       },
     ]
@@ -261,9 +255,10 @@ const columns = computed<TableColumnsType>(() => {
     )
     return cols
   }
+  // 采购价格推移：工厂×物料×供应商×月份
   const cols: TableColumnsType = [
     {
-      title: t('entity.purchasepriceitem.materialcode'),
+      title: t('entity.purchaseprice.materialcode'),
       dataIndex: 'materialCode',
       key: 'materialCode',
       width: 140,
@@ -285,20 +280,20 @@ const columns = computed<TableColumnsType>(() => {
       ellipsis: true,
     },
     {
-      title: t('entity.purchaseprice.suppliername'),
+      title: t('entity.purchaseorder.suppliername'),
       dataIndex: 'supplierName',
       key: 'supplierName',
       width: 160,
       ellipsis: true,
     },
     {
-      title: t('entity.purchaseprice.currencycode'),
+      title: t('entity.purchasepriceitem.conditioncurrency'),
       dataIndex: 'currency',
       key: 'currency',
       width: 80,
     },
     {
-      title: t('entity.purchasepriceitem.purchaseunit'),
+      title: t('entity.purchasepriceitem.unitofmeasure'),
       dataIndex: 'unit',
       key: 'unit',
       width: 80,

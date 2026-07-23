@@ -27,7 +27,7 @@ namespace Takt.Domain.Entities.Logistics.Manufacturing.Sop;
 public class TaktSopWorkstation : TaktCompanyEntityBase
 {
     /// <summary>
-    /// 工厂代码（选项 TaktPlants/options，DictValue=PlantCode）
+    /// 工厂代码（选项 TaktPlants/options；DictValue=PlantCode）
     /// </summary>
     [SugarColumn(ColumnName = "plant_code", ColumnDescription = "工厂代码", ColumnDataType = "nvarchar", Length = 4, IsNullable = false)]
     public string PlantCode { get; set; } = string.Empty;
@@ -45,7 +45,7 @@ public class TaktSopWorkstation : TaktCompanyEntityBase
     public string WorkstationName { get; set; } = string.Empty;
 
     /// <summary>
-    /// 工作中心（选项 TaktWorkCenters/options，DictValue=WorkCenterCode）
+    /// 工作中心（选项 TaktWorkCenters/options；DictValue=WorkCenterCode）
     /// </summary>
     [SugarColumn(ColumnName = "work_center", ColumnDescription = "工作中心", ColumnDataType = "nvarchar", Length = 20, IsNullable = true)]
     public string? WorkCenter { get; set; }

@@ -10,7 +10,7 @@
 <template>
   <a-form
     ref="formRef"
-    class="takt-generated-form purchase-inquiry-form flex flex-col min-h-0"
+    class="takt-generated-form purchase-inquiry-form flex flex-col min-h-0 overflow-visible"
     :model="formState"
     :rules="rules"
     layout="horizontal"
@@ -22,76 +22,32 @@
     >
       <a-tab-pane
         key="tab-0"
-        :tab="t('common.page.form.tabs.basicinfo') + ' (1/2)'"
+        :tab="t('common.page.form.tabs.basicinfo') + ' (1/3)'"
         force-render
       >
         <div :class="formContentClass">
           <a-row :gutter="24">
             <a-col :span="12">
               <a-form-item
-                :label="t('common.page.entity.tenantcode')"
-                name="tenantCode"
-              >
-                <a-input
-                  v-model:value="formState.tenantCode"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('common.page.entity.tenantcode') })"
-                  show-count
-                  :maxlength="20"
-                  disabled
-                />
-              </a-form-item>
-            </a-col>
-            <a-col :span="12">
-              <a-form-item
-                :label="t('common.page.entity.companycode')"
-                name="companyCode"
-              >
-                <a-input
-                  v-model:value="formState.companyCode"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('common.page.entity.companycode') })"
-                  show-count
-                  :maxlength="20"
-                  disabled
-                />
-              </a-form-item>
-            </a-col>
-            <a-col :span="12">
-              <a-form-item
-                :label="t('common.page.entity.companydefaultculture')"
-                name="companyDefaultCulture"
-              >
-                <a-input
-                  v-model:value="formState.companyDefaultCulture"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('common.page.entity.companydefaultculture') })"
-                  show-count
-                  :maxlength="20"
-                  disabled
-                />
-              </a-form-item>
-            </a-col>
-            <a-col :span="12">
-              <a-form-item
-                :label="t('entity.purchaseinquiry.plantcode')"
+                :label="pi.label('plantCode')"
                 name="plantCode"
               >
-                <a-input
+                <TaktSelect
                   v-model:value="formState.plantCode"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.purchaseinquiry.plantcode') })"
-                  show-count
-                  :maxlength="40"
-                  allow-clear
+                  api-url="TaktPlants/options"
+                  :placeholder="pi.ph('plantCode')"
                   :disabled="!!formData?.purchaseInquiryId"
                 />
               </a-form-item>
             </a-col>
             <a-col :span="12">
               <a-form-item
-                :label="t('entity.purchaseinquiry.code')"
+                :label="pi.label('purchaseInquiryCode')"
                 name="purchaseInquiryCode"
               >
                 <a-input
                   v-model:value="formState.purchaseInquiryCode"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.purchaseinquiry.code') })"
+                  :placeholder="pi.ph('purchaseInquiryCode')"
                   show-count
                   :maxlength="40"
                   allow-clear
@@ -101,12 +57,12 @@
             </a-col>
             <a-col :span="12">
               <a-form-item
-                :label="t('entity.purchaseinquiry.inquirydate')"
+                :label="pi.label('inquiryDate')"
                 name="inquiryDate"
               >
                 <a-date-picker
                   v-model:value="formState.inquiryDate"
-                  :placeholder="t('common.page.form.placeholder.select', { field: t('entity.purchaseinquiry.inquirydate') })"
+                  :placeholder="pi.ph('inquiryDate')"
                   value-format="YYYY-MM-DD"
                   style="width: 100%"
                 />
@@ -114,12 +70,12 @@
             </a-col>
             <a-col :span="12">
               <a-form-item
-                :label="t('entity.purchaseinquiry.quotedeadlinedate')"
+                :label="pi.label('quoteDeadlineDate')"
                 name="quoteDeadlineDate"
               >
                 <a-date-picker
                   v-model:value="formState.quoteDeadlineDate"
-                  :placeholder="t('common.page.form.placeholder.select', { field: t('entity.purchaseinquiry.quotedeadlinedate') })"
+                  :placeholder="pi.ph('quoteDeadlineDate')"
                   value-format="YYYY-MM-DD"
                   style="width: 100%"
                 />
@@ -127,26 +83,24 @@
             </a-col>
             <a-col :span="12">
               <a-form-item
-                :label="t('entity.purchaseinquiry.inquiryid')"
+                :label="pi.label('inquiryId')"
                 name="inquiryId"
               >
-                <a-input
+                <TaktSelect
                   v-model:value="formState.inquiryId"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.purchaseinquiry.inquiryid') })"
-                  show-count
-                  :maxlength="20"
-                  allow-clear
+                  api-url="TaktEmployees/options"
+                  :placeholder="pi.ph('inquiryId')"
                 />
               </a-form-item>
             </a-col>
             <a-col :span="12">
               <a-form-item
-                :label="t('entity.purchaseinquiry.inquiryby')"
+                :label="pi.label('inquiryBy')"
                 name="inquiryBy"
               >
                 <a-input
                   v-model:value="formState.inquiryBy"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.purchaseinquiry.inquiryby') })"
+                  :placeholder="pi.ph('inquiryBy')"
                   show-count
                   :maxlength="40"
                   allow-clear
@@ -155,16 +109,53 @@
             </a-col>
             <a-col :span="12">
               <a-form-item
-                :label="t('entity.purchaseinquiry.suppliercode')"
+                :label="pi.label('supplierCode')"
                 name="supplierCode"
               >
-                <a-input
+                <TaktSelect
                   v-model:value="formState.supplierCode"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.purchaseinquiry.suppliercode') })"
-                  show-count
-                  :maxlength="40"
-                  allow-clear
+                  api-url="TaktSuppliers/options"
+                  :placeholder="pi.ph('supplierCode')"
                   :disabled="!!formData?.purchaseInquiryId"
+                />
+              </a-form-item>
+            </a-col>
+            <a-col :span="12">
+              <a-form-item
+                :label="pi.label('supplierName1')"
+                name="supplierName1"
+              >
+                <a-input
+                  v-model:value="formState.supplierName1"
+                  :placeholder="pi.ph('supplierName1')"
+                  show-count
+                  :maxlength="140"
+                  allow-clear
+                />
+              </a-form-item>
+            </a-col>
+            <a-col :span="12">
+              <a-form-item
+                :label="pi.label('currencyCode')"
+                name="currencyCode"
+              >
+                <TaktSelect
+                  v-model:value="formState.currencyCode"
+                  dict-type="accounting_currency_code"
+                  :placeholder="pi.ph('currencyCode')"
+                  :disabled="!!formData?.purchaseInquiryId"
+                />
+              </a-form-item>
+            </a-col>
+            <a-col :span="12">
+              <a-form-item
+                :label="pi.label('taxRate')"
+                name="taxRate"
+              >
+                <TaktSelect
+                  v-model:value="formState.taxRate"
+                  dict-type="accounting_tax_rate_param"
+                  :placeholder="pi.ph('taxRate')"
                 />
               </a-form-item>
             </a-col>
@@ -173,81 +164,103 @@
       </a-tab-pane>
       <a-tab-pane
         key="tab-1"
-        :tab="t('common.page.form.tabs.basicinfo') + ' (2/2)'"
+        :tab="t('common.page.form.tabs.basicinfo') + ' (2/3)'"
         force-render
       >
         <div :class="formContentClass">
           <a-row :gutter="24">
             <a-col :span="12">
               <a-form-item
-                :label="t('entity.purchaseinquiry.suppliername')"
-                name="supplierName"
+                :label="pi.label('taxAmount')"
+                name="taxAmount"
               >
-                <a-input
-                  v-model:value="formState.supplierName"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.purchaseinquiry.suppliername') })"
-                  show-count
-                  :maxlength="200"
-                  allow-clear
+                <a-input-number
+                  v-model:value="formState.taxAmount"
+                  :placeholder="pi.ph('taxAmount')"
+                  style="width: 100%"
                 />
               </a-form-item>
             </a-col>
             <a-col :span="12">
               <a-form-item
-                :label="t('entity.purchaseinquiry.totalquantity')"
+                :label="pi.label('paymentMode')"
+                name="paymentMode"
+              >
+                <TaktSelect
+                  v-model:value="formState.paymentMode"
+                  dict-type="logistics_payment_mode"
+                  :placeholder="pi.ph('paymentMode')"
+                />
+              </a-form-item>
+            </a-col>
+            <a-col :span="12">
+              <a-form-item
+                :label="pi.label('chainScheme')"
+                name="chainScheme"
+              >
+                <TaktSelect
+                  v-model:value="formState.chainScheme"
+                  dict-type="logistics_procurement_chain_scheme"
+                  :placeholder="pi.ph('chainScheme')"
+                />
+              </a-form-item>
+            </a-col>
+            <a-col :span="12">
+              <a-form-item
+                :label="pi.label('totalQuantity')"
                 name="totalQuantity"
               >
                 <a-input-number
                   v-model:value="formState.totalQuantity"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.purchaseinquiry.totalquantity') })"
+                  :placeholder="pi.ph('totalQuantity')"
                   style="width: 100%"
                 />
               </a-form-item>
             </a-col>
             <a-col :span="12">
               <a-form-item
-                :label="t('entity.purchaseinquiry.totalamount')"
+                :label="pi.label('totalAmount')"
                 name="totalAmount"
               >
                 <a-input-number
                   v-model:value="formState.totalAmount"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.purchaseinquiry.totalamount') })"
+                  :placeholder="pi.ph('totalAmount')"
                   style="width: 100%"
                 />
               </a-form-item>
             </a-col>
             <a-col :span="12">
               <a-form-item
-                :label="t('entity.purchaseinquiry.convertedquantity')"
+                :label="pi.label('convertedQuantity')"
                 name="convertedQuantity"
               >
                 <a-input-number
                   v-model:value="formState.convertedQuantity"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.purchaseinquiry.convertedquantity') })"
+                  :placeholder="pi.ph('convertedQuantity')"
                   style="width: 100%"
                 />
               </a-form-item>
             </a-col>
             <a-col :span="12">
               <a-form-item
-                :label="t('entity.purchaseinquiry.convertedamount')"
+                :label="pi.label('convertedAmount')"
                 name="convertedAmount"
               >
                 <a-input-number
                   v-model:value="formState.convertedAmount"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.purchaseinquiry.convertedamount') })"
+                  :placeholder="pi.ph('convertedAmount')"
                   style="width: 100%"
                 />
               </a-form-item>
             </a-col>
             <a-col :span="12">
               <a-form-item
-                :label="t('entity.purchaseinquiry.inquiryreason')"
+                :label="pi.label('inquiryReason')"
                 name="inquiryReason"
               >
                 <a-input
                   v-model:value="formState.inquiryReason"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.purchaseinquiry.inquiryreason') })"
+                  :placeholder="pi.ph('inquiryReason')"
                   show-count
                   :maxlength="500"
                   allow-clear
@@ -256,26 +269,77 @@
             </a-col>
             <a-col :span="12">
               <a-form-item
-                :label="t('entity.purchaseinquiry.inquirystatus')"
+                :label="pi.label('inquiryStatus')"
                 name="inquiryStatus"
               >
                 <TaktSelect
                   v-model:value="formState.inquiryStatus"
-                  dict-type="sys_normal_disable"
-                  :placeholder="t('common.page.form.placeholder.select', { field: t('entity.purchaseinquiry.inquirystatus') })"
+                  dict-type="sys_normal_disable_status"
+                  :placeholder="pi.ph('inquiryStatus')"
                 />
               </a-form-item>
             </a-col>
             <a-col :span="12">
               <a-form-item
-                :label="t('entity.purchaseinquiry.convertedstatus')"
+                :label="pi.label('convertedStatus')"
                 name="convertedStatus"
               >
                 <TaktSelect
                   v-model:value="formState.convertedStatus"
                   dict-type="sys_convert_status"
-                  :placeholder="t('common.page.form.placeholder.select', { field: t('entity.purchaseinquiry.convertedstatus') })"
-                  allow-clear
+                  :placeholder="pi.ph('convertedStatus')"
+                />
+              </a-form-item>
+            </a-col>
+          </a-row>
+        </div>
+      </a-tab-pane>
+      <a-tab-pane
+        key="tab-2"
+        :tab="t('common.page.form.tabs.basicinfo') + ' (3/3)'"
+        force-render
+      >
+        <div :class="formContentClass">
+          <a-row :gutter="24">
+            <a-col :span="24">
+              <a-form-item
+                :label="pi.label('tenantCode')"
+                name="tenantCode"
+              >
+                <a-input
+                  v-model:value="formState.tenantCode"
+                  :placeholder="pi.ph('tenantCode')"
+                  show-count
+                  :maxlength="20"
+                  disabled
+                />
+              </a-form-item>
+            </a-col>
+            <a-col :span="24">
+              <a-form-item
+                :label="pi.label('companyCode')"
+                name="companyCode"
+              >
+                <a-input
+                  v-model:value="formState.companyCode"
+                  :placeholder="pi.ph('companyCode')"
+                  show-count
+                  :maxlength="20"
+                  disabled
+                />
+              </a-form-item>
+            </a-col>
+            <a-col :span="24">
+              <a-form-item
+                :label="pi.label('companyDefaultCulture')"
+                name="companyDefaultCulture"
+              >
+                <a-input
+                  v-model:value="formState.companyDefaultCulture"
+                  :placeholder="pi.ph('companyDefaultCulture')"
+                  show-count
+                  :maxlength="20"
+                  disabled
                 />
               </a-form-item>
             </a-col>
@@ -292,7 +356,7 @@
                     >
                       <span class="takt-form-label-hint-icon"><RiQuestionLine class="takt-remix-icon" /></span>
                     </a-tooltip>
-                    <span>{{ t('common.page.entity.extfield') }}</span>
+                    <span>{{ pi.label('extField') }}</span>
                   </span>
                 </template>
                 <a-textarea
@@ -307,12 +371,12 @@
             </a-col>
             <a-col :span="24">
               <a-form-item
-                :label="t('common.page.entity.remark')"
+                :label="pi.label('remark')"
                 name="remark"
               >
                 <a-textarea
                   v-model:value="formState.remark"
-                  :placeholder="t('common.page.form.placeholder.optional', { field: t('common.page.entity.remark') })"
+                  :placeholder="pi.ph('remark')"
                   :rows="4"
                   show-count
                   :maxlength="400"
@@ -329,13 +393,71 @@
       ref="purchaseInquiryItemTableRef"
       v-model="childPurchaseInquiryItemRows"
       :columns="purchaseInquiryItemFormColumns"
-      :title="t('entity.purchaseinquiryitem._self')"
-      :add-button-entity="t('entity.purchaseinquiryitem._self')"
+      :title="purchaseInquiryItemPi.self()"
+      :add-button-entity="purchaseInquiryItemPi.self()"
       id-field="purchaseInquiryItemId"
       :default-row="createDefaultPurchaseInquiryItemRow"
       :disabled="loading"
+      :enable-vertical-scroll="false"
       section-border
-    />
+      class="w-full min-w-0"
+    >
+      <template #cell-allocationCategory="{ record }">
+        <TaktSelect
+          v-model:value="record.allocationCategory"
+          dict-type="logistics_allocation_category"
+          class="w-full"
+          :get-popup-container="getSelectPopupContainer"
+          :placeholder="purchaseInquiryItemPi.ph('allocationCategory')"
+          :disabled="loading"
+          allow-clear
+        />
+      </template>
+      <template #cell-materialCode="{ record }">
+        <TaktSelect
+          v-model:value="record.materialCode"
+          api-url="TaktMaterialPlants/options"
+          class="w-full"
+          :get-popup-container="getSelectPopupContainer"
+          :placeholder="purchaseInquiryItemPi.queryPh('materialCode', 'select')"
+          :disabled="loading"
+          allow-clear
+        />
+      </template>
+      <template #cell-inquiryUnit="{ record }">
+        <TaktSelect
+          v-model:value="record.inquiryUnit"
+          dict-type="logistics_unit_of_measure_code"
+          class="w-full"
+          :get-popup-container="getSelectPopupContainer"
+          :placeholder="purchaseInquiryItemPi.ph('inquiryUnit')"
+          :disabled="loading"
+          allow-clear
+        />
+      </template>
+      <template #cell-purchasePerUnit="{ record }">
+        <TaktSelect
+          v-model:value="record.purchasePerUnit"
+          dict-type="logistics_price_unit_param"
+          class="w-full"
+          :get-popup-container="getSelectPopupContainer"
+          :placeholder="purchaseInquiryItemPi.ph('purchasePerUnit')"
+          :disabled="loading"
+          allow-clear
+        />
+      </template>
+      <template #cell-isObsolete="{ record }">
+        <TaktSelect
+          v-model:value="record.isObsolete"
+          dict-type="sys_yes_no_type"
+          class="w-full"
+          :get-popup-container="getSelectPopupContainer"
+          :placeholder="purchaseInquiryItemPi.ph('isObsolete')"
+          :disabled="loading"
+          allow-clear
+        />
+      </template>
+    </TaktEditableTable>
   </a-form>
 </template>
 
@@ -347,6 +469,11 @@
 import { reactive, watch, computed, ref, onMounted } from 'vue'
 import { useI18n } from 'vue-i18n'
 import type { Rule } from 'ant-design-vue/es/form'
+import { usePurchaseInquiryI18n } from '../composables/use-purchase-inquiry-i18n'
+
+/** 实体字段 i18n */
+const pi = usePurchaseInquiryI18n()
+
 import type { PurchaseInquiryCreate } from '@/types/logistics/procurement/purchase-inquiry'
 import TaktSelect from '@/components/business/takt-select/index.vue'
 import { RiQuestionLine } from '@remixicon/vue'
@@ -383,9 +510,19 @@ const formContentClass = computed(() => (formFields.length > 10 ? 'takt-form-con
 /** 当前激活的 Tab key */
 const activeTab = ref('tab-0')
 /** CreateDto 字段名列表（与 formState 键对齐） */
-const formFields = ["tenantCode","companyCode","companyDefaultCulture","plantCode","purchaseInquiryCode","inquiryDate","quoteDeadlineDate","inquiryId","inquiryBy","supplierCode","supplierName","totalQuantity","totalAmount","convertedQuantity","convertedAmount","inquiryReason","inquiryStatus","convertedStatus","extField","remark"]
+const formFields = ["tenantCode","companyCode","companyDefaultCulture","plantCode","purchaseInquiryCode","inquiryDate","quoteDeadlineDate","inquiryId","inquiryBy","supplierCode","supplierName1","currencyCode","taxRate","taxAmount","paymentMode","chainScheme","totalQuantity","totalAmount","convertedQuantity","convertedAmount","inquiryReason","inquiryStatus","convertedStatus","extField","remark"]
+
 
 import type { TaktEditableTableColumn } from '@/components/business/takt-editable-table/types'
+import { resolveNextDetailLineNumber } from '@/utils/takt-sequence'
+import { usePurchaseInquiryItemI18n } from '../composables/use-purchase-inquiry-item-i18n'
+
+const purchaseInquiryItemPi = usePurchaseInquiryItemI18n()
+
+/** 弹窗/表格内 TaktSelect 下拉挂载容器（避免 overflow 裁剪与表头列错位） */
+function getSelectPopupContainer(triggerNode?: HTMLElement): HTMLElement {
+  return triggerNode?.ownerDocument?.body ?? document.body
+}
 
 const childPurchaseInquiryItemRows = ref<Record<string, unknown>[]>([])
 const purchaseInquiryItemTableRef = ref<{
@@ -394,90 +531,126 @@ const purchaseInquiryItemTableRef = ref<{
   resetRows: () => void
 } | null>(null)
 
+/** 是否已持久化的子表行 */
+function isPersistedPurchaseInquiryItemRow(row: Record<string, unknown>): boolean {
+  const id = row.purchaseInquiryItemId
+  if (id == null || id === '') {
+    return false
+  }
+  return String(id) !== '0'
+}
+
+/** 分配下一可用子表行号（含作废行，仅据当前表格行递增） */
+function allocateNextPurchaseInquiryItemLineNumber(): number {
+  const rows = purchaseInquiryItemTableRef.value?.getRows?.() ?? childPurchaseInquiryItemRows.value
+  return resolveNextDetailLineNumber(0, rows)
+}
+
 /** 子表 purchaseInquiryItem 可编辑列 */
 const purchaseInquiryItemFormColumns = computed<TaktEditableTableColumn[]>(() => [
   {
     key: 'lineNumber',
-    title: t('entity.purchaseinquiryitem.linenumber'),
-    editor: 'inputNumber',
-    width: 140, summary: 'sum',
+    title: purchaseInquiryItemPi.label('lineNumber'),
+    width: 140,
   },
   {
     key: 'allocationCategory',
-    title: t('entity.purchaseinquiryitem.allocationcategory'),
-    editor: 'input',
+    title: purchaseInquiryItemPi.label('allocationCategory'),
     width: 140,
   },
   {
     key: 'materialCode',
-    title: t('entity.purchaseinquiryitem.materialcode'),
-    editor: 'input',
+    title: purchaseInquiryItemPi.label('materialCode'),
     width: 140,
-  },
-  {
-    key: 'materialName',
-    title: t('entity.purchaseinquiryitem.materialname'),
-    editor: 'input',
-    width: 140,
-  },
-  {
-    key: 'materialSpecification',
-    title: t('entity.purchaseinquiryitem.materialspecification'),
-    editor: 'input',
-    width: 140, allowClear: true, placeholder: t('common.page.form.placeholder.optional', { field: t('entity.purchaseinquiryitem.materialspecification') }),
   },
   {
     key: 'inquiryUnit',
-    title: t('entity.purchaseinquiryitem.inquiryunit'),
-    editor: 'input',
+    title: purchaseInquiryItemPi.label('inquiryUnit'),
     width: 140,
   },
   {
     key: 'inquiryQuantity',
-    title: t('entity.purchaseinquiryitem.inquiryquantity'),
-    editor: 'inputNumber',
+    title: purchaseInquiryItemPi.label('inquiryQuantity'),
+    width: 140,
+  },
+  {
+    key: 'purchasePerUnit',
+    title: purchaseInquiryItemPi.label('purchasePerUnit'),
     width: 140,
   },
   {
     key: 'quotedUnitPrice',
-    title: t('entity.purchaseinquiryitem.quotedunitprice'),
+    title: purchaseInquiryItemPi.label('quotedUnitPrice'),
     editor: 'textarea',
     rows: 1,
-    placeholder: t('common.page.form.placeholder.required', { field: t('entity.purchaseinquiryitem.quotedunitprice') }),
+    placeholder: purchaseInquiryItemPi.ph('quotedUnitPrice'),
+    width: 180,
+  },
+  {
+    key: 'taxIncludedAmount',
+    title: purchaseInquiryItemPi.label('taxIncludedAmount'),
+    width: 140,
+  },
+  {
+    key: 'untaxedAmount',
+    title: purchaseInquiryItemPi.label('untaxedAmount'),
+    width: 140,
+  },
+  {
+    key: 'taxAmount',
+    title: purchaseInquiryItemPi.label('taxAmount'),
+    width: 140,
+  },
+  {
+    key: 'isObsolete',
+    title: purchaseInquiryItemPi.label('isObsolete'),
     width: 140,
   },
 ])
 
 /** 编辑态从 formData 同步各子表行 */
 function syncChildRowsFromFormData(val: Partial<PurchaseInquiryCreate & { purchaseInquiryId?: string }> | null | undefined) {
-  childPurchaseInquiryItemRows.value = ((val as any)?.items ?? []) as Record<string, unknown>[]
+  const rows_purchaseInquiryItem = ((val as any)?.items ?? []) as Record<string, unknown>[]
+  childPurchaseInquiryItemRows.value = rows_purchaseInquiryItem
 }
 
 function createDefaultPurchaseInquiryItemRow(): Record<string, unknown> {
   return {
-    lineNumber: (childPurchaseInquiryItemRows.value.length + 1) * 10,
+    lineNumber: allocateNextPurchaseInquiryItemLineNumber(),
     allocationCategory: '',
     materialCode: '',
-    materialName: '',
-    materialSpecification: '',
     inquiryUnit: '',
     inquiryQuantity: 0,
+    purchasePerUnit: 0,
     quotedUnitPrice: 0,
+    taxIncludedAmount: 0,
+    untaxedAmount: 0,
+    taxAmount: 0,
+    isObsolete: 0,
   }
 }
 
 /** 组装 Create/Update 载荷（主表 + 子表数组） */
 function buildSubmitPayload() {
   const masterId = props.formData?.purchaseInquiryId ?? ''
+  const isUpdate = Boolean(masterId)
   return {
     ...formState,
-    items: purchaseInquiryItemTableRef.value?.getRows?.() ?? childPurchaseInquiryItemRows.value.map((rest) => ({
-      ...rest,
-      tenantCode: tenantStore.tenantCode,
-      companyCode: tenantStore.companyCode,
-      companyDefaultCulture: userStore.userInfo?.companyDefaultCulture ?? '',
-      purchaseInquiryId: masterId,
-    })),
+    items: purchaseInquiryItemTableRef.value?.getRows?.() ?? childPurchaseInquiryItemRows.value.map((row) => {
+      const normalized = {
+        ...row,
+        tenantCode: tenantStore.tenantCode,
+        companyCode: tenantStore.companyCode,
+        companyDefaultCulture: userStore.userInfo?.companyDefaultCulture ?? '',
+        purchaseInquiryId: masterId,
+      }
+      if (isUpdate && isPersistedPurchaseInquiryItemRow(row)) {
+        normalized.purchaseInquiryItemId = row.purchaseInquiryItemId
+      } else {
+        delete normalized.purchaseInquiryItemId
+      }
+      return normalized
+    }),
   }
 }
 
@@ -499,7 +672,12 @@ const formRef = ref()
 const formState = reactive<Record<string, any>>({})
 /** 表单字段默认值（字典 IsDefault=1，来自 TaktDictDataSeedData） */
 const FORM_FIELD_DEFAULTS: Record<string, string | number> = {
-  inquiryStatus: 1
+  currencyCode: "CNY",
+  taxRate: 10,
+  paymentMode: "VENDORPAY",
+  chainScheme: 1,
+  inquiryStatus: 1,
+  convertedStatus: 0
 }
 
 /** 写入表单默认值（新增 / resetFields / 弹窗再次打开时） */
@@ -556,39 +734,106 @@ const rules = computed<Record<string, Rule[]>>(() => ({
   plantCode: [
     {
       required: true,
-      message: t('common.page.form.placeholder.required', { field: t('entity.purchaseinquiry.plantcode') }),
-      trigger: 'blur'
+      message: pi.ph('plantCode'),
+      trigger: 'change'
     }
   ],
   purchaseInquiryCode: [
     {
       required: true,
-      message: t('common.page.form.placeholder.required', { field: t('entity.purchaseinquiry.code') }),
+      message: pi.ph('purchaseInquiryCode'),
       trigger: 'blur'
     }
   ],
   inquiryDate: [
     {
       required: true,
-      message: t('common.page.form.placeholder.select', { field: t('entity.purchaseinquiry.inquirydate') }),
+      message: pi.ph('inquiryDate'),
       trigger: 'change'
     }
   ],
   inquiryBy: [
     {
       required: true,
-      message: t('common.page.form.placeholder.required', { field: t('entity.purchaseinquiry.inquiryby') }),
+      message: pi.ph('inquiryBy'),
       trigger: 'blur'
     }
   ],
-  totalQuantity: [{
+  supplierCode: [
+    {
+      required: true,
+      message: pi.ph('supplierCode'),
+      trigger: 'change'
+    }
+  ],
+  supplierName1: [
+    {
+      required: true,
+      message: pi.ph('supplierName1'),
+      trigger: 'blur'
+    }
+  ],
+  currencyCode: [
+    {
+      required: true,
+      message: pi.ph('currencyCode'),
+      trigger: 'change'
+    }
+  ],
+  taxRate: [{
     validator: async (_rule, value) => {
       if (value === undefined || value === null || value === '') {
-        return Promise.reject(t('common.page.form.placeholder.select', { field: t('entity.purchaseinquiry.totalquantity') }))
+        return Promise.reject(pi.ph('taxRate'))
       }
       const num = typeof value === 'number' ? value : Number(value)
       if (!Number.isFinite(num)) {
-        return Promise.reject(t('common.page.form.placeholder.select', { field: t('entity.purchaseinquiry.totalquantity') }))
+        return Promise.reject(pi.ph('taxRate'))
+      }
+      return Promise.resolve()
+    },
+    trigger: 'change'
+  }],
+  taxAmount: [{
+    validator: async (_rule, value) => {
+      if (value === undefined || value === null || value === '') {
+        return Promise.reject(pi.ph('taxAmount'))
+      }
+      const num = typeof value === 'number' ? value : Number(value)
+      if (!Number.isFinite(num)) {
+        return Promise.reject(pi.ph('taxAmount'))
+      }
+      return Promise.resolve()
+    },
+    trigger: 'change'
+  }],
+  paymentMode: [
+    {
+      required: true,
+      message: pi.ph('paymentMode'),
+      trigger: 'change'
+    }
+  ],
+  chainScheme: [{
+    validator: async (_rule, value) => {
+      if (value === undefined || value === null || value === '') {
+        return Promise.reject(pi.ph('chainScheme'))
+      }
+      const num = typeof value === 'number' ? value : Number(value)
+      if (!Number.isFinite(num)) {
+        return Promise.reject(pi.ph('chainScheme'))
+      }
+      return Promise.resolve()
+    },
+    trigger: 'change'
+  }],
+  totalQuantity: [{
+    validator: async (_rule, value) => {
+      if (value === undefined || value === null || value === '') {
+        return Promise.reject(pi.ph('totalQuantity'))
+      }
+      const num = typeof value === 'number' ? value : Number(value)
+      if (!Number.isFinite(num)) {
+        return Promise.reject(pi.ph('totalQuantity'))
       }
       return Promise.resolve()
     },
@@ -597,11 +842,11 @@ const rules = computed<Record<string, Rule[]>>(() => ({
   totalAmount: [{
     validator: async (_rule, value) => {
       if (value === undefined || value === null || value === '') {
-        return Promise.reject(t('common.page.form.placeholder.select', { field: t('entity.purchaseinquiry.totalamount') }))
+        return Promise.reject(pi.ph('totalAmount'))
       }
       const num = typeof value === 'number' ? value : Number(value)
       if (!Number.isFinite(num)) {
-        return Promise.reject(t('common.page.form.placeholder.select', { field: t('entity.purchaseinquiry.totalamount') }))
+        return Promise.reject(pi.ph('totalAmount'))
       }
       return Promise.resolve()
     },
@@ -610,11 +855,11 @@ const rules = computed<Record<string, Rule[]>>(() => ({
   convertedQuantity: [{
     validator: async (_rule, value) => {
       if (value === undefined || value === null || value === '') {
-        return Promise.reject(t('common.page.form.placeholder.select', { field: t('entity.purchaseinquiry.convertedquantity') }))
+        return Promise.reject(pi.ph('convertedQuantity'))
       }
       const num = typeof value === 'number' ? value : Number(value)
       if (!Number.isFinite(num)) {
-        return Promise.reject(t('common.page.form.placeholder.select', { field: t('entity.purchaseinquiry.convertedquantity') }))
+        return Promise.reject(pi.ph('convertedQuantity'))
       }
       return Promise.resolve()
     },
@@ -623,11 +868,11 @@ const rules = computed<Record<string, Rule[]>>(() => ({
   convertedAmount: [{
     validator: async (_rule, value) => {
       if (value === undefined || value === null || value === '') {
-        return Promise.reject(t('common.page.form.placeholder.select', { field: t('entity.purchaseinquiry.convertedamount') }))
+        return Promise.reject(pi.ph('convertedAmount'))
       }
       const num = typeof value === 'number' ? value : Number(value)
       if (!Number.isFinite(num)) {
-        return Promise.reject(t('common.page.form.placeholder.select', { field: t('entity.purchaseinquiry.convertedamount') }))
+        return Promise.reject(pi.ph('convertedAmount'))
       }
       return Promise.resolve()
     },
@@ -636,11 +881,11 @@ const rules = computed<Record<string, Rule[]>>(() => ({
   inquiryStatus: [{
     validator: async (_rule, value) => {
       if (value === undefined || value === null || value === '') {
-        return Promise.reject(t('common.page.form.placeholder.select', { field: t('entity.purchaseinquiry.inquirystatus') }))
+        return Promise.reject(pi.ph('inquiryStatus'))
       }
       const num = typeof value === 'number' ? value : Number(value)
       if (!Number.isFinite(num)) {
-        return Promise.reject(t('common.page.form.placeholder.select', { field: t('entity.purchaseinquiry.inquirystatus') }))
+        return Promise.reject(pi.ph('inquiryStatus'))
       }
       return Promise.resolve()
     },
@@ -649,11 +894,11 @@ const rules = computed<Record<string, Rule[]>>(() => ({
   convertedStatus: [{
     validator: async (_rule, value) => {
       if (value === undefined || value === null || value === '') {
-        return Promise.reject(t('common.page.form.placeholder.select', { field: t('entity.purchaseinquiry.convertedstatus') }))
+        return Promise.reject(pi.ph('convertedStatus'))
       }
       const num = typeof value === 'number' ? value : Number(value)
       if (!Number.isFinite(num)) {
-        return Promise.reject(t('common.page.form.placeholder.select', { field: t('entity.purchaseinquiry.convertedstatus') }))
+        return Promise.reject(pi.ph('convertedStatus'))
       }
       return Promise.resolve()
     },
@@ -671,6 +916,18 @@ async function validate() {
 /** 映射为 Create/Update DTO */
 function getValues(): Record<string, any> {
   const payload = buildSubmitPayload() as Record<string, unknown>
+  if ('taxRate' in payload) {
+    const rawtaxRate = payload.taxRate
+    payload.taxRate = typeof rawtaxRate === 'number' ? rawtaxRate : Number(rawtaxRate)
+  }
+  if ('taxAmount' in payload) {
+    const rawtaxAmount = payload.taxAmount
+    payload.taxAmount = typeof rawtaxAmount === 'number' ? rawtaxAmount : Number(rawtaxAmount)
+  }
+  if ('chainScheme' in payload) {
+    const rawchainScheme = payload.chainScheme
+    payload.chainScheme = typeof rawchainScheme === 'number' ? rawchainScheme : Number(rawchainScheme)
+  }
   if ('totalQuantity' in payload) {
     const rawtotalQuantity = payload.totalQuantity
     payload.totalQuantity = typeof rawtotalQuantity === 'number' ? rawtotalQuantity : Number(rawtotalQuantity)

@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Infrastructure.Data.Seeds.I18nSeedData.Logistics.Quality.Cost
 // 文件名称：TaktQualityAssuranceI18nSeedData.cs
-// 创建时间：2026-07-20
+// 创建时间：2026-07-23
 // 创建人：Takt365(Auto Generated)
 // 功能描述：TaktQualityAssurance 实体字段国际化种子（无对应 frontend locales；TranslationText 取自 ColumnDescription，ContextNote 取自属性 XML summary）
 // 
@@ -91,13 +91,13 @@ public class TaktQualityAssuranceI18nSeedData : ITaktSeedDataCoordinator
             new TranslationSeedItem("entity.qualityassurance._self", "zh-HK", "品质业务主表信息_hk", "实体名称"),
 
             // entity.qualityassurance.plantcode
-            new TranslationSeedItem("entity.qualityassurance.plantcode", "en-US", "工厂代码_us", "工厂代码（选项 TaktPlants/options，DictValue=PlantCode）"),
+            new TranslationSeedItem("entity.qualityassurance.plantcode", "en-US", "工厂代码_us", "工厂代码（选项 TaktPlants/options；DictValue=PlantCode）"),
             // entity.qualityassurance.plantcode
-            new TranslationSeedItem("entity.qualityassurance.plantcode", "ja-JP", "工厂代码_jp", "工厂代码（选项 TaktPlants/options，DictValue=PlantCode）"),
+            new TranslationSeedItem("entity.qualityassurance.plantcode", "ja-JP", "工厂代码_jp", "工厂代码（选项 TaktPlants/options；DictValue=PlantCode）"),
             // entity.qualityassurance.plantcode
-            new TranslationSeedItem("entity.qualityassurance.plantcode", "zh-CN", "工厂代码", "工厂代码（选项 TaktPlants/options，DictValue=PlantCode）"),
+            new TranslationSeedItem("entity.qualityassurance.plantcode", "zh-CN", "工厂代码", "工厂代码（选项 TaktPlants/options；DictValue=PlantCode）"),
             // entity.qualityassurance.plantcode
-            new TranslationSeedItem("entity.qualityassurance.plantcode", "zh-HK", "工厂代码_hk", "工厂代码（选项 TaktPlants/options，DictValue=PlantCode）"),
+            new TranslationSeedItem("entity.qualityassurance.plantcode", "zh-HK", "工厂代码_hk", "工厂代码（选项 TaktPlants/options；DictValue=PlantCode）"),
 
             // entity.qualityassurance.code
             new TranslationSeedItem("entity.qualityassurance.code", "en-US", "品质业务编码_us", "品质业务编码(唯一,如:QO-2026-0001)"),
@@ -117,14 +117,14 @@ public class TaktQualityAssuranceI18nSeedData : ITaktSeedDataCoordinator
             // entity.qualityassurance.assurancemonth
             new TranslationSeedItem("entity.qualityassurance.assurancemonth", "zh-HK", "业务年月_hk", "业务年月(格式:2026-05)"),
 
-            // entity.qualityassurance.customername
-            new TranslationSeedItem("entity.qualityassurance.customername", "en-US", "顾客名_us", "顾客名"),
-            // entity.qualityassurance.customername
-            new TranslationSeedItem("entity.qualityassurance.customername", "ja-JP", "顾客名_jp", "顾客名"),
-            // entity.qualityassurance.customername
-            new TranslationSeedItem("entity.qualityassurance.customername", "zh-CN", "顾客名", "顾客名"),
-            // entity.qualityassurance.customername
-            new TranslationSeedItem("entity.qualityassurance.customername", "zh-HK", "顾客名_hk", "顾客名"),
+            // entity.qualityassurance.customername1
+            new TranslationSeedItem("entity.qualityassurance.customername1", "en-US", "客户名称1_us", "客户名称1（冗余，与 TaktCustomer.CustomerName1 对齐）"),
+            // entity.qualityassurance.customername1
+            new TranslationSeedItem("entity.qualityassurance.customername1", "ja-JP", "客户名称1_jp", "客户名称1（冗余，与 TaktCustomer.CustomerName1 对齐）"),
+            // entity.qualityassurance.customername1
+            new TranslationSeedItem("entity.qualityassurance.customername1", "zh-CN", "客户名称1", "客户名称1（冗余，与 TaktCustomer.CustomerName1 对齐）"),
+            // entity.qualityassurance.customername1
+            new TranslationSeedItem("entity.qualityassurance.customername1", "zh-HK", "客户名称1_hk", "客户名称1（冗余，与 TaktCustomer.CustomerName1 对齐）"),
 
             // entity.qualityassurance.debitnoteno
             new TranslationSeedItem("entity.qualityassurance.debitnoteno", "en-US", "Debit Note No_us", "Debit Note No"),

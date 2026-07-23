@@ -20,15 +20,20 @@ export const PURCHASEPRICE_SELF_I18N_KEY = buildEntitySelfI18nKey(PURCHASEPRICE_
 
 /** 列表业务列（不含主键） */
 export const PURCHASEPRICE_LIST_FIELDS = [
+  'plantCode',
   'purchasePriceCode',
   'priceType',
   'supplierCode',
   'materialCode',
+  'purchaseGroup',
+  'taxCode',
+  'grBasedInvoiceInspection',
+  'pricingDateControl',
   'validFrom',
   'validTo',
-  'variableKey',
   'purchaseInquiryId',
   'purchaseInquiryCode',
+  'variableKey',
 ] as const
 
 /** 表单控件默认占位类型（仅 UI/校验语义，不含 i18n 键） */
@@ -36,15 +41,20 @@ export const PURCHASEPRICE_PLACEHOLDER = {
   tenantCode: 'optional',
   companyCode: 'optional',
   companyDefaultCulture: 'optional',
+  plantCode: 'select',
   purchasePriceCode: 'required',
   priceType: 'select',
   supplierCode: 'select',
   materialCode: 'select',
+  purchaseGroup: 'optional',
+  taxCode: 'optional',
+  grBasedInvoiceInspection: 'select',
+  pricingDateControl: 'select',
   validFrom: 'select',
   validTo: 'select',
-  variableKey: 'optional',
   purchaseInquiryId: 'optional',
   purchaseInquiryCode: 'optional',
+  variableKey: 'optional',
   extField: 'optional',
   remark: 'optional',
 } as const satisfies Record<string, EntityFieldPlaceholderKind>
@@ -54,27 +64,36 @@ export type PurchasePriceField = keyof typeof PURCHASEPRICE_PLACEHOLDER
 
 /** 高级查询可 trim 的字符串字段 */
 export const PURCHASEPRICE_QUERY_STRING_FIELDS = [
+  'plantCode',
   'purchasePriceCode',
   'priceType',
   'supplierCode',
   'materialCode',
+  'purchaseGroup',
+  'taxCode',
   'validFromStart',
   'validFromEnd',
   'validToStart',
   'validToEnd',
-  'variableKey',
   'purchaseInquiryId',
   'purchaseInquiryCode',
+  'variableKey',
   'createdAtStart',
   'createdAtEnd',
   'extField',
   'remark',
 ] as const satisfies readonly (keyof PurchasePriceQuery)[]
 
-export type PurchasePriceQueryField = (typeof PURCHASEPRICE_QUERY_STRING_FIELDS)[number]
+export type PurchasePriceQueryField =
+  | (typeof PURCHASEPRICE_QUERY_STRING_FIELDS)[number]
+  | 'grBasedInvoiceInspection' | 'pricingDateControl'
 
 /** 高级查询抽屉全部字段（含数值） */
-export const PURCHASEPRICE_QUERY_FIELDS: readonly PurchasePriceQueryField[] = [...PURCHASEPRICE_QUERY_STRING_FIELDS]
+export const PURCHASEPRICE_QUERY_FIELDS: readonly PurchasePriceQueryField[] = [
+  ...PURCHASEPRICE_QUERY_STRING_FIELDS,
+  'grBasedInvoiceInspection',
+  'pricingDateControl',
+]
 
 /**
  * Takt采购价格实体字段 i18n：index / purchase-price-form 统一入口

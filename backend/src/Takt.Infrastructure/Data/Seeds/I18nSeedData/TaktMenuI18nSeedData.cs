@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Infrastructure.Data.Seeds.I18nSeedData
 // 文件名称：TaktMenuI18nSeedData.cs
-// 创建时间：2026-07-20
+// 创建时间：2026-07-23
 // 创建人：Takt365(Cursor AI)
 // 功能描述：菜单导航国际化翻译种子（menu.* 键，与 TaktMenuLevel1~4SeedData I18nKey 对齐）
 // 
@@ -662,6 +662,15 @@ public class TaktMenuI18nSeedData : ITaktSeedDataCoordinator
             // menu.foundation.quartz.task
             ("menu.foundation.quartz.task", "zh-HK", "定时任务_hk", "菜单导航"),
 
+            // menu.foundation.admin.division
+            ("menu.foundation.admin.division", "en-US", "行政区划_us", "菜单导航"),
+            // menu.foundation.admin.division
+            ("menu.foundation.admin.division", "ja-JP", "行政区划_jp", "菜单导航"),
+            // menu.foundation.admin.division
+            ("menu.foundation.admin.division", "zh-CN", "行政区划", "菜单导航"),
+            // menu.foundation.admin.division
+            ("menu.foundation.admin.division", "zh-HK", "行政区划_hk", "菜单导航"),
+
             // menu.statistics.report._self
             ("menu.statistics.report._self", "en-US", "报表管理_us", "菜单导航"),
             // menu.statistics.report._self
@@ -778,6 +787,15 @@ public class TaktMenuI18nSeedData : ITaktSeedDataCoordinator
             ("menu.accounting.financial.period", "zh-CN", "财务期间", "菜单导航"),
             // menu.accounting.financial.period
             ("menu.accounting.financial.period", "zh-HK", "财务期间_hk", "菜单导航"),
+
+            // menu.accounting.financial.bank
+            ("menu.accounting.financial.bank", "en-US", "银行信息_us", "菜单导航"),
+            // menu.accounting.financial.bank
+            ("menu.accounting.financial.bank", "ja-JP", "银行信息_jp", "菜单导航"),
+            // menu.accounting.financial.bank
+            ("menu.accounting.financial.bank", "zh-CN", "银行信息", "菜单导航"),
+            // menu.accounting.financial.bank
+            ("menu.accounting.financial.bank", "zh-HK", "银行信息_hk", "菜单导航"),
 
             // menu.accounting.controlling.profit.center
             ("menu.accounting.controlling.profit.center", "en-US", "利润中心_us", "菜单导航"),
@@ -1797,22 +1815,22 @@ public class TaktMenuI18nSeedData : ITaktSeedDataCoordinator
             ("menu.logistics.manufacturing.bom.material.cost.analysis", "zh-HK", "BOM成本分析_hk", "菜单导航"),
 
             // menu.logistics.manufacturing.bom.material.cost.trend
-            ("menu.logistics.manufacturing.bom.material.cost.trend", "en-US", "产品成本分析_us", "菜单导航"),
+            ("menu.logistics.manufacturing.bom.material.cost.trend", "en-US", "产品成本推移_us", "菜单导航"),
             // menu.logistics.manufacturing.bom.material.cost.trend
-            ("menu.logistics.manufacturing.bom.material.cost.trend", "ja-JP", "产品成本分析_jp", "菜单导航"),
+            ("menu.logistics.manufacturing.bom.material.cost.trend", "ja-JP", "产品成本推移_jp", "菜单导航"),
             // menu.logistics.manufacturing.bom.material.cost.trend
-            ("menu.logistics.manufacturing.bom.material.cost.trend", "zh-CN", "产品成本分析", "菜单导航"),
+            ("menu.logistics.manufacturing.bom.material.cost.trend", "zh-CN", "产品成本推移", "菜单导航"),
             // menu.logistics.manufacturing.bom.material.cost.trend
-            ("menu.logistics.manufacturing.bom.material.cost.trend", "zh-HK", "产品成本分析_hk", "菜单导航"),
+            ("menu.logistics.manufacturing.bom.material.cost.trend", "zh-HK", "产品成本推移_hk", "菜单导航"),
 
-            // menu.logistics.manufacturing.bom.model.moving.price
-            ("menu.logistics.manufacturing.bom.model.moving.price", "en-US", "机种成本推移_us", "菜单导航"),
-            // menu.logistics.manufacturing.bom.model.moving.price
-            ("menu.logistics.manufacturing.bom.model.moving.price", "ja-JP", "机种成本推移_jp", "菜单导航"),
-            // menu.logistics.manufacturing.bom.model.moving.price
-            ("menu.logistics.manufacturing.bom.model.moving.price", "zh-CN", "机种成本推移", "菜单导航"),
-            // menu.logistics.manufacturing.bom.model.moving.price
-            ("menu.logistics.manufacturing.bom.model.moving.price", "zh-HK", "机种成本推移_hk", "菜单导航"),
+            // menu.logistics.manufacturing.bom.model.cost.trend
+            ("menu.logistics.manufacturing.bom.model.cost.trend", "en-US", "机种成本推移_us", "菜单导航"),
+            // menu.logistics.manufacturing.bom.model.cost.trend
+            ("menu.logistics.manufacturing.bom.model.cost.trend", "ja-JP", "机种成本推移_jp", "菜单导航"),
+            // menu.logistics.manufacturing.bom.model.cost.trend
+            ("menu.logistics.manufacturing.bom.model.cost.trend", "zh-CN", "机种成本推移", "菜单导航"),
+            // menu.logistics.manufacturing.bom.model.cost.trend
+            ("menu.logistics.manufacturing.bom.model.cost.trend", "zh-HK", "机种成本推移_hk", "菜单导航"),
 
             // menu.logistics.manufacturing.mds.sales.forecast
             ("menu.logistics.manufacturing.mds.sales.forecast", "en-US", "销售预测_us", "菜单导航"),

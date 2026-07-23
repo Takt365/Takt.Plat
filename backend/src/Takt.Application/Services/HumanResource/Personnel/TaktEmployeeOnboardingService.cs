@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Application.Services.HumanResource.Personnel
 // 文件名称：TaktEmployeeOnboardingService.cs
-// 创建时间：2026-06-23
+// 创建时间：2026-07-23
 // 创建人：Takt365(Cursor AI)
 // 功能描述：入职待办应用服务实现
 // 
@@ -106,8 +106,8 @@ public class TaktEmployeeOnboardingService : TaktServiceBase, ITaktEmployeeOnboa
             false);
         return list.Select(e => new TaktSelectOption
         {
-            DictValue = e.Id,
-            DictLabel = e.CandidateName ?? e.Id.ToString(),
+            DictValue = e.EmployeeCode ?? string.Empty,
+            DictLabel = e.CandidateName ?? e.EmployeeCode ?? string.Empty,
         }).ToList();
     }
 
@@ -331,12 +331,14 @@ public class TaktEmployeeOnboardingService : TaktServiceBase, ITaktEmployeeOnboa
             exp = exp.And(x =>
                 SqlFunc.ToString(x.OfferId).Contains(keywords)
                 || (x.TodoNo != null && x.TodoNo.Contains(keywords))
-                || SqlFunc.ToString(x.TodoStatus).Contains(keywords)
                 || (x.CandidateName != null && x.CandidateName.Contains(keywords))
                 || (x.Mobile != null && x.Mobile.Contains(keywords))
                 || SqlFunc.ToString(x.EmployeeId).Contains(keywords)
+                || (x.EmployeeCode != null && x.EmployeeCode.Contains(keywords))
+                || (x.EmployeeName != null && x.EmployeeName.Contains(keywords))
                 || SqlFunc.ToString(x.EmployeeJoinedId).Contains(keywords)
                 || (x.Reason != null && x.Reason.Contains(keywords))
+                || SqlFunc.ToString(x.TodoStatus).Contains(keywords)
                 || (x.ExtField != null && x.ExtField.Contains(keywords))
                 || (x.Remark != null && x.Remark.Contains(keywords))
                 || SqlFunc.ToString(x.PlannedJoinedDate).Contains(keywords)
@@ -354,11 +356,6 @@ public class TaktEmployeeOnboardingService : TaktServiceBase, ITaktEmployeeOnboa
             exp = exp.And(x => x.TodoNo != null && x.TodoNo.Contains(queryDto.TodoNo));
         }
 
-        if (queryDto?.TodoStatus.HasValue == true)
-        {
-            exp = exp.And(x => x.TodoStatus == queryDto.TodoStatus);
-        }
-
         if (!string.IsNullOrEmpty(queryDto?.CandidateName))
         {
             exp = exp.And(x => x.CandidateName != null && x.CandidateName.Contains(queryDto.CandidateName));
@@ -374,6 +371,16 @@ public class TaktEmployeeOnboardingService : TaktServiceBase, ITaktEmployeeOnboa
             exp = exp.And(x => x.EmployeeId == queryDto.EmployeeId);
         }
 
+        if (!string.IsNullOrEmpty(queryDto?.EmployeeCode))
+        {
+            exp = exp.And(x => x.EmployeeCode != null && x.EmployeeCode.Contains(queryDto.EmployeeCode));
+        }
+
+        if (!string.IsNullOrEmpty(queryDto?.EmployeeName))
+        {
+            exp = exp.And(x => x.EmployeeName != null && x.EmployeeName.Contains(queryDto.EmployeeName));
+        }
+
         if (queryDto?.EmployeeJoinedId.HasValue == true)
         {
             exp = exp.And(x => x.EmployeeJoinedId == queryDto.EmployeeJoinedId);
@@ -382,6 +389,11 @@ public class TaktEmployeeOnboardingService : TaktServiceBase, ITaktEmployeeOnboa
         if (!string.IsNullOrEmpty(queryDto?.Reason))
         {
             exp = exp.And(x => x.Reason != null && x.Reason.Contains(queryDto.Reason));
+        }
+
+        if (queryDto?.TodoStatus.HasValue == true)
+        {
+            exp = exp.And(x => x.TodoStatus == queryDto.TodoStatus);
         }
 
         if (!string.IsNullOrEmpty(queryDto?.ExtField))

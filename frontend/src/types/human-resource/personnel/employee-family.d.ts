@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：frontend/src/types/human-resource/personnel
 // 文件名称：employee-family.d.ts
-// 创建时间：2026-06-23
+// 创建时间：2026-07-23
 // 创建人：Takt365(Auto Generated)
 // 功能描述：human-resource/personnel 模块类型定义（自动生成；类型名去 Takt 前缀与末尾 Dto，如 TaktCompanyDto → Company）
 // 
@@ -29,14 +29,19 @@ export interface EmployeeFamily extends CompanyDtoBase {
   employeeFamilyId: string;
 
   /**
-   * 员工ID
+   * 员工（选项 TaktEmployees/options；DictValue=Id）
    */
   employeeId: string;
 
   /**
-   * 员工名称（填充字段）
+   * 员工编码（冗余，与 TaktEmployee.EmployeeCode 对齐）
    */
-  employeeName?: string;
+  employeeCode: string;
+
+  /**
+   * 员工姓名（冗余，与 TaktEmployee.EmployeeName 对齐）
+   */
+  employeeName: string;
 
   /**
    * 成员姓名
@@ -44,7 +49,7 @@ export interface EmployeeFamily extends CompanyDtoBase {
   memberName: string;
 
   /**
-   * 与员工关系（0=配偶，1=子女，2=父母，3=兄弟姐妹，9=其他）
+   * 与员工关系（字典 hr_employee_family_relation_type；0=配偶 1=子女 2=父母 3=兄弟姐妹 9=其他）
    */
   relationType: number;
 
@@ -69,7 +74,7 @@ export interface EmployeeFamily extends CompanyDtoBase {
   birthDate?: string;
 
   /**
-   * 是否紧急联系人（1=是，0=否）
+   * 是否紧急联系人（字典 sys_yes_no_type；0=否 1=是）
    */
   isEmergencyContact: number;
 
@@ -94,9 +99,19 @@ export interface EmployeeFamilyQuery extends TaktPagedQuery {
   companyCode?: string;
 
   /**
-   * 员工ID
+   * 员工（选项 TaktEmployees/options；DictValue=Id）
    */
   employeeId?: string;
+
+  /**
+   * 员工编码（冗余，与 TaktEmployee.EmployeeCode 对齐）
+   */
+  employeeCode?: string;
+
+  /**
+   * 员工姓名（冗余，与 TaktEmployee.EmployeeName 对齐）
+   */
+  employeeName?: string;
 
   /**
    * 成员姓名
@@ -104,7 +119,7 @@ export interface EmployeeFamilyQuery extends TaktPagedQuery {
   memberName?: string;
 
   /**
-   * 与员工关系（0=配偶，1=子女，2=父母，3=兄弟姐妹，9=其他）
+   * 与员工关系（字典 hr_employee_family_relation_type；0=配偶 1=子女 2=父母 3=兄弟姐妹 9=其他）
    */
   relationType?: number;
 
@@ -134,7 +149,7 @@ export interface EmployeeFamilyQuery extends TaktPagedQuery {
   birthDateEnd?: string;
 
   /**
-   * 是否紧急联系人（1=是，0=否）
+   * 是否紧急联系人（字典 sys_yes_no_type；0=否 1=是）
    */
   isEmergencyContact?: number;
 
@@ -183,9 +198,19 @@ export interface EmployeeFamilyCreate {
   companyDefaultCulture: string;
 
   /**
-   * 员工ID
+   * 员工（选项 TaktEmployees/options；DictValue=Id）
    */
   employeeId: string;
+
+  /**
+   * 员工编码（冗余，与 TaktEmployee.EmployeeCode 对齐）
+   */
+  employeeCode: string;
+
+  /**
+   * 员工姓名（冗余，与 TaktEmployee.EmployeeName 对齐）
+   */
+  employeeName: string;
 
   /**
    * 成员姓名
@@ -193,7 +218,7 @@ export interface EmployeeFamilyCreate {
   memberName: string;
 
   /**
-   * 与员工关系（0=配偶，1=子女，2=父母，3=兄弟姐妹，9=其他）
+   * 与员工关系（字典 hr_employee_family_relation_type；0=配偶 1=子女 2=父母 3=兄弟姐妹 9=其他）
    */
   relationType: number;
 
@@ -218,7 +243,7 @@ export interface EmployeeFamilyCreate {
   birthDate?: string;
 
   /**
-   * 是否紧急联系人（1=是，0=否）
+   * 是否紧急联系人（字典 sys_yes_no_type；0=否 1=是）
    */
   isEmergencyContact: number;
 
@@ -267,9 +292,19 @@ export interface EmployeeFamilyTemplate {
   companyCode?: string;
 
   /**
-   * 员工ID
+   * 员工（选项 TaktEmployees/options；DictValue=Id）
    */
   employeeId?: string;
+
+  /**
+   * 员工编码（冗余，与 TaktEmployee.EmployeeCode 对齐）
+   */
+  employeeCode?: string;
+
+  /**
+   * 员工姓名（冗余，与 TaktEmployee.EmployeeName 对齐）
+   */
+  employeeName?: string;
 
   /**
    * 成员姓名
@@ -277,7 +312,7 @@ export interface EmployeeFamilyTemplate {
   memberName?: string;
 
   /**
-   * 与员工关系（0=配偶，1=子女，2=父母，3=兄弟姐妹，9=其他）
+   * 与员工关系（字典 hr_employee_family_relation_type；0=配偶 1=子女 2=父母 3=兄弟姐妹 9=其他）
    */
   relationType?: number;
 
@@ -302,7 +337,7 @@ export interface EmployeeFamilyTemplate {
   birthDate?: string;
 
   /**
-   * 是否紧急联系人（1=是，0=否）
+   * 是否紧急联系人（字典 sys_yes_no_type；0=否 1=是）
    */
   isEmergencyContact?: number;
 
@@ -341,9 +376,19 @@ export interface EmployeeFamilyImport {
   companyDefaultCulture?: string;
 
   /**
-   * 员工ID
+   * 员工（选项 TaktEmployees/options；DictValue=Id）
    */
   employeeId?: string;
+
+  /**
+   * 员工编码（冗余，与 TaktEmployee.EmployeeCode 对齐）
+   */
+  employeeCode?: string;
+
+  /**
+   * 员工姓名（冗余，与 TaktEmployee.EmployeeName 对齐）
+   */
+  employeeName?: string;
 
   /**
    * 成员姓名
@@ -351,7 +396,7 @@ export interface EmployeeFamilyImport {
   memberName?: string;
 
   /**
-   * 与员工关系（0=配偶，1=子女，2=父母，3=兄弟姐妹，9=其他）
+   * 与员工关系（字典 hr_employee_family_relation_type；0=配偶 1=子女 2=父母 3=兄弟姐妹 9=其他）
    */
   relationType?: number;
 
@@ -376,7 +421,7 @@ export interface EmployeeFamilyImport {
   birthDate?: string;
 
   /**
-   * 是否紧急联系人（1=是，0=否）
+   * 是否紧急联系人（字典 sys_yes_no_type；0=否 1=是）
    */
   isEmergencyContact?: number;
 
@@ -410,9 +455,19 @@ export interface EmployeeFamilyExport {
   companyCode: string;
 
   /**
-   * 员工ID
+   * 员工（选项 TaktEmployees/options；DictValue=Id）
    */
   employeeId: string;
+
+  /**
+   * 员工编码（冗余，与 TaktEmployee.EmployeeCode 对齐）
+   */
+  employeeCode: string;
+
+  /**
+   * 员工姓名（冗余，与 TaktEmployee.EmployeeName 对齐）
+   */
+  employeeName: string;
 
   /**
    * 成员姓名
@@ -420,7 +475,7 @@ export interface EmployeeFamilyExport {
   memberName: string;
 
   /**
-   * 与员工关系（0=配偶，1=子女，2=父母，3=兄弟姐妹，9=其他）
+   * 与员工关系（字典 hr_employee_family_relation_type；0=配偶 1=子女 2=父母 3=兄弟姐妹 9=其他）
    */
   relationType: number;
 
@@ -445,7 +500,7 @@ export interface EmployeeFamilyExport {
   birthDate?: string;
 
   /**
-   * 是否紧急联系人（1=是，0=否）
+   * 是否紧急联系人（字典 sys_yes_no_type；0=否 1=是）
    */
   isEmergencyContact: number;
 

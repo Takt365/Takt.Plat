@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Application.Validators.HumanResource.Personnel
 // 文件名称：TaktEmployeeSkillValidators.cs
-// 创建时间：2026-07-20
+// 创建时间：2026-07-23
 // 创建人：Takt365(Auto Generated)
 // 功能描述：EmployeeSkill 模块 FluentValidation 验证器（由 generate-validators-from-entity.cjs 根据 TaktEmployeeSkill 生成，请按需审阅）
 // 
@@ -37,6 +37,12 @@ public class TaktEmployeeSkillCreateValidator : AbstractValidator<TaktEmployeeSk
             .MaximumLength(4).WithMessage("公司代码长度不能超过4个字符");
         RuleFor(x => x.EmployeeId)
             .GreaterThanOrEqualTo(0).WithMessage("员工不能为负数");
+        RuleFor(x => x.EmployeeCode)
+            .NotEmpty().WithMessage("员工编码不能为空")
+            .MaximumLength(6).WithMessage("员工编码长度不能超过6个字符");
+        RuleFor(x => x.EmployeeName)
+            .NotEmpty().WithMessage("员工姓名不能为空")
+            .MaximumLength(80).WithMessage("员工姓名长度不能超过80个字符");
         RuleFor(x => x.SkillName)
             .NotEmpty().WithMessage("技能名称不能为空")
             .MaximumLength(100).WithMessage("技能名称长度不能超过100个字符");
@@ -71,6 +77,12 @@ public class TaktEmployeeSkillUpdateValidator : AbstractValidator<TaktEmployeeSk
             .MaximumLength(4).WithMessage("公司代码长度不能超过4个字符");
         RuleFor(x => x.EmployeeId)
             .GreaterThanOrEqualTo(0).WithMessage("员工不能为负数");
+        RuleFor(x => x.EmployeeCode)
+            .NotEmpty().WithMessage("员工编码不能为空")
+            .MaximumLength(6).WithMessage("员工编码长度不能超过6个字符");
+        RuleFor(x => x.EmployeeName)
+            .NotEmpty().WithMessage("员工姓名不能为空")
+            .MaximumLength(80).WithMessage("员工姓名长度不能超过80个字符");
         RuleFor(x => x.SkillName)
             .NotEmpty().WithMessage("技能名称不能为空")
             .MaximumLength(100).WithMessage("技能名称长度不能超过100个字符");
@@ -101,6 +113,12 @@ public class TaktEmployeeSkillImportValidator : AbstractValidator<TaktEmployeeSk
             .MaximumLength(4).WithMessage("公司代码长度不能超过4个字符").When(x => !string.IsNullOrWhiteSpace(x.CompanyCode));
         RuleFor(x => x.EmployeeId)
             .GreaterThanOrEqualTo(0).WithMessage("员工不能为负数");
+        RuleFor(x => x.EmployeeCode)
+            .NotEmpty().WithMessage("员工编码不能为空")
+            .MaximumLength(6).WithMessage("员工编码长度不能超过6个字符");
+        RuleFor(x => x.EmployeeName)
+            .NotEmpty().WithMessage("员工姓名不能为空")
+            .MaximumLength(80).WithMessage("员工姓名长度不能超过80个字符");
         RuleFor(x => x.SkillName)
             .NotEmpty().WithMessage("技能名称不能为空")
             .MaximumLength(100).WithMessage("技能名称长度不能超过100个字符");

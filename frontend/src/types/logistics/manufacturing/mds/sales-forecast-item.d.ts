@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：frontend/src/types/logistics/manufacturing/mds
 // 文件名称：sales-forecast-item.d.ts
-// 创建时间：2026-07-13
+// 创建时间：2026-07-23
 // 创建人：Takt365(Auto Generated)
 // 功能描述：logistics/manufacturing/mds 模块类型定义（自动生成；类型名去 Takt 前缀与末尾 Dto，如 TaktCompanyDto → Company）
 // 
@@ -49,17 +49,17 @@ export interface SalesForecastItem extends CompanyDtoBase {
   lineNumber: number;
 
   /**
-   * 物料编码（关联 TaktMaterial.MaterialCode，选项 TaktMaterials/options）
+   * 物料编码（选项 TaktMaterialPlants/options；DictValue=MaterialCode，ExtValue=PlantCode）
    */
   materialCode: string;
 
   /**
-   * 物料名称
+   * 物料名称（回填：随物料）
    */
   materialName: string;
 
   /**
-   * 物料规格
+   * 物料规格（回填：随物料）
    */
   materialSpecification?: string;
 
@@ -74,7 +74,7 @@ export interface SalesForecastItem extends CompanyDtoBase {
   modelName?: string;
 
   /**
-   * 计划单位（字典 logistics_unit_of_measure_code，DictValue=PC/EA 等；默认 PC）
+   * 计划单位（字典 logistics_unit_of_measure_code；DictValue=PC/EA 等；默认 PC）
    */
   planUnit: string;
 
@@ -104,7 +104,7 @@ export interface SalesForecastItem extends CompanyDtoBase {
   estimatedAmount: number;
 
   /**
-   * 是否作废（字典 sys_yes_no_type，0=否 1=是；编辑移除子行时标记作废）
+   * 是否作废（字典 sys_yes_no_type；0=否 1=是；编辑移除子行时标记作废）
    */
   isObsolete: number;
 
@@ -144,17 +144,17 @@ export interface SalesForecastItemQuery extends TaktPagedQuery {
   lineNumber?: number;
 
   /**
-   * 物料编码（关联 TaktMaterial.MaterialCode，选项 TaktMaterials/options）
+   * 物料编码（选项 TaktMaterialPlants/options；DictValue=MaterialCode，ExtValue=PlantCode）
    */
   materialCode?: string;
 
   /**
-   * 物料名称
+   * 物料名称（回填：随物料）
    */
   materialName?: string;
 
   /**
-   * 物料规格
+   * 物料规格（回填：随物料）
    */
   materialSpecification?: string;
 
@@ -169,7 +169,7 @@ export interface SalesForecastItemQuery extends TaktPagedQuery {
   modelName?: string;
 
   /**
-   * 计划单位（字典 logistics_unit_of_measure_code，DictValue=PC/EA 等；默认 PC）
+   * 计划单位（字典 logistics_unit_of_measure_code；DictValue=PC/EA 等；默认 PC）
    */
   planUnit?: string;
 
@@ -204,7 +204,7 @@ export interface SalesForecastItemQuery extends TaktPagedQuery {
   estimatedAmount?: number;
 
   /**
-   * 是否作废（字典 sys_yes_no_type，0=否 1=是；编辑移除子行时标记作废）
+   * 是否作废（字典 sys_yes_no_type；0=否 1=是；编辑移除子行时标记作废）
    */
   isObsolete?: number;
 
@@ -268,17 +268,17 @@ export interface SalesForecastItemCreate {
   lineNumber: number;
 
   /**
-   * 物料编码（关联 TaktMaterial.MaterialCode，选项 TaktMaterials/options）
+   * 物料编码（选项 TaktMaterialPlants/options；DictValue=MaterialCode，ExtValue=PlantCode）
    */
   materialCode: string;
 
   /**
-   * 物料名称
+   * 物料名称（回填：随物料）
    */
   materialName: string;
 
   /**
-   * 物料规格
+   * 物料规格（回填：随物料）
    */
   materialSpecification?: string;
 
@@ -293,7 +293,7 @@ export interface SalesForecastItemCreate {
   modelName?: string;
 
   /**
-   * 计划单位（字典 logistics_unit_of_measure_code，DictValue=PC/EA 等；默认 PC）
+   * 计划单位（字典 logistics_unit_of_measure_code；DictValue=PC/EA 等；默认 PC）
    */
   planUnit: string;
 
@@ -323,7 +323,7 @@ export interface SalesForecastItemCreate {
   estimatedAmount: number;
 
   /**
-   * 是否作废（字典 sys_yes_no_type，0=否 1=是；编辑移除子行时标记作废）
+   * 是否作废（字典 sys_yes_no_type；0=否 1=是；编辑移除子行时标记作废）
    */
   isObsolete: number;
 
@@ -406,17 +406,17 @@ export interface SalesForecastItemTemplate {
   lineNumber?: number;
 
   /**
-   * 物料编码（关联 TaktMaterial.MaterialCode，选项 TaktMaterials/options）
+   * 物料编码（选项 TaktMaterialPlants/options；DictValue=MaterialCode，ExtValue=PlantCode）
    */
   materialCode?: string;
 
   /**
-   * 物料名称
+   * 物料名称（回填：随物料）
    */
   materialName?: string;
 
   /**
-   * 物料规格
+   * 物料规格（回填：随物料）
    */
   materialSpecification?: string;
 
@@ -431,7 +431,7 @@ export interface SalesForecastItemTemplate {
   modelName?: string;
 
   /**
-   * 计划单位（字典 logistics_unit_of_measure_code，DictValue=PC/EA 等；默认 PC）
+   * 计划单位（字典 logistics_unit_of_measure_code；DictValue=PC/EA 等；默认 PC）
    */
   planUnit?: string;
 
@@ -461,7 +461,7 @@ export interface SalesForecastItemTemplate {
   estimatedAmount?: number;
 
   /**
-   * 是否作废（字典 sys_yes_no_type，0=否 1=是；编辑移除子行时标记作废）
+   * 是否作废（字典 sys_yes_no_type；0=否 1=是；编辑移除子行时标记作废）
    */
   isObsolete?: number;
 
@@ -515,17 +515,17 @@ export interface SalesForecastItemImport {
   lineNumber?: number;
 
   /**
-   * 物料编码（关联 TaktMaterial.MaterialCode，选项 TaktMaterials/options）
+   * 物料编码（选项 TaktMaterialPlants/options；DictValue=MaterialCode，ExtValue=PlantCode）
    */
   materialCode?: string;
 
   /**
-   * 物料名称
+   * 物料名称（回填：随物料）
    */
   materialName?: string;
 
   /**
-   * 物料规格
+   * 物料规格（回填：随物料）
    */
   materialSpecification?: string;
 
@@ -540,7 +540,7 @@ export interface SalesForecastItemImport {
   modelName?: string;
 
   /**
-   * 计划单位（字典 logistics_unit_of_measure_code，DictValue=PC/EA 等；默认 PC）
+   * 计划单位（字典 logistics_unit_of_measure_code；DictValue=PC/EA 等；默认 PC）
    */
   planUnit?: string;
 
@@ -570,7 +570,7 @@ export interface SalesForecastItemImport {
   estimatedAmount?: number;
 
   /**
-   * 是否作废（字典 sys_yes_no_type，0=否 1=是；编辑移除子行时标记作废）
+   * 是否作废（字典 sys_yes_no_type；0=否 1=是；编辑移除子行时标记作废）
    */
   isObsolete?: number;
 
@@ -619,17 +619,17 @@ export interface SalesForecastItemExport {
   lineNumber: number;
 
   /**
-   * 物料编码（关联 TaktMaterial.MaterialCode，选项 TaktMaterials/options）
+   * 物料编码（选项 TaktMaterialPlants/options；DictValue=MaterialCode，ExtValue=PlantCode）
    */
   materialCode: string;
 
   /**
-   * 物料名称
+   * 物料名称（回填：随物料）
    */
   materialName: string;
 
   /**
-   * 物料规格
+   * 物料规格（回填：随物料）
    */
   materialSpecification?: string;
 
@@ -644,7 +644,7 @@ export interface SalesForecastItemExport {
   modelName?: string;
 
   /**
-   * 计划单位（字典 logistics_unit_of_measure_code，DictValue=PC/EA 等；默认 PC）
+   * 计划单位（字典 logistics_unit_of_measure_code；DictValue=PC/EA 等；默认 PC）
    */
   planUnit: string;
 
@@ -674,7 +674,7 @@ export interface SalesForecastItemExport {
   estimatedAmount: number;
 
   /**
-   * 是否作废（字典 sys_yes_no_type，0=否 1=是；编辑移除子行时标记作废）
+   * 是否作废（字典 sys_yes_no_type；0=否 1=是；编辑移除子行时标记作废）
    */
   isObsolete: number;
 

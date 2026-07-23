@@ -24,12 +24,12 @@ namespace Takt.Domain.Entities.HumanResource.Personnel;
 public class TaktEmployeeOnboarding : TaktCompanyEntityBase
 {
     /// <summary>
-    /// 录用信息（选项 TaktTalentOffers/options，DictValue=Id）
+    /// 录用信息（选项 TaktTalentOffers/options；DictValue=Id）
     /// </summary>
     [SugarColumn(ColumnName = "offer_id", ColumnDescription = "录用信息ID", ColumnDataType = "bigint", IsNullable = false)]
     public long OfferId { get; set; }
     /// <summary>
-    /// 待办单号（租户+公司内业务编号）
+    /// 待办单号（租户+公司内业务编码）
     /// </summary>
     [SugarColumn(ColumnName = "todo_no", ColumnDescription = "待办单号", ColumnDataType = "varchar", Length = 20, IsNullable = false)]
     public string TodoNo { get; set; } = string.Empty;
@@ -53,6 +53,16 @@ public class TaktEmployeeOnboarding : TaktCompanyEntityBase
     /// </summary>
     [SugarColumn(ColumnName = "employee_id", ColumnDescription = "关联员工ID", ColumnDataType = "bigint", IsNullable = true)]
     public long? EmployeeId { get; set; }
+    /// <summary>
+    /// 员工编码（冗余，与 TaktEmployee.EmployeeCode 对齐；建档回填后可写，建档前可空）
+    /// </summary>
+    [SugarColumn(ColumnName = "employee_code", ColumnDescription = "员工编码", ColumnDataType = "varchar", Length = 6, IsNullable = true)]
+    public string? EmployeeCode { get; set; }
+    /// <summary>
+    /// 员工姓名（冗余，与 TaktEmployee.EmployeeName 对齐；建档回填后可写，建档前可空）
+    /// </summary>
+    [SugarColumn(ColumnName = "employee_name", ColumnDescription = "员工姓名", ColumnDataType = "nvarchar", Length = 80, IsNullable = true)]
+    public string? EmployeeName { get; set; }
     /// <summary>
     /// 入职上岗单（关联 TaktEmployeeJoined.Id；待办完成后回填，可空）
     /// </summary>

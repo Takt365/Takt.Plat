@@ -17,7 +17,7 @@ using Takt.Domain.Entities;
 namespace Takt.Domain.Entities.Logistics.Manufacturing.Bom;
 
 /// <summary>
-/// 标准工序时间实体（基于 SAP PP 标准工时）
+/// 标准工序时间实体（基于标准工时）
 /// </summary>
 [SugarTable("takt_logistics_manufacturing_bom_standard_operation_time", "标准工序时间表")]
 [SugarIndex("ix_standard_operation_time_tenant", nameof(TenantCode), OrderByType.Asc, nameof(CompanyCode), OrderByType.Asc, false)]
@@ -28,19 +28,19 @@ namespace Takt.Domain.Entities.Logistics.Manufacturing.Bom;
 public class TaktStandardOperationTime : TaktApprovalEntityBase
 {
     /// <summary>
-    /// 工厂代码（选项 TaktPlants/options，DictValue=PlantCode）
+    /// 工厂代码（选项 TaktPlants/options；DictValue=PlantCode）
     /// </summary>
     [SugarColumn(ColumnName = "plant_code", ColumnDescription = "工厂代码", ColumnDataType = "nvarchar", Length = 4, IsNullable = false)]
     public string PlantCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 物料编码（选项 TaktMaterialPlants/options，DictValue=MaterialCode，ExtValue=PlantCode）
+    /// 物料编码（选项 TaktMaterialPlants/options；DictValue=MaterialCode，ExtValue=PlantCode）
     /// </summary>
     [SugarColumn(ColumnName = "material_code", ColumnDescription = "物料编码", ColumnDataType = "nvarchar", Length = 20, IsNullable = false)]
     public string MaterialCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 工作中心（选项 TaktWorkCenters/options，DictValue=WorkCenterCode，ExtValue=PlantCode）
+    /// 工作中心（选项 TaktWorkCenters/options；DictValue=WorkCenterCode，ExtValue=PlantCode）
     /// </summary>
     [SugarColumn(ColumnName = "work_center", ColumnDescription = "工作中心", ColumnDataType = "nvarchar", Length = 20, IsNullable = false)]
     public string WorkCenter { get; set; } = string.Empty;
@@ -58,7 +58,7 @@ public class TaktStandardOperationTime : TaktApprovalEntityBase
     public decimal StandardMinutes { get; set; } = 0;
 
     /// <summary>
-    /// 工时单位（字典 logistics_time_unit，默认 MIN）
+    /// 工时单位（字典 logistics_time_unit；默认 MIN）
     /// </summary>
     [SugarColumn(ColumnName = "time_unit", ColumnDescription = "工时单位", ColumnDataType = "nvarchar", Length = 3, IsNullable = false, DefaultValue = "MIN")]
     public string TimeUnit { get; set; } = "MIN";
@@ -70,7 +70,7 @@ public class TaktStandardOperationTime : TaktApprovalEntityBase
     public int StandardShorts { get; set; } = 0;
 
     /// <summary>
-    /// 点数单位（字典 logistics_points_unit，默认 SHORT）
+    /// 点数单位（字典 logistics_points_unit；默认 SHORT）
     /// </summary>
     [SugarColumn(ColumnName = "points_unit", ColumnDescription = "点数单位", ColumnDataType = "nvarchar", Length = 5, IsNullable = false, DefaultValue = "SHORT")]
     public string PointsUnit { get; set; } = "SHORT";

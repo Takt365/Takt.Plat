@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：frontend/src/types/logistics/manufacturing/mrp
 // 文件名称：purchase-plan.d.ts
-// 创建时间：2026-07-13
+// 创建时间：2026-07-23
 // 创建人：Takt365(Auto Generated)
 // 功能描述：logistics/manufacturing/mrp 模块类型定义（自动生成；类型名去 Takt 前缀与末尾 Dto，如 TaktCompanyDto → Company）
 // 
@@ -29,7 +29,7 @@ export interface PurchasePlan extends ApprovalDtoBase {
   purchasePlanId: string;
 
   /**
-   * 工厂代码（选项 TaktPlants/options，DictValue=PlantCode）
+   * 工厂代码（选项 TaktPlants/options；DictValue=PlantCode）
    */
   plantCode: string;
 
@@ -84,12 +84,12 @@ export interface PurchasePlan extends ApprovalDtoBase {
   planPeriodEnd: string;
 
   /**
-   * 采购组编码（关联 TaktPurchaseGroup.PurchaseGroupCode，选项 TaktPurchaseGroups/options，DictValue=PurchaseGroupCode）
+   * 采购组编码（选项 TaktPurchaseGroups/options；DictValue=PurchaseGroupCode）
    */
   purchaseGroupCode?: string;
 
   /**
-   * 计划人员工ID（关联 TaktEmployee.Id，选项 TaktEmployees/options）
+   * 计划人员工ID（选项 TaktEmployees/options；DictValue=Id）
    */
   plannerId?: string;
 
@@ -99,7 +99,7 @@ export interface PurchasePlan extends ApprovalDtoBase {
   plannerName?: string;
 
   /**
-   * 计划人（关联 TaktEmployee.EmployeeNo，选项 TaktEmployees/options，DictValue=EmployeeNo）
+   * 计划人（选项 TaktEmployees/options；DictValue=EmployeeCode）
    */
   planBy: string;
 
@@ -164,7 +164,7 @@ export interface PurchasePlanQuery extends TaktPagedQuery {
   companyCode?: string;
 
   /**
-   * 工厂代码（选项 TaktPlants/options，DictValue=PlantCode）
+   * 工厂代码（选项 TaktPlants/options；DictValue=PlantCode）
    */
   plantCode?: string;
 
@@ -224,17 +224,17 @@ export interface PurchasePlanQuery extends TaktPagedQuery {
   planPeriodEndEnd?: string;
 
   /**
-   * 采购组编码（关联 TaktPurchaseGroup.PurchaseGroupCode，选项 TaktPurchaseGroups/options，DictValue=PurchaseGroupCode）
+   * 采购组编码（选项 TaktPurchaseGroups/options；DictValue=PurchaseGroupCode）
    */
   purchaseGroupCode?: string;
 
   /**
-   * 计划人员工ID（关联 TaktEmployee.Id，选项 TaktEmployees/options）
+   * 计划人员工ID（选项 TaktEmployees/options；DictValue=Id）
    */
   plannerId?: string;
 
   /**
-   * 计划人（关联 TaktEmployee.EmployeeNo，选项 TaktEmployees/options，DictValue=EmployeeNo）
+   * 计划人（选项 TaktEmployees/options；DictValue=EmployeeCode）
    */
   planBy?: string;
 
@@ -358,7 +358,7 @@ export interface PurchasePlanCreate {
   companyDefaultCulture: string;
 
   /**
-   * 工厂代码（选项 TaktPlants/options，DictValue=PlantCode）
+   * 工厂代码（选项 TaktPlants/options；DictValue=PlantCode）
    */
   plantCode: string;
 
@@ -403,17 +403,17 @@ export interface PurchasePlanCreate {
   planPeriodEnd: string;
 
   /**
-   * 采购组编码（关联 TaktPurchaseGroup.PurchaseGroupCode，选项 TaktPurchaseGroups/options，DictValue=PurchaseGroupCode）
+   * 采购组编码（选项 TaktPurchaseGroups/options；DictValue=PurchaseGroupCode）
    */
   purchaseGroupCode?: string;
 
   /**
-   * 计划人员工ID（关联 TaktEmployee.Id，选项 TaktEmployees/options）
+   * 计划人员工ID（选项 TaktEmployees/options；DictValue=Id）
    */
   plannerId?: string;
 
   /**
-   * 计划人（关联 TaktEmployee.EmployeeNo，选项 TaktEmployees/options，DictValue=EmployeeNo）
+   * 计划人（选项 TaktEmployees/options；DictValue=EmployeeCode）
    */
   planBy: string;
 
@@ -526,7 +526,7 @@ export interface PurchasePlanTemplate {
   companyCode?: string;
 
   /**
-   * 工厂代码（选项 TaktPlants/options，DictValue=PlantCode）
+   * 工厂代码（选项 TaktPlants/options；DictValue=PlantCode）
    */
   plantCode?: string;
 
@@ -571,17 +571,17 @@ export interface PurchasePlanTemplate {
   planPeriodEnd?: string;
 
   /**
-   * 采购组编码（关联 TaktPurchaseGroup.PurchaseGroupCode，选项 TaktPurchaseGroups/options，DictValue=PurchaseGroupCode）
+   * 采购组编码（选项 TaktPurchaseGroups/options；DictValue=PurchaseGroupCode）
    */
   purchaseGroupCode?: string;
 
   /**
-   * 计划人员工ID（关联 TaktEmployee.Id，选项 TaktEmployees/options）
+   * 计划人员工ID（选项 TaktEmployees/options；DictValue=Id）
    */
   plannerId?: string;
 
   /**
-   * 计划人（关联 TaktEmployee.EmployeeNo，选项 TaktEmployees/options，DictValue=EmployeeNo）
+   * 计划人（选项 TaktEmployees/options；DictValue=EmployeeCode）
    */
   planBy?: string;
 
@@ -660,7 +660,7 @@ export interface PurchasePlanImport {
   companyDefaultCulture?: string;
 
   /**
-   * 工厂代码（选项 TaktPlants/options，DictValue=PlantCode）
+   * 工厂代码（选项 TaktPlants/options；DictValue=PlantCode）
    */
   plantCode?: string;
 
@@ -705,17 +705,17 @@ export interface PurchasePlanImport {
   planPeriodEnd?: string;
 
   /**
-   * 采购组编码（关联 TaktPurchaseGroup.PurchaseGroupCode，选项 TaktPurchaseGroups/options，DictValue=PurchaseGroupCode）
+   * 采购组编码（选项 TaktPurchaseGroups/options；DictValue=PurchaseGroupCode）
    */
   purchaseGroupCode?: string;
 
   /**
-   * 计划人员工ID（关联 TaktEmployee.Id，选项 TaktEmployees/options）
+   * 计划人员工ID（选项 TaktEmployees/options；DictValue=Id）
    */
   plannerId?: string;
 
   /**
-   * 计划人（关联 TaktEmployee.EmployeeNo，选项 TaktEmployees/options，DictValue=EmployeeNo）
+   * 计划人（选项 TaktEmployees/options；DictValue=EmployeeCode）
    */
   planBy?: string;
 
@@ -784,7 +784,7 @@ export interface PurchasePlanExport {
   purchasePlanId: string;
 
   /**
-   * 工厂代码（选项 TaktPlants/options，DictValue=PlantCode）
+   * 工厂代码（选项 TaktPlants/options；DictValue=PlantCode）
    */
   plantCode: string;
 
@@ -829,17 +829,17 @@ export interface PurchasePlanExport {
   planPeriodEnd: string;
 
   /**
-   * 采购组编码（关联 TaktPurchaseGroup.PurchaseGroupCode，选项 TaktPurchaseGroups/options，DictValue=PurchaseGroupCode）
+   * 采购组编码（选项 TaktPurchaseGroups/options；DictValue=PurchaseGroupCode）
    */
   purchaseGroupCode?: string;
 
   /**
-   * 计划人员工ID（关联 TaktEmployee.Id，选项 TaktEmployees/options）
+   * 计划人员工ID（选项 TaktEmployees/options；DictValue=Id）
    */
   plannerId?: string;
 
   /**
-   * 计划人（关联 TaktEmployee.EmployeeNo，选项 TaktEmployees/options，DictValue=EmployeeNo）
+   * 计划人（选项 TaktEmployees/options；DictValue=EmployeeCode）
    */
   planBy: string;
 

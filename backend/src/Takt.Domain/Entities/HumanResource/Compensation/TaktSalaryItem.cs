@@ -95,7 +95,7 @@ public class TaktSalaryItem : TaktCompanyEntityBase
     [SugarColumn(ColumnName = "include_housing_fund_base", ColumnDescription = "是否计入公积金基数", ColumnDataType = "int", IsNullable = false, DefaultValue = "0")]
     public int IncludeHousingFundBase { get; set; } = 0;
     /// <summary>
-    /// 关联工厂（选项 TaktPlants/options，DictValue=Id）
+    /// 关联工厂（选项 TaktPlants/options；DictValue=Id）
     /// </summary>
     [SugarColumn(ColumnName = "related_plant", ColumnDescription = "关联工厂", ColumnDataType = "nvarchar", Length = 4, IsNullable = false)]
     public string RelatedPlant { get; set; } = string.Empty;

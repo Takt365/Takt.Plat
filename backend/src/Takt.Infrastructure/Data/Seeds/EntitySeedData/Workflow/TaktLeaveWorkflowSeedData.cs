@@ -115,7 +115,7 @@ public class TaktLeaveWorkflowSeedData : ITaktSeedDataCoordinator
             var demoEmployee = await employeeRepository.FirstAsync(e =>
                 e.TenantCode == tenantCode
                 && e.CompanyCode == company.CompanyCode
-                && e.EmployeeNo == "900003");
+                && e.EmployeeCode == "900003");
             if (demoEmployee == null)
             {
                 TaktLogger.Warning("公司 {CompanyCode} 缺少演示员工 900003，跳过该公司请假工作流种子", company.CompanyCode);

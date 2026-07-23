@@ -21,7 +21,7 @@
     >
       <a-tab-pane
         key="tab-0"
-        :tab="t('common.page.form.tabs.basicinfo') + ' (1/2)'"
+        :tab="t('common.page.form.tabs.basicinfo') + ' (1/3)'"
         force-render
       >
         <div :class="formContentClass">
@@ -151,21 +151,104 @@
       </a-tab-pane>
       <a-tab-pane
         key="tab-1"
-        :tab="t('common.page.form.tabs.basicinfo') + ' (2/2)'"
+        :tab="t('common.page.form.tabs.basicinfo') + ' (2/3)'"
         force-render
       >
         <div :class="formContentClass">
           <a-row :gutter="24">
             <a-col :span="12">
               <a-form-item
-                :label="pi.label('taxCode')"
-                name="taxCode"
+                :label="pi.label('untaxedPrice')"
+                name="untaxedPrice"
+              >
+                <a-input-number
+                  v-model:value="formState.untaxedPrice"
+                  :placeholder="pi.ph('untaxedPrice')"
+                  style="width: 100%"
+                />
+              </a-form-item>
+            </a-col>
+            <a-col :span="12">
+              <a-form-item
+                :label="pi.label('taxIncludedPrice')"
+                name="taxIncludedPrice"
+              >
+                <a-input-number
+                  v-model:value="formState.taxIncludedPrice"
+                  :placeholder="pi.ph('taxIncludedPrice')"
+                  style="width: 100%"
+                />
+              </a-form-item>
+            </a-col>
+            <a-col :span="12">
+              <a-form-item
+                :label="pi.label('conditionCurrency')"
+                name="conditionCurrency"
               >
                 <TaktSelect
-                  v-model:value="formState.taxCode"
-                  dict-type="accounting_tax_code"
-                  :placeholder="pi.ph('taxCode')"
-                  :disabled="!!formData?.purchasePriceItemId"
+                  v-model:value="formState.conditionCurrency"
+                  dict-type="accounting_currency_code"
+                  :placeholder="pi.ph('conditionCurrency')"
+                />
+              </a-form-item>
+            </a-col>
+            <a-col :span="12">
+              <a-form-item
+                :label="pi.label('priceUnit')"
+                name="priceUnit"
+              >
+                <TaktSelect
+                  v-model:value="formState.priceUnit"
+                  dict-type="logistics_price_unit_param"
+                  :placeholder="pi.ph('priceUnit')"
+                />
+              </a-form-item>
+            </a-col>
+            <a-col :span="12">
+              <a-form-item
+                :label="pi.label('unitOfMeasure')"
+                name="unitOfMeasure"
+              >
+                <TaktSelect
+                  v-model:value="formState.unitOfMeasure"
+                  dict-type="logistics_unit_of_measure_code"
+                  :placeholder="pi.ph('unitOfMeasure')"
+                />
+              </a-form-item>
+            </a-col>
+            <a-col :span="12">
+              <a-form-item
+                :label="pi.label('minOrderQuantity')"
+                name="minOrderQuantity"
+              >
+                <a-input-number
+                  v-model:value="formState.minOrderQuantity"
+                  :placeholder="pi.ph('minOrderQuantity')"
+                  style="width: 100%"
+                />
+              </a-form-item>
+            </a-col>
+            <a-col :span="12">
+              <a-form-item
+                :label="pi.label('roundingValue')"
+                name="roundingValue"
+              >
+                <a-input-number
+                  v-model:value="formState.roundingValue"
+                  :placeholder="pi.ph('roundingValue')"
+                  style="width: 100%"
+                />
+              </a-form-item>
+            </a-col>
+            <a-col :span="12">
+              <a-form-item
+                :label="pi.label('plannedDeliveryTimeDays')"
+                name="plannedDeliveryTimeDays"
+              >
+                <a-input-number
+                  v-model:value="formState.plannedDeliveryTimeDays"
+                  :placeholder="pi.ph('plannedDeliveryTimeDays')"
+                  style="width: 100%"
                 />
               </a-form-item>
             </a-col>
@@ -195,6 +278,16 @@
                 />
               </a-form-item>
             </a-col>
+          </a-row>
+        </div>
+      </a-tab-pane>
+      <a-tab-pane
+        key="tab-2"
+        :tab="t('common.page.form.tabs.basicinfo') + ' (3/3)'"
+        force-render
+      >
+        <div :class="formContentClass">
+          <a-row :gutter="24">
             <a-col :span="12">
               <a-form-item
                 :label="pi.label('scaleValues')"
@@ -240,7 +333,7 @@ const formContentClass = computed(() => (formFields.length > 10 ? 'takt-form-con
 /** 当前激活的 Tab key */
 const activeTab = ref('tab-0')
 /** CreateDto 字段名列表（与 formState 键对齐） */
-const formFields = ["purchasePriceSeq","priceType","scaleType","scaleBasis","scaleQuantity","scaleUnit","scaleValue","scaleCurrency","calculationType","price","taxCode","isObsolete","scaleQuantities","scaleValues"]
+const formFields = ["purchasePriceSeq","priceType","scaleType","scaleBasis","scaleQuantity","scaleUnit","scaleValue","scaleCurrency","calculationType","price","untaxedPrice","taxIncludedPrice","conditionCurrency","priceUnit","unitOfMeasure","minOrderQuantity","roundingValue","plannedDeliveryTimeDays","isObsolete","scaleQuantities","scaleValues"]
 
 
 
@@ -270,7 +363,8 @@ const FORM_FIELD_DEFAULTS: Record<string, string | number> = {
   scaleBasis: "C",
   scaleCurrency: "CNY",
   calculationType: "A",
-  taxCode: "J1"
+  conditionCurrency: "CNY",
+  priceUnit: 1000
 }
 
 /** 写入表单默认值（新增 / resetFields / 弹窗再次打开时） */
@@ -376,6 +470,98 @@ const rules = computed<Record<string, Rule[]>>(() => ({
     },
     trigger: 'change'
   }],
+  untaxedPrice: [{
+    validator: async (_rule, value) => {
+      if (value === undefined || value === null || value === '') {
+        return Promise.reject(pi.ph('untaxedPrice'))
+      }
+      const num = typeof value === 'number' ? value : Number(value)
+      if (!Number.isFinite(num)) {
+        return Promise.reject(pi.ph('untaxedPrice'))
+      }
+      return Promise.resolve()
+    },
+    trigger: 'change'
+  }],
+  taxIncludedPrice: [{
+    validator: async (_rule, value) => {
+      if (value === undefined || value === null || value === '') {
+        return Promise.reject(pi.ph('taxIncludedPrice'))
+      }
+      const num = typeof value === 'number' ? value : Number(value)
+      if (!Number.isFinite(num)) {
+        return Promise.reject(pi.ph('taxIncludedPrice'))
+      }
+      return Promise.resolve()
+    },
+    trigger: 'change'
+  }],
+  conditionCurrency: [
+    {
+      required: true,
+      message: pi.ph('conditionCurrency'),
+      trigger: 'change'
+    }
+  ],
+  priceUnit: [{
+    validator: async (_rule, value) => {
+      if (value === undefined || value === null || value === '') {
+        return Promise.reject(pi.ph('priceUnit'))
+      }
+      const num = typeof value === 'number' ? value : Number(value)
+      if (!Number.isFinite(num)) {
+        return Promise.reject(pi.ph('priceUnit'))
+      }
+      return Promise.resolve()
+    },
+    trigger: 'change'
+  }],
+  unitOfMeasure: [
+    {
+      required: true,
+      message: pi.ph('unitOfMeasure'),
+      trigger: 'change'
+    }
+  ],
+  minOrderQuantity: [{
+    validator: async (_rule, value) => {
+      if (value === undefined || value === null || value === '') {
+        return Promise.reject(pi.ph('minOrderQuantity'))
+      }
+      const num = typeof value === 'number' ? value : Number(value)
+      if (!Number.isFinite(num)) {
+        return Promise.reject(pi.ph('minOrderQuantity'))
+      }
+      return Promise.resolve()
+    },
+    trigger: 'change'
+  }],
+  roundingValue: [{
+    validator: async (_rule, value) => {
+      if (value === undefined || value === null || value === '') {
+        return Promise.reject(pi.ph('roundingValue'))
+      }
+      const num = typeof value === 'number' ? value : Number(value)
+      if (!Number.isFinite(num)) {
+        return Promise.reject(pi.ph('roundingValue'))
+      }
+      return Promise.resolve()
+    },
+    trigger: 'change'
+  }],
+  plannedDeliveryTimeDays: [{
+    validator: async (_rule, value) => {
+      if (value === undefined || value === null || value === '') {
+        return Promise.reject(pi.ph('plannedDeliveryTimeDays'))
+      }
+      const num = typeof value === 'number' ? value : Number(value)
+      if (!Number.isFinite(num)) {
+        return Promise.reject(pi.ph('plannedDeliveryTimeDays'))
+      }
+      return Promise.resolve()
+    },
+    trigger: 'change'
+  }],
   isObsolete: [{
     validator: async (_rule, value) => {
       if (value === undefined || value === null || value === '') {
@@ -415,6 +601,30 @@ function getValues(): Record<string, any> {
   if ('price' in payload) {
     const rawprice = payload.price
     payload.price = typeof rawprice === 'number' ? rawprice : Number(rawprice)
+  }
+  if ('untaxedPrice' in payload) {
+    const rawuntaxedPrice = payload.untaxedPrice
+    payload.untaxedPrice = typeof rawuntaxedPrice === 'number' ? rawuntaxedPrice : Number(rawuntaxedPrice)
+  }
+  if ('taxIncludedPrice' in payload) {
+    const rawtaxIncludedPrice = payload.taxIncludedPrice
+    payload.taxIncludedPrice = typeof rawtaxIncludedPrice === 'number' ? rawtaxIncludedPrice : Number(rawtaxIncludedPrice)
+  }
+  if ('priceUnit' in payload) {
+    const rawpriceUnit = payload.priceUnit
+    payload.priceUnit = typeof rawpriceUnit === 'number' ? rawpriceUnit : Number(rawpriceUnit)
+  }
+  if ('minOrderQuantity' in payload) {
+    const rawminOrderQuantity = payload.minOrderQuantity
+    payload.minOrderQuantity = typeof rawminOrderQuantity === 'number' ? rawminOrderQuantity : Number(rawminOrderQuantity)
+  }
+  if ('roundingValue' in payload) {
+    const rawroundingValue = payload.roundingValue
+    payload.roundingValue = typeof rawroundingValue === 'number' ? rawroundingValue : Number(rawroundingValue)
+  }
+  if ('plannedDeliveryTimeDays' in payload) {
+    const rawplannedDeliveryTimeDays = payload.plannedDeliveryTimeDays
+    payload.plannedDeliveryTimeDays = typeof rawplannedDeliveryTimeDays === 'number' ? rawplannedDeliveryTimeDays : Number(rawplannedDeliveryTimeDays)
   }
   if ('isObsolete' in payload) {
     const rawisObsolete = payload.isObsolete

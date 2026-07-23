@@ -2,7 +2,7 @@
 <!-- 项目名称：节拍数字工厂 · Takt Plat (TDF) -->
 <!-- 命名空间：@/views/foundation/numbering -->
 <!-- 文件名称：index.vue -->
-<!-- 功能描述：编号规则实体 定义系统中各类业务单据的编号生成规则管理页面，含查询、增删改，由 generate-vue-crud-from-api.cjs 根据 types/api 自动生成 -->
+<!-- 功能描述：编码规则实体 定义系统中各类业务单据的编码生成规则管理页面，含查询、增删改，由 generate-vue-crud-from-api.cjs 根据 types/api 自动生成 -->
 <!-- 版权信息：Copyright (c) 2025 Takt  All rights reserved. -->
 <!-- 免责声明：此软件使用 MIT License，作者不承担任何使用风险。 -->
 <!-- ======================================== -->
@@ -404,7 +404,7 @@
 
 <script setup lang="ts">
 /**
- * 编号规则实体 定义系统中各类业务单据的编号生成规则管理页 · 由 generate-vue-crud-from-api.cjs 根据 types/api 生成
+ * 编码规则实体 定义系统中各类业务单据的编码生成规则管理页 · 由 generate-vue-crud-from-api.cjs 根据 types/api 生成
  * @module views/foundation/numbering
  */
 import { ref, computed, onMounted } from 'vue'

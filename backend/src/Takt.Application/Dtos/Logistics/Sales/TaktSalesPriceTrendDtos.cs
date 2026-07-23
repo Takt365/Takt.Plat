@@ -170,12 +170,12 @@ public class TaktSalesPriceMonthlyTrendQueryDto : TaktPagedQuery
     public string? CustomerCode { get; set; }
 
     /// <summary>
-    /// 价格类型（字典 logistics_price_type；可选）
+    /// 价格类型（字典 logistics_price_type，如 PR00；可选）
     /// </summary>
-    public int? PriceType { get; set; }
+    public string? PriceType { get; set; }
 
     /// <summary>
-    /// 仅启用价格主表（PriceStatus=1；默认 true）
+    /// 仅启用价格主表（兼容字段；当前实体无 PriceStatus，服务侧暂不按状态过滤）
     /// </summary>
     public bool? OnlyEnabled { get; set; }
 

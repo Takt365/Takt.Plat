@@ -92,9 +92,9 @@ public class TaktHolidaySeedData : ITaktSeedDataCoordinator
         foreach (var company in orderedCompanies)
         {
             TaktLogger.Information(
-                "正在为公司 {CompanyCode} ({CompanyName}) 初始化假日...",
+                "正在为公司 {CompanyCode} ({CompanyName1}) 初始化假日...",
                 company.CompanyCode,
-                company.CompanyName);
+                company.CompanyName1);
 
             var holidays = GetHolidaysForCompany(company);
 

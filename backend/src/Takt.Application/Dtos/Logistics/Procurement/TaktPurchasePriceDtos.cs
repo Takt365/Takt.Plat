@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Application.Dtos.Logistics.Procurement
 // 文件名称：TaktPurchasePriceDtos.cs
-// 创建时间：2026-07-20
+// 创建时间：2026-07-21
 // 创建人：Takt365(Auto Generated)
 // 功能描述：PurchasePrice 模块 DTO（由 generate-dtos-from-entity.cjs 根据 TaktPurchasePrice 生成，请按需审阅）
 // 
@@ -36,6 +36,11 @@ public class TaktPurchasePriceDto : TaktCompanyDtoBase
     public long PurchasePriceId { get; set; }
 
     /// <summary>
+    /// 工厂代码（选项 TaktPlants/options，DictValue=PlantCode）
+    /// </summary>
+    public string PlantCode { get; set; } = string.Empty;
+
+    /// <summary>
     /// 定价记录号（唯一索引；长度 20）
     /// </summary>
     public string PurchasePriceCode { get; set; } = string.Empty;
@@ -56,6 +61,26 @@ public class TaktPurchasePriceDto : TaktCompanyDtoBase
     public string MaterialCode { get; set; } = string.Empty;
 
     /// <summary>
+    /// 采购组（选项 TaktPurchaseGroups/options，DictValue=PurchaseGroupCode）
+    /// </summary>
+    public string? PurchaseGroup { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 税码（字典 accounting_tax_code，DictValue=J0～J8/L1/X0～X3；SAP MWSKZ；中国）
+    /// </summary>
+    public string? TaxCode { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 基于收货的发票检验（字典 sys_yes_no_type，0=否 1=是；SAP WEBRE）
+    /// </summary>
+    public int GrBasedInvoiceInspection { get; set; } = 0;
+
+    /// <summary>
+    /// 定价日期控制（字典 logistics_pricing_date_control；1=采购订单日期，2=交货日期，3=当前日期，4=手动，5=收货日期；默认 1）
+    /// </summary>
+    public int PricingDateControl { get; set; } = 0;
+
+    /// <summary>
     /// 有效起始日
     /// </summary>
     public DateTime ValidFrom { get; set; }
@@ -64,11 +89,6 @@ public class TaktPurchasePriceDto : TaktCompanyDtoBase
     /// 有效截至日
     /// </summary>
     public DateTime ValidTo { get; set; }
-
-    /// <summary>
-    /// 可变关键字
-    /// </summary>
-    public string? VariableKey { get; set; } = string.Empty;
 
     /// <summary>
     /// 来源采购询价 ID（选项 TaktPurchaseInquirys/options，DictValue=Id）
@@ -85,6 +105,11 @@ public class TaktPurchasePriceDto : TaktCompanyDtoBase
     /// 来源采购询价编码（冗余）
     /// </summary>
     public string? PurchaseInquiryCode { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 可变关键字
+    /// </summary>
+    public string? VariableKey { get; set; } = string.Empty;
 
     /// <summary>
     /// 定价条件行列表（主子表关系）
@@ -115,6 +140,11 @@ public class TaktPurchasePriceQueryDto : TaktPagedQuery
     public string? CompanyCode { get; set; } = string.Empty;
 
     /// <summary>
+    /// 工厂代码（选项 TaktPlants/options，DictValue=PlantCode）
+    /// </summary>
+    public string? PlantCode { get; set; } = string.Empty;
+
+    /// <summary>
     /// 定价记录号（唯一索引；长度 20）
     /// </summary>
     public string? PurchasePriceCode { get; set; } = string.Empty;
@@ -133,6 +163,26 @@ public class TaktPurchasePriceQueryDto : TaktPagedQuery
     /// 物料编码（选项 TaktMaterialPlants/options，DictValue=MaterialCode）
     /// </summary>
     public string? MaterialCode { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 采购组（选项 TaktPurchaseGroups/options，DictValue=PurchaseGroupCode）
+    /// </summary>
+    public string? PurchaseGroup { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 税码（字典 accounting_tax_code，DictValue=J0～J8/L1/X0～X3；SAP MWSKZ；中国）
+    /// </summary>
+    public string? TaxCode { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 基于收货的发票检验（字典 sys_yes_no_type，0=否 1=是；SAP WEBRE）
+    /// </summary>
+    public int? GrBasedInvoiceInspection { get; set; }
+
+    /// <summary>
+    /// 定价日期控制（字典 logistics_pricing_date_control；1=采购订单日期，2=交货日期，3=当前日期，4=手动，5=收货日期；默认 1）
+    /// </summary>
+    public int? PricingDateControl { get; set; }
 
     /// <summary>
     /// 有效起始日（范围查询-开始）
@@ -155,11 +205,6 @@ public class TaktPurchasePriceQueryDto : TaktPagedQuery
     public DateTime? ValidToEnd { get; set; }
 
     /// <summary>
-    /// 可变关键字
-    /// </summary>
-    public string? VariableKey { get; set; } = string.Empty;
-
-    /// <summary>
     /// 来源采购询价 ID（选项 TaktPurchaseInquirys/options，DictValue=Id）
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
@@ -169,6 +214,11 @@ public class TaktPurchasePriceQueryDto : TaktPagedQuery
     /// 来源采购询价编码（冗余）
     /// </summary>
     public string? PurchaseInquiryCode { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 可变关键字
+    /// </summary>
+    public string? VariableKey { get; set; } = string.Empty;
 
     /// <summary>
     /// 创建时间（范围查询-开始）
@@ -216,6 +266,12 @@ public class TaktPurchasePriceCreateDto
     public string CompanyDefaultCulture { get; set; } = string.Empty;
 
     /// <summary>
+    /// 工厂代码（选项 TaktPlants/options，DictValue=PlantCode）
+    /// </summary>
+    [Required(ErrorMessage = "工厂代码（选项 TaktPlants/options，DictValue=PlantCode）不能为空")]
+    public string PlantCode { get; set; } = string.Empty;
+
+    /// <summary>
     /// 定价记录号（唯一索引；长度 20）
     /// </summary>
     [Required(ErrorMessage = "定价记录号（唯一索引；长度 20）不能为空")]
@@ -240,6 +296,26 @@ public class TaktPurchasePriceCreateDto
     public string MaterialCode { get; set; } = string.Empty;
 
     /// <summary>
+    /// 采购组（选项 TaktPurchaseGroups/options，DictValue=PurchaseGroupCode）
+    /// </summary>
+    public string? PurchaseGroup { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 税码（字典 accounting_tax_code，DictValue=J0～J8/L1/X0～X3；SAP MWSKZ；中国）
+    /// </summary>
+    public string? TaxCode { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 基于收货的发票检验（字典 sys_yes_no_type，0=否 1=是；SAP WEBRE）
+    /// </summary>
+    public int GrBasedInvoiceInspection { get; set; } = 0;
+
+    /// <summary>
+    /// 定价日期控制（字典 logistics_pricing_date_control；1=采购订单日期，2=交货日期，3=当前日期，4=手动，5=收货日期；默认 1）
+    /// </summary>
+    public int PricingDateControl { get; set; } = 0;
+
+    /// <summary>
     /// 有效起始日
     /// </summary>
     public DateTime ValidFrom { get; set; }
@@ -248,11 +324,6 @@ public class TaktPurchasePriceCreateDto
     /// 有效截至日
     /// </summary>
     public DateTime ValidTo { get; set; }
-
-    /// <summary>
-    /// 可变关键字
-    /// </summary>
-    public string? VariableKey { get; set; } = string.Empty;
 
     /// <summary>
     /// 来源采购询价 ID（选项 TaktPurchaseInquirys/options，DictValue=Id）
@@ -264,6 +335,11 @@ public class TaktPurchasePriceCreateDto
     /// 来源采购询价编码（冗余）
     /// </summary>
     public string? PurchaseInquiryCode { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 可变关键字
+    /// </summary>
+    public string? VariableKey { get; set; } = string.Empty;
 
     /// <summary>
     /// 定价条件行列表（主子表关系）（子表，级联保存）
@@ -327,6 +403,11 @@ public class TaktPurchasePriceTemplateDto
     public string? CompanyCode { get; set; } = string.Empty;
 
     /// <summary>
+    /// 工厂代码（选项 TaktPlants/options，DictValue=PlantCode）
+    /// </summary>
+    public string? PlantCode { get; set; } = string.Empty;
+
+    /// <summary>
     /// 定价记录号（唯一索引；长度 20）
     /// </summary>
     public string? PurchasePriceCode { get; set; } = string.Empty;
@@ -347,6 +428,26 @@ public class TaktPurchasePriceTemplateDto
     public string? MaterialCode { get; set; } = string.Empty;
 
     /// <summary>
+    /// 采购组（选项 TaktPurchaseGroups/options，DictValue=PurchaseGroupCode）
+    /// </summary>
+    public string? PurchaseGroup { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 税码（字典 accounting_tax_code，DictValue=J0～J8/L1/X0～X3；SAP MWSKZ；中国）
+    /// </summary>
+    public string? TaxCode { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 基于收货的发票检验（字典 sys_yes_no_type，0=否 1=是；SAP WEBRE）
+    /// </summary>
+    public int? GrBasedInvoiceInspection { get; set; }
+
+    /// <summary>
+    /// 定价日期控制（字典 logistics_pricing_date_control；1=采购订单日期，2=交货日期，3=当前日期，4=手动，5=收货日期；默认 1）
+    /// </summary>
+    public int? PricingDateControl { get; set; }
+
+    /// <summary>
     /// 有效起始日
     /// </summary>
     public DateTime? ValidFrom { get; set; }
@@ -355,11 +456,6 @@ public class TaktPurchasePriceTemplateDto
     /// 有效截至日
     /// </summary>
     public DateTime? ValidTo { get; set; }
-
-    /// <summary>
-    /// 可变关键字
-    /// </summary>
-    public string? VariableKey { get; set; } = string.Empty;
 
     /// <summary>
     /// 来源采购询价 ID（选项 TaktPurchaseInquirys/options，DictValue=Id）
@@ -371,6 +467,11 @@ public class TaktPurchasePriceTemplateDto
     /// 来源采购询价编码（冗余）
     /// </summary>
     public string? PurchaseInquiryCode { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 可变关键字
+    /// </summary>
+    public string? VariableKey { get; set; } = string.Empty;
 
     /// <summary>
     /// 定价条件行列表（主子表关系）（子表，级联保存）
@@ -410,6 +511,11 @@ public class TaktPurchasePriceImportDto
     public string? CompanyDefaultCulture { get; set; } = string.Empty;
 
     /// <summary>
+    /// 工厂代码（选项 TaktPlants/options，DictValue=PlantCode）
+    /// </summary>
+    public string? PlantCode { get; set; } = string.Empty;
+
+    /// <summary>
     /// 定价记录号（唯一索引；长度 20）
     /// </summary>
     public string? PurchasePriceCode { get; set; } = string.Empty;
@@ -430,6 +536,26 @@ public class TaktPurchasePriceImportDto
     public string? MaterialCode { get; set; } = string.Empty;
 
     /// <summary>
+    /// 采购组（选项 TaktPurchaseGroups/options，DictValue=PurchaseGroupCode）
+    /// </summary>
+    public string? PurchaseGroup { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 税码（字典 accounting_tax_code，DictValue=J0～J8/L1/X0～X3；SAP MWSKZ；中国）
+    /// </summary>
+    public string? TaxCode { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 基于收货的发票检验（字典 sys_yes_no_type，0=否 1=是；SAP WEBRE）
+    /// </summary>
+    public int? GrBasedInvoiceInspection { get; set; }
+
+    /// <summary>
+    /// 定价日期控制（字典 logistics_pricing_date_control；1=采购订单日期，2=交货日期，3=当前日期，4=手动，5=收货日期；默认 1）
+    /// </summary>
+    public int? PricingDateControl { get; set; }
+
+    /// <summary>
     /// 有效起始日
     /// </summary>
     public DateTime? ValidFrom { get; set; }
@@ -438,11 +564,6 @@ public class TaktPurchasePriceImportDto
     /// 有效截至日
     /// </summary>
     public DateTime? ValidTo { get; set; }
-
-    /// <summary>
-    /// 可变关键字
-    /// </summary>
-    public string? VariableKey { get; set; } = string.Empty;
 
     /// <summary>
     /// 来源采购询价 ID（选项 TaktPurchaseInquirys/options，DictValue=Id）
@@ -454,6 +575,11 @@ public class TaktPurchasePriceImportDto
     /// 来源采购询价编码（冗余）
     /// </summary>
     public string? PurchaseInquiryCode { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 可变关键字
+    /// </summary>
+    public string? VariableKey { get; set; } = string.Empty;
 
     /// <summary>
     /// 定价条件行列表（主子表关系）（子表，级联保存）
@@ -494,6 +620,11 @@ public class TaktPurchasePriceExportDto
     public string CompanyCode { get; set; } = string.Empty;
 
     /// <summary>
+    /// 工厂代码（选项 TaktPlants/options，DictValue=PlantCode）
+    /// </summary>
+    public string PlantCode { get; set; } = string.Empty;
+
+    /// <summary>
     /// 定价记录号（唯一索引；长度 20）
     /// </summary>
     public string PurchasePriceCode { get; set; } = string.Empty;
@@ -514,6 +645,26 @@ public class TaktPurchasePriceExportDto
     public string MaterialCode { get; set; } = string.Empty;
 
     /// <summary>
+    /// 采购组（选项 TaktPurchaseGroups/options，DictValue=PurchaseGroupCode）
+    /// </summary>
+    public string? PurchaseGroup { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 税码（字典 accounting_tax_code，DictValue=J0～J8/L1/X0～X3；SAP MWSKZ；中国）
+    /// </summary>
+    public string? TaxCode { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 基于收货的发票检验（字典 sys_yes_no_type，0=否 1=是；SAP WEBRE）
+    /// </summary>
+    public int GrBasedInvoiceInspection { get; set; } = 0;
+
+    /// <summary>
+    /// 定价日期控制（字典 logistics_pricing_date_control；1=采购订单日期，2=交货日期，3=当前日期，4=手动，5=收货日期；默认 1）
+    /// </summary>
+    public int PricingDateControl { get; set; } = 0;
+
+    /// <summary>
     /// 有效起始日
     /// </summary>
     public DateTime ValidFrom { get; set; }
@@ -522,11 +673,6 @@ public class TaktPurchasePriceExportDto
     /// 有效截至日
     /// </summary>
     public DateTime ValidTo { get; set; }
-
-    /// <summary>
-    /// 可变关键字
-    /// </summary>
-    public string? VariableKey { get; set; } = string.Empty;
 
     /// <summary>
     /// 来源采购询价 ID（选项 TaktPurchaseInquirys/options，DictValue=Id）
@@ -538,6 +684,11 @@ public class TaktPurchasePriceExportDto
     /// 来源采购询价编码（冗余）
     /// </summary>
     public string? PurchaseInquiryCode { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 可变关键字
+    /// </summary>
+    public string? VariableKey { get; set; } = string.Empty;
 
     /// <summary>
     /// 扩展字段JSON

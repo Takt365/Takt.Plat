@@ -43,12 +43,12 @@ public class TaktPurchasePriceTrendQueryDto
     public string? SupplierCode { get; set; }
 
     /// <summary>
-    /// 价格类型（字典 logistics_price_type；可选）
+    /// 价格类型（字典 logistics_price_type；可选；如 PB00）
     /// </summary>
-    public int? PriceType { get; set; }
+    public string? PriceType { get; set; }
 
     /// <summary>
-    /// 仅启用价格（PriceStatus=1；默认 true）
+    /// 仅启用价格（主表已无 PriceStatus；保留兼容，忽略）
     /// </summary>
     public bool? OnlyEnabled { get; set; }
 }
@@ -175,17 +175,17 @@ public class TaktPurchasePriceMonthlyTrendQueryDto : TaktPagedQuery
     public string? SupplierCode { get; set; }
 
     /// <summary>
-    /// 价格类型（字典 logistics_price_type；可选）
+    /// 价格类型（字典 logistics_price_type；可选；如 PB00）
     /// </summary>
-    public int? PriceType { get; set; }
+    public string? PriceType { get; set; }
 
     /// <summary>
-    /// 仅启用价格主表（PriceStatus=1；默认 true）
+    /// 仅启用价格主表（主表已无 PriceStatus；保留兼容，忽略）
     /// </summary>
     public bool? OnlyEnabled { get; set; }
 
     /// <summary>
-    /// 涨跌筛选：空=全部；up/down/flat/none；changed=仅涨或跌
+    /// 涨跌筛选：空=采购价格推移全部 / 机种推移默认领涨领跌各 50；leading=领涨领跌各 50；all=全部；up/down/flat/none；changed=仅涨或跌
     /// </summary>
     public string? TrendFilter { get; set; }
 }

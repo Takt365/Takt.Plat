@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Application.Validators.Logistics.CustomerService
 // 文件名称：TaktServiceContractValidators.cs
-// 创建时间：2026-07-20
+// 创建时间：2026-07-23
 // 创建人：Takt365(Auto Generated)
 // 功能描述：ServiceContract 模块 FluentValidation 验证器（由 generate-validators-from-entity.cjs 根据 TaktServiceContract 生成，请按需审阅）
 // 
@@ -49,9 +49,6 @@ public class TaktServiceContractCreateValidator : AbstractValidator<TaktServiceC
         RuleFor(x => x.ClientCode)
             .NotEmpty().WithMessage("客户端编码不能为空")
             .MaximumLength(20).WithMessage("客户端编码长度不能超过20个字符");
-        RuleFor(x => x.ClientName)
-            .NotEmpty().WithMessage("客户端名称不能为空")
-            .MaximumLength(80).WithMessage("客户端名称长度不能超过80个字符");
         RuleFor(x => x.CurrencyCode)
             .NotEmpty().WithMessage("结算币种代码不能为空")
             .MaximumLength(10).WithMessage("结算币种代码长度不能超过10个字符");
@@ -98,9 +95,6 @@ public class TaktServiceContractUpdateValidator : AbstractValidator<TaktServiceC
         RuleFor(x => x.ClientCode)
             .NotEmpty().WithMessage("客户端编码不能为空")
             .MaximumLength(20).WithMessage("客户端编码长度不能超过20个字符");
-        RuleFor(x => x.ClientName)
-            .NotEmpty().WithMessage("客户端名称不能为空")
-            .MaximumLength(80).WithMessage("客户端名称长度不能超过80个字符");
         RuleFor(x => x.CurrencyCode)
             .NotEmpty().WithMessage("结算币种代码不能为空")
             .MaximumLength(10).WithMessage("结算币种代码长度不能超过10个字符");
@@ -143,9 +137,6 @@ public class TaktServiceContractImportValidator : AbstractValidator<TaktServiceC
         RuleFor(x => x.ClientCode)
             .NotEmpty().WithMessage("客户端编码不能为空")
             .MaximumLength(20).WithMessage("客户端编码长度不能超过20个字符");
-        RuleFor(x => x.ClientName)
-            .NotEmpty().WithMessage("客户端名称不能为空")
-            .MaximumLength(80).WithMessage("客户端名称长度不能超过80个字符");
         RuleFor(x => x.CurrencyCode)
             .NotEmpty().WithMessage("结算币种代码不能为空")
             .MaximumLength(10).WithMessage("结算币种代码长度不能超过10个字符");

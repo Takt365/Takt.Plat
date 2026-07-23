@@ -54,7 +54,7 @@ export interface EcAttachment extends CompanyDtoBase {
   attachmentType: string;
 
   /**
-   * 文件编号（如联络编号等）
+   * 文件编码（如联络编码等）
    */
   docNo: string;
 
@@ -119,7 +119,7 @@ export interface EcAttachmentQuery extends TaktPagedQuery {
   attachmentType?: string;
 
   /**
-   * 文件编号（如联络编号等）
+   * 文件编码（如联络编码等）
    */
   docNo?: string;
 
@@ -203,7 +203,7 @@ export interface EcAttachmentCreate {
   attachmentType: string;
 
   /**
-   * 文件编号（如联络编号等）
+   * 文件编码（如联络编码等）
    */
   docNo: string;
 
@@ -306,7 +306,7 @@ export interface EcAttachmentTemplate {
   attachmentType?: string;
 
   /**
-   * 文件编号（如联络编号等）
+   * 文件编码（如联络编码等）
    */
   docNo?: string;
 
@@ -380,7 +380,7 @@ export interface EcAttachmentImport {
   attachmentType?: string;
 
   /**
-   * 文件编号（如联络编号等）
+   * 文件编码（如联络编码等）
    */
   docNo?: string;
 
@@ -449,7 +449,7 @@ export interface EcAttachmentExport {
   attachmentType: string;
 
   /**
-   * 文件编号（如联络编号等）
+   * 文件编码（如联络编码等）
    */
   docNo: string;
 

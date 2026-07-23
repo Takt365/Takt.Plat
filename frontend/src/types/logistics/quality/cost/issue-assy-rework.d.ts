@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：frontend/src/types/logistics/quality/cost
 // 文件名称：issue-assy-rework.d.ts
-// 创建时间：2026-07-09
+// 创建时间：2026-07-23
 // 创建人：Takt365(Auto Generated)
 // 功能描述：logistics/quality/cost 模块类型定义（自动生成；类型名去 Takt 前缀与末尾 Dto，如 TaktCompanyDto → Company）
 // 
@@ -29,7 +29,7 @@ export interface QualityIssueAssyRework extends CompanyDtoBase {
   qualityIssueAssyReworkId: string;
 
   /**
-   * 品质问题主表 ID（关联 TaktQualityIssue.Id，选项 TaktQualityIssues/options）
+   * 品质问题主表 ID（选项 TaktQualityIssues/options；DictValue=Id）
    */
   qualityIssueId: string;
 
@@ -96,7 +96,7 @@ export interface QualityIssueAssyRework extends CompanyDtoBase {
   /**
    * 组装顾客名
    */
-  assyCustomerName?: string;
+  assyCustomerName1?: string;
 
   /**
    * 组装 Debit Note No
@@ -119,7 +119,7 @@ export interface QualityIssueAssyRework extends CompanyDtoBase {
   assyRecorder?: string;
 
   /**
-   * 是否作废（字典 sys_yes_no_type，0=否 1=是；编辑移除子行时标记作废）
+   * 是否作废（字典 sys_yes_no_type；0=否 1=是；编辑移除子行时标记作废）
    */
   isObsolete: number;
 
@@ -149,7 +149,7 @@ export interface QualityIssueAssyReworkQuery extends TaktPagedQuery {
   companyCode?: string;
 
   /**
-   * 品质问题主表 ID（关联 TaktQualityIssue.Id，选项 TaktQualityIssues/options）
+   * 品质问题主表 ID（选项 TaktQualityIssues/options；DictValue=Id）
    */
   qualityIssueId?: string;
 
@@ -211,7 +211,7 @@ export interface QualityIssueAssyReworkQuery extends TaktPagedQuery {
   /**
    * 组装顾客名
    */
-  assyCustomerName?: string;
+  assyCustomerName1?: string;
 
   /**
    * 组装 Debit Note No
@@ -234,7 +234,7 @@ export interface QualityIssueAssyReworkQuery extends TaktPagedQuery {
   assyRecorder?: string;
 
   /**
-   * 是否作废（字典 sys_yes_no_type，0=否 1=是；编辑移除子行时标记作废）
+   * 是否作废（字典 sys_yes_no_type；0=否 1=是；编辑移除子行时标记作废）
    */
   isObsolete?: number;
 
@@ -283,7 +283,7 @@ export interface QualityIssueAssyReworkCreate {
   companyDefaultCulture: string;
 
   /**
-   * 品质问题主表 ID（关联 TaktQualityIssue.Id，选项 TaktQualityIssues/options）
+   * 品质问题主表 ID（选项 TaktQualityIssues/options；DictValue=Id）
    */
   qualityIssueId: string;
 
@@ -345,7 +345,7 @@ export interface QualityIssueAssyReworkCreate {
   /**
    * 组装顾客名
    */
-  assyCustomerName?: string;
+  assyCustomerName1?: string;
 
   /**
    * 组装 Debit Note No
@@ -368,7 +368,7 @@ export interface QualityIssueAssyReworkCreate {
   assyRecorder?: string;
 
   /**
-   * 是否作废（字典 sys_yes_no_type，0=否 1=是；编辑移除子行时标记作废）
+   * 是否作废（字典 sys_yes_no_type；0=否 1=是；编辑移除子行时标记作废）
    */
   isObsolete: number;
 
@@ -436,7 +436,7 @@ export interface QualityIssueAssyReworkTemplate {
   companyCode?: string;
 
   /**
-   * 品质问题主表 ID（关联 TaktQualityIssue.Id，选项 TaktQualityIssues/options）
+   * 品质问题主表 ID（选项 TaktQualityIssues/options；DictValue=Id）
    */
   qualityIssueId?: string;
 
@@ -498,7 +498,7 @@ export interface QualityIssueAssyReworkTemplate {
   /**
    * 组装顾客名
    */
-  assyCustomerName?: string;
+  assyCustomerName1?: string;
 
   /**
    * 组装 Debit Note No
@@ -521,7 +521,7 @@ export interface QualityIssueAssyReworkTemplate {
   assyRecorder?: string;
 
   /**
-   * 是否作废（字典 sys_yes_no_type，0=否 1=是；编辑移除子行时标记作废）
+   * 是否作废（字典 sys_yes_no_type；0=否 1=是；编辑移除子行时标记作废）
    */
   isObsolete?: number;
 
@@ -560,7 +560,7 @@ export interface QualityIssueAssyReworkImport {
   companyDefaultCulture?: string;
 
   /**
-   * 品质问题主表 ID（关联 TaktQualityIssue.Id，选项 TaktQualityIssues/options）
+   * 品质问题主表 ID（选项 TaktQualityIssues/options；DictValue=Id）
    */
   qualityIssueId?: string;
 
@@ -622,7 +622,7 @@ export interface QualityIssueAssyReworkImport {
   /**
    * 组装顾客名
    */
-  assyCustomerName?: string;
+  assyCustomerName1?: string;
 
   /**
    * 组装 Debit Note No
@@ -645,7 +645,7 @@ export interface QualityIssueAssyReworkImport {
   assyRecorder?: string;
 
   /**
-   * 是否作废（字典 sys_yes_no_type，0=否 1=是；编辑移除子行时标记作废）
+   * 是否作废（字典 sys_yes_no_type；0=否 1=是；编辑移除子行时标记作废）
    */
   isObsolete?: number;
 
@@ -679,7 +679,7 @@ export interface QualityIssueAssyReworkExport {
   companyCode: string;
 
   /**
-   * 品质问题主表 ID（关联 TaktQualityIssue.Id，选项 TaktQualityIssues/options）
+   * 品质问题主表 ID（选项 TaktQualityIssues/options；DictValue=Id）
    */
   qualityIssueId: string;
 
@@ -741,7 +741,7 @@ export interface QualityIssueAssyReworkExport {
   /**
    * 组装顾客名
    */
-  assyCustomerName?: string;
+  assyCustomerName1?: string;
 
   /**
    * 组装 Debit Note No
@@ -764,7 +764,7 @@ export interface QualityIssueAssyReworkExport {
   assyRecorder?: string;
 
   /**
-   * 是否作废（字典 sys_yes_no_type，0=否 1=是；编辑移除子行时标记作废）
+   * 是否作废（字典 sys_yes_no_type；0=否 1=是；编辑移除子行时标记作废）
    */
   isObsolete: number;
 

@@ -274,12 +274,16 @@ export function registerTaktEventHandlers(): void {
     void ensureTaktPaginationConfigAsync().catch(() => undefined);
     // 清空旧租户翻译
     useTranslationStore().resetTranslationMessages();
+    // 清空旧租户字典（CultureCode 过滤依赖 Accept-Language + 租户数据）
+    useDictDataStore().resetDictData();
     // 按新租户重建菜单
     EventBus.emit('menu:refresh', undefined);
     // 通知各列表页刷新数据
     EventBus.emit('table:refresh', {});
     // 加载新租户翻译
     void useTranslationStore().loadTranslationMessagesAsync();
+    // 预加载新租户字典
+    void useDictDataStore().loadAllDictDataAsync();
     // 强制刷新菜单（租户级权限变化）
     void useMenuStore().loadMenuListAsync(true).catch(() => undefined);
   });
@@ -300,8 +304,8 @@ export function registerTaktEventHandlers(): void {
     void useMenuStore().loadMenuListAsync(true).catch(() => undefined);
     // 按当前公司与租户同步当日假日主题色
     void useUserStore().loadHolidayThemeForCurrentSession().catch(() => undefined);
-    // 重载字典（公司级隔离）
-    void useDictDataStore().loadAllDictDataAsync();
+    // 重载字典（Accept-Language 下 eo + 区域项；公司切换后强制刷新）
+    void useDictDataStore().reloadAllDictDataAsync();
     // 按新公司上下文重连 SignalR
     void useSignalRStore().reconnectSignalRAsync().catch(() => undefined);
   });
@@ -317,12 +321,9 @@ export function registerTaktEventHandlers(): void {
     }
   });
 
-  // 语言切换：同步 i18n 与持久化偏好
-  EventBus.on('locale:change', ({ locale }) => {
-    /** 语言与动态翻译 Store */
-    const localeStore = useLocaleStore();
-    // 切换 vue-i18n locale 并持久化
-    localeStore.setLocale(locale);
+  // 语言切换：Accept-Language 变化后重载字典（eo + 当前语言区域项）
+  EventBus.on('locale:change', () => {
+    void useDictDataStore().reloadAllDictDataAsync();
   });
 
   // 页签重新可见时校验 SignalR（后端重启后 WebSocket 常已断开但 Store 仍显示已连接）

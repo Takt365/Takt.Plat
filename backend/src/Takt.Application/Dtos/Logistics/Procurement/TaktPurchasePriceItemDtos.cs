@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Application.Dtos.Logistics.Procurement
 // 文件名称：TaktPurchasePriceItemDtos.cs
-// 创建时间：2026-07-20
+// 创建时间：2026-07-21
 // 创建人：Takt365(Auto Generated)
 // 功能描述：PurchasePriceItem 模块 DTO（由 generate-dtos-from-entity.cjs 根据 TaktPurchasePriceItem 生成，请按需审阅）
 // 
@@ -102,9 +102,44 @@ public class TaktPurchasePriceItemDto : TaktCompanyDtoBase
     public decimal Price { get; set; }
 
     /// <summary>
-    /// 税码（字典 accounting_tax_code，DictValue=J0/J1/J2…；SAP MWSKZ）
+    /// 未税价格（冗余；可由 Price 与税码推算后回写）
     /// </summary>
-    public string? TaxCode { get; set; } = string.Empty;
+    public decimal UntaxedPrice { get; set; }
+
+    /// <summary>
+    /// 含税价格（冗余；可由 Price 与税码推算后回写）
+    /// </summary>
+    public decimal TaxIncludedPrice { get; set; }
+
+    /// <summary>
+    /// 条件货币（字典 accounting_currency_code，DictValue=CNY/USD 等；SAP KONWA；默认 CNY）
+    /// </summary>
+    public string ConditionCurrency { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 定价单位（字典 logistics_price_unit_param；1/10/100/1000；SAP KPEIN；默认 1000）
+    /// </summary>
+    public int PriceUnit { get; set; } = 0;
+
+    /// <summary>
+    /// 计量单位（字典 logistics_unit_of_measure_code，DictValue=PC/EA 等；SAP KMEIN；默认 PC）
+    /// </summary>
+    public string UnitOfMeasure { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 最小起订量（计量单位数量，整数；SAP MINBM）
+    /// </summary>
+    public int MinOrderQuantity { get; set; } = 0;
+
+    /// <summary>
+    /// 舍入值（基本单位数量，用于数量舍入，整数；SAP BSTRF）
+    /// </summary>
+    public int RoundingValue { get; set; } = 0;
+
+    /// <summary>
+    /// 计划交货时间（天数，整数；SAP PLIFZ）
+    /// </summary>
+    public int PlannedDeliveryTimeDays { get; set; } = 0;
 
     /// <summary>
     /// 是否作废（字典 sys_yes_no_type，0=否 1=是；编辑移除子行时标记作废）
@@ -207,9 +242,44 @@ public class TaktPurchasePriceItemQueryDto : TaktPagedQuery
     public decimal? Price { get; set; }
 
     /// <summary>
-    /// 税码（字典 accounting_tax_code，DictValue=J0/J1/J2…；SAP MWSKZ）
+    /// 未税价格（冗余；可由 Price 与税码推算后回写）
     /// </summary>
-    public string? TaxCode { get; set; } = string.Empty;
+    public decimal? UntaxedPrice { get; set; }
+
+    /// <summary>
+    /// 含税价格（冗余；可由 Price 与税码推算后回写）
+    /// </summary>
+    public decimal? TaxIncludedPrice { get; set; }
+
+    /// <summary>
+    /// 条件货币（字典 accounting_currency_code，DictValue=CNY/USD 等；SAP KONWA；默认 CNY）
+    /// </summary>
+    public string? ConditionCurrency { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 定价单位（字典 logistics_price_unit_param；1/10/100/1000；SAP KPEIN；默认 1000）
+    /// </summary>
+    public int? PriceUnit { get; set; }
+
+    /// <summary>
+    /// 计量单位（字典 logistics_unit_of_measure_code，DictValue=PC/EA 等；SAP KMEIN；默认 PC）
+    /// </summary>
+    public string? UnitOfMeasure { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 最小起订量（计量单位数量，整数；SAP MINBM）
+    /// </summary>
+    public int? MinOrderQuantity { get; set; }
+
+    /// <summary>
+    /// 舍入值（基本单位数量，用于数量舍入，整数；SAP BSTRF）
+    /// </summary>
+    public int? RoundingValue { get; set; }
+
+    /// <summary>
+    /// 计划交货时间（天数，整数；SAP PLIFZ）
+    /// </summary>
+    public int? PlannedDeliveryTimeDays { get; set; }
 
     /// <summary>
     /// 是否作废（字典 sys_yes_no_type，0=否 1=是；编辑移除子行时标记作废）
@@ -326,9 +396,46 @@ public class TaktPurchasePriceItemCreateDto
     public decimal Price { get; set; }
 
     /// <summary>
-    /// 税码（字典 accounting_tax_code，DictValue=J0/J1/J2…；SAP MWSKZ）
+    /// 未税价格（冗余；可由 Price 与税码推算后回写）
     /// </summary>
-    public string? TaxCode { get; set; } = string.Empty;
+    public decimal UntaxedPrice { get; set; }
+
+    /// <summary>
+    /// 含税价格（冗余；可由 Price 与税码推算后回写）
+    /// </summary>
+    public decimal TaxIncludedPrice { get; set; }
+
+    /// <summary>
+    /// 条件货币（字典 accounting_currency_code，DictValue=CNY/USD 等；SAP KONWA；默认 CNY）
+    /// </summary>
+    [Required(ErrorMessage = "条件货币（字典 accounting_currency_code，DictValue=CNY/USD 等；SAP KONWA；默认 CNY）不能为空")]
+    public string ConditionCurrency { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 定价单位（字典 logistics_price_unit_param；1/10/100/1000；SAP KPEIN；默认 1000）
+    /// </summary>
+    public int PriceUnit { get; set; } = 0;
+
+    /// <summary>
+    /// 计量单位（字典 logistics_unit_of_measure_code，DictValue=PC/EA 等；SAP KMEIN；默认 PC）
+    /// </summary>
+    [Required(ErrorMessage = "计量单位（字典 logistics_unit_of_measure_code，DictValue=PC/EA 等；SAP KMEIN；默认 PC）不能为空")]
+    public string UnitOfMeasure { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 最小起订量（计量单位数量，整数；SAP MINBM）
+    /// </summary>
+    public int MinOrderQuantity { get; set; } = 0;
+
+    /// <summary>
+    /// 舍入值（基本单位数量，用于数量舍入，整数；SAP BSTRF）
+    /// </summary>
+    public int RoundingValue { get; set; } = 0;
+
+    /// <summary>
+    /// 计划交货时间（天数，整数；SAP PLIFZ）
+    /// </summary>
+    public int PlannedDeliveryTimeDays { get; set; } = 0;
 
     /// <summary>
     /// 是否作废（字典 sys_yes_no_type，0=否 1=是；编辑移除子行时标记作废）
@@ -491,9 +598,44 @@ public class TaktPurchasePriceItemTemplateDto
     public decimal? Price { get; set; }
 
     /// <summary>
-    /// 税码（字典 accounting_tax_code，DictValue=J0/J1/J2…；SAP MWSKZ）
+    /// 未税价格（冗余；可由 Price 与税码推算后回写）
     /// </summary>
-    public string? TaxCode { get; set; } = string.Empty;
+    public decimal? UntaxedPrice { get; set; }
+
+    /// <summary>
+    /// 含税价格（冗余；可由 Price 与税码推算后回写）
+    /// </summary>
+    public decimal? TaxIncludedPrice { get; set; }
+
+    /// <summary>
+    /// 条件货币（字典 accounting_currency_code，DictValue=CNY/USD 等；SAP KONWA；默认 CNY）
+    /// </summary>
+    public string? ConditionCurrency { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 定价单位（字典 logistics_price_unit_param；1/10/100/1000；SAP KPEIN；默认 1000）
+    /// </summary>
+    public int? PriceUnit { get; set; }
+
+    /// <summary>
+    /// 计量单位（字典 logistics_unit_of_measure_code，DictValue=PC/EA 等；SAP KMEIN；默认 PC）
+    /// </summary>
+    public string? UnitOfMeasure { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 最小起订量（计量单位数量，整数；SAP MINBM）
+    /// </summary>
+    public int? MinOrderQuantity { get; set; }
+
+    /// <summary>
+    /// 舍入值（基本单位数量，用于数量舍入，整数；SAP BSTRF）
+    /// </summary>
+    public int? RoundingValue { get; set; }
+
+    /// <summary>
+    /// 计划交货时间（天数，整数；SAP PLIFZ）
+    /// </summary>
+    public int? PlannedDeliveryTimeDays { get; set; }
 
     /// <summary>
     /// 是否作废（字典 sys_yes_no_type，0=否 1=是；编辑移除子行时标记作废）
@@ -604,9 +746,44 @@ public class TaktPurchasePriceItemImportDto
     public decimal? Price { get; set; }
 
     /// <summary>
-    /// 税码（字典 accounting_tax_code，DictValue=J0/J1/J2…；SAP MWSKZ）
+    /// 未税价格（冗余；可由 Price 与税码推算后回写）
     /// </summary>
-    public string? TaxCode { get; set; } = string.Empty;
+    public decimal? UntaxedPrice { get; set; }
+
+    /// <summary>
+    /// 含税价格（冗余；可由 Price 与税码推算后回写）
+    /// </summary>
+    public decimal? TaxIncludedPrice { get; set; }
+
+    /// <summary>
+    /// 条件货币（字典 accounting_currency_code，DictValue=CNY/USD 等；SAP KONWA；默认 CNY）
+    /// </summary>
+    public string? ConditionCurrency { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 定价单位（字典 logistics_price_unit_param；1/10/100/1000；SAP KPEIN；默认 1000）
+    /// </summary>
+    public int? PriceUnit { get; set; }
+
+    /// <summary>
+    /// 计量单位（字典 logistics_unit_of_measure_code，DictValue=PC/EA 等；SAP KMEIN；默认 PC）
+    /// </summary>
+    public string? UnitOfMeasure { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 最小起订量（计量单位数量，整数；SAP MINBM）
+    /// </summary>
+    public int? MinOrderQuantity { get; set; }
+
+    /// <summary>
+    /// 舍入值（基本单位数量，用于数量舍入，整数；SAP BSTRF）
+    /// </summary>
+    public int? RoundingValue { get; set; }
+
+    /// <summary>
+    /// 计划交货时间（天数，整数；SAP PLIFZ）
+    /// </summary>
+    public int? PlannedDeliveryTimeDays { get; set; }
 
     /// <summary>
     /// 是否作废（字典 sys_yes_no_type，0=否 1=是；编辑移除子行时标记作废）
@@ -718,9 +895,44 @@ public class TaktPurchasePriceItemExportDto
     public decimal Price { get; set; }
 
     /// <summary>
-    /// 税码（字典 accounting_tax_code，DictValue=J0/J1/J2…；SAP MWSKZ）
+    /// 未税价格（冗余；可由 Price 与税码推算后回写）
     /// </summary>
-    public string? TaxCode { get; set; } = string.Empty;
+    public decimal UntaxedPrice { get; set; }
+
+    /// <summary>
+    /// 含税价格（冗余；可由 Price 与税码推算后回写）
+    /// </summary>
+    public decimal TaxIncludedPrice { get; set; }
+
+    /// <summary>
+    /// 条件货币（字典 accounting_currency_code，DictValue=CNY/USD 等；SAP KONWA；默认 CNY）
+    /// </summary>
+    public string ConditionCurrency { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 定价单位（字典 logistics_price_unit_param；1/10/100/1000；SAP KPEIN；默认 1000）
+    /// </summary>
+    public int PriceUnit { get; set; } = 0;
+
+    /// <summary>
+    /// 计量单位（字典 logistics_unit_of_measure_code，DictValue=PC/EA 等；SAP KMEIN；默认 PC）
+    /// </summary>
+    public string UnitOfMeasure { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 最小起订量（计量单位数量，整数；SAP MINBM）
+    /// </summary>
+    public int MinOrderQuantity { get; set; } = 0;
+
+    /// <summary>
+    /// 舍入值（基本单位数量，用于数量舍入，整数；SAP BSTRF）
+    /// </summary>
+    public int RoundingValue { get; set; } = 0;
+
+    /// <summary>
+    /// 计划交货时间（天数，整数；SAP PLIFZ）
+    /// </summary>
+    public int PlannedDeliveryTimeDays { get; set; } = 0;
 
     /// <summary>
     /// 是否作废（字典 sys_yes_no_type，0=否 1=是；编辑移除子行时标记作废）

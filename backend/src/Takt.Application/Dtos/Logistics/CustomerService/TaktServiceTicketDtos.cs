@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Application.Dtos.Logistics.CustomerService
 // 文件名称：TaktServiceTicketDtos.cs
-// 创建时间：2026-06-24
+// 创建时间：2026-07-23
 // 创建人：Takt365(Auto Generated)
 // 功能描述：ServiceTicket 模块 DTO（由 generate-dtos-from-entity.cjs 根据 TaktServiceTicket 生成，请按需审阅）
 // 
@@ -52,6 +52,11 @@ public class TaktServiceTicketDto : TaktCompanyDtoBase
     public long ClientId { get; set; }
 
     /// <summary>
+    /// 客户端名称（填充字段）
+    /// </summary>
+    public string? ClientName { get; set; }
+
+    /// <summary>
     /// 客户端编码（冗余字段，便于查询）
     /// </summary>
     public string ClientCode { get; set; } = string.Empty;
@@ -59,7 +64,7 @@ public class TaktServiceTicketDto : TaktCompanyDtoBase
     /// <summary>
     /// 客户端名称（冗余字段，便于查询）
     /// </summary>
-    public string ClientName { get; set; } = string.Empty;
+    public string ClientName1 { get; set; } = string.Empty;
 
     /// <summary>
     /// 关联服务请求ID（序列化为string以避免Javascript精度问题）
@@ -118,6 +123,11 @@ public class TaktServiceTicketDto : TaktCompanyDtoBase
     /// 优先级（字典 sys_priority_level_category）
     /// </summary>
     public int Priority { get; set; } = 0;
+
+    /// <summary>
+    /// 工单状态（字典 sys_ticket_status；0=新建，1=已分配，2=处理中，3=待确认，4=已完成，5=已关闭，6=已取消）
+    /// </summary>
+    public int TicketStatus { get; set; } = 0;
 
     /// <summary>
     /// 工单主题
@@ -191,11 +201,6 @@ public class TaktServiceTicketDto : TaktCompanyDtoBase
     public int SortOrder { get; set; } = 0;
 
     /// <summary>
-    /// 工单状态（字典 sys_ticket_status；0=新建，1=已分配，2=处理中，3=待确认，4=已完成，5=已关闭，6=已取消）
-    /// </summary>
-    public int TicketStatus { get; set; } = 0;
-
-    /// <summary>
     /// 关联服务请求
     /// （主表：TaktServiceRequest）
     /// </summary>
@@ -259,7 +264,7 @@ public class TaktServiceTicketQueryDto : TaktPagedQuery
     /// <summary>
     /// 客户端名称（冗余字段，便于查询）
     /// </summary>
-    public string? ClientName { get; set; } = string.Empty;
+    public string? ClientName1 { get; set; } = string.Empty;
 
     /// <summary>
     /// 关联服务请求ID（序列化为string以避免Javascript精度问题）
@@ -303,6 +308,11 @@ public class TaktServiceTicketQueryDto : TaktPagedQuery
     /// 优先级（字典 sys_priority_level_category）
     /// </summary>
     public int? Priority { get; set; }
+
+    /// <summary>
+    /// 工单状态（字典 sys_ticket_status；0=新建，1=已分配，2=处理中，3=待确认，4=已完成，5=已关闭，6=已取消）
+    /// </summary>
+    public int? TicketStatus { get; set; }
 
     /// <summary>
     /// 工单主题
@@ -401,11 +411,6 @@ public class TaktServiceTicketQueryDto : TaktPagedQuery
     public int? SortOrder { get; set; }
 
     /// <summary>
-    /// 工单状态（字典 sys_ticket_status；0=新建，1=已分配，2=处理中，3=待确认，4=已完成，5=已关闭，6=已取消）
-    /// </summary>
-    public int? TicketStatus { get; set; }
-
-    /// <summary>
     /// 创建时间（范围查询-开始）
     /// </summary>
     public DateTime? CreatedAtStart { get; set; }
@@ -478,7 +483,7 @@ public class TaktServiceTicketCreateDto
     /// 客户端名称（冗余字段，便于查询）
     /// </summary>
     [Required(ErrorMessage = "客户端名称（冗余字段，便于查询）不能为空")]
-    public string ClientName { get; set; } = string.Empty;
+    public string ClientName1 { get; set; } = string.Empty;
 
     /// <summary>
     /// 关联服务请求ID（序列化为string以避免Javascript精度问题）
@@ -522,6 +527,11 @@ public class TaktServiceTicketCreateDto
     /// 优先级（字典 sys_priority_level_category）
     /// </summary>
     public int Priority { get; set; } = 0;
+
+    /// <summary>
+    /// 工单状态（字典 sys_ticket_status；0=新建，1=已分配，2=处理中，3=待确认，4=已完成，5=已关闭，6=已取消）
+    /// </summary>
+    public int TicketStatus { get; set; } = 0;
 
     /// <summary>
     /// 工单主题
@@ -589,11 +599,6 @@ public class TaktServiceTicketCreateDto
     /// 验收时间
     /// </summary>
     public DateTime? AcceptedAt { get; set; }
-
-    /// <summary>
-    /// 工单状态（字典 sys_ticket_status；0=新建，1=已分配，2=处理中，3=待确认，4=已完成，5=已关闭，6=已取消）
-    /// </summary>
-    public int TicketStatus { get; set; } = 0;
 
     /// <summary>
     /// 扩展字段JSON
@@ -718,7 +723,7 @@ public class TaktServiceTicketTemplateDto
     /// <summary>
     /// 客户端名称（冗余字段，便于查询）
     /// </summary>
-    public string? ClientName { get; set; } = string.Empty;
+    public string? ClientName1 { get; set; } = string.Empty;
 
     /// <summary>
     /// 关联服务请求ID（序列化为string以避免Javascript精度问题）
@@ -762,6 +767,11 @@ public class TaktServiceTicketTemplateDto
     /// 优先级（字典 sys_priority_level_category）
     /// </summary>
     public int? Priority { get; set; }
+
+    /// <summary>
+    /// 工单状态（字典 sys_ticket_status；0=新建，1=已分配，2=处理中，3=待确认，4=已完成，5=已关闭，6=已取消）
+    /// </summary>
+    public int? TicketStatus { get; set; }
 
     /// <summary>
     /// 工单主题
@@ -828,11 +838,6 @@ public class TaktServiceTicketTemplateDto
     /// 验收时间
     /// </summary>
     public DateTime? AcceptedAt { get; set; }
-
-    /// <summary>
-    /// 工单状态（字典 sys_ticket_status；0=新建，1=已分配，2=处理中，3=待确认，4=已完成，5=已关闭，6=已取消）
-    /// </summary>
-    public int? TicketStatus { get; set; }
 
     /// <summary>
     /// 扩展字段JSON
@@ -890,7 +895,7 @@ public class TaktServiceTicketImportDto
     /// <summary>
     /// 客户端名称（冗余字段，便于查询）
     /// </summary>
-    public string? ClientName { get; set; } = string.Empty;
+    public string? ClientName1 { get; set; } = string.Empty;
 
     /// <summary>
     /// 关联服务请求ID（序列化为string以避免Javascript精度问题）
@@ -934,6 +939,11 @@ public class TaktServiceTicketImportDto
     /// 优先级（字典 sys_priority_level_category）
     /// </summary>
     public int? Priority { get; set; }
+
+    /// <summary>
+    /// 工单状态（字典 sys_ticket_status；0=新建，1=已分配，2=处理中，3=待确认，4=已完成，5=已关闭，6=已取消）
+    /// </summary>
+    public int? TicketStatus { get; set; }
 
     /// <summary>
     /// 工单主题
@@ -1000,11 +1010,6 @@ public class TaktServiceTicketImportDto
     /// 验收时间
     /// </summary>
     public DateTime? AcceptedAt { get; set; }
-
-    /// <summary>
-    /// 工单状态（字典 sys_ticket_status；0=新建，1=已分配，2=处理中，3=待确认，4=已完成，5=已关闭，6=已取消）
-    /// </summary>
-    public int? TicketStatus { get; set; }
 
     /// <summary>
     /// 扩展字段JSON
@@ -1063,7 +1068,7 @@ public class TaktServiceTicketExportDto
     /// <summary>
     /// 客户端名称（冗余字段，便于查询）
     /// </summary>
-    public string ClientName { get; set; } = string.Empty;
+    public string ClientName1 { get; set; } = string.Empty;
 
     /// <summary>
     /// 关联服务请求ID（序列化为string以避免Javascript精度问题）
@@ -1107,6 +1112,11 @@ public class TaktServiceTicketExportDto
     /// 优先级（字典 sys_priority_level_category）
     /// </summary>
     public int Priority { get; set; } = 0;
+
+    /// <summary>
+    /// 工单状态（字典 sys_ticket_status；0=新建，1=已分配，2=处理中，3=待确认，4=已完成，5=已关闭，6=已取消）
+    /// </summary>
+    public int TicketStatus { get; set; } = 0;
 
     /// <summary>
     /// 工单主题
@@ -1178,11 +1188,6 @@ public class TaktServiceTicketExportDto
     /// 排序号（越小越靠前）
     /// </summary>
     public int SortOrder { get; set; } = 0;
-
-    /// <summary>
-    /// 工单状态（字典 sys_ticket_status；0=新建，1=已分配，2=处理中，3=待确认，4=已完成，5=已关闭，6=已取消）
-    /// </summary>
-    public int TicketStatus { get; set; } = 0;
 
     /// <summary>
     /// 扩展字段JSON

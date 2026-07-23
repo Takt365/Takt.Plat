@@ -87,9 +87,29 @@ function mergeUsings(content, entityNamespace, entityShort) {
 }
 
 /**
- * @param {object[]} navSpecs
+ * 从导航区正文解析已有 [Navigate] 属性块（含紧邻 summary）
+ * @param {string} navRegionBody 含「导航属性区域」标记之后的类体片段
+ * @returns {{ navProp: string, block: string }[]}
  */
-function buildNavigationRegionLines(navSpecs) {
+function extractExistingNavigateBlocks(navRegionBody) {
+  const blocks = [];
+  const re =
+    /(\s*\/\/\/\s*<summary>[\s\S]*?\/\/\/\s*<\/summary>\s*)?\[Navigate\([\s\S]*?\)\]\s*public\s+List<(?:Takt\w+)>\??\s+(\w+)\s*\{\s*get;\s*set;\s*\}/g;
+  let match;
+  while ((match = re.exec(navRegionBody)) !== null) {
+    blocks.push({
+      navProp: match[2],
+      block: match[0].replace(/^\n+/, '').replace(/\n+$/, ''),
+    });
+  }
+  return blocks;
+}
+
+/**
+ * @param {object[]} navSpecs RBAC 配置项
+ * @param {{ navProp: string, block: string }[]} [preserveBlocks] 非 RBAC 业务导航（须保留）
+ */
+function buildNavigationRegionLines(navSpecs, preserveBlocks = []) {
   const lines = [];
   lines.push('    // ========================================');
   lines.push(`    // ${NAVIGATION_REGION_MARKER}`);
@@ -105,14 +125,24 @@ function buildNavigationRegionLines(navSpecs) {
     lines.push(`    public List<Takt${spec.junction}>? ${spec.navProp} { get; set; }`);
     lines.push('');
   });
+  // 保留手工/业务 OneToMany（如 EmployeeAddresses），避免整区覆盖时被删掉
+  preserveBlocks.forEach((item) => {
+    const normalized = item.block
+      .split('\n')
+      .map((line) => (line.startsWith('    ') ? line : `    ${line.trimStart()}`))
+      .join('\n');
+    lines.push(normalized);
+    lines.push('');
+  });
   return lines.join('\n');
 }
 
 /**
+ * 替换「导航属性区域」：RBAC 项按配置重写，其余 [Navigate] 原样保留
  * @param {string} content
- * @param {string} navigationBlock
+ * @param {object[]} navSpecs
  */
-function replaceNavigationRegion(content, navigationBlock) {
+function replaceNavigationRegion(content, navSpecs) {
   const classMatch = content.match(/public\s+class\s+Takt\w+[\s\S]*?\{/);
   if (!classMatch) {
     return null;
@@ -131,20 +161,32 @@ function replaceNavigationRegion(content, navigationBlock) {
   const classEndIdx = i - 1;
   const classBody = content.slice(openIdx + 1, classEndIdx);
   const markerIdx = classBody.indexOf(NAVIGATION_REGION_MARKER);
-  let newBody;
+  const rbacNavProps = new Set(navSpecs.map((s) => s.navProp));
+  let preserveBlocks = [];
+  let scalarBody;
   if (markerIdx >= 0) {
     let navStart = classBody.lastIndexOf('// ========================================', markerIdx);
     if (navStart < 0) {
       navStart = markerIdx;
     }
-    const scalarBody = classBody.slice(0, navStart).replace(/\s+$/, '');
-    const sep = scalarBody.length ? '\n\n' : '\n';
-    newBody = `${scalarBody}${sep}${navigationBlock}\n`;
+    const existingNavRegion = classBody.slice(navStart);
+    preserveBlocks = extractExistingNavigateBlocks(existingNavRegion).filter(
+      (b) => !rbacNavProps.has(b.navProp),
+    );
+    scalarBody = classBody.slice(0, navStart).replace(/\s+$/, '');
   } else {
-    const trimmed = classBody.replace(/\s+$/, '');
-    const sep = trimmed.length ? '\n\n' : '\n';
-    newBody = `${trimmed}${sep}${navigationBlock}\n`;
+    // 无标记时：从整段类体提取非 RBAC 导航，并从标量区剥离全部导航块
+    const allBlocks = extractExistingNavigateBlocks(classBody);
+    preserveBlocks = allBlocks.filter((b) => !rbacNavProps.has(b.navProp));
+    let stripped = classBody;
+    allBlocks.forEach((b) => {
+      stripped = stripped.replace(b.block, '');
+    });
+    scalarBody = stripped.replace(/\s+$/, '');
   }
+  const navigationBlock = buildNavigationRegionLines(navSpecs, preserveBlocks);
+  const sep = scalarBody.length ? '\n\n' : '\n';
+  const newBody = `${scalarBody}${sep}${navigationBlock}\n`;
   return content.slice(0, openIdx + 1) + newBody + content.slice(classEndIdx);
 }
 
@@ -164,8 +206,7 @@ function syncEntityRbacNavigations(entityShort, options = {}) {
   let content = fs.readFileSync(entityFile, 'utf-8');
   const entityNamespace = parseEntityNamespace(content);
   content = mergeUsings(content, entityNamespace, entityShort);
-  const navigationBlock = buildNavigationRegionLines(navSpecs);
-  const updated = replaceNavigationRegion(content, navigationBlock);
+  const updated = replaceNavigationRegion(content, navSpecs);
   if (!updated) {
     return { status: 'failed', reason: 'parse-failed' };
   }
@@ -210,7 +251,7 @@ function printUsage() {
 说明:
   - 已禁用 --all；每次必须指定一个实体
   - 配置源：scripts/gen/rbac-parent-config.cjs → RBAC_PARENT_NAVIGATIONS
-  - 写入「导航属性区域」内 SqlSugar [Navigate] OneToMany
+  - 仅重写配置中的 RBAC [Navigate]；「导航属性区域」内其它业务 OneToMany（如 EmployeeAddresses）原样保留
   - 须先于 generate-dtos-from-entity.cjs（DTO 从实体导航生成 List<关联Dto> 与 Create *Ids）
 `);
 }

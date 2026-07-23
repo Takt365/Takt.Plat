@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Infrastructure.Data.Seeds.I18nSeedData.HumanResource.Talent
 // 文件名称：TaktTalentJobPostingI18nSeedData.cs
-// 创建时间：2026-07-20
+// 创建时间：2026-07-23
 // 创建人：Takt365(Auto Generated)
 // 功能描述：TaktTalentJobPosting 实体字段国际化种子（无对应 frontend locales；TranslationText 取自 ColumnDescription，ContextNote 取自属性 XML summary）
 // 
@@ -91,22 +91,22 @@ public class TaktTalentJobPostingI18nSeedData : ITaktSeedDataCoordinator
             new TranslationSeedItem("entity.talentjobposting._self", "zh-HK", "职位发布信息_hk", "实体名称"),
 
             // entity.talentjobposting.staffingrequirementid
-            new TranslationSeedItem("entity.talentjobposting.staffingrequirementid", "en-US", "用人需求ID_us", "用人需求（选项 TaktTalentStaffingRequirements/options，DictValue=Id）"),
+            new TranslationSeedItem("entity.talentjobposting.staffingrequirementid", "en-US", "用人需求ID_us", "用人需求（选项 TaktTalentStaffingRequirements/options；DictValue=Id）"),
             // entity.talentjobposting.staffingrequirementid
-            new TranslationSeedItem("entity.talentjobposting.staffingrequirementid", "ja-JP", "用人需求ID_jp", "用人需求（选项 TaktTalentStaffingRequirements/options，DictValue=Id）"),
+            new TranslationSeedItem("entity.talentjobposting.staffingrequirementid", "ja-JP", "用人需求ID_jp", "用人需求（选项 TaktTalentStaffingRequirements/options；DictValue=Id）"),
             // entity.talentjobposting.staffingrequirementid
-            new TranslationSeedItem("entity.talentjobposting.staffingrequirementid", "zh-CN", "用人需求ID", "用人需求（选项 TaktTalentStaffingRequirements/options，DictValue=Id）"),
+            new TranslationSeedItem("entity.talentjobposting.staffingrequirementid", "zh-CN", "用人需求ID", "用人需求（选项 TaktTalentStaffingRequirements/options；DictValue=Id）"),
             // entity.talentjobposting.staffingrequirementid
-            new TranslationSeedItem("entity.talentjobposting.staffingrequirementid", "zh-HK", "用人需求ID_hk", "用人需求（选项 TaktTalentStaffingRequirements/options，DictValue=Id）"),
+            new TranslationSeedItem("entity.talentjobposting.staffingrequirementid", "zh-HK", "用人需求ID_hk", "用人需求（选项 TaktTalentStaffingRequirements/options；DictValue=Id）"),
 
             // entity.talentjobposting.postingcode
-            new TranslationSeedItem("entity.talentjobposting.postingcode", "en-US", "发布编号_us", "发布编号（租户+公司内唯一）"),
+            new TranslationSeedItem("entity.talentjobposting.postingcode", "en-US", "发布编码_us", "发布编码（租户+公司内唯一）"),
             // entity.talentjobposting.postingcode
-            new TranslationSeedItem("entity.talentjobposting.postingcode", "ja-JP", "发布编号_jp", "发布编号（租户+公司内唯一）"),
+            new TranslationSeedItem("entity.talentjobposting.postingcode", "ja-JP", "发布编码_jp", "发布编码（租户+公司内唯一）"),
             // entity.talentjobposting.postingcode
-            new TranslationSeedItem("entity.talentjobposting.postingcode", "zh-CN", "发布编号", "发布编号（租户+公司内唯一）"),
+            new TranslationSeedItem("entity.talentjobposting.postingcode", "zh-CN", "发布编码", "发布编码（租户+公司内唯一）"),
             // entity.talentjobposting.postingcode
-            new TranslationSeedItem("entity.talentjobposting.postingcode", "zh-HK", "发布编号_hk", "发布编号（租户+公司内唯一）"),
+            new TranslationSeedItem("entity.talentjobposting.postingcode", "zh-HK", "发布编码_hk", "发布编码（租户+公司内唯一）"),
 
             // entity.talentjobposting.title
             new TranslationSeedItem("entity.talentjobposting.title", "en-US", "职位标题_us", "职位标题"),

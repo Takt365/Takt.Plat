@@ -78,11 +78,11 @@ public static class TaktProcurementHelper
     }
 
     /// <summary>
-    /// 会签编号（最长 50）
+    /// 会签编码（最长 50）
     /// </summary>
     /// <param name="inquiryCode">询价编码</param>
     /// <param name="inquiryId">询价主键</param>
-    /// <returns>会签编号</returns>
+    /// <returns>会签编码</returns>
     /// <exception cref="ArgumentException">inquiryCode 为空</exception>
     public static string DeriveCountersignCode(string inquiryCode, long inquiryId)
     {
@@ -92,11 +92,11 @@ public static class TaktProcurementHelper
     }
 
     /// <summary>
-    /// 费用单编号（最长 40）
+    /// 费用单编码（最长 40）
     /// </summary>
     /// <param name="orderCode">采购订单或来源编码</param>
     /// <param name="orderId">来源主键</param>
-    /// <returns>费用单编号</returns>
+    /// <returns>费用单编码</returns>
     /// <exception cref="ArgumentException">orderCode 为空</exception>
     public static string DeriveExpenseCode(string orderCode, long orderId)
     {

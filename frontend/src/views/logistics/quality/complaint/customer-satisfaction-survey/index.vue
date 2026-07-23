@@ -9,17 +9,37 @@
 
 <template>
   <div class="p-4 flex flex-col min-h-0 h-full">
-    <!-- 查询栏 -->
-    <TaktQueryBar
-      v-model="queryKeyword"
-      :placeholder="searchPlaceholder"
-      :loading="loading"
-      @search="handleSearch"
-      @reset="handleReset"
-    />
-
-    <!-- 工具栏 -->
-    <TaktToolsBar
+    <!-- 左主右从 -->
+    <TaktMasterDetailTableLr
+      v-model:master-current="currentPage"
+      v-model:master-page-size="pageSize"
+      v-model:selected-master-key="selectedMasterKey"
+      class="min-h-0 flex-1"
+      :master-columns="columns"
+      :master-data-source="dataSource"
+      :master-loading="loading"
+      :master-row-key="getCustomerSatisfactionSurveyId"
+      :master-row-selection="rowSelection"
+      master-id-column-key="customerSatisfactionSurveyId"
+      :master-visible-column-keys="visibleColumnKeys"
+      master-table-mode="masterDetailMaster"
+      master-scroll-layout="masterDetailLr"
+      :master-total="total"
+      master-entity-scope="company"
+      @master-change="handleTableChange"
+      @master-resize-column="handleResizeColumn"
+      @master-pagination-change="handleMasterPaginationChange"
+      @master-select="handleMasterSelect"
+    >
+      <template #master-toolbar>
+        <TaktQueryBar
+          v-model="queryKeyword"
+          :placeholder="searchPlaceholder"
+          :loading="loading"
+          @search="handleSearch"
+          @reset="handleReset"
+        />
+        <TaktToolsBar
       create-permission="logistics:quality:complaint:customer:satisfaction:survey:create"
       update-permission="logistics:quality:complaint:customer:satisfaction:survey:update"
       delete-permission="logistics:quality:complaint:customer:satisfaction:survey:delete"
@@ -50,28 +70,47 @@
       @advanced-query="handleAdvancedQuery"
       @column-setting="handleColumnSetting"
       @refresh="handleRefresh"
-    />
-
-    <!-- 左主右从 -->
-    <TaktMasterDetailTableLr
-      v-model:master-current="currentPage"
-      v-model:master-page-size="pageSize"
-      v-model:selected-master-key="selectedMasterKey"
-      class="min-h-0 flex-1"
-      :master-columns="columns"
-      :master-data-source="dataSource"
-      :master-loading="loading"
-      :master-row-key="getCustomerSatisfactionSurveyId"
-      :master-row-selection="rowSelection"
-      master-id-column-key="customerSatisfactionSurveyId"
-      :master-visible-column-keys="visibleColumnKeys"
-      :master-total="total"
-      master-entity-scope="company"
-      @master-change="handleTableChange"
-      @master-resize-column="handleResizeColumn"
-      @master-pagination-change="handleMasterPaginationChange"
-      @master-select="handleMasterSelect"
-    >
+        />
+      </template>
+      <!-- 字典/开关列渲染 -->
+      <template #bodyCell="{ column, record }">
+        <template v-if="column.key === 'surveyMethod'">
+          <TaktDictTag
+            :value="getCustomerSatisfactionSurveyDictValue(record, 'surveyMethod')"
+            dict-type="logistics_quality_survey_method"
+          />
+        </template>
+        <template v-else-if="column.key === 'surveyType'">
+          <TaktDictTag
+            :value="getCustomerSatisfactionSurveyDictValue(record, 'surveyType')"
+            dict-type="logistics_quality_survey_type"
+          />
+        </template>
+        <template v-else-if="column.key === 'surveyPeriod'">
+          <TaktDictTag
+            :value="getCustomerSatisfactionSurveyDictValue(record, 'surveyPeriod')"
+            dict-type="logistics_quality_period"
+          />
+        </template>
+        <template v-else-if="column.key === 'overallSatisfaction'">
+          <TaktDictTag
+            :value="getCustomerSatisfactionSurveyDictValue(record, 'overallSatisfaction')"
+            dict-type="logistics_quality_satisfaction_level"
+          />
+        </template>
+        <template v-else-if="column.key === 'surveyStatus'">
+          <TaktDictTag
+            :value="getCustomerSatisfactionSurveyDictValue(record, 'surveyStatus')"
+            dict-type="logistics_quality_survey_status"
+          />
+        </template>
+        <template v-else-if="column.key === 'followUpStatus'">
+          <TaktDictTag
+            :value="getCustomerSatisfactionSurveyDictValue(record, 'followUpStatus')"
+            dict-type="logistics_quality_follow_up_status"
+          />
+        </template>
+      </template>
       <template #detail>
         <CustomerSatisfactionSurveyItemPanel
           ref="customerSatisfactionSurveyItemPanelRef"
@@ -109,10 +148,10 @@
     >
       <template #default="{ isFieldVisible }">
       <div v-show="isFieldVisible('customerSatisfactionSurveyCode')">
-      <a-form-item :label="t('entity.customersatisfactionsurvey.code')">
+      <a-form-item :label="pi.queryLabel('customerSatisfactionSurveyCode')">
         <a-input
           v-model:value="advancedQueryForm.customerSatisfactionSurveyCode"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.customersatisfactionsurvey.code') })"
+          :placeholder="pi.queryPh('customerSatisfactionSurveyCode', 'required')"
           show-count
           :maxlength="50"
           allow-clear
@@ -120,101 +159,101 @@
       </a-form-item>
       </div>
       <div v-show="isFieldVisible('customerId')">
-      <a-form-item :label="t('entity.customersatisfactionsurvey.customerid')">
-        <a-input
+      <a-form-item :label="pi.queryLabel('customerId')">
+        <TaktSelect
           v-model:value="advancedQueryForm.customerId"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.customersatisfactionsurvey.customerid') })"
-          show-count
-          :maxlength="20"
+          api-url="TaktCustomers/options"
+          :placeholder="pi.queryPh('customerId', 'select')"
           allow-clear
         />
       </a-form-item>
       </div>
-      <div v-show="isFieldVisible('customerName')">
-      <a-form-item :label="t('entity.customersatisfactionsurvey.customername')">
+      <div v-show="isFieldVisible('customerName1')">
+      <a-form-item :label="pi.queryLabel('customerName1')">
         <a-input
-          v-model:value="advancedQueryForm.customerName"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.customersatisfactionsurvey.customername') })"
+          v-model:value="advancedQueryForm.customerName1"
+          :placeholder="pi.queryPh('customerName1', 'required')"
           show-count
-          :maxlength="200"
+          :maxlength="140"
           allow-clear
         />
       </a-form-item>
       </div>
       <div v-show="isFieldVisible('customerCode')">
-      <a-form-item :label="t('entity.customersatisfactionsurvey.customercode')">
-        <a-input
+      <a-form-item :label="pi.queryLabel('customerCode')">
+        <TaktSelect
           v-model:value="advancedQueryForm.customerCode"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.customersatisfactionsurvey.customercode') })"
-          show-count
-          :maxlength="50"
+          api-url="TaktCustomers/options"
+          :placeholder="pi.queryPh('customerCode', 'select')"
           allow-clear
         />
       </a-form-item>
       </div>
       <div v-show="isFieldVisible('surveyDateStart')">
-      <a-form-item :label="t('entity.customersatisfactionsurvey.surveydatestart')">
+      <a-form-item :label="pi.queryLabel('surveyDateStart')">
         <a-date-picker
           v-model:value="advancedQueryForm.surveyDateStart"
-          :placeholder="t('common.page.form.placeholder.select', { field: t('entity.customersatisfactionsurvey.surveydatestart') })"
+          :placeholder="pi.queryPh('surveyDateStart', 'select')"
           value-format="YYYY-MM-DD"
           style="width: 100%"
         />
       </a-form-item>
       </div>
       <div v-show="isFieldVisible('surveyDateEnd')">
-      <a-form-item :label="t('entity.customersatisfactionsurvey.surveydateend')">
+      <a-form-item :label="pi.queryLabel('surveyDateEnd')">
         <a-date-picker
           v-model:value="advancedQueryForm.surveyDateEnd"
-          :placeholder="t('common.page.form.placeholder.select', { field: t('entity.customersatisfactionsurvey.surveydateend') })"
+          :placeholder="pi.queryPh('surveyDateEnd', 'select')"
           value-format="YYYY-MM-DD"
           style="width: 100%"
         />
       </a-form-item>
       </div>
       <div v-show="isFieldVisible('surveyMethod')">
-      <a-form-item :label="t('entity.customersatisfactionsurvey.surveymethod')">
-        <a-input-number
+      <a-form-item :label="pi.queryLabel('surveyMethod')">
+        <TaktSelect
           v-model:value="advancedQueryForm.surveyMethod"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.customersatisfactionsurvey.surveymethod') })"
-          style="width: 100%"
+          dict-type="logistics_quality_survey_method"
+          :placeholder="pi.queryPh('surveyMethod', 'select')"
+          allow-clear
         />
       </a-form-item>
       </div>
       <div v-show="isFieldVisible('surveyType')">
-      <a-form-item :label="t('entity.customersatisfactionsurvey.surveytype')">
-        <a-input-number
+      <a-form-item :label="pi.queryLabel('surveyType')">
+        <TaktSelect
           v-model:value="advancedQueryForm.surveyType"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.customersatisfactionsurvey.surveytype') })"
-          style="width: 100%"
+          dict-type="logistics_quality_survey_type"
+          :placeholder="pi.queryPh('surveyType', 'select')"
+          allow-clear
         />
       </a-form-item>
       </div>
       <div v-show="isFieldVisible('surveyPeriod')">
-      <a-form-item :label="t('entity.customersatisfactionsurvey.surveyperiod')">
-        <a-input-number
+      <a-form-item :label="pi.queryLabel('surveyPeriod')">
+        <TaktSelect
           v-model:value="advancedQueryForm.surveyPeriod"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.customersatisfactionsurvey.surveyperiod') })"
-          style="width: 100%"
+          dict-type="logistics_quality_period"
+          :placeholder="pi.queryPh('surveyPeriod', 'select')"
+          allow-clear
         />
       </a-form-item>
       </div>
       <div v-show="isFieldVisible('surveyorBy')">
-      <a-form-item :label="t('entity.customersatisfactionsurvey.surveyorby')">
-        <a-input
+      <a-form-item :label="pi.queryLabel('surveyorBy')">
+        <TaktSelect
           v-model:value="advancedQueryForm.surveyorBy"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.customersatisfactionsurvey.surveyorby') })"
-          show-count
-          :maxlength="50"
+          api-url="TaktEmployees/options"
+          :placeholder="pi.queryPh('surveyorBy', 'select')"
           allow-clear
         />
       </a-form-item>
       </div>
       <div v-show="isFieldVisible('customerContact')">
-      <a-form-item :label="t('entity.customersatisfactionsurvey.customercontact')">
+      <a-form-item :label="pi.queryLabel('customerContact')">
         <a-input
           v-model:value="advancedQueryForm.customerContact"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.customersatisfactionsurvey.customercontact') })"
+          :placeholder="pi.queryPh('customerContact', 'required')"
           show-count
           :maxlength="50"
           allow-clear
@@ -222,10 +261,10 @@
       </a-form-item>
       </div>
       <div v-show="isFieldVisible('customerPhone')">
-      <a-form-item :label="t('entity.customersatisfactionsurvey.customerphone')">
+      <a-form-item :label="pi.queryLabel('customerPhone')">
         <a-input
           v-model:value="advancedQueryForm.customerPhone"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.customersatisfactionsurvey.customerphone') })"
+          :placeholder="pi.queryPh('customerPhone', 'required')"
           show-count
           :maxlength="50"
           allow-clear
@@ -233,73 +272,74 @@
       </a-form-item>
       </div>
       <div v-show="isFieldVisible('overallSatisfaction')">
-      <a-form-item :label="t('entity.customersatisfactionsurvey.overallsatisfaction')">
-        <a-input-number
+      <a-form-item :label="pi.queryLabel('overallSatisfaction')">
+        <TaktSelect
           v-model:value="advancedQueryForm.overallSatisfaction"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.customersatisfactionsurvey.overallsatisfaction') })"
-          style="width: 100%"
+          dict-type="logistics_quality_satisfaction_level"
+          :placeholder="pi.queryPh('overallSatisfaction', 'select')"
+          allow-clear
         />
       </a-form-item>
       </div>
       <div v-show="isFieldVisible('totalScore')">
-      <a-form-item :label="t('entity.customersatisfactionsurvey.totalscore')">
+      <a-form-item :label="pi.queryLabel('totalScore')">
         <a-input-number
           v-model:value="advancedQueryForm.totalScore"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.customersatisfactionsurvey.totalscore') })"
+          :placeholder="pi.queryPh('totalScore', 'required')"
           style="width: 100%"
         />
       </a-form-item>
       </div>
       <div v-show="isFieldVisible('qualityScore')">
-      <a-form-item :label="t('entity.customersatisfactionsurvey.qualityscore')">
+      <a-form-item :label="pi.queryLabel('qualityScore')">
         <a-input-number
           v-model:value="advancedQueryForm.qualityScore"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.customersatisfactionsurvey.qualityscore') })"
+          :placeholder="pi.queryPh('qualityScore', 'required')"
           style="width: 100%"
         />
       </a-form-item>
       </div>
       <div v-show="isFieldVisible('deliveryScore')">
-      <a-form-item :label="t('entity.customersatisfactionsurvey.deliveryscore')">
+      <a-form-item :label="pi.queryLabel('deliveryScore')">
         <a-input-number
           v-model:value="advancedQueryForm.deliveryScore"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.customersatisfactionsurvey.deliveryscore') })"
+          :placeholder="pi.queryPh('deliveryScore', 'required')"
           style="width: 100%"
         />
       </a-form-item>
       </div>
       <div v-show="isFieldVisible('serviceScore')">
-      <a-form-item :label="t('entity.customersatisfactionsurvey.servicescore')">
+      <a-form-item :label="pi.queryLabel('serviceScore')">
         <a-input-number
           v-model:value="advancedQueryForm.serviceScore"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.customersatisfactionsurvey.servicescore') })"
+          :placeholder="pi.queryPh('serviceScore', 'required')"
           style="width: 100%"
         />
       </a-form-item>
       </div>
       <div v-show="isFieldVisible('priceScore')">
-      <a-form-item :label="t('entity.customersatisfactionsurvey.pricescore')">
+      <a-form-item :label="pi.queryLabel('priceScore')">
         <a-input-number
           v-model:value="advancedQueryForm.priceScore"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.customersatisfactionsurvey.pricescore') })"
+          :placeholder="pi.queryPh('priceScore', 'required')"
           style="width: 100%"
         />
       </a-form-item>
       </div>
       <div v-show="isFieldVisible('technicalScore')">
-      <a-form-item :label="t('entity.customersatisfactionsurvey.technicalscore')">
+      <a-form-item :label="pi.queryLabel('technicalScore')">
         <a-input-number
           v-model:value="advancedQueryForm.technicalScore"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.customersatisfactionsurvey.technicalscore') })"
+          :placeholder="pi.queryPh('technicalScore', 'required')"
           style="width: 100%"
         />
       </a-form-item>
       </div>
       <div v-show="isFieldVisible('customerPraise')">
-      <a-form-item :label="t('entity.customersatisfactionsurvey.customerpraise')">
+      <a-form-item :label="pi.queryLabel('customerPraise')">
         <a-input
           v-model:value="advancedQueryForm.customerPraise"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.customersatisfactionsurvey.customerpraise') })"
+          :placeholder="pi.queryPh('customerPraise', 'required')"
           show-count
           :maxlength="2000"
           allow-clear
@@ -307,10 +347,10 @@
       </a-form-item>
       </div>
       <div v-show="isFieldVisible('customerFeedback')">
-      <a-form-item :label="t('entity.customersatisfactionsurvey.customerfeedback')">
+      <a-form-item :label="pi.queryLabel('customerFeedback')">
         <a-input
           v-model:value="advancedQueryForm.customerFeedback"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.customersatisfactionsurvey.customerfeedback') })"
+          :placeholder="pi.queryPh('customerFeedback', 'required')"
           show-count
           :maxlength="2000"
           allow-clear
@@ -318,61 +358,72 @@
       </a-form-item>
       </div>
       <div v-show="isFieldVisible('improvementPlan')">
-      <a-form-item :label="t('entity.customersatisfactionsurvey.improvementplan')">
+      <a-form-item :label="pi.queryLabel('improvementPlan')">
         <a-input
           v-model:value="advancedQueryForm.improvementPlan"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.customersatisfactionsurvey.improvementplan') })"
+          :placeholder="pi.queryPh('improvementPlan', 'required')"
           show-count
           :maxlength="2000"
           allow-clear
         />
       </a-form-item>
       </div>
-      <div v-show="isFieldVisible('surveyStatus')">
-      <a-form-item :label="t('entity.customersatisfactionsurvey.surveystatus')">
-        <a-input-number
-          v-model:value="advancedQueryForm.surveyStatus"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.customersatisfactionsurvey.surveystatus') })"
-          style="width: 100%"
-        />
-      </a-form-item>
-      </div>
-      <div v-show="isFieldVisible('followUpStatus')">
-      <a-form-item :label="t('entity.customersatisfactionsurvey.followupstatus')">
-        <a-input-number
-          v-model:value="advancedQueryForm.followUpStatus"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.customersatisfactionsurvey.followupstatus') })"
-          style="width: 100%"
-        />
-      </a-form-item>
-      </div>
       <div v-show="isFieldVisible('relatedComplaintId')">
-      <a-form-item :label="t('entity.customersatisfactionsurvey.relatedcomplaintid')">
-        <a-input
+      <a-form-item :label="pi.queryLabel('relatedComplaintId')">
+        <TaktSelect
           v-model:value="advancedQueryForm.relatedComplaintId"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.customersatisfactionsurvey.relatedcomplaintid') })"
+          api-url="TaktCustomerComplaints/options"
+          :placeholder="pi.queryPh('relatedComplaintId', 'select')"
+          allow-clear
+        />
+      </a-form-item>
+      </div>
+      <div v-show="isFieldVisible('attachments')">
+      <a-form-item :label="pi.queryLabel('attachments')">
+        <a-input
+          v-model:value="advancedQueryForm.attachments"
+          :placeholder="pi.queryPh('attachments', 'required')"
           show-count
           :maxlength="20"
           allow-clear
         />
       </a-form-item>
       </div>
+      <div v-show="isFieldVisible('surveyStatus')">
+      <a-form-item :label="pi.queryLabel('surveyStatus')">
+        <TaktSelect
+          v-model:value="advancedQueryForm.surveyStatus"
+          dict-type="logistics_quality_survey_status"
+          :placeholder="pi.queryPh('surveyStatus', 'select')"
+          allow-clear
+        />
+      </a-form-item>
+      </div>
       <div v-show="isFieldVisible('relatedPlant')">
-      <a-form-item :label="t('entity.customersatisfactionsurvey.relatedplant')">
-        <a-input
+      <a-form-item :label="pi.queryLabel('relatedPlant')">
+        <TaktSelect
           v-model:value="advancedQueryForm.relatedPlant"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.customersatisfactionsurvey.relatedplant') })"
-          show-count
-          :maxlength="4"
+          api-url="TaktPlants/options"
+          :placeholder="pi.queryPh('relatedPlant', 'select')"
+          allow-clear
+        />
+      </a-form-item>
+      </div>
+      <div v-show="isFieldVisible('followUpStatus')">
+      <a-form-item :label="pi.queryLabel('followUpStatus')">
+        <TaktSelect
+          v-model:value="advancedQueryForm.followUpStatus"
+          dict-type="logistics_quality_follow_up_status"
+          :placeholder="pi.queryPh('followUpStatus', 'select')"
           allow-clear
         />
       </a-form-item>
       </div>
       <div v-show="isFieldVisible('createdAtStart')">
-      <a-form-item :label="t('common.page.entity.createdatstart')">
+      <a-form-item :label="pi.queryLabel('createdAtStart')">
         <a-date-picker
           v-model:value="advancedQueryForm.createdAtStart"
-          :placeholder="t('common.page.form.placeholder.select', { field: t('common.page.entity.createdatstart') })"
+          :placeholder="pi.queryPh('createdAtStart', 'select')"
           value-format="YYYY-MM-DD HH:mm:ss"
             show-time
           style="width: 100%"
@@ -380,10 +431,10 @@
       </a-form-item>
       </div>
       <div v-show="isFieldVisible('createdAtEnd')">
-      <a-form-item :label="t('common.page.entity.createdatend')">
+      <a-form-item :label="pi.queryLabel('createdAtEnd')">
         <a-date-picker
           v-model:value="advancedQueryForm.createdAtEnd"
-          :placeholder="t('common.page.form.placeholder.select', { field: t('common.page.entity.createdatend') })"
+          :placeholder="pi.queryPh('createdAtEnd', 'select')"
           value-format="YYYY-MM-DD HH:mm:ss"
             show-time
           style="width: 100%"
@@ -405,7 +456,7 @@
             >
               <span class="takt-form-label-hint-icon"><RiQuestionLine class="takt-remix-icon" /></span>
             </a-tooltip>
-            <span>{{ t('common.page.entity.extfield') }}</span>
+            <span>{{ pi.queryLabel('extField') }}</span>
           </span>
         </template>
         <a-textarea
@@ -419,10 +470,10 @@
       </a-form-item>
       </div>
       <div v-show="isFieldVisible('remark')">
-      <a-form-item :label="t('common.page.entity.remark')">
+      <a-form-item :label="pi.queryLabel('remark')">
         <a-textarea
           v-model:value="advancedQueryForm.remark"
-          :placeholder="t('common.page.form.placeholder.optional', { field: t('common.page.entity.remark') })"
+          :placeholder="pi.queryPh('remark', 'optional')"
             :rows="4"
             show-count
             :maxlength="400"
@@ -436,14 +487,15 @@
     <!-- 导入对话框 -->
     <TaktModal
       v-model:open="importVisible"
-      :title="t('common.dialog.title.import', { entity: t('entity.customersatisfactionsurvey._self') })"
+      :title="t('common.dialog.title.import', { entity: pi.self() })"
       :width="600"
       :footer="null"
       :cancel-text="t('common.page.button.close')"
       @cancel="handleImportCancel"
     >
       <TaktImportFile
-        entity-i18n-key="entity.customersatisfactionsurvey._self"
+        v-if="importVisible"
+        :entity-i18n-key="CUSTOMERSATISFACTIONSURVEY_SELF_I18N_KEY"
         file-type="xlsx"
         :sheet-name="excelNames.sheet"
         :template-file-name="excelNames.fileBase"
@@ -462,7 +514,7 @@
       :id-column-key="'customerSatisfactionSurveyId'"
       :action-column-key="'action'"
       entity-scope="company"
-      table-mode="single"
+      table-mode="masterDetailMaster"
       @update:checked-keys="handleColumnKeysChange"
       @reset="handleColumnSettingReset"
     />
@@ -482,12 +534,25 @@ import { useI18n } from 'vue-i18n'
 import { ensureTaktPaginationConfigAsync, getTaktDefaultPageIndex, getTaktDefaultPageSize } from '@/utils/takt-paged'
 import CustomerSatisfactionSurveyForm from './components/customer-satisfaction-survey-form.vue'
 import CustomerSatisfactionSurveyItemPanel from './components/customer-satisfaction-survey-item-panel.vue'
-import { provideCustomerSatisfactionSurveyMasterContext } from './composables/use-customer-satisfaction-survey-master-context'
+import { provideCustomerSatisfactionSurveyMasterContext, type CustomerSatisfactionSurveyRowRecord } from './composables/use-customer-satisfaction-survey-master-context'
 import { getCustomerSatisfactionSurveyList, getCustomerSatisfactionSurveyById, createCustomerSatisfactionSurvey, updateCustomerSatisfactionSurvey, deleteCustomerSatisfactionSurveyById, deleteCustomerSatisfactionSurveyBatch, getCustomerSatisfactionSurveyTemplate, importCustomerSatisfactionSurvey, exportCustomerSatisfactionSurvey, updateCustomerSatisfactionSurveyStatus } from '@/api/logistics/quality/complaint/customer-satisfaction-survey'
 import type { CustomerSatisfactionSurvey, CustomerSatisfactionSurveyQuery } from '@/types/logistics/quality/complaint/customer-satisfaction-survey'
+import { useDictDataStore } from '@/stores/foundation/dict-data'
 import { taktExcelEntityNames } from '@/utils/naming'
 import { resolveExportDownloadFileName } from '@/utils/export-download-name'
+import { normalizeImportResult, type TaktImportResult } from '@/utils/takt-import-result'
 import { RiEditLine, RiDeleteBinLine, RiQuestionLine } from '@remixicon/vue'
+
+import {
+  useCustomerSatisfactionSurveyI18n,
+  CUSTOMERSATISFACTIONSURVEY_LIST_FIELDS,
+  CUSTOMERSATISFACTIONSURVEY_QUERY_STRING_FIELDS,
+  CUSTOMERSATISFACTIONSURVEY_QUERY_FIELDS,
+  CUSTOMERSATISFACTIONSURVEY_SELF_I18N_KEY,
+} from './composables/use-customer-satisfaction-survey-i18n'
+
+/** 实体字段 i18n（标签/占位符统一入口） */
+const pi = useCustomerSatisfactionSurveyI18n()
 
 /** i18n 翻译函数 */
 const { t } = useI18n()
@@ -495,7 +560,7 @@ const { t } = useI18n()
 const excelNames = taktExcelEntityNames('TaktCustomerSatisfactionSurvey')
 /** 列表快捷查询占位文案 */
 const searchPlaceholder = computed(
-  () => t('common.page.form.placeholder.search', { keyword: t('entity.customersatisfactionsurvey._self') })
+  () => t('common.page.form.placeholder.search', { keyword: pi.self() })
 )
 
 /** 快捷查询关键字 */
@@ -511,9 +576,9 @@ const pageSize = ref(getTaktDefaultPageSize())
 /** 分页 total */
 const total = ref(0)
 /** 工具栏单选时当前行 */
-const selectedRow = ref<CustomerSatisfactionSurvey | null>(null)
+const selectedRow = ref<CustomerSatisfactionSurveyRowRecord | null>(null)
 /** 表格多选行 */
-const selectedRows = ref<CustomerSatisfactionSurvey[]>([])
+const selectedRows = ref<CustomerSatisfactionSurveyRowRecord[]>([])
 /** 表格多选 row-key 集合 */
 const selectedRowKeys = ref<(string | number)[]>([])
 
@@ -530,72 +595,37 @@ const formRef = ref()
 
 /** 高级查询抽屉是否打开 */
 const advancedQueryVisible = ref(false)
+/**
+ * 创建空的高级查询表单
+ * @returns {Record<string, unknown>} 高级查询初始模型
+ */
+function createEmptyAdvancedQueryForm() {
+  const form = Object.fromEntries(CUSTOMERSATISFACTIONSURVEY_QUERY_STRING_FIELDS.map((key) => [key, ''])) as Record<
+    (typeof CUSTOMERSATISFACTIONSURVEY_QUERY_STRING_FIELDS)[number],
+    string
+  >
+  return {
+    ...form,
+    surveyMethod: undefined as number | undefined,
+    surveyType: undefined as number | undefined,
+    surveyPeriod: undefined as number | undefined,
+    overallSatisfaction: undefined as number | undefined,
+    totalScore: undefined as number | undefined,
+    qualityScore: undefined as number | undefined,
+    deliveryScore: undefined as number | undefined,
+    serviceScore: undefined as number | undefined,
+    priceScore: undefined as number | undefined,
+    technicalScore: undefined as number | undefined,
+    surveyStatus: undefined as number | undefined,
+    followUpStatus: undefined as number | undefined,
+  }
+}
 /** 高级查询表单模型 */
-const advancedQueryForm = ref({
-  customerSatisfactionSurveyCode: '',
-  customerId: '',
-  customerName: '',
-  customerCode: '',
-  surveyDateStart: '',
-  surveyDateEnd: '',
-  surveyMethod: undefined as number | undefined,
-  surveyType: undefined as number | undefined,
-  surveyPeriod: undefined as number | undefined,
-  surveyorBy: '',
-  customerContact: '',
-  customerPhone: '',
-  overallSatisfaction: undefined as number | undefined,
-  totalScore: undefined as number | undefined,
-  qualityScore: undefined as number | undefined,
-  deliveryScore: undefined as number | undefined,
-  serviceScore: undefined as number | undefined,
-  priceScore: undefined as number | undefined,
-  technicalScore: undefined as number | undefined,
-  customerPraise: '',
-  customerFeedback: '',
-  improvementPlan: '',
-  surveyStatus: undefined as number | undefined,
-  followUpStatus: undefined as number | undefined,
-  relatedComplaintId: '',
-  relatedPlant: '',
-  createdAtStart: '',
-  createdAtEnd: '',
-  extField: '',
-  remark: '',
-})
+const advancedQueryForm = ref(createEmptyAdvancedQueryForm())
 /** 高级查询字段元数据（列显隐配置） */
-const queryFieldsMeta = computed(() => [
-  { key: 'customerSatisfactionSurveyCode', label: t('entity.customersatisfactionsurvey.code') },
-  { key: 'customerId', label: t('entity.customersatisfactionsurvey.customerid') },
-  { key: 'customerName', label: t('entity.customersatisfactionsurvey.customername') },
-  { key: 'customerCode', label: t('entity.customersatisfactionsurvey.customercode') },
-  { key: 'surveyDateStart', label: t('common.page.entity.createdatstart').replace(t('common.page.entity.createdat'), t('entity.customersatisfactionsurvey.surveydate')) },
-  { key: 'surveyDateEnd', label: t('common.page.entity.createdatend').replace(t('common.page.entity.createdat'), t('entity.customersatisfactionsurvey.surveydate')) },
-  { key: 'surveyMethod', label: t('entity.customersatisfactionsurvey.surveymethod') },
-  { key: 'surveyType', label: t('entity.customersatisfactionsurvey.surveytype') },
-  { key: 'surveyPeriod', label: t('entity.customersatisfactionsurvey.surveyperiod') },
-  { key: 'surveyorBy', label: t('entity.customersatisfactionsurvey.surveyorby') },
-  { key: 'customerContact', label: t('entity.customersatisfactionsurvey.customercontact') },
-  { key: 'customerPhone', label: t('entity.customersatisfactionsurvey.customerphone') },
-  { key: 'overallSatisfaction', label: t('entity.customersatisfactionsurvey.overallsatisfaction') },
-  { key: 'totalScore', label: t('entity.customersatisfactionsurvey.totalscore') },
-  { key: 'qualityScore', label: t('entity.customersatisfactionsurvey.qualityscore') },
-  { key: 'deliveryScore', label: t('entity.customersatisfactionsurvey.deliveryscore') },
-  { key: 'serviceScore', label: t('entity.customersatisfactionsurvey.servicescore') },
-  { key: 'priceScore', label: t('entity.customersatisfactionsurvey.pricescore') },
-  { key: 'technicalScore', label: t('entity.customersatisfactionsurvey.technicalscore') },
-  { key: 'customerPraise', label: t('entity.customersatisfactionsurvey.customerpraise') },
-  { key: 'customerFeedback', label: t('entity.customersatisfactionsurvey.customerfeedback') },
-  { key: 'improvementPlan', label: t('entity.customersatisfactionsurvey.improvementplan') },
-  { key: 'surveyStatus', label: t('entity.customersatisfactionsurvey.surveystatus') },
-  { key: 'followUpStatus', label: t('entity.customersatisfactionsurvey.followupstatus') },
-  { key: 'relatedComplaintId', label: t('entity.customersatisfactionsurvey.relatedcomplaintid') },
-  { key: 'relatedPlant', label: t('entity.customersatisfactionsurvey.relatedplant') },
-  { key: 'createdAtStart', label: t('common.page.entity.createdatstart') },
-  { key: 'createdAtEnd', label: t('common.page.entity.createdatend') },
-  { key: 'extField', label: t('common.page.entity.extfield') },
-  { key: 'remark', label: t('common.page.entity.remark') },
-])
+const queryFieldsMeta = computed(() =>
+  CUSTOMERSATISFACTIONSURVEY_QUERY_FIELDS.map((key) => ({ key, label: pi.queryLabel(key) })),
+)
 /** 高级查询当前可见字段 key */
 const visibleQueryFieldKeys = ref<string[]>([])
 /** 列设置抽屉是否打开 */
@@ -611,6 +641,8 @@ const updateDisabled = computed(() => selectedRows.value.length !== 1)
 /** 工具栏「删除」是否禁用（未选中任何行） */
 const deleteDisabled = computed(() => selectedRows.value.length === 0)
 
+/** Pinia：字典缓存（列表/查询 dict-type 渲染前预热） */
+const dictDataStore = useDictDataStore()
 /** 主表选中行上下文（右侧明细面板读取） */
 const { selectedMasterRow } = provideCustomerSatisfactionSurveyMasterContext()
 const customerSatisfactionSurveyItemPanelRef = ref<InstanceType<typeof CustomerSatisfactionSurveyItemPanel> | null>(null)
@@ -637,12 +669,9 @@ function buildListQuery(overrides?: Partial<CustomerSatisfactionSurveyQuery>): C
       query[key] = v as never
     }
   }
-  assignTrimmed('customerSatisfactionSurveyCode', form.customerSatisfactionSurveyCode)
-  assignTrimmed('customerId', form.customerId)
-  assignTrimmed('customerName', form.customerName)
-  assignTrimmed('customerCode', form.customerCode)
-  assignTrimmed('surveyDateStart', form.surveyDateStart)
-  assignTrimmed('surveyDateEnd', form.surveyDateEnd)
+  for (const key of CUSTOMERSATISFACTIONSURVEY_QUERY_STRING_FIELDS) {
+    assignTrimmed(key, form[key])
+  }
   if (form.surveyMethod !== undefined && form.surveyMethod !== null) {
     query.surveyMethod = form.surveyMethod
   }
@@ -652,9 +681,6 @@ function buildListQuery(overrides?: Partial<CustomerSatisfactionSurveyQuery>): C
   if (form.surveyPeriod !== undefined && form.surveyPeriod !== null) {
     query.surveyPeriod = form.surveyPeriod
   }
-  assignTrimmed('surveyorBy', form.surveyorBy)
-  assignTrimmed('customerContact', form.customerContact)
-  assignTrimmed('customerPhone', form.customerPhone)
   if (form.overallSatisfaction !== undefined && form.overallSatisfaction !== null) {
     query.overallSatisfaction = form.overallSatisfaction
   }
@@ -676,26 +702,18 @@ function buildListQuery(overrides?: Partial<CustomerSatisfactionSurveyQuery>): C
   if (form.technicalScore !== undefined && form.technicalScore !== null) {
     query.technicalScore = form.technicalScore
   }
-  assignTrimmed('customerPraise', form.customerPraise)
-  assignTrimmed('customerFeedback', form.customerFeedback)
-  assignTrimmed('improvementPlan', form.improvementPlan)
   if (form.surveyStatus !== undefined && form.surveyStatus !== null) {
     query.surveyStatus = form.surveyStatus
   }
   if (form.followUpStatus !== undefined && form.followUpStatus !== null) {
     query.followUpStatus = form.followUpStatus
   }
-  assignTrimmed('relatedComplaintId', form.relatedComplaintId)
-  assignTrimmed('relatedPlant', form.relatedPlant)
-  assignTrimmed('createdAtStart', form.createdAtStart)
-  assignTrimmed('createdAtEnd', form.createdAtEnd)
-  assignTrimmed('extField', form.extField)
-  assignTrimmed('remark', form.remark)
   return query
 }
 /** 页面挂载：租户上下文就绪后加载分页配置，再拉列表 */
 onMounted(async () => {
   await ensureTaktPaginationConfigAsync()
+  void dictDataStore.loadAllDictDataAsync()
   loadData()
 })
 
@@ -704,7 +722,7 @@ onMounted(async () => {
 const selectedMasterKey = ref('')
 
 /** 同步主表选中行到右侧明细（子表由 *-panel watch 自动 reload） */
-function syncMasterSelection(record: CustomerSatisfactionSurvey | null) {
+function syncMasterSelection(record: CustomerSatisfactionSurveyRowRecord | null) {
   selectedMasterRow.value = record
   selectedMasterKey.value = record ? getCustomerSatisfactionSurveyId(record) : ''
 }
@@ -714,7 +732,7 @@ function syncMasterSelection(record: CustomerSatisfactionSurvey | null) {
  * @param record 主表行
  */
 function handleMasterSelect(record: Record<string, unknown>) {
-  const row = record as unknown as CustomerSatisfactionSurvey
+  const row = record as unknown as CustomerSatisfactionSurveyRowRecord
   const key = getCustomerSatisfactionSurveyId(row)
   selectedRowKeys.value = [key]
   selectedRows.value = [row]
@@ -732,7 +750,7 @@ function handleMasterPaginationChange(_page: number, _pageSize: number) {
 }
 
 /** 加载主表详情并回填当前页 dataSource */
-async function loadCustomerSatisfactionSurveyDetail(record: CustomerSatisfactionSurvey): Promise<CustomerSatisfactionSurvey | null> {
+async function loadCustomerSatisfactionSurveyDetail(record: CustomerSatisfactionSurveyRowRecord): Promise<CustomerSatisfactionSurvey | null> {
   const id = getCustomerSatisfactionSurveyId(record)
   if (!id) {
     return null
@@ -763,7 +781,7 @@ const columns = computed<TableColumnsType>(() => [
     customRender: ({ record }: { record: any }) => getCustomerSatisfactionSurveyField(record, 'customerSatisfactionSurveyId') ?? ''
   },
   {
-    title: t('entity.customersatisfactionsurvey.code'),
+    title: pi.label('customerSatisfactionSurveyCode'),
     dataIndex: 'customerSatisfactionSurveyCode',
     key: 'customerSatisfactionSurveyCode',
     width: 120,
@@ -772,7 +790,7 @@ const columns = computed<TableColumnsType>(() => [
     customRender: ({ record }: { record: any }) => getCustomerSatisfactionSurveyField(record, 'customerSatisfactionSurveyCode') ?? ''
   },
   {
-    title: t('entity.customersatisfactionsurvey.customerid'),
+    title: pi.label('customerId'),
     dataIndex: 'customerId',
     key: 'customerId',
     width: 120,
@@ -781,16 +799,16 @@ const columns = computed<TableColumnsType>(() => [
     customRender: ({ record }: { record: any }) => getCustomerSatisfactionSurveyField(record, 'customerId') ?? ''
   },
   {
-    title: t('entity.customersatisfactionsurvey.customername'),
-    dataIndex: 'customerName',
-    key: 'customerName',
+    title: pi.label('customerName1'),
+    dataIndex: 'customerName1',
+    key: 'customerName1',
     width: 120,
     resizable: true,
     ellipsis: true,
-    customRender: ({ record }: { record: any }) => getCustomerSatisfactionSurveyField(record, 'customerName') ?? ''
+    customRender: ({ record }: { record: any }) => getCustomerSatisfactionSurveyField(record, 'customerName1') ?? ''
   },
   {
-    title: t('entity.customersatisfactionsurvey.customercode'),
+    title: pi.label('customerCode'),
     dataIndex: 'customerCode',
     key: 'customerCode',
     width: 120,
@@ -799,7 +817,7 @@ const columns = computed<TableColumnsType>(() => [
     customRender: ({ record }: { record: any }) => getCustomerSatisfactionSurveyField(record, 'customerCode') ?? ''
   },
   {
-    title: t('entity.customersatisfactionsurvey.surveydate'),
+    title: pi.label('surveyDate'),
     dataIndex: 'surveyDate',
     key: 'surveyDate',
     width: 120,
@@ -808,34 +826,31 @@ const columns = computed<TableColumnsType>(() => [
     customRender: ({ record }: { record: any }) => getCustomerSatisfactionSurveyField(record, 'surveyDate') ?? ''
   },
   {
-    title: t('entity.customersatisfactionsurvey.surveymethod'),
+    title: pi.label('surveyMethod'),
     dataIndex: 'surveyMethod',
     key: 'surveyMethod',
     width: 120,
     resizable: true,
     ellipsis: true,
-    customRender: ({ record }: { record: any }) => getCustomerSatisfactionSurveyField(record, 'surveyMethod') ?? ''
   },
   {
-    title: t('entity.customersatisfactionsurvey.surveytype'),
+    title: pi.label('surveyType'),
     dataIndex: 'surveyType',
     key: 'surveyType',
     width: 120,
     resizable: true,
     ellipsis: true,
-    customRender: ({ record }: { record: any }) => getCustomerSatisfactionSurveyField(record, 'surveyType') ?? ''
   },
   {
-    title: t('entity.customersatisfactionsurvey.surveyperiod'),
+    title: pi.label('surveyPeriod'),
     dataIndex: 'surveyPeriod',
     key: 'surveyPeriod',
     width: 120,
     resizable: true,
     ellipsis: true,
-    customRender: ({ record }: { record: any }) => getCustomerSatisfactionSurveyField(record, 'surveyPeriod') ?? ''
   },
   {
-    title: t('entity.customersatisfactionsurvey.surveyorby'),
+    title: pi.label('surveyorBy'),
     dataIndex: 'surveyorBy',
     key: 'surveyorBy',
     width: 120,
@@ -844,7 +859,7 @@ const columns = computed<TableColumnsType>(() => [
     customRender: ({ record }: { record: any }) => getCustomerSatisfactionSurveyField(record, 'surveyorBy') ?? ''
   },
   {
-    title: t('entity.customersatisfactionsurvey.customercontact'),
+    title: pi.label('customerContact'),
     dataIndex: 'customerContact',
     key: 'customerContact',
     width: 120,
@@ -853,7 +868,7 @@ const columns = computed<TableColumnsType>(() => [
     customRender: ({ record }: { record: any }) => getCustomerSatisfactionSurveyField(record, 'customerContact') ?? ''
   },
   {
-    title: t('entity.customersatisfactionsurvey.customerphone'),
+    title: pi.label('customerPhone'),
     dataIndex: 'customerPhone',
     key: 'customerPhone',
     width: 120,
@@ -862,16 +877,15 @@ const columns = computed<TableColumnsType>(() => [
     customRender: ({ record }: { record: any }) => getCustomerSatisfactionSurveyField(record, 'customerPhone') ?? ''
   },
   {
-    title: t('entity.customersatisfactionsurvey.overallsatisfaction'),
+    title: pi.label('overallSatisfaction'),
     dataIndex: 'overallSatisfaction',
     key: 'overallSatisfaction',
     width: 120,
     resizable: true,
     ellipsis: true,
-    customRender: ({ record }: { record: any }) => getCustomerSatisfactionSurveyField(record, 'overallSatisfaction') ?? ''
   },
   {
-    title: t('entity.customersatisfactionsurvey.totalscore'),
+    title: pi.label('totalScore'),
     dataIndex: 'totalScore',
     key: 'totalScore',
     width: 120,
@@ -880,7 +894,7 @@ const columns = computed<TableColumnsType>(() => [
     customRender: ({ record }: { record: any }) => getCustomerSatisfactionSurveyField(record, 'totalScore') ?? ''
   },
   {
-    title: t('entity.customersatisfactionsurvey.qualityscore'),
+    title: pi.label('qualityScore'),
     dataIndex: 'qualityScore',
     key: 'qualityScore',
     width: 120,
@@ -889,7 +903,7 @@ const columns = computed<TableColumnsType>(() => [
     customRender: ({ record }: { record: any }) => getCustomerSatisfactionSurveyField(record, 'qualityScore') ?? ''
   },
   {
-    title: t('entity.customersatisfactionsurvey.deliveryscore'),
+    title: pi.label('deliveryScore'),
     dataIndex: 'deliveryScore',
     key: 'deliveryScore',
     width: 120,
@@ -898,7 +912,7 @@ const columns = computed<TableColumnsType>(() => [
     customRender: ({ record }: { record: any }) => getCustomerSatisfactionSurveyField(record, 'deliveryScore') ?? ''
   },
   {
-    title: t('entity.customersatisfactionsurvey.servicescore'),
+    title: pi.label('serviceScore'),
     dataIndex: 'serviceScore',
     key: 'serviceScore',
     width: 120,
@@ -907,7 +921,7 @@ const columns = computed<TableColumnsType>(() => [
     customRender: ({ record }: { record: any }) => getCustomerSatisfactionSurveyField(record, 'serviceScore') ?? ''
   },
   {
-    title: t('entity.customersatisfactionsurvey.pricescore'),
+    title: pi.label('priceScore'),
     dataIndex: 'priceScore',
     key: 'priceScore',
     width: 120,
@@ -916,7 +930,7 @@ const columns = computed<TableColumnsType>(() => [
     customRender: ({ record }: { record: any }) => getCustomerSatisfactionSurveyField(record, 'priceScore') ?? ''
   },
   {
-    title: t('entity.customersatisfactionsurvey.technicalscore'),
+    title: pi.label('technicalScore'),
     dataIndex: 'technicalScore',
     key: 'technicalScore',
     width: 120,
@@ -925,7 +939,7 @@ const columns = computed<TableColumnsType>(() => [
     customRender: ({ record }: { record: any }) => getCustomerSatisfactionSurveyField(record, 'technicalScore') ?? ''
   },
   {
-    title: t('entity.customersatisfactionsurvey.customerpraise'),
+    title: pi.label('customerPraise'),
     dataIndex: 'customerPraise',
     key: 'customerPraise',
     width: 120,
@@ -934,7 +948,7 @@ const columns = computed<TableColumnsType>(() => [
     customRender: ({ record }: { record: any }) => getCustomerSatisfactionSurveyField(record, 'customerPraise') ?? ''
   },
   {
-    title: t('entity.customersatisfactionsurvey.customerfeedback'),
+    title: pi.label('customerFeedback'),
     dataIndex: 'customerFeedback',
     key: 'customerFeedback',
     width: 120,
@@ -943,7 +957,7 @@ const columns = computed<TableColumnsType>(() => [
     customRender: ({ record }: { record: any }) => getCustomerSatisfactionSurveyField(record, 'customerFeedback') ?? ''
   },
   {
-    title: t('entity.customersatisfactionsurvey.improvementplan'),
+    title: pi.label('improvementPlan'),
     dataIndex: 'improvementPlan',
     key: 'improvementPlan',
     width: 120,
@@ -952,25 +966,7 @@ const columns = computed<TableColumnsType>(() => [
     customRender: ({ record }: { record: any }) => getCustomerSatisfactionSurveyField(record, 'improvementPlan') ?? ''
   },
   {
-    title: t('entity.customersatisfactionsurvey.surveystatus'),
-    dataIndex: 'surveyStatus',
-    key: 'surveyStatus',
-    width: 120,
-    resizable: true,
-    ellipsis: true,
-    customRender: ({ record }: { record: any }) => getCustomerSatisfactionSurveyField(record, 'surveyStatus') ?? ''
-  },
-  {
-    title: t('entity.customersatisfactionsurvey.followupstatus'),
-    dataIndex: 'followUpStatus',
-    key: 'followUpStatus',
-    width: 120,
-    resizable: true,
-    ellipsis: true,
-    customRender: ({ record }: { record: any }) => getCustomerSatisfactionSurveyField(record, 'followUpStatus') ?? ''
-  },
-  {
-    title: t('entity.customersatisfactionsurvey.relatedcomplaintid'),
+    title: pi.label('relatedComplaintId'),
     dataIndex: 'relatedComplaintId',
     key: 'relatedComplaintId',
     width: 120,
@@ -979,13 +975,38 @@ const columns = computed<TableColumnsType>(() => [
     customRender: ({ record }: { record: any }) => getCustomerSatisfactionSurveyField(record, 'relatedComplaintId') ?? ''
   },
   {
-    title: t('entity.customersatisfactionsurvey.relatedplant'),
+    title: pi.label('attachments'),
+    dataIndex: 'attachments',
+    key: 'attachments',
+    width: 120,
+    resizable: true,
+    ellipsis: true,
+    customRender: ({ record }: { record: any }) => getCustomerSatisfactionSurveyField(record, 'attachments') ?? ''
+  },
+  {
+    title: pi.label('surveyStatus'),
+    dataIndex: 'surveyStatus',
+    key: 'surveyStatus',
+    width: 120,
+    resizable: true,
+    ellipsis: true,
+  },
+  {
+    title: pi.label('relatedPlant'),
     dataIndex: 'relatedPlant',
     key: 'relatedPlant',
     width: 120,
     resizable: true,
     ellipsis: true,
     customRender: ({ record }: { record: any }) => getCustomerSatisfactionSurveyField(record, 'relatedPlant') ?? ''
+  },
+  {
+    title: pi.label('followUpStatus'),
+    dataIndex: 'followUpStatus',
+    key: 'followUpStatus',
+    width: 120,
+    resizable: true,
+    ellipsis: true,
   },
   CreateActionColumn({
     actions: [
@@ -995,7 +1016,7 @@ const columns = computed<TableColumnsType>(() => [
         shape: 'plain',
         icon: RiEditLine,
         permission: 'logistics:quality:complaint:customer:satisfaction:survey:update',
-        onClick: (record: CustomerSatisfactionSurvey) => handleEdit(record)
+        onClick: (record: CustomerSatisfactionSurveyRowRecord) => handleEdit(record)
       },
       {
         key: 'delete',
@@ -1003,26 +1024,44 @@ const columns = computed<TableColumnsType>(() => [
         shape: 'plain',
         icon: RiDeleteBinLine,
         permission: 'logistics:quality:complaint:customer:satisfaction:survey:delete',
-        onClick: (record: CustomerSatisfactionSurvey) => handleDeleteOne(record)
+        onClick: (record: CustomerSatisfactionSurveyRowRecord) => handleDeleteOne(record)
       }
     ]
   })
 ])
 
 /** 表格 row-key（优先实体主键字段） */
-const getCustomerSatisfactionSurveyId = (record: any): string => record?.[entityIdName] ?? ''
+const getCustomerSatisfactionSurveyId = (record: CustomerSatisfactionSurveyRowRecord): string => {
+  const id = (record as Record<string, unknown>)?.[entityIdName]
+  return id != null ? String(id) : ''
+}
 /**
  * 读取行字段值
  * @param record 行数据
  * @param field 字段名
  */
 const getCustomerSatisfactionSurveyField = (record: any, field: string): any => record?.[field]
+/**
+ * 供 TaktDictTag 等组件使用的标量字典值
+ * @param record 行数据
+ * @param field 字段名
+ */
+const getCustomerSatisfactionSurveyDictValue = (
+  record: CustomerSatisfactionSurveyRowRecord,
+  field: string,
+): string | number | undefined => {
+  const value = (record as Record<string, unknown>)?.[field]
+  if (value === null || value === undefined) return undefined
+  if (typeof value === 'string' || typeof value === 'number') return value
+  return String(value)
+}
+
 
 
 /** 行选择配置 */
 const rowSelection = computed(() => ({
   selectedRowKeys: selectedRowKeys.value,
-  onChange: (keys: (string | number)[], rows: CustomerSatisfactionSurvey[]) => {
+  onChange: (keys: (string | number)[], rows: CustomerSatisfactionSurveyRowRecord[]) => {
     selectedRowKeys.value = keys
     selectedRows.value = rows
     selectedRow.value = rows.length === 1 ? (rows[0] ?? null) : null
@@ -1032,7 +1071,7 @@ const rowSelection = computed(() => ({
       syncMasterSelection(null)
     }
   },
-  onSelect: (record: CustomerSatisfactionSurvey, selected: boolean) => {
+  onSelect: (record: CustomerSatisfactionSurveyRowRecord, selected: boolean) => {
     if (selected) {
       selectedRow.value = record
       syncMasterSelection(record)
@@ -1041,7 +1080,7 @@ const rowSelection = computed(() => ({
       syncMasterSelection(null)
     }
   },
-  onSelectAll: (selected: boolean, selectedRowsData: CustomerSatisfactionSurvey[]) => {
+  onSelectAll: (selected: boolean, selectedRowsData: CustomerSatisfactionSurveyRowRecord[]) => {
     selectedRow.value = selected && selectedRowsData.length === 1 ? (selectedRowsData[0] ?? null) : null
     syncMasterSelection(selectedRow.value)
   }
@@ -1079,7 +1118,7 @@ function handleReset() {
   advancedQueryForm.value = {
   customerSatisfactionSurveyCode: '',
   customerId: '',
-  customerName: '',
+  customerName1: '',
   customerCode: '',
   surveyDateStart: '',
   surveyDateEnd: '',
@@ -1099,10 +1138,11 @@ function handleReset() {
   customerPraise: '',
   customerFeedback: '',
   improvementPlan: '',
-  surveyStatus: undefined as number | undefined,
-  followUpStatus: undefined as number | undefined,
   relatedComplaintId: '',
+  attachments: '',
+  surveyStatus: undefined as number | undefined,
   relatedPlant: '',
+  followUpStatus: undefined as number | undefined,
   createdAtStart: '',
   createdAtEnd: '',
   extField: '',
@@ -1114,14 +1154,14 @@ function handleReset() {
 
 /** 打开新增弹窗 */
 function handleCreate() {
-  formTitle.value = t('common.dialog.title.create', { entity: t('entity.customersatisfactionsurvey._self') })
+  formTitle.value = t('common.dialog.title.create', { entity: pi.self() })
   formData.value = null
   formVisible.value = true
   nextTick(() => formRef.value?.resetFields())
 }
 /** 打开编辑弹窗（主子表：先拉详情含子表） */
-async function handleEdit(record: CustomerSatisfactionSurvey) {
-  formTitle.value = t('common.dialog.title.edit', { entity: t('entity.customersatisfactionsurvey._self') })
+async function handleEdit(record: CustomerSatisfactionSurveyRowRecord) {
+  formTitle.value = t('common.dialog.title.edit', { entity: pi.self() })
   formLoading.value = true
   try {
     const detail = await loadCustomerSatisfactionSurveyDetail(record)
@@ -1137,7 +1177,7 @@ function handleUpdate() {
   if (selectedRow.value) {
     void handleEdit(selectedRow.value)
   } else {
-    message.warning(t('common.tip.select.to.action', { action: t('common.page.button.edit'), entity: t('entity.customersatisfactionsurvey._self') }))
+    message.warning(t('common.tip.select.to.action', { action: t('common.page.button.edit'), entity: pi.self() }))
   }
 }
 /** 提交新增/编辑表单 */
@@ -1155,10 +1195,10 @@ async function handleFormSubmit() {
     const id = (formData.value as any)?.[entityIdName]
     if (id) {
       await updateCustomerSatisfactionSurvey(id, payload as any)
-      message.success(t('common.feedback.updated', { target: t('entity.customersatisfactionsurvey._self') }))
+      message.success(t('common.feedback.updated', { target: pi.self() }))
     } else {
       await createCustomerSatisfactionSurvey(payload as any)
-      message.success(t('common.feedback.created', { target: t('entity.customersatisfactionsurvey._self') }))
+      message.success(t('common.feedback.created', { target: pi.self() }))
     }
     formVisible.value = false
     formData.value = null
@@ -1189,15 +1229,22 @@ async function handleDownloadTemplate(sheetName?: string, fileName?: string): Pr
   return (res as any)?.data ?? res
 }
 
-/** 上传并导入 Excel 文件 */
-async function handleImportFile(file: File, sheetName?: string): Promise<{ success: number; fail: number; errors: string[] }> {
-  return await importCustomerSatisfactionSurvey(file, sheetName)
+/** 上传并导入 Excel 文件（归一化后端 SuccessCount/successCount） */
+async function handleImportFile(file: File, sheetName?: string): Promise<TaktImportResult> {
+  const raw = await importCustomerSatisfactionSurvey(file, sheetName)
+  return normalizeImportResult(raw)
 }
 
-/** 导入完成回调：刷新列表并可选关闭对话框 */
-function handleImportSuccess(result: { success: number; fail: number; errors: string[] }) {
+/** 导入完成回调：刷新列表；全部成功时延迟关闭对话框 */
+function handleImportSuccess(result: TaktImportResult) {
   loadData()
-  if (result.fail === 0) setTimeout(() => { importVisible.value = false }, 2000)
+
+      if (selectedMasterKey.value) {
+    customerSatisfactionSurveyItemPanelRef.value?.reload?.()
+      }
+  if (result.fail === 0 && result.success > 0) {
+    setTimeout(() => { importVisible.value = false }, 2000)
+  }
 }
 
 /** 关闭导入对话框 */
@@ -1231,24 +1278,24 @@ async function handleExport() {
     link.click()
     document.body.removeChild(link)
     setTimeout(() => window.URL.revokeObjectURL(url), 100)
-    message.success(t('common.feedback.export.success', { target: t('entity.customersatisfactionsurvey._self') }))
+    message.success(t('common.feedback.export.success', { target: pi.self() }))
   } catch (error: any) {
     logger.error('[CustomerSatisfactionSurvey] 导出失败', { error })
-    message.error(error?.message || t('common.feedback.export.failed', { target: t('entity.customersatisfactionsurvey._self') }))
+    message.error(error?.message || t('common.feedback.export.failed', { target: pi.self() }))
   } finally {
     loading.value = false
   }
 }
 /** 删除单行 */
-async function handleDeleteOne(record: CustomerSatisfactionSurvey) {
+async function handleDeleteOne(record: CustomerSatisfactionSurveyRowRecord) {
   Modal.confirm({
     title: t('common.tip.confirm.delete.title'),
-    content: t('common.tip.confirm.delete.entity', { entity: t('entity.customersatisfactionsurvey._self'), name: t('common.tip.this.target', { target: t('entity.customersatisfactionsurvey._self') }) }),
+    content: t('common.tip.confirm.delete.entity', { entity: pi.self(), name: t('common.tip.this.target', { target: pi.self() }) }),
     okText: t('common.page.button.delete'),
     cancelText: t('common.page.button.cancel'),
     onOk: async () => {
       await deleteCustomerSatisfactionSurveyById((record as any)[entityIdName])
-      message.success(t('common.feedback.deleted', { target: t('entity.customersatisfactionsurvey._self') }))
+      message.success(t('common.feedback.deleted', { target: pi.self() }))
       selectedRowKeys.value = []
       selectedRows.value = []
       selectedRow.value = null
@@ -1260,18 +1307,18 @@ async function handleDeleteOne(record: CustomerSatisfactionSurvey) {
 /** 批量删除选中行 */
 async function handleDelete() {
   if (selectedRows.value.length === 0) {
-    message.warning(t('common.tip.select.to.action', { action: t('common.page.button.delete'), entity: t('entity.customersatisfactionsurvey._self') }))
+    message.warning(t('common.tip.select.to.action', { action: t('common.page.button.delete'), entity: pi.self() }))
     return
   }
   Modal.confirm({
     title: t('common.tip.confirm.delete.title'),
-    content: t('common.tip.confirm.delete.count', { entity: t('entity.customersatisfactionsurvey._self'), count: selectedRows.value.length }),
+    content: t('common.tip.confirm.delete.count', { entity: pi.self(), count: selectedRows.value.length }),
     okText: t('common.page.button.delete'),
     cancelText: t('common.page.button.cancel'),
     onOk: async () => {
       const ids = selectedRows.value.map((r: any) => r[entityIdName]).filter(Boolean)
       await deleteCustomerSatisfactionSurveyBatch(ids)
-      message.success(t('common.feedback.deleted', { target: t('entity.customersatisfactionsurvey._self') }))
+      message.success(t('common.feedback.deleted', { target: pi.self() }))
       selectedRowKeys.value = []
       selectedRows.value = []
       selectedRow.value = null
@@ -1296,7 +1343,7 @@ function handleAdvancedQueryReset() {
   advancedQueryForm.value = {
   customerSatisfactionSurveyCode: '',
   customerId: '',
-  customerName: '',
+  customerName1: '',
   customerCode: '',
   surveyDateStart: '',
   surveyDateEnd: '',
@@ -1316,10 +1363,11 @@ function handleAdvancedQueryReset() {
   customerPraise: '',
   customerFeedback: '',
   improvementPlan: '',
-  surveyStatus: undefined as number | undefined,
-  followUpStatus: undefined as number | undefined,
   relatedComplaintId: '',
+  attachments: '',
+  surveyStatus: undefined as number | undefined,
   relatedPlant: '',
+  followUpStatus: undefined as number | undefined,
   createdAtStart: '',
   createdAtEnd: '',
   extField: '',

@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Infrastructure.Data.Seeds.I18nSeedData.HumanResource.Training
 // 文件名称：TaktTrainingPlanI18nSeedData.cs
-// 创建时间：2026-07-20
+// 创建时间：2026-07-23
 // 创建人：Takt365(Auto Generated)
 // 功能描述：TaktTrainingPlan 实体字段国际化种子（无对应 frontend locales；TranslationText 取自 ColumnDescription，ContextNote 取自属性 XML summary）
 // 
@@ -190,13 +190,13 @@ public class TaktTrainingPlanI18nSeedData : ITaktSeedDataCoordinator
             new TranslationSeedItem("entity.trainingplan.description", "zh-HK", "计划说明_hk", "计划说明"),
 
             // entity.trainingplan.relatedplant
-            new TranslationSeedItem("entity.trainingplan.relatedplant", "en-US", "关联工厂_us", "关联工厂（选项 TaktPlants/options，DictValue=Id）"),
+            new TranslationSeedItem("entity.trainingplan.relatedplant", "en-US", "关联工厂_us", "关联工厂（选项 TaktPlants/options；DictValue=Id）"),
             // entity.trainingplan.relatedplant
-            new TranslationSeedItem("entity.trainingplan.relatedplant", "ja-JP", "关联工厂_jp", "关联工厂（选项 TaktPlants/options，DictValue=Id）"),
+            new TranslationSeedItem("entity.trainingplan.relatedplant", "ja-JP", "关联工厂_jp", "关联工厂（选项 TaktPlants/options；DictValue=Id）"),
             // entity.trainingplan.relatedplant
-            new TranslationSeedItem("entity.trainingplan.relatedplant", "zh-CN", "关联工厂", "关联工厂（选项 TaktPlants/options，DictValue=Id）"),
+            new TranslationSeedItem("entity.trainingplan.relatedplant", "zh-CN", "关联工厂", "关联工厂（选项 TaktPlants/options；DictValue=Id）"),
             // entity.trainingplan.relatedplant
-            new TranslationSeedItem("entity.trainingplan.relatedplant", "zh-HK", "关联工厂_hk", "关联工厂（选项 TaktPlants/options，DictValue=Id）"),
+            new TranslationSeedItem("entity.trainingplan.relatedplant", "zh-HK", "关联工厂_hk", "关联工厂（选项 TaktPlants/options；DictValue=Id）"),
 
             // entity.trainingplan.status
             new TranslationSeedItem("entity.trainingplan.status", "en-US", "业务状态_us", "计划业务状态（字典 sys_normal_disable_status；1=启用 0=禁用）"),

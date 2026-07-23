@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Application.Services.Logistics.Manufacturing.Mrp
 // 文件名称：TaktPurchasePlanService.cs
-// 创建时间：2026-07-13
+// 创建时间：2026-07-23
 // 创建人：Takt365(Cursor AI)
 // 功能描述：采购计划应用服务实现
 // 
@@ -102,12 +102,12 @@ public class TaktPurchasePlanService : TaktServiceBase, ITaktPurchasePlanService
         EnsureThreeLayerContext();
         var list = await _purchasePlanRepository.GetListAsync(
             x => x.TenantCode == CurrentTenantCode && x.CompanyCode == CurrentCompanyCode && x.PlanStatus == 1,
-            x => x.PlantCode ?? string.Empty,
+            x => x.PurchasePlanCode ?? string.Empty,
             false);
         return list.Select(e => new TaktSelectOption
         {
-            DictValue = e.Id,
-            DictLabel = e.PlantCode ?? e.Id.ToString(),
+            DictValue = e.PurchasePlanCode,
+            DictLabel = e.PurchasePlanCode,
         }).ToList();
     }
 
@@ -359,9 +359,9 @@ public class TaktPurchasePlanService : TaktServiceBase, ITaktPurchasePlanService
     {
         // 采购计划明细（Items）
         List<TaktPurchasePlanItemUpdateDto>? itemsForSave;
-        if (dto is TaktPurchasePlanUpdateDto updateDto && updateDto.Items != null)
+        if (dto is TaktPurchasePlanUpdateDto updateDtoForItems && updateDtoForItems.Items != null)
         {
-            itemsForSave = updateDto.Items;
+            itemsForSave = updateDtoForItems.Items;
         }
         else if (dto.Items != null)
         {

@@ -24,7 +24,7 @@ namespace Takt.Domain.Entities.HumanResource.Compensation;
 public class TaktEmpSalary : TaktCompanyEntityBase
 {
     /// <summary>
-    /// 员工（选项 TaktEmployees/options，DictValue=Id）
+    /// 员工（选项 TaktEmployees/options；DictValue=Id）
     /// </summary>
     [SugarColumn(ColumnName = "employee_id", ColumnDescription = "员工ID", ColumnDataType = "bigint", IsNullable = false)]
     [JsonConverter(typeof(ValueToStringConverter))]
@@ -35,13 +35,13 @@ public class TaktEmpSalary : TaktCompanyEntityBase
     [SugarColumn(ColumnName = "employee_name", ColumnDescription = "员工姓名", ColumnDataType = "nvarchar", Length = 50, IsNullable = false)]
     public string EmployeeName { get; set; } = string.Empty;
     /// <summary>
-    /// 薪酬体系（选项 TaktPayrolls/options，DictValue=Id）
+    /// 薪酬体系（选项 TaktPayrolls/options；DictValue=Id）
     /// </summary>
     [SugarColumn(ColumnName = "payroll_id", ColumnDescription = "薪酬体系ID", ColumnDataType = "bigint", IsNullable = true)]
     [JsonConverter(typeof(ValueToStringConverter))]
     public long? PayrollId { get; set; }
     /// <summary>
-    /// 薪级（选项 TaktPayScales/options，DictValue=Id）
+    /// 薪级（选项 TaktPayScales/options；DictValue=Id）
     /// </summary>
     [SugarColumn(ColumnName = "pay_scale_id", ColumnDescription = "薪级ID", ColumnDataType = "bigint", IsNullable = true)]
     [JsonConverter(typeof(ValueToStringConverter))]
@@ -78,7 +78,7 @@ public class TaktEmpSalary : TaktCompanyEntityBase
     [SugarColumn(ColumnName = "effective_date", ColumnDescription = "生效日期", ColumnDataType = "date", IsNullable = false)]
     public DateTime EffectiveDate { get; set; }
     /// <summary>
-    /// 关联工厂（选项 TaktPlants/options，DictValue=Id）
+    /// 关联工厂（选项 TaktPlants/options；DictValue=Id）
     /// </summary>
     [SugarColumn(ColumnName = "related_plant", ColumnDescription = "关联工厂", ColumnDataType = "nvarchar", Length = 4, IsNullable = false)]
     public string RelatedPlant { get; set; } = string.Empty;

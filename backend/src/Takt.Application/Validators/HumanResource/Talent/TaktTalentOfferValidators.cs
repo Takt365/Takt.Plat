@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Application.Validators.HumanResource.Talent
 // 文件名称：TaktTalentOfferValidators.cs
-// 创建时间：2026-07-20
+// 创建时间：2026-07-23
 // 创建人：Takt365(Auto Generated)
 // 功能描述：TalentOffer 模块 FluentValidation 验证器（由 generate-validators-from-entity.cjs 根据 TaktTalentOffer 生成，请按需审阅）
 // 
@@ -38,8 +38,8 @@ public class TaktTalentOfferCreateValidator : AbstractValidator<TaktTalentOfferC
         RuleFor(x => x.JobPostingId)
             .GreaterThanOrEqualTo(0).WithMessage("职位发布不能为负数");
         RuleFor(x => x.OfferNo)
-            .NotEmpty().WithMessage("录用编号不能为空")
-            .MaximumLength(20).WithMessage("录用编号长度不能超过20个字符");
+            .NotEmpty().WithMessage("录用编码不能为空")
+            .MaximumLength(20).WithMessage("录用编码长度不能超过20个字符");
         RuleFor(x => x.EmployeeId)
             .GreaterThanOrEqualTo(0).WithMessage("关联员工不能为负数");
         RuleFor(x => x.DeptId)
@@ -81,8 +81,8 @@ public class TaktTalentOfferUpdateValidator : AbstractValidator<TaktTalentOfferU
         RuleFor(x => x.JobPostingId)
             .GreaterThanOrEqualTo(0).WithMessage("职位发布不能为负数");
         RuleFor(x => x.OfferNo)
-            .NotEmpty().WithMessage("录用编号不能为空")
-            .MaximumLength(20).WithMessage("录用编号长度不能超过20个字符");
+            .NotEmpty().WithMessage("录用编码不能为空")
+            .MaximumLength(20).WithMessage("录用编码长度不能超过20个字符");
         RuleFor(x => x.EmployeeId)
             .GreaterThanOrEqualTo(0).WithMessage("关联员工不能为负数");
         RuleFor(x => x.DeptId)
@@ -120,8 +120,8 @@ public class TaktTalentOfferImportValidator : AbstractValidator<TaktTalentOfferI
         RuleFor(x => x.JobPostingId)
             .GreaterThanOrEqualTo(0).WithMessage("职位发布不能为负数");
         RuleFor(x => x.OfferNo)
-            .NotEmpty().WithMessage("录用编号不能为空")
-            .MaximumLength(20).WithMessage("录用编号长度不能超过20个字符");
+            .NotEmpty().WithMessage("录用编码不能为空")
+            .MaximumLength(20).WithMessage("录用编码长度不能超过20个字符");
         RuleFor(x => x.EmployeeId)
             .GreaterThanOrEqualTo(0).WithMessage("关联员工不能为负数");
         RuleFor(x => x.DeptId)

@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Application.Services.Logistics.Procurement
 // 文件名称：TaktPurchaseInquiryItemService.cs
-// 创建时间：2026-07-09
+// 创建时间：2026-07-23
 // 创建人：Takt365(Cursor AI)
 // 功能描述：采购询价明细应用服务实现
 // 
@@ -96,13 +96,13 @@ public class TaktPurchaseInquiryItemService : TaktServiceBase, ITaktPurchaseInqu
     {
         EnsureThreeLayerContext();
         var list = await _purchaseInquiryItemRepository.GetListAsync(
-            x => x.TenantCode == CurrentTenantCode && x.CompanyCode == CurrentCompanyCode,
+            x => x.TenantCode == CurrentTenantCode && x.CompanyCode == CurrentCompanyCode && x.IsObsolete == 0,
             x => x.MaterialName ?? string.Empty,
             false);
         return list.Select(e => new TaktSelectOption
         {
-            DictValue = e.Id,
-            DictLabel = e.MaterialName ?? e.Id.ToString(),
+            DictValue = e.PurchaseInquiryCode,
+            DictLabel = e.MaterialName ?? e.PurchaseInquiryCode,
         }).ToList();
     }
 
@@ -359,9 +359,9 @@ public class TaktPurchaseInquiryItemService : TaktServiceBase, ITaktPurchaseInqu
                 || SqlFunc.ToString(x.InquiryQuantity).Contains(keywords)
                 || SqlFunc.ToString(x.PurchasePerUnit).Contains(keywords)
                 || SqlFunc.ToString(x.QuotedUnitPrice).Contains(keywords)
-                || SqlFunc.ToString(x.QuotedAmount).Contains(keywords)
-                || (x.TargetSupplierCode != null && x.TargetSupplierCode.Contains(keywords))
-                || (x.TargetSupplierName != null && x.TargetSupplierName.Contains(keywords))
+                || SqlFunc.ToString(x.TaxIncludedAmount).Contains(keywords)
+                || SqlFunc.ToString(x.UntaxedAmount).Contains(keywords)
+                || SqlFunc.ToString(x.TaxAmount).Contains(keywords)
                 || (x.ExtField != null && x.ExtField.Contains(keywords))
                 || (x.Remark != null && x.Remark.Contains(keywords))
                 || SqlFunc.ToString(x.CreatedAt).Contains(keywords)
@@ -423,19 +423,19 @@ public class TaktPurchaseInquiryItemService : TaktServiceBase, ITaktPurchaseInqu
             exp = exp.And(x => x.QuotedUnitPrice == queryDto.QuotedUnitPrice);
         }
 
-        if (queryDto?.QuotedAmount.HasValue == true)
+        if (queryDto?.TaxIncludedAmount.HasValue == true)
         {
-            exp = exp.And(x => x.QuotedAmount == queryDto.QuotedAmount);
+            exp = exp.And(x => x.TaxIncludedAmount == queryDto.TaxIncludedAmount);
         }
 
-        if (!string.IsNullOrEmpty(queryDto?.TargetSupplierCode))
+        if (queryDto?.UntaxedAmount.HasValue == true)
         {
-            exp = exp.And(x => x.TargetSupplierCode != null && x.TargetSupplierCode.Contains(queryDto.TargetSupplierCode));
+            exp = exp.And(x => x.UntaxedAmount == queryDto.UntaxedAmount);
         }
 
-        if (!string.IsNullOrEmpty(queryDto?.TargetSupplierName))
+        if (queryDto?.TaxAmount.HasValue == true)
         {
-            exp = exp.And(x => x.TargetSupplierName != null && x.TargetSupplierName.Contains(queryDto.TargetSupplierName));
+            exp = exp.And(x => x.TaxAmount == queryDto.TaxAmount);
         }
 
         if (!string.IsNullOrEmpty(queryDto?.ExtField))

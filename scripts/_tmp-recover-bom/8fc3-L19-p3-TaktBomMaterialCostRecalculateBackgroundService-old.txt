@@ -1,0 +1,3 @@
+                ScannedRowCount = result?.ScannedRowCount ?? 0,
+                PatchedModelCodeRowCount = result?.PatchedModelCodeRowCount ?? 0,
+                RefreshedGroupCount = result?.RefreshedGroupCount ?? 0,

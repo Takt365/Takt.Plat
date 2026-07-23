@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：frontend/src/types/logistics/procurement
 // 文件名称：purchase-inquiry.d.ts
-// 创建时间：2026-06-24
+// 创建时间：2026-07-23
 // 创建人：Takt365(Auto Generated)
 // 功能描述：logistics/procurement 模块类型定义（自动生成；类型名去 Takt 前缀与末尾 Dto，如 TaktCompanyDto → Company）
 // 
@@ -11,25 +11,25 @@
 // ========================================
 
 import type {
-  ApprovalDtoBase,
+  CompanyDtoBase,
   TaktPagedQuery
 } from '@/types/common';
 
 /**
  * 采购询价实体
  * 对应前端 TaktPurchaseInquiryDto
- * 继承 TaktApprovalDtoBase
+ * 继承 TaktCompanyDtoBase
  * 对应前端 PurchaseInquiry
  * @description 对应后端 TaktPurchaseInquiryDto
  */
-export interface PurchaseInquiry extends ApprovalDtoBase {
+export interface PurchaseInquiry extends CompanyDtoBase {
   /**
    * PurchaseInquiryID（适配实体 Id，序列化为 string 以避免 Javascript 精度问题）
    */
   purchaseInquiryId: string;
 
   /**
-   * 工厂代码
+   * 工厂代码（选项 TaktPlants/options；DictValue=PlantCode）
    */
   plantCode: string;
 
@@ -49,7 +49,7 @@ export interface PurchaseInquiry extends ApprovalDtoBase {
   quoteDeadlineDate?: string;
 
   /**
-   * 询价人员工 ID（关联 TaktEmployee）
+   * 询价人员工 ID（选项 TaktEmployees/options；DictValue=Id）
    */
   inquiryId?: string;
 
@@ -64,14 +64,39 @@ export interface PurchaseInquiry extends ApprovalDtoBase {
   inquiryBy: string;
 
   /**
-   * 询价供应商编码
+   * 询价供应商编码（选项 TaktSuppliers/options；DictValue=SupplierCode；一单一供应商，明细禁止再挂供应商）
    */
-  supplierCode?: string;
+  supplierCode: string;
 
   /**
-   * 询价供应商名称
+   * 询价供应商名称1（冗余，与 TaktSupplier.SupplierName1 对齐）
    */
-  supplierName?: string;
+  supplierName1: string;
+
+  /**
+   * 结算币种（字典 accounting_currency_code；DictValue=CNY/USD 等；一单一币种）
+   */
+  currencyCode: string;
+
+  /**
+   * 税率（字典 accounting_tax_rate_param；13=13%，9=9%，0=0% 等；一单一税率）
+   */
+  taxRate: number;
+
+  /**
+   * 税费
+   */
+  taxAmount: number;
+
+  /**
+   * 付款方式（字典 logistics_payment_mode：vendorpay=供应商付款，employeereimburse=员工报销）
+   */
+  paymentMode: string;
+
+  /**
+   * 采购链路方案（字典 logistics_procurement_chain_scheme；1=方案一含报销，2=方案二仅 PO）
+   */
+  chainScheme: number;
 
   /**
    * 询价总数量（基本单位数量）
@@ -99,7 +124,7 @@ export interface PurchaseInquiry extends ApprovalDtoBase {
   inquiryReason?: string;
 
   /**
-   * 询价状态（字典 sys_normal_disable：1=启用，0=禁用）
+   * 询价状态（字典 sys_normal_disable_status；1=启用，0=禁用）
    */
   inquiryStatus: number;
 
@@ -134,7 +159,7 @@ export interface PurchaseInquiryQuery extends TaktPagedQuery {
   companyCode?: string;
 
   /**
-   * 工厂代码
+   * 工厂代码（选项 TaktPlants/options；DictValue=PlantCode）
    */
   plantCode?: string;
 
@@ -164,7 +189,7 @@ export interface PurchaseInquiryQuery extends TaktPagedQuery {
   quoteDeadlineDateEnd?: string;
 
   /**
-   * 询价人员工 ID（关联 TaktEmployee）
+   * 询价人员工 ID（选项 TaktEmployees/options；DictValue=Id）
    */
   inquiryId?: string;
 
@@ -174,14 +199,39 @@ export interface PurchaseInquiryQuery extends TaktPagedQuery {
   inquiryBy?: string;
 
   /**
-   * 询价供应商编码
+   * 询价供应商编码（选项 TaktSuppliers/options；DictValue=SupplierCode；一单一供应商，明细禁止再挂供应商）
    */
   supplierCode?: string;
 
   /**
-   * 询价供应商名称
+   * 询价供应商名称1（冗余，与 TaktSupplier.SupplierName1 对齐）
    */
-  supplierName?: string;
+  supplierName1?: string;
+
+  /**
+   * 结算币种（字典 accounting_currency_code；DictValue=CNY/USD 等；一单一币种）
+   */
+  currencyCode?: string;
+
+  /**
+   * 税率（字典 accounting_tax_rate_param；13=13%，9=9%，0=0% 等；一单一税率）
+   */
+  taxRate?: number;
+
+  /**
+   * 税费
+   */
+  taxAmount?: number;
+
+  /**
+   * 付款方式（字典 logistics_payment_mode：vendorpay=供应商付款，employeereimburse=员工报销）
+   */
+  paymentMode?: string;
+
+  /**
+   * 采购链路方案（字典 logistics_procurement_chain_scheme；1=方案一含报销，2=方案二仅 PO）
+   */
+  chainScheme?: number;
 
   /**
    * 询价总数量（基本单位数量）
@@ -209,7 +259,7 @@ export interface PurchaseInquiryQuery extends TaktPagedQuery {
   inquiryReason?: string;
 
   /**
-   * 询价状态（字典 sys_normal_disable：1=启用，0=禁用）
+   * 询价状态（字典 sys_normal_disable_status；1=启用，0=禁用）
    */
   inquiryStatus?: number;
 
@@ -217,46 +267,6 @@ export interface PurchaseInquiryQuery extends TaktPagedQuery {
    * 转价格状态（字典 sys_convert_status；0=未转换，1=部分转换，2=全部转换）
    */
   convertedStatus?: number;
-
-  /**
-   * 审批状态（字典 sys_approval_status；与 TaktApprovalEntityBase.ApprovalStatus 一致）
-   */
-  approvalStatus?: number;
-
-  /**
-   * 发起人ID
-   */
-  initiatorId?: string;
-
-  /**
-   * 发起时间（范围查询-开始）
-   */
-  initiatedAtStart?: string;
-
-  /**
-   * 发起时间（范围查询-结束）
-   */
-  initiatedAtEnd?: string;
-
-  /**
-   * 最终审批人ID
-   */
-  approvedBy?: string;
-
-  /**
-   * 最终审批时间（范围查询-开始）
-   */
-  approvedAtStart?: string;
-
-  /**
-   * 最终审批时间（范围查询-结束）
-   */
-  approvedAtEnd?: string;
-
-  /**
-   * 流程实例 ID
-   */
-  flowInstanceId?: string;
 
   /**
    * 创建时间（范围查询-开始）
@@ -303,7 +313,7 @@ export interface PurchaseInquiryCreate {
   companyDefaultCulture: string;
 
   /**
-   * 工厂代码
+   * 工厂代码（选项 TaktPlants/options；DictValue=PlantCode）
    */
   plantCode: string;
 
@@ -323,7 +333,7 @@ export interface PurchaseInquiryCreate {
   quoteDeadlineDate?: string;
 
   /**
-   * 询价人员工 ID（关联 TaktEmployee）
+   * 询价人员工 ID（选项 TaktEmployees/options；DictValue=Id）
    */
   inquiryId?: string;
 
@@ -333,14 +343,39 @@ export interface PurchaseInquiryCreate {
   inquiryBy: string;
 
   /**
-   * 询价供应商编码
+   * 询价供应商编码（选项 TaktSuppliers/options；DictValue=SupplierCode；一单一供应商，明细禁止再挂供应商）
    */
-  supplierCode?: string;
+  supplierCode: string;
 
   /**
-   * 询价供应商名称
+   * 询价供应商名称1（冗余，与 TaktSupplier.SupplierName1 对齐）
    */
-  supplierName?: string;
+  supplierName1: string;
+
+  /**
+   * 结算币种（字典 accounting_currency_code；DictValue=CNY/USD 等；一单一币种）
+   */
+  currencyCode: string;
+
+  /**
+   * 税率（字典 accounting_tax_rate_param；13=13%，9=9%，0=0% 等；一单一税率）
+   */
+  taxRate: number;
+
+  /**
+   * 税费
+   */
+  taxAmount: number;
+
+  /**
+   * 付款方式（字典 logistics_payment_mode：vendorpay=供应商付款，employeereimburse=员工报销）
+   */
+  paymentMode: string;
+
+  /**
+   * 采购链路方案（字典 logistics_procurement_chain_scheme；1=方案一含报销，2=方案二仅 PO）
+   */
+  chainScheme: number;
 
   /**
    * 询价总数量（基本单位数量）
@@ -368,7 +403,7 @@ export interface PurchaseInquiryCreate {
   inquiryReason?: string;
 
   /**
-   * 询价状态（字典 sys_normal_disable：1=启用，0=禁用）
+   * 询价状态（字典 sys_normal_disable_status；1=启用，0=禁用）
    */
   inquiryStatus: number;
 
@@ -407,6 +442,11 @@ export interface PurchaseInquiryUpdate extends PurchaseInquiryCreate {
    */
   purchaseInquiryId: string;
 
+  /**
+   * 采购询价明细列表（主子表关系）（子表，级联保存）
+   */
+  items?: any;
+
 }
 
 
@@ -422,7 +462,7 @@ export interface PurchaseInquiryStatus {
   purchaseInquiryId: string;
 
   /**
-   * 询价状态（字典 sys_normal_disable：1=启用，0=禁用）
+   * 询价状态（字典 sys_normal_disable_status；1=启用，0=禁用）
    */
   inquiryStatus: number;
 
@@ -446,7 +486,7 @@ export interface PurchaseInquiryTemplate {
   companyCode?: string;
 
   /**
-   * 工厂代码
+   * 工厂代码（选项 TaktPlants/options；DictValue=PlantCode）
    */
   plantCode?: string;
 
@@ -466,7 +506,7 @@ export interface PurchaseInquiryTemplate {
   quoteDeadlineDate?: string;
 
   /**
-   * 询价人员工 ID（关联 TaktEmployee）
+   * 询价人员工 ID（选项 TaktEmployees/options；DictValue=Id）
    */
   inquiryId?: string;
 
@@ -476,14 +516,39 @@ export interface PurchaseInquiryTemplate {
   inquiryBy?: string;
 
   /**
-   * 询价供应商编码
+   * 询价供应商编码（选项 TaktSuppliers/options；DictValue=SupplierCode；一单一供应商，明细禁止再挂供应商）
    */
   supplierCode?: string;
 
   /**
-   * 询价供应商名称
+   * 询价供应商名称1（冗余，与 TaktSupplier.SupplierName1 对齐）
    */
-  supplierName?: string;
+  supplierName1?: string;
+
+  /**
+   * 结算币种（字典 accounting_currency_code；DictValue=CNY/USD 等；一单一币种）
+   */
+  currencyCode?: string;
+
+  /**
+   * 税率（字典 accounting_tax_rate_param；13=13%，9=9%，0=0% 等；一单一税率）
+   */
+  taxRate?: number;
+
+  /**
+   * 税费
+   */
+  taxAmount?: number;
+
+  /**
+   * 付款方式（字典 logistics_payment_mode：vendorpay=供应商付款，employeereimburse=员工报销）
+   */
+  paymentMode?: string;
+
+  /**
+   * 采购链路方案（字典 logistics_procurement_chain_scheme；1=方案一含报销，2=方案二仅 PO）
+   */
+  chainScheme?: number;
 
   /**
    * 询价总数量（基本单位数量）
@@ -511,7 +576,7 @@ export interface PurchaseInquiryTemplate {
   inquiryReason?: string;
 
   /**
-   * 询价状态（字典 sys_normal_disable：1=启用，0=禁用）
+   * 询价状态（字典 sys_normal_disable_status；1=启用，0=禁用）
    */
   inquiryStatus?: number;
 
@@ -560,7 +625,7 @@ export interface PurchaseInquiryImport {
   companyDefaultCulture?: string;
 
   /**
-   * 工厂代码
+   * 工厂代码（选项 TaktPlants/options；DictValue=PlantCode）
    */
   plantCode?: string;
 
@@ -580,7 +645,7 @@ export interface PurchaseInquiryImport {
   quoteDeadlineDate?: string;
 
   /**
-   * 询价人员工 ID（关联 TaktEmployee）
+   * 询价人员工 ID（选项 TaktEmployees/options；DictValue=Id）
    */
   inquiryId?: string;
 
@@ -590,14 +655,39 @@ export interface PurchaseInquiryImport {
   inquiryBy?: string;
 
   /**
-   * 询价供应商编码
+   * 询价供应商编码（选项 TaktSuppliers/options；DictValue=SupplierCode；一单一供应商，明细禁止再挂供应商）
    */
   supplierCode?: string;
 
   /**
-   * 询价供应商名称
+   * 询价供应商名称1（冗余，与 TaktSupplier.SupplierName1 对齐）
    */
-  supplierName?: string;
+  supplierName1?: string;
+
+  /**
+   * 结算币种（字典 accounting_currency_code；DictValue=CNY/USD 等；一单一币种）
+   */
+  currencyCode?: string;
+
+  /**
+   * 税率（字典 accounting_tax_rate_param；13=13%，9=9%，0=0% 等；一单一税率）
+   */
+  taxRate?: number;
+
+  /**
+   * 税费
+   */
+  taxAmount?: number;
+
+  /**
+   * 付款方式（字典 logistics_payment_mode：vendorpay=供应商付款，employeereimburse=员工报销）
+   */
+  paymentMode?: string;
+
+  /**
+   * 采购链路方案（字典 logistics_procurement_chain_scheme；1=方案一含报销，2=方案二仅 PO）
+   */
+  chainScheme?: number;
 
   /**
    * 询价总数量（基本单位数量）
@@ -625,7 +715,7 @@ export interface PurchaseInquiryImport {
   inquiryReason?: string;
 
   /**
-   * 询价状态（字典 sys_normal_disable：1=启用，0=禁用）
+   * 询价状态（字典 sys_normal_disable_status；1=启用，0=禁用）
    */
   inquiryStatus?: number;
 
@@ -664,7 +754,12 @@ export interface PurchaseInquiryExport {
   purchaseInquiryId: string;
 
   /**
-   * 工厂代码
+   * 公司代码
+   */
+  companyCode: string;
+
+  /**
+   * 工厂代码（选项 TaktPlants/options；DictValue=PlantCode）
    */
   plantCode: string;
 
@@ -684,7 +779,7 @@ export interface PurchaseInquiryExport {
   quoteDeadlineDate?: string;
 
   /**
-   * 询价人员工 ID（关联 TaktEmployee）
+   * 询价人员工 ID（选项 TaktEmployees/options；DictValue=Id）
    */
   inquiryId?: string;
 
@@ -694,14 +789,39 @@ export interface PurchaseInquiryExport {
   inquiryBy: string;
 
   /**
-   * 询价供应商编码
+   * 询价供应商编码（选项 TaktSuppliers/options；DictValue=SupplierCode；一单一供应商，明细禁止再挂供应商）
    */
-  supplierCode?: string;
+  supplierCode: string;
 
   /**
-   * 询价供应商名称
+   * 询价供应商名称1（冗余，与 TaktSupplier.SupplierName1 对齐）
    */
-  supplierName?: string;
+  supplierName1: string;
+
+  /**
+   * 结算币种（字典 accounting_currency_code；DictValue=CNY/USD 等；一单一币种）
+   */
+  currencyCode: string;
+
+  /**
+   * 税率（字典 accounting_tax_rate_param；13=13%，9=9%，0=0% 等；一单一税率）
+   */
+  taxRate: number;
+
+  /**
+   * 税费
+   */
+  taxAmount: number;
+
+  /**
+   * 付款方式（字典 logistics_payment_mode：vendorpay=供应商付款，employeereimburse=员工报销）
+   */
+  paymentMode: string;
+
+  /**
+   * 采购链路方案（字典 logistics_procurement_chain_scheme；1=方案一含报销，2=方案二仅 PO）
+   */
+  chainScheme: number;
 
   /**
    * 询价总数量（基本单位数量）
@@ -729,7 +849,7 @@ export interface PurchaseInquiryExport {
   inquiryReason?: string;
 
   /**
-   * 询价状态（字典 sys_normal_disable：1=启用，0=禁用）
+   * 询价状态（字典 sys_normal_disable_status；1=启用，0=禁用）
    */
   inquiryStatus: number;
 

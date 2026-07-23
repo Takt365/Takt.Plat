@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Infrastructure.Data.Seeds.I18nSeedData.Logistics.Quality.Cost
 // 文件名称：TaktQualityAssuranceCalibrationI18nSeedData.cs
-// 创建时间：2026-07-20
+// 创建时间：2026-07-23
 // 创建人：Takt365(Auto Generated)
 // 功能描述：TaktQualityAssuranceCalibration 实体字段国际化种子（无对应 frontend locales；TranslationText 取自 ColumnDescription，ContextNote 取自属性 XML summary）
 // 
@@ -91,13 +91,13 @@ public class TaktQualityAssuranceCalibrationI18nSeedData : ITaktSeedDataCoordina
             new TranslationSeedItem("entity.qualityassurancecalibration._self", "zh-HK", "品质业务明细 - 测定器校正费用信息_hk", "实体名称"),
 
             // entity.qualityassurancecalibration.qualityassuranceid
-            new TranslationSeedItem("entity.qualityassurancecalibration.qualityassuranceid", "en-US", "品质业务主表ID_us", "品质业务主表 ID（选项 TaktQualityAssurances/options，DictValue=Id）"),
+            new TranslationSeedItem("entity.qualityassurancecalibration.qualityassuranceid", "en-US", "品质业务主表ID_us", "品质业务主表 ID（选项 TaktQualityAssurances/options；DictValue=Id）"),
             // entity.qualityassurancecalibration.qualityassuranceid
-            new TranslationSeedItem("entity.qualityassurancecalibration.qualityassuranceid", "ja-JP", "品质业务主表ID_jp", "品质业务主表 ID（选项 TaktQualityAssurances/options，DictValue=Id）"),
+            new TranslationSeedItem("entity.qualityassurancecalibration.qualityassuranceid", "ja-JP", "品质业务主表ID_jp", "品质业务主表 ID（选项 TaktQualityAssurances/options；DictValue=Id）"),
             // entity.qualityassurancecalibration.qualityassuranceid
-            new TranslationSeedItem("entity.qualityassurancecalibration.qualityassuranceid", "zh-CN", "品质业务主表ID", "品质业务主表 ID（选项 TaktQualityAssurances/options，DictValue=Id）"),
+            new TranslationSeedItem("entity.qualityassurancecalibration.qualityassuranceid", "zh-CN", "品质业务主表ID", "品质业务主表 ID（选项 TaktQualityAssurances/options；DictValue=Id）"),
             // entity.qualityassurancecalibration.qualityassuranceid
-            new TranslationSeedItem("entity.qualityassurancecalibration.qualityassuranceid", "zh-HK", "品质业务主表ID_hk", "品质业务主表 ID（选项 TaktQualityAssurances/options，DictValue=Id）"),
+            new TranslationSeedItem("entity.qualityassurancecalibration.qualityassuranceid", "zh-HK", "品质业务主表ID_hk", "品质业务主表 ID（选项 TaktQualityAssurances/options；DictValue=Id）"),
 
             // entity.qualityassurancecalibration.qualityassurancecode
             new TranslationSeedItem("entity.qualityassurancecalibration.qualityassurancecode", "en-US", "品质业务编码_us", "品质业务编码（冗余字段,便于查询）"),
@@ -163,13 +163,13 @@ public class TaktQualityAssuranceCalibrationI18nSeedData : ITaktSeedDataCoordina
             new TranslationSeedItem("entity.qualityassurancecalibration.calibrationnote", "zh-HK", "校正备注_hk", "校正备注"),
 
             // entity.qualityassurancecalibration.isobsolete
-            new TranslationSeedItem("entity.qualityassurancecalibration.isobsolete", "en-US", "是否作废_us", "是否作废（字典 sys_yes_no_type，0=否 1=是；编辑移除子行时标记作废）"),
+            new TranslationSeedItem("entity.qualityassurancecalibration.isobsolete", "en-US", "是否作废_us", "是否作废（字典 sys_yes_no_type；0=否 1=是；编辑移除子行时标记作废）"),
             // entity.qualityassurancecalibration.isobsolete
-            new TranslationSeedItem("entity.qualityassurancecalibration.isobsolete", "ja-JP", "是否作废_jp", "是否作废（字典 sys_yes_no_type，0=否 1=是；编辑移除子行时标记作废）"),
+            new TranslationSeedItem("entity.qualityassurancecalibration.isobsolete", "ja-JP", "是否作废_jp", "是否作废（字典 sys_yes_no_type；0=否 1=是；编辑移除子行时标记作废）"),
             // entity.qualityassurancecalibration.isobsolete
-            new TranslationSeedItem("entity.qualityassurancecalibration.isobsolete", "zh-CN", "是否作废", "是否作废（字典 sys_yes_no_type，0=否 1=是；编辑移除子行时标记作废）"),
+            new TranslationSeedItem("entity.qualityassurancecalibration.isobsolete", "zh-CN", "是否作废", "是否作废（字典 sys_yes_no_type；0=否 1=是；编辑移除子行时标记作废）"),
             // entity.qualityassurancecalibration.isobsolete
-            new TranslationSeedItem("entity.qualityassurancecalibration.isobsolete", "zh-HK", "是否作废_hk", "是否作废（字典 sys_yes_no_type，0=否 1=是；编辑移除子行时标记作废）"),
+            new TranslationSeedItem("entity.qualityassurancecalibration.isobsolete", "zh-HK", "是否作废_hk", "是否作废（字典 sys_yes_no_type；0=否 1=是；编辑移除子行时标记作废）"),
 
             // entity.qualityassurancecalibration.operation
             new TranslationSeedItem("entity.qualityassurancecalibration.operation", "en-US", "品质业务主表_us", "品质业务主表(导航属性)"),

@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Application.Services.Logistics.Sales
 // 文件名称：TaktSalesQuotationService.cs
-// 创建时间：2026-07-09
+// 创建时间：2026-07-23
 // 创建人：Takt365(Cursor AI)
 // 功能描述：销售报价应用服务实现
 // 
@@ -102,12 +102,12 @@ public class TaktSalesQuotationService : TaktServiceBase, ITaktSalesQuotationSer
         EnsureThreeLayerContext();
         var list = await _salesQuotationRepository.GetListAsync(
             x => x.TenantCode == CurrentTenantCode && x.CompanyCode == CurrentCompanyCode && x.QuotationStatus == 1,
-            x => x.CustomerName ?? string.Empty,
+            x => x.SalesQuotationCode ?? string.Empty,
             false);
         return list.Select(e => new TaktSelectOption
         {
-            DictValue = e.Id,
-            DictLabel = e.CustomerName ?? e.Id.ToString(),
+            DictValue = e.SalesQuotationCode,
+            DictLabel = e.SalesQuotationCode,
         }).ToList();
     }
 
@@ -355,7 +355,20 @@ public class TaktSalesQuotationService : TaktServiceBase, ITaktSalesQuotationSer
     private async Task SaveSalesQuotationChildrenAsync(TaktSalesQuotation entity, TaktSalesQuotationCreateDto dto)
     {
         // 销售报价明细（Items）
-        if (dto.Items is not { Count: > 0 })
+        List<TaktSalesQuotationItemUpdateDto>? itemsForSave;
+        if (dto is TaktSalesQuotationUpdateDto updateDtoForItems && updateDtoForItems.Items != null)
+        {
+            itemsForSave = updateDtoForItems.Items;
+        }
+        else if (dto.Items != null)
+        {
+            itemsForSave = dto.Items.Adapt<List<TaktSalesQuotationItemUpdateDto>>();
+        }
+        else
+        {
+            itemsForSave = null;
+        }
+        if (itemsForSave is not { Count: > 0 })
         {
             await MarkSalesQuotationItemsObsoleteAsync(entity.Id);
             return;
@@ -367,9 +380,9 @@ public class TaktSalesQuotationService : TaktServiceBase, ITaktSalesQuotationSer
             var submittedIds = new HashSet<long>();
             var toCreate = new List<TaktSalesQuotationItem>();
             var seenLineKeys = new HashSet<string>(StringComparer.Ordinal);
-            for (var i = 0; i < dto.Items.Count; i++)
+            for (var i = 0; i < itemsForSave.Count; i++)
             {
-                var childDto = dto.Items[i];
+                var childDto = itemsForSave[i];
                 childDto.SalesQuotationId = entity.Id;
                 var lineKey = $"{entity.CompanyCode}|{entity.Id}|{childDto.LineNumber}";
                 if (!seenLineKeys.Add(lineKey))
@@ -468,11 +481,13 @@ public class TaktSalesQuotationService : TaktServiceBase, ITaktSalesQuotationSer
                 (x.PlantCode != null && x.PlantCode.Contains(keywords))
                 || (x.SalesQuotationCode != null && x.SalesQuotationCode.Contains(keywords))
                 || (x.CustomerCode != null && x.CustomerCode.Contains(keywords))
-                || (x.CustomerName != null && x.CustomerName.Contains(keywords))
+                || (x.CustomerName1 != null && x.CustomerName1.Contains(keywords))
                 || (x.SalesBy != null && x.SalesBy.Contains(keywords))
                 || SqlFunc.ToString(x.TotalQuantity).Contains(keywords)
                 || SqlFunc.ToString(x.TotalAmount).Contains(keywords)
                 || SqlFunc.ToString(x.DiscountAmount).Contains(keywords)
+                || (x.CurrencyCode != null && x.CurrencyCode.Contains(keywords))
+                || SqlFunc.ToString(x.TaxRate).Contains(keywords)
                 || SqlFunc.ToString(x.TaxAmount).Contains(keywords)
                 || SqlFunc.ToString(x.ActualAmount).Contains(keywords)
                 || (x.SalesOrderCode != null && x.SalesOrderCode.Contains(keywords))
@@ -500,9 +515,9 @@ public class TaktSalesQuotationService : TaktServiceBase, ITaktSalesQuotationSer
             exp = exp.And(x => x.CustomerCode != null && x.CustomerCode.Contains(queryDto.CustomerCode));
         }
 
-        if (!string.IsNullOrEmpty(queryDto?.CustomerName))
+        if (!string.IsNullOrEmpty(queryDto?.CustomerName1))
         {
-            exp = exp.And(x => x.CustomerName != null && x.CustomerName.Contains(queryDto.CustomerName));
+            exp = exp.And(x => x.CustomerName1 != null && x.CustomerName1.Contains(queryDto.CustomerName1));
         }
 
         if (!string.IsNullOrEmpty(queryDto?.SalesBy))
@@ -523,6 +538,16 @@ public class TaktSalesQuotationService : TaktServiceBase, ITaktSalesQuotationSer
         if (queryDto?.DiscountAmount.HasValue == true)
         {
             exp = exp.And(x => x.DiscountAmount == queryDto.DiscountAmount);
+        }
+
+        if (!string.IsNullOrEmpty(queryDto?.CurrencyCode))
+        {
+            exp = exp.And(x => x.CurrencyCode != null && x.CurrencyCode.Contains(queryDto.CurrencyCode));
+        }
+
+        if (queryDto?.TaxRate.HasValue == true)
+        {
+            exp = exp.And(x => x.TaxRate == queryDto.TaxRate);
         }
 
         if (queryDto?.TaxAmount.HasValue == true)

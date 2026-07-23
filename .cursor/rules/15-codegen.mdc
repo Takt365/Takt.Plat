@@ -20,7 +20,7 @@ alwaysApply: false
 
 | 步 | `PIPELINE.key` | 脚本 | `alwaysAll` | 输出 |
 |----|----------------|------|-------------|------|
-| 0 | `entity-rbac-nav` | `generate-entity-rbac-navigations.cjs` | — | 主实体 RBAC `[Navigate]` 导航区 |
+| 0 | `entity-rbac-nav` | `generate-entity-rbac-navigations.cjs` | — | 主实体 **RBAC** `[Navigate]`（仅同步 `rbac-parent-config` 项；同区业务 OneToMany 原样保留） |
 | 1 | `dtos` | `generate-dtos-from-entity.cjs` | — | `Takt.Application/Dtos/**/TaktXxxDtos.cs` |
 | 2 | `validators` | `generate-validators-from-entity.cjs` | ✅ | `Takt.Application/Validators/**/TaktXxx*Validator.cs` |
 | 3 | `services` | `generate-services-from-dtos.cjs` | — | `ITaktXxxService` + `TaktXxxService` |

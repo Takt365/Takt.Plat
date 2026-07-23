@@ -4,7 +4,7 @@
 // 文件名称：TaktIsoCode.cs
 // 创建时间：2026-06-14
 // 创建人：Takt365(Cursor AI)
-// 功能描述：ISO 编码主数据（租户内共享），供编号规则、单据编码等段引用
+// 功能描述：ISO 编码主数据（租户内共享），供编码规则、单据编码等段引用
 //
 // 版权信息：Copyright (c) 2025 Takt  All rights reserved.
 // 免责声明：此软件使用 MIT License，作者不承担任何使用风险。
@@ -17,7 +17,7 @@ namespace Takt.Domain.Entities.Foundation;
 
 /// <summary>
 /// ISO 编码实体
-/// 维护租户内标准短码（如 Eng、Pmc、D1000），用于编号规则、单据编码等段引用
+/// 维护租户内标准短码（如 Eng、Pmc、D1000），用于编码规则、单据编码等段引用
 /// </summary>
 [SugarTable("takt_foundation_iso_code", "ISO编码表")]
 [SugarIndex("ix_iso_code_tenant", nameof(TenantCode), OrderByType.Asc, false)]
@@ -30,7 +30,7 @@ public class TaktIsoCode : TaktTenantEntityBase
     [SugarColumn(ColumnName = "iso_code_category", ColumnDescription = "编码类别", ColumnDataType = "int", IsNullable = false, DefaultValue = "1")]
     public int IsoCodeCategory { get; set; } = 1;
     /// <summary>
-    /// ISO 编码（唯一索引：租户+类别内唯一，见 ix_iso_code_category_unique；编号规则等段引用，如 Eng、Pmc、D1000）
+    /// ISO 编码（唯一索引：租户+类别内唯一，见 ix_iso_code_category_unique；编码规则等段引用，如 Eng、Pmc、D1000）
     /// </summary>
     [SugarColumn(ColumnName = "iso_code", ColumnDescription = "ISO编码", ColumnDataType = "varchar", Length = 20, IsNullable = false)]
     public string IsoCode { get; set; } = string.Empty;

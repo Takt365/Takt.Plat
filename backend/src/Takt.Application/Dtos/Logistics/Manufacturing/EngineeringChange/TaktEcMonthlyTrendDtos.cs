@@ -4,7 +4,7 @@
 // 文件名称：TaktEcMonthlyTrendDtos.cs
 // 创建时间：2026-07-18
 // 创建人：Takt365(Cursor AI)
-// 功能描述：月设变推移转置分析 DTO（TaktEcGijutsu.EcIssueDate × 件数/损失金额）
+// 功能描述：月设变推移转置分析 DTO（设变号×部门×月份完成件数）
 //
 // 版权信息：Copyright (c) 2026 Takt  All rights reserved.
 // 免责声明：此软件使用 MIT License，作者不承担任何使用风险。
@@ -13,7 +13,7 @@
 namespace Takt.Application.Dtos.Logistics.Manufacturing.EngineeringChange;
 
 /// <summary>
-/// 月设变推移转置分析查询 DTO
+/// 月设变推移转置分析查询 DTO（按设变号×部门统计）
 /// </summary>
 public class TaktEcMonthlyTrendQueryDto : TaktPagedQuery
 {
@@ -38,17 +38,27 @@ public class TaktEcMonthlyTrendQueryDto : TaktPagedQuery
     public string? FocusPeriod { get; set; }
 
     /// <summary>
-    /// 区分（字典 logistics_ec_distinction_category；可选）
+    /// 设变单号（可选，模糊）
+    /// </summary>
+    public string? EcNo { get; set; }
+
+    /// <summary>
+    /// 责任部门编码（可选）
+    /// </summary>
+    public string? DeptCode { get; set; }
+
+    /// <summary>
+    /// 区分（字典 logistics_ec_distinction_category；可选，按主表过滤）
     /// </summary>
     public int? EcDistinction { get; set; }
 
     /// <summary>
-    /// 变更状态（字典 logistics_ec_status；可选）
+    /// 变更状态（字典 logistics_ec_status；可选，按主表过滤）
     /// </summary>
     public int? ChangeStatus { get; set; }
 
     /// <summary>
-    /// 设变状态（字典 logistics_ec_gijutsu_status；可选）
+    /// 设变状态（字典 logistics_ec_gijutsu_status；可选，按主表过滤）
     /// </summary>
     public int? EcStatus { get; set; }
 
@@ -59,7 +69,7 @@ public class TaktEcMonthlyTrendQueryDto : TaktPagedQuery
 }
 
 /// <summary>
-/// 月设变推移转置行（行=工厂+区分，列=各月设变件数）
+/// 月设变推移转置行（行=工厂+设变号+部门，列=各月完成任务件数）
 /// </summary>
 public class TaktEcMonthlyTrendDto
 {
@@ -69,24 +79,19 @@ public class TaktEcMonthlyTrendDto
     public string PlantCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 区分（字典 logistics_ec_distinction_category）
+    /// 设变单号
     /// </summary>
-    public int EcDistinction { get; set; }
+    public string EcNo { get; set; } = string.Empty;
 
     /// <summary>
-    /// 区分显示名（可空）
+    /// 责任部门编码
     /// </summary>
-    public string? EcDistinctionName { get; set; }
+    public string DeptCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 各期间设变件数（键 yyyy-MM）
+    /// 各期间完成件数（键 yyyy-MM，按 CompletedAt）
     /// </summary>
     public Dictionary<string, int> PeriodValues { get; set; } = new(StringComparer.Ordinal);
-
-    /// <summary>
-    /// 各期间损失金额合计（键 yyyy-MM）
-    /// </summary>
-    public Dictionary<string, decimal> PeriodLossAmounts { get; set; } = new(StringComparer.Ordinal);
 
     /// <summary>
     /// 环比涨跌：none / up / down / flat
@@ -166,7 +171,7 @@ public class TaktEcMonthlyTrendResultDto
 }
 
 /// <summary>
-/// 月实施推移转置分析查询 DTO
+/// 月实施推移转置分析查询 DTO（按部门汇总）
 /// </summary>
 public class TaktEcImplementationMonthlyTrendQueryDto : TaktPagedQuery
 {

@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：frontend/src/types/accounting/financial
 // 文件名称：expense-detail.d.ts
-// 创建时间：2026-07-09
+// 创建时间：2026-07-23
 // 创建人：Takt365(Auto Generated)
 // 功能描述：accounting/financial 模块类型定义（自动生成；类型名去 Takt 前缀与末尾 Dto，如 TaktCompanyDto → Company）
 // 
@@ -39,7 +39,7 @@ export interface ExpenseDetail extends CompanyDtoBase {
   expenseName?: string;
 
   /**
-   * 费用单编号（冗余，便于查询）
+   * 费用单编码（冗余，便于查询）
    */
   expenseCode: string;
 
@@ -74,7 +74,7 @@ export interface ExpenseDetail extends CompanyDtoBase {
   itemAmount: number;
 
   /**
-   * 会计科目（关联 TaktAccountTitle.AccountTitleCode，选项 TaktAccountTitles/options）
+   * 会计科目（选项 TaktAccountTitles/options；DictValue=Id）
    */
   accountTitle?: string;
 
@@ -89,7 +89,7 @@ export interface ExpenseDetail extends CompanyDtoBase {
   expenseDetailDate?: string;
 
   /**
-   * 是否作废（字典 sys_yes_no_type，0=否 1=是；编辑移除子行时标记作废）
+   * 是否作废（字典 sys_yes_no_type；0=否 1=是；编辑移除子行时标记作废）
    */
   isObsolete: number;
 
@@ -119,7 +119,7 @@ export interface ExpenseDetailQuery extends TaktPagedQuery {
   expenseId?: string;
 
   /**
-   * 费用单编号（冗余，便于查询）
+   * 费用单编码（冗余，便于查询）
    */
   expenseCode?: string;
 
@@ -154,7 +154,7 @@ export interface ExpenseDetailQuery extends TaktPagedQuery {
   itemAmount?: number;
 
   /**
-   * 会计科目（关联 TaktAccountTitle.AccountTitleCode，选项 TaktAccountTitles/options）
+   * 会计科目（选项 TaktAccountTitles/options；DictValue=Id）
    */
   accountTitle?: string;
 
@@ -174,7 +174,7 @@ export interface ExpenseDetailQuery extends TaktPagedQuery {
   expenseDetailDateEnd?: string;
 
   /**
-   * 是否作废（字典 sys_yes_no_type，0=否 1=是；编辑移除子行时标记作废）
+   * 是否作废（字典 sys_yes_no_type；0=否 1=是；编辑移除子行时标记作废）
    */
   isObsolete?: number;
 
@@ -228,7 +228,7 @@ export interface ExpenseDetailCreate {
   expenseId: string;
 
   /**
-   * 费用单编号（冗余，便于查询）
+   * 费用单编码（冗余，便于查询）
    */
   expenseCode: string;
 
@@ -263,7 +263,7 @@ export interface ExpenseDetailCreate {
   itemAmount: number;
 
   /**
-   * 会计科目（关联 TaktAccountTitle.AccountTitleCode，选项 TaktAccountTitles/options）
+   * 会计科目（选项 TaktAccountTitles/options；DictValue=Id）
    */
   accountTitle?: string;
 
@@ -278,7 +278,7 @@ export interface ExpenseDetailCreate {
   expenseDetailDate?: string;
 
   /**
-   * 是否作废（字典 sys_yes_no_type，0=否 1=是；编辑移除子行时标记作废）
+   * 是否作废（字典 sys_yes_no_type；0=否 1=是；编辑移除子行时标记作废）
    */
   isObsolete: number;
 
@@ -351,7 +351,7 @@ export interface ExpenseDetailTemplate {
   expenseId?: string;
 
   /**
-   * 费用单编号（冗余，便于查询）
+   * 费用单编码（冗余，便于查询）
    */
   expenseCode?: string;
 
@@ -386,7 +386,7 @@ export interface ExpenseDetailTemplate {
   itemAmount?: number;
 
   /**
-   * 会计科目（关联 TaktAccountTitle.AccountTitleCode，选项 TaktAccountTitles/options）
+   * 会计科目（选项 TaktAccountTitles/options；DictValue=Id）
    */
   accountTitle?: string;
 
@@ -401,7 +401,7 @@ export interface ExpenseDetailTemplate {
   expenseDetailDate?: string;
 
   /**
-   * 是否作废（字典 sys_yes_no_type，0=否 1=是；编辑移除子行时标记作废）
+   * 是否作废（字典 sys_yes_no_type；0=否 1=是；编辑移除子行时标记作废）
    */
   isObsolete?: number;
 
@@ -445,7 +445,7 @@ export interface ExpenseDetailImport {
   expenseId?: string;
 
   /**
-   * 费用单编号（冗余，便于查询）
+   * 费用单编码（冗余，便于查询）
    */
   expenseCode?: string;
 
@@ -480,7 +480,7 @@ export interface ExpenseDetailImport {
   itemAmount?: number;
 
   /**
-   * 会计科目（关联 TaktAccountTitle.AccountTitleCode，选项 TaktAccountTitles/options）
+   * 会计科目（选项 TaktAccountTitles/options；DictValue=Id）
    */
   accountTitle?: string;
 
@@ -495,7 +495,7 @@ export interface ExpenseDetailImport {
   expenseDetailDate?: string;
 
   /**
-   * 是否作废（字典 sys_yes_no_type，0=否 1=是；编辑移除子行时标记作废）
+   * 是否作废（字典 sys_yes_no_type；0=否 1=是；编辑移除子行时标记作废）
    */
   isObsolete?: number;
 
@@ -534,7 +534,7 @@ export interface ExpenseDetailExport {
   expenseId: string;
 
   /**
-   * 费用单编号（冗余，便于查询）
+   * 费用单编码（冗余，便于查询）
    */
   expenseCode: string;
 
@@ -569,7 +569,7 @@ export interface ExpenseDetailExport {
   itemAmount: number;
 
   /**
-   * 会计科目（关联 TaktAccountTitle.AccountTitleCode，选项 TaktAccountTitles/options）
+   * 会计科目（选项 TaktAccountTitles/options；DictValue=Id）
    */
   accountTitle?: string;
 
@@ -584,7 +584,7 @@ export interface ExpenseDetailExport {
   expenseDetailDate?: string;
 
   /**
-   * 是否作废（字典 sys_yes_no_type，0=否 1=是；编辑移除子行时标记作废）
+   * 是否作废（字典 sys_yes_no_type；0=否 1=是；编辑移除子行时标记作废）
    */
   isObsolete: number;
 

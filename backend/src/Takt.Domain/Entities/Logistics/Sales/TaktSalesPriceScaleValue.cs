@@ -4,7 +4,7 @@
 // 文件名称：TaktSalesPriceScaleValue.cs
 // 创建时间：2025-01-20
 // 创建人：Takt365(Cursor AI)
-// 功能描述：Takt销售价格价值等级实体（SAP KONW：定价记录号/条件序列号/行号/等级值/金额）
+// 功能描述：Takt销售价格价值等级实体（SAP KONW：定价记录号/定价序号/等级序号/等级值/价格）
 //
 // 版权信息：Copyright (c) 2025 Takt  All rights reserved.
 // 免责声明：此软件使用 MIT License，作者不承担任何使用风险。
@@ -16,12 +16,12 @@ using Takt.Domain.Entities;
 namespace Takt.Domain.Entities.Logistics.Sales;
 
 /// <summary>
-/// Takt销售价格价值等级实体（SAP KONW；主子表：TaktSalesPriceItem → ScaleValues；与数量等级仅差 ScaleValue↔ScaleQuantity）
+/// Takt销售价格价值等级实体（；主子表：TaktSalesPriceItem → ScaleValues；与数量等级仅差 ScaleValue↔ScaleQuantity）
 /// </summary>
 [SugarTable("takt_logistics_sales_price_scale_value", "销售价格价值等级表")]
 [SugarIndex("ix_sales_price_scale_value_tenant", nameof(TenantCode), OrderByType.Asc, nameof(CompanyCode), OrderByType.Asc, false)]
 [SugarIndex("ix_sales_price_scale_value_is_deleted", nameof(TenantCode), OrderByType.Asc, nameof(CompanyCode), OrderByType.Asc, nameof(IsDeleted), OrderByType.Asc, false)]
-[SugarIndex("ix_takt_logistics_sales_price_scale_value_line_unique", nameof(TenantCode), OrderByType.Asc, nameof(CompanyCode), OrderByType.Asc, nameof(SalesPriceItemId), OrderByType.Asc, nameof(LineNumber), OrderByType.Asc, true)]
+[SugarIndex("ix_takt_logistics_sales_price_scale_value_unique", nameof(TenantCode), OrderByType.Asc, nameof(CompanyCode), OrderByType.Asc, nameof(SalesPriceItemId), OrderByType.Asc, nameof(SalesPriceCode), OrderByType.Asc, nameof(SalesPriceSeq), OrderByType.Asc, nameof(SalesScaleSeq), OrderByType.Asc, nameof(ScaleValue), OrderByType.Asc, true)]
 [SugarIndex("ix_takt_logistics_sales_price_scale_value_code_seq", nameof(TenantCode), OrderByType.Asc, nameof(CompanyCode), OrderByType.Asc, nameof(SalesPriceCode), OrderByType.Asc, nameof(SalesPriceSeq), OrderByType.Asc, false)]
 public class TaktSalesPriceScaleValue : TaktCompanyEntityBase
 {
@@ -39,16 +39,16 @@ public class TaktSalesPriceScaleValue : TaktCompanyEntityBase
     public string SalesPriceCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 条件序列号（KOPOS；冗余；与明细 SalesPriceSeq 一致）
+    /// 定价序号（冗余；与明细 SalesPriceSeq 一致，固定步长=10）
     /// </summary>
-    [SugarColumn(ColumnName = "sales_price_seq", ColumnDescription = "条件序列号", ColumnDataType = "int", IsNullable = false, DefaultValue = "10")]
+    [SugarColumn(ColumnName = "sales_price_seq", ColumnDescription = "定价序号", ColumnDataType = "int", IsNullable = false, DefaultValue = "10")]
     public int SalesPriceSeq { get; set; } = 10;
 
     /// <summary>
-    /// 行号（KLFN1；阶梯行序号，固定步长=10）
+    /// 等级序号（KOPOS；同一明细内阶梯序号，固定步长=10）
     /// </summary>
-    [SugarColumn(ColumnName = "line_number", ColumnDescription = "行号", ColumnDataType = "int", IsNullable = false, DefaultValue = "10")]
-    public int LineNumber { get; set; } = 10;
+    [SugarColumn(ColumnName = "sales_scale_seq", ColumnDescription = "等级序号", ColumnDataType = "int", IsNullable = false, DefaultValue = "10")]
+    public int SalesScaleSeq { get; set; } = 10;
 
     /// <summary>
     /// 等级值（KSTBW；价值等级门槛；对应数量等级表的 ScaleQuantity）
@@ -57,13 +57,30 @@ public class TaktSalesPriceScaleValue : TaktCompanyEntityBase
     public decimal ScaleValue { get; set; } = 0;
 
     /// <summary>
-    /// 金额（KBETR）
+    /// 价格（KBETR）
     /// </summary>
-    [SugarColumn(ColumnName = "amount", ColumnDescription = "金额", ColumnDataType = "decimal", Length = 18, DecimalDigits = 5, IsNullable = false, DefaultValue = "0")]
-    public decimal Amount { get; set; } = 0;
+    [SugarColumn(ColumnName = "price", ColumnDescription = "价格", ColumnDataType = "decimal", Length = 18, DecimalDigits = 5, IsNullable = false, DefaultValue = "0")]
+    public decimal Price { get; set; } = 0;
 
     /// <summary>
-    /// 是否作废（字典 sys_yes_no_type，0=否 1=是；编辑移除子行时标记作废）
+    /// 未税价格（冗余；可由 Price 与税码推算后回写）
+    /// </summary>
+    [SugarColumn(ColumnName = "untaxed_price", ColumnDescription = "未税价格", ColumnDataType = "decimal", Length = 18, DecimalDigits = 5, IsNullable = false, DefaultValue = "0")]
+    public decimal UntaxedPrice { get; set; } = 0;
+
+    /// <summary>
+    /// 含税价格（冗余；可由 Price 与税码推算后回写）
+    /// </summary>
+    [SugarColumn(ColumnName = "tax_included_price", ColumnDescription = "含税价格", ColumnDataType = "decimal", Length = 18, DecimalDigits = 5, IsNullable = false, DefaultValue = "0")]
+    public decimal TaxIncludedPrice { get; set; } = 0;
+    /// <summary>
+    /// 税费（冗余；含税−未税，打印用）
+    /// </summary>
+    [SugarColumn(ColumnName = "tax_amount", ColumnDescription = "税费", ColumnDataType = "decimal", Length = 18, DecimalDigits = 5, IsNullable = false, DefaultValue = "0")]
+    public decimal TaxAmount { get; set; } = 0;
+
+    /// <summary>
+    /// 是否作废（字典 sys_yes_no_type；0=否 1=是；编辑移除子行时标记作废）
     /// </summary>
     [SugarColumn(ColumnName = "is_obsolete", ColumnDescription = "是否作废", ColumnDataType = "int", IsNullable = false, DefaultValue = "0")]
     public int IsObsolete { get; set; } = 0;

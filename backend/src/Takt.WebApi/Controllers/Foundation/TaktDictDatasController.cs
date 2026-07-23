@@ -274,6 +274,7 @@ public class TaktDictDatasController : TaktControllerBase
     /// </summary>
     /// <returns>扁平字典项列表</returns>
     [HttpGet("all")]
+    [AllowAnonymous]
     public async Task<IActionResult> GetDataDictAllAsync()
     {
         try

@@ -29,23 +29,23 @@ namespace Takt.Domain.Entities.Logistics.Quality.Complaint;
 public class TaktCustomerSatisfactionSurvey : TaktCompanyEntityBase
 {
     /// <summary>
-    /// 调查表编号（组合唯一索引）
+    /// 调查表编码（组合唯一索引）
     /// </summary>
-    [SugarColumn(ColumnName = "customer_satisfaction_survey_code", ColumnDescription = "调查表编号", ColumnDataType = "nvarchar", Length = 50, IsNullable = false)]
+    [SugarColumn(ColumnName = "customer_satisfaction_survey_code", ColumnDescription = "调查表编码", ColumnDataType = "nvarchar", Length = 50, IsNullable = false)]
     public string CustomerSatisfactionSurveyCode { get; set; } = string.Empty;
     /// <summary>
-    /// 客户 ID（选项 TaktCustomers/options，DictValue=Id）
+    /// 客户 ID（选项 TaktCustomers/options；DictValue=Id）
     /// </summary>
     [SugarColumn(ColumnName = "customer_id", ColumnDescription = "客户ID", ColumnDataType = "bigint", IsNullable = false)]
     [JsonConverter(typeof(ValueToStringConverter))]
     public long CustomerId { get; set; }
     /// <summary>
-    /// 客户名称
+    /// 客户名称1（冗余，与 TaktCustomer.CustomerName1 对齐）
     /// </summary>
-    [SugarColumn(ColumnName = "customer_name", ColumnDescription = "客户名称", ColumnDataType = "nvarchar", Length = 200, IsNullable = false)]
-    public string CustomerName { get; set; } = string.Empty;
+    [SugarColumn(ColumnName = "customer_name1", ColumnDescription = "客户名称1", ColumnDataType = "nvarchar", Length = 140, IsNullable = false)]
+    public string CustomerName1 { get; set; } = string.Empty;
     /// <summary>
-    /// 客户编码（选项 TaktCustomers/options，DictValue=CustomerCode）
+    /// 客户编码（选项 TaktCustomers/options；DictValue=CustomerCode）
     /// </summary>
     [SugarColumn(ColumnName = "customer_code", ColumnDescription = "客户编码", ColumnDataType = "nvarchar", Length = 50, IsNullable = true)]
     public string? CustomerCode { get; set; }
@@ -70,7 +70,7 @@ public class TaktCustomerSatisfactionSurvey : TaktCompanyEntityBase
     [SugarColumn(ColumnName = "survey_period", ColumnDescription = "调查周期", ColumnDataType = "int", IsNullable = false, DefaultValue = "1")]
     public int SurveyPeriod { get; set; } = 1;
     /// <summary>
-    /// 调查人（选项 TaktEmployees/options，DictValue=EmployeeCode）
+    /// 调查人（选项 TaktEmployees/options；DictValue=EmployeeCode）
     /// </summary>
     [SugarColumn(ColumnName = "surveyor_by", ColumnDescription = "调查人", ColumnDataType = "nvarchar", Length = 50, IsNullable = true)]
     public string? SurveyorBy { get; set; }
@@ -135,7 +135,7 @@ public class TaktCustomerSatisfactionSurvey : TaktCompanyEntityBase
     [SugarColumn(ColumnName = "improvement_plan", ColumnDescription = "改进计划", ColumnDataType = "nvarchar", Length = 2000, IsNullable = true)]
     public string? ImprovementPlan { get; set; }
     /// <summary>
-    /// 关联客诉 ID（选项 TaktCustomerComplaints/options，DictValue=Id）
+    /// 关联客诉 ID（选项 TaktCustomerComplaints/options；DictValue=Id）
     /// </summary>
     [SugarColumn(ColumnName = "related_complaint_id", ColumnDescription = "关联客诉ID", ColumnDataType = "bigint", IsNullable = true)]
     [JsonConverter(typeof(ValueToStringConverter))]
@@ -151,7 +151,7 @@ public class TaktCustomerSatisfactionSurvey : TaktCompanyEntityBase
     [SugarColumn(ColumnName = "survey_status", ColumnDescription = "调查状态", ColumnDataType = "int", IsNullable = false, DefaultValue = "0")]
     public int SurveyStatus { get; set; } = 0;
     /// <summary>
-    /// 关联工厂（选项 TaktPlants/options，DictValue=PlantCode）
+    /// 关联工厂（选项 TaktPlants/options；DictValue=PlantCode）
     /// </summary>
     [SugarColumn(ColumnName = "related_plant", ColumnDescription = "关联工厂", ColumnDataType = "nvarchar", Length = 4, IsNullable = false)]
     public string RelatedPlant { get; set; } = string.Empty;

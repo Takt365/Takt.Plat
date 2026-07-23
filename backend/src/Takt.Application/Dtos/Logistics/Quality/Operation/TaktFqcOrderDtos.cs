@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Application.Dtos.Logistics.Quality.Operation
 // 文件名称：TaktFqcOrderDtos.cs
-// 创建时间：2026-07-09
+// 创建时间：2026-07-23
 // 创建人：Takt365(Auto Generated)
 // 功能描述：FqcOrder 模块 DTO（由 generate-dtos-from-entity.cjs 根据 TaktFqcOrder 生成，请按需审阅）
 // 
@@ -41,7 +41,7 @@ public class TaktFqcOrderDto : TaktCompanyDtoBase
     public string PlantCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 来源单号（选项 TaktSalesOrders/options，DictValue=SalesOrderCode）
+    /// 来源单号（选项 TaktSalesOrders/options；DictValue=SalesOrderCode）
     /// </summary>
     public string SourceCode { get; set; } = string.Empty;
 
@@ -56,7 +56,7 @@ public class TaktFqcOrderDto : TaktCompanyDtoBase
     public string FqcOrderCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 客户编码（选项 TaktCustomers/options，DictValue=CustomerCode）
+    /// 客户编码（选项 TaktCustomers/options；DictValue=CustomerCode）
     /// </summary>
     public string? CustomerCode { get; set; } = string.Empty;
 
@@ -86,7 +86,7 @@ public class TaktFqcOrderDto : TaktCompanyDtoBase
     public decimal TotalInspectionReturnQuantity { get; set; }
 
     /// <summary>
-    /// 判定人（选项 TaktEmployees/options，DictValue=EmployeeCode）
+    /// 判定人（选项 TaktEmployees/options；DictValue=EmployeeCode）
     /// </summary>
     public string? JudgeBy { get; set; } = string.Empty;
 
@@ -139,7 +139,7 @@ public class TaktFqcOrderQueryDto : TaktPagedQuery
     public string? PlantCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 来源单号（选项 TaktSalesOrders/options，DictValue=SalesOrderCode）
+    /// 来源单号（选项 TaktSalesOrders/options；DictValue=SalesOrderCode）
     /// </summary>
     public string? SourceCode { get; set; } = string.Empty;
 
@@ -159,7 +159,7 @@ public class TaktFqcOrderQueryDto : TaktPagedQuery
     public string? FqcOrderCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 客户编码（选项 TaktCustomers/options，DictValue=CustomerCode）
+    /// 客户编码（选项 TaktCustomers/options；DictValue=CustomerCode）
     /// </summary>
     public string? CustomerCode { get; set; } = string.Empty;
 
@@ -189,7 +189,7 @@ public class TaktFqcOrderQueryDto : TaktPagedQuery
     public decimal? TotalInspectionReturnQuantity { get; set; }
 
     /// <summary>
-    /// 判定人（选项 TaktEmployees/options，DictValue=EmployeeCode）
+    /// 判定人（选项 TaktEmployees/options；DictValue=EmployeeCode）
     /// </summary>
     public string? JudgeBy { get; set; } = string.Empty;
 
@@ -265,9 +265,9 @@ public class TaktFqcOrderCreateDto
     public string PlantCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 来源单号（选项 TaktSalesOrders/options，DictValue=SalesOrderCode）
+    /// 来源单号（选项 TaktSalesOrders/options；DictValue=SalesOrderCode）
     /// </summary>
-    [Required(ErrorMessage = "来源单号（选项 TaktSalesOrders/options，DictValue=SalesOrderCode）不能为空")]
+    [Required(ErrorMessage = "来源单号（选项 TaktSalesOrders/options；DictValue=SalesOrderCode）不能为空")]
     public string SourceCode { get; set; } = string.Empty;
 
     /// <summary>
@@ -282,7 +282,7 @@ public class TaktFqcOrderCreateDto
     public string FqcOrderCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 客户编码（选项 TaktCustomers/options，DictValue=CustomerCode）
+    /// 客户编码（选项 TaktCustomers/options；DictValue=CustomerCode）
     /// </summary>
     public string? CustomerCode { get; set; } = string.Empty;
 
@@ -312,7 +312,7 @@ public class TaktFqcOrderCreateDto
     public decimal TotalInspectionReturnQuantity { get; set; }
 
     /// <summary>
-    /// 判定人（选项 TaktEmployees/options，DictValue=EmployeeCode）
+    /// 判定人（选项 TaktEmployees/options；DictValue=EmployeeCode）
     /// </summary>
     public string? JudgeBy { get; set; } = string.Empty;
 
@@ -422,7 +422,7 @@ public class TaktFqcOrderTemplateDto
     public string? PlantCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 来源单号（选项 TaktSalesOrders/options，DictValue=SalesOrderCode）
+    /// 来源单号（选项 TaktSalesOrders/options；DictValue=SalesOrderCode）
     /// </summary>
     public string? SourceCode { get; set; } = string.Empty;
 
@@ -437,7 +437,7 @@ public class TaktFqcOrderTemplateDto
     public string? FqcOrderCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 客户编码（选项 TaktCustomers/options，DictValue=CustomerCode）
+    /// 客户编码（选项 TaktCustomers/options；DictValue=CustomerCode）
     /// </summary>
     public string? CustomerCode { get; set; } = string.Empty;
 
@@ -467,7 +467,7 @@ public class TaktFqcOrderTemplateDto
     public decimal? TotalInspectionReturnQuantity { get; set; }
 
     /// <summary>
-    /// 判定人（选项 TaktEmployees/options，DictValue=EmployeeCode）
+    /// 判定人（选项 TaktEmployees/options；DictValue=EmployeeCode）
     /// </summary>
     public string? JudgeBy { get; set; } = string.Empty;
 
@@ -529,7 +529,7 @@ public class TaktFqcOrderImportDto
     public string? PlantCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 来源单号（选项 TaktSalesOrders/options，DictValue=SalesOrderCode）
+    /// 来源单号（选项 TaktSalesOrders/options；DictValue=SalesOrderCode）
     /// </summary>
     public string? SourceCode { get; set; } = string.Empty;
 
@@ -544,7 +544,7 @@ public class TaktFqcOrderImportDto
     public string? FqcOrderCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 客户编码（选项 TaktCustomers/options，DictValue=CustomerCode）
+    /// 客户编码（选项 TaktCustomers/options；DictValue=CustomerCode）
     /// </summary>
     public string? CustomerCode { get; set; } = string.Empty;
 
@@ -574,7 +574,7 @@ public class TaktFqcOrderImportDto
     public decimal? TotalInspectionReturnQuantity { get; set; }
 
     /// <summary>
-    /// 判定人（选项 TaktEmployees/options，DictValue=EmployeeCode）
+    /// 判定人（选项 TaktEmployees/options；DictValue=EmployeeCode）
     /// </summary>
     public string? JudgeBy { get; set; } = string.Empty;
 
@@ -637,7 +637,7 @@ public class TaktFqcOrderExportDto
     public string PlantCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 来源单号（选项 TaktSalesOrders/options，DictValue=SalesOrderCode）
+    /// 来源单号（选项 TaktSalesOrders/options；DictValue=SalesOrderCode）
     /// </summary>
     public string SourceCode { get; set; } = string.Empty;
 
@@ -652,7 +652,7 @@ public class TaktFqcOrderExportDto
     public string FqcOrderCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 客户编码（选项 TaktCustomers/options，DictValue=CustomerCode）
+    /// 客户编码（选项 TaktCustomers/options；DictValue=CustomerCode）
     /// </summary>
     public string? CustomerCode { get; set; } = string.Empty;
 
@@ -682,7 +682,7 @@ public class TaktFqcOrderExportDto
     public decimal TotalInspectionReturnQuantity { get; set; }
 
     /// <summary>
-    /// 判定人（选项 TaktEmployees/options，DictValue=EmployeeCode）
+    /// 判定人（选项 TaktEmployees/options；DictValue=EmployeeCode）
     /// </summary>
     public string? JudgeBy { get; set; } = string.Empty;
 

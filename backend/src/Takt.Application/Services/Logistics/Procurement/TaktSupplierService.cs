@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Application.Services.Logistics.Procurement
 // 文件名称：TaktSupplierService.cs
-// 创建时间：2026-06-23
+// 创建时间：2026-07-23
 // 创建人：Takt365(Cursor AI)
 // 功能描述：供货商信息应用服务实现
 // 
@@ -97,13 +97,12 @@ public class TaktSupplierService : TaktServiceBase, ITaktSupplierService
         EnsureThreeLayerContext();
         var list = await _supplierRepository.GetListAsync(
             x => x.TenantCode == CurrentTenantCode && x.CompanyCode == CurrentCompanyCode && x.SupplierStatus == 1,
-            x => x.SupplierName ?? string.Empty,
+            x => x.SupplierShortName ?? string.Empty,
             false);
         return list.Select(e => new TaktSelectOption
         {
             DictValue = e.SupplierCode,
-            DictLabel = e.SupplierName ?? e.SupplierCode,
-            ExtValue = e.Id,
+            DictLabel = e.SupplierShortName ?? e.SupplierCode,
         }).ToList();
     }
 
@@ -337,16 +336,20 @@ public class TaktSupplierService : TaktServiceBase, ITaktSupplierService
             exp = exp.And(x =>
                 (x.PlantCode != null && x.PlantCode.Contains(keywords))
                 || (x.SupplierCode != null && x.SupplierCode.Contains(keywords))
-                || (x.SupplierName != null && x.SupplierName.Contains(keywords))
+                || (x.SupplierName1 != null && x.SupplierName1.Contains(keywords))
+                || (x.SupplierName2 != null && x.SupplierName2.Contains(keywords))
                 || (x.SupplierShortName != null && x.SupplierShortName.Contains(keywords))
                 || SqlFunc.ToString(x.SupplierType).Contains(keywords)
-                || (x.IndustrySector != null && x.IndustrySector.Contains(keywords))
+                || (x.EnterpriseNature != null && x.EnterpriseNature.Contains(keywords))
+                || (x.IndustryAttribute != null && x.IndustryAttribute.Contains(keywords))
+                || (x.DefaultCulture != null && x.DefaultCulture.Contains(keywords))
                 || (x.SupplierTaxNumber != null && x.SupplierTaxNumber.Contains(keywords))
                 || SqlFunc.ToString(x.TaxRate).Contains(keywords)
                 || (x.RegistrationCountry != null && x.RegistrationCountry.Contains(keywords))
+                || (x.RegistrationProvince != null && x.RegistrationProvince.Contains(keywords))
+                || (x.RegistrationCity != null && x.RegistrationCity.Contains(keywords))
                 || (x.RegistrationAddress1 != null && x.RegistrationAddress1.Contains(keywords))
                 || (x.RegistrationAddress2 != null && x.RegistrationAddress2.Contains(keywords))
-                || (x.RegistrationAddress3 != null && x.RegistrationAddress3.Contains(keywords))
                 || (x.SupplierPhone != null && x.SupplierPhone.Contains(keywords))
                 || (x.SupplierFax != null && x.SupplierFax.Contains(keywords))
                 || (x.SupplierEmail != null && x.SupplierEmail.Contains(keywords))
@@ -355,11 +358,27 @@ public class TaktSupplierService : TaktServiceBase, ITaktSupplierService
                 || (x.ContactPhone != null && x.ContactPhone.Contains(keywords))
                 || (x.ContactEmail != null && x.ContactEmail.Contains(keywords))
                 || (x.CurrencyCode != null && x.CurrencyCode.Contains(keywords))
-                || SqlFunc.ToString(x.PaymentTerms).Contains(keywords)
+                || (x.ReconciliationAccount != null && x.ReconciliationAccount.Contains(keywords))
+                || (x.CustomerCode != null && x.CustomerCode.Contains(keywords))
+                || SqlFunc.ToString(x.ClearingWithCustomer).Contains(keywords)
+                || SqlFunc.ToString(x.PaymentMethod).Contains(keywords)
+                || (x.PaymentTerms != null && x.PaymentTerms.Contains(keywords))
+                || (x.BankCode != null && x.BankCode.Contains(keywords))
+                || (x.BankAccount != null && x.BankAccount.Contains(keywords))
+                || (x.AccountHolder != null && x.AccountHolder.Contains(keywords))
+                || SqlFunc.ToString(x.GrBasedInvoiceInspection).Contains(keywords)
+                || (x.Incoterms1 != null && x.Incoterms1.Contains(keywords))
+                || (x.Incoterms2 != null && x.Incoterms2.Contains(keywords))
+                || SqlFunc.ToString(x.AutomaticPurchaseOrder).Contains(keywords)
+                || SqlFunc.ToString(x.PricingDateControl).Contains(keywords)
+                || (x.PurchaseGroup != null && x.PurchaseGroup.Contains(keywords))
+                || SqlFunc.ToString(x.PlannedDeliveryTimeDays).Contains(keywords)
+                || SqlFunc.ToString(x.EvaluatedReceiptSettlement).Contains(keywords)
+                || (x.PurchasingOrganization != null && x.PurchasingOrganization.Contains(keywords))
                 || SqlFunc.ToString(x.SupplierLevel).Contains(keywords)
                 || SqlFunc.ToString(x.EvaluationScore).Contains(keywords)
-                || SqlFunc.ToString(x.SupplierStatus).Contains(keywords)
                 || SqlFunc.ToString(x.SortOrder).Contains(keywords)
+                || SqlFunc.ToString(x.SupplierStatus).Contains(keywords)
                 || (x.ExtField != null && x.ExtField.Contains(keywords))
                 || (x.Remark != null && x.Remark.Contains(keywords))
                 || SqlFunc.ToString(x.CreatedAt).Contains(keywords)
@@ -376,9 +395,14 @@ public class TaktSupplierService : TaktServiceBase, ITaktSupplierService
             exp = exp.And(x => x.SupplierCode != null && x.SupplierCode.Contains(queryDto.SupplierCode));
         }
 
-        if (!string.IsNullOrEmpty(queryDto?.SupplierName))
+        if (!string.IsNullOrEmpty(queryDto?.SupplierName1))
         {
-            exp = exp.And(x => x.SupplierName != null && x.SupplierName.Contains(queryDto.SupplierName));
+            exp = exp.And(x => x.SupplierName1 != null && x.SupplierName1.Contains(queryDto.SupplierName1));
+        }
+
+        if (!string.IsNullOrEmpty(queryDto?.SupplierName2))
+        {
+            exp = exp.And(x => x.SupplierName2 != null && x.SupplierName2.Contains(queryDto.SupplierName2));
         }
 
         if (!string.IsNullOrEmpty(queryDto?.SupplierShortName))
@@ -391,9 +415,19 @@ public class TaktSupplierService : TaktServiceBase, ITaktSupplierService
             exp = exp.And(x => x.SupplierType == queryDto.SupplierType);
         }
 
-        if (!string.IsNullOrEmpty(queryDto?.IndustrySector))
+        if (!string.IsNullOrEmpty(queryDto?.EnterpriseNature))
         {
-            exp = exp.And(x => x.IndustrySector != null && x.IndustrySector.Contains(queryDto.IndustrySector));
+            exp = exp.And(x => x.EnterpriseNature != null && x.EnterpriseNature.Contains(queryDto.EnterpriseNature));
+        }
+
+        if (!string.IsNullOrEmpty(queryDto?.IndustryAttribute))
+        {
+            exp = exp.And(x => x.IndustryAttribute != null && x.IndustryAttribute.Contains(queryDto.IndustryAttribute));
+        }
+
+        if (!string.IsNullOrEmpty(queryDto?.DefaultCulture))
+        {
+            exp = exp.And(x => x.DefaultCulture != null && x.DefaultCulture.Contains(queryDto.DefaultCulture));
         }
 
         if (!string.IsNullOrEmpty(queryDto?.SupplierTaxNumber))
@@ -411,6 +445,16 @@ public class TaktSupplierService : TaktServiceBase, ITaktSupplierService
             exp = exp.And(x => x.RegistrationCountry != null && x.RegistrationCountry.Contains(queryDto.RegistrationCountry));
         }
 
+        if (!string.IsNullOrEmpty(queryDto?.RegistrationProvince))
+        {
+            exp = exp.And(x => x.RegistrationProvince != null && x.RegistrationProvince.Contains(queryDto.RegistrationProvince));
+        }
+
+        if (!string.IsNullOrEmpty(queryDto?.RegistrationCity))
+        {
+            exp = exp.And(x => x.RegistrationCity != null && x.RegistrationCity.Contains(queryDto.RegistrationCity));
+        }
+
         if (!string.IsNullOrEmpty(queryDto?.RegistrationAddress1))
         {
             exp = exp.And(x => x.RegistrationAddress1 != null && x.RegistrationAddress1.Contains(queryDto.RegistrationAddress1));
@@ -419,11 +463,6 @@ public class TaktSupplierService : TaktServiceBase, ITaktSupplierService
         if (!string.IsNullOrEmpty(queryDto?.RegistrationAddress2))
         {
             exp = exp.And(x => x.RegistrationAddress2 != null && x.RegistrationAddress2.Contains(queryDto.RegistrationAddress2));
-        }
-
-        if (!string.IsNullOrEmpty(queryDto?.RegistrationAddress3))
-        {
-            exp = exp.And(x => x.RegistrationAddress3 != null && x.RegistrationAddress3.Contains(queryDto.RegistrationAddress3));
         }
 
         if (!string.IsNullOrEmpty(queryDto?.SupplierPhone))
@@ -466,9 +505,89 @@ public class TaktSupplierService : TaktServiceBase, ITaktSupplierService
             exp = exp.And(x => x.CurrencyCode != null && x.CurrencyCode.Contains(queryDto.CurrencyCode));
         }
 
+        if (!string.IsNullOrEmpty(queryDto?.ReconciliationAccount))
+        {
+            exp = exp.And(x => x.ReconciliationAccount != null && x.ReconciliationAccount.Contains(queryDto.ReconciliationAccount));
+        }
+
+        if (!string.IsNullOrEmpty(queryDto?.CustomerCode))
+        {
+            exp = exp.And(x => x.CustomerCode != null && x.CustomerCode.Contains(queryDto.CustomerCode));
+        }
+
+        if (queryDto?.ClearingWithCustomer.HasValue == true)
+        {
+            exp = exp.And(x => x.ClearingWithCustomer == queryDto.ClearingWithCustomer);
+        }
+
+        if (queryDto?.PaymentMethod.HasValue == true)
+        {
+            exp = exp.And(x => x.PaymentMethod == queryDto.PaymentMethod);
+        }
+
         if (!string.IsNullOrEmpty(queryDto?.PaymentTerms))
         {
-            exp = exp.And(x => x.PaymentTerms == queryDto.PaymentTerms);
+            exp = exp.And(x => x.PaymentTerms != null && x.PaymentTerms.Contains(queryDto.PaymentTerms));
+        }
+
+        if (!string.IsNullOrEmpty(queryDto?.BankCode))
+        {
+            exp = exp.And(x => x.BankCode != null && x.BankCode.Contains(queryDto.BankCode));
+        }
+
+        if (!string.IsNullOrEmpty(queryDto?.BankAccount))
+        {
+            exp = exp.And(x => x.BankAccount != null && x.BankAccount.Contains(queryDto.BankAccount));
+        }
+
+        if (!string.IsNullOrEmpty(queryDto?.AccountHolder))
+        {
+            exp = exp.And(x => x.AccountHolder != null && x.AccountHolder.Contains(queryDto.AccountHolder));
+        }
+
+        if (queryDto?.GrBasedInvoiceInspection.HasValue == true)
+        {
+            exp = exp.And(x => x.GrBasedInvoiceInspection == queryDto.GrBasedInvoiceInspection);
+        }
+
+        if (!string.IsNullOrEmpty(queryDto?.Incoterms1))
+        {
+            exp = exp.And(x => x.Incoterms1 != null && x.Incoterms1.Contains(queryDto.Incoterms1));
+        }
+
+        if (!string.IsNullOrEmpty(queryDto?.Incoterms2))
+        {
+            exp = exp.And(x => x.Incoterms2 != null && x.Incoterms2.Contains(queryDto.Incoterms2));
+        }
+
+        if (queryDto?.AutomaticPurchaseOrder.HasValue == true)
+        {
+            exp = exp.And(x => x.AutomaticPurchaseOrder == queryDto.AutomaticPurchaseOrder);
+        }
+
+        if (queryDto?.PricingDateControl.HasValue == true)
+        {
+            exp = exp.And(x => x.PricingDateControl == queryDto.PricingDateControl);
+        }
+
+        if (!string.IsNullOrEmpty(queryDto?.PurchaseGroup))
+        {
+            exp = exp.And(x => x.PurchaseGroup != null && x.PurchaseGroup.Contains(queryDto.PurchaseGroup));
+        }
+
+        if (queryDto?.PlannedDeliveryTimeDays.HasValue == true)
+        {
+            exp = exp.And(x => x.PlannedDeliveryTimeDays == queryDto.PlannedDeliveryTimeDays);
+        }
+
+        if (queryDto?.EvaluatedReceiptSettlement.HasValue == true)
+        {
+            exp = exp.And(x => x.EvaluatedReceiptSettlement == queryDto.EvaluatedReceiptSettlement);
+        }
+
+        if (!string.IsNullOrEmpty(queryDto?.PurchasingOrganization))
+        {
+            exp = exp.And(x => x.PurchasingOrganization != null && x.PurchasingOrganization.Contains(queryDto.PurchasingOrganization));
         }
 
         if (queryDto?.SupplierLevel.HasValue == true)
@@ -481,14 +600,14 @@ public class TaktSupplierService : TaktServiceBase, ITaktSupplierService
             exp = exp.And(x => x.EvaluationScore == queryDto.EvaluationScore);
         }
 
-        if (queryDto?.SupplierStatus.HasValue == true)
-        {
-            exp = exp.And(x => x.SupplierStatus == queryDto.SupplierStatus);
-        }
-
         if (queryDto?.SortOrder.HasValue == true)
         {
             exp = exp.And(x => x.SortOrder == queryDto.SortOrder);
+        }
+
+        if (queryDto?.SupplierStatus.HasValue == true)
+        {
+            exp = exp.And(x => x.SupplierStatus == queryDto.SupplierStatus);
         }
 
         if (!string.IsNullOrEmpty(queryDto?.ExtField))

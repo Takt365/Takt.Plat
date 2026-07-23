@@ -9,17 +9,37 @@
 
 <template>
   <div class="p-4 flex flex-col min-h-0 h-full">
-    <!-- 查询栏 -->
-    <TaktQueryBar
-      v-model="queryKeyword"
-      :placeholder="searchPlaceholder"
-      :loading="loading"
-      @search="handleSearch"
-      @reset="handleReset"
-    />
-
-    <!-- 工具栏 -->
-    <TaktToolsBar
+    <!-- 左主右从 -->
+    <TaktMasterDetailTableLr
+      v-model:master-current="currentPage"
+      v-model:master-page-size="pageSize"
+      v-model:selected-master-key="selectedMasterKey"
+      class="min-h-0 flex-1"
+      :master-columns="columns"
+      :master-data-source="dataSource"
+      :master-loading="loading"
+      :master-row-key="getQualityIssueId"
+      :master-row-selection="rowSelection"
+      master-id-column-key="qualityIssueId"
+      :master-visible-column-keys="visibleColumnKeys"
+      master-table-mode="masterDetailMaster"
+      master-scroll-layout="masterDetailLr"
+      :master-total="total"
+      master-entity-scope="company"
+      @master-change="handleTableChange"
+      @master-resize-column="handleResizeColumn"
+      @master-pagination-change="handleMasterPaginationChange"
+      @master-select="handleMasterSelect"
+    >
+      <template #master-toolbar>
+        <TaktQueryBar
+          v-model="queryKeyword"
+          :placeholder="searchPlaceholder"
+          :loading="loading"
+          @search="handleSearch"
+          @reset="handleReset"
+        />
+        <TaktToolsBar
       create-permission="logistics:quality:cost:issue:create"
       update-permission="logistics:quality:cost:issue:update"
       delete-permission="logistics:quality:cost:issue:delete"
@@ -50,28 +70,8 @@
       @advanced-query="handleAdvancedQuery"
       @column-setting="handleColumnSetting"
       @refresh="handleRefresh"
-    />
-
-    <!-- 左主右从 -->
-    <TaktMasterDetailTableLr
-      v-model:master-current="currentPage"
-      v-model:master-page-size="pageSize"
-      v-model:selected-master-key="selectedMasterKey"
-      class="min-h-0 flex-1"
-      :master-columns="columns"
-      :master-data-source="dataSource"
-      :master-loading="loading"
-      :master-row-key="getQualityIssueId"
-      :master-row-selection="rowSelection"
-      master-id-column-key="qualityIssueId"
-      :master-visible-column-keys="visibleColumnKeys"
-      :master-total="total"
-      master-entity-scope="company"
-      @master-change="handleTableChange"
-      @master-resize-column="handleResizeColumn"
-      @master-pagination-change="handleMasterPaginationChange"
-      @master-select="handleMasterSelect"
-    >
+        />
+      </template>
       <template #detail>
         <QualityIssueMeetingPanel
           ref="qualityIssueMeetingPanelRef"
@@ -109,21 +109,20 @@
     >
       <template #default="{ isFieldVisible }">
       <div v-show="isFieldVisible('plantCode')">
-      <a-form-item :label="t('entity.qualityissue.plantcode')">
-        <a-input
+      <a-form-item :label="pi.queryLabel('plantCode')">
+        <TaktSelect
           v-model:value="advancedQueryForm.plantCode"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.qualityissue.plantcode') })"
-          show-count
-          :maxlength="4"
+          api-url="TaktPlants/options"
+          :placeholder="pi.queryPh('plantCode', 'select')"
           allow-clear
         />
       </a-form-item>
       </div>
       <div v-show="isFieldVisible('qualityIssueCode')">
-      <a-form-item :label="t('entity.qualityissue.code')">
+      <a-form-item :label="pi.queryLabel('qualityIssueCode')">
         <a-input
           v-model:value="advancedQueryForm.qualityIssueCode"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.qualityissue.code') })"
+          :placeholder="pi.queryPh('qualityIssueCode', 'required')"
           show-count
           :maxlength="30"
           allow-clear
@@ -131,30 +130,30 @@
       </a-form-item>
       </div>
       <div v-show="isFieldVisible('issueDateStart')">
-      <a-form-item :label="t('entity.qualityissue.issuedatestart')">
+      <a-form-item :label="pi.queryLabel('issueDateStart')">
         <a-date-picker
           v-model:value="advancedQueryForm.issueDateStart"
-          :placeholder="t('common.page.form.placeholder.select', { field: t('entity.qualityissue.issuedatestart') })"
+          :placeholder="pi.queryPh('issueDateStart', 'select')"
           value-format="YYYY-MM-DD"
           style="width: 100%"
         />
       </a-form-item>
       </div>
       <div v-show="isFieldVisible('issueDateEnd')">
-      <a-form-item :label="t('entity.qualityissue.issuedateend')">
+      <a-form-item :label="pi.queryLabel('issueDateEnd')">
         <a-date-picker
           v-model:value="advancedQueryForm.issueDateEnd"
-          :placeholder="t('common.page.form.placeholder.select', { field: t('entity.qualityissue.issuedateend') })"
+          :placeholder="pi.queryPh('issueDateEnd', 'select')"
           value-format="YYYY-MM-DD"
           style="width: 100%"
         />
       </a-form-item>
       </div>
       <div v-show="isFieldVisible('model')">
-      <a-form-item :label="t('entity.qualityissue.model')">
+      <a-form-item :label="pi.queryLabel('model')">
         <a-input
           v-model:value="advancedQueryForm.model"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.qualityissue.model') })"
+          :placeholder="pi.queryPh('model', 'required')"
           show-count
           :maxlength="255"
           allow-clear
@@ -162,10 +161,10 @@
       </a-form-item>
       </div>
       <div v-show="isFieldVisible('lot')">
-      <a-form-item :label="t('entity.qualityissue.lot')">
+      <a-form-item :label="pi.queryLabel('lot')">
         <a-input
           v-model:value="advancedQueryForm.lot"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.qualityissue.lot') })"
+          :placeholder="pi.queryPh('lot', 'required')"
           show-count
           :maxlength="30"
           allow-clear
@@ -173,10 +172,10 @@
       </a-form-item>
       </div>
       <div v-show="isFieldVisible('qualityProblemsResponse')">
-      <a-form-item :label="t('entity.qualityissue.qualityproblemsresponse')">
+      <a-form-item :label="pi.queryLabel('qualityProblemsResponse')">
         <a-input
           v-model:value="advancedQueryForm.qualityProblemsResponse"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.qualityissue.qualityproblemsresponse') })"
+          :placeholder="pi.queryPh('qualityProblemsResponse', 'required')"
           show-count
           :maxlength="255"
           allow-clear
@@ -184,10 +183,10 @@
       </a-form-item>
       </div>
       <div v-show="isFieldVisible('reworkDueToDefects')">
-      <a-form-item :label="t('entity.qualityissue.reworkduetodefects')">
+      <a-form-item :label="pi.queryLabel('reworkDueToDefects')">
         <a-input
           v-model:value="advancedQueryForm.reworkDueToDefects"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.qualityissue.reworkduetodefects') })"
+          :placeholder="pi.queryPh('reworkDueToDefects', 'required')"
           show-count
           :maxlength="255"
           allow-clear
@@ -195,10 +194,10 @@
       </a-form-item>
       </div>
       <div v-show="isFieldVisible('needRework')">
-      <a-form-item :label="t('entity.qualityissue.needrework')">
+      <a-form-item :label="pi.queryLabel('needRework')">
         <a-input
           v-model:value="advancedQueryForm.needRework"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.qualityissue.needrework') })"
+          :placeholder="pi.queryPh('needRework', 'required')"
           show-count
           :maxlength="1"
           allow-clear
@@ -206,28 +205,28 @@
       </a-form-item>
       </div>
       <div v-show="isFieldVisible('totalTimeMinutes')">
-      <a-form-item :label="t('entity.qualityissue.totaltimeminutes')">
+      <a-form-item :label="pi.queryLabel('totalTimeMinutes')">
         <a-input-number
           v-model:value="advancedQueryForm.totalTimeMinutes"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.qualityissue.totaltimeminutes') })"
+          :placeholder="pi.queryPh('totalTimeMinutes', 'required')"
           style="width: 100%"
         />
       </a-form-item>
       </div>
       <div v-show="isFieldVisible('totalCost')">
-      <a-form-item :label="t('entity.qualityissue.totalcost')">
+      <a-form-item :label="pi.queryLabel('totalCost')">
         <a-input-number
           v-model:value="advancedQueryForm.totalCost"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.qualityissue.totalcost') })"
+          :placeholder="pi.queryPh('totalCost', 'required')"
           style="width: 100%"
         />
       </a-form-item>
       </div>
       <div v-show="isFieldVisible('costCurrency')">
-      <a-form-item :label="t('entity.qualityissue.costcurrency')">
+      <a-form-item :label="pi.queryLabel('costCurrency')">
         <a-input
           v-model:value="advancedQueryForm.costCurrency"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.qualityissue.costcurrency') })"
+          :placeholder="pi.queryPh('costCurrency', 'required')"
           show-count
           :maxlength="3"
           allow-clear
@@ -235,10 +234,10 @@
       </a-form-item>
       </div>
       <div v-show="isFieldVisible('createdAtStart')">
-      <a-form-item :label="t('common.page.entity.createdatstart')">
+      <a-form-item :label="pi.queryLabel('createdAtStart')">
         <a-date-picker
           v-model:value="advancedQueryForm.createdAtStart"
-          :placeholder="t('common.page.form.placeholder.select', { field: t('common.page.entity.createdatstart') })"
+          :placeholder="pi.queryPh('createdAtStart', 'select')"
           value-format="YYYY-MM-DD HH:mm:ss"
             show-time
           style="width: 100%"
@@ -246,10 +245,10 @@
       </a-form-item>
       </div>
       <div v-show="isFieldVisible('createdAtEnd')">
-      <a-form-item :label="t('common.page.entity.createdatend')">
+      <a-form-item :label="pi.queryLabel('createdAtEnd')">
         <a-date-picker
           v-model:value="advancedQueryForm.createdAtEnd"
-          :placeholder="t('common.page.form.placeholder.select', { field: t('common.page.entity.createdatend') })"
+          :placeholder="pi.queryPh('createdAtEnd', 'select')"
           value-format="YYYY-MM-DD HH:mm:ss"
             show-time
           style="width: 100%"
@@ -271,7 +270,7 @@
             >
               <span class="takt-form-label-hint-icon"><RiQuestionLine class="takt-remix-icon" /></span>
             </a-tooltip>
-            <span>{{ t('common.page.entity.extfield') }}</span>
+            <span>{{ pi.queryLabel('extField') }}</span>
           </span>
         </template>
         <a-textarea
@@ -285,10 +284,10 @@
       </a-form-item>
       </div>
       <div v-show="isFieldVisible('remark')">
-      <a-form-item :label="t('common.page.entity.remark')">
+      <a-form-item :label="pi.queryLabel('remark')">
         <a-textarea
           v-model:value="advancedQueryForm.remark"
-          :placeholder="t('common.page.form.placeholder.optional', { field: t('common.page.entity.remark') })"
+          :placeholder="pi.queryPh('remark', 'optional')"
             :rows="4"
             show-count
             :maxlength="400"
@@ -302,14 +301,15 @@
     <!-- 导入对话框 -->
     <TaktModal
       v-model:open="importVisible"
-      :title="t('common.dialog.title.import', { entity: t('entity.qualityissue._self') })"
+      :title="t('common.dialog.title.import', { entity: pi.self() })"
       :width="600"
       :footer="null"
       :cancel-text="t('common.page.button.close')"
       @cancel="handleImportCancel"
     >
       <TaktImportFile
-        entity-i18n-key="entity.qualityissue._self"
+        v-if="importVisible"
+        :entity-i18n-key="QUALITYISSUE_SELF_I18N_KEY"
         file-type="xlsx"
         :sheet-name="excelNames.sheet"
         :template-file-name="excelNames.fileBase"
@@ -328,7 +328,7 @@
       :id-column-key="'qualityIssueId'"
       :action-column-key="'action'"
       entity-scope="company"
-      table-mode="single"
+      table-mode="masterDetailMaster"
       @update:checked-keys="handleColumnKeysChange"
       @reset="handleColumnSettingReset"
     />
@@ -348,12 +348,24 @@ import { useI18n } from 'vue-i18n'
 import { ensureTaktPaginationConfigAsync, getTaktDefaultPageIndex, getTaktDefaultPageSize } from '@/utils/takt-paged'
 import QualityIssueForm from './components/issue-form.vue'
 import QualityIssueMeetingPanel from './components/issue-meeting-panel.vue'
-import { provideQualityIssueMasterContext } from './composables/use-issue-master-context'
+import { provideQualityIssueMasterContext, type QualityIssueRowRecord } from './composables/use-issue-master-context'
 import { getQualityIssueList, getQualityIssueById, createQualityIssue, updateQualityIssue, deleteQualityIssueById, deleteQualityIssueBatch, getQualityIssueTemplate, importQualityIssue, exportQualityIssue } from '@/api/logistics/quality/cost/issue'
 import type { QualityIssue, QualityIssueQuery } from '@/types/logistics/quality/cost/issue'
 import { taktExcelEntityNames } from '@/utils/naming'
 import { resolveExportDownloadFileName } from '@/utils/export-download-name'
+import { normalizeImportResult, type TaktImportResult } from '@/utils/takt-import-result'
 import { RiEditLine, RiDeleteBinLine, RiQuestionLine } from '@remixicon/vue'
+
+import {
+  useQualityIssueI18n,
+  QUALITYISSUE_LIST_FIELDS,
+  QUALITYISSUE_QUERY_STRING_FIELDS,
+  QUALITYISSUE_QUERY_FIELDS,
+  QUALITYISSUE_SELF_I18N_KEY,
+} from './composables/use-issue-i18n'
+
+/** 实体字段 i18n（标签/占位符统一入口） */
+const pi = useQualityIssueI18n()
 
 /** i18n 翻译函数 */
 const { t } = useI18n()
@@ -361,7 +373,7 @@ const { t } = useI18n()
 const excelNames = taktExcelEntityNames('TaktQualityIssue')
 /** 列表快捷查询占位文案 */
 const searchPlaceholder = computed(
-  () => t('common.page.form.placeholder.search', { keyword: t('entity.qualityissue._self') })
+  () => t('common.page.form.placeholder.search', { keyword: pi.self() })
 )
 
 /** 快捷查询关键字 */
@@ -377,9 +389,9 @@ const pageSize = ref(getTaktDefaultPageSize())
 /** 分页 total */
 const total = ref(0)
 /** 工具栏单选时当前行 */
-const selectedRow = ref<QualityIssue | null>(null)
+const selectedRow = ref<QualityIssueRowRecord | null>(null)
 /** 表格多选行 */
-const selectedRows = ref<QualityIssue[]>([])
+const selectedRows = ref<QualityIssueRowRecord[]>([])
 /** 表格多选 row-key 集合 */
 const selectedRowKeys = ref<(string | number)[]>([])
 
@@ -396,44 +408,27 @@ const formRef = ref()
 
 /** 高级查询抽屉是否打开 */
 const advancedQueryVisible = ref(false)
+/**
+ * 创建空的高级查询表单
+ * @returns {Record<string, unknown>} 高级查询初始模型
+ */
+function createEmptyAdvancedQueryForm() {
+  const form = Object.fromEntries(QUALITYISSUE_QUERY_STRING_FIELDS.map((key) => [key, ''])) as Record<
+    (typeof QUALITYISSUE_QUERY_STRING_FIELDS)[number],
+    string
+  >
+  return {
+    ...form,
+    totalTimeMinutes: undefined as number | undefined,
+    totalCost: undefined as number | undefined,
+  }
+}
 /** 高级查询表单模型 */
-const advancedQueryForm = ref({
-  plantCode: '',
-  qualityIssueCode: '',
-  issueDateStart: '',
-  issueDateEnd: '',
-  model: '',
-  lot: '',
-  qualityProblemsResponse: '',
-  reworkDueToDefects: '',
-  needRework: '',
-  totalTimeMinutes: undefined as number | undefined,
-  totalCost: undefined as number | undefined,
-  costCurrency: '',
-  createdAtStart: '',
-  createdAtEnd: '',
-  extField: '',
-  remark: '',
-})
+const advancedQueryForm = ref(createEmptyAdvancedQueryForm())
 /** 高级查询字段元数据（列显隐配置） */
-const queryFieldsMeta = computed(() => [
-  { key: 'plantCode', label: t('entity.qualityissue.plantcode') },
-  { key: 'qualityIssueCode', label: t('entity.qualityissue.code') },
-  { key: 'issueDateStart', label: t('common.page.entity.createdatstart').replace(t('common.page.entity.createdat'), t('entity.qualityissue.issuedate')) },
-  { key: 'issueDateEnd', label: t('common.page.entity.createdatend').replace(t('common.page.entity.createdat'), t('entity.qualityissue.issuedate')) },
-  { key: 'model', label: t('entity.qualityissue.model') },
-  { key: 'lot', label: t('entity.qualityissue.lot') },
-  { key: 'qualityProblemsResponse', label: t('entity.qualityissue.qualityproblemsresponse') },
-  { key: 'reworkDueToDefects', label: t('entity.qualityissue.reworkduetodefects') },
-  { key: 'needRework', label: t('entity.qualityissue.needrework') },
-  { key: 'totalTimeMinutes', label: t('entity.qualityissue.totaltimeminutes') },
-  { key: 'totalCost', label: t('entity.qualityissue.totalcost') },
-  { key: 'costCurrency', label: t('entity.qualityissue.costcurrency') },
-  { key: 'createdAtStart', label: t('common.page.entity.createdatstart') },
-  { key: 'createdAtEnd', label: t('common.page.entity.createdatend') },
-  { key: 'extField', label: t('common.page.entity.extfield') },
-  { key: 'remark', label: t('common.page.entity.remark') },
-])
+const queryFieldsMeta = computed(() =>
+  QUALITYISSUE_QUERY_FIELDS.map((key) => ({ key, label: pi.queryLabel(key) })),
+)
 /** 高级查询当前可见字段 key */
 const visibleQueryFieldKeys = ref<string[]>([])
 /** 列设置抽屉是否打开 */
@@ -475,26 +470,15 @@ function buildListQuery(overrides?: Partial<QualityIssueQuery>): QualityIssueQue
       query[key] = v as never
     }
   }
-  assignTrimmed('plantCode', form.plantCode)
-  assignTrimmed('qualityIssueCode', form.qualityIssueCode)
-  assignTrimmed('issueDateStart', form.issueDateStart)
-  assignTrimmed('issueDateEnd', form.issueDateEnd)
-  assignTrimmed('model', form.model)
-  assignTrimmed('lot', form.lot)
-  assignTrimmed('qualityProblemsResponse', form.qualityProblemsResponse)
-  assignTrimmed('reworkDueToDefects', form.reworkDueToDefects)
-  assignTrimmed('needRework', form.needRework)
+  for (const key of QUALITYISSUE_QUERY_STRING_FIELDS) {
+    assignTrimmed(key, form[key])
+  }
   if (form.totalTimeMinutes !== undefined && form.totalTimeMinutes !== null) {
     query.totalTimeMinutes = form.totalTimeMinutes
   }
   if (form.totalCost !== undefined && form.totalCost !== null) {
     query.totalCost = form.totalCost
   }
-  assignTrimmed('costCurrency', form.costCurrency)
-  assignTrimmed('createdAtStart', form.createdAtStart)
-  assignTrimmed('createdAtEnd', form.createdAtEnd)
-  assignTrimmed('extField', form.extField)
-  assignTrimmed('remark', form.remark)
   return query
 }
 /** 页面挂载：租户上下文就绪后加载分页配置，再拉列表 */
@@ -508,7 +492,7 @@ onMounted(async () => {
 const selectedMasterKey = ref('')
 
 /** 同步主表选中行到右侧明细（子表由 *-panel watch 自动 reload） */
-function syncMasterSelection(record: QualityIssue | null) {
+function syncMasterSelection(record: QualityIssueRowRecord | null) {
   selectedMasterRow.value = record
   selectedMasterKey.value = record ? getQualityIssueId(record) : ''
 }
@@ -518,7 +502,7 @@ function syncMasterSelection(record: QualityIssue | null) {
  * @param record 主表行
  */
 function handleMasterSelect(record: Record<string, unknown>) {
-  const row = record as unknown as QualityIssue
+  const row = record as unknown as QualityIssueRowRecord
   const key = getQualityIssueId(row)
   selectedRowKeys.value = [key]
   selectedRows.value = [row]
@@ -536,7 +520,7 @@ function handleMasterPaginationChange(_page: number, _pageSize: number) {
 }
 
 /** 加载主表详情并回填当前页 dataSource */
-async function loadQualityIssueDetail(record: QualityIssue): Promise<QualityIssue | null> {
+async function loadQualityIssueDetail(record: QualityIssueRowRecord): Promise<QualityIssue | null> {
   const id = getQualityIssueId(record)
   if (!id) {
     return null
@@ -567,7 +551,7 @@ const columns = computed<TableColumnsType>(() => [
     customRender: ({ record }: { record: any }) => getQualityIssueField(record, 'qualityIssueId') ?? ''
   },
   {
-    title: t('entity.qualityissue.plantcode'),
+    title: pi.label('plantCode'),
     dataIndex: 'plantCode',
     key: 'plantCode',
     width: 120,
@@ -576,7 +560,7 @@ const columns = computed<TableColumnsType>(() => [
     customRender: ({ record }: { record: any }) => getQualityIssueField(record, 'plantCode') ?? ''
   },
   {
-    title: t('entity.qualityissue.code'),
+    title: pi.label('qualityIssueCode'),
     dataIndex: 'qualityIssueCode',
     key: 'qualityIssueCode',
     width: 120,
@@ -585,7 +569,7 @@ const columns = computed<TableColumnsType>(() => [
     customRender: ({ record }: { record: any }) => getQualityIssueField(record, 'qualityIssueCode') ?? ''
   },
   {
-    title: t('entity.qualityissue.issuedate'),
+    title: pi.label('issueDate'),
     dataIndex: 'issueDate',
     key: 'issueDate',
     width: 120,
@@ -594,7 +578,7 @@ const columns = computed<TableColumnsType>(() => [
     customRender: ({ record }: { record: any }) => getQualityIssueField(record, 'issueDate') ?? ''
   },
   {
-    title: t('entity.qualityissue.model'),
+    title: pi.label('model'),
     dataIndex: 'model',
     key: 'model',
     width: 120,
@@ -603,7 +587,7 @@ const columns = computed<TableColumnsType>(() => [
     customRender: ({ record }: { record: any }) => getQualityIssueField(record, 'model') ?? ''
   },
   {
-    title: t('entity.qualityissue.lot'),
+    title: pi.label('lot'),
     dataIndex: 'lot',
     key: 'lot',
     width: 120,
@@ -612,7 +596,7 @@ const columns = computed<TableColumnsType>(() => [
     customRender: ({ record }: { record: any }) => getQualityIssueField(record, 'lot') ?? ''
   },
   {
-    title: t('entity.qualityissue.qualityproblemsresponse'),
+    title: pi.label('qualityProblemsResponse'),
     dataIndex: 'qualityProblemsResponse',
     key: 'qualityProblemsResponse',
     width: 120,
@@ -621,7 +605,7 @@ const columns = computed<TableColumnsType>(() => [
     customRender: ({ record }: { record: any }) => getQualityIssueField(record, 'qualityProblemsResponse') ?? ''
   },
   {
-    title: t('entity.qualityissue.reworkduetodefects'),
+    title: pi.label('reworkDueToDefects'),
     dataIndex: 'reworkDueToDefects',
     key: 'reworkDueToDefects',
     width: 120,
@@ -630,7 +614,7 @@ const columns = computed<TableColumnsType>(() => [
     customRender: ({ record }: { record: any }) => getQualityIssueField(record, 'reworkDueToDefects') ?? ''
   },
   {
-    title: t('entity.qualityissue.needrework'),
+    title: pi.label('needRework'),
     dataIndex: 'needRework',
     key: 'needRework',
     width: 120,
@@ -639,7 +623,7 @@ const columns = computed<TableColumnsType>(() => [
     customRender: ({ record }: { record: any }) => getQualityIssueField(record, 'needRework') ?? ''
   },
   {
-    title: t('entity.qualityissue.totaltimeminutes'),
+    title: pi.label('totalTimeMinutes'),
     dataIndex: 'totalTimeMinutes',
     key: 'totalTimeMinutes',
     width: 120,
@@ -648,7 +632,7 @@ const columns = computed<TableColumnsType>(() => [
     customRender: ({ record }: { record: any }) => getQualityIssueField(record, 'totalTimeMinutes') ?? ''
   },
   {
-    title: t('entity.qualityissue.totalcost'),
+    title: pi.label('totalCost'),
     dataIndex: 'totalCost',
     key: 'totalCost',
     width: 120,
@@ -657,7 +641,7 @@ const columns = computed<TableColumnsType>(() => [
     customRender: ({ record }: { record: any }) => getQualityIssueField(record, 'totalCost') ?? ''
   },
   {
-    title: t('entity.qualityissue.costcurrency'),
+    title: pi.label('costCurrency'),
     dataIndex: 'costCurrency',
     key: 'costCurrency',
     width: 120,
@@ -673,7 +657,7 @@ const columns = computed<TableColumnsType>(() => [
         shape: 'plain',
         icon: RiEditLine,
         permission: 'logistics:quality:cost:issue:update',
-        onClick: (record: QualityIssue) => handleEdit(record)
+        onClick: (record: QualityIssueRowRecord) => handleEdit(record)
       },
       {
         key: 'delete',
@@ -681,14 +665,17 @@ const columns = computed<TableColumnsType>(() => [
         shape: 'plain',
         icon: RiDeleteBinLine,
         permission: 'logistics:quality:cost:issue:delete',
-        onClick: (record: QualityIssue) => handleDeleteOne(record)
+        onClick: (record: QualityIssueRowRecord) => handleDeleteOne(record)
       }
     ]
   })
 ])
 
 /** 表格 row-key（优先实体主键字段） */
-const getQualityIssueId = (record: any): string => record?.[entityIdName] ?? ''
+const getQualityIssueId = (record: QualityIssueRowRecord): string => {
+  const id = (record as Record<string, unknown>)?.[entityIdName]
+  return id != null ? String(id) : ''
+}
 /**
  * 读取行字段值
  * @param record 行数据
@@ -697,10 +684,11 @@ const getQualityIssueId = (record: any): string => record?.[entityIdName] ?? ''
 const getQualityIssueField = (record: any, field: string): any => record?.[field]
 
 
+
 /** 行选择配置 */
 const rowSelection = computed(() => ({
   selectedRowKeys: selectedRowKeys.value,
-  onChange: (keys: (string | number)[], rows: QualityIssue[]) => {
+  onChange: (keys: (string | number)[], rows: QualityIssueRowRecord[]) => {
     selectedRowKeys.value = keys
     selectedRows.value = rows
     selectedRow.value = rows.length === 1 ? (rows[0] ?? null) : null
@@ -710,7 +698,7 @@ const rowSelection = computed(() => ({
       syncMasterSelection(null)
     }
   },
-  onSelect: (record: QualityIssue, selected: boolean) => {
+  onSelect: (record: QualityIssueRowRecord, selected: boolean) => {
     if (selected) {
       selectedRow.value = record
       syncMasterSelection(record)
@@ -719,7 +707,7 @@ const rowSelection = computed(() => ({
       syncMasterSelection(null)
     }
   },
-  onSelectAll: (selected: boolean, selectedRowsData: QualityIssue[]) => {
+  onSelectAll: (selected: boolean, selectedRowsData: QualityIssueRowRecord[]) => {
     selectedRow.value = selected && selectedRowsData.length === 1 ? (selectedRowsData[0] ?? null) : null
     syncMasterSelection(selectedRow.value)
   }
@@ -778,14 +766,14 @@ function handleReset() {
 
 /** 打开新增弹窗 */
 function handleCreate() {
-  formTitle.value = t('common.dialog.title.create', { entity: t('entity.qualityissue._self') })
+  formTitle.value = t('common.dialog.title.create', { entity: pi.self() })
   formData.value = null
   formVisible.value = true
   nextTick(() => formRef.value?.resetFields())
 }
 /** 打开编辑弹窗（主子表：先拉详情含子表） */
-async function handleEdit(record: QualityIssue) {
-  formTitle.value = t('common.dialog.title.edit', { entity: t('entity.qualityissue._self') })
+async function handleEdit(record: QualityIssueRowRecord) {
+  formTitle.value = t('common.dialog.title.edit', { entity: pi.self() })
   formLoading.value = true
   try {
     const detail = await loadQualityIssueDetail(record)
@@ -801,7 +789,7 @@ function handleUpdate() {
   if (selectedRow.value) {
     void handleEdit(selectedRow.value)
   } else {
-    message.warning(t('common.tip.select.to.action', { action: t('common.page.button.edit'), entity: t('entity.qualityissue._self') }))
+    message.warning(t('common.tip.select.to.action', { action: t('common.page.button.edit'), entity: pi.self() }))
   }
 }
 /** 提交新增/编辑表单 */
@@ -819,10 +807,10 @@ async function handleFormSubmit() {
     const id = (formData.value as any)?.[entityIdName]
     if (id) {
       await updateQualityIssue(id, payload as any)
-      message.success(t('common.feedback.updated', { target: t('entity.qualityissue._self') }))
+      message.success(t('common.feedback.updated', { target: pi.self() }))
     } else {
       await createQualityIssue(payload as any)
-      message.success(t('common.feedback.created', { target: t('entity.qualityissue._self') }))
+      message.success(t('common.feedback.created', { target: pi.self() }))
     }
     formVisible.value = false
     formData.value = null
@@ -853,15 +841,22 @@ async function handleDownloadTemplate(sheetName?: string, fileName?: string): Pr
   return (res as any)?.data ?? res
 }
 
-/** 上传并导入 Excel 文件 */
-async function handleImportFile(file: File, sheetName?: string): Promise<{ success: number; fail: number; errors: string[] }> {
-  return await importQualityIssue(file, sheetName)
+/** 上传并导入 Excel 文件（归一化后端 SuccessCount/successCount） */
+async function handleImportFile(file: File, sheetName?: string): Promise<TaktImportResult> {
+  const raw = await importQualityIssue(file, sheetName)
+  return normalizeImportResult(raw)
 }
 
-/** 导入完成回调：刷新列表并可选关闭对话框 */
-function handleImportSuccess(result: { success: number; fail: number; errors: string[] }) {
+/** 导入完成回调：刷新列表；全部成功时延迟关闭对话框 */
+function handleImportSuccess(result: TaktImportResult) {
   loadData()
-  if (result.fail === 0) setTimeout(() => { importVisible.value = false }, 2000)
+
+      if (selectedMasterKey.value) {
+    qualityIssueMeetingPanelRef.value?.reload?.()
+      }
+  if (result.fail === 0 && result.success > 0) {
+    setTimeout(() => { importVisible.value = false }, 2000)
+  }
 }
 
 /** 关闭导入对话框 */
@@ -895,24 +890,24 @@ async function handleExport() {
     link.click()
     document.body.removeChild(link)
     setTimeout(() => window.URL.revokeObjectURL(url), 100)
-    message.success(t('common.feedback.export.success', { target: t('entity.qualityissue._self') }))
+    message.success(t('common.feedback.export.success', { target: pi.self() }))
   } catch (error: any) {
     logger.error('[QualityIssue] 导出失败', { error })
-    message.error(error?.message || t('common.feedback.export.failed', { target: t('entity.qualityissue._self') }))
+    message.error(error?.message || t('common.feedback.export.failed', { target: pi.self() }))
   } finally {
     loading.value = false
   }
 }
 /** 删除单行 */
-async function handleDeleteOne(record: QualityIssue) {
+async function handleDeleteOne(record: QualityIssueRowRecord) {
   Modal.confirm({
     title: t('common.tip.confirm.delete.title'),
-    content: t('common.tip.confirm.delete.entity', { entity: t('entity.qualityissue._self'), name: t('common.tip.this.target', { target: t('entity.qualityissue._self') }) }),
+    content: t('common.tip.confirm.delete.entity', { entity: pi.self(), name: t('common.tip.this.target', { target: pi.self() }) }),
     okText: t('common.page.button.delete'),
     cancelText: t('common.page.button.cancel'),
     onOk: async () => {
       await deleteQualityIssueById((record as any)[entityIdName])
-      message.success(t('common.feedback.deleted', { target: t('entity.qualityissue._self') }))
+      message.success(t('common.feedback.deleted', { target: pi.self() }))
       selectedRowKeys.value = []
       selectedRows.value = []
       selectedRow.value = null
@@ -924,18 +919,18 @@ async function handleDeleteOne(record: QualityIssue) {
 /** 批量删除选中行 */
 async function handleDelete() {
   if (selectedRows.value.length === 0) {
-    message.warning(t('common.tip.select.to.action', { action: t('common.page.button.delete'), entity: t('entity.qualityissue._self') }))
+    message.warning(t('common.tip.select.to.action', { action: t('common.page.button.delete'), entity: pi.self() }))
     return
   }
   Modal.confirm({
     title: t('common.tip.confirm.delete.title'),
-    content: t('common.tip.confirm.delete.count', { entity: t('entity.qualityissue._self'), count: selectedRows.value.length }),
+    content: t('common.tip.confirm.delete.count', { entity: pi.self(), count: selectedRows.value.length }),
     okText: t('common.page.button.delete'),
     cancelText: t('common.page.button.cancel'),
     onOk: async () => {
       const ids = selectedRows.value.map((r: any) => r[entityIdName]).filter(Boolean)
       await deleteQualityIssueBatch(ids)
-      message.success(t('common.feedback.deleted', { target: t('entity.qualityissue._self') }))
+      message.success(t('common.feedback.deleted', { target: pi.self() }))
       selectedRowKeys.value = []
       selectedRows.value = []
       selectedRow.value = null

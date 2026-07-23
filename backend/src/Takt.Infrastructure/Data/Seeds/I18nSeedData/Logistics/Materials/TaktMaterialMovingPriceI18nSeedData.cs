@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Infrastructure.Data.Seeds.I18nSeedData.Logistics.Materials
 // 文件名称：TaktMaterialMovingPriceI18nSeedData.cs
-// 创建时间：2026-07-20
+// 创建时间：2026-07-23
 // 创建人：Takt365(Auto Generated)
 // 功能描述：TaktMaterialMovingPrice 实体字段国际化种子（已对齐前端 locales：src/locales/logistics/materials/material-moving-price）
 // 
@@ -91,13 +91,13 @@ public class TaktMaterialMovingPriceI18nSeedData : ITaktSeedDataCoordinator
             new TranslationSeedItem("entity.materialmovingprice._self", "zh-HK", "移动价格信息_hk", "实体名称"),
 
             // entity.materialmovingprice.plantcode
-            new TranslationSeedItem("entity.materialmovingprice.plantcode", "en-US", "工厂代码_us", "工厂代码（选项 TaktPlants/options，DictValue=PlantCode）"),
+            new TranslationSeedItem("entity.materialmovingprice.plantcode", "en-US", "工厂代码_us", "工厂代码（选项 TaktPlants/options；DictValue=PlantCode）"),
             // entity.materialmovingprice.plantcode
-            new TranslationSeedItem("entity.materialmovingprice.plantcode", "ja-JP", "工厂代码_jp", "工厂代码（选项 TaktPlants/options，DictValue=PlantCode）"),
+            new TranslationSeedItem("entity.materialmovingprice.plantcode", "ja-JP", "工厂代码_jp", "工厂代码（选项 TaktPlants/options；DictValue=PlantCode）"),
             // entity.materialmovingprice.plantcode
-            new TranslationSeedItem("entity.materialmovingprice.plantcode", "zh-CN", "工厂代码", "工厂代码（选项 TaktPlants/options，DictValue=PlantCode）"),
+            new TranslationSeedItem("entity.materialmovingprice.plantcode", "zh-CN", "工厂代码", "工厂代码（选项 TaktPlants/options；DictValue=PlantCode）"),
             // entity.materialmovingprice.plantcode
-            new TranslationSeedItem("entity.materialmovingprice.plantcode", "zh-HK", "工厂代码_hk", "工厂代码（选项 TaktPlants/options，DictValue=PlantCode）"),
+            new TranslationSeedItem("entity.materialmovingprice.plantcode", "zh-HK", "工厂代码_hk", "工厂代码（选项 TaktPlants/options；DictValue=PlantCode）"),
 
             // entity.materialmovingprice.perioddate
             new TranslationSeedItem("entity.materialmovingprice.perioddate", "en-US", "期间_us", "期间（日期类型，业务存当月首日，表示年月，如 2026-07-01 → 2026年7月）"),
@@ -109,13 +109,13 @@ public class TaktMaterialMovingPriceI18nSeedData : ITaktSeedDataCoordinator
             new TranslationSeedItem("entity.materialmovingprice.perioddate", "zh-HK", "期间_hk", "期间（日期类型，业务存当月首日，表示年月，如 2026-07-01 → 2026年7月）"),
 
             // entity.materialmovingprice.materialcode
-            new TranslationSeedItem("entity.materialmovingprice.materialcode", "en-US", "物料编码_us", "物料编码（选项 TaktMaterialPlants/options，DictValue=MaterialCode，ExtValue=PlantCode）"),
+            new TranslationSeedItem("entity.materialmovingprice.materialcode", "en-US", "物料编码_us", "物料编码（选项 TaktMaterialPlants/options；DictValue=MaterialCode，ExtValue=PlantCode）"),
             // entity.materialmovingprice.materialcode
-            new TranslationSeedItem("entity.materialmovingprice.materialcode", "ja-JP", "物料编码_jp", "物料编码（选项 TaktMaterialPlants/options，DictValue=MaterialCode，ExtValue=PlantCode）"),
+            new TranslationSeedItem("entity.materialmovingprice.materialcode", "ja-JP", "物料编码_jp", "物料编码（选项 TaktMaterialPlants/options；DictValue=MaterialCode，ExtValue=PlantCode）"),
             // entity.materialmovingprice.materialcode
-            new TranslationSeedItem("entity.materialmovingprice.materialcode", "zh-CN", "物料编码", "物料编码（选项 TaktMaterialPlants/options，DictValue=MaterialCode，ExtValue=PlantCode）"),
+            new TranslationSeedItem("entity.materialmovingprice.materialcode", "zh-CN", "物料编码", "物料编码（选项 TaktMaterialPlants/options；DictValue=MaterialCode，ExtValue=PlantCode）"),
             // entity.materialmovingprice.materialcode
-            new TranslationSeedItem("entity.materialmovingprice.materialcode", "zh-HK", "物料编码_hk", "物料编码（选项 TaktMaterialPlants/options，DictValue=MaterialCode，ExtValue=PlantCode）"),
+            new TranslationSeedItem("entity.materialmovingprice.materialcode", "zh-HK", "物料编码_hk", "物料编码（选项 TaktMaterialPlants/options；DictValue=MaterialCode，ExtValue=PlantCode）"),
 
             // entity.materialmovingprice.valuation
             new TranslationSeedItem("entity.materialmovingprice.valuation", "en-US", "评估类别_us", "评估类别（字典 logistics_valuation_class_category；Z792=成品，Z790=半成品，Z300=原材料）"),
@@ -172,13 +172,13 @@ public class TaktMaterialMovingPriceI18nSeedData : ITaktSeedDataCoordinator
             new TranslationSeedItem("entity.materialmovingprice.priceunit", "zh-HK", "价格单位_hk", "价格单位（字典 logistics_price_unit_param；1/10/100/1000；默认 1000）"),
 
             // entity.materialmovingprice.currency
-            new TranslationSeedItem("entity.materialmovingprice.currency", "en-US", "币种_us", "币种（字典 accounting_currency_code，DictValue=CNY/USD 等）"),
+            new TranslationSeedItem("entity.materialmovingprice.currency", "en-US", "币种_us", "币种（字典 accounting_currency_code；DictValue=CNY/USD 等）"),
             // entity.materialmovingprice.currency
-            new TranslationSeedItem("entity.materialmovingprice.currency", "ja-JP", "币种_jp", "币种（字典 accounting_currency_code，DictValue=CNY/USD 等）"),
+            new TranslationSeedItem("entity.materialmovingprice.currency", "ja-JP", "币种_jp", "币种（字典 accounting_currency_code；DictValue=CNY/USD 等）"),
             // entity.materialmovingprice.currency
-            new TranslationSeedItem("entity.materialmovingprice.currency", "zh-CN", "币种", "币种（字典 accounting_currency_code，DictValue=CNY/USD 等）"),
+            new TranslationSeedItem("entity.materialmovingprice.currency", "zh-CN", "币种", "币种（字典 accounting_currency_code；DictValue=CNY/USD 等）"),
             // entity.materialmovingprice.currency
-            new TranslationSeedItem("entity.materialmovingprice.currency", "zh-HK", "币种_hk", "币种（字典 accounting_currency_code，DictValue=CNY/USD 等）"),
+            new TranslationSeedItem("entity.materialmovingprice.currency", "zh-HK", "币种_hk", "币种（字典 accounting_currency_code；DictValue=CNY/USD 等）"),
         };
     }
 

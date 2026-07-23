@@ -22,35 +22,35 @@
     >
       <a-tab-pane
         key="tab-0"
-        :tab="t('common.page.form.tabs.basicinfo') + ' (1/4)'"
+        :tab="t('common.page.form.tabs.basicinfo') + ' (1/6)'"
         force-render
       >
         <div :class="formContentClass">
           <a-row :gutter="24">
             <a-col :span="12">
               <a-form-item
-                :label="pi.label('tenantCode')"
-                name="tenantCode"
+                :label="pi.label('companyName1')"
+                name="companyName1"
               >
                 <a-input
-                  v-model:value="formState.tenantCode"
-                  :placeholder="pi.ph('tenantCode')"
+                  v-model:value="formState.companyName1"
+                  :placeholder="pi.ph('companyName1')"
                   show-count
-                  :maxlength="20"
+                  :maxlength="140"
                   allow-clear
                 />
               </a-form-item>
             </a-col>
             <a-col :span="12">
               <a-form-item
-                :label="pi.label('companyName')"
-                name="companyName"
+                :label="pi.label('companyName2')"
+                name="companyName2"
               >
                 <a-input
-                  v-model:value="formState.companyName"
-                  :placeholder="pi.ph('companyName')"
+                  v-model:value="formState.companyName2"
+                  :placeholder="pi.ph('companyName2')"
                   show-count
-                  :maxlength="200"
+                  :maxlength="140"
                   allow-clear
                 />
               </a-form-item>
@@ -141,15 +141,15 @@
                 />
               </a-form-item>
             </a-col>
-            <a-col :span="24">
+            <a-col :span="12">
               <a-form-item
-                :label="pi.label('registrationAddress3')"
-                name="registrationAddress3"
+                :label="pi.label('registrationRegion')"
+                name="registrationRegion"
               >
-                <a-textarea
-                  v-model:value="formState.registrationAddress3"
-                  :placeholder="pi.ph('registrationAddress3')"
-                  :rows="2"
+                <TaktSelect
+                  v-model:value="formState.registrationRegion"
+                  dict-type="sys_country_code"
+                  :placeholder="pi.ph('registrationRegion')"
                 />
               </a-form-item>
             </a-col>
@@ -158,36 +158,20 @@
       </a-tab-pane>
       <a-tab-pane
         key="tab-1"
-        :tab="t('common.page.form.tabs.basicinfo') + ' (2/4)'"
+        :tab="t('common.page.form.tabs.basicinfo') + ' (2/6)'"
         force-render
       >
         <div :class="formContentClass">
           <a-row :gutter="24">
             <a-col :span="12">
               <a-form-item
-                :label="pi.label('registrationRegion')"
-                name="registrationRegion"
-              >
-                <a-input
-                  v-model:value="formState.registrationRegion"
-                  :placeholder="pi.ph('registrationRegion')"
-                  show-count
-                  :maxlength="50"
-                  allow-clear
-                />
-              </a-form-item>
-            </a-col>
-            <a-col :span="12">
-              <a-form-item
                 :label="pi.label('registrationProvince')"
                 name="registrationProvince"
               >
-                <a-input
+                <TaktSelect
                   v-model:value="formState.registrationProvince"
+                  api-url="TaktAdminDivisions/options"
                   :placeholder="pi.ph('registrationProvince')"
-                  show-count
-                  :maxlength="50"
-                  allow-clear
                 />
               </a-form-item>
             </a-col>
@@ -196,12 +180,10 @@
                 :label="pi.label('registrationCity')"
                 name="registrationCity"
               >
-                <a-input
+                <TaktSelect
                   v-model:value="formState.registrationCity"
+                  api-url="TaktAdminDivisions/options"
                   :placeholder="pi.ph('registrationCity')"
-                  show-count
-                  :maxlength="50"
-                  allow-clear
                 />
               </a-form-item>
             </a-col>
@@ -210,12 +192,10 @@
                 :label="pi.label('businessRegion')"
                 name="businessRegion"
               >
-                <a-input
+                <TaktSelect
                   v-model:value="formState.businessRegion"
+                  dict-type="sys_country_code"
                   :placeholder="pi.ph('businessRegion')"
-                  show-count
-                  :maxlength="50"
-                  allow-clear
                 />
               </a-form-item>
             </a-col>
@@ -224,12 +204,10 @@
                 :label="pi.label('businessProvince')"
                 name="businessProvince"
               >
-                <a-input
+                <TaktSelect
                   v-model:value="formState.businessProvince"
+                  api-url="TaktAdminDivisions/options"
                   :placeholder="pi.ph('businessProvince')"
-                  show-count
-                  :maxlength="50"
-                  allow-clear
                 />
               </a-form-item>
             </a-col>
@@ -238,12 +216,10 @@
                 :label="pi.label('businessCity')"
                 name="businessCity"
               >
-                <a-input
+                <TaktSelect
                   v-model:value="formState.businessCity"
+                  api-url="TaktAdminDivisions/options"
                   :placeholder="pi.ph('businessCity')"
-                  show-count
-                  :maxlength="50"
-                  allow-clear
                 />
               </a-form-item>
             </a-col>
@@ -271,18 +247,6 @@
                 />
               </a-form-item>
             </a-col>
-            <a-col :span="24">
-              <a-form-item
-                :label="pi.label('businessAddress3')"
-                name="businessAddress3"
-              >
-                <a-textarea
-                  v-model:value="formState.businessAddress3"
-                  :placeholder="pi.ph('businessAddress3')"
-                  :rows="2"
-                />
-              </a-form-item>
-            </a-col>
             <a-col :span="12">
               <a-form-item
                 :label="pi.label('companyPhone')"
@@ -297,16 +261,6 @@
                 />
               </a-form-item>
             </a-col>
-          </a-row>
-        </div>
-      </a-tab-pane>
-      <a-tab-pane
-        key="tab-2"
-        :tab="t('common.page.form.tabs.basicinfo') + ' (3/4)'"
-        force-render
-      >
-        <div :class="formContentClass">
-          <a-row :gutter="24">
             <a-col :span="12">
               <a-form-item
                 :label="pi.label('companyEmail')"
@@ -335,6 +289,16 @@
                 />
               </a-form-item>
             </a-col>
+          </a-row>
+        </div>
+      </a-tab-pane>
+      <a-tab-pane
+        key="tab-2"
+        :tab="t('common.page.form.tabs.basicinfo') + ' (3/6)'"
+        force-render
+      >
+        <div :class="formContentClass">
+          <a-row :gutter="24">
             <a-col :span="12">
               <a-form-item
                 :label="pi.label('companyWebsite')"
@@ -444,17 +408,7 @@
                 />
               </a-form-item>
             </a-col>
-          </a-row>
-        </div>
-      </a-tab-pane>
-      <a-tab-pane
-        key="tab-3"
-        :tab="t('common.page.form.tabs.basicinfo') + ' (4/4)'"
-        force-render
-      >
-        <div :class="formContentClass">
-          <a-row :gutter="24">
-            <a-col :span="24">
+            <a-col :span="12">
               <a-form-item
                 :label="pi.label('companyExistence')"
                 name="companyExistence"
@@ -466,7 +420,7 @@
                 />
               </a-form-item>
             </a-col>
-            <a-col :span="24">
+            <a-col :span="12">
               <a-form-item
                 :label="pi.label('defaultCulture')"
                 name="defaultCulture"
@@ -478,7 +432,17 @@
                 />
               </a-form-item>
             </a-col>
-            <a-col :span="24">
+          </a-row>
+        </div>
+      </a-tab-pane>
+      <a-tab-pane
+        key="tab-3"
+        :tab="t('common.page.form.tabs.basicinfo') + ' (4/6)'"
+        force-render
+      >
+        <div :class="formContentClass">
+          <a-row :gutter="24">
+            <a-col :span="12">
               <a-form-item
                 :label="pi.label('codeAlias')"
                 name="codeAlias"
@@ -489,6 +453,170 @@
                   show-count
                   :maxlength="3"
                   allow-clear
+                />
+              </a-form-item>
+            </a-col>
+            <a-col :span="12">
+              <a-form-item
+                :label="pi.label('bankCode')"
+                name="bankCode"
+              >
+                <TaktSelect
+                  v-model:value="formState.bankCode"
+                  api-url="TaktBanks/options"
+                  :placeholder="pi.ph('bankCode')"
+                  :disabled="!!formData?.companyId"
+                />
+              </a-form-item>
+            </a-col>
+            <a-col :span="12">
+              <a-form-item
+                :label="pi.label('bankAccount')"
+                name="bankAccount"
+              >
+                <a-input
+                  v-model:value="formState.bankAccount"
+                  :placeholder="pi.ph('bankAccount')"
+                  show-count
+                  :maxlength="40"
+                  allow-clear
+                />
+              </a-form-item>
+            </a-col>
+            <a-col :span="12">
+              <a-form-item
+                :label="pi.label('accountHolder')"
+                name="accountHolder"
+              >
+                <a-input
+                  v-model:value="formState.accountHolder"
+                  :placeholder="pi.ph('accountHolder')"
+                  show-count
+                  :maxlength="100"
+                  allow-clear
+                />
+              </a-form-item>
+            </a-col>
+            <a-col :span="12">
+              <a-form-item
+                :label="pi.label('currencyCode')"
+                name="currencyCode"
+              >
+                <TaktSelect
+                  v-model:value="formState.currencyCode"
+                  dict-type="accounting_currency_code"
+                  :placeholder="pi.ph('currencyCode')"
+                  :disabled="!!formData?.companyId"
+                />
+              </a-form-item>
+            </a-col>
+            <a-col :span="12">
+              <a-form-item
+                :label="pi.label('chartOfAccounts')"
+                name="chartOfAccounts"
+              >
+                <TaktSelect
+                  v-model:value="formState.chartOfAccounts"
+                  dict-type="accounting_chart_of_accounts"
+                  :placeholder="pi.ph('chartOfAccounts')"
+                />
+              </a-form-item>
+            </a-col>
+            <a-col :span="12">
+              <a-form-item
+                :label="pi.label('inputTaxCode')"
+                name="inputTaxCode"
+              >
+                <TaktSelect
+                  v-model:value="formState.inputTaxCode"
+                  dict-type="accounting_tax_code"
+                  :placeholder="pi.ph('inputTaxCode')"
+                  :disabled="!!formData?.companyId"
+                />
+              </a-form-item>
+            </a-col>
+            <a-col :span="12">
+              <a-form-item
+                :label="pi.label('outputTaxCode')"
+                name="outputTaxCode"
+              >
+                <TaktSelect
+                  v-model:value="formState.outputTaxCode"
+                  dict-type="accounting_tax_code"
+                  :placeholder="pi.ph('outputTaxCode')"
+                  :disabled="!!formData?.companyId"
+                />
+              </a-form-item>
+            </a-col>
+            <a-col :span="12">
+              <a-form-item
+                :label="pi.label('businessPlace')"
+                name="businessPlace"
+              >
+                <a-input
+                  v-model:value="formState.businessPlace"
+                  :placeholder="pi.ph('businessPlace')"
+                  show-count
+                  :maxlength="4"
+                  allow-clear
+                />
+              </a-form-item>
+            </a-col>
+            <a-col :span="12">
+              <a-form-item
+                :label="pi.label('postingPeriodVariant')"
+                name="postingPeriodVariant"
+              >
+                <TaktSelect
+                  v-model:value="formState.postingPeriodVariant"
+                  dict-type="accounting_posting_period_variant"
+                  :placeholder="pi.ph('postingPeriodVariant')"
+                />
+              </a-form-item>
+            </a-col>
+          </a-row>
+        </div>
+      </a-tab-pane>
+      <a-tab-pane
+        key="tab-4"
+        :tab="t('common.page.form.tabs.basicinfo') + ' (5/6)'"
+        force-render
+      >
+        <div :class="formContentClass">
+          <a-row :gutter="24">
+            <a-col :span="24">
+              <a-form-item
+                :label="pi.label('fiscalYearVariant')"
+                name="fiscalYearVariant"
+              >
+                <TaktSelect
+                  v-model:value="formState.fiscalYearVariant"
+                  dict-type="accounting_fiscal_year_variant"
+                  :placeholder="pi.ph('fiscalYearVariant')"
+                />
+              </a-form-item>
+            </a-col>
+            <a-col :span="24">
+              <a-form-item
+                :label="pi.label('creditControlArea')"
+                name="creditControlArea"
+              >
+                <TaktSelect
+                  v-model:value="formState.creditControlArea"
+                  api-url="TaktCompanies/options"
+                  :placeholder="pi.ph('creditControlArea')"
+                />
+              </a-form-item>
+            </a-col>
+            <a-col :span="24">
+              <a-form-item
+                :label="pi.label('financialManagementArea')"
+                name="financialManagementArea"
+              >
+                <TaktSelect
+                  v-model:value="formState.financialManagementArea"
+                  api-url="TaktCompanies/options"
+                  :placeholder="pi.ph('financialManagementArea')"
                 />
               </a-form-item>
             </a-col>
@@ -513,6 +641,30 @@
                   v-model:value="formState.companyStatus"
                   dict-type="sys_normal_disable_status"
                   :placeholder="pi.ph('companyStatus')"
+                />
+              </a-form-item>
+            </a-col>
+          </a-row>
+        </div>
+      </a-tab-pane>
+      <a-tab-pane
+        key="tab-5"
+        :tab="t('common.page.form.tabs.basicinfo') + ' (6/6)'"
+        force-render
+      >
+        <div :class="formContentClass">
+          <a-row :gutter="24">
+            <a-col :span="24">
+              <a-form-item
+                :label="pi.label('tenantCode')"
+                name="tenantCode"
+              >
+                <a-input
+                  v-model:value="formState.tenantCode"
+                  :placeholder="pi.ph('tenantCode')"
+                  show-count
+                  :maxlength="20"
+                  allow-clear
                 />
               </a-form-item>
             </a-col>
@@ -625,8 +777,16 @@ const FORM_FIELD_DEFAULTS: Record<string, string | number> = {
   enterpriseNature: "150",
   industryAttribute: "C",
   enterpriseScale: "M",
+  registrationRegion: "CN",
+  businessRegion: "CN",
   companyExistence: 1,
-  defaultCulture: "zh-CN"
+  defaultCulture: "ZH-CN",
+  currencyCode: "CNY",
+  chartOfAccounts: "INT",
+  inputTaxCode: "J2",
+  outputTaxCode: "J2",
+  postingPeriodVariant: "0001",
+  fiscalYearVariant: "K4"
 }
 
 /** 写入表单默认值（新增 / resetFields / 弹窗再次打开时） */
@@ -678,10 +838,10 @@ watch(
 
 /** 表单校验规则（与 FluentValidation 必填对齐） */
 const rules = computed<Record<string, Rule[]>>(() => ({
-  companyName: [
+  companyName1: [
     {
       required: true,
-      message: pi.ph('companyName'),
+      message: pi.ph('companyName1'),
       trigger: 'blur'
     }
   ],
@@ -731,42 +891,42 @@ const rules = computed<Record<string, Rule[]>>(() => ({
     {
       required: true,
       message: pi.ph('registrationRegion'),
-      trigger: 'blur'
+      trigger: 'change'
     }
   ],
   registrationProvince: [
     {
       required: true,
       message: pi.ph('registrationProvince'),
-      trigger: 'blur'
+      trigger: 'change'
     }
   ],
   registrationCity: [
     {
       required: true,
       message: pi.ph('registrationCity'),
-      trigger: 'blur'
+      trigger: 'change'
     }
   ],
   businessRegion: [
     {
       required: true,
       message: pi.ph('businessRegion'),
-      trigger: 'blur'
+      trigger: 'change'
     }
   ],
   businessProvince: [
     {
       required: true,
       message: pi.ph('businessProvince'),
-      trigger: 'blur'
+      trigger: 'change'
     }
   ],
   businessCity: [
     {
       required: true,
       message: pi.ph('businessCity'),
-      trigger: 'blur'
+      trigger: 'change'
     }
   ],
   businessAddress1: [
@@ -877,6 +1037,90 @@ const rules = computed<Record<string, Rule[]>>(() => ({
       required: true,
       message: pi.ph('codeAlias'),
       trigger: 'blur'
+    }
+  ],
+  bankCode: [
+    {
+      required: true,
+      message: pi.ph('bankCode'),
+      trigger: 'change'
+    }
+  ],
+  bankAccount: [
+    {
+      required: true,
+      message: pi.ph('bankAccount'),
+      trigger: 'blur'
+    }
+  ],
+  accountHolder: [
+    {
+      required: true,
+      message: pi.ph('accountHolder'),
+      trigger: 'blur'
+    }
+  ],
+  currencyCode: [
+    {
+      required: true,
+      message: pi.ph('currencyCode'),
+      trigger: 'change'
+    }
+  ],
+  chartOfAccounts: [
+    {
+      required: true,
+      message: pi.ph('chartOfAccounts'),
+      trigger: 'change'
+    }
+  ],
+  inputTaxCode: [
+    {
+      required: true,
+      message: pi.ph('inputTaxCode'),
+      trigger: 'change'
+    }
+  ],
+  outputTaxCode: [
+    {
+      required: true,
+      message: pi.ph('outputTaxCode'),
+      trigger: 'change'
+    }
+  ],
+  businessPlace: [
+    {
+      required: true,
+      message: pi.ph('businessPlace'),
+      trigger: 'blur'
+    }
+  ],
+  postingPeriodVariant: [
+    {
+      required: true,
+      message: pi.ph('postingPeriodVariant'),
+      trigger: 'change'
+    }
+  ],
+  fiscalYearVariant: [
+    {
+      required: true,
+      message: pi.ph('fiscalYearVariant'),
+      trigger: 'change'
+    }
+  ],
+  creditControlArea: [
+    {
+      required: true,
+      message: pi.ph('creditControlArea'),
+      trigger: 'change'
+    }
+  ],
+  financialManagementArea: [
+    {
+      required: true,
+      message: pi.ph('financialManagementArea'),
+      trigger: 'change'
     }
   ],
   relatedPlant: [

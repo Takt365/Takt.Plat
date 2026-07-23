@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Application.Validators.Logistics.Sales
 // 文件名称：TaktSalesOrderValidators.cs
-// 创建时间：2026-07-20
+// 创建时间：2026-07-23
 // 创建人：Takt365(Auto Generated)
 // 功能描述：SalesOrder 模块 FluentValidation 验证器（由 generate-validators-from-entity.cjs 根据 TaktSalesOrder 生成，请按需审阅）
 // 
@@ -44,9 +44,12 @@ public class TaktSalesOrderCreateValidator : AbstractValidator<TaktSalesOrderCre
         RuleFor(x => x.CustomerCode)
             .NotEmpty().WithMessage("客户编码不能为空")
             .MaximumLength(50).WithMessage("客户编码长度不能超过50个字符");
-        RuleFor(x => x.CustomerName)
-            .NotEmpty().WithMessage("客户名称不能为空")
-            .MaximumLength(200).WithMessage("客户名称长度不能超过200个字符");
+        RuleFor(x => x.CustomerName1)
+            .NotEmpty().WithMessage("客户名称1不能为空")
+            .MaximumLength(140).WithMessage("客户名称1长度不能超过140个字符");
+        RuleFor(x => x.CurrencyCode)
+            .NotEmpty().WithMessage("结算币种不能为空")
+            .MaximumLength(3).WithMessage("结算币种长度不能超过3个字符");
         RuleFor(x => x.ExtField)
             .MaximumLength(4000).WithMessage("扩展字段JSON长度不能超过4000个字符");
         RuleFor(x => x.Remark)
@@ -85,9 +88,12 @@ public class TaktSalesOrderUpdateValidator : AbstractValidator<TaktSalesOrderUpd
         RuleFor(x => x.CustomerCode)
             .NotEmpty().WithMessage("客户编码不能为空")
             .MaximumLength(50).WithMessage("客户编码长度不能超过50个字符");
-        RuleFor(x => x.CustomerName)
-            .NotEmpty().WithMessage("客户名称不能为空")
-            .MaximumLength(200).WithMessage("客户名称长度不能超过200个字符");
+        RuleFor(x => x.CustomerName1)
+            .NotEmpty().WithMessage("客户名称1不能为空")
+            .MaximumLength(140).WithMessage("客户名称1长度不能超过140个字符");
+        RuleFor(x => x.CurrencyCode)
+            .NotEmpty().WithMessage("结算币种不能为空")
+            .MaximumLength(3).WithMessage("结算币种长度不能超过3个字符");
         RuleFor(x => x.ExtField)
             .MaximumLength(4000).WithMessage("扩展字段JSON长度不能超过4000个字符");
         RuleFor(x => x.Remark)
@@ -122,9 +128,12 @@ public class TaktSalesOrderImportValidator : AbstractValidator<TaktSalesOrderImp
         RuleFor(x => x.CustomerCode)
             .NotEmpty().WithMessage("客户编码不能为空")
             .MaximumLength(50).WithMessage("客户编码长度不能超过50个字符");
-        RuleFor(x => x.CustomerName)
-            .NotEmpty().WithMessage("客户名称不能为空")
-            .MaximumLength(200).WithMessage("客户名称长度不能超过200个字符");
+        RuleFor(x => x.CustomerName1)
+            .NotEmpty().WithMessage("客户名称1不能为空")
+            .MaximumLength(140).WithMessage("客户名称1长度不能超过140个字符");
+        RuleFor(x => x.CurrencyCode)
+            .NotEmpty().WithMessage("结算币种不能为空")
+            .MaximumLength(3).WithMessage("结算币种长度不能超过3个字符");
         RuleFor(x => x.ExtField)
             .MaximumLength(4000).WithMessage("扩展字段JSON长度不能超过4000个字符").When(x => !string.IsNullOrWhiteSpace(x.ExtField));
         RuleFor(x => x.Remark)

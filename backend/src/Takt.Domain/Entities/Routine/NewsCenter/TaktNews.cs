@@ -127,7 +127,7 @@ public class TaktNews : TaktApprovalEntityBase
     [SugarColumn(ColumnName = "dept_name", ColumnDescription = "发布部门名称", ColumnDataType = "nvarchar", Length = 100, IsNullable = true)]
     public string? DeptName { get; set; }
     /// <summary>
-    /// 发布人 ID（选项 TaktUsers/options，DictValue=Id）
+    /// 发布人 ID（选项 TaktUsers/options；DictValue=Id）
     /// </summary>
     [SugarColumn(ColumnName = "publisher_id", ColumnDescription = "发布人ID", ColumnDataType = "bigint", IsNullable = false)]
     [JsonConverter(typeof(ValueToStringConverter))]

@@ -70,7 +70,7 @@ public class TaktDocument : TaktApprovalEntityBase
     [SugarColumn(ColumnName = "document_tags", ColumnDescription = "标签", ColumnDataType = "nvarchar", Length = 500, IsNullable = true)]
     public string? DocumentTags { get; set; }
     /// <summary>
-    /// 当前文件 ID（选项 TaktFiles/options，DictValue=Id）
+    /// 当前文件 ID（选项 TaktFiles/options；DictValue=Id）
     /// </summary>
     [SugarColumn(ColumnName = "file_id", ColumnDescription = "当前文件ID", ColumnDataType = "bigint", IsNullable = true)]
     [JsonConverter(typeof(ValueToStringConverter))]
@@ -116,7 +116,7 @@ public class TaktDocument : TaktApprovalEntityBase
     [SugarColumn(ColumnName = "document_publish_time", ColumnDescription = "发布时间", ColumnDataType = "datetime", IsNullable = true)]
     public DateTime? DocumentPublishTime { get; set; }
     /// <summary>
-    /// 发布人 ID（选项 TaktUsers/options，DictValue=Id）
+    /// 发布人 ID（选项 TaktUsers/options；DictValue=Id）
     /// </summary>
     [SugarColumn(ColumnName = "publisher_id", ColumnDescription = "发布人ID", ColumnDataType = "bigint", IsNullable = false)]
     [JsonConverter(typeof(ValueToStringConverter))]

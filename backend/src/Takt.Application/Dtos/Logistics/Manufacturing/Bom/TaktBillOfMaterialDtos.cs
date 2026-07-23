@@ -77,7 +77,7 @@ public class TaktBillOfMaterialDto : TaktCompanyDtoBase
     public int BomType { get; set; } = 0;
 
     /// <summary>
-    /// 备选BOM编号（对应SAP Alternative BOM，如01/02）
+    /// 备选BOM编码（对应SAP Alternative BOM，如01/02）
     /// </summary>
     public string AlternativeBomNumber { get; set; } = string.Empty;
 
@@ -186,7 +186,7 @@ public class TaktBillOfMaterialQueryDto : TaktPagedQuery
     public int? BomType { get; set; }
 
     /// <summary>
-    /// 备选BOM编号（对应SAP Alternative BOM，如01/02）
+    /// 备选BOM编码（对应SAP Alternative BOM，如01/02）
     /// </summary>
     public string? AlternativeBomNumber { get; set; } = string.Empty;
 
@@ -328,9 +328,9 @@ public class TaktBillOfMaterialCreateDto
     public int BomType { get; set; } = 0;
 
     /// <summary>
-    /// 备选BOM编号（对应SAP Alternative BOM，如01/02）
+    /// 备选BOM编码（对应SAP Alternative BOM，如01/02）
     /// </summary>
-    [Required(ErrorMessage = "备选BOM编号（对应SAP Alternative BOM，如01/02）不能为空")]
+    [Required(ErrorMessage = "备选BOM编码（对应SAP Alternative BOM，如01/02）不能为空")]
     public string AlternativeBomNumber { get; set; } = string.Empty;
 
     /// <summary>
@@ -510,7 +510,7 @@ public class TaktBillOfMaterialTemplateDto
     public int? BomType { get; set; }
 
     /// <summary>
-    /// 备选BOM编号（对应SAP Alternative BOM，如01/02）
+    /// 备选BOM编码（对应SAP Alternative BOM，如01/02）
     /// </summary>
     public string? AlternativeBomNumber { get; set; } = string.Empty;
 
@@ -623,7 +623,7 @@ public class TaktBillOfMaterialImportDto
     public int? BomType { get; set; }
 
     /// <summary>
-    /// 备选BOM编号（对应SAP Alternative BOM，如01/02）
+    /// 备选BOM编码（对应SAP Alternative BOM，如01/02）
     /// </summary>
     public string? AlternativeBomNumber { get; set; } = string.Empty;
 
@@ -737,7 +737,7 @@ public class TaktBillOfMaterialExportDto
     public int BomType { get; set; } = 0;
 
     /// <summary>
-    /// 备选BOM编号（对应SAP Alternative BOM，如01/02）
+    /// 备选BOM编码（对应SAP Alternative BOM，如01/02）
     /// </summary>
     public string AlternativeBomNumber { get; set; } = string.Empty;
 

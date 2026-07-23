@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Application.Validators.Accounting.Financial
 // 文件名称：TaktCountersignDetailValidators.cs
-// 创建时间：2026-07-20
+// 创建时间：2026-07-23
 // 创建人：Takt365(Auto Generated)
 // 功能描述：CountersignDetail 模块 FluentValidation 验证器（由 generate-validators-from-entity.cjs 根据 TaktCountersignDetail 生成，请按需审阅）
 // 
@@ -38,8 +38,8 @@ public class TaktCountersignDetailCreateValidator : AbstractValidator<TaktCounte
         RuleFor(x => x.CountersignId)
             .GreaterThanOrEqualTo(0).WithMessage("会签单 ID不能为负数");
         RuleFor(x => x.CountersignCode)
-            .NotEmpty().WithMessage("会签编号不能为空")
-            .MaximumLength(50).WithMessage("会签编号长度不能超过50个字符");
+            .NotEmpty().WithMessage("会签编码不能为空")
+            .MaximumLength(50).WithMessage("会签编码长度不能超过50个字符");
         RuleFor(x => x.AllocationCategory)
             .NotEmpty().WithMessage("分配类别不能为空")
             .MaximumLength(40).WithMessage("分配类别长度不能超过40个字符");
@@ -78,8 +78,8 @@ public class TaktCountersignDetailUpdateValidator : AbstractValidator<TaktCounte
         RuleFor(x => x.CountersignId)
             .GreaterThanOrEqualTo(0).WithMessage("会签单 ID不能为负数");
         RuleFor(x => x.CountersignCode)
-            .NotEmpty().WithMessage("会签编号不能为空")
-            .MaximumLength(50).WithMessage("会签编号长度不能超过50个字符");
+            .NotEmpty().WithMessage("会签编码不能为空")
+            .MaximumLength(50).WithMessage("会签编码长度不能超过50个字符");
         RuleFor(x => x.AllocationCategory)
             .NotEmpty().WithMessage("分配类别不能为空")
             .MaximumLength(40).WithMessage("分配类别长度不能超过40个字符");
@@ -114,8 +114,8 @@ public class TaktCountersignDetailImportValidator : AbstractValidator<TaktCounte
         RuleFor(x => x.CountersignId)
             .GreaterThanOrEqualTo(0).WithMessage("会签单 ID不能为负数");
         RuleFor(x => x.CountersignCode)
-            .NotEmpty().WithMessage("会签编号不能为空")
-            .MaximumLength(50).WithMessage("会签编号长度不能超过50个字符");
+            .NotEmpty().WithMessage("会签编码不能为空")
+            .MaximumLength(50).WithMessage("会签编码长度不能超过50个字符");
         RuleFor(x => x.AllocationCategory)
             .NotEmpty().WithMessage("分配类别不能为空")
             .MaximumLength(40).WithMessage("分配类别长度不能超过40个字符");

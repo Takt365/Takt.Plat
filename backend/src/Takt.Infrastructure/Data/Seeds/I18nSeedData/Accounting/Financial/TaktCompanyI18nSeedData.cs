@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Infrastructure.Data.Seeds.I18nSeedData.Accounting.Financial
 // 文件名称：TaktCompanyI18nSeedData.cs
-// 创建时间：2026-07-20
+// 创建时间：2026-07-23
 // 创建人：Takt365(Auto Generated)
 // 功能描述：TaktCompany 实体字段国际化种子（无对应 frontend locales；TranslationText 取自 ColumnDescription，ContextNote 取自属性 XML summary）
 // 
@@ -90,14 +90,23 @@ public class TaktCompanyI18nSeedData : ITaktSeedDataCoordinator
             // entity.company._self
             new TranslationSeedItem("entity.company._self", "zh-HK", "公司信息_hk", "实体名称"),
 
-            // entity.company.name
-            new TranslationSeedItem("entity.company.name", "en-US", "公司名称_us", "公司名称"),
-            // entity.company.name
-            new TranslationSeedItem("entity.company.name", "ja-JP", "公司名称_jp", "公司名称"),
-            // entity.company.name
-            new TranslationSeedItem("entity.company.name", "zh-CN", "公司名称", "公司名称"),
-            // entity.company.name
-            new TranslationSeedItem("entity.company.name", "zh-HK", "公司名称_hk", "公司名称"),
+            // entity.company.name1
+            new TranslationSeedItem("entity.company.name1", "en-US", "公司名称1_us", "公司名称1"),
+            // entity.company.name1
+            new TranslationSeedItem("entity.company.name1", "ja-JP", "公司名称1_jp", "公司名称1"),
+            // entity.company.name1
+            new TranslationSeedItem("entity.company.name1", "zh-CN", "公司名称1", "公司名称1"),
+            // entity.company.name1
+            new TranslationSeedItem("entity.company.name1", "zh-HK", "公司名称1_hk", "公司名称1"),
+
+            // entity.company.name2
+            new TranslationSeedItem("entity.company.name2", "en-US", "公司名称2_us", "公司名称2"),
+            // entity.company.name2
+            new TranslationSeedItem("entity.company.name2", "ja-JP", "公司名称2_jp", "公司名称2"),
+            // entity.company.name2
+            new TranslationSeedItem("entity.company.name2", "zh-CN", "公司名称2", "公司名称2"),
+            // entity.company.name2
+            new TranslationSeedItem("entity.company.name2", "zh-HK", "公司名称2_hk", "公司名称2"),
 
             // entity.company.shortname
             new TranslationSeedItem("entity.company.shortname", "en-US", "公司简称_us", "公司简称"),
@@ -162,68 +171,59 @@ public class TaktCompanyI18nSeedData : ITaktSeedDataCoordinator
             // entity.company.registrationaddress2
             new TranslationSeedItem("entity.company.registrationaddress2", "zh-HK", "注册地址2_hk", "注册地址2"),
 
-            // entity.company.registrationaddress3
-            new TranslationSeedItem("entity.company.registrationaddress3", "en-US", "注册地址3_us", "注册地址3"),
-            // entity.company.registrationaddress3
-            new TranslationSeedItem("entity.company.registrationaddress3", "ja-JP", "注册地址3_jp", "注册地址3"),
-            // entity.company.registrationaddress3
-            new TranslationSeedItem("entity.company.registrationaddress3", "zh-CN", "注册地址3", "注册地址3"),
-            // entity.company.registrationaddress3
-            new TranslationSeedItem("entity.company.registrationaddress3", "zh-HK", "注册地址3_hk", "注册地址3"),
-
             // entity.company.registrationregion
-            new TranslationSeedItem("entity.company.registrationregion", "en-US", "注册国家_us", "注册国家"),
+            new TranslationSeedItem("entity.company.registrationregion", "en-US", "注册国家_us", "注册国家（字典 sys_country_code；DictValue=ISO alpha-2）"),
             // entity.company.registrationregion
-            new TranslationSeedItem("entity.company.registrationregion", "ja-JP", "注册国家_jp", "注册国家"),
+            new TranslationSeedItem("entity.company.registrationregion", "ja-JP", "注册国家_jp", "注册国家（字典 sys_country_code；DictValue=ISO alpha-2）"),
             // entity.company.registrationregion
-            new TranslationSeedItem("entity.company.registrationregion", "zh-CN", "注册国家", "注册国家"),
+            new TranslationSeedItem("entity.company.registrationregion", "zh-CN", "注册国家", "注册国家（字典 sys_country_code；DictValue=ISO alpha-2）"),
             // entity.company.registrationregion
-            new TranslationSeedItem("entity.company.registrationregion", "zh-HK", "注册国家_hk", "注册国家"),
+            new TranslationSeedItem("entity.company.registrationregion", "zh-HK", "注册国家_hk", "注册国家（字典 sys_country_code；DictValue=ISO alpha-2）"),
 
             // entity.company.registrationprovince
-            new TranslationSeedItem("entity.company.registrationprovince", "en-US", "注册省_us", "注册省"),
+            new TranslationSeedItem("entity.company.registrationprovince", "en-US", "注册省_us", "注册省（选项 TaktAdminDivisions/options；DictValue=DivisionCode；建议 Level=2）"),
             // entity.company.registrationprovince
-            new TranslationSeedItem("entity.company.registrationprovince", "ja-JP", "注册省_jp", "注册省"),
+            new TranslationSeedItem("entity.company.registrationprovince", "ja-JP", "注册省_jp", "注册省（选项 TaktAdminDivisions/options；DictValue=DivisionCode；建议 Level=2）"),
             // entity.company.registrationprovince
-            new TranslationSeedItem("entity.company.registrationprovince", "zh-CN", "注册省", "注册省"),
+            new TranslationSeedItem("entity.company.registrationprovince", "zh-CN", "注册省", "注册省（选项 TaktAdminDivisions/options；DictValue=DivisionCode；建议 Level=2）"),
             // entity.company.registrationprovince
-            new TranslationSeedItem("entity.company.registrationprovince", "zh-HK", "注册省_hk", "注册省"),
+            new TranslationSeedItem("entity.company.registrationprovince", "zh-HK", "注册省_hk", "注册省（选项 TaktAdminDivisions/options；DictValue=DivisionCode；建议 Level=2）"),
 
             // entity.company.registrationcity
-            new TranslationSeedItem("entity.company.registrationcity", "en-US", "注册市_us", "注册市"),
+            new TranslationSeedItem("entity.company.registrationcity", "en-US", "注册市_us", "注册市（选项 TaktAdminDivisions/options；DictValue=DivisionCode；建议 Level=3）"),
             // entity.company.registrationcity
-            new TranslationSeedItem("entity.company.registrationcity", "ja-JP", "注册市_jp", "注册市"),
+            new TranslationSeedItem("entity.company.registrationcity", "ja-JP", "注册市_jp", "注册市（选项 TaktAdminDivisions/options；DictValue=DivisionCode；建议 Level=3）"),
             // entity.company.registrationcity
-            new TranslationSeedItem("entity.company.registrationcity", "zh-CN", "注册市", "注册市"),
+            new TranslationSeedItem("entity.company.registrationcity", "zh-CN", "注册市", "注册市（选项 TaktAdminDivisions/options；DictValue=DivisionCode；建议 Level=3）"),
             // entity.company.registrationcity
-            new TranslationSeedItem("entity.company.registrationcity", "zh-HK", "注册市_hk", "注册市"),
+            new TranslationSeedItem("entity.company.registrationcity", "zh-HK", "注册市_hk", "注册市（选项 TaktAdminDivisions/options；DictValue=DivisionCode；建议 Level=3）"),
 
             // entity.company.businessregion
-            new TranslationSeedItem("entity.company.businessregion", "en-US", "经营国家_us", "经营国家"),
+            new TranslationSeedItem("entity.company.businessregion", "en-US", "经营国家_us", "经营国家（字典 sys_country_code；DictValue=ISO alpha-2）"),
             // entity.company.businessregion
-            new TranslationSeedItem("entity.company.businessregion", "ja-JP", "经营国家_jp", "经营国家"),
+            new TranslationSeedItem("entity.company.businessregion", "ja-JP", "经营国家_jp", "经营国家（字典 sys_country_code；DictValue=ISO alpha-2）"),
             // entity.company.businessregion
-            new TranslationSeedItem("entity.company.businessregion", "zh-CN", "经营国家", "经营国家"),
+            new TranslationSeedItem("entity.company.businessregion", "zh-CN", "经营国家", "经营国家（字典 sys_country_code；DictValue=ISO alpha-2）"),
             // entity.company.businessregion
-            new TranslationSeedItem("entity.company.businessregion", "zh-HK", "经营国家_hk", "经营国家"),
+            new TranslationSeedItem("entity.company.businessregion", "zh-HK", "经营国家_hk", "经营国家（字典 sys_country_code；DictValue=ISO alpha-2）"),
 
             // entity.company.businessprovince
-            new TranslationSeedItem("entity.company.businessprovince", "en-US", "经营地区-省_us", "经营地区-省"),
+            new TranslationSeedItem("entity.company.businessprovince", "en-US", "经营地区-省_us", "经营地区-省（选项 TaktAdminDivisions/options；DictValue=DivisionCode；建议 Level=2）"),
             // entity.company.businessprovince
-            new TranslationSeedItem("entity.company.businessprovince", "ja-JP", "经营地区-省_jp", "经营地区-省"),
+            new TranslationSeedItem("entity.company.businessprovince", "ja-JP", "经营地区-省_jp", "经营地区-省（选项 TaktAdminDivisions/options；DictValue=DivisionCode；建议 Level=2）"),
             // entity.company.businessprovince
-            new TranslationSeedItem("entity.company.businessprovince", "zh-CN", "经营地区-省", "经营地区-省"),
+            new TranslationSeedItem("entity.company.businessprovince", "zh-CN", "经营地区-省", "经营地区-省（选项 TaktAdminDivisions/options；DictValue=DivisionCode；建议 Level=2）"),
             // entity.company.businessprovince
-            new TranslationSeedItem("entity.company.businessprovince", "zh-HK", "经营地区-省_hk", "经营地区-省"),
+            new TranslationSeedItem("entity.company.businessprovince", "zh-HK", "经营地区-省_hk", "经营地区-省（选项 TaktAdminDivisions/options；DictValue=DivisionCode；建议 Level=2）"),
 
             // entity.company.businesscity
-            new TranslationSeedItem("entity.company.businesscity", "en-US", "经营地区-市_us", "经营地区-市"),
+            new TranslationSeedItem("entity.company.businesscity", "en-US", "经营地区-市_us", "经营地区-市（选项 TaktAdminDivisions/options；DictValue=DivisionCode；建议 Level=3）"),
             // entity.company.businesscity
-            new TranslationSeedItem("entity.company.businesscity", "ja-JP", "经营地区-市_jp", "经营地区-市"),
+            new TranslationSeedItem("entity.company.businesscity", "ja-JP", "经营地区-市_jp", "经营地区-市（选项 TaktAdminDivisions/options；DictValue=DivisionCode；建议 Level=3）"),
             // entity.company.businesscity
-            new TranslationSeedItem("entity.company.businesscity", "zh-CN", "经营地区-市", "经营地区-市"),
+            new TranslationSeedItem("entity.company.businesscity", "zh-CN", "经营地区-市", "经营地区-市（选项 TaktAdminDivisions/options；DictValue=DivisionCode；建议 Level=3）"),
             // entity.company.businesscity
-            new TranslationSeedItem("entity.company.businesscity", "zh-HK", "经营地区-市_hk", "经营地区-市"),
+            new TranslationSeedItem("entity.company.businesscity", "zh-HK", "经营地区-市_hk", "经营地区-市（选项 TaktAdminDivisions/options；DictValue=DivisionCode；建议 Level=3）"),
 
             // entity.company.businessaddress1
             new TranslationSeedItem("entity.company.businessaddress1", "en-US", "经营地址1_us", "经营地址1"),
@@ -242,15 +242,6 @@ public class TaktCompanyI18nSeedData : ITaktSeedDataCoordinator
             new TranslationSeedItem("entity.company.businessaddress2", "zh-CN", "经营地址2", "经营地址2"),
             // entity.company.businessaddress2
             new TranslationSeedItem("entity.company.businessaddress2", "zh-HK", "经营地址2_hk", "经营地址2"),
-
-            // entity.company.businessaddress3
-            new TranslationSeedItem("entity.company.businessaddress3", "en-US", "经营地址3_us", "经营地址3"),
-            // entity.company.businessaddress3
-            new TranslationSeedItem("entity.company.businessaddress3", "ja-JP", "经营地址3_jp", "经营地址3"),
-            // entity.company.businessaddress3
-            new TranslationSeedItem("entity.company.businessaddress3", "zh-CN", "经营地址3", "经营地址3"),
-            // entity.company.businessaddress3
-            new TranslationSeedItem("entity.company.businessaddress3", "zh-HK", "经营地址3_hk", "经营地址3"),
 
             // entity.company.phone
             new TranslationSeedItem("entity.company.phone", "en-US", "公司电话_us", "公司电话"),
@@ -361,13 +352,13 @@ public class TaktCompanyI18nSeedData : ITaktSeedDataCoordinator
             new TranslationSeedItem("entity.company.existence", "zh-HK", "存续状态_hk", "存续状态（字典 sys_entity_existence_status）"),
 
             // entity.company.defaultculture
-            new TranslationSeedItem("entity.company.defaultculture", "en-US", "区域文化_us", "区域文化编码（字典 sys_culture_code）"),
+            new TranslationSeedItem("entity.company.defaultculture", "en-US", "区域文化_us", "区域文化编码（字典 sys_culture_code；即语言/区域文化）"),
             // entity.company.defaultculture
-            new TranslationSeedItem("entity.company.defaultculture", "ja-JP", "区域文化_jp", "区域文化编码（字典 sys_culture_code）"),
+            new TranslationSeedItem("entity.company.defaultculture", "ja-JP", "区域文化_jp", "区域文化编码（字典 sys_culture_code；即语言/区域文化）"),
             // entity.company.defaultculture
-            new TranslationSeedItem("entity.company.defaultculture", "zh-CN", "区域文化", "区域文化编码（字典 sys_culture_code）"),
+            new TranslationSeedItem("entity.company.defaultculture", "zh-CN", "区域文化", "区域文化编码（字典 sys_culture_code；即语言/区域文化）"),
             // entity.company.defaultculture
-            new TranslationSeedItem("entity.company.defaultculture", "zh-HK", "区域文化_hk", "区域文化编码（字典 sys_culture_code）"),
+            new TranslationSeedItem("entity.company.defaultculture", "zh-HK", "区域文化_hk", "区域文化编码（字典 sys_culture_code；即语言/区域文化）"),
 
             // entity.company.codealias
             new TranslationSeedItem("entity.company.codealias", "en-US", "编码代号_us", "编码代号（如 TKC、TCJ、DTA；前端字典录入）"),
@@ -378,14 +369,122 @@ public class TaktCompanyI18nSeedData : ITaktSeedDataCoordinator
             // entity.company.codealias
             new TranslationSeedItem("entity.company.codealias", "zh-HK", "编码代号_hk", "编码代号（如 TKC、TCJ、DTA；前端字典录入）"),
 
+            // entity.company.bankcode
+            new TranslationSeedItem("entity.company.bankcode", "en-US", "银行代码_us", "银行代码（选项 TaktBanks/options；DictValue=BankCode）"),
+            // entity.company.bankcode
+            new TranslationSeedItem("entity.company.bankcode", "ja-JP", "银行代码_jp", "银行代码（选项 TaktBanks/options；DictValue=BankCode）"),
+            // entity.company.bankcode
+            new TranslationSeedItem("entity.company.bankcode", "zh-CN", "银行代码", "银行代码（选项 TaktBanks/options；DictValue=BankCode）"),
+            // entity.company.bankcode
+            new TranslationSeedItem("entity.company.bankcode", "zh-HK", "银行代码_hk", "银行代码（选项 TaktBanks/options；DictValue=BankCode）"),
+
+            // entity.company.bankaccount
+            new TranslationSeedItem("entity.company.bankaccount", "en-US", "银行帐号_us", "银行帐号"),
+            // entity.company.bankaccount
+            new TranslationSeedItem("entity.company.bankaccount", "ja-JP", "银行帐号_jp", "银行帐号"),
+            // entity.company.bankaccount
+            new TranslationSeedItem("entity.company.bankaccount", "zh-CN", "银行帐号", "银行帐号"),
+            // entity.company.bankaccount
+            new TranslationSeedItem("entity.company.bankaccount", "zh-HK", "银行帐号_hk", "银行帐号"),
+
+            // entity.company.accountholder
+            new TranslationSeedItem("entity.company.accountholder", "en-US", "帐户持有人_us", "帐户持有人"),
+            // entity.company.accountholder
+            new TranslationSeedItem("entity.company.accountholder", "ja-JP", "帐户持有人_jp", "帐户持有人"),
+            // entity.company.accountholder
+            new TranslationSeedItem("entity.company.accountholder", "zh-CN", "帐户持有人", "帐户持有人"),
+            // entity.company.accountholder
+            new TranslationSeedItem("entity.company.accountholder", "zh-HK", "帐户持有人_hk", "帐户持有人"),
+
+            // entity.company.currencycode
+            new TranslationSeedItem("entity.company.currencycode", "en-US", "币种_us", "币种（字典 accounting_currency_code；ISO 4217，如 CNY/USD）"),
+            // entity.company.currencycode
+            new TranslationSeedItem("entity.company.currencycode", "ja-JP", "币种_jp", "币种（字典 accounting_currency_code；ISO 4217，如 CNY/USD）"),
+            // entity.company.currencycode
+            new TranslationSeedItem("entity.company.currencycode", "zh-CN", "币种", "币种（字典 accounting_currency_code；ISO 4217，如 CNY/USD）"),
+            // entity.company.currencycode
+            new TranslationSeedItem("entity.company.currencycode", "zh-HK", "币种_hk", "币种（字典 accounting_currency_code；ISO 4217，如 CNY/USD）"),
+
+            // entity.company.chartofaccounts
+            new TranslationSeedItem("entity.company.chartofaccounts", "en-US", "帐目表_us", "帐目表（字典 accounting_chart_of_accounts；如 INT/TEAC）"),
+            // entity.company.chartofaccounts
+            new TranslationSeedItem("entity.company.chartofaccounts", "ja-JP", "帐目表_jp", "帐目表（字典 accounting_chart_of_accounts；如 INT/TEAC）"),
+            // entity.company.chartofaccounts
+            new TranslationSeedItem("entity.company.chartofaccounts", "zh-CN", "帐目表", "帐目表（字典 accounting_chart_of_accounts；如 INT/TEAC）"),
+            // entity.company.chartofaccounts
+            new TranslationSeedItem("entity.company.chartofaccounts", "zh-HK", "帐目表_hk", "帐目表（字典 accounting_chart_of_accounts；如 INT/TEAC）"),
+
+            // entity.company.inputtaxcode
+            new TranslationSeedItem("entity.company.inputtaxcode", "en-US", "进项税码_us", "进项税码（字典 accounting_tax_code）"),
+            // entity.company.inputtaxcode
+            new TranslationSeedItem("entity.company.inputtaxcode", "ja-JP", "进项税码_jp", "进项税码（字典 accounting_tax_code）"),
+            // entity.company.inputtaxcode
+            new TranslationSeedItem("entity.company.inputtaxcode", "zh-CN", "进项税码", "进项税码（字典 accounting_tax_code）"),
+            // entity.company.inputtaxcode
+            new TranslationSeedItem("entity.company.inputtaxcode", "zh-HK", "进项税码_hk", "进项税码（字典 accounting_tax_code）"),
+
+            // entity.company.outputtaxcode
+            new TranslationSeedItem("entity.company.outputtaxcode", "en-US", "销项税码_us", "销项税码（字典 accounting_tax_code）"),
+            // entity.company.outputtaxcode
+            new TranslationSeedItem("entity.company.outputtaxcode", "ja-JP", "销项税码_jp", "销项税码（字典 accounting_tax_code）"),
+            // entity.company.outputtaxcode
+            new TranslationSeedItem("entity.company.outputtaxcode", "zh-CN", "销项税码", "销项税码（字典 accounting_tax_code）"),
+            // entity.company.outputtaxcode
+            new TranslationSeedItem("entity.company.outputtaxcode", "zh-HK", "销项税码_hk", "销项税码（字典 accounting_tax_code）"),
+
+            // entity.company.businessplace
+            new TranslationSeedItem("entity.company.businessplace", "en-US", "营业税主体_us", "营业税主体（营业场所）"),
+            // entity.company.businessplace
+            new TranslationSeedItem("entity.company.businessplace", "ja-JP", "营业税主体_jp", "营业税主体（营业场所）"),
+            // entity.company.businessplace
+            new TranslationSeedItem("entity.company.businessplace", "zh-CN", "营业税主体", "营业税主体（营业场所）"),
+            // entity.company.businessplace
+            new TranslationSeedItem("entity.company.businessplace", "zh-HK", "营业税主体_hk", "营业税主体（营业场所）"),
+
+            // entity.company.postingperiodvariant
+            new TranslationSeedItem("entity.company.postingperiodvariant", "en-US", "记帐期间变式_us", "记帐期间变式（字典 accounting_posting_period_variant；原则上一个公司对应一个变式）"),
+            // entity.company.postingperiodvariant
+            new TranslationSeedItem("entity.company.postingperiodvariant", "ja-JP", "记帐期间变式_jp", "记帐期间变式（字典 accounting_posting_period_variant；原则上一个公司对应一个变式）"),
+            // entity.company.postingperiodvariant
+            new TranslationSeedItem("entity.company.postingperiodvariant", "zh-CN", "记帐期间变式", "记帐期间变式（字典 accounting_posting_period_variant；原则上一个公司对应一个变式）"),
+            // entity.company.postingperiodvariant
+            new TranslationSeedItem("entity.company.postingperiodvariant", "zh-HK", "记帐期间变式_hk", "记帐期间变式（字典 accounting_posting_period_variant；原则上一个公司对应一个变式）"),
+
+            // entity.company.fiscalyearvariant
+            new TranslationSeedItem("entity.company.fiscalyearvariant", "en-US", "会计年度变式_us", "会计年度变式（字典 accounting_fiscal_year_variant；如 K4/Z1/Z2）"),
+            // entity.company.fiscalyearvariant
+            new TranslationSeedItem("entity.company.fiscalyearvariant", "ja-JP", "会计年度变式_jp", "会计年度变式（字典 accounting_fiscal_year_variant；如 K4/Z1/Z2）"),
+            // entity.company.fiscalyearvariant
+            new TranslationSeedItem("entity.company.fiscalyearvariant", "zh-CN", "会计年度变式", "会计年度变式（字典 accounting_fiscal_year_variant；如 K4/Z1/Z2）"),
+            // entity.company.fiscalyearvariant
+            new TranslationSeedItem("entity.company.fiscalyearvariant", "zh-HK", "会计年度变式_hk", "会计年度变式（字典 accounting_fiscal_year_variant；如 K4/Z1/Z2）"),
+
+            // entity.company.creditcontrolarea
+            new TranslationSeedItem("entity.company.creditcontrolarea", "en-US", "贷方控制范围_us", "贷方控制范围（选项 TaktCompanies/options；DictValue=CompanyCode）"),
+            // entity.company.creditcontrolarea
+            new TranslationSeedItem("entity.company.creditcontrolarea", "ja-JP", "贷方控制范围_jp", "贷方控制范围（选项 TaktCompanies/options；DictValue=CompanyCode）"),
+            // entity.company.creditcontrolarea
+            new TranslationSeedItem("entity.company.creditcontrolarea", "zh-CN", "贷方控制范围", "贷方控制范围（选项 TaktCompanies/options；DictValue=CompanyCode）"),
+            // entity.company.creditcontrolarea
+            new TranslationSeedItem("entity.company.creditcontrolarea", "zh-HK", "贷方控制范围_hk", "贷方控制范围（选项 TaktCompanies/options；DictValue=CompanyCode）"),
+
+            // entity.company.financialmanagementarea
+            new TranslationSeedItem("entity.company.financialmanagementarea", "en-US", "财务管理范围_us", "财务管理范围（选项 TaktCompanies/options；DictValue=CompanyCode）"),
+            // entity.company.financialmanagementarea
+            new TranslationSeedItem("entity.company.financialmanagementarea", "ja-JP", "财务管理范围_jp", "财务管理范围（选项 TaktCompanies/options；DictValue=CompanyCode）"),
+            // entity.company.financialmanagementarea
+            new TranslationSeedItem("entity.company.financialmanagementarea", "zh-CN", "财务管理范围", "财务管理范围（选项 TaktCompanies/options；DictValue=CompanyCode）"),
+            // entity.company.financialmanagementarea
+            new TranslationSeedItem("entity.company.financialmanagementarea", "zh-HK", "财务管理范围_hk", "财务管理范围（选项 TaktCompanies/options；DictValue=CompanyCode）"),
+
             // entity.company.relatedplant
-            new TranslationSeedItem("entity.company.relatedplant", "en-US", "关联工厂_us", "关联工厂（选项 TaktPlants/options，DictValue=Id）"),
+            new TranslationSeedItem("entity.company.relatedplant", "en-US", "关联工厂_us", "关联工厂（选项 TaktPlants/options；DictValue=Id）"),
             // entity.company.relatedplant
-            new TranslationSeedItem("entity.company.relatedplant", "ja-JP", "关联工厂_jp", "关联工厂（选项 TaktPlants/options，DictValue=Id）"),
+            new TranslationSeedItem("entity.company.relatedplant", "ja-JP", "关联工厂_jp", "关联工厂（选项 TaktPlants/options；DictValue=Id）"),
             // entity.company.relatedplant
-            new TranslationSeedItem("entity.company.relatedplant", "zh-CN", "关联工厂", "关联工厂（选项 TaktPlants/options，DictValue=Id）"),
+            new TranslationSeedItem("entity.company.relatedplant", "zh-CN", "关联工厂", "关联工厂（选项 TaktPlants/options；DictValue=Id）"),
             // entity.company.relatedplant
-            new TranslationSeedItem("entity.company.relatedplant", "zh-HK", "关联工厂_hk", "关联工厂（选项 TaktPlants/options，DictValue=Id）"),
+            new TranslationSeedItem("entity.company.relatedplant", "zh-HK", "关联工厂_hk", "关联工厂（选项 TaktPlants/options；DictValue=Id）"),
 
             // entity.company.sortorder
             new TranslationSeedItem("entity.company.sortorder", "en-US", "排序号_us", "排序号（越小越靠前）"),

@@ -60,7 +60,7 @@ public class TaktEmployeePostSeedData : ITaktSeedDataCoordinator
 
         foreach (var company in orderedCompanies)
         {
-            foreach (var (employeeNo, postCode) in GetEmployeePostTemplates(company))
+            foreach (var (EmployeeCode, postCode) in GetEmployeePostTemplates(company))
             {
                 insertCount += await CreateEmployeePostAsync(
                     repository,
@@ -68,7 +68,7 @@ public class TaktEmployeePostSeedData : ITaktSeedDataCoordinator
                     postRepository,
                     tenantCode,
                     company.CompanyCode,
-                    employeeNo,
+                    EmployeeCode,
                     postCode);
             }
         }
@@ -83,7 +83,7 @@ public class TaktEmployeePostSeedData : ITaktSeedDataCoordinator
     /// </summary>
     /// <param name="company">公司实体</param>
     /// <returns>员工-岗位模板</returns>
-    private static IEnumerable<(string EmployeeNo, string PostCode)> GetEmployeePostTemplates(TaktCompany company)
+    private static IEnumerable<(string EmployeeCode, string PostCode)> GetEmployeePostTemplates(TaktCompany company)
     {
         if (string.Equals(company.DefaultCulture, "zh-CN", StringComparison.OrdinalIgnoreCase)
             && string.Equals(company.IndustryAttribute, "C", StringComparison.OrdinalIgnoreCase))
@@ -112,13 +112,13 @@ public class TaktEmployeePostSeedData : ITaktSeedDataCoordinator
         ITaktCompanySeedRepository<TaktPost> postRepository,
         string tenantCode,
         string companyCode,
-        string employeeNo,
+        string EmployeeCode,
         string postCode)
     {
         var employee = await employeeRepository.FirstAsync(e =>
             e.TenantCode == tenantCode &&
             e.CompanyCode == companyCode &&
-            e.EmployeeNo == employeeNo);
+            e.EmployeeCode == EmployeeCode);
         if (employee == null) return 0;
 
         var post = await postRepository.FirstAsync(p =>

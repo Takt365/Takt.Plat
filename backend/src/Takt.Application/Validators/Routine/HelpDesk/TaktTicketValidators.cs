@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Application.Validators.Routine.HelpDesk
 // 文件名称：TaktTicketValidators.cs
-// 创建时间：2026-07-20
+// 创建时间：2026-07-23
 // 创建人：Takt365(Auto Generated)
 // 功能描述：Ticket 模块 FluentValidation 验证器（由 generate-validators-from-entity.cjs 根据 TaktTicket 生成，请按需审阅）
 // 
@@ -36,8 +36,8 @@ public class TaktTicketCreateValidator : AbstractValidator<TaktTicketCreateDto>
             .NotEmpty().WithMessage("公司代码不能为空")
             .MaximumLength(4).WithMessage("公司代码长度不能超过4个字符");
         RuleFor(x => x.TicketNo)
-            .NotEmpty().WithMessage("工单编号不能为空")
-            .MaximumLength(50).WithMessage("工单编号长度不能超过50个字符");
+            .NotEmpty().WithMessage("工单编码不能为空")
+            .MaximumLength(50).WithMessage("工单编码长度不能超过50个字符");
         RuleFor(x => x.TicketTitle)
             .NotEmpty().WithMessage("工单标题不能为空")
             .MaximumLength(200).WithMessage("工单标题长度不能超过200个字符");
@@ -83,8 +83,8 @@ public class TaktTicketUpdateValidator : AbstractValidator<TaktTicketUpdateDto>
             .NotEmpty().WithMessage("公司代码不能为空")
             .MaximumLength(4).WithMessage("公司代码长度不能超过4个字符");
         RuleFor(x => x.TicketNo)
-            .NotEmpty().WithMessage("工单编号不能为空")
-            .MaximumLength(50).WithMessage("工单编号长度不能超过50个字符");
+            .NotEmpty().WithMessage("工单编码不能为空")
+            .MaximumLength(50).WithMessage("工单编码长度不能超过50个字符");
         RuleFor(x => x.TicketTitle)
             .NotEmpty().WithMessage("工单标题不能为空")
             .MaximumLength(200).WithMessage("工单标题长度不能超过200个字符");
@@ -126,8 +126,8 @@ public class TaktTicketImportValidator : AbstractValidator<TaktTicketImportDto>
         RuleFor(x => x.CompanyCode)
             .MaximumLength(4).WithMessage("公司代码长度不能超过4个字符").When(x => !string.IsNullOrWhiteSpace(x.CompanyCode));
         RuleFor(x => x.TicketNo)
-            .NotEmpty().WithMessage("工单编号不能为空")
-            .MaximumLength(50).WithMessage("工单编号长度不能超过50个字符");
+            .NotEmpty().WithMessage("工单编码不能为空")
+            .MaximumLength(50).WithMessage("工单编码长度不能超过50个字符");
         RuleFor(x => x.TicketTitle)
             .NotEmpty().WithMessage("工单标题不能为空")
             .MaximumLength(200).WithMessage("工单标题长度不能超过200个字符");

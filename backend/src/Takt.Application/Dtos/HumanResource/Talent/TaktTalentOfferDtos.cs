@@ -47,7 +47,7 @@ public class TaktTalentOfferDto : TaktApprovalDtoBase
     public string? JobPostingName { get; set; }
 
     /// <summary>
-    /// 录用编号（租户+公司内业务编号）
+    /// 录用编码（租户+公司内业务编码）
     /// </summary>
     public string OfferNo { get; set; } = string.Empty;
 
@@ -135,7 +135,7 @@ public class TaktTalentOfferQueryDto : TaktPagedQuery
     public long? JobPostingId { get; set; }
 
     /// <summary>
-    /// 录用编号（租户+公司内业务编号）
+    /// 录用编码（租户+公司内业务编码）
     /// </summary>
     public string? OfferNo { get; set; } = string.Empty;
 
@@ -277,9 +277,9 @@ public class TaktTalentOfferCreateDto
     public long JobPostingId { get; set; }
 
     /// <summary>
-    /// 录用编号（租户+公司内业务编号）
+    /// 录用编码（租户+公司内业务编码）
     /// </summary>
-    [Required(ErrorMessage = "录用编号（租户+公司内业务编号）不能为空")]
+    [Required(ErrorMessage = "录用编码（租户+公司内业务编码）不能为空")]
     public string OfferNo { get; set; } = string.Empty;
 
     /// <summary>
@@ -384,7 +384,7 @@ public class TaktTalentOfferTemplateDto
     public long? JobPostingId { get; set; }
 
     /// <summary>
-    /// 录用编号（租户+公司内业务编号）
+    /// 录用编码（租户+公司内业务编码）
     /// </summary>
     public string? OfferNo { get; set; } = string.Empty;
 
@@ -470,7 +470,7 @@ public class TaktTalentOfferImportDto
     public long? JobPostingId { get; set; }
 
     /// <summary>
-    /// 录用编号（租户+公司内业务编号）
+    /// 录用编码（租户+公司内业务编码）
     /// </summary>
     public string? OfferNo { get; set; } = string.Empty;
 
@@ -552,7 +552,7 @@ public class TaktTalentOfferExportDto
     public long JobPostingId { get; set; }
 
     /// <summary>
-    /// 录用编号（租户+公司内业务编号）
+    /// 录用编码（租户+公司内业务编码）
     /// </summary>
     public string OfferNo { get; set; } = string.Empty;
 

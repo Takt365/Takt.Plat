@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Infrastructure.Data.Seeds.I18nSeedData.Logistics.Serial
 // 文件名称：TaktSerialSummaryI18nSeedData.cs
-// 创建时间：2026-07-20
+// 创建时间：2026-07-23
 // 创建人：Takt365(Auto Generated)
 // 功能描述：TaktSerialSummary 实体字段国际化种子（无对应 frontend locales；TranslationText 取自 ColumnDescription，ContextNote 取自属性 XML summary）
 // 
@@ -91,13 +91,13 @@ public class TaktSerialSummaryI18nSeedData : ITaktSeedDataCoordinator
             new TranslationSeedItem("entity.serialsummary._self", "zh-HK", "序列号汇总信息_hk", "实体名称"),
 
             // entity.serialsummary.plantcode
-            new TranslationSeedItem("entity.serialsummary.plantcode", "en-US", "工厂代码_us", "工厂代码（选项 TaktPlants/options，DictValue=PlantCode）"),
+            new TranslationSeedItem("entity.serialsummary.plantcode", "en-US", "工厂代码_us", "工厂代码（选项 TaktPlants/options；DictValue=PlantCode）"),
             // entity.serialsummary.plantcode
-            new TranslationSeedItem("entity.serialsummary.plantcode", "ja-JP", "工厂代码_jp", "工厂代码（选项 TaktPlants/options，DictValue=PlantCode）"),
+            new TranslationSeedItem("entity.serialsummary.plantcode", "ja-JP", "工厂代码_jp", "工厂代码（选项 TaktPlants/options；DictValue=PlantCode）"),
             // entity.serialsummary.plantcode
-            new TranslationSeedItem("entity.serialsummary.plantcode", "zh-CN", "工厂代码", "工厂代码（选项 TaktPlants/options，DictValue=PlantCode）"),
+            new TranslationSeedItem("entity.serialsummary.plantcode", "zh-CN", "工厂代码", "工厂代码（选项 TaktPlants/options；DictValue=PlantCode）"),
             // entity.serialsummary.plantcode
-            new TranslationSeedItem("entity.serialsummary.plantcode", "zh-HK", "工厂代码_hk", "工厂代码（选项 TaktPlants/options，DictValue=PlantCode）"),
+            new TranslationSeedItem("entity.serialsummary.plantcode", "zh-HK", "工厂代码_hk", "工厂代码（选项 TaktPlants/options；DictValue=PlantCode）"),
 
             // entity.serialsummary.inboundno
             new TranslationSeedItem("entity.serialsummary.inboundno", "en-US", "入库单号_us", "入库单号"),
@@ -118,13 +118,13 @@ public class TaktSerialSummaryI18nSeedData : ITaktSeedDataCoordinator
             new TranslationSeedItem("entity.serialsummary.inbounddate", "zh-HK", "入库日期_hk", "入库日期"),
 
             // entity.serialsummary.materialcode
-            new TranslationSeedItem("entity.serialsummary.materialcode", "en-US", "产品物料_us", "产品物料（选项 TaktMaterialPlants/options，DictValue=MaterialCode，ExtValue=PlantCode）"),
+            new TranslationSeedItem("entity.serialsummary.materialcode", "en-US", "产品物料_us", "产品物料（选项 TaktMaterialPlants/options；DictValue=MaterialCode，ExtValue=PlantCode）"),
             // entity.serialsummary.materialcode
-            new TranslationSeedItem("entity.serialsummary.materialcode", "ja-JP", "产品物料_jp", "产品物料（选项 TaktMaterialPlants/options，DictValue=MaterialCode，ExtValue=PlantCode）"),
+            new TranslationSeedItem("entity.serialsummary.materialcode", "ja-JP", "产品物料_jp", "产品物料（选项 TaktMaterialPlants/options；DictValue=MaterialCode，ExtValue=PlantCode）"),
             // entity.serialsummary.materialcode
-            new TranslationSeedItem("entity.serialsummary.materialcode", "zh-CN", "产品物料", "产品物料（选项 TaktMaterialPlants/options，DictValue=MaterialCode，ExtValue=PlantCode）"),
+            new TranslationSeedItem("entity.serialsummary.materialcode", "zh-CN", "产品物料", "产品物料（选项 TaktMaterialPlants/options；DictValue=MaterialCode，ExtValue=PlantCode）"),
             // entity.serialsummary.materialcode
-            new TranslationSeedItem("entity.serialsummary.materialcode", "zh-HK", "产品物料_hk", "产品物料（选项 TaktMaterialPlants/options，DictValue=MaterialCode，ExtValue=PlantCode）"),
+            new TranslationSeedItem("entity.serialsummary.materialcode", "zh-HK", "产品物料_hk", "产品物料（选项 TaktMaterialPlants/options；DictValue=MaterialCode，ExtValue=PlantCode）"),
 
             // entity.serialsummary.inboundserialno
             new TranslationSeedItem("entity.serialsummary.inboundserialno", "en-US", "入库序列号_us", "入库序列号（计算后的业务序号；租户+公司+工厂内唯一）"),
@@ -181,13 +181,13 @@ public class TaktSerialSummaryI18nSeedData : ITaktSeedDataCoordinator
             new TranslationSeedItem("entity.serialsummary.loadingdate", "zh-HK", "装车日期_hk", "装车日期（未装车时为空）"),
 
             // entity.serialsummary.destination
-            new TranslationSeedItem("entity.serialsummary.destination", "en-US", "仕向地_us", "仕向地（选项 TaktModelDestinations/options，DictValue=DestinationCode）"),
+            new TranslationSeedItem("entity.serialsummary.destination", "en-US", "仕向地_us", "仕向地（选项 TaktModelDestinations/options；DictValue=DestinationCode）"),
             // entity.serialsummary.destination
-            new TranslationSeedItem("entity.serialsummary.destination", "ja-JP", "仕向地_jp", "仕向地（选项 TaktModelDestinations/options，DictValue=DestinationCode）"),
+            new TranslationSeedItem("entity.serialsummary.destination", "ja-JP", "仕向地_jp", "仕向地（选项 TaktModelDestinations/options；DictValue=DestinationCode）"),
             // entity.serialsummary.destination
-            new TranslationSeedItem("entity.serialsummary.destination", "zh-CN", "仕向地", "仕向地（选项 TaktModelDestinations/options，DictValue=DestinationCode）"),
+            new TranslationSeedItem("entity.serialsummary.destination", "zh-CN", "仕向地", "仕向地（选项 TaktModelDestinations/options；DictValue=DestinationCode）"),
             // entity.serialsummary.destination
-            new TranslationSeedItem("entity.serialsummary.destination", "zh-HK", "仕向地_hk", "仕向地（选项 TaktModelDestinations/options，DictValue=DestinationCode）"),
+            new TranslationSeedItem("entity.serialsummary.destination", "zh-HK", "仕向地_hk", "仕向地（选项 TaktModelDestinations/options；DictValue=DestinationCode）"),
 
             // entity.serialsummary.destinationport
             new TranslationSeedItem("entity.serialsummary.destinationport", "en-US", "目的地港_us", "目的地港（字典 logistics_destination_port_code；DictValue 为港口/运输编码，如 ACE_AIR、VIE）"),

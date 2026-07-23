@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Application.Dtos.Logistics.Procurement
 // 文件名称：TaktPurchaseOrderItemDtos.cs
-// 创建时间：2026-07-09
+// 创建时间：2026-07-23
 // 创建人：Takt365(Auto Generated)
 // 功能描述：PurchaseOrderItem 模块 DTO（由 generate-dtos-from-entity.cjs 根据 TaktPurchaseOrderItem 生成，请按需审阅）
 // 
@@ -36,7 +36,7 @@ public class TaktPurchaseOrderItemDto : TaktCompanyDtoBase
     public long PurchaseOrderItemId { get; set; }
 
     /// <summary>
-    /// 采购订单 ID（关联 TaktPurchaseOrder.Id，选项 TaktPurchaseOrders/options）
+    /// 采购订单 ID（选项 TaktPurchaseOrders/options；DictValue=Id）
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
     public long PurchaseOrderId { get; set; }
@@ -67,22 +67,22 @@ public class TaktPurchaseOrderItemDto : TaktCompanyDtoBase
     public int? RequestLineNumber { get; set; }
 
     /// <summary>
-    /// 物料编码
+    /// 物料编码（选项 TaktMaterialPlants/options；DictValue=MaterialCode，ExtValue=PlantCode）
     /// </summary>
     public string? MaterialCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 物料名称
+    /// 物料名称（回填：随物料）
     /// </summary>
     public string MaterialName { get; set; } = string.Empty;
 
     /// <summary>
-    /// 物料规格
+    /// 物料规格（回填：随物料）
     /// </summary>
     public string? MaterialSpecification { get; set; } = string.Empty;
 
     /// <summary>
-    /// 采购单位
+    /// 采购单位（字典 logistics_unit_of_measure_code；DictValue=PC/EA 等；默认 PC）
     /// </summary>
     public string PurchaseUnit { get; set; } = string.Empty;
 
@@ -102,9 +102,9 @@ public class TaktPurchaseOrderItemDto : TaktCompanyDtoBase
     public int PurchasePerUnit { get; set; } = 0;
 
     /// <summary>
-    /// 单价（精确到分，存储为整数，单位为分）
+    /// 采购单价
     /// </summary>
-    public decimal UnitPrice { get; set; }
+    public decimal PurchaseUnitPrice { get; set; }
 
     /// <summary>
     /// 折扣率（字典 logistics_discount_rate_param 预设或手输；0-100，表示折扣百分比）
@@ -117,19 +117,19 @@ public class TaktPurchaseOrderItemDto : TaktCompanyDtoBase
     public decimal DiscountAmount { get; set; }
 
     /// <summary>
-    /// 税费率（字典 accounting_tax_rate_param 预设或手输；0-100，表示税费百分比）
+    /// 含税金额
     /// </summary>
-    public decimal TaxRate { get; set; }
+    public decimal TaxIncludedAmount { get; set; }
 
     /// <summary>
-    /// 税费（精确到分，存储为整数，单位为分）
+    /// 未税金额
+    /// </summary>
+    public decimal UntaxedAmount { get; set; }
+
+    /// <summary>
+    /// 税费
     /// </summary>
     public decimal TaxAmount { get; set; }
-
-    /// <summary>
-    /// 小计金额（精确到分，存储为整数，单位为分）
-    /// </summary>
-    public decimal SubtotalAmount { get; set; }
 
     /// <summary>
     /// 行交货状态（字典 logistics_delivery_status；0=未交货，1=部分交货，2=全部交货）
@@ -137,7 +137,7 @@ public class TaktPurchaseOrderItemDto : TaktCompanyDtoBase
     public int DeliveryStatus { get; set; } = 0;
 
     /// <summary>
-    /// 是否作废（字典 sys_yes_no_type，0=否 1=是；编辑移除子行时标记作废）
+    /// 是否作废（字典 sys_yes_no_type；0=否 1=是；编辑移除子行时标记作废）
     /// </summary>
     public int IsObsolete { get; set; } = 0;
 
@@ -164,7 +164,7 @@ public class TaktPurchaseOrderItemQueryDto : TaktPagedQuery
     public string? CompanyCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 采购订单 ID（关联 TaktPurchaseOrder.Id，选项 TaktPurchaseOrders/options）
+    /// 采购订单 ID（选项 TaktPurchaseOrders/options；DictValue=Id）
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
     public long? PurchaseOrderId { get; set; }
@@ -190,22 +190,22 @@ public class TaktPurchaseOrderItemQueryDto : TaktPagedQuery
     public int? RequestLineNumber { get; set; }
 
     /// <summary>
-    /// 物料编码
+    /// 物料编码（选项 TaktMaterialPlants/options；DictValue=MaterialCode，ExtValue=PlantCode）
     /// </summary>
     public string? MaterialCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 物料名称
+    /// 物料名称（回填：随物料）
     /// </summary>
     public string? MaterialName { get; set; } = string.Empty;
 
     /// <summary>
-    /// 物料规格
+    /// 物料规格（回填：随物料）
     /// </summary>
     public string? MaterialSpecification { get; set; } = string.Empty;
 
     /// <summary>
-    /// 采购单位
+    /// 采购单位（字典 logistics_unit_of_measure_code；DictValue=PC/EA 等；默认 PC）
     /// </summary>
     public string? PurchaseUnit { get; set; } = string.Empty;
 
@@ -225,9 +225,9 @@ public class TaktPurchaseOrderItemQueryDto : TaktPagedQuery
     public int? PurchasePerUnit { get; set; }
 
     /// <summary>
-    /// 单价（精确到分，存储为整数，单位为分）
+    /// 采购单价
     /// </summary>
-    public decimal? UnitPrice { get; set; }
+    public decimal? PurchaseUnitPrice { get; set; }
 
     /// <summary>
     /// 折扣率（字典 logistics_discount_rate_param 预设或手输；0-100，表示折扣百分比）
@@ -240,19 +240,19 @@ public class TaktPurchaseOrderItemQueryDto : TaktPagedQuery
     public decimal? DiscountAmount { get; set; }
 
     /// <summary>
-    /// 税费率（字典 accounting_tax_rate_param 预设或手输；0-100，表示税费百分比）
+    /// 含税金额
     /// </summary>
-    public decimal? TaxRate { get; set; }
+    public decimal? TaxIncludedAmount { get; set; }
 
     /// <summary>
-    /// 税费（精确到分，存储为整数，单位为分）
+    /// 未税金额
+    /// </summary>
+    public decimal? UntaxedAmount { get; set; }
+
+    /// <summary>
+    /// 税费
     /// </summary>
     public decimal? TaxAmount { get; set; }
-
-    /// <summary>
-    /// 小计金额（精确到分，存储为整数，单位为分）
-    /// </summary>
-    public decimal? SubtotalAmount { get; set; }
 
     /// <summary>
     /// 行交货状态（字典 logistics_delivery_status；0=未交货，1=部分交货，2=全部交货）
@@ -260,7 +260,7 @@ public class TaktPurchaseOrderItemQueryDto : TaktPagedQuery
     public int? DeliveryStatus { get; set; }
 
     /// <summary>
-    /// 是否作废（字典 sys_yes_no_type，0=否 1=是；编辑移除子行时标记作废）
+    /// 是否作废（字典 sys_yes_no_type；0=否 1=是；编辑移除子行时标记作废）
     /// </summary>
     public int? IsObsolete { get; set; }
 
@@ -310,7 +310,7 @@ public class TaktPurchaseOrderItemCreateDto
     public string CompanyDefaultCulture { get; set; } = string.Empty;
 
     /// <summary>
-    /// 采购订单 ID（关联 TaktPurchaseOrder.Id，选项 TaktPurchaseOrders/options）
+    /// 采购订单 ID（选项 TaktPurchaseOrders/options；DictValue=Id）
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
     public long PurchaseOrderId { get; set; }
@@ -337,25 +337,25 @@ public class TaktPurchaseOrderItemCreateDto
     public int? RequestLineNumber { get; set; }
 
     /// <summary>
-    /// 物料编码
+    /// 物料编码（选项 TaktMaterialPlants/options；DictValue=MaterialCode，ExtValue=PlantCode）
     /// </summary>
     public string? MaterialCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 物料名称
+    /// 物料名称（回填：随物料）
     /// </summary>
-    [Required(ErrorMessage = "物料名称不能为空")]
+    [Required(ErrorMessage = "物料名称（回填：随物料）不能为空")]
     public string MaterialName { get; set; } = string.Empty;
 
     /// <summary>
-    /// 物料规格
+    /// 物料规格（回填：随物料）
     /// </summary>
     public string? MaterialSpecification { get; set; } = string.Empty;
 
     /// <summary>
-    /// 采购单位
+    /// 采购单位（字典 logistics_unit_of_measure_code；DictValue=PC/EA 等；默认 PC）
     /// </summary>
-    [Required(ErrorMessage = "采购单位不能为空")]
+    [Required(ErrorMessage = "采购单位（字典 logistics_unit_of_measure_code；DictValue=PC/EA 等；默认 PC）不能为空")]
     public string PurchaseUnit { get; set; } = string.Empty;
 
     /// <summary>
@@ -374,9 +374,9 @@ public class TaktPurchaseOrderItemCreateDto
     public int PurchasePerUnit { get; set; } = 0;
 
     /// <summary>
-    /// 单价（精确到分，存储为整数，单位为分）
+    /// 采购单价
     /// </summary>
-    public decimal UnitPrice { get; set; }
+    public decimal PurchaseUnitPrice { get; set; }
 
     /// <summary>
     /// 折扣率（字典 logistics_discount_rate_param 预设或手输；0-100，表示折扣百分比）
@@ -389,19 +389,19 @@ public class TaktPurchaseOrderItemCreateDto
     public decimal DiscountAmount { get; set; }
 
     /// <summary>
-    /// 税费率（字典 accounting_tax_rate_param 预设或手输；0-100，表示税费百分比）
+    /// 含税金额
     /// </summary>
-    public decimal TaxRate { get; set; }
+    public decimal TaxIncludedAmount { get; set; }
 
     /// <summary>
-    /// 税费（精确到分，存储为整数，单位为分）
+    /// 未税金额
+    /// </summary>
+    public decimal UntaxedAmount { get; set; }
+
+    /// <summary>
+    /// 税费
     /// </summary>
     public decimal TaxAmount { get; set; }
-
-    /// <summary>
-    /// 小计金额（精确到分，存储为整数，单位为分）
-    /// </summary>
-    public decimal SubtotalAmount { get; set; }
 
     /// <summary>
     /// 行交货状态（字典 logistics_delivery_status；0=未交货，1=部分交货，2=全部交货）
@@ -409,7 +409,7 @@ public class TaktPurchaseOrderItemCreateDto
     public int DeliveryStatus { get; set; } = 0;
 
     /// <summary>
-    /// 是否作废（字典 sys_yes_no_type，0=否 1=是；编辑移除子行时标记作废）
+    /// 是否作废（字典 sys_yes_no_type；0=否 1=是；编辑移除子行时标记作废）
     /// </summary>
     public int IsObsolete { get; set; } = 0;
 
@@ -512,7 +512,7 @@ public class TaktPurchaseOrderItemTemplateDto
     public string? CompanyCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 采购订单 ID（关联 TaktPurchaseOrder.Id，选项 TaktPurchaseOrders/options）
+    /// 采购订单 ID（选项 TaktPurchaseOrders/options；DictValue=Id）
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
     public long? PurchaseOrderId { get; set; }
@@ -538,22 +538,22 @@ public class TaktPurchaseOrderItemTemplateDto
     public int? RequestLineNumber { get; set; }
 
     /// <summary>
-    /// 物料编码
+    /// 物料编码（选项 TaktMaterialPlants/options；DictValue=MaterialCode，ExtValue=PlantCode）
     /// </summary>
     public string? MaterialCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 物料名称
+    /// 物料名称（回填：随物料）
     /// </summary>
     public string? MaterialName { get; set; } = string.Empty;
 
     /// <summary>
-    /// 物料规格
+    /// 物料规格（回填：随物料）
     /// </summary>
     public string? MaterialSpecification { get; set; } = string.Empty;
 
     /// <summary>
-    /// 采购单位
+    /// 采购单位（字典 logistics_unit_of_measure_code；DictValue=PC/EA 等；默认 PC）
     /// </summary>
     public string? PurchaseUnit { get; set; } = string.Empty;
 
@@ -573,9 +573,9 @@ public class TaktPurchaseOrderItemTemplateDto
     public int? PurchasePerUnit { get; set; }
 
     /// <summary>
-    /// 单价（精确到分，存储为整数，单位为分）
+    /// 采购单价
     /// </summary>
-    public decimal? UnitPrice { get; set; }
+    public decimal? PurchaseUnitPrice { get; set; }
 
     /// <summary>
     /// 折扣率（字典 logistics_discount_rate_param 预设或手输；0-100，表示折扣百分比）
@@ -588,19 +588,19 @@ public class TaktPurchaseOrderItemTemplateDto
     public decimal? DiscountAmount { get; set; }
 
     /// <summary>
-    /// 税费率（字典 accounting_tax_rate_param 预设或手输；0-100，表示税费百分比）
+    /// 含税金额
     /// </summary>
-    public decimal? TaxRate { get; set; }
+    public decimal? TaxIncludedAmount { get; set; }
 
     /// <summary>
-    /// 税费（精确到分，存储为整数，单位为分）
+    /// 未税金额
+    /// </summary>
+    public decimal? UntaxedAmount { get; set; }
+
+    /// <summary>
+    /// 税费
     /// </summary>
     public decimal? TaxAmount { get; set; }
-
-    /// <summary>
-    /// 小计金额（精确到分，存储为整数，单位为分）
-    /// </summary>
-    public decimal? SubtotalAmount { get; set; }
 
     /// <summary>
     /// 行交货状态（字典 logistics_delivery_status；0=未交货，1=部分交货，2=全部交货）
@@ -608,7 +608,7 @@ public class TaktPurchaseOrderItemTemplateDto
     public int? DeliveryStatus { get; set; }
 
     /// <summary>
-    /// 是否作废（字典 sys_yes_no_type，0=否 1=是；编辑移除子行时标记作废）
+    /// 是否作废（字典 sys_yes_no_type；0=否 1=是；编辑移除子行时标记作废）
     /// </summary>
     public int? IsObsolete { get; set; }
 
@@ -645,7 +645,7 @@ public class TaktPurchaseOrderItemImportDto
     public string? CompanyDefaultCulture { get; set; } = string.Empty;
 
     /// <summary>
-    /// 采购订单 ID（关联 TaktPurchaseOrder.Id，选项 TaktPurchaseOrders/options）
+    /// 采购订单 ID（选项 TaktPurchaseOrders/options；DictValue=Id）
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
     public long? PurchaseOrderId { get; set; }
@@ -671,22 +671,22 @@ public class TaktPurchaseOrderItemImportDto
     public int? RequestLineNumber { get; set; }
 
     /// <summary>
-    /// 物料编码
+    /// 物料编码（选项 TaktMaterialPlants/options；DictValue=MaterialCode，ExtValue=PlantCode）
     /// </summary>
     public string? MaterialCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 物料名称
+    /// 物料名称（回填：随物料）
     /// </summary>
     public string? MaterialName { get; set; } = string.Empty;
 
     /// <summary>
-    /// 物料规格
+    /// 物料规格（回填：随物料）
     /// </summary>
     public string? MaterialSpecification { get; set; } = string.Empty;
 
     /// <summary>
-    /// 采购单位
+    /// 采购单位（字典 logistics_unit_of_measure_code；DictValue=PC/EA 等；默认 PC）
     /// </summary>
     public string? PurchaseUnit { get; set; } = string.Empty;
 
@@ -706,9 +706,9 @@ public class TaktPurchaseOrderItemImportDto
     public int? PurchasePerUnit { get; set; }
 
     /// <summary>
-    /// 单价（精确到分，存储为整数，单位为分）
+    /// 采购单价
     /// </summary>
-    public decimal? UnitPrice { get; set; }
+    public decimal? PurchaseUnitPrice { get; set; }
 
     /// <summary>
     /// 折扣率（字典 logistics_discount_rate_param 预设或手输；0-100，表示折扣百分比）
@@ -721,19 +721,19 @@ public class TaktPurchaseOrderItemImportDto
     public decimal? DiscountAmount { get; set; }
 
     /// <summary>
-    /// 税费率（字典 accounting_tax_rate_param 预设或手输；0-100，表示税费百分比）
+    /// 含税金额
     /// </summary>
-    public decimal? TaxRate { get; set; }
+    public decimal? TaxIncludedAmount { get; set; }
 
     /// <summary>
-    /// 税费（精确到分，存储为整数，单位为分）
+    /// 未税金额
+    /// </summary>
+    public decimal? UntaxedAmount { get; set; }
+
+    /// <summary>
+    /// 税费
     /// </summary>
     public decimal? TaxAmount { get; set; }
-
-    /// <summary>
-    /// 小计金额（精确到分，存储为整数，单位为分）
-    /// </summary>
-    public decimal? SubtotalAmount { get; set; }
 
     /// <summary>
     /// 行交货状态（字典 logistics_delivery_status；0=未交货，1=部分交货，2=全部交货）
@@ -741,7 +741,7 @@ public class TaktPurchaseOrderItemImportDto
     public int? DeliveryStatus { get; set; }
 
     /// <summary>
-    /// 是否作废（字典 sys_yes_no_type，0=否 1=是；编辑移除子行时标记作废）
+    /// 是否作废（字典 sys_yes_no_type；0=否 1=是；编辑移除子行时标记作废）
     /// </summary>
     public int? IsObsolete { get; set; }
 
@@ -779,7 +779,7 @@ public class TaktPurchaseOrderItemExportDto
     public string CompanyCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 采购订单 ID（关联 TaktPurchaseOrder.Id，选项 TaktPurchaseOrders/options）
+    /// 采购订单 ID（选项 TaktPurchaseOrders/options；DictValue=Id）
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
     public long PurchaseOrderId { get; set; }
@@ -805,22 +805,22 @@ public class TaktPurchaseOrderItemExportDto
     public int? RequestLineNumber { get; set; }
 
     /// <summary>
-    /// 物料编码
+    /// 物料编码（选项 TaktMaterialPlants/options；DictValue=MaterialCode，ExtValue=PlantCode）
     /// </summary>
     public string? MaterialCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 物料名称
+    /// 物料名称（回填：随物料）
     /// </summary>
     public string MaterialName { get; set; } = string.Empty;
 
     /// <summary>
-    /// 物料规格
+    /// 物料规格（回填：随物料）
     /// </summary>
     public string? MaterialSpecification { get; set; } = string.Empty;
 
     /// <summary>
-    /// 采购单位
+    /// 采购单位（字典 logistics_unit_of_measure_code；DictValue=PC/EA 等；默认 PC）
     /// </summary>
     public string PurchaseUnit { get; set; } = string.Empty;
 
@@ -840,9 +840,9 @@ public class TaktPurchaseOrderItemExportDto
     public int PurchasePerUnit { get; set; } = 0;
 
     /// <summary>
-    /// 单价（精确到分，存储为整数，单位为分）
+    /// 采购单价
     /// </summary>
-    public decimal UnitPrice { get; set; }
+    public decimal PurchaseUnitPrice { get; set; }
 
     /// <summary>
     /// 折扣率（字典 logistics_discount_rate_param 预设或手输；0-100，表示折扣百分比）
@@ -855,19 +855,19 @@ public class TaktPurchaseOrderItemExportDto
     public decimal DiscountAmount { get; set; }
 
     /// <summary>
-    /// 税费率（字典 accounting_tax_rate_param 预设或手输；0-100，表示税费百分比）
+    /// 含税金额
     /// </summary>
-    public decimal TaxRate { get; set; }
+    public decimal TaxIncludedAmount { get; set; }
 
     /// <summary>
-    /// 税费（精确到分，存储为整数，单位为分）
+    /// 未税金额
+    /// </summary>
+    public decimal UntaxedAmount { get; set; }
+
+    /// <summary>
+    /// 税费
     /// </summary>
     public decimal TaxAmount { get; set; }
-
-    /// <summary>
-    /// 小计金额（精确到分，存储为整数，单位为分）
-    /// </summary>
-    public decimal SubtotalAmount { get; set; }
 
     /// <summary>
     /// 行交货状态（字典 logistics_delivery_status；0=未交货，1=部分交货，2=全部交货）
@@ -875,7 +875,7 @@ public class TaktPurchaseOrderItemExportDto
     public int DeliveryStatus { get; set; } = 0;
 
     /// <summary>
-    /// 是否作废（字典 sys_yes_no_type，0=否 1=是；编辑移除子行时标记作废）
+    /// 是否作废（字典 sys_yes_no_type；0=否 1=是；编辑移除子行时标记作废）
     /// </summary>
     public int IsObsolete { get; set; } = 0;
 

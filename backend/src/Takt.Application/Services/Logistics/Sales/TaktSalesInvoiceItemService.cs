@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Application.Services.Logistics.Sales
 // 文件名称：TaktSalesInvoiceItemService.cs
-// 创建时间：2026-07-09
+// 创建时间：2026-07-23
 // 创建人：Takt365(Cursor AI)
 // 功能描述：销售发票明细应用服务实现
 // 
@@ -100,13 +100,13 @@ public class TaktSalesInvoiceItemService : TaktServiceBase, ITaktSalesInvoiceIte
     {
         EnsureThreeLayerContext();
         var list = await _salesInvoiceItemRepository.GetListAsync(
-            x => x.TenantCode == CurrentTenantCode && x.CompanyCode == CurrentCompanyCode,
-            x => x.MaterialName ?? string.Empty,
+            x => x.TenantCode == CurrentTenantCode && x.CompanyCode == CurrentCompanyCode && x.IsObsolete == 0,
+            x => x.ModelName ?? string.Empty,
             false);
         return list.Select(e => new TaktSelectOption
         {
-            DictValue = e.Id,
-            DictLabel = e.MaterialName ?? e.Id.ToString(),
+            DictValue = e.AccountingDocumentCode,
+            DictLabel = e.ModelName ?? e.AccountingDocumentCode,
         }).ToList();
     }
 
@@ -379,7 +379,6 @@ public class TaktSalesInvoiceItemService : TaktServiceBase, ITaktSalesInvoiceIte
                 SqlFunc.ToString(x.SalesInvoiceId).Contains(keywords)
                 || (x.AccountingDocumentCode != null && x.AccountingDocumentCode.Contains(keywords))
                 || SqlFunc.ToString(x.LineNumber).Contains(keywords)
-                || (x.Currency != null && x.Currency.Contains(keywords))
                 || (x.ModelName != null && x.ModelName.Contains(keywords))
                 || (x.MaterialCode != null && x.MaterialCode.Contains(keywords))
                 || (x.MaterialType != null && x.MaterialType.Contains(keywords))
@@ -390,6 +389,9 @@ public class TaktSalesInvoiceItemService : TaktServiceBase, ITaktSalesInvoiceIte
                 || (x.Unit != null && x.Unit.Contains(keywords))
                 || SqlFunc.ToString(x.LocalCurrencyAmount).Contains(keywords)
                 || SqlFunc.ToString(x.TransactionCurrencyAmount).Contains(keywords)
+                || SqlFunc.ToString(x.TaxIncludedPrice).Contains(keywords)
+                || SqlFunc.ToString(x.UntaxedPrice).Contains(keywords)
+                || SqlFunc.ToString(x.TaxAmount).Contains(keywords)
                 || (x.DocumentType != null && x.DocumentType.Contains(keywords))
                 || (x.ReferenceDocumentCode != null && x.ReferenceDocumentCode.Contains(keywords))
                 || SqlFunc.ToString(x.ReferenceDocumentItem).Contains(keywords)
@@ -413,11 +415,6 @@ public class TaktSalesInvoiceItemService : TaktServiceBase, ITaktSalesInvoiceIte
         if (queryDto?.LineNumber.HasValue == true)
         {
             exp = exp.And(x => x.LineNumber == queryDto.LineNumber);
-        }
-
-        if (!string.IsNullOrEmpty(queryDto?.Currency))
-        {
-            exp = exp.And(x => x.Currency != null && x.Currency.Contains(queryDto.Currency));
         }
 
         if (!string.IsNullOrEmpty(queryDto?.ModelName))
@@ -468,6 +465,21 @@ public class TaktSalesInvoiceItemService : TaktServiceBase, ITaktSalesInvoiceIte
         if (queryDto?.TransactionCurrencyAmount.HasValue == true)
         {
             exp = exp.And(x => x.TransactionCurrencyAmount == queryDto.TransactionCurrencyAmount);
+        }
+
+        if (queryDto?.TaxIncludedPrice.HasValue == true)
+        {
+            exp = exp.And(x => x.TaxIncludedPrice == queryDto.TaxIncludedPrice);
+        }
+
+        if (queryDto?.UntaxedPrice.HasValue == true)
+        {
+            exp = exp.And(x => x.UntaxedPrice == queryDto.UntaxedPrice);
+        }
+
+        if (queryDto?.TaxAmount.HasValue == true)
+        {
+            exp = exp.And(x => x.TaxAmount == queryDto.TaxAmount);
         }
 
         if (!string.IsNullOrEmpty(queryDto?.DocumentType))

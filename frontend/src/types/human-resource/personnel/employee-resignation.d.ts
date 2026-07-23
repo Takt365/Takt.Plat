@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：frontend/src/types/human-resource/personnel
 // 文件名称：employee-resignation.d.ts
-// 创建时间：2026-06-23
+// 创建时间：2026-07-23
 // 创建人：Takt365(Auto Generated)
 // 功能描述：human-resource/personnel 模块类型定义（自动生成；类型名去 Takt 前缀与末尾 Dto，如 TaktCompanyDto → Company）
 // 
@@ -16,7 +16,7 @@ import type {
 } from '@/types/common';
 
 /**
- * 员工离职办理记录（审批单，状态见 <see cref="TaktApprovalEntityBase.ApprovalStatus"/>）
+ * 员工离职办理记录（审批单；审批态见基类 ApprovalStatus，字典 sys_approval_status）
  * 对应前端 TaktEmployeeResignationDto
  * 继承 TaktApprovalDtoBase
  * 对应前端 EmployeeResignation
@@ -29,17 +29,22 @@ export interface EmployeeResignation extends ApprovalDtoBase {
   employeeResignationId: string;
 
   /**
-   * 员工ID
+   * 员工（选项 TaktEmployees/options；DictValue=Id）
    */
   employeeId: string;
 
   /**
-   * 员工名称（填充字段）
+   * 员工编码（冗余，与 TaktEmployee.EmployeeCode 对齐）
    */
-  employeeName?: string;
+  employeeCode: string;
 
   /**
-   * 离职类型（0=主动辞职，1=公司辞退，2=合同到期，3=退休，9=其他）
+   * 员工姓名（冗余，与 TaktEmployee.EmployeeName 对齐）
+   */
+  employeeName: string;
+
+  /**
+   * 离职类型（字典 hr_resignation_category；0=主动辞职 1=公司辞退 2=合同到期 3=退休 9=其他）
    */
   resignationType: number;
 
@@ -89,12 +94,22 @@ export interface EmployeeResignationQuery extends TaktPagedQuery {
   companyCode?: string;
 
   /**
-   * 员工ID
+   * 员工（选项 TaktEmployees/options；DictValue=Id）
    */
   employeeId?: string;
 
   /**
-   * 离职类型（0=主动辞职，1=公司辞退，2=合同到期，3=退休，9=其他）
+   * 员工编码（冗余，与 TaktEmployee.EmployeeCode 对齐）
+   */
+  employeeCode?: string;
+
+  /**
+   * 员工姓名（冗余，与 TaktEmployee.EmployeeName 对齐）
+   */
+  employeeName?: string;
+
+  /**
+   * 离职类型（字典 hr_resignation_category；0=主动辞职 1=公司辞退 2=合同到期 3=退休 9=其他）
    */
   resignationType?: number;
 
@@ -223,12 +238,22 @@ export interface EmployeeResignationCreate {
   companyDefaultCulture: string;
 
   /**
-   * 员工ID
+   * 员工（选项 TaktEmployees/options；DictValue=Id）
    */
   employeeId: string;
 
   /**
-   * 离职类型（0=主动辞职，1=公司辞退，2=合同到期，3=退休，9=其他）
+   * 员工编码（冗余，与 TaktEmployee.EmployeeCode 对齐）
+   */
+  employeeCode: string;
+
+  /**
+   * 员工姓名（冗余，与 TaktEmployee.EmployeeName 对齐）
+   */
+  employeeName: string;
+
+  /**
+   * 离职类型（字典 hr_resignation_category；0=主动辞职 1=公司辞退 2=合同到期 3=退休 9=其他）
    */
   resignationType: number;
 
@@ -302,12 +327,22 @@ export interface EmployeeResignationTemplate {
   companyCode?: string;
 
   /**
-   * 员工ID
+   * 员工（选项 TaktEmployees/options；DictValue=Id）
    */
   employeeId?: string;
 
   /**
-   * 离职类型（0=主动辞职，1=公司辞退，2=合同到期，3=退休，9=其他）
+   * 员工编码（冗余，与 TaktEmployee.EmployeeCode 对齐）
+   */
+  employeeCode?: string;
+
+  /**
+   * 员工姓名（冗余，与 TaktEmployee.EmployeeName 对齐）
+   */
+  employeeName?: string;
+
+  /**
+   * 离职类型（字典 hr_resignation_category；0=主动辞职 1=公司辞退 2=合同到期 3=退休 9=其他）
    */
   resignationType?: number;
 
@@ -371,12 +406,22 @@ export interface EmployeeResignationImport {
   companyDefaultCulture?: string;
 
   /**
-   * 员工ID
+   * 员工（选项 TaktEmployees/options；DictValue=Id）
    */
   employeeId?: string;
 
   /**
-   * 离职类型（0=主动辞职，1=公司辞退，2=合同到期，3=退休，9=其他）
+   * 员工编码（冗余，与 TaktEmployee.EmployeeCode 对齐）
+   */
+  employeeCode?: string;
+
+  /**
+   * 员工姓名（冗余，与 TaktEmployee.EmployeeName 对齐）
+   */
+  employeeName?: string;
+
+  /**
+   * 离职类型（字典 hr_resignation_category；0=主动辞职 1=公司辞退 2=合同到期 3=退休 9=其他）
    */
   resignationType?: number;
 
@@ -430,12 +475,22 @@ export interface EmployeeResignationExport {
   employeeResignationId: string;
 
   /**
-   * 员工ID
+   * 员工（选项 TaktEmployees/options；DictValue=Id）
    */
   employeeId: string;
 
   /**
-   * 离职类型（0=主动辞职，1=公司辞退，2=合同到期，3=退休，9=其他）
+   * 员工编码（冗余，与 TaktEmployee.EmployeeCode 对齐）
+   */
+  employeeCode: string;
+
+  /**
+   * 员工姓名（冗余，与 TaktEmployee.EmployeeName 对齐）
+   */
+  employeeName: string;
+
+  /**
+   * 离职类型（字典 hr_resignation_category；0=主动辞职 1=公司辞退 2=合同到期 3=退休 9=其他）
    */
   resignationType: number;
 

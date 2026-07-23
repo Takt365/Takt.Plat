@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Infrastructure.Data.Seeds.I18nSeedData.Accounting.Financial
 // 文件名称：TaktCountersignDetailI18nSeedData.cs
-// 创建时间：2026-07-20
+// 创建时间：2026-07-23
 // 创建人：Takt365(Auto Generated)
 // 功能描述：TaktCountersignDetail 实体字段国际化种子（无对应 frontend locales；TranslationText 取自 ColumnDescription，ContextNote 取自属性 XML summary）
 // 
@@ -100,13 +100,13 @@ public class TaktCountersignDetailI18nSeedData : ITaktSeedDataCoordinator
             new TranslationSeedItem("entity.countersigndetail.countersignid", "zh-HK", "会签单ID_hk", "会签单 ID（主子表关系）"),
 
             // entity.countersigndetail.countersigncode
-            new TranslationSeedItem("entity.countersigndetail.countersigncode", "en-US", "会签编号_us", "会签编号（冗余，便于查询）"),
+            new TranslationSeedItem("entity.countersigndetail.countersigncode", "en-US", "会签编码_us", "会签编码（冗余，便于查询）"),
             // entity.countersigndetail.countersigncode
-            new TranslationSeedItem("entity.countersigndetail.countersigncode", "ja-JP", "会签编号_jp", "会签编号（冗余，便于查询）"),
+            new TranslationSeedItem("entity.countersigndetail.countersigncode", "ja-JP", "会签编码_jp", "会签编码（冗余，便于查询）"),
             // entity.countersigndetail.countersigncode
-            new TranslationSeedItem("entity.countersigndetail.countersigncode", "zh-CN", "会签编号", "会签编号（冗余，便于查询）"),
+            new TranslationSeedItem("entity.countersigndetail.countersigncode", "zh-CN", "会签编码", "会签编码（冗余，便于查询）"),
             // entity.countersigndetail.countersigncode
-            new TranslationSeedItem("entity.countersigndetail.countersigncode", "zh-HK", "会签编号_hk", "会签编号（冗余，便于查询）"),
+            new TranslationSeedItem("entity.countersigndetail.countersigncode", "zh-HK", "会签编码_hk", "会签编码（冗余，便于查询）"),
 
             // entity.countersigndetail.linenumber
             new TranslationSeedItem("entity.countersigndetail.linenumber", "en-US", "行号_us", "行号（项号/序号，固定步长=10）"),
@@ -127,13 +127,13 @@ public class TaktCountersignDetailI18nSeedData : ITaktSeedDataCoordinator
             new TranslationSeedItem("entity.countersigndetail.allocationcategory", "zh-HK", "分配类别_hk", "分配类别（字典 logistics_allocation_category：A=资产，K=成本中心，F=订单；会签明细、采购申请明细、费用单明细共用）"),
 
             // entity.countersigndetail.accounttitle
-            new TranslationSeedItem("entity.countersigndetail.accounttitle", "en-US", "会计科目_us", "会计科目（选项 TaktAccountTitles/options，DictValue=Id）"),
+            new TranslationSeedItem("entity.countersigndetail.accounttitle", "en-US", "会计科目_us", "会计科目（选项 TaktAccountTitles/options；DictValue=Id）"),
             // entity.countersigndetail.accounttitle
-            new TranslationSeedItem("entity.countersigndetail.accounttitle", "ja-JP", "会计科目_jp", "会计科目（选项 TaktAccountTitles/options，DictValue=Id）"),
+            new TranslationSeedItem("entity.countersigndetail.accounttitle", "ja-JP", "会计科目_jp", "会计科目（选项 TaktAccountTitles/options；DictValue=Id）"),
             // entity.countersigndetail.accounttitle
-            new TranslationSeedItem("entity.countersigndetail.accounttitle", "zh-CN", "会计科目", "会计科目（选项 TaktAccountTitles/options，DictValue=Id）"),
+            new TranslationSeedItem("entity.countersigndetail.accounttitle", "zh-CN", "会计科目", "会计科目（选项 TaktAccountTitles/options；DictValue=Id）"),
             // entity.countersigndetail.accounttitle
-            new TranslationSeedItem("entity.countersigndetail.accounttitle", "zh-HK", "会计科目_hk", "会计科目（选项 TaktAccountTitles/options，DictValue=Id）"),
+            new TranslationSeedItem("entity.countersigndetail.accounttitle", "zh-HK", "会计科目_hk", "会计科目（选项 TaktAccountTitles/options；DictValue=Id）"),
 
             // entity.countersigndetail.itemname
             new TranslationSeedItem("entity.countersigndetail.itemname", "en-US", "明细项名称_us", "明细项名称"),
@@ -172,13 +172,13 @@ public class TaktCountersignDetailI18nSeedData : ITaktSeedDataCoordinator
             new TranslationSeedItem("entity.countersigndetail.itemamount", "zh-HK", "金额_hk", "金额"),
 
             // entity.countersigndetail.isobsolete
-            new TranslationSeedItem("entity.countersigndetail.isobsolete", "en-US", "是否作废_us", "是否作废（字典 sys_yes_no_type，0=否 1=是；编辑移除子行时标记作废）"),
+            new TranslationSeedItem("entity.countersigndetail.isobsolete", "en-US", "是否作废_us", "是否作废（字典 sys_yes_no_type；0=否 1=是；编辑移除子行时标记作废）"),
             // entity.countersigndetail.isobsolete
-            new TranslationSeedItem("entity.countersigndetail.isobsolete", "ja-JP", "是否作废_jp", "是否作废（字典 sys_yes_no_type，0=否 1=是；编辑移除子行时标记作废）"),
+            new TranslationSeedItem("entity.countersigndetail.isobsolete", "ja-JP", "是否作废_jp", "是否作废（字典 sys_yes_no_type；0=否 1=是；编辑移除子行时标记作废）"),
             // entity.countersigndetail.isobsolete
-            new TranslationSeedItem("entity.countersigndetail.isobsolete", "zh-CN", "是否作废", "是否作废（字典 sys_yes_no_type，0=否 1=是；编辑移除子行时标记作废）"),
+            new TranslationSeedItem("entity.countersigndetail.isobsolete", "zh-CN", "是否作废", "是否作废（字典 sys_yes_no_type；0=否 1=是；编辑移除子行时标记作废）"),
             // entity.countersigndetail.isobsolete
-            new TranslationSeedItem("entity.countersigndetail.isobsolete", "zh-HK", "是否作废_hk", "是否作废（字典 sys_yes_no_type，0=否 1=是；编辑移除子行时标记作废）"),
+            new TranslationSeedItem("entity.countersigndetail.isobsolete", "zh-HK", "是否作废_hk", "是否作废（字典 sys_yes_no_type；0=否 1=是；编辑移除子行时标记作废）"),
         };
     }
 

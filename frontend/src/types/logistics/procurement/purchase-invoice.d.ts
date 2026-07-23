@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：frontend/src/types/logistics/procurement
 // 文件名称：purchase-invoice.d.ts
-// 创建时间：2026-06-23
+// 创建时间：2026-07-23
 // 创建人：Takt365(Auto Generated)
 // 功能描述：logistics/procurement 模块类型定义（自动生成；类型名去 Takt 前缀与末尾 Dto，如 TaktCompanyDto → Company）
 // 
@@ -29,7 +29,7 @@ export interface PurchaseInvoice extends CompanyDtoBase {
   purchaseInvoiceId: string;
 
   /**
-   * 工厂代码
+   * 工厂代码（选项 TaktPlants/options；DictValue=PlantCode）
    */
   plantCode: string;
 
@@ -39,19 +39,19 @@ export interface PurchaseInvoice extends CompanyDtoBase {
   purchaseInvoiceCode: string;
 
   /**
-   * 关联采购订单编码
+   * 关联采购订单编码（选项 TaktPurchaseOrders/options；DictValue=PurchaseOrderCode）
    */
   purchaseOrderCode?: string;
 
   /**
-   * 供应商编码
+   * 供应商编码（选项 TaktSuppliers/options；DictValue=SupplierCode）
    */
   supplierCode: string;
 
   /**
-   * 供应商名称
+   * 供应商名称1（冗余，与 TaktSupplier.SupplierName1 对齐）
    */
-  supplierName: string;
+  supplierName1: string;
 
   /**
    * 开票日期
@@ -62,6 +62,16 @@ export interface PurchaseInvoice extends CompanyDtoBase {
    * 发票总金额
    */
   totalAmount: number;
+
+  /**
+   * 结算币种（字典 accounting_currency_code；DictValue=CNY/USD 等；一单一币种）
+   */
+  currencyCode: string;
+
+  /**
+   * 税率（字典 accounting_tax_rate_param；13=13%，9=9%，0=0% 等；一单一税率）
+   */
+  taxRate: number;
 
   /**
    * 税费
@@ -79,11 +89,6 @@ export interface PurchaseInvoice extends CompanyDtoBase {
   paidAmount: number;
 
   /**
-   * 发票状态（字典 logistics_invoice_status；0=草稿，1=已开票，2=已收款，3=已作废）
-   */
-  invoiceStatus: number;
-
-  /**
    * 付款方式（字典 accounting_payment_method_type；0=现金，1=银行转账，2=支票，3=信用证，4=其他）
    */
   paymentMethod: number;
@@ -92,6 +97,11 @@ export interface PurchaseInvoice extends CompanyDtoBase {
    * 税务发票号码
    */
   taxInvoiceNo?: string;
+
+  /**
+   * 发票状态（字典 logistics_invoice_status；0=草稿，1=已开票，2=已收款，3=已作废）
+   */
+  invoiceStatus: number;
 
   /**
    * 采购发票明细列表（主子表关系，一张发票可有多个明细行） （子表：TaktPurchaseInvoiceItem）
@@ -119,7 +129,7 @@ export interface PurchaseInvoiceQuery extends TaktPagedQuery {
   companyCode?: string;
 
   /**
-   * 工厂代码
+   * 工厂代码（选项 TaktPlants/options；DictValue=PlantCode）
    */
   plantCode?: string;
 
@@ -129,19 +139,19 @@ export interface PurchaseInvoiceQuery extends TaktPagedQuery {
   purchaseInvoiceCode?: string;
 
   /**
-   * 关联采购订单编码
+   * 关联采购订单编码（选项 TaktPurchaseOrders/options；DictValue=PurchaseOrderCode）
    */
   purchaseOrderCode?: string;
 
   /**
-   * 供应商编码
+   * 供应商编码（选项 TaktSuppliers/options；DictValue=SupplierCode）
    */
   supplierCode?: string;
 
   /**
-   * 供应商名称
+   * 供应商名称1（冗余，与 TaktSupplier.SupplierName1 对齐）
    */
-  supplierName?: string;
+  supplierName1?: string;
 
   /**
    * 开票日期（范围查询-开始）
@@ -159,6 +169,16 @@ export interface PurchaseInvoiceQuery extends TaktPagedQuery {
   totalAmount?: number;
 
   /**
+   * 结算币种（字典 accounting_currency_code；DictValue=CNY/USD 等；一单一币种）
+   */
+  currencyCode?: string;
+
+  /**
+   * 税率（字典 accounting_tax_rate_param；13=13%，9=9%，0=0% 等；一单一税率）
+   */
+  taxRate?: number;
+
+  /**
    * 税费
    */
   taxAmount?: number;
@@ -174,11 +194,6 @@ export interface PurchaseInvoiceQuery extends TaktPagedQuery {
   paidAmount?: number;
 
   /**
-   * 发票状态（字典 logistics_invoice_status；0=草稿，1=已开票，2=已收款，3=已作废）
-   */
-  invoiceStatus?: number;
-
-  /**
    * 付款方式（字典 accounting_payment_method_type；0=现金，1=银行转账，2=支票，3=信用证，4=其他）
    */
   paymentMethod?: number;
@@ -187,6 +202,11 @@ export interface PurchaseInvoiceQuery extends TaktPagedQuery {
    * 税务发票号码
    */
   taxInvoiceNo?: string;
+
+  /**
+   * 发票状态（字典 logistics_invoice_status；0=草稿，1=已开票，2=已收款，3=已作废）
+   */
+  invoiceStatus?: number;
 
   /**
    * 创建时间（范围查询-开始）
@@ -233,7 +253,7 @@ export interface PurchaseInvoiceCreate {
   companyDefaultCulture: string;
 
   /**
-   * 工厂代码
+   * 工厂代码（选项 TaktPlants/options；DictValue=PlantCode）
    */
   plantCode: string;
 
@@ -243,19 +263,19 @@ export interface PurchaseInvoiceCreate {
   purchaseInvoiceCode: string;
 
   /**
-   * 关联采购订单编码
+   * 关联采购订单编码（选项 TaktPurchaseOrders/options；DictValue=PurchaseOrderCode）
    */
   purchaseOrderCode?: string;
 
   /**
-   * 供应商编码
+   * 供应商编码（选项 TaktSuppliers/options；DictValue=SupplierCode）
    */
   supplierCode: string;
 
   /**
-   * 供应商名称
+   * 供应商名称1（冗余，与 TaktSupplier.SupplierName1 对齐）
    */
-  supplierName: string;
+  supplierName1: string;
 
   /**
    * 开票日期
@@ -266,6 +286,16 @@ export interface PurchaseInvoiceCreate {
    * 发票总金额
    */
   totalAmount: number;
+
+  /**
+   * 结算币种（字典 accounting_currency_code；DictValue=CNY/USD 等；一单一币种）
+   */
+  currencyCode: string;
+
+  /**
+   * 税率（字典 accounting_tax_rate_param；13=13%，9=9%，0=0% 等；一单一税率）
+   */
+  taxRate: number;
 
   /**
    * 税费
@@ -283,11 +313,6 @@ export interface PurchaseInvoiceCreate {
   paidAmount: number;
 
   /**
-   * 发票状态（字典 logistics_invoice_status；0=草稿，1=已开票，2=已收款，3=已作废）
-   */
-  invoiceStatus: number;
-
-  /**
    * 付款方式（字典 accounting_payment_method_type；0=现金，1=银行转账，2=支票，3=信用证，4=其他）
    */
   paymentMethod: number;
@@ -296,6 +321,11 @@ export interface PurchaseInvoiceCreate {
    * 税务发票号码
    */
   taxInvoiceNo?: string;
+
+  /**
+   * 发票状态（字典 logistics_invoice_status；0=草稿，1=已开票，2=已收款，3=已作废）
+   */
+  invoiceStatus: number;
 
   /**
    * 采购发票明细列表（主子表关系，一张发票可有多个明细行）（子表，级联保存）
@@ -326,6 +356,11 @@ export interface PurchaseInvoiceUpdate extends PurchaseInvoiceCreate {
    * PurchaseInvoiceID（标识要更新的实体）
    */
   purchaseInvoiceId: string;
+
+  /**
+   * 采购发票明细列表（主子表关系，一张发票可有多个明细行）（子表，级联保存）
+   */
+  items?: any;
 
 }
 
@@ -366,7 +401,7 @@ export interface PurchaseInvoiceTemplate {
   companyCode?: string;
 
   /**
-   * 工厂代码
+   * 工厂代码（选项 TaktPlants/options；DictValue=PlantCode）
    */
   plantCode?: string;
 
@@ -376,19 +411,19 @@ export interface PurchaseInvoiceTemplate {
   purchaseInvoiceCode?: string;
 
   /**
-   * 关联采购订单编码
+   * 关联采购订单编码（选项 TaktPurchaseOrders/options；DictValue=PurchaseOrderCode）
    */
   purchaseOrderCode?: string;
 
   /**
-   * 供应商编码
+   * 供应商编码（选项 TaktSuppliers/options；DictValue=SupplierCode）
    */
   supplierCode?: string;
 
   /**
-   * 供应商名称
+   * 供应商名称1（冗余，与 TaktSupplier.SupplierName1 对齐）
    */
-  supplierName?: string;
+  supplierName1?: string;
 
   /**
    * 开票日期
@@ -399,6 +434,16 @@ export interface PurchaseInvoiceTemplate {
    * 发票总金额
    */
   totalAmount?: number;
+
+  /**
+   * 结算币种（字典 accounting_currency_code；DictValue=CNY/USD 等；一单一币种）
+   */
+  currencyCode?: string;
+
+  /**
+   * 税率（字典 accounting_tax_rate_param；13=13%，9=9%，0=0% 等；一单一税率）
+   */
+  taxRate?: number;
 
   /**
    * 税费
@@ -416,11 +461,6 @@ export interface PurchaseInvoiceTemplate {
   paidAmount?: number;
 
   /**
-   * 发票状态（字典 logistics_invoice_status；0=草稿，1=已开票，2=已收款，3=已作废）
-   */
-  invoiceStatus?: number;
-
-  /**
    * 付款方式（字典 accounting_payment_method_type；0=现金，1=银行转账，2=支票，3=信用证，4=其他）
    */
   paymentMethod?: number;
@@ -429,6 +469,11 @@ export interface PurchaseInvoiceTemplate {
    * 税务发票号码
    */
   taxInvoiceNo?: string;
+
+  /**
+   * 发票状态（字典 logistics_invoice_status；0=草稿，1=已开票，2=已收款，3=已作废）
+   */
+  invoiceStatus?: number;
 
   /**
    * 采购发票明细列表（主子表关系，一张发票可有多个明细行）（子表，级联保存）
@@ -470,7 +515,7 @@ export interface PurchaseInvoiceImport {
   companyDefaultCulture?: string;
 
   /**
-   * 工厂代码
+   * 工厂代码（选项 TaktPlants/options；DictValue=PlantCode）
    */
   plantCode?: string;
 
@@ -480,19 +525,19 @@ export interface PurchaseInvoiceImport {
   purchaseInvoiceCode?: string;
 
   /**
-   * 关联采购订单编码
+   * 关联采购订单编码（选项 TaktPurchaseOrders/options；DictValue=PurchaseOrderCode）
    */
   purchaseOrderCode?: string;
 
   /**
-   * 供应商编码
+   * 供应商编码（选项 TaktSuppliers/options；DictValue=SupplierCode）
    */
   supplierCode?: string;
 
   /**
-   * 供应商名称
+   * 供应商名称1（冗余，与 TaktSupplier.SupplierName1 对齐）
    */
-  supplierName?: string;
+  supplierName1?: string;
 
   /**
    * 开票日期
@@ -503,6 +548,16 @@ export interface PurchaseInvoiceImport {
    * 发票总金额
    */
   totalAmount?: number;
+
+  /**
+   * 结算币种（字典 accounting_currency_code；DictValue=CNY/USD 等；一单一币种）
+   */
+  currencyCode?: string;
+
+  /**
+   * 税率（字典 accounting_tax_rate_param；13=13%，9=9%，0=0% 等；一单一税率）
+   */
+  taxRate?: number;
 
   /**
    * 税费
@@ -520,11 +575,6 @@ export interface PurchaseInvoiceImport {
   paidAmount?: number;
 
   /**
-   * 发票状态（字典 logistics_invoice_status；0=草稿，1=已开票，2=已收款，3=已作废）
-   */
-  invoiceStatus?: number;
-
-  /**
    * 付款方式（字典 accounting_payment_method_type；0=现金，1=银行转账，2=支票，3=信用证，4=其他）
    */
   paymentMethod?: number;
@@ -533,6 +583,11 @@ export interface PurchaseInvoiceImport {
    * 税务发票号码
    */
   taxInvoiceNo?: string;
+
+  /**
+   * 发票状态（字典 logistics_invoice_status；0=草稿，1=已开票，2=已收款，3=已作废）
+   */
+  invoiceStatus?: number;
 
   /**
    * 采购发票明细列表（主子表关系，一张发票可有多个明细行）（子表，级联保存）
@@ -569,7 +624,7 @@ export interface PurchaseInvoiceExport {
   companyCode: string;
 
   /**
-   * 工厂代码
+   * 工厂代码（选项 TaktPlants/options；DictValue=PlantCode）
    */
   plantCode: string;
 
@@ -579,19 +634,19 @@ export interface PurchaseInvoiceExport {
   purchaseInvoiceCode: string;
 
   /**
-   * 关联采购订单编码
+   * 关联采购订单编码（选项 TaktPurchaseOrders/options；DictValue=PurchaseOrderCode）
    */
   purchaseOrderCode?: string;
 
   /**
-   * 供应商编码
+   * 供应商编码（选项 TaktSuppliers/options；DictValue=SupplierCode）
    */
   supplierCode: string;
 
   /**
-   * 供应商名称
+   * 供应商名称1（冗余，与 TaktSupplier.SupplierName1 对齐）
    */
-  supplierName: string;
+  supplierName1: string;
 
   /**
    * 开票日期
@@ -602,6 +657,16 @@ export interface PurchaseInvoiceExport {
    * 发票总金额
    */
   totalAmount: number;
+
+  /**
+   * 结算币种（字典 accounting_currency_code；DictValue=CNY/USD 等；一单一币种）
+   */
+  currencyCode: string;
+
+  /**
+   * 税率（字典 accounting_tax_rate_param；13=13%，9=9%，0=0% 等；一单一税率）
+   */
+  taxRate: number;
 
   /**
    * 税费
@@ -619,11 +684,6 @@ export interface PurchaseInvoiceExport {
   paidAmount: number;
 
   /**
-   * 发票状态（字典 logistics_invoice_status；0=草稿，1=已开票，2=已收款，3=已作废）
-   */
-  invoiceStatus: number;
-
-  /**
    * 付款方式（字典 accounting_payment_method_type；0=现金，1=银行转账，2=支票，3=信用证，4=其他）
    */
   paymentMethod: number;
@@ -632,6 +692,11 @@ export interface PurchaseInvoiceExport {
    * 税务发票号码
    */
   taxInvoiceNo?: string;
+
+  /**
+   * 发票状态（字典 logistics_invoice_status；0=草稿，1=已开票，2=已收款，3=已作废）
+   */
+  invoiceStatus: number;
 
   /**
    * 扩展字段JSON

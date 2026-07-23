@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：frontend/src/types/logistics/sales
 // 文件名称：price-scale-quantity.d.ts
-// 创建时间：2026-07-20
+// 创建时间：2026-07-23
 // 创建人：Takt365(Auto Generated)
 // 功能描述：logistics/sales 模块类型定义（自动生成；类型名去 Takt 前缀与末尾 Dto，如 TaktCompanyDto → Company）
 // 
@@ -16,7 +16,7 @@ import type {
 } from '@/types/common';
 
 /**
- * Takt销售价格数量等级实体（SAP KONM；主子表：TaktSalesPriceItem → ScaleQuantities；与价值等级仅差 ScaleQuantity↔ScaleValue）
+ * Takt销售价格数量等级实体（；主子表：TaktSalesPriceItem → ScaleQuantities；与价值等级仅差 ScaleQuantity↔ScaleValue）
  * 对应前端 TaktSalesPriceScaleQuantityDto
  * 继承 TaktCompanyDtoBase
  * 对应前端 SalesPriceScaleQuantity
@@ -44,14 +44,14 @@ export interface SalesPriceScaleQuantity extends CompanyDtoBase {
   salesPriceCode: string;
 
   /**
-   * 条件序列号（KOPOS；冗余；与明细 SalesPriceSeq 一致）
+   * 定价序号（冗余；与明细 SalesPriceSeq 一致，固定步长=10）
    */
   salesPriceSeq: number;
 
   /**
-   * 行号（KLFN1；阶梯行序号，固定步长=10）
+   * 等级序号（KOPOS；同一明细内阶梯序号，固定步长=10）
    */
-  lineNumber: number;
+  salesScaleSeq: number;
 
   /**
    * 等级数量（KSTBM；数量等级门槛；对应价值等级表的 ScaleValue）
@@ -59,12 +59,27 @@ export interface SalesPriceScaleQuantity extends CompanyDtoBase {
   scaleQuantity: number;
 
   /**
-   * 金额（KBETR）
+   * 价格（KBETR）
    */
-  amount: number;
+  price: number;
 
   /**
-   * 是否作废（字典 sys_yes_no_type，0=否 1=是；编辑移除子行时标记作废）
+   * 未税价格（冗余；可由 Price 与税码推算后回写）
+   */
+  untaxedPrice: number;
+
+  /**
+   * 含税价格（冗余；可由 Price 与税码推算后回写）
+   */
+  taxIncludedPrice: number;
+
+  /**
+   * 税费（冗余；含税−未税，打印用）
+   */
+  taxAmount: number;
+
+  /**
+   * 是否作废（字典 sys_yes_no_type；0=否 1=是；编辑移除子行时标记作废）
    */
   isObsolete: number;
 
@@ -99,14 +114,14 @@ export interface SalesPriceScaleQuantityQuery extends TaktPagedQuery {
   salesPriceCode?: string;
 
   /**
-   * 条件序列号（KOPOS；冗余；与明细 SalesPriceSeq 一致）
+   * 定价序号（冗余；与明细 SalesPriceSeq 一致，固定步长=10）
    */
   salesPriceSeq?: number;
 
   /**
-   * 行号（KLFN1；阶梯行序号，固定步长=10）
+   * 等级序号（KOPOS；同一明细内阶梯序号，固定步长=10）
    */
-  lineNumber?: number;
+  salesScaleSeq?: number;
 
   /**
    * 等级数量（KSTBM；数量等级门槛；对应价值等级表的 ScaleValue）
@@ -114,12 +129,27 @@ export interface SalesPriceScaleQuantityQuery extends TaktPagedQuery {
   scaleQuantity?: number;
 
   /**
-   * 金额（KBETR）
+   * 价格（KBETR）
    */
-  amount?: number;
+  price?: number;
 
   /**
-   * 是否作废（字典 sys_yes_no_type，0=否 1=是；编辑移除子行时标记作废）
+   * 未税价格（冗余；可由 Price 与税码推算后回写）
+   */
+  untaxedPrice?: number;
+
+  /**
+   * 含税价格（冗余；可由 Price 与税码推算后回写）
+   */
+  taxIncludedPrice?: number;
+
+  /**
+   * 税费（冗余；含税−未税，打印用）
+   */
+  taxAmount?: number;
+
+  /**
+   * 是否作废（字典 sys_yes_no_type；0=否 1=是；编辑移除子行时标记作废）
    */
   isObsolete?: number;
 
@@ -178,14 +208,14 @@ export interface SalesPriceScaleQuantityCreate {
   salesPriceCode: string;
 
   /**
-   * 条件序列号（KOPOS；冗余；与明细 SalesPriceSeq 一致）
+   * 定价序号（冗余；与明细 SalesPriceSeq 一致，固定步长=10）
    */
   salesPriceSeq: number;
 
   /**
-   * 行号（KLFN1；阶梯行序号，固定步长=10）
+   * 等级序号（KOPOS；同一明细内阶梯序号，固定步长=10）
    */
-  lineNumber: number;
+  salesScaleSeq: number;
 
   /**
    * 等级数量（KSTBM；数量等级门槛；对应价值等级表的 ScaleValue）
@@ -193,12 +223,27 @@ export interface SalesPriceScaleQuantityCreate {
   scaleQuantity: number;
 
   /**
-   * 金额（KBETR）
+   * 价格（KBETR）
    */
-  amount: number;
+  price: number;
 
   /**
-   * 是否作废（字典 sys_yes_no_type，0=否 1=是；编辑移除子行时标记作废）
+   * 未税价格（冗余；可由 Price 与税码推算后回写）
+   */
+  untaxedPrice: number;
+
+  /**
+   * 含税价格（冗余；可由 Price 与税码推算后回写）
+   */
+  taxIncludedPrice: number;
+
+  /**
+   * 税费（冗余；含税−未税，打印用）
+   */
+  taxAmount: number;
+
+  /**
+   * 是否作废（字典 sys_yes_no_type；0=否 1=是；编辑移除子行时标记作废）
    */
   isObsolete: number;
 
@@ -276,14 +321,14 @@ export interface SalesPriceScaleQuantityTemplate {
   salesPriceCode?: string;
 
   /**
-   * 条件序列号（KOPOS；冗余；与明细 SalesPriceSeq 一致）
+   * 定价序号（冗余；与明细 SalesPriceSeq 一致，固定步长=10）
    */
   salesPriceSeq?: number;
 
   /**
-   * 行号（KLFN1；阶梯行序号，固定步长=10）
+   * 等级序号（KOPOS；同一明细内阶梯序号，固定步长=10）
    */
-  lineNumber?: number;
+  salesScaleSeq?: number;
 
   /**
    * 等级数量（KSTBM；数量等级门槛；对应价值等级表的 ScaleValue）
@@ -291,12 +336,27 @@ export interface SalesPriceScaleQuantityTemplate {
   scaleQuantity?: number;
 
   /**
-   * 金额（KBETR）
+   * 价格（KBETR）
    */
-  amount?: number;
+  price?: number;
 
   /**
-   * 是否作废（字典 sys_yes_no_type，0=否 1=是；编辑移除子行时标记作废）
+   * 未税价格（冗余；可由 Price 与税码推算后回写）
+   */
+  untaxedPrice?: number;
+
+  /**
+   * 含税价格（冗余；可由 Price 与税码推算后回写）
+   */
+  taxIncludedPrice?: number;
+
+  /**
+   * 税费（冗余；含税−未税，打印用）
+   */
+  taxAmount?: number;
+
+  /**
+   * 是否作废（字典 sys_yes_no_type；0=否 1=是；编辑移除子行时标记作废）
    */
   isObsolete?: number;
 
@@ -345,14 +405,14 @@ export interface SalesPriceScaleQuantityImport {
   salesPriceCode?: string;
 
   /**
-   * 条件序列号（KOPOS；冗余；与明细 SalesPriceSeq 一致）
+   * 定价序号（冗余；与明细 SalesPriceSeq 一致，固定步长=10）
    */
   salesPriceSeq?: number;
 
   /**
-   * 行号（KLFN1；阶梯行序号，固定步长=10）
+   * 等级序号（KOPOS；同一明细内阶梯序号，固定步长=10）
    */
-  lineNumber?: number;
+  salesScaleSeq?: number;
 
   /**
    * 等级数量（KSTBM；数量等级门槛；对应价值等级表的 ScaleValue）
@@ -360,12 +420,27 @@ export interface SalesPriceScaleQuantityImport {
   scaleQuantity?: number;
 
   /**
-   * 金额（KBETR）
+   * 价格（KBETR）
    */
-  amount?: number;
+  price?: number;
 
   /**
-   * 是否作废（字典 sys_yes_no_type，0=否 1=是；编辑移除子行时标记作废）
+   * 未税价格（冗余；可由 Price 与税码推算后回写）
+   */
+  untaxedPrice?: number;
+
+  /**
+   * 含税价格（冗余；可由 Price 与税码推算后回写）
+   */
+  taxIncludedPrice?: number;
+
+  /**
+   * 税费（冗余；含税−未税，打印用）
+   */
+  taxAmount?: number;
+
+  /**
+   * 是否作废（字典 sys_yes_no_type；0=否 1=是；编辑移除子行时标记作废）
    */
   isObsolete?: number;
 
@@ -409,14 +484,14 @@ export interface SalesPriceScaleQuantityExport {
   salesPriceCode: string;
 
   /**
-   * 条件序列号（KOPOS；冗余；与明细 SalesPriceSeq 一致）
+   * 定价序号（冗余；与明细 SalesPriceSeq 一致，固定步长=10）
    */
   salesPriceSeq: number;
 
   /**
-   * 行号（KLFN1；阶梯行序号，固定步长=10）
+   * 等级序号（KOPOS；同一明细内阶梯序号，固定步长=10）
    */
-  lineNumber: number;
+  salesScaleSeq: number;
 
   /**
    * 等级数量（KSTBM；数量等级门槛；对应价值等级表的 ScaleValue）
@@ -424,12 +499,27 @@ export interface SalesPriceScaleQuantityExport {
   scaleQuantity: number;
 
   /**
-   * 金额（KBETR）
+   * 价格（KBETR）
    */
-  amount: number;
+  price: number;
 
   /**
-   * 是否作废（字典 sys_yes_no_type，0=否 1=是；编辑移除子行时标记作废）
+   * 未税价格（冗余；可由 Price 与税码推算后回写）
+   */
+  untaxedPrice: number;
+
+  /**
+   * 含税价格（冗余；可由 Price 与税码推算后回写）
+   */
+  taxIncludedPrice: number;
+
+  /**
+   * 税费（冗余；含税−未税，打印用）
+   */
+  taxAmount: number;
+
+  /**
+   * 是否作废（字典 sys_yes_no_type；0=否 1=是；编辑移除子行时标记作废）
    */
   isObsolete: number;
 

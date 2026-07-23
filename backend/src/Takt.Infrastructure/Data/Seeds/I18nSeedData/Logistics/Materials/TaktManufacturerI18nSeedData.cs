@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Infrastructure.Data.Seeds.I18nSeedData.Logistics.Materials
 // 文件名称：TaktManufacturerI18nSeedData.cs
-// 创建时间：2026-07-20
+// 创建时间：2026-07-23
 // 创建人：Takt365(Auto Generated)
 // 功能描述：TaktManufacturer 实体字段国际化种子（无对应 frontend locales；TranslationText 取自 ColumnDescription，ContextNote 取自属性 XML summary）
 // 
@@ -99,14 +99,23 @@ public class TaktManufacturerI18nSeedData : ITaktSeedDataCoordinator
             // entity.manufacturer.code
             new TranslationSeedItem("entity.manufacturer.code", "zh-HK", "制造商编码_hk", "制造商编码（唯一索引）"),
 
-            // entity.manufacturer.name
-            new TranslationSeedItem("entity.manufacturer.name", "en-US", "制造商名称_us", "制造商名称"),
-            // entity.manufacturer.name
-            new TranslationSeedItem("entity.manufacturer.name", "ja-JP", "制造商名称_jp", "制造商名称"),
-            // entity.manufacturer.name
-            new TranslationSeedItem("entity.manufacturer.name", "zh-CN", "制造商名称", "制造商名称"),
-            // entity.manufacturer.name
-            new TranslationSeedItem("entity.manufacturer.name", "zh-HK", "制造商名称_hk", "制造商名称"),
+            // entity.manufacturer.name1
+            new TranslationSeedItem("entity.manufacturer.name1", "en-US", "制造商名称1_us", "制造商名称1"),
+            // entity.manufacturer.name1
+            new TranslationSeedItem("entity.manufacturer.name1", "ja-JP", "制造商名称1_jp", "制造商名称1"),
+            // entity.manufacturer.name1
+            new TranslationSeedItem("entity.manufacturer.name1", "zh-CN", "制造商名称1", "制造商名称1"),
+            // entity.manufacturer.name1
+            new TranslationSeedItem("entity.manufacturer.name1", "zh-HK", "制造商名称1_hk", "制造商名称1"),
+
+            // entity.manufacturer.name2
+            new TranslationSeedItem("entity.manufacturer.name2", "en-US", "制造商名称2_us", "制造商名称2"),
+            // entity.manufacturer.name2
+            new TranslationSeedItem("entity.manufacturer.name2", "ja-JP", "制造商名称2_jp", "制造商名称2"),
+            // entity.manufacturer.name2
+            new TranslationSeedItem("entity.manufacturer.name2", "zh-CN", "制造商名称2", "制造商名称2"),
+            // entity.manufacturer.name2
+            new TranslationSeedItem("entity.manufacturer.name2", "zh-HK", "制造商名称2_hk", "制造商名称2"),
 
             // entity.manufacturer.shortname
             new TranslationSeedItem("entity.manufacturer.shortname", "en-US", "制造商简称_us", "制造商简称"),
@@ -127,13 +136,13 @@ public class TaktManufacturerI18nSeedData : ITaktSeedDataCoordinator
             new TranslationSeedItem("entity.manufacturer.type", "zh-HK", "制造商类型_hk", "制造商类型（字典 logistics_manufacturer_type；0=OEM，1=ODM，2=CM，3=品牌制造商，4=其他）"),
 
             // entity.manufacturer.industrysector
-            new TranslationSeedItem("entity.manufacturer.industrysector", "en-US", "行业领域_us", "行业领域（字典 logistics_industry_sector，DictValue=A/C/M/P）"),
+            new TranslationSeedItem("entity.manufacturer.industrysector", "en-US", "行业领域_us", "行业领域（字典 logistics_industry_sector；DictValue=A/C/M/P）"),
             // entity.manufacturer.industrysector
-            new TranslationSeedItem("entity.manufacturer.industrysector", "ja-JP", "行业领域_jp", "行业领域（字典 logistics_industry_sector，DictValue=A/C/M/P）"),
+            new TranslationSeedItem("entity.manufacturer.industrysector", "ja-JP", "行业领域_jp", "行业领域（字典 logistics_industry_sector；DictValue=A/C/M/P）"),
             // entity.manufacturer.industrysector
-            new TranslationSeedItem("entity.manufacturer.industrysector", "zh-CN", "行业领域", "行业领域（字典 logistics_industry_sector，DictValue=A/C/M/P）"),
+            new TranslationSeedItem("entity.manufacturer.industrysector", "zh-CN", "行业领域", "行业领域（字典 logistics_industry_sector；DictValue=A/C/M/P）"),
             // entity.manufacturer.industrysector
-            new TranslationSeedItem("entity.manufacturer.industrysector", "zh-HK", "行业领域_hk", "行业领域（字典 logistics_industry_sector，DictValue=A/C/M/P）"),
+            new TranslationSeedItem("entity.manufacturer.industrysector", "zh-HK", "行业领域_hk", "行业领域（字典 logistics_industry_sector；DictValue=A/C/M/P）"),
 
             // entity.manufacturer.taxnumber
             new TranslationSeedItem("entity.manufacturer.taxnumber", "en-US", "制造商标识_us", "制造商标识（税务登记证号/统一社会信用代码）"),
@@ -145,13 +154,31 @@ public class TaktManufacturerI18nSeedData : ITaktSeedDataCoordinator
             new TranslationSeedItem("entity.manufacturer.taxnumber", "zh-HK", "制造商标识_hk", "制造商标识（税务登记证号/统一社会信用代码）"),
 
             // entity.manufacturer.registrationcountry
-            new TranslationSeedItem("entity.manufacturer.registrationcountry", "en-US", "注册国家_us", "注册国家（ISO 3166-1 alpha-2 两位代码，选项 TaktIsoCodes/options，DictValue=IsoCode）"),
+            new TranslationSeedItem("entity.manufacturer.registrationcountry", "en-US", "注册国家_us", "注册国家（字典 sys_country_code；DictValue=ISO alpha-2）"),
             // entity.manufacturer.registrationcountry
-            new TranslationSeedItem("entity.manufacturer.registrationcountry", "ja-JP", "注册国家_jp", "注册国家（ISO 3166-1 alpha-2 两位代码，选项 TaktIsoCodes/options，DictValue=IsoCode）"),
+            new TranslationSeedItem("entity.manufacturer.registrationcountry", "ja-JP", "注册国家_jp", "注册国家（字典 sys_country_code；DictValue=ISO alpha-2）"),
             // entity.manufacturer.registrationcountry
-            new TranslationSeedItem("entity.manufacturer.registrationcountry", "zh-CN", "注册国家", "注册国家（ISO 3166-1 alpha-2 两位代码，选项 TaktIsoCodes/options，DictValue=IsoCode）"),
+            new TranslationSeedItem("entity.manufacturer.registrationcountry", "zh-CN", "注册国家", "注册国家（字典 sys_country_code；DictValue=ISO alpha-2）"),
             // entity.manufacturer.registrationcountry
-            new TranslationSeedItem("entity.manufacturer.registrationcountry", "zh-HK", "注册国家_hk", "注册国家（ISO 3166-1 alpha-2 两位代码，选项 TaktIsoCodes/options，DictValue=IsoCode）"),
+            new TranslationSeedItem("entity.manufacturer.registrationcountry", "zh-HK", "注册国家_hk", "注册国家（字典 sys_country_code；DictValue=ISO alpha-2）"),
+
+            // entity.manufacturer.registrationprovince
+            new TranslationSeedItem("entity.manufacturer.registrationprovince", "en-US", "注册省_us", "注册省（选项 TaktAdminDivisions/options；DictValue=DivisionCode；建议 Level=2）"),
+            // entity.manufacturer.registrationprovince
+            new TranslationSeedItem("entity.manufacturer.registrationprovince", "ja-JP", "注册省_jp", "注册省（选项 TaktAdminDivisions/options；DictValue=DivisionCode；建议 Level=2）"),
+            // entity.manufacturer.registrationprovince
+            new TranslationSeedItem("entity.manufacturer.registrationprovince", "zh-CN", "注册省", "注册省（选项 TaktAdminDivisions/options；DictValue=DivisionCode；建议 Level=2）"),
+            // entity.manufacturer.registrationprovince
+            new TranslationSeedItem("entity.manufacturer.registrationprovince", "zh-HK", "注册省_hk", "注册省（选项 TaktAdminDivisions/options；DictValue=DivisionCode；建议 Level=2）"),
+
+            // entity.manufacturer.registrationcity
+            new TranslationSeedItem("entity.manufacturer.registrationcity", "en-US", "注册市_us", "注册市（选项 TaktAdminDivisions/options；DictValue=DivisionCode；建议 Level=3）"),
+            // entity.manufacturer.registrationcity
+            new TranslationSeedItem("entity.manufacturer.registrationcity", "ja-JP", "注册市_jp", "注册市（选项 TaktAdminDivisions/options；DictValue=DivisionCode；建议 Level=3）"),
+            // entity.manufacturer.registrationcity
+            new TranslationSeedItem("entity.manufacturer.registrationcity", "zh-CN", "注册市", "注册市（选项 TaktAdminDivisions/options；DictValue=DivisionCode；建议 Level=3）"),
+            // entity.manufacturer.registrationcity
+            new TranslationSeedItem("entity.manufacturer.registrationcity", "zh-HK", "注册市_hk", "注册市（选项 TaktAdminDivisions/options；DictValue=DivisionCode；建议 Level=3）"),
 
             // entity.manufacturer.registrationaddress1
             new TranslationSeedItem("entity.manufacturer.registrationaddress1", "en-US", "注册地址1_us", "注册地址1"),
@@ -170,15 +197,6 @@ public class TaktManufacturerI18nSeedData : ITaktSeedDataCoordinator
             new TranslationSeedItem("entity.manufacturer.registrationaddress2", "zh-CN", "注册地址2", "注册地址2"),
             // entity.manufacturer.registrationaddress2
             new TranslationSeedItem("entity.manufacturer.registrationaddress2", "zh-HK", "注册地址2_hk", "注册地址2"),
-
-            // entity.manufacturer.registrationaddress3
-            new TranslationSeedItem("entity.manufacturer.registrationaddress3", "en-US", "注册地址3_us", "注册地址3"),
-            // entity.manufacturer.registrationaddress3
-            new TranslationSeedItem("entity.manufacturer.registrationaddress3", "ja-JP", "注册地址3_jp", "注册地址3"),
-            // entity.manufacturer.registrationaddress3
-            new TranslationSeedItem("entity.manufacturer.registrationaddress3", "zh-CN", "注册地址3", "注册地址3"),
-            // entity.manufacturer.registrationaddress3
-            new TranslationSeedItem("entity.manufacturer.registrationaddress3", "zh-HK", "注册地址3_hk", "注册地址3"),
 
             // entity.manufacturer.phone
             new TranslationSeedItem("entity.manufacturer.phone", "en-US", "制造商电话_us", "制造商电话"),

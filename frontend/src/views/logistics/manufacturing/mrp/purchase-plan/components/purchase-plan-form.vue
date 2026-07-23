@@ -397,7 +397,7 @@
       <template #cell-materialCode="{ record }">
         <TaktSelect
           v-model:value="record.materialCode"
-          api-url="TaktMaterials/options"
+          api-url="TaktMaterialPlants/options"
           class="w-full"
           :get-popup-container="getSelectPopupContainer"
           :placeholder="purchasePlanItemPi.queryPh('materialCode', 'select')"
@@ -563,18 +563,6 @@ const purchasePlanItemFormColumns = computed<TaktEditableTableColumn[]>(() => [
     width: 140,
   },
   {
-    key: 'materialName',
-    title: purchasePlanItemPi.label('materialName'),
-    editor: 'input',
-    width: 140,
-  },
-  {
-    key: 'materialSpecification',
-    title: purchasePlanItemPi.label('materialSpecification'),
-    editor: 'input',
-    width: 140, allowClear: true, placeholder: purchasePlanItemPi.ph('materialSpecification'),
-  },
-  {
     key: 'planUnit',
     title: purchasePlanItemPi.label('planUnit'),
     width: 140,
@@ -607,15 +595,30 @@ const purchasePlanItemFormColumns = computed<TaktEditableTableColumn[]>(() => [
     width: 140,
   },
   {
+    key: 'taxIncludedPrice',
+    title: purchasePlanItemPi.label('taxIncludedPrice'),
+    width: 140,
+  },
+  {
+    key: 'untaxedPrice',
+    title: purchasePlanItemPi.label('untaxedPrice'),
+    width: 140,
+  },
+  {
+    key: 'taxAmount',
+    title: purchasePlanItemPi.label('taxAmount'),
+    width: 140,
+  },
+  {
     key: 'referenceSupplierCode',
     title: purchasePlanItemPi.label('referenceSupplierCode'),
     width: 140,
   },
   {
-    key: 'referenceSupplierName',
-    title: purchasePlanItemPi.label('referenceSupplierName'),
+    key: 'referenceSupplierName1',
+    title: purchasePlanItemPi.label('referenceSupplierName1'),
     editor: 'input',
-    width: 140, allowClear: true, placeholder: purchasePlanItemPi.ph('referenceSupplierName'),
+    width: 140, allowClear: true, placeholder: purchasePlanItemPi.ph('referenceSupplierName1'),
   },
   {
     key: 'isObsolete',
@@ -638,16 +641,17 @@ function createDefaultPurchasePlanItemRow(): Record<string, unknown> {
     productionPlanLineNumber: 0,
     materialRequirementsPlanningItemId: '',
     materialCode: '',
-    materialName: '',
-    materialSpecification: '',
     planUnit: '',
     planQuantity: 0,
     plannedArrivalDate: '',
     convertedQuantity: 0,
     estimatedUnitPrice: 0,
     estimatedAmount: 0,
+    taxIncludedPrice: 0,
+    untaxedPrice: 0,
+    taxAmount: 0,
     referenceSupplierCode: '',
-    referenceSupplierName: '',
+    referenceSupplierName1: '',
     isObsolete: 0,
   }
 }

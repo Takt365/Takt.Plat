@@ -62,6 +62,7 @@
       :data-source="dataSource"
       :loading="loading"
       :stripe="true"
+      :virtual="true"
       :row-key="getServiceRequestId"
       :row-selection="rowSelection"
       :custom-row="onClickRow"
@@ -73,7 +74,7 @@
       <template #bodyCell="{ column, record }">
         <template v-if="column.key === 'priority'">
           <TaktDictTag
-            :value="getServiceRequestField(record, 'priority')"
+            :value="getServiceRequestDictValue(record, 'priority')"
             dict-type="sys_priority_level_category"
           />
         </template>
@@ -119,10 +120,10 @@
     >
       <template #default="{ isFieldVisible }">
       <div v-show="isFieldVisible('plantCode')">
-      <a-form-item :label="t('entity.servicerequest.plantcode')">
+      <a-form-item :label="pi.queryLabel('plantCode')">
         <a-input
           v-model:value="advancedQueryForm.plantCode"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.servicerequest.plantcode') })"
+          :placeholder="pi.queryPh('plantCode', 'required')"
           show-count
           :maxlength="4"
           allow-clear
@@ -130,10 +131,10 @@
       </a-form-item>
       </div>
       <div v-show="isFieldVisible('serviceRequestCode')">
-      <a-form-item :label="t('entity.servicerequest.code')">
+      <a-form-item :label="pi.queryLabel('serviceRequestCode')">
         <a-input
           v-model:value="advancedQueryForm.serviceRequestCode"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.servicerequest.code') })"
+          :placeholder="pi.queryPh('serviceRequestCode', 'required')"
           show-count
           :maxlength="50"
           allow-clear
@@ -141,10 +142,10 @@
       </a-form-item>
       </div>
       <div v-show="isFieldVisible('clientId')">
-      <a-form-item :label="t('entity.servicerequest.clientid')">
+      <a-form-item :label="pi.queryLabel('clientId')">
         <a-input
           v-model:value="advancedQueryForm.clientId"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.servicerequest.clientid') })"
+          :placeholder="pi.queryPh('clientId', 'required')"
           show-count
           :maxlength="20"
           allow-clear
@@ -152,32 +153,32 @@
       </a-form-item>
       </div>
       <div v-show="isFieldVisible('clientCode')">
-      <a-form-item :label="t('entity.servicerequest.clientcode')">
+      <a-form-item :label="pi.queryLabel('clientCode')">
         <a-input
           v-model:value="advancedQueryForm.clientCode"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.servicerequest.clientcode') })"
+          :placeholder="pi.queryPh('clientCode', 'required')"
           show-count
           :maxlength="20"
           allow-clear
         />
       </a-form-item>
       </div>
-      <div v-show="isFieldVisible('clientName')">
-      <a-form-item :label="t('entity.servicerequest.clientname')">
+      <div v-show="isFieldVisible('clientName1')">
+      <a-form-item :label="pi.queryLabel('clientName1')">
         <a-input
-          v-model:value="advancedQueryForm.clientName"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.servicerequest.clientname') })"
+          v-model:value="advancedQueryForm.clientName1"
+          :placeholder="pi.queryPh('clientName1', 'required')"
           show-count
-          :maxlength="80"
+          :maxlength="140"
           allow-clear
         />
       </a-form-item>
       </div>
       <div v-show="isFieldVisible('serviceContractId')">
-      <a-form-item :label="t('entity.servicerequest.servicecontractid')">
+      <a-form-item :label="pi.queryLabel('serviceContractId')">
         <a-input
           v-model:value="advancedQueryForm.serviceContractId"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.servicerequest.servicecontractid') })"
+          :placeholder="pi.queryPh('serviceContractId', 'required')"
           show-count
           :maxlength="20"
           allow-clear
@@ -185,10 +186,10 @@
       </a-form-item>
       </div>
       <div v-show="isFieldVisible('serviceContractCode')">
-      <a-form-item :label="t('entity.servicerequest.servicecontractcode')">
+      <a-form-item :label="pi.queryLabel('serviceContractCode')">
         <a-input
           v-model:value="advancedQueryForm.serviceContractCode"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.servicerequest.servicecontractcode') })"
+          :placeholder="pi.queryPh('serviceContractCode', 'required')"
           show-count
           :maxlength="50"
           allow-clear
@@ -196,87 +197,87 @@
       </a-form-item>
       </div>
       <div v-show="isFieldVisible('requestDateStart')">
-      <a-form-item :label="t('entity.servicerequest.requestdatestart')">
+      <a-form-item :label="pi.queryLabel('requestDateStart')">
         <a-date-picker
           v-model:value="advancedQueryForm.requestDateStart"
-          :placeholder="t('common.page.form.placeholder.select', { field: t('entity.servicerequest.requestdatestart') })"
+          :placeholder="pi.queryPh('requestDateStart', 'select')"
           value-format="YYYY-MM-DD"
           style="width: 100%"
         />
       </a-form-item>
       </div>
       <div v-show="isFieldVisible('requestDateEnd')">
-      <a-form-item :label="t('entity.servicerequest.requestdateend')">
+      <a-form-item :label="pi.queryLabel('requestDateEnd')">
         <a-date-picker
           v-model:value="advancedQueryForm.requestDateEnd"
-          :placeholder="t('common.page.form.placeholder.select', { field: t('entity.servicerequest.requestdateend') })"
+          :placeholder="pi.queryPh('requestDateEnd', 'select')"
           value-format="YYYY-MM-DD"
           style="width: 100%"
         />
       </a-form-item>
       </div>
       <div v-show="isFieldVisible('expectedServiceDateStart')">
-      <a-form-item :label="t('entity.servicerequest.expectedservicedatestart')">
+      <a-form-item :label="pi.queryLabel('expectedServiceDateStart')">
         <a-date-picker
           v-model:value="advancedQueryForm.expectedServiceDateStart"
-          :placeholder="t('common.page.form.placeholder.select', { field: t('entity.servicerequest.expectedservicedatestart') })"
+          :placeholder="pi.queryPh('expectedServiceDateStart', 'select')"
           value-format="YYYY-MM-DD"
           style="width: 100%"
         />
       </a-form-item>
       </div>
       <div v-show="isFieldVisible('expectedServiceDateEnd')">
-      <a-form-item :label="t('entity.servicerequest.expectedservicedateend')">
+      <a-form-item :label="pi.queryLabel('expectedServiceDateEnd')">
         <a-date-picker
           v-model:value="advancedQueryForm.expectedServiceDateEnd"
-          :placeholder="t('common.page.form.placeholder.select', { field: t('entity.servicerequest.expectedservicedateend') })"
+          :placeholder="pi.queryPh('expectedServiceDateEnd', 'select')"
           value-format="YYYY-MM-DD"
           style="width: 100%"
         />
       </a-form-item>
       </div>
       <div v-show="isFieldVisible('requestType')">
-      <a-form-item :label="t('entity.servicerequest.requesttype')">
+      <a-form-item :label="pi.queryLabel('requestType')">
         <a-input-number
           v-model:value="advancedQueryForm.requestType"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.servicerequest.requesttype') })"
+          :placeholder="pi.queryPh('requestType', 'required')"
           style="width: 100%"
         />
       </a-form-item>
       </div>
       <div v-show="isFieldVisible('sourceChannel')">
-      <a-form-item :label="t('entity.servicerequest.sourcechannel')">
+      <a-form-item :label="pi.queryLabel('sourceChannel')">
         <a-input-number
           v-model:value="advancedQueryForm.sourceChannel"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.servicerequest.sourcechannel') })"
+          :placeholder="pi.queryPh('sourceChannel', 'required')"
           style="width: 100%"
         />
       </a-form-item>
       </div>
       <div v-show="isFieldVisible('priority')">
-      <a-form-item :label="t('entity.servicerequest.priority')">
+      <a-form-item :label="pi.queryLabel('priority')">
         <TaktSelect
           v-model:value="advancedQueryForm.priority"
           dict-type="sys_priority_level_category"
-          :placeholder="t('common.page.form.placeholder.select', { field: t('entity.servicerequest.priority') })"
+          :placeholder="pi.queryPh('priority', 'select')"
           allow-clear
         />
       </a-form-item>
       </div>
       <div v-show="isFieldVisible('requestStatus')">
-      <a-form-item :label="t('entity.servicerequest.requeststatus')">
+      <a-form-item :label="pi.queryLabel('requestStatus')">
         <a-input-number
           v-model:value="advancedQueryForm.requestStatus"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.servicerequest.requeststatus') })"
+          :placeholder="pi.queryPh('requestStatus', 'required')"
           style="width: 100%"
         />
       </a-form-item>
       </div>
       <div v-show="isFieldVisible('requestSubject')">
-      <a-form-item :label="t('entity.servicerequest.requestsubject')">
+      <a-form-item :label="pi.queryLabel('requestSubject')">
         <a-input
           v-model:value="advancedQueryForm.requestSubject"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.servicerequest.requestsubject') })"
+          :placeholder="pi.queryPh('requestSubject', 'required')"
           show-count
           :maxlength="200"
           allow-clear
@@ -284,20 +285,20 @@
       </a-form-item>
       </div>
       <div v-show="isFieldVisible('requestDescription')">
-      <a-form-item :label="t('entity.servicerequest.requestdescription')">
+      <a-form-item :label="pi.queryLabel('requestDescription')">
         <a-textarea
           v-model:value="advancedQueryForm.requestDescription"
-          :placeholder="t('common.page.form.placeholder.optional', { field: t('entity.servicerequest.requestdescription') })"
+          :placeholder="pi.queryPh('requestDescription', 'optional')"
           :rows="2"
           allow-clear
         />
       </a-form-item>
       </div>
       <div v-show="isFieldVisible('contactPerson')">
-      <a-form-item :label="t('entity.servicerequest.contactperson')">
+      <a-form-item :label="pi.queryLabel('contactPerson')">
         <a-input
           v-model:value="advancedQueryForm.contactPerson"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.servicerequest.contactperson') })"
+          :placeholder="pi.queryPh('contactPerson', 'required')"
           show-count
           :maxlength="50"
           allow-clear
@@ -305,10 +306,10 @@
       </a-form-item>
       </div>
       <div v-show="isFieldVisible('contactPhone')">
-      <a-form-item :label="t('entity.servicerequest.contactphone')">
+      <a-form-item :label="pi.queryLabel('contactPhone')">
         <a-input
           v-model:value="advancedQueryForm.contactPhone"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.servicerequest.contactphone') })"
+          :placeholder="pi.queryPh('contactPhone', 'required')"
           show-count
           :maxlength="50"
           allow-clear
@@ -316,10 +317,10 @@
       </a-form-item>
       </div>
       <div v-show="isFieldVisible('contactEmail')">
-      <a-form-item :label="t('entity.servicerequest.contactemail')">
+      <a-form-item :label="pi.queryLabel('contactEmail')">
         <a-input
           v-model:value="advancedQueryForm.contactEmail"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.servicerequest.contactemail') })"
+          :placeholder="pi.queryPh('contactEmail', 'required')"
           show-count
           :maxlength="100"
           allow-clear
@@ -327,20 +328,20 @@
       </a-form-item>
       </div>
       <div v-show="isFieldVisible('serviceAddress')">
-      <a-form-item :label="t('entity.servicerequest.serviceaddress')">
+      <a-form-item :label="pi.queryLabel('serviceAddress')">
         <a-textarea
           v-model:value="advancedQueryForm.serviceAddress"
-          :placeholder="t('common.page.form.placeholder.optional', { field: t('entity.servicerequest.serviceaddress') })"
+          :placeholder="pi.queryPh('serviceAddress', 'optional')"
           :rows="2"
           allow-clear
         />
       </a-form-item>
       </div>
       <div v-show="isFieldVisible('assignedEmployeeId')">
-      <a-form-item :label="t('entity.servicerequest.assignedemployeeid')">
+      <a-form-item :label="pi.queryLabel('assignedEmployeeId')">
         <a-input
           v-model:value="advancedQueryForm.assignedEmployeeId"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.servicerequest.assignedemployeeid') })"
+          :placeholder="pi.queryPh('assignedEmployeeId', 'required')"
           show-count
           :maxlength="20"
           allow-clear
@@ -348,10 +349,10 @@
       </a-form-item>
       </div>
       <div v-show="isFieldVisible('assignedEmployeeName')">
-      <a-form-item :label="t('entity.servicerequest.assignedemployeename')">
+      <a-form-item :label="pi.queryLabel('assignedEmployeeName')">
         <a-input
           v-model:value="advancedQueryForm.assignedEmployeeName"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.servicerequest.assignedemployeename') })"
+          :placeholder="pi.queryPh('assignedEmployeeName', 'required')"
           show-count
           :maxlength="50"
           allow-clear
@@ -359,10 +360,10 @@
       </a-form-item>
       </div>
       <div v-show="isFieldVisible('assignedAtStart')">
-      <a-form-item :label="t('entity.servicerequest.assignedatstart')">
+      <a-form-item :label="pi.queryLabel('assignedAtStart')">
         <a-input
           v-model:value="advancedQueryForm.assignedAtStart"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.servicerequest.assignedatstart') })"
+          :placeholder="pi.queryPh('assignedAtStart', 'required')"
           show-count
           :maxlength="20"
           allow-clear
@@ -370,20 +371,20 @@
       </a-form-item>
       </div>
       <div v-show="isFieldVisible('assignedAtEnd')">
-      <a-form-item :label="t('entity.servicerequest.assignedatend')">
+      <a-form-item :label="pi.queryLabel('assignedAtEnd')">
         <a-date-picker
           v-model:value="advancedQueryForm.assignedAtEnd"
-          :placeholder="t('common.page.form.placeholder.select', { field: t('entity.servicerequest.assignedatend') })"
+          :placeholder="pi.queryPh('assignedAtEnd', 'select')"
           value-format="YYYY-MM-DD"
           style="width: 100%"
         />
       </a-form-item>
       </div>
       <div v-show="isFieldVisible('closedAtStart')">
-      <a-form-item :label="t('entity.servicerequest.closedatstart')">
+      <a-form-item :label="pi.queryLabel('closedAtStart')">
         <a-input
           v-model:value="advancedQueryForm.closedAtStart"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.servicerequest.closedatstart') })"
+          :placeholder="pi.queryPh('closedAtStart', 'required')"
           show-count
           :maxlength="20"
           allow-clear
@@ -391,20 +392,20 @@
       </a-form-item>
       </div>
       <div v-show="isFieldVisible('closedAtEnd')">
-      <a-form-item :label="t('entity.servicerequest.closedatend')">
+      <a-form-item :label="pi.queryLabel('closedAtEnd')">
         <a-date-picker
           v-model:value="advancedQueryForm.closedAtEnd"
-          :placeholder="t('common.page.form.placeholder.select', { field: t('entity.servicerequest.closedatend') })"
+          :placeholder="pi.queryPh('closedAtEnd', 'select')"
           value-format="YYYY-MM-DD"
           style="width: 100%"
         />
       </a-form-item>
       </div>
       <div v-show="isFieldVisible('createdAtStart')">
-      <a-form-item :label="t('common.page.entity.createdatstart')">
+      <a-form-item :label="pi.queryLabel('createdAtStart')">
         <a-date-picker
           v-model:value="advancedQueryForm.createdAtStart"
-          :placeholder="t('common.page.form.placeholder.select', { field: t('common.page.entity.createdatstart') })"
+          :placeholder="pi.queryPh('createdAtStart', 'select')"
           value-format="YYYY-MM-DD HH:mm:ss"
             show-time
           style="width: 100%"
@@ -412,10 +413,10 @@
       </a-form-item>
       </div>
       <div v-show="isFieldVisible('createdAtEnd')">
-      <a-form-item :label="t('common.page.entity.createdatend')">
+      <a-form-item :label="pi.queryLabel('createdAtEnd')">
         <a-date-picker
           v-model:value="advancedQueryForm.createdAtEnd"
-          :placeholder="t('common.page.form.placeholder.select', { field: t('common.page.entity.createdatend') })"
+          :placeholder="pi.queryPh('createdAtEnd', 'select')"
           value-format="YYYY-MM-DD HH:mm:ss"
             show-time
           style="width: 100%"
@@ -437,7 +438,7 @@
             >
               <span class="takt-form-label-hint-icon"><RiQuestionLine class="takt-remix-icon" /></span>
             </a-tooltip>
-            <span>{{ t('common.page.entity.extfield') }}</span>
+            <span>{{ pi.queryLabel('extField') }}</span>
           </span>
         </template>
         <a-textarea
@@ -451,10 +452,10 @@
       </a-form-item>
       </div>
       <div v-show="isFieldVisible('remark')">
-      <a-form-item :label="t('common.page.entity.remark')">
+      <a-form-item :label="pi.queryLabel('remark')">
         <a-textarea
           v-model:value="advancedQueryForm.remark"
-          :placeholder="t('common.page.form.placeholder.optional', { field: t('common.page.entity.remark') })"
+          :placeholder="pi.queryPh('remark', 'optional')"
             :rows="4"
             show-count
             :maxlength="400"
@@ -468,14 +469,15 @@
     <!-- 导入对话框 -->
     <TaktModal
       v-model:open="importVisible"
-      :title="t('common.dialog.title.import', { entity: t('entity.servicerequest._self') })"
+      :title="t('common.dialog.title.import', { entity: pi.self() })"
       :width="600"
       :footer="null"
       :cancel-text="t('common.page.button.close')"
       @cancel="handleImportCancel"
     >
       <TaktImportFile
-        entity-i18n-key="entity.servicerequest._self"
+        v-if="importVisible"
+        :entity-i18n-key="SERVICEREQUEST_SELF_I18N_KEY"
         file-type="xlsx"
         :sheet-name="excelNames.sheet"
         :template-file-name="excelNames.fileBase"
@@ -518,15 +520,28 @@ import type { ServiceRequest, ServiceRequestQuery } from '@/types/logistics/cust
 import { useDictDataStore } from '@/stores/foundation/dict-data'
 import { taktExcelEntityNames } from '@/utils/naming'
 import { resolveExportDownloadFileName } from '@/utils/export-download-name'
+import { normalizeImportResult, type TaktImportResult } from '@/utils/takt-import-result'
 import { RiEditLine, RiDeleteBinLine, RiQuestionLine } from '@remixicon/vue'
 
+import {
+  useServiceRequestI18n,
+  SERVICEREQUEST_LIST_FIELDS,
+  SERVICEREQUEST_QUERY_STRING_FIELDS,
+  SERVICEREQUEST_QUERY_FIELDS,
+  SERVICEREQUEST_SELF_I18N_KEY,
+} from './composables/use-service-request-i18n'
+
+/** 实体字段 i18n（标签/占位符统一入口） */
+const pi = useServiceRequestI18n()
+/** 表格行类型（TaktSingleTable slot record 与 dataSource 行兼容） */
+type ServiceRequestRowRecord = ServiceRequest | Record<string, unknown>
 /** i18n 翻译函数 */
 const { t } = useI18n()
 /** Excel 导入/导出默认 sheet 名与文件名前缀 */
 const excelNames = taktExcelEntityNames('TaktServiceRequest')
 /** 列表快捷查询占位文案 */
 const searchPlaceholder = computed(
-  () => t('common.page.form.placeholder.search', { keyword: t('entity.servicerequest._self') })
+  () => t('common.page.form.placeholder.search', { keyword: pi.self() })
 )
 
 /** 快捷查询关键字 */
@@ -542,9 +557,9 @@ const pageSize = ref(getTaktDefaultPageSize())
 /** 分页 total */
 const total = ref(0)
 /** 工具栏单选时当前行 */
-const selectedRow = ref<ServiceRequest | null>(null)
+const selectedRow = ref<ServiceRequestRowRecord | null>(null)
 /** 表格多选行 */
-const selectedRows = ref<ServiceRequest[]>([])
+const selectedRows = ref<ServiceRequestRowRecord[]>([])
 /** 表格多选 row-key 集合 */
 const selectedRowKeys = ref<(string | number)[]>([])
 
@@ -561,74 +576,29 @@ const formRef = ref()
 
 /** 高级查询抽屉是否打开 */
 const advancedQueryVisible = ref(false)
+/**
+ * 创建空的高级查询表单
+ * @returns {Record<string, unknown>} 高级查询初始模型
+ */
+function createEmptyAdvancedQueryForm() {
+  const form = Object.fromEntries(SERVICEREQUEST_QUERY_STRING_FIELDS.map((key) => [key, ''])) as Record<
+    (typeof SERVICEREQUEST_QUERY_STRING_FIELDS)[number],
+    string
+  >
+  return {
+    ...form,
+    requestType: undefined as number | undefined,
+    sourceChannel: undefined as number | undefined,
+    priority: undefined as number | undefined,
+    requestStatus: undefined as number | undefined,
+  }
+}
 /** 高级查询表单模型 */
-const advancedQueryForm = ref({
-  plantCode: '',
-  serviceRequestCode: '',
-  clientId: '',
-  clientCode: '',
-  clientName: '',
-  serviceContractId: '',
-  serviceContractCode: '',
-  requestDateStart: '',
-  requestDateEnd: '',
-  expectedServiceDateStart: '',
-  expectedServiceDateEnd: '',
-  requestType: undefined as number | undefined,
-  sourceChannel: undefined as number | undefined,
-  priority: undefined as number | undefined,
-  requestStatus: undefined as number | undefined,
-  requestSubject: '',
-  requestDescription: '',
-  contactPerson: '',
-  contactPhone: '',
-  contactEmail: '',
-  serviceAddress: '',
-  assignedEmployeeId: '',
-  assignedEmployeeName: '',
-  assignedAtStart: '',
-  assignedAtEnd: '',
-  closedAtStart: '',
-  closedAtEnd: '',
-  createdAtStart: '',
-  createdAtEnd: '',
-  extField: '',
-  remark: '',
-})
+const advancedQueryForm = ref(createEmptyAdvancedQueryForm())
 /** 高级查询字段元数据（列显隐配置） */
-const queryFieldsMeta = computed(() => [
-  { key: 'plantCode', label: t('entity.servicerequest.plantcode') },
-  { key: 'serviceRequestCode', label: t('entity.servicerequest.code') },
-  { key: 'clientId', label: t('entity.servicerequest.clientid') },
-  { key: 'clientCode', label: t('entity.servicerequest.clientcode') },
-  { key: 'clientName', label: t('entity.servicerequest.clientname') },
-  { key: 'serviceContractId', label: t('entity.servicerequest.servicecontractid') },
-  { key: 'serviceContractCode', label: t('entity.servicerequest.servicecontractcode') },
-  { key: 'requestDateStart', label: t('common.page.entity.createdatstart').replace(t('common.page.entity.createdat'), t('entity.servicerequest.requestdate')) },
-  { key: 'requestDateEnd', label: t('common.page.entity.createdatend').replace(t('common.page.entity.createdat'), t('entity.servicerequest.requestdate')) },
-  { key: 'expectedServiceDateStart', label: t('common.page.entity.createdatstart').replace(t('common.page.entity.createdat'), t('entity.servicerequest.expectedservicedate')) },
-  { key: 'expectedServiceDateEnd', label: t('common.page.entity.createdatend').replace(t('common.page.entity.createdat'), t('entity.servicerequest.expectedservicedate')) },
-  { key: 'requestType', label: t('entity.servicerequest.requesttype') },
-  { key: 'sourceChannel', label: t('entity.servicerequest.sourcechannel') },
-  { key: 'priority', label: t('entity.servicerequest.priority') },
-  { key: 'requestStatus', label: t('entity.servicerequest.requeststatus') },
-  { key: 'requestSubject', label: t('entity.servicerequest.requestsubject') },
-  { key: 'requestDescription', label: t('entity.servicerequest.requestdescription') },
-  { key: 'contactPerson', label: t('entity.servicerequest.contactperson') },
-  { key: 'contactPhone', label: t('entity.servicerequest.contactphone') },
-  { key: 'contactEmail', label: t('entity.servicerequest.contactemail') },
-  { key: 'serviceAddress', label: t('entity.servicerequest.serviceaddress') },
-  { key: 'assignedEmployeeId', label: t('entity.servicerequest.assignedemployeeid') },
-  { key: 'assignedEmployeeName', label: t('entity.servicerequest.assignedemployeename') },
-  { key: 'assignedAtStart', label: t('entity.servicerequest.assignedatstart') },
-  { key: 'assignedAtEnd', label: t('entity.servicerequest.assignedatend') },
-  { key: 'closedAtStart', label: t('entity.servicerequest.closedatstart') },
-  { key: 'closedAtEnd', label: t('entity.servicerequest.closedatend') },
-  { key: 'createdAtStart', label: t('common.page.entity.createdatstart') },
-  { key: 'createdAtEnd', label: t('common.page.entity.createdatend') },
-  { key: 'extField', label: t('common.page.entity.extfield') },
-  { key: 'remark', label: t('common.page.entity.remark') },
-])
+const queryFieldsMeta = computed(() =>
+  SERVICEREQUEST_QUERY_FIELDS.map((key) => ({ key, label: pi.queryLabel(key) })),
+)
 /** 高级查询当前可见字段 key */
 const visibleQueryFieldKeys = ref<string[]>([])
 /** 列设置抽屉是否打开 */
@@ -670,17 +640,9 @@ function buildListQuery(overrides?: Partial<ServiceRequestQuery>): ServiceReques
       query[key] = v as never
     }
   }
-  assignTrimmed('plantCode', form.plantCode)
-  assignTrimmed('serviceRequestCode', form.serviceRequestCode)
-  assignTrimmed('clientId', form.clientId)
-  assignTrimmed('clientCode', form.clientCode)
-  assignTrimmed('clientName', form.clientName)
-  assignTrimmed('serviceContractId', form.serviceContractId)
-  assignTrimmed('serviceContractCode', form.serviceContractCode)
-  assignTrimmed('requestDateStart', form.requestDateStart)
-  assignTrimmed('requestDateEnd', form.requestDateEnd)
-  assignTrimmed('expectedServiceDateStart', form.expectedServiceDateStart)
-  assignTrimmed('expectedServiceDateEnd', form.expectedServiceDateEnd)
+  for (const key of SERVICEREQUEST_QUERY_STRING_FIELDS) {
+    assignTrimmed(key, form[key])
+  }
   if (form.requestType !== undefined && form.requestType !== null) {
     query.requestType = form.requestType
   }
@@ -693,22 +655,6 @@ function buildListQuery(overrides?: Partial<ServiceRequestQuery>): ServiceReques
   if (form.requestStatus !== undefined && form.requestStatus !== null) {
     query.requestStatus = form.requestStatus
   }
-  assignTrimmed('requestSubject', form.requestSubject)
-  assignTrimmed('requestDescription', form.requestDescription)
-  assignTrimmed('contactPerson', form.contactPerson)
-  assignTrimmed('contactPhone', form.contactPhone)
-  assignTrimmed('contactEmail', form.contactEmail)
-  assignTrimmed('serviceAddress', form.serviceAddress)
-  assignTrimmed('assignedEmployeeId', form.assignedEmployeeId)
-  assignTrimmed('assignedEmployeeName', form.assignedEmployeeName)
-  assignTrimmed('assignedAtStart', form.assignedAtStart)
-  assignTrimmed('assignedAtEnd', form.assignedAtEnd)
-  assignTrimmed('closedAtStart', form.closedAtStart)
-  assignTrimmed('closedAtEnd', form.closedAtEnd)
-  assignTrimmed('createdAtStart', form.createdAtStart)
-  assignTrimmed('createdAtEnd', form.createdAtEnd)
-  assignTrimmed('extField', form.extField)
-  assignTrimmed('remark', form.remark)
   return query
 }
 /** 页面挂载：租户上下文就绪后加载分页配置，再拉列表 */
@@ -719,238 +665,32 @@ onMounted(async () => {
 })
 
 
-
-
-
-
+/**
+ * 构建列表标准文本列
+ * @param key 列 key / dataIndex
+ * @param title 列标题
+ * @param options 宽度与固定列
+ */
+function buildServiceRequestListColumn(
+  key: string,
+  title: string,
+  options?: { width?: number; fixed?: 'left' },
+) {
+  return {
+    title,
+    dataIndex: key,
+    key,
+    width: options?.width ?? 120,
+    resizable: true,
+    ellipsis: true,
+    ...(options?.fixed ? { fixed: options.fixed } : {}),
+  }
+}
 
 /** 表格列定义（i18n 随 locale 变化） */
 const columns = computed<TableColumnsType>(() => [
-  {
-    title: t('common.page.entity.id'),
-    dataIndex: 'serviceRequestId',
-    key: 'serviceRequestId',
-    width: 80,
-    resizable: true,
-    ellipsis: true,
-    fixed: 'left',
-    customRender: ({ record }: { record: any }) => getServiceRequestField(record, 'serviceRequestId') ?? ''
-  },
-  {
-    title: t('entity.servicerequest.plantcode'),
-    dataIndex: 'plantCode',
-    key: 'plantCode',
-    width: 120,
-    resizable: true,
-    ellipsis: true,
-    customRender: ({ record }: { record: any }) => getServiceRequestField(record, 'plantCode') ?? ''
-  },
-  {
-    title: t('entity.servicerequest.code'),
-    dataIndex: 'serviceRequestCode',
-    key: 'serviceRequestCode',
-    width: 120,
-    resizable: true,
-    ellipsis: true,
-    customRender: ({ record }: { record: any }) => getServiceRequestField(record, 'serviceRequestCode') ?? ''
-  },
-  {
-    title: t('entity.servicerequest.clientid'),
-    dataIndex: 'clientId',
-    key: 'clientId',
-    width: 120,
-    resizable: true,
-    ellipsis: true,
-    customRender: ({ record }: { record: any }) => getServiceRequestField(record, 'clientId') ?? ''
-  },
-  {
-    title: t('entity.servicerequest.clientcode'),
-    dataIndex: 'clientCode',
-    key: 'clientCode',
-    width: 120,
-    resizable: true,
-    ellipsis: true,
-    customRender: ({ record }: { record: any }) => getServiceRequestField(record, 'clientCode') ?? ''
-  },
-  {
-    title: t('entity.servicerequest.clientname'),
-    dataIndex: 'clientName',
-    key: 'clientName',
-    width: 120,
-    resizable: true,
-    ellipsis: true,
-    customRender: ({ record }: { record: any }) => getServiceRequestField(record, 'clientName') ?? ''
-  },
-  {
-    title: t('entity.servicerequest.servicecontractid'),
-    dataIndex: 'serviceContractId',
-    key: 'serviceContractId',
-    width: 120,
-    resizable: true,
-    ellipsis: true,
-    customRender: ({ record }: { record: any }) => getServiceRequestField(record, 'serviceContractId') ?? ''
-  },
-  {
-    title: t('entity.servicerequest.servicecontractcode'),
-    dataIndex: 'serviceContractCode',
-    key: 'serviceContractCode',
-    width: 120,
-    resizable: true,
-    ellipsis: true,
-    customRender: ({ record }: { record: any }) => getServiceRequestField(record, 'serviceContractCode') ?? ''
-  },
-  {
-    title: t('entity.servicerequest.requestdate'),
-    dataIndex: 'requestDate',
-    key: 'requestDate',
-    width: 120,
-    resizable: true,
-    ellipsis: true,
-    customRender: ({ record }: { record: any }) => getServiceRequestField(record, 'requestDate') ?? ''
-  },
-  {
-    title: t('entity.servicerequest.expectedservicedate'),
-    dataIndex: 'expectedServiceDate',
-    key: 'expectedServiceDate',
-    width: 120,
-    resizable: true,
-    ellipsis: true,
-    customRender: ({ record }: { record: any }) => getServiceRequestField(record, 'expectedServiceDate') ?? ''
-  },
-  {
-    title: t('entity.servicerequest.requesttype'),
-    dataIndex: 'requestType',
-    key: 'requestType',
-    width: 120,
-    resizable: true,
-    ellipsis: true,
-    customRender: ({ record }: { record: any }) => getServiceRequestField(record, 'requestType') ?? ''
-  },
-  {
-    title: t('entity.servicerequest.sourcechannel'),
-    dataIndex: 'sourceChannel',
-    key: 'sourceChannel',
-    width: 120,
-    resizable: true,
-    ellipsis: true,
-    customRender: ({ record }: { record: any }) => getServiceRequestField(record, 'sourceChannel') ?? ''
-  },
-  {
-    title: t('entity.servicerequest.priority'),
-    dataIndex: 'priority',
-    key: 'priority',
-    width: 120,
-    resizable: true,
-    ellipsis: true,
-  },
-  {
-    title: t('entity.servicerequest.requeststatus'),
-    dataIndex: 'requestStatus',
-    key: 'requestStatus',
-    width: 120,
-    resizable: true,
-    ellipsis: true,
-    customRender: ({ record }: { record: any }) => getServiceRequestField(record, 'requestStatus') ?? ''
-  },
-  {
-    title: t('entity.servicerequest.requestsubject'),
-    dataIndex: 'requestSubject',
-    key: 'requestSubject',
-    width: 120,
-    resizable: true,
-    ellipsis: true,
-    customRender: ({ record }: { record: any }) => getServiceRequestField(record, 'requestSubject') ?? ''
-  },
-  {
-    title: t('entity.servicerequest.requestdescription'),
-    dataIndex: 'requestDescription',
-    key: 'requestDescription',
-    width: 120,
-    resizable: true,
-    ellipsis: true,
-    customRender: ({ record }: { record: any }) => getServiceRequestField(record, 'requestDescription') ?? ''
-  },
-  {
-    title: t('entity.servicerequest.contactperson'),
-    dataIndex: 'contactPerson',
-    key: 'contactPerson',
-    width: 120,
-    resizable: true,
-    ellipsis: true,
-    customRender: ({ record }: { record: any }) => getServiceRequestField(record, 'contactPerson') ?? ''
-  },
-  {
-    title: t('entity.servicerequest.contactphone'),
-    dataIndex: 'contactPhone',
-    key: 'contactPhone',
-    width: 120,
-    resizable: true,
-    ellipsis: true,
-    customRender: ({ record }: { record: any }) => getServiceRequestField(record, 'contactPhone') ?? ''
-  },
-  {
-    title: t('entity.servicerequest.contactemail'),
-    dataIndex: 'contactEmail',
-    key: 'contactEmail',
-    width: 120,
-    resizable: true,
-    ellipsis: true,
-    customRender: ({ record }: { record: any }) => getServiceRequestField(record, 'contactEmail') ?? ''
-  },
-  {
-    title: t('entity.servicerequest.serviceaddress'),
-    dataIndex: 'serviceAddress',
-    key: 'serviceAddress',
-    width: 120,
-    resizable: true,
-    ellipsis: true,
-    customRender: ({ record }: { record: any }) => getServiceRequestField(record, 'serviceAddress') ?? ''
-  },
-  {
-    title: t('entity.servicerequest.assignedemployeeid'),
-    dataIndex: 'assignedEmployeeId',
-    key: 'assignedEmployeeId',
-    width: 120,
-    resizable: true,
-    ellipsis: true,
-    customRender: ({ record }: { record: any }) => getServiceRequestField(record, 'assignedEmployeeId') ?? ''
-  },
-  {
-    title: t('entity.servicerequest.assignedemployeename'),
-    dataIndex: 'assignedEmployeeName',
-    key: 'assignedEmployeeName',
-    width: 120,
-    resizable: true,
-    ellipsis: true,
-    customRender: ({ record }: { record: any }) => getServiceRequestField(record, 'assignedEmployeeName') ?? ''
-  },
-  {
-    title: t('entity.servicerequest.assignedat'),
-    dataIndex: 'assignedAt',
-    key: 'assignedAt',
-    width: 120,
-    resizable: true,
-    ellipsis: true,
-    customRender: ({ record }: { record: any }) => getServiceRequestField(record, 'assignedAt') ?? ''
-  },
-  {
-    title: t('entity.servicerequest.closedat'),
-    dataIndex: 'closedAt',
-    key: 'closedAt',
-    width: 120,
-    resizable: true,
-    ellipsis: true,
-    customRender: ({ record }: { record: any }) => getServiceRequestField(record, 'closedAt') ?? ''
-  },
-  {
-    title: t('entity.servicerequest.servicecontract'),
-    dataIndex: 'serviceContract',
-    key: 'serviceContract',
-    width: 120,
-    resizable: true,
-    ellipsis: true,
-    customRender: ({ record }: { record: any }) => getServiceRequestField(record, 'serviceContract') ?? ''
-  },
+  buildServiceRequestListColumn('serviceRequestId', t('common.page.entity.id'), { width: 80, fixed: 'left' }),
+  ...SERVICEREQUEST_LIST_FIELDS.map((key) => buildServiceRequestListColumn(key, pi.label(key))),
   CreateActionColumn({
     actions: [
       {
@@ -959,7 +699,7 @@ const columns = computed<TableColumnsType>(() => [
         shape: 'plain',
         icon: RiEditLine,
         permission: 'logistics:service:request:update',
-        onClick: (record: ServiceRequest) => handleEdit(record)
+        onClick: (record: ServiceRequestRowRecord) => handleEdit(record)
       },
       {
         key: 'delete',
@@ -967,44 +707,56 @@ const columns = computed<TableColumnsType>(() => [
         shape: 'plain',
         icon: RiDeleteBinLine,
         permission: 'logistics:service:request:delete',
-        onClick: (record: ServiceRequest) => handleDeleteOne(record)
+        onClick: (record: ServiceRequestRowRecord) => handleDeleteOne(record)
       }
     ]
   })
 ])
 
 /** 表格 row-key（优先实体主键字段） */
-const getServiceRequestId = (record: any): string => record?.[entityIdName] ?? ''
+const getServiceRequestId = (record: ServiceRequestRowRecord): string => {
+  const id = (record as Record<string, unknown>)?.[entityIdName]
+  return id != null ? String(id) : ''
+}
 /**
- * 读取行字段值
+ * 供 TaktDictTag 等组件使用的标量字典值
  * @param record 行数据
  * @param field 字段名
  */
-const getServiceRequestField = (record: any, field: string): any => record?.[field]
+const getServiceRequestDictValue = (
+  record: ServiceRequestRowRecord,
+  field: string,
+): string | number | undefined => {
+  const value = (record as Record<string, unknown>)?.[field]
+  if (value === null || value === undefined) return undefined
+  if (typeof value === 'string' || typeof value === 'number') return value
+  return String(value)
+}
+
 
 
 /** 行选择配置 */
 const rowSelection = computed(() => ({
   selectedRowKeys: selectedRowKeys.value,
-  onChange: (keys: (string | number)[], rows: ServiceRequest[]) => {
+  onChange: (keys: (string | number)[], rows: ServiceRequestRowRecord[]) => {
     selectedRowKeys.value = keys
     selectedRows.value = rows
     selectedRow.value = rows.length === 1 ? (rows[0] ?? null) : null
   },
-  onSelect: (record: ServiceRequest, selected: boolean) => {
+  onSelect: (record: ServiceRequestRowRecord, selected: boolean) => {
     if (selected) {
       selectedRow.value = record
     } else if (selectedRow.value && getServiceRequestId(selectedRow.value) === getServiceRequestId(record)) {
       selectedRow.value = null
     }
   },
-  onSelectAll: (selected: boolean, selectedRowsData: ServiceRequest[]) => {
+  onSelectAll: (selected: boolean, selectedRowsData: ServiceRequestRowRecord[]) => {
     selectedRow.value = selected && selectedRowsData.length === 1 ? (selectedRowsData[0] ?? null) : null
   }
 }))
 
 /** 行点击切换选中（与 rowSelection 联动） */
-const onClickRow = (record: ServiceRequest) => ({
+const onClickRow = (record: ServiceRequestRowRecord) => ({
   onClick: () => {
     const key = getServiceRequestId(record)
     const index = selectedRowKeys.value.indexOf(key)
@@ -1050,63 +802,43 @@ function handleSearch() {
 /** 重置查询条件并刷新列表 */
 function handleReset() {
   queryKeyword.value = ''
-  advancedQueryForm.value = {
-  plantCode: '',
-  serviceRequestCode: '',
-  clientId: '',
-  clientCode: '',
-  clientName: '',
-  serviceContractId: '',
-  serviceContractCode: '',
-  requestDateStart: '',
-  requestDateEnd: '',
-  expectedServiceDateStart: '',
-  expectedServiceDateEnd: '',
-  requestType: undefined as number | undefined,
-  sourceChannel: undefined as number | undefined,
-  priority: undefined as number | undefined,
-  requestStatus: undefined as number | undefined,
-  requestSubject: '',
-  requestDescription: '',
-  contactPerson: '',
-  contactPhone: '',
-  contactEmail: '',
-  serviceAddress: '',
-  assignedEmployeeId: '',
-  assignedEmployeeName: '',
-  assignedAtStart: '',
-  assignedAtEnd: '',
-  closedAtStart: '',
-  closedAtEnd: '',
-  createdAtStart: '',
-  createdAtEnd: '',
-  extField: '',
-  remark: '',
-  }
+  advancedQueryForm.value = createEmptyAdvancedQueryForm()
   currentPage.value = getTaktDefaultPageIndex()
   loadData()
 }
 
 /** 打开新增弹窗 */
 function handleCreate() {
-  formTitle.value = t('common.dialog.title.create', { entity: t('entity.servicerequest._self') })
+  formTitle.value = t('common.dialog.title.create', { entity: pi.self() })
   formData.value = null
   formVisible.value = true
   nextTick(() => formRef.value?.resetFields())
 }
-/** 打开编辑弹窗 */
-function handleEdit(record: ServiceRequest) {
-  formTitle.value = t('common.dialog.title.edit', { entity: t('entity.servicerequest._self') })
-  formData.value = { ...record }
-  formVisible.value = true
+/** 打开编辑弹窗（拉取详情，避免列表列裁剪字段） */
+async function handleEdit(record: ServiceRequestRowRecord) {
+  const id = getServiceRequestId(record)
+  if (!id) {
+    return
+  }
+  formTitle.value = t('common.dialog.title.edit', { entity: pi.self() })
+  formLoading.value = true
+  try {
+    const detail = await getServiceRequestById(id)
+    formData.value = detail ?? ({ ...record } as Partial<ServiceRequest>)
+    formVisible.value = true
+  } catch (error: unknown) {
+    message.error(t('common.feedback.load.data.failed'))
+  } finally {
+    formLoading.value = false
+  }
 }
 
 /** 工具栏编辑：打开当前单选行 */
 function handleUpdate() {
   if (selectedRow.value) {
-    handleEdit(selectedRow.value)
+    void handleEdit(selectedRow.value)
   } else {
-    message.warning(t('common.tip.select.to.action', { action: t('common.page.button.edit'), entity: t('entity.servicerequest._self') }))
+    message.warning(t('common.tip.select.to.action', { action: t('common.page.button.edit'), entity: pi.self() }))
   }
 }
 /** 提交新增/编辑表单 */
@@ -1124,10 +856,10 @@ async function handleFormSubmit() {
     const id = (formData.value as any)?.[entityIdName]
     if (id) {
       await updateServiceRequest(id, payload as any)
-      message.success(t('common.feedback.updated', { target: t('entity.servicerequest._self') }))
+      message.success(t('common.feedback.updated', { target: pi.self() }))
     } else {
       await createServiceRequest(payload as any)
-      message.success(t('common.feedback.created', { target: t('entity.servicerequest._self') }))
+      message.success(t('common.feedback.created', { target: pi.self() }))
     }
     formVisible.value = false
     formData.value = null
@@ -1155,15 +887,18 @@ async function handleDownloadTemplate(sheetName?: string, fileName?: string): Pr
   return (res as any)?.data ?? res
 }
 
-/** 上传并导入 Excel 文件 */
-async function handleImportFile(file: File, sheetName?: string): Promise<{ success: number; fail: number; errors: string[] }> {
-  return await importServiceRequest(file, sheetName)
+/** 上传并导入 Excel 文件（归一化后端 SuccessCount/successCount） */
+async function handleImportFile(file: File, sheetName?: string): Promise<TaktImportResult> {
+  const raw = await importServiceRequest(file, sheetName)
+  return normalizeImportResult(raw)
 }
 
-/** 导入完成回调：刷新列表并可选关闭对话框 */
-function handleImportSuccess(result: { success: number; fail: number; errors: string[] }) {
+/** 导入完成回调：刷新列表；全部成功时延迟关闭对话框 */
+function handleImportSuccess(result: TaktImportResult) {
   loadData()
-  if (result.fail === 0) setTimeout(() => { importVisible.value = false }, 2000)
+  if (result.fail === 0 && result.success > 0) {
+    setTimeout(() => { importVisible.value = false }, 2000)
+  }
 }
 
 /** 关闭导入对话框 */
@@ -1197,24 +932,24 @@ async function handleExport() {
     link.click()
     document.body.removeChild(link)
     setTimeout(() => window.URL.revokeObjectURL(url), 100)
-    message.success(t('common.feedback.export.success', { target: t('entity.servicerequest._self') }))
+    message.success(t('common.feedback.export.success', { target: pi.self() }))
   } catch (error: any) {
     logger.error('[ServiceRequest] 导出失败', { error })
-    message.error(error?.message || t('common.feedback.export.failed', { target: t('entity.servicerequest._self') }))
+    message.error(error?.message || t('common.feedback.export.failed', { target: pi.self() }))
   } finally {
     loading.value = false
   }
 }
 /** 删除单行 */
-async function handleDeleteOne(record: ServiceRequest) {
+async function handleDeleteOne(record: ServiceRequestRowRecord) {
   Modal.confirm({
     title: t('common.tip.confirm.delete.title'),
-    content: t('common.tip.confirm.delete.entity', { entity: t('entity.servicerequest._self'), name: t('common.tip.this.target', { target: t('entity.servicerequest._self') }) }),
+    content: t('common.tip.confirm.delete.entity', { entity: pi.self(), name: t('common.tip.this.target', { target: pi.self() }) }),
     okText: t('common.page.button.delete'),
     cancelText: t('common.page.button.cancel'),
     onOk: async () => {
       await deleteServiceRequestById((record as any)[entityIdName])
-      message.success(t('common.feedback.deleted', { target: t('entity.servicerequest._self') }))
+      message.success(t('common.feedback.deleted', { target: pi.self() }))
       loadData()
     }
   })
@@ -1222,18 +957,18 @@ async function handleDeleteOne(record: ServiceRequest) {
 /** 批量删除选中行 */
 async function handleDelete() {
   if (selectedRows.value.length === 0) {
-    message.warning(t('common.tip.select.to.action', { action: t('common.page.button.delete'), entity: t('entity.servicerequest._self') }))
+    message.warning(t('common.tip.select.to.action', { action: t('common.page.button.delete'), entity: pi.self() }))
     return
   }
   Modal.confirm({
     title: t('common.tip.confirm.delete.title'),
-    content: t('common.tip.confirm.delete.count', { entity: t('entity.servicerequest._self'), count: selectedRows.value.length }),
+    content: t('common.tip.confirm.delete.count', { entity: pi.self(), count: selectedRows.value.length }),
     okText: t('common.page.button.delete'),
     cancelText: t('common.page.button.cancel'),
     onOk: async () => {
       const ids = selectedRows.value.map((r: any) => r[entityIdName]).filter(Boolean)
       await deleteServiceRequestBatch(ids)
-      message.success(t('common.feedback.deleted', { target: t('entity.servicerequest._self') }))
+      message.success(t('common.feedback.deleted', { target: pi.self() }))
       loadData()
     }
   })
@@ -1251,39 +986,7 @@ function handleAdvancedQuerySubmit() {
 }
 
 function handleAdvancedQueryReset() {
-  advancedQueryForm.value = {
-  plantCode: '',
-  serviceRequestCode: '',
-  clientId: '',
-  clientCode: '',
-  clientName: '',
-  serviceContractId: '',
-  serviceContractCode: '',
-  requestDateStart: '',
-  requestDateEnd: '',
-  expectedServiceDateStart: '',
-  expectedServiceDateEnd: '',
-  requestType: undefined as number | undefined,
-  sourceChannel: undefined as number | undefined,
-  priority: undefined as number | undefined,
-  requestStatus: undefined as number | undefined,
-  requestSubject: '',
-  requestDescription: '',
-  contactPerson: '',
-  contactPhone: '',
-  contactEmail: '',
-  serviceAddress: '',
-  assignedEmployeeId: '',
-  assignedEmployeeName: '',
-  assignedAtStart: '',
-  assignedAtEnd: '',
-  closedAtStart: '',
-  closedAtEnd: '',
-  createdAtStart: '',
-  createdAtEnd: '',
-  extField: '',
-  remark: '',
-  }
+  advancedQueryForm.value = createEmptyAdvancedQueryForm()
 }
 
 /** 打开列设置抽屉 */

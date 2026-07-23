@@ -598,7 +598,7 @@ public class TaktAuthService : TaktServiceBase, ITaktAuthService
             .Select((e, index) => new TaktSelectOption
             {
                 DictValue = e.CompanyCode,
-                DictLabel = !string.IsNullOrWhiteSpace(e.CompanyShortName) ? e.CompanyShortName : e.CompanyName,
+                DictLabel = !string.IsNullOrWhiteSpace(e.CompanyShortName) ? e.CompanyShortName : e.CompanyName1,
                 ExtLabel = string.Equals(e.CompanyCode, activeCompany, StringComparison.OrdinalIgnoreCase) ? "1" : "0",
                 ExtValue = e.RelatedPlant ?? string.Empty,
                 SortOrder = index,

@@ -9,22 +9,42 @@
 
 <template>
   <div class="p-4 flex flex-col min-h-0 h-full">
-    <!-- 查询栏 -->
-    <TaktQueryBar
-      v-model="queryKeyword"
-      :placeholder="searchPlaceholder"
-      :loading="loading"
-      @search="handleSearch"
-      @reset="handleReset"
-    />
-
-    <!-- 工具栏 -->
-    <TaktToolsBar
-      create-permission="logistics:materials:manufacturer:material:create"
-      update-permission="logistics:materials:manufacturer:material:update"
-      delete-permission="logistics:materials:manufacturer:material:delete"
-      import-permission="logistics:materials:manufacturer:material:import"
-      export-permission="logistics:materials:manufacturer:material:export"
+    <!-- 左主右从 -->
+    <TaktMasterDetailTableLr
+      v-model:master-current="currentPage"
+      v-model:master-page-size="pageSize"
+      v-model:selected-master-key="selectedMasterKey"
+      class="min-h-0 flex-1"
+      :master-columns="columns"
+      :master-data-source="dataSource"
+      :master-loading="loading"
+      :master-row-key="getManufacturerId"
+      :master-row-selection="rowSelection"
+      master-id-column-key="manufacturerId"
+      :master-visible-column-keys="visibleColumnKeys"
+      master-table-mode="masterDetailMaster"
+      master-scroll-layout="masterDetailLr"
+      :master-total="total"
+      master-entity-scope="company"
+      @master-change="handleTableChange"
+      @master-resize-column="handleResizeColumn"
+      @master-pagination-change="handleMasterPaginationChange"
+      @master-select="handleMasterSelect"
+    >
+      <template #master-toolbar>
+        <TaktQueryBar
+          v-model="queryKeyword"
+          :placeholder="searchPlaceholder"
+          :loading="loading"
+          @search="handleSearch"
+          @reset="handleReset"
+        />
+        <TaktToolsBar
+      create-permission="logistics:materials:manufacturer:create"
+      update-permission="logistics:materials:manufacturer:update"
+      delete-permission="logistics:materials:manufacturer:delete"
+      import-permission="logistics:materials:manufacturer:import"
+      export-permission="logistics:materials:manufacturer:export"
       :show-create="true"
       :show-update="true"
       :show-delete="true"
@@ -50,30 +70,8 @@
       @advanced-query="handleAdvancedQuery"
       @column-setting="handleColumnSetting"
       @refresh="handleRefresh"
-    />
-
-    <!-- 左主右从 -->
-    <TaktMasterDetailTableLr
-      v-model:master-current="currentPage"
-      v-model:master-page-size="pageSize"
-      v-model:selected-master-key="selectedMasterKey"
-      class="min-h-0 flex-1"
-      :master-columns="columns"
-      :master-data-source="dataSource"
-      :master-loading="loading"
-      :master-row-key="getManufacturerId"
-      :master-row-selection="rowSelection"
-      master-id-column-key="manufacturerId"
-      :master-visible-column-keys="visibleColumnKeys"
-      master-table-mode="masterDetailMaster"
-      master-scroll-layout="masterDetailLr"
-      :master-total="total"
-      master-entity-scope="company"
-      @master-change="handleTableChange"
-      @master-resize-column="handleResizeColumn"
-      @master-pagination-change="handleMasterPaginationChange"
-      @master-select="handleMasterSelect"
-    >
+        />
+      </template>
       <!-- 字典/开关列渲染 -->
       <template #bodyCell="{ column, record }">
         <template v-if="column.key === 'manufacturerStatus'">
@@ -93,6 +91,12 @@
           <TaktDictTag
             :value="getManufacturerDictValue(record, 'industrySector')"
             dict-type="logistics_industry_sector"
+          />
+        </template>
+        <template v-else-if="column.key === 'registrationCountry'">
+          <TaktDictTag
+            :value="getManufacturerDictValue(record, 'registrationCountry')"
+            dict-type="sys_country_code"
           />
         </template>
         <template v-else-if="column.key === 'manufacturerLevel'">
@@ -155,13 +159,24 @@
         />
       </a-form-item>
       </div>
-      <div v-show="isFieldVisible('manufacturerName')">
-      <a-form-item :label="pi.queryLabel('manufacturerName')">
+      <div v-show="isFieldVisible('manufacturerName1')">
+      <a-form-item :label="pi.queryLabel('manufacturerName1')">
         <a-input
-          v-model:value="advancedQueryForm.manufacturerName"
-          :placeholder="pi.queryPh('manufacturerName', 'required')"
+          v-model:value="advancedQueryForm.manufacturerName1"
+          :placeholder="pi.queryPh('manufacturerName1', 'required')"
           show-count
-          :maxlength="80"
+          :maxlength="140"
+          allow-clear
+        />
+      </a-form-item>
+      </div>
+      <div v-show="isFieldVisible('manufacturerName2')">
+      <a-form-item :label="pi.queryLabel('manufacturerName2')">
+        <a-input
+          v-model:value="advancedQueryForm.manufacturerName2"
+          :placeholder="pi.queryPh('manufacturerName2', 'required')"
+          show-count
+          :maxlength="140"
           allow-clear
         />
       </a-form-item>
@@ -212,8 +227,28 @@
       <a-form-item :label="pi.queryLabel('registrationCountry')">
         <TaktSelect
           v-model:value="advancedQueryForm.registrationCountry"
-          api-url="TaktIsoCodes/options"
+          dict-type="sys_country_code"
           :placeholder="pi.queryPh('registrationCountry', 'select')"
+          allow-clear
+        />
+      </a-form-item>
+      </div>
+      <div v-show="isFieldVisible('registrationProvince')">
+      <a-form-item :label="pi.queryLabel('registrationProvince')">
+        <TaktSelect
+          v-model:value="advancedQueryForm.registrationProvince"
+          api-url="TaktAdminDivisions/options"
+          :placeholder="pi.queryPh('registrationProvince', 'select')"
+          allow-clear
+        />
+      </a-form-item>
+      </div>
+      <div v-show="isFieldVisible('registrationCity')">
+      <a-form-item :label="pi.queryLabel('registrationCity')">
+        <TaktSelect
+          v-model:value="advancedQueryForm.registrationCity"
+          api-url="TaktAdminDivisions/options"
+          :placeholder="pi.queryPh('registrationCity', 'select')"
           allow-clear
         />
       </a-form-item>
@@ -233,16 +268,6 @@
         <a-textarea
           v-model:value="advancedQueryForm.registrationAddress2"
           :placeholder="pi.queryPh('registrationAddress2', 'optional')"
-          :rows="2"
-          allow-clear
-        />
-      </a-form-item>
-      </div>
-      <div v-show="isFieldVisible('registrationAddress3')">
-      <a-form-item :label="pi.queryLabel('registrationAddress3')">
-        <a-textarea
-          v-model:value="advancedQueryForm.registrationAddress3"
-          :placeholder="pi.queryPh('registrationAddress3', 'optional')"
           :rows="2"
           allow-clear
         />
@@ -707,13 +732,22 @@ const columns = computed<TableColumnsType>(() => [
     customRender: ({ record }: { record: any }) => getManufacturerField(record, 'manufacturerCode') ?? ''
   },
   {
-    title: pi.label('manufacturerName'),
-    dataIndex: 'manufacturerName',
-    key: 'manufacturerName',
+    title: pi.label('manufacturerName1'),
+    dataIndex: 'manufacturerName1',
+    key: 'manufacturerName1',
     width: 120,
     resizable: true,
     ellipsis: true,
-    customRender: ({ record }: { record: any }) => getManufacturerField(record, 'manufacturerName') ?? ''
+    customRender: ({ record }: { record: any }) => getManufacturerField(record, 'manufacturerName1') ?? ''
+  },
+  {
+    title: pi.label('manufacturerName2'),
+    dataIndex: 'manufacturerName2',
+    key: 'manufacturerName2',
+    width: 120,
+    resizable: true,
+    ellipsis: true,
+    customRender: ({ record }: { record: any }) => getManufacturerField(record, 'manufacturerName2') ?? ''
   },
   {
     title: pi.label('manufacturerShortName'),
@@ -756,7 +790,24 @@ const columns = computed<TableColumnsType>(() => [
     width: 120,
     resizable: true,
     ellipsis: true,
-    customRender: ({ record }: { record: any }) => getManufacturerField(record, 'registrationCountry') ?? ''
+  },
+  {
+    title: pi.label('registrationProvince'),
+    dataIndex: 'registrationProvince',
+    key: 'registrationProvince',
+    width: 120,
+    resizable: true,
+    ellipsis: true,
+    customRender: ({ record }: { record: any }) => getManufacturerField(record, 'registrationProvince') ?? ''
+  },
+  {
+    title: pi.label('registrationCity'),
+    dataIndex: 'registrationCity',
+    key: 'registrationCity',
+    width: 120,
+    resizable: true,
+    ellipsis: true,
+    customRender: ({ record }: { record: any }) => getManufacturerField(record, 'registrationCity') ?? ''
   },
   {
     title: pi.label('registrationAddress1'),
@@ -775,15 +826,6 @@ const columns = computed<TableColumnsType>(() => [
     resizable: true,
     ellipsis: true,
     customRender: ({ record }: { record: any }) => getManufacturerField(record, 'registrationAddress2') ?? ''
-  },
-  {
-    title: pi.label('registrationAddress3'),
-    dataIndex: 'registrationAddress3',
-    key: 'registrationAddress3',
-    width: 120,
-    resizable: true,
-    ellipsis: true,
-    customRender: ({ record }: { record: any }) => getManufacturerField(record, 'registrationAddress3') ?? ''
   },
   {
     title: pi.label('manufacturerPhone'),
@@ -888,7 +930,7 @@ const columns = computed<TableColumnsType>(() => [
         label: t('common.page.button.edit'),
         shape: 'plain',
         icon: RiEditLine,
-        permission: 'logistics:materials:manufacturer:material:update',
+        permission: 'logistics:materials:manufacturer:update',
         onClick: (record: ManufacturerRowRecord) => handleEdit(record)
       },
       {
@@ -896,7 +938,7 @@ const columns = computed<TableColumnsType>(() => [
         label: t('common.page.button.delete'),
         shape: 'plain',
         icon: RiDeleteBinLine,
-        permission: 'logistics:materials:manufacturer:material:delete',
+        permission: 'logistics:materials:manufacturer:delete',
         onClick: (record: ManufacturerRowRecord) => handleDeleteOne(record)
       }
     ]
@@ -997,15 +1039,17 @@ function handleReset() {
   queryKeyword.value = ''
   advancedQueryForm.value = {
   manufacturerCode: '',
-  manufacturerName: '',
+  manufacturerName1: '',
+  manufacturerName2: '',
   manufacturerShortName: '',
   manufacturerType: undefined as number | undefined,
   industrySector: '',
   manufacturerTaxNumber: '',
   registrationCountry: '',
+  registrationProvince: '',
+  registrationCity: '',
   registrationAddress1: '',
   registrationAddress2: '',
-  registrationAddress3: '',
   manufacturerPhone: '',
   manufacturerFax: '',
   manufacturerEmail: '',
@@ -1240,15 +1284,17 @@ function handleAdvancedQuerySubmit() {
 function handleAdvancedQueryReset() {
   advancedQueryForm.value = {
   manufacturerCode: '',
-  manufacturerName: '',
+  manufacturerName1: '',
+  manufacturerName2: '',
   manufacturerShortName: '',
   manufacturerType: undefined as number | undefined,
   industrySector: '',
   manufacturerTaxNumber: '',
   registrationCountry: '',
+  registrationProvince: '',
+  registrationCity: '',
   registrationAddress1: '',
   registrationAddress2: '',
-  registrationAddress3: '',
   manufacturerPhone: '',
   manufacturerFax: '',
   manufacturerEmail: '',

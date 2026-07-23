@@ -47,7 +47,7 @@ public class TaktTicketService : TaktServiceBase, ITaktTicketService
     /// <param name="categoryAssignRepository">工单分类默认处理人仓储</param>
     /// <param name="assetRepository">财务资产仓储</param>
     /// <param name="itAssetRepository">IT 设备保修扩展仓储</param>
-    /// <param name="numberingGenerator">业务编号生成器</param>
+    /// <param name="numberingGenerator">业务编码生成器</param>
     /// <param name="uniqueValidator">唯一性验证器</param>
     /// <param name="userContext">用户上下文</param>
     /// <param name="localizationService">本地化服务</param>
@@ -793,9 +793,9 @@ public class TaktTicketService : TaktServiceBase, ITaktTicketService
     }
 
     /// <summary>
-    /// 生成工单编号
+    /// 生成工单编码
     /// </summary>
-    /// <returns>工单编号</returns>
+    /// <returns>工单编码</returns>
     private async Task<string> GenerateTicketNoAsync()
     {
         EnsureThreeLayerContext();
@@ -811,24 +811,24 @@ public class TaktTicketService : TaktServiceBase, ITaktTicketService
         }
         catch (Exception ex)
         {
-            LogWarning($"编号规则 {TaktTicketWorkflowHelper.TicketNumberRuleCode} 不可用: {ex.Message}");
+            LogWarning($"编码规则 {TaktTicketWorkflowHelper.TicketNumberRuleCode} 不可用: {ex.Message}");
             return BuildFallbackTicketNo();
         }
     }
 
     /// <summary>
-    /// 编号规则不可用时的兜底工单号
+    /// 编码规则不可用时的兜底工单号
     /// </summary>
-    /// <returns>兜底工单编号</returns>
+    /// <returns>兜底工单编码</returns>
     private static string BuildFallbackTicketNo()
     {
         return $"TK{DateTime.Now:yyyyMMddHHmmss}{Random.Shared.Next(1000, 9999)}";
     }
 
     /// <summary>
-    /// 校验工单编号唯一
+    /// 校验工单编码唯一
     /// </summary>
-    /// <param name="ticketNo">工单编号</param>
+    /// <param name="ticketNo">工单编码</param>
     /// <param name="excludeId">排除的工单ID</param>
     /// <returns>任务</returns>
     private async Task EnsureTicketNoUniqueAsync(string ticketNo, long? excludeId = null)

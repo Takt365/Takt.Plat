@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：frontend/src/types/accounting/financial
 // 文件名称：company.d.ts
-// 创建时间：2026-07-06
+// 创建时间：2026-07-23
 // 创建人：Takt365(Auto Generated)
 // 功能描述：accounting/financial 模块类型定义（自动生成；类型名去 Takt 前缀与末尾 Dto，如 TaktCompanyDto → Company）
 // 
@@ -29,9 +29,14 @@ export interface Company extends TenantDtoBase {
   companyId: string;
 
   /**
-   * 公司名称
+   * 公司名称1
    */
-  companyName: string;
+  companyName1: string;
+
+  /**
+   * 公司名称2
+   */
+  companyName2?: string;
 
   /**
    * 公司简称
@@ -69,37 +74,32 @@ export interface Company extends TenantDtoBase {
   registrationAddress2?: string;
 
   /**
-   * 注册地址3
-   */
-  registrationAddress3?: string;
-
-  /**
-   * 注册国家
+   * 注册国家（字典 sys_country_code；DictValue=ISO alpha-2）
    */
   registrationRegion: string;
 
   /**
-   * 注册省
+   * 注册省（选项 TaktAdminDivisions/options；DictValue=DivisionCode；建议 Level=2）
    */
   registrationProvince: string;
 
   /**
-   * 注册市
+   * 注册市（选项 TaktAdminDivisions/options；DictValue=DivisionCode；建议 Level=3）
    */
   registrationCity: string;
 
   /**
-   * 经营国家
+   * 经营国家（字典 sys_country_code；DictValue=ISO alpha-2）
    */
   businessRegion: string;
 
   /**
-   * 经营地区-省
+   * 经营地区-省（选项 TaktAdminDivisions/options；DictValue=DivisionCode；建议 Level=2）
    */
   businessProvince: string;
 
   /**
-   * 经营地区-市
+   * 经营地区-市（选项 TaktAdminDivisions/options；DictValue=DivisionCode；建议 Level=3）
    */
   businessCity: string;
 
@@ -112,11 +112,6 @@ export interface Company extends TenantDtoBase {
    * 经营地址2
    */
   businessAddress2?: string;
-
-  /**
-   * 经营地址3
-   */
-  businessAddress3?: string;
 
   /**
    * 公司电话
@@ -179,7 +174,7 @@ export interface Company extends TenantDtoBase {
   companyExistence: number;
 
   /**
-   * 区域文化编码（字典 sys_culture_code）
+   * 区域文化编码（字典 sys_culture_code；即语言/区域文化）
    */
   defaultCulture: string;
 
@@ -189,7 +184,67 @@ export interface Company extends TenantDtoBase {
   codeAlias: string;
 
   /**
-   * 关联工厂（关联 TaktPlant.PlantCode，选项 TaktPlants/options）
+   * 银行代码（选项 TaktBanks/options；DictValue=BankCode）
+   */
+  bankCode: string;
+
+  /**
+   * 银行帐号
+   */
+  bankAccount: string;
+
+  /**
+   * 帐户持有人
+   */
+  accountHolder: string;
+
+  /**
+   * 币种（字典 accounting_currency_code；ISO 4217，如 CNY/USD）
+   */
+  currencyCode: string;
+
+  /**
+   * 帐目表（字典 accounting_chart_of_accounts；如 INT/TEAC）
+   */
+  chartOfAccounts: string;
+
+  /**
+   * 进项税码（字典 accounting_tax_code）
+   */
+  inputTaxCode: string;
+
+  /**
+   * 销项税码（字典 accounting_tax_code）
+   */
+  outputTaxCode: string;
+
+  /**
+   * 营业税主体（营业场所）
+   */
+  businessPlace: string;
+
+  /**
+   * 记帐期间变式（字典 accounting_posting_period_variant；原则上一个公司对应一个变式）
+   */
+  postingPeriodVariant: string;
+
+  /**
+   * 会计年度变式（字典 accounting_fiscal_year_variant；如 K4/Z1/Z2）
+   */
+  fiscalYearVariant: string;
+
+  /**
+   * 贷方控制范围（选项 TaktCompanies/options；DictValue=CompanyCode）
+   */
+  creditControlArea: string;
+
+  /**
+   * 财务管理范围（选项 TaktCompanies/options；DictValue=CompanyCode）
+   */
+  financialManagementArea: string;
+
+  /**
+   * 关联工厂（选项 TaktPlants/options；DictValue=Id）
    */
   relatedPlant: string;
 
@@ -229,9 +284,14 @@ export interface CompanyQuery extends TaktPagedQuery {
   tenantCode?: string;
 
   /**
-   * 公司名称
+   * 公司名称1
    */
-  companyName?: string;
+  companyName1?: string;
+
+  /**
+   * 公司名称2
+   */
+  companyName2?: string;
 
   /**
    * 公司简称
@@ -269,37 +329,32 @@ export interface CompanyQuery extends TaktPagedQuery {
   registrationAddress2?: string;
 
   /**
-   * 注册地址3
-   */
-  registrationAddress3?: string;
-
-  /**
-   * 注册国家
+   * 注册国家（字典 sys_country_code；DictValue=ISO alpha-2）
    */
   registrationRegion?: string;
 
   /**
-   * 注册省
+   * 注册省（选项 TaktAdminDivisions/options；DictValue=DivisionCode；建议 Level=2）
    */
   registrationProvince?: string;
 
   /**
-   * 注册市
+   * 注册市（选项 TaktAdminDivisions/options；DictValue=DivisionCode；建议 Level=3）
    */
   registrationCity?: string;
 
   /**
-   * 经营国家
+   * 经营国家（字典 sys_country_code；DictValue=ISO alpha-2）
    */
   businessRegion?: string;
 
   /**
-   * 经营地区-省
+   * 经营地区-省（选项 TaktAdminDivisions/options；DictValue=DivisionCode；建议 Level=2）
    */
   businessProvince?: string;
 
   /**
-   * 经营地区-市
+   * 经营地区-市（选项 TaktAdminDivisions/options；DictValue=DivisionCode；建议 Level=3）
    */
   businessCity?: string;
 
@@ -312,11 +367,6 @@ export interface CompanyQuery extends TaktPagedQuery {
    * 经营地址2
    */
   businessAddress2?: string;
-
-  /**
-   * 经营地址3
-   */
-  businessAddress3?: string;
 
   /**
    * 公司电话
@@ -389,7 +439,7 @@ export interface CompanyQuery extends TaktPagedQuery {
   companyExistence?: number;
 
   /**
-   * 区域文化编码（字典 sys_culture_code）
+   * 区域文化编码（字典 sys_culture_code；即语言/区域文化）
    */
   defaultCulture?: string;
 
@@ -399,7 +449,67 @@ export interface CompanyQuery extends TaktPagedQuery {
   codeAlias?: string;
 
   /**
-   * 关联工厂（关联 TaktPlant.PlantCode，选项 TaktPlants/options）
+   * 银行代码（选项 TaktBanks/options；DictValue=BankCode）
+   */
+  bankCode?: string;
+
+  /**
+   * 银行帐号
+   */
+  bankAccount?: string;
+
+  /**
+   * 帐户持有人
+   */
+  accountHolder?: string;
+
+  /**
+   * 币种（字典 accounting_currency_code；ISO 4217，如 CNY/USD）
+   */
+  currencyCode?: string;
+
+  /**
+   * 帐目表（字典 accounting_chart_of_accounts；如 INT/TEAC）
+   */
+  chartOfAccounts?: string;
+
+  /**
+   * 进项税码（字典 accounting_tax_code）
+   */
+  inputTaxCode?: string;
+
+  /**
+   * 销项税码（字典 accounting_tax_code）
+   */
+  outputTaxCode?: string;
+
+  /**
+   * 营业税主体（营业场所）
+   */
+  businessPlace?: string;
+
+  /**
+   * 记帐期间变式（字典 accounting_posting_period_variant；原则上一个公司对应一个变式）
+   */
+  postingPeriodVariant?: string;
+
+  /**
+   * 会计年度变式（字典 accounting_fiscal_year_variant；如 K4/Z1/Z2）
+   */
+  fiscalYearVariant?: string;
+
+  /**
+   * 贷方控制范围（选项 TaktCompanies/options；DictValue=CompanyCode）
+   */
+  creditControlArea?: string;
+
+  /**
+   * 财务管理范围（选项 TaktCompanies/options；DictValue=CompanyCode）
+   */
+  financialManagementArea?: string;
+
+  /**
+   * 关联工厂（选项 TaktPlants/options；DictValue=Id）
    */
   relatedPlant?: string;
 
@@ -448,9 +558,14 @@ export interface CompanyCreate {
   tenantCode: string;
 
   /**
-   * 公司名称
+   * 公司名称1
    */
-  companyName: string;
+  companyName1: string;
+
+  /**
+   * 公司名称2
+   */
+  companyName2?: string;
 
   /**
    * 公司简称
@@ -488,37 +603,32 @@ export interface CompanyCreate {
   registrationAddress2?: string;
 
   /**
-   * 注册地址3
-   */
-  registrationAddress3?: string;
-
-  /**
-   * 注册国家
+   * 注册国家（字典 sys_country_code；DictValue=ISO alpha-2）
    */
   registrationRegion: string;
 
   /**
-   * 注册省
+   * 注册省（选项 TaktAdminDivisions/options；DictValue=DivisionCode；建议 Level=2）
    */
   registrationProvince: string;
 
   /**
-   * 注册市
+   * 注册市（选项 TaktAdminDivisions/options；DictValue=DivisionCode；建议 Level=3）
    */
   registrationCity: string;
 
   /**
-   * 经营国家
+   * 经营国家（字典 sys_country_code；DictValue=ISO alpha-2）
    */
   businessRegion: string;
 
   /**
-   * 经营地区-省
+   * 经营地区-省（选项 TaktAdminDivisions/options；DictValue=DivisionCode；建议 Level=2）
    */
   businessProvince: string;
 
   /**
-   * 经营地区-市
+   * 经营地区-市（选项 TaktAdminDivisions/options；DictValue=DivisionCode；建议 Level=3）
    */
   businessCity: string;
 
@@ -531,11 +641,6 @@ export interface CompanyCreate {
    * 经营地址2
    */
   businessAddress2?: string;
-
-  /**
-   * 经营地址3
-   */
-  businessAddress3?: string;
 
   /**
    * 公司电话
@@ -598,7 +703,7 @@ export interface CompanyCreate {
   companyExistence: number;
 
   /**
-   * 区域文化编码（字典 sys_culture_code）
+   * 区域文化编码（字典 sys_culture_code；即语言/区域文化）
    */
   defaultCulture: string;
 
@@ -608,7 +713,67 @@ export interface CompanyCreate {
   codeAlias: string;
 
   /**
-   * 关联工厂（关联 TaktPlant.PlantCode，选项 TaktPlants/options）
+   * 银行代码（选项 TaktBanks/options；DictValue=BankCode）
+   */
+  bankCode: string;
+
+  /**
+   * 银行帐号
+   */
+  bankAccount: string;
+
+  /**
+   * 帐户持有人
+   */
+  accountHolder: string;
+
+  /**
+   * 币种（字典 accounting_currency_code；ISO 4217，如 CNY/USD）
+   */
+  currencyCode: string;
+
+  /**
+   * 帐目表（字典 accounting_chart_of_accounts；如 INT/TEAC）
+   */
+  chartOfAccounts: string;
+
+  /**
+   * 进项税码（字典 accounting_tax_code）
+   */
+  inputTaxCode: string;
+
+  /**
+   * 销项税码（字典 accounting_tax_code）
+   */
+  outputTaxCode: string;
+
+  /**
+   * 营业税主体（营业场所）
+   */
+  businessPlace: string;
+
+  /**
+   * 记帐期间变式（字典 accounting_posting_period_variant；原则上一个公司对应一个变式）
+   */
+  postingPeriodVariant: string;
+
+  /**
+   * 会计年度变式（字典 accounting_fiscal_year_variant；如 K4/Z1/Z2）
+   */
+  fiscalYearVariant: string;
+
+  /**
+   * 贷方控制范围（选项 TaktCompanies/options；DictValue=CompanyCode）
+   */
+  creditControlArea: string;
+
+  /**
+   * 财务管理范围（选项 TaktCompanies/options；DictValue=CompanyCode）
+   */
+  financialManagementArea: string;
+
+  /**
+   * 关联工厂（选项 TaktPlants/options；DictValue=Id）
    */
   relatedPlant: string;
 
@@ -705,9 +870,14 @@ export interface CompanyTemplate {
   tenantCode?: string;
 
   /**
-   * 公司名称
+   * 公司名称1
    */
-  companyName?: string;
+  companyName1?: string;
+
+  /**
+   * 公司名称2
+   */
+  companyName2?: string;
 
   /**
    * 公司简称
@@ -745,37 +915,32 @@ export interface CompanyTemplate {
   registrationAddress2?: string;
 
   /**
-   * 注册地址3
-   */
-  registrationAddress3?: string;
-
-  /**
-   * 注册国家
+   * 注册国家（字典 sys_country_code；DictValue=ISO alpha-2）
    */
   registrationRegion?: string;
 
   /**
-   * 注册省
+   * 注册省（选项 TaktAdminDivisions/options；DictValue=DivisionCode；建议 Level=2）
    */
   registrationProvince?: string;
 
   /**
-   * 注册市
+   * 注册市（选项 TaktAdminDivisions/options；DictValue=DivisionCode；建议 Level=3）
    */
   registrationCity?: string;
 
   /**
-   * 经营国家
+   * 经营国家（字典 sys_country_code；DictValue=ISO alpha-2）
    */
   businessRegion?: string;
 
   /**
-   * 经营地区-省
+   * 经营地区-省（选项 TaktAdminDivisions/options；DictValue=DivisionCode；建议 Level=2）
    */
   businessProvince?: string;
 
   /**
-   * 经营地区-市
+   * 经营地区-市（选项 TaktAdminDivisions/options；DictValue=DivisionCode；建议 Level=3）
    */
   businessCity?: string;
 
@@ -788,11 +953,6 @@ export interface CompanyTemplate {
    * 经营地址2
    */
   businessAddress2?: string;
-
-  /**
-   * 经营地址3
-   */
-  businessAddress3?: string;
 
   /**
    * 公司电话
@@ -855,7 +1015,7 @@ export interface CompanyTemplate {
   companyExistence?: number;
 
   /**
-   * 区域文化编码（字典 sys_culture_code）
+   * 区域文化编码（字典 sys_culture_code；即语言/区域文化）
    */
   defaultCulture?: string;
 
@@ -865,7 +1025,67 @@ export interface CompanyTemplate {
   codeAlias?: string;
 
   /**
-   * 关联工厂（关联 TaktPlant.PlantCode，选项 TaktPlants/options）
+   * 银行代码（选项 TaktBanks/options；DictValue=BankCode）
+   */
+  bankCode?: string;
+
+  /**
+   * 银行帐号
+   */
+  bankAccount?: string;
+
+  /**
+   * 帐户持有人
+   */
+  accountHolder?: string;
+
+  /**
+   * 币种（字典 accounting_currency_code；ISO 4217，如 CNY/USD）
+   */
+  currencyCode?: string;
+
+  /**
+   * 帐目表（字典 accounting_chart_of_accounts；如 INT/TEAC）
+   */
+  chartOfAccounts?: string;
+
+  /**
+   * 进项税码（字典 accounting_tax_code）
+   */
+  inputTaxCode?: string;
+
+  /**
+   * 销项税码（字典 accounting_tax_code）
+   */
+  outputTaxCode?: string;
+
+  /**
+   * 营业税主体（营业场所）
+   */
+  businessPlace?: string;
+
+  /**
+   * 记帐期间变式（字典 accounting_posting_period_variant；原则上一个公司对应一个变式）
+   */
+  postingPeriodVariant?: string;
+
+  /**
+   * 会计年度变式（字典 accounting_fiscal_year_variant；如 K4/Z1/Z2）
+   */
+  fiscalYearVariant?: string;
+
+  /**
+   * 贷方控制范围（选项 TaktCompanies/options；DictValue=CompanyCode）
+   */
+  creditControlArea?: string;
+
+  /**
+   * 财务管理范围（选项 TaktCompanies/options；DictValue=CompanyCode）
+   */
+  financialManagementArea?: string;
+
+  /**
+   * 关联工厂（选项 TaktPlants/options；DictValue=Id）
    */
   relatedPlant?: string;
 
@@ -909,9 +1129,14 @@ export interface CompanyImport {
   tenantCode?: string;
 
   /**
-   * 公司名称
+   * 公司名称1
    */
-  companyName?: string;
+  companyName1?: string;
+
+  /**
+   * 公司名称2
+   */
+  companyName2?: string;
 
   /**
    * 公司简称
@@ -949,37 +1174,32 @@ export interface CompanyImport {
   registrationAddress2?: string;
 
   /**
-   * 注册地址3
-   */
-  registrationAddress3?: string;
-
-  /**
-   * 注册国家
+   * 注册国家（字典 sys_country_code；DictValue=ISO alpha-2）
    */
   registrationRegion?: string;
 
   /**
-   * 注册省
+   * 注册省（选项 TaktAdminDivisions/options；DictValue=DivisionCode；建议 Level=2）
    */
   registrationProvince?: string;
 
   /**
-   * 注册市
+   * 注册市（选项 TaktAdminDivisions/options；DictValue=DivisionCode；建议 Level=3）
    */
   registrationCity?: string;
 
   /**
-   * 经营国家
+   * 经营国家（字典 sys_country_code；DictValue=ISO alpha-2）
    */
   businessRegion?: string;
 
   /**
-   * 经营地区-省
+   * 经营地区-省（选项 TaktAdminDivisions/options；DictValue=DivisionCode；建议 Level=2）
    */
   businessProvince?: string;
 
   /**
-   * 经营地区-市
+   * 经营地区-市（选项 TaktAdminDivisions/options；DictValue=DivisionCode；建议 Level=3）
    */
   businessCity?: string;
 
@@ -992,11 +1212,6 @@ export interface CompanyImport {
    * 经营地址2
    */
   businessAddress2?: string;
-
-  /**
-   * 经营地址3
-   */
-  businessAddress3?: string;
 
   /**
    * 公司电话
@@ -1059,7 +1274,7 @@ export interface CompanyImport {
   companyExistence?: number;
 
   /**
-   * 区域文化编码（字典 sys_culture_code）
+   * 区域文化编码（字典 sys_culture_code；即语言/区域文化）
    */
   defaultCulture?: string;
 
@@ -1069,7 +1284,67 @@ export interface CompanyImport {
   codeAlias?: string;
 
   /**
-   * 关联工厂（关联 TaktPlant.PlantCode，选项 TaktPlants/options）
+   * 银行代码（选项 TaktBanks/options；DictValue=BankCode）
+   */
+  bankCode?: string;
+
+  /**
+   * 银行帐号
+   */
+  bankAccount?: string;
+
+  /**
+   * 帐户持有人
+   */
+  accountHolder?: string;
+
+  /**
+   * 币种（字典 accounting_currency_code；ISO 4217，如 CNY/USD）
+   */
+  currencyCode?: string;
+
+  /**
+   * 帐目表（字典 accounting_chart_of_accounts；如 INT/TEAC）
+   */
+  chartOfAccounts?: string;
+
+  /**
+   * 进项税码（字典 accounting_tax_code）
+   */
+  inputTaxCode?: string;
+
+  /**
+   * 销项税码（字典 accounting_tax_code）
+   */
+  outputTaxCode?: string;
+
+  /**
+   * 营业税主体（营业场所）
+   */
+  businessPlace?: string;
+
+  /**
+   * 记帐期间变式（字典 accounting_posting_period_variant；原则上一个公司对应一个变式）
+   */
+  postingPeriodVariant?: string;
+
+  /**
+   * 会计年度变式（字典 accounting_fiscal_year_variant；如 K4/Z1/Z2）
+   */
+  fiscalYearVariant?: string;
+
+  /**
+   * 贷方控制范围（选项 TaktCompanies/options；DictValue=CompanyCode）
+   */
+  creditControlArea?: string;
+
+  /**
+   * 财务管理范围（选项 TaktCompanies/options；DictValue=CompanyCode）
+   */
+  financialManagementArea?: string;
+
+  /**
+   * 关联工厂（选项 TaktPlants/options；DictValue=Id）
    */
   relatedPlant?: string;
 
@@ -1113,9 +1388,14 @@ export interface CompanyExport {
   companyId: string;
 
   /**
-   * 公司名称
+   * 公司名称1
    */
-  companyName: string;
+  companyName1: string;
+
+  /**
+   * 公司名称2
+   */
+  companyName2?: string;
 
   /**
    * 公司简称
@@ -1153,37 +1433,32 @@ export interface CompanyExport {
   registrationAddress2?: string;
 
   /**
-   * 注册地址3
-   */
-  registrationAddress3?: string;
-
-  /**
-   * 注册国家
+   * 注册国家（字典 sys_country_code；DictValue=ISO alpha-2）
    */
   registrationRegion: string;
 
   /**
-   * 注册省
+   * 注册省（选项 TaktAdminDivisions/options；DictValue=DivisionCode；建议 Level=2）
    */
   registrationProvince: string;
 
   /**
-   * 注册市
+   * 注册市（选项 TaktAdminDivisions/options；DictValue=DivisionCode；建议 Level=3）
    */
   registrationCity: string;
 
   /**
-   * 经营国家
+   * 经营国家（字典 sys_country_code；DictValue=ISO alpha-2）
    */
   businessRegion: string;
 
   /**
-   * 经营地区-省
+   * 经营地区-省（选项 TaktAdminDivisions/options；DictValue=DivisionCode；建议 Level=2）
    */
   businessProvince: string;
 
   /**
-   * 经营地区-市
+   * 经营地区-市（选项 TaktAdminDivisions/options；DictValue=DivisionCode；建议 Level=3）
    */
   businessCity: string;
 
@@ -1196,11 +1471,6 @@ export interface CompanyExport {
    * 经营地址2
    */
   businessAddress2?: string;
-
-  /**
-   * 经营地址3
-   */
-  businessAddress3?: string;
 
   /**
    * 公司电话
@@ -1263,7 +1533,7 @@ export interface CompanyExport {
   companyExistence: number;
 
   /**
-   * 区域文化编码（字典 sys_culture_code）
+   * 区域文化编码（字典 sys_culture_code；即语言/区域文化）
    */
   defaultCulture: string;
 
@@ -1273,7 +1543,67 @@ export interface CompanyExport {
   codeAlias: string;
 
   /**
-   * 关联工厂（关联 TaktPlant.PlantCode，选项 TaktPlants/options）
+   * 银行代码（选项 TaktBanks/options；DictValue=BankCode）
+   */
+  bankCode: string;
+
+  /**
+   * 银行帐号
+   */
+  bankAccount: string;
+
+  /**
+   * 帐户持有人
+   */
+  accountHolder: string;
+
+  /**
+   * 币种（字典 accounting_currency_code；ISO 4217，如 CNY/USD）
+   */
+  currencyCode: string;
+
+  /**
+   * 帐目表（字典 accounting_chart_of_accounts；如 INT/TEAC）
+   */
+  chartOfAccounts: string;
+
+  /**
+   * 进项税码（字典 accounting_tax_code）
+   */
+  inputTaxCode: string;
+
+  /**
+   * 销项税码（字典 accounting_tax_code）
+   */
+  outputTaxCode: string;
+
+  /**
+   * 营业税主体（营业场所）
+   */
+  businessPlace: string;
+
+  /**
+   * 记帐期间变式（字典 accounting_posting_period_variant；原则上一个公司对应一个变式）
+   */
+  postingPeriodVariant: string;
+
+  /**
+   * 会计年度变式（字典 accounting_fiscal_year_variant；如 K4/Z1/Z2）
+   */
+  fiscalYearVariant: string;
+
+  /**
+   * 贷方控制范围（选项 TaktCompanies/options；DictValue=CompanyCode）
+   */
+  creditControlArea: string;
+
+  /**
+   * 财务管理范围（选项 TaktCompanies/options；DictValue=CompanyCode）
+   */
+  financialManagementArea: string;
+
+  /**
+   * 关联工厂（选项 TaktPlants/options；DictValue=Id）
    */
   relatedPlant: string;
 

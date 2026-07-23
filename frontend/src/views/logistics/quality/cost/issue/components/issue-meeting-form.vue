@@ -21,104 +21,200 @@
     >
       <a-tab-pane
         key="tab-0"
-        :tab="t('common.page.form.tabs.basicinfo')"
+        :tab="t('common.page.form.tabs.basicinfo') + ' (1/2)'"
         force-render
       >
         <div :class="formContentClass">
           <a-row :gutter="24">
             <a-col :span="12">
               <a-form-item
-                :label="t('entity.qualityissuemeeting.linenumber')"
+                :label="pi.label('lineNumber')"
                 name="lineNumber"
               >
                 <a-input-number
                   v-model:value="formState.lineNumber"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.qualityissuemeeting.linenumber') })"
+                  :placeholder="pi.ph('lineNumber')"
                   style="width: 100%"
                 />
               </a-form-item>
             </a-col>
             <a-col :span="12">
               <a-form-item
-                :label="t('entity.qualityissuemeeting.directmanpowercostperminute')"
+                :label="pi.label('directManpowerCostPerMinute')"
                 name="directManpowerCostPerMinute"
               >
                 <a-input-number
                   v-model:value="formState.directManpowerCostPerMinute"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.qualityissuemeeting.directmanpowercostperminute') })"
+                  :placeholder="pi.ph('directManpowerCostPerMinute')"
                   style="width: 100%"
                 />
               </a-form-item>
             </a-col>
             <a-col :span="12">
               <a-form-item
-                :label="t('entity.qualityissuemeeting.indirectmanpowercostperminute')"
+                :label="pi.label('indirectManpowerCostPerMinute')"
                 name="indirectManpowerCostPerMinute"
               >
                 <a-input-number
                   v-model:value="formState.indirectManpowerCostPerMinute"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.qualityissuemeeting.indirectmanpowercostperminute') })"
+                  :placeholder="pi.ph('indirectManpowerCostPerMinute')"
                   style="width: 100%"
                 />
               </a-form-item>
             </a-col>
             <a-col :span="24">
               <a-form-item
-                :label="t('entity.qualityissuemeeting.meetinginvestigationcontent')"
+                :label="pi.label('meetingInvestigationContent')"
                 name="meetingInvestigationContent"
               >
                 <a-textarea
                   v-model:value="formState.meetingInvestigationContent"
-                  :placeholder="t('common.page.form.placeholder.optional', { field: t('entity.qualityissuemeeting.meetinginvestigationcontent') })"
+                  :placeholder="pi.ph('meetingInvestigationContent')"
                   :rows="2"
                 />
               </a-form-item>
             </a-col>
             <a-col :span="12">
               <a-form-item
-                :label="t('entity.qualityissuemeeting.meetinginvestigationcost')"
+                :label="pi.label('meetingInvestigationCost')"
                 name="meetingInvestigationCost"
               >
                 <a-input-number
                   v-model:value="formState.meetingInvestigationCost"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.qualityissuemeeting.meetinginvestigationcost') })"
+                  :placeholder="pi.ph('meetingInvestigationCost')"
                   style="width: 100%"
                 />
               </a-form-item>
             </a-col>
             <a-col :span="12">
               <a-form-item
-                :label="t('entity.qualityissuemeeting.meetingtimeminutes')"
+                :label="pi.label('meetingTimeMinutes')"
                 name="meetingTimeMinutes"
               >
                 <a-input-number
                   v-model:value="formState.meetingTimeMinutes"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.qualityissuemeeting.meetingtimeminutes') })"
+                  :placeholder="pi.ph('meetingTimeMinutes')"
                   style="width: 100%"
                 />
               </a-form-item>
             </a-col>
             <a-col :span="12">
               <a-form-item
-                :label="t('entity.qualityissuemeeting.directparticipantcount')"
+                :label="pi.label('directParticipantCount')"
                 name="directParticipantCount"
               >
                 <a-input-number
                   v-model:value="formState.directParticipantCount"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.qualityissuemeeting.directparticipantcount') })"
+                  :placeholder="pi.ph('directParticipantCount')"
                   style="width: 100%"
                 />
               </a-form-item>
             </a-col>
             <a-col :span="12">
               <a-form-item
-                :label="t('entity.qualityissuemeeting.indirectparticipantcount')"
+                :label="pi.label('indirectParticipantCount')"
                 name="indirectParticipantCount"
               >
                 <a-input-number
                   v-model:value="formState.indirectParticipantCount"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.qualityissuemeeting.indirectparticipantcount') })"
+                  :placeholder="pi.ph('indirectParticipantCount')"
                   style="width: 100%"
+                />
+              </a-form-item>
+            </a-col>
+            <a-col :span="12">
+              <a-form-item
+                :label="pi.label('investigationWorkTimeMinutes')"
+                name="investigationWorkTimeMinutes"
+              >
+                <a-input-number
+                  v-model:value="formState.investigationWorkTimeMinutes"
+                  :placeholder="pi.ph('investigationWorkTimeMinutes')"
+                  style="width: 100%"
+                />
+              </a-form-item>
+            </a-col>
+            <a-col :span="12">
+              <a-form-item
+                :label="pi.label('travelCost')"
+                name="travelCost"
+              >
+                <a-input-number
+                  v-model:value="formState.travelCost"
+                  :placeholder="pi.ph('travelCost')"
+                  style="width: 100%"
+                />
+              </a-form-item>
+            </a-col>
+          </a-row>
+        </div>
+      </a-tab-pane>
+      <a-tab-pane
+        key="tab-1"
+        :tab="t('common.page.form.tabs.basicinfo') + ' (2/2)'"
+        force-render
+      >
+        <div :class="formContentClass">
+          <a-row :gutter="24">
+            <a-col :span="12">
+              <a-form-item
+                :label="pi.label('otherExpenses')"
+                name="otherExpenses"
+              >
+                <a-input-number
+                  v-model:value="formState.otherExpenses"
+                  :placeholder="pi.ph('otherExpenses')"
+                  style="width: 100%"
+                />
+              </a-form-item>
+            </a-col>
+            <a-col :span="12">
+              <a-form-item
+                :label="pi.label('otherWorkTimeMinutes')"
+                name="otherWorkTimeMinutes"
+              >
+                <a-input-number
+                  v-model:value="formState.otherWorkTimeMinutes"
+                  :placeholder="pi.ph('otherWorkTimeMinutes')"
+                  style="width: 100%"
+                />
+              </a-form-item>
+            </a-col>
+            <a-col :span="12">
+              <a-form-item
+                :label="pi.label('otherApparatusCost')"
+                name="otherApparatusCost"
+              >
+                <a-input-number
+                  v-model:value="formState.otherApparatusCost"
+                  :placeholder="pi.ph('otherApparatusCost')"
+                  style="width: 100%"
+                />
+              </a-form-item>
+            </a-col>
+            <a-col :span="12">
+              <a-form-item
+                :label="pi.label('meetingRecorder')"
+                name="meetingRecorder"
+              >
+                <a-input
+                  v-model:value="formState.meetingRecorder"
+                  :placeholder="pi.ph('meetingRecorder')"
+                  show-count
+                  :maxlength="20"
+                  allow-clear
+                />
+              </a-form-item>
+            </a-col>
+            <a-col :span="12">
+              <a-form-item
+                :label="pi.label('isObsolete')"
+                name="isObsolete"
+              >
+                <TaktSelect
+                  v-model:value="formState.isObsolete"
+                  dict-type="sys_yes_no_type"
+                  :placeholder="pi.ph('isObsolete')"
                 />
               </a-form-item>
             </a-col>
@@ -134,10 +230,17 @@
  * 品质问题应对主表子表 qualityIssueMeeting 维护表单 · 由 generate-vue-master-detail-from-api.cjs 生成
  * @module views/logistics/quality/cost/issue/components
  */
-import { reactive, watch, computed, ref } from 'vue'
+import { reactive, watch, computed, ref, onMounted } from 'vue'
 import { useI18n } from 'vue-i18n'
 import type { Rule } from 'ant-design-vue/es/form'
+import { useQualityIssueMeetingI18n } from '../composables/use-issue-meeting-i18n'
+
+/** 实体字段 i18n */
+const pi = useQualityIssueMeetingI18n()
+
 import type { QualityIssueMeetingCreate } from '@/types/logistics/quality/cost/issue-meeting'
+import TaktSelect from '@/components/business/takt-select/index.vue'
+import { useDictDataStore } from '@/stores/foundation/dict-data'
 
 /** i18n 翻译函数 */
 const { t } = useI18n()
@@ -146,7 +249,8 @@ const formContentClass = computed(() => (formFields.length > 10 ? 'takt-form-con
 /** 当前激活的 Tab key */
 const activeTab = ref('tab-0')
 /** CreateDto 字段名列表（与 formState 键对齐） */
-const formFields = ["lineNumber","directManpowerCostPerMinute","indirectManpowerCostPerMinute","meetingInvestigationContent","meetingInvestigationCost","meetingTimeMinutes","directParticipantCount","indirectParticipantCount"]
+const formFields = ["lineNumber","directManpowerCostPerMinute","indirectManpowerCostPerMinute","meetingInvestigationContent","meetingInvestigationCost","meetingTimeMinutes","directParticipantCount","indirectParticipantCount","investigationWorkTimeMinutes","travelCost","otherExpenses","otherWorkTimeMinutes","otherApparatusCost","meetingRecorder","isObsolete"]
+
 
 
 /** 父级传入的编辑 DTO；新增时为 undefined 或空对象 */
@@ -173,6 +277,13 @@ function applyFormDefaults(target: Record<string, unknown>) {
   void target
 }
 
+/** Pinia：字典缓存（TaktSelect dict-type 渲染前预热，避免选项空白） */
+const dictDataStore = useDictDataStore()
+
+/** 表单挂载时预加载全量字典 */
+onMounted(() => {
+  void dictDataStore.loadAllDictDataAsync()
+})
 
 /** 编辑态灌入 formData；新增态恢复默认值（须含 qualityIssueMeetingId 才视为编辑） */
 watch(
@@ -201,11 +312,11 @@ const rules = computed<Record<string, Rule[]>>(() => ({
   lineNumber: [{
     validator: async (_rule, value) => {
       if (value === undefined || value === null || value === '') {
-        return Promise.reject(t('common.page.form.placeholder.select', { field: t('entity.qualityissuemeeting.linenumber') }))
+        return Promise.reject(pi.ph('lineNumber'))
       }
       const num = typeof value === 'number' ? value : Number(value)
       if (!Number.isFinite(num)) {
-        return Promise.reject(t('common.page.form.placeholder.select', { field: t('entity.qualityissuemeeting.linenumber') }))
+        return Promise.reject(pi.ph('lineNumber'))
       }
       return Promise.resolve()
     },
@@ -214,11 +325,11 @@ const rules = computed<Record<string, Rule[]>>(() => ({
   directManpowerCostPerMinute: [{
     validator: async (_rule, value) => {
       if (value === undefined || value === null || value === '') {
-        return Promise.reject(t('common.page.form.placeholder.select', { field: t('entity.qualityissuemeeting.directmanpowercostperminute') }))
+        return Promise.reject(pi.ph('directManpowerCostPerMinute'))
       }
       const num = typeof value === 'number' ? value : Number(value)
       if (!Number.isFinite(num)) {
-        return Promise.reject(t('common.page.form.placeholder.select', { field: t('entity.qualityissuemeeting.directmanpowercostperminute') }))
+        return Promise.reject(pi.ph('directManpowerCostPerMinute'))
       }
       return Promise.resolve()
     },
@@ -227,11 +338,11 @@ const rules = computed<Record<string, Rule[]>>(() => ({
   indirectManpowerCostPerMinute: [{
     validator: async (_rule, value) => {
       if (value === undefined || value === null || value === '') {
-        return Promise.reject(t('common.page.form.placeholder.select', { field: t('entity.qualityissuemeeting.indirectmanpowercostperminute') }))
+        return Promise.reject(pi.ph('indirectManpowerCostPerMinute'))
       }
       const num = typeof value === 'number' ? value : Number(value)
       if (!Number.isFinite(num)) {
-        return Promise.reject(t('common.page.form.placeholder.select', { field: t('entity.qualityissuemeeting.indirectmanpowercostperminute') }))
+        return Promise.reject(pi.ph('indirectManpowerCostPerMinute'))
       }
       return Promise.resolve()
     },
@@ -240,11 +351,11 @@ const rules = computed<Record<string, Rule[]>>(() => ({
   meetingInvestigationCost: [{
     validator: async (_rule, value) => {
       if (value === undefined || value === null || value === '') {
-        return Promise.reject(t('common.page.form.placeholder.select', { field: t('entity.qualityissuemeeting.meetinginvestigationcost') }))
+        return Promise.reject(pi.ph('meetingInvestigationCost'))
       }
       const num = typeof value === 'number' ? value : Number(value)
       if (!Number.isFinite(num)) {
-        return Promise.reject(t('common.page.form.placeholder.select', { field: t('entity.qualityissuemeeting.meetinginvestigationcost') }))
+        return Promise.reject(pi.ph('meetingInvestigationCost'))
       }
       return Promise.resolve()
     },
@@ -253,11 +364,11 @@ const rules = computed<Record<string, Rule[]>>(() => ({
   meetingTimeMinutes: [{
     validator: async (_rule, value) => {
       if (value === undefined || value === null || value === '') {
-        return Promise.reject(t('common.page.form.placeholder.select', { field: t('entity.qualityissuemeeting.meetingtimeminutes') }))
+        return Promise.reject(pi.ph('meetingTimeMinutes'))
       }
       const num = typeof value === 'number' ? value : Number(value)
       if (!Number.isFinite(num)) {
-        return Promise.reject(t('common.page.form.placeholder.select', { field: t('entity.qualityissuemeeting.meetingtimeminutes') }))
+        return Promise.reject(pi.ph('meetingTimeMinutes'))
       }
       return Promise.resolve()
     },
@@ -266,11 +377,11 @@ const rules = computed<Record<string, Rule[]>>(() => ({
   directParticipantCount: [{
     validator: async (_rule, value) => {
       if (value === undefined || value === null || value === '') {
-        return Promise.reject(t('common.page.form.placeholder.select', { field: t('entity.qualityissuemeeting.directparticipantcount') }))
+        return Promise.reject(pi.ph('directParticipantCount'))
       }
       const num = typeof value === 'number' ? value : Number(value)
       if (!Number.isFinite(num)) {
-        return Promise.reject(t('common.page.form.placeholder.select', { field: t('entity.qualityissuemeeting.directparticipantcount') }))
+        return Promise.reject(pi.ph('directParticipantCount'))
       }
       return Promise.resolve()
     },
@@ -279,11 +390,89 @@ const rules = computed<Record<string, Rule[]>>(() => ({
   indirectParticipantCount: [{
     validator: async (_rule, value) => {
       if (value === undefined || value === null || value === '') {
-        return Promise.reject(t('common.page.form.placeholder.select', { field: t('entity.qualityissuemeeting.indirectparticipantcount') }))
+        return Promise.reject(pi.ph('indirectParticipantCount'))
       }
       const num = typeof value === 'number' ? value : Number(value)
       if (!Number.isFinite(num)) {
-        return Promise.reject(t('common.page.form.placeholder.select', { field: t('entity.qualityissuemeeting.indirectparticipantcount') }))
+        return Promise.reject(pi.ph('indirectParticipantCount'))
+      }
+      return Promise.resolve()
+    },
+    trigger: 'change'
+  }],
+  investigationWorkTimeMinutes: [{
+    validator: async (_rule, value) => {
+      if (value === undefined || value === null || value === '') {
+        return Promise.reject(pi.ph('investigationWorkTimeMinutes'))
+      }
+      const num = typeof value === 'number' ? value : Number(value)
+      if (!Number.isFinite(num)) {
+        return Promise.reject(pi.ph('investigationWorkTimeMinutes'))
+      }
+      return Promise.resolve()
+    },
+    trigger: 'change'
+  }],
+  travelCost: [{
+    validator: async (_rule, value) => {
+      if (value === undefined || value === null || value === '') {
+        return Promise.reject(pi.ph('travelCost'))
+      }
+      const num = typeof value === 'number' ? value : Number(value)
+      if (!Number.isFinite(num)) {
+        return Promise.reject(pi.ph('travelCost'))
+      }
+      return Promise.resolve()
+    },
+    trigger: 'change'
+  }],
+  otherExpenses: [{
+    validator: async (_rule, value) => {
+      if (value === undefined || value === null || value === '') {
+        return Promise.reject(pi.ph('otherExpenses'))
+      }
+      const num = typeof value === 'number' ? value : Number(value)
+      if (!Number.isFinite(num)) {
+        return Promise.reject(pi.ph('otherExpenses'))
+      }
+      return Promise.resolve()
+    },
+    trigger: 'change'
+  }],
+  otherWorkTimeMinutes: [{
+    validator: async (_rule, value) => {
+      if (value === undefined || value === null || value === '') {
+        return Promise.reject(pi.ph('otherWorkTimeMinutes'))
+      }
+      const num = typeof value === 'number' ? value : Number(value)
+      if (!Number.isFinite(num)) {
+        return Promise.reject(pi.ph('otherWorkTimeMinutes'))
+      }
+      return Promise.resolve()
+    },
+    trigger: 'change'
+  }],
+  otherApparatusCost: [{
+    validator: async (_rule, value) => {
+      if (value === undefined || value === null || value === '') {
+        return Promise.reject(pi.ph('otherApparatusCost'))
+      }
+      const num = typeof value === 'number' ? value : Number(value)
+      if (!Number.isFinite(num)) {
+        return Promise.reject(pi.ph('otherApparatusCost'))
+      }
+      return Promise.resolve()
+    },
+    trigger: 'change'
+  }],
+  isObsolete: [{
+    validator: async (_rule, value) => {
+      if (value === undefined || value === null || value === '') {
+        return Promise.reject(pi.ph('isObsolete'))
+      }
+      const num = typeof value === 'number' ? value : Number(value)
+      if (!Number.isFinite(num)) {
+        return Promise.reject(pi.ph('isObsolete'))
       }
       return Promise.resolve()
     },
@@ -327,6 +516,30 @@ function getValues(): Record<string, any> {
   if ('indirectParticipantCount' in payload) {
     const rawindirectParticipantCount = payload.indirectParticipantCount
     payload.indirectParticipantCount = typeof rawindirectParticipantCount === 'number' ? rawindirectParticipantCount : Number(rawindirectParticipantCount)
+  }
+  if ('investigationWorkTimeMinutes' in payload) {
+    const rawinvestigationWorkTimeMinutes = payload.investigationWorkTimeMinutes
+    payload.investigationWorkTimeMinutes = typeof rawinvestigationWorkTimeMinutes === 'number' ? rawinvestigationWorkTimeMinutes : Number(rawinvestigationWorkTimeMinutes)
+  }
+  if ('travelCost' in payload) {
+    const rawtravelCost = payload.travelCost
+    payload.travelCost = typeof rawtravelCost === 'number' ? rawtravelCost : Number(rawtravelCost)
+  }
+  if ('otherExpenses' in payload) {
+    const rawotherExpenses = payload.otherExpenses
+    payload.otherExpenses = typeof rawotherExpenses === 'number' ? rawotherExpenses : Number(rawotherExpenses)
+  }
+  if ('otherWorkTimeMinutes' in payload) {
+    const rawotherWorkTimeMinutes = payload.otherWorkTimeMinutes
+    payload.otherWorkTimeMinutes = typeof rawotherWorkTimeMinutes === 'number' ? rawotherWorkTimeMinutes : Number(rawotherWorkTimeMinutes)
+  }
+  if ('otherApparatusCost' in payload) {
+    const rawotherApparatusCost = payload.otherApparatusCost
+    payload.otherApparatusCost = typeof rawotherApparatusCost === 'number' ? rawotherApparatusCost : Number(rawotherApparatusCost)
+  }
+  if ('isObsolete' in payload) {
+    const rawisObsolete = payload.isObsolete
+    payload.isObsolete = typeof rawisObsolete === 'number' ? rawisObsolete : Number(rawisObsolete)
   }
   if ('sortOrder' in payload) delete payload.sortOrder
   payload.qualityIssueId = props.masterId

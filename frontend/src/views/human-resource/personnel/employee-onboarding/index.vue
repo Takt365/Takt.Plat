@@ -20,11 +20,11 @@
 
     <!-- 工具栏 -->
     <TaktToolsBar
-      create-permission="human:resource:personnel:employee:onboarding:create"
-      update-permission="human:resource:personnel:employee:onboarding:update"
-      delete-permission="human:resource:personnel:employee:onboarding:delete"
-      import-permission="human:resource:personnel:employee:onboarding:import"
-      export-permission="human:resource:personnel:employee:onboarding:export"
+      create-permission="human:resource:personnel:talent:staffing:requirement:create"
+      update-permission="human:resource:personnel:talent:staffing:requirement:update"
+      delete-permission="human:resource:personnel:talent:staffing:requirement:delete"
+      import-permission="human:resource:personnel:talent:staffing:requirement:import"
+      export-permission="human:resource:personnel:talent:staffing:requirement:export"
       :show-create="true"
       :show-update="true"
       :show-delete="true"
@@ -62,6 +62,7 @@
       :data-source="dataSource"
       :loading="loading"
       :stripe="true"
+      :virtual="true"
       :row-key="getEmployeeOnboardingId"
       :row-selection="rowSelection"
       :custom-row="onClickRow"
@@ -69,6 +70,15 @@
       @change="handleTableChange"
       @resize-column="handleResizeColumn"
     >
+      <!-- 字典/开关列渲染 -->
+      <template #bodyCell="{ column, record }">
+        <template v-if="column.key === 'todoStatus'">
+          <TaktDictTag
+            :value="getEmployeeOnboardingDictValue(record, 'todoStatus')"
+            dict-type="hr_personnel_onboarding_status"
+          />
+        </template>
+      </template>
 
     </TaktSingleTable>
 
@@ -110,71 +120,61 @@
     >
       <template #default="{ isFieldVisible }">
       <div v-show="isFieldVisible('offerId')">
-      <a-form-item :label="t('entity.employeeonboarding.offerid')">
-        <a-input
+      <a-form-item :label="pi.queryLabel('offerId')">
+        <TaktSelect
           v-model:value="advancedQueryForm.offerId"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.employeeonboarding.offerid') })"
-          show-count
-          :maxlength="20"
+          api-url="TaktTalentOffers/options"
+          :placeholder="pi.queryPh('offerId', 'select')"
           allow-clear
         />
       </a-form-item>
       </div>
       <div v-show="isFieldVisible('todoNo')">
-      <a-form-item :label="t('entity.employeeonboarding.todono')">
+      <a-form-item :label="pi.queryLabel('todoNo')">
         <a-input
           v-model:value="advancedQueryForm.todoNo"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.employeeonboarding.todono') })"
+          :placeholder="pi.queryPh('todoNo', 'required')"
           show-count
           :maxlength="20"
           allow-clear
         />
       </a-form-item>
       </div>
-      <div v-show="isFieldVisible('todoStatus')">
-      <a-form-item :label="t('entity.employeeonboarding.todostatus')">
-        <a-input-number
-          v-model:value="advancedQueryForm.todoStatus"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.employeeonboarding.todostatus') })"
-          style="width: 100%"
-        />
-      </a-form-item>
-      </div>
       <div v-show="isFieldVisible('plannedJoinedDateStart')">
-      <a-form-item :label="t('entity.employeeonboarding.plannedjoineddatestart')">
+      <a-form-item :label="pi.queryLabel('plannedJoinedDateStart')">
         <a-date-picker
           v-model:value="advancedQueryForm.plannedJoinedDateStart"
-          :placeholder="t('common.page.form.placeholder.select', { field: t('entity.employeeonboarding.plannedjoineddatestart') })"
+          :placeholder="pi.queryPh('plannedJoinedDateStart', 'select')"
           value-format="YYYY-MM-DD"
           style="width: 100%"
         />
       </a-form-item>
       </div>
       <div v-show="isFieldVisible('plannedJoinedDateEnd')">
-      <a-form-item :label="t('entity.employeeonboarding.plannedjoineddateend')">
+      <a-form-item :label="pi.queryLabel('plannedJoinedDateEnd')">
         <a-date-picker
           v-model:value="advancedQueryForm.plannedJoinedDateEnd"
-          :placeholder="t('common.page.form.placeholder.select', { field: t('entity.employeeonboarding.plannedjoineddateend') })"
+          :placeholder="pi.queryPh('plannedJoinedDateEnd', 'select')"
           value-format="YYYY-MM-DD"
           style="width: 100%"
         />
       </a-form-item>
       </div>
       <div v-show="isFieldVisible('candidateName')">
-      <a-form-item :label="t('entity.employeeonboarding.candidatename')">
+      <a-form-item :label="pi.queryLabel('candidateName')">
         <a-date-picker
           v-model:value="advancedQueryForm.candidateName"
-          :placeholder="t('common.page.form.placeholder.select', { field: t('entity.employeeonboarding.candidatename') })"
+          :placeholder="pi.queryPh('candidateName', 'select')"
           value-format="YYYY-MM-DD"
           style="width: 100%"
         />
       </a-form-item>
       </div>
       <div v-show="isFieldVisible('mobile')">
-      <a-form-item :label="t('entity.employeeonboarding.mobile')">
+      <a-form-item :label="pi.queryLabel('mobile')">
         <a-input
           v-model:value="advancedQueryForm.mobile"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.employeeonboarding.mobile') })"
+          :placeholder="pi.queryPh('mobile', 'required')"
           show-count
           :maxlength="11"
           allow-clear
@@ -182,21 +182,42 @@
       </a-form-item>
       </div>
       <div v-show="isFieldVisible('employeeId')">
-      <a-form-item :label="t('entity.employeeonboarding.employeeid')">
-        <a-input
+      <a-form-item :label="pi.queryLabel('employeeId')">
+        <TaktSelect
           v-model:value="advancedQueryForm.employeeId"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.employeeonboarding.employeeid') })"
+          api-url="TaktEmployees/options"
+          :placeholder="pi.queryPh('employeeId', 'select')"
+          allow-clear
+        />
+      </a-form-item>
+      </div>
+      <div v-show="isFieldVisible('employeeCode')">
+      <a-form-item :label="pi.queryLabel('employeeCode')">
+        <a-input
+          v-model:value="advancedQueryForm.employeeCode"
+          :placeholder="pi.queryPh('employeeCode', 'required')"
           show-count
-          :maxlength="20"
+          :maxlength="6"
+          allow-clear
+        />
+      </a-form-item>
+      </div>
+      <div v-show="isFieldVisible('employeeName')">
+      <a-form-item :label="pi.queryLabel('employeeName')">
+        <a-input
+          v-model:value="advancedQueryForm.employeeName"
+          :placeholder="pi.queryPh('employeeName', 'required')"
+          show-count
+          :maxlength="80"
           allow-clear
         />
       </a-form-item>
       </div>
       <div v-show="isFieldVisible('employeeJoinedId')">
-      <a-form-item :label="t('entity.employeeonboarding.employeejoinedid')">
+      <a-form-item :label="pi.queryLabel('employeeJoinedId')">
         <a-input
           v-model:value="advancedQueryForm.employeeJoinedId"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.employeeonboarding.employeejoinedid') })"
+          :placeholder="pi.queryPh('employeeJoinedId', 'required')"
           show-count
           :maxlength="20"
           allow-clear
@@ -204,21 +225,31 @@
       </a-form-item>
       </div>
       <div v-show="isFieldVisible('reason')">
-      <a-form-item :label="t('entity.employeeonboarding.reason')">
+      <a-form-item :label="pi.queryLabel('reason')">
         <a-input
           v-model:value="advancedQueryForm.reason"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.employeeonboarding.reason') })"
+          :placeholder="pi.queryPh('reason', 'required')"
           show-count
           :maxlength="500"
           allow-clear
         />
       </a-form-item>
       </div>
+      <div v-show="isFieldVisible('todoStatus')">
+      <a-form-item :label="pi.queryLabel('todoStatus')">
+        <TaktSelect
+          v-model:value="advancedQueryForm.todoStatus"
+          dict-type="hr_personnel_onboarding_status"
+          :placeholder="pi.queryPh('todoStatus', 'select')"
+          allow-clear
+        />
+      </a-form-item>
+      </div>
       <div v-show="isFieldVisible('createdAtStart')">
-      <a-form-item :label="t('common.page.entity.createdatstart')">
+      <a-form-item :label="pi.queryLabel('createdAtStart')">
         <a-date-picker
           v-model:value="advancedQueryForm.createdAtStart"
-          :placeholder="t('common.page.form.placeholder.select', { field: t('common.page.entity.createdatstart') })"
+          :placeholder="pi.queryPh('createdAtStart', 'select')"
           value-format="YYYY-MM-DD HH:mm:ss"
             show-time
           style="width: 100%"
@@ -226,10 +257,10 @@
       </a-form-item>
       </div>
       <div v-show="isFieldVisible('createdAtEnd')">
-      <a-form-item :label="t('common.page.entity.createdatend')">
+      <a-form-item :label="pi.queryLabel('createdAtEnd')">
         <a-date-picker
           v-model:value="advancedQueryForm.createdAtEnd"
-          :placeholder="t('common.page.form.placeholder.select', { field: t('common.page.entity.createdatend') })"
+          :placeholder="pi.queryPh('createdAtEnd', 'select')"
           value-format="YYYY-MM-DD HH:mm:ss"
             show-time
           style="width: 100%"
@@ -251,7 +282,7 @@
             >
               <span class="takt-form-label-hint-icon"><RiQuestionLine class="takt-remix-icon" /></span>
             </a-tooltip>
-            <span>{{ t('common.page.entity.extfield') }}</span>
+            <span>{{ pi.queryLabel('extField') }}</span>
           </span>
         </template>
         <a-textarea
@@ -265,10 +296,10 @@
       </a-form-item>
       </div>
       <div v-show="isFieldVisible('remark')">
-      <a-form-item :label="t('common.page.entity.remark')">
+      <a-form-item :label="pi.queryLabel('remark')">
         <a-textarea
           v-model:value="advancedQueryForm.remark"
-          :placeholder="t('common.page.form.placeholder.optional', { field: t('common.page.entity.remark') })"
+          :placeholder="pi.queryPh('remark', 'optional')"
             :rows="4"
             show-count
             :maxlength="400"
@@ -282,14 +313,15 @@
     <!-- 导入对话框 -->
     <TaktModal
       v-model:open="importVisible"
-      :title="t('common.dialog.title.import', { entity: t('entity.employeeonboarding._self') })"
+      :title="t('common.dialog.title.import', { entity: pi.self() })"
       :width="600"
       :footer="null"
       :cancel-text="t('common.page.button.close')"
       @cancel="handleImportCancel"
     >
       <TaktImportFile
-        entity-i18n-key="entity.employeeonboarding._self"
+        v-if="importVisible"
+        :entity-i18n-key="EMPLOYEEONBOARDING_SELF_I18N_KEY"
         file-type="xlsx"
         :sheet-name="excelNames.sheet"
         :template-file-name="excelNames.fileBase"
@@ -329,17 +361,31 @@ import { ensureTaktPaginationConfigAsync, getTaktDefaultPageIndex, getTaktDefaul
 import EmployeeOnboardingForm from './components/employee-onboarding-form.vue'
 import { getEmployeeOnboardingList, getEmployeeOnboardingById, createEmployeeOnboarding, updateEmployeeOnboarding, deleteEmployeeOnboardingById, deleteEmployeeOnboardingBatch, getEmployeeOnboardingTemplate, importEmployeeOnboarding, exportEmployeeOnboarding, updateEmployeeOnboardingStatus } from '@/api/human-resource/personnel/employee-onboarding'
 import type { EmployeeOnboarding, EmployeeOnboardingQuery } from '@/types/human-resource/personnel/employee-onboarding'
+import { useDictDataStore } from '@/stores/foundation/dict-data'
 import { taktExcelEntityNames } from '@/utils/naming'
 import { resolveExportDownloadFileName } from '@/utils/export-download-name'
+import { normalizeImportResult, type TaktImportResult } from '@/utils/takt-import-result'
 import { RiEditLine, RiDeleteBinLine, RiQuestionLine } from '@remixicon/vue'
 
+import {
+  useEmployeeOnboardingI18n,
+  EMPLOYEEONBOARDING_LIST_FIELDS,
+  EMPLOYEEONBOARDING_QUERY_STRING_FIELDS,
+  EMPLOYEEONBOARDING_QUERY_FIELDS,
+  EMPLOYEEONBOARDING_SELF_I18N_KEY,
+} from './composables/use-employee-onboarding-i18n'
+
+/** 实体字段 i18n（标签/占位符统一入口） */
+const pi = useEmployeeOnboardingI18n()
+/** 表格行类型（TaktSingleTable slot record 与 dataSource 行兼容） */
+type EmployeeOnboardingRowRecord = EmployeeOnboarding | Record<string, unknown>
 /** i18n 翻译函数 */
 const { t } = useI18n()
 /** Excel 导入/导出默认 sheet 名与文件名前缀 */
 const excelNames = taktExcelEntityNames('TaktEmployeeOnboarding')
 /** 列表快捷查询占位文案 */
 const searchPlaceholder = computed(
-  () => t('common.page.form.placeholder.search', { keyword: t('entity.employeeonboarding._self') })
+  () => t('common.page.form.placeholder.search', { keyword: pi.self() })
 )
 
 /** 快捷查询关键字 */
@@ -355,9 +401,9 @@ const pageSize = ref(getTaktDefaultPageSize())
 /** 分页 total */
 const total = ref(0)
 /** 工具栏单选时当前行 */
-const selectedRow = ref<EmployeeOnboarding | null>(null)
+const selectedRow = ref<EmployeeOnboardingRowRecord | null>(null)
 /** 表格多选行 */
-const selectedRows = ref<EmployeeOnboarding[]>([])
+const selectedRows = ref<EmployeeOnboardingRowRecord[]>([])
 /** 表格多选 row-key 集合 */
 const selectedRowKeys = ref<(string | number)[]>([])
 
@@ -374,40 +420,26 @@ const formRef = ref()
 
 /** 高级查询抽屉是否打开 */
 const advancedQueryVisible = ref(false)
+/**
+ * 创建空的高级查询表单
+ * @returns {Record<string, unknown>} 高级查询初始模型
+ */
+function createEmptyAdvancedQueryForm() {
+  const form = Object.fromEntries(EMPLOYEEONBOARDING_QUERY_STRING_FIELDS.map((key) => [key, ''])) as Record<
+    (typeof EMPLOYEEONBOARDING_QUERY_STRING_FIELDS)[number],
+    string
+  >
+  return {
+    ...form,
+    todoStatus: undefined as number | undefined,
+  }
+}
 /** 高级查询表单模型 */
-const advancedQueryForm = ref({
-  offerId: '',
-  todoNo: '',
-  todoStatus: undefined as number | undefined,
-  plannedJoinedDateStart: '',
-  plannedJoinedDateEnd: '',
-  candidateName: '',
-  mobile: '',
-  employeeId: '',
-  employeeJoinedId: '',
-  reason: '',
-  createdAtStart: '',
-  createdAtEnd: '',
-  extField: '',
-  remark: '',
-})
+const advancedQueryForm = ref(createEmptyAdvancedQueryForm())
 /** 高级查询字段元数据（列显隐配置） */
-const queryFieldsMeta = computed(() => [
-  { key: 'offerId', label: t('entity.employeeonboarding.offerid') },
-  { key: 'todoNo', label: t('entity.employeeonboarding.todono') },
-  { key: 'todoStatus', label: t('entity.employeeonboarding.todostatus') },
-  { key: 'plannedJoinedDateStart', label: t('common.page.entity.createdatstart').replace(t('common.page.entity.createdat'), t('entity.employeeonboarding.plannedjoineddate')) },
-  { key: 'plannedJoinedDateEnd', label: t('common.page.entity.createdatend').replace(t('common.page.entity.createdat'), t('entity.employeeonboarding.plannedjoineddate')) },
-  { key: 'candidateName', label: t('entity.employeeonboarding.candidatename') },
-  { key: 'mobile', label: t('entity.employeeonboarding.mobile') },
-  { key: 'employeeId', label: t('entity.employeeonboarding.employeeid') },
-  { key: 'employeeJoinedId', label: t('entity.employeeonboarding.employeejoinedid') },
-  { key: 'reason', label: t('entity.employeeonboarding.reason') },
-  { key: 'createdAtStart', label: t('common.page.entity.createdatstart') },
-  { key: 'createdAtEnd', label: t('common.page.entity.createdatend') },
-  { key: 'extField', label: t('common.page.entity.extfield') },
-  { key: 'remark', label: t('common.page.entity.remark') },
-])
+const queryFieldsMeta = computed(() =>
+  EMPLOYEEONBOARDING_QUERY_FIELDS.map((key) => ({ key, label: pi.queryLabel(key) })),
+)
 /** 高级查询当前可见字段 key */
 const visibleQueryFieldKeys = ref<string[]>([])
 /** 列设置抽屉是否打开 */
@@ -423,6 +455,8 @@ const updateDisabled = computed(() => selectedRows.value.length !== 1)
 /** 工具栏「删除」是否禁用（未选中任何行） */
 const deleteDisabled = computed(() => selectedRows.value.length === 0)
 
+/** Pinia：字典缓存（列表/查询 dict-type 渲染前预热） */
+const dictDataStore = useDictDataStore()
 
 
 /**
@@ -447,147 +481,48 @@ function buildListQuery(overrides?: Partial<EmployeeOnboardingQuery>): EmployeeO
       query[key] = v as never
     }
   }
-  assignTrimmed('offerId', form.offerId)
-  assignTrimmed('todoNo', form.todoNo)
+  for (const key of EMPLOYEEONBOARDING_QUERY_STRING_FIELDS) {
+    assignTrimmed(key, form[key])
+  }
   if (form.todoStatus !== undefined && form.todoStatus !== null) {
     query.todoStatus = form.todoStatus
   }
-  assignTrimmed('plannedJoinedDateStart', form.plannedJoinedDateStart)
-  assignTrimmed('plannedJoinedDateEnd', form.plannedJoinedDateEnd)
-  assignTrimmed('candidateName', form.candidateName)
-  assignTrimmed('mobile', form.mobile)
-  assignTrimmed('employeeId', form.employeeId)
-  assignTrimmed('employeeJoinedId', form.employeeJoinedId)
-  assignTrimmed('reason', form.reason)
-  assignTrimmed('createdAtStart', form.createdAtStart)
-  assignTrimmed('createdAtEnd', form.createdAtEnd)
-  assignTrimmed('extField', form.extField)
-  assignTrimmed('remark', form.remark)
   return query
 }
 /** 页面挂载：租户上下文就绪后加载分页配置，再拉列表 */
 onMounted(async () => {
   await ensureTaktPaginationConfigAsync()
+  void dictDataStore.loadAllDictDataAsync()
   loadData()
 })
 
 
-
-
-
-
+/**
+ * 构建列表标准文本列
+ * @param key 列 key / dataIndex
+ * @param title 列标题
+ * @param options 宽度与固定列
+ */
+function buildEmployeeOnboardingListColumn(
+  key: string,
+  title: string,
+  options?: { width?: number; fixed?: 'left' },
+) {
+  return {
+    title,
+    dataIndex: key,
+    key,
+    width: options?.width ?? 120,
+    resizable: true,
+    ellipsis: true,
+    ...(options?.fixed ? { fixed: options.fixed } : {}),
+  }
+}
 
 /** 表格列定义（i18n 随 locale 变化） */
 const columns = computed<TableColumnsType>(() => [
-  {
-    title: t('common.page.entity.id'),
-    dataIndex: 'employeeOnboardingId',
-    key: 'employeeOnboardingId',
-    width: 80,
-    resizable: true,
-    ellipsis: true,
-    fixed: 'left',
-    customRender: ({ record }: { record: any }) => getEmployeeOnboardingField(record, 'employeeOnboardingId') ?? ''
-  },
-  {
-    title: t('entity.employeeonboarding.offerid'),
-    dataIndex: 'offerId',
-    key: 'offerId',
-    width: 120,
-    resizable: true,
-    ellipsis: true,
-    customRender: ({ record }: { record: any }) => getEmployeeOnboardingField(record, 'offerId') ?? ''
-  },
-  {
-    title: t('entity.employeeonboarding.todono'),
-    dataIndex: 'todoNo',
-    key: 'todoNo',
-    width: 120,
-    resizable: true,
-    ellipsis: true,
-    customRender: ({ record }: { record: any }) => getEmployeeOnboardingField(record, 'todoNo') ?? ''
-  },
-  {
-    title: t('entity.employeeonboarding.todostatus'),
-    dataIndex: 'todoStatus',
-    key: 'todoStatus',
-    width: 120,
-    resizable: true,
-    ellipsis: true,
-    customRender: ({ record }: { record: any }) => getEmployeeOnboardingField(record, 'todoStatus') ?? ''
-  },
-  {
-    title: t('entity.employeeonboarding.plannedjoineddate'),
-    dataIndex: 'plannedJoinedDate',
-    key: 'plannedJoinedDate',
-    width: 120,
-    resizable: true,
-    ellipsis: true,
-    customRender: ({ record }: { record: any }) => getEmployeeOnboardingField(record, 'plannedJoinedDate') ?? ''
-  },
-  {
-    title: t('entity.employeeonboarding.candidatename'),
-    dataIndex: 'candidateName',
-    key: 'candidateName',
-    width: 120,
-    resizable: true,
-    ellipsis: true,
-    customRender: ({ record }: { record: any }) => getEmployeeOnboardingField(record, 'candidateName') ?? ''
-  },
-  {
-    title: t('entity.employeeonboarding.mobile'),
-    dataIndex: 'mobile',
-    key: 'mobile',
-    width: 120,
-    resizable: true,
-    ellipsis: true,
-    customRender: ({ record }: { record: any }) => getEmployeeOnboardingField(record, 'mobile') ?? ''
-  },
-  {
-    title: t('entity.employeeonboarding.employeeid'),
-    dataIndex: 'employeeId',
-    key: 'employeeId',
-    width: 120,
-    resizable: true,
-    ellipsis: true,
-    customRender: ({ record }: { record: any }) => getEmployeeOnboardingField(record, 'employeeId') ?? ''
-  },
-  {
-    title: t('entity.employeeonboarding.employeejoinedid'),
-    dataIndex: 'employeeJoinedId',
-    key: 'employeeJoinedId',
-    width: 120,
-    resizable: true,
-    ellipsis: true,
-    customRender: ({ record }: { record: any }) => getEmployeeOnboardingField(record, 'employeeJoinedId') ?? ''
-  },
-  {
-    title: t('entity.employeeonboarding.reason'),
-    dataIndex: 'reason',
-    key: 'reason',
-    width: 120,
-    resizable: true,
-    ellipsis: true,
-    customRender: ({ record }: { record: any }) => getEmployeeOnboardingField(record, 'reason') ?? ''
-  },
-  {
-    title: t('entity.employeeonboarding.offer'),
-    dataIndex: 'offer',
-    key: 'offer',
-    width: 120,
-    resizable: true,
-    ellipsis: true,
-    customRender: ({ record }: { record: any }) => getEmployeeOnboardingField(record, 'offer') ?? ''
-  },
-  {
-    title: t('entity.employeeonboarding.employeejoined'),
-    dataIndex: 'employeeJoined',
-    key: 'employeeJoined',
-    width: 120,
-    resizable: true,
-    ellipsis: true,
-    customRender: ({ record }: { record: any }) => getEmployeeOnboardingField(record, 'employeeJoined') ?? ''
-  },
+  buildEmployeeOnboardingListColumn('employeeOnboardingId', t('common.page.entity.id'), { width: 80, fixed: 'left' }),
+  ...EMPLOYEEONBOARDING_LIST_FIELDS.map((key) => buildEmployeeOnboardingListColumn(key, pi.label(key))),
   CreateActionColumn({
     actions: [
       {
@@ -595,53 +530,65 @@ const columns = computed<TableColumnsType>(() => [
         label: t('common.page.button.edit'),
         shape: 'plain',
         icon: RiEditLine,
-        permission: 'human:resource:personnel:employee:onboarding:update',
-        onClick: (record: EmployeeOnboarding) => handleEdit(record)
+        permission: 'human:resource:personnel:talent:staffing:requirement:update',
+        onClick: (record: EmployeeOnboardingRowRecord) => handleEdit(record)
       },
       {
         key: 'delete',
         label: t('common.page.button.delete'),
         shape: 'plain',
         icon: RiDeleteBinLine,
-        permission: 'human:resource:personnel:employee:onboarding:delete',
-        onClick: (record: EmployeeOnboarding) => handleDeleteOne(record)
+        permission: 'human:resource:personnel:talent:staffing:requirement:delete',
+        onClick: (record: EmployeeOnboardingRowRecord) => handleDeleteOne(record)
       }
     ]
   })
 ])
 
 /** 表格 row-key（优先实体主键字段） */
-const getEmployeeOnboardingId = (record: any): string => record?.[entityIdName] ?? ''
+const getEmployeeOnboardingId = (record: EmployeeOnboardingRowRecord): string => {
+  const id = (record as Record<string, unknown>)?.[entityIdName]
+  return id != null ? String(id) : ''
+}
 /**
- * 读取行字段值
+ * 供 TaktDictTag 等组件使用的标量字典值
  * @param record 行数据
  * @param field 字段名
  */
-const getEmployeeOnboardingField = (record: any, field: string): any => record?.[field]
+const getEmployeeOnboardingDictValue = (
+  record: EmployeeOnboardingRowRecord,
+  field: string,
+): string | number | undefined => {
+  const value = (record as Record<string, unknown>)?.[field]
+  if (value === null || value === undefined) return undefined
+  if (typeof value === 'string' || typeof value === 'number') return value
+  return String(value)
+}
+
 
 
 /** 行选择配置 */
 const rowSelection = computed(() => ({
   selectedRowKeys: selectedRowKeys.value,
-  onChange: (keys: (string | number)[], rows: EmployeeOnboarding[]) => {
+  onChange: (keys: (string | number)[], rows: EmployeeOnboardingRowRecord[]) => {
     selectedRowKeys.value = keys
     selectedRows.value = rows
     selectedRow.value = rows.length === 1 ? (rows[0] ?? null) : null
   },
-  onSelect: (record: EmployeeOnboarding, selected: boolean) => {
+  onSelect: (record: EmployeeOnboardingRowRecord, selected: boolean) => {
     if (selected) {
       selectedRow.value = record
     } else if (selectedRow.value && getEmployeeOnboardingId(selectedRow.value) === getEmployeeOnboardingId(record)) {
       selectedRow.value = null
     }
   },
-  onSelectAll: (selected: boolean, selectedRowsData: EmployeeOnboarding[]) => {
+  onSelectAll: (selected: boolean, selectedRowsData: EmployeeOnboardingRowRecord[]) => {
     selectedRow.value = selected && selectedRowsData.length === 1 ? (selectedRowsData[0] ?? null) : null
   }
 }))
 
 /** 行点击切换选中（与 rowSelection 联动） */
-const onClickRow = (record: EmployeeOnboarding) => ({
+const onClickRow = (record: EmployeeOnboardingRowRecord) => ({
   onClick: () => {
     const key = getEmployeeOnboardingId(record)
     const index = selectedRowKeys.value.indexOf(key)
@@ -687,46 +634,43 @@ function handleSearch() {
 /** 重置查询条件并刷新列表 */
 function handleReset() {
   queryKeyword.value = ''
-  advancedQueryForm.value = {
-  offerId: '',
-  todoNo: '',
-  todoStatus: undefined as number | undefined,
-  plannedJoinedDateStart: '',
-  plannedJoinedDateEnd: '',
-  candidateName: '',
-  mobile: '',
-  employeeId: '',
-  employeeJoinedId: '',
-  reason: '',
-  createdAtStart: '',
-  createdAtEnd: '',
-  extField: '',
-  remark: '',
-  }
+  advancedQueryForm.value = createEmptyAdvancedQueryForm()
   currentPage.value = getTaktDefaultPageIndex()
   loadData()
 }
 
 /** 打开新增弹窗 */
 function handleCreate() {
-  formTitle.value = t('common.dialog.title.create', { entity: t('entity.employeeonboarding._self') })
+  formTitle.value = t('common.dialog.title.create', { entity: pi.self() })
   formData.value = null
   formVisible.value = true
   nextTick(() => formRef.value?.resetFields())
 }
-/** 打开编辑弹窗 */
-function handleEdit(record: EmployeeOnboarding) {
-  formTitle.value = t('common.dialog.title.edit', { entity: t('entity.employeeonboarding._self') })
-  formData.value = { ...record }
-  formVisible.value = true
+/** 打开编辑弹窗（拉取详情，避免列表列裁剪字段） */
+async function handleEdit(record: EmployeeOnboardingRowRecord) {
+  const id = getEmployeeOnboardingId(record)
+  if (!id) {
+    return
+  }
+  formTitle.value = t('common.dialog.title.edit', { entity: pi.self() })
+  formLoading.value = true
+  try {
+    const detail = await getEmployeeOnboardingById(id)
+    formData.value = detail ?? ({ ...record } as Partial<EmployeeOnboarding>)
+    formVisible.value = true
+  } catch (error: unknown) {
+    message.error(t('common.feedback.load.data.failed'))
+  } finally {
+    formLoading.value = false
+  }
 }
 
 /** 工具栏编辑：打开当前单选行 */
 function handleUpdate() {
   if (selectedRow.value) {
-    handleEdit(selectedRow.value)
+    void handleEdit(selectedRow.value)
   } else {
-    message.warning(t('common.tip.select.to.action', { action: t('common.page.button.edit'), entity: t('entity.employeeonboarding._self') }))
+    message.warning(t('common.tip.select.to.action', { action: t('common.page.button.edit'), entity: pi.self() }))
   }
 }
 /** 提交新增/编辑表单 */
@@ -744,10 +688,10 @@ async function handleFormSubmit() {
     const id = (formData.value as any)?.[entityIdName]
     if (id) {
       await updateEmployeeOnboarding(id, payload as any)
-      message.success(t('common.feedback.updated', { target: t('entity.employeeonboarding._self') }))
+      message.success(t('common.feedback.updated', { target: pi.self() }))
     } else {
       await createEmployeeOnboarding(payload as any)
-      message.success(t('common.feedback.created', { target: t('entity.employeeonboarding._self') }))
+      message.success(t('common.feedback.created', { target: pi.self() }))
     }
     formVisible.value = false
     formData.value = null
@@ -775,15 +719,18 @@ async function handleDownloadTemplate(sheetName?: string, fileName?: string): Pr
   return (res as any)?.data ?? res
 }
 
-/** 上传并导入 Excel 文件 */
-async function handleImportFile(file: File, sheetName?: string): Promise<{ success: number; fail: number; errors: string[] }> {
-  return await importEmployeeOnboarding(file, sheetName)
+/** 上传并导入 Excel 文件（归一化后端 SuccessCount/successCount） */
+async function handleImportFile(file: File, sheetName?: string): Promise<TaktImportResult> {
+  const raw = await importEmployeeOnboarding(file, sheetName)
+  return normalizeImportResult(raw)
 }
 
-/** 导入完成回调：刷新列表并可选关闭对话框 */
-function handleImportSuccess(result: { success: number; fail: number; errors: string[] }) {
+/** 导入完成回调：刷新列表；全部成功时延迟关闭对话框 */
+function handleImportSuccess(result: TaktImportResult) {
   loadData()
-  if (result.fail === 0) setTimeout(() => { importVisible.value = false }, 2000)
+  if (result.fail === 0 && result.success > 0) {
+    setTimeout(() => { importVisible.value = false }, 2000)
+  }
 }
 
 /** 关闭导入对话框 */
@@ -817,24 +764,24 @@ async function handleExport() {
     link.click()
     document.body.removeChild(link)
     setTimeout(() => window.URL.revokeObjectURL(url), 100)
-    message.success(t('common.feedback.export.success', { target: t('entity.employeeonboarding._self') }))
+    message.success(t('common.feedback.export.success', { target: pi.self() }))
   } catch (error: any) {
     logger.error('[EmployeeOnboarding] 导出失败', { error })
-    message.error(error?.message || t('common.feedback.export.failed', { target: t('entity.employeeonboarding._self') }))
+    message.error(error?.message || t('common.feedback.export.failed', { target: pi.self() }))
   } finally {
     loading.value = false
   }
 }
 /** 删除单行 */
-async function handleDeleteOne(record: EmployeeOnboarding) {
+async function handleDeleteOne(record: EmployeeOnboardingRowRecord) {
   Modal.confirm({
     title: t('common.tip.confirm.delete.title'),
-    content: t('common.tip.confirm.delete.entity', { entity: t('entity.employeeonboarding._self'), name: t('common.tip.this.target', { target: t('entity.employeeonboarding._self') }) }),
+    content: t('common.tip.confirm.delete.entity', { entity: pi.self(), name: t('common.tip.this.target', { target: pi.self() }) }),
     okText: t('common.page.button.delete'),
     cancelText: t('common.page.button.cancel'),
     onOk: async () => {
       await deleteEmployeeOnboardingById((record as any)[entityIdName])
-      message.success(t('common.feedback.deleted', { target: t('entity.employeeonboarding._self') }))
+      message.success(t('common.feedback.deleted', { target: pi.self() }))
       loadData()
     }
   })
@@ -842,18 +789,18 @@ async function handleDeleteOne(record: EmployeeOnboarding) {
 /** 批量删除选中行 */
 async function handleDelete() {
   if (selectedRows.value.length === 0) {
-    message.warning(t('common.tip.select.to.action', { action: t('common.page.button.delete'), entity: t('entity.employeeonboarding._self') }))
+    message.warning(t('common.tip.select.to.action', { action: t('common.page.button.delete'), entity: pi.self() }))
     return
   }
   Modal.confirm({
     title: t('common.tip.confirm.delete.title'),
-    content: t('common.tip.confirm.delete.count', { entity: t('entity.employeeonboarding._self'), count: selectedRows.value.length }),
+    content: t('common.tip.confirm.delete.count', { entity: pi.self(), count: selectedRows.value.length }),
     okText: t('common.page.button.delete'),
     cancelText: t('common.page.button.cancel'),
     onOk: async () => {
       const ids = selectedRows.value.map((r: any) => r[entityIdName]).filter(Boolean)
       await deleteEmployeeOnboardingBatch(ids)
-      message.success(t('common.feedback.deleted', { target: t('entity.employeeonboarding._self') }))
+      message.success(t('common.feedback.deleted', { target: pi.self() }))
       loadData()
     }
   })
@@ -871,22 +818,7 @@ function handleAdvancedQuerySubmit() {
 }
 
 function handleAdvancedQueryReset() {
-  advancedQueryForm.value = {
-  offerId: '',
-  todoNo: '',
-  todoStatus: undefined as number | undefined,
-  plannedJoinedDateStart: '',
-  plannedJoinedDateEnd: '',
-  candidateName: '',
-  mobile: '',
-  employeeId: '',
-  employeeJoinedId: '',
-  reason: '',
-  createdAtStart: '',
-  createdAtEnd: '',
-  extField: '',
-  remark: '',
-  }
+  advancedQueryForm.value = createEmptyAdvancedQueryForm()
 }
 
 /** 打开列设置抽屉 */

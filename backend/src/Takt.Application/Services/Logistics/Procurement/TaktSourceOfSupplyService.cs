@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Application.Services.Logistics.Procurement
 // 文件名称：TaktSourceOfSupplyService.cs
-// 创建时间：2026-06-30
+// 创建时间：2026-07-21
 // 创建人：Takt365(Cursor AI)
 // 功能描述：货源清单清单应用服务实现
 // 
@@ -373,8 +373,9 @@ public class TaktSourceOfSupplyService : TaktServiceBase, ITaktSourceOfSupplySer
                 || SqlFunc.ToString(x.IsFixed).Contains(keywords)
                 || SqlFunc.ToString(x.IsBlocked).Contains(keywords)
                 || (x.PurchaseUnit != null && x.PurchaseUnit.Contains(keywords))
-                || SqlFunc.ToString(x.MinimumOrderQuantity).Contains(keywords)
-                || SqlFunc.ToString(x.LeadTimeDays).Contains(keywords)
+                || SqlFunc.ToString(x.MinOrderQuantity).Contains(keywords)
+                || SqlFunc.ToString(x.RoundingValue).Contains(keywords)
+                || SqlFunc.ToString(x.PlannedDeliveryTimeDays).Contains(keywords)
                 || (x.AgreementNumber != null && x.AgreementNumber.Contains(keywords))
                 || SqlFunc.ToString(x.AgreementLineNumber).Contains(keywords)
                 || SqlFunc.ToString(x.SortOrder).Contains(keywords)
@@ -427,14 +428,19 @@ public class TaktSourceOfSupplyService : TaktServiceBase, ITaktSourceOfSupplySer
             exp = exp.And(x => x.PurchaseUnit != null && x.PurchaseUnit.Contains(queryDto.PurchaseUnit));
         }
 
-        if (queryDto?.MinimumOrderQuantity.HasValue == true)
+        if (queryDto?.MinOrderQuantity.HasValue == true)
         {
-            exp = exp.And(x => x.MinimumOrderQuantity == queryDto.MinimumOrderQuantity);
+            exp = exp.And(x => x.MinOrderQuantity == queryDto.MinOrderQuantity);
         }
 
-        if (queryDto?.LeadTimeDays.HasValue == true)
+        if (queryDto?.RoundingValue.HasValue == true)
         {
-            exp = exp.And(x => x.LeadTimeDays == queryDto.LeadTimeDays);
+            exp = exp.And(x => x.RoundingValue == queryDto.RoundingValue);
+        }
+
+        if (queryDto?.PlannedDeliveryTimeDays.HasValue == true)
+        {
+            exp = exp.And(x => x.PlannedDeliveryTimeDays == queryDto.PlannedDeliveryTimeDays);
         }
 
         if (!string.IsNullOrEmpty(queryDto?.AgreementNumber))

@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：frontend/src/types/logistics/quality/operation
 // 文件名称：fqc-defect-handling.d.ts
-// 创建时间：2026-07-09
+// 创建时间：2026-07-23
 // 创建人：Takt365(Auto Generated)
 // 功能描述：logistics/quality/operation 模块类型定义（自动生成；类型名去 Takt 前缀与末尾 Dto，如 TaktCompanyDto → Company）
 // 
@@ -34,7 +34,7 @@ export interface FqcDefectHandling extends CompanyDtoBase {
   fqcDefectHandlingCode: string;
 
   /**
-   * FQC检验单明细 ID（关联 TaktFqcOrderItem.Id，选项 TaktFqcOrderItems/options）
+   * FQC检验单明细 ID（选项 TaktFqcOrderItems/options；DictValue=Id）
    */
   fqcOrderItemId: string;
 
@@ -84,17 +84,17 @@ export interface FqcDefectHandling extends CompanyDtoBase {
   handlingDescription?: string;
 
   /**
-   * 责任部门（选项 TaktDepts/tree-options，DictValue=DeptCode）
+   * 责任部门（选项 TaktDepts/tree-options；DictValue=DeptCode）
    */
   responsibleDept?: string;
 
   /**
-   * 责任人（选项 TaktEmployees/options，DictValue=EmployeeCode）
+   * 责任人（选项 TaktEmployees/options；DictValue=EmployeeCode）
    */
   responsibleBy?: string;
 
   /**
-   * 处理人（选项 TaktEmployees/options，DictValue=EmployeeCode）
+   * 处理人（选项 TaktEmployees/options；DictValue=EmployeeCode）
    */
   handlerBy?: string;
 
@@ -124,7 +124,7 @@ export interface FqcDefectHandling extends CompanyDtoBase {
   handlingStatus: number;
 
   /**
-   * 是否作废（字典 sys_yes_no_type，0=否 1=是；编辑移除子行时标记作废）
+   * 是否作废（字典 sys_yes_no_type；0=否 1=是；编辑移除子行时标记作废）
    */
   isObsolete: number;
 
@@ -159,7 +159,7 @@ export interface FqcDefectHandlingQuery extends TaktPagedQuery {
   fqcDefectHandlingCode?: string;
 
   /**
-   * FQC检验单明细 ID（关联 TaktFqcOrderItem.Id，选项 TaktFqcOrderItems/options）
+   * FQC检验单明细 ID（选项 TaktFqcOrderItems/options；DictValue=Id）
    */
   fqcOrderItemId?: string;
 
@@ -204,17 +204,17 @@ export interface FqcDefectHandlingQuery extends TaktPagedQuery {
   handlingDescription?: string;
 
   /**
-   * 责任部门（选项 TaktDepts/tree-options，DictValue=DeptCode）
+   * 责任部门（选项 TaktDepts/tree-options；DictValue=DeptCode）
    */
   responsibleDept?: string;
 
   /**
-   * 责任人（选项 TaktEmployees/options，DictValue=EmployeeCode）
+   * 责任人（选项 TaktEmployees/options；DictValue=EmployeeCode）
    */
   responsibleBy?: string;
 
   /**
-   * 处理人（选项 TaktEmployees/options，DictValue=EmployeeCode）
+   * 处理人（选项 TaktEmployees/options；DictValue=EmployeeCode）
    */
   handlerBy?: string;
 
@@ -249,7 +249,7 @@ export interface FqcDefectHandlingQuery extends TaktPagedQuery {
   handlingStatus?: number;
 
   /**
-   * 是否作废（字典 sys_yes_no_type，0=否 1=是；编辑移除子行时标记作废）
+   * 是否作废（字典 sys_yes_no_type；0=否 1=是；编辑移除子行时标记作废）
    */
   isObsolete?: number;
 
@@ -303,7 +303,7 @@ export interface FqcDefectHandlingCreate {
   fqcDefectHandlingCode: string;
 
   /**
-   * FQC检验单明细 ID（关联 TaktFqcOrderItem.Id，选项 TaktFqcOrderItems/options）
+   * FQC检验单明细 ID（选项 TaktFqcOrderItems/options；DictValue=Id）
    */
   fqcOrderItemId: string;
 
@@ -348,17 +348,17 @@ export interface FqcDefectHandlingCreate {
   handlingDescription?: string;
 
   /**
-   * 责任部门（选项 TaktDepts/tree-options，DictValue=DeptCode）
+   * 责任部门（选项 TaktDepts/tree-options；DictValue=DeptCode）
    */
   responsibleDept?: string;
 
   /**
-   * 责任人（选项 TaktEmployees/options，DictValue=EmployeeCode）
+   * 责任人（选项 TaktEmployees/options；DictValue=EmployeeCode）
    */
   responsibleBy?: string;
 
   /**
-   * 处理人（选项 TaktEmployees/options，DictValue=EmployeeCode）
+   * 处理人（选项 TaktEmployees/options；DictValue=EmployeeCode）
    */
   handlerBy?: string;
 
@@ -388,7 +388,7 @@ export interface FqcDefectHandlingCreate {
   handlingStatus: number;
 
   /**
-   * 是否作废（字典 sys_yes_no_type，0=否 1=是；编辑移除子行时标记作废）
+   * 是否作废（字典 sys_yes_no_type；0=否 1=是；编辑移除子行时标记作废）
    */
   isObsolete: number;
 
@@ -480,7 +480,7 @@ export interface FqcDefectHandlingTemplate {
   fqcDefectHandlingCode?: string;
 
   /**
-   * FQC检验单明细 ID（关联 TaktFqcOrderItem.Id，选项 TaktFqcOrderItems/options）
+   * FQC检验单明细 ID（选项 TaktFqcOrderItems/options；DictValue=Id）
    */
   fqcOrderItemId?: string;
 
@@ -525,17 +525,17 @@ export interface FqcDefectHandlingTemplate {
   handlingDescription?: string;
 
   /**
-   * 责任部门（选项 TaktDepts/tree-options，DictValue=DeptCode）
+   * 责任部门（选项 TaktDepts/tree-options；DictValue=DeptCode）
    */
   responsibleDept?: string;
 
   /**
-   * 责任人（选项 TaktEmployees/options，DictValue=EmployeeCode）
+   * 责任人（选项 TaktEmployees/options；DictValue=EmployeeCode）
    */
   responsibleBy?: string;
 
   /**
-   * 处理人（选项 TaktEmployees/options，DictValue=EmployeeCode）
+   * 处理人（选项 TaktEmployees/options；DictValue=EmployeeCode）
    */
   handlerBy?: string;
 
@@ -565,7 +565,7 @@ export interface FqcDefectHandlingTemplate {
   handlingStatus?: number;
 
   /**
-   * 是否作废（字典 sys_yes_no_type，0=否 1=是；编辑移除子行时标记作废）
+   * 是否作废（字典 sys_yes_no_type；0=否 1=是；编辑移除子行时标记作废）
    */
   isObsolete?: number;
 
@@ -609,7 +609,7 @@ export interface FqcDefectHandlingImport {
   fqcDefectHandlingCode?: string;
 
   /**
-   * FQC检验单明细 ID（关联 TaktFqcOrderItem.Id，选项 TaktFqcOrderItems/options）
+   * FQC检验单明细 ID（选项 TaktFqcOrderItems/options；DictValue=Id）
    */
   fqcOrderItemId?: string;
 
@@ -654,17 +654,17 @@ export interface FqcDefectHandlingImport {
   handlingDescription?: string;
 
   /**
-   * 责任部门（选项 TaktDepts/tree-options，DictValue=DeptCode）
+   * 责任部门（选项 TaktDepts/tree-options；DictValue=DeptCode）
    */
   responsibleDept?: string;
 
   /**
-   * 责任人（选项 TaktEmployees/options，DictValue=EmployeeCode）
+   * 责任人（选项 TaktEmployees/options；DictValue=EmployeeCode）
    */
   responsibleBy?: string;
 
   /**
-   * 处理人（选项 TaktEmployees/options，DictValue=EmployeeCode）
+   * 处理人（选项 TaktEmployees/options；DictValue=EmployeeCode）
    */
   handlerBy?: string;
 
@@ -694,7 +694,7 @@ export interface FqcDefectHandlingImport {
   handlingStatus?: number;
 
   /**
-   * 是否作废（字典 sys_yes_no_type，0=否 1=是；编辑移除子行时标记作废）
+   * 是否作废（字典 sys_yes_no_type；0=否 1=是；编辑移除子行时标记作废）
    */
   isObsolete?: number;
 
@@ -733,7 +733,7 @@ export interface FqcDefectHandlingExport {
   fqcDefectHandlingCode: string;
 
   /**
-   * FQC检验单明细 ID（关联 TaktFqcOrderItem.Id，选项 TaktFqcOrderItems/options）
+   * FQC检验单明细 ID（选项 TaktFqcOrderItems/options；DictValue=Id）
    */
   fqcOrderItemId: string;
 
@@ -778,17 +778,17 @@ export interface FqcDefectHandlingExport {
   handlingDescription?: string;
 
   /**
-   * 责任部门（选项 TaktDepts/tree-options，DictValue=DeptCode）
+   * 责任部门（选项 TaktDepts/tree-options；DictValue=DeptCode）
    */
   responsibleDept?: string;
 
   /**
-   * 责任人（选项 TaktEmployees/options，DictValue=EmployeeCode）
+   * 责任人（选项 TaktEmployees/options；DictValue=EmployeeCode）
    */
   responsibleBy?: string;
 
   /**
-   * 处理人（选项 TaktEmployees/options，DictValue=EmployeeCode）
+   * 处理人（选项 TaktEmployees/options；DictValue=EmployeeCode）
    */
   handlerBy?: string;
 
@@ -818,7 +818,7 @@ export interface FqcDefectHandlingExport {
   handlingStatus: number;
 
   /**
-   * 是否作废（字典 sys_yes_no_type，0=否 1=是；编辑移除子行时标记作废）
+   * 是否作废（字典 sys_yes_no_type；0=否 1=是；编辑移除子行时标记作废）
    */
   isObsolete: number;
 

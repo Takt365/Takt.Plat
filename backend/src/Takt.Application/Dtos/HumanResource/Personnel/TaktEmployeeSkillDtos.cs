@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Application.Dtos.HumanResource.Personnel
 // 文件名称：TaktEmployeeSkillDtos.cs
-// 创建时间：2026-06-23
+// 创建时间：2026-07-23
 // 创建人：Takt365(Auto Generated)
 // 功能描述：EmployeeSkill 模块 DTO（由 generate-dtos-from-entity.cjs 根据 TaktEmployeeSkill 生成，请按需审阅）
 // 
@@ -36,15 +36,20 @@ public class TaktEmployeeSkillDto : TaktCompanyDtoBase
     public long EmployeeSkillId { get; set; }
 
     /// <summary>
-    /// 员工ID
+    /// 员工（选项 TaktEmployees/options；DictValue=Id）
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
     public long EmployeeId { get; set; }
 
     /// <summary>
-    /// 员工名称（填充字段）
+    /// 员工编码（冗余，与 TaktEmployee.EmployeeCode 对齐）
     /// </summary>
-    public string? EmployeeName { get; set; }
+    public string EmployeeCode { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 员工姓名（冗余，与 TaktEmployee.EmployeeName 对齐）
+    /// </summary>
+    public string EmployeeName { get; set; } = string.Empty;
 
     /// <summary>
     /// 技能名称
@@ -52,7 +57,7 @@ public class TaktEmployeeSkillDto : TaktCompanyDtoBase
     public string SkillName { get; set; } = string.Empty;
 
     /// <summary>
-    /// 技能等级（0=入门，1=熟练，2=精通，3=专家）
+    /// 技能等级（字典 hr_employee_skill_level；0=入门 1=熟练 2=精通 3=专家）
     /// </summary>
     public int SkillLevel { get; set; } = 0;
 
@@ -62,9 +67,9 @@ public class TaktEmployeeSkillDto : TaktCompanyDtoBase
     public string? CertificateName { get; set; } = string.Empty;
 
     /// <summary>
-    /// 证书编号
+    /// 证书编码
     /// </summary>
-    public string? CertificateNo { get; set; } = string.Empty;
+    public string? CertificateCode { get; set; } = string.Empty;
 
     /// <summary>
     /// 取得日期
@@ -99,10 +104,20 @@ public class TaktEmployeeSkillQueryDto : TaktPagedQuery
     public string? CompanyCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 员工ID
+    /// 员工（选项 TaktEmployees/options；DictValue=Id）
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
     public long? EmployeeId { get; set; }
+
+    /// <summary>
+    /// 员工编码（冗余，与 TaktEmployee.EmployeeCode 对齐）
+    /// </summary>
+    public string? EmployeeCode { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 员工姓名（冗余，与 TaktEmployee.EmployeeName 对齐）
+    /// </summary>
+    public string? EmployeeName { get; set; } = string.Empty;
 
     /// <summary>
     /// 技能名称
@@ -110,7 +125,7 @@ public class TaktEmployeeSkillQueryDto : TaktPagedQuery
     public string? SkillName { get; set; } = string.Empty;
 
     /// <summary>
-    /// 技能等级（0=入门，1=熟练，2=精通，3=专家）
+    /// 技能等级（字典 hr_employee_skill_level；0=入门 1=熟练 2=精通 3=专家）
     /// </summary>
     public int? SkillLevel { get; set; }
 
@@ -120,9 +135,9 @@ public class TaktEmployeeSkillQueryDto : TaktPagedQuery
     public string? CertificateName { get; set; } = string.Empty;
 
     /// <summary>
-    /// 证书编号
+    /// 证书编码
     /// </summary>
-    public string? CertificateNo { get; set; } = string.Empty;
+    public string? CertificateCode { get; set; } = string.Empty;
 
     /// <summary>
     /// 取得日期（范围查询-开始）
@@ -190,10 +205,22 @@ public class TaktEmployeeSkillCreateDto
     public string CompanyDefaultCulture { get; set; } = string.Empty;
 
     /// <summary>
-    /// 员工ID
+    /// 员工（选项 TaktEmployees/options；DictValue=Id）
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
     public long EmployeeId { get; set; }
+
+    /// <summary>
+    /// 员工编码（冗余，与 TaktEmployee.EmployeeCode 对齐）
+    /// </summary>
+    [Required(ErrorMessage = "员工编码（冗余，与 TaktEmployee.EmployeeCode 对齐）不能为空")]
+    public string EmployeeCode { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 员工姓名（冗余，与 TaktEmployee.EmployeeName 对齐）
+    /// </summary>
+    [Required(ErrorMessage = "员工姓名（冗余，与 TaktEmployee.EmployeeName 对齐）不能为空")]
+    public string EmployeeName { get; set; } = string.Empty;
 
     /// <summary>
     /// 技能名称
@@ -202,7 +229,7 @@ public class TaktEmployeeSkillCreateDto
     public string SkillName { get; set; } = string.Empty;
 
     /// <summary>
-    /// 技能等级（0=入门，1=熟练，2=精通，3=专家）
+    /// 技能等级（字典 hr_employee_skill_level；0=入门 1=熟练 2=精通 3=专家）
     /// </summary>
     public int SkillLevel { get; set; } = 0;
 
@@ -212,9 +239,9 @@ public class TaktEmployeeSkillCreateDto
     public string? CertificateName { get; set; } = string.Empty;
 
     /// <summary>
-    /// 证书编号
+    /// 证书编码
     /// </summary>
-    public string? CertificateNo { get; set; } = string.Empty;
+    public string? CertificateCode { get; set; } = string.Empty;
 
     /// <summary>
     /// 取得日期
@@ -278,10 +305,20 @@ public class TaktEmployeeSkillTemplateDto
     public string? CompanyCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 员工ID
+    /// 员工（选项 TaktEmployees/options；DictValue=Id）
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
     public long? EmployeeId { get; set; }
+
+    /// <summary>
+    /// 员工编码（冗余，与 TaktEmployee.EmployeeCode 对齐）
+    /// </summary>
+    public string? EmployeeCode { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 员工姓名（冗余，与 TaktEmployee.EmployeeName 对齐）
+    /// </summary>
+    public string? EmployeeName { get; set; } = string.Empty;
 
     /// <summary>
     /// 技能名称
@@ -289,7 +326,7 @@ public class TaktEmployeeSkillTemplateDto
     public string? SkillName { get; set; } = string.Empty;
 
     /// <summary>
-    /// 技能等级（0=入门，1=熟练，2=精通，3=专家）
+    /// 技能等级（字典 hr_employee_skill_level；0=入门 1=熟练 2=精通 3=专家）
     /// </summary>
     public int? SkillLevel { get; set; }
 
@@ -299,9 +336,9 @@ public class TaktEmployeeSkillTemplateDto
     public string? CertificateName { get; set; } = string.Empty;
 
     /// <summary>
-    /// 证书编号
+    /// 证书编码
     /// </summary>
-    public string? CertificateNo { get; set; } = string.Empty;
+    public string? CertificateCode { get; set; } = string.Empty;
 
     /// <summary>
     /// 取得日期
@@ -346,10 +383,20 @@ public class TaktEmployeeSkillImportDto
     public string? CompanyDefaultCulture { get; set; } = string.Empty;
 
     /// <summary>
-    /// 员工ID
+    /// 员工（选项 TaktEmployees/options；DictValue=Id）
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
     public long? EmployeeId { get; set; }
+
+    /// <summary>
+    /// 员工编码（冗余，与 TaktEmployee.EmployeeCode 对齐）
+    /// </summary>
+    public string? EmployeeCode { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 员工姓名（冗余，与 TaktEmployee.EmployeeName 对齐）
+    /// </summary>
+    public string? EmployeeName { get; set; } = string.Empty;
 
     /// <summary>
     /// 技能名称
@@ -357,7 +404,7 @@ public class TaktEmployeeSkillImportDto
     public string? SkillName { get; set; } = string.Empty;
 
     /// <summary>
-    /// 技能等级（0=入门，1=熟练，2=精通，3=专家）
+    /// 技能等级（字典 hr_employee_skill_level；0=入门 1=熟练 2=精通 3=专家）
     /// </summary>
     public int? SkillLevel { get; set; }
 
@@ -367,9 +414,9 @@ public class TaktEmployeeSkillImportDto
     public string? CertificateName { get; set; } = string.Empty;
 
     /// <summary>
-    /// 证书编号
+    /// 证书编码
     /// </summary>
-    public string? CertificateNo { get; set; } = string.Empty;
+    public string? CertificateCode { get; set; } = string.Empty;
 
     /// <summary>
     /// 取得日期
@@ -415,10 +462,20 @@ public class TaktEmployeeSkillExportDto
     public string CompanyCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 员工ID
+    /// 员工（选项 TaktEmployees/options；DictValue=Id）
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
     public long EmployeeId { get; set; }
+
+    /// <summary>
+    /// 员工编码（冗余，与 TaktEmployee.EmployeeCode 对齐）
+    /// </summary>
+    public string EmployeeCode { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 员工姓名（冗余，与 TaktEmployee.EmployeeName 对齐）
+    /// </summary>
+    public string EmployeeName { get; set; } = string.Empty;
 
     /// <summary>
     /// 技能名称
@@ -426,7 +483,7 @@ public class TaktEmployeeSkillExportDto
     public string SkillName { get; set; } = string.Empty;
 
     /// <summary>
-    /// 技能等级（0=入门，1=熟练，2=精通，3=专家）
+    /// 技能等级（字典 hr_employee_skill_level；0=入门 1=熟练 2=精通 3=专家）
     /// </summary>
     public int SkillLevel { get; set; } = 0;
 
@@ -436,9 +493,9 @@ public class TaktEmployeeSkillExportDto
     public string? CertificateName { get; set; } = string.Empty;
 
     /// <summary>
-    /// 证书编号
+    /// 证书编码
     /// </summary>
-    public string? CertificateNo { get; set; } = string.Empty;
+    public string? CertificateCode { get; set; } = string.Empty;
 
     /// <summary>
     /// 取得日期

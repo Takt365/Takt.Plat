@@ -22,7 +22,7 @@ namespace Takt.Application.Dtos.Foundation;
 // ========================================
 
 /// <summary>
-/// ISO 编码实体 维护租户内标准短码（如 Eng、Pmc、D1000），用于编号规则、单据编码等段引用
+/// ISO 编码实体 维护租户内标准短码（如 Eng、Pmc、D1000），用于编码规则、单据编码等段引用
 /// 对应前端 TaktIsoCodeDto
 /// 继承 TaktTenantDtoBase
 /// </summary>
@@ -41,7 +41,7 @@ public class TaktIsoCodeDto : TaktTenantDtoBase
     public int IsoCodeCategory { get; set; } = 0;
 
     /// <summary>
-    /// ISO 编码（唯一索引：租户+类别内唯一，见 ix_iso_code_category_unique；编号规则等段引用，如 Eng、Pmc、D1000）
+    /// ISO 编码（唯一索引：租户+类别内唯一，见 ix_iso_code_category_unique；编码规则等段引用，如 Eng、Pmc、D1000）
     /// </summary>
     public string IsoCode { get; set; } = string.Empty;
 
@@ -93,7 +93,7 @@ public class TaktIsoCodeQueryDto : TaktPagedQuery
     public int? IsoCodeCategory { get; set; }
 
     /// <summary>
-    /// ISO 编码（唯一索引：租户+类别内唯一，见 ix_iso_code_category_unique；编号规则等段引用，如 Eng、Pmc、D1000）
+    /// ISO 编码（唯一索引：租户+类别内唯一，见 ix_iso_code_category_unique；编码规则等段引用，如 Eng、Pmc、D1000）
     /// </summary>
     public string? IsoCode { get; set; } = string.Empty;
 
@@ -163,9 +163,9 @@ public class TaktIsoCodeCreateDto
     public int IsoCodeCategory { get; set; } = 0;
 
     /// <summary>
-    /// ISO 编码（唯一索引：租户+类别内唯一，见 ix_iso_code_category_unique；编号规则等段引用，如 Eng、Pmc、D1000）
+    /// ISO 编码（唯一索引：租户+类别内唯一，见 ix_iso_code_category_unique；编码规则等段引用，如 Eng、Pmc、D1000）
     /// </summary>
-    [Required(ErrorMessage = "ISO 编码（唯一索引：租户+类别内唯一，见 ix_iso_code_category_unique；编号规则等段引用，如 Eng、Pmc、D1000）不能为空")]
+    [Required(ErrorMessage = "ISO 编码（唯一索引：租户+类别内唯一，见 ix_iso_code_category_unique；编码规则等段引用，如 Eng、Pmc、D1000）不能为空")]
     public string IsoCode { get; set; } = string.Empty;
 
     /// <summary>
@@ -289,7 +289,7 @@ public class TaktIsoCodeTemplateDto
     public int? IsoCodeCategory { get; set; }
 
     /// <summary>
-    /// ISO 编码（唯一索引：租户+类别内唯一，见 ix_iso_code_category_unique；编号规则等段引用，如 Eng、Pmc、D1000）
+    /// ISO 编码（唯一索引：租户+类别内唯一，见 ix_iso_code_category_unique；编码规则等段引用，如 Eng、Pmc、D1000）
     /// </summary>
     public string? IsoCode { get; set; } = string.Empty;
 
@@ -341,7 +341,7 @@ public class TaktIsoCodeImportDto
     public int? IsoCodeCategory { get; set; }
 
     /// <summary>
-    /// ISO 编码（唯一索引：租户+类别内唯一，见 ix_iso_code_category_unique；编号规则等段引用，如 Eng、Pmc、D1000）
+    /// ISO 编码（唯一索引：租户+类别内唯一，见 ix_iso_code_category_unique；编码规则等段引用，如 Eng、Pmc、D1000）
     /// </summary>
     public string? IsoCode { get; set; } = string.Empty;
 
@@ -399,7 +399,7 @@ public class TaktIsoCodeExportDto
     public int IsoCodeCategory { get; set; } = 0;
 
     /// <summary>
-    /// ISO 编码（唯一索引：租户+类别内唯一，见 ix_iso_code_category_unique；编号规则等段引用，如 Eng、Pmc、D1000）
+    /// ISO 编码（唯一索引：租户+类别内唯一，见 ix_iso_code_category_unique；编码规则等段引用，如 Eng、Pmc、D1000）
     /// </summary>
     public string IsoCode { get; set; } = string.Empty;
 

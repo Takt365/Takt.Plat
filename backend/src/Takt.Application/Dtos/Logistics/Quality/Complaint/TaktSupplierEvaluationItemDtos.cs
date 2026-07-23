@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Application.Dtos.Logistics.Quality.Complaint
 // 文件名称：TaktSupplierEvaluationItemDtos.cs
-// 创建时间：2026-07-09
+// 创建时间：2026-07-23
 // 创建人：Takt365(Auto Generated)
 // 功能描述：SupplierEvaluationItem 模块 DTO（由 generate-dtos-from-entity.cjs 根据 TaktSupplierEvaluationItem 生成，请按需审阅）
 // 
@@ -36,7 +36,7 @@ public class TaktSupplierEvaluationItemDto : TaktCompanyDtoBase
     public long SupplierEvaluationItemId { get; set; }
 
     /// <summary>
-    /// 评价表 ID（关联 TaktSupplierEvaluation.Id，选项 TaktSupplierEvaluations/options）
+    /// 评价表 ID（选项 TaktSupplierEvaluations/options；DictValue=Id）
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
     public long EvaluationId { get; set; }
@@ -47,7 +47,7 @@ public class TaktSupplierEvaluationItemDto : TaktCompanyDtoBase
     public string? EvaluationName { get; set; }
 
     /// <summary>
-    /// 评价表编号（冗余字段，便于查询）
+    /// 评价表编码（冗余字段，便于查询）
     /// </summary>
     public string SupplierEvaluationCode { get; set; } = string.Empty;
 
@@ -122,7 +122,7 @@ public class TaktSupplierEvaluationItemDto : TaktCompanyDtoBase
     public int RectificationStatus { get; set; } = 0;
 
     /// <summary>
-    /// 是否作废（字典 sys_yes_no_type，0=否 1=是；编辑移除子行时标记作废）
+    /// 是否作废（字典 sys_yes_no_type；0=否 1=是；编辑移除子行时标记作废）
     /// </summary>
     public int IsObsolete { get; set; } = 0;
 
@@ -155,13 +155,13 @@ public class TaktSupplierEvaluationItemQueryDto : TaktPagedQuery
     public string? CompanyCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 评价表 ID（关联 TaktSupplierEvaluation.Id，选项 TaktSupplierEvaluations/options）
+    /// 评价表 ID（选项 TaktSupplierEvaluations/options；DictValue=Id）
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
     public long? EvaluationId { get; set; }
 
     /// <summary>
-    /// 评价表编号（冗余字段，便于查询）
+    /// 评价表编码（冗余字段，便于查询）
     /// </summary>
     public string? SupplierEvaluationCode { get; set; } = string.Empty;
 
@@ -241,7 +241,7 @@ public class TaktSupplierEvaluationItemQueryDto : TaktPagedQuery
     public int? RectificationStatus { get; set; }
 
     /// <summary>
-    /// 是否作废（字典 sys_yes_no_type，0=否 1=是；编辑移除子行时标记作废）
+    /// 是否作废（字典 sys_yes_no_type；0=否 1=是；编辑移除子行时标记作废）
     /// </summary>
     public int? IsObsolete { get; set; }
 
@@ -291,15 +291,15 @@ public class TaktSupplierEvaluationItemCreateDto
     public string CompanyDefaultCulture { get; set; } = string.Empty;
 
     /// <summary>
-    /// 评价表 ID（关联 TaktSupplierEvaluation.Id，选项 TaktSupplierEvaluations/options）
+    /// 评价表 ID（选项 TaktSupplierEvaluations/options；DictValue=Id）
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
     public long EvaluationId { get; set; }
 
     /// <summary>
-    /// 评价表编号（冗余字段，便于查询）
+    /// 评价表编码（冗余字段，便于查询）
     /// </summary>
-    [Required(ErrorMessage = "评价表编号（冗余字段，便于查询）不能为空")]
+    [Required(ErrorMessage = "评价表编码（冗余字段，便于查询）不能为空")]
     public string SupplierEvaluationCode { get; set; } = string.Empty;
 
     /// <summary>
@@ -374,7 +374,7 @@ public class TaktSupplierEvaluationItemCreateDto
     public int RectificationStatus { get; set; } = 0;
 
     /// <summary>
-    /// 是否作废（字典 sys_yes_no_type，0=否 1=是；编辑移除子行时标记作废）
+    /// 是否作废（字典 sys_yes_no_type；0=否 1=是；编辑移除子行时标记作废）
     /// </summary>
     public int IsObsolete { get; set; } = 0;
 
@@ -477,13 +477,13 @@ public class TaktSupplierEvaluationItemTemplateDto
     public string? CompanyCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 评价表 ID（关联 TaktSupplierEvaluation.Id，选项 TaktSupplierEvaluations/options）
+    /// 评价表 ID（选项 TaktSupplierEvaluations/options；DictValue=Id）
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
     public long? EvaluationId { get; set; }
 
     /// <summary>
-    /// 评价表编号（冗余字段，便于查询）
+    /// 评价表编码（冗余字段，便于查询）
     /// </summary>
     public string? SupplierEvaluationCode { get; set; } = string.Empty;
 
@@ -558,7 +558,7 @@ public class TaktSupplierEvaluationItemTemplateDto
     public int? RectificationStatus { get; set; }
 
     /// <summary>
-    /// 是否作废（字典 sys_yes_no_type，0=否 1=是；编辑移除子行时标记作废）
+    /// 是否作废（字典 sys_yes_no_type；0=否 1=是；编辑移除子行时标记作废）
     /// </summary>
     public int? IsObsolete { get; set; }
 
@@ -595,13 +595,13 @@ public class TaktSupplierEvaluationItemImportDto
     public string? CompanyDefaultCulture { get; set; } = string.Empty;
 
     /// <summary>
-    /// 评价表 ID（关联 TaktSupplierEvaluation.Id，选项 TaktSupplierEvaluations/options）
+    /// 评价表 ID（选项 TaktSupplierEvaluations/options；DictValue=Id）
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
     public long? EvaluationId { get; set; }
 
     /// <summary>
-    /// 评价表编号（冗余字段，便于查询）
+    /// 评价表编码（冗余字段，便于查询）
     /// </summary>
     public string? SupplierEvaluationCode { get; set; } = string.Empty;
 
@@ -676,7 +676,7 @@ public class TaktSupplierEvaluationItemImportDto
     public int? RectificationStatus { get; set; }
 
     /// <summary>
-    /// 是否作废（字典 sys_yes_no_type，0=否 1=是；编辑移除子行时标记作废）
+    /// 是否作废（字典 sys_yes_no_type；0=否 1=是；编辑移除子行时标记作废）
     /// </summary>
     public int? IsObsolete { get; set; }
 
@@ -714,13 +714,13 @@ public class TaktSupplierEvaluationItemExportDto
     public string CompanyCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 评价表 ID（关联 TaktSupplierEvaluation.Id，选项 TaktSupplierEvaluations/options）
+    /// 评价表 ID（选项 TaktSupplierEvaluations/options；DictValue=Id）
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
     public long EvaluationId { get; set; }
 
     /// <summary>
-    /// 评价表编号（冗余字段，便于查询）
+    /// 评价表编码（冗余字段，便于查询）
     /// </summary>
     public string SupplierEvaluationCode { get; set; } = string.Empty;
 
@@ -795,7 +795,7 @@ public class TaktSupplierEvaluationItemExportDto
     public int RectificationStatus { get; set; } = 0;
 
     /// <summary>
-    /// 是否作废（字典 sys_yes_no_type，0=否 1=是；编辑移除子行时标记作废）
+    /// 是否作废（字典 sys_yes_no_type；0=否 1=是；编辑移除子行时标记作废）
     /// </summary>
     public int IsObsolete { get; set; } = 0;
 

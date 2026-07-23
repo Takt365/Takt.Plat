@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Infrastructure.Data.Seeds.I18nSeedData.Logistics.Quality.Complaint
 // 文件名称：TaktCustomerSatisfactionSurveyI18nSeedData.cs
-// 创建时间：2026-07-20
+// 创建时间：2026-07-23
 // 创建人：Takt365(Auto Generated)
 // 功能描述：TaktCustomerSatisfactionSurvey 实体字段国际化种子（无对应 frontend locales；TranslationText 取自 ColumnDescription，ContextNote 取自属性 XML summary）
 // 
@@ -91,40 +91,40 @@ public class TaktCustomerSatisfactionSurveyI18nSeedData : ITaktSeedDataCoordinat
             new TranslationSeedItem("entity.customersatisfactionsurvey._self", "zh-HK", "客户满意度调查表主表信息_hk", "实体名称"),
 
             // entity.customersatisfactionsurvey.code
-            new TranslationSeedItem("entity.customersatisfactionsurvey.code", "en-US", "调查表编号_us", "调查表编号（组合唯一索引）"),
+            new TranslationSeedItem("entity.customersatisfactionsurvey.code", "en-US", "调查表编码_us", "调查表编码（组合唯一索引）"),
             // entity.customersatisfactionsurvey.code
-            new TranslationSeedItem("entity.customersatisfactionsurvey.code", "ja-JP", "调查表编号_jp", "调查表编号（组合唯一索引）"),
+            new TranslationSeedItem("entity.customersatisfactionsurvey.code", "ja-JP", "调查表编码_jp", "调查表编码（组合唯一索引）"),
             // entity.customersatisfactionsurvey.code
-            new TranslationSeedItem("entity.customersatisfactionsurvey.code", "zh-CN", "调查表编号", "调查表编号（组合唯一索引）"),
+            new TranslationSeedItem("entity.customersatisfactionsurvey.code", "zh-CN", "调查表编码", "调查表编码（组合唯一索引）"),
             // entity.customersatisfactionsurvey.code
-            new TranslationSeedItem("entity.customersatisfactionsurvey.code", "zh-HK", "调查表编号_hk", "调查表编号（组合唯一索引）"),
+            new TranslationSeedItem("entity.customersatisfactionsurvey.code", "zh-HK", "调查表编码_hk", "调查表编码（组合唯一索引）"),
 
             // entity.customersatisfactionsurvey.customerid
-            new TranslationSeedItem("entity.customersatisfactionsurvey.customerid", "en-US", "客户ID_us", "客户 ID（选项 TaktCustomers/options，DictValue=Id）"),
+            new TranslationSeedItem("entity.customersatisfactionsurvey.customerid", "en-US", "客户ID_us", "客户 ID（选项 TaktCustomers/options；DictValue=Id）"),
             // entity.customersatisfactionsurvey.customerid
-            new TranslationSeedItem("entity.customersatisfactionsurvey.customerid", "ja-JP", "客户ID_jp", "客户 ID（选项 TaktCustomers/options，DictValue=Id）"),
+            new TranslationSeedItem("entity.customersatisfactionsurvey.customerid", "ja-JP", "客户ID_jp", "客户 ID（选项 TaktCustomers/options；DictValue=Id）"),
             // entity.customersatisfactionsurvey.customerid
-            new TranslationSeedItem("entity.customersatisfactionsurvey.customerid", "zh-CN", "客户ID", "客户 ID（选项 TaktCustomers/options，DictValue=Id）"),
+            new TranslationSeedItem("entity.customersatisfactionsurvey.customerid", "zh-CN", "客户ID", "客户 ID（选项 TaktCustomers/options；DictValue=Id）"),
             // entity.customersatisfactionsurvey.customerid
-            new TranslationSeedItem("entity.customersatisfactionsurvey.customerid", "zh-HK", "客户ID_hk", "客户 ID（选项 TaktCustomers/options，DictValue=Id）"),
+            new TranslationSeedItem("entity.customersatisfactionsurvey.customerid", "zh-HK", "客户ID_hk", "客户 ID（选项 TaktCustomers/options；DictValue=Id）"),
 
-            // entity.customersatisfactionsurvey.customername
-            new TranslationSeedItem("entity.customersatisfactionsurvey.customername", "en-US", "客户名称_us", "客户名称"),
-            // entity.customersatisfactionsurvey.customername
-            new TranslationSeedItem("entity.customersatisfactionsurvey.customername", "ja-JP", "客户名称_jp", "客户名称"),
-            // entity.customersatisfactionsurvey.customername
-            new TranslationSeedItem("entity.customersatisfactionsurvey.customername", "zh-CN", "客户名称", "客户名称"),
-            // entity.customersatisfactionsurvey.customername
-            new TranslationSeedItem("entity.customersatisfactionsurvey.customername", "zh-HK", "客户名称_hk", "客户名称"),
+            // entity.customersatisfactionsurvey.customername1
+            new TranslationSeedItem("entity.customersatisfactionsurvey.customername1", "en-US", "客户名称1_us", "客户名称1（冗余，与 TaktCustomer.CustomerName1 对齐）"),
+            // entity.customersatisfactionsurvey.customername1
+            new TranslationSeedItem("entity.customersatisfactionsurvey.customername1", "ja-JP", "客户名称1_jp", "客户名称1（冗余，与 TaktCustomer.CustomerName1 对齐）"),
+            // entity.customersatisfactionsurvey.customername1
+            new TranslationSeedItem("entity.customersatisfactionsurvey.customername1", "zh-CN", "客户名称1", "客户名称1（冗余，与 TaktCustomer.CustomerName1 对齐）"),
+            // entity.customersatisfactionsurvey.customername1
+            new TranslationSeedItem("entity.customersatisfactionsurvey.customername1", "zh-HK", "客户名称1_hk", "客户名称1（冗余，与 TaktCustomer.CustomerName1 对齐）"),
 
             // entity.customersatisfactionsurvey.customercode
-            new TranslationSeedItem("entity.customersatisfactionsurvey.customercode", "en-US", "客户编码_us", "客户编码（选项 TaktCustomers/options，DictValue=CustomerCode）"),
+            new TranslationSeedItem("entity.customersatisfactionsurvey.customercode", "en-US", "客户编码_us", "客户编码（选项 TaktCustomers/options；DictValue=CustomerCode）"),
             // entity.customersatisfactionsurvey.customercode
-            new TranslationSeedItem("entity.customersatisfactionsurvey.customercode", "ja-JP", "客户编码_jp", "客户编码（选项 TaktCustomers/options，DictValue=CustomerCode）"),
+            new TranslationSeedItem("entity.customersatisfactionsurvey.customercode", "ja-JP", "客户编码_jp", "客户编码（选项 TaktCustomers/options；DictValue=CustomerCode）"),
             // entity.customersatisfactionsurvey.customercode
-            new TranslationSeedItem("entity.customersatisfactionsurvey.customercode", "zh-CN", "客户编码", "客户编码（选项 TaktCustomers/options，DictValue=CustomerCode）"),
+            new TranslationSeedItem("entity.customersatisfactionsurvey.customercode", "zh-CN", "客户编码", "客户编码（选项 TaktCustomers/options；DictValue=CustomerCode）"),
             // entity.customersatisfactionsurvey.customercode
-            new TranslationSeedItem("entity.customersatisfactionsurvey.customercode", "zh-HK", "客户编码_hk", "客户编码（选项 TaktCustomers/options，DictValue=CustomerCode）"),
+            new TranslationSeedItem("entity.customersatisfactionsurvey.customercode", "zh-HK", "客户编码_hk", "客户编码（选项 TaktCustomers/options；DictValue=CustomerCode）"),
 
             // entity.customersatisfactionsurvey.surveydate
             new TranslationSeedItem("entity.customersatisfactionsurvey.surveydate", "en-US", "调查日期_us", "调查日期"),
@@ -163,13 +163,13 @@ public class TaktCustomerSatisfactionSurveyI18nSeedData : ITaktSeedDataCoordinat
             new TranslationSeedItem("entity.customersatisfactionsurvey.surveyperiod", "zh-HK", "调查周期_hk", "调查周期（字典 logistics_quality_period）"),
 
             // entity.customersatisfactionsurvey.surveyorby
-            new TranslationSeedItem("entity.customersatisfactionsurvey.surveyorby", "en-US", "调查人_us", "调查人（选项 TaktEmployees/options，DictValue=EmployeeCode）"),
+            new TranslationSeedItem("entity.customersatisfactionsurvey.surveyorby", "en-US", "调查人_us", "调查人（选项 TaktEmployees/options；DictValue=EmployeeCode）"),
             // entity.customersatisfactionsurvey.surveyorby
-            new TranslationSeedItem("entity.customersatisfactionsurvey.surveyorby", "ja-JP", "调查人_jp", "调查人（选项 TaktEmployees/options，DictValue=EmployeeCode）"),
+            new TranslationSeedItem("entity.customersatisfactionsurvey.surveyorby", "ja-JP", "调查人_jp", "调查人（选项 TaktEmployees/options；DictValue=EmployeeCode）"),
             // entity.customersatisfactionsurvey.surveyorby
-            new TranslationSeedItem("entity.customersatisfactionsurvey.surveyorby", "zh-CN", "调查人", "调查人（选项 TaktEmployees/options，DictValue=EmployeeCode）"),
+            new TranslationSeedItem("entity.customersatisfactionsurvey.surveyorby", "zh-CN", "调查人", "调查人（选项 TaktEmployees/options；DictValue=EmployeeCode）"),
             // entity.customersatisfactionsurvey.surveyorby
-            new TranslationSeedItem("entity.customersatisfactionsurvey.surveyorby", "zh-HK", "调查人_hk", "调查人（选项 TaktEmployees/options，DictValue=EmployeeCode）"),
+            new TranslationSeedItem("entity.customersatisfactionsurvey.surveyorby", "zh-HK", "调查人_hk", "调查人（选项 TaktEmployees/options；DictValue=EmployeeCode）"),
 
             // entity.customersatisfactionsurvey.customercontact
             new TranslationSeedItem("entity.customersatisfactionsurvey.customercontact", "en-US", "客户联系人_us", "客户联系人"),
@@ -280,13 +280,13 @@ public class TaktCustomerSatisfactionSurveyI18nSeedData : ITaktSeedDataCoordinat
             new TranslationSeedItem("entity.customersatisfactionsurvey.improvementplan", "zh-HK", "改进计划_hk", "改进计划/措施"),
 
             // entity.customersatisfactionsurvey.relatedcomplaintid
-            new TranslationSeedItem("entity.customersatisfactionsurvey.relatedcomplaintid", "en-US", "关联客诉ID_us", "关联客诉 ID（选项 TaktCustomerComplaints/options，DictValue=Id）"),
+            new TranslationSeedItem("entity.customersatisfactionsurvey.relatedcomplaintid", "en-US", "关联客诉ID_us", "关联客诉 ID（选项 TaktCustomerComplaints/options；DictValue=Id）"),
             // entity.customersatisfactionsurvey.relatedcomplaintid
-            new TranslationSeedItem("entity.customersatisfactionsurvey.relatedcomplaintid", "ja-JP", "关联客诉ID_jp", "关联客诉 ID（选项 TaktCustomerComplaints/options，DictValue=Id）"),
+            new TranslationSeedItem("entity.customersatisfactionsurvey.relatedcomplaintid", "ja-JP", "关联客诉ID_jp", "关联客诉 ID（选项 TaktCustomerComplaints/options；DictValue=Id）"),
             // entity.customersatisfactionsurvey.relatedcomplaintid
-            new TranslationSeedItem("entity.customersatisfactionsurvey.relatedcomplaintid", "zh-CN", "关联客诉ID", "关联客诉 ID（选项 TaktCustomerComplaints/options，DictValue=Id）"),
+            new TranslationSeedItem("entity.customersatisfactionsurvey.relatedcomplaintid", "zh-CN", "关联客诉ID", "关联客诉 ID（选项 TaktCustomerComplaints/options；DictValue=Id）"),
             // entity.customersatisfactionsurvey.relatedcomplaintid
-            new TranslationSeedItem("entity.customersatisfactionsurvey.relatedcomplaintid", "zh-HK", "关联客诉ID_hk", "关联客诉 ID（选项 TaktCustomerComplaints/options，DictValue=Id）"),
+            new TranslationSeedItem("entity.customersatisfactionsurvey.relatedcomplaintid", "zh-HK", "关联客诉ID_hk", "关联客诉 ID（选项 TaktCustomerComplaints/options；DictValue=Id）"),
 
             // entity.customersatisfactionsurvey.attachments
             new TranslationSeedItem("entity.customersatisfactionsurvey.attachments", "en-US", "附件JSON_us", "附件 （JSON列表形式，由TaktFile 统一上传到服务器）"),
@@ -307,13 +307,13 @@ public class TaktCustomerSatisfactionSurveyI18nSeedData : ITaktSeedDataCoordinat
             new TranslationSeedItem("entity.customersatisfactionsurvey.surveystatus", "zh-HK", "调查状态_hk", "调查状态（字典 logistics_quality_survey_status）"),
 
             // entity.customersatisfactionsurvey.relatedplant
-            new TranslationSeedItem("entity.customersatisfactionsurvey.relatedplant", "en-US", "关联工厂_us", "关联工厂（选项 TaktPlants/options，DictValue=PlantCode）"),
+            new TranslationSeedItem("entity.customersatisfactionsurvey.relatedplant", "en-US", "关联工厂_us", "关联工厂（选项 TaktPlants/options；DictValue=PlantCode）"),
             // entity.customersatisfactionsurvey.relatedplant
-            new TranslationSeedItem("entity.customersatisfactionsurvey.relatedplant", "ja-JP", "关联工厂_jp", "关联工厂（选项 TaktPlants/options，DictValue=PlantCode）"),
+            new TranslationSeedItem("entity.customersatisfactionsurvey.relatedplant", "ja-JP", "关联工厂_jp", "关联工厂（选项 TaktPlants/options；DictValue=PlantCode）"),
             // entity.customersatisfactionsurvey.relatedplant
-            new TranslationSeedItem("entity.customersatisfactionsurvey.relatedplant", "zh-CN", "关联工厂", "关联工厂（选项 TaktPlants/options，DictValue=PlantCode）"),
+            new TranslationSeedItem("entity.customersatisfactionsurvey.relatedplant", "zh-CN", "关联工厂", "关联工厂（选项 TaktPlants/options；DictValue=PlantCode）"),
             // entity.customersatisfactionsurvey.relatedplant
-            new TranslationSeedItem("entity.customersatisfactionsurvey.relatedplant", "zh-HK", "关联工厂_hk", "关联工厂（选项 TaktPlants/options，DictValue=PlantCode）"),
+            new TranslationSeedItem("entity.customersatisfactionsurvey.relatedplant", "zh-HK", "关联工厂_hk", "关联工厂（选项 TaktPlants/options；DictValue=PlantCode）"),
 
             // entity.customersatisfactionsurvey.sortorder
             new TranslationSeedItem("entity.customersatisfactionsurvey.sortorder", "en-US", "排序号_us", "排序号（越小越靠前）"),

@@ -92,7 +92,7 @@ public class TaktMaterialDocumentItemDto : TaktCompanyDtoBase
     public string? ProductionOrderCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 项目编号（WBS 元素）
+    /// 项目编码（WBS 元素）
     /// </summary>
     public string? ProjectCode { get; set; } = string.Empty;
 
@@ -107,7 +107,7 @@ public class TaktMaterialDocumentItemDto : TaktCompanyDtoBase
     public DateTime DocumentDate { get; set; }
 
     /// <summary>
-    /// 收货/发货单编号
+    /// 收货/发货单编码
     /// </summary>
     public string? ReferenceDocumentCode { get; set; } = string.Empty;
 
@@ -206,7 +206,7 @@ public class TaktMaterialDocumentItemQueryDto : TaktPagedQuery
     public string? ProductionOrderCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 项目编号（WBS 元素）
+    /// 项目编码（WBS 元素）
     /// </summary>
     public string? ProjectCode { get; set; } = string.Empty;
 
@@ -226,7 +226,7 @@ public class TaktMaterialDocumentItemQueryDto : TaktPagedQuery
     public DateTime? DocumentDateEnd { get; set; }
 
     /// <summary>
-    /// 收货/发货单编号
+    /// 收货/发货单编码
     /// </summary>
     public string? ReferenceDocumentCode { get; set; } = string.Empty;
 
@@ -340,7 +340,7 @@ public class TaktMaterialDocumentItemCreateDto
     public string? ProductionOrderCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 项目编号（WBS 元素）
+    /// 项目编码（WBS 元素）
     /// </summary>
     public string? ProjectCode { get; set; } = string.Empty;
 
@@ -355,7 +355,7 @@ public class TaktMaterialDocumentItemCreateDto
     public DateTime DocumentDate { get; set; }
 
     /// <summary>
-    /// 收货/发货单编号
+    /// 收货/发货单编码
     /// </summary>
     public string? ReferenceDocumentCode { get; set; } = string.Empty;
 
@@ -495,7 +495,7 @@ public class TaktMaterialDocumentItemTemplateDto
     public string? ProductionOrderCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 项目编号（WBS 元素）
+    /// 项目编码（WBS 元素）
     /// </summary>
     public string? ProjectCode { get; set; } = string.Empty;
 
@@ -510,7 +510,7 @@ public class TaktMaterialDocumentItemTemplateDto
     public DateTime? DocumentDate { get; set; }
 
     /// <summary>
-    /// 收货/发货单编号
+    /// 收货/发货单编码
     /// </summary>
     public string? ReferenceDocumentCode { get; set; } = string.Empty;
 
@@ -608,7 +608,7 @@ public class TaktMaterialDocumentItemImportDto
     public string? ProductionOrderCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 项目编号（WBS 元素）
+    /// 项目编码（WBS 元素）
     /// </summary>
     public string? ProjectCode { get; set; } = string.Empty;
 
@@ -623,7 +623,7 @@ public class TaktMaterialDocumentItemImportDto
     public DateTime? DocumentDate { get; set; }
 
     /// <summary>
-    /// 收货/发货单编号
+    /// 收货/发货单编码
     /// </summary>
     public string? ReferenceDocumentCode { get; set; } = string.Empty;
 
@@ -722,7 +722,7 @@ public class TaktMaterialDocumentItemExportDto
     public string? ProductionOrderCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 项目编号（WBS 元素）
+    /// 项目编码（WBS 元素）
     /// </summary>
     public string? ProjectCode { get; set; } = string.Empty;
 
@@ -737,7 +737,7 @@ public class TaktMaterialDocumentItemExportDto
     public DateTime DocumentDate { get; set; }
 
     /// <summary>
-    /// 收货/发货单编号
+    /// 收货/发货单编码
     /// </summary>
     public string? ReferenceDocumentCode { get; set; } = string.Empty;
 

@@ -8,9 +8,6 @@
 
 <template>
   <div class="order-item-panel flex h-full min-h-0 flex-col overflow-hidden">
-    <div class="mb-2 text-sm font-medium text-text">
-      {{ pi.self() }}
-    </div>
     <TaktQueryBar
       v-model="queryKeyword"
       :placeholder="searchPlaceholder"
@@ -55,7 +52,10 @@
       @delete="handleDelete"
       @refresh="handleRefresh"
     />
-    <div class="order-item-panel__table-wrap min-h-0 flex-1 overflow-hidden">
+    <div
+      ref="detailTableWrapRef"
+      class="order-item-panel__table-wrap min-h-0 flex-1 overflow-hidden"
+    >
       <TaktSingleTable
         class="h-full min-h-0"
         :columns="columns"
@@ -63,6 +63,7 @@
         :data-source="dataSource"
         :loading="loading"
         :stripe="true"
+        :virtual="true"
         :row-key="getSalesOrderItemId"
         :row-selection="rowSelection"
         :custom-row="onClickRow"
@@ -74,11 +75,27 @@
         :total="total"
         scroll-layout="masterDetailLr"
         table-mode="masterDetailDetail"
+        :scroll="{ y: detailTableScrollY }"
         :show-row-selection="true"
         @change="handleTableChange"
         @pagination-change="handleMasterDetailPaginationChange"
         @resize-column="handleResizeColumn"
-      />
+      >
+        <template #summary>
+          <a-table-summary fixed>
+            <a-table-summary-row>
+              <a-table-summary-cell :index="0" />
+              <a-table-summary-cell
+                v-for="cell in summaryCells"
+                :key="cell.key"
+                :index="cell.index"
+              >
+                <span class="text-sm font-medium">{{ cell.text }}</span>
+              </a-table-summary-cell>
+            </a-table-summary-row>
+          </a-table-summary>
+        </template>
+      </TaktSingleTable>
     </div>
     <TaktModal
       v-model:open="formVisible"
@@ -130,7 +147,7 @@
       <a-form-item :label="pi.queryLabel('materialCode')">
         <TaktSelect
           v-model:value="advancedQueryForm.materialCode"
-          api-url="TaktMaterials/options"
+          api-url="TaktMaterialPlants/options"
           :placeholder="pi.queryPh('materialCode', 'select')"
           allow-clear
         />
@@ -196,11 +213,11 @@
         />
       </a-form-item>
       </div>
-      <div v-show="isFieldVisible('unitPrice')">
-      <a-form-item :label="pi.queryLabel('unitPrice')">
+      <div v-show="isFieldVisible('salesUnitPrice')">
+      <a-form-item :label="pi.queryLabel('salesUnitPrice')">
         <a-input-number
-          v-model:value="advancedQueryForm.unitPrice"
-          :placeholder="pi.queryPh('unitPrice', 'required')"
+          v-model:value="advancedQueryForm.salesUnitPrice"
+          :placeholder="pi.queryPh('salesUnitPrice', 'required')"
           style="width: 100%"
         />
       </a-form-item>
@@ -223,13 +240,21 @@
         />
       </a-form-item>
       </div>
-      <div v-show="isFieldVisible('taxRate')">
-      <a-form-item :label="pi.queryLabel('taxRate')">
-        <TaktSelect
-          v-model:value="advancedQueryForm.taxRate"
-          dict-type="accounting_tax_rate_param"
-          :placeholder="pi.queryPh('taxRate', 'select')"
-          allow-clear
+      <div v-show="isFieldVisible('taxIncludedAmount')">
+      <a-form-item :label="pi.queryLabel('taxIncludedAmount')">
+        <a-input-number
+          v-model:value="advancedQueryForm.taxIncludedAmount"
+          :placeholder="pi.queryPh('taxIncludedAmount', 'required')"
+          style="width: 100%"
+        />
+      </a-form-item>
+      </div>
+      <div v-show="isFieldVisible('untaxedAmount')">
+      <a-form-item :label="pi.queryLabel('untaxedAmount')">
+        <a-input-number
+          v-model:value="advancedQueryForm.untaxedAmount"
+          :placeholder="pi.queryPh('untaxedAmount', 'required')"
+          style="width: 100%"
         />
       </a-form-item>
       </div>
@@ -242,21 +267,22 @@
         />
       </a-form-item>
       </div>
-      <div v-show="isFieldVisible('subtotalAmount')">
-      <a-form-item :label="pi.queryLabel('subtotalAmount')">
-        <a-input-number
-          v-model:value="advancedQueryForm.subtotalAmount"
-          :placeholder="pi.queryPh('subtotalAmount', 'required')"
-          style="width: 100%"
-        />
-      </a-form-item>
-      </div>
       <div v-show="isFieldVisible('deliveryStatus')">
       <a-form-item :label="pi.queryLabel('deliveryStatus')">
         <TaktSelect
           v-model:value="advancedQueryForm.deliveryStatus"
           dict-type="logistics_delivery_status"
           :placeholder="pi.queryPh('deliveryStatus', 'select')"
+          allow-clear
+        />
+      </a-form-item>
+      </div>
+      <div v-show="isFieldVisible('isObsolete')">
+      <a-form-item :label="pi.queryLabel('isObsolete')">
+        <TaktSelect
+          v-model:value="advancedQueryForm.isObsolete"
+          dict-type="sys_yes_no_type"
+          :placeholder="pi.queryPh('isObsolete', 'select')"
           allow-clear
         />
       </a-form-item>
@@ -366,14 +392,23 @@
  * Takt销售订单实体子表 salesOrderItem 右栏面板
  * @module views/logistics/sales/order/components
  */
-import { ref, computed, watch } from 'vue'
+import { ref, computed, watch, onMounted, onBeforeUnmount, nextTick } from 'vue'
 import { message, Modal } from 'ant-design-vue'
 import type { TableColumnsType } from 'ant-design-vue'
 import { useI18n } from 'vue-i18n'
+import { measureMasterDetailLrTableScrollY } from '@/composables/use-takt-master-detail-lr-scroll-y'
+import { TAKT_TABLE_SCROLL_Y_MIN } from '@/utils/table-scroll'
 import { getTaktDefaultPageIndex, getTaktDefaultPageSize } from '@/utils/takt-paged'
 import { taktExcelEntityNames } from '@/utils/naming'
 import { resolveExportDownloadFileName } from '@/utils/export-download-name'
 import { normalizeImportResult, type TaktImportResult } from '@/utils/takt-import-result'
+import {
+  filterMergedColumnsByDefaultVisible,
+  filterTableColumnsByVisibleKeys,
+  mergeDefaultColumns,
+  normalizeUserTableColumns,
+} from '@/utils/table-columns'
+import { formatSummaryValue } from '@/components/business/takt-editable-table/editable-table-utils'
 import { CreateActionColumn } from '@/components/business/takt-action-column/index'
 import { RiEditLine, RiDeleteBinLine, RiQuestionLine } from '@remixicon/vue'
 import SalesOrderItemForm from './order-item-form.vue'
@@ -393,7 +428,8 @@ import type { SalesOrderItem, SalesOrderItemQuery } from '@/types/logistics/sale
 
 import {
   useSalesOrderItemI18n,
-  SALESORDERITEM_LIST_FIELDS,
+  SALESORDERITEM_DEFAULT_VISIBLE_COLUMN_KEYS,
+  SALESORDERITEM_SUMMARY_SUM_FIELDS,
   SALESORDERITEM_QUERY_STRING_FIELDS,
   SALESORDERITEM_QUERY_FIELDS,
   SALESORDERITEM_SELF_I18N_KEY,
@@ -413,6 +449,41 @@ const searchPlaceholder = computed(
 )
 
 const loading = ref(false)
+
+/** 子表滚动区容器（扣除查询/工具栏后剩余高度） */
+const detailTableWrapRef = ref<HTMLElement | null>(null)
+/** 子表 scroll.y（按 __table-wrap 实测，避免沿用主表共享高度导致双滚动条） */
+const detailTableScrollY = ref(TAKT_TABLE_SCROLL_Y_MIN)
+let detailTableScrollResizeObserver: ResizeObserver | null = null
+
+/** 按子表容器重算 scroll.y（扣除表头 + 汇总行，避免合计被裁切或双滚动条） */
+function recalcDetailTableScrollY(): void {
+  const wrap = detailTableWrapRef.value
+  if (!wrap) {
+    return
+  }
+  detailTableScrollY.value = measureMasterDetailLrTableScrollY(wrap, { reserveSummaryRow: true })
+}
+
+/** 监听子表容器尺寸变化 */
+function startDetailTableScrollObserve(): void {
+  stopDetailTableScrollObserve()
+  recalcDetailTableScrollY()
+  const wrap = detailTableWrapRef.value
+  if (!wrap) {
+    return
+  }
+  detailTableScrollResizeObserver = new ResizeObserver(() => {
+    recalcDetailTableScrollY()
+  })
+  detailTableScrollResizeObserver.observe(wrap)
+}
+
+/** 停止监听子表容器尺寸 */
+function stopDetailTableScrollObserve(): void {
+  detailTableScrollResizeObserver?.disconnect()
+  detailTableScrollResizeObserver = null
+}
 const dataSource = ref<SalesOrderItem[]>([])
 const currentPage = ref(getTaktDefaultPageIndex())
 const pageSize = ref(getTaktDefaultPageSize())
@@ -443,13 +514,14 @@ function createEmptyAdvancedQueryForm() {
     orderQuantity: undefined as number | undefined,
     shippedQuantity: undefined as number | undefined,
     salesPerUnit: undefined as number | undefined,
-    unitPrice: undefined as number | undefined,
+    salesUnitPrice: undefined as number | undefined,
     discountRate: undefined as number | undefined,
     discountAmount: undefined as number | undefined,
-    taxRate: undefined as number | undefined,
+    taxIncludedAmount: undefined as number | undefined,
+    untaxedAmount: undefined as number | undefined,
     taxAmount: undefined as number | undefined,
-    subtotalAmount: undefined as number | undefined,
     deliveryStatus: undefined as number | undefined,
+    isObsolete: undefined as number | undefined,
   }
 }
 const advancedQueryForm = ref(createEmptyAdvancedQueryForm())
@@ -474,8 +546,8 @@ function handleAdvancedQueryReset() {
   advancedQueryForm.value = createEmptyAdvancedQueryForm()
 }
 const columnSettingVisible = ref(false)
-/** 表格当前可见列 key（空数组时按 tableMode=masterDetailDetail 默认 id+4 业务列） */
-const visibleColumnKeys = ref<string[]>([])
+/** 表格当前可见列 key */
+const visibleColumnKeys = ref<string[]>([...SALESORDERITEM_DEFAULT_VISIBLE_COLUMN_KEYS])
 
 function handleColumnSetting() {
   columnSettingVisible.value = true
@@ -486,7 +558,7 @@ function handleColumnKeysChange(keys: string[]) {
 }
 
 function handleColumnSettingReset() {
-  visibleColumnKeys.value = []
+  visibleColumnKeys.value = [...SALESORDERITEM_DEFAULT_VISIBLE_COLUMN_KEYS]
 }
 const importVisible = ref(false)
 
@@ -518,6 +590,16 @@ const columns = computed<TableColumnsType>(() => [
     fixed: 'left',
     customRender: ({ record }: { record: SalesOrderItem }) =>
       String(getSalesOrderItemField(record, 'salesOrderItemId') ?? ''),
+  },
+  {
+    title: pi.label('salesOrderId'),
+    dataIndex: 'salesOrderId',
+    key: 'salesOrderId',
+    width: 120,
+    resizable: true,
+    ellipsis: true,
+    customRender: ({ record }: { record: SalesOrderItem }) =>
+      String(getSalesOrderItemField(record, 'salesOrderId') ?? ''),
   },
   {
     title: pi.label('salesOrderName'),
@@ -620,14 +702,14 @@ const columns = computed<TableColumnsType>(() => [
       String(getSalesOrderItemField(record, 'salesPerUnit') ?? ''),
   },
   {
-    title: pi.label('unitPrice'),
-    dataIndex: 'unitPrice',
-    key: 'unitPrice',
+    title: pi.label('salesUnitPrice'),
+    dataIndex: 'salesUnitPrice',
+    key: 'salesUnitPrice',
     width: 120,
     resizable: true,
     ellipsis: true,
     customRender: ({ record }: { record: SalesOrderItem }) =>
-      String(getSalesOrderItemField(record, 'unitPrice') ?? ''),
+      String(getSalesOrderItemField(record, 'salesUnitPrice') ?? ''),
   },
   {
     title: pi.label('discountRate'),
@@ -650,14 +732,24 @@ const columns = computed<TableColumnsType>(() => [
       String(getSalesOrderItemField(record, 'discountAmount') ?? ''),
   },
   {
-    title: pi.label('taxRate'),
-    dataIndex: 'taxRate',
-    key: 'taxRate',
+    title: pi.label('taxIncludedAmount'),
+    dataIndex: 'taxIncludedAmount',
+    key: 'taxIncludedAmount',
     width: 120,
     resizable: true,
     ellipsis: true,
     customRender: ({ record }: { record: SalesOrderItem }) =>
-      String(getSalesOrderItemField(record, 'taxRate') ?? ''),
+      String(getSalesOrderItemField(record, 'taxIncludedAmount') ?? ''),
+  },
+  {
+    title: pi.label('untaxedAmount'),
+    dataIndex: 'untaxedAmount',
+    key: 'untaxedAmount',
+    width: 120,
+    resizable: true,
+    ellipsis: true,
+    customRender: ({ record }: { record: SalesOrderItem }) =>
+      String(getSalesOrderItemField(record, 'untaxedAmount') ?? ''),
   },
   {
     title: pi.label('taxAmount'),
@@ -670,16 +762,6 @@ const columns = computed<TableColumnsType>(() => [
       String(getSalesOrderItemField(record, 'taxAmount') ?? ''),
   },
   {
-    title: pi.label('subtotalAmount'),
-    dataIndex: 'subtotalAmount',
-    key: 'subtotalAmount',
-    width: 120,
-    resizable: true,
-    ellipsis: true,
-    customRender: ({ record }: { record: SalesOrderItem }) =>
-      String(getSalesOrderItemField(record, 'subtotalAmount') ?? ''),
-  },
-  {
     title: pi.label('deliveryStatus'),
     dataIndex: 'deliveryStatus',
     key: 'deliveryStatus',
@@ -690,14 +772,14 @@ const columns = computed<TableColumnsType>(() => [
       String(getSalesOrderItemField(record, 'deliveryStatus') ?? ''),
   },
   {
-    title: pi.label('salesOrder'),
-    dataIndex: 'salesOrder',
-    key: 'salesOrder',
+    title: pi.label('isObsolete'),
+    dataIndex: 'isObsolete',
+    key: 'isObsolete',
     width: 120,
     resizable: true,
     ellipsis: true,
     customRender: ({ record }: { record: SalesOrderItem }) =>
-      String(getSalesOrderItemField(record, 'salesOrder') ?? ''),
+      String(getSalesOrderItemField(record, 'isObsolete') ?? ''),
   },
   CreateActionColumn({
     actions: [
@@ -721,6 +803,75 @@ const columns = computed<TableColumnsType>(() => [
   }),
 ])
 
+/** 与 TaktSingleTable 展示列对齐（用于汇总行单元格） */
+const resolvedSummaryColumns = computed(() => {
+  const userCols = normalizeUserTableColumns(columns.value)
+  const merged = mergeDefaultColumns(userCols, t, true, 'company')
+  const keys = visibleColumnKeys.value
+  if (keys.length > 0) {
+    return filterTableColumnsByVisibleKeys(merged, keys, merged)
+  }
+  return filterMergedColumnsByDefaultVisible(merged, userCols, {
+    idColumnKey: 'salesOrderItemId',
+    actionColumnKey: 'action',
+    tableMode: 'masterDetailDetail',
+    entityScope: 'company',
+  })
+})
+
+const summarySumFieldSet = new Set<string>(SALESORDERITEM_SUMMARY_SUM_FIELDS)
+
+/** 汇总行首列文案 */
+const summaryLabel = computed(() => t('components.business.page.editabletable.summarylabel'))
+
+/** 汇总行单元格（index 与 a-table 列序一致：0=行选择，1..n=展示列） */
+const summaryCells = computed(() => {
+  const cells: Array<{ key: string; text: string; index: number }> = []
+  resolvedSummaryColumns.value.forEach((col, columnIndex) => {
+    const key = String(col.key ?? columnIndex)
+    let text = ''
+    if (columnIndex === 0) {
+      text = summaryLabel.value
+    } else if (isSummarySumField(key)) {
+      text = formatSummaryFieldTotal(key)
+    }
+    cells.push({
+      key,
+      text,
+      index: columnIndex + 1,
+    })
+  })
+  return cells
+})
+
+/** 是否参与当前页合计 */
+function isSummarySumField(field: string): boolean {
+  return summarySumFieldSet.has(field)
+}
+
+/** 当前页 dataSource 各合计列求和 */
+const summaryFieldTotals = computed(() => {
+  const totals = Object.fromEntries(
+    SALESORDERITEM_SUMMARY_SUM_FIELDS.map((field) => [field, 0]),
+  ) as Record<(typeof SALESORDERITEM_SUMMARY_SUM_FIELDS)[number], number>
+  for (const row of dataSource.value) {
+    for (const field of SALESORDERITEM_SUMMARY_SUM_FIELDS) {
+      const num = Number(getSalesOrderItemField(row, field))
+      if (Number.isFinite(num)) {
+        totals[field] += num
+      }
+    }
+  }
+  return totals
+})
+
+/** 格式化合计单元格展示值 */
+function formatSummaryFieldTotal(field: string): string {
+  if (!isSummarySumField(field)) {
+    return ''
+  }
+  return formatSummaryValue(summaryFieldTotals.value[field as keyof typeof summaryFieldTotals.value])
+}
 const rowSelection = computed(() => ({
   selectedRowKeys: selectedRowKeys.value,
   onChange: (keys: (string | number)[], rows: SalesOrderItem[]) => {
@@ -796,8 +947,8 @@ function buildListQuery(overrides?: Partial<SalesOrderItemQuery>): SalesOrderIte
   if (form.salesPerUnit !== undefined && form.salesPerUnit !== null) {
     query.salesPerUnit = form.salesPerUnit
   }
-  if (form.unitPrice !== undefined && form.unitPrice !== null) {
-    query.unitPrice = form.unitPrice
+  if (form.salesUnitPrice !== undefined && form.salesUnitPrice !== null) {
+    query.salesUnitPrice = form.salesUnitPrice
   }
   if (form.discountRate !== undefined && form.discountRate !== null) {
     query.discountRate = form.discountRate
@@ -805,17 +956,20 @@ function buildListQuery(overrides?: Partial<SalesOrderItemQuery>): SalesOrderIte
   if (form.discountAmount !== undefined && form.discountAmount !== null) {
     query.discountAmount = form.discountAmount
   }
-  if (form.taxRate !== undefined && form.taxRate !== null) {
-    query.taxRate = form.taxRate
+  if (form.taxIncludedAmount !== undefined && form.taxIncludedAmount !== null) {
+    query.taxIncludedAmount = form.taxIncludedAmount
+  }
+  if (form.untaxedAmount !== undefined && form.untaxedAmount !== null) {
+    query.untaxedAmount = form.untaxedAmount
   }
   if (form.taxAmount !== undefined && form.taxAmount !== null) {
     query.taxAmount = form.taxAmount
   }
-  if (form.subtotalAmount !== undefined && form.subtotalAmount !== null) {
-    query.subtotalAmount = form.subtotalAmount
-  }
   if (form.deliveryStatus !== undefined && form.deliveryStatus !== null) {
     query.deliveryStatus = form.deliveryStatus
+  }
+  if (form.isObsolete !== undefined && form.isObsolete !== null) {
+    query.isObsolete = form.isObsolete
   }
   return query
 }
@@ -856,6 +1010,36 @@ watch(masterSalesOrderId, () => {
 
 /** 租户/公司切换时刷新子表 */
 useTableRefresh(loadData)
+
+onMounted(() => {
+  startDetailTableScrollObserve()
+})
+
+onBeforeUnmount(() => {
+  stopDetailTableScrollObserve()
+})
+
+watch(
+  () => loading.value,
+  (isLoading) => {
+    if (!isLoading) {
+      void nextTick(() => recalcDetailTableScrollY())
+    }
+  },
+)
+
+watch(
+  () => [dataSource.value.length, visibleColumnKeys.value.join(',')],
+  () => {
+    void nextTick(() => recalcDetailTableScrollY())
+  },
+)
+
+watch(hasMasterSelection, (selected) => {
+  if (selected) {
+    void nextTick(() => startDetailTableScrollObserve())
+  }
+})
 
 function handleSearch() {
   currentPage.value = getTaktDefaultPageIndex()

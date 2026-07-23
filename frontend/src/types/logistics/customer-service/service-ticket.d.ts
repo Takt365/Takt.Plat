@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：frontend/src/types/logistics/customer-service
 // 文件名称：service-ticket.d.ts
-// 创建时间：2026-06-23
+// 创建时间：2026-07-23
 // 创建人：Takt365(Auto Generated)
 // 功能描述：logistics/customer-service 模块类型定义（自动生成；类型名去 Takt 前缀与末尾 Dto，如 TaktCompanyDto → Company）
 // 
@@ -44,6 +44,11 @@ export interface ServiceTicket extends CompanyDtoBase {
   clientId: string;
 
   /**
+   * 客户端名称（填充字段）
+   */
+  clientName?: string;
+
+  /**
    * 客户端编码（冗余字段，便于查询）
    */
   clientCode: string;
@@ -51,7 +56,7 @@ export interface ServiceTicket extends CompanyDtoBase {
   /**
    * 客户端名称（冗余字段，便于查询）
    */
-  clientName: string;
+  clientName1: string;
 
   /**
    * 关联服务请求ID（序列化为string以避免Javascript精度问题）
@@ -241,7 +246,7 @@ export interface ServiceTicketQuery extends TaktPagedQuery {
   /**
    * 客户端名称（冗余字段，便于查询）
    */
-  clientName?: string;
+  clientName1?: string;
 
   /**
    * 关联服务请求ID（序列化为string以避免Javascript精度问题）
@@ -450,7 +455,7 @@ export interface ServiceTicketCreate {
   /**
    * 客户端名称（冗余字段，便于查询）
    */
-  clientName: string;
+  clientName1: string;
 
   /**
    * 关联服务请求ID（序列化为string以避免Javascript精度问题）
@@ -667,7 +672,7 @@ export interface ServiceTicketTemplate {
   /**
    * 客户端名称（冗余字段，便于查询）
    */
-  clientName?: string;
+  clientName1?: string;
 
   /**
    * 关联服务请求ID（序列化为string以避免Javascript精度问题）
@@ -836,7 +841,7 @@ export interface ServiceTicketImport {
   /**
    * 客户端名称（冗余字段，便于查询）
    */
-  clientName?: string;
+  clientName1?: string;
 
   /**
    * 关联服务请求ID（序列化为string以避免Javascript精度问题）
@@ -1000,7 +1005,7 @@ export interface ServiceTicketExport {
   /**
    * 客户端名称（冗余字段，便于查询）
    */
-  clientName: string;
+  clientName1: string;
 
   /**
    * 关联服务请求ID（序列化为string以避免Javascript精度问题）

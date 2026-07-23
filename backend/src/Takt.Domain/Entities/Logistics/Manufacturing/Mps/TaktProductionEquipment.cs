@@ -26,7 +26,7 @@ public class TaktProductionEquipment : TaktCompanyEntityBase
 {
     // ---- 基础标识 ----
     /// <summary>
-    /// 工厂代码（选项 TaktPlants/options，DictValue=PlantCode）
+    /// 工厂代码（选项 TaktPlants/options；DictValue=PlantCode）
     /// </summary>
     [SugarColumn(ColumnName = "plant_code", ColumnDescription = "工厂代码", ColumnDataType = "nvarchar", Length = 40, IsNullable = false)]
     public string PlantCode { get; set; } = string.Empty;
@@ -36,7 +36,7 @@ public class TaktProductionEquipment : TaktCompanyEntityBase
     [SugarColumn(ColumnName = "equipment_category", ColumnDescription = "设备类别", ColumnDataType = "int", IsNullable = false, DefaultValue = "1")]
     public int EquipmentCategory { get; set; } = 1;
     /// <summary>
-    /// 生产设备编码（同一工厂+存放位置内不可重复；EquipmentCode / 资产MES编号）
+    /// 生产设备编码（同一工厂+存放位置内不可重复；EquipmentCode / 资产MES编码）
     /// </summary>
     [SugarColumn(ColumnName = "production_equipment_code", ColumnDescription = "生产设备编码", ColumnDataType = "nvarchar", Length = 40, IsNullable = false)]
     public string ProductionEquipmentCode { get; set; } = string.Empty;

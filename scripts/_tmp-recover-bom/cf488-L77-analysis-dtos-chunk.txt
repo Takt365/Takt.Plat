@@ -1,0 +1,240 @@
+c DateTime CreatedAt { get; set; }
+}
+
+// ========================================
+// BOM 物料成本转置分析 DTO
+// ========================================
+
+/// <summary>
+/// 成本转置查询（行=产品，列=月份期间）
+/// </summary>
+public class TaktBomMaterialCostTransposedQueryDto : TaktPagedQuery
+{
+    /// <summary>
+    /// 关键词（产品编码/描述）
+    /// </summary>
+    public string? KeyWords { get; set; }
+
+    /// <summary>
+    /// 产品编码
+    /// </summary>
+    public string? ProductCode { get; set; }
+
+    /// <summary>
+    /// 处理日期起
+    /// </summary>
+    public DateTime? ProcessedDateStart { get; set; }
+
+    /// <summary>
+    /// 处理日期止
+    /// </summary>
+    public DateTime? ProcessedDateEnd { get; set; }
+
+    /// <summary>
+    /// 状态（默认仅已处理=1）
+    /// </summary>
+    public int? BomMaterialCostStatus { get; set; }
+}
+
+/// <summary>
+/// 成本转置行（产品各月总成本）
+/// </summary>
+public class TaktBomMaterialCostTransposedDto
+{
+    /// <summary>
+    /// 产品编码
+    /// </summary>
+    public string ProductCode { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 产品描述
+    /// </summary>
+    public string ProductDescription { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 各期间总成本（键 yyyy-MM）
+    /// </summary>
+    public Dictionary<string, decimal> PeriodCosts { get; set; } = new(StringComparer.Ordinal);
+}
+
+/// <summary>
+/// 成本转置分页结果（含动态列顺序）
+/// </summary>
+public class TaktBomMaterialCostTransposedResultDto
+{
+    /// <summary>
+    /// 分页数据
+    /// </summary>
+    public TaktPagedResult<TaktBomMaterialCostTransposedDto> Paged { get; set; } = null!;
+
+    /// <summary>
+    /// 期间列顺序（yyyy-MM）
+    /// </summary>
+    public List<string> PeriodOrder { get; set; } = new();
+}
+
+/// <summary>
+/// 成本差异分析查询（两期间组件级对比）
+/// </summary>
+public class TaktBomMaterialCostVarianceQueryDto
+{
+    /// <summary>
+    /// 产品编码
+    /// </summary>
+    [Required]
+    public string ProductCode { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 基准期间（yyyy-MM）
+    /// </summary>
+    [Required]
+    public string BasePeriod { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 对比期间（yyyy-MM）
+    /// </summary>
+    [Required]
+    public string ComparePeriod { get; set; } = string.Empty;
+}
+
+/// <summary>
+/// 成本差异分析行（组件级）
+/// </summary>
+public class TaktBomMaterialCostVarianceLineDto
+{
+    /// <summary>
+    /// BOM 项目号
+    /// </summary>
+    public string BomItemNo { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 组件编码
+    /// </summary>
+    public string ComponentCode { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 组件描述
+    /// </summary>
+    public string ComponentDescription { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 采购类型（F/E）
+    /// </summary>
+    public string PurchaseType { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 货币
+    /// </summary>
+    public string Currency { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 基准行成本
+    /// </summary>
+    public decimal BaseCost { get; set; }
+
+    /// <summary>
+    /// 对比行成本
+    /// </summary>
+    public decimal CompareCost { get; set; }
+
+    /// <summary>
+    /// 成本差异（对比 - 基准）
+    /// </summary>
+    public decimal VarianceAmount { get; set; }
+
+    /// <summary>
+    /// 成本差异率（%）
+    /// </summary>
+    public decimal? VariancePercent { get; set; }
+
+    /// <summary>
+    /// 基准单价
+    /// </summary>
+    public decimal BaseUnitPrice { get; set; }
+
+    /// <summary>
+    /// 对比单价
+    /// </summary>
+    public decimal CompareUnitPrice { get; set; }
+
+    /// <summary>
+    /// 单价差异
+    /// </summary>
+    public decimal UnitPriceVariance { get; set; }
+
+    /// <summary>
+    /// 基准数量
+    /// </summary>
+    public decimal BaseQuantity { get; set; }
+
+    /// <summary>
+    /// 对比数量
+    /// </summary>
+    public decimal CompareQuantity { get; set; }
+
+    /// <summary>
+    /// 数量差异
+    /// </summary>
+    public decimal QuantityVariance { get; set; }
+
+    /// <summary>
+    /// 价格因素影响额（(对比单价-基准单价)×基准数量/价格单位）
+    /// </summary>
+    public decimal PriceEffectAmount { get; set; }
+
+    /// <summary>
+    /// 数量因素影响额（(对比数量-基准数量)×基准单价/价格单位）
+    /// </summary>
+    public decimal QuantityEffectAmount { get; set; }
+
+    /// <summary>
+    /// 变动类型：new=新增组件，removed=移除组件，price=价格变动，quantity=用量变动，mixed=复合
+    /// </summary>
+    public string ChangeType { get; set; } = string.Empty;
+}
+
+/// <summary>
+/// 成本差异分析结果
+/// </summary>
+public class TaktBomMaterialCostVarianceResultDto
+{
+    /// <summary>
+    /// 产品编码
+    /// </summary>
+    public string ProductCode { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 产品描述
+    /// </summary>
+    public string ProductDescription { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 基准期间
+    /// </summary>
+    public string BasePeriod { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 对比期间
+    /// </summary>
+    public string ComparePeriod { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 基准总成本
+    /// </summary>
+    public decimal BaseTotalCost { get; set; }
+
+    /// <summary>
+    /// 对比总成本
+    /// </summary>
+    public decimal CompareTotalCost { get; set; }
+
+    /// <summary>
+    /// 总成本差异
+    /// </summary>
+    public decimal TotalVariance { get; set; }
+
+    /// <summary>
+    /// 组件差异明细（按差异额绝对值降序）
+    /// </summary>
+    public List<TaktBomMaterialCostVarianceLineDto> Lines { get; set; } = new();
+}

@@ -84,7 +84,7 @@ export interface MaterialDocumentItem extends CompanyDtoBase {
   productionOrderCode?: string;
 
   /**
-   * 项目编号（WBS 元素）
+   * 项目编码（WBS 元素）
    */
   projectCode?: string;
 
@@ -99,7 +99,7 @@ export interface MaterialDocumentItem extends CompanyDtoBase {
   documentDate: string;
 
   /**
-   * 收货/发货单编号
+   * 收货/发货单编码
    */
   referenceDocumentCode?: string;
 
@@ -194,7 +194,7 @@ export interface MaterialDocumentItemQuery extends TaktPagedQuery {
   productionOrderCode?: string;
 
   /**
-   * 项目编号（WBS 元素）
+   * 项目编码（WBS 元素）
    */
   projectCode?: string;
 
@@ -214,7 +214,7 @@ export interface MaterialDocumentItemQuery extends TaktPagedQuery {
   documentDateEnd?: string;
 
   /**
-   * 收货/发货单编号
+   * 收货/发货单编码
    */
   referenceDocumentCode?: string;
 
@@ -323,7 +323,7 @@ export interface MaterialDocumentItemCreate {
   productionOrderCode?: string;
 
   /**
-   * 项目编号（WBS 元素）
+   * 项目编码（WBS 元素）
    */
   projectCode?: string;
 
@@ -338,7 +338,7 @@ export interface MaterialDocumentItemCreate {
   documentDate: string;
 
   /**
-   * 收货/发货单编号
+   * 收货/发货单编码
    */
   referenceDocumentCode?: string;
 
@@ -466,7 +466,7 @@ export interface MaterialDocumentItemTemplate {
   productionOrderCode?: string;
 
   /**
-   * 项目编号（WBS 元素）
+   * 项目编码（WBS 元素）
    */
   projectCode?: string;
 
@@ -481,7 +481,7 @@ export interface MaterialDocumentItemTemplate {
   documentDate?: string;
 
   /**
-   * 收货/发货单编号
+   * 收货/发货单编码
    */
   referenceDocumentCode?: string;
 
@@ -580,7 +580,7 @@ export interface MaterialDocumentItemImport {
   productionOrderCode?: string;
 
   /**
-   * 项目编号（WBS 元素）
+   * 项目编码（WBS 元素）
    */
   projectCode?: string;
 
@@ -595,7 +595,7 @@ export interface MaterialDocumentItemImport {
   documentDate?: string;
 
   /**
-   * 收货/发货单编号
+   * 收货/发货单编码
    */
   referenceDocumentCode?: string;
 
@@ -689,7 +689,7 @@ export interface MaterialDocumentItemExport {
   productionOrderCode?: string;
 
   /**
-   * 项目编号（WBS 元素）
+   * 项目编码（WBS 元素）
    */
   projectCode?: string;
 
@@ -704,7 +704,7 @@ export interface MaterialDocumentItemExport {
   documentDate: string;
 
   /**
-   * 收货/发货单编号
+   * 收货/发货单编码
    */
   referenceDocumentCode?: string;
 

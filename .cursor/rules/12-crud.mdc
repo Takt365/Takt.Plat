@@ -103,10 +103,11 @@ types/     id 及 long 字段 string；TaktPagedQuery / TaktPagedResult
 views/     index.vue（8 行 HTML 头）+ components/xxx-form.vue
 页面分区   查询栏 → 工具栏 → 表格 → 分页 → 弹窗 → 高级查询/列设置
 组件       TaktQueryBar、TaktToolsBar、TaktSingleTable、TaktPagination、takt-modal
-表格       row-key string；:pagination="false" + 外置 TaktPagination
+表格       row-key string；:pagination="false" + 外置 TaktPagination；TaktSingleTable 默认 virtual
 权限       TaktToolsBar *-permission + 按钮 v-permission
 文案       列标题 entity.*；页面壳 locales/{域}/{模块}/page.* 或 common.page.*
 导入导出   template/import blob；export responseType blob
+大数据     后端分页/树一层取数（可查任意行）；前端表格默认虚拟滚动（见 07/08）
 loading    列表/提交 async + loading 态
 ```
 

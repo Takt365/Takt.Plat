@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：frontend/src/types/human-resource/personnel
 // 文件名称：employee-experience.d.ts
-// 创建时间：2026-06-23
+// 创建时间：2026-07-23
 // 创建人：Takt365(Auto Generated)
 // 功能描述：human-resource/personnel 模块类型定义（自动生成；类型名去 Takt 前缀与末尾 Dto，如 TaktCompanyDto → Company）
 // 
@@ -29,14 +29,19 @@ export interface EmployeeExperience extends CompanyDtoBase {
   employeeExperienceId: string;
 
   /**
-   * 员工ID
+   * 员工（选项 TaktEmployees/options；DictValue=Id）
    */
   employeeId: string;
 
   /**
-   * 员工名称（填充字段）
+   * 员工编码（冗余，与 TaktEmployee.EmployeeCode 对齐）
    */
-  employeeName?: string;
+  employeeCode: string;
+
+  /**
+   * 员工姓名（冗余，与 TaktEmployee.EmployeeName 对齐）
+   */
+  employeeName: string;
 
   /**
    * 工作单位名称
@@ -94,9 +99,19 @@ export interface EmployeeExperienceQuery extends TaktPagedQuery {
   companyCode?: string;
 
   /**
-   * 员工ID
+   * 员工（选项 TaktEmployees/options；DictValue=Id）
    */
   employeeId?: string;
+
+  /**
+   * 员工编码（冗余，与 TaktEmployee.EmployeeCode 对齐）
+   */
+  employeeCode?: string;
+
+  /**
+   * 员工姓名（冗余，与 TaktEmployee.EmployeeName 对齐）
+   */
+  employeeName?: string;
 
   /**
    * 工作单位名称
@@ -188,9 +203,19 @@ export interface EmployeeExperienceCreate {
   companyDefaultCulture: string;
 
   /**
-   * 员工ID
+   * 员工（选项 TaktEmployees/options；DictValue=Id）
    */
   employeeId: string;
+
+  /**
+   * 员工编码（冗余，与 TaktEmployee.EmployeeCode 对齐）
+   */
+  employeeCode: string;
+
+  /**
+   * 员工姓名（冗余，与 TaktEmployee.EmployeeName 对齐）
+   */
+  employeeName: string;
 
   /**
    * 工作单位名称
@@ -272,9 +297,19 @@ export interface EmployeeExperienceTemplate {
   companyCode?: string;
 
   /**
-   * 员工ID
+   * 员工（选项 TaktEmployees/options；DictValue=Id）
    */
   employeeId?: string;
+
+  /**
+   * 员工编码（冗余，与 TaktEmployee.EmployeeCode 对齐）
+   */
+  employeeCode?: string;
+
+  /**
+   * 员工姓名（冗余，与 TaktEmployee.EmployeeName 对齐）
+   */
+  employeeName?: string;
 
   /**
    * 工作单位名称
@@ -346,9 +381,19 @@ export interface EmployeeExperienceImport {
   companyDefaultCulture?: string;
 
   /**
-   * 员工ID
+   * 员工（选项 TaktEmployees/options；DictValue=Id）
    */
   employeeId?: string;
+
+  /**
+   * 员工编码（冗余，与 TaktEmployee.EmployeeCode 对齐）
+   */
+  employeeCode?: string;
+
+  /**
+   * 员工姓名（冗余，与 TaktEmployee.EmployeeName 对齐）
+   */
+  employeeName?: string;
 
   /**
    * 工作单位名称
@@ -415,9 +460,19 @@ export interface EmployeeExperienceExport {
   companyCode: string;
 
   /**
-   * 员工ID
+   * 员工（选项 TaktEmployees/options；DictValue=Id）
    */
   employeeId: string;
+
+  /**
+   * 员工编码（冗余，与 TaktEmployee.EmployeeCode 对齐）
+   */
+  employeeCode: string;
+
+  /**
+   * 员工姓名（冗余，与 TaktEmployee.EmployeeName 对齐）
+   */
+  employeeName: string;
 
   /**
    * 工作单位名称

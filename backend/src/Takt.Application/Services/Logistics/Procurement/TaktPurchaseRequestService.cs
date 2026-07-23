@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Application.Services.Logistics.Procurement
 // 文件名称：TaktPurchaseRequestService.cs
-// 创建时间：2026-07-09
+// 创建时间：2026-07-23
 // 创建人：Takt365(Cursor AI)
 // 功能描述：采购申请应用服务实现
 // 
@@ -359,7 +359,20 @@ public class TaktPurchaseRequestService : TaktServiceBase, ITaktPurchaseRequestS
     private async Task SavePurchaseRequestChildrenAsync(TaktPurchaseRequest entity, TaktPurchaseRequestCreateDto dto)
     {
         // 采购申请明细（Items）
-        if (dto.Items is not { Count: > 0 })
+        List<TaktPurchaseRequestItemUpdateDto>? itemsForSave;
+        if (dto is TaktPurchaseRequestUpdateDto updateDtoForItems && updateDtoForItems.Items != null)
+        {
+            itemsForSave = updateDtoForItems.Items;
+        }
+        else if (dto.Items != null)
+        {
+            itemsForSave = dto.Items.Adapt<List<TaktPurchaseRequestItemUpdateDto>>();
+        }
+        else
+        {
+            itemsForSave = null;
+        }
+        if (itemsForSave is not { Count: > 0 })
         {
             await MarkPurchaseRequestItemsObsoleteAsync(entity.Id);
             return;
@@ -371,9 +384,9 @@ public class TaktPurchaseRequestService : TaktServiceBase, ITaktPurchaseRequestS
             var submittedIds = new HashSet<long>();
             var toCreate = new List<TaktPurchaseRequestItem>();
             var seenLineKeys = new HashSet<string>(StringComparer.Ordinal);
-            for (var i = 0; i < dto.Items.Count; i++)
+            for (var i = 0; i < itemsForSave.Count; i++)
             {
-                var childDto = dto.Items[i];
+                var childDto = itemsForSave[i];
                 childDto.PurchaseRequestId = entity.Id;
                 var lineKey = $"{entity.CompanyCode}|{entity.Id}|{childDto.LineNumber}";
                 if (!seenLineKeys.Add(lineKey))
@@ -475,12 +488,19 @@ public class TaktPurchaseRequestService : TaktServiceBase, ITaktPurchaseRequestS
                 || (x.PurchaseRequestCode != null && x.PurchaseRequestCode.Contains(keywords))
                 || SqlFunc.ToString(x.PurchaseInquiryId).Contains(keywords)
                 || (x.PurchaseInquiryCode != null && x.PurchaseInquiryCode.Contains(keywords))
+                || SqlFunc.ToString(x.PurchasePlanId).Contains(keywords)
+                || (x.PurchasePlanCode != null && x.PurchasePlanCode.Contains(keywords))
                 || SqlFunc.ToString(x.ChainScheme).Contains(keywords)
                 || SqlFunc.ToString(x.PoDecision).Contains(keywords)
                 || SqlFunc.ToString(x.CountersignId).Contains(keywords)
                 || (x.CountersignCode != null && x.CountersignCode.Contains(keywords))
                 || SqlFunc.ToString(x.RequestId).Contains(keywords)
                 || (x.RequestBy != null && x.RequestBy.Contains(keywords))
+                || (x.SupplierCode != null && x.SupplierCode.Contains(keywords))
+                || (x.SupplierName1 != null && x.SupplierName1.Contains(keywords))
+                || (x.CurrencyCode != null && x.CurrencyCode.Contains(keywords))
+                || SqlFunc.ToString(x.TaxRate).Contains(keywords)
+                || SqlFunc.ToString(x.TaxAmount).Contains(keywords)
                 || SqlFunc.ToString(x.TotalQuantity).Contains(keywords)
                 || SqlFunc.ToString(x.TotalAmount).Contains(keywords)
                 || SqlFunc.ToString(x.ConvertedQuantity).Contains(keywords)
@@ -516,6 +536,16 @@ public class TaktPurchaseRequestService : TaktServiceBase, ITaktPurchaseRequestS
             exp = exp.And(x => x.PurchaseInquiryCode != null && x.PurchaseInquiryCode.Contains(queryDto.PurchaseInquiryCode));
         }
 
+        if (queryDto?.PurchasePlanId.HasValue == true)
+        {
+            exp = exp.And(x => x.PurchasePlanId == queryDto.PurchasePlanId);
+        }
+
+        if (!string.IsNullOrEmpty(queryDto?.PurchasePlanCode))
+        {
+            exp = exp.And(x => x.PurchasePlanCode != null && x.PurchasePlanCode.Contains(queryDto.PurchasePlanCode));
+        }
+
         if (queryDto?.ChainScheme.HasValue == true)
         {
             exp = exp.And(x => x.ChainScheme == queryDto.ChainScheme);
@@ -544,6 +574,31 @@ public class TaktPurchaseRequestService : TaktServiceBase, ITaktPurchaseRequestS
         if (!string.IsNullOrEmpty(queryDto?.RequestBy))
         {
             exp = exp.And(x => x.RequestBy != null && x.RequestBy.Contains(queryDto.RequestBy));
+        }
+
+        if (!string.IsNullOrEmpty(queryDto?.SupplierCode))
+        {
+            exp = exp.And(x => x.SupplierCode != null && x.SupplierCode.Contains(queryDto.SupplierCode));
+        }
+
+        if (!string.IsNullOrEmpty(queryDto?.SupplierName1))
+        {
+            exp = exp.And(x => x.SupplierName1 != null && x.SupplierName1.Contains(queryDto.SupplierName1));
+        }
+
+        if (!string.IsNullOrEmpty(queryDto?.CurrencyCode))
+        {
+            exp = exp.And(x => x.CurrencyCode != null && x.CurrencyCode.Contains(queryDto.CurrencyCode));
+        }
+
+        if (queryDto?.TaxRate.HasValue == true)
+        {
+            exp = exp.And(x => x.TaxRate == queryDto.TaxRate);
+        }
+
+        if (queryDto?.TaxAmount.HasValue == true)
+        {
+            exp = exp.And(x => x.TaxAmount == queryDto.TaxAmount);
         }
 
         if (queryDto?.TotalQuantity.HasValue == true)

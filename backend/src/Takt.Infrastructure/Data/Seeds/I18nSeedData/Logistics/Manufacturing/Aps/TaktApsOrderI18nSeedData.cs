@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Infrastructure.Data.Seeds.I18nSeedData.Logistics.Manufacturing.Aps
 // 文件名称：TaktApsOrderI18nSeedData.cs
-// 创建时间：2026-07-20
+// 创建时间：2026-07-23
 // 创建人：Takt365(Auto Generated)
 // 功能描述：TaktApsOrder 实体字段国际化种子（无对应 frontend locales；TranslationText 取自 ColumnDescription，ContextNote 取自属性 XML summary）
 // 
@@ -91,13 +91,13 @@ public class TaktApsOrderI18nSeedData : ITaktSeedDataCoordinator
             new TranslationSeedItem("entity.apsorder._self", "zh-HK", "APS 排程订单信息_hk", "实体名称"),
 
             // entity.apsorder.plantcode
-            new TranslationSeedItem("entity.apsorder.plantcode", "en-US", "工厂代码_us", "工厂代码（选项 TaktPlants/options，DictValue=PlantCode）"),
+            new TranslationSeedItem("entity.apsorder.plantcode", "en-US", "工厂代码_us", "工厂代码（选项 TaktPlants/options；DictValue=PlantCode）"),
             // entity.apsorder.plantcode
-            new TranslationSeedItem("entity.apsorder.plantcode", "ja-JP", "工厂代码_jp", "工厂代码（选项 TaktPlants/options，DictValue=PlantCode）"),
+            new TranslationSeedItem("entity.apsorder.plantcode", "ja-JP", "工厂代码_jp", "工厂代码（选项 TaktPlants/options；DictValue=PlantCode）"),
             // entity.apsorder.plantcode
-            new TranslationSeedItem("entity.apsorder.plantcode", "zh-CN", "工厂代码", "工厂代码（选项 TaktPlants/options，DictValue=PlantCode）"),
+            new TranslationSeedItem("entity.apsorder.plantcode", "zh-CN", "工厂代码", "工厂代码（选项 TaktPlants/options；DictValue=PlantCode）"),
             // entity.apsorder.plantcode
-            new TranslationSeedItem("entity.apsorder.plantcode", "zh-HK", "工厂代码_hk", "工厂代码（选项 TaktPlants/options，DictValue=PlantCode）"),
+            new TranslationSeedItem("entity.apsorder.plantcode", "zh-HK", "工厂代码_hk", "工厂代码（选项 TaktPlants/options；DictValue=PlantCode）"),
 
             // entity.apsorder.code
             new TranslationSeedItem("entity.apsorder.code", "en-US", "APS订单编码_us", "APS 订单编码"),
@@ -127,13 +127,13 @@ public class TaktApsOrderI18nSeedData : ITaktSeedDataCoordinator
             new TranslationSeedItem("entity.apsorder.plannedordercode", "zh-HK", "来源计划订单编码_hk", "来源计划订单编码（冗余）"),
 
             // entity.apsorder.materialcode
-            new TranslationSeedItem("entity.apsorder.materialcode", "en-US", "物料编码_us", "物料编码（选项 TaktMaterialPlants/options，DictValue=MaterialCode，ExtValue=PlantCode）"),
+            new TranslationSeedItem("entity.apsorder.materialcode", "en-US", "物料编码_us", "物料编码（选项 TaktMaterialPlants/options；DictValue=MaterialCode，ExtValue=PlantCode）"),
             // entity.apsorder.materialcode
-            new TranslationSeedItem("entity.apsorder.materialcode", "ja-JP", "物料编码_jp", "物料编码（选项 TaktMaterialPlants/options，DictValue=MaterialCode，ExtValue=PlantCode）"),
+            new TranslationSeedItem("entity.apsorder.materialcode", "ja-JP", "物料编码_jp", "物料编码（选项 TaktMaterialPlants/options；DictValue=MaterialCode，ExtValue=PlantCode）"),
             // entity.apsorder.materialcode
-            new TranslationSeedItem("entity.apsorder.materialcode", "zh-CN", "物料编码", "物料编码（选项 TaktMaterialPlants/options，DictValue=MaterialCode，ExtValue=PlantCode）"),
+            new TranslationSeedItem("entity.apsorder.materialcode", "zh-CN", "物料编码", "物料编码（选项 TaktMaterialPlants/options；DictValue=MaterialCode，ExtValue=PlantCode）"),
             // entity.apsorder.materialcode
-            new TranslationSeedItem("entity.apsorder.materialcode", "zh-HK", "物料编码_hk", "物料编码（选项 TaktMaterialPlants/options，DictValue=MaterialCode，ExtValue=PlantCode）"),
+            new TranslationSeedItem("entity.apsorder.materialcode", "zh-HK", "物料编码_hk", "物料编码（选项 TaktMaterialPlants/options；DictValue=MaterialCode，ExtValue=PlantCode）"),
 
             // entity.apsorder.orderquantity
             new TranslationSeedItem("entity.apsorder.orderquantity", "en-US", "订单数量_us", "订单数量"),
@@ -145,22 +145,22 @@ public class TaktApsOrderI18nSeedData : ITaktSeedDataCoordinator
             new TranslationSeedItem("entity.apsorder.orderquantity", "zh-HK", "订单数量_hk", "订单数量"),
 
             // entity.apsorder.unitofmeasure
-            new TranslationSeedItem("entity.apsorder.unitofmeasure", "en-US", "计量单位_us", "计量单位（字典 logistics_unit_of_measure_code，DictValue=PC/EA 等；默认 PC）"),
+            new TranslationSeedItem("entity.apsorder.unitofmeasure", "en-US", "计量单位_us", "计量单位（字典 logistics_unit_of_measure_code；DictValue=PC/EA 等；默认 PC）"),
             // entity.apsorder.unitofmeasure
-            new TranslationSeedItem("entity.apsorder.unitofmeasure", "ja-JP", "计量单位_jp", "计量单位（字典 logistics_unit_of_measure_code，DictValue=PC/EA 等；默认 PC）"),
+            new TranslationSeedItem("entity.apsorder.unitofmeasure", "ja-JP", "计量单位_jp", "计量单位（字典 logistics_unit_of_measure_code；DictValue=PC/EA 等；默认 PC）"),
             // entity.apsorder.unitofmeasure
-            new TranslationSeedItem("entity.apsorder.unitofmeasure", "zh-CN", "计量单位", "计量单位（字典 logistics_unit_of_measure_code，DictValue=PC/EA 等；默认 PC）"),
+            new TranslationSeedItem("entity.apsorder.unitofmeasure", "zh-CN", "计量单位", "计量单位（字典 logistics_unit_of_measure_code；DictValue=PC/EA 等；默认 PC）"),
             // entity.apsorder.unitofmeasure
-            new TranslationSeedItem("entity.apsorder.unitofmeasure", "zh-HK", "计量单位_hk", "计量单位（字典 logistics_unit_of_measure_code，DictValue=PC/EA 等；默认 PC）"),
+            new TranslationSeedItem("entity.apsorder.unitofmeasure", "zh-HK", "计量单位_hk", "计量单位（字典 logistics_unit_of_measure_code；DictValue=PC/EA 等；默认 PC）"),
 
             // entity.apsorder.routingcode
-            new TranslationSeedItem("entity.apsorder.routingcode", "en-US", "工艺路线编码_us", "工艺路线编码（选项 TaktRoutings/options，DictValue=RoutingCode）"),
+            new TranslationSeedItem("entity.apsorder.routingcode", "en-US", "工艺路线编码_us", "工艺路线编码（选项 TaktRoutings/options；DictValue=RoutingCode）"),
             // entity.apsorder.routingcode
-            new TranslationSeedItem("entity.apsorder.routingcode", "ja-JP", "工艺路线编码_jp", "工艺路线编码（选项 TaktRoutings/options，DictValue=RoutingCode）"),
+            new TranslationSeedItem("entity.apsorder.routingcode", "ja-JP", "工艺路线编码_jp", "工艺路线编码（选项 TaktRoutings/options；DictValue=RoutingCode）"),
             // entity.apsorder.routingcode
-            new TranslationSeedItem("entity.apsorder.routingcode", "zh-CN", "工艺路线编码", "工艺路线编码（选项 TaktRoutings/options，DictValue=RoutingCode）"),
+            new TranslationSeedItem("entity.apsorder.routingcode", "zh-CN", "工艺路线编码", "工艺路线编码（选项 TaktRoutings/options；DictValue=RoutingCode）"),
             // entity.apsorder.routingcode
-            new TranslationSeedItem("entity.apsorder.routingcode", "zh-HK", "工艺路线编码_hk", "工艺路线编码（选项 TaktRoutings/options，DictValue=RoutingCode）"),
+            new TranslationSeedItem("entity.apsorder.routingcode", "zh-HK", "工艺路线编码_hk", "工艺路线编码（选项 TaktRoutings/options；DictValue=RoutingCode）"),
 
             // entity.apsorder.plannedstarttime
             new TranslationSeedItem("entity.apsorder.plannedstarttime", "en-US", "计划开始时间_us", "计划开始时间"),

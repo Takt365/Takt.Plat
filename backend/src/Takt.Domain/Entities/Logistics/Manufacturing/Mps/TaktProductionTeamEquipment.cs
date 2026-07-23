@@ -27,7 +27,7 @@ namespace Takt.Domain.Entities.Logistics.Manufacturing.Mps;
 public class TaktProductionTeamEquipment : TaktCompanyEntityBase
 {
     /// <summary>
-    /// 工厂代码（选项 TaktPlants/options，DictValue=PlantCode）
+    /// 工厂代码（选项 TaktPlants/options；DictValue=PlantCode）
     /// </summary>
     [SugarColumn(ColumnName = "plant_code", ColumnDescription = "工厂代码", ColumnDataType = "nvarchar", Length = 40, IsNullable = false)]
     public string PlantCode { get; set; } = string.Empty;
@@ -67,7 +67,7 @@ public class TaktProductionTeamEquipment : TaktCompanyEntityBase
     [SugarColumn(ColumnName = "team_equipment_status", ColumnDescription = "班组设备状态", ColumnDataType = "int", IsNullable = false, DefaultValue = "1")]
     public int TeamEquipmentStatus { get; set; } = 1;
     /// <summary>
-    /// 是否作废（字典 sys_yes_no_type，0=否 1=是；编辑移除子行时标记作废）
+    /// 是否作废（字典 sys_yes_no_type；0=否 1=是；编辑移除子行时标记作废）
     /// </summary>
     [SugarColumn(ColumnName = "is_obsolete", ColumnDescription = "是否作废", ColumnDataType = "int", IsNullable = false, DefaultValue = "0")]
     public int IsObsolete { get; set; } = 0;

@@ -1232,7 +1232,7 @@ public static class TaktServHelper
 public class CpuCoreInfo
 {
     /// <summary>
-    /// 逻辑核心名称（如 0、1、2…；非物理核心编号）
+    /// 逻辑核心名称（如 0、1、2…；非物理核心编码）
     /// </summary>
     public string Name { get; set; } = string.Empty;
 
@@ -1659,12 +1659,12 @@ public class InstalledLanguage
 public class ServerHardwareInfo
 {
     /// <summary>
-    /// 主机编号（系统序列号，来源于 SMBIOS）
+    /// 主机编码（系统序列号，来源于 SMBIOS）
     /// </summary>
     public string HostSerialNumber { get; set; } = string.Empty;
 
     /// <summary>
-    /// 硬盘编号（第一个磁盘的序列号）
+    /// 硬盘编码（第一个磁盘的序列号）
     /// </summary>
     public string DriveSerialNumber { get; set; } = string.Empty;
 

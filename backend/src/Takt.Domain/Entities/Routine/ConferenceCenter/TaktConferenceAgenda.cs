@@ -27,7 +27,7 @@ namespace Takt.Domain.Entities.Routine.ConferenceCenter;
 public class TaktConferenceAgenda : TaktCompanyEntityBase
 {
     /// <summary>
-    /// 会议 ID（选项 TaktConferences/options，DictValue=Id）
+    /// 会议 ID（选项 TaktConferences/options；DictValue=Id）
     /// </summary>
     [SugarColumn(ColumnName = "conference_id", ColumnDescription = "会议ID", ColumnDataType = "bigint", IsNullable = false)]
     [JsonConverter(typeof(ValueToStringConverter))]
@@ -58,7 +58,7 @@ public class TaktConferenceAgenda : TaktCompanyEntityBase
     [SugarColumn(ColumnName = "conference_agenda_summary", ColumnDescription = "摘要", ColumnDataType = "nvarchar", Length = 2000, IsNullable = true)]
     public string? ConferenceAgendaSummary { get; set; }
     /// <summary>
-    /// 主讲人/汇报人 ID（选项 TaktUsers/options，DictValue=Id）
+    /// 主讲人/汇报人 ID（选项 TaktUsers/options；DictValue=Id）
     /// </summary>
     [SugarColumn(ColumnName = "presenter_id", ColumnDescription = "主讲人ID", ColumnDataType = "bigint", IsNullable = true)]
     [JsonConverter(typeof(ValueToStringConverter))]
@@ -79,7 +79,7 @@ public class TaktConferenceAgenda : TaktCompanyEntityBase
     [SugarColumn(ColumnName = "duration_minutes", ColumnDescription = "计划时长分钟", ColumnDataType = "int", IsNullable = false, DefaultValue = "0")]
     public int DurationMinutes { get; set; } = 0;
     /// <summary>
-    /// 记录人 ID（选项 TaktUsers/options，DictValue=Id）
+    /// 记录人 ID（选项 TaktUsers/options；DictValue=Id）
     /// </summary>
     [SugarColumn(ColumnName = "recorder_id", ColumnDescription = "记录人ID", ColumnDataType = "bigint", IsNullable = true)]
     [JsonConverter(typeof(ValueToStringConverter))]
@@ -96,7 +96,7 @@ public class TaktConferenceAgenda : TaktCompanyEntityBase
     public string? Attachments { get; set; }
 
     /// <summary>
-    /// 是否作废（字典 sys_yes_no_type，0=否 1=是；编辑移除子行时标记作废）
+    /// 是否作废（字典 sys_yes_no_type；0=否 1=是；编辑移除子行时标记作废）
     /// </summary>
     [SugarColumn(ColumnName = "is_obsolete", ColumnDescription = "是否作废", ColumnDataType = "int", IsNullable = false, DefaultValue = "0")]
     public int IsObsolete { get; set; } = 0;

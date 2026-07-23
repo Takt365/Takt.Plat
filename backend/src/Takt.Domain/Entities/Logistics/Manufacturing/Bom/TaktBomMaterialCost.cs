@@ -30,7 +30,7 @@ namespace Takt.Domain.Entities.Logistics.Manufacturing.Bom;
 public class TaktBomMaterialCost : TaktCompanyEntityBase
 {
     /// <summary>
-    /// 工厂代码（选项 TaktPlants/options，DictValue=PlantCode）
+    /// 工厂代码（选项 TaktPlants/options；DictValue=PlantCode）
     /// </summary>
     [SugarColumn(ColumnName = "plant_code", ColumnDescription = "工厂代码", ColumnDataType = "nvarchar", Length = 4, IsNullable = false)]
     public string PlantCode { get; set; } = string.Empty;
@@ -66,7 +66,7 @@ public class TaktBomMaterialCost : TaktCompanyEntityBase
     public decimal ProductMonthlyCost { get; set; } = 0;
 
     /// <summary>
-    /// 币种（字典 accounting_currency_code，如 CNY/USD）
+    /// 币种（字典 accounting_currency_code；如 CNY/USD）
     /// </summary>
     [SugarColumn(ColumnName = "currency_code", ColumnDescription = "币种", ColumnDataType = "nvarchar", Length = 3, IsNullable = false)]
     public string CurrencyCode { get; set; } = string.Empty;

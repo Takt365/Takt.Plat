@@ -21,7 +21,7 @@
     >
       <a-tab-pane
         key="tab-0"
-        :tab="t('common.page.form.tabs.basicinfo')"
+        :tab="t('common.page.form.tabs.basicinfo') + ' (1/2)'"
         force-render
       >
         <div :class="formContentClass">
@@ -68,18 +68,6 @@
             </a-col>
             <a-col :span="12">
               <a-form-item
-                :label="pi.label('currency')"
-                name="currency"
-              >
-                <TaktSelect
-                  v-model:value="formState.currency"
-                  dict-type="accounting_currency_code"
-                  :placeholder="pi.ph('currency')"
-                />
-              </a-form-item>
-            </a-col>
-            <a-col :span="12">
-              <a-form-item
                 :label="pi.label('modelName')"
                 name="modelName"
               >
@@ -99,7 +87,7 @@
               >
                 <TaktSelect
                   v-model:value="formState.materialCode"
-                  api-url="TaktMaterials/options"
+                  api-url="TaktMaterialPlants/options"
                   :placeholder="pi.ph('materialCode')"
                   :disabled="!!formData?.salesInvoiceItemId"
                 />
@@ -119,15 +107,171 @@
             </a-col>
             <a-col :span="12">
               <a-form-item
-                :label="pi.label('materialName')"
-                name="materialName"
+                :label="pi.label('profitCenterCode')"
+                name="profitCenterCode"
+              >
+                <TaktSelect
+                  v-model:value="formState.profitCenterCode"
+                  api-url="TaktProfitCenters/options"
+                  :placeholder="pi.ph('profitCenterCode')"
+                  :disabled="!!formData?.salesInvoiceItemId"
+                />
+              </a-form-item>
+            </a-col>
+            <a-col :span="12">
+              <a-form-item
+                :label="pi.label('accountTitle')"
+                name="accountTitle"
+              >
+                <TaktSelect
+                  v-model:value="formState.accountTitle"
+                  api-url="TaktAccountTitles/options"
+                  :placeholder="pi.ph('accountTitle')"
+                />
+              </a-form-item>
+            </a-col>
+            <a-col :span="12">
+              <a-form-item
+                :label="pi.label('quantity')"
+                name="quantity"
+              >
+                <a-input-number
+                  v-model:value="formState.quantity"
+                  :placeholder="pi.ph('quantity')"
+                  style="width: 100%"
+                />
+              </a-form-item>
+            </a-col>
+            <a-col :span="12">
+              <a-form-item
+                :label="pi.label('unit')"
+                name="unit"
+              >
+                <TaktSelect
+                  v-model:value="formState.unit"
+                  dict-type="logistics_unit_of_measure_code"
+                  :placeholder="pi.ph('unit')"
+                />
+              </a-form-item>
+            </a-col>
+          </a-row>
+        </div>
+      </a-tab-pane>
+      <a-tab-pane
+        key="tab-1"
+        :tab="t('common.page.form.tabs.basicinfo') + ' (2/2)'"
+        force-render
+      >
+        <div :class="formContentClass">
+          <a-row :gutter="24">
+            <a-col :span="12">
+              <a-form-item
+                :label="pi.label('localCurrencyAmount')"
+                name="localCurrencyAmount"
+              >
+                <a-input-number
+                  v-model:value="formState.localCurrencyAmount"
+                  :placeholder="pi.ph('localCurrencyAmount')"
+                  style="width: 100%"
+                />
+              </a-form-item>
+            </a-col>
+            <a-col :span="12">
+              <a-form-item
+                :label="pi.label('transactionCurrencyAmount')"
+                name="transactionCurrencyAmount"
+              >
+                <a-input-number
+                  v-model:value="formState.transactionCurrencyAmount"
+                  :placeholder="pi.ph('transactionCurrencyAmount')"
+                  style="width: 100%"
+                />
+              </a-form-item>
+            </a-col>
+            <a-col :span="12">
+              <a-form-item
+                :label="pi.label('taxIncludedPrice')"
+                name="taxIncludedPrice"
+              >
+                <a-input-number
+                  v-model:value="formState.taxIncludedPrice"
+                  :placeholder="pi.ph('taxIncludedPrice')"
+                  style="width: 100%"
+                />
+              </a-form-item>
+            </a-col>
+            <a-col :span="12">
+              <a-form-item
+                :label="pi.label('untaxedPrice')"
+                name="untaxedPrice"
+              >
+                <a-input-number
+                  v-model:value="formState.untaxedPrice"
+                  :placeholder="pi.ph('untaxedPrice')"
+                  style="width: 100%"
+                />
+              </a-form-item>
+            </a-col>
+            <a-col :span="12">
+              <a-form-item
+                :label="pi.label('taxAmount')"
+                name="taxAmount"
+              >
+                <a-input-number
+                  v-model:value="formState.taxAmount"
+                  :placeholder="pi.ph('taxAmount')"
+                  style="width: 100%"
+                />
+              </a-form-item>
+            </a-col>
+            <a-col :span="12">
+              <a-form-item
+                :label="pi.label('documentType')"
+                name="documentType"
+              >
+                <TaktSelect
+                  v-model:value="formState.documentType"
+                  dict-type="logistics_accounting_document_type"
+                  :placeholder="pi.ph('documentType')"
+                />
+              </a-form-item>
+            </a-col>
+            <a-col :span="12">
+              <a-form-item
+                :label="pi.label('referenceDocumentCode')"
+                name="referenceDocumentCode"
               >
                 <a-input
-                  v-model:value="formState.materialName"
-                  :placeholder="pi.ph('materialName')"
+                  v-model:value="formState.referenceDocumentCode"
+                  :placeholder="pi.ph('referenceDocumentCode')"
                   show-count
                   :maxlength="20"
                   allow-clear
+                  :disabled="!!formData?.salesInvoiceItemId"
+                />
+              </a-form-item>
+            </a-col>
+            <a-col :span="12">
+              <a-form-item
+                :label="pi.label('referenceDocumentItem')"
+                name="referenceDocumentItem"
+              >
+                <a-input-number
+                  v-model:value="formState.referenceDocumentItem"
+                  :placeholder="pi.ph('referenceDocumentItem')"
+                  style="width: 100%"
+                />
+              </a-form-item>
+            </a-col>
+            <a-col :span="12">
+              <a-form-item
+                :label="pi.label('isObsolete')"
+                name="isObsolete"
+              >
+                <TaktSelect
+                  v-model:value="formState.isObsolete"
+                  dict-type="sys_yes_no_type"
+                  :placeholder="pi.ph('isObsolete')"
                 />
               </a-form-item>
             </a-col>
@@ -162,7 +306,7 @@ const formContentClass = computed(() => (formFields.length > 10 ? 'takt-form-con
 /** 当前激活的 Tab key */
 const activeTab = ref('tab-0')
 /** CreateDto 字段名列表（与 formState 键对齐） */
-const formFields = ["accountingDocumentCode","lineNumber","postingDate","currency","modelName","materialCode","materialType","materialName"]
+const formFields = ["accountingDocumentCode","lineNumber","postingDate","modelName","materialCode","materialType","profitCenterCode","accountTitle","quantity","unit","localCurrencyAmount","transactionCurrencyAmount","taxIncludedPrice","untaxedPrice","taxAmount","documentType","referenceDocumentCode","referenceDocumentItem","isObsolete"]
 
 
 
@@ -187,8 +331,8 @@ const formRef = ref()
 const formState = reactive<Record<string, any>>({})
 /** 表单字段默认值（字典 IsDefault=1，来自 TaktDictDataSeedData） */
 const FORM_FIELD_DEFAULTS: Record<string, string | number> = {
-  currency: "CNY",
-  materialType: "ROH"
+  materialType: "ROH",
+  documentType: "RV"
 }
 
 /** 写入表单默认值（新增 / resetFields / 弹窗再次打开时） */
@@ -255,13 +399,6 @@ const rules = computed<Record<string, Rule[]>>(() => ({
       trigger: 'change'
     }
   ],
-  currency: [
-    {
-      required: true,
-      message: pi.ph('currency'),
-      trigger: 'change'
-    }
-  ],
   materialCode: [
     {
       required: true,
@@ -276,13 +413,111 @@ const rules = computed<Record<string, Rule[]>>(() => ({
       trigger: 'change'
     }
   ],
-  materialName: [
+  quantity: [{
+    validator: async (_rule, value) => {
+      if (value === undefined || value === null || value === '') {
+        return Promise.reject(pi.ph('quantity'))
+      }
+      const num = typeof value === 'number' ? value : Number(value)
+      if (!Number.isFinite(num)) {
+        return Promise.reject(pi.ph('quantity'))
+      }
+      return Promise.resolve()
+    },
+    trigger: 'change'
+  }],
+  unit: [
     {
       required: true,
-      message: pi.ph('materialName'),
-      trigger: 'blur'
+      message: pi.ph('unit'),
+      trigger: 'change'
     }
   ],
+  localCurrencyAmount: [{
+    validator: async (_rule, value) => {
+      if (value === undefined || value === null || value === '') {
+        return Promise.reject(pi.ph('localCurrencyAmount'))
+      }
+      const num = typeof value === 'number' ? value : Number(value)
+      if (!Number.isFinite(num)) {
+        return Promise.reject(pi.ph('localCurrencyAmount'))
+      }
+      return Promise.resolve()
+    },
+    trigger: 'change'
+  }],
+  transactionCurrencyAmount: [{
+    validator: async (_rule, value) => {
+      if (value === undefined || value === null || value === '') {
+        return Promise.reject(pi.ph('transactionCurrencyAmount'))
+      }
+      const num = typeof value === 'number' ? value : Number(value)
+      if (!Number.isFinite(num)) {
+        return Promise.reject(pi.ph('transactionCurrencyAmount'))
+      }
+      return Promise.resolve()
+    },
+    trigger: 'change'
+  }],
+  taxIncludedPrice: [{
+    validator: async (_rule, value) => {
+      if (value === undefined || value === null || value === '') {
+        return Promise.reject(pi.ph('taxIncludedPrice'))
+      }
+      const num = typeof value === 'number' ? value : Number(value)
+      if (!Number.isFinite(num)) {
+        return Promise.reject(pi.ph('taxIncludedPrice'))
+      }
+      return Promise.resolve()
+    },
+    trigger: 'change'
+  }],
+  untaxedPrice: [{
+    validator: async (_rule, value) => {
+      if (value === undefined || value === null || value === '') {
+        return Promise.reject(pi.ph('untaxedPrice'))
+      }
+      const num = typeof value === 'number' ? value : Number(value)
+      if (!Number.isFinite(num)) {
+        return Promise.reject(pi.ph('untaxedPrice'))
+      }
+      return Promise.resolve()
+    },
+    trigger: 'change'
+  }],
+  taxAmount: [{
+    validator: async (_rule, value) => {
+      if (value === undefined || value === null || value === '') {
+        return Promise.reject(pi.ph('taxAmount'))
+      }
+      const num = typeof value === 'number' ? value : Number(value)
+      if (!Number.isFinite(num)) {
+        return Promise.reject(pi.ph('taxAmount'))
+      }
+      return Promise.resolve()
+    },
+    trigger: 'change'
+  }],
+  documentType: [
+    {
+      required: true,
+      message: pi.ph('documentType'),
+      trigger: 'change'
+    }
+  ],
+  isObsolete: [{
+    validator: async (_rule, value) => {
+      if (value === undefined || value === null || value === '') {
+        return Promise.reject(pi.ph('isObsolete'))
+      }
+      const num = typeof value === 'number' ? value : Number(value)
+      if (!Number.isFinite(num)) {
+        return Promise.reject(pi.ph('isObsolete'))
+      }
+      return Promise.resolve()
+    },
+    trigger: 'change'
+  }],
 }))
 
 /** 校验表单（失败 throw，供父级 handleFormSubmit 捕获） */
@@ -297,6 +532,38 @@ function getValues(): Record<string, any> {
   if ('lineNumber' in payload) {
     const rawlineNumber = payload.lineNumber
     payload.lineNumber = typeof rawlineNumber === 'number' ? rawlineNumber : Number(rawlineNumber)
+  }
+  if ('quantity' in payload) {
+    const rawquantity = payload.quantity
+    payload.quantity = typeof rawquantity === 'number' ? rawquantity : Number(rawquantity)
+  }
+  if ('localCurrencyAmount' in payload) {
+    const rawlocalCurrencyAmount = payload.localCurrencyAmount
+    payload.localCurrencyAmount = typeof rawlocalCurrencyAmount === 'number' ? rawlocalCurrencyAmount : Number(rawlocalCurrencyAmount)
+  }
+  if ('transactionCurrencyAmount' in payload) {
+    const rawtransactionCurrencyAmount = payload.transactionCurrencyAmount
+    payload.transactionCurrencyAmount = typeof rawtransactionCurrencyAmount === 'number' ? rawtransactionCurrencyAmount : Number(rawtransactionCurrencyAmount)
+  }
+  if ('taxIncludedPrice' in payload) {
+    const rawtaxIncludedPrice = payload.taxIncludedPrice
+    payload.taxIncludedPrice = typeof rawtaxIncludedPrice === 'number' ? rawtaxIncludedPrice : Number(rawtaxIncludedPrice)
+  }
+  if ('untaxedPrice' in payload) {
+    const rawuntaxedPrice = payload.untaxedPrice
+    payload.untaxedPrice = typeof rawuntaxedPrice === 'number' ? rawuntaxedPrice : Number(rawuntaxedPrice)
+  }
+  if ('taxAmount' in payload) {
+    const rawtaxAmount = payload.taxAmount
+    payload.taxAmount = typeof rawtaxAmount === 'number' ? rawtaxAmount : Number(rawtaxAmount)
+  }
+  if ('referenceDocumentItem' in payload) {
+    const rawreferenceDocumentItem = payload.referenceDocumentItem
+    payload.referenceDocumentItem = typeof rawreferenceDocumentItem === 'number' ? rawreferenceDocumentItem : Number(rawreferenceDocumentItem)
+  }
+  if ('isObsolete' in payload) {
+    const rawisObsolete = payload.isObsolete
+    payload.isObsolete = typeof rawisObsolete === 'number' ? rawisObsolete : Number(rawisObsolete)
   }
   if ('sortOrder' in payload) delete payload.sortOrder
   payload.salesInvoiceId = props.masterId

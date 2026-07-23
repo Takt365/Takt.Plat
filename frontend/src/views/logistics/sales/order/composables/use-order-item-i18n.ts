@@ -20,6 +20,7 @@ export const SALESORDERITEM_SELF_I18N_KEY = buildEntitySelfI18nKey(SALESORDERITE
 
 /** 列表业务列（不含主键） */
 export const SALESORDERITEM_LIST_FIELDS = [
+  'salesOrderId',
   'salesOrderName',
   'salesOrderCode',
   'lineNumber',
@@ -30,14 +31,53 @@ export const SALESORDERITEM_LIST_FIELDS = [
   'orderQuantity',
   'shippedQuantity',
   'salesPerUnit',
-  'unitPrice',
+  'salesUnitPrice',
   'discountRate',
   'discountAmount',
-  'taxRate',
+  'taxIncludedAmount',
+  'untaxedAmount',
   'taxAmount',
-  'subtotalAmount',
   'deliveryStatus',
-  'salesOrder',
+  'isObsolete',
+] as const
+
+/** 明细右栏 panel 默认展示列（不含主键 id；含 action） */
+export const SALESORDERITEM_DEFAULT_VISIBLE_COLUMN_KEYS = [
+  'salesOrderId',
+  'salesOrderName',
+  'salesOrderCode',
+  'lineNumber',
+  'materialCode',
+  'materialName',
+  'materialSpecification',
+  'salesUnit',
+  'orderQuantity',
+  'shippedQuantity',
+  'salesPerUnit',
+  'salesUnitPrice',
+  'discountRate',
+  'discountAmount',
+  'taxIncludedAmount',
+  'untaxedAmount',
+  'taxAmount',
+  'deliveryStatus',
+  'isObsolete',
+  'action',
+] as const
+
+/** 明细右栏 panel 合计列（当前页 dataSource 数值字段求和） */
+export const SALESORDERITEM_SUMMARY_SUM_FIELDS = [
+  'orderQuantity',
+  'shippedQuantity',
+  'salesPerUnit',
+  'salesUnitPrice',
+  'discountRate',
+  'discountAmount',
+  'taxIncludedAmount',
+  'untaxedAmount',
+  'taxAmount',
+  'deliveryStatus',
+  'isObsolete',
 ] as const
 
 /** 表单控件默认占位类型（仅 UI/校验语义，不含 i18n 键） */
@@ -47,12 +87,20 @@ export const SALESORDERITEM_PLACEHOLDER = {
   companyDefaultCulture: 'optional',
   lineNumber: 'select',
   materialCode: 'select',
-  materialName: 'required',
+  materialName: 'optional',
   materialSpecification: 'optional',
   salesUnit: 'select',
   orderQuantity: 'select',
   shippedQuantity: 'select',
   salesPerUnit: 'select',
+  salesUnitPrice: 'select',
+  discountRate: 'select',
+  discountAmount: 'select',
+  taxIncludedAmount: 'select',
+  untaxedAmount: 'select',
+  taxAmount: 'select',
+  deliveryStatus: 'select',
+  isObsolete: 'select',
 } as const satisfies Record<string, EntityFieldPlaceholderKind>
 
 /** 表单 ph() 可接受的字段（与 PLACEHOLDER 键一致，避免与 LIST_FIELDS 导航列混用） */
@@ -73,7 +121,7 @@ export const SALESORDERITEM_QUERY_STRING_FIELDS = [
 
 export type SalesOrderItemQueryField =
   | (typeof SALESORDERITEM_QUERY_STRING_FIELDS)[number]
-  | 'lineNumber' | 'orderQuantity' | 'shippedQuantity' | 'salesPerUnit' | 'unitPrice' | 'discountRate' | 'discountAmount' | 'taxRate' | 'taxAmount' | 'subtotalAmount' | 'deliveryStatus'
+  | 'lineNumber' | 'orderQuantity' | 'shippedQuantity' | 'salesPerUnit' | 'salesUnitPrice' | 'discountRate' | 'discountAmount' | 'taxIncludedAmount' | 'untaxedAmount' | 'taxAmount' | 'deliveryStatus' | 'isObsolete'
 
 /** 高级查询抽屉全部字段（含数值） */
 export const SALESORDERITEM_QUERY_FIELDS: readonly SalesOrderItemQueryField[] = [
@@ -82,13 +130,14 @@ export const SALESORDERITEM_QUERY_FIELDS: readonly SalesOrderItemQueryField[] = 
   'orderQuantity',
   'shippedQuantity',
   'salesPerUnit',
-  'unitPrice',
+  'salesUnitPrice',
   'discountRate',
   'discountAmount',
-  'taxRate',
+  'taxIncludedAmount',
+  'untaxedAmount',
   'taxAmount',
-  'subtotalAmount',
   'deliveryStatus',
+  'isObsolete',
 ]
 
 /**

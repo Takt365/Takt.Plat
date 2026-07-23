@@ -25,15 +25,35 @@ namespace Takt.Domain.Entities.HumanResource.Personnel;
 public class TaktEmployeeDelegation : TaktCompanyEntityBase
 {
     /// <summary>
-    /// 代理人（选项 TaktEmployees/options，DictValue=Id）
+    /// 代理人（选项 TaktEmployees/options；DictValue=Id）
     /// </summary>
     [SugarColumn(ColumnName = "proxy_employee_id", ColumnDescription = "代理人ID", ColumnDataType = "bigint", IsNullable = false)]
     public long ProxyEmployeeId { get; set; }
     /// <summary>
-    /// 被代理人（选项 TaktEmployees/options，DictValue=Id）
+    /// 代理人编码（冗余，与 TaktEmployee.EmployeeCode 对齐）
+    /// </summary>
+    [SugarColumn(ColumnName = "proxy_employee_code", ColumnDescription = "代理人编码", ColumnDataType = "varchar", Length = 6, IsNullable = false)]
+    public string ProxyEmployeeCode { get; set; } = string.Empty;
+    /// <summary>
+    /// 代理人姓名（冗余，与 TaktEmployee.EmployeeName 对齐）
+    /// </summary>
+    [SugarColumn(ColumnName = "proxy_employee_name", ColumnDescription = "代理人姓名", ColumnDataType = "nvarchar", Length = 80, IsNullable = false)]
+    public string ProxyEmployeeName { get; set; } = string.Empty;
+    /// <summary>
+    /// 被代理人（选项 TaktEmployees/options；DictValue=Id）
     /// </summary>
     [SugarColumn(ColumnName = "original_employee_id", ColumnDescription = "被代理人ID", ColumnDataType = "bigint", IsNullable = false)]
     public long OriginalEmployeeId { get; set; }
+    /// <summary>
+    /// 被代理人编码（冗余，与 TaktEmployee.EmployeeCode 对齐）
+    /// </summary>
+    [SugarColumn(ColumnName = "original_employee_code", ColumnDescription = "被代理人编码", ColumnDataType = "varchar", Length = 6, IsNullable = false)]
+    public string OriginalEmployeeCode { get; set; } = string.Empty;
+    /// <summary>
+    /// 被代理人姓名（冗余，与 TaktEmployee.EmployeeName 对齐）
+    /// </summary>
+    [SugarColumn(ColumnName = "original_employee_name", ColumnDescription = "被代理人姓名", ColumnDataType = "nvarchar", Length = 80, IsNullable = false)]
+    public string OriginalEmployeeName { get; set; } = string.Empty;
     /// <summary>
     /// 代理类型（字典 hr_employee_delegation_type；1=完全代理 2=部分代理 3=审批代理）
     /// </summary>

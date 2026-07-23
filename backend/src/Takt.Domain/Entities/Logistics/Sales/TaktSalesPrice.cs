@@ -1,4 +1,4 @@
-﻿// ========================================
+// ========================================
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Domain.Entities.Logistics.Sales
 // 文件名称：TaktSalesPrice.cs
@@ -21,11 +21,18 @@ namespace Takt.Domain.Entities.Logistics.Sales;
 [SugarTable("takt_logistics_sales_price", "销售价格表")]
 [SugarIndex("ix_sales_price_tenant", nameof(TenantCode), OrderByType.Asc, nameof(CompanyCode), OrderByType.Asc, false)]
 [SugarIndex("ix_sales_price_is_deleted", nameof(TenantCode), OrderByType.Asc, nameof(CompanyCode), OrderByType.Asc, nameof(IsDeleted), OrderByType.Asc, false)]
-[SugarIndex("ix_takt_logistics_sales_price_code_unique", nameof(TenantCode), OrderByType.Asc, nameof(CompanyCode), OrderByType.Asc, nameof(SalesPriceCode), OrderByType.Asc, true)]
+[SugarIndex("ix_takt_logistics_sales_price_code_unique", nameof(TenantCode), OrderByType.Asc, nameof(CompanyCode), OrderByType.Asc, nameof(PlantCode), OrderByType.Asc, nameof(SalesPriceCode), OrderByType.Asc, true)]
 [SugarIndex("ix_takt_logistics_sales_price_type", nameof(TenantCode), OrderByType.Asc, nameof(CompanyCode), OrderByType.Asc, nameof(PriceType), OrderByType.Asc, false)]
 [SugarIndex("ix_takt_logistics_sales_price_customer_material", nameof(TenantCode), OrderByType.Asc, nameof(CompanyCode), OrderByType.Asc, nameof(CustomerCode), OrderByType.Asc, nameof(MaterialCode), OrderByType.Asc, false)]
+[SugarIndex("ix_takt_logistics_sales_price_plant_code", nameof(TenantCode), OrderByType.Asc, nameof(CompanyCode), OrderByType.Asc, nameof(PlantCode), OrderByType.Asc, false)]
 public class TaktSalesPrice : TaktCompanyEntityBase
 {
+    /// <summary>
+    /// 工厂代码（选项 TaktPlants/options；DictValue=PlantCode）
+    /// </summary>
+    [SugarColumn(ColumnName = "plant_code", ColumnDescription = "工厂代码", ColumnDataType = "nvarchar", Length = 4, IsNullable = false)]
+    public string PlantCode { get; set; } = string.Empty;
+
     /// <summary>
     /// 定价记录号（唯一索引；长度 20）
     /// </summary>
@@ -36,19 +43,43 @@ public class TaktSalesPrice : TaktCompanyEntityBase
     /// 条件类型（字典 logistics_price_type；PB00=采购总价 Gross Price，PR00=基本价格 Base Price，MWST=销项税/增值税，MWRK=不可抵扣进项税，NLXV=购置税）
     /// </summary>
     [SugarColumn(ColumnName = "price_type", ColumnDescription = "条件类型", ColumnDataType = "nvarchar", Length = 4, IsNullable = false, DefaultValue = "PB00")]
-    public string PriceType { get; set; } = "PB00";
+    public string PriceType { get; set; } = "PR00";
 
     /// <summary>
-    /// 客户编码（选项 TaktCustomers/options，DictValue=CustomerCode）
+    /// 客户编码（选项 TaktCustomers/options；DictValue=CustomerCode）
     /// </summary>
     [SugarColumn(ColumnName = "customer_code", ColumnDescription = "客户", ColumnDataType = "nvarchar", Length = 40, IsNullable = false)]
     public string CustomerCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 物料编码（选项 TaktMaterialPlants/options，DictValue=MaterialCode）
+    /// 物料编码（选项 TaktMaterialPlants/options；DictValue=MaterialCode）
     /// </summary>
     [SugarColumn(ColumnName = "material_code", ColumnDescription = "物料", ColumnDataType = "nvarchar", Length = 40, IsNullable = false)]
     public string MaterialCode { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 销售组（选项 TaktSalesGroups/options；DictValue=SalesGroupCode）
+    /// </summary>
+    [SugarColumn(ColumnName = "sales_group", ColumnDescription = "销售组", ColumnDataType = "nvarchar", Length = 3, IsNullable = true)]
+    public string? SalesGroup { get; set; }
+
+    /// <summary>
+    /// 税码（字典 accounting_tax_code；DictValue=J0～J8/L1/X0～X3；中国）
+    /// </summary>
+    [SugarColumn(ColumnName = "tax_code", ColumnDescription = "税码", ColumnDataType = "nvarchar", Length = 4, IsNullable = true)]
+    public string? TaxCode { get; set; }
+
+    /// <summary>
+    /// 基于收货的发票检验（字典 sys_yes_no_type；0=否 1=是）
+    /// </summary>
+    [SugarColumn(ColumnName = "gr_based_invoice_inspection", ColumnDescription = "基于收货的发票检验", ColumnDataType = "int", IsNullable = false, DefaultValue = "0")]
+    public int GrBasedInvoiceInspection { get; set; } = 0;
+
+    /// <summary>
+    /// 定价日期控制（字典 logistics_pricing_date_control；1=采购订单日期，2=交货日期，3=当前日期，4=手动，5=收货日期；默认 1）
+    /// </summary>
+    [SugarColumn(ColumnName = "pricing_date_control", ColumnDescription = "定价日期控制", ColumnDataType = "int", IsNullable = false, DefaultValue = "1")]
+    public int PricingDateControl { get; set; } = 1;
 
     /// <summary>
     /// 有效起始日
@@ -63,13 +94,7 @@ public class TaktSalesPrice : TaktCompanyEntityBase
     public DateTime ValidTo { get; set; } = new DateTime(9999, 12, 31, 23, 59, 59);
 
     /// <summary>
-    /// 可变关键字
-    /// </summary>
-    [SugarColumn(ColumnName = "variable_key", ColumnDescription = "可变关键字", ColumnDataType = "nvarchar", Length = 40, IsNullable = true)]
-    public string? VariableKey { get; set; }
-
-    /// <summary>
-    /// 来源销售报价 ID（选项 TaktSalesQuotations/options，DictValue=Id；对应采购侧来源询价）
+    /// 来源销售报价 ID（选项 TaktSalesQuotations/options；DictValue=Id；对应采购侧来源询价）
     /// </summary>
     [SugarColumn(ColumnName = "sales_quotation_id", ColumnDescription = "来源销售报价ID", ColumnDataType = "bigint", IsNullable = true)]
     [JsonConverter(typeof(ValueToStringConverter))]
@@ -80,6 +105,12 @@ public class TaktSalesPrice : TaktCompanyEntityBase
     /// </summary>
     [SugarColumn(ColumnName = "sales_quotation_code", ColumnDescription = "来源销售报价编码", ColumnDataType = "varchar", Length = 40, IsNullable = true)]
     public string? SalesQuotationCode { get; set; }
+
+    /// <summary>
+    /// 可变关键字
+    /// </summary>
+    [SugarColumn(ColumnName = "variable_key", ColumnDescription = "可变关键字", ColumnDataType = "nvarchar", Length = 40, IsNullable = true)]
+    public string? VariableKey { get; set; }
 
     /// <summary>
     /// 定价条件行列表（主子表关系）

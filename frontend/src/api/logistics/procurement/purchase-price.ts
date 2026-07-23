@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：frontend/src/api/logistics/procurement
 // 文件名称：purchase-price.ts
-// 创建时间：2026-07-20
+// 创建时间：2026-07-21
 // 创建人：Takt365(Auto Generated)
 // 功能描述：logistics/procurement 模块 API（自动生成，请勿手改路由常量）
 // 
@@ -120,6 +120,32 @@ export function getPurchasePriceOptions(): Promise<TaktSelectOption[]> {
   return request<TaktSelectOption[]>({
     url: `${PURCHASE_PRICE_API_BASE}/options`,
     method: 'get',
+  });
+}
+
+/**
+ * 获取采购价格中的供应商选项（按工厂去重）
+ * @param {string} [plantCode] 工厂代码
+ * @returns {Promise<TaktSelectOption[]>} 下拉选项
+ */
+export function getPurchasePriceSupplierOptions(plantCode?: string): Promise<TaktSelectOption[]> {
+  return request<TaktSelectOption[]>({
+    url: `${PURCHASE_PRICE_API_BASE}/supplier-options`,
+    method: 'get',
+    params: { plantCode },
+  });
+}
+
+/**
+ * 获取采购价格中的物料选项（按工厂去重）
+ * @param {string} [plantCode] 工厂代码
+ * @returns {Promise<TaktSelectOption[]>} 下拉选项
+ */
+export function getPurchasePriceMaterialOptions(plantCode?: string): Promise<TaktSelectOption[]> {
+  return request<TaktSelectOption[]>({
+    url: `${PURCHASE_PRICE_API_BASE}/material-options`,
+    method: 'get',
+    params: { plantCode },
   });
 }
 

@@ -415,7 +415,7 @@ public class TaktAnnouncementCreateDto
     public int AnnouncementStatus { get; set; } = 0;
 
     /// <summary>
-    /// 编号规则编码（自动取号时使用）
+    /// 编码规则编码（自动取号时使用）
     /// </summary>
     public string? NumberingRuleCode { get; set; }
 
@@ -697,7 +697,7 @@ public class TaktAnnouncementImportDto
     public int? AnnouncementStatus { get; set; }
 
     /// <summary>
-    /// 编号规则编码（自动取号时使用）
+    /// 编码规则编码（自动取号时使用）
     /// </summary>
     public string? NumberingRuleCode { get; set; }
 

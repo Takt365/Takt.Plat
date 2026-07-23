@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Application.Validators.Accounting.Financial
 // 文件名称：TaktCompanyValidators.cs
-// 创建时间：2026-07-20
+// 创建时间：2026-07-23
 // 创建人：Takt365(Auto Generated)
 // 功能描述：Company 模块 FluentValidation 验证器（由 generate-validators-from-entity.cjs 根据 TaktCompany 生成，请按需审阅）
 // 
@@ -32,9 +32,9 @@ public class TaktCompanyCreateValidator : AbstractValidator<TaktCompanyCreateDto
         RuleFor(x => x.TenantCode)
             .NotEmpty().WithMessage("租户编码不能为空")
             .MaximumLength(3).WithMessage("租户编码长度不能超过3个字符");
-        RuleFor(x => x.CompanyName)
-            .NotEmpty().WithMessage("公司名称不能为空")
-            .MaximumLength(200).WithMessage("公司名称长度不能超过200个字符");
+        RuleFor(x => x.CompanyName1)
+            .NotEmpty().WithMessage("公司名称1不能为空")
+            .MaximumLength(140).WithMessage("公司名称1长度不能超过140个字符");
         RuleFor(x => x.CompanyShortName)
             .NotEmpty().WithMessage("公司简称不能为空")
             .MaximumLength(50).WithMessage("公司简称长度不能超过50个字符");
@@ -51,28 +51,28 @@ public class TaktCompanyCreateValidator : AbstractValidator<TaktCompanyCreateDto
             .NotEmpty().WithMessage("经营范围不能为空");
         RuleFor(x => x.RegistrationAddress1)
             .NotEmpty().WithMessage("注册地址1不能为空")
-            .MaximumLength(200).WithMessage("注册地址1长度不能超过200个字符");
+            .MaximumLength(140).WithMessage("注册地址1长度不能超过140个字符");
         RuleFor(x => x.RegistrationRegion)
             .NotEmpty().WithMessage("注册国家不能为空")
-            .MaximumLength(50).WithMessage("注册国家长度不能超过50个字符");
+            .MaximumLength(2).WithMessage("注册国家长度不能超过2个字符");
         RuleFor(x => x.RegistrationProvince)
             .NotEmpty().WithMessage("注册省不能为空")
-            .MaximumLength(50).WithMessage("注册省长度不能超过50个字符");
+            .MaximumLength(70).WithMessage("注册省长度不能超过70个字符");
         RuleFor(x => x.RegistrationCity)
             .NotEmpty().WithMessage("注册市不能为空")
-            .MaximumLength(50).WithMessage("注册市长度不能超过50个字符");
+            .MaximumLength(70).WithMessage("注册市长度不能超过70个字符");
         RuleFor(x => x.BusinessRegion)
             .NotEmpty().WithMessage("经营国家不能为空")
-            .MaximumLength(50).WithMessage("经营国家长度不能超过50个字符");
+            .MaximumLength(2).WithMessage("经营国家长度不能超过2个字符");
         RuleFor(x => x.BusinessProvince)
             .NotEmpty().WithMessage("经营地区-省不能为空")
-            .MaximumLength(50).WithMessage("经营地区-省长度不能超过50个字符");
+            .MaximumLength(70).WithMessage("经营地区-省长度不能超过70个字符");
         RuleFor(x => x.BusinessCity)
             .NotEmpty().WithMessage("经营地区-市不能为空")
-            .MaximumLength(50).WithMessage("经营地区-市长度不能超过50个字符");
+            .MaximumLength(70).WithMessage("经营地区-市长度不能超过70个字符");
         RuleFor(x => x.BusinessAddress1)
             .NotEmpty().WithMessage("经营地址1不能为空")
-            .MaximumLength(200).WithMessage("经营地址1长度不能超过200个字符");
+            .MaximumLength(140).WithMessage("经营地址1长度不能超过140个字符");
         RuleFor(x => x.CompanyPhone)
             .NotEmpty().WithMessage("公司电话不能为空")
             .MaximumLength(50).WithMessage("公司电话长度不能超过50个字符");
@@ -104,6 +104,42 @@ public class TaktCompanyCreateValidator : AbstractValidator<TaktCompanyCreateDto
         RuleFor(x => x.CodeAlias)
             .NotEmpty().WithMessage("编码代号不能为空")
             .MaximumLength(3).WithMessage("编码代号长度不能超过3个字符");
+        RuleFor(x => x.BankCode)
+            .NotEmpty().WithMessage("银行代码不能为空")
+            .MaximumLength(15).WithMessage("银行代码长度不能超过15个字符");
+        RuleFor(x => x.BankAccount)
+            .NotEmpty().WithMessage("银行帐号不能为空")
+            .MaximumLength(40).WithMessage("银行帐号长度不能超过40个字符");
+        RuleFor(x => x.AccountHolder)
+            .NotEmpty().WithMessage("帐户持有人不能为空")
+            .MaximumLength(100).WithMessage("帐户持有人长度不能超过100个字符");
+        RuleFor(x => x.CurrencyCode)
+            .NotEmpty().WithMessage("币种不能为空")
+            .MaximumLength(3).WithMessage("币种长度不能超过3个字符");
+        RuleFor(x => x.ChartOfAccounts)
+            .NotEmpty().WithMessage("帐目表不能为空")
+            .MaximumLength(4).WithMessage("帐目表长度不能超过4个字符");
+        RuleFor(x => x.InputTaxCode)
+            .NotEmpty().WithMessage("进项税码不能为空")
+            .MaximumLength(2).WithMessage("进项税码长度不能超过2个字符");
+        RuleFor(x => x.OutputTaxCode)
+            .NotEmpty().WithMessage("销项税码不能为空")
+            .MaximumLength(2).WithMessage("销项税码长度不能超过2个字符");
+        RuleFor(x => x.BusinessPlace)
+            .NotEmpty().WithMessage("营业税主体不能为空")
+            .MaximumLength(4).WithMessage("营业税主体长度不能超过4个字符");
+        RuleFor(x => x.PostingPeriodVariant)
+            .NotEmpty().WithMessage("记帐期间变式不能为空")
+            .MaximumLength(4).WithMessage("记帐期间变式长度不能超过4个字符");
+        RuleFor(x => x.FiscalYearVariant)
+            .NotEmpty().WithMessage("会计年度变式不能为空")
+            .MaximumLength(2).WithMessage("会计年度变式长度不能超过2个字符");
+        RuleFor(x => x.CreditControlArea)
+            .NotEmpty().WithMessage("贷方控制范围不能为空")
+            .MaximumLength(4).WithMessage("贷方控制范围长度不能超过4个字符");
+        RuleFor(x => x.FinancialManagementArea)
+            .NotEmpty().WithMessage("财务管理范围不能为空")
+            .MaximumLength(4).WithMessage("财务管理范围长度不能超过4个字符");
         RuleFor(x => x.RelatedPlant)
             .NotEmpty().WithMessage("关联工厂不能为空")
             .MaximumLength(4).WithMessage("关联工厂长度不能超过4个字符");
@@ -133,9 +169,9 @@ public class TaktCompanyUpdateValidator : AbstractValidator<TaktCompanyUpdateDto
         RuleFor(x => x.TenantCode)
             .NotEmpty().WithMessage("租户编码不能为空")
             .MaximumLength(3).WithMessage("租户编码长度不能超过3个字符");
-        RuleFor(x => x.CompanyName)
-            .NotEmpty().WithMessage("公司名称不能为空")
-            .MaximumLength(200).WithMessage("公司名称长度不能超过200个字符");
+        RuleFor(x => x.CompanyName1)
+            .NotEmpty().WithMessage("公司名称1不能为空")
+            .MaximumLength(140).WithMessage("公司名称1长度不能超过140个字符");
         RuleFor(x => x.CompanyShortName)
             .NotEmpty().WithMessage("公司简称不能为空")
             .MaximumLength(50).WithMessage("公司简称长度不能超过50个字符");
@@ -152,28 +188,28 @@ public class TaktCompanyUpdateValidator : AbstractValidator<TaktCompanyUpdateDto
             .NotEmpty().WithMessage("经营范围不能为空");
         RuleFor(x => x.RegistrationAddress1)
             .NotEmpty().WithMessage("注册地址1不能为空")
-            .MaximumLength(200).WithMessage("注册地址1长度不能超过200个字符");
+            .MaximumLength(140).WithMessage("注册地址1长度不能超过140个字符");
         RuleFor(x => x.RegistrationRegion)
             .NotEmpty().WithMessage("注册国家不能为空")
-            .MaximumLength(50).WithMessage("注册国家长度不能超过50个字符");
+            .MaximumLength(2).WithMessage("注册国家长度不能超过2个字符");
         RuleFor(x => x.RegistrationProvince)
             .NotEmpty().WithMessage("注册省不能为空")
-            .MaximumLength(50).WithMessage("注册省长度不能超过50个字符");
+            .MaximumLength(70).WithMessage("注册省长度不能超过70个字符");
         RuleFor(x => x.RegistrationCity)
             .NotEmpty().WithMessage("注册市不能为空")
-            .MaximumLength(50).WithMessage("注册市长度不能超过50个字符");
+            .MaximumLength(70).WithMessage("注册市长度不能超过70个字符");
         RuleFor(x => x.BusinessRegion)
             .NotEmpty().WithMessage("经营国家不能为空")
-            .MaximumLength(50).WithMessage("经营国家长度不能超过50个字符");
+            .MaximumLength(2).WithMessage("经营国家长度不能超过2个字符");
         RuleFor(x => x.BusinessProvince)
             .NotEmpty().WithMessage("经营地区-省不能为空")
-            .MaximumLength(50).WithMessage("经营地区-省长度不能超过50个字符");
+            .MaximumLength(70).WithMessage("经营地区-省长度不能超过70个字符");
         RuleFor(x => x.BusinessCity)
             .NotEmpty().WithMessage("经营地区-市不能为空")
-            .MaximumLength(50).WithMessage("经营地区-市长度不能超过50个字符");
+            .MaximumLength(70).WithMessage("经营地区-市长度不能超过70个字符");
         RuleFor(x => x.BusinessAddress1)
             .NotEmpty().WithMessage("经营地址1不能为空")
-            .MaximumLength(200).WithMessage("经营地址1长度不能超过200个字符");
+            .MaximumLength(140).WithMessage("经营地址1长度不能超过140个字符");
         RuleFor(x => x.CompanyPhone)
             .NotEmpty().WithMessage("公司电话不能为空")
             .MaximumLength(50).WithMessage("公司电话长度不能超过50个字符");
@@ -205,6 +241,42 @@ public class TaktCompanyUpdateValidator : AbstractValidator<TaktCompanyUpdateDto
         RuleFor(x => x.CodeAlias)
             .NotEmpty().WithMessage("编码代号不能为空")
             .MaximumLength(3).WithMessage("编码代号长度不能超过3个字符");
+        RuleFor(x => x.BankCode)
+            .NotEmpty().WithMessage("银行代码不能为空")
+            .MaximumLength(15).WithMessage("银行代码长度不能超过15个字符");
+        RuleFor(x => x.BankAccount)
+            .NotEmpty().WithMessage("银行帐号不能为空")
+            .MaximumLength(40).WithMessage("银行帐号长度不能超过40个字符");
+        RuleFor(x => x.AccountHolder)
+            .NotEmpty().WithMessage("帐户持有人不能为空")
+            .MaximumLength(100).WithMessage("帐户持有人长度不能超过100个字符");
+        RuleFor(x => x.CurrencyCode)
+            .NotEmpty().WithMessage("币种不能为空")
+            .MaximumLength(3).WithMessage("币种长度不能超过3个字符");
+        RuleFor(x => x.ChartOfAccounts)
+            .NotEmpty().WithMessage("帐目表不能为空")
+            .MaximumLength(4).WithMessage("帐目表长度不能超过4个字符");
+        RuleFor(x => x.InputTaxCode)
+            .NotEmpty().WithMessage("进项税码不能为空")
+            .MaximumLength(2).WithMessage("进项税码长度不能超过2个字符");
+        RuleFor(x => x.OutputTaxCode)
+            .NotEmpty().WithMessage("销项税码不能为空")
+            .MaximumLength(2).WithMessage("销项税码长度不能超过2个字符");
+        RuleFor(x => x.BusinessPlace)
+            .NotEmpty().WithMessage("营业税主体不能为空")
+            .MaximumLength(4).WithMessage("营业税主体长度不能超过4个字符");
+        RuleFor(x => x.PostingPeriodVariant)
+            .NotEmpty().WithMessage("记帐期间变式不能为空")
+            .MaximumLength(4).WithMessage("记帐期间变式长度不能超过4个字符");
+        RuleFor(x => x.FiscalYearVariant)
+            .NotEmpty().WithMessage("会计年度变式不能为空")
+            .MaximumLength(2).WithMessage("会计年度变式长度不能超过2个字符");
+        RuleFor(x => x.CreditControlArea)
+            .NotEmpty().WithMessage("贷方控制范围不能为空")
+            .MaximumLength(4).WithMessage("贷方控制范围长度不能超过4个字符");
+        RuleFor(x => x.FinancialManagementArea)
+            .NotEmpty().WithMessage("财务管理范围不能为空")
+            .MaximumLength(4).WithMessage("财务管理范围长度不能超过4个字符");
         RuleFor(x => x.RelatedPlant)
             .NotEmpty().WithMessage("关联工厂不能为空")
             .MaximumLength(4).WithMessage("关联工厂长度不能超过4个字符");
@@ -231,9 +303,9 @@ public class TaktCompanyImportValidator : AbstractValidator<TaktCompanyImportDto
     {
         RuleFor(x => x.TenantCode)
             .MaximumLength(3).WithMessage("租户编码长度不能超过3个字符").When(x => !string.IsNullOrWhiteSpace(x.TenantCode));
-        RuleFor(x => x.CompanyName)
-            .NotEmpty().WithMessage("公司名称不能为空")
-            .MaximumLength(200).WithMessage("公司名称长度不能超过200个字符");
+        RuleFor(x => x.CompanyName1)
+            .NotEmpty().WithMessage("公司名称1不能为空")
+            .MaximumLength(140).WithMessage("公司名称1长度不能超过140个字符");
         RuleFor(x => x.CompanyShortName)
             .NotEmpty().WithMessage("公司简称不能为空")
             .MaximumLength(50).WithMessage("公司简称长度不能超过50个字符");
@@ -250,28 +322,28 @@ public class TaktCompanyImportValidator : AbstractValidator<TaktCompanyImportDto
             .NotEmpty().WithMessage("经营范围不能为空");
         RuleFor(x => x.RegistrationAddress1)
             .NotEmpty().WithMessage("注册地址1不能为空")
-            .MaximumLength(200).WithMessage("注册地址1长度不能超过200个字符");
+            .MaximumLength(140).WithMessage("注册地址1长度不能超过140个字符");
         RuleFor(x => x.RegistrationRegion)
             .NotEmpty().WithMessage("注册国家不能为空")
-            .MaximumLength(50).WithMessage("注册国家长度不能超过50个字符");
+            .MaximumLength(2).WithMessage("注册国家长度不能超过2个字符");
         RuleFor(x => x.RegistrationProvince)
             .NotEmpty().WithMessage("注册省不能为空")
-            .MaximumLength(50).WithMessage("注册省长度不能超过50个字符");
+            .MaximumLength(70).WithMessage("注册省长度不能超过70个字符");
         RuleFor(x => x.RegistrationCity)
             .NotEmpty().WithMessage("注册市不能为空")
-            .MaximumLength(50).WithMessage("注册市长度不能超过50个字符");
+            .MaximumLength(70).WithMessage("注册市长度不能超过70个字符");
         RuleFor(x => x.BusinessRegion)
             .NotEmpty().WithMessage("经营国家不能为空")
-            .MaximumLength(50).WithMessage("经营国家长度不能超过50个字符");
+            .MaximumLength(2).WithMessage("经营国家长度不能超过2个字符");
         RuleFor(x => x.BusinessProvince)
             .NotEmpty().WithMessage("经营地区-省不能为空")
-            .MaximumLength(50).WithMessage("经营地区-省长度不能超过50个字符");
+            .MaximumLength(70).WithMessage("经营地区-省长度不能超过70个字符");
         RuleFor(x => x.BusinessCity)
             .NotEmpty().WithMessage("经营地区-市不能为空")
-            .MaximumLength(50).WithMessage("经营地区-市长度不能超过50个字符");
+            .MaximumLength(70).WithMessage("经营地区-市长度不能超过70个字符");
         RuleFor(x => x.BusinessAddress1)
             .NotEmpty().WithMessage("经营地址1不能为空")
-            .MaximumLength(200).WithMessage("经营地址1长度不能超过200个字符");
+            .MaximumLength(140).WithMessage("经营地址1长度不能超过140个字符");
         RuleFor(x => x.CompanyPhone)
             .NotEmpty().WithMessage("公司电话不能为空")
             .MaximumLength(50).WithMessage("公司电话长度不能超过50个字符");
@@ -303,6 +375,42 @@ public class TaktCompanyImportValidator : AbstractValidator<TaktCompanyImportDto
         RuleFor(x => x.CodeAlias)
             .NotEmpty().WithMessage("编码代号不能为空")
             .MaximumLength(3).WithMessage("编码代号长度不能超过3个字符");
+        RuleFor(x => x.BankCode)
+            .NotEmpty().WithMessage("银行代码不能为空")
+            .MaximumLength(15).WithMessage("银行代码长度不能超过15个字符");
+        RuleFor(x => x.BankAccount)
+            .NotEmpty().WithMessage("银行帐号不能为空")
+            .MaximumLength(40).WithMessage("银行帐号长度不能超过40个字符");
+        RuleFor(x => x.AccountHolder)
+            .NotEmpty().WithMessage("帐户持有人不能为空")
+            .MaximumLength(100).WithMessage("帐户持有人长度不能超过100个字符");
+        RuleFor(x => x.CurrencyCode)
+            .NotEmpty().WithMessage("币种不能为空")
+            .MaximumLength(3).WithMessage("币种长度不能超过3个字符");
+        RuleFor(x => x.ChartOfAccounts)
+            .NotEmpty().WithMessage("帐目表不能为空")
+            .MaximumLength(4).WithMessage("帐目表长度不能超过4个字符");
+        RuleFor(x => x.InputTaxCode)
+            .NotEmpty().WithMessage("进项税码不能为空")
+            .MaximumLength(2).WithMessage("进项税码长度不能超过2个字符");
+        RuleFor(x => x.OutputTaxCode)
+            .NotEmpty().WithMessage("销项税码不能为空")
+            .MaximumLength(2).WithMessage("销项税码长度不能超过2个字符");
+        RuleFor(x => x.BusinessPlace)
+            .NotEmpty().WithMessage("营业税主体不能为空")
+            .MaximumLength(4).WithMessage("营业税主体长度不能超过4个字符");
+        RuleFor(x => x.PostingPeriodVariant)
+            .NotEmpty().WithMessage("记帐期间变式不能为空")
+            .MaximumLength(4).WithMessage("记帐期间变式长度不能超过4个字符");
+        RuleFor(x => x.FiscalYearVariant)
+            .NotEmpty().WithMessage("会计年度变式不能为空")
+            .MaximumLength(2).WithMessage("会计年度变式长度不能超过2个字符");
+        RuleFor(x => x.CreditControlArea)
+            .NotEmpty().WithMessage("贷方控制范围不能为空")
+            .MaximumLength(4).WithMessage("贷方控制范围长度不能超过4个字符");
+        RuleFor(x => x.FinancialManagementArea)
+            .NotEmpty().WithMessage("财务管理范围不能为空")
+            .MaximumLength(4).WithMessage("财务管理范围长度不能超过4个字符");
         RuleFor(x => x.RelatedPlant)
             .NotEmpty().WithMessage("关联工厂不能为空")
             .MaximumLength(4).WithMessage("关联工厂长度不能超过4个字符");

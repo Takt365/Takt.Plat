@@ -29,6 +29,18 @@
         ]"
       />
       <template v-if="props.activeTab === 'issue'">
+        <a-input
+          v-model:value="ecNo"
+          class="ec-monthly-trend-query-bar__control ec-monthly-trend-query-bar__control--ec-no"
+          allow-clear
+          :placeholder="t(`${localePrefix}.ecNo`)"
+        />
+        <a-input
+          v-model:value="deptCode"
+          class="ec-monthly-trend-query-bar__control ec-monthly-trend-query-bar__control--dept"
+          allow-clear
+          :placeholder="t(`${localePrefix}.deptCode`)"
+        />
         <TaktSelect
           v-model:value="ecDistinction"
           dict-type="logistics_ec_distinction_category"
@@ -95,6 +107,8 @@ import { useI18n } from 'vue-i18n'
 const plantCode = defineModel<string | undefined>('plantCode')
 /** 年月区间 */
 const periodRange = defineModel<[string, string] | null>('periodRange')
+/** 设变单号 */
+const ecNo = defineModel<string>('ecNo', { default: '' })
 /** 区分 */
 const ecDistinction = defineModel<number | undefined>('ecDistinction')
 /** 变更状态 */
@@ -143,7 +157,8 @@ const localePrefix = 'logistics.manufacturing.engineering-change.ec-monthly-tren
 .ec-monthly-trend-query-bar__control--distinction,
 .ec-monthly-trend-query-bar__control--status,
 .ec-monthly-trend-query-bar__control--ec-status,
-.ec-monthly-trend-query-bar__control--dept {
+.ec-monthly-trend-query-bar__control--dept,
+.ec-monthly-trend-query-bar__control--ec-no {
   width: 12rem;
   min-width: 9rem;
 }

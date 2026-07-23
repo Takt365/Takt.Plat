@@ -63,9 +63,9 @@ public class TaktUserSeedData : ITaktSeedDataCoordinator
         // 定义标准用户列表（admin, guest, demo）
         var standardUsers = new[]
         {
-            new { Username = "admin", NicknameSuffix = "管理员", EmployeeNo = "900001" },
-            new { Username = "guest", NicknameSuffix = "访客", EmployeeNo = "900002" },
-            new { Username = "demo", NicknameSuffix = "演示用户", EmployeeNo = "900003" }
+            new { Username = "admin", NicknameSuffix = "管理员", EmployeeCode = "900001" },
+            new { Username = "guest", NicknameSuffix = "访客", EmployeeCode = "900002" },
+            new { Username = "demo", NicknameSuffix = "演示用户", EmployeeCode = "900003" }
         };
 
         TaktLogger.Information("正在为租户 {TenantCode} 初始化用户...", tenantCode);
@@ -80,7 +80,7 @@ public class TaktUserSeedData : ITaktSeedDataCoordinator
                 tenantCode, 
                 userData.Username, 
                 nickname, 
-                userData.EmployeeNo, 
+                userData.EmployeeCode, 
                 defaultPasswordHash);
             
             insertCount += i;
@@ -104,14 +104,14 @@ public class TaktUserSeedData : ITaktSeedDataCoordinator
         string tenantCode,
         string username,
         string nickname,
-        string employeeNo,
+        string EmployeeCode,
         string passwordHash)
     {
-        // 根据员工编号查找员工主键ID
-        var employee = await employeeRepository.FirstAsync(e => e.TenantCode == tenantCode && e.EmployeeNo == employeeNo);
+        // 根据员工编码查找员工主键ID
+        var employee = await employeeRepository.FirstAsync(e => e.TenantCode == tenantCode && e.EmployeeCode == EmployeeCode);
         if (employee == null)
         {
-            throw new InvalidOperationException($"租户 {tenantCode} 中未找到员工编号 {employeeNo} 的员工档案");
+            throw new InvalidOperationException($"租户 {tenantCode} 中未找到员工编码 {EmployeeCode} 的员工档案");
         }
 
         var user = await userRepository.FirstAsync(u => u.TenantCode == tenantCode && u.Username == username);

@@ -142,11 +142,11 @@
         />
       </a-form-item>
       </div>
-      <div v-show="isFieldVisible('lineNumber')">
-      <a-form-item :label="pi.queryLabel('lineNumber')">
+      <div v-show="isFieldVisible('purchaseScaleSeq')">
+      <a-form-item :label="pi.queryLabel('purchaseScaleSeq')">
         <a-input-number
-          v-model:value="advancedQueryForm.lineNumber"
-          :placeholder="pi.queryPh('lineNumber', 'required')"
+          v-model:value="advancedQueryForm.purchaseScaleSeq"
+          :placeholder="pi.queryPh('purchaseScaleSeq', 'required')"
           style="width: 100%"
         />
       </a-form-item>
@@ -160,11 +160,29 @@
         />
       </a-form-item>
       </div>
-      <div v-show="isFieldVisible('amount')">
-      <a-form-item :label="pi.queryLabel('amount')">
+      <div v-show="isFieldVisible('price')">
+      <a-form-item :label="pi.queryLabel('price')">
         <a-input-number
-          v-model:value="advancedQueryForm.amount"
-          :placeholder="pi.queryPh('amount', 'required')"
+          v-model:value="advancedQueryForm.price"
+          :placeholder="pi.queryPh('price', 'required')"
+          style="width: 100%"
+        />
+      </a-form-item>
+      </div>
+      <div v-show="isFieldVisible('untaxedPrice')">
+      <a-form-item :label="pi.queryLabel('untaxedPrice')">
+        <a-input-number
+          v-model:value="advancedQueryForm.untaxedPrice"
+          :placeholder="pi.queryPh('untaxedPrice', 'required')"
+          style="width: 100%"
+        />
+      </a-form-item>
+      </div>
+      <div v-show="isFieldVisible('taxIncludedPrice')">
+      <a-form-item :label="pi.queryLabel('taxIncludedPrice')">
+        <a-input-number
+          v-model:value="advancedQueryForm.taxIncludedPrice"
+          :placeholder="pi.queryPh('taxIncludedPrice', 'required')"
           style="width: 100%"
         />
       </a-form-item>
@@ -403,9 +421,11 @@ function createEmptyAdvancedQueryForm() {
   return {
     ...form,
     purchasePriceSeq: undefined as number | undefined,
-    lineNumber: undefined as number | undefined,
+    purchaseScaleSeq: undefined as number | undefined,
     scaleQuantity: undefined as number | undefined,
-    amount: undefined as number | undefined,
+    price: undefined as number | undefined,
+    untaxedPrice: undefined as number | undefined,
+    taxIncludedPrice: undefined as number | undefined,
     isObsolete: undefined as number | undefined,
   }
 }
@@ -507,14 +527,14 @@ const columns = computed<TableColumnsType>(() => [
       String(getPurchasePriceScaleQuantityField(record, 'purchasePriceSeq') ?? ''),
   },
   {
-    title: pi.label('lineNumber'),
-    dataIndex: 'lineNumber',
-    key: 'lineNumber',
+    title: pi.label('purchaseScaleSeq'),
+    dataIndex: 'purchaseScaleSeq',
+    key: 'purchaseScaleSeq',
     width: 120,
     resizable: true,
     ellipsis: true,
     customRender: ({ record }: { record: PurchasePriceScaleQuantity }) =>
-      String(getPurchasePriceScaleQuantityField(record, 'lineNumber') ?? ''),
+      String(getPurchasePriceScaleQuantityField(record, 'purchaseScaleSeq') ?? ''),
   },
   {
     title: pi.label('scaleQuantity'),
@@ -527,14 +547,34 @@ const columns = computed<TableColumnsType>(() => [
       String(getPurchasePriceScaleQuantityField(record, 'scaleQuantity') ?? ''),
   },
   {
-    title: pi.label('amount'),
-    dataIndex: 'amount',
-    key: 'amount',
+    title: pi.label('price'),
+    dataIndex: 'price',
+    key: 'price',
     width: 120,
     resizable: true,
     ellipsis: true,
     customRender: ({ record }: { record: PurchasePriceScaleQuantity }) =>
-      String(getPurchasePriceScaleQuantityField(record, 'amount') ?? ''),
+      String(getPurchasePriceScaleQuantityField(record, 'price') ?? ''),
+  },
+  {
+    title: pi.label('untaxedPrice'),
+    dataIndex: 'untaxedPrice',
+    key: 'untaxedPrice',
+    width: 120,
+    resizable: true,
+    ellipsis: true,
+    customRender: ({ record }: { record: PurchasePriceScaleQuantity }) =>
+      String(getPurchasePriceScaleQuantityField(record, 'untaxedPrice') ?? ''),
+  },
+  {
+    title: pi.label('taxIncludedPrice'),
+    dataIndex: 'taxIncludedPrice',
+    key: 'taxIncludedPrice',
+    width: 120,
+    resizable: true,
+    ellipsis: true,
+    customRender: ({ record }: { record: PurchasePriceScaleQuantity }) =>
+      String(getPurchasePriceScaleQuantityField(record, 'taxIncludedPrice') ?? ''),
   },
   {
     title: pi.label('isObsolete'),
@@ -703,14 +743,20 @@ function buildListQuery(overrides?: Partial<PurchasePriceScaleQuantityQuery>): P
   if (form.purchasePriceSeq !== undefined && form.purchasePriceSeq !== null) {
     query.purchasePriceSeq = form.purchasePriceSeq
   }
-  if (form.lineNumber !== undefined && form.lineNumber !== null) {
-    query.lineNumber = form.lineNumber
+  if (form.purchaseScaleSeq !== undefined && form.purchaseScaleSeq !== null) {
+    query.purchaseScaleSeq = form.purchaseScaleSeq
   }
   if (form.scaleQuantity !== undefined && form.scaleQuantity !== null) {
     query.scaleQuantity = form.scaleQuantity
   }
-  if (form.amount !== undefined && form.amount !== null) {
-    query.amount = form.amount
+  if (form.price !== undefined && form.price !== null) {
+    query.price = form.price
+  }
+  if (form.untaxedPrice !== undefined && form.untaxedPrice !== null) {
+    query.untaxedPrice = form.untaxedPrice
+  }
+  if (form.taxIncludedPrice !== undefined && form.taxIncludedPrice !== null) {
+    query.taxIncludedPrice = form.taxIncludedPrice
   }
   if (form.isObsolete !== undefined && form.isObsolete !== null) {
     query.isObsolete = form.isObsolete

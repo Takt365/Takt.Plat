@@ -29,54 +29,12 @@
           <a-row :gutter="24">
             <a-col :span="12">
               <a-form-item
-                :label="t('common.page.entity.tenantcode')"
-                name="tenantCode"
-              >
-                <a-input
-                  v-model:value="formState.tenantCode"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('common.page.entity.tenantcode') })"
-                  show-count
-                  :maxlength="20"
-                  disabled
-                />
-              </a-form-item>
-            </a-col>
-            <a-col :span="12">
-              <a-form-item
-                :label="t('common.page.entity.companycode')"
-                name="companyCode"
-              >
-                <a-input
-                  v-model:value="formState.companyCode"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('common.page.entity.companycode') })"
-                  show-count
-                  :maxlength="20"
-                  disabled
-                />
-              </a-form-item>
-            </a-col>
-            <a-col :span="12">
-              <a-form-item
-                :label="t('common.page.entity.companydefaultculture')"
-                name="companyDefaultCulture"
-              >
-                <a-input
-                  v-model:value="formState.companyDefaultCulture"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('common.page.entity.companydefaultculture') })"
-                  show-count
-                  :maxlength="20"
-                  disabled
-                />
-              </a-form-item>
-            </a-col>
-            <a-col :span="12">
-              <a-form-item
-                :label="t('entity.serviceticket.plantcode')"
+                :label="pi.label('plantCode')"
                 name="plantCode"
               >
                 <a-input
                   v-model:value="formState.plantCode"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.serviceticket.plantcode') })"
+                  :placeholder="pi.ph('plantCode')"
                   show-count
                   :maxlength="4"
                   allow-clear
@@ -86,12 +44,12 @@
             </a-col>
             <a-col :span="12">
               <a-form-item
-                :label="t('entity.serviceticket.code')"
+                :label="pi.label('serviceTicketCode')"
                 name="serviceTicketCode"
               >
                 <a-input
                   v-model:value="formState.serviceTicketCode"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.serviceticket.code') })"
+                  :placeholder="pi.ph('serviceTicketCode')"
                   show-count
                   :maxlength="50"
                   allow-clear
@@ -101,12 +59,12 @@
             </a-col>
             <a-col :span="12">
               <a-form-item
-                :label="t('entity.serviceticket.clientid')"
+                :label="pi.label('clientId')"
                 name="clientId"
               >
                 <a-input
                   v-model:value="formState.clientId"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.serviceticket.clientid') })"
+                  :placeholder="pi.ph('clientId')"
                   show-count
                   :maxlength="20"
                   allow-clear
@@ -115,12 +73,12 @@
             </a-col>
             <a-col :span="12">
               <a-form-item
-                :label="t('entity.serviceticket.clientcode')"
+                :label="pi.label('clientCode')"
                 name="clientCode"
               >
                 <a-input
                   v-model:value="formState.clientCode"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.serviceticket.clientcode') })"
+                  :placeholder="pi.ph('clientCode')"
                   show-count
                   :maxlength="20"
                   allow-clear
@@ -130,26 +88,26 @@
             </a-col>
             <a-col :span="12">
               <a-form-item
-                :label="t('entity.serviceticket.clientname')"
-                name="clientName"
+                :label="pi.label('clientName1')"
+                name="clientName1"
               >
                 <a-input
-                  v-model:value="formState.clientName"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.serviceticket.clientname') })"
+                  v-model:value="formState.clientName1"
+                  :placeholder="pi.ph('clientName1')"
                   show-count
-                  :maxlength="80"
+                  :maxlength="140"
                   allow-clear
                 />
               </a-form-item>
             </a-col>
             <a-col :span="12">
               <a-form-item
-                :label="t('entity.serviceticket.servicerequestid')"
+                :label="pi.label('serviceRequestId')"
                 name="serviceRequestId"
               >
                 <a-input
                   v-model:value="formState.serviceRequestId"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.serviceticket.servicerequestid') })"
+                  :placeholder="pi.ph('serviceRequestId')"
                   show-count
                   :maxlength="20"
                   allow-clear
@@ -158,16 +116,59 @@
             </a-col>
             <a-col :span="12">
               <a-form-item
-                :label="t('entity.serviceticket.servicerequestcode')"
+                :label="pi.label('serviceRequestCode')"
                 name="serviceRequestCode"
               >
                 <a-input
                   v-model:value="formState.serviceRequestCode"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.serviceticket.servicerequestcode') })"
+                  :placeholder="pi.ph('serviceRequestCode')"
                   show-count
                   :maxlength="50"
                   allow-clear
                   :disabled="!!formData?.serviceTicketId"
+                />
+              </a-form-item>
+            </a-col>
+            <a-col :span="12">
+              <a-form-item
+                :label="pi.label('serviceOrderId')"
+                name="serviceOrderId"
+              >
+                <a-input
+                  v-model:value="formState.serviceOrderId"
+                  :placeholder="pi.ph('serviceOrderId')"
+                  show-count
+                  :maxlength="20"
+                  allow-clear
+                />
+              </a-form-item>
+            </a-col>
+            <a-col :span="12">
+              <a-form-item
+                :label="pi.label('serviceOrderCode')"
+                name="serviceOrderCode"
+              >
+                <a-input
+                  v-model:value="formState.serviceOrderCode"
+                  :placeholder="pi.ph('serviceOrderCode')"
+                  show-count
+                  :maxlength="50"
+                  allow-clear
+                  :disabled="!!formData?.serviceTicketId"
+                />
+              </a-form-item>
+            </a-col>
+            <a-col :span="12">
+              <a-form-item
+                :label="pi.label('serviceContractId')"
+                name="serviceContractId"
+              >
+                <a-input
+                  v-model:value="formState.serviceContractId"
+                  :placeholder="pi.ph('serviceContractId')"
+                  show-count
+                  :maxlength="20"
+                  allow-clear
                 />
               </a-form-item>
             </a-col>
@@ -183,55 +184,12 @@
           <a-row :gutter="24">
             <a-col :span="12">
               <a-form-item
-                :label="t('entity.serviceticket.serviceorderid')"
-                name="serviceOrderId"
-              >
-                <a-input
-                  v-model:value="formState.serviceOrderId"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.serviceticket.serviceorderid') })"
-                  show-count
-                  :maxlength="20"
-                  allow-clear
-                />
-              </a-form-item>
-            </a-col>
-            <a-col :span="12">
-              <a-form-item
-                :label="t('entity.serviceticket.serviceordercode')"
-                name="serviceOrderCode"
-              >
-                <a-input
-                  v-model:value="formState.serviceOrderCode"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.serviceticket.serviceordercode') })"
-                  show-count
-                  :maxlength="50"
-                  allow-clear
-                  :disabled="!!formData?.serviceTicketId"
-                />
-              </a-form-item>
-            </a-col>
-            <a-col :span="12">
-              <a-form-item
-                :label="t('entity.serviceticket.servicecontractid')"
-                name="serviceContractId"
-              >
-                <a-input
-                  v-model:value="formState.serviceContractId"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.serviceticket.servicecontractid') })"
-                  show-count
-                  :maxlength="20"
-                  allow-clear
-                />
-              </a-form-item>
-            </a-col>
-            <a-col :span="12">
-              <a-form-item
-                :label="t('entity.serviceticket.servicecontractcode')"
+                :label="pi.label('serviceContractCode')"
                 name="serviceContractCode"
               >
                 <a-input
                   v-model:value="formState.serviceContractCode"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.serviceticket.servicecontractcode') })"
+                  :placeholder="pi.ph('serviceContractCode')"
                   show-count
                   :maxlength="50"
                   allow-clear
@@ -241,48 +199,48 @@
             </a-col>
             <a-col :span="12">
               <a-form-item
-                :label="t('entity.serviceticket.tickettype')"
+                :label="pi.label('ticketType')"
                 name="ticketType"
               >
                 <a-input-number
                   v-model:value="formState.ticketType"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.serviceticket.tickettype') })"
+                  :placeholder="pi.ph('ticketType')"
                   style="width: 100%"
                 />
               </a-form-item>
             </a-col>
             <a-col :span="12">
               <a-form-item
-                :label="t('entity.serviceticket.priority')"
+                :label="pi.label('priority')"
                 name="priority"
               >
                 <TaktSelect
                   v-model:value="formState.priority"
                   dict-type="sys_priority_level_category"
-                  :placeholder="t('common.page.form.placeholder.select', { field: t('entity.serviceticket.priority') })"
+                  :placeholder="pi.ph('priority')"
                 />
               </a-form-item>
             </a-col>
             <a-col :span="12">
               <a-form-item
-                :label="t('entity.serviceticket.ticketstatus')"
+                :label="pi.label('ticketStatus')"
                 name="ticketStatus"
               >
                 <TaktSelect
                   v-model:value="formState.ticketStatus"
                   dict-type="sys_ticket_status"
-                  :placeholder="t('common.page.form.placeholder.select', { field: t('entity.serviceticket.ticketstatus') })"
+                  :placeholder="pi.ph('ticketStatus')"
                 />
               </a-form-item>
             </a-col>
             <a-col :span="12">
               <a-form-item
-                :label="t('entity.serviceticket.ticketsubject')"
+                :label="pi.label('ticketSubject')"
                 name="ticketSubject"
               >
                 <a-input
                   v-model:value="formState.ticketSubject"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.serviceticket.ticketsubject') })"
+                  :placeholder="pi.ph('ticketSubject')"
                   show-count
                   :maxlength="200"
                   allow-clear
@@ -291,25 +249,67 @@
             </a-col>
             <a-col :span="24">
               <a-form-item
-                :label="t('entity.serviceticket.faultdescription')"
+                :label="pi.label('faultDescription')"
                 name="faultDescription"
               >
                 <a-textarea
                   v-model:value="formState.faultDescription"
-                  :placeholder="t('common.page.form.placeholder.optional', { field: t('entity.serviceticket.faultdescription') })"
+                  :placeholder="pi.ph('faultDescription')"
                   :rows="2"
                 />
               </a-form-item>
             </a-col>
             <a-col :span="24">
               <a-form-item
-                :label="t('entity.serviceticket.solutiondescription')"
+                :label="pi.label('solutionDescription')"
                 name="solutionDescription"
               >
                 <a-textarea
                   v-model:value="formState.solutionDescription"
-                  :placeholder="t('common.page.form.placeholder.optional', { field: t('entity.serviceticket.solutiondescription') })"
+                  :placeholder="pi.ph('solutionDescription')"
                   :rows="2"
+                />
+              </a-form-item>
+            </a-col>
+            <a-col :span="12">
+              <a-form-item
+                :label="pi.label('serviceLocation')"
+                name="serviceLocation"
+              >
+                <a-input
+                  v-model:value="formState.serviceLocation"
+                  :placeholder="pi.ph('serviceLocation')"
+                  show-count
+                  :maxlength="500"
+                  allow-clear
+                />
+              </a-form-item>
+            </a-col>
+            <a-col :span="12">
+              <a-form-item
+                :label="pi.label('assignedEmployeeId')"
+                name="assignedEmployeeId"
+              >
+                <a-input
+                  v-model:value="formState.assignedEmployeeId"
+                  :placeholder="pi.ph('assignedEmployeeId')"
+                  show-count
+                  :maxlength="20"
+                  allow-clear
+                />
+              </a-form-item>
+            </a-col>
+            <a-col :span="12">
+              <a-form-item
+                :label="pi.label('assignedEmployeeName')"
+                name="assignedEmployeeName"
+              >
+                <a-input
+                  v-model:value="formState.assignedEmployeeName"
+                  :placeholder="pi.ph('assignedEmployeeName')"
+                  show-count
+                  :maxlength="50"
+                  allow-clear
                 />
               </a-form-item>
             </a-col>
@@ -323,134 +323,92 @@
       >
         <div :class="formContentClass">
           <a-row :gutter="24">
-            <a-col :span="12">
+            <a-col :span="24">
               <a-form-item
-                :label="t('entity.serviceticket.servicelocation')"
-                name="serviceLocation"
-              >
-                <a-input
-                  v-model:value="formState.serviceLocation"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.serviceticket.servicelocation') })"
-                  show-count
-                  :maxlength="500"
-                  allow-clear
-                />
-              </a-form-item>
-            </a-col>
-            <a-col :span="12">
-              <a-form-item
-                :label="t('entity.serviceticket.assignedemployeeid')"
-                name="assignedEmployeeId"
-              >
-                <a-input
-                  v-model:value="formState.assignedEmployeeId"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.serviceticket.assignedemployeeid') })"
-                  show-count
-                  :maxlength="20"
-                  allow-clear
-                />
-              </a-form-item>
-            </a-col>
-            <a-col :span="12">
-              <a-form-item
-                :label="t('entity.serviceticket.assignedemployeename')"
-                name="assignedEmployeeName"
-              >
-                <a-input
-                  v-model:value="formState.assignedEmployeeName"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.serviceticket.assignedemployeename') })"
-                  show-count
-                  :maxlength="50"
-                  allow-clear
-                />
-              </a-form-item>
-            </a-col>
-            <a-col :span="12">
-              <a-form-item
-                :label="t('entity.serviceticket.scheduledstarttime')"
+                :label="pi.label('scheduledStartTime')"
                 name="scheduledStartTime"
               >
                 <a-date-picker
                   v-model:value="formState.scheduledStartTime"
-                  :placeholder="t('common.page.form.placeholder.select', { field: t('entity.serviceticket.scheduledstarttime') })"
+                  :placeholder="pi.ph('scheduledStartTime')"
                   value-format="YYYY-MM-DD"
                   style="width: 100%"
                 />
               </a-form-item>
             </a-col>
-            <a-col :span="12">
+            <a-col :span="24">
               <a-form-item
-                :label="t('entity.serviceticket.scheduledendtime')"
+                :label="pi.label('scheduledEndTime')"
                 name="scheduledEndTime"
               >
                 <a-date-picker
                   v-model:value="formState.scheduledEndTime"
-                  :placeholder="t('common.page.form.placeholder.select', { field: t('entity.serviceticket.scheduledendtime') })"
+                  :placeholder="pi.ph('scheduledEndTime')"
                   value-format="YYYY-MM-DD"
                   style="width: 100%"
                 />
               </a-form-item>
             </a-col>
-            <a-col :span="12">
+            <a-col :span="24">
               <a-form-item
-                :label="t('entity.serviceticket.actualstarttime')"
+                :label="pi.label('actualStartTime')"
                 name="actualStartTime"
               >
                 <a-date-picker
                   v-model:value="formState.actualStartTime"
-                  :placeholder="t('common.page.form.placeholder.select', { field: t('entity.serviceticket.actualstarttime') })"
+                  :placeholder="pi.ph('actualStartTime')"
                   value-format="YYYY-MM-DD"
                   style="width: 100%"
                 />
               </a-form-item>
             </a-col>
-            <a-col :span="12">
+            <a-col :span="24">
               <a-form-item
-                :label="t('entity.serviceticket.actualendtime')"
+                :label="pi.label('actualEndTime')"
                 name="actualEndTime"
               >
                 <a-date-picker
                   v-model:value="formState.actualEndTime"
-                  :placeholder="t('common.page.form.placeholder.select', { field: t('entity.serviceticket.actualendtime') })"
+                  :placeholder="pi.ph('actualEndTime')"
                   value-format="YYYY-MM-DD"
                   style="width: 100%"
                 />
               </a-form-item>
             </a-col>
-            <a-col :span="12">
+            <a-col :span="24">
               <a-form-item
-                :label="t('entity.serviceticket.acceptanceresult')"
+                :label="pi.label('acceptanceResult')"
                 name="acceptanceResult"
               >
                 <a-input-number
                   v-model:value="formState.acceptanceResult"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.serviceticket.acceptanceresult') })"
+                  :placeholder="pi.ph('acceptanceResult')"
                   style="width: 100%"
                 />
               </a-form-item>
             </a-col>
-            <a-col :span="12">
+            <a-col :span="24">
               <a-form-item
-                :label="t('entity.serviceticket.acceptedby')"
+                :label="pi.label('acceptedBy')"
                 name="acceptedBy"
               >
                 <a-input
                   v-model:value="formState.acceptedBy"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.serviceticket.acceptedby') })"
+                  :placeholder="pi.ph('acceptedBy')"
                   show-count
                   :maxlength="50"
                   allow-clear
                 />
               </a-form-item>
             </a-col>
-            <a-col :span="12">
+            <a-col :span="24">
               <a-form-item
-                :label="t('entity.serviceticket.acceptedat')"
+                :label="pi.label('acceptedAt')"
                 name="acceptedAt"
               >
                 <a-date-picker
                   v-model:value="formState.acceptedAt"
-                  :placeholder="t('common.page.form.placeholder.select', { field: t('entity.serviceticket.acceptedat') })"
+                  :placeholder="pi.ph('acceptedAt')"
                   value-format="YYYY-MM-DD"
                   style="width: 100%"
                 />
@@ -468,6 +426,48 @@
           <a-row :gutter="24">
             <a-col :span="24">
               <a-form-item
+                :label="pi.label('tenantCode')"
+                name="tenantCode"
+              >
+                <a-input
+                  v-model:value="formState.tenantCode"
+                  :placeholder="pi.ph('tenantCode')"
+                  show-count
+                  :maxlength="20"
+                  disabled
+                />
+              </a-form-item>
+            </a-col>
+            <a-col :span="24">
+              <a-form-item
+                :label="pi.label('companyCode')"
+                name="companyCode"
+              >
+                <a-input
+                  v-model:value="formState.companyCode"
+                  :placeholder="pi.ph('companyCode')"
+                  show-count
+                  :maxlength="20"
+                  disabled
+                />
+              </a-form-item>
+            </a-col>
+            <a-col :span="24">
+              <a-form-item
+                :label="pi.label('companyDefaultCulture')"
+                name="companyDefaultCulture"
+              >
+                <a-input
+                  v-model:value="formState.companyDefaultCulture"
+                  :placeholder="pi.ph('companyDefaultCulture')"
+                  show-count
+                  :maxlength="20"
+                  disabled
+                />
+              </a-form-item>
+            </a-col>
+            <a-col :span="24">
+              <a-form-item
                 name="extField"
                 class="takt-form-item-ext-field"
               >
@@ -479,7 +479,7 @@
                     >
                       <span class="takt-form-label-hint-icon"><RiQuestionLine class="takt-remix-icon" /></span>
                     </a-tooltip>
-                    <span>{{ t('common.page.entity.extfield') }}</span>
+                    <span>{{ pi.label('extField') }}</span>
                   </span>
                 </template>
                 <a-textarea
@@ -494,12 +494,12 @@
             </a-col>
             <a-col :span="24">
               <a-form-item
-                :label="t('common.page.entity.remark')"
+                :label="pi.label('remark')"
                 name="remark"
               >
                 <a-textarea
                   v-model:value="formState.remark"
-                  :placeholder="t('common.page.form.placeholder.optional', { field: t('common.page.entity.remark') })"
+                  :placeholder="pi.ph('remark')"
                   :rows="4"
                   show-count
                   :maxlength="400"
@@ -522,6 +522,10 @@
 import { reactive, watch, computed, ref, onMounted } from 'vue'
 import { useI18n } from 'vue-i18n'
 import type { Rule } from 'ant-design-vue/es/form'
+import { useServiceTicketI18n } from '../composables/use-service-ticket-i18n'
+
+/** 实体字段 i18n */
+const pi = useServiceTicketI18n()
 import type { ServiceTicketCreate } from '@/types/logistics/customer-service/service-ticket'
 import TaktSelect from '@/components/business/takt-select/index.vue'
 import { RiQuestionLine } from '@remixicon/vue'
@@ -532,7 +536,7 @@ import { useUserStore } from '@/stores/identity/user'
 /** i18n 翻译函数 */
 const { t } = useI18n()
 
-/** Pinia：租户/公司上下文 */
+/** Pinia：租户上下文 */
 const tenantStore = useTenantStore()
 /** Pinia：用户上下文 */
 const userStore = useUserStore()
@@ -540,25 +544,23 @@ const userStore = useUserStore()
 /**
  * 上下文隔离字段：租户 / 公司 / 公司默认语言（登录或公司切换注入，表单只读）
  * @param target 表单数据
- * @param force 为 true 时强制覆盖（新增态或公司切换）
+ * @param force 为 true 时强制覆盖（新增态或上下文切换）
  */
 function applyScopeDefaults(target: Record<string, unknown>, force = false) {
-  if (formFields.includes('tenantCode') && (force || !target.tenantCode)) {
+  if (force || !target.tenantCode) {
     target.tenantCode = tenantStore.tenantCode
   }
-  if (formFields.includes('companyCode') && (force || !target.companyCode)) {
+  if (force || !target.companyCode) {
     target.companyCode = tenantStore.companyCode
   }
-  if (formFields.includes('companyDefaultCulture') && (force || !target.companyDefaultCulture)) {
+  if (force || !target.companyDefaultCulture) {
     target.companyDefaultCulture = userStore.userInfo?.companyDefaultCulture ?? ''
   }
 }
-/** 表单内容区高度 class（字段多时 tab-10 行） */
-const formContentClass = computed(() => (formFields.length > 10 ? 'takt-form-content-rows-10' : 'takt-form-content-rows-5'))
+/** 表单内容区高度 class（多 Tab 大表单固定 10 行高度） */
+const formContentClass = 'takt-form-content-rows-10'
 /** 当前激活的 Tab key */
 const activeTab = ref('tab-0')
-/** CreateDto 字段名列表（与 formState 键对齐） */
-const formFields = ["tenantCode","companyCode","companyDefaultCulture","plantCode","serviceTicketCode","clientId","clientCode","clientName","serviceRequestId","serviceRequestCode","serviceOrderId","serviceOrderCode","serviceContractId","serviceContractCode","ticketType","priority","ticketStatus","ticketSubject","faultDescription","solutionDescription","serviceLocation","assignedEmployeeId","assignedEmployeeName","scheduledStartTime","scheduledEndTime","actualStartTime","actualEndTime","acceptanceResult","acceptedBy","acceptedAt","extField","remark"]
 
 
 /** 父级传入的编辑 DTO；新增时为 undefined 或空对象 */
@@ -624,8 +626,7 @@ watch(
 watch(
   () => [tenantStore.tenantCode, tenantStore.companyCode, userStore.userInfo?.companyDefaultCulture] as const,
   () => {
-    const isCreate = !props.formData?.serviceTicketId
-    if (isCreate) {
+    if (!props.formData?.serviceTicketId) {
       applyScopeDefaults(formState, true)
     }
   },
@@ -636,46 +637,46 @@ const rules = computed<Record<string, Rule[]>>(() => ({
   plantCode: [
     {
       required: true,
-      message: t('common.page.form.placeholder.required', { field: t('entity.serviceticket.plantcode') }),
+      message: pi.ph('plantCode'),
       trigger: 'blur'
     }
   ],
   serviceTicketCode: [
     {
       required: true,
-      message: t('common.page.form.placeholder.required', { field: t('entity.serviceticket.code') }),
+      message: pi.ph('serviceTicketCode'),
       trigger: 'blur'
     }
   ],
   clientId: [
     {
       required: true,
-      message: t('common.page.form.placeholder.required', { field: t('entity.serviceticket.clientid') }),
+      message: pi.ph('clientId'),
       trigger: 'blur'
     }
   ],
   clientCode: [
     {
       required: true,
-      message: t('common.page.form.placeholder.required', { field: t('entity.serviceticket.clientcode') }),
+      message: pi.ph('clientCode'),
       trigger: 'blur'
     }
   ],
-  clientName: [
+  clientName1: [
     {
       required: true,
-      message: t('common.page.form.placeholder.required', { field: t('entity.serviceticket.clientname') }),
+      message: pi.ph('clientName1'),
       trigger: 'blur'
     }
   ],
   ticketType: [{
     validator: async (_rule, value) => {
       if (value === undefined || value === null || value === '') {
-        return Promise.reject(t('common.page.form.placeholder.select', { field: t('entity.serviceticket.tickettype') }))
+        return Promise.reject(pi.ph('ticketType'))
       }
       const num = typeof value === 'number' ? value : Number(value)
       if (!Number.isFinite(num)) {
-        return Promise.reject(t('common.page.form.placeholder.select', { field: t('entity.serviceticket.tickettype') }))
+        return Promise.reject(pi.ph('ticketType'))
       }
       return Promise.resolve()
     },
@@ -684,11 +685,11 @@ const rules = computed<Record<string, Rule[]>>(() => ({
   priority: [{
     validator: async (_rule, value) => {
       if (value === undefined || value === null || value === '') {
-        return Promise.reject(t('common.page.form.placeholder.select', { field: t('entity.serviceticket.priority') }))
+        return Promise.reject(pi.ph('priority'))
       }
       const num = typeof value === 'number' ? value : Number(value)
       if (!Number.isFinite(num)) {
-        return Promise.reject(t('common.page.form.placeholder.select', { field: t('entity.serviceticket.priority') }))
+        return Promise.reject(pi.ph('priority'))
       }
       return Promise.resolve()
     },
@@ -697,11 +698,11 @@ const rules = computed<Record<string, Rule[]>>(() => ({
   ticketStatus: [{
     validator: async (_rule, value) => {
       if (value === undefined || value === null || value === '') {
-        return Promise.reject(t('common.page.form.placeholder.select', { field: t('entity.serviceticket.ticketstatus') }))
+        return Promise.reject(pi.ph('ticketStatus'))
       }
       const num = typeof value === 'number' ? value : Number(value)
       if (!Number.isFinite(num)) {
-        return Promise.reject(t('common.page.form.placeholder.select', { field: t('entity.serviceticket.ticketstatus') }))
+        return Promise.reject(pi.ph('ticketStatus'))
       }
       return Promise.resolve()
     },
@@ -710,7 +711,7 @@ const rules = computed<Record<string, Rule[]>>(() => ({
   ticketSubject: [
     {
       required: true,
-      message: t('common.page.form.placeholder.required', { field: t('entity.serviceticket.ticketsubject') }),
+      message: pi.ph('ticketSubject'),
       trigger: 'blur'
     }
   ],

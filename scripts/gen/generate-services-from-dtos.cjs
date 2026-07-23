@@ -293,12 +293,14 @@ function hasGetOptionsAsyncMethod(content, methodName) {
 }
 
 /**
- * Get*OptionsAsync / Get*TreeOptionsAsync 实现是否通过仓储查询（拒绝遗留的 GetTenantXxxListAsync 等）
+ * Get*OptionsAsync / Get*TreeOptionsAsync 实现是否通过仓储查询（拒绝遗留的 GetTenantXxxListAsync、全量递归 Build*Tree）
  * @param {string|null} block 方法块全文
  * @param {string} repoField 如 _menuRepository
+ * @param {{ statusField?: string, enabledValue?: number }|null} [statusMeta]
+ * @param {Set<string>|null} [entityPropNames] 实体属性名；块内引用不存在的属性则视为失效并重生成
  * @returns {boolean}
  */
-function isValidOptionsImplementationBlock(block, repoField, statusMeta = null) {
+function isValidOptionsImplementationBlock(block, repoField, statusMeta = null, entityPropNames = null) {
   if (!block || !block.trim()) {
     return false;
   }
@@ -308,10 +310,83 @@ function isValidOptionsImplementationBlock(block, repoField, statusMeta = null) 
   if (/\bawait\s+Get(?:Tenant|Company)?\w+ListAsync\s*\(/.test(block)) {
     return false;
   }
+  // 大数据树：拒绝内存递归 Build*Tree / Build*TreeOptions（须按 parentId 只查一层）
+  if (/\bBuild\w+Tree(?:Options)?\s*\(/.test(block)) {
+    return false;
+  }
   if (optionsBlockUsesStaleIntStatusCompare(block, statusMeta)) {
     return false;
   }
+  if (optionsBlockReferencesMissingEntityProps(block, entityPropNames)) {
+    return false;
+  }
+  // 平铺 Options：禁止 DictValue/DictLabel 使用雪花 Id（须业务 *Code）
+  if (optionsBlockUsesSnowflakeIdForSelect(block)) {
+    return false;
+  }
   return true;
+}
+
+/**
+ * 平铺 Get*OptionsAsync 是否仍用 e.Id / item.Id 作 DictValue 或 DictLabel
+ * @param {string} block
+ */
+function optionsBlockUsesSnowflakeIdForSelect(block) {
+  if (!block || !block.trim()) {
+    return false;
+  }
+  // 树形 TreeOptions 的 DictValue=item.Id 仍服务于 ParentId，此处仅拦平铺 TaktSelectOption
+  if (/\bTaktTreeSelectOption\b/.test(block)) {
+    return false;
+  }
+  if (/DictValue\s*=\s*(?:e|item)\.Id\b/.test(block)) {
+    return true;
+  }
+  if (/DictLabel\s*=\s*(?:e|item)\.Id(?:\.ToString\s*\(\s*\))?/.test(block)) {
+    return true;
+  }
+  if (/DictLabel\s*=\s*.*\?\?\s*(?:e|item)\.Id(?:\.ToString\s*\(\s*\))?/.test(block)) {
+    return true;
+  }
+  return false;
+}
+
+/**
+ * Options 方法块是否引用了实体上已删除/不存在的属性（如旧 MaterialName）
+ * @param {string} block
+ * @param {Set<string>|null|undefined} entityPropNames
+ * @returns {boolean} true=存在缺失引用，应重生成
+ */
+function optionsBlockReferencesMissingEntityProps(block, entityPropNames) {
+  if (!block || !entityPropNames || entityPropNames.size === 0) {
+    return false;
+  }
+  const allowed = new Set([
+    ...entityPropNames,
+    'Id',
+    'TenantCode',
+    'CompanyCode',
+    'CreatedAt',
+    'CreatedBy',
+    'UpdatedAt',
+    'UpdatedBy',
+    'DeletedAt',
+    'DeletedBy',
+    'IsDeleted',
+    'Remark',
+    'ExtField',
+    'SortOrder',
+    'ApprovalStatus',
+    'FlowInstanceId',
+  ]);
+  const re = /\b(?:e|x|item)\.([A-Z]\w*)\b/g;
+  let m;
+  while ((m = re.exec(block)) !== null) {
+    if (!allowed.has(m[1])) {
+      return true;
+    }
+  }
+  return false;
 }
 
 /**
@@ -322,6 +397,8 @@ function isValidOptionsImplementationBlock(block, repoField, statusMeta = null) 
  * @param {string} params.repoField
  * @param {string} params.freshTemplate
  * @param {boolean} [params.refreshOptions]
+ * @param {object|null} [params.statusMeta]
+ * @param {Set<string>|null} [params.entityPropNames]
  * @returns {{ block: string, preserved: boolean, regenerated: boolean }}
  */
 function resolveOptionsImplementationBlock({
@@ -331,6 +408,7 @@ function resolveOptionsImplementationBlock({
   freshTemplate,
   refreshOptions = false,
   statusMeta = null,
+  entityPropNames = null,
 }) {
   if (!hasGetOptionsAsyncMethod(existingContent, methodName)) {
     return { block: freshTemplate, preserved: false, regenerated: false };
@@ -343,7 +421,7 @@ function resolveOptionsImplementationBlock({
     methodName,
     'implementation',
   );
-  if (preserved && isValidOptionsImplementationBlock(preserved, repoField, statusMeta)) {
+  if (preserved && isValidOptionsImplementationBlock(preserved, repoField, statusMeta, entityPropNames)) {
     return { block: preserved, preserved: true, regenerated: false };
   }
   return { block: freshTemplate, preserved: false, regenerated: true };
@@ -358,14 +436,23 @@ function buildGetOptionsAsyncInterfaceSection(entityShort, hasTree, dtoInfo, des
     hasTree && dtoInfo.tree ? `Get${entityShort}TreeOptionsAsync` : `Get${entityShort}OptionsAsync`;
   if (hasGetOptionsAsyncMethod(existingContent, methodName)) {
     const preserved = extractGetOptionsAsyncMethodBlock(existingContent, methodName, 'interface');
+    // 树形 TreeOptions：旧签名无 parentId 时强制换成懒加载一层接口
     if (preserved) {
-      return { block: preserved, preserved: true, methodName };
+      const isLazyTreeOptions =
+        !(hasTree && dtoInfo.tree) || /\blong\s+parentId\b/.test(preserved);
+      if (isLazyTreeOptions) {
+        return { block: preserved, preserved: true, methodName };
+      }
     }
   }
   let block = '';
   if (hasTree && dtoInfo.tree) {
-    block += buildMethodXmlDoc({ summary: `获取${desc}树形选项列表`, returns: '树形选项' });
-    block += `    Task<List<TaktTreeSelectOption>> ${methodName}();\n\n`;
+    block += buildMethodXmlDoc({
+      summary: `获取${desc}树形选项列表（懒加载：仅 parentId 直接子级一层）`,
+      params: [{ name: 'parentId', desc: '父级ID（0=根）' }],
+      returns: '树形选项（一层）',
+    });
+    block += `    Task<List<TaktTreeSelectOption>> ${methodName}(long parentId = 0);\n\n`;
   } else {
     block += buildMethodXmlDoc({ summary: `获取${desc}选项列表`, returns: '下拉选项' });
     block += `    Task<List<TaktSelectOption>> ${methodName}();\n\n`;
@@ -374,7 +461,9 @@ function buildGetOptionsAsyncInterfaceSection(entityShort, hasTree, dtoInfo, des
 }
 
 /**
- * 非树形实体：GetXxxOptionsAsync 默认实现模板
+ * 非树形实体：GetXxxOptionsAsync 默认实现模板（DictValue/DictLabel 均禁止雪花 Id）
+ * @param {string} nameField 展示字段（Name / Code / nvarchar）
+ * @param {string} valueField 业务 Code，无则 Name，再无则首个业务 nvarchar
  */
 function buildFlatOptionsAsyncImplTemplate(
   entityShort,
@@ -383,7 +472,14 @@ function buildFlatOptionsAsyncImplTemplate(
   ensureContextLine,
   optionsListPredicate,
   nameField,
+  valueField,
 ) {
+  if (!valueField || valueField === 'Id') {
+    throw new Error(
+      `Get${entityShort}OptionsAsync：valueField 须为 *Code / *Name / 业务 nvarchar，禁止雪花 Id`,
+    );
+  }
+  const labelField = nameField && nameField !== 'Id' ? nameField : valueField;
   let block = '';
   block += buildMethodXmlDoc({ summary: `获取${desc}选项列表`, returns: '下拉选项' });
   block += `    public async Task<List<TaktSelectOption>> Get${entityShort}OptionsAsync()\n`;
@@ -391,12 +487,17 @@ function buildFlatOptionsAsyncImplTemplate(
   block += ensureContextLine;
   block += `        var list = await ${repoField}.GetListAsync(\n`;
   block += `            ${optionsListPredicate},\n`;
-  block += `            x => x.${nameField} ?? string.Empty,\n`;
+  block += `            x => x.${labelField} ?? string.Empty,\n`;
   block += '            false);\n';
   block += '        return list.Select(e => new TaktSelectOption\n';
   block += '        {\n';
-  block += '            DictValue = e.Id,\n';
-  block += `            DictLabel = e.${nameField} ?? e.Id.ToString(),\n`;
+  block += `            DictValue = e.${valueField},\n`;
+  if (labelField === valueField) {
+    // 无可用 *Name（如仅有 FormName）：标签与值都用 *Code
+    block += `            DictLabel = e.${valueField},\n`;
+  } else {
+    block += `            DictLabel = e.${labelField} ?? e.${valueField},\n`;
+  }
   block += '        }).ToList();\n';
   block += '    }\n\n';
   return block;
@@ -1068,15 +1169,17 @@ function buildMasterDetailChildUpsertBlock(c, entityName, entityShort, entityFil
   const childIdProp = `${c.childShort}Id`;
   const childUpdateDto = `Takt${c.childShort}UpdateDto`;
   const saveVar = `${c.navPropName.charAt(0).toLowerCase()}${c.navPropName.slice(1)}ForSave`;
+  /** 多子表时各块须用不同模式变量名，避免 CS0128（updateDto 重复定义） */
+  const updateDtoVar = `updateDtoFor${c.navPropName}`;
   const childUniqueIndexes = extractUniqueIndexes(c.childFile, c.childBase);
   const lineUniqueIndexes = childUniqueIndexes.filter((idx) => idx.fields.includes('LineNumber'));
   const indent = '        ';
   const lines = [];
   lines.push(`${indent}// ${childDesc}（${c.navPropName}）`);
   lines.push(`${indent}List<${childUpdateDto}>? ${saveVar};`);
-  lines.push(`${indent}if (dto is Takt${entityShort}UpdateDto updateDto && updateDto.${c.navPropName} != null)`);
+  lines.push(`${indent}if (dto is Takt${entityShort}UpdateDto ${updateDtoVar} && ${updateDtoVar}.${c.navPropName} != null)`);
   lines.push(`${indent}{`);
-  lines.push(`${indent}    ${saveVar} = updateDto.${c.navPropName};`);
+  lines.push(`${indent}    ${saveVar} = ${updateDtoVar}.${c.navPropName};`);
   lines.push(`${indent}}`);
   lines.push(`${indent}else if (dto.${c.navPropName} != null)`);
   lines.push(`${indent}{`);
@@ -1477,7 +1580,12 @@ function generateMasterDetailServiceExtras(
   };
 }
 
-function getNameFieldName(entityFile) {
+/**
+ * 实体业务 string 属性（排除租户/审计等非展示列）
+ * @param {string} entityFile
+ * @returns {string[]}
+ */
+function listBusinessStringPropertyNames(entityFile) {
   const content = readUtf8(entityFile);
   const stringRegex = /public\s+string\??\s+(\w+)\s*\{/g;
   const standard = new Set([
@@ -1493,17 +1601,104 @@ function getNameFieldName(entityFile) {
   const names = [];
   let m;
   while ((m = stringRegex.exec(content)) !== null) {
-    names.push(m[1]);
+    if (!standard.has(m[1])) {
+      names.push(m[1]);
+    }
   }
-  const nameField = names.find((f) => f.endsWith('Name') && !standard.has(f));
-  if (nameField) {
-    return nameField;
+  return names;
+}
+
+/**
+ * 下拉 DictLabel：优先 {Entity}Name，再合理 *Name（不含 Code / nvarchar 回退）
+ * @param {string} entityFile
+ * @param {string} [entityShort] 不含 Takt 前缀
+ * @returns {string|null}
+ */
+function getNameFieldName(entityFile, entityShort = '') {
+  const names = listBusinessStringPropertyNames(entityFile);
+  /** 非业务显示名（不可作 DictLabel；如 SAP FormName） */
+  const nameDenylist = new Set([
+    'FormName',
+    'FileName',
+    'SheetName',
+    'TableName',
+    'ColumnName',
+    'SchemaName',
+    'AssemblyName',
+  ]);
+  const exactName = entityShort ? `${entityShort}Name` : '';
+  if (exactName && names.includes(exactName)) {
+    return exactName;
   }
-  const codeField = names.find((f) => f.endsWith('Code') && !standard.has(f));
-  if (codeField) {
-    return codeField;
+  const nameField = names.find(
+    (f) =>
+      f.endsWith('Name') &&
+      !nameDenylist.has(f) &&
+      !f.endsWith('ByName') &&
+      !f.endsWith('FileName'),
+  );
+  return nameField || null;
+}
+
+/**
+ * 无 *Code / *Name 时：声明顺序上第一个业务 string（对应 nvarchar 列）
+ * @param {string} entityFile
+ * @param {string} [entityShort]
+ * @returns {string|null}
+ */
+function getFirstBusinessNvarcharField(entityFile, entityShort = '') {
+  const names = listBusinessStringPropertyNames(entityFile);
+  const nameDenylist = new Set([
+    'FormName',
+    'FileName',
+    'SheetName',
+    'TableName',
+    'ColumnName',
+    'SchemaName',
+    'AssemblyName',
+  ]);
+  const preferredName = getNameFieldName(entityFile, entityShort);
+  const codeField = resolvePrimaryBusinessCodeField(entityFile, entityShort);
+  const skip = new Set([preferredName, codeField].filter(Boolean));
+  return (
+    names.find((f) => !skip.has(f) && !nameDenylist.has(f)) ||
+    names.find((f) => !nameDenylist.has(f)) ||
+    null
+  );
+}
+
+/**
+ * 下拉 DictValue：*Code → *Name → 首个业务 nvarchar；禁止雪花 Id
+ * @param {string} entityFile
+ * @param {string} entityShort
+ * @returns {string|null}
+ */
+function getOptionsValueFieldName(entityFile, entityShort) {
+  return (
+    resolvePrimaryBusinessCodeField(entityFile, entityShort) ||
+    getNameFieldName(entityFile, entityShort) ||
+    getFirstBusinessNvarcharField(entityFile, entityShort)
+  );
+}
+
+/**
+ * 解析 Options 的 label/value：无 Code 用 Name，再无则用首个 nvarchar；禁止 Id
+ * @param {string} entityFile
+ * @param {string} entityShort
+ * @param {string} desc
+ */
+function resolveOptionsDisplayFields(entityFile, entityShort, desc) {
+  const codeField = resolvePrimaryBusinessCodeField(entityFile, entityShort);
+  const nameOnly = getNameFieldName(entityFile, entityShort);
+  const firstNvarchar = getFirstBusinessNvarcharField(entityFile, entityShort);
+  const valueField = codeField || nameOnly || firstNvarchar;
+  if (!valueField || valueField === 'Id') {
+    throw new Error(
+      `实体 Takt${entityShort}（${desc}）无可用 Options 字段：请提供 {Entity}Code，或 *Name，或至少一个业务 nvarchar 字段（禁止雪花 Id）`,
+    );
   }
-  return names.find((f) => !standard.has(f)) || 'Id';
+  const nameField = nameOnly || codeField || firstNvarchar || valueField;
+  return { nameField, valueField };
 }
 
 function extractEntityPropertyNames(entityFile) {
@@ -2308,16 +2503,38 @@ function buildBuiltInStatusDisableGuardLines(desc, builtInStatusMeta, dtoPropNam
 }
 
 /**
- * 树形选项列表查询条件（仅启用项，用于 GetXxxTreeOptionsAsync）
+ * 树形选项/树列表：按 parentId 只查直接子级（含租户/公司/启用态）
  * @param {string} dtoBase
  * @param {ReturnType<typeof extractPrimaryEnableStatusMeta>} statusMeta
+ * @param {boolean} [hasIsObsolete]
+ * @param {{ forIncludeDisabled?: boolean }} [opts] forIncludeDisabled=true 时生成三元 Expression 用的启用谓词片段
  */
-function buildTreeOptionsListPredicate(dtoBase, statusMeta) {
-  return buildOptionsListPredicate(dtoBase, statusMeta);
+function buildLazyTreeChildPredicate(dtoBase, statusMeta, hasIsObsolete = false) {
+  const scope =
+    dtoBase === 'TaktTenantDtoBase'
+      ? 'x.TenantCode == CurrentTenantCode'
+      : 'x.TenantCode == CurrentTenantCode && x.CompanyCode == CurrentCompanyCode';
+  const obsoletePart = hasIsObsolete ? ' && x.IsObsolete == 0' : '';
+  const base = `${scope} && x.ParentId == parentId${obsoletePart}`;
+  if (statusMeta?.kind === 'int') {
+    return {
+      withStatus: `x => ${base} && x.${statusMeta.field} == ${statusMeta.intEnabled ?? 1}`,
+      withoutStatus: `x => ${base}`,
+      statusField: statusMeta.field,
+      enabledValue: statusMeta.intEnabled ?? 1,
+    };
+  }
+  return {
+    withStatus: `x => ${base}`,
+    withoutStatus: `x => ${base}`,
+    statusField: null,
+    enabledValue: 1,
+  };
 }
 
 /**
- * 生成 GetXxxTreeOptionsAsync、GetXxxTreeAsync 及对应 Build 私有方法（树形实体不生成 GetXxxOptionsAsync）
+ * 生成 GetXxxTreeOptionsAsync、GetXxxTreeAsync（懒加载一层；不生成递归 Build*Tree）
+ * 参照 TaktAdminDivisionService + TaktLazyTreeHelper
  */
 function generateTreeServiceMethods(
   entityName,
@@ -2333,104 +2550,86 @@ function generateTreeServiceMethods(
   const entityContent = readUtf8(entityFile);
   const statusMeta = extractPrimaryEnableStatusMeta(entityContent, entityShort);
   const hasSortOrder = /public\s+int\s+SortOrder\s*\{/.test(entityContent);
-  const orderField = hasSortOrder ? 'SortOrder' : 'Id';
-  const listPredicate =
-    dtoBase === 'TaktTenantDtoBase'
-      ? 'x => x.TenantCode == CurrentTenantCode'
-      : 'x => x.TenantCode == CurrentTenantCode && x.CompanyCode == CurrentCompanyCode';
-  const treeOptionsPredicate = buildTreeOptionsListPredicate(dtoBase, statusMeta);
+  const hasIsLeaf = /public\s+int\s+IsLeaf\s*\{/.test(entityContent);
+  const hasIsObsolete = entityFileHasIsObsolete(entityFile);
   const ensureLine =
     dtoBase === 'TaktTenantDtoBase' ? '' : '        EnsureThreeLayerContext();\n';
+  const pred = buildLazyTreeChildPredicate(dtoBase, statusMeta, hasIsObsolete);
+  const sortOrderAssign = hasSortOrder
+    ? '                    SortOrder = item.SortOrder,\n'
+    : '                    SortOrder = 0,\n';
+  const isLeafAssign = hasIsLeaf
+    ? `                var isLeaf = TaktLazyTreeHelper.ToAntIsLeaf(item.IsLeaf);\n`
+    : '                var isLeaf = false;\n';
 
-  let block = '';
-  block += buildMethodXmlDoc({
-    summary: `获取${desc}树形选项列表`,
-    returns: '树形选项',
+  let treeOptionsBlock = '';
+  treeOptionsBlock += buildMethodXmlDoc({
+    summary: `获取${desc}树形选项列表（懒加载：仅 parentId 直接子级一层）`,
+    params: [{ name: 'parentId', desc: '父级ID（0=根）' }],
+    returns: '树形选项（一层）',
   });
-  block += `    public async Task<List<TaktTreeSelectOption>> Get${entityShort}TreeOptionsAsync()\n`;
-  block += '    {\n';
-  block += ensureLine;
-  block += `        var list = await ${repoField}.GetListAsync(${treeOptionsPredicate});\n`;
-  block += `        return Build${entityShort}TreeOptions(list, 0);\n`;
-  block += '    }\n\n';
-  const treeOptionsBlock = block;
-  block = '';
-  block += buildMethodXmlDoc({
-    summary: `在内存中构建${desc}树形选项（递归，按 ParentId）`,
-  });
-  block += `    private List<TaktTreeSelectOption> Build${entityShort}TreeOptions(List<${entityName}> all, long parentId)\n`;
-  block += '    {\n';
-  block += '        var result = new List<TaktTreeSelectOption>();\n';
-  block += `        foreach (var item in all.Where(x => x.ParentId == parentId).OrderBy(x => x.${orderField}))\n`;
-  block += '        {\n';
-  block += '            var option = new TaktTreeSelectOption\n';
-  block += '            {\n';
-  block += '                DictValue = item.Id,\n';
-  block += `                DictLabel = item.${nameField} ?? item.Id.ToString(),\n`;
-  block += hasSortOrder
-    ? '                SortOrder = item.SortOrder,\n'
-    : '                SortOrder = 0,\n';
-  block += '            };\n';
-  block += `            var children = Build${entityShort}TreeOptions(all, item.Id);\n`;
-  block += '            if (children.Count > 0)\n';
-  block += '            {\n';
-  block += '                option.Children = children;\n';
-  block += '            }\n';
-  block += '            result.Add(option);\n';
-  block += '        }\n';
-  block += '        return result;\n';
-  block += '    }\n\n';
+  treeOptionsBlock += `    public async Task<List<TaktTreeSelectOption>> Get${entityShort}TreeOptionsAsync(long parentId = 0)\n`;
+  treeOptionsBlock += '    {\n';
+  treeOptionsBlock += ensureLine;
+  treeOptionsBlock += `        var list = await ${repoField}.GetListAsync(${pred.withStatus});\n`;
+  treeOptionsBlock += '        return list\n';
+  treeOptionsBlock += hasSortOrder
+    ? '            .OrderBy(x => x.SortOrder)\n'
+    : '            .OrderBy(x => x.Id)\n';
+  treeOptionsBlock += '            .Select(item =>\n';
+  treeOptionsBlock += '            {\n';
+  treeOptionsBlock += isLeafAssign;
+  treeOptionsBlock += '                return new TaktTreeSelectOption\n';
+  treeOptionsBlock += '                {\n';
+  treeOptionsBlock += '                    DictValue = item.Id.ToString(),\n';
+  // DictLabel：禁止回退雪花 Id；无 *Name 时用业务 Code（与平铺 Options 一致）
+  treeOptionsBlock += `                    DictLabel = item.${nameField},\n`;
+  treeOptionsBlock += sortOrderAssign;
+  treeOptionsBlock += '                    IsLeaf = isLeaf,\n';
+  treeOptionsBlock += '                    Children = null,\n';
+  treeOptionsBlock += '                };\n';
+  treeOptionsBlock += '            })\n';
+  treeOptionsBlock += '            .ToList();\n';
+  treeOptionsBlock += '    }\n\n';
 
-  let filterBlock;
-  if (statusMeta?.kind === 'int') {
-    filterBlock = `        var filtered = includeDisabled
-            ? list
-            : list.Where(x => x.${statusMeta.field} == ${statusMeta.intEnabled ?? 1}).ToList();`;
-  } else {
-    filterBlock = '        var filtered = list;';
-  }
-
-  block += buildMethodXmlDoc({
-    summary: `获取${desc}树形列表`,
+  let treeRemainderBlock = '';
+  treeRemainderBlock += buildMethodXmlDoc({
+    summary: `获取${desc}树形列表（懒加载：仅 parentId 直接子级一层；不整表加载、不递归构树）`,
     params: [
-      { name: 'parentId', desc: '父级ID' },
+      { name: 'parentId', desc: '父级ID（0=根）' },
       { name: 'includeDisabled', desc: '是否包含禁用项' },
     ],
-    returns: '树形列表',
+    returns: '树形列表（一层）',
   });
-  block += `    public async Task<List<${treeDto}>> Get${entityShort}TreeAsync(long parentId = 0, bool includeDisabled = false)\n`;
-  block += '    {\n';
-  block += ensureLine;
-  block += `        var list = await ${repoField}.GetListAsync(${listPredicate});\n`;
-  block += `${filterBlock}\n`;
-  block += `        return Build${entityShort}Tree(filtered, parentId);\n`;
-  block += '    }\n\n';
-  block += buildMethodXmlDoc({
-    summary: `在内存中构建${desc}树（递归，按 ParentId）`,
-  });
-  block += `    private List<${treeDto}> Build${entityShort}Tree(List<${entityName}> allRecords, long parentId)\n`;
-  block += '    {\n';
-  block += '        var children = allRecords\n';
-  block += `            .Where(x => x.ParentId == parentId)\n`;
-  block += `            .OrderBy(x => x.${orderField})\n`;
-  block += '            .ToList();\n';
-  block += `        var treeList = new List<${treeDto}>();\n`;
-  block += '        foreach (var item in children)\n';
-  block += '        {\n';
-  block += `            var treeDto = item.Adapt<${treeDto}>();\n`;
-  block += `            var childTree = Build${entityShort}Tree(allRecords, item.Id);\n`;
-  block += '            if (childTree.Count > 0)\n';
-  block += '            {\n';
-  block += '                treeDto.Children = childTree;\n';
-  block += '            }\n';
-  block += '            treeList.Add(treeDto);\n';
-  block += '        }\n';
-  block += '        return treeList;\n';
-  block += '    }\n\n';
+  treeRemainderBlock += `    public async Task<List<${treeDto}>> Get${entityShort}TreeAsync(long parentId = 0, bool includeDisabled = false)\n`;
+  treeRemainderBlock += '    {\n';
+  treeRemainderBlock += ensureLine;
+  if (pred.statusField) {
+    treeRemainderBlock += `        Expression<Func<${entityName}, bool>> predicate = includeDisabled\n`;
+    treeRemainderBlock += `            ? (${pred.withoutStatus})\n`;
+    treeRemainderBlock += `            : (${pred.withStatus});\n`;
+    treeRemainderBlock += `        var list = await ${repoField}.GetListAsync(predicate);\n`;
+  } else {
+    treeRemainderBlock += `        var list = await ${repoField}.GetListAsync(${pred.withoutStatus});\n`;
+  }
+  treeRemainderBlock += '        return list\n';
+  treeRemainderBlock += hasSortOrder
+    ? '            .OrderBy(x => x.SortOrder)\n'
+    : '            .OrderBy(x => x.Id)\n';
+  treeRemainderBlock += '            .Select(item =>\n';
+  treeRemainderBlock += '            {\n';
+  treeRemainderBlock += `                var treeDto = item.Adapt<${treeDto}>();\n`;
+  treeRemainderBlock += `                treeDto.Children = new List<${treeDto}>();\n`;
+  treeRemainderBlock += '                return treeDto;\n';
+  treeRemainderBlock += '            })\n';
+  treeRemainderBlock += '            .ToList();\n';
+  treeRemainderBlock += '    }\n\n';
+
   return {
     treeOptionsBlock,
-    treeRemainderBlock: block,
-    block: treeOptionsBlock + block,
+    treeRemainderBlock,
+    block: treeOptionsBlock + treeRemainderBlock,
+    needsLazyTreeHelper: true,
     needsEnumsUsing: false,
   };
 }
@@ -2529,12 +2728,12 @@ function generateServiceInterface(
 
   if (hasTree && dtoInfo.tree) {
     content += buildMethodXmlDoc({
-      summary: `获取${desc}树形列表`,
+      summary: `获取${desc}树形列表（懒加载：仅 parentId 直接子级一层）`,
       params: [
-        { name: 'parentId', desc: '父级ID' },
+        { name: 'parentId', desc: '父级ID（0=根）' },
         { name: 'includeDisabled', desc: '是否包含禁用项' },
       ],
-      returns: '树形列表',
+      returns: '树形列表（一层）',
     });
     content += `    Task<List<${dtoInfo.tree}>> Get${entityShort}TreeAsync(long parentId = 0, bool includeDisabled = false);\n\n`;
   }
@@ -2796,7 +2995,11 @@ function generateServiceImplementation(
   const queryProps = extractQueryDtoProperties(dtoContent, dtoInfo.query, entityProps);
   const dateRanges = extractDateRangeFields(dtoContent, dtoInfo.query, entityProps);
   const enableStatusMeta = extractPrimaryEnableStatusMeta(entityContent, entityShort);
-  const nameField = getNameFieldName(entityFile);
+  const { nameField, valueField: optionsValueField } = resolveOptionsDisplayFields(
+    entityFile,
+    entityShort,
+    desc,
+  );
   const importDtoName = dtoInfo.import;
   const uniqueIndexes = extractUniqueIndexes(entityFile, dtoBase);
   const manyToOneMasterEarly =
@@ -2918,6 +3121,9 @@ function generateServiceImplementation(
   content += 'using Takt.Shared.Helpers;\n';
   content += 'using Takt.Shared.Models;\n';
   content += 'using Takt.Shared.Options;\n';
+  if (treeGen?.needsLazyTreeHelper) {
+    content += 'using Takt.Application.Helpers;\n';
+  }
   if (needsSharedEnumsUsing) {
     content += 'using Takt.Shared.Enums;\n';
   }
@@ -3078,6 +3284,7 @@ function generateServiceImplementation(
       freshTemplate: treeGen.treeOptionsBlock,
       refreshOptions: genOptions.refreshOptions === true,
       statusMeta: enableStatusMeta,
+      entityPropNames: entityProps,
     });
     content += treeOptionsResolved.block;
     if (treeOptionsResolved.preserved) {
@@ -3095,6 +3302,7 @@ function generateServiceImplementation(
       ensureContextLine,
       optionsListPredicate,
       nameField,
+      optionsValueField,
     );
     const flatOptionsResolved = resolveOptionsImplementationBlock({
       existingContent,
@@ -3103,6 +3311,7 @@ function generateServiceImplementation(
       freshTemplate: flatOptionsTemplate,
       refreshOptions: genOptions.refreshOptions === true,
       statusMeta: enableStatusMeta,
+      entityPropNames: entityProps,
     });
     content += flatOptionsResolved.block;
     if (flatOptionsResolved.preserved) {
@@ -3714,15 +3923,18 @@ function processDtoFile(dtoFile, options) {
   const ifaceContent = iface.content;
   const impl = implResult.content;
 
-  const preservedOptions = [
-    ...new Set([...(iface.preservedOptionsMethods || []), ...(implResult.preservedOptionsMethods || [])]),
-  ];
+  const preservedOptions = [...new Set([...(implResult.preservedOptionsMethods || [])])];
+  const ifaceOnlyPreserved = (iface.preservedOptionsMethods || []).filter(
+    (m) => !(implResult.regeneratedOptionsMethods || []).includes(m),
+  );
   if (preservedOptions.length > 0) {
     console.log(`  ℹ️  已保留已有 Get*OptionsAsync（未重新生成）: ${preservedOptions.join(', ')}`);
+  } else if (ifaceOnlyPreserved.length > 0 && (implResult.regeneratedOptionsMethods || []).length > 0) {
+    // 接口签名保留、实现因实体字段变更等已重生成 —— 只打重生成日志即可
   }
   if (implResult.regeneratedOptionsMethods?.length > 0) {
     console.log(
-      `  ℹ️  已重新生成 Get*OptionsAsync（未使用 ${DTO_BASE_TO_REPOSITORY[dtoBase]} 或含遗留无效调用）: ${implResult.regeneratedOptionsMethods.join(', ')}`,
+      `  ℹ️  已重新生成 Get*OptionsAsync（实体字段失效/遗留无效调用/--refresh-options）: ${implResult.regeneratedOptionsMethods.join(', ')}`,
     );
   }
   if (
@@ -3755,7 +3967,7 @@ function processDtoFile(dtoFile, options) {
   console.log(`  ✅ ${ifaceLabel}: ${path.relative(CONFIG.backendRoot, output.interfaceFile)}`);
   console.log(`  ✅ ${implLabel}: ${path.relative(CONFIG.backendRoot, output.implFile)}`);
   if (crudType === 'Tree' || dtoInfo.tree) {
-    console.log('  ℹ️  已生成 Get*TreeAsync（内存递归构建，includeDisabled 按实体状态字段过滤）');
+    console.log('  ℹ️  已生成 Get*TreeAsync / TreeOptions（懒加载一层 parentId，见 TaktLazyTreeHelper）');
   }
   if (crudType === 'MasterDetail') {
     console.log('  ℹ️  已生成 Fill*DetailsAsync / Save*ChildrenAsync 级联方法');
@@ -3805,9 +4017,11 @@ function printUsage() {
   - 独立子表明细含 IsObsolete：列表默认未作废；Delete 标记作废；Create 强制 IsObsolete=0；UpdateXxxObsoleteAsync 作废/撤销
   - RBAC 八表：主实体 Create/Update/Delete 委托 ITaktRbacService（见 scripts/gen/rbac-parent-config.cjs，User 除外）
   - Auth 等手工服务仅在不带 --force 时跳过
-  - 树形实体（含 ParentId）：生成 GetXxxTreeOptionsAsync + GetXxxTreeAsync，不生成 GetXxxOptionsAsync
-  - Get*OptionsAsync：磁盘上无该方法 → 生成默认模板；已存在且实现含 \${repo}.GetListAsync → 原样保留
-  - 已存在但含遗留无效调用（如 GetTenantMenuListAsync）→ 自动改用仓储查询模板重新生成
+  - 树形实体（含 ParentId）：生成懒加载 GetXxxTreeOptionsAsync(parentId) + GetXxxTreeAsync(parentId)（仅一层，见 TaktLazyTreeHelper），不生成 GetXxxOptionsAsync / 递归 Build*Tree
+  - Get*OptionsAsync：磁盘上无该方法 → 生成默认模板；已存在且实现含仓储 GetListAsync、非递归 Build*Tree、且引用属性仍在实体上 → 原样保留
+  - 已存在但含遗留无效调用（如 GetTenantMenuListAsync）、全量递归 Build*Tree、或引用已删字段（如旧 MaterialName）→ 自动改用模板重新生成
+  - DictLabel：优先 {Entity}Name / *Name；否则与 DictValue 同字段
+  - DictValue（平铺）：*Code → *Name → 首个业务 nvarchar；禁止雪花 Id；树形 TreeOptions 的 DictValue 仍为 Id 字符串（ParentId 外键）
   - --refresh-options：强制重新生成所有 Get*OptionsAsync / Get*TreeOptionsAsync 实现
   - 实体含 IsBuiltIn（int，字典 sys_yes_no_type）时：创建/导入强制 0；更新保留原值；单删/批删前校验；状态更新禁止将内置项设为非启用(1)
   - 实体含 SortOrder / LineNumber：Create、Import、主子表 Save*ChildrenAsync 在值 <= 0 时经 ITaktSortOrderGenerator / ITaktLineNumberGenerator 自动生成；SortOrder/独立子表用 GetMaxIntAsync；主子表 Save 无 IsObsolete 时用 GetMaxIntAsync(includeSoftDeleted: true)

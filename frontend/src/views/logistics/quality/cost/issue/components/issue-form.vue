@@ -10,7 +10,7 @@
 <template>
   <a-form
     ref="formRef"
-    class="takt-generated-form issue-form flex flex-col min-h-0"
+    class="takt-generated-form issue-form flex flex-col min-h-0 overflow-visible"
     :model="formState"
     :rules="rules"
     layout="horizontal"
@@ -22,76 +22,32 @@
     >
       <a-tab-pane
         key="tab-0"
-        :tab="t('common.page.form.tabs.basicinfo') + ' (1/2)'"
+        :tab="t('common.page.form.tabs.basicinfo') + ' (1/3)'"
         force-render
       >
         <div :class="formContentClass">
           <a-row :gutter="24">
             <a-col :span="12">
               <a-form-item
-                :label="t('common.page.entity.tenantcode')"
-                name="tenantCode"
-              >
-                <a-input
-                  v-model:value="formState.tenantCode"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('common.page.entity.tenantcode') })"
-                  show-count
-                  :maxlength="20"
-                  disabled
-                />
-              </a-form-item>
-            </a-col>
-            <a-col :span="12">
-              <a-form-item
-                :label="t('common.page.entity.companycode')"
-                name="companyCode"
-              >
-                <a-input
-                  v-model:value="formState.companyCode"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('common.page.entity.companycode') })"
-                  show-count
-                  :maxlength="20"
-                  disabled
-                />
-              </a-form-item>
-            </a-col>
-            <a-col :span="12">
-              <a-form-item
-                :label="t('common.page.entity.companydefaultculture')"
-                name="companyDefaultCulture"
-              >
-                <a-input
-                  v-model:value="formState.companyDefaultCulture"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('common.page.entity.companydefaultculture') })"
-                  show-count
-                  :maxlength="20"
-                  disabled
-                />
-              </a-form-item>
-            </a-col>
-            <a-col :span="12">
-              <a-form-item
-                :label="t('entity.qualityissue.plantcode')"
+                :label="pi.label('plantCode')"
                 name="plantCode"
               >
-                <a-input
+                <TaktSelect
                   v-model:value="formState.plantCode"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.qualityissue.plantcode') })"
-                  show-count
-                  :maxlength="4"
-                  allow-clear
+                  api-url="TaktPlants/options"
+                  :placeholder="pi.ph('plantCode')"
                   :disabled="!!formData?.qualityIssueId"
                 />
               </a-form-item>
             </a-col>
             <a-col :span="12">
               <a-form-item
-                :label="t('entity.qualityissue.code')"
+                :label="pi.label('qualityIssueCode')"
                 name="qualityIssueCode"
               >
                 <a-input
                   v-model:value="formState.qualityIssueCode"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.qualityissue.code') })"
+                  :placeholder="pi.ph('qualityIssueCode')"
                   show-count
                   :maxlength="30"
                   allow-clear
@@ -101,12 +57,12 @@
             </a-col>
             <a-col :span="12">
               <a-form-item
-                :label="t('entity.qualityissue.issuedate')"
+                :label="pi.label('issueDate')"
                 name="issueDate"
               >
                 <a-date-picker
                   v-model:value="formState.issueDate"
-                  :placeholder="t('common.page.form.placeholder.select', { field: t('entity.qualityissue.issuedate') })"
+                  :placeholder="pi.ph('issueDate')"
                   value-format="YYYY-MM-DD"
                   style="width: 100%"
                 />
@@ -114,12 +70,12 @@
             </a-col>
             <a-col :span="12">
               <a-form-item
-                :label="t('entity.qualityissue.model')"
+                :label="pi.label('model')"
                 name="model"
               >
                 <a-input
                   v-model:value="formState.model"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.qualityissue.model') })"
+                  :placeholder="pi.ph('model')"
                   show-count
                   :maxlength="255"
                   allow-clear
@@ -128,12 +84,12 @@
             </a-col>
             <a-col :span="12">
               <a-form-item
-                :label="t('entity.qualityissue.lot')"
+                :label="pi.label('lot')"
                 name="lot"
               >
                 <a-input
                   v-model:value="formState.lot"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.qualityissue.lot') })"
+                  :placeholder="pi.ph('lot')"
                   show-count
                   :maxlength="30"
                   allow-clear
@@ -142,12 +98,12 @@
             </a-col>
             <a-col :span="12">
               <a-form-item
-                :label="t('entity.qualityissue.qualityproblemsresponse')"
+                :label="pi.label('qualityProblemsResponse')"
                 name="qualityProblemsResponse"
               >
                 <a-input
                   v-model:value="formState.qualityProblemsResponse"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.qualityissue.qualityproblemsresponse') })"
+                  :placeholder="pi.ph('qualityProblemsResponse')"
                   show-count
                   :maxlength="255"
                   allow-clear
@@ -156,15 +112,53 @@
             </a-col>
             <a-col :span="12">
               <a-form-item
-                :label="t('entity.qualityissue.reworkduetodefects')"
+                :label="pi.label('reworkDueToDefects')"
                 name="reworkDueToDefects"
               >
                 <a-input
                   v-model:value="formState.reworkDueToDefects"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.qualityissue.reworkduetodefects') })"
+                  :placeholder="pi.ph('reworkDueToDefects')"
                   show-count
                   :maxlength="255"
                   allow-clear
+                />
+              </a-form-item>
+            </a-col>
+            <a-col :span="12">
+              <a-form-item
+                :label="pi.label('needRework')"
+                name="needRework"
+              >
+                <a-input
+                  v-model:value="formState.needRework"
+                  :placeholder="pi.ph('needRework')"
+                  show-count
+                  :maxlength="1"
+                  allow-clear
+                />
+              </a-form-item>
+            </a-col>
+            <a-col :span="12">
+              <a-form-item
+                :label="pi.label('totalTimeMinutes')"
+                name="totalTimeMinutes"
+              >
+                <a-input-number
+                  v-model:value="formState.totalTimeMinutes"
+                  :placeholder="pi.ph('totalTimeMinutes')"
+                  style="width: 100%"
+                />
+              </a-form-item>
+            </a-col>
+            <a-col :span="12">
+              <a-form-item
+                :label="pi.label('totalCost')"
+                name="totalCost"
+              >
+                <a-input-number
+                  v-model:value="formState.totalCost"
+                  :placeholder="pi.ph('totalCost')"
+                  style="width: 100%"
                 />
               </a-form-item>
             </a-col>
@@ -173,60 +167,74 @@
       </a-tab-pane>
       <a-tab-pane
         key="tab-1"
-        :tab="t('common.page.form.tabs.basicinfo') + ' (2/2)'"
+        :tab="t('common.page.form.tabs.basicinfo') + ' (2/3)'"
         force-render
       >
         <div :class="formContentClass">
           <a-row :gutter="24">
             <a-col :span="24">
               <a-form-item
-                :label="t('entity.qualityissue.needrework')"
-                name="needRework"
-              >
-                <a-input
-                  v-model:value="formState.needRework"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.qualityissue.needrework') })"
-                  show-count
-                  :maxlength="1"
-                  allow-clear
-                />
-              </a-form-item>
-            </a-col>
-            <a-col :span="24">
-              <a-form-item
-                :label="t('entity.qualityissue.totaltimeminutes')"
-                name="totalTimeMinutes"
-              >
-                <a-input-number
-                  v-model:value="formState.totalTimeMinutes"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.qualityissue.totaltimeminutes') })"
-                  style="width: 100%"
-                />
-              </a-form-item>
-            </a-col>
-            <a-col :span="24">
-              <a-form-item
-                :label="t('entity.qualityissue.totalcost')"
-                name="totalCost"
-              >
-                <a-input-number
-                  v-model:value="formState.totalCost"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.qualityissue.totalcost') })"
-                  style="width: 100%"
-                />
-              </a-form-item>
-            </a-col>
-            <a-col :span="24">
-              <a-form-item
-                :label="t('entity.qualityissue.costcurrency')"
+                :label="pi.label('costCurrency')"
                 name="costCurrency"
               >
                 <a-input
                   v-model:value="formState.costCurrency"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.qualityissue.costcurrency') })"
+                  :placeholder="pi.ph('costCurrency')"
                   show-count
                   :maxlength="3"
                   allow-clear
+                />
+              </a-form-item>
+            </a-col>
+          </a-row>
+        </div>
+      </a-tab-pane>
+      <a-tab-pane
+        key="tab-2"
+        :tab="t('common.page.form.tabs.basicinfo') + ' (3/3)'"
+        force-render
+      >
+        <div :class="formContentClass">
+          <a-row :gutter="24">
+            <a-col :span="24">
+              <a-form-item
+                :label="pi.label('tenantCode')"
+                name="tenantCode"
+              >
+                <a-input
+                  v-model:value="formState.tenantCode"
+                  :placeholder="pi.ph('tenantCode')"
+                  show-count
+                  :maxlength="20"
+                  disabled
+                />
+              </a-form-item>
+            </a-col>
+            <a-col :span="24">
+              <a-form-item
+                :label="pi.label('companyCode')"
+                name="companyCode"
+              >
+                <a-input
+                  v-model:value="formState.companyCode"
+                  :placeholder="pi.ph('companyCode')"
+                  show-count
+                  :maxlength="20"
+                  disabled
+                />
+              </a-form-item>
+            </a-col>
+            <a-col :span="24">
+              <a-form-item
+                :label="pi.label('companyDefaultCulture')"
+                name="companyDefaultCulture"
+              >
+                <a-input
+                  v-model:value="formState.companyDefaultCulture"
+                  :placeholder="pi.ph('companyDefaultCulture')"
+                  show-count
+                  :maxlength="20"
+                  disabled
                 />
               </a-form-item>
             </a-col>
@@ -243,7 +251,7 @@
                     >
                       <span class="takt-form-label-hint-icon"><RiQuestionLine class="takt-remix-icon" /></span>
                     </a-tooltip>
-                    <span>{{ t('common.page.entity.extfield') }}</span>
+                    <span>{{ pi.label('extField') }}</span>
                   </span>
                 </template>
                 <a-textarea
@@ -258,12 +266,12 @@
             </a-col>
             <a-col :span="24">
               <a-form-item
-                :label="t('common.page.entity.remark')"
+                :label="pi.label('remark')"
                 name="remark"
               >
                 <a-textarea
                   v-model:value="formState.remark"
-                  :placeholder="t('common.page.form.placeholder.optional', { field: t('common.page.entity.remark') })"
+                  :placeholder="pi.ph('remark')"
                   :rows="4"
                   show-count
                   :maxlength="400"
@@ -280,13 +288,27 @@
       ref="qualityIssueMeetingTableRef"
       v-model="childQualityIssueMeetingRows"
       :columns="qualityIssueMeetingFormColumns"
-      :title="t('entity.qualityissuemeeting._self')"
-      :add-button-entity="t('entity.qualityissuemeeting._self')"
+      :title="qualityIssueMeetingPi.self()"
+      :add-button-entity="qualityIssueMeetingPi.self()"
       id-field="qualityIssueMeetingId"
       :default-row="createDefaultQualityIssueMeetingRow"
       :disabled="loading"
+      :enable-vertical-scroll="false"
       section-border
-    />
+      class="w-full min-w-0"
+    >
+      <template #cell-isObsolete="{ record }">
+        <TaktSelect
+          v-model:value="record.isObsolete"
+          dict-type="sys_yes_no_type"
+          class="w-full"
+          :get-popup-container="getSelectPopupContainer"
+          :placeholder="qualityIssueMeetingPi.ph('isObsolete')"
+          :disabled="loading"
+          allow-clear
+        />
+      </template>
+    </TaktEditableTable>
   </a-form>
 </template>
 
@@ -298,7 +320,13 @@
 import { reactive, watch, computed, ref } from 'vue'
 import { useI18n } from 'vue-i18n'
 import type { Rule } from 'ant-design-vue/es/form'
+import { useQualityIssueI18n } from '../composables/use-issue-i18n'
+
+/** 实体字段 i18n */
+const pi = useQualityIssueI18n()
+
 import type { QualityIssueCreate } from '@/types/logistics/quality/cost/issue'
+import TaktSelect from '@/components/business/takt-select/index.vue'
 import { RiQuestionLine } from '@remixicon/vue'
 import { useTenantStore } from '@/stores/identity/tenant'
 import { useUserStore } from '@/stores/identity/user'
@@ -334,7 +362,17 @@ const activeTab = ref('tab-0')
 /** CreateDto 字段名列表（与 formState 键对齐） */
 const formFields = ["tenantCode","companyCode","companyDefaultCulture","plantCode","qualityIssueCode","issueDate","model","lot","qualityProblemsResponse","reworkDueToDefects","needRework","totalTimeMinutes","totalCost","costCurrency","extField","remark"]
 
+
 import type { TaktEditableTableColumn } from '@/components/business/takt-editable-table/types'
+import { resolveNextDetailLineNumber } from '@/utils/takt-sequence'
+import { useQualityIssueMeetingI18n } from '../composables/use-issue-meeting-i18n'
+
+const qualityIssueMeetingPi = useQualityIssueMeetingI18n()
+
+/** 弹窗/表格内 TaktSelect 下拉挂载容器（避免 overflow 裁剪与表头列错位） */
+function getSelectPopupContainer(triggerNode?: HTMLElement): HTMLElement {
+  return triggerNode?.ownerDocument?.body ?? document.body
+}
 
 const childQualityIssueMeetingRows = ref<Record<string, unknown>[]>([])
 const qualityIssueMeetingTableRef = ref<{
@@ -343,68 +381,113 @@ const qualityIssueMeetingTableRef = ref<{
   resetRows: () => void
 } | null>(null)
 
+/** 是否已持久化的子表行 */
+function isPersistedQualityIssueMeetingRow(row: Record<string, unknown>): boolean {
+  const id = row.qualityIssueMeetingId
+  if (id == null || id === '') {
+    return false
+  }
+  return String(id) !== '0'
+}
+
+/** 分配下一可用子表行号（含作废行，仅据当前表格行递增） */
+function allocateNextQualityIssueMeetingLineNumber(): number {
+  const rows = qualityIssueMeetingTableRef.value?.getRows?.() ?? childQualityIssueMeetingRows.value
+  return resolveNextDetailLineNumber(0, rows)
+}
+
 /** 子表 qualityIssueMeeting 可编辑列 */
 const qualityIssueMeetingFormColumns = computed<TaktEditableTableColumn[]>(() => [
   {
     key: 'lineNumber',
-    title: t('entity.qualityissuemeeting.linenumber'),
-    editor: 'inputNumber',
-    width: 140, summary: 'sum',
+    title: qualityIssueMeetingPi.label('lineNumber'),
+    width: 140,
   },
   {
     key: 'directManpowerCostPerMinute',
-    title: t('entity.qualityissuemeeting.directmanpowercostperminute'),
-    editor: 'inputNumber',
+    title: qualityIssueMeetingPi.label('directManpowerCostPerMinute'),
     width: 140,
   },
   {
     key: 'indirectManpowerCostPerMinute',
-    title: t('entity.qualityissuemeeting.indirectmanpowercostperminute'),
-    editor: 'inputNumber',
+    title: qualityIssueMeetingPi.label('indirectManpowerCostPerMinute'),
     width: 140,
   },
   {
     key: 'meetingInvestigationContent',
-    title: t('entity.qualityissuemeeting.meetinginvestigationcontent'),
+    title: qualityIssueMeetingPi.label('meetingInvestigationContent'),
     editor: 'textarea',
     rows: 1,
-    placeholder: t('common.page.form.placeholder.optional', { field: t('entity.qualityissuemeeting.meetinginvestigationcontent') }),
-    width: 140,
+    placeholder: qualityIssueMeetingPi.ph('meetingInvestigationContent'),
+    width: 180,
   },
   {
     key: 'meetingInvestigationCost',
-    title: t('entity.qualityissuemeeting.meetinginvestigationcost'),
-    editor: 'inputNumber',
+    title: qualityIssueMeetingPi.label('meetingInvestigationCost'),
     width: 140,
   },
   {
     key: 'meetingTimeMinutes',
-    title: t('entity.qualityissuemeeting.meetingtimeminutes'),
-    editor: 'inputNumber',
+    title: qualityIssueMeetingPi.label('meetingTimeMinutes'),
     width: 140,
   },
   {
     key: 'directParticipantCount',
-    title: t('entity.qualityissuemeeting.directparticipantcount'),
-    editor: 'inputNumber',
+    title: qualityIssueMeetingPi.label('directParticipantCount'),
     width: 140,
   },
   {
     key: 'indirectParticipantCount',
-    title: t('entity.qualityissuemeeting.indirectparticipantcount'),
-    editor: 'inputNumber',
+    title: qualityIssueMeetingPi.label('indirectParticipantCount'),
+    width: 140,
+  },
+  {
+    key: 'investigationWorkTimeMinutes',
+    title: qualityIssueMeetingPi.label('investigationWorkTimeMinutes'),
+    width: 140,
+  },
+  {
+    key: 'travelCost',
+    title: qualityIssueMeetingPi.label('travelCost'),
+    width: 140,
+  },
+  {
+    key: 'otherExpenses',
+    title: qualityIssueMeetingPi.label('otherExpenses'),
+    width: 140,
+  },
+  {
+    key: 'otherWorkTimeMinutes',
+    title: qualityIssueMeetingPi.label('otherWorkTimeMinutes'),
+    width: 140,
+  },
+  {
+    key: 'otherApparatusCost',
+    title: qualityIssueMeetingPi.label('otherApparatusCost'),
+    width: 140,
+  },
+  {
+    key: 'meetingRecorder',
+    title: qualityIssueMeetingPi.label('meetingRecorder'),
+    editor: 'input',
+    width: 140, allowClear: true, placeholder: qualityIssueMeetingPi.ph('meetingRecorder'),
+  },
+  {
+    key: 'isObsolete',
+    title: qualityIssueMeetingPi.label('isObsolete'),
     width: 140,
   },
 ])
 
 /** 编辑态从 formData 同步各子表行 */
 function syncChildRowsFromFormData(val: Partial<QualityIssueCreate & { qualityIssueId?: string }> | null | undefined) {
-  childQualityIssueMeetingRows.value = ((val as any)?.meetingItems ?? []) as Record<string, unknown>[]
+  const rows_qualityIssueMeeting = ((val as any)?.meetingItems ?? []) as Record<string, unknown>[]
+  childQualityIssueMeetingRows.value = rows_qualityIssueMeeting
 }
 
 function createDefaultQualityIssueMeetingRow(): Record<string, unknown> {
   return {
-    lineNumber: (childQualityIssueMeetingRows.value.length + 1) * 10,
+    lineNumber: allocateNextQualityIssueMeetingLineNumber(),
     directManpowerCostPerMinute: 0,
     indirectManpowerCostPerMinute: 0,
     meetingInvestigationContent: '',
@@ -412,21 +495,37 @@ function createDefaultQualityIssueMeetingRow(): Record<string, unknown> {
     meetingTimeMinutes: 0,
     directParticipantCount: 0,
     indirectParticipantCount: 0,
+    investigationWorkTimeMinutes: 0,
+    travelCost: 0,
+    otherExpenses: 0,
+    otherWorkTimeMinutes: 0,
+    otherApparatusCost: 0,
+    meetingRecorder: '',
+    isObsolete: 0,
   }
 }
 
 /** 组装 Create/Update 载荷（主表 + 子表数组） */
 function buildSubmitPayload() {
   const masterId = props.formData?.qualityIssueId ?? ''
+  const isUpdate = Boolean(masterId)
   return {
     ...formState,
-    meetingItems: qualityIssueMeetingTableRef.value?.getRows?.() ?? childQualityIssueMeetingRows.value.map((rest) => ({
-      ...rest,
-      tenantCode: tenantStore.tenantCode,
-      companyCode: tenantStore.companyCode,
-      companyDefaultCulture: userStore.userInfo?.companyDefaultCulture ?? '',
-      qualityIssueId: masterId,
-    })),
+    meetingItems: qualityIssueMeetingTableRef.value?.getRows?.() ?? childQualityIssueMeetingRows.value.map((row) => {
+      const normalized = {
+        ...row,
+        tenantCode: tenantStore.tenantCode,
+        companyCode: tenantStore.companyCode,
+        companyDefaultCulture: userStore.userInfo?.companyDefaultCulture ?? '',
+        qualityIssueId: masterId,
+      }
+      if (isUpdate && isPersistedQualityIssueMeetingRow(row)) {
+        normalized.qualityIssueMeetingId = row.qualityIssueMeetingId
+      } else {
+        delete normalized.qualityIssueMeetingId
+      }
+      return normalized
+    }),
   }
 }
 
@@ -493,46 +592,46 @@ const rules = computed<Record<string, Rule[]>>(() => ({
   plantCode: [
     {
       required: true,
-      message: t('common.page.form.placeholder.required', { field: t('entity.qualityissue.plantcode') }),
-      trigger: 'blur'
+      message: pi.ph('plantCode'),
+      trigger: 'change'
     }
   ],
   qualityIssueCode: [
     {
       required: true,
-      message: t('common.page.form.placeholder.required', { field: t('entity.qualityissue.code') }),
+      message: pi.ph('qualityIssueCode'),
       trigger: 'blur'
     }
   ],
   issueDate: [
     {
       required: true,
-      message: t('common.page.form.placeholder.select', { field: t('entity.qualityissue.issuedate') }),
+      message: pi.ph('issueDate'),
       trigger: 'change'
     }
   ],
   model: [
     {
       required: true,
-      message: t('common.page.form.placeholder.required', { field: t('entity.qualityissue.model') }),
+      message: pi.ph('model'),
       trigger: 'blur'
     }
   ],
   lot: [
     {
       required: true,
-      message: t('common.page.form.placeholder.required', { field: t('entity.qualityissue.lot') }),
+      message: pi.ph('lot'),
       trigger: 'blur'
     }
   ],
   totalTimeMinutes: [{
     validator: async (_rule, value) => {
       if (value === undefined || value === null || value === '') {
-        return Promise.reject(t('common.page.form.placeholder.select', { field: t('entity.qualityissue.totaltimeminutes') }))
+        return Promise.reject(pi.ph('totalTimeMinutes'))
       }
       const num = typeof value === 'number' ? value : Number(value)
       if (!Number.isFinite(num)) {
-        return Promise.reject(t('common.page.form.placeholder.select', { field: t('entity.qualityissue.totaltimeminutes') }))
+        return Promise.reject(pi.ph('totalTimeMinutes'))
       }
       return Promise.resolve()
     },
@@ -541,11 +640,11 @@ const rules = computed<Record<string, Rule[]>>(() => ({
   totalCost: [{
     validator: async (_rule, value) => {
       if (value === undefined || value === null || value === '') {
-        return Promise.reject(t('common.page.form.placeholder.select', { field: t('entity.qualityissue.totalcost') }))
+        return Promise.reject(pi.ph('totalCost'))
       }
       const num = typeof value === 'number' ? value : Number(value)
       if (!Number.isFinite(num)) {
-        return Promise.reject(t('common.page.form.placeholder.select', { field: t('entity.qualityissue.totalcost') }))
+        return Promise.reject(pi.ph('totalCost'))
       }
       return Promise.resolve()
     },
@@ -554,7 +653,7 @@ const rules = computed<Record<string, Rule[]>>(() => ({
   costCurrency: [
     {
       required: true,
-      message: t('common.page.form.placeholder.required', { field: t('entity.qualityissue.costcurrency') }),
+      message: pi.ph('costCurrency'),
       trigger: 'blur'
     }
   ],

@@ -8,7 +8,7 @@ alwaysApply: true
 
 **强制基线**：树节点实体须遵守 `@.cursor/rules/12-crud.mdc`。本章规定 **ParentId 层级与树形 UI 扩展**。
 
-**代码生成**：实体含 `ParentId` 时，`generate-all` 生成 `*TreeDto`、`Get*TreeAsync`、`tree`/`tree-options` 路由（`15-codegen` §二）；**Vue 不自动生成**（`Dept` 等在排除列表），须手工 `13-vue-view` §四 + `14-vue-form` §四。
+**代码生成**：实体含 `ParentId` 时，`generate-all` 生成懒加载 `Get*TreeAsync(parentId)` / `TreeOptions(parentId)`（一层子节点）+ Vue 懒加载左树（`15-codegen`）；排除实体（Dept/Menu 等）Vue 须手工对齐 `admin-division`。
 
 通用命名、权限、i18n 见 `@.cursor/rules/00-project.mdc`；后端见 `01-backend`；前端见 `02-frontend`；树深/虚拟列表见 `07-overflow-vue` §3。
 
@@ -55,7 +55,7 @@ alwaysApply: true
 
 ---
 
-## 三、后端 DTO 与服务
+## 三、后端 DTO 与服务（大数据：懒加载一层）
 
 ### 3.1 DTO
 
@@ -66,34 +66,36 @@ public class TaktXxxTreeDto : TaktXxxDto
 }
 ```
 
-- 树接口返回 `List<TaktXxxTreeDto>`，**非** `TaktPagedResult`
-- 下拉选项：`List<TaktTreeSelectOption>`（`GetXxxTreeOptionsAsync`）
+- 树接口返回 `List<TaktXxxTreeDto>`（**仅一层直接子节点**），**非** `TaktPagedResult`
+- 下拉：`List<TaktTreeSelectOption>`，`IsLeaf` + `Children = null`（见 `TaktLazyTreeHelper`）
 
 ### 3.2 服务方法（命名固定）
 
 | 方法 | 返回值 | 说明 |
 |------|--------|------|
-| `GetXxxTreeAsync(long parentId = 0, bool includeDisabled = false)` | `List<TaktXxxTreeDto>` | 管理页树数据 |
-| `GetXxxTreeOptionsAsync()` | `List<TaktTreeSelectOption>` | 表单父级选择 |
-| `GetXxxListAsync` | `TaktPagedResult<TaktXxxDto>` | 可选：平铺分页（非树 UI 时） |
+| `GetXxxTreeAsync(long parentId = 0, bool includeDisabled = false)` | `List<TaktXxxTreeDto>` | **仅** `ParentId == parentId` 一层 |
+| `GetXxxTreeOptionsAsync(long parentId = 0)` | `List<TaktTreeSelectOption>` | 表单父级懒加载，带 `parentId` |
+| `GetXxxListAsync` | `TaktPagedResult<TaktXxxDto>` | 右侧表服务端分页（Query 含 `ParentId`） |
 
-### 3.3 BuildTree 私有方法
+### 3.3 禁止全表递归 Build（强制）
 
-**标准参照**：`TaktDeptService.BuildDeptTree` / `BuildDeptTreeOptions`
+**标准参照**：`TaktAdminDivisionService` + `TaktLazyTreeHelper`  
+**生成脚本**：`generate-services-from-dtos.cjs` → `generateTreeServiceMethods`
 
 ```csharp
-private List<TaktXxxTreeDto> BuildXxxTree(List<TaktXxx> allRecords, long parentId)
-{
-    return allRecords
-        .Where(x => x.ParentId == parentId)
-        .OrderBy(x => x.SortOrder)
-        .Select(item => { /* Adapt + 递归 Children */ })
-        .ToList();
-}
+// ✅ 只查直接子级
+var list = await repo.GetListAsync(x => … && x.ParentId == parentId …);
+return list.OrderBy(…).Select(item => {
+    var dto = item.Adapt<TaktXxxTreeDto>();
+    dto.Children = new List<TaktXxxTreeDto>(); // 非递归；靠 IsLeaf / 前端 loadData
+    return dto;
+}).ToList();
 ```
 
-- 一次查租户+公司下全表（或合理过滤），**内存构树**；数据量极大时评估 `DeptPath` 前缀查询
-- 禁止 N+1 递归查库
+```text
+❌ GetListAsync 全表 + BuildXxxTree 内存递归
+❌ TreeOptions 无 parentId、一次返回整棵树
+```
 
 ### 3.4 Create / Update / Delete
 
@@ -104,58 +106,61 @@ private List<TaktXxxTreeDto> BuildXxxTree(List<TaktXxx> allRecords, long parentI
 ### 3.5 控制器路由
 
 ```
-GET api/TaktDepts/tree?parentId=0&includeDisabled=false
-GET api/TaktDepts/tree-options
+GET api/TaktXxxs/tree?parentId=0&includeDisabled=false
+GET api/TaktXxxs/tree-options?parentId=0
 ```
 
-方法名与路由段与 `TaktDeptService` 对齐；权限独立：`humanresource:organization:dept:list` 等。
+权限与 `12-crud` / 菜单种子一致。
 
 ---
 
 ## 四、前端实现
 
-**标准参照**：`views/human-resource/organization/dept/index.vue`
+**标准参照（大数据）**：`views/foundation/admin-division/index.vue`  
+**代码生成**：`scripts/gen/generate-vue-tree-from-api.cjs`（流水线步 9 / `generate-vue-all`）按本节生成，**禁止**再生成「一次拉全量树 + 客户端拍平」。
 
 ### 4.1 布局模式
 
-视图布局与分区见 `13-vue-view` §四；树 API/拍平见下文。
+视图布局与分区见 `13-vue-view` §四。
 
 | 模式 | 组件 | 说明 |
 |------|------|------|
-| 左树右表 | `takt-tree-left-table` + `takt-tree-right-table` + `takt-tree-left-tools-bar` | 1/4 + 3/4；左侧选节点过滤右侧 |
-| 单树表 | `TaktSingleTable` / `a-table` + `children` 列 | 数据量小 |
-| 表单父级 | `TaktTreeSelect` / API `getXxxTreeOptions` | 选 ParentId（`14-vue-form` §四） |
+| 左树右表 | `takt-tree-left-table` + `takt-tree-right-table` | 左侧懒加载导航；右侧 `getXxxList` 服务端分页 |
+| 表单父级 | `TaktTreeSelect` + `:lazy="true"` + `tree-options?parentId=` | 选 ParentId（`14-vue-form` §四） |
 
-### 4.2 树数据 → 表格（强制）
+### 4.2 大数据树数据流（强制）
 
 ```
-API getXxxTree → 内存保留 fullTableTree
-右侧展示：选中左侧节点 → getSubtree → flattenXxxRows（深度优先拍平）→ 客户端分页 slice
+左侧：getXxxTree(parentId) 仅一层 → mapLazyTreeNodes → :load-data 展开再拉
+     + :virtual="true"（禁止一次渲染万级 DOM）
+右侧：getXxxList({ parentId, pageIndex, pageSize, … }) 服务端分页
+     选中左侧节点 → parentId 换源 → 重新 list
 ```
 
-- **禁止**把整棵树未拍平直接绑大表格不分页
-- `takt-tree-right-table`：`showPagination` + `virtual`（拍平行数超过 `TAKT_TABLE_AUTO_VIRTUAL_ROW_THRESHOLD`=5000 自动 virtual，见 `07-overflow-vue` / `table-scroll.ts`）
-- `expandedRowKeys` / `children`：树表展开列与拍平策略二选一，勿重复渲染
+- **禁止** `getXxxTree('0')` 拉整棵树进 `fullTableTree` 再 `flatten` + 客户端 slice
+- **禁止** 左侧 `:virtual="false"` 绑全量树节点
+- 展开「全部」仅作用于**已加载**节点（`collectTreeExpandableKeys`），不触发全量展开
+- 表单 `TaktTreeSelect`：**必须** `:lazy="true"`（与 `use-lazy-tree` / `takt-tree-select` 对齐）
 
-### 4.3 客户端工具函数（页面内）
+### 4.3 页面内编排（生成脚本产出）
 
-- `flattenDeptTableRows`：DFS 拍平，可带 `_treeDepth` 缩进
-- `getSubtree(tree, key)`：按选中节点截取子树
-- `collectTreeExpandableKeys`：左侧树展开全部
-- `findParentAndOrderNum`：拖拽排序后算 `parentId` + `sortOrder`
+- `mapXxxLazyNodes` / `mergeLoadedChildren` / `taktIsLeafFlag`（`@/composables/use-lazy-tree`）
+- `reloadLeftTreeRoots` / `handleLeftTreeLoadData` / `loadRightList` / `refreshAfterMutation`
+- `findParentAndOrderNum`：拖拽改 `parentId` + `sortOrder`
 
 ### 4.4 拖拽改父级
 
-- 左侧树 `@drop` → `updateXxx(id, { parentId, sortOrder, …其余字段 })` → 重新 `loadData`
+- 左侧树 `@tree-drop` → `updateXxx` → `loadData` / `refreshAfterMutation`
 - Id 全程 **string**
 
 ### 4.5 API / types
 
 ```typescript
-export function getDeptTree(parentId: string, includeDisabled: boolean): Promise<DeptTree[]>
+export function getXxxTree(parentId: string, includeDisabled: boolean): Promise<XxxTree[]>
+export function getXxxList(query: { parentId?: string; pageIndex: number; pageSize: number }): Promise<TaktPagedResult<Xxx>>
 ```
 
-- `DeptTree` 含 `children?: DeptTree[]`；主键 `deptId: string`
+- 树 DTO 一层即可；`isLeaf` 驱动展开图标；主键 **string**
 
 ---
 
@@ -163,19 +168,17 @@ export function getDeptTree(parentId: string, includeDisabled: boolean): Promise
 
 | 项 | 限制 |
 |----|------|
-| 树深度 | 业务建议 ≤ **10** 层（与流程设计器一致） |
-| 单次构树 | 租户+公司 scoped；超大规模改用 Path 前缀查询 + 懒加载子节点 |
-| 右侧拍平 | 客户端分页；行数极大时必须 virtual |
-| 左侧搜索 | 客户端过滤树，不重复打全量 API |
+| 树深度 | 业务建议 ≤ **10** 层 |
+| 左侧渲染 | **必须** virtual + 懒加载；禁止万级 DOM |
+| 右侧列表 | **必须** 服务端分页（`TaktPagedQuery`）；禁止全量拍平 |
+| 左侧搜索 | 仅过滤已加载节点 |
 
 ---
 
 ## 六、Agent 约束
 
-- 新建树模块：**先通过 `12-crud` 自检（节点 CRUD）**，再读 `TaktDeptService` + `dept/index.vue`
-- 必须有 `GetXxxTreeAsync` + `BuildXxxTree`；表单选父加 `GetXxxTreeOptionsAsync`
-- 前端树表页必须 **拍平 + 分页** 或 **virtual**，禁止万级 DOM
-- `ParentId` 前后端类型一致（API string / DB long + JsonConverter）
-- 改父级/排序须防环、防挂到自身子孙
-- 视图/表单：`13-vue-view`、`14-vue-form`；后端可生成、Vue 须手工（`15-codegen` §四）
+- 新建/再生树页：**改前台流水脚本** `generate-vue-tree-from-api.cjs`，对照 `admin-division/index.vue`
+- 前端树表页必须 **懒加载 + virtual + 右侧 list 分页**，禁止全量树拍平
+- `ParentId` 前后端类型一致（API string / DB long）
+- 视图/表单：`13-vue-view`、`14-vue-form`；生成后人工核对排除实体（Dept/Menu 等）
 - 实现清单：`.cursor/skills/11-tree-table/SKILL.md`

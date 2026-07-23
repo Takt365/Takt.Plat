@@ -24,7 +24,7 @@ namespace Takt.Domain.Entities.HumanResource.Performance;
 public class TaktPerfAssessment : TaktCompanyEntityBase
 {
     /// <summary>
-    /// 员工（选项 TaktEmployees/options，DictValue=Id）
+    /// 员工（选项 TaktEmployees/options；DictValue=Id）
     /// </summary>
     [SugarColumn(ColumnName = "employee_id", ColumnDescription = "员工ID", ColumnDataType = "bigint", IsNullable = false)]
     [JsonConverter(typeof(ValueToStringConverter))]
@@ -45,7 +45,7 @@ public class TaktPerfAssessment : TaktCompanyEntityBase
     [SugarColumn(ColumnName = "assessment_date", ColumnDescription = "考核日期", ColumnDataType = "date", IsNullable = false)]
     public DateTime AssessmentDate { get; set; }
     /// <summary>
-    /// 方案指标（选项 TaktPerfSchemes/options，DictValue=Id）
+    /// 方案指标（选项 TaktPerfSchemes/options；DictValue=Id）
     /// </summary>
     [SugarColumn(ColumnName = "scheme_metric_id", ColumnDescription = "方案指标ID", ColumnDataType = "bigint", IsNullable = false)]
     [JsonConverter(typeof(ValueToStringConverter))]
@@ -81,7 +81,7 @@ public class TaktPerfAssessment : TaktCompanyEntityBase
     [SugarColumn(ColumnName = "performance_grade", ColumnDescription = "绩效等级", ColumnDataType = "nvarchar", Length = 10, IsNullable = false)]
     public string PerformanceGrade { get; set; } = string.Empty;
     /// <summary>
-    /// 评审人（选项 TaktEmployees/options，DictValue=Id）
+    /// 评审人（选项 TaktEmployees/options；DictValue=Id）
     /// </summary>
     [SugarColumn(ColumnName = "reviewer_id", ColumnDescription = "评审人ID", ColumnDataType = "bigint", IsNullable = false)]
     [JsonConverter(typeof(ValueToStringConverter))]
@@ -97,7 +97,7 @@ public class TaktPerfAssessment : TaktCompanyEntityBase
     [SugarColumn(ColumnName = "interview_notes", ColumnDescription = "面谈记录", ColumnDataType = "nvarchar", Length = 1000, IsNullable = false)]
     public string InterviewNotes { get; set; } = string.Empty;
     /// <summary>
-    /// 关联工厂（选项 TaktPlants/options，DictValue=Id）
+    /// 关联工厂（选项 TaktPlants/options；DictValue=Id）
     /// </summary>
     [SugarColumn(ColumnName = "related_plant", ColumnDescription = "关联工厂", ColumnDataType = "nvarchar", Length = 4, IsNullable = false)]
     public string RelatedPlant { get; set; } = string.Empty;

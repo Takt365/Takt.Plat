@@ -11,7 +11,7 @@
 // ========================================
 
 /**
- * 树表 index.vue：ref/computed 状态块（完整 JSDoc）
+ * 树表 index.vue：ref/computed 状态块（大数据懒加载左树 + 右侧 list 分页）
  * @param {string} entityPascal
  * @param {object} options
  */
@@ -51,33 +51,37 @@ ${needsUserStore ? `/** 用户上下文（companyDefaultCulture 等） */
 const userStore = useUserStore()
 ` : ''}${needsExcelNames ? `/** Excel 导入/导出默认 sheet 名与文件名前缀 */
 const excelNames = taktExcelEntityNames('${entityClassName}')
-` : ''}/** 右侧树表快捷查询占位文案 */
+` : ''}/** 右侧列表快捷查询占位文案 */
 const tableSearchPlaceholder = computed(() =>
   t('common.page.form.placeholder.search', {
     keyword: [${searchFieldLabelExprs}].join(' / '),
   })
 )
 
-/** 左侧树关键字（客户端过滤，不重复请求 API） */
+/** 左侧树关键字（仅过滤已加载节点，不重复请求 API） */
 const treeQueryKeyword = ref('')
-/** 右侧树表快捷查询关键字 */
+/** 右侧列表快捷查询关键字 */
 const queryKeyword = ref('')
-/** 左侧树工具栏「展开/收缩」状态 */
+/** 左侧树工具栏「展开/收缩」状态（仅已加载层） */
 const treeExpanded = ref(false)
 /** 左侧树当前展开的节点 key 列表 */
 const treeExpandedKeys = ref<(string | number)[]>([])
 /** 右侧表格展开状态（预留） */
 const tableExpanded = ref(false)
-/** 右侧拍平列表当前页码 */
+/** 右侧列表当前页码（服务端分页） */
 const tableCurrentPage = ref(getTaktDefaultPageIndex())
-/** 右侧拍平列表每页条数 */
+/** 右侧列表每页条数 */
 const tablePageSize = ref(getTaktDefaultPageSize())
-/** 页面 loading（树加载、提交、导出等） */
+/** 左侧树 loading */
 const loading = ref(false)
-/** 全量树表节点（左侧树与右侧表共用，不受右侧查询过滤） */
-const fullTableTree = ref<Record<string, unknown>[]>([])
-/** 左侧 a-tree 绑定数据（由 fullTableTree 映射 title/key） */
-const entityTreeData = ref<TreeDataItem[]>([])
+/** 右侧列表 loading */
+const listLoading = ref(false)
+/** 左侧 a-tree 懒加载数据（仅已展开路径） */
+const entityTreeData = ref<TaktLazyTreeNode[]>([])
+/** 右侧列表数据源（服务端分页，当前父级直接子节点） */
+const tableDataSource = ref<${entityPascal}[]>([])
+/** 右侧列表总行数 */
+const tableTotal = ref(0)
 /** 左侧树当前选中的节点 key 列表 */
 const selectedTreeKeys = ref<(string | number)[]>([])
 /** 工具栏单选时当前行（编辑/删除） */
@@ -105,7 +109,7 @@ const columnSettingVisible = ref(false)
 const visibleColumnKeys = ref<string[]>([])
 /** 实体主键字段名（row-key、API 路径参数） */
 const entityIdName = '${idField}'
-/** 树节点标题字段名（左侧树 title 与缩进列） */
+/** 树节点标题字段名（左侧树 title） */
 const treeTitleField = '${titleField}'
 `;
 }

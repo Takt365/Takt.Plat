@@ -26,21 +26,21 @@ namespace Takt.Domain.Entities.Logistics.Manufacturing.Sop;
 public class TaktSopExecScan : TaktCompanyEntityBase
 {
     /// <summary>
-    /// 执行追溯 ID（选项 TaktSopExecs/options，DictValue=Id）
+    /// 执行追溯 ID（选项 TaktSopExecs/options；DictValue=Id）
     /// </summary>
     [SugarColumn(ColumnName = "exec_id", ColumnDescription = "执行追溯ID", ColumnDataType = "bigint", IsNullable = false)]
     [JsonConverter(typeof(ValueToStringConverter))]
     public long ExecId { get; set; }
 
     /// <summary>
-    /// 工步执行明细 ID（选项 TaktSopExecSteps/options，DictValue=Id）
+    /// 工步执行明细 ID（选项 TaktSopExecSteps/options；DictValue=Id）
     /// </summary>
     [SugarColumn(ColumnName = "exec_step_id", ColumnDescription = "工步执行明细ID", ColumnDataType = "bigint", IsNullable = true)]
     [JsonConverter(typeof(ValueToStringConverter))]
     public long? ExecStepId { get; set; }
 
     /// <summary>
-    /// 工步 ID（选项 TaktSopSteps/options，DictValue=Id）
+    /// 工步 ID（选项 TaktSopSteps/options；DictValue=Id）
     /// </summary>
     [SugarColumn(ColumnName = "step_id", ColumnDescription = "工步ID", ColumnDataType = "bigint", IsNullable = false)]
     [JsonConverter(typeof(ValueToStringConverter))]
@@ -53,7 +53,7 @@ public class TaktSopExecScan : TaktCompanyEntityBase
     public string ScannedBarcode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 期望物料编码（选项 TaktMaterialPlants/options，DictValue=MaterialCode，ExtValue=PlantCode）
+    /// 期望物料编码（选项 TaktMaterialPlants/options；DictValue=MaterialCode，ExtValue=PlantCode）
     /// </summary>
     [SugarColumn(ColumnName = "expected_material_code", ColumnDescription = "期望物料编码", ColumnDataType = "nvarchar", Length = 50, IsNullable = true)]
     public string? ExpectedMaterialCode { get; set; }

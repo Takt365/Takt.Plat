@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Infrastructure.Data.Seeds.I18nSeedData.Accounting.Financial
 // 文件名称：TaktBalanceSheetI18nSeedData.cs
-// 创建时间：2026-07-20
+// 创建时间：2026-07-23
 // 创建人：Takt365(Auto Generated)
 // 功能描述：TaktBalanceSheet 实体字段国际化种子（无对应 frontend locales；TranslationText 取自 ColumnDescription，ContextNote 取自属性 XML summary）
 // 
@@ -91,13 +91,13 @@ public class TaktBalanceSheetI18nSeedData : ITaktSeedDataCoordinator
             new TranslationSeedItem("entity.balancesheet._self", "zh-HK", "资产负债表行信息_hk", "实体名称"),
 
             // entity.balancesheet.relatedplant
-            new TranslationSeedItem("entity.balancesheet.relatedplant", "en-US", "关联工厂_us", "关联工厂（选项 TaktPlants/options，DictValue=PlantCode；公司合并口径可用约定码）"),
+            new TranslationSeedItem("entity.balancesheet.relatedplant", "en-US", "关联工厂_us", "关联工厂（选项 TaktPlants/options；DictValue=PlantCode；公司合并口径可用约定码）"),
             // entity.balancesheet.relatedplant
-            new TranslationSeedItem("entity.balancesheet.relatedplant", "ja-JP", "关联工厂_jp", "关联工厂（选项 TaktPlants/options，DictValue=PlantCode；公司合并口径可用约定码）"),
+            new TranslationSeedItem("entity.balancesheet.relatedplant", "ja-JP", "关联工厂_jp", "关联工厂（选项 TaktPlants/options；DictValue=PlantCode；公司合并口径可用约定码）"),
             // entity.balancesheet.relatedplant
-            new TranslationSeedItem("entity.balancesheet.relatedplant", "zh-CN", "关联工厂", "关联工厂（选项 TaktPlants/options，DictValue=PlantCode；公司合并口径可用约定码）"),
+            new TranslationSeedItem("entity.balancesheet.relatedplant", "zh-CN", "关联工厂", "关联工厂（选项 TaktPlants/options；DictValue=PlantCode；公司合并口径可用约定码）"),
             // entity.balancesheet.relatedplant
-            new TranslationSeedItem("entity.balancesheet.relatedplant", "zh-HK", "关联工厂_hk", "关联工厂（选项 TaktPlants/options，DictValue=PlantCode；公司合并口径可用约定码）"),
+            new TranslationSeedItem("entity.balancesheet.relatedplant", "zh-HK", "关联工厂_hk", "关联工厂（选项 TaktPlants/options；DictValue=PlantCode；公司合并口径可用约定码）"),
 
             // entity.balancesheet.periodcode
             new TranslationSeedItem("entity.balancesheet.periodcode", "en-US", "会计期间_us", "会计期间编码（YYYYMM；资产负债表日所属报告期）"),

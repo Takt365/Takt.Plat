@@ -31,7 +31,7 @@ namespace Takt.Domain.Entities.Logistics.Manufacturing.Mrp;
 public class TaktPurchasePlan : TaktApprovalEntityBase
 {
     /// <summary>
-    /// 工厂代码（选项 TaktPlants/options，DictValue=PlantCode）
+    /// 工厂代码（选项 TaktPlants/options；DictValue=PlantCode）
     /// </summary>
     [SugarColumn(ColumnName = "plant_code", ColumnDescription = "工厂代码", ColumnDataType = "nvarchar", Length = 50, IsNullable = false)]
     public string PlantCode { get; set; } = string.Empty;
@@ -87,20 +87,20 @@ public class TaktPurchasePlan : TaktApprovalEntityBase
     public DateTime PlanPeriodEnd { get; set; } = DateTime.Now;
 
     /// <summary>
-    /// 采购组编码（选项 TaktPurchaseGroups/options，DictValue=PurchaseGroupCode）
+    /// 采购组编码（选项 TaktPurchaseGroups/options；DictValue=PurchaseGroupCode）
     /// </summary>
     [SugarColumn(ColumnName = "purchase_group_code", ColumnDescription = "采购组编码", ColumnDataType = "nvarchar", Length = 50, IsNullable = true)]
     public string? PurchaseGroupCode { get; set; }
 
     /// <summary>
-    /// 计划人员工ID（选项 TaktEmployees/options，DictValue=Id）
+    /// 计划人员工ID（选项 TaktEmployees/options；DictValue=Id）
     /// </summary>
     [SugarColumn(ColumnName = "planner_id", ColumnDescription = "计划人员工ID", ColumnDataType = "bigint", IsNullable = true)]
     [JsonConverter(typeof(ValueToStringConverter))]
     public long? PlannerId { get; set; }
 
     /// <summary>
-    /// 计划人（选项 TaktEmployees/options，DictValue=EmployeeNo）
+    /// 计划人（选项 TaktEmployees/options；DictValue=EmployeeCode）
     /// </summary>
     [SugarColumn(ColumnName = "plan_by", ColumnDescription = "计划人", ColumnDataType = "nvarchar", Length = 50, IsNullable = false)]
     public string PlanBy { get; set; } = string.Empty;

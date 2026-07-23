@@ -23,9 +23,12 @@ export const SALESPRICESCALEQUANTITY_LIST_FIELDS = [
   'salesPriceItemId',
   'salesPriceCode',
   'salesPriceSeq',
-  'lineNumber',
+  'salesScaleSeq',
   'scaleQuantity',
-  'amount',
+  'price',
+  'untaxedPrice',
+  'taxIncludedPrice',
+  'taxAmount',
   'isObsolete',
 ] as const
 
@@ -34,9 +37,12 @@ export const SALESPRICESCALEQUANTITY_DEFAULT_VISIBLE_COLUMN_KEYS = [
   'salesPriceItemId',
   'salesPriceCode',
   'salesPriceSeq',
-  'lineNumber',
+  'salesScaleSeq',
   'scaleQuantity',
-  'amount',
+  'price',
+  'untaxedPrice',
+  'taxIncludedPrice',
+  'taxAmount',
   'isObsolete',
   'action',
 ] as const
@@ -44,8 +50,12 @@ export const SALESPRICESCALEQUANTITY_DEFAULT_VISIBLE_COLUMN_KEYS = [
 /** 明细右栏 panel 合计列（当前页 dataSource 数值字段求和） */
 export const SALESPRICESCALEQUANTITY_SUMMARY_SUM_FIELDS = [
   'salesPriceSeq',
+  'salesScaleSeq',
   'scaleQuantity',
-  'amount',
+  'price',
+  'untaxedPrice',
+  'taxIncludedPrice',
+  'taxAmount',
   'isObsolete',
 ] as const
 
@@ -56,9 +66,12 @@ export const SALESPRICESCALEQUANTITY_PLACEHOLDER = {
   companyDefaultCulture: 'optional',
   salesPriceCode: 'required',
   salesPriceSeq: 'select',
-  lineNumber: 'select',
+  salesScaleSeq: 'select',
   scaleQuantity: 'select',
-  amount: 'select',
+  price: 'select',
+  untaxedPrice: 'select',
+  taxIncludedPrice: 'select',
+  taxAmount: 'select',
   isObsolete: 'select',
 } as const satisfies Record<string, EntityFieldPlaceholderKind>
 
@@ -76,15 +89,18 @@ export const SALESPRICESCALEQUANTITY_QUERY_STRING_FIELDS = [
 
 export type SalesPriceScaleQuantityQueryField =
   | (typeof SALESPRICESCALEQUANTITY_QUERY_STRING_FIELDS)[number]
-  | 'salesPriceSeq' | 'lineNumber' | 'scaleQuantity' | 'amount' | 'isObsolete'
+  | 'salesPriceSeq' | 'salesScaleSeq' | 'scaleQuantity' | 'price' | 'untaxedPrice' | 'taxIncludedPrice' | 'taxAmount' | 'isObsolete'
 
 /** 高级查询抽屉全部字段（含数值） */
 export const SALESPRICESCALEQUANTITY_QUERY_FIELDS: readonly SalesPriceScaleQuantityQueryField[] = [
   ...SALESPRICESCALEQUANTITY_QUERY_STRING_FIELDS,
   'salesPriceSeq',
-  'lineNumber',
+  'salesScaleSeq',
   'scaleQuantity',
-  'amount',
+  'price',
+  'untaxedPrice',
+  'taxIncludedPrice',
+  'taxAmount',
   'isObsolete',
 ]
 

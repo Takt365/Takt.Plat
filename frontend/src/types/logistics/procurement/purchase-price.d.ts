@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：frontend/src/types/logistics/procurement
 // 文件名称：purchase-price.d.ts
-// 创建时间：2026-07-20
+// 创建时间：2026-07-21
 // 创建人：Takt365(Auto Generated)
 // 功能描述：logistics/procurement 模块类型定义（自动生成；类型名去 Takt 前缀与末尾 Dto，如 TaktCompanyDto → Company）
 // 
@@ -29,6 +29,11 @@ export interface PurchasePrice extends CompanyDtoBase {
   purchasePriceId: string;
 
   /**
+   * 工厂代码（选项 TaktPlants/options，DictValue=PlantCode）
+   */
+  plantCode: string;
+
+  /**
    * 定价记录号（唯一索引；长度 20）
    */
   purchasePriceCode: string;
@@ -49,6 +54,26 @@ export interface PurchasePrice extends CompanyDtoBase {
   materialCode: string;
 
   /**
+   * 采购组（选项 TaktPurchaseGroups/options，DictValue=PurchaseGroupCode）
+   */
+  purchaseGroup?: string;
+
+  /**
+   * 税码（字典 accounting_tax_code，DictValue=J0～J8/L1/X0～X3；SAP MWSKZ；中国）
+   */
+  taxCode?: string;
+
+  /**
+   * 基于收货的发票检验（字典 sys_yes_no_type，0=否 1=是；SAP WEBRE）
+   */
+  grBasedInvoiceInspection: number;
+
+  /**
+   * 定价日期控制（字典 logistics_pricing_date_control；1=采购订单日期，2=交货日期，3=当前日期，4=手动，5=收货日期；默认 1）
+   */
+  pricingDateControl: number;
+
+  /**
    * 有效起始日
    */
   validFrom: string;
@@ -57,11 +82,6 @@ export interface PurchasePrice extends CompanyDtoBase {
    * 有效截至日
    */
   validTo: string;
-
-  /**
-   * 可变关键字
-   */
-  variableKey?: string;
 
   /**
    * 来源采购询价 ID（选项 TaktPurchaseInquirys/options，DictValue=Id）
@@ -77,6 +97,11 @@ export interface PurchasePrice extends CompanyDtoBase {
    * 来源采购询价编码（冗余）
    */
   purchaseInquiryCode?: string;
+
+  /**
+   * 可变关键字
+   */
+  variableKey?: string;
 
   /**
    * 定价条件行列表（主子表关系） （子表：TaktPurchasePriceItem）
@@ -104,6 +129,11 @@ export interface PurchasePriceQuery extends TaktPagedQuery {
   companyCode?: string;
 
   /**
+   * 工厂代码（选项 TaktPlants/options，DictValue=PlantCode）
+   */
+  plantCode?: string;
+
+  /**
    * 定价记录号（唯一索引；长度 20）
    */
   purchasePriceCode?: string;
@@ -122,6 +152,26 @@ export interface PurchasePriceQuery extends TaktPagedQuery {
    * 物料编码（选项 TaktMaterialPlants/options，DictValue=MaterialCode）
    */
   materialCode?: string;
+
+  /**
+   * 采购组（选项 TaktPurchaseGroups/options，DictValue=PurchaseGroupCode）
+   */
+  purchaseGroup?: string;
+
+  /**
+   * 税码（字典 accounting_tax_code，DictValue=J0～J8/L1/X0～X3；SAP MWSKZ；中国）
+   */
+  taxCode?: string;
+
+  /**
+   * 基于收货的发票检验（字典 sys_yes_no_type，0=否 1=是；SAP WEBRE）
+   */
+  grBasedInvoiceInspection?: number;
+
+  /**
+   * 定价日期控制（字典 logistics_pricing_date_control；1=采购订单日期，2=交货日期，3=当前日期，4=手动，5=收货日期；默认 1）
+   */
+  pricingDateControl?: number;
 
   /**
    * 有效起始日（范围查询-开始）
@@ -144,11 +194,6 @@ export interface PurchasePriceQuery extends TaktPagedQuery {
   validToEnd?: string;
 
   /**
-   * 可变关键字
-   */
-  variableKey?: string;
-
-  /**
    * 来源采购询价 ID（选项 TaktPurchaseInquirys/options，DictValue=Id）
    */
   purchaseInquiryId?: string;
@@ -157,6 +202,11 @@ export interface PurchasePriceQuery extends TaktPagedQuery {
    * 来源采购询价编码（冗余）
    */
   purchaseInquiryCode?: string;
+
+  /**
+   * 可变关键字
+   */
+  variableKey?: string;
 
   /**
    * 创建时间（范围查询-开始）
@@ -203,6 +253,11 @@ export interface PurchasePriceCreate {
   companyDefaultCulture: string;
 
   /**
+   * 工厂代码（选项 TaktPlants/options，DictValue=PlantCode）
+   */
+  plantCode: string;
+
+  /**
    * 定价记录号（唯一索引；长度 20）
    */
   purchasePriceCode: string;
@@ -223,6 +278,26 @@ export interface PurchasePriceCreate {
   materialCode: string;
 
   /**
+   * 采购组（选项 TaktPurchaseGroups/options，DictValue=PurchaseGroupCode）
+   */
+  purchaseGroup?: string;
+
+  /**
+   * 税码（字典 accounting_tax_code，DictValue=J0～J8/L1/X0～X3；SAP MWSKZ；中国）
+   */
+  taxCode?: string;
+
+  /**
+   * 基于收货的发票检验（字典 sys_yes_no_type，0=否 1=是；SAP WEBRE）
+   */
+  grBasedInvoiceInspection: number;
+
+  /**
+   * 定价日期控制（字典 logistics_pricing_date_control；1=采购订单日期，2=交货日期，3=当前日期，4=手动，5=收货日期；默认 1）
+   */
+  pricingDateControl: number;
+
+  /**
    * 有效起始日
    */
   validFrom: string;
@@ -233,11 +308,6 @@ export interface PurchasePriceCreate {
   validTo: string;
 
   /**
-   * 可变关键字
-   */
-  variableKey?: string;
-
-  /**
    * 来源采购询价 ID（选项 TaktPurchaseInquirys/options，DictValue=Id）
    */
   purchaseInquiryId?: string;
@@ -246,6 +316,11 @@ export interface PurchasePriceCreate {
    * 来源采购询价编码（冗余）
    */
   purchaseInquiryCode?: string;
+
+  /**
+   * 可变关键字
+   */
+  variableKey?: string;
 
   /**
    * 定价条件行列表（主子表关系）（子表，级联保存）
@@ -302,6 +377,11 @@ export interface PurchasePriceTemplate {
   companyCode?: string;
 
   /**
+   * 工厂代码（选项 TaktPlants/options，DictValue=PlantCode）
+   */
+  plantCode?: string;
+
+  /**
    * 定价记录号（唯一索引；长度 20）
    */
   purchasePriceCode?: string;
@@ -322,6 +402,26 @@ export interface PurchasePriceTemplate {
   materialCode?: string;
 
   /**
+   * 采购组（选项 TaktPurchaseGroups/options，DictValue=PurchaseGroupCode）
+   */
+  purchaseGroup?: string;
+
+  /**
+   * 税码（字典 accounting_tax_code，DictValue=J0～J8/L1/X0～X3；SAP MWSKZ；中国）
+   */
+  taxCode?: string;
+
+  /**
+   * 基于收货的发票检验（字典 sys_yes_no_type，0=否 1=是；SAP WEBRE）
+   */
+  grBasedInvoiceInspection?: number;
+
+  /**
+   * 定价日期控制（字典 logistics_pricing_date_control；1=采购订单日期，2=交货日期，3=当前日期，4=手动，5=收货日期；默认 1）
+   */
+  pricingDateControl?: number;
+
+  /**
    * 有效起始日
    */
   validFrom?: string;
@@ -332,11 +432,6 @@ export interface PurchasePriceTemplate {
   validTo?: string;
 
   /**
-   * 可变关键字
-   */
-  variableKey?: string;
-
-  /**
    * 来源采购询价 ID（选项 TaktPurchaseInquirys/options，DictValue=Id）
    */
   purchaseInquiryId?: string;
@@ -345,6 +440,11 @@ export interface PurchasePriceTemplate {
    * 来源采购询价编码（冗余）
    */
   purchaseInquiryCode?: string;
+
+  /**
+   * 可变关键字
+   */
+  variableKey?: string;
 
   /**
    * 定价条件行列表（主子表关系）（子表，级联保存）
@@ -386,6 +486,11 @@ export interface PurchasePriceImport {
   companyDefaultCulture?: string;
 
   /**
+   * 工厂代码（选项 TaktPlants/options，DictValue=PlantCode）
+   */
+  plantCode?: string;
+
+  /**
    * 定价记录号（唯一索引；长度 20）
    */
   purchasePriceCode?: string;
@@ -406,6 +511,26 @@ export interface PurchasePriceImport {
   materialCode?: string;
 
   /**
+   * 采购组（选项 TaktPurchaseGroups/options，DictValue=PurchaseGroupCode）
+   */
+  purchaseGroup?: string;
+
+  /**
+   * 税码（字典 accounting_tax_code，DictValue=J0～J8/L1/X0～X3；SAP MWSKZ；中国）
+   */
+  taxCode?: string;
+
+  /**
+   * 基于收货的发票检验（字典 sys_yes_no_type，0=否 1=是；SAP WEBRE）
+   */
+  grBasedInvoiceInspection?: number;
+
+  /**
+   * 定价日期控制（字典 logistics_pricing_date_control；1=采购订单日期，2=交货日期，3=当前日期，4=手动，5=收货日期；默认 1）
+   */
+  pricingDateControl?: number;
+
+  /**
    * 有效起始日
    */
   validFrom?: string;
@@ -416,11 +541,6 @@ export interface PurchasePriceImport {
   validTo?: string;
 
   /**
-   * 可变关键字
-   */
-  variableKey?: string;
-
-  /**
    * 来源采购询价 ID（选项 TaktPurchaseInquirys/options，DictValue=Id）
    */
   purchaseInquiryId?: string;
@@ -429,6 +549,11 @@ export interface PurchasePriceImport {
    * 来源采购询价编码（冗余）
    */
   purchaseInquiryCode?: string;
+
+  /**
+   * 可变关键字
+   */
+  variableKey?: string;
 
   /**
    * 定价条件行列表（主子表关系）（子表，级联保存）
@@ -465,6 +590,11 @@ export interface PurchasePriceExport {
   companyCode: string;
 
   /**
+   * 工厂代码（选项 TaktPlants/options，DictValue=PlantCode）
+   */
+  plantCode: string;
+
+  /**
    * 定价记录号（唯一索引；长度 20）
    */
   purchasePriceCode: string;
@@ -485,6 +615,26 @@ export interface PurchasePriceExport {
   materialCode: string;
 
   /**
+   * 采购组（选项 TaktPurchaseGroups/options，DictValue=PurchaseGroupCode）
+   */
+  purchaseGroup?: string;
+
+  /**
+   * 税码（字典 accounting_tax_code，DictValue=J0～J8/L1/X0～X3；SAP MWSKZ；中国）
+   */
+  taxCode?: string;
+
+  /**
+   * 基于收货的发票检验（字典 sys_yes_no_type，0=否 1=是；SAP WEBRE）
+   */
+  grBasedInvoiceInspection: number;
+
+  /**
+   * 定价日期控制（字典 logistics_pricing_date_control；1=采购订单日期，2=交货日期，3=当前日期，4=手动，5=收货日期；默认 1）
+   */
+  pricingDateControl: number;
+
+  /**
    * 有效起始日
    */
   validFrom: string;
@@ -495,11 +645,6 @@ export interface PurchasePriceExport {
   validTo: string;
 
   /**
-   * 可变关键字
-   */
-  variableKey?: string;
-
-  /**
    * 来源采购询价 ID（选项 TaktPurchaseInquirys/options，DictValue=Id）
    */
   purchaseInquiryId?: string;
@@ -508,6 +653,11 @@ export interface PurchasePriceExport {
    * 来源采购询价编码（冗余）
    */
   purchaseInquiryCode?: string;
+
+  /**
+   * 可变关键字
+   */
+  variableKey?: string;
 
   /**
    * 扩展字段JSON

@@ -1,0 +1,14 @@
+    /// <summary>
+    /// 扫描 BOM 行数
+    /// </summary>
+    public int ScannedRowCount { get; set; }
+
+    /// <summary>
+    /// 回填机种编码行数
+    /// </summary>
+    public int PatchedModelCodeRowCount { get; set; }
+
+    /// <summary>
+    /// 重算维度组数
+    /// </summary>
+    public int RefreshedGroupCount { get; set; }

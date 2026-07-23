@@ -26,7 +26,7 @@ namespace Takt.Domain.Entities.Logistics.Procurement;
 public class TaktPurchaseGroup : TaktCompanyEntityBase
 {
     /// <summary>
-    /// 工厂代码（选项 TaktPlants/options，DictValue=PlantCode）
+    /// 工厂代码（选项 TaktPlants/options；DictValue=PlantCode）
     /// </summary>
     [SugarColumn(ColumnName = "plant_code", ColumnDescription = "工厂代码", ColumnDataType = "nvarchar", Length = 4, IsNullable = false)]
     public string PlantCode { get; set; } = string.Empty;
@@ -47,7 +47,7 @@ public class TaktPurchaseGroup : TaktCompanyEntityBase
     [SugarColumn(ColumnName = "purchase_group_description", ColumnDescription = "采购组描述", ColumnDataType = "nvarchar", Length = 200, IsNullable = true)]
     public string? PurchaseGroupDescription { get; set; }
     /// <summary>
-    /// 采购组负责人用户 ID（选项 TaktUsers/options，DictValue=Id）
+    /// 采购组负责人用户 ID（选项 TaktUsers/options；DictValue=Id）
     /// </summary>
     [SugarColumn(ColumnName = "responsible_user_id", ColumnDescription = "负责人用户ID", ColumnDataType = "bigint", IsNullable = true)]
     [JsonConverter(typeof(ValueToStringConverter))]

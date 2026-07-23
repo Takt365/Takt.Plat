@@ -62,6 +62,7 @@
       :data-source="dataSource"
       :loading="loading"
       :stripe="true"
+      :virtual="true"
       :row-key="getCustomerId"
       :row-selection="rowSelection"
       :custom-row="onClickRow"
@@ -84,16 +85,94 @@
             dict-type="logistics_customer_category"
           />
         </template>
+        <template v-else-if="column.key === 'enterpriseNature'">
+          <TaktDictTag
+            :value="getCustomerDictValue(record, 'enterpriseNature')"
+            dict-type="sys_enterprise_nature_type"
+          />
+        </template>
+        <template v-else-if="column.key === 'industryAttribute'">
+          <TaktDictTag
+            :value="getCustomerDictValue(record, 'industryAttribute')"
+            dict-type="sys_industry_attribute_type"
+          />
+        </template>
+        <template v-else-if="column.key === 'defaultCulture'">
+          <TaktDictTag
+            :value="getCustomerDictValue(record, 'defaultCulture')"
+            dict-type="sys_culture_code"
+          />
+        </template>
         <template v-else-if="column.key === 'taxRate'">
           <TaktDictTag
             :value="getCustomerDictValue(record, 'taxRate')"
             dict-type="accounting_tax_rate_param"
           />
         </template>
+        <template v-else-if="column.key === 'registrationCountry'">
+          <TaktDictTag
+            :value="getCustomerDictValue(record, 'registrationCountry')"
+            dict-type="sys_country_code"
+          />
+        </template>
+        <template v-else-if="column.key === 'currencyCode'">
+          <TaktDictTag
+            :value="getCustomerDictValue(record, 'currencyCode')"
+            dict-type="accounting_currency_code"
+          />
+        </template>
+        <template v-else-if="column.key === 'customerGroup'">
+          <TaktDictTag
+            :value="getCustomerDictValue(record, 'customerGroup')"
+            dict-type="logistics_customer_group"
+          />
+        </template>
+        <template v-else-if="column.key === 'accountAssignmentGroup'">
+          <TaktDictTag
+            :value="getCustomerDictValue(record, 'accountAssignmentGroup')"
+            dict-type="logistics_account_assignment_group"
+          />
+        </template>
+        <template v-else-if="column.key === 'centralPostingBlock'">
+          <TaktDictTag
+            :value="getCustomerDictValue(record, 'centralPostingBlock')"
+            dict-type="sys_yes_no_type"
+          />
+        </template>
+        <template v-else-if="column.key === 'clearingWithVendor'">
+          <TaktDictTag
+            :value="getCustomerDictValue(record, 'clearingWithVendor')"
+            dict-type="sys_yes_no_type"
+          />
+        </template>
         <template v-else-if="column.key === 'paymentTerms'">
           <TaktDictTag
             :value="getCustomerDictValue(record, 'paymentTerms')"
             dict-type="accounting_payment_terms_param"
+          />
+        </template>
+        <template v-else-if="column.key === 'paymentMethod'">
+          <TaktDictTag
+            :value="getCustomerDictValue(record, 'paymentMethod')"
+            dict-type="accounting_payment_method_type"
+          />
+        </template>
+        <template v-else-if="column.key === 'incoterms1'">
+          <TaktDictTag
+            :value="getCustomerDictValue(record, 'incoterms1')"
+            dict-type="logistics_incoterms1"
+          />
+        </template>
+        <template v-else-if="column.key === 'shippingConditions'">
+          <TaktDictTag
+            :value="getCustomerDictValue(record, 'shippingConditions')"
+            dict-type="logistics_shipping_conditions"
+          />
+        </template>
+        <template v-else-if="column.key === 'customerPricingProcedure'">
+          <TaktDictTag
+            :value="getCustomerDictValue(record, 'customerPricingProcedure')"
+            dict-type="logistics_customer_pricing_procedure"
           />
         </template>
         <template v-else-if="column.key === 'creditLevel'">
@@ -176,13 +255,24 @@
         />
       </a-form-item>
       </div>
-      <div v-show="isFieldVisible('customerName')">
-      <a-form-item :label="pi.queryLabel('customerName')">
+      <div v-show="isFieldVisible('customerName1')">
+      <a-form-item :label="pi.queryLabel('customerName1')">
         <a-input
-          v-model:value="advancedQueryForm.customerName"
-          :placeholder="pi.queryPh('customerName', 'required')"
+          v-model:value="advancedQueryForm.customerName1"
+          :placeholder="pi.queryPh('customerName1', 'required')"
           show-count
-          :maxlength="80"
+          :maxlength="140"
+          allow-clear
+        />
+      </a-form-item>
+      </div>
+      <div v-show="isFieldVisible('customerName2')">
+      <a-form-item :label="pi.queryLabel('customerName2')">
+        <a-input
+          v-model:value="advancedQueryForm.customerName2"
+          :placeholder="pi.queryPh('customerName2', 'required')"
+          show-count
+          :maxlength="140"
           allow-clear
         />
       </a-form-item>
@@ -208,13 +298,32 @@
         />
       </a-form-item>
       </div>
-      <div v-show="isFieldVisible('industrySector')">
-      <a-form-item :label="pi.queryLabel('industrySector')">
-        <a-input
-          v-model:value="advancedQueryForm.industrySector"
-          :placeholder="pi.queryPh('industrySector', 'required')"
-          show-count
-          :maxlength="50"
+      <div v-show="isFieldVisible('enterpriseNature')">
+      <a-form-item :label="pi.queryLabel('enterpriseNature')">
+        <TaktSelect
+          v-model:value="advancedQueryForm.enterpriseNature"
+          dict-type="sys_enterprise_nature_type"
+          :placeholder="pi.queryPh('enterpriseNature', 'select')"
+          allow-clear
+        />
+      </a-form-item>
+      </div>
+      <div v-show="isFieldVisible('industryAttribute')">
+      <a-form-item :label="pi.queryLabel('industryAttribute')">
+        <TaktSelect
+          v-model:value="advancedQueryForm.industryAttribute"
+          dict-type="sys_industry_attribute_type"
+          :placeholder="pi.queryPh('industryAttribute', 'select')"
+          allow-clear
+        />
+      </a-form-item>
+      </div>
+      <div v-show="isFieldVisible('defaultCulture')">
+      <a-form-item :label="pi.queryLabel('defaultCulture')">
+        <TaktSelect
+          v-model:value="advancedQueryForm.defaultCulture"
+          dict-type="sys_culture_code"
+          :placeholder="pi.queryPh('defaultCulture', 'select')"
           allow-clear
         />
       </a-form-item>
@@ -242,11 +351,30 @@
       </div>
       <div v-show="isFieldVisible('registrationCountry')">
       <a-form-item :label="pi.queryLabel('registrationCountry')">
-        <a-input
+        <TaktSelect
           v-model:value="advancedQueryForm.registrationCountry"
-          :placeholder="pi.queryPh('registrationCountry', 'required')"
-          show-count
-          :maxlength="2"
+          dict-type="sys_country_code"
+          :placeholder="pi.queryPh('registrationCountry', 'select')"
+          allow-clear
+        />
+      </a-form-item>
+      </div>
+      <div v-show="isFieldVisible('registrationProvince')">
+      <a-form-item :label="pi.queryLabel('registrationProvince')">
+        <TaktSelect
+          v-model:value="advancedQueryForm.registrationProvince"
+          api-url="TaktAdminDivisions/options"
+          :placeholder="pi.queryPh('registrationProvince', 'select')"
+          allow-clear
+        />
+      </a-form-item>
+      </div>
+      <div v-show="isFieldVisible('registrationCity')">
+      <a-form-item :label="pi.queryLabel('registrationCity')">
+        <TaktSelect
+          v-model:value="advancedQueryForm.registrationCity"
+          api-url="TaktAdminDivisions/options"
+          :placeholder="pi.queryPh('registrationCity', 'select')"
           allow-clear
         />
       </a-form-item>
@@ -266,16 +394,6 @@
         <a-textarea
           v-model:value="advancedQueryForm.registrationAddress2"
           :placeholder="pi.queryPh('registrationAddress2', 'optional')"
-          :rows="2"
-          allow-clear
-        />
-      </a-form-item>
-      </div>
-      <div v-show="isFieldVisible('registrationAddress3')">
-      <a-form-item :label="pi.queryLabel('registrationAddress3')">
-        <a-textarea
-          v-model:value="advancedQueryForm.registrationAddress3"
-          :placeholder="pi.queryPh('registrationAddress3', 'optional')"
           :rows="2"
           allow-clear
         />
@@ -360,11 +478,133 @@
       </div>
       <div v-show="isFieldVisible('currencyCode')">
       <a-form-item :label="pi.queryLabel('currencyCode')">
-        <a-input
+        <TaktSelect
           v-model:value="advancedQueryForm.currencyCode"
-          :placeholder="pi.queryPh('currencyCode', 'required')"
+          dict-type="accounting_currency_code"
+          :placeholder="pi.queryPh('currencyCode', 'select')"
+          allow-clear
+        />
+      </a-form-item>
+      </div>
+      <div v-show="isFieldVisible('salesOrganization')">
+      <a-form-item :label="pi.queryLabel('salesOrganization')">
+        <TaktSelect
+          v-model:value="advancedQueryForm.salesOrganization"
+          api-url="TaktCompanies/options"
+          :placeholder="pi.queryPh('salesOrganization', 'select')"
+          allow-clear
+        />
+      </a-form-item>
+      </div>
+      <div v-show="isFieldVisible('distributionChannel')">
+      <a-form-item :label="pi.queryLabel('distributionChannel')">
+        <a-input
+          v-model:value="advancedQueryForm.distributionChannel"
+          :placeholder="pi.queryPh('distributionChannel', 'required')"
           show-count
-          :maxlength="3"
+          :maxlength="2"
+          allow-clear
+        />
+      </a-form-item>
+      </div>
+      <div v-show="isFieldVisible('productGroup')">
+      <a-form-item :label="pi.queryLabel('productGroup')">
+        <a-input
+          v-model:value="advancedQueryForm.productGroup"
+          :placeholder="pi.queryPh('productGroup', 'required')"
+          show-count
+          :maxlength="2"
+          allow-clear
+        />
+      </a-form-item>
+      </div>
+      <div v-show="isFieldVisible('customerGroup')">
+      <a-form-item :label="pi.queryLabel('customerGroup')">
+        <TaktSelect
+          v-model:value="advancedQueryForm.customerGroup"
+          dict-type="logistics_customer_group"
+          :placeholder="pi.queryPh('customerGroup', 'select')"
+          allow-clear
+        />
+      </a-form-item>
+      </div>
+      <div v-show="isFieldVisible('tradingPartner')">
+      <a-form-item :label="pi.queryLabel('tradingPartner')">
+        <TaktSelect
+          v-model:value="advancedQueryForm.tradingPartner"
+          api-url="TaktPlants/options"
+          :placeholder="pi.queryPh('tradingPartner', 'select')"
+          allow-clear
+        />
+      </a-form-item>
+      </div>
+      <div v-show="isFieldVisible('accountAssignmentGroup')">
+      <a-form-item :label="pi.queryLabel('accountAssignmentGroup')">
+        <TaktSelect
+          v-model:value="advancedQueryForm.accountAssignmentGroup"
+          dict-type="logistics_account_assignment_group"
+          :placeholder="pi.queryPh('accountAssignmentGroup', 'select')"
+          allow-clear
+        />
+      </a-form-item>
+      </div>
+      <div v-show="isFieldVisible('supplierCode')">
+      <a-form-item :label="pi.queryLabel('supplierCode')">
+        <TaktSelect
+          v-model:value="advancedQueryForm.supplierCode"
+          api-url="TaktSuppliers/options"
+          :placeholder="pi.queryPh('supplierCode', 'select')"
+          allow-clear
+        />
+      </a-form-item>
+      </div>
+      <div v-show="isFieldVisible('nielsenIndicator')">
+      <a-form-item :label="pi.queryLabel('nielsenIndicator')">
+        <a-input
+          v-model:value="advancedQueryForm.nielsenIndicator"
+          :placeholder="pi.queryPh('nielsenIndicator', 'required')"
+          show-count
+          :maxlength="2"
+          allow-clear
+        />
+      </a-form-item>
+      </div>
+      <div v-show="isFieldVisible('centralPostingBlock')">
+      <a-form-item :label="pi.queryLabel('centralPostingBlock')">
+        <TaktSelect
+          v-model:value="advancedQueryForm.centralPostingBlock"
+          dict-type="sys_yes_no_type"
+          :placeholder="pi.queryPh('centralPostingBlock', 'select')"
+          allow-clear
+        />
+      </a-form-item>
+      </div>
+      <div v-show="isFieldVisible('reconciliationAccount')">
+      <a-form-item :label="pi.queryLabel('reconciliationAccount')">
+        <TaktSelect
+          v-model:value="advancedQueryForm.reconciliationAccount"
+          api-url="TaktAccountTitles/options"
+          :placeholder="pi.queryPh('reconciliationAccount', 'select')"
+          allow-clear
+        />
+      </a-form-item>
+      </div>
+      <div v-show="isFieldVisible('headquarters')">
+      <a-form-item :label="pi.queryLabel('headquarters')">
+        <TaktSelect
+          v-model:value="advancedQueryForm.headquarters"
+          api-url="TaktCustomers/options"
+          :placeholder="pi.queryPh('headquarters', 'select')"
+          allow-clear
+        />
+      </a-form-item>
+      </div>
+      <div v-show="isFieldVisible('clearingWithVendor')">
+      <a-form-item :label="pi.queryLabel('clearingWithVendor')">
+        <TaktSelect
+          v-model:value="advancedQueryForm.clearingWithVendor"
+          dict-type="sys_yes_no_type"
+          :placeholder="pi.queryPh('clearingWithVendor', 'select')"
           allow-clear
         />
       </a-form-item>
@@ -375,6 +615,67 @@
           v-model:value="advancedQueryForm.paymentTerms"
           dict-type="accounting_payment_terms_param"
           :placeholder="pi.queryPh('paymentTerms', 'select')"
+          allow-clear
+        />
+      </a-form-item>
+      </div>
+      <div v-show="isFieldVisible('paymentMethod')">
+      <a-form-item :label="pi.queryLabel('paymentMethod')">
+        <TaktSelect
+          v-model:value="advancedQueryForm.paymentMethod"
+          dict-type="accounting_payment_method_type"
+          :placeholder="pi.queryPh('paymentMethod', 'select')"
+          allow-clear
+        />
+      </a-form-item>
+      </div>
+      <div v-show="isFieldVisible('deliveringPlant')">
+      <a-form-item :label="pi.queryLabel('deliveringPlant')">
+        <TaktSelect
+          v-model:value="advancedQueryForm.deliveringPlant"
+          api-url="TaktPlants/options"
+          :placeholder="pi.queryPh('deliveringPlant', 'select')"
+          allow-clear
+        />
+      </a-form-item>
+      </div>
+      <div v-show="isFieldVisible('incoterms1')">
+      <a-form-item :label="pi.queryLabel('incoterms1')">
+        <TaktSelect
+          v-model:value="advancedQueryForm.incoterms1"
+          dict-type="logistics_incoterms1"
+          :placeholder="pi.queryPh('incoterms1', 'select')"
+          allow-clear
+        />
+      </a-form-item>
+      </div>
+      <div v-show="isFieldVisible('incoterms2')">
+      <a-form-item :label="pi.queryLabel('incoterms2')">
+        <a-input
+          v-model:value="advancedQueryForm.incoterms2"
+          :placeholder="pi.queryPh('incoterms2', 'required')"
+          show-count
+          :maxlength="40"
+          allow-clear
+        />
+      </a-form-item>
+      </div>
+      <div v-show="isFieldVisible('shippingConditions')">
+      <a-form-item :label="pi.queryLabel('shippingConditions')">
+        <TaktSelect
+          v-model:value="advancedQueryForm.shippingConditions"
+          dict-type="logistics_shipping_conditions"
+          :placeholder="pi.queryPh('shippingConditions', 'select')"
+          allow-clear
+        />
+      </a-form-item>
+      </div>
+      <div v-show="isFieldVisible('customerPricingProcedure')">
+      <a-form-item :label="pi.queryLabel('customerPricingProcedure')">
+        <TaktSelect
+          v-model:value="advancedQueryForm.customerPricingProcedure"
+          dict-type="logistics_customer_pricing_procedure"
+          :placeholder="pi.queryPh('customerPricingProcedure', 'select')"
           allow-clear
         />
       </a-form-item>
@@ -635,6 +936,9 @@ function createEmptyAdvancedQueryForm() {
     ...form,
     customerType: undefined as number | undefined,
     taxRate: undefined as number | undefined,
+    centralPostingBlock: undefined as number | undefined,
+    clearingWithVendor: undefined as number | undefined,
+    paymentMethod: undefined as number | undefined,
     creditLevel: undefined as number | undefined,
     creditAmount: undefined as number | undefined,
     discountRate: undefined as number | undefined,
@@ -698,6 +1002,15 @@ function buildListQuery(overrides?: Partial<CustomerQuery>): CustomerQuery {
   }
   if (form.taxRate !== undefined && form.taxRate !== null) {
     query.taxRate = form.taxRate
+  }
+  if (form.centralPostingBlock !== undefined && form.centralPostingBlock !== null) {
+    query.centralPostingBlock = form.centralPostingBlock
+  }
+  if (form.clearingWithVendor !== undefined && form.clearingWithVendor !== null) {
+    query.clearingWithVendor = form.clearingWithVendor
+  }
+  if (form.paymentMethod !== undefined && form.paymentMethod !== null) {
+    query.paymentMethod = form.paymentMethod
   }
   if (form.creditLevel !== undefined && form.creditLevel !== null) {
     query.creditLevel = form.creditLevel

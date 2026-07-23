@@ -29,11 +29,11 @@ export interface PurchasePriceMonthlyTrendQuery extends TaktPagedQuery {
   materialCode?: string;
   /** 供应商编码 */
   supplierCode?: string;
-  /** 价格类型 */
-  priceType?: number;
+  /** 价格类型（字典 logistics_price_type，如 PB00） */
+  priceType?: string;
   /** 仅启用主表 */
   onlyEnabled?: boolean;
-  /** 涨跌筛选 */
+  /** 涨跌筛选：空/all=全部；leading=机种推移领涨领跌各 50；up/down/changed */
   trendFilter?: string;
 }
 

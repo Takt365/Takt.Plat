@@ -23,10 +23,20 @@ namespace Takt.Domain.Entities.HumanResource.Personnel;
 public class TaktEmployeeEducation : TaktCompanyEntityBase
 {
     /// <summary>
-    /// 员工（选项 TaktEmployees/options，DictValue=Id）
+    /// 员工（选项 TaktEmployees/options；DictValue=Id）
     /// </summary>
     [SugarColumn(ColumnName = "employee_id", ColumnDescription = "员工ID", ColumnDataType = "bigint", IsNullable = false)]
     public long EmployeeId { get; set; }
+    /// <summary>
+    /// 员工编码（冗余，与 TaktEmployee.EmployeeCode 对齐）
+    /// </summary>
+    [SugarColumn(ColumnName = "employee_code", ColumnDescription = "员工编码", ColumnDataType = "varchar", Length = 6, IsNullable = false)]
+    public string EmployeeCode { get; set; } = string.Empty;
+    /// <summary>
+    /// 员工姓名（冗余，与 TaktEmployee.EmployeeName 对齐）
+    /// </summary>
+    [SugarColumn(ColumnName = "employee_name", ColumnDescription = "员工姓名", ColumnDataType = "nvarchar", Length = 80, IsNullable = false)]
+    public string EmployeeName { get; set; } = string.Empty;
     /// <summary>
     /// 学校名称
     /// </summary>
@@ -48,10 +58,10 @@ public class TaktEmployeeEducation : TaktCompanyEntityBase
     [SugarColumn(ColumnName = "major_name", ColumnDescription = "专业名称", ColumnDataType = "nvarchar", Length = 100, IsNullable = true)]
     public string? MajorName { get; set; }
     /// <summary>
-    /// 证书编号
+    /// 证书编码
     /// </summary>
-    [SugarColumn(ColumnName = "certificate_no", ColumnDescription = "证书编号", ColumnDataType = "varchar", Length = 100, IsNullable = true)]
-    public string? CertificateNo { get; set; }
+    [SugarColumn(ColumnName = "certificate_code", ColumnDescription = "证书编码", ColumnDataType = "varchar", Length = 100, IsNullable = true)]
+    public string? CertificateCode { get; set; }
     /// <summary>
     /// 开始日期
     /// </summary>

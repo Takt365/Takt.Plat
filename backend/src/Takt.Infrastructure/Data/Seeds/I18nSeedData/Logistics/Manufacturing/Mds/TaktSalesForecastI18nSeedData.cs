@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Infrastructure.Data.Seeds.I18nSeedData.Logistics.Manufacturing.Mds
 // 文件名称：TaktSalesForecastI18nSeedData.cs
-// 创建时间：2026-07-20
+// 创建时间：2026-07-23
 // 创建人：Takt365(Auto Generated)
 // 功能描述：TaktSalesForecast 实体字段国际化种子（无对应 frontend locales；TranslationText 取自 ColumnDescription，ContextNote 取自属性 XML summary）
 // 
@@ -91,13 +91,13 @@ public class TaktSalesForecastI18nSeedData : ITaktSeedDataCoordinator
             new TranslationSeedItem("entity.salesforecast._self", "zh-HK", "Takt销售预测信息_hk", "实体名称"),
 
             // entity.salesforecast.plantcode
-            new TranslationSeedItem("entity.salesforecast.plantcode", "en-US", "工厂代码_us", "工厂代码（选项 TaktPlants/options，DictValue=PlantCode）"),
+            new TranslationSeedItem("entity.salesforecast.plantcode", "en-US", "工厂代码_us", "工厂代码（选项 TaktPlants/options；DictValue=PlantCode）"),
             // entity.salesforecast.plantcode
-            new TranslationSeedItem("entity.salesforecast.plantcode", "ja-JP", "工厂代码_jp", "工厂代码（选项 TaktPlants/options，DictValue=PlantCode）"),
+            new TranslationSeedItem("entity.salesforecast.plantcode", "ja-JP", "工厂代码_jp", "工厂代码（选项 TaktPlants/options；DictValue=PlantCode）"),
             // entity.salesforecast.plantcode
-            new TranslationSeedItem("entity.salesforecast.plantcode", "zh-CN", "工厂代码", "工厂代码（选项 TaktPlants/options，DictValue=PlantCode）"),
+            new TranslationSeedItem("entity.salesforecast.plantcode", "zh-CN", "工厂代码", "工厂代码（选项 TaktPlants/options；DictValue=PlantCode）"),
             // entity.salesforecast.plantcode
-            new TranslationSeedItem("entity.salesforecast.plantcode", "zh-HK", "工厂代码_hk", "工厂代码（选项 TaktPlants/options，DictValue=PlantCode）"),
+            new TranslationSeedItem("entity.salesforecast.plantcode", "zh-HK", "工厂代码_hk", "工厂代码（选项 TaktPlants/options；DictValue=PlantCode）"),
 
             // entity.salesforecast.code
             new TranslationSeedItem("entity.salesforecast.code", "en-US", "销售预测编码_us", "销售预测编码（租户+公司+工厂内业务唯一）"),
@@ -144,32 +144,32 @@ public class TaktSalesForecastI18nSeedData : ITaktSeedDataCoordinator
             // entity.salesforecast.customercode
             new TranslationSeedItem("entity.salesforecast.customercode", "zh-HK", "客户编码_hk", "客户编码（选项 TaktCustomers/options；汇总计划时可为空，DictValue=Id）"),
 
-            // entity.salesforecast.customername
-            new TranslationSeedItem("entity.salesforecast.customername", "en-US", "客户名称_us", "客户名称（冗余字段，便于查询展示）"),
-            // entity.salesforecast.customername
-            new TranslationSeedItem("entity.salesforecast.customername", "ja-JP", "客户名称_jp", "客户名称（冗余字段，便于查询展示）"),
-            // entity.salesforecast.customername
-            new TranslationSeedItem("entity.salesforecast.customername", "zh-CN", "客户名称", "客户名称（冗余字段，便于查询展示）"),
-            // entity.salesforecast.customername
-            new TranslationSeedItem("entity.salesforecast.customername", "zh-HK", "客户名称_hk", "客户名称（冗余字段，便于查询展示）"),
+            // entity.salesforecast.customername1
+            new TranslationSeedItem("entity.salesforecast.customername1", "en-US", "客户名称1_us", "客户名称1（冗余，与 TaktCustomer.CustomerName1 对齐）"),
+            // entity.salesforecast.customername1
+            new TranslationSeedItem("entity.salesforecast.customername1", "ja-JP", "客户名称1_jp", "客户名称1（冗余，与 TaktCustomer.CustomerName1 对齐）"),
+            // entity.salesforecast.customername1
+            new TranslationSeedItem("entity.salesforecast.customername1", "zh-CN", "客户名称1", "客户名称1（冗余，与 TaktCustomer.CustomerName1 对齐）"),
+            // entity.salesforecast.customername1
+            new TranslationSeedItem("entity.salesforecast.customername1", "zh-HK", "客户名称1_hk", "客户名称1（冗余，与 TaktCustomer.CustomerName1 对齐）"),
 
             // entity.salesforecast.plannerid
-            new TranslationSeedItem("entity.salesforecast.plannerid", "en-US", "计划人员工ID_us", "计划人员工ID（选项 TaktEmployees/options，DictValue=Id）"),
+            new TranslationSeedItem("entity.salesforecast.plannerid", "en-US", "计划人员工ID_us", "计划人员工ID（选项 TaktEmployees/options；DictValue=Id）"),
             // entity.salesforecast.plannerid
-            new TranslationSeedItem("entity.salesforecast.plannerid", "ja-JP", "计划人员工ID_jp", "计划人员工ID（选项 TaktEmployees/options，DictValue=Id）"),
+            new TranslationSeedItem("entity.salesforecast.plannerid", "ja-JP", "计划人员工ID_jp", "计划人员工ID（选项 TaktEmployees/options；DictValue=Id）"),
             // entity.salesforecast.plannerid
-            new TranslationSeedItem("entity.salesforecast.plannerid", "zh-CN", "计划人员工ID", "计划人员工ID（选项 TaktEmployees/options，DictValue=Id）"),
+            new TranslationSeedItem("entity.salesforecast.plannerid", "zh-CN", "计划人员工ID", "计划人员工ID（选项 TaktEmployees/options；DictValue=Id）"),
             // entity.salesforecast.plannerid
-            new TranslationSeedItem("entity.salesforecast.plannerid", "zh-HK", "计划人员工ID_hk", "计划人员工ID（选项 TaktEmployees/options，DictValue=Id）"),
+            new TranslationSeedItem("entity.salesforecast.plannerid", "zh-HK", "计划人员工ID_hk", "计划人员工ID（选项 TaktEmployees/options；DictValue=Id）"),
 
             // entity.salesforecast.planby
-            new TranslationSeedItem("entity.salesforecast.planby", "en-US", "计划人_us", "计划人（选项 TaktEmployees/options，DictValue=EmployeeNo）"),
+            new TranslationSeedItem("entity.salesforecast.planby", "en-US", "计划人_us", "计划人（选项 TaktEmployees/options；DictValue=EmployeeCode）"),
             // entity.salesforecast.planby
-            new TranslationSeedItem("entity.salesforecast.planby", "ja-JP", "计划人_jp", "计划人（选项 TaktEmployees/options，DictValue=EmployeeNo）"),
+            new TranslationSeedItem("entity.salesforecast.planby", "ja-JP", "计划人_jp", "计划人（选项 TaktEmployees/options；DictValue=EmployeeCode）"),
             // entity.salesforecast.planby
-            new TranslationSeedItem("entity.salesforecast.planby", "zh-CN", "计划人", "计划人（选项 TaktEmployees/options，DictValue=EmployeeNo）"),
+            new TranslationSeedItem("entity.salesforecast.planby", "zh-CN", "计划人", "计划人（选项 TaktEmployees/options；DictValue=EmployeeCode）"),
             // entity.salesforecast.planby
-            new TranslationSeedItem("entity.salesforecast.planby", "zh-HK", "计划人_hk", "计划人（选项 TaktEmployees/options，DictValue=EmployeeNo）"),
+            new TranslationSeedItem("entity.salesforecast.planby", "zh-HK", "计划人_hk", "计划人（选项 TaktEmployees/options；DictValue=EmployeeCode）"),
 
             // entity.salesforecast.totalquantity
             new TranslationSeedItem("entity.salesforecast.totalquantity", "en-US", "计划总数量_us", "计划总数量（基本单位数量）"),

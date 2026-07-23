@@ -50,8 +50,10 @@ public interface ITaktAccountTitleService
     /// <summary>
     /// 获取会计科目选项列表（DictValue 为 AccountTitleCode，DictLabel 为科目名称）
     /// </summary>
+    /// <param name="reconciliationOnly">为 true 时仅返回统驭科目（统驭标识 D/K/A）</param>
+    /// <param name="auxiliaryType">可选；按统驭标识精确过滤（如 D=客户、K=供应商）</param>
     /// <returns>下拉选项</returns>
-    Task<List<TaktSelectOption>> GetAccountTitleOptionsAsync();
+    Task<List<TaktSelectOption>> GetAccountTitleOptionsAsync(bool reconciliationOnly = false, string? auxiliaryType = null);
 
     /// <summary>
     /// 获取会计科目树形列表

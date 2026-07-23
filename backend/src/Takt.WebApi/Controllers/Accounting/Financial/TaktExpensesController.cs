@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.WebApi.Controllers.Accounting.Financial
 // 文件名称：TaktExpensesController.cs
-// 创建时间：2026-06-24
+// 创建时间：2026-07-23
 // 创建人：Takt365(Cursor AI)
 // 功能描述：费用单控制器
 // 

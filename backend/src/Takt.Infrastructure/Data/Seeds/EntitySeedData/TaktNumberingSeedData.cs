@@ -4,7 +4,7 @@
 // 文件名称：TaktNumberingSeedData.cs
 // 创建时间：2026-06-14
 // 创建人：Takt365(Cursor AI)
-// 功能描述：内置业务编号规则种子（日常/财务/后勤等模块；按 Database:CompanyCodes 各公司写入）
+// 功能描述：内置业务编码规则种子（日常/财务/后勤等模块；按 Database:CompanyCodes 各公司写入）
 //
 // 版权信息：Copyright (c) 2026 Takt  All rights reserved.
 // 免责声明：此软件使用 MIT License，作者不承担任何使用风险。
@@ -22,7 +22,7 @@ using Takt.Shared.Options;
 namespace Takt.Infrastructure.Data.Seeds.EntitySeedData;
 
 /// <summary>
-/// 内置编号规则种子（按 Database:CompanyCodes 各公司写入；幂等：存在则更新配置，保留 CurrentSequence/ExampleCode）
+/// 内置编码规则种子（按 Database:CompanyCodes 各公司写入；幂等：存在则更新配置，保留 CurrentSequence/ExampleCode）
 /// </summary>
 public class TaktNumberingSeedData : ITaktSeedDataCoordinator
 {
@@ -54,7 +54,7 @@ public class TaktNumberingSeedData : ITaktSeedDataCoordinator
     public int Order => 48;
 
     /// <summary>
-    /// 初始化内置编号规则种子
+    /// 初始化内置编码规则种子
     /// </summary>
     /// <param name="serviceProvider">服务提供者</param>
     /// <param name="tenantCode">租户编码（由协调器传入）</param>
@@ -63,10 +63,10 @@ public class TaktNumberingSeedData : ITaktSeedDataCoordinator
         IServiceProvider serviceProvider,
         string? tenantCode = null)
     {
-        TaktLogger.Information("开始初始化内置编号规则种子数据...");
+        TaktLogger.Information("开始初始化内置编码规则种子数据...");
         if (string.IsNullOrEmpty(tenantCode))
         {
-            TaktLogger.Warning("租户编码为空，跳过编号规则种子数据初始化");
+            TaktLogger.Warning("租户编码为空，跳过编码规则种子数据初始化");
             return (0, 0);
         }
         var configuration = serviceProvider.GetRequiredService<IConfiguration>();
@@ -77,7 +77,7 @@ public class TaktNumberingSeedData : ITaktSeedDataCoordinator
             c => c.TenantCode == tenantCode && c.CompanyStatus == 1);
         if (companies == null || companies.Count == 0)
         {
-            TaktLogger.Warning("租户 {TenantCode} 未找到启用的公司，跳过编号规则种子", tenantCode);
+            TaktLogger.Warning("租户 {TenantCode} 未找到启用的公司，跳过编码规则种子", tenantCode);
             return (0, 0);
         }
         var orderedCompanies = TaktDatabaseOptions.OrderByConfiguredCodes(
@@ -86,13 +86,13 @@ public class TaktNumberingSeedData : ITaktSeedDataCoordinator
             c => c.CompanyCode);
         if (orderedCompanies.Count == 0)
         {
-            TaktLogger.Warning("租户 {TenantCode} 未找到 Database:CompanyCodes 对应的公司，跳过编号规则种子", tenantCode);
+            TaktLogger.Warning("租户 {TenantCode} 未找到 Database:CompanyCodes 对应的公司，跳过编码规则种子", tenantCode);
             return (0, 0);
         }
         var templates = GetBuiltInRuleTemplates();
         var insertCount = 0;
         var updateCount = 0;
-        TaktLogger.Information("正在为租户 {TenantCode} 初始化内置编号规则...", tenantCode);
+        TaktLogger.Information("正在为租户 {TenantCode} 初始化内置编码规则...", tenantCode);
         foreach (var company in orderedCompanies)
         {
             foreach (var template in templates)
@@ -107,14 +107,14 @@ public class TaktNumberingSeedData : ITaktSeedDataCoordinator
             }
         }
         TaktLogger.Information(
-            "内置编号规则种子完成: 插入 {InsertCount} 条，更新 {UpdateCount} 条",
+            "内置编码规则种子完成: 插入 {InsertCount} 条，更新 {UpdateCount} 条",
             insertCount,
             updateCount);
         return (insertCount, updateCount);
     }
 
     /// <summary>
-    /// 获取内置编号规则模板
+    /// 获取内置编码规则模板
     /// </summary>
     /// <returns>规则模板列表</returns>
     private static List<NumberingSeedTemplate> GetBuiltInRuleTemplates()
@@ -345,9 +345,9 @@ public class TaktNumberingSeedData : ITaktSeedDataCoordinator
     }
 
     /// <summary>
-    /// 创建或更新编号规则（更新时保留 CurrentSequence，按最新段配置重算 ExampleCode）
+    /// 创建或更新编码规则（更新时保留 CurrentSequence，按最新段配置重算 ExampleCode）
     /// </summary>
-    /// <param name="repository">编号规则仓储</param>
+    /// <param name="repository">编码规则仓储</param>
     /// <param name="tenantCode">租户编码</param>
     /// <param name="companyCode">公司编码</param>
     /// <param name="template">规则模板</param>
@@ -417,7 +417,7 @@ public class TaktNumberingSeedData : ITaktSeedDataCoordinator
     /// <summary>
     /// 按默认段顺序生成初始起始编码（与 TaktNumberingService 创建逻辑一致）
     /// </summary>
-    /// <param name="rule">编号规则（须含 TenantCode、CompanyCode 等段字段）</param>
+    /// <param name="rule">编码规则（须含 TenantCode、CompanyCode 等段字段）</param>
     /// <param name="referenceTime">参考时间</param>
     /// <returns>起始编码与当前流水号</returns>
     private static (string ExampleCode, int CurrentSequence) BuildInitialExampleCode(
@@ -432,7 +432,7 @@ public class TaktNumberingSeedData : ITaktSeedDataCoordinator
     /// <summary>
     /// 按 DateFormat 强制对齐 ResetPeriod（与 TaktNumberingHelper.NormalizeNumberingModel 一致）
     /// </summary>
-    /// <param name="entity">编号规则</param>
+    /// <param name="entity">编码规则</param>
     private static void ApplyDateFormatResetPeriodAlignment(TaktNumbering entity)
     {
         if (string.Equals(entity.DateFormat?.Trim(), "none", StringComparison.OrdinalIgnoreCase))
@@ -448,12 +448,12 @@ public class TaktNumberingSeedData : ITaktSeedDataCoordinator
     }
 
     /// <summary>
-    /// 按 Description 段配置拼接业务编号（与 TaktNumberingService 一致）
+    /// 按 Description 段配置拼接业务编码（与 TaktNumberingService 一致）
     /// </summary>
-    /// <param name="rule">编号规则</param>
+    /// <param name="rule">编码规则</param>
     /// <param name="sequence">流水号</param>
     /// <param name="referenceTime">参考时间</param>
-    /// <returns>业务编号</returns>
+    /// <returns>业务编码</returns>
     private static string FormatBusinessCode(TaktNumbering rule, int sequence, DateTime referenceTime)
     {
         var length = rule.SequenceLength <= 0 ? 6 : rule.SequenceLength;
@@ -621,7 +621,7 @@ public class TaktNumberingSeedData : ITaktSeedDataCoordinator
     }
 
     /// <summary>
-    /// 编号规则种子模板
+    /// 编码规则种子模板
     /// </summary>
     /// <param name="RuleCode">规则编码</param>
     /// <param name="RuleName">规则名称</param>

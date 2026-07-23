@@ -45,7 +45,7 @@ namespace Takt.Domain.Entities.Logistics.Manufacturing.Bom;
 public class TaktBomMaterialCostItem : TaktCompanyEntityBase
 {
     /// <summary>
-    /// 工厂代码（选项 TaktPlants/options，DictValue=PlantCode）
+    /// 工厂代码（选项 TaktPlants/options；DictValue=PlantCode）
     /// </summary>
     [SugarColumn(ColumnName = "plant_code", ColumnDescription = "工厂代码", ColumnDataType = "nvarchar", Length = 4, IsNullable = false)]
     public string PlantCode { get; set; } = string.Empty;
@@ -123,7 +123,7 @@ public class TaktBomMaterialCostItem : TaktCompanyEntityBase
     public string? SpecialProcurementType { get; set; }
 
     /// <summary>
-    /// 利润中心（选项 TaktProfitCenters/options，DictValue=Id）
+    /// 利润中心（选项 TaktProfitCenters/options；DictValue=Id）
     /// </summary>
     [SugarColumn(ColumnName = "profit_center_code", ColumnDescription = "利润中心", ColumnDataType = "nvarchar", Length = 4, IsNullable = false)]
     public string ProfitCenterCode { get; set; } = string.Empty;
@@ -141,7 +141,7 @@ public class TaktBomMaterialCostItem : TaktCompanyEntityBase
     public int MovingPriceUnit { get; set; } = 1;
 
     /// <summary>
-    /// 移动价格货币（字典 accounting_currency_code，如 CNY/USD）
+    /// 移动价格货币（字典 accounting_currency_code；如 CNY/USD）
     /// </summary>
     [SugarColumn(ColumnName = "moving_price_currency", ColumnDescription = "移动价格货币", ColumnDataType = "nvarchar", Length = 3, IsNullable = false)]
     public string MovingPriceCurrency { get; set; } = string.Empty;
@@ -153,13 +153,13 @@ public class TaktBomMaterialCostItem : TaktCompanyEntityBase
     public string PurchaseOrganization { get; set; } = string.Empty;
 
     /// <summary>
-    /// 采购组（选项 TaktPurchaseGroups/options，DictValue=Id）
+    /// 采购组（选项 TaktPurchaseGroups/options；DictValue=Id）
     /// </summary>
     [SugarColumn(ColumnName = "purchase_group", ColumnDescription = "采购组", ColumnDataType = "nvarchar", Length = 3, IsNullable = false)]
     public string PurchaseGroup { get; set; } = string.Empty;
 
     /// <summary>
-    /// 供应商编码（选项 TaktSuppliers/options，DictValue=SupplierCode）
+    /// 供应商编码（选项 TaktSuppliers/options；DictValue=SupplierCode）
     /// </summary>
     [SugarColumn(ColumnName = "supplier_code", ColumnDescription = "供应商", ColumnDataType = "nvarchar", Length = 8, IsNullable = false)]
     public string SupplierCode { get; set; } = string.Empty;
@@ -177,7 +177,7 @@ public class TaktBomMaterialCostItem : TaktCompanyEntityBase
     public int PurchasePriceUnit { get; set; } = 1;
 
     /// <summary>
-    /// 采购货币（字典 accounting_currency_code，如 CNY/USD）
+    /// 采购货币（字典 accounting_currency_code；如 CNY/USD）
     /// </summary>
     [SugarColumn(ColumnName = "purchase_currency", ColumnDescription = "采购货币", ColumnDataType = "nvarchar", Length = 3, IsNullable = false)]
     public string PurchaseCurrency { get; set; } = string.Empty;

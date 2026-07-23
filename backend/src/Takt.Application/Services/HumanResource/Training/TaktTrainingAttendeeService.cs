@@ -279,7 +279,7 @@ public class TaktTrainingAttendeeService : TaktServiceBase, ITaktTrainingAttende
                 || SqlFunc.ToString(x.TrainingHours).Contains(keywords)
                 || SqlFunc.ToString(x.TrainingScore).Contains(keywords)
                 || SqlFunc.ToString(x.IsPassed).Contains(keywords)
-                || (x.CertificateNo != null && x.CertificateNo.Contains(keywords))
+                || (x.CertificateCode != null && x.CertificateCode.Contains(keywords))
                 || (x.TrainingEvaluation != null && x.TrainingEvaluation.Contains(keywords))
                 || SqlFunc.ToString(x.TrainingResultStatus).Contains(keywords)
                 || (x.RelatedPlant != null && x.RelatedPlant.Contains(keywords))
@@ -337,9 +337,9 @@ public class TaktTrainingAttendeeService : TaktServiceBase, ITaktTrainingAttende
             exp = exp.And(x => x.IsPassed == queryDto.IsPassed);
         }
 
-        if (!string.IsNullOrEmpty(queryDto?.CertificateNo))
+        if (!string.IsNullOrEmpty(queryDto?.CertificateCode))
         {
-            exp = exp.And(x => x.CertificateNo != null && x.CertificateNo.Contains(queryDto.CertificateNo));
+            exp = exp.And(x => x.CertificateCode != null && x.CertificateCode.Contains(queryDto.CertificateCode));
         }
 
         if (!string.IsNullOrEmpty(queryDto?.TrainingEvaluation))

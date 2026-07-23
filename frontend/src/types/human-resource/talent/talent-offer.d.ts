@@ -44,7 +44,7 @@ export interface TalentOffer extends ApprovalDtoBase {
   jobPostingName?: string;
 
   /**
-   * 录用编号（租户+公司内业务编号）
+   * 录用编码（租户+公司内业务编码）
    */
   offerNo: string;
 
@@ -119,7 +119,7 @@ export interface TalentOfferQuery extends TaktPagedQuery {
   jobPostingId?: string;
 
   /**
-   * 录用编号（租户+公司内业务编号）
+   * 录用编码（租户+公司内业务编码）
    */
   offerNo?: string;
 
@@ -248,7 +248,7 @@ export interface TalentOfferCreate {
   jobPostingId: string;
 
   /**
-   * 录用编号（租户+公司内业务编号）
+   * 录用编码（租户+公司内业务编码）
    */
   offerNo: string;
 
@@ -342,7 +342,7 @@ export interface TalentOfferTemplate {
   jobPostingId?: string;
 
   /**
-   * 录用编号（租户+公司内业务编号）
+   * 录用编码（租户+公司内业务编码）
    */
   offerNo?: string;
 
@@ -416,7 +416,7 @@ export interface TalentOfferImport {
   jobPostingId?: string;
 
   /**
-   * 录用编号（租户+公司内业务编号）
+   * 录用编码（租户+公司内业务编码）
    */
   offerNo?: string;
 
@@ -480,7 +480,7 @@ export interface TalentOfferExport {
   jobPostingId: string;
 
   /**
-   * 录用编号（租户+公司内业务编号）
+   * 录用编码（租户+公司内业务编码）
    */
   offerNo: string;
 

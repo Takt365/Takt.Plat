@@ -109,24 +109,4 @@ public interface ITaktIqcOrderService
     /// <returns>Excel 文件</returns>
     Task<(string fileName, byte[] fileContent)> ExportIqcOrderAsync(TaktIqcOrderQueryDto? query = null, string? sheetName = null, string? fileName = null);
 
-    /// <summary>
-    /// IQC 进货检验月推移转置分析
-    /// </summary>
-    /// <param name="queryDto">查询 DTO</param>
-    /// <returns>分析结果</returns>
-    Task<TaktQualityInspectionMonthlyTrendResultDto<TaktIqcOrderMonthlyTrendDto>> GetIqcOrderMonthlyTrendAnalysisAsync(
-        TaktIqcOrderMonthlyTrendQueryDto queryDto);
-
-    /// <summary>
-    /// 导出 IQC 进货检验月推移
-    /// </summary>
-    /// <param name="query">查询条件</param>
-    /// <param name="sheetName">工作表名称</param>
-    /// <param name="fileName">文件名</param>
-    /// <returns>Excel 文件</returns>
-    Task<(string fileName, byte[] fileContent)> ExportIqcOrderMonthlyTrendAnalysisAsync(
-        TaktIqcOrderMonthlyTrendQueryDto query,
-        string? sheetName = null,
-        string? fileName = null);
-
 }

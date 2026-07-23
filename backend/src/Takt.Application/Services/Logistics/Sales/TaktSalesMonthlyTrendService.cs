@@ -300,7 +300,7 @@ public class TaktSalesMonthlyTrendService : TaktServiceBase, ITaktSalesMonthlyTr
             PlantCode = key.PlantCode,
             CustomerCode = key.CustomerCode,
             CustomerName = groupRows
-                .Select(r => r.CustomerName?.Trim())
+                .Select(r => r.CustomerName1?.Trim())
                 .FirstOrDefault(n => !string.IsNullOrWhiteSpace(n)) ?? string.Empty,
             Trend = "none",
         };

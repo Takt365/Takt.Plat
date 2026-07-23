@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：frontend/src/types/logistics/materials
 // 文件名称：manufacturer.d.ts
-// 创建时间：2026-07-05
+// 创建时间：2026-07-23
 // 创建人：Takt365(Auto Generated)
 // 功能描述：logistics/materials 模块类型定义（自动生成；类型名去 Takt 前缀与末尾 Dto，如 TaktCompanyDto → Company）
 // 
@@ -34,9 +34,14 @@ export interface Manufacturer extends CompanyDtoBase {
   manufacturerCode: string;
 
   /**
-   * 制造商名称
+   * 制造商名称1
    */
-  manufacturerName: string;
+  manufacturerName1: string;
+
+  /**
+   * 制造商名称2
+   */
+  manufacturerName2?: string;
 
   /**
    * 制造商简称
@@ -49,7 +54,7 @@ export interface Manufacturer extends CompanyDtoBase {
   manufacturerType: number;
 
   /**
-   * 行业领域（字典 logistics_industry_sector，DictValue=A/C/M/P）
+   * 行业领域（字典 logistics_industry_sector；DictValue=A/C/M/P）
    */
   industrySector?: string;
 
@@ -59,9 +64,19 @@ export interface Manufacturer extends CompanyDtoBase {
   manufacturerTaxNumber?: string;
 
   /**
-   * 注册国家（ISO 3166-1 alpha-2 两位代码，选项 TaktIsoCodes/options，DictValue=IsoCode）
+   * 注册国家（字典 sys_country_code；DictValue=ISO alpha-2）
    */
   registrationCountry?: string;
+
+  /**
+   * 注册省（选项 TaktAdminDivisions/options；DictValue=DivisionCode；建议 Level=2）
+   */
+  registrationProvince?: string;
+
+  /**
+   * 注册市（选项 TaktAdminDivisions/options；DictValue=DivisionCode；建议 Level=3）
+   */
+  registrationCity?: string;
 
   /**
    * 注册地址1
@@ -72,11 +87,6 @@ export interface Manufacturer extends CompanyDtoBase {
    * 注册地址2
    */
   registrationAddress2?: string;
-
-  /**
-   * 注册地址3
-   */
-  registrationAddress3?: string;
 
   /**
    * 制造商电话
@@ -169,9 +179,14 @@ export interface ManufacturerQuery extends TaktPagedQuery {
   manufacturerCode?: string;
 
   /**
-   * 制造商名称
+   * 制造商名称1
    */
-  manufacturerName?: string;
+  manufacturerName1?: string;
+
+  /**
+   * 制造商名称2
+   */
+  manufacturerName2?: string;
 
   /**
    * 制造商简称
@@ -184,7 +199,7 @@ export interface ManufacturerQuery extends TaktPagedQuery {
   manufacturerType?: number;
 
   /**
-   * 行业领域（字典 logistics_industry_sector，DictValue=A/C/M/P）
+   * 行业领域（字典 logistics_industry_sector；DictValue=A/C/M/P）
    */
   industrySector?: string;
 
@@ -194,9 +209,19 @@ export interface ManufacturerQuery extends TaktPagedQuery {
   manufacturerTaxNumber?: string;
 
   /**
-   * 注册国家（ISO 3166-1 alpha-2 两位代码，选项 TaktIsoCodes/options，DictValue=IsoCode）
+   * 注册国家（字典 sys_country_code；DictValue=ISO alpha-2）
    */
   registrationCountry?: string;
+
+  /**
+   * 注册省（选项 TaktAdminDivisions/options；DictValue=DivisionCode；建议 Level=2）
+   */
+  registrationProvince?: string;
+
+  /**
+   * 注册市（选项 TaktAdminDivisions/options；DictValue=DivisionCode；建议 Level=3）
+   */
+  registrationCity?: string;
 
   /**
    * 注册地址1
@@ -207,11 +232,6 @@ export interface ManufacturerQuery extends TaktPagedQuery {
    * 注册地址2
    */
   registrationAddress2?: string;
-
-  /**
-   * 注册地址3
-   */
-  registrationAddress3?: string;
 
   /**
    * 制造商电话
@@ -323,9 +343,14 @@ export interface ManufacturerCreate {
   manufacturerCode: string;
 
   /**
-   * 制造商名称
+   * 制造商名称1
    */
-  manufacturerName: string;
+  manufacturerName1: string;
+
+  /**
+   * 制造商名称2
+   */
+  manufacturerName2?: string;
 
   /**
    * 制造商简称
@@ -338,7 +363,7 @@ export interface ManufacturerCreate {
   manufacturerType: number;
 
   /**
-   * 行业领域（字典 logistics_industry_sector，DictValue=A/C/M/P）
+   * 行业领域（字典 logistics_industry_sector；DictValue=A/C/M/P）
    */
   industrySector?: string;
 
@@ -348,9 +373,19 @@ export interface ManufacturerCreate {
   manufacturerTaxNumber?: string;
 
   /**
-   * 注册国家（ISO 3166-1 alpha-2 两位代码，选项 TaktIsoCodes/options，DictValue=IsoCode）
+   * 注册国家（字典 sys_country_code；DictValue=ISO alpha-2）
    */
   registrationCountry?: string;
+
+  /**
+   * 注册省（选项 TaktAdminDivisions/options；DictValue=DivisionCode；建议 Level=2）
+   */
+  registrationProvince?: string;
+
+  /**
+   * 注册市（选项 TaktAdminDivisions/options；DictValue=DivisionCode；建议 Level=3）
+   */
+  registrationCity?: string;
 
   /**
    * 注册地址1
@@ -361,11 +396,6 @@ export interface ManufacturerCreate {
    * 注册地址2
    */
   registrationAddress2?: string;
-
-  /**
-   * 注册地址3
-   */
-  registrationAddress3?: string;
 
   /**
    * 制造商电话
@@ -452,6 +482,11 @@ export interface ManufacturerUpdate extends ManufacturerCreate {
    */
   manufacturerId: string;
 
+  /**
+   * 导航属性：制造商物料明细列表（子表，级联保存）
+   */
+  manufacturerMaterials?: any;
+
 }
 
 
@@ -515,9 +550,14 @@ export interface ManufacturerTemplate {
   manufacturerCode?: string;
 
   /**
-   * 制造商名称
+   * 制造商名称1
    */
-  manufacturerName?: string;
+  manufacturerName1?: string;
+
+  /**
+   * 制造商名称2
+   */
+  manufacturerName2?: string;
 
   /**
    * 制造商简称
@@ -530,7 +570,7 @@ export interface ManufacturerTemplate {
   manufacturerType?: number;
 
   /**
-   * 行业领域（字典 logistics_industry_sector，DictValue=A/C/M/P）
+   * 行业领域（字典 logistics_industry_sector；DictValue=A/C/M/P）
    */
   industrySector?: string;
 
@@ -540,9 +580,19 @@ export interface ManufacturerTemplate {
   manufacturerTaxNumber?: string;
 
   /**
-   * 注册国家（ISO 3166-1 alpha-2 两位代码，选项 TaktIsoCodes/options，DictValue=IsoCode）
+   * 注册国家（字典 sys_country_code；DictValue=ISO alpha-2）
    */
   registrationCountry?: string;
+
+  /**
+   * 注册省（选项 TaktAdminDivisions/options；DictValue=DivisionCode；建议 Level=2）
+   */
+  registrationProvince?: string;
+
+  /**
+   * 注册市（选项 TaktAdminDivisions/options；DictValue=DivisionCode；建议 Level=3）
+   */
+  registrationCity?: string;
 
   /**
    * 注册地址1
@@ -553,11 +603,6 @@ export interface ManufacturerTemplate {
    * 注册地址2
    */
   registrationAddress2?: string;
-
-  /**
-   * 注册地址3
-   */
-  registrationAddress3?: string;
 
   /**
    * 制造商电话
@@ -659,9 +704,14 @@ export interface ManufacturerImport {
   manufacturerCode?: string;
 
   /**
-   * 制造商名称
+   * 制造商名称1
    */
-  manufacturerName?: string;
+  manufacturerName1?: string;
+
+  /**
+   * 制造商名称2
+   */
+  manufacturerName2?: string;
 
   /**
    * 制造商简称
@@ -674,7 +724,7 @@ export interface ManufacturerImport {
   manufacturerType?: number;
 
   /**
-   * 行业领域（字典 logistics_industry_sector，DictValue=A/C/M/P）
+   * 行业领域（字典 logistics_industry_sector；DictValue=A/C/M/P）
    */
   industrySector?: string;
 
@@ -684,9 +734,19 @@ export interface ManufacturerImport {
   manufacturerTaxNumber?: string;
 
   /**
-   * 注册国家（ISO 3166-1 alpha-2 两位代码，选项 TaktIsoCodes/options，DictValue=IsoCode）
+   * 注册国家（字典 sys_country_code；DictValue=ISO alpha-2）
    */
   registrationCountry?: string;
+
+  /**
+   * 注册省（选项 TaktAdminDivisions/options；DictValue=DivisionCode；建议 Level=2）
+   */
+  registrationProvince?: string;
+
+  /**
+   * 注册市（选项 TaktAdminDivisions/options；DictValue=DivisionCode；建议 Level=3）
+   */
+  registrationCity?: string;
 
   /**
    * 注册地址1
@@ -697,11 +757,6 @@ export interface ManufacturerImport {
    * 注册地址2
    */
   registrationAddress2?: string;
-
-  /**
-   * 注册地址3
-   */
-  registrationAddress3?: string;
 
   /**
    * 制造商电话
@@ -798,9 +853,14 @@ export interface ManufacturerExport {
   manufacturerCode: string;
 
   /**
-   * 制造商名称
+   * 制造商名称1
    */
-  manufacturerName: string;
+  manufacturerName1: string;
+
+  /**
+   * 制造商名称2
+   */
+  manufacturerName2?: string;
 
   /**
    * 制造商简称
@@ -813,7 +873,7 @@ export interface ManufacturerExport {
   manufacturerType: number;
 
   /**
-   * 行业领域（字典 logistics_industry_sector，DictValue=A/C/M/P）
+   * 行业领域（字典 logistics_industry_sector；DictValue=A/C/M/P）
    */
   industrySector?: string;
 
@@ -823,9 +883,19 @@ export interface ManufacturerExport {
   manufacturerTaxNumber?: string;
 
   /**
-   * 注册国家（ISO 3166-1 alpha-2 两位代码，选项 TaktIsoCodes/options，DictValue=IsoCode）
+   * 注册国家（字典 sys_country_code；DictValue=ISO alpha-2）
    */
   registrationCountry?: string;
+
+  /**
+   * 注册省（选项 TaktAdminDivisions/options；DictValue=DivisionCode；建议 Level=2）
+   */
+  registrationProvince?: string;
+
+  /**
+   * 注册市（选项 TaktAdminDivisions/options；DictValue=DivisionCode；建议 Level=3）
+   */
+  registrationCity?: string;
 
   /**
    * 注册地址1
@@ -836,11 +906,6 @@ export interface ManufacturerExport {
    * 注册地址2
    */
   registrationAddress2?: string;
-
-  /**
-   * 注册地址3
-   */
-  registrationAddress3?: string;
 
   /**
    * 制造商电话

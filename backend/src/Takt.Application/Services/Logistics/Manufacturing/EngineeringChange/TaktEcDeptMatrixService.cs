@@ -438,11 +438,11 @@ public class TaktEcDeptMatrixService : TaktServiceBase, ITaktEcDeptMatrixService
     }
 
     /// <summary>
-    /// 按附件类别取文件编号
+    /// 按附件类别取文件编码
     /// </summary>
     /// <param name="attachments">附件列表</param>
     /// <param name="attachmentType">文件类别</param>
-    /// <returns>文件编号</returns>
+    /// <returns>文件编码</returns>
     private static string? FindAttachmentDocNo(IReadOnlyList<TaktEcAttachment> attachments, string attachmentType)
     {
         return attachments

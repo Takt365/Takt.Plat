@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：frontend/src/types/logistics/procurement
 // 文件名称：purchase-inquiry-item.d.ts
-// 创建时间：2026-07-09
+// 创建时间：2026-07-23
 // 创建人：Takt365(Auto Generated)
 // 功能描述：logistics/procurement 模块类型定义（自动生成；类型名去 Takt 前缀与末尾 Dto，如 TaktCompanyDto → Company）
 // 
@@ -29,7 +29,7 @@ export interface PurchaseInquiryItem extends CompanyDtoBase {
   purchaseInquiryItemId: string;
 
   /**
-   * 采购询价 ID（关联 TaktPurchaseInquiry.Id，选项 TaktPurchaseInquirys/options）
+   * 采购询价 ID（选项 TaktPurchaseInquirys/options；DictValue=Id）
    */
   purchaseInquiryId: string;
 
@@ -54,22 +54,22 @@ export interface PurchaseInquiryItem extends CompanyDtoBase {
   allocationCategory: string;
 
   /**
-   * 物料编码（选项 TaktMaterials/options，DictValue=MaterialCode）
+   * 物料编码（选项 TaktMaterialPlants/options；DictValue=MaterialCode，ExtValue=PlantCode）
    */
   materialCode?: string;
 
   /**
-   * 物料名称
+   * 物料名称（回填：随物料）
    */
   materialName: string;
 
   /**
-   * 物料规格
+   * 物料规格（回填：随物料）
    */
   materialSpecification?: string;
 
   /**
-   * 询价单位
+   * 询价单位（字典 logistics_unit_of_measure_code；DictValue=PC/EA 等；默认 PC）
    */
   inquiryUnit: string;
 
@@ -89,22 +89,22 @@ export interface PurchaseInquiryItem extends CompanyDtoBase {
   quotedUnitPrice: number;
 
   /**
-   * 报价金额
+   * 含税金额
    */
-  quotedAmount: number;
+  taxIncludedAmount: number;
 
   /**
-   * 目标供应商编码（选项 TaktSuppliers/options，DictValue=SupplierCode）
+   * 未税金额
    */
-  targetSupplierCode?: string;
+  untaxedAmount: number;
 
   /**
-   * 目标供应商名称
+   * 税费
    */
-  targetSupplierName?: string;
+  taxAmount: number;
 
   /**
-   * 是否作废（字典 sys_yes_no_type，0=否 1=是；编辑移除子行时标记作废）
+   * 是否作废（字典 sys_yes_no_type；0=否 1=是；编辑移除子行时标记作废）
    */
   isObsolete: number;
 
@@ -129,7 +129,7 @@ export interface PurchaseInquiryItemQuery extends TaktPagedQuery {
   companyCode?: string;
 
   /**
-   * 采购询价 ID（关联 TaktPurchaseInquiry.Id，选项 TaktPurchaseInquirys/options）
+   * 采购询价 ID（选项 TaktPurchaseInquirys/options；DictValue=Id）
    */
   purchaseInquiryId?: string;
 
@@ -149,22 +149,22 @@ export interface PurchaseInquiryItemQuery extends TaktPagedQuery {
   allocationCategory?: string;
 
   /**
-   * 物料编码（选项 TaktMaterials/options，DictValue=MaterialCode）
+   * 物料编码（选项 TaktMaterialPlants/options；DictValue=MaterialCode，ExtValue=PlantCode）
    */
   materialCode?: string;
 
   /**
-   * 物料名称
+   * 物料名称（回填：随物料）
    */
   materialName?: string;
 
   /**
-   * 物料规格
+   * 物料规格（回填：随物料）
    */
   materialSpecification?: string;
 
   /**
-   * 询价单位
+   * 询价单位（字典 logistics_unit_of_measure_code；DictValue=PC/EA 等；默认 PC）
    */
   inquiryUnit?: string;
 
@@ -184,22 +184,22 @@ export interface PurchaseInquiryItemQuery extends TaktPagedQuery {
   quotedUnitPrice?: number;
 
   /**
-   * 报价金额
+   * 含税金额
    */
-  quotedAmount?: number;
+  taxIncludedAmount?: number;
 
   /**
-   * 目标供应商编码（选项 TaktSuppliers/options，DictValue=SupplierCode）
+   * 未税金额
    */
-  targetSupplierCode?: string;
+  untaxedAmount?: number;
 
   /**
-   * 目标供应商名称
+   * 税费
    */
-  targetSupplierName?: string;
+  taxAmount?: number;
 
   /**
-   * 是否作废（字典 sys_yes_no_type，0=否 1=是；编辑移除子行时标记作废）
+   * 是否作废（字典 sys_yes_no_type；0=否 1=是；编辑移除子行时标记作废）
    */
   isObsolete?: number;
 
@@ -248,7 +248,7 @@ export interface PurchaseInquiryItemCreate {
   companyDefaultCulture: string;
 
   /**
-   * 采购询价 ID（关联 TaktPurchaseInquiry.Id，选项 TaktPurchaseInquirys/options）
+   * 采购询价 ID（选项 TaktPurchaseInquirys/options；DictValue=Id）
    */
   purchaseInquiryId: string;
 
@@ -268,22 +268,22 @@ export interface PurchaseInquiryItemCreate {
   allocationCategory: string;
 
   /**
-   * 物料编码（选项 TaktMaterials/options，DictValue=MaterialCode）
+   * 物料编码（选项 TaktMaterialPlants/options；DictValue=MaterialCode，ExtValue=PlantCode）
    */
   materialCode?: string;
 
   /**
-   * 物料名称
+   * 物料名称（回填：随物料）
    */
   materialName: string;
 
   /**
-   * 物料规格
+   * 物料规格（回填：随物料）
    */
   materialSpecification?: string;
 
   /**
-   * 询价单位
+   * 询价单位（字典 logistics_unit_of_measure_code；DictValue=PC/EA 等；默认 PC）
    */
   inquiryUnit: string;
 
@@ -303,22 +303,22 @@ export interface PurchaseInquiryItemCreate {
   quotedUnitPrice: number;
 
   /**
-   * 报价金额
+   * 含税金额
    */
-  quotedAmount: number;
+  taxIncludedAmount: number;
 
   /**
-   * 目标供应商编码（选项 TaktSuppliers/options，DictValue=SupplierCode）
+   * 未税金额
    */
-  targetSupplierCode?: string;
+  untaxedAmount: number;
 
   /**
-   * 目标供应商名称
+   * 税费
    */
-  targetSupplierName?: string;
+  taxAmount: number;
 
   /**
-   * 是否作废（字典 sys_yes_no_type，0=否 1=是；编辑移除子行时标记作废）
+   * 是否作废（字典 sys_yes_no_type；0=否 1=是；编辑移除子行时标记作废）
    */
   isObsolete: number;
 
@@ -386,7 +386,7 @@ export interface PurchaseInquiryItemTemplate {
   companyCode?: string;
 
   /**
-   * 采购询价 ID（关联 TaktPurchaseInquiry.Id，选项 TaktPurchaseInquirys/options）
+   * 采购询价 ID（选项 TaktPurchaseInquirys/options；DictValue=Id）
    */
   purchaseInquiryId?: string;
 
@@ -406,22 +406,22 @@ export interface PurchaseInquiryItemTemplate {
   allocationCategory?: string;
 
   /**
-   * 物料编码（选项 TaktMaterials/options，DictValue=MaterialCode）
+   * 物料编码（选项 TaktMaterialPlants/options；DictValue=MaterialCode，ExtValue=PlantCode）
    */
   materialCode?: string;
 
   /**
-   * 物料名称
+   * 物料名称（回填：随物料）
    */
   materialName?: string;
 
   /**
-   * 物料规格
+   * 物料规格（回填：随物料）
    */
   materialSpecification?: string;
 
   /**
-   * 询价单位
+   * 询价单位（字典 logistics_unit_of_measure_code；DictValue=PC/EA 等；默认 PC）
    */
   inquiryUnit?: string;
 
@@ -441,22 +441,22 @@ export interface PurchaseInquiryItemTemplate {
   quotedUnitPrice?: number;
 
   /**
-   * 报价金额
+   * 含税金额
    */
-  quotedAmount?: number;
+  taxIncludedAmount?: number;
 
   /**
-   * 目标供应商编码（选项 TaktSuppliers/options，DictValue=SupplierCode）
+   * 未税金额
    */
-  targetSupplierCode?: string;
+  untaxedAmount?: number;
 
   /**
-   * 目标供应商名称
+   * 税费
    */
-  targetSupplierName?: string;
+  taxAmount?: number;
 
   /**
-   * 是否作废（字典 sys_yes_no_type，0=否 1=是；编辑移除子行时标记作废）
+   * 是否作废（字典 sys_yes_no_type；0=否 1=是；编辑移除子行时标记作废）
    */
   isObsolete?: number;
 
@@ -495,7 +495,7 @@ export interface PurchaseInquiryItemImport {
   companyDefaultCulture?: string;
 
   /**
-   * 采购询价 ID（关联 TaktPurchaseInquiry.Id，选项 TaktPurchaseInquirys/options）
+   * 采购询价 ID（选项 TaktPurchaseInquirys/options；DictValue=Id）
    */
   purchaseInquiryId?: string;
 
@@ -515,22 +515,22 @@ export interface PurchaseInquiryItemImport {
   allocationCategory?: string;
 
   /**
-   * 物料编码（选项 TaktMaterials/options，DictValue=MaterialCode）
+   * 物料编码（选项 TaktMaterialPlants/options；DictValue=MaterialCode，ExtValue=PlantCode）
    */
   materialCode?: string;
 
   /**
-   * 物料名称
+   * 物料名称（回填：随物料）
    */
   materialName?: string;
 
   /**
-   * 物料规格
+   * 物料规格（回填：随物料）
    */
   materialSpecification?: string;
 
   /**
-   * 询价单位
+   * 询价单位（字典 logistics_unit_of_measure_code；DictValue=PC/EA 等；默认 PC）
    */
   inquiryUnit?: string;
 
@@ -550,22 +550,22 @@ export interface PurchaseInquiryItemImport {
   quotedUnitPrice?: number;
 
   /**
-   * 报价金额
+   * 含税金额
    */
-  quotedAmount?: number;
+  taxIncludedAmount?: number;
 
   /**
-   * 目标供应商编码（选项 TaktSuppliers/options，DictValue=SupplierCode）
+   * 未税金额
    */
-  targetSupplierCode?: string;
+  untaxedAmount?: number;
 
   /**
-   * 目标供应商名称
+   * 税费
    */
-  targetSupplierName?: string;
+  taxAmount?: number;
 
   /**
-   * 是否作废（字典 sys_yes_no_type，0=否 1=是；编辑移除子行时标记作废）
+   * 是否作废（字典 sys_yes_no_type；0=否 1=是；编辑移除子行时标记作废）
    */
   isObsolete?: number;
 
@@ -599,7 +599,7 @@ export interface PurchaseInquiryItemExport {
   companyCode: string;
 
   /**
-   * 采购询价 ID（关联 TaktPurchaseInquiry.Id，选项 TaktPurchaseInquirys/options）
+   * 采购询价 ID（选项 TaktPurchaseInquirys/options；DictValue=Id）
    */
   purchaseInquiryId: string;
 
@@ -619,22 +619,22 @@ export interface PurchaseInquiryItemExport {
   allocationCategory: string;
 
   /**
-   * 物料编码（选项 TaktMaterials/options，DictValue=MaterialCode）
+   * 物料编码（选项 TaktMaterialPlants/options；DictValue=MaterialCode，ExtValue=PlantCode）
    */
   materialCode?: string;
 
   /**
-   * 物料名称
+   * 物料名称（回填：随物料）
    */
   materialName: string;
 
   /**
-   * 物料规格
+   * 物料规格（回填：随物料）
    */
   materialSpecification?: string;
 
   /**
-   * 询价单位
+   * 询价单位（字典 logistics_unit_of_measure_code；DictValue=PC/EA 等；默认 PC）
    */
   inquiryUnit: string;
 
@@ -654,22 +654,22 @@ export interface PurchaseInquiryItemExport {
   quotedUnitPrice: number;
 
   /**
-   * 报价金额
+   * 含税金额
    */
-  quotedAmount: number;
+  taxIncludedAmount: number;
 
   /**
-   * 目标供应商编码（选项 TaktSuppliers/options，DictValue=SupplierCode）
+   * 未税金额
    */
-  targetSupplierCode?: string;
+  untaxedAmount: number;
 
   /**
-   * 目标供应商名称
+   * 税费
    */
-  targetSupplierName?: string;
+  taxAmount: number;
 
   /**
-   * 是否作废（字典 sys_yes_no_type，0=否 1=是；编辑移除子行时标记作废）
+   * 是否作废（字典 sys_yes_no_type；0=否 1=是；编辑移除子行时标记作废）
    */
   isObsolete: number;
 

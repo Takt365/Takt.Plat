@@ -1633,16 +1633,13 @@ public class TaktBomMaterialCostItemComponentMovingPriceDto
     public Dictionary<string, decimal> PeriodMaterialCosts { get; set; } = new(StringComparer.Ordinal);
 
     /// <summary>
-    /// 兼容旧字段：同 PeriodMaterialCosts
+    /// 各核算月相对上一展示月的存在/价格变动（键 yyyy-MM，与 PeriodOrder 对齐）。
+    /// present=首月有；absent=本月无且上月无；new=本月有上月无；removed=本月无上月有；up/down/flat=两月都有且价格对比。
     /// </summary>
-    public Dictionary<string, decimal> PeriodUnitPrices
-    {
-        get => PeriodMaterialCosts;
-        set => PeriodMaterialCosts = value ?? new Dictionary<string, decimal>(StringComparer.Ordinal);
-    }
+    public Dictionary<string, string> PeriodChangeTypes { get; set; } = new(StringComparer.Ordinal);
 
     /// <summary>
-    /// 环比涨跌：none / up / down / flat
+    /// 环比涨跌：none / up / down / flat / new / removed
     /// </summary>
     public string Trend { get; set; } = "none";
 
@@ -1718,6 +1715,16 @@ public class TaktBomMaterialCostItemComponentMovingPriceResultDto
     public int FlatCount { get; set; }
 
     /// <summary>
+    /// 关注月新增组件数（筛选前全量统计）
+    /// </summary>
+    public int NewCount { get; set; }
+
+    /// <summary>
+    /// 关注月剔除组件数（筛选前全量统计）
+    /// </summary>
+    public int RemovedCount { get; set; }
+
+    /// <summary>
     /// 无法比较产品数（筛选前全量统计）
     /// </summary>
     public int NoneCount { get; set; }
@@ -1736,7 +1743,7 @@ public class TaktBomMaterialCostItemComponentMovingPriceResultDto
 /// <summary>
 /// 机种成本推移查询
 /// </summary>
-public class TaktBomMaterialCostItemModelMovingPriceQueryDto : TaktPagedQuery
+public class TaktBomMaterialCostItemModelCostTrendQueryDto : TaktPagedQuery
 {
     /// <summary>
     /// 工厂代码（必填）
@@ -1772,12 +1779,17 @@ public class TaktBomMaterialCostItemModelMovingPriceQueryDto : TaktPagedQuery
     /// 涨跌筛选：空=全部；up/down/flat/none；changed=仅涨或跌
     /// </summary>
     public string? TrendFilter { get; set; }
+
+    /// <summary>
+    /// 合并模式：summary=工厂+组件+生产相关+采购类型（默认）；detail=差异组件键（组件编码+描述+数量+批量标识+生产相关+采购类型+特殊采购类+利润中心；期间由核算日期 yyyy-MM）
+    /// </summary>
+    public string? MergeMode { get; set; }
 }
 
 /// <summary>
-/// 机种成本推移分析行（键=Plant+ComponentCode+ProductionRelated+PurchaseType，跨产品组合并；列为月材料成本）
+/// 机种成本推移分析行（summary/detail 合并键跨产品组合并；列为核算月材料成本）
 /// </summary>
-public class TaktBomMaterialCostItemModelMovingPriceDto
+public class TaktBomMaterialCostItemModelCostTrendDto
 {
     /// <summary>
     /// 工厂代码
@@ -1805,6 +1817,16 @@ public class TaktBomMaterialCostItemModelMovingPriceDto
     public string ComponentDescription { get; set; } = string.Empty;
 
     /// <summary>
+    /// 组件数量（detail 模式展示；summary 可为空）
+    /// </summary>
+    public decimal? ComponentQuantity { get; set; }
+
+    /// <summary>
+    /// 批量标识（detail 模式）
+    /// </summary>
+    public string? BatchIndicator { get; set; }
+
+    /// <summary>
     /// 生产相关
     /// </summary>
     public string? ProductionRelated { get; set; }
@@ -1813,6 +1835,16 @@ public class TaktBomMaterialCostItemModelMovingPriceDto
     /// 采购类型
     /// </summary>
     public string PurchaseType { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 特殊采购类（detail 模式）
+    /// </summary>
+    public string? SpecialProcurementType { get; set; }
+
+    /// <summary>
+    /// 利润中心（detail 模式）
+    /// </summary>
+    public string? ProfitCenterCode { get; set; }
 
     /// <summary>
     /// 产品组（机种下共用该键的产品编码，逗号分隔）
@@ -1872,12 +1904,12 @@ public class TaktBomMaterialCostItemModelMovingPriceDto
 /// <summary>
 /// 机种成本推移分析结果
 /// </summary>
-public class TaktBomMaterialCostItemModelMovingPriceResultDto
+public class TaktBomMaterialCostItemModelCostTrendResultDto
 {
     /// <summary>
     /// 分页分析行（组件合并键）
     /// </summary>
-    public TaktPagedResult<TaktBomMaterialCostItemModelMovingPriceDto> Paged { get; set; } = null!;
+    public TaktPagedResult<TaktBomMaterialCostItemModelCostTrendDto> Paged { get; set; } = null!;
 
     /// <summary>
     /// 期间列顺序 yyyy-MM

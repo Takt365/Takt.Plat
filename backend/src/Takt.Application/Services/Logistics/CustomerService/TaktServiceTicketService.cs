@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Application.Services.Logistics.CustomerService
 // 文件名称：TaktServiceTicketService.cs
-// 创建时间：2026-06-23
+// 创建时间：2026-07-23
 // 创建人：Takt365(Cursor AI)
 // 功能描述：服务工单应用服务实现
 // 
@@ -109,12 +109,12 @@ public class TaktServiceTicketService : TaktServiceBase, ITaktServiceTicketServi
         EnsureThreeLayerContext();
         var list = await _serviceTicketRepository.GetListAsync(
             x => x.TenantCode == CurrentTenantCode && x.CompanyCode == CurrentCompanyCode && x.TicketStatus == 1,
-            x => x.ClientName ?? string.Empty,
+            x => x.AssignedEmployeeName ?? string.Empty,
             false);
         return list.Select(e => new TaktSelectOption
         {
-            DictValue = e.Id,
-            DictLabel = e.ClientName ?? e.Id.ToString(),
+            DictValue = e.ServiceTicketCode,
+            DictLabel = e.AssignedEmployeeName ?? e.ServiceTicketCode,
         }).ToList();
     }
 
@@ -404,51 +404,6 @@ public class TaktServiceTicketService : TaktServiceBase, ITaktServiceTicketServi
         }
         entity.ServiceContractId = master.Id;
     }
-
-    /// <summary>
-    /// 获取服务工单统计（数据看板）
-    /// </summary>
-    /// <param name="queryDto">查询 DTO</param>
-    /// <returns>服务工单统计</returns>
-    public async Task<TaktServiceTicketStatDto> GetServiceTicketStatAsync(TaktServiceTicketStatQueryDto queryDto)
-    {
-        EnsureThreeLayerContext();
-        var (start, end, statMonth) = TaktStatMonthRangeHelper.ResolveMonthRange(
-            queryDto.CreatedAtStart,
-            queryDto.CreatedAtEnd);
-        var tenantCode = CurrentTenantCode;
-        var companyCode = CurrentCompanyCode;
-        Expression<Func<TaktServiceTicket, bool>> predicate = x =>
-            x.TenantCode == tenantCode
-            && x.CompanyCode == companyCode
-            && x.CreatedAt >= start
-            && x.CreatedAt <= end;
-        var monthTicketCount = await _serviceTicketRepository.CountAsync(predicate);
-        Expression<Func<TaktServiceTicket, bool>> openPredicate = x =>
-            x.TenantCode == tenantCode
-            && x.CompanyCode == companyCode
-            && x.CreatedAt >= start
-            && x.CreatedAt <= end
-            && x.TicketStatus >= 0
-            && x.TicketStatus <= 3;
-        var monthOpenTicketCount = await _serviceTicketRepository.CountAsync(openPredicate);
-        Expression<Func<TaktServiceTicket, bool>> closedPredicate = x =>
-            x.TenantCode == tenantCode
-            && x.CompanyCode == companyCode
-            && x.CreatedAt >= start
-            && x.CreatedAt <= end
-            && x.TicketStatus >= 4
-            && x.TicketStatus <= 5;
-        var monthClosedTicketCount = await _serviceTicketRepository.CountAsync(closedPredicate);
-        return new TaktServiceTicketStatDto
-        {
-            StatMonth = statMonth,
-            MonthTicketCount = monthTicketCount,
-            MonthOpenTicketCount = monthOpenTicketCount,
-            MonthClosedTicketCount = monthClosedTicketCount,
-        };
-    }
-
     // ========================================
     // 查询表达式
     // ========================================
@@ -470,7 +425,7 @@ public class TaktServiceTicketService : TaktServiceBase, ITaktServiceTicketServi
                 || (x.ServiceTicketCode != null && x.ServiceTicketCode.Contains(keywords))
                 || SqlFunc.ToString(x.ClientId).Contains(keywords)
                 || (x.ClientCode != null && x.ClientCode.Contains(keywords))
-                || (x.ClientName != null && x.ClientName.Contains(keywords))
+                || (x.ClientName1 != null && x.ClientName1.Contains(keywords))
                 || SqlFunc.ToString(x.ServiceRequestId).Contains(keywords)
                 || (x.ServiceRequestCode != null && x.ServiceRequestCode.Contains(keywords))
                 || SqlFunc.ToString(x.ServiceOrderId).Contains(keywords)
@@ -520,9 +475,9 @@ public class TaktServiceTicketService : TaktServiceBase, ITaktServiceTicketServi
             exp = exp.And(x => x.ClientCode != null && x.ClientCode.Contains(queryDto.ClientCode));
         }
 
-        if (!string.IsNullOrEmpty(queryDto?.ClientName))
+        if (!string.IsNullOrEmpty(queryDto?.ClientName1))
         {
-            exp = exp.And(x => x.ClientName != null && x.ClientName.Contains(queryDto.ClientName));
+            exp = exp.And(x => x.ClientName1 != null && x.ClientName1.Contains(queryDto.ClientName1));
         }
 
         if (queryDto?.ServiceRequestId.HasValue == true)

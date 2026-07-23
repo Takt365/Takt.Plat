@@ -9,17 +9,37 @@
 
 <template>
   <div class="p-4 flex flex-col min-h-0 h-full">
-    <!-- 查询栏 -->
-    <TaktQueryBar
-      v-model="queryKeyword"
-      :placeholder="searchPlaceholder"
-      :loading="loading"
-      @search="handleSearch"
-      @reset="handleReset"
-    />
-
-    <!-- 工具栏 -->
-    <TaktToolsBar
+    <!-- 左主右从 -->
+    <TaktMasterDetailTableLr
+      v-model:master-current="currentPage"
+      v-model:master-page-size="pageSize"
+      v-model:selected-master-key="selectedMasterKey"
+      class="min-h-0 flex-1"
+      :master-columns="columns"
+      :master-data-source="dataSource"
+      :master-loading="loading"
+      :master-row-key="getSupplierEvaluationId"
+      :master-row-selection="rowSelection"
+      master-id-column-key="supplierEvaluationId"
+      :master-visible-column-keys="visibleColumnKeys"
+      master-table-mode="masterDetailMaster"
+      master-scroll-layout="masterDetailLr"
+      :master-total="total"
+      master-entity-scope="company"
+      @master-change="handleTableChange"
+      @master-resize-column="handleResizeColumn"
+      @master-pagination-change="handleMasterPaginationChange"
+      @master-select="handleMasterSelect"
+    >
+      <template #master-toolbar>
+        <TaktQueryBar
+          v-model="queryKeyword"
+          :placeholder="searchPlaceholder"
+          :loading="loading"
+          @search="handleSearch"
+          @reset="handleReset"
+        />
+        <TaktToolsBar
       create-permission="logistics:quality:complaint:supplier:evaluation:create"
       update-permission="logistics:quality:complaint:supplier:evaluation:update"
       delete-permission="logistics:quality:complaint:supplier:evaluation:delete"
@@ -50,28 +70,41 @@
       @advanced-query="handleAdvancedQuery"
       @column-setting="handleColumnSetting"
       @refresh="handleRefresh"
-    />
-
-    <!-- 左主右从 -->
-    <TaktMasterDetailTableLr
-      v-model:master-current="currentPage"
-      v-model:master-page-size="pageSize"
-      v-model:selected-master-key="selectedMasterKey"
-      class="min-h-0 flex-1"
-      :master-columns="columns"
-      :master-data-source="dataSource"
-      :master-loading="loading"
-      :master-row-key="getSupplierEvaluationId"
-      :master-row-selection="rowSelection"
-      master-id-column-key="supplierEvaluationId"
-      :master-visible-column-keys="visibleColumnKeys"
-      :master-total="total"
-      master-entity-scope="company"
-      @master-change="handleTableChange"
-      @master-resize-column="handleResizeColumn"
-      @master-pagination-change="handleMasterPaginationChange"
-      @master-select="handleMasterSelect"
-    >
+        />
+      </template>
+      <!-- 字典/开关列渲染 -->
+      <template #bodyCell="{ column, record }">
+        <template v-if="column.key === 'evaluationPeriod'">
+          <TaktDictTag
+            :value="getSupplierEvaluationDictValue(record, 'evaluationPeriod')"
+            dict-type="logistics_quality_period"
+          />
+        </template>
+        <template v-else-if="column.key === 'overallRating'">
+          <TaktDictTag
+            :value="getSupplierEvaluationDictValue(record, 'overallRating')"
+            dict-type="logistics_quality_supplier_rating"
+          />
+        </template>
+        <template v-else-if="column.key === 'evaluationConclusion'">
+          <TaktDictTag
+            :value="getSupplierEvaluationDictValue(record, 'evaluationConclusion')"
+            dict-type="logistics_quality_evaluation_conclusion"
+          />
+        </template>
+        <template v-else-if="column.key === 'evaluationStatus'">
+          <TaktDictTag
+            :value="getSupplierEvaluationDictValue(record, 'evaluationStatus')"
+            dict-type="logistics_quality_evaluation_status"
+          />
+        </template>
+        <template v-else-if="column.key === 'rectificationStatus'">
+          <TaktDictTag
+            :value="getSupplierEvaluationDictValue(record, 'rectificationStatus')"
+            dict-type="logistics_quality_rectification_status"
+          />
+        </template>
+      </template>
       <template #detail>
         <SupplierEvaluationItemPanel
           ref="supplierEvaluationItemPanelRef"
@@ -109,10 +142,10 @@
     >
       <template #default="{ isFieldVisible }">
       <div v-show="isFieldVisible('supplierEvaluationCode')">
-      <a-form-item :label="t('entity.supplierevaluation.code')">
+      <a-form-item :label="pi.queryLabel('supplierEvaluationCode')">
         <a-input
           v-model:value="advancedQueryForm.supplierEvaluationCode"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.supplierevaluation.code') })"
+          :placeholder="pi.queryPh('supplierEvaluationCode', 'required')"
           show-count
           :maxlength="50"
           allow-clear
@@ -120,166 +153,164 @@
       </a-form-item>
       </div>
       <div v-show="isFieldVisible('supplierId')">
-      <a-form-item :label="t('entity.supplierevaluation.supplierid')">
-        <a-input
+      <a-form-item :label="pi.queryLabel('supplierId')">
+        <TaktSelect
           v-model:value="advancedQueryForm.supplierId"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.supplierevaluation.supplierid') })"
-          show-count
-          :maxlength="20"
+          api-url="TaktSuppliers/options"
+          :placeholder="pi.queryPh('supplierId', 'select')"
           allow-clear
         />
       </a-form-item>
       </div>
-      <div v-show="isFieldVisible('supplierName')">
-      <a-form-item :label="t('entity.supplierevaluation.suppliername')">
+      <div v-show="isFieldVisible('supplierName1')">
+      <a-form-item :label="pi.queryLabel('supplierName1')">
         <a-input
-          v-model:value="advancedQueryForm.supplierName"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.supplierevaluation.suppliername') })"
+          v-model:value="advancedQueryForm.supplierName1"
+          :placeholder="pi.queryPh('supplierName1', 'required')"
           show-count
-          :maxlength="200"
+          :maxlength="140"
           allow-clear
         />
       </a-form-item>
       </div>
       <div v-show="isFieldVisible('supplierCode')">
-      <a-form-item :label="t('entity.supplierevaluation.suppliercode')">
-        <a-input
+      <a-form-item :label="pi.queryLabel('supplierCode')">
+        <TaktSelect
           v-model:value="advancedQueryForm.supplierCode"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.supplierevaluation.suppliercode') })"
-          show-count
-          :maxlength="50"
+          api-url="TaktSuppliers/options"
+          :placeholder="pi.queryPh('supplierCode', 'select')"
           allow-clear
         />
       </a-form-item>
       </div>
       <div v-show="isFieldVisible('evaluationDateStart')">
-      <a-form-item :label="t('entity.supplierevaluation.evaluationdatestart')">
+      <a-form-item :label="pi.queryLabel('evaluationDateStart')">
         <a-date-picker
           v-model:value="advancedQueryForm.evaluationDateStart"
-          :placeholder="t('common.page.form.placeholder.select', { field: t('entity.supplierevaluation.evaluationdatestart') })"
+          :placeholder="pi.queryPh('evaluationDateStart', 'select')"
           value-format="YYYY-MM-DD"
           style="width: 100%"
         />
       </a-form-item>
       </div>
       <div v-show="isFieldVisible('evaluationDateEnd')">
-      <a-form-item :label="t('entity.supplierevaluation.evaluationdateend')">
+      <a-form-item :label="pi.queryLabel('evaluationDateEnd')">
         <a-date-picker
           v-model:value="advancedQueryForm.evaluationDateEnd"
-          :placeholder="t('common.page.form.placeholder.select', { field: t('entity.supplierevaluation.evaluationdateend') })"
+          :placeholder="pi.queryPh('evaluationDateEnd', 'select')"
           value-format="YYYY-MM-DD"
           style="width: 100%"
         />
       </a-form-item>
       </div>
       <div v-show="isFieldVisible('evaluationPeriod')">
-      <a-form-item :label="t('entity.supplierevaluation.evaluationperiod')">
-        <a-input-number
+      <a-form-item :label="pi.queryLabel('evaluationPeriod')">
+        <TaktSelect
           v-model:value="advancedQueryForm.evaluationPeriod"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.supplierevaluation.evaluationperiod') })"
-          style="width: 100%"
+          dict-type="logistics_quality_period"
+          :placeholder="pi.queryPh('evaluationPeriod', 'select')"
+          allow-clear
         />
       </a-form-item>
       </div>
       <div v-show="isFieldVisible('evaluationType')">
-      <a-form-item :label="t('entity.supplierevaluation.evaluationtype')">
+      <a-form-item :label="pi.queryLabel('evaluationType')">
         <a-input-number
           v-model:value="advancedQueryForm.evaluationType"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.supplierevaluation.evaluationtype') })"
+          :placeholder="pi.queryPh('evaluationType', 'required')"
           style="width: 100%"
         />
       </a-form-item>
       </div>
       <div v-show="isFieldVisible('evaluatorBy')">
-      <a-form-item :label="t('entity.supplierevaluation.evaluatorby')">
-        <a-input
+      <a-form-item :label="pi.queryLabel('evaluatorBy')">
+        <TaktSelect
           v-model:value="advancedQueryForm.evaluatorBy"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.supplierevaluation.evaluatorby') })"
-          show-count
-          :maxlength="50"
+          api-url="TaktEmployees/options"
+          :placeholder="pi.queryPh('evaluatorBy', 'select')"
           allow-clear
         />
       </a-form-item>
       </div>
       <div v-show="isFieldVisible('evaluationDept')">
-      <a-form-item :label="t('entity.supplierevaluation.evaluationdept')">
-        <a-input
+      <a-form-item :label="pi.queryLabel('evaluationDept')">
+        <TaktSelect
           v-model:value="advancedQueryForm.evaluationDept"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.supplierevaluation.evaluationdept') })"
-          show-count
-          :maxlength="100"
+          api-url="TaktDepts/tree-options"
+          :placeholder="pi.queryPh('evaluationDept', 'select')"
           allow-clear
         />
       </a-form-item>
       </div>
       <div v-show="isFieldVisible('overallRating')">
-      <a-form-item :label="t('entity.supplierevaluation.overallrating')">
-        <a-input-number
+      <a-form-item :label="pi.queryLabel('overallRating')">
+        <TaktSelect
           v-model:value="advancedQueryForm.overallRating"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.supplierevaluation.overallrating') })"
-          style="width: 100%"
+          dict-type="logistics_quality_supplier_rating"
+          :placeholder="pi.queryPh('overallRating', 'select')"
+          allow-clear
         />
       </a-form-item>
       </div>
       <div v-show="isFieldVisible('totalScore')">
-      <a-form-item :label="t('entity.supplierevaluation.totalscore')">
+      <a-form-item :label="pi.queryLabel('totalScore')">
         <a-input-number
           v-model:value="advancedQueryForm.totalScore"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.supplierevaluation.totalscore') })"
+          :placeholder="pi.queryPh('totalScore', 'required')"
           style="width: 100%"
         />
       </a-form-item>
       </div>
       <div v-show="isFieldVisible('qualityScore')">
-      <a-form-item :label="t('entity.supplierevaluation.qualityscore')">
+      <a-form-item :label="pi.queryLabel('qualityScore')">
         <a-input-number
           v-model:value="advancedQueryForm.qualityScore"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.supplierevaluation.qualityscore') })"
+          :placeholder="pi.queryPh('qualityScore', 'required')"
           style="width: 100%"
         />
       </a-form-item>
       </div>
       <div v-show="isFieldVisible('deliveryScore')">
-      <a-form-item :label="t('entity.supplierevaluation.deliveryscore')">
+      <a-form-item :label="pi.queryLabel('deliveryScore')">
         <a-input-number
           v-model:value="advancedQueryForm.deliveryScore"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.supplierevaluation.deliveryscore') })"
+          :placeholder="pi.queryPh('deliveryScore', 'required')"
           style="width: 100%"
         />
       </a-form-item>
       </div>
       <div v-show="isFieldVisible('priceScore')">
-      <a-form-item :label="t('entity.supplierevaluation.pricescore')">
+      <a-form-item :label="pi.queryLabel('priceScore')">
         <a-input-number
           v-model:value="advancedQueryForm.priceScore"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.supplierevaluation.pricescore') })"
+          :placeholder="pi.queryPh('priceScore', 'required')"
           style="width: 100%"
         />
       </a-form-item>
       </div>
       <div v-show="isFieldVisible('serviceScore')">
-      <a-form-item :label="t('entity.supplierevaluation.servicescore')">
+      <a-form-item :label="pi.queryLabel('serviceScore')">
         <a-input-number
           v-model:value="advancedQueryForm.serviceScore"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.supplierevaluation.servicescore') })"
+          :placeholder="pi.queryPh('serviceScore', 'required')"
           style="width: 100%"
         />
       </a-form-item>
       </div>
       <div v-show="isFieldVisible('technicalScore')">
-      <a-form-item :label="t('entity.supplierevaluation.technicalscore')">
+      <a-form-item :label="pi.queryLabel('technicalScore')">
         <a-input-number
           v-model:value="advancedQueryForm.technicalScore"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.supplierevaluation.technicalscore') })"
+          :placeholder="pi.queryPh('technicalScore', 'required')"
           style="width: 100%"
         />
       </a-form-item>
       </div>
       <div v-show="isFieldVisible('mainStrengths')">
-      <a-form-item :label="t('entity.supplierevaluation.mainstrengths')">
+      <a-form-item :label="pi.queryLabel('mainStrengths')">
         <a-input
           v-model:value="advancedQueryForm.mainStrengths"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.supplierevaluation.mainstrengths') })"
+          :placeholder="pi.queryPh('mainStrengths', 'required')"
           show-count
           :maxlength="2000"
           allow-clear
@@ -287,10 +318,10 @@
       </a-form-item>
       </div>
       <div v-show="isFieldVisible('mainIssues')">
-      <a-form-item :label="t('entity.supplierevaluation.mainissues')">
+      <a-form-item :label="pi.queryLabel('mainIssues')">
         <a-input
           v-model:value="advancedQueryForm.mainIssues"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.supplierevaluation.mainissues') })"
+          :placeholder="pi.queryPh('mainIssues', 'required')"
           show-count
           :maxlength="2000"
           allow-clear
@@ -298,10 +329,10 @@
       </a-form-item>
       </div>
       <div v-show="isFieldVisible('improvementRequirements')">
-      <a-form-item :label="t('entity.supplierevaluation.improvementrequirements')">
+      <a-form-item :label="pi.queryLabel('improvementRequirements')">
         <a-input
           v-model:value="advancedQueryForm.improvementRequirements"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.supplierevaluation.improvementrequirements') })"
+          :placeholder="pi.queryPh('improvementRequirements', 'required')"
           show-count
           :maxlength="2000"
           allow-clear
@@ -309,68 +340,81 @@
       </a-form-item>
       </div>
       <div v-show="isFieldVisible('evaluationConclusion')">
-      <a-form-item :label="t('entity.supplierevaluation.evaluationconclusion')">
-        <a-input-number
+      <a-form-item :label="pi.queryLabel('evaluationConclusion')">
+        <TaktSelect
           v-model:value="advancedQueryForm.evaluationConclusion"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.supplierevaluation.evaluationconclusion') })"
-          style="width: 100%"
+          dict-type="logistics_quality_evaluation_conclusion"
+          :placeholder="pi.queryPh('evaluationConclusion', 'select')"
+          allow-clear
         />
       </a-form-item>
       </div>
       <div v-show="isFieldVisible('rectificationDeadlineStart')">
-      <a-form-item :label="t('entity.supplierevaluation.rectificationdeadlinestart')">
+      <a-form-item :label="pi.queryLabel('rectificationDeadlineStart')">
         <a-date-picker
           v-model:value="advancedQueryForm.rectificationDeadlineStart"
-          :placeholder="t('common.page.form.placeholder.select', { field: t('entity.supplierevaluation.rectificationdeadlinestart') })"
+          :placeholder="pi.queryPh('rectificationDeadlineStart', 'select')"
           value-format="YYYY-MM-DD"
           style="width: 100%"
         />
       </a-form-item>
       </div>
       <div v-show="isFieldVisible('rectificationDeadlineEnd')">
-      <a-form-item :label="t('entity.supplierevaluation.rectificationdeadlineend')">
+      <a-form-item :label="pi.queryLabel('rectificationDeadlineEnd')">
         <a-date-picker
           v-model:value="advancedQueryForm.rectificationDeadlineEnd"
-          :placeholder="t('common.page.form.placeholder.select', { field: t('entity.supplierevaluation.rectificationdeadlineend') })"
+          :placeholder="pi.queryPh('rectificationDeadlineEnd', 'select')"
           value-format="YYYY-MM-DD"
           style="width: 100%"
         />
       </a-form-item>
       </div>
-      <div v-show="isFieldVisible('evaluationStatus')">
-      <a-form-item :label="t('entity.supplierevaluation.evaluationstatus')">
-        <a-input-number
-          v-model:value="advancedQueryForm.evaluationStatus"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.supplierevaluation.evaluationstatus') })"
-          style="width: 100%"
+      <div v-show="isFieldVisible('attachments')">
+      <a-form-item :label="pi.queryLabel('attachments')">
+        <a-input
+          v-model:value="advancedQueryForm.attachments"
+          :placeholder="pi.queryPh('attachments', 'required')"
+          show-count
+          :maxlength="20"
+          allow-clear
         />
       </a-form-item>
       </div>
-      <div v-show="isFieldVisible('rectificationStatus')">
-      <a-form-item :label="t('entity.supplierevaluation.rectificationstatus')">
-        <a-input-number
-          v-model:value="advancedQueryForm.rectificationStatus"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.supplierevaluation.rectificationstatus') })"
-          style="width: 100%"
+      <div v-show="isFieldVisible('evaluationStatus')">
+      <a-form-item :label="pi.queryLabel('evaluationStatus')">
+        <TaktSelect
+          v-model:value="advancedQueryForm.evaluationStatus"
+          dict-type="logistics_quality_evaluation_status"
+          :placeholder="pi.queryPh('evaluationStatus', 'select')"
+          allow-clear
         />
       </a-form-item>
       </div>
       <div v-show="isFieldVisible('relatedPlant')">
-      <a-form-item :label="t('entity.supplierevaluation.relatedplant')">
-        <a-input
+      <a-form-item :label="pi.queryLabel('relatedPlant')">
+        <TaktSelect
           v-model:value="advancedQueryForm.relatedPlant"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.supplierevaluation.relatedplant') })"
-          show-count
-          :maxlength="4"
+          api-url="TaktPlants/options"
+          :placeholder="pi.queryPh('relatedPlant', 'select')"
+          allow-clear
+        />
+      </a-form-item>
+      </div>
+      <div v-show="isFieldVisible('rectificationStatus')">
+      <a-form-item :label="pi.queryLabel('rectificationStatus')">
+        <TaktSelect
+          v-model:value="advancedQueryForm.rectificationStatus"
+          dict-type="logistics_quality_rectification_status"
+          :placeholder="pi.queryPh('rectificationStatus', 'select')"
           allow-clear
         />
       </a-form-item>
       </div>
       <div v-show="isFieldVisible('createdAtStart')">
-      <a-form-item :label="t('common.page.entity.createdatstart')">
+      <a-form-item :label="pi.queryLabel('createdAtStart')">
         <a-date-picker
           v-model:value="advancedQueryForm.createdAtStart"
-          :placeholder="t('common.page.form.placeholder.select', { field: t('common.page.entity.createdatstart') })"
+          :placeholder="pi.queryPh('createdAtStart', 'select')"
           value-format="YYYY-MM-DD HH:mm:ss"
             show-time
           style="width: 100%"
@@ -378,10 +422,10 @@
       </a-form-item>
       </div>
       <div v-show="isFieldVisible('createdAtEnd')">
-      <a-form-item :label="t('common.page.entity.createdatend')">
+      <a-form-item :label="pi.queryLabel('createdAtEnd')">
         <a-date-picker
           v-model:value="advancedQueryForm.createdAtEnd"
-          :placeholder="t('common.page.form.placeholder.select', { field: t('common.page.entity.createdatend') })"
+          :placeholder="pi.queryPh('createdAtEnd', 'select')"
           value-format="YYYY-MM-DD HH:mm:ss"
             show-time
           style="width: 100%"
@@ -403,7 +447,7 @@
             >
               <span class="takt-form-label-hint-icon"><RiQuestionLine class="takt-remix-icon" /></span>
             </a-tooltip>
-            <span>{{ t('common.page.entity.extfield') }}</span>
+            <span>{{ pi.queryLabel('extField') }}</span>
           </span>
         </template>
         <a-textarea
@@ -417,10 +461,10 @@
       </a-form-item>
       </div>
       <div v-show="isFieldVisible('remark')">
-      <a-form-item :label="t('common.page.entity.remark')">
+      <a-form-item :label="pi.queryLabel('remark')">
         <a-textarea
           v-model:value="advancedQueryForm.remark"
-          :placeholder="t('common.page.form.placeholder.optional', { field: t('common.page.entity.remark') })"
+          :placeholder="pi.queryPh('remark', 'optional')"
             :rows="4"
             show-count
             :maxlength="400"
@@ -434,14 +478,15 @@
     <!-- 导入对话框 -->
     <TaktModal
       v-model:open="importVisible"
-      :title="t('common.dialog.title.import', { entity: t('entity.supplierevaluation._self') })"
+      :title="t('common.dialog.title.import', { entity: pi.self() })"
       :width="600"
       :footer="null"
       :cancel-text="t('common.page.button.close')"
       @cancel="handleImportCancel"
     >
       <TaktImportFile
-        entity-i18n-key="entity.supplierevaluation._self"
+        v-if="importVisible"
+        :entity-i18n-key="SUPPLIEREVALUATION_SELF_I18N_KEY"
         file-type="xlsx"
         :sheet-name="excelNames.sheet"
         :template-file-name="excelNames.fileBase"
@@ -460,7 +505,7 @@
       :id-column-key="'supplierEvaluationId'"
       :action-column-key="'action'"
       entity-scope="company"
-      table-mode="single"
+      table-mode="masterDetailMaster"
       @update:checked-keys="handleColumnKeysChange"
       @reset="handleColumnSettingReset"
     />
@@ -480,12 +525,25 @@ import { useI18n } from 'vue-i18n'
 import { ensureTaktPaginationConfigAsync, getTaktDefaultPageIndex, getTaktDefaultPageSize } from '@/utils/takt-paged'
 import SupplierEvaluationForm from './components/supplier-evaluation-form.vue'
 import SupplierEvaluationItemPanel from './components/supplier-evaluation-item-panel.vue'
-import { provideSupplierEvaluationMasterContext } from './composables/use-supplier-evaluation-master-context'
+import { provideSupplierEvaluationMasterContext, type SupplierEvaluationRowRecord } from './composables/use-supplier-evaluation-master-context'
 import { getSupplierEvaluationList, getSupplierEvaluationById, createSupplierEvaluation, updateSupplierEvaluation, deleteSupplierEvaluationById, deleteSupplierEvaluationBatch, getSupplierEvaluationTemplate, importSupplierEvaluation, exportSupplierEvaluation, updateSupplierEvaluationStatus } from '@/api/logistics/quality/complaint/supplier-evaluation'
 import type { SupplierEvaluation, SupplierEvaluationQuery } from '@/types/logistics/quality/complaint/supplier-evaluation'
+import { useDictDataStore } from '@/stores/foundation/dict-data'
 import { taktExcelEntityNames } from '@/utils/naming'
 import { resolveExportDownloadFileName } from '@/utils/export-download-name'
+import { normalizeImportResult, type TaktImportResult } from '@/utils/takt-import-result'
 import { RiEditLine, RiDeleteBinLine, RiQuestionLine } from '@remixicon/vue'
+
+import {
+  useSupplierEvaluationI18n,
+  SUPPLIEREVALUATION_LIST_FIELDS,
+  SUPPLIEREVALUATION_QUERY_STRING_FIELDS,
+  SUPPLIEREVALUATION_QUERY_FIELDS,
+  SUPPLIEREVALUATION_SELF_I18N_KEY,
+} from './composables/use-supplier-evaluation-i18n'
+
+/** 实体字段 i18n（标签/占位符统一入口） */
+const pi = useSupplierEvaluationI18n()
 
 /** i18n 翻译函数 */
 const { t } = useI18n()
@@ -493,7 +551,7 @@ const { t } = useI18n()
 const excelNames = taktExcelEntityNames('TaktSupplierEvaluation')
 /** 列表快捷查询占位文案 */
 const searchPlaceholder = computed(
-  () => t('common.page.form.placeholder.search', { keyword: t('entity.supplierevaluation._self') })
+  () => t('common.page.form.placeholder.search', { keyword: pi.self() })
 )
 
 /** 快捷查询关键字 */
@@ -509,9 +567,9 @@ const pageSize = ref(getTaktDefaultPageSize())
 /** 分页 total */
 const total = ref(0)
 /** 工具栏单选时当前行 */
-const selectedRow = ref<SupplierEvaluation | null>(null)
+const selectedRow = ref<SupplierEvaluationRowRecord | null>(null)
 /** 表格多选行 */
-const selectedRows = ref<SupplierEvaluation[]>([])
+const selectedRows = ref<SupplierEvaluationRowRecord[]>([])
 /** 表格多选 row-key 集合 */
 const selectedRowKeys = ref<(string | number)[]>([])
 
@@ -528,72 +586,37 @@ const formRef = ref()
 
 /** 高级查询抽屉是否打开 */
 const advancedQueryVisible = ref(false)
+/**
+ * 创建空的高级查询表单
+ * @returns {Record<string, unknown>} 高级查询初始模型
+ */
+function createEmptyAdvancedQueryForm() {
+  const form = Object.fromEntries(SUPPLIEREVALUATION_QUERY_STRING_FIELDS.map((key) => [key, ''])) as Record<
+    (typeof SUPPLIEREVALUATION_QUERY_STRING_FIELDS)[number],
+    string
+  >
+  return {
+    ...form,
+    evaluationPeriod: undefined as number | undefined,
+    evaluationType: undefined as number | undefined,
+    overallRating: undefined as number | undefined,
+    totalScore: undefined as number | undefined,
+    qualityScore: undefined as number | undefined,
+    deliveryScore: undefined as number | undefined,
+    priceScore: undefined as number | undefined,
+    serviceScore: undefined as number | undefined,
+    technicalScore: undefined as number | undefined,
+    evaluationConclusion: undefined as number | undefined,
+    evaluationStatus: undefined as number | undefined,
+    rectificationStatus: undefined as number | undefined,
+  }
+}
 /** 高级查询表单模型 */
-const advancedQueryForm = ref({
-  supplierEvaluationCode: '',
-  supplierId: '',
-  supplierName: '',
-  supplierCode: '',
-  evaluationDateStart: '',
-  evaluationDateEnd: '',
-  evaluationPeriod: undefined as number | undefined,
-  evaluationType: undefined as number | undefined,
-  evaluatorBy: '',
-  evaluationDept: '',
-  overallRating: undefined as number | undefined,
-  totalScore: undefined as number | undefined,
-  qualityScore: undefined as number | undefined,
-  deliveryScore: undefined as number | undefined,
-  priceScore: undefined as number | undefined,
-  serviceScore: undefined as number | undefined,
-  technicalScore: undefined as number | undefined,
-  mainStrengths: '',
-  mainIssues: '',
-  improvementRequirements: '',
-  evaluationConclusion: undefined as number | undefined,
-  rectificationDeadlineStart: '',
-  rectificationDeadlineEnd: '',
-  evaluationStatus: undefined as number | undefined,
-  rectificationStatus: undefined as number | undefined,
-  relatedPlant: '',
-  createdAtStart: '',
-  createdAtEnd: '',
-  extField: '',
-  remark: '',
-})
+const advancedQueryForm = ref(createEmptyAdvancedQueryForm())
 /** 高级查询字段元数据（列显隐配置） */
-const queryFieldsMeta = computed(() => [
-  { key: 'supplierEvaluationCode', label: t('entity.supplierevaluation.code') },
-  { key: 'supplierId', label: t('entity.supplierevaluation.supplierid') },
-  { key: 'supplierName', label: t('entity.supplierevaluation.suppliername') },
-  { key: 'supplierCode', label: t('entity.supplierevaluation.suppliercode') },
-  { key: 'evaluationDateStart', label: t('common.page.entity.createdatstart').replace(t('common.page.entity.createdat'), t('entity.supplierevaluation.evaluationdate')) },
-  { key: 'evaluationDateEnd', label: t('common.page.entity.createdatend').replace(t('common.page.entity.createdat'), t('entity.supplierevaluation.evaluationdate')) },
-  { key: 'evaluationPeriod', label: t('entity.supplierevaluation.evaluationperiod') },
-  { key: 'evaluationType', label: t('entity.supplierevaluation.evaluationtype') },
-  { key: 'evaluatorBy', label: t('entity.supplierevaluation.evaluatorby') },
-  { key: 'evaluationDept', label: t('entity.supplierevaluation.evaluationdept') },
-  { key: 'overallRating', label: t('entity.supplierevaluation.overallrating') },
-  { key: 'totalScore', label: t('entity.supplierevaluation.totalscore') },
-  { key: 'qualityScore', label: t('entity.supplierevaluation.qualityscore') },
-  { key: 'deliveryScore', label: t('entity.supplierevaluation.deliveryscore') },
-  { key: 'priceScore', label: t('entity.supplierevaluation.pricescore') },
-  { key: 'serviceScore', label: t('entity.supplierevaluation.servicescore') },
-  { key: 'technicalScore', label: t('entity.supplierevaluation.technicalscore') },
-  { key: 'mainStrengths', label: t('entity.supplierevaluation.mainstrengths') },
-  { key: 'mainIssues', label: t('entity.supplierevaluation.mainissues') },
-  { key: 'improvementRequirements', label: t('entity.supplierevaluation.improvementrequirements') },
-  { key: 'evaluationConclusion', label: t('entity.supplierevaluation.evaluationconclusion') },
-  { key: 'rectificationDeadlineStart', label: t('entity.supplierevaluation.rectificationdeadlinestart') },
-  { key: 'rectificationDeadlineEnd', label: t('entity.supplierevaluation.rectificationdeadlineend') },
-  { key: 'evaluationStatus', label: t('entity.supplierevaluation.evaluationstatus') },
-  { key: 'rectificationStatus', label: t('entity.supplierevaluation.rectificationstatus') },
-  { key: 'relatedPlant', label: t('entity.supplierevaluation.relatedplant') },
-  { key: 'createdAtStart', label: t('common.page.entity.createdatstart') },
-  { key: 'createdAtEnd', label: t('common.page.entity.createdatend') },
-  { key: 'extField', label: t('common.page.entity.extfield') },
-  { key: 'remark', label: t('common.page.entity.remark') },
-])
+const queryFieldsMeta = computed(() =>
+  SUPPLIEREVALUATION_QUERY_FIELDS.map((key) => ({ key, label: pi.queryLabel(key) })),
+)
 /** 高级查询当前可见字段 key */
 const visibleQueryFieldKeys = ref<string[]>([])
 /** 列设置抽屉是否打开 */
@@ -609,6 +632,8 @@ const updateDisabled = computed(() => selectedRows.value.length !== 1)
 /** 工具栏「删除」是否禁用（未选中任何行） */
 const deleteDisabled = computed(() => selectedRows.value.length === 0)
 
+/** Pinia：字典缓存（列表/查询 dict-type 渲染前预热） */
+const dictDataStore = useDictDataStore()
 /** 主表选中行上下文（右侧明细面板读取） */
 const { selectedMasterRow } = provideSupplierEvaluationMasterContext()
 const supplierEvaluationItemPanelRef = ref<InstanceType<typeof SupplierEvaluationItemPanel> | null>(null)
@@ -635,20 +660,15 @@ function buildListQuery(overrides?: Partial<SupplierEvaluationQuery>): SupplierE
       query[key] = v as never
     }
   }
-  assignTrimmed('supplierEvaluationCode', form.supplierEvaluationCode)
-  assignTrimmed('supplierId', form.supplierId)
-  assignTrimmed('supplierName', form.supplierName)
-  assignTrimmed('supplierCode', form.supplierCode)
-  assignTrimmed('evaluationDateStart', form.evaluationDateStart)
-  assignTrimmed('evaluationDateEnd', form.evaluationDateEnd)
+  for (const key of SUPPLIEREVALUATION_QUERY_STRING_FIELDS) {
+    assignTrimmed(key, form[key])
+  }
   if (form.evaluationPeriod !== undefined && form.evaluationPeriod !== null) {
     query.evaluationPeriod = form.evaluationPeriod
   }
   if (form.evaluationType !== undefined && form.evaluationType !== null) {
     query.evaluationType = form.evaluationType
   }
-  assignTrimmed('evaluatorBy', form.evaluatorBy)
-  assignTrimmed('evaluationDept', form.evaluationDept)
   if (form.overallRating !== undefined && form.overallRating !== null) {
     query.overallRating = form.overallRating
   }
@@ -670,30 +690,21 @@ function buildListQuery(overrides?: Partial<SupplierEvaluationQuery>): SupplierE
   if (form.technicalScore !== undefined && form.technicalScore !== null) {
     query.technicalScore = form.technicalScore
   }
-  assignTrimmed('mainStrengths', form.mainStrengths)
-  assignTrimmed('mainIssues', form.mainIssues)
-  assignTrimmed('improvementRequirements', form.improvementRequirements)
   if (form.evaluationConclusion !== undefined && form.evaluationConclusion !== null) {
     query.evaluationConclusion = form.evaluationConclusion
   }
-  assignTrimmed('rectificationDeadlineStart', form.rectificationDeadlineStart)
-  assignTrimmed('rectificationDeadlineEnd', form.rectificationDeadlineEnd)
   if (form.evaluationStatus !== undefined && form.evaluationStatus !== null) {
     query.evaluationStatus = form.evaluationStatus
   }
   if (form.rectificationStatus !== undefined && form.rectificationStatus !== null) {
     query.rectificationStatus = form.rectificationStatus
   }
-  assignTrimmed('relatedPlant', form.relatedPlant)
-  assignTrimmed('createdAtStart', form.createdAtStart)
-  assignTrimmed('createdAtEnd', form.createdAtEnd)
-  assignTrimmed('extField', form.extField)
-  assignTrimmed('remark', form.remark)
   return query
 }
 /** 页面挂载：租户上下文就绪后加载分页配置，再拉列表 */
 onMounted(async () => {
   await ensureTaktPaginationConfigAsync()
+  void dictDataStore.loadAllDictDataAsync()
   loadData()
 })
 
@@ -702,7 +713,7 @@ onMounted(async () => {
 const selectedMasterKey = ref('')
 
 /** 同步主表选中行到右侧明细（子表由 *-panel watch 自动 reload） */
-function syncMasterSelection(record: SupplierEvaluation | null) {
+function syncMasterSelection(record: SupplierEvaluationRowRecord | null) {
   selectedMasterRow.value = record
   selectedMasterKey.value = record ? getSupplierEvaluationId(record) : ''
 }
@@ -712,7 +723,7 @@ function syncMasterSelection(record: SupplierEvaluation | null) {
  * @param record 主表行
  */
 function handleMasterSelect(record: Record<string, unknown>) {
-  const row = record as unknown as SupplierEvaluation
+  const row = record as unknown as SupplierEvaluationRowRecord
   const key = getSupplierEvaluationId(row)
   selectedRowKeys.value = [key]
   selectedRows.value = [row]
@@ -730,7 +741,7 @@ function handleMasterPaginationChange(_page: number, _pageSize: number) {
 }
 
 /** 加载主表详情并回填当前页 dataSource */
-async function loadSupplierEvaluationDetail(record: SupplierEvaluation): Promise<SupplierEvaluation | null> {
+async function loadSupplierEvaluationDetail(record: SupplierEvaluationRowRecord): Promise<SupplierEvaluation | null> {
   const id = getSupplierEvaluationId(record)
   if (!id) {
     return null
@@ -761,7 +772,7 @@ const columns = computed<TableColumnsType>(() => [
     customRender: ({ record }: { record: any }) => getSupplierEvaluationField(record, 'supplierEvaluationId') ?? ''
   },
   {
-    title: t('entity.supplierevaluation.code'),
+    title: pi.label('supplierEvaluationCode'),
     dataIndex: 'supplierEvaluationCode',
     key: 'supplierEvaluationCode',
     width: 120,
@@ -770,7 +781,7 @@ const columns = computed<TableColumnsType>(() => [
     customRender: ({ record }: { record: any }) => getSupplierEvaluationField(record, 'supplierEvaluationCode') ?? ''
   },
   {
-    title: t('entity.supplierevaluation.supplierid'),
+    title: pi.label('supplierId'),
     dataIndex: 'supplierId',
     key: 'supplierId',
     width: 120,
@@ -779,16 +790,16 @@ const columns = computed<TableColumnsType>(() => [
     customRender: ({ record }: { record: any }) => getSupplierEvaluationField(record, 'supplierId') ?? ''
   },
   {
-    title: t('entity.supplierevaluation.suppliername'),
-    dataIndex: 'supplierName',
-    key: 'supplierName',
+    title: pi.label('supplierName1'),
+    dataIndex: 'supplierName1',
+    key: 'supplierName1',
     width: 120,
     resizable: true,
     ellipsis: true,
-    customRender: ({ record }: { record: any }) => getSupplierEvaluationField(record, 'supplierName') ?? ''
+    customRender: ({ record }: { record: any }) => getSupplierEvaluationField(record, 'supplierName1') ?? ''
   },
   {
-    title: t('entity.supplierevaluation.suppliercode'),
+    title: pi.label('supplierCode'),
     dataIndex: 'supplierCode',
     key: 'supplierCode',
     width: 120,
@@ -797,7 +808,7 @@ const columns = computed<TableColumnsType>(() => [
     customRender: ({ record }: { record: any }) => getSupplierEvaluationField(record, 'supplierCode') ?? ''
   },
   {
-    title: t('entity.supplierevaluation.evaluationdate'),
+    title: pi.label('evaluationDate'),
     dataIndex: 'evaluationDate',
     key: 'evaluationDate',
     width: 120,
@@ -806,16 +817,15 @@ const columns = computed<TableColumnsType>(() => [
     customRender: ({ record }: { record: any }) => getSupplierEvaluationField(record, 'evaluationDate') ?? ''
   },
   {
-    title: t('entity.supplierevaluation.evaluationperiod'),
+    title: pi.label('evaluationPeriod'),
     dataIndex: 'evaluationPeriod',
     key: 'evaluationPeriod',
     width: 120,
     resizable: true,
     ellipsis: true,
-    customRender: ({ record }: { record: any }) => getSupplierEvaluationField(record, 'evaluationPeriod') ?? ''
   },
   {
-    title: t('entity.supplierevaluation.evaluationtype'),
+    title: pi.label('evaluationType'),
     dataIndex: 'evaluationType',
     key: 'evaluationType',
     width: 120,
@@ -824,7 +834,7 @@ const columns = computed<TableColumnsType>(() => [
     customRender: ({ record }: { record: any }) => getSupplierEvaluationField(record, 'evaluationType') ?? ''
   },
   {
-    title: t('entity.supplierevaluation.evaluatorby'),
+    title: pi.label('evaluatorBy'),
     dataIndex: 'evaluatorBy',
     key: 'evaluatorBy',
     width: 120,
@@ -833,7 +843,7 @@ const columns = computed<TableColumnsType>(() => [
     customRender: ({ record }: { record: any }) => getSupplierEvaluationField(record, 'evaluatorBy') ?? ''
   },
   {
-    title: t('entity.supplierevaluation.evaluationdept'),
+    title: pi.label('evaluationDept'),
     dataIndex: 'evaluationDept',
     key: 'evaluationDept',
     width: 120,
@@ -842,16 +852,15 @@ const columns = computed<TableColumnsType>(() => [
     customRender: ({ record }: { record: any }) => getSupplierEvaluationField(record, 'evaluationDept') ?? ''
   },
   {
-    title: t('entity.supplierevaluation.overallrating'),
+    title: pi.label('overallRating'),
     dataIndex: 'overallRating',
     key: 'overallRating',
     width: 120,
     resizable: true,
     ellipsis: true,
-    customRender: ({ record }: { record: any }) => getSupplierEvaluationField(record, 'overallRating') ?? ''
   },
   {
-    title: t('entity.supplierevaluation.totalscore'),
+    title: pi.label('totalScore'),
     dataIndex: 'totalScore',
     key: 'totalScore',
     width: 120,
@@ -860,7 +869,7 @@ const columns = computed<TableColumnsType>(() => [
     customRender: ({ record }: { record: any }) => getSupplierEvaluationField(record, 'totalScore') ?? ''
   },
   {
-    title: t('entity.supplierevaluation.qualityscore'),
+    title: pi.label('qualityScore'),
     dataIndex: 'qualityScore',
     key: 'qualityScore',
     width: 120,
@@ -869,7 +878,7 @@ const columns = computed<TableColumnsType>(() => [
     customRender: ({ record }: { record: any }) => getSupplierEvaluationField(record, 'qualityScore') ?? ''
   },
   {
-    title: t('entity.supplierevaluation.deliveryscore'),
+    title: pi.label('deliveryScore'),
     dataIndex: 'deliveryScore',
     key: 'deliveryScore',
     width: 120,
@@ -878,7 +887,7 @@ const columns = computed<TableColumnsType>(() => [
     customRender: ({ record }: { record: any }) => getSupplierEvaluationField(record, 'deliveryScore') ?? ''
   },
   {
-    title: t('entity.supplierevaluation.pricescore'),
+    title: pi.label('priceScore'),
     dataIndex: 'priceScore',
     key: 'priceScore',
     width: 120,
@@ -887,7 +896,7 @@ const columns = computed<TableColumnsType>(() => [
     customRender: ({ record }: { record: any }) => getSupplierEvaluationField(record, 'priceScore') ?? ''
   },
   {
-    title: t('entity.supplierevaluation.servicescore'),
+    title: pi.label('serviceScore'),
     dataIndex: 'serviceScore',
     key: 'serviceScore',
     width: 120,
@@ -896,7 +905,7 @@ const columns = computed<TableColumnsType>(() => [
     customRender: ({ record }: { record: any }) => getSupplierEvaluationField(record, 'serviceScore') ?? ''
   },
   {
-    title: t('entity.supplierevaluation.technicalscore'),
+    title: pi.label('technicalScore'),
     dataIndex: 'technicalScore',
     key: 'technicalScore',
     width: 120,
@@ -905,7 +914,7 @@ const columns = computed<TableColumnsType>(() => [
     customRender: ({ record }: { record: any }) => getSupplierEvaluationField(record, 'technicalScore') ?? ''
   },
   {
-    title: t('entity.supplierevaluation.mainstrengths'),
+    title: pi.label('mainStrengths'),
     dataIndex: 'mainStrengths',
     key: 'mainStrengths',
     width: 120,
@@ -914,7 +923,7 @@ const columns = computed<TableColumnsType>(() => [
     customRender: ({ record }: { record: any }) => getSupplierEvaluationField(record, 'mainStrengths') ?? ''
   },
   {
-    title: t('entity.supplierevaluation.mainissues'),
+    title: pi.label('mainIssues'),
     dataIndex: 'mainIssues',
     key: 'mainIssues',
     width: 120,
@@ -923,7 +932,7 @@ const columns = computed<TableColumnsType>(() => [
     customRender: ({ record }: { record: any }) => getSupplierEvaluationField(record, 'mainIssues') ?? ''
   },
   {
-    title: t('entity.supplierevaluation.improvementrequirements'),
+    title: pi.label('improvementRequirements'),
     dataIndex: 'improvementRequirements',
     key: 'improvementRequirements',
     width: 120,
@@ -932,16 +941,15 @@ const columns = computed<TableColumnsType>(() => [
     customRender: ({ record }: { record: any }) => getSupplierEvaluationField(record, 'improvementRequirements') ?? ''
   },
   {
-    title: t('entity.supplierevaluation.evaluationconclusion'),
+    title: pi.label('evaluationConclusion'),
     dataIndex: 'evaluationConclusion',
     key: 'evaluationConclusion',
     width: 120,
     resizable: true,
     ellipsis: true,
-    customRender: ({ record }: { record: any }) => getSupplierEvaluationField(record, 'evaluationConclusion') ?? ''
   },
   {
-    title: t('entity.supplierevaluation.rectificationdeadline'),
+    title: pi.label('rectificationDeadline'),
     dataIndex: 'rectificationDeadline',
     key: 'rectificationDeadline',
     width: 120,
@@ -950,31 +958,38 @@ const columns = computed<TableColumnsType>(() => [
     customRender: ({ record }: { record: any }) => getSupplierEvaluationField(record, 'rectificationDeadline') ?? ''
   },
   {
-    title: t('entity.supplierevaluation.evaluationstatus'),
+    title: pi.label('attachments'),
+    dataIndex: 'attachments',
+    key: 'attachments',
+    width: 120,
+    resizable: true,
+    ellipsis: true,
+    customRender: ({ record }: { record: any }) => getSupplierEvaluationField(record, 'attachments') ?? ''
+  },
+  {
+    title: pi.label('evaluationStatus'),
     dataIndex: 'evaluationStatus',
     key: 'evaluationStatus',
     width: 120,
     resizable: true,
     ellipsis: true,
-    customRender: ({ record }: { record: any }) => getSupplierEvaluationField(record, 'evaluationStatus') ?? ''
   },
   {
-    title: t('entity.supplierevaluation.rectificationstatus'),
-    dataIndex: 'rectificationStatus',
-    key: 'rectificationStatus',
-    width: 120,
-    resizable: true,
-    ellipsis: true,
-    customRender: ({ record }: { record: any }) => getSupplierEvaluationField(record, 'rectificationStatus') ?? ''
-  },
-  {
-    title: t('entity.supplierevaluation.relatedplant'),
+    title: pi.label('relatedPlant'),
     dataIndex: 'relatedPlant',
     key: 'relatedPlant',
     width: 120,
     resizable: true,
     ellipsis: true,
     customRender: ({ record }: { record: any }) => getSupplierEvaluationField(record, 'relatedPlant') ?? ''
+  },
+  {
+    title: pi.label('rectificationStatus'),
+    dataIndex: 'rectificationStatus',
+    key: 'rectificationStatus',
+    width: 120,
+    resizable: true,
+    ellipsis: true,
   },
   CreateActionColumn({
     actions: [
@@ -984,7 +999,7 @@ const columns = computed<TableColumnsType>(() => [
         shape: 'plain',
         icon: RiEditLine,
         permission: 'logistics:quality:complaint:supplier:evaluation:update',
-        onClick: (record: SupplierEvaluation) => handleEdit(record)
+        onClick: (record: SupplierEvaluationRowRecord) => handleEdit(record)
       },
       {
         key: 'delete',
@@ -992,26 +1007,44 @@ const columns = computed<TableColumnsType>(() => [
         shape: 'plain',
         icon: RiDeleteBinLine,
         permission: 'logistics:quality:complaint:supplier:evaluation:delete',
-        onClick: (record: SupplierEvaluation) => handleDeleteOne(record)
+        onClick: (record: SupplierEvaluationRowRecord) => handleDeleteOne(record)
       }
     ]
   })
 ])
 
 /** 表格 row-key（优先实体主键字段） */
-const getSupplierEvaluationId = (record: any): string => record?.[entityIdName] ?? ''
+const getSupplierEvaluationId = (record: SupplierEvaluationRowRecord): string => {
+  const id = (record as Record<string, unknown>)?.[entityIdName]
+  return id != null ? String(id) : ''
+}
 /**
  * 读取行字段值
  * @param record 行数据
  * @param field 字段名
  */
 const getSupplierEvaluationField = (record: any, field: string): any => record?.[field]
+/**
+ * 供 TaktDictTag 等组件使用的标量字典值
+ * @param record 行数据
+ * @param field 字段名
+ */
+const getSupplierEvaluationDictValue = (
+  record: SupplierEvaluationRowRecord,
+  field: string,
+): string | number | undefined => {
+  const value = (record as Record<string, unknown>)?.[field]
+  if (value === null || value === undefined) return undefined
+  if (typeof value === 'string' || typeof value === 'number') return value
+  return String(value)
+}
+
 
 
 /** 行选择配置 */
 const rowSelection = computed(() => ({
   selectedRowKeys: selectedRowKeys.value,
-  onChange: (keys: (string | number)[], rows: SupplierEvaluation[]) => {
+  onChange: (keys: (string | number)[], rows: SupplierEvaluationRowRecord[]) => {
     selectedRowKeys.value = keys
     selectedRows.value = rows
     selectedRow.value = rows.length === 1 ? (rows[0] ?? null) : null
@@ -1021,7 +1054,7 @@ const rowSelection = computed(() => ({
       syncMasterSelection(null)
     }
   },
-  onSelect: (record: SupplierEvaluation, selected: boolean) => {
+  onSelect: (record: SupplierEvaluationRowRecord, selected: boolean) => {
     if (selected) {
       selectedRow.value = record
       syncMasterSelection(record)
@@ -1030,7 +1063,7 @@ const rowSelection = computed(() => ({
       syncMasterSelection(null)
     }
   },
-  onSelectAll: (selected: boolean, selectedRowsData: SupplierEvaluation[]) => {
+  onSelectAll: (selected: boolean, selectedRowsData: SupplierEvaluationRowRecord[]) => {
     selectedRow.value = selected && selectedRowsData.length === 1 ? (selectedRowsData[0] ?? null) : null
     syncMasterSelection(selectedRow.value)
   }
@@ -1068,7 +1101,7 @@ function handleReset() {
   advancedQueryForm.value = {
   supplierEvaluationCode: '',
   supplierId: '',
-  supplierName: '',
+  supplierName1: '',
   supplierCode: '',
   evaluationDateStart: '',
   evaluationDateEnd: '',
@@ -1089,9 +1122,10 @@ function handleReset() {
   evaluationConclusion: undefined as number | undefined,
   rectificationDeadlineStart: '',
   rectificationDeadlineEnd: '',
+  attachments: '',
   evaluationStatus: undefined as number | undefined,
-  rectificationStatus: undefined as number | undefined,
   relatedPlant: '',
+  rectificationStatus: undefined as number | undefined,
   createdAtStart: '',
   createdAtEnd: '',
   extField: '',
@@ -1103,14 +1137,14 @@ function handleReset() {
 
 /** 打开新增弹窗 */
 function handleCreate() {
-  formTitle.value = t('common.dialog.title.create', { entity: t('entity.supplierevaluation._self') })
+  formTitle.value = t('common.dialog.title.create', { entity: pi.self() })
   formData.value = null
   formVisible.value = true
   nextTick(() => formRef.value?.resetFields())
 }
 /** 打开编辑弹窗（主子表：先拉详情含子表） */
-async function handleEdit(record: SupplierEvaluation) {
-  formTitle.value = t('common.dialog.title.edit', { entity: t('entity.supplierevaluation._self') })
+async function handleEdit(record: SupplierEvaluationRowRecord) {
+  formTitle.value = t('common.dialog.title.edit', { entity: pi.self() })
   formLoading.value = true
   try {
     const detail = await loadSupplierEvaluationDetail(record)
@@ -1126,7 +1160,7 @@ function handleUpdate() {
   if (selectedRow.value) {
     void handleEdit(selectedRow.value)
   } else {
-    message.warning(t('common.tip.select.to.action', { action: t('common.page.button.edit'), entity: t('entity.supplierevaluation._self') }))
+    message.warning(t('common.tip.select.to.action', { action: t('common.page.button.edit'), entity: pi.self() }))
   }
 }
 /** 提交新增/编辑表单 */
@@ -1144,10 +1178,10 @@ async function handleFormSubmit() {
     const id = (formData.value as any)?.[entityIdName]
     if (id) {
       await updateSupplierEvaluation(id, payload as any)
-      message.success(t('common.feedback.updated', { target: t('entity.supplierevaluation._self') }))
+      message.success(t('common.feedback.updated', { target: pi.self() }))
     } else {
       await createSupplierEvaluation(payload as any)
-      message.success(t('common.feedback.created', { target: t('entity.supplierevaluation._self') }))
+      message.success(t('common.feedback.created', { target: pi.self() }))
     }
     formVisible.value = false
     formData.value = null
@@ -1178,15 +1212,22 @@ async function handleDownloadTemplate(sheetName?: string, fileName?: string): Pr
   return (res as any)?.data ?? res
 }
 
-/** 上传并导入 Excel 文件 */
-async function handleImportFile(file: File, sheetName?: string): Promise<{ success: number; fail: number; errors: string[] }> {
-  return await importSupplierEvaluation(file, sheetName)
+/** 上传并导入 Excel 文件（归一化后端 SuccessCount/successCount） */
+async function handleImportFile(file: File, sheetName?: string): Promise<TaktImportResult> {
+  const raw = await importSupplierEvaluation(file, sheetName)
+  return normalizeImportResult(raw)
 }
 
-/** 导入完成回调：刷新列表并可选关闭对话框 */
-function handleImportSuccess(result: { success: number; fail: number; errors: string[] }) {
+/** 导入完成回调：刷新列表；全部成功时延迟关闭对话框 */
+function handleImportSuccess(result: TaktImportResult) {
   loadData()
-  if (result.fail === 0) setTimeout(() => { importVisible.value = false }, 2000)
+
+      if (selectedMasterKey.value) {
+    supplierEvaluationItemPanelRef.value?.reload?.()
+      }
+  if (result.fail === 0 && result.success > 0) {
+    setTimeout(() => { importVisible.value = false }, 2000)
+  }
 }
 
 /** 关闭导入对话框 */
@@ -1220,24 +1261,24 @@ async function handleExport() {
     link.click()
     document.body.removeChild(link)
     setTimeout(() => window.URL.revokeObjectURL(url), 100)
-    message.success(t('common.feedback.export.success', { target: t('entity.supplierevaluation._self') }))
+    message.success(t('common.feedback.export.success', { target: pi.self() }))
   } catch (error: any) {
     logger.error('[SupplierEvaluation] 导出失败', { error })
-    message.error(error?.message || t('common.feedback.export.failed', { target: t('entity.supplierevaluation._self') }))
+    message.error(error?.message || t('common.feedback.export.failed', { target: pi.self() }))
   } finally {
     loading.value = false
   }
 }
 /** 删除单行 */
-async function handleDeleteOne(record: SupplierEvaluation) {
+async function handleDeleteOne(record: SupplierEvaluationRowRecord) {
   Modal.confirm({
     title: t('common.tip.confirm.delete.title'),
-    content: t('common.tip.confirm.delete.entity', { entity: t('entity.supplierevaluation._self'), name: t('common.tip.this.target', { target: t('entity.supplierevaluation._self') }) }),
+    content: t('common.tip.confirm.delete.entity', { entity: pi.self(), name: t('common.tip.this.target', { target: pi.self() }) }),
     okText: t('common.page.button.delete'),
     cancelText: t('common.page.button.cancel'),
     onOk: async () => {
       await deleteSupplierEvaluationById((record as any)[entityIdName])
-      message.success(t('common.feedback.deleted', { target: t('entity.supplierevaluation._self') }))
+      message.success(t('common.feedback.deleted', { target: pi.self() }))
       selectedRowKeys.value = []
       selectedRows.value = []
       selectedRow.value = null
@@ -1249,18 +1290,18 @@ async function handleDeleteOne(record: SupplierEvaluation) {
 /** 批量删除选中行 */
 async function handleDelete() {
   if (selectedRows.value.length === 0) {
-    message.warning(t('common.tip.select.to.action', { action: t('common.page.button.delete'), entity: t('entity.supplierevaluation._self') }))
+    message.warning(t('common.tip.select.to.action', { action: t('common.page.button.delete'), entity: pi.self() }))
     return
   }
   Modal.confirm({
     title: t('common.tip.confirm.delete.title'),
-    content: t('common.tip.confirm.delete.count', { entity: t('entity.supplierevaluation._self'), count: selectedRows.value.length }),
+    content: t('common.tip.confirm.delete.count', { entity: pi.self(), count: selectedRows.value.length }),
     okText: t('common.page.button.delete'),
     cancelText: t('common.page.button.cancel'),
     onOk: async () => {
       const ids = selectedRows.value.map((r: any) => r[entityIdName]).filter(Boolean)
       await deleteSupplierEvaluationBatch(ids)
-      message.success(t('common.feedback.deleted', { target: t('entity.supplierevaluation._self') }))
+      message.success(t('common.feedback.deleted', { target: pi.self() }))
       selectedRowKeys.value = []
       selectedRows.value = []
       selectedRow.value = null
@@ -1285,7 +1326,7 @@ function handleAdvancedQueryReset() {
   advancedQueryForm.value = {
   supplierEvaluationCode: '',
   supplierId: '',
-  supplierName: '',
+  supplierName1: '',
   supplierCode: '',
   evaluationDateStart: '',
   evaluationDateEnd: '',
@@ -1306,9 +1347,10 @@ function handleAdvancedQueryReset() {
   evaluationConclusion: undefined as number | undefined,
   rectificationDeadlineStart: '',
   rectificationDeadlineEnd: '',
+  attachments: '',
   evaluationStatus: undefined as number | undefined,
-  rectificationStatus: undefined as number | undefined,
   relatedPlant: '',
+  rectificationStatus: undefined as number | undefined,
   createdAtStart: '',
   createdAtEnd: '',
   extField: '',

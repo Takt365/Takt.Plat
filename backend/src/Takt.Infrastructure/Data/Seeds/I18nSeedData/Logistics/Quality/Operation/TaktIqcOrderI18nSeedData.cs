@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Infrastructure.Data.Seeds.I18nSeedData.Logistics.Quality.Operation
 // 文件名称：TaktIqcOrderI18nSeedData.cs
-// 创建时间：2026-07-20
+// 创建时间：2026-07-23
 // 创建人：Takt365(Auto Generated)
 // 功能描述：TaktIqcOrder 实体字段国际化种子（无对应 frontend locales；TranslationText 取自 ColumnDescription，ContextNote 取自属性 XML summary）
 // 
@@ -100,13 +100,13 @@ public class TaktIqcOrderI18nSeedData : ITaktSeedDataCoordinator
             new TranslationSeedItem("entity.iqcorder.plantcode", "zh-HK", "工厂代码_hk", "工厂代码（选项 TaktPlants/options，DictValue=PlantCode）"),
 
             // entity.iqcorder.sourcecode
-            new TranslationSeedItem("entity.iqcorder.sourcecode", "en-US", "来源单号_us", "来源单号（选项 TaktPurchaseOrders/options，DictValue=PurchaseOrderCode）"),
+            new TranslationSeedItem("entity.iqcorder.sourcecode", "en-US", "来源单号_us", "来源单号（选项 TaktPurchaseOrders/options；DictValue=PurchaseOrderCode）"),
             // entity.iqcorder.sourcecode
-            new TranslationSeedItem("entity.iqcorder.sourcecode", "ja-JP", "来源单号_jp", "来源单号（选项 TaktPurchaseOrders/options，DictValue=PurchaseOrderCode）"),
+            new TranslationSeedItem("entity.iqcorder.sourcecode", "ja-JP", "来源单号_jp", "来源单号（选项 TaktPurchaseOrders/options；DictValue=PurchaseOrderCode）"),
             // entity.iqcorder.sourcecode
-            new TranslationSeedItem("entity.iqcorder.sourcecode", "zh-CN", "来源单号", "来源单号（选项 TaktPurchaseOrders/options，DictValue=PurchaseOrderCode）"),
+            new TranslationSeedItem("entity.iqcorder.sourcecode", "zh-CN", "来源单号", "来源单号（选项 TaktPurchaseOrders/options；DictValue=PurchaseOrderCode）"),
             // entity.iqcorder.sourcecode
-            new TranslationSeedItem("entity.iqcorder.sourcecode", "zh-HK", "来源单号_hk", "来源单号（选项 TaktPurchaseOrders/options，DictValue=PurchaseOrderCode）"),
+            new TranslationSeedItem("entity.iqcorder.sourcecode", "zh-HK", "来源单号_hk", "来源单号（选项 TaktPurchaseOrders/options；DictValue=PurchaseOrderCode）"),
 
             // entity.iqcorder.inspectiondate
             new TranslationSeedItem("entity.iqcorder.inspectiondate", "en-US", "检验日期_us", "检验日期"),
@@ -127,13 +127,13 @@ public class TaktIqcOrderI18nSeedData : ITaktSeedDataCoordinator
             new TranslationSeedItem("entity.iqcorder.code", "zh-HK", "IQC检验单编码_hk", "IQC检验单编码（唯一索引，根据来源单号自动生成）"),
 
             // entity.iqcorder.suppliercode
-            new TranslationSeedItem("entity.iqcorder.suppliercode", "en-US", "供应商编码_us", "供应商编码（选项 TaktSuppliers/options，DictValue=SupplierCode）"),
+            new TranslationSeedItem("entity.iqcorder.suppliercode", "en-US", "供应商编码_us", "供应商编码（选项 TaktSuppliers/options；DictValue=SupplierCode）"),
             // entity.iqcorder.suppliercode
-            new TranslationSeedItem("entity.iqcorder.suppliercode", "ja-JP", "供应商编码_jp", "供应商编码（选项 TaktSuppliers/options，DictValue=SupplierCode）"),
+            new TranslationSeedItem("entity.iqcorder.suppliercode", "ja-JP", "供应商编码_jp", "供应商编码（选项 TaktSuppliers/options；DictValue=SupplierCode）"),
             // entity.iqcorder.suppliercode
-            new TranslationSeedItem("entity.iqcorder.suppliercode", "zh-CN", "供应商编码", "供应商编码（选项 TaktSuppliers/options，DictValue=SupplierCode）"),
+            new TranslationSeedItem("entity.iqcorder.suppliercode", "zh-CN", "供应商编码", "供应商编码（选项 TaktSuppliers/options；DictValue=SupplierCode）"),
             // entity.iqcorder.suppliercode
-            new TranslationSeedItem("entity.iqcorder.suppliercode", "zh-HK", "供应商编码_hk", "供应商编码（选项 TaktSuppliers/options，DictValue=SupplierCode）"),
+            new TranslationSeedItem("entity.iqcorder.suppliercode", "zh-HK", "供应商编码_hk", "供应商编码（选项 TaktSuppliers/options；DictValue=SupplierCode）"),
 
             // entity.iqcorder.totalpurchasequantity
             new TranslationSeedItem("entity.iqcorder.totalpurchasequantity", "en-US", "进货总数_us", "进货总数"),

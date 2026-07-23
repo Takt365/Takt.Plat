@@ -18,12 +18,12 @@
  */
 export interface ServerHardware {
   /**
-   * 主机编号（系统序列号）
+   * 主机编码（系统序列号）
    */
   hostSerialNumber: string;
 
   /**
-   * 硬盘编号（首个磁盘序列号）
+   * 硬盘编码（首个磁盘序列号）
    */
   driveSerialNumber: string;
 

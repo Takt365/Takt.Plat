@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Application.Services.Accounting.Financial
 // 文件名称：TaktExpenseService.cs
-// 创建时间：2026-07-09
+// 创建时间：2026-07-23
 // 创建人：Takt365(Cursor AI)
 // 功能描述：费用单应用服务实现
 // 
@@ -106,8 +106,8 @@ public class TaktExpenseService : TaktServiceBase, ITaktExpenseService
             false);
         return list.Select(e => new TaktSelectOption
         {
-            DictValue = e.Id,
-            DictLabel = e.ExpenseCode ?? e.Id.ToString(),
+            DictValue = e.ExpenseCode,
+            DictLabel = e.ExpenseCode,
         }).ToList();
     }
 
@@ -352,7 +352,20 @@ public class TaktExpenseService : TaktServiceBase, ITaktExpenseService
     private async Task SaveExpenseChildrenAsync(TaktExpense entity, TaktExpenseCreateDto dto)
     {
         // 费用单明细（ExpenseDetails）
-        if (dto.ExpenseDetails is not { Count: > 0 })
+        List<TaktExpenseDetailUpdateDto>? expenseDetailsForSave;
+        if (dto is TaktExpenseUpdateDto updateDtoForExpenseDetails && updateDtoForExpenseDetails.ExpenseDetails != null)
+        {
+            expenseDetailsForSave = updateDtoForExpenseDetails.ExpenseDetails;
+        }
+        else if (dto.ExpenseDetails != null)
+        {
+            expenseDetailsForSave = dto.ExpenseDetails.Adapt<List<TaktExpenseDetailUpdateDto>>();
+        }
+        else
+        {
+            expenseDetailsForSave = null;
+        }
+        if (expenseDetailsForSave is not { Count: > 0 })
         {
             await MarkExpenseDetailsObsoleteAsync(entity.Id);
             return;
@@ -364,9 +377,9 @@ public class TaktExpenseService : TaktServiceBase, ITaktExpenseService
             var submittedIds = new HashSet<long>();
             var toCreate = new List<TaktExpenseDetail>();
             var seenLineKeys = new HashSet<string>(StringComparer.Ordinal);
-            for (var i = 0; i < dto.ExpenseDetails.Count; i++)
+            for (var i = 0; i < expenseDetailsForSave.Count; i++)
             {
-                var childDto = dto.ExpenseDetails[i];
+                var childDto = expenseDetailsForSave[i];
                 childDto.ExpenseId = entity.Id;
                 var lineKey = $"{entity.CompanyCode}|{entity.Id}|{childDto.LineNumber}";
                 if (!seenLineKeys.Add(lineKey))
@@ -466,7 +479,7 @@ public class TaktExpenseService : TaktServiceBase, ITaktExpenseService
                 || (x.ExpenseTitle != null && x.ExpenseTitle.Contains(keywords))
                 || SqlFunc.ToString(x.ExpenseType).Contains(keywords)
                 || (x.SupplierCode != null && x.SupplierCode.Contains(keywords))
-                || (x.SupplierName != null && x.SupplierName.Contains(keywords))
+                || (x.SupplierName1 != null && x.SupplierName1.Contains(keywords))
                 || SqlFunc.ToString(x.ApplicantBy).Contains(keywords)
                 || (x.ApplicationDept != null && x.ApplicationDept.Contains(keywords))
                 || (x.CostBearerDept != null && x.CostBearerDept.Contains(keywords))
@@ -508,9 +521,9 @@ public class TaktExpenseService : TaktServiceBase, ITaktExpenseService
             exp = exp.And(x => x.SupplierCode != null && x.SupplierCode.Contains(queryDto.SupplierCode));
         }
 
-        if (!string.IsNullOrEmpty(queryDto?.SupplierName))
+        if (!string.IsNullOrEmpty(queryDto?.SupplierName1))
         {
-            exp = exp.And(x => x.SupplierName != null && x.SupplierName.Contains(queryDto.SupplierName));
+            exp = exp.And(x => x.SupplierName1 != null && x.SupplierName1.Contains(queryDto.SupplierName1));
         }
 
         if (queryDto?.ApplicantBy.HasValue == true)

@@ -27,7 +27,7 @@ namespace Takt.Domain.Entities.Logistics.Quality.Complaint;
 public class TaktCustomerComplaintItem : TaktCompanyEntityBase
 {
     /// <summary>
-    /// 客诉 ID（选项 TaktCustomerComplaints/options，DictValue=Id）
+    /// 客诉 ID（选项 TaktCustomerComplaints/options；DictValue=Id）
     /// </summary>
     [SugarColumn(ColumnName = "complaint_id", ColumnDescription = "客诉ID", ColumnDataType = "bigint", IsNullable = false)]
     [JsonConverter(typeof(ValueToStringConverter))]
@@ -43,7 +43,7 @@ public class TaktCustomerComplaintItem : TaktCompanyEntityBase
     [SugarColumn(ColumnName = "line_number", ColumnDescription = "行号", ColumnDataType = "int", IsNullable = false, DefaultValue = "0")]
     public int LineNumber { get; set; } = 0;
     /// <summary>
-    /// 产品编码（选项 TaktMaterialPlants/options，DictValue=MaterialCode，ExtValue=PlantCode）
+    /// 产品编码（选项 TaktMaterialPlants/options；DictValue=MaterialCode，ExtValue=PlantCode）
     /// </summary>
     [SugarColumn(ColumnName = "product_code", ColumnDescription = "产品编码", ColumnDataType = "nvarchar", Length = 50, IsNullable = true)]
     public string? ProductCode { get; set; }
@@ -68,7 +68,7 @@ public class TaktCustomerComplaintItem : TaktCompanyEntityBase
     [SugarColumn(ColumnName = "defect_description", ColumnDescription = "不良现象描述", ColumnDataType = "nvarchar", Length = 1000, IsNullable = false)]
     public string DefectDescription { get; set; } = string.Empty;
     /// <summary>
-    /// 缺点等级（字典 logistics_quality_defect_severity_code，DictValue=CR/MA/MI）
+    /// 缺点等级（字典 logistics_quality_defect_severity_code；DictValue=CR/MA/MI）
     /// </summary>
     [SugarColumn(ColumnName = "defect_level", ColumnDescription = "缺点等级", ColumnDataType = "nvarchar", Length = 2, IsNullable = false)]
     public string DefectLevel { get; set; } = string.Empty;
@@ -93,7 +93,7 @@ public class TaktCustomerComplaintItem : TaktCompanyEntityBase
     [SugarColumn(ColumnName = "improvement_action", ColumnDescription = "改善对策", ColumnDataType = "nvarchar", Length = 1000, IsNullable = true)]
     public string? ImprovementAction { get; set; }
     /// <summary>
-    /// 改善责任人（选项 TaktEmployees/options，DictValue=EmployeeCode）
+    /// 改善责任人（选项 TaktEmployees/options；DictValue=EmployeeCode）
     /// </summary>
     [SugarColumn(ColumnName = "improvement_responsible", ColumnDescription = "改善责任人", ColumnDataType = "nvarchar", Length = 50, IsNullable = true)]
     public string? ImprovementResponsible { get; set; }
@@ -119,7 +119,7 @@ public class TaktCustomerComplaintItem : TaktCompanyEntityBase
     public int ImprovementStatus { get; set; } = 0;
 
     /// <summary>
-    /// 是否作废（字典 sys_yes_no_type，0=否 1=是；编辑移除子行时标记作废）
+    /// 是否作废（字典 sys_yes_no_type；0=否 1=是；编辑移除子行时标记作废）
     /// </summary>
     [SugarColumn(ColumnName = "is_obsolete", ColumnDescription = "是否作废", ColumnDataType = "int", IsNullable = false, DefaultValue = "0")]
     public int IsObsolete { get; set; } = 0;

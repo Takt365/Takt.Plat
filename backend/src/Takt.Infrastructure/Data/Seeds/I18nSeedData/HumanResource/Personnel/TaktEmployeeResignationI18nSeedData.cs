@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Infrastructure.Data.Seeds.I18nSeedData.HumanResource.Personnel
 // 文件名称：TaktEmployeeResignationI18nSeedData.cs
-// 创建时间：2026-07-20
+// 创建时间：2026-07-23
 // 创建人：Takt365(Auto Generated)
 // 功能描述：TaktEmployeeResignation 实体字段国际化种子（无对应 frontend locales；TranslationText 取自 ColumnDescription，ContextNote 取自属性 XML summary）
 // 
@@ -91,13 +91,31 @@ public class TaktEmployeeResignationI18nSeedData : ITaktSeedDataCoordinator
             new TranslationSeedItem("entity.employeeresignation._self", "zh-HK", "员工离职办理记录信息_hk", "实体名称"),
 
             // entity.employeeresignation.employeeid
-            new TranslationSeedItem("entity.employeeresignation.employeeid", "en-US", "员工ID_us", "员工（选项 TaktEmployees/options，DictValue=Id）"),
+            new TranslationSeedItem("entity.employeeresignation.employeeid", "en-US", "员工ID_us", "员工（选项 TaktEmployees/options；DictValue=Id）"),
             // entity.employeeresignation.employeeid
-            new TranslationSeedItem("entity.employeeresignation.employeeid", "ja-JP", "员工ID_jp", "员工（选项 TaktEmployees/options，DictValue=Id）"),
+            new TranslationSeedItem("entity.employeeresignation.employeeid", "ja-JP", "员工ID_jp", "员工（选项 TaktEmployees/options；DictValue=Id）"),
             // entity.employeeresignation.employeeid
-            new TranslationSeedItem("entity.employeeresignation.employeeid", "zh-CN", "员工ID", "员工（选项 TaktEmployees/options，DictValue=Id）"),
+            new TranslationSeedItem("entity.employeeresignation.employeeid", "zh-CN", "员工ID", "员工（选项 TaktEmployees/options；DictValue=Id）"),
             // entity.employeeresignation.employeeid
-            new TranslationSeedItem("entity.employeeresignation.employeeid", "zh-HK", "员工ID_hk", "员工（选项 TaktEmployees/options，DictValue=Id）"),
+            new TranslationSeedItem("entity.employeeresignation.employeeid", "zh-HK", "员工ID_hk", "员工（选项 TaktEmployees/options；DictValue=Id）"),
+
+            // entity.employeeresignation.employeecode
+            new TranslationSeedItem("entity.employeeresignation.employeecode", "en-US", "员工编码_us", "员工编码（冗余，与 TaktEmployee.EmployeeCode 对齐）"),
+            // entity.employeeresignation.employeecode
+            new TranslationSeedItem("entity.employeeresignation.employeecode", "ja-JP", "员工编码_jp", "员工编码（冗余，与 TaktEmployee.EmployeeCode 对齐）"),
+            // entity.employeeresignation.employeecode
+            new TranslationSeedItem("entity.employeeresignation.employeecode", "zh-CN", "员工编码", "员工编码（冗余，与 TaktEmployee.EmployeeCode 对齐）"),
+            // entity.employeeresignation.employeecode
+            new TranslationSeedItem("entity.employeeresignation.employeecode", "zh-HK", "员工编码_hk", "员工编码（冗余，与 TaktEmployee.EmployeeCode 对齐）"),
+
+            // entity.employeeresignation.employeename
+            new TranslationSeedItem("entity.employeeresignation.employeename", "en-US", "员工姓名_us", "员工姓名（冗余，与 TaktEmployee.EmployeeName 对齐）"),
+            // entity.employeeresignation.employeename
+            new TranslationSeedItem("entity.employeeresignation.employeename", "ja-JP", "员工姓名_jp", "员工姓名（冗余，与 TaktEmployee.EmployeeName 对齐）"),
+            // entity.employeeresignation.employeename
+            new TranslationSeedItem("entity.employeeresignation.employeename", "zh-CN", "员工姓名", "员工姓名（冗余，与 TaktEmployee.EmployeeName 对齐）"),
+            // entity.employeeresignation.employeename
+            new TranslationSeedItem("entity.employeeresignation.employeename", "zh-HK", "员工姓名_hk", "员工姓名（冗余，与 TaktEmployee.EmployeeName 对齐）"),
 
             // entity.employeeresignation.resignationtype
             new TranslationSeedItem("entity.employeeresignation.resignationtype", "en-US", "离职类型_us", "离职类型（字典 hr_resignation_category；0=主动辞职 1=公司辞退 2=合同到期 3=退休 9=其他）"),

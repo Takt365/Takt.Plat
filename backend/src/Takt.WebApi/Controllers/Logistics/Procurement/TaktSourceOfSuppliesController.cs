@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.WebApi.Controllers.Logistics.Procurement
 // 文件名称：TaktSourceOfSuppliesController.cs
-// 创建时间：2026-06-23
+// 创建时间：2026-07-21
 // 创建人：Takt365(Cursor AI)
 // 功能描述：货源清单清单控制器
 // 

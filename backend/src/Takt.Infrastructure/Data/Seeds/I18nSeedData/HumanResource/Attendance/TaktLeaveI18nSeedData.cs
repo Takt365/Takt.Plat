@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Infrastructure.Data.Seeds.I18nSeedData.HumanResource.Attendance
 // 文件名称：TaktLeaveI18nSeedData.cs
-// 创建时间：2026-07-20
+// 创建时间：2026-07-23
 // 创建人：Takt365(Auto Generated)
 // 功能描述：TaktLeave 实体字段国际化种子（无对应 frontend locales；TranslationText 取自 ColumnDescription，ContextNote 取自属性 XML summary）
 // 
@@ -91,13 +91,13 @@ public class TaktLeaveI18nSeedData : ITaktSeedDataCoordinator
             new TranslationSeedItem("entity.leave._self", "zh-HK", "请假信息_hk", "实体名称"),
 
             // entity.leave.employeeid
-            new TranslationSeedItem("entity.leave.employeeid", "en-US", "员工ID_us", "员工（选项 TaktEmployees/options，DictValue=Id）"),
+            new TranslationSeedItem("entity.leave.employeeid", "en-US", "员工ID_us", "员工（选项 TaktEmployees/options；DictValue=Id）"),
             // entity.leave.employeeid
-            new TranslationSeedItem("entity.leave.employeeid", "ja-JP", "员工ID_jp", "员工（选项 TaktEmployees/options，DictValue=Id）"),
+            new TranslationSeedItem("entity.leave.employeeid", "ja-JP", "员工ID_jp", "员工（选项 TaktEmployees/options；DictValue=Id）"),
             // entity.leave.employeeid
-            new TranslationSeedItem("entity.leave.employeeid", "zh-CN", "员工ID", "员工（选项 TaktEmployees/options，DictValue=Id）"),
+            new TranslationSeedItem("entity.leave.employeeid", "zh-CN", "员工ID", "员工（选项 TaktEmployees/options；DictValue=Id）"),
             // entity.leave.employeeid
-            new TranslationSeedItem("entity.leave.employeeid", "zh-HK", "员工ID_hk", "员工（选项 TaktEmployees/options，DictValue=Id）"),
+            new TranslationSeedItem("entity.leave.employeeid", "zh-HK", "员工ID_hk", "员工（选项 TaktEmployees/options；DictValue=Id）"),
 
             // entity.leave.employeename
             new TranslationSeedItem("entity.leave.employeename", "en-US", "员工姓名_us", "员工姓名"),
@@ -172,13 +172,13 @@ public class TaktLeaveI18nSeedData : ITaktSeedDataCoordinator
             new TranslationSeedItem("entity.leave.attachments", "zh-HK", "证明附件JSON_hk", "证明附件（JSON 列表，由 TaktFile 统一上传）"),
 
             // entity.leave.handlingby
-            new TranslationSeedItem("entity.leave.handlingby", "en-US", "经办人_us", "经办人（选项 TaktEmployees/options，DictValue=Id）"),
+            new TranslationSeedItem("entity.leave.handlingby", "en-US", "经办人_us", "经办人（选项 TaktEmployees/options；DictValue=Id）"),
             // entity.leave.handlingby
-            new TranslationSeedItem("entity.leave.handlingby", "ja-JP", "经办人_jp", "经办人（选项 TaktEmployees/options，DictValue=Id）"),
+            new TranslationSeedItem("entity.leave.handlingby", "ja-JP", "经办人_jp", "经办人（选项 TaktEmployees/options；DictValue=Id）"),
             // entity.leave.handlingby
-            new TranslationSeedItem("entity.leave.handlingby", "zh-CN", "经办人", "经办人（选项 TaktEmployees/options，DictValue=Id）"),
+            new TranslationSeedItem("entity.leave.handlingby", "zh-CN", "经办人", "经办人（选项 TaktEmployees/options；DictValue=Id）"),
             // entity.leave.handlingby
-            new TranslationSeedItem("entity.leave.handlingby", "zh-HK", "经办人_hk", "经办人（选项 TaktEmployees/options，DictValue=Id）"),
+            new TranslationSeedItem("entity.leave.handlingby", "zh-HK", "经办人_hk", "经办人（选项 TaktEmployees/options；DictValue=Id）"),
 
             // entity.leave.handlingat
             new TranslationSeedItem("entity.leave.handlingat", "en-US", "经办时间_us", "经办时间"),
@@ -199,13 +199,13 @@ public class TaktLeaveI18nSeedData : ITaktSeedDataCoordinator
             new TranslationSeedItem("entity.leave.handlingcomment", "zh-HK", "经办备注_hk", "经办备注"),
 
             // entity.leave.relatedplant
-            new TranslationSeedItem("entity.leave.relatedplant", "en-US", "关联工厂_us", "关联工厂（选项 TaktPlants/options，DictValue=Id）"),
+            new TranslationSeedItem("entity.leave.relatedplant", "en-US", "关联工厂_us", "关联工厂（选项 TaktPlants/options；DictValue=Id）"),
             // entity.leave.relatedplant
-            new TranslationSeedItem("entity.leave.relatedplant", "ja-JP", "关联工厂_jp", "关联工厂（选项 TaktPlants/options，DictValue=Id）"),
+            new TranslationSeedItem("entity.leave.relatedplant", "ja-JP", "关联工厂_jp", "关联工厂（选项 TaktPlants/options；DictValue=Id）"),
             // entity.leave.relatedplant
-            new TranslationSeedItem("entity.leave.relatedplant", "zh-CN", "关联工厂", "关联工厂（选项 TaktPlants/options，DictValue=Id）"),
+            new TranslationSeedItem("entity.leave.relatedplant", "zh-CN", "关联工厂", "关联工厂（选项 TaktPlants/options；DictValue=Id）"),
             // entity.leave.relatedplant
-            new TranslationSeedItem("entity.leave.relatedplant", "zh-HK", "关联工厂_hk", "关联工厂（选项 TaktPlants/options，DictValue=Id）"),
+            new TranslationSeedItem("entity.leave.relatedplant", "zh-HK", "关联工厂_hk", "关联工厂（选项 TaktPlants/options；DictValue=Id）"),
 
             // entity.leave.status
             new TranslationSeedItem("entity.leave.status", "en-US", "请假状态_us", "请假状态（字典 sys_approval_status；0=待审批 1=审批中 2=已通过 3=已驳回 4=已撤回 5=已终止）"),

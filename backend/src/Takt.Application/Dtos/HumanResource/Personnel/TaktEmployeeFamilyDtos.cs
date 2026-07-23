@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Application.Dtos.HumanResource.Personnel
 // 文件名称：TaktEmployeeFamilyDtos.cs
-// 创建时间：2026-06-23
+// 创建时间：2026-07-23
 // 创建人：Takt365(Auto Generated)
 // 功能描述：EmployeeFamily 模块 DTO（由 generate-dtos-from-entity.cjs 根据 TaktEmployeeFamily 生成，请按需审阅）
 // 
@@ -36,15 +36,20 @@ public class TaktEmployeeFamilyDto : TaktCompanyDtoBase
     public long EmployeeFamilyId { get; set; }
 
     /// <summary>
-    /// 员工ID
+    /// 员工（选项 TaktEmployees/options；DictValue=Id）
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
     public long EmployeeId { get; set; }
 
     /// <summary>
-    /// 员工名称（填充字段）
+    /// 员工编码（冗余，与 TaktEmployee.EmployeeCode 对齐）
     /// </summary>
-    public string? EmployeeName { get; set; }
+    public string EmployeeCode { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 员工姓名（冗余，与 TaktEmployee.EmployeeName 对齐）
+    /// </summary>
+    public string EmployeeName { get; set; } = string.Empty;
 
     /// <summary>
     /// 成员姓名
@@ -52,7 +57,7 @@ public class TaktEmployeeFamilyDto : TaktCompanyDtoBase
     public string MemberName { get; set; } = string.Empty;
 
     /// <summary>
-    /// 与员工关系（0=配偶，1=子女，2=父母，3=兄弟姐妹，9=其他）
+    /// 与员工关系（字典 hr_employee_family_relation_type；0=配偶 1=子女 2=父母 3=兄弟姐妹 9=其他）
     /// </summary>
     public int RelationType { get; set; } = 0;
 
@@ -77,7 +82,7 @@ public class TaktEmployeeFamilyDto : TaktCompanyDtoBase
     public DateTime? BirthDate { get; set; }
 
     /// <summary>
-    /// 是否紧急联系人（1=是，0=否）
+    /// 是否紧急联系人（字典 sys_yes_no_type；0=否 1=是）
     /// </summary>
     public int IsEmergencyContact { get; set; } = 0;
 
@@ -104,10 +109,20 @@ public class TaktEmployeeFamilyQueryDto : TaktPagedQuery
     public string? CompanyCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 员工ID
+    /// 员工（选项 TaktEmployees/options；DictValue=Id）
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
     public long? EmployeeId { get; set; }
+
+    /// <summary>
+    /// 员工编码（冗余，与 TaktEmployee.EmployeeCode 对齐）
+    /// </summary>
+    public string? EmployeeCode { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 员工姓名（冗余，与 TaktEmployee.EmployeeName 对齐）
+    /// </summary>
+    public string? EmployeeName { get; set; } = string.Empty;
 
     /// <summary>
     /// 成员姓名
@@ -115,7 +130,7 @@ public class TaktEmployeeFamilyQueryDto : TaktPagedQuery
     public string? MemberName { get; set; } = string.Empty;
 
     /// <summary>
-    /// 与员工关系（0=配偶，1=子女，2=父母，3=兄弟姐妹，9=其他）
+    /// 与员工关系（字典 hr_employee_family_relation_type；0=配偶 1=子女 2=父母 3=兄弟姐妹 9=其他）
     /// </summary>
     public int? RelationType { get; set; }
 
@@ -145,7 +160,7 @@ public class TaktEmployeeFamilyQueryDto : TaktPagedQuery
     public DateTime? BirthDateEnd { get; set; }
 
     /// <summary>
-    /// 是否紧急联系人（1=是，0=否）
+    /// 是否紧急联系人（字典 sys_yes_no_type；0=否 1=是）
     /// </summary>
     public int? IsEmergencyContact { get; set; }
 
@@ -195,10 +210,22 @@ public class TaktEmployeeFamilyCreateDto
     public string CompanyDefaultCulture { get; set; } = string.Empty;
 
     /// <summary>
-    /// 员工ID
+    /// 员工（选项 TaktEmployees/options；DictValue=Id）
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
     public long EmployeeId { get; set; }
+
+    /// <summary>
+    /// 员工编码（冗余，与 TaktEmployee.EmployeeCode 对齐）
+    /// </summary>
+    [Required(ErrorMessage = "员工编码（冗余，与 TaktEmployee.EmployeeCode 对齐）不能为空")]
+    public string EmployeeCode { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 员工姓名（冗余，与 TaktEmployee.EmployeeName 对齐）
+    /// </summary>
+    [Required(ErrorMessage = "员工姓名（冗余，与 TaktEmployee.EmployeeName 对齐）不能为空")]
+    public string EmployeeName { get; set; } = string.Empty;
 
     /// <summary>
     /// 成员姓名
@@ -207,7 +234,7 @@ public class TaktEmployeeFamilyCreateDto
     public string MemberName { get; set; } = string.Empty;
 
     /// <summary>
-    /// 与员工关系（0=配偶，1=子女，2=父母，3=兄弟姐妹，9=其他）
+    /// 与员工关系（字典 hr_employee_family_relation_type；0=配偶 1=子女 2=父母 3=兄弟姐妹 9=其他）
     /// </summary>
     public int RelationType { get; set; } = 0;
 
@@ -232,7 +259,7 @@ public class TaktEmployeeFamilyCreateDto
     public DateTime? BirthDate { get; set; }
 
     /// <summary>
-    /// 是否紧急联系人（1=是，0=否）
+    /// 是否紧急联系人（字典 sys_yes_no_type；0=否 1=是）
     /// </summary>
     public int IsEmergencyContact { get; set; } = 0;
 
@@ -288,10 +315,20 @@ public class TaktEmployeeFamilyTemplateDto
     public string? CompanyCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 员工ID
+    /// 员工（选项 TaktEmployees/options；DictValue=Id）
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
     public long? EmployeeId { get; set; }
+
+    /// <summary>
+    /// 员工编码（冗余，与 TaktEmployee.EmployeeCode 对齐）
+    /// </summary>
+    public string? EmployeeCode { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 员工姓名（冗余，与 TaktEmployee.EmployeeName 对齐）
+    /// </summary>
+    public string? EmployeeName { get; set; } = string.Empty;
 
     /// <summary>
     /// 成员姓名
@@ -299,7 +336,7 @@ public class TaktEmployeeFamilyTemplateDto
     public string? MemberName { get; set; } = string.Empty;
 
     /// <summary>
-    /// 与员工关系（0=配偶，1=子女，2=父母，3=兄弟姐妹，9=其他）
+    /// 与员工关系（字典 hr_employee_family_relation_type；0=配偶 1=子女 2=父母 3=兄弟姐妹 9=其他）
     /// </summary>
     public int? RelationType { get; set; }
 
@@ -324,7 +361,7 @@ public class TaktEmployeeFamilyTemplateDto
     public DateTime? BirthDate { get; set; }
 
     /// <summary>
-    /// 是否紧急联系人（1=是，0=否）
+    /// 是否紧急联系人（字典 sys_yes_no_type；0=否 1=是）
     /// </summary>
     public int? IsEmergencyContact { get; set; }
 
@@ -361,10 +398,20 @@ public class TaktEmployeeFamilyImportDto
     public string? CompanyDefaultCulture { get; set; } = string.Empty;
 
     /// <summary>
-    /// 员工ID
+    /// 员工（选项 TaktEmployees/options；DictValue=Id）
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
     public long? EmployeeId { get; set; }
+
+    /// <summary>
+    /// 员工编码（冗余，与 TaktEmployee.EmployeeCode 对齐）
+    /// </summary>
+    public string? EmployeeCode { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 员工姓名（冗余，与 TaktEmployee.EmployeeName 对齐）
+    /// </summary>
+    public string? EmployeeName { get; set; } = string.Empty;
 
     /// <summary>
     /// 成员姓名
@@ -372,7 +419,7 @@ public class TaktEmployeeFamilyImportDto
     public string? MemberName { get; set; } = string.Empty;
 
     /// <summary>
-    /// 与员工关系（0=配偶，1=子女，2=父母，3=兄弟姐妹，9=其他）
+    /// 与员工关系（字典 hr_employee_family_relation_type；0=配偶 1=子女 2=父母 3=兄弟姐妹 9=其他）
     /// </summary>
     public int? RelationType { get; set; }
 
@@ -397,7 +444,7 @@ public class TaktEmployeeFamilyImportDto
     public DateTime? BirthDate { get; set; }
 
     /// <summary>
-    /// 是否紧急联系人（1=是，0=否）
+    /// 是否紧急联系人（字典 sys_yes_no_type；0=否 1=是）
     /// </summary>
     public int? IsEmergencyContact { get; set; }
 
@@ -435,10 +482,20 @@ public class TaktEmployeeFamilyExportDto
     public string CompanyCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 员工ID
+    /// 员工（选项 TaktEmployees/options；DictValue=Id）
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
     public long EmployeeId { get; set; }
+
+    /// <summary>
+    /// 员工编码（冗余，与 TaktEmployee.EmployeeCode 对齐）
+    /// </summary>
+    public string EmployeeCode { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 员工姓名（冗余，与 TaktEmployee.EmployeeName 对齐）
+    /// </summary>
+    public string EmployeeName { get; set; } = string.Empty;
 
     /// <summary>
     /// 成员姓名
@@ -446,7 +503,7 @@ public class TaktEmployeeFamilyExportDto
     public string MemberName { get; set; } = string.Empty;
 
     /// <summary>
-    /// 与员工关系（0=配偶，1=子女，2=父母，3=兄弟姐妹，9=其他）
+    /// 与员工关系（字典 hr_employee_family_relation_type；0=配偶 1=子女 2=父母 3=兄弟姐妹 9=其他）
     /// </summary>
     public int RelationType { get; set; } = 0;
 
@@ -471,7 +528,7 @@ public class TaktEmployeeFamilyExportDto
     public DateTime? BirthDate { get; set; }
 
     /// <summary>
-    /// 是否紧急联系人（1=是，0=否）
+    /// 是否紧急联系人（字典 sys_yes_no_type；0=否 1=是）
     /// </summary>
     public int IsEmergencyContact { get; set; } = 0;
 

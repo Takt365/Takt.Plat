@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：frontend/src/types/logistics/sales
 // 文件名称：order.d.ts
-// 创建时间：2026-07-09
+// 创建时间：2026-07-23
 // 创建人：Takt365(Auto Generated)
 // 功能描述：logistics/sales 模块类型定义（自动生成；类型名去 Takt 前缀与末尾 Dto，如 TaktCompanyDto → Company）
 // 
@@ -29,7 +29,7 @@ export interface SalesOrder extends CompanyDtoBase {
   salesOrderId: string;
 
   /**
-   * 工厂代码（选项 TaktPlants/options，DictValue=PlantCode）
+   * 工厂代码（选项 TaktPlants/options；DictValue=PlantCode）
    */
   plantCode: string;
 
@@ -39,14 +39,14 @@ export interface SalesOrder extends CompanyDtoBase {
   salesOrderCode: string;
 
   /**
-   * 客户编码（选项 TaktCustomers/options，DictValue=CustomerCode）
+   * 客户编码（选项 TaktCustomers/options；DictValue=CustomerCode）
    */
   customerCode: string;
 
   /**
-   * 客户名称
+   * 客户名称1（冗余，与 TaktCustomer.CustomerName1 对齐）
    */
-  customerName: string;
+  customerName1: string;
 
   /**
    * 订单日期
@@ -64,7 +64,7 @@ export interface SalesOrder extends CompanyDtoBase {
   actualDeliveryDate?: string;
 
   /**
-   * 销售员（选项 TaktEmployees/options，DictValue=EmployeeCode）
+   * 销售员（选项 TaktEmployees/options；DictValue=EmployeeCode）
    */
   salesBy?: string;
 
@@ -82,6 +82,16 @@ export interface SalesOrder extends CompanyDtoBase {
    * 折扣金额（精确到分，存储为整数，单位为分）
    */
   discountAmount: number;
+
+  /**
+   * 结算币种（字典 accounting_currency_code；DictValue=CNY/USD 等；一单一币种）
+   */
+  currencyCode: string;
+
+  /**
+   * 税率（字典 accounting_tax_rate_param；13=13%，9=9%，0=0% 等；一单一税率）
+   */
+  taxRate: number;
 
   /**
    * 税费（精确到分，存储为整数，单位为分）
@@ -159,7 +169,7 @@ export interface SalesOrderQuery extends TaktPagedQuery {
   companyCode?: string;
 
   /**
-   * 工厂代码（选项 TaktPlants/options，DictValue=PlantCode）
+   * 工厂代码（选项 TaktPlants/options；DictValue=PlantCode）
    */
   plantCode?: string;
 
@@ -169,14 +179,14 @@ export interface SalesOrderQuery extends TaktPagedQuery {
   salesOrderCode?: string;
 
   /**
-   * 客户编码（选项 TaktCustomers/options，DictValue=CustomerCode）
+   * 客户编码（选项 TaktCustomers/options；DictValue=CustomerCode）
    */
   customerCode?: string;
 
   /**
-   * 客户名称
+   * 客户名称1（冗余，与 TaktCustomer.CustomerName1 对齐）
    */
-  customerName?: string;
+  customerName1?: string;
 
   /**
    * 订单日期（范围查询-开始）
@@ -209,7 +219,7 @@ export interface SalesOrderQuery extends TaktPagedQuery {
   actualDeliveryDateEnd?: string;
 
   /**
-   * 销售员（选项 TaktEmployees/options，DictValue=EmployeeCode）
+   * 销售员（选项 TaktEmployees/options；DictValue=EmployeeCode）
    */
   salesBy?: string;
 
@@ -227,6 +237,16 @@ export interface SalesOrderQuery extends TaktPagedQuery {
    * 折扣金额（精确到分，存储为整数，单位为分）
    */
   discountAmount?: number;
+
+  /**
+   * 结算币种（字典 accounting_currency_code；DictValue=CNY/USD 等；一单一币种）
+   */
+  currencyCode?: string;
+
+  /**
+   * 税率（字典 accounting_tax_rate_param；13=13%，9=9%，0=0% 等；一单一税率）
+   */
+  taxRate?: number;
 
   /**
    * 税费（精确到分，存储为整数，单位为分）
@@ -323,7 +343,7 @@ export interface SalesOrderCreate {
   companyDefaultCulture: string;
 
   /**
-   * 工厂代码（选项 TaktPlants/options，DictValue=PlantCode）
+   * 工厂代码（选项 TaktPlants/options；DictValue=PlantCode）
    */
   plantCode: string;
 
@@ -333,14 +353,14 @@ export interface SalesOrderCreate {
   salesOrderCode: string;
 
   /**
-   * 客户编码（选项 TaktCustomers/options，DictValue=CustomerCode）
+   * 客户编码（选项 TaktCustomers/options；DictValue=CustomerCode）
    */
   customerCode: string;
 
   /**
-   * 客户名称
+   * 客户名称1（冗余，与 TaktCustomer.CustomerName1 对齐）
    */
-  customerName: string;
+  customerName1: string;
 
   /**
    * 订单日期
@@ -358,7 +378,7 @@ export interface SalesOrderCreate {
   actualDeliveryDate?: string;
 
   /**
-   * 销售员（选项 TaktEmployees/options，DictValue=EmployeeCode）
+   * 销售员（选项 TaktEmployees/options；DictValue=EmployeeCode）
    */
   salesBy?: string;
 
@@ -376,6 +396,16 @@ export interface SalesOrderCreate {
    * 折扣金额（精确到分，存储为整数，单位为分）
    */
   discountAmount: number;
+
+  /**
+   * 结算币种（字典 accounting_currency_code；DictValue=CNY/USD 等；一单一币种）
+   */
+  currencyCode: string;
+
+  /**
+   * 税率（字典 accounting_tax_rate_param；13=13%，9=9%，0=0% 等；一单一税率）
+   */
+  taxRate: number;
 
   /**
    * 税费（精确到分，存储为整数，单位为分）
@@ -430,7 +460,7 @@ export interface SalesOrderCreate {
   /**
    * 销售订单明细列表（主子表关系，一个订单可以有多个明细）（子表，级联保存）
    */
-  items?: SalesOrderItemUpdate[];
+  items?: SalesOrderItemCreate[];
 
   /**
    * 扩展字段JSON
@@ -456,6 +486,11 @@ export interface SalesOrderUpdate extends SalesOrderCreate {
    * SalesOrderID（标识要更新的实体）
    */
   salesOrderId: string;
+
+  /**
+   * 销售订单明细列表（主子表关系，一个订单可以有多个明细）（子表，级联保存）
+   */
+  items?: any;
 
 }
 
@@ -496,7 +531,7 @@ export interface SalesOrderTemplate {
   companyCode?: string;
 
   /**
-   * 工厂代码（选项 TaktPlants/options，DictValue=PlantCode）
+   * 工厂代码（选项 TaktPlants/options；DictValue=PlantCode）
    */
   plantCode?: string;
 
@@ -506,14 +541,14 @@ export interface SalesOrderTemplate {
   salesOrderCode?: string;
 
   /**
-   * 客户编码（选项 TaktCustomers/options，DictValue=CustomerCode）
+   * 客户编码（选项 TaktCustomers/options；DictValue=CustomerCode）
    */
   customerCode?: string;
 
   /**
-   * 客户名称
+   * 客户名称1（冗余，与 TaktCustomer.CustomerName1 对齐）
    */
-  customerName?: string;
+  customerName1?: string;
 
   /**
    * 订单日期
@@ -531,7 +566,7 @@ export interface SalesOrderTemplate {
   actualDeliveryDate?: string;
 
   /**
-   * 销售员（选项 TaktEmployees/options，DictValue=EmployeeCode）
+   * 销售员（选项 TaktEmployees/options；DictValue=EmployeeCode）
    */
   salesBy?: string;
 
@@ -549,6 +584,16 @@ export interface SalesOrderTemplate {
    * 折扣金额（精确到分，存储为整数，单位为分）
    */
   discountAmount?: number;
+
+  /**
+   * 结算币种（字典 accounting_currency_code；DictValue=CNY/USD 等；一单一币种）
+   */
+  currencyCode?: string;
+
+  /**
+   * 税率（字典 accounting_tax_rate_param；13=13%，9=9%，0=0% 等；一单一税率）
+   */
+  taxRate?: number;
 
   /**
    * 税费（精确到分，存储为整数，单位为分）
@@ -640,7 +685,7 @@ export interface SalesOrderImport {
   companyDefaultCulture?: string;
 
   /**
-   * 工厂代码（选项 TaktPlants/options，DictValue=PlantCode）
+   * 工厂代码（选项 TaktPlants/options；DictValue=PlantCode）
    */
   plantCode?: string;
 
@@ -650,14 +695,14 @@ export interface SalesOrderImport {
   salesOrderCode?: string;
 
   /**
-   * 客户编码（选项 TaktCustomers/options，DictValue=CustomerCode）
+   * 客户编码（选项 TaktCustomers/options；DictValue=CustomerCode）
    */
   customerCode?: string;
 
   /**
-   * 客户名称
+   * 客户名称1（冗余，与 TaktCustomer.CustomerName1 对齐）
    */
-  customerName?: string;
+  customerName1?: string;
 
   /**
    * 订单日期
@@ -675,7 +720,7 @@ export interface SalesOrderImport {
   actualDeliveryDate?: string;
 
   /**
-   * 销售员（选项 TaktEmployees/options，DictValue=EmployeeCode）
+   * 销售员（选项 TaktEmployees/options；DictValue=EmployeeCode）
    */
   salesBy?: string;
 
@@ -693,6 +738,16 @@ export interface SalesOrderImport {
    * 折扣金额（精确到分，存储为整数，单位为分）
    */
   discountAmount?: number;
+
+  /**
+   * 结算币种（字典 accounting_currency_code；DictValue=CNY/USD 等；一单一币种）
+   */
+  currencyCode?: string;
+
+  /**
+   * 税率（字典 accounting_tax_rate_param；13=13%，9=9%，0=0% 等；一单一税率）
+   */
+  taxRate?: number;
 
   /**
    * 税费（精确到分，存储为整数，单位为分）
@@ -779,7 +834,7 @@ export interface SalesOrderExport {
   companyCode: string;
 
   /**
-   * 工厂代码（选项 TaktPlants/options，DictValue=PlantCode）
+   * 工厂代码（选项 TaktPlants/options；DictValue=PlantCode）
    */
   plantCode: string;
 
@@ -789,14 +844,14 @@ export interface SalesOrderExport {
   salesOrderCode: string;
 
   /**
-   * 客户编码（选项 TaktCustomers/options，DictValue=CustomerCode）
+   * 客户编码（选项 TaktCustomers/options；DictValue=CustomerCode）
    */
   customerCode: string;
 
   /**
-   * 客户名称
+   * 客户名称1（冗余，与 TaktCustomer.CustomerName1 对齐）
    */
-  customerName: string;
+  customerName1: string;
 
   /**
    * 订单日期
@@ -814,7 +869,7 @@ export interface SalesOrderExport {
   actualDeliveryDate?: string;
 
   /**
-   * 销售员（选项 TaktEmployees/options，DictValue=EmployeeCode）
+   * 销售员（选项 TaktEmployees/options；DictValue=EmployeeCode）
    */
   salesBy?: string;
 
@@ -832,6 +887,16 @@ export interface SalesOrderExport {
    * 折扣金额（精确到分，存储为整数，单位为分）
    */
   discountAmount: number;
+
+  /**
+   * 结算币种（字典 accounting_currency_code；DictValue=CNY/USD 等；一单一币种）
+   */
+  currencyCode: string;
+
+  /**
+   * 税率（字典 accounting_tax_rate_param；13=13%，9=9%，0=0% 等；一单一税率）
+   */
+  taxRate: number;
 
   /**
    * 税费（精确到分，存储为整数，单位为分）

@@ -62,6 +62,7 @@
       :data-source="dataSource"
       :loading="loading"
       :stripe="true"
+      :virtual="true"
       :row-key="getServiceOrderId"
       :row-selection="rowSelection"
       :custom-row="onClickRow"
@@ -110,10 +111,10 @@
     >
       <template #default="{ isFieldVisible }">
       <div v-show="isFieldVisible('plantCode')">
-      <a-form-item :label="t('entity.serviceorder.plantcode')">
+      <a-form-item :label="pi.queryLabel('plantCode')">
         <a-input
           v-model:value="advancedQueryForm.plantCode"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.serviceorder.plantcode') })"
+          :placeholder="pi.queryPh('plantCode', 'required')"
           show-count
           :maxlength="4"
           allow-clear
@@ -121,10 +122,10 @@
       </a-form-item>
       </div>
       <div v-show="isFieldVisible('serviceOrderCode')">
-      <a-form-item :label="t('entity.serviceorder.code')">
+      <a-form-item :label="pi.queryLabel('serviceOrderCode')">
         <a-input
           v-model:value="advancedQueryForm.serviceOrderCode"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.serviceorder.code') })"
+          :placeholder="pi.queryPh('serviceOrderCode', 'required')"
           show-count
           :maxlength="50"
           allow-clear
@@ -132,10 +133,10 @@
       </a-form-item>
       </div>
       <div v-show="isFieldVisible('clientId')">
-      <a-form-item :label="t('entity.serviceorder.clientid')">
+      <a-form-item :label="pi.queryLabel('clientId')">
         <a-input
           v-model:value="advancedQueryForm.clientId"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.serviceorder.clientid') })"
+          :placeholder="pi.queryPh('clientId', 'required')"
           show-count
           :maxlength="20"
           allow-clear
@@ -143,32 +144,32 @@
       </a-form-item>
       </div>
       <div v-show="isFieldVisible('clientCode')">
-      <a-form-item :label="t('entity.serviceorder.clientcode')">
+      <a-form-item :label="pi.queryLabel('clientCode')">
         <a-input
           v-model:value="advancedQueryForm.clientCode"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.serviceorder.clientcode') })"
+          :placeholder="pi.queryPh('clientCode', 'required')"
           show-count
           :maxlength="20"
           allow-clear
         />
       </a-form-item>
       </div>
-      <div v-show="isFieldVisible('clientName')">
-      <a-form-item :label="t('entity.serviceorder.clientname')">
+      <div v-show="isFieldVisible('clientName1')">
+      <a-form-item :label="pi.queryLabel('clientName1')">
         <a-input
-          v-model:value="advancedQueryForm.clientName"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.serviceorder.clientname') })"
+          v-model:value="advancedQueryForm.clientName1"
+          :placeholder="pi.queryPh('clientName1', 'required')"
           show-count
-          :maxlength="80"
+          :maxlength="140"
           allow-clear
         />
       </a-form-item>
       </div>
       <div v-show="isFieldVisible('serviceContractId')">
-      <a-form-item :label="t('entity.serviceorder.servicecontractid')">
+      <a-form-item :label="pi.queryLabel('serviceContractId')">
         <a-input
           v-model:value="advancedQueryForm.serviceContractId"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.serviceorder.servicecontractid') })"
+          :placeholder="pi.queryPh('serviceContractId', 'required')"
           show-count
           :maxlength="20"
           allow-clear
@@ -176,10 +177,10 @@
       </a-form-item>
       </div>
       <div v-show="isFieldVisible('serviceContractCode')">
-      <a-form-item :label="t('entity.serviceorder.servicecontractcode')">
+      <a-form-item :label="pi.queryLabel('serviceContractCode')">
         <a-input
           v-model:value="advancedQueryForm.serviceContractCode"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.serviceorder.servicecontractcode') })"
+          :placeholder="pi.queryPh('serviceContractCode', 'required')"
           show-count
           :maxlength="50"
           allow-clear
@@ -187,10 +188,10 @@
       </a-form-item>
       </div>
       <div v-show="isFieldVisible('serviceRequestId')">
-      <a-form-item :label="t('entity.serviceorder.servicerequestid')">
+      <a-form-item :label="pi.queryLabel('serviceRequestId')">
         <a-input
           v-model:value="advancedQueryForm.serviceRequestId"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.serviceorder.servicerequestid') })"
+          :placeholder="pi.queryPh('serviceRequestId', 'required')"
           show-count
           :maxlength="20"
           allow-clear
@@ -198,10 +199,10 @@
       </a-form-item>
       </div>
       <div v-show="isFieldVisible('serviceRequestCode')">
-      <a-form-item :label="t('entity.serviceorder.servicerequestcode')">
+      <a-form-item :label="pi.queryLabel('serviceRequestCode')">
         <a-input
           v-model:value="advancedQueryForm.serviceRequestCode"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.serviceorder.servicerequestcode') })"
+          :placeholder="pi.queryPh('serviceRequestCode', 'required')"
           show-count
           :maxlength="50"
           allow-clear
@@ -209,175 +210,175 @@
       </a-form-item>
       </div>
       <div v-show="isFieldVisible('orderDateStart')">
-      <a-form-item :label="t('entity.serviceorder.orderdatestart')">
+      <a-form-item :label="pi.queryLabel('orderDateStart')">
         <a-date-picker
           v-model:value="advancedQueryForm.orderDateStart"
-          :placeholder="t('common.page.form.placeholder.select', { field: t('entity.serviceorder.orderdatestart') })"
+          :placeholder="pi.queryPh('orderDateStart', 'select')"
           value-format="YYYY-MM-DD"
           style="width: 100%"
         />
       </a-form-item>
       </div>
       <div v-show="isFieldVisible('orderDateEnd')">
-      <a-form-item :label="t('entity.serviceorder.orderdateend')">
+      <a-form-item :label="pi.queryLabel('orderDateEnd')">
         <a-date-picker
           v-model:value="advancedQueryForm.orderDateEnd"
-          :placeholder="t('common.page.form.placeholder.select', { field: t('entity.serviceorder.orderdateend') })"
+          :placeholder="pi.queryPh('orderDateEnd', 'select')"
           value-format="YYYY-MM-DD"
           style="width: 100%"
         />
       </a-form-item>
       </div>
       <div v-show="isFieldVisible('orderType')">
-      <a-form-item :label="t('entity.serviceorder.ordertype')">
+      <a-form-item :label="pi.queryLabel('orderType')">
         <a-input-number
           v-model:value="advancedQueryForm.orderType"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.serviceorder.ordertype') })"
+          :placeholder="pi.queryPh('orderType', 'required')"
           style="width: 100%"
         />
       </a-form-item>
       </div>
       <div v-show="isFieldVisible('orderStatus')">
-      <a-form-item :label="t('entity.serviceorder.orderstatus')">
+      <a-form-item :label="pi.queryLabel('orderStatus')">
         <a-input-number
           v-model:value="advancedQueryForm.orderStatus"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.serviceorder.orderstatus') })"
+          :placeholder="pi.queryPh('orderStatus', 'required')"
           style="width: 100%"
         />
       </a-form-item>
       </div>
       <div v-show="isFieldVisible('totalAmount')">
-      <a-form-item :label="t('entity.serviceorder.totalamount')">
+      <a-form-item :label="pi.queryLabel('totalAmount')">
         <a-input-number
           v-model:value="advancedQueryForm.totalAmount"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.serviceorder.totalamount') })"
+          :placeholder="pi.queryPh('totalAmount', 'required')"
           style="width: 100%"
         />
       </a-form-item>
       </div>
       <div v-show="isFieldVisible('discountAmount')">
-      <a-form-item :label="t('entity.serviceorder.discountamount')">
+      <a-form-item :label="pi.queryLabel('discountAmount')">
         <a-input-number
           v-model:value="advancedQueryForm.discountAmount"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.serviceorder.discountamount') })"
+          :placeholder="pi.queryPh('discountAmount', 'required')"
           style="width: 100%"
         />
       </a-form-item>
       </div>
       <div v-show="isFieldVisible('taxAmount')">
-      <a-form-item :label="t('entity.serviceorder.taxamount')">
+      <a-form-item :label="pi.queryLabel('taxAmount')">
         <a-input-number
           v-model:value="advancedQueryForm.taxAmount"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.serviceorder.taxamount') })"
+          :placeholder="pi.queryPh('taxAmount', 'required')"
           style="width: 100%"
         />
       </a-form-item>
       </div>
       <div v-show="isFieldVisible('actualAmount')">
-      <a-form-item :label="t('entity.serviceorder.actualamount')">
+      <a-form-item :label="pi.queryLabel('actualAmount')">
         <a-input-number
           v-model:value="advancedQueryForm.actualAmount"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.serviceorder.actualamount') })"
+          :placeholder="pi.queryPh('actualAmount', 'required')"
           style="width: 100%"
         />
       </a-form-item>
       </div>
       <div v-show="isFieldVisible('currencyCode')">
-      <a-form-item :label="t('entity.serviceorder.currencycode')">
+      <a-form-item :label="pi.queryLabel('currencyCode')">
         <a-input
           v-model:value="advancedQueryForm.currencyCode"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.serviceorder.currencycode') })"
+          :placeholder="pi.queryPh('currencyCode', 'required')"
           show-count
-          :maxlength="3"
+          :maxlength="10"
           allow-clear
         />
       </a-form-item>
       </div>
       <div v-show="isFieldVisible('plannedStartDateStart')">
-      <a-form-item :label="t('entity.serviceorder.plannedstartdatestart')">
+      <a-form-item :label="pi.queryLabel('plannedStartDateStart')">
         <a-date-picker
           v-model:value="advancedQueryForm.plannedStartDateStart"
-          :placeholder="t('common.page.form.placeholder.select', { field: t('entity.serviceorder.plannedstartdatestart') })"
+          :placeholder="pi.queryPh('plannedStartDateStart', 'select')"
           value-format="YYYY-MM-DD"
           style="width: 100%"
         />
       </a-form-item>
       </div>
       <div v-show="isFieldVisible('plannedStartDateEnd')">
-      <a-form-item :label="t('entity.serviceorder.plannedstartdateend')">
+      <a-form-item :label="pi.queryLabel('plannedStartDateEnd')">
         <a-date-picker
           v-model:value="advancedQueryForm.plannedStartDateEnd"
-          :placeholder="t('common.page.form.placeholder.select', { field: t('entity.serviceorder.plannedstartdateend') })"
+          :placeholder="pi.queryPh('plannedStartDateEnd', 'select')"
           value-format="YYYY-MM-DD"
           style="width: 100%"
         />
       </a-form-item>
       </div>
       <div v-show="isFieldVisible('plannedEndDateStart')">
-      <a-form-item :label="t('entity.serviceorder.plannedenddatestart')">
+      <a-form-item :label="pi.queryLabel('plannedEndDateStart')">
         <a-date-picker
           v-model:value="advancedQueryForm.plannedEndDateStart"
-          :placeholder="t('common.page.form.placeholder.select', { field: t('entity.serviceorder.plannedenddatestart') })"
+          :placeholder="pi.queryPh('plannedEndDateStart', 'select')"
           value-format="YYYY-MM-DD"
           style="width: 100%"
         />
       </a-form-item>
       </div>
       <div v-show="isFieldVisible('plannedEndDateEnd')">
-      <a-form-item :label="t('entity.serviceorder.plannedenddateend')">
+      <a-form-item :label="pi.queryLabel('plannedEndDateEnd')">
         <a-date-picker
           v-model:value="advancedQueryForm.plannedEndDateEnd"
-          :placeholder="t('common.page.form.placeholder.select', { field: t('entity.serviceorder.plannedenddateend') })"
+          :placeholder="pi.queryPh('plannedEndDateEnd', 'select')"
           value-format="YYYY-MM-DD"
           style="width: 100%"
         />
       </a-form-item>
       </div>
       <div v-show="isFieldVisible('actualStartDateStart')">
-      <a-form-item :label="t('entity.serviceorder.actualstartdatestart')">
+      <a-form-item :label="pi.queryLabel('actualStartDateStart')">
         <a-date-picker
           v-model:value="advancedQueryForm.actualStartDateStart"
-          :placeholder="t('common.page.form.placeholder.select', { field: t('entity.serviceorder.actualstartdatestart') })"
+          :placeholder="pi.queryPh('actualStartDateStart', 'select')"
           value-format="YYYY-MM-DD"
           style="width: 100%"
         />
       </a-form-item>
       </div>
       <div v-show="isFieldVisible('actualStartDateEnd')">
-      <a-form-item :label="t('entity.serviceorder.actualstartdateend')">
+      <a-form-item :label="pi.queryLabel('actualStartDateEnd')">
         <a-date-picker
           v-model:value="advancedQueryForm.actualStartDateEnd"
-          :placeholder="t('common.page.form.placeholder.select', { field: t('entity.serviceorder.actualstartdateend') })"
+          :placeholder="pi.queryPh('actualStartDateEnd', 'select')"
           value-format="YYYY-MM-DD"
           style="width: 100%"
         />
       </a-form-item>
       </div>
       <div v-show="isFieldVisible('actualEndDateStart')">
-      <a-form-item :label="t('entity.serviceorder.actualenddatestart')">
+      <a-form-item :label="pi.queryLabel('actualEndDateStart')">
         <a-date-picker
           v-model:value="advancedQueryForm.actualEndDateStart"
-          :placeholder="t('common.page.form.placeholder.select', { field: t('entity.serviceorder.actualenddatestart') })"
+          :placeholder="pi.queryPh('actualEndDateStart', 'select')"
           value-format="YYYY-MM-DD"
           style="width: 100%"
         />
       </a-form-item>
       </div>
       <div v-show="isFieldVisible('actualEndDateEnd')">
-      <a-form-item :label="t('entity.serviceorder.actualenddateend')">
+      <a-form-item :label="pi.queryLabel('actualEndDateEnd')">
         <a-date-picker
           v-model:value="advancedQueryForm.actualEndDateEnd"
-          :placeholder="t('common.page.form.placeholder.select', { field: t('entity.serviceorder.actualenddateend') })"
+          :placeholder="pi.queryPh('actualEndDateEnd', 'select')"
           value-format="YYYY-MM-DD"
           style="width: 100%"
         />
       </a-form-item>
       </div>
       <div v-show="isFieldVisible('serviceBy')">
-      <a-form-item :label="t('entity.serviceorder.serviceby')">
+      <a-form-item :label="pi.queryLabel('serviceBy')">
         <a-input
           v-model:value="advancedQueryForm.serviceBy"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.serviceorder.serviceby') })"
+          :placeholder="pi.queryPh('serviceBy', 'required')"
           show-count
           :maxlength="50"
           allow-clear
@@ -385,10 +386,10 @@
       </a-form-item>
       </div>
       <div v-show="isFieldVisible('createdAtStart')">
-      <a-form-item :label="t('common.page.entity.createdatstart')">
+      <a-form-item :label="pi.queryLabel('createdAtStart')">
         <a-date-picker
           v-model:value="advancedQueryForm.createdAtStart"
-          :placeholder="t('common.page.form.placeholder.select', { field: t('common.page.entity.createdatstart') })"
+          :placeholder="pi.queryPh('createdAtStart', 'select')"
           value-format="YYYY-MM-DD HH:mm:ss"
             show-time
           style="width: 100%"
@@ -396,10 +397,10 @@
       </a-form-item>
       </div>
       <div v-show="isFieldVisible('createdAtEnd')">
-      <a-form-item :label="t('common.page.entity.createdatend')">
+      <a-form-item :label="pi.queryLabel('createdAtEnd')">
         <a-date-picker
           v-model:value="advancedQueryForm.createdAtEnd"
-          :placeholder="t('common.page.form.placeholder.select', { field: t('common.page.entity.createdatend') })"
+          :placeholder="pi.queryPh('createdAtEnd', 'select')"
           value-format="YYYY-MM-DD HH:mm:ss"
             show-time
           style="width: 100%"
@@ -421,7 +422,7 @@
             >
               <span class="takt-form-label-hint-icon"><RiQuestionLine class="takt-remix-icon" /></span>
             </a-tooltip>
-            <span>{{ t('common.page.entity.extfield') }}</span>
+            <span>{{ pi.queryLabel('extField') }}</span>
           </span>
         </template>
         <a-textarea
@@ -435,10 +436,10 @@
       </a-form-item>
       </div>
       <div v-show="isFieldVisible('remark')">
-      <a-form-item :label="t('common.page.entity.remark')">
+      <a-form-item :label="pi.queryLabel('remark')">
         <a-textarea
           v-model:value="advancedQueryForm.remark"
-          :placeholder="t('common.page.form.placeholder.optional', { field: t('common.page.entity.remark') })"
+          :placeholder="pi.queryPh('remark', 'optional')"
             :rows="4"
             show-count
             :maxlength="400"
@@ -452,14 +453,15 @@
     <!-- 导入对话框 -->
     <TaktModal
       v-model:open="importVisible"
-      :title="t('common.dialog.title.import', { entity: t('entity.serviceorder._self') })"
+      :title="t('common.dialog.title.import', { entity: pi.self() })"
       :width="600"
       :footer="null"
       :cancel-text="t('common.page.button.close')"
       @cancel="handleImportCancel"
     >
       <TaktImportFile
-        entity-i18n-key="entity.serviceorder._self"
+        v-if="importVisible"
+        :entity-i18n-key="SERVICEORDER_SELF_I18N_KEY"
         file-type="xlsx"
         :sheet-name="excelNames.sheet"
         :template-file-name="excelNames.fileBase"
@@ -501,15 +503,28 @@ import { getServiceOrderList, getServiceOrderById, createServiceOrder, updateSer
 import type { ServiceOrder, ServiceOrderQuery } from '@/types/logistics/customer-service/service-order'
 import { taktExcelEntityNames } from '@/utils/naming'
 import { resolveExportDownloadFileName } from '@/utils/export-download-name'
+import { normalizeImportResult, type TaktImportResult } from '@/utils/takt-import-result'
 import { RiEditLine, RiDeleteBinLine, RiQuestionLine } from '@remixicon/vue'
 
+import {
+  useServiceOrderI18n,
+  SERVICEORDER_LIST_FIELDS,
+  SERVICEORDER_QUERY_STRING_FIELDS,
+  SERVICEORDER_QUERY_FIELDS,
+  SERVICEORDER_SELF_I18N_KEY,
+} from './composables/use-service-order-i18n'
+
+/** 实体字段 i18n（标签/占位符统一入口） */
+const pi = useServiceOrderI18n()
+/** 表格行类型（TaktSingleTable slot record 与 dataSource 行兼容） */
+type ServiceOrderRowRecord = ServiceOrder | Record<string, unknown>
 /** i18n 翻译函数 */
 const { t } = useI18n()
 /** Excel 导入/导出默认 sheet 名与文件名前缀 */
 const excelNames = taktExcelEntityNames('TaktServiceOrder')
 /** 列表快捷查询占位文案 */
 const searchPlaceholder = computed(
-  () => t('common.page.form.placeholder.search', { keyword: t('entity.serviceorder._self') })
+  () => t('common.page.form.placeholder.search', { keyword: pi.self() })
 )
 
 /** 快捷查询关键字 */
@@ -525,9 +540,9 @@ const pageSize = ref(getTaktDefaultPageSize())
 /** 分页 total */
 const total = ref(0)
 /** 工具栏单选时当前行 */
-const selectedRow = ref<ServiceOrder | null>(null)
+const selectedRow = ref<ServiceOrderRowRecord | null>(null)
 /** 表格多选行 */
-const selectedRows = ref<ServiceOrder[]>([])
+const selectedRows = ref<ServiceOrderRowRecord[]>([])
 /** 表格多选 row-key 集合 */
 const selectedRowKeys = ref<(string | number)[]>([])
 
@@ -544,74 +559,31 @@ const formRef = ref()
 
 /** 高级查询抽屉是否打开 */
 const advancedQueryVisible = ref(false)
+/**
+ * 创建空的高级查询表单
+ * @returns {Record<string, unknown>} 高级查询初始模型
+ */
+function createEmptyAdvancedQueryForm() {
+  const form = Object.fromEntries(SERVICEORDER_QUERY_STRING_FIELDS.map((key) => [key, ''])) as Record<
+    (typeof SERVICEORDER_QUERY_STRING_FIELDS)[number],
+    string
+  >
+  return {
+    ...form,
+    orderType: undefined as number | undefined,
+    orderStatus: undefined as number | undefined,
+    totalAmount: undefined as number | undefined,
+    discountAmount: undefined as number | undefined,
+    taxAmount: undefined as number | undefined,
+    actualAmount: undefined as number | undefined,
+  }
+}
 /** 高级查询表单模型 */
-const advancedQueryForm = ref({
-  plantCode: '',
-  serviceOrderCode: '',
-  clientId: '',
-  clientCode: '',
-  clientName: '',
-  serviceContractId: '',
-  serviceContractCode: '',
-  serviceRequestId: '',
-  serviceRequestCode: '',
-  orderDateStart: '',
-  orderDateEnd: '',
-  orderType: undefined as number | undefined,
-  orderStatus: undefined as number | undefined,
-  totalAmount: undefined as number | undefined,
-  discountAmount: undefined as number | undefined,
-  taxAmount: undefined as number | undefined,
-  actualAmount: undefined as number | undefined,
-  currencyCode: '',
-  plannedStartDateStart: '',
-  plannedStartDateEnd: '',
-  plannedEndDateStart: '',
-  plannedEndDateEnd: '',
-  actualStartDateStart: '',
-  actualStartDateEnd: '',
-  actualEndDateStart: '',
-  actualEndDateEnd: '',
-  serviceBy: '',
-  createdAtStart: '',
-  createdAtEnd: '',
-  extField: '',
-  remark: '',
-})
+const advancedQueryForm = ref(createEmptyAdvancedQueryForm())
 /** 高级查询字段元数据（列显隐配置） */
-const queryFieldsMeta = computed(() => [
-  { key: 'plantCode', label: t('entity.serviceorder.plantcode') },
-  { key: 'serviceOrderCode', label: t('entity.serviceorder.code') },
-  { key: 'clientId', label: t('entity.serviceorder.clientid') },
-  { key: 'clientCode', label: t('entity.serviceorder.clientcode') },
-  { key: 'clientName', label: t('entity.serviceorder.clientname') },
-  { key: 'serviceContractId', label: t('entity.serviceorder.servicecontractid') },
-  { key: 'serviceContractCode', label: t('entity.serviceorder.servicecontractcode') },
-  { key: 'serviceRequestId', label: t('entity.serviceorder.servicerequestid') },
-  { key: 'serviceRequestCode', label: t('entity.serviceorder.servicerequestcode') },
-  { key: 'orderDateStart', label: t('common.page.entity.createdatstart').replace(t('common.page.entity.createdat'), t('entity.serviceorder.orderdate')) },
-  { key: 'orderDateEnd', label: t('common.page.entity.createdatend').replace(t('common.page.entity.createdat'), t('entity.serviceorder.orderdate')) },
-  { key: 'orderType', label: t('entity.serviceorder.ordertype') },
-  { key: 'orderStatus', label: t('entity.serviceorder.orderstatus') },
-  { key: 'totalAmount', label: t('entity.serviceorder.totalamount') },
-  { key: 'discountAmount', label: t('entity.serviceorder.discountamount') },
-  { key: 'taxAmount', label: t('entity.serviceorder.taxamount') },
-  { key: 'actualAmount', label: t('entity.serviceorder.actualamount') },
-  { key: 'currencyCode', label: t('entity.serviceorder.currencycode') },
-  { key: 'plannedStartDateStart', label: t('common.page.entity.createdatstart').replace(t('common.page.entity.createdat'), t('entity.serviceorder.plannedstartdate')) },
-  { key: 'plannedStartDateEnd', label: t('common.page.entity.createdatend').replace(t('common.page.entity.createdat'), t('entity.serviceorder.plannedstartdate')) },
-  { key: 'plannedEndDateStart', label: t('common.page.entity.createdatstart').replace(t('common.page.entity.createdat'), t('entity.serviceorder.plannedenddate')) },
-  { key: 'plannedEndDateEnd', label: t('common.page.entity.createdatend').replace(t('common.page.entity.createdat'), t('entity.serviceorder.plannedenddate')) },
-  { key: 'actualStartDateStart', label: t('common.page.entity.createdatstart').replace(t('common.page.entity.createdat'), t('entity.serviceorder.actualstartdate')) },
-  { key: 'actualStartDateEnd', label: t('common.page.entity.createdatend').replace(t('common.page.entity.createdat'), t('entity.serviceorder.actualstartdate')) },
-  { key: 'actualEndDateStart', label: t('common.page.entity.createdatstart').replace(t('common.page.entity.createdat'), t('entity.serviceorder.actualenddate')) },
-  { key: 'actualEndDateEnd', label: t('common.page.entity.createdatend').replace(t('common.page.entity.createdat'), t('entity.serviceorder.actualenddate')) },
-  { key: 'serviceBy', label: t('entity.serviceorder.serviceby') },
-  { key: 'createdAtStart', label: t('common.page.entity.createdatstart') },
-  { key: 'createdAtEnd', label: t('common.page.entity.createdatend') },
-  { key: 'extField', label: t('common.page.entity.extfield') },
-  { key: 'remark', label: t('common.page.entity.remark') },
-])
+const queryFieldsMeta = computed(() =>
+  SERVICEORDER_QUERY_FIELDS.map((key) => ({ key, label: pi.queryLabel(key) })),
+)
 /** 高级查询当前可见字段 key */
 const visibleQueryFieldKeys = ref<string[]>([])
 /** 列设置抽屉是否打开 */
@@ -651,17 +623,9 @@ function buildListQuery(overrides?: Partial<ServiceOrderQuery>): ServiceOrderQue
       query[key] = v as never
     }
   }
-  assignTrimmed('plantCode', form.plantCode)
-  assignTrimmed('serviceOrderCode', form.serviceOrderCode)
-  assignTrimmed('clientId', form.clientId)
-  assignTrimmed('clientCode', form.clientCode)
-  assignTrimmed('clientName', form.clientName)
-  assignTrimmed('serviceContractId', form.serviceContractId)
-  assignTrimmed('serviceContractCode', form.serviceContractCode)
-  assignTrimmed('serviceRequestId', form.serviceRequestId)
-  assignTrimmed('serviceRequestCode', form.serviceRequestCode)
-  assignTrimmed('orderDateStart', form.orderDateStart)
-  assignTrimmed('orderDateEnd', form.orderDateEnd)
+  for (const key of SERVICEORDER_QUERY_STRING_FIELDS) {
+    assignTrimmed(key, form[key])
+  }
   if (form.orderType !== undefined && form.orderType !== null) {
     query.orderType = form.orderType
   }
@@ -680,20 +644,6 @@ function buildListQuery(overrides?: Partial<ServiceOrderQuery>): ServiceOrderQue
   if (form.actualAmount !== undefined && form.actualAmount !== null) {
     query.actualAmount = form.actualAmount
   }
-  assignTrimmed('currencyCode', form.currencyCode)
-  assignTrimmed('plannedStartDateStart', form.plannedStartDateStart)
-  assignTrimmed('plannedStartDateEnd', form.plannedStartDateEnd)
-  assignTrimmed('plannedEndDateStart', form.plannedEndDateStart)
-  assignTrimmed('plannedEndDateEnd', form.plannedEndDateEnd)
-  assignTrimmed('actualStartDateStart', form.actualStartDateStart)
-  assignTrimmed('actualStartDateEnd', form.actualStartDateEnd)
-  assignTrimmed('actualEndDateStart', form.actualEndDateStart)
-  assignTrimmed('actualEndDateEnd', form.actualEndDateEnd)
-  assignTrimmed('serviceBy', form.serviceBy)
-  assignTrimmed('createdAtStart', form.createdAtStart)
-  assignTrimmed('createdAtEnd', form.createdAtEnd)
-  assignTrimmed('extField', form.extField)
-  assignTrimmed('remark', form.remark)
   return query
 }
 /** 页面挂载：租户上下文就绪后加载分页配置，再拉列表 */
@@ -703,239 +653,32 @@ onMounted(async () => {
 })
 
 
-
-
-
-
+/**
+ * 构建列表标准文本列
+ * @param key 列 key / dataIndex
+ * @param title 列标题
+ * @param options 宽度与固定列
+ */
+function buildServiceOrderListColumn(
+  key: string,
+  title: string,
+  options?: { width?: number; fixed?: 'left' },
+) {
+  return {
+    title,
+    dataIndex: key,
+    key,
+    width: options?.width ?? 120,
+    resizable: true,
+    ellipsis: true,
+    ...(options?.fixed ? { fixed: options.fixed } : {}),
+  }
+}
 
 /** 表格列定义（i18n 随 locale 变化） */
 const columns = computed<TableColumnsType>(() => [
-  {
-    title: t('common.page.entity.id'),
-    dataIndex: 'serviceOrderId',
-    key: 'serviceOrderId',
-    width: 80,
-    resizable: true,
-    ellipsis: true,
-    fixed: 'left',
-    customRender: ({ record }: { record: any }) => getServiceOrderField(record, 'serviceOrderId') ?? ''
-  },
-  {
-    title: t('entity.serviceorder.plantcode'),
-    dataIndex: 'plantCode',
-    key: 'plantCode',
-    width: 120,
-    resizable: true,
-    ellipsis: true,
-    customRender: ({ record }: { record: any }) => getServiceOrderField(record, 'plantCode') ?? ''
-  },
-  {
-    title: t('entity.serviceorder.code'),
-    dataIndex: 'serviceOrderCode',
-    key: 'serviceOrderCode',
-    width: 120,
-    resizable: true,
-    ellipsis: true,
-    customRender: ({ record }: { record: any }) => getServiceOrderField(record, 'serviceOrderCode') ?? ''
-  },
-  {
-    title: t('entity.serviceorder.clientid'),
-    dataIndex: 'clientId',
-    key: 'clientId',
-    width: 120,
-    resizable: true,
-    ellipsis: true,
-    customRender: ({ record }: { record: any }) => getServiceOrderField(record, 'clientId') ?? ''
-  },
-  {
-    title: t('entity.serviceorder.clientcode'),
-    dataIndex: 'clientCode',
-    key: 'clientCode',
-    width: 120,
-    resizable: true,
-    ellipsis: true,
-    customRender: ({ record }: { record: any }) => getServiceOrderField(record, 'clientCode') ?? ''
-  },
-  {
-    title: t('entity.serviceorder.clientname'),
-    dataIndex: 'clientName',
-    key: 'clientName',
-    width: 120,
-    resizable: true,
-    ellipsis: true,
-    customRender: ({ record }: { record: any }) => getServiceOrderField(record, 'clientName') ?? ''
-  },
-  {
-    title: t('entity.serviceorder.servicecontractid'),
-    dataIndex: 'serviceContractId',
-    key: 'serviceContractId',
-    width: 120,
-    resizable: true,
-    ellipsis: true,
-    customRender: ({ record }: { record: any }) => getServiceOrderField(record, 'serviceContractId') ?? ''
-  },
-  {
-    title: t('entity.serviceorder.servicecontractcode'),
-    dataIndex: 'serviceContractCode',
-    key: 'serviceContractCode',
-    width: 120,
-    resizable: true,
-    ellipsis: true,
-    customRender: ({ record }: { record: any }) => getServiceOrderField(record, 'serviceContractCode') ?? ''
-  },
-  {
-    title: t('entity.serviceorder.servicerequestid'),
-    dataIndex: 'serviceRequestId',
-    key: 'serviceRequestId',
-    width: 120,
-    resizable: true,
-    ellipsis: true,
-    customRender: ({ record }: { record: any }) => getServiceOrderField(record, 'serviceRequestId') ?? ''
-  },
-  {
-    title: t('entity.serviceorder.servicerequestcode'),
-    dataIndex: 'serviceRequestCode',
-    key: 'serviceRequestCode',
-    width: 120,
-    resizable: true,
-    ellipsis: true,
-    customRender: ({ record }: { record: any }) => getServiceOrderField(record, 'serviceRequestCode') ?? ''
-  },
-  {
-    title: t('entity.serviceorder.orderdate'),
-    dataIndex: 'orderDate',
-    key: 'orderDate',
-    width: 120,
-    resizable: true,
-    ellipsis: true,
-    customRender: ({ record }: { record: any }) => getServiceOrderField(record, 'orderDate') ?? ''
-  },
-  {
-    title: t('entity.serviceorder.ordertype'),
-    dataIndex: 'orderType',
-    key: 'orderType',
-    width: 120,
-    resizable: true,
-    ellipsis: true,
-    customRender: ({ record }: { record: any }) => getServiceOrderField(record, 'orderType') ?? ''
-  },
-  {
-    title: t('entity.serviceorder.orderstatus'),
-    dataIndex: 'orderStatus',
-    key: 'orderStatus',
-    width: 120,
-    resizable: true,
-    ellipsis: true,
-    customRender: ({ record }: { record: any }) => getServiceOrderField(record, 'orderStatus') ?? ''
-  },
-  {
-    title: t('entity.serviceorder.totalamount'),
-    dataIndex: 'totalAmount',
-    key: 'totalAmount',
-    width: 120,
-    resizable: true,
-    ellipsis: true,
-    customRender: ({ record }: { record: any }) => getServiceOrderField(record, 'totalAmount') ?? ''
-  },
-  {
-    title: t('entity.serviceorder.discountamount'),
-    dataIndex: 'discountAmount',
-    key: 'discountAmount',
-    width: 120,
-    resizable: true,
-    ellipsis: true,
-    customRender: ({ record }: { record: any }) => getServiceOrderField(record, 'discountAmount') ?? ''
-  },
-  {
-    title: t('entity.serviceorder.taxamount'),
-    dataIndex: 'taxAmount',
-    key: 'taxAmount',
-    width: 120,
-    resizable: true,
-    ellipsis: true,
-    customRender: ({ record }: { record: any }) => getServiceOrderField(record, 'taxAmount') ?? ''
-  },
-  {
-    title: t('entity.serviceorder.actualamount'),
-    dataIndex: 'actualAmount',
-    key: 'actualAmount',
-    width: 120,
-    resizable: true,
-    ellipsis: true,
-    customRender: ({ record }: { record: any }) => getServiceOrderField(record, 'actualAmount') ?? ''
-  },
-  {
-    title: t('entity.serviceorder.currencycode'),
-    dataIndex: 'currencyCode',
-    key: 'currencyCode',
-    width: 120,
-    resizable: true,
-    ellipsis: true,
-    customRender: ({ record }: { record: any }) => getServiceOrderField(record, 'currencyCode') ?? ''
-  },
-  {
-    title: t('entity.serviceorder.plannedstartdate'),
-    dataIndex: 'plannedStartDate',
-    key: 'plannedStartDate',
-    width: 120,
-    resizable: true,
-    ellipsis: true,
-    customRender: ({ record }: { record: any }) => getServiceOrderField(record, 'plannedStartDate') ?? ''
-  },
-  {
-    title: t('entity.serviceorder.plannedenddate'),
-    dataIndex: 'plannedEndDate',
-    key: 'plannedEndDate',
-    width: 120,
-    resizable: true,
-    ellipsis: true,
-    customRender: ({ record }: { record: any }) => getServiceOrderField(record, 'plannedEndDate') ?? ''
-  },
-  {
-    title: t('entity.serviceorder.actualstartdate'),
-    dataIndex: 'actualStartDate',
-    key: 'actualStartDate',
-    width: 120,
-    resizable: true,
-    ellipsis: true,
-    customRender: ({ record }: { record: any }) => getServiceOrderField(record, 'actualStartDate') ?? ''
-  },
-  {
-    title: t('entity.serviceorder.actualenddate'),
-    dataIndex: 'actualEndDate',
-    key: 'actualEndDate',
-    width: 120,
-    resizable: true,
-    ellipsis: true,
-    customRender: ({ record }: { record: any }) => getServiceOrderField(record, 'actualEndDate') ?? ''
-  },
-  {
-    title: t('entity.serviceorder.serviceby'),
-    dataIndex: 'serviceBy',
-    key: 'serviceBy',
-    width: 120,
-    resizable: true,
-    ellipsis: true,
-    customRender: ({ record }: { record: any }) => getServiceOrderField(record, 'serviceBy') ?? ''
-  },
-  {
-    title: t('entity.serviceorder.servicecontract'),
-    dataIndex: 'serviceContract',
-    key: 'serviceContract',
-    width: 120,
-    resizable: true,
-    ellipsis: true,
-    customRender: ({ record }: { record: any }) => getServiceOrderField(record, 'serviceContract') ?? ''
-  },
-  {
-    title: t('entity.serviceorder.servicerequest'),
-    dataIndex: 'serviceRequest',
-    key: 'serviceRequest',
-    width: 120,
-    resizable: true,
-    ellipsis: true,
-    customRender: ({ record }: { record: any }) => getServiceOrderField(record, 'serviceRequest') ?? ''
-  },
+  buildServiceOrderListColumn('serviceOrderId', t('common.page.entity.id'), { width: 80, fixed: 'left' }),
+  ...SERVICEORDER_LIST_FIELDS.map((key) => buildServiceOrderListColumn(key, pi.label(key))),
   CreateActionColumn({
     actions: [
       {
@@ -944,7 +687,7 @@ const columns = computed<TableColumnsType>(() => [
         shape: 'plain',
         icon: RiEditLine,
         permission: 'logistics:service:order:update',
-        onClick: (record: ServiceOrder) => handleEdit(record)
+        onClick: (record: ServiceOrderRowRecord) => handleEdit(record)
       },
       {
         key: 'delete',
@@ -952,44 +695,42 @@ const columns = computed<TableColumnsType>(() => [
         shape: 'plain',
         icon: RiDeleteBinLine,
         permission: 'logistics:service:order:delete',
-        onClick: (record: ServiceOrder) => handleDeleteOne(record)
+        onClick: (record: ServiceOrderRowRecord) => handleDeleteOne(record)
       }
     ]
   })
 ])
 
 /** 表格 row-key（优先实体主键字段） */
-const getServiceOrderId = (record: any): string => record?.[entityIdName] ?? ''
-/**
- * 读取行字段值
- * @param record 行数据
- * @param field 字段名
- */
-const getServiceOrderField = (record: any, field: string): any => record?.[field]
+const getServiceOrderId = (record: ServiceOrderRowRecord): string => {
+  const id = (record as Record<string, unknown>)?.[entityIdName]
+  return id != null ? String(id) : ''
+}
+
 
 
 /** 行选择配置 */
 const rowSelection = computed(() => ({
   selectedRowKeys: selectedRowKeys.value,
-  onChange: (keys: (string | number)[], rows: ServiceOrder[]) => {
+  onChange: (keys: (string | number)[], rows: ServiceOrderRowRecord[]) => {
     selectedRowKeys.value = keys
     selectedRows.value = rows
     selectedRow.value = rows.length === 1 ? (rows[0] ?? null) : null
   },
-  onSelect: (record: ServiceOrder, selected: boolean) => {
+  onSelect: (record: ServiceOrderRowRecord, selected: boolean) => {
     if (selected) {
       selectedRow.value = record
     } else if (selectedRow.value && getServiceOrderId(selectedRow.value) === getServiceOrderId(record)) {
       selectedRow.value = null
     }
   },
-  onSelectAll: (selected: boolean, selectedRowsData: ServiceOrder[]) => {
+  onSelectAll: (selected: boolean, selectedRowsData: ServiceOrderRowRecord[]) => {
     selectedRow.value = selected && selectedRowsData.length === 1 ? (selectedRowsData[0] ?? null) : null
   }
 }))
 
 /** 行点击切换选中（与 rowSelection 联动） */
-const onClickRow = (record: ServiceOrder) => ({
+const onClickRow = (record: ServiceOrderRowRecord) => ({
   onClick: () => {
     const key = getServiceOrderId(record)
     const index = selectedRowKeys.value.indexOf(key)
@@ -1035,63 +776,43 @@ function handleSearch() {
 /** 重置查询条件并刷新列表 */
 function handleReset() {
   queryKeyword.value = ''
-  advancedQueryForm.value = {
-  plantCode: '',
-  serviceOrderCode: '',
-  clientId: '',
-  clientCode: '',
-  clientName: '',
-  serviceContractId: '',
-  serviceContractCode: '',
-  serviceRequestId: '',
-  serviceRequestCode: '',
-  orderDateStart: '',
-  orderDateEnd: '',
-  orderType: undefined as number | undefined,
-  orderStatus: undefined as number | undefined,
-  totalAmount: undefined as number | undefined,
-  discountAmount: undefined as number | undefined,
-  taxAmount: undefined as number | undefined,
-  actualAmount: undefined as number | undefined,
-  currencyCode: '',
-  plannedStartDateStart: '',
-  plannedStartDateEnd: '',
-  plannedEndDateStart: '',
-  plannedEndDateEnd: '',
-  actualStartDateStart: '',
-  actualStartDateEnd: '',
-  actualEndDateStart: '',
-  actualEndDateEnd: '',
-  serviceBy: '',
-  createdAtStart: '',
-  createdAtEnd: '',
-  extField: '',
-  remark: '',
-  }
+  advancedQueryForm.value = createEmptyAdvancedQueryForm()
   currentPage.value = getTaktDefaultPageIndex()
   loadData()
 }
 
 /** 打开新增弹窗 */
 function handleCreate() {
-  formTitle.value = t('common.dialog.title.create', { entity: t('entity.serviceorder._self') })
+  formTitle.value = t('common.dialog.title.create', { entity: pi.self() })
   formData.value = null
   formVisible.value = true
   nextTick(() => formRef.value?.resetFields())
 }
-/** 打开编辑弹窗 */
-function handleEdit(record: ServiceOrder) {
-  formTitle.value = t('common.dialog.title.edit', { entity: t('entity.serviceorder._self') })
-  formData.value = { ...record }
-  formVisible.value = true
+/** 打开编辑弹窗（拉取详情，避免列表列裁剪字段） */
+async function handleEdit(record: ServiceOrderRowRecord) {
+  const id = getServiceOrderId(record)
+  if (!id) {
+    return
+  }
+  formTitle.value = t('common.dialog.title.edit', { entity: pi.self() })
+  formLoading.value = true
+  try {
+    const detail = await getServiceOrderById(id)
+    formData.value = detail ?? ({ ...record } as Partial<ServiceOrder>)
+    formVisible.value = true
+  } catch (error: unknown) {
+    message.error(t('common.feedback.load.data.failed'))
+  } finally {
+    formLoading.value = false
+  }
 }
 
 /** 工具栏编辑：打开当前单选行 */
 function handleUpdate() {
   if (selectedRow.value) {
-    handleEdit(selectedRow.value)
+    void handleEdit(selectedRow.value)
   } else {
-    message.warning(t('common.tip.select.to.action', { action: t('common.page.button.edit'), entity: t('entity.serviceorder._self') }))
+    message.warning(t('common.tip.select.to.action', { action: t('common.page.button.edit'), entity: pi.self() }))
   }
 }
 /** 提交新增/编辑表单 */
@@ -1109,10 +830,10 @@ async function handleFormSubmit() {
     const id = (formData.value as any)?.[entityIdName]
     if (id) {
       await updateServiceOrder(id, payload as any)
-      message.success(t('common.feedback.updated', { target: t('entity.serviceorder._self') }))
+      message.success(t('common.feedback.updated', { target: pi.self() }))
     } else {
       await createServiceOrder(payload as any)
-      message.success(t('common.feedback.created', { target: t('entity.serviceorder._self') }))
+      message.success(t('common.feedback.created', { target: pi.self() }))
     }
     formVisible.value = false
     formData.value = null
@@ -1140,15 +861,18 @@ async function handleDownloadTemplate(sheetName?: string, fileName?: string): Pr
   return (res as any)?.data ?? res
 }
 
-/** 上传并导入 Excel 文件 */
-async function handleImportFile(file: File, sheetName?: string): Promise<{ success: number; fail: number; errors: string[] }> {
-  return await importServiceOrder(file, sheetName)
+/** 上传并导入 Excel 文件（归一化后端 SuccessCount/successCount） */
+async function handleImportFile(file: File, sheetName?: string): Promise<TaktImportResult> {
+  const raw = await importServiceOrder(file, sheetName)
+  return normalizeImportResult(raw)
 }
 
-/** 导入完成回调：刷新列表并可选关闭对话框 */
-function handleImportSuccess(result: { success: number; fail: number; errors: string[] }) {
+/** 导入完成回调：刷新列表；全部成功时延迟关闭对话框 */
+function handleImportSuccess(result: TaktImportResult) {
   loadData()
-  if (result.fail === 0) setTimeout(() => { importVisible.value = false }, 2000)
+  if (result.fail === 0 && result.success > 0) {
+    setTimeout(() => { importVisible.value = false }, 2000)
+  }
 }
 
 /** 关闭导入对话框 */
@@ -1182,24 +906,24 @@ async function handleExport() {
     link.click()
     document.body.removeChild(link)
     setTimeout(() => window.URL.revokeObjectURL(url), 100)
-    message.success(t('common.feedback.export.success', { target: t('entity.serviceorder._self') }))
+    message.success(t('common.feedback.export.success', { target: pi.self() }))
   } catch (error: any) {
     logger.error('[ServiceOrder] 导出失败', { error })
-    message.error(error?.message || t('common.feedback.export.failed', { target: t('entity.serviceorder._self') }))
+    message.error(error?.message || t('common.feedback.export.failed', { target: pi.self() }))
   } finally {
     loading.value = false
   }
 }
 /** 删除单行 */
-async function handleDeleteOne(record: ServiceOrder) {
+async function handleDeleteOne(record: ServiceOrderRowRecord) {
   Modal.confirm({
     title: t('common.tip.confirm.delete.title'),
-    content: t('common.tip.confirm.delete.entity', { entity: t('entity.serviceorder._self'), name: t('common.tip.this.target', { target: t('entity.serviceorder._self') }) }),
+    content: t('common.tip.confirm.delete.entity', { entity: pi.self(), name: t('common.tip.this.target', { target: pi.self() }) }),
     okText: t('common.page.button.delete'),
     cancelText: t('common.page.button.cancel'),
     onOk: async () => {
       await deleteServiceOrderById((record as any)[entityIdName])
-      message.success(t('common.feedback.deleted', { target: t('entity.serviceorder._self') }))
+      message.success(t('common.feedback.deleted', { target: pi.self() }))
       loadData()
     }
   })
@@ -1207,18 +931,18 @@ async function handleDeleteOne(record: ServiceOrder) {
 /** 批量删除选中行 */
 async function handleDelete() {
   if (selectedRows.value.length === 0) {
-    message.warning(t('common.tip.select.to.action', { action: t('common.page.button.delete'), entity: t('entity.serviceorder._self') }))
+    message.warning(t('common.tip.select.to.action', { action: t('common.page.button.delete'), entity: pi.self() }))
     return
   }
   Modal.confirm({
     title: t('common.tip.confirm.delete.title'),
-    content: t('common.tip.confirm.delete.count', { entity: t('entity.serviceorder._self'), count: selectedRows.value.length }),
+    content: t('common.tip.confirm.delete.count', { entity: pi.self(), count: selectedRows.value.length }),
     okText: t('common.page.button.delete'),
     cancelText: t('common.page.button.cancel'),
     onOk: async () => {
       const ids = selectedRows.value.map((r: any) => r[entityIdName]).filter(Boolean)
       await deleteServiceOrderBatch(ids)
-      message.success(t('common.feedback.deleted', { target: t('entity.serviceorder._self') }))
+      message.success(t('common.feedback.deleted', { target: pi.self() }))
       loadData()
     }
   })
@@ -1236,39 +960,7 @@ function handleAdvancedQuerySubmit() {
 }
 
 function handleAdvancedQueryReset() {
-  advancedQueryForm.value = {
-  plantCode: '',
-  serviceOrderCode: '',
-  clientId: '',
-  clientCode: '',
-  clientName: '',
-  serviceContractId: '',
-  serviceContractCode: '',
-  serviceRequestId: '',
-  serviceRequestCode: '',
-  orderDateStart: '',
-  orderDateEnd: '',
-  orderType: undefined as number | undefined,
-  orderStatus: undefined as number | undefined,
-  totalAmount: undefined as number | undefined,
-  discountAmount: undefined as number | undefined,
-  taxAmount: undefined as number | undefined,
-  actualAmount: undefined as number | undefined,
-  currencyCode: '',
-  plannedStartDateStart: '',
-  plannedStartDateEnd: '',
-  plannedEndDateStart: '',
-  plannedEndDateEnd: '',
-  actualStartDateStart: '',
-  actualStartDateEnd: '',
-  actualEndDateStart: '',
-  actualEndDateEnd: '',
-  serviceBy: '',
-  createdAtStart: '',
-  createdAtEnd: '',
-  extField: '',
-  remark: '',
-  }
+  advancedQueryForm.value = createEmptyAdvancedQueryForm()
 }
 
 /** 打开列设置抽屉 */

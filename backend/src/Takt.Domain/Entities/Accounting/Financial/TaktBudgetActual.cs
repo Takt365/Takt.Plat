@@ -28,7 +28,7 @@ namespace Takt.Domain.Entities.Accounting.Financial;
 public class TaktBudgetActual : TaktCompanyEntityBase
 {
     /// <summary>
-    /// 关联工厂（选项 TaktPlants/options，DictValue=PlantCode）
+    /// 关联工厂（选项 TaktPlants/options；DictValue=PlantCode）
     /// </summary>
     [SugarColumn(ColumnName = "related_plant", ColumnDescription = "关联工厂", ColumnDataType = "nvarchar", Length = 4, IsNullable = false)]
     public string RelatedPlant { get; set; } = string.Empty;

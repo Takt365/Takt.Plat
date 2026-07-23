@@ -28,111 +28,97 @@
           <a-row :gutter="24">
             <a-col :span="12">
               <a-form-item
-                :label="t('entity.qualityassuranceincoming.linenumber')"
+                :label="pi.label('lineNumber')"
                 name="lineNumber"
               >
                 <a-input-number
                   v-model:value="formState.lineNumber"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.qualityassuranceincoming.linenumber') })"
+                  :placeholder="pi.ph('lineNumber')"
                   style="width: 100%"
                 />
               </a-form-item>
             </a-col>
             <a-col :span="12">
               <a-form-item
-                :label="t('entity.qualityassuranceincoming.directmanpowercostperminute')"
+                :label="pi.label('directManpowerCostPerMinute')"
                 name="directManpowerCostPerMinute"
               >
                 <a-input-number
                   v-model:value="formState.directManpowerCostPerMinute"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.qualityassuranceincoming.directmanpowercostperminute') })"
+                  :placeholder="pi.ph('directManpowerCostPerMinute')"
                   style="width: 100%"
                 />
               </a-form-item>
             </a-col>
             <a-col :span="12">
               <a-form-item
-                :label="t('entity.qualityassuranceincoming.incominginspectioncost')"
+                :label="pi.label('incomingInspectionCost')"
                 name="incomingInspectionCost"
               >
                 <a-input-number
                   v-model:value="formState.incomingInspectionCost"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.qualityassuranceincoming.incominginspectioncost') })"
+                  :placeholder="pi.ph('incomingInspectionCost')"
                   style="width: 100%"
                 />
               </a-form-item>
             </a-col>
             <a-col :span="12">
               <a-form-item
-                :label="t('entity.qualityassuranceincoming.inspectiontimeminutes')"
+                :label="pi.label('inspectionTimeMinutes')"
                 name="inspectionTimeMinutes"
               >
                 <a-input-number
                   v-model:value="formState.inspectionTimeMinutes"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.qualityassuranceincoming.inspectiontimeminutes') })"
+                  :placeholder="pi.ph('inspectionTimeMinutes')"
                   style="width: 100%"
                 />
               </a-form-item>
             </a-col>
             <a-col :span="12">
               <a-form-item
-                :label="t('entity.qualityassuranceincoming.travelcost')"
+                :label="pi.label('travelCost')"
                 name="travelCost"
               >
                 <a-input-number
                   v-model:value="formState.travelCost"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.qualityassuranceincoming.travelcost') })"
+                  :placeholder="pi.ph('travelCost')"
                   style="width: 100%"
                 />
               </a-form-item>
             </a-col>
             <a-col :span="12">
               <a-form-item
-                :label="t('entity.qualityassuranceincoming.otherexpenses')"
+                :label="pi.label('otherExpenses')"
                 name="otherExpenses"
               >
                 <a-input-number
                   v-model:value="formState.otherExpenses"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.qualityassuranceincoming.otherexpenses') })"
+                  :placeholder="pi.ph('otherExpenses')"
                   style="width: 100%"
                 />
               </a-form-item>
             </a-col>
             <a-col :span="24">
               <a-form-item
-                :label="t('entity.qualityassuranceincoming.incomingnote')"
+                :label="pi.label('incomingNote')"
                 name="incomingNote"
               >
                 <a-textarea
                   v-model:value="formState.incomingNote"
-                  :placeholder="t('common.page.form.placeholder.optional', { field: t('entity.qualityassuranceincoming.incomingnote') })"
+                  :placeholder="pi.ph('incomingNote')"
                   :rows="2"
                 />
               </a-form-item>
             </a-col>
-            <a-col :span="24">
+            <a-col :span="12">
               <a-form-item
-                name="extField"
-                class="takt-form-item-ext-field"
+                :label="pi.label('isObsolete')"
+                name="isObsolete"
               >
-                <template #label>
-                  <span class="takt-form-ext-field-label">
-                    <a-tooltip
-                      :title="t('common.page.entity.extfieldhint')"
-                      placement="top"
-                    >
-                      <span class="takt-form-label-hint-icon"><RiQuestionLine class="takt-remix-icon" /></span>
-                    </a-tooltip>
-                    <span>{{ t('common.page.entity.extfield') }}</span>
-                  </span>
-                </template>
-                <a-textarea
-                  v-model:value="formState.extField"
-                  :placeholder="t('common.page.form.placeholder.extfield')"
-                  :rows="4"
-                  show-count
-                  :maxlength="400"
-                  allow-clear
+                <TaktSelect
+                  v-model:value="formState.isObsolete"
+                  dict-type="sys_yes_no_type"
+                  :placeholder="pi.ph('isObsolete')"
                 />
               </a-form-item>
             </a-col>
@@ -148,11 +134,17 @@
  * 品质业务主表子表 qualityAssuranceIncoming 维护表单 · 由 generate-vue-master-detail-from-api.cjs 生成
  * @module views/logistics/quality/cost/assurance/components
  */
-import { reactive, watch, computed, ref } from 'vue'
+import { reactive, watch, computed, ref, onMounted } from 'vue'
 import { useI18n } from 'vue-i18n'
 import type { Rule } from 'ant-design-vue/es/form'
+import { useQualityAssuranceIncomingI18n } from '../composables/use-assurance-incoming-i18n'
+
+/** 实体字段 i18n */
+const pi = useQualityAssuranceIncomingI18n()
+
 import type { QualityAssuranceIncomingCreate } from '@/types/logistics/quality/cost/assurance-incoming'
-import { RiQuestionLine } from '@remixicon/vue'
+import TaktSelect from '@/components/business/takt-select/index.vue'
+import { useDictDataStore } from '@/stores/foundation/dict-data'
 
 /** i18n 翻译函数 */
 const { t } = useI18n()
@@ -161,7 +153,8 @@ const formContentClass = computed(() => (formFields.length > 10 ? 'takt-form-con
 /** 当前激活的 Tab key */
 const activeTab = ref('tab-0')
 /** CreateDto 字段名列表（与 formState 键对齐） */
-const formFields = ["lineNumber","directManpowerCostPerMinute","incomingInspectionCost","inspectionTimeMinutes","travelCost","otherExpenses","incomingNote","extField"]
+const formFields = ["lineNumber","directManpowerCostPerMinute","incomingInspectionCost","inspectionTimeMinutes","travelCost","otherExpenses","incomingNote","isObsolete"]
+
 
 
 /** 父级传入的编辑 DTO；新增时为 undefined 或空对象 */
@@ -188,6 +181,13 @@ function applyFormDefaults(target: Record<string, unknown>) {
   void target
 }
 
+/** Pinia：字典缓存（TaktSelect dict-type 渲染前预热，避免选项空白） */
+const dictDataStore = useDictDataStore()
+
+/** 表单挂载时预加载全量字典 */
+onMounted(() => {
+  void dictDataStore.loadAllDictDataAsync()
+})
 
 /** 编辑态灌入 formData；新增态恢复默认值（须含 qualityAssuranceIncomingId 才视为编辑） */
 watch(
@@ -216,11 +216,11 @@ const rules = computed<Record<string, Rule[]>>(() => ({
   lineNumber: [{
     validator: async (_rule, value) => {
       if (value === undefined || value === null || value === '') {
-        return Promise.reject(t('common.page.form.placeholder.select', { field: t('entity.qualityassuranceincoming.linenumber') }))
+        return Promise.reject(pi.ph('lineNumber'))
       }
       const num = typeof value === 'number' ? value : Number(value)
       if (!Number.isFinite(num)) {
-        return Promise.reject(t('common.page.form.placeholder.select', { field: t('entity.qualityassuranceincoming.linenumber') }))
+        return Promise.reject(pi.ph('lineNumber'))
       }
       return Promise.resolve()
     },
@@ -229,11 +229,11 @@ const rules = computed<Record<string, Rule[]>>(() => ({
   directManpowerCostPerMinute: [{
     validator: async (_rule, value) => {
       if (value === undefined || value === null || value === '') {
-        return Promise.reject(t('common.page.form.placeholder.select', { field: t('entity.qualityassuranceincoming.directmanpowercostperminute') }))
+        return Promise.reject(pi.ph('directManpowerCostPerMinute'))
       }
       const num = typeof value === 'number' ? value : Number(value)
       if (!Number.isFinite(num)) {
-        return Promise.reject(t('common.page.form.placeholder.select', { field: t('entity.qualityassuranceincoming.directmanpowercostperminute') }))
+        return Promise.reject(pi.ph('directManpowerCostPerMinute'))
       }
       return Promise.resolve()
     },
@@ -242,11 +242,11 @@ const rules = computed<Record<string, Rule[]>>(() => ({
   incomingInspectionCost: [{
     validator: async (_rule, value) => {
       if (value === undefined || value === null || value === '') {
-        return Promise.reject(t('common.page.form.placeholder.select', { field: t('entity.qualityassuranceincoming.incominginspectioncost') }))
+        return Promise.reject(pi.ph('incomingInspectionCost'))
       }
       const num = typeof value === 'number' ? value : Number(value)
       if (!Number.isFinite(num)) {
-        return Promise.reject(t('common.page.form.placeholder.select', { field: t('entity.qualityassuranceincoming.incominginspectioncost') }))
+        return Promise.reject(pi.ph('incomingInspectionCost'))
       }
       return Promise.resolve()
     },
@@ -255,11 +255,11 @@ const rules = computed<Record<string, Rule[]>>(() => ({
   inspectionTimeMinutes: [{
     validator: async (_rule, value) => {
       if (value === undefined || value === null || value === '') {
-        return Promise.reject(t('common.page.form.placeholder.select', { field: t('entity.qualityassuranceincoming.inspectiontimeminutes') }))
+        return Promise.reject(pi.ph('inspectionTimeMinutes'))
       }
       const num = typeof value === 'number' ? value : Number(value)
       if (!Number.isFinite(num)) {
-        return Promise.reject(t('common.page.form.placeholder.select', { field: t('entity.qualityassuranceincoming.inspectiontimeminutes') }))
+        return Promise.reject(pi.ph('inspectionTimeMinutes'))
       }
       return Promise.resolve()
     },
@@ -268,11 +268,11 @@ const rules = computed<Record<string, Rule[]>>(() => ({
   travelCost: [{
     validator: async (_rule, value) => {
       if (value === undefined || value === null || value === '') {
-        return Promise.reject(t('common.page.form.placeholder.select', { field: t('entity.qualityassuranceincoming.travelcost') }))
+        return Promise.reject(pi.ph('travelCost'))
       }
       const num = typeof value === 'number' ? value : Number(value)
       if (!Number.isFinite(num)) {
-        return Promise.reject(t('common.page.form.placeholder.select', { field: t('entity.qualityassuranceincoming.travelcost') }))
+        return Promise.reject(pi.ph('travelCost'))
       }
       return Promise.resolve()
     },
@@ -281,11 +281,24 @@ const rules = computed<Record<string, Rule[]>>(() => ({
   otherExpenses: [{
     validator: async (_rule, value) => {
       if (value === undefined || value === null || value === '') {
-        return Promise.reject(t('common.page.form.placeholder.select', { field: t('entity.qualityassuranceincoming.otherexpenses') }))
+        return Promise.reject(pi.ph('otherExpenses'))
       }
       const num = typeof value === 'number' ? value : Number(value)
       if (!Number.isFinite(num)) {
-        return Promise.reject(t('common.page.form.placeholder.select', { field: t('entity.qualityassuranceincoming.otherexpenses') }))
+        return Promise.reject(pi.ph('otherExpenses'))
+      }
+      return Promise.resolve()
+    },
+    trigger: 'change'
+  }],
+  isObsolete: [{
+    validator: async (_rule, value) => {
+      if (value === undefined || value === null || value === '') {
+        return Promise.reject(pi.ph('isObsolete'))
+      }
+      const num = typeof value === 'number' ? value : Number(value)
+      if (!Number.isFinite(num)) {
+        return Promise.reject(pi.ph('isObsolete'))
       }
       return Promise.resolve()
     },
@@ -325,6 +338,10 @@ function getValues(): Record<string, any> {
   if ('otherExpenses' in payload) {
     const rawotherExpenses = payload.otherExpenses
     payload.otherExpenses = typeof rawotherExpenses === 'number' ? rawotherExpenses : Number(rawotherExpenses)
+  }
+  if ('isObsolete' in payload) {
+    const rawisObsolete = payload.isObsolete
+    payload.isObsolete = typeof rawisObsolete === 'number' ? rawisObsolete : Number(rawisObsolete)
   }
   if ('sortOrder' in payload) delete payload.sortOrder
   payload.qualityAssuranceId = props.masterId

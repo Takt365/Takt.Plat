@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：frontend/src/types/logistics/procurement
 // 文件名称：supplier.d.ts
-// 创建时间：2026-07-01
+// 创建时间：2026-07-23
 // 创建人：Takt365(Auto Generated)
 // 功能描述：logistics/procurement 模块类型定义（自动生成；类型名去 Takt 前缀与末尾 Dto，如 TaktCompanyDto → Company）
 // 
@@ -29,7 +29,7 @@ export interface Supplier extends CompanyDtoBase {
   supplierId: string;
 
   /**
-   * 工厂代码（选项 TaktPlants/options，DictValue=PlantCode）
+   * 工厂代码（选项 TaktPlants/options；DictValue=PlantCode）
    */
   plantCode: string;
 
@@ -39,9 +39,14 @@ export interface Supplier extends CompanyDtoBase {
   supplierCode: string;
 
   /**
-   * 供货商名称
+   * 供货商名称1
    */
-  supplierName: string;
+  supplierName1: string;
+
+  /**
+   * 供货商名称2
+   */
+  supplierName2?: string;
 
   /**
    * 供货商简称
@@ -54,9 +59,19 @@ export interface Supplier extends CompanyDtoBase {
   supplierType: number;
 
   /**
-   * 行业领域（字典 logistics_industry_sector，DictValue=A/C/M/P）
+   * 企业性质（字典 sys_enterprise_nature_type）
    */
-  industrySector?: string;
+  enterpriseNature: string;
+
+  /**
+   * 行业属性（字典 sys_industry_attribute_type）
+   */
+  industryAttribute: string;
+
+  /**
+   * 区域文化编码（字典 sys_culture_code；即语言/区域文化）
+   */
+  defaultCulture: string;
 
   /**
    * 供货商标识（税务登记证号/统一社会信用代码）
@@ -69,9 +84,19 @@ export interface Supplier extends CompanyDtoBase {
   taxRate: number;
 
   /**
-   * 注册国家（ISO 3166-1 alpha-2两位代码）
+   * 注册国家（字典 sys_country_code；DictValue=ISO alpha-2）
    */
   registrationCountry?: string;
+
+  /**
+   * 注册省（选项 TaktAdminDivisions/options；DictValue=DivisionCode；建议 Level=2）
+   */
+  registrationProvince?: string;
+
+  /**
+   * 注册市（选项 TaktAdminDivisions/options；DictValue=DivisionCode；建议 Level=3）
+   */
+  registrationCity?: string;
 
   /**
    * 注册地址1
@@ -82,11 +107,6 @@ export interface Supplier extends CompanyDtoBase {
    * 注册地址2
    */
   registrationAddress2?: string;
-
-  /**
-   * 注册地址3
-   */
-  registrationAddress3?: string;
 
   /**
    * 供货商电话
@@ -124,14 +144,94 @@ export interface Supplier extends CompanyDtoBase {
   contactEmail?: string;
 
   /**
-   * 结算币种代码（字典 accounting_currency_code，DictValue=CNY/USD 等）
+   * 结算币种代码（字典 accounting_currency_code；DictValue=CNY/USD 等）
    */
   currencyCode: string;
+
+  /**
+   * 统驭科目（选项 TaktAccountTitles/options?reconciliationOnly=true&amp;auxiliaryType=K；DictValue=AccountTitleCode）
+   */
+  reconciliationAccount: string;
+
+  /**
+   * 客户（选项 TaktCustomers/options；DictValue=CustomerCode）
+   */
+  customerCode: string;
+
+  /**
+   * 具有客户的清算（字典 sys_yes_no_type；0=否 1=是）
+   */
+  clearingWithCustomer: number;
+
+  /**
+   * 付款方式（字典 accounting_payment_method_type；0=现金，1=银行转账，2=支票，3=信用证，4=其他）
+   */
+  paymentMethod: number;
 
   /**
    * 付款条件（字典 accounting_payment_terms_param；DictValue=prepayship/cod/net30 等）
    */
   paymentTerms: string;
+
+  /**
+   * 银行代码（选项 TaktBanks/options；DictValue=BankCode）
+   */
+  bankCode: string;
+
+  /**
+   * 银行帐号
+   */
+  bankAccount: string;
+
+  /**
+   * 帐户持有人
+   */
+  accountHolder: string;
+
+  /**
+   * 基于收货的发票验证（字典 sys_yes_no_type；0=否 1=是）
+   */
+  grBasedInvoiceInspection: number;
+
+  /**
+   * 国际贸易条件1（字典 logistics_incoterms1；CFR/CIF/…/FOB 等；默认 FOB）
+   */
+  incoterms1: string;
+
+  /**
+   * 国际贸易条件2（地点说明）
+   */
+  incoterms2: string;
+
+  /**
+   * 自动产生的采购订单（字典 sys_yes_no_type；0=否 1=是）
+   */
+  automaticPurchaseOrder: number;
+
+  /**
+   * 定价日期控制（字典 logistics_pricing_date_control；1=采购订单日期，2=交货日期，3=当前日期，4=手动，5=收货日期；默认 1）
+   */
+  pricingDateControl: number;
+
+  /**
+   * 采购组（选项 TaktPurchaseGroups/options；DictValue=PurchaseGroupCode）
+   */
+  purchaseGroup: string;
+
+  /**
+   * 计划交货时间（天）
+   */
+  plannedDeliveryTimeDays: number;
+
+  /**
+   * 评估收据结算（字典 sys_yes_no_type；0=否 1=是）
+   */
+  evaluatedReceiptSettlement: number;
+
+  /**
+   * 采购组织（选项 TaktPlants/options；DictValue=PlantCode）
+   */
+  purchasingOrganization: string;
 
   /**
    * 供货商等级（字典 logistics_grade_category；0=普通，1=优选，2=战略，3=临时）
@@ -174,7 +274,7 @@ export interface SupplierQuery extends TaktPagedQuery {
   companyCode?: string;
 
   /**
-   * 工厂代码（选项 TaktPlants/options，DictValue=PlantCode）
+   * 工厂代码（选项 TaktPlants/options；DictValue=PlantCode）
    */
   plantCode?: string;
 
@@ -184,9 +284,14 @@ export interface SupplierQuery extends TaktPagedQuery {
   supplierCode?: string;
 
   /**
-   * 供货商名称
+   * 供货商名称1
    */
-  supplierName?: string;
+  supplierName1?: string;
+
+  /**
+   * 供货商名称2
+   */
+  supplierName2?: string;
 
   /**
    * 供货商简称
@@ -199,9 +304,19 @@ export interface SupplierQuery extends TaktPagedQuery {
   supplierType?: number;
 
   /**
-   * 行业领域（字典 logistics_industry_sector，DictValue=A/C/M/P）
+   * 企业性质（字典 sys_enterprise_nature_type）
    */
-  industrySector?: string;
+  enterpriseNature?: string;
+
+  /**
+   * 行业属性（字典 sys_industry_attribute_type）
+   */
+  industryAttribute?: string;
+
+  /**
+   * 区域文化编码（字典 sys_culture_code；即语言/区域文化）
+   */
+  defaultCulture?: string;
 
   /**
    * 供货商标识（税务登记证号/统一社会信用代码）
@@ -214,9 +329,19 @@ export interface SupplierQuery extends TaktPagedQuery {
   taxRate?: number;
 
   /**
-   * 注册国家（ISO 3166-1 alpha-2两位代码）
+   * 注册国家（字典 sys_country_code；DictValue=ISO alpha-2）
    */
   registrationCountry?: string;
+
+  /**
+   * 注册省（选项 TaktAdminDivisions/options；DictValue=DivisionCode；建议 Level=2）
+   */
+  registrationProvince?: string;
+
+  /**
+   * 注册市（选项 TaktAdminDivisions/options；DictValue=DivisionCode；建议 Level=3）
+   */
+  registrationCity?: string;
 
   /**
    * 注册地址1
@@ -227,11 +352,6 @@ export interface SupplierQuery extends TaktPagedQuery {
    * 注册地址2
    */
   registrationAddress2?: string;
-
-  /**
-   * 注册地址3
-   */
-  registrationAddress3?: string;
 
   /**
    * 供货商电话
@@ -269,14 +389,94 @@ export interface SupplierQuery extends TaktPagedQuery {
   contactEmail?: string;
 
   /**
-   * 结算币种代码（字典 accounting_currency_code，DictValue=CNY/USD 等）
+   * 结算币种代码（字典 accounting_currency_code；DictValue=CNY/USD 等）
    */
   currencyCode?: string;
+
+  /**
+   * 统驭科目（选项 TaktAccountTitles/options?reconciliationOnly=true&amp;auxiliaryType=K；DictValue=AccountTitleCode）
+   */
+  reconciliationAccount?: string;
+
+  /**
+   * 客户（选项 TaktCustomers/options；DictValue=CustomerCode）
+   */
+  customerCode?: string;
+
+  /**
+   * 具有客户的清算（字典 sys_yes_no_type；0=否 1=是）
+   */
+  clearingWithCustomer?: number;
+
+  /**
+   * 付款方式（字典 accounting_payment_method_type；0=现金，1=银行转账，2=支票，3=信用证，4=其他）
+   */
+  paymentMethod?: number;
 
   /**
    * 付款条件（字典 accounting_payment_terms_param；DictValue=prepayship/cod/net30 等）
    */
   paymentTerms?: string;
+
+  /**
+   * 银行代码（选项 TaktBanks/options；DictValue=BankCode）
+   */
+  bankCode?: string;
+
+  /**
+   * 银行帐号
+   */
+  bankAccount?: string;
+
+  /**
+   * 帐户持有人
+   */
+  accountHolder?: string;
+
+  /**
+   * 基于收货的发票验证（字典 sys_yes_no_type；0=否 1=是）
+   */
+  grBasedInvoiceInspection?: number;
+
+  /**
+   * 国际贸易条件1（字典 logistics_incoterms1；CFR/CIF/…/FOB 等；默认 FOB）
+   */
+  incoterms1?: string;
+
+  /**
+   * 国际贸易条件2（地点说明）
+   */
+  incoterms2?: string;
+
+  /**
+   * 自动产生的采购订单（字典 sys_yes_no_type；0=否 1=是）
+   */
+  automaticPurchaseOrder?: number;
+
+  /**
+   * 定价日期控制（字典 logistics_pricing_date_control；1=采购订单日期，2=交货日期，3=当前日期，4=手动，5=收货日期；默认 1）
+   */
+  pricingDateControl?: number;
+
+  /**
+   * 采购组（选项 TaktPurchaseGroups/options；DictValue=PurchaseGroupCode）
+   */
+  purchaseGroup?: string;
+
+  /**
+   * 计划交货时间（天）
+   */
+  plannedDeliveryTimeDays?: number;
+
+  /**
+   * 评估收据结算（字典 sys_yes_no_type；0=否 1=是）
+   */
+  evaluatedReceiptSettlement?: number;
+
+  /**
+   * 采购组织（选项 TaktPlants/options；DictValue=PlantCode）
+   */
+  purchasingOrganization?: string;
 
   /**
    * 供货商等级（字典 logistics_grade_category；0=普通，1=优选，2=战略，3=临时）
@@ -343,7 +543,7 @@ export interface SupplierCreate {
   companyDefaultCulture: string;
 
   /**
-   * 工厂代码（选项 TaktPlants/options，DictValue=PlantCode）
+   * 工厂代码（选项 TaktPlants/options；DictValue=PlantCode）
    */
   plantCode: string;
 
@@ -353,9 +553,14 @@ export interface SupplierCreate {
   supplierCode: string;
 
   /**
-   * 供货商名称
+   * 供货商名称1
    */
-  supplierName: string;
+  supplierName1: string;
+
+  /**
+   * 供货商名称2
+   */
+  supplierName2?: string;
 
   /**
    * 供货商简称
@@ -368,9 +573,19 @@ export interface SupplierCreate {
   supplierType: number;
 
   /**
-   * 行业领域（字典 logistics_industry_sector，DictValue=A/C/M/P）
+   * 企业性质（字典 sys_enterprise_nature_type）
    */
-  industrySector?: string;
+  enterpriseNature: string;
+
+  /**
+   * 行业属性（字典 sys_industry_attribute_type）
+   */
+  industryAttribute: string;
+
+  /**
+   * 区域文化编码（字典 sys_culture_code；即语言/区域文化）
+   */
+  defaultCulture: string;
 
   /**
    * 供货商标识（税务登记证号/统一社会信用代码）
@@ -383,9 +598,19 @@ export interface SupplierCreate {
   taxRate: number;
 
   /**
-   * 注册国家（ISO 3166-1 alpha-2两位代码）
+   * 注册国家（字典 sys_country_code；DictValue=ISO alpha-2）
    */
   registrationCountry?: string;
+
+  /**
+   * 注册省（选项 TaktAdminDivisions/options；DictValue=DivisionCode；建议 Level=2）
+   */
+  registrationProvince?: string;
+
+  /**
+   * 注册市（选项 TaktAdminDivisions/options；DictValue=DivisionCode；建议 Level=3）
+   */
+  registrationCity?: string;
 
   /**
    * 注册地址1
@@ -396,11 +621,6 @@ export interface SupplierCreate {
    * 注册地址2
    */
   registrationAddress2?: string;
-
-  /**
-   * 注册地址3
-   */
-  registrationAddress3?: string;
 
   /**
    * 供货商电话
@@ -438,14 +658,94 @@ export interface SupplierCreate {
   contactEmail?: string;
 
   /**
-   * 结算币种代码（字典 accounting_currency_code，DictValue=CNY/USD 等）
+   * 结算币种代码（字典 accounting_currency_code；DictValue=CNY/USD 等）
    */
   currencyCode: string;
+
+  /**
+   * 统驭科目（选项 TaktAccountTitles/options?reconciliationOnly=true&amp;auxiliaryType=K；DictValue=AccountTitleCode）
+   */
+  reconciliationAccount: string;
+
+  /**
+   * 客户（选项 TaktCustomers/options；DictValue=CustomerCode）
+   */
+  customerCode: string;
+
+  /**
+   * 具有客户的清算（字典 sys_yes_no_type；0=否 1=是）
+   */
+  clearingWithCustomer: number;
+
+  /**
+   * 付款方式（字典 accounting_payment_method_type；0=现金，1=银行转账，2=支票，3=信用证，4=其他）
+   */
+  paymentMethod: number;
 
   /**
    * 付款条件（字典 accounting_payment_terms_param；DictValue=prepayship/cod/net30 等）
    */
   paymentTerms: string;
+
+  /**
+   * 银行代码（选项 TaktBanks/options；DictValue=BankCode）
+   */
+  bankCode: string;
+
+  /**
+   * 银行帐号
+   */
+  bankAccount: string;
+
+  /**
+   * 帐户持有人
+   */
+  accountHolder: string;
+
+  /**
+   * 基于收货的发票验证（字典 sys_yes_no_type；0=否 1=是）
+   */
+  grBasedInvoiceInspection: number;
+
+  /**
+   * 国际贸易条件1（字典 logistics_incoterms1；CFR/CIF/…/FOB 等；默认 FOB）
+   */
+  incoterms1: string;
+
+  /**
+   * 国际贸易条件2（地点说明）
+   */
+  incoterms2: string;
+
+  /**
+   * 自动产生的采购订单（字典 sys_yes_no_type；0=否 1=是）
+   */
+  automaticPurchaseOrder: number;
+
+  /**
+   * 定价日期控制（字典 logistics_pricing_date_control；1=采购订单日期，2=交货日期，3=当前日期，4=手动，5=收货日期；默认 1）
+   */
+  pricingDateControl: number;
+
+  /**
+   * 采购组（选项 TaktPurchaseGroups/options；DictValue=PurchaseGroupCode）
+   */
+  purchaseGroup: string;
+
+  /**
+   * 计划交货时间（天）
+   */
+  plannedDeliveryTimeDays: number;
+
+  /**
+   * 评估收据结算（字典 sys_yes_no_type；0=否 1=是）
+   */
+  evaluatedReceiptSettlement: number;
+
+  /**
+   * 采购组织（选项 TaktPlants/options；DictValue=PlantCode）
+   */
+  purchasingOrganization: string;
 
   /**
    * 供货商等级（字典 logistics_grade_category；0=普通，1=优选，2=战略，3=临时）
@@ -545,7 +845,7 @@ export interface SupplierTemplate {
   companyCode?: string;
 
   /**
-   * 工厂代码（选项 TaktPlants/options，DictValue=PlantCode）
+   * 工厂代码（选项 TaktPlants/options；DictValue=PlantCode）
    */
   plantCode?: string;
 
@@ -555,9 +855,14 @@ export interface SupplierTemplate {
   supplierCode?: string;
 
   /**
-   * 供货商名称
+   * 供货商名称1
    */
-  supplierName?: string;
+  supplierName1?: string;
+
+  /**
+   * 供货商名称2
+   */
+  supplierName2?: string;
 
   /**
    * 供货商简称
@@ -570,9 +875,19 @@ export interface SupplierTemplate {
   supplierType?: number;
 
   /**
-   * 行业领域（字典 logistics_industry_sector，DictValue=A/C/M/P）
+   * 企业性质（字典 sys_enterprise_nature_type）
    */
-  industrySector?: string;
+  enterpriseNature?: string;
+
+  /**
+   * 行业属性（字典 sys_industry_attribute_type）
+   */
+  industryAttribute?: string;
+
+  /**
+   * 区域文化编码（字典 sys_culture_code；即语言/区域文化）
+   */
+  defaultCulture?: string;
 
   /**
    * 供货商标识（税务登记证号/统一社会信用代码）
@@ -585,9 +900,19 @@ export interface SupplierTemplate {
   taxRate?: number;
 
   /**
-   * 注册国家（ISO 3166-1 alpha-2两位代码）
+   * 注册国家（字典 sys_country_code；DictValue=ISO alpha-2）
    */
   registrationCountry?: string;
+
+  /**
+   * 注册省（选项 TaktAdminDivisions/options；DictValue=DivisionCode；建议 Level=2）
+   */
+  registrationProvince?: string;
+
+  /**
+   * 注册市（选项 TaktAdminDivisions/options；DictValue=DivisionCode；建议 Level=3）
+   */
+  registrationCity?: string;
 
   /**
    * 注册地址1
@@ -598,11 +923,6 @@ export interface SupplierTemplate {
    * 注册地址2
    */
   registrationAddress2?: string;
-
-  /**
-   * 注册地址3
-   */
-  registrationAddress3?: string;
 
   /**
    * 供货商电话
@@ -640,14 +960,94 @@ export interface SupplierTemplate {
   contactEmail?: string;
 
   /**
-   * 结算币种代码（字典 accounting_currency_code，DictValue=CNY/USD 等）
+   * 结算币种代码（字典 accounting_currency_code；DictValue=CNY/USD 等）
    */
   currencyCode?: string;
+
+  /**
+   * 统驭科目（选项 TaktAccountTitles/options?reconciliationOnly=true&amp;auxiliaryType=K；DictValue=AccountTitleCode）
+   */
+  reconciliationAccount?: string;
+
+  /**
+   * 客户（选项 TaktCustomers/options；DictValue=CustomerCode）
+   */
+  customerCode?: string;
+
+  /**
+   * 具有客户的清算（字典 sys_yes_no_type；0=否 1=是）
+   */
+  clearingWithCustomer?: number;
+
+  /**
+   * 付款方式（字典 accounting_payment_method_type；0=现金，1=银行转账，2=支票，3=信用证，4=其他）
+   */
+  paymentMethod?: number;
 
   /**
    * 付款条件（字典 accounting_payment_terms_param；DictValue=prepayship/cod/net30 等）
    */
   paymentTerms?: string;
+
+  /**
+   * 银行代码（选项 TaktBanks/options；DictValue=BankCode）
+   */
+  bankCode?: string;
+
+  /**
+   * 银行帐号
+   */
+  bankAccount?: string;
+
+  /**
+   * 帐户持有人
+   */
+  accountHolder?: string;
+
+  /**
+   * 基于收货的发票验证（字典 sys_yes_no_type；0=否 1=是）
+   */
+  grBasedInvoiceInspection?: number;
+
+  /**
+   * 国际贸易条件1（字典 logistics_incoterms1；CFR/CIF/…/FOB 等；默认 FOB）
+   */
+  incoterms1?: string;
+
+  /**
+   * 国际贸易条件2（地点说明）
+   */
+  incoterms2?: string;
+
+  /**
+   * 自动产生的采购订单（字典 sys_yes_no_type；0=否 1=是）
+   */
+  automaticPurchaseOrder?: number;
+
+  /**
+   * 定价日期控制（字典 logistics_pricing_date_control；1=采购订单日期，2=交货日期，3=当前日期，4=手动，5=收货日期；默认 1）
+   */
+  pricingDateControl?: number;
+
+  /**
+   * 采购组（选项 TaktPurchaseGroups/options；DictValue=PurchaseGroupCode）
+   */
+  purchaseGroup?: string;
+
+  /**
+   * 计划交货时间（天）
+   */
+  plannedDeliveryTimeDays?: number;
+
+  /**
+   * 评估收据结算（字典 sys_yes_no_type；0=否 1=是）
+   */
+  evaluatedReceiptSettlement?: number;
+
+  /**
+   * 采购组织（选项 TaktPlants/options；DictValue=PlantCode）
+   */
+  purchasingOrganization?: string;
 
   /**
    * 供货商等级（字典 logistics_grade_category；0=普通，1=优选，2=战略，3=临时）
@@ -699,7 +1099,7 @@ export interface SupplierImport {
   companyDefaultCulture?: string;
 
   /**
-   * 工厂代码（选项 TaktPlants/options，DictValue=PlantCode）
+   * 工厂代码（选项 TaktPlants/options；DictValue=PlantCode）
    */
   plantCode?: string;
 
@@ -709,9 +1109,14 @@ export interface SupplierImport {
   supplierCode?: string;
 
   /**
-   * 供货商名称
+   * 供货商名称1
    */
-  supplierName?: string;
+  supplierName1?: string;
+
+  /**
+   * 供货商名称2
+   */
+  supplierName2?: string;
 
   /**
    * 供货商简称
@@ -724,9 +1129,19 @@ export interface SupplierImport {
   supplierType?: number;
 
   /**
-   * 行业领域（字典 logistics_industry_sector，DictValue=A/C/M/P）
+   * 企业性质（字典 sys_enterprise_nature_type）
    */
-  industrySector?: string;
+  enterpriseNature?: string;
+
+  /**
+   * 行业属性（字典 sys_industry_attribute_type）
+   */
+  industryAttribute?: string;
+
+  /**
+   * 区域文化编码（字典 sys_culture_code；即语言/区域文化）
+   */
+  defaultCulture?: string;
 
   /**
    * 供货商标识（税务登记证号/统一社会信用代码）
@@ -739,9 +1154,19 @@ export interface SupplierImport {
   taxRate?: number;
 
   /**
-   * 注册国家（ISO 3166-1 alpha-2两位代码）
+   * 注册国家（字典 sys_country_code；DictValue=ISO alpha-2）
    */
   registrationCountry?: string;
+
+  /**
+   * 注册省（选项 TaktAdminDivisions/options；DictValue=DivisionCode；建议 Level=2）
+   */
+  registrationProvince?: string;
+
+  /**
+   * 注册市（选项 TaktAdminDivisions/options；DictValue=DivisionCode；建议 Level=3）
+   */
+  registrationCity?: string;
 
   /**
    * 注册地址1
@@ -752,11 +1177,6 @@ export interface SupplierImport {
    * 注册地址2
    */
   registrationAddress2?: string;
-
-  /**
-   * 注册地址3
-   */
-  registrationAddress3?: string;
 
   /**
    * 供货商电话
@@ -794,14 +1214,94 @@ export interface SupplierImport {
   contactEmail?: string;
 
   /**
-   * 结算币种代码（字典 accounting_currency_code，DictValue=CNY/USD 等）
+   * 结算币种代码（字典 accounting_currency_code；DictValue=CNY/USD 等）
    */
   currencyCode?: string;
+
+  /**
+   * 统驭科目（选项 TaktAccountTitles/options?reconciliationOnly=true&amp;auxiliaryType=K；DictValue=AccountTitleCode）
+   */
+  reconciliationAccount?: string;
+
+  /**
+   * 客户（选项 TaktCustomers/options；DictValue=CustomerCode）
+   */
+  customerCode?: string;
+
+  /**
+   * 具有客户的清算（字典 sys_yes_no_type；0=否 1=是）
+   */
+  clearingWithCustomer?: number;
+
+  /**
+   * 付款方式（字典 accounting_payment_method_type；0=现金，1=银行转账，2=支票，3=信用证，4=其他）
+   */
+  paymentMethod?: number;
 
   /**
    * 付款条件（字典 accounting_payment_terms_param；DictValue=prepayship/cod/net30 等）
    */
   paymentTerms?: string;
+
+  /**
+   * 银行代码（选项 TaktBanks/options；DictValue=BankCode）
+   */
+  bankCode?: string;
+
+  /**
+   * 银行帐号
+   */
+  bankAccount?: string;
+
+  /**
+   * 帐户持有人
+   */
+  accountHolder?: string;
+
+  /**
+   * 基于收货的发票验证（字典 sys_yes_no_type；0=否 1=是）
+   */
+  grBasedInvoiceInspection?: number;
+
+  /**
+   * 国际贸易条件1（字典 logistics_incoterms1；CFR/CIF/…/FOB 等；默认 FOB）
+   */
+  incoterms1?: string;
+
+  /**
+   * 国际贸易条件2（地点说明）
+   */
+  incoterms2?: string;
+
+  /**
+   * 自动产生的采购订单（字典 sys_yes_no_type；0=否 1=是）
+   */
+  automaticPurchaseOrder?: number;
+
+  /**
+   * 定价日期控制（字典 logistics_pricing_date_control；1=采购订单日期，2=交货日期，3=当前日期，4=手动，5=收货日期；默认 1）
+   */
+  pricingDateControl?: number;
+
+  /**
+   * 采购组（选项 TaktPurchaseGroups/options；DictValue=PurchaseGroupCode）
+   */
+  purchaseGroup?: string;
+
+  /**
+   * 计划交货时间（天）
+   */
+  plannedDeliveryTimeDays?: number;
+
+  /**
+   * 评估收据结算（字典 sys_yes_no_type；0=否 1=是）
+   */
+  evaluatedReceiptSettlement?: number;
+
+  /**
+   * 采购组织（选项 TaktPlants/options；DictValue=PlantCode）
+   */
+  purchasingOrganization?: string;
 
   /**
    * 供货商等级（字典 logistics_grade_category；0=普通，1=优选，2=战略，3=临时）
@@ -848,7 +1348,7 @@ export interface SupplierExport {
   companyCode: string;
 
   /**
-   * 工厂代码（选项 TaktPlants/options，DictValue=PlantCode）
+   * 工厂代码（选项 TaktPlants/options；DictValue=PlantCode）
    */
   plantCode: string;
 
@@ -858,9 +1358,14 @@ export interface SupplierExport {
   supplierCode: string;
 
   /**
-   * 供货商名称
+   * 供货商名称1
    */
-  supplierName: string;
+  supplierName1: string;
+
+  /**
+   * 供货商名称2
+   */
+  supplierName2?: string;
 
   /**
    * 供货商简称
@@ -873,9 +1378,19 @@ export interface SupplierExport {
   supplierType: number;
 
   /**
-   * 行业领域（字典 logistics_industry_sector，DictValue=A/C/M/P）
+   * 企业性质（字典 sys_enterprise_nature_type）
    */
-  industrySector?: string;
+  enterpriseNature: string;
+
+  /**
+   * 行业属性（字典 sys_industry_attribute_type）
+   */
+  industryAttribute: string;
+
+  /**
+   * 区域文化编码（字典 sys_culture_code；即语言/区域文化）
+   */
+  defaultCulture: string;
 
   /**
    * 供货商标识（税务登记证号/统一社会信用代码）
@@ -888,9 +1403,19 @@ export interface SupplierExport {
   taxRate: number;
 
   /**
-   * 注册国家（ISO 3166-1 alpha-2两位代码）
+   * 注册国家（字典 sys_country_code；DictValue=ISO alpha-2）
    */
   registrationCountry?: string;
+
+  /**
+   * 注册省（选项 TaktAdminDivisions/options；DictValue=DivisionCode；建议 Level=2）
+   */
+  registrationProvince?: string;
+
+  /**
+   * 注册市（选项 TaktAdminDivisions/options；DictValue=DivisionCode；建议 Level=3）
+   */
+  registrationCity?: string;
 
   /**
    * 注册地址1
@@ -901,11 +1426,6 @@ export interface SupplierExport {
    * 注册地址2
    */
   registrationAddress2?: string;
-
-  /**
-   * 注册地址3
-   */
-  registrationAddress3?: string;
 
   /**
    * 供货商电话
@@ -943,14 +1463,94 @@ export interface SupplierExport {
   contactEmail?: string;
 
   /**
-   * 结算币种代码（字典 accounting_currency_code，DictValue=CNY/USD 等）
+   * 结算币种代码（字典 accounting_currency_code；DictValue=CNY/USD 等）
    */
   currencyCode: string;
+
+  /**
+   * 统驭科目（选项 TaktAccountTitles/options?reconciliationOnly=true&amp;auxiliaryType=K；DictValue=AccountTitleCode）
+   */
+  reconciliationAccount: string;
+
+  /**
+   * 客户（选项 TaktCustomers/options；DictValue=CustomerCode）
+   */
+  customerCode: string;
+
+  /**
+   * 具有客户的清算（字典 sys_yes_no_type；0=否 1=是）
+   */
+  clearingWithCustomer: number;
+
+  /**
+   * 付款方式（字典 accounting_payment_method_type；0=现金，1=银行转账，2=支票，3=信用证，4=其他）
+   */
+  paymentMethod: number;
 
   /**
    * 付款条件（字典 accounting_payment_terms_param；DictValue=prepayship/cod/net30 等）
    */
   paymentTerms: string;
+
+  /**
+   * 银行代码（选项 TaktBanks/options；DictValue=BankCode）
+   */
+  bankCode: string;
+
+  /**
+   * 银行帐号
+   */
+  bankAccount: string;
+
+  /**
+   * 帐户持有人
+   */
+  accountHolder: string;
+
+  /**
+   * 基于收货的发票验证（字典 sys_yes_no_type；0=否 1=是）
+   */
+  grBasedInvoiceInspection: number;
+
+  /**
+   * 国际贸易条件1（字典 logistics_incoterms1；CFR/CIF/…/FOB 等；默认 FOB）
+   */
+  incoterms1: string;
+
+  /**
+   * 国际贸易条件2（地点说明）
+   */
+  incoterms2: string;
+
+  /**
+   * 自动产生的采购订单（字典 sys_yes_no_type；0=否 1=是）
+   */
+  automaticPurchaseOrder: number;
+
+  /**
+   * 定价日期控制（字典 logistics_pricing_date_control；1=采购订单日期，2=交货日期，3=当前日期，4=手动，5=收货日期；默认 1）
+   */
+  pricingDateControl: number;
+
+  /**
+   * 采购组（选项 TaktPurchaseGroups/options；DictValue=PurchaseGroupCode）
+   */
+  purchaseGroup: string;
+
+  /**
+   * 计划交货时间（天）
+   */
+  plannedDeliveryTimeDays: number;
+
+  /**
+   * 评估收据结算（字典 sys_yes_no_type；0=否 1=是）
+   */
+  evaluatedReceiptSettlement: number;
+
+  /**
+   * 采购组织（选项 TaktPlants/options；DictValue=PlantCode）
+   */
+  purchasingOrganization: string;
 
   /**
    * 供货商等级（字典 logistics_grade_category；0=普通，1=优选，2=战略，3=临时）

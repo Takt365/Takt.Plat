@@ -38,7 +38,7 @@ public class TaktTalentStaffingRequirement : TaktApprovalEntityBase
     [SugarColumn(ColumnName = "dept_id", ColumnDescription = "申请部门ID", ColumnDataType = "bigint", IsNullable = false)]
     public long DeptId { get; set; }
     /// <summary>
-    /// 申请岗位（选项 TaktPosts/options，DictValue=Id）
+    /// 申请岗位（选项 TaktPosts/options；DictValue=Id）
     /// </summary>
     [SugarColumn(ColumnName = "post_id", ColumnDescription = "申请岗位ID", ColumnDataType = "bigint", IsNullable = false)]
     public long PostId { get; set; }

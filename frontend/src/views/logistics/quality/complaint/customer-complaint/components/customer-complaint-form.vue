@@ -10,7 +10,7 @@
 <template>
   <a-form
     ref="formRef"
-    class="takt-generated-form customer-complaint-form flex flex-col min-h-0"
+    class="takt-generated-form customer-complaint-form flex flex-col min-h-0 overflow-visible"
     :model="formState"
     :rules="rules"
     layout="horizontal"
@@ -29,54 +29,12 @@
           <a-row :gutter="24">
             <a-col :span="12">
               <a-form-item
-                :label="t('common.page.entity.tenantcode')"
-                name="tenantCode"
-              >
-                <a-input
-                  v-model:value="formState.tenantCode"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('common.page.entity.tenantcode') })"
-                  show-count
-                  :maxlength="20"
-                  disabled
-                />
-              </a-form-item>
-            </a-col>
-            <a-col :span="12">
-              <a-form-item
-                :label="t('common.page.entity.companycode')"
-                name="companyCode"
-              >
-                <a-input
-                  v-model:value="formState.companyCode"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('common.page.entity.companycode') })"
-                  show-count
-                  :maxlength="20"
-                  disabled
-                />
-              </a-form-item>
-            </a-col>
-            <a-col :span="12">
-              <a-form-item
-                :label="t('common.page.entity.companydefaultculture')"
-                name="companyDefaultCulture"
-              >
-                <a-input
-                  v-model:value="formState.companyDefaultCulture"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('common.page.entity.companydefaultculture') })"
-                  show-count
-                  :maxlength="20"
-                  disabled
-                />
-              </a-form-item>
-            </a-col>
-            <a-col :span="12">
-              <a-form-item
-                :label="t('entity.customercomplaint.code')"
+                :label="pi.label('customerComplaintCode')"
                 name="customerComplaintCode"
               >
                 <a-input
                   v-model:value="formState.customerComplaintCode"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.customercomplaint.code') })"
+                  :placeholder="pi.ph('customerComplaintCode')"
                   show-count
                   :maxlength="50"
                   allow-clear
@@ -86,55 +44,51 @@
             </a-col>
             <a-col :span="12">
               <a-form-item
-                :label="t('entity.customercomplaint.customerid')"
+                :label="pi.label('customerId')"
                 name="customerId"
               >
-                <a-input
+                <TaktSelect
                   v-model:value="formState.customerId"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.customercomplaint.customerid') })"
-                  show-count
-                  :maxlength="20"
-                  allow-clear
+                  api-url="TaktCustomers/options"
+                  :placeholder="pi.ph('customerId')"
                 />
               </a-form-item>
             </a-col>
             <a-col :span="12">
               <a-form-item
-                :label="t('entity.customercomplaint.customername')"
-                name="customerName"
+                :label="pi.label('customerName1')"
+                name="customerName1"
               >
                 <a-input
-                  v-model:value="formState.customerName"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.customercomplaint.customername') })"
+                  v-model:value="formState.customerName1"
+                  :placeholder="pi.ph('customerName1')"
                   show-count
-                  :maxlength="200"
+                  :maxlength="140"
                   allow-clear
                 />
               </a-form-item>
             </a-col>
             <a-col :span="12">
               <a-form-item
-                :label="t('entity.customercomplaint.customercode')"
+                :label="pi.label('customerCode')"
                 name="customerCode"
               >
-                <a-input
+                <TaktSelect
                   v-model:value="formState.customerCode"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.customercomplaint.customercode') })"
-                  show-count
-                  :maxlength="50"
-                  allow-clear
+                  api-url="TaktCustomers/options"
+                  :placeholder="pi.ph('customerCode')"
                   :disabled="!!formData?.customerComplaintId"
                 />
               </a-form-item>
             </a-col>
             <a-col :span="12">
               <a-form-item
-                :label="t('entity.customercomplaint.complaintdate')"
+                :label="pi.label('complaintDate')"
                 name="complaintDate"
               >
                 <a-date-picker
                   v-model:value="formState.complaintDate"
-                  :placeholder="t('common.page.form.placeholder.select', { field: t('entity.customercomplaint.complaintdate') })"
+                  :placeholder="pi.ph('complaintDate')"
                   value-format="YYYY-MM-DD"
                   style="width: 100%"
                 />
@@ -142,25 +96,63 @@
             </a-col>
             <a-col :span="12">
               <a-form-item
-                :label="t('entity.customercomplaint.complaintmethod')"
+                :label="pi.label('complaintMethod')"
                 name="complaintMethod"
               >
                 <TaktSelect
                   v-model:value="formState.complaintMethod"
                   dict-type="logistics_quality_complaint_method"
-                  :placeholder="t('common.page.form.placeholder.select', { field: t('entity.customercomplaint.complaintmethod') })"
+                  :placeholder="pi.ph('complaintMethod')"
                 />
               </a-form-item>
             </a-col>
             <a-col :span="12">
               <a-form-item
-                :label="t('entity.customercomplaint.complainttype')"
+                :label="pi.label('complaintType')"
                 name="complaintType"
               >
-                <a-input-number
+                <TaktSelect
                   v-model:value="formState.complaintType"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.customercomplaint.complainttype') })"
-                  style="width: 100%"
+                  dict-type="logistics_quality_complaint_type"
+                  :placeholder="pi.ph('complaintType')"
+                />
+              </a-form-item>
+            </a-col>
+            <a-col :span="12">
+              <a-form-item
+                :label="pi.label('complaintLevel')"
+                name="complaintLevel"
+              >
+                <TaktSelect
+                  v-model:value="formState.complaintLevel"
+                  dict-type="logistics_quality_complaint_level"
+                  :placeholder="pi.ph('complaintLevel')"
+                />
+              </a-form-item>
+            </a-col>
+            <a-col :span="12">
+              <a-form-item
+                :label="pi.label('responsibleDeptId')"
+                name="responsibleDeptId"
+              >
+                <TaktSelect
+                  v-model:value="formState.responsibleDeptId"
+                  api-url="TaktDepts/options"
+                  :placeholder="pi.ph('responsibleDeptId')"
+                />
+              </a-form-item>
+            </a-col>
+            <a-col :span="12">
+              <a-form-item
+                :label="pi.label('responsibleDeptName')"
+                name="responsibleDeptName"
+              >
+                <a-input
+                  v-model:value="formState.responsibleDeptName"
+                  :placeholder="pi.ph('responsibleDeptName')"
+                  show-count
+                  :maxlength="100"
+                  allow-clear
                 />
               </a-form-item>
             </a-col>
@@ -176,66 +168,24 @@
           <a-row :gutter="24">
             <a-col :span="12">
               <a-form-item
-                :label="t('entity.customercomplaint.complaintlevel')"
-                name="complaintLevel"
-              >
-                <a-input-number
-                  v-model:value="formState.complaintLevel"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.customercomplaint.complaintlevel') })"
-                  style="width: 100%"
-                />
-              </a-form-item>
-            </a-col>
-            <a-col :span="12">
-              <a-form-item
-                :label="t('entity.customercomplaint.responsibledeptid')"
-                name="responsibleDeptId"
-              >
-                <a-input
-                  v-model:value="formState.responsibleDeptId"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.customercomplaint.responsibledeptid') })"
-                  show-count
-                  :maxlength="20"
-                  allow-clear
-                />
-              </a-form-item>
-            </a-col>
-            <a-col :span="12">
-              <a-form-item
-                :label="t('entity.customercomplaint.responsibledeptname')"
-                name="responsibleDeptName"
-              >
-                <a-input
-                  v-model:value="formState.responsibleDeptName"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.customercomplaint.responsibledeptname') })"
-                  show-count
-                  :maxlength="100"
-                  allow-clear
-                />
-              </a-form-item>
-            </a-col>
-            <a-col :span="12">
-              <a-form-item
-                :label="t('entity.customercomplaint.responsiblepersonid')"
+                :label="pi.label('responsiblePersonId')"
                 name="responsiblePersonId"
               >
-                <a-input
+                <TaktSelect
                   v-model:value="formState.responsiblePersonId"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.customercomplaint.responsiblepersonid') })"
-                  show-count
-                  :maxlength="20"
-                  allow-clear
+                  api-url="TaktEmployees/options"
+                  :placeholder="pi.ph('responsiblePersonId')"
                 />
               </a-form-item>
             </a-col>
             <a-col :span="12">
               <a-form-item
-                :label="t('entity.customercomplaint.responsiblepersonname')"
+                :label="pi.label('responsiblePersonName')"
                 name="responsiblePersonName"
               >
                 <a-input
                   v-model:value="formState.responsiblePersonName"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.customercomplaint.responsiblepersonname') })"
+                  :placeholder="pi.ph('responsiblePersonName')"
                   show-count
                   :maxlength="50"
                   allow-clear
@@ -244,12 +194,12 @@
             </a-col>
             <a-col :span="12">
               <a-form-item
-                :label="t('entity.customercomplaint.requiredreplydate')"
+                :label="pi.label('requiredReplyDate')"
                 name="requiredReplyDate"
               >
                 <a-date-picker
                   v-model:value="formState.requiredReplyDate"
-                  :placeholder="t('common.page.form.placeholder.select', { field: t('entity.customercomplaint.requiredreplydate') })"
+                  :placeholder="pi.ph('requiredReplyDate')"
                   value-format="YYYY-MM-DD"
                   style="width: 100%"
                 />
@@ -257,52 +207,90 @@
             </a-col>
             <a-col :span="12">
               <a-form-item
-                :label="t('entity.customercomplaint.actualreplydate')"
+                :label="pi.label('actualReplyDate')"
                 name="actualReplyDate"
               >
                 <a-date-picker
                   v-model:value="formState.actualReplyDate"
-                  :placeholder="t('common.page.form.placeholder.select', { field: t('entity.customercomplaint.actualreplydate') })"
+                  :placeholder="pi.ph('actualReplyDate')"
                   value-format="YYYY-MM-DD"
-                  style="width: 100%"
-                />
-              </a-form-item>
-            </a-col>
-            <a-col :span="12">
-              <a-form-item
-                :label="t('entity.customercomplaint.complaintstatus')"
-                name="complaintStatus"
-              >
-                <a-input-number
-                  v-model:value="formState.complaintStatus"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.customercomplaint.complaintstatus') })"
                   style="width: 100%"
                 />
               </a-form-item>
             </a-col>
             <a-col :span="24">
               <a-form-item
-                :label="t('entity.customercomplaint.complaintdescription')"
+                :label="pi.label('complaintDescription')"
                 name="complaintDescription"
               >
                 <a-textarea
                   v-model:value="formState.complaintDescription"
-                  :placeholder="t('common.page.form.placeholder.optional', { field: t('entity.customercomplaint.complaintdescription') })"
+                  :placeholder="pi.ph('complaintDescription')"
                   :rows="2"
                 />
               </a-form-item>
             </a-col>
             <a-col :span="12">
               <a-form-item
-                :label="t('entity.customercomplaint.handlingresult')"
+                :label="pi.label('handlingResult')"
                 name="handlingResult"
               >
                 <a-input
                   v-model:value="formState.handlingResult"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.customercomplaint.handlingresult') })"
+                  :placeholder="pi.ph('handlingResult')"
                   show-count
                   :maxlength="2000"
                   allow-clear
+                />
+              </a-form-item>
+            </a-col>
+            <a-col :span="12">
+              <a-form-item
+                :label="pi.label('customerSatisfaction')"
+                name="customerSatisfaction"
+              >
+                <TaktSelect
+                  v-model:value="formState.customerSatisfaction"
+                  dict-type="logistics_quality_customer_satisfaction"
+                  :placeholder="pi.ph('customerSatisfaction')"
+                />
+              </a-form-item>
+            </a-col>
+            <a-col :span="12">
+              <a-form-item
+                :label="pi.label('attachments')"
+                name="attachments"
+              >
+                <a-input
+                  v-model:value="formState.attachments"
+                  :placeholder="pi.ph('attachments')"
+                  show-count
+                  :maxlength="20"
+                  allow-clear
+                />
+              </a-form-item>
+            </a-col>
+            <a-col :span="12">
+              <a-form-item
+                :label="pi.label('relatedPlant')"
+                name="relatedPlant"
+              >
+                <TaktSelect
+                  v-model:value="formState.relatedPlant"
+                  api-url="TaktPlants/options"
+                  :placeholder="pi.ph('relatedPlant')"
+                />
+              </a-form-item>
+            </a-col>
+            <a-col :span="12">
+              <a-form-item
+                :label="pi.label('complaintStatus')"
+                name="complaintStatus"
+              >
+                <TaktSelect
+                  v-model:value="formState.complaintStatus"
+                  dict-type="logistics_quality_complaint_status"
+                  :placeholder="pi.ph('complaintStatus')"
                 />
               </a-form-item>
             </a-col>
@@ -318,27 +306,43 @@
           <a-row :gutter="24">
             <a-col :span="24">
               <a-form-item
-                :label="t('entity.customercomplaint.customersatisfaction')"
-                name="customerSatisfaction"
+                :label="pi.label('tenantCode')"
+                name="tenantCode"
               >
-                <a-input-number
-                  v-model:value="formState.customerSatisfaction"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.customercomplaint.customersatisfaction') })"
-                  style="width: 100%"
+                <a-input
+                  v-model:value="formState.tenantCode"
+                  :placeholder="pi.ph('tenantCode')"
+                  show-count
+                  :maxlength="20"
+                  disabled
                 />
               </a-form-item>
             </a-col>
             <a-col :span="24">
               <a-form-item
-                :label="t('entity.customercomplaint.relatedplant')"
-                name="relatedPlant"
+                :label="pi.label('companyCode')"
+                name="companyCode"
               >
                 <a-input
-                  v-model:value="formState.relatedPlant"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.customercomplaint.relatedplant') })"
+                  v-model:value="formState.companyCode"
+                  :placeholder="pi.ph('companyCode')"
                   show-count
-                  :maxlength="4"
-                  allow-clear
+                  :maxlength="20"
+                  disabled
+                />
+              </a-form-item>
+            </a-col>
+            <a-col :span="24">
+              <a-form-item
+                :label="pi.label('companyDefaultCulture')"
+                name="companyDefaultCulture"
+              >
+                <a-input
+                  v-model:value="formState.companyDefaultCulture"
+                  :placeholder="pi.ph('companyDefaultCulture')"
+                  show-count
+                  :maxlength="20"
+                  disabled
                 />
               </a-form-item>
             </a-col>
@@ -355,7 +359,7 @@
                     >
                       <span class="takt-form-label-hint-icon"><RiQuestionLine class="takt-remix-icon" /></span>
                     </a-tooltip>
-                    <span>{{ t('common.page.entity.extfield') }}</span>
+                    <span>{{ pi.label('extField') }}</span>
                   </span>
                 </template>
                 <a-textarea
@@ -370,12 +374,12 @@
             </a-col>
             <a-col :span="24">
               <a-form-item
-                :label="t('common.page.entity.remark')"
+                :label="pi.label('remark')"
                 name="remark"
               >
                 <a-textarea
                   v-model:value="formState.remark"
-                  :placeholder="t('common.page.form.placeholder.optional', { field: t('common.page.entity.remark') })"
+                  :placeholder="pi.ph('remark')"
                   :rows="4"
                   show-count
                   :maxlength="400"
@@ -392,13 +396,93 @@
       ref="customerComplaintItemTableRef"
       v-model="childCustomerComplaintItemRows"
       :columns="customerComplaintItemFormColumns"
-      :title="t('entity.customercomplaintitem._self')"
-      :add-button-entity="t('entity.customercomplaintitem._self')"
+      :title="customerComplaintItemPi.self()"
+      :add-button-entity="customerComplaintItemPi.self()"
       id-field="customerComplaintItemId"
       :default-row="createDefaultCustomerComplaintItemRow"
       :disabled="loading"
+      :enable-vertical-scroll="false"
       section-border
-    />
+      class="w-full min-w-0"
+    >
+      <template #cell-complaintId="{ record }">
+        <TaktSelect
+          v-model:value="record.complaintId"
+          api-url="TaktCustomerComplaints/options"
+          class="w-full"
+          :get-popup-container="getSelectPopupContainer"
+          :placeholder="customerComplaintItemPi.queryPh('complaintId', 'select')"
+          :disabled="loading"
+          allow-clear
+        />
+      </template>
+      <template #cell-productCode="{ record }">
+        <TaktSelect
+          v-model:value="record.productCode"
+          api-url="TaktMaterialPlants/options"
+          class="w-full"
+          :get-popup-container="getSelectPopupContainer"
+          :placeholder="customerComplaintItemPi.queryPh('productCode', 'select')"
+          :disabled="loading"
+          allow-clear
+        />
+      </template>
+      <template #cell-itemType="{ record }">
+        <TaktSelect
+          v-model:value="record.itemType"
+          dict-type="logistics_quality_complaint_item_type"
+          class="w-full"
+          :get-popup-container="getSelectPopupContainer"
+          :placeholder="customerComplaintItemPi.ph('itemType')"
+          :disabled="loading"
+          allow-clear
+        />
+      </template>
+      <template #cell-defectLevel="{ record }">
+        <TaktSelect
+          v-model:value="record.defectLevel"
+          dict-type="logistics_quality_defect_severity_code"
+          class="w-full"
+          :get-popup-container="getSelectPopupContainer"
+          :placeholder="customerComplaintItemPi.ph('defectLevel')"
+          :disabled="loading"
+          allow-clear
+        />
+      </template>
+      <template #cell-improvementResponsible="{ record }">
+        <TaktSelect
+          v-model:value="record.improvementResponsible"
+          api-url="TaktEmployees/options"
+          class="w-full"
+          :get-popup-container="getSelectPopupContainer"
+          :placeholder="customerComplaintItemPi.queryPh('improvementResponsible', 'select')"
+          :disabled="loading"
+          allow-clear
+        />
+      </template>
+      <template #cell-improvementStatus="{ record }">
+        <TaktSelect
+          v-model:value="record.improvementStatus"
+          dict-type="logistics_quality_improvement_status"
+          class="w-full"
+          :get-popup-container="getSelectPopupContainer"
+          :placeholder="customerComplaintItemPi.ph('improvementStatus')"
+          :disabled="loading"
+          allow-clear
+        />
+      </template>
+      <template #cell-isObsolete="{ record }">
+        <TaktSelect
+          v-model:value="record.isObsolete"
+          dict-type="sys_yes_no_type"
+          class="w-full"
+          :get-popup-container="getSelectPopupContainer"
+          :placeholder="customerComplaintItemPi.ph('isObsolete')"
+          :disabled="loading"
+          allow-clear
+        />
+      </template>
+    </TaktEditableTable>
   </a-form>
 </template>
 
@@ -407,11 +491,18 @@
  * 客诉主表实体维护表单 · 由 generate-vue-master-detail-from-api.cjs 根据 types/api 生成
  * @module views/logistics/quality/complaint/customer-complaint/components
  */
-import { reactive, watch, computed, ref } from 'vue'
+import { reactive, watch, computed, ref, onMounted } from 'vue'
 import { useI18n } from 'vue-i18n'
 import type { Rule } from 'ant-design-vue/es/form'
+import { useCustomerComplaintI18n } from '../composables/use-customer-complaint-i18n'
+
+/** 实体字段 i18n */
+const pi = useCustomerComplaintI18n()
+
 import type { CustomerComplaintCreate } from '@/types/logistics/quality/complaint/customer-complaint'
+import TaktSelect from '@/components/business/takt-select/index.vue'
 import { RiQuestionLine } from '@remixicon/vue'
+import { useDictDataStore } from '@/stores/foundation/dict-data'
 import { useTenantStore } from '@/stores/identity/tenant'
 import { useUserStore } from '@/stores/identity/user'
 
@@ -444,9 +535,19 @@ const formContentClass = computed(() => (formFields.length > 10 ? 'takt-form-con
 /** 当前激活的 Tab key */
 const activeTab = ref('tab-0')
 /** CreateDto 字段名列表（与 formState 键对齐） */
-const formFields = ["tenantCode","companyCode","companyDefaultCulture","customerComplaintCode","customerId","customerName","customerCode","complaintDate","complaintMethod","complaintType","complaintLevel","responsibleDeptId","responsibleDeptName","responsiblePersonId","responsiblePersonName","requiredReplyDate","actualReplyDate","complaintStatus","complaintDescription","handlingResult","customerSatisfaction","relatedPlant","extField","remark"]
+const formFields = ["tenantCode","companyCode","companyDefaultCulture","customerComplaintCode","customerId","customerName1","customerCode","complaintDate","complaintMethod","complaintType","complaintLevel","responsibleDeptId","responsibleDeptName","responsiblePersonId","responsiblePersonName","requiredReplyDate","actualReplyDate","complaintDescription","handlingResult","customerSatisfaction","attachments","relatedPlant","complaintStatus","extField","remark"]
+
 
 import type { TaktEditableTableColumn } from '@/components/business/takt-editable-table/types'
+import { resolveNextDetailLineNumber } from '@/utils/takt-sequence'
+import { useCustomerComplaintItemI18n } from '../composables/use-customer-complaint-item-i18n'
+
+const customerComplaintItemPi = useCustomerComplaintItemI18n()
+
+/** 弹窗/表格内 TaktSelect 下拉挂载容器（避免 overflow 裁剪与表头列错位） */
+function getSelectPopupContainer(triggerNode?: HTMLElement): HTMLElement {
+  return triggerNode?.ownerDocument?.body ?? document.body
+}
 
 const childCustomerComplaintItemRows = ref<Record<string, unknown>[]>([])
 const customerComplaintItemTableRef = ref<{
@@ -455,68 +556,137 @@ const customerComplaintItemTableRef = ref<{
   resetRows: () => void
 } | null>(null)
 
+/** 是否已持久化的子表行 */
+function isPersistedCustomerComplaintItemRow(row: Record<string, unknown>): boolean {
+  const id = row.customerComplaintItemId
+  if (id == null || id === '') {
+    return false
+  }
+  return String(id) !== '0'
+}
+
+/** 分配下一可用子表行号（含作废行，仅据当前表格行递增） */
+function allocateNextCustomerComplaintItemLineNumber(): number {
+  const rows = customerComplaintItemTableRef.value?.getRows?.() ?? childCustomerComplaintItemRows.value
+  return resolveNextDetailLineNumber(0, rows)
+}
+
 /** 子表 customerComplaintItem 可编辑列 */
 const customerComplaintItemFormColumns = computed<TaktEditableTableColumn[]>(() => [
   {
+    key: 'complaintId',
+    title: customerComplaintItemPi.label('complaintId'),
+    width: 140,
+  },
+  {
     key: 'lineNumber',
-    title: t('entity.customercomplaintitem.linenumber'),
-    editor: 'inputNumber',
-    width: 140, summary: 'sum',
+    title: customerComplaintItemPi.label('lineNumber'),
+    width: 140,
   },
   {
     key: 'productCode',
-    title: t('entity.customercomplaintitem.productcode'),
-    editor: 'input',
-    width: 140, allowClear: true, placeholder: t('common.page.form.placeholder.optional', { field: t('entity.customercomplaintitem.productcode') }),
+    title: customerComplaintItemPi.label('productCode'),
+    width: 140,
   },
   {
     key: 'productName',
-    title: t('entity.customercomplaintitem.productname'),
+    title: customerComplaintItemPi.label('productName'),
     editor: 'input',
-    width: 140, allowClear: true, placeholder: t('common.page.form.placeholder.optional', { field: t('entity.customercomplaintitem.productname') }),
+    width: 140, allowClear: true, placeholder: customerComplaintItemPi.ph('productName'),
   },
   {
     key: 'batchNo',
-    title: t('entity.customercomplaintitem.batchno'),
+    title: customerComplaintItemPi.label('batchNo'),
     editor: 'input',
-    width: 140, allowClear: true, placeholder: t('common.page.form.placeholder.optional', { field: t('entity.customercomplaintitem.batchno') }),
+    width: 140, allowClear: true, placeholder: customerComplaintItemPi.ph('batchNo'),
   },
   {
     key: 'itemType',
-    title: t('entity.customercomplaintitem.itemtype'),
-    editor: 'inputNumber',
+    title: customerComplaintItemPi.label('itemType'),
     width: 140,
   },
   {
     key: 'defectDescription',
-    title: t('entity.customercomplaintitem.defectdescription'),
+    title: customerComplaintItemPi.label('defectDescription'),
     editor: 'textarea',
     rows: 1,
-    placeholder: t('common.page.form.placeholder.required', { field: t('entity.customercomplaintitem.defectdescription') }),
-    width: 140,
+    placeholder: customerComplaintItemPi.ph('defectDescription'),
+    width: 180,
   },
   {
     key: 'defectLevel',
-    title: t('entity.customercomplaintitem.defectlevel'),
-    editor: 'input',
+    title: customerComplaintItemPi.label('defectLevel'),
     width: 140,
   },
   {
     key: 'defectQuantity',
-    title: t('entity.customercomplaintitem.defectquantity'),
-    editor: 'inputNumber',
+    title: customerComplaintItemPi.label('defectQuantity'),
+    width: 140,
+  },
+  {
+    key: 'defectRate',
+    title: customerComplaintItemPi.label('defectRate'),
+    width: 140,
+  },
+  {
+    key: 'causeAnalysis',
+    title: customerComplaintItemPi.label('causeAnalysis'),
+    editor: 'input',
+    width: 140, allowClear: true, placeholder: customerComplaintItemPi.ph('causeAnalysis'),
+  },
+  {
+    key: 'improvementAction',
+    title: customerComplaintItemPi.label('improvementAction'),
+    editor: 'input',
+    width: 140, allowClear: true, placeholder: customerComplaintItemPi.ph('improvementAction'),
+  },
+  {
+    key: 'improvementResponsible',
+    title: customerComplaintItemPi.label('improvementResponsible'),
+    width: 140,
+  },
+  {
+    key: 'plannedCompletionDate',
+    title: customerComplaintItemPi.label('plannedCompletionDate'),
+    editor: 'datePicker',
+    valueFormat: 'YYYY-MM-DD',
+    width: 140,
+  },
+  {
+    key: 'actualCompletionDate',
+    title: customerComplaintItemPi.label('actualCompletionDate'),
+    editor: 'datePicker',
+    valueFormat: 'YYYY-MM-DD',
+    width: 140,
+  },
+  {
+    key: 'attachmentPaths',
+    title: customerComplaintItemPi.label('attachmentPaths'),
+    editor: 'input',
+    width: 140, allowClear: true, placeholder: customerComplaintItemPi.ph('attachmentPaths'),
+  },
+  {
+    key: 'improvementStatus',
+    title: customerComplaintItemPi.label('improvementStatus'),
+    width: 140,
+  },
+  {
+    key: 'isObsolete',
+    title: customerComplaintItemPi.label('isObsolete'),
     width: 140,
   },
 ])
 
 /** 编辑态从 formData 同步各子表行 */
 function syncChildRowsFromFormData(val: Partial<CustomerComplaintCreate & { customerComplaintId?: string }> | null | undefined) {
-  childCustomerComplaintItemRows.value = ((val as any)?.items ?? []) as Record<string, unknown>[]
+  const rows_customerComplaintItem = ((val as any)?.items ?? []) as Record<string, unknown>[]
+  childCustomerComplaintItemRows.value = rows_customerComplaintItem
 }
 
 function createDefaultCustomerComplaintItemRow(): Record<string, unknown> {
   return {
-    lineNumber: (childCustomerComplaintItemRows.value.length + 1) * 10,
+    complaintId: '',
+    lineNumber: allocateNextCustomerComplaintItemLineNumber(),
     productCode: '',
     productName: '',
     batchNo: '',
@@ -524,21 +694,39 @@ function createDefaultCustomerComplaintItemRow(): Record<string, unknown> {
     defectDescription: '',
     defectLevel: '',
     defectQuantity: 0,
+    defectRate: 0,
+    causeAnalysis: '',
+    improvementAction: '',
+    improvementResponsible: '',
+    plannedCompletionDate: '',
+    actualCompletionDate: '',
+    attachmentPaths: '',
+    improvementStatus: 0,
+    isObsolete: 0,
   }
 }
 
 /** 组装 Create/Update 载荷（主表 + 子表数组） */
 function buildSubmitPayload() {
   const masterId = props.formData?.customerComplaintId ?? ''
+  const isUpdate = Boolean(masterId)
   return {
     ...formState,
-    items: customerComplaintItemTableRef.value?.getRows?.() ?? childCustomerComplaintItemRows.value.map((rest) => ({
-      ...rest,
-      tenantCode: tenantStore.tenantCode,
-      companyCode: tenantStore.companyCode,
-      companyDefaultCulture: userStore.userInfo?.companyDefaultCulture ?? '',
-      complaintId: masterId,
-    })),
+    items: customerComplaintItemTableRef.value?.getRows?.() ?? childCustomerComplaintItemRows.value.map((row) => {
+      const normalized = {
+        ...row,
+        tenantCode: tenantStore.tenantCode,
+        companyCode: tenantStore.companyCode,
+        companyDefaultCulture: userStore.userInfo?.companyDefaultCulture ?? '',
+        customerComplaintCode: masterId,
+      }
+      if (isUpdate && isPersistedCustomerComplaintItemRow(row)) {
+        normalized.customerComplaintItemId = row.customerComplaintItemId
+      } else {
+        delete normalized.customerComplaintItemId
+      }
+      return normalized
+    }),
   }
 }
 
@@ -558,11 +746,26 @@ const props = withDefaults(defineProps<Props>(), {
 const formRef = ref()
 /** 表单双向绑定模型 */
 const formState = reactive<Record<string, any>>({})
-/** 表单字段默认值（无字典默认项） */
-function applyFormDefaults(target: Record<string, unknown>) {
-  void target
+/** 表单字段默认值（字典 IsDefault=1，来自 TaktDictDataSeedData） */
+const FORM_FIELD_DEFAULTS: Record<string, string | number> = {
+  complaintMethod: 0,
+  complaintType: 0,
+  complaintLevel: 0,
+  complaintStatus: 0
 }
 
+/** 写入表单默认值（新增 / resetFields / 弹窗再次打开时） */
+function applyFormDefaults(target: Record<string, unknown>) {
+  Object.assign(target, FORM_FIELD_DEFAULTS)
+}
+
+/** Pinia：字典缓存（TaktSelect dict-type 渲染前预热，避免选项空白） */
+const dictDataStore = useDictDataStore()
+
+/** 表单挂载时预加载全量字典 */
+onMounted(() => {
+  void dictDataStore.loadAllDictDataAsync()
+})
 
 /** 编辑态灌入 formData；新增态恢复默认值（须含 customerComplaintId 才视为编辑） */
 watch(
@@ -605,39 +808,39 @@ const rules = computed<Record<string, Rule[]>>(() => ({
   customerComplaintCode: [
     {
       required: true,
-      message: t('common.page.form.placeholder.required', { field: t('entity.customercomplaint.code') }),
+      message: pi.ph('customerComplaintCode'),
       trigger: 'blur'
     }
   ],
   customerId: [
     {
       required: true,
-      message: t('common.page.form.placeholder.required', { field: t('entity.customercomplaint.customerid') }),
-      trigger: 'blur'
+      message: pi.ph('customerId'),
+      trigger: 'change'
     }
   ],
-  customerName: [
+  customerName1: [
     {
       required: true,
-      message: t('common.page.form.placeholder.required', { field: t('entity.customercomplaint.customername') }),
+      message: pi.ph('customerName1'),
       trigger: 'blur'
     }
   ],
   complaintDate: [
     {
       required: true,
-      message: t('common.page.form.placeholder.select', { field: t('entity.customercomplaint.complaintdate') }),
+      message: pi.ph('complaintDate'),
       trigger: 'change'
     }
   ],
   complaintMethod: [{
     validator: async (_rule, value) => {
       if (value === undefined || value === null || value === '') {
-        return Promise.reject(t('common.page.form.placeholder.select', { field: t('entity.customercomplaint.complaintmethod') }))
+        return Promise.reject(pi.ph('complaintMethod'))
       }
       const num = typeof value === 'number' ? value : Number(value)
       if (!Number.isFinite(num)) {
-        return Promise.reject(t('common.page.form.placeholder.select', { field: t('entity.customercomplaint.complaintmethod') }))
+        return Promise.reject(pi.ph('complaintMethod'))
       }
       return Promise.resolve()
     },
@@ -646,11 +849,11 @@ const rules = computed<Record<string, Rule[]>>(() => ({
   complaintType: [{
     validator: async (_rule, value) => {
       if (value === undefined || value === null || value === '') {
-        return Promise.reject(t('common.page.form.placeholder.select', { field: t('entity.customercomplaint.complainttype') }))
+        return Promise.reject(pi.ph('complaintType'))
       }
       const num = typeof value === 'number' ? value : Number(value)
       if (!Number.isFinite(num)) {
-        return Promise.reject(t('common.page.form.placeholder.select', { field: t('entity.customercomplaint.complainttype') }))
+        return Promise.reject(pi.ph('complaintType'))
       }
       return Promise.resolve()
     },
@@ -659,24 +862,11 @@ const rules = computed<Record<string, Rule[]>>(() => ({
   complaintLevel: [{
     validator: async (_rule, value) => {
       if (value === undefined || value === null || value === '') {
-        return Promise.reject(t('common.page.form.placeholder.select', { field: t('entity.customercomplaint.complaintlevel') }))
+        return Promise.reject(pi.ph('complaintLevel'))
       }
       const num = typeof value === 'number' ? value : Number(value)
       if (!Number.isFinite(num)) {
-        return Promise.reject(t('common.page.form.placeholder.select', { field: t('entity.customercomplaint.complaintlevel') }))
-      }
-      return Promise.resolve()
-    },
-    trigger: 'change'
-  }],
-  complaintStatus: [{
-    validator: async (_rule, value) => {
-      if (value === undefined || value === null || value === '') {
-        return Promise.reject(t('common.page.form.placeholder.select', { field: t('entity.customercomplaint.complaintstatus') }))
-      }
-      const num = typeof value === 'number' ? value : Number(value)
-      if (!Number.isFinite(num)) {
-        return Promise.reject(t('common.page.form.placeholder.select', { field: t('entity.customercomplaint.complaintstatus') }))
+        return Promise.reject(pi.ph('complaintLevel'))
       }
       return Promise.resolve()
     },
@@ -685,10 +875,30 @@ const rules = computed<Record<string, Rule[]>>(() => ({
   complaintDescription: [
     {
       required: true,
-      message: t('common.page.form.placeholder.required', { field: t('entity.customercomplaint.complaintdescription') }),
+      message: pi.ph('complaintDescription'),
       trigger: 'blur'
     }
   ],
+  relatedPlant: [
+    {
+      required: true,
+      message: pi.ph('relatedPlant'),
+      trigger: 'change'
+    }
+  ],
+  complaintStatus: [{
+    validator: async (_rule, value) => {
+      if (value === undefined || value === null || value === '') {
+        return Promise.reject(pi.ph('complaintStatus'))
+      }
+      const num = typeof value === 'number' ? value : Number(value)
+      if (!Number.isFinite(num)) {
+        return Promise.reject(pi.ph('complaintStatus'))
+      }
+      return Promise.resolve()
+    },
+    trigger: 'change'
+  }],
 }))
 
 /** 校验表单（失败 throw，供父级 handleFormSubmit 捕获） */
@@ -713,13 +923,13 @@ function getValues(): Record<string, any> {
     const rawcomplaintLevel = payload.complaintLevel
     payload.complaintLevel = typeof rawcomplaintLevel === 'number' ? rawcomplaintLevel : Number(rawcomplaintLevel)
   }
-  if ('complaintStatus' in payload) {
-    const rawcomplaintStatus = payload.complaintStatus
-    payload.complaintStatus = typeof rawcomplaintStatus === 'number' ? rawcomplaintStatus : Number(rawcomplaintStatus)
-  }
   if ('customerSatisfaction' in payload) {
     const rawcustomerSatisfaction = payload.customerSatisfaction
     payload.customerSatisfaction = typeof rawcustomerSatisfaction === 'number' ? rawcustomerSatisfaction : Number(rawcustomerSatisfaction)
+  }
+  if ('complaintStatus' in payload) {
+    const rawcomplaintStatus = payload.complaintStatus
+    payload.complaintStatus = typeof rawcomplaintStatus === 'number' ? rawcomplaintStatus : Number(rawcomplaintStatus)
   }
   if ('sortOrder' in payload) delete payload.sortOrder
   return payload

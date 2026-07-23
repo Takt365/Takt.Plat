@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Application.Dtos.Logistics.Procurement
 // 文件名称：TaktPurchaseRequestDtos.cs
-// 创建时间：2026-07-09
+// 创建时间：2026-07-23
 // 创建人：Takt365(Auto Generated)
 // 功能描述：PurchaseRequest 模块 DTO（由 generate-dtos-from-entity.cjs 根据 TaktPurchaseRequest 生成，请按需审阅）
 // 
@@ -36,7 +36,7 @@ public class TaktPurchaseRequestDto : TaktApprovalDtoBase
     public long PurchaseRequestId { get; set; }
 
     /// <summary>
-    /// 工厂代码（选项 TaktPlants/options，DictValue=PlantCode）
+    /// 工厂代码（选项 TaktPlants/options；DictValue=PlantCode）
     /// </summary>
     public string PlantCode { get; set; } = string.Empty;
 
@@ -46,7 +46,7 @@ public class TaktPurchaseRequestDto : TaktApprovalDtoBase
     public string PurchaseRequestCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 来源采购询价 ID（关联 TaktPurchaseInquiry.Id，选项 TaktPurchaseInquirys/options）
+    /// 来源采购询价 ID（选项 TaktPurchaseInquirys/options；DictValue=Id）
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
     public long? PurchaseInquiryId { get; set; }
@@ -68,6 +68,11 @@ public class TaktPurchaseRequestDto : TaktApprovalDtoBase
     public long? PurchasePlanId { get; set; }
 
     /// <summary>
+    /// 来源采购计划 名称（填充字段）
+    /// </summary>
+    public string? PurchasePlanName { get; set; }
+
+    /// <summary>
     /// 来源采购计划编码（冗余）
     /// </summary>
     public string? PurchasePlanCode { get; set; } = string.Empty;
@@ -83,7 +88,7 @@ public class TaktPurchaseRequestDto : TaktApprovalDtoBase
     public int? PoDecision { get; set; }
 
     /// <summary>
-    /// PR 会签单 ID（关联 TaktCountersign.Id，选项 TaktCountersigns/options）
+    /// PR 会签单 ID（选项 TaktCountersigns/options；DictValue=Id）
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
     public long? CountersignId { get; set; }
@@ -94,7 +99,7 @@ public class TaktPurchaseRequestDto : TaktApprovalDtoBase
     public string? CountersignName { get; set; }
 
     /// <summary>
-    /// PR 会签编号（冗余）
+    /// PR 会签编码（冗余）
     /// </summary>
     public string? CountersignCode { get; set; } = string.Empty;
 
@@ -109,7 +114,7 @@ public class TaktPurchaseRequestDto : TaktApprovalDtoBase
     public DateTime? RequiredArrivalDate { get; set; }
 
     /// <summary>
-    /// 申请人员工 ID（关联 TaktEmployee.Id，选项 TaktEmployees/options）
+    /// 申请人员工 ID（选项 TaktEmployees/options；DictValue=Id）
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
     public long? RequestId { get; set; }
@@ -123,6 +128,31 @@ public class TaktPurchaseRequestDto : TaktApprovalDtoBase
     /// 申请人（人员代码）
     /// </summary>
     public string RequestBy { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 供应商编码（选项 TaktSuppliers/options；DictValue=SupplierCode；一单一供应商，明细禁止再挂供应商）
+    /// </summary>
+    public string SupplierCode { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 供应商名称1（冗余，与 TaktSupplier.SupplierName1 对齐）
+    /// </summary>
+    public string SupplierName1 { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 结算币种（字典 accounting_currency_code；DictValue=CNY/USD 等；一单一币种）
+    /// </summary>
+    public string CurrencyCode { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 税率（字典 accounting_tax_rate_param；13=13%，9=9%，0=0% 等；一单一税率）
+    /// </summary>
+    public int TaxRate { get; set; } = 0;
+
+    /// <summary>
+    /// 税费（精确到分）
+    /// </summary>
+    public decimal TaxAmount { get; set; }
 
     /// <summary>
     /// 申请总数量（基本单位数量）
@@ -188,7 +218,7 @@ public class TaktPurchaseRequestQueryDto : TaktPagedQuery
     public string? CompanyCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 工厂代码（选项 TaktPlants/options，DictValue=PlantCode）
+    /// 工厂代码（选项 TaktPlants/options；DictValue=PlantCode）
     /// </summary>
     public string? PlantCode { get; set; } = string.Empty;
 
@@ -198,7 +228,7 @@ public class TaktPurchaseRequestQueryDto : TaktPagedQuery
     public string? PurchaseRequestCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 来源采购询价 ID（关联 TaktPurchaseInquiry.Id，选项 TaktPurchaseInquirys/options）
+    /// 来源采购询价 ID（选项 TaktPurchaseInquirys/options；DictValue=Id）
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
     public long? PurchaseInquiryId { get; set; }
@@ -230,13 +260,13 @@ public class TaktPurchaseRequestQueryDto : TaktPagedQuery
     public int? PoDecision { get; set; }
 
     /// <summary>
-    /// PR 会签单 ID（关联 TaktCountersign.Id，选项 TaktCountersigns/options）
+    /// PR 会签单 ID（选项 TaktCountersigns/options；DictValue=Id）
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
     public long? CountersignId { get; set; }
 
     /// <summary>
-    /// PR 会签编号（冗余）
+    /// PR 会签编码（冗余）
     /// </summary>
     public string? CountersignCode { get; set; } = string.Empty;
 
@@ -261,7 +291,7 @@ public class TaktPurchaseRequestQueryDto : TaktPagedQuery
     public DateTime? RequiredArrivalDateEnd { get; set; }
 
     /// <summary>
-    /// 申请人员工 ID（关联 TaktEmployee.Id，选项 TaktEmployees/options）
+    /// 申请人员工 ID（选项 TaktEmployees/options；DictValue=Id）
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
     public long? RequestId { get; set; }
@@ -270,6 +300,31 @@ public class TaktPurchaseRequestQueryDto : TaktPagedQuery
     /// 申请人（人员代码）
     /// </summary>
     public string? RequestBy { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 供应商编码（选项 TaktSuppliers/options；DictValue=SupplierCode；一单一供应商，明细禁止再挂供应商）
+    /// </summary>
+    public string? SupplierCode { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 供应商名称1（冗余，与 TaktSupplier.SupplierName1 对齐）
+    /// </summary>
+    public string? SupplierName1 { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 结算币种（字典 accounting_currency_code；DictValue=CNY/USD 等；一单一币种）
+    /// </summary>
+    public string? CurrencyCode { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 税率（字典 accounting_tax_rate_param；13=13%，9=9%，0=0% 等；一单一税率）
+    /// </summary>
+    public int? TaxRate { get; set; }
+
+    /// <summary>
+    /// 税费（精确到分）
+    /// </summary>
+    public decimal? TaxAmount { get; set; }
 
     /// <summary>
     /// 申请总数量（基本单位数量）
@@ -395,9 +450,9 @@ public class TaktPurchaseRequestCreateDto
     public string CompanyDefaultCulture { get; set; } = string.Empty;
 
     /// <summary>
-    /// 工厂代码（选项 TaktPlants/options，DictValue=PlantCode）
+    /// 工厂代码（选项 TaktPlants/options；DictValue=PlantCode）
     /// </summary>
-    [Required(ErrorMessage = "工厂代码（选项 TaktPlants/options，DictValue=PlantCode）不能为空")]
+    [Required(ErrorMessage = "工厂代码（选项 TaktPlants/options；DictValue=PlantCode）不能为空")]
     public string PlantCode { get; set; } = string.Empty;
 
     /// <summary>
@@ -407,7 +462,7 @@ public class TaktPurchaseRequestCreateDto
     public string PurchaseRequestCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 来源采购询价 ID（关联 TaktPurchaseInquiry.Id，选项 TaktPurchaseInquirys/options）
+    /// 来源采购询价 ID（选项 TaktPurchaseInquirys/options；DictValue=Id）
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
     public long? PurchaseInquiryId { get; set; }
@@ -439,13 +494,13 @@ public class TaktPurchaseRequestCreateDto
     public int? PoDecision { get; set; }
 
     /// <summary>
-    /// PR 会签单 ID（关联 TaktCountersign.Id，选项 TaktCountersigns/options）
+    /// PR 会签单 ID（选项 TaktCountersigns/options；DictValue=Id）
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
     public long? CountersignId { get; set; }
 
     /// <summary>
-    /// PR 会签编号（冗余）
+    /// PR 会签编码（冗余）
     /// </summary>
     public string? CountersignCode { get; set; } = string.Empty;
 
@@ -460,7 +515,7 @@ public class TaktPurchaseRequestCreateDto
     public DateTime? RequiredArrivalDate { get; set; }
 
     /// <summary>
-    /// 申请人员工 ID（关联 TaktEmployee.Id，选项 TaktEmployees/options）
+    /// 申请人员工 ID（选项 TaktEmployees/options；DictValue=Id）
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
     public long? RequestId { get; set; }
@@ -470,6 +525,34 @@ public class TaktPurchaseRequestCreateDto
     /// </summary>
     [Required(ErrorMessage = "申请人（人员代码）不能为空")]
     public string RequestBy { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 供应商编码（选项 TaktSuppliers/options；DictValue=SupplierCode；一单一供应商，明细禁止再挂供应商）
+    /// </summary>
+    [Required(ErrorMessage = "供应商编码（选项 TaktSuppliers/options；DictValue=SupplierCode；一单一供应商，明细禁止再挂供应商）不能为空")]
+    public string SupplierCode { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 供应商名称1（冗余，与 TaktSupplier.SupplierName1 对齐）
+    /// </summary>
+    [Required(ErrorMessage = "供应商名称1（冗余，与 TaktSupplier.SupplierName1 对齐）不能为空")]
+    public string SupplierName1 { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 结算币种（字典 accounting_currency_code；DictValue=CNY/USD 等；一单一币种）
+    /// </summary>
+    [Required(ErrorMessage = "结算币种（字典 accounting_currency_code；DictValue=CNY/USD 等；一单一币种）不能为空")]
+    public string CurrencyCode { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 税率（字典 accounting_tax_rate_param；13=13%，9=9%，0=0% 等；一单一税率）
+    /// </summary>
+    public int TaxRate { get; set; } = 0;
+
+    /// <summary>
+    /// 税费（精确到分）
+    /// </summary>
+    public decimal TaxAmount { get; set; }
 
     /// <summary>
     /// 申请总数量（基本单位数量）
@@ -509,7 +592,7 @@ public class TaktPurchaseRequestCreateDto
     /// <summary>
     /// 采购申请明细列表（主子表关系，一个申请可以有多个明细）（子表，级联保存）
     /// </summary>
-    public List<TaktPurchaseRequestItemUpdateDto>? Items { get; set; }
+    public List<TaktPurchaseRequestItemCreateDto>? Items { get; set; }
 
     /// <summary>
     /// 扩展字段JSON
@@ -540,6 +623,11 @@ public class TaktPurchaseRequestUpdateDto : TaktPurchaseRequestCreateDto
     [AdaptMember("Id")]
     [JsonConverter(typeof(ValueToStringConverter))]
     public long PurchaseRequestId { get; set; }
+
+    /// <summary>
+    /// 采购申请明细列表（主子表关系，一个申请可以有多个明细）（子表，级联保存）
+    /// </summary>
+    public new List<TaktPurchaseRequestItemUpdateDto>? Items { get; set; }
 
 }
 
@@ -587,7 +675,7 @@ public class TaktPurchaseRequestTemplateDto
     public string? CompanyCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 工厂代码（选项 TaktPlants/options，DictValue=PlantCode）
+    /// 工厂代码（选项 TaktPlants/options；DictValue=PlantCode）
     /// </summary>
     public string? PlantCode { get; set; } = string.Empty;
 
@@ -597,7 +685,7 @@ public class TaktPurchaseRequestTemplateDto
     public string? PurchaseRequestCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 来源采购询价 ID（关联 TaktPurchaseInquiry.Id，选项 TaktPurchaseInquirys/options）
+    /// 来源采购询价 ID（选项 TaktPurchaseInquirys/options；DictValue=Id）
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
     public long? PurchaseInquiryId { get; set; }
@@ -629,13 +717,13 @@ public class TaktPurchaseRequestTemplateDto
     public int? PoDecision { get; set; }
 
     /// <summary>
-    /// PR 会签单 ID（关联 TaktCountersign.Id，选项 TaktCountersigns/options）
+    /// PR 会签单 ID（选项 TaktCountersigns/options；DictValue=Id）
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
     public long? CountersignId { get; set; }
 
     /// <summary>
-    /// PR 会签编号（冗余）
+    /// PR 会签编码（冗余）
     /// </summary>
     public string? CountersignCode { get; set; } = string.Empty;
 
@@ -650,7 +738,7 @@ public class TaktPurchaseRequestTemplateDto
     public DateTime? RequiredArrivalDate { get; set; }
 
     /// <summary>
-    /// 申请人员工 ID（关联 TaktEmployee.Id，选项 TaktEmployees/options）
+    /// 申请人员工 ID（选项 TaktEmployees/options；DictValue=Id）
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
     public long? RequestId { get; set; }
@@ -659,6 +747,31 @@ public class TaktPurchaseRequestTemplateDto
     /// 申请人（人员代码）
     /// </summary>
     public string? RequestBy { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 供应商编码（选项 TaktSuppliers/options；DictValue=SupplierCode；一单一供应商，明细禁止再挂供应商）
+    /// </summary>
+    public string? SupplierCode { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 供应商名称1（冗余，与 TaktSupplier.SupplierName1 对齐）
+    /// </summary>
+    public string? SupplierName1 { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 结算币种（字典 accounting_currency_code；DictValue=CNY/USD 等；一单一币种）
+    /// </summary>
+    public string? CurrencyCode { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 税率（字典 accounting_tax_rate_param；13=13%，9=9%，0=0% 等；一单一税率）
+    /// </summary>
+    public int? TaxRate { get; set; }
+
+    /// <summary>
+    /// 税费（精确到分）
+    /// </summary>
+    public decimal? TaxAmount { get; set; }
 
     /// <summary>
     /// 申请总数量（基本单位数量）
@@ -733,7 +846,7 @@ public class TaktPurchaseRequestImportDto
     public string? CompanyDefaultCulture { get; set; } = string.Empty;
 
     /// <summary>
-    /// 工厂代码（选项 TaktPlants/options，DictValue=PlantCode）
+    /// 工厂代码（选项 TaktPlants/options；DictValue=PlantCode）
     /// </summary>
     public string? PlantCode { get; set; } = string.Empty;
 
@@ -743,7 +856,7 @@ public class TaktPurchaseRequestImportDto
     public string? PurchaseRequestCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 来源采购询价 ID（关联 TaktPurchaseInquiry.Id，选项 TaktPurchaseInquirys/options）
+    /// 来源采购询价 ID（选项 TaktPurchaseInquirys/options；DictValue=Id）
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
     public long? PurchaseInquiryId { get; set; }
@@ -775,13 +888,13 @@ public class TaktPurchaseRequestImportDto
     public int? PoDecision { get; set; }
 
     /// <summary>
-    /// PR 会签单 ID（关联 TaktCountersign.Id，选项 TaktCountersigns/options）
+    /// PR 会签单 ID（选项 TaktCountersigns/options；DictValue=Id）
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
     public long? CountersignId { get; set; }
 
     /// <summary>
-    /// PR 会签编号（冗余）
+    /// PR 会签编码（冗余）
     /// </summary>
     public string? CountersignCode { get; set; } = string.Empty;
 
@@ -796,7 +909,7 @@ public class TaktPurchaseRequestImportDto
     public DateTime? RequiredArrivalDate { get; set; }
 
     /// <summary>
-    /// 申请人员工 ID（关联 TaktEmployee.Id，选项 TaktEmployees/options）
+    /// 申请人员工 ID（选项 TaktEmployees/options；DictValue=Id）
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
     public long? RequestId { get; set; }
@@ -805,6 +918,31 @@ public class TaktPurchaseRequestImportDto
     /// 申请人（人员代码）
     /// </summary>
     public string? RequestBy { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 供应商编码（选项 TaktSuppliers/options；DictValue=SupplierCode；一单一供应商，明细禁止再挂供应商）
+    /// </summary>
+    public string? SupplierCode { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 供应商名称1（冗余，与 TaktSupplier.SupplierName1 对齐）
+    /// </summary>
+    public string? SupplierName1 { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 结算币种（字典 accounting_currency_code；DictValue=CNY/USD 等；一单一币种）
+    /// </summary>
+    public string? CurrencyCode { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 税率（字典 accounting_tax_rate_param；13=13%，9=9%，0=0% 等；一单一税率）
+    /// </summary>
+    public int? TaxRate { get; set; }
+
+    /// <summary>
+    /// 税费（精确到分）
+    /// </summary>
+    public decimal? TaxAmount { get; set; }
 
     /// <summary>
     /// 申请总数量（基本单位数量）
@@ -875,7 +1013,7 @@ public class TaktPurchaseRequestExportDto
     public long PurchaseRequestId { get; set; }
 
     /// <summary>
-    /// 工厂代码（选项 TaktPlants/options，DictValue=PlantCode）
+    /// 工厂代码（选项 TaktPlants/options；DictValue=PlantCode）
     /// </summary>
     public string PlantCode { get; set; } = string.Empty;
 
@@ -885,7 +1023,7 @@ public class TaktPurchaseRequestExportDto
     public string PurchaseRequestCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 来源采购询价 ID（关联 TaktPurchaseInquiry.Id，选项 TaktPurchaseInquirys/options）
+    /// 来源采购询价 ID（选项 TaktPurchaseInquirys/options；DictValue=Id）
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
     public long? PurchaseInquiryId { get; set; }
@@ -917,13 +1055,13 @@ public class TaktPurchaseRequestExportDto
     public int? PoDecision { get; set; }
 
     /// <summary>
-    /// PR 会签单 ID（关联 TaktCountersign.Id，选项 TaktCountersigns/options）
+    /// PR 会签单 ID（选项 TaktCountersigns/options；DictValue=Id）
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
     public long? CountersignId { get; set; }
 
     /// <summary>
-    /// PR 会签编号（冗余）
+    /// PR 会签编码（冗余）
     /// </summary>
     public string? CountersignCode { get; set; } = string.Empty;
 
@@ -938,7 +1076,7 @@ public class TaktPurchaseRequestExportDto
     public DateTime? RequiredArrivalDate { get; set; }
 
     /// <summary>
-    /// 申请人员工 ID（关联 TaktEmployee.Id，选项 TaktEmployees/options）
+    /// 申请人员工 ID（选项 TaktEmployees/options；DictValue=Id）
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
     public long? RequestId { get; set; }
@@ -947,6 +1085,31 @@ public class TaktPurchaseRequestExportDto
     /// 申请人（人员代码）
     /// </summary>
     public string RequestBy { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 供应商编码（选项 TaktSuppliers/options；DictValue=SupplierCode；一单一供应商，明细禁止再挂供应商）
+    /// </summary>
+    public string SupplierCode { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 供应商名称1（冗余，与 TaktSupplier.SupplierName1 对齐）
+    /// </summary>
+    public string SupplierName1 { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 结算币种（字典 accounting_currency_code；DictValue=CNY/USD 等；一单一币种）
+    /// </summary>
+    public string CurrencyCode { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 税率（字典 accounting_tax_rate_param；13=13%，9=9%，0=0% 等；一单一税率）
+    /// </summary>
+    public int TaxRate { get; set; } = 0;
+
+    /// <summary>
+    /// 税费（精确到分）
+    /// </summary>
+    public decimal TaxAmount { get; set; }
 
     /// <summary>
     /// 申请总数量（基本单位数量）

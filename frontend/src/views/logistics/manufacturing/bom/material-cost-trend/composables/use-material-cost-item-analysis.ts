@@ -28,10 +28,12 @@ export type BomMaterialCostItemAnalysisViewMode = 'trend' | 'transposed';
  * @returns 秩
  */
 export function bomMomTrendSortRank(trend: string | null | undefined): number {
-  if (trend === 'up') return 0;
-  if (trend === 'down') return 1;
-  if (trend === 'flat') return 2;
-  return 3;
+  if (trend === 'new') return 0;
+  if (trend === 'removed') return 1;
+  if (trend === 'up') return 2;
+  if (trend === 'down') return 3;
+  if (trend === 'flat') return 4;
+  return 5;
 }
 
 /**
@@ -150,8 +152,33 @@ export function useMaterialCostAnalysis() {
    * @returns CSS 类
    */
   function trendClass(trend: string): string {
-    if (trend === 'up') return 'text-red-600 font-medium';
-    if (trend === 'down') return 'text-green-600 font-medium';
+    if (trend === 'up' || trend === 'new') return 'text-red-600 font-medium';
+    if (trend === 'down' || trend === 'removed') return 'text-green-600 font-medium';
+    return '';
+  }
+
+  /**
+   * 期间单元格变动码文案（有无物料 / 价格）
+   * @param changeType present / absent / new / removed / up / down / flat
+   * @returns 展示文本
+   */
+  function periodChangeTypeLabel(changeType: string): string {
+    const key = `${localePrefix}.periodChange.${changeType}`;
+    const text = t(key);
+    return text === key ? changeType : text;
+  }
+
+  /**
+   * 期间单元格变动码样式
+   * @param changeType 变动码
+   * @returns CSS 类
+   */
+  function periodChangeTypeClass(changeType: string): string {
+    if (changeType === 'new') return 'text-blue-600 font-medium';
+    if (changeType === 'removed') return 'text-orange-600 font-medium';
+    if (changeType === 'up') return 'text-red-600';
+    if (changeType === 'down') return 'text-green-600';
+    if (changeType === 'absent') return 'text-text-secondary';
     return '';
   }
 
@@ -193,6 +220,8 @@ export function useMaterialCostAnalysis() {
     formatPercent,
     trendLabel,
     changeTypeLabel,
+    periodChangeTypeLabel,
+    periodChangeTypeClass,
     trendClass,
     varianceClass,
     canDrill,

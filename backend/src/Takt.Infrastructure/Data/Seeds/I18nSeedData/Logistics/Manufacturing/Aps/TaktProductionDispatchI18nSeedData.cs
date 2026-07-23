@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Infrastructure.Data.Seeds.I18nSeedData.Logistics.Manufacturing.Aps
 // 文件名称：TaktProductionDispatchI18nSeedData.cs
-// 创建时间：2026-07-20
+// 创建时间：2026-07-23
 // 创建人：Takt365(Auto Generated)
 // 功能描述：TaktProductionDispatch 实体字段国际化种子（无对应 frontend locales；TranslationText 取自 ColumnDescription，ContextNote 取自属性 XML summary）
 // 
@@ -91,13 +91,13 @@ public class TaktProductionDispatchI18nSeedData : ITaktSeedDataCoordinator
             new TranslationSeedItem("entity.productiondispatch._self", "zh-HK", "生产派工单信息_hk", "实体名称"),
 
             // entity.productiondispatch.plantcode
-            new TranslationSeedItem("entity.productiondispatch.plantcode", "en-US", "工厂代码_us", "工厂代码（选项 TaktPlants/options，DictValue=PlantCode）"),
+            new TranslationSeedItem("entity.productiondispatch.plantcode", "en-US", "工厂代码_us", "工厂代码（选项 TaktPlants/options；DictValue=PlantCode）"),
             // entity.productiondispatch.plantcode
-            new TranslationSeedItem("entity.productiondispatch.plantcode", "ja-JP", "工厂代码_jp", "工厂代码（选项 TaktPlants/options，DictValue=PlantCode）"),
+            new TranslationSeedItem("entity.productiondispatch.plantcode", "ja-JP", "工厂代码_jp", "工厂代码（选项 TaktPlants/options；DictValue=PlantCode）"),
             // entity.productiondispatch.plantcode
-            new TranslationSeedItem("entity.productiondispatch.plantcode", "zh-CN", "工厂代码", "工厂代码（选项 TaktPlants/options，DictValue=PlantCode）"),
+            new TranslationSeedItem("entity.productiondispatch.plantcode", "zh-CN", "工厂代码", "工厂代码（选项 TaktPlants/options；DictValue=PlantCode）"),
             // entity.productiondispatch.plantcode
-            new TranslationSeedItem("entity.productiondispatch.plantcode", "zh-HK", "工厂代码_hk", "工厂代码（选项 TaktPlants/options，DictValue=PlantCode）"),
+            new TranslationSeedItem("entity.productiondispatch.plantcode", "zh-HK", "工厂代码_hk", "工厂代码（选项 TaktPlants/options；DictValue=PlantCode）"),
 
             // entity.productiondispatch.dispatchcode
             new TranslationSeedItem("entity.productiondispatch.dispatchcode", "en-US", "派工单编码_us", "派工单编码"),
@@ -109,13 +109,13 @@ public class TaktProductionDispatchI18nSeedData : ITaktSeedDataCoordinator
             new TranslationSeedItem("entity.productiondispatch.dispatchcode", "zh-HK", "派工单编码_hk", "派工单编码"),
 
             // entity.productiondispatch.productionorderid
-            new TranslationSeedItem("entity.productiondispatch.productionorderid", "en-US", "生产工单ID_us", "生产工单 ID（选项 TaktProductionOrders/options，DictValue=Id）"),
+            new TranslationSeedItem("entity.productiondispatch.productionorderid", "en-US", "生产工单ID_us", "生产工单 ID（选项 TaktProductionOrders/options；DictValue=Id）"),
             // entity.productiondispatch.productionorderid
-            new TranslationSeedItem("entity.productiondispatch.productionorderid", "ja-JP", "生产工单ID_jp", "生产工单 ID（选项 TaktProductionOrders/options，DictValue=Id）"),
+            new TranslationSeedItem("entity.productiondispatch.productionorderid", "ja-JP", "生产工单ID_jp", "生产工单 ID（选项 TaktProductionOrders/options；DictValue=Id）"),
             // entity.productiondispatch.productionorderid
-            new TranslationSeedItem("entity.productiondispatch.productionorderid", "zh-CN", "生产工单ID", "生产工单 ID（选项 TaktProductionOrders/options，DictValue=Id）"),
+            new TranslationSeedItem("entity.productiondispatch.productionorderid", "zh-CN", "生产工单ID", "生产工单 ID（选项 TaktProductionOrders/options；DictValue=Id）"),
             // entity.productiondispatch.productionorderid
-            new TranslationSeedItem("entity.productiondispatch.productionorderid", "zh-HK", "生产工单ID_hk", "生产工单 ID（选项 TaktProductionOrders/options，DictValue=Id）"),
+            new TranslationSeedItem("entity.productiondispatch.productionorderid", "zh-HK", "生产工单ID_hk", "生产工单 ID（选项 TaktProductionOrders/options；DictValue=Id）"),
 
             // entity.productiondispatch.prodordercode
             new TranslationSeedItem("entity.productiondispatch.prodordercode", "en-US", "工单号_us", "工单号（关联 TaktProductionOrder.ProdOrderCode，冗余）"),
@@ -127,22 +127,22 @@ public class TaktProductionDispatchI18nSeedData : ITaktSeedDataCoordinator
             new TranslationSeedItem("entity.productiondispatch.prodordercode", "zh-HK", "工单号_hk", "工单号（关联 TaktProductionOrder.ProdOrderCode，冗余）"),
 
             // entity.productiondispatch.apsoperationid
-            new TranslationSeedItem("entity.productiondispatch.apsoperationid", "en-US", "APS工序排程ID_us", "APS 工序排程 ID（选项 TaktApsOperations/options，DictValue=Id）"),
+            new TranslationSeedItem("entity.productiondispatch.apsoperationid", "en-US", "APS工序排程ID_us", "APS 工序排程 ID（选项 TaktApsOperations/options；DictValue=Id）"),
             // entity.productiondispatch.apsoperationid
-            new TranslationSeedItem("entity.productiondispatch.apsoperationid", "ja-JP", "APS工序排程ID_jp", "APS 工序排程 ID（选项 TaktApsOperations/options，DictValue=Id）"),
+            new TranslationSeedItem("entity.productiondispatch.apsoperationid", "ja-JP", "APS工序排程ID_jp", "APS 工序排程 ID（选项 TaktApsOperations/options；DictValue=Id）"),
             // entity.productiondispatch.apsoperationid
-            new TranslationSeedItem("entity.productiondispatch.apsoperationid", "zh-CN", "APS工序排程ID", "APS 工序排程 ID（选项 TaktApsOperations/options，DictValue=Id）"),
+            new TranslationSeedItem("entity.productiondispatch.apsoperationid", "zh-CN", "APS工序排程ID", "APS 工序排程 ID（选项 TaktApsOperations/options；DictValue=Id）"),
             // entity.productiondispatch.apsoperationid
-            new TranslationSeedItem("entity.productiondispatch.apsoperationid", "zh-HK", "APS工序排程ID_hk", "APS 工序排程 ID（选项 TaktApsOperations/options，DictValue=Id）"),
+            new TranslationSeedItem("entity.productiondispatch.apsoperationid", "zh-HK", "APS工序排程ID_hk", "APS 工序排程 ID（选项 TaktApsOperations/options；DictValue=Id）"),
 
             // entity.productiondispatch.workcentercode
-            new TranslationSeedItem("entity.productiondispatch.workcentercode", "en-US", "工作中心编码_us", "工作中心编码（选项 TaktWorkCenters/options，DictValue=WorkCenterCode）"),
+            new TranslationSeedItem("entity.productiondispatch.workcentercode", "en-US", "工作中心编码_us", "工作中心编码（选项 TaktWorkCenters/options；DictValue=WorkCenterCode）"),
             // entity.productiondispatch.workcentercode
-            new TranslationSeedItem("entity.productiondispatch.workcentercode", "ja-JP", "工作中心编码_jp", "工作中心编码（选项 TaktWorkCenters/options，DictValue=WorkCenterCode）"),
+            new TranslationSeedItem("entity.productiondispatch.workcentercode", "ja-JP", "工作中心编码_jp", "工作中心编码（选项 TaktWorkCenters/options；DictValue=WorkCenterCode）"),
             // entity.productiondispatch.workcentercode
-            new TranslationSeedItem("entity.productiondispatch.workcentercode", "zh-CN", "工作中心编码", "工作中心编码（选项 TaktWorkCenters/options，DictValue=WorkCenterCode）"),
+            new TranslationSeedItem("entity.productiondispatch.workcentercode", "zh-CN", "工作中心编码", "工作中心编码（选项 TaktWorkCenters/options；DictValue=WorkCenterCode）"),
             // entity.productiondispatch.workcentercode
-            new TranslationSeedItem("entity.productiondispatch.workcentercode", "zh-HK", "工作中心编码_hk", "工作中心编码（选项 TaktWorkCenters/options，DictValue=WorkCenterCode）"),
+            new TranslationSeedItem("entity.productiondispatch.workcentercode", "zh-HK", "工作中心编码_hk", "工作中心编码（选项 TaktWorkCenters/options；DictValue=WorkCenterCode）"),
 
             // entity.productiondispatch.processcode
             new TranslationSeedItem("entity.productiondispatch.processcode", "en-US", "工序编码_us", "工序编码"),

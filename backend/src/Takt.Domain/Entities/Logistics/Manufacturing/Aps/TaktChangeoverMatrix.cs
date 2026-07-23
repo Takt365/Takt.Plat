@@ -25,25 +25,25 @@ namespace Takt.Domain.Entities.Logistics.Manufacturing.Aps;
 public class TaktChangeoverMatrix : TaktCompanyEntityBase
 {
     /// <summary>
-    /// 工厂代码（选项 TaktPlants/options，DictValue=PlantCode）
+    /// 工厂代码（选项 TaktPlants/options；DictValue=PlantCode）
     /// </summary>
     [SugarColumn(ColumnName = "plant_code", ColumnDescription = "工厂代码", ColumnDataType = "nvarchar", Length = 40, IsNullable = false)]
     public string PlantCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 工作中心编码（选项 TaktWorkCenters/options，DictValue=WorkCenterCode）
+    /// 工作中心编码（选项 TaktWorkCenters/options；DictValue=WorkCenterCode）
     /// </summary>
     [SugarColumn(ColumnName = "work_center_code", ColumnDescription = "工作中心编码", ColumnDataType = "nvarchar", Length = 40, IsNullable = false)]
     public string WorkCenterCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 换型前物料编码（选项 TaktMaterialPlants/options，DictValue=MaterialCode，ExtValue=PlantCode）
+    /// 换型前物料编码（选项 TaktMaterialPlants/options；DictValue=MaterialCode，ExtValue=PlantCode）
     /// </summary>
     [SugarColumn(ColumnName = "from_material_code", ColumnDescription = "换型前物料编码", ColumnDataType = "nvarchar", Length = 40, IsNullable = false)]
     public string FromMaterialCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 换型后物料编码（选项 TaktMaterialPlants/options，DictValue=MaterialCode，ExtValue=PlantCode）
+    /// 换型后物料编码（选项 TaktMaterialPlants/options；DictValue=MaterialCode，ExtValue=PlantCode）
     /// </summary>
     [SugarColumn(ColumnName = "to_material_code", ColumnDescription = "换型后物料编码", ColumnDataType = "nvarchar", Length = 40, IsNullable = false)]
     public string ToMaterialCode { get; set; } = string.Empty;

@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Infrastructure.Data.Seeds.I18nSeedData.Logistics.Procurement
 // 文件名称：TaktSourceOfSupplyI18nSeedData.cs
-// 创建时间：2026-07-20
+// 创建时间：2026-07-23
 // 创建人：Takt365(Auto Generated)
 // 功能描述：TaktSourceOfSupply 实体字段国际化种子（无对应 frontend locales；TranslationText 取自 ColumnDescription，ContextNote 取自属性 XML summary）
 // 
@@ -91,13 +91,13 @@ public class TaktSourceOfSupplyI18nSeedData : ITaktSeedDataCoordinator
             new TranslationSeedItem("entity.sourceofsupply._self", "zh-HK", "Takt货源清单信息_hk", "实体名称"),
 
             // entity.sourceofsupply.plantcode
-            new TranslationSeedItem("entity.sourceofsupply.plantcode", "en-US", "工厂代码_us", "工厂代码（选项 TaktPlants/options，DictValue=PlantCode）"),
+            new TranslationSeedItem("entity.sourceofsupply.plantcode", "en-US", "工厂代码_us", "工厂代码（选项 TaktPlants/options；DictValue=PlantCode）"),
             // entity.sourceofsupply.plantcode
-            new TranslationSeedItem("entity.sourceofsupply.plantcode", "ja-JP", "工厂代码_jp", "工厂代码（选项 TaktPlants/options，DictValue=PlantCode）"),
+            new TranslationSeedItem("entity.sourceofsupply.plantcode", "ja-JP", "工厂代码_jp", "工厂代码（选项 TaktPlants/options；DictValue=PlantCode）"),
             // entity.sourceofsupply.plantcode
-            new TranslationSeedItem("entity.sourceofsupply.plantcode", "zh-CN", "工厂代码", "工厂代码（选项 TaktPlants/options，DictValue=PlantCode）"),
+            new TranslationSeedItem("entity.sourceofsupply.plantcode", "zh-CN", "工厂代码", "工厂代码（选项 TaktPlants/options；DictValue=PlantCode）"),
             // entity.sourceofsupply.plantcode
-            new TranslationSeedItem("entity.sourceofsupply.plantcode", "zh-HK", "工厂代码_hk", "工厂代码（选项 TaktPlants/options，DictValue=PlantCode）"),
+            new TranslationSeedItem("entity.sourceofsupply.plantcode", "zh-HK", "工厂代码_hk", "工厂代码（选项 TaktPlants/options；DictValue=PlantCode）"),
 
             // entity.sourceofsupply.code
             new TranslationSeedItem("entity.sourceofsupply.code", "en-US", "货源清单编码_us", "货源清单编码（租户+公司内唯一；业务单据号）"),
@@ -109,31 +109,31 @@ public class TaktSourceOfSupplyI18nSeedData : ITaktSeedDataCoordinator
             new TranslationSeedItem("entity.sourceofsupply.code", "zh-HK", "货源清单编码_hk", "货源清单编码（租户+公司内唯一；业务单据号）"),
 
             // entity.sourceofsupply.materialcode
-            new TranslationSeedItem("entity.sourceofsupply.materialcode", "en-US", "物料编码_us", "物料编码（选项 TaktMaterialPlants/options，DictValue=MaterialCode，ExtValue=PlantCode）"),
+            new TranslationSeedItem("entity.sourceofsupply.materialcode", "en-US", "物料编码_us", "物料编码（选项 TaktMaterialPlants/options；DictValue=MaterialCode，ExtValue=PlantCode）"),
             // entity.sourceofsupply.materialcode
-            new TranslationSeedItem("entity.sourceofsupply.materialcode", "ja-JP", "物料编码_jp", "物料编码（选项 TaktMaterialPlants/options，DictValue=MaterialCode，ExtValue=PlantCode）"),
+            new TranslationSeedItem("entity.sourceofsupply.materialcode", "ja-JP", "物料编码_jp", "物料编码（选项 TaktMaterialPlants/options；DictValue=MaterialCode，ExtValue=PlantCode）"),
             // entity.sourceofsupply.materialcode
-            new TranslationSeedItem("entity.sourceofsupply.materialcode", "zh-CN", "物料编码", "物料编码（选项 TaktMaterialPlants/options，DictValue=MaterialCode，ExtValue=PlantCode）"),
+            new TranslationSeedItem("entity.sourceofsupply.materialcode", "zh-CN", "物料编码", "物料编码（选项 TaktMaterialPlants/options；DictValue=MaterialCode，ExtValue=PlantCode）"),
             // entity.sourceofsupply.materialcode
-            new TranslationSeedItem("entity.sourceofsupply.materialcode", "zh-HK", "物料编码_hk", "物料编码（选项 TaktMaterialPlants/options，DictValue=MaterialCode，ExtValue=PlantCode）"),
+            new TranslationSeedItem("entity.sourceofsupply.materialcode", "zh-HK", "物料编码_hk", "物料编码（选项 TaktMaterialPlants/options；DictValue=MaterialCode，ExtValue=PlantCode）"),
 
             // entity.sourceofsupply.suppliercode
-            new TranslationSeedItem("entity.sourceofsupply.suppliercode", "en-US", "供货商编码_us", "供货商编码（选项 TaktSuppliers/options，DictValue=SupplierCode）"),
+            new TranslationSeedItem("entity.sourceofsupply.suppliercode", "en-US", "供货商编码_us", "供货商编码（选项 TaktSuppliers/options；DictValue=SupplierCode）"),
             // entity.sourceofsupply.suppliercode
-            new TranslationSeedItem("entity.sourceofsupply.suppliercode", "ja-JP", "供货商编码_jp", "供货商编码（选项 TaktSuppliers/options，DictValue=SupplierCode）"),
+            new TranslationSeedItem("entity.sourceofsupply.suppliercode", "ja-JP", "供货商编码_jp", "供货商编码（选项 TaktSuppliers/options；DictValue=SupplierCode）"),
             // entity.sourceofsupply.suppliercode
-            new TranslationSeedItem("entity.sourceofsupply.suppliercode", "zh-CN", "供货商编码", "供货商编码（选项 TaktSuppliers/options，DictValue=SupplierCode）"),
+            new TranslationSeedItem("entity.sourceofsupply.suppliercode", "zh-CN", "供货商编码", "供货商编码（选项 TaktSuppliers/options；DictValue=SupplierCode）"),
             // entity.sourceofsupply.suppliercode
-            new TranslationSeedItem("entity.sourceofsupply.suppliercode", "zh-HK", "供货商编码_hk", "供货商编码（选项 TaktSuppliers/options，DictValue=SupplierCode）"),
+            new TranslationSeedItem("entity.sourceofsupply.suppliercode", "zh-HK", "供货商编码_hk", "供货商编码（选项 TaktSuppliers/options；DictValue=SupplierCode）"),
 
             // entity.sourceofsupply.purchasegroup
-            new TranslationSeedItem("entity.sourceofsupply.purchasegroup", "en-US", "采购组_us", "采购组（选项 TaktPurchaseGroups/options，DictValue=PurchaseGroupCode）"),
+            new TranslationSeedItem("entity.sourceofsupply.purchasegroup", "en-US", "采购组_us", "采购组（选项 TaktPurchaseGroups/options；DictValue=PurchaseGroupCode）"),
             // entity.sourceofsupply.purchasegroup
-            new TranslationSeedItem("entity.sourceofsupply.purchasegroup", "ja-JP", "采购组_jp", "采购组（选项 TaktPurchaseGroups/options，DictValue=PurchaseGroupCode）"),
+            new TranslationSeedItem("entity.sourceofsupply.purchasegroup", "ja-JP", "采购组_jp", "采购组（选项 TaktPurchaseGroups/options；DictValue=PurchaseGroupCode）"),
             // entity.sourceofsupply.purchasegroup
-            new TranslationSeedItem("entity.sourceofsupply.purchasegroup", "zh-CN", "采购组", "采购组（选项 TaktPurchaseGroups/options，DictValue=PurchaseGroupCode）"),
+            new TranslationSeedItem("entity.sourceofsupply.purchasegroup", "zh-CN", "采购组", "采购组（选项 TaktPurchaseGroups/options；DictValue=PurchaseGroupCode）"),
             // entity.sourceofsupply.purchasegroup
-            new TranslationSeedItem("entity.sourceofsupply.purchasegroup", "zh-HK", "采购组_hk", "采购组（选项 TaktPurchaseGroups/options，DictValue=PurchaseGroupCode）"),
+            new TranslationSeedItem("entity.sourceofsupply.purchasegroup", "zh-HK", "采购组_hk", "采购组（选项 TaktPurchaseGroups/options；DictValue=PurchaseGroupCode）"),
 
             // entity.sourceofsupply.isfixed
             new TranslationSeedItem("entity.sourceofsupply.isfixed", "en-US", "固定_us", "固定（字典 sys_yes_no_type；1=是，0=否；固定货源清单，MRP/寻源优先选用）"),
@@ -154,40 +154,49 @@ public class TaktSourceOfSupplyI18nSeedData : ITaktSeedDataCoordinator
             new TranslationSeedItem("entity.sourceofsupply.isblocked", "zh-HK", "冻结_hk", "冻结（字典 sys_yes_no_type；1=是，0=否；冻结后禁止新建采购订单引用）"),
 
             // entity.sourceofsupply.purchaseunit
-            new TranslationSeedItem("entity.sourceofsupply.purchaseunit", "en-US", "采购单位_us", "采购单位（字典 logistics_unit_of_measure_code，DictValue=PC/EA 等；默认 PC）"),
+            new TranslationSeedItem("entity.sourceofsupply.purchaseunit", "en-US", "采购单位_us", "采购单位（字典 logistics_unit_of_measure_code；DictValue=PC/EA 等；默认 PC）"),
             // entity.sourceofsupply.purchaseunit
-            new TranslationSeedItem("entity.sourceofsupply.purchaseunit", "ja-JP", "采购单位_jp", "采购单位（字典 logistics_unit_of_measure_code，DictValue=PC/EA 等；默认 PC）"),
+            new TranslationSeedItem("entity.sourceofsupply.purchaseunit", "ja-JP", "采购单位_jp", "采购单位（字典 logistics_unit_of_measure_code；DictValue=PC/EA 等；默认 PC）"),
             // entity.sourceofsupply.purchaseunit
-            new TranslationSeedItem("entity.sourceofsupply.purchaseunit", "zh-CN", "采购单位", "采购单位（字典 logistics_unit_of_measure_code，DictValue=PC/EA 等；默认 PC）"),
+            new TranslationSeedItem("entity.sourceofsupply.purchaseunit", "zh-CN", "采购单位", "采购单位（字典 logistics_unit_of_measure_code；DictValue=PC/EA 等；默认 PC）"),
             // entity.sourceofsupply.purchaseunit
-            new TranslationSeedItem("entity.sourceofsupply.purchaseunit", "zh-HK", "采购单位_hk", "采购单位（字典 logistics_unit_of_measure_code，DictValue=PC/EA 等；默认 PC）"),
+            new TranslationSeedItem("entity.sourceofsupply.purchaseunit", "zh-HK", "采购单位_hk", "采购单位（字典 logistics_unit_of_measure_code；DictValue=PC/EA 等；默认 PC）"),
 
-            // entity.sourceofsupply.minimumorderquantity
-            new TranslationSeedItem("entity.sourceofsupply.minimumorderquantity", "en-US", "最小订购量_us", "最小订购量"),
-            // entity.sourceofsupply.minimumorderquantity
-            new TranslationSeedItem("entity.sourceofsupply.minimumorderquantity", "ja-JP", "最小订购量_jp", "最小订购量"),
-            // entity.sourceofsupply.minimumorderquantity
-            new TranslationSeedItem("entity.sourceofsupply.minimumorderquantity", "zh-CN", "最小订购量", "最小订购量"),
-            // entity.sourceofsupply.minimumorderquantity
-            new TranslationSeedItem("entity.sourceofsupply.minimumorderquantity", "zh-HK", "最小订购量_hk", "最小订购量"),
+            // entity.sourceofsupply.minorderquantity
+            new TranslationSeedItem("entity.sourceofsupply.minorderquantity", "en-US", "最小起订量_us", "最小起订量（采购单位数量，整数）"),
+            // entity.sourceofsupply.minorderquantity
+            new TranslationSeedItem("entity.sourceofsupply.minorderquantity", "ja-JP", "最小起订量_jp", "最小起订量（采购单位数量，整数）"),
+            // entity.sourceofsupply.minorderquantity
+            new TranslationSeedItem("entity.sourceofsupply.minorderquantity", "zh-CN", "最小起订量", "最小起订量（采购单位数量，整数）"),
+            // entity.sourceofsupply.minorderquantity
+            new TranslationSeedItem("entity.sourceofsupply.minorderquantity", "zh-HK", "最小起订量_hk", "最小起订量（采购单位数量，整数）"),
 
-            // entity.sourceofsupply.leadtimedays
-            new TranslationSeedItem("entity.sourceofsupply.leadtimedays", "en-US", "计划交货天数_us", "计划交货天数（采购提前期）"),
-            // entity.sourceofsupply.leadtimedays
-            new TranslationSeedItem("entity.sourceofsupply.leadtimedays", "ja-JP", "计划交货天数_jp", "计划交货天数（采购提前期）"),
-            // entity.sourceofsupply.leadtimedays
-            new TranslationSeedItem("entity.sourceofsupply.leadtimedays", "zh-CN", "计划交货天数", "计划交货天数（采购提前期）"),
-            // entity.sourceofsupply.leadtimedays
-            new TranslationSeedItem("entity.sourceofsupply.leadtimedays", "zh-HK", "计划交货天数_hk", "计划交货天数（采购提前期）"),
+            // entity.sourceofsupply.roundingvalue
+            new TranslationSeedItem("entity.sourceofsupply.roundingvalue", "en-US", "舍入值_us", "舍入值（基本单位数量，用于数量舍入，整数）"),
+            // entity.sourceofsupply.roundingvalue
+            new TranslationSeedItem("entity.sourceofsupply.roundingvalue", "ja-JP", "舍入值_jp", "舍入值（基本单位数量，用于数量舍入，整数）"),
+            // entity.sourceofsupply.roundingvalue
+            new TranslationSeedItem("entity.sourceofsupply.roundingvalue", "zh-CN", "舍入值", "舍入值（基本单位数量，用于数量舍入，整数）"),
+            // entity.sourceofsupply.roundingvalue
+            new TranslationSeedItem("entity.sourceofsupply.roundingvalue", "zh-HK", "舍入值_hk", "舍入值（基本单位数量，用于数量舍入，整数）"),
+
+            // entity.sourceofsupply.planneddeliverytimedays
+            new TranslationSeedItem("entity.sourceofsupply.planneddeliverytimedays", "en-US", "计划交货时间_us", "计划交货时间（天数，整数）"),
+            // entity.sourceofsupply.planneddeliverytimedays
+            new TranslationSeedItem("entity.sourceofsupply.planneddeliverytimedays", "ja-JP", "计划交货时间_jp", "计划交货时间（天数，整数）"),
+            // entity.sourceofsupply.planneddeliverytimedays
+            new TranslationSeedItem("entity.sourceofsupply.planneddeliverytimedays", "zh-CN", "计划交货时间", "计划交货时间（天数，整数）"),
+            // entity.sourceofsupply.planneddeliverytimedays
+            new TranslationSeedItem("entity.sourceofsupply.planneddeliverytimedays", "zh-HK", "计划交货时间_hk", "计划交货时间（天数，整数）"),
 
             // entity.sourceofsupply.agreementnumber
-            new TranslationSeedItem("entity.sourceofsupply.agreementnumber", "en-US", "框架协议号_us", "框架协议号（采购合同/协议编号，可选）"),
+            new TranslationSeedItem("entity.sourceofsupply.agreementnumber", "en-US", "框架协议号_us", "框架协议号（采购合同/协议编码，可选）"),
             // entity.sourceofsupply.agreementnumber
-            new TranslationSeedItem("entity.sourceofsupply.agreementnumber", "ja-JP", "框架协议号_jp", "框架协议号（采购合同/协议编号，可选）"),
+            new TranslationSeedItem("entity.sourceofsupply.agreementnumber", "ja-JP", "框架协议号_jp", "框架协议号（采购合同/协议编码，可选）"),
             // entity.sourceofsupply.agreementnumber
-            new TranslationSeedItem("entity.sourceofsupply.agreementnumber", "zh-CN", "框架协议号", "框架协议号（采购合同/协议编号，可选）"),
+            new TranslationSeedItem("entity.sourceofsupply.agreementnumber", "zh-CN", "框架协议号", "框架协议号（采购合同/协议编码，可选）"),
             // entity.sourceofsupply.agreementnumber
-            new TranslationSeedItem("entity.sourceofsupply.agreementnumber", "zh-HK", "框架协议号_hk", "框架协议号（采购合同/协议编号，可选）"),
+            new TranslationSeedItem("entity.sourceofsupply.agreementnumber", "zh-HK", "框架协议号_hk", "框架协议号（采购合同/协议编码，可选）"),
 
             // entity.sourceofsupply.agreementlinenumber
             new TranslationSeedItem("entity.sourceofsupply.agreementlinenumber", "en-US", "协议行号_us", "协议行号"),

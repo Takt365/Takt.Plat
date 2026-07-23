@@ -154,7 +154,7 @@ public class TaktGenTableColumn : TaktTenantEntityBase
     public string HtmlType { get; set; } = "input";
 
     /// <summary>
-    /// 字典类型（选项 TaktDictTypes/options，DictValue=Id）
+    /// 字典类型（选项 TaktDictTypes/options；DictValue=Id）
     /// </summary>
     [SugarColumn(ColumnName = "dict_type", ColumnDescription = "字典类型", ColumnDataType = "nvarchar", Length = 100, IsNullable = true)]
     public string? DictType { get; set; }

@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Application.Dtos.HumanResource.Personnel
 // 文件名称：TaktEmployeeOnboardingDtos.cs
-// 创建时间：2026-06-24
+// 创建时间：2026-07-23
 // 创建人：Takt365(Auto Generated)
 // 功能描述：EmployeeOnboarding 模块 DTO（由 generate-dtos-from-entity.cjs 根据 TaktEmployeeOnboarding 生成，请按需审阅）
 // 
@@ -22,7 +22,7 @@ namespace Takt.Application.Dtos.HumanResource.Personnel;
 // ========================================
 
 /// <summary>
-/// 入职待办（办理待办单，非审批单；状态见 todo_status）
+/// 入职待办（办理待办单，非审批单；状态见 TodoStatus）
 /// 对应前端 TaktEmployeeOnboardingDto
 /// 继承 TaktCompanyDtoBase
 /// </summary>
@@ -36,18 +36,18 @@ public class TaktEmployeeOnboardingDto : TaktCompanyDtoBase
     public long EmployeeOnboardingId { get; set; }
 
     /// <summary>
-    /// 录用信息ID（人才管理 TaktTalentOffer）
+    /// 录用信息（选项 TaktTalentOffers/options；DictValue=Id）
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
     public long OfferId { get; set; }
 
     /// <summary>
-    /// 录用信息名称（填充字段）
+    /// 录用信息（选项 TaktTalentOffers/options；DictValue=Id）
     /// </summary>
     public string? OfferName { get; set; }
 
     /// <summary>
-    /// 待办单号（租户+公司内业务编号）
+    /// 待办单号（租户+公司内业务编码）
     /// </summary>
     public string TodoNo { get; set; } = string.Empty;
 
@@ -67,24 +67,29 @@ public class TaktEmployeeOnboardingDto : TaktCompanyDtoBase
     public string? Mobile { get; set; } = string.Empty;
 
     /// <summary>
-    /// 关联员工ID（建档后回填，可空）
+    /// 关联员工（选项 TaktEmployees/options；建档后回填，可空，DictValue=Id）
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
     public long? EmployeeId { get; set; }
 
     /// <summary>
-    /// 关联员工名称（填充字段）
+    /// 员工编码（冗余，与 TaktEmployee.EmployeeCode 对齐；建档回填后可写，建档前可空）
     /// </summary>
-    public string? EmployeeName { get; set; }
+    public string? EmployeeCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 入职上岗单ID（待办完成后回填，可空）
+    /// 员工姓名（冗余，与 TaktEmployee.EmployeeName 对齐；建档回填后可写，建档前可空）
+    /// </summary>
+    public string? EmployeeName { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 入职上岗单（关联 TaktEmployeeJoined.Id；待办完成后回填，可空）
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
     public long? EmployeeJoinedId { get; set; }
 
     /// <summary>
-    /// 入职上岗单名称（填充字段）
+    /// 入职上岗单（关联 TaktEmployeeJoined.Id；待办完成后回填，可空）
     /// </summary>
     public string? EmployeeJoinedName { get; set; }
 
@@ -94,7 +99,7 @@ public class TaktEmployeeOnboardingDto : TaktCompanyDtoBase
     public string? Reason { get; set; } = string.Empty;
 
     /// <summary>
-    /// 待办状态（0=待办理，1=办理中，2=已完成，3=已取消）
+    /// 待办状态（字典 hr_personnel_onboarding_status；0=待办理 1=办理中 2=已完成 3=已取消）
     /// </summary>
     public int TodoStatus { get; set; } = 0;
 
@@ -133,13 +138,13 @@ public class TaktEmployeeOnboardingQueryDto : TaktPagedQuery
     public string? CompanyCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 录用信息ID（人才管理 TaktTalentOffer）
+    /// 录用信息（选项 TaktTalentOffers/options；DictValue=Id）
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
     public long? OfferId { get; set; }
 
     /// <summary>
-    /// 待办单号（租户+公司内业务编号）
+    /// 待办单号（租户+公司内业务编码）
     /// </summary>
     public string? TodoNo { get; set; } = string.Empty;
 
@@ -164,13 +169,23 @@ public class TaktEmployeeOnboardingQueryDto : TaktPagedQuery
     public string? Mobile { get; set; } = string.Empty;
 
     /// <summary>
-    /// 关联员工ID（建档后回填，可空）
+    /// 关联员工（选项 TaktEmployees/options；建档后回填，可空，DictValue=Id）
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
     public long? EmployeeId { get; set; }
 
     /// <summary>
-    /// 入职上岗单ID（待办完成后回填，可空）
+    /// 员工编码（冗余，与 TaktEmployee.EmployeeCode 对齐；建档回填后可写，建档前可空）
+    /// </summary>
+    public string? EmployeeCode { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 员工姓名（冗余，与 TaktEmployee.EmployeeName 对齐；建档回填后可写，建档前可空）
+    /// </summary>
+    public string? EmployeeName { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 入职上岗单（关联 TaktEmployeeJoined.Id；待办完成后回填，可空）
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
     public long? EmployeeJoinedId { get; set; }
@@ -181,7 +196,7 @@ public class TaktEmployeeOnboardingQueryDto : TaktPagedQuery
     public string? Reason { get; set; } = string.Empty;
 
     /// <summary>
-    /// 待办状态（0=待办理，1=办理中，2=已完成，3=已取消）
+    /// 待办状态（字典 hr_personnel_onboarding_status；0=待办理 1=办理中 2=已完成 3=已取消）
     /// </summary>
     public int? TodoStatus { get; set; }
 
@@ -231,15 +246,15 @@ public class TaktEmployeeOnboardingCreateDto
     public string CompanyDefaultCulture { get; set; } = string.Empty;
 
     /// <summary>
-    /// 录用信息ID（人才管理 TaktTalentOffer）
+    /// 录用信息（选项 TaktTalentOffers/options；DictValue=Id）
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
     public long OfferId { get; set; }
 
     /// <summary>
-    /// 待办单号（租户+公司内业务编号）
+    /// 待办单号（租户+公司内业务编码）
     /// </summary>
-    [Required(ErrorMessage = "待办单号（租户+公司内业务编号）不能为空")]
+    [Required(ErrorMessage = "待办单号（租户+公司内业务编码）不能为空")]
     public string TodoNo { get; set; } = string.Empty;
 
     /// <summary>
@@ -259,13 +274,23 @@ public class TaktEmployeeOnboardingCreateDto
     public string? Mobile { get; set; } = string.Empty;
 
     /// <summary>
-    /// 关联员工ID（建档后回填，可空）
+    /// 关联员工（选项 TaktEmployees/options；建档后回填，可空，DictValue=Id）
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
     public long? EmployeeId { get; set; }
 
     /// <summary>
-    /// 入职上岗单ID（待办完成后回填，可空）
+    /// 员工编码（冗余，与 TaktEmployee.EmployeeCode 对齐；建档回填后可写，建档前可空）
+    /// </summary>
+    public string? EmployeeCode { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 员工姓名（冗余，与 TaktEmployee.EmployeeName 对齐；建档回填后可写，建档前可空）
+    /// </summary>
+    public string? EmployeeName { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 入职上岗单（关联 TaktEmployeeJoined.Id；待办完成后回填，可空）
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
     public long? EmployeeJoinedId { get; set; }
@@ -276,7 +301,7 @@ public class TaktEmployeeOnboardingCreateDto
     public string? Reason { get; set; } = string.Empty;
 
     /// <summary>
-    /// 待办状态（0=待办理，1=办理中，2=已完成，3=已取消）
+    /// 待办状态（字典 hr_personnel_onboarding_status；0=待办理 1=办理中 2=已完成 3=已取消）
     /// </summary>
     public int TodoStatus { get; set; } = 0;
 
@@ -330,9 +355,9 @@ public class TaktEmployeeOnboardingStatusDto
     public long EmployeeOnboardingId { get; set; }
 
     /// <summary>
-    /// 待办状态（0=待办理，1=办理中，2=已完成，3=已取消）
+    /// 待办状态（字典 hr_personnel_onboarding_status；0=待办理 1=办理中 2=已完成 3=已取消）
     /// </summary>
-    [Required(ErrorMessage = "待办状态（0=待办理，1=办理中，2=已完成，3=已取消）不能为空")]
+    [Required(ErrorMessage = "待办状态（字典 hr_personnel_onboarding_status；0=待办理 1=办理中 2=已完成 3=已取消）不能为空")]
     public int TodoStatus { get; set; } = 0;
 }
 
@@ -356,13 +381,13 @@ public class TaktEmployeeOnboardingTemplateDto
     public string? CompanyCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 录用信息ID（人才管理 TaktTalentOffer）
+    /// 录用信息（选项 TaktTalentOffers/options；DictValue=Id）
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
     public long? OfferId { get; set; }
 
     /// <summary>
-    /// 待办单号（租户+公司内业务编号）
+    /// 待办单号（租户+公司内业务编码）
     /// </summary>
     public string? TodoNo { get; set; } = string.Empty;
 
@@ -382,13 +407,23 @@ public class TaktEmployeeOnboardingTemplateDto
     public string? Mobile { get; set; } = string.Empty;
 
     /// <summary>
-    /// 关联员工ID（建档后回填，可空）
+    /// 关联员工（选项 TaktEmployees/options；建档后回填，可空，DictValue=Id）
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
     public long? EmployeeId { get; set; }
 
     /// <summary>
-    /// 入职上岗单ID（待办完成后回填，可空）
+    /// 员工编码（冗余，与 TaktEmployee.EmployeeCode 对齐；建档回填后可写，建档前可空）
+    /// </summary>
+    public string? EmployeeCode { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 员工姓名（冗余，与 TaktEmployee.EmployeeName 对齐；建档回填后可写，建档前可空）
+    /// </summary>
+    public string? EmployeeName { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 入职上岗单（关联 TaktEmployeeJoined.Id；待办完成后回填，可空）
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
     public long? EmployeeJoinedId { get; set; }
@@ -399,7 +434,7 @@ public class TaktEmployeeOnboardingTemplateDto
     public string? Reason { get; set; } = string.Empty;
 
     /// <summary>
-    /// 待办状态（0=待办理，1=办理中，2=已完成，3=已取消）
+    /// 待办状态（字典 hr_personnel_onboarding_status；0=待办理 1=办理中 2=已完成 3=已取消）
     /// </summary>
     public int? TodoStatus { get; set; }
 
@@ -436,13 +471,13 @@ public class TaktEmployeeOnboardingImportDto
     public string? CompanyDefaultCulture { get; set; } = string.Empty;
 
     /// <summary>
-    /// 录用信息ID（人才管理 TaktTalentOffer）
+    /// 录用信息（选项 TaktTalentOffers/options；DictValue=Id）
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
     public long? OfferId { get; set; }
 
     /// <summary>
-    /// 待办单号（租户+公司内业务编号）
+    /// 待办单号（租户+公司内业务编码）
     /// </summary>
     public string? TodoNo { get; set; } = string.Empty;
 
@@ -462,13 +497,23 @@ public class TaktEmployeeOnboardingImportDto
     public string? Mobile { get; set; } = string.Empty;
 
     /// <summary>
-    /// 关联员工ID（建档后回填，可空）
+    /// 关联员工（选项 TaktEmployees/options；建档后回填，可空，DictValue=Id）
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
     public long? EmployeeId { get; set; }
 
     /// <summary>
-    /// 入职上岗单ID（待办完成后回填，可空）
+    /// 员工编码（冗余，与 TaktEmployee.EmployeeCode 对齐；建档回填后可写，建档前可空）
+    /// </summary>
+    public string? EmployeeCode { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 员工姓名（冗余，与 TaktEmployee.EmployeeName 对齐；建档回填后可写，建档前可空）
+    /// </summary>
+    public string? EmployeeName { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 入职上岗单（关联 TaktEmployeeJoined.Id；待办完成后回填，可空）
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
     public long? EmployeeJoinedId { get; set; }
@@ -479,7 +524,7 @@ public class TaktEmployeeOnboardingImportDto
     public string? Reason { get; set; } = string.Empty;
 
     /// <summary>
-    /// 待办状态（0=待办理，1=办理中，2=已完成，3=已取消）
+    /// 待办状态（字典 hr_personnel_onboarding_status；0=待办理 1=办理中 2=已完成 3=已取消）
     /// </summary>
     public int? TodoStatus { get; set; }
 
@@ -517,13 +562,13 @@ public class TaktEmployeeOnboardingExportDto
     public string CompanyCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 录用信息ID（人才管理 TaktTalentOffer）
+    /// 录用信息（选项 TaktTalentOffers/options；DictValue=Id）
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
     public long OfferId { get; set; }
 
     /// <summary>
-    /// 待办单号（租户+公司内业务编号）
+    /// 待办单号（租户+公司内业务编码）
     /// </summary>
     public string TodoNo { get; set; } = string.Empty;
 
@@ -543,13 +588,23 @@ public class TaktEmployeeOnboardingExportDto
     public string? Mobile { get; set; } = string.Empty;
 
     /// <summary>
-    /// 关联员工ID（建档后回填，可空）
+    /// 关联员工（选项 TaktEmployees/options；建档后回填，可空，DictValue=Id）
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
     public long? EmployeeId { get; set; }
 
     /// <summary>
-    /// 入职上岗单ID（待办完成后回填，可空）
+    /// 员工编码（冗余，与 TaktEmployee.EmployeeCode 对齐；建档回填后可写，建档前可空）
+    /// </summary>
+    public string? EmployeeCode { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 员工姓名（冗余，与 TaktEmployee.EmployeeName 对齐；建档回填后可写，建档前可空）
+    /// </summary>
+    public string? EmployeeName { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 入职上岗单（关联 TaktEmployeeJoined.Id；待办完成后回填，可空）
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
     public long? EmployeeJoinedId { get; set; }
@@ -560,7 +615,7 @@ public class TaktEmployeeOnboardingExportDto
     public string? Reason { get; set; } = string.Empty;
 
     /// <summary>
-    /// 待办状态（0=待办理，1=办理中，2=已完成，3=已取消）
+    /// 待办状态（字典 hr_personnel_onboarding_status；0=待办理 1=办理中 2=已完成 3=已取消）
     /// </summary>
     public int TodoStatus { get; set; } = 0;
 

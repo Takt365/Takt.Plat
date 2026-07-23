@@ -20,6 +20,7 @@ export const SALESQUOTATIONITEM_SELF_I18N_KEY = buildEntitySelfI18nKey(SALESQUOT
 
 /** 列表业务列（不含主键） */
 export const SALESQUOTATIONITEM_LIST_FIELDS = [
+  'salesQuotationId',
   'salesQuotationName',
   'salesQuotationCode',
   'lineNumber',
@@ -29,13 +30,48 @@ export const SALESQUOTATIONITEM_LIST_FIELDS = [
   'salesUnit',
   'quotationQuantity',
   'salesPerUnit',
-  'unitPrice',
+  'quotationUnitPrice',
   'discountRate',
   'discountAmount',
-  'taxRate',
+  'taxIncludedAmount',
+  'untaxedAmount',
   'taxAmount',
-  'subtotalAmount',
-  'salesQuotation',
+  'isObsolete',
+] as const
+
+/** 明细右栏 panel 默认展示列（不含主键 id；含 action） */
+export const SALESQUOTATIONITEM_DEFAULT_VISIBLE_COLUMN_KEYS = [
+  'salesQuotationId',
+  'salesQuotationName',
+  'salesQuotationCode',
+  'lineNumber',
+  'materialCode',
+  'materialName',
+  'materialSpecification',
+  'salesUnit',
+  'quotationQuantity',
+  'salesPerUnit',
+  'quotationUnitPrice',
+  'discountRate',
+  'discountAmount',
+  'taxIncludedAmount',
+  'untaxedAmount',
+  'taxAmount',
+  'isObsolete',
+  'action',
+] as const
+
+/** 明细右栏 panel 合计列（当前页 dataSource 数值字段求和） */
+export const SALESQUOTATIONITEM_SUMMARY_SUM_FIELDS = [
+  'quotationQuantity',
+  'salesPerUnit',
+  'quotationUnitPrice',
+  'discountRate',
+  'discountAmount',
+  'taxIncludedAmount',
+  'untaxedAmount',
+  'taxAmount',
+  'isObsolete',
 ] as const
 
 /** 表单控件默认占位类型（仅 UI/校验语义，不含 i18n 键） */
@@ -45,12 +81,18 @@ export const SALESQUOTATIONITEM_PLACEHOLDER = {
   companyDefaultCulture: 'optional',
   lineNumber: 'select',
   materialCode: 'select',
-  materialName: 'required',
+  materialName: 'optional',
   materialSpecification: 'optional',
   salesUnit: 'select',
   quotationQuantity: 'select',
   salesPerUnit: 'select',
-  unitPrice: 'select',
+  quotationUnitPrice: 'select',
+  discountRate: 'select',
+  discountAmount: 'select',
+  taxIncludedAmount: 'select',
+  untaxedAmount: 'select',
+  taxAmount: 'select',
+  isObsolete: 'select',
 } as const satisfies Record<string, EntityFieldPlaceholderKind>
 
 /** 表单 ph() 可接受的字段（与 PLACEHOLDER 键一致，避免与 LIST_FIELDS 导航列混用） */
@@ -71,7 +113,7 @@ export const SALESQUOTATIONITEM_QUERY_STRING_FIELDS = [
 
 export type SalesQuotationItemQueryField =
   | (typeof SALESQUOTATIONITEM_QUERY_STRING_FIELDS)[number]
-  | 'lineNumber' | 'quotationQuantity' | 'salesPerUnit' | 'unitPrice' | 'discountRate' | 'discountAmount' | 'taxRate' | 'taxAmount' | 'subtotalAmount'
+  | 'lineNumber' | 'quotationQuantity' | 'salesPerUnit' | 'quotationUnitPrice' | 'discountRate' | 'discountAmount' | 'taxIncludedAmount' | 'untaxedAmount' | 'taxAmount' | 'isObsolete'
 
 /** 高级查询抽屉全部字段（含数值） */
 export const SALESQUOTATIONITEM_QUERY_FIELDS: readonly SalesQuotationItemQueryField[] = [
@@ -79,12 +121,13 @@ export const SALESQUOTATIONITEM_QUERY_FIELDS: readonly SalesQuotationItemQueryFi
   'lineNumber',
   'quotationQuantity',
   'salesPerUnit',
-  'unitPrice',
+  'quotationUnitPrice',
   'discountRate',
   'discountAmount',
-  'taxRate',
+  'taxIncludedAmount',
+  'untaxedAmount',
   'taxAmount',
-  'subtotalAmount',
+  'isObsolete',
 ]
 
 /**

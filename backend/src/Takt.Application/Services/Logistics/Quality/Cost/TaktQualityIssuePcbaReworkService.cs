@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Application.Services.Logistics.Quality.Cost
 // 文件名称：TaktQualityIssuePcbaReworkService.cs
-// 创建时间：2026-07-09
+// 创建时间：2026-07-23
 // 创建人：Takt365(Cursor AI)
 // 功能描述：质量问题PCBA不良改修费用明细应用服务实现
 // 
@@ -100,13 +100,13 @@ public class TaktQualityIssuePcbaReworkService : TaktServiceBase, ITaktQualityIs
     {
         EnsureThreeLayerContext();
         var list = await _qualityIssuePcbaReworkRepository.GetListAsync(
-            x => x.TenantCode == CurrentTenantCode && x.CompanyCode == CurrentCompanyCode,
-            x => x.PcbaCustomerName ?? string.Empty,
+            x => x.TenantCode == CurrentTenantCode && x.CompanyCode == CurrentCompanyCode && x.IsObsolete == 0,
+            x => x.QualityIssueCode ?? string.Empty,
             false);
         return list.Select(e => new TaktSelectOption
         {
-            DictValue = e.Id,
-            DictLabel = e.PcbaCustomerName ?? e.Id.ToString(),
+            DictValue = e.QualityIssueCode,
+            DictLabel = e.QualityIssueCode,
         }).ToList();
     }
 
@@ -388,7 +388,7 @@ public class TaktQualityIssuePcbaReworkService : TaktServiceBase, ITaktQualityIs
                 || SqlFunc.ToString(x.PcbaOtherExpenses).Contains(keywords)
                 || (x.PcbaReworkNote != null && x.PcbaReworkNote.Contains(keywords))
                 || SqlFunc.ToString(x.PcbaScrapCost).Contains(keywords)
-                || (x.PcbaCustomerName != null && x.PcbaCustomerName.Contains(keywords))
+                || (x.PcbaCustomerName1 != null && x.PcbaCustomerName1.Contains(keywords))
                 || (x.PcbaDebitNoteNo != null && x.PcbaDebitNoteNo.Contains(keywords))
                 || SqlFunc.ToString(x.PcbaOtherExpenses2).Contains(keywords)
                 || (x.PcbaNote != null && x.PcbaNote.Contains(keywords))
@@ -459,9 +459,9 @@ public class TaktQualityIssuePcbaReworkService : TaktServiceBase, ITaktQualityIs
             exp = exp.And(x => x.PcbaScrapCost == queryDto.PcbaScrapCost);
         }
 
-        if (!string.IsNullOrEmpty(queryDto?.PcbaCustomerName))
+        if (!string.IsNullOrEmpty(queryDto?.PcbaCustomerName1))
         {
-            exp = exp.And(x => x.PcbaCustomerName != null && x.PcbaCustomerName.Contains(queryDto.PcbaCustomerName));
+            exp = exp.And(x => x.PcbaCustomerName1 != null && x.PcbaCustomerName1.Contains(queryDto.PcbaCustomerName1));
         }
 
         if (!string.IsNullOrEmpty(queryDto?.PcbaDebitNoteNo))

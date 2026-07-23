@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：frontend/src/types/logistics/quality/operation
 // 文件名称：fqc-order.d.ts
-// 创建时间：2026-07-09
+// 创建时间：2026-07-23
 // 创建人：Takt365(Auto Generated)
 // 功能描述：logistics/quality/operation 模块类型定义（自动生成；类型名去 Takt 前缀与末尾 Dto，如 TaktCompanyDto → Company）
 // 
@@ -34,7 +34,7 @@ export interface FqcOrder extends CompanyDtoBase {
   plantCode: string;
 
   /**
-   * 来源单号（选项 TaktSalesOrders/options，DictValue=SalesOrderCode）
+   * 来源单号（选项 TaktSalesOrders/options；DictValue=SalesOrderCode）
    */
   sourceCode: string;
 
@@ -49,7 +49,7 @@ export interface FqcOrder extends CompanyDtoBase {
   fqcOrderCode: string;
 
   /**
-   * 客户编码（选项 TaktCustomers/options，DictValue=CustomerCode）
+   * 客户编码（选项 TaktCustomers/options；DictValue=CustomerCode）
    */
   customerCode?: string;
 
@@ -79,7 +79,7 @@ export interface FqcOrder extends CompanyDtoBase {
   totalInspectionReturnQuantity: number;
 
   /**
-   * 判定人（选项 TaktEmployees/options，DictValue=EmployeeCode）
+   * 判定人（选项 TaktEmployees/options；DictValue=EmployeeCode）
    */
   judgeBy?: string;
 
@@ -129,7 +129,7 @@ export interface FqcOrderQuery extends TaktPagedQuery {
   plantCode?: string;
 
   /**
-   * 来源单号（选项 TaktSalesOrders/options，DictValue=SalesOrderCode）
+   * 来源单号（选项 TaktSalesOrders/options；DictValue=SalesOrderCode）
    */
   sourceCode?: string;
 
@@ -149,7 +149,7 @@ export interface FqcOrderQuery extends TaktPagedQuery {
   fqcOrderCode?: string;
 
   /**
-   * 客户编码（选项 TaktCustomers/options，DictValue=CustomerCode）
+   * 客户编码（选项 TaktCustomers/options；DictValue=CustomerCode）
    */
   customerCode?: string;
 
@@ -179,7 +179,7 @@ export interface FqcOrderQuery extends TaktPagedQuery {
   totalInspectionReturnQuantity?: number;
 
   /**
-   * 判定人（选项 TaktEmployees/options，DictValue=EmployeeCode）
+   * 判定人（选项 TaktEmployees/options；DictValue=EmployeeCode）
    */
   judgeBy?: string;
 
@@ -253,7 +253,7 @@ export interface FqcOrderCreate {
   plantCode: string;
 
   /**
-   * 来源单号（选项 TaktSalesOrders/options，DictValue=SalesOrderCode）
+   * 来源单号（选项 TaktSalesOrders/options；DictValue=SalesOrderCode）
    */
   sourceCode: string;
 
@@ -268,7 +268,7 @@ export interface FqcOrderCreate {
   fqcOrderCode: string;
 
   /**
-   * 客户编码（选项 TaktCustomers/options，DictValue=CustomerCode）
+   * 客户编码（选项 TaktCustomers/options；DictValue=CustomerCode）
    */
   customerCode?: string;
 
@@ -298,7 +298,7 @@ export interface FqcOrderCreate {
   totalInspectionReturnQuantity: number;
 
   /**
-   * 判定人（选项 TaktEmployees/options，DictValue=EmployeeCode）
+   * 判定人（选项 TaktEmployees/options；DictValue=EmployeeCode）
    */
   judgeBy?: string;
 
@@ -396,7 +396,7 @@ export interface FqcOrderTemplate {
   plantCode?: string;
 
   /**
-   * 来源单号（选项 TaktSalesOrders/options，DictValue=SalesOrderCode）
+   * 来源单号（选项 TaktSalesOrders/options；DictValue=SalesOrderCode）
    */
   sourceCode?: string;
 
@@ -411,7 +411,7 @@ export interface FqcOrderTemplate {
   fqcOrderCode?: string;
 
   /**
-   * 客户编码（选项 TaktCustomers/options，DictValue=CustomerCode）
+   * 客户编码（选项 TaktCustomers/options；DictValue=CustomerCode）
    */
   customerCode?: string;
 
@@ -441,7 +441,7 @@ export interface FqcOrderTemplate {
   totalInspectionReturnQuantity?: number;
 
   /**
-   * 判定人（选项 TaktEmployees/options，DictValue=EmployeeCode）
+   * 判定人（选项 TaktEmployees/options；DictValue=EmployeeCode）
    */
   judgeBy?: string;
 
@@ -505,7 +505,7 @@ export interface FqcOrderImport {
   plantCode?: string;
 
   /**
-   * 来源单号（选项 TaktSalesOrders/options，DictValue=SalesOrderCode）
+   * 来源单号（选项 TaktSalesOrders/options；DictValue=SalesOrderCode）
    */
   sourceCode?: string;
 
@@ -520,7 +520,7 @@ export interface FqcOrderImport {
   fqcOrderCode?: string;
 
   /**
-   * 客户编码（选项 TaktCustomers/options，DictValue=CustomerCode）
+   * 客户编码（选项 TaktCustomers/options；DictValue=CustomerCode）
    */
   customerCode?: string;
 
@@ -550,7 +550,7 @@ export interface FqcOrderImport {
   totalInspectionReturnQuantity?: number;
 
   /**
-   * 判定人（选项 TaktEmployees/options，DictValue=EmployeeCode）
+   * 判定人（选项 TaktEmployees/options；DictValue=EmployeeCode）
    */
   judgeBy?: string;
 
@@ -609,7 +609,7 @@ export interface FqcOrderExport {
   plantCode: string;
 
   /**
-   * 来源单号（选项 TaktSalesOrders/options，DictValue=SalesOrderCode）
+   * 来源单号（选项 TaktSalesOrders/options；DictValue=SalesOrderCode）
    */
   sourceCode: string;
 
@@ -624,7 +624,7 @@ export interface FqcOrderExport {
   fqcOrderCode: string;
 
   /**
-   * 客户编码（选项 TaktCustomers/options，DictValue=CustomerCode）
+   * 客户编码（选项 TaktCustomers/options；DictValue=CustomerCode）
    */
   customerCode?: string;
 
@@ -654,7 +654,7 @@ export interface FqcOrderExport {
   totalInspectionReturnQuantity: number;
 
   /**
-   * 判定人（选项 TaktEmployees/options，DictValue=EmployeeCode）
+   * 判定人（选项 TaktEmployees/options；DictValue=EmployeeCode）
    */
   judgeBy?: string;
 

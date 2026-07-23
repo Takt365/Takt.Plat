@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：frontend/src/api/foundation
 // 文件名称：dict-data.ts
-// 创建时间：2026-06-02
+// 创建时间：2026-07-20
 // 创建人：Takt365(Auto Generated)
 // 功能描述：foundation 模块 API（自动生成，请勿手改路由常量）
 // 
@@ -16,8 +16,8 @@ import type {
   TaktSelectOption
 } from '@/types/common';
 import type {
+  DataDictAll,
   DictData,
-  DictDataAll,
   DictDataCreate,
   DictDataSort,
   DictDataUpdate
@@ -123,6 +123,17 @@ export function updateDictDataSort(dto: DictDataSort): Promise<DictData> {
   });
 }
 
+/**
+ * 获取当前 Accept-Language 下全部字典数据（eo 全局项 + 匹配区域项，登录即可访问）
+ * @returns {Promise<DataDictAll>} 扁平字典项列表
+ */
+export function getDataDictAll(): Promise<DataDictAll> {
+  return request<DataDictAll>({
+    url: `${DICT_DATA_API_BASE}/all`,
+    method: 'get',
+  });
+}
+
 // ========================================
 // 选项
 // ========================================
@@ -162,11 +173,11 @@ export function getDictDataTemplate(sheetName?: string, templateName?: string): 
 
 /**
  * 导入字典数据
- * @param {File} file Excel文件
+ * @param {globalThis.File} file Excel文件
  * @param {string} sheetName sheetName
  * @returns {Promise<{ success: number; fail: number; errors: string[] }>} 导入结果
  */
-export function importDictData(file: File, sheetName?: string): Promise<{ success: number; fail: number; errors: string[] }> {
+export function importDictData(file: globalThis.File, sheetName?: string): Promise<{ success: number; fail: number; errors: string[] }> {
   const formData = new FormData();
   formData.append('file', file);
   
@@ -205,19 +216,4 @@ export function exportDictData(
     },
     responseType: 'blob',
   });
-}
-
-// ========================================
-// 租户全量字典
-// ========================================
-
-/**
- * 获取当前租户下全部字典数据（扁平列表，含 dictTypeCode）
- * @returns {Promise<TaktSelectOption[]>} 字典项列表
- */
-export function getDictDataAll(): Promise<TaktSelectOption[]> {
-  return request<DictDataAll>({
-    url: `${DICT_DATA_API_BASE}/all`,
-    method: 'get',
-  }).then((dto) => dto.items ?? []);
 }

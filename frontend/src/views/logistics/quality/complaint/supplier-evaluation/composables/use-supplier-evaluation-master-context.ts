@@ -9,10 +9,13 @@
 import { inject, provide, type InjectionKey, type Ref, ref } from 'vue'
 import type { SupplierEvaluation } from '@/types/logistics/quality/complaint/supplier-evaluation'
 
+/** 表格行类型（与 index 列表行、TaktSingleTable slot record 一致） */
+export type SupplierEvaluationRowRecord = SupplierEvaluation | Record<string, unknown>
+
 /** 主表选中行上下文 */
 export interface SupplierEvaluationMasterContext {
   /** 当前选中的主表行（右侧明细依赖） */
-  selectedMasterRow: Ref<SupplierEvaluation | null>
+  selectedMasterRow: Ref<SupplierEvaluationRowRecord | null>
 }
 
 const supplierEvaluationMasterContextKey: InjectionKey<SupplierEvaluationMasterContext> = Symbol('supplier-evaluationMasterContext')
@@ -22,7 +25,7 @@ const supplierEvaluationMasterContextKey: InjectionKey<SupplierEvaluationMasterC
  * @returns {SupplierEvaluationMasterContext} 主表上下文
  */
 export function provideSupplierEvaluationMasterContext(): SupplierEvaluationMasterContext {
-  const selectedMasterRow = ref<SupplierEvaluation | null>(null)
+  const selectedMasterRow = ref<SupplierEvaluationRowRecord | null>(null)
   const ctx: SupplierEvaluationMasterContext = { selectedMasterRow }
   provide(supplierEvaluationMasterContextKey, ctx)
   return ctx

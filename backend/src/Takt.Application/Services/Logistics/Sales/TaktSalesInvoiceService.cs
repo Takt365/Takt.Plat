@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Application.Services.Logistics.Sales
 // 文件名称：TaktSalesInvoiceService.cs
-// 创建时间：2026-07-09
+// 创建时间：2026-07-23
 // 创建人：Takt365(Cursor AI)
 // 功能描述：销售发票应用服务实现
 // 
@@ -102,14 +102,12 @@ public class TaktSalesInvoiceService : TaktServiceBase, ITaktSalesInvoiceService
         EnsureThreeLayerContext();
         var list = await _salesInvoiceRepository.GetListAsync(
             x => x.TenantCode == CurrentTenantCode && x.CompanyCode == CurrentCompanyCode,
-            x => x.AccountingDocumentCode ?? string.Empty,
+            x => x.CustomerCode ?? string.Empty,
             false);
         return list.Select(e => new TaktSelectOption
         {
-            DictValue = e.AccountingDocumentCode,
-            DictLabel = string.IsNullOrWhiteSpace(e.CustomerName)
-                ? e.AccountingDocumentCode
-                : $"{e.AccountingDocumentCode} {e.CustomerName}",
+            DictValue = e.CustomerCode,
+            DictLabel = e.CustomerCode,
         }).ToList();
     }
 
@@ -340,7 +338,20 @@ public class TaktSalesInvoiceService : TaktServiceBase, ITaktSalesInvoiceService
     private async Task SaveSalesInvoiceChildrenAsync(TaktSalesInvoice entity, TaktSalesInvoiceCreateDto dto)
     {
         // 销售发票明细（Items）
-        if (dto.Items is not { Count: > 0 })
+        List<TaktSalesInvoiceItemUpdateDto>? itemsForSave;
+        if (dto is TaktSalesInvoiceUpdateDto updateDtoForItems && updateDtoForItems.Items != null)
+        {
+            itemsForSave = updateDtoForItems.Items;
+        }
+        else if (dto.Items != null)
+        {
+            itemsForSave = dto.Items.Adapt<List<TaktSalesInvoiceItemUpdateDto>>();
+        }
+        else
+        {
+            itemsForSave = null;
+        }
+        if (itemsForSave is not { Count: > 0 })
         {
             await MarkSalesInvoiceItemsObsoleteAsync(entity.Id);
             return;
@@ -352,9 +363,9 @@ public class TaktSalesInvoiceService : TaktServiceBase, ITaktSalesInvoiceService
             var submittedIds = new HashSet<long>();
             var toCreate = new List<TaktSalesInvoiceItem>();
             var seenLineKeys = new HashSet<string>(StringComparer.Ordinal);
-            for (var i = 0; i < dto.Items.Count; i++)
+            for (var i = 0; i < itemsForSave.Count; i++)
             {
-                var childDto = dto.Items[i];
+                var childDto = itemsForSave[i];
                 childDto.SalesInvoiceId = entity.Id;
                 var lineKey = $"{entity.CompanyCode}|{entity.Id}|{childDto.LineNumber}";
                 if (!seenLineKeys.Add(lineKey))
@@ -453,7 +464,10 @@ public class TaktSalesInvoiceService : TaktServiceBase, ITaktSalesInvoiceService
                 (x.PlantCode != null && x.PlantCode.Contains(keywords))
                 || (x.YearMonth != null && x.YearMonth.Contains(keywords))
                 || (x.CustomerCode != null && x.CustomerCode.Contains(keywords))
-                || (x.CustomerName != null && x.CustomerName.Contains(keywords))
+                || (x.CustomerName1 != null && x.CustomerName1.Contains(keywords))
+                || (x.CurrencyCode != null && x.CurrencyCode.Contains(keywords))
+                || SqlFunc.ToString(x.TaxRate).Contains(keywords)
+                || SqlFunc.ToString(x.TaxAmount).Contains(keywords)
                 || (x.AccountingDocumentCode != null && x.AccountingDocumentCode.Contains(keywords))
                 || (x.ExtField != null && x.ExtField.Contains(keywords))
                 || (x.Remark != null && x.Remark.Contains(keywords))
@@ -476,9 +490,24 @@ public class TaktSalesInvoiceService : TaktServiceBase, ITaktSalesInvoiceService
             exp = exp.And(x => x.CustomerCode != null && x.CustomerCode.Contains(queryDto.CustomerCode));
         }
 
-        if (!string.IsNullOrEmpty(queryDto?.CustomerName))
+        if (!string.IsNullOrEmpty(queryDto?.CustomerName1))
         {
-            exp = exp.And(x => x.CustomerName != null && x.CustomerName.Contains(queryDto.CustomerName));
+            exp = exp.And(x => x.CustomerName1 != null && x.CustomerName1.Contains(queryDto.CustomerName1));
+        }
+
+        if (!string.IsNullOrEmpty(queryDto?.CurrencyCode))
+        {
+            exp = exp.And(x => x.CurrencyCode != null && x.CurrencyCode.Contains(queryDto.CurrencyCode));
+        }
+
+        if (queryDto?.TaxRate.HasValue == true)
+        {
+            exp = exp.And(x => x.TaxRate == queryDto.TaxRate);
+        }
+
+        if (queryDto?.TaxAmount.HasValue == true)
+        {
+            exp = exp.And(x => x.TaxAmount == queryDto.TaxAmount);
         }
 
         if (!string.IsNullOrEmpty(queryDto?.AccountingDocumentCode))

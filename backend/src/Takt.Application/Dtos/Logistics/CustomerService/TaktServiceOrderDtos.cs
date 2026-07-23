@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Application.Dtos.Logistics.CustomerService
 // 文件名称：TaktServiceOrderDtos.cs
-// 创建时间：2026-06-24
+// 创建时间：2026-07-23
 // 创建人：Takt365(Auto Generated)
 // 功能描述：ServiceOrder 模块 DTO（由 generate-dtos-from-entity.cjs 根据 TaktServiceOrder 生成，请按需审阅）
 // 
@@ -52,6 +52,11 @@ public class TaktServiceOrderDto : TaktCompanyDtoBase
     public long ClientId { get; set; }
 
     /// <summary>
+    /// 客户端名称（填充字段）
+    /// </summary>
+    public string? ClientName { get; set; }
+
+    /// <summary>
     /// 客户端编码（冗余字段，便于查询）
     /// </summary>
     public string ClientCode { get; set; } = string.Empty;
@@ -59,7 +64,7 @@ public class TaktServiceOrderDto : TaktCompanyDtoBase
     /// <summary>
     /// 客户端名称（冗余字段，便于查询）
     /// </summary>
-    public string ClientName { get; set; } = string.Empty;
+    public string ClientName1 { get; set; } = string.Empty;
 
     /// <summary>
     /// 关联服务合同ID（序列化为string以避免Javascript精度问题）
@@ -102,6 +107,11 @@ public class TaktServiceOrderDto : TaktCompanyDtoBase
     /// 订单类型（0=现场服务，1=远程支持，2=备件更换，3=安装调试，4=其他）
     /// </summary>
     public int OrderType { get; set; } = 0;
+
+    /// <summary>
+    /// 订单状态（0=草稿，1=已确认，2=执行中，3=已完成，4=已结算，5=已取消）
+    /// </summary>
+    public int OrderStatus { get; set; } = 0;
 
     /// <summary>
     /// 订单总金额
@@ -157,11 +167,6 @@ public class TaktServiceOrderDto : TaktCompanyDtoBase
     /// 排序号（越小越靠前）
     /// </summary>
     public int SortOrder { get; set; } = 0;
-
-    /// <summary>
-    /// 订单状态（0=草稿，1=已确认，2=执行中，3=已完成，4=已结算，5=已取消）
-    /// </summary>
-    public int OrderStatus { get; set; } = 0;
 
     /// <summary>
     /// 关联服务合同
@@ -227,7 +232,7 @@ public class TaktServiceOrderQueryDto : TaktPagedQuery
     /// <summary>
     /// 客户端名称（冗余字段，便于查询）
     /// </summary>
-    public string? ClientName { get; set; } = string.Empty;
+    public string? ClientName1 { get; set; } = string.Empty;
 
     /// <summary>
     /// 关联服务合同ID（序列化为string以避免Javascript精度问题）
@@ -265,6 +270,11 @@ public class TaktServiceOrderQueryDto : TaktPagedQuery
     /// 订单类型（0=现场服务，1=远程支持，2=备件更换，3=安装调试，4=其他）
     /// </summary>
     public int? OrderType { get; set; }
+
+    /// <summary>
+    /// 订单状态（0=草稿，1=已确认，2=执行中，3=已完成，4=已结算，5=已取消）
+    /// </summary>
+    public int? OrderStatus { get; set; }
 
     /// <summary>
     /// 订单总金额
@@ -342,11 +352,6 @@ public class TaktServiceOrderQueryDto : TaktPagedQuery
     public int? SortOrder { get; set; }
 
     /// <summary>
-    /// 订单状态（0=草稿，1=已确认，2=执行中，3=已完成，4=已结算，5=已取消）
-    /// </summary>
-    public int? OrderStatus { get; set; }
-
-    /// <summary>
     /// 创建时间（范围查询-开始）
     /// </summary>
     public DateTime? CreatedAtStart { get; set; }
@@ -419,7 +424,7 @@ public class TaktServiceOrderCreateDto
     /// 客户端名称（冗余字段，便于查询）
     /// </summary>
     [Required(ErrorMessage = "客户端名称（冗余字段，便于查询）不能为空")]
-    public string ClientName { get; set; } = string.Empty;
+    public string ClientName1 { get; set; } = string.Empty;
 
     /// <summary>
     /// 关联服务合同ID（序列化为string以避免Javascript精度问题）
@@ -452,6 +457,11 @@ public class TaktServiceOrderCreateDto
     /// 订单类型（0=现场服务，1=远程支持，2=备件更换，3=安装调试，4=其他）
     /// </summary>
     public int OrderType { get; set; } = 0;
+
+    /// <summary>
+    /// 订单状态（0=草稿，1=已确认，2=执行中，3=已完成，4=已结算，5=已取消）
+    /// </summary>
+    public int OrderStatus { get; set; } = 0;
 
     /// <summary>
     /// 订单总金额
@@ -505,11 +515,6 @@ public class TaktServiceOrderCreateDto
     public string? ServiceBy { get; set; } = string.Empty;
 
     /// <summary>
-    /// 订单状态（0=草稿，1=已确认，2=执行中，3=已完成，4=已结算，5=已取消）
-    /// </summary>
-    public int OrderStatus { get; set; } = 0;
-
-    /// <summary>
     /// 服务工单列表（外键在子表 TaktServiceTicket.ServiceOrderId）（子表，级联保存）
     /// </summary>
     public List<TaktServiceTicketCreateDto>? Tickets { get; set; }
@@ -543,6 +548,11 @@ public class TaktServiceOrderUpdateDto : TaktServiceOrderCreateDto
     [AdaptMember("Id")]
     [JsonConverter(typeof(ValueToStringConverter))]
     public long ServiceOrderId { get; set; }
+
+    /// <summary>
+    /// 服务工单列表（外键在子表 TaktServiceTicket.ServiceOrderId）（子表，级联保存）
+    /// </summary>
+    public new List<TaktServiceTicketUpdateDto>? Tickets { get; set; }
 
 }
 
@@ -637,7 +647,7 @@ public class TaktServiceOrderTemplateDto
     /// <summary>
     /// 客户端名称（冗余字段，便于查询）
     /// </summary>
-    public string? ClientName { get; set; } = string.Empty;
+    public string? ClientName1 { get; set; } = string.Empty;
 
     /// <summary>
     /// 关联服务合同ID（序列化为string以避免Javascript精度问题）
@@ -670,6 +680,11 @@ public class TaktServiceOrderTemplateDto
     /// 订单类型（0=现场服务，1=远程支持，2=备件更换，3=安装调试，4=其他）
     /// </summary>
     public int? OrderType { get; set; }
+
+    /// <summary>
+    /// 订单状态（0=草稿，1=已确认，2=执行中，3=已完成，4=已结算，5=已取消）
+    /// </summary>
+    public int? OrderStatus { get; set; }
 
     /// <summary>
     /// 订单总金额
@@ -720,11 +735,6 @@ public class TaktServiceOrderTemplateDto
     /// 服务负责人（人员代码）
     /// </summary>
     public string? ServiceBy { get; set; } = string.Empty;
-
-    /// <summary>
-    /// 订单状态（0=草稿，1=已确认，2=执行中，3=已完成，4=已结算，5=已取消）
-    /// </summary>
-    public int? OrderStatus { get; set; }
 
     /// <summary>
     /// 服务工单列表（外键在子表 TaktServiceTicket.ServiceOrderId）（子表，级联保存）
@@ -787,7 +797,7 @@ public class TaktServiceOrderImportDto
     /// <summary>
     /// 客户端名称（冗余字段，便于查询）
     /// </summary>
-    public string? ClientName { get; set; } = string.Empty;
+    public string? ClientName1 { get; set; } = string.Empty;
 
     /// <summary>
     /// 关联服务合同ID（序列化为string以避免Javascript精度问题）
@@ -820,6 +830,11 @@ public class TaktServiceOrderImportDto
     /// 订单类型（0=现场服务，1=远程支持，2=备件更换，3=安装调试，4=其他）
     /// </summary>
     public int? OrderType { get; set; }
+
+    /// <summary>
+    /// 订单状态（0=草稿，1=已确认，2=执行中，3=已完成，4=已结算，5=已取消）
+    /// </summary>
+    public int? OrderStatus { get; set; }
 
     /// <summary>
     /// 订单总金额
@@ -870,11 +885,6 @@ public class TaktServiceOrderImportDto
     /// 服务负责人（人员代码）
     /// </summary>
     public string? ServiceBy { get; set; } = string.Empty;
-
-    /// <summary>
-    /// 订单状态（0=草稿，1=已确认，2=执行中，3=已完成，4=已结算，5=已取消）
-    /// </summary>
-    public int? OrderStatus { get; set; }
 
     /// <summary>
     /// 服务工单列表（外键在子表 TaktServiceTicket.ServiceOrderId）（子表，级联保存）
@@ -938,7 +948,7 @@ public class TaktServiceOrderExportDto
     /// <summary>
     /// 客户端名称（冗余字段，便于查询）
     /// </summary>
-    public string ClientName { get; set; } = string.Empty;
+    public string ClientName1 { get; set; } = string.Empty;
 
     /// <summary>
     /// 关联服务合同ID（序列化为string以避免Javascript精度问题）
@@ -971,6 +981,11 @@ public class TaktServiceOrderExportDto
     /// 订单类型（0=现场服务，1=远程支持，2=备件更换，3=安装调试，4=其他）
     /// </summary>
     public int OrderType { get; set; } = 0;
+
+    /// <summary>
+    /// 订单状态（0=草稿，1=已确认，2=执行中，3=已完成，4=已结算，5=已取消）
+    /// </summary>
+    public int OrderStatus { get; set; } = 0;
 
     /// <summary>
     /// 订单总金额
@@ -1026,11 +1041,6 @@ public class TaktServiceOrderExportDto
     /// 排序号（越小越靠前）
     /// </summary>
     public int SortOrder { get; set; } = 0;
-
-    /// <summary>
-    /// 订单状态（0=草稿，1=已确认，2=执行中，3=已完成，4=已结算，5=已取消）
-    /// </summary>
-    public int OrderStatus { get; set; } = 0;
 
     /// <summary>
     /// 扩展字段JSON

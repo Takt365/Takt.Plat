@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Application.Dtos.Logistics.Procurement
 // 文件名称：TaktSourceOfSupplyDtos.cs
-// 创建时间：2026-06-30
+// 创建时间：2026-07-21
 // 创建人：Takt365(Auto Generated)
 // 功能描述：SourceOfSupply 模块 DTO（由 generate-dtos-from-entity.cjs 根据 TaktSourceOfSupply 生成，请按需审阅）
 // 
@@ -46,7 +46,7 @@ public class TaktSourceOfSupplyDto : TaktCompanyDtoBase
     public string SourceOfSupplyCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 物料编码（选项 TaktMaterials/options，DictValue=MaterialCode）
+    /// 物料编码（选项 TaktMaterialPlants/options，DictValue=MaterialCode，ExtValue=PlantCode）
     /// </summary>
     public string MaterialCode { get; set; } = string.Empty;
 
@@ -71,22 +71,27 @@ public class TaktSourceOfSupplyDto : TaktCompanyDtoBase
     public int IsBlocked { get; set; } = 0;
 
     /// <summary>
-    /// 采购单位
+    /// 采购单位（字典 logistics_unit_of_measure_code，DictValue=PC/EA 等；默认 PC）
     /// </summary>
     public string PurchaseUnit { get; set; } = string.Empty;
 
     /// <summary>
-    /// 最小订购量
+    /// 最小起订量（采购单位数量，整数；SAP MINBM）
     /// </summary>
-    public decimal MinimumOrderQuantity { get; set; }
+    public int MinOrderQuantity { get; set; } = 0;
 
     /// <summary>
-    /// 计划交货天数（采购提前期）
+    /// 舍入值（基本单位数量，用于数量舍入，整数；SAP BSTRF）
     /// </summary>
-    public int LeadTimeDays { get; set; } = 0;
+    public int RoundingValue { get; set; } = 0;
 
     /// <summary>
-    /// 框架协议号（采购合同/协议编号，可选）
+    /// 计划交货时间（天数，整数；SAP PLIFZ）
+    /// </summary>
+    public int PlannedDeliveryTimeDays { get; set; } = 0;
+
+    /// <summary>
+    /// 框架协议号（采购合同/协议编码，可选）
     /// </summary>
     public string? AgreementNumber { get; set; } = string.Empty;
 
@@ -148,7 +153,7 @@ public class TaktSourceOfSupplyQueryDto : TaktPagedQuery
     public string? SourceOfSupplyCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 物料编码（选项 TaktMaterials/options，DictValue=MaterialCode）
+    /// 物料编码（选项 TaktMaterialPlants/options，DictValue=MaterialCode，ExtValue=PlantCode）
     /// </summary>
     public string? MaterialCode { get; set; } = string.Empty;
 
@@ -173,22 +178,27 @@ public class TaktSourceOfSupplyQueryDto : TaktPagedQuery
     public int? IsBlocked { get; set; }
 
     /// <summary>
-    /// 采购单位
+    /// 采购单位（字典 logistics_unit_of_measure_code，DictValue=PC/EA 等；默认 PC）
     /// </summary>
     public string? PurchaseUnit { get; set; } = string.Empty;
 
     /// <summary>
-    /// 最小订购量
+    /// 最小起订量（采购单位数量，整数；SAP MINBM）
     /// </summary>
-    public decimal? MinimumOrderQuantity { get; set; }
+    public int? MinOrderQuantity { get; set; }
 
     /// <summary>
-    /// 计划交货天数（采购提前期）
+    /// 舍入值（基本单位数量，用于数量舍入，整数；SAP BSTRF）
     /// </summary>
-    public int? LeadTimeDays { get; set; }
+    public int? RoundingValue { get; set; }
 
     /// <summary>
-    /// 框架协议号（采购合同/协议编号，可选）
+    /// 计划交货时间（天数，整数；SAP PLIFZ）
+    /// </summary>
+    public int? PlannedDeliveryTimeDays { get; set; }
+
+    /// <summary>
+    /// 框架协议号（采购合同/协议编码，可选）
     /// </summary>
     public string? AgreementNumber { get; set; } = string.Empty;
 
@@ -285,9 +295,9 @@ public class TaktSourceOfSupplyCreateDto
     public string SourceOfSupplyCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 物料编码（选项 TaktMaterials/options，DictValue=MaterialCode）
+    /// 物料编码（选项 TaktMaterialPlants/options，DictValue=MaterialCode，ExtValue=PlantCode）
     /// </summary>
-    [Required(ErrorMessage = "物料编码（选项 TaktMaterials/options，DictValue=MaterialCode）不能为空")]
+    [Required(ErrorMessage = "物料编码（选项 TaktMaterialPlants/options，DictValue=MaterialCode，ExtValue=PlantCode）不能为空")]
     public string MaterialCode { get; set; } = string.Empty;
 
     /// <summary>
@@ -312,23 +322,28 @@ public class TaktSourceOfSupplyCreateDto
     public int IsBlocked { get; set; } = 0;
 
     /// <summary>
-    /// 采购单位
+    /// 采购单位（字典 logistics_unit_of_measure_code，DictValue=PC/EA 等；默认 PC）
     /// </summary>
-    [Required(ErrorMessage = "采购单位不能为空")]
+    [Required(ErrorMessage = "采购单位（字典 logistics_unit_of_measure_code，DictValue=PC/EA 等；默认 PC）不能为空")]
     public string PurchaseUnit { get; set; } = string.Empty;
 
     /// <summary>
-    /// 最小订购量
+    /// 最小起订量（采购单位数量，整数；SAP MINBM）
     /// </summary>
-    public decimal MinimumOrderQuantity { get; set; }
+    public int MinOrderQuantity { get; set; } = 0;
 
     /// <summary>
-    /// 计划交货天数（采购提前期）
+    /// 舍入值（基本单位数量，用于数量舍入，整数；SAP BSTRF）
     /// </summary>
-    public int LeadTimeDays { get; set; } = 0;
+    public int RoundingValue { get; set; } = 0;
 
     /// <summary>
-    /// 框架协议号（采购合同/协议编号，可选）
+    /// 计划交货时间（天数，整数；SAP PLIFZ）
+    /// </summary>
+    public int PlannedDeliveryTimeDays { get; set; } = 0;
+
+    /// <summary>
+    /// 框架协议号（采购合同/协议编码，可选）
     /// </summary>
     public string? AgreementNumber { get; set; } = string.Empty;
 
@@ -462,7 +477,7 @@ public class TaktSourceOfSupplyTemplateDto
     public string? SourceOfSupplyCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 物料编码（选项 TaktMaterials/options，DictValue=MaterialCode）
+    /// 物料编码（选项 TaktMaterialPlants/options，DictValue=MaterialCode，ExtValue=PlantCode）
     /// </summary>
     public string? MaterialCode { get; set; } = string.Empty;
 
@@ -487,22 +502,27 @@ public class TaktSourceOfSupplyTemplateDto
     public int? IsBlocked { get; set; }
 
     /// <summary>
-    /// 采购单位
+    /// 采购单位（字典 logistics_unit_of_measure_code，DictValue=PC/EA 等；默认 PC）
     /// </summary>
     public string? PurchaseUnit { get; set; } = string.Empty;
 
     /// <summary>
-    /// 最小订购量
+    /// 最小起订量（采购单位数量，整数；SAP MINBM）
     /// </summary>
-    public decimal? MinimumOrderQuantity { get; set; }
+    public int? MinOrderQuantity { get; set; }
 
     /// <summary>
-    /// 计划交货天数（采购提前期）
+    /// 舍入值（基本单位数量，用于数量舍入，整数；SAP BSTRF）
     /// </summary>
-    public int? LeadTimeDays { get; set; }
+    public int? RoundingValue { get; set; }
 
     /// <summary>
-    /// 框架协议号（采购合同/协议编号，可选）
+    /// 计划交货时间（天数，整数；SAP PLIFZ）
+    /// </summary>
+    public int? PlannedDeliveryTimeDays { get; set; }
+
+    /// <summary>
+    /// 框架协议号（采购合同/协议编码，可选）
     /// </summary>
     public string? AgreementNumber { get; set; } = string.Empty;
 
@@ -569,7 +589,7 @@ public class TaktSourceOfSupplyImportDto
     public string? SourceOfSupplyCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 物料编码（选项 TaktMaterials/options，DictValue=MaterialCode）
+    /// 物料编码（选项 TaktMaterialPlants/options，DictValue=MaterialCode，ExtValue=PlantCode）
     /// </summary>
     public string? MaterialCode { get; set; } = string.Empty;
 
@@ -594,22 +614,27 @@ public class TaktSourceOfSupplyImportDto
     public int? IsBlocked { get; set; }
 
     /// <summary>
-    /// 采购单位
+    /// 采购单位（字典 logistics_unit_of_measure_code，DictValue=PC/EA 等；默认 PC）
     /// </summary>
     public string? PurchaseUnit { get; set; } = string.Empty;
 
     /// <summary>
-    /// 最小订购量
+    /// 最小起订量（采购单位数量，整数；SAP MINBM）
     /// </summary>
-    public decimal? MinimumOrderQuantity { get; set; }
+    public int? MinOrderQuantity { get; set; }
 
     /// <summary>
-    /// 计划交货天数（采购提前期）
+    /// 舍入值（基本单位数量，用于数量舍入，整数；SAP BSTRF）
     /// </summary>
-    public int? LeadTimeDays { get; set; }
+    public int? RoundingValue { get; set; }
 
     /// <summary>
-    /// 框架协议号（采购合同/协议编号，可选）
+    /// 计划交货时间（天数，整数；SAP PLIFZ）
+    /// </summary>
+    public int? PlannedDeliveryTimeDays { get; set; }
+
+    /// <summary>
+    /// 框架协议号（采购合同/协议编码，可选）
     /// </summary>
     public string? AgreementNumber { get; set; } = string.Empty;
 
@@ -677,7 +702,7 @@ public class TaktSourceOfSupplyExportDto
     public string SourceOfSupplyCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 物料编码（选项 TaktMaterials/options，DictValue=MaterialCode）
+    /// 物料编码（选项 TaktMaterialPlants/options，DictValue=MaterialCode，ExtValue=PlantCode）
     /// </summary>
     public string MaterialCode { get; set; } = string.Empty;
 
@@ -702,22 +727,27 @@ public class TaktSourceOfSupplyExportDto
     public int IsBlocked { get; set; } = 0;
 
     /// <summary>
-    /// 采购单位
+    /// 采购单位（字典 logistics_unit_of_measure_code，DictValue=PC/EA 等；默认 PC）
     /// </summary>
     public string PurchaseUnit { get; set; } = string.Empty;
 
     /// <summary>
-    /// 最小订购量
+    /// 最小起订量（采购单位数量，整数；SAP MINBM）
     /// </summary>
-    public decimal MinimumOrderQuantity { get; set; }
+    public int MinOrderQuantity { get; set; } = 0;
 
     /// <summary>
-    /// 计划交货天数（采购提前期）
+    /// 舍入值（基本单位数量，用于数量舍入，整数；SAP BSTRF）
     /// </summary>
-    public int LeadTimeDays { get; set; } = 0;
+    public int RoundingValue { get; set; } = 0;
 
     /// <summary>
-    /// 框架协议号（采购合同/协议编号，可选）
+    /// 计划交货时间（天数，整数；SAP PLIFZ）
+    /// </summary>
+    public int PlannedDeliveryTimeDays { get; set; } = 0;
+
+    /// <summary>
+    /// 框架协议号（采购合同/协议编码，可选）
     /// </summary>
     public string? AgreementNumber { get; set; } = string.Empty;
 

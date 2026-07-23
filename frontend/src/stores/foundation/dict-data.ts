@@ -12,8 +12,16 @@
 
 import { defineStore } from 'pinia';
 import { ref, computed } from 'vue';
-import { getDictDataAll } from '@/api/foundation/dict-data';
+import { getDataDictAll } from '@/api/foundation/dict-data';
 import type { TaktDictSelectFieldNames, TaktDictSelectOption, TaktSelectOption } from '@/types/common';
+import { useTenantStore } from '@/stores/identity/tenant';
+import { resolveRequestLocale } from '@/stores/foundation/locale';
+import { groupDictItemsByTypeCode } from '@/utils/takt-dict-group';
+import {
+  applyDictFieldDefaults as applyDictFieldDefaultsToTarget,
+  resolveDictDefaultOption,
+  resolveDictDefaultValue,
+} from '@/utils/takt-dict-default';
 import { createLogger } from '@/utils/logger';
 
 const dictLogger = createLogger('dict-data');
@@ -29,12 +37,25 @@ function mapDictDataToOption(dto: TaktSelectOption): TaktSelectOption {
     dictValue: dto.dictValue,
     i18nKey: dto.i18nKey,
     dictTypeCode: dto.dictTypeCode,
+    cultureCode: dto.cultureCode,
     extLabel: dto.extLabel,
     extValue: dto.extValue,
     cssClass: dto.cssClass,
     listClass: dto.listClass,
     sortOrder: dto.sortOrder,
+    isDefault: dto.isDefault,
   };
+}
+
+/**
+ * 解析字典缓存键（租户 + 公司 + Accept-Language；与后端 GetDataDictAll 过滤一致）
+ * @returns 缓存键
+ */
+function resolveDictCacheKey(): string {
+  const tenantStore = useTenantStore();
+  const tenantCode = tenantStore.tenantCode?.trim() ?? '';
+  const companyCode = tenantStore.companyCode?.trim() ?? '';
+  return `${tenantCode}|${companyCode}|${resolveRequestLocale()}`;
 }
 
 /**
@@ -44,13 +65,22 @@ export const useDictDataStore = defineStore('dict-data', () => {
   const dictMap = ref<Record<string, TaktSelectOption[]>>({});
   const loading = ref(false);
   const loaded = ref(false);
+  /** 上次成功加载时的缓存键 */
+  const loadedCacheKey = ref('');
 
   let loadingPromise: Promise<void> | null = null;
+  /** 进行中的加载所对应的缓存键 */
+  let pendingCacheKey = '';
 
   /**
    * 是否已加载完成
    */
   const isLoaded = computed(() => loaded.value);
+
+  /**
+   * 当前缓存是否与租户/公司/Accept-Language 一致
+   */
+  const isCacheFresh = computed(() => loaded.value && loadedCacheKey.value === resolveDictCacheKey());
 
   /**
    * 从缓存获取字典项
@@ -102,53 +132,96 @@ export const useDictDataStore = defineStore('dict-data', () => {
   }
 
   /**
-   * 加载全部字典数据（GET TaktDictDatas/all，按 dictTypeCode 分组）
+   * 获取字典类型下 IsDefault=1 的默认项
+   * @param dictTypeCode 字典类型编码
+   * @returns 默认字典项
    */
-  async function loadAllDictDataAsync(): Promise<void> {
-    if (loaded.value) {
+  function getDictDefaultOption(dictTypeCode: string): TaktSelectOption | undefined {
+    return resolveDictDefaultOption(dictMap.value[dictTypeCode] ?? []);
+  }
+
+  /**
+   * 获取字典类型下 IsDefault=1 的默认绑定值
+   * @param dictTypeCode 字典类型编码
+   * @param valueField 值字段（默认 dictValue）
+   * @returns 默认值
+   */
+  function getDictDefaultValue(
+    dictTypeCode: string,
+    valueField: TaktDictSelectFieldNames['valueField'] = 'dictValue',
+  ): string | number | undefined {
+    return resolveDictDefaultValue(dictMap.value[dictTypeCode] ?? [], { valueField });
+  }
+
+  /**
+   * 按字段→字典类型映射写入 IsDefault 默认值（仅空字段；调用前须已 loadAllDictDataAsync）
+   * @param target 表单模型
+   * @param fieldDictMap 表单字段名 → dictTypeCode
+   * @param valueFieldByField 可选：字段级 valueField 覆盖
+   */
+  function applyDictFieldDefaults(
+    target: Record<string, unknown>,
+    fieldDictMap: Readonly<Record<string, string>>,
+    valueFieldByField?: Readonly<Partial<Record<string, TaktDictSelectFieldNames['valueField']>>>,
+  ): void {
+    applyDictFieldDefaultsToTarget(
+      target,
+      fieldDictMap,
+      (dictTypeCode, valueField) => getDictDefaultValue(dictTypeCode, valueField ?? 'dictValue'),
+      valueFieldByField,
+    );
+  }
+
+  /**
+   * 加载全部字典数据（GET TaktDictDatas/all；后端返回 CultureCode eo + Accept-Language 项）
+   * @param options.force 为 true 时忽略已加载缓存并强制刷新
+   */
+  async function loadAllDictDataAsync(options?: { force?: boolean }): Promise<void> {
+    const cacheKey = resolveDictCacheKey();
+
+    if (!options?.force && loaded.value && loadedCacheKey.value === cacheKey) {
       return;
     }
 
-    if (loadingPromise) {
+    if (!options?.force && loadingPromise && pendingCacheKey === cacheKey) {
       return loadingPromise;
     }
 
     loading.value = true;
+    pendingCacheKey = cacheKey;
 
     loadingPromise = (async () => {
       try {
-        const items = await getDictDataAll();
-
-        const grouped: Record<string, TaktSelectOption[]> = {};
-
-        items
-          .map(mapDictDataToOption)
-          .sort((a, b) => a.sortOrder - b.sortOrder)
-          .forEach((option) => {
-            const typeCode = option.dictTypeCode;
-
-            if (!typeCode) {
-              return;
-            }
-
-            if (!grouped[typeCode]) {
-              grouped[typeCode] = [];
-            }
-
-            grouped[typeCode].push(option);
-          });
-
-        dictMap.value = grouped;
+        const requestLocale = resolveRequestLocale();
+        const result = await getDataDictAll();
+        const items = (result?.items ?? []).map(mapDictDataToOption);
+        dictMap.value = groupDictItemsByTypeCode(items, requestLocale);
         loaded.value = true;
+        loadedCacheKey.value = cacheKey;
       } catch (error) {
-        dictLogger.warn('加载字典数据失败', { action: 'loadAllDictData' }, error);
+        dictLogger.warn('加载字典数据失败', { action: 'loadAllDictData', cacheKey }, error);
+        throw error;
       } finally {
         loading.value = false;
-        loadingPromise = null;
+        if (pendingCacheKey === cacheKey) {
+          loadingPromise = null;
+          pendingCacheKey = '';
+        }
       }
     })();
 
     return loadingPromise;
+  }
+
+  /**
+   * 强制重载字典（语言/租户/公司切换后调用）
+   */
+  async function reloadAllDictDataAsync(): Promise<void> {
+    loaded.value = false;
+    loadedCacheKey.value = '';
+    loadingPromise = null;
+    pendingCacheKey = '';
+    return loadAllDictDataAsync({ force: true });
   }
 
   /**
@@ -157,8 +230,10 @@ export const useDictDataStore = defineStore('dict-data', () => {
   function resetDictData(): void {
     dictMap.value = {};
     loaded.value = false;
+    loadedCacheKey.value = '';
     loading.value = false;
     loadingPromise = null;
+    pendingCacheKey = '';
   }
 
   return {
@@ -166,9 +241,14 @@ export const useDictDataStore = defineStore('dict-data', () => {
     loading,
     loaded,
     isLoaded,
+    isCacheFresh,
     getDictOption,
     getDictOptionsForSelect,
+    getDictDefaultOption,
+    getDictDefaultValue,
+    applyDictFieldDefaults,
     loadAllDictDataAsync,
+    reloadAllDictDataAsync,
     resetDictData,
   };
 });

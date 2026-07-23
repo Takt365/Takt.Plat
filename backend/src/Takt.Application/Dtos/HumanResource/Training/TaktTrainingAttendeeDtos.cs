@@ -103,9 +103,9 @@ public class TaktTrainingAttendeeDto : TaktCompanyDtoBase
     public int IsPassed { get; set; } = 0;
 
     /// <summary>
-    /// 证书编号
+    /// 证书编码
     /// </summary>
-    public string CertificateNo { get; set; } = string.Empty;
+    public string CertificateCode { get; set; } = string.Empty;
 
     /// <summary>
     /// 培训评价
@@ -222,9 +222,9 @@ public class TaktTrainingAttendeeQueryDto : TaktPagedQuery
     public int? IsPassed { get; set; }
 
     /// <summary>
-    /// 证书编号
+    /// 证书编码
     /// </summary>
-    public string? CertificateNo { get; set; } = string.Empty;
+    public string? CertificateCode { get; set; } = string.Empty;
 
     /// <summary>
     /// 培训评价
@@ -353,10 +353,10 @@ public class TaktTrainingAttendeeCreateDto
     public int IsPassed { get; set; } = 0;
 
     /// <summary>
-    /// 证书编号
+    /// 证书编码
     /// </summary>
-    [Required(ErrorMessage = "证书编号不能为空")]
-    public string CertificateNo { get; set; } = string.Empty;
+    [Required(ErrorMessage = "证书编码不能为空")]
+    public string CertificateCode { get; set; } = string.Empty;
 
     /// <summary>
     /// 培训评价
@@ -513,9 +513,9 @@ public class TaktTrainingAttendeeTemplateDto
     public int? IsPassed { get; set; }
 
     /// <summary>
-    /// 证书编号
+    /// 证书编码
     /// </summary>
-    public string? CertificateNo { get; set; } = string.Empty;
+    public string? CertificateCode { get; set; } = string.Empty;
 
     /// <summary>
     /// 培训评价
@@ -627,9 +627,9 @@ public class TaktTrainingAttendeeImportDto
     public int? IsPassed { get; set; }
 
     /// <summary>
-    /// 证书编号
+    /// 证书编码
     /// </summary>
-    public string? CertificateNo { get; set; } = string.Empty;
+    public string? CertificateCode { get; set; } = string.Empty;
 
     /// <summary>
     /// 培训评价
@@ -742,9 +742,9 @@ public class TaktTrainingAttendeeExportDto
     public int IsPassed { get; set; } = 0;
 
     /// <summary>
-    /// 证书编号
+    /// 证书编码
     /// </summary>
-    public string CertificateNo { get; set; } = string.Empty;
+    public string CertificateCode { get; set; } = string.Empty;
 
     /// <summary>
     /// 培训评价

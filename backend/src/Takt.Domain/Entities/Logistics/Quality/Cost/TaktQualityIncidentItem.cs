@@ -26,7 +26,7 @@ namespace Takt.Domain.Entities.Logistics.Quality.Cost;
 public class TaktQualityIncidentItem : TaktCompanyEntityBase
 {
     /// <summary>
-    /// 品质事故主表 ID（选项 TaktQualityIncidents/options，DictValue=Id）
+    /// 品质事故主表 ID（选项 TaktQualityIncidents/options；DictValue=Id）
     /// </summary>
     [SugarColumn(ColumnName = "quality_incident_id", ColumnDescription = "品质事故主表ID", ColumnDataType = "bigint", IsNullable = false)]
     [JsonConverter(typeof(ValueToStringConverter))]
@@ -45,7 +45,7 @@ public class TaktQualityIncidentItem : TaktCompanyEntityBase
     public int LineNumber { get; set; } = 0;
 
     /// <summary>
-    /// 物料编码（选项 TaktMaterialPlants/options，DictValue=MaterialCode，ExtValue=PlantCode）
+    /// 物料编码（选项 TaktMaterialPlants/options；DictValue=MaterialCode，ExtValue=PlantCode）
     /// </summary>
     [SugarColumn(ColumnName = "material_code", ColumnDescription = "物料编码", Length = 20, ColumnDataType = "nvarchar", IsNullable = false)]
     public string MaterialCode { get; set; } = string.Empty;
@@ -117,7 +117,7 @@ public class TaktQualityIncidentItem : TaktCompanyEntityBase
     public string? ScrapNote { get; set; }
 
     /// <summary>
-    /// 是否作废（字典 sys_yes_no_type，0=否 1=是；编辑移除子行时标记作废）
+    /// 是否作废（字典 sys_yes_no_type；0=否 1=是；编辑移除子行时标记作废）
     /// </summary>
     [SugarColumn(ColumnName = "is_obsolete", ColumnDescription = "是否作废", ColumnDataType = "int", IsNullable = false, DefaultValue = "0")]
     public int IsObsolete { get; set; } = 0;

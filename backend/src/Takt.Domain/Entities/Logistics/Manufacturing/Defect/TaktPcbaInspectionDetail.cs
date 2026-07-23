@@ -44,19 +44,19 @@ public class TaktPcbaInspectionDetail : TaktCompanyEntityBase
     public int LineNumber { get; set; } = 0;
 
     /// <summary>
-    /// PCBA板别（字典 logistics_pcba_function_category，存 DictValue）
+    /// PCBA板别（字典 logistics_pcba_function_category；存 DictValue）
     /// </summary>
     [SugarColumn(ColumnName = "pcba_board_type", ColumnDescription = "PCBA板别", Length = 40, ColumnDataType = "nvarchar", IsNullable = true)]
     public string? PcbaBoardType { get; set; }
 
     /// <summary>
-    /// 目视线别（字典 logistics_visual_inspection_line_category，存 DictValue）
+    /// 目视线别（字典 logistics_visual_inspection_line_category；存 DictValue）
     /// </summary>
     [SugarColumn(ColumnName = "visual_inspection_line", ColumnDescription = "目视线别", Length = 40, ColumnDataType = "nvarchar", IsNullable = true)]
     public string? VisualInspectionLine { get; set; }
 
     /// <summary>
-    /// AOI线别（字典 logistics_aoi_inspection_line_category，存 DictValue）
+    /// AOI线别（字典 logistics_aoi_inspection_line_category；存 DictValue）
     /// </summary>
     [SugarColumn(ColumnName = "aoi_line", ColumnDescription = "AOI线别", Length = 40, ColumnDataType = "nvarchar", IsNullable = true)]
     public string? AoiLine { get; set; }
@@ -80,7 +80,7 @@ public class TaktPcbaInspectionDetail : TaktCompanyEntityBase
     public int ShiftNo { get; set; } = 1;
 
     /// <summary>
-    /// 检查员（选项 TaktEmployees/options，DictValue=Id）
+    /// 检查员（选项 TaktEmployees/options；DictValue=Id）
     /// </summary>
     [SugarColumn(ColumnName = "inspector_name", ColumnDescription = "检查员", Length = 40, ColumnDataType = "nvarchar", IsNullable = true)]
     public string? InspectorName { get; set; }
@@ -104,7 +104,7 @@ public class TaktPcbaInspectionDetail : TaktCompanyEntityBase
     public int InspectionStatus { get; set; } = 1;
 
     /// <summary>
-    /// 生产班组（选项 TaktProductionTeams/options，DictValue=TeamCode，ExtValue=PlantCode）
+    /// 生产班组（选项 TaktProductionTeams/options；DictValue=TeamCode，ExtValue=PlantCode）
     /// </summary>
     [SugarColumn(ColumnName = "prod_team", ColumnDescription = "生产班组", Length = 40, ColumnDataType = "nvarchar", IsNullable = true)]
     public string? ProdTeam { get; set; }
@@ -146,13 +146,13 @@ public class TaktPcbaInspectionDetail : TaktCompanyEntityBase
     public string? Content { get; set; }
 
     /// <summary>
-    /// 不良个所（字典 logistics_pcb_location_category，存 DictValue）
+    /// 不良个所（字典 logistics_pcb_location_category；存 DictValue）
     /// </summary>
     [SugarColumn(ColumnName = "defect_location", ColumnDescription = "不良个所", Length = 40, ColumnDataType = "nvarchar", IsNullable = true)]
     public string? DefectLocation { get; set; }
 
     /// <summary>
-    /// 是否作废（字典 sys_yes_no_type，0=否 1=是；编辑移除子行时标记作废）
+    /// 是否作废（字典 sys_yes_no_type；0=否 1=是；编辑移除子行时标记作废）
     /// </summary>
     [SugarColumn(ColumnName = "is_obsolete", ColumnDescription = "是否作废", ColumnDataType = "int", IsNullable = false, DefaultValue = "0")]
     public int IsObsolete { get; set; } = 0;

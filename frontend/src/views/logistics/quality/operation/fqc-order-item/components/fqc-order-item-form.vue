@@ -73,7 +73,7 @@
               >
                 <TaktSelect
                   v-model:value="formState.materialCode"
-                  api-url="TaktMaterials/options"
+                  api-url="TaktMaterialPlants/options"
                   :placeholder="pi.ph('materialCode')"
                   :disabled="!!formData?.fqcOrderItemId"
                 />
@@ -89,7 +89,7 @@
                   :placeholder="pi.ph('materialName')"
                   show-count
                   :maxlength="40"
-                  allow-clear
+                  disabled
                 />
               </a-form-item>
             </a-col>
@@ -833,13 +833,6 @@ const rules = computed<Record<string, Rule[]>>(() => ({
       required: true,
       message: pi.ph('materialCode'),
       trigger: 'change'
-    }
-  ],
-  materialName: [
-    {
-      required: true,
-      message: pi.ph('materialName'),
-      trigger: 'blur'
     }
   ],
   warehouseQuantity: [{

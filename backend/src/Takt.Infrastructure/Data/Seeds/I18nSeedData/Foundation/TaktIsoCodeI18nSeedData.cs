@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Infrastructure.Data.Seeds.I18nSeedData.Foundation
 // 文件名称：TaktIsoCodeI18nSeedData.cs
-// 创建时间：2026-07-20
+// 创建时间：2026-07-23
 // 创建人：Takt365(Auto Generated)
 // 功能描述：TaktIsoCode 实体字段国际化种子（无对应 frontend locales；TranslationText 取自 ColumnDescription，ContextNote 取自属性 XML summary）
 // 
@@ -100,13 +100,13 @@ public class TaktIsoCodeI18nSeedData : ITaktSeedDataCoordinator
             new TranslationSeedItem("entity.isocode.category", "zh-HK", "编码类别_hk", "编码类别（字典 sys_iso_code_category；0=不使用，1=部门）"),
 
             // entity.isocode.isocode
-            new TranslationSeedItem("entity.isocode.isocode", "en-US", "ISO编码_us", "ISO 编码（唯一索引：租户+类别内唯一，见 ix_iso_code_category_unique；编号规则等段引用，如 Eng、Pmc、D1000）"),
+            new TranslationSeedItem("entity.isocode.isocode", "en-US", "ISO编码_us", "ISO 编码（唯一索引：租户+类别内唯一，见 ix_iso_code_category_unique；编码规则等段引用，如 Eng、Pmc、D1000）"),
             // entity.isocode.isocode
-            new TranslationSeedItem("entity.isocode.isocode", "ja-JP", "ISO编码_jp", "ISO 编码（唯一索引：租户+类别内唯一，见 ix_iso_code_category_unique；编号规则等段引用，如 Eng、Pmc、D1000）"),
+            new TranslationSeedItem("entity.isocode.isocode", "ja-JP", "ISO编码_jp", "ISO 编码（唯一索引：租户+类别内唯一，见 ix_iso_code_category_unique；编码规则等段引用，如 Eng、Pmc、D1000）"),
             // entity.isocode.isocode
-            new TranslationSeedItem("entity.isocode.isocode", "zh-CN", "ISO编码", "ISO 编码（唯一索引：租户+类别内唯一，见 ix_iso_code_category_unique；编号规则等段引用，如 Eng、Pmc、D1000）"),
+            new TranslationSeedItem("entity.isocode.isocode", "zh-CN", "ISO编码", "ISO 编码（唯一索引：租户+类别内唯一，见 ix_iso_code_category_unique；编码规则等段引用，如 Eng、Pmc、D1000）"),
             // entity.isocode.isocode
-            new TranslationSeedItem("entity.isocode.isocode", "zh-HK", "ISO编码_hk", "ISO 编码（唯一索引：租户+类别内唯一，见 ix_iso_code_category_unique；编号规则等段引用，如 Eng、Pmc、D1000）"),
+            new TranslationSeedItem("entity.isocode.isocode", "zh-HK", "ISO编码_hk", "ISO 编码（唯一索引：租户+类别内唯一，见 ix_iso_code_category_unique；编码规则等段引用，如 Eng、Pmc、D1000）"),
 
             // entity.isocode.isoname
             new TranslationSeedItem("entity.isocode.isoname", "en-US", "ISO名称_us", "ISO 名称（如：技术、生管、总经理室）"),

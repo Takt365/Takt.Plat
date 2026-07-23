@@ -66,6 +66,7 @@ import type { TaktDictSelectFieldNames, TaktDictSelectOption, TaktSelectOption }
 import request from '@/api/request'
 import { createLogger } from '@/utils/logger'
 import { useDictDataStore } from '@/stores/foundation/dict-data'
+import { isEmptyFormFieldValue } from '@/utils/takt-dict-default'
 import { useI18n } from 'vue-i18n'
 
 const selectLogger = createLogger('takt-select')
@@ -118,6 +119,8 @@ interface Props {
     label?: string
     value?: string
   }
+  /** dict-type 模式下值未绑定时是否自动选中 IsDefault=1 项（默认 true；用户手动清空后不再回填） */
+  applyDictDefault?: boolean
 }
 
 const props = withDefaults(defineProps<Props>(), {
@@ -142,7 +145,8 @@ const props = withDefaults(defineProps<Props>(), {
   fieldNames: () => ({
     label: 'label',
     value: 'value'
-  })
+  }),
+  applyDictDefault: true,
 })
 
 /**
@@ -189,6 +193,60 @@ const rawData = ref<TaktSelectOption[]>([])
 const remoteSearchKeyword = ref('')
 let remoteSearchTimer: ReturnType<typeof setTimeout> | undefined
 const dictDataStore = useDictDataStore()
+/** 当前 dictType 是否已自动写入过 IsDefault（用户清空后不再自动回填） */
+const dictDefaultApplied = ref(false)
+
+/**
+ * 解析 dict-type 模式下 valueField 映射
+ * @returns getDictDefaultValue 使用的 valueField
+ */
+function resolveDictValueField(): TaktDictSelectFieldNames['valueField'] {
+  const valueFieldKey = props.fieldNames?.value
+  if (valueFieldKey === 'extLabel') {
+    return 'extLabel'
+  }
+  if (valueFieldKey === 'extValue') {
+    return 'extValue'
+  }
+  if (valueFieldKey === 'sortOrder') {
+    return 'sortOrder'
+  }
+  return 'dictValue'
+}
+
+/**
+ * dict-type 且绑定值为空时，按 IsDefault=1 自动选中（每 dictType 仅一次）
+ */
+function tryApplyDictDefault(): void {
+  if (!props.dictType || props.applyDictDefault === false || props.multiple || dictDefaultApplied.value) {
+    return
+  }
+  if (!isEmptyFormFieldValue(props.modelValue)) {
+    return
+  }
+
+  const dictValueField = resolveDictValueField()
+  const defaultValue = dictDataStore.getDictDefaultValue(props.dictType, dictValueField)
+  if (defaultValue === undefined) {
+    return
+  }
+
+  let expectedValueType = inferValueType(props.modelValue)
+  if (expectedValueType === 'string' && props.modelValue == null) {
+    const dictOptions = dictDataStore.getDictOptionsForSelect(props.dictType, {
+      valueField: dictValueField,
+      labelField: props.fieldNames?.label === 'extLabel' ? 'extLabel' : 'dictLabel',
+    })
+    if (dictOptions.every((option) => isNumericValue(option.value))) {
+      expectedValueType = 'number'
+    }
+  }
+
+  const rawValue = typeof defaultValue === 'number' ? defaultValue : String(defaultValue)
+  const convertedValue = convertValueType(rawValue, expectedValueType, props.dictType)
+  dictDefaultApplied.value = true
+  emit('update:modelValue', convertedValue)
+}
 
 /**
  * 推断期望的值类型（根据 modelValue 的类型）
@@ -523,6 +581,7 @@ const loadData = async () => {
     try {
       loading.value = true
       await dictDataStore.loadAllDictDataAsync()
+      tryApplyDictDefault()
     } catch (error) {
       selectLogger.warn('加载字典数据失败', { action: 'loadData', dictType: props.dictType }, error)
     } finally {
@@ -641,6 +700,10 @@ const handleSearch = (value: string) => {
     void loadData()
   }, props.searchDebounceMs)
 }
+
+watch(() => props.dictType, () => {
+  dictDefaultApplied.value = false
+})
 
 // 监听 dictType、API URL、options、apiParams 与 disabled 变化
 watch(() => [props.dictType, props.apiUrl, props.options, props.apiParams, props.disabled], () => {

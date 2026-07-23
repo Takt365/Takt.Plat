@@ -84,7 +84,7 @@ public class TaktDeptSeedData : ITaktSeedDataCoordinator
 
         foreach (var company in orderedCompanies)
         {
-            TaktLogger.Information("正在为公司 {CompanyCode} ({CompanyName}) 初始化部门...", company.CompanyCode, company.CompanyName);
+            TaktLogger.Information("正在为公司 {CompanyCode} ({CompanyName1}) 初始化部门...", company.CompanyCode, company.CompanyName1);
             
             var result = await SeedDeptsForCompanyAsync(repository, tenantCode, company.CompanyCode);
             insertCount += result.InsertCount;

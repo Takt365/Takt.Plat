@@ -318,7 +318,7 @@ export interface AnnouncementCreate {
   announcementCode?: string;
 
   /**
-   * 编号规则编码（创建自动取号用，对应 TaktNumbering.RuleCode；不落库）
+   * 编码规则编码（创建自动取号用，对应 TaktNumbering.RuleCode；不落库）
    */
   numberingRuleCode?: string;
 
@@ -590,7 +590,7 @@ export interface AnnouncementImport {
   announcementCode?: string;
 
   /**
-   * 编号规则编码（导入自动取号用，对应 TaktNumbering.RuleCode；不落库）
+   * 编码规则编码（导入自动取号用，对应 TaktNumbering.RuleCode；不落库）
    */
   numberingRuleCode?: string;
 

@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Application.Dtos.Logistics.CustomerService
 // 文件名称：TaktServiceRequestDtos.cs
-// 创建时间：2026-06-24
+// 创建时间：2026-07-23
 // 创建人：Takt365(Auto Generated)
 // 功能描述：ServiceRequest 模块 DTO（由 generate-dtos-from-entity.cjs 根据 TaktServiceRequest 生成，请按需审阅）
 // 
@@ -52,6 +52,11 @@ public class TaktServiceRequestDto : TaktCompanyDtoBase
     public long ClientId { get; set; }
 
     /// <summary>
+    /// 客户端名称（填充字段）
+    /// </summary>
+    public string? ClientName { get; set; }
+
+    /// <summary>
     /// 客户端编码（冗余字段，便于查询）
     /// </summary>
     public string ClientCode { get; set; } = string.Empty;
@@ -59,7 +64,7 @@ public class TaktServiceRequestDto : TaktCompanyDtoBase
     /// <summary>
     /// 客户端名称（冗余字段，便于查询）
     /// </summary>
-    public string ClientName { get; set; } = string.Empty;
+    public string ClientName1 { get; set; } = string.Empty;
 
     /// <summary>
     /// 关联服务合同ID（序列化为string以避免Javascript精度问题）
@@ -101,6 +106,11 @@ public class TaktServiceRequestDto : TaktCompanyDtoBase
     /// 优先级（字典 sys_priority_level_category）
     /// </summary>
     public int Priority { get; set; } = 0;
+
+    /// <summary>
+    /// 请求状态（0=草稿，1=已提交，2=处理中，3=已完成，4=已关闭，5=已取消）
+    /// </summary>
+    public int RequestStatus { get; set; } = 0;
 
     /// <summary>
     /// 请求主题
@@ -157,11 +167,6 @@ public class TaktServiceRequestDto : TaktCompanyDtoBase
     /// 排序号（越小越靠前）
     /// </summary>
     public int SortOrder { get; set; } = 0;
-
-    /// <summary>
-    /// 请求状态（0=草稿，1=已提交，2=处理中，3=已完成，4=已关闭，5=已取消）
-    /// </summary>
-    public int RequestStatus { get; set; } = 0;
 
     /// <summary>
     /// 关联服务合同
@@ -227,7 +232,7 @@ public class TaktServiceRequestQueryDto : TaktPagedQuery
     /// <summary>
     /// 客户端名称（冗余字段，便于查询）
     /// </summary>
-    public string? ClientName { get; set; } = string.Empty;
+    public string? ClientName1 { get; set; } = string.Empty;
 
     /// <summary>
     /// 关联服务合同ID（序列化为string以避免Javascript精度问题）
@@ -274,6 +279,11 @@ public class TaktServiceRequestQueryDto : TaktPagedQuery
     /// 优先级（字典 sys_priority_level_category）
     /// </summary>
     public int? Priority { get; set; }
+
+    /// <summary>
+    /// 请求状态（0=草稿，1=已提交，2=处理中，3=已完成，4=已关闭，5=已取消）
+    /// </summary>
+    public int? RequestStatus { get; set; }
 
     /// <summary>
     /// 请求主题
@@ -340,11 +350,6 @@ public class TaktServiceRequestQueryDto : TaktPagedQuery
     /// 排序号（越小越靠前）
     /// </summary>
     public int? SortOrder { get; set; }
-
-    /// <summary>
-    /// 请求状态（0=草稿，1=已提交，2=处理中，3=已完成，4=已关闭，5=已取消）
-    /// </summary>
-    public int? RequestStatus { get; set; }
 
     /// <summary>
     /// 创建时间（范围查询-开始）
@@ -419,7 +424,7 @@ public class TaktServiceRequestCreateDto
     /// 客户端名称（冗余字段，便于查询）
     /// </summary>
     [Required(ErrorMessage = "客户端名称（冗余字段，便于查询）不能为空")]
-    public string ClientName { get; set; } = string.Empty;
+    public string ClientName1 { get; set; } = string.Empty;
 
     /// <summary>
     /// 关联服务合同ID（序列化为string以避免Javascript精度问题）
@@ -456,6 +461,11 @@ public class TaktServiceRequestCreateDto
     /// 优先级（字典 sys_priority_level_category）
     /// </summary>
     public int Priority { get; set; } = 0;
+
+    /// <summary>
+    /// 请求状态（0=草稿，1=已提交，2=处理中，3=已完成，4=已关闭，5=已取消）
+    /// </summary>
+    public int RequestStatus { get; set; } = 0;
 
     /// <summary>
     /// 请求主题
@@ -511,11 +521,6 @@ public class TaktServiceRequestCreateDto
     public DateTime? ClosedAt { get; set; }
 
     /// <summary>
-    /// 请求状态（0=草稿，1=已提交，2=处理中，3=已完成，4=已关闭，5=已取消）
-    /// </summary>
-    public int RequestStatus { get; set; } = 0;
-
-    /// <summary>
     /// 关联服务订单列表（外键在子表 TaktServiceOrder.ServiceRequestId）（子表，级联保存）
     /// </summary>
     public List<TaktServiceOrderCreateDto>? ServiceOrders { get; set; }
@@ -554,6 +559,16 @@ public class TaktServiceRequestUpdateDto : TaktServiceRequestCreateDto
     [AdaptMember("Id")]
     [JsonConverter(typeof(ValueToStringConverter))]
     public long ServiceRequestId { get; set; }
+
+    /// <summary>
+    /// 关联服务订单列表（外键在子表 TaktServiceOrder.ServiceRequestId）（子表，级联保存）
+    /// </summary>
+    public new List<TaktServiceOrderUpdateDto>? ServiceOrders { get; set; }
+
+    /// <summary>
+    /// 服务工单列表（外键在子表 TaktServiceTicket.ServiceRequestId）（子表，级联保存）
+    /// </summary>
+    public new List<TaktServiceTicketUpdateDto>? Tickets { get; set; }
 
 }
 
@@ -648,7 +663,7 @@ public class TaktServiceRequestTemplateDto
     /// <summary>
     /// 客户端名称（冗余字段，便于查询）
     /// </summary>
-    public string? ClientName { get; set; } = string.Empty;
+    public string? ClientName1 { get; set; } = string.Empty;
 
     /// <summary>
     /// 关联服务合同ID（序列化为string以避免Javascript精度问题）
@@ -685,6 +700,11 @@ public class TaktServiceRequestTemplateDto
     /// 优先级（字典 sys_priority_level_category）
     /// </summary>
     public int? Priority { get; set; }
+
+    /// <summary>
+    /// 请求状态（0=草稿，1=已提交，2=处理中，3=已完成，4=已关闭，5=已取消）
+    /// </summary>
+    public int? RequestStatus { get; set; }
 
     /// <summary>
     /// 请求主题
@@ -736,11 +756,6 @@ public class TaktServiceRequestTemplateDto
     /// 关闭时间
     /// </summary>
     public DateTime? ClosedAt { get; set; }
-
-    /// <summary>
-    /// 请求状态（0=草稿，1=已提交，2=处理中，3=已完成，4=已关闭，5=已取消）
-    /// </summary>
-    public int? RequestStatus { get; set; }
 
     /// <summary>
     /// 关联服务订单列表（外键在子表 TaktServiceOrder.ServiceRequestId）（子表，级联保存）
@@ -808,7 +823,7 @@ public class TaktServiceRequestImportDto
     /// <summary>
     /// 客户端名称（冗余字段，便于查询）
     /// </summary>
-    public string? ClientName { get; set; } = string.Empty;
+    public string? ClientName1 { get; set; } = string.Empty;
 
     /// <summary>
     /// 关联服务合同ID（序列化为string以避免Javascript精度问题）
@@ -845,6 +860,11 @@ public class TaktServiceRequestImportDto
     /// 优先级（字典 sys_priority_level_category）
     /// </summary>
     public int? Priority { get; set; }
+
+    /// <summary>
+    /// 请求状态（0=草稿，1=已提交，2=处理中，3=已完成，4=已关闭，5=已取消）
+    /// </summary>
+    public int? RequestStatus { get; set; }
 
     /// <summary>
     /// 请求主题
@@ -896,11 +916,6 @@ public class TaktServiceRequestImportDto
     /// 关闭时间
     /// </summary>
     public DateTime? ClosedAt { get; set; }
-
-    /// <summary>
-    /// 请求状态（0=草稿，1=已提交，2=处理中，3=已完成，4=已关闭，5=已取消）
-    /// </summary>
-    public int? RequestStatus { get; set; }
 
     /// <summary>
     /// 关联服务订单列表（外键在子表 TaktServiceOrder.ServiceRequestId）（子表，级联保存）
@@ -969,7 +984,7 @@ public class TaktServiceRequestExportDto
     /// <summary>
     /// 客户端名称（冗余字段，便于查询）
     /// </summary>
-    public string ClientName { get; set; } = string.Empty;
+    public string ClientName1 { get; set; } = string.Empty;
 
     /// <summary>
     /// 关联服务合同ID（序列化为string以避免Javascript精度问题）
@@ -1006,6 +1021,11 @@ public class TaktServiceRequestExportDto
     /// 优先级（字典 sys_priority_level_category）
     /// </summary>
     public int Priority { get; set; } = 0;
+
+    /// <summary>
+    /// 请求状态（0=草稿，1=已提交，2=处理中，3=已完成，4=已关闭，5=已取消）
+    /// </summary>
+    public int RequestStatus { get; set; } = 0;
 
     /// <summary>
     /// 请求主题
@@ -1062,11 +1082,6 @@ public class TaktServiceRequestExportDto
     /// 排序号（越小越靠前）
     /// </summary>
     public int SortOrder { get; set; } = 0;
-
-    /// <summary>
-    /// 请求状态（0=草稿，1=已提交，2=处理中，3=已完成，4=已关闭，5=已取消）
-    /// </summary>
-    public int RequestStatus { get; set; } = 0;
 
     /// <summary>
     /// 扩展字段JSON

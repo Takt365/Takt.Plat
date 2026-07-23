@@ -166,7 +166,7 @@ interface Props {
   /** 是否启用斑马纹 */
   stripe?: boolean
   /**
-   * 虚拟滚动；true 强制开；false 仅在行数未超过 5000 时关闭；超 5000 行一律自动开启
+   * 虚拟滚动（大数据默认开启）。true 强制开；false 仅在行数未超过阈值时关闭；超阈值一律自动开启
    * @see TAKT_TABLE_AUTO_VIRTUAL_ROW_THRESHOLD
    */
   virtual?: boolean
@@ -231,7 +231,7 @@ const props = withDefaults(defineProps<Props>(), {
   rowKey: 'id',
   rowClassName: undefined,
   stripe: true,
-  virtual: false,
+  virtual: true,
   scroll: undefined,
   scrollLayout: 'page',
   size: 'middle',

@@ -45,37 +45,9 @@
               >
                 <TaktSelect
                   v-model:value="formState.materialCode"
-                  api-url="TaktMaterials/options"
+                  api-url="TaktMaterialPlants/options"
                   :placeholder="pi.ph('materialCode')"
                   :disabled="!!formData?.materialRequirementsPlanningItemId"
-                />
-              </a-form-item>
-            </a-col>
-            <a-col :span="12">
-              <a-form-item
-                :label="pi.label('materialName')"
-                name="materialName"
-              >
-                <a-input
-                  v-model:value="formState.materialName"
-                  :placeholder="pi.ph('materialName')"
-                  show-count
-                  :maxlength="20"
-                  allow-clear
-                />
-              </a-form-item>
-            </a-col>
-            <a-col :span="12">
-              <a-form-item
-                :label="pi.label('materialSpecification')"
-                name="materialSpecification"
-              >
-                <a-input
-                  v-model:value="formState.materialSpecification"
-                  :placeholder="pi.ph('materialSpecification')"
-                  show-count
-                  :maxlength="20"
-                  allow-clear
                 />
               </a-form-item>
             </a-col>
@@ -160,16 +132,6 @@
                 />
               </a-form-item>
             </a-col>
-          </a-row>
-        </div>
-      </a-tab-pane>
-      <a-tab-pane
-        key="tab-1"
-        :tab="t('common.page.form.tabs.basicinfo') + ' (2/2)'"
-        force-render
-      >
-        <div :class="formContentClass">
-          <a-row :gutter="24">
             <a-col :span="12">
               <a-form-item
                 :label="pi.label('grossRequirement')"
@@ -194,6 +156,16 @@
                 />
               </a-form-item>
             </a-col>
+          </a-row>
+        </div>
+      </a-tab-pane>
+      <a-tab-pane
+        key="tab-1"
+        :tab="t('common.page.form.tabs.basicinfo') + ' (2/2)'"
+        force-render
+      >
+        <div :class="formContentClass">
+          <a-row :gutter="24">
             <a-col :span="12">
               <a-form-item
                 :label="pi.label('onHandQuantity')"
@@ -285,7 +257,7 @@ const formContentClass = computed(() => (formFields.length > 10 ? 'takt-form-con
 /** 当前激活的 Tab key */
 const activeTab = ref('tab-0')
 /** CreateDto 字段名列表（与 formState 键对齐） */
-const formFields = ["lineNumber","materialCode","materialName","materialSpecification","modelCode","modelName","parentMaterialCode","bomLevel","requirementDate","planUnit","grossRequirement","scheduledReceipts","onHandQuantity","projectedOnHand","netRequirement","procurementType","isObsolete"]
+const formFields = ["lineNumber","materialCode","modelCode","modelName","parentMaterialCode","bomLevel","requirementDate","planUnit","grossRequirement","scheduledReceipts","onHandQuantity","projectedOnHand","netRequirement","procurementType","isObsolete"]
 
 
 
@@ -363,13 +335,6 @@ const rules = computed<Record<string, Rule[]>>(() => ({
       required: true,
       message: pi.ph('materialCode'),
       trigger: 'change'
-    }
-  ],
-  materialName: [
-    {
-      required: true,
-      message: pi.ph('materialName'),
-      trigger: 'blur'
     }
   ],
   bomLevel: [{

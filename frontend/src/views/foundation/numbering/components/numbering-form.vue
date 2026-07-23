@@ -2,7 +2,7 @@
 <!-- 项目名称：节拍数字工厂 · Takt Plat (TDF) -->
 <!-- 命名空间：@/views/foundation/numbering/components -->
 <!-- 文件名称：numbering-form.vue -->
-<!-- 功能描述：编号规则实体 定义系统中各类业务单据的编号生成规则维护弹窗内嵌表单。由 generate-vue-crud-from-api.cjs 根据 types/api 自动生成；defineExpose 提供 validate、getValues、resetFields -->
+<!-- 功能描述：编码规则实体 定义系统中各类业务单据的编码生成规则维护弹窗内嵌表单。由 generate-vue-crud-from-api.cjs 根据 types/api 自动生成；defineExpose 提供 validate、getValues、resetFields -->
 <!-- 版权信息：Copyright (c) 2025 Takt  All rights reserved. -->
 <!-- 免责声明：此软件使用 MIT License，作者不承担任何使用风险。 -->
 <!-- ======================================== -->
@@ -352,7 +352,7 @@
 
 <script setup lang="ts">
 /**
- * 编号规则实体 定义系统中各类业务单据的编号生成规则维护表单 · 由 generate-vue-crud-from-api.cjs 根据 types/api 生成
+ * 编码规则实体 定义系统中各类业务单据的编码生成规则维护表单 · 由 generate-vue-crud-from-api.cjs 根据 types/api 生成
  * @module views/foundation/numbering/components
  */
 import { reactive, watch, computed, ref, onMounted } from 'vue'

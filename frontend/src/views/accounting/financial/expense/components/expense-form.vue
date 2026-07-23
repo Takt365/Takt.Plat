@@ -10,7 +10,7 @@
 <template>
   <a-form
     ref="formRef"
-    class="takt-generated-form expense-form flex flex-col min-h-0"
+    class="takt-generated-form expense-form flex flex-col min-h-0 overflow-visible"
     :model="formState"
     :rules="rules"
     layout="horizontal"
@@ -29,54 +29,12 @@
           <a-row :gutter="24">
             <a-col :span="12">
               <a-form-item
-                :label="t('common.page.entity.tenantcode')"
-                name="tenantCode"
-              >
-                <a-input
-                  v-model:value="formState.tenantCode"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('common.page.entity.tenantcode') })"
-                  show-count
-                  :maxlength="20"
-                  disabled
-                />
-              </a-form-item>
-            </a-col>
-            <a-col :span="12">
-              <a-form-item
-                :label="t('common.page.entity.companycode')"
-                name="companyCode"
-              >
-                <a-input
-                  v-model:value="formState.companyCode"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('common.page.entity.companycode') })"
-                  show-count
-                  :maxlength="20"
-                  disabled
-                />
-              </a-form-item>
-            </a-col>
-            <a-col :span="12">
-              <a-form-item
-                :label="t('common.page.entity.companydefaultculture')"
-                name="companyDefaultCulture"
-              >
-                <a-input
-                  v-model:value="formState.companyDefaultCulture"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('common.page.entity.companydefaultculture') })"
-                  show-count
-                  :maxlength="20"
-                  disabled
-                />
-              </a-form-item>
-            </a-col>
-            <a-col :span="12">
-              <a-form-item
-                :label="t('entity.expense.code')"
+                :label="pi.label('expenseCode')"
                 name="expenseCode"
               >
                 <a-input
                   v-model:value="formState.expenseCode"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.expense.code') })"
+                  :placeholder="pi.ph('expenseCode')"
                   show-count
                   :maxlength="40"
                   allow-clear
@@ -86,12 +44,12 @@
             </a-col>
             <a-col :span="12">
               <a-form-item
-                :label="t('entity.expense.title')"
+                :label="pi.label('expenseTitle')"
                 name="expenseTitle"
               >
                 <a-input
                   v-model:value="formState.expenseTitle"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.expense.title') })"
+                  :placeholder="pi.ph('expenseTitle')"
                   show-count
                   :maxlength="200"
                   allow-clear
@@ -100,70 +58,100 @@
             </a-col>
             <a-col :span="12">
               <a-form-item
-                :label="t('entity.expense.type')"
+                :label="pi.label('expenseType')"
                 name="expenseType"
               >
                 <TaktSelect
                   v-model:value="formState.expenseType"
                   dict-type="accounting_expense_type"
-                  :placeholder="t('common.page.form.placeholder.select', { field: t('entity.expense.type') })"
+                  :placeholder="pi.ph('expenseType')"
                 />
               </a-form-item>
             </a-col>
             <a-col :span="12">
               <a-form-item
-                :label="t('entity.expense.suppliercode')"
+                :label="pi.label('supplierCode')"
                 name="supplierCode"
               >
                 <TaktSelect
                   v-model:value="formState.supplierCode"
                   api-url="TaktSuppliers/options"
-                  :placeholder="t('common.page.form.placeholder.select', { field: t('entity.expense.suppliercode') })"
-                  :disabled="loading || !!formData?.expenseId"
-                  allow-clear
-                  @change="handleSupplierCodeChange"
+                  :placeholder="pi.ph('supplierCode')"
+                  :disabled="!!formData?.expenseId"
                 />
               </a-form-item>
             </a-col>
             <a-col :span="12">
               <a-form-item
-                :label="t('entity.expense.suppliername')"
-                name="supplierName"
+                :label="pi.label('supplierName1')"
+                name="supplierName1"
               >
                 <a-input
-                  v-model:value="formState.supplierName"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.expense.suppliername') })"
+                  v-model:value="formState.supplierName1"
+                  :placeholder="pi.ph('supplierName1')"
                   show-count
-                  :maxlength="200"
+                  :maxlength="140"
                   allow-clear
                 />
               </a-form-item>
             </a-col>
             <a-col :span="12">
               <a-form-item
-                :label="t('entity.expense.applicantby')"
+                :label="pi.label('applicantBy')"
                 name="applicantBy"
               >
                 <TaktSelect
                   v-model:value="formState.applicantBy"
                   api-url="TaktEmployees/options"
-                  :placeholder="t('common.page.form.placeholder.select', { field: t('entity.expense.applicantby') })"
-                  :disabled="loading"
-                  allow-clear
+                  :placeholder="pi.ph('applicantBy')"
                 />
               </a-form-item>
             </a-col>
             <a-col :span="12">
               <a-form-item
-                :label="t('entity.expense.applicationdept')"
+                :label="pi.label('applicationDept')"
                 name="applicationDept"
               >
-                <TaktTreeSelect
+                <TaktSelect
                   v-model:value="formState.applicationDept"
                   api-url="TaktDepts/tree-options"
-                  :placeholder="t('common.page.form.placeholder.select', { field: t('entity.expense.applicationdept') })"
-                  :disabled="loading"
-                  allow-clear
+                  :placeholder="pi.ph('applicationDept')"
+                />
+              </a-form-item>
+            </a-col>
+            <a-col :span="12">
+              <a-form-item
+                :label="pi.label('costBearerDept')"
+                name="costBearerDept"
+              >
+                <TaktSelect
+                  v-model:value="formState.costBearerDept"
+                  api-url="TaktDepts/tree-options"
+                  :placeholder="pi.ph('costBearerDept')"
+                />
+              </a-form-item>
+            </a-col>
+            <a-col :span="12">
+              <a-form-item
+                :label="pi.label('costCenter')"
+                name="costCenter"
+              >
+                <TaktSelect
+                  v-model:value="formState.costCenter"
+                  api-url="TaktCostCenters/tree-options"
+                  :placeholder="pi.ph('costCenter')"
+                />
+              </a-form-item>
+            </a-col>
+            <a-col :span="12">
+              <a-form-item
+                :label="pi.label('countersignId')"
+                name="countersignId"
+              >
+                <TaktSelect
+                  v-model:value="formState.countersignId"
+                  api-url="TaktCountersigns/options"
+                  :placeholder="pi.ph('countersignId')"
                 />
               </a-form-item>
             </a-col>
@@ -179,120 +167,74 @@
           <a-row :gutter="24">
             <a-col :span="12">
               <a-form-item
-                :label="t('entity.expense.costbearerdept')"
-                name="costBearerDept"
-              >
-                <TaktTreeSelect
-                  v-model:value="formState.costBearerDept"
-                  api-url="TaktDepts/tree-options"
-                  :placeholder="t('common.page.form.placeholder.select', { field: t('entity.expense.costbearerdept') })"
-                  :disabled="loading"
-                  allow-clear
-                />
-              </a-form-item>
-            </a-col>
-            <a-col :span="12">
-              <a-form-item
-                :label="t('entity.expense.costcenter')"
-                name="costCenter"
-              >
-                <TaktTreeSelect
-                  v-model:value="formState.costCenter"
-                  api-url="TaktCostCenters/tree-options"
-                  :placeholder="t('common.page.form.placeholder.select', { field: t('entity.expense.costcenter') })"
-                  :disabled="loading"
-                  allow-clear
-                />
-              </a-form-item>
-            </a-col>
-            <a-col :span="12">
-              <a-form-item
-                :label="t('entity.expense.countersignid')"
-                name="countersignId"
-              >
-                <TaktSelect
-                  v-model:value="formState.countersignId"
-                  api-url="TaktCountersigns/options"
-                  :placeholder="t('common.page.form.placeholder.select', { field: t('entity.expense.countersignid') })"
-                  :disabled="loading"
-                  allow-clear
-                />
-              </a-form-item>
-            </a-col>
-            <a-col :span="12">
-              <a-form-item
-                :label="t('entity.expense.purchaseordercode')"
+                :label="pi.label('purchaseOrderCode')"
                 name="purchaseOrderCode"
               >
                 <TaktSelect
                   v-model:value="formState.purchaseOrderCode"
                   api-url="TaktPurchaseOrders/options"
-                  :placeholder="t('common.page.form.placeholder.select', { field: t('entity.expense.purchaseordercode') })"
-                  :disabled="loading || !!formData?.expenseId"
-                  allow-clear
+                  :placeholder="pi.ph('purchaseOrderCode')"
+                  :disabled="!!formData?.expenseId"
                 />
               </a-form-item>
             </a-col>
             <a-col :span="12">
               <a-form-item
-                :label="t('entity.expense.purchaserequestcode')"
+                :label="pi.label('purchaseRequestCode')"
                 name="purchaseRequestCode"
               >
                 <TaktSelect
                   v-model:value="formState.purchaseRequestCode"
                   api-url="TaktPurchaseRequests/options"
-                  :placeholder="t('common.page.form.placeholder.select', { field: t('entity.expense.purchaserequestcode') })"
-                  :disabled="loading || !!formData?.expenseId"
-                  allow-clear
+                  :placeholder="pi.ph('purchaseRequestCode')"
+                  :disabled="!!formData?.expenseId"
                 />
               </a-form-item>
             </a-col>
             <a-col :span="12">
               <a-form-item
-                :label="t('entity.expense.amount')"
+                :label="pi.label('expenseAmount')"
                 name="expenseAmount"
               >
                 <a-input-number
                   v-model:value="formState.expenseAmount"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.expense.amount') })"
+                  :placeholder="pi.ph('expenseAmount')"
                   style="width: 100%"
                 />
               </a-form-item>
             </a-col>
             <a-col :span="12">
               <a-form-item
-                :label="t('entity.expense.taxrate')"
+                :label="pi.label('taxRate')"
                 name="taxRate"
               >
                 <TaktSelect
                   v-model:value="formState.taxRate"
                   dict-type="accounting_tax_rate_param"
-                  :placeholder="t('common.page.form.placeholder.select', { field: t('entity.expense.taxrate') })"
-                  :disabled="loading"
-                  allow-clear
+                  :placeholder="pi.ph('taxRate')"
                 />
               </a-form-item>
             </a-col>
             <a-col :span="12">
               <a-form-item
-                :label="t('entity.expense.taxamount')"
+                :label="pi.label('taxAmount')"
                 name="taxAmount"
               >
                 <a-input-number
                   v-model:value="formState.taxAmount"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.expense.taxamount') })"
+                  :placeholder="pi.ph('taxAmount')"
                   style="width: 100%"
                 />
               </a-form-item>
             </a-col>
             <a-col :span="12">
               <a-form-item
-                :label="t('entity.expense.date')"
+                :label="pi.label('expenseDate')"
                 name="expenseDate"
               >
                 <a-date-picker
                   v-model:value="formState.expenseDate"
-                  :placeholder="t('common.page.form.placeholder.select', { field: t('entity.expense.date') })"
+                  :placeholder="pi.ph('expenseDate')"
                   value-format="YYYY-MM-DD"
                   style="width: 100%"
                 />
@@ -300,15 +242,53 @@
             </a-col>
             <a-col :span="12">
               <a-form-item
-                :label="t('entity.expense.applicationreason')"
+                :label="pi.label('applicationReason')"
                 name="applicationReason"
               >
                 <a-input
                   v-model:value="formState.applicationReason"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.expense.applicationreason') })"
+                  :placeholder="pi.ph('applicationReason')"
                   show-count
                   :maxlength="20"
                   allow-clear
+                />
+              </a-form-item>
+            </a-col>
+            <a-col :span="12">
+              <a-form-item
+                :label="pi.label('attachments')"
+                name="attachments"
+              >
+                <a-input
+                  v-model:value="formState.attachments"
+                  :placeholder="pi.ph('attachments')"
+                  show-count
+                  :maxlength="20"
+                  allow-clear
+                />
+              </a-form-item>
+            </a-col>
+            <a-col :span="12">
+              <a-form-item
+                :label="pi.label('relatedPlant')"
+                name="relatedPlant"
+              >
+                <TaktSelect
+                  v-model:value="formState.relatedPlant"
+                  api-url="TaktPlants/options"
+                  :placeholder="pi.ph('relatedPlant')"
+                />
+              </a-form-item>
+            </a-col>
+            <a-col :span="12">
+              <a-form-item
+                :label="pi.label('expenseStatus')"
+                name="expenseStatus"
+              >
+                <TaktSelect
+                  v-model:value="formState.expenseStatus"
+                  dict-type="sys_approval_status"
+                  :placeholder="pi.ph('expenseStatus')"
                 />
               </a-form-item>
             </a-col>
@@ -324,43 +304,43 @@
           <a-row :gutter="24">
             <a-col :span="24">
               <a-form-item
-                :label="t('entity.expense.attachments')"
-                name="attachments"
+                :label="pi.label('tenantCode')"
+                name="tenantCode"
               >
                 <a-input
-                  v-model:value="formState.attachments"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.expense.attachments') })"
+                  v-model:value="formState.tenantCode"
+                  :placeholder="pi.ph('tenantCode')"
                   show-count
                   :maxlength="20"
-                  allow-clear
+                  disabled
                 />
               </a-form-item>
             </a-col>
             <a-col :span="24">
               <a-form-item
-                :label="t('entity.expense.relatedplant')"
-                name="relatedPlant"
+                :label="pi.label('companyCode')"
+                name="companyCode"
               >
-                <TaktSelect
-                  v-model:value="formState.relatedPlant"
-                  api-url="TaktPlants/options"
-                  :placeholder="t('common.page.form.placeholder.select', { field: t('entity.expense.relatedplant') })"
-                  :disabled="loading"
-                  allow-clear
+                <a-input
+                  v-model:value="formState.companyCode"
+                  :placeholder="pi.ph('companyCode')"
+                  show-count
+                  :maxlength="20"
+                  disabled
                 />
               </a-form-item>
             </a-col>
             <a-col :span="24">
               <a-form-item
-                :label="t('entity.expense.status')"
-                name="expenseStatus"
+                :label="pi.label('companyDefaultCulture')"
+                name="companyDefaultCulture"
               >
-                <TaktSelect
-                  v-model:value="formState.expenseStatus"
-                  dict-type="sys_approval_status"
-                  :placeholder="t('common.page.form.placeholder.select', { field: t('entity.expense.status') })"
-                  :disabled="loading"
-                  allow-clear
+                <a-input
+                  v-model:value="formState.companyDefaultCulture"
+                  :placeholder="pi.ph('companyDefaultCulture')"
+                  show-count
+                  :maxlength="20"
+                  disabled
                 />
               </a-form-item>
             </a-col>
@@ -377,7 +357,7 @@
                     >
                       <span class="takt-form-label-hint-icon"><RiQuestionLine class="takt-remix-icon" /></span>
                     </a-tooltip>
-                    <span>{{ t('common.page.entity.extfield') }}</span>
+                    <span>{{ pi.label('extField') }}</span>
                   </span>
                 </template>
                 <a-textarea
@@ -392,12 +372,12 @@
             </a-col>
             <a-col :span="24">
               <a-form-item
-                :label="t('common.page.entity.remark')"
+                :label="pi.label('remark')"
                 name="remark"
               >
                 <a-textarea
                   v-model:value="formState.remark"
-                  :placeholder="t('common.page.form.placeholder.optional', { field: t('common.page.entity.remark') })"
+                  :placeholder="pi.ph('remark')"
                   :rows="4"
                   show-count
                   :maxlength="400"
@@ -414,18 +394,44 @@
       ref="expenseDetailTableRef"
       v-model="childExpenseDetailRows"
       :columns="expenseDetailFormColumns"
-      :title="t('entity.expensedetail._self')"
-      :add-button-entity="t('entity.expensedetail._self')"
+      :title="expenseDetailPi.self()"
+      :add-button-entity="expenseDetailPi.self()"
       id-field="expenseDetailId"
       :default-row="createDefaultExpenseDetailRow"
       :disabled="loading"
+      :enable-vertical-scroll="false"
       section-border
+      class="w-full min-w-0"
     >
+      <template #cell-allocationCategory="{ record }">
+        <TaktSelect
+          v-model:value="record.allocationCategory"
+          dict-type="logistics_allocation_category"
+          class="w-full"
+          :get-popup-container="getSelectPopupContainer"
+          :placeholder="expenseDetailPi.ph('allocationCategory')"
+          :disabled="loading"
+          allow-clear
+        />
+      </template>
       <template #cell-accountTitle="{ record }">
         <TaktSelect
           v-model:value="record.accountTitle"
           api-url="TaktAccountTitles/options"
-          :placeholder="t('common.page.form.placeholder.select', { field: t('entity.expensedetail.accounttitle') })"
+          class="w-full"
+          :get-popup-container="getSelectPopupContainer"
+          :placeholder="expenseDetailPi.queryPh('accountTitle', 'select')"
+          :disabled="loading"
+          allow-clear
+        />
+      </template>
+      <template #cell-isObsolete="{ record }">
+        <TaktSelect
+          v-model:value="record.isObsolete"
+          dict-type="sys_yes_no_type"
+          class="w-full"
+          :get-popup-container="getSelectPopupContainer"
+          :placeholder="expenseDetailPi.ph('isObsolete')"
           :disabled="loading"
           allow-clear
         />
@@ -442,6 +448,11 @@
 import { reactive, watch, computed, ref, onMounted } from 'vue'
 import { useI18n } from 'vue-i18n'
 import type { Rule } from 'ant-design-vue/es/form'
+import { useExpenseI18n } from '../composables/use-expense-i18n'
+
+/** 实体字段 i18n */
+const pi = useExpenseI18n()
+
 import type { ExpenseCreate } from '@/types/accounting/financial/expense'
 import TaktSelect from '@/components/business/takt-select/index.vue'
 import { RiQuestionLine } from '@remixicon/vue'
@@ -478,9 +489,19 @@ const formContentClass = computed(() => (formFields.length > 10 ? 'takt-form-con
 /** 当前激活的 Tab key */
 const activeTab = ref('tab-0')
 /** CreateDto 字段名列表（与 formState 键对齐） */
-const formFields = ["tenantCode","companyCode","companyDefaultCulture","expenseCode","expenseTitle","expenseType","supplierCode","supplierName","applicantBy","applicationDept","costBearerDept","costCenter","countersignId","purchaseOrderCode","purchaseRequestCode","expenseAmount","taxRate","taxAmount","expenseDate","applicationReason","attachments","relatedPlant","expenseStatus","extField","remark"]
+const formFields = ["tenantCode","companyCode","companyDefaultCulture","expenseCode","expenseTitle","expenseType","supplierCode","supplierName1","applicantBy","applicationDept","costBearerDept","costCenter","countersignId","purchaseOrderCode","purchaseRequestCode","expenseAmount","taxRate","taxAmount","expenseDate","applicationReason","attachments","relatedPlant","expenseStatus","extField","remark"]
+
 
 import type { TaktEditableTableColumn } from '@/components/business/takt-editable-table/types'
+import { resolveNextDetailLineNumber } from '@/utils/takt-sequence'
+import { useExpenseDetailI18n } from '../composables/use-expense-detail-i18n'
+
+const expenseDetailPi = useExpenseDetailI18n()
+
+/** 弹窗/表格内 TaktSelect 下拉挂载容器（避免 overflow 裁剪与表头列错位） */
+function getSelectPopupContainer(triggerNode?: HTMLElement): HTMLElement {
+  return triggerNode?.ownerDocument?.body ?? document.body
+}
 
 const childExpenseDetailRows = ref<Record<string, unknown>[]>([])
 const expenseDetailTableRef = ref<{
@@ -489,67 +510,91 @@ const expenseDetailTableRef = ref<{
   resetRows: () => void
 } | null>(null)
 
+/** 是否已持久化的子表行 */
+function isPersistedExpenseDetailRow(row: Record<string, unknown>): boolean {
+  const id = row.expenseDetailId
+  if (id == null || id === '') {
+    return false
+  }
+  return String(id) !== '0'
+}
+
+/** 分配下一可用子表行号（含作废行，仅据当前表格行递增） */
+function allocateNextExpenseDetailLineNumber(): number {
+  const rows = expenseDetailTableRef.value?.getRows?.() ?? childExpenseDetailRows.value
+  return resolveNextDetailLineNumber(0, rows)
+}
+
 /** 子表 expenseDetail 可编辑列 */
 const expenseDetailFormColumns = computed<TaktEditableTableColumn[]>(() => [
   {
     key: 'lineNumber',
-    title: t('entity.expensedetail.linenumber'),
-    editor: 'inputNumber',
-    width: 140, summary: 'sum',
+    title: expenseDetailPi.label('lineNumber'),
+    width: 140,
   },
   {
     key: 'allocationCategory',
-    title: t('entity.expensedetail.allocationcategory'),
-    editor: 'input',
+    title: expenseDetailPi.label('allocationCategory'),
     width: 140,
   },
   {
     key: 'itemName',
-    title: t('entity.expensedetail.itemname'),
+    title: expenseDetailPi.label('itemName'),
     editor: 'input',
     width: 140,
   },
   {
     key: 'itemDescription',
-    title: t('entity.expensedetail.itemdescription'),
+    title: expenseDetailPi.label('itemDescription'),
     editor: 'textarea',
     rows: 1,
-    placeholder: t('common.page.form.placeholder.optional', { field: t('entity.expensedetail.itemdescription') }),
-    width: 140,
+    placeholder: expenseDetailPi.ph('itemDescription'),
+    width: 180,
   },
   {
     key: 'itemQuantity',
-    title: t('entity.expensedetail.itemquantity'),
-    editor: 'inputNumber',
+    title: expenseDetailPi.label('itemQuantity'),
     width: 140,
   },
   {
     key: 'itemAmount',
-    title: t('entity.expensedetail.itemamount'),
-    editor: 'inputNumber',
+    title: expenseDetailPi.label('itemAmount'),
     width: 140,
   },
   {
     key: 'accountTitle',
-    title: t('entity.expensedetail.accounttitle'),
-    width: 180,
+    title: expenseDetailPi.label('accountTitle'),
+    width: 140,
   },
   {
     key: 'invoiceNo',
-    title: t('entity.expensedetail.invoiceno'),
+    title: expenseDetailPi.label('invoiceNo'),
     editor: 'input',
-    width: 140, allowClear: true, placeholder: t('common.page.form.placeholder.optional', { field: t('entity.expensedetail.invoiceno') }),
+    width: 140, allowClear: true, placeholder: expenseDetailPi.ph('invoiceNo'),
+  },
+  {
+    key: 'expenseDetailDate',
+    title: expenseDetailPi.label('expenseDetailDate'),
+    editor: 'datePicker',
+    valueFormat: 'YYYY-MM-DD',
+    width: 140,
+  },
+  {
+    key: 'isObsolete',
+    title: expenseDetailPi.label('isObsolete'),
+    width: 140,
   },
 ])
 
 /** 编辑态从 formData 同步各子表行 */
 function syncChildRowsFromFormData(val: Partial<ExpenseCreate & { expenseId?: string }> | null | undefined) {
-  childExpenseDetailRows.value = ((val as any)?.expenseDetails ?? []) as Record<string, unknown>[]
+  const rows_expenseDetail = ((val as any)?.expenseDetails ?? []) as Record<string, unknown>[]
+  childExpenseDetailRows.value = rows_expenseDetail
 }
 
 function createDefaultExpenseDetailRow(): Record<string, unknown> {
   return {
-    lineNumber: (childExpenseDetailRows.value.length + 1) * 10,
+    lineNumber: allocateNextExpenseDetailLineNumber(),
     allocationCategory: '',
     itemName: '',
     itemDescription: '',
@@ -557,21 +602,32 @@ function createDefaultExpenseDetailRow(): Record<string, unknown> {
     itemAmount: 0,
     accountTitle: '',
     invoiceNo: '',
+    expenseDetailDate: '',
+    isObsolete: 0,
   }
 }
 
 /** 组装 Create/Update 载荷（主表 + 子表数组） */
 function buildSubmitPayload() {
   const masterId = props.formData?.expenseId ?? ''
+  const isUpdate = Boolean(masterId)
   return {
     ...formState,
-    expenseDetails: expenseDetailTableRef.value?.getRows?.() ?? childExpenseDetailRows.value.map((rest) => ({
-      ...rest,
-      tenantCode: tenantStore.tenantCode,
-      companyCode: tenantStore.companyCode,
-      companyDefaultCulture: userStore.userInfo?.companyDefaultCulture ?? '',
-      expenseId: masterId,
-    })),
+    expenseDetails: expenseDetailTableRef.value?.getRows?.() ?? childExpenseDetailRows.value.map((row) => {
+      const normalized = {
+        ...row,
+        tenantCode: tenantStore.tenantCode,
+        companyCode: tenantStore.companyCode,
+        companyDefaultCulture: userStore.userInfo?.companyDefaultCulture ?? '',
+        expenseId: masterId,
+      }
+      if (isUpdate && isPersistedExpenseDetailRow(row)) {
+        normalized.expenseDetailId = row.expenseDetailId
+      } else {
+        delete normalized.expenseDetailId
+      }
+      return normalized
+    }),
   }
 }
 
@@ -594,39 +650,8 @@ const formState = reactive<Record<string, any>>({})
 /** 表单字段默认值（字典 IsDefault=1，来自 TaktDictDataSeedData） */
 const FORM_FIELD_DEFAULTS: Record<string, string | number> = {
   expenseType: 1,
-  expenseStatus: 0,
-  taxRate: 0,
-}
-
-/** 选项字段灌入表单时统一为控件值类型 */
-function normalizeOptionFields(target: Record<string, unknown>) {
-  const idFields = ['applicantBy', 'countersignId'] as const
-  for (const key of idFields) {
-    if (target[key] != null && target[key] !== '') {
-      target[key] = String(target[key])
-    }
-  }
-  if (target.applicationDept != null && target.applicationDept !== '') {
-    target.applicationDept = String(target.applicationDept)
-  }
-  if (target.costBearerDept != null && target.costBearerDept !== '') {
-    target.costBearerDept = String(target.costBearerDept)
-  }
-}
-
-/**
- * 供应商编码变更时回填供应商名称
- * @param _value 选中值（SupplierCode）
- * @param option 下拉项
- */
-function handleSupplierCodeChange(
-  _value: unknown,
-  option: { dictLabel?: string; label?: string } | null,
-) {
-  const label = option?.dictLabel ?? option?.label
-  if (label) {
-    formState.supplierName = String(label)
-  }
+  taxRate: 10,
+  expenseStatus: 0
 }
 
 /** 写入表单默认值（新增 / resetFields / 弹窗再次打开时） */
@@ -650,7 +675,6 @@ watch(
       const next = { ...val } as Record<string, unknown>
       Object.keys(formState).forEach((k) => delete formState[k])
     delete (next as any).expenseDetails
-      normalizeOptionFields(next)
       applyScopeDefaults(next)
       Object.assign(formState, next)
     syncChildRowsFromFormData(val)
@@ -684,43 +708,45 @@ const rules = computed<Record<string, Rule[]>>(() => ({
   expenseCode: [
     {
       required: true,
-      message: t('common.page.form.placeholder.required', { field: t('entity.expense.code') }),
+      message: pi.ph('expenseCode'),
       trigger: 'blur'
     }
   ],
   expenseTitle: [
     {
       required: true,
-      message: t('common.page.form.placeholder.required', { field: t('entity.expense.title') }),
+      message: pi.ph('expenseTitle'),
       trigger: 'blur'
     }
   ],
   expenseType: [{
     validator: async (_rule, value) => {
       if (value === undefined || value === null || value === '') {
-        return Promise.reject(t('common.page.form.placeholder.select', { field: t('entity.expense.type') }))
+        return Promise.reject(pi.ph('expenseType'))
       }
       const num = typeof value === 'number' ? value : Number(value)
       if (!Number.isFinite(num)) {
-        return Promise.reject(t('common.page.form.placeholder.select', { field: t('entity.expense.type') }))
+        return Promise.reject(pi.ph('expenseType'))
       }
       return Promise.resolve()
     },
     trigger: 'change'
   }],
-  applicantBy: [{
-    required: true,
-    message: t('common.page.form.placeholder.select', { field: t('entity.expense.applicantby') }),
-    trigger: 'change'
-  }],
+  applicantBy: [
+    {
+      required: true,
+      message: pi.ph('applicantBy'),
+      trigger: 'change'
+    }
+  ],
   expenseAmount: [{
     validator: async (_rule, value) => {
       if (value === undefined || value === null || value === '') {
-        return Promise.reject(t('common.page.form.placeholder.select', { field: t('entity.expense.amount') }))
+        return Promise.reject(pi.ph('expenseAmount'))
       }
       const num = typeof value === 'number' ? value : Number(value)
       if (!Number.isFinite(num)) {
-        return Promise.reject(t('common.page.form.placeholder.select', { field: t('entity.expense.amount') }))
+        return Promise.reject(pi.ph('expenseAmount'))
       }
       return Promise.resolve()
     },
@@ -729,11 +755,11 @@ const rules = computed<Record<string, Rule[]>>(() => ({
   taxRate: [{
     validator: async (_rule, value) => {
       if (value === undefined || value === null || value === '') {
-        return Promise.reject(t('common.page.form.placeholder.select', { field: t('entity.expense.taxrate') }))
+        return Promise.reject(pi.ph('taxRate'))
       }
       const num = typeof value === 'number' ? value : Number(value)
       if (!Number.isFinite(num)) {
-        return Promise.reject(t('common.page.form.placeholder.select', { field: t('entity.expense.taxrate') }))
+        return Promise.reject(pi.ph('taxRate'))
       }
       return Promise.resolve()
     },
@@ -742,11 +768,11 @@ const rules = computed<Record<string, Rule[]>>(() => ({
   taxAmount: [{
     validator: async (_rule, value) => {
       if (value === undefined || value === null || value === '') {
-        return Promise.reject(t('common.page.form.placeholder.select', { field: t('entity.expense.taxamount') }))
+        return Promise.reject(pi.ph('taxAmount'))
       }
       const num = typeof value === 'number' ? value : Number(value)
       if (!Number.isFinite(num)) {
-        return Promise.reject(t('common.page.form.placeholder.select', { field: t('entity.expense.taxamount') }))
+        return Promise.reject(pi.ph('taxAmount'))
       }
       return Promise.resolve()
     },
@@ -755,23 +781,25 @@ const rules = computed<Record<string, Rule[]>>(() => ({
   expenseDate: [
     {
       required: true,
-      message: t('common.page.form.placeholder.select', { field: t('entity.expense.date') }),
+      message: pi.ph('expenseDate'),
       trigger: 'change'
     }
   ],
-  relatedPlant: [{
-    required: true,
-    message: t('common.page.form.placeholder.select', { field: t('entity.expense.relatedplant') }),
-    trigger: 'change'
-  }],
+  relatedPlant: [
+    {
+      required: true,
+      message: pi.ph('relatedPlant'),
+      trigger: 'change'
+    }
+  ],
   expenseStatus: [{
     validator: async (_rule, value) => {
       if (value === undefined || value === null || value === '') {
-        return Promise.reject(t('common.page.form.placeholder.select', { field: t('entity.expense.status') }))
+        return Promise.reject(pi.ph('expenseStatus'))
       }
       const num = typeof value === 'number' ? value : Number(value)
       if (!Number.isFinite(num)) {
-        return Promise.reject(t('common.page.form.placeholder.select', { field: t('entity.expense.status') }))
+        return Promise.reject(pi.ph('expenseStatus'))
       }
       return Promise.resolve()
     },
@@ -808,13 +836,6 @@ function getValues(): Record<string, any> {
   if ('expenseStatus' in payload) {
     const rawexpenseStatus = payload.expenseStatus
     payload.expenseStatus = typeof rawexpenseStatus === 'number' ? rawexpenseStatus : Number(rawexpenseStatus)
-  }
-  const longFields = ['applicantBy', 'countersignId'] as const
-  for (const key of longFields) {
-    if (key in payload && payload[key] != null && payload[key] !== '') {
-      const raw = payload[key]
-      payload[key] = typeof raw === 'number' ? raw : Number(raw)
-    }
   }
   if ('sortOrder' in payload) delete payload.sortOrder
   return payload

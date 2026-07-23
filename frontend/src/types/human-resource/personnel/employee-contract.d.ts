@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：frontend/src/types/human-resource/personnel
 // 文件名称：employee-contract.d.ts
-// 创建时间：2026-06-23
+// 创建时间：2026-07-23
 // 创建人：Takt365(Auto Generated)
 // 功能描述：human-resource/personnel 模块类型定义（自动生成；类型名去 Takt 前缀与末尾 Dto，如 TaktCompanyDto → Company）
 // 
@@ -29,29 +29,29 @@ export interface EmployeeContract extends CompanyDtoBase {
   employeeContractId: string;
 
   /**
-   * 员工ID
+   * 员工（选项 TaktEmployees/options；DictValue=Id）
    */
   employeeId: string;
 
   /**
-   * 员工名称（填充字段）
+   * 员工编码（冗余，与 TaktEmployee.EmployeeCode 对齐）
    */
-  employeeName?: string;
+  employeeCode: string;
 
   /**
-   * 合同编号
+   * 员工姓名（冗余，与 TaktEmployee.EmployeeName 对齐）
    */
-  contractNo: string;
+  employeeName: string;
 
   /**
-   * 合同类型（0=固定期限，1=无固定期限，2=以完成一定工作任务为期限，3=实习）
+   * 合同编码
+   */
+  contractCode: string;
+
+  /**
+   * 合同类型（字典 hr_employee_contract_type；0=固定期限 1=无固定期限 2=以完成一定工作任务为期限 3=实习）
    */
   contractType: number;
-
-  /**
-   * 合同状态（0=草稿，1=生效，2=到期，3=终止）
-   */
-  contractStatus: number;
 
   /**
    * 合同开始日期
@@ -78,6 +78,11 @@ export interface EmployeeContract extends CompanyDtoBase {
    */
   signCompany?: string;
 
+  /**
+   * 合同状态（字典 hr_employee_contract_status；0=草稿 1=生效 2=到期 3=终止）
+   */
+  contractStatus: number;
+
 }
 
 
@@ -99,24 +104,29 @@ export interface EmployeeContractQuery extends TaktPagedQuery {
   companyCode?: string;
 
   /**
-   * 员工ID
+   * 员工（选项 TaktEmployees/options；DictValue=Id）
    */
   employeeId?: string;
 
   /**
-   * 合同编号
+   * 员工编码（冗余，与 TaktEmployee.EmployeeCode 对齐）
    */
-  contractNo?: string;
+  employeeCode?: string;
 
   /**
-   * 合同类型（0=固定期限，1=无固定期限，2=以完成一定工作任务为期限，3=实习）
+   * 员工姓名（冗余，与 TaktEmployee.EmployeeName 对齐）
+   */
+  employeeName?: string;
+
+  /**
+   * 合同编码
+   */
+  contractCode?: string;
+
+  /**
+   * 合同类型（字典 hr_employee_contract_type；0=固定期限 1=无固定期限 2=以完成一定工作任务为期限 3=实习）
    */
   contractType?: number;
-
-  /**
-   * 合同状态（0=草稿，1=生效，2=到期，3=终止）
-   */
-  contractStatus?: number;
 
   /**
    * 合同开始日期（范围查询-开始）
@@ -164,6 +174,11 @@ export interface EmployeeContractQuery extends TaktPagedQuery {
   signCompany?: string;
 
   /**
+   * 合同状态（字典 hr_employee_contract_status；0=草稿 1=生效 2=到期 3=终止）
+   */
+  contractStatus?: number;
+
+  /**
    * 创建时间（范围查询-开始）
    */
   createdAtStart?: string;
@@ -208,24 +223,29 @@ export interface EmployeeContractCreate {
   companyDefaultCulture: string;
 
   /**
-   * 员工ID
+   * 员工（选项 TaktEmployees/options；DictValue=Id）
    */
   employeeId: string;
 
   /**
-   * 合同编号
+   * 员工编码（冗余，与 TaktEmployee.EmployeeCode 对齐）
    */
-  contractNo: string;
+  employeeCode: string;
 
   /**
-   * 合同类型（0=固定期限，1=无固定期限，2=以完成一定工作任务为期限，3=实习）
+   * 员工姓名（冗余，与 TaktEmployee.EmployeeName 对齐）
+   */
+  employeeName: string;
+
+  /**
+   * 合同编码
+   */
+  contractCode: string;
+
+  /**
+   * 合同类型（字典 hr_employee_contract_type；0=固定期限 1=无固定期限 2=以完成一定工作任务为期限 3=实习）
    */
   contractType: number;
-
-  /**
-   * 合同状态（0=草稿，1=生效，2=到期，3=终止）
-   */
-  contractStatus: number;
 
   /**
    * 合同开始日期
@@ -251,6 +271,11 @@ export interface EmployeeContractCreate {
    * 签约单位
    */
   signCompany?: string;
+
+  /**
+   * 合同状态（字典 hr_employee_contract_status；0=草稿 1=生效 2=到期 3=终止）
+   */
+  contractStatus: number;
 
   /**
    * 扩展字段JSON
@@ -292,7 +317,7 @@ export interface EmployeeContractStatus {
   employeeContractId: string;
 
   /**
-   * 合同状态（0=草稿，1=生效，2=到期，3=终止）
+   * 合同状态（字典 hr_employee_contract_status；0=草稿 1=生效 2=到期 3=终止）
    */
   contractStatus: number;
 
@@ -316,24 +341,29 @@ export interface EmployeeContractTemplate {
   companyCode?: string;
 
   /**
-   * 员工ID
+   * 员工（选项 TaktEmployees/options；DictValue=Id）
    */
   employeeId?: string;
 
   /**
-   * 合同编号
+   * 员工编码（冗余，与 TaktEmployee.EmployeeCode 对齐）
    */
-  contractNo?: string;
+  employeeCode?: string;
 
   /**
-   * 合同类型（0=固定期限，1=无固定期限，2=以完成一定工作任务为期限，3=实习）
+   * 员工姓名（冗余，与 TaktEmployee.EmployeeName 对齐）
+   */
+  employeeName?: string;
+
+  /**
+   * 合同编码
+   */
+  contractCode?: string;
+
+  /**
+   * 合同类型（字典 hr_employee_contract_type；0=固定期限 1=无固定期限 2=以完成一定工作任务为期限 3=实习）
    */
   contractType?: number;
-
-  /**
-   * 合同状态（0=草稿，1=生效，2=到期，3=终止）
-   */
-  contractStatus?: number;
 
   /**
    * 合同开始日期
@@ -359,6 +389,11 @@ export interface EmployeeContractTemplate {
    * 签约单位
    */
   signCompany?: string;
+
+  /**
+   * 合同状态（字典 hr_employee_contract_status；0=草稿 1=生效 2=到期 3=终止）
+   */
+  contractStatus?: number;
 
   /**
    * 扩展字段JSON
@@ -395,24 +430,29 @@ export interface EmployeeContractImport {
   companyDefaultCulture?: string;
 
   /**
-   * 员工ID
+   * 员工（选项 TaktEmployees/options；DictValue=Id）
    */
   employeeId?: string;
 
   /**
-   * 合同编号
+   * 员工编码（冗余，与 TaktEmployee.EmployeeCode 对齐）
    */
-  contractNo?: string;
+  employeeCode?: string;
 
   /**
-   * 合同类型（0=固定期限，1=无固定期限，2=以完成一定工作任务为期限，3=实习）
+   * 员工姓名（冗余，与 TaktEmployee.EmployeeName 对齐）
+   */
+  employeeName?: string;
+
+  /**
+   * 合同编码
+   */
+  contractCode?: string;
+
+  /**
+   * 合同类型（字典 hr_employee_contract_type；0=固定期限 1=无固定期限 2=以完成一定工作任务为期限 3=实习）
    */
   contractType?: number;
-
-  /**
-   * 合同状态（0=草稿，1=生效，2=到期，3=终止）
-   */
-  contractStatus?: number;
 
   /**
    * 合同开始日期
@@ -438,6 +478,11 @@ export interface EmployeeContractImport {
    * 签约单位
    */
   signCompany?: string;
+
+  /**
+   * 合同状态（字典 hr_employee_contract_status；0=草稿 1=生效 2=到期 3=终止）
+   */
+  contractStatus?: number;
 
   /**
    * 扩展字段JSON
@@ -469,24 +514,29 @@ export interface EmployeeContractExport {
   companyCode: string;
 
   /**
-   * 员工ID
+   * 员工（选项 TaktEmployees/options；DictValue=Id）
    */
   employeeId: string;
 
   /**
-   * 合同编号
+   * 员工编码（冗余，与 TaktEmployee.EmployeeCode 对齐）
    */
-  contractNo: string;
+  employeeCode: string;
 
   /**
-   * 合同类型（0=固定期限，1=无固定期限，2=以完成一定工作任务为期限，3=实习）
+   * 员工姓名（冗余，与 TaktEmployee.EmployeeName 对齐）
+   */
+  employeeName: string;
+
+  /**
+   * 合同编码
+   */
+  contractCode: string;
+
+  /**
+   * 合同类型（字典 hr_employee_contract_type；0=固定期限 1=无固定期限 2=以完成一定工作任务为期限 3=实习）
    */
   contractType: number;
-
-  /**
-   * 合同状态（0=草稿，1=生效，2=到期，3=终止）
-   */
-  contractStatus: number;
 
   /**
    * 合同开始日期
@@ -512,6 +562,11 @@ export interface EmployeeContractExport {
    * 签约单位
    */
   signCompany?: string;
+
+  /**
+   * 合同状态（字典 hr_employee_contract_status；0=草稿 1=生效 2=到期 3=终止）
+   */
+  contractStatus: number;
 
   /**
    * 扩展字段JSON

@@ -240,12 +240,12 @@
             </a-col>
             <a-col :span="12">
               <a-form-item
-                :label="t('entity.trainingattendee.certificateno')"
-                name="certificateNo"
+                :label="t('entity.trainingattendee.CertificateCode')"
+                name="CertificateCode"
               >
                 <a-input
-                  v-model:value="formState.certificateNo"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.trainingattendee.certificateno') })"
+                  v-model:value="formState.CertificateCode"
+                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.trainingattendee.CertificateCode') })"
                   show-count
                   :maxlength="50"
                   allow-clear
@@ -392,7 +392,7 @@ const formContentClass = computed(() => (formFields.length > 10 ? 'takt-form-con
 /** 当前激活的 Tab key */
 const activeTab = ref('tab-0')
 /** CreateDto 字段名列表（与 formState 键对齐） */
-const formFields = ["tenantCode","companyCode","companyDefaultCulture","employeeId","employeeName","trainingCourseId","courseName","trainingType","instructor","trainingStartDate","trainingEndDate","trainingDate","trainingHours","trainingScore","isPassed","certificateNo","trainingEvaluation","trainingResultStatus","relatedPlant","extField","remark"]
+const formFields = ["tenantCode","companyCode","companyDefaultCulture","employeeId","employeeName","trainingCourseId","courseName","trainingType","instructor","trainingStartDate","trainingEndDate","trainingDate","trainingHours","trainingScore","isPassed","CertificateCode","trainingEvaluation","trainingResultStatus","relatedPlant","extField","remark"]
 
 
 /** 父级传入的编辑 DTO；新增时为 undefined 或空对象 */
@@ -556,10 +556,10 @@ const rules = computed<Record<string, Rule[]>>(() => ({
     },
     trigger: 'change'
   }],
-  certificateNo: [
+  CertificateCode: [
     {
       required: true,
-      message: t('common.page.form.placeholder.required', { field: t('entity.trainingattendee.certificateno') }),
+      message: t('common.page.form.placeholder.required', { field: t('entity.trainingattendee.CertificateCode') }),
       trigger: 'blur'
     }
   ],

@@ -26,7 +26,7 @@ namespace Takt.Domain.Entities.Logistics.Materials;
 public class TaktWarehouse : TaktCompanyEntityBase
 {
     /// <summary>
-    /// 工厂代码（选项 TaktPlants/options，DictValue=PlantCode）
+    /// 工厂代码（选项 TaktPlants/options；DictValue=PlantCode）
     /// </summary>
     [SugarColumn(ColumnName = "plant_code", ColumnDescription = "工厂代码", ColumnDataType = "nvarchar", Length = 4, IsNullable = false)]
     public string PlantCode { get; set; } = string.Empty;
@@ -61,7 +61,7 @@ public class TaktWarehouse : TaktCompanyEntityBase
     [SugarColumn(ColumnName = "contact_phone", ColumnDescription = "联系电话", ColumnDataType = "varchar", Length = 30, IsNullable = true)]
     public string? ContactPhone { get; set; }
     /// <summary>
-    /// 仓库负责人用户编码（选项 TaktUsers/options，DictValue=Username）
+    /// 仓库负责人用户编码（选项 TaktUsers/options；DictValue=Username）
     /// </summary>
     [SugarColumn(ColumnName = "manager_user_code", ColumnDescription = "仓库负责人用户编码", ColumnDataType = "varchar", Length = 50, IsNullable = true)]
     public string? ManagerUserCode { get; set; }

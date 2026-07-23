@@ -47,7 +47,7 @@ public class TaktTalentJobPostingDto : TaktCompanyDtoBase
     public string? StaffingRequirementName { get; set; }
 
     /// <summary>
-    /// 发布编号（租户+公司内唯一）
+    /// 发布编码（租户+公司内唯一）
     /// </summary>
     public string PostingCode { get; set; } = string.Empty;
 
@@ -127,7 +127,7 @@ public class TaktTalentJobPostingQueryDto : TaktPagedQuery
     public long? StaffingRequirementId { get; set; }
 
     /// <summary>
-    /// 发布编号（租户+公司内唯一）
+    /// 发布编码（租户+公司内唯一）
     /// </summary>
     public string? PostingCode { get; set; } = string.Empty;
 
@@ -233,9 +233,9 @@ public class TaktTalentJobPostingCreateDto
     public long StaffingRequirementId { get; set; }
 
     /// <summary>
-    /// 发布编号（租户+公司内唯一）
+    /// 发布编码（租户+公司内唯一）
     /// </summary>
-    [Required(ErrorMessage = "发布编号（租户+公司内唯一）不能为空")]
+    [Required(ErrorMessage = "发布编码（租户+公司内唯一）不能为空")]
     public string PostingCode { get; set; } = string.Empty;
 
     /// <summary>
@@ -361,7 +361,7 @@ public class TaktTalentJobPostingTemplateDto
     public long? StaffingRequirementId { get; set; }
 
     /// <summary>
-    /// 发布编号（租户+公司内唯一）
+    /// 发布编码（租户+公司内唯一）
     /// </summary>
     public string? PostingCode { get; set; } = string.Empty;
 
@@ -444,7 +444,7 @@ public class TaktTalentJobPostingImportDto
     public long? StaffingRequirementId { get; set; }
 
     /// <summary>
-    /// 发布编号（租户+公司内唯一）
+    /// 发布编码（租户+公司内唯一）
     /// </summary>
     public string? PostingCode { get; set; } = string.Empty;
 
@@ -528,7 +528,7 @@ public class TaktTalentJobPostingExportDto
     public long StaffingRequirementId { get; set; }
 
     /// <summary>
-    /// 发布编号（租户+公司内唯一）
+    /// 发布编码（租户+公司内唯一）
     /// </summary>
     public string PostingCode { get; set; } = string.Empty;
 

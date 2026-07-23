@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：frontend/src/types/logistics/sales
 // 文件名称：quotation.d.ts
-// 创建时间：2026-07-09
+// 创建时间：2026-07-23
 // 创建人：Takt365(Auto Generated)
 // 功能描述：logistics/sales 模块类型定义（自动生成；类型名去 Takt 前缀与末尾 Dto，如 TaktCompanyDto → Company）
 // 
@@ -29,7 +29,7 @@ export interface SalesQuotation extends CompanyDtoBase {
   salesQuotationId: string;
 
   /**
-   * 工厂代码（选项 TaktPlants/options，DictValue=PlantCode）
+   * 工厂代码（选项 TaktPlants/options；DictValue=PlantCode）
    */
   plantCode: string;
 
@@ -39,14 +39,14 @@ export interface SalesQuotation extends CompanyDtoBase {
   salesQuotationCode: string;
 
   /**
-   * 客户编码（选项 TaktCustomers/options，DictValue=CustomerCode）
+   * 客户编码（选项 TaktCustomers/options；DictValue=CustomerCode）
    */
   customerCode: string;
 
   /**
-   * 客户名称
+   * 客户名称1（冗余，与 TaktCustomer.CustomerName1 对齐）
    */
-  customerName: string;
+  customerName1: string;
 
   /**
    * 报价日期
@@ -59,7 +59,7 @@ export interface SalesQuotation extends CompanyDtoBase {
   validUntilDate?: string;
 
   /**
-   * 销售员（选项 TaktEmployees/options，DictValue=EmployeeCode）
+   * 销售员（选项 TaktEmployees/options；DictValue=EmployeeCode）
    */
   salesBy?: string;
 
@@ -77,6 +77,16 @@ export interface SalesQuotation extends CompanyDtoBase {
    * 折扣金额
    */
   discountAmount: number;
+
+  /**
+   * 结算币种（字典 accounting_currency_code；DictValue=CNY/USD 等；一单一币种）
+   */
+  currencyCode: string;
+
+  /**
+   * 税率（字典 accounting_tax_rate_param；13=13%，9=9%，0=0% 等；一单一税率）
+   */
+  taxRate: number;
 
   /**
    * 税费
@@ -124,7 +134,7 @@ export interface SalesQuotationQuery extends TaktPagedQuery {
   companyCode?: string;
 
   /**
-   * 工厂代码（选项 TaktPlants/options，DictValue=PlantCode）
+   * 工厂代码（选项 TaktPlants/options；DictValue=PlantCode）
    */
   plantCode?: string;
 
@@ -134,14 +144,14 @@ export interface SalesQuotationQuery extends TaktPagedQuery {
   salesQuotationCode?: string;
 
   /**
-   * 客户编码（选项 TaktCustomers/options，DictValue=CustomerCode）
+   * 客户编码（选项 TaktCustomers/options；DictValue=CustomerCode）
    */
   customerCode?: string;
 
   /**
-   * 客户名称
+   * 客户名称1（冗余，与 TaktCustomer.CustomerName1 对齐）
    */
-  customerName?: string;
+  customerName1?: string;
 
   /**
    * 报价日期（范围查询-开始）
@@ -164,7 +174,7 @@ export interface SalesQuotationQuery extends TaktPagedQuery {
   validUntilDateEnd?: string;
 
   /**
-   * 销售员（选项 TaktEmployees/options，DictValue=EmployeeCode）
+   * 销售员（选项 TaktEmployees/options；DictValue=EmployeeCode）
    */
   salesBy?: string;
 
@@ -182,6 +192,16 @@ export interface SalesQuotationQuery extends TaktPagedQuery {
    * 折扣金额
    */
   discountAmount?: number;
+
+  /**
+   * 结算币种（字典 accounting_currency_code；DictValue=CNY/USD 等；一单一币种）
+   */
+  currencyCode?: string;
+
+  /**
+   * 税率（字典 accounting_tax_rate_param；13=13%，9=9%，0=0% 等；一单一税率）
+   */
+  taxRate?: number;
 
   /**
    * 税费
@@ -248,7 +268,7 @@ export interface SalesQuotationCreate {
   companyDefaultCulture: string;
 
   /**
-   * 工厂代码（选项 TaktPlants/options，DictValue=PlantCode）
+   * 工厂代码（选项 TaktPlants/options；DictValue=PlantCode）
    */
   plantCode: string;
 
@@ -258,14 +278,14 @@ export interface SalesQuotationCreate {
   salesQuotationCode: string;
 
   /**
-   * 客户编码（选项 TaktCustomers/options，DictValue=CustomerCode）
+   * 客户编码（选项 TaktCustomers/options；DictValue=CustomerCode）
    */
   customerCode: string;
 
   /**
-   * 客户名称
+   * 客户名称1（冗余，与 TaktCustomer.CustomerName1 对齐）
    */
-  customerName: string;
+  customerName1: string;
 
   /**
    * 报价日期
@@ -278,7 +298,7 @@ export interface SalesQuotationCreate {
   validUntilDate?: string;
 
   /**
-   * 销售员（选项 TaktEmployees/options，DictValue=EmployeeCode）
+   * 销售员（选项 TaktEmployees/options；DictValue=EmployeeCode）
    */
   salesBy?: string;
 
@@ -296,6 +316,16 @@ export interface SalesQuotationCreate {
    * 折扣金额
    */
   discountAmount: number;
+
+  /**
+   * 结算币种（字典 accounting_currency_code；DictValue=CNY/USD 等；一单一币种）
+   */
+  currencyCode: string;
+
+  /**
+   * 税率（字典 accounting_tax_rate_param；13=13%，9=9%，0=0% 等；一单一税率）
+   */
+  taxRate: number;
 
   /**
    * 税费
@@ -320,7 +350,7 @@ export interface SalesQuotationCreate {
   /**
    * 销售报价明细列表（主子表关系）（子表，级联保存）
    */
-  items?: SalesQuotationItemUpdate[];
+  items?: SalesQuotationItemCreate[];
 
   /**
    * 扩展字段JSON
@@ -346,6 +376,11 @@ export interface SalesQuotationUpdate extends SalesQuotationCreate {
    * SalesQuotationID（标识要更新的实体）
    */
   salesQuotationId: string;
+
+  /**
+   * 销售报价明细列表（主子表关系）（子表，级联保存）
+   */
+  items?: any;
 
 }
 
@@ -386,7 +421,7 @@ export interface SalesQuotationTemplate {
   companyCode?: string;
 
   /**
-   * 工厂代码（选项 TaktPlants/options，DictValue=PlantCode）
+   * 工厂代码（选项 TaktPlants/options；DictValue=PlantCode）
    */
   plantCode?: string;
 
@@ -396,14 +431,14 @@ export interface SalesQuotationTemplate {
   salesQuotationCode?: string;
 
   /**
-   * 客户编码（选项 TaktCustomers/options，DictValue=CustomerCode）
+   * 客户编码（选项 TaktCustomers/options；DictValue=CustomerCode）
    */
   customerCode?: string;
 
   /**
-   * 客户名称
+   * 客户名称1（冗余，与 TaktCustomer.CustomerName1 对齐）
    */
-  customerName?: string;
+  customerName1?: string;
 
   /**
    * 报价日期
@@ -416,7 +451,7 @@ export interface SalesQuotationTemplate {
   validUntilDate?: string;
 
   /**
-   * 销售员（选项 TaktEmployees/options，DictValue=EmployeeCode）
+   * 销售员（选项 TaktEmployees/options；DictValue=EmployeeCode）
    */
   salesBy?: string;
 
@@ -434,6 +469,16 @@ export interface SalesQuotationTemplate {
    * 折扣金额
    */
   discountAmount?: number;
+
+  /**
+   * 结算币种（字典 accounting_currency_code；DictValue=CNY/USD 等；一单一币种）
+   */
+  currencyCode?: string;
+
+  /**
+   * 税率（字典 accounting_tax_rate_param；13=13%，9=9%，0=0% 等；一单一税率）
+   */
+  taxRate?: number;
 
   /**
    * 税费
@@ -495,7 +540,7 @@ export interface SalesQuotationImport {
   companyDefaultCulture?: string;
 
   /**
-   * 工厂代码（选项 TaktPlants/options，DictValue=PlantCode）
+   * 工厂代码（选项 TaktPlants/options；DictValue=PlantCode）
    */
   plantCode?: string;
 
@@ -505,14 +550,14 @@ export interface SalesQuotationImport {
   salesQuotationCode?: string;
 
   /**
-   * 客户编码（选项 TaktCustomers/options，DictValue=CustomerCode）
+   * 客户编码（选项 TaktCustomers/options；DictValue=CustomerCode）
    */
   customerCode?: string;
 
   /**
-   * 客户名称
+   * 客户名称1（冗余，与 TaktCustomer.CustomerName1 对齐）
    */
-  customerName?: string;
+  customerName1?: string;
 
   /**
    * 报价日期
@@ -525,7 +570,7 @@ export interface SalesQuotationImport {
   validUntilDate?: string;
 
   /**
-   * 销售员（选项 TaktEmployees/options，DictValue=EmployeeCode）
+   * 销售员（选项 TaktEmployees/options；DictValue=EmployeeCode）
    */
   salesBy?: string;
 
@@ -543,6 +588,16 @@ export interface SalesQuotationImport {
    * 折扣金额
    */
   discountAmount?: number;
+
+  /**
+   * 结算币种（字典 accounting_currency_code；DictValue=CNY/USD 等；一单一币种）
+   */
+  currencyCode?: string;
+
+  /**
+   * 税率（字典 accounting_tax_rate_param；13=13%，9=9%，0=0% 等；一单一税率）
+   */
+  taxRate?: number;
 
   /**
    * 税费
@@ -599,7 +654,7 @@ export interface SalesQuotationExport {
   companyCode: string;
 
   /**
-   * 工厂代码（选项 TaktPlants/options，DictValue=PlantCode）
+   * 工厂代码（选项 TaktPlants/options；DictValue=PlantCode）
    */
   plantCode: string;
 
@@ -609,14 +664,14 @@ export interface SalesQuotationExport {
   salesQuotationCode: string;
 
   /**
-   * 客户编码（选项 TaktCustomers/options，DictValue=CustomerCode）
+   * 客户编码（选项 TaktCustomers/options；DictValue=CustomerCode）
    */
   customerCode: string;
 
   /**
-   * 客户名称
+   * 客户名称1（冗余，与 TaktCustomer.CustomerName1 对齐）
    */
-  customerName: string;
+  customerName1: string;
 
   /**
    * 报价日期
@@ -629,7 +684,7 @@ export interface SalesQuotationExport {
   validUntilDate?: string;
 
   /**
-   * 销售员（选项 TaktEmployees/options，DictValue=EmployeeCode）
+   * 销售员（选项 TaktEmployees/options；DictValue=EmployeeCode）
    */
   salesBy?: string;
 
@@ -647,6 +702,16 @@ export interface SalesQuotationExport {
    * 折扣金额
    */
   discountAmount: number;
+
+  /**
+   * 结算币种（字典 accounting_currency_code；DictValue=CNY/USD 等；一单一币种）
+   */
+  currencyCode: string;
+
+  /**
+   * 税率（字典 accounting_tax_rate_param；13=13%，9=9%，0=0% 等；一单一税率）
+   */
+  taxRate: number;
 
   /**
    * 税费

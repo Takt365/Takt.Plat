@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Infrastructure.Data.Seeds.I18nSeedData.HumanResource.Personnel
 // 文件名称：TaktEmployeeFamilyI18nSeedData.cs
-// 创建时间：2026-07-20
+// 创建时间：2026-07-23
 // 创建人：Takt365(Auto Generated)
 // 功能描述：TaktEmployeeFamily 实体字段国际化种子（无对应 frontend locales；TranslationText 取自 ColumnDescription，ContextNote 取自属性 XML summary）
 // 
@@ -91,13 +91,31 @@ public class TaktEmployeeFamilyI18nSeedData : ITaktSeedDataCoordinator
             new TranslationSeedItem("entity.employeefamily._self", "zh-HK", "员工家庭成员信息_hk", "实体名称"),
 
             // entity.employeefamily.employeeid
-            new TranslationSeedItem("entity.employeefamily.employeeid", "en-US", "员工ID_us", "员工（选项 TaktEmployees/options，DictValue=Id）"),
+            new TranslationSeedItem("entity.employeefamily.employeeid", "en-US", "员工ID_us", "员工（选项 TaktEmployees/options；DictValue=Id）"),
             // entity.employeefamily.employeeid
-            new TranslationSeedItem("entity.employeefamily.employeeid", "ja-JP", "员工ID_jp", "员工（选项 TaktEmployees/options，DictValue=Id）"),
+            new TranslationSeedItem("entity.employeefamily.employeeid", "ja-JP", "员工ID_jp", "员工（选项 TaktEmployees/options；DictValue=Id）"),
             // entity.employeefamily.employeeid
-            new TranslationSeedItem("entity.employeefamily.employeeid", "zh-CN", "员工ID", "员工（选项 TaktEmployees/options，DictValue=Id）"),
+            new TranslationSeedItem("entity.employeefamily.employeeid", "zh-CN", "员工ID", "员工（选项 TaktEmployees/options；DictValue=Id）"),
             // entity.employeefamily.employeeid
-            new TranslationSeedItem("entity.employeefamily.employeeid", "zh-HK", "员工ID_hk", "员工（选项 TaktEmployees/options，DictValue=Id）"),
+            new TranslationSeedItem("entity.employeefamily.employeeid", "zh-HK", "员工ID_hk", "员工（选项 TaktEmployees/options；DictValue=Id）"),
+
+            // entity.employeefamily.employeecode
+            new TranslationSeedItem("entity.employeefamily.employeecode", "en-US", "员工编码_us", "员工编码（冗余，与 TaktEmployee.EmployeeCode 对齐）"),
+            // entity.employeefamily.employeecode
+            new TranslationSeedItem("entity.employeefamily.employeecode", "ja-JP", "员工编码_jp", "员工编码（冗余，与 TaktEmployee.EmployeeCode 对齐）"),
+            // entity.employeefamily.employeecode
+            new TranslationSeedItem("entity.employeefamily.employeecode", "zh-CN", "员工编码", "员工编码（冗余，与 TaktEmployee.EmployeeCode 对齐）"),
+            // entity.employeefamily.employeecode
+            new TranslationSeedItem("entity.employeefamily.employeecode", "zh-HK", "员工编码_hk", "员工编码（冗余，与 TaktEmployee.EmployeeCode 对齐）"),
+
+            // entity.employeefamily.employeename
+            new TranslationSeedItem("entity.employeefamily.employeename", "en-US", "员工姓名_us", "员工姓名（冗余，与 TaktEmployee.EmployeeName 对齐）"),
+            // entity.employeefamily.employeename
+            new TranslationSeedItem("entity.employeefamily.employeename", "ja-JP", "员工姓名_jp", "员工姓名（冗余，与 TaktEmployee.EmployeeName 对齐）"),
+            // entity.employeefamily.employeename
+            new TranslationSeedItem("entity.employeefamily.employeename", "zh-CN", "员工姓名", "员工姓名（冗余，与 TaktEmployee.EmployeeName 对齐）"),
+            // entity.employeefamily.employeename
+            new TranslationSeedItem("entity.employeefamily.employeename", "zh-HK", "员工姓名_hk", "员工姓名（冗余，与 TaktEmployee.EmployeeName 对齐）"),
 
             // entity.employeefamily.membername
             new TranslationSeedItem("entity.employeefamily.membername", "en-US", "成员姓名_us", "成员姓名"),

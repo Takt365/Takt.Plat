@@ -19,7 +19,8 @@ export default {
     selectProductRequired: 'Please select a product',
     selectPeriodRequired: 'Please select a costing period',
     summary: '{plant} / {model} / {product} — {componentCount} component rows (single-product analysis)',
-    trendSummary: 'Detail MoM {base} → {compare}: up {up} · down {down} · flat {flat}',
+    trendSummary:
+      'Detail MoM {base} → {compare}: up {up} · down {down} · flat {flat} · new {added} · removed {removed}',
     queryFailed: 'Product cost analysis query failed',
     exportSuccess: 'Product cost analysis exported',
     exportFailed: 'Failed to export product cost analysis',
@@ -29,6 +30,17 @@ export default {
     },
     trend: {
       none: '—',
+      up: 'Up',
+      down: 'Down',
+      flat: 'Flat',
+      new: 'New',
+      removed: 'Removed',
+    },
+    periodChange: {
+      present: 'Present',
+      absent: 'Absent',
+      new: 'New',
+      removed: 'Removed',
       up: 'Up',
       down: 'Down',
       flat: 'Flat',

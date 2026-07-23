@@ -26,7 +26,7 @@ namespace Takt.Domain.Entities.Logistics.Manufacturing.Mps;
 public class TaktProductionTeam : TaktCompanyEntityBase
 {
     /// <summary>
-    /// 工厂代码（选项 TaktPlants/options，DictValue=Id）
+    /// 工厂代码（选项 TaktPlants/options；DictValue=Id）
     /// </summary>
     [SugarColumn(ColumnName = "plant_code", ColumnDescription = "工厂代码", ColumnDataType = "nvarchar", Length = 4, IsNullable = false)]
     public string PlantCode { get; set; } = string.Empty;
@@ -44,7 +44,7 @@ public class TaktProductionTeam : TaktCompanyEntityBase
     public string TeamName { get; set; } = string.Empty;
 
     /// <summary>
-    /// 班组分类（字典 logistics_team_category，存 DictValue；A=组立 P=PCBA Q=质检 O=其他；PCBA 线体如 SMT/AI/手插须维护设备组）
+    /// 班组分类（字典 logistics_team_category；存 DictValue；A=组立 P=PCBA Q=质检 O=其他；PCBA 线体如 SMT/AI/手插须维护设备组）
     /// </summary>
     [SugarColumn(ColumnName = "team_category", ColumnDescription = "班组分类编码", ColumnDataType = "nvarchar", Length = 2, IsNullable = false, DefaultValue = "A")]
     public string TeamCategory { get; set; } = "A";

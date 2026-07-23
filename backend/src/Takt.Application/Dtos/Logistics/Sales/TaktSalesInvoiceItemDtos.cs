@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Application.Dtos.Logistics.Sales
 // 文件名称：TaktSalesInvoiceItemDtos.cs
-// 创建时间：2026-07-09
+// 创建时间：2026-07-23
 // 创建人：Takt365(Auto Generated)
 // 功能描述：SalesInvoiceItem 模块 DTO（由 generate-dtos-from-entity.cjs 根据 TaktSalesInvoiceItem 生成，请按需审阅）
 // 
@@ -36,18 +36,18 @@ public class TaktSalesInvoiceItemDto : TaktCompanyDtoBase
     public long SalesInvoiceItemId { get; set; }
 
     /// <summary>
-    /// 销售发票（关联 TaktSalesInvoice.Id，选项 TaktSalesInvoices/options）
+    /// 销售发票（选项 TaktSalesInvoices/options；DictValue=Id）
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
     public long SalesInvoiceId { get; set; }
 
     /// <summary>
-    /// 销售发票（关联 TaktSalesInvoice.Id，选项 TaktSalesInvoices/options）
+    /// 销售发票（选项 TaktSalesInvoices/options；DictValue=Id）
     /// </summary>
     public string? SalesInvoiceName { get; set; }
 
     /// <summary>
-    /// 会计凭证编号（冗余，与主表 AccountingDocumentCode 一致）
+    /// 会计凭证编码（冗余，与主表 AccountingDocumentCode 一致）
     /// </summary>
     public string AccountingDocumentCode { get; set; } = string.Empty;
 
@@ -62,37 +62,32 @@ public class TaktSalesInvoiceItemDto : TaktCompanyDtoBase
     public DateTime PostingDate { get; set; }
 
     /// <summary>
-    /// 货币（字典 accounting_currency_code，DictValue=CNY/USD 等）
-    /// </summary>
-    public string Currency { get; set; } = string.Empty;
-
-    /// <summary>
     /// 机种名称
     /// </summary>
     public string? ModelName { get; set; } = string.Empty;
 
     /// <summary>
-    /// 物料编码（选项 TaktMaterials/options，DictValue=MaterialCode）
+    /// 物料编码（选项 TaktMaterialPlants/options；DictValue=MaterialCode，ExtValue=PlantCode）
     /// </summary>
     public string MaterialCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 物料类型（字典 logistics_material_type，DictValue=ROH/HALB 等；默认 ROH）
+    /// 物料类型（字典 logistics_material_type；DictValue=ROH/HALB 等；默认 ROH）
     /// </summary>
     public string MaterialType { get; set; } = string.Empty;
 
     /// <summary>
-    /// 物料名称
+    /// 物料名称（回填：随物料）
     /// </summary>
     public string MaterialName { get; set; } = string.Empty;
 
     /// <summary>
-    /// 利润中心（关联 TaktProfitCenter.ProfitCenterCode，选项 TaktProfitCenters/options，DictValue=ProfitCenterCode）
+    /// 利润中心（选项 TaktProfitCenters/options；DictValue=ProfitCenterCode）
     /// </summary>
     public string? ProfitCenterCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 会计科目（关联 TaktAccountTitle.AccountTitleCode，选项 TaktAccountTitles/options）
+    /// 会计科目（选项 TaktAccountTitles/options；DictValue=Id）
     /// </summary>
     public string? AccountTitle { get; set; } = string.Empty;
 
@@ -102,7 +97,7 @@ public class TaktSalesInvoiceItemDto : TaktCompanyDtoBase
     public decimal Quantity { get; set; }
 
     /// <summary>
-    /// 单位
+    /// 单位（字典 logistics_unit_of_measure_code；DictValue=PC/EA 等；默认 PC）
     /// </summary>
     public string Unit { get; set; } = string.Empty;
 
@@ -117,7 +112,22 @@ public class TaktSalesInvoiceItemDto : TaktCompanyDtoBase
     public decimal TransactionCurrencyAmount { get; set; }
 
     /// <summary>
-    /// 凭证类型（字典 logistics_accounting_document_type，DictValue=AA/AB/…）
+    /// 含税价格（打印用；如 100.00）
+    /// </summary>
+    public decimal TaxIncludedPrice { get; set; }
+
+    /// <summary>
+    /// 未税价格（打印用；如 88.50）
+    /// </summary>
+    public decimal UntaxedPrice { get; set; }
+
+    /// <summary>
+    /// 税费（打印用；行税额，如 11.50）
+    /// </summary>
+    public decimal TaxAmount { get; set; }
+
+    /// <summary>
+    /// 凭证类型（字典 logistics_accounting_document_type；DictValue=AA/AB/…）
     /// </summary>
     public string DocumentType { get; set; } = string.Empty;
 
@@ -132,7 +142,7 @@ public class TaktSalesInvoiceItemDto : TaktCompanyDtoBase
     public int? ReferenceDocumentItem { get; set; }
 
     /// <summary>
-    /// 是否作废（字典 sys_yes_no_type，0=否 1=是；编辑移除子行时标记作废）
+    /// 是否作废（字典 sys_yes_no_type；0=否 1=是；编辑移除子行时标记作废）
     /// </summary>
     public int IsObsolete { get; set; } = 0;
 
@@ -165,13 +175,13 @@ public class TaktSalesInvoiceItemQueryDto : TaktPagedQuery
     public string? CompanyCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 销售发票（关联 TaktSalesInvoice.Id，选项 TaktSalesInvoices/options）
+    /// 销售发票（选项 TaktSalesInvoices/options；DictValue=Id）
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
     public long? SalesInvoiceId { get; set; }
 
     /// <summary>
-    /// 会计凭证编号（冗余，与主表 AccountingDocumentCode 一致）
+    /// 会计凭证编码（冗余，与主表 AccountingDocumentCode 一致）
     /// </summary>
     public string? AccountingDocumentCode { get; set; } = string.Empty;
 
@@ -191,37 +201,32 @@ public class TaktSalesInvoiceItemQueryDto : TaktPagedQuery
     public DateTime? PostingDateEnd { get; set; }
 
     /// <summary>
-    /// 货币（字典 accounting_currency_code，DictValue=CNY/USD 等）
-    /// </summary>
-    public string? Currency { get; set; } = string.Empty;
-
-    /// <summary>
     /// 机种名称
     /// </summary>
     public string? ModelName { get; set; } = string.Empty;
 
     /// <summary>
-    /// 物料编码（选项 TaktMaterials/options，DictValue=MaterialCode）
+    /// 物料编码（选项 TaktMaterialPlants/options；DictValue=MaterialCode，ExtValue=PlantCode）
     /// </summary>
     public string? MaterialCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 物料类型（字典 logistics_material_type，DictValue=ROH/HALB 等；默认 ROH）
+    /// 物料类型（字典 logistics_material_type；DictValue=ROH/HALB 等；默认 ROH）
     /// </summary>
     public string? MaterialType { get; set; } = string.Empty;
 
     /// <summary>
-    /// 物料名称
+    /// 物料名称（回填：随物料）
     /// </summary>
     public string? MaterialName { get; set; } = string.Empty;
 
     /// <summary>
-    /// 利润中心（关联 TaktProfitCenter.ProfitCenterCode，选项 TaktProfitCenters/options，DictValue=ProfitCenterCode）
+    /// 利润中心（选项 TaktProfitCenters/options；DictValue=ProfitCenterCode）
     /// </summary>
     public string? ProfitCenterCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 会计科目（关联 TaktAccountTitle.AccountTitleCode，选项 TaktAccountTitles/options）
+    /// 会计科目（选项 TaktAccountTitles/options；DictValue=Id）
     /// </summary>
     public string? AccountTitle { get; set; } = string.Empty;
 
@@ -231,7 +236,7 @@ public class TaktSalesInvoiceItemQueryDto : TaktPagedQuery
     public decimal? Quantity { get; set; }
 
     /// <summary>
-    /// 单位
+    /// 单位（字典 logistics_unit_of_measure_code；DictValue=PC/EA 等；默认 PC）
     /// </summary>
     public string? Unit { get; set; } = string.Empty;
 
@@ -246,7 +251,22 @@ public class TaktSalesInvoiceItemQueryDto : TaktPagedQuery
     public decimal? TransactionCurrencyAmount { get; set; }
 
     /// <summary>
-    /// 凭证类型（字典 logistics_accounting_document_type，DictValue=AA/AB/…）
+    /// 含税价格（打印用；如 100.00）
+    /// </summary>
+    public decimal? TaxIncludedPrice { get; set; }
+
+    /// <summary>
+    /// 未税价格（打印用；如 88.50）
+    /// </summary>
+    public decimal? UntaxedPrice { get; set; }
+
+    /// <summary>
+    /// 税费（打印用；行税额，如 11.50）
+    /// </summary>
+    public decimal? TaxAmount { get; set; }
+
+    /// <summary>
+    /// 凭证类型（字典 logistics_accounting_document_type；DictValue=AA/AB/…）
     /// </summary>
     public string? DocumentType { get; set; } = string.Empty;
 
@@ -261,7 +281,7 @@ public class TaktSalesInvoiceItemQueryDto : TaktPagedQuery
     public int? ReferenceDocumentItem { get; set; }
 
     /// <summary>
-    /// 是否作废（字典 sys_yes_no_type，0=否 1=是；编辑移除子行时标记作废）
+    /// 是否作废（字典 sys_yes_no_type；0=否 1=是；编辑移除子行时标记作废）
     /// </summary>
     public int? IsObsolete { get; set; }
 
@@ -311,15 +331,15 @@ public class TaktSalesInvoiceItemCreateDto
     public string CompanyDefaultCulture { get; set; } = string.Empty;
 
     /// <summary>
-    /// 销售发票（关联 TaktSalesInvoice.Id，选项 TaktSalesInvoices/options）
+    /// 销售发票（选项 TaktSalesInvoices/options；DictValue=Id）
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
     public long SalesInvoiceId { get; set; }
 
     /// <summary>
-    /// 会计凭证编号（冗余，与主表 AccountingDocumentCode 一致）
+    /// 会计凭证编码（冗余，与主表 AccountingDocumentCode 一致）
     /// </summary>
-    [Required(ErrorMessage = "会计凭证编号（冗余，与主表 AccountingDocumentCode 一致）不能为空")]
+    [Required(ErrorMessage = "会计凭证编码（冗余，与主表 AccountingDocumentCode 一致）不能为空")]
     public string AccountingDocumentCode { get; set; } = string.Empty;
 
     /// <summary>
@@ -333,41 +353,35 @@ public class TaktSalesInvoiceItemCreateDto
     public DateTime PostingDate { get; set; }
 
     /// <summary>
-    /// 货币（字典 accounting_currency_code，DictValue=CNY/USD 等）
-    /// </summary>
-    [Required(ErrorMessage = "货币（字典 accounting_currency_code，DictValue=CNY/USD 等）不能为空")]
-    public string Currency { get; set; } = string.Empty;
-
-    /// <summary>
     /// 机种名称
     /// </summary>
     public string? ModelName { get; set; } = string.Empty;
 
     /// <summary>
-    /// 物料编码（选项 TaktMaterials/options，DictValue=MaterialCode）
+    /// 物料编码（选项 TaktMaterialPlants/options；DictValue=MaterialCode，ExtValue=PlantCode）
     /// </summary>
-    [Required(ErrorMessage = "物料编码（选项 TaktMaterials/options，DictValue=MaterialCode）不能为空")]
+    [Required(ErrorMessage = "物料编码（选项 TaktMaterialPlants/options；DictValue=MaterialCode，ExtValue=PlantCode）不能为空")]
     public string MaterialCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 物料类型（字典 logistics_material_type，DictValue=ROH/HALB 等；默认 ROH）
+    /// 物料类型（字典 logistics_material_type；DictValue=ROH/HALB 等；默认 ROH）
     /// </summary>
-    [Required(ErrorMessage = "物料类型（字典 logistics_material_type，DictValue=ROH/HALB 等；默认 ROH）不能为空")]
+    [Required(ErrorMessage = "物料类型（字典 logistics_material_type；DictValue=ROH/HALB 等；默认 ROH）不能为空")]
     public string MaterialType { get; set; } = string.Empty;
 
     /// <summary>
-    /// 物料名称
+    /// 物料名称（回填：随物料）
     /// </summary>
-    [Required(ErrorMessage = "物料名称不能为空")]
+    [Required(ErrorMessage = "物料名称（回填：随物料）不能为空")]
     public string MaterialName { get; set; } = string.Empty;
 
     /// <summary>
-    /// 利润中心（关联 TaktProfitCenter.ProfitCenterCode，选项 TaktProfitCenters/options，DictValue=ProfitCenterCode）
+    /// 利润中心（选项 TaktProfitCenters/options；DictValue=ProfitCenterCode）
     /// </summary>
     public string? ProfitCenterCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 会计科目（关联 TaktAccountTitle.AccountTitleCode，选项 TaktAccountTitles/options）
+    /// 会计科目（选项 TaktAccountTitles/options；DictValue=Id）
     /// </summary>
     public string? AccountTitle { get; set; } = string.Empty;
 
@@ -377,9 +391,9 @@ public class TaktSalesInvoiceItemCreateDto
     public decimal Quantity { get; set; }
 
     /// <summary>
-    /// 单位
+    /// 单位（字典 logistics_unit_of_measure_code；DictValue=PC/EA 等；默认 PC）
     /// </summary>
-    [Required(ErrorMessage = "单位不能为空")]
+    [Required(ErrorMessage = "单位（字典 logistics_unit_of_measure_code；DictValue=PC/EA 等；默认 PC）不能为空")]
     public string Unit { get; set; } = string.Empty;
 
     /// <summary>
@@ -393,9 +407,24 @@ public class TaktSalesInvoiceItemCreateDto
     public decimal TransactionCurrencyAmount { get; set; }
 
     /// <summary>
-    /// 凭证类型（字典 logistics_accounting_document_type，DictValue=AA/AB/…）
+    /// 含税价格（打印用；如 100.00）
     /// </summary>
-    [Required(ErrorMessage = "凭证类型（字典 logistics_accounting_document_type，DictValue=AA/AB/…）不能为空")]
+    public decimal TaxIncludedPrice { get; set; }
+
+    /// <summary>
+    /// 未税价格（打印用；如 88.50）
+    /// </summary>
+    public decimal UntaxedPrice { get; set; }
+
+    /// <summary>
+    /// 税费（打印用；行税额，如 11.50）
+    /// </summary>
+    public decimal TaxAmount { get; set; }
+
+    /// <summary>
+    /// 凭证类型（字典 logistics_accounting_document_type；DictValue=AA/AB/…）
+    /// </summary>
+    [Required(ErrorMessage = "凭证类型（字典 logistics_accounting_document_type；DictValue=AA/AB/…）不能为空")]
     public string DocumentType { get; set; } = string.Empty;
 
     /// <summary>
@@ -409,7 +438,7 @@ public class TaktSalesInvoiceItemCreateDto
     public int? ReferenceDocumentItem { get; set; }
 
     /// <summary>
-    /// 是否作废（字典 sys_yes_no_type，0=否 1=是；编辑移除子行时标记作废）
+    /// 是否作废（字典 sys_yes_no_type；0=否 1=是；编辑移除子行时标记作废）
     /// </summary>
     public int IsObsolete { get; set; } = 0;
 
@@ -488,13 +517,13 @@ public class TaktSalesInvoiceItemTemplateDto
     public string? CompanyCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 销售发票（关联 TaktSalesInvoice.Id，选项 TaktSalesInvoices/options）
+    /// 销售发票（选项 TaktSalesInvoices/options；DictValue=Id）
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
     public long? SalesInvoiceId { get; set; }
 
     /// <summary>
-    /// 会计凭证编号（冗余，与主表 AccountingDocumentCode 一致）
+    /// 会计凭证编码（冗余，与主表 AccountingDocumentCode 一致）
     /// </summary>
     public string? AccountingDocumentCode { get; set; } = string.Empty;
 
@@ -509,37 +538,32 @@ public class TaktSalesInvoiceItemTemplateDto
     public DateTime? PostingDate { get; set; }
 
     /// <summary>
-    /// 货币（字典 accounting_currency_code，DictValue=CNY/USD 等）
-    /// </summary>
-    public string? Currency { get; set; } = string.Empty;
-
-    /// <summary>
     /// 机种名称
     /// </summary>
     public string? ModelName { get; set; } = string.Empty;
 
     /// <summary>
-    /// 物料编码（选项 TaktMaterials/options，DictValue=MaterialCode）
+    /// 物料编码（选项 TaktMaterialPlants/options；DictValue=MaterialCode，ExtValue=PlantCode）
     /// </summary>
     public string? MaterialCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 物料类型（字典 logistics_material_type，DictValue=ROH/HALB 等；默认 ROH）
+    /// 物料类型（字典 logistics_material_type；DictValue=ROH/HALB 等；默认 ROH）
     /// </summary>
     public string? MaterialType { get; set; } = string.Empty;
 
     /// <summary>
-    /// 物料名称
+    /// 物料名称（回填：随物料）
     /// </summary>
     public string? MaterialName { get; set; } = string.Empty;
 
     /// <summary>
-    /// 利润中心（关联 TaktProfitCenter.ProfitCenterCode，选项 TaktProfitCenters/options，DictValue=ProfitCenterCode）
+    /// 利润中心（选项 TaktProfitCenters/options；DictValue=ProfitCenterCode）
     /// </summary>
     public string? ProfitCenterCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 会计科目（关联 TaktAccountTitle.AccountTitleCode，选项 TaktAccountTitles/options）
+    /// 会计科目（选项 TaktAccountTitles/options；DictValue=Id）
     /// </summary>
     public string? AccountTitle { get; set; } = string.Empty;
 
@@ -549,7 +573,7 @@ public class TaktSalesInvoiceItemTemplateDto
     public decimal? Quantity { get; set; }
 
     /// <summary>
-    /// 单位
+    /// 单位（字典 logistics_unit_of_measure_code；DictValue=PC/EA 等；默认 PC）
     /// </summary>
     public string? Unit { get; set; } = string.Empty;
 
@@ -564,7 +588,22 @@ public class TaktSalesInvoiceItemTemplateDto
     public decimal? TransactionCurrencyAmount { get; set; }
 
     /// <summary>
-    /// 凭证类型（字典 logistics_accounting_document_type，DictValue=AA/AB/…）
+    /// 含税价格（打印用；如 100.00）
+    /// </summary>
+    public decimal? TaxIncludedPrice { get; set; }
+
+    /// <summary>
+    /// 未税价格（打印用；如 88.50）
+    /// </summary>
+    public decimal? UntaxedPrice { get; set; }
+
+    /// <summary>
+    /// 税费（打印用；行税额，如 11.50）
+    /// </summary>
+    public decimal? TaxAmount { get; set; }
+
+    /// <summary>
+    /// 凭证类型（字典 logistics_accounting_document_type；DictValue=AA/AB/…）
     /// </summary>
     public string? DocumentType { get; set; } = string.Empty;
 
@@ -579,7 +618,7 @@ public class TaktSalesInvoiceItemTemplateDto
     public int? ReferenceDocumentItem { get; set; }
 
     /// <summary>
-    /// 是否作废（字典 sys_yes_no_type，0=否 1=是；编辑移除子行时标记作废）
+    /// 是否作废（字典 sys_yes_no_type；0=否 1=是；编辑移除子行时标记作废）
     /// </summary>
     public int? IsObsolete { get; set; }
 
@@ -616,13 +655,13 @@ public class TaktSalesInvoiceItemImportDto
     public string? CompanyDefaultCulture { get; set; } = string.Empty;
 
     /// <summary>
-    /// 销售发票（关联 TaktSalesInvoice.Id，选项 TaktSalesInvoices/options）
+    /// 销售发票（选项 TaktSalesInvoices/options；DictValue=Id）
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
     public long? SalesInvoiceId { get; set; }
 
     /// <summary>
-    /// 会计凭证编号（冗余，与主表 AccountingDocumentCode 一致）
+    /// 会计凭证编码（冗余，与主表 AccountingDocumentCode 一致）
     /// </summary>
     public string? AccountingDocumentCode { get; set; } = string.Empty;
 
@@ -637,37 +676,32 @@ public class TaktSalesInvoiceItemImportDto
     public DateTime? PostingDate { get; set; }
 
     /// <summary>
-    /// 货币（字典 accounting_currency_code，DictValue=CNY/USD 等）
-    /// </summary>
-    public string? Currency { get; set; } = string.Empty;
-
-    /// <summary>
     /// 机种名称
     /// </summary>
     public string? ModelName { get; set; } = string.Empty;
 
     /// <summary>
-    /// 物料编码（选项 TaktMaterials/options，DictValue=MaterialCode）
+    /// 物料编码（选项 TaktMaterialPlants/options；DictValue=MaterialCode，ExtValue=PlantCode）
     /// </summary>
     public string? MaterialCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 物料类型（字典 logistics_material_type，DictValue=ROH/HALB 等；默认 ROH）
+    /// 物料类型（字典 logistics_material_type；DictValue=ROH/HALB 等；默认 ROH）
     /// </summary>
     public string? MaterialType { get; set; } = string.Empty;
 
     /// <summary>
-    /// 物料名称
+    /// 物料名称（回填：随物料）
     /// </summary>
     public string? MaterialName { get; set; } = string.Empty;
 
     /// <summary>
-    /// 利润中心（关联 TaktProfitCenter.ProfitCenterCode，选项 TaktProfitCenters/options，DictValue=ProfitCenterCode）
+    /// 利润中心（选项 TaktProfitCenters/options；DictValue=ProfitCenterCode）
     /// </summary>
     public string? ProfitCenterCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 会计科目（关联 TaktAccountTitle.AccountTitleCode，选项 TaktAccountTitles/options）
+    /// 会计科目（选项 TaktAccountTitles/options；DictValue=Id）
     /// </summary>
     public string? AccountTitle { get; set; } = string.Empty;
 
@@ -677,7 +711,7 @@ public class TaktSalesInvoiceItemImportDto
     public decimal? Quantity { get; set; }
 
     /// <summary>
-    /// 单位
+    /// 单位（字典 logistics_unit_of_measure_code；DictValue=PC/EA 等；默认 PC）
     /// </summary>
     public string? Unit { get; set; } = string.Empty;
 
@@ -692,7 +726,22 @@ public class TaktSalesInvoiceItemImportDto
     public decimal? TransactionCurrencyAmount { get; set; }
 
     /// <summary>
-    /// 凭证类型（字典 logistics_accounting_document_type，DictValue=AA/AB/…）
+    /// 含税价格（打印用；如 100.00）
+    /// </summary>
+    public decimal? TaxIncludedPrice { get; set; }
+
+    /// <summary>
+    /// 未税价格（打印用；如 88.50）
+    /// </summary>
+    public decimal? UntaxedPrice { get; set; }
+
+    /// <summary>
+    /// 税费（打印用；行税额，如 11.50）
+    /// </summary>
+    public decimal? TaxAmount { get; set; }
+
+    /// <summary>
+    /// 凭证类型（字典 logistics_accounting_document_type；DictValue=AA/AB/…）
     /// </summary>
     public string? DocumentType { get; set; } = string.Empty;
 
@@ -707,7 +756,7 @@ public class TaktSalesInvoiceItemImportDto
     public int? ReferenceDocumentItem { get; set; }
 
     /// <summary>
-    /// 是否作废（字典 sys_yes_no_type，0=否 1=是；编辑移除子行时标记作废）
+    /// 是否作废（字典 sys_yes_no_type；0=否 1=是；编辑移除子行时标记作废）
     /// </summary>
     public int? IsObsolete { get; set; }
 
@@ -745,13 +794,13 @@ public class TaktSalesInvoiceItemExportDto
     public string CompanyCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 销售发票（关联 TaktSalesInvoice.Id，选项 TaktSalesInvoices/options）
+    /// 销售发票（选项 TaktSalesInvoices/options；DictValue=Id）
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
     public long SalesInvoiceId { get; set; }
 
     /// <summary>
-    /// 会计凭证编号（冗余，与主表 AccountingDocumentCode 一致）
+    /// 会计凭证编码（冗余，与主表 AccountingDocumentCode 一致）
     /// </summary>
     public string AccountingDocumentCode { get; set; } = string.Empty;
 
@@ -766,37 +815,32 @@ public class TaktSalesInvoiceItemExportDto
     public DateTime PostingDate { get; set; }
 
     /// <summary>
-    /// 货币（字典 accounting_currency_code，DictValue=CNY/USD 等）
-    /// </summary>
-    public string Currency { get; set; } = string.Empty;
-
-    /// <summary>
     /// 机种名称
     /// </summary>
     public string? ModelName { get; set; } = string.Empty;
 
     /// <summary>
-    /// 物料编码（选项 TaktMaterials/options，DictValue=MaterialCode）
+    /// 物料编码（选项 TaktMaterialPlants/options；DictValue=MaterialCode，ExtValue=PlantCode）
     /// </summary>
     public string MaterialCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 物料类型（字典 logistics_material_type，DictValue=ROH/HALB 等；默认 ROH）
+    /// 物料类型（字典 logistics_material_type；DictValue=ROH/HALB 等；默认 ROH）
     /// </summary>
     public string MaterialType { get; set; } = string.Empty;
 
     /// <summary>
-    /// 物料名称
+    /// 物料名称（回填：随物料）
     /// </summary>
     public string MaterialName { get; set; } = string.Empty;
 
     /// <summary>
-    /// 利润中心（关联 TaktProfitCenter.ProfitCenterCode，选项 TaktProfitCenters/options，DictValue=ProfitCenterCode）
+    /// 利润中心（选项 TaktProfitCenters/options；DictValue=ProfitCenterCode）
     /// </summary>
     public string? ProfitCenterCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 会计科目（关联 TaktAccountTitle.AccountTitleCode，选项 TaktAccountTitles/options）
+    /// 会计科目（选项 TaktAccountTitles/options；DictValue=Id）
     /// </summary>
     public string? AccountTitle { get; set; } = string.Empty;
 
@@ -806,7 +850,7 @@ public class TaktSalesInvoiceItemExportDto
     public decimal Quantity { get; set; }
 
     /// <summary>
-    /// 单位
+    /// 单位（字典 logistics_unit_of_measure_code；DictValue=PC/EA 等；默认 PC）
     /// </summary>
     public string Unit { get; set; } = string.Empty;
 
@@ -821,7 +865,22 @@ public class TaktSalesInvoiceItemExportDto
     public decimal TransactionCurrencyAmount { get; set; }
 
     /// <summary>
-    /// 凭证类型（字典 logistics_accounting_document_type，DictValue=AA/AB/…）
+    /// 含税价格（打印用；如 100.00）
+    /// </summary>
+    public decimal TaxIncludedPrice { get; set; }
+
+    /// <summary>
+    /// 未税价格（打印用；如 88.50）
+    /// </summary>
+    public decimal UntaxedPrice { get; set; }
+
+    /// <summary>
+    /// 税费（打印用；行税额，如 11.50）
+    /// </summary>
+    public decimal TaxAmount { get; set; }
+
+    /// <summary>
+    /// 凭证类型（字典 logistics_accounting_document_type；DictValue=AA/AB/…）
     /// </summary>
     public string DocumentType { get; set; } = string.Empty;
 
@@ -836,7 +895,7 @@ public class TaktSalesInvoiceItemExportDto
     public int? ReferenceDocumentItem { get; set; }
 
     /// <summary>
-    /// 是否作废（字典 sys_yes_no_type，0=否 1=是；编辑移除子行时标记作废）
+    /// 是否作废（字典 sys_yes_no_type；0=否 1=是；编辑移除子行时标记作废）
     /// </summary>
     public int IsObsolete { get; set; } = 0;
 

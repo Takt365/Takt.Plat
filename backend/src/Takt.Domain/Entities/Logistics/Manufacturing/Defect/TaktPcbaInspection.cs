@@ -35,7 +35,7 @@ public class TaktPcbaInspection : TaktCompanyEntityBase
     public string PlantCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 生产类别（字典 logistics_prod_category，存 DictValue：EPP/FPP/RWP/MDP/CPP）
+    /// 生产类别（字典 logistics_prod_category；存 DictValue：EPP/FPP/RWP/MDP/CPP）
     /// </summary>
     [SugarColumn(ColumnName = "prod_category", ColumnDescription = "生产类别", Length = 20, ColumnDataType = "nvarchar", IsNullable = false)]
     public string ProdCategory { get; set; } = string.Empty;
@@ -47,7 +47,7 @@ public class TaktPcbaInspection : TaktCompanyEntityBase
     public string? ProdOrderType { get; set; }
 
     /// <summary>
-    /// 工单号（选项 TaktProductionOrders/options，DictValue=ProdOrderCode，ExtValue=PlantCode）
+    /// 工单号（选项 TaktProductionOrders/options；DictValue=ProdOrderCode，ExtValue=PlantCode）
     /// </summary>
     [SugarColumn(ColumnName = "prod_order_code", ColumnDescription = "工单号", Length = 20, ColumnDataType = "nvarchar", IsNullable = false)]
     public string ProdOrderCode { get; set; } = string.Empty;

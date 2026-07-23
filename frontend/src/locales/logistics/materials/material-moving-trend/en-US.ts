@@ -32,6 +32,7 @@ export default {
     filter: {
       all: 'All',
       changed: 'Changed only',
+      leading: 'Top 50 up & down',
     },
     trend: {
       none: '—',

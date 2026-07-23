@@ -22,7 +22,7 @@ namespace Takt.Application.Dtos.Foundation;
 // ========================================
 
 /// <summary>
-/// 编号规则实体 定义系统中各类业务单据的编号生成规则，如：订单号、合同号、发票号等 支持灵活的前缀、日期格式、流水号组合 编码顺序：单据类型-公司-部门-前缀-日期-流水号 示例：order-1000-DEPT01-SO-20250120-000001
+/// 编码规则实体 定义系统中各类业务单据的编码生成规则，如：订单号、合同号、发票号等 支持灵活的前缀、日期格式、流水号组合 编码顺序：单据类型-公司-部门-前缀-日期-流水号 示例：order-1000-DEPT01-SO-20250120-000001
 /// 对应前端 TaktNumberingDto
 /// 继承 TaktCompanyDtoBase
 /// </summary>
@@ -91,7 +91,7 @@ public class TaktNumberingDto : TaktCompanyDtoBase
     public int CurrentSequence { get; set; } = 0;
 
     /// <summary>
-    /// 起始编码（新增时必填；完整业务编号样例，末段为当前流水号） 如：SO-20250120-000001；生成编号后会更新为最近一次产出编码
+    /// 起始编码（新增时必填；完整业务编码样例，末段为当前流水号） 如：SO-20250120-000001；生成编码后会更新为最近一次产出编码
     /// </summary>
     public string ExampleCode { get; set; } = string.Empty;
 
@@ -193,7 +193,7 @@ public class TaktNumberingQueryDto : TaktPagedQuery
     public int? CurrentSequence { get; set; }
 
     /// <summary>
-    /// 起始编码（新增时必填；完整业务编号样例，末段为当前流水号） 如：SO-20250120-000001；生成编号后会更新为最近一次产出编码
+    /// 起始编码（新增时必填；完整业务编码样例，末段为当前流水号） 如：SO-20250120-000001；生成编码后会更新为最近一次产出编码
     /// </summary>
     public string? ExampleCode { get; set; } = string.Empty;
 
@@ -323,9 +323,9 @@ public class TaktNumberingCreateDto
     public int CurrentSequence { get; set; } = 0;
 
     /// <summary>
-    /// 起始编码（新增时必填；完整业务编号样例，末段为当前流水号） 如：SO-20250120-000001；生成编号后会更新为最近一次产出编码
+    /// 起始编码（新增时必填；完整业务编码样例，末段为当前流水号） 如：SO-20250120-000001；生成编码后会更新为最近一次产出编码
     /// </summary>
-    [Required(ErrorMessage = "起始编码（新增时必填；完整业务编号样例，末段为当前流水号） 如：SO-20250120-000001；生成编号后会更新为最近一次产出编码不能为空")]
+    [Required(ErrorMessage = "起始编码（新增时必填；完整业务编码样例，末段为当前流水号） 如：SO-20250120-000001；生成编码后会更新为最近一次产出编码不能为空")]
     public string ExampleCode { get; set; } = string.Empty;
 
     /// <summary>
@@ -479,7 +479,7 @@ public class TaktNumberingTemplateDto
     public int? CurrentSequence { get; set; }
 
     /// <summary>
-    /// 起始编码（新增时必填；完整业务编号样例，末段为当前流水号） 如：SO-20250120-000001；生成编号后会更新为最近一次产出编码
+    /// 起始编码（新增时必填；完整业务编码样例，末段为当前流水号） 如：SO-20250120-000001；生成编码后会更新为最近一次产出编码
     /// </summary>
     public string? ExampleCode { get; set; } = string.Empty;
 
@@ -591,7 +591,7 @@ public class TaktNumberingImportDto
     public int? CurrentSequence { get; set; }
 
     /// <summary>
-    /// 起始编码（新增时必填；完整业务编号样例，末段为当前流水号） 如：SO-20250120-000001；生成编号后会更新为最近一次产出编码
+    /// 起始编码（新增时必填；完整业务编码样例，末段为当前流水号） 如：SO-20250120-000001；生成编码后会更新为最近一次产出编码
     /// </summary>
     public string? ExampleCode { get; set; } = string.Empty;
 
@@ -704,7 +704,7 @@ public class TaktNumberingExportDto
     public int CurrentSequence { get; set; } = 0;
 
     /// <summary>
-    /// 起始编码（新增时必填；完整业务编号样例，末段为当前流水号） 如：SO-20250120-000001；生成编号后会更新为最近一次产出编码
+    /// 起始编码（新增时必填；完整业务编码样例，末段为当前流水号） 如：SO-20250120-000001；生成编码后会更新为最近一次产出编码
     /// </summary>
     public string ExampleCode { get; set; } = string.Empty;
 

@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Infrastructure.Data.Seeds.I18nSeedData.Accounting.Financial
 // 文件名称：TaktExpenseDetailI18nSeedData.cs
-// 创建时间：2026-07-20
+// 创建时间：2026-07-23
 // 创建人：Takt365(Auto Generated)
 // 功能描述：TaktExpenseDetail 实体字段国际化种子（无对应 frontend locales；TranslationText 取自 ColumnDescription，ContextNote 取自属性 XML summary）
 // 
@@ -100,13 +100,13 @@ public class TaktExpenseDetailI18nSeedData : ITaktSeedDataCoordinator
             new TranslationSeedItem("entity.expensedetail.expenseid", "zh-HK", "费用单ID_hk", "费用单 ID（主子表关系）"),
 
             // entity.expensedetail.expensecode
-            new TranslationSeedItem("entity.expensedetail.expensecode", "en-US", "费用单编号_us", "费用单编号（冗余，便于查询）"),
+            new TranslationSeedItem("entity.expensedetail.expensecode", "en-US", "费用单编码_us", "费用单编码（冗余，便于查询）"),
             // entity.expensedetail.expensecode
-            new TranslationSeedItem("entity.expensedetail.expensecode", "ja-JP", "费用单编号_jp", "费用单编号（冗余，便于查询）"),
+            new TranslationSeedItem("entity.expensedetail.expensecode", "ja-JP", "费用单编码_jp", "费用单编码（冗余，便于查询）"),
             // entity.expensedetail.expensecode
-            new TranslationSeedItem("entity.expensedetail.expensecode", "zh-CN", "费用单编号", "费用单编号（冗余，便于查询）"),
+            new TranslationSeedItem("entity.expensedetail.expensecode", "zh-CN", "费用单编码", "费用单编码（冗余，便于查询）"),
             // entity.expensedetail.expensecode
-            new TranslationSeedItem("entity.expensedetail.expensecode", "zh-HK", "费用单编号_hk", "费用单编号（冗余，便于查询）"),
+            new TranslationSeedItem("entity.expensedetail.expensecode", "zh-HK", "费用单编码_hk", "费用单编码（冗余，便于查询）"),
 
             // entity.expensedetail.linenumber
             new TranslationSeedItem("entity.expensedetail.linenumber", "en-US", "行号_us", "行号（项号/序号，固定步长=10）"),
@@ -163,13 +163,13 @@ public class TaktExpenseDetailI18nSeedData : ITaktSeedDataCoordinator
             new TranslationSeedItem("entity.expensedetail.itemamount", "zh-HK", "金额_hk", "金额"),
 
             // entity.expensedetail.accounttitle
-            new TranslationSeedItem("entity.expensedetail.accounttitle", "en-US", "会计科目_us", "会计科目（选项 TaktAccountTitles/options，DictValue=Id）"),
+            new TranslationSeedItem("entity.expensedetail.accounttitle", "en-US", "会计科目_us", "会计科目（选项 TaktAccountTitles/options；DictValue=Id）"),
             // entity.expensedetail.accounttitle
-            new TranslationSeedItem("entity.expensedetail.accounttitle", "ja-JP", "会计科目_jp", "会计科目（选项 TaktAccountTitles/options，DictValue=Id）"),
+            new TranslationSeedItem("entity.expensedetail.accounttitle", "ja-JP", "会计科目_jp", "会计科目（选项 TaktAccountTitles/options；DictValue=Id）"),
             // entity.expensedetail.accounttitle
-            new TranslationSeedItem("entity.expensedetail.accounttitle", "zh-CN", "会计科目", "会计科目（选项 TaktAccountTitles/options，DictValue=Id）"),
+            new TranslationSeedItem("entity.expensedetail.accounttitle", "zh-CN", "会计科目", "会计科目（选项 TaktAccountTitles/options；DictValue=Id）"),
             // entity.expensedetail.accounttitle
-            new TranslationSeedItem("entity.expensedetail.accounttitle", "zh-HK", "会计科目_hk", "会计科目（选项 TaktAccountTitles/options，DictValue=Id）"),
+            new TranslationSeedItem("entity.expensedetail.accounttitle", "zh-HK", "会计科目_hk", "会计科目（选项 TaktAccountTitles/options；DictValue=Id）"),
 
             // entity.expensedetail.invoiceno
             new TranslationSeedItem("entity.expensedetail.invoiceno", "en-US", "发票号码_us", "发票号码"),
@@ -190,13 +190,13 @@ public class TaktExpenseDetailI18nSeedData : ITaktSeedDataCoordinator
             new TranslationSeedItem("entity.expensedetail.date", "zh-HK", "费用发生日期_hk", "费用发生日期"),
 
             // entity.expensedetail.isobsolete
-            new TranslationSeedItem("entity.expensedetail.isobsolete", "en-US", "是否作废_us", "是否作废（字典 sys_yes_no_type，0=否 1=是；编辑移除子行时标记作废）"),
+            new TranslationSeedItem("entity.expensedetail.isobsolete", "en-US", "是否作废_us", "是否作废（字典 sys_yes_no_type；0=否 1=是；编辑移除子行时标记作废）"),
             // entity.expensedetail.isobsolete
-            new TranslationSeedItem("entity.expensedetail.isobsolete", "ja-JP", "是否作废_jp", "是否作废（字典 sys_yes_no_type，0=否 1=是；编辑移除子行时标记作废）"),
+            new TranslationSeedItem("entity.expensedetail.isobsolete", "ja-JP", "是否作废_jp", "是否作废（字典 sys_yes_no_type；0=否 1=是；编辑移除子行时标记作废）"),
             // entity.expensedetail.isobsolete
-            new TranslationSeedItem("entity.expensedetail.isobsolete", "zh-CN", "是否作废", "是否作废（字典 sys_yes_no_type，0=否 1=是；编辑移除子行时标记作废）"),
+            new TranslationSeedItem("entity.expensedetail.isobsolete", "zh-CN", "是否作废", "是否作废（字典 sys_yes_no_type；0=否 1=是；编辑移除子行时标记作废）"),
             // entity.expensedetail.isobsolete
-            new TranslationSeedItem("entity.expensedetail.isobsolete", "zh-HK", "是否作废_hk", "是否作废（字典 sys_yes_no_type，0=否 1=是；编辑移除子行时标记作废）"),
+            new TranslationSeedItem("entity.expensedetail.isobsolete", "zh-HK", "是否作废_hk", "是否作废（字典 sys_yes_no_type；0=否 1=是；编辑移除子行时标记作废）"),
         };
     }
 

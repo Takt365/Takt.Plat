@@ -27,7 +27,7 @@ namespace Takt.Domain.Entities.Logistics.Materials;
 public class TaktMaterialDocumentItem : TaktCompanyEntityBase
 {
     /// <summary>
-    /// 物料凭证 ID（选项 TaktMaterialDocuments/options，DictValue=Id）
+    /// 物料凭证 ID（选项 TaktMaterialDocuments/options；DictValue=Id）
     /// </summary>
     [SugarColumn(ColumnName = "material_document_id", ColumnDescription = "物料凭证ID", ColumnDataType = "bigint", IsNullable = false)]
     [JsonConverter(typeof(ValueToStringConverter))]
@@ -43,12 +43,12 @@ public class TaktMaterialDocumentItem : TaktCompanyEntityBase
     [SugarColumn(ColumnName = "line_number", ColumnDescription = "行号", ColumnDataType = "int", IsNullable = false, DefaultValue = "0")]
     public int LineNumber { get; set; } = 0;
     /// <summary>
-    /// 库存地点（选项 TaktWarehouses/options，DictValue=WarehouseCode）
+    /// 库存地点（选项 TaktWarehouses/options；DictValue=WarehouseCode）
     /// </summary>
     [SugarColumn(ColumnName = "warehouse_code", ColumnDescription = "库存地点", ColumnDataType = "nvarchar", Length = 4, IsNullable = false)]
     public string WarehouseCode { get; set; } = string.Empty;
     /// <summary>
-    /// 移动类型（字典 logistics_movement_type，如 101=收货）
+    /// 移动类型（字典 logistics_movement_type；如 101=收货）
     /// </summary>
     [SugarColumn(ColumnName = "movement_type", ColumnDescription = "移动类型", ColumnDataType = "nvarchar", Length = 4, IsNullable = false, DefaultValue = "101")]
     public string MovementType { get; set; } = "101";
@@ -63,7 +63,7 @@ public class TaktMaterialDocumentItem : TaktCompanyEntityBase
     [SugarColumn(ColumnName = "quantity", ColumnDescription = "数量", ColumnDataType = "decimal", Length = 18, DecimalDigits = 4, IsNullable = false, DefaultValue = "0")]
     public decimal Quantity { get; set; } = 0;
     /// <summary>
-    /// 特殊库存（字典 logistics_special_stock_type，空=非特殊库存）
+    /// 特殊库存（字典 logistics_special_stock_type；空=非特殊库存）
     /// </summary>
     [SugarColumn(ColumnName = "special_stock", ColumnDescription = "特殊库存", ColumnDataType = "nvarchar", Length = 1, IsNullable = true)]
     public string? SpecialStock { get; set; }
@@ -78,9 +78,9 @@ public class TaktMaterialDocumentItem : TaktCompanyEntityBase
     [SugarColumn(ColumnName = "production_order_code", ColumnDescription = "生产订单", ColumnDataType = "nvarchar", Length = 12, IsNullable = true)]
     public string? ProductionOrderCode { get; set; }
     /// <summary>
-    /// 项目编号（WBS 元素）
+    /// 项目编码（WBS 元素）
     /// </summary>
-    [SugarColumn(ColumnName = "project_code", ColumnDescription = "项目编号", ColumnDataType = "nvarchar", Length = 24, IsNullable = true)]
+    [SugarColumn(ColumnName = "project_code", ColumnDescription = "项目编码", ColumnDataType = "nvarchar", Length = 24, IsNullable = true)]
     public string? ProjectCode { get; set; }
     /// <summary>
     /// 本位币金额
@@ -93,18 +93,18 @@ public class TaktMaterialDocumentItem : TaktCompanyEntityBase
     [SugarColumn(ColumnName = "document_date", ColumnDescription = "凭证日期", ColumnDataType = "datetime", IsNullable = false)]
     public DateTime DocumentDate { get; set; }
     /// <summary>
-    /// 收货/发货单编号
+    /// 收货/发货单编码
     /// </summary>
-    [SugarColumn(ColumnName = "reference_document_code", ColumnDescription = "收货/发货单编号", ColumnDataType = "nvarchar", Length = 16, IsNullable = true)]
+    [SugarColumn(ColumnName = "reference_document_code", ColumnDescription = "收货/发货单编码", ColumnDataType = "nvarchar", Length = 16, IsNullable = true)]
     public string? ReferenceDocumentCode { get; set; }
     /// <summary>
-    /// 客户（选项 TaktCustomers/options，DictValue=Id）
+    /// 客户（选项 TaktCustomers/options；DictValue=Id）
     /// </summary>
     [SugarColumn(ColumnName = "customer_code", ColumnDescription = "客户", ColumnDataType = "nvarchar", Length = 20, IsNullable = true)]
     public string? CustomerCode { get; set; }
 
     /// <summary>
-    /// 是否作废（字典 sys_yes_no_type，0=否 1=是；编辑移除子行时标记作废）
+    /// 是否作废（字典 sys_yes_no_type；0=否 1=是；编辑移除子行时标记作废）
     /// </summary>
     [SugarColumn(ColumnName = "is_obsolete", ColumnDescription = "是否作废", ColumnDataType = "int", IsNullable = false, DefaultValue = "0")]
     public int IsObsolete { get; set; } = 0;

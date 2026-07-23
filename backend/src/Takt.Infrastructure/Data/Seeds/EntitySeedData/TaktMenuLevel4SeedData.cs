@@ -1,4 +1,4 @@
-﻿// ========================================
+// ========================================
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Infrastructure.Data.Seeds
 // 文件名称：TaktMenuLevel4SeedData.cs
@@ -66,8 +66,7 @@ public class TaktMenuLevel4SeedData
         var manufacturingEngineeringChangeMenu = await menuRepository.FirstAsync(m => m.MenuCode == "LOGISTICS_MANUFACTURING_ENGINEERING_CHANGE");
         var manufacturingOutputMenu = await menuRepository.FirstAsync(m => m.MenuCode == "LOGISTICS_MANUFACTURING_OUTPUT");
         var manufacturingDefectMenu = await menuRepository.FirstAsync(m => m.MenuCode == "LOGISTICS_MANUFACTURING_DEFECT");
-        var manufacturingSopMenu = await menuRepository.FirstAsync(m =>
-            m.MenuCode == "LOGISTICS_MANUFACTURING_SOP" || m.MenuCode == "LOGISTICS_MANUFACTURING_ESOP");
+        var manufacturingSopMenu = await menuRepository.FirstAsync(m => m.MenuCode == "LOGISTICS_MANUFACTURING_SOP");
         var qualityCostMenu = await menuRepository.FirstAsync(m => m.MenuCode == "LOGISTICS_QUALITY_COST");
         var qualityAssuranceMenu = await menuRepository.FirstAsync(m => m.MenuCode == "LOGISTICS_QUALITY_OPERATION");
         var qualityComplaintMenu = await menuRepository.FirstAsync(m => m.MenuCode == "LOGISTICS_QUALITY_COMPLAINT");
@@ -177,10 +176,10 @@ public class TaktMenuLevel4SeedData
             insertCount += insertBOM11;
             updateCount += updateBOM11;
 
-            // 产品成本分析：单个产品下 TaktBomMaterialCostItem 明细组件期间转置涨跌
+            // 产品成本推移：单个产品下 TaktBomMaterialCostItem 明细组件期间转置涨跌
             var (insertBOM12, updateBOM12) = await CreateOrUpdateMenuAsync(menuRepository, sqlSugarContext, tenantCode, "LOGISTICS_MANUFACTURING_BOM_MATERIAL_COST_TREND", menu =>
             {
-                menu.MenuName = "产品成本分析";
+                menu.MenuName = "产品成本推移";
                 menu.MenuCode = "LOGISTICS_MANUFACTURING_BOM_MATERIAL_COST_TREND";
                 menu.I18nKey = "menu.logistics.manufacturing.bom.material.cost.trend";
                 menu.Icon = "RiFundsBoxLine";
@@ -199,17 +198,17 @@ public class TaktMenuLevel4SeedData
             updateCount += updateBOM12;
 
             // 机种成本推移：按组件编码合并后核算月单价转置
-            var (insertBOM13, updateBOM13) = await CreateOrUpdateMenuAsync(menuRepository, sqlSugarContext, tenantCode, "LOGISTICS_MANUFACTURING_BOM_MODEL_MOVING_PRICE", menu =>
+            var (insertBOM13, updateBOM13) = await CreateOrUpdateMenuAsync(menuRepository, sqlSugarContext, tenantCode, "LOGISTICS_MANUFACTURING_BOM_MODEL_COST_TREND", menu =>
             {
                 menu.MenuName = "机种成本推移";
-                menu.MenuCode = "LOGISTICS_MANUFACTURING_BOM_MODEL_MOVING_PRICE";
-                menu.I18nKey = "menu.logistics.manufacturing.bom.model.moving.price";
+                menu.MenuCode = "LOGISTICS_MANUFACTURING_BOM_MODEL_COST_TREND";
+                menu.I18nKey = "menu.logistics.manufacturing.bom.model.cost.trend";
                 menu.Icon = "RiLineChartLine";
                 menu.ParentId = manufacturingBomMenu.Id;
                 menu.MenuType = 1;
-                menu.Permission = "logistics:manufacturing:bom:model:moving:price:list";
-                menu.RoutePath = "/logistics/manufacturing/bom/model-moving-price";
-                menu.ComponentPath = "logistics/manufacturing/bom/model-moving-price/index";
+                menu.Permission = "logistics:manufacturing:bom:model:cost:trend:list";
+                menu.RoutePath = "/logistics/manufacturing/bom/model-cost-trend";
+                menu.ComponentPath = "logistics/manufacturing/bom/model-cost-trend/index";
                 menu.SortOrder = 7;
                 menu.MenuStatus = 1;
                 menu.IsVisible = 1;

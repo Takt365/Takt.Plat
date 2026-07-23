@@ -1,0 +1,14 @@
+    /// <param name="externalPurchaseOnly">为 true 时仅加载 PurchaseType=F（外部采购），用于汇总与价格对比</param>
+    /// <returns>成本行列表</returns>
+    private async Task<List<TaktBomMaterialCost>> LoadAnalysisRowsAsync(
+        TaktBomMaterialCostTransposedQueryDto queryDto,
+        bool externalPurchaseOnly = false)
+    {
+        var status = queryDto.BomMaterialCostStatus ?? 1;
+        var exp = Expressionable.Create<TaktBomMaterialCost>();
+        exp = exp.And(x => x.TenantCode == CurrentTenantCode && x.CompanyCode == CurrentCompanyCode);
+        exp = exp.And(x => x.BomMaterialCostStatus == status);
+        if (externalPurchaseOnly)
+        {
+            exp = exp.And(x => x.PurchaseType != null && x.PurchaseType == "F");
+        }

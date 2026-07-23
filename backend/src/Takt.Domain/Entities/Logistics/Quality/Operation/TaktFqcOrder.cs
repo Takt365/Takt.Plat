@@ -29,7 +29,7 @@ public class TaktFqcOrder : TaktCompanyEntityBase
     [SugarColumn(ColumnName = "plant_code", ColumnDescription = "工厂代码", ColumnDataType = "nvarchar", Length = 4, IsNullable = false)]
     public string PlantCode { get; set; } = string.Empty;
     /// <summary>
-    /// 来源单号（选项 TaktSalesOrders/options，DictValue=SalesOrderCode）
+    /// 来源单号（选项 TaktSalesOrders/options；DictValue=SalesOrderCode）
     /// </summary>
     [SugarColumn(ColumnName = "source_code", ColumnDescription = "来源单号", ColumnDataType = "nvarchar", Length = 50, IsNullable = false)]
     public string SourceCode { get; set; } = string.Empty;
@@ -44,7 +44,7 @@ public class TaktFqcOrder : TaktCompanyEntityBase
     [SugarColumn(ColumnName = "fqc_order_code", ColumnDescription = "FQC检验单编码", ColumnDataType = "nvarchar", Length = 50, IsNullable = false)]
     public string FqcOrderCode { get; set; } = string.Empty;
     /// <summary>
-    /// 客户编码（选项 TaktCustomers/options，DictValue=CustomerCode）
+    /// 客户编码（选项 TaktCustomers/options；DictValue=CustomerCode）
     /// </summary>
     [SugarColumn(ColumnName = "customer_code", ColumnDescription = "客户编码", ColumnDataType = "nvarchar", Length = 50, IsNullable = true)]
     public string? CustomerCode { get; set; }
@@ -74,7 +74,7 @@ public class TaktFqcOrder : TaktCompanyEntityBase
     [SugarColumn(ColumnName = "total_inspection_return_quantity", ColumnDescription = "总验退数量", ColumnDataType = "decimal", Length = 16, DecimalDigits = 6, IsNullable = false, DefaultValue = "0")]
     public decimal TotalInspectionReturnQuantity { get; set; } = 0;
     /// <summary>
-    /// 判定人（选项 TaktEmployees/options，DictValue=EmployeeCode）
+    /// 判定人（选项 TaktEmployees/options；DictValue=EmployeeCode）
     /// </summary>
     [SugarColumn(ColumnName = "judge_by", ColumnDescription = "判定人", ColumnDataType = "nvarchar", Length = 50, IsNullable = true)]
     public string? JudgeBy { get; set; }

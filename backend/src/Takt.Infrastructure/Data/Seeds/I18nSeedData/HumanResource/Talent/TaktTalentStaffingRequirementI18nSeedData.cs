@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Infrastructure.Data.Seeds.I18nSeedData.HumanResource.Talent
 // 文件名称：TaktTalentStaffingRequirementI18nSeedData.cs
-// 创建时间：2026-07-20
+// 创建时间：2026-07-23
 // 创建人：Takt365(Auto Generated)
 // 功能描述：TaktTalentStaffingRequirement 实体字段国际化种子（无对应 frontend locales；TranslationText 取自 ColumnDescription，ContextNote 取自属性 XML summary）
 // 
@@ -109,13 +109,13 @@ public class TaktTalentStaffingRequirementI18nSeedData : ITaktSeedDataCoordinato
             new TranslationSeedItem("entity.talentstaffingrequirement.deptid", "zh-HK", "申请部门ID_hk", "申请部门（关联 TaktDept.Id，选项 TaktDepts/tree-options）"),
 
             // entity.talentstaffingrequirement.postid
-            new TranslationSeedItem("entity.talentstaffingrequirement.postid", "en-US", "申请岗位ID_us", "申请岗位（选项 TaktPosts/options，DictValue=Id）"),
+            new TranslationSeedItem("entity.talentstaffingrequirement.postid", "en-US", "申请岗位ID_us", "申请岗位（选项 TaktPosts/options；DictValue=Id）"),
             // entity.talentstaffingrequirement.postid
-            new TranslationSeedItem("entity.talentstaffingrequirement.postid", "ja-JP", "申请岗位ID_jp", "申请岗位（选项 TaktPosts/options，DictValue=Id）"),
+            new TranslationSeedItem("entity.talentstaffingrequirement.postid", "ja-JP", "申请岗位ID_jp", "申请岗位（选项 TaktPosts/options；DictValue=Id）"),
             // entity.talentstaffingrequirement.postid
-            new TranslationSeedItem("entity.talentstaffingrequirement.postid", "zh-CN", "申请岗位ID", "申请岗位（选项 TaktPosts/options，DictValue=Id）"),
+            new TranslationSeedItem("entity.talentstaffingrequirement.postid", "zh-CN", "申请岗位ID", "申请岗位（选项 TaktPosts/options；DictValue=Id）"),
             // entity.talentstaffingrequirement.postid
-            new TranslationSeedItem("entity.talentstaffingrequirement.postid", "zh-HK", "申请岗位ID_hk", "申请岗位（选项 TaktPosts/options，DictValue=Id）"),
+            new TranslationSeedItem("entity.talentstaffingrequirement.postid", "zh-HK", "申请岗位ID_hk", "申请岗位（选项 TaktPosts/options；DictValue=Id）"),
 
             // entity.talentstaffingrequirement.jobgrade
             new TranslationSeedItem("entity.talentstaffingrequirement.jobgrade", "en-US", "职级_us", "职级（可参照字典 sys_post_level_category；列存业务码，如 P3/M2）"),

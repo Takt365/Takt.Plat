@@ -22,101 +22,84 @@
     >
       <a-tab-pane
         key="tab-0"
-        :tab="t('common.page.form.tabs.basicinfo') + ' (1/2)'"
+        :tab="t('common.page.form.tabs.basicinfo') + ' (1/3)'"
         force-render
       >
         <div :class="formContentClass">
           <a-row :gutter="24">
             <a-col :span="12">
               <a-form-item
-                :label="t('common.page.entity.tenantcode')"
-                name="tenantCode"
-              >
-                <a-input
-                  v-model:value="formState.tenantCode"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('common.page.entity.tenantcode') })"
-                  show-count
-                  :maxlength="20"
-                  disabled
-                />
-              </a-form-item>
-            </a-col>
-            <a-col :span="12">
-              <a-form-item
-                :label="t('common.page.entity.companycode')"
-                name="companyCode"
-              >
-                <a-input
-                  v-model:value="formState.companyCode"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('common.page.entity.companycode') })"
-                  show-count
-                  :maxlength="20"
-                  disabled
-                />
-              </a-form-item>
-            </a-col>
-            <a-col :span="12">
-              <a-form-item
-                :label="t('common.page.entity.companydefaultculture')"
-                name="companyDefaultCulture"
-              >
-                <a-input
-                  v-model:value="formState.companyDefaultCulture"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('common.page.entity.companydefaultculture') })"
-                  show-count
-                  :maxlength="20"
-                  disabled
-                />
-              </a-form-item>
-            </a-col>
-            <a-col :span="12">
-              <a-form-item
-                :label="t('entity.employeereassignment.employeeid')"
+                :label="pi.label('employeeId')"
                 name="employeeId"
               >
-                <a-input
+                <TaktSelect
                   v-model:value="formState.employeeId"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.employeereassignment.employeeid') })"
+                  api-url="TaktEmployees/options"
+                  :placeholder="pi.ph('employeeId')"
+                />
+              </a-form-item>
+            </a-col>
+            <a-col :span="12">
+              <a-form-item
+                :label="pi.label('employeeCode')"
+                name="employeeCode"
+              >
+                <a-input
+                  v-model:value="formState.employeeCode"
+                  :placeholder="pi.ph('employeeCode')"
                   show-count
-                  :maxlength="20"
+                  :maxlength="6"
+                  allow-clear
+                  :disabled="!!formData?.employeeReassignmentId"
+                />
+              </a-form-item>
+            </a-col>
+            <a-col :span="12">
+              <a-form-item
+                :label="pi.label('employeeName')"
+                name="employeeName"
+              >
+                <a-input
+                  v-model:value="formState.employeeName"
+                  :placeholder="pi.ph('employeeName')"
+                  show-count
+                  :maxlength="80"
                   allow-clear
                 />
               </a-form-item>
             </a-col>
             <a-col :span="12">
               <a-form-item
-                :label="t('entity.employeereassignment.reassignmenttype')"
+                :label="pi.label('reassignmentType')"
                 name="reassignmentType"
               >
-                <a-input-number
+                <TaktSelect
                   v-model:value="formState.reassignmentType"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.employeereassignment.reassignmenttype') })"
-                  style="width: 100%"
+                  dict-type="hr_reassignment_type"
+                  :placeholder="pi.ph('reassignmentType')"
                 />
               </a-form-item>
             </a-col>
             <a-col :span="12">
               <a-form-item
-                :label="t('entity.employeereassignment.fromdeptid')"
+                :label="pi.label('fromDeptId')"
                 name="fromDeptId"
               >
-                <a-input
+                <TaktSelect
                   v-model:value="formState.fromDeptId"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.employeereassignment.fromdeptid') })"
-                  show-count
-                  :maxlength="20"
-                  allow-clear
+                  api-url="TaktDepts/tree-options"
+                  :placeholder="pi.ph('fromDeptId')"
                 />
               </a-form-item>
             </a-col>
             <a-col :span="12">
               <a-form-item
-                :label="t('entity.employeereassignment.fromdeptname')"
+                :label="pi.label('fromDeptName')"
                 name="fromDeptName"
               >
                 <a-input
                   v-model:value="formState.fromDeptName"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.employeereassignment.fromdeptname') })"
+                  :placeholder="pi.ph('fromDeptName')"
                   show-count
                   :maxlength="100"
                   allow-clear
@@ -125,26 +108,24 @@
             </a-col>
             <a-col :span="12">
               <a-form-item
-                :label="t('entity.employeereassignment.frompostid')"
+                :label="pi.label('fromPostId')"
                 name="fromPostId"
               >
-                <a-input
+                <TaktSelect
                   v-model:value="formState.fromPostId"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.employeereassignment.frompostid') })"
-                  show-count
-                  :maxlength="20"
-                  allow-clear
+                  api-url="TaktPosts/options"
+                  :placeholder="pi.ph('fromPostId')"
                 />
               </a-form-item>
             </a-col>
             <a-col :span="12">
               <a-form-item
-                :label="t('entity.employeereassignment.frompostname')"
+                :label="pi.label('fromPostName')"
                 name="fromPostName"
               >
                 <a-input
                   v-model:value="formState.fromPostName"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.employeereassignment.frompostname') })"
+                  :placeholder="pi.ph('fromPostName')"
                   show-count
                   :maxlength="100"
                   allow-clear
@@ -153,14 +134,26 @@
             </a-col>
             <a-col :span="12">
               <a-form-item
-                :label="t('entity.employeereassignment.todeptid')"
+                :label="pi.label('toDeptId')"
                 name="toDeptId"
               >
-                <a-input
+                <TaktSelect
                   v-model:value="formState.toDeptId"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.employeereassignment.todeptid') })"
+                  api-url="TaktDepts/tree-options"
+                  :placeholder="pi.ph('toDeptId')"
+                />
+              </a-form-item>
+            </a-col>
+            <a-col :span="12">
+              <a-form-item
+                :label="pi.label('toDeptName')"
+                name="toDeptName"
+              >
+                <a-input
+                  v-model:value="formState.toDeptName"
+                  :placeholder="pi.ph('toDeptName')"
                   show-count
-                  :maxlength="20"
+                  :maxlength="100"
                   allow-clear
                 />
               </a-form-item>
@@ -170,47 +163,31 @@
       </a-tab-pane>
       <a-tab-pane
         key="tab-1"
-        :tab="t('common.page.form.tabs.basicinfo') + ' (2/2)'"
+        :tab="t('common.page.form.tabs.basicinfo') + ' (2/3)'"
         force-render
       >
         <div :class="formContentClass">
           <a-row :gutter="24">
             <a-col :span="24">
               <a-form-item
-                :label="t('entity.employeereassignment.todeptname')"
-                name="toDeptName"
-              >
-                <a-input
-                  v-model:value="formState.toDeptName"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.employeereassignment.todeptname') })"
-                  show-count
-                  :maxlength="100"
-                  allow-clear
-                />
-              </a-form-item>
-            </a-col>
-            <a-col :span="24">
-              <a-form-item
-                :label="t('entity.employeereassignment.topostid')"
+                :label="pi.label('toPostId')"
                 name="toPostId"
               >
-                <a-input
+                <TaktSelect
                   v-model:value="formState.toPostId"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.employeereassignment.topostid') })"
-                  show-count
-                  :maxlength="20"
-                  allow-clear
+                  api-url="TaktPosts/options"
+                  :placeholder="pi.ph('toPostId')"
                 />
               </a-form-item>
             </a-col>
             <a-col :span="24">
               <a-form-item
-                :label="t('entity.employeereassignment.topostname')"
+                :label="pi.label('toPostName')"
                 name="toPostName"
               >
                 <a-input
                   v-model:value="formState.toPostName"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.employeereassignment.topostname') })"
+                  :placeholder="pi.ph('toPostName')"
                   show-count
                   :maxlength="100"
                   allow-clear
@@ -219,12 +196,12 @@
             </a-col>
             <a-col :span="24">
               <a-form-item
-                :label="t('entity.employeereassignment.effectivedate')"
+                :label="pi.label('effectiveDate')"
                 name="effectiveDate"
               >
                 <a-date-picker
                   v-model:value="formState.effectiveDate"
-                  :placeholder="t('common.page.form.placeholder.select', { field: t('entity.employeereassignment.effectivedate') })"
+                  :placeholder="pi.ph('effectiveDate')"
                   value-format="YYYY-MM-DD"
                   style="width: 100%"
                 />
@@ -232,15 +209,67 @@
             </a-col>
             <a-col :span="24">
               <a-form-item
-                :label="t('entity.employeereassignment.reason')"
+                :label="pi.label('reason')"
                 name="reason"
               >
                 <a-input
                   v-model:value="formState.reason"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.employeereassignment.reason') })"
+                  :placeholder="pi.ph('reason')"
                   show-count
                   :maxlength="500"
                   allow-clear
+                />
+              </a-form-item>
+            </a-col>
+          </a-row>
+        </div>
+      </a-tab-pane>
+      <a-tab-pane
+        key="tab-2"
+        :tab="t('common.page.form.tabs.basicinfo') + ' (3/3)'"
+        force-render
+      >
+        <div :class="formContentClass">
+          <a-row :gutter="24">
+            <a-col :span="24">
+              <a-form-item
+                :label="pi.label('tenantCode')"
+                name="tenantCode"
+              >
+                <a-input
+                  v-model:value="formState.tenantCode"
+                  :placeholder="pi.ph('tenantCode')"
+                  show-count
+                  :maxlength="20"
+                  disabled
+                />
+              </a-form-item>
+            </a-col>
+            <a-col :span="24">
+              <a-form-item
+                :label="pi.label('companyCode')"
+                name="companyCode"
+              >
+                <a-input
+                  v-model:value="formState.companyCode"
+                  :placeholder="pi.ph('companyCode')"
+                  show-count
+                  :maxlength="20"
+                  disabled
+                />
+              </a-form-item>
+            </a-col>
+            <a-col :span="24">
+              <a-form-item
+                :label="pi.label('companyDefaultCulture')"
+                name="companyDefaultCulture"
+              >
+                <a-input
+                  v-model:value="formState.companyDefaultCulture"
+                  :placeholder="pi.ph('companyDefaultCulture')"
+                  show-count
+                  :maxlength="20"
+                  disabled
                 />
               </a-form-item>
             </a-col>
@@ -257,7 +286,7 @@
                     >
                       <span class="takt-form-label-hint-icon"><RiQuestionLine class="takt-remix-icon" /></span>
                     </a-tooltip>
-                    <span>{{ t('common.page.entity.extfield') }}</span>
+                    <span>{{ pi.label('extField') }}</span>
                   </span>
                 </template>
                 <a-textarea
@@ -272,12 +301,12 @@
             </a-col>
             <a-col :span="24">
               <a-form-item
-                :label="t('common.page.entity.remark')"
+                :label="pi.label('remark')"
                 name="remark"
               >
                 <a-textarea
                   v-model:value="formState.remark"
-                  :placeholder="t('common.page.form.placeholder.optional', { field: t('common.page.entity.remark') })"
+                  :placeholder="pi.ph('remark')"
                   :rows="4"
                   show-count
                   :maxlength="400"
@@ -297,18 +326,24 @@
  * 员工调动记录维护表单 · 由 generate-vue-crud-from-api.cjs 根据 types/api 生成
  * @module views/human-resource/personnel/employee-reassignment/components
  */
-import { reactive, watch, computed, ref } from 'vue'
+import { reactive, watch, computed, ref, onMounted } from 'vue'
 import { useI18n } from 'vue-i18n'
 import type { Rule } from 'ant-design-vue/es/form'
+import { useEmployeeReassignmentI18n } from '../composables/use-employee-reassignment-i18n'
+
+/** 实体字段 i18n */
+const pi = useEmployeeReassignmentI18n()
 import type { EmployeeReassignmentCreate } from '@/types/human-resource/personnel/employee-reassignment'
+import TaktSelect from '@/components/business/takt-select/index.vue'
 import { RiQuestionLine } from '@remixicon/vue'
+import { useDictDataStore } from '@/stores/foundation/dict-data'
 import { useTenantStore } from '@/stores/identity/tenant'
 import { useUserStore } from '@/stores/identity/user'
 
 /** i18n 翻译函数 */
 const { t } = useI18n()
 
-/** Pinia：租户/公司上下文 */
+/** Pinia：租户上下文 */
 const tenantStore = useTenantStore()
 /** Pinia：用户上下文 */
 const userStore = useUserStore()
@@ -316,25 +351,23 @@ const userStore = useUserStore()
 /**
  * 上下文隔离字段：租户 / 公司 / 公司默认语言（登录或公司切换注入，表单只读）
  * @param target 表单数据
- * @param force 为 true 时强制覆盖（新增态或公司切换）
+ * @param force 为 true 时强制覆盖（新增态或上下文切换）
  */
 function applyScopeDefaults(target: Record<string, unknown>, force = false) {
-  if (formFields.includes('tenantCode') && (force || !target.tenantCode)) {
+  if (force || !target.tenantCode) {
     target.tenantCode = tenantStore.tenantCode
   }
-  if (formFields.includes('companyCode') && (force || !target.companyCode)) {
+  if (force || !target.companyCode) {
     target.companyCode = tenantStore.companyCode
   }
-  if (formFields.includes('companyDefaultCulture') && (force || !target.companyDefaultCulture)) {
+  if (force || !target.companyDefaultCulture) {
     target.companyDefaultCulture = userStore.userInfo?.companyDefaultCulture ?? ''
   }
 }
-/** 表单内容区高度 class（字段多时 tab-10 行） */
-const formContentClass = computed(() => (formFields.length > 10 ? 'takt-form-content-rows-10' : 'takt-form-content-rows-5'))
+/** 表单内容区高度 class（多 Tab 大表单固定 10 行高度） */
+const formContentClass = 'takt-form-content-rows-10'
 /** 当前激活的 Tab key */
 const activeTab = ref('tab-0')
-/** CreateDto 字段名列表（与 formState 键对齐） */
-const formFields = ["tenantCode","companyCode","companyDefaultCulture","employeeId","reassignmentType","fromDeptId","fromDeptName","fromPostId","fromPostName","toDeptId","toDeptName","toPostId","toPostName","effectiveDate","reason","extField","remark"]
 
 
 /** 父级传入的编辑 DTO；新增时为 undefined 或空对象 */
@@ -358,6 +391,13 @@ function applyFormDefaults(target: Record<string, unknown>) {
   void target
 }
 
+/** Pinia：字典缓存（TaktSelect dict-type 渲染前预热，避免选项空白） */
+const dictDataStore = useDictDataStore()
+
+/** 表单挂载时预加载全量字典 */
+onMounted(() => {
+  void dictDataStore.loadAllDictDataAsync()
+})
 
 /** 编辑态灌入 formData；新增态恢复默认值（须含 employeeReassignmentId 才视为编辑） */
 watch(
@@ -387,8 +427,7 @@ watch(
 watch(
   () => [tenantStore.tenantCode, tenantStore.companyCode, userStore.userInfo?.companyDefaultCulture] as const,
   () => {
-    const isCreate = !props.formData?.employeeReassignmentId
-    if (isCreate) {
+    if (!props.formData?.employeeReassignmentId) {
       applyScopeDefaults(formState, true)
     }
   },
@@ -399,18 +438,32 @@ const rules = computed<Record<string, Rule[]>>(() => ({
   employeeId: [
     {
       required: true,
-      message: t('common.page.form.placeholder.required', { field: t('entity.employeereassignment.employeeid') }),
+      message: pi.ph('employeeId'),
+      trigger: 'change'
+    }
+  ],
+  employeeCode: [
+    {
+      required: true,
+      message: pi.ph('employeeCode'),
+      trigger: 'blur'
+    }
+  ],
+  employeeName: [
+    {
+      required: true,
+      message: pi.ph('employeeName'),
       trigger: 'blur'
     }
   ],
   reassignmentType: [{
     validator: async (_rule, value) => {
       if (value === undefined || value === null || value === '') {
-        return Promise.reject(t('common.page.form.placeholder.select', { field: t('entity.employeereassignment.reassignmenttype') }))
+        return Promise.reject(pi.ph('reassignmentType'))
       }
       const num = typeof value === 'number' ? value : Number(value)
       if (!Number.isFinite(num)) {
-        return Promise.reject(t('common.page.form.placeholder.select', { field: t('entity.employeereassignment.reassignmenttype') }))
+        return Promise.reject(pi.ph('reassignmentType'))
       }
       return Promise.resolve()
     },
@@ -419,28 +472,28 @@ const rules = computed<Record<string, Rule[]>>(() => ({
   fromDeptId: [
     {
       required: true,
-      message: t('common.page.form.placeholder.required', { field: t('entity.employeereassignment.fromdeptid') }),
-      trigger: 'blur'
+      message: pi.ph('fromDeptId'),
+      trigger: 'change'
     }
   ],
   fromDeptName: [
     {
       required: true,
-      message: t('common.page.form.placeholder.required', { field: t('entity.employeereassignment.fromdeptname') }),
+      message: pi.ph('fromDeptName'),
       trigger: 'blur'
     }
   ],
   toDeptId: [
     {
       required: true,
-      message: t('common.page.form.placeholder.required', { field: t('entity.employeereassignment.todeptid') }),
-      trigger: 'blur'
+      message: pi.ph('toDeptId'),
+      trigger: 'change'
     }
   ],
   toDeptName: [
     {
       required: true,
-      message: t('common.page.form.placeholder.required', { field: t('entity.employeereassignment.todeptname') }),
+      message: pi.ph('toDeptName'),
       trigger: 'blur'
     }
   ],

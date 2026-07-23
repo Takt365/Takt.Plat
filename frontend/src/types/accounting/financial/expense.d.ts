@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：frontend/src/types/accounting/financial
 // 文件名称：expense.d.ts
-// 创建时间：2026-06-29
+// 创建时间：2026-07-23
 // 创建人：Takt365(Auto Generated)
 // 功能描述：accounting/financial 模块类型定义（自动生成；类型名去 Takt 前缀与末尾 Dto，如 TaktCompanyDto → Company）
 // 
@@ -29,7 +29,7 @@ export interface Expense extends ApprovalDtoBase {
   expenseId: string;
 
   /**
-   * 费用单编号（租户+公司内唯一）
+   * 费用单编码（租户+公司内唯一）
    */
   expenseCode: string;
 
@@ -44,17 +44,17 @@ export interface Expense extends ApprovalDtoBase {
   expenseType: number;
 
   /**
-   * 供应商编码（关联 TaktSupplier.SupplierCode，选项 TaktSuppliers/options；整单唯一）
+   * 供应商编码（选项 TaktSuppliers/options；整单唯一，DictValue=Id）
    */
   supplierCode?: string;
 
   /**
    * 供应商名称（整单唯一）
    */
-  supplierName?: string;
+  supplierName1?: string;
 
   /**
-   * 申请人（关联 TaktEmployee.Id，选项 TaktEmployees/options）
+   * 申请人（选项 TaktEmployees/options；DictValue=Id）
    */
   applicantBy: string;
 
@@ -74,22 +74,22 @@ export interface Expense extends ApprovalDtoBase {
   costCenter?: string;
 
   /**
-   * 关联会签单（关联 TaktCountersign.Id，选项 TaktCountersigns/options）
+   * 关联会签单（选项 TaktCountersigns/options；DictValue=Id）
    */
   countersignId?: string;
 
   /**
-   * 关联会签单（关联 TaktCountersign.Id，选项 TaktCountersigns/options）
+   * 关联会签单（选项 TaktCountersigns/options；DictValue=Id）
    */
   countersignName?: string;
 
   /**
-   * 来源采购订单编码（关联 TaktPurchaseOrder.PurchaseOrderCode，选项 TaktPurchaseOrders/options；采购链路自动生成时写入）
+   * 来源采购订单编码（选项 TaktPurchaseOrders/options；采购链路自动生成时写入，DictValue=Id）
    */
   purchaseOrderCode?: string;
 
   /**
-   * 来源采购申请编码（关联 TaktPurchaseRequest.PurchaseRequestCode，选项 TaktPurchaseRequests/options；采购链路自动生成时写入）
+   * 来源采购申请编码（选项 TaktPurchaseRequests/options；采购链路自动生成时写入，DictValue=Id）
    */
   purchaseRequestCode?: string;
 
@@ -124,7 +124,7 @@ export interface Expense extends ApprovalDtoBase {
   attachments?: string;
 
   /**
-   * 关联工厂（关联 TaktPlant.PlantCode，选项 TaktPlants/options）
+   * 关联工厂（选项 TaktPlants/options；DictValue=Id）
    */
   relatedPlant: string;
 
@@ -159,7 +159,7 @@ export interface ExpenseQuery extends TaktPagedQuery {
   companyCode?: string;
 
   /**
-   * 费用单编号（租户+公司内唯一）
+   * 费用单编码（租户+公司内唯一）
    */
   expenseCode?: string;
 
@@ -174,17 +174,17 @@ export interface ExpenseQuery extends TaktPagedQuery {
   expenseType?: number;
 
   /**
-   * 供应商编码（关联 TaktSupplier.SupplierCode，选项 TaktSuppliers/options；整单唯一）
+   * 供应商编码（选项 TaktSuppliers/options；整单唯一，DictValue=Id）
    */
   supplierCode?: string;
 
   /**
    * 供应商名称（整单唯一）
    */
-  supplierName?: string;
+  supplierName1?: string;
 
   /**
-   * 申请人（关联 TaktEmployee.Id，选项 TaktEmployees/options）
+   * 申请人（选项 TaktEmployees/options；DictValue=Id）
    */
   applicantBy?: string;
 
@@ -204,17 +204,17 @@ export interface ExpenseQuery extends TaktPagedQuery {
   costCenter?: string;
 
   /**
-   * 关联会签单（关联 TaktCountersign.Id，选项 TaktCountersigns/options）
+   * 关联会签单（选项 TaktCountersigns/options；DictValue=Id）
    */
   countersignId?: string;
 
   /**
-   * 来源采购订单编码（关联 TaktPurchaseOrder.PurchaseOrderCode，选项 TaktPurchaseOrders/options；采购链路自动生成时写入）
+   * 来源采购订单编码（选项 TaktPurchaseOrders/options；采购链路自动生成时写入，DictValue=Id）
    */
   purchaseOrderCode?: string;
 
   /**
-   * 来源采购申请编码（关联 TaktPurchaseRequest.PurchaseRequestCode，选项 TaktPurchaseRequests/options；采购链路自动生成时写入）
+   * 来源采购申请编码（选项 TaktPurchaseRequests/options；采购链路自动生成时写入，DictValue=Id）
    */
   purchaseRequestCode?: string;
 
@@ -254,7 +254,7 @@ export interface ExpenseQuery extends TaktPagedQuery {
   attachments?: string;
 
   /**
-   * 关联工厂（关联 TaktPlant.PlantCode，选项 TaktPlants/options）
+   * 关联工厂（选项 TaktPlants/options；DictValue=Id）
    */
   relatedPlant?: string;
 
@@ -348,7 +348,7 @@ export interface ExpenseCreate {
   companyDefaultCulture: string;
 
   /**
-   * 费用单编号（租户+公司内唯一）
+   * 费用单编码（租户+公司内唯一）
    */
   expenseCode: string;
 
@@ -363,17 +363,17 @@ export interface ExpenseCreate {
   expenseType: number;
 
   /**
-   * 供应商编码（关联 TaktSupplier.SupplierCode，选项 TaktSuppliers/options；整单唯一）
+   * 供应商编码（选项 TaktSuppliers/options；整单唯一，DictValue=Id）
    */
   supplierCode?: string;
 
   /**
    * 供应商名称（整单唯一）
    */
-  supplierName?: string;
+  supplierName1?: string;
 
   /**
-   * 申请人（关联 TaktEmployee.Id，选项 TaktEmployees/options）
+   * 申请人（选项 TaktEmployees/options；DictValue=Id）
    */
   applicantBy: string;
 
@@ -393,17 +393,17 @@ export interface ExpenseCreate {
   costCenter?: string;
 
   /**
-   * 关联会签单（关联 TaktCountersign.Id，选项 TaktCountersigns/options）
+   * 关联会签单（选项 TaktCountersigns/options；DictValue=Id）
    */
   countersignId?: string;
 
   /**
-   * 来源采购订单编码（关联 TaktPurchaseOrder.PurchaseOrderCode，选项 TaktPurchaseOrders/options；采购链路自动生成时写入）
+   * 来源采购订单编码（选项 TaktPurchaseOrders/options；采购链路自动生成时写入，DictValue=Id）
    */
   purchaseOrderCode?: string;
 
   /**
-   * 来源采购申请编码（关联 TaktPurchaseRequest.PurchaseRequestCode，选项 TaktPurchaseRequests/options；采购链路自动生成时写入）
+   * 来源采购申请编码（选项 TaktPurchaseRequests/options；采购链路自动生成时写入，DictValue=Id）
    */
   purchaseRequestCode?: string;
 
@@ -438,7 +438,7 @@ export interface ExpenseCreate {
   attachments?: string;
 
   /**
-   * 关联工厂（关联 TaktPlant.PlantCode，选项 TaktPlants/options）
+   * 关联工厂（选项 TaktPlants/options；DictValue=Id）
    */
   relatedPlant: string;
 
@@ -476,6 +476,11 @@ export interface ExpenseUpdate extends ExpenseCreate {
    * ExpenseID（标识要更新的实体）
    */
   expenseId: string;
+
+  /**
+   * 费用单明细列表（主子表关系）（子表，级联保存）
+   */
+  expenseDetails?: any;
 
 }
 
@@ -516,7 +521,7 @@ export interface ExpenseTemplate {
   companyCode?: string;
 
   /**
-   * 费用单编号（租户+公司内唯一）
+   * 费用单编码（租户+公司内唯一）
    */
   expenseCode?: string;
 
@@ -531,17 +536,17 @@ export interface ExpenseTemplate {
   expenseType?: number;
 
   /**
-   * 供应商编码（关联 TaktSupplier.SupplierCode，选项 TaktSuppliers/options；整单唯一）
+   * 供应商编码（选项 TaktSuppliers/options；整单唯一，DictValue=Id）
    */
   supplierCode?: string;
 
   /**
    * 供应商名称（整单唯一）
    */
-  supplierName?: string;
+  supplierName1?: string;
 
   /**
-   * 申请人（关联 TaktEmployee.Id，选项 TaktEmployees/options）
+   * 申请人（选项 TaktEmployees/options；DictValue=Id）
    */
   applicantBy?: string;
 
@@ -561,17 +566,17 @@ export interface ExpenseTemplate {
   costCenter?: string;
 
   /**
-   * 关联会签单（关联 TaktCountersign.Id，选项 TaktCountersigns/options）
+   * 关联会签单（选项 TaktCountersigns/options；DictValue=Id）
    */
   countersignId?: string;
 
   /**
-   * 来源采购订单编码（关联 TaktPurchaseOrder.PurchaseOrderCode，选项 TaktPurchaseOrders/options；采购链路自动生成时写入）
+   * 来源采购订单编码（选项 TaktPurchaseOrders/options；采购链路自动生成时写入，DictValue=Id）
    */
   purchaseOrderCode?: string;
 
   /**
-   * 来源采购申请编码（关联 TaktPurchaseRequest.PurchaseRequestCode，选项 TaktPurchaseRequests/options；采购链路自动生成时写入）
+   * 来源采购申请编码（选项 TaktPurchaseRequests/options；采购链路自动生成时写入，DictValue=Id）
    */
   purchaseRequestCode?: string;
 
@@ -606,7 +611,7 @@ export interface ExpenseTemplate {
   attachments?: string;
 
   /**
-   * 关联工厂（关联 TaktPlant.PlantCode，选项 TaktPlants/options）
+   * 关联工厂（选项 TaktPlants/options；DictValue=Id）
    */
   relatedPlant?: string;
 
@@ -655,7 +660,7 @@ export interface ExpenseImport {
   companyDefaultCulture?: string;
 
   /**
-   * 费用单编号（租户+公司内唯一）
+   * 费用单编码（租户+公司内唯一）
    */
   expenseCode?: string;
 
@@ -670,17 +675,17 @@ export interface ExpenseImport {
   expenseType?: number;
 
   /**
-   * 供应商编码（关联 TaktSupplier.SupplierCode，选项 TaktSuppliers/options；整单唯一）
+   * 供应商编码（选项 TaktSuppliers/options；整单唯一，DictValue=Id）
    */
   supplierCode?: string;
 
   /**
    * 供应商名称（整单唯一）
    */
-  supplierName?: string;
+  supplierName1?: string;
 
   /**
-   * 申请人（关联 TaktEmployee.Id，选项 TaktEmployees/options）
+   * 申请人（选项 TaktEmployees/options；DictValue=Id）
    */
   applicantBy?: string;
 
@@ -700,17 +705,17 @@ export interface ExpenseImport {
   costCenter?: string;
 
   /**
-   * 关联会签单（关联 TaktCountersign.Id，选项 TaktCountersigns/options）
+   * 关联会签单（选项 TaktCountersigns/options；DictValue=Id）
    */
   countersignId?: string;
 
   /**
-   * 来源采购订单编码（关联 TaktPurchaseOrder.PurchaseOrderCode，选项 TaktPurchaseOrders/options；采购链路自动生成时写入）
+   * 来源采购订单编码（选项 TaktPurchaseOrders/options；采购链路自动生成时写入，DictValue=Id）
    */
   purchaseOrderCode?: string;
 
   /**
-   * 来源采购申请编码（关联 TaktPurchaseRequest.PurchaseRequestCode，选项 TaktPurchaseRequests/options；采购链路自动生成时写入）
+   * 来源采购申请编码（选项 TaktPurchaseRequests/options；采购链路自动生成时写入，DictValue=Id）
    */
   purchaseRequestCode?: string;
 
@@ -745,7 +750,7 @@ export interface ExpenseImport {
   attachments?: string;
 
   /**
-   * 关联工厂（关联 TaktPlant.PlantCode，选项 TaktPlants/options）
+   * 关联工厂（选项 TaktPlants/options；DictValue=Id）
    */
   relatedPlant?: string;
 
@@ -784,7 +789,7 @@ export interface ExpenseExport {
   expenseId: string;
 
   /**
-   * 费用单编号（租户+公司内唯一）
+   * 费用单编码（租户+公司内唯一）
    */
   expenseCode: string;
 
@@ -799,17 +804,17 @@ export interface ExpenseExport {
   expenseType: number;
 
   /**
-   * 供应商编码（关联 TaktSupplier.SupplierCode，选项 TaktSuppliers/options；整单唯一）
+   * 供应商编码（选项 TaktSuppliers/options；整单唯一，DictValue=Id）
    */
   supplierCode?: string;
 
   /**
    * 供应商名称（整单唯一）
    */
-  supplierName?: string;
+  supplierName1?: string;
 
   /**
-   * 申请人（关联 TaktEmployee.Id，选项 TaktEmployees/options）
+   * 申请人（选项 TaktEmployees/options；DictValue=Id）
    */
   applicantBy: string;
 
@@ -829,17 +834,17 @@ export interface ExpenseExport {
   costCenter?: string;
 
   /**
-   * 关联会签单（关联 TaktCountersign.Id，选项 TaktCountersigns/options）
+   * 关联会签单（选项 TaktCountersigns/options；DictValue=Id）
    */
   countersignId?: string;
 
   /**
-   * 来源采购订单编码（关联 TaktPurchaseOrder.PurchaseOrderCode，选项 TaktPurchaseOrders/options；采购链路自动生成时写入）
+   * 来源采购订单编码（选项 TaktPurchaseOrders/options；采购链路自动生成时写入，DictValue=Id）
    */
   purchaseOrderCode?: string;
 
   /**
-   * 来源采购申请编码（关联 TaktPurchaseRequest.PurchaseRequestCode，选项 TaktPurchaseRequests/options；采购链路自动生成时写入）
+   * 来源采购申请编码（选项 TaktPurchaseRequests/options；采购链路自动生成时写入，DictValue=Id）
    */
   purchaseRequestCode?: string;
 
@@ -874,7 +879,7 @@ export interface ExpenseExport {
   attachments?: string;
 
   /**
-   * 关联工厂（关联 TaktPlant.PlantCode，选项 TaktPlants/options）
+   * 关联工厂（选项 TaktPlants/options；DictValue=Id）
    */
   relatedPlant: string;
 

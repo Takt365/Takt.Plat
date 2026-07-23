@@ -86,7 +86,7 @@ export const FQCORDERITEM_PLACEHOLDER = {
   companyDefaultCulture: 'optional',
   lineNumber: 'select',
   materialCode: 'select',
-  materialName: 'required',
+  materialName: 'optional',
   batchNo: 'optional',
   warehouseQuantity: 'select',
   standardCode: 'select',

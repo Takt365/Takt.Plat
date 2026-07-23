@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：frontend/src/types/logistics/procurement
 // 文件名称：purchase-request-item.d.ts
-// 创建时间：2026-07-09
+// 创建时间：2026-07-23
 // 创建人：Takt365(Auto Generated)
 // 功能描述：logistics/procurement 模块类型定义（自动生成；类型名去 Takt 前缀与末尾 Dto，如 TaktCompanyDto → Company）
 // 
@@ -29,7 +29,7 @@ export interface PurchaseRequestItem extends CompanyDtoBase {
   purchaseRequestItemId: string;
 
   /**
-   * 采购申请 ID（关联 TaktPurchaseRequest.Id，选项 TaktPurchaseRequests/options）
+   * 采购申请 ID（选项 TaktPurchaseRequests/options；DictValue=Id）
    */
   purchaseRequestId: string;
 
@@ -44,6 +44,16 @@ export interface PurchaseRequestItem extends CompanyDtoBase {
   purchaseRequestCode: string;
 
   /**
+   * 来源采购计划明细 ID（MRP 追溯，关联 TaktPurchasePlanItem.Id）
+   */
+  purchasePlanItemId?: string;
+
+  /**
+   * 来源采购计划明细 名称（填充字段）
+   */
+  purchasePlanItemName?: string;
+
+  /**
    * 行号（项号/序号，固定步长=10）
    */
   lineNumber: number;
@@ -54,22 +64,22 @@ export interface PurchaseRequestItem extends CompanyDtoBase {
   allocationCategory: string;
 
   /**
-   * 物料编码
+   * 物料编码（选项 TaktMaterialPlants/options；DictValue=MaterialCode，ExtValue=PlantCode）
    */
   materialCode?: string;
 
   /**
-   * 物料名称
+   * 物料名称（回填：随物料）
    */
   materialName: string;
 
   /**
-   * 物料规格
+   * 物料规格（回填：随物料）
    */
   materialSpecification?: string;
 
   /**
-   * 申请单位
+   * 申请单位（字典 logistics_unit_of_measure_code；DictValue=PC/EA 等；默认 PC）
    */
   requestUnit: string;
 
@@ -89,27 +99,27 @@ export interface PurchaseRequestItem extends CompanyDtoBase {
   purchasePerUnit: number;
 
   /**
-   * 预计单价（精确到分，存储为整数，单位为分）
+   * 请购单价
    */
-  estimatedUnitPrice: number;
+  purchaseRequestUnitPrice: number;
 
   /**
-   * 预计金额（精确到分，存储为整数，单位为分）
+   * 含税金额
    */
-  estimatedAmount: number;
+  taxIncludedAmount: number;
 
   /**
-   * 参考供应商编码
+   * 未税金额
    */
-  referenceSupplierCode?: string;
+  untaxedAmount: number;
 
   /**
-   * 参考供应商名称
+   * 税费
    */
-  referenceSupplierName?: string;
+  taxAmount: number;
 
   /**
-   * 是否作废（字典 sys_yes_no_type，0=否 1=是；编辑移除子行时标记作废）
+   * 是否作废（字典 sys_yes_no_type；0=否 1=是；编辑移除子行时标记作废）
    */
   isObsolete: number;
 
@@ -134,7 +144,7 @@ export interface PurchaseRequestItemQuery extends TaktPagedQuery {
   companyCode?: string;
 
   /**
-   * 采购申请 ID（关联 TaktPurchaseRequest.Id，选项 TaktPurchaseRequests/options）
+   * 采购申请 ID（选项 TaktPurchaseRequests/options；DictValue=Id）
    */
   purchaseRequestId?: string;
 
@@ -142,6 +152,11 @@ export interface PurchaseRequestItemQuery extends TaktPagedQuery {
    * 采购申请编码（冗余字段，便于查询）
    */
   purchaseRequestCode?: string;
+
+  /**
+   * 来源采购计划明细 ID（MRP 追溯，关联 TaktPurchasePlanItem.Id）
+   */
+  purchasePlanItemId?: string;
 
   /**
    * 行号（项号/序号，固定步长=10）
@@ -154,22 +169,22 @@ export interface PurchaseRequestItemQuery extends TaktPagedQuery {
   allocationCategory?: string;
 
   /**
-   * 物料编码
+   * 物料编码（选项 TaktMaterialPlants/options；DictValue=MaterialCode，ExtValue=PlantCode）
    */
   materialCode?: string;
 
   /**
-   * 物料名称
+   * 物料名称（回填：随物料）
    */
   materialName?: string;
 
   /**
-   * 物料规格
+   * 物料规格（回填：随物料）
    */
   materialSpecification?: string;
 
   /**
-   * 申请单位
+   * 申请单位（字典 logistics_unit_of_measure_code；DictValue=PC/EA 等；默认 PC）
    */
   requestUnit?: string;
 
@@ -189,27 +204,27 @@ export interface PurchaseRequestItemQuery extends TaktPagedQuery {
   purchasePerUnit?: number;
 
   /**
-   * 预计单价（精确到分，存储为整数，单位为分）
+   * 请购单价
    */
-  estimatedUnitPrice?: number;
+  purchaseRequestUnitPrice?: number;
 
   /**
-   * 预计金额（精确到分，存储为整数，单位为分）
+   * 含税金额
    */
-  estimatedAmount?: number;
+  taxIncludedAmount?: number;
 
   /**
-   * 参考供应商编码
+   * 未税金额
    */
-  referenceSupplierCode?: string;
+  untaxedAmount?: number;
 
   /**
-   * 参考供应商名称
+   * 税费
    */
-  referenceSupplierName?: string;
+  taxAmount?: number;
 
   /**
-   * 是否作废（字典 sys_yes_no_type，0=否 1=是；编辑移除子行时标记作废）
+   * 是否作废（字典 sys_yes_no_type；0=否 1=是；编辑移除子行时标记作废）
    */
   isObsolete?: number;
 
@@ -258,7 +273,7 @@ export interface PurchaseRequestItemCreate {
   companyDefaultCulture: string;
 
   /**
-   * 采购申请 ID（关联 TaktPurchaseRequest.Id，选项 TaktPurchaseRequests/options）
+   * 采购申请 ID（选项 TaktPurchaseRequests/options；DictValue=Id）
    */
   purchaseRequestId: string;
 
@@ -266,6 +281,11 @@ export interface PurchaseRequestItemCreate {
    * 采购申请编码（冗余字段，便于查询）
    */
   purchaseRequestCode: string;
+
+  /**
+   * 来源采购计划明细 ID（MRP 追溯，关联 TaktPurchasePlanItem.Id）
+   */
+  purchasePlanItemId?: string;
 
   /**
    * 行号（项号/序号，固定步长=10）
@@ -278,22 +298,22 @@ export interface PurchaseRequestItemCreate {
   allocationCategory: string;
 
   /**
-   * 物料编码
+   * 物料编码（选项 TaktMaterialPlants/options；DictValue=MaterialCode，ExtValue=PlantCode）
    */
   materialCode?: string;
 
   /**
-   * 物料名称
+   * 物料名称（回填：随物料）
    */
   materialName: string;
 
   /**
-   * 物料规格
+   * 物料规格（回填：随物料）
    */
   materialSpecification?: string;
 
   /**
-   * 申请单位
+   * 申请单位（字典 logistics_unit_of_measure_code；DictValue=PC/EA 等；默认 PC）
    */
   requestUnit: string;
 
@@ -313,27 +333,27 @@ export interface PurchaseRequestItemCreate {
   purchasePerUnit: number;
 
   /**
-   * 预计单价（精确到分，存储为整数，单位为分）
+   * 请购单价
    */
-  estimatedUnitPrice: number;
+  purchaseRequestUnitPrice: number;
 
   /**
-   * 预计金额（精确到分，存储为整数，单位为分）
+   * 含税金额
    */
-  estimatedAmount: number;
+  taxIncludedAmount: number;
 
   /**
-   * 参考供应商编码
+   * 未税金额
    */
-  referenceSupplierCode?: string;
+  untaxedAmount: number;
 
   /**
-   * 参考供应商名称
+   * 税费
    */
-  referenceSupplierName?: string;
+  taxAmount: number;
 
   /**
-   * 是否作废（字典 sys_yes_no_type，0=否 1=是；编辑移除子行时标记作废）
+   * 是否作废（字典 sys_yes_no_type；0=否 1=是；编辑移除子行时标记作废）
    */
   isObsolete: number;
 
@@ -401,7 +421,7 @@ export interface PurchaseRequestItemTemplate {
   companyCode?: string;
 
   /**
-   * 采购申请 ID（关联 TaktPurchaseRequest.Id，选项 TaktPurchaseRequests/options）
+   * 采购申请 ID（选项 TaktPurchaseRequests/options；DictValue=Id）
    */
   purchaseRequestId?: string;
 
@@ -409,6 +429,11 @@ export interface PurchaseRequestItemTemplate {
    * 采购申请编码（冗余字段，便于查询）
    */
   purchaseRequestCode?: string;
+
+  /**
+   * 来源采购计划明细 ID（MRP 追溯，关联 TaktPurchasePlanItem.Id）
+   */
+  purchasePlanItemId?: string;
 
   /**
    * 行号（项号/序号，固定步长=10）
@@ -421,22 +446,22 @@ export interface PurchaseRequestItemTemplate {
   allocationCategory?: string;
 
   /**
-   * 物料编码
+   * 物料编码（选项 TaktMaterialPlants/options；DictValue=MaterialCode，ExtValue=PlantCode）
    */
   materialCode?: string;
 
   /**
-   * 物料名称
+   * 物料名称（回填：随物料）
    */
   materialName?: string;
 
   /**
-   * 物料规格
+   * 物料规格（回填：随物料）
    */
   materialSpecification?: string;
 
   /**
-   * 申请单位
+   * 申请单位（字典 logistics_unit_of_measure_code；DictValue=PC/EA 等；默认 PC）
    */
   requestUnit?: string;
 
@@ -456,27 +481,27 @@ export interface PurchaseRequestItemTemplate {
   purchasePerUnit?: number;
 
   /**
-   * 预计单价（精确到分，存储为整数，单位为分）
+   * 请购单价
    */
-  estimatedUnitPrice?: number;
+  purchaseRequestUnitPrice?: number;
 
   /**
-   * 预计金额（精确到分，存储为整数，单位为分）
+   * 含税金额
    */
-  estimatedAmount?: number;
+  taxIncludedAmount?: number;
 
   /**
-   * 参考供应商编码
+   * 未税金额
    */
-  referenceSupplierCode?: string;
+  untaxedAmount?: number;
 
   /**
-   * 参考供应商名称
+   * 税费
    */
-  referenceSupplierName?: string;
+  taxAmount?: number;
 
   /**
-   * 是否作废（字典 sys_yes_no_type，0=否 1=是；编辑移除子行时标记作废）
+   * 是否作废（字典 sys_yes_no_type；0=否 1=是；编辑移除子行时标记作废）
    */
   isObsolete?: number;
 
@@ -515,7 +540,7 @@ export interface PurchaseRequestItemImport {
   companyDefaultCulture?: string;
 
   /**
-   * 采购申请 ID（关联 TaktPurchaseRequest.Id，选项 TaktPurchaseRequests/options）
+   * 采购申请 ID（选项 TaktPurchaseRequests/options；DictValue=Id）
    */
   purchaseRequestId?: string;
 
@@ -523,6 +548,11 @@ export interface PurchaseRequestItemImport {
    * 采购申请编码（冗余字段，便于查询）
    */
   purchaseRequestCode?: string;
+
+  /**
+   * 来源采购计划明细 ID（MRP 追溯，关联 TaktPurchasePlanItem.Id）
+   */
+  purchasePlanItemId?: string;
 
   /**
    * 行号（项号/序号，固定步长=10）
@@ -535,22 +565,22 @@ export interface PurchaseRequestItemImport {
   allocationCategory?: string;
 
   /**
-   * 物料编码
+   * 物料编码（选项 TaktMaterialPlants/options；DictValue=MaterialCode，ExtValue=PlantCode）
    */
   materialCode?: string;
 
   /**
-   * 物料名称
+   * 物料名称（回填：随物料）
    */
   materialName?: string;
 
   /**
-   * 物料规格
+   * 物料规格（回填：随物料）
    */
   materialSpecification?: string;
 
   /**
-   * 申请单位
+   * 申请单位（字典 logistics_unit_of_measure_code；DictValue=PC/EA 等；默认 PC）
    */
   requestUnit?: string;
 
@@ -570,27 +600,27 @@ export interface PurchaseRequestItemImport {
   purchasePerUnit?: number;
 
   /**
-   * 预计单价（精确到分，存储为整数，单位为分）
+   * 请购单价
    */
-  estimatedUnitPrice?: number;
+  purchaseRequestUnitPrice?: number;
 
   /**
-   * 预计金额（精确到分，存储为整数，单位为分）
+   * 含税金额
    */
-  estimatedAmount?: number;
+  taxIncludedAmount?: number;
 
   /**
-   * 参考供应商编码
+   * 未税金额
    */
-  referenceSupplierCode?: string;
+  untaxedAmount?: number;
 
   /**
-   * 参考供应商名称
+   * 税费
    */
-  referenceSupplierName?: string;
+  taxAmount?: number;
 
   /**
-   * 是否作废（字典 sys_yes_no_type，0=否 1=是；编辑移除子行时标记作废）
+   * 是否作废（字典 sys_yes_no_type；0=否 1=是；编辑移除子行时标记作废）
    */
   isObsolete?: number;
 
@@ -624,7 +654,7 @@ export interface PurchaseRequestItemExport {
   companyCode: string;
 
   /**
-   * 采购申请 ID（关联 TaktPurchaseRequest.Id，选项 TaktPurchaseRequests/options）
+   * 采购申请 ID（选项 TaktPurchaseRequests/options；DictValue=Id）
    */
   purchaseRequestId: string;
 
@@ -632,6 +662,11 @@ export interface PurchaseRequestItemExport {
    * 采购申请编码（冗余字段，便于查询）
    */
   purchaseRequestCode: string;
+
+  /**
+   * 来源采购计划明细 ID（MRP 追溯，关联 TaktPurchasePlanItem.Id）
+   */
+  purchasePlanItemId?: string;
 
   /**
    * 行号（项号/序号，固定步长=10）
@@ -644,22 +679,22 @@ export interface PurchaseRequestItemExport {
   allocationCategory: string;
 
   /**
-   * 物料编码
+   * 物料编码（选项 TaktMaterialPlants/options；DictValue=MaterialCode，ExtValue=PlantCode）
    */
   materialCode?: string;
 
   /**
-   * 物料名称
+   * 物料名称（回填：随物料）
    */
   materialName: string;
 
   /**
-   * 物料规格
+   * 物料规格（回填：随物料）
    */
   materialSpecification?: string;
 
   /**
-   * 申请单位
+   * 申请单位（字典 logistics_unit_of_measure_code；DictValue=PC/EA 等；默认 PC）
    */
   requestUnit: string;
 
@@ -679,27 +714,27 @@ export interface PurchaseRequestItemExport {
   purchasePerUnit: number;
 
   /**
-   * 预计单价（精确到分，存储为整数，单位为分）
+   * 请购单价
    */
-  estimatedUnitPrice: number;
+  purchaseRequestUnitPrice: number;
 
   /**
-   * 预计金额（精确到分，存储为整数，单位为分）
+   * 含税金额
    */
-  estimatedAmount: number;
+  taxIncludedAmount: number;
 
   /**
-   * 参考供应商编码
+   * 未税金额
    */
-  referenceSupplierCode?: string;
+  untaxedAmount: number;
 
   /**
-   * 参考供应商名称
+   * 税费
    */
-  referenceSupplierName?: string;
+  taxAmount: number;
 
   /**
-   * 是否作废（字典 sys_yes_no_type，0=否 1=是；编辑移除子行时标记作废）
+   * 是否作废（字典 sys_yes_no_type；0=否 1=是；编辑移除子行时标记作废）
    */
   isObsolete: number;
 

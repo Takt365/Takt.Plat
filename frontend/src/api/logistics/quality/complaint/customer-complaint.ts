@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：frontend/src/api/logistics/quality/complaint
 // 文件名称：customer-complaint.ts
-// 创建时间：2026-06-23
+// 创建时间：2026-07-23
 // 创建人：Takt365(Auto Generated)
 // 功能描述：logistics/quality/complaint 模块 API（自动生成，请勿手改路由常量）
 // 
@@ -22,10 +22,6 @@ import type {
   CustomerComplaintStatus,
   CustomerComplaintUpdate
 } from '@/types/logistics/quality/complaint/customer-complaint';
-import type {
-  CustomerComplaintMonthlyTrendQuery,
-  CustomerComplaintMonthlyTrendResult
-} from '@/types/logistics/quality/complaint/customer-complaint-trend';
 
 /**
  * API 路径前缀（相对 request baseURL，对应后端 [controller]）
@@ -221,49 +217,5 @@ export function exportCustomerComplaint(
       exportName
     },
     responseType: 'blob',
-  });
-}
-
-// ========================================
-// 顾客投诉推移分析
-// ========================================
-
-/**
- * 顾客投诉月度推移转置分析
- * @param {CustomerComplaintMonthlyTrendQuery} queryDto 查询条件
- * @returns {Promise<CustomerComplaintMonthlyTrendResult>} 分析结果
- */
-export function getCustomerComplaintMonthlyTrendAnalysis(
-  queryDto: CustomerComplaintMonthlyTrendQuery
-): Promise<CustomerComplaintMonthlyTrendResult> {
-  return request<CustomerComplaintMonthlyTrendResult>({
-    url: `${CUSTOMER_COMPLAINT_API_BASE}/monthly-trend-analysis`,
-    method: 'get',
-    params: queryDto,
-  });
-}
-
-/**
- * 导出顾客投诉月度推移转置分析
- * @param {CustomerComplaintMonthlyTrendQuery} query 查询条件
- * @param {string} [sheetName] 工作表名
- * @param {string} [exportName] 导出文件名
- * @returns {Promise<Blob>} Excel 文件
- */
-export function exportCustomerComplaintMonthlyTrendAnalysis(
-  query: CustomerComplaintMonthlyTrendQuery,
-  sheetName?: string,
-  exportName?: string
-): Promise<Blob> {
-  return request<Blob>({
-    url: `${CUSTOMER_COMPLAINT_API_BASE}/monthly-trend-analysis/export`,
-    method: 'get',
-    params: {
-      ...query,
-      sheetName,
-      exportName,
-    },
-    responseType: 'blob',
-    returnBinaryMeta: true,
   });
 }

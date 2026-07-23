@@ -30,7 +30,7 @@ public class TaktSocialInsurance : TaktCompanyEntityBase
     [JsonConverter(typeof(ValueToStringConverter))]
     public long? BenefitItemId { get; set; }
     /// <summary>
-    /// 员工（选项 TaktEmployees/options，DictValue=Id）
+    /// 员工（选项 TaktEmployees/options；DictValue=Id）
     /// </summary>
     [SugarColumn(ColumnName = "employee_id", ColumnDescription = "员工ID", ColumnDataType = "bigint", IsNullable = false)]
     [JsonConverter(typeof(ValueToStringConverter))]
@@ -91,7 +91,7 @@ public class TaktSocialInsurance : TaktCompanyEntityBase
     [SugarColumn(ColumnName = "total_amount", ColumnDescription = "缴纳合计", ColumnDataType = "decimal", Length = 18, DecimalDigits = 2, IsNullable = false, DefaultValue = "0")]
     public decimal TotalAmount { get; set; }
     /// <summary>
-    /// 关联工厂（选项 TaktPlants/options，DictValue=Id）
+    /// 关联工厂（选项 TaktPlants/options；DictValue=Id）
     /// </summary>
     [SugarColumn(ColumnName = "related_plant", ColumnDescription = "关联工厂", ColumnDataType = "nvarchar", Length = 4, IsNullable = false)]
     public string RelatedPlant { get; set; } = string.Empty;

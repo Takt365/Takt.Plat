@@ -4,7 +4,7 @@
 // 文件名称：TaktEmployeeSeedData.cs
 // 创建时间：2025-01-20
 // 创建人：Takt365(Cursor AI)
-// 功能描述：员工档案种子数据初始化（跨租户：DEV/QAS/PRD）
+// 功能描述：员工档案种子数据初始化（跨租户：DEV/QAS/PRD）；含家庭/工作/常住地址子表
 //
 // 版权信息：Copyright (c) 2025 Takt  All rights reserved.
 // 免责声明：此软件使用 MIT License，作者不承担任何使用风险。
@@ -50,6 +50,7 @@ public class TaktEmployeeSeedData : ITaktSeedDataCoordinator
         }
 
         var repository = serviceProvider.GetRequiredService<ITaktCompanySeedRepository<TaktEmployee>>();
+        var addressRepository = serviceProvider.GetRequiredService<ITaktCompanySeedRepository<TaktEmployeeAddress>>();
         var companyRepository = serviceProvider.GetRequiredService<ITaktTenantSeedRepository<TaktCompany>>();
         var sqlSugarContext = serviceProvider.GetRequiredService<TaktSeedContext>();
         var configuration = serviceProvider.GetRequiredService<IConfiguration>();
@@ -75,7 +76,7 @@ public class TaktEmployeeSeedData : ITaktSeedDataCoordinator
 
         foreach (var company in orderedCompanies)
         {
-            TaktLogger.Information("正在为公司 {CompanyCode} ({CompanyName}) 初始化员工档案...", company.CompanyCode, company.CompanyName);
+            TaktLogger.Information("正在为公司 {CompanyCode} ({CompanyName1}) 初始化员工档案...", company.CompanyCode, company.CompanyName1);
             var employees = GetStandardEmployees();
             for (var index = 0; index < employees.Count; index++)
             {
@@ -85,11 +86,14 @@ public class TaktEmployeeSeedData : ITaktSeedDataCoordinator
                     sqlSugarContext,
                     tenantCode,
                     company.CompanyCode,
-                    employeeData.EmployeeNo,
+                    employeeData.EmployeeCode,
                     employeeData.EmployeeName,
                     index);
                 insertCount += i;
                 updateCount += u;
+                var (ai, au) = await EnsureSeedAddressesAsync(addressRepository, sqlSugarContext, employee, index);
+                insertCount += ai;
+                updateCount += au;
             }
         }
 
@@ -101,7 +105,7 @@ public class TaktEmployeeSeedData : ITaktSeedDataCoordinator
     /// <summary>
     /// 获取标准员工档案列表
     /// </summary>
-    private static List<(string EmployeeNo, string EmployeeName)> GetStandardEmployees()
+    private static List<(string EmployeeCode, string EmployeeName)> GetStandardEmployees()
     {
         return new List<(string, string)>
         {
@@ -126,11 +130,63 @@ public class TaktEmployeeSeedData : ITaktSeedDataCoordinator
         employee.Mobile = $"1380013800{sequence}";
         employee.NativePlace = "110000";
         employee.Ethnicity = 1;
-        employee.PoliticalStatus = 0;
+        employee.PoliticalAffiliation = 0;
         employee.MaritalStatus = 0;
-        employee.EmergencyContactName = "紧急联系人";
-        employee.EmergencyContactPhone = $"1390013900{sequence}";
-        employee.HomeAddress = "北京市朝阳区种子路1号";
+    }
+
+    /// <summary>
+    /// 幂等写入家庭/工作/常住三类地址（字典 hr_employee_address_type：1/2/3）
+    /// </summary>
+    private static async Task<(int InsertCount, int UpdateCount)> EnsureSeedAddressesAsync(
+        ITaktCompanySeedRepository<TaktEmployeeAddress> addressRepository,
+        TaktSeedContext sqlSugarContext,
+        TaktEmployee employee,
+        int sequence)
+    {
+        int insertCount = 0;
+        int updateCount = 0;
+        var samples = new (int AddressType, string Address1)[]
+        {
+            (1, $"北京市朝阳区家庭种子路{sequence + 1}号"),
+            (2, $"北京市朝阳区工作种子路{sequence + 1}号"),
+            (3, $"北京市朝阳区常住种子路{sequence + 1}号")
+        };
+        foreach (var sample in samples)
+        {
+            var address = await addressRepository.FirstAsync(a =>
+                a.TenantCode == employee.TenantCode &&
+                a.CompanyCode == employee.CompanyCode &&
+                a.EmployeeId == employee.Id &&
+                a.AddressType == sample.AddressType);
+            if (address == null)
+            {
+                address = new TaktEmployeeAddress
+                {
+                    TenantCode = employee.TenantCode,
+                    CompanyCode = employee.CompanyCode,
+                    EmployeeId = employee.Id,
+                    AddressType = sample.AddressType,
+                    Country = "CN",
+                    Province = "110000",
+                    City = "110100",
+                    District = "110105",
+                    Address1 = sample.Address1
+                };
+                await addressRepository.CreateAsync(address);
+                insertCount++;
+            }
+            else
+            {
+                address.Country = "CN";
+                address.Province = "110000";
+                address.City = "110100";
+                address.District = "110105";
+                address.Address1 = sample.Address1;
+                await sqlSugarContext.Db.Updateable(address).ExecuteCommandAsync();
+                updateCount++;
+            }
+        }
+        return (insertCount, updateCount);
     }
 
     /// <summary>
@@ -141,22 +197,21 @@ public class TaktEmployeeSeedData : ITaktSeedDataCoordinator
         TaktSeedContext sqlSugarContext,
         string tenantCode,
         string companyCode,
-        string employeeNo,
+        string EmployeeCode,
         string name,
         int sequence)
     {
-        var employee = await repository.FirstAsync(e => e.TenantCode == tenantCode && e.CompanyCode == companyCode && e.EmployeeNo == employeeNo);
+        var employee = await repository.FirstAsync(e => e.TenantCode == tenantCode && e.CompanyCode == companyCode && e.EmployeeCode == EmployeeCode);
         if (employee == null)
         {
             employee = new TaktEmployee
             {
                 TenantCode = tenantCode,
                 CompanyCode = companyCode,
-                EmployeeNo = employeeNo,
+                EmployeeCode = EmployeeCode,
                 EmployeeName = name,
                 Gender = 1,
                 EmployeeStatus = 2,
-                JoinedDate = DateTime.Now,
                 IsBuiltIn = 1
             };
             ApplySeedPersonalProfile(employee, sequence);
@@ -168,7 +223,7 @@ public class TaktEmployeeSeedData : ITaktSeedDataCoordinator
         employee.IsBuiltIn = 1;
         ApplySeedPersonalProfile(employee, sequence);
         await sqlSugarContext.Db.Updateable(employee)
-            .IgnoreColumns(x => x.EmployeeNo)
+            .IgnoreColumns(x => x.EmployeeCode)
             .Where(x => x.TenantCode == tenantCode && x.CompanyCode == companyCode)
             .ExecuteCommandAsync();
         return (employee, 0, 1);

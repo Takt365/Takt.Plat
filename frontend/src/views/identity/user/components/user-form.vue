@@ -47,7 +47,7 @@
               size="middle"
               :column="1"
             >
-              <a-descriptions-item :label="t('entity.employee.no')">
+              <a-descriptions-item :label="t('entity.employee.code')">
                 {{ displayStr(boundEmployeeOption.extLabel) }}
               </a-descriptions-item>
               <a-descriptions-item :label="t('entity.employee.name')">
@@ -101,7 +101,7 @@
               size="middle"
               :column="1"
             >
-              <a-descriptions-item :label="t('entity.employee.no')">
+              <a-descriptions-item :label="t('entity.employee.code')">
                 {{ displayStr(selectedEmployeeOption.extLabel) }}
               </a-descriptions-item>
               <a-descriptions-item :label="t('entity.employee.name')">

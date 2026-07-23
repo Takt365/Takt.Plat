@@ -44,7 +44,7 @@ export interface MaterialDocument extends CompanyDtoBase {
   materialDocumentCode: string;
 
   /**
-   * 过账人（关联 TaktEmployee.EmployeeNo，选项 TaktEmployees/options，DictValue=EmployeeNo）
+   * 过账人（关联 TaktEmployee.EmployeeCode，选项 TaktEmployees/options，DictValue=EmployeeCode）
    */
   postedBy?: string;
 
@@ -94,7 +94,7 @@ export interface MaterialDocumentQuery extends TaktPagedQuery {
   materialDocumentCode?: string;
 
   /**
-   * 过账人（关联 TaktEmployee.EmployeeNo，选项 TaktEmployees/options，DictValue=EmployeeNo）
+   * 过账人（关联 TaktEmployee.EmployeeCode，选项 TaktEmployees/options，DictValue=EmployeeCode）
    */
   postedBy?: string;
 
@@ -163,7 +163,7 @@ export interface MaterialDocumentCreate {
   materialDocumentCode: string;
 
   /**
-   * 过账人（关联 TaktEmployee.EmployeeNo，选项 TaktEmployees/options，DictValue=EmployeeNo）
+   * 过账人（关联 TaktEmployee.EmployeeCode，选项 TaktEmployees/options，DictValue=EmployeeCode）
    */
   postedBy?: string;
 
@@ -261,7 +261,7 @@ export interface MaterialDocumentTemplate {
   materialDocumentCode?: string;
 
   /**
-   * 过账人（关联 TaktEmployee.EmployeeNo，选项 TaktEmployees/options，DictValue=EmployeeNo）
+   * 过账人（关联 TaktEmployee.EmployeeCode，选项 TaktEmployees/options，DictValue=EmployeeCode）
    */
   postedBy?: string;
 
@@ -325,7 +325,7 @@ export interface MaterialDocumentImport {
   materialDocumentCode?: string;
 
   /**
-   * 过账人（关联 TaktEmployee.EmployeeNo，选项 TaktEmployees/options，DictValue=EmployeeNo）
+   * 过账人（关联 TaktEmployee.EmployeeCode，选项 TaktEmployees/options，DictValue=EmployeeCode）
    */
   postedBy?: string;
 
@@ -384,7 +384,7 @@ export interface MaterialDocumentExport {
   materialDocumentCode: string;
 
   /**
-   * 过账人（关联 TaktEmployee.EmployeeNo，选项 TaktEmployees/options，DictValue=EmployeeNo）
+   * 过账人（关联 TaktEmployee.EmployeeCode，选项 TaktEmployees/options，DictValue=EmployeeCode）
    */
   postedBy?: string;
 

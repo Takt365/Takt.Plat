@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：frontend/src/types/logistics/sales
 // 文件名称：invoice-item.d.ts
-// 创建时间：2026-07-09
+// 创建时间：2026-07-23
 // 创建人：Takt365(Auto Generated)
 // 功能描述：logistics/sales 模块类型定义（自动生成；类型名去 Takt 前缀与末尾 Dto，如 TaktCompanyDto → Company）
 // 
@@ -29,17 +29,17 @@ export interface SalesInvoiceItem extends CompanyDtoBase {
   salesInvoiceItemId: string;
 
   /**
-   * 销售发票（关联 TaktSalesInvoice.Id，选项 TaktSalesInvoices/options）
+   * 销售发票（选项 TaktSalesInvoices/options；DictValue=Id）
    */
   salesInvoiceId: string;
 
   /**
-   * 销售发票（关联 TaktSalesInvoice.Id，选项 TaktSalesInvoices/options）
+   * 销售发票（选项 TaktSalesInvoices/options；DictValue=Id）
    */
   salesInvoiceName?: string;
 
   /**
-   * 会计凭证编号（冗余，与主表 AccountingDocumentCode 一致）
+   * 会计凭证编码（冗余，与主表 AccountingDocumentCode 一致）
    */
   accountingDocumentCode: string;
 
@@ -54,37 +54,32 @@ export interface SalesInvoiceItem extends CompanyDtoBase {
   postingDate: string;
 
   /**
-   * 货币（字典 accounting_currency_code，DictValue=CNY/USD 等）
-   */
-  currency: string;
-
-  /**
    * 机种名称
    */
   modelName?: string;
 
   /**
-   * 物料编码（选项 TaktMaterials/options，DictValue=MaterialCode）
+   * 物料编码（选项 TaktMaterialPlants/options；DictValue=MaterialCode，ExtValue=PlantCode）
    */
   materialCode: string;
 
   /**
-   * 物料类型（字典 logistics_material_type，DictValue=ROH/HALB 等；默认 ROH）
+   * 物料类型（字典 logistics_material_type；DictValue=ROH/HALB 等；默认 ROH）
    */
   materialType: string;
 
   /**
-   * 物料名称
+   * 物料名称（回填：随物料）
    */
   materialName: string;
 
   /**
-   * 利润中心（关联 TaktProfitCenter.ProfitCenterCode，选项 TaktProfitCenters/options，DictValue=ProfitCenterCode）
+   * 利润中心（选项 TaktProfitCenters/options；DictValue=ProfitCenterCode）
    */
   profitCenterCode?: string;
 
   /**
-   * 会计科目（关联 TaktAccountTitle.AccountTitleCode，选项 TaktAccountTitles/options）
+   * 会计科目（选项 TaktAccountTitles/options；DictValue=Id）
    */
   accountTitle?: string;
 
@@ -94,7 +89,7 @@ export interface SalesInvoiceItem extends CompanyDtoBase {
   quantity: number;
 
   /**
-   * 单位
+   * 单位（字典 logistics_unit_of_measure_code；DictValue=PC/EA 等；默认 PC）
    */
   unit: string;
 
@@ -109,7 +104,22 @@ export interface SalesInvoiceItem extends CompanyDtoBase {
   transactionCurrencyAmount: number;
 
   /**
-   * 凭证类型（字典 logistics_accounting_document_type，DictValue=AA/AB/…）
+   * 含税价格（打印用；如 100.00）
+   */
+  taxIncludedPrice: number;
+
+  /**
+   * 未税价格（打印用；如 88.50）
+   */
+  untaxedPrice: number;
+
+  /**
+   * 税费（打印用；行税额，如 11.50）
+   */
+  taxAmount: number;
+
+  /**
+   * 凭证类型（字典 logistics_accounting_document_type；DictValue=AA/AB/…）
    */
   documentType: string;
 
@@ -124,7 +134,7 @@ export interface SalesInvoiceItem extends CompanyDtoBase {
   referenceDocumentItem?: number;
 
   /**
-   * 是否作废（字典 sys_yes_no_type，0=否 1=是；编辑移除子行时标记作废）
+   * 是否作废（字典 sys_yes_no_type；0=否 1=是；编辑移除子行时标记作废）
    */
   isObsolete: number;
 
@@ -154,12 +164,12 @@ export interface SalesInvoiceItemQuery extends TaktPagedQuery {
   companyCode?: string;
 
   /**
-   * 销售发票（关联 TaktSalesInvoice.Id，选项 TaktSalesInvoices/options）
+   * 销售发票（选项 TaktSalesInvoices/options；DictValue=Id）
    */
   salesInvoiceId?: string;
 
   /**
-   * 会计凭证编号（冗余，与主表 AccountingDocumentCode 一致）
+   * 会计凭证编码（冗余，与主表 AccountingDocumentCode 一致）
    */
   accountingDocumentCode?: string;
 
@@ -179,37 +189,32 @@ export interface SalesInvoiceItemQuery extends TaktPagedQuery {
   postingDateEnd?: string;
 
   /**
-   * 货币（字典 accounting_currency_code，DictValue=CNY/USD 等）
-   */
-  currency?: string;
-
-  /**
    * 机种名称
    */
   modelName?: string;
 
   /**
-   * 物料编码（选项 TaktMaterials/options，DictValue=MaterialCode）
+   * 物料编码（选项 TaktMaterialPlants/options；DictValue=MaterialCode，ExtValue=PlantCode）
    */
   materialCode?: string;
 
   /**
-   * 物料类型（字典 logistics_material_type，DictValue=ROH/HALB 等；默认 ROH）
+   * 物料类型（字典 logistics_material_type；DictValue=ROH/HALB 等；默认 ROH）
    */
   materialType?: string;
 
   /**
-   * 物料名称
+   * 物料名称（回填：随物料）
    */
   materialName?: string;
 
   /**
-   * 利润中心（关联 TaktProfitCenter.ProfitCenterCode，选项 TaktProfitCenters/options，DictValue=ProfitCenterCode）
+   * 利润中心（选项 TaktProfitCenters/options；DictValue=ProfitCenterCode）
    */
   profitCenterCode?: string;
 
   /**
-   * 会计科目（关联 TaktAccountTitle.AccountTitleCode，选项 TaktAccountTitles/options）
+   * 会计科目（选项 TaktAccountTitles/options；DictValue=Id）
    */
   accountTitle?: string;
 
@@ -219,7 +224,7 @@ export interface SalesInvoiceItemQuery extends TaktPagedQuery {
   quantity?: number;
 
   /**
-   * 单位
+   * 单位（字典 logistics_unit_of_measure_code；DictValue=PC/EA 等；默认 PC）
    */
   unit?: string;
 
@@ -234,7 +239,22 @@ export interface SalesInvoiceItemQuery extends TaktPagedQuery {
   transactionCurrencyAmount?: number;
 
   /**
-   * 凭证类型（字典 logistics_accounting_document_type，DictValue=AA/AB/…）
+   * 含税价格（打印用；如 100.00）
+   */
+  taxIncludedPrice?: number;
+
+  /**
+   * 未税价格（打印用；如 88.50）
+   */
+  untaxedPrice?: number;
+
+  /**
+   * 税费（打印用；行税额，如 11.50）
+   */
+  taxAmount?: number;
+
+  /**
+   * 凭证类型（字典 logistics_accounting_document_type；DictValue=AA/AB/…）
    */
   documentType?: string;
 
@@ -249,7 +269,7 @@ export interface SalesInvoiceItemQuery extends TaktPagedQuery {
   referenceDocumentItem?: number;
 
   /**
-   * 是否作废（字典 sys_yes_no_type，0=否 1=是；编辑移除子行时标记作废）
+   * 是否作废（字典 sys_yes_no_type；0=否 1=是；编辑移除子行时标记作废）
    */
   isObsolete?: number;
 
@@ -298,12 +318,12 @@ export interface SalesInvoiceItemCreate {
   companyDefaultCulture: string;
 
   /**
-   * 销售发票（关联 TaktSalesInvoice.Id，选项 TaktSalesInvoices/options）
+   * 销售发票（选项 TaktSalesInvoices/options；DictValue=Id）
    */
   salesInvoiceId: string;
 
   /**
-   * 会计凭证编号（冗余，与主表 AccountingDocumentCode 一致）
+   * 会计凭证编码（冗余，与主表 AccountingDocumentCode 一致）
    */
   accountingDocumentCode: string;
 
@@ -318,37 +338,32 @@ export interface SalesInvoiceItemCreate {
   postingDate: string;
 
   /**
-   * 货币（字典 accounting_currency_code，DictValue=CNY/USD 等）
-   */
-  currency: string;
-
-  /**
    * 机种名称
    */
   modelName?: string;
 
   /**
-   * 物料编码（选项 TaktMaterials/options，DictValue=MaterialCode）
+   * 物料编码（选项 TaktMaterialPlants/options；DictValue=MaterialCode，ExtValue=PlantCode）
    */
   materialCode: string;
 
   /**
-   * 物料类型（字典 logistics_material_type，DictValue=ROH/HALB 等；默认 ROH）
+   * 物料类型（字典 logistics_material_type；DictValue=ROH/HALB 等；默认 ROH）
    */
   materialType: string;
 
   /**
-   * 物料名称
+   * 物料名称（回填：随物料）
    */
   materialName: string;
 
   /**
-   * 利润中心（关联 TaktProfitCenter.ProfitCenterCode，选项 TaktProfitCenters/options，DictValue=ProfitCenterCode）
+   * 利润中心（选项 TaktProfitCenters/options；DictValue=ProfitCenterCode）
    */
   profitCenterCode?: string;
 
   /**
-   * 会计科目（关联 TaktAccountTitle.AccountTitleCode，选项 TaktAccountTitles/options）
+   * 会计科目（选项 TaktAccountTitles/options；DictValue=Id）
    */
   accountTitle?: string;
 
@@ -358,7 +373,7 @@ export interface SalesInvoiceItemCreate {
   quantity: number;
 
   /**
-   * 单位
+   * 单位（字典 logistics_unit_of_measure_code；DictValue=PC/EA 等；默认 PC）
    */
   unit: string;
 
@@ -373,7 +388,22 @@ export interface SalesInvoiceItemCreate {
   transactionCurrencyAmount: number;
 
   /**
-   * 凭证类型（字典 logistics_accounting_document_type，DictValue=AA/AB/…）
+   * 含税价格（打印用；如 100.00）
+   */
+  taxIncludedPrice: number;
+
+  /**
+   * 未税价格（打印用；如 88.50）
+   */
+  untaxedPrice: number;
+
+  /**
+   * 税费（打印用；行税额，如 11.50）
+   */
+  taxAmount: number;
+
+  /**
+   * 凭证类型（字典 logistics_accounting_document_type；DictValue=AA/AB/…）
    */
   documentType: string;
 
@@ -388,7 +418,7 @@ export interface SalesInvoiceItemCreate {
   referenceDocumentItem?: number;
 
   /**
-   * 是否作废（字典 sys_yes_no_type，0=否 1=是；编辑移除子行时标记作废）
+   * 是否作废（字典 sys_yes_no_type；0=否 1=是；编辑移除子行时标记作废）
    */
   isObsolete: number;
 
@@ -456,12 +486,12 @@ export interface SalesInvoiceItemTemplate {
   companyCode?: string;
 
   /**
-   * 销售发票（关联 TaktSalesInvoice.Id，选项 TaktSalesInvoices/options）
+   * 销售发票（选项 TaktSalesInvoices/options；DictValue=Id）
    */
   salesInvoiceId?: string;
 
   /**
-   * 会计凭证编号（冗余，与主表 AccountingDocumentCode 一致）
+   * 会计凭证编码（冗余，与主表 AccountingDocumentCode 一致）
    */
   accountingDocumentCode?: string;
 
@@ -476,37 +506,32 @@ export interface SalesInvoiceItemTemplate {
   postingDate?: string;
 
   /**
-   * 货币（字典 accounting_currency_code，DictValue=CNY/USD 等）
-   */
-  currency?: string;
-
-  /**
    * 机种名称
    */
   modelName?: string;
 
   /**
-   * 物料编码（选项 TaktMaterials/options，DictValue=MaterialCode）
+   * 物料编码（选项 TaktMaterialPlants/options；DictValue=MaterialCode，ExtValue=PlantCode）
    */
   materialCode?: string;
 
   /**
-   * 物料类型（字典 logistics_material_type，DictValue=ROH/HALB 等；默认 ROH）
+   * 物料类型（字典 logistics_material_type；DictValue=ROH/HALB 等；默认 ROH）
    */
   materialType?: string;
 
   /**
-   * 物料名称
+   * 物料名称（回填：随物料）
    */
   materialName?: string;
 
   /**
-   * 利润中心（关联 TaktProfitCenter.ProfitCenterCode，选项 TaktProfitCenters/options，DictValue=ProfitCenterCode）
+   * 利润中心（选项 TaktProfitCenters/options；DictValue=ProfitCenterCode）
    */
   profitCenterCode?: string;
 
   /**
-   * 会计科目（关联 TaktAccountTitle.AccountTitleCode，选项 TaktAccountTitles/options）
+   * 会计科目（选项 TaktAccountTitles/options；DictValue=Id）
    */
   accountTitle?: string;
 
@@ -516,7 +541,7 @@ export interface SalesInvoiceItemTemplate {
   quantity?: number;
 
   /**
-   * 单位
+   * 单位（字典 logistics_unit_of_measure_code；DictValue=PC/EA 等；默认 PC）
    */
   unit?: string;
 
@@ -531,7 +556,22 @@ export interface SalesInvoiceItemTemplate {
   transactionCurrencyAmount?: number;
 
   /**
-   * 凭证类型（字典 logistics_accounting_document_type，DictValue=AA/AB/…）
+   * 含税价格（打印用；如 100.00）
+   */
+  taxIncludedPrice?: number;
+
+  /**
+   * 未税价格（打印用；如 88.50）
+   */
+  untaxedPrice?: number;
+
+  /**
+   * 税费（打印用；行税额，如 11.50）
+   */
+  taxAmount?: number;
+
+  /**
+   * 凭证类型（字典 logistics_accounting_document_type；DictValue=AA/AB/…）
    */
   documentType?: string;
 
@@ -546,7 +586,7 @@ export interface SalesInvoiceItemTemplate {
   referenceDocumentItem?: number;
 
   /**
-   * 是否作废（字典 sys_yes_no_type，0=否 1=是；编辑移除子行时标记作废）
+   * 是否作废（字典 sys_yes_no_type；0=否 1=是；编辑移除子行时标记作废）
    */
   isObsolete?: number;
 
@@ -585,12 +625,12 @@ export interface SalesInvoiceItemImport {
   companyDefaultCulture?: string;
 
   /**
-   * 销售发票（关联 TaktSalesInvoice.Id，选项 TaktSalesInvoices/options）
+   * 销售发票（选项 TaktSalesInvoices/options；DictValue=Id）
    */
   salesInvoiceId?: string;
 
   /**
-   * 会计凭证编号（冗余，与主表 AccountingDocumentCode 一致）
+   * 会计凭证编码（冗余，与主表 AccountingDocumentCode 一致）
    */
   accountingDocumentCode?: string;
 
@@ -605,37 +645,32 @@ export interface SalesInvoiceItemImport {
   postingDate?: string;
 
   /**
-   * 货币（字典 accounting_currency_code，DictValue=CNY/USD 等）
-   */
-  currency?: string;
-
-  /**
    * 机种名称
    */
   modelName?: string;
 
   /**
-   * 物料编码（选项 TaktMaterials/options，DictValue=MaterialCode）
+   * 物料编码（选项 TaktMaterialPlants/options；DictValue=MaterialCode，ExtValue=PlantCode）
    */
   materialCode?: string;
 
   /**
-   * 物料类型（字典 logistics_material_type，DictValue=ROH/HALB 等；默认 ROH）
+   * 物料类型（字典 logistics_material_type；DictValue=ROH/HALB 等；默认 ROH）
    */
   materialType?: string;
 
   /**
-   * 物料名称
+   * 物料名称（回填：随物料）
    */
   materialName?: string;
 
   /**
-   * 利润中心（关联 TaktProfitCenter.ProfitCenterCode，选项 TaktProfitCenters/options，DictValue=ProfitCenterCode）
+   * 利润中心（选项 TaktProfitCenters/options；DictValue=ProfitCenterCode）
    */
   profitCenterCode?: string;
 
   /**
-   * 会计科目（关联 TaktAccountTitle.AccountTitleCode，选项 TaktAccountTitles/options）
+   * 会计科目（选项 TaktAccountTitles/options；DictValue=Id）
    */
   accountTitle?: string;
 
@@ -645,7 +680,7 @@ export interface SalesInvoiceItemImport {
   quantity?: number;
 
   /**
-   * 单位
+   * 单位（字典 logistics_unit_of_measure_code；DictValue=PC/EA 等；默认 PC）
    */
   unit?: string;
 
@@ -660,7 +695,22 @@ export interface SalesInvoiceItemImport {
   transactionCurrencyAmount?: number;
 
   /**
-   * 凭证类型（字典 logistics_accounting_document_type，DictValue=AA/AB/…）
+   * 含税价格（打印用；如 100.00）
+   */
+  taxIncludedPrice?: number;
+
+  /**
+   * 未税价格（打印用；如 88.50）
+   */
+  untaxedPrice?: number;
+
+  /**
+   * 税费（打印用；行税额，如 11.50）
+   */
+  taxAmount?: number;
+
+  /**
+   * 凭证类型（字典 logistics_accounting_document_type；DictValue=AA/AB/…）
    */
   documentType?: string;
 
@@ -675,7 +725,7 @@ export interface SalesInvoiceItemImport {
   referenceDocumentItem?: number;
 
   /**
-   * 是否作废（字典 sys_yes_no_type，0=否 1=是；编辑移除子行时标记作废）
+   * 是否作废（字典 sys_yes_no_type；0=否 1=是；编辑移除子行时标记作废）
    */
   isObsolete?: number;
 
@@ -709,12 +759,12 @@ export interface SalesInvoiceItemExport {
   companyCode: string;
 
   /**
-   * 销售发票（关联 TaktSalesInvoice.Id，选项 TaktSalesInvoices/options）
+   * 销售发票（选项 TaktSalesInvoices/options；DictValue=Id）
    */
   salesInvoiceId: string;
 
   /**
-   * 会计凭证编号（冗余，与主表 AccountingDocumentCode 一致）
+   * 会计凭证编码（冗余，与主表 AccountingDocumentCode 一致）
    */
   accountingDocumentCode: string;
 
@@ -729,37 +779,32 @@ export interface SalesInvoiceItemExport {
   postingDate: string;
 
   /**
-   * 货币（字典 accounting_currency_code，DictValue=CNY/USD 等）
-   */
-  currency: string;
-
-  /**
    * 机种名称
    */
   modelName?: string;
 
   /**
-   * 物料编码（选项 TaktMaterials/options，DictValue=MaterialCode）
+   * 物料编码（选项 TaktMaterialPlants/options；DictValue=MaterialCode，ExtValue=PlantCode）
    */
   materialCode: string;
 
   /**
-   * 物料类型（字典 logistics_material_type，DictValue=ROH/HALB 等；默认 ROH）
+   * 物料类型（字典 logistics_material_type；DictValue=ROH/HALB 等；默认 ROH）
    */
   materialType: string;
 
   /**
-   * 物料名称
+   * 物料名称（回填：随物料）
    */
   materialName: string;
 
   /**
-   * 利润中心（关联 TaktProfitCenter.ProfitCenterCode，选项 TaktProfitCenters/options，DictValue=ProfitCenterCode）
+   * 利润中心（选项 TaktProfitCenters/options；DictValue=ProfitCenterCode）
    */
   profitCenterCode?: string;
 
   /**
-   * 会计科目（关联 TaktAccountTitle.AccountTitleCode，选项 TaktAccountTitles/options）
+   * 会计科目（选项 TaktAccountTitles/options；DictValue=Id）
    */
   accountTitle?: string;
 
@@ -769,7 +814,7 @@ export interface SalesInvoiceItemExport {
   quantity: number;
 
   /**
-   * 单位
+   * 单位（字典 logistics_unit_of_measure_code；DictValue=PC/EA 等；默认 PC）
    */
   unit: string;
 
@@ -784,7 +829,22 @@ export interface SalesInvoiceItemExport {
   transactionCurrencyAmount: number;
 
   /**
-   * 凭证类型（字典 logistics_accounting_document_type，DictValue=AA/AB/…）
+   * 含税价格（打印用；如 100.00）
+   */
+  taxIncludedPrice: number;
+
+  /**
+   * 未税价格（打印用；如 88.50）
+   */
+  untaxedPrice: number;
+
+  /**
+   * 税费（打印用；行税额，如 11.50）
+   */
+  taxAmount: number;
+
+  /**
+   * 凭证类型（字典 logistics_accounting_document_type；DictValue=AA/AB/…）
    */
   documentType: string;
 
@@ -799,7 +859,7 @@ export interface SalesInvoiceItemExport {
   referenceDocumentItem?: number;
 
   /**
-   * 是否作废（字典 sys_yes_no_type，0=否 1=是；编辑移除子行时标记作废）
+   * 是否作废（字典 sys_yes_no_type；0=否 1=是；编辑移除子行时标记作废）
    */
   isObsolete: number;
 

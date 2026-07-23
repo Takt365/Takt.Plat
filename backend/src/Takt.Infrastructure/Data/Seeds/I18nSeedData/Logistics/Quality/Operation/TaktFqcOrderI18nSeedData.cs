@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Infrastructure.Data.Seeds.I18nSeedData.Logistics.Quality.Operation
 // 文件名称：TaktFqcOrderI18nSeedData.cs
-// 创建时间：2026-07-20
+// 创建时间：2026-07-23
 // 创建人：Takt365(Auto Generated)
 // 功能描述：TaktFqcOrder 实体字段国际化种子（无对应 frontend locales；TranslationText 取自 ColumnDescription，ContextNote 取自属性 XML summary）
 // 
@@ -100,13 +100,13 @@ public class TaktFqcOrderI18nSeedData : ITaktSeedDataCoordinator
             new TranslationSeedItem("entity.fqcorder.plantcode", "zh-HK", "工厂代码_hk", "工厂代码（选项 TaktPlants/options，DictValue=PlantCode）"),
 
             // entity.fqcorder.sourcecode
-            new TranslationSeedItem("entity.fqcorder.sourcecode", "en-US", "来源单号_us", "来源单号（选项 TaktSalesOrders/options，DictValue=SalesOrderCode）"),
+            new TranslationSeedItem("entity.fqcorder.sourcecode", "en-US", "来源单号_us", "来源单号（选项 TaktSalesOrders/options；DictValue=SalesOrderCode）"),
             // entity.fqcorder.sourcecode
-            new TranslationSeedItem("entity.fqcorder.sourcecode", "ja-JP", "来源单号_jp", "来源单号（选项 TaktSalesOrders/options，DictValue=SalesOrderCode）"),
+            new TranslationSeedItem("entity.fqcorder.sourcecode", "ja-JP", "来源单号_jp", "来源单号（选项 TaktSalesOrders/options；DictValue=SalesOrderCode）"),
             // entity.fqcorder.sourcecode
-            new TranslationSeedItem("entity.fqcorder.sourcecode", "zh-CN", "来源单号", "来源单号（选项 TaktSalesOrders/options，DictValue=SalesOrderCode）"),
+            new TranslationSeedItem("entity.fqcorder.sourcecode", "zh-CN", "来源单号", "来源单号（选项 TaktSalesOrders/options；DictValue=SalesOrderCode）"),
             // entity.fqcorder.sourcecode
-            new TranslationSeedItem("entity.fqcorder.sourcecode", "zh-HK", "来源单号_hk", "来源单号（选项 TaktSalesOrders/options，DictValue=SalesOrderCode）"),
+            new TranslationSeedItem("entity.fqcorder.sourcecode", "zh-HK", "来源单号_hk", "来源单号（选项 TaktSalesOrders/options；DictValue=SalesOrderCode）"),
 
             // entity.fqcorder.inspectiondate
             new TranslationSeedItem("entity.fqcorder.inspectiondate", "en-US", "检验日期_us", "检验日期"),
@@ -127,13 +127,13 @@ public class TaktFqcOrderI18nSeedData : ITaktSeedDataCoordinator
             new TranslationSeedItem("entity.fqcorder.code", "zh-HK", "FQC检验单编码_hk", "FQC检验单编码（唯一索引，根据来源单号自动生成）"),
 
             // entity.fqcorder.customercode
-            new TranslationSeedItem("entity.fqcorder.customercode", "en-US", "客户编码_us", "客户编码（选项 TaktCustomers/options，DictValue=CustomerCode）"),
+            new TranslationSeedItem("entity.fqcorder.customercode", "en-US", "客户编码_us", "客户编码（选项 TaktCustomers/options；DictValue=CustomerCode）"),
             // entity.fqcorder.customercode
-            new TranslationSeedItem("entity.fqcorder.customercode", "ja-JP", "客户编码_jp", "客户编码（选项 TaktCustomers/options，DictValue=CustomerCode）"),
+            new TranslationSeedItem("entity.fqcorder.customercode", "ja-JP", "客户编码_jp", "客户编码（选项 TaktCustomers/options；DictValue=CustomerCode）"),
             // entity.fqcorder.customercode
-            new TranslationSeedItem("entity.fqcorder.customercode", "zh-CN", "客户编码", "客户编码（选项 TaktCustomers/options，DictValue=CustomerCode）"),
+            new TranslationSeedItem("entity.fqcorder.customercode", "zh-CN", "客户编码", "客户编码（选项 TaktCustomers/options；DictValue=CustomerCode）"),
             // entity.fqcorder.customercode
-            new TranslationSeedItem("entity.fqcorder.customercode", "zh-HK", "客户编码_hk", "客户编码（选项 TaktCustomers/options，DictValue=CustomerCode）"),
+            new TranslationSeedItem("entity.fqcorder.customercode", "zh-HK", "客户编码_hk", "客户编码（选项 TaktCustomers/options；DictValue=CustomerCode）"),
 
             // entity.fqcorder.totalwarehousequantity
             new TranslationSeedItem("entity.fqcorder.totalwarehousequantity", "en-US", "总入库数_us", "总入库数"),
@@ -181,13 +181,13 @@ public class TaktFqcOrderI18nSeedData : ITaktSeedDataCoordinator
             new TranslationSeedItem("entity.fqcorder.totalinspectionreturnquantity", "zh-HK", "总验退数量_hk", "总验退数量（自动计算 = 各明细验退数量合计）"),
 
             // entity.fqcorder.judgeby
-            new TranslationSeedItem("entity.fqcorder.judgeby", "en-US", "判定人_us", "判定人（选项 TaktEmployees/options，DictValue=EmployeeCode）"),
+            new TranslationSeedItem("entity.fqcorder.judgeby", "en-US", "判定人_us", "判定人（选项 TaktEmployees/options；DictValue=EmployeeCode）"),
             // entity.fqcorder.judgeby
-            new TranslationSeedItem("entity.fqcorder.judgeby", "ja-JP", "判定人_jp", "判定人（选项 TaktEmployees/options，DictValue=EmployeeCode）"),
+            new TranslationSeedItem("entity.fqcorder.judgeby", "ja-JP", "判定人_jp", "判定人（选项 TaktEmployees/options；DictValue=EmployeeCode）"),
             // entity.fqcorder.judgeby
-            new TranslationSeedItem("entity.fqcorder.judgeby", "zh-CN", "判定人", "判定人（选项 TaktEmployees/options，DictValue=EmployeeCode）"),
+            new TranslationSeedItem("entity.fqcorder.judgeby", "zh-CN", "判定人", "判定人（选项 TaktEmployees/options；DictValue=EmployeeCode）"),
             // entity.fqcorder.judgeby
-            new TranslationSeedItem("entity.fqcorder.judgeby", "zh-HK", "判定人_hk", "判定人（选项 TaktEmployees/options，DictValue=EmployeeCode）"),
+            new TranslationSeedItem("entity.fqcorder.judgeby", "zh-HK", "判定人_hk", "判定人（选项 TaktEmployees/options；DictValue=EmployeeCode）"),
 
             // entity.fqcorder.judgedate
             new TranslationSeedItem("entity.fqcorder.judgedate", "en-US", "判定日期_us", "判定日期"),

@@ -29,7 +29,7 @@ namespace Takt.Domain.Entities.Logistics.Sales;
 public class TaktSalesQuotation : TaktCompanyEntityBase
 {
     /// <summary>
-    /// 工厂代码（选项 TaktPlants/options，DictValue=PlantCode）
+    /// 工厂代码（选项 TaktPlants/options；DictValue=PlantCode）
     /// </summary>
     [SugarColumn(ColumnName = "plant_code", ColumnDescription = "工厂代码", ColumnDataType = "nvarchar", Length = 4, IsNullable = false)]
     public string PlantCode { get; set; } = string.Empty;
@@ -39,15 +39,15 @@ public class TaktSalesQuotation : TaktCompanyEntityBase
     [SugarColumn(ColumnName = "sales_quotation_code", ColumnDescription = "销售报价编码", ColumnDataType = "nvarchar", Length = 50, IsNullable = false)]
     public string SalesQuotationCode { get; set; } = string.Empty;
     /// <summary>
-    /// 客户编码（选项 TaktCustomers/options，DictValue=CustomerCode）
+    /// 客户编码（选项 TaktCustomers/options；DictValue=CustomerCode）
     /// </summary>
     [SugarColumn(ColumnName = "customer_code", ColumnDescription = "客户编码", ColumnDataType = "nvarchar", Length = 50, IsNullable = false)]
     public string CustomerCode { get; set; } = string.Empty;
     /// <summary>
-    /// 客户名称
+    /// 客户名称1（冗余，与 TaktCustomer.CustomerName1 对齐）
     /// </summary>
-    [SugarColumn(ColumnName = "customer_name", ColumnDescription = "客户名称", ColumnDataType = "nvarchar", Length = 200, IsNullable = false)]
-    public string CustomerName { get; set; } = string.Empty;
+    [SugarColumn(ColumnName = "customer_name1", ColumnDescription = "客户名称1", ColumnDataType = "nvarchar", Length = 140, IsNullable = false)]
+    public string CustomerName1 { get; set; } = string.Empty;
     /// <summary>
     /// 报价日期
     /// </summary>
@@ -59,7 +59,7 @@ public class TaktSalesQuotation : TaktCompanyEntityBase
     [SugarColumn(ColumnName = "valid_until_date", ColumnDescription = "报价有效期至", ColumnDataType = "datetime", IsNullable = true)]
     public DateTime? ValidUntilDate { get; set; }
     /// <summary>
-    /// 销售员（选项 TaktEmployees/options，DictValue=EmployeeCode）
+    /// 销售员（选项 TaktEmployees/options；DictValue=EmployeeCode）
     /// </summary>
     [SugarColumn(ColumnName = "sales_by", ColumnDescription = "销售员", ColumnDataType = "nvarchar", Length = 50, IsNullable = true)]
     public string? SalesBy { get; set; }
@@ -78,6 +78,16 @@ public class TaktSalesQuotation : TaktCompanyEntityBase
     /// </summary>
     [SugarColumn(ColumnName = "discount_amount", ColumnDescription = "折扣金额", ColumnDataType = "decimal", Length = 18, DecimalDigits = 2, IsNullable = false, DefaultValue = "0")]
     public decimal DiscountAmount { get; set; } = 0;
+    /// <summary>
+    /// 结算币种（字典 accounting_currency_code；DictValue=CNY/USD 等；一单一币种）
+    /// </summary>
+    [SugarColumn(ColumnName = "currency_code", ColumnDescription = "结算币种", ColumnDataType = "nvarchar", Length = 3, IsNullable = false, DefaultValue = "CNY")]
+    public string CurrencyCode { get; set; } = "CNY";
+    /// <summary>
+    /// 税率（字典 accounting_tax_rate_param；13=13%，9=9%，0=0% 等；一单一税率）
+    /// </summary>
+    [SugarColumn(ColumnName = "tax_rate", ColumnDescription = "税率", ColumnDataType = "int", IsNullable = false, DefaultValue = "13")]
+    public int TaxRate { get; set; } = 13;
     /// <summary>
     /// 税费
     /// </summary>

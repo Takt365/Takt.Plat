@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Infrastructure.Data.Seeds.I18nSeedData.HumanResource.Personnel
 // 文件名称：TaktEmployeeI18nSeedData.cs
-// 创建时间：2026-07-20
+// 创建时间：2026-07-23
 // 创建人：Takt365(Auto Generated)
 // 功能描述：TaktEmployee 实体字段国际化种子（无对应 frontend locales；TranslationText 取自 ColumnDescription，ContextNote 取自属性 XML summary）
 // 
@@ -90,14 +90,14 @@ public class TaktEmployeeI18nSeedData : ITaktSeedDataCoordinator
             // entity.employee._self
             new TranslationSeedItem("entity.employee._self", "zh-HK", "员工信息_hk", "实体名称"),
 
-            // entity.employee.no
-            new TranslationSeedItem("entity.employee.no", "en-US", "员工编号_us", "员工编号（租户+公司内唯一）"),
-            // entity.employee.no
-            new TranslationSeedItem("entity.employee.no", "ja-JP", "员工编号_jp", "员工编号（租户+公司内唯一）"),
-            // entity.employee.no
-            new TranslationSeedItem("entity.employee.no", "zh-CN", "员工编号", "员工编号（租户+公司内唯一）"),
-            // entity.employee.no
-            new TranslationSeedItem("entity.employee.no", "zh-HK", "员工编号_hk", "员工编号（租户+公司内唯一）"),
+            // entity.employee.code
+            new TranslationSeedItem("entity.employee.code", "en-US", "员工编码_us", "员工编码（租户+公司内唯一）"),
+            // entity.employee.code
+            new TranslationSeedItem("entity.employee.code", "ja-JP", "员工编码_jp", "员工编码（租户+公司内唯一）"),
+            // entity.employee.code
+            new TranslationSeedItem("entity.employee.code", "zh-CN", "员工编码", "员工编码（租户+公司内唯一）"),
+            // entity.employee.code
+            new TranslationSeedItem("entity.employee.code", "zh-HK", "员工编码_hk", "员工编码（租户+公司内唯一）"),
 
             // entity.employee.name
             new TranslationSeedItem("entity.employee.name", "en-US", "姓名_us", "姓名"),
@@ -154,13 +154,13 @@ public class TaktEmployeeI18nSeedData : ITaktSeedDataCoordinator
             new TranslationSeedItem("entity.employee.email", "zh-HK", "电子邮箱_hk", "电子邮箱"),
 
             // entity.employee.nativeplace
-            new TranslationSeedItem("entity.employee.nativeplace", "en-US", "籍贯_us", "籍贯（字典 hr_native_place_code；列存 6 位 GB 行政区划代码，人事档案必填）"),
+            new TranslationSeedItem("entity.employee.nativeplace", "en-US", "籍贯_us", "籍贯（字典 hr_native_place_code；列存 6 位 GB 行政区划代码，人事档案必填；与住址子表无关）"),
             // entity.employee.nativeplace
-            new TranslationSeedItem("entity.employee.nativeplace", "ja-JP", "籍贯_jp", "籍贯（字典 hr_native_place_code；列存 6 位 GB 行政区划代码，人事档案必填）"),
+            new TranslationSeedItem("entity.employee.nativeplace", "ja-JP", "籍贯_jp", "籍贯（字典 hr_native_place_code；列存 6 位 GB 行政区划代码，人事档案必填；与住址子表无关）"),
             // entity.employee.nativeplace
-            new TranslationSeedItem("entity.employee.nativeplace", "zh-CN", "籍贯", "籍贯（字典 hr_native_place_code；列存 6 位 GB 行政区划代码，人事档案必填）"),
+            new TranslationSeedItem("entity.employee.nativeplace", "zh-CN", "籍贯", "籍贯（字典 hr_native_place_code；列存 6 位 GB 行政区划代码，人事档案必填；与住址子表无关）"),
             // entity.employee.nativeplace
-            new TranslationSeedItem("entity.employee.nativeplace", "zh-HK", "籍贯_hk", "籍贯（字典 hr_native_place_code；列存 6 位 GB 行政区划代码，人事档案必填）"),
+            new TranslationSeedItem("entity.employee.nativeplace", "zh-HK", "籍贯_hk", "籍贯（字典 hr_native_place_code；列存 6 位 GB 行政区划代码，人事档案必填；与住址子表无关）"),
 
             // entity.employee.ethnicity
             new TranslationSeedItem("entity.employee.ethnicity", "en-US", "民族_us", "民族（字典 hr_ethnic_code；DictValue 1～56）"),
@@ -171,176 +171,14 @@ public class TaktEmployeeI18nSeedData : ITaktSeedDataCoordinator
             // entity.employee.ethnicity
             new TranslationSeedItem("entity.employee.ethnicity", "zh-HK", "民族_hk", "民族（字典 hr_ethnic_code；DictValue 1～56）"),
 
-            // entity.employee.education
-            new TranslationSeedItem("entity.employee.education", "en-US", "最高学历_us", "最高学历摘要（字典 hr_education_level_category；1=高中及以下 2=大专 3=本科 4=硕士 5=博士；明细见 EmployeeEducations）"),
-            // entity.employee.education
-            new TranslationSeedItem("entity.employee.education", "ja-JP", "最高学历_jp", "最高学历摘要（字典 hr_education_level_category；1=高中及以下 2=大专 3=本科 4=硕士 5=博士；明细见 EmployeeEducations）"),
-            // entity.employee.education
-            new TranslationSeedItem("entity.employee.education", "zh-CN", "最高学历", "最高学历摘要（字典 hr_education_level_category；1=高中及以下 2=大专 3=本科 4=硕士 5=博士；明细见 EmployeeEducations）"),
-            // entity.employee.education
-            new TranslationSeedItem("entity.employee.education", "zh-HK", "最高学历_hk", "最高学历摘要（字典 hr_education_level_category；1=高中及以下 2=大专 3=本科 4=硕士 5=博士；明细见 EmployeeEducations）"),
-
-            // entity.employee.graduateschool
-            new TranslationSeedItem("entity.employee.graduateschool", "en-US", "毕业院校_us", "毕业院校（最高学历摘要）"),
-            // entity.employee.graduateschool
-            new TranslationSeedItem("entity.employee.graduateschool", "ja-JP", "毕业院校_jp", "毕业院校（最高学历摘要）"),
-            // entity.employee.graduateschool
-            new TranslationSeedItem("entity.employee.graduateschool", "zh-CN", "毕业院校", "毕业院校（最高学历摘要）"),
-            // entity.employee.graduateschool
-            new TranslationSeedItem("entity.employee.graduateschool", "zh-HK", "毕业院校_hk", "毕业院校（最高学历摘要）"),
-
-            // entity.employee.major
-            new TranslationSeedItem("entity.employee.major", "en-US", "专业_us", "专业（最高学历摘要）"),
-            // entity.employee.major
-            new TranslationSeedItem("entity.employee.major", "ja-JP", "专业_jp", "专业（最高学历摘要）"),
-            // entity.employee.major
-            new TranslationSeedItem("entity.employee.major", "zh-CN", "专业", "专业（最高学历摘要）"),
-            // entity.employee.major
-            new TranslationSeedItem("entity.employee.major", "zh-HK", "专业_hk", "专业（最高学历摘要）"),
-
-            // entity.employee.joineddate
-            new TranslationSeedItem("entity.employee.joineddate", "en-US", "实际上岗日期_us", "实际上岗日期（JoinedDate：入职上班；投影字段，由上岗审批通过后回写，未上岗可空）"),
-            // entity.employee.joineddate
-            new TranslationSeedItem("entity.employee.joineddate", "ja-JP", "实际上岗日期_jp", "实际上岗日期（JoinedDate：入职上班；投影字段，由上岗审批通过后回写，未上岗可空）"),
-            // entity.employee.joineddate
-            new TranslationSeedItem("entity.employee.joineddate", "zh-CN", "实际上岗日期", "实际上岗日期（JoinedDate：入职上班；投影字段，由上岗审批通过后回写，未上岗可空）"),
-            // entity.employee.joineddate
-            new TranslationSeedItem("entity.employee.joineddate", "zh-HK", "实际上岗日期_hk", "实际上岗日期（JoinedDate：入职上班；投影字段，由上岗审批通过后回写，未上岗可空）"),
-
-            // entity.employee.probationenddate
-            new TranslationSeedItem("entity.employee.probationenddate", "en-US", "试用期结束日期_us", "试用期结束日期（投影字段，由上岗审批通过后回写）"),
-            // entity.employee.probationenddate
-            new TranslationSeedItem("entity.employee.probationenddate", "ja-JP", "试用期结束日期_jp", "试用期结束日期（投影字段，由上岗审批通过后回写）"),
-            // entity.employee.probationenddate
-            new TranslationSeedItem("entity.employee.probationenddate", "zh-CN", "试用期结束日期", "试用期结束日期（投影字段，由上岗审批通过后回写）"),
-            // entity.employee.probationenddate
-            new TranslationSeedItem("entity.employee.probationenddate", "zh-HK", "试用期结束日期_hk", "试用期结束日期（投影字段，由上岗审批通过后回写）"),
-
-            // entity.employee.regulardate
-            new TranslationSeedItem("entity.employee.regulardate", "en-US", "转正日期_us", "转正日期（投影字段，由上岗审批通过后回写）"),
-            // entity.employee.regulardate
-            new TranslationSeedItem("entity.employee.regulardate", "ja-JP", "转正日期_jp", "转正日期（投影字段，由上岗审批通过后回写）"),
-            // entity.employee.regulardate
-            new TranslationSeedItem("entity.employee.regulardate", "zh-CN", "转正日期", "转正日期（投影字段，由上岗审批通过后回写）"),
-            // entity.employee.regulardate
-            new TranslationSeedItem("entity.employee.regulardate", "zh-HK", "转正日期_hk", "转正日期（投影字段，由上岗审批通过后回写）"),
-
-            // entity.employee.terminationdate
-            new TranslationSeedItem("entity.employee.terminationdate", "en-US", "离职日期_us", "离职日期（投影字段，由离职审批通过后回写）"),
-            // entity.employee.terminationdate
-            new TranslationSeedItem("entity.employee.terminationdate", "ja-JP", "离职日期_jp", "离职日期（投影字段，由离职审批通过后回写）"),
-            // entity.employee.terminationdate
-            new TranslationSeedItem("entity.employee.terminationdate", "zh-CN", "离职日期", "离职日期（投影字段，由离职审批通过后回写）"),
-            // entity.employee.terminationdate
-            new TranslationSeedItem("entity.employee.terminationdate", "zh-HK", "离职日期_hk", "离职日期（投影字段，由离职审批通过后回写）"),
-
-            // entity.employee.lastworkdate
-            new TranslationSeedItem("entity.employee.lastworkdate", "en-US", "最后工作日_us", "最后工作日（投影字段，由离职审批通过后回写）"),
-            // entity.employee.lastworkdate
-            new TranslationSeedItem("entity.employee.lastworkdate", "ja-JP", "最后工作日_jp", "最后工作日（投影字段，由离职审批通过后回写）"),
-            // entity.employee.lastworkdate
-            new TranslationSeedItem("entity.employee.lastworkdate", "zh-CN", "最后工作日", "最后工作日（投影字段，由离职审批通过后回写）"),
-            // entity.employee.lastworkdate
-            new TranslationSeedItem("entity.employee.lastworkdate", "zh-HK", "最后工作日_hk", "最后工作日（投影字段，由离职审批通过后回写）"),
-
-            // entity.employee.resignationtype
-            new TranslationSeedItem("entity.employee.resignationtype", "en-US", "离职类型_us", "离职类型（字典 hr_resignation_category；投影字段，由离职审批通过后回写；0=主动辞职 1=公司辞退 2=合同到期 3=退休 9=其他）"),
-            // entity.employee.resignationtype
-            new TranslationSeedItem("entity.employee.resignationtype", "ja-JP", "离职类型_jp", "离职类型（字典 hr_resignation_category；投影字段，由离职审批通过后回写；0=主动辞职 1=公司辞退 2=合同到期 3=退休 9=其他）"),
-            // entity.employee.resignationtype
-            new TranslationSeedItem("entity.employee.resignationtype", "zh-CN", "离职类型", "离职类型（字典 hr_resignation_category；投影字段，由离职审批通过后回写；0=主动辞职 1=公司辞退 2=合同到期 3=退休 9=其他）"),
-            // entity.employee.resignationtype
-            new TranslationSeedItem("entity.employee.resignationtype", "zh-HK", "离职类型_hk", "离职类型（字典 hr_resignation_category；投影字段，由离职审批通过后回写；0=主动辞职 1=公司辞退 2=合同到期 3=退休 9=其他）"),
-
-            // entity.employee.resignationreason
-            new TranslationSeedItem("entity.employee.resignationreason", "en-US", "离职原因_us", "离职原因（投影字段，由离职审批通过后回写）"),
-            // entity.employee.resignationreason
-            new TranslationSeedItem("entity.employee.resignationreason", "ja-JP", "离职原因_jp", "离职原因（投影字段，由离职审批通过后回写）"),
-            // entity.employee.resignationreason
-            new TranslationSeedItem("entity.employee.resignationreason", "zh-CN", "离职原因", "离职原因（投影字段，由离职审批通过后回写）"),
-            // entity.employee.resignationreason
-            new TranslationSeedItem("entity.employee.resignationreason", "zh-HK", "离职原因_hk", "离职原因（投影字段，由离职审批通过后回写）"),
-
-            // entity.employee.status
-            new TranslationSeedItem("entity.employee.status", "en-US", "员工状态_us", "员工状态（字典 hr_employee_status；1=试用期 2=正式 3=离职 4=退休）"),
-            // entity.employee.status
-            new TranslationSeedItem("entity.employee.status", "ja-JP", "员工状态_jp", "员工状态（字典 hr_employee_status；1=试用期 2=正式 3=离职 4=退休）"),
-            // entity.employee.status
-            new TranslationSeedItem("entity.employee.status", "zh-CN", "员工状态", "员工状态（字典 hr_employee_status；1=试用期 2=正式 3=离职 4=退休）"),
-            // entity.employee.status
-            new TranslationSeedItem("entity.employee.status", "zh-HK", "员工状态_hk", "员工状态（字典 hr_employee_status；1=试用期 2=正式 3=离职 4=退休）"),
-
-            // entity.employee.primarydeptid
-            new TranslationSeedItem("entity.employee.primarydeptid", "en-US", "当前主部门ID_us", "当前主部门（关联 TaktDept.Id，选项 TaktDepts/tree-options；任职投影快照，未上岗可空）"),
-            // entity.employee.primarydeptid
-            new TranslationSeedItem("entity.employee.primarydeptid", "ja-JP", "当前主部门ID_jp", "当前主部门（关联 TaktDept.Id，选项 TaktDepts/tree-options；任职投影快照，未上岗可空）"),
-            // entity.employee.primarydeptid
-            new TranslationSeedItem("entity.employee.primarydeptid", "zh-CN", "当前主部门ID", "当前主部门（关联 TaktDept.Id，选项 TaktDepts/tree-options；任职投影快照，未上岗可空）"),
-            // entity.employee.primarydeptid
-            new TranslationSeedItem("entity.employee.primarydeptid", "zh-HK", "当前主部门ID_hk", "当前主部门（关联 TaktDept.Id，选项 TaktDepts/tree-options；任职投影快照，未上岗可空）"),
-
-            // entity.employee.primarypostid
-            new TranslationSeedItem("entity.employee.primarypostid", "en-US", "当前主岗位ID_us", "当前主岗位（选项 TaktPosts/options；任职投影快照，未上岗可空，DictValue=Id）"),
-            // entity.employee.primarypostid
-            new TranslationSeedItem("entity.employee.primarypostid", "ja-JP", "当前主岗位ID_jp", "当前主岗位（选项 TaktPosts/options；任职投影快照，未上岗可空，DictValue=Id）"),
-            // entity.employee.primarypostid
-            new TranslationSeedItem("entity.employee.primarypostid", "zh-CN", "当前主岗位ID", "当前主岗位（选项 TaktPosts/options；任职投影快照，未上岗可空，DictValue=Id）"),
-            // entity.employee.primarypostid
-            new TranslationSeedItem("entity.employee.primarypostid", "zh-HK", "当前主岗位ID_hk", "当前主岗位（选项 TaktPosts/options；任职投影快照，未上岗可空，DictValue=Id）"),
-
-            // entity.employee.isbuiltin
-            new TranslationSeedItem("entity.employee.isbuiltin", "en-US", "内置_us", "内置（字典 sys_yes_no_type；0=否 1=是；种子员工不可删）"),
-            // entity.employee.isbuiltin
-            new TranslationSeedItem("entity.employee.isbuiltin", "ja-JP", "内置_jp", "内置（字典 sys_yes_no_type；0=否 1=是；种子员工不可删）"),
-            // entity.employee.isbuiltin
-            new TranslationSeedItem("entity.employee.isbuiltin", "zh-CN", "内置", "内置（字典 sys_yes_no_type；0=否 1=是；种子员工不可删）"),
-            // entity.employee.isbuiltin
-            new TranslationSeedItem("entity.employee.isbuiltin", "zh-HK", "内置_hk", "内置（字典 sys_yes_no_type；0=否 1=是；种子员工不可删）"),
-
-            // entity.employee.emergencycontactname
-            new TranslationSeedItem("entity.employee.emergencycontactname", "en-US", "紧急联系人姓名_us", "紧急联系人姓名（人事档案必填）"),
-            // entity.employee.emergencycontactname
-            new TranslationSeedItem("entity.employee.emergencycontactname", "ja-JP", "紧急联系人姓名_jp", "紧急联系人姓名（人事档案必填）"),
-            // entity.employee.emergencycontactname
-            new TranslationSeedItem("entity.employee.emergencycontactname", "zh-CN", "紧急联系人姓名", "紧急联系人姓名（人事档案必填）"),
-            // entity.employee.emergencycontactname
-            new TranslationSeedItem("entity.employee.emergencycontactname", "zh-HK", "紧急联系人姓名_hk", "紧急联系人姓名（人事档案必填）"),
-
-            // entity.employee.emergencycontactphone
-            new TranslationSeedItem("entity.employee.emergencycontactphone", "en-US", "紧急联系人电话_us", "紧急联系人电话（人事档案必填）"),
-            // entity.employee.emergencycontactphone
-            new TranslationSeedItem("entity.employee.emergencycontactphone", "ja-JP", "紧急联系人电话_jp", "紧急联系人电话（人事档案必填）"),
-            // entity.employee.emergencycontactphone
-            new TranslationSeedItem("entity.employee.emergencycontactphone", "zh-CN", "紧急联系人电话", "紧急联系人电话（人事档案必填）"),
-            // entity.employee.emergencycontactphone
-            new TranslationSeedItem("entity.employee.emergencycontactphone", "zh-HK", "紧急联系人电话_hk", "紧急联系人电话（人事档案必填）"),
-
-            // entity.employee.homeaddress
-            new TranslationSeedItem("entity.employee.homeaddress", "en-US", "家庭住址_us", "家庭住址（人事档案必填）"),
-            // entity.employee.homeaddress
-            new TranslationSeedItem("entity.employee.homeaddress", "ja-JP", "家庭住址_jp", "家庭住址（人事档案必填）"),
-            // entity.employee.homeaddress
-            new TranslationSeedItem("entity.employee.homeaddress", "zh-CN", "家庭住址", "家庭住址（人事档案必填）"),
-            // entity.employee.homeaddress
-            new TranslationSeedItem("entity.employee.homeaddress", "zh-HK", "家庭住址_hk", "家庭住址（人事档案必填）"),
-
-            // entity.employee.avatar
-            new TranslationSeedItem("entity.employee.avatar", "en-US", "头像URL_us", "头像URL"),
-            // entity.employee.avatar
-            new TranslationSeedItem("entity.employee.avatar", "ja-JP", "头像URL_jp", "头像URL"),
-            // entity.employee.avatar
-            new TranslationSeedItem("entity.employee.avatar", "zh-CN", "头像URL", "头像URL"),
-            // entity.employee.avatar
-            new TranslationSeedItem("entity.employee.avatar", "zh-HK", "头像URL_hk", "头像URL"),
-
-            // entity.employee.politicalstatus
-            new TranslationSeedItem("entity.employee.politicalstatus", "en-US", "政治面貌_us", "政治面貌（字典 hr_political_status；0～12；人事档案必填）"),
-            // entity.employee.politicalstatus
-            new TranslationSeedItem("entity.employee.politicalstatus", "ja-JP", "政治面貌_jp", "政治面貌（字典 hr_political_status；0～12；人事档案必填）"),
-            // entity.employee.politicalstatus
-            new TranslationSeedItem("entity.employee.politicalstatus", "zh-CN", "政治面貌", "政治面貌（字典 hr_political_status；0～12；人事档案必填）"),
-            // entity.employee.politicalstatus
-            new TranslationSeedItem("entity.employee.politicalstatus", "zh-HK", "政治面貌_hk", "政治面貌（字典 hr_political_status；0～12；人事档案必填）"),
+            // entity.employee.politicalaffiliation
+            new TranslationSeedItem("entity.employee.politicalaffiliation", "en-US", "政治面貌_us", "政治面貌（字典 hr_political_affiliation；0～12；人事档案必填）"),
+            // entity.employee.politicalaffiliation
+            new TranslationSeedItem("entity.employee.politicalaffiliation", "ja-JP", "政治面貌_jp", "政治面貌（字典 hr_political_affiliation；0～12；人事档案必填）"),
+            // entity.employee.politicalaffiliation
+            new TranslationSeedItem("entity.employee.politicalaffiliation", "zh-CN", "政治面貌", "政治面貌（字典 hr_political_affiliation；0～12；人事档案必填）"),
+            // entity.employee.politicalaffiliation
+            new TranslationSeedItem("entity.employee.politicalaffiliation", "zh-HK", "政治面貌_hk", "政治面貌（字典 hr_political_affiliation；0～12；人事档案必填）"),
 
             // entity.employee.maritalstatus
             new TranslationSeedItem("entity.employee.maritalstatus", "en-US", "婚姻状况_us", "婚姻状况（字典 hr_marital_status；0=未婚 1=已婚 2=离异 3=丧偶；人事档案必填）"),
@@ -351,23 +189,149 @@ public class TaktEmployeeI18nSeedData : ITaktSeedDataCoordinator
             // entity.employee.maritalstatus
             new TranslationSeedItem("entity.employee.maritalstatus", "zh-HK", "婚姻状况_hk", "婚姻状况（字典 hr_marital_status；0=未婚 1=已婚 2=离异 3=丧偶；人事档案必填）"),
 
+            // entity.employee.status
+            new TranslationSeedItem("entity.employee.status", "en-US", "员工状态_us", "员工状态（字典 hr_employee_status；1=试用期 2=正式 3=离职 4=退休）"),
+            // entity.employee.status
+            new TranslationSeedItem("entity.employee.status", "ja-JP", "员工状态_jp", "员工状态（字典 hr_employee_status；1=试用期 2=正式 3=离职 4=退休）"),
+            // entity.employee.status
+            new TranslationSeedItem("entity.employee.status", "zh-CN", "员工状态", "员工状态（字典 hr_employee_status；1=试用期 2=正式 3=离职 4=退休）"),
+            // entity.employee.status
+            new TranslationSeedItem("entity.employee.status", "zh-HK", "员工状态_hk", "员工状态（字典 hr_employee_status；1=试用期 2=正式 3=离职 4=退休）"),
+
+            // entity.employee.isbuiltin
+            new TranslationSeedItem("entity.employee.isbuiltin", "en-US", "内置_us", "内置（字典 sys_yes_no_type；0=否 1=是；种子员工不可删）"),
+            // entity.employee.isbuiltin
+            new TranslationSeedItem("entity.employee.isbuiltin", "ja-JP", "内置_jp", "内置（字典 sys_yes_no_type；0=否 1=是；种子员工不可删）"),
+            // entity.employee.isbuiltin
+            new TranslationSeedItem("entity.employee.isbuiltin", "zh-CN", "内置", "内置（字典 sys_yes_no_type；0=否 1=是；种子员工不可删）"),
+            // entity.employee.isbuiltin
+            new TranslationSeedItem("entity.employee.isbuiltin", "zh-HK", "内置_hk", "内置（字典 sys_yes_no_type；0=否 1=是；种子员工不可删）"),
+
+            // entity.employee.avatar
+            new TranslationSeedItem("entity.employee.avatar", "en-US", "头像URL_us", "头像URL（展示用；档案附件明细见 EmployeeAttachments）"),
+            // entity.employee.avatar
+            new TranslationSeedItem("entity.employee.avatar", "ja-JP", "头像URL_jp", "头像URL（展示用；档案附件明细见 EmployeeAttachments）"),
+            // entity.employee.avatar
+            new TranslationSeedItem("entity.employee.avatar", "zh-CN", "头像URL", "头像URL（展示用；档案附件明细见 EmployeeAttachments）"),
+            // entity.employee.avatar
+            new TranslationSeedItem("entity.employee.avatar", "zh-HK", "头像URL_hk", "头像URL（展示用；档案附件明细见 EmployeeAttachments）"),
+
             // entity.employee.depts
-            new TranslationSeedItem("entity.employee.depts", "en-US", "员工部门关联_us", "员工部门关联（RBAC，表 takt_human_resource_organization_employee_dept）"),
+            new TranslationSeedItem("entity.employee.depts", "en-US", "员工部门关联_us", "员工部门关联（RBAC，表 takt_human_resource_organization_employeedept）"),
             // entity.employee.depts
-            new TranslationSeedItem("entity.employee.depts", "ja-JP", "员工部门关联_jp", "员工部门关联（RBAC，表 takt_human_resource_organization_employee_dept）"),
+            new TranslationSeedItem("entity.employee.depts", "ja-JP", "员工部门关联_jp", "员工部门关联（RBAC，表 takt_human_resource_organization_employeedept）"),
             // entity.employee.depts
-            new TranslationSeedItem("entity.employee.depts", "zh-CN", "员工部门关联", "员工部门关联（RBAC，表 takt_human_resource_organization_employee_dept）"),
+            new TranslationSeedItem("entity.employee.depts", "zh-CN", "员工部门关联", "员工部门关联（RBAC，表 takt_human_resource_organization_employeedept）"),
             // entity.employee.depts
-            new TranslationSeedItem("entity.employee.depts", "zh-HK", "员工部门关联_hk", "员工部门关联（RBAC，表 takt_human_resource_organization_employee_dept）"),
+            new TranslationSeedItem("entity.employee.depts", "zh-HK", "员工部门关联_hk", "员工部门关联（RBAC，表 takt_human_resource_organization_employeedept）"),
 
             // entity.employee.posts
-            new TranslationSeedItem("entity.employee.posts", "en-US", "员工岗位关联_us", "员工岗位关联（RBAC，表 takt_human_resource_organization_employee_post）"),
+            new TranslationSeedItem("entity.employee.posts", "en-US", "员工岗位关联_us", "员工岗位关联（RBAC，表 takt_human_resource_organization_employeepost）"),
             // entity.employee.posts
-            new TranslationSeedItem("entity.employee.posts", "ja-JP", "员工岗位关联_jp", "员工岗位关联（RBAC，表 takt_human_resource_organization_employee_post）"),
+            new TranslationSeedItem("entity.employee.posts", "ja-JP", "员工岗位关联_jp", "员工岗位关联（RBAC，表 takt_human_resource_organization_employeepost）"),
             // entity.employee.posts
-            new TranslationSeedItem("entity.employee.posts", "zh-CN", "员工岗位关联", "员工岗位关联（RBAC，表 takt_human_resource_organization_employee_post）"),
+            new TranslationSeedItem("entity.employee.posts", "zh-CN", "员工岗位关联", "员工岗位关联（RBAC，表 takt_human_resource_organization_employeepost）"),
             // entity.employee.posts
-            new TranslationSeedItem("entity.employee.posts", "zh-HK", "员工岗位关联_hk", "员工岗位关联（RBAC，表 takt_human_resource_organization_employee_post）"),
+            new TranslationSeedItem("entity.employee.posts", "zh-HK", "员工岗位关联_hk", "员工岗位关联（RBAC，表 takt_human_resource_organization_employeepost）"),
+
+            // entity.employee.addresses
+            new TranslationSeedItem("entity.employee.addresses", "en-US", "员工地址_us", "员工地址（家庭/工作/常住）"),
+            // entity.employee.addresses
+            new TranslationSeedItem("entity.employee.addresses", "ja-JP", "员工地址_jp", "员工地址（家庭/工作/常住）"),
+            // entity.employee.addresses
+            new TranslationSeedItem("entity.employee.addresses", "zh-CN", "员工地址", "员工地址（家庭/工作/常住）"),
+            // entity.employee.addresses
+            new TranslationSeedItem("entity.employee.addresses", "zh-HK", "员工地址_hk", "员工地址（家庭/工作/常住）"),
+
+            // entity.employee.educations
+            new TranslationSeedItem("entity.employee.educations", "en-US", "教育经历_us", "教育经历（含最高学历 IsHighest）"),
+            // entity.employee.educations
+            new TranslationSeedItem("entity.employee.educations", "ja-JP", "教育经历_jp", "教育经历（含最高学历 IsHighest）"),
+            // entity.employee.educations
+            new TranslationSeedItem("entity.employee.educations", "zh-CN", "教育经历", "教育经历（含最高学历 IsHighest）"),
+            // entity.employee.educations
+            new TranslationSeedItem("entity.employee.educations", "zh-HK", "教育经历_hk", "教育经历（含最高学历 IsHighest）"),
+
+            // entity.employee.families
+            new TranslationSeedItem("entity.employee.families", "en-US", "家庭成员_us", "家庭成员（含紧急联系人 IsEmergencyContact）"),
+            // entity.employee.families
+            new TranslationSeedItem("entity.employee.families", "ja-JP", "家庭成员_jp", "家庭成员（含紧急联系人 IsEmergencyContact）"),
+            // entity.employee.families
+            new TranslationSeedItem("entity.employee.families", "zh-CN", "家庭成员", "家庭成员（含紧急联系人 IsEmergencyContact）"),
+            // entity.employee.families
+            new TranslationSeedItem("entity.employee.families", "zh-HK", "家庭成员_hk", "家庭成员（含紧急联系人 IsEmergencyContact）"),
+
+            // entity.employee.experiences
+            new TranslationSeedItem("entity.employee.experiences", "en-US", "外部工作经历_us", "外部工作经历"),
+            // entity.employee.experiences
+            new TranslationSeedItem("entity.employee.experiences", "ja-JP", "外部工作经历_jp", "外部工作经历"),
+            // entity.employee.experiences
+            new TranslationSeedItem("entity.employee.experiences", "zh-CN", "外部工作经历", "外部工作经历"),
+            // entity.employee.experiences
+            new TranslationSeedItem("entity.employee.experiences", "zh-HK", "外部工作经历_hk", "外部工作经历"),
+
+            // entity.employee.skills
+            new TranslationSeedItem("entity.employee.skills", "en-US", "技能与证书_us", "技能与证书"),
+            // entity.employee.skills
+            new TranslationSeedItem("entity.employee.skills", "ja-JP", "技能与证书_jp", "技能与证书"),
+            // entity.employee.skills
+            new TranslationSeedItem("entity.employee.skills", "zh-CN", "技能与证书", "技能与证书"),
+            // entity.employee.skills
+            new TranslationSeedItem("entity.employee.skills", "zh-HK", "技能与证书_hk", "技能与证书"),
+
+            // entity.employee.contracts
+            new TranslationSeedItem("entity.employee.contracts", "en-US", "劳动合同_us", "劳动合同"),
+            // entity.employee.contracts
+            new TranslationSeedItem("entity.employee.contracts", "ja-JP", "劳动合同_jp", "劳动合同"),
+            // entity.employee.contracts
+            new TranslationSeedItem("entity.employee.contracts", "zh-CN", "劳动合同", "劳动合同"),
+            // entity.employee.contracts
+            new TranslationSeedItem("entity.employee.contracts", "zh-HK", "劳动合同_hk", "劳动合同"),
+
+            // entity.employee.joineds
+            new TranslationSeedItem("entity.employee.joineds", "en-US", "入职上岗办理_us", "入职上岗办理（实际上岗日/试用/转正/部门岗位）"),
+            // entity.employee.joineds
+            new TranslationSeedItem("entity.employee.joineds", "ja-JP", "入职上岗办理_jp", "入职上岗办理（实际上岗日/试用/转正/部门岗位）"),
+            // entity.employee.joineds
+            new TranslationSeedItem("entity.employee.joineds", "zh-CN", "入职上岗办理", "入职上岗办理（实际上岗日/试用/转正/部门岗位）"),
+            // entity.employee.joineds
+            new TranslationSeedItem("entity.employee.joineds", "zh-HK", "入职上岗办理_hk", "入职上岗办理（实际上岗日/试用/转正/部门岗位）"),
+
+            // entity.employee.onboardings
+            new TranslationSeedItem("entity.employee.onboardings", "en-US", "入职待办_us", "入职待办"),
+            // entity.employee.onboardings
+            new TranslationSeedItem("entity.employee.onboardings", "ja-JP", "入职待办_jp", "入职待办"),
+            // entity.employee.onboardings
+            new TranslationSeedItem("entity.employee.onboardings", "zh-CN", "入职待办", "入职待办"),
+            // entity.employee.onboardings
+            new TranslationSeedItem("entity.employee.onboardings", "zh-HK", "入职待办_hk", "入职待办"),
+
+            // entity.employee.reassignments
+            new TranslationSeedItem("entity.employee.reassignments", "en-US", "调动记录_us", "调动记录"),
+            // entity.employee.reassignments
+            new TranslationSeedItem("entity.employee.reassignments", "ja-JP", "调动记录_jp", "调动记录"),
+            // entity.employee.reassignments
+            new TranslationSeedItem("entity.employee.reassignments", "zh-CN", "调动记录", "调动记录"),
+            // entity.employee.reassignments
+            new TranslationSeedItem("entity.employee.reassignments", "zh-HK", "调动记录_hk", "调动记录"),
+
+            // entity.employee.resignations
+            new TranslationSeedItem("entity.employee.resignations", "en-US", "离职办理_us", "离职办理"),
+            // entity.employee.resignations
+            new TranslationSeedItem("entity.employee.resignations", "ja-JP", "离职办理_jp", "离职办理"),
+            // entity.employee.resignations
+            new TranslationSeedItem("entity.employee.resignations", "zh-CN", "离职办理", "离职办理"),
+            // entity.employee.resignations
+            new TranslationSeedItem("entity.employee.resignations", "zh-HK", "离职办理_hk", "离职办理"),
+
+            // entity.employee.attachments
+            new TranslationSeedItem("entity.employee.attachments", "en-US", "档案附件_us", "档案附件"),
+            // entity.employee.attachments
+            new TranslationSeedItem("entity.employee.attachments", "ja-JP", "档案附件_jp", "档案附件"),
+            // entity.employee.attachments
+            new TranslationSeedItem("entity.employee.attachments", "zh-CN", "档案附件", "档案附件"),
+            // entity.employee.attachments
+            new TranslationSeedItem("entity.employee.attachments", "zh-HK", "档案附件_hk", "档案附件"),
         };
     }
 

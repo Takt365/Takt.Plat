@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：frontend/src/types/human-resource/personnel
 // 文件名称：employee-joined.d.ts
-// 创建时间：2026-06-23
+// 创建时间：2026-07-23
 // 创建人：Takt365(Auto Generated)
 // 功能描述：human-resource/personnel 模块类型定义（自动生成；类型名去 Takt 前缀与末尾 Dto，如 TaktCompanyDto → Company）
 // 
@@ -16,7 +16,7 @@ import type {
 } from '@/types/common';
 
 /**
- * 员工入职上岗办理记录（审批单，Joined=实际上班；状态见 <see cref="TaktApprovalEntityBase.ApprovalStatus"/>）
+ * 员工入职上岗办理记录（审批单，Joined=实际上班；审批态见基类 ApprovalStatus，字典 sys_approval_status）
  * 对应前端 TaktEmployeeJoinedDto
  * 继承 TaktApprovalDtoBase
  * 对应前端 EmployeeJoined
@@ -29,22 +29,27 @@ export interface EmployeeJoined extends ApprovalDtoBase {
   employeeJoinedId: string;
 
   /**
-   * 员工ID
+   * 员工（选项 TaktEmployees/options；DictValue=Id）
    */
   employeeId: string;
 
   /**
-   * 员工名称（填充字段）
+   * 员工编码（冗余，与 TaktEmployee.EmployeeCode 对齐）
    */
-  employeeName?: string;
+  employeeCode: string;
 
   /**
-   * 入职待办ID（由入职待办办结后生成上岗单时回填，可空）
+   * 员工姓名（冗余，与 TaktEmployee.EmployeeName 对齐）
+   */
+  employeeName: string;
+
+  /**
+   * 入职待办（选项 TaktEmployeeOnboardings/options；DictValue=Id）
    */
   onboardingId?: string;
 
   /**
-   * 入职待办名称（填充字段）
+   * 入职待办（选项 TaktEmployeeOnboardings/options；DictValue=Id）
    */
   onboardingName?: string;
 
@@ -64,7 +69,7 @@ export interface EmployeeJoined extends ApprovalDtoBase {
   regularDate?: string;
 
   /**
-   * 上岗部门ID
+   * 上岗部门（关联 TaktDept.Id，选项 TaktDepts/tree-options）
    */
   deptId: string;
 
@@ -74,7 +79,7 @@ export interface EmployeeJoined extends ApprovalDtoBase {
   deptName: string;
 
   /**
-   * 上岗岗位ID
+   * 上岗岗位（选项 TaktPosts/options；DictValue=Id）
    */
   postId?: string;
 
@@ -89,17 +94,17 @@ export interface EmployeeJoined extends ApprovalDtoBase {
   jobTitle?: string;
 
   /**
-   * 工作性质（0=全职，1=兼职，2=实习，3=外包，4=其他）
+   * 工作性质（字典 hr_employee_work_nature_type；0=全职 1=兼职 2=实习 3=外包 4=其他）
    */
   workNature: number;
 
   /**
-   * 任职类型（0=主职，1=兼职，2=借调，3=挂职）
+   * 任职类型（字典 hr_employee_employment_type；0=主职 1=兼职 2=借调 3=挂职）
    */
   employmentType: number;
 
   /**
-   * 直属上级员工ID
+   * 直属上级（选项 TaktEmployees/options；DictValue=Id）
    */
   directManagerId?: string;
 
@@ -129,12 +134,22 @@ export interface EmployeeJoinedQuery extends TaktPagedQuery {
   companyCode?: string;
 
   /**
-   * 员工ID
+   * 员工（选项 TaktEmployees/options；DictValue=Id）
    */
   employeeId?: string;
 
   /**
-   * 入职待办ID（由入职待办办结后生成上岗单时回填，可空）
+   * 员工编码（冗余，与 TaktEmployee.EmployeeCode 对齐）
+   */
+  employeeCode?: string;
+
+  /**
+   * 员工姓名（冗余，与 TaktEmployee.EmployeeName 对齐）
+   */
+  employeeName?: string;
+
+  /**
+   * 入职待办（选项 TaktEmployeeOnboardings/options；DictValue=Id）
    */
   onboardingId?: string;
 
@@ -169,7 +184,7 @@ export interface EmployeeJoinedQuery extends TaktPagedQuery {
   regularDateEnd?: string;
 
   /**
-   * 上岗部门ID
+   * 上岗部门（关联 TaktDept.Id，选项 TaktDepts/tree-options）
    */
   deptId?: string;
 
@@ -179,7 +194,7 @@ export interface EmployeeJoinedQuery extends TaktPagedQuery {
   deptName?: string;
 
   /**
-   * 上岗岗位ID
+   * 上岗岗位（选项 TaktPosts/options；DictValue=Id）
    */
   postId?: string;
 
@@ -194,17 +209,17 @@ export interface EmployeeJoinedQuery extends TaktPagedQuery {
   jobTitle?: string;
 
   /**
-   * 工作性质（0=全职，1=兼职，2=实习，3=外包，4=其他）
+   * 工作性质（字典 hr_employee_work_nature_type；0=全职 1=兼职 2=实习 3=外包 4=其他）
    */
   workNature?: number;
 
   /**
-   * 任职类型（0=主职，1=兼职，2=借调，3=挂职）
+   * 任职类型（字典 hr_employee_employment_type；0=主职 1=兼职 2=借调 3=挂职）
    */
   employmentType?: number;
 
   /**
-   * 直属上级员工ID
+   * 直属上级（选项 TaktEmployees/options；DictValue=Id）
    */
   directManagerId?: string;
 
@@ -298,12 +313,22 @@ export interface EmployeeJoinedCreate {
   companyDefaultCulture: string;
 
   /**
-   * 员工ID
+   * 员工（选项 TaktEmployees/options；DictValue=Id）
    */
   employeeId: string;
 
   /**
-   * 入职待办ID（由入职待办办结后生成上岗单时回填，可空）
+   * 员工编码（冗余，与 TaktEmployee.EmployeeCode 对齐）
+   */
+  employeeCode: string;
+
+  /**
+   * 员工姓名（冗余，与 TaktEmployee.EmployeeName 对齐）
+   */
+  employeeName: string;
+
+  /**
+   * 入职待办（选项 TaktEmployeeOnboardings/options；DictValue=Id）
    */
   onboardingId?: string;
 
@@ -323,7 +348,7 @@ export interface EmployeeJoinedCreate {
   regularDate?: string;
 
   /**
-   * 上岗部门ID
+   * 上岗部门（关联 TaktDept.Id，选项 TaktDepts/tree-options）
    */
   deptId: string;
 
@@ -333,7 +358,7 @@ export interface EmployeeJoinedCreate {
   deptName: string;
 
   /**
-   * 上岗岗位ID
+   * 上岗岗位（选项 TaktPosts/options；DictValue=Id）
    */
   postId?: string;
 
@@ -348,17 +373,17 @@ export interface EmployeeJoinedCreate {
   jobTitle?: string;
 
   /**
-   * 工作性质（0=全职，1=兼职，2=实习，3=外包，4=其他）
+   * 工作性质（字典 hr_employee_work_nature_type；0=全职 1=兼职 2=实习 3=外包 4=其他）
    */
   workNature: number;
 
   /**
-   * 任职类型（0=主职，1=兼职，2=借调，3=挂职）
+   * 任职类型（字典 hr_employee_employment_type；0=主职 1=兼职 2=借调 3=挂职）
    */
   employmentType: number;
 
   /**
-   * 直属上级员工ID
+   * 直属上级（选项 TaktEmployees/options；DictValue=Id）
    */
   directManagerId?: string;
 
@@ -412,12 +437,22 @@ export interface EmployeeJoinedTemplate {
   companyCode?: string;
 
   /**
-   * 员工ID
+   * 员工（选项 TaktEmployees/options；DictValue=Id）
    */
   employeeId?: string;
 
   /**
-   * 入职待办ID（由入职待办办结后生成上岗单时回填，可空）
+   * 员工编码（冗余，与 TaktEmployee.EmployeeCode 对齐）
+   */
+  employeeCode?: string;
+
+  /**
+   * 员工姓名（冗余，与 TaktEmployee.EmployeeName 对齐）
+   */
+  employeeName?: string;
+
+  /**
+   * 入职待办（选项 TaktEmployeeOnboardings/options；DictValue=Id）
    */
   onboardingId?: string;
 
@@ -437,7 +472,7 @@ export interface EmployeeJoinedTemplate {
   regularDate?: string;
 
   /**
-   * 上岗部门ID
+   * 上岗部门（关联 TaktDept.Id，选项 TaktDepts/tree-options）
    */
   deptId?: string;
 
@@ -447,7 +482,7 @@ export interface EmployeeJoinedTemplate {
   deptName?: string;
 
   /**
-   * 上岗岗位ID
+   * 上岗岗位（选项 TaktPosts/options；DictValue=Id）
    */
   postId?: string;
 
@@ -462,17 +497,17 @@ export interface EmployeeJoinedTemplate {
   jobTitle?: string;
 
   /**
-   * 工作性质（0=全职，1=兼职，2=实习，3=外包，4=其他）
+   * 工作性质（字典 hr_employee_work_nature_type；0=全职 1=兼职 2=实习 3=外包 4=其他）
    */
   workNature?: number;
 
   /**
-   * 任职类型（0=主职，1=兼职，2=借调，3=挂职）
+   * 任职类型（字典 hr_employee_employment_type；0=主职 1=兼职 2=借调 3=挂职）
    */
   employmentType?: number;
 
   /**
-   * 直属上级员工ID
+   * 直属上级（选项 TaktEmployees/options；DictValue=Id）
    */
   directManagerId?: string;
 
@@ -516,12 +551,22 @@ export interface EmployeeJoinedImport {
   companyDefaultCulture?: string;
 
   /**
-   * 员工ID
+   * 员工（选项 TaktEmployees/options；DictValue=Id）
    */
   employeeId?: string;
 
   /**
-   * 入职待办ID（由入职待办办结后生成上岗单时回填，可空）
+   * 员工编码（冗余，与 TaktEmployee.EmployeeCode 对齐）
+   */
+  employeeCode?: string;
+
+  /**
+   * 员工姓名（冗余，与 TaktEmployee.EmployeeName 对齐）
+   */
+  employeeName?: string;
+
+  /**
+   * 入职待办（选项 TaktEmployeeOnboardings/options；DictValue=Id）
    */
   onboardingId?: string;
 
@@ -541,7 +586,7 @@ export interface EmployeeJoinedImport {
   regularDate?: string;
 
   /**
-   * 上岗部门ID
+   * 上岗部门（关联 TaktDept.Id，选项 TaktDepts/tree-options）
    */
   deptId?: string;
 
@@ -551,7 +596,7 @@ export interface EmployeeJoinedImport {
   deptName?: string;
 
   /**
-   * 上岗岗位ID
+   * 上岗岗位（选项 TaktPosts/options；DictValue=Id）
    */
   postId?: string;
 
@@ -566,17 +611,17 @@ export interface EmployeeJoinedImport {
   jobTitle?: string;
 
   /**
-   * 工作性质（0=全职，1=兼职，2=实习，3=外包，4=其他）
+   * 工作性质（字典 hr_employee_work_nature_type；0=全职 1=兼职 2=实习 3=外包 4=其他）
    */
   workNature?: number;
 
   /**
-   * 任职类型（0=主职，1=兼职，2=借调，3=挂职）
+   * 任职类型（字典 hr_employee_employment_type；0=主职 1=兼职 2=借调 3=挂职）
    */
   employmentType?: number;
 
   /**
-   * 直属上级员工ID
+   * 直属上级（选项 TaktEmployees/options；DictValue=Id）
    */
   directManagerId?: string;
 
@@ -610,12 +655,22 @@ export interface EmployeeJoinedExport {
   employeeJoinedId: string;
 
   /**
-   * 员工ID
+   * 员工（选项 TaktEmployees/options；DictValue=Id）
    */
   employeeId: string;
 
   /**
-   * 入职待办ID（由入职待办办结后生成上岗单时回填，可空）
+   * 员工编码（冗余，与 TaktEmployee.EmployeeCode 对齐）
+   */
+  employeeCode: string;
+
+  /**
+   * 员工姓名（冗余，与 TaktEmployee.EmployeeName 对齐）
+   */
+  employeeName: string;
+
+  /**
+   * 入职待办（选项 TaktEmployeeOnboardings/options；DictValue=Id）
    */
   onboardingId?: string;
 
@@ -635,7 +690,7 @@ export interface EmployeeJoinedExport {
   regularDate?: string;
 
   /**
-   * 上岗部门ID
+   * 上岗部门（关联 TaktDept.Id，选项 TaktDepts/tree-options）
    */
   deptId: string;
 
@@ -645,7 +700,7 @@ export interface EmployeeJoinedExport {
   deptName: string;
 
   /**
-   * 上岗岗位ID
+   * 上岗岗位（选项 TaktPosts/options；DictValue=Id）
    */
   postId?: string;
 
@@ -660,17 +715,17 @@ export interface EmployeeJoinedExport {
   jobTitle?: string;
 
   /**
-   * 工作性质（0=全职，1=兼职，2=实习，3=外包，4=其他）
+   * 工作性质（字典 hr_employee_work_nature_type；0=全职 1=兼职 2=实习 3=外包 4=其他）
    */
   workNature: number;
 
   /**
-   * 任职类型（0=主职，1=兼职，2=借调，3=挂职）
+   * 任职类型（字典 hr_employee_employment_type；0=主职 1=兼职 2=借调 3=挂职）
    */
   employmentType: number;
 
   /**
-   * 直属上级员工ID
+   * 直属上级（选项 TaktEmployees/options；DictValue=Id）
    */
   directManagerId?: string;
 

@@ -45,7 +45,7 @@ public class TaktRoutingItem : TaktCompanyEntityBase
     public int LineNumber { get; set; } = 0;
 
     /// <summary>
-    /// 作业/工序计量单位（字典 logistics_unit_of_measure_code，DictValue=PC/EA 等；默认 PC）
+    /// 作业/工序计量单位（字典 logistics_unit_of_measure_code；DictValue=PC/EA 等；默认 PC）
     /// </summary>
     [SugarColumn(ColumnName = "base_unit", ColumnDescription = "计量单位", ColumnDataType = "nvarchar", Length = 10, IsNullable = false, DefaultValue = "PC")]
     public string BaseUnit { get; set; } = "PC";
@@ -63,7 +63,7 @@ public class TaktRoutingItem : TaktCompanyEntityBase
     public decimal StandardMinutes { get; set; } = 0;
 
     /// <summary>
-    /// 工时单位（字典 logistics_time_unit，DictValue=MIN/H/S；MIN=分钟，H=小时，S=秒；默认 MIN）
+    /// 工时单位（字典 logistics_time_unit；DictValue=MIN/H/S；MIN=分钟，H=小时，S=秒；默认 MIN）
     /// </summary>
     [SugarColumn(ColumnName = "time_unit", ColumnDescription = "工时单位", ColumnDataType = "nvarchar", Length = 3, IsNullable = false, DefaultValue = "MIN")]
     public string TimeUnit { get; set; } = "MIN";
@@ -75,7 +75,7 @@ public class TaktRoutingItem : TaktCompanyEntityBase
     public int StandardShorts { get; set; } = 0;
 
     /// <summary>
-    /// 点数单位（字典 logistics_points_unit，DictValue=SHORT；SHORT=点数；默认 SHORT）
+    /// 点数单位（字典 logistics_points_unit；DictValue=SHORT；SHORT=点数；默认 SHORT）
     /// </summary>
     [SugarColumn(ColumnName = "points_unit", ColumnDescription = "点数单位", ColumnDataType = "nvarchar", Length = 5, IsNullable = false, DefaultValue = "SHORT")]
     public string PointsUnit { get; set; } = "SHORT";
@@ -135,7 +135,7 @@ public class TaktRoutingItem : TaktCompanyEntityBase
     public string? ExtJson { get; set; }
 
     /// <summary>
-    /// 是否作废（字典 sys_yes_no_type，0=否 1=是；编辑移除子行时标记作废）
+    /// 是否作废（字典 sys_yes_no_type；0=否 1=是；编辑移除子行时标记作废）
     /// </summary>
     [SugarColumn(ColumnName = "is_obsolete", ColumnDescription = "是否作废", ColumnDataType = "int", IsNullable = false, DefaultValue = "0")]
     public int IsObsolete { get; set; } = 0;

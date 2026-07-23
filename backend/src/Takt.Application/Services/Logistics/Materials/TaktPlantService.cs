@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Application.Services.Logistics.Materials
 // 文件名称：TaktPlantService.cs
-// 创建时间：2026-07-01
+// 创建时间：2026-07-23
 // 创建人：Takt365(Cursor AI)
 // 功能描述：工厂应用服务实现
 // 
@@ -96,15 +96,12 @@ public class TaktPlantService : TaktServiceBase, ITaktPlantService
     {
         var list = await _plantRepository.GetListAsync(
             x => x.TenantCode == CurrentTenantCode && x.PlantStatus == 1,
-            x => x.PlantName ?? string.Empty,
+            x => x.PlantShortName ?? string.Empty,
             false);
         return list.Select(e => new TaktSelectOption
         {
             DictValue = e.PlantCode,
-            DictLabel = string.IsNullOrWhiteSpace(e.PlantShortName)
-                ? (string.IsNullOrWhiteSpace(e.PlantName) ? e.PlantCode : e.PlantName)
-                : $"{e.PlantCode} {e.PlantShortName}",
-            ExtValue = e.Id,
+            DictLabel = e.PlantShortName ?? e.PlantCode,
         }).ToList();
     }
 
@@ -337,7 +334,8 @@ public class TaktPlantService : TaktServiceBase, ITaktPlantService
             var keywords = queryDto.KeyWords;
             exp = exp.And(x =>
                 (x.PlantCode != null && x.PlantCode.Contains(keywords))
-                || (x.PlantName != null && x.PlantName.Contains(keywords))
+                || (x.PlantName1 != null && x.PlantName1.Contains(keywords))
+                || (x.PlantName2 != null && x.PlantName2.Contains(keywords))
                 || (x.PlantShortName != null && x.PlantShortName.Contains(keywords))
                 || (x.CodeAlias != null && x.CodeAlias.Contains(keywords))
                 || (x.DefaultCulture != null && x.DefaultCulture.Contains(keywords))
@@ -347,7 +345,6 @@ public class TaktPlantService : TaktServiceBase, ITaktPlantService
                 || (x.BusinessScope != null && x.BusinessScope.Contains(keywords))
                 || (x.RegistrationAddress1 != null && x.RegistrationAddress1.Contains(keywords))
                 || (x.RegistrationAddress2 != null && x.RegistrationAddress2.Contains(keywords))
-                || (x.RegistrationAddress3 != null && x.RegistrationAddress3.Contains(keywords))
                 || (x.RegistrationRegion != null && x.RegistrationRegion.Contains(keywords))
                 || (x.RegistrationProvince != null && x.RegistrationProvince.Contains(keywords))
                 || (x.RegistrationCity != null && x.RegistrationCity.Contains(keywords))
@@ -356,10 +353,8 @@ public class TaktPlantService : TaktServiceBase, ITaktPlantService
                 || (x.BusinessCity != null && x.BusinessCity.Contains(keywords))
                 || (x.BusinessAddress1 != null && x.BusinessAddress1.Contains(keywords))
                 || (x.BusinessAddress2 != null && x.BusinessAddress2.Contains(keywords))
-                || (x.BusinessAddress3 != null && x.BusinessAddress3.Contains(keywords))
                 || (x.PlantAddress1 != null && x.PlantAddress1.Contains(keywords))
                 || (x.PlantAddress2 != null && x.PlantAddress2.Contains(keywords))
-                || (x.PlantAddress3 != null && x.PlantAddress3.Contains(keywords))
                 || (x.PlantPhone != null && x.PlantPhone.Contains(keywords))
                 || (x.PlantEmail != null && x.PlantEmail.Contains(keywords))
                 || (x.PlantFax != null && x.PlantFax.Contains(keywords))
@@ -370,6 +365,19 @@ public class TaktPlantService : TaktServiceBase, ITaktPlantService
                 || (x.PlantManager != null && x.PlantManager.Contains(keywords))
                 || SqlFunc.ToString(x.RegisteredCapital).Contains(keywords)
                 || SqlFunc.ToString(x.PlantExistence).Contains(keywords)
+                || (x.BankCode != null && x.BankCode.Contains(keywords))
+                || (x.BankAccount != null && x.BankAccount.Contains(keywords))
+                || (x.AccountHolder != null && x.AccountHolder.Contains(keywords))
+                || (x.PurchasingOrganization != null && x.PurchasingOrganization.Contains(keywords))
+                || (x.SalesOrganization != null && x.SalesOrganization.Contains(keywords))
+                || (x.MaterialRequirementsPlanning != null && x.MaterialRequirementsPlanning.Contains(keywords))
+                || (x.DistributionChannel != null && x.DistributionChannel.Contains(keywords))
+                || (x.IntercompanyBillingProductGroup != null && x.IntercompanyBillingProductGroup.Contains(keywords))
+                || (x.TaxIndicator != null && x.TaxIndicator.Contains(keywords))
+                || (x.ValuationArea != null && x.ValuationArea.Contains(keywords))
+                || (x.PlantVendorNumber != null && x.PlantVendorNumber.Contains(keywords))
+                || (x.PlantCustomerNumber != null && x.PlantCustomerNumber.Contains(keywords))
+                || (x.FactoryCalendar != null && x.FactoryCalendar.Contains(keywords))
                 || (x.RelatedCompany != null && x.RelatedCompany.Contains(keywords))
                 || SqlFunc.ToString(x.SortOrder).Contains(keywords)
                 || SqlFunc.ToString(x.PlantStatus).Contains(keywords)
@@ -386,9 +394,14 @@ public class TaktPlantService : TaktServiceBase, ITaktPlantService
             exp = exp.And(x => x.PlantCode != null && x.PlantCode.Contains(queryDto.PlantCode));
         }
 
-        if (!string.IsNullOrEmpty(queryDto?.PlantName))
+        if (!string.IsNullOrEmpty(queryDto?.PlantName1))
         {
-            exp = exp.And(x => x.PlantName != null && x.PlantName.Contains(queryDto.PlantName));
+            exp = exp.And(x => x.PlantName1 != null && x.PlantName1.Contains(queryDto.PlantName1));
+        }
+
+        if (!string.IsNullOrEmpty(queryDto?.PlantName2))
+        {
+            exp = exp.And(x => x.PlantName2 != null && x.PlantName2.Contains(queryDto.PlantName2));
         }
 
         if (!string.IsNullOrEmpty(queryDto?.PlantShortName))
@@ -436,11 +449,6 @@ public class TaktPlantService : TaktServiceBase, ITaktPlantService
             exp = exp.And(x => x.RegistrationAddress2 != null && x.RegistrationAddress2.Contains(queryDto.RegistrationAddress2));
         }
 
-        if (!string.IsNullOrEmpty(queryDto?.RegistrationAddress3))
-        {
-            exp = exp.And(x => x.RegistrationAddress3 != null && x.RegistrationAddress3.Contains(queryDto.RegistrationAddress3));
-        }
-
         if (!string.IsNullOrEmpty(queryDto?.RegistrationRegion))
         {
             exp = exp.And(x => x.RegistrationRegion != null && x.RegistrationRegion.Contains(queryDto.RegistrationRegion));
@@ -481,11 +489,6 @@ public class TaktPlantService : TaktServiceBase, ITaktPlantService
             exp = exp.And(x => x.BusinessAddress2 != null && x.BusinessAddress2.Contains(queryDto.BusinessAddress2));
         }
 
-        if (!string.IsNullOrEmpty(queryDto?.BusinessAddress3))
-        {
-            exp = exp.And(x => x.BusinessAddress3 != null && x.BusinessAddress3.Contains(queryDto.BusinessAddress3));
-        }
-
         if (!string.IsNullOrEmpty(queryDto?.PlantAddress1))
         {
             exp = exp.And(x => x.PlantAddress1 != null && x.PlantAddress1.Contains(queryDto.PlantAddress1));
@@ -494,11 +497,6 @@ public class TaktPlantService : TaktServiceBase, ITaktPlantService
         if (!string.IsNullOrEmpty(queryDto?.PlantAddress2))
         {
             exp = exp.And(x => x.PlantAddress2 != null && x.PlantAddress2.Contains(queryDto.PlantAddress2));
-        }
-
-        if (!string.IsNullOrEmpty(queryDto?.PlantAddress3))
-        {
-            exp = exp.And(x => x.PlantAddress3 != null && x.PlantAddress3.Contains(queryDto.PlantAddress3));
         }
 
         if (!string.IsNullOrEmpty(queryDto?.PlantPhone))
@@ -549,6 +547,71 @@ public class TaktPlantService : TaktServiceBase, ITaktPlantService
         if (queryDto?.PlantExistence.HasValue == true)
         {
             exp = exp.And(x => x.PlantExistence == queryDto.PlantExistence);
+        }
+
+        if (!string.IsNullOrEmpty(queryDto?.BankCode))
+        {
+            exp = exp.And(x => x.BankCode != null && x.BankCode.Contains(queryDto.BankCode));
+        }
+
+        if (!string.IsNullOrEmpty(queryDto?.BankAccount))
+        {
+            exp = exp.And(x => x.BankAccount != null && x.BankAccount.Contains(queryDto.BankAccount));
+        }
+
+        if (!string.IsNullOrEmpty(queryDto?.AccountHolder))
+        {
+            exp = exp.And(x => x.AccountHolder != null && x.AccountHolder.Contains(queryDto.AccountHolder));
+        }
+
+        if (!string.IsNullOrEmpty(queryDto?.PurchasingOrganization))
+        {
+            exp = exp.And(x => x.PurchasingOrganization != null && x.PurchasingOrganization.Contains(queryDto.PurchasingOrganization));
+        }
+
+        if (!string.IsNullOrEmpty(queryDto?.SalesOrganization))
+        {
+            exp = exp.And(x => x.SalesOrganization != null && x.SalesOrganization.Contains(queryDto.SalesOrganization));
+        }
+
+        if (!string.IsNullOrEmpty(queryDto?.MaterialRequirementsPlanning))
+        {
+            exp = exp.And(x => x.MaterialRequirementsPlanning != null && x.MaterialRequirementsPlanning.Contains(queryDto.MaterialRequirementsPlanning));
+        }
+
+        if (!string.IsNullOrEmpty(queryDto?.DistributionChannel))
+        {
+            exp = exp.And(x => x.DistributionChannel != null && x.DistributionChannel.Contains(queryDto.DistributionChannel));
+        }
+
+        if (!string.IsNullOrEmpty(queryDto?.IntercompanyBillingProductGroup))
+        {
+            exp = exp.And(x => x.IntercompanyBillingProductGroup != null && x.IntercompanyBillingProductGroup.Contains(queryDto.IntercompanyBillingProductGroup));
+        }
+
+        if (!string.IsNullOrEmpty(queryDto?.TaxIndicator))
+        {
+            exp = exp.And(x => x.TaxIndicator != null && x.TaxIndicator.Contains(queryDto.TaxIndicator));
+        }
+
+        if (!string.IsNullOrEmpty(queryDto?.ValuationArea))
+        {
+            exp = exp.And(x => x.ValuationArea != null && x.ValuationArea.Contains(queryDto.ValuationArea));
+        }
+
+        if (!string.IsNullOrEmpty(queryDto?.PlantVendorNumber))
+        {
+            exp = exp.And(x => x.PlantVendorNumber != null && x.PlantVendorNumber.Contains(queryDto.PlantVendorNumber));
+        }
+
+        if (!string.IsNullOrEmpty(queryDto?.PlantCustomerNumber))
+        {
+            exp = exp.And(x => x.PlantCustomerNumber != null && x.PlantCustomerNumber.Contains(queryDto.PlantCustomerNumber));
+        }
+
+        if (!string.IsNullOrEmpty(queryDto?.FactoryCalendar))
+        {
+            exp = exp.And(x => x.FactoryCalendar != null && x.FactoryCalendar.Contains(queryDto.FactoryCalendar));
         }
 
         if (!string.IsNullOrEmpty(queryDto?.RelatedCompany))

@@ -36,7 +36,7 @@ public class TaktTicketDto : TaktCompanyDtoBase
     public long TicketId { get; set; }
 
     /// <summary>
-    /// 工单编号（唯一）
+    /// 工单编码（唯一）
     /// </summary>
     public string TicketNo { get; set; } = string.Empty;
 
@@ -225,7 +225,7 @@ public class TaktTicketQueryDto : TaktPagedQuery
     public string? CompanyCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 工单编号（唯一）
+    /// 工单编码（唯一）
     /// </summary>
     public string? TicketNo { get; set; } = string.Empty;
 
@@ -432,9 +432,9 @@ public class TaktTicketCreateDto
     public string CompanyDefaultCulture { get; set; } = string.Empty;
 
     /// <summary>
-    /// 工单编号（唯一）
+    /// 工单编码（唯一）
     /// </summary>
-    [Required(ErrorMessage = "工单编号（唯一）不能为空")]
+    [Required(ErrorMessage = "工单编码（唯一）不能为空")]
     public string TicketNo { get; set; } = string.Empty;
 
     /// <summary>
@@ -651,7 +651,7 @@ public class TaktTicketTemplateDto
     public string? CompanyCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 工单编号（唯一）
+    /// 工单编码（唯一）
     /// </summary>
     public string? TicketNo { get; set; } = string.Empty;
 
@@ -825,7 +825,7 @@ public class TaktTicketImportDto
     public string? CompanyDefaultCulture { get; set; } = string.Empty;
 
     /// <summary>
-    /// 工单编号（唯一）
+    /// 工单编码（唯一）
     /// </summary>
     public string? TicketNo { get; set; } = string.Empty;
 
@@ -1000,7 +1000,7 @@ public class TaktTicketExportDto
     public string CompanyCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 工单编号（唯一）
+    /// 工单编码（唯一）
     /// </summary>
     public string TicketNo { get; set; } = string.Empty;
 

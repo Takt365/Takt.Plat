@@ -24,11 +24,21 @@ namespace Takt.Domain.Entities.HumanResource.Personnel;
 public class TaktEmployeeAttachment : TaktCompanyEntityBase
 {
     /// <summary>
-    /// 员工（选项 TaktEmployees/options，DictValue=Id）
+    /// 员工（选项 TaktEmployees/options；DictValue=Id）
     /// </summary>
     [SugarColumn(ColumnName = "employee_id", ColumnDescription = "员工ID", ColumnDataType = "bigint", IsNullable = false)]
     [JsonConverter(typeof(ValueToStringConverter))]
     public long EmployeeId { get; set; }
+    /// <summary>
+    /// 员工编码（冗余，与 TaktEmployee.EmployeeCode 对齐）
+    /// </summary>
+    [SugarColumn(ColumnName = "employee_code", ColumnDescription = "员工编码", ColumnDataType = "varchar", Length = 6, IsNullable = false)]
+    public string EmployeeCode { get; set; } = string.Empty;
+    /// <summary>
+    /// 员工姓名（冗余，与 TaktEmployee.EmployeeName 对齐）
+    /// </summary>
+    [SugarColumn(ColumnName = "employee_name", ColumnDescription = "员工姓名", ColumnDataType = "nvarchar", Length = 80, IsNullable = false)]
+    public string EmployeeName { get; set; } = string.Empty;
     /// <summary>
     /// 附件名称（业务称谓，如毕业证、就业证）
     /// </summary>

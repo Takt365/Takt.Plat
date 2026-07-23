@@ -23,13 +23,15 @@ export const SALESQUOTATION_LIST_FIELDS = [
   'plantCode',
   'salesQuotationCode',
   'customerCode',
-  'customerName',
+  'customerName1',
   'quotationDate',
   'validUntilDate',
   'salesBy',
   'totalQuantity',
   'totalAmount',
   'discountAmount',
+  'currencyCode',
+  'taxRate',
   'taxAmount',
   'actualAmount',
   'salesOrderCode',
@@ -44,13 +46,15 @@ export const SALESQUOTATION_PLACEHOLDER = {
   plantCode: 'select',
   salesQuotationCode: 'required',
   customerCode: 'select',
-  customerName: 'required',
+  customerName1: 'required',
   quotationDate: 'select',
   validUntilDate: 'optional',
   salesBy: 'optional',
   totalQuantity: 'select',
   totalAmount: 'select',
   discountAmount: 'select',
+  currencyCode: 'select',
+  taxRate: 'select',
   taxAmount: 'select',
   actualAmount: 'select',
   salesOrderCode: 'optional',
@@ -67,12 +71,13 @@ export const SALESQUOTATION_QUERY_STRING_FIELDS = [
   'plantCode',
   'salesQuotationCode',
   'customerCode',
-  'customerName',
+  'customerName1',
   'quotationDateStart',
   'quotationDateEnd',
   'validUntilDateStart',
   'validUntilDateEnd',
   'salesBy',
+  'currencyCode',
   'salesOrderCode',
   'createdAtStart',
   'createdAtEnd',
@@ -82,7 +87,7 @@ export const SALESQUOTATION_QUERY_STRING_FIELDS = [
 
 export type SalesQuotationQueryField =
   | (typeof SALESQUOTATION_QUERY_STRING_FIELDS)[number]
-  | 'totalQuantity' | 'totalAmount' | 'discountAmount' | 'taxAmount' | 'actualAmount' | 'quotationStatus'
+  | 'totalQuantity' | 'totalAmount' | 'discountAmount' | 'taxRate' | 'taxAmount' | 'actualAmount' | 'quotationStatus'
 
 /** 高级查询抽屉全部字段（含数值） */
 export const SALESQUOTATION_QUERY_FIELDS: readonly SalesQuotationQueryField[] = [
@@ -90,6 +95,7 @@ export const SALESQUOTATION_QUERY_FIELDS: readonly SalesQuotationQueryField[] = 
   'totalQuantity',
   'totalAmount',
   'discountAmount',
+  'taxRate',
   'taxAmount',
   'actualAmount',
   'quotationStatus',

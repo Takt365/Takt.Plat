@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：frontend/src/types/logistics/sales
 // 文件名称：customer.d.ts
-// 创建时间：2026-07-01
+// 创建时间：2026-07-23
 // 创建人：Takt365(Auto Generated)
 // 功能描述：logistics/sales 模块类型定义（自动生成；类型名去 Takt 前缀与末尾 Dto，如 TaktCompanyDto → Company）
 // 
@@ -29,7 +29,7 @@ export interface Customer extends CompanyDtoBase {
   customerId: string;
 
   /**
-   * 工厂代码（选项 TaktPlants/options，DictValue=PlantCode）
+   * 工厂代码（选项 TaktPlants/options；DictValue=PlantCode）
    */
   plantCode: string;
 
@@ -39,9 +39,14 @@ export interface Customer extends CompanyDtoBase {
   customerCode: string;
 
   /**
-   * 客户名称
+   * 客户名称1
    */
-  customerName: string;
+  customerName1: string;
+
+  /**
+   * 客户名称2
+   */
+  customerName2?: string;
 
   /**
    * 客户简称
@@ -54,9 +59,19 @@ export interface Customer extends CompanyDtoBase {
   customerType: number;
 
   /**
-   * 行业领域
+   * 企业性质（字典 sys_enterprise_nature_type）
    */
-  industrySector?: string;
+  enterpriseNature: string;
+
+  /**
+   * 行业属性（字典 sys_industry_attribute_type）
+   */
+  industryAttribute: string;
+
+  /**
+   * 区域文化编码（字典 sys_culture_code；即语言/区域文化）
+   */
+  defaultCulture: string;
 
   /**
    * 客户标识（税务登记证号/统一社会信用代码）
@@ -69,9 +84,19 @@ export interface Customer extends CompanyDtoBase {
   taxRate: number;
 
   /**
-   * 注册国家（ISO 3166-1 alpha-2两位代码）
+   * 注册国家（字典 sys_country_code；DictValue=ISO alpha-2）
    */
   registrationCountry?: string;
+
+  /**
+   * 注册省（选项 TaktAdminDivisions/options；DictValue=DivisionCode；建议 Level=2）
+   */
+  registrationProvince?: string;
+
+  /**
+   * 注册市（选项 TaktAdminDivisions/options；DictValue=DivisionCode；建议 Level=3）
+   */
+  registrationCity?: string;
 
   /**
    * 注册地址1
@@ -82,11 +107,6 @@ export interface Customer extends CompanyDtoBase {
    * 注册地址2
    */
   registrationAddress2?: string;
-
-  /**
-   * 注册地址3
-   */
-  registrationAddress3?: string;
 
   /**
    * 客户电话
@@ -124,14 +144,104 @@ export interface Customer extends CompanyDtoBase {
   contactEmail?: string;
 
   /**
-   * 结算币种代码
+   * 结算币种代码（字典 accounting_currency_code；DictValue=CNY/USD 等）
    */
   currencyCode: string;
+
+  /**
+   * 销售组织（选项 TaktCompanies/options；DictValue=CompanyCode）
+   */
+  salesOrganization: string;
+
+  /**
+   * 分销渠道
+   */
+  distributionChannel: string;
+
+  /**
+   * 产品组
+   */
+  productGroup: string;
+
+  /**
+   * 客户组（字典 logistics_customer_group；DictValue=Z1～Z4）
+   */
+  customerGroup: string;
+
+  /**
+   * 贸易伙伴（选项 TaktPlants/options；DictValue=PlantCode）
+   */
+  tradingPartner: string;
+
+  /**
+   * 帐户分配组（字典 logistics_account_assignment_group；DictValue=01/02/03/Y1～Y4/Z0～ZD）
+   */
+  accountAssignmentGroup: string;
+
+  /**
+   * 供应商（选项 TaktSuppliers/options；DictValue=SupplierCode）
+   */
+  supplierCode: string;
+
+  /**
+   * 尼尔森标识
+   */
+  nielsenIndicator: string;
+
+  /**
+   * 中心记帐冻结（字典 sys_yes_no_type；0=否 1=是）
+   */
+  centralPostingBlock: number;
+
+  /**
+   * 统驭科目（选项 TaktAccountTitles/options?reconciliationOnly=true&amp;auxiliaryType=D；DictValue=AccountTitleCode）
+   */
+  reconciliationAccount: string;
+
+  /**
+   * 总部（选项 TaktCustomers/options；DictValue=CustomerCode）
+   */
+  headquarters: string;
+
+  /**
+   * 具有供应商的清算（字典 sys_yes_no_type；0=否 1=是）
+   */
+  clearingWithVendor: number;
 
   /**
    * 付款条件（字典 accounting_payment_terms_param；DictValue=prepayship/cod/net30 等）
    */
   paymentTerms: string;
+
+  /**
+   * 付款方式（字典 accounting_payment_method_type；0=现金，1=银行转账，2=支票，3=信用证，4=其他）
+   */
+  paymentMethod: number;
+
+  /**
+   * 交货工厂（选项 TaktPlants/options；DictValue=PlantCode）
+   */
+  deliveringPlant: string;
+
+  /**
+   * 国际贸易条件1（字典 logistics_incoterms1；CFR/CIF/…/FOB 等；默认 FOB）
+   */
+  incoterms1: string;
+
+  /**
+   * 国际贸易条件2（地点说明）
+   */
+  incoterms2: string;
+
+  /**
+   * 装运条件（字典 logistics_shipping_conditions；DictValue=Z1～Z3）
+   */
+  shippingConditions: string;
+
+  /**
+   * 客户定价过程（字典 logistics_customer_pricing_procedure；DictValue=1/2/3；默认 1）
+   */
+  customerPricingProcedure: string;
 
   /**
    * 信用等级（字典 logistics_credit_rating_category；0=无 1=A级 2=AA级 3=AAA级 4=B级 5=C级）
@@ -149,7 +259,7 @@ export interface Customer extends CompanyDtoBase {
   discountRate: number;
 
   /**
-   * 销售员（选项 TaktEmployees/options，DictValue=EmployeeCode）
+   * 销售员（选项 TaktEmployees/options；DictValue=EmployeeCode）
    */
   salesBy?: string;
 
@@ -194,7 +304,7 @@ export interface CustomerQuery extends TaktPagedQuery {
   companyCode?: string;
 
   /**
-   * 工厂代码（选项 TaktPlants/options，DictValue=PlantCode）
+   * 工厂代码（选项 TaktPlants/options；DictValue=PlantCode）
    */
   plantCode?: string;
 
@@ -204,9 +314,14 @@ export interface CustomerQuery extends TaktPagedQuery {
   customerCode?: string;
 
   /**
-   * 客户名称
+   * 客户名称1
    */
-  customerName?: string;
+  customerName1?: string;
+
+  /**
+   * 客户名称2
+   */
+  customerName2?: string;
 
   /**
    * 客户简称
@@ -219,9 +334,19 @@ export interface CustomerQuery extends TaktPagedQuery {
   customerType?: number;
 
   /**
-   * 行业领域
+   * 企业性质（字典 sys_enterprise_nature_type）
    */
-  industrySector?: string;
+  enterpriseNature?: string;
+
+  /**
+   * 行业属性（字典 sys_industry_attribute_type）
+   */
+  industryAttribute?: string;
+
+  /**
+   * 区域文化编码（字典 sys_culture_code；即语言/区域文化）
+   */
+  defaultCulture?: string;
 
   /**
    * 客户标识（税务登记证号/统一社会信用代码）
@@ -234,9 +359,19 @@ export interface CustomerQuery extends TaktPagedQuery {
   taxRate?: number;
 
   /**
-   * 注册国家（ISO 3166-1 alpha-2两位代码）
+   * 注册国家（字典 sys_country_code；DictValue=ISO alpha-2）
    */
   registrationCountry?: string;
+
+  /**
+   * 注册省（选项 TaktAdminDivisions/options；DictValue=DivisionCode；建议 Level=2）
+   */
+  registrationProvince?: string;
+
+  /**
+   * 注册市（选项 TaktAdminDivisions/options；DictValue=DivisionCode；建议 Level=3）
+   */
+  registrationCity?: string;
 
   /**
    * 注册地址1
@@ -247,11 +382,6 @@ export interface CustomerQuery extends TaktPagedQuery {
    * 注册地址2
    */
   registrationAddress2?: string;
-
-  /**
-   * 注册地址3
-   */
-  registrationAddress3?: string;
 
   /**
    * 客户电话
@@ -289,14 +419,104 @@ export interface CustomerQuery extends TaktPagedQuery {
   contactEmail?: string;
 
   /**
-   * 结算币种代码
+   * 结算币种代码（字典 accounting_currency_code；DictValue=CNY/USD 等）
    */
   currencyCode?: string;
+
+  /**
+   * 销售组织（选项 TaktCompanies/options；DictValue=CompanyCode）
+   */
+  salesOrganization?: string;
+
+  /**
+   * 分销渠道
+   */
+  distributionChannel?: string;
+
+  /**
+   * 产品组
+   */
+  productGroup?: string;
+
+  /**
+   * 客户组（字典 logistics_customer_group；DictValue=Z1～Z4）
+   */
+  customerGroup?: string;
+
+  /**
+   * 贸易伙伴（选项 TaktPlants/options；DictValue=PlantCode）
+   */
+  tradingPartner?: string;
+
+  /**
+   * 帐户分配组（字典 logistics_account_assignment_group；DictValue=01/02/03/Y1～Y4/Z0～ZD）
+   */
+  accountAssignmentGroup?: string;
+
+  /**
+   * 供应商（选项 TaktSuppliers/options；DictValue=SupplierCode）
+   */
+  supplierCode?: string;
+
+  /**
+   * 尼尔森标识
+   */
+  nielsenIndicator?: string;
+
+  /**
+   * 中心记帐冻结（字典 sys_yes_no_type；0=否 1=是）
+   */
+  centralPostingBlock?: number;
+
+  /**
+   * 统驭科目（选项 TaktAccountTitles/options?reconciliationOnly=true&amp;auxiliaryType=D；DictValue=AccountTitleCode）
+   */
+  reconciliationAccount?: string;
+
+  /**
+   * 总部（选项 TaktCustomers/options；DictValue=CustomerCode）
+   */
+  headquarters?: string;
+
+  /**
+   * 具有供应商的清算（字典 sys_yes_no_type；0=否 1=是）
+   */
+  clearingWithVendor?: number;
 
   /**
    * 付款条件（字典 accounting_payment_terms_param；DictValue=prepayship/cod/net30 等）
    */
   paymentTerms?: string;
+
+  /**
+   * 付款方式（字典 accounting_payment_method_type；0=现金，1=银行转账，2=支票，3=信用证，4=其他）
+   */
+  paymentMethod?: number;
+
+  /**
+   * 交货工厂（选项 TaktPlants/options；DictValue=PlantCode）
+   */
+  deliveringPlant?: string;
+
+  /**
+   * 国际贸易条件1（字典 logistics_incoterms1；CFR/CIF/…/FOB 等；默认 FOB）
+   */
+  incoterms1?: string;
+
+  /**
+   * 国际贸易条件2（地点说明）
+   */
+  incoterms2?: string;
+
+  /**
+   * 装运条件（字典 logistics_shipping_conditions；DictValue=Z1～Z3）
+   */
+  shippingConditions?: string;
+
+  /**
+   * 客户定价过程（字典 logistics_customer_pricing_procedure；DictValue=1/2/3；默认 1）
+   */
+  customerPricingProcedure?: string;
 
   /**
    * 信用等级（字典 logistics_credit_rating_category；0=无 1=A级 2=AA级 3=AAA级 4=B级 5=C级）
@@ -314,7 +534,7 @@ export interface CustomerQuery extends TaktPagedQuery {
   discountRate?: number;
 
   /**
-   * 销售员（选项 TaktEmployees/options，DictValue=EmployeeCode）
+   * 销售员（选项 TaktEmployees/options；DictValue=EmployeeCode）
    */
   salesBy?: string;
 
@@ -383,7 +603,7 @@ export interface CustomerCreate {
   companyDefaultCulture: string;
 
   /**
-   * 工厂代码（选项 TaktPlants/options，DictValue=PlantCode）
+   * 工厂代码（选项 TaktPlants/options；DictValue=PlantCode）
    */
   plantCode: string;
 
@@ -393,9 +613,14 @@ export interface CustomerCreate {
   customerCode: string;
 
   /**
-   * 客户名称
+   * 客户名称1
    */
-  customerName: string;
+  customerName1: string;
+
+  /**
+   * 客户名称2
+   */
+  customerName2?: string;
 
   /**
    * 客户简称
@@ -408,9 +633,19 @@ export interface CustomerCreate {
   customerType: number;
 
   /**
-   * 行业领域
+   * 企业性质（字典 sys_enterprise_nature_type）
    */
-  industrySector?: string;
+  enterpriseNature: string;
+
+  /**
+   * 行业属性（字典 sys_industry_attribute_type）
+   */
+  industryAttribute: string;
+
+  /**
+   * 区域文化编码（字典 sys_culture_code；即语言/区域文化）
+   */
+  defaultCulture: string;
 
   /**
    * 客户标识（税务登记证号/统一社会信用代码）
@@ -423,9 +658,19 @@ export interface CustomerCreate {
   taxRate: number;
 
   /**
-   * 注册国家（ISO 3166-1 alpha-2两位代码）
+   * 注册国家（字典 sys_country_code；DictValue=ISO alpha-2）
    */
   registrationCountry?: string;
+
+  /**
+   * 注册省（选项 TaktAdminDivisions/options；DictValue=DivisionCode；建议 Level=2）
+   */
+  registrationProvince?: string;
+
+  /**
+   * 注册市（选项 TaktAdminDivisions/options；DictValue=DivisionCode；建议 Level=3）
+   */
+  registrationCity?: string;
 
   /**
    * 注册地址1
@@ -436,11 +681,6 @@ export interface CustomerCreate {
    * 注册地址2
    */
   registrationAddress2?: string;
-
-  /**
-   * 注册地址3
-   */
-  registrationAddress3?: string;
 
   /**
    * 客户电话
@@ -478,14 +718,104 @@ export interface CustomerCreate {
   contactEmail?: string;
 
   /**
-   * 结算币种代码
+   * 结算币种代码（字典 accounting_currency_code；DictValue=CNY/USD 等）
    */
   currencyCode: string;
+
+  /**
+   * 销售组织（选项 TaktCompanies/options；DictValue=CompanyCode）
+   */
+  salesOrganization: string;
+
+  /**
+   * 分销渠道
+   */
+  distributionChannel: string;
+
+  /**
+   * 产品组
+   */
+  productGroup: string;
+
+  /**
+   * 客户组（字典 logistics_customer_group；DictValue=Z1～Z4）
+   */
+  customerGroup: string;
+
+  /**
+   * 贸易伙伴（选项 TaktPlants/options；DictValue=PlantCode）
+   */
+  tradingPartner: string;
+
+  /**
+   * 帐户分配组（字典 logistics_account_assignment_group；DictValue=01/02/03/Y1～Y4/Z0～ZD）
+   */
+  accountAssignmentGroup: string;
+
+  /**
+   * 供应商（选项 TaktSuppliers/options；DictValue=SupplierCode）
+   */
+  supplierCode: string;
+
+  /**
+   * 尼尔森标识
+   */
+  nielsenIndicator: string;
+
+  /**
+   * 中心记帐冻结（字典 sys_yes_no_type；0=否 1=是）
+   */
+  centralPostingBlock: number;
+
+  /**
+   * 统驭科目（选项 TaktAccountTitles/options?reconciliationOnly=true&amp;auxiliaryType=D；DictValue=AccountTitleCode）
+   */
+  reconciliationAccount: string;
+
+  /**
+   * 总部（选项 TaktCustomers/options；DictValue=CustomerCode）
+   */
+  headquarters: string;
+
+  /**
+   * 具有供应商的清算（字典 sys_yes_no_type；0=否 1=是）
+   */
+  clearingWithVendor: number;
 
   /**
    * 付款条件（字典 accounting_payment_terms_param；DictValue=prepayship/cod/net30 等）
    */
   paymentTerms: string;
+
+  /**
+   * 付款方式（字典 accounting_payment_method_type；0=现金，1=银行转账，2=支票，3=信用证，4=其他）
+   */
+  paymentMethod: number;
+
+  /**
+   * 交货工厂（选项 TaktPlants/options；DictValue=PlantCode）
+   */
+  deliveringPlant: string;
+
+  /**
+   * 国际贸易条件1（字典 logistics_incoterms1；CFR/CIF/…/FOB 等；默认 FOB）
+   */
+  incoterms1: string;
+
+  /**
+   * 国际贸易条件2（地点说明）
+   */
+  incoterms2: string;
+
+  /**
+   * 装运条件（字典 logistics_shipping_conditions；DictValue=Z1～Z3）
+   */
+  shippingConditions: string;
+
+  /**
+   * 客户定价过程（字典 logistics_customer_pricing_procedure；DictValue=1/2/3；默认 1）
+   */
+  customerPricingProcedure: string;
 
   /**
    * 信用等级（字典 logistics_credit_rating_category；0=无 1=A级 2=AA级 3=AAA级 4=B级 5=C级）
@@ -503,7 +833,7 @@ export interface CustomerCreate {
   discountRate: number;
 
   /**
-   * 销售员（选项 TaktEmployees/options，DictValue=EmployeeCode）
+   * 销售员（选项 TaktEmployees/options；DictValue=EmployeeCode）
    */
   salesBy?: string;
 
@@ -605,7 +935,7 @@ export interface CustomerTemplate {
   companyCode?: string;
 
   /**
-   * 工厂代码（选项 TaktPlants/options，DictValue=PlantCode）
+   * 工厂代码（选项 TaktPlants/options；DictValue=PlantCode）
    */
   plantCode?: string;
 
@@ -615,9 +945,14 @@ export interface CustomerTemplate {
   customerCode?: string;
 
   /**
-   * 客户名称
+   * 客户名称1
    */
-  customerName?: string;
+  customerName1?: string;
+
+  /**
+   * 客户名称2
+   */
+  customerName2?: string;
 
   /**
    * 客户简称
@@ -630,9 +965,19 @@ export interface CustomerTemplate {
   customerType?: number;
 
   /**
-   * 行业领域
+   * 企业性质（字典 sys_enterprise_nature_type）
    */
-  industrySector?: string;
+  enterpriseNature?: string;
+
+  /**
+   * 行业属性（字典 sys_industry_attribute_type）
+   */
+  industryAttribute?: string;
+
+  /**
+   * 区域文化编码（字典 sys_culture_code；即语言/区域文化）
+   */
+  defaultCulture?: string;
 
   /**
    * 客户标识（税务登记证号/统一社会信用代码）
@@ -645,9 +990,19 @@ export interface CustomerTemplate {
   taxRate?: number;
 
   /**
-   * 注册国家（ISO 3166-1 alpha-2两位代码）
+   * 注册国家（字典 sys_country_code；DictValue=ISO alpha-2）
    */
   registrationCountry?: string;
+
+  /**
+   * 注册省（选项 TaktAdminDivisions/options；DictValue=DivisionCode；建议 Level=2）
+   */
+  registrationProvince?: string;
+
+  /**
+   * 注册市（选项 TaktAdminDivisions/options；DictValue=DivisionCode；建议 Level=3）
+   */
+  registrationCity?: string;
 
   /**
    * 注册地址1
@@ -658,11 +1013,6 @@ export interface CustomerTemplate {
    * 注册地址2
    */
   registrationAddress2?: string;
-
-  /**
-   * 注册地址3
-   */
-  registrationAddress3?: string;
 
   /**
    * 客户电话
@@ -700,14 +1050,104 @@ export interface CustomerTemplate {
   contactEmail?: string;
 
   /**
-   * 结算币种代码
+   * 结算币种代码（字典 accounting_currency_code；DictValue=CNY/USD 等）
    */
   currencyCode?: string;
+
+  /**
+   * 销售组织（选项 TaktCompanies/options；DictValue=CompanyCode）
+   */
+  salesOrganization?: string;
+
+  /**
+   * 分销渠道
+   */
+  distributionChannel?: string;
+
+  /**
+   * 产品组
+   */
+  productGroup?: string;
+
+  /**
+   * 客户组（字典 logistics_customer_group；DictValue=Z1～Z4）
+   */
+  customerGroup?: string;
+
+  /**
+   * 贸易伙伴（选项 TaktPlants/options；DictValue=PlantCode）
+   */
+  tradingPartner?: string;
+
+  /**
+   * 帐户分配组（字典 logistics_account_assignment_group；DictValue=01/02/03/Y1～Y4/Z0～ZD）
+   */
+  accountAssignmentGroup?: string;
+
+  /**
+   * 供应商（选项 TaktSuppliers/options；DictValue=SupplierCode）
+   */
+  supplierCode?: string;
+
+  /**
+   * 尼尔森标识
+   */
+  nielsenIndicator?: string;
+
+  /**
+   * 中心记帐冻结（字典 sys_yes_no_type；0=否 1=是）
+   */
+  centralPostingBlock?: number;
+
+  /**
+   * 统驭科目（选项 TaktAccountTitles/options?reconciliationOnly=true&amp;auxiliaryType=D；DictValue=AccountTitleCode）
+   */
+  reconciliationAccount?: string;
+
+  /**
+   * 总部（选项 TaktCustomers/options；DictValue=CustomerCode）
+   */
+  headquarters?: string;
+
+  /**
+   * 具有供应商的清算（字典 sys_yes_no_type；0=否 1=是）
+   */
+  clearingWithVendor?: number;
 
   /**
    * 付款条件（字典 accounting_payment_terms_param；DictValue=prepayship/cod/net30 等）
    */
   paymentTerms?: string;
+
+  /**
+   * 付款方式（字典 accounting_payment_method_type；0=现金，1=银行转账，2=支票，3=信用证，4=其他）
+   */
+  paymentMethod?: number;
+
+  /**
+   * 交货工厂（选项 TaktPlants/options；DictValue=PlantCode）
+   */
+  deliveringPlant?: string;
+
+  /**
+   * 国际贸易条件1（字典 logistics_incoterms1；CFR/CIF/…/FOB 等；默认 FOB）
+   */
+  incoterms1?: string;
+
+  /**
+   * 国际贸易条件2（地点说明）
+   */
+  incoterms2?: string;
+
+  /**
+   * 装运条件（字典 logistics_shipping_conditions；DictValue=Z1～Z3）
+   */
+  shippingConditions?: string;
+
+  /**
+   * 客户定价过程（字典 logistics_customer_pricing_procedure；DictValue=1/2/3；默认 1）
+   */
+  customerPricingProcedure?: string;
 
   /**
    * 信用等级（字典 logistics_credit_rating_category；0=无 1=A级 2=AA级 3=AAA级 4=B级 5=C级）
@@ -725,7 +1165,7 @@ export interface CustomerTemplate {
   discountRate?: number;
 
   /**
-   * 销售员（选项 TaktEmployees/options，DictValue=EmployeeCode）
+   * 销售员（选项 TaktEmployees/options；DictValue=EmployeeCode）
    */
   salesBy?: string;
 
@@ -779,7 +1219,7 @@ export interface CustomerImport {
   companyDefaultCulture?: string;
 
   /**
-   * 工厂代码（选项 TaktPlants/options，DictValue=PlantCode）
+   * 工厂代码（选项 TaktPlants/options；DictValue=PlantCode）
    */
   plantCode?: string;
 
@@ -789,9 +1229,14 @@ export interface CustomerImport {
   customerCode?: string;
 
   /**
-   * 客户名称
+   * 客户名称1
    */
-  customerName?: string;
+  customerName1?: string;
+
+  /**
+   * 客户名称2
+   */
+  customerName2?: string;
 
   /**
    * 客户简称
@@ -804,9 +1249,19 @@ export interface CustomerImport {
   customerType?: number;
 
   /**
-   * 行业领域
+   * 企业性质（字典 sys_enterprise_nature_type）
    */
-  industrySector?: string;
+  enterpriseNature?: string;
+
+  /**
+   * 行业属性（字典 sys_industry_attribute_type）
+   */
+  industryAttribute?: string;
+
+  /**
+   * 区域文化编码（字典 sys_culture_code；即语言/区域文化）
+   */
+  defaultCulture?: string;
 
   /**
    * 客户标识（税务登记证号/统一社会信用代码）
@@ -819,9 +1274,19 @@ export interface CustomerImport {
   taxRate?: number;
 
   /**
-   * 注册国家（ISO 3166-1 alpha-2两位代码）
+   * 注册国家（字典 sys_country_code；DictValue=ISO alpha-2）
    */
   registrationCountry?: string;
+
+  /**
+   * 注册省（选项 TaktAdminDivisions/options；DictValue=DivisionCode；建议 Level=2）
+   */
+  registrationProvince?: string;
+
+  /**
+   * 注册市（选项 TaktAdminDivisions/options；DictValue=DivisionCode；建议 Level=3）
+   */
+  registrationCity?: string;
 
   /**
    * 注册地址1
@@ -832,11 +1297,6 @@ export interface CustomerImport {
    * 注册地址2
    */
   registrationAddress2?: string;
-
-  /**
-   * 注册地址3
-   */
-  registrationAddress3?: string;
 
   /**
    * 客户电话
@@ -874,14 +1334,104 @@ export interface CustomerImport {
   contactEmail?: string;
 
   /**
-   * 结算币种代码
+   * 结算币种代码（字典 accounting_currency_code；DictValue=CNY/USD 等）
    */
   currencyCode?: string;
+
+  /**
+   * 销售组织（选项 TaktCompanies/options；DictValue=CompanyCode）
+   */
+  salesOrganization?: string;
+
+  /**
+   * 分销渠道
+   */
+  distributionChannel?: string;
+
+  /**
+   * 产品组
+   */
+  productGroup?: string;
+
+  /**
+   * 客户组（字典 logistics_customer_group；DictValue=Z1～Z4）
+   */
+  customerGroup?: string;
+
+  /**
+   * 贸易伙伴（选项 TaktPlants/options；DictValue=PlantCode）
+   */
+  tradingPartner?: string;
+
+  /**
+   * 帐户分配组（字典 logistics_account_assignment_group；DictValue=01/02/03/Y1～Y4/Z0～ZD）
+   */
+  accountAssignmentGroup?: string;
+
+  /**
+   * 供应商（选项 TaktSuppliers/options；DictValue=SupplierCode）
+   */
+  supplierCode?: string;
+
+  /**
+   * 尼尔森标识
+   */
+  nielsenIndicator?: string;
+
+  /**
+   * 中心记帐冻结（字典 sys_yes_no_type；0=否 1=是）
+   */
+  centralPostingBlock?: number;
+
+  /**
+   * 统驭科目（选项 TaktAccountTitles/options?reconciliationOnly=true&amp;auxiliaryType=D；DictValue=AccountTitleCode）
+   */
+  reconciliationAccount?: string;
+
+  /**
+   * 总部（选项 TaktCustomers/options；DictValue=CustomerCode）
+   */
+  headquarters?: string;
+
+  /**
+   * 具有供应商的清算（字典 sys_yes_no_type；0=否 1=是）
+   */
+  clearingWithVendor?: number;
 
   /**
    * 付款条件（字典 accounting_payment_terms_param；DictValue=prepayship/cod/net30 等）
    */
   paymentTerms?: string;
+
+  /**
+   * 付款方式（字典 accounting_payment_method_type；0=现金，1=银行转账，2=支票，3=信用证，4=其他）
+   */
+  paymentMethod?: number;
+
+  /**
+   * 交货工厂（选项 TaktPlants/options；DictValue=PlantCode）
+   */
+  deliveringPlant?: string;
+
+  /**
+   * 国际贸易条件1（字典 logistics_incoterms1；CFR/CIF/…/FOB 等；默认 FOB）
+   */
+  incoterms1?: string;
+
+  /**
+   * 国际贸易条件2（地点说明）
+   */
+  incoterms2?: string;
+
+  /**
+   * 装运条件（字典 logistics_shipping_conditions；DictValue=Z1～Z3）
+   */
+  shippingConditions?: string;
+
+  /**
+   * 客户定价过程（字典 logistics_customer_pricing_procedure；DictValue=1/2/3；默认 1）
+   */
+  customerPricingProcedure?: string;
 
   /**
    * 信用等级（字典 logistics_credit_rating_category；0=无 1=A级 2=AA级 3=AAA级 4=B级 5=C级）
@@ -899,7 +1449,7 @@ export interface CustomerImport {
   discountRate?: number;
 
   /**
-   * 销售员（选项 TaktEmployees/options，DictValue=EmployeeCode）
+   * 销售员（选项 TaktEmployees/options；DictValue=EmployeeCode）
    */
   salesBy?: string;
 
@@ -948,7 +1498,7 @@ export interface CustomerExport {
   companyCode: string;
 
   /**
-   * 工厂代码（选项 TaktPlants/options，DictValue=PlantCode）
+   * 工厂代码（选项 TaktPlants/options；DictValue=PlantCode）
    */
   plantCode: string;
 
@@ -958,9 +1508,14 @@ export interface CustomerExport {
   customerCode: string;
 
   /**
-   * 客户名称
+   * 客户名称1
    */
-  customerName: string;
+  customerName1: string;
+
+  /**
+   * 客户名称2
+   */
+  customerName2?: string;
 
   /**
    * 客户简称
@@ -973,9 +1528,19 @@ export interface CustomerExport {
   customerType: number;
 
   /**
-   * 行业领域
+   * 企业性质（字典 sys_enterprise_nature_type）
    */
-  industrySector?: string;
+  enterpriseNature: string;
+
+  /**
+   * 行业属性（字典 sys_industry_attribute_type）
+   */
+  industryAttribute: string;
+
+  /**
+   * 区域文化编码（字典 sys_culture_code；即语言/区域文化）
+   */
+  defaultCulture: string;
 
   /**
    * 客户标识（税务登记证号/统一社会信用代码）
@@ -988,9 +1553,19 @@ export interface CustomerExport {
   taxRate: number;
 
   /**
-   * 注册国家（ISO 3166-1 alpha-2两位代码）
+   * 注册国家（字典 sys_country_code；DictValue=ISO alpha-2）
    */
   registrationCountry?: string;
+
+  /**
+   * 注册省（选项 TaktAdminDivisions/options；DictValue=DivisionCode；建议 Level=2）
+   */
+  registrationProvince?: string;
+
+  /**
+   * 注册市（选项 TaktAdminDivisions/options；DictValue=DivisionCode；建议 Level=3）
+   */
+  registrationCity?: string;
 
   /**
    * 注册地址1
@@ -1001,11 +1576,6 @@ export interface CustomerExport {
    * 注册地址2
    */
   registrationAddress2?: string;
-
-  /**
-   * 注册地址3
-   */
-  registrationAddress3?: string;
 
   /**
    * 客户电话
@@ -1043,14 +1613,104 @@ export interface CustomerExport {
   contactEmail?: string;
 
   /**
-   * 结算币种代码
+   * 结算币种代码（字典 accounting_currency_code；DictValue=CNY/USD 等）
    */
   currencyCode: string;
+
+  /**
+   * 销售组织（选项 TaktCompanies/options；DictValue=CompanyCode）
+   */
+  salesOrganization: string;
+
+  /**
+   * 分销渠道
+   */
+  distributionChannel: string;
+
+  /**
+   * 产品组
+   */
+  productGroup: string;
+
+  /**
+   * 客户组（字典 logistics_customer_group；DictValue=Z1～Z4）
+   */
+  customerGroup: string;
+
+  /**
+   * 贸易伙伴（选项 TaktPlants/options；DictValue=PlantCode）
+   */
+  tradingPartner: string;
+
+  /**
+   * 帐户分配组（字典 logistics_account_assignment_group；DictValue=01/02/03/Y1～Y4/Z0～ZD）
+   */
+  accountAssignmentGroup: string;
+
+  /**
+   * 供应商（选项 TaktSuppliers/options；DictValue=SupplierCode）
+   */
+  supplierCode: string;
+
+  /**
+   * 尼尔森标识
+   */
+  nielsenIndicator: string;
+
+  /**
+   * 中心记帐冻结（字典 sys_yes_no_type；0=否 1=是）
+   */
+  centralPostingBlock: number;
+
+  /**
+   * 统驭科目（选项 TaktAccountTitles/options?reconciliationOnly=true&amp;auxiliaryType=D；DictValue=AccountTitleCode）
+   */
+  reconciliationAccount: string;
+
+  /**
+   * 总部（选项 TaktCustomers/options；DictValue=CustomerCode）
+   */
+  headquarters: string;
+
+  /**
+   * 具有供应商的清算（字典 sys_yes_no_type；0=否 1=是）
+   */
+  clearingWithVendor: number;
 
   /**
    * 付款条件（字典 accounting_payment_terms_param；DictValue=prepayship/cod/net30 等）
    */
   paymentTerms: string;
+
+  /**
+   * 付款方式（字典 accounting_payment_method_type；0=现金，1=银行转账，2=支票，3=信用证，4=其他）
+   */
+  paymentMethod: number;
+
+  /**
+   * 交货工厂（选项 TaktPlants/options；DictValue=PlantCode）
+   */
+  deliveringPlant: string;
+
+  /**
+   * 国际贸易条件1（字典 logistics_incoterms1；CFR/CIF/…/FOB 等；默认 FOB）
+   */
+  incoterms1: string;
+
+  /**
+   * 国际贸易条件2（地点说明）
+   */
+  incoterms2: string;
+
+  /**
+   * 装运条件（字典 logistics_shipping_conditions；DictValue=Z1～Z3）
+   */
+  shippingConditions: string;
+
+  /**
+   * 客户定价过程（字典 logistics_customer_pricing_procedure；DictValue=1/2/3；默认 1）
+   */
+  customerPricingProcedure: string;
 
   /**
    * 信用等级（字典 logistics_credit_rating_category；0=无 1=A级 2=AA级 3=AAA级 4=B级 5=C级）
@@ -1068,7 +1728,7 @@ export interface CustomerExport {
   discountRate: number;
 
   /**
-   * 销售员（选项 TaktEmployees/options，DictValue=EmployeeCode）
+   * 销售员（选项 TaktEmployees/options；DictValue=EmployeeCode）
    */
   salesBy?: string;
 

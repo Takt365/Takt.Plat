@@ -109,14 +109,14 @@
             </a-col>
             <a-col :span="12">
               <a-form-item
-                :label="pi.label('customerName')"
-                name="customerName"
+                :label="pi.label('customerName1')"
+                name="customerName1"
               >
                 <a-input
-                  v-model:value="formState.customerName"
-                  :placeholder="pi.ph('customerName')"
+                  v-model:value="formState.customerName1"
+                  :placeholder="pi.ph('customerName1')"
                   show-count
-                  :maxlength="200"
+                  :maxlength="140"
                   allow-clear
                 />
               </a-form-item>
@@ -353,7 +353,7 @@
       <template #cell-materialCode="{ record }">
         <TaktSelect
           v-model:value="record.materialCode"
-          api-url="TaktMaterials/options"
+          api-url="TaktMaterialPlants/options"
           class="w-full"
           :get-popup-container="getSelectPopupContainer"
           :placeholder="salesForecastItemPi.queryPh('materialCode', 'select')"
@@ -436,7 +436,7 @@ const formContentClass = computed(() => (formFields.length > 10 ? 'takt-form-con
 /** 当前激活的 Tab key */
 const activeTab = ref('tab-0')
 /** CreateDto 字段名列表（与 formState 键对齐） */
-const formFields = ["tenantCode","companyCode","companyDefaultCulture","plantCode","salesForecastCode","planDate","planPeriodStart","planPeriodEnd","customerCode","customerName","plannerId","planBy","totalQuantity","totalAmount","convertedQuantity","convertedAmount","planStatus","convertedStatus","planDescription","extField","remark"]
+const formFields = ["tenantCode","companyCode","companyDefaultCulture","plantCode","salesForecastCode","planDate","planPeriodStart","planPeriodEnd","customerCode","customerName1","plannerId","planBy","totalQuantity","totalAmount","convertedQuantity","convertedAmount","planStatus","convertedStatus","planDescription","extField","remark"]
 
 
 import type { TaktEditableTableColumn } from '@/components/business/takt-editable-table/types'
@@ -483,18 +483,6 @@ const salesForecastItemFormColumns = computed<TaktEditableTableColumn[]>(() => [
     key: 'materialCode',
     title: salesForecastItemPi.label('materialCode'),
     width: 140,
-  },
-  {
-    key: 'materialName',
-    title: salesForecastItemPi.label('materialName'),
-    editor: 'input',
-    width: 140,
-  },
-  {
-    key: 'materialSpecification',
-    title: salesForecastItemPi.label('materialSpecification'),
-    editor: 'input',
-    width: 140, allowClear: true, placeholder: salesForecastItemPi.ph('materialSpecification'),
   },
   {
     key: 'modelCode',
@@ -557,8 +545,6 @@ function createDefaultSalesForecastItemRow(): Record<string, unknown> {
   return {
     lineNumber: allocateNextSalesForecastItemLineNumber(),
     materialCode: '',
-    materialName: '',
-    materialSpecification: '',
     modelCode: '',
     modelName: '',
     planUnit: '',

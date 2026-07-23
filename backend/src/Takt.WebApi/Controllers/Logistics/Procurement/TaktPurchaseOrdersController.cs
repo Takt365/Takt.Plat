@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.WebApi.Controllers.Logistics.Procurement
 // 文件名称：TaktPurchaseOrdersController.cs
-// 创建时间：2026-06-24
+// 创建时间：2026-07-23
 // 创建人：Takt365(Cursor AI)
 // 功能描述：采购订单控制器
 // 
@@ -49,26 +49,6 @@ public class TaktPurchaseOrdersController : TaktControllerBase
         {
             var result = await _purchaseOrderService.GetPurchaseOrderListAsync(queryDto);
             return Success(result.Data, result.Total, result.PageIndex, result.PageSize, "查询成功");
-        }
-        catch (Exception ex)
-        {
-            return HandleException(ex);
-        }
-    }
-
-    /// <summary>
-    /// 获取采购订单统计（数据看板）
-    /// </summary>
-    /// <param name="queryDto">查询 DTO</param>
-    /// <returns>采购订单统计</returns>
-    [TaktPermission("logistics:procurement:purchase:order:list", "采购订单统计")]
-    [HttpGet("order-stat")]
-    public async Task<IActionResult> GetPurchaseOrderStatAsync([FromQuery] TaktProcurementStatQueryDto queryDto)
-    {
-        try
-        {
-            var result = await _purchaseOrderService.GetPurchaseOrderStatAsync(queryDto);
-            return Success(result, "查询成功");
         }
         catch (Exception ex)
         {

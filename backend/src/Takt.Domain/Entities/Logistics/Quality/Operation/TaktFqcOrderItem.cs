@@ -40,7 +40,7 @@ public class TaktFqcOrderItem : TaktCompanyEntityBase
     [SugarColumn(ColumnName = "line_number", ColumnDescription = "行号", ColumnDataType = "int", IsNullable = false, DefaultValue = "0")]
     public int LineNumber { get; set; } = 0;
     /// <summary>
-    /// 物料编码（选项 TaktMaterialPlants/options，DictValue=MaterialCode，ExtValue=PlantCode）
+    /// 物料编码（选项 TaktMaterialPlants/options；DictValue=MaterialCode，ExtValue=PlantCode）
     /// </summary>
     [SugarColumn(ColumnName = "material_code", ColumnDescription = "物料编码", ColumnDataType = "nvarchar", Length = 20, IsNullable = false)]
     public string MaterialCode { get; set; } = string.Empty;
@@ -60,12 +60,12 @@ public class TaktFqcOrderItem : TaktCompanyEntityBase
     [SugarColumn(ColumnName = "warehouse_quantity", ColumnDescription = "入库数量", ColumnDataType = "decimal", Length = 18, DecimalDigits = 4, IsNullable = false, DefaultValue = "0")]
     public decimal WarehouseQuantity { get; set; } = 0;
     /// <summary>
-    /// 检验标准编码（选项 TaktInspectionStandards/options，DictValue=StandardCode）
+    /// 检验标准编码（选项 TaktInspectionStandards/options；DictValue=StandardCode）
     /// </summary>
     [SugarColumn(ColumnName = "standard_code", ColumnDescription = "检验标准编码", ColumnDataType = "nvarchar", Length = 50, IsNullable = false)]
     public string StandardCode { get; set; } = string.Empty;
     /// <summary>
-    /// 抽样方案编码（选项 TaktSamplingSchemes/options，DictValue=SamplingSchemeCode）
+    /// 抽样方案编码（选项 TaktSamplingSchemes/options；DictValue=SamplingSchemeCode）
     /// </summary>
     [SugarColumn(ColumnName = "sampling_scheme_code", ColumnDescription = "抽样方案编码", ColumnDataType = "nvarchar", Length = 50, IsNullable = false)]
     public string SamplingSchemeCode { get; set; } = string.Empty;
@@ -105,7 +105,7 @@ public class TaktFqcOrderItem : TaktCompanyEntityBase
     [SugarColumn(ColumnName = "inspection_description", ColumnDescription = "检验说明", ColumnDataType = "nvarchar", Length = 1000, IsNullable = true)]
     public string? InspectionDescription { get; set; }
     /// <summary>
-    /// 检验员（选项 TaktEmployees/options，DictValue=EmployeeCode）
+    /// 检验员（选项 TaktEmployees/options；DictValue=EmployeeCode）
     /// </summary>
     [SugarColumn(ColumnName = "inspector_by", ColumnDescription = "检验员", ColumnDataType = "nvarchar", Length = 50, IsNullable = false)]
     public string InspectorBy { get; set; } = string.Empty;
@@ -121,7 +121,7 @@ public class TaktFqcOrderItem : TaktCompanyEntityBase
     public int JudgeStatus { get; set; } = 0;
 
     /// <summary>
-    /// 是否作废（字典 sys_yes_no_type，0=否 1=是；编辑移除子行时标记作废）
+    /// 是否作废（字典 sys_yes_no_type；0=否 1=是；编辑移除子行时标记作废）
     /// </summary>
     [SugarColumn(ColumnName = "is_obsolete", ColumnDescription = "是否作废", ColumnDataType = "int", IsNullable = false, DefaultValue = "0")]
     public int IsObsolete { get; set; } = 0;

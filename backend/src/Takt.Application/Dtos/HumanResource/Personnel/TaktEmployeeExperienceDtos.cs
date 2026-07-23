@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Application.Dtos.HumanResource.Personnel
 // 文件名称：TaktEmployeeExperienceDtos.cs
-// 创建时间：2026-06-23
+// 创建时间：2026-07-23
 // 创建人：Takt365(Auto Generated)
 // 功能描述：EmployeeExperience 模块 DTO（由 generate-dtos-from-entity.cjs 根据 TaktEmployeeExperience 生成，请按需审阅）
 // 
@@ -36,15 +36,20 @@ public class TaktEmployeeExperienceDto : TaktCompanyDtoBase
     public long EmployeeExperienceId { get; set; }
 
     /// <summary>
-    /// 员工ID
+    /// 员工（选项 TaktEmployees/options；DictValue=Id）
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
     public long EmployeeId { get; set; }
 
     /// <summary>
-    /// 员工名称（填充字段）
+    /// 员工编码（冗余，与 TaktEmployee.EmployeeCode 对齐）
     /// </summary>
-    public string? EmployeeName { get; set; }
+    public string EmployeeCode { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 员工姓名（冗余，与 TaktEmployee.EmployeeName 对齐）
+    /// </summary>
+    public string EmployeeName { get; set; } = string.Empty;
 
     /// <summary>
     /// 工作单位名称
@@ -104,10 +109,20 @@ public class TaktEmployeeExperienceQueryDto : TaktPagedQuery
     public string? CompanyCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 员工ID
+    /// 员工（选项 TaktEmployees/options；DictValue=Id）
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
     public long? EmployeeId { get; set; }
+
+    /// <summary>
+    /// 员工编码（冗余，与 TaktEmployee.EmployeeCode 对齐）
+    /// </summary>
+    public string? EmployeeCode { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 员工姓名（冗余，与 TaktEmployee.EmployeeName 对齐）
+    /// </summary>
+    public string? EmployeeName { get; set; } = string.Empty;
 
     /// <summary>
     /// 工作单位名称
@@ -200,10 +215,22 @@ public class TaktEmployeeExperienceCreateDto
     public string CompanyDefaultCulture { get; set; } = string.Empty;
 
     /// <summary>
-    /// 员工ID
+    /// 员工（选项 TaktEmployees/options；DictValue=Id）
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
     public long EmployeeId { get; set; }
+
+    /// <summary>
+    /// 员工编码（冗余，与 TaktEmployee.EmployeeCode 对齐）
+    /// </summary>
+    [Required(ErrorMessage = "员工编码（冗余，与 TaktEmployee.EmployeeCode 对齐）不能为空")]
+    public string EmployeeCode { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 员工姓名（冗余，与 TaktEmployee.EmployeeName 对齐）
+    /// </summary>
+    [Required(ErrorMessage = "员工姓名（冗余，与 TaktEmployee.EmployeeName 对齐）不能为空")]
+    public string EmployeeName { get; set; } = string.Empty;
 
     /// <summary>
     /// 工作单位名称
@@ -293,10 +320,20 @@ public class TaktEmployeeExperienceTemplateDto
     public string? CompanyCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 员工ID
+    /// 员工（选项 TaktEmployees/options；DictValue=Id）
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
     public long? EmployeeId { get; set; }
+
+    /// <summary>
+    /// 员工编码（冗余，与 TaktEmployee.EmployeeCode 对齐）
+    /// </summary>
+    public string? EmployeeCode { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 员工姓名（冗余，与 TaktEmployee.EmployeeName 对齐）
+    /// </summary>
+    public string? EmployeeName { get; set; } = string.Empty;
 
     /// <summary>
     /// 工作单位名称
@@ -366,10 +403,20 @@ public class TaktEmployeeExperienceImportDto
     public string? CompanyDefaultCulture { get; set; } = string.Empty;
 
     /// <summary>
-    /// 员工ID
+    /// 员工（选项 TaktEmployees/options；DictValue=Id）
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
     public long? EmployeeId { get; set; }
+
+    /// <summary>
+    /// 员工编码（冗余，与 TaktEmployee.EmployeeCode 对齐）
+    /// </summary>
+    public string? EmployeeCode { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 员工姓名（冗余，与 TaktEmployee.EmployeeName 对齐）
+    /// </summary>
+    public string? EmployeeName { get; set; } = string.Empty;
 
     /// <summary>
     /// 工作单位名称
@@ -440,10 +487,20 @@ public class TaktEmployeeExperienceExportDto
     public string CompanyCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 员工ID
+    /// 员工（选项 TaktEmployees/options；DictValue=Id）
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
     public long EmployeeId { get; set; }
+
+    /// <summary>
+    /// 员工编码（冗余，与 TaktEmployee.EmployeeCode 对齐）
+    /// </summary>
+    public string EmployeeCode { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 员工姓名（冗余，与 TaktEmployee.EmployeeName 对齐）
+    /// </summary>
+    public string EmployeeName { get; set; } = string.Empty;
 
     /// <summary>
     /// 工作单位名称

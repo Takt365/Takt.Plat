@@ -2,7 +2,7 @@
 <!-- 项目名称：节拍数字工厂 · Takt Plat (TDF) -->
 <!-- 命名空间：@/views/logistics/sales/order/components -->
 <!-- 文件名称：order-form.vue -->
-<!-- 功能描述：APS 排程订单维护弹窗内嵌表单（上主下从级联保存）。由 generate-vue-master-detail-from-api.cjs 根据 types/api 自动生成；defineExpose 提供 validate、getValues、resetFields -->
+<!-- 功能描述：Takt销售订单实体维护弹窗内嵌表单（上主下从级联保存）。由 generate-vue-master-detail-from-api.cjs 根据 types/api 自动生成；defineExpose 提供 validate、getValues、resetFields -->
 <!-- 版权信息：Copyright (c) 2025 Takt  All rights reserved. -->
 <!-- 免责声明：此软件使用 MIT License，作者不承担任何使用风险。 -->
 <!-- ======================================== -->
@@ -22,7 +22,7 @@
     >
       <a-tab-pane
         key="tab-0"
-        :tab="t('common.page.form.tabs.basicinfo') + ' (1/3)'"
+        :tab="t('common.page.form.tabs.basicinfo') + ' (1/4)'"
         force-render
       >
         <div :class="formContentClass">
@@ -36,126 +36,123 @@
                   v-model:value="formState.plantCode"
                   api-url="TaktPlants/options"
                   :placeholder="pi.ph('plantCode')"
-                  :disabled="!!formData?.apsOrderId"
+                  :disabled="!!formData?.salesOrderId"
                 />
               </a-form-item>
             </a-col>
             <a-col :span="12">
               <a-form-item
-                :label="pi.label('apsOrderCode')"
-                name="apsOrderCode"
+                :label="pi.label('salesOrderCode')"
+                name="salesOrderCode"
               >
                 <a-input
-                  v-model:value="formState.apsOrderCode"
-                  :placeholder="pi.ph('apsOrderCode')"
+                  v-model:value="formState.salesOrderCode"
+                  :placeholder="pi.ph('salesOrderCode')"
                   show-count
-                  :maxlength="40"
+                  :maxlength="50"
                   allow-clear
-                  :disabled="!!formData?.apsOrderId"
+                  :disabled="!!formData?.salesOrderId"
                 />
               </a-form-item>
             </a-col>
             <a-col :span="12">
               <a-form-item
-                :label="pi.label('plannedOrderId')"
-                name="plannedOrderId"
-              >
-                <a-input
-                  v-model:value="formState.plannedOrderId"
-                  :placeholder="pi.ph('plannedOrderId')"
-                  show-count
-                  :maxlength="20"
-                  allow-clear
-                />
-              </a-form-item>
-            </a-col>
-            <a-col :span="12">
-              <a-form-item
-                :label="pi.label('plannedOrderCode')"
-                name="plannedOrderCode"
-              >
-                <a-input
-                  v-model:value="formState.plannedOrderCode"
-                  :placeholder="pi.ph('plannedOrderCode')"
-                  show-count
-                  :maxlength="40"
-                  allow-clear
-                  :disabled="!!formData?.apsOrderId"
-                />
-              </a-form-item>
-            </a-col>
-            <a-col :span="12">
-              <a-form-item
-                :label="pi.label('materialCode')"
-                name="materialCode"
+                :label="pi.label('customerCode')"
+                name="customerCode"
               >
                 <TaktSelect
-                  v-model:value="formState.materialCode"
-                  api-url="TaktMaterials/options"
-                  :placeholder="pi.ph('materialCode')"
-                  :disabled="!!formData?.apsOrderId"
+                  v-model:value="formState.customerCode"
+                  api-url="TaktCustomers/options"
+                  :placeholder="pi.ph('customerCode')"
+                  :disabled="!!formData?.salesOrderId"
                 />
               </a-form-item>
             </a-col>
             <a-col :span="12">
               <a-form-item
-                :label="pi.label('orderQuantity')"
-                name="orderQuantity"
+                :label="pi.label('customerName1')"
+                name="customerName1"
+              >
+                <a-input
+                  v-model:value="formState.customerName1"
+                  :placeholder="pi.ph('customerName1')"
+                  show-count
+                  :maxlength="140"
+                  allow-clear
+                />
+              </a-form-item>
+            </a-col>
+            <a-col :span="12">
+              <a-form-item
+                :label="pi.label('orderDate')"
+                name="orderDate"
+              >
+                <a-date-picker
+                  v-model:value="formState.orderDate"
+                  :placeholder="pi.ph('orderDate')"
+                  value-format="YYYY-MM-DD"
+                  style="width: 100%"
+                />
+              </a-form-item>
+            </a-col>
+            <a-col :span="12">
+              <a-form-item
+                :label="pi.label('requiredDeliveryDate')"
+                name="requiredDeliveryDate"
+              >
+                <a-date-picker
+                  v-model:value="formState.requiredDeliveryDate"
+                  :placeholder="pi.ph('requiredDeliveryDate')"
+                  value-format="YYYY-MM-DD"
+                  style="width: 100%"
+                />
+              </a-form-item>
+            </a-col>
+            <a-col :span="12">
+              <a-form-item
+                :label="pi.label('actualDeliveryDate')"
+                name="actualDeliveryDate"
+              >
+                <a-date-picker
+                  v-model:value="formState.actualDeliveryDate"
+                  :placeholder="pi.ph('actualDeliveryDate')"
+                  value-format="YYYY-MM-DD"
+                  style="width: 100%"
+                />
+              </a-form-item>
+            </a-col>
+            <a-col :span="12">
+              <a-form-item
+                :label="pi.label('salesBy')"
+                name="salesBy"
+              >
+                <TaktSelect
+                  v-model:value="formState.salesBy"
+                  api-url="TaktEmployees/options"
+                  :placeholder="pi.ph('salesBy')"
+                />
+              </a-form-item>
+            </a-col>
+            <a-col :span="12">
+              <a-form-item
+                :label="pi.label('totalQuantity')"
+                name="totalQuantity"
               >
                 <a-input-number
-                  v-model:value="formState.orderQuantity"
-                  :placeholder="pi.ph('orderQuantity')"
+                  v-model:value="formState.totalQuantity"
+                  :placeholder="pi.ph('totalQuantity')"
                   style="width: 100%"
                 />
               </a-form-item>
             </a-col>
             <a-col :span="12">
               <a-form-item
-                :label="pi.label('unitOfMeasure')"
-                name="unitOfMeasure"
+                :label="pi.label('totalAmount')"
+                name="totalAmount"
               >
-                <TaktSelect
-                  v-model:value="formState.unitOfMeasure"
-                  dict-type="logistics_unit_of_measure_code"
-                  :placeholder="pi.ph('unitOfMeasure')"
-                />
-              </a-form-item>
-            </a-col>
-            <a-col :span="12">
-              <a-form-item
-                :label="pi.label('routingCode')"
-                name="routingCode"
-              >
-                <TaktSelect
-                  v-model:value="formState.routingCode"
-                  api-url="TaktRoutings/options"
-                  :placeholder="pi.ph('routingCode')"
-                  :disabled="!!formData?.apsOrderId"
-                />
-              </a-form-item>
-            </a-col>
-            <a-col :span="12">
-              <a-form-item
-                :label="pi.label('plannedStartTime')"
-                name="plannedStartTime"
-              >
-                <a-date-picker
-                  v-model:value="formState.plannedStartTime"
-                  :placeholder="pi.ph('plannedStartTime')"
-                  value-format="YYYY-MM-DD"
-                  style="width: 100%"
-                />
-              </a-form-item>
-            </a-col>
-            <a-col :span="12">
-              <a-form-item
-                :label="pi.label('plannedEndTime')"
-                name="plannedEndTime"
-              >
-                <a-date-picker
-                  v-model:value="formState.plannedEndTime"
-                  :placeholder="pi.ph('plannedEndTime')"
-                  value-format="YYYY-MM-DD"
+                <a-input-number
+                  v-model:value="formState.totalAmount"
+                  :placeholder="pi.ph('totalAmount')"
                   style="width: 100%"
                 />
               </a-form-item>
@@ -165,34 +162,129 @@
       </a-tab-pane>
       <a-tab-pane
         key="tab-1"
-        :tab="t('common.page.form.tabs.basicinfo') + ' (2/3)'"
+        :tab="t('common.page.form.tabs.basicinfo') + ' (2/4)'"
         force-render
       >
         <div :class="formContentClass">
           <a-row :gutter="24">
-            <a-col :span="24">
+            <a-col :span="12">
               <a-form-item
-                :label="pi.label('orderStatus')"
-                name="orderStatus"
+                :label="pi.label('discountAmount')"
+                name="discountAmount"
               >
-                <TaktSelect
-                  v-model:value="formState.orderStatus"
-                  dict-type="aps_order_status"
-                  :placeholder="pi.ph('orderStatus')"
+                <a-input-number
+                  v-model:value="formState.discountAmount"
+                  :placeholder="pi.ph('discountAmount')"
+                  style="width: 100%"
                 />
               </a-form-item>
             </a-col>
-            <a-col :span="24">
+            <a-col :span="12">
               <a-form-item
-                :label="pi.label('apsScheduleId')"
-                name="apsScheduleId"
+                :label="pi.label('currencyCode')"
+                name="currencyCode"
               >
-                <a-input
-                  v-model:value="formState.apsScheduleId"
-                  :placeholder="pi.ph('apsScheduleId')"
-                  show-count
-                  :maxlength="20"
-                  allow-clear
+                <TaktSelect
+                  v-model:value="formState.currencyCode"
+                  dict-type="accounting_currency_code"
+                  :placeholder="pi.ph('currencyCode')"
+                  :disabled="!!formData?.salesOrderId"
+                />
+              </a-form-item>
+            </a-col>
+            <a-col :span="12">
+              <a-form-item
+                :label="pi.label('taxRate')"
+                name="taxRate"
+              >
+                <TaktSelect
+                  v-model:value="formState.taxRate"
+                  dict-type="accounting_tax_rate_param"
+                  :placeholder="pi.ph('taxRate')"
+                />
+              </a-form-item>
+            </a-col>
+            <a-col :span="12">
+              <a-form-item
+                :label="pi.label('taxAmount')"
+                name="taxAmount"
+              >
+                <a-input-number
+                  v-model:value="formState.taxAmount"
+                  :placeholder="pi.ph('taxAmount')"
+                  style="width: 100%"
+                />
+              </a-form-item>
+            </a-col>
+            <a-col :span="12">
+              <a-form-item
+                :label="pi.label('actualAmount')"
+                name="actualAmount"
+              >
+                <a-input-number
+                  v-model:value="formState.actualAmount"
+                  :placeholder="pi.ph('actualAmount')"
+                  style="width: 100%"
+                />
+              </a-form-item>
+            </a-col>
+            <a-col :span="12">
+              <a-form-item
+                :label="pi.label('shippedQuantity')"
+                name="shippedQuantity"
+              >
+                <a-input-number
+                  v-model:value="formState.shippedQuantity"
+                  :placeholder="pi.ph('shippedQuantity')"
+                  style="width: 100%"
+                />
+              </a-form-item>
+            </a-col>
+            <a-col :span="12">
+              <a-form-item
+                :label="pi.label('shippedAmount')"
+                name="shippedAmount"
+              >
+                <a-input-number
+                  v-model:value="formState.shippedAmount"
+                  :placeholder="pi.ph('shippedAmount')"
+                  style="width: 100%"
+                />
+              </a-form-item>
+            </a-col>
+            <a-col :span="12">
+              <a-form-item
+                :label="pi.label('receivedAmount')"
+                name="receivedAmount"
+              >
+                <a-input-number
+                  v-model:value="formState.receivedAmount"
+                  :placeholder="pi.ph('receivedAmount')"
+                  style="width: 100%"
+                />
+              </a-form-item>
+            </a-col>
+            <a-col :span="12">
+              <a-form-item
+                :label="pi.label('deliveryMethod')"
+                name="deliveryMethod"
+              >
+                <TaktSelect
+                  v-model:value="formState.deliveryMethod"
+                  dict-type="logistics_delivery_method_type"
+                  :placeholder="pi.ph('deliveryMethod')"
+                />
+              </a-form-item>
+            </a-col>
+            <a-col :span="12">
+              <a-form-item
+                :label="pi.label('paymentMethod')"
+                name="paymentMethod"
+              >
+                <TaktSelect
+                  v-model:value="formState.paymentMethod"
+                  dict-type="accounting_payment_method_type"
+                  :placeholder="pi.ph('paymentMethod')"
                 />
               </a-form-item>
             </a-col>
@@ -201,7 +293,53 @@
       </a-tab-pane>
       <a-tab-pane
         key="tab-2"
-        :tab="t('common.page.form.tabs.basicinfo') + ' (3/3)'"
+        :tab="t('common.page.form.tabs.basicinfo') + ' (3/4)'"
+        force-render
+      >
+        <div :class="formContentClass">
+          <a-row :gutter="24">
+            <a-col :span="24">
+              <a-form-item
+                :label="pi.label('deliveryAddress')"
+                name="deliveryAddress"
+              >
+                <a-textarea
+                  v-model:value="formState.deliveryAddress"
+                  :placeholder="pi.ph('deliveryAddress')"
+                  :rows="2"
+                />
+              </a-form-item>
+            </a-col>
+            <a-col :span="24">
+              <a-form-item
+                :label="pi.label('orderStatus')"
+                name="orderStatus"
+              >
+                <TaktSelect
+                  v-model:value="formState.orderStatus"
+                  dict-type="sys_normal_disable_status"
+                  :placeholder="pi.ph('orderStatus')"
+                />
+              </a-form-item>
+            </a-col>
+            <a-col :span="24">
+              <a-form-item
+                :label="pi.label('deliveryStatus')"
+                name="deliveryStatus"
+              >
+                <TaktSelect
+                  v-model:value="formState.deliveryStatus"
+                  dict-type="logistics_delivery_status"
+                  :placeholder="pi.ph('deliveryStatus')"
+                />
+              </a-form-item>
+            </a-col>
+          </a-row>
+        </div>
+      </a-tab-pane>
+      <a-tab-pane
+        key="tab-3"
+        :tab="t('common.page.form.tabs.basicinfo') + ' (4/4)'"
         force-render
       >
         <div :class="formContentClass">
@@ -293,60 +431,60 @@
         </div>
       </a-tab-pane>
     </a-tabs>
-    <!-- 下：子表 operations -->
+    <!-- 下：子表 items -->
     <TaktEditableTable
-      ref="apsOperationTableRef"
-      v-model="childApsOperationRows"
-      :columns="apsOperationFormColumns"
-      :title="apsOperationPi.self()"
-      :add-button-entity="apsOperationPi.self()"
-      id-field="apsOperationId"
-      :default-row="createDefaultApsOperationRow"
+      ref="salesOrderItemTableRef"
+      v-model="childSalesOrderItemRows"
+      :columns="salesOrderItemFormColumns"
+      :title="salesOrderItemPi.self()"
+      :add-button-entity="salesOrderItemPi.self()"
+      id-field="salesOrderItemId"
+      :default-row="createDefaultSalesOrderItemRow"
       :disabled="loading"
       :enable-vertical-scroll="false"
       section-border
       class="w-full min-w-0"
     >
-      <template #cell-routingItemId="{ record }">
+      <template #cell-materialCode="{ record }">
         <TaktSelect
-          v-model:value="record.routingItemId"
-          api-url="TaktRoutingItems/options"
+          v-model:value="record.materialCode"
+          api-url="TaktMaterialPlants/options"
           class="w-full"
           :get-popup-container="getSelectPopupContainer"
-          :placeholder="apsOperationPi.queryPh('routingItemId', 'select')"
+          :placeholder="salesOrderItemPi.queryPh('materialCode', 'select')"
           :disabled="loading"
           allow-clear
         />
       </template>
-      <template #cell-workCenterCode="{ record }">
+      <template #cell-salesUnit="{ record }">
         <TaktSelect
-          v-model:value="record.workCenterCode"
-          api-url="TaktWorkCenters/options"
+          v-model:value="record.salesUnit"
+          dict-type="logistics_unit_of_measure_code"
           class="w-full"
           :get-popup-container="getSelectPopupContainer"
-          :placeholder="apsOperationPi.queryPh('workCenterCode', 'select')"
+          :placeholder="salesOrderItemPi.ph('salesUnit')"
           :disabled="loading"
           allow-clear
         />
       </template>
-      <template #cell-workCenterResourceId="{ record }">
+      <template #cell-salesPerUnit="{ record }">
         <TaktSelect
-          v-model:value="record.workCenterResourceId"
-          api-url="TaktWorkCenterResources/options"
+          v-model:value="record.salesPerUnit"
+          dict-type="logistics_price_unit_param"
           class="w-full"
           :get-popup-container="getSelectPopupContainer"
-          :placeholder="apsOperationPi.queryPh('workCenterResourceId', 'select')"
+          :placeholder="salesOrderItemPi.ph('salesPerUnit')"
           :disabled="loading"
           allow-clear
         />
       </template>
-      <template #cell-operationStatus="{ record }">
+      <template #cell-deliveryStatus="{ record }">
         <TaktSelect
-          v-model:value="record.operationStatus"
-          dict-type="aps_operation_status"
+          v-model:value="record.deliveryStatus"
+          dict-type="logistics_delivery_status"
           class="w-full"
           :get-popup-container="getSelectPopupContainer"
-          :placeholder="apsOperationPi.ph('operationStatus')"
+          :placeholder="salesOrderItemPi.ph('deliveryStatus')"
           :disabled="loading"
           allow-clear
         />
@@ -357,7 +495,7 @@
           dict-type="sys_yes_no_type"
           class="w-full"
           :get-popup-container="getSelectPopupContainer"
-          :placeholder="apsOperationPi.ph('isObsolete')"
+          :placeholder="salesOrderItemPi.ph('isObsolete')"
           :disabled="loading"
           allow-clear
         />
@@ -368,18 +506,18 @@
 
 <script setup lang="ts">
 /**
- * APS 排程订单维护表单 · 由 generate-vue-master-detail-from-api.cjs 根据 types/api 生成
+ * Takt销售订单实体维护表单 · 由 generate-vue-master-detail-from-api.cjs 根据 types/api 生成
  * @module views/logistics/sales/order/components
  */
 import { reactive, watch, computed, ref, onMounted } from 'vue'
 import { useI18n } from 'vue-i18n'
 import type { Rule } from 'ant-design-vue/es/form'
-import { useApsOrderI18n } from '../composables/use-order-i18n'
+import { useSalesOrderI18n } from '../composables/use-order-i18n'
 
 /** 实体字段 i18n */
-const pi = useApsOrderI18n()
+const pi = useSalesOrderI18n()
 
-import type { ApsOrderCreate } from '@/types/logistics/manufacturing/aps/order'
+import type { SalesOrderCreate } from '@/types/logistics/sales/order'
 import TaktSelect from '@/components/business/takt-select/index.vue'
 import { RiQuestionLine } from '@remixicon/vue'
 import { useDictDataStore } from '@/stores/foundation/dict-data'
@@ -415,30 +553,30 @@ const formContentClass = computed(() => (formFields.length > 10 ? 'takt-form-con
 /** 当前激活的 Tab key */
 const activeTab = ref('tab-0')
 /** CreateDto 字段名列表（与 formState 键对齐） */
-const formFields = ["tenantCode","companyCode","companyDefaultCulture","plantCode","apsOrderCode","plannedOrderId","plannedOrderCode","materialCode","orderQuantity","unitOfMeasure","routingCode","plannedStartTime","plannedEndTime","orderStatus","apsScheduleId","extField","remark"]
+const formFields = ["tenantCode","companyCode","companyDefaultCulture","plantCode","salesOrderCode","customerCode","customerName1","orderDate","requiredDeliveryDate","actualDeliveryDate","salesBy","totalQuantity","totalAmount","discountAmount","currencyCode","taxRate","taxAmount","actualAmount","shippedQuantity","shippedAmount","receivedAmount","deliveryMethod","paymentMethod","deliveryAddress","orderStatus","deliveryStatus","extField","remark"]
 
 
 import type { TaktEditableTableColumn } from '@/components/business/takt-editable-table/types'
 import { resolveNextDetailLineNumber } from '@/utils/takt-sequence'
-import { useApsOperationI18n } from '../composables/use-operation-i18n'
+import { useSalesOrderItemI18n } from '../composables/use-order-item-i18n'
 
-const apsOperationPi = useApsOperationI18n()
+const salesOrderItemPi = useSalesOrderItemI18n()
 
 /** 弹窗/表格内 TaktSelect 下拉挂载容器（避免 overflow 裁剪与表头列错位） */
 function getSelectPopupContainer(triggerNode?: HTMLElement): HTMLElement {
   return triggerNode?.ownerDocument?.body ?? document.body
 }
 
-const childApsOperationRows = ref<Record<string, unknown>[]>([])
-const apsOperationTableRef = ref<{
+const childSalesOrderItemRows = ref<Record<string, unknown>[]>([])
+const salesOrderItemTableRef = ref<{
   getRows: () => Record<string, unknown>[]
   validate: () => Promise<unknown>
   resetRows: () => void
 } | null>(null)
 
 /** 是否已持久化的子表行 */
-function isPersistedApsOperationRow(row: Record<string, unknown>): boolean {
-  const id = row.apsOperationId
+function isPersistedSalesOrderItemRow(row: Record<string, unknown>): boolean {
+  const id = row.salesOrderItemId
   if (id == null || id === '') {
     return false
   }
@@ -446,122 +584,128 @@ function isPersistedApsOperationRow(row: Record<string, unknown>): boolean {
 }
 
 /** 分配下一可用子表行号（含作废行，仅据当前表格行递增） */
-function allocateNextApsOperationLineNumber(): number {
-  const rows = apsOperationTableRef.value?.getRows?.() ?? childApsOperationRows.value
+function allocateNextSalesOrderItemLineNumber(): number {
+  const rows = salesOrderItemTableRef.value?.getRows?.() ?? childSalesOrderItemRows.value
   return resolveNextDetailLineNumber(0, rows)
 }
 
-/** 子表 apsOperation 可编辑列 */
-const apsOperationFormColumns = computed<TaktEditableTableColumn[]>(() => [
+/** 子表 salesOrderItem 可编辑列 */
+const salesOrderItemFormColumns = computed<TaktEditableTableColumn[]>(() => [
   {
     key: 'lineNumber',
-    title: apsOperationPi.label('lineNumber'),
+    title: salesOrderItemPi.label('lineNumber'),
     width: 140,
   },
   {
-    key: 'routingItemId',
-    title: apsOperationPi.label('routingItemId'),
+    key: 'materialCode',
+    title: salesOrderItemPi.label('materialCode'),
     width: 140,
   },
   {
-    key: 'processCode',
-    title: apsOperationPi.label('processCode'),
-    editor: 'input',
+    key: 'salesUnit',
+    title: salesOrderItemPi.label('salesUnit'),
     width: 140,
   },
   {
-    key: 'processName',
-    title: apsOperationPi.label('processName'),
-    editor: 'input',
-    width: 140, allowClear: true, placeholder: apsOperationPi.ph('processName'),
-  },
-  {
-    key: 'workCenterCode',
-    title: apsOperationPi.label('workCenterCode'),
+    key: 'orderQuantity',
+    title: salesOrderItemPi.label('orderQuantity'),
     width: 140,
   },
   {
-    key: 'workCenterResourceId',
-    title: apsOperationPi.label('workCenterResourceId'),
+    key: 'shippedQuantity',
+    title: salesOrderItemPi.label('shippedQuantity'),
     width: 140,
   },
   {
-    key: 'plannedStartTime',
-    title: apsOperationPi.label('plannedStartTime'),
-    editor: 'datePicker',
-    valueFormat: 'YYYY-MM-DD HH:mm:ss', showTime: true,
+    key: 'salesPerUnit',
+    title: salesOrderItemPi.label('salesPerUnit'),
     width: 140,
   },
   {
-    key: 'plannedEndTime',
-    title: apsOperationPi.label('plannedEndTime'),
-    editor: 'datePicker',
-    valueFormat: 'YYYY-MM-DD HH:mm:ss', showTime: true,
+    key: 'salesUnitPrice',
+    title: salesOrderItemPi.label('salesUnitPrice'),
     width: 140,
   },
   {
-    key: 'plannedDurationMinutes',
-    title: apsOperationPi.label('plannedDurationMinutes'),
+    key: 'discountRate',
+    title: salesOrderItemPi.label('discountRate'),
     width: 140,
   },
   {
-    key: 'changeoverMinutes',
-    title: apsOperationPi.label('changeoverMinutes'),
+    key: 'discountAmount',
+    title: salesOrderItemPi.label('discountAmount'),
     width: 140,
   },
   {
-    key: 'operationStatus',
-    title: apsOperationPi.label('operationStatus'),
+    key: 'taxIncludedAmount',
+    title: salesOrderItemPi.label('taxIncludedAmount'),
+    width: 140,
+  },
+  {
+    key: 'untaxedAmount',
+    title: salesOrderItemPi.label('untaxedAmount'),
+    width: 140,
+  },
+  {
+    key: 'taxAmount',
+    title: salesOrderItemPi.label('taxAmount'),
+    width: 140,
+  },
+  {
+    key: 'deliveryStatus',
+    title: salesOrderItemPi.label('deliveryStatus'),
     width: 140,
   },
   {
     key: 'isObsolete',
-    title: apsOperationPi.label('isObsolete'),
+    title: salesOrderItemPi.label('isObsolete'),
     width: 140,
   },
 ])
 
 /** 编辑态从 formData 同步各子表行 */
-function syncChildRowsFromFormData(val: Partial<ApsOrderCreate & { apsOrderId?: string }> | null | undefined) {
-  const rows_apsOperation = ((val as any)?.operations ?? []) as Record<string, unknown>[]
-  childApsOperationRows.value = rows_apsOperation
+function syncChildRowsFromFormData(val: Partial<SalesOrderCreate & { salesOrderId?: string }> | null | undefined) {
+  const rows_salesOrderItem = ((val as any)?.items ?? []) as Record<string, unknown>[]
+  childSalesOrderItemRows.value = rows_salesOrderItem
 }
 
-function createDefaultApsOperationRow(): Record<string, unknown> {
+function createDefaultSalesOrderItemRow(): Record<string, unknown> {
   return {
-    lineNumber: allocateNextApsOperationLineNumber(),
-    routingItemId: '',
-    processCode: '',
-    processName: '',
-    workCenterCode: '',
-    workCenterResourceId: '',
-    plannedStartTime: '',
-    plannedEndTime: '',
-    plannedDurationMinutes: 0,
-    changeoverMinutes: 0,
-    operationStatus: 0,
+    lineNumber: allocateNextSalesOrderItemLineNumber(),
+    materialCode: '',
+    salesUnit: '',
+    orderQuantity: 0,
+    shippedQuantity: 0,
+    salesPerUnit: 0,
+    salesUnitPrice: 0,
+    discountRate: 0,
+    discountAmount: 0,
+    taxIncludedAmount: 0,
+    untaxedAmount: 0,
+    taxAmount: 0,
+    deliveryStatus: 0,
     isObsolete: 0,
   }
 }
 
 /** 组装 Create/Update 载荷（主表 + 子表数组） */
 function buildSubmitPayload() {
-  const masterId = props.formData?.apsOrderId ?? ''
+  const masterId = props.formData?.salesOrderId ?? ''
   const isUpdate = Boolean(masterId)
   return {
     ...formState,
-    operations: apsOperationTableRef.value?.getRows?.() ?? childApsOperationRows.value.map((row) => {
+    items: salesOrderItemTableRef.value?.getRows?.() ?? childSalesOrderItemRows.value.map((row) => {
       const normalized = {
         ...row,
         tenantCode: tenantStore.tenantCode,
         companyCode: tenantStore.companyCode,
         companyDefaultCulture: userStore.userInfo?.companyDefaultCulture ?? '',
-        apsOrderId: masterId,
+        salesOrderId: masterId,
       }
-      if (isUpdate && isPersistedApsOperationRow(row)) {
-        normalized.apsOperationId = row.apsOperationId
+      if (isUpdate && isPersistedSalesOrderItemRow(row)) {
+        normalized.salesOrderItemId = row.salesOrderItemId
       } else {
-        delete normalized.apsOperationId
+        delete normalized.salesOrderItemId
       }
       return normalized
     }),
@@ -570,7 +714,7 @@ function buildSubmitPayload() {
 
 /** 父级传入的编辑 DTO；新增时为 undefined 或空对象 */
 interface Props {
-  formData?: Partial<ApsOrderCreate & { apsOrderId?: string }> | null
+  formData?: Partial<SalesOrderCreate & { salesOrderId?: string }> | null
   /** 父级提交 loading，禁用表单项 */
   loading?: boolean
 }
@@ -584,9 +728,19 @@ const props = withDefaults(defineProps<Props>(), {
 const formRef = ref()
 /** 表单双向绑定模型 */
 const formState = reactive<Record<string, any>>({})
-/** 表单字段默认值（无字典默认项） */
+/** 表单字段默认值（字典 IsDefault=1，来自 TaktDictDataSeedData） */
+const FORM_FIELD_DEFAULTS: Record<string, string | number> = {
+  currencyCode: "CNY",
+  taxRate: 10,
+  deliveryMethod: 0,
+  paymentMethod: 0,
+  orderStatus: 1,
+  deliveryStatus: 0
+}
+
+/** 写入表单默认值（新增 / resetFields / 弹窗再次打开时） */
 function applyFormDefaults(target: Record<string, unknown>) {
-  void target
+  Object.assign(target, FORM_FIELD_DEFAULTS)
 }
 
 /** Pinia：字典缓存（TaktSelect dict-type 渲染前预热，避免选项空白） */
@@ -597,14 +751,14 @@ onMounted(() => {
   void dictDataStore.loadAllDictDataAsync()
 })
 
-/** 编辑态灌入 formData；新增态恢复默认值（须含 apsOrderId 才视为编辑） */
+/** 编辑态灌入 formData；新增态恢复默认值（须含 salesOrderId 才视为编辑） */
 watch(
   () => props.formData,
   (val) => {
-    if (val?.apsOrderId) {
+    if (val?.salesOrderId) {
       const next = { ...val } as Record<string, unknown>
       Object.keys(formState).forEach((k) => delete formState[k])
-    delete (next as any).operations
+    delete (next as any).items
       applyScopeDefaults(next)
       Object.assign(formState, next)
     syncChildRowsFromFormData(val)
@@ -626,7 +780,7 @@ watch(
 watch(
   () => [tenantStore.tenantCode, tenantStore.companyCode, userStore.userInfo?.companyDefaultCulture] as const,
   () => {
-    const isCreate = !props.formData?.apsOrderId
+    const isCreate = !props.formData?.salesOrderId
     if (isCreate) {
       applyScopeDefaults(formState, true)
     }
@@ -642,40 +796,184 @@ const rules = computed<Record<string, Rule[]>>(() => ({
       trigger: 'change'
     }
   ],
-  apsOrderCode: [
+  salesOrderCode: [
     {
       required: true,
-      message: pi.ph('apsOrderCode'),
+      message: pi.ph('salesOrderCode'),
       trigger: 'blur'
     }
   ],
-  materialCode: [
+  customerCode: [
     {
       required: true,
-      message: pi.ph('materialCode'),
+      message: pi.ph('customerCode'),
       trigger: 'change'
     }
   ],
-  orderQuantity: [{
+  customerName1: [
+    {
+      required: true,
+      message: pi.ph('customerName1'),
+      trigger: 'blur'
+    }
+  ],
+  orderDate: [
+    {
+      required: true,
+      message: pi.ph('orderDate'),
+      trigger: 'change'
+    }
+  ],
+  totalQuantity: [{
     validator: async (_rule, value) => {
       if (value === undefined || value === null || value === '') {
-        return Promise.reject(pi.ph('orderQuantity'))
+        return Promise.reject(pi.ph('totalQuantity'))
       }
       const num = typeof value === 'number' ? value : Number(value)
       if (!Number.isFinite(num)) {
-        return Promise.reject(pi.ph('orderQuantity'))
+        return Promise.reject(pi.ph('totalQuantity'))
       }
       return Promise.resolve()
     },
     trigger: 'change'
   }],
-  unitOfMeasure: [
+  totalAmount: [{
+    validator: async (_rule, value) => {
+      if (value === undefined || value === null || value === '') {
+        return Promise.reject(pi.ph('totalAmount'))
+      }
+      const num = typeof value === 'number' ? value : Number(value)
+      if (!Number.isFinite(num)) {
+        return Promise.reject(pi.ph('totalAmount'))
+      }
+      return Promise.resolve()
+    },
+    trigger: 'change'
+  }],
+  discountAmount: [{
+    validator: async (_rule, value) => {
+      if (value === undefined || value === null || value === '') {
+        return Promise.reject(pi.ph('discountAmount'))
+      }
+      const num = typeof value === 'number' ? value : Number(value)
+      if (!Number.isFinite(num)) {
+        return Promise.reject(pi.ph('discountAmount'))
+      }
+      return Promise.resolve()
+    },
+    trigger: 'change'
+  }],
+  currencyCode: [
     {
       required: true,
-      message: pi.ph('unitOfMeasure'),
+      message: pi.ph('currencyCode'),
       trigger: 'change'
     }
   ],
+  taxRate: [{
+    validator: async (_rule, value) => {
+      if (value === undefined || value === null || value === '') {
+        return Promise.reject(pi.ph('taxRate'))
+      }
+      const num = typeof value === 'number' ? value : Number(value)
+      if (!Number.isFinite(num)) {
+        return Promise.reject(pi.ph('taxRate'))
+      }
+      return Promise.resolve()
+    },
+    trigger: 'change'
+  }],
+  taxAmount: [{
+    validator: async (_rule, value) => {
+      if (value === undefined || value === null || value === '') {
+        return Promise.reject(pi.ph('taxAmount'))
+      }
+      const num = typeof value === 'number' ? value : Number(value)
+      if (!Number.isFinite(num)) {
+        return Promise.reject(pi.ph('taxAmount'))
+      }
+      return Promise.resolve()
+    },
+    trigger: 'change'
+  }],
+  actualAmount: [{
+    validator: async (_rule, value) => {
+      if (value === undefined || value === null || value === '') {
+        return Promise.reject(pi.ph('actualAmount'))
+      }
+      const num = typeof value === 'number' ? value : Number(value)
+      if (!Number.isFinite(num)) {
+        return Promise.reject(pi.ph('actualAmount'))
+      }
+      return Promise.resolve()
+    },
+    trigger: 'change'
+  }],
+  shippedQuantity: [{
+    validator: async (_rule, value) => {
+      if (value === undefined || value === null || value === '') {
+        return Promise.reject(pi.ph('shippedQuantity'))
+      }
+      const num = typeof value === 'number' ? value : Number(value)
+      if (!Number.isFinite(num)) {
+        return Promise.reject(pi.ph('shippedQuantity'))
+      }
+      return Promise.resolve()
+    },
+    trigger: 'change'
+  }],
+  shippedAmount: [{
+    validator: async (_rule, value) => {
+      if (value === undefined || value === null || value === '') {
+        return Promise.reject(pi.ph('shippedAmount'))
+      }
+      const num = typeof value === 'number' ? value : Number(value)
+      if (!Number.isFinite(num)) {
+        return Promise.reject(pi.ph('shippedAmount'))
+      }
+      return Promise.resolve()
+    },
+    trigger: 'change'
+  }],
+  receivedAmount: [{
+    validator: async (_rule, value) => {
+      if (value === undefined || value === null || value === '') {
+        return Promise.reject(pi.ph('receivedAmount'))
+      }
+      const num = typeof value === 'number' ? value : Number(value)
+      if (!Number.isFinite(num)) {
+        return Promise.reject(pi.ph('receivedAmount'))
+      }
+      return Promise.resolve()
+    },
+    trigger: 'change'
+  }],
+  deliveryMethod: [{
+    validator: async (_rule, value) => {
+      if (value === undefined || value === null || value === '') {
+        return Promise.reject(pi.ph('deliveryMethod'))
+      }
+      const num = typeof value === 'number' ? value : Number(value)
+      if (!Number.isFinite(num)) {
+        return Promise.reject(pi.ph('deliveryMethod'))
+      }
+      return Promise.resolve()
+    },
+    trigger: 'change'
+  }],
+  paymentMethod: [{
+    validator: async (_rule, value) => {
+      if (value === undefined || value === null || value === '') {
+        return Promise.reject(pi.ph('paymentMethod'))
+      }
+      const num = typeof value === 'number' ? value : Number(value)
+      if (!Number.isFinite(num)) {
+        return Promise.reject(pi.ph('paymentMethod'))
+      }
+      return Promise.resolve()
+    },
+    trigger: 'change'
+  }],
   orderStatus: [{
     validator: async (_rule, value) => {
       if (value === undefined || value === null || value === '') {
@@ -689,25 +987,82 @@ const rules = computed<Record<string, Rule[]>>(() => ({
     },
     trigger: 'change'
   }],
+  deliveryStatus: [{
+    validator: async (_rule, value) => {
+      if (value === undefined || value === null || value === '') {
+        return Promise.reject(pi.ph('deliveryStatus'))
+      }
+      const num = typeof value === 'number' ? value : Number(value)
+      if (!Number.isFinite(num)) {
+        return Promise.reject(pi.ph('deliveryStatus'))
+      }
+      return Promise.resolve()
+    },
+    trigger: 'change'
+  }],
 }))
 
 /** 校验表单（失败 throw，供父级 handleFormSubmit 捕获） */
 async function validate() {
   await formRef.value?.validate()
-  await apsOperationTableRef.value?.validate?.()
+  await salesOrderItemTableRef.value?.validate?.()
   return formState
 }
 
 /** 映射为 Create/Update DTO */
 function getValues(): Record<string, any> {
   const payload = buildSubmitPayload() as Record<string, unknown>
-  if ('orderQuantity' in payload) {
-    const raworderQuantity = payload.orderQuantity
-    payload.orderQuantity = typeof raworderQuantity === 'number' ? raworderQuantity : Number(raworderQuantity)
+  if ('totalQuantity' in payload) {
+    const rawtotalQuantity = payload.totalQuantity
+    payload.totalQuantity = typeof rawtotalQuantity === 'number' ? rawtotalQuantity : Number(rawtotalQuantity)
+  }
+  if ('totalAmount' in payload) {
+    const rawtotalAmount = payload.totalAmount
+    payload.totalAmount = typeof rawtotalAmount === 'number' ? rawtotalAmount : Number(rawtotalAmount)
+  }
+  if ('discountAmount' in payload) {
+    const rawdiscountAmount = payload.discountAmount
+    payload.discountAmount = typeof rawdiscountAmount === 'number' ? rawdiscountAmount : Number(rawdiscountAmount)
+  }
+  if ('taxRate' in payload) {
+    const rawtaxRate = payload.taxRate
+    payload.taxRate = typeof rawtaxRate === 'number' ? rawtaxRate : Number(rawtaxRate)
+  }
+  if ('taxAmount' in payload) {
+    const rawtaxAmount = payload.taxAmount
+    payload.taxAmount = typeof rawtaxAmount === 'number' ? rawtaxAmount : Number(rawtaxAmount)
+  }
+  if ('actualAmount' in payload) {
+    const rawactualAmount = payload.actualAmount
+    payload.actualAmount = typeof rawactualAmount === 'number' ? rawactualAmount : Number(rawactualAmount)
+  }
+  if ('shippedQuantity' in payload) {
+    const rawshippedQuantity = payload.shippedQuantity
+    payload.shippedQuantity = typeof rawshippedQuantity === 'number' ? rawshippedQuantity : Number(rawshippedQuantity)
+  }
+  if ('shippedAmount' in payload) {
+    const rawshippedAmount = payload.shippedAmount
+    payload.shippedAmount = typeof rawshippedAmount === 'number' ? rawshippedAmount : Number(rawshippedAmount)
+  }
+  if ('receivedAmount' in payload) {
+    const rawreceivedAmount = payload.receivedAmount
+    payload.receivedAmount = typeof rawreceivedAmount === 'number' ? rawreceivedAmount : Number(rawreceivedAmount)
+  }
+  if ('deliveryMethod' in payload) {
+    const rawdeliveryMethod = payload.deliveryMethod
+    payload.deliveryMethod = typeof rawdeliveryMethod === 'number' ? rawdeliveryMethod : Number(rawdeliveryMethod)
+  }
+  if ('paymentMethod' in payload) {
+    const rawpaymentMethod = payload.paymentMethod
+    payload.paymentMethod = typeof rawpaymentMethod === 'number' ? rawpaymentMethod : Number(rawpaymentMethod)
   }
   if ('orderStatus' in payload) {
     const raworderStatus = payload.orderStatus
     payload.orderStatus = typeof raworderStatus === 'number' ? raworderStatus : Number(raworderStatus)
+  }
+  if ('deliveryStatus' in payload) {
+    const rawdeliveryStatus = payload.deliveryStatus
+    payload.deliveryStatus = typeof rawdeliveryStatus === 'number' ? rawdeliveryStatus : Number(rawdeliveryStatus)
   }
   if ('sortOrder' in payload) delete payload.sortOrder
   return payload
@@ -720,9 +1075,9 @@ function resetFields() {
     Object.assign(formState, props.formData)
   }
   applyFormDefaults(formState)
-  applyScopeDefaults(formState as Record<string, unknown>, !props.formData?.apsOrderId)
-  childApsOperationRows.value = []
-  apsOperationTableRef.value?.resetRows?.()
+  applyScopeDefaults(formState as Record<string, unknown>, !props.formData?.salesOrderId)
+  childSalesOrderItemRows.value = []
+  salesOrderItemTableRef.value?.resetRows?.()
   activeTab.value = 'tab-0'
   formRef.value?.clearValidate()
 }

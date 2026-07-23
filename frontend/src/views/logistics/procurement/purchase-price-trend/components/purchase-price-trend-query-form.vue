@@ -30,17 +30,23 @@
       />
       <TaktSelect
         v-model:value="supplierCode"
-        api-url="TaktSuppliers/options"
+        api-url="TaktPurchasePrices/supplier-options"
+        :api-params="plantCode ? { plantCode } : undefined"
+        :disabled="!plantCode?.trim()"
         class="purchase-price-trend-query-bar__control purchase-price-trend-query-bar__control--supplier"
         allow-clear
+        show-search
         :placeholder="t(`${localePrefix}.supplierCode`)"
       />
-      <a-input
+      <TaktSelect
         v-model:value="materialCode"
+        api-url="TaktPurchasePrices/material-options"
+        :api-params="plantCode ? { plantCode } : undefined"
+        :disabled="!plantCode?.trim()"
         class="purchase-price-trend-query-bar__control purchase-price-trend-query-bar__control--material"
         allow-clear
+        show-search
         :placeholder="t(`${localePrefix}.materialCode`)"
-        @press-enter="emit('search')"
       />
       <TaktSelect
         v-model:value="priceType"
@@ -88,10 +94,10 @@ const plantCode = defineModel<string | undefined>('plantCode')
 const periodRange = defineModel<[string, string] | null>('periodRange')
 /** 供应商编码 */
 const supplierCode = defineModel<string | undefined>('supplierCode')
-/** 物料编码关键字 */
-const materialCode = defineModel<string>('materialCode', { default: '' })
+/** 物料编码（采购价格表内去重选项） */
+const materialCode = defineModel<string | undefined>('materialCode')
 /** 价格类型 */
-const priceType = defineModel<number | undefined>('priceType')
+const priceType = defineModel<string | undefined>('priceType')
 const props = defineProps<{
   /** 查询 loading */
   loading?: boolean
@@ -104,7 +110,15 @@ const emit = defineEmits<{
 const { t } = useI18n()
 /** 静态 locales 前缀 */
 const localePrefix = 'logistics.procurement.purchase-price-trend.page'
-</script>
+
+/** 工厂变更时清空依赖工厂的维度筛选 */
+watch(
+  () => plantCode.value,
+  () => {
+    supplierCode.value = undefined
+    materialCode.value = undefined
+  },
+)</script>
 
 <style scoped>
 .takt-query-bar {

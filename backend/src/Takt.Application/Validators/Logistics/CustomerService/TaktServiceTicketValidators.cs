@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Application.Validators.Logistics.CustomerService
 // 文件名称：TaktServiceTicketValidators.cs
-// 创建时间：2026-07-20
+// 创建时间：2026-07-23
 // 创建人：Takt365(Auto Generated)
 // 功能描述：ServiceTicket 模块 FluentValidation 验证器（由 generate-validators-from-entity.cjs 根据 TaktServiceTicket 生成，请按需审阅）
 // 
@@ -46,9 +46,9 @@ public class TaktServiceTicketCreateValidator : AbstractValidator<TaktServiceTic
         RuleFor(x => x.ClientCode)
             .NotEmpty().WithMessage("客户端编码不能为空")
             .MaximumLength(20).WithMessage("客户端编码长度不能超过20个字符");
-        RuleFor(x => x.ClientName)
+        RuleFor(x => x.ClientName1)
             .NotEmpty().WithMessage("客户端名称不能为空")
-            .MaximumLength(80).WithMessage("客户端名称长度不能超过80个字符");
+            .MaximumLength(140).WithMessage("客户端名称长度不能超过140个字符");
         RuleFor(x => x.ServiceRequestId)
             .GreaterThanOrEqualTo(0).WithMessage("关联服务请求ID不能为负数");
         RuleFor(x => x.ServiceOrderId)
@@ -100,9 +100,9 @@ public class TaktServiceTicketUpdateValidator : AbstractValidator<TaktServiceTic
         RuleFor(x => x.ClientCode)
             .NotEmpty().WithMessage("客户端编码不能为空")
             .MaximumLength(20).WithMessage("客户端编码长度不能超过20个字符");
-        RuleFor(x => x.ClientName)
+        RuleFor(x => x.ClientName1)
             .NotEmpty().WithMessage("客户端名称不能为空")
-            .MaximumLength(80).WithMessage("客户端名称长度不能超过80个字符");
+            .MaximumLength(140).WithMessage("客户端名称长度不能超过140个字符");
         RuleFor(x => x.ServiceRequestId)
             .GreaterThanOrEqualTo(0).WithMessage("关联服务请求ID不能为负数");
         RuleFor(x => x.ServiceOrderId)
@@ -150,9 +150,9 @@ public class TaktServiceTicketImportValidator : AbstractValidator<TaktServiceTic
         RuleFor(x => x.ClientCode)
             .NotEmpty().WithMessage("客户端编码不能为空")
             .MaximumLength(20).WithMessage("客户端编码长度不能超过20个字符");
-        RuleFor(x => x.ClientName)
+        RuleFor(x => x.ClientName1)
             .NotEmpty().WithMessage("客户端名称不能为空")
-            .MaximumLength(80).WithMessage("客户端名称长度不能超过80个字符");
+            .MaximumLength(140).WithMessage("客户端名称长度不能超过140个字符");
         RuleFor(x => x.ServiceRequestId)
             .GreaterThanOrEqualTo(0).WithMessage("关联服务请求ID不能为负数");
         RuleFor(x => x.ServiceOrderId)

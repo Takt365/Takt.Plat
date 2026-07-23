@@ -132,7 +132,7 @@ async function ensureDictLoaded(): Promise<void> {
     return;
   }
 
-  if (dictDataStore.isLoaded || dictDataStore.loading) {
+  if (dictDataStore.isCacheFresh || dictDataStore.loading) {
     return;
   }
 

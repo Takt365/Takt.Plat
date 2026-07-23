@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：frontend/src/types/foundation
 // 文件名称：dict-type.d.ts
-// 创建时间：2026-06-02
+// 创建时间：2026-07-20
 // 创建人：Takt365(Auto Generated)
 // 功能描述：foundation 模块类型定义（自动生成；类型名去 Takt 前缀与末尾 Dto，如 TaktCompanyDto → Company）
 // 
@@ -10,7 +10,10 @@
 // 免责声明：此软件使用 MIT License，作者不承担任何使用风险。
 // ========================================
 
-import type { TaktPagedQuery, TenantDtoBase } from '@/types/common';
+import type {
+  TaktPagedQuery,
+  TenantDtoBase
+} from '@/types/common';
 
 /**
  * 字典类型实体 用于定义系统中使用的各种字典分类，如：订单状态、用户类型、审批状态等 租户级实体：字典类型在租户内共享，不需要公司隔离
@@ -26,12 +29,12 @@ export interface DictType extends TenantDtoBase {
   dictTypeId: string;
 
   /**
-   * 字典类型编码（唯一索引：租户内 DictTypeCode+DictTypeName 组合唯一，见 ix_dict_type_code_name_unique；如 order_status, user_type）
+   * 字典类型编码（租户内唯一；命名：{领域}_{业务项}_后缀，如 sys_equipment_status、logistics_supplier_category）
    */
   dictTypeCode: string;
 
   /**
-   * 字典类型名称（唯一索引：租户内 DictTypeCode+DictTypeName 组合唯一，见 ix_dict_type_code_name_unique；如：订单状态、用户类型）
+   * 字典类型名称（如：订单状态、用户类型）
    */
   dictTypeName: string;
 
@@ -46,17 +49,17 @@ export interface DictType extends TenantDtoBase {
   dictScript?: string;
 
   /**
-   * 排序号
-   */
-  sortOrder: number;
-
-  /**
    * 内置（字典 sys_yes_no_type；0=否 1=是）
    */
   isBuiltIn: number;
 
   /**
-   * 状态（1=启用，0=禁用）
+   * 排序号
+   */
+  sortOrder: number;
+
+  /**
+   * 状态（字典 sys_normal_disable_status；1=启用 0=禁用）
    */
   dictStatus: number;
 
@@ -81,12 +84,12 @@ export interface DictTypeQuery extends TaktPagedQuery {
   tenantCode?: string;
 
   /**
-   * 字典类型编码（唯一索引：租户内 DictTypeCode+DictTypeName 组合唯一，见 ix_dict_type_code_name_unique；如 order_status, user_type）
+   * 字典类型编码（租户内唯一；命名：{领域}_{业务项}_后缀，如 sys_equipment_status、logistics_supplier_category）
    */
   dictTypeCode?: string;
 
   /**
-   * 字典类型名称（唯一索引：租户内 DictTypeCode+DictTypeName 组合唯一，见 ix_dict_type_code_name_unique；如：订单状态、用户类型）
+   * 字典类型名称（如：订单状态、用户类型）
    */
   dictTypeName?: string;
 
@@ -101,17 +104,17 @@ export interface DictTypeQuery extends TaktPagedQuery {
   dictScript?: string;
 
   /**
-   * 排序号
-   */
-  sortOrder?: number;
-
-  /**
    * 内置（字典 sys_yes_no_type；0=否 1=是）
    */
   isBuiltIn?: number;
 
   /**
-   * 状态（1=启用，0=禁用）
+   * 排序号
+   */
+  sortOrder?: number;
+
+  /**
+   * 状态（字典 sys_normal_disable_status；1=启用 0=禁用）
    */
   dictStatus?: number;
 
@@ -128,7 +131,7 @@ export interface DictTypeQuery extends TaktPagedQuery {
   /**
    * 扩展字段JSON
    */
-  ExtField?: string;
+  extField?: string;
 
   /**
    * 备注（模糊查询）
@@ -145,12 +148,17 @@ export interface DictTypeQuery extends TaktPagedQuery {
  */
 export interface DictTypeCreate {
   /**
-   * 字典类型编码（唯一索引：租户内 DictTypeCode+DictTypeName 组合唯一，见 ix_dict_type_code_name_unique；如 order_status, user_type）
+   * 租户编码（登录上下文注入，对应请求头 X-Tenant-Code）
+   */
+  tenantCode: string;
+
+  /**
+   * 字典类型编码（租户内唯一；命名：{领域}_{业务项}_后缀，如 sys_equipment_status、logistics_supplier_category）
    */
   dictTypeCode: string;
 
   /**
-   * 字典类型名称（唯一索引：租户内 DictTypeCode+DictTypeName 组合唯一，见 ix_dict_type_code_name_unique；如：订单状态、用户类型）
+   * 字典类型名称（如：订单状态、用户类型）
    */
   dictTypeName: string;
 
@@ -165,17 +173,12 @@ export interface DictTypeCreate {
   dictScript?: string;
 
   /**
-   * 排序号
-   */
-  sortOrder: number;
-
-  /**
    * 内置（字典 sys_yes_no_type；0=否 1=是）
    */
   isBuiltIn: number;
 
   /**
-   * 状态（1=启用，0=禁用）
+   * 状态（字典 sys_normal_disable_status；1=启用 0=禁用）
    */
   dictStatus: number;
 
@@ -187,7 +190,7 @@ export interface DictTypeCreate {
   /**
    * 扩展字段JSON
    */
-  ExtField?: string;
+  extField?: string;
 
   /**
    * 备注
@@ -224,7 +227,7 @@ export interface DictTypeStatus {
   dictTypeId: string;
 
   /**
-   * 状态（1=启用，0=禁用）
+   * 状态（字典 sys_normal_disable_status；1=启用 0=禁用）
    */
   dictStatus: number;
 
@@ -276,12 +279,17 @@ export interface DictTypeSort {
  */
 export interface DictTypeTemplate {
   /**
-   * 字典类型编码（唯一索引：租户内 DictTypeCode+DictTypeName 组合唯一，见 ix_dict_type_code_name_unique；如 order_status, user_type）
+   * 租户编码（登录上下文注入，对应请求头 X-Tenant-Code）
+   */
+  tenantCode?: string;
+
+  /**
+   * 字典类型编码（租户内唯一；命名：{领域}_{业务项}_后缀，如 sys_equipment_status、logistics_supplier_category）
    */
   dictTypeCode?: string;
 
   /**
-   * 字典类型名称（唯一索引：租户内 DictTypeCode+DictTypeName 组合唯一，见 ix_dict_type_code_name_unique；如：订单状态、用户类型）
+   * 字典类型名称（如：订单状态、用户类型）
    */
   dictTypeName?: string;
 
@@ -296,24 +304,24 @@ export interface DictTypeTemplate {
   dictScript?: string;
 
   /**
-   * 排序号
-   */
-  sortOrder?: number;
-
-  /**
    * 内置（字典 sys_yes_no_type；0=否 1=是）
    */
   isBuiltIn?: number;
 
   /**
-   * 状态（1=启用，0=禁用）
+   * 状态（字典 sys_normal_disable_status；1=启用 0=禁用）
    */
   dictStatus?: number;
 
   /**
+   * 字典数据列表（一对多关联）（子表，级联保存）
+   */
+  dictDataList?: DictDataCreate[];
+
+  /**
    * 扩展字段JSON
    */
-  ExtField?: string;
+  extField?: string;
 
   /**
    * 备注
@@ -330,12 +338,17 @@ export interface DictTypeTemplate {
  */
 export interface DictTypeImport {
   /**
-   * 字典类型编码（唯一索引：租户内 DictTypeCode+DictTypeName 组合唯一，见 ix_dict_type_code_name_unique；如 order_status, user_type）
+   * 租户编码（登录上下文注入，对应请求头 X-Tenant-Code）
+   */
+  tenantCode?: string;
+
+  /**
+   * 字典类型编码（租户内唯一；命名：{领域}_{业务项}_后缀，如 sys_equipment_status、logistics_supplier_category）
    */
   dictTypeCode?: string;
 
   /**
-   * 字典类型名称（唯一索引：租户内 DictTypeCode+DictTypeName 组合唯一，见 ix_dict_type_code_name_unique；如：订单状态、用户类型）
+   * 字典类型名称（如：订单状态、用户类型）
    */
   dictTypeName?: string;
 
@@ -350,24 +363,24 @@ export interface DictTypeImport {
   dictScript?: string;
 
   /**
-   * 排序号
-   */
-  sortOrder?: number;
-
-  /**
    * 内置（字典 sys_yes_no_type；0=否 1=是）
    */
   isBuiltIn?: number;
 
   /**
-   * 状态（1=启用，0=禁用）
+   * 状态（字典 sys_normal_disable_status；1=启用 0=禁用）
    */
   dictStatus?: number;
 
   /**
+   * 字典数据列表（一对多关联）（子表，级联保存）
+   */
+  dictDataList?: DictDataCreate[];
+
+  /**
    * 扩展字段JSON
    */
-  ExtField?: string;
+  extField?: string;
 
   /**
    * 备注
@@ -389,12 +402,12 @@ export interface DictTypeExport {
   dictTypeId: string;
 
   /**
-   * 字典类型编码（唯一索引：租户内 DictTypeCode+DictTypeName 组合唯一，见 ix_dict_type_code_name_unique；如 order_status, user_type）
+   * 字典类型编码（租户内唯一；命名：{领域}_{业务项}_后缀，如 sys_equipment_status、logistics_supplier_category）
    */
   dictTypeCode: string;
 
   /**
-   * 字典类型名称（唯一索引：租户内 DictTypeCode+DictTypeName 组合唯一，见 ix_dict_type_code_name_unique；如：订单状态、用户类型）
+   * 字典类型名称（如：订单状态、用户类型）
    */
   dictTypeName: string;
 
@@ -409,24 +422,24 @@ export interface DictTypeExport {
   dictScript?: string;
 
   /**
-   * 排序号
-   */
-  sortOrder: number;
-
-  /**
    * 内置（字典 sys_yes_no_type；0=否 1=是）
    */
   isBuiltIn: number;
 
   /**
-   * 状态（1=启用，0=禁用）
+   * 排序号
+   */
+  sortOrder: number;
+
+  /**
+   * 状态（字典 sys_normal_disable_status；1=启用 0=禁用）
    */
   dictStatus: number;
 
   /**
    * 扩展字段JSON
    */
-  ExtField?: string;
+  extField?: string;
 
   /**
    * 备注

@@ -26,7 +26,7 @@ namespace Takt.Domain.Entities.Logistics.Materials;
 public class TaktStorageLocation : TaktCompanyEntityBase
 {
     /// <summary>
-    /// 仓库 ID（选项 TaktWarehouses/options，DictValue=Id）
+    /// 仓库 ID（选项 TaktWarehouses/options；DictValue=Id）
     /// </summary>
     [SugarColumn(ColumnName = "warehouse_id", ColumnDescription = "仓库ID", ColumnDataType = "bigint", IsNullable = false)]
     public long WarehouseId { get; set; }

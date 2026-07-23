@@ -525,7 +525,7 @@ public class TaktServiceContractService : TaktServiceBase, ITaktServiceContractS
                 || (x.ContractName != null && x.ContractName.Contains(keywords))
                 || SqlFunc.ToString(x.ClientId).Contains(keywords)
                 || (x.ClientCode != null && x.ClientCode.Contains(keywords))
-                || (x.ClientName != null && x.ClientName.Contains(keywords))
+                || (x.ClientName1 != null && x.ClientName1.Contains(keywords))
                 || SqlFunc.ToString(x.ContractType).Contains(keywords)
                 || SqlFunc.ToString(x.ContractStatus).Contains(keywords)
                 || SqlFunc.ToString(x.ContractAmount).Contains(keywords)
@@ -572,7 +572,7 @@ public class TaktServiceContractService : TaktServiceBase, ITaktServiceContractS
 
         if (!string.IsNullOrEmpty(queryDto?.ClientName))
         {
-            exp = exp.And(x => x.ClientName != null && x.ClientName.Contains(queryDto.ClientName));
+            exp = exp.And(x => x.ClientName1 != null && x.ClientName1.Contains(queryDto.ClientName));
         }
 
         if (queryDto?.ContractType.HasValue == true)

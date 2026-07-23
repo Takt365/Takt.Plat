@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：frontend/src/types/foundation
 // 文件名称：dict-data.d.ts
-// 创建时间：2026-06-02
+// 创建时间：2026-07-20
 // 创建人：Takt365(Auto Generated)
 // 功能描述：foundation 模块类型定义（自动生成；类型名去 Takt 前缀与末尾 Dto，如 TaktCompanyDto → Company）
 // 
@@ -10,10 +10,13 @@
 // 免责声明：此软件使用 MIT License，作者不承担任何使用风险。
 // ========================================
 
-import type { TaktPagedQuery, TaktSelectOption, TenantDtoBase } from '@/types/common';
+import type {
+  TaktPagedQuery,
+  TenantDtoBase
+} from '@/types/common';
 
 /**
- * 字典数据实体 字典类型的具体数据项，如：订单状态下的“待支付”、“已完成”等 租户级实体：字典数据在租户内共享，不需要公司隔离
+ * 字典数据实体 字典类型的具体数据项，如：订单状态下的“待支付”、“已完成”等 租户级实体：字典数据在租户内共享；CultureCode 区分区域（eo=全语言通用，如 zh-CN/ja-JP 按 Accept-Language 取数）
  * 对应前端 TaktDictDataDto
  * 继承 TaktTenantDtoBase
  * 对应前端 DictData
@@ -26,7 +29,7 @@ export interface DictData extends TenantDtoBase {
   dictDataId: string;
 
   /**
-   * 字典类型ID（关联 TaktDictType.Id）
+   * 字典类型ID（关联 TaktDictType.Id；唯一索引：租户内 DictTypeId+CultureCode+DictLabel+I18nKey 唯一）
    */
   dictTypeId: string;
 
@@ -41,7 +44,7 @@ export interface DictData extends TenantDtoBase {
   dictTypeCode: string;
 
   /**
-   * 字典项标签（唯一索引：租户内 DictTypeId+DictLabel+DictValue+I18nKey 唯一，见 ix_dict_data_type_label_value_i18n_unique；如：待支付、已完成）
+   * 字典项标签（唯一索引：租户内 DictTypeId+CultureCode+DictLabel+I18nKey 唯一；sys_culture_code 等区域文化项用本族语，同语言多地区才加括号，如 English (US)、中文 (简体)）
    */
   dictLabel: string;
 
@@ -51,7 +54,7 @@ export interface DictData extends TenantDtoBase {
   dictValue: string;
 
   /**
-   * 国际化翻译键（用于多语言支持，如：dict.user_type.admin）
+   * 国际化翻译键（与 DictTypeCode 段对应，如 dict.sys.equipment.status.0、dict.logistics.supplier.category.1）
    */
   i18nKey: string;
 
@@ -74,6 +77,11 @@ export interface DictData extends TenantDtoBase {
    * CSS 类名（0=默认, 1=primary, 2=success, 3=warning, 4=danger, 5=info） 用于数据表格中字典值显示的颜色标签
    */
   cssClass: number;
+
+  /**
+   * 区域文化编码（与 TaktCulture.CultureCode / Accept-Language 对齐，如 zh-CN、ja-JP；eo 表示世界语/全语言通用）
+   */
+  cultureCode: string;
 
   /**
    * 是否默认项（1=是，0=否）
@@ -106,7 +114,7 @@ export interface DictDataQuery extends TaktPagedQuery {
   tenantCode?: string;
 
   /**
-   * 字典类型ID（关联 TaktDictType.Id）
+   * 字典类型ID（关联 TaktDictType.Id；唯一索引：租户内 DictTypeId+CultureCode+DictLabel+I18nKey 唯一）
    */
   dictTypeId?: string;
 
@@ -116,7 +124,7 @@ export interface DictDataQuery extends TaktPagedQuery {
   dictTypeCode?: string;
 
   /**
-   * 字典项标签（唯一索引：租户内 DictTypeId+DictLabel+DictValue+I18nKey 唯一，见 ix_dict_data_type_label_value_i18n_unique；如：待支付、已完成）
+   * 字典项标签（唯一索引：租户内 DictTypeId+CultureCode+DictLabel+I18nKey 唯一；sys_culture_code 等区域文化项用本族语，同语言多地区才加括号，如 English (US)、中文 (简体)）
    */
   dictLabel?: string;
 
@@ -126,7 +134,7 @@ export interface DictDataQuery extends TaktPagedQuery {
   dictValue?: string;
 
   /**
-   * 国际化翻译键（用于多语言支持，如：dict.user_type.admin）
+   * 国际化翻译键（与 DictTypeCode 段对应，如 dict.sys.equipment.status.0、dict.logistics.supplier.category.1）
    */
   i18nKey?: string;
 
@@ -151,6 +159,11 @@ export interface DictDataQuery extends TaktPagedQuery {
   cssClass?: number;
 
   /**
+   * 区域文化编码（与 TaktCulture.CultureCode / Accept-Language 对齐，如 zh-CN、ja-JP；eo 表示世界语/全语言通用）
+   */
+  cultureCode?: string;
+
+  /**
    * 是否默认项（1=是，0=否）
    */
   isDefault?: number;
@@ -173,7 +186,7 @@ export interface DictDataQuery extends TaktPagedQuery {
   /**
    * 扩展字段JSON
    */
-  ExtField?: string;
+  extField?: string;
 
   /**
    * 备注（模糊查询）
@@ -190,7 +203,12 @@ export interface DictDataQuery extends TaktPagedQuery {
  */
 export interface DictDataCreate {
   /**
-   * 字典类型ID（关联 TaktDictType.Id）
+   * 租户编码（登录上下文注入，对应请求头 X-Tenant-Code）
+   */
+  tenantCode: string;
+
+  /**
+   * 字典类型ID（关联 TaktDictType.Id；唯一索引：租户内 DictTypeId+CultureCode+DictLabel+I18nKey 唯一）
    */
   dictTypeId: string;
 
@@ -200,7 +218,7 @@ export interface DictDataCreate {
   dictTypeCode: string;
 
   /**
-   * 字典项标签（唯一索引：租户内 DictTypeId+DictLabel+DictValue+I18nKey 唯一，见 ix_dict_data_type_label_value_i18n_unique；如：待支付、已完成）
+   * 字典项标签（唯一索引：租户内 DictTypeId+CultureCode+DictLabel+I18nKey 唯一；sys_culture_code 等区域文化项用本族语，同语言多地区才加括号，如 English (US)、中文 (简体)）
    */
   dictLabel: string;
 
@@ -210,7 +228,7 @@ export interface DictDataCreate {
   dictValue: string;
 
   /**
-   * 国际化翻译键（用于多语言支持，如：dict.user_type.admin）
+   * 国际化翻译键（与 DictTypeCode 段对应，如 dict.sys.equipment.status.0、dict.logistics.supplier.category.1）
    */
   i18nKey: string;
 
@@ -235,6 +253,11 @@ export interface DictDataCreate {
   cssClass: number;
 
   /**
+   * 区域文化编码（与 TaktCulture.CultureCode / Accept-Language 对齐，如 zh-CN、ja-JP；eo 表示世界语/全语言通用）
+   */
+  cultureCode: string;
+
+  /**
    * 是否默认项（1=是，0=否）
    */
   isDefault: number;
@@ -247,7 +270,7 @@ export interface DictDataCreate {
   /**
    * 扩展字段JSON
    */
-  ExtField?: string;
+  extField?: string;
 
   /**
    * 备注
@@ -298,7 +321,12 @@ export interface DictDataSort {
  */
 export interface DictDataTemplate {
   /**
-   * 字典类型ID（关联 TaktDictType.Id）
+   * 租户编码（登录上下文注入，对应请求头 X-Tenant-Code）
+   */
+  tenantCode?: string;
+
+  /**
+   * 字典类型ID（关联 TaktDictType.Id；唯一索引：租户内 DictTypeId+CultureCode+DictLabel+I18nKey 唯一）
    */
   dictTypeId?: string;
 
@@ -308,7 +336,7 @@ export interface DictDataTemplate {
   dictTypeCode?: string;
 
   /**
-   * 字典项标签（唯一索引：租户内 DictTypeId+DictLabel+DictValue+I18nKey 唯一，见 ix_dict_data_type_label_value_i18n_unique；如：待支付、已完成）
+   * 字典项标签（唯一索引：租户内 DictTypeId+CultureCode+DictLabel+I18nKey 唯一；sys_culture_code 等区域文化项用本族语，同语言多地区才加括号，如 English (US)、中文 (简体)）
    */
   dictLabel?: string;
 
@@ -318,7 +346,7 @@ export interface DictDataTemplate {
   dictValue?: string;
 
   /**
-   * 国际化翻译键（用于多语言支持，如：dict.user_type.admin）
+   * 国际化翻译键（与 DictTypeCode 段对应，如 dict.sys.equipment.status.0、dict.logistics.supplier.category.1）
    */
   i18nKey?: string;
 
@@ -343,6 +371,11 @@ export interface DictDataTemplate {
   cssClass?: number;
 
   /**
+   * 区域文化编码（与 TaktCulture.CultureCode / Accept-Language 对齐，如 zh-CN、ja-JP；eo 表示世界语/全语言通用）
+   */
+  cultureCode?: string;
+
+  /**
    * 是否默认项（1=是，0=否）
    */
   isDefault?: number;
@@ -355,7 +388,7 @@ export interface DictDataTemplate {
   /**
    * 扩展字段JSON
    */
-  ExtField?: string;
+  extField?: string;
 
   /**
    * 备注
@@ -372,7 +405,12 @@ export interface DictDataTemplate {
  */
 export interface DictDataImport {
   /**
-   * 字典类型ID（关联 TaktDictType.Id）
+   * 租户编码（登录上下文注入，对应请求头 X-Tenant-Code）
+   */
+  tenantCode?: string;
+
+  /**
+   * 字典类型ID（关联 TaktDictType.Id；唯一索引：租户内 DictTypeId+CultureCode+DictLabel+I18nKey 唯一）
    */
   dictTypeId?: string;
 
@@ -382,7 +420,7 @@ export interface DictDataImport {
   dictTypeCode?: string;
 
   /**
-   * 字典项标签（唯一索引：租户内 DictTypeId+DictLabel+DictValue+I18nKey 唯一，见 ix_dict_data_type_label_value_i18n_unique；如：待支付、已完成）
+   * 字典项标签（唯一索引：租户内 DictTypeId+CultureCode+DictLabel+I18nKey 唯一；sys_culture_code 等区域文化项用本族语，同语言多地区才加括号，如 English (US)、中文 (简体)）
    */
   dictLabel?: string;
 
@@ -392,7 +430,7 @@ export interface DictDataImport {
   dictValue?: string;
 
   /**
-   * 国际化翻译键（用于多语言支持，如：dict.user_type.admin）
+   * 国际化翻译键（与 DictTypeCode 段对应，如 dict.sys.equipment.status.0、dict.logistics.supplier.category.1）
    */
   i18nKey?: string;
 
@@ -417,6 +455,11 @@ export interface DictDataImport {
   cssClass?: number;
 
   /**
+   * 区域文化编码（与 TaktCulture.CultureCode / Accept-Language 对齐，如 zh-CN、ja-JP；eo 表示世界语/全语言通用）
+   */
+  cultureCode?: string;
+
+  /**
    * 是否默认项（1=是，0=否）
    */
   isDefault?: number;
@@ -429,7 +472,7 @@ export interface DictDataImport {
   /**
    * 扩展字段JSON
    */
-  ExtField?: string;
+  extField?: string;
 
   /**
    * 备注
@@ -451,7 +494,7 @@ export interface DictDataExport {
   dictDataId: string;
 
   /**
-   * 字典类型ID（关联 TaktDictType.Id）
+   * 字典类型ID（关联 TaktDictType.Id；唯一索引：租户内 DictTypeId+CultureCode+DictLabel+I18nKey 唯一）
    */
   dictTypeId: string;
 
@@ -461,7 +504,7 @@ export interface DictDataExport {
   dictTypeCode: string;
 
   /**
-   * 字典项标签（唯一索引：租户内 DictTypeId+DictLabel+DictValue+I18nKey 唯一，见 ix_dict_data_type_label_value_i18n_unique；如：待支付、已完成）
+   * 字典项标签（唯一索引：租户内 DictTypeId+CultureCode+DictLabel+I18nKey 唯一；sys_culture_code 等区域文化项用本族语，同语言多地区才加括号，如 English (US)、中文 (简体)）
    */
   dictLabel: string;
 
@@ -471,7 +514,7 @@ export interface DictDataExport {
   dictValue: string;
 
   /**
-   * 国际化翻译键（用于多语言支持，如：dict.user_type.admin）
+   * 国际化翻译键（与 DictTypeCode 段对应，如 dict.sys.equipment.status.0、dict.logistics.supplier.category.1）
    */
   i18nKey: string;
 
@@ -496,6 +539,11 @@ export interface DictDataExport {
   cssClass: number;
 
   /**
+   * 区域文化编码（与 TaktCulture.CultureCode / Accept-Language 对齐，如 zh-CN、ja-JP；eo 表示世界语/全语言通用）
+   */
+  cultureCode: string;
+
+  /**
    * 是否默认项（1=是，0=否）
    */
   isDefault: number;
@@ -508,7 +556,7 @@ export interface DictDataExport {
   /**
    * 扩展字段JSON
    */
-  ExtField?: string;
+  extField?: string;
 
   /**
    * 备注
@@ -522,14 +570,18 @@ export interface DictDataExport {
 
 }
 
+
 /**
- * 租户下全部字典数据响应
+ * 当前 Accept-Language 下全部字典数据响应 DTO（含 CultureCode eo 的全区域项）
+ * 对应前端 DataDictAll；Items 为扁平列表，含 DictTypeCode 供前端分组
+ * 对应前端 DataDictAll
  * @description 对应后端 TaktDataDictAllDto
  */
-export interface DictDataAll {
+export interface DataDictAll {
   /**
-   * 字典项列表（含 dictTypeCode 供前端分组）
+   * 字典项列表（已按 DictTypeCode、SortOrder 排序）
    */
   items: TaktSelectOption[];
+
 }
 

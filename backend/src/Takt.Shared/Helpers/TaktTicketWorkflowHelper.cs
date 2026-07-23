@@ -20,7 +20,7 @@ namespace Takt.Shared.Helpers;
 public static class TaktTicketWorkflowHelper
 {
     /// <summary>
-    /// 编号规则编码（对接 TaktNumbering.RuleCode）
+    /// 编码规则编码（对接 TaktNumbering.RuleCode）
     /// </summary>
     public const string TicketNumberRuleCode = "HD-TICKET";
 

@@ -81,7 +81,7 @@ public class TaktEquipmentDto : TaktCompanyDtoBase
     public string? DealerBy { get; set; } = string.Empty;
 
     /// <summary>
-    /// 序列号/出厂编号
+    /// 序列号/出厂编码
     /// </summary>
     public string? SerialNumber { get; set; } = string.Empty;
 
@@ -266,7 +266,7 @@ public class TaktEquipmentQueryDto : TaktPagedQuery
     public string? DealerBy { get; set; } = string.Empty;
 
     /// <summary>
-    /// 序列号/出厂编号
+    /// 序列号/出厂编码
     /// </summary>
     public string? SerialNumber { get; set; } = string.Empty;
 
@@ -484,7 +484,7 @@ public class TaktEquipmentCreateDto
     public string? DealerBy { get; set; } = string.Empty;
 
     /// <summary>
-    /// 序列号/出厂编号
+    /// 序列号/出厂编码
     /// </summary>
     public string? SerialNumber { get; set; } = string.Empty;
 
@@ -719,7 +719,7 @@ public class TaktEquipmentTemplateDto
     public string? DealerBy { get; set; } = string.Empty;
 
     /// <summary>
-    /// 序列号/出厂编号
+    /// 序列号/出厂编码
     /// </summary>
     public string? SerialNumber { get; set; } = string.Empty;
 
@@ -911,7 +911,7 @@ public class TaktEquipmentImportDto
     public string? DealerBy { get; set; } = string.Empty;
 
     /// <summary>
-    /// 序列号/出厂编号
+    /// 序列号/出厂编码
     /// </summary>
     public string? SerialNumber { get; set; } = string.Empty;
 
@@ -1104,7 +1104,7 @@ public class TaktEquipmentExportDto
     public string? DealerBy { get; set; } = string.Empty;
 
     /// <summary>
-    /// 序列号/出厂编号
+    /// 序列号/出厂编码
     /// </summary>
     public string? SerialNumber { get; set; } = string.Empty;
 

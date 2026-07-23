@@ -9,10 +9,13 @@
 import { inject, provide, type InjectionKey, type Ref, ref } from 'vue'
 import type { Material } from '@/types/logistics/materials/material'
 
+/** 表格行类型（与 index 列表行、TaktSingleTable slot record 一致） */
+export type MaterialRowRecord = Material | Record<string, unknown>
+
 /** 主表选中行上下文 */
 export interface MaterialMasterContext {
   /** 当前选中的主表行（右侧明细依赖） */
-  selectedMasterRow: Ref<Material | null>
+  selectedMasterRow: Ref<MaterialRowRecord | null>
 }
 
 const materialMasterContextKey: InjectionKey<MaterialMasterContext> = Symbol('materialMasterContext')
@@ -22,7 +25,7 @@ const materialMasterContextKey: InjectionKey<MaterialMasterContext> = Symbol('ma
  * @returns {MaterialMasterContext} 主表上下文
  */
 export function provideMaterialMasterContext(): MaterialMasterContext {
-  const selectedMasterRow = ref<Material | null>(null)
+  const selectedMasterRow = ref<MaterialRowRecord | null>(null)
   const ctx: MaterialMasterContext = { selectedMasterRow }
   provide(materialMasterContextKey, ctx)
   return ctx

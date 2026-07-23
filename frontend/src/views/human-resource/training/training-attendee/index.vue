@@ -262,11 +262,11 @@
         />
       </a-form-item>
       </div>
-      <div v-show="isFieldVisible('certificateNo')">
-      <a-form-item :label="t('entity.trainingattendee.certificateno')">
+      <div v-show="isFieldVisible('CertificateCode')">
+      <a-form-item :label="t('entity.trainingattendee.CertificateCode')">
         <a-input
-          v-model:value="advancedQueryForm.certificateNo"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.trainingattendee.certificateno') })"
+          v-model:value="advancedQueryForm.CertificateCode"
+          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.trainingattendee.CertificateCode') })"
           show-count
           :maxlength="50"
           allow-clear
@@ -481,7 +481,7 @@ const advancedQueryForm = ref({
   trainingHours: undefined as number | undefined,
   trainingScore: undefined as number | undefined,
   isPassed: undefined as number | undefined,
-  certificateNo: '',
+  CertificateCode: '',
   trainingEvaluation: '',
   trainingResultStatus: undefined as number | undefined,
   relatedPlant: '',
@@ -507,7 +507,7 @@ const queryFieldsMeta = computed(() => [
   { key: 'trainingHours', label: t('entity.trainingattendee.traininghours') },
   { key: 'trainingScore', label: t('entity.trainingattendee.trainingscore') },
   { key: 'isPassed', label: t('entity.trainingattendee.ispassed') },
-  { key: 'certificateNo', label: t('entity.trainingattendee.certificateno') },
+  { key: 'CertificateCode', label: t('entity.trainingattendee.CertificateCode') },
   { key: 'trainingEvaluation', label: t('entity.trainingattendee.trainingevaluation') },
   { key: 'trainingResultStatus', label: t('entity.trainingattendee.trainingresultstatus') },
   { key: 'relatedPlant', label: t('entity.trainingattendee.relatedplant') },
@@ -576,7 +576,7 @@ function buildListQuery(overrides?: Partial<TrainingAttendeeQuery>): TrainingAtt
   if (form.isPassed !== undefined && form.isPassed !== null) {
     query.isPassed = form.isPassed
   }
-  assignTrimmed('certificateNo', form.certificateNo)
+  assignTrimmed('CertificateCode', form.CertificateCode)
   assignTrimmed('trainingEvaluation', form.trainingEvaluation)
   if (form.trainingResultStatus !== undefined && form.trainingResultStatus !== null) {
     query.trainingResultStatus = form.trainingResultStatus
@@ -721,13 +721,13 @@ const columns = computed<TableColumnsType>(() => [
     customRender: ({ record }: { record: any }) => getTrainingAttendeeField(record, 'isPassed') ?? ''
   },
   {
-    title: t('entity.trainingattendee.certificateno'),
-    dataIndex: 'certificateNo',
-    key: 'certificateNo',
+    title: t('entity.trainingattendee.CertificateCode'),
+    dataIndex: 'CertificateCode',
+    key: 'CertificateCode',
     width: 120,
     resizable: true,
     ellipsis: true,
-    customRender: ({ record }: { record: any }) => getTrainingAttendeeField(record, 'certificateNo') ?? ''
+    customRender: ({ record }: { record: any }) => getTrainingAttendeeField(record, 'CertificateCode') ?? ''
   },
   {
     title: t('entity.trainingattendee.trainingevaluation'),
@@ -871,7 +871,7 @@ function handleReset() {
   trainingHours: undefined as number | undefined,
   trainingScore: undefined as number | undefined,
   isPassed: undefined as number | undefined,
-  certificateNo: '',
+  CertificateCode: '',
   trainingEvaluation: '',
   trainingResultStatus: undefined as number | undefined,
   relatedPlant: '',
@@ -1064,7 +1064,7 @@ function handleAdvancedQueryReset() {
   trainingHours: undefined as number | undefined,
   trainingScore: undefined as number | undefined,
   isPassed: undefined as number | undefined,
-  certificateNo: '',
+  CertificateCode: '',
   trainingEvaluation: '',
   trainingResultStatus: undefined as number | undefined,
   relatedPlant: '',

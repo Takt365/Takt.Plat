@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Infrastructure.Data.Seeds.I18nSeedData.Code.Generator
 // 文件名称：TaktGenTableColumnI18nSeedData.cs
-// 创建时间：2026-07-20
+// 创建时间：2026-07-23
 // 创建人：Takt365(Auto Generated)
 // 功能描述：TaktGenTableColumn 实体字段国际化种子（无对应 frontend locales；TranslationText 取自 ColumnDescription，ContextNote 取自属性 XML summary）
 // 
@@ -280,13 +280,13 @@ public class TaktGenTableColumnI18nSeedData : ITaktSeedDataCoordinator
             new TranslationSeedItem("entity.gentablecolumn.htmltype", "zh-HK", "显示类型_hk", "显示类型（字典 gen_display_type；input=文本框 select=下拉框 switch=开关 等）"),
 
             // entity.gentablecolumn.dicttype
-            new TranslationSeedItem("entity.gentablecolumn.dicttype", "en-US", "字典类型_us", "字典类型（选项 TaktDictTypes/options，DictValue=Id）"),
+            new TranslationSeedItem("entity.gentablecolumn.dicttype", "en-US", "字典类型_us", "字典类型（选项 TaktDictTypes/options；DictValue=Id）"),
             // entity.gentablecolumn.dicttype
-            new TranslationSeedItem("entity.gentablecolumn.dicttype", "ja-JP", "字典类型_jp", "字典类型（选项 TaktDictTypes/options，DictValue=Id）"),
+            new TranslationSeedItem("entity.gentablecolumn.dicttype", "ja-JP", "字典类型_jp", "字典类型（选项 TaktDictTypes/options；DictValue=Id）"),
             // entity.gentablecolumn.dicttype
-            new TranslationSeedItem("entity.gentablecolumn.dicttype", "zh-CN", "字典类型", "字典类型（选项 TaktDictTypes/options，DictValue=Id）"),
+            new TranslationSeedItem("entity.gentablecolumn.dicttype", "zh-CN", "字典类型", "字典类型（选项 TaktDictTypes/options；DictValue=Id）"),
             // entity.gentablecolumn.dicttype
-            new TranslationSeedItem("entity.gentablecolumn.dicttype", "zh-HK", "字典类型_hk", "字典类型（选项 TaktDictTypes/options，DictValue=Id）"),
+            new TranslationSeedItem("entity.gentablecolumn.dicttype", "zh-HK", "字典类型_hk", "字典类型（选项 TaktDictTypes/options；DictValue=Id）"),
 
             // entity.gentablecolumn.table
             new TranslationSeedItem("entity.gentablecolumn.table", "en-US", "所属表配置_us", "所属表配置（主表，本表 GenTableId 关联 TaktGenTable.Id）"),

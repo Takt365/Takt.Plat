@@ -25,15 +25,15 @@ namespace Takt.Domain.Entities.Logistics.Sales;
 public class TaktSalesInvoiceItem : TaktCompanyEntityBase
 {
     /// <summary>
-    /// 销售发票（选项 TaktSalesInvoices/options，DictValue=Id）
+    /// 销售发票（选项 TaktSalesInvoices/options；DictValue=Id）
     /// </summary>
     [SugarColumn(ColumnName = "sales_invoice_id", ColumnDescription = "销售发票ID", ColumnDataType = "bigint", IsNullable = false)]
     [JsonConverter(typeof(ValueToStringConverter))]
     public long SalesInvoiceId { get; set; }
     /// <summary>
-    /// 会计凭证编号（冗余，与主表 AccountingDocumentCode 一致）
+    /// 会计凭证编码（冗余，与主表 AccountingDocumentCode 一致）
     /// </summary>
-    [SugarColumn(ColumnName = "accounting_document_code", ColumnDescription = "会计凭证编号", ColumnDataType = "nvarchar", Length = 40, IsNullable = false)]
+    [SugarColumn(ColumnName = "accounting_document_code", ColumnDescription = "会计凭证编码", ColumnDataType = "nvarchar", Length = 40, IsNullable = false)]
     public string AccountingDocumentCode { get; set; } = string.Empty;
     /// <summary>
     /// 行号（项目/序号，固定步长=10）
@@ -46,22 +46,17 @@ public class TaktSalesInvoiceItem : TaktCompanyEntityBase
     [SugarColumn(ColumnName = "posting_date", ColumnDescription = "过帐日期", ColumnDataType = "datetime", IsNullable = false)]
     public DateTime PostingDate { get; set; }
     /// <summary>
-    /// 货币（字典 accounting_currency_code，DictValue=CNY/USD 等）
-    /// </summary>
-    [SugarColumn(ColumnName = "currency", ColumnDescription = "货币", ColumnDataType = "nvarchar", Length = 3, IsNullable = false, DefaultValue = "CNY")]
-    public string Currency { get; set; } = "CNY";
-    /// <summary>
     /// 机种名称
     /// </summary>
     [SugarColumn(ColumnName = "model_name", ColumnDescription = "机种名称", ColumnDataType = "nvarchar", Length = 200, IsNullable = true)]
     public string? ModelName { get; set; }
     /// <summary>
-    /// 物料编码（选项 TaktMaterialPlants/options，DictValue=MaterialCode，ExtValue=PlantCode）
+    /// 物料编码（选项 TaktMaterialPlants/options；DictValue=MaterialCode，ExtValue=PlantCode）
     /// </summary>
     [SugarColumn(ColumnName = "material_code", ColumnDescription = "物料编码", ColumnDataType = "nvarchar", Length = 20, IsNullable = false)]
     public string MaterialCode { get; set; } = string.Empty;
     /// <summary>
-    /// 物料类型（字典 logistics_material_type，DictValue=ROH/HALB 等；默认 ROH）
+    /// 物料类型（字典 logistics_material_type；DictValue=ROH/HALB 等；默认 ROH）
     /// </summary>
     [SugarColumn(ColumnName = "material_type", ColumnDescription = "物料类型", ColumnDataType = "nvarchar", Length = 4, IsNullable = false, DefaultValue = "ROH")]
     public string MaterialType { get; set; } = "ROH";
@@ -71,12 +66,12 @@ public class TaktSalesInvoiceItem : TaktCompanyEntityBase
     [SugarColumn(ColumnName = "material_name", ColumnDescription = "物料名称", ColumnDataType = "nvarchar", Length = 40, IsNullable = false)]
     public string MaterialName { get; set; } = string.Empty;
     /// <summary>
-    /// 利润中心（选项 TaktProfitCenters/options，DictValue=ProfitCenterCode）
+    /// 利润中心（选项 TaktProfitCenters/options；DictValue=ProfitCenterCode）
     /// </summary>
     [SugarColumn(ColumnName = "profit_center_code", ColumnDescription = "利润中心", ColumnDataType = "nvarchar", Length = 40, IsNullable = true)]
     public string? ProfitCenterCode { get; set; }
     /// <summary>
-    /// 会计科目（选项 TaktAccountTitles/options，DictValue=Id）
+    /// 会计科目（选项 TaktAccountTitles/options；DictValue=Id）
     /// </summary>
     [SugarColumn(ColumnName = "account_title", ColumnDescription = "会计科目", ColumnDataType = "varchar", Length = 40, IsNullable = true)]
     public string? AccountTitle { get; set; }
@@ -86,7 +81,7 @@ public class TaktSalesInvoiceItem : TaktCompanyEntityBase
     [SugarColumn(ColumnName = "quantity", ColumnDescription = "数量", ColumnDataType = "decimal", Length = 18, DecimalDigits = 4, IsNullable = false, DefaultValue = "0")]
     public decimal Quantity { get; set; } = 0;
     /// <summary>
-    /// 单位（字典 logistics_unit_of_measure_code，DictValue=PC/EA 等；默认 PC）
+    /// 单位（字典 logistics_unit_of_measure_code；DictValue=PC/EA 等；默认 PC）
     /// </summary>
     [SugarColumn(ColumnName = "unit", ColumnDescription = "单位", ColumnDataType = "nvarchar", Length = 20, IsNullable = false, DefaultValue = "PC")]
     public string Unit { get; set; } = "PC";
@@ -101,7 +96,22 @@ public class TaktSalesInvoiceItem : TaktCompanyEntityBase
     [SugarColumn(ColumnName = "transaction_currency_amount", ColumnDescription = "业务货币金额", ColumnDataType = "decimal", Length = 18, DecimalDigits = 2, IsNullable = false, DefaultValue = "0")]
     public decimal TransactionCurrencyAmount { get; set; } = 0;
     /// <summary>
-    /// 凭证类型（字典 logistics_accounting_document_type，DictValue=AA/AB/…）
+    /// 含税价格（打印用；如 100.00）
+    /// </summary>
+    [SugarColumn(ColumnName = "tax_included_price", ColumnDescription = "含税价格", ColumnDataType = "decimal", Length = 18, DecimalDigits = 5, IsNullable = false, DefaultValue = "0")]
+    public decimal TaxIncludedPrice { get; set; } = 0;
+    /// <summary>
+    /// 未税价格（打印用；如 88.50）
+    /// </summary>
+    [SugarColumn(ColumnName = "untaxed_price", ColumnDescription = "未税价格", ColumnDataType = "decimal", Length = 18, DecimalDigits = 5, IsNullable = false, DefaultValue = "0")]
+    public decimal UntaxedPrice { get; set; } = 0;
+    /// <summary>
+    /// 税费（打印用；行税额，如 11.50）
+    /// </summary>
+    [SugarColumn(ColumnName = "tax_amount", ColumnDescription = "税费", ColumnDataType = "decimal", Length = 18, DecimalDigits = 5, IsNullable = false, DefaultValue = "0")]
+    public decimal TaxAmount { get; set; } = 0;
+    /// <summary>
+    /// 凭证类型（字典 logistics_accounting_document_type；DictValue=AA/AB/…）
     /// </summary>
     [SugarColumn(ColumnName = "document_type", ColumnDescription = "凭证类型", ColumnDataType = "varchar", Length = 2, IsNullable = false)]
     public string DocumentType { get; set; } = string.Empty;
@@ -117,7 +127,7 @@ public class TaktSalesInvoiceItem : TaktCompanyEntityBase
     public int? ReferenceDocumentItem { get; set; }
 
     /// <summary>
-    /// 是否作废（字典 sys_yes_no_type，0=否 1=是；编辑移除子行时标记作废）
+    /// 是否作废（字典 sys_yes_no_type；0=否 1=是；编辑移除子行时标记作废）
     /// </summary>
     [SugarColumn(ColumnName = "is_obsolete", ColumnDescription = "是否作废", ColumnDataType = "int", IsNullable = false, DefaultValue = "0")]
     public int IsObsolete { get; set; } = 0;

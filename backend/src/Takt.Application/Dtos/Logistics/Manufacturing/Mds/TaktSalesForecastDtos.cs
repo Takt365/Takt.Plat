@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Application.Dtos.Logistics.Manufacturing.Mds
 // 文件名称：TaktSalesForecastDtos.cs
-// 创建时间：2026-07-13
+// 创建时间：2026-07-23
 // 创建人：Takt365(Auto Generated)
 // 功能描述：SalesForecast 模块 DTO（由 generate-dtos-from-entity.cjs 根据 TaktSalesForecast 生成，请按需审阅）
 // 
@@ -36,7 +36,7 @@ public class TaktSalesForecastDto : TaktApprovalDtoBase
     public long SalesForecastId { get; set; }
 
     /// <summary>
-    /// 工厂代码（选项 TaktPlants/options，DictValue=PlantCode）
+    /// 工厂代码（选项 TaktPlants/options；DictValue=PlantCode）
     /// </summary>
     public string PlantCode { get; set; } = string.Empty;
 
@@ -61,17 +61,17 @@ public class TaktSalesForecastDto : TaktApprovalDtoBase
     public DateTime PlanPeriodEnd { get; set; }
 
     /// <summary>
-    /// 客户编码（关联 TaktCustomer.CustomerCode，选项 TaktCustomers/options；汇总计划时可为空）
+    /// 客户编码（选项 TaktCustomers/options；汇总计划时可为空，DictValue=Id）
     /// </summary>
     public string? CustomerCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 客户名称（冗余字段，便于查询展示）
+    /// 客户名称1（冗余，与 TaktCustomer.CustomerName1 对齐）
     /// </summary>
-    public string? CustomerName { get; set; } = string.Empty;
+    public string? CustomerName1 { get; set; } = string.Empty;
 
     /// <summary>
-    /// 计划人员工ID（关联 TaktEmployee.Id，选项 TaktEmployees/options）
+    /// 计划人员工ID（选项 TaktEmployees/options；DictValue=Id）
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
     public long? PlannerId { get; set; }
@@ -82,7 +82,7 @@ public class TaktSalesForecastDto : TaktApprovalDtoBase
     public string? PlannerName { get; set; }
 
     /// <summary>
-    /// 计划人（关联 TaktEmployee.EmployeeNo，选项 TaktEmployees/options，DictValue=EmployeeNo）
+    /// 计划人（选项 TaktEmployees/options；DictValue=EmployeeCode）
     /// </summary>
     public string PlanBy { get; set; } = string.Empty;
 
@@ -150,7 +150,7 @@ public class TaktSalesForecastQueryDto : TaktPagedQuery
     public string? CompanyCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 工厂代码（选项 TaktPlants/options，DictValue=PlantCode）
+    /// 工厂代码（选项 TaktPlants/options；DictValue=PlantCode）
     /// </summary>
     public string? PlantCode { get; set; } = string.Empty;
 
@@ -190,23 +190,23 @@ public class TaktSalesForecastQueryDto : TaktPagedQuery
     public DateTime? PlanPeriodEndEnd { get; set; }
 
     /// <summary>
-    /// 客户编码（关联 TaktCustomer.CustomerCode，选项 TaktCustomers/options；汇总计划时可为空）
+    /// 客户编码（选项 TaktCustomers/options；汇总计划时可为空，DictValue=Id）
     /// </summary>
     public string? CustomerCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 客户名称（冗余字段，便于查询展示）
+    /// 客户名称1（冗余，与 TaktCustomer.CustomerName1 对齐）
     /// </summary>
-    public string? CustomerName { get; set; } = string.Empty;
+    public string? CustomerName1 { get; set; } = string.Empty;
 
     /// <summary>
-    /// 计划人员工ID（关联 TaktEmployee.Id，选项 TaktEmployees/options）
+    /// 计划人员工ID（选项 TaktEmployees/options；DictValue=Id）
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
     public long? PlannerId { get; set; }
 
     /// <summary>
-    /// 计划人（关联 TaktEmployee.EmployeeNo，选项 TaktEmployees/options，DictValue=EmployeeNo）
+    /// 计划人（选项 TaktEmployees/options；DictValue=EmployeeCode）
     /// </summary>
     public string? PlanBy { get; set; } = string.Empty;
 
@@ -334,9 +334,9 @@ public class TaktSalesForecastCreateDto
     public string CompanyDefaultCulture { get; set; } = string.Empty;
 
     /// <summary>
-    /// 工厂代码（选项 TaktPlants/options，DictValue=PlantCode）
+    /// 工厂代码（选项 TaktPlants/options；DictValue=PlantCode）
     /// </summary>
-    [Required(ErrorMessage = "工厂代码（选项 TaktPlants/options，DictValue=PlantCode）不能为空")]
+    [Required(ErrorMessage = "工厂代码（选项 TaktPlants/options；DictValue=PlantCode）不能为空")]
     public string PlantCode { get; set; } = string.Empty;
 
     /// <summary>
@@ -361,25 +361,25 @@ public class TaktSalesForecastCreateDto
     public DateTime PlanPeriodEnd { get; set; }
 
     /// <summary>
-    /// 客户编码（关联 TaktCustomer.CustomerCode，选项 TaktCustomers/options；汇总计划时可为空）
+    /// 客户编码（选项 TaktCustomers/options；汇总计划时可为空，DictValue=Id）
     /// </summary>
     public string? CustomerCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 客户名称（冗余字段，便于查询展示）
+    /// 客户名称1（冗余，与 TaktCustomer.CustomerName1 对齐）
     /// </summary>
-    public string? CustomerName { get; set; } = string.Empty;
+    public string? CustomerName1 { get; set; } = string.Empty;
 
     /// <summary>
-    /// 计划人员工ID（关联 TaktEmployee.Id，选项 TaktEmployees/options）
+    /// 计划人员工ID（选项 TaktEmployees/options；DictValue=Id）
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
     public long? PlannerId { get; set; }
 
     /// <summary>
-    /// 计划人（关联 TaktEmployee.EmployeeNo，选项 TaktEmployees/options，DictValue=EmployeeNo）
+    /// 计划人（选项 TaktEmployees/options；DictValue=EmployeeCode）
     /// </summary>
-    [Required(ErrorMessage = "计划人（关联 TaktEmployee.EmployeeNo，选项 TaktEmployees/options，DictValue=EmployeeNo）不能为空")]
+    [Required(ErrorMessage = "计划人（选项 TaktEmployees/options；DictValue=EmployeeCode）不能为空")]
     public string PlanBy { get; set; } = string.Empty;
 
     /// <summary>
@@ -503,7 +503,7 @@ public class TaktSalesForecastTemplateDto
     public string? CompanyCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 工厂代码（选项 TaktPlants/options，DictValue=PlantCode）
+    /// 工厂代码（选项 TaktPlants/options；DictValue=PlantCode）
     /// </summary>
     public string? PlantCode { get; set; } = string.Empty;
 
@@ -528,23 +528,23 @@ public class TaktSalesForecastTemplateDto
     public DateTime? PlanPeriodEnd { get; set; }
 
     /// <summary>
-    /// 客户编码（关联 TaktCustomer.CustomerCode，选项 TaktCustomers/options；汇总计划时可为空）
+    /// 客户编码（选项 TaktCustomers/options；汇总计划时可为空，DictValue=Id）
     /// </summary>
     public string? CustomerCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 客户名称（冗余字段，便于查询展示）
+    /// 客户名称1（冗余，与 TaktCustomer.CustomerName1 对齐）
     /// </summary>
-    public string? CustomerName { get; set; } = string.Empty;
+    public string? CustomerName1 { get; set; } = string.Empty;
 
     /// <summary>
-    /// 计划人员工ID（关联 TaktEmployee.Id，选项 TaktEmployees/options）
+    /// 计划人员工ID（选项 TaktEmployees/options；DictValue=Id）
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
     public long? PlannerId { get; set; }
 
     /// <summary>
-    /// 计划人（关联 TaktEmployee.EmployeeNo，选项 TaktEmployees/options，DictValue=EmployeeNo）
+    /// 计划人（选项 TaktEmployees/options；DictValue=EmployeeCode）
     /// </summary>
     public string? PlanBy { get; set; } = string.Empty;
 
@@ -621,7 +621,7 @@ public class TaktSalesForecastImportDto
     public string? CompanyDefaultCulture { get; set; } = string.Empty;
 
     /// <summary>
-    /// 工厂代码（选项 TaktPlants/options，DictValue=PlantCode）
+    /// 工厂代码（选项 TaktPlants/options；DictValue=PlantCode）
     /// </summary>
     public string? PlantCode { get; set; } = string.Empty;
 
@@ -646,23 +646,23 @@ public class TaktSalesForecastImportDto
     public DateTime? PlanPeriodEnd { get; set; }
 
     /// <summary>
-    /// 客户编码（关联 TaktCustomer.CustomerCode，选项 TaktCustomers/options；汇总计划时可为空）
+    /// 客户编码（选项 TaktCustomers/options；汇总计划时可为空，DictValue=Id）
     /// </summary>
     public string? CustomerCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 客户名称（冗余字段，便于查询展示）
+    /// 客户名称1（冗余，与 TaktCustomer.CustomerName1 对齐）
     /// </summary>
-    public string? CustomerName { get; set; } = string.Empty;
+    public string? CustomerName1 { get; set; } = string.Empty;
 
     /// <summary>
-    /// 计划人员工ID（关联 TaktEmployee.Id，选项 TaktEmployees/options）
+    /// 计划人员工ID（选项 TaktEmployees/options；DictValue=Id）
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
     public long? PlannerId { get; set; }
 
     /// <summary>
-    /// 计划人（关联 TaktEmployee.EmployeeNo，选项 TaktEmployees/options，DictValue=EmployeeNo）
+    /// 计划人（选项 TaktEmployees/options；DictValue=EmployeeCode）
     /// </summary>
     public string? PlanBy { get; set; } = string.Empty;
 
@@ -735,7 +735,7 @@ public class TaktSalesForecastExportDto
     public long SalesForecastId { get; set; }
 
     /// <summary>
-    /// 工厂代码（选项 TaktPlants/options，DictValue=PlantCode）
+    /// 工厂代码（选项 TaktPlants/options；DictValue=PlantCode）
     /// </summary>
     public string PlantCode { get; set; } = string.Empty;
 
@@ -760,23 +760,23 @@ public class TaktSalesForecastExportDto
     public DateTime PlanPeriodEnd { get; set; }
 
     /// <summary>
-    /// 客户编码（关联 TaktCustomer.CustomerCode，选项 TaktCustomers/options；汇总计划时可为空）
+    /// 客户编码（选项 TaktCustomers/options；汇总计划时可为空，DictValue=Id）
     /// </summary>
     public string? CustomerCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 客户名称（冗余字段，便于查询展示）
+    /// 客户名称1（冗余，与 TaktCustomer.CustomerName1 对齐）
     /// </summary>
-    public string? CustomerName { get; set; } = string.Empty;
+    public string? CustomerName1 { get; set; } = string.Empty;
 
     /// <summary>
-    /// 计划人员工ID（关联 TaktEmployee.Id，选项 TaktEmployees/options）
+    /// 计划人员工ID（选项 TaktEmployees/options；DictValue=Id）
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
     public long? PlannerId { get; set; }
 
     /// <summary>
-    /// 计划人（关联 TaktEmployee.EmployeeNo，选项 TaktEmployees/options，DictValue=EmployeeNo）
+    /// 计划人（选项 TaktEmployees/options；DictValue=EmployeeCode）
     /// </summary>
     public string PlanBy { get; set; } = string.Empty;
 

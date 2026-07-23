@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Application.Dtos.HumanResource.Personnel
 // 文件名称：TaktEmployeeDtos.cs
-// 创建时间：2026-06-24
+// 创建时间：2026-07-23
 // 创建人：Takt365(Auto Generated)
 // 功能描述：Employee 模块 DTO（由 generate-dtos-from-entity.cjs 根据 TaktEmployee 生成，请按需审阅）
 // 
@@ -22,7 +22,7 @@ namespace Takt.Application.Dtos.HumanResource.Personnel;
 // ========================================
 
 /// <summary>
-/// 员工实体（人事主档，公司级档案非审批单） 员工与系统用户分离；子表承载合同、调动、任职、教育、家庭、技能、外部履历、附件等全场景明细 参照 SAP Personnel Number (PERNR) 设计
+/// 员工实体（人事主档，公司级档案非审批单） 仅保留身份与档案基本属性；明细见导航子表： 教育→Education；地址→Address；家庭/紧急联系人→Family； 上岗日期/试用/转正/主部门岗位→Joined；离职→Resignation； 合同→Contract；调动→Reassignment；技能→Skill；履历→Experience； 附件→Attachment；代理→Delegation；入职待办→Onboarding 参照 SAP Personnel Number (PERNR) 设计
 /// 对应前端 TaktEmployeeDto
 /// 继承 TaktCompanyDtoBase
 /// </summary>
@@ -36,9 +36,9 @@ public class TaktEmployeeDto : TaktCompanyDtoBase
     public long EmployeeId { get; set; }
 
     /// <summary>
-    /// 员工编号（租户+公司内唯一）
+    /// 员工编码（租户+公司内唯一）
     /// </summary>
-    public string EmployeeNo { get; set; } = string.Empty;
+    public string EmployeeCode { get; set; } = string.Empty;
 
     /// <summary>
     /// 姓名
@@ -46,7 +46,7 @@ public class TaktEmployeeDto : TaktCompanyDtoBase
     public string EmployeeName { get; set; } = string.Empty;
 
     /// <summary>
-    /// 性别（0=未知，1=男，2=女）
+    /// 性别（字典 sys_user_gender_category；0=未知 1=男 2=女）
     /// </summary>
     public int Gender { get; set; } = 0;
 
@@ -71,126 +71,39 @@ public class TaktEmployeeDto : TaktCompanyDtoBase
     public string? Email { get; set; } = string.Empty;
 
     /// <summary>
-    /// 籍贯（字典 hr_native_place_code 的 6 位 GB 行政区划代码，人事档案必填）
+    /// 籍贯（字典 hr_native_place_code；列存 6 位 GB 行政区划代码，人事档案必填；与住址子表无关）
     /// </summary>
     public string NativePlace { get; set; } = string.Empty;
 
     /// <summary>
-    /// 民族（字典 hr_ethnic_code，1～56）
+    /// 民族（字典 hr_ethnic_code；DictValue 1～56）
     /// </summary>
     public int Ethnicity { get; set; } = 0;
 
     /// <summary>
-    /// 最高学历摘要（1=高中及以下，2=大专，3=本科，4=硕士，5=博士；明细见 EmployeeEducations）
+    /// 政治面貌（字典 hr_political_affiliation；0～12；人事档案必填）
     /// </summary>
-    public int? Education { get; set; }
+    public int PoliticalAffiliation { get; set; } = 0;
 
     /// <summary>
-    /// 毕业院校（最高学历摘要）
+    /// 婚姻状况（字典 hr_marital_status；0=未婚 1=已婚 2=离异 3=丧偶；人事档案必填）
     /// </summary>
-    public string? GraduateSchool { get; set; } = string.Empty;
+    public int MaritalStatus { get; set; } = 0;
 
     /// <summary>
-    /// 专业（最高学历摘要）
-    /// </summary>
-    public string? Major { get; set; } = string.Empty;
-
-    /// <summary>
-    /// 实际上岗日期（JoinedDate：入职上班；投影字段，由上岗审批通过后回写，未上岗可空）
-    /// </summary>
-    public DateTime? JoinedDate { get; set; }
-
-    /// <summary>
-    /// 试用期结束日期（投影字段，由上岗审批通过后回写）
-    /// </summary>
-    public DateTime? ProbationEndDate { get; set; }
-
-    /// <summary>
-    /// 转正日期（投影字段，由上岗审批通过后回写）
-    /// </summary>
-    public DateTime? RegularDate { get; set; }
-
-    /// <summary>
-    /// 离职日期（投影字段，由离职审批通过后回写）
-    /// </summary>
-    public DateTime? TerminationDate { get; set; }
-
-    /// <summary>
-    /// 最后工作日（投影字段，由离职审批通过后回写）
-    /// </summary>
-    public DateTime? LastWorkDate { get; set; }
-
-    /// <summary>
-    /// 离职类型（投影字段，由离职审批通过后回写；0=主动辞职，1=公司辞退，2=合同到期，3=退休，9=其他）
-    /// </summary>
-    public int? ResignationType { get; set; }
-
-    /// <summary>
-    /// 离职原因（投影字段，由离职审批通过后回写）
-    /// </summary>
-    public string? ResignationReason { get; set; } = string.Empty;
-
-    /// <summary>
-    /// 员工状态（1=试用期，2=正式，3=离职，4=退休）
+    /// 员工状态（字典 hr_employee_status；1=试用期 2=正式 3=离职 4=退休）
     /// </summary>
     public int EmployeeStatus { get; set; } = 0;
 
     /// <summary>
-    /// 当前主部门ID（任职投影快照；未上岗可空，在岗员工由投影服务保证有值）
-    /// </summary>
-    [JsonConverter(typeof(ValueToStringConverter))]
-    public long? PrimaryDeptId { get; set; }
-
-    /// <summary>
-    /// 当前主部门名称（填充字段）
-    /// </summary>
-    public string? PrimaryDeptName { get; set; }
-
-    /// <summary>
-    /// 当前主岗位ID（任职投影快照；未上岗可空，在岗员工由投影服务保证有值）
-    /// </summary>
-    [JsonConverter(typeof(ValueToStringConverter))]
-    public long? PrimaryPostId { get; set; }
-
-    /// <summary>
-    /// 当前主岗位名称（填充字段）
-    /// </summary>
-    public string? PrimaryPostName { get; set; }
-
-    /// <summary>
-    /// 内置（种子员工不可删）
+    /// 内置（字典 sys_yes_no_type；0=否 1=是；种子员工不可删）
     /// </summary>
     public int IsBuiltIn { get; set; } = 0;
 
     /// <summary>
-    /// 紧急联系人姓名（人事档案必填）
-    /// </summary>
-    public string EmergencyContactName { get; set; } = string.Empty;
-
-    /// <summary>
-    /// 紧急联系人电话（人事档案必填）
-    /// </summary>
-    public string EmergencyContactPhone { get; set; } = string.Empty;
-
-    /// <summary>
-    /// 家庭住址（人事档案必填）
-    /// </summary>
-    public string HomeAddress { get; set; } = string.Empty;
-
-    /// <summary>
-    /// 头像URL
+    /// 头像URL（展示用；档案附件明细见 EmployeeAttachments）
     /// </summary>
     public string? Avatar { get; set; } = string.Empty;
-
-    /// <summary>
-    /// 政治面貌（字典 hr_political_status，0～12；人事档案必填）
-    /// </summary>
-    public int PoliticalStatus { get; set; } = 0;
-
-    /// <summary>
-    /// 婚姻状况（0=未婚，1=已婚，2=离异，3=丧偶；人事档案必填）
-    /// </summary>
-    public int MaritalStatus { get; set; } = 0;
 
     /// <summary>
     /// 员工部门关联（RBAC，表 takt_human_resource_organization_employeedept）
@@ -203,6 +116,72 @@ public class TaktEmployeeDto : TaktCompanyDtoBase
     /// （子表：TaktEmployeePost）
     /// </summary>
     public List<TaktEmployeePostDto>? EmployeePosts { get; set; }
+
+    /// <summary>
+    /// 员工地址（家庭/工作/常住）
+    /// （子表：TaktEmployeeAddress）
+    /// </summary>
+    public List<TaktEmployeeAddressDto>? EmployeeAddresses { get; set; }
+
+    /// <summary>
+    /// 教育经历（含最高学历 IsHighest）
+    /// （子表：TaktEmployeeEducation）
+    /// </summary>
+    public List<TaktEmployeeEducationDto>? EmployeeEducations { get; set; }
+
+    /// <summary>
+    /// 家庭成员（含紧急联系人 IsEmergencyContact）
+    /// （子表：TaktEmployeeFamily）
+    /// </summary>
+    public List<TaktEmployeeFamilyDto>? EmployeeFamilies { get; set; }
+
+    /// <summary>
+    /// 外部工作经历
+    /// （子表：TaktEmployeeExperience）
+    /// </summary>
+    public List<TaktEmployeeExperienceDto>? EmployeeExperiences { get; set; }
+
+    /// <summary>
+    /// 技能与证书
+    /// （子表：TaktEmployeeSkill）
+    /// </summary>
+    public List<TaktEmployeeSkillDto>? EmployeeSkills { get; set; }
+
+    /// <summary>
+    /// 劳动合同
+    /// （子表：TaktEmployeeContract）
+    /// </summary>
+    public List<TaktEmployeeContractDto>? EmployeeContracts { get; set; }
+
+    /// <summary>
+    /// 入职上岗办理（实际上岗日/试用/转正/部门岗位）
+    /// （子表：TaktEmployeeJoined）
+    /// </summary>
+    public List<TaktEmployeeJoinedDto>? EmployeeJoineds { get; set; }
+
+    /// <summary>
+    /// 入职待办
+    /// （子表：TaktEmployeeOnboarding）
+    /// </summary>
+    public List<TaktEmployeeOnboardingDto>? EmployeeOnboardings { get; set; }
+
+    /// <summary>
+    /// 调动记录
+    /// （子表：TaktEmployeeReassignment）
+    /// </summary>
+    public List<TaktEmployeeReassignmentDto>? EmployeeReassignments { get; set; }
+
+    /// <summary>
+    /// 离职办理
+    /// （子表：TaktEmployeeResignation）
+    /// </summary>
+    public List<TaktEmployeeResignationDto>? EmployeeResignations { get; set; }
+
+    /// <summary>
+    /// 档案附件
+    /// （子表：TaktEmployeeAttachment）
+    /// </summary>
+    public List<TaktEmployeeAttachmentDto>? EmployeeAttachments { get; set; }
 
 }
 
@@ -227,9 +206,9 @@ public class TaktEmployeeQueryDto : TaktPagedQuery
     public string? CompanyCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 员工编号（租户+公司内唯一）
+    /// 员工编码（租户+公司内唯一）
     /// </summary>
-    public string? EmployeeNo { get; set; } = string.Empty;
+    public string? EmployeeCode { get; set; } = string.Empty;
 
     /// <summary>
     /// 姓名
@@ -237,7 +216,7 @@ public class TaktEmployeeQueryDto : TaktPagedQuery
     public string? EmployeeName { get; set; } = string.Empty;
 
     /// <summary>
-    /// 性别（0=未知，1=男，2=女）
+    /// 性别（字典 sys_user_gender_category；0=未知 1=男 2=女）
     /// </summary>
     public int? Gender { get; set; }
 
@@ -267,141 +246,39 @@ public class TaktEmployeeQueryDto : TaktPagedQuery
     public string? Email { get; set; } = string.Empty;
 
     /// <summary>
-    /// 籍贯（字典 hr_native_place_code 的 6 位 GB 行政区划代码，人事档案必填）
+    /// 籍贯（字典 hr_native_place_code；列存 6 位 GB 行政区划代码，人事档案必填；与住址子表无关）
     /// </summary>
     public string? NativePlace { get; set; } = string.Empty;
 
     /// <summary>
-    /// 民族（字典 hr_ethnic_code，1～56）
+    /// 民族（字典 hr_ethnic_code；DictValue 1～56）
     /// </summary>
     public int? Ethnicity { get; set; }
 
     /// <summary>
-    /// 最高学历摘要（1=高中及以下，2=大专，3=本科，4=硕士，5=博士；明细见 EmployeeEducations）
+    /// 政治面貌（字典 hr_political_affiliation；0～12；人事档案必填）
     /// </summary>
-    public int? Education { get; set; }
+    public int? PoliticalAffiliation { get; set; }
 
     /// <summary>
-    /// 毕业院校（最高学历摘要）
+    /// 婚姻状况（字典 hr_marital_status；0=未婚 1=已婚 2=离异 3=丧偶；人事档案必填）
     /// </summary>
-    public string? GraduateSchool { get; set; } = string.Empty;
+    public int? MaritalStatus { get; set; }
 
     /// <summary>
-    /// 专业（最高学历摘要）
-    /// </summary>
-    public string? Major { get; set; } = string.Empty;
-
-    /// <summary>
-    /// 实际上岗日期（JoinedDate：入职上班；投影字段，由上岗审批通过后回写，未上岗可空）（范围查询-开始）
-    /// </summary>
-    public DateTime? JoinedDateStart { get; set; }
-
-    /// <summary>
-    /// 实际上岗日期（JoinedDate：入职上班；投影字段，由上岗审批通过后回写，未上岗可空）（范围查询-结束）
-    /// </summary>
-    public DateTime? JoinedDateEnd { get; set; }
-
-    /// <summary>
-    /// 试用期结束日期（投影字段，由上岗审批通过后回写）（范围查询-开始）
-    /// </summary>
-    public DateTime? ProbationEndDateStart { get; set; }
-
-    /// <summary>
-    /// 试用期结束日期（投影字段，由上岗审批通过后回写）（范围查询-结束）
-    /// </summary>
-    public DateTime? ProbationEndDateEnd { get; set; }
-
-    /// <summary>
-    /// 转正日期（投影字段，由上岗审批通过后回写）（范围查询-开始）
-    /// </summary>
-    public DateTime? RegularDateStart { get; set; }
-
-    /// <summary>
-    /// 转正日期（投影字段，由上岗审批通过后回写）（范围查询-结束）
-    /// </summary>
-    public DateTime? RegularDateEnd { get; set; }
-
-    /// <summary>
-    /// 离职日期（投影字段，由离职审批通过后回写）（范围查询-开始）
-    /// </summary>
-    public DateTime? TerminationDateStart { get; set; }
-
-    /// <summary>
-    /// 离职日期（投影字段，由离职审批通过后回写）（范围查询-结束）
-    /// </summary>
-    public DateTime? TerminationDateEnd { get; set; }
-
-    /// <summary>
-    /// 最后工作日（投影字段，由离职审批通过后回写）（范围查询-开始）
-    /// </summary>
-    public DateTime? LastWorkDateStart { get; set; }
-
-    /// <summary>
-    /// 最后工作日（投影字段，由离职审批通过后回写）（范围查询-结束）
-    /// </summary>
-    public DateTime? LastWorkDateEnd { get; set; }
-
-    /// <summary>
-    /// 离职类型（投影字段，由离职审批通过后回写；0=主动辞职，1=公司辞退，2=合同到期，3=退休，9=其他）
-    /// </summary>
-    public int? ResignationType { get; set; }
-
-    /// <summary>
-    /// 离职原因（投影字段，由离职审批通过后回写）
-    /// </summary>
-    public string? ResignationReason { get; set; } = string.Empty;
-
-    /// <summary>
-    /// 员工状态（1=试用期，2=正式，3=离职，4=退休）
+    /// 员工状态（字典 hr_employee_status；1=试用期 2=正式 3=离职 4=退休）
     /// </summary>
     public int? EmployeeStatus { get; set; }
 
     /// <summary>
-    /// 当前主部门ID（任职投影快照；未上岗可空，在岗员工由投影服务保证有值）
-    /// </summary>
-    [JsonConverter(typeof(ValueToStringConverter))]
-    public long? PrimaryDeptId { get; set; }
-
-    /// <summary>
-    /// 当前主岗位ID（任职投影快照；未上岗可空，在岗员工由投影服务保证有值）
-    /// </summary>
-    [JsonConverter(typeof(ValueToStringConverter))]
-    public long? PrimaryPostId { get; set; }
-
-    /// <summary>
-    /// 内置（种子员工不可删）
+    /// 内置（字典 sys_yes_no_type；0=否 1=是；种子员工不可删）
     /// </summary>
     public int? IsBuiltIn { get; set; }
 
     /// <summary>
-    /// 紧急联系人姓名（人事档案必填）
-    /// </summary>
-    public string? EmergencyContactName { get; set; } = string.Empty;
-
-    /// <summary>
-    /// 紧急联系人电话（人事档案必填）
-    /// </summary>
-    public string? EmergencyContactPhone { get; set; } = string.Empty;
-
-    /// <summary>
-    /// 家庭住址（人事档案必填）
-    /// </summary>
-    public string? HomeAddress { get; set; } = string.Empty;
-
-    /// <summary>
-    /// 头像URL
+    /// 头像URL（展示用；档案附件明细见 EmployeeAttachments）
     /// </summary>
     public string? Avatar { get; set; } = string.Empty;
-
-    /// <summary>
-    /// 政治面貌（字典 hr_political_status，0～12；人事档案必填）
-    /// </summary>
-    public int? PoliticalStatus { get; set; }
-
-    /// <summary>
-    /// 婚姻状况（0=未婚，1=已婚，2=离异，3=丧偶；人事档案必填）
-    /// </summary>
-    public int? MaritalStatus { get; set; }
 
     /// <summary>
     /// 创建时间（范围查询-开始）
@@ -449,10 +326,10 @@ public class TaktEmployeeCreateDto
     public string CompanyDefaultCulture { get; set; } = string.Empty;
 
     /// <summary>
-    /// 员工编号（租户+公司内唯一）
+    /// 员工编码（租户+公司内唯一）
     /// </summary>
-    [Required(ErrorMessage = "员工编号（租户+公司内唯一）不能为空")]
-    public string EmployeeNo { get; set; } = string.Empty;
+    [Required(ErrorMessage = "员工编码（租户+公司内唯一）不能为空")]
+    public string EmployeeCode { get; set; } = string.Empty;
 
     /// <summary>
     /// 姓名
@@ -461,7 +338,7 @@ public class TaktEmployeeCreateDto
     public string EmployeeName { get; set; } = string.Empty;
 
     /// <summary>
-    /// 性别（0=未知，1=男，2=女）
+    /// 性别（字典 sys_user_gender_category；0=未知 1=男 2=女）
     /// </summary>
     public int Gender { get; set; } = 0;
 
@@ -488,120 +365,40 @@ public class TaktEmployeeCreateDto
     public string? Email { get; set; } = string.Empty;
 
     /// <summary>
-    /// 籍贯（字典 hr_native_place_code 的 6 位 GB 行政区划代码，人事档案必填）
+    /// 籍贯（字典 hr_native_place_code；列存 6 位 GB 行政区划代码，人事档案必填；与住址子表无关）
     /// </summary>
-    [Required(ErrorMessage = "籍贯（字典 hr_native_place_code 的 6 位 GB 行政区划代码，人事档案必填）不能为空")]
+    [Required(ErrorMessage = "籍贯（字典 hr_native_place_code；列存 6 位 GB 行政区划代码，人事档案必填；与住址子表无关）不能为空")]
     public string NativePlace { get; set; } = string.Empty;
 
     /// <summary>
-    /// 民族（字典 hr_ethnic_code，1～56）
+    /// 民族（字典 hr_ethnic_code；DictValue 1～56）
     /// </summary>
     public int Ethnicity { get; set; } = 0;
 
     /// <summary>
-    /// 最高学历摘要（1=高中及以下，2=大专，3=本科，4=硕士，5=博士；明细见 EmployeeEducations）
+    /// 政治面貌（字典 hr_political_affiliation；0～12；人事档案必填）
     /// </summary>
-    public int? Education { get; set; }
+    public int PoliticalAffiliation { get; set; } = 0;
 
     /// <summary>
-    /// 毕业院校（最高学历摘要）
+    /// 婚姻状况（字典 hr_marital_status；0=未婚 1=已婚 2=离异 3=丧偶；人事档案必填）
     /// </summary>
-    public string? GraduateSchool { get; set; } = string.Empty;
+    public int MaritalStatus { get; set; } = 0;
 
     /// <summary>
-    /// 专业（最高学历摘要）
-    /// </summary>
-    public string? Major { get; set; } = string.Empty;
-
-    /// <summary>
-    /// 实际上岗日期（JoinedDate：入职上班；投影字段，由上岗审批通过后回写，未上岗可空）
-    /// </summary>
-    public DateTime? JoinedDate { get; set; }
-
-    /// <summary>
-    /// 试用期结束日期（投影字段，由上岗审批通过后回写）
-    /// </summary>
-    public DateTime? ProbationEndDate { get; set; }
-
-    /// <summary>
-    /// 转正日期（投影字段，由上岗审批通过后回写）
-    /// </summary>
-    public DateTime? RegularDate { get; set; }
-
-    /// <summary>
-    /// 离职日期（投影字段，由离职审批通过后回写）
-    /// </summary>
-    public DateTime? TerminationDate { get; set; }
-
-    /// <summary>
-    /// 最后工作日（投影字段，由离职审批通过后回写）
-    /// </summary>
-    public DateTime? LastWorkDate { get; set; }
-
-    /// <summary>
-    /// 离职类型（投影字段，由离职审批通过后回写；0=主动辞职，1=公司辞退，2=合同到期，3=退休，9=其他）
-    /// </summary>
-    public int? ResignationType { get; set; }
-
-    /// <summary>
-    /// 离职原因（投影字段，由离职审批通过后回写）
-    /// </summary>
-    public string? ResignationReason { get; set; } = string.Empty;
-
-    /// <summary>
-    /// 员工状态（1=试用期，2=正式，3=离职，4=退休）
+    /// 员工状态（字典 hr_employee_status；1=试用期 2=正式 3=离职 4=退休）
     /// </summary>
     public int EmployeeStatus { get; set; } = 0;
 
     /// <summary>
-    /// 当前主部门ID（任职投影快照；未上岗可空，在岗员工由投影服务保证有值）
-    /// </summary>
-    [JsonConverter(typeof(ValueToStringConverter))]
-    public long? PrimaryDeptId { get; set; }
-
-    /// <summary>
-    /// 当前主岗位ID（任职投影快照；未上岗可空，在岗员工由投影服务保证有值）
-    /// </summary>
-    [JsonConverter(typeof(ValueToStringConverter))]
-    public long? PrimaryPostId { get; set; }
-
-    /// <summary>
-    /// 内置（种子员工不可删）
+    /// 内置（字典 sys_yes_no_type；0=否 1=是；种子员工不可删）
     /// </summary>
     public int IsBuiltIn { get; set; } = 0;
 
     /// <summary>
-    /// 紧急联系人姓名（人事档案必填）
-    /// </summary>
-    [Required(ErrorMessage = "紧急联系人姓名（人事档案必填）不能为空")]
-    public string EmergencyContactName { get; set; } = string.Empty;
-
-    /// <summary>
-    /// 紧急联系人电话（人事档案必填）
-    /// </summary>
-    [Required(ErrorMessage = "紧急联系人电话（人事档案必填）不能为空")]
-    public string EmergencyContactPhone { get; set; } = string.Empty;
-
-    /// <summary>
-    /// 家庭住址（人事档案必填）
-    /// </summary>
-    [Required(ErrorMessage = "家庭住址（人事档案必填）不能为空")]
-    public string HomeAddress { get; set; } = string.Empty;
-
-    /// <summary>
-    /// 头像URL
+    /// 头像URL（展示用；档案附件明细见 EmployeeAttachments）
     /// </summary>
     public string? Avatar { get; set; } = string.Empty;
-
-    /// <summary>
-    /// 政治面貌（字典 hr_political_status，0～12；人事档案必填）
-    /// </summary>
-    public int PoliticalStatus { get; set; } = 0;
-
-    /// <summary>
-    /// 婚姻状况（0=未婚，1=已婚，2=离异，3=丧偶；人事档案必填）
-    /// </summary>
-    public int MaritalStatus { get; set; } = 0;
 
     /// <summary>
     /// 员工部门关联（RBAC 全量覆盖，分配走 ITaktRbacService）
@@ -612,6 +409,61 @@ public class TaktEmployeeCreateDto
     /// 员工岗位关联（RBAC 全量覆盖，分配走 ITaktRbacService）
     /// </summary>
     public long[]? EmployeePostIds { get; set; }
+
+    /// <summary>
+    /// 员工地址（家庭/工作/常住）（子表，级联保存）
+    /// </summary>
+    public List<TaktEmployeeAddressCreateDto>? EmployeeAddresses { get; set; }
+
+    /// <summary>
+    /// 教育经历（含最高学历 IsHighest）（子表，级联保存）
+    /// </summary>
+    public List<TaktEmployeeEducationCreateDto>? EmployeeEducations { get; set; }
+
+    /// <summary>
+    /// 家庭成员（含紧急联系人 IsEmergencyContact）（子表，级联保存）
+    /// </summary>
+    public List<TaktEmployeeFamilyCreateDto>? EmployeeFamilies { get; set; }
+
+    /// <summary>
+    /// 外部工作经历（子表，级联保存）
+    /// </summary>
+    public List<TaktEmployeeExperienceCreateDto>? EmployeeExperiences { get; set; }
+
+    /// <summary>
+    /// 技能与证书（子表，级联保存）
+    /// </summary>
+    public List<TaktEmployeeSkillCreateDto>? EmployeeSkills { get; set; }
+
+    /// <summary>
+    /// 劳动合同（子表，级联保存）
+    /// </summary>
+    public List<TaktEmployeeContractCreateDto>? EmployeeContracts { get; set; }
+
+    /// <summary>
+    /// 入职上岗办理（实际上岗日/试用/转正/部门岗位）（子表，级联保存）
+    /// </summary>
+    public List<TaktEmployeeJoinedCreateDto>? EmployeeJoineds { get; set; }
+
+    /// <summary>
+    /// 入职待办（子表，级联保存）
+    /// </summary>
+    public List<TaktEmployeeOnboardingCreateDto>? EmployeeOnboardings { get; set; }
+
+    /// <summary>
+    /// 调动记录（子表，级联保存）
+    /// </summary>
+    public List<TaktEmployeeReassignmentCreateDto>? EmployeeReassignments { get; set; }
+
+    /// <summary>
+    /// 离职办理（子表，级联保存）
+    /// </summary>
+    public List<TaktEmployeeResignationCreateDto>? EmployeeResignations { get; set; }
+
+    /// <summary>
+    /// 档案附件（子表，级联保存）
+    /// </summary>
+    public List<TaktEmployeeAttachmentCreateDto>? EmployeeAttachments { get; set; }
 
     /// <summary>
     /// 扩展字段JSON
@@ -643,6 +495,61 @@ public class TaktEmployeeUpdateDto : TaktEmployeeCreateDto
     [JsonConverter(typeof(ValueToStringConverter))]
     public long EmployeeId { get; set; }
 
+    /// <summary>
+    /// 员工地址（家庭/工作/常住）（子表，级联保存）
+    /// </summary>
+    public new List<TaktEmployeeAddressUpdateDto>? EmployeeAddresses { get; set; }
+
+    /// <summary>
+    /// 教育经历（含最高学历 IsHighest）（子表，级联保存）
+    /// </summary>
+    public new List<TaktEmployeeEducationUpdateDto>? EmployeeEducations { get; set; }
+
+    /// <summary>
+    /// 家庭成员（含紧急联系人 IsEmergencyContact）（子表，级联保存）
+    /// </summary>
+    public new List<TaktEmployeeFamilyUpdateDto>? EmployeeFamilies { get; set; }
+
+    /// <summary>
+    /// 外部工作经历（子表，级联保存）
+    /// </summary>
+    public new List<TaktEmployeeExperienceUpdateDto>? EmployeeExperiences { get; set; }
+
+    /// <summary>
+    /// 技能与证书（子表，级联保存）
+    /// </summary>
+    public new List<TaktEmployeeSkillUpdateDto>? EmployeeSkills { get; set; }
+
+    /// <summary>
+    /// 劳动合同（子表，级联保存）
+    /// </summary>
+    public new List<TaktEmployeeContractUpdateDto>? EmployeeContracts { get; set; }
+
+    /// <summary>
+    /// 入职上岗办理（实际上岗日/试用/转正/部门岗位）（子表，级联保存）
+    /// </summary>
+    public new List<TaktEmployeeJoinedUpdateDto>? EmployeeJoineds { get; set; }
+
+    /// <summary>
+    /// 入职待办（子表，级联保存）
+    /// </summary>
+    public new List<TaktEmployeeOnboardingUpdateDto>? EmployeeOnboardings { get; set; }
+
+    /// <summary>
+    /// 调动记录（子表，级联保存）
+    /// </summary>
+    public new List<TaktEmployeeReassignmentUpdateDto>? EmployeeReassignments { get; set; }
+
+    /// <summary>
+    /// 离职办理（子表，级联保存）
+    /// </summary>
+    public new List<TaktEmployeeResignationUpdateDto>? EmployeeResignations { get; set; }
+
+    /// <summary>
+    /// 档案附件（子表，级联保存）
+    /// </summary>
+    public new List<TaktEmployeeAttachmentUpdateDto>? EmployeeAttachments { get; set; }
+
 }
 
 // ========================================
@@ -663,15 +570,10 @@ public class TaktEmployeeStatusDto
     public long EmployeeId { get; set; }
 
     /// <summary>
-    /// 员工状态（1=试用期，2=正式，3=离职，4=退休）
+    /// 婚姻状况（字典 hr_marital_status；0=未婚 1=已婚 2=离异 3=丧偶；人事档案必填）
     /// </summary>
-    [Required(ErrorMessage = "员工状态（1=试用期，2=正式，3=离职，4=退休）不能为空")]
-    public int EmployeeStatus { get; set; } = 0;
-
-    /// <summary>
-    /// 政治面貌（字典 hr_political_status）
-    /// </summary>
-    public int PoliticalStatus { get; set; } = 0;
+    [Required(ErrorMessage = "婚姻状况（字典 hr_marital_status；0=未婚 1=已婚 2=离异 3=丧偶；人事档案必填）不能为空")]
+    public int MaritalStatus { get; set; } = 0;
 }
 
 // ========================================
@@ -694,9 +596,9 @@ public class TaktEmployeeTemplateDto
     public string? CompanyCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 员工编号（租户+公司内唯一）
+    /// 员工编码（租户+公司内唯一）
     /// </summary>
-    public string? EmployeeNo { get; set; } = string.Empty;
+    public string? EmployeeCode { get; set; } = string.Empty;
 
     /// <summary>
     /// 姓名
@@ -704,7 +606,7 @@ public class TaktEmployeeTemplateDto
     public string? EmployeeName { get; set; } = string.Empty;
 
     /// <summary>
-    /// 性别（0=未知，1=男，2=女）
+    /// 性别（字典 sys_user_gender_category；0=未知 1=男 2=女）
     /// </summary>
     public int? Gender { get; set; }
 
@@ -729,116 +631,39 @@ public class TaktEmployeeTemplateDto
     public string? Email { get; set; } = string.Empty;
 
     /// <summary>
-    /// 籍贯（字典 hr_native_place_code 的 6 位 GB 行政区划代码，人事档案必填）
+    /// 籍贯（字典 hr_native_place_code；列存 6 位 GB 行政区划代码，人事档案必填；与住址子表无关）
     /// </summary>
     public string? NativePlace { get; set; } = string.Empty;
 
     /// <summary>
-    /// 民族（字典 hr_ethnic_code，1～56）
+    /// 民族（字典 hr_ethnic_code；DictValue 1～56）
     /// </summary>
     public int? Ethnicity { get; set; }
 
     /// <summary>
-    /// 最高学历摘要（1=高中及以下，2=大专，3=本科，4=硕士，5=博士；明细见 EmployeeEducations）
+    /// 政治面貌（字典 hr_political_affiliation；0～12；人事档案必填）
     /// </summary>
-    public int? Education { get; set; }
+    public int? PoliticalAffiliation { get; set; }
 
     /// <summary>
-    /// 毕业院校（最高学历摘要）
+    /// 婚姻状况（字典 hr_marital_status；0=未婚 1=已婚 2=离异 3=丧偶；人事档案必填）
     /// </summary>
-    public string? GraduateSchool { get; set; } = string.Empty;
+    public int? MaritalStatus { get; set; }
 
     /// <summary>
-    /// 专业（最高学历摘要）
-    /// </summary>
-    public string? Major { get; set; } = string.Empty;
-
-    /// <summary>
-    /// 实际上岗日期（JoinedDate：入职上班；投影字段，由上岗审批通过后回写，未上岗可空）
-    /// </summary>
-    public DateTime? JoinedDate { get; set; }
-
-    /// <summary>
-    /// 试用期结束日期（投影字段，由上岗审批通过后回写）
-    /// </summary>
-    public DateTime? ProbationEndDate { get; set; }
-
-    /// <summary>
-    /// 转正日期（投影字段，由上岗审批通过后回写）
-    /// </summary>
-    public DateTime? RegularDate { get; set; }
-
-    /// <summary>
-    /// 离职日期（投影字段，由离职审批通过后回写）
-    /// </summary>
-    public DateTime? TerminationDate { get; set; }
-
-    /// <summary>
-    /// 最后工作日（投影字段，由离职审批通过后回写）
-    /// </summary>
-    public DateTime? LastWorkDate { get; set; }
-
-    /// <summary>
-    /// 离职类型（投影字段，由离职审批通过后回写；0=主动辞职，1=公司辞退，2=合同到期，3=退休，9=其他）
-    /// </summary>
-    public int? ResignationType { get; set; }
-
-    /// <summary>
-    /// 离职原因（投影字段，由离职审批通过后回写）
-    /// </summary>
-    public string? ResignationReason { get; set; } = string.Empty;
-
-    /// <summary>
-    /// 员工状态（1=试用期，2=正式，3=离职，4=退休）
+    /// 员工状态（字典 hr_employee_status；1=试用期 2=正式 3=离职 4=退休）
     /// </summary>
     public int? EmployeeStatus { get; set; }
 
     /// <summary>
-    /// 当前主部门ID（任职投影快照；未上岗可空，在岗员工由投影服务保证有值）
-    /// </summary>
-    [JsonConverter(typeof(ValueToStringConverter))]
-    public long? PrimaryDeptId { get; set; }
-
-    /// <summary>
-    /// 当前主岗位ID（任职投影快照；未上岗可空，在岗员工由投影服务保证有值）
-    /// </summary>
-    [JsonConverter(typeof(ValueToStringConverter))]
-    public long? PrimaryPostId { get; set; }
-
-    /// <summary>
-    /// 内置（种子员工不可删）
+    /// 内置（字典 sys_yes_no_type；0=否 1=是；种子员工不可删）
     /// </summary>
     public int? IsBuiltIn { get; set; }
 
     /// <summary>
-    /// 紧急联系人姓名（人事档案必填）
-    /// </summary>
-    public string? EmergencyContactName { get; set; } = string.Empty;
-
-    /// <summary>
-    /// 紧急联系人电话（人事档案必填）
-    /// </summary>
-    public string? EmergencyContactPhone { get; set; } = string.Empty;
-
-    /// <summary>
-    /// 家庭住址（人事档案必填）
-    /// </summary>
-    public string? HomeAddress { get; set; } = string.Empty;
-
-    /// <summary>
-    /// 头像URL
+    /// 头像URL（展示用；档案附件明细见 EmployeeAttachments）
     /// </summary>
     public string? Avatar { get; set; } = string.Empty;
-
-    /// <summary>
-    /// 政治面貌（字典 hr_political_status，0～12；人事档案必填）
-    /// </summary>
-    public int? PoliticalStatus { get; set; }
-
-    /// <summary>
-    /// 婚姻状况（0=未婚，1=已婚，2=离异，3=丧偶；人事档案必填）
-    /// </summary>
-    public int? MaritalStatus { get; set; }
 
     /// <summary>
     /// 员工部门关联（RBAC 全量覆盖，分配走 ITaktRbacService）
@@ -849,6 +674,61 @@ public class TaktEmployeeTemplateDto
     /// 员工岗位关联（RBAC 全量覆盖，分配走 ITaktRbacService）
     /// </summary>
     public long[]? EmployeePostIds { get; set; }
+
+    /// <summary>
+    /// 员工地址（家庭/工作/常住）（子表，级联保存）
+    /// </summary>
+    public List<TaktEmployeeAddressCreateDto>? EmployeeAddresses { get; set; }
+
+    /// <summary>
+    /// 教育经历（含最高学历 IsHighest）（子表，级联保存）
+    /// </summary>
+    public List<TaktEmployeeEducationCreateDto>? EmployeeEducations { get; set; }
+
+    /// <summary>
+    /// 家庭成员（含紧急联系人 IsEmergencyContact）（子表，级联保存）
+    /// </summary>
+    public List<TaktEmployeeFamilyCreateDto>? EmployeeFamilies { get; set; }
+
+    /// <summary>
+    /// 外部工作经历（子表，级联保存）
+    /// </summary>
+    public List<TaktEmployeeExperienceCreateDto>? EmployeeExperiences { get; set; }
+
+    /// <summary>
+    /// 技能与证书（子表，级联保存）
+    /// </summary>
+    public List<TaktEmployeeSkillCreateDto>? EmployeeSkills { get; set; }
+
+    /// <summary>
+    /// 劳动合同（子表，级联保存）
+    /// </summary>
+    public List<TaktEmployeeContractCreateDto>? EmployeeContracts { get; set; }
+
+    /// <summary>
+    /// 入职上岗办理（实际上岗日/试用/转正/部门岗位）（子表，级联保存）
+    /// </summary>
+    public List<TaktEmployeeJoinedCreateDto>? EmployeeJoineds { get; set; }
+
+    /// <summary>
+    /// 入职待办（子表，级联保存）
+    /// </summary>
+    public List<TaktEmployeeOnboardingCreateDto>? EmployeeOnboardings { get; set; }
+
+    /// <summary>
+    /// 调动记录（子表，级联保存）
+    /// </summary>
+    public List<TaktEmployeeReassignmentCreateDto>? EmployeeReassignments { get; set; }
+
+    /// <summary>
+    /// 离职办理（子表，级联保存）
+    /// </summary>
+    public List<TaktEmployeeResignationCreateDto>? EmployeeResignations { get; set; }
+
+    /// <summary>
+    /// 档案附件（子表，级联保存）
+    /// </summary>
+    public List<TaktEmployeeAttachmentCreateDto>? EmployeeAttachments { get; set; }
 
     /// <summary>
     /// 扩展字段JSON
@@ -883,9 +763,9 @@ public class TaktEmployeeImportDto
     public string? CompanyDefaultCulture { get; set; } = string.Empty;
 
     /// <summary>
-    /// 员工编号（租户+公司内唯一）
+    /// 员工编码（租户+公司内唯一）
     /// </summary>
-    public string? EmployeeNo { get; set; } = string.Empty;
+    public string? EmployeeCode { get; set; } = string.Empty;
 
     /// <summary>
     /// 姓名
@@ -893,7 +773,7 @@ public class TaktEmployeeImportDto
     public string? EmployeeName { get; set; } = string.Empty;
 
     /// <summary>
-    /// 性别（0=未知，1=男，2=女）
+    /// 性别（字典 sys_user_gender_category；0=未知 1=男 2=女）
     /// </summary>
     public int? Gender { get; set; }
 
@@ -918,116 +798,39 @@ public class TaktEmployeeImportDto
     public string? Email { get; set; } = string.Empty;
 
     /// <summary>
-    /// 籍贯（字典 hr_native_place_code 的 6 位 GB 行政区划代码，人事档案必填）
+    /// 籍贯（字典 hr_native_place_code；列存 6 位 GB 行政区划代码，人事档案必填；与住址子表无关）
     /// </summary>
     public string? NativePlace { get; set; } = string.Empty;
 
     /// <summary>
-    /// 民族（字典 hr_ethnic_code，1～56）
+    /// 民族（字典 hr_ethnic_code；DictValue 1～56）
     /// </summary>
     public int? Ethnicity { get; set; }
 
     /// <summary>
-    /// 最高学历摘要（1=高中及以下，2=大专，3=本科，4=硕士，5=博士；明细见 EmployeeEducations）
+    /// 政治面貌（字典 hr_political_affiliation；0～12；人事档案必填）
     /// </summary>
-    public int? Education { get; set; }
+    public int? PoliticalAffiliation { get; set; }
 
     /// <summary>
-    /// 毕业院校（最高学历摘要）
+    /// 婚姻状况（字典 hr_marital_status；0=未婚 1=已婚 2=离异 3=丧偶；人事档案必填）
     /// </summary>
-    public string? GraduateSchool { get; set; } = string.Empty;
+    public int? MaritalStatus { get; set; }
 
     /// <summary>
-    /// 专业（最高学历摘要）
-    /// </summary>
-    public string? Major { get; set; } = string.Empty;
-
-    /// <summary>
-    /// 实际上岗日期（JoinedDate：入职上班；投影字段，由上岗审批通过后回写，未上岗可空）
-    /// </summary>
-    public DateTime? JoinedDate { get; set; }
-
-    /// <summary>
-    /// 试用期结束日期（投影字段，由上岗审批通过后回写）
-    /// </summary>
-    public DateTime? ProbationEndDate { get; set; }
-
-    /// <summary>
-    /// 转正日期（投影字段，由上岗审批通过后回写）
-    /// </summary>
-    public DateTime? RegularDate { get; set; }
-
-    /// <summary>
-    /// 离职日期（投影字段，由离职审批通过后回写）
-    /// </summary>
-    public DateTime? TerminationDate { get; set; }
-
-    /// <summary>
-    /// 最后工作日（投影字段，由离职审批通过后回写）
-    /// </summary>
-    public DateTime? LastWorkDate { get; set; }
-
-    /// <summary>
-    /// 离职类型（投影字段，由离职审批通过后回写；0=主动辞职，1=公司辞退，2=合同到期，3=退休，9=其他）
-    /// </summary>
-    public int? ResignationType { get; set; }
-
-    /// <summary>
-    /// 离职原因（投影字段，由离职审批通过后回写）
-    /// </summary>
-    public string? ResignationReason { get; set; } = string.Empty;
-
-    /// <summary>
-    /// 员工状态（1=试用期，2=正式，3=离职，4=退休）
+    /// 员工状态（字典 hr_employee_status；1=试用期 2=正式 3=离职 4=退休）
     /// </summary>
     public int? EmployeeStatus { get; set; }
 
     /// <summary>
-    /// 当前主部门ID（任职投影快照；未上岗可空，在岗员工由投影服务保证有值）
-    /// </summary>
-    [JsonConverter(typeof(ValueToStringConverter))]
-    public long? PrimaryDeptId { get; set; }
-
-    /// <summary>
-    /// 当前主岗位ID（任职投影快照；未上岗可空，在岗员工由投影服务保证有值）
-    /// </summary>
-    [JsonConverter(typeof(ValueToStringConverter))]
-    public long? PrimaryPostId { get; set; }
-
-    /// <summary>
-    /// 内置（种子员工不可删）
+    /// 内置（字典 sys_yes_no_type；0=否 1=是；种子员工不可删）
     /// </summary>
     public int? IsBuiltIn { get; set; }
 
     /// <summary>
-    /// 紧急联系人姓名（人事档案必填）
-    /// </summary>
-    public string? EmergencyContactName { get; set; } = string.Empty;
-
-    /// <summary>
-    /// 紧急联系人电话（人事档案必填）
-    /// </summary>
-    public string? EmergencyContactPhone { get; set; } = string.Empty;
-
-    /// <summary>
-    /// 家庭住址（人事档案必填）
-    /// </summary>
-    public string? HomeAddress { get; set; } = string.Empty;
-
-    /// <summary>
-    /// 头像URL
+    /// 头像URL（展示用；档案附件明细见 EmployeeAttachments）
     /// </summary>
     public string? Avatar { get; set; } = string.Empty;
-
-    /// <summary>
-    /// 政治面貌（字典 hr_political_status，0～12；人事档案必填）
-    /// </summary>
-    public int? PoliticalStatus { get; set; }
-
-    /// <summary>
-    /// 婚姻状况（0=未婚，1=已婚，2=离异，3=丧偶；人事档案必填）
-    /// </summary>
-    public int? MaritalStatus { get; set; }
 
     /// <summary>
     /// 员工部门关联（RBAC 全量覆盖，分配走 ITaktRbacService）
@@ -1038,6 +841,61 @@ public class TaktEmployeeImportDto
     /// 员工岗位关联（RBAC 全量覆盖，分配走 ITaktRbacService）
     /// </summary>
     public long[]? EmployeePostIds { get; set; }
+
+    /// <summary>
+    /// 员工地址（家庭/工作/常住）（子表，级联保存）
+    /// </summary>
+    public List<TaktEmployeeAddressCreateDto>? EmployeeAddresses { get; set; }
+
+    /// <summary>
+    /// 教育经历（含最高学历 IsHighest）（子表，级联保存）
+    /// </summary>
+    public List<TaktEmployeeEducationCreateDto>? EmployeeEducations { get; set; }
+
+    /// <summary>
+    /// 家庭成员（含紧急联系人 IsEmergencyContact）（子表，级联保存）
+    /// </summary>
+    public List<TaktEmployeeFamilyCreateDto>? EmployeeFamilies { get; set; }
+
+    /// <summary>
+    /// 外部工作经历（子表，级联保存）
+    /// </summary>
+    public List<TaktEmployeeExperienceCreateDto>? EmployeeExperiences { get; set; }
+
+    /// <summary>
+    /// 技能与证书（子表，级联保存）
+    /// </summary>
+    public List<TaktEmployeeSkillCreateDto>? EmployeeSkills { get; set; }
+
+    /// <summary>
+    /// 劳动合同（子表，级联保存）
+    /// </summary>
+    public List<TaktEmployeeContractCreateDto>? EmployeeContracts { get; set; }
+
+    /// <summary>
+    /// 入职上岗办理（实际上岗日/试用/转正/部门岗位）（子表，级联保存）
+    /// </summary>
+    public List<TaktEmployeeJoinedCreateDto>? EmployeeJoineds { get; set; }
+
+    /// <summary>
+    /// 入职待办（子表，级联保存）
+    /// </summary>
+    public List<TaktEmployeeOnboardingCreateDto>? EmployeeOnboardings { get; set; }
+
+    /// <summary>
+    /// 调动记录（子表，级联保存）
+    /// </summary>
+    public List<TaktEmployeeReassignmentCreateDto>? EmployeeReassignments { get; set; }
+
+    /// <summary>
+    /// 离职办理（子表，级联保存）
+    /// </summary>
+    public List<TaktEmployeeResignationCreateDto>? EmployeeResignations { get; set; }
+
+    /// <summary>
+    /// 档案附件（子表，级联保存）
+    /// </summary>
+    public List<TaktEmployeeAttachmentCreateDto>? EmployeeAttachments { get; set; }
 
     /// <summary>
     /// 扩展字段JSON
@@ -1073,9 +931,9 @@ public class TaktEmployeeExportDto
     public string CompanyCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 员工编号（租户+公司内唯一）
+    /// 员工编码（租户+公司内唯一）
     /// </summary>
-    public string EmployeeNo { get; set; } = string.Empty;
+    public string EmployeeCode { get; set; } = string.Empty;
 
     /// <summary>
     /// 姓名
@@ -1083,7 +941,7 @@ public class TaktEmployeeExportDto
     public string EmployeeName { get; set; } = string.Empty;
 
     /// <summary>
-    /// 性别（0=未知，1=男，2=女）
+    /// 性别（字典 sys_user_gender_category；0=未知 1=男 2=女）
     /// </summary>
     public int Gender { get; set; } = 0;
 
@@ -1108,116 +966,39 @@ public class TaktEmployeeExportDto
     public string? Email { get; set; } = string.Empty;
 
     /// <summary>
-    /// 籍贯（字典 hr_native_place_code 的 6 位 GB 行政区划代码，人事档案必填）
+    /// 籍贯（字典 hr_native_place_code；列存 6 位 GB 行政区划代码，人事档案必填；与住址子表无关）
     /// </summary>
     public string NativePlace { get; set; } = string.Empty;
 
     /// <summary>
-    /// 民族（字典 hr_ethnic_code，1～56）
+    /// 民族（字典 hr_ethnic_code；DictValue 1～56）
     /// </summary>
     public int Ethnicity { get; set; } = 0;
 
     /// <summary>
-    /// 最高学历摘要（1=高中及以下，2=大专，3=本科，4=硕士，5=博士；明细见 EmployeeEducations）
+    /// 政治面貌（字典 hr_political_affiliation；0～12；人事档案必填）
     /// </summary>
-    public int? Education { get; set; }
+    public int PoliticalAffiliation { get; set; } = 0;
 
     /// <summary>
-    /// 毕业院校（最高学历摘要）
+    /// 婚姻状况（字典 hr_marital_status；0=未婚 1=已婚 2=离异 3=丧偶；人事档案必填）
     /// </summary>
-    public string? GraduateSchool { get; set; } = string.Empty;
+    public int MaritalStatus { get; set; } = 0;
 
     /// <summary>
-    /// 专业（最高学历摘要）
-    /// </summary>
-    public string? Major { get; set; } = string.Empty;
-
-    /// <summary>
-    /// 实际上岗日期（JoinedDate：入职上班；投影字段，由上岗审批通过后回写，未上岗可空）
-    /// </summary>
-    public DateTime? JoinedDate { get; set; }
-
-    /// <summary>
-    /// 试用期结束日期（投影字段，由上岗审批通过后回写）
-    /// </summary>
-    public DateTime? ProbationEndDate { get; set; }
-
-    /// <summary>
-    /// 转正日期（投影字段，由上岗审批通过后回写）
-    /// </summary>
-    public DateTime? RegularDate { get; set; }
-
-    /// <summary>
-    /// 离职日期（投影字段，由离职审批通过后回写）
-    /// </summary>
-    public DateTime? TerminationDate { get; set; }
-
-    /// <summary>
-    /// 最后工作日（投影字段，由离职审批通过后回写）
-    /// </summary>
-    public DateTime? LastWorkDate { get; set; }
-
-    /// <summary>
-    /// 离职类型（投影字段，由离职审批通过后回写；0=主动辞职，1=公司辞退，2=合同到期，3=退休，9=其他）
-    /// </summary>
-    public int? ResignationType { get; set; }
-
-    /// <summary>
-    /// 离职原因（投影字段，由离职审批通过后回写）
-    /// </summary>
-    public string? ResignationReason { get; set; } = string.Empty;
-
-    /// <summary>
-    /// 员工状态（1=试用期，2=正式，3=离职，4=退休）
+    /// 员工状态（字典 hr_employee_status；1=试用期 2=正式 3=离职 4=退休）
     /// </summary>
     public int EmployeeStatus { get; set; } = 0;
 
     /// <summary>
-    /// 当前主部门ID（任职投影快照；未上岗可空，在岗员工由投影服务保证有值）
-    /// </summary>
-    [JsonConverter(typeof(ValueToStringConverter))]
-    public long? PrimaryDeptId { get; set; }
-
-    /// <summary>
-    /// 当前主岗位ID（任职投影快照；未上岗可空，在岗员工由投影服务保证有值）
-    /// </summary>
-    [JsonConverter(typeof(ValueToStringConverter))]
-    public long? PrimaryPostId { get; set; }
-
-    /// <summary>
-    /// 内置（种子员工不可删）
+    /// 内置（字典 sys_yes_no_type；0=否 1=是；种子员工不可删）
     /// </summary>
     public int IsBuiltIn { get; set; } = 0;
 
     /// <summary>
-    /// 紧急联系人姓名（人事档案必填）
-    /// </summary>
-    public string EmergencyContactName { get; set; } = string.Empty;
-
-    /// <summary>
-    /// 紧急联系人电话（人事档案必填）
-    /// </summary>
-    public string EmergencyContactPhone { get; set; } = string.Empty;
-
-    /// <summary>
-    /// 家庭住址（人事档案必填）
-    /// </summary>
-    public string HomeAddress { get; set; } = string.Empty;
-
-    /// <summary>
-    /// 头像URL
+    /// 头像URL（展示用；档案附件明细见 EmployeeAttachments）
     /// </summary>
     public string? Avatar { get; set; } = string.Empty;
-
-    /// <summary>
-    /// 政治面貌（字典 hr_political_status，0～12；人事档案必填）
-    /// </summary>
-    public int PoliticalStatus { get; set; } = 0;
-
-    /// <summary>
-    /// 婚姻状况（0=未婚，1=已婚，2=离异，3=丧偶；人事档案必填）
-    /// </summary>
-    public int MaritalStatus { get; set; } = 0;
 
     /// <summary>
     /// 扩展字段JSON

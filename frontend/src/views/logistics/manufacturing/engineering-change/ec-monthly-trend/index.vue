@@ -2,7 +2,7 @@
 <!-- 项目名称：节拍数字工厂 · Takt Plat (TDF) -->
 <!-- 命名空间：@/views/logistics/manufacturing/engineering-change/ec-monthly-trend -->
 <!-- 文件名称：index.vue -->
-<!-- 功能描述：月设变推移（工厂×区分×月份转置表） -->
+<!-- 功能描述：月设变推移（工厂×设变号×部门×月份转置表） -->
 <!-- 版权信息：Copyright (c) 2026 Takt  All rights reserved. -->
 <!-- 免责声明：此软件使用 MIT License，作者不承担任何使用风险。 -->
 <!-- ======================================== -->
@@ -12,6 +12,7 @@
     <ec-monthly-trend-query-form
       v-model:plant-code="plantCode"
       v-model:period-range="periodRange"
+      v-model:ec-no="ecNo"
       v-model:ec-distinction="ecDistinction"
       v-model:change-status="changeStatus"
       v-model:ec-status="ecStatus"
@@ -62,6 +63,7 @@
       :active-tab="activeTab"
       :plant-code="plantCode"
       :period-range="periodRange"
+      :ec-no="ecNo"
       :ec-distinction="ecDistinction"
       :change-status="changeStatus"
       :ec-status="ecStatus"
@@ -101,13 +103,15 @@ const activeTab = ref<'issue' | 'implement'>('issue')
 const plantCode = ref<string | undefined>()
 /** 期间年月 */
 const periodRange = ref<[string, string] | null>(null)
+/** 设变单号 */
+const ecNo = ref('')
 /** 区分 */
 const ecDistinction = ref<number | undefined>()
 /** 变更状态 */
 const changeStatus = ref<number | undefined>()
 /** 设变状态 */
 const ecStatus = ref<number | undefined>()
-/** 部门编码（实施推移） */
+/** 部门编码（设变推移 / 实施推移） */
 const deptCode = ref('')
 /** 明细面板 loading */
 const panelLoading = ref(false)
@@ -195,6 +199,7 @@ async function applyDefaultPlantFromCompany(): Promise<void> {
 /** 重置 */
 async function handleReset() {
   await applyDefaultPlantFromCompany()
+  ecNo.value = ''
   ecDistinction.value = undefined
   changeStatus.value = undefined
   ecStatus.value = undefined

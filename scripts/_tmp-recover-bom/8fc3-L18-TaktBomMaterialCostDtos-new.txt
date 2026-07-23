@@ -1,0 +1,51 @@
+/// <summary>
+/// 机种编码批量回填结果（由型号目的地按产品编码回写 ModelCode）
+/// </summary>
+public class TaktBomMaterialCostBackfillModelCodeResultDto
+{
+    /// <summary>
+    /// 本次扫描的 BOM 行数（符合查询条件）
+    /// </summary>
+    public int ScannedRowCount { get; set; }
+
+    /// <summary>
+    /// 回填机种编码的行数
+    /// </summary>
+    public int PatchedModelCodeRowCount { get; set; }
+
+    /// <summary>
+    /// 处理月份（YYYY-MM）
+    /// </summary>
+    public string ProcessedMonth { get; set; } = string.Empty;
+}
+
+/// <summary>
+/// 机种月平均材料成本批量重算结果
+/// </summary>
+public class TaktBomMaterialCostRecalculateModelAverageResultDto
+{
+    /// <summary>
+    /// 本次扫描的 BOM 行数（符合查询条件）
+    /// </summary>
+    public int ScannedRowCount { get; set; }
+
+    /// <summary>
+    /// 重算的工厂+机种+处理月份组数
+    /// </summary>
+    public int RefreshedGroupCount { get; set; }
+
+    /// <summary>
+    /// 已有机种月平均而跳过的维度组数
+    /// </summary>
+    public int SkippedGroupCount { get; set; }
+
+    /// <summary>
+    /// 强制重算前清零的维度组数
+    /// </summary>
+    public int ResetGroupCount { get; set; }
+
+    /// <summary>
+    /// 涉及处理月份数（日历月，含跳过/重算）
+    /// </summary>
+    public int ProcessedMonthCount { get; set; }
+}

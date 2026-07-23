@@ -22,61 +22,19 @@
     >
       <a-tab-pane
         key="tab-0"
-        :tab="t('common.page.form.tabs.basicinfo') + ' (1/3)'"
+        :tab="t('common.page.form.tabs.basicinfo') + ' (1/4)'"
         force-render
       >
         <div :class="formContentClass">
           <a-row :gutter="24">
             <a-col :span="12">
               <a-form-item
-                :label="t('common.page.entity.tenantcode')"
-                name="tenantCode"
-              >
-                <a-input
-                  v-model:value="formState.tenantCode"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('common.page.entity.tenantcode') })"
-                  show-count
-                  :maxlength="20"
-                  disabled
-                />
-              </a-form-item>
-            </a-col>
-            <a-col :span="12">
-              <a-form-item
-                :label="t('common.page.entity.companycode')"
-                name="companyCode"
-              >
-                <a-input
-                  v-model:value="formState.companyCode"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('common.page.entity.companycode') })"
-                  show-count
-                  :maxlength="20"
-                  disabled
-                />
-              </a-form-item>
-            </a-col>
-            <a-col :span="12">
-              <a-form-item
-                :label="t('common.page.entity.companydefaultculture')"
-                name="companyDefaultCulture"
-              >
-                <a-input
-                  v-model:value="formState.companyDefaultCulture"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('common.page.entity.companydefaultculture') })"
-                  show-count
-                  :maxlength="20"
-                  disabled
-                />
-              </a-form-item>
-            </a-col>
-            <a-col :span="12">
-              <a-form-item
-                :label="t('entity.serviceorder.plantcode')"
+                :label="pi.label('plantCode')"
                 name="plantCode"
               >
                 <a-input
                   v-model:value="formState.plantCode"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.serviceorder.plantcode') })"
+                  :placeholder="pi.ph('plantCode')"
                   show-count
                   :maxlength="4"
                   allow-clear
@@ -86,12 +44,12 @@
             </a-col>
             <a-col :span="12">
               <a-form-item
-                :label="t('entity.serviceorder.code')"
+                :label="pi.label('serviceOrderCode')"
                 name="serviceOrderCode"
               >
                 <a-input
                   v-model:value="formState.serviceOrderCode"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.serviceorder.code') })"
+                  :placeholder="pi.ph('serviceOrderCode')"
                   show-count
                   :maxlength="50"
                   allow-clear
@@ -101,12 +59,12 @@
             </a-col>
             <a-col :span="12">
               <a-form-item
-                :label="t('entity.serviceorder.clientid')"
+                :label="pi.label('clientId')"
                 name="clientId"
               >
                 <a-input
                   v-model:value="formState.clientId"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.serviceorder.clientid') })"
+                  :placeholder="pi.ph('clientId')"
                   show-count
                   :maxlength="20"
                   allow-clear
@@ -115,12 +73,12 @@
             </a-col>
             <a-col :span="12">
               <a-form-item
-                :label="t('entity.serviceorder.clientcode')"
+                :label="pi.label('clientCode')"
                 name="clientCode"
               >
                 <a-input
                   v-model:value="formState.clientCode"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.serviceorder.clientcode') })"
+                  :placeholder="pi.ph('clientCode')"
                   show-count
                   :maxlength="20"
                   allow-clear
@@ -130,26 +88,26 @@
             </a-col>
             <a-col :span="12">
               <a-form-item
-                :label="t('entity.serviceorder.clientname')"
-                name="clientName"
+                :label="pi.label('clientName1')"
+                name="clientName1"
               >
                 <a-input
-                  v-model:value="formState.clientName"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.serviceorder.clientname') })"
+                  v-model:value="formState.clientName1"
+                  :placeholder="pi.ph('clientName1')"
                   show-count
-                  :maxlength="80"
+                  :maxlength="140"
                   allow-clear
                 />
               </a-form-item>
             </a-col>
             <a-col :span="12">
               <a-form-item
-                :label="t('entity.serviceorder.servicecontractid')"
+                :label="pi.label('serviceContractId')"
                 name="serviceContractId"
               >
                 <a-input
                   v-model:value="formState.serviceContractId"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.serviceorder.servicecontractid') })"
+                  :placeholder="pi.ph('serviceContractId')"
                   show-count
                   :maxlength="20"
                   allow-clear
@@ -158,16 +116,58 @@
             </a-col>
             <a-col :span="12">
               <a-form-item
-                :label="t('entity.serviceorder.servicecontractcode')"
+                :label="pi.label('serviceContractCode')"
                 name="serviceContractCode"
               >
                 <a-input
                   v-model:value="formState.serviceContractCode"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.serviceorder.servicecontractcode') })"
+                  :placeholder="pi.ph('serviceContractCode')"
                   show-count
                   :maxlength="50"
                   allow-clear
                   :disabled="!!formData?.serviceOrderId"
+                />
+              </a-form-item>
+            </a-col>
+            <a-col :span="12">
+              <a-form-item
+                :label="pi.label('serviceRequestId')"
+                name="serviceRequestId"
+              >
+                <a-input
+                  v-model:value="formState.serviceRequestId"
+                  :placeholder="pi.ph('serviceRequestId')"
+                  show-count
+                  :maxlength="20"
+                  allow-clear
+                />
+              </a-form-item>
+            </a-col>
+            <a-col :span="12">
+              <a-form-item
+                :label="pi.label('serviceRequestCode')"
+                name="serviceRequestCode"
+              >
+                <a-input
+                  v-model:value="formState.serviceRequestCode"
+                  :placeholder="pi.ph('serviceRequestCode')"
+                  show-count
+                  :maxlength="50"
+                  allow-clear
+                  :disabled="!!formData?.serviceOrderId"
+                />
+              </a-form-item>
+            </a-col>
+            <a-col :span="12">
+              <a-form-item
+                :label="pi.label('orderDate')"
+                name="orderDate"
+              >
+                <a-date-picker
+                  v-model:value="formState.orderDate"
+                  :placeholder="pi.ph('orderDate')"
+                  value-format="YYYY-MM-DD"
+                  style="width: 100%"
                 />
               </a-form-item>
             </a-col>
@@ -176,35 +176,93 @@
       </a-tab-pane>
       <a-tab-pane
         key="tab-1"
-        :tab="t('common.page.form.tabs.basicinfo') + ' (2/3)'"
+        :tab="t('common.page.form.tabs.basicinfo') + ' (2/4)'"
         force-render
       >
         <div :class="formContentClass">
           <a-row :gutter="24">
             <a-col :span="12">
               <a-form-item
-                :label="t('entity.serviceorder.servicerequestid')"
-                name="serviceRequestId"
+                :label="pi.label('orderType')"
+                name="orderType"
               >
-                <a-input
-                  v-model:value="formState.serviceRequestId"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.serviceorder.servicerequestid') })"
-                  show-count
-                  :maxlength="20"
-                  allow-clear
+                <a-input-number
+                  v-model:value="formState.orderType"
+                  :placeholder="pi.ph('orderType')"
+                  style="width: 100%"
                 />
               </a-form-item>
             </a-col>
             <a-col :span="12">
               <a-form-item
-                :label="t('entity.serviceorder.servicerequestcode')"
-                name="serviceRequestCode"
+                :label="pi.label('orderStatus')"
+                name="orderStatus"
+              >
+                <a-input-number
+                  v-model:value="formState.orderStatus"
+                  :placeholder="pi.ph('orderStatus')"
+                  style="width: 100%"
+                />
+              </a-form-item>
+            </a-col>
+            <a-col :span="12">
+              <a-form-item
+                :label="pi.label('totalAmount')"
+                name="totalAmount"
+              >
+                <a-input-number
+                  v-model:value="formState.totalAmount"
+                  :placeholder="pi.ph('totalAmount')"
+                  style="width: 100%"
+                />
+              </a-form-item>
+            </a-col>
+            <a-col :span="12">
+              <a-form-item
+                :label="pi.label('discountAmount')"
+                name="discountAmount"
+              >
+                <a-input-number
+                  v-model:value="formState.discountAmount"
+                  :placeholder="pi.ph('discountAmount')"
+                  style="width: 100%"
+                />
+              </a-form-item>
+            </a-col>
+            <a-col :span="12">
+              <a-form-item
+                :label="pi.label('taxAmount')"
+                name="taxAmount"
+              >
+                <a-input-number
+                  v-model:value="formState.taxAmount"
+                  :placeholder="pi.ph('taxAmount')"
+                  style="width: 100%"
+                />
+              </a-form-item>
+            </a-col>
+            <a-col :span="12">
+              <a-form-item
+                :label="pi.label('actualAmount')"
+                name="actualAmount"
+              >
+                <a-input-number
+                  v-model:value="formState.actualAmount"
+                  :placeholder="pi.ph('actualAmount')"
+                  style="width: 100%"
+                />
+              </a-form-item>
+            </a-col>
+            <a-col :span="12">
+              <a-form-item
+                :label="pi.label('currencyCode')"
+                name="currencyCode"
               >
                 <a-input
-                  v-model:value="formState.serviceRequestCode"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.serviceorder.servicerequestcode') })"
+                  v-model:value="formState.currencyCode"
+                  :placeholder="pi.ph('currencyCode')"
                   show-count
-                  :maxlength="50"
+                  :maxlength="10"
                   allow-clear
                   :disabled="!!formData?.serviceOrderId"
                 />
@@ -212,12 +270,12 @@
             </a-col>
             <a-col :span="12">
               <a-form-item
-                :label="t('entity.serviceorder.orderdate')"
-                name="orderDate"
+                :label="pi.label('plannedStartDate')"
+                name="plannedStartDate"
               >
                 <a-date-picker
-                  v-model:value="formState.orderDate"
-                  :placeholder="t('common.page.form.placeholder.select', { field: t('entity.serviceorder.orderdate') })"
+                  v-model:value="formState.plannedStartDate"
+                  :placeholder="pi.ph('plannedStartDate')"
                   value-format="YYYY-MM-DD"
                   style="width: 100%"
                 />
@@ -225,88 +283,27 @@
             </a-col>
             <a-col :span="12">
               <a-form-item
-                :label="t('entity.serviceorder.ordertype')"
-                name="orderType"
+                :label="pi.label('plannedEndDate')"
+                name="plannedEndDate"
               >
-                <a-input-number
-                  v-model:value="formState.orderType"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.serviceorder.ordertype') })"
+                <a-date-picker
+                  v-model:value="formState.plannedEndDate"
+                  :placeholder="pi.ph('plannedEndDate')"
+                  value-format="YYYY-MM-DD"
                   style="width: 100%"
                 />
               </a-form-item>
             </a-col>
             <a-col :span="12">
               <a-form-item
-                :label="t('entity.serviceorder.orderstatus')"
-                name="orderStatus"
+                :label="pi.label('actualStartDate')"
+                name="actualStartDate"
               >
-                <a-input-number
-                  v-model:value="formState.orderStatus"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.serviceorder.orderstatus') })"
+                <a-date-picker
+                  v-model:value="formState.actualStartDate"
+                  :placeholder="pi.ph('actualStartDate')"
+                  value-format="YYYY-MM-DD"
                   style="width: 100%"
-                />
-              </a-form-item>
-            </a-col>
-            <a-col :span="12">
-              <a-form-item
-                :label="t('entity.serviceorder.totalamount')"
-                name="totalAmount"
-              >
-                <a-input-number
-                  v-model:value="formState.totalAmount"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.serviceorder.totalamount') })"
-                  style="width: 100%"
-                />
-              </a-form-item>
-            </a-col>
-            <a-col :span="12">
-              <a-form-item
-                :label="t('entity.serviceorder.discountamount')"
-                name="discountAmount"
-              >
-                <a-input-number
-                  v-model:value="formState.discountAmount"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.serviceorder.discountamount') })"
-                  style="width: 100%"
-                />
-              </a-form-item>
-            </a-col>
-            <a-col :span="12">
-              <a-form-item
-                :label="t('entity.serviceorder.taxamount')"
-                name="taxAmount"
-              >
-                <a-input-number
-                  v-model:value="formState.taxAmount"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.serviceorder.taxamount') })"
-                  style="width: 100%"
-                />
-              </a-form-item>
-            </a-col>
-            <a-col :span="12">
-              <a-form-item
-                :label="t('entity.serviceorder.actualamount')"
-                name="actualAmount"
-              >
-                <a-input-number
-                  v-model:value="formState.actualAmount"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.serviceorder.actualamount') })"
-                  style="width: 100%"
-                />
-              </a-form-item>
-            </a-col>
-            <a-col :span="12">
-              <a-form-item
-                :label="t('entity.serviceorder.currencycode')"
-                name="currencyCode"
-              >
-                <a-input
-                  v-model:value="formState.currencyCode"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.serviceorder.currencycode') })"
-                  show-count
-                  :maxlength="3"
-                  allow-clear
-                  :disabled="!!formData?.serviceOrderId"
                 />
               </a-form-item>
             </a-col>
@@ -315,58 +312,19 @@
       </a-tab-pane>
       <a-tab-pane
         key="tab-2"
-        :tab="t('common.page.form.tabs.basicinfo') + ' (3/3)'"
+        :tab="t('common.page.form.tabs.basicinfo') + ' (3/4)'"
         force-render
       >
         <div :class="formContentClass">
           <a-row :gutter="24">
             <a-col :span="24">
               <a-form-item
-                :label="t('entity.serviceorder.plannedstartdate')"
-                name="plannedStartDate"
-              >
-                <a-date-picker
-                  v-model:value="formState.plannedStartDate"
-                  :placeholder="t('common.page.form.placeholder.select', { field: t('entity.serviceorder.plannedstartdate') })"
-                  value-format="YYYY-MM-DD"
-                  style="width: 100%"
-                />
-              </a-form-item>
-            </a-col>
-            <a-col :span="24">
-              <a-form-item
-                :label="t('entity.serviceorder.plannedenddate')"
-                name="plannedEndDate"
-              >
-                <a-date-picker
-                  v-model:value="formState.plannedEndDate"
-                  :placeholder="t('common.page.form.placeholder.select', { field: t('entity.serviceorder.plannedenddate') })"
-                  value-format="YYYY-MM-DD"
-                  style="width: 100%"
-                />
-              </a-form-item>
-            </a-col>
-            <a-col :span="24">
-              <a-form-item
-                :label="t('entity.serviceorder.actualstartdate')"
-                name="actualStartDate"
-              >
-                <a-date-picker
-                  v-model:value="formState.actualStartDate"
-                  :placeholder="t('common.page.form.placeholder.select', { field: t('entity.serviceorder.actualstartdate') })"
-                  value-format="YYYY-MM-DD"
-                  style="width: 100%"
-                />
-              </a-form-item>
-            </a-col>
-            <a-col :span="24">
-              <a-form-item
-                :label="t('entity.serviceorder.actualenddate')"
+                :label="pi.label('actualEndDate')"
                 name="actualEndDate"
               >
                 <a-date-picker
                   v-model:value="formState.actualEndDate"
-                  :placeholder="t('common.page.form.placeholder.select', { field: t('entity.serviceorder.actualenddate') })"
+                  :placeholder="pi.ph('actualEndDate')"
                   value-format="YYYY-MM-DD"
                   style="width: 100%"
                 />
@@ -374,15 +332,67 @@
             </a-col>
             <a-col :span="24">
               <a-form-item
-                :label="t('entity.serviceorder.serviceby')"
+                :label="pi.label('serviceBy')"
                 name="serviceBy"
               >
                 <a-input
                   v-model:value="formState.serviceBy"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.serviceorder.serviceby') })"
+                  :placeholder="pi.ph('serviceBy')"
                   show-count
                   :maxlength="50"
                   allow-clear
+                />
+              </a-form-item>
+            </a-col>
+          </a-row>
+        </div>
+      </a-tab-pane>
+      <a-tab-pane
+        key="tab-3"
+        :tab="t('common.page.form.tabs.basicinfo') + ' (4/4)'"
+        force-render
+      >
+        <div :class="formContentClass">
+          <a-row :gutter="24">
+            <a-col :span="24">
+              <a-form-item
+                :label="pi.label('tenantCode')"
+                name="tenantCode"
+              >
+                <a-input
+                  v-model:value="formState.tenantCode"
+                  :placeholder="pi.ph('tenantCode')"
+                  show-count
+                  :maxlength="20"
+                  disabled
+                />
+              </a-form-item>
+            </a-col>
+            <a-col :span="24">
+              <a-form-item
+                :label="pi.label('companyCode')"
+                name="companyCode"
+              >
+                <a-input
+                  v-model:value="formState.companyCode"
+                  :placeholder="pi.ph('companyCode')"
+                  show-count
+                  :maxlength="20"
+                  disabled
+                />
+              </a-form-item>
+            </a-col>
+            <a-col :span="24">
+              <a-form-item
+                :label="pi.label('companyDefaultCulture')"
+                name="companyDefaultCulture"
+              >
+                <a-input
+                  v-model:value="formState.companyDefaultCulture"
+                  :placeholder="pi.ph('companyDefaultCulture')"
+                  show-count
+                  :maxlength="20"
+                  disabled
                 />
               </a-form-item>
             </a-col>
@@ -399,7 +409,7 @@
                     >
                       <span class="takt-form-label-hint-icon"><RiQuestionLine class="takt-remix-icon" /></span>
                     </a-tooltip>
-                    <span>{{ t('common.page.entity.extfield') }}</span>
+                    <span>{{ pi.label('extField') }}</span>
                   </span>
                 </template>
                 <a-textarea
@@ -414,12 +424,12 @@
             </a-col>
             <a-col :span="24">
               <a-form-item
-                :label="t('common.page.entity.remark')"
+                :label="pi.label('remark')"
                 name="remark"
               >
                 <a-textarea
                   v-model:value="formState.remark"
-                  :placeholder="t('common.page.form.placeholder.optional', { field: t('common.page.entity.remark') })"
+                  :placeholder="pi.ph('remark')"
                   :rows="4"
                   show-count
                   :maxlength="400"
@@ -442,6 +452,10 @@
 import { reactive, watch, computed, ref } from 'vue'
 import { useI18n } from 'vue-i18n'
 import type { Rule } from 'ant-design-vue/es/form'
+import { useServiceOrderI18n } from '../composables/use-service-order-i18n'
+
+/** 实体字段 i18n */
+const pi = useServiceOrderI18n()
 import type { ServiceOrderCreate } from '@/types/logistics/customer-service/service-order'
 import { RiQuestionLine } from '@remixicon/vue'
 import { useTenantStore } from '@/stores/identity/tenant'
@@ -450,7 +464,7 @@ import { useUserStore } from '@/stores/identity/user'
 /** i18n 翻译函数 */
 const { t } = useI18n()
 
-/** Pinia：租户/公司上下文 */
+/** Pinia：租户上下文 */
 const tenantStore = useTenantStore()
 /** Pinia：用户上下文 */
 const userStore = useUserStore()
@@ -458,25 +472,23 @@ const userStore = useUserStore()
 /**
  * 上下文隔离字段：租户 / 公司 / 公司默认语言（登录或公司切换注入，表单只读）
  * @param target 表单数据
- * @param force 为 true 时强制覆盖（新增态或公司切换）
+ * @param force 为 true 时强制覆盖（新增态或上下文切换）
  */
 function applyScopeDefaults(target: Record<string, unknown>, force = false) {
-  if (formFields.includes('tenantCode') && (force || !target.tenantCode)) {
+  if (force || !target.tenantCode) {
     target.tenantCode = tenantStore.tenantCode
   }
-  if (formFields.includes('companyCode') && (force || !target.companyCode)) {
+  if (force || !target.companyCode) {
     target.companyCode = tenantStore.companyCode
   }
-  if (formFields.includes('companyDefaultCulture') && (force || !target.companyDefaultCulture)) {
+  if (force || !target.companyDefaultCulture) {
     target.companyDefaultCulture = userStore.userInfo?.companyDefaultCulture ?? ''
   }
 }
-/** 表单内容区高度 class（字段多时 tab-10 行） */
-const formContentClass = computed(() => (formFields.length > 10 ? 'takt-form-content-rows-10' : 'takt-form-content-rows-5'))
+/** 表单内容区高度 class（多 Tab 大表单固定 10 行高度） */
+const formContentClass = 'takt-form-content-rows-10'
 /** 当前激活的 Tab key */
 const activeTab = ref('tab-0')
-/** CreateDto 字段名列表（与 formState 键对齐） */
-const formFields = ["tenantCode","companyCode","companyDefaultCulture","plantCode","serviceOrderCode","clientId","clientCode","clientName","serviceContractId","serviceContractCode","serviceRequestId","serviceRequestCode","orderDate","orderType","orderStatus","totalAmount","discountAmount","taxAmount","actualAmount","currencyCode","plannedStartDate","plannedEndDate","actualStartDate","actualEndDate","serviceBy","extField","remark"]
 
 
 /** 父级传入的编辑 DTO；新增时为 undefined 或空对象 */
@@ -529,8 +541,7 @@ watch(
 watch(
   () => [tenantStore.tenantCode, tenantStore.companyCode, userStore.userInfo?.companyDefaultCulture] as const,
   () => {
-    const isCreate = !props.formData?.serviceOrderId
-    if (isCreate) {
+    if (!props.formData?.serviceOrderId) {
       applyScopeDefaults(formState, true)
     }
   },
@@ -541,53 +552,53 @@ const rules = computed<Record<string, Rule[]>>(() => ({
   plantCode: [
     {
       required: true,
-      message: t('common.page.form.placeholder.required', { field: t('entity.serviceorder.plantcode') }),
+      message: pi.ph('plantCode'),
       trigger: 'blur'
     }
   ],
   serviceOrderCode: [
     {
       required: true,
-      message: t('common.page.form.placeholder.required', { field: t('entity.serviceorder.code') }),
+      message: pi.ph('serviceOrderCode'),
       trigger: 'blur'
     }
   ],
   clientId: [
     {
       required: true,
-      message: t('common.page.form.placeholder.required', { field: t('entity.serviceorder.clientid') }),
+      message: pi.ph('clientId'),
       trigger: 'blur'
     }
   ],
   clientCode: [
     {
       required: true,
-      message: t('common.page.form.placeholder.required', { field: t('entity.serviceorder.clientcode') }),
+      message: pi.ph('clientCode'),
       trigger: 'blur'
     }
   ],
-  clientName: [
+  clientName1: [
     {
       required: true,
-      message: t('common.page.form.placeholder.required', { field: t('entity.serviceorder.clientname') }),
+      message: pi.ph('clientName1'),
       trigger: 'blur'
     }
   ],
   orderDate: [
     {
       required: true,
-      message: t('common.page.form.placeholder.select', { field: t('entity.serviceorder.orderdate') }),
+      message: pi.ph('orderDate'),
       trigger: 'change'
     }
   ],
   orderType: [{
     validator: async (_rule, value) => {
       if (value === undefined || value === null || value === '') {
-        return Promise.reject(t('common.page.form.placeholder.select', { field: t('entity.serviceorder.ordertype') }))
+        return Promise.reject(pi.ph('orderType'))
       }
       const num = typeof value === 'number' ? value : Number(value)
       if (!Number.isFinite(num)) {
-        return Promise.reject(t('common.page.form.placeholder.select', { field: t('entity.serviceorder.ordertype') }))
+        return Promise.reject(pi.ph('orderType'))
       }
       return Promise.resolve()
     },
@@ -596,11 +607,11 @@ const rules = computed<Record<string, Rule[]>>(() => ({
   orderStatus: [{
     validator: async (_rule, value) => {
       if (value === undefined || value === null || value === '') {
-        return Promise.reject(t('common.page.form.placeholder.select', { field: t('entity.serviceorder.orderstatus') }))
+        return Promise.reject(pi.ph('orderStatus'))
       }
       const num = typeof value === 'number' ? value : Number(value)
       if (!Number.isFinite(num)) {
-        return Promise.reject(t('common.page.form.placeholder.select', { field: t('entity.serviceorder.orderstatus') }))
+        return Promise.reject(pi.ph('orderStatus'))
       }
       return Promise.resolve()
     },
@@ -609,11 +620,11 @@ const rules = computed<Record<string, Rule[]>>(() => ({
   totalAmount: [{
     validator: async (_rule, value) => {
       if (value === undefined || value === null || value === '') {
-        return Promise.reject(t('common.page.form.placeholder.select', { field: t('entity.serviceorder.totalamount') }))
+        return Promise.reject(pi.ph('totalAmount'))
       }
       const num = typeof value === 'number' ? value : Number(value)
       if (!Number.isFinite(num)) {
-        return Promise.reject(t('common.page.form.placeholder.select', { field: t('entity.serviceorder.totalamount') }))
+        return Promise.reject(pi.ph('totalAmount'))
       }
       return Promise.resolve()
     },
@@ -622,11 +633,11 @@ const rules = computed<Record<string, Rule[]>>(() => ({
   discountAmount: [{
     validator: async (_rule, value) => {
       if (value === undefined || value === null || value === '') {
-        return Promise.reject(t('common.page.form.placeholder.select', { field: t('entity.serviceorder.discountamount') }))
+        return Promise.reject(pi.ph('discountAmount'))
       }
       const num = typeof value === 'number' ? value : Number(value)
       if (!Number.isFinite(num)) {
-        return Promise.reject(t('common.page.form.placeholder.select', { field: t('entity.serviceorder.discountamount') }))
+        return Promise.reject(pi.ph('discountAmount'))
       }
       return Promise.resolve()
     },
@@ -635,11 +646,11 @@ const rules = computed<Record<string, Rule[]>>(() => ({
   taxAmount: [{
     validator: async (_rule, value) => {
       if (value === undefined || value === null || value === '') {
-        return Promise.reject(t('common.page.form.placeholder.select', { field: t('entity.serviceorder.taxamount') }))
+        return Promise.reject(pi.ph('taxAmount'))
       }
       const num = typeof value === 'number' ? value : Number(value)
       if (!Number.isFinite(num)) {
-        return Promise.reject(t('common.page.form.placeholder.select', { field: t('entity.serviceorder.taxamount') }))
+        return Promise.reject(pi.ph('taxAmount'))
       }
       return Promise.resolve()
     },
@@ -648,11 +659,11 @@ const rules = computed<Record<string, Rule[]>>(() => ({
   actualAmount: [{
     validator: async (_rule, value) => {
       if (value === undefined || value === null || value === '') {
-        return Promise.reject(t('common.page.form.placeholder.select', { field: t('entity.serviceorder.actualamount') }))
+        return Promise.reject(pi.ph('actualAmount'))
       }
       const num = typeof value === 'number' ? value : Number(value)
       if (!Number.isFinite(num)) {
-        return Promise.reject(t('common.page.form.placeholder.select', { field: t('entity.serviceorder.actualamount') }))
+        return Promise.reject(pi.ph('actualAmount'))
       }
       return Promise.resolve()
     },
@@ -661,7 +672,7 @@ const rules = computed<Record<string, Rule[]>>(() => ({
   currencyCode: [
     {
       required: true,
-      message: t('common.page.form.placeholder.required', { field: t('entity.serviceorder.currencycode') }),
+      message: pi.ph('currencyCode'),
       trigger: 'blur'
     }
   ],

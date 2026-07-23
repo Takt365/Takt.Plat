@@ -89,7 +89,7 @@ public class TaktIsoCodeService : TaktServiceBase, ITaktIsoCodeService
     }
 
     /// <summary>
-    /// 获取ISO编码选项列表（仅启用；DictValue=IsoCode 供编号规则等部门段引用）
+    /// 获取ISO编码选项列表（仅启用；DictValue=IsoCode 供编码规则等部门段引用）
     /// </summary>
     /// <returns>下拉选项</returns>
     public async Task<List<TaktSelectOption>> GetIsoCodeOptionsAsync(int? isoCodeCategory = null)

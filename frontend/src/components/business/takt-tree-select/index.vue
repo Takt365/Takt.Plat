@@ -30,6 +30,7 @@
       :field-names="treeFieldNames"
       :virtual="shouldUseVirtual"
       :list-height="listHeight"
+      :load-data="apiLazyLoadData"
       popup-class-name="takt-tree-select-dropdown"
       v-bind="{
         ...filteredAttrs,
@@ -58,10 +59,15 @@ import { Button } from 'ant-design-vue'
 import type { TaktTreeSelectOption } from '@/types/common'
 import request from '@/api/request'
 import { createLogger } from '@/utils/logger'
+import {
+  mapLazyTreeNodes,
+  mergeLoadedChildren,
+  taktIsLeafFlag,
+} from '@/composables/use-lazy-tree'
 const treeSelectLogger = createLogger('takt-tree-select')
 
-/** API 树节点最大数量（08-overflow-fullstack） */
-const MAX_TREE_NODES = 500
+/** API 树节点告警上限（08-overflow；懒加载按已加载节点计） */
+const MAX_TREE_NODES = 5000
 
 const { t } = useI18n()
 type TreeValue = string | number
@@ -141,6 +147,11 @@ interface Props {
     value?: string
     children?: string
   }
+  /**
+   * 懒加载模式（apiUrl 按 parentId 分层拉取）。
+   * true=强制懒加载；false=一次拉全树；undefined=根据首包是否含 isLeaf 自动判断
+   */
+  lazy?: boolean | undefined
 }
 
 const props = withDefaults(defineProps<Props>(), {
@@ -166,7 +177,8 @@ const props = withDefaults(defineProps<Props>(), {
     label: 'title',
     value: 'value',
     children: 'children'
-  })
+  }),
+  lazy: undefined,
 })
 
 const emit = defineEmits<{
@@ -182,6 +194,8 @@ const expandedKeys = ref<(string | number)[]>([])
 const treeSelectRef = ref<TreeSelectRefLike | null>(null) // 预留供外部访问 TreeSelect 组件实例
 const dropdownVisible = ref(false)
 const actionButtonsRef = ref<HTMLElement | null>(null)
+/** 运行时是否启用 api 懒加载（由 prop.lazy 或首包 isLeaf 推断） */
+const lazyApiEnabled = ref(false)
 
 // 内部值，优先使用 value（v-model:value），否则使用 modelValue（v-model）
 const internalValue = computed(() => props.value ?? props.modelValue)
@@ -300,7 +314,7 @@ function convertValueType(value: string | number, expectedType: 'number' | 'stri
 function convertToTreeData(tree: TreeNodeLike[]): AntTreeSelectNode[] {
   const { label: labelField, value: valueField, children: childrenField } = treeFieldNames.value
   const expectedValueType = props.apiUrl ? 'string' as const : inferValueType(props.modelValue)
-  
+
   function convertNode(node: TreeNodeLike): AntTreeSelectNode {
     const label = String(node.dictLabel ?? (node as { title?: string }).title ?? '')
     let value = (node.dictValue ?? (node as { value?: string | number }).value ?? '') as string | number
@@ -308,21 +322,48 @@ function convertToTreeData(tree: TreeNodeLike[]): AntTreeSelectNode[] {
     value = props.apiUrl
       ? convertValueType(value, 'string', `树节点 "${label}"`)
       : convertValueType(value, expectedValueType, `树节点 "${label}"`)
-    
+
+    const leaf = taktIsLeafFlag(node.isLeaf)
     const result: AntTreeSelectNode = {
       ...node,
       [labelField]: label,
       [valueField]: value,
     }
-    
+    if (lazyApiEnabled.value || props.lazy === true) {
+      result.isLeaf = leaf
+    }
+
     if (node.children?.length) {
       result[childrenField] = node.children.map(convertNode)
+    } else if (!leaf && (lazyApiEnabled.value || props.lazy === true) && props.apiUrl) {
+      // 懒加载非叶子：不设 children，由 loadData 拉取
+      delete result[childrenField]
     }
-    
+
     return result
   }
-  
+
   return tree.map(convertNode)
+}
+
+/**
+ * 将 API 一层选项规范为带 isLeaf 的原始节点（children 不设）
+ * @param rows API 返回
+ */
+function normalizeApiLazyOptions(rows: TaktTreeSelectOption[]): TreeNodeLike[] {
+  return mapLazyTreeNodes(rows, {
+    getKey: (r) => String(r.dictValue ?? ''),
+    getTitle: (r) => String(r.dictLabel ?? ''),
+    isLeaf: (r) => taktIsLeafFlag(r.isLeaf),
+  }).map((n) => {
+    const { key: _k, title: _t, children: _c, ...rest } = n
+    return {
+      ...rest,
+      dictValue: n.key,
+      dictLabel: n.title,
+      isLeaf: n.isLeaf,
+    } as TreeNodeLike
+  })
 }
 
 // 计算最终的树形数据（优先使用 props.treeData，否则使用从 API 加载的数据）
@@ -333,7 +374,53 @@ const treeData = computed(() => {
   return convertToTreeData(rawData.value)
 })
 
-// 加载数据（有 treeData 时直接用，不请求 api；仅当既无 apiUrl 且未传入 treeData 时才告警）
+/**
+ * apiUrl 懒加载：展开时按 parentId 拉取一层子节点（无 apiUrl 或外部 treeData / 非懒模式时不绑定）
+ * @param treeNode Ant TreeSelect 节点
+ */
+async function onApiLazyLoadData(treeNode: Record<string, unknown>) {
+  if (!props.apiUrl || props.treeData !== undefined || !lazyApiEnabled.value) return
+  const valueField = treeFieldNames.value.value
+  const dataRef = (treeNode.dataRef ?? treeNode) as Record<string, unknown>
+  const parentId = dataRef[valueField] ?? dataRef.value ?? dataRef.key
+  if (parentId == null || parentId === '') return
+  const existing = dataRef[treeFieldNames.value.children] as unknown[] | undefined
+  if (existing?.length) return
+  try {
+    const data = await request<TaktTreeSelectOption[]>({
+      url: props.apiUrl,
+      method: 'get',
+      params: { parentId: String(parentId) },
+    })
+    const children = normalizeApiLazyOptions(Array.isArray(data) ? data : [])
+    rawData.value = mergeLoadedChildren(
+      rawData.value as unknown as Record<string, unknown>[],
+      String(parentId),
+      children as unknown as Record<string, unknown>[],
+      { keyField: 'dictValue', childrenField: 'children' },
+    ) as unknown as TreeNodeLike[]
+  } catch (error) {
+    treeSelectLogger.error('懒加载子节点失败', { action: 'apiLazyLoadData', parentId }, error)
+  }
+}
+
+/** 仅懒模式向 a-tree-select 传入 loadData */
+const apiLazyLoadData = computed(() =>
+  props.apiUrl && props.treeData === undefined && lazyApiEnabled.value ? onApiLazyLoadData : undefined,
+)
+
+/**
+ * 根据 prop / 首包推断是否启用懒加载
+ * @param rows API 首包
+ */
+function resolveLazyApiEnabled(rows: TaktTreeSelectOption[]) {
+  if (props.lazy === true) return true
+  if (props.lazy === false) return false
+  // 自动：后端返回了 isLeaf（AdminDivision 懒模式）；Dept 等全量树不含 isLeaf
+  return rows.some((r) => typeof r.isLeaf === 'boolean')
+}
+
+// 加载根层数据（有 treeData 时直接用；懒/自动模式带 parentId=0；lazy=false 不传参以兼容旧全量接口）
 const loadData = async () => {
   if (props.treeData !== undefined) {
     return
@@ -347,9 +434,12 @@ const loadData = async () => {
     loading.value = true
     const data = await request<TaktTreeSelectOption[]>({
       url: props.apiUrl,
-      method: 'get'
+      method: 'get',
+      ...(props.lazy === false ? {} : { params: { parentId: '0' } }),
     })
-    rawData.value = Array.isArray(data) ? data : []
+    const rows = Array.isArray(data) ? data : []
+    lazyApiEnabled.value = resolveLazyApiEnabled(rows)
+    rawData.value = lazyApiEnabled.value ? normalizeApiLazyOptions(rows) : rows
     if (totalNodeCount.value > MAX_TREE_NODES) {
       treeSelectLogger.warn('树节点数超过上限', {
         action: 'loadData',

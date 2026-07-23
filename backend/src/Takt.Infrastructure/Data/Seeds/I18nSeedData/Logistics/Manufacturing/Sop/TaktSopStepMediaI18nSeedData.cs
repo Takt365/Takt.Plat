@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Infrastructure.Data.Seeds.I18nSeedData.Logistics.Manufacturing.Sop
 // 文件名称：TaktSopStepMediaI18nSeedData.cs
-// 创建时间：2026-07-20
+// 创建时间：2026-07-23
 // 创建人：Takt365(Auto Generated)
 // 功能描述：TaktSopStepMedia 实体字段国际化种子（无对应 frontend locales；TranslationText 取自 ColumnDescription，ContextNote 取自属性 XML summary）
 // 
@@ -91,13 +91,13 @@ public class TaktSopStepMediaI18nSeedData : ITaktSeedDataCoordinator
             new TranslationSeedItem("entity.sopstepmedia._self", "zh-HK", "SOP 工步多媒体信息_hk", "实体名称"),
 
             // entity.sopstepmedia.stepid
-            new TranslationSeedItem("entity.sopstepmedia.stepid", "en-US", "工步ID_us", "工步 ID（选项 TaktSopSteps/options，DictValue=Id）"),
+            new TranslationSeedItem("entity.sopstepmedia.stepid", "en-US", "工步ID_us", "工步 ID（选项 TaktSopSteps/options；DictValue=Id）"),
             // entity.sopstepmedia.stepid
-            new TranslationSeedItem("entity.sopstepmedia.stepid", "ja-JP", "工步ID_jp", "工步 ID（选项 TaktSopSteps/options，DictValue=Id）"),
+            new TranslationSeedItem("entity.sopstepmedia.stepid", "ja-JP", "工步ID_jp", "工步 ID（选项 TaktSopSteps/options；DictValue=Id）"),
             // entity.sopstepmedia.stepid
-            new TranslationSeedItem("entity.sopstepmedia.stepid", "zh-CN", "工步ID", "工步 ID（选项 TaktSopSteps/options，DictValue=Id）"),
+            new TranslationSeedItem("entity.sopstepmedia.stepid", "zh-CN", "工步ID", "工步 ID（选项 TaktSopSteps/options；DictValue=Id）"),
             // entity.sopstepmedia.stepid
-            new TranslationSeedItem("entity.sopstepmedia.stepid", "zh-HK", "工步ID_hk", "工步 ID（选项 TaktSopSteps/options，DictValue=Id）"),
+            new TranslationSeedItem("entity.sopstepmedia.stepid", "zh-HK", "工步ID_hk", "工步 ID（选项 TaktSopSteps/options；DictValue=Id）"),
 
             // entity.sopstepmedia.mediatype
             new TranslationSeedItem("entity.sopstepmedia.mediatype", "en-US", "媒体类型_us", "媒体类型（字典 logistics_sop_media_type；1=图片JPG/PNG，2=视频MP4，3=PDF，4=3D轻量化）"),

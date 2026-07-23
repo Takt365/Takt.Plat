@@ -4,7 +4,7 @@
 // 文件名称：TaktNumberingGenerator.cs
 // 创建时间：2026-06-24
 // 创建人：Takt365(Cursor AI)
-// 功能描述：ITaktNumberingGenerator 实现（按规则编码递增流水并写回编号规则表）
+// 功能描述：ITaktNumberingGenerator 实现（按规则编码递增流水并写回编码规则表）
 //
 // 版权信息：Copyright (c) 2026 Takt  All rights reserved.
 // 免责声明：此软件使用 MIT License，作者不承担任何使用风险。
@@ -20,7 +20,7 @@ using Takt.Shared.Models;
 namespace Takt.Infrastructure.Services;
 
 /// <summary>
-/// 业务编号生成器实现
+/// 业务编码生成器实现
 /// </summary>
 public sealed class TaktNumberingGenerator : ITaktNumberingGenerator
 {
@@ -30,7 +30,7 @@ public sealed class TaktNumberingGenerator : ITaktNumberingGenerator
     /// <summary>
     /// 构造函数
     /// </summary>
-    /// <param name="numberingRepository">编号规则仓储</param>
+    /// <param name="numberingRepository">编码规则仓储</param>
     /// <param name="userContext">用户上下文</param>
     public TaktNumberingGenerator(
         ITaktCompanyRepository<TaktNumbering> numberingRepository,
@@ -41,7 +41,7 @@ public sealed class TaktNumberingGenerator : ITaktNumberingGenerator
     }
 
     /// <summary>
-    /// 生成下一个业务编号（递增流水并持久化）
+    /// 生成下一个业务编码（递增流水并持久化）
     /// </summary>
     /// <param name="ruleCode">规则编码</param>
     /// <param name="cancellationToken">取消令牌</param>
@@ -54,13 +54,13 @@ public sealed class TaktNumberingGenerator : ITaktNumberingGenerator
         var rule = await LoadActiveRuleByCodeAsync(ruleCode.Trim(), throwIfMissing: true);
         if (rule == null)
         {
-            throw new TaktBusinessException($"编号规则「{ruleCode}」不存在");
+            throw new TaktBusinessException($"编码规则「{ruleCode}」不存在");
         }
         return await PersistNextCodeAsync(rule, cancellationToken);
     }
 
     /// <summary>
-    /// 预览下一个业务编号（不占用流水号、不写库）
+    /// 预览下一个业务编码（不占用流水号、不写库）
     /// </summary>
     /// <param name="ruleCode">规则编码</param>
     /// <param name="cancellationToken">取消令牌</param>
@@ -73,7 +73,7 @@ public sealed class TaktNumberingGenerator : ITaktNumberingGenerator
         var rule = await LoadActiveRuleByCodeAsync(ruleCode.Trim(), throwIfMissing: true);
         if (rule == null)
         {
-            throw new TaktBusinessException($"编号规则「{ruleCode}」不存在");
+            throw new TaktBusinessException($"编码规则「{ruleCode}」不存在");
         }
         var now = DateTime.Now;
         var model = ToModel(rule);
@@ -87,7 +87,7 @@ public sealed class TaktNumberingGenerator : ITaktNumberingGenerator
     }
 
     /// <summary>
-    /// 尝试生成下一个业务编号；规则不存在或已禁用时返回 null
+    /// 尝试生成下一个业务编码；规则不存在或已禁用时返回 null
     /// </summary>
     /// <param name="ruleCode">规则编码</param>
     /// <param name="cancellationToken">取消令牌</param>
@@ -109,9 +109,9 @@ public sealed class TaktNumberingGenerator : ITaktNumberingGenerator
     }
 
     /// <summary>
-    /// 递增流水并写回编号规则
+    /// 递增流水并写回编码规则
     /// </summary>
-    /// <param name="rule">编号规则实体</param>
+    /// <param name="rule">编码规则实体</param>
     /// <param name="cancellationToken">取消令牌</param>
     /// <returns>生成结果</returns>
     private async Task<TaktNumberingModel> PersistNextCodeAsync(
@@ -135,11 +135,11 @@ public sealed class TaktNumberingGenerator : ITaktNumberingGenerator
     }
 
     /// <summary>
-    /// 按规则编码加载当前租户/公司下已启用的编号规则
+    /// 按规则编码加载当前租户/公司下已启用的编码规则
     /// </summary>
     /// <param name="ruleCode">规则编码</param>
     /// <param name="throwIfMissing">不存在或禁用时是否抛异常</param>
-    /// <returns>编号规则实体；不可用时可能为 null</returns>
+    /// <returns>编码规则实体；不可用时可能为 null</returns>
     private async Task<TaktNumbering?> LoadActiveRuleByCodeAsync(string ruleCode, bool throwIfMissing)
     {
         var tenantCode = _userContext.TenantCode;
@@ -161,7 +161,7 @@ public sealed class TaktNumberingGenerator : ITaktNumberingGenerator
         {
             if (throwIfMissing)
             {
-                throw new TaktBusinessException($"编号规则「{ruleCode}」不存在");
+                throw new TaktBusinessException($"编码规则「{ruleCode}」不存在");
             }
             return null;
         }
@@ -169,7 +169,7 @@ public sealed class TaktNumberingGenerator : ITaktNumberingGenerator
         {
             if (throwIfMissing)
             {
-                throw new TaktBusinessException($"编号规则「{ruleCode}」已禁用");
+                throw new TaktBusinessException($"编码规则「{ruleCode}」已禁用");
             }
             return null;
         }
@@ -177,10 +177,10 @@ public sealed class TaktNumberingGenerator : ITaktNumberingGenerator
     }
 
     /// <summary>
-    /// 实体转编号模型（供 TaktNumberingHelper 纯计算）
+    /// 实体转编码模型（供 TaktNumberingHelper 纯计算）
     /// </summary>
-    /// <param name="entity">编号规则实体</param>
-    /// <returns>编号模型</returns>
+    /// <param name="entity">编码规则实体</param>
+    /// <returns>编码模型</returns>
     private static TaktNumberingModel ToModel(TaktNumbering entity) => new()
     {
         RuleCode = entity.RuleCode,

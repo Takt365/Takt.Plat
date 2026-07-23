@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Application.Validators.Logistics.Procurement
 // 文件名称：TaktPurchaseRequestValidators.cs
-// 创建时间：2026-07-20
+// 创建时间：2026-07-23
 // 创建人：Takt365(Auto Generated)
 // 功能描述：PurchaseRequest 模块 FluentValidation 验证器（由 generate-validators-from-entity.cjs 根据 TaktPurchaseRequest 生成，请按需审阅）
 // 
@@ -52,6 +52,15 @@ public class TaktPurchaseRequestCreateValidator : AbstractValidator<TaktPurchase
         RuleFor(x => x.RequestBy)
             .NotEmpty().WithMessage("申请人不能为空")
             .MaximumLength(50).WithMessage("申请人长度不能超过50个字符");
+        RuleFor(x => x.SupplierCode)
+            .NotEmpty().WithMessage("供应商编码不能为空")
+            .MaximumLength(50).WithMessage("供应商编码长度不能超过50个字符");
+        RuleFor(x => x.SupplierName1)
+            .NotEmpty().WithMessage("供应商名称1不能为空")
+            .MaximumLength(140).WithMessage("供应商名称1长度不能超过140个字符");
+        RuleFor(x => x.CurrencyCode)
+            .NotEmpty().WithMessage("结算币种不能为空")
+            .MaximumLength(3).WithMessage("结算币种长度不能超过3个字符");
         RuleFor(x => x.ExtField)
             .MaximumLength(4000).WithMessage("扩展字段JSON长度不能超过4000个字符");
         RuleFor(x => x.Remark)
@@ -98,6 +107,15 @@ public class TaktPurchaseRequestUpdateValidator : AbstractValidator<TaktPurchase
         RuleFor(x => x.RequestBy)
             .NotEmpty().WithMessage("申请人不能为空")
             .MaximumLength(50).WithMessage("申请人长度不能超过50个字符");
+        RuleFor(x => x.SupplierCode)
+            .NotEmpty().WithMessage("供应商编码不能为空")
+            .MaximumLength(50).WithMessage("供应商编码长度不能超过50个字符");
+        RuleFor(x => x.SupplierName1)
+            .NotEmpty().WithMessage("供应商名称1不能为空")
+            .MaximumLength(140).WithMessage("供应商名称1长度不能超过140个字符");
+        RuleFor(x => x.CurrencyCode)
+            .NotEmpty().WithMessage("结算币种不能为空")
+            .MaximumLength(3).WithMessage("结算币种长度不能超过3个字符");
         RuleFor(x => x.ExtField)
             .MaximumLength(4000).WithMessage("扩展字段JSON长度不能超过4000个字符");
         RuleFor(x => x.Remark)
@@ -140,6 +158,15 @@ public class TaktPurchaseRequestImportValidator : AbstractValidator<TaktPurchase
         RuleFor(x => x.RequestBy)
             .NotEmpty().WithMessage("申请人不能为空")
             .MaximumLength(50).WithMessage("申请人长度不能超过50个字符");
+        RuleFor(x => x.SupplierCode)
+            .NotEmpty().WithMessage("供应商编码不能为空")
+            .MaximumLength(50).WithMessage("供应商编码长度不能超过50个字符");
+        RuleFor(x => x.SupplierName1)
+            .NotEmpty().WithMessage("供应商名称1不能为空")
+            .MaximumLength(140).WithMessage("供应商名称1长度不能超过140个字符");
+        RuleFor(x => x.CurrencyCode)
+            .NotEmpty().WithMessage("结算币种不能为空")
+            .MaximumLength(3).WithMessage("结算币种长度不能超过3个字符");
         RuleFor(x => x.ExtField)
             .MaximumLength(4000).WithMessage("扩展字段JSON长度不能超过4000个字符").When(x => !string.IsNullOrWhiteSpace(x.ExtField));
         RuleFor(x => x.Remark)

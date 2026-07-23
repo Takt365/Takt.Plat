@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Application.Dtos.Logistics.Quality.Cost
 // 文件名称：TaktQualityIssuePcbaReworkDtos.cs
-// 创建时间：2026-07-09
+// 创建时间：2026-07-23
 // 创建人：Takt365(Auto Generated)
 // 功能描述：QualityIssuePcbaRework 模块 DTO（由 generate-dtos-from-entity.cjs 根据 TaktQualityIssuePcbaRework 生成，请按需审阅）
 // 
@@ -36,7 +36,7 @@ public class TaktQualityIssuePcbaReworkDto : TaktCompanyDtoBase
     public long QualityIssuePcbaReworkId { get; set; }
 
     /// <summary>
-    /// 品质问题主表 ID（关联 TaktQualityIssue.Id，选项 TaktQualityIssues/options）
+    /// 品质问题主表 ID（选项 TaktQualityIssues/options；DictValue=Id）
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
     public long QualityIssueId { get; set; }
@@ -104,7 +104,7 @@ public class TaktQualityIssuePcbaReworkDto : TaktCompanyDtoBase
     /// <summary>
     /// PCBA顾客名
     /// </summary>
-    public string? PcbaCustomerName { get; set; } = string.Empty;
+    public string? PcbaCustomerName1 { get; set; } = string.Empty;
 
     /// <summary>
     /// PCBA Debit Note No
@@ -127,7 +127,7 @@ public class TaktQualityIssuePcbaReworkDto : TaktCompanyDtoBase
     public string? PcbaRecorder { get; set; } = string.Empty;
 
     /// <summary>
-    /// 是否作废（字典 sys_yes_no_type，0=否 1=是；编辑移除子行时标记作废）
+    /// 是否作废（字典 sys_yes_no_type；0=否 1=是；编辑移除子行时标记作废）
     /// </summary>
     public int IsObsolete { get; set; } = 0;
 
@@ -160,7 +160,7 @@ public class TaktQualityIssuePcbaReworkQueryDto : TaktPagedQuery
     public string? CompanyCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 品质问题主表 ID（关联 TaktQualityIssue.Id，选项 TaktQualityIssues/options）
+    /// 品质问题主表 ID（选项 TaktQualityIssues/options；DictValue=Id）
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
     public long? QualityIssueId { get; set; }
@@ -223,7 +223,7 @@ public class TaktQualityIssuePcbaReworkQueryDto : TaktPagedQuery
     /// <summary>
     /// PCBA顾客名
     /// </summary>
-    public string? PcbaCustomerName { get; set; } = string.Empty;
+    public string? PcbaCustomerName1 { get; set; } = string.Empty;
 
     /// <summary>
     /// PCBA Debit Note No
@@ -246,7 +246,7 @@ public class TaktQualityIssuePcbaReworkQueryDto : TaktPagedQuery
     public string? PcbaRecorder { get; set; } = string.Empty;
 
     /// <summary>
-    /// 是否作废（字典 sys_yes_no_type，0=否 1=是；编辑移除子行时标记作废）
+    /// 是否作废（字典 sys_yes_no_type；0=否 1=是；编辑移除子行时标记作废）
     /// </summary>
     public int? IsObsolete { get; set; }
 
@@ -296,7 +296,7 @@ public class TaktQualityIssuePcbaReworkCreateDto
     public string CompanyDefaultCulture { get; set; } = string.Empty;
 
     /// <summary>
-    /// 品质问题主表 ID（关联 TaktQualityIssue.Id，选项 TaktQualityIssues/options）
+    /// 品质问题主表 ID（选项 TaktQualityIssues/options；DictValue=Id）
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
     public long QualityIssueId { get; set; }
@@ -360,7 +360,7 @@ public class TaktQualityIssuePcbaReworkCreateDto
     /// <summary>
     /// PCBA顾客名
     /// </summary>
-    public string? PcbaCustomerName { get; set; } = string.Empty;
+    public string? PcbaCustomerName1 { get; set; } = string.Empty;
 
     /// <summary>
     /// PCBA Debit Note No
@@ -383,7 +383,7 @@ public class TaktQualityIssuePcbaReworkCreateDto
     public string? PcbaRecorder { get; set; } = string.Empty;
 
     /// <summary>
-    /// 是否作废（字典 sys_yes_no_type，0=否 1=是；编辑移除子行时标记作废）
+    /// 是否作废（字典 sys_yes_no_type；0=否 1=是；编辑移除子行时标记作废）
     /// </summary>
     public int IsObsolete { get; set; } = 0;
 
@@ -462,7 +462,7 @@ public class TaktQualityIssuePcbaReworkTemplateDto
     public string? CompanyCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 品质问题主表 ID（关联 TaktQualityIssue.Id，选项 TaktQualityIssues/options）
+    /// 品质问题主表 ID（选项 TaktQualityIssues/options；DictValue=Id）
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
     public long? QualityIssueId { get; set; }
@@ -525,7 +525,7 @@ public class TaktQualityIssuePcbaReworkTemplateDto
     /// <summary>
     /// PCBA顾客名
     /// </summary>
-    public string? PcbaCustomerName { get; set; } = string.Empty;
+    public string? PcbaCustomerName1 { get; set; } = string.Empty;
 
     /// <summary>
     /// PCBA Debit Note No
@@ -548,7 +548,7 @@ public class TaktQualityIssuePcbaReworkTemplateDto
     public string? PcbaRecorder { get; set; } = string.Empty;
 
     /// <summary>
-    /// 是否作废（字典 sys_yes_no_type，0=否 1=是；编辑移除子行时标记作废）
+    /// 是否作废（字典 sys_yes_no_type；0=否 1=是；编辑移除子行时标记作废）
     /// </summary>
     public int? IsObsolete { get; set; }
 
@@ -585,7 +585,7 @@ public class TaktQualityIssuePcbaReworkImportDto
     public string? CompanyDefaultCulture { get; set; } = string.Empty;
 
     /// <summary>
-    /// 品质问题主表 ID（关联 TaktQualityIssue.Id，选项 TaktQualityIssues/options）
+    /// 品质问题主表 ID（选项 TaktQualityIssues/options；DictValue=Id）
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
     public long? QualityIssueId { get; set; }
@@ -648,7 +648,7 @@ public class TaktQualityIssuePcbaReworkImportDto
     /// <summary>
     /// PCBA顾客名
     /// </summary>
-    public string? PcbaCustomerName { get; set; } = string.Empty;
+    public string? PcbaCustomerName1 { get; set; } = string.Empty;
 
     /// <summary>
     /// PCBA Debit Note No
@@ -671,7 +671,7 @@ public class TaktQualityIssuePcbaReworkImportDto
     public string? PcbaRecorder { get; set; } = string.Empty;
 
     /// <summary>
-    /// 是否作废（字典 sys_yes_no_type，0=否 1=是；编辑移除子行时标记作废）
+    /// 是否作废（字典 sys_yes_no_type；0=否 1=是；编辑移除子行时标记作废）
     /// </summary>
     public int? IsObsolete { get; set; }
 
@@ -709,7 +709,7 @@ public class TaktQualityIssuePcbaReworkExportDto
     public string CompanyCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 品质问题主表 ID（关联 TaktQualityIssue.Id，选项 TaktQualityIssues/options）
+    /// 品质问题主表 ID（选项 TaktQualityIssues/options；DictValue=Id）
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
     public long QualityIssueId { get; set; }
@@ -772,7 +772,7 @@ public class TaktQualityIssuePcbaReworkExportDto
     /// <summary>
     /// PCBA顾客名
     /// </summary>
-    public string? PcbaCustomerName { get; set; } = string.Empty;
+    public string? PcbaCustomerName1 { get; set; } = string.Empty;
 
     /// <summary>
     /// PCBA Debit Note No
@@ -795,7 +795,7 @@ public class TaktQualityIssuePcbaReworkExportDto
     public string? PcbaRecorder { get; set; } = string.Empty;
 
     /// <summary>
-    /// 是否作废（字典 sys_yes_no_type，0=否 1=是；编辑移除子行时标记作废）
+    /// 是否作废（字典 sys_yes_no_type；0=否 1=是；编辑移除子行时标记作废）
     /// </summary>
     public int IsObsolete { get; set; } = 0;
 

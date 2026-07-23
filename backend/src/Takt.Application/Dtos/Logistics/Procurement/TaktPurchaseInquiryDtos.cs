@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Application.Dtos.Logistics.Procurement
 // 文件名称：TaktPurchaseInquiryDtos.cs
-// 创建时间：2026-07-09
+// 创建时间：2026-07-23
 // 创建人：Takt365(Auto Generated)
 // 功能描述：PurchaseInquiry 模块 DTO（由 generate-dtos-from-entity.cjs 根据 TaktPurchaseInquiry 生成，请按需审阅）
 // 
@@ -36,7 +36,7 @@ public class TaktPurchaseInquiryDto : TaktCompanyDtoBase
     public long PurchaseInquiryId { get; set; }
 
     /// <summary>
-    /// 工厂代码（选项 TaktPlants/options，DictValue=PlantCode）
+    /// 工厂代码（选项 TaktPlants/options；DictValue=PlantCode）
     /// </summary>
     public string PlantCode { get; set; } = string.Empty;
 
@@ -56,7 +56,7 @@ public class TaktPurchaseInquiryDto : TaktCompanyDtoBase
     public DateTime? QuoteDeadlineDate { get; set; }
 
     /// <summary>
-    /// 询价人员工 ID（关联 TaktEmployee.Id，选项 TaktEmployees/options）
+    /// 询价人员工 ID（选项 TaktEmployees/options；DictValue=Id）
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
     public long? InquiryId { get; set; }
@@ -72,14 +72,29 @@ public class TaktPurchaseInquiryDto : TaktCompanyDtoBase
     public string InquiryBy { get; set; } = string.Empty;
 
     /// <summary>
-    /// 询价供应商编码（选项 TaktSuppliers/options，DictValue=SupplierCode）
+    /// 询价供应商编码（选项 TaktSuppliers/options；DictValue=SupplierCode；一单一供应商，明细禁止再挂供应商）
     /// </summary>
-    public string? SupplierCode { get; set; } = string.Empty;
+    public string SupplierCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 询价供应商名称
+    /// 询价供应商名称1（冗余，与 TaktSupplier.SupplierName1 对齐）
     /// </summary>
-    public string? SupplierName { get; set; } = string.Empty;
+    public string SupplierName1 { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 结算币种（字典 accounting_currency_code；DictValue=CNY/USD 等；一单一币种）
+    /// </summary>
+    public string CurrencyCode { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 税率（字典 accounting_tax_rate_param；13=13%，9=9%，0=0% 等；一单一税率）
+    /// </summary>
+    public int TaxRate { get; set; } = 0;
+
+    /// <summary>
+    /// 税费
+    /// </summary>
+    public decimal TaxAmount { get; set; }
 
     /// <summary>
     /// 付款方式（字典 logistics_payment_mode：vendorpay=供应商付款，employeereimburse=员工报销）
@@ -155,7 +170,7 @@ public class TaktPurchaseInquiryQueryDto : TaktPagedQuery
     public string? CompanyCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 工厂代码（选项 TaktPlants/options，DictValue=PlantCode）
+    /// 工厂代码（选项 TaktPlants/options；DictValue=PlantCode）
     /// </summary>
     public string? PlantCode { get; set; } = string.Empty;
 
@@ -185,7 +200,7 @@ public class TaktPurchaseInquiryQueryDto : TaktPagedQuery
     public DateTime? QuoteDeadlineDateEnd { get; set; }
 
     /// <summary>
-    /// 询价人员工 ID（关联 TaktEmployee.Id，选项 TaktEmployees/options）
+    /// 询价人员工 ID（选项 TaktEmployees/options；DictValue=Id）
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
     public long? InquiryId { get; set; }
@@ -196,14 +211,29 @@ public class TaktPurchaseInquiryQueryDto : TaktPagedQuery
     public string? InquiryBy { get; set; } = string.Empty;
 
     /// <summary>
-    /// 询价供应商编码（选项 TaktSuppliers/options，DictValue=SupplierCode）
+    /// 询价供应商编码（选项 TaktSuppliers/options；DictValue=SupplierCode；一单一供应商，明细禁止再挂供应商）
     /// </summary>
     public string? SupplierCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 询价供应商名称
+    /// 询价供应商名称1（冗余，与 TaktSupplier.SupplierName1 对齐）
     /// </summary>
-    public string? SupplierName { get; set; } = string.Empty;
+    public string? SupplierName1 { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 结算币种（字典 accounting_currency_code；DictValue=CNY/USD 等；一单一币种）
+    /// </summary>
+    public string? CurrencyCode { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 税率（字典 accounting_tax_rate_param；13=13%，9=9%，0=0% 等；一单一税率）
+    /// </summary>
+    public int? TaxRate { get; set; }
+
+    /// <summary>
+    /// 税费
+    /// </summary>
+    public decimal? TaxAmount { get; set; }
 
     /// <summary>
     /// 付款方式（字典 logistics_payment_mode：vendorpay=供应商付款，employeereimburse=员工报销）
@@ -296,9 +326,9 @@ public class TaktPurchaseInquiryCreateDto
     public string CompanyDefaultCulture { get; set; } = string.Empty;
 
     /// <summary>
-    /// 工厂代码（选项 TaktPlants/options，DictValue=PlantCode）
+    /// 工厂代码（选项 TaktPlants/options；DictValue=PlantCode）
     /// </summary>
-    [Required(ErrorMessage = "工厂代码（选项 TaktPlants/options，DictValue=PlantCode）不能为空")]
+    [Required(ErrorMessage = "工厂代码（选项 TaktPlants/options；DictValue=PlantCode）不能为空")]
     public string PlantCode { get; set; } = string.Empty;
 
     /// <summary>
@@ -318,7 +348,7 @@ public class TaktPurchaseInquiryCreateDto
     public DateTime? QuoteDeadlineDate { get; set; }
 
     /// <summary>
-    /// 询价人员工 ID（关联 TaktEmployee.Id，选项 TaktEmployees/options）
+    /// 询价人员工 ID（选项 TaktEmployees/options；DictValue=Id）
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
     public long? InquiryId { get; set; }
@@ -330,14 +360,32 @@ public class TaktPurchaseInquiryCreateDto
     public string InquiryBy { get; set; } = string.Empty;
 
     /// <summary>
-    /// 询价供应商编码（选项 TaktSuppliers/options，DictValue=SupplierCode）
+    /// 询价供应商编码（选项 TaktSuppliers/options；DictValue=SupplierCode；一单一供应商，明细禁止再挂供应商）
     /// </summary>
-    public string? SupplierCode { get; set; } = string.Empty;
+    [Required(ErrorMessage = "询价供应商编码（选项 TaktSuppliers/options；DictValue=SupplierCode；一单一供应商，明细禁止再挂供应商）不能为空")]
+    public string SupplierCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 询价供应商名称
+    /// 询价供应商名称1（冗余，与 TaktSupplier.SupplierName1 对齐）
     /// </summary>
-    public string? SupplierName { get; set; } = string.Empty;
+    [Required(ErrorMessage = "询价供应商名称1（冗余，与 TaktSupplier.SupplierName1 对齐）不能为空")]
+    public string SupplierName1 { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 结算币种（字典 accounting_currency_code；DictValue=CNY/USD 等；一单一币种）
+    /// </summary>
+    [Required(ErrorMessage = "结算币种（字典 accounting_currency_code；DictValue=CNY/USD 等；一单一币种）不能为空")]
+    public string CurrencyCode { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 税率（字典 accounting_tax_rate_param；13=13%，9=9%，0=0% 等；一单一税率）
+    /// </summary>
+    public int TaxRate { get; set; } = 0;
+
+    /// <summary>
+    /// 税费
+    /// </summary>
+    public decimal TaxAmount { get; set; }
 
     /// <summary>
     /// 付款方式（字典 logistics_payment_mode：vendorpay=供应商付款，employeereimburse=员工报销）
@@ -388,7 +436,7 @@ public class TaktPurchaseInquiryCreateDto
     /// <summary>
     /// 采购询价明细列表（主子表关系）（子表，级联保存）
     /// </summary>
-    public List<TaktPurchaseInquiryItemUpdateDto>? Items { get; set; }
+    public List<TaktPurchaseInquiryItemCreateDto>? Items { get; set; }
 
     /// <summary>
     /// 扩展字段JSON
@@ -419,6 +467,11 @@ public class TaktPurchaseInquiryUpdateDto : TaktPurchaseInquiryCreateDto
     [AdaptMember("Id")]
     [JsonConverter(typeof(ValueToStringConverter))]
     public long PurchaseInquiryId { get; set; }
+
+    /// <summary>
+    /// 采购询价明细列表（主子表关系）（子表，级联保存）
+    /// </summary>
+    public new List<TaktPurchaseInquiryItemUpdateDto>? Items { get; set; }
 
 }
 
@@ -466,7 +519,7 @@ public class TaktPurchaseInquiryTemplateDto
     public string? CompanyCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 工厂代码（选项 TaktPlants/options，DictValue=PlantCode）
+    /// 工厂代码（选项 TaktPlants/options；DictValue=PlantCode）
     /// </summary>
     public string? PlantCode { get; set; } = string.Empty;
 
@@ -486,7 +539,7 @@ public class TaktPurchaseInquiryTemplateDto
     public DateTime? QuoteDeadlineDate { get; set; }
 
     /// <summary>
-    /// 询价人员工 ID（关联 TaktEmployee.Id，选项 TaktEmployees/options）
+    /// 询价人员工 ID（选项 TaktEmployees/options；DictValue=Id）
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
     public long? InquiryId { get; set; }
@@ -497,14 +550,29 @@ public class TaktPurchaseInquiryTemplateDto
     public string? InquiryBy { get; set; } = string.Empty;
 
     /// <summary>
-    /// 询价供应商编码（选项 TaktSuppliers/options，DictValue=SupplierCode）
+    /// 询价供应商编码（选项 TaktSuppliers/options；DictValue=SupplierCode；一单一供应商，明细禁止再挂供应商）
     /// </summary>
     public string? SupplierCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 询价供应商名称
+    /// 询价供应商名称1（冗余，与 TaktSupplier.SupplierName1 对齐）
     /// </summary>
-    public string? SupplierName { get; set; } = string.Empty;
+    public string? SupplierName1 { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 结算币种（字典 accounting_currency_code；DictValue=CNY/USD 等；一单一币种）
+    /// </summary>
+    public string? CurrencyCode { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 税率（字典 accounting_tax_rate_param；13=13%，9=9%，0=0% 等；一单一税率）
+    /// </summary>
+    public int? TaxRate { get; set; }
+
+    /// <summary>
+    /// 税费
+    /// </summary>
+    public decimal? TaxAmount { get; set; }
 
     /// <summary>
     /// 付款方式（字典 logistics_payment_mode：vendorpay=供应商付款，employeereimburse=员工报销）
@@ -589,7 +657,7 @@ public class TaktPurchaseInquiryImportDto
     public string? CompanyDefaultCulture { get; set; } = string.Empty;
 
     /// <summary>
-    /// 工厂代码（选项 TaktPlants/options，DictValue=PlantCode）
+    /// 工厂代码（选项 TaktPlants/options；DictValue=PlantCode）
     /// </summary>
     public string? PlantCode { get; set; } = string.Empty;
 
@@ -609,7 +677,7 @@ public class TaktPurchaseInquiryImportDto
     public DateTime? QuoteDeadlineDate { get; set; }
 
     /// <summary>
-    /// 询价人员工 ID（关联 TaktEmployee.Id，选项 TaktEmployees/options）
+    /// 询价人员工 ID（选项 TaktEmployees/options；DictValue=Id）
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
     public long? InquiryId { get; set; }
@@ -620,14 +688,29 @@ public class TaktPurchaseInquiryImportDto
     public string? InquiryBy { get; set; } = string.Empty;
 
     /// <summary>
-    /// 询价供应商编码（选项 TaktSuppliers/options，DictValue=SupplierCode）
+    /// 询价供应商编码（选项 TaktSuppliers/options；DictValue=SupplierCode；一单一供应商，明细禁止再挂供应商）
     /// </summary>
     public string? SupplierCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 询价供应商名称
+    /// 询价供应商名称1（冗余，与 TaktSupplier.SupplierName1 对齐）
     /// </summary>
-    public string? SupplierName { get; set; } = string.Empty;
+    public string? SupplierName1 { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 结算币种（字典 accounting_currency_code；DictValue=CNY/USD 等；一单一币种）
+    /// </summary>
+    public string? CurrencyCode { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 税率（字典 accounting_tax_rate_param；13=13%，9=9%，0=0% 等；一单一税率）
+    /// </summary>
+    public int? TaxRate { get; set; }
+
+    /// <summary>
+    /// 税费
+    /// </summary>
+    public decimal? TaxAmount { get; set; }
 
     /// <summary>
     /// 付款方式（字典 logistics_payment_mode：vendorpay=供应商付款，employeereimburse=员工报销）
@@ -713,7 +796,7 @@ public class TaktPurchaseInquiryExportDto
     public string CompanyCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 工厂代码（选项 TaktPlants/options，DictValue=PlantCode）
+    /// 工厂代码（选项 TaktPlants/options；DictValue=PlantCode）
     /// </summary>
     public string PlantCode { get; set; } = string.Empty;
 
@@ -733,7 +816,7 @@ public class TaktPurchaseInquiryExportDto
     public DateTime? QuoteDeadlineDate { get; set; }
 
     /// <summary>
-    /// 询价人员工 ID（关联 TaktEmployee.Id，选项 TaktEmployees/options）
+    /// 询价人员工 ID（选项 TaktEmployees/options；DictValue=Id）
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
     public long? InquiryId { get; set; }
@@ -744,14 +827,29 @@ public class TaktPurchaseInquiryExportDto
     public string InquiryBy { get; set; } = string.Empty;
 
     /// <summary>
-    /// 询价供应商编码（选项 TaktSuppliers/options，DictValue=SupplierCode）
+    /// 询价供应商编码（选项 TaktSuppliers/options；DictValue=SupplierCode；一单一供应商，明细禁止再挂供应商）
     /// </summary>
-    public string? SupplierCode { get; set; } = string.Empty;
+    public string SupplierCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 询价供应商名称
+    /// 询价供应商名称1（冗余，与 TaktSupplier.SupplierName1 对齐）
     /// </summary>
-    public string? SupplierName { get; set; } = string.Empty;
+    public string SupplierName1 { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 结算币种（字典 accounting_currency_code；DictValue=CNY/USD 等；一单一币种）
+    /// </summary>
+    public string CurrencyCode { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 税率（字典 accounting_tax_rate_param；13=13%，9=9%，0=0% 等；一单一税率）
+    /// </summary>
+    public int TaxRate { get; set; } = 0;
+
+    /// <summary>
+    /// 税费
+    /// </summary>
+    public decimal TaxAmount { get; set; }
 
     /// <summary>
     /// 付款方式（字典 logistics_payment_mode：vendorpay=供应商付款，employeereimburse=员工报销）

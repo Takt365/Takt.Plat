@@ -100,37 +100,9 @@
               >
                 <TaktSelect
                   v-model:value="formState.materialCode"
-                  api-url="TaktMaterials/options"
+                  api-url="TaktMaterialPlants/options"
                   :placeholder="pi.ph('materialCode')"
                   :disabled="!!formData?.purchasePlanItemId"
-                />
-              </a-form-item>
-            </a-col>
-            <a-col :span="12">
-              <a-form-item
-                :label="pi.label('materialName')"
-                name="materialName"
-              >
-                <a-input
-                  v-model:value="formState.materialName"
-                  :placeholder="pi.ph('materialName')"
-                  show-count
-                  :maxlength="20"
-                  allow-clear
-                />
-              </a-form-item>
-            </a-col>
-            <a-col :span="12">
-              <a-form-item
-                :label="pi.label('materialSpecification')"
-                name="materialSpecification"
-              >
-                <a-input
-                  v-model:value="formState.materialSpecification"
-                  :placeholder="pi.ph('materialSpecification')"
-                  show-count
-                  :maxlength="20"
-                  allow-clear
                 />
               </a-form-item>
             </a-col>
@@ -158,16 +130,6 @@
                 />
               </a-form-item>
             </a-col>
-          </a-row>
-        </div>
-      </a-tab-pane>
-      <a-tab-pane
-        key="tab-1"
-        :tab="t('common.page.form.tabs.basicinfo') + ' (2/2)'"
-        force-render
-      >
-        <div :class="formContentClass">
-          <a-row :gutter="24">
             <a-col :span="12">
               <a-form-item
                 :label="pi.label('plannedArrivalDate')"
@@ -193,6 +155,16 @@
                 />
               </a-form-item>
             </a-col>
+          </a-row>
+        </div>
+      </a-tab-pane>
+      <a-tab-pane
+        key="tab-1"
+        :tab="t('common.page.form.tabs.basicinfo') + ' (2/2)'"
+        force-render
+      >
+        <div :class="formContentClass">
+          <a-row :gutter="24">
             <a-col :span="12">
               <a-form-item
                 :label="pi.label('estimatedUnitPrice')"
@@ -219,6 +191,42 @@
             </a-col>
             <a-col :span="12">
               <a-form-item
+                :label="pi.label('taxIncludedPrice')"
+                name="taxIncludedPrice"
+              >
+                <a-input-number
+                  v-model:value="formState.taxIncludedPrice"
+                  :placeholder="pi.ph('taxIncludedPrice')"
+                  style="width: 100%"
+                />
+              </a-form-item>
+            </a-col>
+            <a-col :span="12">
+              <a-form-item
+                :label="pi.label('untaxedPrice')"
+                name="untaxedPrice"
+              >
+                <a-input-number
+                  v-model:value="formState.untaxedPrice"
+                  :placeholder="pi.ph('untaxedPrice')"
+                  style="width: 100%"
+                />
+              </a-form-item>
+            </a-col>
+            <a-col :span="12">
+              <a-form-item
+                :label="pi.label('taxAmount')"
+                name="taxAmount"
+              >
+                <a-input-number
+                  v-model:value="formState.taxAmount"
+                  :placeholder="pi.ph('taxAmount')"
+                  style="width: 100%"
+                />
+              </a-form-item>
+            </a-col>
+            <a-col :span="12">
+              <a-form-item
                 :label="pi.label('referenceSupplierCode')"
                 name="referenceSupplierCode"
               >
@@ -232,12 +240,12 @@
             </a-col>
             <a-col :span="12">
               <a-form-item
-                :label="pi.label('referenceSupplierName')"
-                name="referenceSupplierName"
+                :label="pi.label('referenceSupplierName1')"
+                name="referenceSupplierName1"
               >
                 <a-input
-                  v-model:value="formState.referenceSupplierName"
-                  :placeholder="pi.ph('referenceSupplierName')"
+                  v-model:value="formState.referenceSupplierName1"
+                  :placeholder="pi.ph('referenceSupplierName1')"
                   show-count
                   :maxlength="20"
                   allow-clear
@@ -287,7 +295,7 @@ const formContentClass = computed(() => (formFields.length > 10 ? 'takt-form-con
 /** 当前激活的 Tab key */
 const activeTab = ref('tab-0')
 /** CreateDto 字段名列表（与 formState 键对齐） */
-const formFields = ["lineNumber","productionPlanId","productionPlanCode","productionPlanLineNumber","materialRequirementsPlanningItemId","materialCode","materialName","materialSpecification","planUnit","planQuantity","plannedArrivalDate","convertedQuantity","estimatedUnitPrice","estimatedAmount","referenceSupplierCode","referenceSupplierName","isObsolete"]
+const formFields = ["lineNumber","productionPlanId","productionPlanCode","productionPlanLineNumber","materialRequirementsPlanningItemId","materialCode","planUnit","planQuantity","plannedArrivalDate","convertedQuantity","estimatedUnitPrice","estimatedAmount","taxIncludedPrice","untaxedPrice","taxAmount","referenceSupplierCode","referenceSupplierName1","isObsolete"]
 
 
 
@@ -367,13 +375,6 @@ const rules = computed<Record<string, Rule[]>>(() => ({
       trigger: 'change'
     }
   ],
-  materialName: [
-    {
-      required: true,
-      message: pi.ph('materialName'),
-      trigger: 'blur'
-    }
-  ],
   planUnit: [
     {
       required: true,
@@ -433,6 +434,45 @@ const rules = computed<Record<string, Rule[]>>(() => ({
     },
     trigger: 'change'
   }],
+  taxIncludedPrice: [{
+    validator: async (_rule, value) => {
+      if (value === undefined || value === null || value === '') {
+        return Promise.reject(pi.ph('taxIncludedPrice'))
+      }
+      const num = typeof value === 'number' ? value : Number(value)
+      if (!Number.isFinite(num)) {
+        return Promise.reject(pi.ph('taxIncludedPrice'))
+      }
+      return Promise.resolve()
+    },
+    trigger: 'change'
+  }],
+  untaxedPrice: [{
+    validator: async (_rule, value) => {
+      if (value === undefined || value === null || value === '') {
+        return Promise.reject(pi.ph('untaxedPrice'))
+      }
+      const num = typeof value === 'number' ? value : Number(value)
+      if (!Number.isFinite(num)) {
+        return Promise.reject(pi.ph('untaxedPrice'))
+      }
+      return Promise.resolve()
+    },
+    trigger: 'change'
+  }],
+  taxAmount: [{
+    validator: async (_rule, value) => {
+      if (value === undefined || value === null || value === '') {
+        return Promise.reject(pi.ph('taxAmount'))
+      }
+      const num = typeof value === 'number' ? value : Number(value)
+      if (!Number.isFinite(num)) {
+        return Promise.reject(pi.ph('taxAmount'))
+      }
+      return Promise.resolve()
+    },
+    trigger: 'change'
+  }],
   isObsolete: [{
     validator: async (_rule, value) => {
       if (value === undefined || value === null || value === '') {
@@ -480,6 +520,18 @@ function getValues(): Record<string, any> {
   if ('estimatedAmount' in payload) {
     const rawestimatedAmount = payload.estimatedAmount
     payload.estimatedAmount = typeof rawestimatedAmount === 'number' ? rawestimatedAmount : Number(rawestimatedAmount)
+  }
+  if ('taxIncludedPrice' in payload) {
+    const rawtaxIncludedPrice = payload.taxIncludedPrice
+    payload.taxIncludedPrice = typeof rawtaxIncludedPrice === 'number' ? rawtaxIncludedPrice : Number(rawtaxIncludedPrice)
+  }
+  if ('untaxedPrice' in payload) {
+    const rawuntaxedPrice = payload.untaxedPrice
+    payload.untaxedPrice = typeof rawuntaxedPrice === 'number' ? rawuntaxedPrice : Number(rawuntaxedPrice)
+  }
+  if ('taxAmount' in payload) {
+    const rawtaxAmount = payload.taxAmount
+    payload.taxAmount = typeof rawtaxAmount === 'number' ? rawtaxAmount : Number(rawtaxAmount)
   }
   if ('isObsolete' in payload) {
     const rawisObsolete = payload.isObsolete

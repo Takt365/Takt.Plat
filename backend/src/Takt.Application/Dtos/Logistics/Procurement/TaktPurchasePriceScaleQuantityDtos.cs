@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Application.Dtos.Logistics.Procurement
 // 文件名称：TaktPurchasePriceScaleQuantityDtos.cs
-// 创建时间：2026-07-20
+// 创建时间：2026-07-21
 // 创建人：Takt365(Auto Generated)
 // 功能描述：PurchasePriceScaleQuantity 模块 DTO（由 generate-dtos-from-entity.cjs 根据 TaktPurchasePriceScaleQuantity 生成，请按需审阅）
 // 
@@ -52,14 +52,14 @@ public class TaktPurchasePriceScaleQuantityDto : TaktCompanyDtoBase
     public string PurchasePriceCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 条件序列号（KOPOS；冗余；与明细 PurchasePriceSeq 一致）
+    /// 定价序号（冗余；与明细 PurchasePriceSeq 一致，固定步长=10）
     /// </summary>
     public int PurchasePriceSeq { get; set; } = 0;
 
     /// <summary>
-    /// 行号（KLFN1；阶梯行序号，固定步长=10）
+    /// 等级序号（KOPOS；同一明细内阶梯序号，固定步长=10）
     /// </summary>
-    public int LineNumber { get; set; } = 0;
+    public int PurchaseScaleSeq { get; set; } = 0;
 
     /// <summary>
     /// 等级数量（KSTBM；数量等级门槛；对应价值等级表的 ScaleValue）
@@ -67,9 +67,19 @@ public class TaktPurchasePriceScaleQuantityDto : TaktCompanyDtoBase
     public decimal ScaleQuantity { get; set; }
 
     /// <summary>
-    /// 金额（KBETR）
+    /// 价格（KBETR）
     /// </summary>
-    public decimal Amount { get; set; }
+    public decimal Price { get; set; }
+
+    /// <summary>
+    /// 未税价格（冗余；可由 Price 与税码推算后回写）
+    /// </summary>
+    public decimal UntaxedPrice { get; set; }
+
+    /// <summary>
+    /// 含税价格（冗余；可由 Price 与税码推算后回写）
+    /// </summary>
+    public decimal TaxIncludedPrice { get; set; }
 
     /// <summary>
     /// 是否作废（字典 sys_yes_no_type，0=否 1=是；编辑移除子行时标记作废）
@@ -110,14 +120,14 @@ public class TaktPurchasePriceScaleQuantityQueryDto : TaktPagedQuery
     public string? PurchasePriceCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 条件序列号（KOPOS；冗余；与明细 PurchasePriceSeq 一致）
+    /// 定价序号（冗余；与明细 PurchasePriceSeq 一致，固定步长=10）
     /// </summary>
     public int? PurchasePriceSeq { get; set; }
 
     /// <summary>
-    /// 行号（KLFN1；阶梯行序号，固定步长=10）
+    /// 等级序号（KOPOS；同一明细内阶梯序号，固定步长=10）
     /// </summary>
-    public int? LineNumber { get; set; }
+    public int? PurchaseScaleSeq { get; set; }
 
     /// <summary>
     /// 等级数量（KSTBM；数量等级门槛；对应价值等级表的 ScaleValue）
@@ -125,9 +135,19 @@ public class TaktPurchasePriceScaleQuantityQueryDto : TaktPagedQuery
     public decimal? ScaleQuantity { get; set; }
 
     /// <summary>
-    /// 金额（KBETR）
+    /// 价格（KBETR）
     /// </summary>
-    public decimal? Amount { get; set; }
+    public decimal? Price { get; set; }
+
+    /// <summary>
+    /// 未税价格（冗余；可由 Price 与税码推算后回写）
+    /// </summary>
+    public decimal? UntaxedPrice { get; set; }
+
+    /// <summary>
+    /// 含税价格（冗余；可由 Price 与税码推算后回写）
+    /// </summary>
+    public decimal? TaxIncludedPrice { get; set; }
 
     /// <summary>
     /// 是否作废（字典 sys_yes_no_type，0=否 1=是；编辑移除子行时标记作废）
@@ -192,14 +212,14 @@ public class TaktPurchasePriceScaleQuantityCreateDto
     public string PurchasePriceCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 条件序列号（KOPOS；冗余；与明细 PurchasePriceSeq 一致）
+    /// 定价序号（冗余；与明细 PurchasePriceSeq 一致，固定步长=10）
     /// </summary>
     public int PurchasePriceSeq { get; set; } = 0;
 
     /// <summary>
-    /// 行号（KLFN1；阶梯行序号，固定步长=10）
+    /// 等级序号（KOPOS；同一明细内阶梯序号，固定步长=10）
     /// </summary>
-    public int LineNumber { get; set; } = 0;
+    public int PurchaseScaleSeq { get; set; } = 0;
 
     /// <summary>
     /// 等级数量（KSTBM；数量等级门槛；对应价值等级表的 ScaleValue）
@@ -207,9 +227,19 @@ public class TaktPurchasePriceScaleQuantityCreateDto
     public decimal ScaleQuantity { get; set; }
 
     /// <summary>
-    /// 金额（KBETR）
+    /// 价格（KBETR）
     /// </summary>
-    public decimal Amount { get; set; }
+    public decimal Price { get; set; }
+
+    /// <summary>
+    /// 未税价格（冗余；可由 Price 与税码推算后回写）
+    /// </summary>
+    public decimal UntaxedPrice { get; set; }
+
+    /// <summary>
+    /// 含税价格（冗余；可由 Price 与税码推算后回写）
+    /// </summary>
+    public decimal TaxIncludedPrice { get; set; }
 
     /// <summary>
     /// 是否作废（字典 sys_yes_no_type，0=否 1=是；编辑移除子行时标记作废）
@@ -302,14 +332,14 @@ public class TaktPurchasePriceScaleQuantityTemplateDto
     public string? PurchasePriceCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 条件序列号（KOPOS；冗余；与明细 PurchasePriceSeq 一致）
+    /// 定价序号（冗余；与明细 PurchasePriceSeq 一致，固定步长=10）
     /// </summary>
     public int? PurchasePriceSeq { get; set; }
 
     /// <summary>
-    /// 行号（KLFN1；阶梯行序号，固定步长=10）
+    /// 等级序号（KOPOS；同一明细内阶梯序号，固定步长=10）
     /// </summary>
-    public int? LineNumber { get; set; }
+    public int? PurchaseScaleSeq { get; set; }
 
     /// <summary>
     /// 等级数量（KSTBM；数量等级门槛；对应价值等级表的 ScaleValue）
@@ -317,9 +347,19 @@ public class TaktPurchasePriceScaleQuantityTemplateDto
     public decimal? ScaleQuantity { get; set; }
 
     /// <summary>
-    /// 金额（KBETR）
+    /// 价格（KBETR）
     /// </summary>
-    public decimal? Amount { get; set; }
+    public decimal? Price { get; set; }
+
+    /// <summary>
+    /// 未税价格（冗余；可由 Price 与税码推算后回写）
+    /// </summary>
+    public decimal? UntaxedPrice { get; set; }
+
+    /// <summary>
+    /// 含税价格（冗余；可由 Price 与税码推算后回写）
+    /// </summary>
+    public decimal? TaxIncludedPrice { get; set; }
 
     /// <summary>
     /// 是否作废（字典 sys_yes_no_type，0=否 1=是；编辑移除子行时标记作废）
@@ -370,14 +410,14 @@ public class TaktPurchasePriceScaleQuantityImportDto
     public string? PurchasePriceCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 条件序列号（KOPOS；冗余；与明细 PurchasePriceSeq 一致）
+    /// 定价序号（冗余；与明细 PurchasePriceSeq 一致，固定步长=10）
     /// </summary>
     public int? PurchasePriceSeq { get; set; }
 
     /// <summary>
-    /// 行号（KLFN1；阶梯行序号，固定步长=10）
+    /// 等级序号（KOPOS；同一明细内阶梯序号，固定步长=10）
     /// </summary>
-    public int? LineNumber { get; set; }
+    public int? PurchaseScaleSeq { get; set; }
 
     /// <summary>
     /// 等级数量（KSTBM；数量等级门槛；对应价值等级表的 ScaleValue）
@@ -385,9 +425,19 @@ public class TaktPurchasePriceScaleQuantityImportDto
     public decimal? ScaleQuantity { get; set; }
 
     /// <summary>
-    /// 金额（KBETR）
+    /// 价格（KBETR）
     /// </summary>
-    public decimal? Amount { get; set; }
+    public decimal? Price { get; set; }
+
+    /// <summary>
+    /// 未税价格（冗余；可由 Price 与税码推算后回写）
+    /// </summary>
+    public decimal? UntaxedPrice { get; set; }
+
+    /// <summary>
+    /// 含税价格（冗余；可由 Price 与税码推算后回写）
+    /// </summary>
+    public decimal? TaxIncludedPrice { get; set; }
 
     /// <summary>
     /// 是否作废（字典 sys_yes_no_type，0=否 1=是；编辑移除子行时标记作废）
@@ -439,14 +489,14 @@ public class TaktPurchasePriceScaleQuantityExportDto
     public string PurchasePriceCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 条件序列号（KOPOS；冗余；与明细 PurchasePriceSeq 一致）
+    /// 定价序号（冗余；与明细 PurchasePriceSeq 一致，固定步长=10）
     /// </summary>
     public int PurchasePriceSeq { get; set; } = 0;
 
     /// <summary>
-    /// 行号（KLFN1；阶梯行序号，固定步长=10）
+    /// 等级序号（KOPOS；同一明细内阶梯序号，固定步长=10）
     /// </summary>
-    public int LineNumber { get; set; } = 0;
+    public int PurchaseScaleSeq { get; set; } = 0;
 
     /// <summary>
     /// 等级数量（KSTBM；数量等级门槛；对应价值等级表的 ScaleValue）
@@ -454,9 +504,19 @@ public class TaktPurchasePriceScaleQuantityExportDto
     public decimal ScaleQuantity { get; set; }
 
     /// <summary>
-    /// 金额（KBETR）
+    /// 价格（KBETR）
     /// </summary>
-    public decimal Amount { get; set; }
+    public decimal Price { get; set; }
+
+    /// <summary>
+    /// 未税价格（冗余；可由 Price 与税码推算后回写）
+    /// </summary>
+    public decimal UntaxedPrice { get; set; }
+
+    /// <summary>
+    /// 含税价格（冗余；可由 Price 与税码推算后回写）
+    /// </summary>
+    public decimal TaxIncludedPrice { get; set; }
 
     /// <summary>
     /// 是否作废（字典 sys_yes_no_type，0=否 1=是；编辑移除子行时标记作废）

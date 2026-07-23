@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Application.Services.Accounting.Financial
 // 文件名称：TaktCompanyService.cs
-// 创建时间：2026-07-06
+// 创建时间：2026-07-23
 // 创建人：Takt365(Cursor AI)
 // 功能描述：公司应用服务实现
 // 
@@ -98,22 +98,19 @@ public class TaktCompanyService : TaktServiceBase, ITaktCompanyService
         return dto;    }
 
     /// <summary>
-    /// 获取公司选项列表（DictValue 为公司代码 CompanyCode）
+    /// 获取公司选项列表
     /// </summary>
     /// <returns>下拉选项</returns>
     public async Task<List<TaktSelectOption>> GetCompanyOptionsAsync()
     {
         var list = await _companyRepository.GetListAsync(
             x => x.TenantCode == CurrentTenantCode && x.CompanyStatus == 1,
-            x => x.CompanyName ?? string.Empty,
+            x => x.CompanyShortName ?? string.Empty,
             false);
         return list.Select(e => new TaktSelectOption
         {
             DictValue = e.CompanyCode,
-            DictLabel = string.IsNullOrWhiteSpace(e.CompanyShortName)
-                ? (string.IsNullOrWhiteSpace(e.CompanyName) ? e.CompanyCode : e.CompanyName)
-                : $"{e.CompanyCode} {e.CompanyShortName}",
-            ExtValue = e.Id,
+            DictLabel = e.CompanyShortName ?? e.CompanyCode,
         }).ToList();
     }
 
@@ -397,7 +394,8 @@ public class TaktCompanyService : TaktServiceBase, ITaktCompanyService
         {
             var keywords = queryDto.KeyWords;
             exp = exp.And(x =>
-                (x.CompanyName != null && x.CompanyName.Contains(keywords))
+                (x.CompanyName1 != null && x.CompanyName1.Contains(keywords))
+                || (x.CompanyName2 != null && x.CompanyName2.Contains(keywords))
                 || (x.CompanyShortName != null && x.CompanyShortName.Contains(keywords))
                 || (x.EnterpriseNature != null && x.EnterpriseNature.Contains(keywords))
                 || (x.IndustryAttribute != null && x.IndustryAttribute.Contains(keywords))
@@ -405,7 +403,6 @@ public class TaktCompanyService : TaktServiceBase, ITaktCompanyService
                 || (x.BusinessScope != null && x.BusinessScope.Contains(keywords))
                 || (x.RegistrationAddress1 != null && x.RegistrationAddress1.Contains(keywords))
                 || (x.RegistrationAddress2 != null && x.RegistrationAddress2.Contains(keywords))
-                || (x.RegistrationAddress3 != null && x.RegistrationAddress3.Contains(keywords))
                 || (x.RegistrationRegion != null && x.RegistrationRegion.Contains(keywords))
                 || (x.RegistrationProvince != null && x.RegistrationProvince.Contains(keywords))
                 || (x.RegistrationCity != null && x.RegistrationCity.Contains(keywords))
@@ -414,7 +411,6 @@ public class TaktCompanyService : TaktServiceBase, ITaktCompanyService
                 || (x.BusinessCity != null && x.BusinessCity.Contains(keywords))
                 || (x.BusinessAddress1 != null && x.BusinessAddress1.Contains(keywords))
                 || (x.BusinessAddress2 != null && x.BusinessAddress2.Contains(keywords))
-                || (x.BusinessAddress3 != null && x.BusinessAddress3.Contains(keywords))
                 || (x.CompanyPhone != null && x.CompanyPhone.Contains(keywords))
                 || (x.CompanyEmail != null && x.CompanyEmail.Contains(keywords))
                 || (x.CompanyFax != null && x.CompanyFax.Contains(keywords))
@@ -427,6 +423,18 @@ public class TaktCompanyService : TaktServiceBase, ITaktCompanyService
                 || SqlFunc.ToString(x.CompanyExistence).Contains(keywords)
                 || (x.DefaultCulture != null && x.DefaultCulture.Contains(keywords))
                 || (x.CodeAlias != null && x.CodeAlias.Contains(keywords))
+                || (x.BankCode != null && x.BankCode.Contains(keywords))
+                || (x.BankAccount != null && x.BankAccount.Contains(keywords))
+                || (x.AccountHolder != null && x.AccountHolder.Contains(keywords))
+                || (x.CurrencyCode != null && x.CurrencyCode.Contains(keywords))
+                || (x.ChartOfAccounts != null && x.ChartOfAccounts.Contains(keywords))
+                || (x.InputTaxCode != null && x.InputTaxCode.Contains(keywords))
+                || (x.OutputTaxCode != null && x.OutputTaxCode.Contains(keywords))
+                || (x.BusinessPlace != null && x.BusinessPlace.Contains(keywords))
+                || (x.PostingPeriodVariant != null && x.PostingPeriodVariant.Contains(keywords))
+                || (x.FiscalYearVariant != null && x.FiscalYearVariant.Contains(keywords))
+                || (x.CreditControlArea != null && x.CreditControlArea.Contains(keywords))
+                || (x.FinancialManagementArea != null && x.FinancialManagementArea.Contains(keywords))
                 || (x.RelatedPlant != null && x.RelatedPlant.Contains(keywords))
                 || SqlFunc.ToString(x.SortOrder).Contains(keywords)
                 || SqlFunc.ToString(x.CompanyStatus).Contains(keywords)
@@ -438,9 +446,14 @@ public class TaktCompanyService : TaktServiceBase, ITaktCompanyService
             );
         }
 
-        if (!string.IsNullOrEmpty(queryDto?.CompanyName))
+        if (!string.IsNullOrEmpty(queryDto?.CompanyName1))
         {
-            exp = exp.And(x => x.CompanyName != null && x.CompanyName.Contains(queryDto.CompanyName));
+            exp = exp.And(x => x.CompanyName1 != null && x.CompanyName1.Contains(queryDto.CompanyName1));
+        }
+
+        if (!string.IsNullOrEmpty(queryDto?.CompanyName2))
+        {
+            exp = exp.And(x => x.CompanyName2 != null && x.CompanyName2.Contains(queryDto.CompanyName2));
         }
 
         if (!string.IsNullOrEmpty(queryDto?.CompanyShortName))
@@ -476,11 +489,6 @@ public class TaktCompanyService : TaktServiceBase, ITaktCompanyService
         if (!string.IsNullOrEmpty(queryDto?.RegistrationAddress2))
         {
             exp = exp.And(x => x.RegistrationAddress2 != null && x.RegistrationAddress2.Contains(queryDto.RegistrationAddress2));
-        }
-
-        if (!string.IsNullOrEmpty(queryDto?.RegistrationAddress3))
-        {
-            exp = exp.And(x => x.RegistrationAddress3 != null && x.RegistrationAddress3.Contains(queryDto.RegistrationAddress3));
         }
 
         if (!string.IsNullOrEmpty(queryDto?.RegistrationRegion))
@@ -521,11 +529,6 @@ public class TaktCompanyService : TaktServiceBase, ITaktCompanyService
         if (!string.IsNullOrEmpty(queryDto?.BusinessAddress2))
         {
             exp = exp.And(x => x.BusinessAddress2 != null && x.BusinessAddress2.Contains(queryDto.BusinessAddress2));
-        }
-
-        if (!string.IsNullOrEmpty(queryDto?.BusinessAddress3))
-        {
-            exp = exp.And(x => x.BusinessAddress3 != null && x.BusinessAddress3.Contains(queryDto.BusinessAddress3));
         }
 
         if (!string.IsNullOrEmpty(queryDto?.CompanyPhone))
@@ -586,6 +589,66 @@ public class TaktCompanyService : TaktServiceBase, ITaktCompanyService
         if (!string.IsNullOrEmpty(queryDto?.CodeAlias))
         {
             exp = exp.And(x => x.CodeAlias != null && x.CodeAlias.Contains(queryDto.CodeAlias));
+        }
+
+        if (!string.IsNullOrEmpty(queryDto?.BankCode))
+        {
+            exp = exp.And(x => x.BankCode != null && x.BankCode.Contains(queryDto.BankCode));
+        }
+
+        if (!string.IsNullOrEmpty(queryDto?.BankAccount))
+        {
+            exp = exp.And(x => x.BankAccount != null && x.BankAccount.Contains(queryDto.BankAccount));
+        }
+
+        if (!string.IsNullOrEmpty(queryDto?.AccountHolder))
+        {
+            exp = exp.And(x => x.AccountHolder != null && x.AccountHolder.Contains(queryDto.AccountHolder));
+        }
+
+        if (!string.IsNullOrEmpty(queryDto?.CurrencyCode))
+        {
+            exp = exp.And(x => x.CurrencyCode != null && x.CurrencyCode.Contains(queryDto.CurrencyCode));
+        }
+
+        if (!string.IsNullOrEmpty(queryDto?.ChartOfAccounts))
+        {
+            exp = exp.And(x => x.ChartOfAccounts != null && x.ChartOfAccounts.Contains(queryDto.ChartOfAccounts));
+        }
+
+        if (!string.IsNullOrEmpty(queryDto?.InputTaxCode))
+        {
+            exp = exp.And(x => x.InputTaxCode != null && x.InputTaxCode.Contains(queryDto.InputTaxCode));
+        }
+
+        if (!string.IsNullOrEmpty(queryDto?.OutputTaxCode))
+        {
+            exp = exp.And(x => x.OutputTaxCode != null && x.OutputTaxCode.Contains(queryDto.OutputTaxCode));
+        }
+
+        if (!string.IsNullOrEmpty(queryDto?.BusinessPlace))
+        {
+            exp = exp.And(x => x.BusinessPlace != null && x.BusinessPlace.Contains(queryDto.BusinessPlace));
+        }
+
+        if (!string.IsNullOrEmpty(queryDto?.PostingPeriodVariant))
+        {
+            exp = exp.And(x => x.PostingPeriodVariant != null && x.PostingPeriodVariant.Contains(queryDto.PostingPeriodVariant));
+        }
+
+        if (!string.IsNullOrEmpty(queryDto?.FiscalYearVariant))
+        {
+            exp = exp.And(x => x.FiscalYearVariant != null && x.FiscalYearVariant.Contains(queryDto.FiscalYearVariant));
+        }
+
+        if (!string.IsNullOrEmpty(queryDto?.CreditControlArea))
+        {
+            exp = exp.And(x => x.CreditControlArea != null && x.CreditControlArea.Contains(queryDto.CreditControlArea));
+        }
+
+        if (!string.IsNullOrEmpty(queryDto?.FinancialManagementArea))
+        {
+            exp = exp.And(x => x.FinancialManagementArea != null && x.FinancialManagementArea.Contains(queryDto.FinancialManagementArea));
         }
 
         if (!string.IsNullOrEmpty(queryDto?.RelatedPlant))

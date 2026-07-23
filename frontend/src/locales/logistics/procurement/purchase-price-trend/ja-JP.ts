@@ -32,6 +32,7 @@ export default {
     filter: {
       all: 'すべて',
       changed: '変動のみ',
+      leading: '上昇・下落各上位50',
     },
     trend: {
       none: '—',

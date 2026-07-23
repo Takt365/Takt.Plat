@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：frontend/src/types/logistics/sales
 // 文件名称：price.d.ts
-// 创建时间：2026-07-20
+// 创建时间：2026-07-23
 // 创建人：Takt365(Auto Generated)
 // 功能描述：logistics/sales 模块类型定义（自动生成；类型名去 Takt 前缀与末尾 Dto，如 TaktCompanyDto → Company）
 // 
@@ -29,6 +29,11 @@ export interface SalesPrice extends CompanyDtoBase {
   salesPriceId: string;
 
   /**
+   * 工厂代码（选项 TaktPlants/options；DictValue=PlantCode）
+   */
+  plantCode: string;
+
+  /**
    * 定价记录号（唯一索引；长度 20）
    */
   salesPriceCode: string;
@@ -39,14 +44,34 @@ export interface SalesPrice extends CompanyDtoBase {
   priceType: string;
 
   /**
-   * 客户编码（选项 TaktCustomers/options，DictValue=CustomerCode）
+   * 客户编码（选项 TaktCustomers/options；DictValue=CustomerCode）
    */
   customerCode: string;
 
   /**
-   * 物料编码（选项 TaktMaterialPlants/options，DictValue=MaterialCode）
+   * 物料编码（选项 TaktMaterialPlants/options；DictValue=MaterialCode）
    */
   materialCode: string;
+
+  /**
+   * 销售组（选项 TaktSalesGroups/options；DictValue=SalesGroupCode）
+   */
+  salesGroup?: string;
+
+  /**
+   * 税码（字典 accounting_tax_code；DictValue=J0～J8/L1/X0～X3；中国）
+   */
+  taxCode?: string;
+
+  /**
+   * 基于收货的发票检验（字典 sys_yes_no_type；0=否 1=是）
+   */
+  grBasedInvoiceInspection: number;
+
+  /**
+   * 定价日期控制（字典 logistics_pricing_date_control；1=采购订单日期，2=交货日期，3=当前日期，4=手动，5=收货日期；默认 1）
+   */
+  pricingDateControl: number;
 
   /**
    * 有效起始日
@@ -59,12 +84,7 @@ export interface SalesPrice extends CompanyDtoBase {
   validTo: string;
 
   /**
-   * 可变关键字
-   */
-  variableKey?: string;
-
-  /**
-   * 来源销售报价 ID（选项 TaktSalesQuotations/options，DictValue=Id；对应采购侧来源询价）
+   * 来源销售报价 ID（选项 TaktSalesQuotations/options；DictValue=Id；对应采购侧来源询价）
    */
   salesQuotationId?: string;
 
@@ -77,6 +97,11 @@ export interface SalesPrice extends CompanyDtoBase {
    * 来源销售报价编码（冗余）
    */
   salesQuotationCode?: string;
+
+  /**
+   * 可变关键字
+   */
+  variableKey?: string;
 
   /**
    * 定价条件行列表（主子表关系） （子表：TaktSalesPriceItem）
@@ -104,6 +129,11 @@ export interface SalesPriceQuery extends TaktPagedQuery {
   companyCode?: string;
 
   /**
+   * 工厂代码（选项 TaktPlants/options；DictValue=PlantCode）
+   */
+  plantCode?: string;
+
+  /**
    * 定价记录号（唯一索引；长度 20）
    */
   salesPriceCode?: string;
@@ -114,14 +144,34 @@ export interface SalesPriceQuery extends TaktPagedQuery {
   priceType?: string;
 
   /**
-   * 客户编码（选项 TaktCustomers/options，DictValue=CustomerCode）
+   * 客户编码（选项 TaktCustomers/options；DictValue=CustomerCode）
    */
   customerCode?: string;
 
   /**
-   * 物料编码（选项 TaktMaterialPlants/options，DictValue=MaterialCode）
+   * 物料编码（选项 TaktMaterialPlants/options；DictValue=MaterialCode）
    */
   materialCode?: string;
+
+  /**
+   * 销售组（选项 TaktSalesGroups/options；DictValue=SalesGroupCode）
+   */
+  salesGroup?: string;
+
+  /**
+   * 税码（字典 accounting_tax_code；DictValue=J0～J8/L1/X0～X3；中国）
+   */
+  taxCode?: string;
+
+  /**
+   * 基于收货的发票检验（字典 sys_yes_no_type；0=否 1=是）
+   */
+  grBasedInvoiceInspection?: number;
+
+  /**
+   * 定价日期控制（字典 logistics_pricing_date_control；1=采购订单日期，2=交货日期，3=当前日期，4=手动，5=收货日期；默认 1）
+   */
+  pricingDateControl?: number;
 
   /**
    * 有效起始日（范围查询-开始）
@@ -144,12 +194,7 @@ export interface SalesPriceQuery extends TaktPagedQuery {
   validToEnd?: string;
 
   /**
-   * 可变关键字
-   */
-  variableKey?: string;
-
-  /**
-   * 来源销售报价 ID（选项 TaktSalesQuotations/options，DictValue=Id；对应采购侧来源询价）
+   * 来源销售报价 ID（选项 TaktSalesQuotations/options；DictValue=Id；对应采购侧来源询价）
    */
   salesQuotationId?: string;
 
@@ -157,6 +202,11 @@ export interface SalesPriceQuery extends TaktPagedQuery {
    * 来源销售报价编码（冗余）
    */
   salesQuotationCode?: string;
+
+  /**
+   * 可变关键字
+   */
+  variableKey?: string;
 
   /**
    * 创建时间（范围查询-开始）
@@ -203,6 +253,11 @@ export interface SalesPriceCreate {
   companyDefaultCulture: string;
 
   /**
+   * 工厂代码（选项 TaktPlants/options；DictValue=PlantCode）
+   */
+  plantCode: string;
+
+  /**
    * 定价记录号（唯一索引；长度 20）
    */
   salesPriceCode: string;
@@ -213,14 +268,34 @@ export interface SalesPriceCreate {
   priceType: string;
 
   /**
-   * 客户编码（选项 TaktCustomers/options，DictValue=CustomerCode）
+   * 客户编码（选项 TaktCustomers/options；DictValue=CustomerCode）
    */
   customerCode: string;
 
   /**
-   * 物料编码（选项 TaktMaterialPlants/options，DictValue=MaterialCode）
+   * 物料编码（选项 TaktMaterialPlants/options；DictValue=MaterialCode）
    */
   materialCode: string;
+
+  /**
+   * 销售组（选项 TaktSalesGroups/options；DictValue=SalesGroupCode）
+   */
+  salesGroup?: string;
+
+  /**
+   * 税码（字典 accounting_tax_code；DictValue=J0～J8/L1/X0～X3；中国）
+   */
+  taxCode?: string;
+
+  /**
+   * 基于收货的发票检验（字典 sys_yes_no_type；0=否 1=是）
+   */
+  grBasedInvoiceInspection: number;
+
+  /**
+   * 定价日期控制（字典 logistics_pricing_date_control；1=采购订单日期，2=交货日期，3=当前日期，4=手动，5=收货日期；默认 1）
+   */
+  pricingDateControl: number;
 
   /**
    * 有效起始日
@@ -233,12 +308,7 @@ export interface SalesPriceCreate {
   validTo: string;
 
   /**
-   * 可变关键字
-   */
-  variableKey?: string;
-
-  /**
-   * 来源销售报价 ID（选项 TaktSalesQuotations/options，DictValue=Id；对应采购侧来源询价）
+   * 来源销售报价 ID（选项 TaktSalesQuotations/options；DictValue=Id；对应采购侧来源询价）
    */
   salesQuotationId?: string;
 
@@ -246,6 +316,11 @@ export interface SalesPriceCreate {
    * 来源销售报价编码（冗余）
    */
   salesQuotationCode?: string;
+
+  /**
+   * 可变关键字
+   */
+  variableKey?: string;
 
   /**
    * 定价条件行列表（主子表关系）（子表，级联保存）
@@ -302,6 +377,11 @@ export interface SalesPriceTemplate {
   companyCode?: string;
 
   /**
+   * 工厂代码（选项 TaktPlants/options；DictValue=PlantCode）
+   */
+  plantCode?: string;
+
+  /**
    * 定价记录号（唯一索引；长度 20）
    */
   salesPriceCode?: string;
@@ -312,14 +392,34 @@ export interface SalesPriceTemplate {
   priceType?: string;
 
   /**
-   * 客户编码（选项 TaktCustomers/options，DictValue=CustomerCode）
+   * 客户编码（选项 TaktCustomers/options；DictValue=CustomerCode）
    */
   customerCode?: string;
 
   /**
-   * 物料编码（选项 TaktMaterialPlants/options，DictValue=MaterialCode）
+   * 物料编码（选项 TaktMaterialPlants/options；DictValue=MaterialCode）
    */
   materialCode?: string;
+
+  /**
+   * 销售组（选项 TaktSalesGroups/options；DictValue=SalesGroupCode）
+   */
+  salesGroup?: string;
+
+  /**
+   * 税码（字典 accounting_tax_code；DictValue=J0～J8/L1/X0～X3；中国）
+   */
+  taxCode?: string;
+
+  /**
+   * 基于收货的发票检验（字典 sys_yes_no_type；0=否 1=是）
+   */
+  grBasedInvoiceInspection?: number;
+
+  /**
+   * 定价日期控制（字典 logistics_pricing_date_control；1=采购订单日期，2=交货日期，3=当前日期，4=手动，5=收货日期；默认 1）
+   */
+  pricingDateControl?: number;
 
   /**
    * 有效起始日
@@ -332,12 +432,7 @@ export interface SalesPriceTemplate {
   validTo?: string;
 
   /**
-   * 可变关键字
-   */
-  variableKey?: string;
-
-  /**
-   * 来源销售报价 ID（选项 TaktSalesQuotations/options，DictValue=Id；对应采购侧来源询价）
+   * 来源销售报价 ID（选项 TaktSalesQuotations/options；DictValue=Id；对应采购侧来源询价）
    */
   salesQuotationId?: string;
 
@@ -345,6 +440,11 @@ export interface SalesPriceTemplate {
    * 来源销售报价编码（冗余）
    */
   salesQuotationCode?: string;
+
+  /**
+   * 可变关键字
+   */
+  variableKey?: string;
 
   /**
    * 定价条件行列表（主子表关系）（子表，级联保存）
@@ -386,6 +486,11 @@ export interface SalesPriceImport {
   companyDefaultCulture?: string;
 
   /**
+   * 工厂代码（选项 TaktPlants/options；DictValue=PlantCode）
+   */
+  plantCode?: string;
+
+  /**
    * 定价记录号（唯一索引；长度 20）
    */
   salesPriceCode?: string;
@@ -396,14 +501,34 @@ export interface SalesPriceImport {
   priceType?: string;
 
   /**
-   * 客户编码（选项 TaktCustomers/options，DictValue=CustomerCode）
+   * 客户编码（选项 TaktCustomers/options；DictValue=CustomerCode）
    */
   customerCode?: string;
 
   /**
-   * 物料编码（选项 TaktMaterialPlants/options，DictValue=MaterialCode）
+   * 物料编码（选项 TaktMaterialPlants/options；DictValue=MaterialCode）
    */
   materialCode?: string;
+
+  /**
+   * 销售组（选项 TaktSalesGroups/options；DictValue=SalesGroupCode）
+   */
+  salesGroup?: string;
+
+  /**
+   * 税码（字典 accounting_tax_code；DictValue=J0～J8/L1/X0～X3；中国）
+   */
+  taxCode?: string;
+
+  /**
+   * 基于收货的发票检验（字典 sys_yes_no_type；0=否 1=是）
+   */
+  grBasedInvoiceInspection?: number;
+
+  /**
+   * 定价日期控制（字典 logistics_pricing_date_control；1=采购订单日期，2=交货日期，3=当前日期，4=手动，5=收货日期；默认 1）
+   */
+  pricingDateControl?: number;
 
   /**
    * 有效起始日
@@ -416,12 +541,7 @@ export interface SalesPriceImport {
   validTo?: string;
 
   /**
-   * 可变关键字
-   */
-  variableKey?: string;
-
-  /**
-   * 来源销售报价 ID（选项 TaktSalesQuotations/options，DictValue=Id；对应采购侧来源询价）
+   * 来源销售报价 ID（选项 TaktSalesQuotations/options；DictValue=Id；对应采购侧来源询价）
    */
   salesQuotationId?: string;
 
@@ -429,6 +549,11 @@ export interface SalesPriceImport {
    * 来源销售报价编码（冗余）
    */
   salesQuotationCode?: string;
+
+  /**
+   * 可变关键字
+   */
+  variableKey?: string;
 
   /**
    * 定价条件行列表（主子表关系）（子表，级联保存）
@@ -465,6 +590,11 @@ export interface SalesPriceExport {
   companyCode: string;
 
   /**
+   * 工厂代码（选项 TaktPlants/options；DictValue=PlantCode）
+   */
+  plantCode: string;
+
+  /**
    * 定价记录号（唯一索引；长度 20）
    */
   salesPriceCode: string;
@@ -475,14 +605,34 @@ export interface SalesPriceExport {
   priceType: string;
 
   /**
-   * 客户编码（选项 TaktCustomers/options，DictValue=CustomerCode）
+   * 客户编码（选项 TaktCustomers/options；DictValue=CustomerCode）
    */
   customerCode: string;
 
   /**
-   * 物料编码（选项 TaktMaterialPlants/options，DictValue=MaterialCode）
+   * 物料编码（选项 TaktMaterialPlants/options；DictValue=MaterialCode）
    */
   materialCode: string;
+
+  /**
+   * 销售组（选项 TaktSalesGroups/options；DictValue=SalesGroupCode）
+   */
+  salesGroup?: string;
+
+  /**
+   * 税码（字典 accounting_tax_code；DictValue=J0～J8/L1/X0～X3；中国）
+   */
+  taxCode?: string;
+
+  /**
+   * 基于收货的发票检验（字典 sys_yes_no_type；0=否 1=是）
+   */
+  grBasedInvoiceInspection: number;
+
+  /**
+   * 定价日期控制（字典 logistics_pricing_date_control；1=采购订单日期，2=交货日期，3=当前日期，4=手动，5=收货日期；默认 1）
+   */
+  pricingDateControl: number;
 
   /**
    * 有效起始日
@@ -495,12 +645,7 @@ export interface SalesPriceExport {
   validTo: string;
 
   /**
-   * 可变关键字
-   */
-  variableKey?: string;
-
-  /**
-   * 来源销售报价 ID（选项 TaktSalesQuotations/options，DictValue=Id；对应采购侧来源询价）
+   * 来源销售报价 ID（选项 TaktSalesQuotations/options；DictValue=Id；对应采购侧来源询价）
    */
   salesQuotationId?: string;
 
@@ -508,6 +653,11 @@ export interface SalesPriceExport {
    * 来源销售报价编码（冗余）
    */
   salesQuotationCode?: string;
+
+  /**
+   * 可变关键字
+   */
+  variableKey?: string;
 
   /**
    * 扩展字段JSON

@@ -32,9 +32,9 @@ public class TaktExpenseDetail : TaktCompanyEntityBase
     [JsonConverter(typeof(ValueToStringConverter))]
     public long ExpenseId { get; set; }
     /// <summary>
-    /// 费用单编号（冗余，便于查询）
+    /// 费用单编码（冗余，便于查询）
     /// </summary>
-    [SugarColumn(ColumnName = "expense_code", ColumnDescription = "费用单编号", ColumnDataType = "varchar", Length = 40, IsNullable = false)]
+    [SugarColumn(ColumnName = "expense_code", ColumnDescription = "费用单编码", ColumnDataType = "varchar", Length = 40, IsNullable = false)]
     public string ExpenseCode { get; set; } = string.Empty;
     /// <summary>
     /// 行号（项号/序号，固定步长=10）
@@ -67,7 +67,7 @@ public class TaktExpenseDetail : TaktCompanyEntityBase
     [SugarColumn(ColumnName = "item_amount", ColumnDescription = "金额", ColumnDataType = "decimal", Length = 18, DecimalDigits = 4, IsNullable = false, DefaultValue = "0")]
     public decimal ItemAmount { get; set; }
     /// <summary>
-    /// 会计科目（选项 TaktAccountTitles/options，DictValue=Id）
+    /// 会计科目（选项 TaktAccountTitles/options；DictValue=Id）
     /// </summary>
     [SugarColumn(ColumnName = "account_title", ColumnDescription = "会计科目", ColumnDataType = "varchar", Length = 50, IsNullable = true)]
     public string? AccountTitle { get; set; }
@@ -83,7 +83,7 @@ public class TaktExpenseDetail : TaktCompanyEntityBase
     public DateTime? ExpenseDetailDate { get; set; }
 
     /// <summary>
-    /// 是否作废（字典 sys_yes_no_type，0=否 1=是；编辑移除子行时标记作废）
+    /// 是否作废（字典 sys_yes_no_type；0=否 1=是；编辑移除子行时标记作废）
     /// </summary>
     [SugarColumn(ColumnName = "is_obsolete", ColumnDescription = "是否作废", ColumnDataType = "int", IsNullable = false, DefaultValue = "0")]
     public int IsObsolete { get; set; } = 0;

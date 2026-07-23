@@ -27,34 +27,34 @@ namespace Takt.Domain.Entities.Logistics.Manufacturing.Sop;
 public class TaktSopAck : TaktCompanyEntityBase
 {
     /// <summary>
-    /// 工厂代码（选项 TaktPlants/options，DictValue=PlantCode）
+    /// 工厂代码（选项 TaktPlants/options；DictValue=PlantCode）
     /// </summary>
     [SugarColumn(ColumnName = "plant_code", ColumnDescription = "工厂代码", ColumnDataType = "nvarchar", Length = 4, IsNullable = false)]
     public string PlantCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// SOP 主档 ID（选项 TaktSopDocs/options，DictValue=Id）
+    /// SOP 主档 ID（选项 TaktSopDocs/options；DictValue=Id）
     /// </summary>
     [SugarColumn(ColumnName = "sop_id", ColumnDescription = "SOP主档ID", ColumnDataType = "bigint", IsNullable = false)]
     [JsonConverter(typeof(ValueToStringConverter))]
     public long SopId { get; set; }
 
     /// <summary>
-    /// SOP 版本 ID（选项 TaktSopRevisions/options，DictValue=Id）
+    /// SOP 版本 ID（选项 TaktSopRevisions/options；DictValue=Id）
     /// </summary>
     [SugarColumn(ColumnName = "revision_id", ColumnDescription = "SOP版本ID", ColumnDataType = "bigint", IsNullable = false)]
     [JsonConverter(typeof(ValueToStringConverter))]
     public long RevisionId { get; set; }
 
     /// <summary>
-    /// 工位 ID（选项 TaktSopWorkstations/options，DictValue=Id）
+    /// 工位 ID（选项 TaktSopWorkstations/options；DictValue=Id）
     /// </summary>
     [SugarColumn(ColumnName = "workstation_id", ColumnDescription = "工位ID", ColumnDataType = "bigint", IsNullable = true)]
     [JsonConverter(typeof(ValueToStringConverter))]
     public long? WorkstationId { get; set; }
 
     /// <summary>
-    /// 确认人 ID（选项 TaktEmployees/options，DictValue=Id）
+    /// 确认人 ID（选项 TaktEmployees/options；DictValue=Id）
     /// </summary>
     [SugarColumn(ColumnName = "acknowledged_by", ColumnDescription = "确认人ID", ColumnDataType = "bigint", IsNullable = false)]
     [JsonConverter(typeof(ValueToStringConverter))]

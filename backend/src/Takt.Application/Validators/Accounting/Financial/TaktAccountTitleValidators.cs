@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Application.Validators.Accounting.Financial
 // 文件名称：TaktAccountTitleValidators.cs
-// 创建时间：2026-07-20
+// 创建时间：2026-07-23
 // 创建人：Takt365(Auto Generated)
 // 功能描述：AccountTitle 模块 FluentValidation 验证器（由 generate-validators-from-entity.cjs 根据 TaktAccountTitle 生成，请按需审阅）
 // 
@@ -47,8 +47,8 @@ public class TaktAccountTitleCreateValidator : AbstractValidator<TaktAccountTitl
             .NotEmpty().WithMessage("科目类型不能为空")
             .MaximumLength(1).WithMessage("科目类型长度不能超过1个字符");
         RuleFor(x => x.AuxiliaryType)
-            .NotEmpty().WithMessage("辅助核算类型不能为空")
-            .MaximumLength(1).WithMessage("辅助核算类型长度不能超过1个字符");
+            .NotEmpty().WithMessage("辅助核算类型 / 统驭标识不能为空")
+            .MaximumLength(1).WithMessage("辅助核算类型 / 统驭标识长度不能超过1个字符");
         RuleFor(x => x.RelatedPlant)
             .NotEmpty().WithMessage("关联工厂不能为空")
             .MaximumLength(4).WithMessage("关联工厂长度不能超过4个字符");
@@ -93,8 +93,8 @@ public class TaktAccountTitleUpdateValidator : AbstractValidator<TaktAccountTitl
             .NotEmpty().WithMessage("科目类型不能为空")
             .MaximumLength(1).WithMessage("科目类型长度不能超过1个字符");
         RuleFor(x => x.AuxiliaryType)
-            .NotEmpty().WithMessage("辅助核算类型不能为空")
-            .MaximumLength(1).WithMessage("辅助核算类型长度不能超过1个字符");
+            .NotEmpty().WithMessage("辅助核算类型 / 统驭标识不能为空")
+            .MaximumLength(1).WithMessage("辅助核算类型 / 统驭标识长度不能超过1个字符");
         RuleFor(x => x.RelatedPlant)
             .NotEmpty().WithMessage("关联工厂不能为空")
             .MaximumLength(4).WithMessage("关联工厂长度不能超过4个字符");
@@ -135,8 +135,8 @@ public class TaktAccountTitleImportValidator : AbstractValidator<TaktAccountTitl
             .NotEmpty().WithMessage("科目类型不能为空")
             .MaximumLength(1).WithMessage("科目类型长度不能超过1个字符");
         RuleFor(x => x.AuxiliaryType)
-            .NotEmpty().WithMessage("辅助核算类型不能为空")
-            .MaximumLength(1).WithMessage("辅助核算类型长度不能超过1个字符");
+            .NotEmpty().WithMessage("辅助核算类型 / 统驭标识不能为空")
+            .MaximumLength(1).WithMessage("辅助核算类型 / 统驭标识长度不能超过1个字符");
         RuleFor(x => x.RelatedPlant)
             .NotEmpty().WithMessage("关联工厂不能为空")
             .MaximumLength(4).WithMessage("关联工厂长度不能超过4个字符");

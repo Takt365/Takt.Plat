@@ -27,12 +27,12 @@ namespace Takt.Domain.Entities.Logistics.Materials;
 public class TaktMaterialDocument : TaktCompanyEntityBase
 {
     /// <summary>
-    /// 工厂代码（选项 TaktPlants/options，DictValue=PlantCode）
+    /// 工厂代码（选项 TaktPlants/options；DictValue=PlantCode）
     /// </summary>
     [SugarColumn(ColumnName = "plant_code", ColumnDescription = "工厂代码", ColumnDataType = "nvarchar", Length = 4, IsNullable = false)]
     public string PlantCode { get; set; } = string.Empty;
     /// <summary>
-    /// 物料编码（选项 TaktMaterialPlants/options，DictValue=MaterialCode，ExtValue=PlantCode）
+    /// 物料编码（选项 TaktMaterialPlants/options；DictValue=MaterialCode，ExtValue=PlantCode）
     /// </summary>
     [SugarColumn(ColumnName = "material_code", ColumnDescription = "物料编码", ColumnDataType = "nvarchar", Length = 20, IsNullable = false)]
     public string MaterialCode { get; set; } = string.Empty;
@@ -42,7 +42,7 @@ public class TaktMaterialDocument : TaktCompanyEntityBase
     [SugarColumn(ColumnName = "material_document_code", ColumnDescription = "物料凭证号", ColumnDataType = "nvarchar", Length = 10, IsNullable = false)]
     public string MaterialDocumentCode { get; set; } = string.Empty;
     /// <summary>
-    /// 过账人（选项 TaktEmployees/options，DictValue=EmployeeNo）
+    /// 过账人（选项 TaktEmployees/options；DictValue=EmployeeCode）
     /// </summary>
     [SugarColumn(ColumnName = "posted_by", ColumnDescription = "过账人", ColumnDataType = "nvarchar", Length = 50, IsNullable = true)]
     public string? PostedBy { get; set; }

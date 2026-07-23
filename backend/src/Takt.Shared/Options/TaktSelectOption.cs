@@ -52,6 +52,11 @@ public class TaktSelectOption
     public string? DictTypeCode { get; set; }
 
     /// <summary>
+    /// 区域文化编码（eo=全局；批量加载时供前端同 DictValue 去重，区域项优先于 eo）
+    /// </summary>
+    public string? CultureCode { get; set; }
+
+    /// <summary>
     /// CSS类名
     /// </summary>
     public int? CssClass { get; set; }
@@ -65,6 +70,11 @@ public class TaktSelectOption
     /// 排序号
     /// </summary>
     public int SortOrder { get; set; } = 0;
+
+    /// <summary>
+    /// 是否默认项（1=是，0=否；与 TaktDictData.IsDefault / sys_yes_no 一致，供前端默认选中）
+    /// </summary>
+    public int IsDefault { get; set; } = 0;
 }
 
 /// <summary>
@@ -73,15 +83,12 @@ public class TaktSelectOption
 public class TaktTreeSelectOption : TaktSelectOption
 {
     /// <summary>
-    /// 构造函数
+    /// 子节点列表（懒加载树：非叶子勿赋空数组，保持 null 以便前端展示展开图标并由 loadData 拉取）
     /// </summary>
-    public TaktTreeSelectOption()
-    {
-        Children = new List<TaktTreeSelectOption>();
-    }
+    public List<TaktTreeSelectOption>? Children { get; set; }
 
     /// <summary>
-    /// 子节点列表
+    /// 是否叶子节点（懒加载树：true=不可展开；false/null 且 Children 为空时由前端 loadData）
     /// </summary>
-    public List<TaktTreeSelectOption> Children { get; set; }
+    public bool? IsLeaf { get; set; }
 }

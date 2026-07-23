@@ -27,8 +27,8 @@ import type {
   BomMaterialCostItemMonthlyTrendResult,
   BomMaterialCostItemComponentMovingPriceQuery,
   BomMaterialCostItemComponentMovingPriceResult,
-  BomMaterialCostItemModelMovingPriceQuery,
-  BomMaterialCostItemModelMovingPriceResult,
+  BomMaterialCostItemModelCostTrendQuery,
+  BomMaterialCostItemModelCostTrendResult,
   BomMaterialCostItemZeroMovingPriceQuery,
   BomMaterialCostItemZeroMovingPriceResult,
   BomMaterialCostItemTransposedQuery,
@@ -436,14 +436,14 @@ export function exportBomMaterialCostItemComponentMovingPriceAnalysis(
 
 /**
  * 机种成本推移：按组件编码合并后核算月单价转置分析
- * @param {BomMaterialCostItemModelMovingPriceQuery} queryDto 查询条件
- * @returns {Promise<BomMaterialCostItemModelMovingPriceResult>} 合并组件单价转置结果
+ * @param {BomMaterialCostItemModelCostTrendQuery} queryDto 查询条件
+ * @returns {Promise<BomMaterialCostItemModelCostTrendResult>} 合并组件单价转置结果
  */
-export function getBomMaterialCostItemModelMovingPriceAnalysis(
-  queryDto: BomMaterialCostItemModelMovingPriceQuery
-): Promise<BomMaterialCostItemModelMovingPriceResult> {
-  return request<BomMaterialCostItemModelMovingPriceResult>({
-    url: `${BOM_MATERIAL_COST_ITEM_API_BASE}/model-moving-price-analysis`,
+export function getBomMaterialCostItemModelCostTrendAnalysis(
+  queryDto: BomMaterialCostItemModelCostTrendQuery
+): Promise<BomMaterialCostItemModelCostTrendResult> {
+  return request<BomMaterialCostItemModelCostTrendResult>({
+    url: `${BOM_MATERIAL_COST_ITEM_API_BASE}/model-cost-trend-analysis`,
     method: 'get',
     params: queryDto,
   });
@@ -451,18 +451,18 @@ export function getBomMaterialCostItemModelMovingPriceAnalysis(
 
 /**
  * 导出机种成本推移（组件合并）分析报表
- * @param {BomMaterialCostItemModelMovingPriceQuery} query 查询条件
+ * @param {BomMaterialCostItemModelCostTrendQuery} query 查询条件
  * @param {string} [sheetName] 工作表名
  * @param {string} [exportName] 导出文件名
  * @returns {Promise<Blob>} Excel 文件
  */
-export function exportBomMaterialCostItemModelMovingPriceAnalysis(
-  query: BomMaterialCostItemModelMovingPriceQuery,
+export function exportBomMaterialCostItemModelCostTrendAnalysis(
+  query: BomMaterialCostItemModelCostTrendQuery,
   sheetName?: string,
   exportName?: string
 ): Promise<Blob> {
   return request<Blob>({
-    url: `${BOM_MATERIAL_COST_ITEM_API_BASE}/model-moving-price-analysis/export`,
+    url: `${BOM_MATERIAL_COST_ITEM_API_BASE}/model-cost-trend-analysis/export`,
     method: 'get',
     params: {
       ...query,

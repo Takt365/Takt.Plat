@@ -538,18 +538,24 @@ ${permissionAttr}
 }
 
 function generateTreeOptionsEndpoint(ctx) {
+  const paramDecl = formatControllerParameters(ctx.params, 'query');
+  const callArgs = ctx.params.map((p) => p.name).join(', ');
   const perm = permissionCode(ctx, 'query');
+  const parentIdParam = ctx.params.find((p) => p.name === 'parentId');
+  const parentIdDoc = parentIdParam
+    ? `\n    /// <param name="parentId">父级ID（0=根；懒加载仅返回直接子级一层）</param>`
+    : '';
   const code = `    /// <summary>
-    /// ${ctx.summary || `获取${ctx.displayName}树形选项列表`}
-    /// </summary>
+    /// ${ctx.summary || `获取${ctx.displayName}树形选项列表（懒加载一层）`}
+    /// </summary>${parentIdDoc}
     /// <returns>树形选项</returns>
     [TaktPermission("${perm}", "${ctx.displayName}树形选项")]
     [HttpGet("tree-options")]
-    public async Task<IActionResult> ${ctx.methodName}()
+    public async Task<IActionResult> ${ctx.methodName}(${paramDecl})
     {
         try
         {
-            var result = await ${ctx.serviceField}.${ctx.methodName}();
+            var result = await ${ctx.serviceField}.${ctx.methodName}(${callArgs});
             return Success(result, "查询成功");
         }
         catch (Exception ex)
@@ -566,12 +572,16 @@ function generateTreeEndpoint(ctx) {
   const callArgs = ctx.params.map((p) => p.name).join(', ');
   const perm = permissionCode(ctx, 'query');
   const includeDisabledParam = ctx.params.find((p) => p.name === 'includeDisabled');
+  const parentIdParam = ctx.params.find((p) => p.name === 'parentId');
   const includeDisabledDoc = includeDisabledParam
-    ? `\n    /// <param name="includeDisabled">为 false 时过滤禁用项（按实体 *Status 枚举字段，如 TaktCommonStatus.Enabled）</param>`
+    ? `\n    /// <param name="includeDisabled">为 false 时过滤禁用项（按实体 *Status 字段）</param>`
+    : '';
+  const parentIdDoc = parentIdParam
+    ? `\n    /// <param name="parentId">父级ID（0=根；懒加载仅返回直接子级一层）</param>`
     : '';
   const code = `    /// <summary>
-    /// ${ctx.summary || `获取${ctx.displayName}树`}
-    /// </summary>${includeDisabledDoc}
+    /// ${ctx.summary || `获取${ctx.displayName}树（懒加载一层）`}
+    /// </summary>${parentIdDoc}${includeDisabledDoc}
     /// <returns>树形数据</returns>
     [TaktPermission("${perm}", "${ctx.displayName}树")]
     [HttpGet("tree")]

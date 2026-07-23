@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Application.Validators.Accounting.Financial
 // 文件名称：TaktExpenseValidators.cs
-// 创建时间：2026-07-20
+// 创建时间：2026-07-23
 // 创建人：Takt365(Auto Generated)
 // 功能描述：Expense 模块 FluentValidation 验证器（由 generate-validators-from-entity.cjs 根据 TaktExpense 生成，请按需审阅）
 // 
@@ -36,8 +36,8 @@ public class TaktExpenseCreateValidator : AbstractValidator<TaktExpenseCreateDto
             .NotEmpty().WithMessage("公司代码不能为空")
             .MaximumLength(4).WithMessage("公司代码长度不能超过4个字符");
         RuleFor(x => x.ExpenseCode)
-            .NotEmpty().WithMessage("费用单编号不能为空")
-            .MaximumLength(40).WithMessage("费用单编号长度不能超过40个字符");
+            .NotEmpty().WithMessage("费用单编码不能为空")
+            .MaximumLength(40).WithMessage("费用单编码长度不能超过40个字符");
         RuleFor(x => x.ExpenseTitle)
             .NotEmpty().WithMessage("费用标题不能为空")
             .MaximumLength(200).WithMessage("费用标题长度不能超过200个字符");
@@ -76,8 +76,8 @@ public class TaktExpenseUpdateValidator : AbstractValidator<TaktExpenseUpdateDto
             .NotEmpty().WithMessage("公司代码不能为空")
             .MaximumLength(4).WithMessage("公司代码长度不能超过4个字符");
         RuleFor(x => x.ExpenseCode)
-            .NotEmpty().WithMessage("费用单编号不能为空")
-            .MaximumLength(40).WithMessage("费用单编号长度不能超过40个字符");
+            .NotEmpty().WithMessage("费用单编码不能为空")
+            .MaximumLength(40).WithMessage("费用单编码长度不能超过40个字符");
         RuleFor(x => x.ExpenseTitle)
             .NotEmpty().WithMessage("费用标题不能为空")
             .MaximumLength(200).WithMessage("费用标题长度不能超过200个字符");
@@ -112,8 +112,8 @@ public class TaktExpenseImportValidator : AbstractValidator<TaktExpenseImportDto
         RuleFor(x => x.CompanyCode)
             .MaximumLength(4).WithMessage("公司代码长度不能超过4个字符").When(x => !string.IsNullOrWhiteSpace(x.CompanyCode));
         RuleFor(x => x.ExpenseCode)
-            .NotEmpty().WithMessage("费用单编号不能为空")
-            .MaximumLength(40).WithMessage("费用单编号长度不能超过40个字符");
+            .NotEmpty().WithMessage("费用单编码不能为空")
+            .MaximumLength(40).WithMessage("费用单编码长度不能超过40个字符");
         RuleFor(x => x.ExpenseTitle)
             .NotEmpty().WithMessage("费用标题不能为空")
             .MaximumLength(200).WithMessage("费用标题长度不能超过200个字符");

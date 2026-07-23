@@ -24,7 +24,7 @@ namespace Takt.Domain.Entities.HumanResource.Performance;
 public class TaktPerfAnalysis : TaktApprovalEntityBase
 {
     /// <summary>
-    /// 员工（选项 TaktEmployees/options，DictValue=Id）
+    /// 员工（选项 TaktEmployees/options；DictValue=Id）
     /// </summary>
     [SugarColumn(ColumnName = "employee_id", ColumnDescription = "员工ID", ColumnDataType = "bigint", IsNullable = false)]
     [JsonConverter(typeof(ValueToStringConverter))]
@@ -35,7 +35,7 @@ public class TaktPerfAnalysis : TaktApprovalEntityBase
     [SugarColumn(ColumnName = "employee_name", ColumnDescription = "员工姓名", ColumnDataType = "nvarchar", Length = 50, IsNullable = false)]
     public string EmployeeName { get; set; } = string.Empty;
     /// <summary>
-    /// 考核评估（选项 TaktPerfAssessments/options，DictValue=Id）
+    /// 考核评估（选项 TaktPerfAssessments/options；DictValue=Id）
     /// </summary>
     [SugarColumn(ColumnName = "assessment_id", ColumnDescription = "考核评估ID", ColumnDataType = "bigint", IsNullable = false)]
     [JsonConverter(typeof(ValueToStringConverter))]
@@ -86,13 +86,13 @@ public class TaktPerfAnalysis : TaktApprovalEntityBase
     [SugarColumn(ColumnName = "result_description", ColumnDescription = "改进结果说明", ColumnDataType = "nvarchar", Length = 1000, IsNullable = false)]
     public string ResultDescription { get; set; } = string.Empty;
     /// <summary>
-    /// 指导老师（选项 TaktEmployees/options，DictValue=Id）
+    /// 指导老师（选项 TaktEmployees/options；DictValue=Id）
     /// </summary>
     [SugarColumn(ColumnName = "mentor_id", ColumnDescription = "指导老师ID", ColumnDataType = "bigint", IsNullable = false)]
     [JsonConverter(typeof(ValueToStringConverter))]
     public long MentorId { get; set; }
     /// <summary>
-    /// 关联工厂（选项 TaktPlants/options，DictValue=Id）
+    /// 关联工厂（选项 TaktPlants/options；DictValue=Id）
     /// </summary>
     [SugarColumn(ColumnName = "related_plant", ColumnDescription = "关联工厂", ColumnDataType = "nvarchar", Length = 4, IsNullable = false)]
     public string RelatedPlant { get; set; } = string.Empty;

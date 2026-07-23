@@ -36,10 +36,15 @@ public class TaktManufacturer : TaktCompanyEntityBase
     [SugarColumn(ColumnName = "manufacturer_code", ColumnDescription = "制造商编码", ColumnDataType = "nvarchar", Length = 20, IsNullable = false)]
     public string ManufacturerCode { get; set; } = string.Empty;
     /// <summary>
-    /// 制造商名称
+    /// 制造商名称1
     /// </summary>
-    [SugarColumn(ColumnName = "manufacturer_name", ColumnDescription = "制造商名称", ColumnDataType = "nvarchar", Length = 80, IsNullable = false)]
-    public string ManufacturerName { get; set; } = string.Empty;
+    [SugarColumn(ColumnName = "manufacturer_name1", ColumnDescription = "制造商名称1", ColumnDataType = "nvarchar", Length = 140, IsNullable = false)]
+    public string ManufacturerName1 { get; set; } = string.Empty;
+    /// <summary>
+    /// 制造商名称2
+    /// </summary>
+    [SugarColumn(ColumnName = "manufacturer_name2", ColumnDescription = "制造商名称2", ColumnDataType = "nvarchar", Length = 140, IsNullable = true)]
+    public string? ManufacturerName2 { get; set; }
     /// <summary>
     /// 制造商简称
     /// </summary>
@@ -51,7 +56,7 @@ public class TaktManufacturer : TaktCompanyEntityBase
     [SugarColumn(ColumnName = "manufacturer_type", ColumnDescription = "制造商类型", ColumnDataType = "int", IsNullable = false, DefaultValue = "0")]
     public int ManufacturerType { get; set; } = 0;
     /// <summary>
-    /// 行业领域（字典 logistics_industry_sector，DictValue=A/C/M/P）
+    /// 行业领域（字典 logistics_industry_sector；DictValue=A/C/M/P）
     /// </summary>
     [SugarColumn(ColumnName = "industry_sector", ColumnDescription = "行业领域", ColumnDataType = "nvarchar", Length = 1, IsNullable = true)]
     public string? IndustrySector { get; set; }
@@ -61,25 +66,30 @@ public class TaktManufacturer : TaktCompanyEntityBase
     [SugarColumn(ColumnName = "manufacturer_tax_number", ColumnDescription = "制造商标识", ColumnDataType = "nvarchar", Length = 50, IsNullable = true)]
     public string? ManufacturerTaxNumber { get; set; }
     /// <summary>
-    /// 注册国家（ISO 3166-1 alpha-2 两位代码，选项 TaktIsoCodes/options，DictValue=IsoCode）
+    /// 注册国家（字典 sys_country_code；DictValue=ISO alpha-2）
     /// </summary>
     [SugarColumn(ColumnName = "registration_country", ColumnDescription = "注册国家", ColumnDataType = "nvarchar", Length = 2, IsNullable = true)]
     public string? RegistrationCountry { get; set; }
     /// <summary>
+    /// 注册省（选项 TaktAdminDivisions/options；DictValue=DivisionCode；建议 Level=2）
+    /// </summary>
+    [SugarColumn(ColumnName = "registration_province", ColumnDescription = "注册省", ColumnDataType = "nvarchar", Length = 70, IsNullable = true)]
+    public string? RegistrationProvince { get; set; }
+    /// <summary>
+    /// 注册市（选项 TaktAdminDivisions/options；DictValue=DivisionCode；建议 Level=3）
+    /// </summary>
+    [SugarColumn(ColumnName = "registration_city", ColumnDescription = "注册市", ColumnDataType = "nvarchar", Length = 70, IsNullable = true)]
+    public string? RegistrationCity { get; set; }
+    /// <summary>
     /// 注册地址1
     /// </summary>
-    [SugarColumn(ColumnName = "registration_address1", ColumnDescription = "注册地址1", ColumnDataType = "nvarchar", Length = 80, IsNullable = true)]
+    [SugarColumn(ColumnName = "registration_address1", ColumnDescription = "注册地址1", ColumnDataType = "nvarchar", Length = 140, IsNullable = true)]
     public string? RegistrationAddress1 { get; set; }
     /// <summary>
     /// 注册地址2
     /// </summary>
-    [SugarColumn(ColumnName = "registration_address2", ColumnDescription = "注册地址2", ColumnDataType = "nvarchar", Length = 80, IsNullable = true)]
+    [SugarColumn(ColumnName = "registration_address2", ColumnDescription = "注册地址2", ColumnDataType = "nvarchar", Length = 140, IsNullable = true)]
     public string? RegistrationAddress2 { get; set; }
-    /// <summary>
-    /// 注册地址3
-    /// </summary>
-    [SugarColumn(ColumnName = "registration_address3", ColumnDescription = "注册地址3", ColumnDataType = "nvarchar", Length = 80, IsNullable = true)]
-    public string? RegistrationAddress3 { get; set; }
     /// <summary>
     /// 制造商电话
     /// </summary>

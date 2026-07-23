@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：frontend/src/types/logistics/quality/cost
 // 文件名称：issue.d.ts
-// 创建时间：2026-06-30
+// 创建时间：2026-07-23
 // 创建人：Takt365(Auto Generated)
 // 功能描述：logistics/quality/cost 模块类型定义（自动生成；类型名去 Takt 前缀与末尾 Dto，如 TaktCompanyDto → Company）
 // 
@@ -29,7 +29,7 @@ export interface QualityIssue extends CompanyDtoBase {
   qualityIssueId: string;
 
   /**
-   * 工厂代码（选项 TaktPlants/options，DictValue=PlantCode）
+   * 工厂代码（选项 TaktPlants/options；DictValue=PlantCode）
    */
   plantCode: string;
 
@@ -119,7 +119,7 @@ export interface QualityIssueQuery extends TaktPagedQuery {
   companyCode?: string;
 
   /**
-   * 工厂代码（选项 TaktPlants/options，DictValue=PlantCode）
+   * 工厂代码（选项 TaktPlants/options；DictValue=PlantCode）
    */
   plantCode?: string;
 
@@ -223,7 +223,7 @@ export interface QualityIssueCreate {
   companyDefaultCulture: string;
 
   /**
-   * 工厂代码（选项 TaktPlants/options，DictValue=PlantCode）
+   * 工厂代码（选项 TaktPlants/options；DictValue=PlantCode）
    */
   plantCode: string;
 
@@ -317,6 +317,21 @@ export interface QualityIssueUpdate extends QualityIssueCreate {
    */
   qualityIssueId: string;
 
+  /**
+   * 会议/调查/试验费用明细列表（子表，级联保存）
+   */
+  meetingItems?: any;
+
+  /**
+   * 组装不良改修应对明细列表（子表，级联保存）
+   */
+  assyReworkItems?: any;
+
+  /**
+   * PCBA不良改修应对明细列表（子表，级联保存）
+   */
+  pcbaReworkItems?: any;
+
 }
 
 
@@ -337,7 +352,7 @@ export interface QualityIssueTemplate {
   companyCode?: string;
 
   /**
-   * 工厂代码（选项 TaktPlants/options，DictValue=PlantCode）
+   * 工厂代码（选项 TaktPlants/options；DictValue=PlantCode）
    */
   plantCode?: string;
 
@@ -441,7 +456,7 @@ export interface QualityIssueImport {
   companyDefaultCulture?: string;
 
   /**
-   * 工厂代码（选项 TaktPlants/options，DictValue=PlantCode）
+   * 工厂代码（选项 TaktPlants/options；DictValue=PlantCode）
    */
   plantCode?: string;
 
@@ -540,7 +555,7 @@ export interface QualityIssueExport {
   companyCode: string;
 
   /**
-   * 工厂代码（选项 TaktPlants/options，DictValue=PlantCode）
+   * 工厂代码（选项 TaktPlants/options；DictValue=PlantCode）
    */
   plantCode: string;
 

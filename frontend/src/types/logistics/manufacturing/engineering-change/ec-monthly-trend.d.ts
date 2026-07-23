@@ -4,7 +4,7 @@
 // 文件名称：ec-monthly-trend.d.ts
 // 创建时间：2026-07-18
 // 创建人：Takt365(Cursor AI)
-// 功能描述：月设变推移转置分析类型
+// 功能描述：月设变推移转置分析类型（设变号×部门×月份）
 //
 // 版权信息：Copyright (c) 2026 Takt  All rights reserved.
 // 免责声明：此软件使用 MIT License，作者不承担任何使用风险。
@@ -25,6 +25,10 @@ export interface EcMonthlyTrendQuery extends TaktPagedQuery {
   periodDateEnd?: string;
   /** 关注期间 yyyy-MM */
   focusPeriod?: string;
+  /** 设变单号 */
+  ecNo?: string;
+  /** 责任部门编码 */
+  deptCode?: string;
   /** 区分（字典 logistics_ec_distinction_category） */
   ecDistinction?: number;
   /** 变更状态（字典 logistics_ec_status） */
@@ -37,19 +41,17 @@ export interface EcMonthlyTrendQuery extends TaktPagedQuery {
 
 /**
  * 月设变推移转置行
- * @description 对应后端 TaktEcMonthlyTrendDto
+ * @description 对应后端 TaktEcMonthlyTrendDto（工厂×设变号×部门）
  */
 export interface EcMonthlyTrend {
   /** 工厂代码 */
   plantCode: string;
-  /** 区分 */
-  ecDistinction: number;
-  /** 区分显示名 */
-  ecDistinctionName?: string | null;
-  /** 各期间设变件数 */
+  /** 设变单号 */
+  ecNo: string;
+  /** 责任部门编码 */
+  deptCode: string;
+  /** 各期间完成件数 */
   periodValues?: Record<string, number>;
-  /** 各期间损失金额合计 */
-  periodLossAmounts?: Record<string, number>;
   /** 环比涨跌 */
   trend?: string;
   /** 环比基准期间 */

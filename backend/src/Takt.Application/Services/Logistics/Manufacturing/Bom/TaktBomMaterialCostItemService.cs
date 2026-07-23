@@ -1175,6 +1175,8 @@ public class TaktBomMaterialCostItemService : TaktServiceBase, ITaktBomMaterialC
             UpCount = built.UpCount,
             DownCount = built.DownCount,
             FlatCount = built.FlatCount,
+            NewCount = built.NewCount,
+            RemovedCount = built.RemovedCount,
             NoneCount = built.NoneCount,
             PeriodCostTotals = periodCostTotals,
             VarianceAmountTotal = varianceAmountTotal,
@@ -1204,6 +1206,8 @@ public class TaktBomMaterialCostItemService : TaktServiceBase, ITaktBomMaterialC
             UpCount = built.UpCount,
             DownCount = built.DownCount,
             FlatCount = built.FlatCount,
+            NewCount = built.NewCount,
+            RemovedCount = built.RemovedCount,
             NoneCount = built.NoneCount,
             PeriodCostTotals = periodCostTotals,
             VarianceAmountTotal = varianceAmountTotal,
@@ -1256,9 +1260,19 @@ public class TaktBomMaterialCostItemService : TaktServiceBase, ITaktBomMaterialC
                 };
                 foreach (var period in result.PeriodOrder)
                 {
-                    dict[$"period_{period}"] = row.PeriodMaterialCosts.TryGetValue(period, out var cost)
-                        ? cost
-                        : null;
+                    var changeType = row.PeriodChangeTypes.TryGetValue(period, out var ct) ? ct : string.Empty;
+                    if (row.PeriodMaterialCosts.TryGetValue(period, out var cost))
+                    {
+                        dict[$"period_{period}"] = string.IsNullOrEmpty(changeType) || changeType is "present" or "flat"
+                            ? cost
+                            : $"{cost} ({FormatPeriodChangeTypeLabel(changeType)})";
+                    }
+                    else
+                    {
+                        dict[$"period_{period}"] = changeType == "removed"
+                            ? FormatPeriodChangeTypeLabel("removed")
+                            : null;
+                    }
                 }
                 return (IReadOnlyDictionary<string, object?>)dict;
             })
@@ -1268,25 +1282,42 @@ public class TaktBomMaterialCostItemService : TaktServiceBase, ITaktBomMaterialC
             exportRows,
             columnKeys,
             columnLabels,
-            sheetName ?? "DTA 产品成本分析表",
-            fileName ?? "DTA 产品成本分析表.xlsx");
+            sheetName ?? "DTA 产品成本推移表",
+            fileName ?? "DTA 产品成本推移表.xlsx");
     }
 
+    /// <summary>
+    /// 期间变动码导出短标签
+    /// </summary>
+    /// <param name="changeType">present / absent / new / removed / up / down / flat</param>
+    /// <returns>中文短标签</returns>
+    private static string FormatPeriodChangeTypeLabel(string changeType) => changeType switch
+    {
+        "new" => "新增",
+        "removed" => "剔除",
+        "up" => "涨",
+        "down" => "跌",
+        "flat" => "平",
+        "present" => "有",
+        "absent" => "无",
+        _ => changeType,
+    };
+
     /// <inheritdoc />
-    public async Task<TaktBomMaterialCostItemModelMovingPriceResultDto> GetBomMaterialCostItemModelMovingPriceAnalysisAsync(
-        TaktBomMaterialCostItemModelMovingPriceQueryDto queryDto)
+    public async Task<TaktBomMaterialCostItemModelCostTrendResultDto> GetBomMaterialCostItemModelCostTrendAnalysisAsync(
+        TaktBomMaterialCostItemModelCostTrendQueryDto queryDto)
     {
         ArgumentNullException.ThrowIfNull(queryDto);
         var pageIndex = TaktPagedClamp.NormalizePageIndex(queryDto.PageIndex);
         var pageSize = TaktPagedClamp.NormalizePageSize(queryDto.PageSize);
         var skip = TaktPagedClamp.ComputeSkip(pageIndex, pageSize);
-        var built = await BuildModelMovingPriceAnalysisAsync(queryDto);
+        var built = await BuildModelCostTrendAnalysisAsync(queryDto);
         var pageRows = built.OrderedRows.Skip(skip).Take(pageSize).ToList();
-        var (periodCostTotals, varianceAmountTotal) = SumModelMovingPriceRowGrandTotals(
+        var (periodCostTotals, varianceAmountTotal) = SumModelCostTrendRowGrandTotals(
             built.OrderedRows, built.PeriodOrder);
-        return new TaktBomMaterialCostItemModelMovingPriceResultDto
+        return new TaktBomMaterialCostItemModelCostTrendResultDto
         {
-            Paged = TaktPagedResult<TaktBomMaterialCostItemModelMovingPriceDto>.Create(
+            Paged = TaktPagedResult<TaktBomMaterialCostItemModelCostTrendDto>.Create(
                 pageRows, built.OrderedRows.Count, pageIndex, pageSize),
             PeriodOrder = built.PeriodOrder,
             ProductCodes = built.ProductCodes,
@@ -1309,23 +1340,44 @@ public class TaktBomMaterialCostItemService : TaktServiceBase, ITaktBomMaterialC
     }
 
     /// <inheritdoc />
-    public async Task<(string fileName, byte[] fileContent)> ExportBomMaterialCostItemModelMovingPriceAnalysisAsync(
-        TaktBomMaterialCostItemModelMovingPriceQueryDto query,
+    public async Task<(string fileName, byte[] fileContent)> ExportBomMaterialCostItemModelCostTrendAnalysisAsync(
+        TaktBomMaterialCostItemModelCostTrendQueryDto query,
         string? sheetName = null,
         string? fileName = null)
     {
         ArgumentNullException.ThrowIfNull(query);
-        var built = await BuildModelMovingPriceAnalysisAsync(query);
+        var built = await BuildModelCostTrendAnalysisAsync(query);
+        var isDetail = IsModelCostDetailMergeMode(query.MergeMode);
         var columnKeys = new List<string>
         {
             "plantCode", "modelCode", "componentCode", "modelName", "productCodes",
-            "componentDescription", "productionRelated", "purchaseType", "productCount", "currency",
+            "componentDescription",
         };
         var columnLabels = new List<string>
         {
             "工厂代码", "机种编码", "组件编码", "机种名称", "产品组",
-            "组件描述", "生产相关", "采购类型", "产品数", "币种",
+            "组件描述",
         };
+        if (isDetail)
+        {
+            columnKeys.AddRange(new[]
+            {
+                "componentQuantity", "batchIndicator", "productionRelated", "purchaseType",
+                "specialProcurementType", "profitCenterCode",
+            });
+            columnLabels.AddRange(new[]
+            {
+                "组件数量", "批量标识", "生产相关", "采购类型",
+                "特殊采购类", "利润中心",
+            });
+        }
+        else
+        {
+            columnKeys.AddRange(new[] { "productionRelated", "purchaseType" });
+            columnLabels.AddRange(new[] { "生产相关", "采购类型" });
+        }
+        columnKeys.AddRange(new[] { "productCount", "currency" });
+        columnLabels.AddRange(new[] { "产品数", "币种" });
         foreach (var period in built.PeriodOrder)
         {
             columnKeys.Add($"period_{period}");
@@ -1344,8 +1396,12 @@ public class TaktBomMaterialCostItemService : TaktServiceBase, ITaktBomMaterialC
                     ["modelName"] = row.ModelName,
                     ["componentCode"] = row.ComponentCode,
                     ["componentDescription"] = row.ComponentDescription,
+                    ["componentQuantity"] = row.ComponentQuantity,
+                    ["batchIndicator"] = row.BatchIndicator,
                     ["productionRelated"] = row.ProductionRelated,
                     ["purchaseType"] = row.PurchaseType,
+                    ["specialProcurementType"] = row.SpecialProcurementType,
+                    ["profitCenterCode"] = row.ProfitCenterCode,
                     ["productCodes"] = row.ProductCodes,
                     ["productCount"] = row.ProductCount,
                     ["currency"] = row.Currency,
@@ -1365,12 +1421,13 @@ public class TaktBomMaterialCostItemService : TaktServiceBase, ITaktBomMaterialC
             })
             .ToList();
 
+        var defaultSheet = isDetail ? "DTA 差异组件推移表" : "DTA 机种成本推移表";
         return await TaktExcelHelper.ExportDictionaryRowsAsync(
             exportRows,
             columnKeys,
             columnLabels,
-            sheetName ?? "DTA 机种成本推移表",
-            fileName ?? "DTA 机种成本推移表.xlsx");
+            sheetName ?? defaultSheet,
+            fileName ?? $"{defaultSheet}.xlsx");
     }
 
     /// <inheritdoc />
@@ -2679,7 +2736,7 @@ public class TaktBomMaterialCostItemService : TaktServiceBase, ITaktBomMaterialC
     }
 
     /// <summary>
-    /// 产品成本分析：单个产品下 BOM 明细行（TaktBomMaterialCostItem）× 月材料成本转置涨跌
+    /// 产品成本推移：单个产品下 BOM 明细行（TaktBomMaterialCostItem）× 月材料成本转置涨跌
     /// </summary>
     /// <param name="queryDto">查询条件（工厂+产品必填）</param>
     /// <returns>排序后的全量明细行与汇总</returns>
@@ -2800,6 +2857,8 @@ public class TaktBomMaterialCostItemService : TaktServiceBase, ITaktBomMaterialC
             UpCount = allRows.Count(r => r.Trend == "up"),
             DownCount = allRows.Count(r => r.Trend == "down"),
             FlatCount = allRows.Count(r => r.Trend == "flat"),
+            NewCount = allRows.Count(r => r.Trend == "new"),
+            RemovedCount = allRows.Count(r => r.Trend == "removed"),
             NoneCount = allRows.Count(r => r.Trend == "none"),
         };
     }
@@ -2832,6 +2891,12 @@ public class TaktBomMaterialCostItemService : TaktServiceBase, ITaktBomMaterialC
 
         /// <summary>持平行数</summary>
         public int FlatCount { get; init; }
+
+        /// <summary>关注月新增行数</summary>
+        public int NewCount { get; init; }
+
+        /// <summary>关注月剔除行数</summary>
+        public int RemovedCount { get; init; }
 
         /// <summary>无趋势行数</summary>
         public int NoneCount { get; init; }
@@ -2946,18 +3011,45 @@ public class TaktBomMaterialCostItemService : TaktServiceBase, ITaktBomMaterialC
     }
 
     /// <summary>
-    /// 机种分析合并键：Plant+ComponentCode+ProductionRelated+PurchaseType
+    /// 是否差异组件（detail）合并模式
+    /// </summary>
+    /// <param name="mergeMode">查询 MergeMode</param>
+    /// <returns>true=detail</returns>
+    private static bool IsModelCostDetailMergeMode(string? mergeMode)
+    {
+        return string.Equals(mergeMode?.Trim(), "detail", StringComparison.OrdinalIgnoreCase);
+    }
+
+    /// <summary>
+    /// 机种分析合并键。summary：Plant+ComponentCode+ProductionRelated+PurchaseType；
+    /// detail：Plant+ComponentCode+ComponentDescription+ComponentQuantity+BatchIndicator+ProductionRelated+PurchaseType+SpecialProcurementType+ProfitCenterCode（期间由 CostingDate→yyyy-MM）
     /// </summary>
     /// <param name="item">明细行</param>
+    /// <param name="detailMode">是否差异组件明细键</param>
     /// <returns>稳定键</returns>
-    private static string BuildModelCostMergeKey(TaktBomMaterialCostItem item)
+    private static string BuildModelCostMergeKey(TaktBomMaterialCostItem item, bool detailMode)
     {
+        if (!detailMode)
+        {
+            return string.Join(
+                "|",
+                item.PlantCode?.Trim() ?? string.Empty,
+                item.ComponentCode?.Trim() ?? string.Empty,
+                item.ProductionRelated?.Trim() ?? string.Empty,
+                item.PurchaseType?.Trim() ?? string.Empty);
+        }
+
         return string.Join(
             "|",
             item.PlantCode?.Trim() ?? string.Empty,
             item.ComponentCode?.Trim() ?? string.Empty,
+            item.ComponentDescription?.Trim() ?? string.Empty,
+            item.ComponentQuantity.ToString("0.##########", System.Globalization.CultureInfo.InvariantCulture),
+            item.BatchIndicator?.Trim() ?? string.Empty,
             item.ProductionRelated?.Trim() ?? string.Empty,
-            item.PurchaseType?.Trim() ?? string.Empty);
+            item.PurchaseType?.Trim() ?? string.Empty,
+            item.SpecialProcurementType?.Trim() ?? string.Empty,
+            item.ProfitCenterCode?.Trim() ?? string.Empty);
     }
 
     /// <summary>
@@ -3054,6 +3146,7 @@ public class TaktBomMaterialCostItemService : TaktServiceBase, ITaktBomMaterialC
             PurchaseType = identity.PurchaseType?.Trim() ?? string.Empty,
             Currency = currency,
             PeriodMaterialCosts = periodCosts,
+            PeriodChangeTypes = BuildPeriodChangeTypes(periodOrder, periodCosts),
         };
         ApplyMaterialCostFocusTrend(row.PeriodMaterialCosts, focusPeriod, row);
         var displaySet = new HashSet<string>(periodOrder, StringComparer.Ordinal);
@@ -3061,6 +3154,55 @@ public class TaktBomMaterialCostItemService : TaktServiceBase, ITaktBomMaterialC
             .Where(kv => displaySet.Contains(kv.Key))
             .ToDictionary(kv => kv.Key, kv => kv.Value, StringComparer.Ordinal);
         return row;
+    }
+
+    /// <summary>
+    /// 按展示期间顺序生成各月存在/价格变动码（先区分有无物料，再对比价格）
+    /// </summary>
+    /// <param name="periodOrder">展示期间列 yyyy-MM</param>
+    /// <param name="periodCosts">有数据的月材料成本</param>
+    /// <returns>期间 → present / absent / new / removed / up / down / flat</returns>
+    private static Dictionary<string, string> BuildPeriodChangeTypes(
+        IReadOnlyList<string> periodOrder,
+        IReadOnlyDictionary<string, decimal> periodCosts)
+    {
+        var result = new Dictionary<string, string>(StringComparer.Ordinal);
+        for (var i = 0; i < periodOrder.Count; i++)
+        {
+            var period = periodOrder[i];
+            var hasCurrent = periodCosts.ContainsKey(period);
+            var hasPrevious = i > 0 && periodCosts.ContainsKey(periodOrder[i - 1]);
+            if (!hasCurrent && !hasPrevious)
+            {
+                result[period] = "absent";
+                continue;
+            }
+            if (!hasCurrent && hasPrevious)
+            {
+                result[period] = "removed";
+                continue;
+            }
+            if (hasCurrent && !hasPrevious)
+            {
+                result[period] = i == 0 ? "present" : "new";
+                continue;
+            }
+            var currentCost = periodCosts[period];
+            var previousCost = periodCosts[periodOrder[i - 1]];
+            if (currentCost > previousCost)
+            {
+                result[period] = "up";
+            }
+            else if (currentCost < previousCost)
+            {
+                result[period] = "down";
+            }
+            else
+            {
+                result[period] = "flat";
+            }
+        }
+        return result;
     }
 
     /// <summary>
@@ -3104,6 +3246,24 @@ public class TaktBomMaterialCostItemService : TaktServiceBase, ITaktBomMaterialC
             out var comparePeriod,
             out var varianceAmount,
             out var variancePercent);
+        // 关注月有、基准月无 → 新增；关注月无、基准月有 → 剔除（先于价格涨跌）
+        if (!string.IsNullOrWhiteSpace(comparePeriod) && !string.IsNullOrWhiteSpace(basePeriod))
+        {
+            var hasCompare = periodCosts.ContainsKey(comparePeriod);
+            var hasBase = periodCosts.ContainsKey(basePeriod);
+            if (hasCompare && !hasBase)
+            {
+                trend = "new";
+                varianceAmount = periodCosts[comparePeriod];
+                variancePercent = null;
+            }
+            else if (!hasCompare && hasBase)
+            {
+                trend = "removed";
+                varianceAmount = TaktBomMaterialCostItemLineCostHelper.RoundCost(-periodCosts[basePeriod]);
+                variancePercent = null;
+            }
+        }
         row.Trend = trend;
         row.BasePeriod = basePeriod;
         row.ComparePeriod = comparePeriod;
@@ -3162,7 +3322,7 @@ public class TaktBomMaterialCostItemService : TaktServiceBase, ITaktBomMaterialC
         var filter = trendFilter.Trim().ToLowerInvariant();
         if (filter == "changed")
         {
-            return rows.Where(r => r.Trend is "up" or "down").ToList();
+            return rows.Where(r => r.Trend is "up" or "down" or "new" or "removed").ToList();
         }
         return rows.Where(r => string.Equals(r.Trend, filter, StringComparison.OrdinalIgnoreCase)).ToList();
     }
@@ -3196,8 +3356,8 @@ public class TaktBomMaterialCostItemService : TaktServiceBase, ITaktBomMaterialC
     /// </summary>
     /// <param name="queryDto">查询条件</param>
     /// <returns>排序后的全量行与汇总</returns>
-    private async Task<ModelMovingPriceAnalysisBuilt> BuildModelMovingPriceAnalysisAsync(
-        TaktBomMaterialCostItemModelMovingPriceQueryDto queryDto)
+    private async Task<ModelCostTrendAnalysisBuilt> BuildModelCostTrendAnalysisAsync(
+        TaktBomMaterialCostItemModelCostTrendQueryDto queryDto)
     {
         ArgumentException.ThrowIfNullOrWhiteSpace(queryDto.PlantCode);
         EnsureThreeLayerContext();
@@ -3235,13 +3395,13 @@ public class TaktBomMaterialCostItemService : TaktServiceBase, ITaktBomMaterialC
         }
         if (productCodes.Count == 0)
         {
-            return ModelMovingPriceAnalysisBuilt.Empty(productCodes);
+            return ModelCostTrendAnalysisBuilt.Empty(productCodes);
         }
 
         var costItems = await LoadBomCostItemsForProductsAsync(plantCode, productCodes, periodStart, periodEnd);
         if (costItems.Count == 0)
         {
-            return ModelMovingPriceAnalysisBuilt.Empty(productCodes);
+            return ModelCostTrendAnalysisBuilt.Empty(productCodes);
         }
 
         var periodOrder = BuildCostingPeriodOrder(costItems, periodStart, periodEnd);
@@ -3257,21 +3417,22 @@ public class TaktBomMaterialCostItemService : TaktServiceBase, ITaktBomMaterialC
             out var modelVarianceAmount,
             out var modelVariancePercent);
 
+        var detailMode = IsModelCostDetailMergeMode(queryDto.MergeMode);
         var mergeGroups = costItems
             .Where(r => !string.IsNullOrWhiteSpace(r.ComponentCode))
-            .GroupBy(BuildModelCostMergeKey, StringComparer.Ordinal)
+            .GroupBy(r => BuildModelCostMergeKey(r, detailMode), StringComparer.Ordinal)
             .OrderBy(g => g.Key, StringComparer.Ordinal)
             .ToList();
 
         var allRows = mergeGroups
             .Select(group => BuildModelMergeKeyMaterialCostRow(
-                plantCode, modelCode, modelName, group.ToList(), periodOrder, focusPeriod))
+                plantCode, modelCode, modelName, group.ToList(), periodOrder, focusPeriod, detailMode))
             .Where(r => r.PeriodMaterialCosts.Count > 0)
             .ToList();
 
-        var filtered = FilterModelMovingPriceRows(allRows, queryDto.TrendFilter);
-        var ordered = OrderModelMovingPriceRowsByTrend(filtered);
-        return new ModelMovingPriceAnalysisBuilt
+        var filtered = FilterModelCostTrendRows(allRows, queryDto.TrendFilter);
+        var ordered = OrderModelCostTrendRowsByTrend(filtered);
+        return new ModelCostTrendAnalysisBuilt
         {
             OrderedRows = ordered,
             PeriodOrder = periodOrder,
@@ -3294,10 +3455,10 @@ public class TaktBomMaterialCostItemService : TaktServiceBase, ITaktBomMaterialC
     /// <summary>
     /// 机种成本推移内存构建结果
     /// </summary>
-    private sealed class ModelMovingPriceAnalysisBuilt
+    private sealed class ModelCostTrendAnalysisBuilt
     {
         /// <summary>过滤并排序后的全量行</summary>
-        public List<TaktBomMaterialCostItemModelMovingPriceDto> OrderedRows { get; init; } = new();
+        public List<TaktBomMaterialCostItemModelCostTrendDto> OrderedRows { get; init; } = new();
 
         /// <summary>期间列顺序</summary>
         public List<string> PeriodOrder { get; init; } = new();
@@ -3346,7 +3507,7 @@ public class TaktBomMaterialCostItemService : TaktServiceBase, ITaktBomMaterialC
         /// </summary>
         /// <param name="productCodes">产品编码</param>
         /// <returns>空构建结果</returns>
-        public static ModelMovingPriceAnalysisBuilt Empty(List<string> productCodes) => new()
+        public static ModelCostTrendAnalysisBuilt Empty(List<string> productCodes) => new()
         {
             ProductCodes = productCodes,
         };
@@ -3406,18 +3567,20 @@ public class TaktBomMaterialCostItemService : TaktServiceBase, ITaktBomMaterialC
     /// <param name="keyItems">同合并键明细</param>
     /// <param name="periodOrder">期间列</param>
     /// <param name="focusPeriod">关注月</param>
+    /// <param name="detailMode">差异组件明细字段是否填充</param>
     /// <returns>分析行</returns>
-    private static TaktBomMaterialCostItemModelMovingPriceDto BuildModelMergeKeyMaterialCostRow(
+    private static TaktBomMaterialCostItemModelCostTrendDto BuildModelMergeKeyMaterialCostRow(
         string plantCode,
         string modelCode,
         string modelName,
         IReadOnlyList<TaktBomMaterialCostItem> keyItems,
         IReadOnlyList<string> periodOrder,
-        string? focusPeriod)
+        string? focusPeriod,
+        bool detailMode)
     {
         var identity = keyItems
-            .OrderBy(r => r.CostingDate)
-            .ThenBy(r => r.Id)
+            .OrderByDescending(r => r.CostingDate)
+            .ThenByDescending(r => r.Id)
             .First();
         var productSet = keyItems
             .Where(r => !string.IsNullOrWhiteSpace(r.ProductCode))
@@ -3448,15 +3611,19 @@ public class TaktBomMaterialCostItemService : TaktServiceBase, ITaktBomMaterialC
             }
         }
 
-        var row = new TaktBomMaterialCostItemModelMovingPriceDto
+        var row = new TaktBomMaterialCostItemModelCostTrendDto
         {
             PlantCode = plantCode,
             ModelCode = modelCode,
             ModelName = modelName,
             ComponentCode = identity.ComponentCode?.Trim() ?? string.Empty,
             ComponentDescription = identity.ComponentDescription?.Trim() ?? string.Empty,
+            ComponentQuantity = detailMode ? identity.ComponentQuantity : null,
+            BatchIndicator = detailMode ? identity.BatchIndicator?.Trim() : null,
             ProductionRelated = identity.ProductionRelated?.Trim(),
             PurchaseType = identity.PurchaseType?.Trim() ?? string.Empty,
+            SpecialProcurementType = detailMode ? identity.SpecialProcurementType?.Trim() : null,
+            ProfitCenterCode = detailMode ? identity.ProfitCenterCode?.Trim() : null,
             ProductCodes = string.Join(",", productSet),
             ProductCount = productSet.Count,
             Currency = currency,
@@ -3484,8 +3651,8 @@ public class TaktBomMaterialCostItemService : TaktServiceBase, ITaktBomMaterialC
     /// <param name="rows">全量行</param>
     /// <param name="trendFilter">筛选码</param>
     /// <returns>过滤后列表</returns>
-    private static List<TaktBomMaterialCostItemModelMovingPriceDto> FilterModelMovingPriceRows(
-        IReadOnlyList<TaktBomMaterialCostItemModelMovingPriceDto> rows,
+    private static List<TaktBomMaterialCostItemModelCostTrendDto> FilterModelCostTrendRows(
+        IReadOnlyList<TaktBomMaterialCostItemModelCostTrendDto> rows,
         string? trendFilter)
     {
         if (string.IsNullOrWhiteSpace(trendFilter))
@@ -3536,8 +3703,8 @@ public class TaktBomMaterialCostItemService : TaktServiceBase, ITaktBomMaterialC
     /// <param name="rows">已筛选全量行</param>
     /// <param name="periodOrder">期间列</param>
     /// <returns>期间合计与环比差额合计</returns>
-    private static (Dictionary<string, decimal> PeriodCostTotals, decimal? VarianceAmountTotal) SumModelMovingPriceRowGrandTotals(
-        IReadOnlyList<TaktBomMaterialCostItemModelMovingPriceDto> rows,
+    private static (Dictionary<string, decimal> PeriodCostTotals, decimal? VarianceAmountTotal) SumModelCostTrendRowGrandTotals(
+        IReadOnlyList<TaktBomMaterialCostItemModelCostTrendDto> rows,
         IReadOnlyList<string> periodOrder)
     {
         return SumPeriodAndVarianceGrandTotals(
@@ -3598,8 +3765,8 @@ public class TaktBomMaterialCostItemService : TaktServiceBase, ITaktBomMaterialC
     /// </summary>
     /// <param name="rows">行</param>
     /// <returns>排序后列表</returns>
-    private static List<TaktBomMaterialCostItemModelMovingPriceDto> OrderModelMovingPriceRowsByTrend(
-        IReadOnlyList<TaktBomMaterialCostItemModelMovingPriceDto> rows)
+    private static List<TaktBomMaterialCostItemModelCostTrendDto> OrderModelCostTrendRowsByTrend(
+        IReadOnlyList<TaktBomMaterialCostItemModelCostTrendDto> rows)
     {
         static int TrendRank(string? trend) => trend switch
         {

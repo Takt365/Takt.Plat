@@ -16,7 +16,7 @@ import type {
 } from '@/types/common';
 
 /**
- * ISO 编码实体 维护租户内标准短码（如 Eng、Pmc、D1000），用于编号规则、单据编码等段引用
+ * ISO 编码实体 维护租户内标准短码（如 Eng、Pmc、D1000），用于编码规则、单据编码等段引用
  * 对应前端 TaktIsoCodeDto
  * 继承 TaktTenantDtoBase
  * 对应前端 IsoCode
@@ -34,7 +34,7 @@ export interface IsoCode extends TenantDtoBase {
   isoCodeCategory: number;
 
   /**
-   * ISO 编码（唯一索引：租户+类别内唯一，见 ix_iso_code_category_unique；编号规则等段引用，如 Eng、Pmc、D1000）
+   * ISO 编码（唯一索引：租户+类别内唯一，见 ix_iso_code_category_unique；编码规则等段引用，如 Eng、Pmc、D1000）
    */
   isoCode: string;
 
@@ -84,7 +84,7 @@ export interface IsoCodeQuery extends TaktPagedQuery {
   isoCodeCategory?: number;
 
   /**
-   * ISO 编码（唯一索引：租户+类别内唯一，见 ix_iso_code_category_unique；编号规则等段引用，如 Eng、Pmc、D1000）
+   * ISO 编码（唯一索引：租户+类别内唯一，见 ix_iso_code_category_unique；编码规则等段引用，如 Eng、Pmc、D1000）
    */
   isoCode?: string;
 
@@ -153,7 +153,7 @@ export interface IsoCodeCreate {
   isoCodeCategory: number;
 
   /**
-   * ISO 编码（唯一索引：租户+类别内唯一，见 ix_iso_code_category_unique；编号规则等段引用，如 Eng、Pmc、D1000）
+   * ISO 编码（唯一索引：租户+类别内唯一，见 ix_iso_code_category_unique；编码规则等段引用，如 Eng、Pmc、D1000）
    */
   isoCode: string;
 
@@ -260,7 +260,7 @@ export interface IsoCodeTemplate {
   isoCodeCategory?: number;
 
   /**
-   * ISO 编码（唯一索引：租户+类别内唯一，见 ix_iso_code_category_unique；编号规则等段引用，如 Eng、Pmc、D1000）
+   * ISO 编码（唯一索引：租户+类别内唯一，见 ix_iso_code_category_unique；编码规则等段引用，如 Eng、Pmc、D1000）
    */
   isoCode?: string;
 
@@ -314,7 +314,7 @@ export interface IsoCodeImport {
   isoCodeCategory?: number;
 
   /**
-   * ISO 编码（唯一索引：租户+类别内唯一，见 ix_iso_code_category_unique；编号规则等段引用，如 Eng、Pmc、D1000）
+   * ISO 编码（唯一索引：租户+类别内唯一，见 ix_iso_code_category_unique；编码规则等段引用，如 Eng、Pmc、D1000）
    */
   isoCode?: string;
 
@@ -368,7 +368,7 @@ export interface IsoCodeExport {
   isoCodeCategory: number;
 
   /**
-   * ISO 编码（唯一索引：租户+类别内唯一，见 ix_iso_code_category_unique；编号规则等段引用，如 Eng、Pmc、D1000）
+   * ISO 编码（唯一索引：租户+类别内唯一，见 ix_iso_code_category_unique；编码规则等段引用，如 Eng、Pmc、D1000）
    */
   isoCode: string;
 

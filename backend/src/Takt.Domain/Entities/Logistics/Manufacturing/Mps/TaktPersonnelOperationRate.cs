@@ -33,7 +33,7 @@ namespace Takt.Domain.Entities.Logistics.Manufacturing.Mps;
 public class TaktPersonnelOperationRate : TaktCompanyEntityBase
 {
     /// <summary>
-    /// 工厂代码（选项 TaktPlants/options，DictValue=Id）
+    /// 工厂代码（选项 TaktPlants/options；DictValue=Id）
     /// </summary>
     [SugarColumn(ColumnName = "plant_code", ColumnDescription = "工厂代码", ColumnDataType = "nvarchar", Length = 4, IsNullable = false)]
     public string PlantCode { get; set; } = string.Empty;
@@ -69,7 +69,7 @@ public class TaktPersonnelOperationRate : TaktCompanyEntityBase
     public int? MonthNumber { get; set; }
 
     /// <summary>
-    /// 生产班组（选项 TaktProductionTeams/options，DictValue=TeamCode，ExtValue=PlantCode）
+    /// 生产班组（选项 TaktProductionTeams/options；DictValue=TeamCode，ExtValue=PlantCode）
     /// </summary>
     [SugarColumn(ColumnName = "prod_team", ColumnDescription = "生产班组", ColumnDataType = "nvarchar", Length = 20, IsNullable = false)]
     public string ProdTeam { get; set; } = string.Empty;

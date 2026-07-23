@@ -9,10 +9,13 @@
 import { inject, provide, type InjectionKey, type Ref, ref } from 'vue'
 import type { QualityIssue } from '@/types/logistics/quality/cost/issue'
 
+/** 表格行类型（与 index 列表行、TaktSingleTable slot record 一致） */
+export type QualityIssueRowRecord = QualityIssue | Record<string, unknown>
+
 /** 主表选中行上下文 */
 export interface QualityIssueMasterContext {
   /** 当前选中的主表行（右侧明细依赖） */
-  selectedMasterRow: Ref<QualityIssue | null>
+  selectedMasterRow: Ref<QualityIssueRowRecord | null>
 }
 
 const qualityIssueMasterContextKey: InjectionKey<QualityIssueMasterContext> = Symbol('issueMasterContext')
@@ -22,7 +25,7 @@ const qualityIssueMasterContextKey: InjectionKey<QualityIssueMasterContext> = Sy
  * @returns {QualityIssueMasterContext} 主表上下文
  */
 export function provideQualityIssueMasterContext(): QualityIssueMasterContext {
-  const selectedMasterRow = ref<QualityIssue | null>(null)
+  const selectedMasterRow = ref<QualityIssueRowRecord | null>(null)
   const ctx: QualityIssueMasterContext = { selectedMasterRow }
   provide(qualityIssueMasterContextKey, ctx)
   return ctx

@@ -4,7 +4,7 @@
 // 文件名称：generate-vue-tree-from-api.cjs
 // 创建时间：2026-06-08
 // 创建人：Takt365(Cursor AI)
-// 功能描述：树表 Vue 视图生成（ParentId + getXxxTree，左树右表）；单表见 generate-vue-crud-from-api.cjs；主子表见 generate-vue-master-detail-from-api.cjs
+// 功能描述：树表 Vue 视图生成（大数据：左侧懒加载+virtual，右侧 getXxxList 服务端分页）；单表见 generate-vue-crud-from-api.cjs；主子表见 generate-vue-master-detail-from-api.cjs
 //
 // 版权信息：Copyright (c) 2025 Takt  All rights reserved.
 // 免责声明：此软件使用 MIT License，作者不承担任何使用风险。
@@ -157,7 +157,9 @@ ${fieldLines.join('\n')}
 }
 
 /**
- * 生成树表 index.vue（左树右表，参照 views/human-resource/organization/dept/index.vue）
+ * 生成树表 index.vue（大数据左树右表，参照 foundation/admin-division/index.vue）
+ * 左侧：getXxxTree(parentId) 一层 + loadData 懒加载 + virtual；右侧：getXxxList({ parentId, pageIndex, pageSize }) 服务端分页。
+ * 禁止一次拉全量树再客户端拍平。
  * @param {object} ctx
  * @param {object} helpers fieldLabelTExpr 等由主脚本注入
  */
@@ -181,9 +183,10 @@ function generateTreeIndexVue(ctx, helpers) {
   } = ctx;
   const { fieldLabelTExpr, fieldPlaceholderTExpr } = helpers;
   const rowRecordType = entityRowRecordTypeName(entityPascal);
-  const { titleField, searchFields } = treeMeta;
+  const { titleField } = treeMeta;
   const entityScope = fields.entityScope || 'company';
   const importApiNames = [
+    caps.apiGetList,
     caps.apiGetTree,
     caps.apiGetById,
     caps.apiCreate,
@@ -197,6 +200,16 @@ function generateTreeIndexVue(ctx, helpers) {
     caps.apiUpdateBuiltIn,
     caps.apiUpdateSort,
   ].filter(Boolean);
+  const codeField = `${entityCamel}Code`;
+  const rightListQueryFieldLines = fields.queryFields
+    .filter((f) => f.name !== 'parentId' && f.name !== 'keyWords')
+    .map((f) => {
+      if (f.type === 'number') {
+        return `    ${f.name}: aq.${f.name},`;
+      }
+      return `    ${f.name}: aq.${f.name} || undefined,`;
+    })
+    .join('\n');
   const listCols = fields.listFields.filter((f) => f.name !== caps.entityIdName && f.name !== 'children');
   const { switchListCols, dictTagListCols } = resolveListSwitchAndDictColsForIndex(
     listCols.filter((f) => f.dictType || f.isListSwitch),
@@ -280,12 +293,7 @@ function generateTreeIndexVue(ctx, helpers) {
     { reloadAfterSuccess: true, recordType: `${entityPascal}RowRecord` },
   );
   const titleBodyCell = titleField ? `          <template v-if="column.key === '${titleField}'">
-            <span
-              class="inline-block"
-              :style="{ paddingLeft: \`\${(record._treeDepth ?? 0) * 16}px\` }"
-            >
-              {{ get${entityPascal}Field(record, '${titleField}') }}
-            </span>
+            <span>{{ get${entityPascal}Field(record, '${titleField}') }}</span>
           </template>` : '';
   const bodyCellBlock = (titleField || switchListCols.length || dictTagListCols.length)
     ? `        <!-- 自定义列渲染 -->
@@ -367,7 +375,7 @@ ${dictBodyCellExtra}
 <!-- 项目名称：节拍数字工厂 · Takt Plat (TDF) -->
 <!-- 命名空间：@/views/${viewModulePath} -->
 <!-- 文件名称：index.vue -->
-<!-- 功能描述：${comment}树表管理页（左树右表），由 generate-vue-tree-from-api.cjs 自动生成 -->
+<!-- 功能描述：${comment}树表管理页（左树懒加载+virtual，右表 list 分页），由 generate-vue-tree-from-api.cjs 自动生成 -->
 <!-- 版权信息：Copyright (c) 2025 Takt  All rights reserved. -->
 <!-- 免责声明：此软件使用 MIT License，作者不承担任何使用风险。 -->
 <!-- ======================================== -->
@@ -394,7 +402,7 @@ ${dictBodyCellExtra}
       <TaktTreeLeftToolsBar
         v-model:expanded="treeExpanded"
         :loading="loading"
-        @search="loadFull${entityPascal}Tree"
+        @search="reloadLeftTreeRoots"
       />
       <TaktTreeRightToolsBar
 ${caps.hasCreate ? `        create-permission="${permissionPrefix}:create"` : ''}
@@ -431,7 +439,7 @@ ${caps.hasExport ? '        @export="handleExport"' : ''}
       />
     </div>
 
-    <!-- 左树右表 -->
+    <!-- 左树右表（大数据：左侧懒加载+virtual，右侧服务端分页） -->
     <div class="${cssRootClass}-tree-table-wrap">
       <TaktTreeLeftTable
         v-model:expanded-keys="treeExpandedKeys"
@@ -440,8 +448,9 @@ ${caps.hasExport ? '        @export="handleExport"' : ''}
         :tree-field-names="{ title: 'title', key: 'key', children: 'children' }"
         :tree-width-ratio="0.2"
         :loading="loading"
-        :virtual="false"
+        :virtual="true"
         :draggable="${caps.hasUpdate}"
+        :load-data="handleLeftTreeLoadData"
         @tree-select="handleTreeSelect"
         @tree-drop="handleTreeDrop"
       />
@@ -454,13 +463,14 @@ ${caps.hasExport ? '        @export="handleExport"' : ''}
         :id-column-key="'${idField}'"
         :action-column-key="'action'"
         table-mode="tree"
-        :data-source="paginatedFlatTableRows"
-        :loading="loading"
+        :data-source="tableDataSource"
+        :loading="listLoading"
         :row-key="get${entityPascal}Id"
         :stripe="true"
         :row-selection="rowSelection"
         :show-pagination="true"
-        :total="tableFlatTotal"
+        :total="tableTotal"
+        :virtual="true"
         @change="handleTableChange"
         @resize-column="handleResizeColumn"
       >
@@ -500,16 +510,22 @@ ${importBlock}
 
 <script setup lang="ts">
 /**
- * ${comment}树表管理页 · ParentId 左树右表（参照 dept/index.vue）
+ * ${comment}树表管理页 · 大数据：左侧懒加载+virtual，右侧 getXxxList 服务端分页（参照 admin-division/index.vue）
  * @module views/${viewModulePath}
  */
 import { ref, computed, watch, watchEffect, onMounted } from 'vue'
-import type { TreeDataItem } from 'ant-design-vue/es/tree'
 import { message, Modal } from 'ant-design-vue'
 import type { TableColumnsType } from 'ant-design-vue'
 import { CreateActionColumn } from '@/components/business/takt-action-column/index'
 import { useI18n } from 'vue-i18n'
 import { ensureTaktPaginationConfigAsync, getTaktDefaultPageIndex, getTaktDefaultPageSize } from '@/utils/takt-paged'
+import { useTableRefresh } from '@/composables/use-table-refresh'
+import {
+  mapLazyTreeNodes,
+  mergeLoadedChildren,
+  taktIsLeafFlag,
+  type TaktLazyTreeNode,
+} from '@/composables/use-lazy-tree'
 ${(caps.hasCreate || caps.hasUpdate) ? `import ${entityPascal}Form from './components/${viewEntityKebab}-form.vue'\n` : ''}import { ${importApiNames.join(', ')} } from '@/api/${modulePath}/${entityKebab}'
 import type { ${entityPascal}, ${caps.entityTreeType}, ${entityPascal}Update } from '@/types/${modulePath}/${entityKebab}'
 import type { TreeDropPayload } from '@/components/business/takt-tree-left-table/index.vue'
@@ -517,105 +533,58 @@ ${indexDictImport}${(caps.hasImport || caps.hasExport) ? "import { taktExcelEnti
 ${entityI18nIndexImport}
 ${treeStateBlock}
 ${indexDictSetup}
-/** 解析树节点 key（与列表 ${idField}、左侧树 key 一致） */
-function resolve${entityPascal}NodeKey(node: Record<string, unknown>): string {
-  const raw = node.key ?? node.${idField} ?? node.id
-  return raw == null ? '' : String(raw)
-}
-
 /**
- * 将接口树转为树表节点（保留 children，供 getSubtree 与左侧树共用 key）
- * @param nodes 实体树 DTO 列表
+ * 将树 API 一层 DTO 映射为左侧懒加载节点
+ * @param rows 一层子节点
  */
-function ${entityCamel}TreeToTableNodes(nodes: ${caps.entityTreeType}[]): Array<Record<string, unknown>> {
-  if (!nodes?.length) return []
-  return nodes.map((node) => {
-    const childNodes = node.children?.length ? ${entityCamel}TreeToTableNodes(node.children) : []
-    return {
-      ...node,
-      key: String(node.${idField} ?? ''),
-      children: childNodes.length > 0 ? childNodes : undefined,
-    }
-  })
-}
-
-/** 将 fullTableTree 转为左侧 a-tree（与右侧表共用 key，保证点选联动） */
-function mapFullTableTreeToTreeData(nodes: Array<Record<string, unknown>>): TreeDataItem[] {
-  if (!nodes?.length) return []
-  return nodes.map((n) => {
-    const title = String(n[treeTitleField] ?? n.title ?? '')
-    const key = resolve${entityPascal}NodeKey(n)
-    const children = n.children as Array<Record<string, unknown>> | undefined
-    if (!children?.length) return { title, key }
-    const mapped = mapFullTableTreeToTreeData(children)
-    return mapped.length > 0 ? { title, key, children: mapped } : { title, key }
+function map${entityPascal}LazyNodes(rows: ${caps.entityTreeType}[]): TaktLazyTreeNode[] {
+  return mapLazyTreeNodes(rows, {
+    getKey: (n) => String(n.${idField} ?? ''),
+    getTitle: (n) => String(n.${titleField} || ${(titleField !== codeField) ? `n.${codeField} || ` : ''}n.${idField} || ''),
+    isLeaf: (n) => taktIsLeafFlag((n as { isLeaf?: unknown }).isLeaf),
   })
 }
 
 /**
- * 按 key 查找树节点（左侧树与右侧表共用 fullTableTree）
- * @param nodes 树节点列表
- * @param key 节点 key
- */
-function findTreeNodeByKey(
-  nodes: Array<Record<string, unknown>>,
-  key: string | number,
-): Record<string, unknown> | null {
-  const k = String(key)
-  for (const node of nodes) {
-    if (resolve${entityPascal}NodeKey(node) === k) return node
-    const children = node.children as Array<Record<string, unknown>> | undefined
-    if (children?.length) {
-      const found = findTreeNodeByKey(children, key)
-      if (found) return found
-    }
-  }
-  return null
-}
-
-/** 从树中取以某 key 为根的子树（返回单元素数组，便于作为表格根） */
-function getSubtree(nodes: Array<Record<string, unknown>>, key: string | number): Array<Record<string, unknown>> {
-  const node = findTreeNodeByKey(nodes, key)
-  return node ? [node] : []
-}
-
-/**
- * 按关键字过滤左侧树：保留 title 匹配的节点及其祖先、子孙
+ * 按关键字过滤左侧树：仅过滤已加载节点（大规模树不做全量搜索）
  * @param nodes 树节点
  * @param keyword 关键字
  */
-function filterTreeByKeyword(nodes: TreeDataItem[], keyword: string): TreeDataItem[] {
+function filterTreeByKeyword(nodes: TaktLazyTreeNode[], keyword: string): TaktLazyTreeNode[] {
   const k = (keyword ?? '').trim().toLowerCase()
   if (!k) return nodes
   /** 递归过滤子树 */
-  function filter(nodes: TreeDataItem[]): TreeDataItem[] {
-    if (!nodes?.length) return []
-    return nodes
+  function filter(list: TaktLazyTreeNode[]): TaktLazyTreeNode[] {
+    if (!list?.length) return []
+    return list
       .map((node) => {
         const title = String(node.title ?? '').toLowerCase()
         const matched = title.includes(k)
-        const filteredChildren = node.children?.length ? filter(node.children) : undefined
+        const filteredChildren = node.children?.length ? filter(node.children as TaktLazyTreeNode[]) : undefined
         const hasMatchInChildren = filteredChildren != null && filteredChildren.length > 0
         if (matched || hasMatchInChildren) {
           if (filteredChildren != null && filteredChildren.length > 0) {
-            return { ...node, children: filteredChildren } as TreeDataItem
+            return { ...node, children: filteredChildren }
           }
           const { children: _omitChildren, ...rest } = node
-          return rest as TreeDataItem
+          return rest as TaktLazyTreeNode
         }
         return null
       })
-      .filter(Boolean) as TreeDataItem[]
+      .filter(Boolean) as TaktLazyTreeNode[]
   }
   return filter(nodes)
 }
 
-/** 左侧树绑定数据（按 treeQueryKeyword 客户端过滤） */
+/** 左侧树绑定数据（按 treeQueryKeyword 客户端过滤已加载节点） */
 const filteredTreeData = computed(() =>
   filterTreeByKeyword(entityTreeData.value, treeQueryKeyword.value)
 )
 
-/** 从树数据中收集所有有子节点的 key（用于左侧树展开全部） */
+/**
+ * 收集已加载且有子节点的 key（展开全部仅作用于已加载层）
+ * @param nodes 树节点
+ */
 function collectTreeExpandableKeys(nodes: Array<Record<string, unknown>>): (string | number)[] {
   if (!nodes?.length) return []
   const keys: (string | number)[] = []
@@ -634,75 +603,110 @@ function collectTreeExpandableKeys(nodes: Array<Record<string, unknown>>): (stri
 }
 
 /**
- * 深度优先拍平树表行（附带 _treeDepth 供缩进列渲染）
- * @param nodes 树表节点
- * @param depth 当前层级
+ * 当前右侧列表的父级 ID（左侧选中；未选中则为根 0）
+ * @returns {string} parentId
  */
-function flatten${entityPascal}TableRows(nodes: Array<Record<string, unknown>>, depth = 0): Array<Record<string, unknown>> {
-  if (!nodes?.length) return []
-  const rows: Array<Record<string, unknown>> = []
-  for (const node of nodes) {
-    const childList = node.children as Array<Record<string, unknown>> | undefined
-    const { children: _children, ...rest } = node
-    rows.push({ ...rest, _treeDepth: depth })
-    if (childList?.length) {
-      rows.push(...flatten${entityPascal}TableRows(childList, depth + 1))
-    }
-  }
-  return rows
-}
-
-/** 右侧树表数据：选中左侧节点时显示该节点（含子级）；未选中时显示整棵树 */
-const tableTreeData = computed(() => {
-  const tree = fullTableTree.value
-  if (!tree?.length) return []
+function getRightListParentId(): string {
   const keys = selectedTreeKeys.value
-  if (keys.length > 0) {
-    const activeKey = keys[keys.length - 1]
-    if (activeKey === undefined) return tree
-    const sub = getSubtree(tree, activeKey)
-    if (sub.length > 0) return sub
+  if (keys.length > 0 && keys[keys.length - 1] != null) {
+    return String(keys[keys.length - 1])
   }
-  return tree
-})
-
-/** 右侧查询条件过滤（仅影响表格展示，不重建左侧树） */
-function matches${entityPascal}RightQuery(record: Record<string, unknown>): boolean {
-  const kw = queryKeyword.value.trim()
-  if (kw) {
-    const k = kw.toLowerCase()
-${searchFields.map((f) => `    if (!String(record.${f} ?? '').toLowerCase().includes(k)) return false`).join('\n')}
-  }
-${fields.queryFields.map((f) => {
-    if (f.type === 'number') {
-      return `  if (advancedQueryForm.value.${f.name} !== undefined && record.${f.name} !== advancedQueryForm.value.${f.name}) return false`;
-    }
-    return `  if (advancedQueryForm.value.${f.name} && !String(record.${f.name} ?? '').includes(String(advancedQueryForm.value.${f.name}))) return false`;
-  }).join('\n')}
-  return true
+  return '0'
 }
 
-/** 右侧拍平后的全部行（先左侧子树，再右侧查询过滤） */
-const tableFlatRows = computed(() =>
-  flatten${entityPascal}TableRows(tableTreeData.value).filter(matches${entityPascal}RightQuery)
-)
-/** 右侧拍平总行数（分页 total） */
-const tableFlatTotal = computed(() => tableFlatRows.value.length)
-/** 当前页行数据 */
-const paginatedFlatTableRows = computed(() => {
-  const start = (tableCurrentPage.value - 1) * tablePageSize.value
-  return tableFlatRows.value.slice(start, start + tablePageSize.value)
-})
+/**
+ * 组装右侧列表查询参数（服务端分页）
+ * @returns 查询 DTO
+ */
+function buildRightListQuery() {
+  const aq = advancedQueryForm.value
+  return {
+    pageIndex: tableCurrentPage.value,
+    pageSize: tablePageSize.value,
+    parentId: aq.parentId ? aq.parentId : getRightListParentId(),
+    keyWords: queryKeyword.value.trim() || undefined,
+${rightListQueryFieldLines}
+  }
+}
 
-/** 左侧选中节点或查询变化时，右侧拍平列表重置到第一页 */
-watch(tableTreeData, () => {
-  tableCurrentPage.value = getTaktDefaultPageIndex()
-})
+/**
+ * 加载右侧列表（服务端分页：当前父级直接子节点）
+ */
+async function loadRightList() {
+  listLoading.value = true
+  try {
+    const res = await ${caps.apiGetList || `get${entityPascal}List`}(buildRightListQuery())
+    const resAny = res as { data?: ${entityPascal}[]; Data?: ${entityPascal}[]; items?: ${entityPascal}[]; total?: number; Total?: number }
+    const items = Array.isArray(res?.data)
+      ? res.data
+      : Array.isArray(resAny?.Data)
+        ? resAny.Data
+        : Array.isArray(resAny?.items)
+          ? resAny.items
+          : []
+    tableDataSource.value = items
+    tableTotal.value = Number(res?.total ?? resAny?.Total ?? items.length) || 0
+  } catch (error: unknown) {
+    logger.error('[${entityPascal}] 加载列表失败', undefined, error)
+    message.error(getErrorMessage(error, t('common.feedback.load.data.failed')))
+    tableDataSource.value = []
+    tableTotal.value = 0
+  } finally {
+    listLoading.value = false
+  }
+}
 
-/** 左侧树选中：重置右侧分页到第一页 */
-const handleTreeSelect = (selectedKeys: (string | number)[]) => {
-  selectedTreeKeys.value = selectedKeys
-  tableCurrentPage.value = getTaktDefaultPageIndex()
+/**
+ * 加载左侧树根节点（parentId=0，一层）
+ */
+async function reloadLeftTreeRoots() {
+  const res = await ${caps.apiGetTree}('0', true)
+  const resAny = res as { data?: ${caps.entityTreeType}[]; Data?: ${caps.entityTreeType}[] }
+  const trees: ${caps.entityTreeType}[] = Array.isArray(res) ? res : (resAny?.data ?? resAny?.Data ?? [])
+  entityTreeData.value = map${entityPascal}LazyNodes(trees)
+  treeExpandedKeys.value = []
+  treeExpanded.value = false
+}
+
+/**
+ * 重新加载指定父节点下已展开的子节点（CRUD 后局部刷新）
+ * @param parentKey 父节点 key
+ */
+async function reloadLeftTreeChildren(parentKey: string) {
+  if (!parentKey || parentKey === '0') {
+    await reloadLeftTreeRoots()
+    return
+  }
+  const res = await ${caps.apiGetTree}(parentKey, true)
+  const resAny = res as { data?: ${caps.entityTreeType}[]; Data?: ${caps.entityTreeType}[] }
+  const trees: ${caps.entityTreeType}[] = Array.isArray(res) ? res : (resAny?.data ?? resAny?.Data ?? [])
+  const children = map${entityPascal}LazyNodes(trees)
+  entityTreeData.value = mergeLoadedChildren(
+    entityTreeData.value,
+    parentKey,
+    children,
+  ) as TaktLazyTreeNode[]
+}
+
+/**
+ * 左侧树懒加载子节点
+ * @param treeNode Ant Design Tree 节点
+ */
+async function handleLeftTreeLoadData(treeNode: Record<string, unknown>) {
+  const dataRef = (treeNode.dataRef ?? treeNode) as Record<string, unknown>
+  const key = dataRef.key ?? treeNode.key
+  if (key == null) return
+  if (Array.isArray(dataRef.children) && dataRef.children.length > 0) return
+  const res = await ${caps.apiGetTree}(String(key), true)
+  const resAny = res as { data?: ${caps.entityTreeType}[]; Data?: ${caps.entityTreeType}[] }
+  const trees: ${caps.entityTreeType}[] = Array.isArray(res) ? res : (resAny?.data ?? resAny?.Data ?? [])
+  const children = map${entityPascal}LazyNodes(trees)
+  dataRef.children = children
+  entityTreeData.value = mergeLoadedChildren(
+    entityTreeData.value,
+    String(key),
+    children,
+  ) as TaktLazyTreeNode[]
 }
 
 ${treeUpdateDtoBlock ? `${treeUpdateDtoBlock}\n\n` : ''}/** 从树结构中查找节点 key 的父级 key 与在同级中的序号（用于 parentId / sortOrder） */
@@ -737,7 +741,7 @@ const handleTreeDrop = async (payload: TreeDropPayload) => {
   if (!pos) return
   try {
     loading.value = true
-    entityTreeData.value = newTreeData
+    entityTreeData.value = newTreeData as TaktLazyTreeNode[]
     const full = await ${caps.apiGetById}(String(dragKey))
     await ${caps.apiUpdate}(String(dragKey), build${entityPascal}UpdateDto(full, {
       parentId: pos.parentId,
@@ -748,20 +752,20 @@ ${!hasSortOrderInUpdateDto && caps.apiUpdateSort ? `    await ${caps.apiUpdateSo
     await loadData()
   } catch (error: unknown) {
     message.error(getErrorMessage(error, t('common.feedback.update.failed', { target: pi.self() })))
-    await loadFull${entityPascal}Tree().catch(() => undefined)
+    await reloadLeftTreeRoots().catch(() => undefined)
   } finally {
     loading.value = false
   }
 }` : 'const handleTreeDrop = async () => {}'}
 
-/** 左侧树关键字搜索（客户端过滤，不重复请求接口） */
+/** 左侧树关键字搜索（仅过滤已加载节点） */
 const handleTreeQuerySearch = () => {
   if (treeExpanded.value) {
     treeExpandedKeys.value = collectTreeExpandableKeys(filteredTreeData.value)
   }
 }
 
-/** 左侧展开/收缩：工具栏展开状态与树展开 key 联动 */
+/** 左侧展开/收缩：仅展开已加载节点 */
 watch(treeExpanded, (expanded) => {
   if (expanded) {
     treeExpandedKeys.value = collectTreeExpandableKeys(filteredTreeData.value)
@@ -775,6 +779,22 @@ watch(filteredTreeData, () => {
   if (treeExpanded.value) {
     treeExpandedKeys.value = collectTreeExpandableKeys(filteredTreeData.value)
   }
+})
+
+/** 左侧树选中：刷新右侧列表（服务端 parentId） */
+const handleTreeSelect = (selectedKeys: (string | number)[]) => {
+  selectedTreeKeys.value = selectedKeys
+  const firstPage = getTaktDefaultPageIndex()
+  if (tableCurrentPage.value === firstPage) {
+    void loadRightList()
+  } else {
+    tableCurrentPage.value = firstPage
+  }
+}
+
+/** 服务端分页：页码/每页条数变化时重新拉列表 */
+watch([tableCurrentPage, tablePageSize], () => {
+  void loadRightList()
 })
 
 /** 表格行记录（实体 DTO 或 ant-design-vue 模板 loose record） */
@@ -856,44 +876,60 @@ const rowSelection = computed(() => ({
   },
 }))
 
-/** 加载全量树（左侧树 + 右侧树表共用数据源） */
-async function loadFull${entityPascal}Tree() {
-  const res = await ${caps.apiGetTree}('0', true)
-  const resAny = res as { data?: ${caps.entityTreeType}[]; Data?: ${caps.entityTreeType}[] }
-  const trees: ${caps.entityTreeType}[] = Array.isArray(res) ? res : (resAny?.data ?? resAny?.Data ?? [])
-  const tableNodes = ${entityCamel}TreeToTableNodes(trees)
-  fullTableTree.value = tableNodes
-  entityTreeData.value = mapFullTableTreeToTreeData(tableNodes)
-  if (treeExpanded.value) {
-    treeExpandedKeys.value = collectTreeExpandableKeys(filteredTreeData.value)
-  }
-}
-
-/** 初始化或增删改后刷新全量树 */
+/** 加载根树 + 右侧列表（初始化 / 租户切换） */
 async function loadData() {
   loading.value = true
   try {
-    await loadFull${entityPascal}Tree()
+    await reloadLeftTreeRoots()
+    await loadRightList()
   } catch (error: unknown) {
     logger.error('[${entityPascal}] 加载树数据失败', undefined, error)
     message.error(getErrorMessage(error, t('common.feedback.load.data.failed')))
-    fullTableTree.value = []
     entityTreeData.value = []
+    tableDataSource.value = []
+    tableTotal.value = 0
   } finally {
     loading.value = false
   }
 }
 
-/** 右侧查询（客户端过滤，不请求接口） */
-const handleSearch = () => {
-  tableCurrentPage.value = getTaktDefaultPageIndex()
+/**
+ * CRUD / 状态变更后局部刷新：当前父级子节点 + 右侧列表
+ */
+async function refreshAfterMutation() {
+  loading.value = true
+  try {
+    const parentKey = getRightListParentId()
+    await reloadLeftTreeChildren(parentKey)
+    await loadRightList()
+  } catch (error: unknown) {
+    logger.error('[${entityPascal}] 刷新失败', undefined, error)
+    message.error(getErrorMessage(error, t('common.feedback.load.data.failed')))
+  } finally {
+    loading.value = false
+  }
 }
 
-/** 右侧重置（不影响左侧树与 fullTableTree） */
+/** 右侧查询（服务端） */
+const handleSearch = () => {
+  const firstPage = getTaktDefaultPageIndex()
+  if (tableCurrentPage.value === firstPage) {
+    void loadRightList()
+  } else {
+    tableCurrentPage.value = firstPage
+  }
+}
+
+/** 右侧重置并重新查询 */
 const handleReset = () => {
   queryKeyword.value = ''
   advancedQueryForm.value = ${advancedQueryResetExpr}
-  tableCurrentPage.value = getTaktDefaultPageIndex()
+  const firstPage = getTaktDefaultPageIndex()
+  if (tableCurrentPage.value === firstPage) {
+    void loadRightList()
+  } else {
+    tableCurrentPage.value = firstPage
+  }
 }
 
 ${listSwitchHandlersBlock}
@@ -946,7 +982,7 @@ ${caps.hasCreate ? `      await ${caps.apiCreate}(payload as any)
     }
     formVisible.value = false
     formData.value = null${INDEX_FORM_RESET_NEXT_TICK}
-    await loadData()
+    await refreshAfterMutation()
   } finally {
     formLoading.value = false
   }
@@ -968,7 +1004,7 @@ async function handleDeleteOne(record: ${rowRecordType}) {
     onOk: async () => {
       await ${caps.apiDelete}((record as any)[entityIdName])
       message.success(t('common.feedback.deleted', { target: pi.self() }))
-      await loadData()
+      await refreshAfterMutation()
     }
   })
 }` : ''}
@@ -988,7 +1024,7 @@ async function handleDelete() {
       const ids = selectedRows.value.map((r: any) => r[entityIdName]).filter(Boolean)
       await ${caps.apiDeleteBatch}(ids)
       message.success(t('common.feedback.deleted', { target: pi.self() }))
-      await loadData()
+      await refreshAfterMutation()
     }
   })
 }` : ''}
@@ -996,7 +1032,7 @@ async function handleDelete() {
 ${(caps.hasImport && caps.hasGetTemplate) ? buildImportHandlersScriptBlock({
   apiGetTemplate: caps.apiGetTemplate,
   apiImport: caps.apiImport,
-  successBody: 'void loadData()',
+  successBody: 'void refreshAfterMutation()',
 }) : ''}
 
 ${caps.hasExport ? `/** 导出当前查询条件下的 Excel */
@@ -1036,10 +1072,15 @@ function handleAdvancedQuery() {
   advancedQueryVisible.value = true
 }
 
-/** 高级查询提交：关闭抽屉并重置右侧分页 */
+/** 高级查询提交：关闭抽屉并重新拉右侧列表 */
 function handleAdvancedQuerySubmit() {
   advancedQueryVisible.value = false
-  tableCurrentPage.value = getTaktDefaultPageIndex()
+  const firstPage = getTaktDefaultPageIndex()
+  if (tableCurrentPage.value === firstPage) {
+    void loadRightList()
+  } else {
+    tableCurrentPage.value = firstPage
+  }
 }
 
 /** 重置高级查询表单（不自动查询） */
@@ -1072,11 +1113,12 @@ function handleTableChange() {}
 /** 列宽拖拽回调占位 */
 function handleResizeColumn() {}
 
-/** 页面挂载：租户上下文就绪后加载分页配置，再拉树数据 */
+/** 页面挂载：租户上下文就绪后加载分页配置，再拉树+列表 */
 onMounted(async () => {
   await ensureTaktPaginationConfigAsync()
 ${indexDictOnMounted}  void loadData()
 })
+useTableRefresh(loadData)
 </script>
 
 <style scoped lang="css">
@@ -1410,6 +1452,7 @@ function generateTreeFormVue(ctx, helpers) {
                 <TaktTreeSelect
                   v-model:value="formState.parentId"
                   api-url="${treeOptionsUrl}"
+                  :lazy="true"
                   :placeholder="${fieldPlaceholderTExpr(parentIdField, 'common.page.form.placeholder.select')}"
                   allow-clear
                   :field-names="{ label: 'dictLabel', value: 'dictValue' }"
@@ -1481,7 +1524,7 @@ function processTreeApiModule(apiFilePath, options, registry) {
     console.warn(`⚠️  缺少树表 API，跳过: ${bundle.rel}`);
     return { skipped: true };
   }
-  console.log(`  树表: ${bundle.fullCtx.caps.apiGetTree}（左树右表，参照 dept/index.vue）`);
+  console.log(`  树表: ${bundle.fullCtx.caps.apiGetTree}（懒加载+virtual + list 分页，参照 admin-division）`);
   console.log(`  entityScope: ${bundle.fullCtx.fields.entityScope} ← Takt${bundle.entityShort}`);
   const treeFieldMetaRaw = resolveTreeFieldMeta(
     bundle.ifaceMap,
@@ -1542,7 +1585,7 @@ function printTreeUsage() {
   console.log(`
 用法: node scripts/generate-vue-tree-from-api.cjs [参数]
 
-模板: **树表 TREE**（ParentId + getXxxTree，左树右表 + TaktTreeSelect）
+模板: **树表 TREE**（大数据：左树懒加载+virtual，右表 getXxxList 分页 + TaktTreeSelect :lazy）
 
 参数:
   --<实体名>            如 --CostCenter、--Dept（不带 Takt 前缀；Dept 为手工页，仍会跳过排除列表）

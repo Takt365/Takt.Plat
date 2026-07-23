@@ -20,11 +20,11 @@ export const SALESINVOICEITEM_SELF_I18N_KEY = buildEntitySelfI18nKey(SALESINVOIC
 
 /** 列表业务列（不含主键） */
 export const SALESINVOICEITEM_LIST_FIELDS = [
+  'salesInvoiceId',
   'salesInvoiceName',
   'accountingDocumentCode',
   'lineNumber',
   'postingDate',
-  'currency',
   'modelName',
   'materialCode',
   'materialType',
@@ -35,10 +35,52 @@ export const SALESINVOICEITEM_LIST_FIELDS = [
   'unit',
   'localCurrencyAmount',
   'transactionCurrencyAmount',
+  'taxIncludedPrice',
+  'untaxedPrice',
+  'taxAmount',
   'documentType',
   'referenceDocumentCode',
   'referenceDocumentItem',
-  'salesInvoice',
+  'isObsolete',
+] as const
+
+/** 明细右栏 panel 默认展示列（不含主键 id；含 action） */
+export const SALESINVOICEITEM_DEFAULT_VISIBLE_COLUMN_KEYS = [
+  'salesInvoiceId',
+  'salesInvoiceName',
+  'accountingDocumentCode',
+  'lineNumber',
+  'postingDate',
+  'modelName',
+  'materialCode',
+  'materialType',
+  'materialName',
+  'profitCenterCode',
+  'accountTitle',
+  'quantity',
+  'unit',
+  'localCurrencyAmount',
+  'transactionCurrencyAmount',
+  'taxIncludedPrice',
+  'untaxedPrice',
+  'taxAmount',
+  'documentType',
+  'referenceDocumentCode',
+  'referenceDocumentItem',
+  'isObsolete',
+  'action',
+] as const
+
+/** 明细右栏 panel 合计列（当前页 dataSource 数值字段求和） */
+export const SALESINVOICEITEM_SUMMARY_SUM_FIELDS = [
+  'quantity',
+  'localCurrencyAmount',
+  'transactionCurrencyAmount',
+  'taxIncludedPrice',
+  'untaxedPrice',
+  'taxAmount',
+  'referenceDocumentItem',
+  'isObsolete',
 ] as const
 
 /** 表单控件默认占位类型（仅 UI/校验语义，不含 i18n 键） */
@@ -49,11 +91,23 @@ export const SALESINVOICEITEM_PLACEHOLDER = {
   accountingDocumentCode: 'required',
   lineNumber: 'select',
   postingDate: 'select',
-  currency: 'select',
   modelName: 'optional',
   materialCode: 'select',
   materialType: 'select',
-  materialName: 'required',
+  materialName: 'optional',
+  profitCenterCode: 'optional',
+  accountTitle: 'optional',
+  quantity: 'select',
+  unit: 'select',
+  localCurrencyAmount: 'select',
+  transactionCurrencyAmount: 'select',
+  taxIncludedPrice: 'select',
+  untaxedPrice: 'select',
+  taxAmount: 'select',
+  documentType: 'select',
+  referenceDocumentCode: 'optional',
+  referenceDocumentItem: 'optional',
+  isObsolete: 'select',
 } as const satisfies Record<string, EntityFieldPlaceholderKind>
 
 /** 表单 ph() 可接受的字段（与 PLACEHOLDER 键一致，避免与 LIST_FIELDS 导航列混用） */
@@ -64,7 +118,6 @@ export const SALESINVOICEITEM_QUERY_STRING_FIELDS = [
   'accountingDocumentCode',
   'postingDateStart',
   'postingDateEnd',
-  'currency',
   'modelName',
   'materialCode',
   'materialType',
@@ -82,7 +135,7 @@ export const SALESINVOICEITEM_QUERY_STRING_FIELDS = [
 
 export type SalesInvoiceItemQueryField =
   | (typeof SALESINVOICEITEM_QUERY_STRING_FIELDS)[number]
-  | 'lineNumber' | 'quantity' | 'localCurrencyAmount' | 'transactionCurrencyAmount' | 'referenceDocumentItem'
+  | 'lineNumber' | 'quantity' | 'localCurrencyAmount' | 'transactionCurrencyAmount' | 'taxIncludedPrice' | 'untaxedPrice' | 'taxAmount' | 'referenceDocumentItem' | 'isObsolete'
 
 /** 高级查询抽屉全部字段（含数值） */
 export const SALESINVOICEITEM_QUERY_FIELDS: readonly SalesInvoiceItemQueryField[] = [
@@ -91,7 +144,11 @@ export const SALESINVOICEITEM_QUERY_FIELDS: readonly SalesInvoiceItemQueryField[
   'quantity',
   'localCurrencyAmount',
   'transactionCurrencyAmount',
+  'taxIncludedPrice',
+  'untaxedPrice',
+  'taxAmount',
   'referenceDocumentItem',
+  'isObsolete',
 ]
 
 /**

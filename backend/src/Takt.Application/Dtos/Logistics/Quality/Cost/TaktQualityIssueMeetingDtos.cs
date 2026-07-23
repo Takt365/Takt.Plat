@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Application.Dtos.Logistics.Quality.Cost
 // 文件名称：TaktQualityIssueMeetingDtos.cs
-// 创建时间：2026-07-09
+// 创建时间：2026-07-23
 // 创建人：Takt365(Auto Generated)
 // 功能描述：QualityIssueMeeting 模块 DTO（由 generate-dtos-from-entity.cjs 根据 TaktQualityIssueMeeting 生成，请按需审阅）
 // 
@@ -36,7 +36,7 @@ public class TaktQualityIssueMeetingDto : TaktCompanyDtoBase
     public long QualityIssueMeetingId { get; set; }
 
     /// <summary>
-    /// 品质问题主表 ID（关联 TaktQualityIssue.Id，选项 TaktQualityIssues/options）
+    /// 品质问题主表 ID（选项 TaktQualityIssues/options；DictValue=Id）
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
     public long QualityIssueId { get; set; }
@@ -122,7 +122,7 @@ public class TaktQualityIssueMeetingDto : TaktCompanyDtoBase
     public string? MeetingRecorder { get; set; } = string.Empty;
 
     /// <summary>
-    /// 是否作废（字典 sys_yes_no_type，0=否 1=是；编辑移除子行时标记作废）
+    /// 是否作废（字典 sys_yes_no_type；0=否 1=是；编辑移除子行时标记作废）
     /// </summary>
     public int IsObsolete { get; set; } = 0;
 
@@ -155,7 +155,7 @@ public class TaktQualityIssueMeetingQueryDto : TaktPagedQuery
     public string? CompanyCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 品质问题主表 ID（关联 TaktQualityIssue.Id，选项 TaktQualityIssues/options）
+    /// 品质问题主表 ID（选项 TaktQualityIssues/options；DictValue=Id）
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
     public long? QualityIssueId { get; set; }
@@ -236,7 +236,7 @@ public class TaktQualityIssueMeetingQueryDto : TaktPagedQuery
     public string? MeetingRecorder { get; set; } = string.Empty;
 
     /// <summary>
-    /// 是否作废（字典 sys_yes_no_type，0=否 1=是；编辑移除子行时标记作废）
+    /// 是否作废（字典 sys_yes_no_type；0=否 1=是；编辑移除子行时标记作废）
     /// </summary>
     public int? IsObsolete { get; set; }
 
@@ -286,7 +286,7 @@ public class TaktQualityIssueMeetingCreateDto
     public string CompanyDefaultCulture { get; set; } = string.Empty;
 
     /// <summary>
-    /// 品质问题主表 ID（关联 TaktQualityIssue.Id，选项 TaktQualityIssues/options）
+    /// 品质问题主表 ID（选项 TaktQualityIssues/options；DictValue=Id）
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
     public long QualityIssueId { get; set; }
@@ -368,7 +368,7 @@ public class TaktQualityIssueMeetingCreateDto
     public string? MeetingRecorder { get; set; } = string.Empty;
 
     /// <summary>
-    /// 是否作废（字典 sys_yes_no_type，0=否 1=是；编辑移除子行时标记作废）
+    /// 是否作废（字典 sys_yes_no_type；0=否 1=是；编辑移除子行时标记作废）
     /// </summary>
     public int IsObsolete { get; set; } = 0;
 
@@ -447,7 +447,7 @@ public class TaktQualityIssueMeetingTemplateDto
     public string? CompanyCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 品质问题主表 ID（关联 TaktQualityIssue.Id，选项 TaktQualityIssues/options）
+    /// 品质问题主表 ID（选项 TaktQualityIssues/options；DictValue=Id）
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
     public long? QualityIssueId { get; set; }
@@ -528,7 +528,7 @@ public class TaktQualityIssueMeetingTemplateDto
     public string? MeetingRecorder { get; set; } = string.Empty;
 
     /// <summary>
-    /// 是否作废（字典 sys_yes_no_type，0=否 1=是；编辑移除子行时标记作废）
+    /// 是否作废（字典 sys_yes_no_type；0=否 1=是；编辑移除子行时标记作废）
     /// </summary>
     public int? IsObsolete { get; set; }
 
@@ -565,7 +565,7 @@ public class TaktQualityIssueMeetingImportDto
     public string? CompanyDefaultCulture { get; set; } = string.Empty;
 
     /// <summary>
-    /// 品质问题主表 ID（关联 TaktQualityIssue.Id，选项 TaktQualityIssues/options）
+    /// 品质问题主表 ID（选项 TaktQualityIssues/options；DictValue=Id）
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
     public long? QualityIssueId { get; set; }
@@ -646,7 +646,7 @@ public class TaktQualityIssueMeetingImportDto
     public string? MeetingRecorder { get; set; } = string.Empty;
 
     /// <summary>
-    /// 是否作废（字典 sys_yes_no_type，0=否 1=是；编辑移除子行时标记作废）
+    /// 是否作废（字典 sys_yes_no_type；0=否 1=是；编辑移除子行时标记作废）
     /// </summary>
     public int? IsObsolete { get; set; }
 
@@ -684,7 +684,7 @@ public class TaktQualityIssueMeetingExportDto
     public string CompanyCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 品质问题主表 ID（关联 TaktQualityIssue.Id，选项 TaktQualityIssues/options）
+    /// 品质问题主表 ID（选项 TaktQualityIssues/options；DictValue=Id）
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
     public long QualityIssueId { get; set; }
@@ -765,7 +765,7 @@ public class TaktQualityIssueMeetingExportDto
     public string? MeetingRecorder { get; set; } = string.Empty;
 
     /// <summary>
-    /// 是否作废（字典 sys_yes_no_type，0=否 1=是；编辑移除子行时标记作废）
+    /// 是否作废（字典 sys_yes_no_type；0=否 1=是；编辑移除子行时标记作废）
     /// </summary>
     public int IsObsolete { get; set; } = 0;
 

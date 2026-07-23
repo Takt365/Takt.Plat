@@ -28,7 +28,7 @@ namespace Takt.Domain.Entities.Logistics.Procurement;
 public class TaktPurchaseInquiry : TaktCompanyEntityBase
 {
     /// <summary>
-    /// 工厂代码（选项 TaktPlants/options，DictValue=PlantCode）
+    /// 工厂代码（选项 TaktPlants/options；DictValue=PlantCode）
     /// </summary>
     [SugarColumn(ColumnName = "plant_code", ColumnDescription = "工厂代码", ColumnDataType = "nvarchar", Length = 4, IsNullable = false)]
     public string PlantCode { get; set; } = string.Empty;
@@ -48,7 +48,7 @@ public class TaktPurchaseInquiry : TaktCompanyEntityBase
     [SugarColumn(ColumnName = "quote_deadline_date", ColumnDescription = "报价截止日期", ColumnDataType = "datetime", IsNullable = true)]
     public DateTime? QuoteDeadlineDate { get; set; }
     /// <summary>
-    /// 询价人员工 ID（选项 TaktEmployees/options，DictValue=Id）
+    /// 询价人员工 ID（选项 TaktEmployees/options；DictValue=Id）
     /// </summary>
     [SugarColumn(ColumnName = "inquiry_id", ColumnDescription = "询价人员工ID", ColumnDataType = "bigint", IsNullable = true)]
     [JsonConverter(typeof(ValueToStringConverter))]
@@ -59,15 +59,30 @@ public class TaktPurchaseInquiry : TaktCompanyEntityBase
     [SugarColumn(ColumnName = "inquiry_by", ColumnDescription = "询价人", ColumnDataType = "varchar", Length = 40, IsNullable = false)]
     public string InquiryBy { get; set; } = string.Empty;
     /// <summary>
-    /// 询价供应商编码（选项 TaktSuppliers/options，DictValue=SupplierCode）
+    /// 询价供应商编码（选项 TaktSuppliers/options；DictValue=SupplierCode；一单一供应商，明细禁止再挂供应商）
     /// </summary>
-    [SugarColumn(ColumnName = "supplier_code", ColumnDescription = "询价供应商编码", ColumnDataType = "varchar", Length = 40, IsNullable = true)]
-    public string? SupplierCode { get; set; }
+    [SugarColumn(ColumnName = "supplier_code", ColumnDescription = "询价供应商编码", ColumnDataType = "varchar", Length = 40, IsNullable = false)]
+    public string SupplierCode { get; set; } = string.Empty;
     /// <summary>
-    /// 询价供应商名称
+    /// 询价供应商名称1（冗余，与 TaktSupplier.SupplierName1 对齐）
     /// </summary>
-    [SugarColumn(ColumnName = "supplier_name", ColumnDescription = "询价供应商名称", ColumnDataType = "nvarchar", Length = 200, IsNullable = true)]
-    public string? SupplierName { get; set; }
+    [SugarColumn(ColumnName = "supplier_name1", ColumnDescription = "询价供应商名称1", ColumnDataType = "nvarchar", Length = 140, IsNullable = false)]
+    public string SupplierName1 { get; set; } = string.Empty;
+    /// <summary>
+    /// 结算币种（字典 accounting_currency_code；DictValue=CNY/USD 等；一单一币种）
+    /// </summary>
+    [SugarColumn(ColumnName = "currency_code", ColumnDescription = "结算币种", ColumnDataType = "nvarchar", Length = 3, IsNullable = false, DefaultValue = "CNY")]
+    public string CurrencyCode { get; set; } = "CNY";
+    /// <summary>
+    /// 税率（字典 accounting_tax_rate_param；13=13%，9=9%，0=0% 等；一单一税率）
+    /// </summary>
+    [SugarColumn(ColumnName = "tax_rate", ColumnDescription = "税率", ColumnDataType = "int", IsNullable = false, DefaultValue = "13")]
+    public int TaxRate { get; set; } = 13;
+    /// <summary>
+    /// 税费
+    /// </summary>
+    [SugarColumn(ColumnName = "tax_amount", ColumnDescription = "税费", ColumnDataType = "decimal", Length = 18, DecimalDigits = 2, IsNullable = false, DefaultValue = "0")]
+    public decimal TaxAmount { get; set; } = 0;
     /// <summary>
     /// 付款方式（字典 logistics_payment_mode：vendorpay=供应商付款，employeereimburse=员工报销）
     /// </summary>

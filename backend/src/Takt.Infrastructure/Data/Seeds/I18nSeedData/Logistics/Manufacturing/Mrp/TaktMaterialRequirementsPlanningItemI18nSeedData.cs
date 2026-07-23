@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Infrastructure.Data.Seeds.I18nSeedData.Logistics.Manufacturing.Mrp
 // 文件名称：TaktMaterialRequirementsPlanningItemI18nSeedData.cs
-// 创建时间：2026-07-20
+// 创建时间：2026-07-23
 // 创建人：Takt365(Auto Generated)
 // 功能描述：TaktMaterialRequirementsPlanningItem 实体字段国际化种子（无对应 frontend locales；TranslationText 取自 ColumnDescription，ContextNote 取自属性 XML summary）
 // 
@@ -118,13 +118,13 @@ public class TaktMaterialRequirementsPlanningItemI18nSeedData : ITaktSeedDataCoo
             new TranslationSeedItem("entity.materialrequirementsplanningitem.linenumber", "zh-HK", "行号_hk", "行号（项号/序号，固定步长=10）"),
 
             // entity.materialrequirementsplanningitem.materialcode
-            new TranslationSeedItem("entity.materialrequirementsplanningitem.materialcode", "en-US", "物料编码_us", "物料编码（选项 TaktMaterialPlants/options，DictValue=MaterialCode，ExtValue=PlantCode）"),
+            new TranslationSeedItem("entity.materialrequirementsplanningitem.materialcode", "en-US", "物料编码_us", "物料编码（选项 TaktMaterialPlants/options；DictValue=MaterialCode，ExtValue=PlantCode）"),
             // entity.materialrequirementsplanningitem.materialcode
-            new TranslationSeedItem("entity.materialrequirementsplanningitem.materialcode", "ja-JP", "物料编码_jp", "物料编码（选项 TaktMaterialPlants/options，DictValue=MaterialCode，ExtValue=PlantCode）"),
+            new TranslationSeedItem("entity.materialrequirementsplanningitem.materialcode", "ja-JP", "物料编码_jp", "物料编码（选项 TaktMaterialPlants/options；DictValue=MaterialCode，ExtValue=PlantCode）"),
             // entity.materialrequirementsplanningitem.materialcode
-            new TranslationSeedItem("entity.materialrequirementsplanningitem.materialcode", "zh-CN", "物料编码", "物料编码（选项 TaktMaterialPlants/options，DictValue=MaterialCode，ExtValue=PlantCode）"),
+            new TranslationSeedItem("entity.materialrequirementsplanningitem.materialcode", "zh-CN", "物料编码", "物料编码（选项 TaktMaterialPlants/options；DictValue=MaterialCode，ExtValue=PlantCode）"),
             // entity.materialrequirementsplanningitem.materialcode
-            new TranslationSeedItem("entity.materialrequirementsplanningitem.materialcode", "zh-HK", "物料编码_hk", "物料编码（选项 TaktMaterialPlants/options，DictValue=MaterialCode，ExtValue=PlantCode）"),
+            new TranslationSeedItem("entity.materialrequirementsplanningitem.materialcode", "zh-HK", "物料编码_hk", "物料编码（选项 TaktMaterialPlants/options；DictValue=MaterialCode，ExtValue=PlantCode）"),
 
             // entity.materialrequirementsplanningitem.materialname
             new TranslationSeedItem("entity.materialrequirementsplanningitem.materialname", "en-US", "物料名称_us", "物料名称（回填：随物料）"),
@@ -190,13 +190,13 @@ public class TaktMaterialRequirementsPlanningItemI18nSeedData : ITaktSeedDataCoo
             new TranslationSeedItem("entity.materialrequirementsplanningitem.requirementdate", "zh-HK", "需求日期_hk", "需求日期"),
 
             // entity.materialrequirementsplanningitem.planunit
-            new TranslationSeedItem("entity.materialrequirementsplanningitem.planunit", "en-US", "计划单位_us", "计划单位（字典 logistics_unit_of_measure_code，DictValue=PC/EA 等；默认 PC）"),
+            new TranslationSeedItem("entity.materialrequirementsplanningitem.planunit", "en-US", "计划单位_us", "计划单位（字典 logistics_unit_of_measure_code；DictValue=PC/EA 等；默认 PC）"),
             // entity.materialrequirementsplanningitem.planunit
-            new TranslationSeedItem("entity.materialrequirementsplanningitem.planunit", "ja-JP", "计划单位_jp", "计划单位（字典 logistics_unit_of_measure_code，DictValue=PC/EA 等；默认 PC）"),
+            new TranslationSeedItem("entity.materialrequirementsplanningitem.planunit", "ja-JP", "计划单位_jp", "计划单位（字典 logistics_unit_of_measure_code；DictValue=PC/EA 等；默认 PC）"),
             // entity.materialrequirementsplanningitem.planunit
-            new TranslationSeedItem("entity.materialrequirementsplanningitem.planunit", "zh-CN", "计划单位", "计划单位（字典 logistics_unit_of_measure_code，DictValue=PC/EA 等；默认 PC）"),
+            new TranslationSeedItem("entity.materialrequirementsplanningitem.planunit", "zh-CN", "计划单位", "计划单位（字典 logistics_unit_of_measure_code；DictValue=PC/EA 等；默认 PC）"),
             // entity.materialrequirementsplanningitem.planunit
-            new TranslationSeedItem("entity.materialrequirementsplanningitem.planunit", "zh-HK", "计划单位_hk", "计划单位（字典 logistics_unit_of_measure_code，DictValue=PC/EA 等；默认 PC）"),
+            new TranslationSeedItem("entity.materialrequirementsplanningitem.planunit", "zh-HK", "计划单位_hk", "计划单位（字典 logistics_unit_of_measure_code；DictValue=PC/EA 等；默认 PC）"),
 
             // entity.materialrequirementsplanningitem.grossrequirement
             new TranslationSeedItem("entity.materialrequirementsplanningitem.grossrequirement", "en-US", "毛需求数量_us", "毛需求数量（基本单位数量）"),
@@ -253,13 +253,13 @@ public class TaktMaterialRequirementsPlanningItemI18nSeedData : ITaktSeedDataCoo
             new TranslationSeedItem("entity.materialrequirementsplanningitem.procurementtype", "zh-HK", "供应类型_hk", "供应类型（字典 logistics_procurement_type；0=自制，1=外购，2=委外）"),
 
             // entity.materialrequirementsplanningitem.isobsolete
-            new TranslationSeedItem("entity.materialrequirementsplanningitem.isobsolete", "en-US", "是否作废_us", "是否作废（字典 sys_yes_no_type，0=否 1=是）"),
+            new TranslationSeedItem("entity.materialrequirementsplanningitem.isobsolete", "en-US", "是否作废_us", "是否作废（字典 sys_yes_no_type；0=否 1=是）"),
             // entity.materialrequirementsplanningitem.isobsolete
-            new TranslationSeedItem("entity.materialrequirementsplanningitem.isobsolete", "ja-JP", "是否作废_jp", "是否作废（字典 sys_yes_no_type，0=否 1=是）"),
+            new TranslationSeedItem("entity.materialrequirementsplanningitem.isobsolete", "ja-JP", "是否作废_jp", "是否作废（字典 sys_yes_no_type；0=否 1=是）"),
             // entity.materialrequirementsplanningitem.isobsolete
-            new TranslationSeedItem("entity.materialrequirementsplanningitem.isobsolete", "zh-CN", "是否作废", "是否作废（字典 sys_yes_no_type，0=否 1=是）"),
+            new TranslationSeedItem("entity.materialrequirementsplanningitem.isobsolete", "zh-CN", "是否作废", "是否作废（字典 sys_yes_no_type；0=否 1=是）"),
             // entity.materialrequirementsplanningitem.isobsolete
-            new TranslationSeedItem("entity.materialrequirementsplanningitem.isobsolete", "zh-HK", "是否作废_hk", "是否作废（字典 sys_yes_no_type，0=否 1=是）"),
+            new TranslationSeedItem("entity.materialrequirementsplanningitem.isobsolete", "zh-HK", "是否作废_hk", "是否作废（字典 sys_yes_no_type；0=否 1=是）"),
         };
     }
 

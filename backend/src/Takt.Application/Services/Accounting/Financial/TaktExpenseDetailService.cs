@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Application.Services.Accounting.Financial
 // 文件名称：TaktExpenseDetailService.cs
-// 创建时间：2026-07-09
+// 创建时间：2026-07-23
 // 创建人：Takt365(Cursor AI)
 // 功能描述：费用单明细应用服务实现
 // 
@@ -96,13 +96,13 @@ public class TaktExpenseDetailService : TaktServiceBase, ITaktExpenseDetailServi
     {
         EnsureThreeLayerContext();
         var list = await _expenseDetailRepository.GetListAsync(
-            x => x.TenantCode == CurrentTenantCode && x.CompanyCode == CurrentCompanyCode,
+            x => x.TenantCode == CurrentTenantCode && x.CompanyCode == CurrentCompanyCode && x.IsObsolete == 0,
             x => x.ItemName ?? string.Empty,
             false);
         return list.Select(e => new TaktSelectOption
         {
-            DictValue = e.Id,
-            DictLabel = e.ItemName ?? e.Id.ToString(),
+            DictValue = e.ExpenseCode,
+            DictLabel = e.ItemName ?? e.ExpenseCode,
         }).ToList();
     }
 

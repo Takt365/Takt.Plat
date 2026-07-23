@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Application.Validators.Logistics.Sales
 // 文件名称：TaktSalesPriceItemValidators.cs
-// 创建时间：2026-07-20
+// 创建时间：2026-07-23
 // 创建人：Takt365(Auto Generated)
 // 功能描述：SalesPriceItem 模块 FluentValidation 验证器（由 generate-validators-from-entity.cjs 根据 TaktSalesPriceItem 生成，请按需审阅）
 // 
@@ -46,6 +46,12 @@ public class TaktSalesPriceItemCreateValidator : AbstractValidator<TaktSalesPric
         RuleFor(x => x.CalculationType)
             .NotEmpty().WithMessage("计算类型不能为空")
             .MaximumLength(1).WithMessage("计算类型长度不能超过1个字符");
+        RuleFor(x => x.ConditionCurrency)
+            .NotEmpty().WithMessage("条件货币不能为空")
+            .MaximumLength(3).WithMessage("条件货币长度不能超过3个字符");
+        RuleFor(x => x.UnitOfMeasure)
+            .NotEmpty().WithMessage("计量单位不能为空")
+            .MaximumLength(5).WithMessage("计量单位长度不能超过5个字符");
         RuleFor(x => x.ExtField)
             .MaximumLength(4000).WithMessage("扩展字段JSON长度不能超过4000个字符");
         RuleFor(x => x.Remark)
@@ -86,6 +92,12 @@ public class TaktSalesPriceItemUpdateValidator : AbstractValidator<TaktSalesPric
         RuleFor(x => x.CalculationType)
             .NotEmpty().WithMessage("计算类型不能为空")
             .MaximumLength(1).WithMessage("计算类型长度不能超过1个字符");
+        RuleFor(x => x.ConditionCurrency)
+            .NotEmpty().WithMessage("条件货币不能为空")
+            .MaximumLength(3).WithMessage("条件货币长度不能超过3个字符");
+        RuleFor(x => x.UnitOfMeasure)
+            .NotEmpty().WithMessage("计量单位不能为空")
+            .MaximumLength(5).WithMessage("计量单位长度不能超过5个字符");
         RuleFor(x => x.ExtField)
             .MaximumLength(4000).WithMessage("扩展字段JSON长度不能超过4000个字符");
         RuleFor(x => x.Remark)
@@ -122,6 +134,12 @@ public class TaktSalesPriceItemImportValidator : AbstractValidator<TaktSalesPric
         RuleFor(x => x.CalculationType)
             .NotEmpty().WithMessage("计算类型不能为空")
             .MaximumLength(1).WithMessage("计算类型长度不能超过1个字符");
+        RuleFor(x => x.ConditionCurrency)
+            .NotEmpty().WithMessage("条件货币不能为空")
+            .MaximumLength(3).WithMessage("条件货币长度不能超过3个字符");
+        RuleFor(x => x.UnitOfMeasure)
+            .NotEmpty().WithMessage("计量单位不能为空")
+            .MaximumLength(5).WithMessage("计量单位长度不能超过5个字符");
         RuleFor(x => x.ExtField)
             .MaximumLength(4000).WithMessage("扩展字段JSON长度不能超过4000个字符").When(x => !string.IsNullOrWhiteSpace(x.ExtField));
         RuleFor(x => x.Remark)

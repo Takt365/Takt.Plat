@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Infrastructure.Data.Seeds.I18nSeedData.Logistics.Manufacturing.Output
 // 文件名称：TaktPcbaOutputI18nSeedData.cs
-// 创建时间：2026-07-20
+// 创建时间：2026-07-23
 // 创建人：Takt365(Auto Generated)
 // 功能描述：TaktPcbaOutput 实体字段国际化种子（无对应 frontend locales；TranslationText 取自 ColumnDescription，ContextNote 取自属性 XML summary）
 // 
@@ -100,13 +100,13 @@ public class TaktPcbaOutputI18nSeedData : ITaktSeedDataCoordinator
             new TranslationSeedItem("entity.pcbaoutput.plantcode", "zh-HK", "工厂代码_hk", "工厂代码（回填：随工单）"),
 
             // entity.pcbaoutput.prodcategory
-            new TranslationSeedItem("entity.pcbaoutput.prodcategory", "en-US", "生产类别_us", "生产类别（字典 logistics_prod_category，存 DictValue：EPP/FPP/RWP/MDP/CPP）"),
+            new TranslationSeedItem("entity.pcbaoutput.prodcategory", "en-US", "生产类别_us", "生产类别（字典 logistics_prod_category；存 DictValue：EPP/FPP/RWP/MDP/CPP）"),
             // entity.pcbaoutput.prodcategory
-            new TranslationSeedItem("entity.pcbaoutput.prodcategory", "ja-JP", "生产类别_jp", "生产类别（字典 logistics_prod_category，存 DictValue：EPP/FPP/RWP/MDP/CPP）"),
+            new TranslationSeedItem("entity.pcbaoutput.prodcategory", "ja-JP", "生产类别_jp", "生产类别（字典 logistics_prod_category；存 DictValue：EPP/FPP/RWP/MDP/CPP）"),
             // entity.pcbaoutput.prodcategory
-            new TranslationSeedItem("entity.pcbaoutput.prodcategory", "zh-CN", "生产类别", "生产类别（字典 logistics_prod_category，存 DictValue：EPP/FPP/RWP/MDP/CPP）"),
+            new TranslationSeedItem("entity.pcbaoutput.prodcategory", "zh-CN", "生产类别", "生产类别（字典 logistics_prod_category；存 DictValue：EPP/FPP/RWP/MDP/CPP）"),
             // entity.pcbaoutput.prodcategory
-            new TranslationSeedItem("entity.pcbaoutput.prodcategory", "zh-HK", "生产类别_hk", "生产类别（字典 logistics_prod_category，存 DictValue：EPP/FPP/RWP/MDP/CPP）"),
+            new TranslationSeedItem("entity.pcbaoutput.prodcategory", "zh-HK", "生产类别_hk", "生产类别（字典 logistics_prod_category；存 DictValue：EPP/FPP/RWP/MDP/CPP）"),
 
             // entity.pcbaoutput.proddate
             new TranslationSeedItem("entity.pcbaoutput.proddate", "en-US", "生产日期_us", "生产日期"),
@@ -127,13 +127,13 @@ public class TaktPcbaOutputI18nSeedData : ITaktSeedDataCoordinator
             new TranslationSeedItem("entity.pcbaoutput.prodordertype", "zh-HK", "工单类别_hk", "工单类别（回填：随工单）"),
 
             // entity.pcbaoutput.prodordercode
-            new TranslationSeedItem("entity.pcbaoutput.prodordercode", "en-US", "工单号_us", "工单号（选项 TaktProductionOrders/options，DictValue=ProdOrderCode，ExtValue=PlantCode）"),
+            new TranslationSeedItem("entity.pcbaoutput.prodordercode", "en-US", "工单号_us", "工单号（选项 TaktProductionOrders/options；DictValue=ProdOrderCode，ExtValue=PlantCode）"),
             // entity.pcbaoutput.prodordercode
-            new TranslationSeedItem("entity.pcbaoutput.prodordercode", "ja-JP", "工单号_jp", "工单号（选项 TaktProductionOrders/options，DictValue=ProdOrderCode，ExtValue=PlantCode）"),
+            new TranslationSeedItem("entity.pcbaoutput.prodordercode", "ja-JP", "工单号_jp", "工单号（选项 TaktProductionOrders/options；DictValue=ProdOrderCode，ExtValue=PlantCode）"),
             // entity.pcbaoutput.prodordercode
-            new TranslationSeedItem("entity.pcbaoutput.prodordercode", "zh-CN", "工单号", "工单号（选项 TaktProductionOrders/options，DictValue=ProdOrderCode，ExtValue=PlantCode）"),
+            new TranslationSeedItem("entity.pcbaoutput.prodordercode", "zh-CN", "工单号", "工单号（选项 TaktProductionOrders/options；DictValue=ProdOrderCode，ExtValue=PlantCode）"),
             // entity.pcbaoutput.prodordercode
-            new TranslationSeedItem("entity.pcbaoutput.prodordercode", "zh-HK", "工单号_hk", "工单号（选项 TaktProductionOrders/options，DictValue=ProdOrderCode，ExtValue=PlantCode）"),
+            new TranslationSeedItem("entity.pcbaoutput.prodordercode", "zh-HK", "工单号_hk", "工单号（选项 TaktProductionOrders/options；DictValue=ProdOrderCode，ExtValue=PlantCode）"),
 
             // entity.pcbaoutput.modelcode
             new TranslationSeedItem("entity.pcbaoutput.modelcode", "en-US", "机种_us", "机种（回填：随工单）"),

@@ -73,15 +73,15 @@ export const TAKT_TABLE_VIEWPORT_HEIGHT_FALLBACK = 800;
 export const TAKT_TREE_LEFT_VIRTUAL_HEIGHT_FALLBACK = 400;
 
 /**
- * 表格 / 树绑定行数超过此阈值时自动开启虚拟滚动（07-overflow-vue）
- * @description 各 takt-*-table 共用；显式 virtual=true 仍始终开启；virtual=false 仅在未超阈值时关闭
+ * 表格 / 树绑定行数超过此阈值时仍强制虚拟滚动（即使页面传 virtual=false）
+ * @description 各 takt-*-table 默认 virtual=true；本阈值是防呆，不是业务数据条数上限
  */
 export const TAKT_TABLE_AUTO_VIRTUAL_ROW_THRESHOLD = 5000;
 
 /**
  * 是否启用 Ant Design Vue Table / Tree 虚拟滚动
  * @param rowCount 当前绑定行数（表格 dataSource.length 或树节点总数）
- * @param virtualProp 组件 virtual 显式值；true 强制开；false 未超阈值时关；省略则仅按阈值
+ * @param virtualProp 组件 virtual；true 强制开；false 未超阈值时可关；省略则默认开
  * @returns {boolean} 是否开启 virtual
  */
 export function shouldUseTableVirtualScroll(
@@ -92,11 +92,14 @@ export function shouldUseTableVirtualScroll(
   if (virtualProp === true) {
     return true;
   }
-  // 超大数据强制虚拟化，禁止页面以 virtual=false 关掉
+  // 超大行数强制虚拟化（防呆）；不是「库里只能查这么多条」
   if (len > TAKT_TABLE_AUTO_VIRTUAL_ROW_THRESHOLD) {
     return true;
   }
-  return false;
+  if (virtualProp === false) {
+    return false;
+  }
+  return true;
 }
 
 /**

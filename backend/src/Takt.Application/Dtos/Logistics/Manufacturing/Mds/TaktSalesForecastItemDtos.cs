@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Application.Dtos.Logistics.Manufacturing.Mds
 // 文件名称：TaktSalesForecastItemDtos.cs
-// 创建时间：2026-07-13
+// 创建时间：2026-07-23
 // 创建人：Takt365(Auto Generated)
 // 功能描述：SalesForecastItem 模块 DTO（由 generate-dtos-from-entity.cjs 根据 TaktSalesForecastItem 生成，请按需审阅）
 // 
@@ -57,17 +57,17 @@ public class TaktSalesForecastItemDto : TaktCompanyDtoBase
     public int LineNumber { get; set; } = 0;
 
     /// <summary>
-    /// 物料编码（关联 TaktMaterial.MaterialCode，选项 TaktMaterials/options）
+    /// 物料编码（选项 TaktMaterialPlants/options；DictValue=MaterialCode，ExtValue=PlantCode）
     /// </summary>
     public string MaterialCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 物料名称
+    /// 物料名称（回填：随物料）
     /// </summary>
     public string MaterialName { get; set; } = string.Empty;
 
     /// <summary>
-    /// 物料规格
+    /// 物料规格（回填：随物料）
     /// </summary>
     public string? MaterialSpecification { get; set; } = string.Empty;
 
@@ -82,7 +82,7 @@ public class TaktSalesForecastItemDto : TaktCompanyDtoBase
     public string? ModelName { get; set; } = string.Empty;
 
     /// <summary>
-    /// 计划单位（字典 logistics_unit_of_measure_code，DictValue=PC/EA 等；默认 PC）
+    /// 计划单位（字典 logistics_unit_of_measure_code；DictValue=PC/EA 等；默认 PC）
     /// </summary>
     public string PlanUnit { get; set; } = string.Empty;
 
@@ -112,7 +112,7 @@ public class TaktSalesForecastItemDto : TaktCompanyDtoBase
     public decimal EstimatedAmount { get; set; }
 
     /// <summary>
-    /// 是否作废（字典 sys_yes_no_type，0=否 1=是；编辑移除子行时标记作废）
+    /// 是否作废（字典 sys_yes_no_type；0=否 1=是；编辑移除子行时标记作废）
     /// </summary>
     public int IsObsolete { get; set; } = 0;
 
@@ -155,17 +155,17 @@ public class TaktSalesForecastItemQueryDto : TaktPagedQuery
     public int? LineNumber { get; set; }
 
     /// <summary>
-    /// 物料编码（关联 TaktMaterial.MaterialCode，选项 TaktMaterials/options）
+    /// 物料编码（选项 TaktMaterialPlants/options；DictValue=MaterialCode，ExtValue=PlantCode）
     /// </summary>
     public string? MaterialCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 物料名称
+    /// 物料名称（回填：随物料）
     /// </summary>
     public string? MaterialName { get; set; } = string.Empty;
 
     /// <summary>
-    /// 物料规格
+    /// 物料规格（回填：随物料）
     /// </summary>
     public string? MaterialSpecification { get; set; } = string.Empty;
 
@@ -180,7 +180,7 @@ public class TaktSalesForecastItemQueryDto : TaktPagedQuery
     public string? ModelName { get; set; } = string.Empty;
 
     /// <summary>
-    /// 计划单位（字典 logistics_unit_of_measure_code，DictValue=PC/EA 等；默认 PC）
+    /// 计划单位（字典 logistics_unit_of_measure_code；DictValue=PC/EA 等；默认 PC）
     /// </summary>
     public string? PlanUnit { get; set; } = string.Empty;
 
@@ -215,7 +215,7 @@ public class TaktSalesForecastItemQueryDto : TaktPagedQuery
     public decimal? EstimatedAmount { get; set; }
 
     /// <summary>
-    /// 是否作废（字典 sys_yes_no_type，0=否 1=是；编辑移除子行时标记作废）
+    /// 是否作废（字典 sys_yes_no_type；0=否 1=是；编辑移除子行时标记作废）
     /// </summary>
     public int? IsObsolete { get; set; }
 
@@ -282,19 +282,19 @@ public class TaktSalesForecastItemCreateDto
     public int LineNumber { get; set; } = 0;
 
     /// <summary>
-    /// 物料编码（关联 TaktMaterial.MaterialCode，选项 TaktMaterials/options）
+    /// 物料编码（选项 TaktMaterialPlants/options；DictValue=MaterialCode，ExtValue=PlantCode）
     /// </summary>
-    [Required(ErrorMessage = "物料编码（关联 TaktMaterial.MaterialCode，选项 TaktMaterials/options）不能为空")]
+    [Required(ErrorMessage = "物料编码（选项 TaktMaterialPlants/options；DictValue=MaterialCode，ExtValue=PlantCode）不能为空")]
     public string MaterialCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 物料名称
+    /// 物料名称（回填：随物料）
     /// </summary>
-    [Required(ErrorMessage = "物料名称不能为空")]
+    [Required(ErrorMessage = "物料名称（回填：随物料）不能为空")]
     public string MaterialName { get; set; } = string.Empty;
 
     /// <summary>
-    /// 物料规格
+    /// 物料规格（回填：随物料）
     /// </summary>
     public string? MaterialSpecification { get; set; } = string.Empty;
 
@@ -309,9 +309,9 @@ public class TaktSalesForecastItemCreateDto
     public string? ModelName { get; set; } = string.Empty;
 
     /// <summary>
-    /// 计划单位（字典 logistics_unit_of_measure_code，DictValue=PC/EA 等；默认 PC）
+    /// 计划单位（字典 logistics_unit_of_measure_code；DictValue=PC/EA 等；默认 PC）
     /// </summary>
-    [Required(ErrorMessage = "计划单位（字典 logistics_unit_of_measure_code，DictValue=PC/EA 等；默认 PC）不能为空")]
+    [Required(ErrorMessage = "计划单位（字典 logistics_unit_of_measure_code；DictValue=PC/EA 等；默认 PC）不能为空")]
     public string PlanUnit { get; set; } = string.Empty;
 
     /// <summary>
@@ -340,7 +340,7 @@ public class TaktSalesForecastItemCreateDto
     public decimal EstimatedAmount { get; set; }
 
     /// <summary>
-    /// 是否作废（字典 sys_yes_no_type，0=否 1=是；编辑移除子行时标记作废）
+    /// 是否作废（字典 sys_yes_no_type；0=否 1=是；编辑移除子行时标记作废）
     /// </summary>
     public int IsObsolete { get; set; } = 0;
 
@@ -435,17 +435,17 @@ public class TaktSalesForecastItemTemplateDto
     public int? LineNumber { get; set; }
 
     /// <summary>
-    /// 物料编码（关联 TaktMaterial.MaterialCode，选项 TaktMaterials/options）
+    /// 物料编码（选项 TaktMaterialPlants/options；DictValue=MaterialCode，ExtValue=PlantCode）
     /// </summary>
     public string? MaterialCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 物料名称
+    /// 物料名称（回填：随物料）
     /// </summary>
     public string? MaterialName { get; set; } = string.Empty;
 
     /// <summary>
-    /// 物料规格
+    /// 物料规格（回填：随物料）
     /// </summary>
     public string? MaterialSpecification { get; set; } = string.Empty;
 
@@ -460,7 +460,7 @@ public class TaktSalesForecastItemTemplateDto
     public string? ModelName { get; set; } = string.Empty;
 
     /// <summary>
-    /// 计划单位（字典 logistics_unit_of_measure_code，DictValue=PC/EA 等；默认 PC）
+    /// 计划单位（字典 logistics_unit_of_measure_code；DictValue=PC/EA 等；默认 PC）
     /// </summary>
     public string? PlanUnit { get; set; } = string.Empty;
 
@@ -490,7 +490,7 @@ public class TaktSalesForecastItemTemplateDto
     public decimal? EstimatedAmount { get; set; }
 
     /// <summary>
-    /// 是否作废（字典 sys_yes_no_type，0=否 1=是；编辑移除子行时标记作废）
+    /// 是否作废（字典 sys_yes_no_type；0=否 1=是；编辑移除子行时标记作废）
     /// </summary>
     public int? IsObsolete { get; set; }
 
@@ -543,17 +543,17 @@ public class TaktSalesForecastItemImportDto
     public int? LineNumber { get; set; }
 
     /// <summary>
-    /// 物料编码（关联 TaktMaterial.MaterialCode，选项 TaktMaterials/options）
+    /// 物料编码（选项 TaktMaterialPlants/options；DictValue=MaterialCode，ExtValue=PlantCode）
     /// </summary>
     public string? MaterialCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 物料名称
+    /// 物料名称（回填：随物料）
     /// </summary>
     public string? MaterialName { get; set; } = string.Empty;
 
     /// <summary>
-    /// 物料规格
+    /// 物料规格（回填：随物料）
     /// </summary>
     public string? MaterialSpecification { get; set; } = string.Empty;
 
@@ -568,7 +568,7 @@ public class TaktSalesForecastItemImportDto
     public string? ModelName { get; set; } = string.Empty;
 
     /// <summary>
-    /// 计划单位（字典 logistics_unit_of_measure_code，DictValue=PC/EA 等；默认 PC）
+    /// 计划单位（字典 logistics_unit_of_measure_code；DictValue=PC/EA 等；默认 PC）
     /// </summary>
     public string? PlanUnit { get; set; } = string.Empty;
 
@@ -598,7 +598,7 @@ public class TaktSalesForecastItemImportDto
     public decimal? EstimatedAmount { get; set; }
 
     /// <summary>
-    /// 是否作废（字典 sys_yes_no_type，0=否 1=是；编辑移除子行时标记作废）
+    /// 是否作废（字典 sys_yes_no_type；0=否 1=是；编辑移除子行时标记作废）
     /// </summary>
     public int? IsObsolete { get; set; }
 
@@ -652,17 +652,17 @@ public class TaktSalesForecastItemExportDto
     public int LineNumber { get; set; } = 0;
 
     /// <summary>
-    /// 物料编码（关联 TaktMaterial.MaterialCode，选项 TaktMaterials/options）
+    /// 物料编码（选项 TaktMaterialPlants/options；DictValue=MaterialCode，ExtValue=PlantCode）
     /// </summary>
     public string MaterialCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 物料名称
+    /// 物料名称（回填：随物料）
     /// </summary>
     public string MaterialName { get; set; } = string.Empty;
 
     /// <summary>
-    /// 物料规格
+    /// 物料规格（回填：随物料）
     /// </summary>
     public string? MaterialSpecification { get; set; } = string.Empty;
 
@@ -677,7 +677,7 @@ public class TaktSalesForecastItemExportDto
     public string? ModelName { get; set; } = string.Empty;
 
     /// <summary>
-    /// 计划单位（字典 logistics_unit_of_measure_code，DictValue=PC/EA 等；默认 PC）
+    /// 计划单位（字典 logistics_unit_of_measure_code；DictValue=PC/EA 等；默认 PC）
     /// </summary>
     public string PlanUnit { get; set; } = string.Empty;
 
@@ -707,7 +707,7 @@ public class TaktSalesForecastItemExportDto
     public decimal EstimatedAmount { get; set; }
 
     /// <summary>
-    /// 是否作废（字典 sys_yes_no_type，0=否 1=是；编辑移除子行时标记作废）
+    /// 是否作废（字典 sys_yes_no_type；0=否 1=是；编辑移除子行时标记作废）
     /// </summary>
     public int IsObsolete { get; set; } = 0;
 

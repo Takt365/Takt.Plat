@@ -442,7 +442,7 @@ export interface UserImport {
   nickname?: string;
 
   /**
-   * 员工编号（用于查找员工）
+   * 员工编码（用于查找员工）
    */
   employeeCode: string;
 
@@ -457,7 +457,7 @@ export interface UserImport {
   passwordHash?: string;
 
   /**
-   * 员工ID（可选，与员工编号二选一；填写时优先使用）
+   * 员工ID（可选，与员工编码二选一；填写时优先使用）
    */
   employeeId: string;
 

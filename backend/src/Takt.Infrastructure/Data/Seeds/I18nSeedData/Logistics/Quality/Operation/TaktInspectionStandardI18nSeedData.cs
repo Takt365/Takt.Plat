@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Infrastructure.Data.Seeds.I18nSeedData.Logistics.Quality.Operation
 // 文件名称：TaktInspectionStandardI18nSeedData.cs
-// 创建时间：2026-07-20
+// 创建时间：2026-07-23
 // 创建人：Takt365(Auto Generated)
 // 功能描述：TaktInspectionStandard 实体字段国际化种子（无对应 frontend locales；TranslationText 取自 ColumnDescription，ContextNote 取自属性 XML summary）
 // 
@@ -145,13 +145,13 @@ public class TaktInspectionStandardI18nSeedData : ITaktSeedDataCoordinator
             new TranslationSeedItem("entity.inspectionstandard.materialcategoryname", "zh-HK", "物料类别名称_hk", "物料类别名称"),
 
             // entity.inspectionstandard.samplingschemecode
-            new TranslationSeedItem("entity.inspectionstandard.samplingschemecode", "en-US", "抽样方案编码_us", "抽样方案编码（选项 TaktSamplingSchemes/options，DictValue=SamplingSchemeCode）"),
+            new TranslationSeedItem("entity.inspectionstandard.samplingschemecode", "en-US", "抽样方案编码_us", "抽样方案编码（选项 TaktSamplingSchemes/options；DictValue=SamplingSchemeCode）"),
             // entity.inspectionstandard.samplingschemecode
-            new TranslationSeedItem("entity.inspectionstandard.samplingschemecode", "ja-JP", "抽样方案编码_jp", "抽样方案编码（选项 TaktSamplingSchemes/options，DictValue=SamplingSchemeCode）"),
+            new TranslationSeedItem("entity.inspectionstandard.samplingschemecode", "ja-JP", "抽样方案编码_jp", "抽样方案编码（选项 TaktSamplingSchemes/options；DictValue=SamplingSchemeCode）"),
             // entity.inspectionstandard.samplingschemecode
-            new TranslationSeedItem("entity.inspectionstandard.samplingschemecode", "zh-CN", "抽样方案编码", "抽样方案编码（选项 TaktSamplingSchemes/options，DictValue=SamplingSchemeCode）"),
+            new TranslationSeedItem("entity.inspectionstandard.samplingschemecode", "zh-CN", "抽样方案编码", "抽样方案编码（选项 TaktSamplingSchemes/options；DictValue=SamplingSchemeCode）"),
             // entity.inspectionstandard.samplingschemecode
-            new TranslationSeedItem("entity.inspectionstandard.samplingschemecode", "zh-HK", "抽样方案编码_hk", "抽样方案编码（选项 TaktSamplingSchemes/options，DictValue=SamplingSchemeCode）"),
+            new TranslationSeedItem("entity.inspectionstandard.samplingschemecode", "zh-HK", "抽样方案编码_hk", "抽样方案编码（选项 TaktSamplingSchemes/options；DictValue=SamplingSchemeCode）"),
 
             // entity.inspectionstandard.samplingschemename
             new TranslationSeedItem("entity.inspectionstandard.samplingschemename", "en-US", "抽样方案名称_us", "抽样方案名称"),

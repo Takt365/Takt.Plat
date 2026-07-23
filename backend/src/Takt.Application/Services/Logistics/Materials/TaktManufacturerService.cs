@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Application.Services.Logistics.Materials
 // 文件名称：TaktManufacturerService.cs
-// 创建时间：2026-07-09
+// 创建时间：2026-07-23
 // 创建人：Takt365(Cursor AI)
 // 功能描述：制造商信息应用服务实现
 // 
@@ -106,12 +106,12 @@ public class TaktManufacturerService : TaktServiceBase, ITaktManufacturerService
         EnsureThreeLayerContext();
         var list = await _manufacturerRepository.GetListAsync(
             x => x.TenantCode == CurrentTenantCode && x.CompanyCode == CurrentCompanyCode && x.ManufacturerStatus == 1,
-            x => x.ManufacturerName ?? string.Empty,
+            x => x.ManufacturerShortName ?? string.Empty,
             false);
         return list.Select(e => new TaktSelectOption
         {
-            DictValue = e.Id,
-            DictLabel = e.ManufacturerName ?? e.Id.ToString(),
+            DictValue = e.ManufacturerCode,
+            DictLabel = e.ManufacturerShortName ?? e.ManufacturerCode,
         }).ToList();
     }
 
@@ -388,7 +388,20 @@ public class TaktManufacturerService : TaktServiceBase, ITaktManufacturerService
     private async Task SaveManufacturerChildrenAsync(TaktManufacturer entity, TaktManufacturerCreateDto dto)
     {
         // 制造商物料明细（ManufacturerMaterials）
-        if (dto.ManufacturerMaterials is not { Count: > 0 })
+        List<TaktManufacturerMaterialUpdateDto>? manufacturerMaterialsForSave;
+        if (dto is TaktManufacturerUpdateDto updateDtoForManufacturerMaterials && updateDtoForManufacturerMaterials.ManufacturerMaterials != null)
+        {
+            manufacturerMaterialsForSave = updateDtoForManufacturerMaterials.ManufacturerMaterials;
+        }
+        else if (dto.ManufacturerMaterials != null)
+        {
+            manufacturerMaterialsForSave = dto.ManufacturerMaterials.Adapt<List<TaktManufacturerMaterialUpdateDto>>();
+        }
+        else
+        {
+            manufacturerMaterialsForSave = null;
+        }
+        if (manufacturerMaterialsForSave is not { Count: > 0 })
         {
             await MarkManufacturerMaterialsObsoleteAsync(entity.Id);
             return;
@@ -400,9 +413,9 @@ public class TaktManufacturerService : TaktServiceBase, ITaktManufacturerService
             var submittedIds = new HashSet<long>();
             var toCreate = new List<TaktManufacturerMaterial>();
             var seenLineKeys = new HashSet<string>(StringComparer.Ordinal);
-            for (var i = 0; i < dto.ManufacturerMaterials.Count; i++)
+            for (var i = 0; i < manufacturerMaterialsForSave.Count; i++)
             {
-                var childDto = dto.ManufacturerMaterials[i];
+                var childDto = manufacturerMaterialsForSave[i];
                 childDto.ManufacturerId = entity.Id;
                 var lineKey = $"{entity.CompanyCode}|{entity.Id}|{childDto.LineNumber}";
                 if (!seenLineKeys.Add(lineKey))
@@ -499,15 +512,17 @@ public class TaktManufacturerService : TaktServiceBase, ITaktManufacturerService
             var keywords = queryDto.KeyWords;
             exp = exp.And(x =>
                 (x.ManufacturerCode != null && x.ManufacturerCode.Contains(keywords))
-                || (x.ManufacturerName != null && x.ManufacturerName.Contains(keywords))
+                || (x.ManufacturerName1 != null && x.ManufacturerName1.Contains(keywords))
+                || (x.ManufacturerName2 != null && x.ManufacturerName2.Contains(keywords))
                 || (x.ManufacturerShortName != null && x.ManufacturerShortName.Contains(keywords))
                 || SqlFunc.ToString(x.ManufacturerType).Contains(keywords)
                 || (x.IndustrySector != null && x.IndustrySector.Contains(keywords))
                 || (x.ManufacturerTaxNumber != null && x.ManufacturerTaxNumber.Contains(keywords))
                 || (x.RegistrationCountry != null && x.RegistrationCountry.Contains(keywords))
+                || (x.RegistrationProvince != null && x.RegistrationProvince.Contains(keywords))
+                || (x.RegistrationCity != null && x.RegistrationCity.Contains(keywords))
                 || (x.RegistrationAddress1 != null && x.RegistrationAddress1.Contains(keywords))
                 || (x.RegistrationAddress2 != null && x.RegistrationAddress2.Contains(keywords))
-                || (x.RegistrationAddress3 != null && x.RegistrationAddress3.Contains(keywords))
                 || (x.ManufacturerPhone != null && x.ManufacturerPhone.Contains(keywords))
                 || (x.ManufacturerFax != null && x.ManufacturerFax.Contains(keywords))
                 || (x.ManufacturerEmail != null && x.ManufacturerEmail.Contains(keywords))
@@ -531,9 +546,14 @@ public class TaktManufacturerService : TaktServiceBase, ITaktManufacturerService
             exp = exp.And(x => x.ManufacturerCode != null && x.ManufacturerCode.Contains(queryDto.ManufacturerCode));
         }
 
-        if (!string.IsNullOrEmpty(queryDto?.ManufacturerName))
+        if (!string.IsNullOrEmpty(queryDto?.ManufacturerName1))
         {
-            exp = exp.And(x => x.ManufacturerName != null && x.ManufacturerName.Contains(queryDto.ManufacturerName));
+            exp = exp.And(x => x.ManufacturerName1 != null && x.ManufacturerName1.Contains(queryDto.ManufacturerName1));
+        }
+
+        if (!string.IsNullOrEmpty(queryDto?.ManufacturerName2))
+        {
+            exp = exp.And(x => x.ManufacturerName2 != null && x.ManufacturerName2.Contains(queryDto.ManufacturerName2));
         }
 
         if (!string.IsNullOrEmpty(queryDto?.ManufacturerShortName))
@@ -561,6 +581,16 @@ public class TaktManufacturerService : TaktServiceBase, ITaktManufacturerService
             exp = exp.And(x => x.RegistrationCountry != null && x.RegistrationCountry.Contains(queryDto.RegistrationCountry));
         }
 
+        if (!string.IsNullOrEmpty(queryDto?.RegistrationProvince))
+        {
+            exp = exp.And(x => x.RegistrationProvince != null && x.RegistrationProvince.Contains(queryDto.RegistrationProvince));
+        }
+
+        if (!string.IsNullOrEmpty(queryDto?.RegistrationCity))
+        {
+            exp = exp.And(x => x.RegistrationCity != null && x.RegistrationCity.Contains(queryDto.RegistrationCity));
+        }
+
         if (!string.IsNullOrEmpty(queryDto?.RegistrationAddress1))
         {
             exp = exp.And(x => x.RegistrationAddress1 != null && x.RegistrationAddress1.Contains(queryDto.RegistrationAddress1));
@@ -569,11 +599,6 @@ public class TaktManufacturerService : TaktServiceBase, ITaktManufacturerService
         if (!string.IsNullOrEmpty(queryDto?.RegistrationAddress2))
         {
             exp = exp.And(x => x.RegistrationAddress2 != null && x.RegistrationAddress2.Contains(queryDto.RegistrationAddress2));
-        }
-
-        if (!string.IsNullOrEmpty(queryDto?.RegistrationAddress3))
-        {
-            exp = exp.And(x => x.RegistrationAddress3 != null && x.RegistrationAddress3.Contains(queryDto.RegistrationAddress3));
         }
 
         if (!string.IsNullOrEmpty(queryDto?.ManufacturerPhone))

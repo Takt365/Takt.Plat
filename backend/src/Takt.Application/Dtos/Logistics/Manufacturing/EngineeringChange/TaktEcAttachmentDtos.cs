@@ -62,7 +62,7 @@ public class TaktEcAttachmentDto : TaktCompanyDtoBase
     public string AttachmentType { get; set; } = string.Empty;
 
     /// <summary>
-    /// 文件编号（如联络编号等）
+    /// 文件编码（如联络编码等）
     /// </summary>
     public string DocNo { get; set; } = string.Empty;
 
@@ -131,7 +131,7 @@ public class TaktEcAttachmentQueryDto : TaktPagedQuery
     public string? AttachmentType { get; set; } = string.Empty;
 
     /// <summary>
-    /// 文件编号（如联络编号等）
+    /// 文件编码（如联络编码等）
     /// </summary>
     public string? DocNo { get; set; } = string.Empty;
 
@@ -219,9 +219,9 @@ public class TaktEcAttachmentCreateDto
     public string AttachmentType { get; set; } = string.Empty;
 
     /// <summary>
-    /// 文件编号（如联络编号等）
+    /// 文件编码（如联络编码等）
     /// </summary>
-    [Required(ErrorMessage = "文件编号（如联络编号等）不能为空")]
+    [Required(ErrorMessage = "文件编码（如联络编码等）不能为空")]
     public string DocNo { get; set; } = string.Empty;
 
     /// <summary>
@@ -337,7 +337,7 @@ public class TaktEcAttachmentTemplateDto
     public string? AttachmentType { get; set; } = string.Empty;
 
     /// <summary>
-    /// 文件编号（如联络编号等）
+    /// 文件编码（如联络编码等）
     /// </summary>
     public string? DocNo { get; set; } = string.Empty;
 
@@ -410,7 +410,7 @@ public class TaktEcAttachmentImportDto
     public string? AttachmentType { get; set; } = string.Empty;
 
     /// <summary>
-    /// 文件编号（如联络编号等）
+    /// 文件编码（如联络编码等）
     /// </summary>
     public string? DocNo { get; set; } = string.Empty;
 
@@ -484,7 +484,7 @@ public class TaktEcAttachmentExportDto
     public string AttachmentType { get; set; } = string.Empty;
 
     /// <summary>
-    /// 文件编号（如联络编号等）
+    /// 文件编码（如联络编码等）
     /// </summary>
     public string DocNo { get; set; } = string.Empty;
 

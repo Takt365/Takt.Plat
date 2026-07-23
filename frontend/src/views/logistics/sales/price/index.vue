@@ -80,6 +80,24 @@
             dict-type="logistics_price_type"
           />
         </template>
+        <template v-else-if="column.key === 'taxCode'">
+          <TaktDictTag
+            :value="getSalesPriceDictValue(record, 'taxCode')"
+            dict-type="accounting_tax_code"
+          />
+        </template>
+        <template v-else-if="column.key === 'grBasedInvoiceInspection'">
+          <TaktDictTag
+            :value="getSalesPriceDictValue(record, 'grBasedInvoiceInspection')"
+            dict-type="sys_yes_no_type"
+          />
+        </template>
+        <template v-else-if="column.key === 'pricingDateControl'">
+          <TaktDictTag
+            :value="getSalesPriceDictValue(record, 'pricingDateControl')"
+            dict-type="logistics_pricing_date_control"
+          />
+        </template>
       </template>
       <template #detail>
         <SalesPriceItemPanel
@@ -117,6 +135,16 @@
       @reset="handleAdvancedQueryReset"
     >
       <template #default="{ isFieldVisible }">
+      <div v-show="isFieldVisible('plantCode')">
+      <a-form-item :label="pi.queryLabel('plantCode')">
+        <TaktSelect
+          v-model:value="advancedQueryForm.plantCode"
+          api-url="TaktPlants/options"
+          :placeholder="pi.queryPh('plantCode', 'select')"
+          allow-clear
+        />
+      </a-form-item>
+      </div>
       <div v-show="isFieldVisible('salesPriceCode')">
       <a-form-item :label="pi.queryLabel('salesPriceCode')">
         <a-input
@@ -154,6 +182,46 @@
           v-model:value="advancedQueryForm.materialCode"
           api-url="TaktMaterialPlants/options"
           :placeholder="pi.queryPh('materialCode', 'select')"
+          allow-clear
+        />
+      </a-form-item>
+      </div>
+      <div v-show="isFieldVisible('salesGroup')">
+      <a-form-item :label="pi.queryLabel('salesGroup')">
+        <TaktSelect
+          v-model:value="advancedQueryForm.salesGroup"
+          api-url="TaktSalesGroups/options"
+          :placeholder="pi.queryPh('salesGroup', 'select')"
+          allow-clear
+        />
+      </a-form-item>
+      </div>
+      <div v-show="isFieldVisible('taxCode')">
+      <a-form-item :label="pi.queryLabel('taxCode')">
+        <TaktSelect
+          v-model:value="advancedQueryForm.taxCode"
+          dict-type="accounting_tax_code"
+          :placeholder="pi.queryPh('taxCode', 'select')"
+          allow-clear
+        />
+      </a-form-item>
+      </div>
+      <div v-show="isFieldVisible('grBasedInvoiceInspection')">
+      <a-form-item :label="pi.queryLabel('grBasedInvoiceInspection')">
+        <TaktSelect
+          v-model:value="advancedQueryForm.grBasedInvoiceInspection"
+          dict-type="sys_yes_no_type"
+          :placeholder="pi.queryPh('grBasedInvoiceInspection', 'select')"
+          allow-clear
+        />
+      </a-form-item>
+      </div>
+      <div v-show="isFieldVisible('pricingDateControl')">
+      <a-form-item :label="pi.queryLabel('pricingDateControl')">
+        <TaktSelect
+          v-model:value="advancedQueryForm.pricingDateControl"
+          dict-type="logistics_pricing_date_control"
+          :placeholder="pi.queryPh('pricingDateControl', 'select')"
           allow-clear
         />
       </a-form-item>
@@ -198,17 +266,6 @@
         />
       </a-form-item>
       </div>
-      <div v-show="isFieldVisible('variableKey')">
-      <a-form-item :label="pi.queryLabel('variableKey')">
-        <a-input
-          v-model:value="advancedQueryForm.variableKey"
-          :placeholder="pi.queryPh('variableKey', 'required')"
-          show-count
-          :maxlength="40"
-          allow-clear
-        />
-      </a-form-item>
-      </div>
       <div v-show="isFieldVisible('salesQuotationId')">
       <a-form-item :label="pi.queryLabel('salesQuotationId')">
         <TaktSelect
@@ -224,6 +281,17 @@
         <a-input
           v-model:value="advancedQueryForm.salesQuotationCode"
           :placeholder="pi.queryPh('salesQuotationCode', 'required')"
+          show-count
+          :maxlength="40"
+          allow-clear
+        />
+      </a-form-item>
+      </div>
+      <div v-show="isFieldVisible('variableKey')">
+      <a-form-item :label="pi.queryLabel('variableKey')">
+        <a-input
+          v-model:value="advancedQueryForm.variableKey"
+          :placeholder="pi.queryPh('variableKey', 'required')"
           show-count
           :maxlength="40"
           allow-clear
@@ -417,7 +485,8 @@ function createEmptyAdvancedQueryForm() {
   >
   return {
     ...form,
-
+    grBasedInvoiceInspection: undefined as number | undefined,
+    pricingDateControl: undefined as number | undefined,
   }
 }
 /** 高级查询表单模型 */
@@ -471,6 +540,12 @@ function buildListQuery(overrides?: Partial<SalesPriceQuery>): SalesPriceQuery {
   }
   for (const key of SALESPRICE_QUERY_STRING_FIELDS) {
     assignTrimmed(key, form[key])
+  }
+  if (form.grBasedInvoiceInspection !== undefined && form.grBasedInvoiceInspection !== null) {
+    query.grBasedInvoiceInspection = form.grBasedInvoiceInspection
+  }
+  if (form.pricingDateControl !== undefined && form.pricingDateControl !== null) {
+    query.pricingDateControl = form.pricingDateControl
   }
   return query
 }
@@ -545,6 +620,15 @@ const columns = computed<TableColumnsType>(() => [
     customRender: ({ record }: { record: any }) => getSalesPriceField(record, 'salesPriceId') ?? ''
   },
   {
+    title: pi.label('plantCode'),
+    dataIndex: 'plantCode',
+    key: 'plantCode',
+    width: 120,
+    resizable: true,
+    ellipsis: true,
+    customRender: ({ record }: { record: any }) => getSalesPriceField(record, 'plantCode') ?? ''
+  },
+  {
     title: pi.label('salesPriceCode'),
     dataIndex: 'salesPriceCode',
     key: 'salesPriceCode',
@@ -580,6 +664,39 @@ const columns = computed<TableColumnsType>(() => [
     customRender: ({ record }: { record: any }) => getSalesPriceField(record, 'materialCode') ?? ''
   },
   {
+    title: pi.label('salesGroup'),
+    dataIndex: 'salesGroup',
+    key: 'salesGroup',
+    width: 120,
+    resizable: true,
+    ellipsis: true,
+    customRender: ({ record }: { record: any }) => getSalesPriceField(record, 'salesGroup') ?? ''
+  },
+  {
+    title: pi.label('taxCode'),
+    dataIndex: 'taxCode',
+    key: 'taxCode',
+    width: 120,
+    resizable: true,
+    ellipsis: true,
+  },
+  {
+    title: pi.label('grBasedInvoiceInspection'),
+    dataIndex: 'grBasedInvoiceInspection',
+    key: 'grBasedInvoiceInspection',
+    width: 120,
+    resizable: true,
+    ellipsis: true,
+  },
+  {
+    title: pi.label('pricingDateControl'),
+    dataIndex: 'pricingDateControl',
+    key: 'pricingDateControl',
+    width: 120,
+    resizable: true,
+    ellipsis: true,
+  },
+  {
     title: pi.label('validFrom'),
     dataIndex: 'validFrom',
     key: 'validFrom',
@@ -598,15 +715,6 @@ const columns = computed<TableColumnsType>(() => [
     customRender: ({ record }: { record: any }) => getSalesPriceField(record, 'validTo') ?? ''
   },
   {
-    title: pi.label('variableKey'),
-    dataIndex: 'variableKey',
-    key: 'variableKey',
-    width: 120,
-    resizable: true,
-    ellipsis: true,
-    customRender: ({ record }: { record: any }) => getSalesPriceField(record, 'variableKey') ?? ''
-  },
-  {
     title: pi.label('salesQuotationId'),
     dataIndex: 'salesQuotationId',
     key: 'salesQuotationId',
@@ -623,6 +731,15 @@ const columns = computed<TableColumnsType>(() => [
     resizable: true,
     ellipsis: true,
     customRender: ({ record }: { record: any }) => getSalesPriceField(record, 'salesQuotationCode') ?? ''
+  },
+  {
+    title: pi.label('variableKey'),
+    dataIndex: 'variableKey',
+    key: 'variableKey',
+    width: 120,
+    resizable: true,
+    ellipsis: true,
+    customRender: ({ record }: { record: any }) => getSalesPriceField(record, 'variableKey') ?? ''
   },
   CreateActionColumn({
     actions: [
@@ -732,17 +849,22 @@ function handleSearch() {
 function handleReset() {
   queryKeyword.value = ''
   advancedQueryForm.value = {
+  plantCode: '',
   salesPriceCode: '',
   priceType: '',
   customerCode: '',
   materialCode: '',
+  salesGroup: '',
+  taxCode: '',
+  grBasedInvoiceInspection: undefined as number | undefined,
+  pricingDateControl: undefined as number | undefined,
   validFromStart: '',
   validFromEnd: '',
   validToStart: '',
   validToEnd: '',
-  variableKey: '',
   salesQuotationId: '',
   salesQuotationCode: '',
+  variableKey: '',
   createdAtStart: '',
   createdAtEnd: '',
   extField: '',
@@ -941,17 +1063,22 @@ function handleAdvancedQuerySubmit() {
 
 function handleAdvancedQueryReset() {
   advancedQueryForm.value = {
+  plantCode: '',
   salesPriceCode: '',
   priceType: '',
   customerCode: '',
   materialCode: '',
+  salesGroup: '',
+  taxCode: '',
+  grBasedInvoiceInspection: undefined as number | undefined,
+  pricingDateControl: undefined as number | undefined,
   validFromStart: '',
   validFromEnd: '',
   validToStart: '',
   validToEnd: '',
-  variableKey: '',
   salesQuotationId: '',
   salesQuotationCode: '',
+  variableKey: '',
   createdAtStart: '',
   createdAtEnd: '',
   extField: '',

@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Application.Dtos.HumanResource.Personnel
 // 文件名称：TaktEmployeeEducationDtos.cs
-// 创建时间：2026-06-23
+// 创建时间：2026-07-23
 // 创建人：Takt365(Auto Generated)
 // 功能描述：EmployeeEducation 模块 DTO（由 generate-dtos-from-entity.cjs 根据 TaktEmployeeEducation 生成，请按需审阅）
 // 
@@ -36,15 +36,20 @@ public class TaktEmployeeEducationDto : TaktCompanyDtoBase
     public long EmployeeEducationId { get; set; }
 
     /// <summary>
-    /// 员工ID
+    /// 员工（选项 TaktEmployees/options；DictValue=Id）
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
     public long EmployeeId { get; set; }
 
     /// <summary>
-    /// 员工名称（填充字段）
+    /// 员工编码（冗余，与 TaktEmployee.EmployeeCode 对齐）
     /// </summary>
-    public string? EmployeeName { get; set; }
+    public string EmployeeCode { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 员工姓名（冗余，与 TaktEmployee.EmployeeName 对齐）
+    /// </summary>
+    public string EmployeeName { get; set; } = string.Empty;
 
     /// <summary>
     /// 学校名称
@@ -52,12 +57,12 @@ public class TaktEmployeeEducationDto : TaktCompanyDtoBase
     public string SchoolName { get; set; } = string.Empty;
 
     /// <summary>
-    /// 学历层次（1=高中及以下，2=大专，3=本科，4=硕士，5=博士）
+    /// 学历层次（字典 hr_education_level_category；1=高中及以下 2=大专 3=本科 4=硕士 5=博士）
     /// </summary>
     public int? EducationLevel { get; set; }
 
     /// <summary>
-    /// 学位层次（0=无，1=学士，2=硕士，3=博士）
+    /// 学位层次（字典 hr_degree_level_category；0=无 1=学士 2=硕士 3=博士）
     /// </summary>
     public int? DegreeLevel { get; set; }
 
@@ -67,9 +72,9 @@ public class TaktEmployeeEducationDto : TaktCompanyDtoBase
     public string? MajorName { get; set; } = string.Empty;
 
     /// <summary>
-    /// 证书编号
+    /// 证书编码
     /// </summary>
-    public string? CertificateNo { get; set; } = string.Empty;
+    public string? CertificateCode { get; set; } = string.Empty;
 
     /// <summary>
     /// 开始日期
@@ -82,7 +87,7 @@ public class TaktEmployeeEducationDto : TaktCompanyDtoBase
     public DateTime? EndDate { get; set; }
 
     /// <summary>
-    /// 是否最高学历（1=是，0=否）
+    /// 是否最高学历（字典 sys_yes_no_type；0=否 1=是）
     /// </summary>
     public int IsHighest { get; set; } = 0;
 
@@ -109,10 +114,20 @@ public class TaktEmployeeEducationQueryDto : TaktPagedQuery
     public string? CompanyCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 员工ID
+    /// 员工（选项 TaktEmployees/options；DictValue=Id）
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
     public long? EmployeeId { get; set; }
+
+    /// <summary>
+    /// 员工编码（冗余，与 TaktEmployee.EmployeeCode 对齐）
+    /// </summary>
+    public string? EmployeeCode { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 员工姓名（冗余，与 TaktEmployee.EmployeeName 对齐）
+    /// </summary>
+    public string? EmployeeName { get; set; } = string.Empty;
 
     /// <summary>
     /// 学校名称
@@ -120,12 +135,12 @@ public class TaktEmployeeEducationQueryDto : TaktPagedQuery
     public string? SchoolName { get; set; } = string.Empty;
 
     /// <summary>
-    /// 学历层次（1=高中及以下，2=大专，3=本科，4=硕士，5=博士）
+    /// 学历层次（字典 hr_education_level_category；1=高中及以下 2=大专 3=本科 4=硕士 5=博士）
     /// </summary>
     public int? EducationLevel { get; set; }
 
     /// <summary>
-    /// 学位层次（0=无，1=学士，2=硕士，3=博士）
+    /// 学位层次（字典 hr_degree_level_category；0=无 1=学士 2=硕士 3=博士）
     /// </summary>
     public int? DegreeLevel { get; set; }
 
@@ -135,9 +150,9 @@ public class TaktEmployeeEducationQueryDto : TaktPagedQuery
     public string? MajorName { get; set; } = string.Empty;
 
     /// <summary>
-    /// 证书编号
+    /// 证书编码
     /// </summary>
-    public string? CertificateNo { get; set; } = string.Empty;
+    public string? CertificateCode { get; set; } = string.Empty;
 
     /// <summary>
     /// 开始日期（范围查询-开始）
@@ -160,7 +175,7 @@ public class TaktEmployeeEducationQueryDto : TaktPagedQuery
     public DateTime? EndDateEnd { get; set; }
 
     /// <summary>
-    /// 是否最高学历（1=是，0=否）
+    /// 是否最高学历（字典 sys_yes_no_type；0=否 1=是）
     /// </summary>
     public int? IsHighest { get; set; }
 
@@ -210,10 +225,22 @@ public class TaktEmployeeEducationCreateDto
     public string CompanyDefaultCulture { get; set; } = string.Empty;
 
     /// <summary>
-    /// 员工ID
+    /// 员工（选项 TaktEmployees/options；DictValue=Id）
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
     public long EmployeeId { get; set; }
+
+    /// <summary>
+    /// 员工编码（冗余，与 TaktEmployee.EmployeeCode 对齐）
+    /// </summary>
+    [Required(ErrorMessage = "员工编码（冗余，与 TaktEmployee.EmployeeCode 对齐）不能为空")]
+    public string EmployeeCode { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 员工姓名（冗余，与 TaktEmployee.EmployeeName 对齐）
+    /// </summary>
+    [Required(ErrorMessage = "员工姓名（冗余，与 TaktEmployee.EmployeeName 对齐）不能为空")]
+    public string EmployeeName { get; set; } = string.Empty;
 
     /// <summary>
     /// 学校名称
@@ -222,12 +249,12 @@ public class TaktEmployeeEducationCreateDto
     public string SchoolName { get; set; } = string.Empty;
 
     /// <summary>
-    /// 学历层次（1=高中及以下，2=大专，3=本科，4=硕士，5=博士）
+    /// 学历层次（字典 hr_education_level_category；1=高中及以下 2=大专 3=本科 4=硕士 5=博士）
     /// </summary>
     public int? EducationLevel { get; set; }
 
     /// <summary>
-    /// 学位层次（0=无，1=学士，2=硕士，3=博士）
+    /// 学位层次（字典 hr_degree_level_category；0=无 1=学士 2=硕士 3=博士）
     /// </summary>
     public int? DegreeLevel { get; set; }
 
@@ -237,9 +264,9 @@ public class TaktEmployeeEducationCreateDto
     public string? MajorName { get; set; } = string.Empty;
 
     /// <summary>
-    /// 证书编号
+    /// 证书编码
     /// </summary>
-    public string? CertificateNo { get; set; } = string.Empty;
+    public string? CertificateCode { get; set; } = string.Empty;
 
     /// <summary>
     /// 开始日期
@@ -252,7 +279,7 @@ public class TaktEmployeeEducationCreateDto
     public DateTime? EndDate { get; set; }
 
     /// <summary>
-    /// 是否最高学历（1=是，0=否）
+    /// 是否最高学历（字典 sys_yes_no_type；0=否 1=是）
     /// </summary>
     public int IsHighest { get; set; } = 0;
 
@@ -308,10 +335,20 @@ public class TaktEmployeeEducationTemplateDto
     public string? CompanyCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 员工ID
+    /// 员工（选项 TaktEmployees/options；DictValue=Id）
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
     public long? EmployeeId { get; set; }
+
+    /// <summary>
+    /// 员工编码（冗余，与 TaktEmployee.EmployeeCode 对齐）
+    /// </summary>
+    public string? EmployeeCode { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 员工姓名（冗余，与 TaktEmployee.EmployeeName 对齐）
+    /// </summary>
+    public string? EmployeeName { get; set; } = string.Empty;
 
     /// <summary>
     /// 学校名称
@@ -319,12 +356,12 @@ public class TaktEmployeeEducationTemplateDto
     public string? SchoolName { get; set; } = string.Empty;
 
     /// <summary>
-    /// 学历层次（1=高中及以下，2=大专，3=本科，4=硕士，5=博士）
+    /// 学历层次（字典 hr_education_level_category；1=高中及以下 2=大专 3=本科 4=硕士 5=博士）
     /// </summary>
     public int? EducationLevel { get; set; }
 
     /// <summary>
-    /// 学位层次（0=无，1=学士，2=硕士，3=博士）
+    /// 学位层次（字典 hr_degree_level_category；0=无 1=学士 2=硕士 3=博士）
     /// </summary>
     public int? DegreeLevel { get; set; }
 
@@ -334,9 +371,9 @@ public class TaktEmployeeEducationTemplateDto
     public string? MajorName { get; set; } = string.Empty;
 
     /// <summary>
-    /// 证书编号
+    /// 证书编码
     /// </summary>
-    public string? CertificateNo { get; set; } = string.Empty;
+    public string? CertificateCode { get; set; } = string.Empty;
 
     /// <summary>
     /// 开始日期
@@ -349,7 +386,7 @@ public class TaktEmployeeEducationTemplateDto
     public DateTime? EndDate { get; set; }
 
     /// <summary>
-    /// 是否最高学历（1=是，0=否）
+    /// 是否最高学历（字典 sys_yes_no_type；0=否 1=是）
     /// </summary>
     public int? IsHighest { get; set; }
 
@@ -386,10 +423,20 @@ public class TaktEmployeeEducationImportDto
     public string? CompanyDefaultCulture { get; set; } = string.Empty;
 
     /// <summary>
-    /// 员工ID
+    /// 员工（选项 TaktEmployees/options；DictValue=Id）
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
     public long? EmployeeId { get; set; }
+
+    /// <summary>
+    /// 员工编码（冗余，与 TaktEmployee.EmployeeCode 对齐）
+    /// </summary>
+    public string? EmployeeCode { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 员工姓名（冗余，与 TaktEmployee.EmployeeName 对齐）
+    /// </summary>
+    public string? EmployeeName { get; set; } = string.Empty;
 
     /// <summary>
     /// 学校名称
@@ -397,12 +444,12 @@ public class TaktEmployeeEducationImportDto
     public string? SchoolName { get; set; } = string.Empty;
 
     /// <summary>
-    /// 学历层次（1=高中及以下，2=大专，3=本科，4=硕士，5=博士）
+    /// 学历层次（字典 hr_education_level_category；1=高中及以下 2=大专 3=本科 4=硕士 5=博士）
     /// </summary>
     public int? EducationLevel { get; set; }
 
     /// <summary>
-    /// 学位层次（0=无，1=学士，2=硕士，3=博士）
+    /// 学位层次（字典 hr_degree_level_category；0=无 1=学士 2=硕士 3=博士）
     /// </summary>
     public int? DegreeLevel { get; set; }
 
@@ -412,9 +459,9 @@ public class TaktEmployeeEducationImportDto
     public string? MajorName { get; set; } = string.Empty;
 
     /// <summary>
-    /// 证书编号
+    /// 证书编码
     /// </summary>
-    public string? CertificateNo { get; set; } = string.Empty;
+    public string? CertificateCode { get; set; } = string.Empty;
 
     /// <summary>
     /// 开始日期
@@ -427,7 +474,7 @@ public class TaktEmployeeEducationImportDto
     public DateTime? EndDate { get; set; }
 
     /// <summary>
-    /// 是否最高学历（1=是，0=否）
+    /// 是否最高学历（字典 sys_yes_no_type；0=否 1=是）
     /// </summary>
     public int? IsHighest { get; set; }
 
@@ -465,10 +512,20 @@ public class TaktEmployeeEducationExportDto
     public string CompanyCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 员工ID
+    /// 员工（选项 TaktEmployees/options；DictValue=Id）
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
     public long EmployeeId { get; set; }
+
+    /// <summary>
+    /// 员工编码（冗余，与 TaktEmployee.EmployeeCode 对齐）
+    /// </summary>
+    public string EmployeeCode { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 员工姓名（冗余，与 TaktEmployee.EmployeeName 对齐）
+    /// </summary>
+    public string EmployeeName { get; set; } = string.Empty;
 
     /// <summary>
     /// 学校名称
@@ -476,12 +533,12 @@ public class TaktEmployeeEducationExportDto
     public string SchoolName { get; set; } = string.Empty;
 
     /// <summary>
-    /// 学历层次（1=高中及以下，2=大专，3=本科，4=硕士，5=博士）
+    /// 学历层次（字典 hr_education_level_category；1=高中及以下 2=大专 3=本科 4=硕士 5=博士）
     /// </summary>
     public int? EducationLevel { get; set; }
 
     /// <summary>
-    /// 学位层次（0=无，1=学士，2=硕士，3=博士）
+    /// 学位层次（字典 hr_degree_level_category；0=无 1=学士 2=硕士 3=博士）
     /// </summary>
     public int? DegreeLevel { get; set; }
 
@@ -491,9 +548,9 @@ public class TaktEmployeeEducationExportDto
     public string? MajorName { get; set; } = string.Empty;
 
     /// <summary>
-    /// 证书编号
+    /// 证书编码
     /// </summary>
-    public string? CertificateNo { get; set; } = string.Empty;
+    public string? CertificateCode { get; set; } = string.Empty;
 
     /// <summary>
     /// 开始日期
@@ -506,7 +563,7 @@ public class TaktEmployeeEducationExportDto
     public DateTime? EndDate { get; set; }
 
     /// <summary>
-    /// 是否最高学历（1=是，0=否）
+    /// 是否最高学历（字典 sys_yes_no_type；0=否 1=是）
     /// </summary>
     public int IsHighest { get; set; } = 0;
 

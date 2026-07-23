@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：frontend/src/types/logistics/procurement
 // 文件名称：purchase-price-scale-quantity.d.ts
-// 创建时间：2026-07-20
+// 创建时间：2026-07-21
 // 创建人：Takt365(Auto Generated)
 // 功能描述：logistics/procurement 模块类型定义（自动生成；类型名去 Takt 前缀与末尾 Dto，如 TaktCompanyDto → Company）
 // 
@@ -44,14 +44,14 @@ export interface PurchasePriceScaleQuantity extends CompanyDtoBase {
   purchasePriceCode: string;
 
   /**
-   * 条件序列号（KOPOS；冗余；与明细 PurchasePriceSeq 一致）
+   * 定价序号（冗余；与明细 PurchasePriceSeq 一致，固定步长=10）
    */
   purchasePriceSeq: number;
 
   /**
-   * 行号（KLFN1；阶梯行序号，固定步长=10）
+   * 等级序号（KOPOS；同一明细内阶梯序号，固定步长=10）
    */
-  lineNumber: number;
+  purchaseScaleSeq: number;
 
   /**
    * 等级数量（KSTBM；数量等级门槛；对应价值等级表的 ScaleValue）
@@ -59,9 +59,19 @@ export interface PurchasePriceScaleQuantity extends CompanyDtoBase {
   scaleQuantity: number;
 
   /**
-   * 金额（KBETR）
+   * 价格（KBETR）
    */
-  amount: number;
+  price: number;
+
+  /**
+   * 未税价格（冗余；可由 Price 与税码推算后回写）
+   */
+  untaxedPrice: number;
+
+  /**
+   * 含税价格（冗余；可由 Price 与税码推算后回写）
+   */
+  taxIncludedPrice: number;
 
   /**
    * 是否作废（字典 sys_yes_no_type，0=否 1=是；编辑移除子行时标记作废）
@@ -99,14 +109,14 @@ export interface PurchasePriceScaleQuantityQuery extends TaktPagedQuery {
   purchasePriceCode?: string;
 
   /**
-   * 条件序列号（KOPOS；冗余；与明细 PurchasePriceSeq 一致）
+   * 定价序号（冗余；与明细 PurchasePriceSeq 一致，固定步长=10）
    */
   purchasePriceSeq?: number;
 
   /**
-   * 行号（KLFN1；阶梯行序号，固定步长=10）
+   * 等级序号（KOPOS；同一明细内阶梯序号，固定步长=10）
    */
-  lineNumber?: number;
+  purchaseScaleSeq?: number;
 
   /**
    * 等级数量（KSTBM；数量等级门槛；对应价值等级表的 ScaleValue）
@@ -114,9 +124,19 @@ export interface PurchasePriceScaleQuantityQuery extends TaktPagedQuery {
   scaleQuantity?: number;
 
   /**
-   * 金额（KBETR）
+   * 价格（KBETR）
    */
-  amount?: number;
+  price?: number;
+
+  /**
+   * 未税价格（冗余；可由 Price 与税码推算后回写）
+   */
+  untaxedPrice?: number;
+
+  /**
+   * 含税价格（冗余；可由 Price 与税码推算后回写）
+   */
+  taxIncludedPrice?: number;
 
   /**
    * 是否作废（字典 sys_yes_no_type，0=否 1=是；编辑移除子行时标记作废）
@@ -178,14 +198,14 @@ export interface PurchasePriceScaleQuantityCreate {
   purchasePriceCode: string;
 
   /**
-   * 条件序列号（KOPOS；冗余；与明细 PurchasePriceSeq 一致）
+   * 定价序号（冗余；与明细 PurchasePriceSeq 一致，固定步长=10）
    */
   purchasePriceSeq: number;
 
   /**
-   * 行号（KLFN1；阶梯行序号，固定步长=10）
+   * 等级序号（KOPOS；同一明细内阶梯序号，固定步长=10）
    */
-  lineNumber: number;
+  purchaseScaleSeq: number;
 
   /**
    * 等级数量（KSTBM；数量等级门槛；对应价值等级表的 ScaleValue）
@@ -193,9 +213,19 @@ export interface PurchasePriceScaleQuantityCreate {
   scaleQuantity: number;
 
   /**
-   * 金额（KBETR）
+   * 价格（KBETR）
    */
-  amount: number;
+  price: number;
+
+  /**
+   * 未税价格（冗余；可由 Price 与税码推算后回写）
+   */
+  untaxedPrice: number;
+
+  /**
+   * 含税价格（冗余；可由 Price 与税码推算后回写）
+   */
+  taxIncludedPrice: number;
 
   /**
    * 是否作废（字典 sys_yes_no_type，0=否 1=是；编辑移除子行时标记作废）
@@ -276,14 +306,14 @@ export interface PurchasePriceScaleQuantityTemplate {
   purchasePriceCode?: string;
 
   /**
-   * 条件序列号（KOPOS；冗余；与明细 PurchasePriceSeq 一致）
+   * 定价序号（冗余；与明细 PurchasePriceSeq 一致，固定步长=10）
    */
   purchasePriceSeq?: number;
 
   /**
-   * 行号（KLFN1；阶梯行序号，固定步长=10）
+   * 等级序号（KOPOS；同一明细内阶梯序号，固定步长=10）
    */
-  lineNumber?: number;
+  purchaseScaleSeq?: number;
 
   /**
    * 等级数量（KSTBM；数量等级门槛；对应价值等级表的 ScaleValue）
@@ -291,9 +321,19 @@ export interface PurchasePriceScaleQuantityTemplate {
   scaleQuantity?: number;
 
   /**
-   * 金额（KBETR）
+   * 价格（KBETR）
    */
-  amount?: number;
+  price?: number;
+
+  /**
+   * 未税价格（冗余；可由 Price 与税码推算后回写）
+   */
+  untaxedPrice?: number;
+
+  /**
+   * 含税价格（冗余；可由 Price 与税码推算后回写）
+   */
+  taxIncludedPrice?: number;
 
   /**
    * 是否作废（字典 sys_yes_no_type，0=否 1=是；编辑移除子行时标记作废）
@@ -345,14 +385,14 @@ export interface PurchasePriceScaleQuantityImport {
   purchasePriceCode?: string;
 
   /**
-   * 条件序列号（KOPOS；冗余；与明细 PurchasePriceSeq 一致）
+   * 定价序号（冗余；与明细 PurchasePriceSeq 一致，固定步长=10）
    */
   purchasePriceSeq?: number;
 
   /**
-   * 行号（KLFN1；阶梯行序号，固定步长=10）
+   * 等级序号（KOPOS；同一明细内阶梯序号，固定步长=10）
    */
-  lineNumber?: number;
+  purchaseScaleSeq?: number;
 
   /**
    * 等级数量（KSTBM；数量等级门槛；对应价值等级表的 ScaleValue）
@@ -360,9 +400,19 @@ export interface PurchasePriceScaleQuantityImport {
   scaleQuantity?: number;
 
   /**
-   * 金额（KBETR）
+   * 价格（KBETR）
    */
-  amount?: number;
+  price?: number;
+
+  /**
+   * 未税价格（冗余；可由 Price 与税码推算后回写）
+   */
+  untaxedPrice?: number;
+
+  /**
+   * 含税价格（冗余；可由 Price 与税码推算后回写）
+   */
+  taxIncludedPrice?: number;
 
   /**
    * 是否作废（字典 sys_yes_no_type，0=否 1=是；编辑移除子行时标记作废）
@@ -409,14 +459,14 @@ export interface PurchasePriceScaleQuantityExport {
   purchasePriceCode: string;
 
   /**
-   * 条件序列号（KOPOS；冗余；与明细 PurchasePriceSeq 一致）
+   * 定价序号（冗余；与明细 PurchasePriceSeq 一致，固定步长=10）
    */
   purchasePriceSeq: number;
 
   /**
-   * 行号（KLFN1；阶梯行序号，固定步长=10）
+   * 等级序号（KOPOS；同一明细内阶梯序号，固定步长=10）
    */
-  lineNumber: number;
+  purchaseScaleSeq: number;
 
   /**
    * 等级数量（KSTBM；数量等级门槛；对应价值等级表的 ScaleValue）
@@ -424,9 +474,19 @@ export interface PurchasePriceScaleQuantityExport {
   scaleQuantity: number;
 
   /**
-   * 金额（KBETR）
+   * 价格（KBETR）
    */
-  amount: number;
+  price: number;
+
+  /**
+   * 未税价格（冗余；可由 Price 与税码推算后回写）
+   */
+  untaxedPrice: number;
+
+  /**
+   * 含税价格（冗余；可由 Price 与税码推算后回写）
+   */
+  taxIncludedPrice: number;
 
   /**
    * 是否作废（字典 sys_yes_no_type，0=否 1=是；编辑移除子行时标记作废）

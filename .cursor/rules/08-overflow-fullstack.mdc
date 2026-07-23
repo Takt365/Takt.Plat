@@ -36,14 +36,23 @@ Vue 一次请求全量数据
 ## 二、正确架构
 
 ```text
-Vue（分页 + 必要时虚拟列表）
+Vue（服务端分页/树懒加载取数 + 表格默认虚拟滚动）
   ↓
-API（分页 + 过滤 + DTO 裁剪）
+API（按页 / 按 parentId 一层返回；条件查询可命中任意行）
   ↓
-C#（IQueryable + Select 投影 + Take）
+C#（IQueryable + Where/Skip/Take；禁止一次 ToList 全表）
   ↓
 DB（索引 + 条件在库内执行）
 ```
+
+**澄清**：分页 / 按层拉取 = **传输与渲染方式**，不是「业务数据只能看前 N 条」。  
+用户通过筛选、翻页、树展开、导出仍可访问全部业务数据。
+
+| 形态 | 后端取数 | 前端渲染 |
+|------|----------|----------|
+| 单表 | `GetXxxListAsync` 分页 | `TaktSingleTable` 默认 virtual |
+| 主子表 | 主表分页 + 子表按主表 Id 分页 | master/detail virtual 默认开 |
+| 树表 | `tree?parentId=` 一层 + 右表 list 分页 | 左树 virtual + loadData；右表 virtual |
 
 ---
 

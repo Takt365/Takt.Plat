@@ -71,7 +71,7 @@ public class TaktPurchasePlanItem : TaktCompanyEntityBase
     public long? MaterialRequirementsPlanningItemId { get; set; }
 
     /// <summary>
-    /// 物料编码（选项 TaktMaterialPlants/options，DictValue=MaterialCode，ExtValue=PlantCode）
+    /// 物料编码（选项 TaktMaterialPlants/options；DictValue=MaterialCode，ExtValue=PlantCode）
     /// </summary>
     [SugarColumn(ColumnName = "material_code", ColumnDescription = "物料编码", ColumnDataType = "nvarchar", Length = 20, IsNullable = false)]
     public string MaterialCode { get; set; } = string.Empty;
@@ -89,7 +89,7 @@ public class TaktPurchasePlanItem : TaktCompanyEntityBase
     public string? MaterialSpecification { get; set; }
 
     /// <summary>
-    /// 计划单位（字典 logistics_unit_of_measure_code，DictValue=PC/EA 等；默认 PC）
+    /// 计划单位（字典 logistics_unit_of_measure_code；DictValue=PC/EA 等；默认 PC）
     /// </summary>
     [SugarColumn(ColumnName = "plan_unit", ColumnDescription = "计划单位", ColumnDataType = "nvarchar", Length = 20, IsNullable = false, DefaultValue = "PC")]
     public string PlanUnit { get; set; } = "PC";
@@ -123,9 +123,24 @@ public class TaktPurchasePlanItem : TaktCompanyEntityBase
     /// </summary>
     [SugarColumn(ColumnName = "estimated_amount", ColumnDescription = "预计金额", ColumnDataType = "decimal", Length = 18, DecimalDigits = 2, IsNullable = false, DefaultValue = "0")]
     public decimal EstimatedAmount { get; set; } = 0;
+    /// <summary>
+    /// 含税价格（打印用；如 100.00）
+    /// </summary>
+    [SugarColumn(ColumnName = "tax_included_price", ColumnDescription = "含税价格", ColumnDataType = "decimal", Length = 18, DecimalDigits = 5, IsNullable = false, DefaultValue = "0")]
+    public decimal TaxIncludedPrice { get; set; } = 0;
+    /// <summary>
+    /// 未税价格（打印用；如 88.50）
+    /// </summary>
+    [SugarColumn(ColumnName = "untaxed_price", ColumnDescription = "未税价格", ColumnDataType = "decimal", Length = 18, DecimalDigits = 5, IsNullable = false, DefaultValue = "0")]
+    public decimal UntaxedPrice { get; set; } = 0;
+    /// <summary>
+    /// 税费（打印用；行税额，如 11.50）
+    /// </summary>
+    [SugarColumn(ColumnName = "tax_amount", ColumnDescription = "税费", ColumnDataType = "decimal", Length = 18, DecimalDigits = 5, IsNullable = false, DefaultValue = "0")]
+    public decimal TaxAmount { get; set; } = 0;
 
     /// <summary>
-    /// 参考供货商编码（选项 TaktSuppliers/options，DictValue=SupplierCode）
+    /// 参考供货商编码（选项 TaktSuppliers/options；DictValue=SupplierCode）
     /// </summary>
     [SugarColumn(ColumnName = "reference_supplier_code", ColumnDescription = "参考供货商编码", ColumnDataType = "nvarchar", Length = 50, IsNullable = true)]
     public string? ReferenceSupplierCode { get; set; }
@@ -133,11 +148,11 @@ public class TaktPurchasePlanItem : TaktCompanyEntityBase
     /// <summary>
     /// 参考供货商名称
     /// </summary>
-    [SugarColumn(ColumnName = "reference_supplier_name", ColumnDescription = "参考供货商名称", ColumnDataType = "nvarchar", Length = 200, IsNullable = true)]
-    public string? ReferenceSupplierName { get; set; }
+    [SugarColumn(ColumnName = "reference_supplier_name1", ColumnDescription = "参考供货商名称1", ColumnDataType = "nvarchar", Length = 140, IsNullable = true)]
+    public string? ReferenceSupplierName1 { get; set; }
 
     /// <summary>
-    /// 是否作废（字典 sys_yes_no_type，0=否 1=是；编辑移除子行时标记作废）
+    /// 是否作废（字典 sys_yes_no_type；0=否 1=是；编辑移除子行时标记作废）
     /// </summary>
     [SugarColumn(ColumnName = "is_obsolete", ColumnDescription = "是否作废", ColumnDataType = "int", IsNullable = false, DefaultValue = "0")]
     public int IsObsolete { get; set; } = 0;

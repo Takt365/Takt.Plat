@@ -62,6 +62,7 @@
       :data-source="dataSource"
       :loading="loading"
       :stripe="true"
+      :virtual="true"
       :row-key="getVendorId"
       :row-selection="rowSelection"
       :custom-row="onClickRow"
@@ -73,32 +74,110 @@
       <template #bodyCell="{ column, record }">
         <template v-if="column.key === 'vendorStatus'">
           <a-switch
-            :checked="getVendorField(record, 'vendorStatus') === 1"
+            :checked="getVendorDictValue(record, 'vendorStatus') === 1"
             :checked-children="t('common.page.button.enable')" :un-checked-children="t('common.page.button.disable')"
             @change="(checked: unknown) => handleVendorStatusChange(record, Boolean(checked))"
           />
         </template>
         <template v-else-if="column.key === 'vendorType'">
           <TaktDictTag
-            :value="getVendorField(record, 'vendorType')"
+            :value="getVendorDictValue(record, 'vendorType')"
             dict-type="logistics_vendor_category"
+          />
+        </template>
+        <template v-else-if="column.key === 'enterpriseNature'">
+          <TaktDictTag
+            :value="getVendorDictValue(record, 'enterpriseNature')"
+            dict-type="sys_enterprise_nature_type"
+          />
+        </template>
+        <template v-else-if="column.key === 'industryAttribute'">
+          <TaktDictTag
+            :value="getVendorDictValue(record, 'industryAttribute')"
+            dict-type="sys_industry_attribute_type"
+          />
+        </template>
+        <template v-else-if="column.key === 'defaultCulture'">
+          <TaktDictTag
+            :value="getVendorDictValue(record, 'defaultCulture')"
+            dict-type="sys_culture_code"
+          />
+        </template>
+        <template v-else-if="column.key === 'taxRate'">
+          <TaktDictTag
+            :value="getVendorDictValue(record, 'taxRate')"
+            dict-type="accounting_tax_rate_param"
+          />
+        </template>
+        <template v-else-if="column.key === 'registrationCountry'">
+          <TaktDictTag
+            :value="getVendorDictValue(record, 'registrationCountry')"
+            dict-type="sys_country_code"
+          />
+        </template>
+        <template v-else-if="column.key === 'currencyCode'">
+          <TaktDictTag
+            :value="getVendorDictValue(record, 'currencyCode')"
+            dict-type="accounting_currency_code"
+          />
+        </template>
+        <template v-else-if="column.key === 'clearingWithCustomer'">
+          <TaktDictTag
+            :value="getVendorDictValue(record, 'clearingWithCustomer')"
+            dict-type="sys_yes_no_type"
+          />
+        </template>
+        <template v-else-if="column.key === 'paymentMethod'">
+          <TaktDictTag
+            :value="getVendorDictValue(record, 'paymentMethod')"
+            dict-type="accounting_payment_method_type"
           />
         </template>
         <template v-else-if="column.key === 'paymentTerms'">
           <TaktDictTag
-            :value="getVendorField(record, 'paymentTerms')"
+            :value="getVendorDictValue(record, 'paymentTerms')"
             dict-type="accounting_payment_terms_param"
+          />
+        </template>
+        <template v-else-if="column.key === 'grBasedInvoiceInspection'">
+          <TaktDictTag
+            :value="getVendorDictValue(record, 'grBasedInvoiceInspection')"
+            dict-type="sys_yes_no_type"
+          />
+        </template>
+        <template v-else-if="column.key === 'incoterms1'">
+          <TaktDictTag
+            :value="getVendorDictValue(record, 'incoterms1')"
+            dict-type="logistics_incoterms1"
+          />
+        </template>
+        <template v-else-if="column.key === 'automaticPurchaseOrder'">
+          <TaktDictTag
+            :value="getVendorDictValue(record, 'automaticPurchaseOrder')"
+            dict-type="sys_yes_no_type"
+          />
+        </template>
+        <template v-else-if="column.key === 'pricingDateControl'">
+          <TaktDictTag
+            :value="getVendorDictValue(record, 'pricingDateControl')"
+            dict-type="logistics_pricing_date_control"
+          />
+        </template>
+        <template v-else-if="column.key === 'evaluatedReceiptSettlement'">
+          <TaktDictTag
+            :value="getVendorDictValue(record, 'evaluatedReceiptSettlement')"
+            dict-type="sys_yes_no_type"
           />
         </template>
         <template v-else-if="column.key === 'creditLevel'">
           <TaktDictTag
-            :value="getVendorField(record, 'creditLevel')"
+            :value="getVendorDictValue(record, 'creditLevel')"
             dict-type="logistics_credit_rating_category"
           />
         </template>
         <template v-else-if="column.key === 'vendorLevel'">
           <TaktDictTag
-            :value="getVendorField(record, 'vendorLevel')"
+            :value="getVendorDictValue(record, 'vendorLevel')"
             dict-type="logistics_grade_category"
           />
         </template>
@@ -144,43 +223,53 @@
     >
       <template #default="{ isFieldVisible }">
       <div v-show="isFieldVisible('plantCode')">
-      <a-form-item :label="t('entity.vendor.plantcode')">
-        <a-input
+      <a-form-item :label="pi.queryLabel('plantCode')">
+        <TaktSelect
           v-model:value="advancedQueryForm.plantCode"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.vendor.plantcode') })"
-          show-count
-          :maxlength="4"
+          api-url="TaktPlants/options"
+          :placeholder="pi.queryPh('plantCode', 'select')"
           allow-clear
         />
       </a-form-item>
       </div>
       <div v-show="isFieldVisible('vendorCode')">
-      <a-form-item :label="t('entity.vendor.code')">
+      <a-form-item :label="pi.queryLabel('vendorCode')">
         <a-input
           v-model:value="advancedQueryForm.vendorCode"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.vendor.code') })"
+          :placeholder="pi.queryPh('vendorCode', 'required')"
           show-count
           :maxlength="20"
           allow-clear
         />
       </a-form-item>
       </div>
-      <div v-show="isFieldVisible('vendorName')">
-      <a-form-item :label="t('entity.vendor.name')">
+      <div v-show="isFieldVisible('vendorName1')">
+      <a-form-item :label="pi.queryLabel('vendorName1')">
         <a-input
-          v-model:value="advancedQueryForm.vendorName"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.vendor.name') })"
+          v-model:value="advancedQueryForm.vendorName1"
+          :placeholder="pi.queryPh('vendorName1', 'required')"
           show-count
-          :maxlength="80"
+          :maxlength="140"
+          allow-clear
+        />
+      </a-form-item>
+      </div>
+      <div v-show="isFieldVisible('vendorName2')">
+      <a-form-item :label="pi.queryLabel('vendorName2')">
+        <a-input
+          v-model:value="advancedQueryForm.vendorName2"
+          :placeholder="pi.queryPh('vendorName2', 'required')"
+          show-count
+          :maxlength="140"
           allow-clear
         />
       </a-form-item>
       </div>
       <div v-show="isFieldVisible('vendorShortName')">
-      <a-form-item :label="t('entity.vendor.shortname')">
+      <a-form-item :label="pi.queryLabel('vendorShortName')">
         <a-input
           v-model:value="advancedQueryForm.vendorShortName"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.vendor.shortname') })"
+          :placeholder="pi.queryPh('vendorShortName', 'required')"
           show-count
           :maxlength="40"
           allow-clear
@@ -188,83 +277,121 @@
       </a-form-item>
       </div>
       <div v-show="isFieldVisible('vendorType')">
-      <a-form-item :label="t('entity.vendor.type')">
+      <a-form-item :label="pi.queryLabel('vendorType')">
         <TaktSelect
           v-model:value="advancedQueryForm.vendorType"
           dict-type="logistics_vendor_category"
-          :placeholder="t('common.page.form.placeholder.select', { field: t('entity.vendor.type') })"
+          :placeholder="pi.queryPh('vendorType', 'select')"
           allow-clear
         />
       </a-form-item>
       </div>
-      <div v-show="isFieldVisible('industrySector')">
-      <a-form-item :label="t('entity.vendor.industrysector')">
-        <a-input
-          v-model:value="advancedQueryForm.industrySector"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.vendor.industrysector') })"
-          show-count
-          :maxlength="50"
+      <div v-show="isFieldVisible('enterpriseNature')">
+      <a-form-item :label="pi.queryLabel('enterpriseNature')">
+        <TaktSelect
+          v-model:value="advancedQueryForm.enterpriseNature"
+          dict-type="sys_enterprise_nature_type"
+          :placeholder="pi.queryPh('enterpriseNature', 'select')"
+          allow-clear
+        />
+      </a-form-item>
+      </div>
+      <div v-show="isFieldVisible('industryAttribute')">
+      <a-form-item :label="pi.queryLabel('industryAttribute')">
+        <TaktSelect
+          v-model:value="advancedQueryForm.industryAttribute"
+          dict-type="sys_industry_attribute_type"
+          :placeholder="pi.queryPh('industryAttribute', 'select')"
+          allow-clear
+        />
+      </a-form-item>
+      </div>
+      <div v-show="isFieldVisible('defaultCulture')">
+      <a-form-item :label="pi.queryLabel('defaultCulture')">
+        <TaktSelect
+          v-model:value="advancedQueryForm.defaultCulture"
+          dict-type="sys_culture_code"
+          :placeholder="pi.queryPh('defaultCulture', 'select')"
           allow-clear
         />
       </a-form-item>
       </div>
       <div v-show="isFieldVisible('vendorTaxNumber')">
-      <a-form-item :label="t('entity.vendor.taxnumber')">
+      <a-form-item :label="pi.queryLabel('vendorTaxNumber')">
         <a-input
           v-model:value="advancedQueryForm.vendorTaxNumber"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.vendor.taxnumber') })"
+          :placeholder="pi.queryPh('vendorTaxNumber', 'required')"
           show-count
           :maxlength="50"
           allow-clear
         />
       </a-form-item>
       </div>
+      <div v-show="isFieldVisible('taxRate')">
+      <a-form-item :label="pi.queryLabel('taxRate')">
+        <TaktSelect
+          v-model:value="advancedQueryForm.taxRate"
+          dict-type="accounting_tax_rate_param"
+          :placeholder="pi.queryPh('taxRate', 'select')"
+          allow-clear
+        />
+      </a-form-item>
+      </div>
       <div v-show="isFieldVisible('registrationCountry')">
-      <a-form-item :label="t('entity.vendor.registrationcountry')">
-        <a-input
+      <a-form-item :label="pi.queryLabel('registrationCountry')">
+        <TaktSelect
           v-model:value="advancedQueryForm.registrationCountry"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.vendor.registrationcountry') })"
-          show-count
-          :maxlength="2"
+          dict-type="sys_country_code"
+          :placeholder="pi.queryPh('registrationCountry', 'select')"
+          allow-clear
+        />
+      </a-form-item>
+      </div>
+      <div v-show="isFieldVisible('registrationProvince')">
+      <a-form-item :label="pi.queryLabel('registrationProvince')">
+        <TaktSelect
+          v-model:value="advancedQueryForm.registrationProvince"
+          api-url="TaktAdminDivisions/options"
+          :placeholder="pi.queryPh('registrationProvince', 'select')"
+          allow-clear
+        />
+      </a-form-item>
+      </div>
+      <div v-show="isFieldVisible('registrationCity')">
+      <a-form-item :label="pi.queryLabel('registrationCity')">
+        <TaktSelect
+          v-model:value="advancedQueryForm.registrationCity"
+          api-url="TaktAdminDivisions/options"
+          :placeholder="pi.queryPh('registrationCity', 'select')"
           allow-clear
         />
       </a-form-item>
       </div>
       <div v-show="isFieldVisible('registrationAddress1')">
-      <a-form-item :label="t('entity.vendor.registrationaddress1')">
+      <a-form-item :label="pi.queryLabel('registrationAddress1')">
         <a-textarea
           v-model:value="advancedQueryForm.registrationAddress1"
-          :placeholder="t('common.page.form.placeholder.optional', { field: t('entity.vendor.registrationaddress1') })"
+          :placeholder="pi.queryPh('registrationAddress1', 'optional')"
           :rows="2"
           allow-clear
         />
       </a-form-item>
       </div>
       <div v-show="isFieldVisible('registrationAddress2')">
-      <a-form-item :label="t('entity.vendor.registrationaddress2')">
+      <a-form-item :label="pi.queryLabel('registrationAddress2')">
         <a-textarea
           v-model:value="advancedQueryForm.registrationAddress2"
-          :placeholder="t('common.page.form.placeholder.optional', { field: t('entity.vendor.registrationaddress2') })"
-          :rows="2"
-          allow-clear
-        />
-      </a-form-item>
-      </div>
-      <div v-show="isFieldVisible('registrationAddress3')">
-      <a-form-item :label="t('entity.vendor.registrationaddress3')">
-        <a-textarea
-          v-model:value="advancedQueryForm.registrationAddress3"
-          :placeholder="t('common.page.form.placeholder.optional', { field: t('entity.vendor.registrationaddress3') })"
+          :placeholder="pi.queryPh('registrationAddress2', 'optional')"
           :rows="2"
           allow-clear
         />
       </a-form-item>
       </div>
       <div v-show="isFieldVisible('vendorPhone')">
-      <a-form-item :label="t('entity.vendor.phone')">
+      <a-form-item :label="pi.queryLabel('vendorPhone')">
         <a-input
           v-model:value="advancedQueryForm.vendorPhone"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.vendor.phone') })"
+          :placeholder="pi.queryPh('vendorPhone', 'required')"
           show-count
           :maxlength="50"
           allow-clear
@@ -272,10 +399,10 @@
       </a-form-item>
       </div>
       <div v-show="isFieldVisible('vendorFax')">
-      <a-form-item :label="t('entity.vendor.fax')">
+      <a-form-item :label="pi.queryLabel('vendorFax')">
         <a-input
           v-model:value="advancedQueryForm.vendorFax"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.vendor.fax') })"
+          :placeholder="pi.queryPh('vendorFax', 'required')"
           show-count
           :maxlength="50"
           allow-clear
@@ -283,10 +410,10 @@
       </a-form-item>
       </div>
       <div v-show="isFieldVisible('vendorEmail')">
-      <a-form-item :label="t('entity.vendor.email')">
+      <a-form-item :label="pi.queryLabel('vendorEmail')">
         <a-input
           v-model:value="advancedQueryForm.vendorEmail"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.vendor.email') })"
+          :placeholder="pi.queryPh('vendorEmail', 'required')"
           show-count
           :maxlength="100"
           allow-clear
@@ -294,10 +421,10 @@
       </a-form-item>
       </div>
       <div v-show="isFieldVisible('vendorWebsite')">
-      <a-form-item :label="t('entity.vendor.website')">
+      <a-form-item :label="pi.queryLabel('vendorWebsite')">
         <a-input
           v-model:value="advancedQueryForm.vendorWebsite"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.vendor.website') })"
+          :placeholder="pi.queryPh('vendorWebsite', 'required')"
           show-count
           :maxlength="200"
           allow-clear
@@ -305,10 +432,10 @@
       </a-form-item>
       </div>
       <div v-show="isFieldVisible('contactPerson')">
-      <a-form-item :label="t('entity.vendor.contactperson')">
+      <a-form-item :label="pi.queryLabel('contactPerson')">
         <a-input
           v-model:value="advancedQueryForm.contactPerson"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.vendor.contactperson') })"
+          :placeholder="pi.queryPh('contactPerson', 'required')"
           show-count
           :maxlength="50"
           allow-clear
@@ -316,10 +443,10 @@
       </a-form-item>
       </div>
       <div v-show="isFieldVisible('contactPhone')">
-      <a-form-item :label="t('entity.vendor.contactphone')">
+      <a-form-item :label="pi.queryLabel('contactPhone')">
         <a-input
           v-model:value="advancedQueryForm.contactPhone"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.vendor.contactphone') })"
+          :placeholder="pi.queryPh('contactPhone', 'required')"
           show-count
           :maxlength="50"
           allow-clear
@@ -327,10 +454,10 @@
       </a-form-item>
       </div>
       <div v-show="isFieldVisible('contactEmail')">
-      <a-form-item :label="t('entity.vendor.contactemail')">
+      <a-form-item :label="pi.queryLabel('contactEmail')">
         <a-input
           v-model:value="advancedQueryForm.contactEmail"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.vendor.contactemail') })"
+          :placeholder="pi.queryPh('contactEmail', 'required')"
           show-count
           :maxlength="100"
           allow-clear
@@ -338,50 +465,211 @@
       </a-form-item>
       </div>
       <div v-show="isFieldVisible('currencyCode')">
-      <a-form-item :label="t('entity.vendor.currencycode')">
-        <a-input
+      <a-form-item :label="pi.queryLabel('currencyCode')">
+        <TaktSelect
           v-model:value="advancedQueryForm.currencyCode"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.vendor.currencycode') })"
-          show-count
-          :maxlength="3"
+          dict-type="accounting_currency_code"
+          :placeholder="pi.queryPh('currencyCode', 'select')"
+          allow-clear
+        />
+      </a-form-item>
+      </div>
+      <div v-show="isFieldVisible('reconciliationAccount')">
+      <a-form-item :label="pi.queryLabel('reconciliationAccount')">
+        <TaktSelect
+          v-model:value="advancedQueryForm.reconciliationAccount"
+          api-url="TaktAccountTitles/options"
+          :placeholder="pi.queryPh('reconciliationAccount', 'select')"
+          allow-clear
+        />
+      </a-form-item>
+      </div>
+      <div v-show="isFieldVisible('customerCode')">
+      <a-form-item :label="pi.queryLabel('customerCode')">
+        <TaktSelect
+          v-model:value="advancedQueryForm.customerCode"
+          api-url="TaktCustomers/options"
+          :placeholder="pi.queryPh('customerCode', 'select')"
+          allow-clear
+        />
+      </a-form-item>
+      </div>
+      <div v-show="isFieldVisible('clearingWithCustomer')">
+      <a-form-item :label="pi.queryLabel('clearingWithCustomer')">
+        <TaktSelect
+          v-model:value="advancedQueryForm.clearingWithCustomer"
+          dict-type="sys_yes_no_type"
+          :placeholder="pi.queryPh('clearingWithCustomer', 'select')"
+          allow-clear
+        />
+      </a-form-item>
+      </div>
+      <div v-show="isFieldVisible('paymentMethod')">
+      <a-form-item :label="pi.queryLabel('paymentMethod')">
+        <TaktSelect
+          v-model:value="advancedQueryForm.paymentMethod"
+          dict-type="accounting_payment_method_type"
+          :placeholder="pi.queryPh('paymentMethod', 'select')"
           allow-clear
         />
       </a-form-item>
       </div>
       <div v-show="isFieldVisible('paymentTerms')">
-      <a-form-item :label="t('entity.vendor.paymentterms')">
+      <a-form-item :label="pi.queryLabel('paymentTerms')">
         <TaktSelect
           v-model:value="advancedQueryForm.paymentTerms"
           dict-type="accounting_payment_terms_param"
-          :placeholder="t('common.page.form.placeholder.select', { field: t('entity.vendor.paymentterms') })"
+          :placeholder="pi.queryPh('paymentTerms', 'select')"
+          allow-clear
+        />
+      </a-form-item>
+      </div>
+      <div v-show="isFieldVisible('bankCode')">
+      <a-form-item :label="pi.queryLabel('bankCode')">
+        <TaktSelect
+          v-model:value="advancedQueryForm.bankCode"
+          api-url="TaktBanks/options"
+          :placeholder="pi.queryPh('bankCode', 'select')"
+          allow-clear
+        />
+      </a-form-item>
+      </div>
+      <div v-show="isFieldVisible('bankAccount')">
+      <a-form-item :label="pi.queryLabel('bankAccount')">
+        <a-input
+          v-model:value="advancedQueryForm.bankAccount"
+          :placeholder="pi.queryPh('bankAccount', 'required')"
+          show-count
+          :maxlength="40"
+          allow-clear
+        />
+      </a-form-item>
+      </div>
+      <div v-show="isFieldVisible('accountHolder')">
+      <a-form-item :label="pi.queryLabel('accountHolder')">
+        <a-input
+          v-model:value="advancedQueryForm.accountHolder"
+          :placeholder="pi.queryPh('accountHolder', 'required')"
+          show-count
+          :maxlength="100"
+          allow-clear
+        />
+      </a-form-item>
+      </div>
+      <div v-show="isFieldVisible('grBasedInvoiceInspection')">
+      <a-form-item :label="pi.queryLabel('grBasedInvoiceInspection')">
+        <TaktSelect
+          v-model:value="advancedQueryForm.grBasedInvoiceInspection"
+          dict-type="sys_yes_no_type"
+          :placeholder="pi.queryPh('grBasedInvoiceInspection', 'select')"
+          allow-clear
+        />
+      </a-form-item>
+      </div>
+      <div v-show="isFieldVisible('incoterms1')">
+      <a-form-item :label="pi.queryLabel('incoterms1')">
+        <TaktSelect
+          v-model:value="advancedQueryForm.incoterms1"
+          dict-type="logistics_incoterms1"
+          :placeholder="pi.queryPh('incoterms1', 'select')"
+          allow-clear
+        />
+      </a-form-item>
+      </div>
+      <div v-show="isFieldVisible('incoterms2')">
+      <a-form-item :label="pi.queryLabel('incoterms2')">
+        <a-input
+          v-model:value="advancedQueryForm.incoterms2"
+          :placeholder="pi.queryPh('incoterms2', 'required')"
+          show-count
+          :maxlength="40"
+          allow-clear
+        />
+      </a-form-item>
+      </div>
+      <div v-show="isFieldVisible('automaticPurchaseOrder')">
+      <a-form-item :label="pi.queryLabel('automaticPurchaseOrder')">
+        <TaktSelect
+          v-model:value="advancedQueryForm.automaticPurchaseOrder"
+          dict-type="sys_yes_no_type"
+          :placeholder="pi.queryPh('automaticPurchaseOrder', 'select')"
+          allow-clear
+        />
+      </a-form-item>
+      </div>
+      <div v-show="isFieldVisible('pricingDateControl')">
+      <a-form-item :label="pi.queryLabel('pricingDateControl')">
+        <TaktSelect
+          v-model:value="advancedQueryForm.pricingDateControl"
+          dict-type="logistics_pricing_date_control"
+          :placeholder="pi.queryPh('pricingDateControl', 'select')"
+          allow-clear
+        />
+      </a-form-item>
+      </div>
+      <div v-show="isFieldVisible('purchaseGroup')">
+      <a-form-item :label="pi.queryLabel('purchaseGroup')">
+        <TaktSelect
+          v-model:value="advancedQueryForm.purchaseGroup"
+          api-url="TaktPurchaseGroups/options"
+          :placeholder="pi.queryPh('purchaseGroup', 'select')"
+          allow-clear
+        />
+      </a-form-item>
+      </div>
+      <div v-show="isFieldVisible('plannedDeliveryTimeDays')">
+      <a-form-item :label="pi.queryLabel('plannedDeliveryTimeDays')">
+        <a-input-number
+          v-model:value="advancedQueryForm.plannedDeliveryTimeDays"
+          :placeholder="pi.queryPh('plannedDeliveryTimeDays', 'required')"
+          style="width: 100%"
+        />
+      </a-form-item>
+      </div>
+      <div v-show="isFieldVisible('evaluatedReceiptSettlement')">
+      <a-form-item :label="pi.queryLabel('evaluatedReceiptSettlement')">
+        <TaktSelect
+          v-model:value="advancedQueryForm.evaluatedReceiptSettlement"
+          dict-type="sys_yes_no_type"
+          :placeholder="pi.queryPh('evaluatedReceiptSettlement', 'select')"
+          allow-clear
+        />
+      </a-form-item>
+      </div>
+      <div v-show="isFieldVisible('purchasingOrganization')">
+      <a-form-item :label="pi.queryLabel('purchasingOrganization')">
+        <TaktSelect
+          v-model:value="advancedQueryForm.purchasingOrganization"
+          api-url="TaktPlants/options"
+          :placeholder="pi.queryPh('purchasingOrganization', 'select')"
           allow-clear
         />
       </a-form-item>
       </div>
       <div v-show="isFieldVisible('creditLevel')">
-      <a-form-item :label="t('entity.vendor.creditlevel')">
+      <a-form-item :label="pi.queryLabel('creditLevel')">
         <TaktSelect
           v-model:value="advancedQueryForm.creditLevel"
           dict-type="logistics_credit_rating_category"
-          :placeholder="t('common.page.form.placeholder.select', { field: t('entity.vendor.creditlevel') })"
+          :placeholder="pi.queryPh('creditLevel', 'select')"
           allow-clear
         />
       </a-form-item>
       </div>
       <div v-show="isFieldVisible('creditAmount')">
-      <a-form-item :label="t('entity.vendor.creditamount')">
+      <a-form-item :label="pi.queryLabel('creditAmount')">
         <a-input-number
           v-model:value="advancedQueryForm.creditAmount"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.vendor.creditamount') })"
+          :placeholder="pi.queryPh('creditAmount', 'required')"
           style="width: 100%"
         />
       </a-form-item>
       </div>
       <div v-show="isFieldVisible('authorizedBrand')">
-      <a-form-item :label="t('entity.vendor.authorizedbrand')">
+      <a-form-item :label="pi.queryLabel('authorizedBrand')">
         <a-input
           v-model:value="advancedQueryForm.authorizedBrand"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.vendor.authorizedbrand') })"
+          :placeholder="pi.queryPh('authorizedBrand', 'required')"
           show-count
           :maxlength="100"
           allow-clear
@@ -389,10 +677,10 @@
       </a-form-item>
       </div>
       <div v-show="isFieldVisible('agentRegion')">
-      <a-form-item :label="t('entity.vendor.agentregion')">
+      <a-form-item :label="pi.queryLabel('agentRegion')">
         <a-input
           v-model:value="advancedQueryForm.agentRegion"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.vendor.agentregion') })"
+          :placeholder="pi.queryPh('agentRegion', 'required')"
           show-count
           :maxlength="200"
           allow-clear
@@ -400,48 +688,39 @@
       </a-form-item>
       </div>
       <div v-show="isFieldVisible('vendorLevel')">
-      <a-form-item :label="t('entity.vendor.level')">
+      <a-form-item :label="pi.queryLabel('vendorLevel')">
         <TaktSelect
           v-model:value="advancedQueryForm.vendorLevel"
           dict-type="logistics_grade_category"
-          :placeholder="t('common.page.form.placeholder.select', { field: t('entity.vendor.level') })"
+          :placeholder="pi.queryPh('vendorLevel', 'select')"
           allow-clear
         />
       </a-form-item>
       </div>
       <div v-show="isFieldVisible('evaluationScore')">
-      <a-form-item :label="t('entity.vendor.evaluationscore')">
+      <a-form-item :label="pi.queryLabel('evaluationScore')">
         <a-input-number
           v-model:value="advancedQueryForm.evaluationScore"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.vendor.evaluationscore') })"
-          style="width: 100%"
-        />
-      </a-form-item>
-      </div>
-      <div v-show="isFieldVisible('isQualified')">
-      <a-form-item :label="t('entity.vendor.isqualified')">
-        <a-input-number
-          v-model:value="advancedQueryForm.isQualified"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.vendor.isqualified') })"
+          :placeholder="pi.queryPh('evaluationScore', 'required')"
           style="width: 100%"
         />
       </a-form-item>
       </div>
       <div v-show="isFieldVisible('vendorStatus')">
-      <a-form-item :label="t('entity.vendor.status')">
+      <a-form-item :label="pi.queryLabel('vendorStatus')">
         <TaktSelect
           v-model:value="advancedQueryForm.vendorStatus"
           dict-type="sys_normal_disable_status"
-          :placeholder="t('common.page.form.placeholder.select', { field: t('entity.vendor.status') })"
+          :placeholder="pi.queryPh('vendorStatus', 'select')"
           allow-clear
         />
       </a-form-item>
       </div>
       <div v-show="isFieldVisible('createdAtStart')">
-      <a-form-item :label="t('common.page.entity.createdatstart')">
+      <a-form-item :label="pi.queryLabel('createdAtStart')">
         <a-date-picker
           v-model:value="advancedQueryForm.createdAtStart"
-          :placeholder="t('common.page.form.placeholder.select', { field: t('common.page.entity.createdatstart') })"
+          :placeholder="pi.queryPh('createdAtStart', 'select')"
           value-format="YYYY-MM-DD HH:mm:ss"
             show-time
           style="width: 100%"
@@ -449,10 +728,10 @@
       </a-form-item>
       </div>
       <div v-show="isFieldVisible('createdAtEnd')">
-      <a-form-item :label="t('common.page.entity.createdatend')">
+      <a-form-item :label="pi.queryLabel('createdAtEnd')">
         <a-date-picker
           v-model:value="advancedQueryForm.createdAtEnd"
-          :placeholder="t('common.page.form.placeholder.select', { field: t('common.page.entity.createdatend') })"
+          :placeholder="pi.queryPh('createdAtEnd', 'select')"
           value-format="YYYY-MM-DD HH:mm:ss"
             show-time
           style="width: 100%"
@@ -474,7 +753,7 @@
             >
               <span class="takt-form-label-hint-icon"><RiQuestionLine class="takt-remix-icon" /></span>
             </a-tooltip>
-            <span>{{ t('common.page.entity.extfield') }}</span>
+            <span>{{ pi.queryLabel('extField') }}</span>
           </span>
         </template>
         <a-textarea
@@ -488,10 +767,10 @@
       </a-form-item>
       </div>
       <div v-show="isFieldVisible('remark')">
-      <a-form-item :label="t('common.page.entity.remark')">
+      <a-form-item :label="pi.queryLabel('remark')">
         <a-textarea
           v-model:value="advancedQueryForm.remark"
-          :placeholder="t('common.page.form.placeholder.optional', { field: t('common.page.entity.remark') })"
+          :placeholder="pi.queryPh('remark', 'optional')"
             :rows="4"
             show-count
             :maxlength="400"
@@ -505,14 +784,15 @@
     <!-- 导入对话框 -->
     <TaktModal
       v-model:open="importVisible"
-      :title="t('common.dialog.title.import', { entity: t('entity.vendor._self') })"
+      :title="t('common.dialog.title.import', { entity: pi.self() })"
       :width="600"
       :footer="null"
       :cancel-text="t('common.page.button.close')"
       @cancel="handleImportCancel"
     >
       <TaktImportFile
-        entity-i18n-key="entity.vendor._self"
+        v-if="importVisible"
+        :entity-i18n-key="VENDOR_SELF_I18N_KEY"
         file-type="xlsx"
         :sheet-name="excelNames.sheet"
         :template-file-name="excelNames.fileBase"
@@ -555,15 +835,28 @@ import type { Vendor, VendorQuery } from '@/types/logistics/procurement/vendor'
 import { useDictDataStore } from '@/stores/foundation/dict-data'
 import { taktExcelEntityNames } from '@/utils/naming'
 import { resolveExportDownloadFileName } from '@/utils/export-download-name'
+import { normalizeImportResult, type TaktImportResult } from '@/utils/takt-import-result'
 import { RiEditLine, RiDeleteBinLine, RiQuestionLine } from '@remixicon/vue'
 
+import {
+  useVendorI18n,
+  VENDOR_LIST_FIELDS,
+  VENDOR_QUERY_STRING_FIELDS,
+  VENDOR_QUERY_FIELDS,
+  VENDOR_SELF_I18N_KEY,
+} from './composables/use-vendor-i18n'
+
+/** 实体字段 i18n（标签/占位符统一入口） */
+const pi = useVendorI18n()
+/** 表格行类型（TaktSingleTable slot record 与 dataSource 行兼容） */
+type VendorRowRecord = Vendor | Record<string, unknown>
 /** i18n 翻译函数 */
 const { t } = useI18n()
 /** Excel 导入/导出默认 sheet 名与文件名前缀 */
 const excelNames = taktExcelEntityNames('TaktVendor')
 /** 列表快捷查询占位文案 */
 const searchPlaceholder = computed(
-  () => t('common.page.form.placeholder.search', { keyword: t('entity.vendor._self') })
+  () => t('common.page.form.placeholder.search', { keyword: pi.self() })
 )
 
 /** 快捷查询关键字 */
@@ -579,9 +872,9 @@ const pageSize = ref(getTaktDefaultPageSize())
 /** 分页 total */
 const total = ref(0)
 /** 工具栏单选时当前行 */
-const selectedRow = ref<Vendor | null>(null)
+const selectedRow = ref<VendorRowRecord | null>(null)
 /** 表格多选行 */
-const selectedRows = ref<Vendor[]>([])
+const selectedRows = ref<VendorRowRecord[]>([])
 /** 表格多选 row-key 集合 */
 const selectedRowKeys = ref<(string | number)[]>([])
 
@@ -598,76 +891,39 @@ const formRef = ref()
 
 /** 高级查询抽屉是否打开 */
 const advancedQueryVisible = ref(false)
+/**
+ * 创建空的高级查询表单
+ * @returns {Record<string, unknown>} 高级查询初始模型
+ */
+function createEmptyAdvancedQueryForm() {
+  const form = Object.fromEntries(VENDOR_QUERY_STRING_FIELDS.map((key) => [key, ''])) as Record<
+    (typeof VENDOR_QUERY_STRING_FIELDS)[number],
+    string
+  >
+  return {
+    ...form,
+    vendorType: undefined as number | undefined,
+    taxRate: undefined as number | undefined,
+    clearingWithCustomer: undefined as number | undefined,
+    paymentMethod: undefined as number | undefined,
+    grBasedInvoiceInspection: undefined as number | undefined,
+    automaticPurchaseOrder: undefined as number | undefined,
+    pricingDateControl: undefined as number | undefined,
+    plannedDeliveryTimeDays: undefined as number | undefined,
+    evaluatedReceiptSettlement: undefined as number | undefined,
+    creditLevel: undefined as number | undefined,
+    creditAmount: undefined as number | undefined,
+    vendorLevel: undefined as number | undefined,
+    evaluationScore: undefined as number | undefined,
+    vendorStatus: undefined as number | undefined,
+  }
+}
 /** 高级查询表单模型 */
-const advancedQueryForm = ref({
-  plantCode: '',
-  vendorCode: '',
-  vendorName: '',
-  vendorShortName: '',
-  vendorType: undefined as number | undefined,
-  industrySector: '',
-  vendorTaxNumber: '',
-  registrationCountry: '',
-  registrationAddress1: '',
-  registrationAddress2: '',
-  registrationAddress3: '',
-  vendorPhone: '',
-  vendorFax: '',
-  vendorEmail: '',
-  vendorWebsite: '',
-  contactPerson: '',
-  contactPhone: '',
-  contactEmail: '',
-  currencyCode: '',
-  paymentTerms: undefined as number | undefined,
-  creditLevel: undefined as number | undefined,
-  creditAmount: undefined as number | undefined,
-  authorizedBrand: '',
-  agentRegion: '',
-  vendorLevel: undefined as number | undefined,
-  evaluationScore: undefined as number | undefined,
-  isQualified: undefined as number | undefined,
-  vendorStatus: undefined as number | undefined,
-  createdAtStart: '',
-  createdAtEnd: '',
-  extField: '',
-  remark: '',
-})
+const advancedQueryForm = ref(createEmptyAdvancedQueryForm())
 /** 高级查询字段元数据（列显隐配置） */
-const queryFieldsMeta = computed(() => [
-  { key: 'plantCode', label: t('entity.vendor.plantcode') },
-  { key: 'vendorCode', label: t('entity.vendor.code') },
-  { key: 'vendorName', label: t('entity.vendor.name') },
-  { key: 'vendorShortName', label: t('entity.vendor.shortname') },
-  { key: 'vendorType', label: t('entity.vendor.type') },
-  { key: 'industrySector', label: t('entity.vendor.industrysector') },
-  { key: 'vendorTaxNumber', label: t('entity.vendor.taxnumber') },
-  { key: 'registrationCountry', label: t('entity.vendor.registrationcountry') },
-  { key: 'registrationAddress1', label: t('entity.vendor.registrationaddress1') },
-  { key: 'registrationAddress2', label: t('entity.vendor.registrationaddress2') },
-  { key: 'registrationAddress3', label: t('entity.vendor.registrationaddress3') },
-  { key: 'vendorPhone', label: t('entity.vendor.phone') },
-  { key: 'vendorFax', label: t('entity.vendor.fax') },
-  { key: 'vendorEmail', label: t('entity.vendor.email') },
-  { key: 'vendorWebsite', label: t('entity.vendor.website') },
-  { key: 'contactPerson', label: t('entity.vendor.contactperson') },
-  { key: 'contactPhone', label: t('entity.vendor.contactphone') },
-  { key: 'contactEmail', label: t('entity.vendor.contactemail') },
-  { key: 'currencyCode', label: t('entity.vendor.currencycode') },
-  { key: 'paymentTerms', label: t('entity.vendor.paymentterms') },
-  { key: 'creditLevel', label: t('entity.vendor.creditlevel') },
-  { key: 'creditAmount', label: t('entity.vendor.creditamount') },
-  { key: 'authorizedBrand', label: t('entity.vendor.authorizedbrand') },
-  { key: 'agentRegion', label: t('entity.vendor.agentregion') },
-  { key: 'vendorLevel', label: t('entity.vendor.level') },
-  { key: 'evaluationScore', label: t('entity.vendor.evaluationscore') },
-  { key: 'isQualified', label: t('entity.vendor.isqualified') },
-  { key: 'vendorStatus', label: t('entity.vendor.status') },
-  { key: 'createdAtStart', label: t('common.page.entity.createdatstart') },
-  { key: 'createdAtEnd', label: t('common.page.entity.createdatend') },
-  { key: 'extField', label: t('common.page.entity.extfield') },
-  { key: 'remark', label: t('common.page.entity.remark') },
-])
+const queryFieldsMeta = computed(() =>
+  VENDOR_QUERY_FIELDS.map((key) => ({ key, label: pi.queryLabel(key) })),
+)
 /** 高级查询当前可见字段 key */
 const visibleQueryFieldKeys = ref<string[]>([])
 /** 列设置抽屉是否打开 */
@@ -709,29 +965,35 @@ function buildListQuery(overrides?: Partial<VendorQuery>): VendorQuery {
       query[key] = v as never
     }
   }
-  assignTrimmed('plantCode', form.plantCode)
-  assignTrimmed('vendorCode', form.vendorCode)
-  assignTrimmed('vendorName', form.vendorName)
-  assignTrimmed('vendorShortName', form.vendorShortName)
+  for (const key of VENDOR_QUERY_STRING_FIELDS) {
+    assignTrimmed(key, form[key])
+  }
   if (form.vendorType !== undefined && form.vendorType !== null) {
     query.vendorType = form.vendorType
   }
-  assignTrimmed('industrySector', form.industrySector)
-  assignTrimmed('vendorTaxNumber', form.vendorTaxNumber)
-  assignTrimmed('registrationCountry', form.registrationCountry)
-  assignTrimmed('registrationAddress1', form.registrationAddress1)
-  assignTrimmed('registrationAddress2', form.registrationAddress2)
-  assignTrimmed('registrationAddress3', form.registrationAddress3)
-  assignTrimmed('vendorPhone', form.vendorPhone)
-  assignTrimmed('vendorFax', form.vendorFax)
-  assignTrimmed('vendorEmail', form.vendorEmail)
-  assignTrimmed('vendorWebsite', form.vendorWebsite)
-  assignTrimmed('contactPerson', form.contactPerson)
-  assignTrimmed('contactPhone', form.contactPhone)
-  assignTrimmed('contactEmail', form.contactEmail)
-  assignTrimmed('currencyCode', form.currencyCode)
-  if (form.paymentTerms !== undefined && form.paymentTerms !== null) {
-    query.paymentTerms = form.paymentTerms
+  if (form.taxRate !== undefined && form.taxRate !== null) {
+    query.taxRate = form.taxRate
+  }
+  if (form.clearingWithCustomer !== undefined && form.clearingWithCustomer !== null) {
+    query.clearingWithCustomer = form.clearingWithCustomer
+  }
+  if (form.paymentMethod !== undefined && form.paymentMethod !== null) {
+    query.paymentMethod = form.paymentMethod
+  }
+  if (form.grBasedInvoiceInspection !== undefined && form.grBasedInvoiceInspection !== null) {
+    query.grBasedInvoiceInspection = form.grBasedInvoiceInspection
+  }
+  if (form.automaticPurchaseOrder !== undefined && form.automaticPurchaseOrder !== null) {
+    query.automaticPurchaseOrder = form.automaticPurchaseOrder
+  }
+  if (form.pricingDateControl !== undefined && form.pricingDateControl !== null) {
+    query.pricingDateControl = form.pricingDateControl
+  }
+  if (form.plannedDeliveryTimeDays !== undefined && form.plannedDeliveryTimeDays !== null) {
+    query.plannedDeliveryTimeDays = form.plannedDeliveryTimeDays
+  }
+  if (form.evaluatedReceiptSettlement !== undefined && form.evaluatedReceiptSettlement !== null) {
+    query.evaluatedReceiptSettlement = form.evaluatedReceiptSettlement
   }
   if (form.creditLevel !== undefined && form.creditLevel !== null) {
     query.creditLevel = form.creditLevel
@@ -739,24 +1001,15 @@ function buildListQuery(overrides?: Partial<VendorQuery>): VendorQuery {
   if (form.creditAmount !== undefined && form.creditAmount !== null) {
     query.creditAmount = form.creditAmount
   }
-  assignTrimmed('authorizedBrand', form.authorizedBrand)
-  assignTrimmed('agentRegion', form.agentRegion)
   if (form.vendorLevel !== undefined && form.vendorLevel !== null) {
     query.vendorLevel = form.vendorLevel
   }
   if (form.evaluationScore !== undefined && form.evaluationScore !== null) {
     query.evaluationScore = form.evaluationScore
   }
-  if (form.isQualified !== undefined && form.isQualified !== null) {
-    query.isQualified = form.isQualified
-  }
   if (form.vendorStatus !== undefined && form.vendorStatus !== null) {
     query.vendorStatus = form.vendorStatus
   }
-  assignTrimmed('createdAtStart', form.createdAtStart)
-  assignTrimmed('createdAtEnd', form.createdAtEnd)
-  assignTrimmed('extField', form.extField)
-  assignTrimmed('remark', form.remark)
   return query
 }
 /** 页面挂载：租户上下文就绪后加载分页配置，再拉列表 */
@@ -767,270 +1020,32 @@ onMounted(async () => {
 })
 
 
-
-
-
-
+/**
+ * 构建列表标准文本列
+ * @param key 列 key / dataIndex
+ * @param title 列标题
+ * @param options 宽度与固定列
+ */
+function buildVendorListColumn(
+  key: string,
+  title: string,
+  options?: { width?: number; fixed?: 'left' },
+) {
+  return {
+    title,
+    dataIndex: key,
+    key,
+    width: options?.width ?? 120,
+    resizable: true,
+    ellipsis: true,
+    ...(options?.fixed ? { fixed: options.fixed } : {}),
+  }
+}
 
 /** 表格列定义（i18n 随 locale 变化） */
 const columns = computed<TableColumnsType>(() => [
-  {
-    title: t('common.page.entity.id'),
-    dataIndex: 'vendorId',
-    key: 'vendorId',
-    width: 80,
-    resizable: true,
-    ellipsis: true,
-    fixed: 'left',
-    customRender: ({ record }: { record: any }) => getVendorField(record, 'vendorId') ?? ''
-  },
-  {
-    title: t('entity.vendor.plantcode'),
-    dataIndex: 'plantCode',
-    key: 'plantCode',
-    width: 120,
-    resizable: true,
-    ellipsis: true,
-    customRender: ({ record }: { record: any }) => getVendorField(record, 'plantCode') ?? ''
-  },
-  {
-    title: t('entity.vendor.code'),
-    dataIndex: 'vendorCode',
-    key: 'vendorCode',
-    width: 120,
-    resizable: true,
-    ellipsis: true,
-    customRender: ({ record }: { record: any }) => getVendorField(record, 'vendorCode') ?? ''
-  },
-  {
-    title: t('entity.vendor.name'),
-    dataIndex: 'vendorName',
-    key: 'vendorName',
-    width: 120,
-    resizable: true,
-    ellipsis: true,
-    customRender: ({ record }: { record: any }) => getVendorField(record, 'vendorName') ?? ''
-  },
-  {
-    title: t('entity.vendor.shortname'),
-    dataIndex: 'vendorShortName',
-    key: 'vendorShortName',
-    width: 120,
-    resizable: true,
-    ellipsis: true,
-    customRender: ({ record }: { record: any }) => getVendorField(record, 'vendorShortName') ?? ''
-  },
-  {
-    title: t('entity.vendor.type'),
-    dataIndex: 'vendorType',
-    key: 'vendorType',
-    width: 120,
-    resizable: true,
-    ellipsis: true,
-  },
-  {
-    title: t('entity.vendor.industrysector'),
-    dataIndex: 'industrySector',
-    key: 'industrySector',
-    width: 120,
-    resizable: true,
-    ellipsis: true,
-    customRender: ({ record }: { record: any }) => getVendorField(record, 'industrySector') ?? ''
-  },
-  {
-    title: t('entity.vendor.taxnumber'),
-    dataIndex: 'vendorTaxNumber',
-    key: 'vendorTaxNumber',
-    width: 120,
-    resizable: true,
-    ellipsis: true,
-    customRender: ({ record }: { record: any }) => getVendorField(record, 'vendorTaxNumber') ?? ''
-  },
-  {
-    title: t('entity.vendor.registrationcountry'),
-    dataIndex: 'registrationCountry',
-    key: 'registrationCountry',
-    width: 120,
-    resizable: true,
-    ellipsis: true,
-    customRender: ({ record }: { record: any }) => getVendorField(record, 'registrationCountry') ?? ''
-  },
-  {
-    title: t('entity.vendor.registrationaddress1'),
-    dataIndex: 'registrationAddress1',
-    key: 'registrationAddress1',
-    width: 120,
-    resizable: true,
-    ellipsis: true,
-    customRender: ({ record }: { record: any }) => getVendorField(record, 'registrationAddress1') ?? ''
-  },
-  {
-    title: t('entity.vendor.registrationaddress2'),
-    dataIndex: 'registrationAddress2',
-    key: 'registrationAddress2',
-    width: 120,
-    resizable: true,
-    ellipsis: true,
-    customRender: ({ record }: { record: any }) => getVendorField(record, 'registrationAddress2') ?? ''
-  },
-  {
-    title: t('entity.vendor.registrationaddress3'),
-    dataIndex: 'registrationAddress3',
-    key: 'registrationAddress3',
-    width: 120,
-    resizable: true,
-    ellipsis: true,
-    customRender: ({ record }: { record: any }) => getVendorField(record, 'registrationAddress3') ?? ''
-  },
-  {
-    title: t('entity.vendor.phone'),
-    dataIndex: 'vendorPhone',
-    key: 'vendorPhone',
-    width: 120,
-    resizable: true,
-    ellipsis: true,
-    customRender: ({ record }: { record: any }) => getVendorField(record, 'vendorPhone') ?? ''
-  },
-  {
-    title: t('entity.vendor.fax'),
-    dataIndex: 'vendorFax',
-    key: 'vendorFax',
-    width: 120,
-    resizable: true,
-    ellipsis: true,
-    customRender: ({ record }: { record: any }) => getVendorField(record, 'vendorFax') ?? ''
-  },
-  {
-    title: t('entity.vendor.email'),
-    dataIndex: 'vendorEmail',
-    key: 'vendorEmail',
-    width: 120,
-    resizable: true,
-    ellipsis: true,
-    customRender: ({ record }: { record: any }) => getVendorField(record, 'vendorEmail') ?? ''
-  },
-  {
-    title: t('entity.vendor.website'),
-    dataIndex: 'vendorWebsite',
-    key: 'vendorWebsite',
-    width: 120,
-    resizable: true,
-    ellipsis: true,
-    customRender: ({ record }: { record: any }) => getVendorField(record, 'vendorWebsite') ?? ''
-  },
-  {
-    title: t('entity.vendor.contactperson'),
-    dataIndex: 'contactPerson',
-    key: 'contactPerson',
-    width: 120,
-    resizable: true,
-    ellipsis: true,
-    customRender: ({ record }: { record: any }) => getVendorField(record, 'contactPerson') ?? ''
-  },
-  {
-    title: t('entity.vendor.contactphone'),
-    dataIndex: 'contactPhone',
-    key: 'contactPhone',
-    width: 120,
-    resizable: true,
-    ellipsis: true,
-    customRender: ({ record }: { record: any }) => getVendorField(record, 'contactPhone') ?? ''
-  },
-  {
-    title: t('entity.vendor.contactemail'),
-    dataIndex: 'contactEmail',
-    key: 'contactEmail',
-    width: 120,
-    resizable: true,
-    ellipsis: true,
-    customRender: ({ record }: { record: any }) => getVendorField(record, 'contactEmail') ?? ''
-  },
-  {
-    title: t('entity.vendor.currencycode'),
-    dataIndex: 'currencyCode',
-    key: 'currencyCode',
-    width: 120,
-    resizable: true,
-    ellipsis: true,
-    customRender: ({ record }: { record: any }) => getVendorField(record, 'currencyCode') ?? ''
-  },
-  {
-    title: t('entity.vendor.paymentterms'),
-    dataIndex: 'paymentTerms',
-    key: 'paymentTerms',
-    width: 120,
-    resizable: true,
-    ellipsis: true,
-  },
-  {
-    title: t('entity.vendor.creditlevel'),
-    dataIndex: 'creditLevel',
-    key: 'creditLevel',
-    width: 120,
-    resizable: true,
-    ellipsis: true,
-  },
-  {
-    title: t('entity.vendor.creditamount'),
-    dataIndex: 'creditAmount',
-    key: 'creditAmount',
-    width: 120,
-    resizable: true,
-    ellipsis: true,
-    customRender: ({ record }: { record: any }) => getVendorField(record, 'creditAmount') ?? ''
-  },
-  {
-    title: t('entity.vendor.authorizedbrand'),
-    dataIndex: 'authorizedBrand',
-    key: 'authorizedBrand',
-    width: 120,
-    resizable: true,
-    ellipsis: true,
-    customRender: ({ record }: { record: any }) => getVendorField(record, 'authorizedBrand') ?? ''
-  },
-  {
-    title: t('entity.vendor.agentregion'),
-    dataIndex: 'agentRegion',
-    key: 'agentRegion',
-    width: 120,
-    resizable: true,
-    ellipsis: true,
-    customRender: ({ record }: { record: any }) => getVendorField(record, 'agentRegion') ?? ''
-  },
-  {
-    title: t('entity.vendor.level'),
-    dataIndex: 'vendorLevel',
-    key: 'vendorLevel',
-    width: 120,
-    resizable: true,
-    ellipsis: true,
-  },
-  {
-    title: t('entity.vendor.evaluationscore'),
-    dataIndex: 'evaluationScore',
-    key: 'evaluationScore',
-    width: 120,
-    resizable: true,
-    ellipsis: true,
-    customRender: ({ record }: { record: any }) => getVendorField(record, 'evaluationScore') ?? ''
-  },
-  {
-    title: t('entity.vendor.isqualified'),
-    dataIndex: 'isQualified',
-    key: 'isQualified',
-    width: 120,
-    resizable: true,
-    ellipsis: true,
-    customRender: ({ record }: { record: any }) => getVendorField(record, 'isQualified') ?? ''
-  },
-  {
-    title: t('entity.vendor.status'),
-    dataIndex: 'vendorStatus',
-    key: 'vendorStatus',
-    width: 120,
-    resizable: true,
-    ellipsis: true,
-  },
+  buildVendorListColumn('vendorId', t('common.page.entity.id'), { width: 80, fixed: 'left' }),
+  ...VENDOR_LIST_FIELDS.map((key) => buildVendorListColumn(key, pi.label(key))),
   CreateActionColumn({
     actions: [
       {
@@ -1039,7 +1054,7 @@ const columns = computed<TableColumnsType>(() => [
         shape: 'plain',
         icon: RiEditLine,
         permission: 'logistics:procurement:vendor:update',
-        onClick: (record: Vendor) => handleEdit(record)
+        onClick: (record: VendorRowRecord) => handleEdit(record)
       },
       {
         key: 'delete',
@@ -1047,44 +1062,63 @@ const columns = computed<TableColumnsType>(() => [
         shape: 'plain',
         icon: RiDeleteBinLine,
         permission: 'logistics:procurement:vendor:delete',
-        onClick: (record: Vendor) => handleDeleteOne(record)
+        onClick: (record: VendorRowRecord) => handleDeleteOne(record)
       }
     ]
   })
 ])
 
 /** 表格 row-key（优先实体主键字段） */
-const getVendorId = (record: any): string => record?.[entityIdName] ?? ''
+const getVendorId = (record: VendorRowRecord): string => {
+  const id = (record as Record<string, unknown>)?.[entityIdName]
+  return id != null ? String(id) : ''
+}
 /**
- * 读取行字段值
+ * 供 TaktDictTag 等组件使用的标量字典值
  * @param record 行数据
  * @param field 字段名
  */
-const getVendorField = (record: any, field: string): any => record?.[field]
+const getVendorDictValue = (
+  record: VendorRowRecord,
+  field: string,
+): string | number | undefined => {
+  const value = (record as Record<string, unknown>)?.[field]
+  if (value === null || value === undefined) return undefined
+  if (typeof value === 'string' || typeof value === 'number') return value
+  return String(value)
+}
+
+/** 将行字段/字典值转为有限 number */
+const toVendorNumber = (value: string | number | undefined | null): number => {
+  if (typeof value === 'number' && Number.isFinite(value)) return value
+  const num = Number(value ?? 0)
+  return Number.isFinite(num) ? num : 0
+}
+
 
 
 /** 行选择配置 */
 const rowSelection = computed(() => ({
   selectedRowKeys: selectedRowKeys.value,
-  onChange: (keys: (string | number)[], rows: Vendor[]) => {
+  onChange: (keys: (string | number)[], rows: VendorRowRecord[]) => {
     selectedRowKeys.value = keys
     selectedRows.value = rows
     selectedRow.value = rows.length === 1 ? (rows[0] ?? null) : null
   },
-  onSelect: (record: Vendor, selected: boolean) => {
+  onSelect: (record: VendorRowRecord, selected: boolean) => {
     if (selected) {
       selectedRow.value = record
     } else if (selectedRow.value && getVendorId(selectedRow.value) === getVendorId(record)) {
       selectedRow.value = null
     }
   },
-  onSelectAll: (selected: boolean, selectedRowsData: Vendor[]) => {
+  onSelectAll: (selected: boolean, selectedRowsData: VendorRowRecord[]) => {
     selectedRow.value = selected && selectedRowsData.length === 1 ? (selectedRowsData[0] ?? null) : null
   }
 }))
 
 /** 行点击切换选中（与 rowSelection 联动） */
-const onClickRow = (record: Vendor) => ({
+const onClickRow = (record: VendorRowRecord) => ({
   onClick: () => {
     const key = getVendorId(record)
     const index = selectedRowKeys.value.indexOf(key)
@@ -1130,64 +1164,43 @@ function handleSearch() {
 /** 重置查询条件并刷新列表 */
 function handleReset() {
   queryKeyword.value = ''
-  advancedQueryForm.value = {
-  plantCode: '',
-  vendorCode: '',
-  vendorName: '',
-  vendorShortName: '',
-  vendorType: undefined as number | undefined,
-  industrySector: '',
-  vendorTaxNumber: '',
-  registrationCountry: '',
-  registrationAddress1: '',
-  registrationAddress2: '',
-  registrationAddress3: '',
-  vendorPhone: '',
-  vendorFax: '',
-  vendorEmail: '',
-  vendorWebsite: '',
-  contactPerson: '',
-  contactPhone: '',
-  contactEmail: '',
-  currencyCode: '',
-  paymentTerms: undefined as number | undefined,
-  creditLevel: undefined as number | undefined,
-  creditAmount: undefined as number | undefined,
-  authorizedBrand: '',
-  agentRegion: '',
-  vendorLevel: undefined as number | undefined,
-  evaluationScore: undefined as number | undefined,
-  isQualified: undefined as number | undefined,
-  vendorStatus: undefined as number | undefined,
-  createdAtStart: '',
-  createdAtEnd: '',
-  extField: '',
-  remark: '',
-  }
+  advancedQueryForm.value = createEmptyAdvancedQueryForm()
   currentPage.value = getTaktDefaultPageIndex()
   loadData()
 }
 
 /** 打开新增弹窗 */
 function handleCreate() {
-  formTitle.value = t('common.dialog.title.create', { entity: t('entity.vendor._self') })
+  formTitle.value = t('common.dialog.title.create', { entity: pi.self() })
   formData.value = null
   formVisible.value = true
   nextTick(() => formRef.value?.resetFields())
 }
-/** 打开编辑弹窗 */
-function handleEdit(record: Vendor) {
-  formTitle.value = t('common.dialog.title.edit', { entity: t('entity.vendor._self') })
-  formData.value = { ...record }
-  formVisible.value = true
+/** 打开编辑弹窗（拉取详情，避免列表列裁剪字段） */
+async function handleEdit(record: VendorRowRecord) {
+  const id = getVendorId(record)
+  if (!id) {
+    return
+  }
+  formTitle.value = t('common.dialog.title.edit', { entity: pi.self() })
+  formLoading.value = true
+  try {
+    const detail = await getVendorById(id)
+    formData.value = detail ?? ({ ...record } as Partial<Vendor>)
+    formVisible.value = true
+  } catch (error: unknown) {
+    message.error(t('common.feedback.load.data.failed'))
+  } finally {
+    formLoading.value = false
+  }
 }
 
 /** 工具栏编辑：打开当前单选行 */
 function handleUpdate() {
   if (selectedRow.value) {
-    handleEdit(selectedRow.value)
+    void handleEdit(selectedRow.value)
   } else {
-    message.warning(t('common.tip.select.to.action', { action: t('common.page.button.edit'), entity: t('entity.vendor._self') }))
+    message.warning(t('common.tip.select.to.action', { action: t('common.page.button.edit'), entity: pi.self() }))
   }
 }
 /** 提交新增/编辑表单 */
@@ -1205,10 +1218,10 @@ async function handleFormSubmit() {
     const id = (formData.value as any)?.[entityIdName]
     if (id) {
       await updateVendor(id, payload as any)
-      message.success(t('common.feedback.updated', { target: t('entity.vendor._self') }))
+      message.success(t('common.feedback.updated', { target: pi.self() }))
     } else {
       await createVendor(payload as any)
-      message.success(t('common.feedback.created', { target: t('entity.vendor._self') }))
+      message.success(t('common.feedback.created', { target: pi.self() }))
     }
     formVisible.value = false
     formData.value = null
@@ -1236,15 +1249,18 @@ async function handleDownloadTemplate(sheetName?: string, fileName?: string): Pr
   return (res as any)?.data ?? res
 }
 
-/** 上传并导入 Excel 文件 */
-async function handleImportFile(file: File, sheetName?: string): Promise<{ success: number; fail: number; errors: string[] }> {
-  return await importVendor(file, sheetName)
+/** 上传并导入 Excel 文件（归一化后端 SuccessCount/successCount） */
+async function handleImportFile(file: File, sheetName?: string): Promise<TaktImportResult> {
+  const raw = await importVendor(file, sheetName)
+  return normalizeImportResult(raw)
 }
 
-/** 导入完成回调：刷新列表并可选关闭对话框 */
-function handleImportSuccess(result: { success: number; fail: number; errors: string[] }) {
+/** 导入完成回调：刷新列表；全部成功时延迟关闭对话框 */
+function handleImportSuccess(result: TaktImportResult) {
   loadData()
-  if (result.fail === 0) setTimeout(() => { importVisible.value = false }, 2000)
+  if (result.fail === 0 && result.success > 0) {
+    setTimeout(() => { importVisible.value = false }, 2000)
+  }
 }
 
 /** 关闭导入对话框 */
@@ -1278,24 +1294,24 @@ async function handleExport() {
     link.click()
     document.body.removeChild(link)
     setTimeout(() => window.URL.revokeObjectURL(url), 100)
-    message.success(t('common.feedback.export.success', { target: t('entity.vendor._self') }))
+    message.success(t('common.feedback.export.success', { target: pi.self() }))
   } catch (error: any) {
     logger.error('[Vendor] 导出失败', { error })
-    message.error(error?.message || t('common.feedback.export.failed', { target: t('entity.vendor._self') }))
+    message.error(error?.message || t('common.feedback.export.failed', { target: pi.self() }))
   } finally {
     loading.value = false
   }
 }
 /** 删除单行 */
-async function handleDeleteOne(record: Vendor) {
+async function handleDeleteOne(record: VendorRowRecord) {
   Modal.confirm({
     title: t('common.tip.confirm.delete.title'),
-    content: t('common.tip.confirm.delete.entity', { entity: t('entity.vendor._self'), name: t('common.tip.this.target', { target: t('entity.vendor._self') }) }),
+    content: t('common.tip.confirm.delete.entity', { entity: pi.self(), name: t('common.tip.this.target', { target: pi.self() }) }),
     okText: t('common.page.button.delete'),
     cancelText: t('common.page.button.cancel'),
     onOk: async () => {
       await deleteVendorById((record as any)[entityIdName])
-      message.success(t('common.feedback.deleted', { target: t('entity.vendor._self') }))
+      message.success(t('common.feedback.deleted', { target: pi.self() }))
       loadData()
     }
   })
@@ -1303,18 +1319,18 @@ async function handleDeleteOne(record: Vendor) {
 /** 批量删除选中行 */
 async function handleDelete() {
   if (selectedRows.value.length === 0) {
-    message.warning(t('common.tip.select.to.action', { action: t('common.page.button.delete'), entity: t('entity.vendor._self') }))
+    message.warning(t('common.tip.select.to.action', { action: t('common.page.button.delete'), entity: pi.self() }))
     return
   }
   Modal.confirm({
     title: t('common.tip.confirm.delete.title'),
-    content: t('common.tip.confirm.delete.count', { entity: t('entity.vendor._self'), count: selectedRows.value.length }),
+    content: t('common.tip.confirm.delete.count', { entity: pi.self(), count: selectedRows.value.length }),
     okText: t('common.page.button.delete'),
     cancelText: t('common.page.button.cancel'),
     onOk: async () => {
       const ids = selectedRows.value.map((r: any) => r[entityIdName]).filter(Boolean)
       await deleteVendorBatch(ids)
-      message.success(t('common.feedback.deleted', { target: t('entity.vendor._self') }))
+      message.success(t('common.feedback.deleted', { target: pi.self() }))
       loadData()
     }
   })
@@ -1324,9 +1340,9 @@ async function handleDelete() {
  * @param record 当前行
  * @param checked 是否启用
  */
-async function handleVendorStatusChange(record: Vendor, checked: boolean) {
+async function handleVendorStatusChange(record: VendorRowRecord, checked: boolean) {
   const newVal = checked ? 1 : 0
-  const oldVal = getVendorField(record, 'vendorStatus')
+  const oldVal = toVendorNumber(getVendorDictValue(record, 'vendorStatus'))
   const id = getVendorId(record)
   const row = dataSource.value.find((item) => getVendorId(item) === id)
   if (row) {
@@ -1356,40 +1372,7 @@ function handleAdvancedQuerySubmit() {
 }
 
 function handleAdvancedQueryReset() {
-  advancedQueryForm.value = {
-  plantCode: '',
-  vendorCode: '',
-  vendorName: '',
-  vendorShortName: '',
-  vendorType: undefined as number | undefined,
-  industrySector: '',
-  vendorTaxNumber: '',
-  registrationCountry: '',
-  registrationAddress1: '',
-  registrationAddress2: '',
-  registrationAddress3: '',
-  vendorPhone: '',
-  vendorFax: '',
-  vendorEmail: '',
-  vendorWebsite: '',
-  contactPerson: '',
-  contactPhone: '',
-  contactEmail: '',
-  currencyCode: '',
-  paymentTerms: undefined as number | undefined,
-  creditLevel: undefined as number | undefined,
-  creditAmount: undefined as number | undefined,
-  authorizedBrand: '',
-  agentRegion: '',
-  vendorLevel: undefined as number | undefined,
-  evaluationScore: undefined as number | undefined,
-  isQualified: undefined as number | undefined,
-  vendorStatus: undefined as number | undefined,
-  createdAtStart: '',
-  createdAtEnd: '',
-  extField: '',
-  remark: '',
-  }
+  advancedQueryForm.value = createEmptyAdvancedQueryForm()
 }
 
 /** 打开列设置抽屉 */

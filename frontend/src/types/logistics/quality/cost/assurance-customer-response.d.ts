@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：frontend/src/types/logistics/quality/cost
 // 文件名称：assurance-customer-response.d.ts
-// 创建时间：2026-07-09
+// 创建时间：2026-07-23
 // 创建人：Takt365(Auto Generated)
 // 功能描述：logistics/quality/cost 模块类型定义（自动生成；类型名去 Takt 前缀与末尾 Dto，如 TaktCompanyDto → Company）
 // 
@@ -29,7 +29,7 @@ export interface QualityAssuranceCustomerResponse extends CompanyDtoBase {
   qualityAssuranceCustomerResponseId: string;
 
   /**
-   * 品质业务主表 ID（关联 TaktQualityAssurance.Id，选项 TaktQualityAssurances/options）
+   * 品质业务主表 ID（选项 TaktQualityAssurances/options；DictValue=Id）
    */
   qualityAssuranceId: string;
 
@@ -69,7 +69,7 @@ export interface QualityAssuranceCustomerResponse extends CompanyDtoBase {
   customerResponseNote?: string;
 
   /**
-   * 是否作废（字典 sys_yes_no_type，0=否 1=是；编辑移除子行时标记作废）
+   * 是否作废（字典 sys_yes_no_type；0=否 1=是；编辑移除子行时标记作废）
    */
   isObsolete: number;
 
@@ -99,7 +99,7 @@ export interface QualityAssuranceCustomerResponseQuery extends TaktPagedQuery {
   companyCode?: string;
 
   /**
-   * 品质业务主表 ID（关联 TaktQualityAssurance.Id，选项 TaktQualityAssurances/options）
+   * 品质业务主表 ID（选项 TaktQualityAssurances/options；DictValue=Id）
    */
   qualityAssuranceId?: string;
 
@@ -134,7 +134,7 @@ export interface QualityAssuranceCustomerResponseQuery extends TaktPagedQuery {
   customerResponseNote?: string;
 
   /**
-   * 是否作废（字典 sys_yes_no_type，0=否 1=是；编辑移除子行时标记作废）
+   * 是否作废（字典 sys_yes_no_type；0=否 1=是；编辑移除子行时标记作废）
    */
   isObsolete?: number;
 
@@ -183,7 +183,7 @@ export interface QualityAssuranceCustomerResponseCreate {
   companyDefaultCulture: string;
 
   /**
-   * 品质业务主表 ID（关联 TaktQualityAssurance.Id，选项 TaktQualityAssurances/options）
+   * 品质业务主表 ID（选项 TaktQualityAssurances/options；DictValue=Id）
    */
   qualityAssuranceId: string;
 
@@ -218,7 +218,7 @@ export interface QualityAssuranceCustomerResponseCreate {
   customerResponseNote?: string;
 
   /**
-   * 是否作废（字典 sys_yes_no_type，0=否 1=是；编辑移除子行时标记作废）
+   * 是否作废（字典 sys_yes_no_type；0=否 1=是；编辑移除子行时标记作废）
    */
   isObsolete: number;
 
@@ -286,7 +286,7 @@ export interface QualityAssuranceCustomerResponseTemplate {
   companyCode?: string;
 
   /**
-   * 品质业务主表 ID（关联 TaktQualityAssurance.Id，选项 TaktQualityAssurances/options）
+   * 品质业务主表 ID（选项 TaktQualityAssurances/options；DictValue=Id）
    */
   qualityAssuranceId?: string;
 
@@ -321,7 +321,7 @@ export interface QualityAssuranceCustomerResponseTemplate {
   customerResponseNote?: string;
 
   /**
-   * 是否作废（字典 sys_yes_no_type，0=否 1=是；编辑移除子行时标记作废）
+   * 是否作废（字典 sys_yes_no_type；0=否 1=是；编辑移除子行时标记作废）
    */
   isObsolete?: number;
 
@@ -360,7 +360,7 @@ export interface QualityAssuranceCustomerResponseImport {
   companyDefaultCulture?: string;
 
   /**
-   * 品质业务主表 ID（关联 TaktQualityAssurance.Id，选项 TaktQualityAssurances/options）
+   * 品质业务主表 ID（选项 TaktQualityAssurances/options；DictValue=Id）
    */
   qualityAssuranceId?: string;
 
@@ -395,7 +395,7 @@ export interface QualityAssuranceCustomerResponseImport {
   customerResponseNote?: string;
 
   /**
-   * 是否作废（字典 sys_yes_no_type，0=否 1=是；编辑移除子行时标记作废）
+   * 是否作废（字典 sys_yes_no_type；0=否 1=是；编辑移除子行时标记作废）
    */
   isObsolete?: number;
 
@@ -429,7 +429,7 @@ export interface QualityAssuranceCustomerResponseExport {
   companyCode: string;
 
   /**
-   * 品质业务主表 ID（关联 TaktQualityAssurance.Id，选项 TaktQualityAssurances/options）
+   * 品质业务主表 ID（选项 TaktQualityAssurances/options；DictValue=Id）
    */
   qualityAssuranceId: string;
 
@@ -464,7 +464,7 @@ export interface QualityAssuranceCustomerResponseExport {
   customerResponseNote?: string;
 
   /**
-   * 是否作废（字典 sys_yes_no_type，0=否 1=是；编辑移除子行时标记作废）
+   * 是否作废（字典 sys_yes_no_type；0=否 1=是；编辑移除子行时标记作废）
    */
   isObsolete: number;
 

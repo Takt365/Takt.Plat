@@ -29,7 +29,7 @@ export interface Countersign extends ApprovalDtoBase {
   countersignId: string;
 
   /**
-   * 会签编号
+   * 会签编码
    */
   countersignCode: string;
 
@@ -174,7 +174,7 @@ export interface CountersignQuery extends TaktPagedQuery {
   companyCode?: string;
 
   /**
-   * 会签编号
+   * 会签编码
    */
   countersignCode?: string;
 
@@ -373,7 +373,7 @@ export interface CountersignCreate {
   companyDefaultCulture: string;
 
   /**
-   * 会签编号
+   * 会签编码
    */
   countersignCode: string;
 
@@ -556,7 +556,7 @@ export interface CountersignTemplate {
   companyCode?: string;
 
   /**
-   * 会签编号
+   * 会签编码
    */
   countersignCode?: string;
 
@@ -710,7 +710,7 @@ export interface CountersignImport {
   companyDefaultCulture?: string;
 
   /**
-   * 会签编号
+   * 会签编码
    */
   countersignCode?: string;
 
@@ -854,7 +854,7 @@ export interface CountersignExport {
   countersignId: string;
 
   /**
-   * 会签编号
+   * 会签编码
    */
   countersignCode: string;
 

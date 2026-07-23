@@ -633,6 +633,14 @@ public class TaktManufacturingPlanningOrchestratorService : TaktServiceBase, ITa
         }
 
         var requestCode = BuildFlowCode("PR");
+        var supplierCode = planItems
+            .Select(x => x.ReferenceSupplierCode)
+            .FirstOrDefault(x => !string.IsNullOrWhiteSpace(x))
+            ?.Trim() ?? string.Empty;
+        var supplierName1 = planItems
+            .Select(x => x.ReferenceSupplierName1)
+            .FirstOrDefault(x => !string.IsNullOrWhiteSpace(x))
+            ?.Trim() ?? supplierCode;
         var createDto = new TaktPurchaseRequestCreateDto
         {
             TenantCode = CurrentTenantCode,
@@ -645,9 +653,10 @@ public class TaktManufacturingPlanningOrchestratorService : TaktServiceBase, ITa
             RequestBy = CurrentUserName ?? "system",
             RequestStatus = 1,
             ChainScheme = 1,
-            Items = planItems.Select(item => new TaktPurchaseRequestItemUpdateDto
+            SupplierCode = supplierCode,
+            SupplierName1 = supplierName1,
+            Items = planItems.Select(item => new TaktPurchaseRequestItemCreateDto
             {
-                PurchaseRequestItemId = 0,
                 LineNumber = item.LineNumber,
                 AllocationCategory = "K",
                 MaterialCode = item.MaterialCode,
@@ -655,15 +664,13 @@ public class TaktManufacturingPlanningOrchestratorService : TaktServiceBase, ITa
                 MaterialSpecification = item.MaterialSpecification,
                 RequestUnit = item.PlanUnit,
                 RequestQuantity = item.PlanQuantity - item.ConvertedQuantity,
-                EstimatedUnitPrice = item.EstimatedUnitPrice,
-                EstimatedAmount = item.EstimatedAmount,
-                PurchasePlanItemId = item.Id,
-                ReferenceSupplierCode = item.ReferenceSupplierCode,
-                ReferenceSupplierName = item.ReferenceSupplierName
+                PurchaseRequestUnitPrice = item.EstimatedUnitPrice,
+                TaxIncludedAmount = item.EstimatedAmount,
+                PurchasePlanItemId = item.Id
             }).ToList()
         };
         createDto.TotalQuantity = createDto.Items?.Sum(x => x.RequestQuantity) ?? 0;
-        createDto.TotalAmount = createDto.Items?.Sum(x => x.EstimatedAmount) ?? 0;
+        createDto.TotalAmount = createDto.Items?.Sum(x => x.TaxIncludedAmount) ?? 0;
 
         var created = await _purchaseRequestService.CreatePurchaseRequestAsync(createDto);
         if (dto.SubmitForCountersign)

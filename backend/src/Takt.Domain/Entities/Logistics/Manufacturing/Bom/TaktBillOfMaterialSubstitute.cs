@@ -60,7 +60,7 @@ public class TaktBillOfMaterialSubstitute : TaktCompanyEntityBase
     public int LineNumber { get; set; } = 10;
 
     /// <summary>
-    /// 替代物料ID（选项 TaktMaterialPlants/options，DictValue=Id，ExtValue=PlantCode）
+    /// 替代物料ID（选项 TaktMaterialPlants/options；DictValue=Id，ExtValue=PlantCode）
     /// </summary>
     [SugarColumn(ColumnName = "substitute_material_id", ColumnDescription = "替代物料ID", ColumnDataType = "bigint", IsNullable = false)]
     [JsonConverter(typeof(ValueToStringConverter))]
@@ -121,7 +121,7 @@ public class TaktBillOfMaterialSubstitute : TaktCompanyEntityBase
     public DateTime? ExpiryDate { get; set; }
 
     /// <summary>
-    /// 是否作废（字典 sys_yes_no_type，0=否 1=是；编辑移除子行时标记作废）
+    /// 是否作废（字典 sys_yes_no_type；0=否 1=是；编辑移除子行时标记作废）
     /// </summary>
     [SugarColumn(ColumnName = "is_obsolete", ColumnDescription = "是否作废", ColumnDataType = "int", IsNullable = false, DefaultValue = "0")]
     public int IsObsolete { get; set; } = 0;

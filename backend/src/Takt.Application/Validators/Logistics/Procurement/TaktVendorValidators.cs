@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Application.Validators.Logistics.Procurement
 // 文件名称：TaktVendorValidators.cs
-// 创建时间：2026-07-20
+// 创建时间：2026-07-23
 // 创建人：Takt365(Auto Generated)
 // 功能描述：Vendor 模块 FluentValidation 验证器（由 generate-validators-from-entity.cjs 根据 TaktVendor 生成，请按需审阅）
 // 
@@ -41,15 +41,51 @@ public class TaktVendorCreateValidator : AbstractValidator<TaktVendorCreateDto>
         RuleFor(x => x.VendorCode)
             .NotEmpty().WithMessage("经销商编码不能为空")
             .MaximumLength(20).WithMessage("经销商编码长度不能超过20个字符");
-        RuleFor(x => x.VendorName)
-            .NotEmpty().WithMessage("经销商名称不能为空")
-            .MaximumLength(80).WithMessage("经销商名称长度不能超过80个字符");
+        RuleFor(x => x.VendorName1)
+            .NotEmpty().WithMessage("经销商名称1不能为空")
+            .MaximumLength(140).WithMessage("经销商名称1长度不能超过140个字符");
+        RuleFor(x => x.EnterpriseNature)
+            .NotEmpty().WithMessage("企业性质不能为空")
+            .MaximumLength(4).WithMessage("企业性质长度不能超过4个字符");
+        RuleFor(x => x.IndustryAttribute)
+            .NotEmpty().WithMessage("行业属性不能为空")
+            .MaximumLength(4).WithMessage("行业属性长度不能超过4个字符");
+        RuleFor(x => x.DefaultCulture)
+            .NotEmpty().WithMessage("区域文化编码不能为空")
+            .MaximumLength(5).WithMessage("区域文化编码长度不能超过5个字符");
         RuleFor(x => x.CurrencyCode)
             .NotEmpty().WithMessage("结算币种代码不能为空")
             .MaximumLength(3).WithMessage("结算币种代码长度不能超过3个字符");
+        RuleFor(x => x.ReconciliationAccount)
+            .NotEmpty().WithMessage("统驭科目不能为空")
+            .MaximumLength(40).WithMessage("统驭科目长度不能超过40个字符");
+        RuleFor(x => x.CustomerCode)
+            .NotEmpty().WithMessage("客户不能为空")
+            .MaximumLength(20).WithMessage("客户长度不能超过20个字符");
         RuleFor(x => x.PaymentTerms)
             .NotEmpty().WithMessage("付款条件不能为空")
             .MaximumLength(40).WithMessage("付款条件长度不能超过40个字符");
+        RuleFor(x => x.BankCode)
+            .NotEmpty().WithMessage("银行代码不能为空")
+            .MaximumLength(15).WithMessage("银行代码长度不能超过15个字符");
+        RuleFor(x => x.BankAccount)
+            .NotEmpty().WithMessage("银行帐号不能为空")
+            .MaximumLength(40).WithMessage("银行帐号长度不能超过40个字符");
+        RuleFor(x => x.AccountHolder)
+            .NotEmpty().WithMessage("帐户持有人不能为空")
+            .MaximumLength(100).WithMessage("帐户持有人长度不能超过100个字符");
+        RuleFor(x => x.Incoterms1)
+            .NotEmpty().WithMessage("国际贸易条件1不能为空")
+            .MaximumLength(3).WithMessage("国际贸易条件1长度不能超过3个字符");
+        RuleFor(x => x.Incoterms2)
+            .NotEmpty().WithMessage("国际贸易条件2不能为空")
+            .MaximumLength(40).WithMessage("国际贸易条件2长度不能超过40个字符");
+        RuleFor(x => x.PurchaseGroup)
+            .NotEmpty().WithMessage("采购组不能为空")
+            .MaximumLength(3).WithMessage("采购组长度不能超过3个字符");
+        RuleFor(x => x.PurchasingOrganization)
+            .NotEmpty().WithMessage("采购组织不能为空")
+            .MaximumLength(4).WithMessage("采购组织长度不能超过4个字符");
         RuleFor(x => x.ExtField)
             .MaximumLength(4000).WithMessage("扩展字段JSON长度不能超过4000个字符");
         RuleFor(x => x.Remark)
@@ -85,15 +121,51 @@ public class TaktVendorUpdateValidator : AbstractValidator<TaktVendorUpdateDto>
         RuleFor(x => x.VendorCode)
             .NotEmpty().WithMessage("经销商编码不能为空")
             .MaximumLength(20).WithMessage("经销商编码长度不能超过20个字符");
-        RuleFor(x => x.VendorName)
-            .NotEmpty().WithMessage("经销商名称不能为空")
-            .MaximumLength(80).WithMessage("经销商名称长度不能超过80个字符");
+        RuleFor(x => x.VendorName1)
+            .NotEmpty().WithMessage("经销商名称1不能为空")
+            .MaximumLength(140).WithMessage("经销商名称1长度不能超过140个字符");
+        RuleFor(x => x.EnterpriseNature)
+            .NotEmpty().WithMessage("企业性质不能为空")
+            .MaximumLength(4).WithMessage("企业性质长度不能超过4个字符");
+        RuleFor(x => x.IndustryAttribute)
+            .NotEmpty().WithMessage("行业属性不能为空")
+            .MaximumLength(4).WithMessage("行业属性长度不能超过4个字符");
+        RuleFor(x => x.DefaultCulture)
+            .NotEmpty().WithMessage("区域文化编码不能为空")
+            .MaximumLength(5).WithMessage("区域文化编码长度不能超过5个字符");
         RuleFor(x => x.CurrencyCode)
             .NotEmpty().WithMessage("结算币种代码不能为空")
             .MaximumLength(3).WithMessage("结算币种代码长度不能超过3个字符");
+        RuleFor(x => x.ReconciliationAccount)
+            .NotEmpty().WithMessage("统驭科目不能为空")
+            .MaximumLength(40).WithMessage("统驭科目长度不能超过40个字符");
+        RuleFor(x => x.CustomerCode)
+            .NotEmpty().WithMessage("客户不能为空")
+            .MaximumLength(20).WithMessage("客户长度不能超过20个字符");
         RuleFor(x => x.PaymentTerms)
             .NotEmpty().WithMessage("付款条件不能为空")
             .MaximumLength(40).WithMessage("付款条件长度不能超过40个字符");
+        RuleFor(x => x.BankCode)
+            .NotEmpty().WithMessage("银行代码不能为空")
+            .MaximumLength(15).WithMessage("银行代码长度不能超过15个字符");
+        RuleFor(x => x.BankAccount)
+            .NotEmpty().WithMessage("银行帐号不能为空")
+            .MaximumLength(40).WithMessage("银行帐号长度不能超过40个字符");
+        RuleFor(x => x.AccountHolder)
+            .NotEmpty().WithMessage("帐户持有人不能为空")
+            .MaximumLength(100).WithMessage("帐户持有人长度不能超过100个字符");
+        RuleFor(x => x.Incoterms1)
+            .NotEmpty().WithMessage("国际贸易条件1不能为空")
+            .MaximumLength(3).WithMessage("国际贸易条件1长度不能超过3个字符");
+        RuleFor(x => x.Incoterms2)
+            .NotEmpty().WithMessage("国际贸易条件2不能为空")
+            .MaximumLength(40).WithMessage("国际贸易条件2长度不能超过40个字符");
+        RuleFor(x => x.PurchaseGroup)
+            .NotEmpty().WithMessage("采购组不能为空")
+            .MaximumLength(3).WithMessage("采购组长度不能超过3个字符");
+        RuleFor(x => x.PurchasingOrganization)
+            .NotEmpty().WithMessage("采购组织不能为空")
+            .MaximumLength(4).WithMessage("采购组织长度不能超过4个字符");
         RuleFor(x => x.ExtField)
             .MaximumLength(4000).WithMessage("扩展字段JSON长度不能超过4000个字符");
         RuleFor(x => x.Remark)
@@ -125,15 +197,51 @@ public class TaktVendorImportValidator : AbstractValidator<TaktVendorImportDto>
         RuleFor(x => x.VendorCode)
             .NotEmpty().WithMessage("经销商编码不能为空")
             .MaximumLength(20).WithMessage("经销商编码长度不能超过20个字符");
-        RuleFor(x => x.VendorName)
-            .NotEmpty().WithMessage("经销商名称不能为空")
-            .MaximumLength(80).WithMessage("经销商名称长度不能超过80个字符");
+        RuleFor(x => x.VendorName1)
+            .NotEmpty().WithMessage("经销商名称1不能为空")
+            .MaximumLength(140).WithMessage("经销商名称1长度不能超过140个字符");
+        RuleFor(x => x.EnterpriseNature)
+            .NotEmpty().WithMessage("企业性质不能为空")
+            .MaximumLength(4).WithMessage("企业性质长度不能超过4个字符");
+        RuleFor(x => x.IndustryAttribute)
+            .NotEmpty().WithMessage("行业属性不能为空")
+            .MaximumLength(4).WithMessage("行业属性长度不能超过4个字符");
+        RuleFor(x => x.DefaultCulture)
+            .NotEmpty().WithMessage("区域文化编码不能为空")
+            .MaximumLength(5).WithMessage("区域文化编码长度不能超过5个字符");
         RuleFor(x => x.CurrencyCode)
             .NotEmpty().WithMessage("结算币种代码不能为空")
             .MaximumLength(3).WithMessage("结算币种代码长度不能超过3个字符");
+        RuleFor(x => x.ReconciliationAccount)
+            .NotEmpty().WithMessage("统驭科目不能为空")
+            .MaximumLength(40).WithMessage("统驭科目长度不能超过40个字符");
+        RuleFor(x => x.CustomerCode)
+            .NotEmpty().WithMessage("客户不能为空")
+            .MaximumLength(20).WithMessage("客户长度不能超过20个字符");
         RuleFor(x => x.PaymentTerms)
             .NotEmpty().WithMessage("付款条件不能为空")
             .MaximumLength(40).WithMessage("付款条件长度不能超过40个字符");
+        RuleFor(x => x.BankCode)
+            .NotEmpty().WithMessage("银行代码不能为空")
+            .MaximumLength(15).WithMessage("银行代码长度不能超过15个字符");
+        RuleFor(x => x.BankAccount)
+            .NotEmpty().WithMessage("银行帐号不能为空")
+            .MaximumLength(40).WithMessage("银行帐号长度不能超过40个字符");
+        RuleFor(x => x.AccountHolder)
+            .NotEmpty().WithMessage("帐户持有人不能为空")
+            .MaximumLength(100).WithMessage("帐户持有人长度不能超过100个字符");
+        RuleFor(x => x.Incoterms1)
+            .NotEmpty().WithMessage("国际贸易条件1不能为空")
+            .MaximumLength(3).WithMessage("国际贸易条件1长度不能超过3个字符");
+        RuleFor(x => x.Incoterms2)
+            .NotEmpty().WithMessage("国际贸易条件2不能为空")
+            .MaximumLength(40).WithMessage("国际贸易条件2长度不能超过40个字符");
+        RuleFor(x => x.PurchaseGroup)
+            .NotEmpty().WithMessage("采购组不能为空")
+            .MaximumLength(3).WithMessage("采购组长度不能超过3个字符");
+        RuleFor(x => x.PurchasingOrganization)
+            .NotEmpty().WithMessage("采购组织不能为空")
+            .MaximumLength(4).WithMessage("采购组织长度不能超过4个字符");
         RuleFor(x => x.ExtField)
             .MaximumLength(4000).WithMessage("扩展字段JSON长度不能超过4000个字符").When(x => !string.IsNullOrWhiteSpace(x.ExtField));
         RuleFor(x => x.Remark)

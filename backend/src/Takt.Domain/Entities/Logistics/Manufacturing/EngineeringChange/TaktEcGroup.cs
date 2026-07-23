@@ -26,7 +26,7 @@ namespace Takt.Domain.Entities.Logistics.Manufacturing.EngineeringChange;
 public class TaktEcGroup : TaktCompanyEntityBase
 {
     /// <summary>
-    /// 工厂代码（选项 TaktPlants/options，DictValue=PlantCode）
+    /// 工厂代码（选项 TaktPlants/options；DictValue=PlantCode）
     /// </summary>
     [SugarColumn(ColumnName = "plant_code", ColumnDescription = "工厂代码", ColumnDataType = "nvarchar", Length = 4, IsNullable = false)]
     public string PlantCode { get; set; } = string.Empty;
@@ -46,7 +46,7 @@ public class TaktEcGroup : TaktCompanyEntityBase
     [SugarColumn(ColumnName = "ec_group_description", ColumnDescription = "设变组描述", ColumnDataType = "nvarchar", Length = 200, IsNullable = true)]
     public string? EcGroupDescription { get; set; }
     /// <summary>
-    /// 设变组负责人用户 ID（选项 TaktUsers/options，DictValue=Id）
+    /// 设变组负责人用户 ID（选项 TaktUsers/options；DictValue=Id）
     /// </summary>
     [SugarColumn(ColumnName = "responsible_user_id", ColumnDescription = "负责人用户ID", ColumnDataType = "bigint", IsNullable = true)]
     [JsonConverter(typeof(ValueToStringConverter))]

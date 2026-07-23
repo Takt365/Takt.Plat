@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Application.Dtos.Logistics.Sales
 // 文件名称：TaktSalesQuotationDtos.cs
-// 创建时间：2026-07-09
+// 创建时间：2026-07-23
 // 创建人：Takt365(Auto Generated)
 // 功能描述：SalesQuotation 模块 DTO（由 generate-dtos-from-entity.cjs 根据 TaktSalesQuotation 生成，请按需审阅）
 // 
@@ -36,7 +36,7 @@ public class TaktSalesQuotationDto : TaktCompanyDtoBase
     public long SalesQuotationId { get; set; }
 
     /// <summary>
-    /// 工厂代码（选项 TaktPlants/options，DictValue=PlantCode）
+    /// 工厂代码（选项 TaktPlants/options；DictValue=PlantCode）
     /// </summary>
     public string PlantCode { get; set; } = string.Empty;
 
@@ -46,14 +46,14 @@ public class TaktSalesQuotationDto : TaktCompanyDtoBase
     public string SalesQuotationCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 客户编码（选项 TaktCustomers/options，DictValue=CustomerCode）
+    /// 客户编码（选项 TaktCustomers/options；DictValue=CustomerCode）
     /// </summary>
     public string CustomerCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 客户名称
+    /// 客户名称1（冗余，与 TaktCustomer.CustomerName1 对齐）
     /// </summary>
-    public string CustomerName { get; set; } = string.Empty;
+    public string CustomerName1 { get; set; } = string.Empty;
 
     /// <summary>
     /// 报价日期
@@ -66,7 +66,7 @@ public class TaktSalesQuotationDto : TaktCompanyDtoBase
     public DateTime? ValidUntilDate { get; set; }
 
     /// <summary>
-    /// 销售员（选项 TaktEmployees/options，DictValue=EmployeeCode）
+    /// 销售员（选项 TaktEmployees/options；DictValue=EmployeeCode）
     /// </summary>
     public string? SalesBy { get; set; } = string.Empty;
 
@@ -84,6 +84,16 @@ public class TaktSalesQuotationDto : TaktCompanyDtoBase
     /// 折扣金额
     /// </summary>
     public decimal DiscountAmount { get; set; }
+
+    /// <summary>
+    /// 结算币种（字典 accounting_currency_code；DictValue=CNY/USD 等；一单一币种）
+    /// </summary>
+    public string CurrencyCode { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 税率（字典 accounting_tax_rate_param；13=13%，9=9%，0=0% 等；一单一税率）
+    /// </summary>
+    public int TaxRate { get; set; } = 0;
 
     /// <summary>
     /// 税费
@@ -134,7 +144,7 @@ public class TaktSalesQuotationQueryDto : TaktPagedQuery
     public string? CompanyCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 工厂代码（选项 TaktPlants/options，DictValue=PlantCode）
+    /// 工厂代码（选项 TaktPlants/options；DictValue=PlantCode）
     /// </summary>
     public string? PlantCode { get; set; } = string.Empty;
 
@@ -144,14 +154,14 @@ public class TaktSalesQuotationQueryDto : TaktPagedQuery
     public string? SalesQuotationCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 客户编码（选项 TaktCustomers/options，DictValue=CustomerCode）
+    /// 客户编码（选项 TaktCustomers/options；DictValue=CustomerCode）
     /// </summary>
     public string? CustomerCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 客户名称
+    /// 客户名称1（冗余，与 TaktCustomer.CustomerName1 对齐）
     /// </summary>
-    public string? CustomerName { get; set; } = string.Empty;
+    public string? CustomerName1 { get; set; } = string.Empty;
 
     /// <summary>
     /// 报价日期（范围查询-开始）
@@ -174,7 +184,7 @@ public class TaktSalesQuotationQueryDto : TaktPagedQuery
     public DateTime? ValidUntilDateEnd { get; set; }
 
     /// <summary>
-    /// 销售员（选项 TaktEmployees/options，DictValue=EmployeeCode）
+    /// 销售员（选项 TaktEmployees/options；DictValue=EmployeeCode）
     /// </summary>
     public string? SalesBy { get; set; } = string.Empty;
 
@@ -192,6 +202,16 @@ public class TaktSalesQuotationQueryDto : TaktPagedQuery
     /// 折扣金额
     /// </summary>
     public decimal? DiscountAmount { get; set; }
+
+    /// <summary>
+    /// 结算币种（字典 accounting_currency_code；DictValue=CNY/USD 等；一单一币种）
+    /// </summary>
+    public string? CurrencyCode { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 税率（字典 accounting_tax_rate_param；13=13%，9=9%，0=0% 等；一单一税率）
+    /// </summary>
+    public int? TaxRate { get; set; }
 
     /// <summary>
     /// 税费
@@ -259,9 +279,9 @@ public class TaktSalesQuotationCreateDto
     public string CompanyDefaultCulture { get; set; } = string.Empty;
 
     /// <summary>
-    /// 工厂代码（选项 TaktPlants/options，DictValue=PlantCode）
+    /// 工厂代码（选项 TaktPlants/options；DictValue=PlantCode）
     /// </summary>
-    [Required(ErrorMessage = "工厂代码（选项 TaktPlants/options，DictValue=PlantCode）不能为空")]
+    [Required(ErrorMessage = "工厂代码（选项 TaktPlants/options；DictValue=PlantCode）不能为空")]
     public string PlantCode { get; set; } = string.Empty;
 
     /// <summary>
@@ -271,16 +291,16 @@ public class TaktSalesQuotationCreateDto
     public string SalesQuotationCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 客户编码（选项 TaktCustomers/options，DictValue=CustomerCode）
+    /// 客户编码（选项 TaktCustomers/options；DictValue=CustomerCode）
     /// </summary>
-    [Required(ErrorMessage = "客户编码（选项 TaktCustomers/options，DictValue=CustomerCode）不能为空")]
+    [Required(ErrorMessage = "客户编码（选项 TaktCustomers/options；DictValue=CustomerCode）不能为空")]
     public string CustomerCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 客户名称
+    /// 客户名称1（冗余，与 TaktCustomer.CustomerName1 对齐）
     /// </summary>
-    [Required(ErrorMessage = "客户名称不能为空")]
-    public string CustomerName { get; set; } = string.Empty;
+    [Required(ErrorMessage = "客户名称1（冗余，与 TaktCustomer.CustomerName1 对齐）不能为空")]
+    public string CustomerName1 { get; set; } = string.Empty;
 
     /// <summary>
     /// 报价日期
@@ -293,7 +313,7 @@ public class TaktSalesQuotationCreateDto
     public DateTime? ValidUntilDate { get; set; }
 
     /// <summary>
-    /// 销售员（选项 TaktEmployees/options，DictValue=EmployeeCode）
+    /// 销售员（选项 TaktEmployees/options；DictValue=EmployeeCode）
     /// </summary>
     public string? SalesBy { get; set; } = string.Empty;
 
@@ -311,6 +331,17 @@ public class TaktSalesQuotationCreateDto
     /// 折扣金额
     /// </summary>
     public decimal DiscountAmount { get; set; }
+
+    /// <summary>
+    /// 结算币种（字典 accounting_currency_code；DictValue=CNY/USD 等；一单一币种）
+    /// </summary>
+    [Required(ErrorMessage = "结算币种（字典 accounting_currency_code；DictValue=CNY/USD 等；一单一币种）不能为空")]
+    public string CurrencyCode { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 税率（字典 accounting_tax_rate_param；13=13%，9=9%，0=0% 等；一单一税率）
+    /// </summary>
+    public int TaxRate { get; set; } = 0;
 
     /// <summary>
     /// 税费
@@ -335,7 +366,7 @@ public class TaktSalesQuotationCreateDto
     /// <summary>
     /// 销售报价明细列表（主子表关系）（子表，级联保存）
     /// </summary>
-    public List<TaktSalesQuotationItemUpdateDto>? Items { get; set; }
+    public List<TaktSalesQuotationItemCreateDto>? Items { get; set; }
 
     /// <summary>
     /// 扩展字段JSON
@@ -366,6 +397,11 @@ public class TaktSalesQuotationUpdateDto : TaktSalesQuotationCreateDto
     [AdaptMember("Id")]
     [JsonConverter(typeof(ValueToStringConverter))]
     public long SalesQuotationId { get; set; }
+
+    /// <summary>
+    /// 销售报价明细列表（主子表关系）（子表，级联保存）
+    /// </summary>
+    public new List<TaktSalesQuotationItemUpdateDto>? Items { get; set; }
 
 }
 
@@ -413,7 +449,7 @@ public class TaktSalesQuotationTemplateDto
     public string? CompanyCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 工厂代码（选项 TaktPlants/options，DictValue=PlantCode）
+    /// 工厂代码（选项 TaktPlants/options；DictValue=PlantCode）
     /// </summary>
     public string? PlantCode { get; set; } = string.Empty;
 
@@ -423,14 +459,14 @@ public class TaktSalesQuotationTemplateDto
     public string? SalesQuotationCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 客户编码（选项 TaktCustomers/options，DictValue=CustomerCode）
+    /// 客户编码（选项 TaktCustomers/options；DictValue=CustomerCode）
     /// </summary>
     public string? CustomerCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 客户名称
+    /// 客户名称1（冗余，与 TaktCustomer.CustomerName1 对齐）
     /// </summary>
-    public string? CustomerName { get; set; } = string.Empty;
+    public string? CustomerName1 { get; set; } = string.Empty;
 
     /// <summary>
     /// 报价日期
@@ -443,7 +479,7 @@ public class TaktSalesQuotationTemplateDto
     public DateTime? ValidUntilDate { get; set; }
 
     /// <summary>
-    /// 销售员（选项 TaktEmployees/options，DictValue=EmployeeCode）
+    /// 销售员（选项 TaktEmployees/options；DictValue=EmployeeCode）
     /// </summary>
     public string? SalesBy { get; set; } = string.Empty;
 
@@ -461,6 +497,16 @@ public class TaktSalesQuotationTemplateDto
     /// 折扣金额
     /// </summary>
     public decimal? DiscountAmount { get; set; }
+
+    /// <summary>
+    /// 结算币种（字典 accounting_currency_code；DictValue=CNY/USD 等；一单一币种）
+    /// </summary>
+    public string? CurrencyCode { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 税率（字典 accounting_tax_rate_param；13=13%，9=9%，0=0% 等；一单一税率）
+    /// </summary>
+    public int? TaxRate { get; set; }
 
     /// <summary>
     /// 税费
@@ -520,7 +566,7 @@ public class TaktSalesQuotationImportDto
     public string? CompanyDefaultCulture { get; set; } = string.Empty;
 
     /// <summary>
-    /// 工厂代码（选项 TaktPlants/options，DictValue=PlantCode）
+    /// 工厂代码（选项 TaktPlants/options；DictValue=PlantCode）
     /// </summary>
     public string? PlantCode { get; set; } = string.Empty;
 
@@ -530,14 +576,14 @@ public class TaktSalesQuotationImportDto
     public string? SalesQuotationCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 客户编码（选项 TaktCustomers/options，DictValue=CustomerCode）
+    /// 客户编码（选项 TaktCustomers/options；DictValue=CustomerCode）
     /// </summary>
     public string? CustomerCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 客户名称
+    /// 客户名称1（冗余，与 TaktCustomer.CustomerName1 对齐）
     /// </summary>
-    public string? CustomerName { get; set; } = string.Empty;
+    public string? CustomerName1 { get; set; } = string.Empty;
 
     /// <summary>
     /// 报价日期
@@ -550,7 +596,7 @@ public class TaktSalesQuotationImportDto
     public DateTime? ValidUntilDate { get; set; }
 
     /// <summary>
-    /// 销售员（选项 TaktEmployees/options，DictValue=EmployeeCode）
+    /// 销售员（选项 TaktEmployees/options；DictValue=EmployeeCode）
     /// </summary>
     public string? SalesBy { get; set; } = string.Empty;
 
@@ -568,6 +614,16 @@ public class TaktSalesQuotationImportDto
     /// 折扣金额
     /// </summary>
     public decimal? DiscountAmount { get; set; }
+
+    /// <summary>
+    /// 结算币种（字典 accounting_currency_code；DictValue=CNY/USD 等；一单一币种）
+    /// </summary>
+    public string? CurrencyCode { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 税率（字典 accounting_tax_rate_param；13=13%，9=9%，0=0% 等；一单一税率）
+    /// </summary>
+    public int? TaxRate { get; set; }
 
     /// <summary>
     /// 税费
@@ -628,7 +684,7 @@ public class TaktSalesQuotationExportDto
     public string CompanyCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 工厂代码（选项 TaktPlants/options，DictValue=PlantCode）
+    /// 工厂代码（选项 TaktPlants/options；DictValue=PlantCode）
     /// </summary>
     public string PlantCode { get; set; } = string.Empty;
 
@@ -638,14 +694,14 @@ public class TaktSalesQuotationExportDto
     public string SalesQuotationCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 客户编码（选项 TaktCustomers/options，DictValue=CustomerCode）
+    /// 客户编码（选项 TaktCustomers/options；DictValue=CustomerCode）
     /// </summary>
     public string CustomerCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 客户名称
+    /// 客户名称1（冗余，与 TaktCustomer.CustomerName1 对齐）
     /// </summary>
-    public string CustomerName { get; set; } = string.Empty;
+    public string CustomerName1 { get; set; } = string.Empty;
 
     /// <summary>
     /// 报价日期
@@ -658,7 +714,7 @@ public class TaktSalesQuotationExportDto
     public DateTime? ValidUntilDate { get; set; }
 
     /// <summary>
-    /// 销售员（选项 TaktEmployees/options，DictValue=EmployeeCode）
+    /// 销售员（选项 TaktEmployees/options；DictValue=EmployeeCode）
     /// </summary>
     public string? SalesBy { get; set; } = string.Empty;
 
@@ -676,6 +732,16 @@ public class TaktSalesQuotationExportDto
     /// 折扣金额
     /// </summary>
     public decimal DiscountAmount { get; set; }
+
+    /// <summary>
+    /// 结算币种（字典 accounting_currency_code；DictValue=CNY/USD 等；一单一币种）
+    /// </summary>
+    public string CurrencyCode { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 税率（字典 accounting_tax_rate_param；13=13%，9=9%，0=0% 等；一单一税率）
+    /// </summary>
+    public int TaxRate { get; set; } = 0;
 
     /// <summary>
     /// 税费

@@ -32,7 +32,7 @@ public class TaktProductionTeamSeedData : ITaktSeedDataCoordinator
     private static readonly HashSet<string> TargetPlantCodes = new(StringComparer.Ordinal) { "C100" };
 
     /// <summary>
-    /// 执行顺序（工厂、编号规则之后）
+    /// 执行顺序（工厂、编码规则之后）
     /// </summary>
     public int Order => 49;
 

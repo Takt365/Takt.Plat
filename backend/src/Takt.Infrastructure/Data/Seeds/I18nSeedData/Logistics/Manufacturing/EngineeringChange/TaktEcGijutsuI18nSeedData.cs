@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Infrastructure.Data.Seeds.I18nSeedData.Logistics.Manufacturing.EngineeringChange
 // 文件名称：TaktEcGijutsuI18nSeedData.cs
-// 创建时间：2026-07-20
+// 创建时间：2026-07-23
 // 创建人：Takt365(Auto Generated)
 // 功能描述：TaktEcGijutsu 实体字段国际化种子（已对齐前端 locales：src/locales/logistics/manufacturing/engineering-change/ec-gijutsu）
 // 
@@ -91,13 +91,13 @@ public class TaktEcGijutsuI18nSeedData : ITaktSeedDataCoordinator
             new TranslationSeedItem("entity.ecgijutsu._self", "zh-HK", "设变技术课主表信息_hk", "实体名称"),
 
             // entity.ecgijutsu.plantcode
-            new TranslationSeedItem("entity.ecgijutsu.plantcode", "en-US", "工厂代码_us", "工厂代码（选项 TaktPlants/options，DictValue=Id）"),
+            new TranslationSeedItem("entity.ecgijutsu.plantcode", "en-US", "工厂代码_us", "工厂代码（选项 TaktPlants/options；DictValue=Id）"),
             // entity.ecgijutsu.plantcode
-            new TranslationSeedItem("entity.ecgijutsu.plantcode", "ja-JP", "工厂代码_jp", "工厂代码（选项 TaktPlants/options，DictValue=Id）"),
+            new TranslationSeedItem("entity.ecgijutsu.plantcode", "ja-JP", "工厂代码_jp", "工厂代码（选项 TaktPlants/options；DictValue=Id）"),
             // entity.ecgijutsu.plantcode
-            new TranslationSeedItem("entity.ecgijutsu.plantcode", "zh-CN", "工厂代码", "工厂代码（选项 TaktPlants/options，DictValue=Id）"),
+            new TranslationSeedItem("entity.ecgijutsu.plantcode", "zh-CN", "工厂代码", "工厂代码（选项 TaktPlants/options；DictValue=Id）"),
             // entity.ecgijutsu.plantcode
-            new TranslationSeedItem("entity.ecgijutsu.plantcode", "zh-HK", "工厂代码_hk", "工厂代码（选项 TaktPlants/options，DictValue=Id）"),
+            new TranslationSeedItem("entity.ecgijutsu.plantcode", "zh-HK", "工厂代码_hk", "工厂代码（选项 TaktPlants/options；DictValue=Id）"),
 
             // entity.ecgijutsu.ecno
             new TranslationSeedItem("entity.ecgijutsu.ecno", "en-US", "设变单号_us", "设变单号（唯一）"),
@@ -145,13 +145,13 @@ public class TaktEcGijutsuI18nSeedData : ITaktSeedDataCoordinator
             new TranslationSeedItem("entity.ecgijutsu.eccontent", "zh-HK", "设变内容_hk", "设变内容"),
 
             // entity.ecgijutsu.ecleader
-            new TranslationSeedItem("entity.ecgijutsu.ecleader", "en-US", "负责人_us", "负责人（选项 TaktEmployees/options，DictValue=Id）"),
+            new TranslationSeedItem("entity.ecgijutsu.ecleader", "en-US", "负责人_us", "负责人（选项 TaktEmployees/options；DictValue=Id）"),
             // entity.ecgijutsu.ecleader
-            new TranslationSeedItem("entity.ecgijutsu.ecleader", "ja-JP", "负责人_jp", "负责人（选项 TaktEmployees/options，DictValue=Id）"),
+            new TranslationSeedItem("entity.ecgijutsu.ecleader", "ja-JP", "负责人_jp", "负责人（选项 TaktEmployees/options；DictValue=Id）"),
             // entity.ecgijutsu.ecleader
-            new TranslationSeedItem("entity.ecgijutsu.ecleader", "zh-CN", "负责人", "负责人（选项 TaktEmployees/options，DictValue=Id）"),
+            new TranslationSeedItem("entity.ecgijutsu.ecleader", "zh-CN", "负责人", "负责人（选项 TaktEmployees/options；DictValue=Id）"),
             // entity.ecgijutsu.ecleader
-            new TranslationSeedItem("entity.ecgijutsu.ecleader", "zh-HK", "负责人_hk", "负责人（选项 TaktEmployees/options，DictValue=Id）"),
+            new TranslationSeedItem("entity.ecgijutsu.ecleader", "zh-HK", "负责人_hk", "负责人（选项 TaktEmployees/options；DictValue=Id）"),
 
             // entity.ecgijutsu.eclossamount
             new TranslationSeedItem("entity.ecgijutsu.eclossamount", "en-US", "损失金额_us", "损失金额"),

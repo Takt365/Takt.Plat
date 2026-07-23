@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Application.Services.Logistics.Quality.Cost
 // 文件名称：TaktQualityIssueMeetingService.cs
-// 创建时间：2026-07-09
+// 创建时间：2026-07-23
 // 创建人：Takt365(Cursor AI)
 // 功能描述：质量问题会议调查试验费用明细应用服务实现
 // 
@@ -100,13 +100,13 @@ public class TaktQualityIssueMeetingService : TaktServiceBase, ITaktQualityIssue
     {
         EnsureThreeLayerContext();
         var list = await _qualityIssueMeetingRepository.GetListAsync(
-            x => x.TenantCode == CurrentTenantCode && x.CompanyCode == CurrentCompanyCode,
+            x => x.TenantCode == CurrentTenantCode && x.CompanyCode == CurrentCompanyCode && x.IsObsolete == 0,
             x => x.QualityIssueCode ?? string.Empty,
             false);
         return list.Select(e => new TaktSelectOption
         {
-            DictValue = e.Id,
-            DictLabel = e.QualityIssueCode ?? e.Id.ToString(),
+            DictValue = e.QualityIssueCode,
+            DictLabel = e.QualityIssueCode,
         }).ToList();
     }
 

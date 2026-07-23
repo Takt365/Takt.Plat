@@ -4,7 +4,7 @@
 // 文件名称：TaktNumberingModel.cs
 // 创建时间：2026-06-24
 // 创建人：Takt365(Cursor AI)
-// 功能描述：编号规则快照与取号结果（拼接/流水计算输入、ITaktNumberingGenerator 输出共用）
+// 功能描述：编码规则快照与取号结果（拼接/流水计算输入、ITaktNumberingGenerator 输出共用）
 //
 // 版权信息：Copyright (c) 2026 Takt  All rights reserved.
 // 免责声明：此软件使用 MIT License，作者不承担任何使用风险。
@@ -13,7 +13,7 @@
 namespace Takt.Shared.Models;
 
 /// <summary>
-/// 编号规则模型（规则字段快照 + 可选业务编号产出）
+/// 编码规则模型（规则字段快照 + 可选业务编码产出）
 /// </summary>
 public sealed class TaktNumberingModel
 {
@@ -23,7 +23,7 @@ public sealed class TaktNumberingModel
     public string RuleCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 业务编号（取号结果或起始编码样例）
+    /// 业务编码（取号结果或起始编码样例）
     /// </summary>
     public string BusinessCode { get; set; } = string.Empty;
 

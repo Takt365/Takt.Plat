@@ -28,36 +28,36 @@
           <a-row :gutter="24">
             <a-col :span="12">
               <a-form-item
-                :label="t('entity.expensedetail.linenumber')"
+                :label="pi.label('lineNumber')"
                 name="lineNumber"
               >
                 <a-input-number
                   v-model:value="formState.lineNumber"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.expensedetail.linenumber') })"
+                  :placeholder="pi.ph('lineNumber')"
                   style="width: 100%"
                 />
               </a-form-item>
             </a-col>
             <a-col :span="12">
               <a-form-item
-                :label="t('entity.expensedetail.allocationcategory')"
+                :label="pi.label('allocationCategory')"
                 name="allocationCategory"
               >
                 <TaktSelect
                   v-model:value="formState.allocationCategory"
                   dict-type="logistics_allocation_category"
-                  :placeholder="t('common.page.form.placeholder.select', { field: t('entity.expensedetail.allocationcategory') })"
+                  :placeholder="pi.ph('allocationCategory')"
                 />
               </a-form-item>
             </a-col>
             <a-col :span="12">
               <a-form-item
-                :label="t('entity.expensedetail.itemname')"
+                :label="pi.label('itemName')"
                 name="itemName"
               >
                 <a-input
                   v-model:value="formState.itemName"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.expensedetail.itemname') })"
+                  :placeholder="pi.ph('itemName')"
                   show-count
                   :maxlength="20"
                   allow-clear
@@ -66,64 +66,88 @@
             </a-col>
             <a-col :span="24">
               <a-form-item
-                :label="t('entity.expensedetail.itemdescription')"
+                :label="pi.label('itemDescription')"
                 name="itemDescription"
               >
                 <a-textarea
                   v-model:value="formState.itemDescription"
-                  :placeholder="t('common.page.form.placeholder.optional', { field: t('entity.expensedetail.itemdescription') })"
+                  :placeholder="pi.ph('itemDescription')"
                   :rows="2"
                 />
               </a-form-item>
             </a-col>
             <a-col :span="12">
               <a-form-item
-                :label="t('entity.expensedetail.itemquantity')"
+                :label="pi.label('itemQuantity')"
                 name="itemQuantity"
               >
                 <a-input-number
                   v-model:value="formState.itemQuantity"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.expensedetail.itemquantity') })"
+                  :placeholder="pi.ph('itemQuantity')"
                   style="width: 100%"
                 />
               </a-form-item>
             </a-col>
             <a-col :span="12">
               <a-form-item
-                :label="t('entity.expensedetail.itemamount')"
+                :label="pi.label('itemAmount')"
                 name="itemAmount"
               >
                 <a-input-number
                   v-model:value="formState.itemAmount"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.expensedetail.itemamount') })"
+                  :placeholder="pi.ph('itemAmount')"
                   style="width: 100%"
                 />
               </a-form-item>
             </a-col>
             <a-col :span="12">
               <a-form-item
-                :label="t('entity.expensedetail.accounttitle')"
+                :label="pi.label('accountTitle')"
                 name="accountTitle"
               >
                 <TaktSelect
                   v-model:value="formState.accountTitle"
                   api-url="TaktAccountTitles/options"
-                  :placeholder="t('common.page.form.placeholder.select', { field: t('entity.expensedetail.accounttitle') })"
+                  :placeholder="pi.ph('accountTitle')"
+                />
+              </a-form-item>
+            </a-col>
+            <a-col :span="12">
+              <a-form-item
+                :label="pi.label('invoiceNo')"
+                name="invoiceNo"
+              >
+                <a-input
+                  v-model:value="formState.invoiceNo"
+                  :placeholder="pi.ph('invoiceNo')"
+                  show-count
+                  :maxlength="20"
                   allow-clear
                 />
               </a-form-item>
             </a-col>
             <a-col :span="12">
               <a-form-item
-                :label="t('entity.expensedetail.invoiceno')"
-                name="invoiceNo"
+                :label="pi.label('expenseDetailDate')"
+                name="expenseDetailDate"
               >
-                <a-input
-                  v-model:value="formState.invoiceNo"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.expensedetail.invoiceno') })"
-                  show-count
-                  :maxlength="20"
-                  allow-clear
+                <a-date-picker
+                  v-model:value="formState.expenseDetailDate"
+                  :placeholder="pi.ph('expenseDetailDate')"
+                  value-format="YYYY-MM-DD"
+                  style="width: 100%"
+                />
+              </a-form-item>
+            </a-col>
+            <a-col :span="12">
+              <a-form-item
+                :label="pi.label('isObsolete')"
+                name="isObsolete"
+              >
+                <TaktSelect
+                  v-model:value="formState.isObsolete"
+                  dict-type="sys_yes_no_type"
+                  :placeholder="pi.ph('isObsolete')"
                 />
               </a-form-item>
             </a-col>
@@ -142,6 +166,11 @@
 import { reactive, watch, computed, ref, onMounted } from 'vue'
 import { useI18n } from 'vue-i18n'
 import type { Rule } from 'ant-design-vue/es/form'
+import { useExpenseDetailI18n } from '../composables/use-expense-detail-i18n'
+
+/** 实体字段 i18n */
+const pi = useExpenseDetailI18n()
+
 import type { ExpenseDetailCreate } from '@/types/accounting/financial/expense-detail'
 import TaktSelect from '@/components/business/takt-select/index.vue'
 import { useDictDataStore } from '@/stores/foundation/dict-data'
@@ -153,7 +182,8 @@ const formContentClass = computed(() => (formFields.length > 10 ? 'takt-form-con
 /** 当前激活的 Tab key */
 const activeTab = ref('tab-0')
 /** CreateDto 字段名列表（与 formState 键对齐） */
-const formFields = ["lineNumber","allocationCategory","itemName","itemDescription","itemQuantity","itemAmount","accountTitle","invoiceNo"]
+const formFields = ["lineNumber","allocationCategory","itemName","itemDescription","itemQuantity","itemAmount","accountTitle","invoiceNo","expenseDetailDate","isObsolete"]
+
 
 
 /** 父级传入的编辑 DTO；新增时为 undefined 或空对象 */
@@ -215,11 +245,11 @@ const rules = computed<Record<string, Rule[]>>(() => ({
   lineNumber: [{
     validator: async (_rule, value) => {
       if (value === undefined || value === null || value === '') {
-        return Promise.reject(t('common.page.form.placeholder.select', { field: t('entity.expensedetail.linenumber') }))
+        return Promise.reject(pi.ph('lineNumber'))
       }
       const num = typeof value === 'number' ? value : Number(value)
       if (!Number.isFinite(num)) {
-        return Promise.reject(t('common.page.form.placeholder.select', { field: t('entity.expensedetail.linenumber') }))
+        return Promise.reject(pi.ph('lineNumber'))
       }
       return Promise.resolve()
     },
@@ -228,25 +258,25 @@ const rules = computed<Record<string, Rule[]>>(() => ({
   allocationCategory: [
     {
       required: true,
-      message: t('common.page.form.placeholder.select', { field: t('entity.expensedetail.allocationcategory') }),
+      message: pi.ph('allocationCategory'),
       trigger: 'change'
     }
   ],
   itemName: [
     {
       required: true,
-      message: t('common.page.form.placeholder.required', { field: t('entity.expensedetail.itemname') }),
+      message: pi.ph('itemName'),
       trigger: 'blur'
     }
   ],
   itemQuantity: [{
     validator: async (_rule, value) => {
       if (value === undefined || value === null || value === '') {
-        return Promise.reject(t('common.page.form.placeholder.select', { field: t('entity.expensedetail.itemquantity') }))
+        return Promise.reject(pi.ph('itemQuantity'))
       }
       const num = typeof value === 'number' ? value : Number(value)
       if (!Number.isFinite(num)) {
-        return Promise.reject(t('common.page.form.placeholder.select', { field: t('entity.expensedetail.itemquantity') }))
+        return Promise.reject(pi.ph('itemQuantity'))
       }
       return Promise.resolve()
     },
@@ -255,11 +285,24 @@ const rules = computed<Record<string, Rule[]>>(() => ({
   itemAmount: [{
     validator: async (_rule, value) => {
       if (value === undefined || value === null || value === '') {
-        return Promise.reject(t('common.page.form.placeholder.select', { field: t('entity.expensedetail.itemamount') }))
+        return Promise.reject(pi.ph('itemAmount'))
       }
       const num = typeof value === 'number' ? value : Number(value)
       if (!Number.isFinite(num)) {
-        return Promise.reject(t('common.page.form.placeholder.select', { field: t('entity.expensedetail.itemamount') }))
+        return Promise.reject(pi.ph('itemAmount'))
+      }
+      return Promise.resolve()
+    },
+    trigger: 'change'
+  }],
+  isObsolete: [{
+    validator: async (_rule, value) => {
+      if (value === undefined || value === null || value === '') {
+        return Promise.reject(pi.ph('isObsolete'))
+      }
+      const num = typeof value === 'number' ? value : Number(value)
+      if (!Number.isFinite(num)) {
+        return Promise.reject(pi.ph('isObsolete'))
       }
       return Promise.resolve()
     },
@@ -287,6 +330,10 @@ function getValues(): Record<string, any> {
   if ('itemAmount' in payload) {
     const rawitemAmount = payload.itemAmount
     payload.itemAmount = typeof rawitemAmount === 'number' ? rawitemAmount : Number(rawitemAmount)
+  }
+  if ('isObsolete' in payload) {
+    const rawisObsolete = payload.isObsolete
+    payload.isObsolete = typeof rawisObsolete === 'number' ? rawisObsolete : Number(rawisObsolete)
   }
   if ('sortOrder' in payload) delete payload.sortOrder
   payload.expenseId = props.masterId

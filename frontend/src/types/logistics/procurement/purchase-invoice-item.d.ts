@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：frontend/src/types/logistics/procurement
 // 文件名称：purchase-invoice-item.d.ts
-// 创建时间：2026-07-09
+// 创建时间：2026-07-23
 // 创建人：Takt365(Auto Generated)
 // 功能描述：logistics/procurement 模块类型定义（自动生成；类型名去 Takt 前缀与末尾 Dto，如 TaktCompanyDto → Company）
 // 
@@ -29,7 +29,7 @@ export interface PurchaseInvoiceItem extends CompanyDtoBase {
   purchaseInvoiceItemId: string;
 
   /**
-   * 采购发票 ID（关联 TaktPurchaseInvoice.Id，选项 TaktPurchaseInvoices/options）
+   * 采购发票 ID（选项 TaktPurchaseInvoices/options；DictValue=Id）
    */
   purchaseInvoiceId: string;
 
@@ -59,22 +59,22 @@ export interface PurchaseInvoiceItem extends CompanyDtoBase {
   purchaseOrderLineNumber?: number;
 
   /**
-   * 物料编码
+   * 物料编码（选项 TaktMaterialPlants/options；DictValue=MaterialCode，ExtValue=PlantCode）
    */
   materialCode?: string;
 
   /**
-   * 物料名称
+   * 物料名称（回填：随物料）
    */
   materialName: string;
 
   /**
-   * 物料规格
+   * 物料规格（回填：随物料）
    */
   materialSpecification?: string;
 
   /**
-   * 采购单位
+   * 采购单位（字典 logistics_unit_of_measure_code；DictValue=PC/EA 等；默认 PC）
    */
   purchaseUnit: string;
 
@@ -84,9 +84,9 @@ export interface PurchaseInvoiceItem extends CompanyDtoBase {
   invoiceQuantity: number;
 
   /**
-   * 单价
+   * 开票单价
    */
-  unitPrice: number;
+  invoiceUnitPrice: number;
 
   /**
    * 折扣率（字典 logistics_discount_rate_param 预设或手输；0-100，表示折扣百分比）
@@ -99,9 +99,14 @@ export interface PurchaseInvoiceItem extends CompanyDtoBase {
   discountAmount: number;
 
   /**
-   * 税费率（字典 accounting_tax_rate_param 预设或手输；0-100，表示税费百分比）
+   * 含税金额
    */
-  taxRate: number;
+  taxIncludedAmount: number;
+
+  /**
+   * 未税金额
+   */
+  untaxedAmount: number;
 
   /**
    * 税费
@@ -109,12 +114,7 @@ export interface PurchaseInvoiceItem extends CompanyDtoBase {
   taxAmount: number;
 
   /**
-   * 小计金额
-   */
-  subtotalAmount: number;
-
-  /**
-   * 是否作废（字典 sys_yes_no_type，0=否 1=是；编辑移除子行时标记作废）
+   * 是否作废（字典 sys_yes_no_type；0=否 1=是；编辑移除子行时标记作废）
    */
   isObsolete: number;
 
@@ -139,7 +139,7 @@ export interface PurchaseInvoiceItemQuery extends TaktPagedQuery {
   companyCode?: string;
 
   /**
-   * 采购发票 ID（关联 TaktPurchaseInvoice.Id，选项 TaktPurchaseInvoices/options）
+   * 采购发票 ID（选项 TaktPurchaseInvoices/options；DictValue=Id）
    */
   purchaseInvoiceId?: string;
 
@@ -164,22 +164,22 @@ export interface PurchaseInvoiceItemQuery extends TaktPagedQuery {
   purchaseOrderLineNumber?: number;
 
   /**
-   * 物料编码
+   * 物料编码（选项 TaktMaterialPlants/options；DictValue=MaterialCode，ExtValue=PlantCode）
    */
   materialCode?: string;
 
   /**
-   * 物料名称
+   * 物料名称（回填：随物料）
    */
   materialName?: string;
 
   /**
-   * 物料规格
+   * 物料规格（回填：随物料）
    */
   materialSpecification?: string;
 
   /**
-   * 采购单位
+   * 采购单位（字典 logistics_unit_of_measure_code；DictValue=PC/EA 等；默认 PC）
    */
   purchaseUnit?: string;
 
@@ -189,9 +189,9 @@ export interface PurchaseInvoiceItemQuery extends TaktPagedQuery {
   invoiceQuantity?: number;
 
   /**
-   * 单价
+   * 开票单价
    */
-  unitPrice?: number;
+  invoiceUnitPrice?: number;
 
   /**
    * 折扣率（字典 logistics_discount_rate_param 预设或手输；0-100，表示折扣百分比）
@@ -204,9 +204,14 @@ export interface PurchaseInvoiceItemQuery extends TaktPagedQuery {
   discountAmount?: number;
 
   /**
-   * 税费率（字典 accounting_tax_rate_param 预设或手输；0-100，表示税费百分比）
+   * 含税金额
    */
-  taxRate?: number;
+  taxIncludedAmount?: number;
+
+  /**
+   * 未税金额
+   */
+  untaxedAmount?: number;
 
   /**
    * 税费
@@ -214,12 +219,7 @@ export interface PurchaseInvoiceItemQuery extends TaktPagedQuery {
   taxAmount?: number;
 
   /**
-   * 小计金额
-   */
-  subtotalAmount?: number;
-
-  /**
-   * 是否作废（字典 sys_yes_no_type，0=否 1=是；编辑移除子行时标记作废）
+   * 是否作废（字典 sys_yes_no_type；0=否 1=是；编辑移除子行时标记作废）
    */
   isObsolete?: number;
 
@@ -268,7 +268,7 @@ export interface PurchaseInvoiceItemCreate {
   companyDefaultCulture: string;
 
   /**
-   * 采购发票 ID（关联 TaktPurchaseInvoice.Id，选项 TaktPurchaseInvoices/options）
+   * 采购发票 ID（选项 TaktPurchaseInvoices/options；DictValue=Id）
    */
   purchaseInvoiceId: string;
 
@@ -293,22 +293,22 @@ export interface PurchaseInvoiceItemCreate {
   purchaseOrderLineNumber?: number;
 
   /**
-   * 物料编码
+   * 物料编码（选项 TaktMaterialPlants/options；DictValue=MaterialCode，ExtValue=PlantCode）
    */
   materialCode?: string;
 
   /**
-   * 物料名称
+   * 物料名称（回填：随物料）
    */
   materialName: string;
 
   /**
-   * 物料规格
+   * 物料规格（回填：随物料）
    */
   materialSpecification?: string;
 
   /**
-   * 采购单位
+   * 采购单位（字典 logistics_unit_of_measure_code；DictValue=PC/EA 等；默认 PC）
    */
   purchaseUnit: string;
 
@@ -318,9 +318,9 @@ export interface PurchaseInvoiceItemCreate {
   invoiceQuantity: number;
 
   /**
-   * 单价
+   * 开票单价
    */
-  unitPrice: number;
+  invoiceUnitPrice: number;
 
   /**
    * 折扣率（字典 logistics_discount_rate_param 预设或手输；0-100，表示折扣百分比）
@@ -333,9 +333,14 @@ export interface PurchaseInvoiceItemCreate {
   discountAmount: number;
 
   /**
-   * 税费率（字典 accounting_tax_rate_param 预设或手输；0-100，表示税费百分比）
+   * 含税金额
    */
-  taxRate: number;
+  taxIncludedAmount: number;
+
+  /**
+   * 未税金额
+   */
+  untaxedAmount: number;
 
   /**
    * 税费
@@ -343,12 +348,7 @@ export interface PurchaseInvoiceItemCreate {
   taxAmount: number;
 
   /**
-   * 小计金额
-   */
-  subtotalAmount: number;
-
-  /**
-   * 是否作废（字典 sys_yes_no_type，0=否 1=是；编辑移除子行时标记作废）
+   * 是否作废（字典 sys_yes_no_type；0=否 1=是；编辑移除子行时标记作废）
    */
   isObsolete: number;
 
@@ -416,7 +416,7 @@ export interface PurchaseInvoiceItemTemplate {
   companyCode?: string;
 
   /**
-   * 采购发票 ID（关联 TaktPurchaseInvoice.Id，选项 TaktPurchaseInvoices/options）
+   * 采购发票 ID（选项 TaktPurchaseInvoices/options；DictValue=Id）
    */
   purchaseInvoiceId?: string;
 
@@ -441,22 +441,22 @@ export interface PurchaseInvoiceItemTemplate {
   purchaseOrderLineNumber?: number;
 
   /**
-   * 物料编码
+   * 物料编码（选项 TaktMaterialPlants/options；DictValue=MaterialCode，ExtValue=PlantCode）
    */
   materialCode?: string;
 
   /**
-   * 物料名称
+   * 物料名称（回填：随物料）
    */
   materialName?: string;
 
   /**
-   * 物料规格
+   * 物料规格（回填：随物料）
    */
   materialSpecification?: string;
 
   /**
-   * 采购单位
+   * 采购单位（字典 logistics_unit_of_measure_code；DictValue=PC/EA 等；默认 PC）
    */
   purchaseUnit?: string;
 
@@ -466,9 +466,9 @@ export interface PurchaseInvoiceItemTemplate {
   invoiceQuantity?: number;
 
   /**
-   * 单价
+   * 开票单价
    */
-  unitPrice?: number;
+  invoiceUnitPrice?: number;
 
   /**
    * 折扣率（字典 logistics_discount_rate_param 预设或手输；0-100，表示折扣百分比）
@@ -481,9 +481,14 @@ export interface PurchaseInvoiceItemTemplate {
   discountAmount?: number;
 
   /**
-   * 税费率（字典 accounting_tax_rate_param 预设或手输；0-100，表示税费百分比）
+   * 含税金额
    */
-  taxRate?: number;
+  taxIncludedAmount?: number;
+
+  /**
+   * 未税金额
+   */
+  untaxedAmount?: number;
 
   /**
    * 税费
@@ -491,12 +496,7 @@ export interface PurchaseInvoiceItemTemplate {
   taxAmount?: number;
 
   /**
-   * 小计金额
-   */
-  subtotalAmount?: number;
-
-  /**
-   * 是否作废（字典 sys_yes_no_type，0=否 1=是；编辑移除子行时标记作废）
+   * 是否作废（字典 sys_yes_no_type；0=否 1=是；编辑移除子行时标记作废）
    */
   isObsolete?: number;
 
@@ -535,7 +535,7 @@ export interface PurchaseInvoiceItemImport {
   companyDefaultCulture?: string;
 
   /**
-   * 采购发票 ID（关联 TaktPurchaseInvoice.Id，选项 TaktPurchaseInvoices/options）
+   * 采购发票 ID（选项 TaktPurchaseInvoices/options；DictValue=Id）
    */
   purchaseInvoiceId?: string;
 
@@ -560,22 +560,22 @@ export interface PurchaseInvoiceItemImport {
   purchaseOrderLineNumber?: number;
 
   /**
-   * 物料编码
+   * 物料编码（选项 TaktMaterialPlants/options；DictValue=MaterialCode，ExtValue=PlantCode）
    */
   materialCode?: string;
 
   /**
-   * 物料名称
+   * 物料名称（回填：随物料）
    */
   materialName?: string;
 
   /**
-   * 物料规格
+   * 物料规格（回填：随物料）
    */
   materialSpecification?: string;
 
   /**
-   * 采购单位
+   * 采购单位（字典 logistics_unit_of_measure_code；DictValue=PC/EA 等；默认 PC）
    */
   purchaseUnit?: string;
 
@@ -585,9 +585,9 @@ export interface PurchaseInvoiceItemImport {
   invoiceQuantity?: number;
 
   /**
-   * 单价
+   * 开票单价
    */
-  unitPrice?: number;
+  invoiceUnitPrice?: number;
 
   /**
    * 折扣率（字典 logistics_discount_rate_param 预设或手输；0-100，表示折扣百分比）
@@ -600,9 +600,14 @@ export interface PurchaseInvoiceItemImport {
   discountAmount?: number;
 
   /**
-   * 税费率（字典 accounting_tax_rate_param 预设或手输；0-100，表示税费百分比）
+   * 含税金额
    */
-  taxRate?: number;
+  taxIncludedAmount?: number;
+
+  /**
+   * 未税金额
+   */
+  untaxedAmount?: number;
 
   /**
    * 税费
@@ -610,12 +615,7 @@ export interface PurchaseInvoiceItemImport {
   taxAmount?: number;
 
   /**
-   * 小计金额
-   */
-  subtotalAmount?: number;
-
-  /**
-   * 是否作废（字典 sys_yes_no_type，0=否 1=是；编辑移除子行时标记作废）
+   * 是否作废（字典 sys_yes_no_type；0=否 1=是；编辑移除子行时标记作废）
    */
   isObsolete?: number;
 
@@ -649,7 +649,7 @@ export interface PurchaseInvoiceItemExport {
   companyCode: string;
 
   /**
-   * 采购发票 ID（关联 TaktPurchaseInvoice.Id，选项 TaktPurchaseInvoices/options）
+   * 采购发票 ID（选项 TaktPurchaseInvoices/options；DictValue=Id）
    */
   purchaseInvoiceId: string;
 
@@ -674,22 +674,22 @@ export interface PurchaseInvoiceItemExport {
   purchaseOrderLineNumber?: number;
 
   /**
-   * 物料编码
+   * 物料编码（选项 TaktMaterialPlants/options；DictValue=MaterialCode，ExtValue=PlantCode）
    */
   materialCode?: string;
 
   /**
-   * 物料名称
+   * 物料名称（回填：随物料）
    */
   materialName: string;
 
   /**
-   * 物料规格
+   * 物料规格（回填：随物料）
    */
   materialSpecification?: string;
 
   /**
-   * 采购单位
+   * 采购单位（字典 logistics_unit_of_measure_code；DictValue=PC/EA 等；默认 PC）
    */
   purchaseUnit: string;
 
@@ -699,9 +699,9 @@ export interface PurchaseInvoiceItemExport {
   invoiceQuantity: number;
 
   /**
-   * 单价
+   * 开票单价
    */
-  unitPrice: number;
+  invoiceUnitPrice: number;
 
   /**
    * 折扣率（字典 logistics_discount_rate_param 预设或手输；0-100，表示折扣百分比）
@@ -714,9 +714,14 @@ export interface PurchaseInvoiceItemExport {
   discountAmount: number;
 
   /**
-   * 税费率（字典 accounting_tax_rate_param 预设或手输；0-100，表示税费百分比）
+   * 含税金额
    */
-  taxRate: number;
+  taxIncludedAmount: number;
+
+  /**
+   * 未税金额
+   */
+  untaxedAmount: number;
 
   /**
    * 税费
@@ -724,12 +729,7 @@ export interface PurchaseInvoiceItemExport {
   taxAmount: number;
 
   /**
-   * 小计金额
-   */
-  subtotalAmount: number;
-
-  /**
-   * 是否作废（字典 sys_yes_no_type，0=否 1=是；编辑移除子行时标记作废）
+   * 是否作废（字典 sys_yes_no_type；0=否 1=是；编辑移除子行时标记作废）
    */
   isObsolete: number;
 

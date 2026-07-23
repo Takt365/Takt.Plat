@@ -327,7 +327,7 @@
       <template #cell-materialCode="{ record }">
         <TaktSelect
           v-model:value="record.materialCode"
-          api-url="TaktMaterials/options"
+          api-url="TaktMaterialPlants/options"
           class="w-full"
           :get-popup-container="getSelectPopupContainer"
           :placeholder="fqcOrderItemPi.queryPh('materialCode', 'select')"
@@ -503,12 +503,6 @@ const fqcOrderItemFormColumns = computed<TaktEditableTableColumn[]>(() => [
     width: 140,
   },
   {
-    key: 'materialName',
-    title: fqcOrderItemPi.label('materialName'),
-    editor: 'input',
-    width: 140,
-  },
-  {
     key: 'batchNo',
     title: fqcOrderItemPi.label('batchNo'),
     editor: 'input',
@@ -602,7 +596,6 @@ function createDefaultFqcOrderItemRow(): Record<string, unknown> {
   return {
     lineNumber: allocateNextFqcOrderItemLineNumber(),
     materialCode: '',
-    materialName: '',
     batchNo: '',
     warehouseQuantity: 0,
     standardCode: '',

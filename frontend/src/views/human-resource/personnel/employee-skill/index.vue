@@ -151,11 +151,11 @@
         />
       </a-form-item>
       </div>
-      <div v-show="isFieldVisible('certificateNo')">
-      <a-form-item :label="t('entity.employeeskill.certificateno')">
+      <div v-show="isFieldVisible('CertificateCode')">
+      <a-form-item :label="t('entity.employeeskill.CertificateCode')">
         <a-input
-          v-model:value="advancedQueryForm.certificateNo"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.employeeskill.certificateno') })"
+          v-model:value="advancedQueryForm.CertificateCode"
+          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.employeeskill.CertificateCode') })"
           show-count
           :maxlength="100"
           allow-clear
@@ -368,7 +368,7 @@ const advancedQueryForm = ref({
   skillName: '',
   skillLevel: undefined as number | undefined,
   certificateName: '',
-  certificateNo: '',
+  CertificateCode: '',
   obtainedDateStart: '',
   obtainedDateEnd: '',
   expiryDateStart: '',
@@ -384,7 +384,7 @@ const queryFieldsMeta = computed(() => [
   { key: 'skillName', label: t('entity.employeeskill.skillname') },
   { key: 'skillLevel', label: t('entity.employeeskill.skilllevel') },
   { key: 'certificateName', label: t('entity.employeeskill.certificatename') },
-  { key: 'certificateNo', label: t('entity.employeeskill.certificateno') },
+  { key: 'CertificateCode', label: t('entity.employeeskill.CertificateCode') },
   { key: 'obtainedDateStart', label: t('common.page.entity.createdatstart').replace(t('common.page.entity.createdat'), t('entity.employeeskill.obtaineddate')) },
   { key: 'obtainedDateEnd', label: t('common.page.entity.createdatend').replace(t('common.page.entity.createdat'), t('entity.employeeskill.obtaineddate')) },
   { key: 'expiryDateStart', label: t('common.page.entity.createdatstart').replace(t('common.page.entity.createdat'), t('entity.employeeskill.expirydate')) },
@@ -439,7 +439,7 @@ function buildListQuery(overrides?: Partial<EmployeeSkillQuery>): EmployeeSkillQ
     query.skillLevel = form.skillLevel
   }
   assignTrimmed('certificateName', form.certificateName)
-  assignTrimmed('certificateNo', form.certificateNo)
+  assignTrimmed('CertificateCode', form.CertificateCode)
   assignTrimmed('obtainedDateStart', form.obtainedDateStart)
   assignTrimmed('obtainedDateEnd', form.obtainedDateEnd)
   assignTrimmed('expiryDateStart', form.expiryDateStart)
@@ -511,13 +511,13 @@ const columns = computed<TableColumnsType>(() => [
     customRender: ({ record }: { record: any }) => getEmployeeSkillField(record, 'certificateName') ?? ''
   },
   {
-    title: t('entity.employeeskill.certificateno'),
-    dataIndex: 'certificateNo',
-    key: 'certificateNo',
+    title: t('entity.employeeskill.CertificateCode'),
+    dataIndex: 'CertificateCode',
+    key: 'CertificateCode',
     width: 120,
     resizable: true,
     ellipsis: true,
-    customRender: ({ record }: { record: any }) => getEmployeeSkillField(record, 'certificateNo') ?? ''
+    customRender: ({ record }: { record: any }) => getEmployeeSkillField(record, 'CertificateCode') ?? ''
   },
   {
     title: t('entity.employeeskill.obtaineddate'),
@@ -641,7 +641,7 @@ function handleReset() {
   skillName: '',
   skillLevel: undefined as number | undefined,
   certificateName: '',
-  certificateNo: '',
+  CertificateCode: '',
   obtainedDateStart: '',
   obtainedDateEnd: '',
   expiryDateStart: '',
@@ -824,7 +824,7 @@ function handleAdvancedQueryReset() {
   skillName: '',
   skillLevel: undefined as number | undefined,
   certificateName: '',
-  certificateNo: '',
+  CertificateCode: '',
   obtainedDateStart: '',
   obtainedDateEnd: '',
   expiryDateStart: '',

@@ -53,7 +53,7 @@ public class TaktCaptchaService : TaktServiceBase, ITaktCaptchaService
     private readonly IHttpClientFactory _httpClientFactory;
 
     /// <summary>
-    /// 可用的 Slider 模板组编号（wwwroot 下存在 hole.png 与 slider.png 的组）
+    /// 可用的 Slider 模板组编码（wwwroot 下存在 hole.png 与 slider.png 的组）
     /// </summary>
     private readonly List<int> _availableTemplateGroups = [];
 
@@ -393,7 +393,7 @@ public class TaktCaptchaService : TaktServiceBase, ITaktCaptchaService
     /// <summary>
     /// 加载指定模板组的 hole.png 与 slider.png
     /// </summary>
-    /// <param name="templateGroup">模板组编号（1..GroupCount）</param>
+    /// <param name="templateGroup">模板组编码（1..GroupCount）</param>
     /// <param name="cancellationToken">取消令牌</param>
     /// <returns>缺口蒙版与滑块贴图</returns>
     private async Task<(Image<Rgba32> holeTemplate, Image<Rgba32> sliderTemplate)> LoadTemplateImagesAsync(

@@ -9,17 +9,37 @@
 
 <template>
   <div class="p-4 flex flex-col min-h-0 h-full">
-    <!-- 查询栏 -->
-    <TaktQueryBar
-      v-model="queryKeyword"
-      :placeholder="searchPlaceholder"
-      :loading="loading"
-      @search="handleSearch"
-      @reset="handleReset"
-    />
-
-    <!-- 工具栏 -->
-    <TaktToolsBar
+    <!-- 左主右从 -->
+    <TaktMasterDetailTableLr
+      v-model:master-current="currentPage"
+      v-model:master-page-size="pageSize"
+      v-model:selected-master-key="selectedMasterKey"
+      class="min-h-0 flex-1"
+      :master-columns="columns"
+      :master-data-source="dataSource"
+      :master-loading="loading"
+      :master-row-key="getPurchaseInquiryId"
+      :master-row-selection="rowSelection"
+      master-id-column-key="purchaseInquiryId"
+      :master-visible-column-keys="visibleColumnKeys"
+      master-table-mode="masterDetailMaster"
+      master-scroll-layout="masterDetailLr"
+      :master-total="total"
+      master-entity-scope="company"
+      @master-change="handleTableChange"
+      @master-resize-column="handleResizeColumn"
+      @master-pagination-change="handleMasterPaginationChange"
+      @master-select="handleMasterSelect"
+    >
+      <template #master-toolbar>
+        <TaktQueryBar
+          v-model="queryKeyword"
+          :placeholder="searchPlaceholder"
+          :loading="loading"
+          @search="handleSearch"
+          @reset="handleReset"
+        />
+        <TaktToolsBar
       create-permission="logistics:procurement:purchase:inquiry:create"
       update-permission="logistics:procurement:purchase:inquiry:update"
       delete-permission="logistics:procurement:purchase:inquiry:delete"
@@ -50,40 +70,44 @@
       @advanced-query="handleAdvancedQuery"
       @column-setting="handleColumnSetting"
       @refresh="handleRefresh"
-    />
-
-    <!-- 左主右从 -->
-    <TaktMasterDetailTableLr
-      v-model:master-current="currentPage"
-      v-model:master-page-size="pageSize"
-      v-model:selected-master-key="selectedMasterKey"
-      class="min-h-0 flex-1"
-      :master-columns="columns"
-      :master-data-source="dataSource"
-      :master-loading="loading"
-      :master-row-key="getPurchaseInquiryId"
-      :master-row-selection="rowSelection"
-      master-id-column-key="purchaseInquiryId"
-      :master-visible-column-keys="visibleColumnKeys"
-      :master-total="total"
-      master-entity-scope="approval"
-      @master-change="handleTableChange"
-      @master-resize-column="handleResizeColumn"
-      @master-pagination-change="handleMasterPaginationChange"
-      @master-select="handleMasterSelect"
-    >
+        />
+      </template>
       <!-- 字典/开关列渲染 -->
       <template #bodyCell="{ column, record }">
         <template v-if="column.key === 'inquiryStatus'">
           <a-switch
-            :checked="getPurchaseInquiryField(record, 'inquiryStatus') === 1"
+            :checked="getPurchaseInquiryDictValue(record, 'inquiryStatus') === 1"
             :checked-children="t('common.page.button.enable')" :un-checked-children="t('common.page.button.disable')"
             @change="(checked: unknown) => handleInquiryStatusChange(record, Boolean(checked))"
           />
         </template>
+        <template v-else-if="column.key === 'currencyCode'">
+          <TaktDictTag
+            :value="getPurchaseInquiryDictValue(record, 'currencyCode')"
+            dict-type="accounting_currency_code"
+          />
+        </template>
+        <template v-else-if="column.key === 'taxRate'">
+          <TaktDictTag
+            :value="getPurchaseInquiryDictValue(record, 'taxRate')"
+            dict-type="accounting_tax_rate_param"
+          />
+        </template>
+        <template v-else-if="column.key === 'paymentMode'">
+          <TaktDictTag
+            :value="getPurchaseInquiryDictValue(record, 'paymentMode')"
+            dict-type="logistics_payment_mode"
+          />
+        </template>
+        <template v-else-if="column.key === 'chainScheme'">
+          <TaktDictTag
+            :value="getPurchaseInquiryDictValue(record, 'chainScheme')"
+            dict-type="logistics_procurement_chain_scheme"
+          />
+        </template>
         <template v-else-if="column.key === 'convertedStatus'">
           <TaktDictTag
-            :value="getPurchaseInquiryField(record, 'convertedStatus')"
+            :value="getPurchaseInquiryDictValue(record, 'convertedStatus')"
             dict-type="sys_convert_status"
           />
         </template>
@@ -125,21 +149,20 @@
     >
       <template #default="{ isFieldVisible }">
       <div v-show="isFieldVisible('plantCode')">
-      <a-form-item :label="t('entity.purchaseinquiry.plantcode')">
-        <a-input
+      <a-form-item :label="pi.queryLabel('plantCode')">
+        <TaktSelect
           v-model:value="advancedQueryForm.plantCode"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.purchaseinquiry.plantcode') })"
-          show-count
-          :maxlength="40"
+          api-url="TaktPlants/options"
+          :placeholder="pi.queryPh('plantCode', 'select')"
           allow-clear
         />
       </a-form-item>
       </div>
       <div v-show="isFieldVisible('purchaseInquiryCode')">
-      <a-form-item :label="t('entity.purchaseinquiry.code')">
+      <a-form-item :label="pi.queryLabel('purchaseInquiryCode')">
         <a-input
           v-model:value="advancedQueryForm.purchaseInquiryCode"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.purchaseinquiry.code') })"
+          :placeholder="pi.queryPh('purchaseInquiryCode', 'required')"
           show-count
           :maxlength="40"
           allow-clear
@@ -147,61 +170,60 @@
       </a-form-item>
       </div>
       <div v-show="isFieldVisible('inquiryDateStart')">
-      <a-form-item :label="t('entity.purchaseinquiry.inquirydatestart')">
+      <a-form-item :label="pi.queryLabel('inquiryDateStart')">
         <a-date-picker
           v-model:value="advancedQueryForm.inquiryDateStart"
-          :placeholder="t('common.page.form.placeholder.select', { field: t('entity.purchaseinquiry.inquirydatestart') })"
+          :placeholder="pi.queryPh('inquiryDateStart', 'select')"
           value-format="YYYY-MM-DD"
           style="width: 100%"
         />
       </a-form-item>
       </div>
       <div v-show="isFieldVisible('inquiryDateEnd')">
-      <a-form-item :label="t('entity.purchaseinquiry.inquirydateend')">
+      <a-form-item :label="pi.queryLabel('inquiryDateEnd')">
         <a-date-picker
           v-model:value="advancedQueryForm.inquiryDateEnd"
-          :placeholder="t('common.page.form.placeholder.select', { field: t('entity.purchaseinquiry.inquirydateend') })"
+          :placeholder="pi.queryPh('inquiryDateEnd', 'select')"
           value-format="YYYY-MM-DD"
           style="width: 100%"
         />
       </a-form-item>
       </div>
       <div v-show="isFieldVisible('quoteDeadlineDateStart')">
-      <a-form-item :label="t('entity.purchaseinquiry.quotedeadlinedatestart')">
+      <a-form-item :label="pi.queryLabel('quoteDeadlineDateStart')">
         <a-date-picker
           v-model:value="advancedQueryForm.quoteDeadlineDateStart"
-          :placeholder="t('common.page.form.placeholder.select', { field: t('entity.purchaseinquiry.quotedeadlinedatestart') })"
+          :placeholder="pi.queryPh('quoteDeadlineDateStart', 'select')"
           value-format="YYYY-MM-DD"
           style="width: 100%"
         />
       </a-form-item>
       </div>
       <div v-show="isFieldVisible('quoteDeadlineDateEnd')">
-      <a-form-item :label="t('entity.purchaseinquiry.quotedeadlinedateend')">
+      <a-form-item :label="pi.queryLabel('quoteDeadlineDateEnd')">
         <a-date-picker
           v-model:value="advancedQueryForm.quoteDeadlineDateEnd"
-          :placeholder="t('common.page.form.placeholder.select', { field: t('entity.purchaseinquiry.quotedeadlinedateend') })"
+          :placeholder="pi.queryPh('quoteDeadlineDateEnd', 'select')"
           value-format="YYYY-MM-DD"
           style="width: 100%"
         />
       </a-form-item>
       </div>
       <div v-show="isFieldVisible('inquiryId')">
-      <a-form-item :label="t('entity.purchaseinquiry.inquiryid')">
-        <a-input
+      <a-form-item :label="pi.queryLabel('inquiryId')">
+        <TaktSelect
           v-model:value="advancedQueryForm.inquiryId"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.purchaseinquiry.inquiryid') })"
-          show-count
-          :maxlength="20"
+          api-url="TaktEmployees/options"
+          :placeholder="pi.queryPh('inquiryId', 'select')"
           allow-clear
         />
       </a-form-item>
       </div>
       <div v-show="isFieldVisible('inquiryBy')">
-      <a-form-item :label="t('entity.purchaseinquiry.inquiryby')">
+      <a-form-item :label="pi.queryLabel('inquiryBy')">
         <a-input
           v-model:value="advancedQueryForm.inquiryBy"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.purchaseinquiry.inquiryby') })"
+          :placeholder="pi.queryPh('inquiryBy', 'required')"
           show-count
           :maxlength="40"
           allow-clear
@@ -209,68 +231,116 @@
       </a-form-item>
       </div>
       <div v-show="isFieldVisible('supplierCode')">
-      <a-form-item :label="t('entity.purchaseinquiry.suppliercode')">
-        <a-input
+      <a-form-item :label="pi.queryLabel('supplierCode')">
+        <TaktSelect
           v-model:value="advancedQueryForm.supplierCode"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.purchaseinquiry.suppliercode') })"
-          show-count
-          :maxlength="40"
+          api-url="TaktSuppliers/options"
+          :placeholder="pi.queryPh('supplierCode', 'select')"
           allow-clear
         />
       </a-form-item>
       </div>
-      <div v-show="isFieldVisible('supplierName')">
-      <a-form-item :label="t('entity.purchaseinquiry.suppliername')">
+      <div v-show="isFieldVisible('supplierName1')">
+      <a-form-item :label="pi.queryLabel('supplierName1')">
         <a-input
-          v-model:value="advancedQueryForm.supplierName"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.purchaseinquiry.suppliername') })"
+          v-model:value="advancedQueryForm.supplierName1"
+          :placeholder="pi.queryPh('supplierName1', 'required')"
           show-count
-          :maxlength="200"
+          :maxlength="140"
+          allow-clear
+        />
+      </a-form-item>
+      </div>
+      <div v-show="isFieldVisible('currencyCode')">
+      <a-form-item :label="pi.queryLabel('currencyCode')">
+        <TaktSelect
+          v-model:value="advancedQueryForm.currencyCode"
+          dict-type="accounting_currency_code"
+          :placeholder="pi.queryPh('currencyCode', 'select')"
+          allow-clear
+        />
+      </a-form-item>
+      </div>
+      <div v-show="isFieldVisible('taxRate')">
+      <a-form-item :label="pi.queryLabel('taxRate')">
+        <TaktSelect
+          v-model:value="advancedQueryForm.taxRate"
+          dict-type="accounting_tax_rate_param"
+          :placeholder="pi.queryPh('taxRate', 'select')"
+          allow-clear
+        />
+      </a-form-item>
+      </div>
+      <div v-show="isFieldVisible('taxAmount')">
+      <a-form-item :label="pi.queryLabel('taxAmount')">
+        <a-input-number
+          v-model:value="advancedQueryForm.taxAmount"
+          :placeholder="pi.queryPh('taxAmount', 'required')"
+          style="width: 100%"
+        />
+      </a-form-item>
+      </div>
+      <div v-show="isFieldVisible('paymentMode')">
+      <a-form-item :label="pi.queryLabel('paymentMode')">
+        <TaktSelect
+          v-model:value="advancedQueryForm.paymentMode"
+          dict-type="logistics_payment_mode"
+          :placeholder="pi.queryPh('paymentMode', 'select')"
+          allow-clear
+        />
+      </a-form-item>
+      </div>
+      <div v-show="isFieldVisible('chainScheme')">
+      <a-form-item :label="pi.queryLabel('chainScheme')">
+        <TaktSelect
+          v-model:value="advancedQueryForm.chainScheme"
+          dict-type="logistics_procurement_chain_scheme"
+          :placeholder="pi.queryPh('chainScheme', 'select')"
           allow-clear
         />
       </a-form-item>
       </div>
       <div v-show="isFieldVisible('totalQuantity')">
-      <a-form-item :label="t('entity.purchaseinquiry.totalquantity')">
+      <a-form-item :label="pi.queryLabel('totalQuantity')">
         <a-input-number
           v-model:value="advancedQueryForm.totalQuantity"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.purchaseinquiry.totalquantity') })"
+          :placeholder="pi.queryPh('totalQuantity', 'required')"
           style="width: 100%"
         />
       </a-form-item>
       </div>
       <div v-show="isFieldVisible('totalAmount')">
-      <a-form-item :label="t('entity.purchaseinquiry.totalamount')">
+      <a-form-item :label="pi.queryLabel('totalAmount')">
         <a-input-number
           v-model:value="advancedQueryForm.totalAmount"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.purchaseinquiry.totalamount') })"
+          :placeholder="pi.queryPh('totalAmount', 'required')"
           style="width: 100%"
         />
       </a-form-item>
       </div>
       <div v-show="isFieldVisible('convertedQuantity')">
-      <a-form-item :label="t('entity.purchaseinquiry.convertedquantity')">
+      <a-form-item :label="pi.queryLabel('convertedQuantity')">
         <a-input-number
           v-model:value="advancedQueryForm.convertedQuantity"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.purchaseinquiry.convertedquantity') })"
+          :placeholder="pi.queryPh('convertedQuantity', 'required')"
           style="width: 100%"
         />
       </a-form-item>
       </div>
       <div v-show="isFieldVisible('convertedAmount')">
-      <a-form-item :label="t('entity.purchaseinquiry.convertedamount')">
+      <a-form-item :label="pi.queryLabel('convertedAmount')">
         <a-input-number
           v-model:value="advancedQueryForm.convertedAmount"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.purchaseinquiry.convertedamount') })"
+          :placeholder="pi.queryPh('convertedAmount', 'required')"
           style="width: 100%"
         />
       </a-form-item>
       </div>
       <div v-show="isFieldVisible('inquiryReason')">
-      <a-form-item :label="t('entity.purchaseinquiry.inquiryreason')">
+      <a-form-item :label="pi.queryLabel('inquiryReason')">
         <a-input
           v-model:value="advancedQueryForm.inquiryReason"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.purchaseinquiry.inquiryreason') })"
+          :placeholder="pi.queryPh('inquiryReason', 'required')"
           show-count
           :maxlength="500"
           allow-clear
@@ -278,115 +348,30 @@
       </a-form-item>
       </div>
       <div v-show="isFieldVisible('inquiryStatus')">
-      <a-form-item :label="t('entity.purchaseinquiry.inquirystatus')">
+      <a-form-item :label="pi.queryLabel('inquiryStatus')">
         <TaktSelect
           v-model:value="advancedQueryForm.inquiryStatus"
-          dict-type="sys_normal_disable"
-          :placeholder="t('common.page.form.placeholder.select', { field: t('entity.purchaseinquiry.inquirystatus') })"
+          dict-type="sys_normal_disable_status"
+          :placeholder="pi.queryPh('inquiryStatus', 'select')"
           allow-clear
         />
       </a-form-item>
       </div>
       <div v-show="isFieldVisible('convertedStatus')">
-      <a-form-item :label="t('entity.purchaseinquiry.convertedstatus')">
+      <a-form-item :label="pi.queryLabel('convertedStatus')">
         <TaktSelect
           v-model:value="advancedQueryForm.convertedStatus"
           dict-type="sys_convert_status"
-          :placeholder="t('common.page.form.placeholder.select', { field: t('entity.purchaseinquiry.convertedstatus') })"
-          allow-clear
-        />
-      </a-form-item>
-      </div>
-      <div v-show="isFieldVisible('approvalStatus')">
-      <a-form-item :label="t('entity.purchaseinquiry.approvalstatus')">
-        <TaktSelect
-          v-model:value="advancedQueryForm.approvalStatus"
-          dict-type="sys_approval_status"
-          :placeholder="t('common.page.form.placeholder.select', { field: t('entity.purchaseinquiry.approvalstatus') })"
-          allow-clear
-        />
-      </a-form-item>
-      </div>
-      <div v-show="isFieldVisible('initiatorId')">
-      <a-form-item :label="t('entity.purchaseinquiry.initiatorid')">
-        <a-input
-          v-model:value="advancedQueryForm.initiatorId"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.purchaseinquiry.initiatorid') })"
-          show-count
-          :maxlength="20"
-          allow-clear
-        />
-      </a-form-item>
-      </div>
-      <div v-show="isFieldVisible('initiatedAtStart')">
-      <a-form-item :label="t('entity.purchaseinquiry.initiatedatstart')">
-        <a-input
-          v-model:value="advancedQueryForm.initiatedAtStart"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.purchaseinquiry.initiatedatstart') })"
-          show-count
-          :maxlength="20"
-          allow-clear
-        />
-      </a-form-item>
-      </div>
-      <div v-show="isFieldVisible('initiatedAtEnd')">
-      <a-form-item :label="t('entity.purchaseinquiry.initiatedatend')">
-        <a-date-picker
-          v-model:value="advancedQueryForm.initiatedAtEnd"
-          :placeholder="t('common.page.form.placeholder.select', { field: t('entity.purchaseinquiry.initiatedatend') })"
-          value-format="YYYY-MM-DD"
-          style="width: 100%"
-        />
-      </a-form-item>
-      </div>
-      <div v-show="isFieldVisible('approvedBy')">
-      <a-form-item :label="t('entity.purchaseinquiry.approvedby')">
-        <a-input
-          v-model:value="advancedQueryForm.approvedBy"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.purchaseinquiry.approvedby') })"
-          show-count
-          :maxlength="20"
-          allow-clear
-        />
-      </a-form-item>
-      </div>
-      <div v-show="isFieldVisible('approvedAtStart')">
-      <a-form-item :label="t('entity.purchaseinquiry.approvedatstart')">
-        <a-input
-          v-model:value="advancedQueryForm.approvedAtStart"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.purchaseinquiry.approvedatstart') })"
-          show-count
-          :maxlength="20"
-          allow-clear
-        />
-      </a-form-item>
-      </div>
-      <div v-show="isFieldVisible('approvedAtEnd')">
-      <a-form-item :label="t('entity.purchaseinquiry.approvedatend')">
-        <a-date-picker
-          v-model:value="advancedQueryForm.approvedAtEnd"
-          :placeholder="t('common.page.form.placeholder.select', { field: t('entity.purchaseinquiry.approvedatend') })"
-          value-format="YYYY-MM-DD"
-          style="width: 100%"
-        />
-      </a-form-item>
-      </div>
-      <div v-show="isFieldVisible('flowInstanceId')">
-      <a-form-item :label="t('entity.purchaseinquiry.flowinstanceid')">
-        <a-input
-          v-model:value="advancedQueryForm.flowInstanceId"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.purchaseinquiry.flowinstanceid') })"
-          show-count
-          :maxlength="20"
+          :placeholder="pi.queryPh('convertedStatus', 'select')"
           allow-clear
         />
       </a-form-item>
       </div>
       <div v-show="isFieldVisible('createdAtStart')">
-      <a-form-item :label="t('common.page.entity.createdatstart')">
+      <a-form-item :label="pi.queryLabel('createdAtStart')">
         <a-date-picker
           v-model:value="advancedQueryForm.createdAtStart"
-          :placeholder="t('common.page.form.placeholder.select', { field: t('common.page.entity.createdatstart') })"
+          :placeholder="pi.queryPh('createdAtStart', 'select')"
           value-format="YYYY-MM-DD HH:mm:ss"
             show-time
           style="width: 100%"
@@ -394,10 +379,10 @@
       </a-form-item>
       </div>
       <div v-show="isFieldVisible('createdAtEnd')">
-      <a-form-item :label="t('common.page.entity.createdatend')">
+      <a-form-item :label="pi.queryLabel('createdAtEnd')">
         <a-date-picker
           v-model:value="advancedQueryForm.createdAtEnd"
-          :placeholder="t('common.page.form.placeholder.select', { field: t('common.page.entity.createdatend') })"
+          :placeholder="pi.queryPh('createdAtEnd', 'select')"
           value-format="YYYY-MM-DD HH:mm:ss"
             show-time
           style="width: 100%"
@@ -419,7 +404,7 @@
             >
               <span class="takt-form-label-hint-icon"><RiQuestionLine class="takt-remix-icon" /></span>
             </a-tooltip>
-            <span>{{ t('common.page.entity.extfield') }}</span>
+            <span>{{ pi.queryLabel('extField') }}</span>
           </span>
         </template>
         <a-textarea
@@ -433,10 +418,10 @@
       </a-form-item>
       </div>
       <div v-show="isFieldVisible('remark')">
-      <a-form-item :label="t('common.page.entity.remark')">
+      <a-form-item :label="pi.queryLabel('remark')">
         <a-textarea
           v-model:value="advancedQueryForm.remark"
-          :placeholder="t('common.page.form.placeholder.optional', { field: t('common.page.entity.remark') })"
+          :placeholder="pi.queryPh('remark', 'optional')"
             :rows="4"
             show-count
             :maxlength="400"
@@ -450,14 +435,15 @@
     <!-- 导入对话框 -->
     <TaktModal
       v-model:open="importVisible"
-      :title="t('common.dialog.title.import', { entity: t('entity.purchaseinquiry._self') })"
+      :title="t('common.dialog.title.import', { entity: pi.self() })"
       :width="600"
       :footer="null"
       :cancel-text="t('common.page.button.close')"
       @cancel="handleImportCancel"
     >
       <TaktImportFile
-        entity-i18n-key="entity.purchaseinquiry._self"
+        v-if="importVisible"
+        :entity-i18n-key="PURCHASEINQUIRY_SELF_I18N_KEY"
         file-type="xlsx"
         :sheet-name="excelNames.sheet"
         :template-file-name="excelNames.fileBase"
@@ -475,8 +461,8 @@
       :checked-keys="visibleColumnKeys"
       :id-column-key="'purchaseInquiryId'"
       :action-column-key="'action'"
-      entity-scope="approval"
-      table-mode="single"
+      entity-scope="company"
+      table-mode="masterDetailMaster"
       @update:checked-keys="handleColumnKeysChange"
       @reset="handleColumnSettingReset"
     />
@@ -496,13 +482,25 @@ import { useI18n } from 'vue-i18n'
 import { ensureTaktPaginationConfigAsync, getTaktDefaultPageIndex, getTaktDefaultPageSize } from '@/utils/takt-paged'
 import PurchaseInquiryForm from './components/purchase-inquiry-form.vue'
 import PurchaseInquiryItemPanel from './components/purchase-inquiry-item-panel.vue'
-import { providePurchaseInquiryMasterContext } from './composables/use-purchase-inquiry-master-context'
+import { providePurchaseInquiryMasterContext, type PurchaseInquiryRowRecord } from './composables/use-purchase-inquiry-master-context'
 import { getPurchaseInquiryList, getPurchaseInquiryById, createPurchaseInquiry, updatePurchaseInquiry, deletePurchaseInquiryById, deletePurchaseInquiryBatch, getPurchaseInquiryTemplate, importPurchaseInquiry, exportPurchaseInquiry, updatePurchaseInquiryStatus } from '@/api/logistics/procurement/purchase-inquiry'
 import type { PurchaseInquiry, PurchaseInquiryQuery } from '@/types/logistics/procurement/purchase-inquiry'
 import { useDictDataStore } from '@/stores/foundation/dict-data'
 import { taktExcelEntityNames } from '@/utils/naming'
 import { resolveExportDownloadFileName } from '@/utils/export-download-name'
+import { normalizeImportResult, type TaktImportResult } from '@/utils/takt-import-result'
 import { RiEditLine, RiDeleteBinLine, RiQuestionLine } from '@remixicon/vue'
+
+import {
+  usePurchaseInquiryI18n,
+  PURCHASEINQUIRY_LIST_FIELDS,
+  PURCHASEINQUIRY_QUERY_STRING_FIELDS,
+  PURCHASEINQUIRY_QUERY_FIELDS,
+  PURCHASEINQUIRY_SELF_I18N_KEY,
+} from './composables/use-purchase-inquiry-i18n'
+
+/** 实体字段 i18n（标签/占位符统一入口） */
+const pi = usePurchaseInquiryI18n()
 
 /** i18n 翻译函数 */
 const { t } = useI18n()
@@ -510,7 +508,7 @@ const { t } = useI18n()
 const excelNames = taktExcelEntityNames('TaktPurchaseInquiry')
 /** 列表快捷查询占位文案 */
 const searchPlaceholder = computed(
-  () => t('common.page.form.placeholder.search', { keyword: t('entity.purchaseinquiry._self') })
+  () => t('common.page.form.placeholder.search', { keyword: pi.self() })
 )
 
 /** 快捷查询关键字 */
@@ -526,9 +524,9 @@ const pageSize = ref(getTaktDefaultPageSize())
 /** 分页 total */
 const total = ref(0)
 /** 工具栏单选时当前行 */
-const selectedRow = ref<PurchaseInquiry | null>(null)
+const selectedRow = ref<PurchaseInquiryRowRecord | null>(null)
 /** 表格多选行 */
-const selectedRows = ref<PurchaseInquiry[]>([])
+const selectedRows = ref<PurchaseInquiryRowRecord[]>([])
 /** 表格多选 row-key 集合 */
 const selectedRowKeys = ref<(string | number)[]>([])
 
@@ -545,70 +543,34 @@ const formRef = ref()
 
 /** 高级查询抽屉是否打开 */
 const advancedQueryVisible = ref(false)
+/**
+ * 创建空的高级查询表单
+ * @returns {Record<string, unknown>} 高级查询初始模型
+ */
+function createEmptyAdvancedQueryForm() {
+  const form = Object.fromEntries(PURCHASEINQUIRY_QUERY_STRING_FIELDS.map((key) => [key, ''])) as Record<
+    (typeof PURCHASEINQUIRY_QUERY_STRING_FIELDS)[number],
+    string
+  >
+  return {
+    ...form,
+    taxRate: undefined as number | undefined,
+    taxAmount: undefined as number | undefined,
+    chainScheme: undefined as number | undefined,
+    totalQuantity: undefined as number | undefined,
+    totalAmount: undefined as number | undefined,
+    convertedQuantity: undefined as number | undefined,
+    convertedAmount: undefined as number | undefined,
+    inquiryStatus: undefined as number | undefined,
+    convertedStatus: undefined as number | undefined,
+  }
+}
 /** 高级查询表单模型 */
-const advancedQueryForm = ref({
-  plantCode: '',
-  purchaseInquiryCode: '',
-  inquiryDateStart: '',
-  inquiryDateEnd: '',
-  quoteDeadlineDateStart: '',
-  quoteDeadlineDateEnd: '',
-  inquiryId: '',
-  inquiryBy: '',
-  supplierCode: '',
-  supplierName: '',
-  totalQuantity: undefined as number | undefined,
-  totalAmount: undefined as number | undefined,
-  convertedQuantity: undefined as number | undefined,
-  convertedAmount: undefined as number | undefined,
-  inquiryReason: '',
-  inquiryStatus: undefined as number | undefined,
-  convertedStatus: undefined as number | undefined,
-  approvalStatus: undefined as number | undefined,
-  initiatorId: '',
-  initiatedAtStart: '',
-  initiatedAtEnd: '',
-  approvedBy: '',
-  approvedAtStart: '',
-  approvedAtEnd: '',
-  flowInstanceId: '',
-  createdAtStart: '',
-  createdAtEnd: '',
-  extField: '',
-  remark: '',
-})
+const advancedQueryForm = ref(createEmptyAdvancedQueryForm())
 /** 高级查询字段元数据（列显隐配置） */
-const queryFieldsMeta = computed(() => [
-  { key: 'plantCode', label: t('entity.purchaseinquiry.plantcode') },
-  { key: 'purchaseInquiryCode', label: t('entity.purchaseinquiry.code') },
-  { key: 'inquiryDateStart', label: t('common.page.entity.createdatstart').replace(t('common.page.entity.createdat'), t('entity.purchaseinquiry.inquirydate')) },
-  { key: 'inquiryDateEnd', label: t('common.page.entity.createdatend').replace(t('common.page.entity.createdat'), t('entity.purchaseinquiry.inquirydate')) },
-  { key: 'quoteDeadlineDateStart', label: t('common.page.entity.createdatstart').replace(t('common.page.entity.createdat'), t('entity.purchaseinquiry.quotedeadlinedate')) },
-  { key: 'quoteDeadlineDateEnd', label: t('common.page.entity.createdatend').replace(t('common.page.entity.createdat'), t('entity.purchaseinquiry.quotedeadlinedate')) },
-  { key: 'inquiryId', label: t('entity.purchaseinquiry.inquiryid') },
-  { key: 'inquiryBy', label: t('entity.purchaseinquiry.inquiryby') },
-  { key: 'supplierCode', label: t('entity.purchaseinquiry.suppliercode') },
-  { key: 'supplierName', label: t('entity.purchaseinquiry.suppliername') },
-  { key: 'totalQuantity', label: t('entity.purchaseinquiry.totalquantity') },
-  { key: 'totalAmount', label: t('entity.purchaseinquiry.totalamount') },
-  { key: 'convertedQuantity', label: t('entity.purchaseinquiry.convertedquantity') },
-  { key: 'convertedAmount', label: t('entity.purchaseinquiry.convertedamount') },
-  { key: 'inquiryReason', label: t('entity.purchaseinquiry.inquiryreason') },
-  { key: 'inquiryStatus', label: t('entity.purchaseinquiry.inquirystatus') },
-  { key: 'convertedStatus', label: t('entity.purchaseinquiry.convertedstatus') },
-  { key: 'approvalStatus', label: t('entity.purchaseinquiry.approvalstatus') },
-  { key: 'initiatorId', label: t('entity.purchaseinquiry.initiatorid') },
-  { key: 'initiatedAtStart', label: t('entity.purchaseinquiry.initiatedatstart') },
-  { key: 'initiatedAtEnd', label: t('entity.purchaseinquiry.initiatedatend') },
-  { key: 'approvedBy', label: t('entity.purchaseinquiry.approvedby') },
-  { key: 'approvedAtStart', label: t('entity.purchaseinquiry.approvedatstart') },
-  { key: 'approvedAtEnd', label: t('entity.purchaseinquiry.approvedatend') },
-  { key: 'flowInstanceId', label: t('entity.purchaseinquiry.flowinstanceid') },
-  { key: 'createdAtStart', label: t('common.page.entity.createdatstart') },
-  { key: 'createdAtEnd', label: t('common.page.entity.createdatend') },
-  { key: 'extField', label: t('common.page.entity.extfield') },
-  { key: 'remark', label: t('common.page.entity.remark') },
-])
+const queryFieldsMeta = computed(() =>
+  PURCHASEINQUIRY_QUERY_FIELDS.map((key) => ({ key, label: pi.queryLabel(key) })),
+)
 /** 高级查询当前可见字段 key */
 const visibleQueryFieldKeys = ref<string[]>([])
 /** 列设置抽屉是否打开 */
@@ -652,16 +614,18 @@ function buildListQuery(overrides?: Partial<PurchaseInquiryQuery>): PurchaseInqu
       query[key] = v as never
     }
   }
-  assignTrimmed('plantCode', form.plantCode)
-  assignTrimmed('purchaseInquiryCode', form.purchaseInquiryCode)
-  assignTrimmed('inquiryDateStart', form.inquiryDateStart)
-  assignTrimmed('inquiryDateEnd', form.inquiryDateEnd)
-  assignTrimmed('quoteDeadlineDateStart', form.quoteDeadlineDateStart)
-  assignTrimmed('quoteDeadlineDateEnd', form.quoteDeadlineDateEnd)
-  assignTrimmed('inquiryId', form.inquiryId)
-  assignTrimmed('inquiryBy', form.inquiryBy)
-  assignTrimmed('supplierCode', form.supplierCode)
-  assignTrimmed('supplierName', form.supplierName)
+  for (const key of PURCHASEINQUIRY_QUERY_STRING_FIELDS) {
+    assignTrimmed(key, form[key])
+  }
+  if (form.taxRate !== undefined && form.taxRate !== null) {
+    query.taxRate = form.taxRate
+  }
+  if (form.taxAmount !== undefined && form.taxAmount !== null) {
+    query.taxAmount = form.taxAmount
+  }
+  if (form.chainScheme !== undefined && form.chainScheme !== null) {
+    query.chainScheme = form.chainScheme
+  }
   if (form.totalQuantity !== undefined && form.totalQuantity !== null) {
     query.totalQuantity = form.totalQuantity
   }
@@ -674,27 +638,12 @@ function buildListQuery(overrides?: Partial<PurchaseInquiryQuery>): PurchaseInqu
   if (form.convertedAmount !== undefined && form.convertedAmount !== null) {
     query.convertedAmount = form.convertedAmount
   }
-  assignTrimmed('inquiryReason', form.inquiryReason)
   if (form.inquiryStatus !== undefined && form.inquiryStatus !== null) {
     query.inquiryStatus = form.inquiryStatus
   }
   if (form.convertedStatus !== undefined && form.convertedStatus !== null) {
     query.convertedStatus = form.convertedStatus
   }
-  if (form.approvalStatus !== undefined && form.approvalStatus !== null) {
-    query.approvalStatus = form.approvalStatus
-  }
-  assignTrimmed('initiatorId', form.initiatorId)
-  assignTrimmed('initiatedAtStart', form.initiatedAtStart)
-  assignTrimmed('initiatedAtEnd', form.initiatedAtEnd)
-  assignTrimmed('approvedBy', form.approvedBy)
-  assignTrimmed('approvedAtStart', form.approvedAtStart)
-  assignTrimmed('approvedAtEnd', form.approvedAtEnd)
-  assignTrimmed('flowInstanceId', form.flowInstanceId)
-  assignTrimmed('createdAtStart', form.createdAtStart)
-  assignTrimmed('createdAtEnd', form.createdAtEnd)
-  assignTrimmed('extField', form.extField)
-  assignTrimmed('remark', form.remark)
   return query
 }
 /** 页面挂载：租户上下文就绪后加载分页配置，再拉列表 */
@@ -709,7 +658,7 @@ onMounted(async () => {
 const selectedMasterKey = ref('')
 
 /** 同步主表选中行到右侧明细（子表由 *-panel watch 自动 reload） */
-function syncMasterSelection(record: PurchaseInquiry | null) {
+function syncMasterSelection(record: PurchaseInquiryRowRecord | null) {
   selectedMasterRow.value = record
   selectedMasterKey.value = record ? getPurchaseInquiryId(record) : ''
 }
@@ -719,7 +668,7 @@ function syncMasterSelection(record: PurchaseInquiry | null) {
  * @param record 主表行
  */
 function handleMasterSelect(record: Record<string, unknown>) {
-  const row = record as unknown as PurchaseInquiry
+  const row = record as unknown as PurchaseInquiryRowRecord
   const key = getPurchaseInquiryId(row)
   selectedRowKeys.value = [key]
   selectedRows.value = [row]
@@ -737,7 +686,7 @@ function handleMasterPaginationChange(_page: number, _pageSize: number) {
 }
 
 /** 加载主表详情并回填当前页 dataSource */
-async function loadPurchaseInquiryDetail(record: PurchaseInquiry): Promise<PurchaseInquiry | null> {
+async function loadPurchaseInquiryDetail(record: PurchaseInquiryRowRecord): Promise<PurchaseInquiry | null> {
   const id = getPurchaseInquiryId(record)
   if (!id) {
     return null
@@ -768,7 +717,7 @@ const columns = computed<TableColumnsType>(() => [
     customRender: ({ record }: { record: any }) => getPurchaseInquiryField(record, 'purchaseInquiryId') ?? ''
   },
   {
-    title: t('entity.purchaseinquiry.plantcode'),
+    title: pi.label('plantCode'),
     dataIndex: 'plantCode',
     key: 'plantCode',
     width: 120,
@@ -777,7 +726,7 @@ const columns = computed<TableColumnsType>(() => [
     customRender: ({ record }: { record: any }) => getPurchaseInquiryField(record, 'plantCode') ?? ''
   },
   {
-    title: t('entity.purchaseinquiry.code'),
+    title: pi.label('purchaseInquiryCode'),
     dataIndex: 'purchaseInquiryCode',
     key: 'purchaseInquiryCode',
     width: 120,
@@ -786,7 +735,7 @@ const columns = computed<TableColumnsType>(() => [
     customRender: ({ record }: { record: any }) => getPurchaseInquiryField(record, 'purchaseInquiryCode') ?? ''
   },
   {
-    title: t('entity.purchaseinquiry.inquirydate'),
+    title: pi.label('inquiryDate'),
     dataIndex: 'inquiryDate',
     key: 'inquiryDate',
     width: 120,
@@ -795,7 +744,7 @@ const columns = computed<TableColumnsType>(() => [
     customRender: ({ record }: { record: any }) => getPurchaseInquiryField(record, 'inquiryDate') ?? ''
   },
   {
-    title: t('entity.purchaseinquiry.quotedeadlinedate'),
+    title: pi.label('quoteDeadlineDate'),
     dataIndex: 'quoteDeadlineDate',
     key: 'quoteDeadlineDate',
     width: 120,
@@ -804,7 +753,7 @@ const columns = computed<TableColumnsType>(() => [
     customRender: ({ record }: { record: any }) => getPurchaseInquiryField(record, 'quoteDeadlineDate') ?? ''
   },
   {
-    title: t('entity.purchaseinquiry.inquiryid'),
+    title: pi.label('inquiryId'),
     dataIndex: 'inquiryId',
     key: 'inquiryId',
     width: 120,
@@ -813,7 +762,7 @@ const columns = computed<TableColumnsType>(() => [
     customRender: ({ record }: { record: any }) => getPurchaseInquiryField(record, 'inquiryId') ?? ''
   },
   {
-    title: t('entity.purchaseinquiry.inquiryby'),
+    title: pi.label('inquiryBy'),
     dataIndex: 'inquiryBy',
     key: 'inquiryBy',
     width: 120,
@@ -822,7 +771,7 @@ const columns = computed<TableColumnsType>(() => [
     customRender: ({ record }: { record: any }) => getPurchaseInquiryField(record, 'inquiryBy') ?? ''
   },
   {
-    title: t('entity.purchaseinquiry.suppliercode'),
+    title: pi.label('supplierCode'),
     dataIndex: 'supplierCode',
     key: 'supplierCode',
     width: 120,
@@ -831,16 +780,57 @@ const columns = computed<TableColumnsType>(() => [
     customRender: ({ record }: { record: any }) => getPurchaseInquiryField(record, 'supplierCode') ?? ''
   },
   {
-    title: t('entity.purchaseinquiry.suppliername'),
-    dataIndex: 'supplierName',
-    key: 'supplierName',
+    title: pi.label('supplierName1'),
+    dataIndex: 'supplierName1',
+    key: 'supplierName1',
     width: 120,
     resizable: true,
     ellipsis: true,
-    customRender: ({ record }: { record: any }) => getPurchaseInquiryField(record, 'supplierName') ?? ''
+    customRender: ({ record }: { record: any }) => getPurchaseInquiryField(record, 'supplierName1') ?? ''
   },
   {
-    title: t('entity.purchaseinquiry.totalquantity'),
+    title: pi.label('currencyCode'),
+    dataIndex: 'currencyCode',
+    key: 'currencyCode',
+    width: 120,
+    resizable: true,
+    ellipsis: true,
+  },
+  {
+    title: pi.label('taxRate'),
+    dataIndex: 'taxRate',
+    key: 'taxRate',
+    width: 120,
+    resizable: true,
+    ellipsis: true,
+  },
+  {
+    title: pi.label('taxAmount'),
+    dataIndex: 'taxAmount',
+    key: 'taxAmount',
+    width: 120,
+    resizable: true,
+    ellipsis: true,
+    customRender: ({ record }: { record: any }) => getPurchaseInquiryField(record, 'taxAmount') ?? ''
+  },
+  {
+    title: pi.label('paymentMode'),
+    dataIndex: 'paymentMode',
+    key: 'paymentMode',
+    width: 120,
+    resizable: true,
+    ellipsis: true,
+  },
+  {
+    title: pi.label('chainScheme'),
+    dataIndex: 'chainScheme',
+    key: 'chainScheme',
+    width: 120,
+    resizable: true,
+    ellipsis: true,
+  },
+  {
+    title: pi.label('totalQuantity'),
     dataIndex: 'totalQuantity',
     key: 'totalQuantity',
     width: 120,
@@ -849,7 +839,7 @@ const columns = computed<TableColumnsType>(() => [
     customRender: ({ record }: { record: any }) => getPurchaseInquiryField(record, 'totalQuantity') ?? ''
   },
   {
-    title: t('entity.purchaseinquiry.totalamount'),
+    title: pi.label('totalAmount'),
     dataIndex: 'totalAmount',
     key: 'totalAmount',
     width: 120,
@@ -858,7 +848,7 @@ const columns = computed<TableColumnsType>(() => [
     customRender: ({ record }: { record: any }) => getPurchaseInquiryField(record, 'totalAmount') ?? ''
   },
   {
-    title: t('entity.purchaseinquiry.convertedquantity'),
+    title: pi.label('convertedQuantity'),
     dataIndex: 'convertedQuantity',
     key: 'convertedQuantity',
     width: 120,
@@ -867,7 +857,7 @@ const columns = computed<TableColumnsType>(() => [
     customRender: ({ record }: { record: any }) => getPurchaseInquiryField(record, 'convertedQuantity') ?? ''
   },
   {
-    title: t('entity.purchaseinquiry.convertedamount'),
+    title: pi.label('convertedAmount'),
     dataIndex: 'convertedAmount',
     key: 'convertedAmount',
     width: 120,
@@ -876,7 +866,7 @@ const columns = computed<TableColumnsType>(() => [
     customRender: ({ record }: { record: any }) => getPurchaseInquiryField(record, 'convertedAmount') ?? ''
   },
   {
-    title: t('entity.purchaseinquiry.inquiryreason'),
+    title: pi.label('inquiryReason'),
     dataIndex: 'inquiryReason',
     key: 'inquiryReason',
     width: 120,
@@ -885,7 +875,7 @@ const columns = computed<TableColumnsType>(() => [
     customRender: ({ record }: { record: any }) => getPurchaseInquiryField(record, 'inquiryReason') ?? ''
   },
   {
-    title: t('entity.purchaseinquiry.inquirystatus'),
+    title: pi.label('inquiryStatus'),
     dataIndex: 'inquiryStatus',
     key: 'inquiryStatus',
     width: 120,
@@ -893,7 +883,7 @@ const columns = computed<TableColumnsType>(() => [
     ellipsis: true,
   },
   {
-    title: t('entity.purchaseinquiry.convertedstatus'),
+    title: pi.label('convertedStatus'),
     dataIndex: 'convertedStatus',
     key: 'convertedStatus',
     width: 120,
@@ -908,7 +898,7 @@ const columns = computed<TableColumnsType>(() => [
         shape: 'plain',
         icon: RiEditLine,
         permission: 'logistics:procurement:purchase:inquiry:update',
-        onClick: (record: PurchaseInquiry) => handleEdit(record)
+        onClick: (record: PurchaseInquiryRowRecord) => handleEdit(record)
       },
       {
         key: 'delete',
@@ -916,26 +906,51 @@ const columns = computed<TableColumnsType>(() => [
         shape: 'plain',
         icon: RiDeleteBinLine,
         permission: 'logistics:procurement:purchase:inquiry:delete',
-        onClick: (record: PurchaseInquiry) => handleDeleteOne(record)
+        onClick: (record: PurchaseInquiryRowRecord) => handleDeleteOne(record)
       }
     ]
   })
 ])
 
 /** 表格 row-key（优先实体主键字段） */
-const getPurchaseInquiryId = (record: any): string => record?.[entityIdName] ?? ''
+const getPurchaseInquiryId = (record: PurchaseInquiryRowRecord): string => {
+  const id = (record as Record<string, unknown>)?.[entityIdName]
+  return id != null ? String(id) : ''
+}
 /**
  * 读取行字段值
  * @param record 行数据
  * @param field 字段名
  */
 const getPurchaseInquiryField = (record: any, field: string): any => record?.[field]
+/**
+ * 供 TaktDictTag 等组件使用的标量字典值
+ * @param record 行数据
+ * @param field 字段名
+ */
+const getPurchaseInquiryDictValue = (
+  record: PurchaseInquiryRowRecord,
+  field: string,
+): string | number | undefined => {
+  const value = (record as Record<string, unknown>)?.[field]
+  if (value === null || value === undefined) return undefined
+  if (typeof value === 'string' || typeof value === 'number') return value
+  return String(value)
+}
+
+/** 将行字段/字典值转为有限 number */
+const toPurchaseInquiryNumber = (value: string | number | undefined | null): number => {
+  if (typeof value === 'number' && Number.isFinite(value)) return value
+  const num = Number(value ?? 0)
+  return Number.isFinite(num) ? num : 0
+}
+
 
 
 /** 行选择配置 */
 const rowSelection = computed(() => ({
   selectedRowKeys: selectedRowKeys.value,
-  onChange: (keys: (string | number)[], rows: PurchaseInquiry[]) => {
+  onChange: (keys: (string | number)[], rows: PurchaseInquiryRowRecord[]) => {
     selectedRowKeys.value = keys
     selectedRows.value = rows
     selectedRow.value = rows.length === 1 ? (rows[0] ?? null) : null
@@ -945,7 +960,7 @@ const rowSelection = computed(() => ({
       syncMasterSelection(null)
     }
   },
-  onSelect: (record: PurchaseInquiry, selected: boolean) => {
+  onSelect: (record: PurchaseInquiryRowRecord, selected: boolean) => {
     if (selected) {
       selectedRow.value = record
       syncMasterSelection(record)
@@ -954,7 +969,7 @@ const rowSelection = computed(() => ({
       syncMasterSelection(null)
     }
   },
-  onSelectAll: (selected: boolean, selectedRowsData: PurchaseInquiry[]) => {
+  onSelectAll: (selected: boolean, selectedRowsData: PurchaseInquiryRowRecord[]) => {
     selectedRow.value = selected && selectedRowsData.length === 1 ? (selectedRowsData[0] ?? null) : null
     syncMasterSelection(selectedRow.value)
   }
@@ -999,7 +1014,12 @@ function handleReset() {
   inquiryId: '',
   inquiryBy: '',
   supplierCode: '',
-  supplierName: '',
+  supplierName1: '',
+  currencyCode: '',
+  taxRate: undefined as number | undefined,
+  taxAmount: undefined as number | undefined,
+  paymentMode: '',
+  chainScheme: undefined as number | undefined,
   totalQuantity: undefined as number | undefined,
   totalAmount: undefined as number | undefined,
   convertedQuantity: undefined as number | undefined,
@@ -1007,14 +1027,6 @@ function handleReset() {
   inquiryReason: '',
   inquiryStatus: undefined as number | undefined,
   convertedStatus: undefined as number | undefined,
-  approvalStatus: undefined as number | undefined,
-  initiatorId: '',
-  initiatedAtStart: '',
-  initiatedAtEnd: '',
-  approvedBy: '',
-  approvedAtStart: '',
-  approvedAtEnd: '',
-  flowInstanceId: '',
   createdAtStart: '',
   createdAtEnd: '',
   extField: '',
@@ -1026,14 +1038,14 @@ function handleReset() {
 
 /** 打开新增弹窗 */
 function handleCreate() {
-  formTitle.value = t('common.dialog.title.create', { entity: t('entity.purchaseinquiry._self') })
+  formTitle.value = t('common.dialog.title.create', { entity: pi.self() })
   formData.value = null
   formVisible.value = true
   nextTick(() => formRef.value?.resetFields())
 }
 /** 打开编辑弹窗（主子表：先拉详情含子表） */
-async function handleEdit(record: PurchaseInquiry) {
-  formTitle.value = t('common.dialog.title.edit', { entity: t('entity.purchaseinquiry._self') })
+async function handleEdit(record: PurchaseInquiryRowRecord) {
+  formTitle.value = t('common.dialog.title.edit', { entity: pi.self() })
   formLoading.value = true
   try {
     const detail = await loadPurchaseInquiryDetail(record)
@@ -1049,7 +1061,7 @@ function handleUpdate() {
   if (selectedRow.value) {
     void handleEdit(selectedRow.value)
   } else {
-    message.warning(t('common.tip.select.to.action', { action: t('common.page.button.edit'), entity: t('entity.purchaseinquiry._self') }))
+    message.warning(t('common.tip.select.to.action', { action: t('common.page.button.edit'), entity: pi.self() }))
   }
 }
 /** 提交新增/编辑表单 */
@@ -1067,10 +1079,10 @@ async function handleFormSubmit() {
     const id = (formData.value as any)?.[entityIdName]
     if (id) {
       await updatePurchaseInquiry(id, payload as any)
-      message.success(t('common.feedback.updated', { target: t('entity.purchaseinquiry._self') }))
+      message.success(t('common.feedback.updated', { target: pi.self() }))
     } else {
       await createPurchaseInquiry(payload as any)
-      message.success(t('common.feedback.created', { target: t('entity.purchaseinquiry._self') }))
+      message.success(t('common.feedback.created', { target: pi.self() }))
     }
     formVisible.value = false
     formData.value = null
@@ -1101,15 +1113,22 @@ async function handleDownloadTemplate(sheetName?: string, fileName?: string): Pr
   return (res as any)?.data ?? res
 }
 
-/** 上传并导入 Excel 文件 */
-async function handleImportFile(file: File, sheetName?: string): Promise<{ success: number; fail: number; errors: string[] }> {
-  return await importPurchaseInquiry(file, sheetName)
+/** 上传并导入 Excel 文件（归一化后端 SuccessCount/successCount） */
+async function handleImportFile(file: File, sheetName?: string): Promise<TaktImportResult> {
+  const raw = await importPurchaseInquiry(file, sheetName)
+  return normalizeImportResult(raw)
 }
 
-/** 导入完成回调：刷新列表并可选关闭对话框 */
-function handleImportSuccess(result: { success: number; fail: number; errors: string[] }) {
+/** 导入完成回调：刷新列表；全部成功时延迟关闭对话框 */
+function handleImportSuccess(result: TaktImportResult) {
   loadData()
-  if (result.fail === 0) setTimeout(() => { importVisible.value = false }, 2000)
+
+      if (selectedMasterKey.value) {
+    purchaseInquiryItemPanelRef.value?.reload?.()
+      }
+  if (result.fail === 0 && result.success > 0) {
+    setTimeout(() => { importVisible.value = false }, 2000)
+  }
 }
 
 /** 关闭导入对话框 */
@@ -1143,24 +1162,24 @@ async function handleExport() {
     link.click()
     document.body.removeChild(link)
     setTimeout(() => window.URL.revokeObjectURL(url), 100)
-    message.success(t('common.feedback.export.success', { target: t('entity.purchaseinquiry._self') }))
+    message.success(t('common.feedback.export.success', { target: pi.self() }))
   } catch (error: any) {
     logger.error('[PurchaseInquiry] 导出失败', { error })
-    message.error(error?.message || t('common.feedback.export.failed', { target: t('entity.purchaseinquiry._self') }))
+    message.error(error?.message || t('common.feedback.export.failed', { target: pi.self() }))
   } finally {
     loading.value = false
   }
 }
 /** 删除单行 */
-async function handleDeleteOne(record: PurchaseInquiry) {
+async function handleDeleteOne(record: PurchaseInquiryRowRecord) {
   Modal.confirm({
     title: t('common.tip.confirm.delete.title'),
-    content: t('common.tip.confirm.delete.entity', { entity: t('entity.purchaseinquiry._self'), name: t('common.tip.this.target', { target: t('entity.purchaseinquiry._self') }) }),
+    content: t('common.tip.confirm.delete.entity', { entity: pi.self(), name: t('common.tip.this.target', { target: pi.self() }) }),
     okText: t('common.page.button.delete'),
     cancelText: t('common.page.button.cancel'),
     onOk: async () => {
       await deletePurchaseInquiryById((record as any)[entityIdName])
-      message.success(t('common.feedback.deleted', { target: t('entity.purchaseinquiry._self') }))
+      message.success(t('common.feedback.deleted', { target: pi.self() }))
       selectedRowKeys.value = []
       selectedRows.value = []
       selectedRow.value = null
@@ -1172,18 +1191,18 @@ async function handleDeleteOne(record: PurchaseInquiry) {
 /** 批量删除选中行 */
 async function handleDelete() {
   if (selectedRows.value.length === 0) {
-    message.warning(t('common.tip.select.to.action', { action: t('common.page.button.delete'), entity: t('entity.purchaseinquiry._self') }))
+    message.warning(t('common.tip.select.to.action', { action: t('common.page.button.delete'), entity: pi.self() }))
     return
   }
   Modal.confirm({
     title: t('common.tip.confirm.delete.title'),
-    content: t('common.tip.confirm.delete.count', { entity: t('entity.purchaseinquiry._self'), count: selectedRows.value.length }),
+    content: t('common.tip.confirm.delete.count', { entity: pi.self(), count: selectedRows.value.length }),
     okText: t('common.page.button.delete'),
     cancelText: t('common.page.button.cancel'),
     onOk: async () => {
       const ids = selectedRows.value.map((r: any) => r[entityIdName]).filter(Boolean)
       await deletePurchaseInquiryBatch(ids)
-      message.success(t('common.feedback.deleted', { target: t('entity.purchaseinquiry._self') }))
+      message.success(t('common.feedback.deleted', { target: pi.self() }))
       selectedRowKeys.value = []
       selectedRows.value = []
       selectedRow.value = null
@@ -1197,9 +1216,9 @@ async function handleDelete() {
  * @param record 当前行
  * @param checked 是否启用
  */
-async function handleInquiryStatusChange(record: PurchaseInquiry, checked: boolean) {
+async function handleInquiryStatusChange(record: PurchaseInquiryRowRecord, checked: boolean) {
   const newVal = checked ? 1 : 0
-  const oldVal = getPurchaseInquiryField(record, 'inquiryStatus')
+  const oldVal = toPurchaseInquiryNumber(getPurchaseInquiryDictValue(record, 'inquiryStatus'))
   const id = getPurchaseInquiryId(record)
   const row = dataSource.value.find((item) => getPurchaseInquiryId(item) === id)
   if (row) {
@@ -1239,7 +1258,12 @@ function handleAdvancedQueryReset() {
   inquiryId: '',
   inquiryBy: '',
   supplierCode: '',
-  supplierName: '',
+  supplierName1: '',
+  currencyCode: '',
+  taxRate: undefined as number | undefined,
+  taxAmount: undefined as number | undefined,
+  paymentMode: '',
+  chainScheme: undefined as number | undefined,
   totalQuantity: undefined as number | undefined,
   totalAmount: undefined as number | undefined,
   convertedQuantity: undefined as number | undefined,
@@ -1247,14 +1271,6 @@ function handleAdvancedQueryReset() {
   inquiryReason: '',
   inquiryStatus: undefined as number | undefined,
   convertedStatus: undefined as number | undefined,
-  approvalStatus: undefined as number | undefined,
-  initiatorId: '',
-  initiatedAtStart: '',
-  initiatedAtEnd: '',
-  approvedBy: '',
-  approvedAtStart: '',
-  approvedAtEnd: '',
-  flowInstanceId: '',
   createdAtStart: '',
   createdAtEnd: '',
   extField: '',

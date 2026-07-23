@@ -44,7 +44,7 @@ public class TaktApsOperation : TaktCompanyEntityBase
     public int LineNumber { get; set; } = 0;
 
     /// <summary>
-    /// 工艺路线工序 ID（选项 TaktRoutingItems/options，DictValue=Id）
+    /// 工艺路线工序 ID（选项 TaktRoutingItems/options；DictValue=Id）
     /// </summary>
     [SugarColumn(ColumnName = "routing_item_id", ColumnDescription = "工艺路线工序ID", ColumnDataType = "bigint", IsNullable = true)]
     [JsonConverter(typeof(ValueToStringConverter))]
@@ -63,13 +63,13 @@ public class TaktApsOperation : TaktCompanyEntityBase
     public string? ProcessName { get; set; }
 
     /// <summary>
-    /// 工作中心编码（选项 TaktWorkCenters/options，DictValue=WorkCenterCode）
+    /// 工作中心编码（选项 TaktWorkCenters/options；DictValue=WorkCenterCode）
     /// </summary>
     [SugarColumn(ColumnName = "work_center_code", ColumnDescription = "工作中心编码", ColumnDataType = "nvarchar", Length = 40, IsNullable = true)]
     public string? WorkCenterCode { get; set; }
 
     /// <summary>
-    /// 工作中心资源 ID（选项 TaktWorkCenterResources/options，DictValue=Id）
+    /// 工作中心资源 ID（选项 TaktWorkCenterResources/options；DictValue=Id）
     /// </summary>
     [SugarColumn(ColumnName = "work_center_resource_id", ColumnDescription = "工作中心资源ID", ColumnDataType = "bigint", IsNullable = true)]
     [JsonConverter(typeof(ValueToStringConverter))]
@@ -106,7 +106,7 @@ public class TaktApsOperation : TaktCompanyEntityBase
     public int OperationStatus { get; set; } = 0;
 
     /// <summary>
-    /// 是否作废（字典 sys_yes_no_type，0=否 1=是；编辑移除子行时标记作废）
+    /// 是否作废（字典 sys_yes_no_type；0=否 1=是；编辑移除子行时标记作废）
     /// </summary>
     [SugarColumn(ColumnName = "is_obsolete", ColumnDescription = "是否作废", ColumnDataType = "int", IsNullable = false, DefaultValue = "0")]
     public int IsObsolete { get; set; } = 0;

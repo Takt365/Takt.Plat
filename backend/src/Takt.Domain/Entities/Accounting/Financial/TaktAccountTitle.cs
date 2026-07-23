@@ -40,7 +40,7 @@ public class TaktAccountTitle : TaktCompanyEntityBase
     [SugarColumn(ColumnName = "parent_id", ColumnDescription = "父级ID", ColumnDataType = "bigint", IsNullable = false, DefaultValue = "0")]
     public long ParentId { get; set; }
     /// <summary>
-    /// 科目类型（字典 accounting_account_title_type；SAP X=资产负债表科目，P=初级成本或收入，S=次级成本，N=非经营性收支，C=现金/银行账户）
+    /// 科目类型（字典 accounting_account_title_type=资产负债表科目，P=初级成本或收入，S=次级成本，N=非经营性收支，C=现金/银行账户）
     /// </summary>
     [SugarColumn(ColumnName = "account_title_type", ColumnDescription = "科目类型", ColumnDataType = "varchar", Length = 1, IsNullable = false)]
     public string AccountTitleType { get; set; } = string.Empty;
@@ -65,7 +65,7 @@ public class TaktAccountTitle : TaktCompanyEntityBase
     [SugarColumn(ColumnName = "is_auxiliary", ColumnDescription = "辅助核算", ColumnDataType = "int", IsNullable = false, DefaultValue = "0")]
     public int IsAuxiliary { get; set; }
     /// <summary>
-    /// 辅助核算类型（字典 accounting_auxiliary_type；SAP D=客户/K=供应商/A=资产/S=总账无辅助/M=物料）
+    /// 辅助核算类型 / 统驭标识（字典 accounting_auxiliary_type；D=客户，K=供应商，A=资产，S=总账无辅助，M=物料）
     /// </summary>
     [SugarColumn(ColumnName = "auxiliary_type", ColumnDescription = "辅助核算类型", ColumnDataType = "varchar", Length = 1, IsNullable = false)]
     public string AuxiliaryType { get; set; } = string.Empty;
@@ -100,7 +100,7 @@ public class TaktAccountTitle : TaktCompanyEntityBase
     [SugarColumn(ColumnName = "valid_to", ColumnDescription = "失效日期", ColumnDataType = "datetime", IsNullable = false)]
     public DateTime ValidTo { get; set; } = new DateTime(9999, 12, 31, 23, 59, 59);
     /// <summary>
-    /// 关联工厂（选项 TaktPlants/options，DictValue=Id）
+    /// 关联工厂（选项 TaktPlants/options；DictValue=Id）
     /// </summary>
     [SugarColumn(ColumnName = "related_plant", ColumnDescription = "关联工厂", ColumnDataType = "varchar", Length = 4, IsNullable = false)]
     public string RelatedPlant { get; set; } = string.Empty;

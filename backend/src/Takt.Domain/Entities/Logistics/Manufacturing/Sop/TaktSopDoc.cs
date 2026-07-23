@@ -29,7 +29,7 @@ namespace Takt.Domain.Entities.Logistics.Manufacturing.Sop;
 public class TaktSopDoc : TaktApprovalEntityBase
 {
     /// <summary>
-    /// 工厂代码（选项 TaktPlants/options，DictValue=PlantCode）
+    /// 工厂代码（选项 TaktPlants/options；DictValue=PlantCode）
     /// </summary>
     [SugarColumn(ColumnName = "plant_code", ColumnDescription = "工厂代码", ColumnDataType = "nvarchar", Length = 4, IsNullable = false)]
     public string PlantCode { get; set; } = string.Empty;
@@ -47,34 +47,34 @@ public class TaktSopDoc : TaktApprovalEntityBase
     public string SopName { get; set; } = string.Empty;
 
     /// <summary>
-    /// 产品/物料编码（选项 TaktMaterialPlants/options，DictValue=MaterialCode，ExtValue=PlantCode）
+    /// 产品/物料编码（选项 TaktMaterialPlants/options；DictValue=MaterialCode，ExtValue=PlantCode）
     /// </summary>
     [SugarColumn(ColumnName = "material_code", ColumnDescription = "物料编码", ColumnDataType = "nvarchar", Length = 50, IsNullable = false)]
     public string MaterialCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 工艺路线明细 ID（选项 TaktRoutingItems/options，DictValue=Id）
+    /// 工艺路线明细 ID（选项 TaktRoutingItems/options；DictValue=Id）
     /// </summary>
     [SugarColumn(ColumnName = "routing_item_id", ColumnDescription = "工序ID", ColumnDataType = "bigint", IsNullable = false)]
     [JsonConverter(typeof(ValueToStringConverter))]
     public long RoutingItemId { get; set; }
 
     /// <summary>
-    /// 工位 ID（选项 TaktSopWorkstations/options，DictValue=Id）
+    /// 工位 ID（选项 TaktSopWorkstations/options；DictValue=Id）
     /// </summary>
     [SugarColumn(ColumnName = "workstation_id", ColumnDescription = "工位ID", ColumnDataType = "bigint", IsNullable = true)]
     [JsonConverter(typeof(ValueToStringConverter))]
     public long? WorkstationId { get; set; }
 
     /// <summary>
-    /// 当前生效版本 ID（选项 TaktSopRevisions/options，DictValue=Id）
+    /// 当前生效版本 ID（选项 TaktSopRevisions/options；DictValue=Id）
     /// </summary>
     [SugarColumn(ColumnName = "current_revision_id", ColumnDescription = "当前版本ID", ColumnDataType = "bigint", IsNullable = true)]
     [JsonConverter(typeof(ValueToStringConverter))]
     public long? CurrentRevisionId { get; set; }
 
     /// <summary>
-    /// 默认语言（选项 TaktCultures/options，DictValue=CultureCode）
+    /// 默认语言（选项 TaktCultures/options；DictValue=CultureCode）
     /// </summary>
     [SugarColumn(ColumnName = "default_lang", ColumnDescription = "默认语言", ColumnDataType = "varchar", Length = 10, IsNullable = false, DefaultValue = "zh-CN")]
     public string DefaultLang { get; set; } = "zh-CN";

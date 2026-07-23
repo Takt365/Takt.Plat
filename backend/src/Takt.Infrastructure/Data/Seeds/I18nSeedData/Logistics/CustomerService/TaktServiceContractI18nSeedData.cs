@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Infrastructure.Data.Seeds.I18nSeedData.Logistics.CustomerService
 // 文件名称：TaktServiceContractI18nSeedData.cs
-// 创建时间：2026-07-20
+// 创建时间：2026-07-23
 // 创建人：Takt365(Auto Generated)
 // 功能描述：TaktServiceContract 实体字段国际化种子（无对应 frontend locales；TranslationText 取自 ColumnDescription，ContextNote 取自属性 XML summary）
 // 
@@ -135,14 +135,14 @@ public class TaktServiceContractI18nSeedData : ITaktSeedDataCoordinator
             // entity.servicecontract.clientcode
             new TranslationSeedItem("entity.servicecontract.clientcode", "zh-HK", "客户端编码_hk", "客户端编码（冗余字段，便于查询）"),
 
-            // entity.servicecontract.clientname
-            new TranslationSeedItem("entity.servicecontract.clientname", "en-US", "客户端名称_us", "客户端名称（冗余字段，便于查询）"),
-            // entity.servicecontract.clientname
-            new TranslationSeedItem("entity.servicecontract.clientname", "ja-JP", "客户端名称_jp", "客户端名称（冗余字段，便于查询）"),
-            // entity.servicecontract.clientname
-            new TranslationSeedItem("entity.servicecontract.clientname", "zh-CN", "客户端名称", "客户端名称（冗余字段，便于查询）"),
-            // entity.servicecontract.clientname
-            new TranslationSeedItem("entity.servicecontract.clientname", "zh-HK", "客户端名称_hk", "客户端名称（冗余字段，便于查询）"),
+            // entity.servicecontract.clientname1
+            new TranslationSeedItem("entity.servicecontract.clientname1", "en-US", "客户端名称1_us", "客户端名称（冗余字段，便于查询）"),
+            // entity.servicecontract.clientname1
+            new TranslationSeedItem("entity.servicecontract.clientname1", "ja-JP", "客户端名称1_jp", "客户端名称（冗余字段，便于查询）"),
+            // entity.servicecontract.clientname1
+            new TranslationSeedItem("entity.servicecontract.clientname1", "zh-CN", "客户端名称1", "客户端名称（冗余字段，便于查询）"),
+            // entity.servicecontract.clientname1
+            new TranslationSeedItem("entity.servicecontract.clientname1", "zh-HK", "客户端名称1_hk", "客户端名称（冗余字段，便于查询）"),
 
             // entity.servicecontract.contracttype
             new TranslationSeedItem("entity.servicecontract.contracttype", "en-US", "合同类型_us", "合同类型（0=维保，1=单次，2=框架，3=SLA，4=其他）"),

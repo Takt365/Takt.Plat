@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.WebApi.Controllers.Logistics.Procurement
 // 文件名称：TaktPurchaseInquiriesController.cs
-// 创建时间：2026-06-24
+// 创建时间：2026-07-23
 // 创建人：Takt365(Cursor AI)
 // 功能描述：采购询价控制器
 // 
@@ -13,7 +13,6 @@
 using Microsoft.AspNetCore.Mvc;
 using Takt.Application.Dtos.Logistics.Procurement;
 using Takt.Application.Services.Logistics.Procurement;
-using Takt.Application.Services.Logistics.Procurement.Chain;
 using Takt.Shared.Constants;
 
 namespace Takt.WebApi.Controllers.Logistics.Procurement;
@@ -27,19 +26,14 @@ namespace Takt.WebApi.Controllers.Logistics.Procurement;
 public class TaktPurchaseInquiriesController : TaktControllerBase
 {
     private readonly ITaktPurchaseInquiryService _purchaseInquiryService;
-    private readonly ITaktProcurementChainOrchestrator _procurementChainOrchestrator;
 
     /// <summary>
     /// 构造函数
     /// </summary>
     /// <param name="purchaseInquiryService">采购询价服务</param>
-    /// <param name="procurementChainOrchestrator">采购全链路编排</param>
-    public TaktPurchaseInquiriesController(
-        ITaktPurchaseInquiryService purchaseInquiryService,
-        ITaktProcurementChainOrchestrator procurementChainOrchestrator)
+    public TaktPurchaseInquiriesController(ITaktPurchaseInquiryService purchaseInquiryService)
     {
         _purchaseInquiryService = purchaseInquiryService;
-        _procurementChainOrchestrator = procurementChainOrchestrator;
     }
 
     /// <summary>
@@ -249,26 +243,6 @@ public class TaktPurchaseInquiriesController : TaktControllerBase
                 FailCount = fail,
                 Errors = errors
             }, $"导入完成：成功{success}条，失败{fail}条");
-        }
-        catch (Exception ex)
-        {
-            return HandleException(ex);
-        }
-    }
-
-    /// <summary>
-    /// 提交采购询价会签审批（方案一/二入口）
-    /// </summary>
-    /// <param name="id">询价主键</param>
-    /// <returns>操作结果</returns>
-    [TaktPermission("logistics:procurement:purchase:inquiry:update", "提交采购询价会签")]
-    [HttpPost("{id}/submit-countersign")]
-    public async Task<IActionResult> SubmitPurchaseInquiryCountersignAsync(long id)
-    {
-        try
-        {
-            await _procurementChainOrchestrator.SubmitPurchaseInquiryForCountersignAsync(id);
-            return Success<object?>(null, "提交成功");
         }
         catch (Exception ex)
         {

@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Application.Services.Logistics.Quality.Cost
 // 文件名称：TaktQualityAssuranceService.cs
-// 创建时间：2026-07-09
+// 创建时间：2026-07-23
 // 创建人：Takt365(Cursor AI)
 // 功能描述：品质业务主应用服务实现
 // 
@@ -126,12 +126,12 @@ public class TaktQualityAssuranceService : TaktServiceBase, ITaktQualityAssuranc
         EnsureThreeLayerContext();
         var list = await _qualityAssuranceRepository.GetListAsync(
             x => x.TenantCode == CurrentTenantCode && x.CompanyCode == CurrentCompanyCode,
-            x => x.CustomerName ?? string.Empty,
+            x => x.QualityAssuranceCode ?? string.Empty,
             false);
         return list.Select(e => new TaktSelectOption
         {
-            DictValue = e.Id,
-            DictLabel = e.CustomerName ?? e.Id.ToString(),
+            DictValue = e.QualityAssuranceCode,
+            DictLabel = e.QualityAssuranceCode,
         }).ToList();
     }
 
@@ -536,7 +536,20 @@ public class TaktQualityAssuranceService : TaktServiceBase, ITaktQualityAssuranc
     private async Task SaveQualityAssuranceChildrenAsync(TaktQualityAssurance entity, TaktQualityAssuranceCreateDto dto)
     {
         // 品质业务来料检验费用明细（IncomingItems）
-        if (dto.IncomingItems is not { Count: > 0 })
+        List<TaktQualityAssuranceIncomingUpdateDto>? incomingItemsForSave;
+        if (dto is TaktQualityAssuranceUpdateDto updateDtoForIncomingItems && updateDtoForIncomingItems.IncomingItems != null)
+        {
+            incomingItemsForSave = updateDtoForIncomingItems.IncomingItems;
+        }
+        else if (dto.IncomingItems != null)
+        {
+            incomingItemsForSave = dto.IncomingItems.Adapt<List<TaktQualityAssuranceIncomingUpdateDto>>();
+        }
+        else
+        {
+            incomingItemsForSave = null;
+        }
+        if (incomingItemsForSave is not { Count: > 0 })
         {
             await MarkQualityAssuranceIncomingsObsoleteAsync(entity.Id);
         }
@@ -547,9 +560,9 @@ public class TaktQualityAssuranceService : TaktServiceBase, ITaktQualityAssuranc
             var submittedIds = new HashSet<long>();
             var toCreate = new List<TaktQualityAssuranceIncoming>();
             var seenLineKeys = new HashSet<string>(StringComparer.Ordinal);
-            for (var i = 0; i < dto.IncomingItems.Count; i++)
+            for (var i = 0; i < incomingItemsForSave.Count; i++)
             {
-                var childDto = dto.IncomingItems[i];
+                var childDto = incomingItemsForSave[i];
                 childDto.QualityAssuranceId = entity.Id;
                 var lineKey = $"{entity.CompanyCode}|{entity.Id}|{childDto.LineNumber}";
                 if (!seenLineKeys.Add(lineKey))
@@ -628,7 +641,20 @@ public class TaktQualityAssuranceService : TaktServiceBase, ITaktQualityAssuranc
             }
         }
         // 品质业务初期定期检定费用明细（FirstArticleItems）
-        if (dto.FirstArticleItems is not { Count: > 0 })
+        List<TaktQualityAssuranceFirstArticleUpdateDto>? firstArticleItemsForSave;
+        if (dto is TaktQualityAssuranceUpdateDto updateDtoForFirstArticleItems && updateDtoForFirstArticleItems.FirstArticleItems != null)
+        {
+            firstArticleItemsForSave = updateDtoForFirstArticleItems.FirstArticleItems;
+        }
+        else if (dto.FirstArticleItems != null)
+        {
+            firstArticleItemsForSave = dto.FirstArticleItems.Adapt<List<TaktQualityAssuranceFirstArticleUpdateDto>>();
+        }
+        else
+        {
+            firstArticleItemsForSave = null;
+        }
+        if (firstArticleItemsForSave is not { Count: > 0 })
         {
             await MarkQualityAssuranceFirstArticlesObsoleteAsync(entity.Id);
         }
@@ -639,9 +665,9 @@ public class TaktQualityAssuranceService : TaktServiceBase, ITaktQualityAssuranc
             var submittedIds = new HashSet<long>();
             var toCreate = new List<TaktQualityAssuranceFirstArticle>();
             var seenLineKeys = new HashSet<string>(StringComparer.Ordinal);
-            for (var i = 0; i < dto.FirstArticleItems.Count; i++)
+            for (var i = 0; i < firstArticleItemsForSave.Count; i++)
             {
-                var childDto = dto.FirstArticleItems[i];
+                var childDto = firstArticleItemsForSave[i];
                 childDto.QualityAssuranceId = entity.Id;
                 var lineKey = $"{entity.CompanyCode}|{entity.Id}|{childDto.LineNumber}";
                 if (!seenLineKeys.Add(lineKey))
@@ -720,7 +746,20 @@ public class TaktQualityAssuranceService : TaktServiceBase, ITaktQualityAssuranc
             }
         }
         // 品质业务设备校正费用明细（CalibrationItems）
-        if (dto.CalibrationItems is not { Count: > 0 })
+        List<TaktQualityAssuranceCalibrationUpdateDto>? calibrationItemsForSave;
+        if (dto is TaktQualityAssuranceUpdateDto updateDtoForCalibrationItems && updateDtoForCalibrationItems.CalibrationItems != null)
+        {
+            calibrationItemsForSave = updateDtoForCalibrationItems.CalibrationItems;
+        }
+        else if (dto.CalibrationItems != null)
+        {
+            calibrationItemsForSave = dto.CalibrationItems.Adapt<List<TaktQualityAssuranceCalibrationUpdateDto>>();
+        }
+        else
+        {
+            calibrationItemsForSave = null;
+        }
+        if (calibrationItemsForSave is not { Count: > 0 })
         {
             await MarkQualityAssuranceCalibrationsObsoleteAsync(entity.Id);
         }
@@ -731,9 +770,9 @@ public class TaktQualityAssuranceService : TaktServiceBase, ITaktQualityAssuranc
             var submittedIds = new HashSet<long>();
             var toCreate = new List<TaktQualityAssuranceCalibration>();
             var seenLineKeys = new HashSet<string>(StringComparer.Ordinal);
-            for (var i = 0; i < dto.CalibrationItems.Count; i++)
+            for (var i = 0; i < calibrationItemsForSave.Count; i++)
             {
-                var childDto = dto.CalibrationItems[i];
+                var childDto = calibrationItemsForSave[i];
                 childDto.QualityAssuranceId = entity.Id;
                 var lineKey = $"{entity.CompanyCode}|{entity.Id}|{childDto.LineNumber}";
                 if (!seenLineKeys.Add(lineKey))
@@ -812,7 +851,20 @@ public class TaktQualityAssuranceService : TaktServiceBase, ITaktQualityAssuranc
             }
         }
         // 品质业务其他通常业务费用明细（OtherItems）
-        if (dto.OtherItems is not { Count: > 0 })
+        List<TaktQualityAssuranceOtherUpdateDto>? otherItemsForSave;
+        if (dto is TaktQualityAssuranceUpdateDto updateDtoForOtherItems && updateDtoForOtherItems.OtherItems != null)
+        {
+            otherItemsForSave = updateDtoForOtherItems.OtherItems;
+        }
+        else if (dto.OtherItems != null)
+        {
+            otherItemsForSave = dto.OtherItems.Adapt<List<TaktQualityAssuranceOtherUpdateDto>>();
+        }
+        else
+        {
+            otherItemsForSave = null;
+        }
+        if (otherItemsForSave is not { Count: > 0 })
         {
             await MarkQualityAssuranceOthersObsoleteAsync(entity.Id);
         }
@@ -823,9 +875,9 @@ public class TaktQualityAssuranceService : TaktServiceBase, ITaktQualityAssuranc
             var submittedIds = new HashSet<long>();
             var toCreate = new List<TaktQualityAssuranceOther>();
             var seenLineKeys = new HashSet<string>(StringComparer.Ordinal);
-            for (var i = 0; i < dto.OtherItems.Count; i++)
+            for (var i = 0; i < otherItemsForSave.Count; i++)
             {
-                var childDto = dto.OtherItems[i];
+                var childDto = otherItemsForSave[i];
                 childDto.QualityAssuranceId = entity.Id;
                 var lineKey = $"{entity.CompanyCode}|{entity.Id}|{childDto.LineNumber}";
                 if (!seenLineKeys.Add(lineKey))
@@ -904,7 +956,20 @@ public class TaktQualityAssuranceService : TaktServiceBase, ITaktQualityAssuranc
             }
         }
         // 品质业务出货检验费用明细（OutgoingItems）
-        if (dto.OutgoingItems is not { Count: > 0 })
+        List<TaktQualityAssuranceOutgoingUpdateDto>? outgoingItemsForSave;
+        if (dto is TaktQualityAssuranceUpdateDto updateDtoForOutgoingItems && updateDtoForOutgoingItems.OutgoingItems != null)
+        {
+            outgoingItemsForSave = updateDtoForOutgoingItems.OutgoingItems;
+        }
+        else if (dto.OutgoingItems != null)
+        {
+            outgoingItemsForSave = dto.OutgoingItems.Adapt<List<TaktQualityAssuranceOutgoingUpdateDto>>();
+        }
+        else
+        {
+            outgoingItemsForSave = null;
+        }
+        if (outgoingItemsForSave is not { Count: > 0 })
         {
             await MarkQualityAssuranceOutgoingsObsoleteAsync(entity.Id);
         }
@@ -915,9 +980,9 @@ public class TaktQualityAssuranceService : TaktServiceBase, ITaktQualityAssuranc
             var submittedIds = new HashSet<long>();
             var toCreate = new List<TaktQualityAssuranceOutgoing>();
             var seenLineKeys = new HashSet<string>(StringComparer.Ordinal);
-            for (var i = 0; i < dto.OutgoingItems.Count; i++)
+            for (var i = 0; i < outgoingItemsForSave.Count; i++)
             {
-                var childDto = dto.OutgoingItems[i];
+                var childDto = outgoingItemsForSave[i];
                 childDto.QualityAssuranceId = entity.Id;
                 var lineKey = $"{entity.CompanyCode}|{entity.Id}|{childDto.LineNumber}";
                 if (!seenLineKeys.Add(lineKey))
@@ -996,7 +1061,20 @@ public class TaktQualityAssuranceService : TaktServiceBase, ITaktQualityAssuranc
             }
         }
         // 品质业务信赖性评价ORT费用明细（ReliabilityItems）
-        if (dto.ReliabilityItems is not { Count: > 0 })
+        List<TaktQualityAssuranceReliabilityUpdateDto>? reliabilityItemsForSave;
+        if (dto is TaktQualityAssuranceUpdateDto updateDtoForReliabilityItems && updateDtoForReliabilityItems.ReliabilityItems != null)
+        {
+            reliabilityItemsForSave = updateDtoForReliabilityItems.ReliabilityItems;
+        }
+        else if (dto.ReliabilityItems != null)
+        {
+            reliabilityItemsForSave = dto.ReliabilityItems.Adapt<List<TaktQualityAssuranceReliabilityUpdateDto>>();
+        }
+        else
+        {
+            reliabilityItemsForSave = null;
+        }
+        if (reliabilityItemsForSave is not { Count: > 0 })
         {
             await MarkQualityAssuranceReliabilitysObsoleteAsync(entity.Id);
         }
@@ -1007,9 +1085,9 @@ public class TaktQualityAssuranceService : TaktServiceBase, ITaktQualityAssuranc
             var submittedIds = new HashSet<long>();
             var toCreate = new List<TaktQualityAssuranceReliability>();
             var seenLineKeys = new HashSet<string>(StringComparer.Ordinal);
-            for (var i = 0; i < dto.ReliabilityItems.Count; i++)
+            for (var i = 0; i < reliabilityItemsForSave.Count; i++)
             {
-                var childDto = dto.ReliabilityItems[i];
+                var childDto = reliabilityItemsForSave[i];
                 childDto.QualityAssuranceId = entity.Id;
                 var lineKey = $"{entity.CompanyCode}|{entity.Id}|{childDto.LineNumber}";
                 if (!seenLineKeys.Add(lineKey))
@@ -1088,7 +1166,20 @@ public class TaktQualityAssuranceService : TaktServiceBase, ITaktQualityAssuranc
             }
         }
         // 品质业务顾客品质要求对应费用明细（CustomerResponseItems）
-        if (dto.CustomerResponseItems is not { Count: > 0 })
+        List<TaktQualityAssuranceCustomerResponseUpdateDto>? customerResponseItemsForSave;
+        if (dto is TaktQualityAssuranceUpdateDto updateDtoForCustomerResponseItems && updateDtoForCustomerResponseItems.CustomerResponseItems != null)
+        {
+            customerResponseItemsForSave = updateDtoForCustomerResponseItems.CustomerResponseItems;
+        }
+        else if (dto.CustomerResponseItems != null)
+        {
+            customerResponseItemsForSave = dto.CustomerResponseItems.Adapt<List<TaktQualityAssuranceCustomerResponseUpdateDto>>();
+        }
+        else
+        {
+            customerResponseItemsForSave = null;
+        }
+        if (customerResponseItemsForSave is not { Count: > 0 })
         {
             await MarkQualityAssuranceCustomerResponsesObsoleteAsync(entity.Id);
         }
@@ -1099,9 +1190,9 @@ public class TaktQualityAssuranceService : TaktServiceBase, ITaktQualityAssuranc
             var submittedIds = new HashSet<long>();
             var toCreate = new List<TaktQualityAssuranceCustomerResponse>();
             var seenLineKeys = new HashSet<string>(StringComparer.Ordinal);
-            for (var i = 0; i < dto.CustomerResponseItems.Count; i++)
+            for (var i = 0; i < customerResponseItemsForSave.Count; i++)
             {
-                var childDto = dto.CustomerResponseItems[i];
+                var childDto = customerResponseItemsForSave[i];
                 childDto.QualityAssuranceId = entity.Id;
                 var lineKey = $"{entity.CompanyCode}|{entity.Id}|{childDto.LineNumber}";
                 if (!seenLineKeys.Add(lineKey))
@@ -1200,7 +1291,7 @@ public class TaktQualityAssuranceService : TaktServiceBase, ITaktQualityAssuranc
                 (x.PlantCode != null && x.PlantCode.Contains(keywords))
                 || (x.QualityAssuranceCode != null && x.QualityAssuranceCode.Contains(keywords))
                 || (x.AssuranceMonth != null && x.AssuranceMonth.Contains(keywords))
-                || (x.CustomerName != null && x.CustomerName.Contains(keywords))
+                || (x.CustomerName1 != null && x.CustomerName1.Contains(keywords))
                 || (x.DebitNoteNo != null && x.DebitNoteNo.Contains(keywords))
                 || (x.Recorder != null && x.Recorder.Contains(keywords))
                 || SqlFunc.ToString(x.TotalQualityCost).Contains(keywords)
@@ -1226,9 +1317,9 @@ public class TaktQualityAssuranceService : TaktServiceBase, ITaktQualityAssuranc
             exp = exp.And(x => x.AssuranceMonth != null && x.AssuranceMonth.Contains(queryDto.AssuranceMonth));
         }
 
-        if (!string.IsNullOrEmpty(queryDto?.CustomerName))
+        if (!string.IsNullOrEmpty(queryDto?.CustomerName1))
         {
-            exp = exp.And(x => x.CustomerName != null && x.CustomerName.Contains(queryDto.CustomerName));
+            exp = exp.And(x => x.CustomerName1 != null && x.CustomerName1.Contains(queryDto.CustomerName1));
         }
 
         if (!string.IsNullOrEmpty(queryDto?.DebitNoteNo))

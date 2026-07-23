@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Application.Services.Logistics.Procurement
 // 文件名称：TaktPurchasePriceService.cs
-// 创建时间：2026-07-20
+// 创建时间：2026-07-21
 // 创建人：Takt365(Cursor AI)
 // 功能描述：采购价格应用服务实现
 // 
@@ -14,6 +14,7 @@ using System.Linq.Expressions;
 using Mapster;
 using SqlSugar;
 using Takt.Application.Dtos.Logistics.Procurement;
+using Takt.Domain.Entities.Logistics.Materials;
 using Takt.Domain.Entities.Logistics.Procurement;
 using Takt.Domain.Interfaces;
 using Takt.Domain.Repositories;
@@ -29,8 +30,13 @@ namespace Takt.Application.Services.Logistics.Procurement;
 /// </summary>
 public class TaktPurchasePriceService : TaktServiceBase, ITaktPurchasePriceService
 {
+    /// <summary>物料/供应商名称按编码分批查询，避免超长 IN 列表</summary>
+    private const int MaterialNameLookupBatchSize = 500;
+
     private readonly ITaktCompanyRepository<TaktPurchasePrice> _purchasePriceRepository;
     private readonly ITaktCompanyRepository<TaktPurchasePriceItem> _purchasePriceItemRepository;
+    private readonly ITaktCompanyRepository<TaktMaterialPlant> _materialPlantRepository;
+    private readonly ITaktCompanyRepository<TaktSupplier> _supplierRepository;
     private readonly ITaktUniqueValidator _uniqueValidator;
 
     /// <summary>
@@ -38,12 +44,16 @@ public class TaktPurchasePriceService : TaktServiceBase, ITaktPurchasePriceServi
     /// </summary>
     /// <param name="purchasePriceRepository">采购价格仓储</param>
     /// <param name="purchasePriceItemRepository">PurchasePriceItem仓储</param>
+    /// <param name="materialPlantRepository">工厂物料仓储</param>
+    /// <param name="supplierRepository">供应商仓储</param>
     /// <param name="uniqueValidator">唯一性验证器</param>
     /// <param name="userContext">用户上下文</param>
     /// <param name="localizationService">本地化服务</param>
     public TaktPurchasePriceService(
         ITaktCompanyRepository<TaktPurchasePrice> purchasePriceRepository,
         ITaktCompanyRepository<TaktPurchasePriceItem> purchasePriceItemRepository,
+        ITaktCompanyRepository<TaktMaterialPlant> materialPlantRepository,
+        ITaktCompanyRepository<TaktSupplier> supplierRepository,
         ITaktUniqueValidator uniqueValidator,
         ITaktUserContext? userContext = null,
         ITaktLocalizationService? localizationService = null)
@@ -51,6 +61,8 @@ public class TaktPurchasePriceService : TaktServiceBase, ITaktPurchasePriceServi
     {
         _purchasePriceRepository = purchasePriceRepository;
         _purchasePriceItemRepository = purchasePriceItemRepository;
+        _materialPlantRepository = materialPlantRepository;
+        _supplierRepository = supplierRepository;
         _uniqueValidator = uniqueValidator;
     }
 
@@ -107,6 +119,78 @@ public class TaktPurchasePriceService : TaktServiceBase, ITaktPurchasePriceServi
         }).ToList();
     }
 
+    /// <inheritdoc />
+    public async Task<List<TaktSelectOption>> GetPurchasePriceSupplierOptionsAsync(string? plantCode = null)
+    {
+        EnsureThreeLayerContext();
+        var trimmedPlant = plantCode?.Trim();
+        if (string.IsNullOrWhiteSpace(trimmedPlant))
+        {
+            return new List<TaktSelectOption>();
+        }
+        var list = await _purchasePriceRepository.GetListAsync(
+            x => x.TenantCode == CurrentTenantCode
+                && x.CompanyCode == CurrentCompanyCode
+                && x.PlantCode == trimmedPlant
+                && x.SupplierCode != null
+                && x.SupplierCode != string.Empty,
+            x => x.SupplierCode,
+            false);
+        var codes = list
+            .Select(x => x.SupplierCode.Trim())
+            .Where(c => !string.IsNullOrWhiteSpace(c))
+            .Distinct(StringComparer.OrdinalIgnoreCase)
+            .OrderBy(c => c, StringComparer.OrdinalIgnoreCase)
+            .ToList();
+        var nameLookup = await LoadSupplierNameLookupAsync(codes);
+        return codes.Select(code =>
+        {
+            var name = nameLookup.TryGetValue(code, out var n) ? n : string.Empty;
+            var label = string.IsNullOrWhiteSpace(name) ? code : $"{code} - {name}";
+            return new TaktSelectOption
+            {
+                DictValue = code,
+                DictLabel = label,
+            };
+        }).ToList();
+    }
+
+    /// <inheritdoc />
+    public async Task<List<TaktSelectOption>> GetPurchasePriceMaterialOptionsAsync(string? plantCode = null)
+    {
+        EnsureThreeLayerContext();
+        var trimmedPlant = plantCode?.Trim();
+        if (string.IsNullOrWhiteSpace(trimmedPlant))
+        {
+            return new List<TaktSelectOption>();
+        }
+        var list = await _purchasePriceRepository.GetListAsync(
+            x => x.TenantCode == CurrentTenantCode
+                && x.CompanyCode == CurrentCompanyCode
+                && x.PlantCode == trimmedPlant
+                && x.MaterialCode != null
+                && x.MaterialCode != string.Empty,
+            x => x.MaterialCode,
+            false);
+        var codes = list
+            .Select(x => x.MaterialCode.Trim())
+            .Where(c => !string.IsNullOrWhiteSpace(c))
+            .Distinct(StringComparer.OrdinalIgnoreCase)
+            .OrderBy(c => c, StringComparer.OrdinalIgnoreCase)
+            .ToList();
+        var nameLookup = await LoadMaterialNameLookupAsync(trimmedPlant, codes);
+        return codes.Select(code =>
+        {
+            var name = nameLookup.TryGetValue(code, out var n) ? n : string.Empty;
+            var label = string.IsNullOrWhiteSpace(name) ? code : $"{code} - {name}";
+            return new TaktSelectOption
+            {
+                DictValue = code,
+                DictLabel = label,
+            };
+        }).ToList();
+    }
+
     /// <summary>
     /// 创建采购价格
     /// </summary>
@@ -117,10 +201,11 @@ public class TaktPurchasePriceService : TaktServiceBase, ITaktPurchasePriceServi
         var entity = dto.Adapt<TaktPurchasePrice>();
         var isUnique_ix_takt_logistics_materials_purchase_price_code_unique = await _uniqueValidator.IsUniqueAsync(
             _purchasePriceRepository,
-            x => x.PurchasePriceCode == entity.PurchasePriceCode);
+            x => x.PlantCode == entity.PlantCode
+                && x.PurchasePriceCode == entity.PurchasePriceCode);
         if (!isUnique_ix_takt_logistics_materials_purchase_price_code_unique)
         {
-            throw new TaktBusinessException("采购价格的PurchasePriceCode已存在");
+            throw new TaktBusinessException("采购价格的PlantCode、PurchasePriceCode已存在");
         }
         entity = await _purchasePriceRepository.CreateAsync(entity);
                 await SavePurchasePriceChildrenAsync(entity, dto);
@@ -143,11 +228,12 @@ public class TaktPurchasePriceService : TaktServiceBase, ITaktPurchasePriceServi
         dto.Adapt(entity);
         var isUnique_ix_takt_logistics_materials_purchase_price_code_unique = await _uniqueValidator.IsUniqueAsync(
             _purchasePriceRepository,
-            x => x.PurchasePriceCode == entity.PurchasePriceCode,
+            x => x.PlantCode == entity.PlantCode
+                && x.PurchasePriceCode == entity.PurchasePriceCode,
             id);
         if (!isUnique_ix_takt_logistics_materials_purchase_price_code_unique)
         {
-            throw new TaktBusinessException("采购价格的PurchasePriceCode已存在");
+            throw new TaktBusinessException("采购价格的PlantCode、PurchasePriceCode已存在");
         }
         await _purchasePriceRepository.UpdateAsync(entity);
                 await SavePurchasePriceChildrenAsync(entity, dto);
@@ -228,17 +314,18 @@ public class TaktPurchasePriceService : TaktServiceBase, ITaktPurchasePriceServi
             try
             {
                 var entity = rows[i].Adapt<TaktPurchasePrice>();
-                var importKey = $"{entity.PurchasePriceCode}";
+                var importKey = $"{entity.PlantCode}|{entity.PurchasePriceCode}";
                 if (!importSeenKeys.Add(importKey))
                 {
-                    throw new TaktBusinessException("与Excel中其他行重复（PurchasePriceCode）");
+                    throw new TaktBusinessException("与Excel中其他行重复（PlantCode、PurchasePriceCode）");
                 }
                 var isUnique_ix_takt_logistics_materials_purchase_price_code_unique = await _uniqueValidator.IsUniqueAsync(
                     _purchasePriceRepository,
-                    x => x.PurchasePriceCode == entity.PurchasePriceCode);
+                    x => x.PlantCode == entity.PlantCode
+                        && x.PurchasePriceCode == entity.PurchasePriceCode);
                 if (!isUnique_ix_takt_logistics_materials_purchase_price_code_unique)
                 {
-                    throw new TaktBusinessException("采购价格的PurchasePriceCode已存在");
+                    throw new TaktBusinessException("采购价格的PlantCode、PurchasePriceCode已存在");
                 }
                 await _purchasePriceRepository.CreateAsync(entity);
                 success += 1;
@@ -332,9 +419,9 @@ public class TaktPurchasePriceService : TaktServiceBase, ITaktPurchasePriceServi
     {
         // 采购价格明细（Items）
         List<TaktPurchasePriceItemUpdateDto>? itemsForSave;
-        if (dto is TaktPurchasePriceUpdateDto updateDto && updateDto.Items != null)
+        if (dto is TaktPurchasePriceUpdateDto updateDtoForItems && updateDtoForItems.Items != null)
         {
-            itemsForSave = updateDto.Items;
+            itemsForSave = updateDtoForItems.Items;
         }
         else if (dto.Items != null)
         {
@@ -414,19 +501,29 @@ public class TaktPurchasePriceService : TaktServiceBase, ITaktPurchasePriceServi
         {
             var keywords = queryDto.KeyWords;
             exp = exp.And(x =>
-                (x.PurchasePriceCode != null && x.PurchasePriceCode.Contains(keywords))
+                (x.PlantCode != null && x.PlantCode.Contains(keywords))
+                || (x.PurchasePriceCode != null && x.PurchasePriceCode.Contains(keywords))
                 || (x.PriceType != null && x.PriceType.Contains(keywords))
                 || (x.SupplierCode != null && x.SupplierCode.Contains(keywords))
                 || (x.MaterialCode != null && x.MaterialCode.Contains(keywords))
-                || (x.VariableKey != null && x.VariableKey.Contains(keywords))
+                || (x.PurchaseGroup != null && x.PurchaseGroup.Contains(keywords))
+                || (x.TaxCode != null && x.TaxCode.Contains(keywords))
+                || SqlFunc.ToString(x.GrBasedInvoiceInspection).Contains(keywords)
+                || SqlFunc.ToString(x.PricingDateControl).Contains(keywords)
                 || SqlFunc.ToString(x.PurchaseInquiryId).Contains(keywords)
                 || (x.PurchaseInquiryCode != null && x.PurchaseInquiryCode.Contains(keywords))
+                || (x.VariableKey != null && x.VariableKey.Contains(keywords))
                 || (x.ExtField != null && x.ExtField.Contains(keywords))
                 || (x.Remark != null && x.Remark.Contains(keywords))
                 || SqlFunc.ToString(x.ValidFrom).Contains(keywords)
                 || SqlFunc.ToString(x.ValidTo).Contains(keywords)
                 || SqlFunc.ToString(x.CreatedAt).Contains(keywords)
             );
+        }
+
+        if (!string.IsNullOrEmpty(queryDto?.PlantCode))
+        {
+            exp = exp.And(x => x.PlantCode != null && x.PlantCode.Contains(queryDto.PlantCode));
         }
 
         if (!string.IsNullOrEmpty(queryDto?.PurchasePriceCode))
@@ -449,9 +546,24 @@ public class TaktPurchasePriceService : TaktServiceBase, ITaktPurchasePriceServi
             exp = exp.And(x => x.MaterialCode != null && x.MaterialCode.Contains(queryDto.MaterialCode));
         }
 
-        if (!string.IsNullOrEmpty(queryDto?.VariableKey))
+        if (!string.IsNullOrEmpty(queryDto?.PurchaseGroup))
         {
-            exp = exp.And(x => x.VariableKey != null && x.VariableKey.Contains(queryDto.VariableKey));
+            exp = exp.And(x => x.PurchaseGroup != null && x.PurchaseGroup.Contains(queryDto.PurchaseGroup));
+        }
+
+        if (!string.IsNullOrEmpty(queryDto?.TaxCode))
+        {
+            exp = exp.And(x => x.TaxCode != null && x.TaxCode.Contains(queryDto.TaxCode));
+        }
+
+        if (queryDto?.GrBasedInvoiceInspection.HasValue == true)
+        {
+            exp = exp.And(x => x.GrBasedInvoiceInspection == queryDto.GrBasedInvoiceInspection);
+        }
+
+        if (queryDto?.PricingDateControl.HasValue == true)
+        {
+            exp = exp.And(x => x.PricingDateControl == queryDto.PricingDateControl);
         }
 
         if (queryDto?.PurchaseInquiryId.HasValue == true)
@@ -462,6 +574,11 @@ public class TaktPurchasePriceService : TaktServiceBase, ITaktPurchasePriceServi
         if (!string.IsNullOrEmpty(queryDto?.PurchaseInquiryCode))
         {
             exp = exp.And(x => x.PurchaseInquiryCode != null && x.PurchaseInquiryCode.Contains(queryDto.PurchaseInquiryCode));
+        }
+
+        if (!string.IsNullOrEmpty(queryDto?.VariableKey))
+        {
+            exp = exp.And(x => x.VariableKey != null && x.VariableKey.Contains(queryDto.VariableKey));
         }
 
         if (!string.IsNullOrEmpty(queryDto?.ExtField))
@@ -505,5 +622,79 @@ public class TaktPurchasePriceService : TaktServiceBase, ITaktPurchasePriceServi
         }
 
         return exp.ToExpression();
+    }
+
+    /// <summary>
+    /// 加载工厂物料名称字典
+    /// </summary>
+    /// <param name="plantCode">工厂</param>
+    /// <param name="materialCodes">物料编码</param>
+    /// <returns>编码→名称</returns>
+    private async Task<Dictionary<string, string>> LoadMaterialNameLookupAsync(
+        string plantCode,
+        IReadOnlyList<string> materialCodes)
+    {
+        if (materialCodes.Count == 0)
+        {
+            return new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase);
+        }
+        var codes = materialCodes.Where(c => !string.IsNullOrWhiteSpace(c)).Distinct(StringComparer.OrdinalIgnoreCase).ToList();
+        var map = new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase);
+        for (var offset = 0; offset < codes.Count; offset = checked(offset + MaterialNameLookupBatchSize))
+        {
+            var batch = codes.Skip(offset).Take(MaterialNameLookupBatchSize).ToList();
+            var plants = await _materialPlantRepository.GetListAsync(
+                x => x.TenantCode == CurrentTenantCode
+                    && x.CompanyCode == CurrentCompanyCode
+                    && x.PlantCode == plantCode
+                    && batch.Contains(x.MaterialCode));
+            foreach (var group in plants
+                .Where(p => !string.IsNullOrWhiteSpace(p.MaterialCode))
+                .GroupBy(p => p.MaterialCode.Trim(), StringComparer.OrdinalIgnoreCase))
+            {
+                if (map.ContainsKey(group.Key))
+                {
+                    continue;
+                }
+                map[group.Key] = group.Select(x => x.MaterialName)
+                    .FirstOrDefault(n => !string.IsNullOrWhiteSpace(n))?.Trim() ?? string.Empty;
+            }
+        }
+        return map;
+    }
+
+    /// <summary>
+    /// 加载供应商名称字典
+    /// </summary>
+    /// <param name="supplierCodes">供应商编码</param>
+    /// <returns>编码→名称</returns>
+    private async Task<Dictionary<string, string>> LoadSupplierNameLookupAsync(IReadOnlyList<string> supplierCodes)
+    {
+        if (supplierCodes.Count == 0)
+        {
+            return new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase);
+        }
+        var codes = supplierCodes.Where(c => !string.IsNullOrWhiteSpace(c)).Distinct(StringComparer.OrdinalIgnoreCase).ToList();
+        var map = new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase);
+        for (var offset = 0; offset < codes.Count; offset = checked(offset + MaterialNameLookupBatchSize))
+        {
+            var batch = codes.Skip(offset).Take(MaterialNameLookupBatchSize).ToList();
+            var suppliers = await _supplierRepository.GetListAsync(
+                x => x.TenantCode == CurrentTenantCode
+                    && x.CompanyCode == CurrentCompanyCode
+                    && batch.Contains(x.SupplierCode));
+            foreach (var group in suppliers
+                .Where(s => !string.IsNullOrWhiteSpace(s.SupplierCode))
+                .GroupBy(s => s.SupplierCode.Trim(), StringComparer.OrdinalIgnoreCase))
+            {
+                if (map.ContainsKey(group.Key))
+                {
+                    continue;
+                }
+                map[group.Key] = group.Select(x => x.SupplierName1)
+                    .FirstOrDefault(n => !string.IsNullOrWhiteSpace(n))?.Trim() ?? string.Empty;
+            }
+        }
+        return map;
     }
 }

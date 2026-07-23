@@ -26,10 +26,11 @@ namespace Takt.Domain.Entities.Logistics.Procurement;
 [SugarIndex("ix_takt_logistics_materials_purchase_request_request_by", nameof(TenantCode), OrderByType.Asc, nameof(CompanyCode), OrderByType.Asc, nameof(RequestBy), OrderByType.Asc, false)]
 [SugarIndex("ix_takt_logistics_materials_purchase_request_request_date", nameof(TenantCode), OrderByType.Asc, nameof(CompanyCode), OrderByType.Asc, nameof(RequestDate), OrderByType.Desc, false)]
 [SugarIndex("ix_takt_logistics_materials_purchase_request_request_id", nameof(TenantCode), OrderByType.Asc, nameof(CompanyCode), OrderByType.Asc, nameof(RequestId), OrderByType.Asc, false)]
+[SugarIndex("ix_takt_logistics_materials_purchase_request_supplier_code", nameof(TenantCode), OrderByType.Asc, nameof(CompanyCode), OrderByType.Asc, nameof(SupplierCode), OrderByType.Asc, false)]
 public class TaktPurchaseRequest : TaktApprovalEntityBase
 {
     /// <summary>
-    /// 工厂代码（选项 TaktPlants/options，DictValue=PlantCode）
+    /// 工厂代码（选项 TaktPlants/options；DictValue=PlantCode）
     /// </summary>
     [SugarColumn(ColumnName = "plant_code", ColumnDescription = "工厂代码", ColumnDataType = "nvarchar", Length = 4, IsNullable = false)]
     public string PlantCode { get; set; } = string.Empty;
@@ -40,7 +41,7 @@ public class TaktPurchaseRequest : TaktApprovalEntityBase
     [SugarColumn(ColumnName = "purchase_request_code", ColumnDescription = "采购申请编码", ColumnDataType = "nvarchar", Length = 10, IsNullable = false)]
     public string PurchaseRequestCode { get; set; } = string.Empty;
     /// <summary>
-    /// 来源采购询价 ID（选项 TaktPurchaseInquirys/options，DictValue=Id）
+    /// 来源采购询价 ID（选项 TaktPurchaseInquirys/options；DictValue=Id）
     /// </summary>
     [SugarColumn(ColumnName = "purchase_inquiry_id", ColumnDescription = "来源采购询价ID", ColumnDataType = "bigint", IsNullable = true)]
     [JsonConverter(typeof(ValueToStringConverter))]
@@ -72,15 +73,15 @@ public class TaktPurchaseRequest : TaktApprovalEntityBase
     [SugarColumn(ColumnName = "po_decision", ColumnDescription = "PO生成决策", ColumnDataType = "int", IsNullable = true)]
     public int? PoDecision { get; set; }
     /// <summary>
-    /// PR 会签单 ID（选项 TaktCountersigns/options，DictValue=Id）
+    /// PR 会签单 ID（选项 TaktCountersigns/options；DictValue=Id）
     /// </summary>
     [SugarColumn(ColumnName = "countersign_id", ColumnDescription = "PR会签单ID", ColumnDataType = "bigint", IsNullable = true)]
     [JsonConverter(typeof(ValueToStringConverter))]
     public long? CountersignId { get; set; }
     /// <summary>
-    /// PR 会签编号（冗余）
+    /// PR 会签编码（冗余）
     /// </summary>
-    [SugarColumn(ColumnName = "countersign_code", ColumnDescription = "PR会签编号", ColumnDataType = "varchar", Length = 50, IsNullable = true)]
+    [SugarColumn(ColumnName = "countersign_code", ColumnDescription = "PR会签编码", ColumnDataType = "varchar", Length = 50, IsNullable = true)]
     public string? CountersignCode { get; set; }
     /// <summary>
     /// 申请日期
@@ -93,7 +94,7 @@ public class TaktPurchaseRequest : TaktApprovalEntityBase
     [SugarColumn(ColumnName = "required_arrival_date", ColumnDescription = "要求到货日期", ColumnDataType = "datetime", IsNullable = true)]
     public DateTime? RequiredArrivalDate { get; set; }
     /// <summary>
-    /// 申请人员工 ID（选项 TaktEmployees/options，DictValue=Id）
+    /// 申请人员工 ID（选项 TaktEmployees/options；DictValue=Id）
     /// </summary>
     [SugarColumn(ColumnName = "request_id", ColumnDescription = "申请人员工ID", ColumnDataType = "bigint", IsNullable = true)]
     [JsonConverter(typeof(ValueToStringConverter))]
@@ -103,6 +104,31 @@ public class TaktPurchaseRequest : TaktApprovalEntityBase
     /// </summary>
     [SugarColumn(ColumnName = "request_by", ColumnDescription = "申请人", ColumnDataType = "nvarchar", Length = 50, IsNullable = false)]
     public string RequestBy { get; set; } = string.Empty;
+    /// <summary>
+    /// 供应商编码（选项 TaktSuppliers/options；DictValue=SupplierCode；一单一供应商，明细禁止再挂供应商）
+    /// </summary>
+    [SugarColumn(ColumnName = "supplier_code", ColumnDescription = "供应商编码", ColumnDataType = "nvarchar", Length = 50, IsNullable = false)]
+    public string SupplierCode { get; set; } = string.Empty;
+    /// <summary>
+    /// 供应商名称1（冗余，与 TaktSupplier.SupplierName1 对齐）
+    /// </summary>
+    [SugarColumn(ColumnName = "supplier_name1", ColumnDescription = "供应商名称1", ColumnDataType = "nvarchar", Length = 140, IsNullable = false)]
+    public string SupplierName1 { get; set; } = string.Empty;
+    /// <summary>
+    /// 结算币种（字典 accounting_currency_code；DictValue=CNY/USD 等；一单一币种）
+    /// </summary>
+    [SugarColumn(ColumnName = "currency_code", ColumnDescription = "结算币种", ColumnDataType = "nvarchar", Length = 3, IsNullable = false, DefaultValue = "CNY")]
+    public string CurrencyCode { get; set; } = "CNY";
+    /// <summary>
+    /// 税率（字典 accounting_tax_rate_param；13=13%，9=9%，0=0% 等；一单一税率）
+    /// </summary>
+    [SugarColumn(ColumnName = "tax_rate", ColumnDescription = "税率", ColumnDataType = "int", IsNullable = false, DefaultValue = "13")]
+    public int TaxRate { get; set; } = 13;
+    /// <summary>
+    /// 税费（精确到分）
+    /// </summary>
+    [SugarColumn(ColumnName = "tax_amount", ColumnDescription = "税费", ColumnDataType = "decimal", Length = 18, DecimalDigits = 2, IsNullable = false, DefaultValue = "0")]
+    public decimal TaxAmount { get; set; } = 0;
     /// <summary>
     /// 申请总数量（基本单位数量）
     /// </summary>

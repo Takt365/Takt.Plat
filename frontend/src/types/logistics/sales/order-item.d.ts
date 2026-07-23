@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：frontend/src/types/logistics/sales
 // 文件名称：order-item.d.ts
-// 创建时间：2026-07-09
+// 创建时间：2026-07-23
 // 创建人：Takt365(Auto Generated)
 // 功能描述：logistics/sales 模块类型定义（自动生成；类型名去 Takt 前缀与末尾 Dto，如 TaktCompanyDto → Company）
 // 
@@ -29,12 +29,12 @@ export interface SalesOrderItem extends CompanyDtoBase {
   salesOrderItemId: string;
 
   /**
-   * 销售订单（关联 TaktSalesOrder.Id，选项 TaktSalesOrders/options）
+   * 销售订单（选项 TaktSalesOrders/options；DictValue=Id）
    */
   salesOrderId: string;
 
   /**
-   * 销售订单（关联 TaktSalesOrder.Id，选项 TaktSalesOrders/options）
+   * 销售订单（选项 TaktSalesOrders/options；DictValue=Id）
    */
   salesOrderName?: string;
 
@@ -49,22 +49,22 @@ export interface SalesOrderItem extends CompanyDtoBase {
   lineNumber: number;
 
   /**
-   * 物料编码（选项 TaktMaterials/options，DictValue=MaterialCode）
+   * 物料编码（选项 TaktMaterialPlants/options；DictValue=MaterialCode，ExtValue=PlantCode）
    */
   materialCode: string;
 
   /**
-   * 物料名称
+   * 物料名称（回填：随物料）
    */
   materialName: string;
 
   /**
-   * 物料规格
+   * 物料规格（回填：随物料）
    */
   materialSpecification?: string;
 
   /**
-   * 销售单位（字典 logistics_unit_of_measure_code，DictValue=PC/EA 等；默认 PC）
+   * 销售单位（字典 logistics_unit_of_measure_code；DictValue=PC/EA 等；默认 PC）
    */
   salesUnit: string;
 
@@ -84,9 +84,9 @@ export interface SalesOrderItem extends CompanyDtoBase {
   salesPerUnit: number;
 
   /**
-   * 单价（精确到分，存储为整数，单位为分）
+   * 销售单价
    */
-  unitPrice: number;
+  salesUnitPrice: number;
 
   /**
    * 折扣率（0-100，表示折扣百分比）
@@ -99,19 +99,19 @@ export interface SalesOrderItem extends CompanyDtoBase {
   discountAmount: number;
 
   /**
-   * 税费率（字典 accounting_tax_rate_param 预设或手输；0-100，表示税费百分比）
+   * 含税金额
    */
-  taxRate: number;
+  taxIncludedAmount: number;
 
   /**
-   * 税费（精确到分，存储为整数，单位为分）
+   * 未税金额
+   */
+  untaxedAmount: number;
+
+  /**
+   * 税费
    */
   taxAmount: number;
-
-  /**
-   * 小计金额（精确到分，存储为整数，单位为分）
-   */
-  subtotalAmount: number;
 
   /**
    * 行交货状态（字典 logistics_delivery_status；0=未交货 1=部分交货 2=全部交货）
@@ -119,7 +119,7 @@ export interface SalesOrderItem extends CompanyDtoBase {
   deliveryStatus: number;
 
   /**
-   * 是否作废（字典 sys_yes_no_type，0=否 1=是；编辑移除子行时标记作废）
+   * 是否作废（字典 sys_yes_no_type；0=否 1=是；编辑移除子行时标记作废）
    */
   isObsolete: number;
 
@@ -149,7 +149,7 @@ export interface SalesOrderItemQuery extends TaktPagedQuery {
   companyCode?: string;
 
   /**
-   * 销售订单（关联 TaktSalesOrder.Id，选项 TaktSalesOrders/options）
+   * 销售订单（选项 TaktSalesOrders/options；DictValue=Id）
    */
   salesOrderId?: string;
 
@@ -164,22 +164,22 @@ export interface SalesOrderItemQuery extends TaktPagedQuery {
   lineNumber?: number;
 
   /**
-   * 物料编码（选项 TaktMaterials/options，DictValue=MaterialCode）
+   * 物料编码（选项 TaktMaterialPlants/options；DictValue=MaterialCode，ExtValue=PlantCode）
    */
   materialCode?: string;
 
   /**
-   * 物料名称
+   * 物料名称（回填：随物料）
    */
   materialName?: string;
 
   /**
-   * 物料规格
+   * 物料规格（回填：随物料）
    */
   materialSpecification?: string;
 
   /**
-   * 销售单位（字典 logistics_unit_of_measure_code，DictValue=PC/EA 等；默认 PC）
+   * 销售单位（字典 logistics_unit_of_measure_code；DictValue=PC/EA 等；默认 PC）
    */
   salesUnit?: string;
 
@@ -199,9 +199,9 @@ export interface SalesOrderItemQuery extends TaktPagedQuery {
   salesPerUnit?: number;
 
   /**
-   * 单价（精确到分，存储为整数，单位为分）
+   * 销售单价
    */
-  unitPrice?: number;
+  salesUnitPrice?: number;
 
   /**
    * 折扣率（0-100，表示折扣百分比）
@@ -214,19 +214,19 @@ export interface SalesOrderItemQuery extends TaktPagedQuery {
   discountAmount?: number;
 
   /**
-   * 税费率（字典 accounting_tax_rate_param 预设或手输；0-100，表示税费百分比）
+   * 含税金额
    */
-  taxRate?: number;
+  taxIncludedAmount?: number;
 
   /**
-   * 税费（精确到分，存储为整数，单位为分）
+   * 未税金额
+   */
+  untaxedAmount?: number;
+
+  /**
+   * 税费
    */
   taxAmount?: number;
-
-  /**
-   * 小计金额（精确到分，存储为整数，单位为分）
-   */
-  subtotalAmount?: number;
 
   /**
    * 行交货状态（字典 logistics_delivery_status；0=未交货 1=部分交货 2=全部交货）
@@ -234,7 +234,7 @@ export interface SalesOrderItemQuery extends TaktPagedQuery {
   deliveryStatus?: number;
 
   /**
-   * 是否作废（字典 sys_yes_no_type，0=否 1=是；编辑移除子行时标记作废）
+   * 是否作废（字典 sys_yes_no_type；0=否 1=是；编辑移除子行时标记作废）
    */
   isObsolete?: number;
 
@@ -283,7 +283,7 @@ export interface SalesOrderItemCreate {
   companyDefaultCulture: string;
 
   /**
-   * 销售订单（关联 TaktSalesOrder.Id，选项 TaktSalesOrders/options）
+   * 销售订单（选项 TaktSalesOrders/options；DictValue=Id）
    */
   salesOrderId: string;
 
@@ -298,22 +298,22 @@ export interface SalesOrderItemCreate {
   lineNumber: number;
 
   /**
-   * 物料编码（选项 TaktMaterials/options，DictValue=MaterialCode）
+   * 物料编码（选项 TaktMaterialPlants/options；DictValue=MaterialCode，ExtValue=PlantCode）
    */
   materialCode: string;
 
   /**
-   * 物料名称
+   * 物料名称（回填：随物料）
    */
   materialName: string;
 
   /**
-   * 物料规格
+   * 物料规格（回填：随物料）
    */
   materialSpecification?: string;
 
   /**
-   * 销售单位（字典 logistics_unit_of_measure_code，DictValue=PC/EA 等；默认 PC）
+   * 销售单位（字典 logistics_unit_of_measure_code；DictValue=PC/EA 等；默认 PC）
    */
   salesUnit: string;
 
@@ -333,9 +333,9 @@ export interface SalesOrderItemCreate {
   salesPerUnit: number;
 
   /**
-   * 单价（精确到分，存储为整数，单位为分）
+   * 销售单价
    */
-  unitPrice: number;
+  salesUnitPrice: number;
 
   /**
    * 折扣率（0-100，表示折扣百分比）
@@ -348,19 +348,19 @@ export interface SalesOrderItemCreate {
   discountAmount: number;
 
   /**
-   * 税费率（字典 accounting_tax_rate_param 预设或手输；0-100，表示税费百分比）
+   * 含税金额
    */
-  taxRate: number;
+  taxIncludedAmount: number;
 
   /**
-   * 税费（精确到分，存储为整数，单位为分）
+   * 未税金额
+   */
+  untaxedAmount: number;
+
+  /**
+   * 税费
    */
   taxAmount: number;
-
-  /**
-   * 小计金额（精确到分，存储为整数，单位为分）
-   */
-  subtotalAmount: number;
 
   /**
    * 行交货状态（字典 logistics_delivery_status；0=未交货 1=部分交货 2=全部交货）
@@ -368,7 +368,7 @@ export interface SalesOrderItemCreate {
   deliveryStatus: number;
 
   /**
-   * 是否作废（字典 sys_yes_no_type，0=否 1=是；编辑移除子行时标记作废）
+   * 是否作废（字典 sys_yes_no_type；0=否 1=是；编辑移除子行时标记作废）
    */
   isObsolete: number;
 
@@ -455,7 +455,7 @@ export interface SalesOrderItemTemplate {
   companyCode?: string;
 
   /**
-   * 销售订单（关联 TaktSalesOrder.Id，选项 TaktSalesOrders/options）
+   * 销售订单（选项 TaktSalesOrders/options；DictValue=Id）
    */
   salesOrderId?: string;
 
@@ -470,22 +470,22 @@ export interface SalesOrderItemTemplate {
   lineNumber?: number;
 
   /**
-   * 物料编码（选项 TaktMaterials/options，DictValue=MaterialCode）
+   * 物料编码（选项 TaktMaterialPlants/options；DictValue=MaterialCode，ExtValue=PlantCode）
    */
   materialCode?: string;
 
   /**
-   * 物料名称
+   * 物料名称（回填：随物料）
    */
   materialName?: string;
 
   /**
-   * 物料规格
+   * 物料规格（回填：随物料）
    */
   materialSpecification?: string;
 
   /**
-   * 销售单位（字典 logistics_unit_of_measure_code，DictValue=PC/EA 等；默认 PC）
+   * 销售单位（字典 logistics_unit_of_measure_code；DictValue=PC/EA 等；默认 PC）
    */
   salesUnit?: string;
 
@@ -505,9 +505,9 @@ export interface SalesOrderItemTemplate {
   salesPerUnit?: number;
 
   /**
-   * 单价（精确到分，存储为整数，单位为分）
+   * 销售单价
    */
-  unitPrice?: number;
+  salesUnitPrice?: number;
 
   /**
    * 折扣率（0-100，表示折扣百分比）
@@ -520,19 +520,19 @@ export interface SalesOrderItemTemplate {
   discountAmount?: number;
 
   /**
-   * 税费率（字典 accounting_tax_rate_param 预设或手输；0-100，表示税费百分比）
+   * 含税金额
    */
-  taxRate?: number;
+  taxIncludedAmount?: number;
 
   /**
-   * 税费（精确到分，存储为整数，单位为分）
+   * 未税金额
+   */
+  untaxedAmount?: number;
+
+  /**
+   * 税费
    */
   taxAmount?: number;
-
-  /**
-   * 小计金额（精确到分，存储为整数，单位为分）
-   */
-  subtotalAmount?: number;
 
   /**
    * 行交货状态（字典 logistics_delivery_status；0=未交货 1=部分交货 2=全部交货）
@@ -540,7 +540,7 @@ export interface SalesOrderItemTemplate {
   deliveryStatus?: number;
 
   /**
-   * 是否作废（字典 sys_yes_no_type，0=否 1=是；编辑移除子行时标记作废）
+   * 是否作废（字典 sys_yes_no_type；0=否 1=是；编辑移除子行时标记作废）
    */
   isObsolete?: number;
 
@@ -579,7 +579,7 @@ export interface SalesOrderItemImport {
   companyDefaultCulture?: string;
 
   /**
-   * 销售订单（关联 TaktSalesOrder.Id，选项 TaktSalesOrders/options）
+   * 销售订单（选项 TaktSalesOrders/options；DictValue=Id）
    */
   salesOrderId?: string;
 
@@ -594,22 +594,22 @@ export interface SalesOrderItemImport {
   lineNumber?: number;
 
   /**
-   * 物料编码（选项 TaktMaterials/options，DictValue=MaterialCode）
+   * 物料编码（选项 TaktMaterialPlants/options；DictValue=MaterialCode，ExtValue=PlantCode）
    */
   materialCode?: string;
 
   /**
-   * 物料名称
+   * 物料名称（回填：随物料）
    */
   materialName?: string;
 
   /**
-   * 物料规格
+   * 物料规格（回填：随物料）
    */
   materialSpecification?: string;
 
   /**
-   * 销售单位（字典 logistics_unit_of_measure_code，DictValue=PC/EA 等；默认 PC）
+   * 销售单位（字典 logistics_unit_of_measure_code；DictValue=PC/EA 等；默认 PC）
    */
   salesUnit?: string;
 
@@ -629,9 +629,9 @@ export interface SalesOrderItemImport {
   salesPerUnit?: number;
 
   /**
-   * 单价（精确到分，存储为整数，单位为分）
+   * 销售单价
    */
-  unitPrice?: number;
+  salesUnitPrice?: number;
 
   /**
    * 折扣率（0-100，表示折扣百分比）
@@ -644,19 +644,19 @@ export interface SalesOrderItemImport {
   discountAmount?: number;
 
   /**
-   * 税费率（字典 accounting_tax_rate_param 预设或手输；0-100，表示税费百分比）
+   * 含税金额
    */
-  taxRate?: number;
+  taxIncludedAmount?: number;
 
   /**
-   * 税费（精确到分，存储为整数，单位为分）
+   * 未税金额
+   */
+  untaxedAmount?: number;
+
+  /**
+   * 税费
    */
   taxAmount?: number;
-
-  /**
-   * 小计金额（精确到分，存储为整数，单位为分）
-   */
-  subtotalAmount?: number;
 
   /**
    * 行交货状态（字典 logistics_delivery_status；0=未交货 1=部分交货 2=全部交货）
@@ -664,7 +664,7 @@ export interface SalesOrderItemImport {
   deliveryStatus?: number;
 
   /**
-   * 是否作废（字典 sys_yes_no_type，0=否 1=是；编辑移除子行时标记作废）
+   * 是否作废（字典 sys_yes_no_type；0=否 1=是；编辑移除子行时标记作废）
    */
   isObsolete?: number;
 
@@ -698,7 +698,7 @@ export interface SalesOrderItemExport {
   companyCode: string;
 
   /**
-   * 销售订单（关联 TaktSalesOrder.Id，选项 TaktSalesOrders/options）
+   * 销售订单（选项 TaktSalesOrders/options；DictValue=Id）
    */
   salesOrderId: string;
 
@@ -713,22 +713,22 @@ export interface SalesOrderItemExport {
   lineNumber: number;
 
   /**
-   * 物料编码（选项 TaktMaterials/options，DictValue=MaterialCode）
+   * 物料编码（选项 TaktMaterialPlants/options；DictValue=MaterialCode，ExtValue=PlantCode）
    */
   materialCode: string;
 
   /**
-   * 物料名称
+   * 物料名称（回填：随物料）
    */
   materialName: string;
 
   /**
-   * 物料规格
+   * 物料规格（回填：随物料）
    */
   materialSpecification?: string;
 
   /**
-   * 销售单位（字典 logistics_unit_of_measure_code，DictValue=PC/EA 等；默认 PC）
+   * 销售单位（字典 logistics_unit_of_measure_code；DictValue=PC/EA 等；默认 PC）
    */
   salesUnit: string;
 
@@ -748,9 +748,9 @@ export interface SalesOrderItemExport {
   salesPerUnit: number;
 
   /**
-   * 单价（精确到分，存储为整数，单位为分）
+   * 销售单价
    */
-  unitPrice: number;
+  salesUnitPrice: number;
 
   /**
    * 折扣率（0-100，表示折扣百分比）
@@ -763,19 +763,19 @@ export interface SalesOrderItemExport {
   discountAmount: number;
 
   /**
-   * 税费率（字典 accounting_tax_rate_param 预设或手输；0-100，表示税费百分比）
+   * 含税金额
    */
-  taxRate: number;
+  taxIncludedAmount: number;
 
   /**
-   * 税费（精确到分，存储为整数，单位为分）
+   * 未税金额
+   */
+  untaxedAmount: number;
+
+  /**
+   * 税费
    */
   taxAmount: number;
-
-  /**
-   * 小计金额（精确到分，存储为整数，单位为分）
-   */
-  subtotalAmount: number;
 
   /**
    * 行交货状态（字典 logistics_delivery_status；0=未交货 1=部分交货 2=全部交货）
@@ -783,7 +783,7 @@ export interface SalesOrderItemExport {
   deliveryStatus: number;
 
   /**
-   * 是否作废（字典 sys_yes_no_type，0=否 1=是；编辑移除子行时标记作废）
+   * 是否作废（字典 sys_yes_no_type；0=否 1=是；编辑移除子行时标记作废）
    */
   isObsolete: number;
 

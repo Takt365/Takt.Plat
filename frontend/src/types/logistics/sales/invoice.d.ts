@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：frontend/src/types/logistics/sales
 // 文件名称：invoice.d.ts
-// 创建时间：2026-07-01
+// 创建时间：2026-07-23
 // 创建人：Takt365(Auto Generated)
 // 功能描述：logistics/sales 模块类型定义（自动生成；类型名去 Takt 前缀与末尾 Dto，如 TaktCompanyDto → Company）
 // 
@@ -29,7 +29,7 @@ export interface SalesInvoice extends CompanyDtoBase {
   salesInvoiceId: string;
 
   /**
-   * 工厂代码（选项 TaktPlants/options，DictValue=PlantCode）
+   * 工厂代码（选项 TaktPlants/options；DictValue=PlantCode）
    */
   plantCode: string;
 
@@ -39,17 +39,32 @@ export interface SalesInvoice extends CompanyDtoBase {
   yearMonth: string;
 
   /**
-   * 客户编码（选项 TaktCustomers/options，DictValue=CustomerCode）
+   * 客户编码（选项 TaktCustomers/options；DictValue=CustomerCode）
    */
   customerCode: string;
 
   /**
-   * 客户名称
+   * 客户名称1（冗余，与 TaktCustomer.CustomerName1 对齐）
    */
-  customerName: string;
+  customerName1: string;
 
   /**
-   * 会计凭证编号（租户+公司+工厂内唯一）
+   * 结算币种（字典 accounting_currency_code；DictValue=CNY/USD 等；一单一币种）
+   */
+  currencyCode: string;
+
+  /**
+   * 税率（字典 accounting_tax_rate_param；13=13%，9=9%，0=0% 等；一单一税率）
+   */
+  taxRate: number;
+
+  /**
+   * 税费
+   */
+  taxAmount: number;
+
+  /**
+   * 会计凭证编码（租户+公司+工厂内唯一）
    */
   accountingDocumentCode: string;
 
@@ -79,7 +94,7 @@ export interface SalesInvoiceQuery extends TaktPagedQuery {
   companyCode?: string;
 
   /**
-   * 工厂代码（选项 TaktPlants/options，DictValue=PlantCode）
+   * 工厂代码（选项 TaktPlants/options；DictValue=PlantCode）
    */
   plantCode?: string;
 
@@ -89,17 +104,32 @@ export interface SalesInvoiceQuery extends TaktPagedQuery {
   yearMonth?: string;
 
   /**
-   * 客户编码（选项 TaktCustomers/options，DictValue=CustomerCode）
+   * 客户编码（选项 TaktCustomers/options；DictValue=CustomerCode）
    */
   customerCode?: string;
 
   /**
-   * 客户名称
+   * 客户名称1（冗余，与 TaktCustomer.CustomerName1 对齐）
    */
-  customerName?: string;
+  customerName1?: string;
 
   /**
-   * 会计凭证编号（租户+公司+工厂内唯一）
+   * 结算币种（字典 accounting_currency_code；DictValue=CNY/USD 等；一单一币种）
+   */
+  currencyCode?: string;
+
+  /**
+   * 税率（字典 accounting_tax_rate_param；13=13%，9=9%，0=0% 等；一单一税率）
+   */
+  taxRate?: number;
+
+  /**
+   * 税费
+   */
+  taxAmount?: number;
+
+  /**
+   * 会计凭证编码（租户+公司+工厂内唯一）
    */
   accountingDocumentCode?: string;
 
@@ -148,7 +178,7 @@ export interface SalesInvoiceCreate {
   companyDefaultCulture: string;
 
   /**
-   * 工厂代码（选项 TaktPlants/options，DictValue=PlantCode）
+   * 工厂代码（选项 TaktPlants/options；DictValue=PlantCode）
    */
   plantCode: string;
 
@@ -158,17 +188,32 @@ export interface SalesInvoiceCreate {
   yearMonth: string;
 
   /**
-   * 客户编码（选项 TaktCustomers/options，DictValue=CustomerCode）
+   * 客户编码（选项 TaktCustomers/options；DictValue=CustomerCode）
    */
   customerCode: string;
 
   /**
-   * 客户名称
+   * 客户名称1（冗余，与 TaktCustomer.CustomerName1 对齐）
    */
-  customerName: string;
+  customerName1: string;
 
   /**
-   * 会计凭证编号（租户+公司+工厂内唯一）
+   * 结算币种（字典 accounting_currency_code；DictValue=CNY/USD 等；一单一币种）
+   */
+  currencyCode: string;
+
+  /**
+   * 税率（字典 accounting_tax_rate_param；13=13%，9=9%，0=0% 等；一单一税率）
+   */
+  taxRate: number;
+
+  /**
+   * 税费
+   */
+  taxAmount: number;
+
+  /**
+   * 会计凭证编码（租户+公司+工厂内唯一）
    */
   accountingDocumentCode: string;
 
@@ -202,6 +247,11 @@ export interface SalesInvoiceUpdate extends SalesInvoiceCreate {
    */
   salesInvoiceId: string;
 
+  /**
+   * 销售发票明细列表（主子表关系，一张发票可有多个明细行）（子表，级联保存）
+   */
+  items?: any;
+
 }
 
 
@@ -222,7 +272,7 @@ export interface SalesInvoiceTemplate {
   companyCode?: string;
 
   /**
-   * 工厂代码（选项 TaktPlants/options，DictValue=PlantCode）
+   * 工厂代码（选项 TaktPlants/options；DictValue=PlantCode）
    */
   plantCode?: string;
 
@@ -232,17 +282,32 @@ export interface SalesInvoiceTemplate {
   yearMonth?: string;
 
   /**
-   * 客户编码（选项 TaktCustomers/options，DictValue=CustomerCode）
+   * 客户编码（选项 TaktCustomers/options；DictValue=CustomerCode）
    */
   customerCode?: string;
 
   /**
-   * 客户名称
+   * 客户名称1（冗余，与 TaktCustomer.CustomerName1 对齐）
    */
-  customerName?: string;
+  customerName1?: string;
 
   /**
-   * 会计凭证编号（租户+公司+工厂内唯一）
+   * 结算币种（字典 accounting_currency_code；DictValue=CNY/USD 等；一单一币种）
+   */
+  currencyCode?: string;
+
+  /**
+   * 税率（字典 accounting_tax_rate_param；13=13%，9=9%，0=0% 等；一单一税率）
+   */
+  taxRate?: number;
+
+  /**
+   * 税费
+   */
+  taxAmount?: number;
+
+  /**
+   * 会计凭证编码（租户+公司+工厂内唯一）
    */
   accountingDocumentCode?: string;
 
@@ -286,7 +351,7 @@ export interface SalesInvoiceImport {
   companyDefaultCulture?: string;
 
   /**
-   * 工厂代码（选项 TaktPlants/options，DictValue=PlantCode）
+   * 工厂代码（选项 TaktPlants/options；DictValue=PlantCode）
    */
   plantCode?: string;
 
@@ -296,17 +361,32 @@ export interface SalesInvoiceImport {
   yearMonth?: string;
 
   /**
-   * 客户编码（选项 TaktCustomers/options，DictValue=CustomerCode）
+   * 客户编码（选项 TaktCustomers/options；DictValue=CustomerCode）
    */
   customerCode?: string;
 
   /**
-   * 客户名称
+   * 客户名称1（冗余，与 TaktCustomer.CustomerName1 对齐）
    */
-  customerName?: string;
+  customerName1?: string;
 
   /**
-   * 会计凭证编号（租户+公司+工厂内唯一）
+   * 结算币种（字典 accounting_currency_code；DictValue=CNY/USD 等；一单一币种）
+   */
+  currencyCode?: string;
+
+  /**
+   * 税率（字典 accounting_tax_rate_param；13=13%，9=9%，0=0% 等；一单一税率）
+   */
+  taxRate?: number;
+
+  /**
+   * 税费
+   */
+  taxAmount?: number;
+
+  /**
+   * 会计凭证编码（租户+公司+工厂内唯一）
    */
   accountingDocumentCode?: string;
 
@@ -345,7 +425,7 @@ export interface SalesInvoiceExport {
   companyCode: string;
 
   /**
-   * 工厂代码（选项 TaktPlants/options，DictValue=PlantCode）
+   * 工厂代码（选项 TaktPlants/options；DictValue=PlantCode）
    */
   plantCode: string;
 
@@ -355,17 +435,32 @@ export interface SalesInvoiceExport {
   yearMonth: string;
 
   /**
-   * 客户编码（选项 TaktCustomers/options，DictValue=CustomerCode）
+   * 客户编码（选项 TaktCustomers/options；DictValue=CustomerCode）
    */
   customerCode: string;
 
   /**
-   * 客户名称
+   * 客户名称1（冗余，与 TaktCustomer.CustomerName1 对齐）
    */
-  customerName: string;
+  customerName1: string;
 
   /**
-   * 会计凭证编号（租户+公司+工厂内唯一）
+   * 结算币种（字典 accounting_currency_code；DictValue=CNY/USD 等；一单一币种）
+   */
+  currencyCode: string;
+
+  /**
+   * 税率（字典 accounting_tax_rate_param；13=13%，9=9%，0=0% 等；一单一税率）
+   */
+  taxRate: number;
+
+  /**
+   * 税费
+   */
+  taxAmount: number;
+
+  /**
+   * 会计凭证编码（租户+公司+工厂内唯一）
    */
   accountingDocumentCode: string;
 

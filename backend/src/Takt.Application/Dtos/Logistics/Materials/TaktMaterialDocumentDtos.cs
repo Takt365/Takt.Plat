@@ -51,7 +51,7 @@ public class TaktMaterialDocumentDto : TaktCompanyDtoBase
     public string MaterialDocumentCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 过账人（关联 TaktEmployee.EmployeeNo，选项 TaktEmployees/options，DictValue=EmployeeNo）
+    /// 过账人（关联 TaktEmployee.EmployeeCode，选项 TaktEmployees/options，DictValue=EmployeeCode）
     /// </summary>
     public string? PostedBy { get; set; } = string.Empty;
 
@@ -104,7 +104,7 @@ public class TaktMaterialDocumentQueryDto : TaktPagedQuery
     public string? MaterialDocumentCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 过账人（关联 TaktEmployee.EmployeeNo，选项 TaktEmployees/options，DictValue=EmployeeNo）
+    /// 过账人（关联 TaktEmployee.EmployeeCode，选项 TaktEmployees/options，DictValue=EmployeeCode）
     /// </summary>
     public string? PostedBy { get; set; } = string.Empty;
 
@@ -177,7 +177,7 @@ public class TaktMaterialDocumentCreateDto
     public string MaterialDocumentCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 过账人（关联 TaktEmployee.EmployeeNo，选项 TaktEmployees/options，DictValue=EmployeeNo）
+    /// 过账人（关联 TaktEmployee.EmployeeCode，选项 TaktEmployees/options，DictValue=EmployeeCode）
     /// </summary>
     public string? PostedBy { get; set; } = string.Empty;
 
@@ -287,7 +287,7 @@ public class TaktMaterialDocumentTemplateDto
     public string? MaterialDocumentCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 过账人（关联 TaktEmployee.EmployeeNo，选项 TaktEmployees/options，DictValue=EmployeeNo）
+    /// 过账人（关联 TaktEmployee.EmployeeCode，选项 TaktEmployees/options，DictValue=EmployeeCode）
     /// </summary>
     public string? PostedBy { get; set; } = string.Empty;
 
@@ -349,7 +349,7 @@ public class TaktMaterialDocumentImportDto
     public string? MaterialDocumentCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 过账人（关联 TaktEmployee.EmployeeNo，选项 TaktEmployees/options，DictValue=EmployeeNo）
+    /// 过账人（关联 TaktEmployee.EmployeeCode，选项 TaktEmployees/options，DictValue=EmployeeCode）
     /// </summary>
     public string? PostedBy { get; set; } = string.Empty;
 
@@ -412,7 +412,7 @@ public class TaktMaterialDocumentExportDto
     public string MaterialDocumentCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 过账人（关联 TaktEmployee.EmployeeNo，选项 TaktEmployees/options，DictValue=EmployeeNo）
+    /// 过账人（关联 TaktEmployee.EmployeeCode，选项 TaktEmployees/options，DictValue=EmployeeCode）
     /// </summary>
     public string? PostedBy { get; set; } = string.Empty;
 

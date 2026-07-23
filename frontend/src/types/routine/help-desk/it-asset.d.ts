@@ -54,9 +54,9 @@ export interface ItAsset extends CompanyDtoBase {
   warrantyProvider?: string;
 
   /**
-   * 保修合同编号
+   * 保修合同编码
    */
-  warrantyContractNo?: string;
+  warrantyContractCode?: string;
 
   /**
    * 服务电话
@@ -144,9 +144,9 @@ export interface ItAssetQuery extends TaktPagedQuery {
   warrantyProvider?: string;
 
   /**
-   * 保修合同编号
+   * 保修合同编码
    */
-  warrantyContractNo?: string;
+  warrantyContractCode?: string;
 
   /**
    * 服务电话
@@ -263,9 +263,9 @@ export interface ItAssetCreate {
   warrantyProvider?: string;
 
   /**
-   * 保修合同编号
+   * 保修合同编码
    */
-  warrantyContractNo?: string;
+  warrantyContractCode?: string;
 
   /**
    * 服务电话
@@ -367,9 +367,9 @@ export interface ItAssetTemplate {
   warrantyProvider?: string;
 
   /**
-   * 保修合同编号
+   * 保修合同编码
    */
-  warrantyContractNo?: string;
+  warrantyContractCode?: string;
 
   /**
    * 服务电话
@@ -461,9 +461,9 @@ export interface ItAssetImport {
   warrantyProvider?: string;
 
   /**
-   * 保修合同编号
+   * 保修合同编码
    */
-  warrantyContractNo?: string;
+  warrantyContractCode?: string;
 
   /**
    * 服务电话
@@ -550,9 +550,9 @@ export interface ItAssetExport {
   warrantyProvider?: string;
 
   /**
-   * 保修合同编号
+   * 保修合同编码
    */
-  warrantyContractNo?: string;
+  warrantyContractCode?: string;
 
   /**
    * 服务电话

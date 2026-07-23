@@ -27,16 +27,16 @@ namespace Takt.Domain.Entities.Logistics.Quality.Complaint;
 public class TaktCustomerSatisfactionSurveyItem : TaktCompanyEntityBase
 {
     /// <summary>
-    /// 调查表 ID（选项 TaktCustomerSatisfactionSurveys/options，DictValue=Id）
+    /// 调查表 ID（选项 TaktCustomerSatisfactionSurveys/options；DictValue=Id）
     /// </summary>
     [SugarColumn(ColumnName = "survey_id", ColumnDescription = "调查表ID", ColumnDataType = "bigint", IsNullable = false)]
     [JsonConverter(typeof(ValueToStringConverter))]
     public long SurveyId { get; set; }
 
     /// <summary>
-    /// 调查表编号（冗余字段，便于查询）
+    /// 调查表编码（冗余字段，便于查询）
     /// </summary>
-    [SugarColumn(ColumnName = "customer_satisfaction_survey_code", ColumnDescription = "调查表编号", ColumnDataType = "nvarchar", Length = 50, IsNullable = false)]
+    [SugarColumn(ColumnName = "customer_satisfaction_survey_code", ColumnDescription = "调查表编码", ColumnDataType = "nvarchar", Length = 50, IsNullable = false)]
     public string CustomerSatisfactionSurveyCode { get; set; } = string.Empty;
 
     /// <summary>
@@ -106,7 +106,7 @@ public class TaktCustomerSatisfactionSurveyItem : TaktCompanyEntityBase
     public int FollowUpStatus { get; set; } = 0;
 
     /// <summary>
-    /// 是否作废（字典 sys_yes_no_type，0=否 1=是；编辑移除子行时标记作废）
+    /// 是否作废（字典 sys_yes_no_type；0=否 1=是；编辑移除子行时标记作废）
     /// </summary>
     [SugarColumn(ColumnName = "is_obsolete", ColumnDescription = "是否作废", ColumnDataType = "int", IsNullable = false, DefaultValue = "0")]
     public int IsObsolete { get; set; } = 0;

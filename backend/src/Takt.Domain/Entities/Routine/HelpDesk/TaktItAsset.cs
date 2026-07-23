@@ -26,7 +26,7 @@ namespace Takt.Domain.Entities.Routine.HelpDesk;
 public class TaktItAsset : TaktCompanyEntityBase
 {
     /// <summary>
-    /// 资产号码（选项 TaktAssets/options，DictValue=AssetCode）
+    /// 资产号码（选项 TaktAssets/options；DictValue=AssetCode）
     /// </summary>
     [SugarColumn(ColumnName = "asset_code", ColumnDescription = "资产号码", ColumnDataType = "varchar", Length = 40, IsNullable = false)]
     public string AssetCode { get; set; } = string.Empty;
@@ -56,10 +56,10 @@ public class TaktItAsset : TaktCompanyEntityBase
     public string? WarrantyProvider { get; set; }
 
     /// <summary>
-    /// 保修合同编号
+    /// 保修合同编码
     /// </summary>
-    [SugarColumn(ColumnName = "warranty_contract_no", ColumnDescription = "保修合同编号", ColumnDataType = "varchar", Length = 100, IsNullable = true)]
-    public string? WarrantyContractNo { get; set; }
+    [SugarColumn(ColumnName = "warranty_contract_code", ColumnDescription = "保修合同编码", ColumnDataType = "varchar", Length = 100, IsNullable = true)]
+    public string? WarrantyContractCode { get; set; }
 
     /// <summary>
     /// 服务电话

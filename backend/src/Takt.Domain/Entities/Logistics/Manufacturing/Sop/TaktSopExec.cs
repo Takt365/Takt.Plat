@@ -27,13 +27,13 @@ namespace Takt.Domain.Entities.Logistics.Manufacturing.Sop;
 public class TaktSopExec : TaktCompanyEntityBase
 {
     /// <summary>
-    /// 工厂代码（选项 TaktPlants/options，DictValue=PlantCode）
+    /// 工厂代码（选项 TaktPlants/options；DictValue=PlantCode）
     /// </summary>
     [SugarColumn(ColumnName = "plant_code", ColumnDescription = "工厂代码", ColumnDataType = "nvarchar", Length = 4, IsNullable = false)]
     public string PlantCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 生产工单 ID（选项 TaktProductionOrders/options，DictValue=Id）
+    /// 生产工单 ID（选项 TaktProductionOrders/options；DictValue=Id）
     /// </summary>
     [SugarColumn(ColumnName = "production_order_id", ColumnDescription = "生产工单ID", ColumnDataType = "bigint", IsNullable = true)]
     [JsonConverter(typeof(ValueToStringConverter))]
@@ -52,13 +52,13 @@ public class TaktSopExec : TaktCompanyEntityBase
     public string? SerialNumber { get; set; }
 
     /// <summary>
-    /// 产品/机种物料编码（选项 TaktMaterialPlants/options，DictValue=MaterialCode，ExtValue=PlantCode）
+    /// 产品/机种物料编码（选项 TaktMaterialPlants/options；DictValue=MaterialCode，ExtValue=PlantCode）
     /// </summary>
     [SugarColumn(ColumnName = "material_code", ColumnDescription = "物料编码", ColumnDataType = "nvarchar", Length = 50, IsNullable = false)]
     public string MaterialCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 工序 ID（选项 TaktRoutingItems/options，DictValue=Id）
+    /// 工序 ID（选项 TaktRoutingItems/options；DictValue=Id）
     /// </summary>
     [SugarColumn(ColumnName = "routing_item_id", ColumnDescription = "工序ID", ColumnDataType = "bigint", IsNullable = false)]
     [JsonConverter(typeof(ValueToStringConverter))]
@@ -71,28 +71,28 @@ public class TaktSopExec : TaktCompanyEntityBase
     public int ProcessSegmentType { get; set; } = 1;
 
     /// <summary>
-    /// 工位 ID（选项 TaktSopWorkstations/options，DictValue=Id）
+    /// 工位 ID（选项 TaktSopWorkstations/options；DictValue=Id）
     /// </summary>
     [SugarColumn(ColumnName = "workstation_id", ColumnDescription = "工位ID", ColumnDataType = "bigint", IsNullable = false)]
     [JsonConverter(typeof(ValueToStringConverter))]
     public long WorkstationId { get; set; }
 
     /// <summary>
-    /// 员工 ID（选项 TaktEmployees/options，DictValue=Id）
+    /// 员工 ID（选项 TaktEmployees/options；DictValue=Id）
     /// </summary>
     [SugarColumn(ColumnName = "employee_id", ColumnDescription = "员工ID", ColumnDataType = "bigint", IsNullable = false)]
     [JsonConverter(typeof(ValueToStringConverter))]
     public long EmployeeId { get; set; }
 
     /// <summary>
-    /// SOP 主档 ID（选项 TaktSopDocs/options，DictValue=Id）
+    /// SOP 主档 ID（选项 TaktSopDocs/options；DictValue=Id）
     /// </summary>
     [SugarColumn(ColumnName = "sop_id", ColumnDescription = "SOP主档ID", ColumnDataType = "bigint", IsNullable = false)]
     [JsonConverter(typeof(ValueToStringConverter))]
     public long SopId { get; set; }
 
     /// <summary>
-    /// SOP 版本 ID（选项 TaktSopRevisions/options，DictValue=Id）
+    /// SOP 版本 ID（选项 TaktSopRevisions/options；DictValue=Id）
     /// </summary>
     [SugarColumn(ColumnName = "revision_id", ColumnDescription = "SOP版本ID", ColumnDataType = "bigint", IsNullable = false)]
     [JsonConverter(typeof(ValueToStringConverter))]
@@ -105,7 +105,7 @@ public class TaktSopExec : TaktCompanyEntityBase
     public string Revision { get; set; } = string.Empty;
 
     /// <summary>
-    /// 使用语言（选项 TaktCultures/options，DictValue=CultureCode）
+    /// 使用语言（选项 TaktCultures/options；DictValue=CultureCode）
     /// </summary>
     [SugarColumn(ColumnName = "content_lang", ColumnDescription = "使用语言", ColumnDataType = "varchar", Length = 10, IsNullable = false, DefaultValue = "zh-CN")]
     public string ContentLang { get; set; } = "zh-CN";
@@ -135,7 +135,7 @@ public class TaktSopExec : TaktCompanyEntityBase
     public int ExecStatus { get; set; } = 1;
 
     /// <summary>
-    /// 当前工步 ID（选项 TaktSopSteps/options，DictValue=Id）
+    /// 当前工步 ID（选项 TaktSopSteps/options；DictValue=Id）
     /// </summary>
     [SugarColumn(ColumnName = "current_step_id", ColumnDescription = "当前工步ID", ColumnDataType = "bigint", IsNullable = true)]
     [JsonConverter(typeof(ValueToStringConverter))]

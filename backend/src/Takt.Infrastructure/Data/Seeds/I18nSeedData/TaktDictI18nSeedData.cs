@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Infrastructure.Data.Seeds.I18nSeedData
 // 文件名称：TaktDictI18nSeedData.cs
-// 创建时间：2026-07-20
+// 创建时间：2026-07-23
 // 创建人：Takt365(Cursor AI)
 // 功能描述：字典项国际化翻译种子（dict.* 键，与 TaktDictDataSeedData I18nKey 对齐）
 // 
@@ -770,6 +770,141 @@ public class TaktDictI18nSeedData : ITaktSeedDataCoordinator
             // dict.accounting.currency.code.chf
             ("dict.accounting.currency.code.chf", "zh-HK", "瑞士法郎_hk", "币种.瑞士法郎"),
 
+            // dict.accounting.chart.of.accounts.int
+            ("dict.accounting.chart.of.accounts.int", "en-US", "INT_us", "帐目表.INT"),
+            // dict.accounting.chart.of.accounts.int
+            ("dict.accounting.chart.of.accounts.int", "ja-JP", "INT_jp", "帐目表.INT"),
+            // dict.accounting.chart.of.accounts.int
+            ("dict.accounting.chart.of.accounts.int", "zh-CN", "INT", "帐目表.INT"),
+            // dict.accounting.chart.of.accounts.int
+            ("dict.accounting.chart.of.accounts.int", "zh-HK", "INT_hk", "帐目表.INT"),
+
+            // dict.accounting.chart.of.accounts.teac
+            ("dict.accounting.chart.of.accounts.teac", "en-US", "TEAC_us", "帐目表.TEAC"),
+            // dict.accounting.chart.of.accounts.teac
+            ("dict.accounting.chart.of.accounts.teac", "ja-JP", "TEAC_jp", "帐目表.TEAC"),
+            // dict.accounting.chart.of.accounts.teac
+            ("dict.accounting.chart.of.accounts.teac", "zh-CN", "TEAC", "帐目表.TEAC"),
+            // dict.accounting.chart.of.accounts.teac
+            ("dict.accounting.chart.of.accounts.teac", "zh-HK", "TEAC_hk", "帐目表.TEAC"),
+
+            // dict.accounting.posting.period.variant.0001
+            ("dict.accounting.posting.period.variant.0001", "en-US", "0001_us", "记帐期间变式.0001"),
+            // dict.accounting.posting.period.variant.0001
+            ("dict.accounting.posting.period.variant.0001", "ja-JP", "0001_jp", "记帐期间变式.0001"),
+            // dict.accounting.posting.period.variant.0001
+            ("dict.accounting.posting.period.variant.0001", "zh-CN", "0001", "记帐期间变式.0001"),
+            // dict.accounting.posting.period.variant.0001
+            ("dict.accounting.posting.period.variant.0001", "zh-HK", "0001_hk", "记帐期间变式.0001"),
+
+            // dict.accounting.posting.period.variant.z001
+            ("dict.accounting.posting.period.variant.z001", "en-US", "Z001_us", "记帐期间变式.Z001"),
+            // dict.accounting.posting.period.variant.z001
+            ("dict.accounting.posting.period.variant.z001", "ja-JP", "Z001_jp", "记帐期间变式.Z001"),
+            // dict.accounting.posting.period.variant.z001
+            ("dict.accounting.posting.period.variant.z001", "zh-CN", "Z001", "记帐期间变式.Z001"),
+            // dict.accounting.posting.period.variant.z001
+            ("dict.accounting.posting.period.variant.z001", "zh-HK", "Z001_hk", "记帐期间变式.Z001"),
+
+            // dict.accounting.posting.period.variant.z002
+            ("dict.accounting.posting.period.variant.z002", "en-US", "Z002_us", "记帐期间变式.Z002"),
+            // dict.accounting.posting.period.variant.z002
+            ("dict.accounting.posting.period.variant.z002", "ja-JP", "Z002_jp", "记帐期间变式.Z002"),
+            // dict.accounting.posting.period.variant.z002
+            ("dict.accounting.posting.period.variant.z002", "zh-CN", "Z002", "记帐期间变式.Z002"),
+            // dict.accounting.posting.period.variant.z002
+            ("dict.accounting.posting.period.variant.z002", "zh-HK", "Z002_hk", "记帐期间变式.Z002"),
+
+            // dict.accounting.posting.period.variant.z004
+            ("dict.accounting.posting.period.variant.z004", "en-US", "Z004_us", "记帐期间变式.Z004"),
+            // dict.accounting.posting.period.variant.z004
+            ("dict.accounting.posting.period.variant.z004", "ja-JP", "Z004_jp", "记帐期间变式.Z004"),
+            // dict.accounting.posting.period.variant.z004
+            ("dict.accounting.posting.period.variant.z004", "zh-CN", "Z004", "记帐期间变式.Z004"),
+            // dict.accounting.posting.period.variant.z004
+            ("dict.accounting.posting.period.variant.z004", "zh-HK", "Z004_hk", "记帐期间变式.Z004"),
+
+            // dict.accounting.posting.period.variant.z006
+            ("dict.accounting.posting.period.variant.z006", "en-US", "Z006_us", "记帐期间变式.Z006"),
+            // dict.accounting.posting.period.variant.z006
+            ("dict.accounting.posting.period.variant.z006", "ja-JP", "Z006_jp", "记帐期间变式.Z006"),
+            // dict.accounting.posting.period.variant.z006
+            ("dict.accounting.posting.period.variant.z006", "zh-CN", "Z006", "记帐期间变式.Z006"),
+            // dict.accounting.posting.period.variant.z006
+            ("dict.accounting.posting.period.variant.z006", "zh-HK", "Z006_hk", "记帐期间变式.Z006"),
+
+            // dict.accounting.posting.period.variant.z003
+            ("dict.accounting.posting.period.variant.z003", "en-US", "Z003_us", "记帐期间变式.Z003"),
+            // dict.accounting.posting.period.variant.z003
+            ("dict.accounting.posting.period.variant.z003", "ja-JP", "Z003_jp", "记帐期间变式.Z003"),
+            // dict.accounting.posting.period.variant.z003
+            ("dict.accounting.posting.period.variant.z003", "zh-CN", "Z003", "记帐期间变式.Z003"),
+            // dict.accounting.posting.period.variant.z003
+            ("dict.accounting.posting.period.variant.z003", "zh-HK", "Z003_hk", "记帐期间变式.Z003"),
+
+            // dict.accounting.posting.period.variant.z005
+            ("dict.accounting.posting.period.variant.z005", "en-US", "Z005_us", "记帐期间变式.Z005"),
+            // dict.accounting.posting.period.variant.z005
+            ("dict.accounting.posting.period.variant.z005", "ja-JP", "Z005_jp", "记帐期间变式.Z005"),
+            // dict.accounting.posting.period.variant.z005
+            ("dict.accounting.posting.period.variant.z005", "zh-CN", "Z005", "记帐期间变式.Z005"),
+            // dict.accounting.posting.period.variant.z005
+            ("dict.accounting.posting.period.variant.z005", "zh-HK", "Z005_hk", "记帐期间变式.Z005"),
+
+            // dict.accounting.posting.period.variant.z007
+            ("dict.accounting.posting.period.variant.z007", "en-US", "Z007_us", "记帐期间变式.Z007"),
+            // dict.accounting.posting.period.variant.z007
+            ("dict.accounting.posting.period.variant.z007", "ja-JP", "Z007_jp", "记帐期间变式.Z007"),
+            // dict.accounting.posting.period.variant.z007
+            ("dict.accounting.posting.period.variant.z007", "zh-CN", "Z007", "记帐期间变式.Z007"),
+            // dict.accounting.posting.period.variant.z007
+            ("dict.accounting.posting.period.variant.z007", "zh-HK", "Z007_hk", "记帐期间变式.Z007"),
+
+            // dict.accounting.posting.period.variant.z009
+            ("dict.accounting.posting.period.variant.z009", "en-US", "Z009_us", "记帐期间变式.Z009"),
+            // dict.accounting.posting.period.variant.z009
+            ("dict.accounting.posting.period.variant.z009", "ja-JP", "Z009_jp", "记帐期间变式.Z009"),
+            // dict.accounting.posting.period.variant.z009
+            ("dict.accounting.posting.period.variant.z009", "zh-CN", "Z009", "记帐期间变式.Z009"),
+            // dict.accounting.posting.period.variant.z009
+            ("dict.accounting.posting.period.variant.z009", "zh-HK", "Z009_hk", "记帐期间变式.Z009"),
+
+            // dict.accounting.posting.period.variant.z008
+            ("dict.accounting.posting.period.variant.z008", "en-US", "Z008_us", "记帐期间变式.Z008"),
+            // dict.accounting.posting.period.variant.z008
+            ("dict.accounting.posting.period.variant.z008", "ja-JP", "Z008_jp", "记帐期间变式.Z008"),
+            // dict.accounting.posting.period.variant.z008
+            ("dict.accounting.posting.period.variant.z008", "zh-CN", "Z008", "记帐期间变式.Z008"),
+            // dict.accounting.posting.period.variant.z008
+            ("dict.accounting.posting.period.variant.z008", "zh-HK", "Z008_hk", "记帐期间变式.Z008"),
+
+            // dict.accounting.fiscal.year.variant.k4
+            ("dict.accounting.fiscal.year.variant.k4", "en-US", "K4_us", "会计年度变式.K4"),
+            // dict.accounting.fiscal.year.variant.k4
+            ("dict.accounting.fiscal.year.variant.k4", "ja-JP", "K4_jp", "会计年度变式.K4"),
+            // dict.accounting.fiscal.year.variant.k4
+            ("dict.accounting.fiscal.year.variant.k4", "zh-CN", "K4", "会计年度变式.K4"),
+            // dict.accounting.fiscal.year.variant.k4
+            ("dict.accounting.fiscal.year.variant.k4", "zh-HK", "K4_hk", "会计年度变式.K4"),
+
+            // dict.accounting.fiscal.year.variant.z1
+            ("dict.accounting.fiscal.year.variant.z1", "en-US", "Z1_us", "会计年度变式.Z1"),
+            // dict.accounting.fiscal.year.variant.z1
+            ("dict.accounting.fiscal.year.variant.z1", "ja-JP", "Z1_jp", "会计年度变式.Z1"),
+            // dict.accounting.fiscal.year.variant.z1
+            ("dict.accounting.fiscal.year.variant.z1", "zh-CN", "Z1", "会计年度变式.Z1"),
+            // dict.accounting.fiscal.year.variant.z1
+            ("dict.accounting.fiscal.year.variant.z1", "zh-HK", "Z1_hk", "会计年度变式.Z1"),
+
+            // dict.accounting.fiscal.year.variant.z2
+            ("dict.accounting.fiscal.year.variant.z2", "en-US", "Z2_us", "会计年度变式.Z2"),
+            // dict.accounting.fiscal.year.variant.z2
+            ("dict.accounting.fiscal.year.variant.z2", "ja-JP", "Z2_jp", "会计年度变式.Z2"),
+            // dict.accounting.fiscal.year.variant.z2
+            ("dict.accounting.fiscal.year.variant.z2", "zh-CN", "Z2", "会计年度变式.Z2"),
+            // dict.accounting.fiscal.year.variant.z2
+            ("dict.accounting.fiscal.year.variant.z2", "zh-HK", "Z2_hk", "会计年度变式.Z2"),
+
             // dict.accounting.exchange.rate.type.m
             ("dict.accounting.exchange.rate.type.m", "en-US", "平均汇率_us", "汇率类型.平均汇率"),
             // dict.accounting.exchange.rate.type.m
@@ -1220,140 +1355,581 @@ public class TaktDictI18nSeedData : ITaktSeedDataCoordinator
             // dict.accounting.payment.method.type.4
             ("dict.accounting.payment.method.type.4", "zh-HK", "其他_hk", "支付方式.其他"),
 
-            // dict.accounting.tax.rate.param.13
-            ("dict.accounting.tax.rate.param.13", "en-US", "13%_us", "税率.13%"),
-            // dict.accounting.tax.rate.param.13
-            ("dict.accounting.tax.rate.param.13", "ja-JP", "13%_jp", "税率.13%"),
-            // dict.accounting.tax.rate.param.13
-            ("dict.accounting.tax.rate.param.13", "zh-CN", "13%", "税率.13%"),
-            // dict.accounting.tax.rate.param.13
-            ("dict.accounting.tax.rate.param.13", "zh-HK", "13%_hk", "税率.13%"),
+            // dict.accounting.sepa.rtrans.type.0
+            ("dict.accounting.sepa.rtrans.type.0", "en-US", "未知（未维护）_us", "SEPA拒付交易支持标识.未知（未维护）"),
+            // dict.accounting.sepa.rtrans.type.0
+            ("dict.accounting.sepa.rtrans.type.0", "ja-JP", "未知（未维护）_jp", "SEPA拒付交易支持标识.未知（未维护）"),
+            // dict.accounting.sepa.rtrans.type.0
+            ("dict.accounting.sepa.rtrans.type.0", "zh-CN", "未知（未维护）", "SEPA拒付交易支持标识.未知（未维护）"),
+            // dict.accounting.sepa.rtrans.type.0
+            ("dict.accounting.sepa.rtrans.type.0", "zh-HK", "未知（未维护）_hk", "SEPA拒付交易支持标识.未知（未维护）"),
 
-            // dict.accounting.tax.rate.param.9
-            ("dict.accounting.tax.rate.param.9", "en-US", "9%_us", "税率.9%"),
-            // dict.accounting.tax.rate.param.9
-            ("dict.accounting.tax.rate.param.9", "ja-JP", "9%_jp", "税率.9%"),
-            // dict.accounting.tax.rate.param.9
-            ("dict.accounting.tax.rate.param.9", "zh-CN", "9%", "税率.9%"),
-            // dict.accounting.tax.rate.param.9
-            ("dict.accounting.tax.rate.param.9", "zh-HK", "9%_hk", "税率.9%"),
+            // dict.accounting.sepa.rtrans.type.1
+            ("dict.accounting.sepa.rtrans.type.1", "en-US", "同时支持 B2B 和 Core 的 R-Transaction_us", "SEPA拒付交易支持标识.同时支持 B2B 和 Core"),
+            // dict.accounting.sepa.rtrans.type.1
+            ("dict.accounting.sepa.rtrans.type.1", "ja-JP", "同时支持 B2B 和 Core 的 R-Transaction_jp", "SEPA拒付交易支持标识.同时支持 B2B 和 Core"),
+            // dict.accounting.sepa.rtrans.type.1
+            ("dict.accounting.sepa.rtrans.type.1", "zh-CN", "同时支持 B2B 和 Core 的 R-Transaction", "SEPA拒付交易支持标识.同时支持 B2B 和 Core"),
+            // dict.accounting.sepa.rtrans.type.1
+            ("dict.accounting.sepa.rtrans.type.1", "zh-HK", "同时支持 B2B 和 Core 的 R-Transaction_hk", "SEPA拒付交易支持标识.同时支持 B2B 和 Core"),
+
+            // dict.accounting.sepa.rtrans.type.2
+            ("dict.accounting.sepa.rtrans.type.2", "en-US", "仅支持 B2B 的 R-Transaction_us", "SEPA拒付交易支持标识.仅支持 B2B"),
+            // dict.accounting.sepa.rtrans.type.2
+            ("dict.accounting.sepa.rtrans.type.2", "ja-JP", "仅支持 B2B 的 R-Transaction_jp", "SEPA拒付交易支持标识.仅支持 B2B"),
+            // dict.accounting.sepa.rtrans.type.2
+            ("dict.accounting.sepa.rtrans.type.2", "zh-CN", "仅支持 B2B 的 R-Transaction", "SEPA拒付交易支持标识.仅支持 B2B"),
+            // dict.accounting.sepa.rtrans.type.2
+            ("dict.accounting.sepa.rtrans.type.2", "zh-HK", "仅支持 B2B 的 R-Transaction_hk", "SEPA拒付交易支持标识.仅支持 B2B"),
+
+            // dict.accounting.sepa.rtrans.type.3
+            ("dict.accounting.sepa.rtrans.type.3", "en-US", "仅支持 Core 的 R-Transaction_us", "SEPA拒付交易支持标识.仅支持 Core"),
+            // dict.accounting.sepa.rtrans.type.3
+            ("dict.accounting.sepa.rtrans.type.3", "ja-JP", "仅支持 Core 的 R-Transaction_jp", "SEPA拒付交易支持标识.仅支持 Core"),
+            // dict.accounting.sepa.rtrans.type.3
+            ("dict.accounting.sepa.rtrans.type.3", "zh-CN", "仅支持 Core 的 R-Transaction", "SEPA拒付交易支持标识.仅支持 Core"),
+            // dict.accounting.sepa.rtrans.type.3
+            ("dict.accounting.sepa.rtrans.type.3", "zh-HK", "仅支持 Core 的 R-Transaction_hk", "SEPA拒付交易支持标识.仅支持 Core"),
+
+            // dict.accounting.sepa.rtrans.type.9
+            ("dict.accounting.sepa.rtrans.type.9", "en-US", "不支持 R-Transaction_us", "SEPA拒付交易支持标识.不支持"),
+            // dict.accounting.sepa.rtrans.type.9
+            ("dict.accounting.sepa.rtrans.type.9", "ja-JP", "不支持 R-Transaction_jp", "SEPA拒付交易支持标识.不支持"),
+            // dict.accounting.sepa.rtrans.type.9
+            ("dict.accounting.sepa.rtrans.type.9", "zh-CN", "不支持 R-Transaction", "SEPA拒付交易支持标识.不支持"),
+            // dict.accounting.sepa.rtrans.type.9
+            ("dict.accounting.sepa.rtrans.type.9", "zh-HK", "不支持 R-Transaction_hk", "SEPA拒付交易支持标识.不支持"),
+
+            // dict.accounting.tax.rate.param.17
+            ("dict.accounting.tax.rate.param.17", "en-US", "17%_us", "税率.17%.中国"),
+            // dict.accounting.tax.rate.param.17
+            ("dict.accounting.tax.rate.param.17", "ja-JP", "17%_jp", "税率.17%.中国"),
+            // dict.accounting.tax.rate.param.17
+            ("dict.accounting.tax.rate.param.17", "zh-CN", "17%", "税率.17%.中国"),
+            // dict.accounting.tax.rate.param.17
+            ("dict.accounting.tax.rate.param.17", "zh-HK", "17%_hk", "税率.17%.中国"),
+
+            // dict.accounting.tax.rate.param.16
+            ("dict.accounting.tax.rate.param.16", "en-US", "16%_us", "税率.16%.中国"),
+            // dict.accounting.tax.rate.param.16
+            ("dict.accounting.tax.rate.param.16", "ja-JP", "16%_jp", "税率.16%.中国"),
+            // dict.accounting.tax.rate.param.16
+            ("dict.accounting.tax.rate.param.16", "zh-CN", "16%", "税率.16%.中国"),
+            // dict.accounting.tax.rate.param.16
+            ("dict.accounting.tax.rate.param.16", "zh-HK", "16%_hk", "税率.16%.中国"),
+
+            // dict.accounting.tax.rate.param.13
+            ("dict.accounting.tax.rate.param.13", "en-US", "13%_us", "税率.13%.中国"),
+            // dict.accounting.tax.rate.param.13
+            ("dict.accounting.tax.rate.param.13", "ja-JP", "13%_jp", "税率.13%.中国"),
+            // dict.accounting.tax.rate.param.13
+            ("dict.accounting.tax.rate.param.13", "zh-CN", "13%", "税率.13%.中国"),
+            // dict.accounting.tax.rate.param.13
+            ("dict.accounting.tax.rate.param.13", "zh-HK", "13%_hk", "税率.13%.中国"),
+
+            // dict.accounting.tax.rate.param.11
+            ("dict.accounting.tax.rate.param.11", "en-US", "11%_us", "税率.11%.中国"),
+            // dict.accounting.tax.rate.param.11
+            ("dict.accounting.tax.rate.param.11", "ja-JP", "11%_jp", "税率.11%.中国"),
+            // dict.accounting.tax.rate.param.11
+            ("dict.accounting.tax.rate.param.11", "zh-CN", "11%", "税率.11%.中国"),
+            // dict.accounting.tax.rate.param.11
+            ("dict.accounting.tax.rate.param.11", "zh-HK", "11%_hk", "税率.11%.中国"),
+
+            // dict.accounting.tax.rate.param.10
+            ("dict.accounting.tax.rate.param.10", "en-US", "10%_us", "税率.10%.中国"),
+            // dict.accounting.tax.rate.param.10
+            ("dict.accounting.tax.rate.param.10", "ja-JP", "10%_jp", "税率.10%.中国"),
+            // dict.accounting.tax.rate.param.10
+            ("dict.accounting.tax.rate.param.10", "zh-CN", "10%", "税率.10%.中国"),
+            // dict.accounting.tax.rate.param.10
+            ("dict.accounting.tax.rate.param.10", "zh-HK", "10%_hk", "税率.10%.中国"),
 
             // dict.accounting.tax.rate.param.6
-            ("dict.accounting.tax.rate.param.6", "en-US", "6%_us", "税率.6%"),
+            ("dict.accounting.tax.rate.param.6", "en-US", "6%_us", "税率.6%.中国"),
             // dict.accounting.tax.rate.param.6
-            ("dict.accounting.tax.rate.param.6", "ja-JP", "6%_jp", "税率.6%"),
+            ("dict.accounting.tax.rate.param.6", "ja-JP", "6%_jp", "税率.6%.中国"),
             // dict.accounting.tax.rate.param.6
-            ("dict.accounting.tax.rate.param.6", "zh-CN", "6%", "税率.6%"),
+            ("dict.accounting.tax.rate.param.6", "zh-CN", "6%", "税率.6%.中国"),
             // dict.accounting.tax.rate.param.6
-            ("dict.accounting.tax.rate.param.6", "zh-HK", "6%_hk", "税率.6%"),
+            ("dict.accounting.tax.rate.param.6", "zh-HK", "6%_hk", "税率.6%.中国"),
 
             // dict.accounting.tax.rate.param.5
-            ("dict.accounting.tax.rate.param.5", "en-US", "5%_us", "税率.5%"),
+            ("dict.accounting.tax.rate.param.5", "en-US", "5%_us", "税率.5%.中国"),
             // dict.accounting.tax.rate.param.5
-            ("dict.accounting.tax.rate.param.5", "ja-JP", "5%_jp", "税率.5%"),
+            ("dict.accounting.tax.rate.param.5", "ja-JP", "5%_jp", "税率.5%.中国"),
             // dict.accounting.tax.rate.param.5
-            ("dict.accounting.tax.rate.param.5", "zh-CN", "5%", "税率.5%"),
+            ("dict.accounting.tax.rate.param.5", "zh-CN", "5%", "税率.5%.中国"),
             // dict.accounting.tax.rate.param.5
-            ("dict.accounting.tax.rate.param.5", "zh-HK", "5%_hk", "税率.5%"),
+            ("dict.accounting.tax.rate.param.5", "zh-HK", "5%_hk", "税率.5%.中国"),
 
             // dict.accounting.tax.rate.param.3
-            ("dict.accounting.tax.rate.param.3", "en-US", "3%_us", "税率.3%"),
+            ("dict.accounting.tax.rate.param.3", "en-US", "3%_us", "税率.3%.中国"),
             // dict.accounting.tax.rate.param.3
-            ("dict.accounting.tax.rate.param.3", "ja-JP", "3%_jp", "税率.3%"),
+            ("dict.accounting.tax.rate.param.3", "ja-JP", "3%_jp", "税率.3%.中国"),
             // dict.accounting.tax.rate.param.3
-            ("dict.accounting.tax.rate.param.3", "zh-CN", "3%", "税率.3%"),
+            ("dict.accounting.tax.rate.param.3", "zh-CN", "3%", "税率.3%.中国"),
             // dict.accounting.tax.rate.param.3
-            ("dict.accounting.tax.rate.param.3", "zh-HK", "3%_hk", "税率.3%"),
-
-            // dict.accounting.tax.rate.param.2
-            ("dict.accounting.tax.rate.param.2", "en-US", "2%_us", "税率.2%"),
-            // dict.accounting.tax.rate.param.2
-            ("dict.accounting.tax.rate.param.2", "ja-JP", "2%_jp", "税率.2%"),
-            // dict.accounting.tax.rate.param.2
-            ("dict.accounting.tax.rate.param.2", "zh-CN", "2%", "税率.2%"),
-            // dict.accounting.tax.rate.param.2
-            ("dict.accounting.tax.rate.param.2", "zh-HK", "2%_hk", "税率.2%"),
+            ("dict.accounting.tax.rate.param.3", "zh-HK", "3%_hk", "税率.3%.中国"),
 
             // dict.accounting.tax.rate.param.1
-            ("dict.accounting.tax.rate.param.1", "en-US", "1%_us", "税率.1%"),
+            ("dict.accounting.tax.rate.param.1", "en-US", "1%_us", "税率.1%.中国"),
             // dict.accounting.tax.rate.param.1
-            ("dict.accounting.tax.rate.param.1", "ja-JP", "1%_jp", "税率.1%"),
+            ("dict.accounting.tax.rate.param.1", "ja-JP", "1%_jp", "税率.1%.中国"),
             // dict.accounting.tax.rate.param.1
-            ("dict.accounting.tax.rate.param.1", "zh-CN", "1%", "税率.1%"),
+            ("dict.accounting.tax.rate.param.1", "zh-CN", "1%", "税率.1%.中国"),
             // dict.accounting.tax.rate.param.1
-            ("dict.accounting.tax.rate.param.1", "zh-HK", "1%_hk", "税率.1%"),
+            ("dict.accounting.tax.rate.param.1", "zh-HK", "1%_hk", "税率.1%.中国"),
 
             // dict.accounting.tax.rate.param.0
-            ("dict.accounting.tax.rate.param.0", "en-US", "0%_us", "税率.0%"),
+            ("dict.accounting.tax.rate.param.0", "en-US", "0%_us", "税率.0%.中国"),
             // dict.accounting.tax.rate.param.0
-            ("dict.accounting.tax.rate.param.0", "ja-JP", "0%_jp", "税率.0%"),
+            ("dict.accounting.tax.rate.param.0", "ja-JP", "0%_jp", "税率.0%.中国"),
             // dict.accounting.tax.rate.param.0
-            ("dict.accounting.tax.rate.param.0", "zh-CN", "0%", "税率.0%"),
+            ("dict.accounting.tax.rate.param.0", "zh-CN", "0%", "税率.0%.中国"),
             // dict.accounting.tax.rate.param.0
-            ("dict.accounting.tax.rate.param.0", "zh-HK", "0%_hk", "税率.0%"),
+            ("dict.accounting.tax.rate.param.0", "zh-HK", "0%_hk", "税率.0%.中国"),
+
+            // dict.accounting.tax.rate.param.25
+            ("dict.accounting.tax.rate.param.25", "en-US", "25%_us", "税率.25%.公司1000日本"),
+            // dict.accounting.tax.rate.param.25
+            ("dict.accounting.tax.rate.param.25", "ja-JP", "25%_jp", "税率.25%.公司1000日本"),
+            // dict.accounting.tax.rate.param.25
+            ("dict.accounting.tax.rate.param.25", "zh-CN", "25%", "税率.25%.公司1000日本"),
+            // dict.accounting.tax.rate.param.25
+            ("dict.accounting.tax.rate.param.25", "zh-HK", "25%_hk", "税率.25%.公司1000日本"),
+
+            // dict.accounting.tax.rate.param.19
+            ("dict.accounting.tax.rate.param.19", "en-US", "19%_us", "税率.19%.公司1000日本"),
+            // dict.accounting.tax.rate.param.19
+            ("dict.accounting.tax.rate.param.19", "ja-JP", "19%_jp", "税率.19%.公司1000日本"),
+            // dict.accounting.tax.rate.param.19
+            ("dict.accounting.tax.rate.param.19", "zh-CN", "19%", "税率.19%.公司1000日本"),
+            // dict.accounting.tax.rate.param.19
+            ("dict.accounting.tax.rate.param.19", "zh-HK", "19%_hk", "税率.19%.公司1000日本"),
+
+            // dict.accounting.tax.rate.param.17_5
+            ("dict.accounting.tax.rate.param.17_5", "en-US", "17.5%_us", "税率.17.5%.公司1000日本"),
+            // dict.accounting.tax.rate.param.17_5
+            ("dict.accounting.tax.rate.param.17_5", "ja-JP", "17.5%_jp", "税率.17.5%.公司1000日本"),
+            // dict.accounting.tax.rate.param.17_5
+            ("dict.accounting.tax.rate.param.17_5", "zh-CN", "17.5%", "税率.17.5%.公司1000日本"),
+            // dict.accounting.tax.rate.param.17_5
+            ("dict.accounting.tax.rate.param.17_5", "zh-HK", "17.5%_hk", "税率.17.5%.公司1000日本"),
+
+            // dict.accounting.tax.rate.param.8
+            ("dict.accounting.tax.rate.param.8", "en-US", "8%_us", "税率.8%.公司1000日本"),
+            // dict.accounting.tax.rate.param.8
+            ("dict.accounting.tax.rate.param.8", "ja-JP", "8%_jp", "税率.8%.公司1000日本"),
+            // dict.accounting.tax.rate.param.8
+            ("dict.accounting.tax.rate.param.8", "zh-CN", "8%", "税率.8%.公司1000日本"),
+            // dict.accounting.tax.rate.param.8
+            ("dict.accounting.tax.rate.param.8", "zh-HK", "8%_hk", "税率.8%.公司1000日本"),
 
             // dict.accounting.tax.code.j0
-            ("dict.accounting.tax.code.j0", "en-US", "进项税0%_us", "税码.J0"),
+            ("dict.accounting.tax.code.j0", "en-US", "0% 进项税，中国_us", "税码.J0.中国"),
             // dict.accounting.tax.code.j0
-            ("dict.accounting.tax.code.j0", "ja-JP", "进项税0%_jp", "税码.J0"),
+            ("dict.accounting.tax.code.j0", "ja-JP", "0% 进项税，中国_jp", "税码.J0.中国"),
             // dict.accounting.tax.code.j0
-            ("dict.accounting.tax.code.j0", "zh-CN", "进项税0%", "税码.J0"),
+            ("dict.accounting.tax.code.j0", "zh-CN", "0% 进项税，中国", "税码.J0.中国"),
             // dict.accounting.tax.code.j0
-            ("dict.accounting.tax.code.j0", "zh-HK", "进项税0%_hk", "税码.J0"),
+            ("dict.accounting.tax.code.j0", "zh-HK", "0% 进项税，中国_hk", "税码.J0.中国"),
 
             // dict.accounting.tax.code.j1
-            ("dict.accounting.tax.code.j1", "en-US", "进项税13%_us", "税码.J1"),
+            ("dict.accounting.tax.code.j1", "en-US", "17% 进项税，中国_us", "税码.J1.中国"),
             // dict.accounting.tax.code.j1
-            ("dict.accounting.tax.code.j1", "ja-JP", "进项税13%_jp", "税码.J1"),
+            ("dict.accounting.tax.code.j1", "ja-JP", "17% 进项税，中国_jp", "税码.J1.中国"),
             // dict.accounting.tax.code.j1
-            ("dict.accounting.tax.code.j1", "zh-CN", "进项税13%", "税码.J1"),
+            ("dict.accounting.tax.code.j1", "zh-CN", "17% 进项税，中国", "税码.J1.中国"),
             // dict.accounting.tax.code.j1
-            ("dict.accounting.tax.code.j1", "zh-HK", "进项税13%_hk", "税码.J1"),
+            ("dict.accounting.tax.code.j1", "zh-HK", "17% 进项税，中国_hk", "税码.J1.中国"),
 
             // dict.accounting.tax.code.j2
-            ("dict.accounting.tax.code.j2", "en-US", "进项税9%_us", "税码.J2"),
+            ("dict.accounting.tax.code.j2", "en-US", "13% 进项税，中国_us", "税码.J2.中国"),
             // dict.accounting.tax.code.j2
-            ("dict.accounting.tax.code.j2", "ja-JP", "进项税9%_jp", "税码.J2"),
+            ("dict.accounting.tax.code.j2", "ja-JP", "13% 进项税，中国_jp", "税码.J2.中国"),
             // dict.accounting.tax.code.j2
-            ("dict.accounting.tax.code.j2", "zh-CN", "进项税9%", "税码.J2"),
+            ("dict.accounting.tax.code.j2", "zh-CN", "13% 进项税，中国", "税码.J2.中国"),
             // dict.accounting.tax.code.j2
-            ("dict.accounting.tax.code.j2", "zh-HK", "进项税9%_hk", "税码.J2"),
+            ("dict.accounting.tax.code.j2", "zh-HK", "13% 进项税，中国_hk", "税码.J2.中国"),
 
             // dict.accounting.tax.code.j3
-            ("dict.accounting.tax.code.j3", "en-US", "进项税6%_us", "税码.J3"),
+            ("dict.accounting.tax.code.j3", "en-US", "11% 进项税，中国_us", "税码.J3.中国"),
             // dict.accounting.tax.code.j3
-            ("dict.accounting.tax.code.j3", "ja-JP", "进项税6%_jp", "税码.J3"),
+            ("dict.accounting.tax.code.j3", "ja-JP", "11% 进项税，中国_jp", "税码.J3.中国"),
             // dict.accounting.tax.code.j3
-            ("dict.accounting.tax.code.j3", "zh-CN", "进项税6%", "税码.J3"),
+            ("dict.accounting.tax.code.j3", "zh-CN", "11% 进项税，中国", "税码.J3.中国"),
             // dict.accounting.tax.code.j3
-            ("dict.accounting.tax.code.j3", "zh-HK", "进项税6%_hk", "税码.J3"),
+            ("dict.accounting.tax.code.j3", "zh-HK", "11% 进项税，中国_hk", "税码.J3.中国"),
 
             // dict.accounting.tax.code.j4
-            ("dict.accounting.tax.code.j4", "en-US", "进项税5%_us", "税码.J4"),
+            ("dict.accounting.tax.code.j4", "en-US", "6% 进项税，中国_us", "税码.J4.中国"),
             // dict.accounting.tax.code.j4
-            ("dict.accounting.tax.code.j4", "ja-JP", "进项税5%_jp", "税码.J4"),
+            ("dict.accounting.tax.code.j4", "ja-JP", "6% 进项税，中国_jp", "税码.J4.中国"),
             // dict.accounting.tax.code.j4
-            ("dict.accounting.tax.code.j4", "zh-CN", "进项税5%", "税码.J4"),
+            ("dict.accounting.tax.code.j4", "zh-CN", "6% 进项税，中国", "税码.J4.中国"),
             // dict.accounting.tax.code.j4
-            ("dict.accounting.tax.code.j4", "zh-HK", "进项税5%_hk", "税码.J4"),
+            ("dict.accounting.tax.code.j4", "zh-HK", "6% 进项税，中国_hk", "税码.J4.中国"),
 
             // dict.accounting.tax.code.j5
-            ("dict.accounting.tax.code.j5", "en-US", "进项税3%_us", "税码.J5"),
+            ("dict.accounting.tax.code.j5", "en-US", "3% 进项税，中国_us", "税码.J5.中国"),
             // dict.accounting.tax.code.j5
-            ("dict.accounting.tax.code.j5", "ja-JP", "进项税3%_jp", "税码.J5"),
+            ("dict.accounting.tax.code.j5", "ja-JP", "3% 进项税，中国_jp", "税码.J5.中国"),
             // dict.accounting.tax.code.j5
-            ("dict.accounting.tax.code.j5", "zh-CN", "进项税3%", "税码.J5"),
+            ("dict.accounting.tax.code.j5", "zh-CN", "3% 进项税，中国", "税码.J5.中国"),
             // dict.accounting.tax.code.j5
-            ("dict.accounting.tax.code.j5", "zh-HK", "进项税3%_hk", "税码.J5"),
+            ("dict.accounting.tax.code.j5", "zh-HK", "3% 进项税，中国_hk", "税码.J5.中国"),
 
             // dict.accounting.tax.code.j6
-            ("dict.accounting.tax.code.j6", "en-US", "进项税1%_us", "税码.J6"),
+            ("dict.accounting.tax.code.j6", "en-US", "16% 进项税，中国_us", "税码.J6.中国"),
             // dict.accounting.tax.code.j6
-            ("dict.accounting.tax.code.j6", "ja-JP", "进项税1%_jp", "税码.J6"),
+            ("dict.accounting.tax.code.j6", "ja-JP", "16% 进项税，中国_jp", "税码.J6.中国"),
             // dict.accounting.tax.code.j6
-            ("dict.accounting.tax.code.j6", "zh-CN", "进项税1%", "税码.J6"),
+            ("dict.accounting.tax.code.j6", "zh-CN", "16% 进项税，中国", "税码.J6.中国"),
             // dict.accounting.tax.code.j6
-            ("dict.accounting.tax.code.j6", "zh-HK", "进项税1%_hk", "税码.J6"),
+            ("dict.accounting.tax.code.j6", "zh-HK", "16% 进项税，中国_hk", "税码.J6.中国"),
+
+            // dict.accounting.tax.code.j7
+            ("dict.accounting.tax.code.j7", "en-US", "10% 进项税，中国_us", "税码.J7.中国"),
+            // dict.accounting.tax.code.j7
+            ("dict.accounting.tax.code.j7", "ja-JP", "10% 进项税，中国_jp", "税码.J7.中国"),
+            // dict.accounting.tax.code.j7
+            ("dict.accounting.tax.code.j7", "zh-CN", "10% 进项税，中国", "税码.J7.中国"),
+            // dict.accounting.tax.code.j7
+            ("dict.accounting.tax.code.j7", "zh-HK", "10% 进项税，中国_hk", "税码.J7.中国"),
+
+            // dict.accounting.tax.code.j8
+            ("dict.accounting.tax.code.j8", "en-US", "1% 进项税，中国_us", "税码.J8.中国"),
+            // dict.accounting.tax.code.j8
+            ("dict.accounting.tax.code.j8", "ja-JP", "1% 进项税，中国_jp", "税码.J8.中国"),
+            // dict.accounting.tax.code.j8
+            ("dict.accounting.tax.code.j8", "zh-CN", "1% 进项税，中国", "税码.J8.中国"),
+            // dict.accounting.tax.code.j8
+            ("dict.accounting.tax.code.j8", "zh-HK", "1% 进项税，中国_hk", "税码.J8.中国"),
+
+            // dict.accounting.tax.code.l1
+            ("dict.accounting.tax.code.l1", "en-US", "5% 奢侈品税，中国_us", "税码.L1.中国"),
+            // dict.accounting.tax.code.l1
+            ("dict.accounting.tax.code.l1", "ja-JP", "5% 奢侈品税，中国_jp", "税码.L1.中国"),
+            // dict.accounting.tax.code.l1
+            ("dict.accounting.tax.code.l1", "zh-CN", "5% 奢侈品税，中国", "税码.L1.中国"),
+            // dict.accounting.tax.code.l1
+            ("dict.accounting.tax.code.l1", "zh-HK", "5% 奢侈品税，中国_hk", "税码.L1.中国"),
+
+            // dict.accounting.tax.code.x0
+            ("dict.accounting.tax.code.x0", "en-US", "0% 销项税，中国_us", "税码.X0.中国"),
+            // dict.accounting.tax.code.x0
+            ("dict.accounting.tax.code.x0", "ja-JP", "0% 销项税，中国_jp", "税码.X0.中国"),
+            // dict.accounting.tax.code.x0
+            ("dict.accounting.tax.code.x0", "zh-CN", "0% 销项税，中国", "税码.X0.中国"),
+            // dict.accounting.tax.code.x0
+            ("dict.accounting.tax.code.x0", "zh-HK", "0% 销项税，中国_hk", "税码.X0.中国"),
+
+            // dict.accounting.tax.code.x1
+            ("dict.accounting.tax.code.x1", "en-US", "17% 销项税，中国_us", "税码.X1.中国"),
+            // dict.accounting.tax.code.x1
+            ("dict.accounting.tax.code.x1", "ja-JP", "17% 销项税，中国_jp", "税码.X1.中国"),
+            // dict.accounting.tax.code.x1
+            ("dict.accounting.tax.code.x1", "zh-CN", "17% 销项税，中国", "税码.X1.中国"),
+            // dict.accounting.tax.code.x1
+            ("dict.accounting.tax.code.x1", "zh-HK", "17% 销项税，中国_hk", "税码.X1.中国"),
+
+            // dict.accounting.tax.code.x2
+            ("dict.accounting.tax.code.x2", "en-US", "13% 销项税，中国_us", "税码.X2.中国"),
+            // dict.accounting.tax.code.x2
+            ("dict.accounting.tax.code.x2", "ja-JP", "13% 销项税，中国_jp", "税码.X2.中国"),
+            // dict.accounting.tax.code.x2
+            ("dict.accounting.tax.code.x2", "zh-CN", "13% 销项税，中国", "税码.X2.中国"),
+            // dict.accounting.tax.code.x2
+            ("dict.accounting.tax.code.x2", "zh-HK", "13% 销项税，中国_hk", "税码.X2.中国"),
+
+            // dict.accounting.tax.code.x3
+            ("dict.accounting.tax.code.x3", "en-US", "16% 销项税，中国_us", "税码.X3.中国"),
+            // dict.accounting.tax.code.x3
+            ("dict.accounting.tax.code.x3", "ja-JP", "16% 销项税，中国_jp", "税码.X3.中国"),
+            // dict.accounting.tax.code.x3
+            ("dict.accounting.tax.code.x3", "zh-CN", "16% 销项税，中国", "税码.X3.中国"),
+            // dict.accounting.tax.code.x3
+            ("dict.accounting.tax.code.x3", "zh-HK", "16% 销项税，中国_hk", "税码.X3.中国"),
+
+            // dict.accounting.tax.code.a0
+            ("dict.accounting.tax.code.a0", "en-US", "ダミー消費税コード 0%_us", "税码.A0.公司1000日本"),
+            // dict.accounting.tax.code.a0
+            ("dict.accounting.tax.code.a0", "ja-JP", "ダミー消費税コード 0%_jp", "税码.A0.公司1000日本"),
+            // dict.accounting.tax.code.a0
+            ("dict.accounting.tax.code.a0", "zh-CN", "ダミー消費税コード 0%", "税码.A0.公司1000日本"),
+            // dict.accounting.tax.code.a0
+            ("dict.accounting.tax.code.a0", "zh-HK", "ダミー消費税コード 0%_hk", "税码.A0.公司1000日本"),
+
+            // dict.accounting.tax.code.a1
+            ("dict.accounting.tax.code.a1", "en-US", "売上(国内) 消費税 0%_us", "税码.A1.公司1000日本"),
+            // dict.accounting.tax.code.a1
+            ("dict.accounting.tax.code.a1", "ja-JP", "売上(国内) 消費税 0%_jp", "税码.A1.公司1000日本"),
+            // dict.accounting.tax.code.a1
+            ("dict.accounting.tax.code.a1", "zh-CN", "売上(国内) 消費税 0%", "税码.A1.公司1000日本"),
+            // dict.accounting.tax.code.a1
+            ("dict.accounting.tax.code.a1", "zh-HK", "売上(国内) 消費税 0%_hk", "税码.A1.公司1000日本"),
+
+            // dict.accounting.tax.code.a2
+            ("dict.accounting.tax.code.a2", "en-US", "売上(輸出) 消費税 0%_us", "税码.A2.公司1000日本"),
+            // dict.accounting.tax.code.a2
+            ("dict.accounting.tax.code.a2", "ja-JP", "売上(輸出) 消費税 0%_jp", "税码.A2.公司1000日本"),
+            // dict.accounting.tax.code.a2
+            ("dict.accounting.tax.code.a2", "zh-CN", "売上(輸出) 消費税 0%", "税码.A2.公司1000日本"),
+            // dict.accounting.tax.code.a2
+            ("dict.accounting.tax.code.a2", "zh-HK", "売上(輸出) 消費税 0%_hk", "税码.A2.公司1000日本"),
+
+            // dict.accounting.tax.code.a5
+            ("dict.accounting.tax.code.a5", "en-US", "売上(課税) 消費税 5%_us", "税码.A5.公司1000日本"),
+            // dict.accounting.tax.code.a5
+            ("dict.accounting.tax.code.a5", "ja-JP", "売上(課税) 消費税 5%_jp", "税码.A5.公司1000日本"),
+            // dict.accounting.tax.code.a5
+            ("dict.accounting.tax.code.a5", "zh-CN", "売上(課税) 消費税 5%", "税码.A5.公司1000日本"),
+            // dict.accounting.tax.code.a5
+            ("dict.accounting.tax.code.a5", "zh-HK", "売上(課税) 消費税 5%_hk", "税码.A5.公司1000日本"),
+
+            // dict.accounting.tax.code.a8
+            ("dict.accounting.tax.code.a8", "en-US", "売上(課税) 消費税 8%_us", "税码.A8.公司1000日本"),
+            // dict.accounting.tax.code.a8
+            ("dict.accounting.tax.code.a8", "ja-JP", "売上(課税) 消費税 8%_jp", "税码.A8.公司1000日本"),
+            // dict.accounting.tax.code.a8
+            ("dict.accounting.tax.code.a8", "zh-CN", "売上(課税) 消費税 8%", "税码.A8.公司1000日本"),
+            // dict.accounting.tax.code.a8
+            ("dict.accounting.tax.code.a8", "zh-HK", "売上(課税) 消費税 8%_hk", "税码.A8.公司1000日本"),
+
+            // dict.accounting.tax.code.aa
+            ("dict.accounting.tax.code.aa", "en-US", "25%(HU)_us", "税码.AA.公司1000日本"),
+            // dict.accounting.tax.code.aa
+            ("dict.accounting.tax.code.aa", "ja-JP", "25%(HU)_jp", "税码.AA.公司1000日本"),
+            // dict.accounting.tax.code.aa
+            ("dict.accounting.tax.code.aa", "zh-CN", "25%(HU)", "税码.AA.公司1000日本"),
+            // dict.accounting.tax.code.aa
+            ("dict.accounting.tax.code.aa", "zh-HK", "25%(HU)_hk", "税码.AA.公司1000日本"),
+
+            // dict.accounting.tax.code.ab
+            ("dict.accounting.tax.code.ab", "en-US", "19%(NL)_us", "税码.AB.公司1000日本"),
+            // dict.accounting.tax.code.ab
+            ("dict.accounting.tax.code.ab", "ja-JP", "19%(NL)_jp", "税码.AB.公司1000日本"),
+            // dict.accounting.tax.code.ab
+            ("dict.accounting.tax.code.ab", "zh-CN", "19%(NL)", "税码.AB.公司1000日本"),
+            // dict.accounting.tax.code.ab
+            ("dict.accounting.tax.code.ab", "zh-HK", "19%(NL)_hk", "税码.AB.公司1000日本"),
+
+            // dict.accounting.tax.code.ac
+            ("dict.accounting.tax.code.ac", "en-US", "19%(CZ)_us", "税码.AC.公司1000日本"),
+            // dict.accounting.tax.code.ac
+            ("dict.accounting.tax.code.ac", "ja-JP", "19%(CZ)_jp", "税码.AC.公司1000日本"),
+            // dict.accounting.tax.code.ac
+            ("dict.accounting.tax.code.ac", "zh-CN", "19%(CZ)", "税码.AC.公司1000日本"),
+            // dict.accounting.tax.code.ac
+            ("dict.accounting.tax.code.ac", "zh-HK", "19%(CZ)_hk", "税码.AC.公司1000日本"),
+
+            // dict.accounting.tax.code.ad
+            ("dict.accounting.tax.code.ad", "en-US", "16%(DE)_us", "税码.AD.公司1000日本"),
+            // dict.accounting.tax.code.ad
+            ("dict.accounting.tax.code.ad", "ja-JP", "16%(DE)_jp", "税码.AD.公司1000日本"),
+            // dict.accounting.tax.code.ad
+            ("dict.accounting.tax.code.ad", "zh-CN", "16%(DE)", "税码.AD.公司1000日本"),
+            // dict.accounting.tax.code.ad
+            ("dict.accounting.tax.code.ad", "zh-HK", "16%(DE)_hk", "税码.AD.公司1000日本"),
+
+            // dict.accounting.tax.code.aj
+            ("dict.accounting.tax.code.aj", "en-US", "売上(課税) 消費税 10%_us", "税码.AJ.公司1000日本"),
+            // dict.accounting.tax.code.aj
+            ("dict.accounting.tax.code.aj", "ja-JP", "売上(課税) 消費税 10%_jp", "税码.AJ.公司1000日本"),
+            // dict.accounting.tax.code.aj
+            ("dict.accounting.tax.code.aj", "zh-CN", "売上(課税) 消費税 10%", "税码.AJ.公司1000日本"),
+            // dict.accounting.tax.code.aj
+            ("dict.accounting.tax.code.aj", "zh-HK", "売上(課税) 消費税 10%_hk", "税码.AJ.公司1000日本"),
+
+            // dict.accounting.tax.code.az
+            ("dict.accounting.tax.code.az", "en-US", "TSSE VAT 17.5%_us", "税码.AZ.公司1000日本"),
+            // dict.accounting.tax.code.az
+            ("dict.accounting.tax.code.az", "ja-JP", "TSSE VAT 17.5%_jp", "税码.AZ.公司1000日本"),
+            // dict.accounting.tax.code.az
+            ("dict.accounting.tax.code.az", "zh-CN", "TSSE VAT 17.5%", "税码.AZ.公司1000日本"),
+            // dict.accounting.tax.code.az
+            ("dict.accounting.tax.code.az", "zh-HK", "TSSE VAT 17.5%_hk", "税码.AZ.公司1000日本"),
+
+            // dict.accounting.tax.code.e0
+            ("dict.accounting.tax.code.e0", "en-US", "ダミー消費税コード 0%(CZ)_us", "税码.E0.公司1000日本"),
+            // dict.accounting.tax.code.e0
+            ("dict.accounting.tax.code.e0", "ja-JP", "ダミー消費税コード 0%(CZ)_jp", "税码.E0.公司1000日本"),
+            // dict.accounting.tax.code.e0
+            ("dict.accounting.tax.code.e0", "zh-CN", "ダミー消費税コード 0%(CZ)", "税码.E0.公司1000日本"),
+            // dict.accounting.tax.code.e0
+            ("dict.accounting.tax.code.e0", "zh-HK", "ダミー消費税コード 0%(CZ)_hk", "税码.E0.公司1000日本"),
+
+            // dict.accounting.tax.code.i8
+            ("dict.accounting.tax.code.i8", "en-US", "輸入消費税 8%_us", "税码.I8.公司1000日本"),
+            // dict.accounting.tax.code.i8
+            ("dict.accounting.tax.code.i8", "ja-JP", "輸入消費税 8%_jp", "税码.I8.公司1000日本"),
+            // dict.accounting.tax.code.i8
+            ("dict.accounting.tax.code.i8", "zh-CN", "輸入消費税 8%", "税码.I8.公司1000日本"),
+            // dict.accounting.tax.code.i8
+            ("dict.accounting.tax.code.i8", "zh-HK", "輸入消費税 8%_hk", "税码.I8.公司1000日本"),
+
+            // dict.accounting.tax.code.ij
+            ("dict.accounting.tax.code.ij", "en-US", "輸入消費税 10%_us", "税码.IJ.公司1000日本"),
+            // dict.accounting.tax.code.ij
+            ("dict.accounting.tax.code.ij", "ja-JP", "輸入消費税 10%_jp", "税码.IJ.公司1000日本"),
+            // dict.accounting.tax.code.ij
+            ("dict.accounting.tax.code.ij", "zh-CN", "輸入消費税 10%", "税码.IJ.公司1000日本"),
+            // dict.accounting.tax.code.ij
+            ("dict.accounting.tax.code.ij", "zh-HK", "輸入消費税 10%_hk", "税码.IJ.公司1000日本"),
+
+            // dict.accounting.tax.code.n8
+            ("dict.accounting.tax.code.n8", "en-US", "消費税 5% 特別地方消費税 3%_us", "税码.N8.公司1000日本"),
+            // dict.accounting.tax.code.n8
+            ("dict.accounting.tax.code.n8", "ja-JP", "消費税 5% 特別地方消費税 3%_jp", "税码.N8.公司1000日本"),
+            // dict.accounting.tax.code.n8
+            ("dict.accounting.tax.code.n8", "zh-CN", "消費税 5% 特別地方消費税 3%", "税码.N8.公司1000日本"),
+            // dict.accounting.tax.code.n8
+            ("dict.accounting.tax.code.n8", "zh-HK", "消費税 5% 特別地方消費税 3%_hk", "税码.N8.公司1000日本"),
+
+            // dict.accounting.tax.code.v0
+            ("dict.accounting.tax.code.v0", "en-US", "ダミー消費税コード 0%_us", "税码.V0.公司1000日本"),
+            // dict.accounting.tax.code.v0
+            ("dict.accounting.tax.code.v0", "ja-JP", "ダミー消費税コード 0%_jp", "税码.V0.公司1000日本"),
+            // dict.accounting.tax.code.v0
+            ("dict.accounting.tax.code.v0", "zh-CN", "ダミー消費税コード 0%", "税码.V0.公司1000日本"),
+            // dict.accounting.tax.code.v0
+            ("dict.accounting.tax.code.v0", "zh-HK", "ダミー消費税コード 0%_hk", "税码.V0.公司1000日本"),
+
+            // dict.accounting.tax.code.v1
+            ("dict.accounting.tax.code.v1", "en-US", "仕入(国内) 消費税 0%_us", "税码.V1.公司1000日本"),
+            // dict.accounting.tax.code.v1
+            ("dict.accounting.tax.code.v1", "ja-JP", "仕入(国内) 消費税 0%_jp", "税码.V1.公司1000日本"),
+            // dict.accounting.tax.code.v1
+            ("dict.accounting.tax.code.v1", "zh-CN", "仕入(国内) 消費税 0%", "税码.V1.公司1000日本"),
+            // dict.accounting.tax.code.v1
+            ("dict.accounting.tax.code.v1", "zh-HK", "仕入(国内) 消費税 0%_hk", "税码.V1.公司1000日本"),
+
+            // dict.accounting.tax.code.v2
+            ("dict.accounting.tax.code.v2", "en-US", "仕入(輸入) 消費税 0%_us", "税码.V2.公司1000日本"),
+            // dict.accounting.tax.code.v2
+            ("dict.accounting.tax.code.v2", "ja-JP", "仕入(輸入) 消費税 0%_jp", "税码.V2.公司1000日本"),
+            // dict.accounting.tax.code.v2
+            ("dict.accounting.tax.code.v2", "zh-CN", "仕入(輸入) 消費税 0%", "税码.V2.公司1000日本"),
+            // dict.accounting.tax.code.v2
+            ("dict.accounting.tax.code.v2", "zh-HK", "仕入(輸入) 消費税 0%_hk", "税码.V2.公司1000日本"),
+
+            // dict.accounting.tax.code.v3
+            ("dict.accounting.tax.code.v3", "en-US", "仕入(課税) 消費税 3%_us", "税码.V3.公司1000日本"),
+            // dict.accounting.tax.code.v3
+            ("dict.accounting.tax.code.v3", "ja-JP", "仕入(課税) 消費税 3%_jp", "税码.V3.公司1000日本"),
+            // dict.accounting.tax.code.v3
+            ("dict.accounting.tax.code.v3", "zh-CN", "仕入(課税) 消費税 3%", "税码.V3.公司1000日本"),
+            // dict.accounting.tax.code.v3
+            ("dict.accounting.tax.code.v3", "zh-HK", "仕入(課税) 消費税 3%_hk", "税码.V3.公司1000日本"),
+
+            // dict.accounting.tax.code.v4
+            ("dict.accounting.tax.code.v4", "en-US", "輸入消費税 5%_us", "税码.V4.公司1000日本"),
+            // dict.accounting.tax.code.v4
+            ("dict.accounting.tax.code.v4", "ja-JP", "輸入消費税 5%_jp", "税码.V4.公司1000日本"),
+            // dict.accounting.tax.code.v4
+            ("dict.accounting.tax.code.v4", "zh-CN", "輸入消費税 5%", "税码.V4.公司1000日本"),
+            // dict.accounting.tax.code.v4
+            ("dict.accounting.tax.code.v4", "zh-HK", "輸入消費税 5%_hk", "税码.V4.公司1000日本"),
+
+            // dict.accounting.tax.code.v5
+            ("dict.accounting.tax.code.v5", "en-US", "仕入(課税) 消費税 5%_us", "税码.V5.公司1000日本"),
+            // dict.accounting.tax.code.v5
+            ("dict.accounting.tax.code.v5", "ja-JP", "仕入(課税) 消費税 5%_jp", "税码.V5.公司1000日本"),
+            // dict.accounting.tax.code.v5
+            ("dict.accounting.tax.code.v5", "zh-CN", "仕入(課税) 消費税 5%", "税码.V5.公司1000日本"),
+            // dict.accounting.tax.code.v5
+            ("dict.accounting.tax.code.v5", "zh-HK", "仕入(課税) 消費税 5%_hk", "税码.V5.公司1000日本"),
+
+            // dict.accounting.tax.code.v8
+            ("dict.accounting.tax.code.v8", "en-US", "仕入(課税) 消費税 8%_us", "税码.V8.公司1000日本"),
+            // dict.accounting.tax.code.v8
+            ("dict.accounting.tax.code.v8", "ja-JP", "仕入(課税) 消費税 8%_jp", "税码.V8.公司1000日本"),
+            // dict.accounting.tax.code.v8
+            ("dict.accounting.tax.code.v8", "zh-CN", "仕入(課税) 消費税 8%", "税码.V8.公司1000日本"),
+            // dict.accounting.tax.code.v8
+            ("dict.accounting.tax.code.v8", "zh-HK", "仕入(課税) 消費税 8%_hk", "税码.V8.公司1000日本"),
+
+            // dict.accounting.tax.code.va
+            ("dict.accounting.tax.code.va", "en-US", "25%(HU)_us", "税码.VA.公司1000日本"),
+            // dict.accounting.tax.code.va
+            ("dict.accounting.tax.code.va", "ja-JP", "25%(HU)_jp", "税码.VA.公司1000日本"),
+            // dict.accounting.tax.code.va
+            ("dict.accounting.tax.code.va", "zh-CN", "25%(HU)", "税码.VA.公司1000日本"),
+            // dict.accounting.tax.code.va
+            ("dict.accounting.tax.code.va", "zh-HK", "25%(HU)_hk", "税码.VA.公司1000日本"),
+
+            // dict.accounting.tax.code.vb
+            ("dict.accounting.tax.code.vb", "en-US", "19%(NL)_us", "税码.VB.公司1000日本"),
+            // dict.accounting.tax.code.vb
+            ("dict.accounting.tax.code.vb", "ja-JP", "19%(NL)_jp", "税码.VB.公司1000日本"),
+            // dict.accounting.tax.code.vb
+            ("dict.accounting.tax.code.vb", "zh-CN", "19%(NL)", "税码.VB.公司1000日本"),
+            // dict.accounting.tax.code.vb
+            ("dict.accounting.tax.code.vb", "zh-HK", "19%(NL)_hk", "税码.VB.公司1000日本"),
+
+            // dict.accounting.tax.code.vc
+            ("dict.accounting.tax.code.vc", "en-US", "19%(CZ)_us", "税码.VC.公司1000日本"),
+            // dict.accounting.tax.code.vc
+            ("dict.accounting.tax.code.vc", "ja-JP", "19%(CZ)_jp", "税码.VC.公司1000日本"),
+            // dict.accounting.tax.code.vc
+            ("dict.accounting.tax.code.vc", "zh-CN", "19%(CZ)", "税码.VC.公司1000日本"),
+            // dict.accounting.tax.code.vc
+            ("dict.accounting.tax.code.vc", "zh-HK", "19%(CZ)_hk", "税码.VC.公司1000日本"),
+
+            // dict.accounting.tax.code.vd
+            ("dict.accounting.tax.code.vd", "en-US", "16%(DE)_us", "税码.VD.公司1000日本"),
+            // dict.accounting.tax.code.vd
+            ("dict.accounting.tax.code.vd", "ja-JP", "16%(DE)_jp", "税码.VD.公司1000日本"),
+            // dict.accounting.tax.code.vd
+            ("dict.accounting.tax.code.vd", "zh-CN", "16%(DE)", "税码.VD.公司1000日本"),
+            // dict.accounting.tax.code.vd
+            ("dict.accounting.tax.code.vd", "zh-HK", "16%(DE)_hk", "税码.VD.公司1000日本"),
+
+            // dict.accounting.tax.code.vh
+            ("dict.accounting.tax.code.vh", "en-US", "仕入(軽減税率) 消費税 8%_us", "税码.VH.公司1000日本"),
+            // dict.accounting.tax.code.vh
+            ("dict.accounting.tax.code.vh", "ja-JP", "仕入(軽減税率) 消費税 8%_jp", "税码.VH.公司1000日本"),
+            // dict.accounting.tax.code.vh
+            ("dict.accounting.tax.code.vh", "zh-CN", "仕入(軽減税率) 消費税 8%", "税码.VH.公司1000日本"),
+            // dict.accounting.tax.code.vh
+            ("dict.accounting.tax.code.vh", "zh-HK", "仕入(軽減税率) 消費税 8%_hk", "税码.VH.公司1000日本"),
+
+            // dict.accounting.tax.code.vj
+            ("dict.accounting.tax.code.vj", "en-US", "仕入(課税) 消費税 10%_us", "税码.VJ.公司1000日本"),
+            // dict.accounting.tax.code.vj
+            ("dict.accounting.tax.code.vj", "ja-JP", "仕入(課税) 消費税 10%_jp", "税码.VJ.公司1000日本"),
+            // dict.accounting.tax.code.vj
+            ("dict.accounting.tax.code.vj", "zh-CN", "仕入(課税) 消費税 10%", "税码.VJ.公司1000日本"),
+            // dict.accounting.tax.code.vj
+            ("dict.accounting.tax.code.vj", "zh-HK", "仕入(課税) 消費税 10%_hk", "税码.VJ.公司1000日本"),
+
+            // dict.accounting.tax.code.vl
+            ("dict.accounting.tax.code.vl", "en-US", "仕入（免税事業者）消費税 8%_us", "税码.VL.公司1000日本"),
+            // dict.accounting.tax.code.vl
+            ("dict.accounting.tax.code.vl", "ja-JP", "仕入（免税事業者）消費税 8%_jp", "税码.VL.公司1000日本"),
+            // dict.accounting.tax.code.vl
+            ("dict.accounting.tax.code.vl", "zh-CN", "仕入（免税事業者）消費税 8%", "税码.VL.公司1000日本"),
+            // dict.accounting.tax.code.vl
+            ("dict.accounting.tax.code.vl", "zh-HK", "仕入（免税事業者）消費税 8%_hk", "税码.VL.公司1000日本"),
+
+            // dict.accounting.tax.code.vm
+            ("dict.accounting.tax.code.vm", "en-US", "仕入（免税事業者）消費税 10%_us", "税码.VM.公司1000日本"),
+            // dict.accounting.tax.code.vm
+            ("dict.accounting.tax.code.vm", "ja-JP", "仕入（免税事業者）消費税 10%_jp", "税码.VM.公司1000日本"),
+            // dict.accounting.tax.code.vm
+            ("dict.accounting.tax.code.vm", "zh-CN", "仕入（免税事業者）消費税 10%", "税码.VM.公司1000日本"),
+            // dict.accounting.tax.code.vm
+            ("dict.accounting.tax.code.vm", "zh-HK", "仕入（免税事業者）消費税 10%_hk", "税码.VM.公司1000日本"),
+
+            // dict.accounting.tax.code.vz
+            ("dict.accounting.tax.code.vz", "en-US", "TSSE VAT 17.5%_us", "税码.VZ.公司1000日本"),
+            // dict.accounting.tax.code.vz
+            ("dict.accounting.tax.code.vz", "ja-JP", "TSSE VAT 17.5%_jp", "税码.VZ.公司1000日本"),
+            // dict.accounting.tax.code.vz
+            ("dict.accounting.tax.code.vz", "zh-CN", "TSSE VAT 17.5%", "税码.VZ.公司1000日本"),
+            // dict.accounting.tax.code.vz
+            ("dict.accounting.tax.code.vz", "zh-HK", "TSSE VAT 17.5%_hk", "税码.VZ.公司1000日本"),
 
             // dict.accounting.tax.category.excludingtax
             ("dict.accounting.tax.category.excludingtax", "en-US", "不含税_us", "税别.不含税"),
@@ -10436,6 +11012,465 @@ public class TaktDictI18nSeedData : ITaktSeedDataCoordinator
             // dict.logistics.customer.category.3
             ("dict.logistics.customer.category.3", "zh-HK", "其他_hk", "客户类型.其他"),
 
+            // dict.logistics.customer.group.z1
+            ("dict.logistics.customer.group.z1", "en-US", "USA/JAPAN+OEM_us", "客户组.Z1"),
+            // dict.logistics.customer.group.z1
+            ("dict.logistics.customer.group.z1", "ja-JP", "USA/JAPAN+OEM_jp", "客户组.Z1"),
+            // dict.logistics.customer.group.z1
+            ("dict.logistics.customer.group.z1", "zh-CN", "USA/JAPAN+OEM", "客户组.Z1"),
+            // dict.logistics.customer.group.z1
+            ("dict.logistics.customer.group.z1", "zh-HK", "USA/JAPAN+OEM_hk", "客户组.Z1"),
+
+            // dict.logistics.customer.group.z2
+            ("dict.logistics.customer.group.z2", "en-US", "EXPORT_us", "客户组.Z2"),
+            // dict.logistics.customer.group.z2
+            ("dict.logistics.customer.group.z2", "ja-JP", "EXPORT_jp", "客户组.Z2"),
+            // dict.logistics.customer.group.z2
+            ("dict.logistics.customer.group.z2", "zh-CN", "EXPORT", "客户组.Z2"),
+            // dict.logistics.customer.group.z2
+            ("dict.logistics.customer.group.z2", "zh-HK", "EXPORT_hk", "客户组.Z2"),
+
+            // dict.logistics.customer.group.z3
+            ("dict.logistics.customer.group.z3", "en-US", "砖厂_us", "客户组.Z3"),
+            // dict.logistics.customer.group.z3
+            ("dict.logistics.customer.group.z3", "ja-JP", "砖厂_jp", "客户组.Z3"),
+            // dict.logistics.customer.group.z3
+            ("dict.logistics.customer.group.z3", "zh-CN", "砖厂", "客户组.Z3"),
+            // dict.logistics.customer.group.z3
+            ("dict.logistics.customer.group.z3", "zh-HK", "砖厂_hk", "客户组.Z3"),
+
+            // dict.logistics.customer.group.z4
+            ("dict.logistics.customer.group.z4", "en-US", "其他_us", "客户组.Z4"),
+            // dict.logistics.customer.group.z4
+            ("dict.logistics.customer.group.z4", "ja-JP", "其他_jp", "客户组.Z4"),
+            // dict.logistics.customer.group.z4
+            ("dict.logistics.customer.group.z4", "zh-CN", "其他", "客户组.Z4"),
+            // dict.logistics.customer.group.z4
+            ("dict.logistics.customer.group.z4", "zh-HK", "其他_hk", "客户组.Z4"),
+
+            // dict.logistics.shipping.conditions.z1
+            ("dict.logistics.shipping.conditions.z1", "en-US", "DTA（国内）_us", "装运条件.Z1"),
+            // dict.logistics.shipping.conditions.z1
+            ("dict.logistics.shipping.conditions.z1", "ja-JP", "DTA（国内）_jp", "装运条件.Z1"),
+            // dict.logistics.shipping.conditions.z1
+            ("dict.logistics.shipping.conditions.z1", "zh-CN", "DTA（国内）", "装运条件.Z1"),
+            // dict.logistics.shipping.conditions.z1
+            ("dict.logistics.shipping.conditions.z1", "zh-HK", "DTA（国内）_hk", "装运条件.Z1"),
+
+            // dict.logistics.shipping.conditions.z2
+            ("dict.logistics.shipping.conditions.z2", "en-US", "DTA（海外）_us", "装运条件.Z2"),
+            // dict.logistics.shipping.conditions.z2
+            ("dict.logistics.shipping.conditions.z2", "ja-JP", "DTA（海外）_jp", "装运条件.Z2"),
+            // dict.logistics.shipping.conditions.z2
+            ("dict.logistics.shipping.conditions.z2", "zh-CN", "DTA（海外）", "装运条件.Z2"),
+            // dict.logistics.shipping.conditions.z2
+            ("dict.logistics.shipping.conditions.z2", "zh-HK", "DTA（海外）_hk", "装运条件.Z2"),
+
+            // dict.logistics.shipping.conditions.z3
+            ("dict.logistics.shipping.conditions.z3", "en-US", "TAC_us", "装运条件.Z3"),
+            // dict.logistics.shipping.conditions.z3
+            ("dict.logistics.shipping.conditions.z3", "ja-JP", "TAC_jp", "装运条件.Z3"),
+            // dict.logistics.shipping.conditions.z3
+            ("dict.logistics.shipping.conditions.z3", "zh-CN", "TAC", "装运条件.Z3"),
+            // dict.logistics.shipping.conditions.z3
+            ("dict.logistics.shipping.conditions.z3", "zh-HK", "TAC_hk", "装运条件.Z3"),
+
+            // dict.logistics.customer.pricing.procedure.1
+            ("dict.logistics.customer.pricing.procedure.1", "en-US", "Standard_us", "客户定价过程.1"),
+            // dict.logistics.customer.pricing.procedure.1
+            ("dict.logistics.customer.pricing.procedure.1", "ja-JP", "Standard_jp", "客户定价过程.1"),
+            // dict.logistics.customer.pricing.procedure.1
+            ("dict.logistics.customer.pricing.procedure.1", "zh-CN", "Standard", "客户定价过程.1"),
+            // dict.logistics.customer.pricing.procedure.1
+            ("dict.logistics.customer.pricing.procedure.1", "zh-HK", "Standard_hk", "客户定价过程.1"),
+
+            // dict.logistics.customer.pricing.procedure.2
+            ("dict.logistics.customer.pricing.procedure.2", "en-US", "Stand Incl Sales Tax_us", "客户定价过程.2"),
+            // dict.logistics.customer.pricing.procedure.2
+            ("dict.logistics.customer.pricing.procedure.2", "ja-JP", "Stand Incl Sales Tax_jp", "客户定价过程.2"),
+            // dict.logistics.customer.pricing.procedure.2
+            ("dict.logistics.customer.pricing.procedure.2", "zh-CN", "Stand Incl Sales Tax", "客户定价过程.2"),
+            // dict.logistics.customer.pricing.procedure.2
+            ("dict.logistics.customer.pricing.procedure.2", "zh-HK", "Stand Incl Sales Tax_hk", "客户定价过程.2"),
+
+            // dict.logistics.customer.pricing.procedure.3
+            ("dict.logistics.customer.pricing.procedure.3", "en-US", "Intercompany_us", "客户定价过程.3"),
+            // dict.logistics.customer.pricing.procedure.3
+            ("dict.logistics.customer.pricing.procedure.3", "ja-JP", "Intercompany_jp", "客户定价过程.3"),
+            // dict.logistics.customer.pricing.procedure.3
+            ("dict.logistics.customer.pricing.procedure.3", "zh-CN", "Intercompany", "客户定价过程.3"),
+            // dict.logistics.customer.pricing.procedure.3
+            ("dict.logistics.customer.pricing.procedure.3", "zh-HK", "Intercompany_hk", "客户定价过程.3"),
+
+            // dict.logistics.incoterms1.cf
+            ("dict.logistics.incoterms1.cf", "en-US", "Costs and Freight_us", "国际贸易条件1.C&F"),
+            // dict.logistics.incoterms1.cf
+            ("dict.logistics.incoterms1.cf", "ja-JP", "Costs and Freight_jp", "国际贸易条件1.C&F"),
+            // dict.logistics.incoterms1.cf
+            ("dict.logistics.incoterms1.cf", "zh-CN", "Costs and Freight", "国际贸易条件1.C&F"),
+            // dict.logistics.incoterms1.cf
+            ("dict.logistics.incoterms1.cf", "zh-HK", "Costs and Freight_hk", "国际贸易条件1.C&F"),
+
+            // dict.logistics.incoterms1.ci
+            ("dict.logistics.incoterms1.ci", "en-US", "C&I_us", "国际贸易条件1.C&I"),
+            // dict.logistics.incoterms1.ci
+            ("dict.logistics.incoterms1.ci", "ja-JP", "C&I_jp", "国际贸易条件1.C&I"),
+            // dict.logistics.incoterms1.ci
+            ("dict.logistics.incoterms1.ci", "zh-CN", "C&I", "国际贸易条件1.C&I"),
+            // dict.logistics.incoterms1.ci
+            ("dict.logistics.incoterms1.ci", "zh-HK", "C&I_hk", "国际贸易条件1.C&I"),
+
+            // dict.logistics.incoterms1.cfr
+            ("dict.logistics.incoterms1.cfr", "en-US", "Costs and Freight_us", "国际贸易条件1.CFR"),
+            // dict.logistics.incoterms1.cfr
+            ("dict.logistics.incoterms1.cfr", "ja-JP", "Costs and Freight_jp", "国际贸易条件1.CFR"),
+            // dict.logistics.incoterms1.cfr
+            ("dict.logistics.incoterms1.cfr", "zh-CN", "Costs and Freight", "国际贸易条件1.CFR"),
+            // dict.logistics.incoterms1.cfr
+            ("dict.logistics.incoterms1.cfr", "zh-HK", "Costs and Freight_hk", "国际贸易条件1.CFR"),
+
+            // dict.logistics.incoterms1.cif
+            ("dict.logistics.incoterms1.cif", "en-US", "Costs, Insurance & Freight_us", "国际贸易条件1.CIF"),
+            // dict.logistics.incoterms1.cif
+            ("dict.logistics.incoterms1.cif", "ja-JP", "Costs, Insurance & Freight_jp", "国际贸易条件1.CIF"),
+            // dict.logistics.incoterms1.cif
+            ("dict.logistics.incoterms1.cif", "zh-CN", "Costs, Insurance & Freight", "国际贸易条件1.CIF"),
+            // dict.logistics.incoterms1.cif
+            ("dict.logistics.incoterms1.cif", "zh-HK", "Costs, Insurance & Freight_hk", "国际贸易条件1.CIF"),
+
+            // dict.logistics.incoterms1.cip
+            ("dict.logistics.incoterms1.cip", "en-US", "Carriage and Insurance Paid To_us", "国际贸易条件1.CIP"),
+            // dict.logistics.incoterms1.cip
+            ("dict.logistics.incoterms1.cip", "ja-JP", "Carriage and Insurance Paid To_jp", "国际贸易条件1.CIP"),
+            // dict.logistics.incoterms1.cip
+            ("dict.logistics.incoterms1.cip", "zh-CN", "Carriage and Insurance Paid To", "国际贸易条件1.CIP"),
+            // dict.logistics.incoterms1.cip
+            ("dict.logistics.incoterms1.cip", "zh-HK", "Carriage and Insurance Paid To_hk", "国际贸易条件1.CIP"),
+
+            // dict.logistics.incoterms1.cpt
+            ("dict.logistics.incoterms1.cpt", "en-US", "Carriage Paid To_us", "国际贸易条件1.CPT"),
+            // dict.logistics.incoterms1.cpt
+            ("dict.logistics.incoterms1.cpt", "ja-JP", "Carriage Paid To_jp", "国际贸易条件1.CPT"),
+            // dict.logistics.incoterms1.cpt
+            ("dict.logistics.incoterms1.cpt", "zh-CN", "Carriage Paid To", "国际贸易条件1.CPT"),
+            // dict.logistics.incoterms1.cpt
+            ("dict.logistics.incoterms1.cpt", "zh-HK", "Carriage Paid To_hk", "国际贸易条件1.CPT"),
+
+            // dict.logistics.incoterms1.daf
+            ("dict.logistics.incoterms1.daf", "en-US", "Delivered at Frontier_us", "国际贸易条件1.DAF"),
+            // dict.logistics.incoterms1.daf
+            ("dict.logistics.incoterms1.daf", "ja-JP", "Delivered at Frontier_jp", "国际贸易条件1.DAF"),
+            // dict.logistics.incoterms1.daf
+            ("dict.logistics.incoterms1.daf", "zh-CN", "Delivered at Frontier", "国际贸易条件1.DAF"),
+            // dict.logistics.incoterms1.daf
+            ("dict.logistics.incoterms1.daf", "zh-HK", "Delivered at Frontier_hk", "国际贸易条件1.DAF"),
+
+            // dict.logistics.incoterms1.dap
+            ("dict.logistics.incoterms1.dap", "en-US", "Delivered at Frontier_us", "国际贸易条件1.DAP"),
+            // dict.logistics.incoterms1.dap
+            ("dict.logistics.incoterms1.dap", "ja-JP", "Delivered at Frontier_jp", "国际贸易条件1.DAP"),
+            // dict.logistics.incoterms1.dap
+            ("dict.logistics.incoterms1.dap", "zh-CN", "Delivered at Frontier", "国际贸易条件1.DAP"),
+            // dict.logistics.incoterms1.dap
+            ("dict.logistics.incoterms1.dap", "zh-HK", "Delivered at Frontier_hk", "国际贸易条件1.DAP"),
+
+            // dict.logistics.incoterms1.dat
+            ("dict.logistics.incoterms1.dat", "en-US", "Delivered at Frontier_us", "国际贸易条件1.DAT"),
+            // dict.logistics.incoterms1.dat
+            ("dict.logistics.incoterms1.dat", "ja-JP", "Delivered at Frontier_jp", "国际贸易条件1.DAT"),
+            // dict.logistics.incoterms1.dat
+            ("dict.logistics.incoterms1.dat", "zh-CN", "Delivered at Frontier", "国际贸易条件1.DAT"),
+            // dict.logistics.incoterms1.dat
+            ("dict.logistics.incoterms1.dat", "zh-HK", "Delivered at Frontier_hk", "国际贸易条件1.DAT"),
+
+            // dict.logistics.incoterms1.ddp
+            ("dict.logistics.incoterms1.ddp", "en-US", "Delivered Duty Paid_us", "国际贸易条件1.DDP"),
+            // dict.logistics.incoterms1.ddp
+            ("dict.logistics.incoterms1.ddp", "ja-JP", "Delivered Duty Paid_jp", "国际贸易条件1.DDP"),
+            // dict.logistics.incoterms1.ddp
+            ("dict.logistics.incoterms1.ddp", "zh-CN", "Delivered Duty Paid", "国际贸易条件1.DDP"),
+            // dict.logistics.incoterms1.ddp
+            ("dict.logistics.incoterms1.ddp", "zh-HK", "Delivered Duty Paid_hk", "国际贸易条件1.DDP"),
+
+            // dict.logistics.incoterms1.ddu
+            ("dict.logistics.incoterms1.ddu", "en-US", "Delivered Duty Unpaid_us", "国际贸易条件1.DDU"),
+            // dict.logistics.incoterms1.ddu
+            ("dict.logistics.incoterms1.ddu", "ja-JP", "Delivered Duty Unpaid_jp", "国际贸易条件1.DDU"),
+            // dict.logistics.incoterms1.ddu
+            ("dict.logistics.incoterms1.ddu", "zh-CN", "Delivered Duty Unpaid", "国际贸易条件1.DDU"),
+            // dict.logistics.incoterms1.ddu
+            ("dict.logistics.incoterms1.ddu", "zh-HK", "Delivered Duty Unpaid_hk", "国际贸易条件1.DDU"),
+
+            // dict.logistics.incoterms1.deq
+            ("dict.logistics.incoterms1.deq", "en-US", "Delivered Ex Quay (Duty Paid)_us", "国际贸易条件1.DEQ"),
+            // dict.logistics.incoterms1.deq
+            ("dict.logistics.incoterms1.deq", "ja-JP", "Delivered Ex Quay (Duty Paid)_jp", "国际贸易条件1.DEQ"),
+            // dict.logistics.incoterms1.deq
+            ("dict.logistics.incoterms1.deq", "zh-CN", "Delivered Ex Quay (Duty Paid)", "国际贸易条件1.DEQ"),
+            // dict.logistics.incoterms1.deq
+            ("dict.logistics.incoterms1.deq", "zh-HK", "Delivered Ex Quay (Duty Paid)_hk", "国际贸易条件1.DEQ"),
+
+            // dict.logistics.incoterms1.des
+            ("dict.logistics.incoterms1.des", "en-US", "Delivered ex Ship_us", "国际贸易条件1.DES"),
+            // dict.logistics.incoterms1.des
+            ("dict.logistics.incoterms1.des", "ja-JP", "Delivered ex Ship_jp", "国际贸易条件1.DES"),
+            // dict.logistics.incoterms1.des
+            ("dict.logistics.incoterms1.des", "zh-CN", "Delivered ex Ship", "国际贸易条件1.DES"),
+            // dict.logistics.incoterms1.des
+            ("dict.logistics.incoterms1.des", "zh-HK", "Delivered ex Ship_hk", "国际贸易条件1.DES"),
+
+            // dict.logistics.incoterms1.dpu
+            ("dict.logistics.incoterms1.dpu", "en-US", "Delivered at Place Unloaded_us", "国际贸易条件1.DPU"),
+            // dict.logistics.incoterms1.dpu
+            ("dict.logistics.incoterms1.dpu", "ja-JP", "Delivered at Place Unloaded_jp", "国际贸易条件1.DPU"),
+            // dict.logistics.incoterms1.dpu
+            ("dict.logistics.incoterms1.dpu", "zh-CN", "Delivered at Place Unloaded", "国际贸易条件1.DPU"),
+            // dict.logistics.incoterms1.dpu
+            ("dict.logistics.incoterms1.dpu", "zh-HK", "Delivered at Place Unloaded_hk", "国际贸易条件1.DPU"),
+
+            // dict.logistics.incoterms1.exw
+            ("dict.logistics.incoterms1.exw", "en-US", "Ex Works_us", "国际贸易条件1.EXW"),
+            // dict.logistics.incoterms1.exw
+            ("dict.logistics.incoterms1.exw", "ja-JP", "Ex Works_jp", "国际贸易条件1.EXW"),
+            // dict.logistics.incoterms1.exw
+            ("dict.logistics.incoterms1.exw", "zh-CN", "Ex Works", "国际贸易条件1.EXW"),
+            // dict.logistics.incoterms1.exw
+            ("dict.logistics.incoterms1.exw", "zh-HK", "Ex Works_hk", "国际贸易条件1.EXW"),
+
+            // dict.logistics.incoterms1.fas
+            ("dict.logistics.incoterms1.fas", "en-US", "Free Alongside Ship_us", "国际贸易条件1.FAS"),
+            // dict.logistics.incoterms1.fas
+            ("dict.logistics.incoterms1.fas", "ja-JP", "Free Alongside Ship_jp", "国际贸易条件1.FAS"),
+            // dict.logistics.incoterms1.fas
+            ("dict.logistics.incoterms1.fas", "zh-CN", "Free Alongside Ship", "国际贸易条件1.FAS"),
+            // dict.logistics.incoterms1.fas
+            ("dict.logistics.incoterms1.fas", "zh-HK", "Free Alongside Ship_hk", "国际贸易条件1.FAS"),
+
+            // dict.logistics.incoterms1.fca
+            ("dict.logistics.incoterms1.fca", "en-US", "Free Carrier_us", "国际贸易条件1.FCA"),
+            // dict.logistics.incoterms1.fca
+            ("dict.logistics.incoterms1.fca", "ja-JP", "Free Carrier_jp", "国际贸易条件1.FCA"),
+            // dict.logistics.incoterms1.fca
+            ("dict.logistics.incoterms1.fca", "zh-CN", "Free Carrier", "国际贸易条件1.FCA"),
+            // dict.logistics.incoterms1.fca
+            ("dict.logistics.incoterms1.fca", "zh-HK", "Free Carrier_hk", "国际贸易条件1.FCA"),
+
+            // dict.logistics.incoterms1.fh
+            ("dict.logistics.incoterms1.fh", "en-US", "Carriage Paid_us", "国际贸易条件1.FH"),
+            // dict.logistics.incoterms1.fh
+            ("dict.logistics.incoterms1.fh", "ja-JP", "Carriage Paid_jp", "国际贸易条件1.FH"),
+            // dict.logistics.incoterms1.fh
+            ("dict.logistics.incoterms1.fh", "zh-CN", "Carriage Paid", "国际贸易条件1.FH"),
+            // dict.logistics.incoterms1.fh
+            ("dict.logistics.incoterms1.fh", "zh-HK", "Carriage Paid_hk", "国际贸易条件1.FH"),
+
+            // dict.logistics.incoterms1.fob
+            ("dict.logistics.incoterms1.fob", "en-US", "Free on Board_us", "国际贸易条件1.FOB"),
+            // dict.logistics.incoterms1.fob
+            ("dict.logistics.incoterms1.fob", "ja-JP", "Free on Board_jp", "国际贸易条件1.FOB"),
+            // dict.logistics.incoterms1.fob
+            ("dict.logistics.incoterms1.fob", "zh-CN", "Free on Board", "国际贸易条件1.FOB"),
+            // dict.logistics.incoterms1.fob
+            ("dict.logistics.incoterms1.fob", "zh-HK", "Free on Board_hk", "国际贸易条件1.FOB"),
+
+            // dict.logistics.incoterms1.un
+            ("dict.logistics.incoterms1.un", "en-US", "Not Free_us", "国际贸易条件1.UN"),
+            // dict.logistics.incoterms1.un
+            ("dict.logistics.incoterms1.un", "ja-JP", "Not Free_jp", "国际贸易条件1.UN"),
+            // dict.logistics.incoterms1.un
+            ("dict.logistics.incoterms1.un", "zh-CN", "Not Free", "国际贸易条件1.UN"),
+            // dict.logistics.incoterms1.un
+            ("dict.logistics.incoterms1.un", "zh-HK", "Not Free_hk", "国际贸易条件1.UN"),
+
+            // dict.logistics.account.assignment.group.01
+            ("dict.logistics.account.assignment.group.01", "en-US", "Domestic Revenues_us", "帐户分配组.01"),
+            // dict.logistics.account.assignment.group.01
+            ("dict.logistics.account.assignment.group.01", "ja-JP", "Domestic Revenues_jp", "帐户分配组.01"),
+            // dict.logistics.account.assignment.group.01
+            ("dict.logistics.account.assignment.group.01", "zh-CN", "Domestic Revenues", "帐户分配组.01"),
+            // dict.logistics.account.assignment.group.01
+            ("dict.logistics.account.assignment.group.01", "zh-HK", "Domestic Revenues_hk", "帐户分配组.01"),
+
+            // dict.logistics.account.assignment.group.02
+            ("dict.logistics.account.assignment.group.02", "en-US", "Foreign Revenues_us", "帐户分配组.02"),
+            // dict.logistics.account.assignment.group.02
+            ("dict.logistics.account.assignment.group.02", "ja-JP", "Foreign Revenues_jp", "帐户分配组.02"),
+            // dict.logistics.account.assignment.group.02
+            ("dict.logistics.account.assignment.group.02", "zh-CN", "Foreign Revenues", "帐户分配组.02"),
+            // dict.logistics.account.assignment.group.02
+            ("dict.logistics.account.assignment.group.02", "zh-HK", "Foreign Revenues_hk", "帐户分配组.02"),
+
+            // dict.logistics.account.assignment.group.03
+            ("dict.logistics.account.assignment.group.03", "en-US", "Affiliat Comp Revenu_us", "帐户分配组.03"),
+            // dict.logistics.account.assignment.group.03
+            ("dict.logistics.account.assignment.group.03", "ja-JP", "Affiliat Comp Revenu_jp", "帐户分配组.03"),
+            // dict.logistics.account.assignment.group.03
+            ("dict.logistics.account.assignment.group.03", "zh-CN", "Affiliat Comp Revenu", "帐户分配组.03"),
+            // dict.logistics.account.assignment.group.03
+            ("dict.logistics.account.assignment.group.03", "zh-HK", "Affiliat Comp Revenu_hk", "帐户分配组.03"),
+
+            // dict.logistics.account.assignment.group.y1
+            ("dict.logistics.account.assignment.group.y1", "en-US", "Affiliat Comp_domes_us", "帐户分配组.Y1"),
+            // dict.logistics.account.assignment.group.y1
+            ("dict.logistics.account.assignment.group.y1", "ja-JP", "Affiliat Comp_domes_jp", "帐户分配组.Y1"),
+            // dict.logistics.account.assignment.group.y1
+            ("dict.logistics.account.assignment.group.y1", "zh-CN", "Affiliat Comp_domes", "帐户分配组.Y1"),
+            // dict.logistics.account.assignment.group.y1
+            ("dict.logistics.account.assignment.group.y1", "zh-HK", "Affiliat Comp_domes_hk", "帐户分配组.Y1"),
+
+            // dict.logistics.account.assignment.group.y2
+            ("dict.logistics.account.assignment.group.y2", "en-US", "Affiliat Comp_abroad_us", "帐户分配组.Y2"),
+            // dict.logistics.account.assignment.group.y2
+            ("dict.logistics.account.assignment.group.y2", "ja-JP", "Affiliat Comp_abroad_jp", "帐户分配组.Y2"),
+            // dict.logistics.account.assignment.group.y2
+            ("dict.logistics.account.assignment.group.y2", "zh-CN", "Affiliat Comp_abroad", "帐户分配组.Y2"),
+            // dict.logistics.account.assignment.group.y2
+            ("dict.logistics.account.assignment.group.y2", "zh-HK", "Affiliat Comp_abroad_hk", "帐户分配组.Y2"),
+
+            // dict.logistics.account.assignment.group.y3
+            ("dict.logistics.account.assignment.group.y3", "en-US", "Affiliat Comp_us", "帐户分配组.Y3"),
+            // dict.logistics.account.assignment.group.y3
+            ("dict.logistics.account.assignment.group.y3", "ja-JP", "Affiliat Comp_jp", "帐户分配组.Y3"),
+            // dict.logistics.account.assignment.group.y3
+            ("dict.logistics.account.assignment.group.y3", "zh-CN", "Affiliat Comp", "帐户分配组.Y3"),
+            // dict.logistics.account.assignment.group.y3
+            ("dict.logistics.account.assignment.group.y3", "zh-HK", "Affiliat Comp_hk", "帐户分配组.Y3"),
+
+            // dict.logistics.account.assignment.group.y4
+            ("dict.logistics.account.assignment.group.y4", "en-US", "Non-Affiliat Comp_us", "帐户分配组.Y4"),
+            // dict.logistics.account.assignment.group.y4
+            ("dict.logistics.account.assignment.group.y4", "ja-JP", "Non-Affiliat Comp_jp", "帐户分配组.Y4"),
+            // dict.logistics.account.assignment.group.y4
+            ("dict.logistics.account.assignment.group.y4", "zh-CN", "Non-Affiliat Comp", "帐户分配组.Y4"),
+            // dict.logistics.account.assignment.group.y4
+            ("dict.logistics.account.assignment.group.y4", "zh-HK", "Non-Affiliat Comp_hk", "帐户分配组.Y4"),
+
+            // dict.logistics.account.assignment.group.z0
+            ("dict.logistics.account.assignment.group.z0", "en-US", "Z0_us", "帐户分配组.Z0"),
+            // dict.logistics.account.assignment.group.z0
+            ("dict.logistics.account.assignment.group.z0", "ja-JP", "Z0_jp", "帐户分配组.Z0"),
+            // dict.logistics.account.assignment.group.z0
+            ("dict.logistics.account.assignment.group.z0", "zh-CN", "Z0", "帐户分配组.Z0"),
+            // dict.logistics.account.assignment.group.z0
+            ("dict.logistics.account.assignment.group.z0", "zh-HK", "Z0_hk", "帐户分配组.Z0"),
+
+            // dict.logistics.account.assignment.group.z1
+            ("dict.logistics.account.assignment.group.z1", "en-US", "Z1_us", "帐户分配组.Z1"),
+            // dict.logistics.account.assignment.group.z1
+            ("dict.logistics.account.assignment.group.z1", "ja-JP", "Z1_jp", "帐户分配组.Z1"),
+            // dict.logistics.account.assignment.group.z1
+            ("dict.logistics.account.assignment.group.z1", "zh-CN", "Z1", "帐户分配组.Z1"),
+            // dict.logistics.account.assignment.group.z1
+            ("dict.logistics.account.assignment.group.z1", "zh-HK", "Z1_hk", "帐户分配组.Z1"),
+
+            // dict.logistics.account.assignment.group.z2
+            ("dict.logistics.account.assignment.group.z2", "en-US", "Z2_us", "帐户分配组.Z2"),
+            // dict.logistics.account.assignment.group.z2
+            ("dict.logistics.account.assignment.group.z2", "ja-JP", "Z2_jp", "帐户分配组.Z2"),
+            // dict.logistics.account.assignment.group.z2
+            ("dict.logistics.account.assignment.group.z2", "zh-CN", "Z2", "帐户分配组.Z2"),
+            // dict.logistics.account.assignment.group.z2
+            ("dict.logistics.account.assignment.group.z2", "zh-HK", "Z2_hk", "帐户分配组.Z2"),
+
+            // dict.logistics.account.assignment.group.z3
+            ("dict.logistics.account.assignment.group.z3", "en-US", "Z3_us", "帐户分配组.Z3"),
+            // dict.logistics.account.assignment.group.z3
+            ("dict.logistics.account.assignment.group.z3", "ja-JP", "Z3_jp", "帐户分配组.Z3"),
+            // dict.logistics.account.assignment.group.z3
+            ("dict.logistics.account.assignment.group.z3", "zh-CN", "Z3", "帐户分配组.Z3"),
+            // dict.logistics.account.assignment.group.z3
+            ("dict.logistics.account.assignment.group.z3", "zh-HK", "Z3_hk", "帐户分配组.Z3"),
+
+            // dict.logistics.account.assignment.group.z4
+            ("dict.logistics.account.assignment.group.z4", "en-US", "Z4_us", "帐户分配组.Z4"),
+            // dict.logistics.account.assignment.group.z4
+            ("dict.logistics.account.assignment.group.z4", "ja-JP", "Z4_jp", "帐户分配组.Z4"),
+            // dict.logistics.account.assignment.group.z4
+            ("dict.logistics.account.assignment.group.z4", "zh-CN", "Z4", "帐户分配组.Z4"),
+            // dict.logistics.account.assignment.group.z4
+            ("dict.logistics.account.assignment.group.z4", "zh-HK", "Z4_hk", "帐户分配组.Z4"),
+
+            // dict.logistics.account.assignment.group.z5
+            ("dict.logistics.account.assignment.group.z5", "en-US", "Z5_us", "帐户分配组.Z5"),
+            // dict.logistics.account.assignment.group.z5
+            ("dict.logistics.account.assignment.group.z5", "ja-JP", "Z5_jp", "帐户分配组.Z5"),
+            // dict.logistics.account.assignment.group.z5
+            ("dict.logistics.account.assignment.group.z5", "zh-CN", "Z5", "帐户分配组.Z5"),
+            // dict.logistics.account.assignment.group.z5
+            ("dict.logistics.account.assignment.group.z5", "zh-HK", "Z5_hk", "帐户分配组.Z5"),
+
+            // dict.logistics.account.assignment.group.z6
+            ("dict.logistics.account.assignment.group.z6", "en-US", "Z6_us", "帐户分配组.Z6"),
+            // dict.logistics.account.assignment.group.z6
+            ("dict.logistics.account.assignment.group.z6", "ja-JP", "Z6_jp", "帐户分配组.Z6"),
+            // dict.logistics.account.assignment.group.z6
+            ("dict.logistics.account.assignment.group.z6", "zh-CN", "Z6", "帐户分配组.Z6"),
+            // dict.logistics.account.assignment.group.z6
+            ("dict.logistics.account.assignment.group.z6", "zh-HK", "Z6_hk", "帐户分配组.Z6"),
+
+            // dict.logistics.account.assignment.group.z7
+            ("dict.logistics.account.assignment.group.z7", "en-US", "Direct Expenses_us", "帐户分配组.Z7"),
+            // dict.logistics.account.assignment.group.z7
+            ("dict.logistics.account.assignment.group.z7", "ja-JP", "Direct Expenses_jp", "帐户分配组.Z7"),
+            // dict.logistics.account.assignment.group.z7
+            ("dict.logistics.account.assignment.group.z7", "zh-CN", "Direct Expenses", "帐户分配组.Z7"),
+            // dict.logistics.account.assignment.group.z7
+            ("dict.logistics.account.assignment.group.z7", "zh-HK", "Direct Expenses_hk", "帐户分配组.Z7"),
+
+            // dict.logistics.account.assignment.group.z8
+            ("dict.logistics.account.assignment.group.z8", "en-US", "Sundry income_us", "帐户分配组.Z8"),
+            // dict.logistics.account.assignment.group.z8
+            ("dict.logistics.account.assignment.group.z8", "ja-JP", "Sundry income_jp", "帐户分配组.Z8"),
+            // dict.logistics.account.assignment.group.z8
+            ("dict.logistics.account.assignment.group.z8", "zh-CN", "Sundry income", "帐户分配组.Z8"),
+            // dict.logistics.account.assignment.group.z8
+            ("dict.logistics.account.assignment.group.z8", "zh-HK", "Sundry income_hk", "帐户分配组.Z8"),
+
+            // dict.logistics.account.assignment.group.z9
+            ("dict.logistics.account.assignment.group.z9", "en-US", "Sundry income (A)_us", "帐户分配组.Z9"),
+            // dict.logistics.account.assignment.group.z9
+            ("dict.logistics.account.assignment.group.z9", "ja-JP", "Sundry income (A)_jp", "帐户分配组.Z9"),
+            // dict.logistics.account.assignment.group.z9
+            ("dict.logistics.account.assignment.group.z9", "zh-CN", "Sundry income (A)", "帐户分配组.Z9"),
+            // dict.logistics.account.assignment.group.z9
+            ("dict.logistics.account.assignment.group.z9", "zh-HK", "Sundry income (A)_hk", "帐户分配组.Z9"),
+
+            // dict.logistics.account.assignment.group.za
+            ("dict.logistics.account.assignment.group.za", "en-US", "Admin Fee Rcvd (A)_us", "帐户分配组.ZA"),
+            // dict.logistics.account.assignment.group.za
+            ("dict.logistics.account.assignment.group.za", "ja-JP", "Admin Fee Rcvd (A)_jp", "帐户分配组.ZA"),
+            // dict.logistics.account.assignment.group.za
+            ("dict.logistics.account.assignment.group.za", "zh-CN", "Admin Fee Rcvd (A)", "帐户分配组.ZA"),
+            // dict.logistics.account.assignment.group.za
+            ("dict.logistics.account.assignment.group.za", "zh-HK", "Admin Fee Rcvd (A)_hk", "帐户分配组.ZA"),
+
+            // dict.logistics.account.assignment.group.zb
+            ("dict.logistics.account.assignment.group.zb", "en-US", "Mgt Fee Income (A)_us", "帐户分配组.ZB"),
+            // dict.logistics.account.assignment.group.zb
+            ("dict.logistics.account.assignment.group.zb", "ja-JP", "Mgt Fee Income (A)_jp", "帐户分配组.ZB"),
+            // dict.logistics.account.assignment.group.zb
+            ("dict.logistics.account.assignment.group.zb", "zh-CN", "Mgt Fee Income (A)", "帐户分配组.ZB"),
+            // dict.logistics.account.assignment.group.zb
+            ("dict.logistics.account.assignment.group.zb", "zh-HK", "Mgt Fee Income (A)_hk", "帐户分配组.ZB"),
+
+            // dict.logistics.account.assignment.group.zc
+            ("dict.logistics.account.assignment.group.zc", "en-US", "Rental Income (A)_us", "帐户分配组.ZC"),
+            // dict.logistics.account.assignment.group.zc
+            ("dict.logistics.account.assignment.group.zc", "ja-JP", "Rental Income (A)_jp", "帐户分配组.ZC"),
+            // dict.logistics.account.assignment.group.zc
+            ("dict.logistics.account.assignment.group.zc", "zh-CN", "Rental Income (A)", "帐户分配组.ZC"),
+            // dict.logistics.account.assignment.group.zc
+            ("dict.logistics.account.assignment.group.zc", "zh-HK", "Rental Income (A)_hk", "帐户分配组.ZC"),
+
+            // dict.logistics.account.assignment.group.zd
+            ("dict.logistics.account.assignment.group.zd", "en-US", "Temp Payment_us", "帐户分配组.ZD"),
+            // dict.logistics.account.assignment.group.zd
+            ("dict.logistics.account.assignment.group.zd", "ja-JP", "Temp Payment_jp", "帐户分配组.ZD"),
+            // dict.logistics.account.assignment.group.zd
+            ("dict.logistics.account.assignment.group.zd", "zh-CN", "Temp Payment", "帐户分配组.ZD"),
+            // dict.logistics.account.assignment.group.zd
+            ("dict.logistics.account.assignment.group.zd", "zh-HK", "Temp Payment_hk", "帐户分配组.ZD"),
+
             // dict.logistics.invoice.status.0
             ("dict.logistics.invoice.status.0", "en-US", "草稿_us", "发票状态.草稿"),
             // dict.logistics.invoice.status.0
@@ -14873,266 +15908,2354 @@ public class TaktDictI18nSeedData : ITaktSeedDataCoordinator
             // dict.logistics.work.center.category.0020
             ("dict.logistics.work.center.category.0020", "zh-HK", "混合（人机）_hk", "工作中心类别.混合（人机联合作业）"),
 
-            // dict.sys.culture.code.af-za
-            ("dict.sys.culture.code.af-za", "en-US", "AFRIKAANS", "区域文化编码.Afrikaans"),
-            // dict.sys.culture.code.af-za
-            ("dict.sys.culture.code.af-za", "ja-JP", "AFRIKAANS", "区域文化编码.Afrikaans"),
-            // dict.sys.culture.code.af-za
-            ("dict.sys.culture.code.af-za", "zh-CN", "AFRIKAANS", "区域文化编码.Afrikaans"),
-            // dict.sys.culture.code.af-za
-            ("dict.sys.culture.code.af-za", "zh-HK", "AFRIKAANS", "区域文化编码.Afrikaans"),
+            // dict.sys.admin.division.level.type.1
+            ("dict.sys.admin.division.level.type.1", "en-US", "国家_us", "行政区划层级.国家"),
+            // dict.sys.admin.division.level.type.1
+            ("dict.sys.admin.division.level.type.1", "ja-JP", "国家_jp", "行政区划层级.国家"),
+            // dict.sys.admin.division.level.type.1
+            ("dict.sys.admin.division.level.type.1", "zh-CN", "国家", "行政区划层级.国家"),
+            // dict.sys.admin.division.level.type.1
+            ("dict.sys.admin.division.level.type.1", "zh-HK", "国家_hk", "行政区划层级.国家"),
 
-            // dict.sys.culture.code.ar-ae
-            ("dict.sys.culture.code.ar-ae", "en-US", "العربية", "区域文化编码.العربية"),
-            // dict.sys.culture.code.ar-ae
-            ("dict.sys.culture.code.ar-ae", "ja-JP", "العربية", "区域文化编码.العربية"),
-            // dict.sys.culture.code.ar-ae
-            ("dict.sys.culture.code.ar-ae", "zh-CN", "العربية", "区域文化编码.العربية"),
-            // dict.sys.culture.code.ar-ae
-            ("dict.sys.culture.code.ar-ae", "zh-HK", "العربية", "区域文化编码.العربية"),
+            // dict.sys.admin.division.level.type.2
+            ("dict.sys.admin.division.level.type.2", "en-US", "州省_us", "行政区划层级.州省"),
+            // dict.sys.admin.division.level.type.2
+            ("dict.sys.admin.division.level.type.2", "ja-JP", "州省_jp", "行政区划层级.州省"),
+            // dict.sys.admin.division.level.type.2
+            ("dict.sys.admin.division.level.type.2", "zh-CN", "州省", "行政区划层级.州省"),
+            // dict.sys.admin.division.level.type.2
+            ("dict.sys.admin.division.level.type.2", "zh-HK", "州省_hk", "行政区划层级.州省"),
 
-            // dict.sys.culture.code.be-by
-            ("dict.sys.culture.code.be-by", "en-US", "Беларуская", "区域文化编码.Беларуская (BY)"),
-            // dict.sys.culture.code.be-by
-            ("dict.sys.culture.code.be-by", "ja-JP", "Беларуская", "区域文化编码.Беларуская (BY)"),
-            // dict.sys.culture.code.be-by
-            ("dict.sys.culture.code.be-by", "zh-CN", "Беларуская", "区域文化编码.Беларуская (BY)"),
-            // dict.sys.culture.code.be-by
-            ("dict.sys.culture.code.be-by", "zh-HK", "Беларуская", "区域文化编码.Беларуская (BY)"),
+            // dict.sys.admin.division.level.type.3
+            ("dict.sys.admin.division.level.type.3", "en-US", "地市_us", "行政区划层级.地市"),
+            // dict.sys.admin.division.level.type.3
+            ("dict.sys.admin.division.level.type.3", "ja-JP", "地市_jp", "行政区划层级.地市"),
+            // dict.sys.admin.division.level.type.3
+            ("dict.sys.admin.division.level.type.3", "zh-CN", "地市", "行政区划层级.地市"),
+            // dict.sys.admin.division.level.type.3
+            ("dict.sys.admin.division.level.type.3", "zh-HK", "地市_hk", "行政区划层级.地市"),
 
-            // dict.sys.culture.code.cs-cz
-            ("dict.sys.culture.code.cs-cz", "en-US", "čEšTINA", "区域文化编码.čeština"),
-            // dict.sys.culture.code.cs-cz
-            ("dict.sys.culture.code.cs-cz", "ja-JP", "čEšTINA", "区域文化编码.čeština"),
-            // dict.sys.culture.code.cs-cz
-            ("dict.sys.culture.code.cs-cz", "zh-CN", "čEšTINA", "区域文化编码.čeština"),
-            // dict.sys.culture.code.cs-cz
-            ("dict.sys.culture.code.cs-cz", "zh-HK", "čEšTINA", "区域文化编码.čeština"),
+            // dict.sys.admin.division.level.type.4
+            ("dict.sys.admin.division.level.type.4", "en-US", "区县_us", "行政区划层级.区县"),
+            // dict.sys.admin.division.level.type.4
+            ("dict.sys.admin.division.level.type.4", "ja-JP", "区县_jp", "行政区划层级.区县"),
+            // dict.sys.admin.division.level.type.4
+            ("dict.sys.admin.division.level.type.4", "zh-CN", "区县", "行政区划层级.区县"),
+            // dict.sys.admin.division.level.type.4
+            ("dict.sys.admin.division.level.type.4", "zh-HK", "区县_hk", "行政区划层级.区县"),
 
-            // dict.sys.culture.code.cy-gb
-            ("dict.sys.culture.code.cy-gb", "en-US", "CYMRAEG", "区域文化编码.Cymraeg"),
-            // dict.sys.culture.code.cy-gb
-            ("dict.sys.culture.code.cy-gb", "ja-JP", "CYMRAEG", "区域文化编码.Cymraeg"),
-            // dict.sys.culture.code.cy-gb
-            ("dict.sys.culture.code.cy-gb", "zh-CN", "CYMRAEG", "区域文化编码.Cymraeg"),
-            // dict.sys.culture.code.cy-gb
-            ("dict.sys.culture.code.cy-gb", "zh-HK", "CYMRAEG", "区域文化编码.Cymraeg"),
+            // dict.sys.admin.division.level.type.5
+            ("dict.sys.admin.division.level.type.5", "en-US", "乡镇街道_us", "行政区划层级.乡镇街道"),
+            // dict.sys.admin.division.level.type.5
+            ("dict.sys.admin.division.level.type.5", "ja-JP", "乡镇街道_jp", "行政区划层级.乡镇街道"),
+            // dict.sys.admin.division.level.type.5
+            ("dict.sys.admin.division.level.type.5", "zh-CN", "乡镇街道", "行政区划层级.乡镇街道"),
+            // dict.sys.admin.division.level.type.5
+            ("dict.sys.admin.division.level.type.5", "zh-HK", "乡镇街道_hk", "行政区划层级.乡镇街道"),
 
-            // dict.sys.culture.code.da-dk
-            ("dict.sys.culture.code.da-dk", "en-US", "DANSK", "区域文化编码.dansk"),
-            // dict.sys.culture.code.da-dk
-            ("dict.sys.culture.code.da-dk", "ja-JP", "DANSK", "区域文化编码.dansk"),
-            // dict.sys.culture.code.da-dk
-            ("dict.sys.culture.code.da-dk", "zh-CN", "DANSK", "区域文化编码.dansk"),
-            // dict.sys.culture.code.da-dk
-            ("dict.sys.culture.code.da-dk", "zh-HK", "DANSK", "区域文化编码.dansk"),
+            // dict.sys.admin.division.level.type.6
+            ("dict.sys.admin.division.level.type.6", "en-US", "行政村_us", "行政区划层级.行政村"),
+            // dict.sys.admin.division.level.type.6
+            ("dict.sys.admin.division.level.type.6", "ja-JP", "行政村_jp", "行政区划层级.行政村"),
+            // dict.sys.admin.division.level.type.6
+            ("dict.sys.admin.division.level.type.6", "zh-CN", "行政村", "行政区划层级.行政村"),
+            // dict.sys.admin.division.level.type.6
+            ("dict.sys.admin.division.level.type.6", "zh-HK", "行政村_hk", "行政区划层级.行政村"),
 
-            // dict.sys.culture.code.de-de
-            ("dict.sys.culture.code.de-de", "en-US", "DEUTSCH", "区域文化编码.Deutsch"),
-            // dict.sys.culture.code.de-de
-            ("dict.sys.culture.code.de-de", "ja-JP", "DEUTSCH", "区域文化编码.Deutsch"),
-            // dict.sys.culture.code.de-de
-            ("dict.sys.culture.code.de-de", "zh-CN", "DEUTSCH", "区域文化编码.Deutsch"),
-            // dict.sys.culture.code.de-de
-            ("dict.sys.culture.code.de-de", "zh-HK", "DEUTSCH", "区域文化编码.Deutsch"),
+            // dict.sys.country.code.ac
+            ("dict.sys.country.code.ac", "en-US", "Ascension Island", "国家地区.阿森松岛"),
+            // dict.sys.country.code.ac
+            ("dict.sys.country.code.ac", "ja-JP", "Ascension Island", "国家地区.阿森松岛"),
+            // dict.sys.country.code.ac
+            ("dict.sys.country.code.ac", "zh-CN", "Ascension Island", "国家地区.阿森松岛"),
+            // dict.sys.country.code.ac
+            ("dict.sys.country.code.ac", "zh-HK", "Ascension Island", "国家地区.阿森松岛"),
 
-            // dict.sys.culture.code.el-gr
-            ("dict.sys.culture.code.el-gr", "en-US", "Ελληνικά", "区域文化编码.Ελληνικά"),
-            // dict.sys.culture.code.el-gr
-            ("dict.sys.culture.code.el-gr", "ja-JP", "Ελληνικά", "区域文化编码.Ελληνικά"),
-            // dict.sys.culture.code.el-gr
-            ("dict.sys.culture.code.el-gr", "zh-CN", "Ελληνικά", "区域文化编码.Ελληνικά"),
-            // dict.sys.culture.code.el-gr
-            ("dict.sys.culture.code.el-gr", "zh-HK", "Ελληνικά", "区域文化编码.Ελληνικά"),
+            // dict.sys.country.code.ad
+            ("dict.sys.country.code.ad", "en-US", "Andorra", "国家地区.安道尔"),
+            // dict.sys.country.code.ad
+            ("dict.sys.country.code.ad", "ja-JP", "Andorra", "国家地区.安道尔"),
+            // dict.sys.country.code.ad
+            ("dict.sys.country.code.ad", "zh-CN", "Andorra", "国家地区.安道尔"),
+            // dict.sys.country.code.ad
+            ("dict.sys.country.code.ad", "zh-HK", "Andorra", "国家地区.安道尔"),
 
-            // dict.sys.culture.code.en-au
-            ("dict.sys.culture.code.en-au", "en-US", "ENGLISH(AU)", "区域文化编码.English (AU)"),
-            // dict.sys.culture.code.en-au
-            ("dict.sys.culture.code.en-au", "ja-JP", "ENGLISH(AU)", "区域文化编码.English (AU)"),
-            // dict.sys.culture.code.en-au
-            ("dict.sys.culture.code.en-au", "zh-CN", "ENGLISH(AU)", "区域文化编码.English (AU)"),
-            // dict.sys.culture.code.en-au
-            ("dict.sys.culture.code.en-au", "zh-HK", "ENGLISH(AU)", "区域文化编码.English (AU)"),
+            // dict.sys.country.code.ae
+            ("dict.sys.country.code.ae", "en-US", "دولة الإمارات العربية المتحدة", "国家地区.阿联酋"),
+            // dict.sys.country.code.ae
+            ("dict.sys.country.code.ae", "ja-JP", "دولة الإمارات العربية المتحدة", "国家地区.阿联酋"),
+            // dict.sys.country.code.ae
+            ("dict.sys.country.code.ae", "zh-CN", "دولة الإمارات العربية المتحدة", "国家地区.阿联酋"),
+            // dict.sys.country.code.ae
+            ("dict.sys.country.code.ae", "zh-HK", "دولة الإمارات العربية المتحدة", "国家地区.阿联酋"),
 
-            // dict.sys.culture.code.en-gb
-            ("dict.sys.culture.code.en-gb", "en-US", "ENGLISH(UK)", "区域文化编码.English (UK)"),
-            // dict.sys.culture.code.en-gb
-            ("dict.sys.culture.code.en-gb", "ja-JP", "ENGLISH(UK)", "区域文化编码.English (UK)"),
-            // dict.sys.culture.code.en-gb
-            ("dict.sys.culture.code.en-gb", "zh-CN", "ENGLISH(UK)", "区域文化编码.English (UK)"),
-            // dict.sys.culture.code.en-gb
-            ("dict.sys.culture.code.en-gb", "zh-HK", "ENGLISH(UK)", "区域文化编码.English (UK)"),
+            // dict.sys.country.code.af
+            ("dict.sys.country.code.af", "en-US", "افغانستان", "国家地区.阿富汗"),
+            // dict.sys.country.code.af
+            ("dict.sys.country.code.af", "ja-JP", "افغانستان", "国家地区.阿富汗"),
+            // dict.sys.country.code.af
+            ("dict.sys.country.code.af", "zh-CN", "افغانستان", "国家地区.阿富汗"),
+            // dict.sys.country.code.af
+            ("dict.sys.country.code.af", "zh-HK", "افغانستان", "国家地区.阿富汗"),
+
+            // dict.sys.country.code.ag
+            ("dict.sys.country.code.ag", "en-US", "Antigua and Barbuda", "国家地区.安提瓜和巴布达"),
+            // dict.sys.country.code.ag
+            ("dict.sys.country.code.ag", "ja-JP", "Antigua and Barbuda", "国家地区.安提瓜和巴布达"),
+            // dict.sys.country.code.ag
+            ("dict.sys.country.code.ag", "zh-CN", "Antigua and Barbuda", "国家地区.安提瓜和巴布达"),
+            // dict.sys.country.code.ag
+            ("dict.sys.country.code.ag", "zh-HK", "Antigua and Barbuda", "国家地区.安提瓜和巴布达"),
+
+            // dict.sys.country.code.ai
+            ("dict.sys.country.code.ai", "en-US", "Anguilla", "国家地区.安圭拉"),
+            // dict.sys.country.code.ai
+            ("dict.sys.country.code.ai", "ja-JP", "Anguilla", "国家地区.安圭拉"),
+            // dict.sys.country.code.ai
+            ("dict.sys.country.code.ai", "zh-CN", "Anguilla", "国家地区.安圭拉"),
+            // dict.sys.country.code.ai
+            ("dict.sys.country.code.ai", "zh-HK", "Anguilla", "国家地区.安圭拉"),
+
+            // dict.sys.country.code.al
+            ("dict.sys.country.code.al", "en-US", "Shqipëria", "国家地区.阿尔巴尼亚"),
+            // dict.sys.country.code.al
+            ("dict.sys.country.code.al", "ja-JP", "Shqipëria", "国家地区.阿尔巴尼亚"),
+            // dict.sys.country.code.al
+            ("dict.sys.country.code.al", "zh-CN", "Shqipëria", "国家地区.阿尔巴尼亚"),
+            // dict.sys.country.code.al
+            ("dict.sys.country.code.al", "zh-HK", "Shqipëria", "国家地区.阿尔巴尼亚"),
+
+            // dict.sys.country.code.am
+            ("dict.sys.country.code.am", "en-US", "Հայաստան", "国家地区.亚美尼亚"),
+            // dict.sys.country.code.am
+            ("dict.sys.country.code.am", "ja-JP", "Հայաստան", "国家地区.亚美尼亚"),
+            // dict.sys.country.code.am
+            ("dict.sys.country.code.am", "zh-CN", "Հայաստան", "国家地区.亚美尼亚"),
+            // dict.sys.country.code.am
+            ("dict.sys.country.code.am", "zh-HK", "Հայաստան", "国家地区.亚美尼亚"),
+
+            // dict.sys.country.code.ao
+            ("dict.sys.country.code.ao", "en-US", "Angola", "国家地区.安哥拉"),
+            // dict.sys.country.code.ao
+            ("dict.sys.country.code.ao", "ja-JP", "Angola", "国家地区.安哥拉"),
+            // dict.sys.country.code.ao
+            ("dict.sys.country.code.ao", "zh-CN", "Angola", "国家地区.安哥拉"),
+            // dict.sys.country.code.ao
+            ("dict.sys.country.code.ao", "zh-HK", "Angola", "国家地区.安哥拉"),
+
+            // dict.sys.country.code.aq
+            ("dict.sys.country.code.aq", "en-US", "Antarctica", "国家地区.南极洲"),
+            // dict.sys.country.code.aq
+            ("dict.sys.country.code.aq", "ja-JP", "Antarctica", "国家地区.南极洲"),
+            // dict.sys.country.code.aq
+            ("dict.sys.country.code.aq", "zh-CN", "Antarctica", "国家地区.南极洲"),
+            // dict.sys.country.code.aq
+            ("dict.sys.country.code.aq", "zh-HK", "Antarctica", "国家地区.南极洲"),
+
+            // dict.sys.country.code.ar
+            ("dict.sys.country.code.ar", "en-US", "Argentina", "国家地区.阿根廷"),
+            // dict.sys.country.code.ar
+            ("dict.sys.country.code.ar", "ja-JP", "Argentina", "国家地区.阿根廷"),
+            // dict.sys.country.code.ar
+            ("dict.sys.country.code.ar", "zh-CN", "Argentina", "国家地区.阿根廷"),
+            // dict.sys.country.code.ar
+            ("dict.sys.country.code.ar", "zh-HK", "Argentina", "国家地区.阿根廷"),
+
+            // dict.sys.country.code.as
+            ("dict.sys.country.code.as", "en-US", "American Samoa", "国家地区.美属萨摩亚"),
+            // dict.sys.country.code.as
+            ("dict.sys.country.code.as", "ja-JP", "American Samoa", "国家地区.美属萨摩亚"),
+            // dict.sys.country.code.as
+            ("dict.sys.country.code.as", "zh-CN", "American Samoa", "国家地区.美属萨摩亚"),
+            // dict.sys.country.code.as
+            ("dict.sys.country.code.as", "zh-HK", "American Samoa", "国家地区.美属萨摩亚"),
+
+            // dict.sys.country.code.at
+            ("dict.sys.country.code.at", "en-US", "Österreich", "国家地区.奥地利"),
+            // dict.sys.country.code.at
+            ("dict.sys.country.code.at", "ja-JP", "Österreich", "国家地区.奥地利"),
+            // dict.sys.country.code.at
+            ("dict.sys.country.code.at", "zh-CN", "Österreich", "国家地区.奥地利"),
+            // dict.sys.country.code.at
+            ("dict.sys.country.code.at", "zh-HK", "Österreich", "国家地区.奥地利"),
+
+            // dict.sys.country.code.au
+            ("dict.sys.country.code.au", "en-US", "Australia", "国家地区.澳大利亚"),
+            // dict.sys.country.code.au
+            ("dict.sys.country.code.au", "ja-JP", "Australia", "国家地区.澳大利亚"),
+            // dict.sys.country.code.au
+            ("dict.sys.country.code.au", "zh-CN", "Australia", "国家地区.澳大利亚"),
+            // dict.sys.country.code.au
+            ("dict.sys.country.code.au", "zh-HK", "Australia", "国家地区.澳大利亚"),
+
+            // dict.sys.country.code.aw
+            ("dict.sys.country.code.aw", "en-US", "Aruba", "国家地区.阿鲁巴"),
+            // dict.sys.country.code.aw
+            ("dict.sys.country.code.aw", "ja-JP", "Aruba", "国家地区.阿鲁巴"),
+            // dict.sys.country.code.aw
+            ("dict.sys.country.code.aw", "zh-CN", "Aruba", "国家地区.阿鲁巴"),
+            // dict.sys.country.code.aw
+            ("dict.sys.country.code.aw", "zh-HK", "Aruba", "国家地区.阿鲁巴"),
+
+            // dict.sys.country.code.ax
+            ("dict.sys.country.code.ax", "en-US", "Åland", "国家地区.奥兰群岛"),
+            // dict.sys.country.code.ax
+            ("dict.sys.country.code.ax", "ja-JP", "Åland", "国家地区.奥兰群岛"),
+            // dict.sys.country.code.ax
+            ("dict.sys.country.code.ax", "zh-CN", "Åland", "国家地区.奥兰群岛"),
+            // dict.sys.country.code.ax
+            ("dict.sys.country.code.ax", "zh-HK", "Åland", "国家地区.奥兰群岛"),
+
+            // dict.sys.country.code.az
+            ("dict.sys.country.code.az", "en-US", "Azərbaycan", "国家地区.阿塞拜疆"),
+            // dict.sys.country.code.az
+            ("dict.sys.country.code.az", "ja-JP", "Azərbaycan", "国家地区.阿塞拜疆"),
+            // dict.sys.country.code.az
+            ("dict.sys.country.code.az", "zh-CN", "Azərbaycan", "国家地区.阿塞拜疆"),
+            // dict.sys.country.code.az
+            ("dict.sys.country.code.az", "zh-HK", "Azərbaycan", "国家地区.阿塞拜疆"),
+
+            // dict.sys.country.code.ba
+            ("dict.sys.country.code.ba", "en-US", "Bosna i Hercegovina", "国家地区.波斯尼亚和黑塞哥维那"),
+            // dict.sys.country.code.ba
+            ("dict.sys.country.code.ba", "ja-JP", "Bosna i Hercegovina", "国家地区.波斯尼亚和黑塞哥维那"),
+            // dict.sys.country.code.ba
+            ("dict.sys.country.code.ba", "zh-CN", "Bosna i Hercegovina", "国家地区.波斯尼亚和黑塞哥维那"),
+            // dict.sys.country.code.ba
+            ("dict.sys.country.code.ba", "zh-HK", "Bosna i Hercegovina", "国家地区.波斯尼亚和黑塞哥维那"),
+
+            // dict.sys.country.code.bb
+            ("dict.sys.country.code.bb", "en-US", "Barbados", "国家地区.巴巴多斯"),
+            // dict.sys.country.code.bb
+            ("dict.sys.country.code.bb", "ja-JP", "Barbados", "国家地区.巴巴多斯"),
+            // dict.sys.country.code.bb
+            ("dict.sys.country.code.bb", "zh-CN", "Barbados", "国家地区.巴巴多斯"),
+            // dict.sys.country.code.bb
+            ("dict.sys.country.code.bb", "zh-HK", "Barbados", "国家地区.巴巴多斯"),
+
+            // dict.sys.country.code.bd
+            ("dict.sys.country.code.bd", "en-US", "Bangladesh", "国家地区.孟加拉国"),
+            // dict.sys.country.code.bd
+            ("dict.sys.country.code.bd", "ja-JP", "Bangladesh", "国家地区.孟加拉国"),
+            // dict.sys.country.code.bd
+            ("dict.sys.country.code.bd", "zh-CN", "Bangladesh", "国家地区.孟加拉国"),
+            // dict.sys.country.code.bd
+            ("dict.sys.country.code.bd", "zh-HK", "Bangladesh", "国家地区.孟加拉国"),
+
+            // dict.sys.country.code.be
+            ("dict.sys.country.code.be", "en-US", "België", "国家地区.比利时"),
+            // dict.sys.country.code.be
+            ("dict.sys.country.code.be", "ja-JP", "België", "国家地区.比利时"),
+            // dict.sys.country.code.be
+            ("dict.sys.country.code.be", "zh-CN", "België", "国家地区.比利时"),
+            // dict.sys.country.code.be
+            ("dict.sys.country.code.be", "zh-HK", "België", "国家地区.比利时"),
+
+            // dict.sys.country.code.bf
+            ("dict.sys.country.code.bf", "en-US", "Burkina Faso", "国家地区.布基纳法索"),
+            // dict.sys.country.code.bf
+            ("dict.sys.country.code.bf", "ja-JP", "Burkina Faso", "国家地区.布基纳法索"),
+            // dict.sys.country.code.bf
+            ("dict.sys.country.code.bf", "zh-CN", "Burkina Faso", "国家地区.布基纳法索"),
+            // dict.sys.country.code.bf
+            ("dict.sys.country.code.bf", "zh-HK", "Burkina Faso", "国家地区.布基纳法索"),
+
+            // dict.sys.country.code.bg
+            ("dict.sys.country.code.bg", "en-US", "България", "国家地区.保加利亚"),
+            // dict.sys.country.code.bg
+            ("dict.sys.country.code.bg", "ja-JP", "България", "国家地区.保加利亚"),
+            // dict.sys.country.code.bg
+            ("dict.sys.country.code.bg", "zh-CN", "България", "国家地区.保加利亚"),
+            // dict.sys.country.code.bg
+            ("dict.sys.country.code.bg", "zh-HK", "България", "国家地区.保加利亚"),
+
+            // dict.sys.country.code.bh
+            ("dict.sys.country.code.bh", "en-US", "‏البحرين", "国家地区.巴林"),
+            // dict.sys.country.code.bh
+            ("dict.sys.country.code.bh", "ja-JP", "‏البحرين", "国家地区.巴林"),
+            // dict.sys.country.code.bh
+            ("dict.sys.country.code.bh", "zh-CN", "‏البحرين", "国家地区.巴林"),
+            // dict.sys.country.code.bh
+            ("dict.sys.country.code.bh", "zh-HK", "‏البحرين", "国家地区.巴林"),
+
+            // dict.sys.country.code.bi
+            ("dict.sys.country.code.bi", "en-US", "Burundi", "国家地区.布隆迪"),
+            // dict.sys.country.code.bi
+            ("dict.sys.country.code.bi", "ja-JP", "Burundi", "国家地区.布隆迪"),
+            // dict.sys.country.code.bi
+            ("dict.sys.country.code.bi", "zh-CN", "Burundi", "国家地区.布隆迪"),
+            // dict.sys.country.code.bi
+            ("dict.sys.country.code.bi", "zh-HK", "Burundi", "国家地区.布隆迪"),
+
+            // dict.sys.country.code.bj
+            ("dict.sys.country.code.bj", "en-US", "Bénin", "国家地区.贝宁"),
+            // dict.sys.country.code.bj
+            ("dict.sys.country.code.bj", "ja-JP", "Bénin", "国家地区.贝宁"),
+            // dict.sys.country.code.bj
+            ("dict.sys.country.code.bj", "zh-CN", "Bénin", "国家地区.贝宁"),
+            // dict.sys.country.code.bj
+            ("dict.sys.country.code.bj", "zh-HK", "Bénin", "国家地区.贝宁"),
+
+            // dict.sys.country.code.bl
+            ("dict.sys.country.code.bl", "en-US", "Saint-Barthélemy", "国家地区.圣巴泰勒米"),
+            // dict.sys.country.code.bl
+            ("dict.sys.country.code.bl", "ja-JP", "Saint-Barthélemy", "国家地区.圣巴泰勒米"),
+            // dict.sys.country.code.bl
+            ("dict.sys.country.code.bl", "zh-CN", "Saint-Barthélemy", "国家地区.圣巴泰勒米"),
+            // dict.sys.country.code.bl
+            ("dict.sys.country.code.bl", "zh-HK", "Saint-Barthélemy", "国家地区.圣巴泰勒米"),
+
+            // dict.sys.country.code.bm
+            ("dict.sys.country.code.bm", "en-US", "Bermuda", "国家地区.百慕大"),
+            // dict.sys.country.code.bm
+            ("dict.sys.country.code.bm", "ja-JP", "Bermuda", "国家地区.百慕大"),
+            // dict.sys.country.code.bm
+            ("dict.sys.country.code.bm", "zh-CN", "Bermuda", "国家地区.百慕大"),
+            // dict.sys.country.code.bm
+            ("dict.sys.country.code.bm", "zh-HK", "Bermuda", "国家地区.百慕大"),
+
+            // dict.sys.country.code.bn
+            ("dict.sys.country.code.bn", "en-US", "Negara Brunei Darussalam", "国家地区.文莱"),
+            // dict.sys.country.code.bn
+            ("dict.sys.country.code.bn", "ja-JP", "Negara Brunei Darussalam", "国家地区.文莱"),
+            // dict.sys.country.code.bn
+            ("dict.sys.country.code.bn", "zh-CN", "Negara Brunei Darussalam", "国家地区.文莱"),
+            // dict.sys.country.code.bn
+            ("dict.sys.country.code.bn", "zh-HK", "Negara Brunei Darussalam", "国家地区.文莱"),
+
+            // dict.sys.country.code.bo
+            ("dict.sys.country.code.bo", "en-US", "Bolivia", "国家地区.玻利维亚"),
+            // dict.sys.country.code.bo
+            ("dict.sys.country.code.bo", "ja-JP", "Bolivia", "国家地区.玻利维亚"),
+            // dict.sys.country.code.bo
+            ("dict.sys.country.code.bo", "zh-CN", "Bolivia", "国家地区.玻利维亚"),
+            // dict.sys.country.code.bo
+            ("dict.sys.country.code.bo", "zh-HK", "Bolivia", "国家地区.玻利维亚"),
+
+            // dict.sys.country.code.bq
+            ("dict.sys.country.code.bq", "en-US", "Bonaire", "国家地区.荷属加勒比区"),
+            // dict.sys.country.code.bq
+            ("dict.sys.country.code.bq", "ja-JP", "Bonaire", "国家地区.荷属加勒比区"),
+            // dict.sys.country.code.bq
+            ("dict.sys.country.code.bq", "zh-CN", "Bonaire", "国家地区.荷属加勒比区"),
+            // dict.sys.country.code.bq
+            ("dict.sys.country.code.bq", "zh-HK", "Bonaire", "国家地区.荷属加勒比区"),
+
+            // dict.sys.country.code.br
+            ("dict.sys.country.code.br", "en-US", "Brasil", "国家地区.巴西"),
+            // dict.sys.country.code.br
+            ("dict.sys.country.code.br", "ja-JP", "Brasil", "国家地区.巴西"),
+            // dict.sys.country.code.br
+            ("dict.sys.country.code.br", "zh-CN", "Brasil", "国家地区.巴西"),
+            // dict.sys.country.code.br
+            ("dict.sys.country.code.br", "zh-HK", "Brasil", "国家地区.巴西"),
+
+            // dict.sys.country.code.bs
+            ("dict.sys.country.code.bs", "en-US", "Bahamas", "国家地区.巴哈马"),
+            // dict.sys.country.code.bs
+            ("dict.sys.country.code.bs", "ja-JP", "Bahamas", "国家地区.巴哈马"),
+            // dict.sys.country.code.bs
+            ("dict.sys.country.code.bs", "zh-CN", "Bahamas", "国家地区.巴哈马"),
+            // dict.sys.country.code.bs
+            ("dict.sys.country.code.bs", "zh-HK", "Bahamas", "国家地区.巴哈马"),
+
+            // dict.sys.country.code.bt
+            ("dict.sys.country.code.bt", "en-US", "ʼbrug-yul", "国家地区.不丹"),
+            // dict.sys.country.code.bt
+            ("dict.sys.country.code.bt", "ja-JP", "ʼbrug-yul", "国家地区.不丹"),
+            // dict.sys.country.code.bt
+            ("dict.sys.country.code.bt", "zh-CN", "ʼbrug-yul", "国家地区.不丹"),
+            // dict.sys.country.code.bt
+            ("dict.sys.country.code.bt", "zh-HK", "ʼbrug-yul", "国家地区.不丹"),
+
+            // dict.sys.country.code.bv
+            ("dict.sys.country.code.bv", "en-US", "Bouvetøya", "国家地区.布韦岛"),
+            // dict.sys.country.code.bv
+            ("dict.sys.country.code.bv", "ja-JP", "Bouvetøya", "国家地区.布韦岛"),
+            // dict.sys.country.code.bv
+            ("dict.sys.country.code.bv", "zh-CN", "Bouvetøya", "国家地区.布韦岛"),
+            // dict.sys.country.code.bv
+            ("dict.sys.country.code.bv", "zh-HK", "Bouvetøya", "国家地区.布韦岛"),
+
+            // dict.sys.country.code.bw
+            ("dict.sys.country.code.bw", "en-US", "Botswana", "国家地区.博茨瓦纳"),
+            // dict.sys.country.code.bw
+            ("dict.sys.country.code.bw", "ja-JP", "Botswana", "国家地区.博茨瓦纳"),
+            // dict.sys.country.code.bw
+            ("dict.sys.country.code.bw", "zh-CN", "Botswana", "国家地区.博茨瓦纳"),
+            // dict.sys.country.code.bw
+            ("dict.sys.country.code.bw", "zh-HK", "Botswana", "国家地区.博茨瓦纳"),
+
+            // dict.sys.country.code.by
+            ("dict.sys.country.code.by", "en-US", "Беларусь", "国家地区.白俄罗斯"),
+            // dict.sys.country.code.by
+            ("dict.sys.country.code.by", "ja-JP", "Беларусь", "国家地区.白俄罗斯"),
+            // dict.sys.country.code.by
+            ("dict.sys.country.code.by", "zh-CN", "Беларусь", "国家地区.白俄罗斯"),
+            // dict.sys.country.code.by
+            ("dict.sys.country.code.by", "zh-HK", "Беларусь", "国家地区.白俄罗斯"),
+
+            // dict.sys.country.code.bz
+            ("dict.sys.country.code.bz", "en-US", "Belize", "国家地区.伯利兹"),
+            // dict.sys.country.code.bz
+            ("dict.sys.country.code.bz", "ja-JP", "Belize", "国家地区.伯利兹"),
+            // dict.sys.country.code.bz
+            ("dict.sys.country.code.bz", "zh-CN", "Belize", "国家地区.伯利兹"),
+            // dict.sys.country.code.bz
+            ("dict.sys.country.code.bz", "zh-HK", "Belize", "国家地区.伯利兹"),
+
+            // dict.sys.country.code.ca
+            ("dict.sys.country.code.ca", "en-US", "Canada", "国家地区.加拿大"),
+            // dict.sys.country.code.ca
+            ("dict.sys.country.code.ca", "ja-JP", "Canada", "国家地区.加拿大"),
+            // dict.sys.country.code.ca
+            ("dict.sys.country.code.ca", "zh-CN", "Canada", "国家地区.加拿大"),
+            // dict.sys.country.code.ca
+            ("dict.sys.country.code.ca", "zh-HK", "Canada", "国家地区.加拿大"),
+
+            // dict.sys.country.code.cc
+            ("dict.sys.country.code.cc", "en-US", "Cocos (Keeling) Islands", "国家地区.科科斯（基林）群岛"),
+            // dict.sys.country.code.cc
+            ("dict.sys.country.code.cc", "ja-JP", "Cocos (Keeling) Islands", "国家地区.科科斯（基林）群岛"),
+            // dict.sys.country.code.cc
+            ("dict.sys.country.code.cc", "zh-CN", "Cocos (Keeling) Islands", "国家地区.科科斯（基林）群岛"),
+            // dict.sys.country.code.cc
+            ("dict.sys.country.code.cc", "zh-HK", "Cocos (Keeling) Islands", "国家地区.科科斯（基林）群岛"),
+
+            // dict.sys.country.code.cd
+            ("dict.sys.country.code.cd", "en-US", "République démocratique du Congo", "国家地区.刚果（金）"),
+            // dict.sys.country.code.cd
+            ("dict.sys.country.code.cd", "ja-JP", "République démocratique du Congo", "国家地区.刚果（金）"),
+            // dict.sys.country.code.cd
+            ("dict.sys.country.code.cd", "zh-CN", "République démocratique du Congo", "国家地区.刚果（金）"),
+            // dict.sys.country.code.cd
+            ("dict.sys.country.code.cd", "zh-HK", "République démocratique du Congo", "国家地区.刚果（金）"),
+
+            // dict.sys.country.code.cf
+            ("dict.sys.country.code.cf", "en-US", "Ködörösêse tî Bêafrîka", "国家地区.中非共和国"),
+            // dict.sys.country.code.cf
+            ("dict.sys.country.code.cf", "ja-JP", "Ködörösêse tî Bêafrîka", "国家地区.中非共和国"),
+            // dict.sys.country.code.cf
+            ("dict.sys.country.code.cf", "zh-CN", "Ködörösêse tî Bêafrîka", "国家地区.中非共和国"),
+            // dict.sys.country.code.cf
+            ("dict.sys.country.code.cf", "zh-HK", "Ködörösêse tî Bêafrîka", "国家地区.中非共和国"),
+
+            // dict.sys.country.code.cg
+            ("dict.sys.country.code.cg", "en-US", "République du Congo", "国家地区.刚果（布）"),
+            // dict.sys.country.code.cg
+            ("dict.sys.country.code.cg", "ja-JP", "République du Congo", "国家地区.刚果（布）"),
+            // dict.sys.country.code.cg
+            ("dict.sys.country.code.cg", "zh-CN", "République du Congo", "国家地区.刚果（布）"),
+            // dict.sys.country.code.cg
+            ("dict.sys.country.code.cg", "zh-HK", "République du Congo", "国家地区.刚果（布）"),
+
+            // dict.sys.country.code.ch
+            ("dict.sys.country.code.ch", "en-US", "Schweiz", "国家地区.瑞士"),
+            // dict.sys.country.code.ch
+            ("dict.sys.country.code.ch", "ja-JP", "Schweiz", "国家地区.瑞士"),
+            // dict.sys.country.code.ch
+            ("dict.sys.country.code.ch", "zh-CN", "Schweiz", "国家地区.瑞士"),
+            // dict.sys.country.code.ch
+            ("dict.sys.country.code.ch", "zh-HK", "Schweiz", "国家地区.瑞士"),
+
+            // dict.sys.country.code.ci
+            ("dict.sys.country.code.ci", "en-US", "Côte d'Ivoire", "国家地区.科特迪瓦"),
+            // dict.sys.country.code.ci
+            ("dict.sys.country.code.ci", "ja-JP", "Côte d'Ivoire", "国家地区.科特迪瓦"),
+            // dict.sys.country.code.ci
+            ("dict.sys.country.code.ci", "zh-CN", "Côte d'Ivoire", "国家地区.科特迪瓦"),
+            // dict.sys.country.code.ci
+            ("dict.sys.country.code.ci", "zh-HK", "Côte d'Ivoire", "国家地区.科特迪瓦"),
+
+            // dict.sys.country.code.ck
+            ("dict.sys.country.code.ck", "en-US", "Cook Islands", "国家地区.库克群岛"),
+            // dict.sys.country.code.ck
+            ("dict.sys.country.code.ck", "ja-JP", "Cook Islands", "国家地区.库克群岛"),
+            // dict.sys.country.code.ck
+            ("dict.sys.country.code.ck", "zh-CN", "Cook Islands", "国家地区.库克群岛"),
+            // dict.sys.country.code.ck
+            ("dict.sys.country.code.ck", "zh-HK", "Cook Islands", "国家地区.库克群岛"),
+
+            // dict.sys.country.code.cl
+            ("dict.sys.country.code.cl", "en-US", "Chile", "国家地区.智利"),
+            // dict.sys.country.code.cl
+            ("dict.sys.country.code.cl", "ja-JP", "Chile", "国家地区.智利"),
+            // dict.sys.country.code.cl
+            ("dict.sys.country.code.cl", "zh-CN", "Chile", "国家地区.智利"),
+            // dict.sys.country.code.cl
+            ("dict.sys.country.code.cl", "zh-HK", "Chile", "国家地区.智利"),
+
+            // dict.sys.country.code.cm
+            ("dict.sys.country.code.cm", "en-US", "Cameroon", "国家地区.喀麦隆"),
+            // dict.sys.country.code.cm
+            ("dict.sys.country.code.cm", "ja-JP", "Cameroon", "国家地区.喀麦隆"),
+            // dict.sys.country.code.cm
+            ("dict.sys.country.code.cm", "zh-CN", "Cameroon", "国家地区.喀麦隆"),
+            // dict.sys.country.code.cm
+            ("dict.sys.country.code.cm", "zh-HK", "Cameroon", "国家地区.喀麦隆"),
+
+            // dict.sys.country.code.cn
+            ("dict.sys.country.code.cn", "en-US", "中国", "国家地区.中国"),
+            // dict.sys.country.code.cn
+            ("dict.sys.country.code.cn", "ja-JP", "中国", "国家地区.中国"),
+            // dict.sys.country.code.cn
+            ("dict.sys.country.code.cn", "zh-CN", "中国", "国家地区.中国"),
+            // dict.sys.country.code.cn
+            ("dict.sys.country.code.cn", "zh-HK", "中国", "国家地区.中国"),
+
+            // dict.sys.country.code.co
+            ("dict.sys.country.code.co", "en-US", "Colombia", "国家地区.哥伦比亚"),
+            // dict.sys.country.code.co
+            ("dict.sys.country.code.co", "ja-JP", "Colombia", "国家地区.哥伦比亚"),
+            // dict.sys.country.code.co
+            ("dict.sys.country.code.co", "zh-CN", "Colombia", "国家地区.哥伦比亚"),
+            // dict.sys.country.code.co
+            ("dict.sys.country.code.co", "zh-HK", "Colombia", "国家地区.哥伦比亚"),
+
+            // dict.sys.country.code.cr
+            ("dict.sys.country.code.cr", "en-US", "Costa Rica", "国家地区.哥斯达黎加"),
+            // dict.sys.country.code.cr
+            ("dict.sys.country.code.cr", "ja-JP", "Costa Rica", "国家地区.哥斯达黎加"),
+            // dict.sys.country.code.cr
+            ("dict.sys.country.code.cr", "zh-CN", "Costa Rica", "国家地区.哥斯达黎加"),
+            // dict.sys.country.code.cr
+            ("dict.sys.country.code.cr", "zh-HK", "Costa Rica", "国家地区.哥斯达黎加"),
+
+            // dict.sys.country.code.cu
+            ("dict.sys.country.code.cu", "en-US", "Cuba", "国家地区.古巴"),
+            // dict.sys.country.code.cu
+            ("dict.sys.country.code.cu", "ja-JP", "Cuba", "国家地区.古巴"),
+            // dict.sys.country.code.cu
+            ("dict.sys.country.code.cu", "zh-CN", "Cuba", "国家地区.古巴"),
+            // dict.sys.country.code.cu
+            ("dict.sys.country.code.cu", "zh-HK", "Cuba", "国家地区.古巴"),
+
+            // dict.sys.country.code.cv
+            ("dict.sys.country.code.cv", "en-US", "Cabo Verde", "国家地区.佛得角"),
+            // dict.sys.country.code.cv
+            ("dict.sys.country.code.cv", "ja-JP", "Cabo Verde", "国家地区.佛得角"),
+            // dict.sys.country.code.cv
+            ("dict.sys.country.code.cv", "zh-CN", "Cabo Verde", "国家地区.佛得角"),
+            // dict.sys.country.code.cv
+            ("dict.sys.country.code.cv", "zh-HK", "Cabo Verde", "国家地区.佛得角"),
+
+            // dict.sys.country.code.cw
+            ("dict.sys.country.code.cw", "en-US", "Curaçao", "国家地区.库拉索"),
+            // dict.sys.country.code.cw
+            ("dict.sys.country.code.cw", "ja-JP", "Curaçao", "国家地区.库拉索"),
+            // dict.sys.country.code.cw
+            ("dict.sys.country.code.cw", "zh-CN", "Curaçao", "国家地区.库拉索"),
+            // dict.sys.country.code.cw
+            ("dict.sys.country.code.cw", "zh-HK", "Curaçao", "国家地区.库拉索"),
+
+            // dict.sys.country.code.cx
+            ("dict.sys.country.code.cx", "en-US", "Christmas Island", "国家地区.圣诞岛"),
+            // dict.sys.country.code.cx
+            ("dict.sys.country.code.cx", "ja-JP", "Christmas Island", "国家地区.圣诞岛"),
+            // dict.sys.country.code.cx
+            ("dict.sys.country.code.cx", "zh-CN", "Christmas Island", "国家地区.圣诞岛"),
+            // dict.sys.country.code.cx
+            ("dict.sys.country.code.cx", "zh-HK", "Christmas Island", "国家地区.圣诞岛"),
+
+            // dict.sys.country.code.cy
+            ("dict.sys.country.code.cy", "en-US", "Κύπρος", "国家地区.塞浦路斯"),
+            // dict.sys.country.code.cy
+            ("dict.sys.country.code.cy", "ja-JP", "Κύπρος", "国家地区.塞浦路斯"),
+            // dict.sys.country.code.cy
+            ("dict.sys.country.code.cy", "zh-CN", "Κύπρος", "国家地区.塞浦路斯"),
+            // dict.sys.country.code.cy
+            ("dict.sys.country.code.cy", "zh-HK", "Κύπρος", "国家地区.塞浦路斯"),
+
+            // dict.sys.country.code.cz
+            ("dict.sys.country.code.cz", "en-US", "Česko", "国家地区.捷克"),
+            // dict.sys.country.code.cz
+            ("dict.sys.country.code.cz", "ja-JP", "Česko", "国家地区.捷克"),
+            // dict.sys.country.code.cz
+            ("dict.sys.country.code.cz", "zh-CN", "Česko", "国家地区.捷克"),
+            // dict.sys.country.code.cz
+            ("dict.sys.country.code.cz", "zh-HK", "Česko", "国家地区.捷克"),
+
+            // dict.sys.country.code.de
+            ("dict.sys.country.code.de", "en-US", "Deutschland", "国家地区.德国"),
+            // dict.sys.country.code.de
+            ("dict.sys.country.code.de", "ja-JP", "Deutschland", "国家地区.德国"),
+            // dict.sys.country.code.de
+            ("dict.sys.country.code.de", "zh-CN", "Deutschland", "国家地区.德国"),
+            // dict.sys.country.code.de
+            ("dict.sys.country.code.de", "zh-HK", "Deutschland", "国家地区.德国"),
+
+            // dict.sys.country.code.dj
+            ("dict.sys.country.code.dj", "en-US", "Djibouti", "国家地区.吉布提"),
+            // dict.sys.country.code.dj
+            ("dict.sys.country.code.dj", "ja-JP", "Djibouti", "国家地区.吉布提"),
+            // dict.sys.country.code.dj
+            ("dict.sys.country.code.dj", "zh-CN", "Djibouti", "国家地区.吉布提"),
+            // dict.sys.country.code.dj
+            ("dict.sys.country.code.dj", "zh-HK", "Djibouti", "国家地区.吉布提"),
+
+            // dict.sys.country.code.dk
+            ("dict.sys.country.code.dk", "en-US", "Danmark", "国家地区.丹麦"),
+            // dict.sys.country.code.dk
+            ("dict.sys.country.code.dk", "ja-JP", "Danmark", "国家地区.丹麦"),
+            // dict.sys.country.code.dk
+            ("dict.sys.country.code.dk", "zh-CN", "Danmark", "国家地区.丹麦"),
+            // dict.sys.country.code.dk
+            ("dict.sys.country.code.dk", "zh-HK", "Danmark", "国家地区.丹麦"),
+
+            // dict.sys.country.code.dm
+            ("dict.sys.country.code.dm", "en-US", "Dominica", "国家地区.多米尼克"),
+            // dict.sys.country.code.dm
+            ("dict.sys.country.code.dm", "ja-JP", "Dominica", "国家地区.多米尼克"),
+            // dict.sys.country.code.dm
+            ("dict.sys.country.code.dm", "zh-CN", "Dominica", "国家地区.多米尼克"),
+            // dict.sys.country.code.dm
+            ("dict.sys.country.code.dm", "zh-HK", "Dominica", "国家地区.多米尼克"),
+
+            // dict.sys.country.code.do
+            ("dict.sys.country.code.do", "en-US", "República Dominicana", "国家地区.多米尼加共和国"),
+            // dict.sys.country.code.do
+            ("dict.sys.country.code.do", "ja-JP", "República Dominicana", "国家地区.多米尼加共和国"),
+            // dict.sys.country.code.do
+            ("dict.sys.country.code.do", "zh-CN", "República Dominicana", "国家地区.多米尼加共和国"),
+            // dict.sys.country.code.do
+            ("dict.sys.country.code.do", "zh-HK", "República Dominicana", "国家地区.多米尼加共和国"),
+
+            // dict.sys.country.code.dz
+            ("dict.sys.country.code.dz", "en-US", "الجزائر", "国家地区.阿尔及利亚"),
+            // dict.sys.country.code.dz
+            ("dict.sys.country.code.dz", "ja-JP", "الجزائر", "国家地区.阿尔及利亚"),
+            // dict.sys.country.code.dz
+            ("dict.sys.country.code.dz", "zh-CN", "الجزائر", "国家地区.阿尔及利亚"),
+            // dict.sys.country.code.dz
+            ("dict.sys.country.code.dz", "zh-HK", "الجزائر", "国家地区.阿尔及利亚"),
+
+            // dict.sys.country.code.ec
+            ("dict.sys.country.code.ec", "en-US", "Ecuador", "国家地区.厄瓜多尔"),
+            // dict.sys.country.code.ec
+            ("dict.sys.country.code.ec", "ja-JP", "Ecuador", "国家地区.厄瓜多尔"),
+            // dict.sys.country.code.ec
+            ("dict.sys.country.code.ec", "zh-CN", "Ecuador", "国家地区.厄瓜多尔"),
+            // dict.sys.country.code.ec
+            ("dict.sys.country.code.ec", "zh-HK", "Ecuador", "国家地区.厄瓜多尔"),
+
+            // dict.sys.country.code.ee
+            ("dict.sys.country.code.ee", "en-US", "Eesti", "国家地区.爱沙尼亚"),
+            // dict.sys.country.code.ee
+            ("dict.sys.country.code.ee", "ja-JP", "Eesti", "国家地区.爱沙尼亚"),
+            // dict.sys.country.code.ee
+            ("dict.sys.country.code.ee", "zh-CN", "Eesti", "国家地区.爱沙尼亚"),
+            // dict.sys.country.code.ee
+            ("dict.sys.country.code.ee", "zh-HK", "Eesti", "国家地区.爱沙尼亚"),
+
+            // dict.sys.country.code.eg
+            ("dict.sys.country.code.eg", "en-US", "مصر‎", "国家地区.埃及"),
+            // dict.sys.country.code.eg
+            ("dict.sys.country.code.eg", "ja-JP", "مصر‎", "国家地区.埃及"),
+            // dict.sys.country.code.eg
+            ("dict.sys.country.code.eg", "zh-CN", "مصر‎", "国家地区.埃及"),
+            // dict.sys.country.code.eg
+            ("dict.sys.country.code.eg", "zh-HK", "مصر‎", "国家地区.埃及"),
+
+            // dict.sys.country.code.eh
+            ("dict.sys.country.code.eh", "en-US", "الصحراء الغربية", "国家地区.西撒哈拉"),
+            // dict.sys.country.code.eh
+            ("dict.sys.country.code.eh", "ja-JP", "الصحراء الغربية", "国家地区.西撒哈拉"),
+            // dict.sys.country.code.eh
+            ("dict.sys.country.code.eh", "zh-CN", "الصحراء الغربية", "国家地区.西撒哈拉"),
+            // dict.sys.country.code.eh
+            ("dict.sys.country.code.eh", "zh-HK", "الصحراء الغربية", "国家地区.西撒哈拉"),
+
+            // dict.sys.country.code.er
+            ("dict.sys.country.code.er", "en-US", "ኤርትራ", "国家地区.厄立特里亚"),
+            // dict.sys.country.code.er
+            ("dict.sys.country.code.er", "ja-JP", "ኤርትራ", "国家地区.厄立特里亚"),
+            // dict.sys.country.code.er
+            ("dict.sys.country.code.er", "zh-CN", "ኤርትራ", "国家地区.厄立特里亚"),
+            // dict.sys.country.code.er
+            ("dict.sys.country.code.er", "zh-HK", "ኤርትራ", "国家地区.厄立特里亚"),
+
+            // dict.sys.country.code.es
+            ("dict.sys.country.code.es", "en-US", "España", "国家地区.西班牙"),
+            // dict.sys.country.code.es
+            ("dict.sys.country.code.es", "ja-JP", "España", "国家地区.西班牙"),
+            // dict.sys.country.code.es
+            ("dict.sys.country.code.es", "zh-CN", "España", "国家地区.西班牙"),
+            // dict.sys.country.code.es
+            ("dict.sys.country.code.es", "zh-HK", "España", "国家地区.西班牙"),
+
+            // dict.sys.country.code.et
+            ("dict.sys.country.code.et", "en-US", "ኢትዮጵያ", "国家地区.埃塞俄比亚"),
+            // dict.sys.country.code.et
+            ("dict.sys.country.code.et", "ja-JP", "ኢትዮጵያ", "国家地区.埃塞俄比亚"),
+            // dict.sys.country.code.et
+            ("dict.sys.country.code.et", "zh-CN", "ኢትዮጵያ", "国家地区.埃塞俄比亚"),
+            // dict.sys.country.code.et
+            ("dict.sys.country.code.et", "zh-HK", "ኢትዮጵያ", "国家地区.埃塞俄比亚"),
+
+            // dict.sys.country.code.fi
+            ("dict.sys.country.code.fi", "en-US", "Suomi", "国家地区.芬兰"),
+            // dict.sys.country.code.fi
+            ("dict.sys.country.code.fi", "ja-JP", "Suomi", "国家地区.芬兰"),
+            // dict.sys.country.code.fi
+            ("dict.sys.country.code.fi", "zh-CN", "Suomi", "国家地区.芬兰"),
+            // dict.sys.country.code.fi
+            ("dict.sys.country.code.fi", "zh-HK", "Suomi", "国家地区.芬兰"),
+
+            // dict.sys.country.code.fj
+            ("dict.sys.country.code.fj", "en-US", "Fiji", "国家地区.斐济"),
+            // dict.sys.country.code.fj
+            ("dict.sys.country.code.fj", "ja-JP", "Fiji", "国家地区.斐济"),
+            // dict.sys.country.code.fj
+            ("dict.sys.country.code.fj", "zh-CN", "Fiji", "国家地区.斐济"),
+            // dict.sys.country.code.fj
+            ("dict.sys.country.code.fj", "zh-HK", "Fiji", "国家地区.斐济"),
+
+            // dict.sys.country.code.fk
+            ("dict.sys.country.code.fk", "en-US", "Falkland Islands", "国家地区.福克兰群岛"),
+            // dict.sys.country.code.fk
+            ("dict.sys.country.code.fk", "ja-JP", "Falkland Islands", "国家地区.福克兰群岛"),
+            // dict.sys.country.code.fk
+            ("dict.sys.country.code.fk", "zh-CN", "Falkland Islands", "国家地区.福克兰群岛"),
+            // dict.sys.country.code.fk
+            ("dict.sys.country.code.fk", "zh-HK", "Falkland Islands", "国家地区.福克兰群岛"),
+
+            // dict.sys.country.code.fm
+            ("dict.sys.country.code.fm", "en-US", "Micronesia", "国家地区.密克罗尼西亚"),
+            // dict.sys.country.code.fm
+            ("dict.sys.country.code.fm", "ja-JP", "Micronesia", "国家地区.密克罗尼西亚"),
+            // dict.sys.country.code.fm
+            ("dict.sys.country.code.fm", "zh-CN", "Micronesia", "国家地区.密克罗尼西亚"),
+            // dict.sys.country.code.fm
+            ("dict.sys.country.code.fm", "zh-HK", "Micronesia", "国家地区.密克罗尼西亚"),
+
+            // dict.sys.country.code.fo
+            ("dict.sys.country.code.fo", "en-US", "Føroyar", "国家地区.法罗群岛"),
+            // dict.sys.country.code.fo
+            ("dict.sys.country.code.fo", "ja-JP", "Føroyar", "国家地区.法罗群岛"),
+            // dict.sys.country.code.fo
+            ("dict.sys.country.code.fo", "zh-CN", "Føroyar", "国家地区.法罗群岛"),
+            // dict.sys.country.code.fo
+            ("dict.sys.country.code.fo", "zh-HK", "Føroyar", "国家地区.法罗群岛"),
+
+            // dict.sys.country.code.fr
+            ("dict.sys.country.code.fr", "en-US", "France", "国家地区.法国"),
+            // dict.sys.country.code.fr
+            ("dict.sys.country.code.fr", "ja-JP", "France", "国家地区.法国"),
+            // dict.sys.country.code.fr
+            ("dict.sys.country.code.fr", "zh-CN", "France", "国家地区.法国"),
+            // dict.sys.country.code.fr
+            ("dict.sys.country.code.fr", "zh-HK", "France", "国家地区.法国"),
+
+            // dict.sys.country.code.ga
+            ("dict.sys.country.code.ga", "en-US", "Gabon", "国家地区.加蓬"),
+            // dict.sys.country.code.ga
+            ("dict.sys.country.code.ga", "ja-JP", "Gabon", "国家地区.加蓬"),
+            // dict.sys.country.code.ga
+            ("dict.sys.country.code.ga", "zh-CN", "Gabon", "国家地区.加蓬"),
+            // dict.sys.country.code.ga
+            ("dict.sys.country.code.ga", "zh-HK", "Gabon", "国家地区.加蓬"),
+
+            // dict.sys.country.code.gb
+            ("dict.sys.country.code.gb", "en-US", "United Kingdom", "国家地区.英国"),
+            // dict.sys.country.code.gb
+            ("dict.sys.country.code.gb", "ja-JP", "United Kingdom", "国家地区.英国"),
+            // dict.sys.country.code.gb
+            ("dict.sys.country.code.gb", "zh-CN", "United Kingdom", "国家地区.英国"),
+            // dict.sys.country.code.gb
+            ("dict.sys.country.code.gb", "zh-HK", "United Kingdom", "国家地区.英国"),
+
+            // dict.sys.country.code.gd
+            ("dict.sys.country.code.gd", "en-US", "Grenada", "国家地区.格林纳达"),
+            // dict.sys.country.code.gd
+            ("dict.sys.country.code.gd", "ja-JP", "Grenada", "国家地区.格林纳达"),
+            // dict.sys.country.code.gd
+            ("dict.sys.country.code.gd", "zh-CN", "Grenada", "国家地区.格林纳达"),
+            // dict.sys.country.code.gd
+            ("dict.sys.country.code.gd", "zh-HK", "Grenada", "国家地区.格林纳达"),
+
+            // dict.sys.country.code.ge
+            ("dict.sys.country.code.ge", "en-US", "საქართველო", "国家地区.格鲁吉亚"),
+            // dict.sys.country.code.ge
+            ("dict.sys.country.code.ge", "ja-JP", "საქართველო", "国家地区.格鲁吉亚"),
+            // dict.sys.country.code.ge
+            ("dict.sys.country.code.ge", "zh-CN", "საქართველო", "国家地区.格鲁吉亚"),
+            // dict.sys.country.code.ge
+            ("dict.sys.country.code.ge", "zh-HK", "საქართველო", "国家地区.格鲁吉亚"),
+
+            // dict.sys.country.code.gf
+            ("dict.sys.country.code.gf", "en-US", "Guyane française", "国家地区.法属圭亚那"),
+            // dict.sys.country.code.gf
+            ("dict.sys.country.code.gf", "ja-JP", "Guyane française", "国家地区.法属圭亚那"),
+            // dict.sys.country.code.gf
+            ("dict.sys.country.code.gf", "zh-CN", "Guyane française", "国家地区.法属圭亚那"),
+            // dict.sys.country.code.gf
+            ("dict.sys.country.code.gf", "zh-HK", "Guyane française", "国家地区.法属圭亚那"),
+
+            // dict.sys.country.code.gg
+            ("dict.sys.country.code.gg", "en-US", "Guernsey", "国家地区.根西岛"),
+            // dict.sys.country.code.gg
+            ("dict.sys.country.code.gg", "ja-JP", "Guernsey", "国家地区.根西岛"),
+            // dict.sys.country.code.gg
+            ("dict.sys.country.code.gg", "zh-CN", "Guernsey", "国家地区.根西岛"),
+            // dict.sys.country.code.gg
+            ("dict.sys.country.code.gg", "zh-HK", "Guernsey", "国家地区.根西岛"),
+
+            // dict.sys.country.code.gh
+            ("dict.sys.country.code.gh", "en-US", "Ghana", "国家地区.加纳"),
+            // dict.sys.country.code.gh
+            ("dict.sys.country.code.gh", "ja-JP", "Ghana", "国家地区.加纳"),
+            // dict.sys.country.code.gh
+            ("dict.sys.country.code.gh", "zh-CN", "Ghana", "国家地区.加纳"),
+            // dict.sys.country.code.gh
+            ("dict.sys.country.code.gh", "zh-HK", "Ghana", "国家地区.加纳"),
+
+            // dict.sys.country.code.gi
+            ("dict.sys.country.code.gi", "en-US", "Gibraltar", "国家地区.直布罗陀"),
+            // dict.sys.country.code.gi
+            ("dict.sys.country.code.gi", "ja-JP", "Gibraltar", "国家地区.直布罗陀"),
+            // dict.sys.country.code.gi
+            ("dict.sys.country.code.gi", "zh-CN", "Gibraltar", "国家地区.直布罗陀"),
+            // dict.sys.country.code.gi
+            ("dict.sys.country.code.gi", "zh-HK", "Gibraltar", "国家地区.直布罗陀"),
+
+            // dict.sys.country.code.gl
+            ("dict.sys.country.code.gl", "en-US", "Kalaallit Nunaat", "国家地区.格陵兰"),
+            // dict.sys.country.code.gl
+            ("dict.sys.country.code.gl", "ja-JP", "Kalaallit Nunaat", "国家地区.格陵兰"),
+            // dict.sys.country.code.gl
+            ("dict.sys.country.code.gl", "zh-CN", "Kalaallit Nunaat", "国家地区.格陵兰"),
+            // dict.sys.country.code.gl
+            ("dict.sys.country.code.gl", "zh-HK", "Kalaallit Nunaat", "国家地区.格陵兰"),
+
+            // dict.sys.country.code.gm
+            ("dict.sys.country.code.gm", "en-US", "Gambia", "国家地区.冈比亚"),
+            // dict.sys.country.code.gm
+            ("dict.sys.country.code.gm", "ja-JP", "Gambia", "国家地区.冈比亚"),
+            // dict.sys.country.code.gm
+            ("dict.sys.country.code.gm", "zh-CN", "Gambia", "国家地区.冈比亚"),
+            // dict.sys.country.code.gm
+            ("dict.sys.country.code.gm", "zh-HK", "Gambia", "国家地区.冈比亚"),
+
+            // dict.sys.country.code.gn
+            ("dict.sys.country.code.gn", "en-US", "Guinée", "国家地区.几内亚"),
+            // dict.sys.country.code.gn
+            ("dict.sys.country.code.gn", "ja-JP", "Guinée", "国家地区.几内亚"),
+            // dict.sys.country.code.gn
+            ("dict.sys.country.code.gn", "zh-CN", "Guinée", "国家地区.几内亚"),
+            // dict.sys.country.code.gn
+            ("dict.sys.country.code.gn", "zh-HK", "Guinée", "国家地区.几内亚"),
+
+            // dict.sys.country.code.gp
+            ("dict.sys.country.code.gp", "en-US", "Guadeloupe", "国家地区.瓜德罗普"),
+            // dict.sys.country.code.gp
+            ("dict.sys.country.code.gp", "ja-JP", "Guadeloupe", "国家地区.瓜德罗普"),
+            // dict.sys.country.code.gp
+            ("dict.sys.country.code.gp", "zh-CN", "Guadeloupe", "国家地区.瓜德罗普"),
+            // dict.sys.country.code.gp
+            ("dict.sys.country.code.gp", "zh-HK", "Guadeloupe", "国家地区.瓜德罗普"),
+
+            // dict.sys.country.code.gq
+            ("dict.sys.country.code.gq", "en-US", "Guinea Ecuatorial", "国家地区.赤道几内亚"),
+            // dict.sys.country.code.gq
+            ("dict.sys.country.code.gq", "ja-JP", "Guinea Ecuatorial", "国家地区.赤道几内亚"),
+            // dict.sys.country.code.gq
+            ("dict.sys.country.code.gq", "zh-CN", "Guinea Ecuatorial", "国家地区.赤道几内亚"),
+            // dict.sys.country.code.gq
+            ("dict.sys.country.code.gq", "zh-HK", "Guinea Ecuatorial", "国家地区.赤道几内亚"),
+
+            // dict.sys.country.code.gr
+            ("dict.sys.country.code.gr", "en-US", "Ελλάδα", "国家地区.希腊"),
+            // dict.sys.country.code.gr
+            ("dict.sys.country.code.gr", "ja-JP", "Ελλάδα", "国家地区.希腊"),
+            // dict.sys.country.code.gr
+            ("dict.sys.country.code.gr", "zh-CN", "Ελλάδα", "国家地区.希腊"),
+            // dict.sys.country.code.gr
+            ("dict.sys.country.code.gr", "zh-HK", "Ελλάδα", "国家地区.希腊"),
+
+            // dict.sys.country.code.gs
+            ("dict.sys.country.code.gs", "en-US", "South Georgia", "国家地区.南乔治亚和南桑威奇群岛"),
+            // dict.sys.country.code.gs
+            ("dict.sys.country.code.gs", "ja-JP", "South Georgia", "国家地区.南乔治亚和南桑威奇群岛"),
+            // dict.sys.country.code.gs
+            ("dict.sys.country.code.gs", "zh-CN", "South Georgia", "国家地区.南乔治亚和南桑威奇群岛"),
+            // dict.sys.country.code.gs
+            ("dict.sys.country.code.gs", "zh-HK", "South Georgia", "国家地区.南乔治亚和南桑威奇群岛"),
+
+            // dict.sys.country.code.gt
+            ("dict.sys.country.code.gt", "en-US", "Guatemala", "国家地区.危地马拉"),
+            // dict.sys.country.code.gt
+            ("dict.sys.country.code.gt", "ja-JP", "Guatemala", "国家地区.危地马拉"),
+            // dict.sys.country.code.gt
+            ("dict.sys.country.code.gt", "zh-CN", "Guatemala", "国家地区.危地马拉"),
+            // dict.sys.country.code.gt
+            ("dict.sys.country.code.gt", "zh-HK", "Guatemala", "国家地区.危地马拉"),
+
+            // dict.sys.country.code.gu
+            ("dict.sys.country.code.gu", "en-US", "Guam", "国家地区.关岛"),
+            // dict.sys.country.code.gu
+            ("dict.sys.country.code.gu", "ja-JP", "Guam", "国家地区.关岛"),
+            // dict.sys.country.code.gu
+            ("dict.sys.country.code.gu", "zh-CN", "Guam", "国家地区.关岛"),
+            // dict.sys.country.code.gu
+            ("dict.sys.country.code.gu", "zh-HK", "Guam", "国家地区.关岛"),
+
+            // dict.sys.country.code.gw
+            ("dict.sys.country.code.gw", "en-US", "Guiné-Bissau", "国家地区.几内亚比绍"),
+            // dict.sys.country.code.gw
+            ("dict.sys.country.code.gw", "ja-JP", "Guiné-Bissau", "国家地区.几内亚比绍"),
+            // dict.sys.country.code.gw
+            ("dict.sys.country.code.gw", "zh-CN", "Guiné-Bissau", "国家地区.几内亚比绍"),
+            // dict.sys.country.code.gw
+            ("dict.sys.country.code.gw", "zh-HK", "Guiné-Bissau", "国家地区.几内亚比绍"),
+
+            // dict.sys.country.code.gy
+            ("dict.sys.country.code.gy", "en-US", "Guyana", "国家地区.圭亚那"),
+            // dict.sys.country.code.gy
+            ("dict.sys.country.code.gy", "ja-JP", "Guyana", "国家地区.圭亚那"),
+            // dict.sys.country.code.gy
+            ("dict.sys.country.code.gy", "zh-CN", "Guyana", "国家地区.圭亚那"),
+            // dict.sys.country.code.gy
+            ("dict.sys.country.code.gy", "zh-HK", "Guyana", "国家地区.圭亚那"),
+
+            // dict.sys.country.code.hk
+            ("dict.sys.country.code.hk", "en-US", "香港", "国家地区.香港"),
+            // dict.sys.country.code.hk
+            ("dict.sys.country.code.hk", "ja-JP", "香港", "国家地区.香港"),
+            // dict.sys.country.code.hk
+            ("dict.sys.country.code.hk", "zh-CN", "香港", "国家地区.香港"),
+            // dict.sys.country.code.hk
+            ("dict.sys.country.code.hk", "zh-HK", "香港", "国家地区.香港"),
+
+            // dict.sys.country.code.hm
+            ("dict.sys.country.code.hm", "en-US", "Heard Island and McDonald Islands", "国家地区.赫德岛和麦克唐纳群岛"),
+            // dict.sys.country.code.hm
+            ("dict.sys.country.code.hm", "ja-JP", "Heard Island and McDonald Islands", "国家地区.赫德岛和麦克唐纳群岛"),
+            // dict.sys.country.code.hm
+            ("dict.sys.country.code.hm", "zh-CN", "Heard Island and McDonald Islands", "国家地区.赫德岛和麦克唐纳群岛"),
+            // dict.sys.country.code.hm
+            ("dict.sys.country.code.hm", "zh-HK", "Heard Island and McDonald Islands", "国家地区.赫德岛和麦克唐纳群岛"),
+
+            // dict.sys.country.code.hn
+            ("dict.sys.country.code.hn", "en-US", "Honduras", "国家地区.洪都拉斯"),
+            // dict.sys.country.code.hn
+            ("dict.sys.country.code.hn", "ja-JP", "Honduras", "国家地区.洪都拉斯"),
+            // dict.sys.country.code.hn
+            ("dict.sys.country.code.hn", "zh-CN", "Honduras", "国家地区.洪都拉斯"),
+            // dict.sys.country.code.hn
+            ("dict.sys.country.code.hn", "zh-HK", "Honduras", "国家地区.洪都拉斯"),
+
+            // dict.sys.country.code.hr
+            ("dict.sys.country.code.hr", "en-US", "Hrvatska", "国家地区.克罗地亚"),
+            // dict.sys.country.code.hr
+            ("dict.sys.country.code.hr", "ja-JP", "Hrvatska", "国家地区.克罗地亚"),
+            // dict.sys.country.code.hr
+            ("dict.sys.country.code.hr", "zh-CN", "Hrvatska", "国家地区.克罗地亚"),
+            // dict.sys.country.code.hr
+            ("dict.sys.country.code.hr", "zh-HK", "Hrvatska", "国家地区.克罗地亚"),
+
+            // dict.sys.country.code.ht
+            ("dict.sys.country.code.ht", "en-US", "Haïti", "国家地区.海地"),
+            // dict.sys.country.code.ht
+            ("dict.sys.country.code.ht", "ja-JP", "Haïti", "国家地区.海地"),
+            // dict.sys.country.code.ht
+            ("dict.sys.country.code.ht", "zh-CN", "Haïti", "国家地区.海地"),
+            // dict.sys.country.code.ht
+            ("dict.sys.country.code.ht", "zh-HK", "Haïti", "国家地区.海地"),
+
+            // dict.sys.country.code.hu
+            ("dict.sys.country.code.hu", "en-US", "Magyarország", "国家地区.匈牙利"),
+            // dict.sys.country.code.hu
+            ("dict.sys.country.code.hu", "ja-JP", "Magyarország", "国家地区.匈牙利"),
+            // dict.sys.country.code.hu
+            ("dict.sys.country.code.hu", "zh-CN", "Magyarország", "国家地区.匈牙利"),
+            // dict.sys.country.code.hu
+            ("dict.sys.country.code.hu", "zh-HK", "Magyarország", "国家地区.匈牙利"),
+
+            // dict.sys.country.code.id
+            ("dict.sys.country.code.id", "en-US", "Indonesia", "国家地区.印度尼西亚"),
+            // dict.sys.country.code.id
+            ("dict.sys.country.code.id", "ja-JP", "Indonesia", "国家地区.印度尼西亚"),
+            // dict.sys.country.code.id
+            ("dict.sys.country.code.id", "zh-CN", "Indonesia", "国家地区.印度尼西亚"),
+            // dict.sys.country.code.id
+            ("dict.sys.country.code.id", "zh-HK", "Indonesia", "国家地区.印度尼西亚"),
+
+            // dict.sys.country.code.ie
+            ("dict.sys.country.code.ie", "en-US", "Éire", "国家地区.爱尔兰"),
+            // dict.sys.country.code.ie
+            ("dict.sys.country.code.ie", "ja-JP", "Éire", "国家地区.爱尔兰"),
+            // dict.sys.country.code.ie
+            ("dict.sys.country.code.ie", "zh-CN", "Éire", "国家地区.爱尔兰"),
+            // dict.sys.country.code.ie
+            ("dict.sys.country.code.ie", "zh-HK", "Éire", "国家地区.爱尔兰"),
+
+            // dict.sys.country.code.il
+            ("dict.sys.country.code.il", "en-US", "יִשְׂרָאֵל", "国家地区.以色列"),
+            // dict.sys.country.code.il
+            ("dict.sys.country.code.il", "ja-JP", "יִשְׂרָאֵל", "国家地区.以色列"),
+            // dict.sys.country.code.il
+            ("dict.sys.country.code.il", "zh-CN", "יִשְׂרָאֵל", "国家地区.以色列"),
+            // dict.sys.country.code.il
+            ("dict.sys.country.code.il", "zh-HK", "יִשְׂרָאֵל", "国家地区.以色列"),
+
+            // dict.sys.country.code.im
+            ("dict.sys.country.code.im", "en-US", "Isle of Man", "国家地区.马恩岛"),
+            // dict.sys.country.code.im
+            ("dict.sys.country.code.im", "ja-JP", "Isle of Man", "国家地区.马恩岛"),
+            // dict.sys.country.code.im
+            ("dict.sys.country.code.im", "zh-CN", "Isle of Man", "国家地区.马恩岛"),
+            // dict.sys.country.code.im
+            ("dict.sys.country.code.im", "zh-HK", "Isle of Man", "国家地区.马恩岛"),
+
+            // dict.sys.country.code.in
+            ("dict.sys.country.code.in", "en-US", "भारत", "国家地区.印度"),
+            // dict.sys.country.code.in
+            ("dict.sys.country.code.in", "ja-JP", "भारत", "国家地区.印度"),
+            // dict.sys.country.code.in
+            ("dict.sys.country.code.in", "zh-CN", "भारत", "国家地区.印度"),
+            // dict.sys.country.code.in
+            ("dict.sys.country.code.in", "zh-HK", "भारत", "国家地区.印度"),
+
+            // dict.sys.country.code.io
+            ("dict.sys.country.code.io", "en-US", "British Indian Ocean Territory", "国家地区.英属印度洋领地"),
+            // dict.sys.country.code.io
+            ("dict.sys.country.code.io", "ja-JP", "British Indian Ocean Territory", "国家地区.英属印度洋领地"),
+            // dict.sys.country.code.io
+            ("dict.sys.country.code.io", "zh-CN", "British Indian Ocean Territory", "国家地区.英属印度洋领地"),
+            // dict.sys.country.code.io
+            ("dict.sys.country.code.io", "zh-HK", "British Indian Ocean Territory", "国家地区.英属印度洋领地"),
+
+            // dict.sys.country.code.iq
+            ("dict.sys.country.code.iq", "en-US", "العراق", "国家地区.伊拉克"),
+            // dict.sys.country.code.iq
+            ("dict.sys.country.code.iq", "ja-JP", "العراق", "国家地区.伊拉克"),
+            // dict.sys.country.code.iq
+            ("dict.sys.country.code.iq", "zh-CN", "العراق", "国家地区.伊拉克"),
+            // dict.sys.country.code.iq
+            ("dict.sys.country.code.iq", "zh-HK", "العراق", "国家地区.伊拉克"),
+
+            // dict.sys.country.code.ir
+            ("dict.sys.country.code.ir", "en-US", "ایران", "国家地区.伊朗"),
+            // dict.sys.country.code.ir
+            ("dict.sys.country.code.ir", "ja-JP", "ایران", "国家地区.伊朗"),
+            // dict.sys.country.code.ir
+            ("dict.sys.country.code.ir", "zh-CN", "ایران", "国家地区.伊朗"),
+            // dict.sys.country.code.ir
+            ("dict.sys.country.code.ir", "zh-HK", "ایران", "国家地区.伊朗"),
+
+            // dict.sys.country.code.is
+            ("dict.sys.country.code.is", "en-US", "Ísland", "国家地区.冰岛"),
+            // dict.sys.country.code.is
+            ("dict.sys.country.code.is", "ja-JP", "Ísland", "国家地区.冰岛"),
+            // dict.sys.country.code.is
+            ("dict.sys.country.code.is", "zh-CN", "Ísland", "国家地区.冰岛"),
+            // dict.sys.country.code.is
+            ("dict.sys.country.code.is", "zh-HK", "Ísland", "国家地区.冰岛"),
+
+            // dict.sys.country.code.it
+            ("dict.sys.country.code.it", "en-US", "Italia", "国家地区.意大利"),
+            // dict.sys.country.code.it
+            ("dict.sys.country.code.it", "ja-JP", "Italia", "国家地区.意大利"),
+            // dict.sys.country.code.it
+            ("dict.sys.country.code.it", "zh-CN", "Italia", "国家地区.意大利"),
+            // dict.sys.country.code.it
+            ("dict.sys.country.code.it", "zh-HK", "Italia", "国家地区.意大利"),
+
+            // dict.sys.country.code.je
+            ("dict.sys.country.code.je", "en-US", "Jersey", "国家地区.泽西岛"),
+            // dict.sys.country.code.je
+            ("dict.sys.country.code.je", "ja-JP", "Jersey", "国家地区.泽西岛"),
+            // dict.sys.country.code.je
+            ("dict.sys.country.code.je", "zh-CN", "Jersey", "国家地区.泽西岛"),
+            // dict.sys.country.code.je
+            ("dict.sys.country.code.je", "zh-HK", "Jersey", "国家地区.泽西岛"),
+
+            // dict.sys.country.code.jm
+            ("dict.sys.country.code.jm", "en-US", "Jamaica", "国家地区.牙买加"),
+            // dict.sys.country.code.jm
+            ("dict.sys.country.code.jm", "ja-JP", "Jamaica", "国家地区.牙买加"),
+            // dict.sys.country.code.jm
+            ("dict.sys.country.code.jm", "zh-CN", "Jamaica", "国家地区.牙买加"),
+            // dict.sys.country.code.jm
+            ("dict.sys.country.code.jm", "zh-HK", "Jamaica", "国家地区.牙买加"),
+
+            // dict.sys.country.code.jo
+            ("dict.sys.country.code.jo", "en-US", "الأردن", "国家地区.约旦"),
+            // dict.sys.country.code.jo
+            ("dict.sys.country.code.jo", "ja-JP", "الأردن", "国家地区.约旦"),
+            // dict.sys.country.code.jo
+            ("dict.sys.country.code.jo", "zh-CN", "الأردن", "国家地区.约旦"),
+            // dict.sys.country.code.jo
+            ("dict.sys.country.code.jo", "zh-HK", "الأردن", "国家地区.约旦"),
+
+            // dict.sys.country.code.jp
+            ("dict.sys.country.code.jp", "en-US", "日本", "国家地区.日本"),
+            // dict.sys.country.code.jp
+            ("dict.sys.country.code.jp", "ja-JP", "日本", "国家地区.日本"),
+            // dict.sys.country.code.jp
+            ("dict.sys.country.code.jp", "zh-CN", "日本", "国家地区.日本"),
+            // dict.sys.country.code.jp
+            ("dict.sys.country.code.jp", "zh-HK", "日本", "国家地区.日本"),
+
+            // dict.sys.country.code.ke
+            ("dict.sys.country.code.ke", "en-US", "Kenya", "国家地区.肯尼亚"),
+            // dict.sys.country.code.ke
+            ("dict.sys.country.code.ke", "ja-JP", "Kenya", "国家地区.肯尼亚"),
+            // dict.sys.country.code.ke
+            ("dict.sys.country.code.ke", "zh-CN", "Kenya", "国家地区.肯尼亚"),
+            // dict.sys.country.code.ke
+            ("dict.sys.country.code.ke", "zh-HK", "Kenya", "国家地区.肯尼亚"),
+
+            // dict.sys.country.code.kg
+            ("dict.sys.country.code.kg", "en-US", "Кыргызстан", "国家地区.吉尔吉斯斯坦"),
+            // dict.sys.country.code.kg
+            ("dict.sys.country.code.kg", "ja-JP", "Кыргызстан", "国家地区.吉尔吉斯斯坦"),
+            // dict.sys.country.code.kg
+            ("dict.sys.country.code.kg", "zh-CN", "Кыргызстан", "国家地区.吉尔吉斯斯坦"),
+            // dict.sys.country.code.kg
+            ("dict.sys.country.code.kg", "zh-HK", "Кыргызстан", "国家地区.吉尔吉斯斯坦"),
+
+            // dict.sys.country.code.kh
+            ("dict.sys.country.code.kh", "en-US", "កម្ពុជា", "国家地区.柬埔寨"),
+            // dict.sys.country.code.kh
+            ("dict.sys.country.code.kh", "ja-JP", "កម្ពុជា", "国家地区.柬埔寨"),
+            // dict.sys.country.code.kh
+            ("dict.sys.country.code.kh", "zh-CN", "កម្ពុជា", "国家地区.柬埔寨"),
+            // dict.sys.country.code.kh
+            ("dict.sys.country.code.kh", "zh-HK", "កម្ពុជា", "国家地区.柬埔寨"),
+
+            // dict.sys.country.code.ki
+            ("dict.sys.country.code.ki", "en-US", "Kiribati", "国家地区.基里巴斯"),
+            // dict.sys.country.code.ki
+            ("dict.sys.country.code.ki", "ja-JP", "Kiribati", "国家地区.基里巴斯"),
+            // dict.sys.country.code.ki
+            ("dict.sys.country.code.ki", "zh-CN", "Kiribati", "国家地区.基里巴斯"),
+            // dict.sys.country.code.ki
+            ("dict.sys.country.code.ki", "zh-HK", "Kiribati", "国家地区.基里巴斯"),
+
+            // dict.sys.country.code.km
+            ("dict.sys.country.code.km", "en-US", "Komori", "国家地区.科摩罗"),
+            // dict.sys.country.code.km
+            ("dict.sys.country.code.km", "ja-JP", "Komori", "国家地区.科摩罗"),
+            // dict.sys.country.code.km
+            ("dict.sys.country.code.km", "zh-CN", "Komori", "国家地区.科摩罗"),
+            // dict.sys.country.code.km
+            ("dict.sys.country.code.km", "zh-HK", "Komori", "国家地区.科摩罗"),
+
+            // dict.sys.country.code.kn
+            ("dict.sys.country.code.kn", "en-US", "Saint Kitts and Nevis", "国家地区.圣基茨和尼维斯"),
+            // dict.sys.country.code.kn
+            ("dict.sys.country.code.kn", "ja-JP", "Saint Kitts and Nevis", "国家地区.圣基茨和尼维斯"),
+            // dict.sys.country.code.kn
+            ("dict.sys.country.code.kn", "zh-CN", "Saint Kitts and Nevis", "国家地区.圣基茨和尼维斯"),
+            // dict.sys.country.code.kn
+            ("dict.sys.country.code.kn", "zh-HK", "Saint Kitts and Nevis", "国家地区.圣基茨和尼维斯"),
+
+            // dict.sys.country.code.kp
+            ("dict.sys.country.code.kp", "en-US", "북한", "国家地区.朝鲜"),
+            // dict.sys.country.code.kp
+            ("dict.sys.country.code.kp", "ja-JP", "북한", "国家地区.朝鲜"),
+            // dict.sys.country.code.kp
+            ("dict.sys.country.code.kp", "zh-CN", "북한", "国家地区.朝鲜"),
+            // dict.sys.country.code.kp
+            ("dict.sys.country.code.kp", "zh-HK", "북한", "国家地区.朝鲜"),
+
+            // dict.sys.country.code.kr
+            ("dict.sys.country.code.kr", "en-US", "대한민국", "国家地区.韩国"),
+            // dict.sys.country.code.kr
+            ("dict.sys.country.code.kr", "ja-JP", "대한민국", "国家地区.韩国"),
+            // dict.sys.country.code.kr
+            ("dict.sys.country.code.kr", "zh-CN", "대한민국", "国家地区.韩国"),
+            // dict.sys.country.code.kr
+            ("dict.sys.country.code.kr", "zh-HK", "대한민국", "国家地区.韩国"),
+
+            // dict.sys.country.code.kw
+            ("dict.sys.country.code.kw", "en-US", "الكويت", "国家地区.科威特"),
+            // dict.sys.country.code.kw
+            ("dict.sys.country.code.kw", "ja-JP", "الكويت", "国家地区.科威特"),
+            // dict.sys.country.code.kw
+            ("dict.sys.country.code.kw", "zh-CN", "الكويت", "国家地区.科威特"),
+            // dict.sys.country.code.kw
+            ("dict.sys.country.code.kw", "zh-HK", "الكويت", "国家地区.科威特"),
+
+            // dict.sys.country.code.ky
+            ("dict.sys.country.code.ky", "en-US", "Cayman Islands", "国家地区.开曼群岛"),
+            // dict.sys.country.code.ky
+            ("dict.sys.country.code.ky", "ja-JP", "Cayman Islands", "国家地区.开曼群岛"),
+            // dict.sys.country.code.ky
+            ("dict.sys.country.code.ky", "zh-CN", "Cayman Islands", "国家地区.开曼群岛"),
+            // dict.sys.country.code.ky
+            ("dict.sys.country.code.ky", "zh-HK", "Cayman Islands", "国家地区.开曼群岛"),
+
+            // dict.sys.country.code.kz
+            ("dict.sys.country.code.kz", "en-US", "Қазақстан", "国家地区.哈萨克斯坦"),
+            // dict.sys.country.code.kz
+            ("dict.sys.country.code.kz", "ja-JP", "Қазақстан", "国家地区.哈萨克斯坦"),
+            // dict.sys.country.code.kz
+            ("dict.sys.country.code.kz", "zh-CN", "Қазақстан", "国家地区.哈萨克斯坦"),
+            // dict.sys.country.code.kz
+            ("dict.sys.country.code.kz", "zh-HK", "Қазақстан", "国家地区.哈萨克斯坦"),
+
+            // dict.sys.country.code.la
+            ("dict.sys.country.code.la", "en-US", "ສປປລາວ", "国家地区.老挝"),
+            // dict.sys.country.code.la
+            ("dict.sys.country.code.la", "ja-JP", "ສປປລາວ", "国家地区.老挝"),
+            // dict.sys.country.code.la
+            ("dict.sys.country.code.la", "zh-CN", "ສປປລາວ", "国家地区.老挝"),
+            // dict.sys.country.code.la
+            ("dict.sys.country.code.la", "zh-HK", "ສປປລາວ", "国家地区.老挝"),
+
+            // dict.sys.country.code.lb
+            ("dict.sys.country.code.lb", "en-US", "لبنان", "国家地区.黎巴嫩"),
+            // dict.sys.country.code.lb
+            ("dict.sys.country.code.lb", "ja-JP", "لبنان", "国家地区.黎巴嫩"),
+            // dict.sys.country.code.lb
+            ("dict.sys.country.code.lb", "zh-CN", "لبنان", "国家地区.黎巴嫩"),
+            // dict.sys.country.code.lb
+            ("dict.sys.country.code.lb", "zh-HK", "لبنان", "国家地区.黎巴嫩"),
+
+            // dict.sys.country.code.lc
+            ("dict.sys.country.code.lc", "en-US", "Saint Lucia", "国家地区.圣卢西亚"),
+            // dict.sys.country.code.lc
+            ("dict.sys.country.code.lc", "ja-JP", "Saint Lucia", "国家地区.圣卢西亚"),
+            // dict.sys.country.code.lc
+            ("dict.sys.country.code.lc", "zh-CN", "Saint Lucia", "国家地区.圣卢西亚"),
+            // dict.sys.country.code.lc
+            ("dict.sys.country.code.lc", "zh-HK", "Saint Lucia", "国家地区.圣卢西亚"),
+
+            // dict.sys.country.code.li
+            ("dict.sys.country.code.li", "en-US", "Liechtenstein", "国家地区.列支敦士登"),
+            // dict.sys.country.code.li
+            ("dict.sys.country.code.li", "ja-JP", "Liechtenstein", "国家地区.列支敦士登"),
+            // dict.sys.country.code.li
+            ("dict.sys.country.code.li", "zh-CN", "Liechtenstein", "国家地区.列支敦士登"),
+            // dict.sys.country.code.li
+            ("dict.sys.country.code.li", "zh-HK", "Liechtenstein", "国家地区.列支敦士登"),
+
+            // dict.sys.country.code.lk
+            ("dict.sys.country.code.lk", "en-US", "śrī laṃkāva", "国家地区.斯里兰卡"),
+            // dict.sys.country.code.lk
+            ("dict.sys.country.code.lk", "ja-JP", "śrī laṃkāva", "国家地区.斯里兰卡"),
+            // dict.sys.country.code.lk
+            ("dict.sys.country.code.lk", "zh-CN", "śrī laṃkāva", "国家地区.斯里兰卡"),
+            // dict.sys.country.code.lk
+            ("dict.sys.country.code.lk", "zh-HK", "śrī laṃkāva", "国家地区.斯里兰卡"),
+
+            // dict.sys.country.code.lr
+            ("dict.sys.country.code.lr", "en-US", "Liberia", "国家地区.利比里亚"),
+            // dict.sys.country.code.lr
+            ("dict.sys.country.code.lr", "ja-JP", "Liberia", "国家地区.利比里亚"),
+            // dict.sys.country.code.lr
+            ("dict.sys.country.code.lr", "zh-CN", "Liberia", "国家地区.利比里亚"),
+            // dict.sys.country.code.lr
+            ("dict.sys.country.code.lr", "zh-HK", "Liberia", "国家地区.利比里亚"),
+
+            // dict.sys.country.code.ls
+            ("dict.sys.country.code.ls", "en-US", "Lesotho", "国家地区.莱索托"),
+            // dict.sys.country.code.ls
+            ("dict.sys.country.code.ls", "ja-JP", "Lesotho", "国家地区.莱索托"),
+            // dict.sys.country.code.ls
+            ("dict.sys.country.code.ls", "zh-CN", "Lesotho", "国家地区.莱索托"),
+            // dict.sys.country.code.ls
+            ("dict.sys.country.code.ls", "zh-HK", "Lesotho", "国家地区.莱索托"),
+
+            // dict.sys.country.code.lt
+            ("dict.sys.country.code.lt", "en-US", "Lietuva", "国家地区.立陶宛"),
+            // dict.sys.country.code.lt
+            ("dict.sys.country.code.lt", "ja-JP", "Lietuva", "国家地区.立陶宛"),
+            // dict.sys.country.code.lt
+            ("dict.sys.country.code.lt", "zh-CN", "Lietuva", "国家地区.立陶宛"),
+            // dict.sys.country.code.lt
+            ("dict.sys.country.code.lt", "zh-HK", "Lietuva", "国家地区.立陶宛"),
+
+            // dict.sys.country.code.lu
+            ("dict.sys.country.code.lu", "en-US", "Luxembourg", "国家地区.卢森堡"),
+            // dict.sys.country.code.lu
+            ("dict.sys.country.code.lu", "ja-JP", "Luxembourg", "国家地区.卢森堡"),
+            // dict.sys.country.code.lu
+            ("dict.sys.country.code.lu", "zh-CN", "Luxembourg", "国家地区.卢森堡"),
+            // dict.sys.country.code.lu
+            ("dict.sys.country.code.lu", "zh-HK", "Luxembourg", "国家地区.卢森堡"),
+
+            // dict.sys.country.code.lv
+            ("dict.sys.country.code.lv", "en-US", "Latvija", "国家地区.拉脱维亚"),
+            // dict.sys.country.code.lv
+            ("dict.sys.country.code.lv", "ja-JP", "Latvija", "国家地区.拉脱维亚"),
+            // dict.sys.country.code.lv
+            ("dict.sys.country.code.lv", "zh-CN", "Latvija", "国家地区.拉脱维亚"),
+            // dict.sys.country.code.lv
+            ("dict.sys.country.code.lv", "zh-HK", "Latvija", "国家地区.拉脱维亚"),
+
+            // dict.sys.country.code.ly
+            ("dict.sys.country.code.ly", "en-US", "‏ليبيا", "国家地区.利比亚"),
+            // dict.sys.country.code.ly
+            ("dict.sys.country.code.ly", "ja-JP", "‏ليبيا", "国家地区.利比亚"),
+            // dict.sys.country.code.ly
+            ("dict.sys.country.code.ly", "zh-CN", "‏ليبيا", "国家地区.利比亚"),
+            // dict.sys.country.code.ly
+            ("dict.sys.country.code.ly", "zh-HK", "‏ليبيا", "国家地区.利比亚"),
+
+            // dict.sys.country.code.ma
+            ("dict.sys.country.code.ma", "en-US", "المغرب", "国家地区.摩洛哥"),
+            // dict.sys.country.code.ma
+            ("dict.sys.country.code.ma", "ja-JP", "المغرب", "国家地区.摩洛哥"),
+            // dict.sys.country.code.ma
+            ("dict.sys.country.code.ma", "zh-CN", "المغرب", "国家地区.摩洛哥"),
+            // dict.sys.country.code.ma
+            ("dict.sys.country.code.ma", "zh-HK", "المغرب", "国家地区.摩洛哥"),
+
+            // dict.sys.country.code.mc
+            ("dict.sys.country.code.mc", "en-US", "Monaco", "国家地区.摩纳哥"),
+            // dict.sys.country.code.mc
+            ("dict.sys.country.code.mc", "ja-JP", "Monaco", "国家地区.摩纳哥"),
+            // dict.sys.country.code.mc
+            ("dict.sys.country.code.mc", "zh-CN", "Monaco", "国家地区.摩纳哥"),
+            // dict.sys.country.code.mc
+            ("dict.sys.country.code.mc", "zh-HK", "Monaco", "国家地区.摩纳哥"),
+
+            // dict.sys.country.code.md
+            ("dict.sys.country.code.md", "en-US", "Moldova", "国家地区.摩尔多瓦"),
+            // dict.sys.country.code.md
+            ("dict.sys.country.code.md", "ja-JP", "Moldova", "国家地区.摩尔多瓦"),
+            // dict.sys.country.code.md
+            ("dict.sys.country.code.md", "zh-CN", "Moldova", "国家地区.摩尔多瓦"),
+            // dict.sys.country.code.md
+            ("dict.sys.country.code.md", "zh-HK", "Moldova", "国家地区.摩尔多瓦"),
+
+            // dict.sys.country.code.me
+            ("dict.sys.country.code.me", "en-US", "Црна Гора", "国家地区.黑山"),
+            // dict.sys.country.code.me
+            ("dict.sys.country.code.me", "ja-JP", "Црна Гора", "国家地区.黑山"),
+            // dict.sys.country.code.me
+            ("dict.sys.country.code.me", "zh-CN", "Црна Гора", "国家地区.黑山"),
+            // dict.sys.country.code.me
+            ("dict.sys.country.code.me", "zh-HK", "Црна Гора", "国家地区.黑山"),
+
+            // dict.sys.country.code.mf
+            ("dict.sys.country.code.mf", "en-US", "Saint-Martin", "国家地区.法属圣马丁"),
+            // dict.sys.country.code.mf
+            ("dict.sys.country.code.mf", "ja-JP", "Saint-Martin", "国家地区.法属圣马丁"),
+            // dict.sys.country.code.mf
+            ("dict.sys.country.code.mf", "zh-CN", "Saint-Martin", "国家地区.法属圣马丁"),
+            // dict.sys.country.code.mf
+            ("dict.sys.country.code.mf", "zh-HK", "Saint-Martin", "国家地区.法属圣马丁"),
+
+            // dict.sys.country.code.mg
+            ("dict.sys.country.code.mg", "en-US", "Madagasikara", "国家地区.马达加斯加"),
+            // dict.sys.country.code.mg
+            ("dict.sys.country.code.mg", "ja-JP", "Madagasikara", "国家地区.马达加斯加"),
+            // dict.sys.country.code.mg
+            ("dict.sys.country.code.mg", "zh-CN", "Madagasikara", "国家地区.马达加斯加"),
+            // dict.sys.country.code.mg
+            ("dict.sys.country.code.mg", "zh-HK", "Madagasikara", "国家地区.马达加斯加"),
+
+            // dict.sys.country.code.mh
+            ("dict.sys.country.code.mh", "en-US", "M̧ajeļ", "国家地区.马绍尔群岛"),
+            // dict.sys.country.code.mh
+            ("dict.sys.country.code.mh", "ja-JP", "M̧ajeļ", "国家地区.马绍尔群岛"),
+            // dict.sys.country.code.mh
+            ("dict.sys.country.code.mh", "zh-CN", "M̧ajeļ", "国家地区.马绍尔群岛"),
+            // dict.sys.country.code.mh
+            ("dict.sys.country.code.mh", "zh-HK", "M̧ajeļ", "国家地区.马绍尔群岛"),
+
+            // dict.sys.country.code.mk
+            ("dict.sys.country.code.mk", "en-US", "Северна Македонија", "国家地区.北马其顿"),
+            // dict.sys.country.code.mk
+            ("dict.sys.country.code.mk", "ja-JP", "Северна Македонија", "国家地区.北马其顿"),
+            // dict.sys.country.code.mk
+            ("dict.sys.country.code.mk", "zh-CN", "Северна Македонија", "国家地区.北马其顿"),
+            // dict.sys.country.code.mk
+            ("dict.sys.country.code.mk", "zh-HK", "Северна Македонија", "国家地区.北马其顿"),
+
+            // dict.sys.country.code.ml
+            ("dict.sys.country.code.ml", "en-US", "Mali", "国家地区.马里"),
+            // dict.sys.country.code.ml
+            ("dict.sys.country.code.ml", "ja-JP", "Mali", "国家地区.马里"),
+            // dict.sys.country.code.ml
+            ("dict.sys.country.code.ml", "zh-CN", "Mali", "国家地区.马里"),
+            // dict.sys.country.code.ml
+            ("dict.sys.country.code.ml", "zh-HK", "Mali", "国家地区.马里"),
+
+            // dict.sys.country.code.mm
+            ("dict.sys.country.code.mm", "en-US", "မြန်မာ", "国家地区.缅甸"),
+            // dict.sys.country.code.mm
+            ("dict.sys.country.code.mm", "ja-JP", "မြန်မာ", "国家地区.缅甸"),
+            // dict.sys.country.code.mm
+            ("dict.sys.country.code.mm", "zh-CN", "မြန်မာ", "国家地区.缅甸"),
+            // dict.sys.country.code.mm
+            ("dict.sys.country.code.mm", "zh-HK", "မြန်မာ", "国家地区.缅甸"),
+
+            // dict.sys.country.code.mn
+            ("dict.sys.country.code.mn", "en-US", "Монгол улс", "国家地区.蒙古"),
+            // dict.sys.country.code.mn
+            ("dict.sys.country.code.mn", "ja-JP", "Монгол улс", "国家地区.蒙古"),
+            // dict.sys.country.code.mn
+            ("dict.sys.country.code.mn", "zh-CN", "Монгол улс", "国家地区.蒙古"),
+            // dict.sys.country.code.mn
+            ("dict.sys.country.code.mn", "zh-HK", "Монгол улс", "国家地区.蒙古"),
+
+            // dict.sys.country.code.mo
+            ("dict.sys.country.code.mo", "en-US", "澳門", "国家地区.澳门"),
+            // dict.sys.country.code.mo
+            ("dict.sys.country.code.mo", "ja-JP", "澳門", "国家地区.澳门"),
+            // dict.sys.country.code.mo
+            ("dict.sys.country.code.mo", "zh-CN", "澳門", "国家地区.澳门"),
+            // dict.sys.country.code.mo
+            ("dict.sys.country.code.mo", "zh-HK", "澳門", "国家地区.澳门"),
+
+            // dict.sys.country.code.mp
+            ("dict.sys.country.code.mp", "en-US", "Northern Mariana Islands", "国家地区.北马里亚纳群岛"),
+            // dict.sys.country.code.mp
+            ("dict.sys.country.code.mp", "ja-JP", "Northern Mariana Islands", "国家地区.北马里亚纳群岛"),
+            // dict.sys.country.code.mp
+            ("dict.sys.country.code.mp", "zh-CN", "Northern Mariana Islands", "国家地区.北马里亚纳群岛"),
+            // dict.sys.country.code.mp
+            ("dict.sys.country.code.mp", "zh-HK", "Northern Mariana Islands", "国家地区.北马里亚纳群岛"),
+
+            // dict.sys.country.code.mq
+            ("dict.sys.country.code.mq", "en-US", "Martinique", "国家地区.马提尼克"),
+            // dict.sys.country.code.mq
+            ("dict.sys.country.code.mq", "ja-JP", "Martinique", "国家地区.马提尼克"),
+            // dict.sys.country.code.mq
+            ("dict.sys.country.code.mq", "zh-CN", "Martinique", "国家地区.马提尼克"),
+            // dict.sys.country.code.mq
+            ("dict.sys.country.code.mq", "zh-HK", "Martinique", "国家地区.马提尼克"),
+
+            // dict.sys.country.code.mr
+            ("dict.sys.country.code.mr", "en-US", "موريتانيا", "国家地区.毛里塔尼亚"),
+            // dict.sys.country.code.mr
+            ("dict.sys.country.code.mr", "ja-JP", "موريتانيا", "国家地区.毛里塔尼亚"),
+            // dict.sys.country.code.mr
+            ("dict.sys.country.code.mr", "zh-CN", "موريتانيا", "国家地区.毛里塔尼亚"),
+            // dict.sys.country.code.mr
+            ("dict.sys.country.code.mr", "zh-HK", "موريتانيا", "国家地区.毛里塔尼亚"),
+
+            // dict.sys.country.code.ms
+            ("dict.sys.country.code.ms", "en-US", "Montserrat", "国家地区.蒙特塞拉特"),
+            // dict.sys.country.code.ms
+            ("dict.sys.country.code.ms", "ja-JP", "Montserrat", "国家地区.蒙特塞拉特"),
+            // dict.sys.country.code.ms
+            ("dict.sys.country.code.ms", "zh-CN", "Montserrat", "国家地区.蒙特塞拉特"),
+            // dict.sys.country.code.ms
+            ("dict.sys.country.code.ms", "zh-HK", "Montserrat", "国家地区.蒙特塞拉特"),
+
+            // dict.sys.country.code.mt
+            ("dict.sys.country.code.mt", "en-US", "Malta", "国家地区.马耳他"),
+            // dict.sys.country.code.mt
+            ("dict.sys.country.code.mt", "ja-JP", "Malta", "国家地区.马耳他"),
+            // dict.sys.country.code.mt
+            ("dict.sys.country.code.mt", "zh-CN", "Malta", "国家地区.马耳他"),
+            // dict.sys.country.code.mt
+            ("dict.sys.country.code.mt", "zh-HK", "Malta", "国家地区.马耳他"),
+
+            // dict.sys.country.code.mu
+            ("dict.sys.country.code.mu", "en-US", "Maurice", "国家地区.毛里求斯"),
+            // dict.sys.country.code.mu
+            ("dict.sys.country.code.mu", "ja-JP", "Maurice", "国家地区.毛里求斯"),
+            // dict.sys.country.code.mu
+            ("dict.sys.country.code.mu", "zh-CN", "Maurice", "国家地区.毛里求斯"),
+            // dict.sys.country.code.mu
+            ("dict.sys.country.code.mu", "zh-HK", "Maurice", "国家地区.毛里求斯"),
+
+            // dict.sys.country.code.mv
+            ("dict.sys.country.code.mv", "en-US", "Maldives", "国家地区.马尔代夫"),
+            // dict.sys.country.code.mv
+            ("dict.sys.country.code.mv", "ja-JP", "Maldives", "国家地区.马尔代夫"),
+            // dict.sys.country.code.mv
+            ("dict.sys.country.code.mv", "zh-CN", "Maldives", "国家地区.马尔代夫"),
+            // dict.sys.country.code.mv
+            ("dict.sys.country.code.mv", "zh-HK", "Maldives", "国家地区.马尔代夫"),
+
+            // dict.sys.country.code.mw
+            ("dict.sys.country.code.mw", "en-US", "Malawi", "国家地区.马拉维"),
+            // dict.sys.country.code.mw
+            ("dict.sys.country.code.mw", "ja-JP", "Malawi", "国家地区.马拉维"),
+            // dict.sys.country.code.mw
+            ("dict.sys.country.code.mw", "zh-CN", "Malawi", "国家地区.马拉维"),
+            // dict.sys.country.code.mw
+            ("dict.sys.country.code.mw", "zh-HK", "Malawi", "国家地区.马拉维"),
+
+            // dict.sys.country.code.mx
+            ("dict.sys.country.code.mx", "en-US", "México", "国家地区.墨西哥"),
+            // dict.sys.country.code.mx
+            ("dict.sys.country.code.mx", "ja-JP", "México", "国家地区.墨西哥"),
+            // dict.sys.country.code.mx
+            ("dict.sys.country.code.mx", "zh-CN", "México", "国家地区.墨西哥"),
+            // dict.sys.country.code.mx
+            ("dict.sys.country.code.mx", "zh-HK", "México", "国家地区.墨西哥"),
+
+            // dict.sys.country.code.my
+            ("dict.sys.country.code.my", "en-US", "Malaysia", "国家地区.马来西亚"),
+            // dict.sys.country.code.my
+            ("dict.sys.country.code.my", "ja-JP", "Malaysia", "国家地区.马来西亚"),
+            // dict.sys.country.code.my
+            ("dict.sys.country.code.my", "zh-CN", "Malaysia", "国家地区.马来西亚"),
+            // dict.sys.country.code.my
+            ("dict.sys.country.code.my", "zh-HK", "Malaysia", "国家地区.马来西亚"),
+
+            // dict.sys.country.code.mz
+            ("dict.sys.country.code.mz", "en-US", "Moçambique", "国家地区.莫桑比克"),
+            // dict.sys.country.code.mz
+            ("dict.sys.country.code.mz", "ja-JP", "Moçambique", "国家地区.莫桑比克"),
+            // dict.sys.country.code.mz
+            ("dict.sys.country.code.mz", "zh-CN", "Moçambique", "国家地区.莫桑比克"),
+            // dict.sys.country.code.mz
+            ("dict.sys.country.code.mz", "zh-HK", "Moçambique", "国家地区.莫桑比克"),
+
+            // dict.sys.country.code.na
+            ("dict.sys.country.code.na", "en-US", "Namibia", "国家地区.纳米比亚"),
+            // dict.sys.country.code.na
+            ("dict.sys.country.code.na", "ja-JP", "Namibia", "国家地区.纳米比亚"),
+            // dict.sys.country.code.na
+            ("dict.sys.country.code.na", "zh-CN", "Namibia", "国家地区.纳米比亚"),
+            // dict.sys.country.code.na
+            ("dict.sys.country.code.na", "zh-HK", "Namibia", "国家地区.纳米比亚"),
+
+            // dict.sys.country.code.nc
+            ("dict.sys.country.code.nc", "en-US", "Nouvelle-Calédonie", "国家地区.新喀里多尼亚"),
+            // dict.sys.country.code.nc
+            ("dict.sys.country.code.nc", "ja-JP", "Nouvelle-Calédonie", "国家地区.新喀里多尼亚"),
+            // dict.sys.country.code.nc
+            ("dict.sys.country.code.nc", "zh-CN", "Nouvelle-Calédonie", "国家地区.新喀里多尼亚"),
+            // dict.sys.country.code.nc
+            ("dict.sys.country.code.nc", "zh-HK", "Nouvelle-Calédonie", "国家地区.新喀里多尼亚"),
+
+            // dict.sys.country.code.ne
+            ("dict.sys.country.code.ne", "en-US", "Niger", "国家地区.尼日尔"),
+            // dict.sys.country.code.ne
+            ("dict.sys.country.code.ne", "ja-JP", "Niger", "国家地区.尼日尔"),
+            // dict.sys.country.code.ne
+            ("dict.sys.country.code.ne", "zh-CN", "Niger", "国家地区.尼日尔"),
+            // dict.sys.country.code.ne
+            ("dict.sys.country.code.ne", "zh-HK", "Niger", "国家地区.尼日尔"),
+
+            // dict.sys.country.code.nf
+            ("dict.sys.country.code.nf", "en-US", "Norfolk Island", "国家地区.诺福克岛"),
+            // dict.sys.country.code.nf
+            ("dict.sys.country.code.nf", "ja-JP", "Norfolk Island", "国家地区.诺福克岛"),
+            // dict.sys.country.code.nf
+            ("dict.sys.country.code.nf", "zh-CN", "Norfolk Island", "国家地区.诺福克岛"),
+            // dict.sys.country.code.nf
+            ("dict.sys.country.code.nf", "zh-HK", "Norfolk Island", "国家地区.诺福克岛"),
+
+            // dict.sys.country.code.ng
+            ("dict.sys.country.code.ng", "en-US", "Nigeria", "国家地区.尼日利亚"),
+            // dict.sys.country.code.ng
+            ("dict.sys.country.code.ng", "ja-JP", "Nigeria", "国家地区.尼日利亚"),
+            // dict.sys.country.code.ng
+            ("dict.sys.country.code.ng", "zh-CN", "Nigeria", "国家地区.尼日利亚"),
+            // dict.sys.country.code.ng
+            ("dict.sys.country.code.ng", "zh-HK", "Nigeria", "国家地区.尼日利亚"),
+
+            // dict.sys.country.code.ni
+            ("dict.sys.country.code.ni", "en-US", "Nicaragua", "国家地区.尼加拉瓜"),
+            // dict.sys.country.code.ni
+            ("dict.sys.country.code.ni", "ja-JP", "Nicaragua", "国家地区.尼加拉瓜"),
+            // dict.sys.country.code.ni
+            ("dict.sys.country.code.ni", "zh-CN", "Nicaragua", "国家地区.尼加拉瓜"),
+            // dict.sys.country.code.ni
+            ("dict.sys.country.code.ni", "zh-HK", "Nicaragua", "国家地区.尼加拉瓜"),
+
+            // dict.sys.country.code.nl
+            ("dict.sys.country.code.nl", "en-US", "Nederland", "国家地区.荷兰"),
+            // dict.sys.country.code.nl
+            ("dict.sys.country.code.nl", "ja-JP", "Nederland", "国家地区.荷兰"),
+            // dict.sys.country.code.nl
+            ("dict.sys.country.code.nl", "zh-CN", "Nederland", "国家地区.荷兰"),
+            // dict.sys.country.code.nl
+            ("dict.sys.country.code.nl", "zh-HK", "Nederland", "国家地区.荷兰"),
+
+            // dict.sys.country.code.no
+            ("dict.sys.country.code.no", "en-US", "Norge", "国家地区.挪威"),
+            // dict.sys.country.code.no
+            ("dict.sys.country.code.no", "ja-JP", "Norge", "国家地区.挪威"),
+            // dict.sys.country.code.no
+            ("dict.sys.country.code.no", "zh-CN", "Norge", "国家地区.挪威"),
+            // dict.sys.country.code.no
+            ("dict.sys.country.code.no", "zh-HK", "Norge", "国家地区.挪威"),
+
+            // dict.sys.country.code.np
+            ("dict.sys.country.code.np", "en-US", "नेपाल", "国家地区.尼泊尔"),
+            // dict.sys.country.code.np
+            ("dict.sys.country.code.np", "ja-JP", "नेपाल", "国家地区.尼泊尔"),
+            // dict.sys.country.code.np
+            ("dict.sys.country.code.np", "zh-CN", "नेपाल", "国家地区.尼泊尔"),
+            // dict.sys.country.code.np
+            ("dict.sys.country.code.np", "zh-HK", "नेपाल", "国家地区.尼泊尔"),
+
+            // dict.sys.country.code.nr
+            ("dict.sys.country.code.nr", "en-US", "Nauru", "国家地区.瑙鲁"),
+            // dict.sys.country.code.nr
+            ("dict.sys.country.code.nr", "ja-JP", "Nauru", "国家地区.瑙鲁"),
+            // dict.sys.country.code.nr
+            ("dict.sys.country.code.nr", "zh-CN", "Nauru", "国家地区.瑙鲁"),
+            // dict.sys.country.code.nr
+            ("dict.sys.country.code.nr", "zh-HK", "Nauru", "国家地区.瑙鲁"),
+
+            // dict.sys.country.code.nu
+            ("dict.sys.country.code.nu", "en-US", "Niuē", "国家地区.纽埃"),
+            // dict.sys.country.code.nu
+            ("dict.sys.country.code.nu", "ja-JP", "Niuē", "国家地区.纽埃"),
+            // dict.sys.country.code.nu
+            ("dict.sys.country.code.nu", "zh-CN", "Niuē", "国家地区.纽埃"),
+            // dict.sys.country.code.nu
+            ("dict.sys.country.code.nu", "zh-HK", "Niuē", "国家地区.纽埃"),
+
+            // dict.sys.country.code.nz
+            ("dict.sys.country.code.nz", "en-US", "New Zealand", "国家地区.新西兰"),
+            // dict.sys.country.code.nz
+            ("dict.sys.country.code.nz", "ja-JP", "New Zealand", "国家地区.新西兰"),
+            // dict.sys.country.code.nz
+            ("dict.sys.country.code.nz", "zh-CN", "New Zealand", "国家地区.新西兰"),
+            // dict.sys.country.code.nz
+            ("dict.sys.country.code.nz", "zh-HK", "New Zealand", "国家地区.新西兰"),
+
+            // dict.sys.country.code.om
+            ("dict.sys.country.code.om", "en-US", "عمان", "国家地区.阿曼"),
+            // dict.sys.country.code.om
+            ("dict.sys.country.code.om", "ja-JP", "عمان", "国家地区.阿曼"),
+            // dict.sys.country.code.om
+            ("dict.sys.country.code.om", "zh-CN", "عمان", "国家地区.阿曼"),
+            // dict.sys.country.code.om
+            ("dict.sys.country.code.om", "zh-HK", "عمان", "国家地区.阿曼"),
+
+            // dict.sys.country.code.pa
+            ("dict.sys.country.code.pa", "en-US", "Panamá", "国家地区.巴拿马"),
+            // dict.sys.country.code.pa
+            ("dict.sys.country.code.pa", "ja-JP", "Panamá", "国家地区.巴拿马"),
+            // dict.sys.country.code.pa
+            ("dict.sys.country.code.pa", "zh-CN", "Panamá", "国家地区.巴拿马"),
+            // dict.sys.country.code.pa
+            ("dict.sys.country.code.pa", "zh-HK", "Panamá", "国家地区.巴拿马"),
+
+            // dict.sys.country.code.pe
+            ("dict.sys.country.code.pe", "en-US", "Perú", "国家地区.秘鲁"),
+            // dict.sys.country.code.pe
+            ("dict.sys.country.code.pe", "ja-JP", "Perú", "国家地区.秘鲁"),
+            // dict.sys.country.code.pe
+            ("dict.sys.country.code.pe", "zh-CN", "Perú", "国家地区.秘鲁"),
+            // dict.sys.country.code.pe
+            ("dict.sys.country.code.pe", "zh-HK", "Perú", "国家地区.秘鲁"),
+
+            // dict.sys.country.code.pf
+            ("dict.sys.country.code.pf", "en-US", "Polynésie française", "国家地区.法属波利尼西亚"),
+            // dict.sys.country.code.pf
+            ("dict.sys.country.code.pf", "ja-JP", "Polynésie française", "国家地区.法属波利尼西亚"),
+            // dict.sys.country.code.pf
+            ("dict.sys.country.code.pf", "zh-CN", "Polynésie française", "国家地区.法属波利尼西亚"),
+            // dict.sys.country.code.pf
+            ("dict.sys.country.code.pf", "zh-HK", "Polynésie française", "国家地区.法属波利尼西亚"),
+
+            // dict.sys.country.code.pg
+            ("dict.sys.country.code.pg", "en-US", "Papua Niugini", "国家地区.巴布亚新几内亚"),
+            // dict.sys.country.code.pg
+            ("dict.sys.country.code.pg", "ja-JP", "Papua Niugini", "国家地区.巴布亚新几内亚"),
+            // dict.sys.country.code.pg
+            ("dict.sys.country.code.pg", "zh-CN", "Papua Niugini", "国家地区.巴布亚新几内亚"),
+            // dict.sys.country.code.pg
+            ("dict.sys.country.code.pg", "zh-HK", "Papua Niugini", "国家地区.巴布亚新几内亚"),
+
+            // dict.sys.country.code.ph
+            ("dict.sys.country.code.ph", "en-US", "Pilipinas", "国家地区.菲律宾"),
+            // dict.sys.country.code.ph
+            ("dict.sys.country.code.ph", "ja-JP", "Pilipinas", "国家地区.菲律宾"),
+            // dict.sys.country.code.ph
+            ("dict.sys.country.code.ph", "zh-CN", "Pilipinas", "国家地区.菲律宾"),
+            // dict.sys.country.code.ph
+            ("dict.sys.country.code.ph", "zh-HK", "Pilipinas", "国家地区.菲律宾"),
+
+            // dict.sys.country.code.pk
+            ("dict.sys.country.code.pk", "en-US", "Pakistan", "国家地区.巴基斯坦"),
+            // dict.sys.country.code.pk
+            ("dict.sys.country.code.pk", "ja-JP", "Pakistan", "国家地区.巴基斯坦"),
+            // dict.sys.country.code.pk
+            ("dict.sys.country.code.pk", "zh-CN", "Pakistan", "国家地区.巴基斯坦"),
+            // dict.sys.country.code.pk
+            ("dict.sys.country.code.pk", "zh-HK", "Pakistan", "国家地区.巴基斯坦"),
+
+            // dict.sys.country.code.pl
+            ("dict.sys.country.code.pl", "en-US", "Polska", "国家地区.波兰"),
+            // dict.sys.country.code.pl
+            ("dict.sys.country.code.pl", "ja-JP", "Polska", "国家地区.波兰"),
+            // dict.sys.country.code.pl
+            ("dict.sys.country.code.pl", "zh-CN", "Polska", "国家地区.波兰"),
+            // dict.sys.country.code.pl
+            ("dict.sys.country.code.pl", "zh-HK", "Polska", "国家地区.波兰"),
+
+            // dict.sys.country.code.pm
+            ("dict.sys.country.code.pm", "en-US", "Saint-Pierre-et-Miquelon", "国家地区.圣皮埃尔和密克隆群岛"),
+            // dict.sys.country.code.pm
+            ("dict.sys.country.code.pm", "ja-JP", "Saint-Pierre-et-Miquelon", "国家地区.圣皮埃尔和密克隆群岛"),
+            // dict.sys.country.code.pm
+            ("dict.sys.country.code.pm", "zh-CN", "Saint-Pierre-et-Miquelon", "国家地区.圣皮埃尔和密克隆群岛"),
+            // dict.sys.country.code.pm
+            ("dict.sys.country.code.pm", "zh-HK", "Saint-Pierre-et-Miquelon", "国家地区.圣皮埃尔和密克隆群岛"),
+
+            // dict.sys.country.code.pn
+            ("dict.sys.country.code.pn", "en-US", "Pitcairn Islands", "国家地区.皮特凯恩群岛"),
+            // dict.sys.country.code.pn
+            ("dict.sys.country.code.pn", "ja-JP", "Pitcairn Islands", "国家地区.皮特凯恩群岛"),
+            // dict.sys.country.code.pn
+            ("dict.sys.country.code.pn", "zh-CN", "Pitcairn Islands", "国家地区.皮特凯恩群岛"),
+            // dict.sys.country.code.pn
+            ("dict.sys.country.code.pn", "zh-HK", "Pitcairn Islands", "国家地区.皮特凯恩群岛"),
+
+            // dict.sys.country.code.pr
+            ("dict.sys.country.code.pr", "en-US", "Puerto Rico", "国家地区.波多黎各"),
+            // dict.sys.country.code.pr
+            ("dict.sys.country.code.pr", "ja-JP", "Puerto Rico", "国家地区.波多黎各"),
+            // dict.sys.country.code.pr
+            ("dict.sys.country.code.pr", "zh-CN", "Puerto Rico", "国家地区.波多黎各"),
+            // dict.sys.country.code.pr
+            ("dict.sys.country.code.pr", "zh-HK", "Puerto Rico", "国家地区.波多黎各"),
+
+            // dict.sys.country.code.ps
+            ("dict.sys.country.code.ps", "en-US", "فلسطين", "国家地区.巴勒斯坦领土"),
+            // dict.sys.country.code.ps
+            ("dict.sys.country.code.ps", "ja-JP", "فلسطين", "国家地区.巴勒斯坦领土"),
+            // dict.sys.country.code.ps
+            ("dict.sys.country.code.ps", "zh-CN", "فلسطين", "国家地区.巴勒斯坦领土"),
+            // dict.sys.country.code.ps
+            ("dict.sys.country.code.ps", "zh-HK", "فلسطين", "国家地区.巴勒斯坦领土"),
+
+            // dict.sys.country.code.pt
+            ("dict.sys.country.code.pt", "en-US", "Portugal", "国家地区.葡萄牙"),
+            // dict.sys.country.code.pt
+            ("dict.sys.country.code.pt", "ja-JP", "Portugal", "国家地区.葡萄牙"),
+            // dict.sys.country.code.pt
+            ("dict.sys.country.code.pt", "zh-CN", "Portugal", "国家地区.葡萄牙"),
+            // dict.sys.country.code.pt
+            ("dict.sys.country.code.pt", "zh-HK", "Portugal", "国家地区.葡萄牙"),
+
+            // dict.sys.country.code.pw
+            ("dict.sys.country.code.pw", "en-US", "Palau", "国家地区.帕劳"),
+            // dict.sys.country.code.pw
+            ("dict.sys.country.code.pw", "ja-JP", "Palau", "国家地区.帕劳"),
+            // dict.sys.country.code.pw
+            ("dict.sys.country.code.pw", "zh-CN", "Palau", "国家地区.帕劳"),
+            // dict.sys.country.code.pw
+            ("dict.sys.country.code.pw", "zh-HK", "Palau", "国家地区.帕劳"),
+
+            // dict.sys.country.code.py
+            ("dict.sys.country.code.py", "en-US", "Paraguay", "国家地区.巴拉圭"),
+            // dict.sys.country.code.py
+            ("dict.sys.country.code.py", "ja-JP", "Paraguay", "国家地区.巴拉圭"),
+            // dict.sys.country.code.py
+            ("dict.sys.country.code.py", "zh-CN", "Paraguay", "国家地区.巴拉圭"),
+            // dict.sys.country.code.py
+            ("dict.sys.country.code.py", "zh-HK", "Paraguay", "国家地区.巴拉圭"),
+
+            // dict.sys.country.code.qa
+            ("dict.sys.country.code.qa", "en-US", "قطر", "国家地区.卡塔尔"),
+            // dict.sys.country.code.qa
+            ("dict.sys.country.code.qa", "ja-JP", "قطر", "国家地区.卡塔尔"),
+            // dict.sys.country.code.qa
+            ("dict.sys.country.code.qa", "zh-CN", "قطر", "国家地区.卡塔尔"),
+            // dict.sys.country.code.qa
+            ("dict.sys.country.code.qa", "zh-HK", "قطر", "国家地区.卡塔尔"),
+
+            // dict.sys.country.code.re
+            ("dict.sys.country.code.re", "en-US", "La Réunion", "国家地区.留尼汪"),
+            // dict.sys.country.code.re
+            ("dict.sys.country.code.re", "ja-JP", "La Réunion", "国家地区.留尼汪"),
+            // dict.sys.country.code.re
+            ("dict.sys.country.code.re", "zh-CN", "La Réunion", "国家地区.留尼汪"),
+            // dict.sys.country.code.re
+            ("dict.sys.country.code.re", "zh-HK", "La Réunion", "国家地区.留尼汪"),
+
+            // dict.sys.country.code.ro
+            ("dict.sys.country.code.ro", "en-US", "România", "国家地区.罗马尼亚"),
+            // dict.sys.country.code.ro
+            ("dict.sys.country.code.ro", "ja-JP", "România", "国家地区.罗马尼亚"),
+            // dict.sys.country.code.ro
+            ("dict.sys.country.code.ro", "zh-CN", "România", "国家地区.罗马尼亚"),
+            // dict.sys.country.code.ro
+            ("dict.sys.country.code.ro", "zh-HK", "România", "国家地区.罗马尼亚"),
+
+            // dict.sys.country.code.rs
+            ("dict.sys.country.code.rs", "en-US", "Србија", "国家地区.塞尔维亚"),
+            // dict.sys.country.code.rs
+            ("dict.sys.country.code.rs", "ja-JP", "Србија", "国家地区.塞尔维亚"),
+            // dict.sys.country.code.rs
+            ("dict.sys.country.code.rs", "zh-CN", "Србија", "国家地区.塞尔维亚"),
+            // dict.sys.country.code.rs
+            ("dict.sys.country.code.rs", "zh-HK", "Србија", "国家地区.塞尔维亚"),
+
+            // dict.sys.country.code.ru
+            ("dict.sys.country.code.ru", "en-US", "Россия", "国家地区.俄罗斯"),
+            // dict.sys.country.code.ru
+            ("dict.sys.country.code.ru", "ja-JP", "Россия", "国家地区.俄罗斯"),
+            // dict.sys.country.code.ru
+            ("dict.sys.country.code.ru", "zh-CN", "Россия", "国家地区.俄罗斯"),
+            // dict.sys.country.code.ru
+            ("dict.sys.country.code.ru", "zh-HK", "Россия", "国家地区.俄罗斯"),
+
+            // dict.sys.country.code.rw
+            ("dict.sys.country.code.rw", "en-US", "Rwanda", "国家地区.卢旺达"),
+            // dict.sys.country.code.rw
+            ("dict.sys.country.code.rw", "ja-JP", "Rwanda", "国家地区.卢旺达"),
+            // dict.sys.country.code.rw
+            ("dict.sys.country.code.rw", "zh-CN", "Rwanda", "国家地区.卢旺达"),
+            // dict.sys.country.code.rw
+            ("dict.sys.country.code.rw", "zh-HK", "Rwanda", "国家地区.卢旺达"),
+
+            // dict.sys.country.code.sa
+            ("dict.sys.country.code.sa", "en-US", "المملكة العربية السعودية", "国家地区.沙特阿拉伯"),
+            // dict.sys.country.code.sa
+            ("dict.sys.country.code.sa", "ja-JP", "المملكة العربية السعودية", "国家地区.沙特阿拉伯"),
+            // dict.sys.country.code.sa
+            ("dict.sys.country.code.sa", "zh-CN", "المملكة العربية السعودية", "国家地区.沙特阿拉伯"),
+            // dict.sys.country.code.sa
+            ("dict.sys.country.code.sa", "zh-HK", "المملكة العربية السعودية", "国家地区.沙特阿拉伯"),
+
+            // dict.sys.country.code.sb
+            ("dict.sys.country.code.sb", "en-US", "Solomon Islands", "国家地区.所罗门群岛"),
+            // dict.sys.country.code.sb
+            ("dict.sys.country.code.sb", "ja-JP", "Solomon Islands", "国家地区.所罗门群岛"),
+            // dict.sys.country.code.sb
+            ("dict.sys.country.code.sb", "zh-CN", "Solomon Islands", "国家地区.所罗门群岛"),
+            // dict.sys.country.code.sb
+            ("dict.sys.country.code.sb", "zh-HK", "Solomon Islands", "国家地区.所罗门群岛"),
+
+            // dict.sys.country.code.sc
+            ("dict.sys.country.code.sc", "en-US", "Seychelles", "国家地区.塞舌尔"),
+            // dict.sys.country.code.sc
+            ("dict.sys.country.code.sc", "ja-JP", "Seychelles", "国家地区.塞舌尔"),
+            // dict.sys.country.code.sc
+            ("dict.sys.country.code.sc", "zh-CN", "Seychelles", "国家地区.塞舌尔"),
+            // dict.sys.country.code.sc
+            ("dict.sys.country.code.sc", "zh-HK", "Seychelles", "国家地区.塞舌尔"),
+
+            // dict.sys.country.code.sd
+            ("dict.sys.country.code.sd", "en-US", "السودان", "国家地区.苏丹"),
+            // dict.sys.country.code.sd
+            ("dict.sys.country.code.sd", "ja-JP", "السودان", "国家地区.苏丹"),
+            // dict.sys.country.code.sd
+            ("dict.sys.country.code.sd", "zh-CN", "السودان", "国家地区.苏丹"),
+            // dict.sys.country.code.sd
+            ("dict.sys.country.code.sd", "zh-HK", "السودان", "国家地区.苏丹"),
+
+            // dict.sys.country.code.se
+            ("dict.sys.country.code.se", "en-US", "Sverige", "国家地区.瑞典"),
+            // dict.sys.country.code.se
+            ("dict.sys.country.code.se", "ja-JP", "Sverige", "国家地区.瑞典"),
+            // dict.sys.country.code.se
+            ("dict.sys.country.code.se", "zh-CN", "Sverige", "国家地区.瑞典"),
+            // dict.sys.country.code.se
+            ("dict.sys.country.code.se", "zh-HK", "Sverige", "国家地区.瑞典"),
+
+            // dict.sys.country.code.sg
+            ("dict.sys.country.code.sg", "en-US", "Singapore", "国家地区.新加坡"),
+            // dict.sys.country.code.sg
+            ("dict.sys.country.code.sg", "ja-JP", "Singapore", "国家地区.新加坡"),
+            // dict.sys.country.code.sg
+            ("dict.sys.country.code.sg", "zh-CN", "Singapore", "国家地区.新加坡"),
+            // dict.sys.country.code.sg
+            ("dict.sys.country.code.sg", "zh-HK", "Singapore", "国家地区.新加坡"),
+
+            // dict.sys.country.code.sh
+            ("dict.sys.country.code.sh", "en-US", "Saint Helena", "国家地区.圣赫勒拿"),
+            // dict.sys.country.code.sh
+            ("dict.sys.country.code.sh", "ja-JP", "Saint Helena", "国家地区.圣赫勒拿"),
+            // dict.sys.country.code.sh
+            ("dict.sys.country.code.sh", "zh-CN", "Saint Helena", "国家地区.圣赫勒拿"),
+            // dict.sys.country.code.sh
+            ("dict.sys.country.code.sh", "zh-HK", "Saint Helena", "国家地区.圣赫勒拿"),
+
+            // dict.sys.country.code.si
+            ("dict.sys.country.code.si", "en-US", "Slovenija", "国家地区.斯洛文尼亚"),
+            // dict.sys.country.code.si
+            ("dict.sys.country.code.si", "ja-JP", "Slovenija", "国家地区.斯洛文尼亚"),
+            // dict.sys.country.code.si
+            ("dict.sys.country.code.si", "zh-CN", "Slovenija", "国家地区.斯洛文尼亚"),
+            // dict.sys.country.code.si
+            ("dict.sys.country.code.si", "zh-HK", "Slovenija", "国家地区.斯洛文尼亚"),
+
+            // dict.sys.country.code.sj
+            ("dict.sys.country.code.sj", "en-US", "Svalbard og Jan Mayen", "国家地区.斯瓦尔巴和扬马延"),
+            // dict.sys.country.code.sj
+            ("dict.sys.country.code.sj", "ja-JP", "Svalbard og Jan Mayen", "国家地区.斯瓦尔巴和扬马延"),
+            // dict.sys.country.code.sj
+            ("dict.sys.country.code.sj", "zh-CN", "Svalbard og Jan Mayen", "国家地区.斯瓦尔巴和扬马延"),
+            // dict.sys.country.code.sj
+            ("dict.sys.country.code.sj", "zh-HK", "Svalbard og Jan Mayen", "国家地区.斯瓦尔巴和扬马延"),
+
+            // dict.sys.country.code.sk
+            ("dict.sys.country.code.sk", "en-US", "Slovensko", "国家地区.斯洛伐克"),
+            // dict.sys.country.code.sk
+            ("dict.sys.country.code.sk", "ja-JP", "Slovensko", "国家地区.斯洛伐克"),
+            // dict.sys.country.code.sk
+            ("dict.sys.country.code.sk", "zh-CN", "Slovensko", "国家地区.斯洛伐克"),
+            // dict.sys.country.code.sk
+            ("dict.sys.country.code.sk", "zh-HK", "Slovensko", "国家地区.斯洛伐克"),
+
+            // dict.sys.country.code.sl
+            ("dict.sys.country.code.sl", "en-US", "Sierra Leone", "国家地区.塞拉利昂"),
+            // dict.sys.country.code.sl
+            ("dict.sys.country.code.sl", "ja-JP", "Sierra Leone", "国家地区.塞拉利昂"),
+            // dict.sys.country.code.sl
+            ("dict.sys.country.code.sl", "zh-CN", "Sierra Leone", "国家地区.塞拉利昂"),
+            // dict.sys.country.code.sl
+            ("dict.sys.country.code.sl", "zh-HK", "Sierra Leone", "国家地区.塞拉利昂"),
+
+            // dict.sys.country.code.sm
+            ("dict.sys.country.code.sm", "en-US", "San Marino", "国家地区.圣马力诺"),
+            // dict.sys.country.code.sm
+            ("dict.sys.country.code.sm", "ja-JP", "San Marino", "国家地区.圣马力诺"),
+            // dict.sys.country.code.sm
+            ("dict.sys.country.code.sm", "zh-CN", "San Marino", "国家地区.圣马力诺"),
+            // dict.sys.country.code.sm
+            ("dict.sys.country.code.sm", "zh-HK", "San Marino", "国家地区.圣马力诺"),
+
+            // dict.sys.country.code.sn
+            ("dict.sys.country.code.sn", "en-US", "Sénégal", "国家地区.塞内加尔"),
+            // dict.sys.country.code.sn
+            ("dict.sys.country.code.sn", "ja-JP", "Sénégal", "国家地区.塞内加尔"),
+            // dict.sys.country.code.sn
+            ("dict.sys.country.code.sn", "zh-CN", "Sénégal", "国家地区.塞内加尔"),
+            // dict.sys.country.code.sn
+            ("dict.sys.country.code.sn", "zh-HK", "Sénégal", "国家地区.塞内加尔"),
+
+            // dict.sys.country.code.so
+            ("dict.sys.country.code.so", "en-US", "Soomaaliya", "国家地区.索马里"),
+            // dict.sys.country.code.so
+            ("dict.sys.country.code.so", "ja-JP", "Soomaaliya", "国家地区.索马里"),
+            // dict.sys.country.code.so
+            ("dict.sys.country.code.so", "zh-CN", "Soomaaliya", "国家地区.索马里"),
+            // dict.sys.country.code.so
+            ("dict.sys.country.code.so", "zh-HK", "Soomaaliya", "国家地区.索马里"),
+
+            // dict.sys.country.code.sr
+            ("dict.sys.country.code.sr", "en-US", "Suriname", "国家地区.苏里南"),
+            // dict.sys.country.code.sr
+            ("dict.sys.country.code.sr", "ja-JP", "Suriname", "国家地区.苏里南"),
+            // dict.sys.country.code.sr
+            ("dict.sys.country.code.sr", "zh-CN", "Suriname", "国家地区.苏里南"),
+            // dict.sys.country.code.sr
+            ("dict.sys.country.code.sr", "zh-HK", "Suriname", "国家地区.苏里南"),
+
+            // dict.sys.country.code.ss
+            ("dict.sys.country.code.ss", "en-US", "South Sudan", "国家地区.南苏丹"),
+            // dict.sys.country.code.ss
+            ("dict.sys.country.code.ss", "ja-JP", "South Sudan", "国家地区.南苏丹"),
+            // dict.sys.country.code.ss
+            ("dict.sys.country.code.ss", "zh-CN", "South Sudan", "国家地区.南苏丹"),
+            // dict.sys.country.code.ss
+            ("dict.sys.country.code.ss", "zh-HK", "South Sudan", "国家地区.南苏丹"),
+
+            // dict.sys.country.code.st
+            ("dict.sys.country.code.st", "en-US", "São Tomé e Príncipe", "国家地区.圣多美和普林西比"),
+            // dict.sys.country.code.st
+            ("dict.sys.country.code.st", "ja-JP", "São Tomé e Príncipe", "国家地区.圣多美和普林西比"),
+            // dict.sys.country.code.st
+            ("dict.sys.country.code.st", "zh-CN", "São Tomé e Príncipe", "国家地区.圣多美和普林西比"),
+            // dict.sys.country.code.st
+            ("dict.sys.country.code.st", "zh-HK", "São Tomé e Príncipe", "国家地区.圣多美和普林西比"),
+
+            // dict.sys.country.code.sv
+            ("dict.sys.country.code.sv", "en-US", "El Salvador", "国家地区.萨尔瓦多"),
+            // dict.sys.country.code.sv
+            ("dict.sys.country.code.sv", "ja-JP", "El Salvador", "国家地区.萨尔瓦多"),
+            // dict.sys.country.code.sv
+            ("dict.sys.country.code.sv", "zh-CN", "El Salvador", "国家地区.萨尔瓦多"),
+            // dict.sys.country.code.sv
+            ("dict.sys.country.code.sv", "zh-HK", "El Salvador", "国家地区.萨尔瓦多"),
+
+            // dict.sys.country.code.sx
+            ("dict.sys.country.code.sx", "en-US", "Sint Maarten", "国家地区.荷属圣马丁"),
+            // dict.sys.country.code.sx
+            ("dict.sys.country.code.sx", "ja-JP", "Sint Maarten", "国家地区.荷属圣马丁"),
+            // dict.sys.country.code.sx
+            ("dict.sys.country.code.sx", "zh-CN", "Sint Maarten", "国家地区.荷属圣马丁"),
+            // dict.sys.country.code.sx
+            ("dict.sys.country.code.sx", "zh-HK", "Sint Maarten", "国家地区.荷属圣马丁"),
+
+            // dict.sys.country.code.sy
+            ("dict.sys.country.code.sy", "en-US", "سوريا", "国家地区.叙利亚"),
+            // dict.sys.country.code.sy
+            ("dict.sys.country.code.sy", "ja-JP", "سوريا", "国家地区.叙利亚"),
+            // dict.sys.country.code.sy
+            ("dict.sys.country.code.sy", "zh-CN", "سوريا", "国家地区.叙利亚"),
+            // dict.sys.country.code.sy
+            ("dict.sys.country.code.sy", "zh-HK", "سوريا", "国家地区.叙利亚"),
+
+            // dict.sys.country.code.sz
+            ("dict.sys.country.code.sz", "en-US", "Eswatini", "国家地区.斯威士兰"),
+            // dict.sys.country.code.sz
+            ("dict.sys.country.code.sz", "ja-JP", "Eswatini", "国家地区.斯威士兰"),
+            // dict.sys.country.code.sz
+            ("dict.sys.country.code.sz", "zh-CN", "Eswatini", "国家地区.斯威士兰"),
+            // dict.sys.country.code.sz
+            ("dict.sys.country.code.sz", "zh-HK", "Eswatini", "国家地区.斯威士兰"),
+
+            // dict.sys.country.code.ta
+            ("dict.sys.country.code.ta", "en-US", "Tristan da Cunha", "国家地区.特里斯坦-达库尼亚"),
+            // dict.sys.country.code.ta
+            ("dict.sys.country.code.ta", "ja-JP", "Tristan da Cunha", "国家地区.特里斯坦-达库尼亚"),
+            // dict.sys.country.code.ta
+            ("dict.sys.country.code.ta", "zh-CN", "Tristan da Cunha", "国家地区.特里斯坦-达库尼亚"),
+            // dict.sys.country.code.ta
+            ("dict.sys.country.code.ta", "zh-HK", "Tristan da Cunha", "国家地区.特里斯坦-达库尼亚"),
+
+            // dict.sys.country.code.tc
+            ("dict.sys.country.code.tc", "en-US", "Turks and Caicos Islands", "国家地区.特克斯和凯科斯群岛"),
+            // dict.sys.country.code.tc
+            ("dict.sys.country.code.tc", "ja-JP", "Turks and Caicos Islands", "国家地区.特克斯和凯科斯群岛"),
+            // dict.sys.country.code.tc
+            ("dict.sys.country.code.tc", "zh-CN", "Turks and Caicos Islands", "国家地区.特克斯和凯科斯群岛"),
+            // dict.sys.country.code.tc
+            ("dict.sys.country.code.tc", "zh-HK", "Turks and Caicos Islands", "国家地区.特克斯和凯科斯群岛"),
+
+            // dict.sys.country.code.td
+            ("dict.sys.country.code.td", "en-US", "Tchad", "国家地区.乍得"),
+            // dict.sys.country.code.td
+            ("dict.sys.country.code.td", "ja-JP", "Tchad", "国家地区.乍得"),
+            // dict.sys.country.code.td
+            ("dict.sys.country.code.td", "zh-CN", "Tchad", "国家地区.乍得"),
+            // dict.sys.country.code.td
+            ("dict.sys.country.code.td", "zh-HK", "Tchad", "国家地区.乍得"),
+
+            // dict.sys.country.code.tf
+            ("dict.sys.country.code.tf", "en-US", "Territoire des Terres australes et antarctiques fr", "国家地区.法属南部领地"),
+            // dict.sys.country.code.tf
+            ("dict.sys.country.code.tf", "ja-JP", "Territoire des Terres australes et antarctiques fr", "国家地区.法属南部领地"),
+            // dict.sys.country.code.tf
+            ("dict.sys.country.code.tf", "zh-CN", "Territoire des Terres australes et antarctiques fr", "国家地区.法属南部领地"),
+            // dict.sys.country.code.tf
+            ("dict.sys.country.code.tf", "zh-HK", "Territoire des Terres australes et antarctiques fr", "国家地区.法属南部领地"),
+
+            // dict.sys.country.code.tg
+            ("dict.sys.country.code.tg", "en-US", "Togo", "国家地区.多哥"),
+            // dict.sys.country.code.tg
+            ("dict.sys.country.code.tg", "ja-JP", "Togo", "国家地区.多哥"),
+            // dict.sys.country.code.tg
+            ("dict.sys.country.code.tg", "zh-CN", "Togo", "国家地区.多哥"),
+            // dict.sys.country.code.tg
+            ("dict.sys.country.code.tg", "zh-HK", "Togo", "国家地区.多哥"),
+
+            // dict.sys.country.code.th
+            ("dict.sys.country.code.th", "en-US", "ประเทศไทย", "国家地区.泰国"),
+            // dict.sys.country.code.th
+            ("dict.sys.country.code.th", "ja-JP", "ประเทศไทย", "国家地区.泰国"),
+            // dict.sys.country.code.th
+            ("dict.sys.country.code.th", "zh-CN", "ประเทศไทย", "国家地区.泰国"),
+            // dict.sys.country.code.th
+            ("dict.sys.country.code.th", "zh-HK", "ประเทศไทย", "国家地区.泰国"),
+
+            // dict.sys.country.code.tj
+            ("dict.sys.country.code.tj", "en-US", "Тоҷикистон", "国家地区.塔吉克斯坦"),
+            // dict.sys.country.code.tj
+            ("dict.sys.country.code.tj", "ja-JP", "Тоҷикистон", "国家地区.塔吉克斯坦"),
+            // dict.sys.country.code.tj
+            ("dict.sys.country.code.tj", "zh-CN", "Тоҷикистон", "国家地区.塔吉克斯坦"),
+            // dict.sys.country.code.tj
+            ("dict.sys.country.code.tj", "zh-HK", "Тоҷикистон", "国家地区.塔吉克斯坦"),
+
+            // dict.sys.country.code.tk
+            ("dict.sys.country.code.tk", "en-US", "Tokelau", "国家地区.托克劳"),
+            // dict.sys.country.code.tk
+            ("dict.sys.country.code.tk", "ja-JP", "Tokelau", "国家地区.托克劳"),
+            // dict.sys.country.code.tk
+            ("dict.sys.country.code.tk", "zh-CN", "Tokelau", "国家地区.托克劳"),
+            // dict.sys.country.code.tk
+            ("dict.sys.country.code.tk", "zh-HK", "Tokelau", "国家地区.托克劳"),
+
+            // dict.sys.country.code.tl
+            ("dict.sys.country.code.tl", "en-US", "Timor-Leste", "国家地区.东帝汶"),
+            // dict.sys.country.code.tl
+            ("dict.sys.country.code.tl", "ja-JP", "Timor-Leste", "国家地区.东帝汶"),
+            // dict.sys.country.code.tl
+            ("dict.sys.country.code.tl", "zh-CN", "Timor-Leste", "国家地区.东帝汶"),
+            // dict.sys.country.code.tl
+            ("dict.sys.country.code.tl", "zh-HK", "Timor-Leste", "国家地区.东帝汶"),
+
+            // dict.sys.country.code.tm
+            ("dict.sys.country.code.tm", "en-US", "Türkmenistan", "国家地区.土库曼斯坦"),
+            // dict.sys.country.code.tm
+            ("dict.sys.country.code.tm", "ja-JP", "Türkmenistan", "国家地区.土库曼斯坦"),
+            // dict.sys.country.code.tm
+            ("dict.sys.country.code.tm", "zh-CN", "Türkmenistan", "国家地区.土库曼斯坦"),
+            // dict.sys.country.code.tm
+            ("dict.sys.country.code.tm", "zh-HK", "Türkmenistan", "国家地区.土库曼斯坦"),
+
+            // dict.sys.country.code.tn
+            ("dict.sys.country.code.tn", "en-US", "تونس", "国家地区.突尼斯"),
+            // dict.sys.country.code.tn
+            ("dict.sys.country.code.tn", "ja-JP", "تونس", "国家地区.突尼斯"),
+            // dict.sys.country.code.tn
+            ("dict.sys.country.code.tn", "zh-CN", "تونس", "国家地区.突尼斯"),
+            // dict.sys.country.code.tn
+            ("dict.sys.country.code.tn", "zh-HK", "تونس", "国家地区.突尼斯"),
+
+            // dict.sys.country.code.to
+            ("dict.sys.country.code.to", "en-US", "Tonga", "国家地区.汤加"),
+            // dict.sys.country.code.to
+            ("dict.sys.country.code.to", "ja-JP", "Tonga", "国家地区.汤加"),
+            // dict.sys.country.code.to
+            ("dict.sys.country.code.to", "zh-CN", "Tonga", "国家地区.汤加"),
+            // dict.sys.country.code.to
+            ("dict.sys.country.code.to", "zh-HK", "Tonga", "国家地区.汤加"),
+
+            // dict.sys.country.code.tr
+            ("dict.sys.country.code.tr", "en-US", "Türkiye", "国家地区.土耳其"),
+            // dict.sys.country.code.tr
+            ("dict.sys.country.code.tr", "ja-JP", "Türkiye", "国家地区.土耳其"),
+            // dict.sys.country.code.tr
+            ("dict.sys.country.code.tr", "zh-CN", "Türkiye", "国家地区.土耳其"),
+            // dict.sys.country.code.tr
+            ("dict.sys.country.code.tr", "zh-HK", "Türkiye", "国家地区.土耳其"),
+
+            // dict.sys.country.code.tt
+            ("dict.sys.country.code.tt", "en-US", "Trinidad and Tobago", "国家地区.特立尼达和多巴哥"),
+            // dict.sys.country.code.tt
+            ("dict.sys.country.code.tt", "ja-JP", "Trinidad and Tobago", "国家地区.特立尼达和多巴哥"),
+            // dict.sys.country.code.tt
+            ("dict.sys.country.code.tt", "zh-CN", "Trinidad and Tobago", "国家地区.特立尼达和多巴哥"),
+            // dict.sys.country.code.tt
+            ("dict.sys.country.code.tt", "zh-HK", "Trinidad and Tobago", "国家地区.特立尼达和多巴哥"),
+
+            // dict.sys.country.code.tv
+            ("dict.sys.country.code.tv", "en-US", "Tuvalu", "国家地区.图瓦卢"),
+            // dict.sys.country.code.tv
+            ("dict.sys.country.code.tv", "ja-JP", "Tuvalu", "国家地区.图瓦卢"),
+            // dict.sys.country.code.tv
+            ("dict.sys.country.code.tv", "zh-CN", "Tuvalu", "国家地区.图瓦卢"),
+            // dict.sys.country.code.tv
+            ("dict.sys.country.code.tv", "zh-HK", "Tuvalu", "国家地区.图瓦卢"),
+
+            // dict.sys.country.code.tw
+            ("dict.sys.country.code.tw", "en-US", "臺灣", "国家地区.台湾"),
+            // dict.sys.country.code.tw
+            ("dict.sys.country.code.tw", "ja-JP", "臺灣", "国家地区.台湾"),
+            // dict.sys.country.code.tw
+            ("dict.sys.country.code.tw", "zh-CN", "臺灣", "国家地区.台湾"),
+            // dict.sys.country.code.tw
+            ("dict.sys.country.code.tw", "zh-HK", "臺灣", "国家地区.台湾"),
+
+            // dict.sys.country.code.tz
+            ("dict.sys.country.code.tz", "en-US", "Tanzania", "国家地区.坦桑尼亚"),
+            // dict.sys.country.code.tz
+            ("dict.sys.country.code.tz", "ja-JP", "Tanzania", "国家地区.坦桑尼亚"),
+            // dict.sys.country.code.tz
+            ("dict.sys.country.code.tz", "zh-CN", "Tanzania", "国家地区.坦桑尼亚"),
+            // dict.sys.country.code.tz
+            ("dict.sys.country.code.tz", "zh-HK", "Tanzania", "国家地区.坦桑尼亚"),
+
+            // dict.sys.country.code.ua
+            ("dict.sys.country.code.ua", "en-US", "Україна", "国家地区.乌克兰"),
+            // dict.sys.country.code.ua
+            ("dict.sys.country.code.ua", "ja-JP", "Україна", "国家地区.乌克兰"),
+            // dict.sys.country.code.ua
+            ("dict.sys.country.code.ua", "zh-CN", "Україна", "国家地区.乌克兰"),
+            // dict.sys.country.code.ua
+            ("dict.sys.country.code.ua", "zh-HK", "Україна", "国家地区.乌克兰"),
+
+            // dict.sys.country.code.ug
+            ("dict.sys.country.code.ug", "en-US", "Uganda", "国家地区.乌干达"),
+            // dict.sys.country.code.ug
+            ("dict.sys.country.code.ug", "ja-JP", "Uganda", "国家地区.乌干达"),
+            // dict.sys.country.code.ug
+            ("dict.sys.country.code.ug", "zh-CN", "Uganda", "国家地区.乌干达"),
+            // dict.sys.country.code.ug
+            ("dict.sys.country.code.ug", "zh-HK", "Uganda", "国家地区.乌干达"),
+
+            // dict.sys.country.code.um
+            ("dict.sys.country.code.um", "en-US", "United States Minor Outlying Islands", "国家地区.美国本土外小岛屿"),
+            // dict.sys.country.code.um
+            ("dict.sys.country.code.um", "ja-JP", "United States Minor Outlying Islands", "国家地区.美国本土外小岛屿"),
+            // dict.sys.country.code.um
+            ("dict.sys.country.code.um", "zh-CN", "United States Minor Outlying Islands", "国家地区.美国本土外小岛屿"),
+            // dict.sys.country.code.um
+            ("dict.sys.country.code.um", "zh-HK", "United States Minor Outlying Islands", "国家地区.美国本土外小岛屿"),
+
+            // dict.sys.country.code.us
+            ("dict.sys.country.code.us", "en-US", "United States", "国家地区.美国"),
+            // dict.sys.country.code.us
+            ("dict.sys.country.code.us", "ja-JP", "United States", "国家地区.美国"),
+            // dict.sys.country.code.us
+            ("dict.sys.country.code.us", "zh-CN", "United States", "国家地区.美国"),
+            // dict.sys.country.code.us
+            ("dict.sys.country.code.us", "zh-HK", "United States", "国家地区.美国"),
+
+            // dict.sys.country.code.uy
+            ("dict.sys.country.code.uy", "en-US", "Uruguay", "国家地区.乌拉圭"),
+            // dict.sys.country.code.uy
+            ("dict.sys.country.code.uy", "ja-JP", "Uruguay", "国家地区.乌拉圭"),
+            // dict.sys.country.code.uy
+            ("dict.sys.country.code.uy", "zh-CN", "Uruguay", "国家地区.乌拉圭"),
+            // dict.sys.country.code.uy
+            ("dict.sys.country.code.uy", "zh-HK", "Uruguay", "国家地区.乌拉圭"),
+
+            // dict.sys.country.code.uz
+            ("dict.sys.country.code.uz", "en-US", "O'zbekiston", "国家地区.乌兹别克斯坦"),
+            // dict.sys.country.code.uz
+            ("dict.sys.country.code.uz", "ja-JP", "O'zbekiston", "国家地区.乌兹别克斯坦"),
+            // dict.sys.country.code.uz
+            ("dict.sys.country.code.uz", "zh-CN", "O'zbekiston", "国家地区.乌兹别克斯坦"),
+            // dict.sys.country.code.uz
+            ("dict.sys.country.code.uz", "zh-HK", "O'zbekiston", "国家地区.乌兹别克斯坦"),
+
+            // dict.sys.country.code.va
+            ("dict.sys.country.code.va", "en-US", "Vaticano", "国家地区.梵蒂冈"),
+            // dict.sys.country.code.va
+            ("dict.sys.country.code.va", "ja-JP", "Vaticano", "国家地区.梵蒂冈"),
+            // dict.sys.country.code.va
+            ("dict.sys.country.code.va", "zh-CN", "Vaticano", "国家地区.梵蒂冈"),
+            // dict.sys.country.code.va
+            ("dict.sys.country.code.va", "zh-HK", "Vaticano", "国家地区.梵蒂冈"),
+
+            // dict.sys.country.code.vc
+            ("dict.sys.country.code.vc", "en-US", "Saint Vincent and the Grenadines", "国家地区.圣文森特和格林纳丁斯"),
+            // dict.sys.country.code.vc
+            ("dict.sys.country.code.vc", "ja-JP", "Saint Vincent and the Grenadines", "国家地区.圣文森特和格林纳丁斯"),
+            // dict.sys.country.code.vc
+            ("dict.sys.country.code.vc", "zh-CN", "Saint Vincent and the Grenadines", "国家地区.圣文森特和格林纳丁斯"),
+            // dict.sys.country.code.vc
+            ("dict.sys.country.code.vc", "zh-HK", "Saint Vincent and the Grenadines", "国家地区.圣文森特和格林纳丁斯"),
+
+            // dict.sys.country.code.ve
+            ("dict.sys.country.code.ve", "en-US", "Venezuela", "国家地区.委内瑞拉"),
+            // dict.sys.country.code.ve
+            ("dict.sys.country.code.ve", "ja-JP", "Venezuela", "国家地区.委内瑞拉"),
+            // dict.sys.country.code.ve
+            ("dict.sys.country.code.ve", "zh-CN", "Venezuela", "国家地区.委内瑞拉"),
+            // dict.sys.country.code.ve
+            ("dict.sys.country.code.ve", "zh-HK", "Venezuela", "国家地区.委内瑞拉"),
+
+            // dict.sys.country.code.vg
+            ("dict.sys.country.code.vg", "en-US", "British Virgin Islands", "国家地区.英属维尔京群岛"),
+            // dict.sys.country.code.vg
+            ("dict.sys.country.code.vg", "ja-JP", "British Virgin Islands", "国家地区.英属维尔京群岛"),
+            // dict.sys.country.code.vg
+            ("dict.sys.country.code.vg", "zh-CN", "British Virgin Islands", "国家地区.英属维尔京群岛"),
+            // dict.sys.country.code.vg
+            ("dict.sys.country.code.vg", "zh-HK", "British Virgin Islands", "国家地区.英属维尔京群岛"),
+
+            // dict.sys.country.code.vi
+            ("dict.sys.country.code.vi", "en-US", "United States Virgin Islands", "国家地区.美属维尔京群岛"),
+            // dict.sys.country.code.vi
+            ("dict.sys.country.code.vi", "ja-JP", "United States Virgin Islands", "国家地区.美属维尔京群岛"),
+            // dict.sys.country.code.vi
+            ("dict.sys.country.code.vi", "zh-CN", "United States Virgin Islands", "国家地区.美属维尔京群岛"),
+            // dict.sys.country.code.vi
+            ("dict.sys.country.code.vi", "zh-HK", "United States Virgin Islands", "国家地区.美属维尔京群岛"),
+
+            // dict.sys.country.code.vn
+            ("dict.sys.country.code.vn", "en-US", "Việt Nam", "国家地区.越南"),
+            // dict.sys.country.code.vn
+            ("dict.sys.country.code.vn", "ja-JP", "Việt Nam", "国家地区.越南"),
+            // dict.sys.country.code.vn
+            ("dict.sys.country.code.vn", "zh-CN", "Việt Nam", "国家地区.越南"),
+            // dict.sys.country.code.vn
+            ("dict.sys.country.code.vn", "zh-HK", "Việt Nam", "国家地区.越南"),
+
+            // dict.sys.country.code.vu
+            ("dict.sys.country.code.vu", "en-US", "Vanuatu", "国家地区.瓦努阿图"),
+            // dict.sys.country.code.vu
+            ("dict.sys.country.code.vu", "ja-JP", "Vanuatu", "国家地区.瓦努阿图"),
+            // dict.sys.country.code.vu
+            ("dict.sys.country.code.vu", "zh-CN", "Vanuatu", "国家地区.瓦努阿图"),
+            // dict.sys.country.code.vu
+            ("dict.sys.country.code.vu", "zh-HK", "Vanuatu", "国家地区.瓦努阿图"),
+
+            // dict.sys.country.code.wf
+            ("dict.sys.country.code.wf", "en-US", "Wallis et Futuna", "国家地区.瓦利斯和富图纳"),
+            // dict.sys.country.code.wf
+            ("dict.sys.country.code.wf", "ja-JP", "Wallis et Futuna", "国家地区.瓦利斯和富图纳"),
+            // dict.sys.country.code.wf
+            ("dict.sys.country.code.wf", "zh-CN", "Wallis et Futuna", "国家地区.瓦利斯和富图纳"),
+            // dict.sys.country.code.wf
+            ("dict.sys.country.code.wf", "zh-HK", "Wallis et Futuna", "国家地区.瓦利斯和富图纳"),
+
+            // dict.sys.country.code.ws
+            ("dict.sys.country.code.ws", "en-US", "Samoa", "国家地区.萨摩亚"),
+            // dict.sys.country.code.ws
+            ("dict.sys.country.code.ws", "ja-JP", "Samoa", "国家地区.萨摩亚"),
+            // dict.sys.country.code.ws
+            ("dict.sys.country.code.ws", "zh-CN", "Samoa", "国家地区.萨摩亚"),
+            // dict.sys.country.code.ws
+            ("dict.sys.country.code.ws", "zh-HK", "Samoa", "国家地区.萨摩亚"),
+
+            // dict.sys.country.code.xk
+            ("dict.sys.country.code.xk", "en-US", "Republika e Kosovës", "国家地区.科索沃"),
+            // dict.sys.country.code.xk
+            ("dict.sys.country.code.xk", "ja-JP", "Republika e Kosovës", "国家地区.科索沃"),
+            // dict.sys.country.code.xk
+            ("dict.sys.country.code.xk", "zh-CN", "Republika e Kosovës", "国家地区.科索沃"),
+            // dict.sys.country.code.xk
+            ("dict.sys.country.code.xk", "zh-HK", "Republika e Kosovës", "国家地区.科索沃"),
+
+            // dict.sys.country.code.ye
+            ("dict.sys.country.code.ye", "en-US", "اليَمَن", "国家地区.也门"),
+            // dict.sys.country.code.ye
+            ("dict.sys.country.code.ye", "ja-JP", "اليَمَن", "国家地区.也门"),
+            // dict.sys.country.code.ye
+            ("dict.sys.country.code.ye", "zh-CN", "اليَمَن", "国家地区.也门"),
+            // dict.sys.country.code.ye
+            ("dict.sys.country.code.ye", "zh-HK", "اليَمَن", "国家地区.也门"),
+
+            // dict.sys.country.code.yt
+            ("dict.sys.country.code.yt", "en-US", "Mayotte", "国家地区.马约特"),
+            // dict.sys.country.code.yt
+            ("dict.sys.country.code.yt", "ja-JP", "Mayotte", "国家地区.马约特"),
+            // dict.sys.country.code.yt
+            ("dict.sys.country.code.yt", "zh-CN", "Mayotte", "国家地区.马约特"),
+            // dict.sys.country.code.yt
+            ("dict.sys.country.code.yt", "zh-HK", "Mayotte", "国家地区.马约特"),
+
+            // dict.sys.country.code.za
+            ("dict.sys.country.code.za", "en-US", "South Africa", "国家地区.南非"),
+            // dict.sys.country.code.za
+            ("dict.sys.country.code.za", "ja-JP", "South Africa", "国家地区.南非"),
+            // dict.sys.country.code.za
+            ("dict.sys.country.code.za", "zh-CN", "South Africa", "国家地区.南非"),
+            // dict.sys.country.code.za
+            ("dict.sys.country.code.za", "zh-HK", "South Africa", "国家地区.南非"),
+
+            // dict.sys.country.code.zm
+            ("dict.sys.country.code.zm", "en-US", "Zambia", "国家地区.赞比亚"),
+            // dict.sys.country.code.zm
+            ("dict.sys.country.code.zm", "ja-JP", "Zambia", "国家地区.赞比亚"),
+            // dict.sys.country.code.zm
+            ("dict.sys.country.code.zm", "zh-CN", "Zambia", "国家地区.赞比亚"),
+            // dict.sys.country.code.zm
+            ("dict.sys.country.code.zm", "zh-HK", "Zambia", "国家地区.赞比亚"),
+
+            // dict.sys.country.code.zw
+            ("dict.sys.country.code.zw", "en-US", "Zimbabwe", "国家地区.津巴布韦"),
+            // dict.sys.country.code.zw
+            ("dict.sys.country.code.zw", "ja-JP", "Zimbabwe", "国家地区.津巴布韦"),
+            // dict.sys.country.code.zw
+            ("dict.sys.country.code.zw", "zh-CN", "Zimbabwe", "国家地区.津巴布韦"),
+            // dict.sys.country.code.zw
+            ("dict.sys.country.code.zw", "zh-HK", "Zimbabwe", "国家地区.津巴布韦"),
 
             // dict.sys.culture.code.en-us
-            ("dict.sys.culture.code.en-us", "en-US", "ENGLISH(US)", "区域文化编码.English (US)"),
+            ("dict.sys.culture.code.en-us", "en-US", "English(US)", "区域文化编码.英语(美国)"),
             // dict.sys.culture.code.en-us
-            ("dict.sys.culture.code.en-us", "ja-JP", "ENGLISH(US)", "区域文化编码.English (US)"),
+            ("dict.sys.culture.code.en-us", "ja-JP", "English(US)", "区域文化编码.英语(美国)"),
             // dict.sys.culture.code.en-us
-            ("dict.sys.culture.code.en-us", "zh-CN", "ENGLISH(US)", "区域文化编码.English (US)"),
+            ("dict.sys.culture.code.en-us", "zh-CN", "English(US)", "区域文化编码.英语(美国)"),
             // dict.sys.culture.code.en-us
-            ("dict.sys.culture.code.en-us", "zh-HK", "ENGLISH(US)", "区域文化编码.English (US)"),
-
-            // dict.sys.culture.code.es-es
-            ("dict.sys.culture.code.es-es", "en-US", "ESPAñOL", "区域文化编码.Español"),
-            // dict.sys.culture.code.es-es
-            ("dict.sys.culture.code.es-es", "ja-JP", "ESPAñOL", "区域文化编码.Español"),
-            // dict.sys.culture.code.es-es
-            ("dict.sys.culture.code.es-es", "zh-CN", "ESPAñOL", "区域文化编码.Español"),
-            // dict.sys.culture.code.es-es
-            ("dict.sys.culture.code.es-es", "zh-HK", "ESPAñOL", "区域文化编码.Español"),
-
-            // dict.sys.culture.code.et-ee
-            ("dict.sys.culture.code.et-ee", "en-US", "EESTI", "区域文化编码.eesti"),
-            // dict.sys.culture.code.et-ee
-            ("dict.sys.culture.code.et-ee", "ja-JP", "EESTI", "区域文化编码.eesti"),
-            // dict.sys.culture.code.et-ee
-            ("dict.sys.culture.code.et-ee", "zh-CN", "EESTI", "区域文化编码.eesti"),
-            // dict.sys.culture.code.et-ee
-            ("dict.sys.culture.code.et-ee", "zh-HK", "EESTI", "区域文化编码.eesti"),
-
-            // dict.sys.culture.code.fi-fi
-            ("dict.sys.culture.code.fi-fi", "en-US", "SUOMI", "区域文化编码.suomi"),
-            // dict.sys.culture.code.fi-fi
-            ("dict.sys.culture.code.fi-fi", "ja-JP", "SUOMI", "区域文化编码.suomi"),
-            // dict.sys.culture.code.fi-fi
-            ("dict.sys.culture.code.fi-fi", "zh-CN", "SUOMI", "区域文化编码.suomi"),
-            // dict.sys.culture.code.fi-fi
-            ("dict.sys.culture.code.fi-fi", "zh-HK", "SUOMI", "区域文化编码.suomi"),
-
-            // dict.sys.culture.code.fr-fr
-            ("dict.sys.culture.code.fr-fr", "en-US", "FRANçAIS", "区域文化编码.français"),
-            // dict.sys.culture.code.fr-fr
-            ("dict.sys.culture.code.fr-fr", "ja-JP", "FRANçAIS", "区域文化编码.français"),
-            // dict.sys.culture.code.fr-fr
-            ("dict.sys.culture.code.fr-fr", "zh-CN", "FRANçAIS", "区域文化编码.français"),
-            // dict.sys.culture.code.fr-fr
-            ("dict.sys.culture.code.fr-fr", "zh-HK", "FRANçAIS", "区域文化编码.français"),
-
-            // dict.sys.culture.code.hi-in
-            ("dict.sys.culture.code.hi-in", "en-US", "हिंदी", "区域文化编码.हिंदी"),
-            // dict.sys.culture.code.hi-in
-            ("dict.sys.culture.code.hi-in", "ja-JP", "हिंदी", "区域文化编码.हिंदी"),
-            // dict.sys.culture.code.hi-in
-            ("dict.sys.culture.code.hi-in", "zh-CN", "हिंदी", "区域文化编码.हिंदी"),
-            // dict.sys.culture.code.hi-in
-            ("dict.sys.culture.code.hi-in", "zh-HK", "हिंदी", "区域文化编码.हिंदी"),
-
-            // dict.sys.culture.code.hr-hr
-            ("dict.sys.culture.code.hr-hr", "en-US", "HRVATSKI", "区域文化编码.hrvatski"),
-            // dict.sys.culture.code.hr-hr
-            ("dict.sys.culture.code.hr-hr", "ja-JP", "HRVATSKI", "区域文化编码.hrvatski"),
-            // dict.sys.culture.code.hr-hr
-            ("dict.sys.culture.code.hr-hr", "zh-CN", "HRVATSKI", "区域文化编码.hrvatski"),
-            // dict.sys.culture.code.hr-hr
-            ("dict.sys.culture.code.hr-hr", "zh-HK", "HRVATSKI", "区域文化编码.hrvatski"),
-
-            // dict.sys.culture.code.it-it
-            ("dict.sys.culture.code.it-it", "en-US", "ITALIANO", "区域文化编码.italiano"),
-            // dict.sys.culture.code.it-it
-            ("dict.sys.culture.code.it-it", "ja-JP", "ITALIANO", "区域文化编码.italiano"),
-            // dict.sys.culture.code.it-it
-            ("dict.sys.culture.code.it-it", "zh-CN", "ITALIANO", "区域文化编码.italiano"),
-            // dict.sys.culture.code.it-it
-            ("dict.sys.culture.code.it-it", "zh-HK", "ITALIANO", "区域文化编码.italiano"),
+            ("dict.sys.culture.code.en-us", "zh-HK", "English(US)", "区域文化编码.英语(美国)"),
 
             // dict.sys.culture.code.ja-jp
-            ("dict.sys.culture.code.ja-jp", "en-US", "日本語(JP)", "区域文化编码.日本語"),
+            ("dict.sys.culture.code.ja-jp", "en-US", "日本語(JP)", "区域文化编码.日语(日本)"),
             // dict.sys.culture.code.ja-jp
-            ("dict.sys.culture.code.ja-jp", "ja-JP", "日本語(JP)", "区域文化编码.日本語"),
+            ("dict.sys.culture.code.ja-jp", "ja-JP", "日本語(JP)", "区域文化编码.日语(日本)"),
             // dict.sys.culture.code.ja-jp
-            ("dict.sys.culture.code.ja-jp", "zh-CN", "日本語(JP)", "区域文化编码.日本語"),
+            ("dict.sys.culture.code.ja-jp", "zh-CN", "日本語(JP)", "区域文化编码.日语(日本)"),
             // dict.sys.culture.code.ja-jp
-            ("dict.sys.culture.code.ja-jp", "zh-HK", "日本語(JP)", "区域文化编码.日本語"),
-
-            // dict.sys.culture.code.ka-ge
-            ("dict.sys.culture.code.ka-ge", "en-US", "ქართული", "区域文化编码.ქართული"),
-            // dict.sys.culture.code.ka-ge
-            ("dict.sys.culture.code.ka-ge", "ja-JP", "ქართული", "区域文化编码.ქართული"),
-            // dict.sys.culture.code.ka-ge
-            ("dict.sys.culture.code.ka-ge", "zh-CN", "ქართული", "区域文化编码.ქართული"),
-            // dict.sys.culture.code.ka-ge
-            ("dict.sys.culture.code.ka-ge", "zh-HK", "ქართული", "区域文化编码.ქართული"),
-
-            // dict.sys.culture.code.ko-kr
-            ("dict.sys.culture.code.ko-kr", "en-US", "한국어", "区域文化编码.한국어"),
-            // dict.sys.culture.code.ko-kr
-            ("dict.sys.culture.code.ko-kr", "ja-JP", "한국어", "区域文化编码.한국어"),
-            // dict.sys.culture.code.ko-kr
-            ("dict.sys.culture.code.ko-kr", "zh-CN", "한국어", "区域文化编码.한국어"),
-            // dict.sys.culture.code.ko-kr
-            ("dict.sys.culture.code.ko-kr", "zh-HK", "한국어", "区域文化编码.한국어"),
-
-            // dict.sys.culture.code.nl-nl
-            ("dict.sys.culture.code.nl-nl", "en-US", "NEDERLANDS", "区域文化编码.Nederlands"),
-            // dict.sys.culture.code.nl-nl
-            ("dict.sys.culture.code.nl-nl", "ja-JP", "NEDERLANDS", "区域文化编码.Nederlands"),
-            // dict.sys.culture.code.nl-nl
-            ("dict.sys.culture.code.nl-nl", "zh-CN", "NEDERLANDS", "区域文化编码.Nederlands"),
-            // dict.sys.culture.code.nl-nl
-            ("dict.sys.culture.code.nl-nl", "zh-HK", "NEDERLANDS", "区域文化编码.Nederlands"),
-
-            // dict.sys.culture.code.pl-pl
-            ("dict.sys.culture.code.pl-pl", "en-US", "POLSKI", "区域文化编码.Polski"),
-            // dict.sys.culture.code.pl-pl
-            ("dict.sys.culture.code.pl-pl", "ja-JP", "POLSKI", "区域文化编码.Polski"),
-            // dict.sys.culture.code.pl-pl
-            ("dict.sys.culture.code.pl-pl", "zh-CN", "POLSKI", "区域文化编码.Polski"),
-            // dict.sys.culture.code.pl-pl
-            ("dict.sys.culture.code.pl-pl", "zh-HK", "POLSKI", "区域文化编码.Polski"),
-
-            // dict.sys.culture.code.ro-ro
-            ("dict.sys.culture.code.ro-ro", "en-US", "ROMâNă", "区域文化编码.română"),
-            // dict.sys.culture.code.ro-ro
-            ("dict.sys.culture.code.ro-ro", "ja-JP", "ROMâNă", "区域文化编码.română"),
-            // dict.sys.culture.code.ro-ro
-            ("dict.sys.culture.code.ro-ro", "zh-CN", "ROMâNă", "区域文化编码.română"),
-            // dict.sys.culture.code.ro-ro
-            ("dict.sys.culture.code.ro-ro", "zh-HK", "ROMâNă", "区域文化编码.română"),
-
-            // dict.sys.culture.code.ru-ru
-            ("dict.sys.culture.code.ru-ru", "en-US", "Русский", "区域文化编码.Русский"),
-            // dict.sys.culture.code.ru-ru
-            ("dict.sys.culture.code.ru-ru", "ja-JP", "Русский", "区域文化编码.Русский"),
-            // dict.sys.culture.code.ru-ru
-            ("dict.sys.culture.code.ru-ru", "zh-CN", "Русский", "区域文化编码.Русский"),
-            // dict.sys.culture.code.ru-ru
-            ("dict.sys.culture.code.ru-ru", "zh-HK", "Русский", "区域文化编码.Русский"),
-
-            // dict.sys.culture.code.sv-se
-            ("dict.sys.culture.code.sv-se", "en-US", "SVENSKA", "区域文化编码.svenska"),
-            // dict.sys.culture.code.sv-se
-            ("dict.sys.culture.code.sv-se", "ja-JP", "SVENSKA", "区域文化编码.svenska"),
-            // dict.sys.culture.code.sv-se
-            ("dict.sys.culture.code.sv-se", "zh-CN", "SVENSKA", "区域文化编码.svenska"),
-            // dict.sys.culture.code.sv-se
-            ("dict.sys.culture.code.sv-se", "zh-HK", "SVENSKA", "区域文化编码.svenska"),
-
-            // dict.sys.culture.code.th-th
-            ("dict.sys.culture.code.th-th", "en-US", "ไทย", "区域文化编码.ไทย"),
-            // dict.sys.culture.code.th-th
-            ("dict.sys.culture.code.th-th", "ja-JP", "ไทย", "区域文化编码.ไทย"),
-            // dict.sys.culture.code.th-th
-            ("dict.sys.culture.code.th-th", "zh-CN", "ไทย", "区域文化编码.ไทย"),
-            // dict.sys.culture.code.th-th
-            ("dict.sys.culture.code.th-th", "zh-HK", "ไทย", "区域文化编码.ไทย"),
-
-            // dict.sys.culture.code.vi-vn
-            ("dict.sys.culture.code.vi-vn", "en-US", "TIếNG VIệT", "区域文化编码.Tiếng Việt"),
-            // dict.sys.culture.code.vi-vn
-            ("dict.sys.culture.code.vi-vn", "ja-JP", "TIếNG VIệT", "区域文化编码.Tiếng Việt"),
-            // dict.sys.culture.code.vi-vn
-            ("dict.sys.culture.code.vi-vn", "zh-CN", "TIếNG VIệT", "区域文化编码.Tiếng Việt"),
-            // dict.sys.culture.code.vi-vn
-            ("dict.sys.culture.code.vi-vn", "zh-HK", "TIếNG VIệT", "区域文化编码.Tiếng Việt"),
+            ("dict.sys.culture.code.ja-jp", "zh-HK", "日本語(JP)", "区域文化编码.日语(日本)"),
 
             // dict.sys.culture.code.zh-cn
-            ("dict.sys.culture.code.zh-cn", "en-US", "中文(简体)", "区域文化编码.中文 (简体)"),
+            ("dict.sys.culture.code.zh-cn", "en-US", "中文(简体)", "区域文化编码.中文(简体)"),
             // dict.sys.culture.code.zh-cn
-            ("dict.sys.culture.code.zh-cn", "ja-JP", "中文(简体)", "区域文化编码.中文 (简体)"),
+            ("dict.sys.culture.code.zh-cn", "ja-JP", "中文(简体)", "区域文化编码.中文(简体)"),
             // dict.sys.culture.code.zh-cn
-            ("dict.sys.culture.code.zh-cn", "zh-CN", "中文(简体)", "区域文化编码.中文 (简体)"),
+            ("dict.sys.culture.code.zh-cn", "zh-CN", "中文(简体)", "区域文化编码.中文(简体)"),
             // dict.sys.culture.code.zh-cn
-            ("dict.sys.culture.code.zh-cn", "zh-HK", "中文(简体)", "区域文化编码.中文 (简体)"),
+            ("dict.sys.culture.code.zh-cn", "zh-HK", "中文(简体)", "区域文化编码.中文(简体)"),
 
             // dict.sys.culture.code.zh-hk
             ("dict.sys.culture.code.zh-hk", "en-US", "中文(香港)", "区域文化编码.中文(香港)"),
@@ -15142,33 +18265,6 @@ public class TaktDictI18nSeedData : ITaktSeedDataCoordinator
             ("dict.sys.culture.code.zh-hk", "zh-CN", "中文(香港)", "区域文化编码.中文(香港)"),
             // dict.sys.culture.code.zh-hk
             ("dict.sys.culture.code.zh-hk", "zh-HK", "中文(香港)", "区域文化编码.中文(香港)"),
-
-            // dict.sys.culture.code.zh-mo
-            ("dict.sys.culture.code.zh-mo", "en-US", "中文(澳门)", "区域文化编码.中文(澳门)"),
-            // dict.sys.culture.code.zh-mo
-            ("dict.sys.culture.code.zh-mo", "ja-JP", "中文(澳门)", "区域文化编码.中文(澳门)"),
-            // dict.sys.culture.code.zh-mo
-            ("dict.sys.culture.code.zh-mo", "zh-CN", "中文(澳门)", "区域文化编码.中文(澳门)"),
-            // dict.sys.culture.code.zh-mo
-            ("dict.sys.culture.code.zh-mo", "zh-HK", "中文(澳门)", "区域文化编码.中文(澳门)"),
-
-            // dict.sys.culture.code.zh-sg
-            ("dict.sys.culture.code.zh-sg", "en-US", "中文(新加坡)", "区域文化编码.中文(新加坡)"),
-            // dict.sys.culture.code.zh-sg
-            ("dict.sys.culture.code.zh-sg", "ja-JP", "中文(新加坡)", "区域文化编码.中文(新加坡)"),
-            // dict.sys.culture.code.zh-sg
-            ("dict.sys.culture.code.zh-sg", "zh-CN", "中文(新加坡)", "区域文化编码.中文(新加坡)"),
-            // dict.sys.culture.code.zh-sg
-            ("dict.sys.culture.code.zh-sg", "zh-HK", "中文(新加坡)", "区域文化编码.中文(新加坡)"),
-
-            // dict.sys.culture.code.zh-tw
-            ("dict.sys.culture.code.zh-tw", "en-US", "中文(繁體)", "区域文化编码.中文(繁體)"),
-            // dict.sys.culture.code.zh-tw
-            ("dict.sys.culture.code.zh-tw", "ja-JP", "中文(繁體)", "区域文化编码.中文(繁體)"),
-            // dict.sys.culture.code.zh-tw
-            ("dict.sys.culture.code.zh-tw", "zh-CN", "中文(繁體)", "区域文化编码.中文(繁體)"),
-            // dict.sys.culture.code.zh-tw
-            ("dict.sys.culture.code.zh-tw", "zh-HK", "中文(繁體)", "区域文化编码.中文(繁體)"),
 
             // dict.sys.data.scope.type.0
             ("dict.sys.data.scope.type.0", "en-US", "全部数据_us", "数据权限.全部数据"),
@@ -17862,49 +20958,49 @@ public class TaktDictI18nSeedData : ITaktSeedDataCoordinator
             ("dict.sys.yes.no.type.0", "zh-HK", "否_hk", "是否.否"),
 
             // dict.sys.numbering.date.format.config.none
-            ("dict.sys.numbering.date.format.config.none", "en-US", "不使用_us", "编号日期格式.不使用"),
+            ("dict.sys.numbering.date.format.config.none", "en-US", "不使用_us", "编码日期格式.不使用"),
             // dict.sys.numbering.date.format.config.none
-            ("dict.sys.numbering.date.format.config.none", "ja-JP", "不使用_jp", "编号日期格式.不使用"),
+            ("dict.sys.numbering.date.format.config.none", "ja-JP", "不使用_jp", "编码日期格式.不使用"),
             // dict.sys.numbering.date.format.config.none
-            ("dict.sys.numbering.date.format.config.none", "zh-CN", "不使用", "编号日期格式.不使用"),
+            ("dict.sys.numbering.date.format.config.none", "zh-CN", "不使用", "编码日期格式.不使用"),
             // dict.sys.numbering.date.format.config.none
-            ("dict.sys.numbering.date.format.config.none", "zh-HK", "不使用_hk", "编号日期格式.不使用"),
+            ("dict.sys.numbering.date.format.config.none", "zh-HK", "不使用_hk", "编码日期格式.不使用"),
 
             // dict.sys.numbering.date.format.config.yyyy
-            ("dict.sys.numbering.date.format.config.yyyy", "en-US", "年(YYYY)_us", "编号日期格式.年"),
+            ("dict.sys.numbering.date.format.config.yyyy", "en-US", "年(YYYY)_us", "编码日期格式.年"),
             // dict.sys.numbering.date.format.config.yyyy
-            ("dict.sys.numbering.date.format.config.yyyy", "ja-JP", "年(YYYY)_jp", "编号日期格式.年"),
+            ("dict.sys.numbering.date.format.config.yyyy", "ja-JP", "年(YYYY)_jp", "编码日期格式.年"),
             // dict.sys.numbering.date.format.config.yyyy
-            ("dict.sys.numbering.date.format.config.yyyy", "zh-CN", "年(YYYY)", "编号日期格式.年"),
+            ("dict.sys.numbering.date.format.config.yyyy", "zh-CN", "年(YYYY)", "编码日期格式.年"),
             // dict.sys.numbering.date.format.config.yyyy
-            ("dict.sys.numbering.date.format.config.yyyy", "zh-HK", "年(YYYY)_hk", "编号日期格式.年"),
+            ("dict.sys.numbering.date.format.config.yyyy", "zh-HK", "年(YYYY)_hk", "编码日期格式.年"),
 
             // dict.sys.numbering.date.format.config.yyyymm
-            ("dict.sys.numbering.date.format.config.yyyymm", "en-US", "年月(YYYYMM)_us", "编号日期格式.年月"),
+            ("dict.sys.numbering.date.format.config.yyyymm", "en-US", "年月(YYYYMM)_us", "编码日期格式.年月"),
             // dict.sys.numbering.date.format.config.yyyymm
-            ("dict.sys.numbering.date.format.config.yyyymm", "ja-JP", "年月(YYYYMM)_jp", "编号日期格式.年月"),
+            ("dict.sys.numbering.date.format.config.yyyymm", "ja-JP", "年月(YYYYMM)_jp", "编码日期格式.年月"),
             // dict.sys.numbering.date.format.config.yyyymm
-            ("dict.sys.numbering.date.format.config.yyyymm", "zh-CN", "年月(YYYYMM)", "编号日期格式.年月"),
+            ("dict.sys.numbering.date.format.config.yyyymm", "zh-CN", "年月(YYYYMM)", "编码日期格式.年月"),
             // dict.sys.numbering.date.format.config.yyyymm
-            ("dict.sys.numbering.date.format.config.yyyymm", "zh-HK", "年月(YYYYMM)_hk", "编号日期格式.年月"),
+            ("dict.sys.numbering.date.format.config.yyyymm", "zh-HK", "年月(YYYYMM)_hk", "编码日期格式.年月"),
 
             // dict.sys.numbering.date.format.config.yyyymmdd
-            ("dict.sys.numbering.date.format.config.yyyymmdd", "en-US", "年月日(YYYYMMDD)_us", "编号日期格式.年月日"),
+            ("dict.sys.numbering.date.format.config.yyyymmdd", "en-US", "年月日(YYYYMMDD)_us", "编码日期格式.年月日"),
             // dict.sys.numbering.date.format.config.yyyymmdd
-            ("dict.sys.numbering.date.format.config.yyyymmdd", "ja-JP", "年月日(YYYYMMDD)_jp", "编号日期格式.年月日"),
+            ("dict.sys.numbering.date.format.config.yyyymmdd", "ja-JP", "年月日(YYYYMMDD)_jp", "编码日期格式.年月日"),
             // dict.sys.numbering.date.format.config.yyyymmdd
-            ("dict.sys.numbering.date.format.config.yyyymmdd", "zh-CN", "年月日(YYYYMMDD)", "编号日期格式.年月日"),
+            ("dict.sys.numbering.date.format.config.yyyymmdd", "zh-CN", "年月日(YYYYMMDD)", "编码日期格式.年月日"),
             // dict.sys.numbering.date.format.config.yyyymmdd
-            ("dict.sys.numbering.date.format.config.yyyymmdd", "zh-HK", "年月日(YYYYMMDD)_hk", "编号日期格式.年月日"),
+            ("dict.sys.numbering.date.format.config.yyyymmdd", "zh-HK", "年月日(YYYYMMDD)_hk", "编码日期格式.年月日"),
 
             // dict.sys.numbering.date.format.config.yyyymmddhh
-            ("dict.sys.numbering.date.format.config.yyyymmddhh", "en-US", "年月日时(YYYYMMDDHH)_us", "编号日期格式.年月日时"),
+            ("dict.sys.numbering.date.format.config.yyyymmddhh", "en-US", "年月日时(YYYYMMDDHH)_us", "编码日期格式.年月日时"),
             // dict.sys.numbering.date.format.config.yyyymmddhh
-            ("dict.sys.numbering.date.format.config.yyyymmddhh", "ja-JP", "年月日时(YYYYMMDDHH)_jp", "编号日期格式.年月日时"),
+            ("dict.sys.numbering.date.format.config.yyyymmddhh", "ja-JP", "年月日时(YYYYMMDDHH)_jp", "编码日期格式.年月日时"),
             // dict.sys.numbering.date.format.config.yyyymmddhh
-            ("dict.sys.numbering.date.format.config.yyyymmddhh", "zh-CN", "年月日时(YYYYMMDDHH)", "编号日期格式.年月日时"),
+            ("dict.sys.numbering.date.format.config.yyyymmddhh", "zh-CN", "年月日时(YYYYMMDDHH)", "编码日期格式.年月日时"),
             // dict.sys.numbering.date.format.config.yyyymmddhh
-            ("dict.sys.numbering.date.format.config.yyyymmddhh", "zh-HK", "年月日时(YYYYMMDDHH)_hk", "编号日期格式.年月日时"),
+            ("dict.sys.numbering.date.format.config.yyyymmddhh", "zh-HK", "年月日时(YYYYMMDDHH)_hk", "编码日期格式.年月日时"),
 
             // dict.routine.ticket.source.type.0
             ("dict.routine.ticket.source.type.0", "en-US", "门户网站_us", "工单来源.门户"),
@@ -18769,6 +21865,33 @@ public class TaktDictI18nSeedData : ITaktSeedDataCoordinator
             ("dict.hr.employee.family.relation.type.9", "zh-CN", "其他", "家庭成员关系.其他"),
             // dict.hr.employee.family.relation.type.9
             ("dict.hr.employee.family.relation.type.9", "zh-HK", "其他_hk", "家庭成员关系.其他"),
+
+            // dict.hr.employee.address.type.1
+            ("dict.hr.employee.address.type.1", "en-US", "家庭_us", "员工地址类型.家庭"),
+            // dict.hr.employee.address.type.1
+            ("dict.hr.employee.address.type.1", "ja-JP", "家庭_jp", "员工地址类型.家庭"),
+            // dict.hr.employee.address.type.1
+            ("dict.hr.employee.address.type.1", "zh-CN", "家庭", "员工地址类型.家庭"),
+            // dict.hr.employee.address.type.1
+            ("dict.hr.employee.address.type.1", "zh-HK", "家庭_hk", "员工地址类型.家庭"),
+
+            // dict.hr.employee.address.type.2
+            ("dict.hr.employee.address.type.2", "en-US", "工作_us", "员工地址类型.工作"),
+            // dict.hr.employee.address.type.2
+            ("dict.hr.employee.address.type.2", "ja-JP", "工作_jp", "员工地址类型.工作"),
+            // dict.hr.employee.address.type.2
+            ("dict.hr.employee.address.type.2", "zh-CN", "工作", "员工地址类型.工作"),
+            // dict.hr.employee.address.type.2
+            ("dict.hr.employee.address.type.2", "zh-HK", "工作_hk", "员工地址类型.工作"),
+
+            // dict.hr.employee.address.type.3
+            ("dict.hr.employee.address.type.3", "en-US", "常住_us", "员工地址类型.常住"),
+            // dict.hr.employee.address.type.3
+            ("dict.hr.employee.address.type.3", "ja-JP", "常住_jp", "员工地址类型.常住"),
+            // dict.hr.employee.address.type.3
+            ("dict.hr.employee.address.type.3", "zh-CN", "常住", "员工地址类型.常住"),
+            // dict.hr.employee.address.type.3
+            ("dict.hr.employee.address.type.3", "zh-HK", "常住_hk", "员工地址类型.常住"),
 
             // dict.hr.degree.level.category.0
             ("dict.hr.degree.level.category.0", "en-US", "无_us", "学位层次.无"),
@@ -21624,13 +24747,13 @@ public class TaktDictI18nSeedData : ITaktSeedDataCoordinator
             ("dict.logistics.accounting.document.type.eu", "zh-HK", "EU 欧元取整差额_hk", "会计凭证类型.EU 欧元取整差额"),
 
             // dict.logistics.accounting.document.type.ex
-            ("dict.logistics.accounting.document.type.ex", "en-US", "EX 外部编号_us", "会计凭证类型.EX 外部编号"),
+            ("dict.logistics.accounting.document.type.ex", "en-US", "EX 外部编码_us", "会计凭证类型.EX 外部编码"),
             // dict.logistics.accounting.document.type.ex
-            ("dict.logistics.accounting.document.type.ex", "ja-JP", "EX 外部编号_jp", "会计凭证类型.EX 外部编号"),
+            ("dict.logistics.accounting.document.type.ex", "ja-JP", "EX 外部编码_jp", "会计凭证类型.EX 外部编码"),
             // dict.logistics.accounting.document.type.ex
-            ("dict.logistics.accounting.document.type.ex", "zh-CN", "EX 外部编号", "会计凭证类型.EX 外部编号"),
+            ("dict.logistics.accounting.document.type.ex", "zh-CN", "EX 外部编码", "会计凭证类型.EX 外部编码"),
             // dict.logistics.accounting.document.type.ex
-            ("dict.logistics.accounting.document.type.ex", "zh-HK", "EX 外部编号_hk", "会计凭证类型.EX 外部编号"),
+            ("dict.logistics.accounting.document.type.ex", "zh-HK", "EX 外部编码_hk", "会计凭证类型.EX 外部编码"),
 
             // dict.logistics.accounting.document.type.ka
             ("dict.logistics.accounting.document.type.ka", "en-US", "KA 供应商凭证_us", "会计凭证类型.KA 供应商凭证"),

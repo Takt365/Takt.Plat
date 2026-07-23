@@ -10,7 +10,7 @@
 <template>
   <a-form
     ref="formRef"
-    class="takt-generated-form manufacturer-form flex flex-col min-h-0"
+    class="takt-generated-form manufacturer-form flex flex-col min-h-0 overflow-visible"
     :model="formState"
     :rules="rules"
     layout="horizontal"
@@ -22,53 +22,11 @@
     >
       <a-tab-pane
         key="tab-0"
-        :tab="t('common.page.form.tabs.basicinfo') + ' (1/3)'"
+        :tab="t('common.page.form.tabs.basicinfo') + ' (1/4)'"
         force-render
       >
         <div :class="formContentClass">
           <a-row :gutter="24">
-            <a-col :span="12">
-              <a-form-item
-                :label="pi.label('tenantCode')"
-                name="tenantCode"
-              >
-                <a-input
-                  v-model:value="formState.tenantCode"
-                  :placeholder="pi.ph('tenantCode')"
-                  show-count
-                  :maxlength="20"
-                  disabled
-                />
-              </a-form-item>
-            </a-col>
-            <a-col :span="12">
-              <a-form-item
-                :label="pi.label('companyCode')"
-                name="companyCode"
-              >
-                <a-input
-                  v-model:value="formState.companyCode"
-                  :placeholder="pi.ph('companyCode')"
-                  show-count
-                  :maxlength="20"
-                  disabled
-                />
-              </a-form-item>
-            </a-col>
-            <a-col :span="12">
-              <a-form-item
-                :label="pi.label('companyDefaultCulture')"
-                name="companyDefaultCulture"
-              >
-                <a-input
-                  v-model:value="formState.companyDefaultCulture"
-                  :placeholder="pi.ph('companyDefaultCulture')"
-                  show-count
-                  :maxlength="20"
-                  disabled
-                />
-              </a-form-item>
-            </a-col>
             <a-col :span="12">
               <a-form-item
                 :label="pi.label('manufacturerCode')"
@@ -86,14 +44,28 @@
             </a-col>
             <a-col :span="12">
               <a-form-item
-                :label="pi.label('manufacturerName')"
-                name="manufacturerName"
+                :label="pi.label('manufacturerName1')"
+                name="manufacturerName1"
               >
                 <a-input
-                  v-model:value="formState.manufacturerName"
-                  :placeholder="pi.ph('manufacturerName')"
+                  v-model:value="formState.manufacturerName1"
+                  :placeholder="pi.ph('manufacturerName1')"
                   show-count
-                  :maxlength="80"
+                  :maxlength="140"
+                  allow-clear
+                />
+              </a-form-item>
+            </a-col>
+            <a-col :span="12">
+              <a-form-item
+                :label="pi.label('manufacturerName2')"
+                name="manufacturerName2"
+              >
+                <a-input
+                  v-model:value="formState.manufacturerName2"
+                  :placeholder="pi.ph('manufacturerName2')"
+                  show-count
+                  :maxlength="140"
                   allow-clear
                 />
               </a-form-item>
@@ -157,8 +129,32 @@
               >
                 <TaktSelect
                   v-model:value="formState.registrationCountry"
-                  api-url="TaktIsoCodes/options"
+                  dict-type="sys_country_code"
                   :placeholder="pi.ph('registrationCountry')"
+                />
+              </a-form-item>
+            </a-col>
+            <a-col :span="12">
+              <a-form-item
+                :label="pi.label('registrationProvince')"
+                name="registrationProvince"
+              >
+                <TaktSelect
+                  v-model:value="formState.registrationProvince"
+                  api-url="TaktAdminDivisions/options"
+                  :placeholder="pi.ph('registrationProvince')"
+                />
+              </a-form-item>
+            </a-col>
+            <a-col :span="12">
+              <a-form-item
+                :label="pi.label('registrationCity')"
+                name="registrationCity"
+              >
+                <TaktSelect
+                  v-model:value="formState.registrationCity"
+                  api-url="TaktAdminDivisions/options"
+                  :placeholder="pi.ph('registrationCity')"
                 />
               </a-form-item>
             </a-col>
@@ -167,7 +163,7 @@
       </a-tab-pane>
       <a-tab-pane
         key="tab-1"
-        :tab="t('common.page.form.tabs.basicinfo') + ' (2/3)'"
+        :tab="t('common.page.form.tabs.basicinfo') + ' (2/4)'"
         force-render
       >
         <div :class="formContentClass">
@@ -192,18 +188,6 @@
                 <a-textarea
                   v-model:value="formState.registrationAddress2"
                   :placeholder="pi.ph('registrationAddress2')"
-                  :rows="2"
-                />
-              </a-form-item>
-            </a-col>
-            <a-col :span="24">
-              <a-form-item
-                :label="pi.label('registrationAddress3')"
-                name="registrationAddress3"
-              >
-                <a-textarea
-                  v-model:value="formState.registrationAddress3"
-                  :placeholder="pi.ph('registrationAddress3')"
                   :rows="2"
                 />
               </a-form-item>
@@ -306,17 +290,7 @@
                 />
               </a-form-item>
             </a-col>
-          </a-row>
-        </div>
-      </a-tab-pane>
-      <a-tab-pane
-        key="tab-2"
-        :tab="t('common.page.form.tabs.basicinfo') + ' (3/3)'"
-        force-render
-      >
-        <div :class="formContentClass">
-          <a-row :gutter="24">
-            <a-col :span="24">
+            <a-col :span="12">
               <a-form-item
                 :label="pi.label('manufacturerLevel')"
                 name="manufacturerLevel"
@@ -328,6 +302,16 @@
                 />
               </a-form-item>
             </a-col>
+          </a-row>
+        </div>
+      </a-tab-pane>
+      <a-tab-pane
+        key="tab-2"
+        :tab="t('common.page.form.tabs.basicinfo') + ' (3/4)'"
+        force-render
+      >
+        <div :class="formContentClass">
+          <a-row :gutter="24">
             <a-col :span="24">
               <a-form-item
                 :label="pi.label('qualityCertification')"
@@ -361,6 +345,58 @@
                   v-model:value="formState.manufacturerStatus"
                   dict-type="sys_normal_disable_status"
                   :placeholder="pi.ph('manufacturerStatus')"
+                />
+              </a-form-item>
+            </a-col>
+          </a-row>
+        </div>
+      </a-tab-pane>
+      <a-tab-pane
+        key="tab-3"
+        :tab="t('common.page.form.tabs.basicinfo') + ' (4/4)'"
+        force-render
+      >
+        <div :class="formContentClass">
+          <a-row :gutter="24">
+            <a-col :span="24">
+              <a-form-item
+                :label="pi.label('tenantCode')"
+                name="tenantCode"
+              >
+                <a-input
+                  v-model:value="formState.tenantCode"
+                  :placeholder="pi.ph('tenantCode')"
+                  show-count
+                  :maxlength="20"
+                  disabled
+                />
+              </a-form-item>
+            </a-col>
+            <a-col :span="24">
+              <a-form-item
+                :label="pi.label('companyCode')"
+                name="companyCode"
+              >
+                <a-input
+                  v-model:value="formState.companyCode"
+                  :placeholder="pi.ph('companyCode')"
+                  show-count
+                  :maxlength="20"
+                  disabled
+                />
+              </a-form-item>
+            </a-col>
+            <a-col :span="24">
+              <a-form-item
+                :label="pi.label('companyDefaultCulture')"
+                name="companyDefaultCulture"
+              >
+                <a-input
+                  v-model:value="formState.companyDefaultCulture"
+                  :placeholder="pi.ph('companyDefaultCulture')"
+                  show-count
+                  :maxlength="20"
+                  disabled
                 />
               </a-form-item>
             </a-col>
@@ -419,8 +455,33 @@
       id-field="manufacturerMaterialId"
       :default-row="createDefaultManufacturerMaterialRow"
       :disabled="loading"
+      :enable-vertical-scroll="false"
       section-border
-    />
+      class="w-full min-w-0"
+    >
+      <template #cell-materialCode="{ record }">
+        <TaktSelect
+          v-model:value="record.materialCode"
+          api-url="TaktMaterialPlants/options"
+          class="w-full"
+          :get-popup-container="getSelectPopupContainer"
+          :placeholder="manufacturerMaterialPi.queryPh('materialCode', 'select')"
+          :disabled="loading"
+          allow-clear
+        />
+      </template>
+      <template #cell-isObsolete="{ record }">
+        <TaktSelect
+          v-model:value="record.isObsolete"
+          dict-type="sys_yes_no_type"
+          class="w-full"
+          :get-popup-container="getSelectPopupContainer"
+          :placeholder="manufacturerMaterialPi.ph('isObsolete')"
+          :disabled="loading"
+          allow-clear
+        />
+      </template>
+    </TaktEditableTable>
   </a-form>
 </template>
 
@@ -473,13 +534,19 @@ const formContentClass = computed(() => (formFields.length > 10 ? 'takt-form-con
 /** 当前激活的 Tab key */
 const activeTab = ref('tab-0')
 /** CreateDto 字段名列表（与 formState 键对齐） */
-const formFields = ["tenantCode","companyCode","companyDefaultCulture","manufacturerCode","manufacturerName","manufacturerShortName","manufacturerType","industrySector","manufacturerTaxNumber","registrationCountry","registrationAddress1","registrationAddress2","registrationAddress3","manufacturerPhone","manufacturerFax","manufacturerEmail","manufacturerWebsite","contactPerson","contactPhone","contactEmail","manufacturerLevel","qualityCertification","evaluationScore","manufacturerStatus","extField","remark"]
+const formFields = ["tenantCode","companyCode","companyDefaultCulture","manufacturerCode","manufacturerName1","manufacturerName2","manufacturerShortName","manufacturerType","industrySector","manufacturerTaxNumber","registrationCountry","registrationProvince","registrationCity","registrationAddress1","registrationAddress2","manufacturerPhone","manufacturerFax","manufacturerEmail","manufacturerWebsite","contactPerson","contactPhone","contactEmail","manufacturerLevel","qualityCertification","evaluationScore","manufacturerStatus","extField","remark"]
 
 
 import type { TaktEditableTableColumn } from '@/components/business/takt-editable-table/types'
+import { resolveNextDetailLineNumber } from '@/utils/takt-sequence'
 import { useManufacturerMaterialI18n } from '../composables/use-manufacturer-material-i18n'
 
 const manufacturerMaterialPi = useManufacturerMaterialI18n()
+
+/** 弹窗/表格内 TaktSelect 下拉挂载容器（避免 overflow 裁剪与表头列错位） */
+function getSelectPopupContainer(triggerNode?: HTMLElement): HTMLElement {
+  return triggerNode?.ownerDocument?.body ?? document.body
+}
 
 const childManufacturerMaterialRows = ref<Record<string, unknown>[]>([])
 const manufacturerMaterialTableRef = ref<{
@@ -488,13 +555,27 @@ const manufacturerMaterialTableRef = ref<{
   resetRows: () => void
 } | null>(null)
 
+/** 是否已持久化的子表行 */
+function isPersistedManufacturerMaterialRow(row: Record<string, unknown>): boolean {
+  const id = row.manufacturerMaterialId
+  if (id == null || id === '') {
+    return false
+  }
+  return String(id) !== '0'
+}
+
+/** 分配下一可用子表行号（含作废行，仅据当前表格行递增） */
+function allocateNextManufacturerMaterialLineNumber(): number {
+  const rows = manufacturerMaterialTableRef.value?.getRows?.() ?? childManufacturerMaterialRows.value
+  return resolveNextDetailLineNumber(0, rows)
+}
+
 /** 子表 manufacturerMaterial 可编辑列 */
 const manufacturerMaterialFormColumns = computed<TaktEditableTableColumn[]>(() => [
   {
     key: 'lineNumber',
     title: manufacturerMaterialPi.label('lineNumber'),
-    editor: 'inputNumber',
-    width: 140, summary: 'sum',
+    width: 140,
   },
   {
     key: 'manufacturerMaterialCode',
@@ -517,56 +598,53 @@ const manufacturerMaterialFormColumns = computed<TaktEditableTableColumn[]>(() =
   {
     key: 'materialCode',
     title: manufacturerMaterialPi.label('materialCode'),
-    editor: 'input',
     width: 140,
   },
   {
-    key: 'extField',
-    title: manufacturerMaterialPi.label('extField'),
-    editor: 'textarea',
-    rows: 2,
-    placeholder: t('common.page.form.placeholder.extfield'),
-    width: 140,
-  },
-  {
-    key: 'remark',
-    title: manufacturerMaterialPi.label('remark'),
-    editor: 'textarea',
-    rows: 2,
-    placeholder: manufacturerMaterialPi.ph('remark'),
+    key: 'isObsolete',
+    title: manufacturerMaterialPi.label('isObsolete'),
     width: 140,
   },
 ])
 
 /** 编辑态从 formData 同步各子表行 */
 function syncChildRowsFromFormData(val: Partial<ManufacturerCreate & { manufacturerId?: string }> | null | undefined) {
-  childManufacturerMaterialRows.value = ((val as any)?.manufacturerMaterials ?? []) as Record<string, unknown>[]
+  const rows_manufacturerMaterial = ((val as any)?.manufacturerMaterials ?? []) as Record<string, unknown>[]
+  childManufacturerMaterialRows.value = rows_manufacturerMaterial
 }
 
 function createDefaultManufacturerMaterialRow(): Record<string, unknown> {
   return {
-    lineNumber: (childManufacturerMaterialRows.value.length + 1) * 10,
+    lineNumber: allocateNextManufacturerMaterialLineNumber(),
     manufacturerMaterialCode: '',
     manufacturerMaterialName: '',
     manufacturerMaterialSpecification: '',
     materialCode: '',
-    extField: '',
-    remark: '',
+    isObsolete: 0,
   }
 }
 
 /** 组装 Create/Update 载荷（主表 + 子表数组） */
 function buildSubmitPayload() {
   const masterId = props.formData?.manufacturerId ?? ''
+  const isUpdate = Boolean(masterId)
   return {
     ...formState,
-    manufacturerMaterials: manufacturerMaterialTableRef.value?.getRows?.() ?? childManufacturerMaterialRows.value.map((rest) => ({
-      ...rest,
-      tenantCode: tenantStore.tenantCode,
-      companyCode: tenantStore.companyCode,
-      companyDefaultCulture: userStore.userInfo?.companyDefaultCulture ?? '',
-      manufacturerId: masterId,
-    })),
+    manufacturerMaterials: manufacturerMaterialTableRef.value?.getRows?.() ?? childManufacturerMaterialRows.value.map((row) => {
+      const normalized = {
+        ...row,
+        tenantCode: tenantStore.tenantCode,
+        companyCode: tenantStore.companyCode,
+        companyDefaultCulture: userStore.userInfo?.companyDefaultCulture ?? '',
+        manufacturerId: masterId,
+      }
+      if (isUpdate && isPersistedManufacturerMaterialRow(row)) {
+        normalized.manufacturerMaterialId = row.manufacturerMaterialId
+      } else {
+        delete normalized.manufacturerMaterialId
+      }
+      return normalized
+    }),
   }
 }
 
@@ -589,6 +667,7 @@ const formState = reactive<Record<string, any>>({})
 /** 表单字段默认值（字典 IsDefault=1，来自 TaktDictDataSeedData） */
 const FORM_FIELD_DEFAULTS: Record<string, string | number> = {
   manufacturerType: 0,
+  registrationCountry: "CN",
   manufacturerLevel: 0,
   qualityCertification: 0,
   manufacturerStatus: 1
@@ -652,10 +731,10 @@ const rules = computed<Record<string, Rule[]>>(() => ({
       trigger: 'blur'
     }
   ],
-  manufacturerName: [
+  manufacturerName1: [
     {
       required: true,
-      message: pi.ph('manufacturerName'),
+      message: pi.ph('manufacturerName1'),
       trigger: 'blur'
     }
   ],

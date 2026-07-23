@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Application.Services.Logistics.CustomerService
 // 文件名称：TaktServiceOrderService.cs
-// 创建时间：2026-06-23
+// 创建时间：2026-07-23
 // 创建人：Takt365(Cursor AI)
 // 功能描述：服务订单应用服务实现
 // 
@@ -102,12 +102,12 @@ public class TaktServiceOrderService : TaktServiceBase, ITaktServiceOrderService
         EnsureThreeLayerContext();
         var list = await _serviceOrderRepository.GetListAsync(
             x => x.TenantCode == CurrentTenantCode && x.CompanyCode == CurrentCompanyCode && x.OrderStatus == 1,
-            x => x.ClientName ?? string.Empty,
+            x => x.ServiceOrderCode ?? string.Empty,
             false);
         return list.Select(e => new TaktSelectOption
         {
-            DictValue = e.Id,
-            DictLabel = e.ClientName ?? e.Id.ToString(),
+            DictValue = e.ServiceOrderCode,
+            DictLabel = e.ServiceOrderCode,
         }).ToList();
     }
 
@@ -354,7 +354,7 @@ public class TaktServiceOrderService : TaktServiceBase, ITaktServiceOrderService
     }
 
     /// <summary>
-    /// 保存服务订单子表级联（服务工单；Create/Update 后按主表 Id 先删后插）
+    /// 保存服务订单子表级联（服务工单；按子表 Id 增量新增/更新；未提交行标记作废，禁止先删后插）
     /// </summary>
     /// <param name="entity">主表实体</param>
     /// <param name="dto">创建/更新 DTO（含子表集合；UpdateDto 须继承 CreateDto）</param>
@@ -362,87 +362,67 @@ public class TaktServiceOrderService : TaktServiceBase, ITaktServiceOrderService
     private async Task SaveServiceOrderChildrenAsync(TaktServiceOrder entity, TaktServiceOrderCreateDto dto)
     {
         // 服务工单（Tickets）
-        if (dto.Tickets is not { Count: > 0 })
+        List<TaktServiceTicketUpdateDto>? ticketsForSave;
+        if (dto is TaktServiceOrderUpdateDto updateDtoForTickets && updateDtoForTickets.Tickets != null)
+        {
+            ticketsForSave = updateDtoForTickets.Tickets;
+        }
+        else if (dto.Tickets != null)
+        {
+            ticketsForSave = dto.Tickets.Adapt<List<TaktServiceTicketUpdateDto>>();
+        }
+        else
+        {
+            ticketsForSave = null;
+        }
+        if (ticketsForSave is not { Count: > 0 })
         {
             await _serviceTicketRepository.DeleteAsync(x => x.ServiceOrderId == entity.Id);
         }
         else
         {
-            var tickets = dto.Tickets.Adapt<List<TaktServiceTicket>>();
-            foreach (var child in tickets)
+            var existingList = await _serviceTicketRepository.GetListAsync(x => x.ServiceOrderId == entity.Id);
+            var existingById = existingList.ToDictionary(x => x.Id);
+            var submittedIds = new HashSet<long>();
+            var toCreate = new List<TaktServiceTicket>();
+            for (var i = 0; i < ticketsForSave.Count; i++)
             {
-                child.ServiceOrderId = entity.Id;
-            }
-            var ticketsNeedSort = tickets.Where(c => c.SortOrder <= 0).ToList();
-            if (ticketsNeedSort.Count > 0)
-            {
-                var maxSort = await _serviceTicketRepository.GetMaxIntAsync(
-                    x => x.TenantCode == CurrentTenantCode && x.CompanyCode == CurrentCompanyCode && x.ServiceOrderId == entity.Id,
-                    x => x.SortOrder);
-                var sortSeq = _sortOrderGenerator.GenerateSequence(ticketsNeedSort.Count, maxSort).ToList();
-                var sortIdx = 0;
-                foreach (var child in tickets)
+                var childDto = ticketsForSave[i];
+                childDto.ServiceOrderId = entity.Id;
+                if (childDto.ServiceTicketId > 0)
                 {
-                    if (child.SortOrder <= 0)
+                    if (!existingById.TryGetValue(childDto.ServiceTicketId, out var target))
                     {
-                        child.SortOrder = sortSeq[sortIdx++];
+                        throw new TaktBusinessException("服务工单不存在（ServiceTicketId={childDto.ServiceTicketId}）");
                     }
+                    if (target.ServiceOrderId != entity.Id)
+                    {
+                        throw new TaktBusinessException("服务工单不属于当前主表（ServiceTicketId={childDto.ServiceTicketId}）");
+                    }
+                    submittedIds.Add(childDto.ServiceTicketId);
+                    childDto.Adapt(target);
+                    target.Id = childDto.ServiceTicketId;
+                    target.ServiceOrderId = entity.Id;
+                    await _serviceTicketRepository.UpdateAsync(target);
+                }
+                else
+                {
+                    var child = childDto.Adapt<TaktServiceTicket>();
+                    child.Id = 0;
+                    child.ServiceOrderId = entity.Id;
+                    toCreate.Add(child);
                 }
             }
-                        var seenKeys = new HashSet<string>(StringComparer.Ordinal);
-                        for (var i = 0; i < tickets.Count; i++)
-                        {
-                            var key = $"{tickets[i].CompanyCode}|{tickets[i].PlantCode}|{tickets[i].ServiceTicketCode}";
-                            if (!seenKeys.Add(key))
-                            {
-                                throw new TaktBusinessException($"服务工单第{i + 1}项与本次提交的其他项重复（CompanyCode、PlantCode、ServiceTicketCode）");
-                            }
-                        }
-            await _serviceTicketRepository.DeleteAsync(x => x.ServiceOrderId == entity.Id);
-            foreach (var child in tickets)
+            foreach (var removed in existingList.Where(x => !submittedIds.Contains(x.Id)))
             {
-            var isUnique_ix_takt_logistics_service_ticket_code_unique = await _uniqueValidator.IsUniqueAsync(
-                _serviceTicketRepository,
-                x => x.CompanyCode == child.CompanyCode
-                    && x.PlantCode == child.PlantCode
-                    && x.ServiceTicketCode == child.ServiceTicketCode);
-            if (!isUnique_ix_takt_logistics_service_ticket_code_unique)
+                await _serviceTicketRepository.DeleteAsync(removed.Id);
+            }
+            if (toCreate.Count > 0)
             {
-                throw new TaktBusinessException("服务工单的CompanyCode、PlantCode、ServiceTicketCode已存在");
+                await _serviceTicketRepository.CreateRangeAsync(toCreate);
             }
-            }
-            await _serviceTicketRepository.CreateRangeAsync(tickets);
         }
     }
-
-    /// <summary>
-    /// 获取服务订单统计（数据看板）
-    /// </summary>
-    /// <param name="queryDto">查询 DTO</param>
-    /// <returns>服务订单统计</returns>
-    public async Task<TaktServiceOrderStatDto> GetServiceOrderStatAsync(TaktServiceOrderStatQueryDto queryDto)
-    {
-        EnsureThreeLayerContext();
-        var (start, end, statMonth) = TaktStatMonthRangeHelper.ResolveMonthRange(
-            queryDto.OrderDateStart,
-            queryDto.OrderDateEnd);
-        var tenantCode = CurrentTenantCode;
-        var companyCode = CurrentCompanyCode;
-        Expression<Func<TaktServiceOrder, bool>> predicate = x =>
-            x.TenantCode == tenantCode
-            && x.CompanyCode == companyCode
-            && x.OrderDate >= start
-            && x.OrderDate <= end;
-        var monthOrderCount = await _serviceOrderRepository.CountAsync(predicate);
-        var monthTotalAmount = await _serviceOrderRepository.SumAsync(x => x.TotalAmount, predicate);
-        return new TaktServiceOrderStatDto
-        {
-            StatMonth = statMonth,
-            MonthOrderCount = monthOrderCount,
-            MonthTotalAmount = monthTotalAmount,
-        };
-    }
-
     // ========================================
     // 查询表达式
     // ========================================
@@ -464,7 +444,7 @@ public class TaktServiceOrderService : TaktServiceBase, ITaktServiceOrderService
                 || (x.ServiceOrderCode != null && x.ServiceOrderCode.Contains(keywords))
                 || SqlFunc.ToString(x.ClientId).Contains(keywords)
                 || (x.ClientCode != null && x.ClientCode.Contains(keywords))
-                || (x.ClientName != null && x.ClientName.Contains(keywords))
+                || (x.ClientName1 != null && x.ClientName1.Contains(keywords))
                 || SqlFunc.ToString(x.ServiceContractId).Contains(keywords)
                 || (x.ServiceContractCode != null && x.ServiceContractCode.Contains(keywords))
                 || SqlFunc.ToString(x.ServiceRequestId).Contains(keywords)
@@ -509,9 +489,9 @@ public class TaktServiceOrderService : TaktServiceBase, ITaktServiceOrderService
             exp = exp.And(x => x.ClientCode != null && x.ClientCode.Contains(queryDto.ClientCode));
         }
 
-        if (!string.IsNullOrEmpty(queryDto?.ClientName))
+        if (!string.IsNullOrEmpty(queryDto?.ClientName1))
         {
-            exp = exp.And(x => x.ClientName != null && x.ClientName.Contains(queryDto.ClientName));
+            exp = exp.And(x => x.ClientName1 != null && x.ClientName1.Contains(queryDto.ClientName1));
         }
 
         if (queryDto?.ServiceContractId.HasValue == true)

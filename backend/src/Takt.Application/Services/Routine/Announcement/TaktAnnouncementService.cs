@@ -40,8 +40,8 @@ public class TaktAnnouncementService : TaktServiceBase, ITaktAnnouncementService
     /// </summary>
     /// <param name="announcementRepository">公告通知仓储</param>
     /// <param name="uniqueValidator">唯一性验证器</param>
-    /// <param name="numberingGenerator">编号生成器</param>
-    /// <param name="numberingRepository">编号规则仓储</param>
+    /// <param name="numberingGenerator">编码生成器</param>
+    /// <param name="numberingRepository">编码规则仓储</param>
     /// <param name="userContext">用户上下文</param>
     /// <param name="localizationService">本地化服务</param>
     public TaktAnnouncementService(
@@ -446,13 +446,13 @@ public class TaktAnnouncementService : TaktServiceBase, ITaktAnnouncementService
     }
 
     // ========================================
-    // 编号生成
+    // 编码生成
     // ========================================
 
     /// <summary>
-    /// 按前端选定的编号规则编码生成业务编码
+    /// 按前端选定的编码规则编码生成业务编码
     /// </summary>
-    /// <param name="ruleCode">编号规则编码（TaktNumbering.RuleCode）</param>
+    /// <param name="ruleCode">编码规则编码（TaktNumbering.RuleCode）</param>
     /// <returns>公告编码</returns>
     private async Task<string> GenerateAnnouncementCodeAsync(string? ruleCode)
     {
@@ -469,21 +469,21 @@ public class TaktAnnouncementService : TaktServiceBase, ITaktAnnouncementService
         }
         catch (Exception ex)
         {
-            LogWarning($"编号规则 {rule.RuleCode} 不可用: {ex.Message}");
+            LogWarning($"编码规则 {rule.RuleCode} 不可用: {ex.Message}");
             return BuildFallbackAnnouncementCode(rule);
         }
     }
 
     /// <summary>
-    /// 按 RuleCode 加载当前租户/公司下已启用的编号规则
+    /// 按 RuleCode 加载当前租户/公司下已启用的编码规则
     /// </summary>
-    /// <param name="ruleCode">编号规则编码（表单选择器传入）</param>
-    /// <returns>编号规则实体</returns>
+    /// <param name="ruleCode">编码规则编码（表单选择器传入）</param>
+    /// <returns>编码规则实体</returns>
     private async Task<TaktNumbering> ResolveActiveNumberingRuleAsync(string? ruleCode)
     {
         if (string.IsNullOrWhiteSpace(ruleCode))
         {
-            throw new TaktBusinessException("自动取号须选择编号规则（NumberingRuleCode）");
+            throw new TaktBusinessException("自动取号须选择编码规则（NumberingRuleCode）");
         }
         var normalizedRuleCode = ruleCode.Trim();
         var rule = await _numberingRepository.FirstAsync(x =>
@@ -492,19 +492,19 @@ public class TaktAnnouncementService : TaktServiceBase, ITaktAnnouncementService
             && x.RuleCode == normalizedRuleCode);
         if (rule == null)
         {
-            throw new TaktBusinessException($"编号规则「{normalizedRuleCode}」不存在");
+            throw new TaktBusinessException($"编码规则「{normalizedRuleCode}」不存在");
         }
         if (rule.NumberingStatus != 1)
         {
-            throw new TaktBusinessException($"编号规则「{normalizedRuleCode}」已禁用");
+            throw new TaktBusinessException($"编码规则「{normalizedRuleCode}」已禁用");
         }
         return rule;
     }
 
     /// <summary>
-    /// 编号规则不可用时的兜底公告编码（前缀取自编号规则 PrefixCode）
+    /// 编码规则不可用时的兜底公告编码（前缀取自编码规则 PrefixCode）
     /// </summary>
-    /// <param name="rule">编号规则</param>
+    /// <param name="rule">编码规则</param>
     /// <returns>兜底编码</returns>
     private static string BuildFallbackAnnouncementCode(TaktNumbering rule)
     {

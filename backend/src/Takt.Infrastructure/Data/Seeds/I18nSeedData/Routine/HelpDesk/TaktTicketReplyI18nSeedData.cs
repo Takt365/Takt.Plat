@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Infrastructure.Data.Seeds.I18nSeedData.Routine.HelpDesk
 // 文件名称：TaktTicketReplyI18nSeedData.cs
-// 创建时间：2026-07-20
+// 创建时间：2026-07-23
 // 创建人：Takt365(Auto Generated)
 // 功能描述：TaktTicketReply 实体字段国际化种子（无对应 frontend locales；TranslationText 取自 ColumnDescription，ContextNote 取自属性 XML summary）
 // 
@@ -91,13 +91,13 @@ public class TaktTicketReplyI18nSeedData : ITaktSeedDataCoordinator
             new TranslationSeedItem("entity.ticketreply._self", "zh-HK", "工单回复信息_hk", "实体名称"),
 
             // entity.ticketreply.ticketid
-            new TranslationSeedItem("entity.ticketreply.ticketid", "en-US", "工单ID_us", "工单 ID（选项 TaktTickets/options，DictValue=Id）"),
+            new TranslationSeedItem("entity.ticketreply.ticketid", "en-US", "工单ID_us", "工单 ID（选项 TaktTickets/options；DictValue=Id）"),
             // entity.ticketreply.ticketid
-            new TranslationSeedItem("entity.ticketreply.ticketid", "ja-JP", "工单ID_jp", "工单 ID（选项 TaktTickets/options，DictValue=Id）"),
+            new TranslationSeedItem("entity.ticketreply.ticketid", "ja-JP", "工单ID_jp", "工单 ID（选项 TaktTickets/options；DictValue=Id）"),
             // entity.ticketreply.ticketid
-            new TranslationSeedItem("entity.ticketreply.ticketid", "zh-CN", "工单ID", "工单 ID（选项 TaktTickets/options，DictValue=Id）"),
+            new TranslationSeedItem("entity.ticketreply.ticketid", "zh-CN", "工单ID", "工单 ID（选项 TaktTickets/options；DictValue=Id）"),
             // entity.ticketreply.ticketid
-            new TranslationSeedItem("entity.ticketreply.ticketid", "zh-HK", "工单ID_hk", "工单 ID（选项 TaktTickets/options，DictValue=Id）"),
+            new TranslationSeedItem("entity.ticketreply.ticketid", "zh-HK", "工单ID_hk", "工单 ID（选项 TaktTickets/options；DictValue=Id）"),
 
             // entity.ticketreply.authortype
             new TranslationSeedItem("entity.ticketreply.authortype", "en-US", "作者类型_us", "作者类型（字典 routine_ticket_reply_author_type；0=客服 1=用户 2=系统）"),
@@ -109,13 +109,13 @@ public class TaktTicketReplyI18nSeedData : ITaktSeedDataCoordinator
             new TranslationSeedItem("entity.ticketreply.authortype", "zh-HK", "作者类型_hk", "作者类型（字典 routine_ticket_reply_author_type；0=客服 1=用户 2=系统）"),
 
             // entity.ticketreply.authorid
-            new TranslationSeedItem("entity.ticketreply.authorid", "en-US", "作者用户ID_us", "作者 ID（选项 TaktUsers/options，DictValue=Id）"),
+            new TranslationSeedItem("entity.ticketreply.authorid", "en-US", "作者用户ID_us", "作者 ID（选项 TaktUsers/options；DictValue=Id）"),
             // entity.ticketreply.authorid
-            new TranslationSeedItem("entity.ticketreply.authorid", "ja-JP", "作者用户ID_jp", "作者 ID（选项 TaktUsers/options，DictValue=Id）"),
+            new TranslationSeedItem("entity.ticketreply.authorid", "ja-JP", "作者用户ID_jp", "作者 ID（选项 TaktUsers/options；DictValue=Id）"),
             // entity.ticketreply.authorid
-            new TranslationSeedItem("entity.ticketreply.authorid", "zh-CN", "作者用户ID", "作者 ID（选项 TaktUsers/options，DictValue=Id）"),
+            new TranslationSeedItem("entity.ticketreply.authorid", "zh-CN", "作者用户ID", "作者 ID（选项 TaktUsers/options；DictValue=Id）"),
             // entity.ticketreply.authorid
-            new TranslationSeedItem("entity.ticketreply.authorid", "zh-HK", "作者用户ID_hk", "作者 ID（选项 TaktUsers/options，DictValue=Id）"),
+            new TranslationSeedItem("entity.ticketreply.authorid", "zh-HK", "作者用户ID_hk", "作者 ID（选项 TaktUsers/options；DictValue=Id）"),
 
             // entity.ticketreply.authorname
             new TranslationSeedItem("entity.ticketreply.authorname", "en-US", "作者姓名_us", "作者姓名"),

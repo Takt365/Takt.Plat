@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Infrastructure.Data.Seeds.I18nSeedData.Logistics.Manufacturing.Mrp
 // 文件名称：TaktMaterialRequirementsPlanningI18nSeedData.cs
-// 创建时间：2026-07-20
+// 创建时间：2026-07-23
 // 创建人：Takt365(Auto Generated)
 // 功能描述：TaktMaterialRequirementsPlanning 实体字段国际化种子（无对应 frontend locales；TranslationText 取自 ColumnDescription，ContextNote 取自属性 XML summary）
 // 
@@ -91,13 +91,13 @@ public class TaktMaterialRequirementsPlanningI18nSeedData : ITaktSeedDataCoordin
             new TranslationSeedItem("entity.materialrequirementsplanning._self", "zh-HK", "物料需求计划 MRP 头表信息_hk", "实体名称"),
 
             // entity.materialrequirementsplanning.plantcode
-            new TranslationSeedItem("entity.materialrequirementsplanning.plantcode", "en-US", "工厂代码_us", "工厂代码（选项 TaktPlants/options，DictValue=PlantCode）"),
+            new TranslationSeedItem("entity.materialrequirementsplanning.plantcode", "en-US", "工厂代码_us", "工厂代码（选项 TaktPlants/options；DictValue=PlantCode）"),
             // entity.materialrequirementsplanning.plantcode
-            new TranslationSeedItem("entity.materialrequirementsplanning.plantcode", "ja-JP", "工厂代码_jp", "工厂代码（选项 TaktPlants/options，DictValue=PlantCode）"),
+            new TranslationSeedItem("entity.materialrequirementsplanning.plantcode", "ja-JP", "工厂代码_jp", "工厂代码（选项 TaktPlants/options；DictValue=PlantCode）"),
             // entity.materialrequirementsplanning.plantcode
-            new TranslationSeedItem("entity.materialrequirementsplanning.plantcode", "zh-CN", "工厂代码", "工厂代码（选项 TaktPlants/options，DictValue=PlantCode）"),
+            new TranslationSeedItem("entity.materialrequirementsplanning.plantcode", "zh-CN", "工厂代码", "工厂代码（选项 TaktPlants/options；DictValue=PlantCode）"),
             // entity.materialrequirementsplanning.plantcode
-            new TranslationSeedItem("entity.materialrequirementsplanning.plantcode", "zh-HK", "工厂代码_hk", "工厂代码（选项 TaktPlants/options，DictValue=PlantCode）"),
+            new TranslationSeedItem("entity.materialrequirementsplanning.plantcode", "zh-HK", "工厂代码_hk", "工厂代码（选项 TaktPlants/options；DictValue=PlantCode）"),
 
             // entity.materialrequirementsplanning.code
             new TranslationSeedItem("entity.materialrequirementsplanning.code", "en-US", "MRP编码_us", "MRP 编码（租户+公司+工厂内业务唯一）"),
@@ -172,22 +172,22 @@ public class TaktMaterialRequirementsPlanningI18nSeedData : ITaktSeedDataCoordin
             new TranslationSeedItem("entity.materialrequirementsplanning.planperiodend", "zh-HK", "计划周期结束日期_hk", "计划周期结束日期"),
 
             // entity.materialrequirementsplanning.plannerid
-            new TranslationSeedItem("entity.materialrequirementsplanning.plannerid", "en-US", "计划人员工ID_us", "计划人员工ID（选项 TaktEmployees/options，DictValue=Id）"),
+            new TranslationSeedItem("entity.materialrequirementsplanning.plannerid", "en-US", "计划人员工ID_us", "计划人员工ID（选项 TaktEmployees/options；DictValue=Id）"),
             // entity.materialrequirementsplanning.plannerid
-            new TranslationSeedItem("entity.materialrequirementsplanning.plannerid", "ja-JP", "计划人员工ID_jp", "计划人员工ID（选项 TaktEmployees/options，DictValue=Id）"),
+            new TranslationSeedItem("entity.materialrequirementsplanning.plannerid", "ja-JP", "计划人员工ID_jp", "计划人员工ID（选项 TaktEmployees/options；DictValue=Id）"),
             // entity.materialrequirementsplanning.plannerid
-            new TranslationSeedItem("entity.materialrequirementsplanning.plannerid", "zh-CN", "计划人员工ID", "计划人员工ID（选项 TaktEmployees/options，DictValue=Id）"),
+            new TranslationSeedItem("entity.materialrequirementsplanning.plannerid", "zh-CN", "计划人员工ID", "计划人员工ID（选项 TaktEmployees/options；DictValue=Id）"),
             // entity.materialrequirementsplanning.plannerid
-            new TranslationSeedItem("entity.materialrequirementsplanning.plannerid", "zh-HK", "计划人员工ID_hk", "计划人员工ID（选项 TaktEmployees/options，DictValue=Id）"),
+            new TranslationSeedItem("entity.materialrequirementsplanning.plannerid", "zh-HK", "计划人员工ID_hk", "计划人员工ID（选项 TaktEmployees/options；DictValue=Id）"),
 
             // entity.materialrequirementsplanning.planby
-            new TranslationSeedItem("entity.materialrequirementsplanning.planby", "en-US", "计划人_us", "计划人（选项 TaktEmployees/options，DictValue=EmployeeNo）"),
+            new TranslationSeedItem("entity.materialrequirementsplanning.planby", "en-US", "计划人_us", "计划人（选项 TaktEmployees/options；DictValue=EmployeeCode）"),
             // entity.materialrequirementsplanning.planby
-            new TranslationSeedItem("entity.materialrequirementsplanning.planby", "ja-JP", "计划人_jp", "计划人（选项 TaktEmployees/options，DictValue=EmployeeNo）"),
+            new TranslationSeedItem("entity.materialrequirementsplanning.planby", "ja-JP", "计划人_jp", "计划人（选项 TaktEmployees/options；DictValue=EmployeeCode）"),
             // entity.materialrequirementsplanning.planby
-            new TranslationSeedItem("entity.materialrequirementsplanning.planby", "zh-CN", "计划人", "计划人（选项 TaktEmployees/options，DictValue=EmployeeNo）"),
+            new TranslationSeedItem("entity.materialrequirementsplanning.planby", "zh-CN", "计划人", "计划人（选项 TaktEmployees/options；DictValue=EmployeeCode）"),
             // entity.materialrequirementsplanning.planby
-            new TranslationSeedItem("entity.materialrequirementsplanning.planby", "zh-HK", "计划人_hk", "计划人（选项 TaktEmployees/options，DictValue=EmployeeNo）"),
+            new TranslationSeedItem("entity.materialrequirementsplanning.planby", "zh-HK", "计划人_hk", "计划人（选项 TaktEmployees/options；DictValue=EmployeeCode）"),
 
             // entity.materialrequirementsplanning.runstatus
             new TranslationSeedItem("entity.materialrequirementsplanning.runstatus", "en-US", "运算状态_us", "运算状态（0=草稿，1=运算中，2=已运算，3=已发布，4=失败）"),

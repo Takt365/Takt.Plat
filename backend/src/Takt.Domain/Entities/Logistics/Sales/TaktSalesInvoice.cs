@@ -28,7 +28,7 @@ namespace Takt.Domain.Entities.Logistics.Sales;
 public class TaktSalesInvoice : TaktCompanyEntityBase
 {
     /// <summary>
-    /// 工厂代码（选项 TaktPlants/options，DictValue=PlantCode）
+    /// 工厂代码（选项 TaktPlants/options；DictValue=PlantCode）
     /// </summary>
     [SugarColumn(ColumnName = "plant_code", ColumnDescription = "工厂代码", ColumnDataType = "nvarchar", Length = 4, IsNullable = false)]
     public string PlantCode { get; set; } = string.Empty;
@@ -38,19 +38,34 @@ public class TaktSalesInvoice : TaktCompanyEntityBase
     [SugarColumn(ColumnName = "year_month", ColumnDescription = "年度期间", ColumnDataType = "varchar", Length = 6, IsNullable = false)]
     public string YearMonth { get; set; } = string.Empty;
     /// <summary>
-    /// 客户编码（选项 TaktCustomers/options，DictValue=CustomerCode）
+    /// 客户编码（选项 TaktCustomers/options；DictValue=CustomerCode）
     /// </summary>
     [SugarColumn(ColumnName = "customer_code", ColumnDescription = "客户编码", ColumnDataType = "nvarchar", Length = 40, IsNullable = false)]
     public string CustomerCode { get; set; } = string.Empty;
     /// <summary>
-    /// 客户名称
+    /// 客户名称1（冗余，与 TaktCustomer.CustomerName1 对齐）
     /// </summary>
-    [SugarColumn(ColumnName = "customer_name", ColumnDescription = "客户名称", ColumnDataType = "nvarchar", Length = 200, IsNullable = false)]
-    public string CustomerName { get; set; } = string.Empty;
+    [SugarColumn(ColumnName = "customer_name1", ColumnDescription = "客户名称1", ColumnDataType = "nvarchar", Length = 140, IsNullable = false)]
+    public string CustomerName1 { get; set; } = string.Empty;
     /// <summary>
-    /// 会计凭证编号（租户+公司+工厂内唯一）
+    /// 结算币种（字典 accounting_currency_code；DictValue=CNY/USD 等；一单一币种）
     /// </summary>
-    [SugarColumn(ColumnName = "accounting_document_code", ColumnDescription = "会计凭证编号", ColumnDataType = "nvarchar", Length = 40, IsNullable = false)]
+    [SugarColumn(ColumnName = "currency_code", ColumnDescription = "结算币种", ColumnDataType = "nvarchar", Length = 3, IsNullable = false, DefaultValue = "CNY")]
+    public string CurrencyCode { get; set; } = "CNY";
+    /// <summary>
+    /// 税率（字典 accounting_tax_rate_param；13=13%，9=9%，0=0% 等；一单一税率）
+    /// </summary>
+    [SugarColumn(ColumnName = "tax_rate", ColumnDescription = "税率", ColumnDataType = "int", IsNullable = false, DefaultValue = "13")]
+    public int TaxRate { get; set; } = 13;
+    /// <summary>
+    /// 税费
+    /// </summary>
+    [SugarColumn(ColumnName = "tax_amount", ColumnDescription = "税费", ColumnDataType = "decimal", Length = 18, DecimalDigits = 2, IsNullable = false, DefaultValue = "0")]
+    public decimal TaxAmount { get; set; } = 0;
+    /// <summary>
+    /// 会计凭证编码（租户+公司+工厂内唯一）
+    /// </summary>
+    [SugarColumn(ColumnName = "accounting_document_code", ColumnDescription = "会计凭证编码", ColumnDataType = "nvarchar", Length = 40, IsNullable = false)]
     public string AccountingDocumentCode { get; set; } = string.Empty;
 
     // ========================================

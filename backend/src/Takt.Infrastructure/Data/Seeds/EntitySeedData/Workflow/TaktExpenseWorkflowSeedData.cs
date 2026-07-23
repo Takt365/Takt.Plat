@@ -130,7 +130,7 @@ public class TaktExpenseWorkflowSeedData : ITaktSeedDataCoordinator
     {
         var rules = new object[]
         {
-            new { field = "expenseCode", title = "费用单编号", type = "input" },
+            new { field = "expenseCode", title = "费用单编码", type = "input" },
             new { field = "expenseTitle", title = "费用标题", type = "input" },
             new { field = "expenseType", title = "费用类型", type = "select", props = new { dictType = "accounting_expense_type" } },
             new { field = "expenseAmount", title = "费用金额", type = "inputNumber" },
@@ -146,7 +146,7 @@ public class TaktExpenseWorkflowSeedData : ITaktSeedDataCoordinator
         {
             fields = new object[]
             {
-                new { dbColumnName = "expense_code", csharpColumnName = "expenseCode", columnDescription = "费用单编号", dataType = "varchar", displayType = "input" },
+                new { dbColumnName = "expense_code", csharpColumnName = "expenseCode", columnDescription = "费用单编码", dataType = "varchar", displayType = "input" },
                 new { dbColumnName = "expense_title", csharpColumnName = "expenseTitle", columnDescription = "费用标题", dataType = "nvarchar", displayType = "input" },
                 new { dbColumnName = "expense_type", csharpColumnName = "expenseType", columnDescription = "费用类型", dataType = "int", displayType = "select", dictTypeCode = "accounting_expense_type" },
                 new { dbColumnName = "expense_amount", csharpColumnName = "expenseAmount", columnDescription = "费用金额", dataType = "decimal", displayType = "inputNumber" },

@@ -185,8 +185,11 @@ export interface BomMaterialCostItemComponentMovingPrice {
   currency: string;
   /** 各核算月材料成本，键 yyyy-MM；缺月无键 */
   periodMaterialCosts: Record<string, number>;
-  /** 兼容旧字段：同 periodMaterialCosts */
-  periodUnitPrices?: Record<string, number>;
+  /**
+   * 各月相对上一展示月：present / absent / new / removed / up / down / flat
+   * （先区分有无物料，再对比价格）
+   */
+  periodChangeTypes?: Record<string, string>;
   trend?: string;
   basePeriod?: string | null;
   comparePeriod?: string | null;
@@ -199,13 +202,17 @@ export interface BomMaterialCostItemComponentMovingPriceResult {
   paged: TaktPagedResult<BomMaterialCostItemComponentMovingPrice>;
   periodOrder: string[];
   productCodes: string[];
-  /** 明细组件行总数（字段名保留兼容） */
+  /** 明细组件行总数 */
   componentCount: number;
   basePeriod?: string | null;
   comparePeriod?: string | null;
   upCount: number;
   downCount: number;
   flatCount: number;
+  /** 关注月新增组件数 */
+  newCount?: number;
+  /** 关注月剔除组件数 */
+  removedCount?: number;
   noneCount: number;
   /** 全量行各期间材料成本合计（分页前、已应用涨跌筛选） */
   periodCostTotals?: Record<string, number>;
@@ -214,7 +221,7 @@ export interface BomMaterialCostItemComponentMovingPriceResult {
 }
 
 /** 机种成本推移查询 */
-export interface BomMaterialCostItemModelMovingPriceQuery extends TaktPagedQuery {
+export interface BomMaterialCostItemModelCostTrendQuery extends TaktPagedQuery {
   plantCode: string;
   /** 可选；空=工厂期间全量（有 productCode 时可反查机种） */
   modelCode?: string;
@@ -224,20 +231,33 @@ export interface BomMaterialCostItemModelMovingPriceQuery extends TaktPagedQuery
   periodDateEnd?: string;
   focusPeriod?: string;
   trendFilter?: string;
+  /**
+   * 合并模式：summary=粗合并（默认）；detail=差异组件键
+   * @description detail：组件编码+描述+数量+批量标识+生产相关+采购类型+特殊采购类+利润中心；期间由核算日期
+   */
+  mergeMode?: 'summary' | 'detail' | string;
 }
 
 /**
  * 机种成本推移分析行
- * @description 合并键 Plant+Component+ProductionRelated+PurchaseType；列为月材料成本
+ * @description summary/detail 合并键；列为月材料成本（CostingDate→yyyy-MM）
  */
-export interface BomMaterialCostItemModelMovingPrice {
+export interface BomMaterialCostItemModelCostTrend {
   plantCode: string;
   modelCode: string;
   modelName: string;
   componentCode: string;
   componentDescription: string;
+  /** detail 模式 */
+  componentQuantity?: number | null;
+  /** detail 模式 */
+  batchIndicator?: string | null;
   productionRelated?: string | null;
   purchaseType: string;
+  /** detail 模式 */
+  specialProcurementType?: string | null;
+  /** detail 模式 */
+  profitCenterCode?: string | null;
   productCodes: string;
   productCount: number;
   currency: string;
@@ -252,8 +272,8 @@ export interface BomMaterialCostItemModelMovingPrice {
 }
 
 /** 机种成本推移分析结果 */
-export interface BomMaterialCostItemModelMovingPriceResult {
-  paged: TaktPagedResult<BomMaterialCostItemModelMovingPrice>;
+export interface BomMaterialCostItemModelCostTrendResult {
+  paged: TaktPagedResult<BomMaterialCostItemModelCostTrend>;
   periodOrder: string[];
   productCodes: string[];
   /** 机种各月材料成本（产品月成本算术平均） */

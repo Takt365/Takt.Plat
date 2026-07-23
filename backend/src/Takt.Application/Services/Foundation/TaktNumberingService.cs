@@ -4,7 +4,7 @@
 // 文件名称：TaktNumberingService.cs
 // 创建时间：2026-06-09
 // 创建人：Takt365(Cursor AI)
-// 功能描述：编号规则应用服务实现（CRUD + 导入导出）
+// 功能描述：编码规则应用服务实现（CRUD + 导入导出）
 // · 新增/导入/更新：服务端按规则自动生成或刷新起始编码 ExampleCode（Create/Import 同时写入 CurrentSequence）
 // · 运行时取号：业务模块注入 ITaktNumberingGenerator，不在本服务重复封装
 // 
@@ -28,7 +28,7 @@ using Takt.Shared.Options;
 namespace Takt.Application.Services.Foundation;
 
 /// <summary>
-/// 编号规则应用服务
+/// 编码规则应用服务
 /// </summary>
 public class TaktNumberingService : TaktServiceBase, ITaktNumberingService
 {
@@ -38,7 +38,7 @@ public class TaktNumberingService : TaktServiceBase, ITaktNumberingService
     /// <summary>
     /// 构造函数
     /// </summary>
-    /// <param name="numberingRepository">编号规则仓储</param>
+    /// <param name="numberingRepository">编码规则仓储</param>
     /// <param name="uniqueValidator">唯一性验证器</param>
     /// <param name="userContext">用户上下文</param>
     /// <param name="localizationService">本地化服务</param>
@@ -54,7 +54,7 @@ public class TaktNumberingService : TaktServiceBase, ITaktNumberingService
     }
 
     /// <summary>
-    /// 获取编号规则列表（分页）
+    /// 获取编码规则列表（分页）
     /// </summary>
     /// <param name="queryDto">查询DTO</param>
     /// <returns>分页结果</returns>
@@ -73,9 +73,9 @@ public class TaktNumberingService : TaktServiceBase, ITaktNumberingService
     }
 
     /// <summary>
-    /// 根据ID获取编号规则
+    /// 根据ID获取编码规则
     /// </summary>
-    /// <param name="id">编号规则ID</param>
+    /// <param name="id">编码规则ID</param>
     /// <returns>DTO</returns>
     public async Task<TaktNumberingDto?> GetNumberingByIdAsync(long id)
     {
@@ -88,7 +88,7 @@ public class TaktNumberingService : TaktServiceBase, ITaktNumberingService
     }
 
     /// <summary>
-    /// 获取编号规则选项列表
+    /// 获取编码规则选项列表
     /// </summary>
     /// <returns>下拉选项</returns>
     public async Task<List<TaktSelectOption>> GetNumberingOptionsAsync()
@@ -109,7 +109,7 @@ public class TaktNumberingService : TaktServiceBase, ITaktNumberingService
     }
 
     /// <summary>
-    /// 创建编号规则
+    /// 创建编码规则
     /// </summary>
     /// <param name="dto">创建DTO</param>
     /// <returns>DTO</returns>
@@ -129,16 +129,16 @@ public class TaktNumberingService : TaktServiceBase, ITaktNumberingService
             x => x.RuleCode == entity.RuleCode);
         if (!isUnique_ix_numbering_code_unique)
         {
-            throw new TaktBusinessException("编号规则的RuleCode已存在");
+            throw new TaktBusinessException("编码规则的RuleCode已存在");
         }
         entity = await _numberingRepository.CreateAsync(entity);
         return await GetNumberingByIdAsync(entity.Id) ?? entity.Adapt<TaktNumberingDto>();
     }
 
     /// <summary>
-    /// 更新编号规则
+    /// 更新编码规则
     /// </summary>
-    /// <param name="id">编号规则ID</param>
+    /// <param name="id">编码规则ID</param>
     /// <param name="dto">更新DTO</param>
     /// <returns>DTO</returns>
     public async Task<TaktNumberingDto> UpdateNumberingAsync(long id, TaktNumberingUpdateDto dto)
@@ -146,7 +146,7 @@ public class TaktNumberingService : TaktServiceBase, ITaktNumberingService
         var entity = await _numberingRepository.GetByIdAsync(id);
         if (entity == null)
         {
-            throw new TaktBusinessException("编号规则不存在");
+            throw new TaktBusinessException("编码规则不存在");
         }
         var originalIsBuiltIn = entity.IsBuiltIn;
         var originalCurrentSequence = entity.CurrentSequence;
@@ -164,37 +164,37 @@ public class TaktNumberingService : TaktServiceBase, ITaktNumberingService
             id);
         if (!isUnique_ix_numbering_code_unique)
         {
-            throw new TaktBusinessException("编号规则的RuleCode已存在");
+            throw new TaktBusinessException("编码规则的RuleCode已存在");
         }
         await _numberingRepository.UpdateAsync(entity);
-        return await GetNumberingByIdAsync(id) ?? throw new TaktBusinessException("编号规则不存在");
+        return await GetNumberingByIdAsync(id) ?? throw new TaktBusinessException("编码规则不存在");
     }
 
     /// <summary>
-    /// 删除编号规则
+    /// 删除编码规则
     /// </summary>
-    /// <param name="id">编号规则ID</param>
+    /// <param name="id">编码规则ID</param>
     /// <returns>任务</returns>
     public async Task DeleteNumberingByIdAsync(long id)
     {
         var entity = await _numberingRepository.GetByIdAsync(id);
         if (entity == null)
         {
-            throw new TaktBusinessException("编号规则不存在或已删除");
+            throw new TaktBusinessException("编码规则不存在或已删除");
         }
         if (entity.IsBuiltIn == 1)
         {
-            throw new TaktBusinessException("内置编号规则不允许删除");
+            throw new TaktBusinessException("内置编码规则不允许删除");
         }
         var deleted = await _numberingRepository.DeleteAsync(id);
         if (!deleted)
         {
-            throw new TaktBusinessException("编号规则不存在或已删除");
+            throw new TaktBusinessException("编码规则不存在或已删除");
         }
     }
 
     /// <summary>
-    /// 批量删除编号规则
+    /// 批量删除编码规则
     /// </summary>
     /// <param name="ids">ID列表</param>
     /// <returns>任务</returns>
@@ -207,7 +207,7 @@ public class TaktNumberingService : TaktServiceBase, ITaktNumberingService
         }
         if (await _numberingRepository.ExistsAsync(x => idList.Contains(x.Id) && x.IsBuiltIn == 1))
         {
-            throw new TaktBusinessException("内置编号规则不允许删除");
+            throw new TaktBusinessException("内置编码规则不允许删除");
         }
         foreach (var id in idList)
         {
@@ -216,7 +216,7 @@ public class TaktNumberingService : TaktServiceBase, ITaktNumberingService
     }
 
     /// <summary>
-    /// 更新编号规则状态
+    /// 更新编码规则状态
     /// </summary>
     /// <param name="dto">状态DTO</param>
     /// <returns>DTO</returns>
@@ -225,15 +225,15 @@ public class TaktNumberingService : TaktServiceBase, ITaktNumberingService
         var entity = await _numberingRepository.GetByIdAsync(dto.NumberingId);
         if (entity == null)
         {
-            throw new TaktBusinessException("编号规则不存在");
+            throw new TaktBusinessException("编码规则不存在");
         }
         if (entity.IsBuiltIn == 1 && dto.NumberingStatus != 1)
         {
-            throw new TaktBusinessException("不允许禁用内置编号规则");
+            throw new TaktBusinessException("不允许禁用内置编码规则");
         }
         entity.NumberingStatus = dto.NumberingStatus;
         await _numberingRepository.UpdateAsync(entity);
-        return await GetNumberingByIdAsync(dto.NumberingId) ?? throw new TaktBusinessException("编号规则不存在");
+        return await GetNumberingByIdAsync(dto.NumberingId) ?? throw new TaktBusinessException("编码规则不存在");
     }
 
     /// <summary>
@@ -245,12 +245,12 @@ public class TaktNumberingService : TaktServiceBase, ITaktNumberingService
     public async Task<(string fileName, byte[] content)> GetNumberingTemplateAsync(string? sheetName = null, string? fileName = null)
     {
         return await TaktExcelHelper.GenerateTemplateAsync<TaktNumberingTemplateDto>(
-            sheetName ?? "编号规则导入模板",
-            fileName ?? "编号规则导入模板.xlsx");
+            sheetName ?? "编码规则导入模板",
+            fileName ?? "编码规则导入模板.xlsx");
     }
 
     /// <summary>
-    /// 导入编号规则
+    /// 导入编码规则
     /// </summary>
     /// <param name="fileStream">Excel 文件流</param>
     /// <param name="sheetName">工作表名称</param>
@@ -261,7 +261,7 @@ public class TaktNumberingService : TaktServiceBase, ITaktNumberingService
         var errors = new List<string>();
         var success = 0;
         var fail = 0;
-        var rows = await TaktExcelHelper.ImportAsync<TaktNumberingImportDto>(fileStream, sheetName ?? "编号规则导入模板");
+        var rows = await TaktExcelHelper.ImportAsync<TaktNumberingImportDto>(fileStream, sheetName ?? "编码规则导入模板");
         if (rows == null || rows.Count == 0)
         {
             errors.Add("Excel文件中没有数据");
@@ -288,7 +288,7 @@ public class TaktNumberingService : TaktServiceBase, ITaktNumberingService
                     x => x.RuleCode == entity.RuleCode);
                 if (!isUnique_ix_numbering_code_unique)
                 {
-                    throw new TaktBusinessException("编号规则的RuleCode已存在");
+                    throw new TaktBusinessException("编码规则的RuleCode已存在");
                 }
                 await _numberingRepository.CreateAsync(entity);
                 success += 1;
@@ -303,7 +303,7 @@ public class TaktNumberingService : TaktServiceBase, ITaktNumberingService
     }
 
     /// <summary>
-    /// 导出编号规则
+    /// 导出编码规则
     /// </summary>
     /// <param name="query">查询条件</param>
     /// <param name="sheetName">工作表名称</param>
@@ -317,14 +317,14 @@ public class TaktNumberingService : TaktServiceBase, ITaktNumberingService
         {
             return await TaktExcelHelper.ExportAsync(
                 new List<TaktNumberingExportDto>(),
-                sheetName ?? "编号规则数据",
-                fileName ?? "编号规则导出.xlsx");
+                sheetName ?? "编码规则数据",
+                fileName ?? "编码规则导出.xlsx");
         }
         var exportData = list.Adapt<List<TaktNumberingExportDto>>();
         return await TaktExcelHelper.ExportAsync(
             exportData,
-            sheetName ?? "编号规则数据",
-            fileName ?? "编号规则导出.xlsx");
+            sheetName ?? "编码规则数据",
+            fileName ?? "编码规则导出.xlsx");
     }
 
     // ========================================
@@ -332,7 +332,7 @@ public class TaktNumberingService : TaktServiceBase, ITaktNumberingService
     // ========================================
 
     /// <summary>
-    /// 构建编号规则查询表达式
+    /// 构建编码规则查询表达式
     /// </summary>
     /// <param name="queryDto">查询DTO</param>
     /// <returns>查询表达式</returns>
@@ -470,14 +470,14 @@ public class TaktNumberingService : TaktServiceBase, ITaktNumberingService
     }
 
     // ========================================
-    // 编号规则规范化（Create/Update/Import 共用）
+    // 编码规则规范化（Create/Update/Import 共用）
     // ========================================
 
     /// <summary>
-    /// 实体转编号模型（供 TaktNumberingHelper 纯计算）
+    /// 实体转编码模型（供 TaktNumberingHelper 纯计算）
     /// </summary>
-    /// <param name="entity">编号规则实体</param>
-    /// <returns>编号模型</returns>
+    /// <param name="entity">编码规则实体</param>
+    /// <returns>编码模型</returns>
     private static TaktNumberingModel ToModel(TaktNumbering entity) => new()
     {
         RuleCode = entity.RuleCode,
@@ -498,9 +498,9 @@ public class TaktNumberingService : TaktServiceBase, ITaktNumberingService
     };
 
     /// <summary>
-    /// 规范化编号规则实体默认值
+    /// 规范化编码规则实体默认值
     /// </summary>
-    /// <param name="entity">编号规则实体</param>
+    /// <param name="entity">编码规则实体</param>
     private static void NormalizeNumberingEntity(TaktNumbering entity)
     {
         var model = ToModel(entity);
@@ -517,7 +517,7 @@ public class TaktNumberingService : TaktServiceBase, ITaktNumberingService
     /// <summary>
     /// 创建/导入时写入起始编码与当前流水
     /// </summary>
-    /// <param name="entity">编号规则实体</param>
+    /// <param name="entity">编码规则实体</param>
     /// <param name="exampleCodeInput">起始编码</param>
     /// <param name="autoGenerateWhenEmpty">为空时是否自动生成</param>
     private static void ApplyExampleCodeOnCreate(

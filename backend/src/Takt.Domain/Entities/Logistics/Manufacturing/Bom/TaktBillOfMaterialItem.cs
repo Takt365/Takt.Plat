@@ -47,7 +47,7 @@ public class TaktBillOfMaterialItem : TaktCompanyEntityBase
     public int LineNumber { get; set; } = 10;
 
     /// <summary>
-    /// 子项物料ID（选项 TaktMaterialPlants/options，DictValue=Id，ExtValue=PlantCode）
+    /// 子项物料ID（选项 TaktMaterialPlants/options；DictValue=Id，ExtValue=PlantCode）
     /// </summary>
     [SugarColumn(ColumnName = "material_id", ColumnDescription = "子项物料ID", ColumnDataType = "bigint", IsNullable = false)]
     [JsonConverter(typeof(ValueToStringConverter))]
@@ -90,7 +90,7 @@ public class TaktBillOfMaterialItem : TaktCompanyEntityBase
     public int OperationSeq { get; set; } = 0;
 
     /// <summary>
-    /// 工作中心（选项 TaktWorkCenters/options，DictValue=WorkCenterCode）
+    /// 工作中心（选项 TaktWorkCenters/options；DictValue=WorkCenterCode）
     /// </summary>
     [SugarColumn(ColumnName = "work_center", ColumnDescription = "工作中心", ColumnDataType = "nvarchar", Length = 50, IsNullable = true)]
     public string? WorkCenter { get; set; }
@@ -126,7 +126,7 @@ public class TaktBillOfMaterialItem : TaktCompanyEntityBase
     public int IsPhantom { get; set; } = 0;
 
     /// <summary>
-    /// 是否作废（字典 sys_yes_no_type，0=否 1=是；编辑移除子行时标记作废）
+    /// 是否作废（字典 sys_yes_no_type；0=否 1=是；编辑移除子行时标记作废）
     /// </summary>
     [SugarColumn(ColumnName = "is_obsolete", ColumnDescription = "是否作废", ColumnDataType = "int", IsNullable = false, DefaultValue = "0")]
     public int IsObsolete { get; set; } = 0;

@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Infrastructure.Data.Seeds.I18nSeedData.Logistics.Quality.Cost
 // 文件名称：TaktQualityAssuranceOtherI18nSeedData.cs
-// 创建时间：2026-07-20
+// 创建时间：2026-07-23
 // 创建人：Takt365(Auto Generated)
 // 功能描述：TaktQualityAssuranceOther 实体字段国际化种子（无对应 frontend locales；TranslationText 取自 ColumnDescription，ContextNote 取自属性 XML summary）
 // 
@@ -91,13 +91,13 @@ public class TaktQualityAssuranceOtherI18nSeedData : ITaktSeedDataCoordinator
             new TranslationSeedItem("entity.qualityassuranceother._self", "zh-HK", "品质业务明细 - 其他通常业务费用信息_hk", "实体名称"),
 
             // entity.qualityassuranceother.qualityassuranceid
-            new TranslationSeedItem("entity.qualityassuranceother.qualityassuranceid", "en-US", "品质业务主表ID_us", "品质业务主表 ID（选项 TaktQualityAssurances/options，DictValue=Id）"),
+            new TranslationSeedItem("entity.qualityassuranceother.qualityassuranceid", "en-US", "品质业务主表ID_us", "品质业务主表 ID（选项 TaktQualityAssurances/options；DictValue=Id）"),
             // entity.qualityassuranceother.qualityassuranceid
-            new TranslationSeedItem("entity.qualityassuranceother.qualityassuranceid", "ja-JP", "品质业务主表ID_jp", "品质业务主表 ID（选项 TaktQualityAssurances/options，DictValue=Id）"),
+            new TranslationSeedItem("entity.qualityassuranceother.qualityassuranceid", "ja-JP", "品质业务主表ID_jp", "品质业务主表 ID（选项 TaktQualityAssurances/options；DictValue=Id）"),
             // entity.qualityassuranceother.qualityassuranceid
-            new TranslationSeedItem("entity.qualityassuranceother.qualityassuranceid", "zh-CN", "品质业务主表ID", "品质业务主表 ID（选项 TaktQualityAssurances/options，DictValue=Id）"),
+            new TranslationSeedItem("entity.qualityassuranceother.qualityassuranceid", "zh-CN", "品质业务主表ID", "品质业务主表 ID（选项 TaktQualityAssurances/options；DictValue=Id）"),
             // entity.qualityassuranceother.qualityassuranceid
-            new TranslationSeedItem("entity.qualityassuranceother.qualityassuranceid", "zh-HK", "品质业务主表ID_hk", "品质业务主表 ID（选项 TaktQualityAssurances/options，DictValue=Id）"),
+            new TranslationSeedItem("entity.qualityassuranceother.qualityassuranceid", "zh-HK", "品质业务主表ID_hk", "品质业务主表 ID（选项 TaktQualityAssurances/options；DictValue=Id）"),
 
             // entity.qualityassuranceother.qualityassurancecode
             new TranslationSeedItem("entity.qualityassuranceother.qualityassurancecode", "en-US", "品质业务编码_us", "品质业务编码（冗余字段,便于查询）"),
@@ -154,13 +154,13 @@ public class TaktQualityAssuranceOtherI18nSeedData : ITaktSeedDataCoordinator
             new TranslationSeedItem("entity.qualityassuranceother.othernote", "zh-HK", "通常业务其他备注_hk", "通常业务其他备注"),
 
             // entity.qualityassuranceother.isobsolete
-            new TranslationSeedItem("entity.qualityassuranceother.isobsolete", "en-US", "是否作废_us", "是否作废（字典 sys_yes_no_type，0=否 1=是；编辑移除子行时标记作废）"),
+            new TranslationSeedItem("entity.qualityassuranceother.isobsolete", "en-US", "是否作废_us", "是否作废（字典 sys_yes_no_type；0=否 1=是；编辑移除子行时标记作废）"),
             // entity.qualityassuranceother.isobsolete
-            new TranslationSeedItem("entity.qualityassuranceother.isobsolete", "ja-JP", "是否作废_jp", "是否作废（字典 sys_yes_no_type，0=否 1=是；编辑移除子行时标记作废）"),
+            new TranslationSeedItem("entity.qualityassuranceother.isobsolete", "ja-JP", "是否作废_jp", "是否作废（字典 sys_yes_no_type；0=否 1=是；编辑移除子行时标记作废）"),
             // entity.qualityassuranceother.isobsolete
-            new TranslationSeedItem("entity.qualityassuranceother.isobsolete", "zh-CN", "是否作废", "是否作废（字典 sys_yes_no_type，0=否 1=是；编辑移除子行时标记作废）"),
+            new TranslationSeedItem("entity.qualityassuranceother.isobsolete", "zh-CN", "是否作废", "是否作废（字典 sys_yes_no_type；0=否 1=是；编辑移除子行时标记作废）"),
             // entity.qualityassuranceother.isobsolete
-            new TranslationSeedItem("entity.qualityassuranceother.isobsolete", "zh-HK", "是否作废_hk", "是否作废（字典 sys_yes_no_type，0=否 1=是；编辑移除子行时标记作废）"),
+            new TranslationSeedItem("entity.qualityassuranceother.isobsolete", "zh-HK", "是否作废_hk", "是否作废（字典 sys_yes_no_type；0=否 1=是；编辑移除子行时标记作废）"),
 
             // entity.qualityassuranceother.operation
             new TranslationSeedItem("entity.qualityassuranceother.operation", "en-US", "品质业务主表_us", "品质业务主表(导航属性)"),

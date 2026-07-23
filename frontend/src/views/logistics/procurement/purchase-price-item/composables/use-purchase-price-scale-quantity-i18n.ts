@@ -23,9 +23,11 @@ export const PURCHASEPRICESCALEQUANTITY_LIST_FIELDS = [
   'purchasePriceItemId',
   'purchasePriceCode',
   'purchasePriceSeq',
-  'lineNumber',
+  'purchaseScaleSeq',
   'scaleQuantity',
-  'amount',
+  'price',
+  'untaxedPrice',
+  'taxIncludedPrice',
   'isObsolete',
 ] as const
 
@@ -34,9 +36,11 @@ export const PURCHASEPRICESCALEQUANTITY_DEFAULT_VISIBLE_COLUMN_KEYS = [
   'purchasePriceItemId',
   'purchasePriceCode',
   'purchasePriceSeq',
-  'lineNumber',
+  'purchaseScaleSeq',
   'scaleQuantity',
-  'amount',
+  'price',
+  'untaxedPrice',
+  'taxIncludedPrice',
   'isObsolete',
   'action',
 ] as const
@@ -44,8 +48,11 @@ export const PURCHASEPRICESCALEQUANTITY_DEFAULT_VISIBLE_COLUMN_KEYS = [
 /** 明细右栏 panel 合计列（当前页 dataSource 数值字段求和） */
 export const PURCHASEPRICESCALEQUANTITY_SUMMARY_SUM_FIELDS = [
   'purchasePriceSeq',
+  'purchaseScaleSeq',
   'scaleQuantity',
-  'amount',
+  'price',
+  'untaxedPrice',
+  'taxIncludedPrice',
   'isObsolete',
 ] as const
 
@@ -56,9 +63,11 @@ export const PURCHASEPRICESCALEQUANTITY_PLACEHOLDER = {
   companyDefaultCulture: 'optional',
   purchasePriceCode: 'required',
   purchasePriceSeq: 'select',
-  lineNumber: 'select',
+  purchaseScaleSeq: 'select',
   scaleQuantity: 'select',
-  amount: 'select',
+  price: 'select',
+  untaxedPrice: 'select',
+  taxIncludedPrice: 'select',
   isObsolete: 'select',
 } as const satisfies Record<string, EntityFieldPlaceholderKind>
 
@@ -76,15 +85,17 @@ export const PURCHASEPRICESCALEQUANTITY_QUERY_STRING_FIELDS = [
 
 export type PurchasePriceScaleQuantityQueryField =
   | (typeof PURCHASEPRICESCALEQUANTITY_QUERY_STRING_FIELDS)[number]
-  | 'purchasePriceSeq' | 'lineNumber' | 'scaleQuantity' | 'amount' | 'isObsolete'
+  | 'purchasePriceSeq' | 'purchaseScaleSeq' | 'scaleQuantity' | 'price' | 'untaxedPrice' | 'taxIncludedPrice' | 'isObsolete'
 
 /** 高级查询抽屉全部字段（含数值） */
 export const PURCHASEPRICESCALEQUANTITY_QUERY_FIELDS: readonly PurchasePriceScaleQuantityQueryField[] = [
   ...PURCHASEPRICESCALEQUANTITY_QUERY_STRING_FIELDS,
   'purchasePriceSeq',
-  'lineNumber',
+  'purchaseScaleSeq',
   'scaleQuantity',
-  'amount',
+  'price',
+  'untaxedPrice',
+  'taxIncludedPrice',
   'isObsolete',
 ]
 

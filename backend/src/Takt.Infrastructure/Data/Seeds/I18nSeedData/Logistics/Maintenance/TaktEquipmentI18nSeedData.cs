@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Infrastructure.Data.Seeds.I18nSeedData.Logistics.Maintenance
 // 文件名称：TaktEquipmentI18nSeedData.cs
-// 创建时间：2026-07-20
+// 创建时间：2026-07-23
 // 创建人：Takt365(Auto Generated)
 // 功能描述：TaktEquipment 实体字段国际化种子（无对应 frontend locales；TranslationText 取自 ColumnDescription，ContextNote 取自属性 XML summary）
 // 
@@ -172,13 +172,13 @@ public class TaktEquipmentI18nSeedData : ITaktSeedDataCoordinator
             new TranslationSeedItem("entity.equipment.dealerby", "zh-HK", "经销商_hk", "经销商"),
 
             // entity.equipment.serialnumber
-            new TranslationSeedItem("entity.equipment.serialnumber", "en-US", "序列号_us", "序列号/出厂编号"),
+            new TranslationSeedItem("entity.equipment.serialnumber", "en-US", "序列号_us", "序列号/出厂编码"),
             // entity.equipment.serialnumber
-            new TranslationSeedItem("entity.equipment.serialnumber", "ja-JP", "序列号_jp", "序列号/出厂编号"),
+            new TranslationSeedItem("entity.equipment.serialnumber", "ja-JP", "序列号_jp", "序列号/出厂编码"),
             // entity.equipment.serialnumber
-            new TranslationSeedItem("entity.equipment.serialnumber", "zh-CN", "序列号", "序列号/出厂编号"),
+            new TranslationSeedItem("entity.equipment.serialnumber", "zh-CN", "序列号", "序列号/出厂编码"),
             // entity.equipment.serialnumber
-            new TranslationSeedItem("entity.equipment.serialnumber", "zh-HK", "序列号_hk", "序列号/出厂编号"),
+            new TranslationSeedItem("entity.equipment.serialnumber", "zh-HK", "序列号_hk", "序列号/出厂编码"),
 
             // entity.equipment.workshopby
             new TranslationSeedItem("entity.equipment.workshopby", "en-US", "所属车间_us", "所属车间"),

@@ -10,7 +10,7 @@
 <template>
   <a-form
     ref="formRef"
-    class="takt-generated-form customer-satisfaction-survey-form flex flex-col min-h-0"
+    class="takt-generated-form customer-satisfaction-survey-form flex flex-col min-h-0 overflow-visible"
     :model="formState"
     :rules="rules"
     layout="horizontal"
@@ -22,61 +22,19 @@
     >
       <a-tab-pane
         key="tab-0"
-        :tab="t('common.page.form.tabs.basicinfo') + ' (1/3)'"
+        :tab="t('common.page.form.tabs.basicinfo') + ' (1/4)'"
         force-render
       >
         <div :class="formContentClass">
           <a-row :gutter="24">
             <a-col :span="12">
               <a-form-item
-                :label="t('common.page.entity.tenantcode')"
-                name="tenantCode"
-              >
-                <a-input
-                  v-model:value="formState.tenantCode"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('common.page.entity.tenantcode') })"
-                  show-count
-                  :maxlength="20"
-                  disabled
-                />
-              </a-form-item>
-            </a-col>
-            <a-col :span="12">
-              <a-form-item
-                :label="t('common.page.entity.companycode')"
-                name="companyCode"
-              >
-                <a-input
-                  v-model:value="formState.companyCode"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('common.page.entity.companycode') })"
-                  show-count
-                  :maxlength="20"
-                  disabled
-                />
-              </a-form-item>
-            </a-col>
-            <a-col :span="12">
-              <a-form-item
-                :label="t('common.page.entity.companydefaultculture')"
-                name="companyDefaultCulture"
-              >
-                <a-input
-                  v-model:value="formState.companyDefaultCulture"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('common.page.entity.companydefaultculture') })"
-                  show-count
-                  :maxlength="20"
-                  disabled
-                />
-              </a-form-item>
-            </a-col>
-            <a-col :span="12">
-              <a-form-item
-                :label="t('entity.customersatisfactionsurvey.code')"
+                :label="pi.label('customerSatisfactionSurveyCode')"
                 name="customerSatisfactionSurveyCode"
               >
                 <a-input
                   v-model:value="formState.customerSatisfactionSurveyCode"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.customersatisfactionsurvey.code') })"
+                  :placeholder="pi.ph('customerSatisfactionSurveyCode')"
                   show-count
                   :maxlength="50"
                   allow-clear
@@ -86,55 +44,51 @@
             </a-col>
             <a-col :span="12">
               <a-form-item
-                :label="t('entity.customersatisfactionsurvey.customerid')"
+                :label="pi.label('customerId')"
                 name="customerId"
               >
-                <a-input
+                <TaktSelect
                   v-model:value="formState.customerId"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.customersatisfactionsurvey.customerid') })"
-                  show-count
-                  :maxlength="20"
-                  allow-clear
+                  api-url="TaktCustomers/options"
+                  :placeholder="pi.ph('customerId')"
                 />
               </a-form-item>
             </a-col>
             <a-col :span="12">
               <a-form-item
-                :label="t('entity.customersatisfactionsurvey.customername')"
-                name="customerName"
+                :label="pi.label('customerName1')"
+                name="customerName1"
               >
                 <a-input
-                  v-model:value="formState.customerName"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.customersatisfactionsurvey.customername') })"
+                  v-model:value="formState.customerName1"
+                  :placeholder="pi.ph('customerName1')"
                   show-count
-                  :maxlength="200"
+                  :maxlength="140"
                   allow-clear
                 />
               </a-form-item>
             </a-col>
             <a-col :span="12">
               <a-form-item
-                :label="t('entity.customersatisfactionsurvey.customercode')"
+                :label="pi.label('customerCode')"
                 name="customerCode"
               >
-                <a-input
+                <TaktSelect
                   v-model:value="formState.customerCode"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.customersatisfactionsurvey.customercode') })"
-                  show-count
-                  :maxlength="50"
-                  allow-clear
+                  api-url="TaktCustomers/options"
+                  :placeholder="pi.ph('customerCode')"
                   :disabled="!!formData?.customerSatisfactionSurveyId"
                 />
               </a-form-item>
             </a-col>
             <a-col :span="12">
               <a-form-item
-                :label="t('entity.customersatisfactionsurvey.surveydate')"
+                :label="pi.label('surveyDate')"
                 name="surveyDate"
               >
                 <a-date-picker
                   v-model:value="formState.surveyDate"
-                  :placeholder="t('common.page.form.placeholder.select', { field: t('entity.customersatisfactionsurvey.surveydate') })"
+                  :placeholder="pi.ph('surveyDate')"
                   value-format="YYYY-MM-DD"
                   style="width: 100%"
                 />
@@ -142,25 +96,63 @@
             </a-col>
             <a-col :span="12">
               <a-form-item
-                :label="t('entity.customersatisfactionsurvey.surveymethod')"
+                :label="pi.label('surveyMethod')"
                 name="surveyMethod"
               >
-                <a-input-number
+                <TaktSelect
                   v-model:value="formState.surveyMethod"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.customersatisfactionsurvey.surveymethod') })"
-                  style="width: 100%"
+                  dict-type="logistics_quality_survey_method"
+                  :placeholder="pi.ph('surveyMethod')"
                 />
               </a-form-item>
             </a-col>
             <a-col :span="12">
               <a-form-item
-                :label="t('entity.customersatisfactionsurvey.surveytype')"
+                :label="pi.label('surveyType')"
                 name="surveyType"
               >
-                <a-input-number
+                <TaktSelect
                   v-model:value="formState.surveyType"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.customersatisfactionsurvey.surveytype') })"
-                  style="width: 100%"
+                  dict-type="logistics_quality_survey_type"
+                  :placeholder="pi.ph('surveyType')"
+                />
+              </a-form-item>
+            </a-col>
+            <a-col :span="12">
+              <a-form-item
+                :label="pi.label('surveyPeriod')"
+                name="surveyPeriod"
+              >
+                <TaktSelect
+                  v-model:value="formState.surveyPeriod"
+                  dict-type="logistics_quality_period"
+                  :placeholder="pi.ph('surveyPeriod')"
+                />
+              </a-form-item>
+            </a-col>
+            <a-col :span="12">
+              <a-form-item
+                :label="pi.label('surveyorBy')"
+                name="surveyorBy"
+              >
+                <TaktSelect
+                  v-model:value="formState.surveyorBy"
+                  api-url="TaktEmployees/options"
+                  :placeholder="pi.ph('surveyorBy')"
+                />
+              </a-form-item>
+            </a-col>
+            <a-col :span="12">
+              <a-form-item
+                :label="pi.label('customerContact')"
+                name="customerContact"
+              >
+                <a-input
+                  v-model:value="formState.customerContact"
+                  :placeholder="pi.ph('customerContact')"
+                  show-count
+                  :maxlength="50"
+                  allow-clear
                 />
               </a-form-item>
             </a-col>
@@ -169,59 +161,19 @@
       </a-tab-pane>
       <a-tab-pane
         key="tab-1"
-        :tab="t('common.page.form.tabs.basicinfo') + ' (2/3)'"
+        :tab="t('common.page.form.tabs.basicinfo') + ' (2/4)'"
         force-render
       >
         <div :class="formContentClass">
           <a-row :gutter="24">
             <a-col :span="12">
               <a-form-item
-                :label="t('entity.customersatisfactionsurvey.surveyperiod')"
-                name="surveyPeriod"
-              >
-                <a-input-number
-                  v-model:value="formState.surveyPeriod"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.customersatisfactionsurvey.surveyperiod') })"
-                  style="width: 100%"
-                />
-              </a-form-item>
-            </a-col>
-            <a-col :span="12">
-              <a-form-item
-                :label="t('entity.customersatisfactionsurvey.surveyorby')"
-                name="surveyorBy"
-              >
-                <a-input
-                  v-model:value="formState.surveyorBy"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.customersatisfactionsurvey.surveyorby') })"
-                  show-count
-                  :maxlength="50"
-                  allow-clear
-                />
-              </a-form-item>
-            </a-col>
-            <a-col :span="12">
-              <a-form-item
-                :label="t('entity.customersatisfactionsurvey.customercontact')"
-                name="customerContact"
-              >
-                <a-input
-                  v-model:value="formState.customerContact"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.customersatisfactionsurvey.customercontact') })"
-                  show-count
-                  :maxlength="50"
-                  allow-clear
-                />
-              </a-form-item>
-            </a-col>
-            <a-col :span="12">
-              <a-form-item
-                :label="t('entity.customersatisfactionsurvey.customerphone')"
+                :label="pi.label('customerPhone')"
                 name="customerPhone"
               >
                 <a-input
                   v-model:value="formState.customerPhone"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.customersatisfactionsurvey.customerphone') })"
+                  :placeholder="pi.ph('customerPhone')"
                   show-count
                   :maxlength="50"
                   allow-clear
@@ -230,73 +182,113 @@
             </a-col>
             <a-col :span="12">
               <a-form-item
-                :label="t('entity.customersatisfactionsurvey.overallsatisfaction')"
+                :label="pi.label('overallSatisfaction')"
                 name="overallSatisfaction"
               >
-                <a-input-number
+                <TaktSelect
                   v-model:value="formState.overallSatisfaction"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.customersatisfactionsurvey.overallsatisfaction') })"
-                  style="width: 100%"
+                  dict-type="logistics_quality_satisfaction_level"
+                  :placeholder="pi.ph('overallSatisfaction')"
                 />
               </a-form-item>
             </a-col>
             <a-col :span="12">
               <a-form-item
-                :label="t('entity.customersatisfactionsurvey.totalscore')"
+                :label="pi.label('totalScore')"
                 name="totalScore"
               >
                 <a-input-number
                   v-model:value="formState.totalScore"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.customersatisfactionsurvey.totalscore') })"
+                  :placeholder="pi.ph('totalScore')"
                   style="width: 100%"
                 />
               </a-form-item>
             </a-col>
             <a-col :span="12">
               <a-form-item
-                :label="t('entity.customersatisfactionsurvey.qualityscore')"
+                :label="pi.label('qualityScore')"
                 name="qualityScore"
               >
                 <a-input-number
                   v-model:value="formState.qualityScore"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.customersatisfactionsurvey.qualityscore') })"
+                  :placeholder="pi.ph('qualityScore')"
                   style="width: 100%"
                 />
               </a-form-item>
             </a-col>
             <a-col :span="12">
               <a-form-item
-                :label="t('entity.customersatisfactionsurvey.deliveryscore')"
+                :label="pi.label('deliveryScore')"
                 name="deliveryScore"
               >
                 <a-input-number
                   v-model:value="formState.deliveryScore"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.customersatisfactionsurvey.deliveryscore') })"
+                  :placeholder="pi.ph('deliveryScore')"
                   style="width: 100%"
                 />
               </a-form-item>
             </a-col>
             <a-col :span="12">
               <a-form-item
-                :label="t('entity.customersatisfactionsurvey.servicescore')"
+                :label="pi.label('serviceScore')"
                 name="serviceScore"
               >
                 <a-input-number
                   v-model:value="formState.serviceScore"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.customersatisfactionsurvey.servicescore') })"
+                  :placeholder="pi.ph('serviceScore')"
                   style="width: 100%"
                 />
               </a-form-item>
             </a-col>
             <a-col :span="12">
               <a-form-item
-                :label="t('entity.customersatisfactionsurvey.pricescore')"
+                :label="pi.label('priceScore')"
                 name="priceScore"
               >
                 <a-input-number
                   v-model:value="formState.priceScore"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.customersatisfactionsurvey.pricescore') })"
+                  :placeholder="pi.ph('priceScore')"
                   style="width: 100%"
+                />
+              </a-form-item>
+            </a-col>
+            <a-col :span="12">
+              <a-form-item
+                :label="pi.label('technicalScore')"
+                name="technicalScore"
+              >
+                <a-input-number
+                  v-model:value="formState.technicalScore"
+                  :placeholder="pi.ph('technicalScore')"
+                  style="width: 100%"
+                />
+              </a-form-item>
+            </a-col>
+            <a-col :span="12">
+              <a-form-item
+                :label="pi.label('customerPraise')"
+                name="customerPraise"
+              >
+                <a-input
+                  v-model:value="formState.customerPraise"
+                  :placeholder="pi.ph('customerPraise')"
+                  show-count
+                  :maxlength="2000"
+                  allow-clear
+                />
+              </a-form-item>
+            </a-col>
+            <a-col :span="12">
+              <a-form-item
+                :label="pi.label('customerFeedback')"
+                name="customerFeedback"
+              >
+                <a-input
+                  v-model:value="formState.customerFeedback"
+                  :placeholder="pi.ph('customerFeedback')"
+                  show-count
+                  :maxlength="2000"
+                  allow-clear
                 />
               </a-form-item>
             </a-col>
@@ -305,114 +297,136 @@
       </a-tab-pane>
       <a-tab-pane
         key="tab-2"
-        :tab="t('common.page.form.tabs.basicinfo') + ' (3/3)'"
+        :tab="t('common.page.form.tabs.basicinfo') + ' (3/4)'"
         force-render
       >
         <div :class="formContentClass">
           <a-row :gutter="24">
-            <a-col :span="12">
+            <a-col :span="24">
               <a-form-item
-                :label="t('entity.customersatisfactionsurvey.technicalscore')"
-                name="technicalScore"
-              >
-                <a-input-number
-                  v-model:value="formState.technicalScore"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.customersatisfactionsurvey.technicalscore') })"
-                  style="width: 100%"
-                />
-              </a-form-item>
-            </a-col>
-            <a-col :span="12">
-              <a-form-item
-                :label="t('entity.customersatisfactionsurvey.customerpraise')"
-                name="customerPraise"
-              >
-                <a-input
-                  v-model:value="formState.customerPraise"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.customersatisfactionsurvey.customerpraise') })"
-                  show-count
-                  :maxlength="2000"
-                  allow-clear
-                />
-              </a-form-item>
-            </a-col>
-            <a-col :span="12">
-              <a-form-item
-                :label="t('entity.customersatisfactionsurvey.customerfeedback')"
-                name="customerFeedback"
-              >
-                <a-input
-                  v-model:value="formState.customerFeedback"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.customersatisfactionsurvey.customerfeedback') })"
-                  show-count
-                  :maxlength="2000"
-                  allow-clear
-                />
-              </a-form-item>
-            </a-col>
-            <a-col :span="12">
-              <a-form-item
-                :label="t('entity.customersatisfactionsurvey.improvementplan')"
+                :label="pi.label('improvementPlan')"
                 name="improvementPlan"
               >
                 <a-input
                   v-model:value="formState.improvementPlan"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.customersatisfactionsurvey.improvementplan') })"
+                  :placeholder="pi.ph('improvementPlan')"
                   show-count
                   :maxlength="2000"
                   allow-clear
                 />
               </a-form-item>
             </a-col>
-            <a-col :span="12">
+            <a-col :span="24">
               <a-form-item
-                :label="t('entity.customersatisfactionsurvey.surveystatus')"
-                name="surveyStatus"
-              >
-                <a-input-number
-                  v-model:value="formState.surveyStatus"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.customersatisfactionsurvey.surveystatus') })"
-                  style="width: 100%"
-                />
-              </a-form-item>
-            </a-col>
-            <a-col :span="12">
-              <a-form-item
-                :label="t('entity.customersatisfactionsurvey.followupstatus')"
-                name="followUpStatus"
-              >
-                <a-input-number
-                  v-model:value="formState.followUpStatus"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.customersatisfactionsurvey.followupstatus') })"
-                  style="width: 100%"
-                />
-              </a-form-item>
-            </a-col>
-            <a-col :span="12">
-              <a-form-item
-                :label="t('entity.customersatisfactionsurvey.relatedcomplaintid')"
+                :label="pi.label('relatedComplaintId')"
                 name="relatedComplaintId"
               >
-                <a-input
+                <TaktSelect
                   v-model:value="formState.relatedComplaintId"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.customersatisfactionsurvey.relatedcomplaintid') })"
+                  api-url="TaktCustomerComplaints/options"
+                  :placeholder="pi.ph('relatedComplaintId')"
+                />
+              </a-form-item>
+            </a-col>
+            <a-col :span="24">
+              <a-form-item
+                :label="pi.label('attachments')"
+                name="attachments"
+              >
+                <a-input
+                  v-model:value="formState.attachments"
+                  :placeholder="pi.ph('attachments')"
                   show-count
                   :maxlength="20"
                   allow-clear
                 />
               </a-form-item>
             </a-col>
-            <a-col :span="12">
+            <a-col :span="24">
               <a-form-item
-                :label="t('entity.customersatisfactionsurvey.relatedplant')"
+                :label="pi.label('surveyStatus')"
+                name="surveyStatus"
+              >
+                <TaktSelect
+                  v-model:value="formState.surveyStatus"
+                  dict-type="logistics_quality_survey_status"
+                  :placeholder="pi.ph('surveyStatus')"
+                />
+              </a-form-item>
+            </a-col>
+            <a-col :span="24">
+              <a-form-item
+                :label="pi.label('relatedPlant')"
                 name="relatedPlant"
               >
-                <a-input
+                <TaktSelect
                   v-model:value="formState.relatedPlant"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.customersatisfactionsurvey.relatedplant') })"
+                  api-url="TaktPlants/options"
+                  :placeholder="pi.ph('relatedPlant')"
+                />
+              </a-form-item>
+            </a-col>
+            <a-col :span="24">
+              <a-form-item
+                :label="pi.label('followUpStatus')"
+                name="followUpStatus"
+              >
+                <TaktSelect
+                  v-model:value="formState.followUpStatus"
+                  dict-type="logistics_quality_follow_up_status"
+                  :placeholder="pi.ph('followUpStatus')"
+                />
+              </a-form-item>
+            </a-col>
+          </a-row>
+        </div>
+      </a-tab-pane>
+      <a-tab-pane
+        key="tab-3"
+        :tab="t('common.page.form.tabs.basicinfo') + ' (4/4)'"
+        force-render
+      >
+        <div :class="formContentClass">
+          <a-row :gutter="24">
+            <a-col :span="24">
+              <a-form-item
+                :label="pi.label('tenantCode')"
+                name="tenantCode"
+              >
+                <a-input
+                  v-model:value="formState.tenantCode"
+                  :placeholder="pi.ph('tenantCode')"
                   show-count
-                  :maxlength="4"
-                  allow-clear
+                  :maxlength="20"
+                  disabled
+                />
+              </a-form-item>
+            </a-col>
+            <a-col :span="24">
+              <a-form-item
+                :label="pi.label('companyCode')"
+                name="companyCode"
+              >
+                <a-input
+                  v-model:value="formState.companyCode"
+                  :placeholder="pi.ph('companyCode')"
+                  show-count
+                  :maxlength="20"
+                  disabled
+                />
+              </a-form-item>
+            </a-col>
+            <a-col :span="24">
+              <a-form-item
+                :label="pi.label('companyDefaultCulture')"
+                name="companyDefaultCulture"
+              >
+                <a-input
+                  v-model:value="formState.companyDefaultCulture"
+                  :placeholder="pi.ph('companyDefaultCulture')"
+                  show-count
+                  :maxlength="20"
+                  disabled
                 />
               </a-form-item>
             </a-col>
@@ -429,7 +443,7 @@
                     >
                       <span class="takt-form-label-hint-icon"><RiQuestionLine class="takt-remix-icon" /></span>
                     </a-tooltip>
-                    <span>{{ t('common.page.entity.extfield') }}</span>
+                    <span>{{ pi.label('extField') }}</span>
                   </span>
                 </template>
                 <a-textarea
@@ -444,12 +458,12 @@
             </a-col>
             <a-col :span="24">
               <a-form-item
-                :label="t('common.page.entity.remark')"
+                :label="pi.label('remark')"
                 name="remark"
               >
                 <a-textarea
                   v-model:value="formState.remark"
-                  :placeholder="t('common.page.form.placeholder.optional', { field: t('common.page.entity.remark') })"
+                  :placeholder="pi.ph('remark')"
                   :rows="4"
                   show-count
                   :maxlength="400"
@@ -466,13 +480,71 @@
       ref="customerSatisfactionSurveyItemTableRef"
       v-model="childCustomerSatisfactionSurveyItemRows"
       :columns="customerSatisfactionSurveyItemFormColumns"
-      :title="t('entity.customersatisfactionsurveyitem._self')"
-      :add-button-entity="t('entity.customersatisfactionsurveyitem._self')"
+      :title="customerSatisfactionSurveyItemPi.self()"
+      :add-button-entity="customerSatisfactionSurveyItemPi.self()"
       id-field="customerSatisfactionSurveyItemId"
       :default-row="createDefaultCustomerSatisfactionSurveyItemRow"
       :disabled="loading"
+      :enable-vertical-scroll="false"
       section-border
-    />
+      class="w-full min-w-0"
+    >
+      <template #cell-surveyId="{ record }">
+        <TaktSelect
+          v-model:value="record.surveyId"
+          api-url="TaktCustomerSatisfactionSurveys/options"
+          class="w-full"
+          :get-popup-container="getSelectPopupContainer"
+          :placeholder="customerSatisfactionSurveyItemPi.queryPh('surveyId', 'select')"
+          :disabled="loading"
+          allow-clear
+        />
+      </template>
+      <template #cell-categoryType="{ record }">
+        <TaktSelect
+          v-model:value="record.categoryType"
+          dict-type="logistics_quality_satisfaction_category"
+          class="w-full"
+          :get-popup-container="getSelectPopupContainer"
+          :placeholder="customerSatisfactionSurveyItemPi.ph('categoryType')"
+          :disabled="loading"
+          allow-clear
+        />
+      </template>
+      <template #cell-satisfactionLevel="{ record }">
+        <TaktSelect
+          v-model:value="record.satisfactionLevel"
+          dict-type="logistics_quality_satisfaction_level"
+          class="w-full"
+          :get-popup-container="getSelectPopupContainer"
+          :placeholder="customerSatisfactionSurveyItemPi.ph('satisfactionLevel')"
+          :disabled="loading"
+          allow-clear
+        />
+      </template>
+      <template #cell-followUpStatus="{ record }">
+        <TaktSelect
+          v-model:value="record.followUpStatus"
+          dict-type="logistics_quality_follow_up_status"
+          class="w-full"
+          :get-popup-container="getSelectPopupContainer"
+          :placeholder="customerSatisfactionSurveyItemPi.ph('followUpStatus')"
+          :disabled="loading"
+          allow-clear
+        />
+      </template>
+      <template #cell-isObsolete="{ record }">
+        <TaktSelect
+          v-model:value="record.isObsolete"
+          dict-type="sys_yes_no_type"
+          class="w-full"
+          :get-popup-container="getSelectPopupContainer"
+          :placeholder="customerSatisfactionSurveyItemPi.ph('isObsolete')"
+          :disabled="loading"
+          allow-clear
+        />
+      </template>
+    </TaktEditableTable>
   </a-form>
 </template>
 
@@ -481,11 +553,18 @@
  * 客户满意度调查表主表实体维护表单 · 由 generate-vue-master-detail-from-api.cjs 根据 types/api 生成
  * @module views/logistics/quality/complaint/customer-satisfaction-survey/components
  */
-import { reactive, watch, computed, ref } from 'vue'
+import { reactive, watch, computed, ref, onMounted } from 'vue'
 import { useI18n } from 'vue-i18n'
 import type { Rule } from 'ant-design-vue/es/form'
+import { useCustomerSatisfactionSurveyI18n } from '../composables/use-customer-satisfaction-survey-i18n'
+
+/** 实体字段 i18n */
+const pi = useCustomerSatisfactionSurveyI18n()
+
 import type { CustomerSatisfactionSurveyCreate } from '@/types/logistics/quality/complaint/customer-satisfaction-survey'
+import TaktSelect from '@/components/business/takt-select/index.vue'
 import { RiQuestionLine } from '@remixicon/vue'
+import { useDictDataStore } from '@/stores/foundation/dict-data'
 import { useTenantStore } from '@/stores/identity/tenant'
 import { useUserStore } from '@/stores/identity/user'
 
@@ -518,9 +597,19 @@ const formContentClass = computed(() => (formFields.length > 10 ? 'takt-form-con
 /** 当前激活的 Tab key */
 const activeTab = ref('tab-0')
 /** CreateDto 字段名列表（与 formState 键对齐） */
-const formFields = ["tenantCode","companyCode","companyDefaultCulture","customerSatisfactionSurveyCode","customerId","customerName","customerCode","surveyDate","surveyMethod","surveyType","surveyPeriod","surveyorBy","customerContact","customerPhone","overallSatisfaction","totalScore","qualityScore","deliveryScore","serviceScore","priceScore","technicalScore","customerPraise","customerFeedback","improvementPlan","surveyStatus","followUpStatus","relatedComplaintId","relatedPlant","extField","remark"]
+const formFields = ["tenantCode","companyCode","companyDefaultCulture","customerSatisfactionSurveyCode","customerId","customerName1","customerCode","surveyDate","surveyMethod","surveyType","surveyPeriod","surveyorBy","customerContact","customerPhone","overallSatisfaction","totalScore","qualityScore","deliveryScore","serviceScore","priceScore","technicalScore","customerPraise","customerFeedback","improvementPlan","relatedComplaintId","attachments","surveyStatus","relatedPlant","followUpStatus","extField","remark"]
+
 
 import type { TaktEditableTableColumn } from '@/components/business/takt-editable-table/types'
+import { resolveNextDetailLineNumber } from '@/utils/takt-sequence'
+import { useCustomerSatisfactionSurveyItemI18n } from '../composables/use-customer-satisfaction-survey-item-i18n'
+
+const customerSatisfactionSurveyItemPi = useCustomerSatisfactionSurveyItemI18n()
+
+/** 弹窗/表格内 TaktSelect 下拉挂载容器（避免 overflow 裁剪与表头列错位） */
+function getSelectPopupContainer(triggerNode?: HTMLElement): HTMLElement {
+  return triggerNode?.ownerDocument?.body ?? document.body
+}
 
 const childCustomerSatisfactionSurveyItemRows = ref<Record<string, unknown>[]>([])
 const customerSatisfactionSurveyItemTableRef = ref<{
@@ -529,68 +618,107 @@ const customerSatisfactionSurveyItemTableRef = ref<{
   resetRows: () => void
 } | null>(null)
 
+/** 是否已持久化的子表行 */
+function isPersistedCustomerSatisfactionSurveyItemRow(row: Record<string, unknown>): boolean {
+  const id = row.customerSatisfactionSurveyItemId
+  if (id == null || id === '') {
+    return false
+  }
+  return String(id) !== '0'
+}
+
+/** 分配下一可用子表行号（含作废行，仅据当前表格行递增） */
+function allocateNextCustomerSatisfactionSurveyItemLineNumber(): number {
+  const rows = customerSatisfactionSurveyItemTableRef.value?.getRows?.() ?? childCustomerSatisfactionSurveyItemRows.value
+  return resolveNextDetailLineNumber(0, rows)
+}
+
 /** 子表 customerSatisfactionSurveyItem 可编辑列 */
 const customerSatisfactionSurveyItemFormColumns = computed<TaktEditableTableColumn[]>(() => [
   {
+    key: 'surveyId',
+    title: customerSatisfactionSurveyItemPi.label('surveyId'),
+    width: 140,
+  },
+  {
     key: 'lineNumber',
-    title: t('entity.customersatisfactionsurveyitem.linenumber'),
-    editor: 'inputNumber',
-    width: 140, summary: 'sum',
+    title: customerSatisfactionSurveyItemPi.label('lineNumber'),
+    width: 140,
   },
   {
     key: 'categoryType',
-    title: t('entity.customersatisfactionsurveyitem.categorytype'),
-    editor: 'inputNumber',
+    title: customerSatisfactionSurveyItemPi.label('categoryType'),
     width: 140,
   },
   {
     key: 'itemName',
-    title: t('entity.customersatisfactionsurveyitem.itemname'),
+    title: customerSatisfactionSurveyItemPi.label('itemName'),
     editor: 'input',
     width: 140,
   },
   {
     key: 'itemDescription',
-    title: t('entity.customersatisfactionsurveyitem.itemdescription'),
+    title: customerSatisfactionSurveyItemPi.label('itemDescription'),
     editor: 'textarea',
     rows: 1,
-    placeholder: t('common.page.form.placeholder.optional', { field: t('entity.customersatisfactionsurveyitem.itemdescription') }),
-    width: 140,
+    placeholder: customerSatisfactionSurveyItemPi.ph('itemDescription'),
+    width: 180,
   },
   {
     key: 'weight',
-    title: t('entity.customersatisfactionsurveyitem.weight'),
-    editor: 'inputNumber',
+    title: customerSatisfactionSurveyItemPi.label('weight'),
     width: 140,
   },
   {
     key: 'score',
-    title: t('entity.customersatisfactionsurveyitem.score'),
-    editor: 'inputNumber',
+    title: customerSatisfactionSurveyItemPi.label('score'),
     width: 140,
   },
   {
     key: 'satisfactionLevel',
-    title: t('entity.customersatisfactionsurveyitem.satisfactionlevel'),
-    editor: 'inputNumber',
+    title: customerSatisfactionSurveyItemPi.label('satisfactionLevel'),
     width: 140,
   },
   {
     key: 'customerFeedback',
-    title: t('entity.customersatisfactionsurveyitem.customerfeedback'),
+    title: customerSatisfactionSurveyItemPi.label('customerFeedback'),
     editor: 'input',
-    width: 140, allowClear: true, placeholder: t('common.page.form.placeholder.optional', { field: t('entity.customersatisfactionsurveyitem.customerfeedback') }),
+    width: 140, allowClear: true, placeholder: customerSatisfactionSurveyItemPi.ph('customerFeedback'),
+  },
+  {
+    key: 'improvementSuggestion',
+    title: customerSatisfactionSurveyItemPi.label('improvementSuggestion'),
+    editor: 'input',
+    width: 140, allowClear: true, placeholder: customerSatisfactionSurveyItemPi.ph('improvementSuggestion'),
+  },
+  {
+    key: 'followUpAction',
+    title: customerSatisfactionSurveyItemPi.label('followUpAction'),
+    editor: 'input',
+    width: 140, allowClear: true, placeholder: customerSatisfactionSurveyItemPi.ph('followUpAction'),
+  },
+  {
+    key: 'followUpStatus',
+    title: customerSatisfactionSurveyItemPi.label('followUpStatus'),
+    width: 140,
+  },
+  {
+    key: 'isObsolete',
+    title: customerSatisfactionSurveyItemPi.label('isObsolete'),
+    width: 140,
   },
 ])
 
 /** 编辑态从 formData 同步各子表行 */
 function syncChildRowsFromFormData(val: Partial<CustomerSatisfactionSurveyCreate & { customerSatisfactionSurveyId?: string }> | null | undefined) {
-  childCustomerSatisfactionSurveyItemRows.value = ((val as any)?.items ?? []) as Record<string, unknown>[]
+  const rows_customerSatisfactionSurveyItem = ((val as any)?.items ?? []) as Record<string, unknown>[]
+  childCustomerSatisfactionSurveyItemRows.value = rows_customerSatisfactionSurveyItem
 }
 
 function createDefaultCustomerSatisfactionSurveyItemRow(): Record<string, unknown> {
   return {
-    lineNumber: (childCustomerSatisfactionSurveyItemRows.value.length + 1) * 10,
+    surveyId: '',
+    lineNumber: allocateNextCustomerSatisfactionSurveyItemLineNumber(),
     categoryType: 0,
     itemName: '',
     itemDescription: '',
@@ -598,21 +726,34 @@ function createDefaultCustomerSatisfactionSurveyItemRow(): Record<string, unknow
     score: 0,
     satisfactionLevel: 0,
     customerFeedback: '',
+    improvementSuggestion: '',
+    followUpAction: '',
+    followUpStatus: 0,
+    isObsolete: 0,
   }
 }
 
 /** 组装 Create/Update 载荷（主表 + 子表数组） */
 function buildSubmitPayload() {
   const masterId = props.formData?.customerSatisfactionSurveyId ?? ''
+  const isUpdate = Boolean(masterId)
   return {
     ...formState,
-    items: customerSatisfactionSurveyItemTableRef.value?.getRows?.() ?? childCustomerSatisfactionSurveyItemRows.value.map((rest) => ({
-      ...rest,
-      tenantCode: tenantStore.tenantCode,
-      companyCode: tenantStore.companyCode,
-      companyDefaultCulture: userStore.userInfo?.companyDefaultCulture ?? '',
-      surveyId: masterId,
-    })),
+    items: customerSatisfactionSurveyItemTableRef.value?.getRows?.() ?? childCustomerSatisfactionSurveyItemRows.value.map((row) => {
+      const normalized = {
+        ...row,
+        tenantCode: tenantStore.tenantCode,
+        companyCode: tenantStore.companyCode,
+        companyDefaultCulture: userStore.userInfo?.companyDefaultCulture ?? '',
+        customerSatisfactionSurveyCode: masterId,
+      }
+      if (isUpdate && isPersistedCustomerSatisfactionSurveyItemRow(row)) {
+        normalized.customerSatisfactionSurveyItemId = row.customerSatisfactionSurveyItemId
+      } else {
+        delete normalized.customerSatisfactionSurveyItemId
+      }
+      return normalized
+    }),
   }
 }
 
@@ -632,11 +773,27 @@ const props = withDefaults(defineProps<Props>(), {
 const formRef = ref()
 /** 表单双向绑定模型 */
 const formState = reactive<Record<string, any>>({})
-/** 表单字段默认值（无字典默认项） */
-function applyFormDefaults(target: Record<string, unknown>) {
-  void target
+/** 表单字段默认值（字典 IsDefault=1，来自 TaktDictDataSeedData） */
+const FORM_FIELD_DEFAULTS: Record<string, string | number> = {
+  surveyMethod: 0,
+  surveyType: 0,
+  surveyPeriod: 1,
+  surveyStatus: 0,
+  followUpStatus: 0
 }
 
+/** 写入表单默认值（新增 / resetFields / 弹窗再次打开时） */
+function applyFormDefaults(target: Record<string, unknown>) {
+  Object.assign(target, FORM_FIELD_DEFAULTS)
+}
+
+/** Pinia：字典缓存（TaktSelect dict-type 渲染前预热，避免选项空白） */
+const dictDataStore = useDictDataStore()
+
+/** 表单挂载时预加载全量字典 */
+onMounted(() => {
+  void dictDataStore.loadAllDictDataAsync()
+})
 
 /** 编辑态灌入 formData；新增态恢复默认值（须含 customerSatisfactionSurveyId 才视为编辑） */
 watch(
@@ -679,39 +836,39 @@ const rules = computed<Record<string, Rule[]>>(() => ({
   customerSatisfactionSurveyCode: [
     {
       required: true,
-      message: t('common.page.form.placeholder.required', { field: t('entity.customersatisfactionsurvey.code') }),
+      message: pi.ph('customerSatisfactionSurveyCode'),
       trigger: 'blur'
     }
   ],
   customerId: [
     {
       required: true,
-      message: t('common.page.form.placeholder.required', { field: t('entity.customersatisfactionsurvey.customerid') }),
-      trigger: 'blur'
+      message: pi.ph('customerId'),
+      trigger: 'change'
     }
   ],
-  customerName: [
+  customerName1: [
     {
       required: true,
-      message: t('common.page.form.placeholder.required', { field: t('entity.customersatisfactionsurvey.customername') }),
+      message: pi.ph('customerName1'),
       trigger: 'blur'
     }
   ],
   surveyDate: [
     {
       required: true,
-      message: t('common.page.form.placeholder.select', { field: t('entity.customersatisfactionsurvey.surveydate') }),
+      message: pi.ph('surveyDate'),
       trigger: 'change'
     }
   ],
   surveyMethod: [{
     validator: async (_rule, value) => {
       if (value === undefined || value === null || value === '') {
-        return Promise.reject(t('common.page.form.placeholder.select', { field: t('entity.customersatisfactionsurvey.surveymethod') }))
+        return Promise.reject(pi.ph('surveyMethod'))
       }
       const num = typeof value === 'number' ? value : Number(value)
       if (!Number.isFinite(num)) {
-        return Promise.reject(t('common.page.form.placeholder.select', { field: t('entity.customersatisfactionsurvey.surveymethod') }))
+        return Promise.reject(pi.ph('surveyMethod'))
       }
       return Promise.resolve()
     },
@@ -720,11 +877,11 @@ const rules = computed<Record<string, Rule[]>>(() => ({
   surveyType: [{
     validator: async (_rule, value) => {
       if (value === undefined || value === null || value === '') {
-        return Promise.reject(t('common.page.form.placeholder.select', { field: t('entity.customersatisfactionsurvey.surveytype') }))
+        return Promise.reject(pi.ph('surveyType'))
       }
       const num = typeof value === 'number' ? value : Number(value)
       if (!Number.isFinite(num)) {
-        return Promise.reject(t('common.page.form.placeholder.select', { field: t('entity.customersatisfactionsurvey.surveytype') }))
+        return Promise.reject(pi.ph('surveyType'))
       }
       return Promise.resolve()
     },
@@ -733,11 +890,11 @@ const rules = computed<Record<string, Rule[]>>(() => ({
   surveyPeriod: [{
     validator: async (_rule, value) => {
       if (value === undefined || value === null || value === '') {
-        return Promise.reject(t('common.page.form.placeholder.select', { field: t('entity.customersatisfactionsurvey.surveyperiod') }))
+        return Promise.reject(pi.ph('surveyPeriod'))
       }
       const num = typeof value === 'number' ? value : Number(value)
       if (!Number.isFinite(num)) {
-        return Promise.reject(t('common.page.form.placeholder.select', { field: t('entity.customersatisfactionsurvey.surveyperiod') }))
+        return Promise.reject(pi.ph('surveyPeriod'))
       }
       return Promise.resolve()
     },
@@ -746,11 +903,11 @@ const rules = computed<Record<string, Rule[]>>(() => ({
   overallSatisfaction: [{
     validator: async (_rule, value) => {
       if (value === undefined || value === null || value === '') {
-        return Promise.reject(t('common.page.form.placeholder.select', { field: t('entity.customersatisfactionsurvey.overallsatisfaction') }))
+        return Promise.reject(pi.ph('overallSatisfaction'))
       }
       const num = typeof value === 'number' ? value : Number(value)
       if (!Number.isFinite(num)) {
-        return Promise.reject(t('common.page.form.placeholder.select', { field: t('entity.customersatisfactionsurvey.overallsatisfaction') }))
+        return Promise.reject(pi.ph('overallSatisfaction'))
       }
       return Promise.resolve()
     },
@@ -759,24 +916,31 @@ const rules = computed<Record<string, Rule[]>>(() => ({
   surveyStatus: [{
     validator: async (_rule, value) => {
       if (value === undefined || value === null || value === '') {
-        return Promise.reject(t('common.page.form.placeholder.select', { field: t('entity.customersatisfactionsurvey.surveystatus') }))
+        return Promise.reject(pi.ph('surveyStatus'))
       }
       const num = typeof value === 'number' ? value : Number(value)
       if (!Number.isFinite(num)) {
-        return Promise.reject(t('common.page.form.placeholder.select', { field: t('entity.customersatisfactionsurvey.surveystatus') }))
+        return Promise.reject(pi.ph('surveyStatus'))
       }
       return Promise.resolve()
     },
     trigger: 'change'
   }],
+  relatedPlant: [
+    {
+      required: true,
+      message: pi.ph('relatedPlant'),
+      trigger: 'change'
+    }
+  ],
   followUpStatus: [{
     validator: async (_rule, value) => {
       if (value === undefined || value === null || value === '') {
-        return Promise.reject(t('common.page.form.placeholder.select', { field: t('entity.customersatisfactionsurvey.followupstatus') }))
+        return Promise.reject(pi.ph('followUpStatus'))
       }
       const num = typeof value === 'number' ? value : Number(value)
       if (!Number.isFinite(num)) {
-        return Promise.reject(t('common.page.form.placeholder.select', { field: t('entity.customersatisfactionsurvey.followupstatus') }))
+        return Promise.reject(pi.ph('followUpStatus'))
       }
       return Promise.resolve()
     },

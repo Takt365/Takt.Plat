@@ -39,7 +39,7 @@ export interface CountersignDetail extends CompanyDtoBase {
   countersignName?: string;
 
   /**
-   * 会签编号（冗余，便于查询）
+   * 会签编码（冗余，便于查询）
    */
   countersignCode: string;
 
@@ -109,7 +109,7 @@ export interface CountersignDetailQuery extends TaktPagedQuery {
   countersignId?: string;
 
   /**
-   * 会签编号（冗余，便于查询）
+   * 会签编码（冗余，便于查询）
    */
   countersignCode?: string;
 
@@ -203,7 +203,7 @@ export interface CountersignDetailCreate {
   countersignId: string;
 
   /**
-   * 会签编号（冗余，便于查询）
+   * 会签编码（冗余，便于查询）
    */
   countersignCode: string;
 
@@ -316,7 +316,7 @@ export interface CountersignDetailTemplate {
   countersignId?: string;
 
   /**
-   * 会签编号（冗余，便于查询）
+   * 会签编码（冗余，便于查询）
    */
   countersignCode?: string;
 
@@ -400,7 +400,7 @@ export interface CountersignDetailImport {
   countersignId?: string;
 
   /**
-   * 会签编号（冗余，便于查询）
+   * 会签编码（冗余，便于查询）
    */
   countersignCode?: string;
 
@@ -479,7 +479,7 @@ export interface CountersignDetailExport {
   countersignId: string;
 
   /**
-   * 会签编号（冗余，便于查询）
+   * 会签编码（冗余，便于查询）
    */
   countersignCode: string;
 

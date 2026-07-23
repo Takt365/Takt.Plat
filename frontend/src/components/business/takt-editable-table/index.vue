@@ -331,7 +331,8 @@ interface Props {
   /** 表尾备注说明（合计行 / 表体下方） */
   footerRemark?: string
   /**
-   * 虚拟滚动；省略时按行数自动：超过 TAKT_TABLE_AUTO_VIRTUAL_ROW_THRESHOLD（5000）强制开启
+   * 虚拟滚动（大数据默认开启）；false 仅在行数未超阈值时可关，超阈值强制开
+   * @see TAKT_TABLE_AUTO_VIRTUAL_ROW_THRESHOLD
    */
   virtual?: boolean
   /** validate 最少行数 */
@@ -368,7 +369,7 @@ const props = withDefaults(defineProps<Props>(), {
   showSummary: undefined,
   summaryLabel: '',
   footerRemark: '',
-  virtual: undefined,
+  virtual: true,
   minRows: 0,
   enableArrowNavigation: true,
   obsoleteField: '',

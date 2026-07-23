@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：frontend/src/types/logistics/quality/complaint
 // 文件名称：customer-complaint-item.d.ts
-// 创建时间：2026-07-09
+// 创建时间：2026-07-23
 // 创建人：Takt365(Auto Generated)
 // 功能描述：logistics/quality/complaint 模块类型定义（自动生成；类型名去 Takt 前缀与末尾 Dto，如 TaktCompanyDto → Company）
 // 
@@ -29,7 +29,7 @@ export interface CustomerComplaintItem extends CompanyDtoBase {
   customerComplaintItemId: string;
 
   /**
-   * 客诉 ID（关联 TaktCustomerComplaint.Id，选项 TaktCustomerComplaints/options）
+   * 客诉 ID（选项 TaktCustomerComplaints/options；DictValue=Id）
    */
   complaintId: string;
 
@@ -49,7 +49,7 @@ export interface CustomerComplaintItem extends CompanyDtoBase {
   lineNumber: number;
 
   /**
-   * 产品编码（选项 TaktMaterials/options，DictValue=MaterialCode）
+   * 产品编码（选项 TaktMaterialPlants/options；DictValue=MaterialCode，ExtValue=PlantCode）
    */
   productCode?: string;
 
@@ -74,7 +74,7 @@ export interface CustomerComplaintItem extends CompanyDtoBase {
   defectDescription: string;
 
   /**
-   * 缺点等级（字典 logistics_quality_defect_severity_code，DictValue=CR/MA/MI）
+   * 缺点等级（字典 logistics_quality_defect_severity_code；DictValue=CR/MA/MI）
    */
   defectLevel: string;
 
@@ -99,7 +99,7 @@ export interface CustomerComplaintItem extends CompanyDtoBase {
   improvementAction?: string;
 
   /**
-   * 改善责任人（选项 TaktEmployees/options，DictValue=EmployeeCode）
+   * 改善责任人（选项 TaktEmployees/options；DictValue=EmployeeCode）
    */
   improvementResponsible?: string;
 
@@ -124,7 +124,7 @@ export interface CustomerComplaintItem extends CompanyDtoBase {
   improvementStatus: number;
 
   /**
-   * 是否作废（字典 sys_yes_no_type，0=否 1=是；编辑移除子行时标记作废）
+   * 是否作废（字典 sys_yes_no_type；0=否 1=是；编辑移除子行时标记作废）
    */
   isObsolete: number;
 
@@ -154,7 +154,7 @@ export interface CustomerComplaintItemQuery extends TaktPagedQuery {
   companyCode?: string;
 
   /**
-   * 客诉 ID（关联 TaktCustomerComplaint.Id，选项 TaktCustomerComplaints/options）
+   * 客诉 ID（选项 TaktCustomerComplaints/options；DictValue=Id）
    */
   complaintId?: string;
 
@@ -169,7 +169,7 @@ export interface CustomerComplaintItemQuery extends TaktPagedQuery {
   lineNumber?: number;
 
   /**
-   * 产品编码（选项 TaktMaterials/options，DictValue=MaterialCode）
+   * 产品编码（选项 TaktMaterialPlants/options；DictValue=MaterialCode，ExtValue=PlantCode）
    */
   productCode?: string;
 
@@ -194,7 +194,7 @@ export interface CustomerComplaintItemQuery extends TaktPagedQuery {
   defectDescription?: string;
 
   /**
-   * 缺点等级（字典 logistics_quality_defect_severity_code，DictValue=CR/MA/MI）
+   * 缺点等级（字典 logistics_quality_defect_severity_code；DictValue=CR/MA/MI）
    */
   defectLevel?: string;
 
@@ -219,7 +219,7 @@ export interface CustomerComplaintItemQuery extends TaktPagedQuery {
   improvementAction?: string;
 
   /**
-   * 改善责任人（选项 TaktEmployees/options，DictValue=EmployeeCode）
+   * 改善责任人（选项 TaktEmployees/options；DictValue=EmployeeCode）
    */
   improvementResponsible?: string;
 
@@ -254,7 +254,7 @@ export interface CustomerComplaintItemQuery extends TaktPagedQuery {
   improvementStatus?: number;
 
   /**
-   * 是否作废（字典 sys_yes_no_type，0=否 1=是；编辑移除子行时标记作废）
+   * 是否作废（字典 sys_yes_no_type；0=否 1=是；编辑移除子行时标记作废）
    */
   isObsolete?: number;
 
@@ -303,7 +303,7 @@ export interface CustomerComplaintItemCreate {
   companyDefaultCulture: string;
 
   /**
-   * 客诉 ID（关联 TaktCustomerComplaint.Id，选项 TaktCustomerComplaints/options）
+   * 客诉 ID（选项 TaktCustomerComplaints/options；DictValue=Id）
    */
   complaintId: string;
 
@@ -318,7 +318,7 @@ export interface CustomerComplaintItemCreate {
   lineNumber: number;
 
   /**
-   * 产品编码（选项 TaktMaterials/options，DictValue=MaterialCode）
+   * 产品编码（选项 TaktMaterialPlants/options；DictValue=MaterialCode，ExtValue=PlantCode）
    */
   productCode?: string;
 
@@ -343,7 +343,7 @@ export interface CustomerComplaintItemCreate {
   defectDescription: string;
 
   /**
-   * 缺点等级（字典 logistics_quality_defect_severity_code，DictValue=CR/MA/MI）
+   * 缺点等级（字典 logistics_quality_defect_severity_code；DictValue=CR/MA/MI）
    */
   defectLevel: string;
 
@@ -368,7 +368,7 @@ export interface CustomerComplaintItemCreate {
   improvementAction?: string;
 
   /**
-   * 改善责任人（选项 TaktEmployees/options，DictValue=EmployeeCode）
+   * 改善责任人（选项 TaktEmployees/options；DictValue=EmployeeCode）
    */
   improvementResponsible?: string;
 
@@ -393,7 +393,7 @@ export interface CustomerComplaintItemCreate {
   improvementStatus: number;
 
   /**
-   * 是否作废（字典 sys_yes_no_type，0=否 1=是；编辑移除子行时标记作废）
+   * 是否作废（字典 sys_yes_no_type；0=否 1=是；编辑移除子行时标记作废）
    */
   isObsolete: number;
 
@@ -480,7 +480,7 @@ export interface CustomerComplaintItemTemplate {
   companyCode?: string;
 
   /**
-   * 客诉 ID（关联 TaktCustomerComplaint.Id，选项 TaktCustomerComplaints/options）
+   * 客诉 ID（选项 TaktCustomerComplaints/options；DictValue=Id）
    */
   complaintId?: string;
 
@@ -495,7 +495,7 @@ export interface CustomerComplaintItemTemplate {
   lineNumber?: number;
 
   /**
-   * 产品编码（选项 TaktMaterials/options，DictValue=MaterialCode）
+   * 产品编码（选项 TaktMaterialPlants/options；DictValue=MaterialCode，ExtValue=PlantCode）
    */
   productCode?: string;
 
@@ -520,7 +520,7 @@ export interface CustomerComplaintItemTemplate {
   defectDescription?: string;
 
   /**
-   * 缺点等级（字典 logistics_quality_defect_severity_code，DictValue=CR/MA/MI）
+   * 缺点等级（字典 logistics_quality_defect_severity_code；DictValue=CR/MA/MI）
    */
   defectLevel?: string;
 
@@ -545,7 +545,7 @@ export interface CustomerComplaintItemTemplate {
   improvementAction?: string;
 
   /**
-   * 改善责任人（选项 TaktEmployees/options，DictValue=EmployeeCode）
+   * 改善责任人（选项 TaktEmployees/options；DictValue=EmployeeCode）
    */
   improvementResponsible?: string;
 
@@ -570,7 +570,7 @@ export interface CustomerComplaintItemTemplate {
   improvementStatus?: number;
 
   /**
-   * 是否作废（字典 sys_yes_no_type，0=否 1=是；编辑移除子行时标记作废）
+   * 是否作废（字典 sys_yes_no_type；0=否 1=是；编辑移除子行时标记作废）
    */
   isObsolete?: number;
 
@@ -609,7 +609,7 @@ export interface CustomerComplaintItemImport {
   companyDefaultCulture?: string;
 
   /**
-   * 客诉 ID（关联 TaktCustomerComplaint.Id，选项 TaktCustomerComplaints/options）
+   * 客诉 ID（选项 TaktCustomerComplaints/options；DictValue=Id）
    */
   complaintId?: string;
 
@@ -624,7 +624,7 @@ export interface CustomerComplaintItemImport {
   lineNumber?: number;
 
   /**
-   * 产品编码（选项 TaktMaterials/options，DictValue=MaterialCode）
+   * 产品编码（选项 TaktMaterialPlants/options；DictValue=MaterialCode，ExtValue=PlantCode）
    */
   productCode?: string;
 
@@ -649,7 +649,7 @@ export interface CustomerComplaintItemImport {
   defectDescription?: string;
 
   /**
-   * 缺点等级（字典 logistics_quality_defect_severity_code，DictValue=CR/MA/MI）
+   * 缺点等级（字典 logistics_quality_defect_severity_code；DictValue=CR/MA/MI）
    */
   defectLevel?: string;
 
@@ -674,7 +674,7 @@ export interface CustomerComplaintItemImport {
   improvementAction?: string;
 
   /**
-   * 改善责任人（选项 TaktEmployees/options，DictValue=EmployeeCode）
+   * 改善责任人（选项 TaktEmployees/options；DictValue=EmployeeCode）
    */
   improvementResponsible?: string;
 
@@ -699,7 +699,7 @@ export interface CustomerComplaintItemImport {
   improvementStatus?: number;
 
   /**
-   * 是否作废（字典 sys_yes_no_type，0=否 1=是；编辑移除子行时标记作废）
+   * 是否作废（字典 sys_yes_no_type；0=否 1=是；编辑移除子行时标记作废）
    */
   isObsolete?: number;
 
@@ -733,7 +733,7 @@ export interface CustomerComplaintItemExport {
   companyCode: string;
 
   /**
-   * 客诉 ID（关联 TaktCustomerComplaint.Id，选项 TaktCustomerComplaints/options）
+   * 客诉 ID（选项 TaktCustomerComplaints/options；DictValue=Id）
    */
   complaintId: string;
 
@@ -748,7 +748,7 @@ export interface CustomerComplaintItemExport {
   lineNumber: number;
 
   /**
-   * 产品编码（选项 TaktMaterials/options，DictValue=MaterialCode）
+   * 产品编码（选项 TaktMaterialPlants/options；DictValue=MaterialCode，ExtValue=PlantCode）
    */
   productCode?: string;
 
@@ -773,7 +773,7 @@ export interface CustomerComplaintItemExport {
   defectDescription: string;
 
   /**
-   * 缺点等级（字典 logistics_quality_defect_severity_code，DictValue=CR/MA/MI）
+   * 缺点等级（字典 logistics_quality_defect_severity_code；DictValue=CR/MA/MI）
    */
   defectLevel: string;
 
@@ -798,7 +798,7 @@ export interface CustomerComplaintItemExport {
   improvementAction?: string;
 
   /**
-   * 改善责任人（选项 TaktEmployees/options，DictValue=EmployeeCode）
+   * 改善责任人（选项 TaktEmployees/options；DictValue=EmployeeCode）
    */
   improvementResponsible?: string;
 
@@ -823,7 +823,7 @@ export interface CustomerComplaintItemExport {
   improvementStatus: number;
 
   /**
-   * 是否作废（字典 sys_yes_no_type，0=否 1=是；编辑移除子行时标记作废）
+   * 是否作废（字典 sys_yes_no_type；0=否 1=是；编辑移除子行时标记作废）
    */
   isObsolete: number;
 

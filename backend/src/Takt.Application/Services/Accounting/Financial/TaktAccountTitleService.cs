@@ -114,12 +114,22 @@ public class TaktAccountTitleService : TaktServiceBase, ITaktAccountTitleService
     /// <summary>
     /// 获取会计科目选项列表（DictValue 为 AccountTitleCode，DictLabel 为科目名称）
     /// </summary>
+    /// <param name="reconciliationOnly">为 true 时仅返回统驭科目（辅助核算类型 / 统驭标识为 D=客户、K=供应商、A=资产）</param>
+    /// <param name="auxiliaryType">可选；按统驭标识精确过滤（如 D=客户、K=供应商）</param>
     /// <returns>下拉选项</returns>
-    public async Task<List<TaktSelectOption>> GetAccountTitleOptionsAsync()
+    public async Task<List<TaktSelectOption>> GetAccountTitleOptionsAsync(bool reconciliationOnly = false, string? auxiliaryType = null)
     {
         EnsureThreeLayerContext();
+        var auxType = string.IsNullOrWhiteSpace(auxiliaryType) ? null : auxiliaryType.Trim();
         var list = await _accountTitleRepository.GetListAsync(
-            x => x.TenantCode == CurrentTenantCode && x.CompanyCode == CurrentCompanyCode && x.AccountTitleStatus == 1,
+            x => x.TenantCode == CurrentTenantCode
+                && x.CompanyCode == CurrentCompanyCode
+                && x.AccountTitleStatus == 1
+                && (!reconciliationOnly
+                    || x.AuxiliaryType == "D"
+                    || x.AuxiliaryType == "K"
+                    || x.AuxiliaryType == "A")
+                && (auxType == null || x.AuxiliaryType == auxType),
             x => x.SortOrder,
             false);
         return list.Select(e => new TaktSelectOption

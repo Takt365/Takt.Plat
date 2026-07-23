@@ -32,6 +32,7 @@ export default {
     filter: {
       all: '全部',
       changed: '僅漲跌',
+      leading: '領漲領跌前50',
     },
     trend: {
       none: '—',

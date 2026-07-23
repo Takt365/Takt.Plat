@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Infrastructure.Data.Seeds.I18nSeedData.HumanResource.Personnel
 // 文件名称：TaktEmployeeJoinedI18nSeedData.cs
-// 创建时间：2026-07-20
+// 创建时间：2026-07-23
 // 创建人：Takt365(Auto Generated)
 // 功能描述：TaktEmployeeJoined 实体字段国际化种子（无对应 frontend locales；TranslationText 取自 ColumnDescription，ContextNote 取自属性 XML summary）
 // 
@@ -91,22 +91,40 @@ public class TaktEmployeeJoinedI18nSeedData : ITaktSeedDataCoordinator
             new TranslationSeedItem("entity.employeejoined._self", "zh-HK", "员工入职上岗办理记录信息_hk", "实体名称"),
 
             // entity.employeejoined.employeeid
-            new TranslationSeedItem("entity.employeejoined.employeeid", "en-US", "员工ID_us", "员工（选项 TaktEmployees/options，DictValue=Id）"),
+            new TranslationSeedItem("entity.employeejoined.employeeid", "en-US", "员工ID_us", "员工（选项 TaktEmployees/options；DictValue=Id）"),
             // entity.employeejoined.employeeid
-            new TranslationSeedItem("entity.employeejoined.employeeid", "ja-JP", "员工ID_jp", "员工（选项 TaktEmployees/options，DictValue=Id）"),
+            new TranslationSeedItem("entity.employeejoined.employeeid", "ja-JP", "员工ID_jp", "员工（选项 TaktEmployees/options；DictValue=Id）"),
             // entity.employeejoined.employeeid
-            new TranslationSeedItem("entity.employeejoined.employeeid", "zh-CN", "员工ID", "员工（选项 TaktEmployees/options，DictValue=Id）"),
+            new TranslationSeedItem("entity.employeejoined.employeeid", "zh-CN", "员工ID", "员工（选项 TaktEmployees/options；DictValue=Id）"),
             // entity.employeejoined.employeeid
-            new TranslationSeedItem("entity.employeejoined.employeeid", "zh-HK", "员工ID_hk", "员工（选项 TaktEmployees/options，DictValue=Id）"),
+            new TranslationSeedItem("entity.employeejoined.employeeid", "zh-HK", "员工ID_hk", "员工（选项 TaktEmployees/options；DictValue=Id）"),
+
+            // entity.employeejoined.employeecode
+            new TranslationSeedItem("entity.employeejoined.employeecode", "en-US", "员工编码_us", "员工编码（冗余，与 TaktEmployee.EmployeeCode 对齐）"),
+            // entity.employeejoined.employeecode
+            new TranslationSeedItem("entity.employeejoined.employeecode", "ja-JP", "员工编码_jp", "员工编码（冗余，与 TaktEmployee.EmployeeCode 对齐）"),
+            // entity.employeejoined.employeecode
+            new TranslationSeedItem("entity.employeejoined.employeecode", "zh-CN", "员工编码", "员工编码（冗余，与 TaktEmployee.EmployeeCode 对齐）"),
+            // entity.employeejoined.employeecode
+            new TranslationSeedItem("entity.employeejoined.employeecode", "zh-HK", "员工编码_hk", "员工编码（冗余，与 TaktEmployee.EmployeeCode 对齐）"),
+
+            // entity.employeejoined.employeename
+            new TranslationSeedItem("entity.employeejoined.employeename", "en-US", "员工姓名_us", "员工姓名（冗余，与 TaktEmployee.EmployeeName 对齐）"),
+            // entity.employeejoined.employeename
+            new TranslationSeedItem("entity.employeejoined.employeename", "ja-JP", "员工姓名_jp", "员工姓名（冗余，与 TaktEmployee.EmployeeName 对齐）"),
+            // entity.employeejoined.employeename
+            new TranslationSeedItem("entity.employeejoined.employeename", "zh-CN", "员工姓名", "员工姓名（冗余，与 TaktEmployee.EmployeeName 对齐）"),
+            // entity.employeejoined.employeename
+            new TranslationSeedItem("entity.employeejoined.employeename", "zh-HK", "员工姓名_hk", "员工姓名（冗余，与 TaktEmployee.EmployeeName 对齐）"),
 
             // entity.employeejoined.onboardingid
-            new TranslationSeedItem("entity.employeejoined.onboardingid", "en-US", "入职待办ID_us", "入职待办（选项 TaktEmployeeOnboardings/options，DictValue=Id）"),
+            new TranslationSeedItem("entity.employeejoined.onboardingid", "en-US", "入职待办ID_us", "入职待办（选项 TaktEmployeeOnboardings/options；DictValue=Id）"),
             // entity.employeejoined.onboardingid
-            new TranslationSeedItem("entity.employeejoined.onboardingid", "ja-JP", "入职待办ID_jp", "入职待办（选项 TaktEmployeeOnboardings/options，DictValue=Id）"),
+            new TranslationSeedItem("entity.employeejoined.onboardingid", "ja-JP", "入职待办ID_jp", "入职待办（选项 TaktEmployeeOnboardings/options；DictValue=Id）"),
             // entity.employeejoined.onboardingid
-            new TranslationSeedItem("entity.employeejoined.onboardingid", "zh-CN", "入职待办ID", "入职待办（选项 TaktEmployeeOnboardings/options，DictValue=Id）"),
+            new TranslationSeedItem("entity.employeejoined.onboardingid", "zh-CN", "入职待办ID", "入职待办（选项 TaktEmployeeOnboardings/options；DictValue=Id）"),
             // entity.employeejoined.onboardingid
-            new TranslationSeedItem("entity.employeejoined.onboardingid", "zh-HK", "入职待办ID_hk", "入职待办（选项 TaktEmployeeOnboardings/options，DictValue=Id）"),
+            new TranslationSeedItem("entity.employeejoined.onboardingid", "zh-HK", "入职待办ID_hk", "入职待办（选项 TaktEmployeeOnboardings/options；DictValue=Id）"),
 
             // entity.employeejoined.joineddate
             new TranslationSeedItem("entity.employeejoined.joineddate", "en-US", "实际上岗日期_us", "实际上岗日期（JoinedDate：我去上班）"),
@@ -154,13 +172,13 @@ public class TaktEmployeeJoinedI18nSeedData : ITaktSeedDataCoordinator
             new TranslationSeedItem("entity.employeejoined.deptname", "zh-HK", "上岗部门名称_hk", "上岗部门名称"),
 
             // entity.employeejoined.postid
-            new TranslationSeedItem("entity.employeejoined.postid", "en-US", "上岗岗位ID_us", "上岗岗位（选项 TaktPosts/options，DictValue=Id）"),
+            new TranslationSeedItem("entity.employeejoined.postid", "en-US", "上岗岗位ID_us", "上岗岗位（选项 TaktPosts/options；DictValue=Id）"),
             // entity.employeejoined.postid
-            new TranslationSeedItem("entity.employeejoined.postid", "ja-JP", "上岗岗位ID_jp", "上岗岗位（选项 TaktPosts/options，DictValue=Id）"),
+            new TranslationSeedItem("entity.employeejoined.postid", "ja-JP", "上岗岗位ID_jp", "上岗岗位（选项 TaktPosts/options；DictValue=Id）"),
             // entity.employeejoined.postid
-            new TranslationSeedItem("entity.employeejoined.postid", "zh-CN", "上岗岗位ID", "上岗岗位（选项 TaktPosts/options，DictValue=Id）"),
+            new TranslationSeedItem("entity.employeejoined.postid", "zh-CN", "上岗岗位ID", "上岗岗位（选项 TaktPosts/options；DictValue=Id）"),
             // entity.employeejoined.postid
-            new TranslationSeedItem("entity.employeejoined.postid", "zh-HK", "上岗岗位ID_hk", "上岗岗位（选项 TaktPosts/options，DictValue=Id）"),
+            new TranslationSeedItem("entity.employeejoined.postid", "zh-HK", "上岗岗位ID_hk", "上岗岗位（选项 TaktPosts/options；DictValue=Id）"),
 
             // entity.employeejoined.postname
             new TranslationSeedItem("entity.employeejoined.postname", "en-US", "上岗岗位名称_us", "上岗岗位名称"),
@@ -199,13 +217,13 @@ public class TaktEmployeeJoinedI18nSeedData : ITaktSeedDataCoordinator
             new TranslationSeedItem("entity.employeejoined.employmenttype", "zh-HK", "任职类型_hk", "任职类型（字典 hr_employee_employment_type；0=主职 1=兼职 2=借调 3=挂职）"),
 
             // entity.employeejoined.directmanagerid
-            new TranslationSeedItem("entity.employeejoined.directmanagerid", "en-US", "直属上级员工ID_us", "直属上级（选项 TaktEmployees/options，DictValue=Id）"),
+            new TranslationSeedItem("entity.employeejoined.directmanagerid", "en-US", "直属上级员工ID_us", "直属上级（选项 TaktEmployees/options；DictValue=Id）"),
             // entity.employeejoined.directmanagerid
-            new TranslationSeedItem("entity.employeejoined.directmanagerid", "ja-JP", "直属上级员工ID_jp", "直属上级（选项 TaktEmployees/options，DictValue=Id）"),
+            new TranslationSeedItem("entity.employeejoined.directmanagerid", "ja-JP", "直属上级员工ID_jp", "直属上级（选项 TaktEmployees/options；DictValue=Id）"),
             // entity.employeejoined.directmanagerid
-            new TranslationSeedItem("entity.employeejoined.directmanagerid", "zh-CN", "直属上级员工ID", "直属上级（选项 TaktEmployees/options，DictValue=Id）"),
+            new TranslationSeedItem("entity.employeejoined.directmanagerid", "zh-CN", "直属上级员工ID", "直属上级（选项 TaktEmployees/options；DictValue=Id）"),
             // entity.employeejoined.directmanagerid
-            new TranslationSeedItem("entity.employeejoined.directmanagerid", "zh-HK", "直属上级员工ID_hk", "直属上级（选项 TaktEmployees/options，DictValue=Id）"),
+            new TranslationSeedItem("entity.employeejoined.directmanagerid", "zh-HK", "直属上级员工ID_hk", "直属上级（选项 TaktEmployees/options；DictValue=Id）"),
 
             // entity.employeejoined.directmanagername
             new TranslationSeedItem("entity.employeejoined.directmanagername", "en-US", "直属上级姓名_us", "直属上级姓名"),

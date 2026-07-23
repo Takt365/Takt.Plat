@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：frontend/src/types/logistics/quality/cost
 // 文件名称：issue-pcba-rework.d.ts
-// 创建时间：2026-07-09
+// 创建时间：2026-07-23
 // 创建人：Takt365(Auto Generated)
 // 功能描述：logistics/quality/cost 模块类型定义（自动生成；类型名去 Takt 前缀与末尾 Dto，如 TaktCompanyDto → Company）
 // 
@@ -29,7 +29,7 @@ export interface QualityIssuePcbaRework extends CompanyDtoBase {
   qualityIssuePcbaReworkId: string;
 
   /**
-   * 品质问题主表 ID（关联 TaktQualityIssue.Id，选项 TaktQualityIssues/options）
+   * 品质问题主表 ID（选项 TaktQualityIssues/options；DictValue=Id）
    */
   qualityIssueId: string;
 
@@ -96,7 +96,7 @@ export interface QualityIssuePcbaRework extends CompanyDtoBase {
   /**
    * PCBA顾客名
    */
-  pcbaCustomerName?: string;
+  pcbaCustomerName1?: string;
 
   /**
    * PCBA Debit Note No
@@ -119,7 +119,7 @@ export interface QualityIssuePcbaRework extends CompanyDtoBase {
   pcbaRecorder?: string;
 
   /**
-   * 是否作废（字典 sys_yes_no_type，0=否 1=是；编辑移除子行时标记作废）
+   * 是否作废（字典 sys_yes_no_type；0=否 1=是；编辑移除子行时标记作废）
    */
   isObsolete: number;
 
@@ -149,7 +149,7 @@ export interface QualityIssuePcbaReworkQuery extends TaktPagedQuery {
   companyCode?: string;
 
   /**
-   * 品质问题主表 ID（关联 TaktQualityIssue.Id，选项 TaktQualityIssues/options）
+   * 品质问题主表 ID（选项 TaktQualityIssues/options；DictValue=Id）
    */
   qualityIssueId?: string;
 
@@ -211,7 +211,7 @@ export interface QualityIssuePcbaReworkQuery extends TaktPagedQuery {
   /**
    * PCBA顾客名
    */
-  pcbaCustomerName?: string;
+  pcbaCustomerName1?: string;
 
   /**
    * PCBA Debit Note No
@@ -234,7 +234,7 @@ export interface QualityIssuePcbaReworkQuery extends TaktPagedQuery {
   pcbaRecorder?: string;
 
   /**
-   * 是否作废（字典 sys_yes_no_type，0=否 1=是；编辑移除子行时标记作废）
+   * 是否作废（字典 sys_yes_no_type；0=否 1=是；编辑移除子行时标记作废）
    */
   isObsolete?: number;
 
@@ -283,7 +283,7 @@ export interface QualityIssuePcbaReworkCreate {
   companyDefaultCulture: string;
 
   /**
-   * 品质问题主表 ID（关联 TaktQualityIssue.Id，选项 TaktQualityIssues/options）
+   * 品质问题主表 ID（选项 TaktQualityIssues/options；DictValue=Id）
    */
   qualityIssueId: string;
 
@@ -345,7 +345,7 @@ export interface QualityIssuePcbaReworkCreate {
   /**
    * PCBA顾客名
    */
-  pcbaCustomerName?: string;
+  pcbaCustomerName1?: string;
 
   /**
    * PCBA Debit Note No
@@ -368,7 +368,7 @@ export interface QualityIssuePcbaReworkCreate {
   pcbaRecorder?: string;
 
   /**
-   * 是否作废（字典 sys_yes_no_type，0=否 1=是；编辑移除子行时标记作废）
+   * 是否作废（字典 sys_yes_no_type；0=否 1=是；编辑移除子行时标记作废）
    */
   isObsolete: number;
 
@@ -436,7 +436,7 @@ export interface QualityIssuePcbaReworkTemplate {
   companyCode?: string;
 
   /**
-   * 品质问题主表 ID（关联 TaktQualityIssue.Id，选项 TaktQualityIssues/options）
+   * 品质问题主表 ID（选项 TaktQualityIssues/options；DictValue=Id）
    */
   qualityIssueId?: string;
 
@@ -498,7 +498,7 @@ export interface QualityIssuePcbaReworkTemplate {
   /**
    * PCBA顾客名
    */
-  pcbaCustomerName?: string;
+  pcbaCustomerName1?: string;
 
   /**
    * PCBA Debit Note No
@@ -521,7 +521,7 @@ export interface QualityIssuePcbaReworkTemplate {
   pcbaRecorder?: string;
 
   /**
-   * 是否作废（字典 sys_yes_no_type，0=否 1=是；编辑移除子行时标记作废）
+   * 是否作废（字典 sys_yes_no_type；0=否 1=是；编辑移除子行时标记作废）
    */
   isObsolete?: number;
 
@@ -560,7 +560,7 @@ export interface QualityIssuePcbaReworkImport {
   companyDefaultCulture?: string;
 
   /**
-   * 品质问题主表 ID（关联 TaktQualityIssue.Id，选项 TaktQualityIssues/options）
+   * 品质问题主表 ID（选项 TaktQualityIssues/options；DictValue=Id）
    */
   qualityIssueId?: string;
 
@@ -622,7 +622,7 @@ export interface QualityIssuePcbaReworkImport {
   /**
    * PCBA顾客名
    */
-  pcbaCustomerName?: string;
+  pcbaCustomerName1?: string;
 
   /**
    * PCBA Debit Note No
@@ -645,7 +645,7 @@ export interface QualityIssuePcbaReworkImport {
   pcbaRecorder?: string;
 
   /**
-   * 是否作废（字典 sys_yes_no_type，0=否 1=是；编辑移除子行时标记作废）
+   * 是否作废（字典 sys_yes_no_type；0=否 1=是；编辑移除子行时标记作废）
    */
   isObsolete?: number;
 
@@ -679,7 +679,7 @@ export interface QualityIssuePcbaReworkExport {
   companyCode: string;
 
   /**
-   * 品质问题主表 ID（关联 TaktQualityIssue.Id，选项 TaktQualityIssues/options）
+   * 品质问题主表 ID（选项 TaktQualityIssues/options；DictValue=Id）
    */
   qualityIssueId: string;
 
@@ -741,7 +741,7 @@ export interface QualityIssuePcbaReworkExport {
   /**
    * PCBA顾客名
    */
-  pcbaCustomerName?: string;
+  pcbaCustomerName1?: string;
 
   /**
    * PCBA Debit Note No
@@ -764,7 +764,7 @@ export interface QualityIssuePcbaReworkExport {
   pcbaRecorder?: string;
 
   /**
-   * 是否作废（字典 sys_yes_no_type，0=否 1=是；编辑移除子行时标记作废）
+   * 是否作废（字典 sys_yes_no_type；0=否 1=是；编辑移除子行时标记作废）
    */
   isObsolete: number;
 

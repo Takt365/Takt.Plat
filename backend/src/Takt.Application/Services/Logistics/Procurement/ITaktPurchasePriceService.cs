@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Application.Services.Logistics.Procurement
 // 文件名称：ITaktPurchasePriceService.cs
-// 创建时间：2026-07-20
+// 创建时间：2026-07-21
 // 创建人：Takt365(Cursor AI)
 // 功能描述：采购价格应用服务接口
 // 
@@ -40,6 +40,20 @@ public interface ITaktPurchasePriceService
     /// </summary>
     /// <returns>下拉选项</returns>
     Task<List<TaktSelectOption>> GetPurchasePriceOptionsAsync();
+
+    /// <summary>
+    /// 获取采购价格中的供应商选项（按工厂去重；DictValue=SupplierCode）
+    /// </summary>
+    /// <param name="plantCode">工厂代码（必填；空则返回空列表）</param>
+    /// <returns>下拉选项</returns>
+    Task<List<TaktSelectOption>> GetPurchasePriceSupplierOptionsAsync(string? plantCode = null);
+
+    /// <summary>
+    /// 获取采购价格中的物料选项（按工厂去重；DictValue=MaterialCode）
+    /// </summary>
+    /// <param name="plantCode">工厂代码（必填；空则返回空列表）</param>
+    /// <returns>下拉选项</returns>
+    Task<List<TaktSelectOption>> GetPurchasePriceMaterialOptionsAsync(string? plantCode = null);
 
     /// <summary>
     /// 创建采购价格
@@ -94,5 +108,4 @@ public interface ITaktPurchasePriceService
     /// <param name="fileName">文件名</param>
     /// <returns>Excel 文件</returns>
     Task<(string fileName, byte[] fileContent)> ExportPurchasePriceAsync(TaktPurchasePriceQueryDto? query = null, string? sheetName = null, string? fileName = null);
-
 }

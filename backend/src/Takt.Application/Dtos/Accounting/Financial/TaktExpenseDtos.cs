@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Application.Dtos.Accounting.Financial
 // 文件名称：TaktExpenseDtos.cs
-// 创建时间：2026-07-09
+// 创建时间：2026-07-23
 // 创建人：Takt365(Auto Generated)
 // 功能描述：Expense 模块 DTO（由 generate-dtos-from-entity.cjs 根据 TaktExpense 生成，请按需审阅）
 // 
@@ -36,7 +36,7 @@ public class TaktExpenseDto : TaktApprovalDtoBase
     public long ExpenseId { get; set; }
 
     /// <summary>
-    /// 费用单编号（租户+公司内唯一）
+    /// 费用单编码（租户+公司内唯一）
     /// </summary>
     public string ExpenseCode { get; set; } = string.Empty;
 
@@ -51,17 +51,17 @@ public class TaktExpenseDto : TaktApprovalDtoBase
     public int ExpenseType { get; set; } = 0;
 
     /// <summary>
-    /// 供应商编码（关联 TaktSupplier.SupplierCode，选项 TaktSuppliers/options；整单唯一）
+    /// 供应商编码（选项 TaktSuppliers/options；整单唯一，DictValue=Id）
     /// </summary>
     public string? SupplierCode { get; set; } = string.Empty;
 
     /// <summary>
     /// 供应商名称（整单唯一）
     /// </summary>
-    public string? SupplierName { get; set; } = string.Empty;
+    public string? SupplierName1 { get; set; } = string.Empty;
 
     /// <summary>
-    /// 申请人（关联 TaktEmployee.Id，选项 TaktEmployees/options）
+    /// 申请人（选项 TaktEmployees/options；DictValue=Id）
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
     public long ApplicantBy { get; set; }
@@ -82,23 +82,23 @@ public class TaktExpenseDto : TaktApprovalDtoBase
     public string? CostCenter { get; set; } = string.Empty;
 
     /// <summary>
-    /// 关联会签单（关联 TaktCountersign.Id，选项 TaktCountersigns/options）
+    /// 关联会签单（选项 TaktCountersigns/options；DictValue=Id）
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
     public long? CountersignId { get; set; }
 
     /// <summary>
-    /// 关联会签单（关联 TaktCountersign.Id，选项 TaktCountersigns/options）
+    /// 关联会签单（选项 TaktCountersigns/options；DictValue=Id）
     /// </summary>
     public string? CountersignName { get; set; }
 
     /// <summary>
-    /// 来源采购订单编码（关联 TaktPurchaseOrder.PurchaseOrderCode，选项 TaktPurchaseOrders/options；采购链路自动生成时写入）
+    /// 来源采购订单编码（选项 TaktPurchaseOrders/options；采购链路自动生成时写入，DictValue=Id）
     /// </summary>
     public string? PurchaseOrderCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 来源采购申请编码（关联 TaktPurchaseRequest.PurchaseRequestCode，选项 TaktPurchaseRequests/options；采购链路自动生成时写入）
+    /// 来源采购申请编码（选项 TaktPurchaseRequests/options；采购链路自动生成时写入，DictValue=Id）
     /// </summary>
     public string? PurchaseRequestCode { get; set; } = string.Empty;
 
@@ -133,7 +133,7 @@ public class TaktExpenseDto : TaktApprovalDtoBase
     public string? Attachments { get; set; } = string.Empty;
 
     /// <summary>
-    /// 关联工厂（关联 TaktPlant.PlantCode，选项 TaktPlants/options）
+    /// 关联工厂（选项 TaktPlants/options；DictValue=Id）
     /// </summary>
     public string RelatedPlant { get; set; } = string.Empty;
 
@@ -171,7 +171,7 @@ public class TaktExpenseQueryDto : TaktPagedQuery
     public string? CompanyCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 费用单编号（租户+公司内唯一）
+    /// 费用单编码（租户+公司内唯一）
     /// </summary>
     public string? ExpenseCode { get; set; } = string.Empty;
 
@@ -186,17 +186,17 @@ public class TaktExpenseQueryDto : TaktPagedQuery
     public int? ExpenseType { get; set; }
 
     /// <summary>
-    /// 供应商编码（关联 TaktSupplier.SupplierCode，选项 TaktSuppliers/options；整单唯一）
+    /// 供应商编码（选项 TaktSuppliers/options；整单唯一，DictValue=Id）
     /// </summary>
     public string? SupplierCode { get; set; } = string.Empty;
 
     /// <summary>
     /// 供应商名称（整单唯一）
     /// </summary>
-    public string? SupplierName { get; set; } = string.Empty;
+    public string? SupplierName1 { get; set; } = string.Empty;
 
     /// <summary>
-    /// 申请人（关联 TaktEmployee.Id，选项 TaktEmployees/options）
+    /// 申请人（选项 TaktEmployees/options；DictValue=Id）
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
     public long? ApplicantBy { get; set; }
@@ -217,18 +217,18 @@ public class TaktExpenseQueryDto : TaktPagedQuery
     public string? CostCenter { get; set; } = string.Empty;
 
     /// <summary>
-    /// 关联会签单（关联 TaktCountersign.Id，选项 TaktCountersigns/options）
+    /// 关联会签单（选项 TaktCountersigns/options；DictValue=Id）
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
     public long? CountersignId { get; set; }
 
     /// <summary>
-    /// 来源采购订单编码（关联 TaktPurchaseOrder.PurchaseOrderCode，选项 TaktPurchaseOrders/options；采购链路自动生成时写入）
+    /// 来源采购订单编码（选项 TaktPurchaseOrders/options；采购链路自动生成时写入，DictValue=Id）
     /// </summary>
     public string? PurchaseOrderCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 来源采购申请编码（关联 TaktPurchaseRequest.PurchaseRequestCode，选项 TaktPurchaseRequests/options；采购链路自动生成时写入）
+    /// 来源采购申请编码（选项 TaktPurchaseRequests/options；采购链路自动生成时写入，DictValue=Id）
     /// </summary>
     public string? PurchaseRequestCode { get; set; } = string.Empty;
 
@@ -268,7 +268,7 @@ public class TaktExpenseQueryDto : TaktPagedQuery
     public string? Attachments { get; set; } = string.Empty;
 
     /// <summary>
-    /// 关联工厂（关联 TaktPlant.PlantCode，选项 TaktPlants/options）
+    /// 关联工厂（选项 TaktPlants/options；DictValue=Id）
     /// </summary>
     public string? RelatedPlant { get; set; } = string.Empty;
 
@@ -366,9 +366,9 @@ public class TaktExpenseCreateDto
     public string CompanyDefaultCulture { get; set; } = string.Empty;
 
     /// <summary>
-    /// 费用单编号（租户+公司内唯一）
+    /// 费用单编码（租户+公司内唯一）
     /// </summary>
-    [Required(ErrorMessage = "费用单编号（租户+公司内唯一）不能为空")]
+    [Required(ErrorMessage = "费用单编码（租户+公司内唯一）不能为空")]
     public string ExpenseCode { get; set; } = string.Empty;
 
     /// <summary>
@@ -383,17 +383,17 @@ public class TaktExpenseCreateDto
     public int ExpenseType { get; set; } = 0;
 
     /// <summary>
-    /// 供应商编码（关联 TaktSupplier.SupplierCode，选项 TaktSuppliers/options；整单唯一）
+    /// 供应商编码（选项 TaktSuppliers/options；整单唯一，DictValue=Id）
     /// </summary>
     public string? SupplierCode { get; set; } = string.Empty;
 
     /// <summary>
     /// 供应商名称（整单唯一）
     /// </summary>
-    public string? SupplierName { get; set; } = string.Empty;
+    public string? SupplierName1 { get; set; } = string.Empty;
 
     /// <summary>
-    /// 申请人（关联 TaktEmployee.Id，选项 TaktEmployees/options）
+    /// 申请人（选项 TaktEmployees/options；DictValue=Id）
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
     public long ApplicantBy { get; set; }
@@ -414,18 +414,18 @@ public class TaktExpenseCreateDto
     public string? CostCenter { get; set; } = string.Empty;
 
     /// <summary>
-    /// 关联会签单（关联 TaktCountersign.Id，选项 TaktCountersigns/options）
+    /// 关联会签单（选项 TaktCountersigns/options；DictValue=Id）
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
     public long? CountersignId { get; set; }
 
     /// <summary>
-    /// 来源采购订单编码（关联 TaktPurchaseOrder.PurchaseOrderCode，选项 TaktPurchaseOrders/options；采购链路自动生成时写入）
+    /// 来源采购订单编码（选项 TaktPurchaseOrders/options；采购链路自动生成时写入，DictValue=Id）
     /// </summary>
     public string? PurchaseOrderCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 来源采购申请编码（关联 TaktPurchaseRequest.PurchaseRequestCode，选项 TaktPurchaseRequests/options；采购链路自动生成时写入）
+    /// 来源采购申请编码（选项 TaktPurchaseRequests/options；采购链路自动生成时写入，DictValue=Id）
     /// </summary>
     public string? PurchaseRequestCode { get; set; } = string.Empty;
 
@@ -460,9 +460,9 @@ public class TaktExpenseCreateDto
     public string? Attachments { get; set; } = string.Empty;
 
     /// <summary>
-    /// 关联工厂（关联 TaktPlant.PlantCode，选项 TaktPlants/options）
+    /// 关联工厂（选项 TaktPlants/options；DictValue=Id）
     /// </summary>
-    [Required(ErrorMessage = "关联工厂（关联 TaktPlant.PlantCode，选项 TaktPlants/options）不能为空")]
+    [Required(ErrorMessage = "关联工厂（选项 TaktPlants/options；DictValue=Id）不能为空")]
     public string RelatedPlant { get; set; } = string.Empty;
 
     /// <summary>
@@ -473,7 +473,7 @@ public class TaktExpenseCreateDto
     /// <summary>
     /// 费用单明细列表（主子表关系）（子表，级联保存）
     /// </summary>
-    public List<TaktExpenseDetailUpdateDto>? ExpenseDetails { get; set; }
+    public List<TaktExpenseDetailCreateDto>? ExpenseDetails { get; set; }
 
     /// <summary>
     /// 扩展字段JSON
@@ -504,6 +504,11 @@ public class TaktExpenseUpdateDto : TaktExpenseCreateDto
     [AdaptMember("Id")]
     [JsonConverter(typeof(ValueToStringConverter))]
     public long ExpenseId { get; set; }
+
+    /// <summary>
+    /// 费用单明细列表（主子表关系）（子表，级联保存）
+    /// </summary>
+    public new List<TaktExpenseDetailUpdateDto>? ExpenseDetails { get; set; }
 
 }
 
@@ -551,7 +556,7 @@ public class TaktExpenseTemplateDto
     public string? CompanyCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 费用单编号（租户+公司内唯一）
+    /// 费用单编码（租户+公司内唯一）
     /// </summary>
     public string? ExpenseCode { get; set; } = string.Empty;
 
@@ -566,17 +571,17 @@ public class TaktExpenseTemplateDto
     public int? ExpenseType { get; set; }
 
     /// <summary>
-    /// 供应商编码（关联 TaktSupplier.SupplierCode，选项 TaktSuppliers/options；整单唯一）
+    /// 供应商编码（选项 TaktSuppliers/options；整单唯一，DictValue=Id）
     /// </summary>
     public string? SupplierCode { get; set; } = string.Empty;
 
     /// <summary>
     /// 供应商名称（整单唯一）
     /// </summary>
-    public string? SupplierName { get; set; } = string.Empty;
+    public string? SupplierName1 { get; set; } = string.Empty;
 
     /// <summary>
-    /// 申请人（关联 TaktEmployee.Id，选项 TaktEmployees/options）
+    /// 申请人（选项 TaktEmployees/options；DictValue=Id）
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
     public long? ApplicantBy { get; set; }
@@ -597,18 +602,18 @@ public class TaktExpenseTemplateDto
     public string? CostCenter { get; set; } = string.Empty;
 
     /// <summary>
-    /// 关联会签单（关联 TaktCountersign.Id，选项 TaktCountersigns/options）
+    /// 关联会签单（选项 TaktCountersigns/options；DictValue=Id）
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
     public long? CountersignId { get; set; }
 
     /// <summary>
-    /// 来源采购订单编码（关联 TaktPurchaseOrder.PurchaseOrderCode，选项 TaktPurchaseOrders/options；采购链路自动生成时写入）
+    /// 来源采购订单编码（选项 TaktPurchaseOrders/options；采购链路自动生成时写入，DictValue=Id）
     /// </summary>
     public string? PurchaseOrderCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 来源采购申请编码（关联 TaktPurchaseRequest.PurchaseRequestCode，选项 TaktPurchaseRequests/options；采购链路自动生成时写入）
+    /// 来源采购申请编码（选项 TaktPurchaseRequests/options；采购链路自动生成时写入，DictValue=Id）
     /// </summary>
     public string? PurchaseRequestCode { get; set; } = string.Empty;
 
@@ -643,7 +648,7 @@ public class TaktExpenseTemplateDto
     public string? Attachments { get; set; } = string.Empty;
 
     /// <summary>
-    /// 关联工厂（关联 TaktPlant.PlantCode，选项 TaktPlants/options）
+    /// 关联工厂（选项 TaktPlants/options；DictValue=Id）
     /// </summary>
     public string? RelatedPlant { get; set; } = string.Empty;
 
@@ -690,7 +695,7 @@ public class TaktExpenseImportDto
     public string? CompanyDefaultCulture { get; set; } = string.Empty;
 
     /// <summary>
-    /// 费用单编号（租户+公司内唯一）
+    /// 费用单编码（租户+公司内唯一）
     /// </summary>
     public string? ExpenseCode { get; set; } = string.Empty;
 
@@ -705,17 +710,17 @@ public class TaktExpenseImportDto
     public int? ExpenseType { get; set; }
 
     /// <summary>
-    /// 供应商编码（关联 TaktSupplier.SupplierCode，选项 TaktSuppliers/options；整单唯一）
+    /// 供应商编码（选项 TaktSuppliers/options；整单唯一，DictValue=Id）
     /// </summary>
     public string? SupplierCode { get; set; } = string.Empty;
 
     /// <summary>
     /// 供应商名称（整单唯一）
     /// </summary>
-    public string? SupplierName { get; set; } = string.Empty;
+    public string? SupplierName1 { get; set; } = string.Empty;
 
     /// <summary>
-    /// 申请人（关联 TaktEmployee.Id，选项 TaktEmployees/options）
+    /// 申请人（选项 TaktEmployees/options；DictValue=Id）
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
     public long? ApplicantBy { get; set; }
@@ -736,18 +741,18 @@ public class TaktExpenseImportDto
     public string? CostCenter { get; set; } = string.Empty;
 
     /// <summary>
-    /// 关联会签单（关联 TaktCountersign.Id，选项 TaktCountersigns/options）
+    /// 关联会签单（选项 TaktCountersigns/options；DictValue=Id）
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
     public long? CountersignId { get; set; }
 
     /// <summary>
-    /// 来源采购订单编码（关联 TaktPurchaseOrder.PurchaseOrderCode，选项 TaktPurchaseOrders/options；采购链路自动生成时写入）
+    /// 来源采购订单编码（选项 TaktPurchaseOrders/options；采购链路自动生成时写入，DictValue=Id）
     /// </summary>
     public string? PurchaseOrderCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 来源采购申请编码（关联 TaktPurchaseRequest.PurchaseRequestCode，选项 TaktPurchaseRequests/options；采购链路自动生成时写入）
+    /// 来源采购申请编码（选项 TaktPurchaseRequests/options；采购链路自动生成时写入，DictValue=Id）
     /// </summary>
     public string? PurchaseRequestCode { get; set; } = string.Empty;
 
@@ -782,7 +787,7 @@ public class TaktExpenseImportDto
     public string? Attachments { get; set; } = string.Empty;
 
     /// <summary>
-    /// 关联工厂（关联 TaktPlant.PlantCode，选项 TaktPlants/options）
+    /// 关联工厂（选项 TaktPlants/options；DictValue=Id）
     /// </summary>
     public string? RelatedPlant { get; set; } = string.Empty;
 
@@ -825,7 +830,7 @@ public class TaktExpenseExportDto
     public long ExpenseId { get; set; }
 
     /// <summary>
-    /// 费用单编号（租户+公司内唯一）
+    /// 费用单编码（租户+公司内唯一）
     /// </summary>
     public string ExpenseCode { get; set; } = string.Empty;
 
@@ -840,17 +845,17 @@ public class TaktExpenseExportDto
     public int ExpenseType { get; set; } = 0;
 
     /// <summary>
-    /// 供应商编码（关联 TaktSupplier.SupplierCode，选项 TaktSuppliers/options；整单唯一）
+    /// 供应商编码（选项 TaktSuppliers/options；整单唯一，DictValue=Id）
     /// </summary>
     public string? SupplierCode { get; set; } = string.Empty;
 
     /// <summary>
     /// 供应商名称（整单唯一）
     /// </summary>
-    public string? SupplierName { get; set; } = string.Empty;
+    public string? SupplierName1 { get; set; } = string.Empty;
 
     /// <summary>
-    /// 申请人（关联 TaktEmployee.Id，选项 TaktEmployees/options）
+    /// 申请人（选项 TaktEmployees/options；DictValue=Id）
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
     public long ApplicantBy { get; set; }
@@ -871,18 +876,18 @@ public class TaktExpenseExportDto
     public string? CostCenter { get; set; } = string.Empty;
 
     /// <summary>
-    /// 关联会签单（关联 TaktCountersign.Id，选项 TaktCountersigns/options）
+    /// 关联会签单（选项 TaktCountersigns/options；DictValue=Id）
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
     public long? CountersignId { get; set; }
 
     /// <summary>
-    /// 来源采购订单编码（关联 TaktPurchaseOrder.PurchaseOrderCode，选项 TaktPurchaseOrders/options；采购链路自动生成时写入）
+    /// 来源采购订单编码（选项 TaktPurchaseOrders/options；采购链路自动生成时写入，DictValue=Id）
     /// </summary>
     public string? PurchaseOrderCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 来源采购申请编码（关联 TaktPurchaseRequest.PurchaseRequestCode，选项 TaktPurchaseRequests/options；采购链路自动生成时写入）
+    /// 来源采购申请编码（选项 TaktPurchaseRequests/options；采购链路自动生成时写入，DictValue=Id）
     /// </summary>
     public string? PurchaseRequestCode { get; set; } = string.Empty;
 
@@ -917,7 +922,7 @@ public class TaktExpenseExportDto
     public string? Attachments { get; set; } = string.Empty;
 
     /// <summary>
-    /// 关联工厂（关联 TaktPlant.PlantCode，选项 TaktPlants/options）
+    /// 关联工厂（选项 TaktPlants/options；DictValue=Id）
     /// </summary>
     public string RelatedPlant { get; set; } = string.Empty;
 

@@ -229,13 +229,78 @@
         />
       </a-form-item>
       </div>
-      <div v-show="isFieldVisible('taxCode')">
-      <a-form-item :label="pi.queryLabel('taxCode')">
+      <div v-show="isFieldVisible('untaxedPrice')">
+      <a-form-item :label="pi.queryLabel('untaxedPrice')">
+        <a-input-number
+          v-model:value="advancedQueryForm.untaxedPrice"
+          :placeholder="pi.queryPh('untaxedPrice', 'required')"
+          style="width: 100%"
+        />
+      </a-form-item>
+      </div>
+      <div v-show="isFieldVisible('taxIncludedPrice')">
+      <a-form-item :label="pi.queryLabel('taxIncludedPrice')">
+        <a-input-number
+          v-model:value="advancedQueryForm.taxIncludedPrice"
+          :placeholder="pi.queryPh('taxIncludedPrice', 'required')"
+          style="width: 100%"
+        />
+      </a-form-item>
+      </div>
+      <div v-show="isFieldVisible('conditionCurrency')">
+      <a-form-item :label="pi.queryLabel('conditionCurrency')">
         <TaktSelect
-          v-model:value="advancedQueryForm.taxCode"
-          dict-type="accounting_tax_code"
-          :placeholder="pi.queryPh('taxCode', 'select')"
+          v-model:value="advancedQueryForm.conditionCurrency"
+          dict-type="accounting_currency_code"
+          :placeholder="pi.queryPh('conditionCurrency', 'select')"
           allow-clear
+        />
+      </a-form-item>
+      </div>
+      <div v-show="isFieldVisible('priceUnit')">
+      <a-form-item :label="pi.queryLabel('priceUnit')">
+        <TaktSelect
+          v-model:value="advancedQueryForm.priceUnit"
+          dict-type="logistics_price_unit_param"
+          :placeholder="pi.queryPh('priceUnit', 'select')"
+          allow-clear
+        />
+      </a-form-item>
+      </div>
+      <div v-show="isFieldVisible('unitOfMeasure')">
+      <a-form-item :label="pi.queryLabel('unitOfMeasure')">
+        <TaktSelect
+          v-model:value="advancedQueryForm.unitOfMeasure"
+          dict-type="logistics_unit_of_measure_code"
+          :placeholder="pi.queryPh('unitOfMeasure', 'select')"
+          allow-clear
+        />
+      </a-form-item>
+      </div>
+      <div v-show="isFieldVisible('minOrderQuantity')">
+      <a-form-item :label="pi.queryLabel('minOrderQuantity')">
+        <a-input-number
+          v-model:value="advancedQueryForm.minOrderQuantity"
+          :placeholder="pi.queryPh('minOrderQuantity', 'required')"
+          style="width: 100%"
+        />
+      </a-form-item>
+      </div>
+      <div v-show="isFieldVisible('roundingValue')">
+      <a-form-item :label="pi.queryLabel('roundingValue')">
+        <a-input-number
+          v-model:value="advancedQueryForm.roundingValue"
+          :placeholder="pi.queryPh('roundingValue', 'required')"
+          style="width: 100%"
+        />
+      </a-form-item>
+      </div>
+      <div v-show="isFieldVisible('plannedDeliveryTimeDays')">
+      <a-form-item :label="pi.queryLabel('plannedDeliveryTimeDays')">
+        <a-input-number
+          v-model:value="advancedQueryForm.plannedDeliveryTimeDays"
+          :placeholder="pi.queryPh('plannedDeliveryTimeDays', 'required')"
+          style="width: 100%"
         />
       </a-form-item>
       </div>
@@ -476,6 +541,12 @@ function createEmptyAdvancedQueryForm() {
     scaleQuantity: undefined as number | undefined,
     scaleValue: undefined as number | undefined,
     price: undefined as number | undefined,
+    untaxedPrice: undefined as number | undefined,
+    taxIncludedPrice: undefined as number | undefined,
+    priceUnit: undefined as number | undefined,
+    minOrderQuantity: undefined as number | undefined,
+    roundingValue: undefined as number | undefined,
+    plannedDeliveryTimeDays: undefined as number | undefined,
     isObsolete: undefined as number | undefined,
   }
 }
@@ -667,14 +738,84 @@ const columns = computed<TableColumnsType>(() => [
       String(getPurchasePriceItemField(record, 'price') ?? ''),
   },
   {
-    title: pi.label('taxCode'),
-    dataIndex: 'taxCode',
-    key: 'taxCode',
+    title: pi.label('untaxedPrice'),
+    dataIndex: 'untaxedPrice',
+    key: 'untaxedPrice',
     width: 120,
     resizable: true,
     ellipsis: true,
     customRender: ({ record }: { record: PurchasePriceItem }) =>
-      String(getPurchasePriceItemField(record, 'taxCode') ?? ''),
+      String(getPurchasePriceItemField(record, 'untaxedPrice') ?? ''),
+  },
+  {
+    title: pi.label('taxIncludedPrice'),
+    dataIndex: 'taxIncludedPrice',
+    key: 'taxIncludedPrice',
+    width: 120,
+    resizable: true,
+    ellipsis: true,
+    customRender: ({ record }: { record: PurchasePriceItem }) =>
+      String(getPurchasePriceItemField(record, 'taxIncludedPrice') ?? ''),
+  },
+  {
+    title: pi.label('conditionCurrency'),
+    dataIndex: 'conditionCurrency',
+    key: 'conditionCurrency',
+    width: 120,
+    resizable: true,
+    ellipsis: true,
+    customRender: ({ record }: { record: PurchasePriceItem }) =>
+      String(getPurchasePriceItemField(record, 'conditionCurrency') ?? ''),
+  },
+  {
+    title: pi.label('priceUnit'),
+    dataIndex: 'priceUnit',
+    key: 'priceUnit',
+    width: 120,
+    resizable: true,
+    ellipsis: true,
+    customRender: ({ record }: { record: PurchasePriceItem }) =>
+      String(getPurchasePriceItemField(record, 'priceUnit') ?? ''),
+  },
+  {
+    title: pi.label('unitOfMeasure'),
+    dataIndex: 'unitOfMeasure',
+    key: 'unitOfMeasure',
+    width: 120,
+    resizable: true,
+    ellipsis: true,
+    customRender: ({ record }: { record: PurchasePriceItem }) =>
+      String(getPurchasePriceItemField(record, 'unitOfMeasure') ?? ''),
+  },
+  {
+    title: pi.label('minOrderQuantity'),
+    dataIndex: 'minOrderQuantity',
+    key: 'minOrderQuantity',
+    width: 120,
+    resizable: true,
+    ellipsis: true,
+    customRender: ({ record }: { record: PurchasePriceItem }) =>
+      String(getPurchasePriceItemField(record, 'minOrderQuantity') ?? ''),
+  },
+  {
+    title: pi.label('roundingValue'),
+    dataIndex: 'roundingValue',
+    key: 'roundingValue',
+    width: 120,
+    resizable: true,
+    ellipsis: true,
+    customRender: ({ record }: { record: PurchasePriceItem }) =>
+      String(getPurchasePriceItemField(record, 'roundingValue') ?? ''),
+  },
+  {
+    title: pi.label('plannedDeliveryTimeDays'),
+    dataIndex: 'plannedDeliveryTimeDays',
+    key: 'plannedDeliveryTimeDays',
+    width: 120,
+    resizable: true,
+    ellipsis: true,
+    customRender: ({ record }: { record: PurchasePriceItem }) =>
+      String(getPurchasePriceItemField(record, 'plannedDeliveryTimeDays') ?? ''),
   },
   {
     title: pi.label('isObsolete'),
@@ -851,6 +992,24 @@ function buildListQuery(overrides?: Partial<PurchasePriceItemQuery>): PurchasePr
   }
   if (form.price !== undefined && form.price !== null) {
     query.price = form.price
+  }
+  if (form.untaxedPrice !== undefined && form.untaxedPrice !== null) {
+    query.untaxedPrice = form.untaxedPrice
+  }
+  if (form.taxIncludedPrice !== undefined && form.taxIncludedPrice !== null) {
+    query.taxIncludedPrice = form.taxIncludedPrice
+  }
+  if (form.priceUnit !== undefined && form.priceUnit !== null) {
+    query.priceUnit = form.priceUnit
+  }
+  if (form.minOrderQuantity !== undefined && form.minOrderQuantity !== null) {
+    query.minOrderQuantity = form.minOrderQuantity
+  }
+  if (form.roundingValue !== undefined && form.roundingValue !== null) {
+    query.roundingValue = form.roundingValue
+  }
+  if (form.plannedDeliveryTimeDays !== undefined && form.plannedDeliveryTimeDays !== null) {
+    query.plannedDeliveryTimeDays = form.plannedDeliveryTimeDays
   }
   if (form.isObsolete !== undefined && form.isObsolete !== null) {
     query.isObsolete = form.isObsolete

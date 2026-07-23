@@ -46,7 +46,7 @@ public class TaktProductionEquipmentDto : TaktCompanyDtoBase
     public int EquipmentCategory { get; set; } = 0;
 
     /// <summary>
-    /// 生产设备编码（租户+公司+工厂内唯一；EquipmentCode / 资产MES编号）
+    /// 生产设备编码（租户+公司+工厂内唯一；EquipmentCode / 资产MES编码）
     /// </summary>
     public string ProductionEquipmentCode { get; set; } = string.Empty;
 
@@ -408,7 +408,7 @@ public class TaktProductionEquipmentQueryDto : TaktPagedQuery
     public int? EquipmentCategory { get; set; }
 
     /// <summary>
-    /// 生产设备编码（租户+公司+工厂内唯一；EquipmentCode / 资产MES编号）
+    /// 生产设备编码（租户+公司+工厂内唯一；EquipmentCode / 资产MES编码）
     /// </summary>
     public string? ProductionEquipmentCode { get; set; } = string.Empty;
 
@@ -794,9 +794,9 @@ public class TaktProductionEquipmentCreateDto
     public int EquipmentCategory { get; set; } = 0;
 
     /// <summary>
-    /// 生产设备编码（租户+公司+工厂内唯一；EquipmentCode / 资产MES编号）
+    /// 生产设备编码（租户+公司+工厂内唯一；EquipmentCode / 资产MES编码）
     /// </summary>
-    [Required(ErrorMessage = "生产设备编码（租户+公司+工厂内唯一；EquipmentCode / 资产MES编号）不能为空")]
+    [Required(ErrorMessage = "生产设备编码（租户+公司+工厂内唯一；EquipmentCode / 资产MES编码）不能为空")]
     public string ProductionEquipmentCode { get; set; } = string.Empty;
 
     /// <summary>
@@ -1232,7 +1232,7 @@ public class TaktProductionEquipmentTemplateDto
     public int? EquipmentCategory { get; set; }
 
     /// <summary>
-    /// 生产设备编码（租户+公司+工厂内唯一；EquipmentCode / 资产MES编号）
+    /// 生产设备编码（租户+公司+工厂内唯一；EquipmentCode / 资产MES编码）
     /// </summary>
     public string? ProductionEquipmentCode { get; set; } = string.Empty;
 
@@ -1599,7 +1599,7 @@ public class TaktProductionEquipmentImportDto
     public int? EquipmentCategory { get; set; }
 
     /// <summary>
-    /// 生产设备编码（租户+公司+工厂内唯一；EquipmentCode / 资产MES编号）
+    /// 生产设备编码（租户+公司+工厂内唯一；EquipmentCode / 资产MES编码）
     /// </summary>
     public string? ProductionEquipmentCode { get; set; } = string.Empty;
 
@@ -1967,7 +1967,7 @@ public class TaktProductionEquipmentExportDto
     public int EquipmentCategory { get; set; } = 0;
 
     /// <summary>
-    /// 生产设备编码（租户+公司+工厂内唯一；EquipmentCode / 资产MES编号）
+    /// 生产设备编码（租户+公司+工厂内唯一；EquipmentCode / 资产MES编码）
     /// </summary>
     public string ProductionEquipmentCode { get; set; } = string.Empty;
 

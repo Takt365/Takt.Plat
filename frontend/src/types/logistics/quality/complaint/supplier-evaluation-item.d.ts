@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：frontend/src/types/logistics/quality/complaint
 // 文件名称：supplier-evaluation-item.d.ts
-// 创建时间：2026-07-09
+// 创建时间：2026-07-23
 // 创建人：Takt365(Auto Generated)
 // 功能描述：logistics/quality/complaint 模块类型定义（自动生成；类型名去 Takt 前缀与末尾 Dto，如 TaktCompanyDto → Company）
 // 
@@ -29,7 +29,7 @@ export interface SupplierEvaluationItem extends CompanyDtoBase {
   supplierEvaluationItemId: string;
 
   /**
-   * 评价表 ID（关联 TaktSupplierEvaluation.Id，选项 TaktSupplierEvaluations/options）
+   * 评价表 ID（选项 TaktSupplierEvaluations/options；DictValue=Id）
    */
   evaluationId: string;
 
@@ -39,7 +39,7 @@ export interface SupplierEvaluationItem extends CompanyDtoBase {
   evaluationName?: string;
 
   /**
-   * 评价表编号（冗余字段，便于查询）
+   * 评价表编码（冗余字段，便于查询）
    */
   supplierEvaluationCode: string;
 
@@ -114,7 +114,7 @@ export interface SupplierEvaluationItem extends CompanyDtoBase {
   rectificationStatus: number;
 
   /**
-   * 是否作废（字典 sys_yes_no_type，0=否 1=是；编辑移除子行时标记作废）
+   * 是否作废（字典 sys_yes_no_type；0=否 1=是；编辑移除子行时标记作废）
    */
   isObsolete: number;
 
@@ -144,12 +144,12 @@ export interface SupplierEvaluationItemQuery extends TaktPagedQuery {
   companyCode?: string;
 
   /**
-   * 评价表 ID（关联 TaktSupplierEvaluation.Id，选项 TaktSupplierEvaluations/options）
+   * 评价表 ID（选项 TaktSupplierEvaluations/options；DictValue=Id）
    */
   evaluationId?: string;
 
   /**
-   * 评价表编号（冗余字段，便于查询）
+   * 评价表编码（冗余字段，便于查询）
    */
   supplierEvaluationCode?: string;
 
@@ -229,7 +229,7 @@ export interface SupplierEvaluationItemQuery extends TaktPagedQuery {
   rectificationStatus?: number;
 
   /**
-   * 是否作废（字典 sys_yes_no_type，0=否 1=是；编辑移除子行时标记作废）
+   * 是否作废（字典 sys_yes_no_type；0=否 1=是；编辑移除子行时标记作废）
    */
   isObsolete?: number;
 
@@ -278,12 +278,12 @@ export interface SupplierEvaluationItemCreate {
   companyDefaultCulture: string;
 
   /**
-   * 评价表 ID（关联 TaktSupplierEvaluation.Id，选项 TaktSupplierEvaluations/options）
+   * 评价表 ID（选项 TaktSupplierEvaluations/options；DictValue=Id）
    */
   evaluationId: string;
 
   /**
-   * 评价表编号（冗余字段，便于查询）
+   * 评价表编码（冗余字段，便于查询）
    */
   supplierEvaluationCode: string;
 
@@ -358,7 +358,7 @@ export interface SupplierEvaluationItemCreate {
   rectificationStatus: number;
 
   /**
-   * 是否作废（字典 sys_yes_no_type，0=否 1=是；编辑移除子行时标记作废）
+   * 是否作废（字典 sys_yes_no_type；0=否 1=是；编辑移除子行时标记作废）
    */
   isObsolete: number;
 
@@ -445,12 +445,12 @@ export interface SupplierEvaluationItemTemplate {
   companyCode?: string;
 
   /**
-   * 评价表 ID（关联 TaktSupplierEvaluation.Id，选项 TaktSupplierEvaluations/options）
+   * 评价表 ID（选项 TaktSupplierEvaluations/options；DictValue=Id）
    */
   evaluationId?: string;
 
   /**
-   * 评价表编号（冗余字段，便于查询）
+   * 评价表编码（冗余字段，便于查询）
    */
   supplierEvaluationCode?: string;
 
@@ -525,7 +525,7 @@ export interface SupplierEvaluationItemTemplate {
   rectificationStatus?: number;
 
   /**
-   * 是否作废（字典 sys_yes_no_type，0=否 1=是；编辑移除子行时标记作废）
+   * 是否作废（字典 sys_yes_no_type；0=否 1=是；编辑移除子行时标记作废）
    */
   isObsolete?: number;
 
@@ -564,12 +564,12 @@ export interface SupplierEvaluationItemImport {
   companyDefaultCulture?: string;
 
   /**
-   * 评价表 ID（关联 TaktSupplierEvaluation.Id，选项 TaktSupplierEvaluations/options）
+   * 评价表 ID（选项 TaktSupplierEvaluations/options；DictValue=Id）
    */
   evaluationId?: string;
 
   /**
-   * 评价表编号（冗余字段，便于查询）
+   * 评价表编码（冗余字段，便于查询）
    */
   supplierEvaluationCode?: string;
 
@@ -644,7 +644,7 @@ export interface SupplierEvaluationItemImport {
   rectificationStatus?: number;
 
   /**
-   * 是否作废（字典 sys_yes_no_type，0=否 1=是；编辑移除子行时标记作废）
+   * 是否作废（字典 sys_yes_no_type；0=否 1=是；编辑移除子行时标记作废）
    */
   isObsolete?: number;
 
@@ -678,12 +678,12 @@ export interface SupplierEvaluationItemExport {
   companyCode: string;
 
   /**
-   * 评价表 ID（关联 TaktSupplierEvaluation.Id，选项 TaktSupplierEvaluations/options）
+   * 评价表 ID（选项 TaktSupplierEvaluations/options；DictValue=Id）
    */
   evaluationId: string;
 
   /**
-   * 评价表编号（冗余字段，便于查询）
+   * 评价表编码（冗余字段，便于查询）
    */
   supplierEvaluationCode: string;
 
@@ -758,7 +758,7 @@ export interface SupplierEvaluationItemExport {
   rectificationStatus: number;
 
   /**
-   * 是否作废（字典 sys_yes_no_type，0=否 1=是；编辑移除子行时标记作废）
+   * 是否作废（字典 sys_yes_no_type；0=否 1=是；编辑移除子行时标记作废）
    */
   isObsolete: number;
 

@@ -74,7 +74,7 @@ export interface Equipment extends CompanyDtoBase {
   dealerBy?: string;
 
   /**
-   * 序列号/出厂编号
+   * 序列号/出厂编码
    */
   serialNumber?: string;
 
@@ -254,7 +254,7 @@ export interface EquipmentQuery extends TaktPagedQuery {
   dealerBy?: string;
 
   /**
-   * 序列号/出厂编号
+   * 序列号/出厂编码
    */
   serialNumber?: string;
 
@@ -468,7 +468,7 @@ export interface EquipmentCreate {
   dealerBy?: string;
 
   /**
-   * 序列号/出厂编号
+   * 序列号/出厂编码
    */
   serialNumber?: string;
 
@@ -691,7 +691,7 @@ export interface EquipmentTemplate {
   dealerBy?: string;
 
   /**
-   * 序列号/出厂编号
+   * 序列号/出厂编码
    */
   serialNumber?: string;
 
@@ -885,7 +885,7 @@ export interface EquipmentImport {
   dealerBy?: string;
 
   /**
-   * 序列号/出厂编号
+   * 序列号/出厂编码
    */
   serialNumber?: string;
 
@@ -1074,7 +1074,7 @@ export interface EquipmentExport {
   dealerBy?: string;
 
   /**
-   * 序列号/出厂编号
+   * 序列号/出厂编码
    */
   serialNumber?: string;
 

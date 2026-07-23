@@ -2,7 +2,7 @@
 <!-- 项目名称：节拍数字工厂 · Takt Plat (TDF) -->
 <!-- 命名空间：@/views/logistics/procurement/purchase-price-trend -->
 <!-- 文件名称：index.vue -->
-<!-- 功能描述：采购价格月推移（工厂×物料×供应商×月份转置表） -->
+<!-- 功能描述：采购价格推移 / 机种价格推移（BOM 机种产品组 + 月单价转置） -->
 <!-- 版权信息：Copyright (c) 2026 Takt  All rights reserved. -->
 <!-- 免责声明：此软件使用 MIT License，作者不承担任何使用风险。 -->
 <!-- ======================================== -->
@@ -69,7 +69,7 @@
 
 <script setup lang="ts">
 /**
- * 采购价格月推移转置分析
+ * 采购价格推移 / 机种价格推移（Tabs：price | model）
  */
 import { message } from 'ant-design-vue'
 import { useI18n } from 'vue-i18n'
@@ -79,6 +79,7 @@ import {
   RiArrowUpDownLine,
   RiArrowUpLine,
   RiListCheck,
+  RiTrophyLine,
 } from '@remixicon/vue'
 import { ensureTaktPaginationConfigAsync, getTaktDefaultPageSize } from '@/utils/takt-paged'
 import { resolveCurrentCompanyRelatedPlantCode } from '@/composables/use-company-related-plant'
@@ -100,49 +101,64 @@ const plantCode = ref<string | undefined>()
 const periodRange = ref<[string, string] | null>(null)
 /** 供应商编码 */
 const supplierCode = ref<string | undefined>()
-/** 物料编码关键字 */
-const materialCode = ref('')
+/** 物料编码 */
+const materialCode = ref<string | undefined>()
 /** 价格类型 */
-const priceType = ref<number | undefined>()
+const priceType = ref<string | undefined>()
 /** 明细面板 loading */
 const panelLoading = ref(false)
 /** 导出 loading */
 const exportLoading = ref(false)
 /** 是否有数据行 */
 const hasRows = ref(false)
-/** 涨跌筛选 */
+/** 涨跌筛选：price 默认空=全部；model 默认 leading=领涨领跌各 50 */
 const trendFilter = ref('')
 /** 右侧涨跌筛选：仅图标 + tooltip，与工具栏右侧一致 */
-const trendFilterActions = computed<ToolBarAction[]>(() => [
-  {
-    key: 'trend-all',
-    icon: RiListCheck,
-    tooltip: t(`${localePrefix}.filter.all`),
-    active: trendFilter.value === '',
-    onClick: () => setTrendFilter(''),
-  },
-  {
-    key: 'trend-changed',
-    icon: RiArrowUpDownLine,
-    tooltip: t(`${localePrefix}.filter.changed`),
-    active: trendFilter.value === 'changed',
-    onClick: () => setTrendFilter('changed'),
-  },
-  {
-    key: 'trend-up',
-    icon: RiArrowUpLine,
-    tooltip: t(`${localePrefix}.trend.up`),
-    active: trendFilter.value === 'up',
-    onClick: () => setTrendFilter('up'),
-  },
-  {
-    key: 'trend-down',
-    icon: RiArrowDownLine,
-    tooltip: t(`${localePrefix}.trend.down`),
-    active: trendFilter.value === 'down',
-    onClick: () => setTrendFilter('down'),
-  },
-])
+const trendFilterActions = computed<ToolBarAction[]>(() => {
+  const actions: ToolBarAction[] = []
+  if (activeTab.value === 'model') {
+    actions.push({
+      key: 'trend-leading',
+      icon: RiTrophyLine,
+      tooltip: t(`${localePrefix}.filter.leading`),
+      active: trendFilter.value === 'leading' || trendFilter.value === '',
+      onClick: () => setTrendFilter('leading'),
+    })
+  }
+  actions.push(
+    {
+      key: 'trend-all',
+      icon: RiListCheck,
+      tooltip: t(`${localePrefix}.filter.all`),
+      active: activeTab.value === 'model'
+        ? trendFilter.value === 'all'
+        : trendFilter.value === '',
+      onClick: () => setTrendFilter(activeTab.value === 'model' ? 'all' : ''),
+    },
+    {
+      key: 'trend-changed',
+      icon: RiArrowUpDownLine,
+      tooltip: t(`${localePrefix}.filter.changed`),
+      active: trendFilter.value === 'changed',
+      onClick: () => setTrendFilter('changed'),
+    },
+    {
+      key: 'trend-up',
+      icon: RiArrowUpLine,
+      tooltip: t(`${localePrefix}.trend.up`),
+      active: trendFilter.value === 'up',
+      onClick: () => setTrendFilter('up'),
+    },
+    {
+      key: 'trend-down',
+      icon: RiArrowDownLine,
+      tooltip: t(`${localePrefix}.trend.down`),
+      active: trendFilter.value === 'down',
+      onClick: () => setTrendFilter('down'),
+    },
+  )
+  return actions
+})
 /** 明细面板 */
 const panelRef = ref<{
   reload?: () => Promise<void>
@@ -171,6 +187,22 @@ function setTrendFilter(value: string) {
   trendFilter.value = value
 }
 
+/**
+ * 按当前 Tab 归一化默认涨跌筛选
+ * @param {string} tab 当前 Tab
+ */
+function applyDefaultTrendFilterForTab(tab: 'price' | 'model') {
+  if (tab === 'model') {
+    if (trendFilter.value === '' || trendFilter.value === 'all') {
+      trendFilter.value = 'leading'
+    }
+    return
+  }
+  if (trendFilter.value === 'leading') {
+    trendFilter.value = ''
+  }
+}
+
 /** 刷新 */
 function handleRefresh() {
   void panelRef.value?.reload?.()
@@ -191,10 +223,10 @@ async function applyDefaultPlantFromCompany(): Promise<void> {
 async function handleReset() {
   await applyDefaultPlantFromCompany()
   supplierCode.value = undefined
-  materialCode.value = ''
+  materialCode.value = undefined
   priceType.value = undefined
   applyDefaultPeriodRange()
-  trendFilter.value = ''
+  trendFilter.value = activeTab.value === 'model' ? 'leading' : ''
   hasRows.value = false
   panelRef.value?.clear?.()
 }
@@ -217,6 +249,10 @@ async function handleExport() {
   }
 }
 
+watch(activeTab, (tab) => {
+  applyDefaultTrendFilterForTab(tab)
+})
+
 watch(
   () => tenantStore.companyCode,
   () => {
@@ -231,3 +267,9 @@ onMounted(async () => {
   void getTaktDefaultPageSize()
 })
 </script>
+
+<style scoped>
+:deep(.purchase-price-trend-tabs .ant-tabs-nav) {
+  margin-bottom: 0;
+}
+</style>

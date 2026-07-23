@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Infrastructure.Data.Seeds.I18nSeedData.Logistics.Manufacturing.Mps
 // 文件名称：TaktPersonnelOperationRateI18nSeedData.cs
-// 创建时间：2026-07-20
+// 创建时间：2026-07-23
 // 创建人：Takt365(Auto Generated)
 // 功能描述：TaktPersonnelOperationRate 实体字段国际化种子（无对应 frontend locales；TranslationText 取自 ColumnDescription，ContextNote 取自属性 XML summary）
 // 
@@ -91,13 +91,13 @@ public class TaktPersonnelOperationRateI18nSeedData : ITaktSeedDataCoordinator
             new TranslationSeedItem("entity.personneloperationrate._self", "zh-HK", "人员稼动率信息_hk", "实体名称"),
 
             // entity.personneloperationrate.plantcode
-            new TranslationSeedItem("entity.personneloperationrate.plantcode", "en-US", "工厂代码_us", "工厂代码（选项 TaktPlants/options，DictValue=Id）"),
+            new TranslationSeedItem("entity.personneloperationrate.plantcode", "en-US", "工厂代码_us", "工厂代码（选项 TaktPlants/options；DictValue=Id）"),
             // entity.personneloperationrate.plantcode
-            new TranslationSeedItem("entity.personneloperationrate.plantcode", "ja-JP", "工厂代码_jp", "工厂代码（选项 TaktPlants/options，DictValue=Id）"),
+            new TranslationSeedItem("entity.personneloperationrate.plantcode", "ja-JP", "工厂代码_jp", "工厂代码（选项 TaktPlants/options；DictValue=Id）"),
             // entity.personneloperationrate.plantcode
-            new TranslationSeedItem("entity.personneloperationrate.plantcode", "zh-CN", "工厂代码", "工厂代码（选项 TaktPlants/options，DictValue=Id）"),
+            new TranslationSeedItem("entity.personneloperationrate.plantcode", "zh-CN", "工厂代码", "工厂代码（选项 TaktPlants/options；DictValue=Id）"),
             // entity.personneloperationrate.plantcode
-            new TranslationSeedItem("entity.personneloperationrate.plantcode", "zh-HK", "工厂代码_hk", "工厂代码（选项 TaktPlants/options，DictValue=Id）"),
+            new TranslationSeedItem("entity.personneloperationrate.plantcode", "zh-HK", "工厂代码_hk", "工厂代码（选项 TaktPlants/options；DictValue=Id）"),
 
             // entity.personneloperationrate.timecategory
             new TranslationSeedItem("entity.personneloperationrate.timecategory", "en-US", "时间类别_us", "时间类别（1=天，2=周，3=月）"),
@@ -145,13 +145,13 @@ public class TaktPersonnelOperationRateI18nSeedData : ITaktSeedDataCoordinator
             new TranslationSeedItem("entity.personneloperationrate.monthnumber", "zh-HK", "月份_hk", "月份（1-12）"),
 
             // entity.personneloperationrate.prodteam
-            new TranslationSeedItem("entity.personneloperationrate.prodteam", "en-US", "生产班组_us", "生产班组（选项 TaktProductionTeams/options，DictValue=TeamCode，ExtValue=PlantCode）"),
+            new TranslationSeedItem("entity.personneloperationrate.prodteam", "en-US", "生产班组_us", "生产班组（选项 TaktProductionTeams/options；DictValue=TeamCode，ExtValue=PlantCode）"),
             // entity.personneloperationrate.prodteam
-            new TranslationSeedItem("entity.personneloperationrate.prodteam", "ja-JP", "生产班组_jp", "生产班组（选项 TaktProductionTeams/options，DictValue=TeamCode，ExtValue=PlantCode）"),
+            new TranslationSeedItem("entity.personneloperationrate.prodteam", "ja-JP", "生产班组_jp", "生产班组（选项 TaktProductionTeams/options；DictValue=TeamCode，ExtValue=PlantCode）"),
             // entity.personneloperationrate.prodteam
-            new TranslationSeedItem("entity.personneloperationrate.prodteam", "zh-CN", "生产班组", "生产班组（选项 TaktProductionTeams/options，DictValue=TeamCode，ExtValue=PlantCode）"),
+            new TranslationSeedItem("entity.personneloperationrate.prodteam", "zh-CN", "生产班组", "生产班组（选项 TaktProductionTeams/options；DictValue=TeamCode，ExtValue=PlantCode）"),
             // entity.personneloperationrate.prodteam
-            new TranslationSeedItem("entity.personneloperationrate.prodteam", "zh-HK", "生产班组_hk", "生产班组（选项 TaktProductionTeams/options，DictValue=TeamCode，ExtValue=PlantCode）"),
+            new TranslationSeedItem("entity.personneloperationrate.prodteam", "zh-HK", "生产班组_hk", "生产班组（选项 TaktProductionTeams/options；DictValue=TeamCode，ExtValue=PlantCode）"),
 
             // entity.personneloperationrate.prodteamname
             new TranslationSeedItem("entity.personneloperationrate.prodteamname", "en-US", "生产班组名称_us", "生产班组名称"),

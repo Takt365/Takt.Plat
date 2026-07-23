@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Infrastructure.Data.Seeds.I18nSeedData.Logistics.Manufacturing.Mps
 // 文件名称：TaktMasterProductionScheduleLineI18nSeedData.cs
-// 创建时间：2026-07-20
+// 创建时间：2026-07-23
 // 创建人：Takt365(Auto Generated)
 // 功能描述：TaktMasterProductionScheduleLine 实体字段国际化种子（无对应 frontend locales；TranslationText 取自 ColumnDescription，ContextNote 取自属性 XML summary）
 // 
@@ -127,13 +127,13 @@ public class TaktMasterProductionScheduleLineI18nSeedData : ITaktSeedDataCoordin
             new TranslationSeedItem("entity.masterproductionscheduleline.masterdemandschedulelineid", "zh-HK", "来源MDS行ID_hk", "来源 MDS 行 ID（关联 TaktMasterDemandScheduleLine.Id）"),
 
             // entity.masterproductionscheduleline.materialcode
-            new TranslationSeedItem("entity.masterproductionscheduleline.materialcode", "en-US", "物料编码_us", "物料编码（选项 TaktMaterialPlants/options，DictValue=MaterialCode，ExtValue=PlantCode）"),
+            new TranslationSeedItem("entity.masterproductionscheduleline.materialcode", "en-US", "物料编码_us", "物料编码（选项 TaktMaterialPlants/options；DictValue=MaterialCode，ExtValue=PlantCode）"),
             // entity.masterproductionscheduleline.materialcode
-            new TranslationSeedItem("entity.masterproductionscheduleline.materialcode", "ja-JP", "物料编码_jp", "物料编码（选项 TaktMaterialPlants/options，DictValue=MaterialCode，ExtValue=PlantCode）"),
+            new TranslationSeedItem("entity.masterproductionscheduleline.materialcode", "ja-JP", "物料编码_jp", "物料编码（选项 TaktMaterialPlants/options；DictValue=MaterialCode，ExtValue=PlantCode）"),
             // entity.masterproductionscheduleline.materialcode
-            new TranslationSeedItem("entity.masterproductionscheduleline.materialcode", "zh-CN", "物料编码", "物料编码（选项 TaktMaterialPlants/options，DictValue=MaterialCode，ExtValue=PlantCode）"),
+            new TranslationSeedItem("entity.masterproductionscheduleline.materialcode", "zh-CN", "物料编码", "物料编码（选项 TaktMaterialPlants/options；DictValue=MaterialCode，ExtValue=PlantCode）"),
             // entity.masterproductionscheduleline.materialcode
-            new TranslationSeedItem("entity.masterproductionscheduleline.materialcode", "zh-HK", "物料编码_hk", "物料编码（选项 TaktMaterialPlants/options，DictValue=MaterialCode，ExtValue=PlantCode）"),
+            new TranslationSeedItem("entity.masterproductionscheduleline.materialcode", "zh-HK", "物料编码_hk", "物料编码（选项 TaktMaterialPlants/options；DictValue=MaterialCode，ExtValue=PlantCode）"),
 
             // entity.masterproductionscheduleline.bucketstart
             new TranslationSeedItem("entity.masterproductionscheduleline.bucketstart", "en-US", "时间桶开始_us", "时间桶开始"),
@@ -208,22 +208,22 @@ public class TaktMasterProductionScheduleLineI18nSeedData : ITaktSeedDataCoordin
             new TranslationSeedItem("entity.masterproductionscheduleline.atpquantity", "zh-HK", "可承诺量ATP_hk", "可承诺量 ATP"),
 
             // entity.masterproductionscheduleline.unitofmeasure
-            new TranslationSeedItem("entity.masterproductionscheduleline.unitofmeasure", "en-US", "计量单位_us", "计量单位（字典 logistics_unit_of_measure_code，DictValue=PC/EA 等；默认 PC）"),
+            new TranslationSeedItem("entity.masterproductionscheduleline.unitofmeasure", "en-US", "计量单位_us", "计量单位（字典 logistics_unit_of_measure_code；DictValue=PC/EA 等；默认 PC）"),
             // entity.masterproductionscheduleline.unitofmeasure
-            new TranslationSeedItem("entity.masterproductionscheduleline.unitofmeasure", "ja-JP", "计量单位_jp", "计量单位（字典 logistics_unit_of_measure_code，DictValue=PC/EA 等；默认 PC）"),
+            new TranslationSeedItem("entity.masterproductionscheduleline.unitofmeasure", "ja-JP", "计量单位_jp", "计量单位（字典 logistics_unit_of_measure_code；DictValue=PC/EA 等；默认 PC）"),
             // entity.masterproductionscheduleline.unitofmeasure
-            new TranslationSeedItem("entity.masterproductionscheduleline.unitofmeasure", "zh-CN", "计量单位", "计量单位（字典 logistics_unit_of_measure_code，DictValue=PC/EA 等；默认 PC）"),
+            new TranslationSeedItem("entity.masterproductionscheduleline.unitofmeasure", "zh-CN", "计量单位", "计量单位（字典 logistics_unit_of_measure_code；DictValue=PC/EA 等；默认 PC）"),
             // entity.masterproductionscheduleline.unitofmeasure
-            new TranslationSeedItem("entity.masterproductionscheduleline.unitofmeasure", "zh-HK", "计量单位_hk", "计量单位（字典 logistics_unit_of_measure_code，DictValue=PC/EA 等；默认 PC）"),
+            new TranslationSeedItem("entity.masterproductionscheduleline.unitofmeasure", "zh-HK", "计量单位_hk", "计量单位（字典 logistics_unit_of_measure_code；DictValue=PC/EA 等；默认 PC）"),
 
             // entity.masterproductionscheduleline.isobsolete
-            new TranslationSeedItem("entity.masterproductionscheduleline.isobsolete", "en-US", "是否作废_us", "是否作废（字典 sys_yes_no_type，0=否 1=是；编辑移除子行时标记作废）"),
+            new TranslationSeedItem("entity.masterproductionscheduleline.isobsolete", "en-US", "是否作废_us", "是否作废（字典 sys_yes_no_type；0=否 1=是；编辑移除子行时标记作废）"),
             // entity.masterproductionscheduleline.isobsolete
-            new TranslationSeedItem("entity.masterproductionscheduleline.isobsolete", "ja-JP", "是否作废_jp", "是否作废（字典 sys_yes_no_type，0=否 1=是；编辑移除子行时标记作废）"),
+            new TranslationSeedItem("entity.masterproductionscheduleline.isobsolete", "ja-JP", "是否作废_jp", "是否作废（字典 sys_yes_no_type；0=否 1=是；编辑移除子行时标记作废）"),
             // entity.masterproductionscheduleline.isobsolete
-            new TranslationSeedItem("entity.masterproductionscheduleline.isobsolete", "zh-CN", "是否作废", "是否作废（字典 sys_yes_no_type，0=否 1=是；编辑移除子行时标记作废）"),
+            new TranslationSeedItem("entity.masterproductionscheduleline.isobsolete", "zh-CN", "是否作废", "是否作废（字典 sys_yes_no_type；0=否 1=是；编辑移除子行时标记作废）"),
             // entity.masterproductionscheduleline.isobsolete
-            new TranslationSeedItem("entity.masterproductionscheduleline.isobsolete", "zh-HK", "是否作废_hk", "是否作废（字典 sys_yes_no_type，0=否 1=是；编辑移除子行时标记作废）"),
+            new TranslationSeedItem("entity.masterproductionscheduleline.isobsolete", "zh-HK", "是否作废_hk", "是否作废（字典 sys_yes_no_type；0=否 1=是；编辑移除子行时标记作废）"),
         };
     }
 

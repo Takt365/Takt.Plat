@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Infrastructure.Data.Seeds.I18nSeedData.Logistics.Quality.Complaint
 // 文件名称：TaktSupplierEvaluationItemI18nSeedData.cs
-// 创建时间：2026-07-20
+// 创建时间：2026-07-23
 // 创建人：Takt365(Auto Generated)
 // 功能描述：TaktSupplierEvaluationItem 实体字段国际化种子（无对应 frontend locales；TranslationText 取自 ColumnDescription，ContextNote 取自属性 XML summary）
 // 
@@ -91,22 +91,22 @@ public class TaktSupplierEvaluationItemI18nSeedData : ITaktSeedDataCoordinator
             new TranslationSeedItem("entity.supplierevaluationitem._self", "zh-HK", "供应商评价考核项目明细信息_hk", "实体名称"),
 
             // entity.supplierevaluationitem.evaluationid
-            new TranslationSeedItem("entity.supplierevaluationitem.evaluationid", "en-US", "评价表ID_us", "评价表 ID（选项 TaktSupplierEvaluations/options，DictValue=Id）"),
+            new TranslationSeedItem("entity.supplierevaluationitem.evaluationid", "en-US", "评价表ID_us", "评价表 ID（选项 TaktSupplierEvaluations/options；DictValue=Id）"),
             // entity.supplierevaluationitem.evaluationid
-            new TranslationSeedItem("entity.supplierevaluationitem.evaluationid", "ja-JP", "评价表ID_jp", "评价表 ID（选项 TaktSupplierEvaluations/options，DictValue=Id）"),
+            new TranslationSeedItem("entity.supplierevaluationitem.evaluationid", "ja-JP", "评价表ID_jp", "评价表 ID（选项 TaktSupplierEvaluations/options；DictValue=Id）"),
             // entity.supplierevaluationitem.evaluationid
-            new TranslationSeedItem("entity.supplierevaluationitem.evaluationid", "zh-CN", "评价表ID", "评价表 ID（选项 TaktSupplierEvaluations/options，DictValue=Id）"),
+            new TranslationSeedItem("entity.supplierevaluationitem.evaluationid", "zh-CN", "评价表ID", "评价表 ID（选项 TaktSupplierEvaluations/options；DictValue=Id）"),
             // entity.supplierevaluationitem.evaluationid
-            new TranslationSeedItem("entity.supplierevaluationitem.evaluationid", "zh-HK", "评价表ID_hk", "评价表 ID（选项 TaktSupplierEvaluations/options，DictValue=Id）"),
+            new TranslationSeedItem("entity.supplierevaluationitem.evaluationid", "zh-HK", "评价表ID_hk", "评价表 ID（选项 TaktSupplierEvaluations/options；DictValue=Id）"),
 
             // entity.supplierevaluationitem.supplierevaluationcode
-            new TranslationSeedItem("entity.supplierevaluationitem.supplierevaluationcode", "en-US", "评价表编号_us", "评价表编号（冗余字段，便于查询）"),
+            new TranslationSeedItem("entity.supplierevaluationitem.supplierevaluationcode", "en-US", "评价表编码_us", "评价表编码（冗余字段，便于查询）"),
             // entity.supplierevaluationitem.supplierevaluationcode
-            new TranslationSeedItem("entity.supplierevaluationitem.supplierevaluationcode", "ja-JP", "评价表编号_jp", "评价表编号（冗余字段，便于查询）"),
+            new TranslationSeedItem("entity.supplierevaluationitem.supplierevaluationcode", "ja-JP", "评价表编码_jp", "评价表编码（冗余字段，便于查询）"),
             // entity.supplierevaluationitem.supplierevaluationcode
-            new TranslationSeedItem("entity.supplierevaluationitem.supplierevaluationcode", "zh-CN", "评价表编号", "评价表编号（冗余字段，便于查询）"),
+            new TranslationSeedItem("entity.supplierevaluationitem.supplierevaluationcode", "zh-CN", "评价表编码", "评价表编码（冗余字段，便于查询）"),
             // entity.supplierevaluationitem.supplierevaluationcode
-            new TranslationSeedItem("entity.supplierevaluationitem.supplierevaluationcode", "zh-HK", "评价表编号_hk", "评价表编号（冗余字段，便于查询）"),
+            new TranslationSeedItem("entity.supplierevaluationitem.supplierevaluationcode", "zh-HK", "评价表编码_hk", "评价表编码（冗余字段，便于查询）"),
 
             // entity.supplierevaluationitem.linenumber
             new TranslationSeedItem("entity.supplierevaluationitem.linenumber", "en-US", "行号_us", "行号（项号/序号，固定步长=10）"),
@@ -235,13 +235,13 @@ public class TaktSupplierEvaluationItemI18nSeedData : ITaktSeedDataCoordinator
             new TranslationSeedItem("entity.supplierevaluationitem.rectificationstatus", "zh-HK", "整改状态_hk", "整改状态（字典 logistics_quality_rectification_status）"),
 
             // entity.supplierevaluationitem.isobsolete
-            new TranslationSeedItem("entity.supplierevaluationitem.isobsolete", "en-US", "是否作废_us", "是否作废（字典 sys_yes_no_type，0=否 1=是；编辑移除子行时标记作废）"),
+            new TranslationSeedItem("entity.supplierevaluationitem.isobsolete", "en-US", "是否作废_us", "是否作废（字典 sys_yes_no_type；0=否 1=是；编辑移除子行时标记作废）"),
             // entity.supplierevaluationitem.isobsolete
-            new TranslationSeedItem("entity.supplierevaluationitem.isobsolete", "ja-JP", "是否作废_jp", "是否作废（字典 sys_yes_no_type，0=否 1=是；编辑移除子行时标记作废）"),
+            new TranslationSeedItem("entity.supplierevaluationitem.isobsolete", "ja-JP", "是否作废_jp", "是否作废（字典 sys_yes_no_type；0=否 1=是；编辑移除子行时标记作废）"),
             // entity.supplierevaluationitem.isobsolete
-            new TranslationSeedItem("entity.supplierevaluationitem.isobsolete", "zh-CN", "是否作废", "是否作废（字典 sys_yes_no_type，0=否 1=是；编辑移除子行时标记作废）"),
+            new TranslationSeedItem("entity.supplierevaluationitem.isobsolete", "zh-CN", "是否作废", "是否作废（字典 sys_yes_no_type；0=否 1=是；编辑移除子行时标记作废）"),
             // entity.supplierevaluationitem.isobsolete
-            new TranslationSeedItem("entity.supplierevaluationitem.isobsolete", "zh-HK", "是否作废_hk", "是否作废（字典 sys_yes_no_type，0=否 1=是；编辑移除子行时标记作废）"),
+            new TranslationSeedItem("entity.supplierevaluationitem.isobsolete", "zh-HK", "是否作废_hk", "是否作废（字典 sys_yes_no_type；0=否 1=是；编辑移除子行时标记作废）"),
 
             // entity.supplierevaluationitem.evaluation
             new TranslationSeedItem("entity.supplierevaluationitem.evaluation", "en-US", "评价表主表_us", "评价表主表"),

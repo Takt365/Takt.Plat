@@ -34,6 +34,11 @@ public class TaktMaterialMovingPriceService : TaktServiceBase, ITaktMaterialMovi
     /// <summary>物料名称按编码分批查询，避免超长 IN 列表</summary>
     private const int MaterialNameLookupBatchSize = 500;
 
+    /// <summary>
+    /// 物料-机种-价格推移默认：领涨 / 领跌各取前 N 个物料（环比差额排序）
+    /// </summary>
+    private const int ModelTrendLeadingMaterialCount = 50;
+
     /// <summary>移动价格按年分表基表名</summary>
     private const string MovingPriceYearShardBaseTable = "takt_logistics_materials_material_moving_price";
 
@@ -398,7 +403,8 @@ public class TaktMaterialMovingPriceService : TaktServiceBase, ITaktMaterialMovi
         var pageSize = TaktPagedClamp.NormalizePageSize(queryDto.PageSize);
         var skip = TaktPagedClamp.ComputeSkip(pageIndex, pageSize);
         var monthly = await BuildMonthlyTrendAnalysisAsync(queryDto);
-        if (monthly.OrderedRows.Count == 0)
+        var orderedRows = ApplyModelTrendLeadingDefault(monthly.OrderedRows, queryDto.TrendFilter);
+        if (orderedRows.Count == 0)
         {
             return new TaktMaterialMovingPriceModelTrendResultDto
             {
@@ -411,7 +417,7 @@ public class TaktMaterialMovingPriceService : TaktServiceBase, ITaktMaterialMovi
             };
         }
         // 仅对当前页物料做 BOM 关联（全量 2 万+ 物料关联明细会超时）
-        var pageMonthly = monthly.OrderedRows.Skip(skip).Take(pageSize).ToList();
+        var pageMonthly = orderedRows.Skip(skip).Take(pageSize).ToList();
         var usage = await LoadBomMaterialUsageLookupAsync(
             queryDto.PlantCode.Trim(),
             pageMonthly.Select(r => r.MaterialCode).ToList());
@@ -419,9 +425,9 @@ public class TaktMaterialMovingPriceService : TaktServiceBase, ITaktMaterialMovi
         return new TaktMaterialMovingPriceModelTrendResultDto
         {
             Paged = TaktPagedResult<TaktMaterialMovingPriceModelTrendDto>.Create(
-                pageRows, monthly.OrderedRows.Count, pageIndex, pageSize),
+                pageRows, orderedRows.Count, pageIndex, pageSize),
             PeriodOrder = monthly.PeriodOrder,
-            MaterialCount = monthly.OrderedRows.Count,
+            MaterialCount = orderedRows.Count,
             BasePeriod = pageRows.FirstOrDefault()?.BasePeriod ?? monthly.BasePeriod,
             ComparePeriod = monthly.ComparePeriod,
             UpCount = monthly.UpCount,
@@ -499,15 +505,16 @@ public class TaktMaterialMovingPriceService : TaktServiceBase, ITaktMaterialMovi
         TaktMaterialMovingPriceMonthlyTrendQueryDto queryDto)
     {
         var monthly = await BuildMonthlyTrendAnalysisAsync(queryDto);
-        if (monthly.OrderedRows.Count == 0)
+        var orderedRows = ApplyModelTrendLeadingDefault(monthly.OrderedRows, queryDto.TrendFilter);
+        if (orderedRows.Count == 0)
         {
             return ModelTrendAnalysisBuilt.Empty();
         }
         var plantCode = queryDto.PlantCode.Trim();
         var usage = await LoadBomMaterialUsageLookupAsync(
             plantCode,
-            monthly.OrderedRows.Select(r => r.MaterialCode).ToList());
-        var enriched = EnrichModelTrendRows(monthly.OrderedRows, usage);
+            orderedRows.Select(r => r.MaterialCode).ToList());
+        var enriched = EnrichModelTrendRows(orderedRows, usage);
         return new ModelTrendAnalysisBuilt
         {
             OrderedRows = enriched,
@@ -1274,6 +1281,9 @@ public class TaktMaterialMovingPriceService : TaktServiceBase, ITaktMaterialMovi
     /// <summary>
     /// 涨跌筛选
     /// </summary>
+    /// <param name="rows">全量行</param>
+    /// <param name="trendFilter">筛选码：空/all/leading=不按涨跌码过滤；up/down/flat/none/changed</param>
+    /// <returns>筛选后行</returns>
     private static List<TaktMaterialMovingPriceMonthlyTrendDto> FilterTrendRows(
         IReadOnlyList<TaktMaterialMovingPriceMonthlyTrendDto> rows,
         string? trendFilter)
@@ -1283,11 +1293,70 @@ public class TaktMaterialMovingPriceService : TaktServiceBase, ITaktMaterialMovi
             return rows.ToList();
         }
         var filter = trendFilter.Trim().ToLowerInvariant();
+        if (filter is "all" or "leading")
+        {
+            return rows.ToList();
+        }
         if (filter == "changed")
         {
             return rows.Where(r => r.Trend is "up" or "down").ToList();
         }
         return rows.Where(r => string.Equals(r.Trend, filter, StringComparison.OrdinalIgnoreCase)).ToList();
+    }
+
+    /// <summary>
+    /// 机种价格推移：空或 leading 时默认取领涨/领跌各前 N 条（按环比差额）
+    /// </summary>
+    /// <param name="orderedRows">已排序全量行</param>
+    /// <param name="trendFilter">涨跌筛选码</param>
+    /// <returns>应用默认领涨领跌后的行</returns>
+    private static List<TaktMaterialMovingPriceMonthlyTrendDto> ApplyModelTrendLeadingDefault(
+        IReadOnlyList<TaktMaterialMovingPriceMonthlyTrendDto> orderedRows,
+        string? trendFilter)
+    {
+        if (!ShouldApplyModelTrendLeadingDefault(trendFilter))
+        {
+            return orderedRows.ToList();
+        }
+        return TakeLeadingTrendRows(orderedRows, ModelTrendLeadingMaterialCount);
+    }
+
+    /// <summary>
+    /// 是否应用机种推移默认领涨/领跌截取
+    /// </summary>
+    /// <param name="trendFilter">涨跌筛选码</param>
+    /// <returns>true=截取领涨领跌各 N</returns>
+    private static bool ShouldApplyModelTrendLeadingDefault(string? trendFilter)
+    {
+        if (string.IsNullOrWhiteSpace(trendFilter))
+        {
+            return true;
+        }
+        return string.Equals(trendFilter.Trim(), "leading", StringComparison.OrdinalIgnoreCase);
+    }
+
+    /// <summary>
+    /// 取领涨 / 领跌各前 N 条（涨：差额降序；跌：差额升序）
+    /// </summary>
+    /// <param name="rows">行集合</param>
+    /// <param name="takeEach">涨、跌各自条数上限</param>
+    /// <returns>领涨后接领跌</returns>
+    private static List<TaktMaterialMovingPriceMonthlyTrendDto> TakeLeadingTrendRows(
+        IReadOnlyList<TaktMaterialMovingPriceMonthlyTrendDto> rows,
+        int takeEach)
+    {
+        var limit = Math.Max(0, takeEach);
+        var up = rows
+            .Where(r => r.Trend == "up")
+            .OrderByDescending(r => r.VarianceAmount ?? 0m)
+            .ThenBy(r => r.MaterialCode, StringComparer.Ordinal)
+            .Take(limit);
+        var down = rows
+            .Where(r => r.Trend == "down")
+            .OrderBy(r => r.VarianceAmount ?? 0m)
+            .ThenBy(r => r.MaterialCode, StringComparer.Ordinal)
+            .Take(limit);
+        return up.Concat(down).ToList();
     }
 
     /// <summary>

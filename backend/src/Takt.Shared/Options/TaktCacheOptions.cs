@@ -185,7 +185,7 @@ public class TaktCacheRedisOptions
     public string InstanceName { get; set; } = "Takt.Net";
 
     /// <summary>
-    /// 默认数据库编号
+    /// 默认数据库编码
     /// </summary>
     public int DefaultDatabase { get; set; }
 

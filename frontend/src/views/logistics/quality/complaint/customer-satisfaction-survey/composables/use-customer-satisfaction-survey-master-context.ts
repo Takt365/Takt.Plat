@@ -9,10 +9,13 @@
 import { inject, provide, type InjectionKey, type Ref, ref } from 'vue'
 import type { CustomerSatisfactionSurvey } from '@/types/logistics/quality/complaint/customer-satisfaction-survey'
 
+/** 表格行类型（与 index 列表行、TaktSingleTable slot record 一致） */
+export type CustomerSatisfactionSurveyRowRecord = CustomerSatisfactionSurvey | Record<string, unknown>
+
 /** 主表选中行上下文 */
 export interface CustomerSatisfactionSurveyMasterContext {
   /** 当前选中的主表行（右侧明细依赖） */
-  selectedMasterRow: Ref<CustomerSatisfactionSurvey | null>
+  selectedMasterRow: Ref<CustomerSatisfactionSurveyRowRecord | null>
 }
 
 const customerSatisfactionSurveyMasterContextKey: InjectionKey<CustomerSatisfactionSurveyMasterContext> = Symbol('customer-satisfaction-surveyMasterContext')
@@ -22,7 +25,7 @@ const customerSatisfactionSurveyMasterContextKey: InjectionKey<CustomerSatisfact
  * @returns {CustomerSatisfactionSurveyMasterContext} 主表上下文
  */
 export function provideCustomerSatisfactionSurveyMasterContext(): CustomerSatisfactionSurveyMasterContext {
-  const selectedMasterRow = ref<CustomerSatisfactionSurvey | null>(null)
+  const selectedMasterRow = ref<CustomerSatisfactionSurveyRowRecord | null>(null)
   const ctx: CustomerSatisfactionSurveyMasterContext = { selectedMasterRow }
   provide(customerSatisfactionSurveyMasterContextKey, ctx)
   return ctx

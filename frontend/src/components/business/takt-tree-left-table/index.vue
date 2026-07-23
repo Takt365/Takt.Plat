@@ -33,6 +33,7 @@
         :draggable="draggable"
         :expand-action="expandAction"
         :virtual="effectiveVirtual"
+        :load-data="loadData"
         v-bind="{
           ...(effectiveVirtual && computedVirtualHeight !== undefined ? { height: computedVirtualHeight } : {}),
           ...(itemHeight !== undefined ? { itemHeight } : {})
@@ -75,9 +76,10 @@ import {
 
 const treeLeftTableLogger = createLogger('takt-tree-left-table')
 
-type TreeNode = Record<string, unknown> & { 
-  key: string | number;
-  children?: TreeNode[] 
+type TreeNode = Record<string, unknown> & {
+  key: string | number
+  children?: TreeNode[]
+  isLeaf?: boolean
 }
 type TreeSelectEvent = Record<string, unknown>
 
@@ -118,6 +120,11 @@ interface Props {
   expandAction?: 'click' | 'doubleclick' | false
   /** 表尾备注说明（树区域下方） */
   footerRemark?: string
+  /**
+   * 懒加载子节点（Ant Design Tree loadData）。
+   * 传入后树进入懒模式：非叶子须 isLeaf=false 且 children 为 undefined。
+   */
+  loadData?: (treeNode: Record<string, unknown>) => Promise<void>
 }
 
 const props = withDefaults(defineProps<Props>(), {
@@ -134,6 +141,7 @@ const props = withDefaults(defineProps<Props>(), {
   draggable: false,
   expandAction: 'click',
   footerRemark: '',
+  loadData: undefined,
 })
 
 const slots = useSlots()

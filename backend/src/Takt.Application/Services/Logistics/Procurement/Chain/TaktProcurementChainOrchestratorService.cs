@@ -378,18 +378,14 @@ public class TaktProcurementChainOrchestratorService : TaktServiceBase, ITaktPro
     }
 
     /// <summary>
-    /// 解析供应商编码
+    /// 解析供应商编码（询价一单一供应商，仅取抬头 SupplierCode）
     /// </summary>
     private static string ResolveSupplierCode(TaktPurchaseInquiry inquiry, IReadOnlyList<TaktPurchaseInquiryItem> items)
     {
+        _ = items;
         if (!string.IsNullOrWhiteSpace(inquiry.SupplierCode))
         {
             return inquiry.SupplierCode;
-        }
-        var fromItem = items.Select(x => x.TargetSupplierCode).FirstOrDefault(x => !string.IsNullOrWhiteSpace(x));
-        if (!string.IsNullOrWhiteSpace(fromItem))
-        {
-            return fromItem!;
         }
         throw new TaktBusinessException("询价单缺少供应商编码，无法生成采购价格");
     }
@@ -458,7 +454,7 @@ public class TaktProcurementChainOrchestratorService : TaktServiceBase, ITaktPro
                 ItemName = item.MaterialName,
                 ItemDescription = $"{TaktProcurementConstants.CountersignMaterialCodePrefix}{item.MaterialCode}",
                 ItemQuantity = item.InquiryQuantity,
-                ItemAmount = item.QuotedAmount
+                ItemAmount = item.TaxIncludedAmount
             }).ToList()
         };
         var created = await _countersignService.CreateCountersignAsync(createDto);
@@ -504,7 +500,7 @@ public class TaktProcurementChainOrchestratorService : TaktServiceBase, ITaktPro
                 ItemName = item.MaterialName,
                 ItemDescription = $"{TaktProcurementConstants.CountersignMaterialCodePrefix}{item.MaterialCode}",
                 ItemQuantity = item.RequestQuantity,
-                ItemAmount = item.EstimatedAmount
+                ItemAmount = item.TaxIncludedAmount
             }).ToList()
         };
         var created = await _countersignService.CreateCountersignAsync(createDto);
@@ -636,9 +632,10 @@ public class TaktProcurementChainOrchestratorService : TaktServiceBase, ITaktPro
             TotalAmount = inquiry.TotalAmount,
             RequestReason = inquiry.InquiryReason ?? countersign.ApplicationReason,
             RequestStatus = 1,
-            Items = items.Select(item => new TaktPurchaseRequestItemUpdateDto
+            SupplierCode = inquiry.SupplierCode,
+            SupplierName1 = inquiry.SupplierName1,
+            Items = items.Select(item => new TaktPurchaseRequestItemCreateDto
             {
-                PurchaseRequestItemId = 0,
                 LineNumber = item.LineNumber,
                 AllocationCategory = item.AllocationCategory,
                 MaterialCode = item.MaterialCode ?? string.Empty,
@@ -646,10 +643,10 @@ public class TaktProcurementChainOrchestratorService : TaktServiceBase, ITaktPro
                 MaterialSpecification = item.MaterialSpecification,
                 RequestUnit = item.InquiryUnit,
                 RequestQuantity = item.InquiryQuantity,
-                EstimatedUnitPrice = item.QuotedUnitPrice,
-                EstimatedAmount = item.QuotedAmount,
-                ReferenceSupplierCode = inquiry.SupplierCode,
-                ReferenceSupplierName = inquiry.SupplierName
+                PurchaseRequestUnitPrice = item.QuotedUnitPrice,
+                TaxIncludedAmount = item.TaxIncludedAmount,
+                UntaxedAmount = item.UntaxedAmount,
+                TaxAmount = item.TaxAmount
             }).ToList()
         };
         var created = await _purchaseRequestService.CreatePurchaseRequestAsync(createDto);
@@ -670,7 +667,9 @@ public class TaktProcurementChainOrchestratorService : TaktServiceBase, ITaktPro
             return existing.Id;
         }
         var supplierCode = inquiry.SupplierCode ?? string.Empty;
-        var supplierName = inquiry.SupplierName ?? supplierCode;
+        var supplierName = string.IsNullOrWhiteSpace(inquiry.SupplierName1)
+            ? supplierCode
+            : inquiry.SupplierName1;
         if (string.IsNullOrWhiteSpace(supplierCode))
         {
             throw new TaktBusinessException("来源询价缺少供应商，无法生成采购订单");
@@ -683,7 +682,7 @@ public class TaktProcurementChainOrchestratorService : TaktServiceBase, ITaktPro
             PlantCode = request.PlantCode,
             PurchaseOrderCode = orderCode,
             SupplierCode = supplierCode,
-            SupplierName = supplierName,
+            SupplierName1 = supplierName,
             OrderDate = DateTime.Now,
             RequiredArrivalDate = request.RequiredArrivalDate,
             TotalQuantity = request.TotalQuantity,
@@ -691,9 +690,8 @@ public class TaktProcurementChainOrchestratorService : TaktServiceBase, ITaktPro
             ActualAmount = request.TotalAmount,
             TaxAmount = 0,
             OrderStatus = 1,
-            Items = (requestDto.Items ?? []).Select(item => new TaktPurchaseOrderItemUpdateDto
+            Items = (requestDto.Items ?? []).Select(item => new TaktPurchaseOrderItemCreateDto
             {
-                PurchaseOrderItemId = 0,
                 LineNumber = item.LineNumber,
                 RequestCode = request.PurchaseRequestCode,
                 RequestLineNumber = item.LineNumber,
@@ -702,8 +700,10 @@ public class TaktProcurementChainOrchestratorService : TaktServiceBase, ITaktPro
                 MaterialSpecification = item.MaterialSpecification,
                 PurchaseUnit = item.RequestUnit,
                 OrderQuantity = item.RequestQuantity,
-                UnitPrice = item.EstimatedUnitPrice,
-                SubtotalAmount = item.EstimatedAmount
+                PurchaseUnitPrice = item.PurchaseRequestUnitPrice,
+                TaxIncludedAmount = item.TaxIncludedAmount,
+                UntaxedAmount = item.UntaxedAmount,
+                TaxAmount = item.TaxAmount
             }).ToList()
         };
         var created = await _purchaseOrderService.CreatePurchaseOrderAsync(createDto);
@@ -735,22 +735,21 @@ public class TaktProcurementChainOrchestratorService : TaktServiceBase, ITaktPro
             ExpenseTitle = $"采购订单费用-{order.PurchaseOrderCode}",
             ExpenseType = expenseType,
             SupplierCode = order.SupplierCode,
-            SupplierName = order.SupplierName,
+            SupplierName1 = order.SupplierName1,
             ApplicantBy = request.RequestId ?? inquiry.InquiryId ?? 0,
             ExpenseAmount = order.TotalAmount,
             TaxAmount = order.TaxAmount,
             ExpenseDate = DateTime.Now,
             ApplicationReason = request.RequestReason,
             ExpenseStatus = 0,
-            ExpenseDetails = (orderDto.Items ?? []).Select((item, index) => new TaktExpenseDetailUpdateDto
+            ExpenseDetails = (orderDto.Items ?? []).Select((item, index) => new TaktExpenseDetailCreateDto
             {
-                ExpenseDetailId = 0,
                 LineNumber = item.LineNumber > 0 ? item.LineNumber : (index + 1) * 10,
                 AllocationCategory = "K",
                 ItemName = item.MaterialName,
                 ItemDescription = item.MaterialSpecification,
                 ItemQuantity = item.OrderQuantity,
-                ItemAmount = item.SubtotalAmount
+                ItemAmount = item.TaxIncludedAmount
             }).ToList()
         };
         var created = await _expenseService.CreateExpenseAsync(createDto);
@@ -784,7 +783,7 @@ public class TaktProcurementChainOrchestratorService : TaktServiceBase, ITaktPro
             ExpenseTitle = $"采购申请费用-{request.PurchaseRequestCode}",
             ExpenseType = expenseType,
             SupplierCode = inquiry.SupplierCode,
-            SupplierName = inquiry.SupplierName,
+            SupplierName1 = inquiry.SupplierName1,
             ApplicantBy = request.RequestId ?? inquiry.InquiryId ?? 0,
             ApplicationDept = prCountersign.ApplicationDept,
             CostBearerDept = prCountersign.CostBearerDept,
@@ -794,15 +793,14 @@ public class TaktProcurementChainOrchestratorService : TaktServiceBase, ITaktPro
             ExpenseDate = DateTime.Now,
             ApplicationReason = request.RequestReason,
             ExpenseStatus = 0,
-            ExpenseDetails = (requestDto.Items ?? []).Select((item, index) => new TaktExpenseDetailUpdateDto
+            ExpenseDetails = (requestDto.Items ?? []).Select((item, index) => new TaktExpenseDetailCreateDto
             {
-                ExpenseDetailId = 0,
                 LineNumber = item.LineNumber > 0 ? item.LineNumber : (index + 1) * 10,
                 AllocationCategory = item.AllocationCategory ?? "K",
                 ItemName = item.MaterialName,
                 ItemDescription = item.MaterialSpecification,
                 ItemQuantity = item.RequestQuantity,
-                ItemAmount = item.EstimatedAmount
+                ItemAmount = item.TaxIncludedAmount
             }).ToList()
         };
         var created = await _expenseService.CreateExpenseAsync(createDto);
@@ -838,9 +836,8 @@ public class TaktProcurementChainOrchestratorService : TaktServiceBase, ITaktPro
             ExpenseDate = DateTime.Now,
             ApplicationReason = countersign.ApplicationReason,
             ExpenseStatus = 0,
-            ExpenseDetails = details.Select(detail => new TaktExpenseDetailUpdateDto
+            ExpenseDetails = details.Select(detail => new TaktExpenseDetailCreateDto
             {
-                ExpenseDetailId = 0,
                 LineNumber = detail.LineNumber,
                 AllocationCategory = detail.AllocationCategory,
                 ItemName = detail.ItemName,

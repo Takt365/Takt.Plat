@@ -34,7 +34,7 @@ namespace Takt.Domain.Entities.Logistics.Serial;
 public class TaktSerialSummary : TaktCompanyEntityBase
 {
     /// <summary>
-    /// 工厂代码（选项 TaktPlants/options，DictValue=PlantCode）
+    /// 工厂代码（选项 TaktPlants/options；DictValue=PlantCode）
     /// </summary>
     [SugarColumn(ColumnName = "plant_code", ColumnDescription = "工厂代码", ColumnDataType = "nvarchar", Length = 4, IsNullable = false)]
     public string PlantCode { get; set; } = string.Empty;
@@ -52,7 +52,7 @@ public class TaktSerialSummary : TaktCompanyEntityBase
     public DateTime InboundDate { get; set; } = DateTime.Today;
 
     /// <summary>
-    /// 产品物料（选项 TaktMaterialPlants/options，DictValue=MaterialCode，ExtValue=PlantCode）
+    /// 产品物料（选项 TaktMaterialPlants/options；DictValue=MaterialCode，ExtValue=PlantCode）
     /// </summary>
     [SugarColumn(ColumnName = "material_code", ColumnDescription = "产品物料", ColumnDataType = "nvarchar", Length = 20, IsNullable = false)]
     public string MaterialCode { get; set; } = string.Empty;
@@ -94,7 +94,7 @@ public class TaktSerialSummary : TaktCompanyEntityBase
     public DateTime? LoadingDate { get; set; }
 
     /// <summary>
-    /// 仕向地（选项 TaktModelDestinations/options，DictValue=DestinationCode）
+    /// 仕向地（选项 TaktModelDestinations/options；DictValue=DestinationCode）
     /// </summary>
     [SugarColumn(ColumnName = "destination", ColumnDescription = "仕向地", ColumnDataType = "nvarchar", Length = 40, IsNullable = false, DefaultValue = "")]
     public string Destination { get; set; } = string.Empty;

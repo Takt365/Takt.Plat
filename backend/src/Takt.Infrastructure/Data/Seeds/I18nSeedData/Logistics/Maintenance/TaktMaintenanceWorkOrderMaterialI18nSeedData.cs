@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Infrastructure.Data.Seeds.I18nSeedData.Logistics.Maintenance
 // 文件名称：TaktMaintenanceWorkOrderMaterialI18nSeedData.cs
-// 创建时间：2026-07-20
+// 创建时间：2026-07-23
 // 创建人：Takt365(Auto Generated)
 // 功能描述：TaktMaintenanceWorkOrderMaterial 实体字段国际化种子（无对应 frontend locales；TranslationText 取自 ColumnDescription，ContextNote 取自属性 XML summary）
 // 
@@ -127,13 +127,13 @@ public class TaktMaintenanceWorkOrderMaterialI18nSeedData : ITaktSeedDataCoordin
             new TranslationSeedItem("entity.maintenanceworkordermaterial.materialid", "zh-HK", "物料ID_hk", "物料ID（关联工厂物料主数据，序列化为string以避免Javascript精度问题）"),
 
             // entity.maintenanceworkordermaterial.materialcode
-            new TranslationSeedItem("entity.maintenanceworkordermaterial.materialcode", "en-US", "物料编码_us", "物料编码（选项 TaktMaterialPlants/options，DictValue=MaterialCode，ExtValue=PlantCode）"),
+            new TranslationSeedItem("entity.maintenanceworkordermaterial.materialcode", "en-US", "物料编码_us", "物料编码（选项 TaktMaterialPlants/options；DictValue=MaterialCode，ExtValue=PlantCode）"),
             // entity.maintenanceworkordermaterial.materialcode
-            new TranslationSeedItem("entity.maintenanceworkordermaterial.materialcode", "ja-JP", "物料编码_jp", "物料编码（选项 TaktMaterialPlants/options，DictValue=MaterialCode，ExtValue=PlantCode）"),
+            new TranslationSeedItem("entity.maintenanceworkordermaterial.materialcode", "ja-JP", "物料编码_jp", "物料编码（选项 TaktMaterialPlants/options；DictValue=MaterialCode，ExtValue=PlantCode）"),
             // entity.maintenanceworkordermaterial.materialcode
-            new TranslationSeedItem("entity.maintenanceworkordermaterial.materialcode", "zh-CN", "物料编码", "物料编码（选项 TaktMaterialPlants/options，DictValue=MaterialCode，ExtValue=PlantCode）"),
+            new TranslationSeedItem("entity.maintenanceworkordermaterial.materialcode", "zh-CN", "物料编码", "物料编码（选项 TaktMaterialPlants/options；DictValue=MaterialCode，ExtValue=PlantCode）"),
             // entity.maintenanceworkordermaterial.materialcode
-            new TranslationSeedItem("entity.maintenanceworkordermaterial.materialcode", "zh-HK", "物料编码_hk", "物料编码（选项 TaktMaterialPlants/options，DictValue=MaterialCode，ExtValue=PlantCode）"),
+            new TranslationSeedItem("entity.maintenanceworkordermaterial.materialcode", "zh-HK", "物料编码_hk", "物料编码（选项 TaktMaterialPlants/options；DictValue=MaterialCode，ExtValue=PlantCode）"),
 
             // entity.maintenanceworkordermaterial.materialname
             new TranslationSeedItem("entity.maintenanceworkordermaterial.materialname", "en-US", "物料名称_us", "物料名称（回填：随物料）"),
@@ -226,13 +226,13 @@ public class TaktMaintenanceWorkOrderMaterialI18nSeedData : ITaktSeedDataCoordin
             new TranslationSeedItem("entity.maintenanceworkordermaterial.issuetime", "zh-HK", "领料时间_hk", "领料时间"),
 
             // entity.maintenanceworkordermaterial.isobsolete
-            new TranslationSeedItem("entity.maintenanceworkordermaterial.isobsolete", "en-US", "是否作废_us", "是否作废（字典 sys_yes_no_type，0=否 1=是；编辑移除子行时标记作废）"),
+            new TranslationSeedItem("entity.maintenanceworkordermaterial.isobsolete", "en-US", "是否作废_us", "是否作废（字典 sys_yes_no_type；0=否 1=是；编辑移除子行时标记作废）"),
             // entity.maintenanceworkordermaterial.isobsolete
-            new TranslationSeedItem("entity.maintenanceworkordermaterial.isobsolete", "ja-JP", "是否作废_jp", "是否作废（字典 sys_yes_no_type，0=否 1=是；编辑移除子行时标记作废）"),
+            new TranslationSeedItem("entity.maintenanceworkordermaterial.isobsolete", "ja-JP", "是否作废_jp", "是否作废（字典 sys_yes_no_type；0=否 1=是；编辑移除子行时标记作废）"),
             // entity.maintenanceworkordermaterial.isobsolete
-            new TranslationSeedItem("entity.maintenanceworkordermaterial.isobsolete", "zh-CN", "是否作废", "是否作废（字典 sys_yes_no_type，0=否 1=是；编辑移除子行时标记作废）"),
+            new TranslationSeedItem("entity.maintenanceworkordermaterial.isobsolete", "zh-CN", "是否作废", "是否作废（字典 sys_yes_no_type；0=否 1=是；编辑移除子行时标记作废）"),
             // entity.maintenanceworkordermaterial.isobsolete
-            new TranslationSeedItem("entity.maintenanceworkordermaterial.isobsolete", "zh-HK", "是否作废_hk", "是否作废（字典 sys_yes_no_type，0=否 1=是；编辑移除子行时标记作废）"),
+            new TranslationSeedItem("entity.maintenanceworkordermaterial.isobsolete", "zh-HK", "是否作废_hk", "是否作废（字典 sys_yes_no_type；0=否 1=是；编辑移除子行时标记作废）"),
 
             // entity.maintenanceworkordermaterial.maintenanceworkorder
             new TranslationSeedItem("entity.maintenanceworkordermaterial.maintenanceworkorder", "en-US", "维护工单_us", "维护工单（主表）"),

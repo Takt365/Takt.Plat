@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Infrastructure.Data.Seeds.I18nSeedData.Logistics.Manufacturing.EngineeringChange
 // 文件名称：TaktEcAttachmentI18nSeedData.cs
-// 创建时间：2026-07-20
+// 创建时间：2026-07-23
 // 创建人：Takt365(Auto Generated)
 // 功能描述：TaktEcAttachment 实体字段国际化种子（无对应 frontend locales；TranslationText 取自 ColumnDescription，ContextNote 取自属性 XML summary）
 // 
@@ -127,13 +127,13 @@ public class TaktEcAttachmentI18nSeedData : ITaktSeedDataCoordinator
             new TranslationSeedItem("entity.ecattachment.attachmenttype", "zh-HK", "文件类别_hk", "文件类别（字典 logistics_ec_attachment_type；TL=联络，EPP=EPP，FPP=FPP，EL=外部联络，TCJ=TCJ，源PDF=源PDF，EC=EC）"),
 
             // entity.ecattachment.docno
-            new TranslationSeedItem("entity.ecattachment.docno", "en-US", "文件编号_us", "文件编号（如联络编号等）"),
+            new TranslationSeedItem("entity.ecattachment.docno", "en-US", "文件编码_us", "文件编码（如联络编码等）"),
             // entity.ecattachment.docno
-            new TranslationSeedItem("entity.ecattachment.docno", "ja-JP", "文件编号_jp", "文件编号（如联络编号等）"),
+            new TranslationSeedItem("entity.ecattachment.docno", "ja-JP", "文件编码_jp", "文件编码（如联络编码等）"),
             // entity.ecattachment.docno
-            new TranslationSeedItem("entity.ecattachment.docno", "zh-CN", "文件编号", "文件编号（如联络编号等）"),
+            new TranslationSeedItem("entity.ecattachment.docno", "zh-CN", "文件编码", "文件编码（如联络编码等）"),
             // entity.ecattachment.docno
-            new TranslationSeedItem("entity.ecattachment.docno", "zh-HK", "文件编号_hk", "文件编号（如联络编号等）"),
+            new TranslationSeedItem("entity.ecattachment.docno", "zh-HK", "文件编码_hk", "文件编码（如联络编码等）"),
 
             // entity.ecattachment.filename
             new TranslationSeedItem("entity.ecattachment.filename", "en-US", "文件名称_us", "文件名称"),
@@ -154,13 +154,13 @@ public class TaktEcAttachmentI18nSeedData : ITaktSeedDataCoordinator
             new TranslationSeedItem("entity.ecattachment.accessurl", "zh-HK", "访问地址_hk", "访问地址（URL）"),
 
             // entity.ecattachment.isobsolete
-            new TranslationSeedItem("entity.ecattachment.isobsolete", "en-US", "是否作废_us", "是否作废（字典 sys_yes_no_type，0=否 1=是；编辑移除子行时标记作废）"),
+            new TranslationSeedItem("entity.ecattachment.isobsolete", "en-US", "是否作废_us", "是否作废（字典 sys_yes_no_type；0=否 1=是；编辑移除子行时标记作废）"),
             // entity.ecattachment.isobsolete
-            new TranslationSeedItem("entity.ecattachment.isobsolete", "ja-JP", "是否作废_jp", "是否作废（字典 sys_yes_no_type，0=否 1=是；编辑移除子行时标记作废）"),
+            new TranslationSeedItem("entity.ecattachment.isobsolete", "ja-JP", "是否作废_jp", "是否作废（字典 sys_yes_no_type；0=否 1=是；编辑移除子行时标记作废）"),
             // entity.ecattachment.isobsolete
-            new TranslationSeedItem("entity.ecattachment.isobsolete", "zh-CN", "是否作废", "是否作废（字典 sys_yes_no_type，0=否 1=是；编辑移除子行时标记作废）"),
+            new TranslationSeedItem("entity.ecattachment.isobsolete", "zh-CN", "是否作废", "是否作废（字典 sys_yes_no_type；0=否 1=是；编辑移除子行时标记作废）"),
             // entity.ecattachment.isobsolete
-            new TranslationSeedItem("entity.ecattachment.isobsolete", "zh-HK", "是否作废_hk", "是否作废（字典 sys_yes_no_type，0=否 1=是；编辑移除子行时标记作废）"),
+            new TranslationSeedItem("entity.ecattachment.isobsolete", "zh-HK", "是否作废_hk", "是否作废（字典 sys_yes_no_type；0=否 1=是；编辑移除子行时标记作废）"),
 
             // entity.ecattachment.ecgijutsu
             new TranslationSeedItem("entity.ecattachment.ecgijutsu", "en-US", "设变主表_us", "设变主表（多对一）"),

@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Application.Dtos.Logistics.Quality.Complaint
 // 文件名称：TaktCustomerSatisfactionSurveyDtos.cs
-// 创建时间：2026-07-09
+// 创建时间：2026-07-23
 // 创建人：Takt365(Auto Generated)
 // 功能描述：CustomerSatisfactionSurvey 模块 DTO（由 generate-dtos-from-entity.cjs 根据 TaktCustomerSatisfactionSurvey 生成，请按需审阅）
 // 
@@ -36,23 +36,28 @@ public class TaktCustomerSatisfactionSurveyDto : TaktCompanyDtoBase
     public long CustomerSatisfactionSurveyId { get; set; }
 
     /// <summary>
-    /// 调查表编号（组合唯一索引）
+    /// 调查表编码（组合唯一索引）
     /// </summary>
     public string CustomerSatisfactionSurveyCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 客户 ID（关联 TaktCustomer.Id，选项 TaktCustomers/options）
+    /// 客户 ID（选项 TaktCustomers/options；DictValue=Id）
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
     public long CustomerId { get; set; }
 
     /// <summary>
-    /// 客户名称
+    /// 客户 名称（填充字段）
     /// </summary>
-    public string CustomerName { get; set; } = string.Empty;
+    public string? CustomerName { get; set; }
 
     /// <summary>
-    /// 客户编码（选项 TaktCustomers/options，DictValue=CustomerCode）
+    /// 客户名称1（冗余，与 TaktCustomer.CustomerName1 对齐）
+    /// </summary>
+    public string CustomerName1 { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 客户编码（选项 TaktCustomers/options；DictValue=CustomerCode）
     /// </summary>
     public string? CustomerCode { get; set; } = string.Empty;
 
@@ -77,7 +82,7 @@ public class TaktCustomerSatisfactionSurveyDto : TaktCompanyDtoBase
     public int SurveyPeriod { get; set; } = 0;
 
     /// <summary>
-    /// 调查人（选项 TaktEmployees/options，DictValue=EmployeeCode）
+    /// 调查人（选项 TaktEmployees/options；DictValue=EmployeeCode）
     /// </summary>
     public string? SurveyorBy { get; set; } = string.Empty;
 
@@ -142,7 +147,7 @@ public class TaktCustomerSatisfactionSurveyDto : TaktCompanyDtoBase
     public string? ImprovementPlan { get; set; } = string.Empty;
 
     /// <summary>
-    /// 关联客诉 ID（关联 TaktCustomerComplaint.Id，选项 TaktCustomerComplaints/options）
+    /// 关联客诉 ID（选项 TaktCustomerComplaints/options；DictValue=Id）
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
     public long? RelatedComplaintId { get; set; }
@@ -163,7 +168,7 @@ public class TaktCustomerSatisfactionSurveyDto : TaktCompanyDtoBase
     public int SurveyStatus { get; set; } = 0;
 
     /// <summary>
-    /// 关联工厂（选项 TaktPlants/options，DictValue=PlantCode）
+    /// 关联工厂（选项 TaktPlants/options；DictValue=PlantCode）
     /// </summary>
     public string RelatedPlant { get; set; } = string.Empty;
 
@@ -206,23 +211,23 @@ public class TaktCustomerSatisfactionSurveyQueryDto : TaktPagedQuery
     public string? CompanyCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 调查表编号（组合唯一索引）
+    /// 调查表编码（组合唯一索引）
     /// </summary>
     public string? CustomerSatisfactionSurveyCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 客户 ID（关联 TaktCustomer.Id，选项 TaktCustomers/options）
+    /// 客户 ID（选项 TaktCustomers/options；DictValue=Id）
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
     public long? CustomerId { get; set; }
 
     /// <summary>
-    /// 客户名称
+    /// 客户名称1（冗余，与 TaktCustomer.CustomerName1 对齐）
     /// </summary>
-    public string? CustomerName { get; set; } = string.Empty;
+    public string? CustomerName1 { get; set; } = string.Empty;
 
     /// <summary>
-    /// 客户编码（选项 TaktCustomers/options，DictValue=CustomerCode）
+    /// 客户编码（选项 TaktCustomers/options；DictValue=CustomerCode）
     /// </summary>
     public string? CustomerCode { get; set; } = string.Empty;
 
@@ -252,7 +257,7 @@ public class TaktCustomerSatisfactionSurveyQueryDto : TaktPagedQuery
     public int? SurveyPeriod { get; set; }
 
     /// <summary>
-    /// 调查人（选项 TaktEmployees/options，DictValue=EmployeeCode）
+    /// 调查人（选项 TaktEmployees/options；DictValue=EmployeeCode）
     /// </summary>
     public string? SurveyorBy { get; set; } = string.Empty;
 
@@ -317,7 +322,7 @@ public class TaktCustomerSatisfactionSurveyQueryDto : TaktPagedQuery
     public string? ImprovementPlan { get; set; } = string.Empty;
 
     /// <summary>
-    /// 关联客诉 ID（关联 TaktCustomerComplaint.Id，选项 TaktCustomerComplaints/options）
+    /// 关联客诉 ID（选项 TaktCustomerComplaints/options；DictValue=Id）
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
     public long? RelatedComplaintId { get; set; }
@@ -333,7 +338,7 @@ public class TaktCustomerSatisfactionSurveyQueryDto : TaktPagedQuery
     public int? SurveyStatus { get; set; }
 
     /// <summary>
-    /// 关联工厂（选项 TaktPlants/options，DictValue=PlantCode）
+    /// 关联工厂（选项 TaktPlants/options；DictValue=PlantCode）
     /// </summary>
     public string? RelatedPlant { get; set; } = string.Empty;
 
@@ -393,25 +398,25 @@ public class TaktCustomerSatisfactionSurveyCreateDto
     public string CompanyDefaultCulture { get; set; } = string.Empty;
 
     /// <summary>
-    /// 调查表编号（组合唯一索引）
+    /// 调查表编码（组合唯一索引）
     /// </summary>
-    [Required(ErrorMessage = "调查表编号（组合唯一索引）不能为空")]
+    [Required(ErrorMessage = "调查表编码（组合唯一索引）不能为空")]
     public string CustomerSatisfactionSurveyCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 客户 ID（关联 TaktCustomer.Id，选项 TaktCustomers/options）
+    /// 客户 ID（选项 TaktCustomers/options；DictValue=Id）
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
     public long CustomerId { get; set; }
 
     /// <summary>
-    /// 客户名称
+    /// 客户名称1（冗余，与 TaktCustomer.CustomerName1 对齐）
     /// </summary>
-    [Required(ErrorMessage = "客户名称不能为空")]
-    public string CustomerName { get; set; } = string.Empty;
+    [Required(ErrorMessage = "客户名称1（冗余，与 TaktCustomer.CustomerName1 对齐）不能为空")]
+    public string CustomerName1 { get; set; } = string.Empty;
 
     /// <summary>
-    /// 客户编码（选项 TaktCustomers/options，DictValue=CustomerCode）
+    /// 客户编码（选项 TaktCustomers/options；DictValue=CustomerCode）
     /// </summary>
     public string? CustomerCode { get; set; } = string.Empty;
 
@@ -436,7 +441,7 @@ public class TaktCustomerSatisfactionSurveyCreateDto
     public int SurveyPeriod { get; set; } = 0;
 
     /// <summary>
-    /// 调查人（选项 TaktEmployees/options，DictValue=EmployeeCode）
+    /// 调查人（选项 TaktEmployees/options；DictValue=EmployeeCode）
     /// </summary>
     public string? SurveyorBy { get; set; } = string.Empty;
 
@@ -501,7 +506,7 @@ public class TaktCustomerSatisfactionSurveyCreateDto
     public string? ImprovementPlan { get; set; } = string.Empty;
 
     /// <summary>
-    /// 关联客诉 ID（关联 TaktCustomerComplaint.Id，选项 TaktCustomerComplaints/options）
+    /// 关联客诉 ID（选项 TaktCustomerComplaints/options；DictValue=Id）
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
     public long? RelatedComplaintId { get; set; }
@@ -517,9 +522,9 @@ public class TaktCustomerSatisfactionSurveyCreateDto
     public int SurveyStatus { get; set; } = 0;
 
     /// <summary>
-    /// 关联工厂（选项 TaktPlants/options，DictValue=PlantCode）
+    /// 关联工厂（选项 TaktPlants/options；DictValue=PlantCode）
     /// </summary>
-    [Required(ErrorMessage = "关联工厂（选项 TaktPlants/options，DictValue=PlantCode）不能为空")]
+    [Required(ErrorMessage = "关联工厂（选项 TaktPlants/options；DictValue=PlantCode）不能为空")]
     public string RelatedPlant { get; set; } = string.Empty;
 
     /// <summary>
@@ -530,7 +535,7 @@ public class TaktCustomerSatisfactionSurveyCreateDto
     /// <summary>
     /// 调查项目明细列表（主子表关系）（子表，级联保存）
     /// </summary>
-    public List<TaktCustomerSatisfactionSurveyItemUpdateDto>? Items { get; set; }
+    public List<TaktCustomerSatisfactionSurveyItemCreateDto>? Items { get; set; }
 
     /// <summary>
     /// 扩展字段JSON
@@ -561,6 +566,11 @@ public class TaktCustomerSatisfactionSurveyUpdateDto : TaktCustomerSatisfactionS
     [AdaptMember("Id")]
     [JsonConverter(typeof(ValueToStringConverter))]
     public long CustomerSatisfactionSurveyId { get; set; }
+
+    /// <summary>
+    /// 调查项目明细列表（主子表关系）（子表，级联保存）
+    /// </summary>
+    public new List<TaktCustomerSatisfactionSurveyItemUpdateDto>? Items { get; set; }
 
 }
 
@@ -632,23 +642,23 @@ public class TaktCustomerSatisfactionSurveyTemplateDto
     public string? CompanyCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 调查表编号（组合唯一索引）
+    /// 调查表编码（组合唯一索引）
     /// </summary>
     public string? CustomerSatisfactionSurveyCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 客户 ID（关联 TaktCustomer.Id，选项 TaktCustomers/options）
+    /// 客户 ID（选项 TaktCustomers/options；DictValue=Id）
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
     public long? CustomerId { get; set; }
 
     /// <summary>
-    /// 客户名称
+    /// 客户名称1（冗余，与 TaktCustomer.CustomerName1 对齐）
     /// </summary>
-    public string? CustomerName { get; set; } = string.Empty;
+    public string? CustomerName1 { get; set; } = string.Empty;
 
     /// <summary>
-    /// 客户编码（选项 TaktCustomers/options，DictValue=CustomerCode）
+    /// 客户编码（选项 TaktCustomers/options；DictValue=CustomerCode）
     /// </summary>
     public string? CustomerCode { get; set; } = string.Empty;
 
@@ -673,7 +683,7 @@ public class TaktCustomerSatisfactionSurveyTemplateDto
     public int? SurveyPeriod { get; set; }
 
     /// <summary>
-    /// 调查人（选项 TaktEmployees/options，DictValue=EmployeeCode）
+    /// 调查人（选项 TaktEmployees/options；DictValue=EmployeeCode）
     /// </summary>
     public string? SurveyorBy { get; set; } = string.Empty;
 
@@ -738,7 +748,7 @@ public class TaktCustomerSatisfactionSurveyTemplateDto
     public string? ImprovementPlan { get; set; } = string.Empty;
 
     /// <summary>
-    /// 关联客诉 ID（关联 TaktCustomerComplaint.Id，选项 TaktCustomerComplaints/options）
+    /// 关联客诉 ID（选项 TaktCustomerComplaints/options；DictValue=Id）
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
     public long? RelatedComplaintId { get; set; }
@@ -754,7 +764,7 @@ public class TaktCustomerSatisfactionSurveyTemplateDto
     public int? SurveyStatus { get; set; }
 
     /// <summary>
-    /// 关联工厂（选项 TaktPlants/options，DictValue=PlantCode）
+    /// 关联工厂（选项 TaktPlants/options；DictValue=PlantCode）
     /// </summary>
     public string? RelatedPlant { get; set; } = string.Empty;
 
@@ -801,23 +811,23 @@ public class TaktCustomerSatisfactionSurveyImportDto
     public string? CompanyDefaultCulture { get; set; } = string.Empty;
 
     /// <summary>
-    /// 调查表编号（组合唯一索引）
+    /// 调查表编码（组合唯一索引）
     /// </summary>
     public string? CustomerSatisfactionSurveyCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 客户 ID（关联 TaktCustomer.Id，选项 TaktCustomers/options）
+    /// 客户 ID（选项 TaktCustomers/options；DictValue=Id）
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
     public long? CustomerId { get; set; }
 
     /// <summary>
-    /// 客户名称
+    /// 客户名称1（冗余，与 TaktCustomer.CustomerName1 对齐）
     /// </summary>
-    public string? CustomerName { get; set; } = string.Empty;
+    public string? CustomerName1 { get; set; } = string.Empty;
 
     /// <summary>
-    /// 客户编码（选项 TaktCustomers/options，DictValue=CustomerCode）
+    /// 客户编码（选项 TaktCustomers/options；DictValue=CustomerCode）
     /// </summary>
     public string? CustomerCode { get; set; } = string.Empty;
 
@@ -842,7 +852,7 @@ public class TaktCustomerSatisfactionSurveyImportDto
     public int? SurveyPeriod { get; set; }
 
     /// <summary>
-    /// 调查人（选项 TaktEmployees/options，DictValue=EmployeeCode）
+    /// 调查人（选项 TaktEmployees/options；DictValue=EmployeeCode）
     /// </summary>
     public string? SurveyorBy { get; set; } = string.Empty;
 
@@ -907,7 +917,7 @@ public class TaktCustomerSatisfactionSurveyImportDto
     public string? ImprovementPlan { get; set; } = string.Empty;
 
     /// <summary>
-    /// 关联客诉 ID（关联 TaktCustomerComplaint.Id，选项 TaktCustomerComplaints/options）
+    /// 关联客诉 ID（选项 TaktCustomerComplaints/options；DictValue=Id）
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
     public long? RelatedComplaintId { get; set; }
@@ -923,7 +933,7 @@ public class TaktCustomerSatisfactionSurveyImportDto
     public int? SurveyStatus { get; set; }
 
     /// <summary>
-    /// 关联工厂（选项 TaktPlants/options，DictValue=PlantCode）
+    /// 关联工厂（选项 TaktPlants/options；DictValue=PlantCode）
     /// </summary>
     public string? RelatedPlant { get; set; } = string.Empty;
 
@@ -971,23 +981,23 @@ public class TaktCustomerSatisfactionSurveyExportDto
     public string CompanyCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 调查表编号（组合唯一索引）
+    /// 调查表编码（组合唯一索引）
     /// </summary>
     public string CustomerSatisfactionSurveyCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 客户 ID（关联 TaktCustomer.Id，选项 TaktCustomers/options）
+    /// 客户 ID（选项 TaktCustomers/options；DictValue=Id）
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
     public long CustomerId { get; set; }
 
     /// <summary>
-    /// 客户名称
+    /// 客户名称1（冗余，与 TaktCustomer.CustomerName1 对齐）
     /// </summary>
-    public string CustomerName { get; set; } = string.Empty;
+    public string CustomerName1 { get; set; } = string.Empty;
 
     /// <summary>
-    /// 客户编码（选项 TaktCustomers/options，DictValue=CustomerCode）
+    /// 客户编码（选项 TaktCustomers/options；DictValue=CustomerCode）
     /// </summary>
     public string? CustomerCode { get; set; } = string.Empty;
 
@@ -1012,7 +1022,7 @@ public class TaktCustomerSatisfactionSurveyExportDto
     public int SurveyPeriod { get; set; } = 0;
 
     /// <summary>
-    /// 调查人（选项 TaktEmployees/options，DictValue=EmployeeCode）
+    /// 调查人（选项 TaktEmployees/options；DictValue=EmployeeCode）
     /// </summary>
     public string? SurveyorBy { get; set; } = string.Empty;
 
@@ -1077,7 +1087,7 @@ public class TaktCustomerSatisfactionSurveyExportDto
     public string? ImprovementPlan { get; set; } = string.Empty;
 
     /// <summary>
-    /// 关联客诉 ID（关联 TaktCustomerComplaint.Id，选项 TaktCustomerComplaints/options）
+    /// 关联客诉 ID（选项 TaktCustomerComplaints/options；DictValue=Id）
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
     public long? RelatedComplaintId { get; set; }
@@ -1093,7 +1103,7 @@ public class TaktCustomerSatisfactionSurveyExportDto
     public int SurveyStatus { get; set; } = 0;
 
     /// <summary>
-    /// 关联工厂（选项 TaktPlants/options，DictValue=PlantCode）
+    /// 关联工厂（选项 TaktPlants/options；DictValue=PlantCode）
     /// </summary>
     public string RelatedPlant { get; set; } = string.Empty;
 

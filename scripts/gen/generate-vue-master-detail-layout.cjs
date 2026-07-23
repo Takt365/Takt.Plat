@@ -968,6 +968,7 @@ ${toolsBarImportExport}
         :data-source="dataSource"
         :loading="loading"
         :stripe="true"
+        :virtual="true"
         :row-key="get${child.childPascal}Id"
         :row-selection="rowSelection"
         :custom-row="onClickRow"

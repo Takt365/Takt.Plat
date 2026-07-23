@@ -105,7 +105,7 @@ description: >-
 
 规则源：`.cursor/rules/`。实现任务优先打开对应 **skill**（检查清单），细则以 **mdc** 为准。
 
-| 编号 | 规则 | Skill | 何时用 |
+| 编码 | 规则 | Skill | 何时用 |
 |------|------|-------|--------|
 | 00 | `00-project.mdc` | 本文件 | 命名、i18n、权限、文件头、Git |
 | 01 | `01-backend.mdc` | [01-backend](../01-backend/SKILL.md) | 后端分层、DDD、种子 |

@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Application.Services.HumanResource.Personnel
 // 文件名称：TaktEmployeeContractService.cs
-// 创建时间：2026-06-23
+// 创建时间：2026-07-23
 // 创建人：Takt365(Cursor AI)
 // 功能描述：员工劳动合同应用服务实现
 // 
@@ -93,12 +93,12 @@ public class TaktEmployeeContractService : TaktServiceBase, ITaktEmployeeContrac
         EnsureThreeLayerContext();
         var list = await _employeeContractRepository.GetListAsync(
             x => x.TenantCode == CurrentTenantCode && x.CompanyCode == CurrentCompanyCode && x.ContractStatus == 1,
-            x => x.ContractNo ?? string.Empty,
+            x => x.EmployeeName ?? string.Empty,
             false);
         return list.Select(e => new TaktSelectOption
         {
-            DictValue = e.Id,
-            DictLabel = e.ContractNo ?? e.Id.ToString(),
+            DictValue = e.EmployeeCode,
+            DictLabel = e.EmployeeName ?? e.EmployeeCode,
         }).ToList();
     }
 
@@ -110,12 +110,12 @@ public class TaktEmployeeContractService : TaktServiceBase, ITaktEmployeeContrac
     public async Task<TaktEmployeeContractDto> CreateEmployeeContractAsync(TaktEmployeeContractCreateDto dto)
     {
         var entity = dto.Adapt<TaktEmployeeContract>();
-        var isUnique_ix_employee_contract_no = await _uniqueValidator.IsUniqueAsync(
+        var isUnique_ix_employee_contract_code = await _uniqueValidator.IsUniqueAsync(
             _employeeContractRepository,
-            x => x.ContractNo == entity.ContractNo);
-        if (!isUnique_ix_employee_contract_no)
+            x => x.ContractCode == entity.ContractCode);
+        if (!isUnique_ix_employee_contract_code)
         {
-            throw new TaktBusinessException("员工劳动合同的ContractNo已存在");
+            throw new TaktBusinessException("员工劳动合同的ContractCode已存在");
         }
         entity = await _employeeContractRepository.CreateAsync(entity);
         return await GetEmployeeContractByIdAsync(entity.Id) ?? entity.Adapt<TaktEmployeeContractDto>();
@@ -135,13 +135,13 @@ public class TaktEmployeeContractService : TaktServiceBase, ITaktEmployeeContrac
             throw new TaktBusinessException("员工劳动合同不存在");
         }
         dto.Adapt(entity);
-        var isUnique_ix_employee_contract_no = await _uniqueValidator.IsUniqueAsync(
+        var isUnique_ix_employee_contract_code = await _uniqueValidator.IsUniqueAsync(
             _employeeContractRepository,
-            x => x.ContractNo == entity.ContractNo,
+            x => x.ContractCode == entity.ContractCode,
             id);
-        if (!isUnique_ix_employee_contract_no)
+        if (!isUnique_ix_employee_contract_code)
         {
-            throw new TaktBusinessException("员工劳动合同的ContractNo已存在");
+            throw new TaktBusinessException("员工劳动合同的ContractCode已存在");
         }
         await _employeeContractRepository.UpdateAsync(entity);
         return await GetEmployeeContractByIdAsync(id) ?? throw new TaktBusinessException("员工劳动合同不存在");
@@ -232,17 +232,17 @@ public class TaktEmployeeContractService : TaktServiceBase, ITaktEmployeeContrac
             try
             {
                 var entity = rows[i].Adapt<TaktEmployeeContract>();
-                var importKey = $"{entity.ContractNo}";
+                var importKey = $"{entity.ContractCode}";
                 if (!importSeenKeys.Add(importKey))
                 {
-                    throw new TaktBusinessException("与Excel中其他行重复（ContractNo）");
+                    throw new TaktBusinessException("与Excel中其他行重复（ContractCode）");
                 }
-                var isUnique_ix_employee_contract_no = await _uniqueValidator.IsUniqueAsync(
+                var isUnique_ix_employee_contract_code = await _uniqueValidator.IsUniqueAsync(
                     _employeeContractRepository,
-                    x => x.ContractNo == entity.ContractNo);
-                if (!isUnique_ix_employee_contract_no)
+                    x => x.ContractCode == entity.ContractCode);
+                if (!isUnique_ix_employee_contract_code)
                 {
-                    throw new TaktBusinessException("员工劳动合同的ContractNo已存在");
+                    throw new TaktBusinessException("员工劳动合同的ContractCode已存在");
                 }
                 await _employeeContractRepository.CreateAsync(entity);
                 success += 1;
@@ -299,10 +299,12 @@ public class TaktEmployeeContractService : TaktServiceBase, ITaktEmployeeContrac
             var keywords = queryDto.KeyWords;
             exp = exp.And(x =>
                 SqlFunc.ToString(x.EmployeeId).Contains(keywords)
-                || (x.ContractNo != null && x.ContractNo.Contains(keywords))
+                || (x.EmployeeCode != null && x.EmployeeCode.Contains(keywords))
+                || (x.EmployeeName != null && x.EmployeeName.Contains(keywords))
+                || (x.ContractCode != null && x.ContractCode.Contains(keywords))
                 || SqlFunc.ToString(x.ContractType).Contains(keywords)
-                || SqlFunc.ToString(x.ContractStatus).Contains(keywords)
                 || (x.SignCompany != null && x.SignCompany.Contains(keywords))
+                || SqlFunc.ToString(x.ContractStatus).Contains(keywords)
                 || (x.ExtField != null && x.ExtField.Contains(keywords))
                 || (x.Remark != null && x.Remark.Contains(keywords))
                 || SqlFunc.ToString(x.StartDate).Contains(keywords)
@@ -318,9 +320,19 @@ public class TaktEmployeeContractService : TaktServiceBase, ITaktEmployeeContrac
             exp = exp.And(x => x.EmployeeId == queryDto.EmployeeId);
         }
 
-        if (!string.IsNullOrEmpty(queryDto?.ContractNo))
+        if (!string.IsNullOrEmpty(queryDto?.EmployeeCode))
         {
-            exp = exp.And(x => x.ContractNo != null && x.ContractNo.Contains(queryDto.ContractNo));
+            exp = exp.And(x => x.EmployeeCode != null && x.EmployeeCode.Contains(queryDto.EmployeeCode));
+        }
+
+        if (!string.IsNullOrEmpty(queryDto?.EmployeeName))
+        {
+            exp = exp.And(x => x.EmployeeName != null && x.EmployeeName.Contains(queryDto.EmployeeName));
+        }
+
+        if (!string.IsNullOrEmpty(queryDto?.ContractCode))
+        {
+            exp = exp.And(x => x.ContractCode != null && x.ContractCode.Contains(queryDto.ContractCode));
         }
 
         if (queryDto?.ContractType.HasValue == true)
@@ -328,14 +340,14 @@ public class TaktEmployeeContractService : TaktServiceBase, ITaktEmployeeContrac
             exp = exp.And(x => x.ContractType == queryDto.ContractType);
         }
 
-        if (queryDto?.ContractStatus.HasValue == true)
-        {
-            exp = exp.And(x => x.ContractStatus == queryDto.ContractStatus);
-        }
-
         if (!string.IsNullOrEmpty(queryDto?.SignCompany))
         {
             exp = exp.And(x => x.SignCompany != null && x.SignCompany.Contains(queryDto.SignCompany));
+        }
+
+        if (queryDto?.ContractStatus.HasValue == true)
+        {
+            exp = exp.And(x => x.ContractStatus == queryDto.ContractStatus);
         }
 
         if (!string.IsNullOrEmpty(queryDto?.ExtField))

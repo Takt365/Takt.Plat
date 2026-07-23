@@ -218,8 +218,8 @@ public interface ITaktBomMaterialCostItemService
     /// </summary>
     /// <param name="queryDto">查询 DTO（PlantCode + ModelCode 必填）</param>
     /// <returns>机种月成本与合并键分析行</returns>
-    Task<TaktBomMaterialCostItemModelMovingPriceResultDto> GetBomMaterialCostItemModelMovingPriceAnalysisAsync(
-        TaktBomMaterialCostItemModelMovingPriceQueryDto queryDto);
+    Task<TaktBomMaterialCostItemModelCostTrendResultDto> GetBomMaterialCostItemModelCostTrendAnalysisAsync(
+        TaktBomMaterialCostItemModelCostTrendQueryDto queryDto);
 
     /// <summary>
     /// 导出机种成本推移分析报表
@@ -228,8 +228,8 @@ public interface ITaktBomMaterialCostItemService
     /// <param name="sheetName">工作表名称</param>
     /// <param name="fileName">文件名</param>
     /// <returns>Excel 文件</returns>
-    Task<(string fileName, byte[] fileContent)> ExportBomMaterialCostItemModelMovingPriceAnalysisAsync(
-        TaktBomMaterialCostItemModelMovingPriceQueryDto query,
+    Task<(string fileName, byte[] fileContent)> ExportBomMaterialCostItemModelCostTrendAnalysisAsync(
+        TaktBomMaterialCostItemModelCostTrendQueryDto query,
         string? sheetName = null,
         string? fileName = null);
 

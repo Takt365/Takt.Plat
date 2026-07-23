@@ -1166,6 +1166,26 @@ public class TaktMenuLevel2SeedData
             });
             insertCount += insertFoundationQuartzTask;
             updateCount += updateFoundationQuartzTask;
+
+            var (insertFoundationAdminDivision, updateFoundationAdminDivision) = await CreateOrUpdateMenuAsync(menuRepository, sqlSugarContext, tenantCode, "FOUNDATION_ADMIN_DIVISION", menu =>
+            {
+                menu.MenuName = "行政区划";
+                menu.MenuCode = "FOUNDATION_ADMIN_DIVISION";
+                menu.I18nKey = "menu.foundation.admin.division";
+                menu.Icon = "RiMap2Line";
+                menu.ParentId = foundationMenu.Id;
+                menu.MenuType = 1;
+                menu.Permission = "foundation:admin:division:list";
+                menu.RoutePath = "/foundation/admin-division";
+                menu.ComponentPath = "foundation/admin-division/index";
+                menu.SortOrder = 12;
+                menu.MenuStatus = 1;
+                menu.IsVisible = 1;
+                menu.IsCached = 0;
+                menu.IsExternal = 0;
+            });
+            insertCount += insertFoundationAdminDivision;
+            updateCount += updateFoundationAdminDivision;
         }
 
         // ========== 统计看板下的二级菜单 (SortOrder: 11) ==========

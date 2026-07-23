@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Infrastructure.Data.Seeds.I18nSeedData.HumanResource.Personnel
 // 文件名称：TaktEmployeeEducationI18nSeedData.cs
-// 创建时间：2026-07-20
+// 创建时间：2026-07-23
 // 创建人：Takt365(Auto Generated)
 // 功能描述：TaktEmployeeEducation 实体字段国际化种子（无对应 frontend locales；TranslationText 取自 ColumnDescription，ContextNote 取自属性 XML summary）
 // 
@@ -91,13 +91,31 @@ public class TaktEmployeeEducationI18nSeedData : ITaktSeedDataCoordinator
             new TranslationSeedItem("entity.employeeeducation._self", "zh-HK", "员工教育经历信息_hk", "实体名称"),
 
             // entity.employeeeducation.employeeid
-            new TranslationSeedItem("entity.employeeeducation.employeeid", "en-US", "员工ID_us", "员工（选项 TaktEmployees/options，DictValue=Id）"),
+            new TranslationSeedItem("entity.employeeeducation.employeeid", "en-US", "员工ID_us", "员工（选项 TaktEmployees/options；DictValue=Id）"),
             // entity.employeeeducation.employeeid
-            new TranslationSeedItem("entity.employeeeducation.employeeid", "ja-JP", "员工ID_jp", "员工（选项 TaktEmployees/options，DictValue=Id）"),
+            new TranslationSeedItem("entity.employeeeducation.employeeid", "ja-JP", "员工ID_jp", "员工（选项 TaktEmployees/options；DictValue=Id）"),
             // entity.employeeeducation.employeeid
-            new TranslationSeedItem("entity.employeeeducation.employeeid", "zh-CN", "员工ID", "员工（选项 TaktEmployees/options，DictValue=Id）"),
+            new TranslationSeedItem("entity.employeeeducation.employeeid", "zh-CN", "员工ID", "员工（选项 TaktEmployees/options；DictValue=Id）"),
             // entity.employeeeducation.employeeid
-            new TranslationSeedItem("entity.employeeeducation.employeeid", "zh-HK", "员工ID_hk", "员工（选项 TaktEmployees/options，DictValue=Id）"),
+            new TranslationSeedItem("entity.employeeeducation.employeeid", "zh-HK", "员工ID_hk", "员工（选项 TaktEmployees/options；DictValue=Id）"),
+
+            // entity.employeeeducation.employeecode
+            new TranslationSeedItem("entity.employeeeducation.employeecode", "en-US", "员工编码_us", "员工编码（冗余，与 TaktEmployee.EmployeeCode 对齐）"),
+            // entity.employeeeducation.employeecode
+            new TranslationSeedItem("entity.employeeeducation.employeecode", "ja-JP", "员工编码_jp", "员工编码（冗余，与 TaktEmployee.EmployeeCode 对齐）"),
+            // entity.employeeeducation.employeecode
+            new TranslationSeedItem("entity.employeeeducation.employeecode", "zh-CN", "员工编码", "员工编码（冗余，与 TaktEmployee.EmployeeCode 对齐）"),
+            // entity.employeeeducation.employeecode
+            new TranslationSeedItem("entity.employeeeducation.employeecode", "zh-HK", "员工编码_hk", "员工编码（冗余，与 TaktEmployee.EmployeeCode 对齐）"),
+
+            // entity.employeeeducation.employeename
+            new TranslationSeedItem("entity.employeeeducation.employeename", "en-US", "员工姓名_us", "员工姓名（冗余，与 TaktEmployee.EmployeeName 对齐）"),
+            // entity.employeeeducation.employeename
+            new TranslationSeedItem("entity.employeeeducation.employeename", "ja-JP", "员工姓名_jp", "员工姓名（冗余，与 TaktEmployee.EmployeeName 对齐）"),
+            // entity.employeeeducation.employeename
+            new TranslationSeedItem("entity.employeeeducation.employeename", "zh-CN", "员工姓名", "员工姓名（冗余，与 TaktEmployee.EmployeeName 对齐）"),
+            // entity.employeeeducation.employeename
+            new TranslationSeedItem("entity.employeeeducation.employeename", "zh-HK", "员工姓名_hk", "员工姓名（冗余，与 TaktEmployee.EmployeeName 对齐）"),
 
             // entity.employeeeducation.schoolname
             new TranslationSeedItem("entity.employeeeducation.schoolname", "en-US", "学校名称_us", "学校名称"),
@@ -135,14 +153,14 @@ public class TaktEmployeeEducationI18nSeedData : ITaktSeedDataCoordinator
             // entity.employeeeducation.majorname
             new TranslationSeedItem("entity.employeeeducation.majorname", "zh-HK", "专业名称_hk", "专业名称"),
 
-            // entity.employeeeducation.certificateno
-            new TranslationSeedItem("entity.employeeeducation.certificateno", "en-US", "证书编号_us", "证书编号"),
-            // entity.employeeeducation.certificateno
-            new TranslationSeedItem("entity.employeeeducation.certificateno", "ja-JP", "证书编号_jp", "证书编号"),
-            // entity.employeeeducation.certificateno
-            new TranslationSeedItem("entity.employeeeducation.certificateno", "zh-CN", "证书编号", "证书编号"),
-            // entity.employeeeducation.certificateno
-            new TranslationSeedItem("entity.employeeeducation.certificateno", "zh-HK", "证书编号_hk", "证书编号"),
+            // entity.employeeeducation.certificatecode
+            new TranslationSeedItem("entity.employeeeducation.certificatecode", "en-US", "证书编码_us", "证书编码"),
+            // entity.employeeeducation.certificatecode
+            new TranslationSeedItem("entity.employeeeducation.certificatecode", "ja-JP", "证书编码_jp", "证书编码"),
+            // entity.employeeeducation.certificatecode
+            new TranslationSeedItem("entity.employeeeducation.certificatecode", "zh-CN", "证书编码", "证书编码"),
+            // entity.employeeeducation.certificatecode
+            new TranslationSeedItem("entity.employeeeducation.certificatecode", "zh-HK", "证书编码_hk", "证书编码"),
 
             // entity.employeeeducation.startdate
             new TranslationSeedItem("entity.employeeeducation.startdate", "en-US", "开始日期_us", "开始日期"),

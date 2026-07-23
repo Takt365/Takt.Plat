@@ -32,7 +32,15 @@ export const SALESPRICEITEM_LIST_FIELDS = [
   'scaleCurrency',
   'calculationType',
   'price',
-  'taxCode',
+  'untaxedPrice',
+  'taxIncludedPrice',
+  'taxAmount',
+  'conditionCurrency',
+  'priceUnit',
+  'unitOfMeasure',
+  'minOrderQuantity',
+  'roundingValue',
+  'plannedDeliveryTimeDays',
   'isObsolete',
 ] as const
 
@@ -50,7 +58,15 @@ export const SALESPRICEITEM_DEFAULT_VISIBLE_COLUMN_KEYS = [
   'scaleCurrency',
   'calculationType',
   'price',
-  'taxCode',
+  'untaxedPrice',
+  'taxIncludedPrice',
+  'taxAmount',
+  'conditionCurrency',
+  'priceUnit',
+  'unitOfMeasure',
+  'minOrderQuantity',
+  'roundingValue',
+  'plannedDeliveryTimeDays',
   'isObsolete',
   'action',
 ] as const
@@ -61,6 +77,13 @@ export const SALESPRICEITEM_SUMMARY_SUM_FIELDS = [
   'scaleQuantity',
   'scaleValue',
   'price',
+  'untaxedPrice',
+  'taxIncludedPrice',
+  'taxAmount',
+  'priceUnit',
+  'minOrderQuantity',
+  'roundingValue',
+  'plannedDeliveryTimeDays',
   'isObsolete',
 ] as const
 
@@ -79,7 +102,15 @@ export const SALESPRICEITEM_PLACEHOLDER = {
   scaleCurrency: 'optional',
   calculationType: 'select',
   price: 'select',
-  taxCode: 'optional',
+  untaxedPrice: 'select',
+  taxIncludedPrice: 'select',
+  taxAmount: 'select',
+  conditionCurrency: 'select',
+  priceUnit: 'select',
+  unitOfMeasure: 'select',
+  minOrderQuantity: 'select',
+  roundingValue: 'select',
+  plannedDeliveryTimeDays: 'select',
   isObsolete: 'select',
   scaleQuantities: 'optional',
   scaleValues: 'optional',
@@ -97,7 +128,8 @@ export const SALESPRICEITEM_QUERY_STRING_FIELDS = [
   'scaleUnit',
   'scaleCurrency',
   'calculationType',
-  'taxCode',
+  'conditionCurrency',
+  'unitOfMeasure',
   'createdAtStart',
   'createdAtEnd',
   'extField',
@@ -106,7 +138,7 @@ export const SALESPRICEITEM_QUERY_STRING_FIELDS = [
 
 export type SalesPriceItemQueryField =
   | (typeof SALESPRICEITEM_QUERY_STRING_FIELDS)[number]
-  | 'salesPriceSeq' | 'scaleQuantity' | 'scaleValue' | 'price' | 'isObsolete'
+  | 'salesPriceSeq' | 'scaleQuantity' | 'scaleValue' | 'price' | 'untaxedPrice' | 'taxIncludedPrice' | 'taxAmount' | 'priceUnit' | 'minOrderQuantity' | 'roundingValue' | 'plannedDeliveryTimeDays' | 'isObsolete'
 
 /** 高级查询抽屉全部字段（含数值） */
 export const SALESPRICEITEM_QUERY_FIELDS: readonly SalesPriceItemQueryField[] = [
@@ -115,6 +147,13 @@ export const SALESPRICEITEM_QUERY_FIELDS: readonly SalesPriceItemQueryField[] = 
   'scaleQuantity',
   'scaleValue',
   'price',
+  'untaxedPrice',
+  'taxIncludedPrice',
+  'taxAmount',
+  'priceUnit',
+  'minOrderQuantity',
+  'roundingValue',
+  'plannedDeliveryTimeDays',
   'isObsolete',
 ]
 

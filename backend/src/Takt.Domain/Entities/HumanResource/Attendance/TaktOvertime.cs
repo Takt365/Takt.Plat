@@ -80,7 +80,7 @@ public class TaktOvertime : TaktApprovalEntityBase
     [SugarColumn(ColumnName = "reason", ColumnDescription = "加班原因", ColumnDataType = "nvarchar", Length = 1000, IsNullable = true)]
     public string? Reason { get; set; }
     /// <summary>
-    /// 经办人（选项 TaktEmployees/options，DictValue=Id）
+    /// 经办人（选项 TaktEmployees/options；DictValue=Id）
     /// </summary>
     [SugarColumn(ColumnName = "handling_by", ColumnDescription = "经办人", ColumnDataType = "bigint", IsNullable = false)]
     [JsonConverter(typeof(ValueToStringConverter))]
@@ -96,7 +96,7 @@ public class TaktOvertime : TaktApprovalEntityBase
     [SugarColumn(ColumnName = "handling_comment", ColumnDescription = "经办备注", ColumnDataType = "nvarchar", Length = 500, IsNullable = true)]
     public string? HandlingComment { get; set; }
     /// <summary>
-    /// 关联工厂（选项 TaktPlants/options，DictValue=Id）
+    /// 关联工厂（选项 TaktPlants/options；DictValue=Id）
     /// </summary>
     [SugarColumn(ColumnName = "related_plant", ColumnDescription = "关联工厂", ColumnDataType = "nvarchar", Length = 4, IsNullable = false)]
     public string RelatedPlant { get; set; } = string.Empty;

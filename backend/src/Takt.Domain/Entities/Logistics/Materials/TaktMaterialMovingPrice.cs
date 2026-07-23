@@ -28,7 +28,7 @@ namespace Takt.Domain.Entities.Logistics.Materials;
 public class TaktMaterialMovingPrice : TaktCompanyEntityBase
 {
     /// <summary>
-    /// 工厂代码（选项 TaktPlants/options，DictValue=PlantCode）
+    /// 工厂代码（选项 TaktPlants/options；DictValue=PlantCode）
     /// </summary>
     [SugarColumn(ColumnName = "plant_code", ColumnDescription = "工厂代码", ColumnDataType = "varchar", Length = 4, IsNullable = false)]
     public string PlantCode { get; set; } = string.Empty;
@@ -38,7 +38,7 @@ public class TaktMaterialMovingPrice : TaktCompanyEntityBase
     [SugarColumn(ColumnName = "period_date", ColumnDescription = "期间", ColumnDataType = "datetime", IsNullable = false)]
     public DateTime PeriodDate { get; set; }
     /// <summary>
-    /// 物料编码（选项 TaktMaterialPlants/options，DictValue=MaterialCode，ExtValue=PlantCode）
+    /// 物料编码（选项 TaktMaterialPlants/options；DictValue=MaterialCode，ExtValue=PlantCode）
     /// </summary>
     [SugarColumn(ColumnName = "material_code", ColumnDescription = "物料编码", ColumnDataType = "nvarchar", Length = 20, IsNullable = false)]
     public string MaterialCode { get; set; } = string.Empty;
@@ -73,7 +73,7 @@ public class TaktMaterialMovingPrice : TaktCompanyEntityBase
     [SugarColumn(ColumnName = "price_unit", ColumnDescription = "价格单位", ColumnDataType = "int", IsNullable = false, DefaultValue = "1000")]
     public int PriceUnit { get; set; } = 1000;
     /// <summary>
-    /// 币种（字典 accounting_currency_code，DictValue=CNY/USD 等）
+    /// 币种（字典 accounting_currency_code；DictValue=CNY/USD 等）
     /// </summary>
     [SugarColumn(ColumnName = "currency", ColumnDescription = "币种", ColumnDataType = "nvarchar", Length = 3, IsNullable = false, DefaultValue = "CNY")]
     public string Currency { get; set; } = "CNY";

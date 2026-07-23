@@ -61,8 +61,8 @@ public class TaktServiceContract : TaktCompanyEntityBase
     /// <summary>
     /// 客户端名称（冗余字段，便于查询）
     /// </summary>
-    [SugarColumn(ColumnName = "client_name", ColumnDescription = "客户端名称", ColumnDataType = "nvarchar", Length = 80, IsNullable = false)]
-    public string ClientName { get; set; } = string.Empty;
+    [SugarColumn(ColumnName = "client_name1", ColumnDescription = "客户端名称1", ColumnDataType = "nvarchar", Length = 140, IsNullable = false)]
+    public string ClientName1 { get; set; } = string.Empty;
 
     /// <summary>
     /// 合同类型（0=维保，1=单次，2=框架，3=SLA，4=其他）

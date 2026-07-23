@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Application.Services.Logistics.Manufacturing.Mrp
 // 文件名称：TaktPurchasePlanItemService.cs
-// 创建时间：2026-07-13
+// 创建时间：2026-07-23
 // 创建人：Takt365(Cursor AI)
 // 功能描述：采购计划明细应用服务实现
 // 
@@ -96,13 +96,13 @@ public class TaktPurchasePlanItemService : TaktServiceBase, ITaktPurchasePlanIte
     {
         EnsureThreeLayerContext();
         var list = await _purchasePlanItemRepository.GetListAsync(
-            x => x.TenantCode == CurrentTenantCode && x.CompanyCode == CurrentCompanyCode,
+            x => x.TenantCode == CurrentTenantCode && x.CompanyCode == CurrentCompanyCode && x.IsObsolete == 0,
             x => x.MaterialName ?? string.Empty,
             false);
         return list.Select(e => new TaktSelectOption
         {
-            DictValue = e.Id,
-            DictLabel = e.MaterialName ?? e.Id.ToString(),
+            DictValue = e.PurchasePlanCode,
+            DictLabel = e.MaterialName ?? e.PurchasePlanCode,
         }).ToList();
     }
 
@@ -363,8 +363,11 @@ public class TaktPurchasePlanItemService : TaktServiceBase, ITaktPurchasePlanIte
                 || SqlFunc.ToString(x.ConvertedQuantity).Contains(keywords)
                 || SqlFunc.ToString(x.EstimatedUnitPrice).Contains(keywords)
                 || SqlFunc.ToString(x.EstimatedAmount).Contains(keywords)
+                || SqlFunc.ToString(x.TaxIncludedPrice).Contains(keywords)
+                || SqlFunc.ToString(x.UntaxedPrice).Contains(keywords)
+                || SqlFunc.ToString(x.TaxAmount).Contains(keywords)
                 || (x.ReferenceSupplierCode != null && x.ReferenceSupplierCode.Contains(keywords))
-                || (x.ReferenceSupplierName != null && x.ReferenceSupplierName.Contains(keywords))
+                || (x.ReferenceSupplierName1 != null && x.ReferenceSupplierName1.Contains(keywords))
                 || (x.ExtField != null && x.ExtField.Contains(keywords))
                 || (x.Remark != null && x.Remark.Contains(keywords))
                 || SqlFunc.ToString(x.PlannedArrivalDate).Contains(keywords)
@@ -447,14 +450,29 @@ public class TaktPurchasePlanItemService : TaktServiceBase, ITaktPurchasePlanIte
             exp = exp.And(x => x.EstimatedAmount == queryDto.EstimatedAmount);
         }
 
+        if (queryDto?.TaxIncludedPrice.HasValue == true)
+        {
+            exp = exp.And(x => x.TaxIncludedPrice == queryDto.TaxIncludedPrice);
+        }
+
+        if (queryDto?.UntaxedPrice.HasValue == true)
+        {
+            exp = exp.And(x => x.UntaxedPrice == queryDto.UntaxedPrice);
+        }
+
+        if (queryDto?.TaxAmount.HasValue == true)
+        {
+            exp = exp.And(x => x.TaxAmount == queryDto.TaxAmount);
+        }
+
         if (!string.IsNullOrEmpty(queryDto?.ReferenceSupplierCode))
         {
             exp = exp.And(x => x.ReferenceSupplierCode != null && x.ReferenceSupplierCode.Contains(queryDto.ReferenceSupplierCode));
         }
 
-        if (!string.IsNullOrEmpty(queryDto?.ReferenceSupplierName))
+        if (!string.IsNullOrEmpty(queryDto?.ReferenceSupplierName1))
         {
-            exp = exp.And(x => x.ReferenceSupplierName != null && x.ReferenceSupplierName.Contains(queryDto.ReferenceSupplierName));
+            exp = exp.And(x => x.ReferenceSupplierName1 != null && x.ReferenceSupplierName1.Contains(queryDto.ReferenceSupplierName1));
         }
 
         if (!string.IsNullOrEmpty(queryDto?.ExtField))

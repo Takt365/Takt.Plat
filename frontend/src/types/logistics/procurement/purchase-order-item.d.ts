@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：frontend/src/types/logistics/procurement
 // 文件名称：purchase-order-item.d.ts
-// 创建时间：2026-07-09
+// 创建时间：2026-07-23
 // 创建人：Takt365(Auto Generated)
 // 功能描述：logistics/procurement 模块类型定义（自动生成；类型名去 Takt 前缀与末尾 Dto，如 TaktCompanyDto → Company）
 // 
@@ -29,7 +29,7 @@ export interface PurchaseOrderItem extends CompanyDtoBase {
   purchaseOrderItemId: string;
 
   /**
-   * 采购订单 ID（关联 TaktPurchaseOrder.Id，选项 TaktPurchaseOrders/options）
+   * 采购订单 ID（选项 TaktPurchaseOrders/options；DictValue=Id）
    */
   purchaseOrderId: string;
 
@@ -59,22 +59,22 @@ export interface PurchaseOrderItem extends CompanyDtoBase {
   requestLineNumber?: number;
 
   /**
-   * 物料编码
+   * 物料编码（选项 TaktMaterialPlants/options；DictValue=MaterialCode，ExtValue=PlantCode）
    */
   materialCode?: string;
 
   /**
-   * 物料名称
+   * 物料名称（回填：随物料）
    */
   materialName: string;
 
   /**
-   * 物料规格
+   * 物料规格（回填：随物料）
    */
   materialSpecification?: string;
 
   /**
-   * 采购单位
+   * 采购单位（字典 logistics_unit_of_measure_code；DictValue=PC/EA 等；默认 PC）
    */
   purchaseUnit: string;
 
@@ -94,9 +94,9 @@ export interface PurchaseOrderItem extends CompanyDtoBase {
   purchasePerUnit: number;
 
   /**
-   * 单价（精确到分，存储为整数，单位为分）
+   * 采购单价
    */
-  unitPrice: number;
+  purchaseUnitPrice: number;
 
   /**
    * 折扣率（字典 logistics_discount_rate_param 预设或手输；0-100，表示折扣百分比）
@@ -109,19 +109,19 @@ export interface PurchaseOrderItem extends CompanyDtoBase {
   discountAmount: number;
 
   /**
-   * 税费率（字典 accounting_tax_rate_param 预设或手输；0-100，表示税费百分比）
+   * 含税金额
    */
-  taxRate: number;
+  taxIncludedAmount: number;
 
   /**
-   * 税费（精确到分，存储为整数，单位为分）
+   * 未税金额
+   */
+  untaxedAmount: number;
+
+  /**
+   * 税费
    */
   taxAmount: number;
-
-  /**
-   * 小计金额（精确到分，存储为整数，单位为分）
-   */
-  subtotalAmount: number;
 
   /**
    * 行交货状态（字典 logistics_delivery_status；0=未交货，1=部分交货，2=全部交货）
@@ -129,7 +129,7 @@ export interface PurchaseOrderItem extends CompanyDtoBase {
   deliveryStatus: number;
 
   /**
-   * 是否作废（字典 sys_yes_no_type，0=否 1=是；编辑移除子行时标记作废）
+   * 是否作废（字典 sys_yes_no_type；0=否 1=是；编辑移除子行时标记作废）
    */
   isObsolete: number;
 
@@ -154,7 +154,7 @@ export interface PurchaseOrderItemQuery extends TaktPagedQuery {
   companyCode?: string;
 
   /**
-   * 采购订单 ID（关联 TaktPurchaseOrder.Id，选项 TaktPurchaseOrders/options）
+   * 采购订单 ID（选项 TaktPurchaseOrders/options；DictValue=Id）
    */
   purchaseOrderId?: string;
 
@@ -179,22 +179,22 @@ export interface PurchaseOrderItemQuery extends TaktPagedQuery {
   requestLineNumber?: number;
 
   /**
-   * 物料编码
+   * 物料编码（选项 TaktMaterialPlants/options；DictValue=MaterialCode，ExtValue=PlantCode）
    */
   materialCode?: string;
 
   /**
-   * 物料名称
+   * 物料名称（回填：随物料）
    */
   materialName?: string;
 
   /**
-   * 物料规格
+   * 物料规格（回填：随物料）
    */
   materialSpecification?: string;
 
   /**
-   * 采购单位
+   * 采购单位（字典 logistics_unit_of_measure_code；DictValue=PC/EA 等；默认 PC）
    */
   purchaseUnit?: string;
 
@@ -214,9 +214,9 @@ export interface PurchaseOrderItemQuery extends TaktPagedQuery {
   purchasePerUnit?: number;
 
   /**
-   * 单价（精确到分，存储为整数，单位为分）
+   * 采购单价
    */
-  unitPrice?: number;
+  purchaseUnitPrice?: number;
 
   /**
    * 折扣率（字典 logistics_discount_rate_param 预设或手输；0-100，表示折扣百分比）
@@ -229,19 +229,19 @@ export interface PurchaseOrderItemQuery extends TaktPagedQuery {
   discountAmount?: number;
 
   /**
-   * 税费率（字典 accounting_tax_rate_param 预设或手输；0-100，表示税费百分比）
+   * 含税金额
    */
-  taxRate?: number;
+  taxIncludedAmount?: number;
 
   /**
-   * 税费（精确到分，存储为整数，单位为分）
+   * 未税金额
+   */
+  untaxedAmount?: number;
+
+  /**
+   * 税费
    */
   taxAmount?: number;
-
-  /**
-   * 小计金额（精确到分，存储为整数，单位为分）
-   */
-  subtotalAmount?: number;
 
   /**
    * 行交货状态（字典 logistics_delivery_status；0=未交货，1=部分交货，2=全部交货）
@@ -249,7 +249,7 @@ export interface PurchaseOrderItemQuery extends TaktPagedQuery {
   deliveryStatus?: number;
 
   /**
-   * 是否作废（字典 sys_yes_no_type，0=否 1=是；编辑移除子行时标记作废）
+   * 是否作废（字典 sys_yes_no_type；0=否 1=是；编辑移除子行时标记作废）
    */
   isObsolete?: number;
 
@@ -298,7 +298,7 @@ export interface PurchaseOrderItemCreate {
   companyDefaultCulture: string;
 
   /**
-   * 采购订单 ID（关联 TaktPurchaseOrder.Id，选项 TaktPurchaseOrders/options）
+   * 采购订单 ID（选项 TaktPurchaseOrders/options；DictValue=Id）
    */
   purchaseOrderId: string;
 
@@ -323,22 +323,22 @@ export interface PurchaseOrderItemCreate {
   requestLineNumber?: number;
 
   /**
-   * 物料编码
+   * 物料编码（选项 TaktMaterialPlants/options；DictValue=MaterialCode，ExtValue=PlantCode）
    */
   materialCode?: string;
 
   /**
-   * 物料名称
+   * 物料名称（回填：随物料）
    */
   materialName: string;
 
   /**
-   * 物料规格
+   * 物料规格（回填：随物料）
    */
   materialSpecification?: string;
 
   /**
-   * 采购单位
+   * 采购单位（字典 logistics_unit_of_measure_code；DictValue=PC/EA 等；默认 PC）
    */
   purchaseUnit: string;
 
@@ -358,9 +358,9 @@ export interface PurchaseOrderItemCreate {
   purchasePerUnit: number;
 
   /**
-   * 单价（精确到分，存储为整数，单位为分）
+   * 采购单价
    */
-  unitPrice: number;
+  purchaseUnitPrice: number;
 
   /**
    * 折扣率（字典 logistics_discount_rate_param 预设或手输；0-100，表示折扣百分比）
@@ -373,19 +373,19 @@ export interface PurchaseOrderItemCreate {
   discountAmount: number;
 
   /**
-   * 税费率（字典 accounting_tax_rate_param 预设或手输；0-100，表示税费百分比）
+   * 含税金额
    */
-  taxRate: number;
+  taxIncludedAmount: number;
 
   /**
-   * 税费（精确到分，存储为整数，单位为分）
+   * 未税金额
+   */
+  untaxedAmount: number;
+
+  /**
+   * 税费
    */
   taxAmount: number;
-
-  /**
-   * 小计金额（精确到分，存储为整数，单位为分）
-   */
-  subtotalAmount: number;
 
   /**
    * 行交货状态（字典 logistics_delivery_status；0=未交货，1=部分交货，2=全部交货）
@@ -393,7 +393,7 @@ export interface PurchaseOrderItemCreate {
   deliveryStatus: number;
 
   /**
-   * 是否作废（字典 sys_yes_no_type，0=否 1=是；编辑移除子行时标记作废）
+   * 是否作废（字典 sys_yes_no_type；0=否 1=是；编辑移除子行时标记作废）
    */
   isObsolete: number;
 
@@ -480,7 +480,7 @@ export interface PurchaseOrderItemTemplate {
   companyCode?: string;
 
   /**
-   * 采购订单 ID（关联 TaktPurchaseOrder.Id，选项 TaktPurchaseOrders/options）
+   * 采购订单 ID（选项 TaktPurchaseOrders/options；DictValue=Id）
    */
   purchaseOrderId?: string;
 
@@ -505,22 +505,22 @@ export interface PurchaseOrderItemTemplate {
   requestLineNumber?: number;
 
   /**
-   * 物料编码
+   * 物料编码（选项 TaktMaterialPlants/options；DictValue=MaterialCode，ExtValue=PlantCode）
    */
   materialCode?: string;
 
   /**
-   * 物料名称
+   * 物料名称（回填：随物料）
    */
   materialName?: string;
 
   /**
-   * 物料规格
+   * 物料规格（回填：随物料）
    */
   materialSpecification?: string;
 
   /**
-   * 采购单位
+   * 采购单位（字典 logistics_unit_of_measure_code；DictValue=PC/EA 等；默认 PC）
    */
   purchaseUnit?: string;
 
@@ -540,9 +540,9 @@ export interface PurchaseOrderItemTemplate {
   purchasePerUnit?: number;
 
   /**
-   * 单价（精确到分，存储为整数，单位为分）
+   * 采购单价
    */
-  unitPrice?: number;
+  purchaseUnitPrice?: number;
 
   /**
    * 折扣率（字典 logistics_discount_rate_param 预设或手输；0-100，表示折扣百分比）
@@ -555,19 +555,19 @@ export interface PurchaseOrderItemTemplate {
   discountAmount?: number;
 
   /**
-   * 税费率（字典 accounting_tax_rate_param 预设或手输；0-100，表示税费百分比）
+   * 含税金额
    */
-  taxRate?: number;
+  taxIncludedAmount?: number;
 
   /**
-   * 税费（精确到分，存储为整数，单位为分）
+   * 未税金额
+   */
+  untaxedAmount?: number;
+
+  /**
+   * 税费
    */
   taxAmount?: number;
-
-  /**
-   * 小计金额（精确到分，存储为整数，单位为分）
-   */
-  subtotalAmount?: number;
 
   /**
    * 行交货状态（字典 logistics_delivery_status；0=未交货，1=部分交货，2=全部交货）
@@ -575,7 +575,7 @@ export interface PurchaseOrderItemTemplate {
   deliveryStatus?: number;
 
   /**
-   * 是否作废（字典 sys_yes_no_type，0=否 1=是；编辑移除子行时标记作废）
+   * 是否作废（字典 sys_yes_no_type；0=否 1=是；编辑移除子行时标记作废）
    */
   isObsolete?: number;
 
@@ -614,7 +614,7 @@ export interface PurchaseOrderItemImport {
   companyDefaultCulture?: string;
 
   /**
-   * 采购订单 ID（关联 TaktPurchaseOrder.Id，选项 TaktPurchaseOrders/options）
+   * 采购订单 ID（选项 TaktPurchaseOrders/options；DictValue=Id）
    */
   purchaseOrderId?: string;
 
@@ -639,22 +639,22 @@ export interface PurchaseOrderItemImport {
   requestLineNumber?: number;
 
   /**
-   * 物料编码
+   * 物料编码（选项 TaktMaterialPlants/options；DictValue=MaterialCode，ExtValue=PlantCode）
    */
   materialCode?: string;
 
   /**
-   * 物料名称
+   * 物料名称（回填：随物料）
    */
   materialName?: string;
 
   /**
-   * 物料规格
+   * 物料规格（回填：随物料）
    */
   materialSpecification?: string;
 
   /**
-   * 采购单位
+   * 采购单位（字典 logistics_unit_of_measure_code；DictValue=PC/EA 等；默认 PC）
    */
   purchaseUnit?: string;
 
@@ -674,9 +674,9 @@ export interface PurchaseOrderItemImport {
   purchasePerUnit?: number;
 
   /**
-   * 单价（精确到分，存储为整数，单位为分）
+   * 采购单价
    */
-  unitPrice?: number;
+  purchaseUnitPrice?: number;
 
   /**
    * 折扣率（字典 logistics_discount_rate_param 预设或手输；0-100，表示折扣百分比）
@@ -689,19 +689,19 @@ export interface PurchaseOrderItemImport {
   discountAmount?: number;
 
   /**
-   * 税费率（字典 accounting_tax_rate_param 预设或手输；0-100，表示税费百分比）
+   * 含税金额
    */
-  taxRate?: number;
+  taxIncludedAmount?: number;
 
   /**
-   * 税费（精确到分，存储为整数，单位为分）
+   * 未税金额
+   */
+  untaxedAmount?: number;
+
+  /**
+   * 税费
    */
   taxAmount?: number;
-
-  /**
-   * 小计金额（精确到分，存储为整数，单位为分）
-   */
-  subtotalAmount?: number;
 
   /**
    * 行交货状态（字典 logistics_delivery_status；0=未交货，1=部分交货，2=全部交货）
@@ -709,7 +709,7 @@ export interface PurchaseOrderItemImport {
   deliveryStatus?: number;
 
   /**
-   * 是否作废（字典 sys_yes_no_type，0=否 1=是；编辑移除子行时标记作废）
+   * 是否作废（字典 sys_yes_no_type；0=否 1=是；编辑移除子行时标记作废）
    */
   isObsolete?: number;
 
@@ -743,7 +743,7 @@ export interface PurchaseOrderItemExport {
   companyCode: string;
 
   /**
-   * 采购订单 ID（关联 TaktPurchaseOrder.Id，选项 TaktPurchaseOrders/options）
+   * 采购订单 ID（选项 TaktPurchaseOrders/options；DictValue=Id）
    */
   purchaseOrderId: string;
 
@@ -768,22 +768,22 @@ export interface PurchaseOrderItemExport {
   requestLineNumber?: number;
 
   /**
-   * 物料编码
+   * 物料编码（选项 TaktMaterialPlants/options；DictValue=MaterialCode，ExtValue=PlantCode）
    */
   materialCode?: string;
 
   /**
-   * 物料名称
+   * 物料名称（回填：随物料）
    */
   materialName: string;
 
   /**
-   * 物料规格
+   * 物料规格（回填：随物料）
    */
   materialSpecification?: string;
 
   /**
-   * 采购单位
+   * 采购单位（字典 logistics_unit_of_measure_code；DictValue=PC/EA 等；默认 PC）
    */
   purchaseUnit: string;
 
@@ -803,9 +803,9 @@ export interface PurchaseOrderItemExport {
   purchasePerUnit: number;
 
   /**
-   * 单价（精确到分，存储为整数，单位为分）
+   * 采购单价
    */
-  unitPrice: number;
+  purchaseUnitPrice: number;
 
   /**
    * 折扣率（字典 logistics_discount_rate_param 预设或手输；0-100，表示折扣百分比）
@@ -818,19 +818,19 @@ export interface PurchaseOrderItemExport {
   discountAmount: number;
 
   /**
-   * 税费率（字典 accounting_tax_rate_param 预设或手输；0-100，表示税费百分比）
+   * 含税金额
    */
-  taxRate: number;
+  taxIncludedAmount: number;
 
   /**
-   * 税费（精确到分，存储为整数，单位为分）
+   * 未税金额
+   */
+  untaxedAmount: number;
+
+  /**
+   * 税费
    */
   taxAmount: number;
-
-  /**
-   * 小计金额（精确到分，存储为整数，单位为分）
-   */
-  subtotalAmount: number;
 
   /**
    * 行交货状态（字典 logistics_delivery_status；0=未交货，1=部分交货，2=全部交货）
@@ -838,7 +838,7 @@ export interface PurchaseOrderItemExport {
   deliveryStatus: number;
 
   /**
-   * 是否作废（字典 sys_yes_no_type，0=否 1=是；编辑移除子行时标记作废）
+   * 是否作废（字典 sys_yes_no_type；0=否 1=是；编辑移除子行时标记作废）
    */
   isObsolete: number;
 

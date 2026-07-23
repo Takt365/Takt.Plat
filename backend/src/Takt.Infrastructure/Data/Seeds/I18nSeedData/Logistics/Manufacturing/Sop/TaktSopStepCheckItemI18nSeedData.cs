@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Infrastructure.Data.Seeds.I18nSeedData.Logistics.Manufacturing.Sop
 // 文件名称：TaktSopStepCheckItemI18nSeedData.cs
-// 创建时间：2026-07-20
+// 创建时间：2026-07-23
 // 创建人：Takt365(Auto Generated)
 // 功能描述：TaktSopStepCheckItem 实体字段国际化种子（无对应 frontend locales；TranslationText 取自 ColumnDescription，ContextNote 取自属性 XML summary）
 // 
@@ -91,13 +91,13 @@ public class TaktSopStepCheckItemI18nSeedData : ITaktSeedDataCoordinator
             new TranslationSeedItem("entity.sopstepcheckitem._self", "zh-HK", "SOP 工步检验项目信息_hk", "实体名称"),
 
             // entity.sopstepcheckitem.stepid
-            new TranslationSeedItem("entity.sopstepcheckitem.stepid", "en-US", "工步ID_us", "工步 ID（选项 TaktSopSteps/options，DictValue=Id）"),
+            new TranslationSeedItem("entity.sopstepcheckitem.stepid", "en-US", "工步ID_us", "工步 ID（选项 TaktSopSteps/options；DictValue=Id）"),
             // entity.sopstepcheckitem.stepid
-            new TranslationSeedItem("entity.sopstepcheckitem.stepid", "ja-JP", "工步ID_jp", "工步 ID（选项 TaktSopSteps/options，DictValue=Id）"),
+            new TranslationSeedItem("entity.sopstepcheckitem.stepid", "ja-JP", "工步ID_jp", "工步 ID（选项 TaktSopSteps/options；DictValue=Id）"),
             // entity.sopstepcheckitem.stepid
-            new TranslationSeedItem("entity.sopstepcheckitem.stepid", "zh-CN", "工步ID", "工步 ID（选项 TaktSopSteps/options，DictValue=Id）"),
+            new TranslationSeedItem("entity.sopstepcheckitem.stepid", "zh-CN", "工步ID", "工步 ID（选项 TaktSopSteps/options；DictValue=Id）"),
             // entity.sopstepcheckitem.stepid
-            new TranslationSeedItem("entity.sopstepcheckitem.stepid", "zh-HK", "工步ID_hk", "工步 ID（选项 TaktSopSteps/options，DictValue=Id）"),
+            new TranslationSeedItem("entity.sopstepcheckitem.stepid", "zh-HK", "工步ID_hk", "工步 ID（选项 TaktSopSteps/options；DictValue=Id）"),
 
             // entity.sopstepcheckitem.checkitemname
             new TranslationSeedItem("entity.sopstepcheckitem.checkitemname", "en-US", "检验项目名称_us", "检验项目名称"),

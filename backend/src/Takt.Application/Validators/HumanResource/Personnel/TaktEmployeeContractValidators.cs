@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Application.Validators.HumanResource.Personnel
 // 文件名称：TaktEmployeeContractValidators.cs
-// 创建时间：2026-07-20
+// 创建时间：2026-07-23
 // 创建人：Takt365(Auto Generated)
 // 功能描述：EmployeeContract 模块 FluentValidation 验证器（由 generate-validators-from-entity.cjs 根据 TaktEmployeeContract 生成，请按需审阅）
 // 
@@ -37,9 +37,15 @@ public class TaktEmployeeContractCreateValidator : AbstractValidator<TaktEmploye
             .MaximumLength(4).WithMessage("公司代码长度不能超过4个字符");
         RuleFor(x => x.EmployeeId)
             .GreaterThanOrEqualTo(0).WithMessage("员工不能为负数");
-        RuleFor(x => x.ContractNo)
-            .NotEmpty().WithMessage("合同编号不能为空")
-            .MaximumLength(50).WithMessage("合同编号长度不能超过50个字符");
+        RuleFor(x => x.EmployeeCode)
+            .NotEmpty().WithMessage("员工编码不能为空")
+            .MaximumLength(6).WithMessage("员工编码长度不能超过6个字符");
+        RuleFor(x => x.EmployeeName)
+            .NotEmpty().WithMessage("员工姓名不能为空")
+            .MaximumLength(80).WithMessage("员工姓名长度不能超过80个字符");
+        RuleFor(x => x.ContractCode)
+            .NotEmpty().WithMessage("合同编码不能为空")
+            .MaximumLength(50).WithMessage("合同编码长度不能超过50个字符");
         RuleFor(x => x.ExtField)
             .MaximumLength(4000).WithMessage("扩展字段JSON长度不能超过4000个字符");
         RuleFor(x => x.Remark)
@@ -71,9 +77,15 @@ public class TaktEmployeeContractUpdateValidator : AbstractValidator<TaktEmploye
             .MaximumLength(4).WithMessage("公司代码长度不能超过4个字符");
         RuleFor(x => x.EmployeeId)
             .GreaterThanOrEqualTo(0).WithMessage("员工不能为负数");
-        RuleFor(x => x.ContractNo)
-            .NotEmpty().WithMessage("合同编号不能为空")
-            .MaximumLength(50).WithMessage("合同编号长度不能超过50个字符");
+        RuleFor(x => x.EmployeeCode)
+            .NotEmpty().WithMessage("员工编码不能为空")
+            .MaximumLength(6).WithMessage("员工编码长度不能超过6个字符");
+        RuleFor(x => x.EmployeeName)
+            .NotEmpty().WithMessage("员工姓名不能为空")
+            .MaximumLength(80).WithMessage("员工姓名长度不能超过80个字符");
+        RuleFor(x => x.ContractCode)
+            .NotEmpty().WithMessage("合同编码不能为空")
+            .MaximumLength(50).WithMessage("合同编码长度不能超过50个字符");
         RuleFor(x => x.ExtField)
             .MaximumLength(4000).WithMessage("扩展字段JSON长度不能超过4000个字符");
         RuleFor(x => x.Remark)
@@ -101,9 +113,15 @@ public class TaktEmployeeContractImportValidator : AbstractValidator<TaktEmploye
             .MaximumLength(4).WithMessage("公司代码长度不能超过4个字符").When(x => !string.IsNullOrWhiteSpace(x.CompanyCode));
         RuleFor(x => x.EmployeeId)
             .GreaterThanOrEqualTo(0).WithMessage("员工不能为负数");
-        RuleFor(x => x.ContractNo)
-            .NotEmpty().WithMessage("合同编号不能为空")
-            .MaximumLength(50).WithMessage("合同编号长度不能超过50个字符");
+        RuleFor(x => x.EmployeeCode)
+            .NotEmpty().WithMessage("员工编码不能为空")
+            .MaximumLength(6).WithMessage("员工编码长度不能超过6个字符");
+        RuleFor(x => x.EmployeeName)
+            .NotEmpty().WithMessage("员工姓名不能为空")
+            .MaximumLength(80).WithMessage("员工姓名长度不能超过80个字符");
+        RuleFor(x => x.ContractCode)
+            .NotEmpty().WithMessage("合同编码不能为空")
+            .MaximumLength(50).WithMessage("合同编码长度不能超过50个字符");
         RuleFor(x => x.ExtField)
             .MaximumLength(4000).WithMessage("扩展字段JSON长度不能超过4000个字符").When(x => !string.IsNullOrWhiteSpace(x.ExtField));
         RuleFor(x => x.Remark)

@@ -28,7 +28,7 @@ namespace Takt.Domain.Entities.Logistics.Manufacturing.Bom;
 public class TaktBillOfMaterial : TaktCompanyEntityBase
 {
     /// <summary>
-    /// 工厂代码（选项 TaktPlants/options，DictValue=PlantCode）
+    /// 工厂代码（选项 TaktPlants/options；DictValue=PlantCode）
     /// </summary>
     [SugarColumn(ColumnName = "plant_code", ColumnDescription = "工厂代码", ColumnDataType = "nvarchar", Length = 50, IsNullable = false)]
     public string PlantCode { get; set; } = string.Empty;
@@ -46,7 +46,7 @@ public class TaktBillOfMaterial : TaktCompanyEntityBase
     public string BomName { get; set; } = string.Empty;
 
     /// <summary>
-    /// 父物料ID（选项 TaktMaterialPlants/options，DictValue=Id，ExtValue=PlantCode）
+    /// 父物料ID（选项 TaktMaterialPlants/options；DictValue=Id，ExtValue=PlantCode）
     /// </summary>
     [SugarColumn(ColumnName = "parent_material_id", ColumnDescription = "父物料ID", ColumnDataType = "bigint", IsNullable = false)]
     [JsonConverter(typeof(ValueToStringConverter))]
@@ -77,9 +77,9 @@ public class TaktBillOfMaterial : TaktCompanyEntityBase
     public int BomType { get; set; } = 0;
 
     /// <summary>
-    /// 备选BOM编号（对应SAP Alternative BOM，如01/02）
+    /// 备选BOM编码（对应，如01/02）
     /// </summary>
-    [SugarColumn(ColumnName = "alternative_bom_number", ColumnDescription = "备选BOM编号", ColumnDataType = "nvarchar", Length = 10, IsNullable = false, DefaultValue = "01")]
+    [SugarColumn(ColumnName = "alternative_bom_number", ColumnDescription = "备选BOM编码", ColumnDataType = "nvarchar", Length = 10, IsNullable = false, DefaultValue = "01")]
     public string AlternativeBomNumber { get; set; } = "01";
 
     /// <summary>
@@ -101,7 +101,7 @@ public class TaktBillOfMaterial : TaktCompanyEntityBase
     public string ParentMaterialUnit { get; set; } = "PC";
 
     /// <summary>
-    /// 基本数量（BOM基数，对应SAP Base quantity）
+    /// 基本数量（BOM基数，对应）
     /// </summary>
     [SugarColumn(ColumnName = "parent_material_quantity", ColumnDescription = "基本数量", ColumnDataType = "decimal", Length = 18, DecimalDigits = 4, IsNullable = false, DefaultValue = "1")]
     public decimal ParentMaterialQuantity { get; set; } = 1;

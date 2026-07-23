@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：frontend/src/types/logistics/quality/operation
 // 文件名称：fqc-order-item.d.ts
-// 创建时间：2026-07-09
+// 创建时间：2026-07-23
 // 创建人：Takt365(Auto Generated)
 // 功能描述：logistics/quality/operation 模块类型定义（自动生成；类型名去 Takt 前缀与末尾 Dto，如 TaktCompanyDto → Company）
 // 
@@ -29,7 +29,7 @@ export interface FqcOrderItem extends CompanyDtoBase {
   fqcOrderItemId: string;
 
   /**
-   * FQC检验单 ID（关联 TaktFqcOrder.Id，选项 TaktFqcOrders/options）
+   * FQC检验单 ID（选项 TaktFqcOrders/options，DictValue=Id）
    */
   fqcOrderId: string;
 
@@ -49,12 +49,12 @@ export interface FqcOrderItem extends CompanyDtoBase {
   lineNumber: number;
 
   /**
-   * 物料编码（选项 TaktMaterials/options，DictValue=MaterialCode）
+   * 物料编码（选项 TaktMaterialPlants/options；DictValue=MaterialCode，ExtValue=PlantCode）
    */
   materialCode: string;
 
   /**
-   * 物料名称
+   * 物料名称（回填：随物料）
    */
   materialName: string;
 
@@ -69,12 +69,12 @@ export interface FqcOrderItem extends CompanyDtoBase {
   warehouseQuantity: number;
 
   /**
-   * 检验标准编码（选项 TaktInspectionStandards/options，DictValue=StandardCode）
+   * 检验标准编码（选项 TaktInspectionStandards/options；DictValue=StandardCode）
    */
   standardCode: string;
 
   /**
-   * 抽样方案编码（选项 TaktSamplingSchemes/options，DictValue=SamplingSchemeCode）
+   * 抽样方案编码（选项 TaktSamplingSchemes/options；DictValue=SamplingSchemeCode）
    */
   samplingSchemeCode: string;
 
@@ -114,7 +114,7 @@ export interface FqcOrderItem extends CompanyDtoBase {
   inspectionDescription?: string;
 
   /**
-   * 检验员（选项 TaktEmployees/options，DictValue=EmployeeCode）
+   * 检验员（选项 TaktEmployees/options；DictValue=EmployeeCode）
    */
   inspectorBy: string;
 
@@ -129,7 +129,7 @@ export interface FqcOrderItem extends CompanyDtoBase {
   judgeStatus: number;
 
   /**
-   * 是否作废（字典 sys_yes_no_type，0=否 1=是；编辑移除子行时标记作废）
+   * 是否作废（字典 sys_yes_no_type；0=否 1=是；编辑移除子行时标记作废）
    */
   isObsolete: number;
 
@@ -164,7 +164,7 @@ export interface FqcOrderItemQuery extends TaktPagedQuery {
   companyCode?: string;
 
   /**
-   * FQC检验单 ID（关联 TaktFqcOrder.Id，选项 TaktFqcOrders/options）
+   * FQC检验单 ID（选项 TaktFqcOrders/options，DictValue=Id）
    */
   fqcOrderId?: string;
 
@@ -179,12 +179,12 @@ export interface FqcOrderItemQuery extends TaktPagedQuery {
   lineNumber?: number;
 
   /**
-   * 物料编码（选项 TaktMaterials/options，DictValue=MaterialCode）
+   * 物料编码（选项 TaktMaterialPlants/options；DictValue=MaterialCode，ExtValue=PlantCode）
    */
   materialCode?: string;
 
   /**
-   * 物料名称
+   * 物料名称（回填：随物料）
    */
   materialName?: string;
 
@@ -199,12 +199,12 @@ export interface FqcOrderItemQuery extends TaktPagedQuery {
   warehouseQuantity?: number;
 
   /**
-   * 检验标准编码（选项 TaktInspectionStandards/options，DictValue=StandardCode）
+   * 检验标准编码（选项 TaktInspectionStandards/options；DictValue=StandardCode）
    */
   standardCode?: string;
 
   /**
-   * 抽样方案编码（选项 TaktSamplingSchemes/options，DictValue=SamplingSchemeCode）
+   * 抽样方案编码（选项 TaktSamplingSchemes/options；DictValue=SamplingSchemeCode）
    */
   samplingSchemeCode?: string;
 
@@ -244,7 +244,7 @@ export interface FqcOrderItemQuery extends TaktPagedQuery {
   inspectionDescription?: string;
 
   /**
-   * 检验员（选项 TaktEmployees/options，DictValue=EmployeeCode）
+   * 检验员（选项 TaktEmployees/options；DictValue=EmployeeCode）
    */
   inspectorBy?: string;
 
@@ -264,7 +264,7 @@ export interface FqcOrderItemQuery extends TaktPagedQuery {
   judgeStatus?: number;
 
   /**
-   * 是否作废（字典 sys_yes_no_type，0=否 1=是；编辑移除子行时标记作废）
+   * 是否作废（字典 sys_yes_no_type；0=否 1=是；编辑移除子行时标记作废）
    */
   isObsolete?: number;
 
@@ -313,7 +313,7 @@ export interface FqcOrderItemCreate {
   companyDefaultCulture: string;
 
   /**
-   * FQC检验单 ID（关联 TaktFqcOrder.Id，选项 TaktFqcOrders/options）
+   * FQC检验单 ID（选项 TaktFqcOrders/options，DictValue=Id）
    */
   fqcOrderId: string;
 
@@ -328,12 +328,12 @@ export interface FqcOrderItemCreate {
   lineNumber: number;
 
   /**
-   * 物料编码（选项 TaktMaterials/options，DictValue=MaterialCode）
+   * 物料编码（选项 TaktMaterialPlants/options；DictValue=MaterialCode，ExtValue=PlantCode）
    */
   materialCode: string;
 
   /**
-   * 物料名称
+   * 物料名称（回填：随物料）
    */
   materialName: string;
 
@@ -348,12 +348,12 @@ export interface FqcOrderItemCreate {
   warehouseQuantity: number;
 
   /**
-   * 检验标准编码（选项 TaktInspectionStandards/options，DictValue=StandardCode）
+   * 检验标准编码（选项 TaktInspectionStandards/options；DictValue=StandardCode）
    */
   standardCode: string;
 
   /**
-   * 抽样方案编码（选项 TaktSamplingSchemes/options，DictValue=SamplingSchemeCode）
+   * 抽样方案编码（选项 TaktSamplingSchemes/options；DictValue=SamplingSchemeCode）
    */
   samplingSchemeCode: string;
 
@@ -393,7 +393,7 @@ export interface FqcOrderItemCreate {
   inspectionDescription?: string;
 
   /**
-   * 检验员（选项 TaktEmployees/options，DictValue=EmployeeCode）
+   * 检验员（选项 TaktEmployees/options；DictValue=EmployeeCode）
    */
   inspectorBy: string;
 
@@ -408,7 +408,7 @@ export interface FqcOrderItemCreate {
   judgeStatus: number;
 
   /**
-   * 是否作废（字典 sys_yes_no_type，0=否 1=是；编辑移除子行时标记作废）
+   * 是否作废（字典 sys_yes_no_type；0=否 1=是；编辑移除子行时标记作废）
    */
   isObsolete: number;
 
@@ -505,7 +505,7 @@ export interface FqcOrderItemTemplate {
   companyCode?: string;
 
   /**
-   * FQC检验单 ID（关联 TaktFqcOrder.Id，选项 TaktFqcOrders/options）
+   * FQC检验单 ID（选项 TaktFqcOrders/options，DictValue=Id）
    */
   fqcOrderId?: string;
 
@@ -520,12 +520,12 @@ export interface FqcOrderItemTemplate {
   lineNumber?: number;
 
   /**
-   * 物料编码（选项 TaktMaterials/options，DictValue=MaterialCode）
+   * 物料编码（选项 TaktMaterialPlants/options；DictValue=MaterialCode，ExtValue=PlantCode）
    */
   materialCode?: string;
 
   /**
-   * 物料名称
+   * 物料名称（回填：随物料）
    */
   materialName?: string;
 
@@ -540,12 +540,12 @@ export interface FqcOrderItemTemplate {
   warehouseQuantity?: number;
 
   /**
-   * 检验标准编码（选项 TaktInspectionStandards/options，DictValue=StandardCode）
+   * 检验标准编码（选项 TaktInspectionStandards/options；DictValue=StandardCode）
    */
   standardCode?: string;
 
   /**
-   * 抽样方案编码（选项 TaktSamplingSchemes/options，DictValue=SamplingSchemeCode）
+   * 抽样方案编码（选项 TaktSamplingSchemes/options；DictValue=SamplingSchemeCode）
    */
   samplingSchemeCode?: string;
 
@@ -585,7 +585,7 @@ export interface FqcOrderItemTemplate {
   inspectionDescription?: string;
 
   /**
-   * 检验员（选项 TaktEmployees/options，DictValue=EmployeeCode）
+   * 检验员（选项 TaktEmployees/options；DictValue=EmployeeCode）
    */
   inspectorBy?: string;
 
@@ -600,7 +600,7 @@ export interface FqcOrderItemTemplate {
   judgeStatus?: number;
 
   /**
-   * 是否作废（字典 sys_yes_no_type，0=否 1=是；编辑移除子行时标记作废）
+   * 是否作废（字典 sys_yes_no_type；0=否 1=是；编辑移除子行时标记作废）
    */
   isObsolete?: number;
 
@@ -644,7 +644,7 @@ export interface FqcOrderItemImport {
   companyDefaultCulture?: string;
 
   /**
-   * FQC检验单 ID（关联 TaktFqcOrder.Id，选项 TaktFqcOrders/options）
+   * FQC检验单 ID（选项 TaktFqcOrders/options，DictValue=Id）
    */
   fqcOrderId?: string;
 
@@ -659,12 +659,12 @@ export interface FqcOrderItemImport {
   lineNumber?: number;
 
   /**
-   * 物料编码（选项 TaktMaterials/options，DictValue=MaterialCode）
+   * 物料编码（选项 TaktMaterialPlants/options；DictValue=MaterialCode，ExtValue=PlantCode）
    */
   materialCode?: string;
 
   /**
-   * 物料名称
+   * 物料名称（回填：随物料）
    */
   materialName?: string;
 
@@ -679,12 +679,12 @@ export interface FqcOrderItemImport {
   warehouseQuantity?: number;
 
   /**
-   * 检验标准编码（选项 TaktInspectionStandards/options，DictValue=StandardCode）
+   * 检验标准编码（选项 TaktInspectionStandards/options；DictValue=StandardCode）
    */
   standardCode?: string;
 
   /**
-   * 抽样方案编码（选项 TaktSamplingSchemes/options，DictValue=SamplingSchemeCode）
+   * 抽样方案编码（选项 TaktSamplingSchemes/options；DictValue=SamplingSchemeCode）
    */
   samplingSchemeCode?: string;
 
@@ -724,7 +724,7 @@ export interface FqcOrderItemImport {
   inspectionDescription?: string;
 
   /**
-   * 检验员（选项 TaktEmployees/options，DictValue=EmployeeCode）
+   * 检验员（选项 TaktEmployees/options；DictValue=EmployeeCode）
    */
   inspectorBy?: string;
 
@@ -739,7 +739,7 @@ export interface FqcOrderItemImport {
   judgeStatus?: number;
 
   /**
-   * 是否作废（字典 sys_yes_no_type，0=否 1=是；编辑移除子行时标记作废）
+   * 是否作废（字典 sys_yes_no_type；0=否 1=是；编辑移除子行时标记作废）
    */
   isObsolete?: number;
 
@@ -778,7 +778,7 @@ export interface FqcOrderItemExport {
   companyCode: string;
 
   /**
-   * FQC检验单 ID（关联 TaktFqcOrder.Id，选项 TaktFqcOrders/options）
+   * FQC检验单 ID（选项 TaktFqcOrders/options，DictValue=Id）
    */
   fqcOrderId: string;
 
@@ -793,12 +793,12 @@ export interface FqcOrderItemExport {
   lineNumber: number;
 
   /**
-   * 物料编码（选项 TaktMaterials/options，DictValue=MaterialCode）
+   * 物料编码（选项 TaktMaterialPlants/options；DictValue=MaterialCode，ExtValue=PlantCode）
    */
   materialCode: string;
 
   /**
-   * 物料名称
+   * 物料名称（回填：随物料）
    */
   materialName: string;
 
@@ -813,12 +813,12 @@ export interface FqcOrderItemExport {
   warehouseQuantity: number;
 
   /**
-   * 检验标准编码（选项 TaktInspectionStandards/options，DictValue=StandardCode）
+   * 检验标准编码（选项 TaktInspectionStandards/options；DictValue=StandardCode）
    */
   standardCode: string;
 
   /**
-   * 抽样方案编码（选项 TaktSamplingSchemes/options，DictValue=SamplingSchemeCode）
+   * 抽样方案编码（选项 TaktSamplingSchemes/options；DictValue=SamplingSchemeCode）
    */
   samplingSchemeCode: string;
 
@@ -858,7 +858,7 @@ export interface FqcOrderItemExport {
   inspectionDescription?: string;
 
   /**
-   * 检验员（选项 TaktEmployees/options，DictValue=EmployeeCode）
+   * 检验员（选项 TaktEmployees/options；DictValue=EmployeeCode）
    */
   inspectorBy: string;
 
@@ -873,7 +873,7 @@ export interface FqcOrderItemExport {
   judgeStatus: number;
 
   /**
-   * 是否作废（字典 sys_yes_no_type，0=否 1=是；编辑移除子行时标记作废）
+   * 是否作废（字典 sys_yes_no_type；0=否 1=是；编辑移除子行时标记作废）
    */
   isObsolete: number;
 

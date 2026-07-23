@@ -2,9 +2,9 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Application.Dtos.HumanResource.Personnel
 // 文件名称：TaktEmployeeAttachmentDtos.cs
-// 创建时间：2026-06-23
+// 创建时间：2026-07-23
 // 创建人：Takt365(Auto Generated)
-// 功能描述：EmployeeAttachment 模块 DTO；文件元数据由 TaktFile 统一管理，本模块仅存 EmployeeId、AttachmentName、AccessUrl。
+// 功能描述：EmployeeAttachment 模块 DTO（由 generate-dtos-from-entity.cjs 根据 TaktEmployeeAttachment 生成，请按需审阅）
 // 
 // 版权信息：Copyright (c) 2025 Takt  All rights reserved.
 // 免责声明：此软件使用 MIT License，作者不承担任何使用风险。
@@ -22,7 +22,7 @@ namespace Takt.Application.Dtos.HumanResource.Personnel;
 // ========================================
 
 /// <summary>
-/// 员工档案附件（主档子表，公司级非审批单）
+/// 员工档案附件（主档子表，公司级非审批单）；文件元数据见 TaktFile，本表仅存业务名称与访问地址引用。
 /// 对应前端 TaktEmployeeAttachmentDto
 /// 继承 TaktCompanyDtoBase
 /// </summary>
@@ -36,15 +36,20 @@ public class TaktEmployeeAttachmentDto : TaktCompanyDtoBase
     public long EmployeeAttachmentId { get; set; }
 
     /// <summary>
-    /// 员工ID
+    /// 员工（选项 TaktEmployees/options；DictValue=Id）
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
     public long EmployeeId { get; set; }
 
     /// <summary>
-    /// 员工名称（填充字段）
+    /// 员工编码（冗余，与 TaktEmployee.EmployeeCode 对齐）
     /// </summary>
-    public string? EmployeeName { get; set; }
+    public string EmployeeCode { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 员工姓名（冗余，与 TaktEmployee.EmployeeName 对齐）
+    /// </summary>
+    public string EmployeeName { get; set; } = string.Empty;
 
     /// <summary>
     /// 附件名称（业务称谓，如毕业证、就业证）
@@ -52,9 +57,16 @@ public class TaktEmployeeAttachmentDto : TaktCompanyDtoBase
     public string AttachmentName { get; set; } = string.Empty;
 
     /// <summary>
-    /// 访问地址（引用 TaktFile.AccessUrl）
+    /// 访问地址（关联 TaktFile.AccessUrl）
     /// </summary>
     public string AccessUrl { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 员工主档（多对一）
+    /// （主表：TaktEmployee）
+    /// </summary>
+    public TaktEmployeeDto? Employee { get; set; }
+
 }
 
 // ========================================
@@ -78,18 +90,28 @@ public class TaktEmployeeAttachmentQueryDto : TaktPagedQuery
     public string? CompanyCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 员工ID
+    /// 员工（选项 TaktEmployees/options；DictValue=Id）
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
     public long? EmployeeId { get; set; }
 
     /// <summary>
-    /// 附件名称
+    /// 员工编码（冗余，与 TaktEmployee.EmployeeCode 对齐）
+    /// </summary>
+    public string? EmployeeCode { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 员工姓名（冗余，与 TaktEmployee.EmployeeName 对齐）
+    /// </summary>
+    public string? EmployeeName { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 附件名称（业务称谓，如毕业证、就业证）
     /// </summary>
     public string? AttachmentName { get; set; } = string.Empty;
 
     /// <summary>
-    /// 访问地址
+    /// 访问地址（关联 TaktFile.AccessUrl）
     /// </summary>
     public string? AccessUrl { get; set; } = string.Empty;
 
@@ -139,21 +161,33 @@ public class TaktEmployeeAttachmentCreateDto
     public string CompanyDefaultCulture { get; set; } = string.Empty;
 
     /// <summary>
-    /// 员工ID
+    /// 员工（选项 TaktEmployees/options；DictValue=Id）
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
     public long EmployeeId { get; set; }
 
     /// <summary>
+    /// 员工编码（冗余，与 TaktEmployee.EmployeeCode 对齐）
+    /// </summary>
+    [Required(ErrorMessage = "员工编码（冗余，与 TaktEmployee.EmployeeCode 对齐）不能为空")]
+    public string EmployeeCode { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 员工姓名（冗余，与 TaktEmployee.EmployeeName 对齐）
+    /// </summary>
+    [Required(ErrorMessage = "员工姓名（冗余，与 TaktEmployee.EmployeeName 对齐）不能为空")]
+    public string EmployeeName { get; set; } = string.Empty;
+
+    /// <summary>
     /// 附件名称（业务称谓，如毕业证、就业证）
     /// </summary>
-    [Required(ErrorMessage = "附件名称不能为空")]
+    [Required(ErrorMessage = "附件名称（业务称谓，如毕业证、就业证）不能为空")]
     public string AttachmentName { get; set; } = string.Empty;
 
     /// <summary>
-    /// 访问地址（引用 TaktFile.AccessUrl）
+    /// 访问地址（关联 TaktFile.AccessUrl）
     /// </summary>
-    [Required(ErrorMessage = "访问地址不能为空")]
+    [Required(ErrorMessage = "访问地址（关联 TaktFile.AccessUrl）不能为空")]
     public string AccessUrl { get; set; } = string.Empty;
 
     /// <summary>
@@ -165,6 +199,7 @@ public class TaktEmployeeAttachmentCreateDto
     /// 备注
     /// </summary>
     public string? Remark { get; set; }
+
 }
 
 // ========================================
@@ -184,6 +219,7 @@ public class TaktEmployeeAttachmentUpdateDto : TaktEmployeeAttachmentCreateDto
     [AdaptMember("Id")]
     [JsonConverter(typeof(ValueToStringConverter))]
     public long EmployeeAttachmentId { get; set; }
+
 }
 
 // ========================================
@@ -206,18 +242,28 @@ public class TaktEmployeeAttachmentTemplateDto
     public string? CompanyCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 员工ID
+    /// 员工（选项 TaktEmployees/options；DictValue=Id）
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
     public long? EmployeeId { get; set; }
 
     /// <summary>
-    /// 附件名称
+    /// 员工编码（冗余，与 TaktEmployee.EmployeeCode 对齐）
+    /// </summary>
+    public string? EmployeeCode { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 员工姓名（冗余，与 TaktEmployee.EmployeeName 对齐）
+    /// </summary>
+    public string? EmployeeName { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 附件名称（业务称谓，如毕业证、就业证）
     /// </summary>
     public string? AttachmentName { get; set; } = string.Empty;
 
     /// <summary>
-    /// 访问地址
+    /// 访问地址（关联 TaktFile.AccessUrl）
     /// </summary>
     public string? AccessUrl { get; set; } = string.Empty;
 
@@ -230,6 +276,7 @@ public class TaktEmployeeAttachmentTemplateDto
     /// 备注
     /// </summary>
     public string? Remark { get; set; }
+
 }
 
 /// <summary>
@@ -253,18 +300,28 @@ public class TaktEmployeeAttachmentImportDto
     public string? CompanyDefaultCulture { get; set; } = string.Empty;
 
     /// <summary>
-    /// 员工ID
+    /// 员工（选项 TaktEmployees/options；DictValue=Id）
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
     public long? EmployeeId { get; set; }
 
     /// <summary>
-    /// 附件名称
+    /// 员工编码（冗余，与 TaktEmployee.EmployeeCode 对齐）
+    /// </summary>
+    public string? EmployeeCode { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 员工姓名（冗余，与 TaktEmployee.EmployeeName 对齐）
+    /// </summary>
+    public string? EmployeeName { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 附件名称（业务称谓，如毕业证、就业证）
     /// </summary>
     public string? AttachmentName { get; set; } = string.Empty;
 
     /// <summary>
-    /// 访问地址
+    /// 访问地址（关联 TaktFile.AccessUrl）
     /// </summary>
     public string? AccessUrl { get; set; } = string.Empty;
 
@@ -277,6 +334,7 @@ public class TaktEmployeeAttachmentImportDto
     /// 备注
     /// </summary>
     public string? Remark { get; set; }
+
 }
 
 // ========================================
@@ -301,18 +359,28 @@ public class TaktEmployeeAttachmentExportDto
     public string CompanyCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 员工ID
+    /// 员工（选项 TaktEmployees/options；DictValue=Id）
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
     public long EmployeeId { get; set; }
 
     /// <summary>
-    /// 附件名称
+    /// 员工编码（冗余，与 TaktEmployee.EmployeeCode 对齐）
+    /// </summary>
+    public string EmployeeCode { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 员工姓名（冗余，与 TaktEmployee.EmployeeName 对齐）
+    /// </summary>
+    public string EmployeeName { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 附件名称（业务称谓，如毕业证、就业证）
     /// </summary>
     public string AttachmentName { get; set; } = string.Empty;
 
     /// <summary>
-    /// 访问地址
+    /// 访问地址（关联 TaktFile.AccessUrl）
     /// </summary>
     public string AccessUrl { get; set; } = string.Empty;
 

@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Infrastructure.Data.Seeds.I18nSeedData.Logistics.Manufacturing.Mps
 // 文件名称：TaktProductionEquipmentI18nSeedData.cs
-// 创建时间：2026-07-20
+// 创建时间：2026-07-23
 // 创建人：Takt365(Auto Generated)
 // 功能描述：TaktProductionEquipment 实体字段国际化种子（无对应 frontend locales；TranslationText 取自 ColumnDescription，ContextNote 取自属性 XML summary）
 // 
@@ -91,13 +91,13 @@ public class TaktProductionEquipmentI18nSeedData : ITaktSeedDataCoordinator
             new TranslationSeedItem("entity.productionequipment._self", "zh-HK", "生产设备主数据信息_hk", "实体名称"),
 
             // entity.productionequipment.plantcode
-            new TranslationSeedItem("entity.productionequipment.plantcode", "en-US", "工厂代码_us", "工厂代码（选项 TaktPlants/options，DictValue=PlantCode）"),
+            new TranslationSeedItem("entity.productionequipment.plantcode", "en-US", "工厂代码_us", "工厂代码（选项 TaktPlants/options；DictValue=PlantCode）"),
             // entity.productionequipment.plantcode
-            new TranslationSeedItem("entity.productionequipment.plantcode", "ja-JP", "工厂代码_jp", "工厂代码（选项 TaktPlants/options，DictValue=PlantCode）"),
+            new TranslationSeedItem("entity.productionequipment.plantcode", "ja-JP", "工厂代码_jp", "工厂代码（选项 TaktPlants/options；DictValue=PlantCode）"),
             // entity.productionequipment.plantcode
-            new TranslationSeedItem("entity.productionequipment.plantcode", "zh-CN", "工厂代码", "工厂代码（选项 TaktPlants/options，DictValue=PlantCode）"),
+            new TranslationSeedItem("entity.productionequipment.plantcode", "zh-CN", "工厂代码", "工厂代码（选项 TaktPlants/options；DictValue=PlantCode）"),
             // entity.productionequipment.plantcode
-            new TranslationSeedItem("entity.productionequipment.plantcode", "zh-HK", "工厂代码_hk", "工厂代码（选项 TaktPlants/options，DictValue=PlantCode）"),
+            new TranslationSeedItem("entity.productionequipment.plantcode", "zh-HK", "工厂代码_hk", "工厂代码（选项 TaktPlants/options；DictValue=PlantCode）"),
 
             // entity.productionequipment.equipmentcategory
             new TranslationSeedItem("entity.productionequipment.equipmentcategory", "en-US", "设备类别_us", "设备类别（字典 logistics_equipment_category；Press/Injection/DieCasting/SMT/Assembly 等）"),
@@ -109,13 +109,13 @@ public class TaktProductionEquipmentI18nSeedData : ITaktSeedDataCoordinator
             new TranslationSeedItem("entity.productionequipment.equipmentcategory", "zh-HK", "设备类别_hk", "设备类别（字典 logistics_equipment_category；Press/Injection/DieCasting/SMT/Assembly 等）"),
 
             // entity.productionequipment.code
-            new TranslationSeedItem("entity.productionequipment.code", "en-US", "生产设备编码_us", "生产设备编码（同一工厂+存放位置内不可重复；EquipmentCode / 资产MES编号）"),
+            new TranslationSeedItem("entity.productionequipment.code", "en-US", "生产设备编码_us", "生产设备编码（同一工厂+存放位置内不可重复；EquipmentCode / 资产MES编码）"),
             // entity.productionequipment.code
-            new TranslationSeedItem("entity.productionequipment.code", "ja-JP", "生产设备编码_jp", "生产设备编码（同一工厂+存放位置内不可重复；EquipmentCode / 资产MES编号）"),
+            new TranslationSeedItem("entity.productionequipment.code", "ja-JP", "生产设备编码_jp", "生产设备编码（同一工厂+存放位置内不可重复；EquipmentCode / 资产MES编码）"),
             // entity.productionequipment.code
-            new TranslationSeedItem("entity.productionequipment.code", "zh-CN", "生产设备编码", "生产设备编码（同一工厂+存放位置内不可重复；EquipmentCode / 资产MES编号）"),
+            new TranslationSeedItem("entity.productionequipment.code", "zh-CN", "生产设备编码", "生产设备编码（同一工厂+存放位置内不可重复；EquipmentCode / 资产MES编码）"),
             // entity.productionequipment.code
-            new TranslationSeedItem("entity.productionequipment.code", "zh-HK", "生产设备编码_hk", "生产设备编码（同一工厂+存放位置内不可重复；EquipmentCode / 资产MES编号）"),
+            new TranslationSeedItem("entity.productionequipment.code", "zh-HK", "生产设备编码_hk", "生产设备编码（同一工厂+存放位置内不可重复；EquipmentCode / 资产MES编码）"),
 
             // entity.productionequipment.name
             new TranslationSeedItem("entity.productionequipment.name", "en-US", "生产设备名称_us", "生产设备名称（列表展示名）"),

@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Application.Validators.HumanResource.Training
 // 文件名称：TaktTrainingAttendeeValidators.cs
-// 创建时间：2026-07-20
+// 创建时间：2026-07-23
 // 创建人：Takt365(Auto Generated)
 // 功能描述：TrainingAttendee 模块 FluentValidation 验证器（由 generate-validators-from-entity.cjs 根据 TaktTrainingAttendee 生成，请按需审阅）
 // 
@@ -51,9 +51,9 @@ public class TaktTrainingAttendeeCreateValidator : AbstractValidator<TaktTrainin
         RuleFor(x => x.Instructor)
             .NotEmpty().WithMessage("培训讲师不能为空")
             .MaximumLength(50).WithMessage("培训讲师长度不能超过50个字符");
-        RuleFor(x => x.CertificateNo)
-            .NotEmpty().WithMessage("证书编号不能为空")
-            .MaximumLength(50).WithMessage("证书编号长度不能超过50个字符");
+        RuleFor(x => x.CertificateCode)
+            .NotEmpty().WithMessage("证书编码不能为空")
+            .MaximumLength(50).WithMessage("证书编码长度不能超过50个字符");
         RuleFor(x => x.TrainingEvaluation)
             .NotEmpty().WithMessage("培训评价不能为空")
             .MaximumLength(500).WithMessage("培训评价长度不能超过500个字符");
@@ -105,9 +105,9 @@ public class TaktTrainingAttendeeUpdateValidator : AbstractValidator<TaktTrainin
         RuleFor(x => x.Instructor)
             .NotEmpty().WithMessage("培训讲师不能为空")
             .MaximumLength(50).WithMessage("培训讲师长度不能超过50个字符");
-        RuleFor(x => x.CertificateNo)
-            .NotEmpty().WithMessage("证书编号不能为空")
-            .MaximumLength(50).WithMessage("证书编号长度不能超过50个字符");
+        RuleFor(x => x.CertificateCode)
+            .NotEmpty().WithMessage("证书编码不能为空")
+            .MaximumLength(50).WithMessage("证书编码长度不能超过50个字符");
         RuleFor(x => x.TrainingEvaluation)
             .NotEmpty().WithMessage("培训评价不能为空")
             .MaximumLength(500).WithMessage("培训评价长度不能超过500个字符");
@@ -155,9 +155,9 @@ public class TaktTrainingAttendeeImportValidator : AbstractValidator<TaktTrainin
         RuleFor(x => x.Instructor)
             .NotEmpty().WithMessage("培训讲师不能为空")
             .MaximumLength(50).WithMessage("培训讲师长度不能超过50个字符");
-        RuleFor(x => x.CertificateNo)
-            .NotEmpty().WithMessage("证书编号不能为空")
-            .MaximumLength(50).WithMessage("证书编号长度不能超过50个字符");
+        RuleFor(x => x.CertificateCode)
+            .NotEmpty().WithMessage("证书编码不能为空")
+            .MaximumLength(50).WithMessage("证书编码长度不能超过50个字符");
         RuleFor(x => x.TrainingEvaluation)
             .NotEmpty().WithMessage("培训评价不能为空")
             .MaximumLength(500).WithMessage("培训评价长度不能超过500个字符");

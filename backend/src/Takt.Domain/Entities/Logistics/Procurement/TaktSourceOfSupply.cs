@@ -28,7 +28,7 @@ namespace Takt.Domain.Entities.Logistics.Procurement;
 public class TaktSourceOfSupply : TaktCompanyEntityBase
 {
     /// <summary>
-    /// 工厂代码（选项 TaktPlants/options，DictValue=PlantCode）
+    /// 工厂代码（选项 TaktPlants/options；DictValue=PlantCode）
     /// </summary>
     [SugarColumn(ColumnName = "plant_code", ColumnDescription = "工厂代码", ColumnDataType = "nvarchar", Length = 4, IsNullable = false)]
     public string PlantCode { get; set; } = string.Empty;
@@ -38,17 +38,17 @@ public class TaktSourceOfSupply : TaktCompanyEntityBase
     [SugarColumn(ColumnName = "source_of_supply_code", ColumnDescription = "货源清单编码", ColumnDataType = "nvarchar", Length = 20, IsNullable = false)]
     public string SourceOfSupplyCode { get; set; } = string.Empty;
     /// <summary>
-    /// 物料编码（选项 TaktMaterialPlants/options，DictValue=MaterialCode，ExtValue=PlantCode）
+    /// 物料编码（选项 TaktMaterialPlants/options；DictValue=MaterialCode，ExtValue=PlantCode）
     /// </summary>
     [SugarColumn(ColumnName = "material_code", ColumnDescription = "物料编码", ColumnDataType = "nvarchar", Length = 20, IsNullable = false)]
     public string MaterialCode { get; set; } = string.Empty;
     /// <summary>
-    /// 供货商编码（选项 TaktSuppliers/options，DictValue=SupplierCode）
+    /// 供货商编码（选项 TaktSuppliers/options；DictValue=SupplierCode）
     /// </summary>
     [SugarColumn(ColumnName = "supplier_code", ColumnDescription = "供货商编码", ColumnDataType = "nvarchar", Length = 50, IsNullable = false)]
     public string SupplierCode { get; set; } = string.Empty;
     /// <summary>
-    /// 采购组（选项 TaktPurchaseGroups/options，DictValue=PurchaseGroupCode）
+    /// 采购组（选项 TaktPurchaseGroups/options；DictValue=PurchaseGroupCode）
     /// </summary>
     [SugarColumn(ColumnName = "purchase_group", ColumnDescription = "采购组", ColumnDataType = "nvarchar", Length = 3, IsNullable = true)]
     public string? PurchaseGroup { get; set; }
@@ -63,22 +63,27 @@ public class TaktSourceOfSupply : TaktCompanyEntityBase
     [SugarColumn(ColumnName = "is_blocked", ColumnDescription = "冻结", ColumnDataType = "int", IsNullable = false, DefaultValue = "0")]
     public int IsBlocked { get; set; } = 0;
     /// <summary>
-    /// 采购单位（字典 logistics_unit_of_measure_code，DictValue=PC/EA 等；默认 PC）
+    /// 采购单位（字典 logistics_unit_of_measure_code；DictValue=PC/EA 等；默认 PC）
     /// </summary>
     [SugarColumn(ColumnName = "purchase_unit", ColumnDescription = "采购单位", ColumnDataType = "nvarchar", Length = 20, IsNullable = false, DefaultValue = "PC")]
     public string PurchaseUnit { get; set; } = "PC";
     /// <summary>
-    /// 最小订购量
+    /// 最小起订量（采购单位数量，整数）
     /// </summary>
-    [SugarColumn(ColumnName = "minimum_order_quantity", ColumnDescription = "最小订购量", ColumnDataType = "decimal", Length = 18, DecimalDigits = 4, IsNullable = false, DefaultValue = "0")]
-    public decimal MinimumOrderQuantity { get; set; } = 0;
+    [SugarColumn(ColumnName = "min_order_quantity", ColumnDescription = "最小起订量", ColumnDataType = "int", IsNullable = false, DefaultValue = "0")]
+    public int MinOrderQuantity { get; set; } = 0;
     /// <summary>
-    /// 计划交货天数（采购提前期）
+    /// 舍入值（基本单位数量，用于数量舍入，整数）
     /// </summary>
-    [SugarColumn(ColumnName = "lead_time_days", ColumnDescription = "计划交货天数", ColumnDataType = "int", IsNullable = false, DefaultValue = "0")]
-    public int LeadTimeDays { get; set; } = 0;
+    [SugarColumn(ColumnName = "rounding_value", ColumnDescription = "舍入值", ColumnDataType = "int", IsNullable = false, DefaultValue = "0")]
+    public int RoundingValue { get; set; } = 0;
     /// <summary>
-    /// 框架协议号（采购合同/协议编号，可选）
+    /// 计划交货时间（天数，整数）
+    /// </summary>
+    [SugarColumn(ColumnName = "planned_delivery_time_days", ColumnDescription = "计划交货时间", ColumnDataType = "int", IsNullable = false, DefaultValue = "0")]
+    public int PlannedDeliveryTimeDays { get; set; } = 0;
+    /// <summary>
+    /// 框架协议号（采购合同/协议编码，可选）
     /// </summary>
     [SugarColumn(ColumnName = "agreement_number", ColumnDescription = "框架协议号", ColumnDataType = "nvarchar", Length = 50, IsNullable = true)]
     public string? AgreementNumber { get; set; }

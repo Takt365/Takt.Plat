@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Infrastructure.Data.Seeds.I18nSeedData.Logistics.Quality.Cost
 // 文件名称：TaktQualityIssueMeetingI18nSeedData.cs
-// 创建时间：2026-07-20
+// 创建时间：2026-07-23
 // 创建人：Takt365(Auto Generated)
 // 功能描述：TaktQualityIssueMeeting 实体字段国际化种子（无对应 frontend locales；TranslationText 取自 ColumnDescription，ContextNote 取自属性 XML summary）
 // 
@@ -91,13 +91,13 @@ public class TaktQualityIssueMeetingI18nSeedData : ITaktSeedDataCoordinator
             new TranslationSeedItem("entity.qualityissuemeeting._self", "zh-HK", "品质问题应对明细 - 会议/调查/试验费用信息_hk", "实体名称"),
 
             // entity.qualityissuemeeting.qualityissueid
-            new TranslationSeedItem("entity.qualityissuemeeting.qualityissueid", "en-US", "品质问题主表ID_us", "品质问题主表 ID（选项 TaktQualityIssues/options，DictValue=Id）"),
+            new TranslationSeedItem("entity.qualityissuemeeting.qualityissueid", "en-US", "品质问题主表ID_us", "品质问题主表 ID（选项 TaktQualityIssues/options；DictValue=Id）"),
             // entity.qualityissuemeeting.qualityissueid
-            new TranslationSeedItem("entity.qualityissuemeeting.qualityissueid", "ja-JP", "品质问题主表ID_jp", "品质问题主表 ID（选项 TaktQualityIssues/options，DictValue=Id）"),
+            new TranslationSeedItem("entity.qualityissuemeeting.qualityissueid", "ja-JP", "品质问题主表ID_jp", "品质问题主表 ID（选项 TaktQualityIssues/options；DictValue=Id）"),
             // entity.qualityissuemeeting.qualityissueid
-            new TranslationSeedItem("entity.qualityissuemeeting.qualityissueid", "zh-CN", "品质问题主表ID", "品质问题主表 ID（选项 TaktQualityIssues/options，DictValue=Id）"),
+            new TranslationSeedItem("entity.qualityissuemeeting.qualityissueid", "zh-CN", "品质问题主表ID", "品质问题主表 ID（选项 TaktQualityIssues/options；DictValue=Id）"),
             // entity.qualityissuemeeting.qualityissueid
-            new TranslationSeedItem("entity.qualityissuemeeting.qualityissueid", "zh-HK", "品质问题主表ID_hk", "品质问题主表 ID（选项 TaktQualityIssues/options，DictValue=Id）"),
+            new TranslationSeedItem("entity.qualityissuemeeting.qualityissueid", "zh-HK", "品质问题主表ID_hk", "品质问题主表 ID（选项 TaktQualityIssues/options；DictValue=Id）"),
 
             // entity.qualityissuemeeting.qualityissuecode
             new TranslationSeedItem("entity.qualityissuemeeting.qualityissuecode", "en-US", "品质问题编码_us", "品质问题编码（冗余字段，便于查询）"),
@@ -235,13 +235,13 @@ public class TaktQualityIssueMeetingI18nSeedData : ITaktSeedDataCoordinator
             new TranslationSeedItem("entity.qualityissuemeeting.meetingrecorder", "zh-HK", "品质问题对应记录者_hk", "品质问题対応记录者（会议调查试验记录者）"),
 
             // entity.qualityissuemeeting.isobsolete
-            new TranslationSeedItem("entity.qualityissuemeeting.isobsolete", "en-US", "是否作废_us", "是否作废（字典 sys_yes_no_type，0=否 1=是；编辑移除子行时标记作废）"),
+            new TranslationSeedItem("entity.qualityissuemeeting.isobsolete", "en-US", "是否作废_us", "是否作废（字典 sys_yes_no_type；0=否 1=是；编辑移除子行时标记作废）"),
             // entity.qualityissuemeeting.isobsolete
-            new TranslationSeedItem("entity.qualityissuemeeting.isobsolete", "ja-JP", "是否作废_jp", "是否作废（字典 sys_yes_no_type，0=否 1=是；编辑移除子行时标记作废）"),
+            new TranslationSeedItem("entity.qualityissuemeeting.isobsolete", "ja-JP", "是否作废_jp", "是否作废（字典 sys_yes_no_type；0=否 1=是；编辑移除子行时标记作废）"),
             // entity.qualityissuemeeting.isobsolete
-            new TranslationSeedItem("entity.qualityissuemeeting.isobsolete", "zh-CN", "是否作废", "是否作废（字典 sys_yes_no_type，0=否 1=是；编辑移除子行时标记作废）"),
+            new TranslationSeedItem("entity.qualityissuemeeting.isobsolete", "zh-CN", "是否作废", "是否作废（字典 sys_yes_no_type；0=否 1=是；编辑移除子行时标记作废）"),
             // entity.qualityissuemeeting.isobsolete
-            new TranslationSeedItem("entity.qualityissuemeeting.isobsolete", "zh-HK", "是否作废_hk", "是否作废（字典 sys_yes_no_type，0=否 1=是；编辑移除子行时标记作废）"),
+            new TranslationSeedItem("entity.qualityissuemeeting.isobsolete", "zh-HK", "是否作废_hk", "是否作废（字典 sys_yes_no_type；0=否 1=是；编辑移除子行时标记作废）"),
 
             // entity.qualityissuemeeting.issue
             new TranslationSeedItem("entity.qualityissuemeeting.issue", "en-US", "质量问题主表_us", "质量问题主表（导航属性）"),

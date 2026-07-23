@@ -20,19 +20,29 @@ namespace Takt.Domain.Entities.HumanResource.Personnel;
 [SugarTable("takt_human_resource_personnel_employee_contract", "员工劳动合同表")]
 [SugarIndex("ix_employee_contract_tenant", nameof(TenantCode), OrderByType.Asc, nameof(CompanyCode), OrderByType.Asc, false)]
 [SugarIndex("ix_employee_contract_employee", nameof(TenantCode), OrderByType.Asc, nameof(CompanyCode), OrderByType.Asc, nameof(EmployeeId), OrderByType.Asc, false)]
-[SugarIndex("ix_employee_contract_no", nameof(TenantCode), OrderByType.Asc, nameof(CompanyCode), OrderByType.Asc, nameof(ContractNo), OrderByType.Asc, true)]
+[SugarIndex("ix_employee_contract_code", nameof(TenantCode), OrderByType.Asc, nameof(CompanyCode), OrderByType.Asc, nameof(ContractCode), OrderByType.Asc, true)]
 public class TaktEmployeeContract : TaktCompanyEntityBase
 {
     /// <summary>
-    /// 员工（选项 TaktEmployees/options，DictValue=Id）
+    /// 员工（选项 TaktEmployees/options；DictValue=Id）
     /// </summary>
     [SugarColumn(ColumnName = "employee_id", ColumnDescription = "员工ID", ColumnDataType = "bigint", IsNullable = false)]
     public long EmployeeId { get; set; }
     /// <summary>
-    /// 合同编号
+    /// 员工编码（冗余，与 TaktEmployee.EmployeeCode 对齐）
     /// </summary>
-    [SugarColumn(ColumnName = "contract_no", ColumnDescription = "合同编号", ColumnDataType = "varchar", Length = 50, IsNullable = false)]
-    public string ContractNo { get; set; } = string.Empty;
+    [SugarColumn(ColumnName = "employee_code", ColumnDescription = "员工编码", ColumnDataType = "varchar", Length = 6, IsNullable = false)]
+    public string EmployeeCode { get; set; } = string.Empty;
+    /// <summary>
+    /// 员工姓名（冗余，与 TaktEmployee.EmployeeName 对齐）
+    /// </summary>
+    [SugarColumn(ColumnName = "employee_name", ColumnDescription = "员工姓名", ColumnDataType = "nvarchar", Length = 80, IsNullable = false)]
+    public string EmployeeName { get; set; } = string.Empty;
+    /// <summary>
+    /// 合同编码
+    /// </summary>
+    [SugarColumn(ColumnName = "contract_code", ColumnDescription = "合同编码", ColumnDataType = "varchar", Length = 50, IsNullable = false)]
+    public string ContractCode { get; set; } = string.Empty;
     /// <summary>
     /// 合同类型（字典 hr_employee_contract_type；0=固定期限 1=无固定期限 2=以完成一定工作任务为期限 3=实习）
     /// </summary>

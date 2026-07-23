@@ -22,76 +22,32 @@
     >
       <a-tab-pane
         key="tab-0"
-        :tab="t('common.page.form.tabs.basicinfo') + ' (1/4)'"
+        :tab="t('common.page.form.tabs.basicinfo') + ' (1/6)'"
         force-render
       >
         <div :class="formContentClass">
           <a-row :gutter="24">
             <a-col :span="12">
               <a-form-item
-                :label="t('common.page.entity.tenantcode')"
-                name="tenantCode"
-              >
-                <a-input
-                  v-model:value="formState.tenantCode"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('common.page.entity.tenantcode') })"
-                  show-count
-                  :maxlength="20"
-                  disabled
-                />
-              </a-form-item>
-            </a-col>
-            <a-col :span="12">
-              <a-form-item
-                :label="t('common.page.entity.companycode')"
-                name="companyCode"
-              >
-                <a-input
-                  v-model:value="formState.companyCode"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('common.page.entity.companycode') })"
-                  show-count
-                  :maxlength="20"
-                  disabled
-                />
-              </a-form-item>
-            </a-col>
-            <a-col :span="12">
-              <a-form-item
-                :label="t('common.page.entity.companydefaultculture')"
-                name="companyDefaultCulture"
-              >
-                <a-input
-                  v-model:value="formState.companyDefaultCulture"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('common.page.entity.companydefaultculture') })"
-                  show-count
-                  :maxlength="20"
-                  disabled
-                />
-              </a-form-item>
-            </a-col>
-            <a-col :span="12">
-              <a-form-item
-                :label="t('entity.vendor.plantcode')"
+                :label="pi.label('plantCode')"
                 name="plantCode"
               >
-                <a-input
+                <TaktSelect
                   v-model:value="formState.plantCode"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.vendor.plantcode') })"
-                  show-count
-                  :maxlength="4"
-                  allow-clear
+                  api-url="TaktPlants/options"
+                  :placeholder="pi.ph('plantCode')"
                   :disabled="!!formData?.vendorId"
                 />
               </a-form-item>
             </a-col>
             <a-col :span="12">
               <a-form-item
-                :label="t('entity.vendor.code')"
+                :label="pi.label('vendorCode')"
                 name="vendorCode"
               >
                 <a-input
                   v-model:value="formState.vendorCode"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.vendor.code') })"
+                  :placeholder="pi.ph('vendorCode')"
                   show-count
                   :maxlength="20"
                   allow-clear
@@ -101,26 +57,40 @@
             </a-col>
             <a-col :span="12">
               <a-form-item
-                :label="t('entity.vendor.name')"
-                name="vendorName"
+                :label="pi.label('vendorName1')"
+                name="vendorName1"
               >
                 <a-input
-                  v-model:value="formState.vendorName"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.vendor.name') })"
+                  v-model:value="formState.vendorName1"
+                  :placeholder="pi.ph('vendorName1')"
                   show-count
-                  :maxlength="80"
+                  :maxlength="140"
                   allow-clear
                 />
               </a-form-item>
             </a-col>
             <a-col :span="12">
               <a-form-item
-                :label="t('entity.vendor.shortname')"
+                :label="pi.label('vendorName2')"
+                name="vendorName2"
+              >
+                <a-input
+                  v-model:value="formState.vendorName2"
+                  :placeholder="pi.ph('vendorName2')"
+                  show-count
+                  :maxlength="140"
+                  allow-clear
+                />
+              </a-form-item>
+            </a-col>
+            <a-col :span="12">
+              <a-form-item
+                :label="pi.label('vendorShortName')"
                 name="vendorShortName"
               >
                 <a-input
                   v-model:value="formState.vendorShortName"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.vendor.shortname') })"
+                  :placeholder="pi.ph('vendorShortName')"
                   show-count
                   :maxlength="40"
                   allow-clear
@@ -129,38 +99,60 @@
             </a-col>
             <a-col :span="12">
               <a-form-item
-                :label="t('entity.vendor.type')"
+                :label="pi.label('vendorType')"
                 name="vendorType"
               >
                 <TaktSelect
                   v-model:value="formState.vendorType"
                   dict-type="logistics_vendor_category"
-                  :placeholder="t('common.page.form.placeholder.select', { field: t('entity.vendor.type') })"
+                  :placeholder="pi.ph('vendorType')"
                 />
               </a-form-item>
             </a-col>
             <a-col :span="12">
               <a-form-item
-                :label="t('entity.vendor.industrysector')"
-                name="industrySector"
+                :label="pi.label('enterpriseNature')"
+                name="enterpriseNature"
               >
-                <a-input
-                  v-model:value="formState.industrySector"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.vendor.industrysector') })"
-                  show-count
-                  :maxlength="50"
-                  allow-clear
+                <TaktSelect
+                  v-model:value="formState.enterpriseNature"
+                  dict-type="sys_enterprise_nature_type"
+                  :placeholder="pi.ph('enterpriseNature')"
                 />
               </a-form-item>
             </a-col>
             <a-col :span="12">
               <a-form-item
-                :label="t('entity.vendor.taxnumber')"
+                :label="pi.label('industryAttribute')"
+                name="industryAttribute"
+              >
+                <TaktSelect
+                  v-model:value="formState.industryAttribute"
+                  dict-type="sys_industry_attribute_type"
+                  :placeholder="pi.ph('industryAttribute')"
+                />
+              </a-form-item>
+            </a-col>
+            <a-col :span="12">
+              <a-form-item
+                :label="pi.label('defaultCulture')"
+                name="defaultCulture"
+              >
+                <TaktSelect
+                  v-model:value="formState.defaultCulture"
+                  dict-type="sys_culture_code"
+                  :placeholder="pi.ph('defaultCulture')"
+                />
+              </a-form-item>
+            </a-col>
+            <a-col :span="12">
+              <a-form-item
+                :label="pi.label('vendorTaxNumber')"
                 name="vendorTaxNumber"
               >
                 <a-input
                   v-model:value="formState.vendorTaxNumber"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.vendor.taxnumber') })"
+                  :placeholder="pi.ph('vendorTaxNumber')"
                   show-count
                   :maxlength="50"
                   allow-clear
@@ -172,69 +164,91 @@
       </a-tab-pane>
       <a-tab-pane
         key="tab-1"
-        :tab="t('common.page.form.tabs.basicinfo') + ' (2/4)'"
+        :tab="t('common.page.form.tabs.basicinfo') + ' (2/6)'"
         force-render
       >
         <div :class="formContentClass">
           <a-row :gutter="24">
             <a-col :span="12">
               <a-form-item
-                :label="t('entity.vendor.registrationcountry')"
+                :label="pi.label('taxRate')"
+                name="taxRate"
+              >
+                <TaktSelect
+                  v-model:value="formState.taxRate"
+                  dict-type="accounting_tax_rate_param"
+                  :placeholder="pi.ph('taxRate')"
+                />
+              </a-form-item>
+            </a-col>
+            <a-col :span="12">
+              <a-form-item
+                :label="pi.label('registrationCountry')"
                 name="registrationCountry"
               >
-                <a-input
+                <TaktSelect
                   v-model:value="formState.registrationCountry"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.vendor.registrationcountry') })"
-                  show-count
-                  :maxlength="2"
-                  allow-clear
+                  dict-type="sys_country_code"
+                  :placeholder="pi.ph('registrationCountry')"
+                />
+              </a-form-item>
+            </a-col>
+            <a-col :span="12">
+              <a-form-item
+                :label="pi.label('registrationProvince')"
+                name="registrationProvince"
+              >
+                <TaktSelect
+                  v-model:value="formState.registrationProvince"
+                  api-url="TaktAdminDivisions/options"
+                  :placeholder="pi.ph('registrationProvince')"
+                />
+              </a-form-item>
+            </a-col>
+            <a-col :span="12">
+              <a-form-item
+                :label="pi.label('registrationCity')"
+                name="registrationCity"
+              >
+                <TaktSelect
+                  v-model:value="formState.registrationCity"
+                  api-url="TaktAdminDivisions/options"
+                  :placeholder="pi.ph('registrationCity')"
                 />
               </a-form-item>
             </a-col>
             <a-col :span="24">
               <a-form-item
-                :label="t('entity.vendor.registrationaddress1')"
+                :label="pi.label('registrationAddress1')"
                 name="registrationAddress1"
               >
                 <a-textarea
                   v-model:value="formState.registrationAddress1"
-                  :placeholder="t('common.page.form.placeholder.optional', { field: t('entity.vendor.registrationaddress1') })"
+                  :placeholder="pi.ph('registrationAddress1')"
                   :rows="2"
                 />
               </a-form-item>
             </a-col>
             <a-col :span="24">
               <a-form-item
-                :label="t('entity.vendor.registrationaddress2')"
+                :label="pi.label('registrationAddress2')"
                 name="registrationAddress2"
               >
                 <a-textarea
                   v-model:value="formState.registrationAddress2"
-                  :placeholder="t('common.page.form.placeholder.optional', { field: t('entity.vendor.registrationaddress2') })"
-                  :rows="2"
-                />
-              </a-form-item>
-            </a-col>
-            <a-col :span="24">
-              <a-form-item
-                :label="t('entity.vendor.registrationaddress3')"
-                name="registrationAddress3"
-              >
-                <a-textarea
-                  v-model:value="formState.registrationAddress3"
-                  :placeholder="t('common.page.form.placeholder.optional', { field: t('entity.vendor.registrationaddress3') })"
+                  :placeholder="pi.ph('registrationAddress2')"
                   :rows="2"
                 />
               </a-form-item>
             </a-col>
             <a-col :span="12">
               <a-form-item
-                :label="t('entity.vendor.phone')"
+                :label="pi.label('vendorPhone')"
                 name="vendorPhone"
               >
                 <a-input
                   v-model:value="formState.vendorPhone"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.vendor.phone') })"
+                  :placeholder="pi.ph('vendorPhone')"
                   show-count
                   :maxlength="50"
                   allow-clear
@@ -243,12 +257,12 @@
             </a-col>
             <a-col :span="12">
               <a-form-item
-                :label="t('entity.vendor.fax')"
+                :label="pi.label('vendorFax')"
                 name="vendorFax"
               >
                 <a-input
                   v-model:value="formState.vendorFax"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.vendor.fax') })"
+                  :placeholder="pi.ph('vendorFax')"
                   show-count
                   :maxlength="50"
                   allow-clear
@@ -257,12 +271,12 @@
             </a-col>
             <a-col :span="12">
               <a-form-item
-                :label="t('entity.vendor.email')"
+                :label="pi.label('vendorEmail')"
                 name="vendorEmail"
               >
                 <a-input
                   v-model:value="formState.vendorEmail"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.vendor.email') })"
+                  :placeholder="pi.ph('vendorEmail')"
                   show-count
                   :maxlength="100"
                   allow-clear
@@ -271,42 +285,14 @@
             </a-col>
             <a-col :span="12">
               <a-form-item
-                :label="t('entity.vendor.website')"
+                :label="pi.label('vendorWebsite')"
                 name="vendorWebsite"
               >
                 <a-input
                   v-model:value="formState.vendorWebsite"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.vendor.website') })"
+                  :placeholder="pi.ph('vendorWebsite')"
                   show-count
                   :maxlength="200"
-                  allow-clear
-                />
-              </a-form-item>
-            </a-col>
-            <a-col :span="12">
-              <a-form-item
-                :label="t('entity.vendor.contactperson')"
-                name="contactPerson"
-              >
-                <a-input
-                  v-model:value="formState.contactPerson"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.vendor.contactperson') })"
-                  show-count
-                  :maxlength="50"
-                  allow-clear
-                />
-              </a-form-item>
-            </a-col>
-            <a-col :span="12">
-              <a-form-item
-                :label="t('entity.vendor.contactphone')"
-                name="contactPhone"
-              >
-                <a-input
-                  v-model:value="formState.contactPhone"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.vendor.contactphone') })"
-                  show-count
-                  :maxlength="50"
                   allow-clear
                 />
               </a-form-item>
@@ -316,19 +302,47 @@
       </a-tab-pane>
       <a-tab-pane
         key="tab-2"
-        :tab="t('common.page.form.tabs.basicinfo') + ' (3/4)'"
+        :tab="t('common.page.form.tabs.basicinfo') + ' (3/6)'"
         force-render
       >
         <div :class="formContentClass">
           <a-row :gutter="24">
             <a-col :span="12">
               <a-form-item
-                :label="t('entity.vendor.contactemail')"
+                :label="pi.label('contactPerson')"
+                name="contactPerson"
+              >
+                <a-input
+                  v-model:value="formState.contactPerson"
+                  :placeholder="pi.ph('contactPerson')"
+                  show-count
+                  :maxlength="50"
+                  allow-clear
+                />
+              </a-form-item>
+            </a-col>
+            <a-col :span="12">
+              <a-form-item
+                :label="pi.label('contactPhone')"
+                name="contactPhone"
+              >
+                <a-input
+                  v-model:value="formState.contactPhone"
+                  :placeholder="pi.ph('contactPhone')"
+                  show-count
+                  :maxlength="50"
+                  allow-clear
+                />
+              </a-form-item>
+            </a-col>
+            <a-col :span="12">
+              <a-form-item
+                :label="pi.label('contactEmail')"
                 name="contactEmail"
               >
                 <a-input
                   v-model:value="formState.contactEmail"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.vendor.contactemail') })"
+                  :placeholder="pi.ph('contactEmail')"
                   show-count
                   :maxlength="100"
                   allow-clear
@@ -337,116 +351,88 @@
             </a-col>
             <a-col :span="12">
               <a-form-item
-                :label="t('entity.vendor.currencycode')"
+                :label="pi.label('currencyCode')"
                 name="currencyCode"
               >
-                <a-input
+                <TaktSelect
                   v-model:value="formState.currencyCode"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.vendor.currencycode') })"
-                  show-count
-                  :maxlength="3"
-                  allow-clear
+                  dict-type="accounting_currency_code"
+                  :placeholder="pi.ph('currencyCode')"
                   :disabled="!!formData?.vendorId"
                 />
               </a-form-item>
             </a-col>
             <a-col :span="12">
               <a-form-item
-                :label="t('entity.vendor.paymentterms')"
+                :label="pi.label('reconciliationAccount')"
+                name="reconciliationAccount"
+              >
+                <TaktSelect
+                  v-model:value="formState.reconciliationAccount"
+                  api-url="TaktAccountTitles/options"
+                  :placeholder="pi.ph('reconciliationAccount')"
+                />
+              </a-form-item>
+            </a-col>
+            <a-col :span="12">
+              <a-form-item
+                :label="pi.label('customerCode')"
+                name="customerCode"
+              >
+                <TaktSelect
+                  v-model:value="formState.customerCode"
+                  api-url="TaktCustomers/options"
+                  :placeholder="pi.ph('customerCode')"
+                  :disabled="!!formData?.vendorId"
+                />
+              </a-form-item>
+            </a-col>
+            <a-col :span="12">
+              <a-form-item
+                :label="pi.label('clearingWithCustomer')"
+                name="clearingWithCustomer"
+              >
+                <TaktSelect
+                  v-model:value="formState.clearingWithCustomer"
+                  dict-type="sys_yes_no_type"
+                  :placeholder="pi.ph('clearingWithCustomer')"
+                />
+              </a-form-item>
+            </a-col>
+            <a-col :span="12">
+              <a-form-item
+                :label="pi.label('paymentMethod')"
+                name="paymentMethod"
+              >
+                <TaktSelect
+                  v-model:value="formState.paymentMethod"
+                  dict-type="accounting_payment_method_type"
+                  :placeholder="pi.ph('paymentMethod')"
+                />
+              </a-form-item>
+            </a-col>
+            <a-col :span="12">
+              <a-form-item
+                :label="pi.label('paymentTerms')"
                 name="paymentTerms"
               >
                 <TaktSelect
                   v-model:value="formState.paymentTerms"
                   dict-type="accounting_payment_terms_param"
-                  :placeholder="t('common.page.form.placeholder.select', { field: t('entity.vendor.paymentterms') })"
+                  :placeholder="pi.ph('paymentTerms')"
                 />
               </a-form-item>
             </a-col>
             <a-col :span="12">
               <a-form-item
-                :label="t('entity.vendor.creditlevel')"
-                name="creditLevel"
+                :label="pi.label('bankCode')"
+                name="bankCode"
               >
                 <TaktSelect
-                  v-model:value="formState.creditLevel"
-                  dict-type="logistics_credit_rating_category"
-                  :placeholder="t('common.page.form.placeholder.select', { field: t('entity.vendor.creditlevel') })"
-                />
-              </a-form-item>
-            </a-col>
-            <a-col :span="12">
-              <a-form-item
-                :label="t('entity.vendor.creditamount')"
-                name="creditAmount"
-              >
-                <a-input-number
-                  v-model:value="formState.creditAmount"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.vendor.creditamount') })"
-                  style="width: 100%"
-                />
-              </a-form-item>
-            </a-col>
-            <a-col :span="12">
-              <a-form-item
-                :label="t('entity.vendor.authorizedbrand')"
-                name="authorizedBrand"
-              >
-                <a-input
-                  v-model:value="formState.authorizedBrand"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.vendor.authorizedbrand') })"
-                  show-count
-                  :maxlength="100"
-                  allow-clear
-                />
-              </a-form-item>
-            </a-col>
-            <a-col :span="12">
-              <a-form-item
-                :label="t('entity.vendor.agentregion')"
-                name="agentRegion"
-              >
-                <a-input
-                  v-model:value="formState.agentRegion"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.vendor.agentregion') })"
-                  show-count
-                  :maxlength="200"
-                  allow-clear
-                />
-              </a-form-item>
-            </a-col>
-            <a-col :span="12">
-              <a-form-item
-                :label="t('entity.vendor.level')"
-                name="vendorLevel"
-              >
-                <TaktSelect
-                  v-model:value="formState.vendorLevel"
-                  dict-type="logistics_grade_category"
-                  :placeholder="t('common.page.form.placeholder.select', { field: t('entity.vendor.level') })"
-                />
-              </a-form-item>
-            </a-col>
-            <a-col :span="12">
-              <a-form-item
-                :label="t('entity.vendor.evaluationscore')"
-                name="evaluationScore"
-              >
-                <a-input-number
-                  v-model:value="formState.evaluationScore"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.vendor.evaluationscore') })"
-                  style="width: 100%"
-                />
-              </a-form-item>
-            </a-col>
-            <a-col :span="12">
-              <a-form-item
-                :label="t('entity.vendor.isqualified')"
-                name="isQualified"
-              >
-                <a-input-number
-                  v-model:value="formState.isQualified"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.vendor.isqualified') })"
-                  style="width: 100%"
+                  v-model:value="formState.bankCode"
+                  api-url="TaktBanks/options"
+                  :placeholder="pi.ph('bankCode')"
+                  :disabled="!!formData?.vendorId"
                 />
               </a-form-item>
             </a-col>
@@ -455,20 +441,296 @@
       </a-tab-pane>
       <a-tab-pane
         key="tab-3"
-        :tab="t('common.page.form.tabs.basicinfo') + ' (4/4)'"
+        :tab="t('common.page.form.tabs.basicinfo') + ' (4/6)'"
+        force-render
+      >
+        <div :class="formContentClass">
+          <a-row :gutter="24">
+            <a-col :span="12">
+              <a-form-item
+                :label="pi.label('bankAccount')"
+                name="bankAccount"
+              >
+                <a-input
+                  v-model:value="formState.bankAccount"
+                  :placeholder="pi.ph('bankAccount')"
+                  show-count
+                  :maxlength="40"
+                  allow-clear
+                />
+              </a-form-item>
+            </a-col>
+            <a-col :span="12">
+              <a-form-item
+                :label="pi.label('accountHolder')"
+                name="accountHolder"
+              >
+                <a-input
+                  v-model:value="formState.accountHolder"
+                  :placeholder="pi.ph('accountHolder')"
+                  show-count
+                  :maxlength="100"
+                  allow-clear
+                />
+              </a-form-item>
+            </a-col>
+            <a-col :span="12">
+              <a-form-item
+                :label="pi.label('grBasedInvoiceInspection')"
+                name="grBasedInvoiceInspection"
+              >
+                <TaktSelect
+                  v-model:value="formState.grBasedInvoiceInspection"
+                  dict-type="sys_yes_no_type"
+                  :placeholder="pi.ph('grBasedInvoiceInspection')"
+                />
+              </a-form-item>
+            </a-col>
+            <a-col :span="12">
+              <a-form-item
+                :label="pi.label('incoterms1')"
+                name="incoterms1"
+              >
+                <TaktSelect
+                  v-model:value="formState.incoterms1"
+                  dict-type="logistics_incoterms1"
+                  :placeholder="pi.ph('incoterms1')"
+                />
+              </a-form-item>
+            </a-col>
+            <a-col :span="12">
+              <a-form-item
+                :label="pi.label('incoterms2')"
+                name="incoterms2"
+              >
+                <a-input
+                  v-model:value="formState.incoterms2"
+                  :placeholder="pi.ph('incoterms2')"
+                  show-count
+                  :maxlength="40"
+                  allow-clear
+                />
+              </a-form-item>
+            </a-col>
+            <a-col :span="12">
+              <a-form-item
+                :label="pi.label('automaticPurchaseOrder')"
+                name="automaticPurchaseOrder"
+              >
+                <TaktSelect
+                  v-model:value="formState.automaticPurchaseOrder"
+                  dict-type="sys_yes_no_type"
+                  :placeholder="pi.ph('automaticPurchaseOrder')"
+                />
+              </a-form-item>
+            </a-col>
+            <a-col :span="12">
+              <a-form-item
+                :label="pi.label('pricingDateControl')"
+                name="pricingDateControl"
+              >
+                <TaktSelect
+                  v-model:value="formState.pricingDateControl"
+                  dict-type="logistics_pricing_date_control"
+                  :placeholder="pi.ph('pricingDateControl')"
+                />
+              </a-form-item>
+            </a-col>
+            <a-col :span="12">
+              <a-form-item
+                :label="pi.label('purchaseGroup')"
+                name="purchaseGroup"
+              >
+                <TaktSelect
+                  v-model:value="formState.purchaseGroup"
+                  api-url="TaktPurchaseGroups/options"
+                  :placeholder="pi.ph('purchaseGroup')"
+                />
+              </a-form-item>
+            </a-col>
+            <a-col :span="12">
+              <a-form-item
+                :label="pi.label('plannedDeliveryTimeDays')"
+                name="plannedDeliveryTimeDays"
+              >
+                <a-input-number
+                  v-model:value="formState.plannedDeliveryTimeDays"
+                  :placeholder="pi.ph('plannedDeliveryTimeDays')"
+                  style="width: 100%"
+                />
+              </a-form-item>
+            </a-col>
+            <a-col :span="12">
+              <a-form-item
+                :label="pi.label('evaluatedReceiptSettlement')"
+                name="evaluatedReceiptSettlement"
+              >
+                <TaktSelect
+                  v-model:value="formState.evaluatedReceiptSettlement"
+                  dict-type="sys_yes_no_type"
+                  :placeholder="pi.ph('evaluatedReceiptSettlement')"
+                />
+              </a-form-item>
+            </a-col>
+          </a-row>
+        </div>
+      </a-tab-pane>
+      <a-tab-pane
+        key="tab-4"
+        :tab="t('common.page.form.tabs.basicinfo') + ' (5/6)'"
         force-render
       >
         <div :class="formContentClass">
           <a-row :gutter="24">
             <a-col :span="24">
               <a-form-item
-                :label="t('entity.vendor.status')"
+                :label="pi.label('purchasingOrganization')"
+                name="purchasingOrganization"
+              >
+                <TaktSelect
+                  v-model:value="formState.purchasingOrganization"
+                  api-url="TaktPlants/options"
+                  :placeholder="pi.ph('purchasingOrganization')"
+                />
+              </a-form-item>
+            </a-col>
+            <a-col :span="24">
+              <a-form-item
+                :label="pi.label('creditLevel')"
+                name="creditLevel"
+              >
+                <TaktSelect
+                  v-model:value="formState.creditLevel"
+                  dict-type="logistics_credit_rating_category"
+                  :placeholder="pi.ph('creditLevel')"
+                />
+              </a-form-item>
+            </a-col>
+            <a-col :span="24">
+              <a-form-item
+                :label="pi.label('creditAmount')"
+                name="creditAmount"
+              >
+                <a-input-number
+                  v-model:value="formState.creditAmount"
+                  :placeholder="pi.ph('creditAmount')"
+                  style="width: 100%"
+                />
+              </a-form-item>
+            </a-col>
+            <a-col :span="24">
+              <a-form-item
+                :label="pi.label('authorizedBrand')"
+                name="authorizedBrand"
+              >
+                <a-input
+                  v-model:value="formState.authorizedBrand"
+                  :placeholder="pi.ph('authorizedBrand')"
+                  show-count
+                  :maxlength="100"
+                  allow-clear
+                />
+              </a-form-item>
+            </a-col>
+            <a-col :span="24">
+              <a-form-item
+                :label="pi.label('agentRegion')"
+                name="agentRegion"
+              >
+                <a-input
+                  v-model:value="formState.agentRegion"
+                  :placeholder="pi.ph('agentRegion')"
+                  show-count
+                  :maxlength="200"
+                  allow-clear
+                />
+              </a-form-item>
+            </a-col>
+            <a-col :span="24">
+              <a-form-item
+                :label="pi.label('vendorLevel')"
+                name="vendorLevel"
+              >
+                <TaktSelect
+                  v-model:value="formState.vendorLevel"
+                  dict-type="logistics_grade_category"
+                  :placeholder="pi.ph('vendorLevel')"
+                />
+              </a-form-item>
+            </a-col>
+            <a-col :span="24">
+              <a-form-item
+                :label="pi.label('evaluationScore')"
+                name="evaluationScore"
+              >
+                <a-input-number
+                  v-model:value="formState.evaluationScore"
+                  :placeholder="pi.ph('evaluationScore')"
+                  style="width: 100%"
+                />
+              </a-form-item>
+            </a-col>
+            <a-col :span="24">
+              <a-form-item
+                :label="pi.label('vendorStatus')"
                 name="vendorStatus"
               >
                 <TaktSelect
                   v-model:value="formState.vendorStatus"
                   dict-type="sys_normal_disable_status"
-                  :placeholder="t('common.page.form.placeholder.select', { field: t('entity.vendor.status') })"
+                  :placeholder="pi.ph('vendorStatus')"
+                />
+              </a-form-item>
+            </a-col>
+          </a-row>
+        </div>
+      </a-tab-pane>
+      <a-tab-pane
+        key="tab-5"
+        :tab="t('common.page.form.tabs.basicinfo') + ' (6/6)'"
+        force-render
+      >
+        <div :class="formContentClass">
+          <a-row :gutter="24">
+            <a-col :span="24">
+              <a-form-item
+                :label="pi.label('tenantCode')"
+                name="tenantCode"
+              >
+                <a-input
+                  v-model:value="formState.tenantCode"
+                  :placeholder="pi.ph('tenantCode')"
+                  show-count
+                  :maxlength="20"
+                  disabled
+                />
+              </a-form-item>
+            </a-col>
+            <a-col :span="24">
+              <a-form-item
+                :label="pi.label('companyCode')"
+                name="companyCode"
+              >
+                <a-input
+                  v-model:value="formState.companyCode"
+                  :placeholder="pi.ph('companyCode')"
+                  show-count
+                  :maxlength="20"
+                  disabled
+                />
+              </a-form-item>
+            </a-col>
+            <a-col :span="24">
+              <a-form-item
+                :label="pi.label('companyDefaultCulture')"
+                name="companyDefaultCulture"
+              >
+                <a-input
+                  v-model:value="formState.companyDefaultCulture"
+                  :placeholder="pi.ph('companyDefaultCulture')"
+                  show-count
+                  :maxlength="20"
+                  disabled
                 />
               </a-form-item>
             </a-col>
@@ -485,7 +747,7 @@
                     >
                       <span class="takt-form-label-hint-icon"><RiQuestionLine class="takt-remix-icon" /></span>
                     </a-tooltip>
-                    <span>{{ t('common.page.entity.extfield') }}</span>
+                    <span>{{ pi.label('extField') }}</span>
                   </span>
                 </template>
                 <a-textarea
@@ -500,12 +762,12 @@
             </a-col>
             <a-col :span="24">
               <a-form-item
-                :label="t('common.page.entity.remark')"
+                :label="pi.label('remark')"
                 name="remark"
               >
                 <a-textarea
                   v-model:value="formState.remark"
-                  :placeholder="t('common.page.form.placeholder.optional', { field: t('common.page.entity.remark') })"
+                  :placeholder="pi.ph('remark')"
                   :rows="4"
                   show-count
                   :maxlength="400"
@@ -528,6 +790,10 @@
 import { reactive, watch, computed, ref, onMounted } from 'vue'
 import { useI18n } from 'vue-i18n'
 import type { Rule } from 'ant-design-vue/es/form'
+import { useVendorI18n } from '../composables/use-vendor-i18n'
+
+/** 实体字段 i18n */
+const pi = useVendorI18n()
 import type { VendorCreate } from '@/types/logistics/procurement/vendor'
 import TaktSelect from '@/components/business/takt-select/index.vue'
 import { RiQuestionLine } from '@remixicon/vue'
@@ -538,7 +804,7 @@ import { useUserStore } from '@/stores/identity/user'
 /** i18n 翻译函数 */
 const { t } = useI18n()
 
-/** Pinia：租户/公司上下文 */
+/** Pinia：租户上下文 */
 const tenantStore = useTenantStore()
 /** Pinia：用户上下文 */
 const userStore = useUserStore()
@@ -546,25 +812,23 @@ const userStore = useUserStore()
 /**
  * 上下文隔离字段：租户 / 公司 / 公司默认语言（登录或公司切换注入，表单只读）
  * @param target 表单数据
- * @param force 为 true 时强制覆盖（新增态或公司切换）
+ * @param force 为 true 时强制覆盖（新增态或上下文切换）
  */
 function applyScopeDefaults(target: Record<string, unknown>, force = false) {
-  if (formFields.includes('tenantCode') && (force || !target.tenantCode)) {
+  if (force || !target.tenantCode) {
     target.tenantCode = tenantStore.tenantCode
   }
-  if (formFields.includes('companyCode') && (force || !target.companyCode)) {
+  if (force || !target.companyCode) {
     target.companyCode = tenantStore.companyCode
   }
-  if (formFields.includes('companyDefaultCulture') && (force || !target.companyDefaultCulture)) {
+  if (force || !target.companyDefaultCulture) {
     target.companyDefaultCulture = userStore.userInfo?.companyDefaultCulture ?? ''
   }
 }
-/** 表单内容区高度 class（字段多时 tab-10 行） */
-const formContentClass = computed(() => (formFields.length > 10 ? 'takt-form-content-rows-10' : 'takt-form-content-rows-5'))
+/** 表单内容区高度 class（多 Tab 大表单固定 10 行高度） */
+const formContentClass = 'takt-form-content-rows-10'
 /** 当前激活的 Tab key */
 const activeTab = ref('tab-0')
-/** CreateDto 字段名列表（与 formState 键对齐） */
-const formFields = ["tenantCode","companyCode","companyDefaultCulture","plantCode","vendorCode","vendorName","vendorShortName","vendorType","industrySector","vendorTaxNumber","registrationCountry","registrationAddress1","registrationAddress2","registrationAddress3","vendorPhone","vendorFax","vendorEmail","vendorWebsite","contactPerson","contactPhone","contactEmail","currencyCode","paymentTerms","creditLevel","creditAmount","authorizedBrand","agentRegion","vendorLevel","evaluationScore","isQualified","vendorStatus","extField","remark"]
 
 
 /** 父级传入的编辑 DTO；新增时为 undefined 或空对象 */
@@ -586,7 +850,15 @@ const formState = reactive<Record<string, any>>({})
 /** 表单字段默认值（字典 IsDefault=1，来自 TaktDictDataSeedData） */
 const FORM_FIELD_DEFAULTS: Record<string, string | number> = {
   vendorType: 0,
-  paymentTerms: 0,
+  enterpriseNature: "150",
+  industryAttribute: "C",
+  defaultCulture: "ZH-CN",
+  taxRate: 10,
+  registrationCountry: "CN",
+  currencyCode: "CNY",
+  paymentMethod: 0,
+  paymentTerms: "PREPAYSHIP",
+  incoterms1: "FOB",
   creditLevel: 0,
   vendorLevel: 0,
   vendorStatus: 1
@@ -633,8 +905,7 @@ watch(
 watch(
   () => [tenantStore.tenantCode, tenantStore.companyCode, userStore.userInfo?.companyDefaultCulture] as const,
   () => {
-    const isCreate = !props.formData?.vendorId
-    if (isCreate) {
+    if (!props.formData?.vendorId) {
       applyScopeDefaults(formState, true)
     }
   },
@@ -645,32 +916,66 @@ const rules = computed<Record<string, Rule[]>>(() => ({
   plantCode: [
     {
       required: true,
-      message: t('common.page.form.placeholder.required', { field: t('entity.vendor.plantcode') }),
-      trigger: 'blur'
+      message: pi.ph('plantCode'),
+      trigger: 'change'
     }
   ],
   vendorCode: [
     {
       required: true,
-      message: t('common.page.form.placeholder.required', { field: t('entity.vendor.code') }),
+      message: pi.ph('vendorCode'),
       trigger: 'blur'
     }
   ],
-  vendorName: [
+  vendorName1: [
     {
       required: true,
-      message: t('common.page.form.placeholder.required', { field: t('entity.vendor.name') }),
+      message: pi.ph('vendorName1'),
       trigger: 'blur'
     }
   ],
   vendorType: [{
     validator: async (_rule, value) => {
       if (value === undefined || value === null || value === '') {
-        return Promise.reject(t('common.page.form.placeholder.select', { field: t('entity.vendor.type') }))
+        return Promise.reject(pi.ph('vendorType'))
       }
       const num = typeof value === 'number' ? value : Number(value)
       if (!Number.isFinite(num)) {
-        return Promise.reject(t('common.page.form.placeholder.select', { field: t('entity.vendor.type') }))
+        return Promise.reject(pi.ph('vendorType'))
+      }
+      return Promise.resolve()
+    },
+    trigger: 'change'
+  }],
+  enterpriseNature: [
+    {
+      required: true,
+      message: pi.ph('enterpriseNature'),
+      trigger: 'change'
+    }
+  ],
+  industryAttribute: [
+    {
+      required: true,
+      message: pi.ph('industryAttribute'),
+      trigger: 'change'
+    }
+  ],
+  defaultCulture: [
+    {
+      required: true,
+      message: pi.ph('defaultCulture'),
+      trigger: 'change'
+    }
+  ],
+  taxRate: [{
+    validator: async (_rule, value) => {
+      if (value === undefined || value === null || value === '') {
+        return Promise.reject(pi.ph('taxRate'))
+      }
+      const num = typeof value === 'number' ? value : Number(value)
+      if (!Number.isFinite(num)) {
+        return Promise.reject(pi.ph('taxRate'))
       }
       return Promise.resolve()
     },
@@ -679,31 +984,179 @@ const rules = computed<Record<string, Rule[]>>(() => ({
   currencyCode: [
     {
       required: true,
-      message: t('common.page.form.placeholder.required', { field: t('entity.vendor.currencycode') }),
-      trigger: 'blur'
+      message: pi.ph('currencyCode'),
+      trigger: 'change'
     }
   ],
-  paymentTerms: [{
+  reconciliationAccount: [
+    {
+      required: true,
+      message: pi.ph('reconciliationAccount'),
+      trigger: 'change'
+    }
+  ],
+  customerCode: [
+    {
+      required: true,
+      message: pi.ph('customerCode'),
+      trigger: 'change'
+    }
+  ],
+  clearingWithCustomer: [{
     validator: async (_rule, value) => {
       if (value === undefined || value === null || value === '') {
-        return Promise.reject(t('common.page.form.placeholder.select', { field: t('entity.vendor.paymentterms') }))
+        return Promise.reject(pi.ph('clearingWithCustomer'))
       }
       const num = typeof value === 'number' ? value : Number(value)
       if (!Number.isFinite(num)) {
-        return Promise.reject(t('common.page.form.placeholder.select', { field: t('entity.vendor.paymentterms') }))
+        return Promise.reject(pi.ph('clearingWithCustomer'))
       }
       return Promise.resolve()
     },
     trigger: 'change'
   }],
-  creditLevel: [{
+  paymentMethod: [{
     validator: async (_rule, value) => {
       if (value === undefined || value === null || value === '') {
-        return Promise.reject(t('common.page.form.placeholder.select', { field: t('entity.vendor.creditlevel') }))
+        return Promise.reject(pi.ph('paymentMethod'))
       }
       const num = typeof value === 'number' ? value : Number(value)
       if (!Number.isFinite(num)) {
-        return Promise.reject(t('common.page.form.placeholder.select', { field: t('entity.vendor.creditlevel') }))
+        return Promise.reject(pi.ph('paymentMethod'))
+      }
+      return Promise.resolve()
+    },
+    trigger: 'change'
+  }],
+  paymentTerms: [
+    {
+      required: true,
+      message: pi.ph('paymentTerms'),
+      trigger: 'change'
+    }
+  ],
+  bankCode: [
+    {
+      required: true,
+      message: pi.ph('bankCode'),
+      trigger: 'change'
+    }
+  ],
+  bankAccount: [
+    {
+      required: true,
+      message: pi.ph('bankAccount'),
+      trigger: 'blur'
+    }
+  ],
+  accountHolder: [
+    {
+      required: true,
+      message: pi.ph('accountHolder'),
+      trigger: 'blur'
+    }
+  ],
+  grBasedInvoiceInspection: [{
+    validator: async (_rule, value) => {
+      if (value === undefined || value === null || value === '') {
+        return Promise.reject(pi.ph('grBasedInvoiceInspection'))
+      }
+      const num = typeof value === 'number' ? value : Number(value)
+      if (!Number.isFinite(num)) {
+        return Promise.reject(pi.ph('grBasedInvoiceInspection'))
+      }
+      return Promise.resolve()
+    },
+    trigger: 'change'
+  }],
+  incoterms1: [
+    {
+      required: true,
+      message: pi.ph('incoterms1'),
+      trigger: 'change'
+    }
+  ],
+  incoterms2: [
+    {
+      required: true,
+      message: pi.ph('incoterms2'),
+      trigger: 'blur'
+    }
+  ],
+  automaticPurchaseOrder: [{
+    validator: async (_rule, value) => {
+      if (value === undefined || value === null || value === '') {
+        return Promise.reject(pi.ph('automaticPurchaseOrder'))
+      }
+      const num = typeof value === 'number' ? value : Number(value)
+      if (!Number.isFinite(num)) {
+        return Promise.reject(pi.ph('automaticPurchaseOrder'))
+      }
+      return Promise.resolve()
+    },
+    trigger: 'change'
+  }],
+  pricingDateControl: [{
+    validator: async (_rule, value) => {
+      if (value === undefined || value === null || value === '') {
+        return Promise.reject(pi.ph('pricingDateControl'))
+      }
+      const num = typeof value === 'number' ? value : Number(value)
+      if (!Number.isFinite(num)) {
+        return Promise.reject(pi.ph('pricingDateControl'))
+      }
+      return Promise.resolve()
+    },
+    trigger: 'change'
+  }],
+  purchaseGroup: [
+    {
+      required: true,
+      message: pi.ph('purchaseGroup'),
+      trigger: 'change'
+    }
+  ],
+  plannedDeliveryTimeDays: [{
+    validator: async (_rule, value) => {
+      if (value === undefined || value === null || value === '') {
+        return Promise.reject(pi.ph('plannedDeliveryTimeDays'))
+      }
+      const num = typeof value === 'number' ? value : Number(value)
+      if (!Number.isFinite(num)) {
+        return Promise.reject(pi.ph('plannedDeliveryTimeDays'))
+      }
+      return Promise.resolve()
+    },
+    trigger: 'change'
+  }],
+  evaluatedReceiptSettlement: [{
+    validator: async (_rule, value) => {
+      if (value === undefined || value === null || value === '') {
+        return Promise.reject(pi.ph('evaluatedReceiptSettlement'))
+      }
+      const num = typeof value === 'number' ? value : Number(value)
+      if (!Number.isFinite(num)) {
+        return Promise.reject(pi.ph('evaluatedReceiptSettlement'))
+      }
+      return Promise.resolve()
+    },
+    trigger: 'change'
+  }],
+  purchasingOrganization: [
+    {
+      required: true,
+      message: pi.ph('purchasingOrganization'),
+      trigger: 'change'
+    }
+  ],
+  creditLevel: [{
+    validator: async (_rule, value) => {
+      if (value === undefined || value === null || value === '') {
+        return Promise.reject(pi.ph('creditLevel'))
+      }
+      const num = typeof value === 'number' ? value : Number(value)
+      if (!Number.isFinite(num)) {
+        return Promise.reject(pi.ph('creditLevel'))
       }
       return Promise.resolve()
     },
@@ -712,11 +1165,11 @@ const rules = computed<Record<string, Rule[]>>(() => ({
   creditAmount: [{
     validator: async (_rule, value) => {
       if (value === undefined || value === null || value === '') {
-        return Promise.reject(t('common.page.form.placeholder.select', { field: t('entity.vendor.creditamount') }))
+        return Promise.reject(pi.ph('creditAmount'))
       }
       const num = typeof value === 'number' ? value : Number(value)
       if (!Number.isFinite(num)) {
-        return Promise.reject(t('common.page.form.placeholder.select', { field: t('entity.vendor.creditamount') }))
+        return Promise.reject(pi.ph('creditAmount'))
       }
       return Promise.resolve()
     },
@@ -725,11 +1178,11 @@ const rules = computed<Record<string, Rule[]>>(() => ({
   vendorLevel: [{
     validator: async (_rule, value) => {
       if (value === undefined || value === null || value === '') {
-        return Promise.reject(t('common.page.form.placeholder.select', { field: t('entity.vendor.level') }))
+        return Promise.reject(pi.ph('vendorLevel'))
       }
       const num = typeof value === 'number' ? value : Number(value)
       if (!Number.isFinite(num)) {
-        return Promise.reject(t('common.page.form.placeholder.select', { field: t('entity.vendor.level') }))
+        return Promise.reject(pi.ph('vendorLevel'))
       }
       return Promise.resolve()
     },
@@ -738,24 +1191,11 @@ const rules = computed<Record<string, Rule[]>>(() => ({
   evaluationScore: [{
     validator: async (_rule, value) => {
       if (value === undefined || value === null || value === '') {
-        return Promise.reject(t('common.page.form.placeholder.select', { field: t('entity.vendor.evaluationscore') }))
+        return Promise.reject(pi.ph('evaluationScore'))
       }
       const num = typeof value === 'number' ? value : Number(value)
       if (!Number.isFinite(num)) {
-        return Promise.reject(t('common.page.form.placeholder.select', { field: t('entity.vendor.evaluationscore') }))
-      }
-      return Promise.resolve()
-    },
-    trigger: 'change'
-  }],
-  isQualified: [{
-    validator: async (_rule, value) => {
-      if (value === undefined || value === null || value === '') {
-        return Promise.reject(t('common.page.form.placeholder.select', { field: t('entity.vendor.isqualified') }))
-      }
-      const num = typeof value === 'number' ? value : Number(value)
-      if (!Number.isFinite(num)) {
-        return Promise.reject(t('common.page.form.placeholder.select', { field: t('entity.vendor.isqualified') }))
+        return Promise.reject(pi.ph('evaluationScore'))
       }
       return Promise.resolve()
     },
@@ -764,11 +1204,11 @@ const rules = computed<Record<string, Rule[]>>(() => ({
   vendorStatus: [{
     validator: async (_rule, value) => {
       if (value === undefined || value === null || value === '') {
-        return Promise.reject(t('common.page.form.placeholder.select', { field: t('entity.vendor.status') }))
+        return Promise.reject(pi.ph('vendorStatus'))
       }
       const num = typeof value === 'number' ? value : Number(value)
       if (!Number.isFinite(num)) {
-        return Promise.reject(t('common.page.form.placeholder.select', { field: t('entity.vendor.status') }))
+        return Promise.reject(pi.ph('vendorStatus'))
       }
       return Promise.resolve()
     },
@@ -789,9 +1229,37 @@ function getValues(): Record<string, any> {
     const rawvendorType = payload.vendorType
     payload.vendorType = typeof rawvendorType === 'number' ? rawvendorType : Number(rawvendorType)
   }
-  if ('paymentTerms' in payload) {
-    const rawpaymentTerms = payload.paymentTerms
-    payload.paymentTerms = typeof rawpaymentTerms === 'number' ? rawpaymentTerms : Number(rawpaymentTerms)
+  if ('taxRate' in payload) {
+    const rawtaxRate = payload.taxRate
+    payload.taxRate = typeof rawtaxRate === 'number' ? rawtaxRate : Number(rawtaxRate)
+  }
+  if ('clearingWithCustomer' in payload) {
+    const rawclearingWithCustomer = payload.clearingWithCustomer
+    payload.clearingWithCustomer = typeof rawclearingWithCustomer === 'number' ? rawclearingWithCustomer : Number(rawclearingWithCustomer)
+  }
+  if ('paymentMethod' in payload) {
+    const rawpaymentMethod = payload.paymentMethod
+    payload.paymentMethod = typeof rawpaymentMethod === 'number' ? rawpaymentMethod : Number(rawpaymentMethod)
+  }
+  if ('grBasedInvoiceInspection' in payload) {
+    const rawgrBasedInvoiceInspection = payload.grBasedInvoiceInspection
+    payload.grBasedInvoiceInspection = typeof rawgrBasedInvoiceInspection === 'number' ? rawgrBasedInvoiceInspection : Number(rawgrBasedInvoiceInspection)
+  }
+  if ('automaticPurchaseOrder' in payload) {
+    const rawautomaticPurchaseOrder = payload.automaticPurchaseOrder
+    payload.automaticPurchaseOrder = typeof rawautomaticPurchaseOrder === 'number' ? rawautomaticPurchaseOrder : Number(rawautomaticPurchaseOrder)
+  }
+  if ('pricingDateControl' in payload) {
+    const rawpricingDateControl = payload.pricingDateControl
+    payload.pricingDateControl = typeof rawpricingDateControl === 'number' ? rawpricingDateControl : Number(rawpricingDateControl)
+  }
+  if ('plannedDeliveryTimeDays' in payload) {
+    const rawplannedDeliveryTimeDays = payload.plannedDeliveryTimeDays
+    payload.plannedDeliveryTimeDays = typeof rawplannedDeliveryTimeDays === 'number' ? rawplannedDeliveryTimeDays : Number(rawplannedDeliveryTimeDays)
+  }
+  if ('evaluatedReceiptSettlement' in payload) {
+    const rawevaluatedReceiptSettlement = payload.evaluatedReceiptSettlement
+    payload.evaluatedReceiptSettlement = typeof rawevaluatedReceiptSettlement === 'number' ? rawevaluatedReceiptSettlement : Number(rawevaluatedReceiptSettlement)
   }
   if ('creditLevel' in payload) {
     const rawcreditLevel = payload.creditLevel
@@ -808,10 +1276,6 @@ function getValues(): Record<string, any> {
   if ('evaluationScore' in payload) {
     const rawevaluationScore = payload.evaluationScore
     payload.evaluationScore = typeof rawevaluationScore === 'number' ? rawevaluationScore : Number(rawevaluationScore)
-  }
-  if ('isQualified' in payload) {
-    const rawisQualified = payload.isQualified
-    payload.isQualified = typeof rawisQualified === 'number' ? rawisQualified : Number(rawisQualified)
   }
   if ('vendorStatus' in payload) {
     const rawvendorStatus = payload.vendorStatus

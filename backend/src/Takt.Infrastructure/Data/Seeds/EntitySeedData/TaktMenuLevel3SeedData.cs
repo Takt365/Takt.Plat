@@ -351,6 +351,26 @@ public class TaktMenuLevel3SeedData
             });
             insertCount += insertAF10;
             updateCount += updateAF10;
+
+            var (insertAFBank, updateAFBank) = await CreateOrUpdateMenuAsync(menuRepository, seedContext, tenantCode, "ACCOUNTING_FINANCIAL_BANK", menu =>
+            {
+                menu.MenuName = "银行信息";
+                menu.MenuCode = "ACCOUNTING_FINANCIAL_BANK";
+                menu.I18nKey = "menu.accounting.financial.bank";
+                menu.Icon = "RiBankLine";
+                menu.ParentId = accountingFinancialMenu.Id;
+                menu.MenuType = 1;
+                menu.Permission = "accounting:financial:bank:list";
+                menu.RoutePath = "/accounting/financial/bank";
+                menu.ComponentPath = "accounting/financial/bank/index";
+                menu.SortOrder = 12;
+                menu.MenuStatus = 1;
+                menu.IsVisible = 1;
+                menu.IsCached = 0;
+                menu.IsExternal = 0;
+            });
+            insertCount += insertAFBank;
+            updateCount += updateAFBank;
         }
 
         // ========== 控制会计下的三级菜单 (ACCOUNTING_CONTROLLING) ==========

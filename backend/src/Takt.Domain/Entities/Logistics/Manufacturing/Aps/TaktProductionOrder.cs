@@ -27,13 +27,13 @@ namespace Takt.Domain.Entities.Logistics.Manufacturing.Aps;
 public class TaktProductionOrder : TaktCompanyEntityBase
 {
     /// <summary>
-    /// 工厂代码（选项 TaktPlants/options，DictValue=Id）
+    /// 工厂代码（选项 TaktPlants/options；DictValue=Id）
     /// </summary>
     [SugarColumn(ColumnName = "plant_code", ColumnDescription = "工厂代码", ColumnDataType = "nvarchar", Length = 4, IsNullable = false)]
     public string PlantCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 工单类别（字典 logistics_prod_order_type，存 DictValue，如 ZDTA/ZDTB/ZDTC/ZDTD/ZDTE/ZDTF）
+    /// 工单类别（字典 logistics_prod_order_type；存 DictValue，如 ZDTA/ZDTB/ZDTC/ZDTD/ZDTE/ZDTF）
     /// </summary>
     [SugarColumn(ColumnName = "prod_order_type", ColumnDescription = "工单类别", ColumnDataType = "nvarchar", Length = 10, IsNullable = false, DefaultValue = "ZDTA")]
     public string ProdOrderType { get; set; } = "ZDTA";
@@ -45,7 +45,7 @@ public class TaktProductionOrder : TaktCompanyEntityBase
     public string ProdOrderCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 物料编码（选项 TaktMaterialPlants/options，DictValue=MaterialCode，ExtValue=PlantCode）
+    /// 物料编码（选项 TaktMaterialPlants/options；DictValue=MaterialCode，ExtValue=PlantCode）
     /// </summary>
     [SugarColumn(ColumnName = "material_code", ColumnDescription = "物料编码", ColumnDataType = "nvarchar", Length = 20, IsNullable = false)]
     public string MaterialCode { get; set; } = string.Empty;
@@ -63,7 +63,7 @@ public class TaktProductionOrder : TaktCompanyEntityBase
     public decimal ProducedQty { get; set; } = 0;
 
     /// <summary>
-    /// 计量单位（字典 logistics_unit_of_measure_code，存 DictValue）
+    /// 计量单位（字典 logistics_unit_of_measure_code；存 DictValue）
     /// </summary>
     [SugarColumn(ColumnName = "unit_of_measure", ColumnDescription = "计量单位", ColumnDataType = "nvarchar", Length = 10, IsNullable = false)]
     public string UnitOfMeasure { get; set; } = string.Empty;
@@ -87,7 +87,7 @@ public class TaktProductionOrder : TaktCompanyEntityBase
     public int Priority { get; set; } = 3;
 
     /// <summary>
-    /// 工作中心（选项 TaktWorkCenters/options，DictValue=WorkCenterCode，ExtValue=PlantCode）
+    /// 工作中心（选项 TaktWorkCenters/options；DictValue=WorkCenterCode，ExtValue=PlantCode）
     /// </summary>
     [SugarColumn(ColumnName = "work_center", ColumnDescription = "工作中心", ColumnDataType = "nvarchar", Length = 80, IsNullable = true)]
     public string? WorkCenter { get; set; }

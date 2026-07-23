@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：frontend/src/types/human-resource/personnel
 // 文件名称：employee-education.d.ts
-// 创建时间：2026-06-23
+// 创建时间：2026-07-23
 // 创建人：Takt365(Auto Generated)
 // 功能描述：human-resource/personnel 模块类型定义（自动生成；类型名去 Takt 前缀与末尾 Dto，如 TaktCompanyDto → Company）
 // 
@@ -29,14 +29,19 @@ export interface EmployeeEducation extends CompanyDtoBase {
   employeeEducationId: string;
 
   /**
-   * 员工ID
+   * 员工（选项 TaktEmployees/options；DictValue=Id）
    */
   employeeId: string;
 
   /**
-   * 员工名称（填充字段）
+   * 员工编码（冗余，与 TaktEmployee.EmployeeCode 对齐）
    */
-  employeeName?: string;
+  employeeCode: string;
+
+  /**
+   * 员工姓名（冗余，与 TaktEmployee.EmployeeName 对齐）
+   */
+  employeeName: string;
 
   /**
    * 学校名称
@@ -44,12 +49,12 @@ export interface EmployeeEducation extends CompanyDtoBase {
   schoolName: string;
 
   /**
-   * 学历层次（1=高中及以下，2=大专，3=本科，4=硕士，5=博士）
+   * 学历层次（字典 hr_education_level_category；1=高中及以下 2=大专 3=本科 4=硕士 5=博士）
    */
   educationLevel?: number;
 
   /**
-   * 学位层次（0=无，1=学士，2=硕士，3=博士）
+   * 学位层次（字典 hr_degree_level_category；0=无 1=学士 2=硕士 3=博士）
    */
   degreeLevel?: number;
 
@@ -59,9 +64,9 @@ export interface EmployeeEducation extends CompanyDtoBase {
   majorName?: string;
 
   /**
-   * 证书编号
+   * 证书编码
    */
-  certificateNo?: string;
+  certificateCode?: string;
 
   /**
    * 开始日期
@@ -74,7 +79,7 @@ export interface EmployeeEducation extends CompanyDtoBase {
   endDate?: string;
 
   /**
-   * 是否最高学历（1=是，0=否）
+   * 是否最高学历（字典 sys_yes_no_type；0=否 1=是）
    */
   isHighest: number;
 
@@ -99,9 +104,19 @@ export interface EmployeeEducationQuery extends TaktPagedQuery {
   companyCode?: string;
 
   /**
-   * 员工ID
+   * 员工（选项 TaktEmployees/options；DictValue=Id）
    */
   employeeId?: string;
+
+  /**
+   * 员工编码（冗余，与 TaktEmployee.EmployeeCode 对齐）
+   */
+  employeeCode?: string;
+
+  /**
+   * 员工姓名（冗余，与 TaktEmployee.EmployeeName 对齐）
+   */
+  employeeName?: string;
 
   /**
    * 学校名称
@@ -109,12 +124,12 @@ export interface EmployeeEducationQuery extends TaktPagedQuery {
   schoolName?: string;
 
   /**
-   * 学历层次（1=高中及以下，2=大专，3=本科，4=硕士，5=博士）
+   * 学历层次（字典 hr_education_level_category；1=高中及以下 2=大专 3=本科 4=硕士 5=博士）
    */
   educationLevel?: number;
 
   /**
-   * 学位层次（0=无，1=学士，2=硕士，3=博士）
+   * 学位层次（字典 hr_degree_level_category；0=无 1=学士 2=硕士 3=博士）
    */
   degreeLevel?: number;
 
@@ -124,9 +139,9 @@ export interface EmployeeEducationQuery extends TaktPagedQuery {
   majorName?: string;
 
   /**
-   * 证书编号
+   * 证书编码
    */
-  certificateNo?: string;
+  certificateCode?: string;
 
   /**
    * 开始日期（范围查询-开始）
@@ -149,7 +164,7 @@ export interface EmployeeEducationQuery extends TaktPagedQuery {
   endDateEnd?: string;
 
   /**
-   * 是否最高学历（1=是，0=否）
+   * 是否最高学历（字典 sys_yes_no_type；0=否 1=是）
    */
   isHighest?: number;
 
@@ -198,9 +213,19 @@ export interface EmployeeEducationCreate {
   companyDefaultCulture: string;
 
   /**
-   * 员工ID
+   * 员工（选项 TaktEmployees/options；DictValue=Id）
    */
   employeeId: string;
+
+  /**
+   * 员工编码（冗余，与 TaktEmployee.EmployeeCode 对齐）
+   */
+  employeeCode: string;
+
+  /**
+   * 员工姓名（冗余，与 TaktEmployee.EmployeeName 对齐）
+   */
+  employeeName: string;
 
   /**
    * 学校名称
@@ -208,12 +233,12 @@ export interface EmployeeEducationCreate {
   schoolName: string;
 
   /**
-   * 学历层次（1=高中及以下，2=大专，3=本科，4=硕士，5=博士）
+   * 学历层次（字典 hr_education_level_category；1=高中及以下 2=大专 3=本科 4=硕士 5=博士）
    */
   educationLevel?: number;
 
   /**
-   * 学位层次（0=无，1=学士，2=硕士，3=博士）
+   * 学位层次（字典 hr_degree_level_category；0=无 1=学士 2=硕士 3=博士）
    */
   degreeLevel?: number;
 
@@ -223,9 +248,9 @@ export interface EmployeeEducationCreate {
   majorName?: string;
 
   /**
-   * 证书编号
+   * 证书编码
    */
-  certificateNo?: string;
+  certificateCode?: string;
 
   /**
    * 开始日期
@@ -238,7 +263,7 @@ export interface EmployeeEducationCreate {
   endDate?: string;
 
   /**
-   * 是否最高学历（1=是，0=否）
+   * 是否最高学历（字典 sys_yes_no_type；0=否 1=是）
    */
   isHighest: number;
 
@@ -287,9 +312,19 @@ export interface EmployeeEducationTemplate {
   companyCode?: string;
 
   /**
-   * 员工ID
+   * 员工（选项 TaktEmployees/options；DictValue=Id）
    */
   employeeId?: string;
+
+  /**
+   * 员工编码（冗余，与 TaktEmployee.EmployeeCode 对齐）
+   */
+  employeeCode?: string;
+
+  /**
+   * 员工姓名（冗余，与 TaktEmployee.EmployeeName 对齐）
+   */
+  employeeName?: string;
 
   /**
    * 学校名称
@@ -297,12 +332,12 @@ export interface EmployeeEducationTemplate {
   schoolName?: string;
 
   /**
-   * 学历层次（1=高中及以下，2=大专，3=本科，4=硕士，5=博士）
+   * 学历层次（字典 hr_education_level_category；1=高中及以下 2=大专 3=本科 4=硕士 5=博士）
    */
   educationLevel?: number;
 
   /**
-   * 学位层次（0=无，1=学士，2=硕士，3=博士）
+   * 学位层次（字典 hr_degree_level_category；0=无 1=学士 2=硕士 3=博士）
    */
   degreeLevel?: number;
 
@@ -312,9 +347,9 @@ export interface EmployeeEducationTemplate {
   majorName?: string;
 
   /**
-   * 证书编号
+   * 证书编码
    */
-  certificateNo?: string;
+  certificateCode?: string;
 
   /**
    * 开始日期
@@ -327,7 +362,7 @@ export interface EmployeeEducationTemplate {
   endDate?: string;
 
   /**
-   * 是否最高学历（1=是，0=否）
+   * 是否最高学历（字典 sys_yes_no_type；0=否 1=是）
    */
   isHighest?: number;
 
@@ -366,9 +401,19 @@ export interface EmployeeEducationImport {
   companyDefaultCulture?: string;
 
   /**
-   * 员工ID
+   * 员工（选项 TaktEmployees/options；DictValue=Id）
    */
   employeeId?: string;
+
+  /**
+   * 员工编码（冗余，与 TaktEmployee.EmployeeCode 对齐）
+   */
+  employeeCode?: string;
+
+  /**
+   * 员工姓名（冗余，与 TaktEmployee.EmployeeName 对齐）
+   */
+  employeeName?: string;
 
   /**
    * 学校名称
@@ -376,12 +421,12 @@ export interface EmployeeEducationImport {
   schoolName?: string;
 
   /**
-   * 学历层次（1=高中及以下，2=大专，3=本科，4=硕士，5=博士）
+   * 学历层次（字典 hr_education_level_category；1=高中及以下 2=大专 3=本科 4=硕士 5=博士）
    */
   educationLevel?: number;
 
   /**
-   * 学位层次（0=无，1=学士，2=硕士，3=博士）
+   * 学位层次（字典 hr_degree_level_category；0=无 1=学士 2=硕士 3=博士）
    */
   degreeLevel?: number;
 
@@ -391,9 +436,9 @@ export interface EmployeeEducationImport {
   majorName?: string;
 
   /**
-   * 证书编号
+   * 证书编码
    */
-  certificateNo?: string;
+  certificateCode?: string;
 
   /**
    * 开始日期
@@ -406,7 +451,7 @@ export interface EmployeeEducationImport {
   endDate?: string;
 
   /**
-   * 是否最高学历（1=是，0=否）
+   * 是否最高学历（字典 sys_yes_no_type；0=否 1=是）
    */
   isHighest?: number;
 
@@ -440,9 +485,19 @@ export interface EmployeeEducationExport {
   companyCode: string;
 
   /**
-   * 员工ID
+   * 员工（选项 TaktEmployees/options；DictValue=Id）
    */
   employeeId: string;
+
+  /**
+   * 员工编码（冗余，与 TaktEmployee.EmployeeCode 对齐）
+   */
+  employeeCode: string;
+
+  /**
+   * 员工姓名（冗余，与 TaktEmployee.EmployeeName 对齐）
+   */
+  employeeName: string;
 
   /**
    * 学校名称
@@ -450,12 +505,12 @@ export interface EmployeeEducationExport {
   schoolName: string;
 
   /**
-   * 学历层次（1=高中及以下，2=大专，3=本科，4=硕士，5=博士）
+   * 学历层次（字典 hr_education_level_category；1=高中及以下 2=大专 3=本科 4=硕士 5=博士）
    */
   educationLevel?: number;
 
   /**
-   * 学位层次（0=无，1=学士，2=硕士，3=博士）
+   * 学位层次（字典 hr_degree_level_category；0=无 1=学士 2=硕士 3=博士）
    */
   degreeLevel?: number;
 
@@ -465,9 +520,9 @@ export interface EmployeeEducationExport {
   majorName?: string;
 
   /**
-   * 证书编号
+   * 证书编码
    */
-  certificateNo?: string;
+  certificateCode?: string;
 
   /**
    * 开始日期
@@ -480,7 +535,7 @@ export interface EmployeeEducationExport {
   endDate?: string;
 
   /**
-   * 是否最高学历（1=是，0=否）
+   * 是否最高学历（字典 sys_yes_no_type；0=否 1=是）
    */
   isHighest: number;
 

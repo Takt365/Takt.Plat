@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：frontend/src/types/logistics/quality/complaint
 // 文件名称：customer-satisfaction-survey.d.ts
-// 创建时间：2026-06-23
+// 创建时间：2026-07-23
 // 创建人：Takt365(Auto Generated)
 // 功能描述：logistics/quality/complaint 模块类型定义（自动生成；类型名去 Takt 前缀与末尾 Dto，如 TaktCompanyDto → Company）
 // 
@@ -29,22 +29,27 @@ export interface CustomerSatisfactionSurvey extends CompanyDtoBase {
   customerSatisfactionSurveyId: string;
 
   /**
-   * 调查表编号（组合唯一索引）
+   * 调查表编码（组合唯一索引）
    */
   customerSatisfactionSurveyCode: string;
 
   /**
-   * 客户ID（序列化为string以避免Javascript精度问题）
+   * 客户 ID（选项 TaktCustomers/options；DictValue=Id）
    */
   customerId: string;
 
   /**
-   * 客户名称
+   * 客户 名称（填充字段）
    */
-  customerName: string;
+  customerName?: string;
 
   /**
-   * 客户编码
+   * 客户名称1（冗余，与 TaktCustomer.CustomerName1 对齐）
+   */
+  customerName1: string;
+
+  /**
+   * 客户编码（选项 TaktCustomers/options；DictValue=CustomerCode）
    */
   customerCode?: string;
 
@@ -54,22 +59,22 @@ export interface CustomerSatisfactionSurvey extends CompanyDtoBase {
   surveyDate: string;
 
   /**
-   * 调查方式（0=问卷，1=电话，2=邮件，3=现场，4=在线）
+   * 调查方式（字典 logistics_quality_survey_method）
    */
   surveyMethod: number;
 
   /**
-   * 调查类型（0=定期调查，1=专项调查，2=投诉后调查，3=其他）
+   * 调查类型（字典 logistics_quality_survey_type）
    */
   surveyType: number;
 
   /**
-   * 调查周期（0=月度，1=季度，2=半年度，3=年度）
+   * 调查周期（字典 logistics_quality_period）
    */
   surveyPeriod: number;
 
   /**
-   * 调查人（人员代码）
+   * 调查人（选项 TaktEmployees/options；DictValue=EmployeeCode）
    */
   surveyorBy?: string;
 
@@ -84,7 +89,7 @@ export interface CustomerSatisfactionSurvey extends CompanyDtoBase {
   customerPhone?: string;
 
   /**
-   * 整体满意度（0=非常不满意，1=不满意，2=一般，3=满意，4=非常满意）
+   * 整体满意度（字典 logistics_quality_satisfaction_level）
    */
   overallSatisfaction: number;
 
@@ -134,34 +139,39 @@ export interface CustomerSatisfactionSurvey extends CompanyDtoBase {
   improvementPlan?: string;
 
   /**
-   * 调查状态（0=草稿，1=进行中，2=已完成，3=已归档）
-   */
-  surveyStatus: number;
-
-  /**
-   * 跟进状态（0=无需跟进，1=待跟进，2=跟进中，3=已完成）
-   */
-  followUpStatus: number;
-
-  /**
-   * 关联客诉ID（序列化为string以避免Javascript精度问题）
+   * 关联客诉 ID（选项 TaktCustomerComplaints/options；DictValue=Id）
    */
   relatedComplaintId?: string;
 
   /**
-   * 关联客诉名称（填充字段）
+   * 关联客诉 名称（填充字段）
    */
   relatedComplaintName?: string;
 
   /**
-   * 关联工厂
+   * 附件 （JSON列表形式，由TaktFile 统一上传到服务器）
    */
-  relatedPlant?: string;
+  attachments?: string;
+
+  /**
+   * 调查状态（字典 logistics_quality_survey_status）
+   */
+  surveyStatus: number;
+
+  /**
+   * 关联工厂（选项 TaktPlants/options；DictValue=PlantCode）
+   */
+  relatedPlant: string;
 
   /**
    * 排序号（越小越靠前）
    */
   sortOrder: number;
+
+  /**
+   * 跟进状态（字典 logistics_quality_follow_up_status）
+   */
+  followUpStatus: number;
 
   /**
    * 调查项目明细列表（主子表关系） （子表：TaktCustomerSatisfactionSurveyItem）
@@ -189,22 +199,22 @@ export interface CustomerSatisfactionSurveyQuery extends TaktPagedQuery {
   companyCode?: string;
 
   /**
-   * 调查表编号（组合唯一索引）
+   * 调查表编码（组合唯一索引）
    */
   customerSatisfactionSurveyCode?: string;
 
   /**
-   * 客户ID（序列化为string以避免Javascript精度问题）
+   * 客户 ID（选项 TaktCustomers/options；DictValue=Id）
    */
   customerId?: string;
 
   /**
-   * 客户名称
+   * 客户名称1（冗余，与 TaktCustomer.CustomerName1 对齐）
    */
-  customerName?: string;
+  customerName1?: string;
 
   /**
-   * 客户编码
+   * 客户编码（选项 TaktCustomers/options；DictValue=CustomerCode）
    */
   customerCode?: string;
 
@@ -219,22 +229,22 @@ export interface CustomerSatisfactionSurveyQuery extends TaktPagedQuery {
   surveyDateEnd?: string;
 
   /**
-   * 调查方式（0=问卷，1=电话，2=邮件，3=现场，4=在线）
+   * 调查方式（字典 logistics_quality_survey_method）
    */
   surveyMethod?: number;
 
   /**
-   * 调查类型（0=定期调查，1=专项调查，2=投诉后调查，3=其他）
+   * 调查类型（字典 logistics_quality_survey_type）
    */
   surveyType?: number;
 
   /**
-   * 调查周期（0=月度，1=季度，2=半年度，3=年度）
+   * 调查周期（字典 logistics_quality_period）
    */
   surveyPeriod?: number;
 
   /**
-   * 调查人（人员代码）
+   * 调查人（选项 TaktEmployees/options；DictValue=EmployeeCode）
    */
   surveyorBy?: string;
 
@@ -249,7 +259,7 @@ export interface CustomerSatisfactionSurveyQuery extends TaktPagedQuery {
   customerPhone?: string;
 
   /**
-   * 整体满意度（0=非常不满意，1=不满意，2=一般，3=满意，4=非常满意）
+   * 整体满意度（字典 logistics_quality_satisfaction_level）
    */
   overallSatisfaction?: number;
 
@@ -299,22 +309,22 @@ export interface CustomerSatisfactionSurveyQuery extends TaktPagedQuery {
   improvementPlan?: string;
 
   /**
-   * 调查状态（0=草稿，1=进行中，2=已完成，3=已归档）
-   */
-  surveyStatus?: number;
-
-  /**
-   * 跟进状态（0=无需跟进，1=待跟进，2=跟进中，3=已完成）
-   */
-  followUpStatus?: number;
-
-  /**
-   * 关联客诉ID（序列化为string以避免Javascript精度问题）
+   * 关联客诉 ID（选项 TaktCustomerComplaints/options；DictValue=Id）
    */
   relatedComplaintId?: string;
 
   /**
-   * 关联工厂
+   * 附件 （JSON列表形式，由TaktFile 统一上传到服务器）
+   */
+  attachments?: string;
+
+  /**
+   * 调查状态（字典 logistics_quality_survey_status）
+   */
+  surveyStatus?: number;
+
+  /**
+   * 关联工厂（选项 TaktPlants/options；DictValue=PlantCode）
    */
   relatedPlant?: string;
 
@@ -322,6 +332,11 @@ export interface CustomerSatisfactionSurveyQuery extends TaktPagedQuery {
    * 排序号（越小越靠前）
    */
   sortOrder?: number;
+
+  /**
+   * 跟进状态（字典 logistics_quality_follow_up_status）
+   */
+  followUpStatus?: number;
 
   /**
    * 创建时间（范围查询-开始）
@@ -368,22 +383,22 @@ export interface CustomerSatisfactionSurveyCreate {
   companyDefaultCulture: string;
 
   /**
-   * 调查表编号（组合唯一索引）
+   * 调查表编码（组合唯一索引）
    */
   customerSatisfactionSurveyCode: string;
 
   /**
-   * 客户ID（序列化为string以避免Javascript精度问题）
+   * 客户 ID（选项 TaktCustomers/options；DictValue=Id）
    */
   customerId: string;
 
   /**
-   * 客户名称
+   * 客户名称1（冗余，与 TaktCustomer.CustomerName1 对齐）
    */
-  customerName: string;
+  customerName1: string;
 
   /**
-   * 客户编码
+   * 客户编码（选项 TaktCustomers/options；DictValue=CustomerCode）
    */
   customerCode?: string;
 
@@ -393,22 +408,22 @@ export interface CustomerSatisfactionSurveyCreate {
   surveyDate: string;
 
   /**
-   * 调查方式（0=问卷，1=电话，2=邮件，3=现场，4=在线）
+   * 调查方式（字典 logistics_quality_survey_method）
    */
   surveyMethod: number;
 
   /**
-   * 调查类型（0=定期调查，1=专项调查，2=投诉后调查，3=其他）
+   * 调查类型（字典 logistics_quality_survey_type）
    */
   surveyType: number;
 
   /**
-   * 调查周期（0=月度，1=季度，2=半年度，3=年度）
+   * 调查周期（字典 logistics_quality_period）
    */
   surveyPeriod: number;
 
   /**
-   * 调查人（人员代码）
+   * 调查人（选项 TaktEmployees/options；DictValue=EmployeeCode）
    */
   surveyorBy?: string;
 
@@ -423,7 +438,7 @@ export interface CustomerSatisfactionSurveyCreate {
   customerPhone?: string;
 
   /**
-   * 整体满意度（0=非常不满意，1=不满意，2=一般，3=满意，4=非常满意）
+   * 整体满意度（字典 logistics_quality_satisfaction_level）
    */
   overallSatisfaction: number;
 
@@ -473,24 +488,29 @@ export interface CustomerSatisfactionSurveyCreate {
   improvementPlan?: string;
 
   /**
-   * 调查状态（0=草稿，1=进行中，2=已完成，3=已归档）
-   */
-  surveyStatus: number;
-
-  /**
-   * 跟进状态（0=无需跟进，1=待跟进，2=跟进中，3=已完成）
-   */
-  followUpStatus: number;
-
-  /**
-   * 关联客诉ID（序列化为string以避免Javascript精度问题）
+   * 关联客诉 ID（选项 TaktCustomerComplaints/options；DictValue=Id）
    */
   relatedComplaintId?: string;
 
   /**
-   * 关联工厂
+   * 附件 （JSON列表形式，由TaktFile 统一上传到服务器）
    */
-  relatedPlant?: string;
+  attachments?: string;
+
+  /**
+   * 调查状态（字典 logistics_quality_survey_status）
+   */
+  surveyStatus: number;
+
+  /**
+   * 关联工厂（选项 TaktPlants/options；DictValue=PlantCode）
+   */
+  relatedPlant: string;
+
+  /**
+   * 跟进状态（字典 logistics_quality_follow_up_status）
+   */
+  followUpStatus: number;
 
   /**
    * 调查项目明细列表（主子表关系）（子表，级联保存）
@@ -522,6 +542,11 @@ export interface CustomerSatisfactionSurveyUpdate extends CustomerSatisfactionSu
    */
   customerSatisfactionSurveyId: string;
 
+  /**
+   * 调查项目明细列表（主子表关系）（子表，级联保存）
+   */
+  items?: any;
+
 }
 
 
@@ -537,7 +562,7 @@ export interface CustomerSatisfactionSurveyStatus {
   customerSatisfactionSurveyId: string;
 
   /**
-   * 调查状态（0=草稿，1=进行中，2=已完成，3=已归档）
+   * 调查状态（字典 logistics_quality_survey_status）
    */
   surveyStatus: number;
 
@@ -580,22 +605,22 @@ export interface CustomerSatisfactionSurveyTemplate {
   companyCode?: string;
 
   /**
-   * 调查表编号（组合唯一索引）
+   * 调查表编码（组合唯一索引）
    */
   customerSatisfactionSurveyCode?: string;
 
   /**
-   * 客户ID（序列化为string以避免Javascript精度问题）
+   * 客户 ID（选项 TaktCustomers/options；DictValue=Id）
    */
   customerId?: string;
 
   /**
-   * 客户名称
+   * 客户名称1（冗余，与 TaktCustomer.CustomerName1 对齐）
    */
-  customerName?: string;
+  customerName1?: string;
 
   /**
-   * 客户编码
+   * 客户编码（选项 TaktCustomers/options；DictValue=CustomerCode）
    */
   customerCode?: string;
 
@@ -605,22 +630,22 @@ export interface CustomerSatisfactionSurveyTemplate {
   surveyDate?: string;
 
   /**
-   * 调查方式（0=问卷，1=电话，2=邮件，3=现场，4=在线）
+   * 调查方式（字典 logistics_quality_survey_method）
    */
   surveyMethod?: number;
 
   /**
-   * 调查类型（0=定期调查，1=专项调查，2=投诉后调查，3=其他）
+   * 调查类型（字典 logistics_quality_survey_type）
    */
   surveyType?: number;
 
   /**
-   * 调查周期（0=月度，1=季度，2=半年度，3=年度）
+   * 调查周期（字典 logistics_quality_period）
    */
   surveyPeriod?: number;
 
   /**
-   * 调查人（人员代码）
+   * 调查人（选项 TaktEmployees/options；DictValue=EmployeeCode）
    */
   surveyorBy?: string;
 
@@ -635,7 +660,7 @@ export interface CustomerSatisfactionSurveyTemplate {
   customerPhone?: string;
 
   /**
-   * 整体满意度（0=非常不满意，1=不满意，2=一般，3=满意，4=非常满意）
+   * 整体满意度（字典 logistics_quality_satisfaction_level）
    */
   overallSatisfaction?: number;
 
@@ -685,24 +710,29 @@ export interface CustomerSatisfactionSurveyTemplate {
   improvementPlan?: string;
 
   /**
-   * 调查状态（0=草稿，1=进行中，2=已完成，3=已归档）
-   */
-  surveyStatus?: number;
-
-  /**
-   * 跟进状态（0=无需跟进，1=待跟进，2=跟进中，3=已完成）
-   */
-  followUpStatus?: number;
-
-  /**
-   * 关联客诉ID（序列化为string以避免Javascript精度问题）
+   * 关联客诉 ID（选项 TaktCustomerComplaints/options；DictValue=Id）
    */
   relatedComplaintId?: string;
 
   /**
-   * 关联工厂
+   * 附件 （JSON列表形式，由TaktFile 统一上传到服务器）
+   */
+  attachments?: string;
+
+  /**
+   * 调查状态（字典 logistics_quality_survey_status）
+   */
+  surveyStatus?: number;
+
+  /**
+   * 关联工厂（选项 TaktPlants/options；DictValue=PlantCode）
    */
   relatedPlant?: string;
+
+  /**
+   * 跟进状态（字典 logistics_quality_follow_up_status）
+   */
+  followUpStatus?: number;
 
   /**
    * 调查项目明细列表（主子表关系）（子表，级联保存）
@@ -744,22 +774,22 @@ export interface CustomerSatisfactionSurveyImport {
   companyDefaultCulture?: string;
 
   /**
-   * 调查表编号（组合唯一索引）
+   * 调查表编码（组合唯一索引）
    */
   customerSatisfactionSurveyCode?: string;
 
   /**
-   * 客户ID（序列化为string以避免Javascript精度问题）
+   * 客户 ID（选项 TaktCustomers/options；DictValue=Id）
    */
   customerId?: string;
 
   /**
-   * 客户名称
+   * 客户名称1（冗余，与 TaktCustomer.CustomerName1 对齐）
    */
-  customerName?: string;
+  customerName1?: string;
 
   /**
-   * 客户编码
+   * 客户编码（选项 TaktCustomers/options；DictValue=CustomerCode）
    */
   customerCode?: string;
 
@@ -769,22 +799,22 @@ export interface CustomerSatisfactionSurveyImport {
   surveyDate?: string;
 
   /**
-   * 调查方式（0=问卷，1=电话，2=邮件，3=现场，4=在线）
+   * 调查方式（字典 logistics_quality_survey_method）
    */
   surveyMethod?: number;
 
   /**
-   * 调查类型（0=定期调查，1=专项调查，2=投诉后调查，3=其他）
+   * 调查类型（字典 logistics_quality_survey_type）
    */
   surveyType?: number;
 
   /**
-   * 调查周期（0=月度，1=季度，2=半年度，3=年度）
+   * 调查周期（字典 logistics_quality_period）
    */
   surveyPeriod?: number;
 
   /**
-   * 调查人（人员代码）
+   * 调查人（选项 TaktEmployees/options；DictValue=EmployeeCode）
    */
   surveyorBy?: string;
 
@@ -799,7 +829,7 @@ export interface CustomerSatisfactionSurveyImport {
   customerPhone?: string;
 
   /**
-   * 整体满意度（0=非常不满意，1=不满意，2=一般，3=满意，4=非常满意）
+   * 整体满意度（字典 logistics_quality_satisfaction_level）
    */
   overallSatisfaction?: number;
 
@@ -849,24 +879,29 @@ export interface CustomerSatisfactionSurveyImport {
   improvementPlan?: string;
 
   /**
-   * 调查状态（0=草稿，1=进行中，2=已完成，3=已归档）
-   */
-  surveyStatus?: number;
-
-  /**
-   * 跟进状态（0=无需跟进，1=待跟进，2=跟进中，3=已完成）
-   */
-  followUpStatus?: number;
-
-  /**
-   * 关联客诉ID（序列化为string以避免Javascript精度问题）
+   * 关联客诉 ID（选项 TaktCustomerComplaints/options；DictValue=Id）
    */
   relatedComplaintId?: string;
 
   /**
-   * 关联工厂
+   * 附件 （JSON列表形式，由TaktFile 统一上传到服务器）
+   */
+  attachments?: string;
+
+  /**
+   * 调查状态（字典 logistics_quality_survey_status）
+   */
+  surveyStatus?: number;
+
+  /**
+   * 关联工厂（选项 TaktPlants/options；DictValue=PlantCode）
    */
   relatedPlant?: string;
+
+  /**
+   * 跟进状态（字典 logistics_quality_follow_up_status）
+   */
+  followUpStatus?: number;
 
   /**
    * 调查项目明细列表（主子表关系）（子表，级联保存）
@@ -903,22 +938,22 @@ export interface CustomerSatisfactionSurveyExport {
   companyCode: string;
 
   /**
-   * 调查表编号（组合唯一索引）
+   * 调查表编码（组合唯一索引）
    */
   customerSatisfactionSurveyCode: string;
 
   /**
-   * 客户ID（序列化为string以避免Javascript精度问题）
+   * 客户 ID（选项 TaktCustomers/options；DictValue=Id）
    */
   customerId: string;
 
   /**
-   * 客户名称
+   * 客户名称1（冗余，与 TaktCustomer.CustomerName1 对齐）
    */
-  customerName: string;
+  customerName1: string;
 
   /**
-   * 客户编码
+   * 客户编码（选项 TaktCustomers/options；DictValue=CustomerCode）
    */
   customerCode?: string;
 
@@ -928,22 +963,22 @@ export interface CustomerSatisfactionSurveyExport {
   surveyDate: string;
 
   /**
-   * 调查方式（0=问卷，1=电话，2=邮件，3=现场，4=在线）
+   * 调查方式（字典 logistics_quality_survey_method）
    */
   surveyMethod: number;
 
   /**
-   * 调查类型（0=定期调查，1=专项调查，2=投诉后调查，3=其他）
+   * 调查类型（字典 logistics_quality_survey_type）
    */
   surveyType: number;
 
   /**
-   * 调查周期（0=月度，1=季度，2=半年度，3=年度）
+   * 调查周期（字典 logistics_quality_period）
    */
   surveyPeriod: number;
 
   /**
-   * 调查人（人员代码）
+   * 调查人（选项 TaktEmployees/options；DictValue=EmployeeCode）
    */
   surveyorBy?: string;
 
@@ -958,7 +993,7 @@ export interface CustomerSatisfactionSurveyExport {
   customerPhone?: string;
 
   /**
-   * 整体满意度（0=非常不满意，1=不满意，2=一般，3=满意，4=非常满意）
+   * 整体满意度（字典 logistics_quality_satisfaction_level）
    */
   overallSatisfaction: number;
 
@@ -1008,29 +1043,34 @@ export interface CustomerSatisfactionSurveyExport {
   improvementPlan?: string;
 
   /**
-   * 调查状态（0=草稿，1=进行中，2=已完成，3=已归档）
-   */
-  surveyStatus: number;
-
-  /**
-   * 跟进状态（0=无需跟进，1=待跟进，2=跟进中，3=已完成）
-   */
-  followUpStatus: number;
-
-  /**
-   * 关联客诉ID（序列化为string以避免Javascript精度问题）
+   * 关联客诉 ID（选项 TaktCustomerComplaints/options；DictValue=Id）
    */
   relatedComplaintId?: string;
 
   /**
-   * 关联工厂
+   * 附件 （JSON列表形式，由TaktFile 统一上传到服务器）
    */
-  relatedPlant?: string;
+  attachments?: string;
+
+  /**
+   * 调查状态（字典 logistics_quality_survey_status）
+   */
+  surveyStatus: number;
+
+  /**
+   * 关联工厂（选项 TaktPlants/options；DictValue=PlantCode）
+   */
+  relatedPlant: string;
 
   /**
    * 排序号（越小越靠前）
    */
   sortOrder: number;
+
+  /**
+   * 跟进状态（字典 logistics_quality_follow_up_status）
+   */
+  followUpStatus: number;
 
   /**
    * 扩展字段JSON

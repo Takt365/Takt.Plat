@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Application.Dtos.Logistics.Quality.Cost
 // 文件名称：TaktQualityAssuranceDtos.cs
-// 创建时间：2026-07-09
+// 创建时间：2026-07-23
 // 创建人：Takt365(Auto Generated)
 // 功能描述：QualityAssurance 模块 DTO（由 generate-dtos-from-entity.cjs 根据 TaktQualityAssurance 生成，请按需审阅）
 // 
@@ -36,7 +36,7 @@ public class TaktQualityAssuranceDto : TaktCompanyDtoBase
     public long QualityAssuranceId { get; set; }
 
     /// <summary>
-    /// 工厂代码（选项 TaktPlants/options，DictValue=PlantCode）
+    /// 工厂代码（选项 TaktPlants/options；DictValue=PlantCode）
     /// </summary>
     public string PlantCode { get; set; } = string.Empty;
 
@@ -51,9 +51,9 @@ public class TaktQualityAssuranceDto : TaktCompanyDtoBase
     public string AssuranceMonth { get; set; } = string.Empty;
 
     /// <summary>
-    /// 顾客名
+    /// 客户名称1（冗余，与 TaktCustomer.CustomerName1 对齐）
     /// </summary>
-    public string? CustomerName { get; set; } = string.Empty;
+    public string? CustomerName1 { get; set; } = string.Empty;
 
     /// <summary>
     /// Debit Note No
@@ -140,7 +140,7 @@ public class TaktQualityAssuranceQueryDto : TaktPagedQuery
     public string? CompanyCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 工厂代码（选项 TaktPlants/options，DictValue=PlantCode）
+    /// 工厂代码（选项 TaktPlants/options；DictValue=PlantCode）
     /// </summary>
     public string? PlantCode { get; set; } = string.Empty;
 
@@ -155,9 +155,9 @@ public class TaktQualityAssuranceQueryDto : TaktPagedQuery
     public string? AssuranceMonth { get; set; } = string.Empty;
 
     /// <summary>
-    /// 顾客名
+    /// 客户名称1（冗余，与 TaktCustomer.CustomerName1 对齐）
     /// </summary>
-    public string? CustomerName { get; set; } = string.Empty;
+    public string? CustomerName1 { get; set; } = string.Empty;
 
     /// <summary>
     /// Debit Note No
@@ -225,9 +225,9 @@ public class TaktQualityAssuranceCreateDto
     public string CompanyDefaultCulture { get; set; } = string.Empty;
 
     /// <summary>
-    /// 工厂代码（选项 TaktPlants/options，DictValue=PlantCode）
+    /// 工厂代码（选项 TaktPlants/options；DictValue=PlantCode）
     /// </summary>
-    [Required(ErrorMessage = "工厂代码（选项 TaktPlants/options，DictValue=PlantCode）不能为空")]
+    [Required(ErrorMessage = "工厂代码（选项 TaktPlants/options；DictValue=PlantCode）不能为空")]
     public string PlantCode { get; set; } = string.Empty;
 
     /// <summary>
@@ -243,9 +243,9 @@ public class TaktQualityAssuranceCreateDto
     public string AssuranceMonth { get; set; } = string.Empty;
 
     /// <summary>
-    /// 顾客名
+    /// 客户名称1（冗余，与 TaktCustomer.CustomerName1 对齐）
     /// </summary>
-    public string? CustomerName { get; set; } = string.Empty;
+    public string? CustomerName1 { get; set; } = string.Empty;
 
     /// <summary>
     /// Debit Note No
@@ -271,37 +271,37 @@ public class TaktQualityAssuranceCreateDto
     /// <summary>
     /// 来料检验费用明细列表（子表，级联保存）
     /// </summary>
-    public List<TaktQualityAssuranceIncomingUpdateDto>? IncomingItems { get; set; }
+    public List<TaktQualityAssuranceIncomingCreateDto>? IncomingItems { get; set; }
 
     /// <summary>
     /// 初期/定期检定费用明细列表（子表，级联保存）
     /// </summary>
-    public List<TaktQualityAssuranceFirstArticleUpdateDto>? FirstArticleItems { get; set; }
+    public List<TaktQualityAssuranceFirstArticleCreateDto>? FirstArticleItems { get; set; }
 
     /// <summary>
     /// 设备校正费用明细列表（子表，级联保存）
     /// </summary>
-    public List<TaktQualityAssuranceCalibrationUpdateDto>? CalibrationItems { get; set; }
+    public List<TaktQualityAssuranceCalibrationCreateDto>? CalibrationItems { get; set; }
 
     /// <summary>
     /// 其他通常业务费用明细列表（子表，级联保存）
     /// </summary>
-    public List<TaktQualityAssuranceOtherUpdateDto>? OtherItems { get; set; }
+    public List<TaktQualityAssuranceOtherCreateDto>? OtherItems { get; set; }
 
     /// <summary>
     /// 出货检验费用明细列表（子表，级联保存）
     /// </summary>
-    public List<TaktQualityAssuranceOutgoingUpdateDto>? OutgoingItems { get; set; }
+    public List<TaktQualityAssuranceOutgoingCreateDto>? OutgoingItems { get; set; }
 
     /// <summary>
     /// 信赖性评价/ORT费用明细列表（子表，级联保存）
     /// </summary>
-    public List<TaktQualityAssuranceReliabilityUpdateDto>? ReliabilityItems { get; set; }
+    public List<TaktQualityAssuranceReliabilityCreateDto>? ReliabilityItems { get; set; }
 
     /// <summary>
     /// 顾客品质要求对应费用明细列表（子表，级联保存）
     /// </summary>
-    public List<TaktQualityAssuranceCustomerResponseUpdateDto>? CustomerResponseItems { get; set; }
+    public List<TaktQualityAssuranceCustomerResponseCreateDto>? CustomerResponseItems { get; set; }
 
     /// <summary>
     /// 扩展字段JSON
@@ -333,6 +333,41 @@ public class TaktQualityAssuranceUpdateDto : TaktQualityAssuranceCreateDto
     [JsonConverter(typeof(ValueToStringConverter))]
     public long QualityAssuranceId { get; set; }
 
+    /// <summary>
+    /// 来料检验费用明细列表（子表，级联保存）
+    /// </summary>
+    public new List<TaktQualityAssuranceIncomingUpdateDto>? IncomingItems { get; set; }
+
+    /// <summary>
+    /// 初期/定期检定费用明细列表（子表，级联保存）
+    /// </summary>
+    public new List<TaktQualityAssuranceFirstArticleUpdateDto>? FirstArticleItems { get; set; }
+
+    /// <summary>
+    /// 设备校正费用明细列表（子表，级联保存）
+    /// </summary>
+    public new List<TaktQualityAssuranceCalibrationUpdateDto>? CalibrationItems { get; set; }
+
+    /// <summary>
+    /// 其他通常业务费用明细列表（子表，级联保存）
+    /// </summary>
+    public new List<TaktQualityAssuranceOtherUpdateDto>? OtherItems { get; set; }
+
+    /// <summary>
+    /// 出货检验费用明细列表（子表，级联保存）
+    /// </summary>
+    public new List<TaktQualityAssuranceOutgoingUpdateDto>? OutgoingItems { get; set; }
+
+    /// <summary>
+    /// 信赖性评价/ORT费用明细列表（子表，级联保存）
+    /// </summary>
+    public new List<TaktQualityAssuranceReliabilityUpdateDto>? ReliabilityItems { get; set; }
+
+    /// <summary>
+    /// 顾客品质要求对应费用明细列表（子表，级联保存）
+    /// </summary>
+    public new List<TaktQualityAssuranceCustomerResponseUpdateDto>? CustomerResponseItems { get; set; }
+
 }
 
 // ========================================
@@ -355,7 +390,7 @@ public class TaktQualityAssuranceTemplateDto
     public string? CompanyCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 工厂代码（选项 TaktPlants/options，DictValue=PlantCode）
+    /// 工厂代码（选项 TaktPlants/options；DictValue=PlantCode）
     /// </summary>
     public string? PlantCode { get; set; } = string.Empty;
 
@@ -370,9 +405,9 @@ public class TaktQualityAssuranceTemplateDto
     public string? AssuranceMonth { get; set; } = string.Empty;
 
     /// <summary>
-    /// 顾客名
+    /// 客户名称1（冗余，与 TaktCustomer.CustomerName1 对齐）
     /// </summary>
-    public string? CustomerName { get; set; } = string.Empty;
+    public string? CustomerName1 { get; set; } = string.Empty;
 
     /// <summary>
     /// Debit Note No
@@ -462,7 +497,7 @@ public class TaktQualityAssuranceImportDto
     public string? CompanyDefaultCulture { get; set; } = string.Empty;
 
     /// <summary>
-    /// 工厂代码（选项 TaktPlants/options，DictValue=PlantCode）
+    /// 工厂代码（选项 TaktPlants/options；DictValue=PlantCode）
     /// </summary>
     public string? PlantCode { get; set; } = string.Empty;
 
@@ -477,9 +512,9 @@ public class TaktQualityAssuranceImportDto
     public string? AssuranceMonth { get; set; } = string.Empty;
 
     /// <summary>
-    /// 顾客名
+    /// 客户名称1（冗余，与 TaktCustomer.CustomerName1 对齐）
     /// </summary>
-    public string? CustomerName { get; set; } = string.Empty;
+    public string? CustomerName1 { get; set; } = string.Empty;
 
     /// <summary>
     /// Debit Note No
@@ -570,7 +605,7 @@ public class TaktQualityAssuranceExportDto
     public string CompanyCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 工厂代码（选项 TaktPlants/options，DictValue=PlantCode）
+    /// 工厂代码（选项 TaktPlants/options；DictValue=PlantCode）
     /// </summary>
     public string PlantCode { get; set; } = string.Empty;
 
@@ -585,9 +620,9 @@ public class TaktQualityAssuranceExportDto
     public string AssuranceMonth { get; set; } = string.Empty;
 
     /// <summary>
-    /// 顾客名
+    /// 客户名称1（冗余，与 TaktCustomer.CustomerName1 对齐）
     /// </summary>
-    public string? CustomerName { get; set; } = string.Empty;
+    public string? CustomerName1 { get; set; } = string.Empty;
 
     /// <summary>
     /// Debit Note No

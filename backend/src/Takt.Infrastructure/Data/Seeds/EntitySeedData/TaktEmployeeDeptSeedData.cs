@@ -62,7 +62,7 @@ public class TaktEmployeeDeptSeedData : ITaktSeedDataCoordinator
         TaktLogger.Information("正在为租户 {TenantCode} 初始化员工-部门关联数据...", tenantCode);
         foreach (var company in orderedCompanies)
         {
-            foreach (var (employeeNo, deptCode) in GetEmployeeDeptTemplates())
+            foreach (var (EmployeeCode, deptCode) in GetEmployeeDeptTemplates())
             {
                 insertCount += await CreateEmployeeDeptAsync(
                     repository,
@@ -70,7 +70,7 @@ public class TaktEmployeeDeptSeedData : ITaktSeedDataCoordinator
                     deptRepository,
                     tenantCode,
                     company.CompanyCode,
-                    employeeNo,
+                    EmployeeCode,
                     deptCode);
             }
         }
@@ -83,7 +83,7 @@ public class TaktEmployeeDeptSeedData : ITaktSeedDataCoordinator
     /// <summary>
     /// 标准员工-部门关联模板（公司编码由 Database:CompanyCodes 驱动）
     /// </summary>
-    private static IEnumerable<(string EmployeeNo, string DeptCode)> GetEmployeeDeptTemplates()
+    private static IEnumerable<(string EmployeeCode, string DeptCode)> GetEmployeeDeptTemplates()
     {
         yield return ("900001", "HEAD_OFFICE");
         yield return ("900002", "D0620");
@@ -96,13 +96,13 @@ public class TaktEmployeeDeptSeedData : ITaktSeedDataCoordinator
         ITaktCompanySeedRepository<TaktDept> deptRepository,
         string tenantCode,
         string companyCode,
-        string employeeNo,
+        string EmployeeCode,
         string deptCode)
     {
         var employee = await employeeRepository.FirstAsync(e =>
             e.TenantCode == tenantCode &&
             e.CompanyCode == companyCode &&
-            e.EmployeeNo == employeeNo);
+            e.EmployeeCode == EmployeeCode);
         if (employee == null) return 0;
 
         var dept = await deptRepository.FirstAsync(d =>

@@ -318,7 +318,7 @@ public class TaktItAssetService : TaktServiceBase, ITaktItAssetService
                 (x.AssetCode != null && x.AssetCode.Contains(keywords))
                 || SqlFunc.ToString(x.WarrantyType).Contains(keywords)
                 || (x.WarrantyProvider != null && x.WarrantyProvider.Contains(keywords))
-                || (x.WarrantyContractNo != null && x.WarrantyContractNo.Contains(keywords))
+                || (x.WarrantyContractCode != null && x.WarrantyContractCode.Contains(keywords))
                 || (x.ServiceHotline != null && x.ServiceHotline.Contains(keywords))
                 || (x.ServiceEmail != null && x.ServiceEmail.Contains(keywords))
                 || (x.WarrantyRemark != null && x.WarrantyRemark.Contains(keywords))
@@ -348,9 +348,9 @@ public class TaktItAssetService : TaktServiceBase, ITaktItAssetService
             exp = exp.And(x => x.WarrantyProvider != null && x.WarrantyProvider.Contains(queryDto.WarrantyProvider));
         }
 
-        if (!string.IsNullOrEmpty(queryDto?.WarrantyContractNo))
+        if (!string.IsNullOrEmpty(queryDto?.WarrantyContractCode))
         {
-            exp = exp.And(x => x.WarrantyContractNo != null && x.WarrantyContractNo.Contains(queryDto.WarrantyContractNo));
+            exp = exp.And(x => x.WarrantyContractCode != null && x.WarrantyContractCode.Contains(queryDto.WarrantyContractCode));
         }
 
         if (!string.IsNullOrEmpty(queryDto?.ServiceHotline))

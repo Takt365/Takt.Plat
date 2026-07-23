@@ -54,7 +54,7 @@ public class TaktInspectionStandard : TaktCompanyEntityBase
     [SugarColumn(ColumnName = "material_category_name", ColumnDescription = "物料类别名称", ColumnDataType = "nvarchar", Length = 200, IsNullable = false)]
     public string MaterialCategoryName { get; set; } = string.Empty;
     /// <summary>
-    /// 抽样方案编码（选项 TaktSamplingSchemes/options，DictValue=SamplingSchemeCode）
+    /// 抽样方案编码（选项 TaktSamplingSchemes/options；DictValue=SamplingSchemeCode）
     /// </summary>
     [SugarColumn(ColumnName = "sampling_scheme_code", ColumnDescription = "抽样方案编码", ColumnDataType = "nvarchar", Length = 50, IsNullable = true)]
     public string? SamplingSchemeCode { get; set; }

@@ -21,43 +21,55 @@
     >
       <a-tab-pane
         key="tab-0"
-        :tab="t('common.page.form.tabs.basicinfo')"
+        :tab="t('common.page.form.tabs.basicinfo') + ' (1/2)'"
         force-render
       >
         <div :class="formContentClass">
           <a-row :gutter="24">
             <a-col :span="12">
               <a-form-item
-                :label="t('entity.supplierevaluationitem.linenumber')"
+                :label="pi.label('evaluationId')"
+                name="evaluationId"
+              >
+                <TaktSelect
+                  v-model:value="formState.evaluationId"
+                  api-url="TaktSupplierEvaluations/options"
+                  :placeholder="pi.ph('evaluationId')"
+                />
+              </a-form-item>
+            </a-col>
+            <a-col :span="12">
+              <a-form-item
+                :label="pi.label('lineNumber')"
                 name="lineNumber"
               >
                 <a-input-number
                   v-model:value="formState.lineNumber"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.supplierevaluationitem.linenumber') })"
+                  :placeholder="pi.ph('lineNumber')"
                   style="width: 100%"
                 />
               </a-form-item>
             </a-col>
             <a-col :span="12">
               <a-form-item
-                :label="t('entity.supplierevaluationitem.categorytype')"
+                :label="pi.label('categoryType')"
                 name="categoryType"
               >
-                <a-input-number
+                <TaktSelect
                   v-model:value="formState.categoryType"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.supplierevaluationitem.categorytype') })"
-                  style="width: 100%"
+                  dict-type="logistics_quality_evaluation_category"
+                  :placeholder="pi.ph('categoryType')"
                 />
               </a-form-item>
             </a-col>
             <a-col :span="12">
               <a-form-item
-                :label="t('entity.supplierevaluationitem.itemname')"
+                :label="pi.label('itemName')"
                 name="itemName"
               >
                 <a-input
                   v-model:value="formState.itemName"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.supplierevaluationitem.itemname') })"
+                  :placeholder="pi.ph('itemName')"
                   show-count
                   :maxlength="20"
                   allow-clear
@@ -66,36 +78,36 @@
             </a-col>
             <a-col :span="24">
               <a-form-item
-                :label="t('entity.supplierevaluationitem.itemdescription')"
+                :label="pi.label('itemDescription')"
                 name="itemDescription"
               >
                 <a-textarea
                   v-model:value="formState.itemDescription"
-                  :placeholder="t('common.page.form.placeholder.optional', { field: t('entity.supplierevaluationitem.itemdescription') })"
+                  :placeholder="pi.ph('itemDescription')"
                   :rows="2"
                 />
               </a-form-item>
             </a-col>
             <a-col :span="12">
               <a-form-item
-                :label="t('entity.supplierevaluationitem.weight')"
+                :label="pi.label('weight')"
                 name="weight"
               >
                 <a-input-number
                   v-model:value="formState.weight"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.supplierevaluationitem.weight') })"
+                  :placeholder="pi.ph('weight')"
                   style="width: 100%"
                 />
               </a-form-item>
             </a-col>
             <a-col :span="12">
               <a-form-item
-                :label="t('entity.supplierevaluationitem.scoringstandard')"
+                :label="pi.label('scoringStandard')"
                 name="scoringStandard"
               >
                 <a-input
                   v-model:value="formState.scoringStandard"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.supplierevaluationitem.scoringstandard') })"
+                  :placeholder="pi.ph('scoringStandard')"
                   show-count
                   :maxlength="20"
                   allow-clear
@@ -104,25 +116,126 @@
             </a-col>
             <a-col :span="12">
               <a-form-item
-                :label="t('entity.supplierevaluationitem.score')"
+                :label="pi.label('score')"
                 name="score"
               >
                 <a-input-number
                   v-model:value="formState.score"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.supplierevaluationitem.score') })"
+                  :placeholder="pi.ph('score')"
                   style="width: 100%"
                 />
               </a-form-item>
             </a-col>
             <a-col :span="12">
               <a-form-item
-                :label="t('entity.supplierevaluationitem.ratinglevel')"
+                :label="pi.label('ratingLevel')"
                 name="ratingLevel"
               >
-                <a-input-number
+                <TaktSelect
                   v-model:value="formState.ratingLevel"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.supplierevaluationitem.ratinglevel') })"
+                  dict-type="logistics_quality_supplier_rating"
+                  :placeholder="pi.ph('ratingLevel')"
+                />
+              </a-form-item>
+            </a-col>
+            <a-col :span="12">
+              <a-form-item
+                :label="pi.label('evaluationComment')"
+                name="evaluationComment"
+              >
+                <a-input
+                  v-model:value="formState.evaluationComment"
+                  :placeholder="pi.ph('evaluationComment')"
+                  show-count
+                  :maxlength="20"
+                  allow-clear
+                />
+              </a-form-item>
+            </a-col>
+          </a-row>
+        </div>
+      </a-tab-pane>
+      <a-tab-pane
+        key="tab-1"
+        :tab="t('common.page.form.tabs.basicinfo') + ' (2/2)'"
+        force-render
+      >
+        <div :class="formContentClass">
+          <a-row :gutter="24">
+            <a-col :span="12">
+              <a-form-item
+                :label="pi.label('existingIssues')"
+                name="existingIssues"
+              >
+                <a-input
+                  v-model:value="formState.existingIssues"
+                  :placeholder="pi.ph('existingIssues')"
+                  show-count
+                  :maxlength="20"
+                  allow-clear
+                />
+              </a-form-item>
+            </a-col>
+            <a-col :span="12">
+              <a-form-item
+                :label="pi.label('improvementRequirement')"
+                name="improvementRequirement"
+              >
+                <a-input
+                  v-model:value="formState.improvementRequirement"
+                  :placeholder="pi.ph('improvementRequirement')"
+                  show-count
+                  :maxlength="20"
+                  allow-clear
+                />
+              </a-form-item>
+            </a-col>
+            <a-col :span="12">
+              <a-form-item
+                :label="pi.label('rectificationRequired')"
+                name="rectificationRequired"
+              >
+                <a-input-number
+                  v-model:value="formState.rectificationRequired"
+                  :placeholder="pi.ph('rectificationRequired')"
                   style="width: 100%"
+                />
+              </a-form-item>
+            </a-col>
+            <a-col :span="12">
+              <a-form-item
+                :label="pi.label('rectificationDeadline')"
+                name="rectificationDeadline"
+              >
+                <a-date-picker
+                  v-model:value="formState.rectificationDeadline"
+                  :placeholder="pi.ph('rectificationDeadline')"
+                  value-format="YYYY-MM-DD"
+                  style="width: 100%"
+                />
+              </a-form-item>
+            </a-col>
+            <a-col :span="12">
+              <a-form-item
+                :label="pi.label('rectificationStatus')"
+                name="rectificationStatus"
+              >
+                <TaktSelect
+                  v-model:value="formState.rectificationStatus"
+                  dict-type="logistics_quality_rectification_status"
+                  :placeholder="pi.ph('rectificationStatus')"
+                />
+              </a-form-item>
+            </a-col>
+            <a-col :span="12">
+              <a-form-item
+                :label="pi.label('isObsolete')"
+                name="isObsolete"
+              >
+                <TaktSelect
+                  v-model:value="formState.isObsolete"
+                  dict-type="sys_yes_no_type"
+                  :placeholder="pi.ph('isObsolete')"
                 />
               </a-form-item>
             </a-col>
@@ -138,10 +251,17 @@
  * 供应商评价考核主表实体子表 supplierEvaluationItem 维护表单 · 由 generate-vue-master-detail-from-api.cjs 生成
  * @module views/logistics/quality/complaint/supplier-evaluation/components
  */
-import { reactive, watch, computed, ref } from 'vue'
+import { reactive, watch, computed, ref, onMounted } from 'vue'
 import { useI18n } from 'vue-i18n'
 import type { Rule } from 'ant-design-vue/es/form'
+import { useSupplierEvaluationItemI18n } from '../composables/use-supplier-evaluation-item-i18n'
+
+/** 实体字段 i18n */
+const pi = useSupplierEvaluationItemI18n()
+
 import type { SupplierEvaluationItemCreate } from '@/types/logistics/quality/complaint/supplier-evaluation-item'
+import TaktSelect from '@/components/business/takt-select/index.vue'
+import { useDictDataStore } from '@/stores/foundation/dict-data'
 
 /** i18n 翻译函数 */
 const { t } = useI18n()
@@ -150,7 +270,8 @@ const formContentClass = computed(() => (formFields.length > 10 ? 'takt-form-con
 /** 当前激活的 Tab key */
 const activeTab = ref('tab-0')
 /** CreateDto 字段名列表（与 formState 键对齐） */
-const formFields = ["lineNumber","categoryType","itemName","itemDescription","weight","scoringStandard","score","ratingLevel"]
+const formFields = ["evaluationId","lineNumber","categoryType","itemName","itemDescription","weight","scoringStandard","score","ratingLevel","evaluationComment","existingIssues","improvementRequirement","rectificationRequired","rectificationDeadline","rectificationStatus","isObsolete"]
+
 
 
 /** 父级传入的编辑 DTO；新增时为 undefined 或空对象 */
@@ -172,11 +293,24 @@ const props = withDefaults(defineProps<Props>(), {
 const formRef = ref()
 /** 表单双向绑定模型 */
 const formState = reactive<Record<string, any>>({})
-/** 表单字段默认值（无字典默认项） */
-function applyFormDefaults(target: Record<string, unknown>) {
-  void target
+/** 表单字段默认值（字典 IsDefault=1，来自 TaktDictDataSeedData） */
+const FORM_FIELD_DEFAULTS: Record<string, string | number> = {
+  categoryType: 0,
+  rectificationStatus: 0
 }
 
+/** 写入表单默认值（新增 / resetFields / 弹窗再次打开时） */
+function applyFormDefaults(target: Record<string, unknown>) {
+  Object.assign(target, FORM_FIELD_DEFAULTS)
+}
+
+/** Pinia：字典缓存（TaktSelect dict-type 渲染前预热，避免选项空白） */
+const dictDataStore = useDictDataStore()
+
+/** 表单挂载时预加载全量字典 */
+onMounted(() => {
+  void dictDataStore.loadAllDictDataAsync()
+})
 
 /** 编辑态灌入 formData；新增态恢复默认值（须含 supplierEvaluationItemId 才视为编辑） */
 watch(
@@ -202,14 +336,21 @@ watch(
 
 /** 表单校验规则（与 FluentValidation 必填对齐） */
 const rules = computed<Record<string, Rule[]>>(() => ({
+  evaluationId: [
+    {
+      required: true,
+      message: pi.ph('evaluationId'),
+      trigger: 'change'
+    }
+  ],
   lineNumber: [{
     validator: async (_rule, value) => {
       if (value === undefined || value === null || value === '') {
-        return Promise.reject(t('common.page.form.placeholder.select', { field: t('entity.supplierevaluationitem.linenumber') }))
+        return Promise.reject(pi.ph('lineNumber'))
       }
       const num = typeof value === 'number' ? value : Number(value)
       if (!Number.isFinite(num)) {
-        return Promise.reject(t('common.page.form.placeholder.select', { field: t('entity.supplierevaluationitem.linenumber') }))
+        return Promise.reject(pi.ph('lineNumber'))
       }
       return Promise.resolve()
     },
@@ -218,11 +359,11 @@ const rules = computed<Record<string, Rule[]>>(() => ({
   categoryType: [{
     validator: async (_rule, value) => {
       if (value === undefined || value === null || value === '') {
-        return Promise.reject(t('common.page.form.placeholder.select', { field: t('entity.supplierevaluationitem.categorytype') }))
+        return Promise.reject(pi.ph('categoryType'))
       }
       const num = typeof value === 'number' ? value : Number(value)
       if (!Number.isFinite(num)) {
-        return Promise.reject(t('common.page.form.placeholder.select', { field: t('entity.supplierevaluationitem.categorytype') }))
+        return Promise.reject(pi.ph('categoryType'))
       }
       return Promise.resolve()
     },
@@ -231,18 +372,57 @@ const rules = computed<Record<string, Rule[]>>(() => ({
   itemName: [
     {
       required: true,
-      message: t('common.page.form.placeholder.required', { field: t('entity.supplierevaluationitem.itemname') }),
+      message: pi.ph('itemName'),
       trigger: 'blur'
     }
   ],
   weight: [{
     validator: async (_rule, value) => {
       if (value === undefined || value === null || value === '') {
-        return Promise.reject(t('common.page.form.placeholder.select', { field: t('entity.supplierevaluationitem.weight') }))
+        return Promise.reject(pi.ph('weight'))
       }
       const num = typeof value === 'number' ? value : Number(value)
       if (!Number.isFinite(num)) {
-        return Promise.reject(t('common.page.form.placeholder.select', { field: t('entity.supplierevaluationitem.weight') }))
+        return Promise.reject(pi.ph('weight'))
+      }
+      return Promise.resolve()
+    },
+    trigger: 'change'
+  }],
+  rectificationRequired: [{
+    validator: async (_rule, value) => {
+      if (value === undefined || value === null || value === '') {
+        return Promise.reject(pi.ph('rectificationRequired'))
+      }
+      const num = typeof value === 'number' ? value : Number(value)
+      if (!Number.isFinite(num)) {
+        return Promise.reject(pi.ph('rectificationRequired'))
+      }
+      return Promise.resolve()
+    },
+    trigger: 'change'
+  }],
+  rectificationStatus: [{
+    validator: async (_rule, value) => {
+      if (value === undefined || value === null || value === '') {
+        return Promise.reject(pi.ph('rectificationStatus'))
+      }
+      const num = typeof value === 'number' ? value : Number(value)
+      if (!Number.isFinite(num)) {
+        return Promise.reject(pi.ph('rectificationStatus'))
+      }
+      return Promise.resolve()
+    },
+    trigger: 'change'
+  }],
+  isObsolete: [{
+    validator: async (_rule, value) => {
+      if (value === undefined || value === null || value === '') {
+        return Promise.reject(pi.ph('isObsolete'))
+      }
+      const num = typeof value === 'number' ? value : Number(value)
+      if (!Number.isFinite(num)) {
+        return Promise.reject(pi.ph('isObsolete'))
       }
       return Promise.resolve()
     },
@@ -256,7 +436,7 @@ async function validate() {
   return formState
 }
 
-/** 映射为 Create/Update DTO（含主表外键 evaluationId） */
+/** 映射为 Create/Update DTO（含主表外键 supplierEvaluationCode） */
 function getValues(): Record<string, any> {
   const payload = { ...formState }
   if ('lineNumber' in payload) {
@@ -279,8 +459,20 @@ function getValues(): Record<string, any> {
     const rawratingLevel = payload.ratingLevel
     payload.ratingLevel = typeof rawratingLevel === 'number' ? rawratingLevel : Number(rawratingLevel)
   }
+  if ('rectificationRequired' in payload) {
+    const rawrectificationRequired = payload.rectificationRequired
+    payload.rectificationRequired = typeof rawrectificationRequired === 'number' ? rawrectificationRequired : Number(rawrectificationRequired)
+  }
+  if ('rectificationStatus' in payload) {
+    const rawrectificationStatus = payload.rectificationStatus
+    payload.rectificationStatus = typeof rawrectificationStatus === 'number' ? rawrectificationStatus : Number(rawrectificationStatus)
+  }
+  if ('isObsolete' in payload) {
+    const rawisObsolete = payload.isObsolete
+    payload.isObsolete = typeof rawisObsolete === 'number' ? rawisObsolete : Number(rawisObsolete)
+  }
   if ('sortOrder' in payload) delete payload.sortOrder
-  payload.evaluationId = props.masterId
+  payload.supplierEvaluationCode = props.masterId
   return payload
 }
 

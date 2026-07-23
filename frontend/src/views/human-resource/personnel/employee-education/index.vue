@@ -160,11 +160,11 @@
         />
       </a-form-item>
       </div>
-      <div v-show="isFieldVisible('certificateNo')">
-      <a-form-item :label="t('entity.employeeeducation.certificateno')">
+      <div v-show="isFieldVisible('CertificateCode')">
+      <a-form-item :label="t('entity.employeeeducation.CertificateCode')">
         <a-input
-          v-model:value="advancedQueryForm.certificateNo"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.employeeeducation.certificateno') })"
+          v-model:value="advancedQueryForm.CertificateCode"
+          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.employeeeducation.CertificateCode') })"
           show-count
           :maxlength="100"
           allow-clear
@@ -387,7 +387,7 @@ const advancedQueryForm = ref({
   educationLevel: undefined as number | undefined,
   degreeLevel: undefined as number | undefined,
   majorName: '',
-  certificateNo: '',
+  CertificateCode: '',
   startDateStart: '',
   startDateEnd: '',
   endDateStart: '',
@@ -405,7 +405,7 @@ const queryFieldsMeta = computed(() => [
   { key: 'educationLevel', label: t('entity.employeeeducation.educationlevel') },
   { key: 'degreeLevel', label: t('entity.employeeeducation.degreelevel') },
   { key: 'majorName', label: t('entity.employeeeducation.majorname') },
-  { key: 'certificateNo', label: t('entity.employeeeducation.certificateno') },
+  { key: 'CertificateCode', label: t('entity.employeeeducation.CertificateCode') },
   { key: 'startDateStart', label: t('common.page.entity.createdatstart').replace(t('common.page.entity.createdat'), t('entity.employeeeducation.startdate')) },
   { key: 'startDateEnd', label: t('common.page.entity.createdatend').replace(t('common.page.entity.createdat'), t('entity.employeeeducation.startdate')) },
   { key: 'endDateStart', label: t('common.page.entity.createdatstart').replace(t('common.page.entity.createdat'), t('entity.employeeeducation.enddate')) },
@@ -464,7 +464,7 @@ function buildListQuery(overrides?: Partial<EmployeeEducationQuery>): EmployeeEd
     query.degreeLevel = form.degreeLevel
   }
   assignTrimmed('majorName', form.majorName)
-  assignTrimmed('certificateNo', form.certificateNo)
+  assignTrimmed('CertificateCode', form.CertificateCode)
   assignTrimmed('startDateStart', form.startDateStart)
   assignTrimmed('startDateEnd', form.startDateEnd)
   assignTrimmed('endDateStart', form.endDateStart)
@@ -548,13 +548,13 @@ const columns = computed<TableColumnsType>(() => [
     customRender: ({ record }: { record: any }) => getEmployeeEducationField(record, 'majorName') ?? ''
   },
   {
-    title: t('entity.employeeeducation.certificateno'),
-    dataIndex: 'certificateNo',
-    key: 'certificateNo',
+    title: t('entity.employeeeducation.CertificateCode'),
+    dataIndex: 'CertificateCode',
+    key: 'CertificateCode',
     width: 120,
     resizable: true,
     ellipsis: true,
-    customRender: ({ record }: { record: any }) => getEmployeeEducationField(record, 'certificateNo') ?? ''
+    customRender: ({ record }: { record: any }) => getEmployeeEducationField(record, 'CertificateCode') ?? ''
   },
   {
     title: t('entity.employeeeducation.startdate'),
@@ -688,7 +688,7 @@ function handleReset() {
   educationLevel: undefined as number | undefined,
   degreeLevel: undefined as number | undefined,
   majorName: '',
-  certificateNo: '',
+  CertificateCode: '',
   startDateStart: '',
   startDateEnd: '',
   endDateStart: '',
@@ -873,7 +873,7 @@ function handleAdvancedQueryReset() {
   educationLevel: undefined as number | undefined,
   degreeLevel: undefined as number | undefined,
   majorName: '',
-  certificateNo: '',
+  CertificateCode: '',
   startDateStart: '',
   startDateEnd: '',
   endDateStart: '',

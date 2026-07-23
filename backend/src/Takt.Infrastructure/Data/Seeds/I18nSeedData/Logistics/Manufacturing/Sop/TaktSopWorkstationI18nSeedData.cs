@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Infrastructure.Data.Seeds.I18nSeedData.Logistics.Manufacturing.Sop
 // 文件名称：TaktSopWorkstationI18nSeedData.cs
-// 创建时间：2026-07-20
+// 创建时间：2026-07-23
 // 创建人：Takt365(Auto Generated)
 // 功能描述：TaktSopWorkstation 实体字段国际化种子（无对应 frontend locales；TranslationText 取自 ColumnDescription，ContextNote 取自属性 XML summary）
 // 
@@ -91,13 +91,13 @@ public class TaktSopWorkstationI18nSeedData : ITaktSeedDataCoordinator
             new TranslationSeedItem("entity.sopworkstation._self", "zh-HK", "SOP 工位主数据信息_hk", "实体名称"),
 
             // entity.sopworkstation.plantcode
-            new TranslationSeedItem("entity.sopworkstation.plantcode", "en-US", "工厂代码_us", "工厂代码（选项 TaktPlants/options，DictValue=PlantCode）"),
+            new TranslationSeedItem("entity.sopworkstation.plantcode", "en-US", "工厂代码_us", "工厂代码（选项 TaktPlants/options；DictValue=PlantCode）"),
             // entity.sopworkstation.plantcode
-            new TranslationSeedItem("entity.sopworkstation.plantcode", "ja-JP", "工厂代码_jp", "工厂代码（选项 TaktPlants/options，DictValue=PlantCode）"),
+            new TranslationSeedItem("entity.sopworkstation.plantcode", "ja-JP", "工厂代码_jp", "工厂代码（选项 TaktPlants/options；DictValue=PlantCode）"),
             // entity.sopworkstation.plantcode
-            new TranslationSeedItem("entity.sopworkstation.plantcode", "zh-CN", "工厂代码", "工厂代码（选项 TaktPlants/options，DictValue=PlantCode）"),
+            new TranslationSeedItem("entity.sopworkstation.plantcode", "zh-CN", "工厂代码", "工厂代码（选项 TaktPlants/options；DictValue=PlantCode）"),
             // entity.sopworkstation.plantcode
-            new TranslationSeedItem("entity.sopworkstation.plantcode", "zh-HK", "工厂代码_hk", "工厂代码（选项 TaktPlants/options，DictValue=PlantCode）"),
+            new TranslationSeedItem("entity.sopworkstation.plantcode", "zh-HK", "工厂代码_hk", "工厂代码（选项 TaktPlants/options；DictValue=PlantCode）"),
 
             // entity.sopworkstation.workstationcode
             new TranslationSeedItem("entity.sopworkstation.workstationcode", "en-US", "工位编码_us", "工位编码（工厂内唯一）"),
@@ -118,13 +118,13 @@ public class TaktSopWorkstationI18nSeedData : ITaktSeedDataCoordinator
             new TranslationSeedItem("entity.sopworkstation.workstationname", "zh-HK", "工位名称_hk", "工位名称"),
 
             // entity.sopworkstation.workcenter
-            new TranslationSeedItem("entity.sopworkstation.workcenter", "en-US", "工作中心_us", "工作中心（选项 TaktWorkCenters/options，DictValue=WorkCenterCode）"),
+            new TranslationSeedItem("entity.sopworkstation.workcenter", "en-US", "工作中心_us", "工作中心（选项 TaktWorkCenters/options；DictValue=WorkCenterCode）"),
             // entity.sopworkstation.workcenter
-            new TranslationSeedItem("entity.sopworkstation.workcenter", "ja-JP", "工作中心_jp", "工作中心（选项 TaktWorkCenters/options，DictValue=WorkCenterCode）"),
+            new TranslationSeedItem("entity.sopworkstation.workcenter", "ja-JP", "工作中心_jp", "工作中心（选项 TaktWorkCenters/options；DictValue=WorkCenterCode）"),
             // entity.sopworkstation.workcenter
-            new TranslationSeedItem("entity.sopworkstation.workcenter", "zh-CN", "工作中心", "工作中心（选项 TaktWorkCenters/options，DictValue=WorkCenterCode）"),
+            new TranslationSeedItem("entity.sopworkstation.workcenter", "zh-CN", "工作中心", "工作中心（选项 TaktWorkCenters/options；DictValue=WorkCenterCode）"),
             // entity.sopworkstation.workcenter
-            new TranslationSeedItem("entity.sopworkstation.workcenter", "zh-HK", "工作中心_hk", "工作中心（选项 TaktWorkCenters/options，DictValue=WorkCenterCode）"),
+            new TranslationSeedItem("entity.sopworkstation.workcenter", "zh-HK", "工作中心_hk", "工作中心（选项 TaktWorkCenters/options；DictValue=WorkCenterCode）"),
 
             // entity.sopworkstation.productionline
             new TranslationSeedItem("entity.sopworkstation.productionline", "en-US", "生产班组_us", "生产班组"),

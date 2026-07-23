@@ -39,7 +39,7 @@ public class TaktApsSchedule : TaktCompanyEntityBase
     public string? MaterialRequirementsPlanningCode { get; set; }
 
     /// <summary>
-    /// 工厂编码（选项 TaktPlants/options，DictValue=PlantCode）
+    /// 工厂编码（选项 TaktPlants/options；DictValue=PlantCode）
     /// </summary>
     [SugarColumn(ColumnName = "plant_code", ColumnDescription = "工厂编码", ColumnDataType = "nvarchar", Length = 4, IsNullable = false)]
     public string PlantCode { get; set; } = string.Empty;
@@ -135,7 +135,7 @@ public class TaktApsSchedule : TaktCompanyEntityBase
     public int ScheduleStatus { get; set; } = 0;
 
     /// <summary>
-    /// 计划员ID（选项 TaktEmployees/options，DictValue=Id）
+    /// 计划员ID（选项 TaktEmployees/options；DictValue=Id）
     /// </summary>
     [SugarColumn(ColumnName = "planner_id", ColumnDescription = "计划员ID", ColumnDataType = "bigint", IsNullable = true)]
     [JsonConverter(typeof(ValueToStringConverter))]
@@ -154,7 +154,7 @@ public class TaktApsSchedule : TaktCompanyEntityBase
     public DateTime? PublishTime { get; set; }
 
     /// <summary>
-    /// 发布人ID（选项 TaktEmployees/options，DictValue=Id）
+    /// 发布人ID（选项 TaktEmployees/options；DictValue=Id）
     /// </summary>
     [SugarColumn(ColumnName = "publish_user_id", ColumnDescription = "发布人ID", ColumnDataType = "bigint", IsNullable = true)]
     [JsonConverter(typeof(ValueToStringConverter))]

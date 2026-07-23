@@ -94,9 +94,9 @@ export interface TrainingAttendee extends CompanyDtoBase {
   isPassed: number;
 
   /**
-   * 证书编号
+   * 证书编码
    */
-  certificateNo: string;
+  CertificateCode: string;
 
   /**
    * 培训评价
@@ -209,9 +209,9 @@ export interface TrainingAttendeeQuery extends TaktPagedQuery {
   isPassed?: number;
 
   /**
-   * 证书编号
+   * 证书编码
    */
-  certificateNo?: string;
+  CertificateCode?: string;
 
   /**
    * 培训评价
@@ -333,9 +333,9 @@ export interface TrainingAttendeeCreate {
   isPassed: number;
 
   /**
-   * 证书编号
+   * 证书编码
    */
-  certificateNo: string;
+  CertificateCode: string;
 
   /**
    * 培训评价
@@ -451,9 +451,9 @@ export interface TrainingAttendeeTemplate {
   isPassed?: number;
 
   /**
-   * 证书编号
+   * 证书编码
    */
-  certificateNo?: string;
+  CertificateCode?: string;
 
   /**
    * 培训评价
@@ -540,9 +540,9 @@ export interface TrainingAttendeeImport {
   isPassed?: number;
 
   /**
-   * 证书编号
+   * 证书编码
    */
-  certificateNo?: string;
+  CertificateCode?: string;
 
   /**
    * 培训评价
@@ -649,9 +649,9 @@ export interface TrainingAttendeeExport {
   isPassed: number;
 
   /**
-   * 证书编号
+   * 证书编码
    */
-  certificateNo: string;
+  CertificateCode: string;
 
   /**
    * 培训评价

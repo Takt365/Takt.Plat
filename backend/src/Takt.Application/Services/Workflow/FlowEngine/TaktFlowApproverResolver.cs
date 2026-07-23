@@ -312,17 +312,24 @@ public class TaktFlowApproverResolverService
         {
             return latest.DirectManagerId;
         }
-        var employee = await _employeeRepository.GetByIdAsync(employeeId);
-        if (employee?.PrimaryDeptId is > 0)
+        var employeeDepts = await _employeeDeptRepository.GetListAsync(
+            x => x.TenantCode == tenantCode
+                && x.CompanyCode == companyCode
+                && x.EmployeeId == employeeId,
+            x => x.CreatedAt,
+            false);
+        var primaryDeptId = employeeDepts.FirstOrDefault(x => x.DeptId > 0)?.DeptId ?? 0;
+        if (primaryDeptId <= 0)
         {
-            var dept = await _deptRepository.GetByIdAsync(employee.PrimaryDeptId.Value);
-            if (dept?.HeadUserId > 0)
+            return null;
+        }
+        var dept = await _deptRepository.GetByIdAsync(primaryDeptId);
+        if (dept?.HeadUserId > 0)
+        {
+            var headUser = await _userRepository.GetByIdAsync(dept.HeadUserId);
+            if (headUser?.EmployeeId > 0)
             {
-                var headUser = await _userRepository.GetByIdAsync(dept.HeadUserId);
-                if (headUser?.EmployeeId > 0)
-                {
-                    return headUser.EmployeeId;
-                }
+                return headUser.EmployeeId;
             }
         }
         return null;

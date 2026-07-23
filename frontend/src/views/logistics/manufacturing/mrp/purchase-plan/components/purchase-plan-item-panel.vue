@@ -63,6 +63,7 @@
         :data-source="dataSource"
         :loading="loading"
         :stripe="true"
+        :virtual="true"
         :row-key="getPurchasePlanItemId"
         :row-selection="rowSelection"
         :custom-row="onClickRow"
@@ -188,7 +189,7 @@
       <a-form-item :label="pi.queryLabel('materialCode')">
         <TaktSelect
           v-model:value="advancedQueryForm.materialCode"
-          api-url="TaktMaterials/options"
+          api-url="TaktMaterialPlants/options"
           :placeholder="pi.queryPh('materialCode', 'select')"
           allow-clear
         />
@@ -282,6 +283,33 @@
         />
       </a-form-item>
       </div>
+      <div v-show="isFieldVisible('taxIncludedPrice')">
+      <a-form-item :label="pi.queryLabel('taxIncludedPrice')">
+        <a-input-number
+          v-model:value="advancedQueryForm.taxIncludedPrice"
+          :placeholder="pi.queryPh('taxIncludedPrice', 'required')"
+          style="width: 100%"
+        />
+      </a-form-item>
+      </div>
+      <div v-show="isFieldVisible('untaxedPrice')">
+      <a-form-item :label="pi.queryLabel('untaxedPrice')">
+        <a-input-number
+          v-model:value="advancedQueryForm.untaxedPrice"
+          :placeholder="pi.queryPh('untaxedPrice', 'required')"
+          style="width: 100%"
+        />
+      </a-form-item>
+      </div>
+      <div v-show="isFieldVisible('taxAmount')">
+      <a-form-item :label="pi.queryLabel('taxAmount')">
+        <a-input-number
+          v-model:value="advancedQueryForm.taxAmount"
+          :placeholder="pi.queryPh('taxAmount', 'required')"
+          style="width: 100%"
+        />
+      </a-form-item>
+      </div>
       <div v-show="isFieldVisible('referenceSupplierCode')">
       <a-form-item :label="pi.queryLabel('referenceSupplierCode')">
         <TaktSelect
@@ -292,11 +320,11 @@
         />
       </a-form-item>
       </div>
-      <div v-show="isFieldVisible('referenceSupplierName')">
-      <a-form-item :label="pi.queryLabel('referenceSupplierName')">
+      <div v-show="isFieldVisible('referenceSupplierName1')">
+      <a-form-item :label="pi.queryLabel('referenceSupplierName1')">
         <a-input
-          v-model:value="advancedQueryForm.referenceSupplierName"
-          :placeholder="pi.queryPh('referenceSupplierName', 'required')"
+          v-model:value="advancedQueryForm.referenceSupplierName1"
+          :placeholder="pi.queryPh('referenceSupplierName1', 'required')"
           show-count
           :maxlength="20"
           allow-clear
@@ -542,6 +570,9 @@ function createEmptyAdvancedQueryForm() {
     convertedQuantity: undefined as number | undefined,
     estimatedUnitPrice: undefined as number | undefined,
     estimatedAmount: undefined as number | undefined,
+    taxIncludedPrice: undefined as number | undefined,
+    untaxedPrice: undefined as number | undefined,
+    taxAmount: undefined as number | undefined,
     isObsolete: undefined as number | undefined,
   }
 }
@@ -773,6 +804,36 @@ const columns = computed<TableColumnsType>(() => [
       String(getPurchasePlanItemField(record, 'estimatedAmount') ?? ''),
   },
   {
+    title: pi.label('taxIncludedPrice'),
+    dataIndex: 'taxIncludedPrice',
+    key: 'taxIncludedPrice',
+    width: 120,
+    resizable: true,
+    ellipsis: true,
+    customRender: ({ record }: { record: PurchasePlanItem }) =>
+      String(getPurchasePlanItemField(record, 'taxIncludedPrice') ?? ''),
+  },
+  {
+    title: pi.label('untaxedPrice'),
+    dataIndex: 'untaxedPrice',
+    key: 'untaxedPrice',
+    width: 120,
+    resizable: true,
+    ellipsis: true,
+    customRender: ({ record }: { record: PurchasePlanItem }) =>
+      String(getPurchasePlanItemField(record, 'untaxedPrice') ?? ''),
+  },
+  {
+    title: pi.label('taxAmount'),
+    dataIndex: 'taxAmount',
+    key: 'taxAmount',
+    width: 120,
+    resizable: true,
+    ellipsis: true,
+    customRender: ({ record }: { record: PurchasePlanItem }) =>
+      String(getPurchasePlanItemField(record, 'taxAmount') ?? ''),
+  },
+  {
     title: pi.label('referenceSupplierCode'),
     dataIndex: 'referenceSupplierCode',
     key: 'referenceSupplierCode',
@@ -783,14 +844,14 @@ const columns = computed<TableColumnsType>(() => [
       String(getPurchasePlanItemField(record, 'referenceSupplierCode') ?? ''),
   },
   {
-    title: pi.label('referenceSupplierName'),
-    dataIndex: 'referenceSupplierName',
-    key: 'referenceSupplierName',
+    title: pi.label('referenceSupplierName1'),
+    dataIndex: 'referenceSupplierName1',
+    key: 'referenceSupplierName1',
     width: 120,
     resizable: true,
     ellipsis: true,
     customRender: ({ record }: { record: PurchasePlanItem }) =>
-      String(getPurchasePlanItemField(record, 'referenceSupplierName') ?? ''),
+      String(getPurchasePlanItemField(record, 'referenceSupplierName1') ?? ''),
   },
   {
     title: pi.label('isObsolete'),
@@ -973,6 +1034,15 @@ function buildListQuery(overrides?: Partial<PurchasePlanItemQuery>): PurchasePla
   }
   if (form.estimatedAmount !== undefined && form.estimatedAmount !== null) {
     query.estimatedAmount = form.estimatedAmount
+  }
+  if (form.taxIncludedPrice !== undefined && form.taxIncludedPrice !== null) {
+    query.taxIncludedPrice = form.taxIncludedPrice
+  }
+  if (form.untaxedPrice !== undefined && form.untaxedPrice !== null) {
+    query.untaxedPrice = form.untaxedPrice
+  }
+  if (form.taxAmount !== undefined && form.taxAmount !== null) {
+    query.taxAmount = form.taxAmount
   }
   if (form.isObsolete !== undefined && form.isObsolete !== null) {
     query.isObsolete = form.isObsolete

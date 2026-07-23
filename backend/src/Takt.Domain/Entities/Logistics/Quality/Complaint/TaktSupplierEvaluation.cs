@@ -29,12 +29,12 @@ namespace Takt.Domain.Entities.Logistics.Quality.Complaint;
 public class TaktSupplierEvaluation : TaktCompanyEntityBase
 {
     /// <summary>
-    /// 评价表编号（组合唯一索引）
+    /// 评价表编码（组合唯一索引）
     /// </summary>
-    [SugarColumn(ColumnName = "supplier_evaluation_code", ColumnDescription = "评价表编号", ColumnDataType = "nvarchar", Length = 50, IsNullable = false)]
+    [SugarColumn(ColumnName = "supplier_evaluation_code", ColumnDescription = "评价表编码", ColumnDataType = "nvarchar", Length = 50, IsNullable = false)]
     public string SupplierEvaluationCode { get; set; } = string.Empty;
     /// <summary>
-    /// 供应商 ID（选项 TaktSuppliers/options，DictValue=Id）
+    /// 供应商 ID（选项 TaktSuppliers/options；DictValue=Id）
     /// </summary>
     [SugarColumn(ColumnName = "supplier_id", ColumnDescription = "供应商ID", ColumnDataType = "bigint", IsNullable = false)]
     [JsonConverter(typeof(ValueToStringConverter))]
@@ -42,10 +42,10 @@ public class TaktSupplierEvaluation : TaktCompanyEntityBase
     /// <summary>
     /// 供应商名称
     /// </summary>
-    [SugarColumn(ColumnName = "supplier_name", ColumnDescription = "供应商名称", ColumnDataType = "nvarchar", Length = 200, IsNullable = false)]
-    public string SupplierName { get; set; } = string.Empty;
+    [SugarColumn(ColumnName = "supplier_name1", ColumnDescription = "供应商名称1", ColumnDataType = "nvarchar", Length = 140, IsNullable = false)]
+    public string SupplierName1 { get; set; } = string.Empty;
     /// <summary>
-    /// 供应商编码（选项 TaktSuppliers/options，DictValue=SupplierCode）
+    /// 供应商编码（选项 TaktSuppliers/options；DictValue=SupplierCode）
     /// </summary>
     [SugarColumn(ColumnName = "supplier_code", ColumnDescription = "供应商编码", ColumnDataType = "nvarchar", Length = 50, IsNullable = true)]
     public string? SupplierCode { get; set; }
@@ -65,12 +65,12 @@ public class TaktSupplierEvaluation : TaktCompanyEntityBase
     [SugarColumn(ColumnName = "evaluation_type", ColumnDescription = "评价类型", ColumnDataType = "int", IsNullable = false, DefaultValue = "0")]
     public int EvaluationType { get; set; } = 0;
     /// <summary>
-    /// 评价人（选项 TaktEmployees/options，DictValue=EmployeeCode）
+    /// 评价人（选项 TaktEmployees/options；DictValue=EmployeeCode）
     /// </summary>
     [SugarColumn(ColumnName = "evaluator_by", ColumnDescription = "评价人", ColumnDataType = "nvarchar", Length = 50, IsNullable = true)]
     public string? EvaluatorBy { get; set; }
     /// <summary>
-    /// 评价部门（选项 TaktDepts/tree-options，DictValue=DeptCode）
+    /// 评价部门（选项 TaktDepts/tree-options；DictValue=DeptCode）
     /// </summary>
     [SugarColumn(ColumnName = "evaluation_dept", ColumnDescription = "评价部门", ColumnDataType = "nvarchar", Length = 100, IsNullable = true)]
     public string? EvaluationDept { get; set; }
@@ -145,7 +145,7 @@ public class TaktSupplierEvaluation : TaktCompanyEntityBase
     [SugarColumn(ColumnName = "evaluation_status", ColumnDescription = "评价状态", ColumnDataType = "int", IsNullable = false, DefaultValue = "0")]
     public int EvaluationStatus { get; set; } = 0;
     /// <summary>
-    /// 关联工厂（选项 TaktPlants/options，DictValue=PlantCode）
+    /// 关联工厂（选项 TaktPlants/options；DictValue=PlantCode）
     /// </summary>
     [SugarColumn(ColumnName = "related_plant", ColumnDescription = "关联工厂", ColumnDataType = "nvarchar", Length = 4, IsNullable = false)]
     public string RelatedPlant { get; set; } = string.Empty;

@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Application.Services.Logistics.Procurement
 // 文件名称：TaktPurchaseOrderService.cs
-// 创建时间：2026-07-09
+// 创建时间：2026-07-23
 // 创建人：Takt365(Cursor AI)
 // 功能描述：采购订单应用服务实现
 // 
@@ -102,13 +102,12 @@ public class TaktPurchaseOrderService : TaktServiceBase, ITaktPurchaseOrderServi
         EnsureThreeLayerContext();
         var list = await _purchaseOrderRepository.GetListAsync(
             x => x.TenantCode == CurrentTenantCode && x.CompanyCode == CurrentCompanyCode && x.OrderStatus == 1,
-            x => x.SupplierName ?? string.Empty,
+            x => x.PurchaseOrderCode ?? string.Empty,
             false);
         return list.Select(e => new TaktSelectOption
         {
             DictValue = e.PurchaseOrderCode,
-            DictLabel = string.IsNullOrWhiteSpace(e.SupplierName) ? e.PurchaseOrderCode : $"{e.PurchaseOrderCode} {e.SupplierName}",
-            ExtValue = e.Id,
+            DictLabel = e.PurchaseOrderCode,
         }).ToList();
     }
 
@@ -363,9 +362,9 @@ public class TaktPurchaseOrderService : TaktServiceBase, ITaktPurchaseOrderServi
     {
         // 采购订单明细（Items）
         List<TaktPurchaseOrderItemUpdateDto>? itemsForSave;
-        if (dto is TaktPurchaseOrderUpdateDto updateDto && updateDto.Items != null)
+        if (dto is TaktPurchaseOrderUpdateDto updateDtoForItems && updateDtoForItems.Items != null)
         {
-            itemsForSave = updateDto.Items;
+            itemsForSave = updateDtoForItems.Items;
         }
         else if (dto.Items != null)
         {
@@ -470,50 +469,6 @@ public class TaktPurchaseOrderService : TaktServiceBase, ITaktPurchaseOrderServi
             }
         }
     }
-
-    /// <summary>
-    /// 获取采购订单统计（数据看板）
-    /// </summary>
-    /// <param name="queryDto">查询 DTO</param>
-    /// <returns>采购订单统计</returns>
-    public async Task<TaktPurchaseOrderStatDto> GetPurchaseOrderStatAsync(TaktProcurementStatQueryDto queryDto)
-    {
-        EnsureThreeLayerContext();
-        var (start, end, statMonth) = TaktStatMonthRangeHelper.ResolveMonthRange(
-            queryDto.OrderDateStart,
-            queryDto.OrderDateEnd);
-        var tenantCode = CurrentTenantCode;
-        var companyCode = CurrentCompanyCode;
-        Expression<Func<TaktPurchaseOrder, bool>> predicate = x =>
-            x.TenantCode == tenantCode
-            && x.CompanyCode == companyCode
-            && x.OrderDate >= start
-            && x.OrderDate <= end;
-        var monthOrderCount = await _purchaseOrderRepository.CountAsync(predicate);
-        var monthTotalAmount = await _purchaseOrderRepository.SumAsync(x => x.TotalAmount, predicate);
-        var compareOrderCount = 0;
-        if (queryDto.CompareOrderDateStart.HasValue || queryDto.CompareOrderDateEnd.HasValue)
-        {
-            var (compareStart, compareEnd, _) = TaktStatMonthRangeHelper.ResolveMonthRange(
-                queryDto.CompareOrderDateStart,
-                queryDto.CompareOrderDateEnd);
-            Expression<Func<TaktPurchaseOrder, bool>> comparePredicate = x =>
-                x.TenantCode == tenantCode
-                && x.CompanyCode == companyCode
-                && x.OrderDate >= compareStart
-                && x.OrderDate <= compareEnd;
-            compareOrderCount = await _purchaseOrderRepository.CountAsync(comparePredicate);
-        }
-        return new TaktPurchaseOrderStatDto
-        {
-            StatMonth = statMonth,
-            MonthOrderCount = monthOrderCount,
-            MonthTotalAmount = monthTotalAmount,
-            CompareOrderCount = compareOrderCount,
-            OrderCountYoYPercent = TaktYoYStatHelper.CalculateYoYPercent(monthOrderCount, compareOrderCount),
-        };
-    }
-
     // ========================================
     // 查询表达式
     // ========================================
@@ -536,11 +491,13 @@ public class TaktPurchaseOrderService : TaktServiceBase, ITaktPurchaseOrderServi
                 || SqlFunc.ToString(x.PurchaseRequestId).Contains(keywords)
                 || (x.PurchaseRequestCode != null && x.PurchaseRequestCode.Contains(keywords))
                 || (x.SupplierCode != null && x.SupplierCode.Contains(keywords))
-                || (x.SupplierName != null && x.SupplierName.Contains(keywords))
+                || (x.SupplierName1 != null && x.SupplierName1.Contains(keywords))
                 || (x.PurchaseGroup != null && x.PurchaseGroup.Contains(keywords))
                 || SqlFunc.ToString(x.TotalQuantity).Contains(keywords)
                 || SqlFunc.ToString(x.TotalAmount).Contains(keywords)
                 || SqlFunc.ToString(x.DiscountAmount).Contains(keywords)
+                || (x.CurrencyCode != null && x.CurrencyCode.Contains(keywords))
+                || SqlFunc.ToString(x.TaxRate).Contains(keywords)
                 || SqlFunc.ToString(x.TaxAmount).Contains(keywords)
                 || SqlFunc.ToString(x.ActualAmount).Contains(keywords)
                 || SqlFunc.ToString(x.ReceivedQuantity).Contains(keywords)
@@ -585,9 +542,9 @@ public class TaktPurchaseOrderService : TaktServiceBase, ITaktPurchaseOrderServi
             exp = exp.And(x => x.SupplierCode != null && x.SupplierCode.Contains(queryDto.SupplierCode));
         }
 
-        if (!string.IsNullOrEmpty(queryDto?.SupplierName))
+        if (!string.IsNullOrEmpty(queryDto?.SupplierName1))
         {
-            exp = exp.And(x => x.SupplierName != null && x.SupplierName.Contains(queryDto.SupplierName));
+            exp = exp.And(x => x.SupplierName1 != null && x.SupplierName1.Contains(queryDto.SupplierName1));
         }
 
         if (!string.IsNullOrEmpty(queryDto?.PurchaseGroup))
@@ -608,6 +565,16 @@ public class TaktPurchaseOrderService : TaktServiceBase, ITaktPurchaseOrderServi
         if (queryDto?.DiscountAmount.HasValue == true)
         {
             exp = exp.And(x => x.DiscountAmount == queryDto.DiscountAmount);
+        }
+
+        if (!string.IsNullOrEmpty(queryDto?.CurrencyCode))
+        {
+            exp = exp.And(x => x.CurrencyCode != null && x.CurrencyCode.Contains(queryDto.CurrencyCode));
+        }
+
+        if (queryDto?.TaxRate.HasValue == true)
+        {
+            exp = exp.And(x => x.TaxRate == queryDto.TaxRate);
         }
 
         if (queryDto?.TaxAmount.HasValue == true)

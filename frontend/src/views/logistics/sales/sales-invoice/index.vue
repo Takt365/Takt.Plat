@@ -9,17 +9,37 @@
 
 <template>
   <div class="p-4 flex flex-col min-h-0 h-full">
-    <!-- 查询栏 -->
-    <TaktQueryBar
-      v-model="queryKeyword"
-      :placeholder="searchPlaceholder"
-      :loading="loading"
-      @search="handleSearch"
-      @reset="handleReset"
-    />
-
-    <!-- 工具栏 -->
-    <TaktToolsBar
+    <!-- 左主右从 -->
+    <TaktMasterDetailTableLr
+      v-model:master-current="currentPage"
+      v-model:master-page-size="pageSize"
+      v-model:selected-master-key="selectedMasterKey"
+      class="min-h-0 flex-1"
+      :master-columns="columns"
+      :master-data-source="dataSource"
+      :master-loading="loading"
+      :master-row-key="getSalesInvoiceId"
+      :master-row-selection="rowSelection"
+      master-id-column-key="salesInvoiceId"
+      :master-visible-column-keys="visibleColumnKeys"
+      master-table-mode="masterDetailMaster"
+      master-scroll-layout="masterDetailLr"
+      :master-total="total"
+      master-entity-scope="company"
+      @master-change="handleTableChange"
+      @master-resize-column="handleResizeColumn"
+      @master-pagination-change="handleMasterPaginationChange"
+      @master-select="handleMasterSelect"
+    >
+      <template #master-toolbar>
+        <TaktQueryBar
+          v-model="queryKeyword"
+          :placeholder="searchPlaceholder"
+          :loading="loading"
+          @search="handleSearch"
+          @reset="handleReset"
+        />
+        <TaktToolsBar
       create-permission="logistics:sales:invoice:create"
       update-permission="logistics:sales:invoice:update"
       delete-permission="logistics:sales:invoice:delete"
@@ -50,30 +70,23 @@
       @advanced-query="handleAdvancedQuery"
       @column-setting="handleColumnSetting"
       @refresh="handleRefresh"
-    />
-
-    <!-- 左主右从 -->
-    <TaktMasterDetailTableLr
-      v-model:master-current="currentPage"
-      v-model:master-page-size="pageSize"
-      v-model:selected-master-key="selectedMasterKey"
-      class="min-h-0 flex-1"
-      :master-columns="columns"
-      :master-data-source="dataSource"
-      :master-loading="loading"
-      :master-row-key="getSalesInvoiceId"
-      :master-row-selection="rowSelection"
-      master-id-column-key="salesInvoiceId"
-      :master-visible-column-keys="visibleColumnKeys"
-      master-table-mode="masterDetailMaster"
-      master-scroll-layout="masterDetailLr"
-      :master-total="total"
-      master-entity-scope="company"
-      @master-change="handleTableChange"
-      @master-resize-column="handleResizeColumn"
-      @master-pagination-change="handleMasterPaginationChange"
-      @master-select="handleMasterSelect"
-    >
+        />
+      </template>
+      <!-- 字典/开关列渲染 -->
+      <template #bodyCell="{ column, record }">
+        <template v-if="column.key === 'currencyCode'">
+          <TaktDictTag
+            :value="getSalesInvoiceDictValue(record, 'currencyCode')"
+            dict-type="accounting_currency_code"
+          />
+        </template>
+        <template v-else-if="column.key === 'taxRate'">
+          <TaktDictTag
+            :value="getSalesInvoiceDictValue(record, 'taxRate')"
+            dict-type="accounting_tax_rate_param"
+          />
+        </template>
+      </template>
       <template #detail>
         <SalesInvoiceItemPanel
           ref="salesInvoiceItemPanelRef"
@@ -141,14 +154,43 @@
         />
       </a-form-item>
       </div>
-      <div v-show="isFieldVisible('customerName')">
-      <a-form-item :label="pi.queryLabel('customerName')">
+      <div v-show="isFieldVisible('customerName1')">
+      <a-form-item :label="pi.queryLabel('customerName1')">
         <a-input
-          v-model:value="advancedQueryForm.customerName"
-          :placeholder="pi.queryPh('customerName', 'required')"
+          v-model:value="advancedQueryForm.customerName1"
+          :placeholder="pi.queryPh('customerName1', 'required')"
           show-count
-          :maxlength="200"
+          :maxlength="140"
           allow-clear
+        />
+      </a-form-item>
+      </div>
+      <div v-show="isFieldVisible('currencyCode')">
+      <a-form-item :label="pi.queryLabel('currencyCode')">
+        <TaktSelect
+          v-model:value="advancedQueryForm.currencyCode"
+          dict-type="accounting_currency_code"
+          :placeholder="pi.queryPh('currencyCode', 'select')"
+          allow-clear
+        />
+      </a-form-item>
+      </div>
+      <div v-show="isFieldVisible('taxRate')">
+      <a-form-item :label="pi.queryLabel('taxRate')">
+        <TaktSelect
+          v-model:value="advancedQueryForm.taxRate"
+          dict-type="accounting_tax_rate_param"
+          :placeholder="pi.queryPh('taxRate', 'select')"
+          allow-clear
+        />
+      </a-form-item>
+      </div>
+      <div v-show="isFieldVisible('taxAmount')">
+      <a-form-item :label="pi.queryLabel('taxAmount')">
+        <a-input-number
+          v-model:value="advancedQueryForm.taxAmount"
+          :placeholder="pi.queryPh('taxAmount', 'required')"
+          style="width: 100%"
         />
       </a-form-item>
       </div>
@@ -281,6 +323,7 @@ import SalesInvoiceItemPanel from './components/invoice-item-panel.vue'
 import { provideSalesInvoiceMasterContext, type SalesInvoiceRowRecord } from './composables/use-invoice-master-context'
 import { getSalesInvoiceList, getSalesInvoiceById, createSalesInvoice, updateSalesInvoice, deleteSalesInvoiceById, deleteSalesInvoiceBatch, getSalesInvoiceTemplate, importSalesInvoice, exportSalesInvoice } from '@/api/logistics/sales/invoice'
 import type { SalesInvoice, SalesInvoiceQuery } from '@/types/logistics/sales/invoice'
+import { useDictDataStore } from '@/stores/foundation/dict-data'
 import { taktExcelEntityNames } from '@/utils/naming'
 import { resolveExportDownloadFileName } from '@/utils/export-download-name'
 import { normalizeImportResult, type TaktImportResult } from '@/utils/takt-import-result'
@@ -349,7 +392,8 @@ function createEmptyAdvancedQueryForm() {
   >
   return {
     ...form,
-
+    taxRate: undefined as number | undefined,
+    taxAmount: undefined as number | undefined,
   }
 }
 /** 高级查询表单模型 */
@@ -373,6 +417,8 @@ const updateDisabled = computed(() => selectedRows.value.length !== 1)
 /** 工具栏「删除」是否禁用（未选中任何行） */
 const deleteDisabled = computed(() => selectedRows.value.length === 0)
 
+/** Pinia：字典缓存（列表/查询 dict-type 渲染前预热） */
+const dictDataStore = useDictDataStore()
 /** 主表选中行上下文（右侧明细面板读取） */
 const { selectedMasterRow } = provideSalesInvoiceMasterContext()
 const salesInvoiceItemPanelRef = ref<InstanceType<typeof SalesInvoiceItemPanel> | null>(null)
@@ -402,11 +448,18 @@ function buildListQuery(overrides?: Partial<SalesInvoiceQuery>): SalesInvoiceQue
   for (const key of SALESINVOICE_QUERY_STRING_FIELDS) {
     assignTrimmed(key, form[key])
   }
+  if (form.taxRate !== undefined && form.taxRate !== null) {
+    query.taxRate = form.taxRate
+  }
+  if (form.taxAmount !== undefined && form.taxAmount !== null) {
+    query.taxAmount = form.taxAmount
+  }
   return query
 }
 /** 页面挂载：租户上下文就绪后加载分页配置，再拉列表 */
 onMounted(async () => {
   await ensureTaktPaginationConfigAsync()
+  void dictDataStore.loadAllDictDataAsync()
   loadData()
 })
 
@@ -501,13 +554,38 @@ const columns = computed<TableColumnsType>(() => [
     customRender: ({ record }: { record: any }) => getSalesInvoiceField(record, 'customerCode') ?? ''
   },
   {
-    title: pi.label('customerName'),
-    dataIndex: 'customerName',
-    key: 'customerName',
+    title: pi.label('customerName1'),
+    dataIndex: 'customerName1',
+    key: 'customerName1',
     width: 120,
     resizable: true,
     ellipsis: true,
-    customRender: ({ record }: { record: any }) => getSalesInvoiceField(record, 'customerName') ?? ''
+    customRender: ({ record }: { record: any }) => getSalesInvoiceField(record, 'customerName1') ?? ''
+  },
+  {
+    title: pi.label('currencyCode'),
+    dataIndex: 'currencyCode',
+    key: 'currencyCode',
+    width: 120,
+    resizable: true,
+    ellipsis: true,
+  },
+  {
+    title: pi.label('taxRate'),
+    dataIndex: 'taxRate',
+    key: 'taxRate',
+    width: 120,
+    resizable: true,
+    ellipsis: true,
+  },
+  {
+    title: pi.label('taxAmount'),
+    dataIndex: 'taxAmount',
+    key: 'taxAmount',
+    width: 120,
+    resizable: true,
+    ellipsis: true,
+    customRender: ({ record }: { record: any }) => getSalesInvoiceField(record, 'taxAmount') ?? ''
   },
   {
     title: pi.label('accountingDocumentCode'),
@@ -551,6 +629,20 @@ const getSalesInvoiceId = (record: SalesInvoiceRowRecord): string => {
  * @param field 字段名
  */
 const getSalesInvoiceField = (record: any, field: string): any => record?.[field]
+/**
+ * 供 TaktDictTag 等组件使用的标量字典值
+ * @param record 行数据
+ * @param field 字段名
+ */
+const getSalesInvoiceDictValue = (
+  record: SalesInvoiceRowRecord,
+  field: string,
+): string | number | undefined => {
+  const value = (record as Record<string, unknown>)?.[field]
+  if (value === null || value === undefined) return undefined
+  if (typeof value === 'string' || typeof value === 'number') return value
+  return String(value)
+}
 
 
 
@@ -615,7 +707,10 @@ function handleReset() {
   plantCode: '',
   yearMonth: '',
   customerCode: '',
-  customerName: '',
+  customerName1: '',
+  currencyCode: '',
+  taxRate: undefined as number | undefined,
+  taxAmount: undefined as number | undefined,
   accountingDocumentCode: '',
   createdAtStart: '',
   createdAtEnd: '',
@@ -818,7 +913,10 @@ function handleAdvancedQueryReset() {
   plantCode: '',
   yearMonth: '',
   customerCode: '',
-  customerName: '',
+  customerName1: '',
+  currencyCode: '',
+  taxRate: undefined as number | undefined,
+  taxAmount: undefined as number | undefined,
   accountingDocumentCode: '',
   createdAtStart: '',
   createdAtEnd: '',

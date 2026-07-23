@@ -10,7 +10,7 @@
 <template>
   <a-form
     ref="formRef"
-    class="takt-generated-form assurance-form flex flex-col min-h-0"
+    class="takt-generated-form assurance-form flex flex-col min-h-0 overflow-visible"
     :model="formState"
     :rules="rules"
     layout="horizontal"
@@ -27,71 +27,27 @@
       >
         <div :class="formContentClass">
           <a-row :gutter="24">
-            <a-col :span="12">
+            <a-col :span="24">
               <a-form-item
-                :label="t('common.page.entity.tenantcode')"
-                name="tenantCode"
-              >
-                <a-input
-                  v-model:value="formState.tenantCode"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('common.page.entity.tenantcode') })"
-                  show-count
-                  :maxlength="20"
-                  disabled
-                />
-              </a-form-item>
-            </a-col>
-            <a-col :span="12">
-              <a-form-item
-                :label="t('common.page.entity.companycode')"
-                name="companyCode"
-              >
-                <a-input
-                  v-model:value="formState.companyCode"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('common.page.entity.companycode') })"
-                  show-count
-                  :maxlength="20"
-                  disabled
-                />
-              </a-form-item>
-            </a-col>
-            <a-col :span="12">
-              <a-form-item
-                :label="t('common.page.entity.companydefaultculture')"
-                name="companyDefaultCulture"
-              >
-                <a-input
-                  v-model:value="formState.companyDefaultCulture"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('common.page.entity.companydefaultculture') })"
-                  show-count
-                  :maxlength="20"
-                  disabled
-                />
-              </a-form-item>
-            </a-col>
-            <a-col :span="12">
-              <a-form-item
-                :label="t('entity.qualityassurance.plantcode')"
+                :label="pi.label('plantCode')"
                 name="plantCode"
               >
-                <a-input
+                <TaktSelect
                   v-model:value="formState.plantCode"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.qualityassurance.plantcode') })"
-                  show-count
-                  :maxlength="4"
-                  allow-clear
+                  api-url="TaktPlants/options"
+                  :placeholder="pi.ph('plantCode')"
                   :disabled="!!formData?.qualityAssuranceId"
                 />
               </a-form-item>
             </a-col>
-            <a-col :span="12">
+            <a-col :span="24">
               <a-form-item
-                :label="t('entity.qualityassurance.code')"
+                :label="pi.label('qualityAssuranceCode')"
                 name="qualityAssuranceCode"
               >
                 <a-input
                   v-model:value="formState.qualityAssuranceCode"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.qualityassurance.code') })"
+                  :placeholder="pi.ph('qualityAssuranceCode')"
                   show-count
                   :maxlength="30"
                   allow-clear
@@ -99,69 +55,83 @@
                 />
               </a-form-item>
             </a-col>
-            <a-col :span="12">
+            <a-col :span="24">
               <a-form-item
-                :label="t('entity.qualityassurance.assurancemonth')"
+                :label="pi.label('assuranceMonth')"
                 name="assuranceMonth"
               >
                 <a-input
                   v-model:value="formState.assuranceMonth"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.qualityassurance.assurancemonth') })"
+                  :placeholder="pi.ph('assuranceMonth')"
                   show-count
                   :maxlength="7"
                   allow-clear
                 />
               </a-form-item>
             </a-col>
-            <a-col :span="12">
+            <a-col :span="24">
               <a-form-item
-                :label="t('entity.qualityassurance.customername')"
-                name="customerName"
+                :label="pi.label('customerName1')"
+                name="customerName1"
               >
                 <a-input
-                  v-model:value="formState.customerName"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.qualityassurance.customername') })"
+                  v-model:value="formState.customerName1"
+                  :placeholder="pi.ph('customerName1')"
                   show-count
-                  :maxlength="50"
+                  :maxlength="140"
                   allow-clear
                 />
               </a-form-item>
             </a-col>
             <a-col :span="24">
               <a-form-item
-                :label="t('entity.qualityassurance.debitnoteno')"
+                :label="pi.label('debitNoteNo')"
                 name="debitNoteNo"
               >
                 <a-textarea
                   v-model:value="formState.debitNoteNo"
-                  :placeholder="t('common.page.form.placeholder.optional', { field: t('entity.qualityassurance.debitnoteno') })"
+                  :placeholder="pi.ph('debitNoteNo')"
                   :rows="2"
                 />
               </a-form-item>
             </a-col>
-            <a-col :span="12">
+            <a-col :span="24">
               <a-form-item
-                :label="t('entity.qualityassurance.recorder')"
+                :label="pi.label('recorder')"
                 name="recorder"
               >
                 <a-input
                   v-model:value="formState.recorder"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.qualityassurance.recorder') })"
+                  :placeholder="pi.ph('recorder')"
                   show-count
                   :maxlength="30"
                   allow-clear
                 />
               </a-form-item>
             </a-col>
-            <a-col :span="12">
+            <a-col :span="24">
               <a-form-item
-                :label="t('entity.qualityassurance.totalqualitycost')"
+                :label="pi.label('totalQualityCost')"
                 name="totalQualityCost"
               >
                 <a-input-number
                   v-model:value="formState.totalQualityCost"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.qualityassurance.totalqualitycost') })"
+                  :placeholder="pi.ph('totalQualityCost')"
                   style="width: 100%"
+                />
+              </a-form-item>
+            </a-col>
+            <a-col :span="24">
+              <a-form-item
+                :label="pi.label('costCurrency')"
+                name="costCurrency"
+              >
+                <a-input
+                  v-model:value="formState.costCurrency"
+                  :placeholder="pi.ph('costCurrency')"
+                  show-count
+                  :maxlength="3"
+                  allow-clear
                 />
               </a-form-item>
             </a-col>
@@ -177,15 +147,43 @@
           <a-row :gutter="24">
             <a-col :span="24">
               <a-form-item
-                :label="t('entity.qualityassurance.costcurrency')"
-                name="costCurrency"
+                :label="pi.label('tenantCode')"
+                name="tenantCode"
               >
                 <a-input
-                  v-model:value="formState.costCurrency"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.qualityassurance.costcurrency') })"
+                  v-model:value="formState.tenantCode"
+                  :placeholder="pi.ph('tenantCode')"
                   show-count
-                  :maxlength="3"
-                  allow-clear
+                  :maxlength="20"
+                  disabled
+                />
+              </a-form-item>
+            </a-col>
+            <a-col :span="24">
+              <a-form-item
+                :label="pi.label('companyCode')"
+                name="companyCode"
+              >
+                <a-input
+                  v-model:value="formState.companyCode"
+                  :placeholder="pi.ph('companyCode')"
+                  show-count
+                  :maxlength="20"
+                  disabled
+                />
+              </a-form-item>
+            </a-col>
+            <a-col :span="24">
+              <a-form-item
+                :label="pi.label('companyDefaultCulture')"
+                name="companyDefaultCulture"
+              >
+                <a-input
+                  v-model:value="formState.companyDefaultCulture"
+                  :placeholder="pi.ph('companyDefaultCulture')"
+                  show-count
+                  :maxlength="20"
+                  disabled
                 />
               </a-form-item>
             </a-col>
@@ -202,7 +200,7 @@
                     >
                       <span class="takt-form-label-hint-icon"><RiQuestionLine class="takt-remix-icon" /></span>
                     </a-tooltip>
-                    <span>{{ t('common.page.entity.extfield') }}</span>
+                    <span>{{ pi.label('extField') }}</span>
                   </span>
                 </template>
                 <a-textarea
@@ -217,12 +215,12 @@
             </a-col>
             <a-col :span="24">
               <a-form-item
-                :label="t('common.page.entity.remark')"
+                :label="pi.label('remark')"
                 name="remark"
               >
                 <a-textarea
                   v-model:value="formState.remark"
-                  :placeholder="t('common.page.form.placeholder.optional', { field: t('common.page.entity.remark') })"
+                  :placeholder="pi.ph('remark')"
                   :rows="4"
                   show-count
                   :maxlength="400"
@@ -239,13 +237,27 @@
       ref="qualityAssuranceIncomingTableRef"
       v-model="childQualityAssuranceIncomingRows"
       :columns="qualityAssuranceIncomingFormColumns"
-      :title="t('entity.qualityassuranceincoming._self')"
-      :add-button-entity="t('entity.qualityassuranceincoming._self')"
+      :title="qualityAssuranceIncomingPi.self()"
+      :add-button-entity="qualityAssuranceIncomingPi.self()"
       id-field="qualityAssuranceIncomingId"
       :default-row="createDefaultQualityAssuranceIncomingRow"
       :disabled="loading"
+      :enable-vertical-scroll="false"
       section-border
-    />
+      class="w-full min-w-0"
+    >
+      <template #cell-isObsolete="{ record }">
+        <TaktSelect
+          v-model:value="record.isObsolete"
+          dict-type="sys_yes_no_type"
+          class="w-full"
+          :get-popup-container="getSelectPopupContainer"
+          :placeholder="qualityAssuranceIncomingPi.ph('isObsolete')"
+          :disabled="loading"
+          allow-clear
+        />
+      </template>
+    </TaktEditableTable>
   </a-form>
 </template>
 
@@ -257,7 +269,13 @@
 import { reactive, watch, computed, ref } from 'vue'
 import { useI18n } from 'vue-i18n'
 import type { Rule } from 'ant-design-vue/es/form'
+import { useQualityAssuranceI18n } from '../composables/use-assurance-i18n'
+
+/** 实体字段 i18n */
+const pi = useQualityAssuranceI18n()
+
 import type { QualityAssuranceCreate } from '@/types/logistics/quality/cost/assurance'
+import TaktSelect from '@/components/business/takt-select/index.vue'
 import { RiQuestionLine } from '@remixicon/vue'
 import { useTenantStore } from '@/stores/identity/tenant'
 import { useUserStore } from '@/stores/identity/user'
@@ -291,9 +309,19 @@ const formContentClass = computed(() => (formFields.length > 10 ? 'takt-form-con
 /** 当前激活的 Tab key */
 const activeTab = ref('tab-0')
 /** CreateDto 字段名列表（与 formState 键对齐） */
-const formFields = ["tenantCode","companyCode","companyDefaultCulture","plantCode","qualityAssuranceCode","assuranceMonth","customerName","debitNoteNo","recorder","totalQualityCost","costCurrency","extField","remark"]
+const formFields = ["tenantCode","companyCode","companyDefaultCulture","plantCode","qualityAssuranceCode","assuranceMonth","customerName1","debitNoteNo","recorder","totalQualityCost","costCurrency","extField","remark"]
+
 
 import type { TaktEditableTableColumn } from '@/components/business/takt-editable-table/types'
+import { resolveNextDetailLineNumber } from '@/utils/takt-sequence'
+import { useQualityAssuranceIncomingI18n } from '../composables/use-assurance-incoming-i18n'
+
+const qualityAssuranceIncomingPi = useQualityAssuranceIncomingI18n()
+
+/** 弹窗/表格内 TaktSelect 下拉挂载容器（避免 overflow 裁剪与表头列错位） */
+function getSelectPopupContainer(triggerNode?: HTMLElement): HTMLElement {
+  return triggerNode?.ownerDocument?.body ?? document.body
+}
 
 const childQualityAssuranceIncomingRows = ref<Record<string, unknown>[]>([])
 const qualityAssuranceIncomingTableRef = ref<{
@@ -302,92 +330,108 @@ const qualityAssuranceIncomingTableRef = ref<{
   resetRows: () => void
 } | null>(null)
 
+/** 是否已持久化的子表行 */
+function isPersistedQualityAssuranceIncomingRow(row: Record<string, unknown>): boolean {
+  const id = row.qualityAssuranceIncomingId
+  if (id == null || id === '') {
+    return false
+  }
+  return String(id) !== '0'
+}
+
+/** 分配下一可用子表行号（含作废行，仅据当前表格行递增） */
+function allocateNextQualityAssuranceIncomingLineNumber(): number {
+  const rows = qualityAssuranceIncomingTableRef.value?.getRows?.() ?? childQualityAssuranceIncomingRows.value
+  return resolveNextDetailLineNumber(0, rows)
+}
+
 /** 子表 qualityAssuranceIncoming 可编辑列 */
 const qualityAssuranceIncomingFormColumns = computed<TaktEditableTableColumn[]>(() => [
   {
     key: 'lineNumber',
-    title: t('entity.qualityassuranceincoming.linenumber'),
-    editor: 'inputNumber',
-    width: 140, summary: 'sum',
+    title: qualityAssuranceIncomingPi.label('lineNumber'),
+    width: 140,
   },
   {
     key: 'directManpowerCostPerMinute',
-    title: t('entity.qualityassuranceincoming.directmanpowercostperminute'),
-    editor: 'inputNumber',
+    title: qualityAssuranceIncomingPi.label('directManpowerCostPerMinute'),
     width: 140,
   },
   {
     key: 'incomingInspectionCost',
-    title: t('entity.qualityassuranceincoming.incominginspectioncost'),
-    editor: 'inputNumber',
+    title: qualityAssuranceIncomingPi.label('incomingInspectionCost'),
     width: 140,
   },
   {
     key: 'inspectionTimeMinutes',
-    title: t('entity.qualityassuranceincoming.inspectiontimeminutes'),
-    editor: 'inputNumber',
+    title: qualityAssuranceIncomingPi.label('inspectionTimeMinutes'),
     width: 140,
   },
   {
     key: 'travelCost',
-    title: t('entity.qualityassuranceincoming.travelcost'),
-    editor: 'inputNumber',
+    title: qualityAssuranceIncomingPi.label('travelCost'),
     width: 140,
   },
   {
     key: 'otherExpenses',
-    title: t('entity.qualityassuranceincoming.otherexpenses'),
-    editor: 'inputNumber',
+    title: qualityAssuranceIncomingPi.label('otherExpenses'),
     width: 140,
   },
   {
     key: 'incomingNote',
-    title: t('entity.qualityassuranceincoming.incomingnote'),
+    title: qualityAssuranceIncomingPi.label('incomingNote'),
     editor: 'textarea',
     rows: 1,
-    placeholder: t('common.page.form.placeholder.optional', { field: t('entity.qualityassuranceincoming.incomingnote') }),
-    width: 140,
+    placeholder: qualityAssuranceIncomingPi.ph('incomingNote'),
+    width: 180,
   },
   {
-    key: 'extField',
-    title: t('common.page.entity.extfield'),
-    editor: 'textarea',
-    rows: 2,
-    placeholder: t('common.page.form.placeholder.optional', { field: t('common.page.entity.extfield') }),
+    key: 'isObsolete',
+    title: qualityAssuranceIncomingPi.label('isObsolete'),
     width: 140,
   },
 ])
 
 /** 编辑态从 formData 同步各子表行 */
 function syncChildRowsFromFormData(val: Partial<QualityAssuranceCreate & { qualityAssuranceId?: string }> | null | undefined) {
-  childQualityAssuranceIncomingRows.value = ((val as any)?.incomingItems ?? []) as Record<string, unknown>[]
+  const rows_qualityAssuranceIncoming = ((val as any)?.incomingItems ?? []) as Record<string, unknown>[]
+  childQualityAssuranceIncomingRows.value = rows_qualityAssuranceIncoming
 }
 
 function createDefaultQualityAssuranceIncomingRow(): Record<string, unknown> {
   return {
-    lineNumber: (childQualityAssuranceIncomingRows.value.length + 1) * 10,
+    lineNumber: allocateNextQualityAssuranceIncomingLineNumber(),
     directManpowerCostPerMinute: 0,
     incomingInspectionCost: 0,
     inspectionTimeMinutes: 0,
     travelCost: 0,
     otherExpenses: 0,
     incomingNote: '',
-    extField: '',
+    isObsolete: 0,
   }
 }
 
 /** 组装 Create/Update 载荷（主表 + 子表数组） */
 function buildSubmitPayload() {
   const masterId = props.formData?.qualityAssuranceId ?? ''
+  const isUpdate = Boolean(masterId)
   return {
     ...formState,
-    incomingItems: qualityAssuranceIncomingTableRef.value?.getRows?.() ?? childQualityAssuranceIncomingRows.value.map((rest) => ({
-      ...rest,
-      tenantCode: tenantStore.tenantCode,
-      companyCode: tenantStore.companyCode,
-      companyDefaultCulture: userStore.userInfo?.companyDefaultCulture ?? '',
-      qualityAssuranceId: masterId,
-    })),
+    incomingItems: qualityAssuranceIncomingTableRef.value?.getRows?.() ?? childQualityAssuranceIncomingRows.value.map((row) => {
+      const normalized = {
+        ...row,
+        tenantCode: tenantStore.tenantCode,
+        companyCode: tenantStore.companyCode,
+        companyDefaultCulture: userStore.userInfo?.companyDefaultCulture ?? '',
+        qualityAssuranceId: masterId,
+      }
+      if (isUpdate && isPersistedQualityAssuranceIncomingRow(row)) {
+        normalized.qualityAssuranceIncomingId = row.qualityAssuranceIncomingId
+      } else {
+        delete normalized.qualityAssuranceIncomingId
+      }
+      return normalized
+    }),
   }
 }
 
@@ -454,32 +498,32 @@ const rules = computed<Record<string, Rule[]>>(() => ({
   plantCode: [
     {
       required: true,
-      message: t('common.page.form.placeholder.required', { field: t('entity.qualityassurance.plantcode') }),
-      trigger: 'blur'
+      message: pi.ph('plantCode'),
+      trigger: 'change'
     }
   ],
   qualityAssuranceCode: [
     {
       required: true,
-      message: t('common.page.form.placeholder.required', { field: t('entity.qualityassurance.code') }),
+      message: pi.ph('qualityAssuranceCode'),
       trigger: 'blur'
     }
   ],
   assuranceMonth: [
     {
       required: true,
-      message: t('common.page.form.placeholder.required', { field: t('entity.qualityassurance.assurancemonth') }),
+      message: pi.ph('assuranceMonth'),
       trigger: 'blur'
     }
   ],
   totalQualityCost: [{
     validator: async (_rule, value) => {
       if (value === undefined || value === null || value === '') {
-        return Promise.reject(t('common.page.form.placeholder.select', { field: t('entity.qualityassurance.totalqualitycost') }))
+        return Promise.reject(pi.ph('totalQualityCost'))
       }
       const num = typeof value === 'number' ? value : Number(value)
       if (!Number.isFinite(num)) {
-        return Promise.reject(t('common.page.form.placeholder.select', { field: t('entity.qualityassurance.totalqualitycost') }))
+        return Promise.reject(pi.ph('totalQualityCost'))
       }
       return Promise.resolve()
     },
@@ -488,7 +532,7 @@ const rules = computed<Record<string, Rule[]>>(() => ({
   costCurrency: [
     {
       required: true,
-      message: t('common.page.form.placeholder.required', { field: t('entity.qualityassurance.costcurrency') }),
+      message: pi.ph('costCurrency'),
       trigger: 'blur'
     }
   ],

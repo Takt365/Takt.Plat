@@ -9,17 +9,37 @@
 
 <template>
   <div class="p-4 flex flex-col min-h-0 h-full">
-    <!-- 查询栏 -->
-    <TaktQueryBar
-      v-model="queryKeyword"
-      :placeholder="searchPlaceholder"
-      :loading="loading"
-      @search="handleSearch"
-      @reset="handleReset"
-    />
-
-    <!-- 工具栏 -->
-    <TaktToolsBar
+    <!-- 左主右从 -->
+    <TaktMasterDetailTableLr
+      v-model:master-current="currentPage"
+      v-model:master-page-size="pageSize"
+      v-model:selected-master-key="selectedMasterKey"
+      class="min-h-0 flex-1"
+      :master-columns="columns"
+      :master-data-source="dataSource"
+      :master-loading="loading"
+      :master-row-key="getSalesQuotationId"
+      :master-row-selection="rowSelection"
+      master-id-column-key="salesQuotationId"
+      :master-visible-column-keys="visibleColumnKeys"
+      master-table-mode="masterDetailMaster"
+      master-scroll-layout="masterDetailLr"
+      :master-total="total"
+      master-entity-scope="company"
+      @master-change="handleTableChange"
+      @master-resize-column="handleResizeColumn"
+      @master-pagination-change="handleMasterPaginationChange"
+      @master-select="handleMasterSelect"
+    >
+      <template #master-toolbar>
+        <TaktQueryBar
+          v-model="queryKeyword"
+          :placeholder="searchPlaceholder"
+          :loading="loading"
+          @search="handleSearch"
+          @reset="handleReset"
+        />
+        <TaktToolsBar
       create-permission="logistics:sales:quotation:create"
       update-permission="logistics:sales:quotation:update"
       delete-permission="logistics:sales:quotation:delete"
@@ -50,33 +70,23 @@
       @advanced-query="handleAdvancedQuery"
       @column-setting="handleColumnSetting"
       @refresh="handleRefresh"
-    />
-
-    <!-- 左主右从 -->
-    <TaktMasterDetailTableLr
-      v-model:master-current="currentPage"
-      v-model:master-page-size="pageSize"
-      v-model:selected-master-key="selectedMasterKey"
-      class="min-h-0 flex-1"
-      :master-columns="columns"
-      :master-data-source="dataSource"
-      :master-loading="loading"
-      :master-row-key="getSalesQuotationId"
-      :master-row-selection="rowSelection"
-      master-id-column-key="salesQuotationId"
-      :master-visible-column-keys="visibleColumnKeys"
-      master-table-mode="masterDetailMaster"
-      master-scroll-layout="masterDetailLr"
-      :master-total="total"
-      master-entity-scope="company"
-      @master-change="handleTableChange"
-      @master-resize-column="handleResizeColumn"
-      @master-pagination-change="handleMasterPaginationChange"
-      @master-select="handleMasterSelect"
-    >
+        />
+      </template>
       <!-- 字典/开关列渲染 -->
       <template #bodyCell="{ column, record }">
-        <template v-if="column.key === 'quotationStatus'">
+        <template v-if="column.key === 'currencyCode'">
+          <TaktDictTag
+            :value="getSalesQuotationDictValue(record, 'currencyCode')"
+            dict-type="accounting_currency_code"
+          />
+        </template>
+        <template v-else-if="column.key === 'taxRate'">
+          <TaktDictTag
+            :value="getSalesQuotationDictValue(record, 'taxRate')"
+            dict-type="accounting_tax_rate_param"
+          />
+        </template>
+        <template v-else-if="column.key === 'quotationStatus'">
           <TaktDictTag
             :value="getSalesQuotationDictValue(record, 'quotationStatus')"
             dict-type="logistics_quotation_status"
@@ -150,13 +160,13 @@
         />
       </a-form-item>
       </div>
-      <div v-show="isFieldVisible('customerName')">
-      <a-form-item :label="pi.queryLabel('customerName')">
+      <div v-show="isFieldVisible('customerName1')">
+      <a-form-item :label="pi.queryLabel('customerName1')">
         <a-input
-          v-model:value="advancedQueryForm.customerName"
-          :placeholder="pi.queryPh('customerName', 'required')"
+          v-model:value="advancedQueryForm.customerName1"
+          :placeholder="pi.queryPh('customerName1', 'required')"
           show-count
-          :maxlength="200"
+          :maxlength="140"
           allow-clear
         />
       </a-form-item>
@@ -235,6 +245,26 @@
           v-model:value="advancedQueryForm.discountAmount"
           :placeholder="pi.queryPh('discountAmount', 'required')"
           style="width: 100%"
+        />
+      </a-form-item>
+      </div>
+      <div v-show="isFieldVisible('currencyCode')">
+      <a-form-item :label="pi.queryLabel('currencyCode')">
+        <TaktSelect
+          v-model:value="advancedQueryForm.currencyCode"
+          dict-type="accounting_currency_code"
+          :placeholder="pi.queryPh('currencyCode', 'select')"
+          allow-clear
+        />
+      </a-form-item>
+      </div>
+      <div v-show="isFieldVisible('taxRate')">
+      <a-form-item :label="pi.queryLabel('taxRate')">
+        <TaktSelect
+          v-model:value="advancedQueryForm.taxRate"
+          dict-type="accounting_tax_rate_param"
+          :placeholder="pi.queryPh('taxRate', 'select')"
+          allow-clear
         />
       </a-form-item>
       </div>
@@ -466,6 +496,7 @@ function createEmptyAdvancedQueryForm() {
     totalQuantity: undefined as number | undefined,
     totalAmount: undefined as number | undefined,
     discountAmount: undefined as number | undefined,
+    taxRate: undefined as number | undefined,
     taxAmount: undefined as number | undefined,
     actualAmount: undefined as number | undefined,
     quotationStatus: undefined as number | undefined,
@@ -531,6 +562,9 @@ function buildListQuery(overrides?: Partial<SalesQuotationQuery>): SalesQuotatio
   }
   if (form.discountAmount !== undefined && form.discountAmount !== null) {
     query.discountAmount = form.discountAmount
+  }
+  if (form.taxRate !== undefined && form.taxRate !== null) {
+    query.taxRate = form.taxRate
   }
   if (form.taxAmount !== undefined && form.taxAmount !== null) {
     query.taxAmount = form.taxAmount
@@ -641,13 +675,13 @@ const columns = computed<TableColumnsType>(() => [
     customRender: ({ record }: { record: any }) => getSalesQuotationField(record, 'customerCode') ?? ''
   },
   {
-    title: pi.label('customerName'),
-    dataIndex: 'customerName',
-    key: 'customerName',
+    title: pi.label('customerName1'),
+    dataIndex: 'customerName1',
+    key: 'customerName1',
     width: 120,
     resizable: true,
     ellipsis: true,
-    customRender: ({ record }: { record: any }) => getSalesQuotationField(record, 'customerName') ?? ''
+    customRender: ({ record }: { record: any }) => getSalesQuotationField(record, 'customerName1') ?? ''
   },
   {
     title: pi.label('quotationDate'),
@@ -702,6 +736,22 @@ const columns = computed<TableColumnsType>(() => [
     resizable: true,
     ellipsis: true,
     customRender: ({ record }: { record: any }) => getSalesQuotationField(record, 'discountAmount') ?? ''
+  },
+  {
+    title: pi.label('currencyCode'),
+    dataIndex: 'currencyCode',
+    key: 'currencyCode',
+    width: 120,
+    resizable: true,
+    ellipsis: true,
+  },
+  {
+    title: pi.label('taxRate'),
+    dataIndex: 'taxRate',
+    key: 'taxRate',
+    width: 120,
+    resizable: true,
+    ellipsis: true,
   },
   {
     title: pi.label('taxAmount'),
@@ -849,7 +899,7 @@ function handleReset() {
   plantCode: '',
   salesQuotationCode: '',
   customerCode: '',
-  customerName: '',
+  customerName1: '',
   quotationDateStart: '',
   quotationDateEnd: '',
   validUntilDateStart: '',
@@ -858,6 +908,8 @@ function handleReset() {
   totalQuantity: undefined as number | undefined,
   totalAmount: undefined as number | undefined,
   discountAmount: undefined as number | undefined,
+  currencyCode: '',
+  taxRate: undefined as number | undefined,
   taxAmount: undefined as number | undefined,
   actualAmount: undefined as number | undefined,
   salesOrderCode: '',
@@ -1063,7 +1115,7 @@ function handleAdvancedQueryReset() {
   plantCode: '',
   salesQuotationCode: '',
   customerCode: '',
-  customerName: '',
+  customerName1: '',
   quotationDateStart: '',
   quotationDateEnd: '',
   validUntilDateStart: '',
@@ -1072,6 +1124,8 @@ function handleAdvancedQueryReset() {
   totalQuantity: undefined as number | undefined,
   totalAmount: undefined as number | undefined,
   discountAmount: undefined as number | undefined,
+  currencyCode: '',
+  taxRate: undefined as number | undefined,
   taxAmount: undefined as number | undefined,
   actualAmount: undefined as number | undefined,
   salesOrderCode: '',

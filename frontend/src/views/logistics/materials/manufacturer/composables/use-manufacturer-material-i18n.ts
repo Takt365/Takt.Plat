@@ -20,12 +20,32 @@ export const MANUFACTURERMATERIAL_SELF_I18N_KEY = buildEntitySelfI18nKey(MANUFAC
 
 /** 列表业务列（不含主键） */
 export const MANUFACTURERMATERIAL_LIST_FIELDS = [
+  'manufacturerId',
   'manufacturerCode',
   'lineNumber',
   'manufacturerMaterialCode',
   'manufacturerMaterialName',
   'manufacturerMaterialSpecification',
   'materialCode',
+  'isObsolete',
+] as const
+
+/** 明细右栏 panel 默认展示列（不含主键 id；含 action） */
+export const MANUFACTURERMATERIAL_DEFAULT_VISIBLE_COLUMN_KEYS = [
+  'manufacturerId',
+  'manufacturerCode',
+  'lineNumber',
+  'manufacturerMaterialCode',
+  'manufacturerMaterialName',
+  'manufacturerMaterialSpecification',
+  'materialCode',
+  'isObsolete',
+  'action',
+] as const
+
+/** 明细右栏 panel 合计列（当前页 dataSource 数值字段求和） */
+export const MANUFACTURERMATERIAL_SUMMARY_SUM_FIELDS = [
+  'isObsolete',
 ] as const
 
 /** 表单控件默认占位类型（仅 UI/校验语义，不含 i18n 键） */
@@ -38,8 +58,7 @@ export const MANUFACTURERMATERIAL_PLACEHOLDER = {
   manufacturerMaterialName: 'required',
   manufacturerMaterialSpecification: 'optional',
   materialCode: 'select',
-  extField: 'optional',
-  remark: 'optional',
+  isObsolete: 'select',
 } as const satisfies Record<string, EntityFieldPlaceholderKind>
 
 /** 表单 ph() 可接受的字段（与 PLACEHOLDER 键一致，避免与 LIST_FIELDS 导航列混用） */
@@ -60,12 +79,13 @@ export const MANUFACTURERMATERIAL_QUERY_STRING_FIELDS = [
 
 export type ManufacturerMaterialQueryField =
   | (typeof MANUFACTURERMATERIAL_QUERY_STRING_FIELDS)[number]
-  | 'lineNumber'
+  | 'lineNumber' | 'isObsolete'
 
 /** 高级查询抽屉全部字段（含数值） */
 export const MANUFACTURERMATERIAL_QUERY_FIELDS: readonly ManufacturerMaterialQueryField[] = [
   ...MANUFACTURERMATERIAL_QUERY_STRING_FIELDS,
   'lineNumber',
+  'isObsolete',
 ]
 
 /**

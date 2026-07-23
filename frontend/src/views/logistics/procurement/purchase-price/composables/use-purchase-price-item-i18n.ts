@@ -32,7 +32,14 @@ export const PURCHASEPRICEITEM_LIST_FIELDS = [
   'scaleCurrency',
   'calculationType',
   'price',
-  'taxCode',
+  'untaxedPrice',
+  'taxIncludedPrice',
+  'conditionCurrency',
+  'priceUnit',
+  'unitOfMeasure',
+  'minOrderQuantity',
+  'roundingValue',
+  'plannedDeliveryTimeDays',
   'isObsolete',
 ] as const
 
@@ -50,7 +57,14 @@ export const PURCHASEPRICEITEM_DEFAULT_VISIBLE_COLUMN_KEYS = [
   'scaleCurrency',
   'calculationType',
   'price',
-  'taxCode',
+  'untaxedPrice',
+  'taxIncludedPrice',
+  'conditionCurrency',
+  'priceUnit',
+  'unitOfMeasure',
+  'minOrderQuantity',
+  'roundingValue',
+  'plannedDeliveryTimeDays',
   'isObsolete',
   'action',
 ] as const
@@ -61,6 +75,12 @@ export const PURCHASEPRICEITEM_SUMMARY_SUM_FIELDS = [
   'scaleQuantity',
   'scaleValue',
   'price',
+  'untaxedPrice',
+  'taxIncludedPrice',
+  'priceUnit',
+  'minOrderQuantity',
+  'roundingValue',
+  'plannedDeliveryTimeDays',
   'isObsolete',
 ] as const
 
@@ -79,7 +99,14 @@ export const PURCHASEPRICEITEM_PLACEHOLDER = {
   scaleCurrency: 'optional',
   calculationType: 'select',
   price: 'select',
-  taxCode: 'optional',
+  untaxedPrice: 'select',
+  taxIncludedPrice: 'select',
+  conditionCurrency: 'select',
+  priceUnit: 'select',
+  unitOfMeasure: 'select',
+  minOrderQuantity: 'select',
+  roundingValue: 'select',
+  plannedDeliveryTimeDays: 'select',
   isObsolete: 'select',
   scaleQuantities: 'optional',
   scaleValues: 'optional',
@@ -97,7 +124,8 @@ export const PURCHASEPRICEITEM_QUERY_STRING_FIELDS = [
   'scaleUnit',
   'scaleCurrency',
   'calculationType',
-  'taxCode',
+  'conditionCurrency',
+  'unitOfMeasure',
   'createdAtStart',
   'createdAtEnd',
   'extField',
@@ -106,7 +134,7 @@ export const PURCHASEPRICEITEM_QUERY_STRING_FIELDS = [
 
 export type PurchasePriceItemQueryField =
   | (typeof PURCHASEPRICEITEM_QUERY_STRING_FIELDS)[number]
-  | 'purchasePriceSeq' | 'scaleQuantity' | 'scaleValue' | 'price' | 'isObsolete'
+  | 'purchasePriceSeq' | 'scaleQuantity' | 'scaleValue' | 'price' | 'untaxedPrice' | 'taxIncludedPrice' | 'priceUnit' | 'minOrderQuantity' | 'roundingValue' | 'plannedDeliveryTimeDays' | 'isObsolete'
 
 /** 高级查询抽屉全部字段（含数值） */
 export const PURCHASEPRICEITEM_QUERY_FIELDS: readonly PurchasePriceItemQueryField[] = [
@@ -115,6 +143,12 @@ export const PURCHASEPRICEITEM_QUERY_FIELDS: readonly PurchasePriceItemQueryFiel
   'scaleQuantity',
   'scaleValue',
   'price',
+  'untaxedPrice',
+  'taxIncludedPrice',
+  'priceUnit',
+  'minOrderQuantity',
+  'roundingValue',
+  'plannedDeliveryTimeDays',
   'isObsolete',
 ]
 

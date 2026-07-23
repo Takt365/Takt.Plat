@@ -29,7 +29,7 @@ export interface MaterialMovingPriceMonthlyTrendQuery extends TaktPagedQuery {
   valuation?: string;
   /** 物料编码（模糊） */
   materialCode?: string;
-  /** 涨跌筛选 */
+  /** 涨跌筛选：空/all=全部；leading=机种推移领涨领跌各 50；up/down/changed */
   trendFilter?: string;
 }
 

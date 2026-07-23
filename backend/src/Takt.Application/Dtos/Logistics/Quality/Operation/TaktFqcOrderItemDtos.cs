@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Application.Dtos.Logistics.Quality.Operation
 // 文件名称：TaktFqcOrderItemDtos.cs
-// 创建时间：2026-07-09
+// 创建时间：2026-07-23
 // 创建人：Takt365(Auto Generated)
 // 功能描述：FqcOrderItem 模块 DTO（由 generate-dtos-from-entity.cjs 根据 TaktFqcOrderItem 生成，请按需审阅）
 // 
@@ -36,7 +36,7 @@ public class TaktFqcOrderItemDto : TaktCompanyDtoBase
     public long FqcOrderItemId { get; set; }
 
     /// <summary>
-    /// FQC检验单 ID（关联 TaktFqcOrder.Id，选项 TaktFqcOrders/options）
+    /// FQC检验单 ID（选项 TaktFqcOrders/options，DictValue=Id）
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
     public long FqcOrderId { get; set; }
@@ -57,12 +57,12 @@ public class TaktFqcOrderItemDto : TaktCompanyDtoBase
     public int LineNumber { get; set; } = 0;
 
     /// <summary>
-    /// 物料编码（选项 TaktMaterials/options，DictValue=MaterialCode）
+    /// 物料编码（选项 TaktMaterialPlants/options；DictValue=MaterialCode，ExtValue=PlantCode）
     /// </summary>
     public string MaterialCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 物料名称
+    /// 物料名称（回填：随物料）
     /// </summary>
     public string MaterialName { get; set; } = string.Empty;
 
@@ -77,12 +77,12 @@ public class TaktFqcOrderItemDto : TaktCompanyDtoBase
     public decimal WarehouseQuantity { get; set; }
 
     /// <summary>
-    /// 检验标准编码（选项 TaktInspectionStandards/options，DictValue=StandardCode）
+    /// 检验标准编码（选项 TaktInspectionStandards/options；DictValue=StandardCode）
     /// </summary>
     public string StandardCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 抽样方案编码（选项 TaktSamplingSchemes/options，DictValue=SamplingSchemeCode）
+    /// 抽样方案编码（选项 TaktSamplingSchemes/options；DictValue=SamplingSchemeCode）
     /// </summary>
     public string SamplingSchemeCode { get; set; } = string.Empty;
 
@@ -122,7 +122,7 @@ public class TaktFqcOrderItemDto : TaktCompanyDtoBase
     public string? InspectionDescription { get; set; } = string.Empty;
 
     /// <summary>
-    /// 检验员（选项 TaktEmployees/options，DictValue=EmployeeCode）
+    /// 检验员（选项 TaktEmployees/options；DictValue=EmployeeCode）
     /// </summary>
     public string InspectorBy { get; set; } = string.Empty;
 
@@ -137,7 +137,7 @@ public class TaktFqcOrderItemDto : TaktCompanyDtoBase
     public int JudgeStatus { get; set; } = 0;
 
     /// <summary>
-    /// 是否作废（字典 sys_yes_no_type，0=否 1=是；编辑移除子行时标记作废）
+    /// 是否作废（字典 sys_yes_no_type；0=否 1=是；编辑移除子行时标记作废）
     /// </summary>
     public int IsObsolete { get; set; } = 0;
 
@@ -176,7 +176,7 @@ public class TaktFqcOrderItemQueryDto : TaktPagedQuery
     public string? CompanyCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// FQC检验单 ID（关联 TaktFqcOrder.Id，选项 TaktFqcOrders/options）
+    /// FQC检验单 ID（选项 TaktFqcOrders/options，DictValue=Id）
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
     public long? FqcOrderId { get; set; }
@@ -192,12 +192,12 @@ public class TaktFqcOrderItemQueryDto : TaktPagedQuery
     public int? LineNumber { get; set; }
 
     /// <summary>
-    /// 物料编码（选项 TaktMaterials/options，DictValue=MaterialCode）
+    /// 物料编码（选项 TaktMaterialPlants/options；DictValue=MaterialCode，ExtValue=PlantCode）
     /// </summary>
     public string? MaterialCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 物料名称
+    /// 物料名称（回填：随物料）
     /// </summary>
     public string? MaterialName { get; set; } = string.Empty;
 
@@ -212,12 +212,12 @@ public class TaktFqcOrderItemQueryDto : TaktPagedQuery
     public decimal? WarehouseQuantity { get; set; }
 
     /// <summary>
-    /// 检验标准编码（选项 TaktInspectionStandards/options，DictValue=StandardCode）
+    /// 检验标准编码（选项 TaktInspectionStandards/options；DictValue=StandardCode）
     /// </summary>
     public string? StandardCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 抽样方案编码（选项 TaktSamplingSchemes/options，DictValue=SamplingSchemeCode）
+    /// 抽样方案编码（选项 TaktSamplingSchemes/options；DictValue=SamplingSchemeCode）
     /// </summary>
     public string? SamplingSchemeCode { get; set; } = string.Empty;
 
@@ -257,7 +257,7 @@ public class TaktFqcOrderItemQueryDto : TaktPagedQuery
     public string? InspectionDescription { get; set; } = string.Empty;
 
     /// <summary>
-    /// 检验员（选项 TaktEmployees/options，DictValue=EmployeeCode）
+    /// 检验员（选项 TaktEmployees/options；DictValue=EmployeeCode）
     /// </summary>
     public string? InspectorBy { get; set; } = string.Empty;
 
@@ -277,7 +277,7 @@ public class TaktFqcOrderItemQueryDto : TaktPagedQuery
     public int? JudgeStatus { get; set; }
 
     /// <summary>
-    /// 是否作废（字典 sys_yes_no_type，0=否 1=是；编辑移除子行时标记作废）
+    /// 是否作废（字典 sys_yes_no_type；0=否 1=是；编辑移除子行时标记作废）
     /// </summary>
     public int? IsObsolete { get; set; }
 
@@ -327,7 +327,7 @@ public class TaktFqcOrderItemCreateDto
     public string CompanyDefaultCulture { get; set; } = string.Empty;
 
     /// <summary>
-    /// FQC检验单 ID（关联 TaktFqcOrder.Id，选项 TaktFqcOrders/options）
+    /// FQC检验单 ID（选项 TaktFqcOrders/options，DictValue=Id）
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
     public long FqcOrderId { get; set; }
@@ -344,15 +344,15 @@ public class TaktFqcOrderItemCreateDto
     public int LineNumber { get; set; } = 0;
 
     /// <summary>
-    /// 物料编码（选项 TaktMaterials/options，DictValue=MaterialCode）
+    /// 物料编码（选项 TaktMaterialPlants/options；DictValue=MaterialCode，ExtValue=PlantCode）
     /// </summary>
-    [Required(ErrorMessage = "物料编码（选项 TaktMaterials/options，DictValue=MaterialCode）不能为空")]
+    [Required(ErrorMessage = "物料编码（选项 TaktMaterialPlants/options；DictValue=MaterialCode，ExtValue=PlantCode）不能为空")]
     public string MaterialCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 物料名称
+    /// 物料名称（回填：随物料）
     /// </summary>
-    [Required(ErrorMessage = "物料名称不能为空")]
+    [Required(ErrorMessage = "物料名称（回填：随物料）不能为空")]
     public string MaterialName { get; set; } = string.Empty;
 
     /// <summary>
@@ -366,15 +366,15 @@ public class TaktFqcOrderItemCreateDto
     public decimal WarehouseQuantity { get; set; }
 
     /// <summary>
-    /// 检验标准编码（选项 TaktInspectionStandards/options，DictValue=StandardCode）
+    /// 检验标准编码（选项 TaktInspectionStandards/options；DictValue=StandardCode）
     /// </summary>
-    [Required(ErrorMessage = "检验标准编码（选项 TaktInspectionStandards/options，DictValue=StandardCode）不能为空")]
+    [Required(ErrorMessage = "检验标准编码（选项 TaktInspectionStandards/options；DictValue=StandardCode）不能为空")]
     public string StandardCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 抽样方案编码（选项 TaktSamplingSchemes/options，DictValue=SamplingSchemeCode）
+    /// 抽样方案编码（选项 TaktSamplingSchemes/options；DictValue=SamplingSchemeCode）
     /// </summary>
-    [Required(ErrorMessage = "抽样方案编码（选项 TaktSamplingSchemes/options，DictValue=SamplingSchemeCode）不能为空")]
+    [Required(ErrorMessage = "抽样方案编码（选项 TaktSamplingSchemes/options；DictValue=SamplingSchemeCode）不能为空")]
     public string SamplingSchemeCode { get; set; } = string.Empty;
 
     /// <summary>
@@ -413,9 +413,9 @@ public class TaktFqcOrderItemCreateDto
     public string? InspectionDescription { get; set; } = string.Empty;
 
     /// <summary>
-    /// 检验员（选项 TaktEmployees/options，DictValue=EmployeeCode）
+    /// 检验员（选项 TaktEmployees/options；DictValue=EmployeeCode）
     /// </summary>
-    [Required(ErrorMessage = "检验员（选项 TaktEmployees/options，DictValue=EmployeeCode）不能为空")]
+    [Required(ErrorMessage = "检验员（选项 TaktEmployees/options；DictValue=EmployeeCode）不能为空")]
     public string InspectorBy { get; set; } = string.Empty;
 
     /// <summary>
@@ -429,7 +429,7 @@ public class TaktFqcOrderItemCreateDto
     public int JudgeStatus { get; set; } = 0;
 
     /// <summary>
-    /// 是否作废（字典 sys_yes_no_type，0=否 1=是；编辑移除子行时标记作废）
+    /// 是否作废（字典 sys_yes_no_type；0=否 1=是；编辑移除子行时标记作废）
     /// </summary>
     public int IsObsolete { get; set; } = 0;
 
@@ -542,7 +542,7 @@ public class TaktFqcOrderItemTemplateDto
     public string? CompanyCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// FQC检验单 ID（关联 TaktFqcOrder.Id，选项 TaktFqcOrders/options）
+    /// FQC检验单 ID（选项 TaktFqcOrders/options，DictValue=Id）
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
     public long? FqcOrderId { get; set; }
@@ -558,12 +558,12 @@ public class TaktFqcOrderItemTemplateDto
     public int? LineNumber { get; set; }
 
     /// <summary>
-    /// 物料编码（选项 TaktMaterials/options，DictValue=MaterialCode）
+    /// 物料编码（选项 TaktMaterialPlants/options；DictValue=MaterialCode，ExtValue=PlantCode）
     /// </summary>
     public string? MaterialCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 物料名称
+    /// 物料名称（回填：随物料）
     /// </summary>
     public string? MaterialName { get; set; } = string.Empty;
 
@@ -578,12 +578,12 @@ public class TaktFqcOrderItemTemplateDto
     public decimal? WarehouseQuantity { get; set; }
 
     /// <summary>
-    /// 检验标准编码（选项 TaktInspectionStandards/options，DictValue=StandardCode）
+    /// 检验标准编码（选项 TaktInspectionStandards/options；DictValue=StandardCode）
     /// </summary>
     public string? StandardCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 抽样方案编码（选项 TaktSamplingSchemes/options，DictValue=SamplingSchemeCode）
+    /// 抽样方案编码（选项 TaktSamplingSchemes/options；DictValue=SamplingSchemeCode）
     /// </summary>
     public string? SamplingSchemeCode { get; set; } = string.Empty;
 
@@ -623,7 +623,7 @@ public class TaktFqcOrderItemTemplateDto
     public string? InspectionDescription { get; set; } = string.Empty;
 
     /// <summary>
-    /// 检验员（选项 TaktEmployees/options，DictValue=EmployeeCode）
+    /// 检验员（选项 TaktEmployees/options；DictValue=EmployeeCode）
     /// </summary>
     public string? InspectorBy { get; set; } = string.Empty;
 
@@ -638,7 +638,7 @@ public class TaktFqcOrderItemTemplateDto
     public int? JudgeStatus { get; set; }
 
     /// <summary>
-    /// 是否作废（字典 sys_yes_no_type，0=否 1=是；编辑移除子行时标记作废）
+    /// 是否作废（字典 sys_yes_no_type；0=否 1=是；编辑移除子行时标记作废）
     /// </summary>
     public int? IsObsolete { get; set; }
 
@@ -680,7 +680,7 @@ public class TaktFqcOrderItemImportDto
     public string? CompanyDefaultCulture { get; set; } = string.Empty;
 
     /// <summary>
-    /// FQC检验单 ID（关联 TaktFqcOrder.Id，选项 TaktFqcOrders/options）
+    /// FQC检验单 ID（选项 TaktFqcOrders/options，DictValue=Id）
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
     public long? FqcOrderId { get; set; }
@@ -696,12 +696,12 @@ public class TaktFqcOrderItemImportDto
     public int? LineNumber { get; set; }
 
     /// <summary>
-    /// 物料编码（选项 TaktMaterials/options，DictValue=MaterialCode）
+    /// 物料编码（选项 TaktMaterialPlants/options；DictValue=MaterialCode，ExtValue=PlantCode）
     /// </summary>
     public string? MaterialCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 物料名称
+    /// 物料名称（回填：随物料）
     /// </summary>
     public string? MaterialName { get; set; } = string.Empty;
 
@@ -716,12 +716,12 @@ public class TaktFqcOrderItemImportDto
     public decimal? WarehouseQuantity { get; set; }
 
     /// <summary>
-    /// 检验标准编码（选项 TaktInspectionStandards/options，DictValue=StandardCode）
+    /// 检验标准编码（选项 TaktInspectionStandards/options；DictValue=StandardCode）
     /// </summary>
     public string? StandardCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 抽样方案编码（选项 TaktSamplingSchemes/options，DictValue=SamplingSchemeCode）
+    /// 抽样方案编码（选项 TaktSamplingSchemes/options；DictValue=SamplingSchemeCode）
     /// </summary>
     public string? SamplingSchemeCode { get; set; } = string.Empty;
 
@@ -761,7 +761,7 @@ public class TaktFqcOrderItemImportDto
     public string? InspectionDescription { get; set; } = string.Empty;
 
     /// <summary>
-    /// 检验员（选项 TaktEmployees/options，DictValue=EmployeeCode）
+    /// 检验员（选项 TaktEmployees/options；DictValue=EmployeeCode）
     /// </summary>
     public string? InspectorBy { get; set; } = string.Empty;
 
@@ -776,7 +776,7 @@ public class TaktFqcOrderItemImportDto
     public int? JudgeStatus { get; set; }
 
     /// <summary>
-    /// 是否作废（字典 sys_yes_no_type，0=否 1=是；编辑移除子行时标记作废）
+    /// 是否作废（字典 sys_yes_no_type；0=否 1=是；编辑移除子行时标记作废）
     /// </summary>
     public int? IsObsolete { get; set; }
 
@@ -819,7 +819,7 @@ public class TaktFqcOrderItemExportDto
     public string CompanyCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// FQC检验单 ID（关联 TaktFqcOrder.Id，选项 TaktFqcOrders/options）
+    /// FQC检验单 ID（选项 TaktFqcOrders/options，DictValue=Id）
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
     public long FqcOrderId { get; set; }
@@ -835,12 +835,12 @@ public class TaktFqcOrderItemExportDto
     public int LineNumber { get; set; } = 0;
 
     /// <summary>
-    /// 物料编码（选项 TaktMaterials/options，DictValue=MaterialCode）
+    /// 物料编码（选项 TaktMaterialPlants/options；DictValue=MaterialCode，ExtValue=PlantCode）
     /// </summary>
     public string MaterialCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 物料名称
+    /// 物料名称（回填：随物料）
     /// </summary>
     public string MaterialName { get; set; } = string.Empty;
 
@@ -855,12 +855,12 @@ public class TaktFqcOrderItemExportDto
     public decimal WarehouseQuantity { get; set; }
 
     /// <summary>
-    /// 检验标准编码（选项 TaktInspectionStandards/options，DictValue=StandardCode）
+    /// 检验标准编码（选项 TaktInspectionStandards/options；DictValue=StandardCode）
     /// </summary>
     public string StandardCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 抽样方案编码（选项 TaktSamplingSchemes/options，DictValue=SamplingSchemeCode）
+    /// 抽样方案编码（选项 TaktSamplingSchemes/options；DictValue=SamplingSchemeCode）
     /// </summary>
     public string SamplingSchemeCode { get; set; } = string.Empty;
 
@@ -900,7 +900,7 @@ public class TaktFqcOrderItemExportDto
     public string? InspectionDescription { get; set; } = string.Empty;
 
     /// <summary>
-    /// 检验员（选项 TaktEmployees/options，DictValue=EmployeeCode）
+    /// 检验员（选项 TaktEmployees/options；DictValue=EmployeeCode）
     /// </summary>
     public string InspectorBy { get; set; } = string.Empty;
 
@@ -915,7 +915,7 @@ public class TaktFqcOrderItemExportDto
     public int JudgeStatus { get; set; } = 0;
 
     /// <summary>
-    /// 是否作废（字典 sys_yes_no_type，0=否 1=是；编辑移除子行时标记作废）
+    /// 是否作废（字典 sys_yes_no_type；0=否 1=是；编辑移除子行时标记作废）
     /// </summary>
     public int IsObsolete { get; set; } = 0;
 

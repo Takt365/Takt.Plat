@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：frontend/src/types/logistics/quality/complaint
 // 文件名称：supplier-evaluation.d.ts
-// 创建时间：2026-06-23
+// 创建时间：2026-07-23
 // 创建人：Takt365(Auto Generated)
 // 功能描述：logistics/quality/complaint 模块类型定义（自动生成；类型名去 Takt 前缀与末尾 Dto，如 TaktCompanyDto → Company）
 // 
@@ -29,22 +29,27 @@ export interface SupplierEvaluation extends CompanyDtoBase {
   supplierEvaluationId: string;
 
   /**
-   * 评价表编号（组合唯一索引）
+   * 评价表编码（组合唯一索引）
    */
   supplierEvaluationCode: string;
 
   /**
-   * 供应商ID（序列化为string以避免Javascript精度问题）
+   * 供应商 ID（选项 TaktSuppliers/options；DictValue=Id）
    */
   supplierId: string;
 
   /**
-   * 供应商名称
+   * 供应商 名称（填充字段）
    */
-  supplierName: string;
+  supplierName?: string;
 
   /**
-   * 供应商编码
+   * 供应商名称
+   */
+  supplierName1: string;
+
+  /**
+   * 供应商编码（选项 TaktSuppliers/options；DictValue=SupplierCode）
    */
   supplierCode?: string;
 
@@ -54,7 +59,7 @@ export interface SupplierEvaluation extends CompanyDtoBase {
   evaluationDate: string;
 
   /**
-   * 评价周期（0=月度，1=季度，2=半年度，3=年度）
+   * 评价周期（字典 logistics_quality_period）
    */
   evaluationPeriod: number;
 
@@ -64,17 +69,17 @@ export interface SupplierEvaluation extends CompanyDtoBase {
   evaluationType: number;
 
   /**
-   * 评价人（人员代码）
+   * 评价人（选项 TaktEmployees/options；DictValue=EmployeeCode）
    */
   evaluatorBy?: string;
 
   /**
-   * 评价部门
+   * 评价部门（选项 TaktDepts/tree-options；DictValue=DeptCode）
    */
   evaluationDept?: string;
 
   /**
-   * 总体评级（0=D级-不合格，1=C级-合格，2=B级-良好，3=A级-优秀）
+   * 总体评级（字典 logistics_quality_supplier_rating）
    */
   overallRating: number;
 
@@ -124,7 +129,7 @@ export interface SupplierEvaluation extends CompanyDtoBase {
   improvementRequirements?: string;
 
   /**
-   * 考核结论（0=继续合作，1=限期整改，2=减少订单，3=暂停合作，4=取消资格）
+   * 考核结论（字典 logistics_quality_evaluation_conclusion）
    */
   evaluationConclusion: number;
 
@@ -134,24 +139,29 @@ export interface SupplierEvaluation extends CompanyDtoBase {
   rectificationDeadline?: string;
 
   /**
-   * 评价状态（0=草稿，1=评价中，2=已完成，3=已归档）
+   * 附件 （JSON列表形式，由TaktFile 统一上传到服务器）
+   */
+  attachments?: string;
+
+  /**
+   * 评价状态（字典 logistics_quality_evaluation_status）
    */
   evaluationStatus: number;
 
   /**
-   * 整改跟进状态（0=无需整改，1=待整改，2=整改中，3=已完成，4=未通过）
+   * 关联工厂（选项 TaktPlants/options；DictValue=PlantCode）
    */
-  rectificationStatus: number;
-
-  /**
-   * 关联工厂
-   */
-  relatedPlant?: string;
+  relatedPlant: string;
 
   /**
    * 排序号（越小越靠前）
    */
   sortOrder: number;
+
+  /**
+   * 整改跟进状态（字典 logistics_quality_rectification_status）
+   */
+  rectificationStatus: number;
 
   /**
    * 评价项目明细列表（主子表关系） （子表：TaktSupplierEvaluationItem）
@@ -179,22 +189,22 @@ export interface SupplierEvaluationQuery extends TaktPagedQuery {
   companyCode?: string;
 
   /**
-   * 评价表编号（组合唯一索引）
+   * 评价表编码（组合唯一索引）
    */
   supplierEvaluationCode?: string;
 
   /**
-   * 供应商ID（序列化为string以避免Javascript精度问题）
+   * 供应商 ID（选项 TaktSuppliers/options；DictValue=Id）
    */
   supplierId?: string;
 
   /**
    * 供应商名称
    */
-  supplierName?: string;
+  supplierName1?: string;
 
   /**
-   * 供应商编码
+   * 供应商编码（选项 TaktSuppliers/options；DictValue=SupplierCode）
    */
   supplierCode?: string;
 
@@ -209,7 +219,7 @@ export interface SupplierEvaluationQuery extends TaktPagedQuery {
   evaluationDateEnd?: string;
 
   /**
-   * 评价周期（0=月度，1=季度，2=半年度，3=年度）
+   * 评价周期（字典 logistics_quality_period）
    */
   evaluationPeriod?: number;
 
@@ -219,17 +229,17 @@ export interface SupplierEvaluationQuery extends TaktPagedQuery {
   evaluationType?: number;
 
   /**
-   * 评价人（人员代码）
+   * 评价人（选项 TaktEmployees/options；DictValue=EmployeeCode）
    */
   evaluatorBy?: string;
 
   /**
-   * 评价部门
+   * 评价部门（选项 TaktDepts/tree-options；DictValue=DeptCode）
    */
   evaluationDept?: string;
 
   /**
-   * 总体评级（0=D级-不合格，1=C级-合格，2=B级-良好，3=A级-优秀）
+   * 总体评级（字典 logistics_quality_supplier_rating）
    */
   overallRating?: number;
 
@@ -279,7 +289,7 @@ export interface SupplierEvaluationQuery extends TaktPagedQuery {
   improvementRequirements?: string;
 
   /**
-   * 考核结论（0=继续合作，1=限期整改，2=减少订单，3=暂停合作，4=取消资格）
+   * 考核结论（字典 logistics_quality_evaluation_conclusion）
    */
   evaluationConclusion?: number;
 
@@ -294,17 +304,17 @@ export interface SupplierEvaluationQuery extends TaktPagedQuery {
   rectificationDeadlineEnd?: string;
 
   /**
-   * 评价状态（0=草稿，1=评价中，2=已完成，3=已归档）
+   * 附件 （JSON列表形式，由TaktFile 统一上传到服务器）
+   */
+  attachments?: string;
+
+  /**
+   * 评价状态（字典 logistics_quality_evaluation_status）
    */
   evaluationStatus?: number;
 
   /**
-   * 整改跟进状态（0=无需整改，1=待整改，2=整改中，3=已完成，4=未通过）
-   */
-  rectificationStatus?: number;
-
-  /**
-   * 关联工厂
+   * 关联工厂（选项 TaktPlants/options；DictValue=PlantCode）
    */
   relatedPlant?: string;
 
@@ -312,6 +322,11 @@ export interface SupplierEvaluationQuery extends TaktPagedQuery {
    * 排序号（越小越靠前）
    */
   sortOrder?: number;
+
+  /**
+   * 整改跟进状态（字典 logistics_quality_rectification_status）
+   */
+  rectificationStatus?: number;
 
   /**
    * 创建时间（范围查询-开始）
@@ -358,22 +373,22 @@ export interface SupplierEvaluationCreate {
   companyDefaultCulture: string;
 
   /**
-   * 评价表编号（组合唯一索引）
+   * 评价表编码（组合唯一索引）
    */
   supplierEvaluationCode: string;
 
   /**
-   * 供应商ID（序列化为string以避免Javascript精度问题）
+   * 供应商 ID（选项 TaktSuppliers/options；DictValue=Id）
    */
   supplierId: string;
 
   /**
    * 供应商名称
    */
-  supplierName: string;
+  supplierName1: string;
 
   /**
-   * 供应商编码
+   * 供应商编码（选项 TaktSuppliers/options；DictValue=SupplierCode）
    */
   supplierCode?: string;
 
@@ -383,7 +398,7 @@ export interface SupplierEvaluationCreate {
   evaluationDate: string;
 
   /**
-   * 评价周期（0=月度，1=季度，2=半年度，3=年度）
+   * 评价周期（字典 logistics_quality_period）
    */
   evaluationPeriod: number;
 
@@ -393,17 +408,17 @@ export interface SupplierEvaluationCreate {
   evaluationType: number;
 
   /**
-   * 评价人（人员代码）
+   * 评价人（选项 TaktEmployees/options；DictValue=EmployeeCode）
    */
   evaluatorBy?: string;
 
   /**
-   * 评价部门
+   * 评价部门（选项 TaktDepts/tree-options；DictValue=DeptCode）
    */
   evaluationDept?: string;
 
   /**
-   * 总体评级（0=D级-不合格，1=C级-合格，2=B级-良好，3=A级-优秀）
+   * 总体评级（字典 logistics_quality_supplier_rating）
    */
   overallRating: number;
 
@@ -453,7 +468,7 @@ export interface SupplierEvaluationCreate {
   improvementRequirements?: string;
 
   /**
-   * 考核结论（0=继续合作，1=限期整改，2=减少订单，3=暂停合作，4=取消资格）
+   * 考核结论（字典 logistics_quality_evaluation_conclusion）
    */
   evaluationConclusion: number;
 
@@ -463,19 +478,24 @@ export interface SupplierEvaluationCreate {
   rectificationDeadline?: string;
 
   /**
-   * 评价状态（0=草稿，1=评价中，2=已完成，3=已归档）
+   * 附件 （JSON列表形式，由TaktFile 统一上传到服务器）
+   */
+  attachments?: string;
+
+  /**
+   * 评价状态（字典 logistics_quality_evaluation_status）
    */
   evaluationStatus: number;
 
   /**
-   * 整改跟进状态（0=无需整改，1=待整改，2=整改中，3=已完成，4=未通过）
+   * 关联工厂（选项 TaktPlants/options；DictValue=PlantCode）
    */
-  rectificationStatus: number;
+  relatedPlant: string;
 
   /**
-   * 关联工厂
+   * 整改跟进状态（字典 logistics_quality_rectification_status）
    */
-  relatedPlant?: string;
+  rectificationStatus: number;
 
   /**
    * 评价项目明细列表（主子表关系）（子表，级联保存）
@@ -507,6 +527,11 @@ export interface SupplierEvaluationUpdate extends SupplierEvaluationCreate {
    */
   supplierEvaluationId: string;
 
+  /**
+   * 评价项目明细列表（主子表关系）（子表，级联保存）
+   */
+  items?: any;
+
 }
 
 
@@ -522,7 +547,7 @@ export interface SupplierEvaluationStatus {
   supplierEvaluationId: string;
 
   /**
-   * 评价状态（0=草稿，1=评价中，2=已完成，3=已归档）
+   * 评价状态（字典 logistics_quality_evaluation_status）
    */
   evaluationStatus: number;
 
@@ -565,22 +590,22 @@ export interface SupplierEvaluationTemplate {
   companyCode?: string;
 
   /**
-   * 评价表编号（组合唯一索引）
+   * 评价表编码（组合唯一索引）
    */
   supplierEvaluationCode?: string;
 
   /**
-   * 供应商ID（序列化为string以避免Javascript精度问题）
+   * 供应商 ID（选项 TaktSuppliers/options；DictValue=Id）
    */
   supplierId?: string;
 
   /**
    * 供应商名称
    */
-  supplierName?: string;
+  supplierName1?: string;
 
   /**
-   * 供应商编码
+   * 供应商编码（选项 TaktSuppliers/options；DictValue=SupplierCode）
    */
   supplierCode?: string;
 
@@ -590,7 +615,7 @@ export interface SupplierEvaluationTemplate {
   evaluationDate?: string;
 
   /**
-   * 评价周期（0=月度，1=季度，2=半年度，3=年度）
+   * 评价周期（字典 logistics_quality_period）
    */
   evaluationPeriod?: number;
 
@@ -600,17 +625,17 @@ export interface SupplierEvaluationTemplate {
   evaluationType?: number;
 
   /**
-   * 评价人（人员代码）
+   * 评价人（选项 TaktEmployees/options；DictValue=EmployeeCode）
    */
   evaluatorBy?: string;
 
   /**
-   * 评价部门
+   * 评价部门（选项 TaktDepts/tree-options；DictValue=DeptCode）
    */
   evaluationDept?: string;
 
   /**
-   * 总体评级（0=D级-不合格，1=C级-合格，2=B级-良好，3=A级-优秀）
+   * 总体评级（字典 logistics_quality_supplier_rating）
    */
   overallRating?: number;
 
@@ -660,7 +685,7 @@ export interface SupplierEvaluationTemplate {
   improvementRequirements?: string;
 
   /**
-   * 考核结论（0=继续合作，1=限期整改，2=减少订单，3=暂停合作，4=取消资格）
+   * 考核结论（字典 logistics_quality_evaluation_conclusion）
    */
   evaluationConclusion?: number;
 
@@ -670,19 +695,24 @@ export interface SupplierEvaluationTemplate {
   rectificationDeadline?: string;
 
   /**
-   * 评价状态（0=草稿，1=评价中，2=已完成，3=已归档）
+   * 附件 （JSON列表形式，由TaktFile 统一上传到服务器）
+   */
+  attachments?: string;
+
+  /**
+   * 评价状态（字典 logistics_quality_evaluation_status）
    */
   evaluationStatus?: number;
 
   /**
-   * 整改跟进状态（0=无需整改，1=待整改，2=整改中，3=已完成，4=未通过）
-   */
-  rectificationStatus?: number;
-
-  /**
-   * 关联工厂
+   * 关联工厂（选项 TaktPlants/options；DictValue=PlantCode）
    */
   relatedPlant?: string;
+
+  /**
+   * 整改跟进状态（字典 logistics_quality_rectification_status）
+   */
+  rectificationStatus?: number;
 
   /**
    * 评价项目明细列表（主子表关系）（子表，级联保存）
@@ -724,22 +754,22 @@ export interface SupplierEvaluationImport {
   companyDefaultCulture?: string;
 
   /**
-   * 评价表编号（组合唯一索引）
+   * 评价表编码（组合唯一索引）
    */
   supplierEvaluationCode?: string;
 
   /**
-   * 供应商ID（序列化为string以避免Javascript精度问题）
+   * 供应商 ID（选项 TaktSuppliers/options；DictValue=Id）
    */
   supplierId?: string;
 
   /**
    * 供应商名称
    */
-  supplierName?: string;
+  supplierName1?: string;
 
   /**
-   * 供应商编码
+   * 供应商编码（选项 TaktSuppliers/options；DictValue=SupplierCode）
    */
   supplierCode?: string;
 
@@ -749,7 +779,7 @@ export interface SupplierEvaluationImport {
   evaluationDate?: string;
 
   /**
-   * 评价周期（0=月度，1=季度，2=半年度，3=年度）
+   * 评价周期（字典 logistics_quality_period）
    */
   evaluationPeriod?: number;
 
@@ -759,17 +789,17 @@ export interface SupplierEvaluationImport {
   evaluationType?: number;
 
   /**
-   * 评价人（人员代码）
+   * 评价人（选项 TaktEmployees/options；DictValue=EmployeeCode）
    */
   evaluatorBy?: string;
 
   /**
-   * 评价部门
+   * 评价部门（选项 TaktDepts/tree-options；DictValue=DeptCode）
    */
   evaluationDept?: string;
 
   /**
-   * 总体评级（0=D级-不合格，1=C级-合格，2=B级-良好，3=A级-优秀）
+   * 总体评级（字典 logistics_quality_supplier_rating）
    */
   overallRating?: number;
 
@@ -819,7 +849,7 @@ export interface SupplierEvaluationImport {
   improvementRequirements?: string;
 
   /**
-   * 考核结论（0=继续合作，1=限期整改，2=减少订单，3=暂停合作，4=取消资格）
+   * 考核结论（字典 logistics_quality_evaluation_conclusion）
    */
   evaluationConclusion?: number;
 
@@ -829,19 +859,24 @@ export interface SupplierEvaluationImport {
   rectificationDeadline?: string;
 
   /**
-   * 评价状态（0=草稿，1=评价中，2=已完成，3=已归档）
+   * 附件 （JSON列表形式，由TaktFile 统一上传到服务器）
+   */
+  attachments?: string;
+
+  /**
+   * 评价状态（字典 logistics_quality_evaluation_status）
    */
   evaluationStatus?: number;
 
   /**
-   * 整改跟进状态（0=无需整改，1=待整改，2=整改中，3=已完成，4=未通过）
-   */
-  rectificationStatus?: number;
-
-  /**
-   * 关联工厂
+   * 关联工厂（选项 TaktPlants/options；DictValue=PlantCode）
    */
   relatedPlant?: string;
+
+  /**
+   * 整改跟进状态（字典 logistics_quality_rectification_status）
+   */
+  rectificationStatus?: number;
 
   /**
    * 评价项目明细列表（主子表关系）（子表，级联保存）
@@ -878,22 +913,22 @@ export interface SupplierEvaluationExport {
   companyCode: string;
 
   /**
-   * 评价表编号（组合唯一索引）
+   * 评价表编码（组合唯一索引）
    */
   supplierEvaluationCode: string;
 
   /**
-   * 供应商ID（序列化为string以避免Javascript精度问题）
+   * 供应商 ID（选项 TaktSuppliers/options；DictValue=Id）
    */
   supplierId: string;
 
   /**
    * 供应商名称
    */
-  supplierName: string;
+  supplierName1: string;
 
   /**
-   * 供应商编码
+   * 供应商编码（选项 TaktSuppliers/options；DictValue=SupplierCode）
    */
   supplierCode?: string;
 
@@ -903,7 +938,7 @@ export interface SupplierEvaluationExport {
   evaluationDate: string;
 
   /**
-   * 评价周期（0=月度，1=季度，2=半年度，3=年度）
+   * 评价周期（字典 logistics_quality_period）
    */
   evaluationPeriod: number;
 
@@ -913,17 +948,17 @@ export interface SupplierEvaluationExport {
   evaluationType: number;
 
   /**
-   * 评价人（人员代码）
+   * 评价人（选项 TaktEmployees/options；DictValue=EmployeeCode）
    */
   evaluatorBy?: string;
 
   /**
-   * 评价部门
+   * 评价部门（选项 TaktDepts/tree-options；DictValue=DeptCode）
    */
   evaluationDept?: string;
 
   /**
-   * 总体评级（0=D级-不合格，1=C级-合格，2=B级-良好，3=A级-优秀）
+   * 总体评级（字典 logistics_quality_supplier_rating）
    */
   overallRating: number;
 
@@ -973,7 +1008,7 @@ export interface SupplierEvaluationExport {
   improvementRequirements?: string;
 
   /**
-   * 考核结论（0=继续合作，1=限期整改，2=减少订单，3=暂停合作，4=取消资格）
+   * 考核结论（字典 logistics_quality_evaluation_conclusion）
    */
   evaluationConclusion: number;
 
@@ -983,24 +1018,29 @@ export interface SupplierEvaluationExport {
   rectificationDeadline?: string;
 
   /**
-   * 评价状态（0=草稿，1=评价中，2=已完成，3=已归档）
+   * 附件 （JSON列表形式，由TaktFile 统一上传到服务器）
+   */
+  attachments?: string;
+
+  /**
+   * 评价状态（字典 logistics_quality_evaluation_status）
    */
   evaluationStatus: number;
 
   /**
-   * 整改跟进状态（0=无需整改，1=待整改，2=整改中，3=已完成，4=未通过）
+   * 关联工厂（选项 TaktPlants/options；DictValue=PlantCode）
    */
-  rectificationStatus: number;
-
-  /**
-   * 关联工厂
-   */
-  relatedPlant?: string;
+  relatedPlant: string;
 
   /**
    * 排序号（越小越靠前）
    */
   sortOrder: number;
+
+  /**
+   * 整改跟进状态（字典 logistics_quality_rectification_status）
+   */
+  rectificationStatus: number;
 
   /**
    * 扩展字段JSON

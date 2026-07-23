@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：frontend/src/types/logistics/manufacturing/mrp
 // 文件名称：material-requirements-planning-item.d.ts
-// 创建时间：2026-07-13
+// 创建时间：2026-07-23
 // 创建人：Takt365(Auto Generated)
 // 功能描述：logistics/manufacturing/mrp 模块类型定义（自动生成；类型名去 Takt 前缀与末尾 Dto，如 TaktCompanyDto → Company）
 // 
@@ -49,17 +49,17 @@ export interface MaterialRequirementsPlanningItem extends CompanyDtoBase {
   lineNumber: number;
 
   /**
-   * 物料编码（关联 TaktMaterial.MaterialCode，选项 TaktMaterials/options）
+   * 物料编码（选项 TaktMaterialPlants/options；DictValue=MaterialCode，ExtValue=PlantCode）
    */
   materialCode: string;
 
   /**
-   * 物料名称
+   * 物料名称（回填：随物料）
    */
   materialName: string;
 
   /**
-   * 物料规格
+   * 物料规格（回填：随物料）
    */
   materialSpecification?: string;
 
@@ -89,7 +89,7 @@ export interface MaterialRequirementsPlanningItem extends CompanyDtoBase {
   requirementDate: string;
 
   /**
-   * 计划单位（字典 logistics_unit_of_measure_code，DictValue=PC/EA 等；默认 PC）
+   * 计划单位（字典 logistics_unit_of_measure_code；DictValue=PC/EA 等；默认 PC）
    */
   planUnit: string;
 
@@ -124,7 +124,7 @@ export interface MaterialRequirementsPlanningItem extends CompanyDtoBase {
   procurementType: number;
 
   /**
-   * 是否作废（字典 sys_yes_no_type，0=否 1=是）
+   * 是否作废（字典 sys_yes_no_type；0=否 1=是）
    */
   isObsolete: number;
 
@@ -164,17 +164,17 @@ export interface MaterialRequirementsPlanningItemQuery extends TaktPagedQuery {
   lineNumber?: number;
 
   /**
-   * 物料编码（关联 TaktMaterial.MaterialCode，选项 TaktMaterials/options）
+   * 物料编码（选项 TaktMaterialPlants/options；DictValue=MaterialCode，ExtValue=PlantCode）
    */
   materialCode?: string;
 
   /**
-   * 物料名称
+   * 物料名称（回填：随物料）
    */
   materialName?: string;
 
   /**
-   * 物料规格
+   * 物料规格（回填：随物料）
    */
   materialSpecification?: string;
 
@@ -209,7 +209,7 @@ export interface MaterialRequirementsPlanningItemQuery extends TaktPagedQuery {
   requirementDateEnd?: string;
 
   /**
-   * 计划单位（字典 logistics_unit_of_measure_code，DictValue=PC/EA 等；默认 PC）
+   * 计划单位（字典 logistics_unit_of_measure_code；DictValue=PC/EA 等；默认 PC）
    */
   planUnit?: string;
 
@@ -244,7 +244,7 @@ export interface MaterialRequirementsPlanningItemQuery extends TaktPagedQuery {
   procurementType?: number;
 
   /**
-   * 是否作废（字典 sys_yes_no_type，0=否 1=是）
+   * 是否作废（字典 sys_yes_no_type；0=否 1=是）
    */
   isObsolete?: number;
 
@@ -308,17 +308,17 @@ export interface MaterialRequirementsPlanningItemCreate {
   lineNumber: number;
 
   /**
-   * 物料编码（关联 TaktMaterial.MaterialCode，选项 TaktMaterials/options）
+   * 物料编码（选项 TaktMaterialPlants/options；DictValue=MaterialCode，ExtValue=PlantCode）
    */
   materialCode: string;
 
   /**
-   * 物料名称
+   * 物料名称（回填：随物料）
    */
   materialName: string;
 
   /**
-   * 物料规格
+   * 物料规格（回填：随物料）
    */
   materialSpecification?: string;
 
@@ -348,7 +348,7 @@ export interface MaterialRequirementsPlanningItemCreate {
   requirementDate: string;
 
   /**
-   * 计划单位（字典 logistics_unit_of_measure_code，DictValue=PC/EA 等；默认 PC）
+   * 计划单位（字典 logistics_unit_of_measure_code；DictValue=PC/EA 等；默认 PC）
    */
   planUnit: string;
 
@@ -383,7 +383,7 @@ export interface MaterialRequirementsPlanningItemCreate {
   procurementType: number;
 
   /**
-   * 是否作废（字典 sys_yes_no_type，0=否 1=是）
+   * 是否作废（字典 sys_yes_no_type；0=否 1=是）
    */
   isObsolete: number;
 
@@ -466,17 +466,17 @@ export interface MaterialRequirementsPlanningItemTemplate {
   lineNumber?: number;
 
   /**
-   * 物料编码（关联 TaktMaterial.MaterialCode，选项 TaktMaterials/options）
+   * 物料编码（选项 TaktMaterialPlants/options；DictValue=MaterialCode，ExtValue=PlantCode）
    */
   materialCode?: string;
 
   /**
-   * 物料名称
+   * 物料名称（回填：随物料）
    */
   materialName?: string;
 
   /**
-   * 物料规格
+   * 物料规格（回填：随物料）
    */
   materialSpecification?: string;
 
@@ -506,7 +506,7 @@ export interface MaterialRequirementsPlanningItemTemplate {
   requirementDate?: string;
 
   /**
-   * 计划单位（字典 logistics_unit_of_measure_code，DictValue=PC/EA 等；默认 PC）
+   * 计划单位（字典 logistics_unit_of_measure_code；DictValue=PC/EA 等；默认 PC）
    */
   planUnit?: string;
 
@@ -541,7 +541,7 @@ export interface MaterialRequirementsPlanningItemTemplate {
   procurementType?: number;
 
   /**
-   * 是否作废（字典 sys_yes_no_type，0=否 1=是）
+   * 是否作废（字典 sys_yes_no_type；0=否 1=是）
    */
   isObsolete?: number;
 
@@ -595,17 +595,17 @@ export interface MaterialRequirementsPlanningItemImport {
   lineNumber?: number;
 
   /**
-   * 物料编码（关联 TaktMaterial.MaterialCode，选项 TaktMaterials/options）
+   * 物料编码（选项 TaktMaterialPlants/options；DictValue=MaterialCode，ExtValue=PlantCode）
    */
   materialCode?: string;
 
   /**
-   * 物料名称
+   * 物料名称（回填：随物料）
    */
   materialName?: string;
 
   /**
-   * 物料规格
+   * 物料规格（回填：随物料）
    */
   materialSpecification?: string;
 
@@ -635,7 +635,7 @@ export interface MaterialRequirementsPlanningItemImport {
   requirementDate?: string;
 
   /**
-   * 计划单位（字典 logistics_unit_of_measure_code，DictValue=PC/EA 等；默认 PC）
+   * 计划单位（字典 logistics_unit_of_measure_code；DictValue=PC/EA 等；默认 PC）
    */
   planUnit?: string;
 
@@ -670,7 +670,7 @@ export interface MaterialRequirementsPlanningItemImport {
   procurementType?: number;
 
   /**
-   * 是否作废（字典 sys_yes_no_type，0=否 1=是）
+   * 是否作废（字典 sys_yes_no_type；0=否 1=是）
    */
   isObsolete?: number;
 
@@ -719,17 +719,17 @@ export interface MaterialRequirementsPlanningItemExport {
   lineNumber: number;
 
   /**
-   * 物料编码（关联 TaktMaterial.MaterialCode，选项 TaktMaterials/options）
+   * 物料编码（选项 TaktMaterialPlants/options；DictValue=MaterialCode，ExtValue=PlantCode）
    */
   materialCode: string;
 
   /**
-   * 物料名称
+   * 物料名称（回填：随物料）
    */
   materialName: string;
 
   /**
-   * 物料规格
+   * 物料规格（回填：随物料）
    */
   materialSpecification?: string;
 
@@ -759,7 +759,7 @@ export interface MaterialRequirementsPlanningItemExport {
   requirementDate: string;
 
   /**
-   * 计划单位（字典 logistics_unit_of_measure_code，DictValue=PC/EA 等；默认 PC）
+   * 计划单位（字典 logistics_unit_of_measure_code；DictValue=PC/EA 等；默认 PC）
    */
   planUnit: string;
 
@@ -794,7 +794,7 @@ export interface MaterialRequirementsPlanningItemExport {
   procurementType: number;
 
   /**
-   * 是否作废（字典 sys_yes_no_type，0=否 1=是）
+   * 是否作废（字典 sys_yes_no_type；0=否 1=是）
    */
   isObsolete: number;
 

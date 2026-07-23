@@ -104,7 +104,7 @@ public class TaktProductionPlanDto : TaktApprovalDtoBase
     public string? PlannerName { get; set; }
 
     /// <summary>
-    /// 计划人（关联 TaktEmployee.EmployeeNo，选项 TaktEmployees/options，DictValue=EmployeeNo）
+    /// 计划人（关联 TaktEmployee.EmployeeCode，选项 TaktEmployees/options，DictValue=EmployeeCode）
     /// </summary>
     public string PlanBy { get; set; } = string.Empty;
 
@@ -240,7 +240,7 @@ public class TaktProductionPlanQueryDto : TaktPagedQuery
     public long? PlannerId { get; set; }
 
     /// <summary>
-    /// 计划人（关联 TaktEmployee.EmployeeNo，选项 TaktEmployees/options，DictValue=EmployeeNo）
+    /// 计划人（关联 TaktEmployee.EmployeeCode，选项 TaktEmployees/options，DictValue=EmployeeCode）
     /// </summary>
     public string? PlanBy { get; set; } = string.Empty;
 
@@ -423,9 +423,9 @@ public class TaktProductionPlanCreateDto
     public long? PlannerId { get; set; }
 
     /// <summary>
-    /// 计划人（关联 TaktEmployee.EmployeeNo，选项 TaktEmployees/options，DictValue=EmployeeNo）
+    /// 计划人（关联 TaktEmployee.EmployeeCode，选项 TaktEmployees/options，DictValue=EmployeeCode）
     /// </summary>
-    [Required(ErrorMessage = "计划人（关联 TaktEmployee.EmployeeNo，选项 TaktEmployees/options，DictValue=EmployeeNo）不能为空")]
+    [Required(ErrorMessage = "计划人（关联 TaktEmployee.EmployeeCode，选项 TaktEmployees/options，DictValue=EmployeeCode）不能为空")]
     public string PlanBy { get; set; } = string.Empty;
 
     /// <summary>
@@ -602,7 +602,7 @@ public class TaktProductionPlanTemplateDto
     public long? PlannerId { get; set; }
 
     /// <summary>
-    /// 计划人（关联 TaktEmployee.EmployeeNo，选项 TaktEmployees/options，DictValue=EmployeeNo）
+    /// 计划人（关联 TaktEmployee.EmployeeCode，选项 TaktEmployees/options，DictValue=EmployeeCode）
     /// </summary>
     public string? PlanBy { get; set; } = string.Empty;
 
@@ -732,7 +732,7 @@ public class TaktProductionPlanImportDto
     public long? PlannerId { get; set; }
 
     /// <summary>
-    /// 计划人（关联 TaktEmployee.EmployeeNo，选项 TaktEmployees/options，DictValue=EmployeeNo）
+    /// 计划人（关联 TaktEmployee.EmployeeCode，选项 TaktEmployees/options，DictValue=EmployeeCode）
     /// </summary>
     public string? PlanBy { get; set; } = string.Empty;
 
@@ -858,7 +858,7 @@ public class TaktProductionPlanExportDto
     public long? PlannerId { get; set; }
 
     /// <summary>
-    /// 计划人（关联 TaktEmployee.EmployeeNo，选项 TaktEmployees/options，DictValue=EmployeeNo）
+    /// 计划人（关联 TaktEmployee.EmployeeCode，选项 TaktEmployees/options，DictValue=EmployeeCode）
     /// </summary>
     public string PlanBy { get; set; } = string.Empty;
 

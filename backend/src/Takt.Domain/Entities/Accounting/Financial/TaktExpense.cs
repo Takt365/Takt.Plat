@@ -29,9 +29,9 @@ namespace Takt.Domain.Entities.Accounting.Financial;
 public class TaktExpense : TaktApprovalEntityBase
 {
     /// <summary>
-    /// 费用单编号（租户+公司内唯一）
+    /// 费用单编码（租户+公司内唯一）
     /// </summary>
-    [SugarColumn(ColumnName = "expense_code", ColumnDescription = "费用单编号", ColumnDataType = "varchar", Length = 40, IsNullable = false)]
+    [SugarColumn(ColumnName = "expense_code", ColumnDescription = "费用单编码", ColumnDataType = "varchar", Length = 40, IsNullable = false)]
     public string ExpenseCode { get; set; } = string.Empty;
     /// <summary>
     /// 费用标题
@@ -51,10 +51,10 @@ public class TaktExpense : TaktApprovalEntityBase
     /// <summary>
     /// 供应商名称（整单唯一）
     /// </summary>
-    [SugarColumn(ColumnName = "supplier_name", ColumnDescription = "供应商名称", ColumnDataType = "nvarchar", Length = 200, IsNullable = true)]
-    public string? SupplierName { get; set; }
+    [SugarColumn(ColumnName = "supplier_name1", ColumnDescription = "供应商名称1", ColumnDataType = "nvarchar", Length = 140, IsNullable = true)]
+    public string? SupplierName1 { get; set; }
     /// <summary>
-    /// 申请人（选项 TaktEmployees/options，DictValue=Id）
+    /// 申请人（选项 TaktEmployees/options；DictValue=Id）
     /// </summary>
     [SugarColumn(ColumnName = "applicant_by", ColumnDescription = "申请人", ColumnDataType = "bigint", IsNullable = false)]
     [JsonConverter(typeof(ValueToStringConverter))]
@@ -75,7 +75,7 @@ public class TaktExpense : TaktApprovalEntityBase
     [SugarColumn(ColumnName = "cost_center", ColumnDescription = "成本中心", ColumnDataType = "varchar", Length = 4, IsNullable = true)]
     public string? CostCenter { get; set; }
     /// <summary>
-    /// 关联会签单（选项 TaktCountersigns/options，DictValue=Id）
+    /// 关联会签单（选项 TaktCountersigns/options；DictValue=Id）
     /// </summary>
     [SugarColumn(ColumnName = "countersign_id", ColumnDescription = "关联会签单ID", ColumnDataType = "bigint", IsNullable = true)]
     [JsonConverter(typeof(ValueToStringConverter))]
@@ -121,7 +121,7 @@ public class TaktExpense : TaktApprovalEntityBase
     [SugarColumn(ColumnName = "attachments", ColumnDescription = "附件", ColumnDataType = "nvarchar", Length = -1, IsNullable = true)]
     public string? Attachments { get; set; }
     /// <summary>
-    /// 关联工厂（选项 TaktPlants/options，DictValue=Id）
+    /// 关联工厂（选项 TaktPlants/options；DictValue=Id）
     /// </summary>
     [SugarColumn(ColumnName = "related_plant", ColumnDescription = "关联工厂", ColumnDataType = "varchar", Length = 4, IsNullable = false)]
     public string RelatedPlant { get; set; } = string.Empty;

@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：frontend/src/types/logistics/quality/complaint
 // 文件名称：customer-complaint.d.ts
-// 创建时间：2026-06-23
+// 创建时间：2026-07-23
 // 创建人：Takt365(Auto Generated)
 // 功能描述：logistics/quality/complaint 模块类型定义（自动生成；类型名去 Takt 前缀与末尾 Dto，如 TaktCompanyDto → Company）
 // 
@@ -34,17 +34,22 @@ export interface CustomerComplaint extends CompanyDtoBase {
   customerComplaintCode: string;
 
   /**
-   * 客户ID（序列化为string以避免Javascript精度问题）
+   * 客户 ID（选项 TaktCustomers/options；DictValue=Id）
    */
   customerId: string;
 
   /**
-   * 客户名称
+   * 客户 名称（填充字段）
    */
-  customerName: string;
+  customerName?: string;
 
   /**
-   * 客户编码
+   * 客户名称1（冗余，与 TaktCustomer.CustomerName1 对齐）
+   */
+  customerName1: string;
+
+  /**
+   * 客户编码（选项 TaktCustomers/options；DictValue=CustomerCode）
    */
   customerCode?: string;
 
@@ -54,22 +59,22 @@ export interface CustomerComplaint extends CompanyDtoBase {
   complaintDate: string;
 
   /**
-   * 投诉方式（0=电话，1=邮件，2=传真，3=现场，4=其他）
+   * 投诉方式（字典 logistics_quality_complaint_method；0=电话，1=邮件，2=传真，3=现场，4=其他）
    */
   complaintMethod: number;
 
   /**
-   * 投诉类型（0=质量，1=交期，2=服务，3=价格，4=其他）
+   * 投诉类型（字典 logistics_quality_complaint_type）
    */
   complaintType: number;
 
   /**
-   * 投诉等级（0=一般，1=重要，2=紧急，3=严重）
+   * 投诉等级（字典 logistics_quality_complaint_level）
    */
   complaintLevel: number;
 
   /**
-   * 责任部门ID（序列化为string以避免Javascript精度问题）
+   * 责任部门 ID（选项 TaktDepts/options；DictValue=Id）
    */
   responsibleDeptId?: string;
 
@@ -79,7 +84,7 @@ export interface CustomerComplaint extends CompanyDtoBase {
   responsibleDeptName?: string;
 
   /**
-   * 责任人ID（序列化为string以避免Javascript精度问题）
+   * 责任人 ID（选项 TaktEmployees/options；DictValue=Id）
    */
   responsiblePersonId?: string;
 
@@ -99,11 +104,6 @@ export interface CustomerComplaint extends CompanyDtoBase {
   actualReplyDate?: string;
 
   /**
-   * 客诉状态（0=待处理，1=处理中，2=已回复，3=已关闭，4=已驳回）
-   */
-  complaintStatus: number;
-
-  /**
    * 客诉描述
    */
   complaintDescription: string;
@@ -114,19 +114,29 @@ export interface CustomerComplaint extends CompanyDtoBase {
   handlingResult?: string;
 
   /**
-   * 客户满意度（0=不满意，1=一般，2=满意，3=非常满意）
+   * 客户满意度（字典 logistics_quality_customer_satisfaction）
    */
   customerSatisfaction?: number;
 
   /**
-   * 关联工厂
+   * 附件 （JSON列表形式，由TaktFile 统一上传到服务器）
    */
-  relatedPlant?: string;
+  attachments?: string;
+
+  /**
+   * 关联工厂（选项 TaktPlants/options；DictValue=PlantCode）
+   */
+  relatedPlant: string;
 
   /**
    * 排序号（越小越靠前）
    */
   sortOrder: number;
+
+  /**
+   * 客诉状态（字典 logistics_quality_complaint_status）
+   */
+  complaintStatus: number;
 
   /**
    * 客诉明细列表（主子表关系） （子表：TaktCustomerComplaintItem）
@@ -159,17 +169,17 @@ export interface CustomerComplaintQuery extends TaktPagedQuery {
   customerComplaintCode?: string;
 
   /**
-   * 客户ID（序列化为string以避免Javascript精度问题）
+   * 客户 ID（选项 TaktCustomers/options；DictValue=Id）
    */
   customerId?: string;
 
   /**
-   * 客户名称
+   * 客户名称1（冗余，与 TaktCustomer.CustomerName1 对齐）
    */
-  customerName?: string;
+  customerName1?: string;
 
   /**
-   * 客户编码
+   * 客户编码（选项 TaktCustomers/options；DictValue=CustomerCode）
    */
   customerCode?: string;
 
@@ -184,22 +194,22 @@ export interface CustomerComplaintQuery extends TaktPagedQuery {
   complaintDateEnd?: string;
 
   /**
-   * 投诉方式（0=电话，1=邮件，2=传真，3=现场，4=其他）
+   * 投诉方式（字典 logistics_quality_complaint_method；0=电话，1=邮件，2=传真，3=现场，4=其他）
    */
   complaintMethod?: number;
 
   /**
-   * 投诉类型（0=质量，1=交期，2=服务，3=价格，4=其他）
+   * 投诉类型（字典 logistics_quality_complaint_type）
    */
   complaintType?: number;
 
   /**
-   * 投诉等级（0=一般，1=重要，2=紧急，3=严重）
+   * 投诉等级（字典 logistics_quality_complaint_level）
    */
   complaintLevel?: number;
 
   /**
-   * 责任部门ID（序列化为string以避免Javascript精度问题）
+   * 责任部门 ID（选项 TaktDepts/options；DictValue=Id）
    */
   responsibleDeptId?: string;
 
@@ -209,7 +219,7 @@ export interface CustomerComplaintQuery extends TaktPagedQuery {
   responsibleDeptName?: string;
 
   /**
-   * 责任人ID（序列化为string以避免Javascript精度问题）
+   * 责任人 ID（选项 TaktEmployees/options；DictValue=Id）
    */
   responsiblePersonId?: string;
 
@@ -239,11 +249,6 @@ export interface CustomerComplaintQuery extends TaktPagedQuery {
   actualReplyDateEnd?: string;
 
   /**
-   * 客诉状态（0=待处理，1=处理中，2=已回复，3=已关闭，4=已驳回）
-   */
-  complaintStatus?: number;
-
-  /**
    * 客诉描述
    */
   complaintDescription?: string;
@@ -254,12 +259,17 @@ export interface CustomerComplaintQuery extends TaktPagedQuery {
   handlingResult?: string;
 
   /**
-   * 客户满意度（0=不满意，1=一般，2=满意，3=非常满意）
+   * 客户满意度（字典 logistics_quality_customer_satisfaction）
    */
   customerSatisfaction?: number;
 
   /**
-   * 关联工厂
+   * 附件 （JSON列表形式，由TaktFile 统一上传到服务器）
+   */
+  attachments?: string;
+
+  /**
+   * 关联工厂（选项 TaktPlants/options；DictValue=PlantCode）
    */
   relatedPlant?: string;
 
@@ -267,6 +277,11 @@ export interface CustomerComplaintQuery extends TaktPagedQuery {
    * 排序号（越小越靠前）
    */
   sortOrder?: number;
+
+  /**
+   * 客诉状态（字典 logistics_quality_complaint_status）
+   */
+  complaintStatus?: number;
 
   /**
    * 创建时间（范围查询-开始）
@@ -318,17 +333,17 @@ export interface CustomerComplaintCreate {
   customerComplaintCode: string;
 
   /**
-   * 客户ID（序列化为string以避免Javascript精度问题）
+   * 客户 ID（选项 TaktCustomers/options；DictValue=Id）
    */
   customerId: string;
 
   /**
-   * 客户名称
+   * 客户名称1（冗余，与 TaktCustomer.CustomerName1 对齐）
    */
-  customerName: string;
+  customerName1: string;
 
   /**
-   * 客户编码
+   * 客户编码（选项 TaktCustomers/options；DictValue=CustomerCode）
    */
   customerCode?: string;
 
@@ -338,22 +353,22 @@ export interface CustomerComplaintCreate {
   complaintDate: string;
 
   /**
-   * 投诉方式（0=电话，1=邮件，2=传真，3=现场，4=其他）
+   * 投诉方式（字典 logistics_quality_complaint_method；0=电话，1=邮件，2=传真，3=现场，4=其他）
    */
   complaintMethod: number;
 
   /**
-   * 投诉类型（0=质量，1=交期，2=服务，3=价格，4=其他）
+   * 投诉类型（字典 logistics_quality_complaint_type）
    */
   complaintType: number;
 
   /**
-   * 投诉等级（0=一般，1=重要，2=紧急，3=严重）
+   * 投诉等级（字典 logistics_quality_complaint_level）
    */
   complaintLevel: number;
 
   /**
-   * 责任部门ID（序列化为string以避免Javascript精度问题）
+   * 责任部门 ID（选项 TaktDepts/options；DictValue=Id）
    */
   responsibleDeptId?: string;
 
@@ -363,7 +378,7 @@ export interface CustomerComplaintCreate {
   responsibleDeptName?: string;
 
   /**
-   * 责任人ID（序列化为string以避免Javascript精度问题）
+   * 责任人 ID（选项 TaktEmployees/options；DictValue=Id）
    */
   responsiblePersonId?: string;
 
@@ -383,11 +398,6 @@ export interface CustomerComplaintCreate {
   actualReplyDate?: string;
 
   /**
-   * 客诉状态（0=待处理，1=处理中，2=已回复，3=已关闭，4=已驳回）
-   */
-  complaintStatus: number;
-
-  /**
    * 客诉描述
    */
   complaintDescription: string;
@@ -398,14 +408,24 @@ export interface CustomerComplaintCreate {
   handlingResult?: string;
 
   /**
-   * 客户满意度（0=不满意，1=一般，2=满意，3=非常满意）
+   * 客户满意度（字典 logistics_quality_customer_satisfaction）
    */
   customerSatisfaction?: number;
 
   /**
-   * 关联工厂
+   * 附件 （JSON列表形式，由TaktFile 统一上传到服务器）
    */
-  relatedPlant?: string;
+  attachments?: string;
+
+  /**
+   * 关联工厂（选项 TaktPlants/options；DictValue=PlantCode）
+   */
+  relatedPlant: string;
+
+  /**
+   * 客诉状态（字典 logistics_quality_complaint_status）
+   */
+  complaintStatus: number;
 
   /**
    * 客诉明细列表（主子表关系）（子表，级联保存）
@@ -437,6 +457,11 @@ export interface CustomerComplaintUpdate extends CustomerComplaintCreate {
    */
   customerComplaintId: string;
 
+  /**
+   * 客诉明细列表（主子表关系）（子表，级联保存）
+   */
+  items?: any;
+
 }
 
 
@@ -452,7 +477,7 @@ export interface CustomerComplaintStatus {
   customerComplaintId: string;
 
   /**
-   * 客诉状态（0=待处理，1=处理中，2=已回复，3=已关闭，4=已驳回）
+   * 客诉状态（字典 logistics_quality_complaint_status）
    */
   complaintStatus: number;
 
@@ -500,17 +525,17 @@ export interface CustomerComplaintTemplate {
   customerComplaintCode?: string;
 
   /**
-   * 客户ID（序列化为string以避免Javascript精度问题）
+   * 客户 ID（选项 TaktCustomers/options；DictValue=Id）
    */
   customerId?: string;
 
   /**
-   * 客户名称
+   * 客户名称1（冗余，与 TaktCustomer.CustomerName1 对齐）
    */
-  customerName?: string;
+  customerName1?: string;
 
   /**
-   * 客户编码
+   * 客户编码（选项 TaktCustomers/options；DictValue=CustomerCode）
    */
   customerCode?: string;
 
@@ -520,22 +545,22 @@ export interface CustomerComplaintTemplate {
   complaintDate?: string;
 
   /**
-   * 投诉方式（0=电话，1=邮件，2=传真，3=现场，4=其他）
+   * 投诉方式（字典 logistics_quality_complaint_method；0=电话，1=邮件，2=传真，3=现场，4=其他）
    */
   complaintMethod?: number;
 
   /**
-   * 投诉类型（0=质量，1=交期，2=服务，3=价格，4=其他）
+   * 投诉类型（字典 logistics_quality_complaint_type）
    */
   complaintType?: number;
 
   /**
-   * 投诉等级（0=一般，1=重要，2=紧急，3=严重）
+   * 投诉等级（字典 logistics_quality_complaint_level）
    */
   complaintLevel?: number;
 
   /**
-   * 责任部门ID（序列化为string以避免Javascript精度问题）
+   * 责任部门 ID（选项 TaktDepts/options；DictValue=Id）
    */
   responsibleDeptId?: string;
 
@@ -545,7 +570,7 @@ export interface CustomerComplaintTemplate {
   responsibleDeptName?: string;
 
   /**
-   * 责任人ID（序列化为string以避免Javascript精度问题）
+   * 责任人 ID（选项 TaktEmployees/options；DictValue=Id）
    */
   responsiblePersonId?: string;
 
@@ -565,11 +590,6 @@ export interface CustomerComplaintTemplate {
   actualReplyDate?: string;
 
   /**
-   * 客诉状态（0=待处理，1=处理中，2=已回复，3=已关闭，4=已驳回）
-   */
-  complaintStatus?: number;
-
-  /**
    * 客诉描述
    */
   complaintDescription?: string;
@@ -580,14 +600,24 @@ export interface CustomerComplaintTemplate {
   handlingResult?: string;
 
   /**
-   * 客户满意度（0=不满意，1=一般，2=满意，3=非常满意）
+   * 客户满意度（字典 logistics_quality_customer_satisfaction）
    */
   customerSatisfaction?: number;
 
   /**
-   * 关联工厂
+   * 附件 （JSON列表形式，由TaktFile 统一上传到服务器）
+   */
+  attachments?: string;
+
+  /**
+   * 关联工厂（选项 TaktPlants/options；DictValue=PlantCode）
    */
   relatedPlant?: string;
+
+  /**
+   * 客诉状态（字典 logistics_quality_complaint_status）
+   */
+  complaintStatus?: number;
 
   /**
    * 客诉明细列表（主子表关系）（子表，级联保存）
@@ -634,17 +664,17 @@ export interface CustomerComplaintImport {
   customerComplaintCode?: string;
 
   /**
-   * 客户ID（序列化为string以避免Javascript精度问题）
+   * 客户 ID（选项 TaktCustomers/options；DictValue=Id）
    */
   customerId?: string;
 
   /**
-   * 客户名称
+   * 客户名称1（冗余，与 TaktCustomer.CustomerName1 对齐）
    */
-  customerName?: string;
+  customerName1?: string;
 
   /**
-   * 客户编码
+   * 客户编码（选项 TaktCustomers/options；DictValue=CustomerCode）
    */
   customerCode?: string;
 
@@ -654,22 +684,22 @@ export interface CustomerComplaintImport {
   complaintDate?: string;
 
   /**
-   * 投诉方式（0=电话，1=邮件，2=传真，3=现场，4=其他）
+   * 投诉方式（字典 logistics_quality_complaint_method；0=电话，1=邮件，2=传真，3=现场，4=其他）
    */
   complaintMethod?: number;
 
   /**
-   * 投诉类型（0=质量，1=交期，2=服务，3=价格，4=其他）
+   * 投诉类型（字典 logistics_quality_complaint_type）
    */
   complaintType?: number;
 
   /**
-   * 投诉等级（0=一般，1=重要，2=紧急，3=严重）
+   * 投诉等级（字典 logistics_quality_complaint_level）
    */
   complaintLevel?: number;
 
   /**
-   * 责任部门ID（序列化为string以避免Javascript精度问题）
+   * 责任部门 ID（选项 TaktDepts/options；DictValue=Id）
    */
   responsibleDeptId?: string;
 
@@ -679,7 +709,7 @@ export interface CustomerComplaintImport {
   responsibleDeptName?: string;
 
   /**
-   * 责任人ID（序列化为string以避免Javascript精度问题）
+   * 责任人 ID（选项 TaktEmployees/options；DictValue=Id）
    */
   responsiblePersonId?: string;
 
@@ -699,11 +729,6 @@ export interface CustomerComplaintImport {
   actualReplyDate?: string;
 
   /**
-   * 客诉状态（0=待处理，1=处理中，2=已回复，3=已关闭，4=已驳回）
-   */
-  complaintStatus?: number;
-
-  /**
    * 客诉描述
    */
   complaintDescription?: string;
@@ -714,14 +739,24 @@ export interface CustomerComplaintImport {
   handlingResult?: string;
 
   /**
-   * 客户满意度（0=不满意，1=一般，2=满意，3=非常满意）
+   * 客户满意度（字典 logistics_quality_customer_satisfaction）
    */
   customerSatisfaction?: number;
 
   /**
-   * 关联工厂
+   * 附件 （JSON列表形式，由TaktFile 统一上传到服务器）
+   */
+  attachments?: string;
+
+  /**
+   * 关联工厂（选项 TaktPlants/options；DictValue=PlantCode）
    */
   relatedPlant?: string;
+
+  /**
+   * 客诉状态（字典 logistics_quality_complaint_status）
+   */
+  complaintStatus?: number;
 
   /**
    * 客诉明细列表（主子表关系）（子表，级联保存）
@@ -763,17 +798,17 @@ export interface CustomerComplaintExport {
   customerComplaintCode: string;
 
   /**
-   * 客户ID（序列化为string以避免Javascript精度问题）
+   * 客户 ID（选项 TaktCustomers/options；DictValue=Id）
    */
   customerId: string;
 
   /**
-   * 客户名称
+   * 客户名称1（冗余，与 TaktCustomer.CustomerName1 对齐）
    */
-  customerName: string;
+  customerName1: string;
 
   /**
-   * 客户编码
+   * 客户编码（选项 TaktCustomers/options；DictValue=CustomerCode）
    */
   customerCode?: string;
 
@@ -783,22 +818,22 @@ export interface CustomerComplaintExport {
   complaintDate: string;
 
   /**
-   * 投诉方式（0=电话，1=邮件，2=传真，3=现场，4=其他）
+   * 投诉方式（字典 logistics_quality_complaint_method；0=电话，1=邮件，2=传真，3=现场，4=其他）
    */
   complaintMethod: number;
 
   /**
-   * 投诉类型（0=质量，1=交期，2=服务，3=价格，4=其他）
+   * 投诉类型（字典 logistics_quality_complaint_type）
    */
   complaintType: number;
 
   /**
-   * 投诉等级（0=一般，1=重要，2=紧急，3=严重）
+   * 投诉等级（字典 logistics_quality_complaint_level）
    */
   complaintLevel: number;
 
   /**
-   * 责任部门ID（序列化为string以避免Javascript精度问题）
+   * 责任部门 ID（选项 TaktDepts/options；DictValue=Id）
    */
   responsibleDeptId?: string;
 
@@ -808,7 +843,7 @@ export interface CustomerComplaintExport {
   responsibleDeptName?: string;
 
   /**
-   * 责任人ID（序列化为string以避免Javascript精度问题）
+   * 责任人 ID（选项 TaktEmployees/options；DictValue=Id）
    */
   responsiblePersonId?: string;
 
@@ -828,11 +863,6 @@ export interface CustomerComplaintExport {
   actualReplyDate?: string;
 
   /**
-   * 客诉状态（0=待处理，1=处理中，2=已回复，3=已关闭，4=已驳回）
-   */
-  complaintStatus: number;
-
-  /**
    * 客诉描述
    */
   complaintDescription: string;
@@ -843,19 +873,29 @@ export interface CustomerComplaintExport {
   handlingResult?: string;
 
   /**
-   * 客户满意度（0=不满意，1=一般，2=满意，3=非常满意）
+   * 客户满意度（字典 logistics_quality_customer_satisfaction）
    */
   customerSatisfaction?: number;
 
   /**
-   * 关联工厂
+   * 附件 （JSON列表形式，由TaktFile 统一上传到服务器）
    */
-  relatedPlant?: string;
+  attachments?: string;
+
+  /**
+   * 关联工厂（选项 TaktPlants/options；DictValue=PlantCode）
+   */
+  relatedPlant: string;
 
   /**
    * 排序号（越小越靠前）
    */
   sortOrder: number;
+
+  /**
+   * 客诉状态（字典 logistics_quality_complaint_status）
+   */
+  complaintStatus: number;
 
   /**
    * 扩展字段JSON

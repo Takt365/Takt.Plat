@@ -18,12 +18,12 @@ namespace Takt.Application.Dtos.Statistics.Logging;
 public class TaktServerHardwareDto
 {
     /// <summary>
-    /// 主机编号（系统序列号）
+    /// 主机编码（系统序列号）
     /// </summary>
     public string HostSerialNumber { get; set; } = string.Empty;
 
     /// <summary>
-    /// 硬盘编号（首个磁盘序列号）
+    /// 硬盘编码（首个磁盘序列号）
     /// </summary>
     public string DriveSerialNumber { get; set; } = string.Empty;
 

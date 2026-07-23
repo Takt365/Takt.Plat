@@ -69,7 +69,7 @@ export interface BillOfMaterial extends CompanyDtoBase {
   bomType: number;
 
   /**
-   * 备选BOM编号（对应SAP Alternative BOM，如01/02）
+   * 备选BOM编码（对应SAP Alternative BOM，如01/02）
    */
   alternativeBomNumber: string;
 
@@ -174,7 +174,7 @@ export interface BillOfMaterialQuery extends TaktPagedQuery {
   bomType?: number;
 
   /**
-   * 备选BOM编号（对应SAP Alternative BOM，如01/02）
+   * 备选BOM编码（对应SAP Alternative BOM，如01/02）
    */
   alternativeBomNumber?: string;
 
@@ -308,7 +308,7 @@ export interface BillOfMaterialCreate {
   bomType: number;
 
   /**
-   * 备选BOM编号（对应SAP Alternative BOM，如01/02）
+   * 备选BOM编码（对应SAP Alternative BOM，如01/02）
    */
   alternativeBomNumber: string;
 
@@ -470,7 +470,7 @@ export interface BillOfMaterialTemplate {
   bomType?: number;
 
   /**
-   * 备选BOM编号（对应SAP Alternative BOM，如01/02）
+   * 备选BOM编码（对应SAP Alternative BOM，如01/02）
    */
   alternativeBomNumber?: string;
 
@@ -584,7 +584,7 @@ export interface BillOfMaterialImport {
   bomType?: number;
 
   /**
-   * 备选BOM编号（对应SAP Alternative BOM，如01/02）
+   * 备选BOM编码（对应SAP Alternative BOM，如01/02）
    */
   alternativeBomNumber?: string;
 
@@ -693,7 +693,7 @@ export interface BillOfMaterialExport {
   bomType: number;
 
   /**
-   * 备选BOM编号（对应SAP Alternative BOM，如01/02）
+   * 备选BOM编码（对应SAP Alternative BOM，如01/02）
    */
   alternativeBomNumber: string;
 

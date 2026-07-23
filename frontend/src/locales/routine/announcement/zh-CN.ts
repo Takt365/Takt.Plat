@@ -11,11 +11,11 @@
 export default {
   page: {
     placeholder: {
-      autocode: '留空则按所选编号规则自动生成',
+      autocode: '留空则按所选编码规则自动生成',
     },
     validation: {
-      numberingRuleRequired: '自动取号须选择编号规则',
-      codeOrRuleRequired: '请填写公告编码或选择编号规则',
+      numberingRuleRequired: '自动取号须选择编码规则',
+      codeOrRuleRequired: '请填写公告编码或选择编码规则',
     },
   },
 };

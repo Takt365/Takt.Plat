@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Application.Services.HumanResource.Personnel
 // 文件名称：TaktEmployeeSkillService.cs
-// 创建时间：2026-06-23
+// 创建时间：2026-07-23
 // 创建人：Takt365(Cursor AI)
 // 功能描述：员工技能应用服务实现
 // 
@@ -93,12 +93,12 @@ public class TaktEmployeeSkillService : TaktServiceBase, ITaktEmployeeSkillServi
         EnsureThreeLayerContext();
         var list = await _employeeSkillRepository.GetListAsync(
             x => x.TenantCode == CurrentTenantCode && x.CompanyCode == CurrentCompanyCode,
-            x => x.SkillName ?? string.Empty,
+            x => x.EmployeeName ?? string.Empty,
             false);
         return list.Select(e => new TaktSelectOption
         {
-            DictValue = e.Id,
-            DictLabel = e.SkillName ?? e.Id.ToString(),
+            DictValue = e.EmployeeCode,
+            DictLabel = e.EmployeeName ?? e.EmployeeCode,
         }).ToList();
     }
 
@@ -254,10 +254,12 @@ public class TaktEmployeeSkillService : TaktServiceBase, ITaktEmployeeSkillServi
             var keywords = queryDto.KeyWords;
             exp = exp.And(x =>
                 SqlFunc.ToString(x.EmployeeId).Contains(keywords)
+                || (x.EmployeeCode != null && x.EmployeeCode.Contains(keywords))
+                || (x.EmployeeName != null && x.EmployeeName.Contains(keywords))
                 || (x.SkillName != null && x.SkillName.Contains(keywords))
                 || SqlFunc.ToString(x.SkillLevel).Contains(keywords)
                 || (x.CertificateName != null && x.CertificateName.Contains(keywords))
-                || (x.CertificateNo != null && x.CertificateNo.Contains(keywords))
+                || (x.CertificateCode != null && x.CertificateCode.Contains(keywords))
                 || (x.ExtField != null && x.ExtField.Contains(keywords))
                 || (x.Remark != null && x.Remark.Contains(keywords))
                 || SqlFunc.ToString(x.ObtainedDate).Contains(keywords)
@@ -269,6 +271,16 @@ public class TaktEmployeeSkillService : TaktServiceBase, ITaktEmployeeSkillServi
         if (queryDto?.EmployeeId.HasValue == true)
         {
             exp = exp.And(x => x.EmployeeId == queryDto.EmployeeId);
+        }
+
+        if (!string.IsNullOrEmpty(queryDto?.EmployeeCode))
+        {
+            exp = exp.And(x => x.EmployeeCode != null && x.EmployeeCode.Contains(queryDto.EmployeeCode));
+        }
+
+        if (!string.IsNullOrEmpty(queryDto?.EmployeeName))
+        {
+            exp = exp.And(x => x.EmployeeName != null && x.EmployeeName.Contains(queryDto.EmployeeName));
         }
 
         if (!string.IsNullOrEmpty(queryDto?.SkillName))
@@ -286,9 +298,9 @@ public class TaktEmployeeSkillService : TaktServiceBase, ITaktEmployeeSkillServi
             exp = exp.And(x => x.CertificateName != null && x.CertificateName.Contains(queryDto.CertificateName));
         }
 
-        if (!string.IsNullOrEmpty(queryDto?.CertificateNo))
+        if (!string.IsNullOrEmpty(queryDto?.CertificateCode))
         {
-            exp = exp.And(x => x.CertificateNo != null && x.CertificateNo.Contains(queryDto.CertificateNo));
+            exp = exp.And(x => x.CertificateCode != null && x.CertificateCode.Contains(queryDto.CertificateCode));
         }
 
         if (!string.IsNullOrEmpty(queryDto?.ExtField))

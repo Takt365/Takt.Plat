@@ -29,7 +29,7 @@ public class TaktFqcDefectHandling : TaktCompanyEntityBase
     [SugarColumn(ColumnName = "fqc_defect_handling_code", ColumnDescription = "FQC不良处理编码", ColumnDataType = "nvarchar", Length = 50, IsNullable = false)]
     public string FqcDefectHandlingCode { get; set; } = string.Empty;
     /// <summary>
-    /// FQC检验单明细 ID（选项 TaktFqcOrderItems/options，DictValue=Id）
+    /// FQC检验单明细 ID（选项 TaktFqcOrderItems/options；DictValue=Id）
     /// </summary>
     [SugarColumn(ColumnName = "fqc_order_item_id", ColumnDescription = "FQC检验单明细ID", ColumnDataType = "bigint", IsNullable = false)]
     [JsonConverter(typeof(ValueToStringConverter))]
@@ -75,17 +75,17 @@ public class TaktFqcDefectHandling : TaktCompanyEntityBase
     [SugarColumn(ColumnName = "handling_description", ColumnDescription = "处理说明", ColumnDataType = "nvarchar", Length = 1000, IsNullable = true)]
     public string? HandlingDescription { get; set; }
     /// <summary>
-    /// 责任部门（选项 TaktDepts/tree-options，DictValue=DeptCode）
+    /// 责任部门（选项 TaktDepts/tree-options；DictValue=DeptCode）
     /// </summary>
     [SugarColumn(ColumnName = "responsible_dept", ColumnDescription = "责任部门", ColumnDataType = "nvarchar", Length = 100, IsNullable = true)]
     public string? ResponsibleDept { get; set; }
     /// <summary>
-    /// 责任人（选项 TaktEmployees/options，DictValue=EmployeeCode）
+    /// 责任人（选项 TaktEmployees/options；DictValue=EmployeeCode）
     /// </summary>
     [SugarColumn(ColumnName = "responsible_by", ColumnDescription = "责任人", ColumnDataType = "nvarchar", Length = 50, IsNullable = true)]
     public string? ResponsibleBy { get; set; }
     /// <summary>
-    /// 处理人（选项 TaktEmployees/options，DictValue=EmployeeCode）
+    /// 处理人（选项 TaktEmployees/options；DictValue=EmployeeCode）
     /// </summary>
     [SugarColumn(ColumnName = "handler_by", ColumnDescription = "处理人", ColumnDataType = "nvarchar", Length = 50, IsNullable = true)]
     public string? HandlerBy { get; set; }
@@ -116,7 +116,7 @@ public class TaktFqcDefectHandling : TaktCompanyEntityBase
     public int HandlingStatus { get; set; } = 0;
 
     /// <summary>
-    /// 是否作废（字典 sys_yes_no_type，0=否 1=是；编辑移除子行时标记作废）
+    /// 是否作废（字典 sys_yes_no_type；0=否 1=是；编辑移除子行时标记作废）
     /// </summary>
     [SugarColumn(ColumnName = "is_obsolete", ColumnDescription = "是否作废", ColumnDataType = "int", IsNullable = false, DefaultValue = "0")]
     public int IsObsolete { get; set; } = 0;

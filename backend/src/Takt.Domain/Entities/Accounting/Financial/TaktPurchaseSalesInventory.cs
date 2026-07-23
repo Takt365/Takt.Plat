@@ -30,7 +30,7 @@ namespace Takt.Domain.Entities.Accounting.Financial;
 public class TaktPurchaseSalesInventory : TaktCompanyEntityBase
 {
     /// <summary>
-    /// 关联工厂（选项 TaktPlants/options，DictValue=PlantCode）
+    /// 关联工厂（选项 TaktPlants/options；DictValue=PlantCode）
     /// </summary>
     [SugarColumn(ColumnName = "related_plant", ColumnDescription = "关联工厂", ColumnDataType = "nvarchar", Length = 4, IsNullable = false)]
     public string RelatedPlant { get; set; } = string.Empty;
@@ -40,7 +40,7 @@ public class TaktPurchaseSalesInventory : TaktCompanyEntityBase
     [SugarColumn(ColumnName = "period_code", ColumnDescription = "会计期间", ColumnDataType = "varchar", Length = 6, IsNullable = false)]
     public string PeriodCode { get; set; } = string.Empty;
     /// <summary>
-    /// 物料编码（选项 TaktMaterials/options 或 TaktMaterialPlants/options，DictValue=MaterialCode）
+    /// 物料编码（选项 TaktMaterials/options 或 TaktMaterialPlants/options；DictValue=MaterialCode）
     /// </summary>
     [SugarColumn(ColumnName = "material_code", ColumnDescription = "物料编码", ColumnDataType = "nvarchar", Length = 40, IsNullable = false)]
     public string MaterialCode { get; set; } = string.Empty;

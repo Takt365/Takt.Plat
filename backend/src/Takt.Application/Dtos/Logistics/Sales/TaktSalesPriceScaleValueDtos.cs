@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Application.Dtos.Logistics.Sales
 // 文件名称：TaktSalesPriceScaleValueDtos.cs
-// 创建时间：2026-07-20
+// 创建时间：2026-07-23
 // 创建人：Takt365(Auto Generated)
 // 功能描述：SalesPriceScaleValue 模块 DTO（由 generate-dtos-from-entity.cjs 根据 TaktSalesPriceScaleValue 生成，请按需审阅）
 // 
@@ -22,7 +22,7 @@ namespace Takt.Application.Dtos.Logistics.Sales;
 // ========================================
 
 /// <summary>
-/// Takt销售价格价值等级实体（SAP KONW；主子表：TaktSalesPriceItem → ScaleValues；与数量等级仅差 ScaleValue↔ScaleQuantity）
+/// Takt销售价格价值等级实体（；主子表：TaktSalesPriceItem → ScaleValues；与数量等级仅差 ScaleValue↔ScaleQuantity）
 /// 对应前端 TaktSalesPriceScaleValueDto
 /// 继承 TaktCompanyDtoBase
 /// </summary>
@@ -52,14 +52,14 @@ public class TaktSalesPriceScaleValueDto : TaktCompanyDtoBase
     public string SalesPriceCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 条件序列号（KOPOS；冗余；与明细 SalesPriceSeq 一致）
+    /// 定价序号（冗余；与明细 SalesPriceSeq 一致，固定步长=10）
     /// </summary>
     public int SalesPriceSeq { get; set; } = 0;
 
     /// <summary>
-    /// 行号（KLFN1；阶梯行序号，固定步长=10）
+    /// 等级序号（KOPOS；同一明细内阶梯序号，固定步长=10）
     /// </summary>
-    public int LineNumber { get; set; } = 0;
+    public int SalesScaleSeq { get; set; } = 0;
 
     /// <summary>
     /// 等级值（KSTBW；价值等级门槛；对应数量等级表的 ScaleQuantity）
@@ -67,12 +67,27 @@ public class TaktSalesPriceScaleValueDto : TaktCompanyDtoBase
     public decimal ScaleValue { get; set; }
 
     /// <summary>
-    /// 金额（KBETR）
+    /// 价格（KBETR）
     /// </summary>
-    public decimal Amount { get; set; }
+    public decimal Price { get; set; }
 
     /// <summary>
-    /// 是否作废（字典 sys_yes_no_type，0=否 1=是；编辑移除子行时标记作废）
+    /// 未税价格（冗余；可由 Price 与税码推算后回写）
+    /// </summary>
+    public decimal UntaxedPrice { get; set; }
+
+    /// <summary>
+    /// 含税价格（冗余；可由 Price 与税码推算后回写）
+    /// </summary>
+    public decimal TaxIncludedPrice { get; set; }
+
+    /// <summary>
+    /// 税费（冗余；含税−未税，打印用）
+    /// </summary>
+    public decimal TaxAmount { get; set; }
+
+    /// <summary>
+    /// 是否作废（字典 sys_yes_no_type；0=否 1=是；编辑移除子行时标记作废）
     /// </summary>
     public int IsObsolete { get; set; } = 0;
 
@@ -110,14 +125,14 @@ public class TaktSalesPriceScaleValueQueryDto : TaktPagedQuery
     public string? SalesPriceCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 条件序列号（KOPOS；冗余；与明细 SalesPriceSeq 一致）
+    /// 定价序号（冗余；与明细 SalesPriceSeq 一致，固定步长=10）
     /// </summary>
     public int? SalesPriceSeq { get; set; }
 
     /// <summary>
-    /// 行号（KLFN1；阶梯行序号，固定步长=10）
+    /// 等级序号（KOPOS；同一明细内阶梯序号，固定步长=10）
     /// </summary>
-    public int? LineNumber { get; set; }
+    public int? SalesScaleSeq { get; set; }
 
     /// <summary>
     /// 等级值（KSTBW；价值等级门槛；对应数量等级表的 ScaleQuantity）
@@ -125,12 +140,27 @@ public class TaktSalesPriceScaleValueQueryDto : TaktPagedQuery
     public decimal? ScaleValue { get; set; }
 
     /// <summary>
-    /// 金额（KBETR）
+    /// 价格（KBETR）
     /// </summary>
-    public decimal? Amount { get; set; }
+    public decimal? Price { get; set; }
 
     /// <summary>
-    /// 是否作废（字典 sys_yes_no_type，0=否 1=是；编辑移除子行时标记作废）
+    /// 未税价格（冗余；可由 Price 与税码推算后回写）
+    /// </summary>
+    public decimal? UntaxedPrice { get; set; }
+
+    /// <summary>
+    /// 含税价格（冗余；可由 Price 与税码推算后回写）
+    /// </summary>
+    public decimal? TaxIncludedPrice { get; set; }
+
+    /// <summary>
+    /// 税费（冗余；含税−未税，打印用）
+    /// </summary>
+    public decimal? TaxAmount { get; set; }
+
+    /// <summary>
+    /// 是否作废（字典 sys_yes_no_type；0=否 1=是；编辑移除子行时标记作废）
     /// </summary>
     public int? IsObsolete { get; set; }
 
@@ -192,14 +222,14 @@ public class TaktSalesPriceScaleValueCreateDto
     public string SalesPriceCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 条件序列号（KOPOS；冗余；与明细 SalesPriceSeq 一致）
+    /// 定价序号（冗余；与明细 SalesPriceSeq 一致，固定步长=10）
     /// </summary>
     public int SalesPriceSeq { get; set; } = 0;
 
     /// <summary>
-    /// 行号（KLFN1；阶梯行序号，固定步长=10）
+    /// 等级序号（KOPOS；同一明细内阶梯序号，固定步长=10）
     /// </summary>
-    public int LineNumber { get; set; } = 0;
+    public int SalesScaleSeq { get; set; } = 0;
 
     /// <summary>
     /// 等级值（KSTBW；价值等级门槛；对应数量等级表的 ScaleQuantity）
@@ -207,12 +237,27 @@ public class TaktSalesPriceScaleValueCreateDto
     public decimal ScaleValue { get; set; }
 
     /// <summary>
-    /// 金额（KBETR）
+    /// 价格（KBETR）
     /// </summary>
-    public decimal Amount { get; set; }
+    public decimal Price { get; set; }
 
     /// <summary>
-    /// 是否作废（字典 sys_yes_no_type，0=否 1=是；编辑移除子行时标记作废）
+    /// 未税价格（冗余；可由 Price 与税码推算后回写）
+    /// </summary>
+    public decimal UntaxedPrice { get; set; }
+
+    /// <summary>
+    /// 含税价格（冗余；可由 Price 与税码推算后回写）
+    /// </summary>
+    public decimal TaxIncludedPrice { get; set; }
+
+    /// <summary>
+    /// 税费（冗余；含税−未税，打印用）
+    /// </summary>
+    public decimal TaxAmount { get; set; }
+
+    /// <summary>
+    /// 是否作废（字典 sys_yes_no_type；0=否 1=是；编辑移除子行时标记作废）
     /// </summary>
     public int IsObsolete { get; set; } = 0;
 
@@ -302,14 +347,14 @@ public class TaktSalesPriceScaleValueTemplateDto
     public string? SalesPriceCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 条件序列号（KOPOS；冗余；与明细 SalesPriceSeq 一致）
+    /// 定价序号（冗余；与明细 SalesPriceSeq 一致，固定步长=10）
     /// </summary>
     public int? SalesPriceSeq { get; set; }
 
     /// <summary>
-    /// 行号（KLFN1；阶梯行序号，固定步长=10）
+    /// 等级序号（KOPOS；同一明细内阶梯序号，固定步长=10）
     /// </summary>
-    public int? LineNumber { get; set; }
+    public int? SalesScaleSeq { get; set; }
 
     /// <summary>
     /// 等级值（KSTBW；价值等级门槛；对应数量等级表的 ScaleQuantity）
@@ -317,12 +362,27 @@ public class TaktSalesPriceScaleValueTemplateDto
     public decimal? ScaleValue { get; set; }
 
     /// <summary>
-    /// 金额（KBETR）
+    /// 价格（KBETR）
     /// </summary>
-    public decimal? Amount { get; set; }
+    public decimal? Price { get; set; }
 
     /// <summary>
-    /// 是否作废（字典 sys_yes_no_type，0=否 1=是；编辑移除子行时标记作废）
+    /// 未税价格（冗余；可由 Price 与税码推算后回写）
+    /// </summary>
+    public decimal? UntaxedPrice { get; set; }
+
+    /// <summary>
+    /// 含税价格（冗余；可由 Price 与税码推算后回写）
+    /// </summary>
+    public decimal? TaxIncludedPrice { get; set; }
+
+    /// <summary>
+    /// 税费（冗余；含税−未税，打印用）
+    /// </summary>
+    public decimal? TaxAmount { get; set; }
+
+    /// <summary>
+    /// 是否作废（字典 sys_yes_no_type；0=否 1=是；编辑移除子行时标记作废）
     /// </summary>
     public int? IsObsolete { get; set; }
 
@@ -370,14 +430,14 @@ public class TaktSalesPriceScaleValueImportDto
     public string? SalesPriceCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 条件序列号（KOPOS；冗余；与明细 SalesPriceSeq 一致）
+    /// 定价序号（冗余；与明细 SalesPriceSeq 一致，固定步长=10）
     /// </summary>
     public int? SalesPriceSeq { get; set; }
 
     /// <summary>
-    /// 行号（KLFN1；阶梯行序号，固定步长=10）
+    /// 等级序号（KOPOS；同一明细内阶梯序号，固定步长=10）
     /// </summary>
-    public int? LineNumber { get; set; }
+    public int? SalesScaleSeq { get; set; }
 
     /// <summary>
     /// 等级值（KSTBW；价值等级门槛；对应数量等级表的 ScaleQuantity）
@@ -385,12 +445,27 @@ public class TaktSalesPriceScaleValueImportDto
     public decimal? ScaleValue { get; set; }
 
     /// <summary>
-    /// 金额（KBETR）
+    /// 价格（KBETR）
     /// </summary>
-    public decimal? Amount { get; set; }
+    public decimal? Price { get; set; }
 
     /// <summary>
-    /// 是否作废（字典 sys_yes_no_type，0=否 1=是；编辑移除子行时标记作废）
+    /// 未税价格（冗余；可由 Price 与税码推算后回写）
+    /// </summary>
+    public decimal? UntaxedPrice { get; set; }
+
+    /// <summary>
+    /// 含税价格（冗余；可由 Price 与税码推算后回写）
+    /// </summary>
+    public decimal? TaxIncludedPrice { get; set; }
+
+    /// <summary>
+    /// 税费（冗余；含税−未税，打印用）
+    /// </summary>
+    public decimal? TaxAmount { get; set; }
+
+    /// <summary>
+    /// 是否作废（字典 sys_yes_no_type；0=否 1=是；编辑移除子行时标记作废）
     /// </summary>
     public int? IsObsolete { get; set; }
 
@@ -439,14 +514,14 @@ public class TaktSalesPriceScaleValueExportDto
     public string SalesPriceCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 条件序列号（KOPOS；冗余；与明细 SalesPriceSeq 一致）
+    /// 定价序号（冗余；与明细 SalesPriceSeq 一致，固定步长=10）
     /// </summary>
     public int SalesPriceSeq { get; set; } = 0;
 
     /// <summary>
-    /// 行号（KLFN1；阶梯行序号，固定步长=10）
+    /// 等级序号（KOPOS；同一明细内阶梯序号，固定步长=10）
     /// </summary>
-    public int LineNumber { get; set; } = 0;
+    public int SalesScaleSeq { get; set; } = 0;
 
     /// <summary>
     /// 等级值（KSTBW；价值等级门槛；对应数量等级表的 ScaleQuantity）
@@ -454,12 +529,27 @@ public class TaktSalesPriceScaleValueExportDto
     public decimal ScaleValue { get; set; }
 
     /// <summary>
-    /// 金额（KBETR）
+    /// 价格（KBETR）
     /// </summary>
-    public decimal Amount { get; set; }
+    public decimal Price { get; set; }
 
     /// <summary>
-    /// 是否作废（字典 sys_yes_no_type，0=否 1=是；编辑移除子行时标记作废）
+    /// 未税价格（冗余；可由 Price 与税码推算后回写）
+    /// </summary>
+    public decimal UntaxedPrice { get; set; }
+
+    /// <summary>
+    /// 含税价格（冗余；可由 Price 与税码推算后回写）
+    /// </summary>
+    public decimal TaxIncludedPrice { get; set; }
+
+    /// <summary>
+    /// 税费（冗余；含税−未税，打印用）
+    /// </summary>
+    public decimal TaxAmount { get; set; }
+
+    /// <summary>
+    /// 是否作废（字典 sys_yes_no_type；0=否 1=是；编辑移除子行时标记作废）
     /// </summary>
     public int IsObsolete { get; set; } = 0;
 

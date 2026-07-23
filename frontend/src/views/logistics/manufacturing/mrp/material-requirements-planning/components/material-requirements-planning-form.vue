@@ -382,7 +382,7 @@
       <template #cell-materialCode="{ record }">
         <TaktSelect
           v-model:value="record.materialCode"
-          api-url="TaktMaterials/options"
+          api-url="TaktMaterialPlants/options"
           class="w-full"
           :get-popup-container="getSelectPopupContainer"
           :placeholder="materialRequirementsPlanningItemPi.queryPh('materialCode', 'select')"
@@ -524,18 +524,6 @@ const materialRequirementsPlanningItemFormColumns = computed<TaktEditableTableCo
     width: 140,
   },
   {
-    key: 'materialName',
-    title: materialRequirementsPlanningItemPi.label('materialName'),
-    editor: 'input',
-    width: 140,
-  },
-  {
-    key: 'materialSpecification',
-    title: materialRequirementsPlanningItemPi.label('materialSpecification'),
-    editor: 'input',
-    width: 140, allowClear: true, placeholder: materialRequirementsPlanningItemPi.ph('materialSpecification'),
-  },
-  {
     key: 'modelCode',
     title: materialRequirementsPlanningItemPi.label('modelCode'),
     editor: 'input',
@@ -617,8 +605,6 @@ function createDefaultMaterialRequirementsPlanningItemRow(): Record<string, unkn
   return {
     lineNumber: allocateNextMaterialRequirementsPlanningItemLineNumber(),
     materialCode: '',
-    materialName: '',
-    materialSpecification: '',
     modelCode: '',
     modelName: '',
     parentMaterialCode: '',

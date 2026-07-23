@@ -77,6 +77,7 @@ import {
   RiArrowUpDownLine,
   RiArrowUpLine,
   RiListCheck,
+  RiTrophyLine,
 } from '@remixicon/vue'
 import { ensureTaktPaginationConfigAsync, getTaktDefaultPageSize } from '@/utils/takt-paged'
 import { resolveCurrentCompanyRelatedPlantCode } from '@/composables/use-company-related-plant'
@@ -102,7 +103,7 @@ const periodRange = ref<[string, string] | null>(buildDefaultCostingPeriodRange(
 const valuation = ref<string | undefined>(DEFAULT_VALUATION)
 /** 物料编码关键字 */
 const materialCode = ref('')
-/** 涨跌筛选 */
+/** 涨跌筛选：price 默认空=全部；model 默认 leading=领涨领跌各 50 */
 const trendFilter = ref('')
 /** 明细面板 loading */
 const panelLoading = ref(false)
@@ -111,36 +112,51 @@ const exportLoading = ref(false)
 /** 是否有数据行 */
 const hasRows = ref(false)
 /** 右侧涨跌筛选：仅图标 + tooltip，与工具栏右侧一致 */
-const trendFilterActions = computed<ToolBarAction[]>(() => [
-  {
-    key: 'trend-all',
-    icon: RiListCheck,
-    tooltip: t(`${localePrefix}.filter.all`),
-    active: trendFilter.value === '',
-    onClick: () => setTrendFilter(''),
-  },
-  {
-    key: 'trend-changed',
-    icon: RiArrowUpDownLine,
-    tooltip: t(`${localePrefix}.filter.changed`),
-    active: trendFilter.value === 'changed',
-    onClick: () => setTrendFilter('changed'),
-  },
-  {
-    key: 'trend-up',
-    icon: RiArrowUpLine,
-    tooltip: t(`${localePrefix}.trend.up`),
-    active: trendFilter.value === 'up',
-    onClick: () => setTrendFilter('up'),
-  },
-  {
-    key: 'trend-down',
-    icon: RiArrowDownLine,
-    tooltip: t(`${localePrefix}.trend.down`),
-    active: trendFilter.value === 'down',
-    onClick: () => setTrendFilter('down'),
-  },
-])
+const trendFilterActions = computed<ToolBarAction[]>(() => {
+  const actions: ToolBarAction[] = []
+  if (activeTab.value === 'model') {
+    actions.push({
+      key: 'trend-leading',
+      icon: RiTrophyLine,
+      tooltip: t(`${localePrefix}.filter.leading`),
+      active: trendFilter.value === 'leading' || trendFilter.value === '',
+      onClick: () => setTrendFilter('leading'),
+    })
+  }
+  actions.push(
+    {
+      key: 'trend-all',
+      icon: RiListCheck,
+      tooltip: t(`${localePrefix}.filter.all`),
+      active: activeTab.value === 'model'
+        ? trendFilter.value === 'all'
+        : trendFilter.value === '',
+      onClick: () => setTrendFilter(activeTab.value === 'model' ? 'all' : ''),
+    },
+    {
+      key: 'trend-changed',
+      icon: RiArrowUpDownLine,
+      tooltip: t(`${localePrefix}.filter.changed`),
+      active: trendFilter.value === 'changed',
+      onClick: () => setTrendFilter('changed'),
+    },
+    {
+      key: 'trend-up',
+      icon: RiArrowUpLine,
+      tooltip: t(`${localePrefix}.trend.up`),
+      active: trendFilter.value === 'up',
+      onClick: () => setTrendFilter('up'),
+    },
+    {
+      key: 'trend-down',
+      icon: RiArrowDownLine,
+      tooltip: t(`${localePrefix}.trend.down`),
+      active: trendFilter.value === 'down',
+      onClick: () => setTrendFilter('down'),
+    },
+  )
+  return actions
+})
 /** 明细面板 */
 const panelRef = ref<{
   reload?: () => Promise<void>
@@ -169,6 +185,22 @@ function setTrendFilter(value: string) {
   trendFilter.value = value
 }
 
+/**
+ * 按当前 Tab 归一化默认涨跌筛选
+ * @param {string} tab 当前 Tab
+ */
+function applyDefaultTrendFilterForTab(tab: 'price' | 'model') {
+  if (tab === 'model') {
+    if (trendFilter.value === '' || trendFilter.value === 'all') {
+      trendFilter.value = 'leading'
+    }
+    return
+  }
+  if (trendFilter.value === 'leading') {
+    trendFilter.value = ''
+  }
+}
+
 /** 刷新 */
 function handleRefresh() {
   void panelRef.value?.reload?.()
@@ -191,7 +223,7 @@ async function handleReset() {
   periodRange.value = buildDefaultCostingPeriodRange(3)
   valuation.value = DEFAULT_VALUATION
   materialCode.value = ''
-  trendFilter.value = ''
+  trendFilter.value = activeTab.value === 'model' ? 'leading' : ''
   hasRows.value = false
   panelRef.value?.clear?.()
 }
@@ -213,6 +245,10 @@ async function handleExport() {
     exportLoading.value = false
   }
 }
+
+watch(activeTab, (tab) => {
+  applyDefaultTrendFilterForTab(tab)
+})
 
 watch(
   () => tenantStore.companyCode,

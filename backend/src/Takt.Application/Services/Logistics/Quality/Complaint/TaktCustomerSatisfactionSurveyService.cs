@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Application.Services.Logistics.Quality.Complaint
 // 文件名称：TaktCustomerSatisfactionSurveyService.cs
-// 创建时间：2026-07-09
+// 创建时间：2026-07-23
 // 创建人：Takt365(Cursor AI)
 // 功能描述：客户满意度调查应用服务实现
 // 
@@ -106,12 +106,12 @@ public class TaktCustomerSatisfactionSurveyService : TaktServiceBase, ITaktCusto
         EnsureThreeLayerContext();
         var list = await _customerSatisfactionSurveyRepository.GetListAsync(
             x => x.TenantCode == CurrentTenantCode && x.CompanyCode == CurrentCompanyCode && x.SurveyStatus == 1,
-            x => x.CustomerName ?? string.Empty,
+            x => x.CustomerSatisfactionSurveyCode ?? string.Empty,
             false);
         return list.Select(e => new TaktSelectOption
         {
-            DictValue = e.Id,
-            DictLabel = e.CustomerName ?? e.Id.ToString(),
+            DictValue = e.CustomerSatisfactionSurveyCode,
+            DictLabel = e.CustomerSatisfactionSurveyCode,
         }).ToList();
     }
 
@@ -390,7 +390,20 @@ public class TaktCustomerSatisfactionSurveyService : TaktServiceBase, ITaktCusto
     private async Task SaveCustomerSatisfactionSurveyChildrenAsync(TaktCustomerSatisfactionSurvey entity, TaktCustomerSatisfactionSurveyCreateDto dto)
     {
         // 客户满意度调查项目明细（Items）
-        if (dto.Items is not { Count: > 0 })
+        List<TaktCustomerSatisfactionSurveyItemUpdateDto>? itemsForSave;
+        if (dto is TaktCustomerSatisfactionSurveyUpdateDto updateDtoForItems && updateDtoForItems.Items != null)
+        {
+            itemsForSave = updateDtoForItems.Items;
+        }
+        else if (dto.Items != null)
+        {
+            itemsForSave = dto.Items.Adapt<List<TaktCustomerSatisfactionSurveyItemUpdateDto>>();
+        }
+        else
+        {
+            itemsForSave = null;
+        }
+        if (itemsForSave is not { Count: > 0 })
         {
             await MarkCustomerSatisfactionSurveyItemsObsoleteAsync(entity.Id);
             return;
@@ -402,9 +415,9 @@ public class TaktCustomerSatisfactionSurveyService : TaktServiceBase, ITaktCusto
             var submittedIds = new HashSet<long>();
             var toCreate = new List<TaktCustomerSatisfactionSurveyItem>();
             var seenLineKeys = new HashSet<string>(StringComparer.Ordinal);
-            for (var i = 0; i < dto.Items.Count; i++)
+            for (var i = 0; i < itemsForSave.Count; i++)
             {
-                var childDto = dto.Items[i];
+                var childDto = itemsForSave[i];
                 childDto.SurveyId = entity.Id;
                 var lineKey = $"{entity.CompanyCode}|{entity.Id}|{childDto.LineNumber}";
                 if (!seenLineKeys.Add(lineKey))
@@ -502,7 +515,7 @@ public class TaktCustomerSatisfactionSurveyService : TaktServiceBase, ITaktCusto
             exp = exp.And(x =>
                 (x.CustomerSatisfactionSurveyCode != null && x.CustomerSatisfactionSurveyCode.Contains(keywords))
                 || SqlFunc.ToString(x.CustomerId).Contains(keywords)
-                || (x.CustomerName != null && x.CustomerName.Contains(keywords))
+                || (x.CustomerName1 != null && x.CustomerName1.Contains(keywords))
                 || (x.CustomerCode != null && x.CustomerCode.Contains(keywords))
                 || SqlFunc.ToString(x.SurveyMethod).Contains(keywords)
                 || SqlFunc.ToString(x.SurveyType).Contains(keywords)
@@ -543,9 +556,9 @@ public class TaktCustomerSatisfactionSurveyService : TaktServiceBase, ITaktCusto
             exp = exp.And(x => x.CustomerId == queryDto.CustomerId);
         }
 
-        if (!string.IsNullOrEmpty(queryDto?.CustomerName))
+        if (!string.IsNullOrEmpty(queryDto?.CustomerName1))
         {
-            exp = exp.And(x => x.CustomerName != null && x.CustomerName.Contains(queryDto.CustomerName));
+            exp = exp.And(x => x.CustomerName1 != null && x.CustomerName1.Contains(queryDto.CustomerName1));
         }
 
         if (!string.IsNullOrEmpty(queryDto?.CustomerCode))

@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.WebApi.Controllers.Logistics.Quality.Complaint
 // 文件名称：TaktCustomerComplaintsController.cs
-// 创建时间：2026-06-23
+// 创建时间：2026-07-23
 // 创建人：Takt365(Cursor AI)
 // 功能描述：客诉主控制器
 // 
@@ -281,53 +281,6 @@ public class TaktCustomerComplaintsController : TaktControllerBase
         try
         {
             var (resultFileName, fileContent) = await _customerComplaintService.ExportCustomerComplaintAsync(query, sheetName, exportName);
-            return File(fileContent, TaktExcelHelper.ExcelContentType, resultFileName);
-        }
-        catch (Exception ex)
-        {
-            return HandleException(ex);
-        }
-    }
-
-    /// <summary>
-    /// 顾客投诉月度推移转置分析
-    /// </summary>
-    /// <param name="queryDto">查询 DTO</param>
-    /// <returns>分析结果</returns>
-    [TaktPermission("logistics:quality:complaint:customer:trend:list", "顾客投诉推移列表")]
-    [HttpGet("monthly-trend-analysis")]
-    public async Task<IActionResult> GetCustomerComplaintMonthlyTrendAnalysisAsync(
-        [FromQuery] TaktCustomerComplaintMonthlyTrendQueryDto queryDto)
-    {
-        try
-        {
-            var result = await _customerComplaintService.GetCustomerComplaintMonthlyTrendAnalysisAsync(queryDto);
-            return Success(result, "查询成功");
-        }
-        catch (Exception ex)
-        {
-            return HandleException(ex);
-        }
-    }
-
-    /// <summary>
-    /// 导出顾客投诉月度推移转置分析
-    /// </summary>
-    /// <param name="query">查询 DTO</param>
-    /// <param name="sheetName">工作表名</param>
-    /// <param name="exportName">导出文件名</param>
-    /// <returns>Excel 文件</returns>
-    [TaktPermission("logistics:quality:complaint:customer:trend:export", "导出顾客投诉推移")]
-    [HttpGet("monthly-trend-analysis/export")]
-    public async Task<IActionResult> ExportCustomerComplaintMonthlyTrendAnalysisAsync(
-        [FromQuery] TaktCustomerComplaintMonthlyTrendQueryDto query,
-        [FromQuery] string? sheetName = null,
-        [FromQuery] string? exportName = null)
-    {
-        try
-        {
-            var (resultFileName, fileContent) = await _customerComplaintService.ExportCustomerComplaintMonthlyTrendAnalysisAsync(
-                query, sheetName, exportName);
             return File(fileContent, TaktExcelHelper.ExcelContentType, resultFileName);
         }
         catch (Exception ex)

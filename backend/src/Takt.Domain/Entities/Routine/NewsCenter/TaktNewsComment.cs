@@ -32,7 +32,7 @@ namespace Takt.Domain.Entities.Routine.NewsCenter;
 public class TaktNewsComment : TaktApprovalEntityBase
 {
     /// <summary>
-    /// 新闻 ID（选项 TaktNews/options，DictValue=Id）
+    /// 新闻 ID（选项 TaktNews/options；DictValue=Id）
     /// </summary>
     [SugarColumn(ColumnName = "news_id", ColumnDescription = "新闻ID", ColumnDataType = "bigint", IsNullable = false)]
     [JsonConverter(typeof(ValueToStringConverter))]
@@ -44,7 +44,7 @@ public class TaktNewsComment : TaktApprovalEntityBase
     [JsonConverter(typeof(ValueToStringConverter))]
     public long ParentId { get; set; } = 0;
     /// <summary>
-    /// 评论人 ID（选项 TaktUsers/options，DictValue=Id）
+    /// 评论人 ID（选项 TaktUsers/options；DictValue=Id）
     /// </summary>
     [SugarColumn(ColumnName = "user_id", ColumnDescription = "评论人ID", ColumnDataType = "bigint", IsNullable = false)]
     [JsonConverter(typeof(ValueToStringConverter))]
@@ -60,7 +60,7 @@ public class TaktNewsComment : TaktApprovalEntityBase
     [SugarColumn(ColumnName = "user_avatar", ColumnDescription = "评论人头像URL", ColumnDataType = "nvarchar", Length = 500, IsNullable = true)]
     public string? UserAvatar { get; set; }
     /// <summary>
-    /// 被回复人 ID（选项 TaktUsers/options，DictValue=Id）
+    /// 被回复人 ID（选项 TaktUsers/options；DictValue=Id）
     /// </summary>
     [SugarColumn(ColumnName = "reply_to_user_id", ColumnDescription = "被回复人ID", ColumnDataType = "bigint", IsNullable = true)]
     [JsonConverter(typeof(ValueToStringConverter))]

@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：frontend/src/types/logistics/procurement
 // 文件名称：source-of-supply.d.ts
-// 创建时间：2026-06-30
+// 创建时间：2026-07-21
 // 创建人：Takt365(Auto Generated)
 // 功能描述：logistics/procurement 模块类型定义（自动生成；类型名去 Takt 前缀与末尾 Dto，如 TaktCompanyDto → Company）
 // 
@@ -39,7 +39,7 @@ export interface SourceOfSupply extends CompanyDtoBase {
   sourceOfSupplyCode: string;
 
   /**
-   * 物料编码（选项 TaktMaterials/options，DictValue=MaterialCode）
+   * 物料编码（选项 TaktMaterialPlants/options，DictValue=MaterialCode，ExtValue=PlantCode）
    */
   materialCode: string;
 
@@ -64,22 +64,27 @@ export interface SourceOfSupply extends CompanyDtoBase {
   isBlocked: number;
 
   /**
-   * 采购单位
+   * 采购单位（字典 logistics_unit_of_measure_code，DictValue=PC/EA 等；默认 PC）
    */
   purchaseUnit: string;
 
   /**
-   * 最小订购量
+   * 最小起订量（采购单位数量，整数；SAP MINBM）
    */
-  minimumOrderQuantity: number;
+  minOrderQuantity: number;
 
   /**
-   * 计划交货天数（采购提前期）
+   * 舍入值（基本单位数量，用于数量舍入，整数；SAP BSTRF）
    */
-  leadTimeDays: number;
+  roundingValue: number;
 
   /**
-   * 框架协议号（采购合同/协议编号，可选）
+   * 计划交货时间（天数，整数；SAP PLIFZ）
+   */
+  plannedDeliveryTimeDays: number;
+
+  /**
+   * 框架协议号（采购合同/协议编码，可选）
    */
   agreementNumber?: string;
 
@@ -139,7 +144,7 @@ export interface SourceOfSupplyQuery extends TaktPagedQuery {
   sourceOfSupplyCode?: string;
 
   /**
-   * 物料编码（选项 TaktMaterials/options，DictValue=MaterialCode）
+   * 物料编码（选项 TaktMaterialPlants/options，DictValue=MaterialCode，ExtValue=PlantCode）
    */
   materialCode?: string;
 
@@ -164,22 +169,27 @@ export interface SourceOfSupplyQuery extends TaktPagedQuery {
   isBlocked?: number;
 
   /**
-   * 采购单位
+   * 采购单位（字典 logistics_unit_of_measure_code，DictValue=PC/EA 等；默认 PC）
    */
   purchaseUnit?: string;
 
   /**
-   * 最小订购量
+   * 最小起订量（采购单位数量，整数；SAP MINBM）
    */
-  minimumOrderQuantity?: number;
+  minOrderQuantity?: number;
 
   /**
-   * 计划交货天数（采购提前期）
+   * 舍入值（基本单位数量，用于数量舍入，整数；SAP BSTRF）
    */
-  leadTimeDays?: number;
+  roundingValue?: number;
 
   /**
-   * 框架协议号（采购合同/协议编号，可选）
+   * 计划交货时间（天数，整数；SAP PLIFZ）
+   */
+  plannedDeliveryTimeDays?: number;
+
+  /**
+   * 框架协议号（采购合同/协议编码，可选）
    */
   agreementNumber?: string;
 
@@ -273,7 +283,7 @@ export interface SourceOfSupplyCreate {
   sourceOfSupplyCode: string;
 
   /**
-   * 物料编码（选项 TaktMaterials/options，DictValue=MaterialCode）
+   * 物料编码（选项 TaktMaterialPlants/options，DictValue=MaterialCode，ExtValue=PlantCode）
    */
   materialCode: string;
 
@@ -298,22 +308,27 @@ export interface SourceOfSupplyCreate {
   isBlocked: number;
 
   /**
-   * 采购单位
+   * 采购单位（字典 logistics_unit_of_measure_code，DictValue=PC/EA 等；默认 PC）
    */
   purchaseUnit: string;
 
   /**
-   * 最小订购量
+   * 最小起订量（采购单位数量，整数；SAP MINBM）
    */
-  minimumOrderQuantity: number;
+  minOrderQuantity: number;
 
   /**
-   * 计划交货天数（采购提前期）
+   * 舍入值（基本单位数量，用于数量舍入，整数；SAP BSTRF）
    */
-  leadTimeDays: number;
+  roundingValue: number;
 
   /**
-   * 框架协议号（采购合同/协议编号，可选）
+   * 计划交货时间（天数，整数；SAP PLIFZ）
+   */
+  plannedDeliveryTimeDays: number;
+
+  /**
+   * 框架协议号（采购合同/协议编码，可选）
    */
   agreementNumber?: string;
 
@@ -430,7 +445,7 @@ export interface SourceOfSupplyTemplate {
   sourceOfSupplyCode?: string;
 
   /**
-   * 物料编码（选项 TaktMaterials/options，DictValue=MaterialCode）
+   * 物料编码（选项 TaktMaterialPlants/options，DictValue=MaterialCode，ExtValue=PlantCode）
    */
   materialCode?: string;
 
@@ -455,22 +470,27 @@ export interface SourceOfSupplyTemplate {
   isBlocked?: number;
 
   /**
-   * 采购单位
+   * 采购单位（字典 logistics_unit_of_measure_code，DictValue=PC/EA 等；默认 PC）
    */
   purchaseUnit?: string;
 
   /**
-   * 最小订购量
+   * 最小起订量（采购单位数量，整数；SAP MINBM）
    */
-  minimumOrderQuantity?: number;
+  minOrderQuantity?: number;
 
   /**
-   * 计划交货天数（采购提前期）
+   * 舍入值（基本单位数量，用于数量舍入，整数；SAP BSTRF）
    */
-  leadTimeDays?: number;
+  roundingValue?: number;
 
   /**
-   * 框架协议号（采购合同/协议编号，可选）
+   * 计划交货时间（天数，整数；SAP PLIFZ）
+   */
+  plannedDeliveryTimeDays?: number;
+
+  /**
+   * 框架协议号（采购合同/协议编码，可选）
    */
   agreementNumber?: string;
 
@@ -539,7 +559,7 @@ export interface SourceOfSupplyImport {
   sourceOfSupplyCode?: string;
 
   /**
-   * 物料编码（选项 TaktMaterials/options，DictValue=MaterialCode）
+   * 物料编码（选项 TaktMaterialPlants/options，DictValue=MaterialCode，ExtValue=PlantCode）
    */
   materialCode?: string;
 
@@ -564,22 +584,27 @@ export interface SourceOfSupplyImport {
   isBlocked?: number;
 
   /**
-   * 采购单位
+   * 采购单位（字典 logistics_unit_of_measure_code，DictValue=PC/EA 等；默认 PC）
    */
   purchaseUnit?: string;
 
   /**
-   * 最小订购量
+   * 最小起订量（采购单位数量，整数；SAP MINBM）
    */
-  minimumOrderQuantity?: number;
+  minOrderQuantity?: number;
 
   /**
-   * 计划交货天数（采购提前期）
+   * 舍入值（基本单位数量，用于数量舍入，整数；SAP BSTRF）
    */
-  leadTimeDays?: number;
+  roundingValue?: number;
 
   /**
-   * 框架协议号（采购合同/协议编号，可选）
+   * 计划交货时间（天数，整数；SAP PLIFZ）
+   */
+  plannedDeliveryTimeDays?: number;
+
+  /**
+   * 框架协议号（采购合同/协议编码，可选）
    */
   agreementNumber?: string;
 
@@ -643,7 +668,7 @@ export interface SourceOfSupplyExport {
   sourceOfSupplyCode: string;
 
   /**
-   * 物料编码（选项 TaktMaterials/options，DictValue=MaterialCode）
+   * 物料编码（选项 TaktMaterialPlants/options，DictValue=MaterialCode，ExtValue=PlantCode）
    */
   materialCode: string;
 
@@ -668,22 +693,27 @@ export interface SourceOfSupplyExport {
   isBlocked: number;
 
   /**
-   * 采购单位
+   * 采购单位（字典 logistics_unit_of_measure_code，DictValue=PC/EA 等；默认 PC）
    */
   purchaseUnit: string;
 
   /**
-   * 最小订购量
+   * 最小起订量（采购单位数量，整数；SAP MINBM）
    */
-  minimumOrderQuantity: number;
+  minOrderQuantity: number;
 
   /**
-   * 计划交货天数（采购提前期）
+   * 舍入值（基本单位数量，用于数量舍入，整数；SAP BSTRF）
    */
-  leadTimeDays: number;
+  roundingValue: number;
 
   /**
-   * 框架协议号（采购合同/协议编号，可选）
+   * 计划交货时间（天数，整数；SAP PLIFZ）
+   */
+  plannedDeliveryTimeDays: number;
+
+  /**
+   * 框架协议号（采购合同/协议编码，可选）
    */
   agreementNumber?: string;
 

@@ -79,7 +79,7 @@ public class TaktEquipment : TaktCompanyEntityBase
     public string? DealerBy { get; set; }
 
     /// <summary>
-    /// 序列号/出厂编号
+    /// 序列号/出厂编码
     /// </summary>
     [SugarColumn(ColumnName = "serial_number", ColumnDescription = "序列号", ColumnDataType = "nvarchar", Length = 100, IsNullable = true)]
     public string? SerialNumber { get; set; }

@@ -197,11 +197,11 @@ public class TaktBomMaterialCostItemsController : TaktControllerBase
     }
 
     /// <summary>
-    /// 产品成本分析：单个产品下明细组件 × 月材料成本转置
+    /// 产品成本推移：单个产品下明细组件 × 月材料成本转置
     /// </summary>
     /// <param name="queryDto">查询 DTO（工厂 + 产品必填）</param>
     /// <returns>明细组件月材料成本结果</returns>
-    [TaktPermission("logistics:manufacturing:bom:material:cost:trend:list", "产品成本分析")]
+    [TaktPermission("logistics:manufacturing:bom:material:cost:trend:list", "产品成本推移")]
     [HttpGet("component-moving-price-analysis")]
     public async Task<IActionResult> GetBomMaterialCostItemComponentMovingPriceAnalysisAsync(
         [FromQuery] TaktBomMaterialCostItemComponentMovingPriceQueryDto queryDto)
@@ -218,13 +218,13 @@ public class TaktBomMaterialCostItemsController : TaktControllerBase
     }
 
     /// <summary>
-    /// 导出产品成本分析（单个产品明细组件×月材料成本）
+    /// 导出产品成本推移（单个产品明细组件×月材料成本）
     /// </summary>
     /// <param name="query">查询条件</param>
     /// <param name="sheetName">工作表名称</param>
     /// <param name="exportName">导出文件名</param>
     /// <returns>Excel 文件</returns>
-    [TaktPermission("logistics:manufacturing:bom:material:cost:trend:export", "导出产品成本分析")]
+    [TaktPermission("logistics:manufacturing:bom:material:cost:trend:export", "导出产品成本推移")]
     [HttpGet("component-moving-price-analysis/export")]
     public async Task<IActionResult> ExportBomMaterialCostItemComponentMovingPriceAnalysisAsync(
         [FromQuery] TaktBomMaterialCostItemComponentMovingPriceQueryDto query,
@@ -247,14 +247,14 @@ public class TaktBomMaterialCostItemsController : TaktControllerBase
     /// </summary>
     /// <param name="queryDto">查询 DTO</param>
     /// <returns>机种月成本与合并键分析行</returns>
-    [TaktPermission("logistics:manufacturing:bom:model:moving:price:list", "机种成本推移")]
-    [HttpGet("model-moving-price-analysis")]
-    public async Task<IActionResult> GetBomMaterialCostItemModelMovingPriceAnalysisAsync(
-        [FromQuery] TaktBomMaterialCostItemModelMovingPriceQueryDto queryDto)
+    [TaktPermission("logistics:manufacturing:bom:model:cost:trend:list", "机种成本推移")]
+    [HttpGet("model-cost-trend-analysis")]
+    public async Task<IActionResult> GetBomMaterialCostItemModelCostTrendAnalysisAsync(
+        [FromQuery] TaktBomMaterialCostItemModelCostTrendQueryDto queryDto)
     {
         try
         {
-            var result = await _bomMaterialCostItemService.GetBomMaterialCostItemModelMovingPriceAnalysisAsync(queryDto);
+            var result = await _bomMaterialCostItemService.GetBomMaterialCostItemModelCostTrendAnalysisAsync(queryDto);
             return Success(result, "查询成功");
         }
         catch (Exception ex)
@@ -270,16 +270,16 @@ public class TaktBomMaterialCostItemsController : TaktControllerBase
     /// <param name="sheetName">工作表名称</param>
     /// <param name="exportName">导出文件名</param>
     /// <returns>Excel 文件</returns>
-    [TaktPermission("logistics:manufacturing:bom:model:moving:price:export", "导出机种成本推移")]
-    [HttpGet("model-moving-price-analysis/export")]
-    public async Task<IActionResult> ExportBomMaterialCostItemModelMovingPriceAnalysisAsync(
-        [FromQuery] TaktBomMaterialCostItemModelMovingPriceQueryDto query,
+    [TaktPermission("logistics:manufacturing:bom:model:cost:trend:export", "导出机种成本推移")]
+    [HttpGet("model-cost-trend-analysis/export")]
+    public async Task<IActionResult> ExportBomMaterialCostItemModelCostTrendAnalysisAsync(
+        [FromQuery] TaktBomMaterialCostItemModelCostTrendQueryDto query,
         [FromQuery] string? sheetName = null,
         [FromQuery] string? exportName = null)
     {
         try
         {
-            var (resultFileName, fileContent) = await _bomMaterialCostItemService.ExportBomMaterialCostItemModelMovingPriceAnalysisAsync(query, sheetName, exportName);
+            var (resultFileName, fileContent) = await _bomMaterialCostItemService.ExportBomMaterialCostItemModelCostTrendAnalysisAsync(query, sheetName, exportName);
             return File(fileContent, TaktExcelHelper.ExcelContentType, resultFileName);
         }
         catch (Exception ex)

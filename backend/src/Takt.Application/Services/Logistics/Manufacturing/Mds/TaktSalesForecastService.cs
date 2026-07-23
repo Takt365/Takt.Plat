@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Application.Services.Logistics.Manufacturing.Mds
 // 文件名称：TaktSalesForecastService.cs
-// 创建时间：2026-07-13
+// 创建时间：2026-07-23
 // 创建人：Takt365(Cursor AI)
 // 功能描述：销售预测应用服务实现
 // 
@@ -94,7 +94,7 @@ public class TaktSalesForecastService : TaktServiceBase, ITaktSalesForecastServi
         return dto;    }
 
     /// <summary>
-    /// 获取销售计划选项列表
+    /// 获取销售预测选项列表
     /// </summary>
     /// <returns>下拉选项</returns>
     public async Task<List<TaktSelectOption>> GetSalesForecastOptionsAsync()
@@ -102,12 +102,12 @@ public class TaktSalesForecastService : TaktServiceBase, ITaktSalesForecastServi
         EnsureThreeLayerContext();
         var list = await _salesForecastRepository.GetListAsync(
             x => x.TenantCode == CurrentTenantCode && x.CompanyCode == CurrentCompanyCode && x.PlanStatus == 1,
-            x => x.CustomerName ?? string.Empty,
+            x => x.SalesForecastCode ?? string.Empty,
             false);
         return list.Select(e => new TaktSelectOption
         {
-            DictValue = e.Id,
-            DictLabel = e.CustomerName ?? e.Id.ToString(),
+            DictValue = e.SalesForecastCode,
+            DictLabel = e.SalesForecastCode,
         }).ToList();
     }
 
@@ -359,9 +359,9 @@ public class TaktSalesForecastService : TaktServiceBase, ITaktSalesForecastServi
     {
         // 销售预测明细（Items）
         List<TaktSalesForecastItemUpdateDto>? itemsForSave;
-        if (dto is TaktSalesForecastUpdateDto updateDto && updateDto.Items != null)
+        if (dto is TaktSalesForecastUpdateDto updateDtoForItems && updateDtoForItems.Items != null)
         {
-            itemsForSave = updateDto.Items;
+            itemsForSave = updateDtoForItems.Items;
         }
         else if (dto.Items != null)
         {
@@ -486,7 +486,7 @@ public class TaktSalesForecastService : TaktServiceBase, ITaktSalesForecastServi
                 (x.PlantCode != null && x.PlantCode.Contains(keywords))
                 || (x.SalesForecastCode != null && x.SalesForecastCode.Contains(keywords))
                 || (x.CustomerCode != null && x.CustomerCode.Contains(keywords))
-                || (x.CustomerName != null && x.CustomerName.Contains(keywords))
+                || (x.CustomerName1 != null && x.CustomerName1.Contains(keywords))
                 || SqlFunc.ToString(x.PlannerId).Contains(keywords)
                 || (x.PlanBy != null && x.PlanBy.Contains(keywords))
                 || SqlFunc.ToString(x.TotalQuantity).Contains(keywords)
@@ -520,9 +520,9 @@ public class TaktSalesForecastService : TaktServiceBase, ITaktSalesForecastServi
             exp = exp.And(x => x.CustomerCode != null && x.CustomerCode.Contains(queryDto.CustomerCode));
         }
 
-        if (!string.IsNullOrEmpty(queryDto?.CustomerName))
+        if (!string.IsNullOrEmpty(queryDto?.CustomerName1))
         {
-            exp = exp.And(x => x.CustomerName != null && x.CustomerName.Contains(queryDto.CustomerName));
+            exp = exp.And(x => x.CustomerName1 != null && x.CustomerName1.Contains(queryDto.CustomerName1));
         }
 
         if (queryDto?.PlannerId.HasValue == true)

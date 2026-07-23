@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：frontend/src/types/logistics/materials
 // 文件名称：manufacturer-material.d.ts
-// 创建时间：2026-07-09
+// 创建时间：2026-07-23
 // 创建人：Takt365(Auto Generated)
 // 功能描述：logistics/materials 模块类型定义（自动生成；类型名去 Takt 前缀与末尾 Dto，如 TaktCompanyDto → Company）
 // 
@@ -29,7 +29,7 @@ export interface ManufacturerMaterial extends CompanyDtoBase {
   manufacturerMaterialId: string;
 
   /**
-   * 制造商 ID（关联 TaktManufacturer.Id，选项 TaktManufacturers/options）
+   * 制造商 ID（选项 TaktManufacturers/options；DictValue=Id）
    */
   manufacturerId: string;
 
@@ -49,7 +49,7 @@ export interface ManufacturerMaterial extends CompanyDtoBase {
   lineNumber: number;
 
   /**
-   * 制造商物料编码（制造商内部的物料编号）
+   * 制造商物料编码（制造商内部的物料编码）
    */
   manufacturerMaterialCode: string;
 
@@ -64,12 +64,12 @@ export interface ManufacturerMaterial extends CompanyDtoBase {
   manufacturerMaterialSpecification?: string;
 
   /**
-   * 物料编码（关联 TaktMaterial.MaterialCode，选项 TaktMaterials/options）
+   * 物料编码（选项 TaktMaterialPlants/options；DictValue=MaterialCode，ExtValue=PlantCode）
    */
   materialCode: string;
 
   /**
-   * 是否作废（字典 sys_yes_no_type，0=否 1=是；编辑移除子行时标记作废）
+   * 是否作废（字典 sys_yes_no_type；0=否 1=是；编辑移除子行时标记作废）
    */
   isObsolete: number;
 
@@ -94,7 +94,7 @@ export interface ManufacturerMaterialQuery extends TaktPagedQuery {
   companyCode?: string;
 
   /**
-   * 制造商 ID（关联 TaktManufacturer.Id，选项 TaktManufacturers/options）
+   * 制造商 ID（选项 TaktManufacturers/options；DictValue=Id）
    */
   manufacturerId?: string;
 
@@ -109,7 +109,7 @@ export interface ManufacturerMaterialQuery extends TaktPagedQuery {
   lineNumber?: number;
 
   /**
-   * 制造商物料编码（制造商内部的物料编号）
+   * 制造商物料编码（制造商内部的物料编码）
    */
   manufacturerMaterialCode?: string;
 
@@ -124,12 +124,12 @@ export interface ManufacturerMaterialQuery extends TaktPagedQuery {
   manufacturerMaterialSpecification?: string;
 
   /**
-   * 物料编码（关联 TaktMaterial.MaterialCode，选项 TaktMaterials/options）
+   * 物料编码（选项 TaktMaterialPlants/options；DictValue=MaterialCode，ExtValue=PlantCode）
    */
   materialCode?: string;
 
   /**
-   * 是否作废（字典 sys_yes_no_type，0=否 1=是；编辑移除子行时标记作废）
+   * 是否作废（字典 sys_yes_no_type；0=否 1=是；编辑移除子行时标记作废）
    */
   isObsolete?: number;
 
@@ -178,7 +178,7 @@ export interface ManufacturerMaterialCreate {
   companyDefaultCulture: string;
 
   /**
-   * 制造商 ID（关联 TaktManufacturer.Id，选项 TaktManufacturers/options）
+   * 制造商 ID（选项 TaktManufacturers/options；DictValue=Id）
    */
   manufacturerId: string;
 
@@ -193,7 +193,7 @@ export interface ManufacturerMaterialCreate {
   lineNumber: number;
 
   /**
-   * 制造商物料编码（制造商内部的物料编号）
+   * 制造商物料编码（制造商内部的物料编码）
    */
   manufacturerMaterialCode: string;
 
@@ -208,12 +208,12 @@ export interface ManufacturerMaterialCreate {
   manufacturerMaterialSpecification?: string;
 
   /**
-   * 物料编码（关联 TaktMaterial.MaterialCode，选项 TaktMaterials/options）
+   * 物料编码（选项 TaktMaterialPlants/options；DictValue=MaterialCode，ExtValue=PlantCode）
    */
   materialCode: string;
 
   /**
-   * 是否作废（字典 sys_yes_no_type，0=否 1=是；编辑移除子行时标记作废）
+   * 是否作废（字典 sys_yes_no_type；0=否 1=是；编辑移除子行时标记作废）
    */
   isObsolete: number;
 
@@ -281,7 +281,7 @@ export interface ManufacturerMaterialTemplate {
   companyCode?: string;
 
   /**
-   * 制造商 ID（关联 TaktManufacturer.Id，选项 TaktManufacturers/options）
+   * 制造商 ID（选项 TaktManufacturers/options；DictValue=Id）
    */
   manufacturerId?: string;
 
@@ -296,7 +296,7 @@ export interface ManufacturerMaterialTemplate {
   lineNumber?: number;
 
   /**
-   * 制造商物料编码（制造商内部的物料编号）
+   * 制造商物料编码（制造商内部的物料编码）
    */
   manufacturerMaterialCode?: string;
 
@@ -311,12 +311,12 @@ export interface ManufacturerMaterialTemplate {
   manufacturerMaterialSpecification?: string;
 
   /**
-   * 物料编码（关联 TaktMaterial.MaterialCode，选项 TaktMaterials/options）
+   * 物料编码（选项 TaktMaterialPlants/options；DictValue=MaterialCode，ExtValue=PlantCode）
    */
   materialCode?: string;
 
   /**
-   * 是否作废（字典 sys_yes_no_type，0=否 1=是；编辑移除子行时标记作废）
+   * 是否作废（字典 sys_yes_no_type；0=否 1=是；编辑移除子行时标记作废）
    */
   isObsolete?: number;
 
@@ -355,7 +355,7 @@ export interface ManufacturerMaterialImport {
   companyDefaultCulture?: string;
 
   /**
-   * 制造商 ID（关联 TaktManufacturer.Id，选项 TaktManufacturers/options）
+   * 制造商 ID（选项 TaktManufacturers/options；DictValue=Id）
    */
   manufacturerId?: string;
 
@@ -370,7 +370,7 @@ export interface ManufacturerMaterialImport {
   lineNumber?: number;
 
   /**
-   * 制造商物料编码（制造商内部的物料编号）
+   * 制造商物料编码（制造商内部的物料编码）
    */
   manufacturerMaterialCode?: string;
 
@@ -385,12 +385,12 @@ export interface ManufacturerMaterialImport {
   manufacturerMaterialSpecification?: string;
 
   /**
-   * 物料编码（关联 TaktMaterial.MaterialCode，选项 TaktMaterials/options）
+   * 物料编码（选项 TaktMaterialPlants/options；DictValue=MaterialCode，ExtValue=PlantCode）
    */
   materialCode?: string;
 
   /**
-   * 是否作废（字典 sys_yes_no_type，0=否 1=是；编辑移除子行时标记作废）
+   * 是否作废（字典 sys_yes_no_type；0=否 1=是；编辑移除子行时标记作废）
    */
   isObsolete?: number;
 
@@ -424,7 +424,7 @@ export interface ManufacturerMaterialExport {
   companyCode: string;
 
   /**
-   * 制造商 ID（关联 TaktManufacturer.Id，选项 TaktManufacturers/options）
+   * 制造商 ID（选项 TaktManufacturers/options；DictValue=Id）
    */
   manufacturerId: string;
 
@@ -439,7 +439,7 @@ export interface ManufacturerMaterialExport {
   lineNumber: number;
 
   /**
-   * 制造商物料编码（制造商内部的物料编号）
+   * 制造商物料编码（制造商内部的物料编码）
    */
   manufacturerMaterialCode: string;
 
@@ -454,12 +454,12 @@ export interface ManufacturerMaterialExport {
   manufacturerMaterialSpecification?: string;
 
   /**
-   * 物料编码（关联 TaktMaterial.MaterialCode，选项 TaktMaterials/options）
+   * 物料编码（选项 TaktMaterialPlants/options；DictValue=MaterialCode，ExtValue=PlantCode）
    */
   materialCode: string;
 
   /**
-   * 是否作废（字典 sys_yes_no_type，0=否 1=是；编辑移除子行时标记作废）
+   * 是否作废（字典 sys_yes_no_type；0=否 1=是；编辑移除子行时标记作废）
    */
   isObsolete: number;
 

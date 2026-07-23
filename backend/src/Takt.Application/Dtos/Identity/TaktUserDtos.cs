@@ -527,7 +527,7 @@ public class TaktUserImportDto
     public long? EmployeeId { get; set; }
 
     /// <summary>
-    /// 员工编号（导入时按编号匹配人事档案）
+    /// 员工编码（导入时按编码匹配人事档案）
     /// </summary>
     public string? EmployeeCode { get; set; }
 

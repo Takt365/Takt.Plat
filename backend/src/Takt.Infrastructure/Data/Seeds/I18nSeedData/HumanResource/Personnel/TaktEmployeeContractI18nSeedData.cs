@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Infrastructure.Data.Seeds.I18nSeedData.HumanResource.Personnel
 // 文件名称：TaktEmployeeContractI18nSeedData.cs
-// 创建时间：2026-07-20
+// 创建时间：2026-07-23
 // 创建人：Takt365(Auto Generated)
 // 功能描述：TaktEmployeeContract 实体字段国际化种子（无对应 frontend locales；TranslationText 取自 ColumnDescription，ContextNote 取自属性 XML summary）
 // 
@@ -91,22 +91,40 @@ public class TaktEmployeeContractI18nSeedData : ITaktSeedDataCoordinator
             new TranslationSeedItem("entity.employeecontract._self", "zh-HK", "员工劳动合同信息_hk", "实体名称"),
 
             // entity.employeecontract.employeeid
-            new TranslationSeedItem("entity.employeecontract.employeeid", "en-US", "员工ID_us", "员工（选项 TaktEmployees/options，DictValue=Id）"),
+            new TranslationSeedItem("entity.employeecontract.employeeid", "en-US", "员工ID_us", "员工（选项 TaktEmployees/options；DictValue=Id）"),
             // entity.employeecontract.employeeid
-            new TranslationSeedItem("entity.employeecontract.employeeid", "ja-JP", "员工ID_jp", "员工（选项 TaktEmployees/options，DictValue=Id）"),
+            new TranslationSeedItem("entity.employeecontract.employeeid", "ja-JP", "员工ID_jp", "员工（选项 TaktEmployees/options；DictValue=Id）"),
             // entity.employeecontract.employeeid
-            new TranslationSeedItem("entity.employeecontract.employeeid", "zh-CN", "员工ID", "员工（选项 TaktEmployees/options，DictValue=Id）"),
+            new TranslationSeedItem("entity.employeecontract.employeeid", "zh-CN", "员工ID", "员工（选项 TaktEmployees/options；DictValue=Id）"),
             // entity.employeecontract.employeeid
-            new TranslationSeedItem("entity.employeecontract.employeeid", "zh-HK", "员工ID_hk", "员工（选项 TaktEmployees/options，DictValue=Id）"),
+            new TranslationSeedItem("entity.employeecontract.employeeid", "zh-HK", "员工ID_hk", "员工（选项 TaktEmployees/options；DictValue=Id）"),
 
-            // entity.employeecontract.contractno
-            new TranslationSeedItem("entity.employeecontract.contractno", "en-US", "合同编号_us", "合同编号"),
-            // entity.employeecontract.contractno
-            new TranslationSeedItem("entity.employeecontract.contractno", "ja-JP", "合同编号_jp", "合同编号"),
-            // entity.employeecontract.contractno
-            new TranslationSeedItem("entity.employeecontract.contractno", "zh-CN", "合同编号", "合同编号"),
-            // entity.employeecontract.contractno
-            new TranslationSeedItem("entity.employeecontract.contractno", "zh-HK", "合同编号_hk", "合同编号"),
+            // entity.employeecontract.employeecode
+            new TranslationSeedItem("entity.employeecontract.employeecode", "en-US", "员工编码_us", "员工编码（冗余，与 TaktEmployee.EmployeeCode 对齐）"),
+            // entity.employeecontract.employeecode
+            new TranslationSeedItem("entity.employeecontract.employeecode", "ja-JP", "员工编码_jp", "员工编码（冗余，与 TaktEmployee.EmployeeCode 对齐）"),
+            // entity.employeecontract.employeecode
+            new TranslationSeedItem("entity.employeecontract.employeecode", "zh-CN", "员工编码", "员工编码（冗余，与 TaktEmployee.EmployeeCode 对齐）"),
+            // entity.employeecontract.employeecode
+            new TranslationSeedItem("entity.employeecontract.employeecode", "zh-HK", "员工编码_hk", "员工编码（冗余，与 TaktEmployee.EmployeeCode 对齐）"),
+
+            // entity.employeecontract.employeename
+            new TranslationSeedItem("entity.employeecontract.employeename", "en-US", "员工姓名_us", "员工姓名（冗余，与 TaktEmployee.EmployeeName 对齐）"),
+            // entity.employeecontract.employeename
+            new TranslationSeedItem("entity.employeecontract.employeename", "ja-JP", "员工姓名_jp", "员工姓名（冗余，与 TaktEmployee.EmployeeName 对齐）"),
+            // entity.employeecontract.employeename
+            new TranslationSeedItem("entity.employeecontract.employeename", "zh-CN", "员工姓名", "员工姓名（冗余，与 TaktEmployee.EmployeeName 对齐）"),
+            // entity.employeecontract.employeename
+            new TranslationSeedItem("entity.employeecontract.employeename", "zh-HK", "员工姓名_hk", "员工姓名（冗余，与 TaktEmployee.EmployeeName 对齐）"),
+
+            // entity.employeecontract.contractcode
+            new TranslationSeedItem("entity.employeecontract.contractcode", "en-US", "合同编码_us", "合同编码"),
+            // entity.employeecontract.contractcode
+            new TranslationSeedItem("entity.employeecontract.contractcode", "ja-JP", "合同编码_jp", "合同编码"),
+            // entity.employeecontract.contractcode
+            new TranslationSeedItem("entity.employeecontract.contractcode", "zh-CN", "合同编码", "合同编码"),
+            // entity.employeecontract.contractcode
+            new TranslationSeedItem("entity.employeecontract.contractcode", "zh-HK", "合同编码_hk", "合同编码"),
 
             // entity.employeecontract.contracttype
             new TranslationSeedItem("entity.employeecontract.contracttype", "en-US", "合同类型_us", "合同类型（字典 hr_employee_contract_type；0=固定期限 1=无固定期限 2=以完成一定工作任务为期限 3=实习）"),

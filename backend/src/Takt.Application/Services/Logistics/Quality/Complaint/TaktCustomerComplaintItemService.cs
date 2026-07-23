@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Application.Services.Logistics.Quality.Complaint
 // 文件名称：TaktCustomerComplaintItemService.cs
-// 创建时间：2026-07-09
+// 创建时间：2026-07-23
 // 创建人：Takt365(Cursor AI)
 // 功能描述：客诉明细应用服务实现
 // 
@@ -100,13 +100,13 @@ public class TaktCustomerComplaintItemService : TaktServiceBase, ITaktCustomerCo
     {
         EnsureThreeLayerContext();
         var list = await _customerComplaintItemRepository.GetListAsync(
-            x => x.TenantCode == CurrentTenantCode && x.CompanyCode == CurrentCompanyCode && x.ImprovementStatus == 1,
+            x => x.TenantCode == CurrentTenantCode && x.CompanyCode == CurrentCompanyCode && x.ImprovementStatus == 1 && x.IsObsolete == 0,
             x => x.ProductName ?? string.Empty,
             false);
         return list.Select(e => new TaktSelectOption
         {
-            DictValue = e.Id,
-            DictLabel = e.ProductName ?? e.Id.ToString(),
+            DictValue = e.CustomerComplaintCode,
+            DictLabel = e.ProductName ?? e.CustomerComplaintCode,
         }).ToList();
     }
 

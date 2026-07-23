@@ -37,7 +37,7 @@ public class TaktEcMonthlyTrendsController : TaktControllerBase
     }
 
     /// <summary>
-    /// 月设变推移转置分析（工厂×区分×月份）
+    /// 月设变推移转置分析（工厂×设变号×部门×月份完成件数）
     /// </summary>
     /// <param name="queryDto">查询 DTO</param>
     /// <returns>转置分析结果</returns>
@@ -58,7 +58,7 @@ public class TaktEcMonthlyTrendsController : TaktControllerBase
     }
 
     /// <summary>
-    /// 清单导出：月设变推移（工厂×区分×月份转置）
+    /// 清单导出：月设变推移（工厂×设变号×部门×月份转置）
     /// </summary>
     /// <param name="query">查询条件</param>
     /// <param name="sheetName">工作表名称</param>

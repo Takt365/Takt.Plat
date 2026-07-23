@@ -79,22 +79,26 @@
             {{ text }}
           </template>
         </template>
-        <template
-          v-if="total > 0"
-          #summary
-        >
-          <a-table-summary fixed>
-            <a-table-summary-row>
-              <a-table-summary-cell
-                v-for="cell in summaryCells"
-                :key="cell.key"
-                :index="cell.index"
-                :align="cell.align"
-              >
-                <span :class="cell.className">{{ cell.text }}</span>
-              </a-table-summary-cell>
-            </a-table-summary-row>
-          </a-table-summary>
+        <template #footerRemark>
+          <div
+            v-if="total > 0 && periodOrder.length > 0"
+            class="flex max-w-full flex-wrap gap-x-3 gap-y-1 text-sm text-text"
+          >
+            <span class="font-medium shrink-0">{{ summaryLabel }}</span>
+            <span
+              v-for="period in periodOrder"
+              :key="period"
+              class="shrink-0"
+            >
+              {{ period }}: {{ formatCost(periodCostTotals[period]) }}
+            </span>
+            <span
+              class="shrink-0 font-medium"
+              :class="varianceClass(varianceAmountTotal)"
+            >
+              {{ t(`${localePrefix}.columns.varianceAmount`) }}: {{ formatCost(varianceAmountTotal) }}
+            </span>
+          </div>
         </template>
       </TaktSingleTable>
     </div>
@@ -134,7 +138,6 @@ import {
   getTaktDefaultPageSize,
 } from '@/utils/takt-paged'
 import { resolveExportDownloadFileName } from '@/utils/export-download-name'
-import { resolveTableSummaryLabelColumnKey } from '@/utils/table-columns'
 import { TAKT_TABLE_SCROLL_Y_MIN } from '@/utils/table-scroll'
 import { resolveCurrentCompanyRelatedPlantCode } from '@/composables/use-company-related-plant'
 import { useTenantStore } from '@/stores/identity/tenant'
@@ -291,52 +294,13 @@ const columns = computed<TableColumnsType>(() => {
 
 const visibleColumnKeys = computed(() => columns.value.map((c) => String(c.key)))
 
-/** 合计行首列文案 */
+/** 合计首列文案 */
 const summaryLabel = computed(() => t('components.business.page.editabletable.summarylabel'))
 
 /** 全量期间成本合计（API：分页前、已应用涨跌筛选） */
 const periodCostTotals = ref<Record<string, number>>({})
 /** 全量环比差额合计（API：分页前、已应用涨跌筛选） */
 const varianceAmountTotal = ref<number | null>(null)
-
-/**
- * 合计文案所在列：跳过序号，取第一个业务数据列
- * @returns {string | undefined} 列 key
- */
-const summaryLabelColumnKey = computed(() => resolveTableSummaryLabelColumnKey(columns.value))
-
-/** 表尾合计单元格（全量周期成本 + 环比差额；文案在第一个业务数据列，无行选择偏移） */
-const summaryCells = computed(() => {
-  const labelKey = summaryLabelColumnKey.value
-  return columns.value.map((col, index) => {
-    const key = String(col.key ?? index)
-    const align = (col.align as 'left' | 'right' | 'center' | undefined) ?? 'left'
-    if (labelKey && key === labelKey) {
-      return { key, index, align, text: summaryLabel.value, className: 'font-medium text-text' }
-    }
-    if (key.startsWith('period_')) {
-      const period = key.replace(/^period_/, '')
-      const total = periodCostTotals.value[period]
-      return {
-        key,
-        index,
-        align: 'right' as const,
-        text: total == null ? '' : formatCost(total),
-        className: 'font-medium text-text',
-      }
-    }
-    if (key === 'varianceAmount') {
-      return {
-        key,
-        index,
-        align: 'right' as const,
-        text: formatCost(varianceAmountTotal.value),
-        className: `font-medium ${varianceClass(varianceAmountTotal.value)}`.trim(),
-      }
-    }
-    return { key, index, align, text: '', className: '' }
-  })
-})
 
 /**
  * 行主键
@@ -522,8 +486,7 @@ async function handleExport() {
 function recalcTableScrollY(): void {
   const wrap = tableWrapRef.value
   if (!wrap || wrap.clientHeight <= 0) return
-  const summaryH = total.value > 0 ? 39 : 0
-  tableScrollY.value = Math.max(TAKT_TABLE_SCROLL_Y_MIN, wrap.clientHeight - 47 - summaryH)
+  tableScrollY.value = Math.max(TAKT_TABLE_SCROLL_Y_MIN, wrap.clientHeight - 47)
 }
 
 function startTableScrollObserve(): void {

@@ -471,6 +471,7 @@ ${caps.hasExport ? '      @export="handleExport"' : ''}
       :data-source="dataSource"
       :loading="loading"
       :stripe="true"
+      :virtual="true"
       :row-key="get${entityPascal}Id"
       :row-selection="rowSelection"
       :custom-row="onClickRow"
